@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { useStyle, Rule } from '@dex-ddl/core';
 
-import TileWrapper from 'components/Tile';
+import { TileWrapper } from 'components/Tile';
 import { Button } from 'components/Button';
 
 type Review = {

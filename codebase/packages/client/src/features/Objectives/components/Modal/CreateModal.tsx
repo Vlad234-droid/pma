@@ -12,7 +12,7 @@ export type CreateModalProps = {};
 
 type Props = HTMLProps<HTMLInputElement> & CreateModalProps;
 
-const CreateModal: FC<Props> = () => {
+export const CreateModal: FC<Props> = () => {
   const { css, theme } = useStyle();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
@@ -145,5 +145,3 @@ const CreateModal: FC<Props> = () => {
     </div>
   );
 };
-
-export default CreateModal;

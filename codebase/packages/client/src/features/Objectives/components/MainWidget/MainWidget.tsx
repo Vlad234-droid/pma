@@ -2,8 +2,8 @@ import React, { FC } from 'react';
 import { Status } from 'config/enum';
 import { useStyle, Rule, CreateRule } from '@dex-ddl/core';
 
-import CreateButton from '../CreateButton';
-import TileWrapper from 'components/Tile';
+import { CreateButton } from '../CreateButton';
+import { TileWrapper } from 'components/Tile';
 import { Button } from 'components/Button';
 import { Icon, RoundIcon, Graphics } from 'components/Icon';
 

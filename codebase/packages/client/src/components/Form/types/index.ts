@@ -5,7 +5,7 @@ export interface FormItem {
   styles?: Styles | Rule;
 }
 
-export type InputProps = FormItem;
+export interface InputProps extends FormItem {}
 
 export interface TextareaProps extends FormItem {
   rows?: number;

@@ -1,7 +1,7 @@
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
 import { render, screen, waitForElementToBeRemoved, fireEvent } from 'styles/test-theme-provider';
-import Tooltip from './Tooltip';
+import { TooltipWrapper as Tooltip } from './index';
 
 it('tooltip element trigger', async () => {
   render(

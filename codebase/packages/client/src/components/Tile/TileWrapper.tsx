@@ -11,7 +11,7 @@ export type TileWrapperProps = {
 
 type Props = HTMLProps<HTMLInputElement> & TileWrapperProps;
 
-const TileWrapper: FC<Props> = ({ boarder = true, hover = false, customStyle = {}, children }) => {
+export const TileWrapper: FC<Props> = ({ boarder = true, hover = false, customStyle = {}, children }) => {
   const { css, theme } = useStyle(boarder);
 
   return (
@@ -55,5 +55,3 @@ const borderStyle: CreateRule<{ boarder: boolean; theme: Theme }> = (props) => {
   }
   return {};
 };
-
-export default TileWrapper;

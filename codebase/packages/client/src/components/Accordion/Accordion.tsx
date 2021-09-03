@@ -9,7 +9,7 @@ type RenderProps = {
   collapseAllSections: () => void;
 };
 
-type AccordionProps = {
+export type AccordionProps = {
   id: string;
   wrapHeaderNavigation?: boolean;
   children: (renderProps: RenderProps) => ReactNode;

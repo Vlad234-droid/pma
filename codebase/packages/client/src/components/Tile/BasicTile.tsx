@@ -1,7 +1,7 @@
 import React, { FC, HTMLProps } from 'react';
 
 import { Rule, useStyle, useBreakpoints } from 'styles';
-import TileWrapper from './TileWrapper';
+import { TileWrapper } from './TileWrapper';
 import { Icon } from '../Icon';
 
 export type TileProps = {
@@ -17,7 +17,7 @@ export type TileProps = {
 
 type Props = HTMLProps<HTMLInputElement> & TileProps;
 
-const BasicTile: FC<Props> = ({
+export const BasicTile: FC<Props> = ({
   boarder = true,
   hover = false,
   title,
@@ -60,6 +60,7 @@ const BasicTile: FC<Props> = ({
 
 const bodyStyle = {
   padding: '24px',
+  color: '#333333',
 };
 
 const wrapperStyle: Rule = () => {
@@ -112,5 +113,3 @@ const descriptionStyle = {
     paddingBottom: '20px',
   },
 };
-
-export default BasicTile;

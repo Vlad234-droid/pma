@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import TileWrapper from 'components/Tile';
+import { TileWrapper } from 'components/Tile';
 import { Icon, IconProps } from 'components/Icon';
 import { Button } from 'components/Button';
 import { useStyle, Rule, Styles } from 'styles';

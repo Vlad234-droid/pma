@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen, fireEvent } from 'styles/test-theme-provider';
 import '@testing-library/jest-dom/extend-expect';
 
-import Item from './Item';
+import { Item } from './Item';
 import { Input } from '../Input';
 
 it('render item without label', async () => {

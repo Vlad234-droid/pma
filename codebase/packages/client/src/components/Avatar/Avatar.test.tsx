@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen } from 'styles/test-theme-provider';
 import '@testing-library/jest-dom/extend-expect';
 
-import Avatar from './Avatar';
+import { Avatar } from './Avatar';
 
 it('render Avatar with image', async () => {
   render(<Avatar img='/test.svg' />);

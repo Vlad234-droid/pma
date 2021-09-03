@@ -1,2 +1,2 @@
-export { default } from './TileWrapper';
-export { default as BasicTile } from './BasicTile';
+export * from './TileWrapper';
+export * from './BasicTile';

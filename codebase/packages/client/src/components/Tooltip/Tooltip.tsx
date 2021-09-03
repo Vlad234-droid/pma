@@ -59,14 +59,14 @@ const Tooltip: FC<AriaTooltipProps & TooltipProps> = (props) => {
   );
 };
 
-type WrapperProps = {
+export type WrapperProps = {
   children?: JSX.Element | JSX.Element[] | string;
   text: string;
   width?: number;
   customStyle?: React.CSSProperties | {};
 };
 
-const Wrapper: FC<HTMLProps<HTMLInputElement> & WrapperProps> = ({ text, width = 186, children }) => {
+export const TooltipWrapper: FC<HTMLProps<HTMLInputElement> & WrapperProps> = ({ text, width = 186, children }) => {
   useInteractionModality();
 
   const state = useTooltipTriggerState({ delay: 0 });
@@ -96,5 +96,3 @@ const Wrapper: FC<HTMLProps<HTMLInputElement> & WrapperProps> = ({ text, width =
     </span>
   );
 };
-
-export default Wrapper;

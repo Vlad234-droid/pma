@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import { useStyle, Styles, Rule } from 'styles';
 import { IconButton } from '@dex-ddl/core';
 
-type Props = {
+export type HeaderProps = {
   title: string;
   onBack?: () => void;
   styles?: Styles | Rule;
@@ -12,7 +12,7 @@ type Props = {
 export const TEST_ID = 'header';
 export const BACK_BTN_TEST_ID = 'header-back';
 
-const Header: FC<Props> = ({ title, onBack, styles = {} }) => {
+const Header: FC<HeaderProps> = ({ title, onBack, styles = {} }) => {
   const { css } = useStyle();
   const history = useHistory();
 

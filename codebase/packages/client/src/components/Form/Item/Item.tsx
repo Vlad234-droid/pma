@@ -9,7 +9,7 @@ export type Props = {
   styles?: Styles | Rule;
 };
 
-const Item: FC<Props> = ({ children, label }) => {
+export const Item: FC<Props> = ({ children, label }) => {
   const { css, theme } = useStyle();
   const [recordingState, setRecordingState] = useState(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -80,5 +80,3 @@ const Item: FC<Props> = ({ children, label }) => {
     </div>
   );
 };
-
-export default Item;

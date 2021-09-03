@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 
 import { useStyle } from 'styles';
 
-import Tile from '../Tile/TileWrapper';
+import { TileWrapper as Tile } from '../Tile/TileWrapper';
 import Confirmed from './Confirmed.svg';
 import Draft from './Draft.svg';
 import Pending from './Pending.svg';
@@ -17,7 +17,7 @@ const statuses: { [S in Status]: string } = {
   confirmed: Confirmed,
 };
 
-export type Props = {
+export type StepIndicatorProps = {
   currentStep?: number;
   currentStatus?: Status;
   titles?: string[];
@@ -29,7 +29,12 @@ const getIcon = (i: number, currentStep?: number, currentStatus?: Status) => {
   if (currentStep && currentStep > i) return statuses.confirmed;
 };
 
-export const StepIndicatorBasic: FC<Props> = ({ currentStep, currentStatus, titles = [], descriptions = [] }) => {
+export const StepIndicatorBasic: FC<StepIndicatorProps> = ({
+  currentStep,
+  currentStatus,
+  titles = [],
+  descriptions = [],
+}) => {
   const { css, theme } = useStyle();
 
   const Line: FC<{ active?: boolean }> = ({ active }) => (
@@ -98,7 +103,12 @@ export const StepIndicatorBasic: FC<Props> = ({ currentStep, currentStatus, titl
   );
 };
 
-export const StepIndicator: FC<Props> = ({ currentStep, currentStatus, titles = [], descriptions = [] }) => {
+export const StepIndicator: FC<StepIndicatorProps> = ({
+  currentStep,
+  currentStatus,
+  titles = [],
+  descriptions = [],
+}) => {
   const { css } = useStyle();
   return (
     <Tile>

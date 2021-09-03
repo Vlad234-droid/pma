@@ -46,7 +46,7 @@ const imageStyle = {
   height: '100%',
 };
 
-const Avatar: FC<Props> = ({ img, size = 56 }) => {
+export const Avatar: FC<Props> = ({ img, size = 56 }) => {
   const { css, theme } = useStyle();
   return (
     <span className={css(contentStyle({ theme, size }))}>
@@ -54,5 +54,3 @@ const Avatar: FC<Props> = ({ img, size = 56 }) => {
     </span>
   );
 };
-
-export default Avatar;

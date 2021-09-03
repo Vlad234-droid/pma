@@ -1,8 +1,8 @@
 import React, { FC, HTMLProps } from 'react';
 import { Icon } from '@dex-ddl/core';
-import TileWrapper from 'components/Tile';
+import { TileWrapper } from 'components/Tile';
 import { Avatar } from 'components/Avatar';
-import { Tooltip } from 'components/Tooltip';
+import { TooltipWrapper as Tooltip } from 'components/Tooltip';
 import { useStyle } from 'styles';
 
 export type DashboardProfileProps = {};
