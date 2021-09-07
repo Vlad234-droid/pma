@@ -7,7 +7,7 @@ import { Document } from './document';
 import { Account } from './account';
 import { Microphone } from './microphone';
 import { RoundStop } from './round-stop';
-import { GraphicProps } from './types';
+import { FCGraphicProps } from './types';
 import { RoundClock } from './round-clock';
 import { RoundPencil } from './round-pencil';
 import { RoundTick } from './round-tick';
@@ -42,7 +42,7 @@ export type Graphics =
   | 'arrowUp'
   | 'arrowDown';
 
-export const icons: { [G in Graphics]: React.ComponentType<GraphicProps> } = {
+export const icons: Record<Graphics, FCGraphicProps> = {
   add: Add,
   arrowLeft: ArrowLeft,
   chatSq: ChatSq,

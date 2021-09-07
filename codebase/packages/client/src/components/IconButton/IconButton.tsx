@@ -3,7 +3,7 @@ import React, { FC, useRef, memo, ButtonHTMLAttributes } from 'react';
 import { ButtonAria, useButton } from '@react-aria/button';
 import type { AriaButtonProps } from '@react-types/button';
 
-import { useStyle, Rule } from 'styles';
+import { useStyle, Rule } from '@dex-ddl/core';
 
 import { Icon, IconProps, Graphics } from '../Icon';
 

@@ -2,7 +2,8 @@ import React from 'react';
 import { Router } from 'react-router-dom';
 import '@testing-library/jest-dom/extend-expect';
 import { createMemoryHistory } from 'history';
-import { render, screen } from 'styles/test-theme-provider';
+import { renderWithTheme } from 'utils/test';
+import { screen } from '@testing-library/react';
 import { buildRoutes } from '../utils';
 import Navigation from './Routes';
 
@@ -14,7 +15,7 @@ it('Routes in the document', async () => {
   const history = createMemoryHistory();
   history.push('/testNew');
   const routes = buildRoutes({ testNew: () => <div>testNew</div> });
-  render(
+  renderWithTheme(
     <Router history={history}>
       <Layout>
         <Navigation routes={routes} />
@@ -28,7 +29,7 @@ it('Routes not in the document', async () => {
   const history = createMemoryHistory();
   history.push('/test');
   const routes = buildRoutes({ testNew: () => <div>testNew</div> });
-  const { queryByText } = render(
+  const { queryByText } = renderWithTheme(
     <Router history={history}>
       <Layout>
         <Navigation routes={routes} />

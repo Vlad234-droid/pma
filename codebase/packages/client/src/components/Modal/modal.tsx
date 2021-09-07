@@ -4,8 +4,7 @@ import { useDialog } from '@react-aria/dialog';
 import { FocusScope } from '@react-aria/focus';
 import { OverlayContainer, useModal, useOverlay, usePreventScroll } from '@react-aria/overlays';
 
-import { CreateRule, Rule, useStyle } from '@dex-ddl/core';
-import { Colors } from 'styles/theme';
+import { CreateRule, Rule, useStyle, Colors } from '@dex-ddl/core';
 
 import { Button } from '../Button';
 

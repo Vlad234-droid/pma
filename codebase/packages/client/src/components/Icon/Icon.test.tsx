@@ -1,6 +1,6 @@
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
-import { themeRender } from 'styles/test-theme-provider';
+import { renderWithTheme as themeRender } from 'utils/test';
 
 import { Icon } from './Icon';
 

@@ -6,7 +6,7 @@ import { useTooltipTriggerState } from '@react-stately/tooltip';
 import { mergeProps } from '@react-aria/utils';
 import { useInteractionModality } from '@react-aria/interactions';
 
-import { useStyle } from 'styles';
+import { useStyle } from '@dex-ddl/core';
 
 type TooltipProps = {
   width?: number;
@@ -25,7 +25,7 @@ const Tooltip: FC<AriaTooltipProps & TooltipProps> = (props) => {
         position: 'absolute',
         left: `${-width * 0.4}px`,
         bottom: '100%',
-        marginBottom: '10px',
+        marginBottom: '18px',
         backgroundColor: theme.colors.link,
         padding: '4px',
       })}

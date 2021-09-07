@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from 'styles/test-theme-provider';
+import { renderWithTheme as render, screen } from 'utils/test';
 import '@testing-library/jest-dom/extend-expect';
 
 import { Input } from '../Input';

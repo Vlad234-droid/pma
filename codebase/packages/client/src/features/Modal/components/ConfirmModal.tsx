@@ -1,7 +1,5 @@
 import React, { FC, HTMLProps } from 'react';
-import { CreateRule } from '@dex-ddl/core';
-import { useBreakpoints, useStyle, Styles } from 'styles';
-import { Modal } from 'components/Modal';
+import { useBreakpoints, useStyle, CreateRule, Modal, Styles } from '@dex-ddl/core';
 import { Button } from 'components/Button';
 
 export type ConfirmModal = {
@@ -22,14 +20,16 @@ const ConfirmModal: FC<Props> = ({ title, description, onCancel, onSave, onOverl
   return (
     <Modal
       modalPosition={'middle'}
-      modalContainerRule={containerRule({ mobileScreen })}
+      modalContainerRule={[containerRule({ mobileScreen })]}
       title={{
         content: title,
-        styles: {
-          fontWeight: 700,
-          fontSize: '20px',
-          lineHeight: '24px',
-        },
+        styles: [
+          {
+            fontWeight: 700,
+            fontSize: '20px',
+            lineHeight: '24px',
+          } as Styles,
+        ],
       }}
       onOverlayClick={onOverlayClick}
     >
@@ -50,33 +50,29 @@ const ConfirmModal: FC<Props> = ({ title, description, onCancel, onSave, onOverl
         })}
       >
         <Button
-          styles={
-            {
-              background: 'white',
-              border: `1px solid ${theme.colors.tescoBlue}`,
-              fontSize: '16px',
-              lineHeight: '20px',
-              fontWeight: 'bold',
-              color: `${theme.colors.tescoBlue}`,
-              width: '50%',
-              margin: '0px 4px',
-            } as Styles
-          }
+          styles={{
+            background: 'white',
+            border: `1px solid ${theme.colors.tescoBlue}`,
+            fontSize: '16px',
+            lineHeight: '20px',
+            fontWeight: 'bold',
+            color: `${theme.colors.tescoBlue}`,
+            width: '50%',
+            margin: '0px 4px',
+          }}
           onPress={onCancel}
         >
           Cancel
         </Button>
         <Button
-          styles={
-            {
-              background: `${theme.colors.tescoBlue}`,
-              fontSize: '16px',
-              lineHeight: '20px',
-              fontWeight: 'bold',
-              width: '50%',
-              margin: '0px 4px 1px 4px',
-            } as Styles
-          }
+          styles={{
+            background: `${theme.colors.tescoBlue}`,
+            fontSize: '16px',
+            lineHeight: '20px',
+            fontWeight: 'bold',
+            width: '50%',
+            margin: '0px 4px 1px 4px',
+          }}
           onPress={onSave}
         >
           Submit

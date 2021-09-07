@@ -1,5 +1,5 @@
 import React, { FC, HTMLProps } from 'react';
-import { useStyle } from 'styles';
+import { useStyle, Styles } from '@dex-ddl/core';
 
 import SecondaryWidget, { Props as SecondaryWidgetProps } from '../SecondaryWidget';
 import MainWidget from '../MainWidget';
@@ -50,6 +50,6 @@ const wrapperStyle = {
   flexWrap: 'wrap',
   gridGap: '8px',
   marginTop: '8px',
-} as React.CSSProperties;
+} as Styles;
 
 export default Widgets;

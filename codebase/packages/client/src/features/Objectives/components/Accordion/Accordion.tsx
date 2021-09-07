@@ -24,7 +24,7 @@ export const TEST_ID = 'objective-accordion';
 
 const ObjectiveAccordion: FC<Props> = ({ objectives }) => (
   <Accordion id='objective-accordion'>
-    <div data-testid={TEST_ID}>
+    <div data-test-id={TEST_ID}>
       {objectives.map(({ id, title, subTitle, description, explanations }) => (
         <Section key={id}>
           <ObjectiveHeader {...{ title, subTitle, description }} />

@@ -1,6 +1,7 @@
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
-import { render, fireEvent } from 'styles/test-theme-provider';
+import { renderWithTheme } from 'utils/test';
+import { fireEvent } from '@testing-library/react';
 import SecondaryWidget, { TEST_ID } from './SecondaryWidget';
 
 describe('SecondaryWidget', () => {
@@ -8,7 +9,7 @@ describe('SecondaryWidget', () => {
   const testTitle = 'test title';
 
   it('should render SecondaryWidget', async () => {
-    const { queryByTestId } = render(
+    const { queryByTestId } = renderWithTheme(
       <SecondaryWidget iconGraphic='account' title={testTitle} date='Last updated Apr 2021' onClick={testHandler} />,
     );
     const widget = queryByTestId(TEST_ID);
@@ -17,7 +18,7 @@ describe('SecondaryWidget', () => {
   });
 
   it('while click', async () => {
-    const { queryByTestId } = render(
+    const { queryByTestId } = renderWithTheme(
       <SecondaryWidget iconGraphic='account' title={testTitle} date='Last updated Apr 2021' onClick={testHandler} />,
     );
     const widget = queryByTestId(TEST_ID);

@@ -1,6 +1,8 @@
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
-import { render, fireEvent } from 'styles/test-theme-provider';
+import { fireEvent } from '@testing-library/react';
+import { renderWithTheme as render } from 'utils/test';
+
 import Header, { TEST_ID, BACK_BTN_TEST_ID } from './Header';
 
 jest.mock('react-router-dom', () => ({

@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { useStyle, Rule } from 'styles';
+import { useStyle, Rule } from '@dex-ddl/core';
 import { Status } from 'config/enum';
 
 import { StepIndicator } from 'components/StepIndicator/StepIndicator';
@@ -73,7 +73,7 @@ const Objectives: FC = () => {
   return (
     <>
       <Header title='Objectives' />
-      <div className={css(wrapperStyle)} data-testid={TEST_ID}>
+      <div className={css(wrapperStyle)} data-test-id={TEST_ID}>
         <div className={css({ display: 'flex' })}>
           <CreateButton withIcon />
         </div>

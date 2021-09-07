@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { TileWrapper } from 'components/Tile';
 import { Icon, IconProps } from 'components/Icon';
 import { Button } from 'components/Button';
-import { useStyle, Rule, Styles } from 'styles';
+import { useStyle, Rule, Styles } from '@dex-ddl/core';
 
 export type Props = {
   iconGraphic: IconProps['graphic'];
@@ -19,7 +19,7 @@ const SecondaryWidget: FC<Props> = ({ iconGraphic, title, date, customStyle, onC
 
   return (
     <TileWrapper customStyle={customStyle}>
-      <div className={css(wrapperStyle)} onClick={onClick} data-testid={TEST_ID}>
+      <div className={css(wrapperStyle)} onClick={onClick} data-test-id={TEST_ID}>
         <div className={css(headStyle)}>
           <Icon graphic={iconGraphic} />
           <span className={css(titleStyle)}>{title}</span>
@@ -64,7 +64,7 @@ const headStyle = {
   '& svg': {
     marginBottom: '10px',
   },
-} as React.CSSProperties;
+} as Styles;
 
 const titleStyle: Rule = ({ theme }) => {
   const mobileScreen = theme.breakpoints.small || theme.breakpoints.xSmall;
@@ -96,7 +96,7 @@ const bodyStyle = {
   display: 'flex',
   justifyContent: 'center',
   flexDirection: 'column',
-} as React.CSSProperties;
+} as Styles;
 
 const btnStyle = ({ theme }) => ({
   fontSize: '14px',

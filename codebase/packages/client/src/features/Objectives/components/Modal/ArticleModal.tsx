@@ -1,5 +1,5 @@
 import React, { FC, HTMLProps } from 'react';
-import { useStyle, useBreakpoints } from 'styles';
+import { useStyle, useBreakpoints } from '@dex-ddl/core';
 import { Icon as IconComponent } from 'components/Icon';
 
 export type ArticleModal = {};

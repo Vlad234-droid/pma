@@ -1,16 +1,18 @@
 import React from 'react';
-import { render, screen } from 'styles/test-theme-provider';
+import { RenderResultWithProps, renderWithTheme } from 'utils/test';
 import '@testing-library/jest-dom/extend-expect';
 
-import { Avatar } from './Avatar';
+import { Avatar, AvatarProps } from './Avatar';
+
+let wrapper: RenderResultWithProps<AvatarProps>;
 
 it('render Avatar with image', async () => {
-  render(<Avatar img='/test.svg' />);
-  const ava = screen.getByRole('img');
+  wrapper = renderWithTheme(<Avatar img='/test.svg' />);
+  const ava = wrapper.getByRole('img');
   expect(ava).toHaveAttribute('src', '/test.svg');
 });
 
 it('render Avatar without image', async () => {
-  render(<Avatar />);
-  expect(screen.getByText('account')).toBeInTheDocument();
+  wrapper = renderWithTheme(<Avatar />);
+  expect(wrapper.getByText('account')).toBeInTheDocument();
 });

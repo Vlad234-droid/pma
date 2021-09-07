@@ -1,6 +1,6 @@
 import React from 'react';
-import { render, screen } from 'styles/test-theme-provider';
 import '@testing-library/jest-dom/extend-expect';
+import { renderWithTheme as render, screen } from 'utils/test';
 
 import { Textarea } from '../Input';
 

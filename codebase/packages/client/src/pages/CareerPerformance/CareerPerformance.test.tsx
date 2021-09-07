@@ -1,11 +1,11 @@
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
 import CareerPerformance from './CareerPerformance';
-import { render, screen } from 'styles/test-theme-provider';
+import { renderWithTheme } from 'utils/test';
 
 it('CareerPerformance', async () => {
-  render(<CareerPerformance />);
-  const wrapper = screen.queryByTestId('timeline');
+  const { getByTestId } = renderWithTheme(<CareerPerformance />);
+  const timeline = getByTestId('timeline');
 
-  expect(wrapper).toBeInTheDocument();
+  expect(timeline).toBeInTheDocument();
 });

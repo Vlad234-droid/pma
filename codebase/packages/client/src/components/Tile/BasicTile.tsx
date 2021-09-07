@@ -1,6 +1,6 @@
 import React, { FC, HTMLProps } from 'react';
 
-import { Rule, useStyle, useBreakpoints } from 'styles';
+import { Rule, useStyle, useBreakpoints } from '@dex-ddl/core';
 import { TileWrapper } from './TileWrapper';
 import { Icon } from '../Icon';
 
@@ -27,7 +27,7 @@ export const BasicTile: FC<Props> = ({
   img,
   customStyle = {},
 }) => {
-  const { css } = useStyle(boarder);
+  const { css } = useStyle();
 
   return (
     <TileWrapper
@@ -48,7 +48,7 @@ export const BasicTile: FC<Props> = ({
           <div className={css(descriptionStyle)}>{description}</div>
           {event && (
             <div className={css(descriptionStyle)}>
-              <Icon graphic='calender' />
+              <Icon graphic='calender' iconStyles={{ verticalAlign: 'middle' }} />
               {event}
             </div>
           )}
@@ -90,7 +90,7 @@ const imageStyle: Rule = () => {
     };
   }
   return {
-    textDecoration: '100%',
+    width: '100%',
   };
 };
 

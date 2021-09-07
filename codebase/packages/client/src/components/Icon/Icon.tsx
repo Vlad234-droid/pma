@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 
-import { useStyle, CreateRule, Rule } from 'styles';
+import { useStyle, CreateRule, Rule, Styles } from '@dex-ddl/core';
 
 import { icons, Graphics } from './graphics';
 import { getId, getTitle } from './utils';
@@ -33,7 +33,7 @@ export const Icon: FC<IconProps> = ({ graphic, title, iconStyles = {}, invertCol
   return (
     <>
       <svg
-        data-testid={testId}
+        data-test-id={testId}
         fill='none'
         className={css(customStylesRule(styles), iconStyles)}
         viewBox='0 0 24 24'
@@ -49,13 +49,14 @@ export const Icon: FC<IconProps> = ({ graphic, title, iconStyles = {}, invertCol
   );
 };
 
-const customStylesRule: CreateRule<IconStyleProps> = (styles) => ({
-  width: styles?.size ?? '24px',
-  height: styles?.size ?? '24px',
+const customStylesRule: CreateRule<IconStyleProps> = (styles) =>
+  ({
+    width: styles?.size ?? '24px',
+    height: styles?.size ?? '24px',
 
-  '& path': {
-    strokeWidth: styles?.strokeWidth,
-    stroke: styles?.stroke,
-    fill: styles?.fill,
-  },
-});
+    '& path': {
+      strokeWidth: styles?.strokeWidth,
+      stroke: styles?.stroke,
+      fill: styles?.fill,
+    },
+  } as Styles);

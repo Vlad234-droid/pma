@@ -51,7 +51,7 @@ const MainWidget: FC<Props> = ({ customStyle, onClick, status, count = 0 }) => {
 
   return (
     <TileWrapper customStyle={customStyle}>
-      <div className={css(wrapperStyle({ clickable: notApproved }))} onClick={handleClick} data-testid={TEST_ID}>
+      <div className={css(wrapperStyle({ clickable: notApproved }))} onClick={handleClick} data-test-id={TEST_ID}>
         <div className={css(headStyle)}>
           <div>
             <Icon graphic='document' invertColors={notApproved} iconStyles={iconStyles} />

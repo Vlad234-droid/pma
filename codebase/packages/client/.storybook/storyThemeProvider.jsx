@@ -1,27 +1,22 @@
-import React from "react"
+import { DDLProvider } from '@dex-ddl/core';
 
-import {
-  getFontFamilies,
-  makeRenderer,
-  ThemeProvider,
-} from "../src/styles"
+/**
+ *  reset styles when changing between stories
+ * */
+const resetFela = () => {
+  const felaStyle = document.querySelector('style[data-fela-type="RULE"]');
+  felaStyle?.parentNode.removeChild(felaStyle);
+
+  const felaFont = document.querySelector('style[data-fela-type="FONT"]');
+  felaFont?.parentNode.removeChild(felaFont);
+};
 
 export const StoryThemeProvider = ({ children }) => {
-  const felaStyle = document.querySelector('style[data-fela-type="RULE"]')
-  if (felaStyle && felaStyle.sheet && felaStyle.sheet.rules) {
-    Array.from(felaStyle.sheet.rules).forEach(() =>
-      felaStyle.sheet.deleteRule(0),
-    )
-  }
+  resetFela();
 
-  const renderer = makeRenderer(getFontFamilies())
-  renderer.renderStatic(
-    {
-      fontFamily: '"TESCO Modern", Arial, sans-serif',
-      background: "#f6f6f6",
-    },
-    "body",
-  )
+  const globalCSS = `body {
+    font-family: "TESCO Modern", Arial, sans-serif
+  }`;
 
-  return <ThemeProvider renderer={renderer}>{children}</ThemeProvider>
-}
+  return <DDLProvider rendererOptions={{ globalCSS }}>{children}</DDLProvider>;
+};

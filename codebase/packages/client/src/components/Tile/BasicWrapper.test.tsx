@@ -1,7 +1,7 @@
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
-import { render, screen } from 'styles/test-theme-provider';
-import BasicTile from './BasicTile';
+import { renderWithTheme as render, screen } from 'utils/test';
+import { BasicTile } from './BasicTile';
 
 it('Tile has image', async () => {
   render(<BasicTile img='/test.svg' title='test' description='desc' />);

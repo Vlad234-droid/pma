@@ -1,6 +1,7 @@
 import React from 'react';
-import { render, screen, fireEvent } from 'styles/test-theme-provider';
 import '@testing-library/jest-dom/extend-expect';
+import { screen, fireEvent } from '@testing-library/react';
+import { renderWithTheme as render } from 'utils/test';
 
 import { Item } from './Item';
 import { Input } from '../Input';
