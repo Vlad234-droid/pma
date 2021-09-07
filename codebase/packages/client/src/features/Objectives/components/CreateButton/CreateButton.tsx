@@ -1,9 +1,7 @@
 import React, { FC, HTMLProps, useState } from 'react';
-import { Rule } from '@dex-ddl/core';
-import { useBreakpoints, useStyle } from 'styles';
-import { Modal } from 'components/Modal';
+import { useBreakpoints, Rule, Modal, useStyle } from '@dex-ddl/core';
 import { Icon } from 'components/Icon';
-import { CreateModal } from '../Modal';
+import { CreateModal, SuccessModal, ArticleModal } from '../Modal';
 import { Button } from 'components/Button';
 import { IconButton } from 'components/IconButton';
 
@@ -15,8 +13,6 @@ type Props = HTMLProps<HTMLInputElement> & CreateModalProps;
 
 const CreateButton: FC<Props> = ({ withIcon = false }) => {
   const { theme } = useStyle();
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -35,7 +31,13 @@ const CreateButton: FC<Props> = ({ withIcon = false }) => {
           Create objectives
         </IconButton>
       ) : (
-        <Button styles={btnStyle({ theme })} onPress={handleBtnClick}>
+        <Button
+          styles={{
+            border: `1px solid ${theme.colors.white}`,
+            fontSize: '14px',
+          }}
+          onPress={handleBtnClick}
+        >
           Create objectives
         </Button>
       )}
@@ -44,48 +46,23 @@ const CreateButton: FC<Props> = ({ withIcon = false }) => {
         <Modal
           modalPosition={'middle'}
           overlayColor={'tescoBlue'}
-          modalContainerRule={containerRule}
+          modalContainerRule={[containerRule]}
           closeOptions={{
             content: <Icon graphic='cancel' invertColors={true} />,
             onClose: () => setIsOpen(false),
-            styles: {
-              display: 'inline-block',
-              height: '24px',
-              paddingLeft: '0px',
-              paddingRight: '0px',
-              position: 'fixed',
-              top: '22px',
-              right: mobileScreen ? '20px' : '40px',
-              textDecoration: 'none',
-              border: 'none',
-              cursor: 'pointer',
-            },
+            styles: [modalCloseOptionStyle],
           }}
           title={{
             content: 'Create objectives',
-            styles: {
-              position: 'fixed',
-              top: '22px',
-              textAlign: 'center',
-              left: 0,
-              right: 0,
-              color: 'white',
-              ...(mobileScreen
-                ? {
-                    fontSize: '20px',
-                    lineHeight: '24px',
-                  }
-                : {
-                    fontSize: '24px',
-                    lineHeight: '28px',
-                  }),
-            },
+            styles: [modalTitleOptionStyle],
           }}
           onOverlayClick={() => {
             setIsOpen(false);
           }}
         >
           <CreateModal />
+          {/*<ArticleModal />*/}
+          {/*<SuccessModal onClose={() => setIsOpen(false)} />*/}
         </Modal>
       )}
     </>
@@ -111,12 +88,12 @@ const containerRule: Rule = ({ colors }) => {
   };
 };
 
-const btnStyle = ({ theme }) => ({
+const btnStyle: Rule = ({ theme }) => ({
   border: `1px solid ${theme.colors.white}`,
   fontSize: '14px',
 });
 
-const iconBtnStyle = ({ theme }) => ({
+const iconBtnStyle: Rule = ({ theme }) => ({
   padding: '0 16px',
   display: 'flex',
   height: '40px',
@@ -130,6 +107,46 @@ const iconBtnStyle = ({ theme }) => ({
   color: theme.colors.white,
   cursor: 'pointer',
 });
+
+const modalCloseOptionStyle: Rule = () => {
+  const [, isBreakpoint] = useBreakpoints();
+  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+  return {
+    display: 'inline-block',
+    height: '24px',
+    paddingLeft: '0px',
+    paddingRight: '0px',
+    position: 'fixed',
+    top: '22px',
+    right: mobileScreen ? '20px' : '40px',
+    textDecoration: 'none',
+    border: 'none',
+    cursor: 'pointer',
+  };
+};
+
+const modalTitleOptionStyle: Rule = () => {
+  const [, isBreakpoint] = useBreakpoints();
+  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+
+  return {
+    position: 'fixed',
+    top: '22px',
+    textAlign: 'center',
+    left: 0,
+    right: 0,
+    color: 'white',
+    ...(mobileScreen
+      ? {
+          fontSize: '20px',
+          lineHeight: '24px',
+        }
+      : {
+          fontSize: '24px',
+          lineHeight: '28px',
+        }),
+  };
+};
 
 const iconStyle: Rule = {
   marginRight: '10px',

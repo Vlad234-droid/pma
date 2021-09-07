@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { useStyle } from '../../styles';
+import { useStyle } from '@dex-ddl/core';
 
 export const StatusIcon: FC<{ icon: string; first?: boolean; last?: boolean }> = ({ icon, first, last }) => {
   const { css } = useStyle();

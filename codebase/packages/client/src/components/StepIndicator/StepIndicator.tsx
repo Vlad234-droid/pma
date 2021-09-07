@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 
-import { useStyle } from 'styles';
+import { useStyle, Styles } from '@dex-ddl/core';
 
 import { TileWrapper as Tile } from '../Tile/TileWrapper';
 import Confirmed from './Confirmed.svg';
@@ -112,7 +112,7 @@ export const StepIndicator: FC<StepIndicatorProps> = ({
   const { css } = useStyle();
   return (
     <Tile>
-      <div className={css(wrapperStyle)} data-testid='timeline'>
+      <div className={css(wrapperStyle)} data-test-id='timeline'>
         <span className={css(titleStyle)}>My Performance Timeline</span>
         <StepIndicatorBasic
           currentStep={currentStep}
@@ -130,19 +130,19 @@ const titleStyle = {
   fontWeight: 'bold',
   fontSize: '20px',
   marginBottom: '20px',
-} as React.CSSProperties;
+} as Styles;
 
 const title2Style = {
   fontStyle: 'normal',
   fontWeight: 'bold',
   fontSize: '14px',
-} as React.CSSProperties;
+} as Styles;
 
 const descriptionStyle = {
   fontStyle: 'normal',
   fontSize: '14px',
-} as React.CSSProperties;
+};
 
 const wrapperStyle = {
   padding: '16px',
-} as React.CSSProperties;
+};

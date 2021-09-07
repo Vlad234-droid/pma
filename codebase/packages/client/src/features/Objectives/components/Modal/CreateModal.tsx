@@ -1,6 +1,5 @@
 import React, { FC, HTMLProps } from 'react';
-import { Icon } from '@dex-ddl/core';
-import { useStyle, Styles, useBreakpoints } from 'styles';
+import { Icon, useStyle, Styles, useBreakpoints } from '@dex-ddl/core';
 import { Button } from 'components/Button';
 import { Icon as IconComponent } from 'components/Icon';
 import { StepIndicatorBasic } from 'components/StepIndicator/StepIndicator';
@@ -87,7 +86,7 @@ export const CreateModal: FC<Props> = () => {
           left: 0,
           right: 0,
           borderTop: '1px solid #E5E5E5',
-        })}
+        } as Styles)}
       >
         <div
           className={css({
@@ -97,18 +96,16 @@ export const CreateModal: FC<Props> = () => {
           })}
         >
           <Button
-            styles={
-              {
-                background: 'white',
-                border: `1px solid ${theme.colors.tescoBlue}`,
-                fontSize: '16px',
-                lineHeight: '20px',
-                fontWeight: 'bold',
-                color: `${theme.colors.tescoBlue}`,
-                width: '50%',
-                margin: '0px 4px',
-              } as Styles
-            }
+            styles={{
+              background: 'white',
+              border: `1px solid ${theme.colors.tescoBlue}`,
+              fontSize: '16px',
+              lineHeight: '20px',
+              fontWeight: 'bold',
+              color: `${theme.colors.tescoBlue}`,
+              width: '50%',
+              margin: '0px 4px',
+            }}
             onPress={() => alert('1')}
           >
             Save as draft
@@ -129,16 +126,14 @@ export const CreateModal: FC<Props> = () => {
           {/*  Next*/}
           {/*</Button>*/}
           <SubmitButton
-            styles={
-              {
-                background: `${theme.colors.tescoBlue}`,
-                fontSize: '16px',
-                lineHeight: '20px',
-                fontWeight: 'bold',
-                width: '50%',
-                margin: '0px 4px 1px 4px',
-              } as Styles
-            }
+            styles={{
+              background: `${theme.colors.tescoBlue}`,
+              fontSize: '16px',
+              lineHeight: '20px',
+              fontWeight: 'bold',
+              width: '50%',
+              margin: '0px 4px 1px 4px',
+            }}
           />
         </div>
       </div>

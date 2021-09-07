@@ -1,5 +1,5 @@
 import React, { FC, HTMLProps } from 'react';
-import { Styles, useStyle, useBreakpoints } from 'styles';
+import { Styles, useStyle, useBreakpoints } from '@dex-ddl/core';
 import { Button } from 'components/Button';
 import { Icon as IconComponent } from 'components/Icon';
 
@@ -85,7 +85,7 @@ const SuccessModal: FC<Props> = ({ onClose }) => {
           left: 0,
           right: 0,
           borderTop: '1px solid #E5E5E5',
-        })}
+        } as Styles)}
       >
         <div
           className={css({
@@ -95,18 +95,16 @@ const SuccessModal: FC<Props> = ({ onClose }) => {
           })}
         >
           <Button
-            styles={
-              {
-                background: 'white',
-                border: `1px solid ${theme.colors.tescoBlue}`,
-                fontSize: '16px',
-                lineHeight: '20px',
-                fontWeight: 'bold',
-                color: `${theme.colors.tescoBlue}`,
-                width: '50%',
-                margin: '0px 4px',
-              } as Styles
-            }
+            styles={{
+              background: 'white',
+              border: `1px solid ${theme.colors.tescoBlue}`,
+              fontSize: '16px',
+              lineHeight: '20px',
+              fontWeight: 'bold',
+              color: `${theme.colors.tescoBlue}`,
+              width: '50%',
+              margin: '0px 4px',
+            }}
             onPress={onClose}
           >
             Okay

@@ -1,12 +1,12 @@
-import React, { FC } from 'react';
+import React from 'react';
 
-import { useStyle } from 'styles';
+import { useStyle } from '@dex-ddl/core';
 
 import { invertColor } from '../utils';
 
-import { GraphicProps } from './types';
+import { FCGraphicProps } from './types';
 
-export const Microphone: FC<GraphicProps> = ({ invertColors }) => {
+export const Microphone: FCGraphicProps = ({ invertColors }) => {
   const { theme } = useStyle();
 
   const stroke = invertColor(theme.colors.link, invertColors, theme);

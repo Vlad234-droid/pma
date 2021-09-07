@@ -1,6 +1,6 @@
-import { createStore, rootEpic, rootReducer } from '@gpg/store';
+import { createStore, rootEpic, rootReducer } from '@pma/store';
 import { composeWithDevTools } from 'redux-devtools-extension';
-import api from '@gpg/api';
+import api from '@pma/api';
 
 const store = createStore({
   reducer: rootReducer,

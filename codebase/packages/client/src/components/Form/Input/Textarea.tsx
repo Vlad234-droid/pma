@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { useStyle } from 'styles';
+import { useStyle } from '@dex-ddl/core';
 
 import { TextareaProps } from '../types';
 import { useRefContainer } from '../context/input';

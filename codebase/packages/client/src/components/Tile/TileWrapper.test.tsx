@@ -1,14 +1,20 @@
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
-import { render, screen } from 'styles/test-theme-provider';
-import { TileWrapper } from './TileWrapper';
+import { RenderResultWithProps, renderWithTheme } from 'utils/test';
+import { TileWrapper, TileWrapperProps } from './TileWrapper';
 
-it('Tile has border', async () => {
-  render(
-    <TileWrapper>
-      <div>test</div>
-    </TileWrapper>,
-  );
-  const tail = screen.queryByText('test');
-  expect(tail).toBeInTheDocument();
+describe('Tile/TileWrapper', () => {
+  let wrapper: RenderResultWithProps<TileWrapperProps>;
+  beforeEach(() => {
+    wrapper = renderWithTheme(
+      <TileWrapper>
+        <div>test</div>
+      </TileWrapper>,
+    );
+  });
+
+  it('Tile has border', async () => {
+    const tail = wrapper.queryByText('test');
+    expect(tail).toBeInTheDocument();
+  });
 });

@@ -1,6 +1,5 @@
 import React, { FC, HTMLProps } from 'react';
-import { useStyle, CreateRule, Theme } from 'styles';
-import { Icon } from '@dex-ddl/core';
+import { useStyle, CreateRule, Theme, Icon } from '@dex-ddl/core';
 
 export type AvatarProps = {
   img?: string;
@@ -50,7 +49,7 @@ export const Avatar: FC<Props> = ({ img, size = 56 }) => {
   const { css, theme } = useStyle();
   return (
     <span className={css(contentStyle({ theme, size }))}>
-      {img ? <img className={css(imageStyle)} src={img} /> : <Icon graphic='account' testId={'test-id-account-icon'} />}
+      {img ? <img style={imageStyle} src={img} /> : <Icon graphic='account' testId={'test-id-account-icon'} />}
     </span>
   );
 };

@@ -1,11 +1,11 @@
-import React, { FC } from 'react';
-import { useStyle } from 'styles';
+import React from 'react';
+import { useStyle } from '@dex-ddl/core';
 
 import { invertColor } from '../utils';
 
-import { GraphicProps } from './types';
+import { FCGraphicProps } from './types';
 
-export const Account: FC<GraphicProps> = ({ invertColors }) => {
+export const Account: FCGraphicProps = ({ invertColors }) => {
   const { theme } = useStyle();
 
   const stroke = invertColor(theme.colors.link, invertColors, theme);

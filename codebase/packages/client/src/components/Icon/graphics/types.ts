@@ -1,7 +1,11 @@
-import { ColorValues, Theme } from 'styles';
+import { FC } from 'react';
 
-export type GraphicProps = {
+import { Theme } from '@dex-ddl/core';
+
+type GraphicProps = {
   invertColors: boolean;
 };
 
-export type IconColors = Extract<ColorValues, Theme['colors']['link'] | Theme['colors']['white']> | 'currentColor';
+export type FCGraphicProps = FC<GraphicProps>;
+
+export type IconColors = Theme['colors']['link'] | Theme['colors']['white'] | 'currentColor';

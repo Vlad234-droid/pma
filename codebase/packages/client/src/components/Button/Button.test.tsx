@@ -1,7 +1,7 @@
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
 import { fireEvent } from '@testing-library/react';
-import { themeRender } from 'styles/test-theme-provider';
+import { renderWithTheme as themeRender } from 'utils/test';
 
 import { Button } from './Button';
 

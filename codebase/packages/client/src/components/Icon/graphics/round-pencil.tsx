@@ -1,8 +1,8 @@
-import React, { FC } from 'react';
+import React from 'react';
 
-import { GraphicProps } from './types';
+import { FCGraphicProps } from './types';
 
-export const RoundPencil: FC<GraphicProps> = () => {
+export const RoundPencil: FCGraphicProps = () => {
   return (
     <path
       stroke='null'

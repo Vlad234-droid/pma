@@ -3,7 +3,7 @@ import React, { FC, useRef } from 'react';
 import { useButton } from '@react-aria/button';
 import type { AriaButtonProps } from '@react-types/button';
 
-import { useStyle, Styles, Rule } from 'styles';
+import { useStyle, Styles, Rule } from '@dex-ddl/core';
 
 type Mode = 'default' | 'inverse';
 

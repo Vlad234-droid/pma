@@ -1,5 +1,6 @@
 import React from 'react';
-import { render, cleanup, fireEvent } from 'styles/test-theme-provider';
+import { fireEvent, cleanup } from '@testing-library/react';
+import { renderWithTheme as render } from 'utils/test';
 
 import { BaseAccordion, Accordion, Header, BaseHeader, Panel, BasePanel, BaseSection, Section } from './';
 
@@ -11,14 +12,14 @@ describe('Accordion', () => {
       <BaseAccordion id='test-accordion'>
         {({ expandAllSections }) => (
           <div>
-            <button data-testid='expand-button' onClick={expandAllSections}>
+            <button data-test-id='expand-button' onClick={expandAllSections}>
               Expand all sections
             </button>
             <BaseSection defaultExpanded={false}>
               {({ expanded, getSectionProps }) => (
                 <div
                   {...getSectionProps({
-                    'data-testid': 'section1',
+                    'data-test-id': 'section1',
                     'data-expanded': expanded,
                   })}
                 />
@@ -28,7 +29,7 @@ describe('Accordion', () => {
               {({ expanded, getSectionProps }) => (
                 <div
                   {...getSectionProps({
-                    'data-testid': 'section2',
+                    'data-test-id': 'section2',
                     'data-expanded': expanded,
                   })}
                 />
@@ -60,14 +61,14 @@ describe('Accordion', () => {
       <BaseAccordion id='test-accordion'>
         {({ collapseAllSections }) => (
           <div>
-            <button data-testid='collapse-button' onClick={collapseAllSections}>
+            <button data-test-id='collapse-button' onClick={collapseAllSections}>
               Collapse all sections
             </button>
             <BaseSection defaultExpanded>
               {({ expanded, getSectionProps }) => (
                 <div
                   {...getSectionProps({
-                    'data-testid': 'section1',
+                    'data-test-id': 'section1',
                     'data-expanded': expanded,
                   })}
                 />
@@ -77,7 +78,7 @@ describe('Accordion', () => {
               {({ expanded, getSectionProps }) => (
                 <div
                   {...getSectionProps({
-                    'data-testid': 'section2',
+                    'data-test-id': 'section2',
                     'data-expanded': expanded,
                   })}
                 />
@@ -144,7 +145,7 @@ describe('Accordion', () => {
     it('getSectionProps can accept 0 arguments', () => {
       const { queryByTestId } = render(
         <Accordion id='test-accordion'>
-          <BaseSection>{({ getSectionProps }) => <div {...getSectionProps()} data-testid='section' />}</BaseSection>
+          <BaseSection>{({ getSectionProps }) => <div {...getSectionProps()} data-test-id='section' />}</BaseSection>
         </Accordion>,
       );
 
@@ -157,7 +158,7 @@ describe('Accordion', () => {
       const { getByTestId } = render(
         <Accordion id='test-accordion'>
           <Section defaultExpanded onToggle={onToggle}>
-            <Header title='test-title' data-testid='header' />
+            <Header title='test-title' data-test-id='header' />
           </Section>
         </Accordion>,
       );
@@ -176,7 +177,7 @@ describe('Accordion', () => {
               {({ getHeadingProps }) => (
                 <div
                   {...getHeadingProps({
-                    'data-testid': 'header',
+                    'data-test-id': 'header',
                   })}
                 />
               )}
@@ -193,7 +194,7 @@ describe('Accordion', () => {
         <Accordion id='test-accordion'>
           <Section>
             <BaseHeader>
-              {({ getElementToggleProps }) => <div {...getElementToggleProps()} data-testid='header' />}
+              {({ getElementToggleProps }) => <div {...getElementToggleProps()} data-test-id='header' />}
             </BaseHeader>
           </Section>
         </Accordion>,
@@ -209,7 +210,7 @@ describe('Accordion', () => {
         const { getByTestId } = render(
           <Accordion id='test-accordion'>
             <Section>
-              <Panel data-testid='panel' />
+              <Panel data-test-id='panel' />
             </Section>
             <Section>
               <Panel />
@@ -238,7 +239,7 @@ describe('Accordion', () => {
         const { getByTestId } = render(
           <Accordion id='test-accordion'>
             <Section>
-              <Panel data-testid='panel' />
+              <Panel data-test-id='panel' />
             </Section>
             <Section>
               <Panel />

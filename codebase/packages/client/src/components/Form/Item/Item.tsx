@@ -1,5 +1,5 @@
 import React, { FC, useRef, useState } from 'react';
-import { useStyle, Rule, Styles } from 'styles';
+import { useStyle, Rule, Styles } from '@dex-ddl/core';
 
 import { Icon } from 'components/Icon';
 import Provider from '../context/input';
@@ -52,7 +52,7 @@ export const Item: FC<Props> = ({ children, label }) => {
           ':focus-within svg path': {
             fill: theme.colors.tescoBlue,
           },
-        } as React.CSSProperties)}
+        } as Styles)}
       >
         <div
           style={{

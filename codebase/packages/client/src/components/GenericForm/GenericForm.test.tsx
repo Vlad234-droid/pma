@@ -1,6 +1,8 @@
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
-import { render, screen } from 'styles/test-theme-provider';
+import { screen } from '@testing-library/react';
+import { renderWithTheme as render } from 'utils/test';
+
 import GenericForm from './GenericForm';
 
 it('render GenericForm', async () => {

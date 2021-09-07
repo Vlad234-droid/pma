@@ -1,4 +1,4 @@
-import { Theme } from 'styles';
+import { Theme } from '@dex-ddl/core';
 
 import { IconColors } from './graphics/types';
 

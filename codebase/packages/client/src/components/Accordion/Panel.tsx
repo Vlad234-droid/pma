@@ -1,5 +1,5 @@
 import React, { ReactNode, useRef, RefObject, CSSProperties, FC } from 'react';
-import { useStyle, Rule } from 'styles';
+import { useStyle, Rule } from '@dex-ddl/core';
 
 import { AccordionConsumer, SectionConsumer } from './contexts';
 

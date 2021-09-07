@@ -1,5 +1,5 @@
 import React, { FC, KeyboardEvent, ReactNode, useState, useEffect } from 'react';
-import { useStyle, Rule } from 'styles';
+import { useStyle, Rule } from '@dex-ddl/core';
 
 import { ARROW_DOWN, ARROW_UP, HOME, END } from './constans';
 import { AccordionProvider } from './contexts';
