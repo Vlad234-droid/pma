@@ -1,8 +1,7 @@
 import React, { FC } from 'react';
-import { useStyle, Rule } from '@dex-ddl/core';
+import { useStyle, Rule , Button } from '@dex-ddl/core';
 
 import { TileWrapper } from 'components/Tile';
-import { Button } from 'components/Button';
 
 type Review = {
   id: string;
@@ -28,11 +27,13 @@ const Reviews: FC<Props> = ({ reviews }) => {
             </div>
             <div className={css(rightStyles)}>
               <Button
-                styles={{
-                  border: `1px solid ${theme.colors.tescoBlue}`,
-                  fontSize: '14px',
-                  height: '34px',
-                }}
+                styles={[
+                  {
+                    border: `1px solid ${theme.colors.tescoBlue}`,
+                    fontSize: '14px',
+                    height: '34px',
+                  },
+                ]}
                 mode='inverse'
                 onPress={() => alert('Test')}
               >
@@ -68,7 +69,7 @@ const titleStyles: Rule = ({ theme }) => {
     color: theme.colors.link,
     fontSize: mobileScreen ? '16px' : '18px',
     lineHeight: mobileScreen ? '20px' : '22px',
-    fontWeight: theme.font.bold,
+    fontWeight: theme.font.weight.bold,
     paddingBottom: '10px',
     margin: 0,
   };

@@ -1,8 +1,7 @@
 import React, { FC, HTMLProps, useState } from 'react';
-import { useBreakpoints, Rule, Modal, useStyle } from '@dex-ddl/core';
+import { useBreakpoints, Rule, Modal, useStyle , Button } from '@dex-ddl/core';
 import { Icon } from 'components/Icon';
 import { CreateModal, SuccessModal, ArticleModal } from '../Modal';
-import { Button } from 'components/Button';
 import { IconButton } from 'components/IconButton';
 
 export type CreateModalProps = {
@@ -22,7 +21,7 @@ const CreateButton: FC<Props> = ({ withIcon = false }) => {
     <>
       {withIcon ? (
         <IconButton
-          styles={[btnStyle, iconBtnStyle]}
+          customVariantRules={{ default: { ...btnStyle, ...iconBtnStyle } }}
           onPress={handleBtnClick}
           graphic='add'
           iconProps={{ invertColors: true }}
@@ -32,10 +31,12 @@ const CreateButton: FC<Props> = ({ withIcon = false }) => {
         </IconButton>
       ) : (
         <Button
-          styles={{
-            border: `1px solid ${theme.colors.white}`,
-            fontSize: '14px',
-          }}
+          styles={[
+            {
+              border: `1px solid ${theme.colors.white}`,
+              fontSize: '14px',
+            },
+          ]}
           onPress={handleBtnClick}
         >
           Create objectives

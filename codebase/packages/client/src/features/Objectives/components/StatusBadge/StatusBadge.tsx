@@ -39,6 +39,7 @@ const StatusBadge: FC<StatusBadgeProps> = ({ status, styles }) => {
 };
 
 const wrapperStyles: Rule = ({ theme }) => ({
+  display: 'flex',
   padding: '8px 16px',
   background: theme.colors.white,
   borderRadius: '40px',
@@ -54,6 +55,7 @@ const labelStyles: CreateRule<{ color: string }> =
     fontSize: '14px',
     lineHeight: '18px',
     fontWeight: 700,
+    display: 'contents',
     color,
   });
 

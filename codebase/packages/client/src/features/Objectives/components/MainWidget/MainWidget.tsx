@@ -1,10 +1,9 @@
 import React, { FC } from 'react';
 import { Status } from 'config/enum';
-import { useStyle, Rule, CreateRule } from '@dex-ddl/core';
+import { useStyle, Rule, CreateRule , Button } from '@dex-ddl/core';
 
 import { CreateButton } from '../CreateButton';
 import { TileWrapper } from 'components/Tile';
-import { Button } from 'components/Button';
 import { Icon, RoundIcon, Graphics } from 'components/Icon';
 
 export type Props = {
@@ -77,10 +76,12 @@ const MainWidget: FC<Props> = ({ customStyle, onClick, status, count = 0 }) => {
                 <CreateButton />
               ) : (
                 <Button
-                  styles={{
-                    border: `1px solid ${theme.colors.white}`,
-                    fontSize: '14px',
-                  }}
+                  styles={[
+                    {
+                      border: `1px solid ${theme.colors.white}`,
+                      fontSize: '14px',
+                    },
+                  ]}
                   onPress={() => alert('Test')}
                 >
                   View and Edit

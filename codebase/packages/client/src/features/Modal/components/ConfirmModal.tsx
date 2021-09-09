@@ -1,6 +1,5 @@
 import React, { FC, HTMLProps } from 'react';
-import { useBreakpoints, useStyle, CreateRule, Modal, Styles } from '@dex-ddl/core';
-import { Button } from 'components/Button';
+import { useBreakpoints, useStyle, CreateRule, Modal, Styles , Button } from '@dex-ddl/core';
 
 export type ConfirmModal = {
   title: string;
@@ -50,29 +49,33 @@ const ConfirmModal: FC<Props> = ({ title, description, onCancel, onSave, onOverl
         })}
       >
         <Button
-          styles={{
-            background: 'white',
-            border: `1px solid ${theme.colors.tescoBlue}`,
-            fontSize: '16px',
-            lineHeight: '20px',
-            fontWeight: 'bold',
-            color: `${theme.colors.tescoBlue}`,
-            width: '50%',
-            margin: '0px 4px',
-          }}
+          styles={[
+            {
+              background: 'white',
+              border: `1px solid ${theme.colors.tescoBlue}`,
+              fontSize: '16px',
+              lineHeight: '20px',
+              fontWeight: 'bold',
+              color: `${theme.colors.tescoBlue}`,
+              width: '50%',
+              margin: '0px 4px',
+            },
+          ]}
           onPress={onCancel}
         >
           Cancel
         </Button>
         <Button
-          styles={{
-            background: `${theme.colors.tescoBlue}`,
-            fontSize: '16px',
-            lineHeight: '20px',
-            fontWeight: 'bold',
-            width: '50%',
-            margin: '0px 4px 1px 4px',
-          }}
+          styles={[
+            {
+              background: `${theme.colors.tescoBlue}`,
+              fontSize: '16px',
+              lineHeight: '20px',
+              fontWeight: 'bold',
+              width: '50%',
+              margin: '0px 4px 1px 4px',
+            },
+          ]}
           onPress={onSave}
         >
           Submit

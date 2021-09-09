@@ -101,7 +101,7 @@ const titleStyle: Rule = ({ theme }) => {
     color: theme.colors.link,
     fontSize: mobileScreen ? '16px' : '18px',
     lineHeight: mobileScreen ? '20px' : '22px',
-    fontWeight: theme.font.bold,
+    fontWeight: theme.font.weight.bold,
     paddingBottom: '10px',
   };
 };
