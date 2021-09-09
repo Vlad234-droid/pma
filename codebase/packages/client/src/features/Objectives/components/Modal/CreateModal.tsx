@@ -1,6 +1,5 @@
 import React, { FC, HTMLProps } from 'react';
-import { Icon, useStyle, Styles, useBreakpoints } from '@dex-ddl/core';
-import { Button } from 'components/Button';
+import { Icon, useStyle, Styles, useBreakpoints , Button } from '@dex-ddl/core';
 import { Icon as IconComponent } from 'components/Icon';
 import { StepIndicatorBasic } from 'components/StepIndicator/StepIndicator';
 import { Item, Input, Textarea } from 'components/Form';
@@ -96,16 +95,18 @@ export const CreateModal: FC<Props> = () => {
           })}
         >
           <Button
-            styles={{
-              background: 'white',
-              border: `1px solid ${theme.colors.tescoBlue}`,
-              fontSize: '16px',
-              lineHeight: '20px',
-              fontWeight: 'bold',
-              color: `${theme.colors.tescoBlue}`,
-              width: '50%',
-              margin: '0px 4px',
-            }}
+            styles={[
+              {
+                background: 'white',
+                border: `1px solid ${theme.colors.tescoBlue}`,
+                fontSize: '16px',
+                lineHeight: '20px',
+                fontWeight: 'bold',
+                color: `${theme.colors.tescoBlue}`,
+                width: '50%',
+                margin: '0px 4px',
+              },
+            ]}
             onPress={() => alert('1')}
           >
             Save as draft
@@ -126,14 +127,16 @@ export const CreateModal: FC<Props> = () => {
           {/*  Next*/}
           {/*</Button>*/}
           <SubmitButton
-            styles={{
-              background: `${theme.colors.tescoBlue}`,
-              fontSize: '16px',
-              lineHeight: '20px',
-              fontWeight: 'bold',
-              width: '50%',
-              margin: '0px 4px 1px 4px',
-            }}
+            styles={[
+              {
+                background: `${theme.colors.tescoBlue}`,
+                fontSize: '16px',
+                lineHeight: '20px',
+                fontWeight: 'bold',
+                width: '50%',
+                margin: '0px 4px 1px 4px',
+              },
+            ]}
           />
         </div>
       </div>

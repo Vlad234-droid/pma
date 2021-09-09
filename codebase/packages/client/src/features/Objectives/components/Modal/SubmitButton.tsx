@@ -1,10 +1,9 @@
 import React, { FC, HTMLProps, useState } from 'react';
-import { Rule } from '@dex-ddl/core';
-import { Button } from 'components/Button';
+import { Rule , Button } from '@dex-ddl/core';
 import { ConfirmModal } from 'features/Modal';
 
 export type SubmitButton = {
-  styles?: Rule;
+  styles?: Rule[];
 };
 
 type Props = HTMLProps<HTMLInputElement> & SubmitButton;

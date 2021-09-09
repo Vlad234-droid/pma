@@ -107,6 +107,6 @@ describe('IconButton', () => {
 
     const button = getByRole('button');
 
-    expect(button).toHaveAttribute('disabled', '');
+    expect(button).toHaveAttribute('aria-disabled', 'true');
   });
 });

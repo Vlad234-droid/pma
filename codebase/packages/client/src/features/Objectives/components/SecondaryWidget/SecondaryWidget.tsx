@@ -1,8 +1,7 @@
 import React, { FC } from 'react';
 import { TileWrapper } from 'components/Tile';
 import { Icon, IconProps } from 'components/Icon';
-import { Button } from 'components/Button';
-import { useStyle, Rule, Styles } from '@dex-ddl/core';
+import { Button , useStyle, Rule, Styles } from '@dex-ddl/core';
 
 export type Props = {
   iconGraphic: IconProps['graphic'];
@@ -27,7 +26,7 @@ const SecondaryWidget: FC<Props> = ({ iconGraphic, title, date, customStyle, onC
         </div>
         <div className={css(bodyStyle)}>
           <div>
-            <Button mode='inverse' styles={btnStyle({ theme }) as Styles} onPress={onClick}>
+            <Button mode='inverse' styles={[btnStyle({ theme }) as Styles]} onPress={onClick}>
               View
             </Button>
           </div>
@@ -51,7 +50,7 @@ const wrapperStyle: Rule = ({ theme }) => {
     display: 'flex',
     '&:hover': {
       opacity: 0.9,
-      backgroundColor: theme.colors.whiteHover,
+      backgroundColor: theme.colors.white,
     },
   };
 };

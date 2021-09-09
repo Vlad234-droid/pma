@@ -1502,10 +1502,10 @@
   resolved "https://registry.yarnpkg.com/@csstools/normalize.css/-/normalize.css-10.1.0.tgz#f0950bba18819512d42f7197e56c518aa491cf18"
   integrity sha512-ij4wRiunFfaJxjB0BdrYHIH8FxBJpOwNPhhAcunlmPdXudL1WQV1qoP9un6JsEBAgQH+7UXyyjh0g7jTxXK6tg==
 
-"@dex-ddl/core@0.1.34":
-  version "0.1.34"
-  resolved "https://nexus.ourtesco.com/repository/colleague-ui-private/@dex-ddl/core/-/core-0.1.34.tgz#ce33d07a538f2f89cb85010bfad16312dfc01476"
-  integrity sha512-nKMJBixNoAj4R1lfulKCM5H+5UCBXNQZS1LgQXgtNokTjwvIpQKScySibAgHBW/9zGlHUboYdvFbOhf2BVeBLw==
+"@dex-ddl/core@0.1.38":
+  version "0.1.38"
+  resolved "https://nexus.ourtesco.com/repository/colleague-ui-private/@dex-ddl/core/-/core-0.1.38.tgz#2409879ce0dddfa0a17ecd772014c03fe5ef4aed"
+  integrity sha512-0o1C0g1jXijDXG9aq7lXyetPVaHrywC2omh0tg64lmrv8bgvPqLEBeHSiivTGUpVIDFxDivIgWzDVu8lAwWj9A==
   dependencies:
     "@energon-components/hooks" "0.9.0"
     "@energon/array-utils" "0.19.4"

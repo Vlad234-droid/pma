@@ -1,73 +1,38 @@
-import React, { FC, useRef, memo, ButtonHTMLAttributes } from 'react';
+import React, { FC, memo } from 'react';
 
-import { ButtonAria, useButton } from '@react-aria/button';
-import type { AriaButtonProps } from '@react-types/button';
+import { AriaButtonProps } from '@react-types/button';
 
-import { useStyle, Rule } from '@dex-ddl/core';
+import { Rule , Button } from '@dex-ddl/core';
 
 import { Icon, IconProps, Graphics } from '../Icon';
 
+type VariantRule = {
+  default?: Rule;
+  disabled?: Rule;
+};
+
 export type IconButtonProps = {
   graphic: Graphics;
-  styles: Rule[];
   iconStyles?: Rule;
   iconProps?: Omit<IconProps, 'graphic' | 'iconStyles'>;
-  customVariantRules?: Partial<VariantRule>;
-} & AriaButtonProps<'button'>;
+  customVariantRules?: VariantRule;
+} & AriaButtonProps<'div'>;
 
-export const IconButton: FC<IconButtonProps> = memo((props) => {
-  const ref = useRef(null);
-
-  const { buttonProps } = useButton(
-    {
-      ...props,
-      elementType: 'button',
-    },
-    ref,
-  ) as ButtonAria<ButtonHTMLAttributes<HTMLButtonElement>>;
-
-  const { graphic, styles = [], iconStyles, iconProps, customVariantRules = {}, children } = props;
-
-  const { css } = useStyle();
-
-  const variant = getVariant({ buttonProps });
-
-  return (
-    <button
-      {...buttonProps}
-      ref={ref}
-      className={css(buttonBaseRule, variantRules(customVariantRules)[variant], ...styles)}
+export const IconButton: FC<IconButtonProps> = memo(
+  ({ graphic, iconStyles, iconProps, customVariantRules = {}, isDisabled, children, ...props }) => (
+    <Button
+      {...props}
+      isDisabled={isDisabled}
+      styles={[buttonBaseRule, getVariantRule(customVariantRules, isDisabled)]}
     >
-      <>
-        <Icon graphic={graphic} iconStyles={iconStyles} {...iconProps} />
-        {children}
-      </>
-    </button>
-  );
-});
+      <Icon graphic={graphic} iconStyles={iconStyles} {...iconProps} />
+      {children}
+    </Button>
+  ),
+);
 
-IconButton.displayName = 'IconButton';
-
-type Variant = 'default' | 'disabled';
-
-type VariantRule = { [K in Variant]: Rule };
-
-type VariantParams = {
-  buttonProps: React.ButtonHTMLAttributes<HTMLButtonElement>;
-};
-
-const getVariant = ({ buttonProps }: VariantParams): Variant => {
-  if (buttonProps.disabled) return 'disabled';
-
-  return 'default';
-};
-
-const variantRules = (customVariantRules: Partial<VariantRule>): VariantRule => {
-  return {
-    default: customVariantRules.default ?? {},
-    disabled: customVariantRules.disabled ?? {},
-  };
-};
+const getVariantRule = ({ default: d = {}, disabled = {} }: VariantRule, isDisabled?: boolean): Rule =>
+  isDisabled ? disabled : d;
 
 const buttonBaseRule: Rule = {
   display: 'inline-flex',
@@ -77,4 +42,10 @@ const buttonBaseRule: Rule = {
   padding: 0,
   outline: 0,
   border: 0,
+
+  // reset button styles
+  borderRadius: undefined,
+  height: undefined,
+  background: undefined,
+  color: undefined,
 };

@@ -1,11 +1,10 @@
 import React, { FC } from 'react';
-import { useStyle, Rule } from '@dex-ddl/core';
+import { useStyle, Rule , Button } from '@dex-ddl/core';
 import { Status } from 'config/enum';
 
 import { StepIndicator } from 'components/StepIndicator/StepIndicator';
 import { Header } from 'components/Header';
 import { IconButton } from 'components/IconButton';
-import { Button } from 'components/Button';
 
 import { CreateButton, Section, StatusBadge, Accordion, Reviews } from 'features/Objectives';
 
@@ -100,7 +99,7 @@ const Objectives: FC = () => {
                 <IconButton
                   onPress={() => alert('share')}
                   graphic='share'
-                  styles={[iconButtonStyles]}
+                  customVariantRules={{ default: iconButtonStyles }}
                   iconStyles={iconStyles}
                 >
                   Share
@@ -108,7 +107,7 @@ const Objectives: FC = () => {
                 <IconButton
                   onPress={() => alert('print')}
                   graphic='print'
-                  styles={[iconButtonStyles]}
+                  customVariantRules={{ default: iconButtonStyles }}
                   iconStyles={iconStyles}
                 >
                   Print
@@ -116,7 +115,7 @@ const Objectives: FC = () => {
                 <IconButton
                   onPress={() => alert('edit')}
                   graphic='edit'
-                  styles={[iconButtonStyles, iconStrokeButtonStyles]}
+                  customVariantRules={{ default: { ...iconButtonStyles, ...iconStrokeButtonStyles } }}
                   iconStyles={iconStyles}
                 >
                   Edit All
@@ -134,7 +133,7 @@ const Objectives: FC = () => {
           right={{
             content: (
               <div>
-                <Button mode='inverse' onPress={() => alert('view')} styles={linkStyles({ theme })}>
+                <Button mode='inverse' onPress={() => alert('view')} styles={[linkStyles({ theme })]}>
                   View history
                 </Button>
               </div>
@@ -150,7 +149,7 @@ const Objectives: FC = () => {
           right={{
             content: (
               <div>
-                <Button mode='inverse' onPress={() => alert('view')} styles={linkStyles({ theme })}>
+                <Button mode='inverse' onPress={() => alert('view')} styles={[linkStyles({ theme })]}>
                   View Files
                 </Button>
               </div>
