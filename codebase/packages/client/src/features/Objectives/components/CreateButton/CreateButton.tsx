@@ -1,7 +1,7 @@
 import React, { FC, HTMLProps, useState } from 'react';
-import { useBreakpoints, Rule, Modal, useStyle , Button } from '@dex-ddl/core';
+import { useBreakpoints, Rule, Modal, useStyle, Button, Styles } from '@dex-ddl/core';
 import { Icon } from 'components/Icon';
-import { CreateModal, SuccessModal, ArticleModal } from '../Modal';
+import { CreateModal } from '../Modal';
 import { IconButton } from 'components/IconButton';
 
 export type CreateModalProps = {
@@ -21,7 +21,7 @@ const CreateButton: FC<Props> = ({ withIcon = false }) => {
     <>
       {withIcon ? (
         <IconButton
-          customVariantRules={{ default: { ...btnStyle, ...iconBtnStyle } }}
+          customVariantRules={{ default: iconBtnStyle }}
           onPress={handleBtnClick}
           graphic='add'
           iconProps={{ invertColors: true }}
@@ -88,11 +88,6 @@ const containerRule: Rule = ({ colors }) => {
     cursor: 'default',
   };
 };
-
-const btnStyle: Rule = ({ theme }) => ({
-  border: `1px solid ${theme.colors.white}`,
-  fontSize: '14px',
-});
 
 const iconBtnStyle: Rule = ({ theme }) => ({
   padding: '0 16px',
