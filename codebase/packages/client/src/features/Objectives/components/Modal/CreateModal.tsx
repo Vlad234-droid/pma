@@ -1,5 +1,7 @@
 import React, { FC, HTMLProps } from 'react';
-import { Icon, useStyle, Styles, useBreakpoints , Button } from '@dex-ddl/core';
+
+import { Icon, Button, useStyle, useBreakpoints } from '@dex-ddl/core';
+
 import { Icon as IconComponent } from 'components/Icon';
 import { StepIndicatorBasic } from 'components/StepIndicator/StepIndicator';
 import { Item, Input, Textarea } from 'components/Form';
@@ -25,14 +27,14 @@ export const CreateModal: FC<Props> = () => {
         className={css({
           height: '100%',
           overflow: 'auto',
-          padding: mobileScreen ? '0 16px' : '0 40px',
+          padding: mobileScreen ? `0 ${theme.spacing.s4}` : `0 ${theme.spacing.s10}`,
         })}
       >
         <span
           className={css({
             position: 'fixed',
-            top: '22px',
-            left: mobileScreen ? '20px' : '40px',
+            top: theme.spacing.s5,
+            left: mobileScreen ? theme.spacing.s5 : theme.spacing.s10,
             textDecoration: 'none',
             border: 'none',
             cursor: 'pointer',
@@ -41,7 +43,7 @@ export const CreateModal: FC<Props> = () => {
           <IconComponent graphic='arrowLeft' invertColors={true} />
         </span>
         <form>
-          <div className={css({ padding: '0 0 20px' })}>
+          <div className={css({ padding: `0 0 ${theme.spacing.s5}` })}>
             <StepIndicatorBasic
               currentStatus={'pending'}
               currentStep={0}
@@ -54,9 +56,14 @@ export const CreateModal: FC<Props> = () => {
           <Item label='Description'>
             <Textarea placeholder='Build 40 additional backlinks for Our Tesco by June. To do so I will connect with Ellie and Andrew from PR to develop an effective outreach strategy.' />
           </Item>
-          <div className={css({ padding: '0 0 20px' })}>
+          <div className={css({ padding: `0 0 ${theme.spacing.s5}`, display: 'flex' })}>
             <Icon graphic='information' />
-            <span style={{ fontSize: '14px', lineHeight: '18px', color: '#00539F', padding: '0 10px' }}>
+            <span
+              className={css(theme.font.fixed.f14, {
+                color: theme.colors.tescoBlue,
+                padding: `${theme.spacing.s0} ${theme.spacing.s2}`,
+              })}
+            >
               Need help writing your objectives?
             </span>
           </div>
@@ -81,60 +88,43 @@ export const CreateModal: FC<Props> = () => {
       <div
         className={css({
           position: 'relative',
-          bottom: '0',
-          left: 0,
-          right: 0,
-          borderTop: '1px solid #E5E5E5',
-        } as Styles)}
+          bottom: theme.spacing.s0,
+          left: theme.spacing.s0,
+          right: theme.spacing.s0,
+          borderTop: `${theme.border.width.b1} solid ${theme.colors.backgroundDarkest}`,
+        })}
       >
         <div
           className={css({
-            padding: '36px 36px',
+            padding: theme.spacing.s9,
             display: 'flex',
             justifyContent: 'center',
           })}
         >
           <Button
             styles={[
+              theme.font.fixed.f16,
               {
-                background: 'white',
-                border: `1px solid ${theme.colors.tescoBlue}`,
-                fontSize: '16px',
-                lineHeight: '20px',
-                fontWeight: 'bold',
-                color: `${theme.colors.tescoBlue}`,
+                fontWeight: theme.font.weight.bold,
                 width: '50%',
-                margin: '0px 4px',
+                margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
+                background: theme.colors.white,
+                border: `${theme.border.width.b1} solid ${theme.colors.tescoBlue}`,
+                color: `${theme.colors.tescoBlue}`,
               },
             ]}
             onPress={() => alert('1')}
           >
             Save as draft
           </Button>
-          {/*<Button*/}
-          {/*  styles={*/}
-          {/*    {*/}
-          {/*      background: `${theme.colors.tescoBlue}`,*/}
-          {/*      fontSize: '16px',*/}
-          {/*      lineHeight: '20px',*/}
-          {/*      fontWeight: 'bold',*/}
-          {/*      width: '50%',*/}
-          {/*      margin: '0px 4px 1px 4px',*/}
-          {/*    } as Styles*/}
-          {/*  }*/}
-          {/*  onPress={() => alert('2')}*/}
-          {/*>*/}
-          {/*  Next*/}
-          {/*</Button>*/}
           <SubmitButton
             styles={[
+              theme.font.fixed.f16,
               {
-                background: `${theme.colors.tescoBlue}`,
-                fontSize: '16px',
-                lineHeight: '20px',
-                fontWeight: 'bold',
+                fontWeight: theme.font.weight.bold,
                 width: '50%',
-                margin: '0px 4px 1px 4px',
+                margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
+                background: `${theme.colors.tescoBlue}`,
               },
             ]}
           />
