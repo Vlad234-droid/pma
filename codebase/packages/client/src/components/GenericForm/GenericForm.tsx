@@ -2,7 +2,7 @@ import React, { RefObject, Fragment, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { AnyObjectSchema } from 'yup';
-import { Button , useStyle, Rule } from '@dex-ddl/core';
+import { Button, useStyle, Rule } from '@dex-ddl/core';
 
 import type { FormField, Handler } from './types';
 

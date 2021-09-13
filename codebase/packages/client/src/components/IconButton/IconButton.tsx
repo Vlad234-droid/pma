@@ -2,7 +2,7 @@ import React, { FC, memo } from 'react';
 
 import { AriaButtonProps } from '@react-types/button';
 
-import { Rule , Button } from '@dex-ddl/core';
+import { Rule, Button } from '@dex-ddl/core';
 
 import { Icon, IconProps, Graphics } from '../Icon';
 

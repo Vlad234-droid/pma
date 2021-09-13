@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { useStyle, Rule , Button } from '@dex-ddl/core';
+import { useStyle, Rule, Button } from '@dex-ddl/core';
 import { Status } from 'config/enum';
 
 import { StepIndicator } from 'components/StepIndicator/StepIndicator';
@@ -70,7 +70,7 @@ const Objectives: FC = () => {
   const { css, theme } = useStyle();
 
   return (
-    <>
+    <div className={css({ margin: '8px' })}>
       <Header title='Objectives' />
       <div className={css(wrapperStyle)} data-test-id={TEST_ID}>
         <div className={css({ display: 'flex' })}>
@@ -159,7 +159,7 @@ const Objectives: FC = () => {
           You have 12 files
         </Section>
       </div>
-    </>
+    </div>
   );
 };
 
@@ -177,7 +177,7 @@ const iconStyles: Rule = {
 };
 
 const iconButtonStyles: Rule = {
-  padding: '10px 20px',
+  padding: '10px',
 };
 
 const iconStrokeButtonStyles: Rule = ({ theme }) => ({
