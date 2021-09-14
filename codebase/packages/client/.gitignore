@@ -12,6 +12,7 @@
 /build
 
 # misc
+/storybook-static
 .DS_Store
 .env.local
 .env.development.local
@@ -31,6 +32,7 @@ yarn-error.log*
 # editors
 .vscode
 .idea
+
 
 #storybook
 /storybook-static

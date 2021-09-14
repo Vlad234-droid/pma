@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { TileWrapper } from 'components/Tile';
 import { Icon, IconProps } from 'components/Icon';
-import { Button , useStyle, Rule, Styles } from '@dex-ddl/core';
+import { Button, Rule, Styles, useStyle } from '@dex-ddl/core';
 
 export type Props = {
   iconGraphic: IconProps['graphic'];
@@ -85,6 +85,7 @@ const descriptionStyle: Rule = ({ theme }) => {
     fontSize: mobileScreen ? '12px' : '14px',
     lineHeight: mobileScreen ? '16px' : '20px',
     color: theme.colors.base,
+    textAlign: 'center',
   };
 };
 

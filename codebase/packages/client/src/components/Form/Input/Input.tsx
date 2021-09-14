@@ -4,13 +4,14 @@ import { useStyle } from '@dex-ddl/core';
 import { InputProps } from '../types';
 import { useRefContainer } from '../context/input';
 
-const Input: FC<InputProps> = ({ placeholder = '' }) => {
+const Input: FC<InputProps> = ({ placeholder = '', onChange }) => {
   const { css } = useStyle();
   const ref = useRefContainer();
 
   return (
     <input
       ref={ref}
+      onChange={onChange}
       className={css({
         width: '100%',
         border: '1px solid #E5E5E5',

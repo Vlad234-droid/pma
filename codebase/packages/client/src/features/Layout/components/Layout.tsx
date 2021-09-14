@@ -13,12 +13,11 @@ const Layout: FC = ({ children }) => {
   );
 };
 
-const layoutRule: Rule = ({ theme }) => ({
+const layoutRule: Rule = () => ({
   display: 'flex',
   flex: 1,
   flexDirection: 'column',
   height: '100vh',
-  background: theme.colors.backgroundDark,
 });
 
 export default Layout;
