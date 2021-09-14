@@ -1,12 +1,13 @@
-import React, { FC } from 'react';
-import { useStyle, Rule, Button } from '@dex-ddl/core';
+import React, { FC, useState } from 'react';
+import { Button, Rule, useStyle } from '@dex-ddl/core';
 import { Status } from 'config/enum';
 
 import { StepIndicator } from 'components/StepIndicator/StepIndicator';
 import { Header } from 'components/Header';
 import { IconButton } from 'components/IconButton';
 
-import { CreateButton, Section, StatusBadge, Accordion, Reviews } from 'features/Objectives';
+import { Accordion, CreateButton, Reviews, Section, StatusBadge } from 'features/Objectives';
+import { PreviousReviewFilesModal } from 'features/ReviewFiles/components';
 
 const objectives = [
   {
@@ -68,6 +69,7 @@ export const TEST_ID = 'objectives-pave';
 
 const Objectives: FC = () => {
   const { css, theme } = useStyle();
+  const [previousReviewFilesModalShow, setPreviousReviewFilesModalShow] = useState(false);
 
   return (
     <div className={css({ margin: '8px' })}>
@@ -149,7 +151,11 @@ const Objectives: FC = () => {
           right={{
             content: (
               <div>
-                <Button mode='inverse' onPress={() => alert('view')} styles={[linkStyles({ theme })]}>
+                <Button
+                  mode='inverse'
+                  onPress={() => setPreviousReviewFilesModalShow(true)}
+                  styles={[linkStyles({ theme })]}
+                >
                   View Files
                 </Button>
               </div>
@@ -159,6 +165,9 @@ const Objectives: FC = () => {
           You have 12 files
         </Section>
       </div>
+      {previousReviewFilesModalShow && (
+        <PreviousReviewFilesModal onOverlayClick={() => setPreviousReviewFilesModalShow(false)} />
+      )}
     </div>
   );
 };
@@ -177,7 +186,7 @@ const iconStyles: Rule = {
 };
 
 const iconButtonStyles: Rule = {
-  padding: '10px',
+  padding: '10px 20px',
 };
 
 const iconStrokeButtonStyles: Rule = ({ theme }) => ({

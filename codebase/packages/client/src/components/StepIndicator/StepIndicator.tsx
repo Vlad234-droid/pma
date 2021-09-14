@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 
-import { useStyle, Styles } from '@dex-ddl/core';
+import { Rule, useStyle } from '@dex-ddl/core';
 
 import { TileWrapper as Tile } from '../Tile/TileWrapper';
 import Confirmed from './Confirmed.svg';
@@ -125,23 +125,42 @@ export const StepIndicator: FC<StepIndicatorProps> = ({
   );
 };
 
-const titleStyle = {
+const titleStyle: Rule = ({
+  font: {
+    fluid: {
+      f18: { fontSize },
+    },
+  },
+}) => ({
   fontStyle: 'normal',
   fontWeight: 'bold',
-  fontSize: '20px',
+  fontSize,
   marginBottom: '20px',
-} as Styles;
+});
 
-const title2Style = {
+const title2Style: Rule = ({
+  font: {
+    fluid: {
+      f14: { fontSize },
+    },
+  },
+}) => ({
   fontStyle: 'normal',
   fontWeight: 'bold',
-  fontSize: '14px',
-} as Styles;
+  fontSize,
+  paddingTop: '8px',
+});
 
-const descriptionStyle = {
+const descriptionStyle: Rule = ({
+  font: {
+    fluid: {
+      f14: { fontSize },
+    },
+  },
+}) => ({
   fontStyle: 'normal',
-  fontSize: '14px',
-};
+  fontSize,
+});
 
 const wrapperStyle = {
   padding: '16px',
