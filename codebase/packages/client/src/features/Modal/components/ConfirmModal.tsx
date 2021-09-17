@@ -1,5 +1,7 @@
 import React, { FC, HTMLProps } from 'react';
-import { useBreakpoints, useStyle, CreateRule, Modal, Styles , Button } from '@dex-ddl/core';
+import { Trans } from 'components/Translation';
+
+import { useBreakpoints, useStyle, CreateRule, Modal, Button } from '@dex-ddl/core';
 
 export type ConfirmModal = {
   title: string;
@@ -27,7 +29,7 @@ const ConfirmModal: FC<Props> = ({ title, description, onCancel, onSave, onOverl
             fontWeight: 700,
             fontSize: '20px',
             lineHeight: '24px',
-          } as Styles,
+          },
         ],
       }}
       onOverlayClick={onOverlayClick}
@@ -63,7 +65,7 @@ const ConfirmModal: FC<Props> = ({ title, description, onCancel, onSave, onOverl
           ]}
           onPress={onCancel}
         >
-          Cancel
+          <Trans i18nKey='cancel'>Cancel</Trans>
         </Button>
         <Button
           styles={[
@@ -78,7 +80,7 @@ const ConfirmModal: FC<Props> = ({ title, description, onCancel, onSave, onOverl
           ]}
           onPress={onSave}
         >
-          Submit
+          <Trans i18nKey='submit'>Submit</Trans>
         </Button>
       </div>
     </Modal>

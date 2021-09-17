@@ -1,4 +1,5 @@
 import React, { FC, HTMLProps } from 'react';
+import { Trans, useTranslation } from 'components/Translation';
 
 import { Icon, Button, useStyle, useBreakpoints } from '@dex-ddl/core';
 
@@ -14,6 +15,7 @@ type Props = HTMLProps<HTMLInputElement> & CreateModalProps;
 
 export const CreateModal: FC<Props> = () => {
   const { css, theme } = useStyle();
+  const { t } = useTranslation();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
 
@@ -47,14 +49,25 @@ export const CreateModal: FC<Props> = () => {
             <StepIndicatorBasic
               currentStatus={'pending'}
               currentStep={0}
-              titles={['Set objectives', 'Mid-year review', 'End year review']}
+              titles={[
+                t('set_objectives', 'Set objectives'),
+                t('mid_year_review', 'Mid-year review'),
+                t('end_year_review', 'End year review'),
+              ]}
             />
           </div>
-          <Item label='Objective title'>
-            <Input placeholder='Example: Build additional backlinks for Our Tesco.' />
+          <Item label={t('objective_title', 'Objective title')}>
+            <Input
+              placeholder={t('objective_title_placeholder', 'Example: Build additional backlinks for Our Tesco.')}
+            />
           </Item>
-          <Item label='Description'>
-            <Textarea placeholder='Build 40 additional backlinks for Our Tesco by June. To do so I will connect with Ellie and Andrew from PR to develop an effective outreach strategy.' />
+          <Item label={t('description', 'Description')}>
+            <Textarea
+              placeholder={t(
+                'description_placeholder',
+                'Build 40 additional backlinks for Our Tesco by June. To do so I will connect with Ellie and Andrew from PR to develop an effective outreach strategy.',
+              )}
+            />
           </Item>
           <div className={css({ padding: `0 0 ${theme.spacing.s5}`, display: 'flex' })}>
             <Icon graphic='information' />
@@ -115,7 +128,7 @@ export const CreateModal: FC<Props> = () => {
             ]}
             onPress={() => alert('1')}
           >
-            Save as draft
+            <Trans i18nKey='save_as_draft'>Save as draft</Trans>
           </Button>
           <SubmitButton
             styles={[

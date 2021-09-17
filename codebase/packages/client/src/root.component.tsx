@@ -1,5 +1,7 @@
 import React from 'react';
 import { Provider } from 'react-redux';
+import { I18nextProvider } from 'react-i18next';
+import i18n from 'utils/i18next';
 
 import { DDLProvider } from '@dex-ddl/core';
 
@@ -42,18 +44,20 @@ const rendererOptions = {
 
 export default function Root() {
   return (
-    <DDLProvider rendererOptions={rendererOptions}>
-      <Provider store={store}>
-        <AuthProvider>
-          <Router history={history}>
-            <React.StrictMode>
-              <Layout>
-                <Navigation routes={routes} />
-              </Layout>
-            </React.StrictMode>
-          </Router>
-        </AuthProvider>
-      </Provider>
-    </DDLProvider>
+    <I18nextProvider i18n={i18n}>
+      <DDLProvider rendererOptions={rendererOptions}>
+        <Provider store={store}>
+          <AuthProvider>
+            <Router history={history}>
+              <React.StrictMode>
+                <Layout>
+                  <Navigation routes={routes} />
+                </Layout>
+              </React.StrictMode>
+            </Router>
+          </AuthProvider>
+        </Provider>
+      </DDLProvider>
+    </I18nextProvider>
   );
 }

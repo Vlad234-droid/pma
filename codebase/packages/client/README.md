@@ -64,6 +64,31 @@ Instead, it will copy all the configuration files and the transitive dependencie
 
 You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
+### `yarn run extract`
+
+Run this function to generate translation json file for local or dev env.
+
+**Note: not work for production. For prod version better move translation to CDN**
+
+#### Date format for translation
+
+Currently, we use `luxon` for date formatting.
+Example how to add pattern for translation in json file or other place:
+
+```
+{
+    "personal_development_plan_date": "Added {{date, d LLL yyyy}}"
+}
+```
+
+Example in code:
+
+```
+t('personal_development_plan_date', 'Added 04 Apr 2021', { date: new Date(2021, 4, 4) })
+```
+
+You can find more date format examples in doc [luxon](https://moment.github.io/luxon/#/formatting?id=tolocalestring-strings-for-humans)
+
 ## Learn More
 
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
