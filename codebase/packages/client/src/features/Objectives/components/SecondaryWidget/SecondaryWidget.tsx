@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import { Trans } from 'components/Translation';
 import { TileWrapper } from 'components/Tile';
 import { Icon, IconProps } from 'components/Icon';
 import { Button, Rule, Styles, useStyle } from '@dex-ddl/core';
@@ -27,7 +28,7 @@ const SecondaryWidget: FC<Props> = ({ iconGraphic, title, date, customStyle, onC
         <div className={css(bodyStyle)}>
           <div>
             <Button mode='inverse' styles={[btnStyle({ theme }) as Styles]} onPress={onClick}>
-              View
+              <Trans i18nKey='view'>View</Trans>
             </Button>
           </div>
         </div>

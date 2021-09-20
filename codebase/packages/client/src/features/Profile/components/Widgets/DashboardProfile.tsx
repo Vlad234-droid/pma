@@ -1,4 +1,5 @@
 import React, { FC, HTMLProps } from 'react';
+import { useTranslation, Trans } from 'components/Translation';
 import { Icon, useStyle, Styles, Rule } from '@dex-ddl/core';
 import { TileWrapper } from 'components/Tile';
 import { Avatar } from 'components/Avatar';
@@ -54,6 +55,7 @@ const bodyStyle = {
 
 const DashboardProfile: FC<Props> = () => {
   const { css } = useStyle();
+  const { t } = useTranslation();
   return (
     <TileWrapper>
       <div className={css(wrapperStyle)}>
@@ -66,19 +68,23 @@ const DashboardProfile: FC<Props> = () => {
         </div>
         <div className={css(bodyStyle)}>
           <div className={css(bodyBlockStyle)}>
-            <span className={css(titleStyle)}>Line manager</span>
+            <span className={css(titleStyle)}>
+              <Trans i18nKey='line_manager'>Line manager</Trans>
+            </span>
             <span className={css(descriptionStyle)}>Justin Thomas</span>
           </div>
           <div className={css(bodyBlockStyle)}>
-            <span className={css(titleStyle)}>Function</span>
+            <span className={css(titleStyle)}>
+              <Trans i18nKey='function'>Function</Trans>
+            </span>
             <span className={css(descriptionStyle)}>Store</span>
           </div>
           <div className={css(bodyBlockStyle)}>
             <span className={css(titleStyle)}>
-              Business unit bonus
+              <Trans i18nKey='business_unit_bonus'>Business unit bonus</Trans>
               <span style={{ margin: '5px' }}>
                 <span style={{ top: '5px', position: 'relative' }}>
-                  <Tooltip text='Accumsan proin ut in convallis eget turpis a pellentesque.'>
+                  <Tooltip text={t('tooltip_info', 'Accumsan proin ut in convallis eget turpis a pellentesque.')}>
                     <Icon graphic='information' />
                   </Tooltip>
                 </span>

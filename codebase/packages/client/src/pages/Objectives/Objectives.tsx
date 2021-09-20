@@ -1,4 +1,5 @@
 import React, { FC, useState } from 'react';
+import { Trans, useTranslation } from 'components/Translation';
 import { Button, Rule, useStyle } from '@dex-ddl/core';
 import { Status } from 'config/enum';
 
@@ -69,6 +70,7 @@ export const TEST_ID = 'objectives-pave';
 
 const Objectives: FC = () => {
   const { css, theme } = useStyle();
+  const { t } = useTranslation();
   const [previousReviewFilesModalShow, setPreviousReviewFilesModalShow] = useState(false);
 
   return (
@@ -90,7 +92,7 @@ const Objectives: FC = () => {
           left={{
             content: (
               <div className={css(tileStyles)}>
-                My Business Objectives
+                <Trans i18nKey='my_business_objectives'>My Business Objectives</Trans>
                 <StatusBadge status={Status.PENDING} styles={{ marginLeft: '10px' }} />
               </div>
             ),
@@ -104,7 +106,7 @@ const Objectives: FC = () => {
                   customVariantRules={{ default: iconButtonStyles }}
                   iconStyles={iconStyles}
                 >
-                  Share
+                  <Trans i18nKey='share'>Share</Trans>
                 </IconButton>
                 <IconButton
                   onPress={() => alert('print')}
@@ -112,7 +114,7 @@ const Objectives: FC = () => {
                   customVariantRules={{ default: iconButtonStyles }}
                   iconStyles={iconStyles}
                 >
-                  Print
+                  <Trans i18nKey='print'>Print</Trans>
                 </IconButton>
                 <IconButton
                   onPress={() => alert('edit')}
@@ -120,7 +122,7 @@ const Objectives: FC = () => {
                   customVariantRules={{ default: { ...iconButtonStyles, ...iconStrokeButtonStyles } }}
                   iconStyles={iconStyles}
                 >
-                  Edit All
+                  <Trans i18nKey='edit_all'>Edit All</Trans>
                 </IconButton>
               </div>
             ),
@@ -130,23 +132,35 @@ const Objectives: FC = () => {
         </Section>
         <Section
           left={{
-            content: <div>My Completed Reviews</div>,
+            content: (
+              <div>
+                <Trans i18nKey='my_completed_reviews'>My Completed Reviews</Trans>
+              </div>
+            ),
           }}
           right={{
             content: (
               <div>
                 <Button mode='inverse' onPress={() => alert('view')} styles={[linkStyles({ theme })]}>
-                  View history
+                  <Trans i18nKey='view_history'>View history</Trans>
                 </Button>
               </div>
             ),
           }}
         >
-          {reviews.length > 0 ? <Reviews reviews={reviews} /> : 'You have no completed reviews'}
+          {reviews.length > 0 ? (
+            <Reviews reviews={reviews} />
+          ) : (
+            t('no_completed_reviews', 'You have no completed reviews')
+          )}
         </Section>
         <Section
           left={{
-            content: <div>Previous Review Files</div>,
+            content: (
+              <div>
+                <Trans i18nKey='previous_review_files'>Previous Review Files</Trans>
+              </div>
+            ),
           }}
           right={{
             content: (
@@ -156,13 +170,13 @@ const Objectives: FC = () => {
                   onPress={() => setPreviousReviewFilesModalShow(true)}
                   styles={[linkStyles({ theme })]}
                 >
-                  View Files
+                  <Trans i18nKey='view_files'>View Files</Trans>
                 </Button>
               </div>
             ),
           }}
         >
-          You have 12 files
+          <Trans i18nKey='you_have_n_files'>You have 12 files</Trans>
         </Section>
       </div>
       {previousReviewFilesModalShow && (

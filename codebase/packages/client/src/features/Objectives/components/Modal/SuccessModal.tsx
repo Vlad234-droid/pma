@@ -1,5 +1,6 @@
 import React, { FC, HTMLProps } from 'react';
-import { Styles, useStyle, useBreakpoints , Button } from '@dex-ddl/core';
+import { Trans } from 'components/Translation';
+import { Styles, useStyle, useBreakpoints, Button } from '@dex-ddl/core';
 import { Icon as IconComponent } from 'components/Icon';
 
 export type SuccessModal = {
@@ -62,7 +63,7 @@ const SuccessModal: FC<Props> = ({ onClose }) => {
               padding: '10px',
             })}
           >
-            Done!
+            <Trans i18nKey='done'>Done</Trans>!
           </div>
           <div
             className={css({
@@ -71,9 +72,11 @@ const SuccessModal: FC<Props> = ({ onClose }) => {
               padding: '10px',
             })}
           >
-            Your objectives
-            <br /> have been sent to your manager
-            <br /> for approval.
+            <Trans i18nKey='objective_sent_for_approval'>
+              Your objectives
+              <br /> have been sent to your manager
+              <br /> for approval.
+            </Trans>
           </div>
         </div>
       </div>
@@ -108,7 +111,7 @@ const SuccessModal: FC<Props> = ({ onClose }) => {
             ]}
             onPress={onClose}
           >
-            Okay
+            <Trans i18nKey='okay'>Okay</Trans>
           </Button>
         </div>
       </div>

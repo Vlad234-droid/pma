@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import { useTranslation } from 'components/Translation';
 import { Status } from 'config/enum';
 import { Rule, useStyle, colors, CreateRule } from '@dex-ddl/core';
 
@@ -11,6 +12,7 @@ export type StatusBadgeProps = {
 
 const StatusBadge: FC<StatusBadgeProps> = ({ status, styles }) => {
   const { css } = useStyle();
+  const { t } = useTranslation();
 
   const isDraft = status === Status.DRAFT;
   const isPending = status === Status.PENDING;
@@ -19,12 +21,12 @@ const StatusBadge: FC<StatusBadgeProps> = ({ status, styles }) => {
   const getContent = (): [Graphics, string, string] => {
     switch (true) {
       case isDraft:
-        return ['roundPencil', 'Draft', colors.base];
+        return ['roundPencil', t('draft', 'Draft'), colors.base];
       case isApproved:
-        return ['roundTick', 'Approved', colors.green];
+        return ['roundTick', t('approved', 'Approved'), colors.green];
       case isPending:
       default:
-        return ['roundClock', 'Pending', colors.pending];
+        return ['roundClock', t('pending', 'Pending'), colors.pending];
     }
   };
 

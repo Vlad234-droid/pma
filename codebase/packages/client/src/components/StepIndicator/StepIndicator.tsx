@@ -18,6 +18,7 @@ const statuses: { [S in Status]: string } = {
 };
 
 export type StepIndicatorProps = {
+  mainTitle?: string;
   currentStep?: number;
   currentStatus?: Status;
   titles?: string[];
@@ -104,6 +105,7 @@ export const StepIndicatorBasic: FC<StepIndicatorProps> = ({
 };
 
 export const StepIndicator: FC<StepIndicatorProps> = ({
+  mainTitle = 'My Performance Timeline',
   currentStep,
   currentStatus,
   titles = [],
@@ -113,7 +115,7 @@ export const StepIndicator: FC<StepIndicatorProps> = ({
   return (
     <Tile>
       <div className={css(wrapperStyle)} data-test-id='timeline'>
-        <span className={css(titleStyle)}>My Performance Timeline</span>
+        <span className={css(titleStyle)}>{mainTitle}</span>
         <StepIndicatorBasic
           currentStep={currentStep}
           currentStatus={currentStatus}

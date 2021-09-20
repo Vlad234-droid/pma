@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
-import { useStyle, Rule , Button } from '@dex-ddl/core';
+import { Trans } from 'components/Translation';
+import { useStyle, Rule, Button } from '@dex-ddl/core';
 
 import { TileWrapper } from 'components/Tile';
 
@@ -37,7 +38,7 @@ const Reviews: FC<Props> = ({ reviews }) => {
                 mode='inverse'
                 onPress={() => alert('Test')}
               >
-                Details
+                <Trans i18nKey='details'>Details</Trans>
               </Button>
             </div>
           </TileWrapper>

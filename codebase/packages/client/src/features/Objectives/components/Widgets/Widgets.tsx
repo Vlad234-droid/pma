@@ -1,4 +1,5 @@
 import React, { FC, HTMLProps } from 'react';
+import { useTranslation } from 'components/Translation';
 import { useStyle, Styles } from '@dex-ddl/core';
 
 import SecondaryWidget, { Props as SecondaryWidgetProps } from '../SecondaryWidget';
@@ -8,32 +9,32 @@ export type MainWidgetProps = {};
 
 type Props = HTMLProps<HTMLInputElement> & MainWidgetProps;
 
-const widgets: SecondaryWidgetProps[] = [
-  {
-    iconGraphic: 'add',
-    title: 'Personal development plan',
-    date: 'Added 04 Apr 2021',
-    customStyle: { flex: '2 1 110px' },
-    onClick: () => alert('View1'),
-  },
-  {
-    iconGraphic: 'chatSq',
-    title: 'Feedback',
-    date: 'Last updated Apr 2021',
-    customStyle: { flex: '2 1 110px' },
-    onClick: () => alert('View2'),
-  },
-  {
-    iconGraphic: 'account',
-    title: 'Check-ins',
-    date: 'Last updated Apr 2021',
-    customStyle: { flex: '2 1 110px' },
-    onClick: () => alert('View3'),
-  },
-];
-
 const Widgets: FC<Props> = () => {
   const { css } = useStyle();
+  const { t } = useTranslation();
+  const widgets: SecondaryWidgetProps[] = [
+    {
+      iconGraphic: 'add',
+      title: t('personal_development_plan', 'Personal development plan'),
+      date: t('personal_development_plan_date', 'Added 04 Apr 2021', { date: new Date(2021, 4, 4) }),
+      customStyle: { flex: '2 1 110px' },
+      onClick: () => alert('View1'),
+    },
+    {
+      iconGraphic: 'chatSq',
+      title: t('feedback', 'Feedback'),
+      date: t('feedback_date', 'Last updated Apr 2021', { date: new Date(2021, 4, 4) }),
+      customStyle: { flex: '2 1 110px' },
+      onClick: () => alert('View2'),
+    },
+    {
+      iconGraphic: 'account',
+      title: t('check_ins', 'Check-ins'),
+      date: t('check_ins_date', 'Last updated Apr 2021', { date: new Date(2021, 4, 4) }),
+      customStyle: { flex: '2 1 110px' },
+      onClick: () => alert('View3'),
+    },
+  ];
 
   return (
     <div className={css(wrapperStyle)}>

@@ -1,4 +1,5 @@
 import React, { FC, HTMLProps, useState } from 'react';
+import { Trans } from 'components/Translation';
 import { useBreakpoints, Rule, Modal, useStyle, Button, Styles } from '@dex-ddl/core';
 import { Icon } from 'components/Icon';
 import { CreateModal } from '../Modal';
@@ -27,7 +28,7 @@ const CreateButton: FC<Props> = ({ withIcon = false }) => {
           iconProps={{ invertColors: true }}
           iconStyles={iconStyle}
         >
-          Create objectives
+          <Trans i18nKey='create_objectives'>Create objectives</Trans>
         </IconButton>
       ) : (
         <Button
@@ -39,7 +40,7 @@ const CreateButton: FC<Props> = ({ withIcon = false }) => {
           ]}
           onPress={handleBtnClick}
         >
-          Create objectives
+          <Trans i18nKey='create_objectives'>Create objectives</Trans>
         </Button>
       )}
 

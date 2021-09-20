@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
+import { Trans, useTranslation } from 'components/Translation';
 import { Status } from 'config/enum';
-import { useStyle, Rule, CreateRule , Button } from '@dex-ddl/core';
+import { useStyle, Rule, CreateRule, Button } from '@dex-ddl/core';
 
 import { CreateButton } from '../CreateButton';
 import { TileWrapper } from 'components/Tile';
@@ -17,6 +18,7 @@ export const TEST_ID = 'main-widget';
 
 const MainWidget: FC<Props> = ({ customStyle, onClick, status, count = 0 }) => {
   const { css, theme } = useStyle();
+  const { t } = useTranslation();
 
   const isStateless = !status;
   const isDraft = status === Status.DRAFT;
@@ -27,18 +29,26 @@ const MainWidget: FC<Props> = ({ customStyle, onClick, status, count = 0 }) => {
   const getContent = (): [Graphics, boolean, string] => {
     switch (true) {
       case isDraft:
-        return ['roundPencil', true, `${count} objective(s) saved as a draft`];
+        return ['roundPencil', true, t('objective_is_draft', `${count} objective(s) saved as a draft`, { count })];
       case isApproved:
         return [
           'roundTick',
           false,
-          `Well done! All ${count} objective(s) have been approved. Your mid year review is scheduled for 06 Sep 2022.`,
+          t(
+            'objective_is_approved',
+            `Well done! All ${count} objective(s) have been approved. Your mid year review is scheduled for 06 Sep 2022.`,
+            { count },
+          ),
         ];
       case isPending:
-        return ['roundClock', true, `${count} objective(s) are waiting for approval`];
+        return [
+          'roundClock',
+          true,
+          t('objective_is_pending', `${count} objective(s) are waiting for approval`, { count }),
+        ];
       case isStateless:
       default:
-        return ['add', false, 'Create my objectives'];
+        return ['add', false, t('create_my_objectives', 'Create my objectives')];
     }
   };
 
@@ -56,7 +66,9 @@ const MainWidget: FC<Props> = ({ customStyle, onClick, status, count = 0 }) => {
             <Icon graphic='document' invertColors={notApproved} iconStyles={iconStyles} />
           </div>
           <div className={css(headerBlockStyle)}>
-            <span className={css(titleStyle)}>My business objectives</span>
+            <span className={css(titleStyle)}>
+              <Trans i18nKey='my_business_objectives'>My Business Objectives</Trans>
+            </span>
             <span className={css(descriptionStyle)}>
               <span className={css(iconStyle)}>
                 {withStroke ? (
@@ -84,7 +96,7 @@ const MainWidget: FC<Props> = ({ customStyle, onClick, status, count = 0 }) => {
                   ]}
                   onPress={() => alert('Test')}
                 >
-                  View and Edit
+                  <Trans i18nKey='view_and_edit'>View and Edit</Trans>
                 </Button>
               )}
             </div>
