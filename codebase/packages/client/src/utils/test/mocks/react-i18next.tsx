@@ -30,13 +30,9 @@ const renderNodes = (reactNodes) => {
 };
 
 const useMock = [() => ({ t: (key) => key }), {}];
-// useMock.t = (k) => k;
-// useMock.i18n = {};
 
 const withTranslation = () => (Component) => (props) => <Component t={(k) => k} {...props} />;
 const Trans = ({ children }) => (Array.isArray(children) ? renderNodes(children) : renderNodes([children]));
 const useTranslation = () => useMock;
-
-// const I18nextProvider = reactI18next.I18nextProvider;
 
 export { withTranslation, Trans, useTranslation, I18nextProvider };

@@ -6,10 +6,11 @@ import Provider from '../context/input';
 
 export type Props = {
   label?: string;
+  withIcon?: boolean;
   styles?: Styles | Rule;
 };
 
-export const Item: FC<Props> = ({ children, label }) => {
+export const Item: FC<Props> = ({ children, label, withIcon = true }) => {
   const { css, theme } = useStyle();
   const [recordingState, setRecordingState] = useState(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -62,20 +63,22 @@ export const Item: FC<Props> = ({ children, label }) => {
         >
           <Provider value={inputRef}>{children}</Provider>
         </div>
-        <span
-          className={css({
-            position: 'absolute',
-            top: '10px',
-            right: '4px',
-            cursor: 'pointer',
-          })}
-          onClick={() => {
-            setRecordingState(!recordingState);
-            setInputFocus();
-          }}
-        >
-          {recordingState ? <Icon graphic='roundStop' /> : <Icon graphic='microphone' fill='#A8A8A8' />}
-        </span>
+        {withIcon && (
+          <span
+            className={css({
+              position: 'absolute',
+              top: '10px',
+              right: '4px',
+              cursor: 'pointer',
+            })}
+            onClick={() => {
+              setRecordingState(!recordingState);
+              setInputFocus();
+            }}
+          >
+            {recordingState ? <Icon graphic='roundStop' /> : <Icon graphic='microphone' fill='#A8A8A8' />}
+          </span>
+        )}
       </div>
     </div>
   );

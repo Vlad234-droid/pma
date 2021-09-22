@@ -7,6 +7,7 @@ import { Document } from './document';
 import { Account } from './account';
 import { Microphone } from './microphone';
 import { RoundStop } from './round-stop';
+import { RoundAlert } from './round-alert';
 import { FCGraphicProps } from './types';
 import { RoundClock } from './round-clock';
 import { RoundPencil } from './round-pencil';
@@ -34,6 +35,7 @@ export type Graphics =
   | 'arrowLeft'
   | 'roundClock'
   | 'roundPencil'
+  | 'roundAlert'
   | 'roundTick'
   | 'roundStop'
   | 'edit'
@@ -55,6 +57,7 @@ export const icons: Record<Graphics, FCGraphicProps> = {
   roundClock: RoundClock,
   roundPencil: RoundPencil,
   roundTick: RoundTick,
+  roundAlert: RoundAlert,
   edit: Edit,
   share: Share,
   print: Print,
