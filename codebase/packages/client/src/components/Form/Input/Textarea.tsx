@@ -4,13 +4,15 @@ import { useStyle } from '@dex-ddl/core';
 import { TextareaProps } from '../types';
 import { useRefContainer } from '../context/input';
 
-const Input: FC<TextareaProps> = ({ placeholder = '', rows = 3 }) => {
+const Textarea: FC<TextareaProps> = ({ placeholder = '', rows = 3, name, value }) => {
   const { css } = useStyle();
   const ref = useRefContainer();
 
   return (
     <textarea
       ref={ref}
+      name={name}
+      value={value}
       className={css({
         width: '100%',
         border: '1px solid #E5E5E5',
@@ -29,4 +31,4 @@ const Input: FC<TextareaProps> = ({ placeholder = '', rows = 3 }) => {
   );
 };
 
-export default Input;
+export default Textarea;

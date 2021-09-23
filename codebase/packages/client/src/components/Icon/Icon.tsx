@@ -19,6 +19,7 @@ export type IconStyleProps = {
   stroke?: string;
   fill?: string;
   size?: Styles['width'];
+  backgroundRadius?: number;
 };
 
 export type IconProps = IconBaseProps & IconStyleProps;
@@ -30,6 +31,7 @@ export const Icon: FC<IconProps> = ({
   iconStyles = {},
   invertColors = false,
   testId,
+  backgroundRadius,
   ...styles
 }) => {
   const { css } = useStyle();
@@ -50,7 +52,7 @@ export const Icon: FC<IconProps> = ({
       aria-labelledby={titleId}
     >
       <title id={titleId}>{customTitle}</title>
-
+      {backgroundRadius && <circle cx={backgroundRadius} cy={backgroundRadius} r={backgroundRadius} fill='white' />}
       <CustomIcon invertColors={invertColors} />
     </svg>
   );

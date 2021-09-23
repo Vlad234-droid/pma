@@ -3,6 +3,7 @@
   "collectCoverageFrom": [
     "src/**/*.{ts,js,tsx,jsx}",
     "!src/root.component.tsx",
+    "!src/config/*",
     "!src/**/index.{ts,js}",
     "!src/**/*.stories.*"
   ],

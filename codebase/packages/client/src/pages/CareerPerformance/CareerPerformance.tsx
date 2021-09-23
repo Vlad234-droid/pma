@@ -1,12 +1,11 @@
 import React, { FC } from 'react';
 import { Trans, useTranslation } from 'components/Translation';
+import { ReviewWidget, Widgets as ObjectiveWidgets } from 'features/Objectives';
 // import i18n from 'utils/i18next';
-import { useStyle, Styles } from '@dex-ddl/core';
+import { Styles, useStyle } from '@dex-ddl/core';
 
 import { DashboardProfile } from 'features/Profile';
 import { BasicTile } from 'components/Tile';
-
-import { Widgets as ObjectiveWidgets } from 'features/Objectives';
 import { StepIndicator } from 'components/StepIndicator/StepIndicator';
 
 // const App = () => {
@@ -74,11 +73,10 @@ const CareerPerformance: FC = () => {
           </h3>
           <div className={css(wrapperStyle)}>
             <div data-test-id='personal' className={css(basicTileStyle)}>
-              <BasicTile
-                hover={true}
-                title={t('tiles_title_id_2', 'Mid-year review')}
-                description={t('tiles_description_id_2', 'Your mid-year review form and results will appear here.')}
-                event={t('tiles_event_id_2', 'The form will be available in Sept 2021')}
+              <ReviewWidget
+                onClick={() => console.log('ReviewWidget')}
+                description={t('tiles_description_id_3', 'Your mid-year review form and results will appear here.')}
+                customStyle={{ height: '182px' }}
               />
             </div>
             <div data-test-id='feedback' className={css(basicTileStyle)}>
@@ -87,6 +85,7 @@ const CareerPerformance: FC = () => {
                 title={t('tiles_title_id_3', 'Mid-year review')}
                 description={t('tiles_description_id_3', 'Your mid-year review form and results will appear here.')}
                 event={t('tiles_event_id_3', 'The form will be available in Sept 2021')}
+                customStyle={{ height: '182px' }}
               />
             </div>
           </div>

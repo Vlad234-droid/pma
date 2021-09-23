@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Meta, Story } from '@storybook/react';
 
-import { Input, Textarea, Item, Props } from '../index';
+import { Input, Textarea, Select, Item, Props } from '../index';
 
 export default {
   title: 'components/Form',
@@ -12,6 +12,15 @@ export default {
 const Template: Story<Props> = (args) => (
   <div style={{ background: '#fff', maxWidth: '600px' }}>
     <div style={{ maxWidth: '500px', padding: '10px' }}>
+      <Item {...args} withIcon={false}>
+        <Select
+          placeholder='Select'
+          options={[
+            { value: '1', label: 'test 1' },
+            { value: '2', label: 'test 2' },
+          ]}
+        />
+      </Item>
       <Item {...args}>
         <Input />
       </Item>
