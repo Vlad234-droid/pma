@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { Provider } from 'react-redux';
 import { I18nextProvider } from 'react-i18next';
 import i18n from 'utils/i18next';
+import ReactDOM from 'react-dom';
 
 import { DDLProvider } from '@dex-ddl/core';
+import { useObservableTheme } from '@dex-runtime/root-state';
 
+import { INTEGRATION_MODE } from './config/constants';
 import store from './config/store';
 import { AuthProvider } from './contexts/authContext';
 import { Router } from 'react-router-dom';
@@ -42,10 +45,12 @@ const rendererOptions = {
   globalCSS: globalCSS,
 };
 
-export default function Root() {
+const Root: FC = () => {
+  const observableTheme = useObservableTheme();
+
   return (
     <I18nextProvider i18n={i18n}>
-      <DDLProvider rendererOptions={rendererOptions}>
+      <DDLProvider rendererOptions={rendererOptions} theme={observableTheme}>
         <Provider store={store}>
           <AuthProvider>
             <Router history={history}>
@@ -60,4 +65,10 @@ export default function Root() {
       </DDLProvider>
     </I18nextProvider>
   );
+};
+
+if (INTEGRATION_MODE === 'standalone') {
+  ReactDOM.render(<Root />, document.getElementById('root'));
 }
+
+export default Root;

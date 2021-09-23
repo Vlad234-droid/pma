@@ -1,6 +1,6 @@
 import React, { FC, HTMLProps, useState } from 'react';
 import { Trans } from 'components/Translation';
-import { useBreakpoints, Rule, Modal, useStyle, Button, Styles } from '@dex-ddl/core';
+import { useBreakpoints, Rule, Modal, useStyle, Button } from '@dex-ddl/core';
 import { Icon } from 'components/Icon';
 import { CreateModal } from '../Modal';
 import { IconButton } from 'components/IconButton';

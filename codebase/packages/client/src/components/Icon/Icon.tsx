@@ -27,7 +27,6 @@ export type IconProps = IconBaseProps & IconStyleProps;
 export const Icon: FC<IconProps> = ({
   graphic,
   title,
-  children,
   iconStyles = {},
   invertColors = false,
   testId,

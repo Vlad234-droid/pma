@@ -15,7 +15,7 @@ export type PreviousReviewFilesModal = {
 type Props = HTMLProps<HTMLInputElement> & PreviousReviewFilesModal;
 
 const PreviousReviewFilesModal: FC<Props> = ({ onOverlayClick }) => {
-  const { theme, css } = useStyle();
+  const { css } = useStyle();
   const [, isBreakpoint] = useBreakpoints();
   const [files, updateFiles]: [any[], any] = useState([]);
   const [filter, setFilteredValue] = useState('');

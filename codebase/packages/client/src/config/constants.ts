@@ -1,3 +1,8 @@
+export const PUBLIC_URL = process.env.PUBLIC_URL ?? '/';
+export const API_URL = process.env.REACT_APP_API_URL ?? '/api';
+
+export const INTEGRATION_MODE = process.env.REACT_APP_INTEGRATION_MODE ?? 'integrity';
+
 export enum ViewportSize {
   PHONE = 320,
   LARGE_PHONE = 504,
