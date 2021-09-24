@@ -3,6 +3,7 @@ import { ComponentType, FC, LazyExoticComponent } from 'react';
 enum Page {
   CAREER_PERFORMANCE = 'career-performance',
   OBJECTIVES_VIEW = 'objectives',
+  PROFILE = 'profile',
   NOT_FOUND = '*',
 }
 

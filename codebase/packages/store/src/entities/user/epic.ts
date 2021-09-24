@@ -1,30 +1,24 @@
-import {
-  // @ts-ignore
-  Epic,
-  isActionOf,
-} from 'typesafe-actions';
+// @ts-ignore
+import { Epic, isActionOf } from 'typesafe-actions';
 import { combineEpics } from 'redux-observable';
 import { from, of } from 'rxjs';
-import { map, filter, switchMap, catchError, takeUntil } from 'rxjs/operators';
+import { catchError, filter, map, switchMap, takeUntil } from 'rxjs/operators';
 
-import { loginAsync } from './actions';
+import { getCurrentUser } from './actions';
 
-export const loginEpic: Epic = (action$, _, { auth }) =>
+export const getCurrentUserEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
-    filter(isActionOf(loginAsync.request)),
-    switchMap(({ payload }) =>
-      from(auth.login(payload)).pipe(
-        // @ts-ignore
-        map(({ token }) => {
-          if (!token) {
-            return loginAsync.failure(new Error('failed login'));
-          }
-          return loginAsync.success({ authorized: true });
+    filter(isActionOf(getCurrentUser.request)),
+    switchMap(() =>
+      from(api.getCurrentUser()).pipe(
+        map(getCurrentUser.success),
+        catchError((e) => {
+          const errors = e?.data.errors;
+          return of(getCurrentUser.failure(errors?.[0]));
         }),
-        catchError((err) => of(loginAsync.failure(err))),
-        takeUntil(action$.pipe(filter(isActionOf(loginAsync.cancel)))),
+        takeUntil(action$.pipe(filter(isActionOf(getCurrentUser.cancel)))),
       ),
     ),
   );
 
-export default combineEpics(loginEpic);
+export default combineEpics(getCurrentUserEpic);

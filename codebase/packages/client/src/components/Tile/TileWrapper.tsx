@@ -1,10 +1,10 @@
 import React, { FC, HTMLProps } from 'react';
-import { useStyle, CreateRule, Theme } from '@dex-ddl/core';
+import { CreateRule, Theme, useStyle } from '@dex-ddl/core';
 
 export type TileWrapperProps = {
   boarder?: boolean;
   hover?: boolean;
-  children: JSX.Element | JSX.Element[] | string;
+  children: any;
   customStyle?: React.CSSProperties | {};
 };
 
