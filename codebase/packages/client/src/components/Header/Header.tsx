@@ -28,7 +28,9 @@ const Header: FC<HeaderProps> = ({ title, onBack, styles = {} }) => {
     <div className={css(wrapperStyles, styles)} data-test-id={TEST_ID}>
       <IconButton onPress={handleBack} graphic='backwardLink' data-test-id={BACK_BTN_TEST_ID} />
       <h3 className={css(headerStyles)}>{title}</h3>
-      <SideMenu context='my-work' />
+      <div className={css(sideMenuStyles)}>
+        <SideMenu context='my-work' />
+      </div>
     </div>
   );
 };
@@ -43,5 +45,11 @@ const headerStyles: Rule = ({ theme }) => ({
   fontSize: '20px',
   color: theme.colors.tescoBlue,
 });
+
+const sideMenuStyles: Rule = {
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+};
 
 export default Header;

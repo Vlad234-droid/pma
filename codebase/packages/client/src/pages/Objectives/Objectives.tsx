@@ -1,13 +1,13 @@
 import React, { FC, useState } from 'react';
 import { Trans, useTranslation } from 'components/Translation';
-import { Button, Rule, useStyle } from '@dex-ddl/core';
+import { Button, Rule, useStyle, Styles, useBreakpoints } from '@dex-ddl/core';
 import { Status } from 'config/enum';
 
 import { StepIndicator } from 'components/StepIndicator/StepIndicator';
 import { Header } from 'components/Header';
-import { IconButton } from 'components/IconButton';
+import { IconButton, Position } from 'components/IconButton';
 
-import { Accordion, CreateButton, Reviews, Section, StatusBadge } from 'features/Objectives';
+import { Accordion, CreateButton, Reviews, Section, StatusBadge, ShareWidget } from 'features/Objectives';
 import { PreviousReviewFilesModal } from 'features/ReviewFiles/components';
 
 const objectives = [
@@ -76,11 +76,11 @@ const Objectives: FC = () => {
   return (
     <div className={css({ margin: '8px' })}>
       <Header title='Objectives' />
-      <div className={css(wrapperStyle)} data-test-id={TEST_ID}>
-        <div className={css({ display: 'flex' })}>
-          <CreateButton withIcon />
-        </div>
-        <div className={css({ marginTop: '16px', flex: '3 1 100%', display: 'flex', flexDirection: 'column' })}>
+      <div className={css({ display: 'flex' })}>
+        <CreateButton withIcon />
+      </div>
+      <div className={css(headWrapperStyles)}>
+        <div className={css(timelineWrapperStyles)}>
           <StepIndicator
             currentStatus={'pending'}
             currentStep={0}
@@ -88,12 +88,20 @@ const Objectives: FC = () => {
             descriptions={['April 2021', 'September 2022', 'March 2022']}
           />
         </div>
+        <ShareWidget
+          customStyle={{ marginTop: '16px', flex: '1 1 30%', display: 'flex', flexDirection: 'column' }}
+          onClick={() => alert('share')}
+        />
+      </div>
+      <div className={css(bodyWrapperStyles)} data-test-id={TEST_ID}>
         <Section
+          title={{
+            content: t('objectives', 'Objectives'),
+          }}
           left={{
             content: (
               <div className={css(tileStyles)}>
-                <Trans i18nKey='my_business_objectives'>My Business Objectives</Trans>
-                <StatusBadge status={Status.PENDING} styles={{ marginLeft: '10px' }} />
+                <StatusBadge status={Status.APPROVED} styles={{ background: 'transparent' }} />
               </div>
             ),
           }}
@@ -105,24 +113,9 @@ const Objectives: FC = () => {
                   graphic='share'
                   customVariantRules={{ default: iconButtonStyles }}
                   iconStyles={iconStyles}
+                  iconPosition={Position.RIGHT}
                 >
-                  <Trans i18nKey='share'>Share</Trans>
-                </IconButton>
-                <IconButton
-                  onPress={() => alert('print')}
-                  graphic='print'
-                  customVariantRules={{ default: iconButtonStyles }}
-                  iconStyles={iconStyles}
-                >
-                  <Trans i18nKey='print'>Print</Trans>
-                </IconButton>
-                <IconButton
-                  onPress={() => alert('edit')}
-                  graphic='edit'
-                  customVariantRules={{ default: { ...iconButtonStyles, ...iconStrokeButtonStyles } }}
-                  iconStyles={iconStyles}
-                >
-                  <Trans i18nKey='edit_all'>Edit All</Trans>
+                  <Trans i18nKey='download'>Download</Trans>
                 </IconButton>
               </div>
             ),
@@ -186,7 +179,27 @@ const Objectives: FC = () => {
   );
 };
 
-const wrapperStyle: Rule = {
+const headWrapperStyles: Rule = () => {
+  const [, isBreakpoint] = useBreakpoints();
+  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+  return {
+    display: 'flex',
+    gap: '10px',
+    margin: '15px 0',
+    flexDirection: mobileScreen ? 'column' : 'row',
+  };
+};
+
+const timelineWrapperStyles = {
+  flex: '3 1 70%',
+  display: 'flex',
+  flexDirection: 'column',
+  '& > div': {
+    height: '100%',
+  },
+} as Styles;
+
+const bodyWrapperStyles: Rule = {
   maxWidth: '856px',
   display: 'flex',
   flexWrap: 'nowrap',
@@ -196,21 +209,17 @@ const wrapperStyle: Rule = {
 };
 
 const iconStyles: Rule = {
-  marginRight: '10px',
+  marginLeft: '10px',
 };
 
-const iconButtonStyles: Rule = {
+const iconButtonStyles: Rule = ({ theme }) => ({
   padding: '10px 20px',
-};
-
-const iconStrokeButtonStyles: Rule = ({ theme }) => ({
-  border: `2px solid ${theme.colors.tescoBlue}`,
-  borderRadius: '34px',
+  color: theme.colors.tescoBlue,
 });
 
 const tileStyles: Rule = {
   display: 'flex',
-  alignItems: 'center',
+  flexDirection: 'column',
 };
 
 const linkStyles = ({ theme }) => ({

@@ -6,4 +6,5 @@ export { default as StatusBadge } from './components/StatusBadge';
 export { default as Accordion } from './components/Accordion';
 export { default as Reviews } from './components/Reviews';
 export { ReviewWidget } from './components/Reviews';
+export { ShareWidget } from './components/ShareWidget';
 export { CreateButton } from './components/CreateButton';

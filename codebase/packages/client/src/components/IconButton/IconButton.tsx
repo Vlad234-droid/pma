@@ -11,24 +11,38 @@ type VariantRule = {
   disabled?: Rule;
 };
 
+export enum Position {
+  RIGHT = 'right',
+  LEFT = 'left',
+}
+
 export type IconButtonProps = {
   graphic: Graphics;
   iconStyles?: Rule;
   iconProps?: Omit<IconProps, 'graphic' | 'iconStyles'>;
   customVariantRules?: VariantRule;
+  iconPosition?: Position;
 } & AriaButtonProps<'div'>;
 
 export const IconButton: FC<IconButtonProps> = memo(
-  ({ graphic, iconStyles, iconProps, customVariantRules = {}, isDisabled, children, ...props }) => (
-    <Button
-      {...props}
-      isDisabled={isDisabled}
-      styles={[buttonBaseRule, getVariantRule(customVariantRules, isDisabled)]}
-    >
-      <Icon graphic={graphic} iconStyles={iconStyles} {...iconProps} />
-      {children}
-    </Button>
-  ),
+  ({ graphic, iconStyles, iconProps, customVariantRules = {}, isDisabled, children, iconPosition, ...props }) => {
+    const getContent = () => {
+      const content = [<Icon key='icon' graphic={graphic} iconStyles={iconStyles} {...iconProps} />, children];
+      if (iconPosition === Position.RIGHT) return [content[1], content[0]];
+
+      return content;
+    };
+
+    return (
+      <Button
+        {...props}
+        isDisabled={isDisabled}
+        styles={[buttonBaseRule, getVariantRule(customVariantRules, isDisabled)]}
+      >
+        {getContent()}
+      </Button>
+    );
+  },
 );
 
 const getVariantRule = ({ default: d = {}, disabled = {} }: VariantRule, isDisabled?: boolean): Rule =>

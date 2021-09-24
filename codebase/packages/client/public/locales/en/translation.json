@@ -50,5 +50,12 @@
   "view_and_edit": "View and Edit",
   "view_files": "View Files",
   "view_history": "View history",
-  "you_have_n_files": "You have 12 files"
+  "you_have_n_files": "You have 12 files",
+  "share_objectives": "Share Objectives",
+  "share_objectives_off_description": "Make all objectives and measures visible to your team",
+  "share_to_team": "Share to team",
+  "share_objectives_on_description": "You are currently sharing your objectives with your team",
+  "stop_sharing": "Stop sharing",
+  "objectives": "Objectives",
+  "download": "Download"
 }

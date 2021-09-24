@@ -18,47 +18,43 @@ const StatusBadge: FC<StatusBadgeProps> = ({ status, styles }) => {
   const isPending = status === Status.PENDING;
   const isApproved = status === Status.APPROVED;
 
-  const getContent = (): [Graphics, string, string] => {
+  const getContent = (): [Graphics, string] => {
     switch (true) {
       case isDraft:
-        return ['roundPencil', t('draft', 'Draft'), colors.base];
+        return ['roundPencil', t('draft', 'Draft')];
       case isApproved:
-        return ['roundTick', t('approved', 'Approved'), colors.green];
+        return ['roundTick', t('approved', 'Approved')];
       case isPending:
       default:
-        return ['roundClock', t('pending', 'Pending'), colors.pending];
+        return ['roundClock', t('pending', 'Pending')];
     }
   };
 
-  const [graphic, label, color] = getContent();
+  const [graphic, label] = getContent();
 
   return (
     <div className={css(wrapperStyles, styles)}>
       <Icon graphic={graphic} invertColors iconStyles={iconStyles} />
-      <span className={css(labelStyles({ color }))}>{label}</span>
+      <span className={css(labelStyles)}>{label}</span>
     </div>
   );
 };
 
 const wrapperStyles: Rule = ({ theme }) => ({
   display: 'flex',
-  padding: '8px 16px',
   background: theme.colors.white,
-  borderRadius: '40px',
+  margin: '10px 0',
 });
 
 const iconStyles: Rule = {
   marginRight: '10px',
 };
 
-const labelStyles: CreateRule<{ color: string }> =
-  ({ color }) =>
-  () => ({
-    fontSize: '14px',
-    lineHeight: '18px',
-    fontWeight: 700,
-    display: 'contents',
-    color,
-  });
+const labelStyles: Rule = ({ theme }) => ({
+  fontSize: '14px',
+  lineHeight: '18px',
+  color: theme.colors.dustyGray,
+  fontWeight: 'normal',
+});
 
 export default StatusBadge;
