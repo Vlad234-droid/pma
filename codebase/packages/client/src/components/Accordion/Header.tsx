@@ -146,7 +146,7 @@ const accordionHeaderWrapperStyles: Rule = {
 };
 
 const accordionHeaderStyles: Rule = ({ theme }) => ({
-  borderTop: `2px solid ${theme.colors.backgroundDarkest}`,
+  borderTop: `1px solid ${theme.colors.disabled}`,
   paddingTop: '10px',
   display: 'flex',
   justifyContent: 'space-between',
@@ -161,7 +161,7 @@ const accordionHeaderTitleStyles: Rule = ({ theme }) => ({
 
 const accordionIconStyles: Rule = {
   transition: 'transform 0.6s ease',
-  marginRight: '20px',
+  marginRight: '10px',
 };
 
 const accordionIconExpandStyles: Rule = {

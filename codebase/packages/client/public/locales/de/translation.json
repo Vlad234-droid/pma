@@ -50,5 +50,12 @@
   "view_and_edit": "View and Edit de",
   "view_files": "View Files de",
   "view_history": "View history de",
-  "you_have_n_files": "You have 12 files de"
+  "you_have_n_files": "You have 12 files de",
+  "share_objectives": "Ziele teilen",
+  "share_objectives_off_description": "Machen Sie alle Ziele und Maßnahmen für Ihr Team sichtbar",
+  "share_to_team": "An Team weitergeben",
+  "share_objectives_on_description": "Sie teilen Ihre Ziele gerade mit Ihrem Team",
+  "stop_sharing": "Beenden Sie das Teilen",
+  "objectives": "Ziele",
+  "download": "Herunterladen"
 }
