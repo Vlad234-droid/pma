@@ -4,6 +4,6 @@ import userReducer from '../entities/user/reducer';
 import toastReducer from '../entities/toast/reducer';
 
 export const rootReducer = combineReducers({
-  user: userReducer,
+  users: userReducer,
   toasts: toastReducer,
 });

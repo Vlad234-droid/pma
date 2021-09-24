@@ -8,3 +8,4 @@ export * from './toast';
 export * from './colleague-data';
 export * from './audit-log';
 export * from './statistics';
+export * from './users';

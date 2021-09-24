@@ -5,15 +5,13 @@ export type Config = {
   [key: string]: string | number | object | undefined;
 };
 
-const API_URL = process.env.REACT_APP_API_URL;
-const API_VERSION = process.env.REACT_APP_API_VERSION;
+const API_URL = 'http://localhost:9090';
+const API_VERSION = '';
 
 let baseURL = `${API_URL}/`;
 if (API_VERSION) {
   baseURL += `${API_VERSION}/`;
 }
-
-console.log(baseURL);
 
 const httpClient = axios.create({ baseURL });
 

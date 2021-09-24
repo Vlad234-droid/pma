@@ -1,45 +1,42 @@
-import React, { createContext, FC, useMemo, useCallback, useState } from 'react';
+import React, { createContext, FC, useCallback, useEffect } from 'react';
+// store
+import { currentUserMetaSelector, currentUserSelector, UerActions } from '@pma/store';
 
 // config
 import User from 'config/entities/User';
 
 // hooks
 import useDispatch from 'hooks/useDispatch';
-
-// store
-import { UerActions } from '@pma/store';
+import { useSelector } from 'react-redux';
 
 type LoginAction = (payload: { email: string; password: string }) => void;
 type LogoutAction = () => void;
 
 type AuthData = {
   authenticated: boolean;
-  user: User | null;
-  accessToken: string | null;
+  user?: User;
+  accessToken?: string;
   login: LoginAction;
   logout: LogoutAction;
 };
 
 const defaultData = {
   authenticated: false, // to check if authenticated or not
-  user: null, // store all the user details
-  accessToken: null,
-  login: () => null, // to start the login process
-  logout: () => null, // logout the user
+  login: () => undefined, // to start the login process
+  logout: () => undefined, // logout the user
 };
 
 const AuthContext = createContext<AuthData>(defaultData);
 
-type State = { user: User | null; token: string };
-
 export const AuthProvider: FC = ({ children }) => {
-  const [{ user, token }] = useState<State>({
-    user: null,
-    token: '',
-  });
+  const { info, authenticated } = useSelector(currentUserSelector) || {};
+  const { loaded, error } = useSelector(currentUserMetaSelector) || {};
+
   const dispatch = useDispatch();
 
-  const isAuthenticated = useMemo(() => Boolean(user?.id), [user]);
+  useEffect(() => {
+    if (!loaded) dispatch(UerActions.getCurrentUser());
+  }, [loaded]);
 
   const loginAction: LoginAction = useCallback((payload) => dispatch(UerActions.login(payload)), []);
 
@@ -48,9 +45,8 @@ export const AuthProvider: FC = ({ children }) => {
   return (
     <AuthContext.Provider
       value={{
-        authenticated: isAuthenticated,
-        user: user,
-        accessToken: token,
+        authenticated,
+        user: info,
         login: loginAction,
         logout: logoutAction,
       }}

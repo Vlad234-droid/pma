@@ -1,6 +1,6 @@
 import React, { FC, HTMLProps } from 'react';
-import { useTranslation, Trans } from 'components/Translation';
-import { Icon, useStyle, Styles, Rule } from '@dex-ddl/core';
+import { Trans, useTranslation } from 'components/Translation';
+import { Icon, Rule, Styles, useStyle } from '@dex-ddl/core';
 import { TileWrapper } from 'components/Tile';
 import { Avatar } from 'components/Avatar';
 import { TooltipWrapper as Tooltip } from 'components/Tooltip';
@@ -53,19 +53,31 @@ const bodyStyle = {
   display: 'inline-flex',
 } as Styles;
 
+export type AvatarNameProps = {
+  user?: any;
+};
+
+export const AvatarName: FC<AvatarNameProps> = ({ user }) => {
+  const { css } = useStyle();
+  const { fullName, job } = user || {};
+  return (
+    <div className={css(headStyle)}>
+      <Avatar size={65} />
+      <div className={css(headerBlockStyle)}>
+        <span className={css(titleStyle)}>{fullName}</span>
+        <span className={css(descriptionStyle)}>{job}</span>
+      </div>
+    </div>
+  );
+};
+
 const DashboardProfile: FC<Props> = () => {
   const { css } = useStyle();
   const { t } = useTranslation();
   return (
     <TileWrapper>
       <div className={css(wrapperStyle)}>
-        <div className={css(headStyle)}>
-          <Avatar size={65} />
-          <div className={css(headerBlockStyle)}>
-            <span className={css(titleStyle)}>Jane Jefferies</span>
-            <span className={css(descriptionStyle)}>Bakery</span>
-          </div>
-        </div>
+        <AvatarName user={{ fullName: 'Jane Jefferies', job: 'Bakery' }} />
         <div className={css(bodyStyle)}>
           <div className={css(bodyBlockStyle)}>
             <span className={css(titleStyle)}>

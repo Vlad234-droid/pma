@@ -1,10 +1,10 @@
-import { StateType } from 'typesafe-actions';
-import { initialState as userInitialState } from '../entities/user/reducer';
-import { initialState as toastInitialState } from '../entities/toast/reducer';
+import {StateType} from 'typesafe-actions';
+import {initialState as userInitialState} from '../entities/user/reducer';
+import {initialState as toastInitialState} from '../entities/toast/reducer';
 
 //@ts-ignore
 export const initialState = {
-  user: userInitialState,
+  users: userInitialState,
   toasts: toastInitialState,
 };
 
