@@ -9,5 +9,5 @@ export const pipe = <T extends any[], R>(fn1: (...args: T) => R, ...fns: Array<(
   return (...args: T) => piped(fn1(...args));
 };
 
-export const getPackageDistFolder = (packageName: string) =>
-  pipe(require.resolve, path.dirname, (mainFilePath) => mainFilePath.replace('src', 'build'))(packageName);
+export const getPackageDistFolder = (packageName: string, buildPath: string) =>
+  pipe(require.resolve, path.dirname, (mainFilePath) => mainFilePath.replace('src', buildPath))(packageName);

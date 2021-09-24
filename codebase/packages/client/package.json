@@ -4,8 +4,10 @@
   "license": "MIT",
   "main": "src/index.tsx",
   "scripts": {
-    "build:prod": "env-cmd --silent --no-override --fallback -f .env.${BUILD_ENV} react-app-rewired build",
+    "run:dev": "cross-env REACT_APP_INTEGRATION_MODE=standalone env-cmd --silent --no-override --fallback -f .env react-app-rewired start",
+    "build:prod": "cross-env REACT_APP_INTEGRATION_MODE=standalone env-cmd --silent --no-override --fallback -f .env.${BUILD_ENV} react-app-rewired build",
     "test:coverage": "jest test --coverage --watchAll",
+    "test": "cross-env BABEL_ENV=test react-app-rewired test",
     "eject": "react-scripts eject",
     "clean": "rimraf build",
     "clean:all": "yarn clean && rimraf node_modules",
@@ -16,10 +18,11 @@
     "lint": "eslint src --ext js,ts,tsx",
     "format": "prettier --write 'src/**/*.{ts,tsx,js,json}'",
     "check-format": "prettier --check .",
-    "test": "cross-env BABEL_ENV=test react-app-rewired test",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "extract": "i18next --config i18next-parser.config.js"
+    "extract": "i18next --config i18next-parser.config.js",
+    "spa:start": "env-cmd -f .env craco start",
+    "spa:build": "craco build"
   },
   "browserslist": {
     "production": [
@@ -28,7 +31,7 @@
       "not op_mini all"
     ],
     "development": [
-      "last 1 chrome version",
+      "chrome 79",
       "last 1 firefox version",
       "last 1 safari version"
     ]
@@ -41,6 +44,8 @@
   },
   "dependencies": {
     "@dex-ddl/core": "0.1.38",
+    "@dex-runtime/root-state": "0.5.1",
+    "@dex-runtime/side-menu": "^0.7.0",
     "@energon-components/hooks": "0.9.0",
     "@hookform/resolvers": "^1.3.0",
     "@react-aria/button": "^3.3.3",
@@ -73,14 +78,16 @@
     "@storybook/react/babel-loader": "8.1.0"
   },
   "devDependencies": {
-    "@babel/runtime": "^7.14.6",
+    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.14.5",
+    "@babel/plugin-proposal-optional-chaining": "^7.14.5",
     "@babel/plugin-transform-runtime": "^7.15.0",
+    "@babel/runtime": "^7.14.6",
     "@storybook/addon-a11y": "^6.3.7",
     "@storybook/addon-actions": "^6.3.7",
     "@storybook/addon-essentials": "^6.3.7",
     "@storybook/addon-links": "^6.3.7",
-    "@storybook/react": "^6.3.7",
     "@storybook/preset-create-react-app": "^3.2.0",
+    "@storybook/react": "^6.3.7",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^12.0.0",
     "@testing-library/user-event": "^12.8.3",
@@ -98,7 +105,9 @@
     "@types/yup": "^0.29.11",
     "babel-jest": "^27.0.5",
     "core-js": "^2.6.5",
+    "craco-plugin-single-spa-application": "^1.0.8",
     "cross-env": "^7.0.3",
+    "dotenv": "^10.0.0",
     "env-cmd": "^10.1.0",
     "eslint": "^7.29.0",
     "eslint-config-prettier": "^8.3.0",
@@ -115,6 +124,7 @@
     "react-app-rewired": "^2.1.8",
     "react-scripts": "4.0.1",
     "redux-devtools-extension": "^2.13.9",
+    "single-spa": "^5.9.3",
     "storybook-mobile": "^0.1.32",
     "ts-config-single-spa": "^2.0.1",
     "tsconfig-paths-webpack-plugin": "^3.3.0",

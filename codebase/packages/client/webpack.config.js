@@ -1,3 +1,7 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
+const path = require("path");
+const dotenv = require('dotenv');
+const webpack = require('webpack');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
 const { merge } = require('webpack-merge');
@@ -12,8 +16,18 @@ module.exports = (webpackConfigEnv, argv) => {
   });
 
   return merge(defaultConfig, {
+    output: {
+      path: path.resolve(__dirname, 'build'),
+    },
+    plugins: [
+      new webpack.DefinePlugin({
+        'process.env': JSON.stringify(dotenv.config().parsed),
+      })
+    ],
     resolve: {
-      plugins: [new TsconfigPathsPlugin({})],
+      plugins: [
+        new TsconfigPathsPlugin({}),
+      ],
     },
   });
 };
