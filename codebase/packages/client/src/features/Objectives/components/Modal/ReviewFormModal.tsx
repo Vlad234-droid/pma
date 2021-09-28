@@ -259,14 +259,14 @@ const ReviewFormModal: FC<Props> = () => {
         </span>
         <form>
           <div className={css({ padding: `0 0 ${theme.spacing.s5}` })}>
-            <div className={css({ fontSize: '24px', lineHeight: '28px', color: theme.colors.tescoBlue })}>
+            <div className={css({ fontSize: '24px', lineHeight: '28px', color: theme.colors.base })}>
               <Trans i18nKey='mid_year_review_main_title'>How did you do against your objectives?</Trans>
             </div>
             <div
               className={css({
                 fontSize: '18px',
                 lineHeight: '24px',
-                color: theme.colors.tescoBlue,
+                color: theme.colors.base,
                 paddingTop: theme.spacing.s2,
                 paddingBottom: theme.spacing.s5,
               })}
@@ -280,7 +280,7 @@ const ReviewFormModal: FC<Props> = () => {
               <Icon graphic='information' />
               <span
                 className={css(theme.font.fixed.f14, {
-                  color: theme.colors.tescoBlue,
+                  color: theme.colors.base,
                   padding: `${theme.spacing.s0} ${theme.spacing.s2}`,
                 })}
               >

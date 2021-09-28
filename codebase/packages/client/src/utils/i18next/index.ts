@@ -9,7 +9,8 @@ i18n
   .use(initReactI18next)
   .init({
     fallbackLng: 'en',
-    saveMissing: true,
+    saveMissing: false,
+    updateMissing: false,
     backend: {
       queryStringParams: { v: '0.0.1' },
     },

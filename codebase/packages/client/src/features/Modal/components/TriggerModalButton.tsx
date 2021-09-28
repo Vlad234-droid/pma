@@ -9,6 +9,7 @@ export type TriggerModalProps = {
   graphic?: Graphics;
   withIcon?: boolean;
   customStyle?: React.CSSProperties | {};
+  mode?: 'default' | 'inverse';
 };
 
 type Props = HTMLProps<HTMLInputElement> & TriggerModalProps;
@@ -19,6 +20,7 @@ const TriggerModalButton: FC<Props> = ({
   title,
   graphic = 'add',
   customStyle = {},
+  mode = 'default',
   children,
 }) => {
   const { theme } = useStyle();
@@ -41,6 +43,7 @@ const TriggerModalButton: FC<Props> = ({
         </IconButton>
       ) : (
         <Button
+          mode={mode}
           styles={[
             {
               border: `1px solid ${theme.colors.white}`,

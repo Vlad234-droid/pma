@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { Trans, useTranslation } from 'components/Translation';
 import { Status } from 'config/enum';
-import { useStyle, Rule, CreateRule } from '@dex-ddl/core';
+import { useStyle, Rule, CreateRule, Colors, colors } from '@dex-ddl/core';
 
 import { ReviewFormModal } from '../Modal';
 import { TileWrapper } from 'components/Tile';
@@ -18,101 +18,116 @@ export type Props = {
 export const TEST_ID = 'review-widget';
 
 const ReviewWidget: FC<Props> = ({ customStyle, onClick, status, description }) => {
-  const { css, theme } = useStyle();
+  const { css } = useStyle();
   const { t } = useTranslation();
 
-  const isStateless = !status;
-  const isDraft = status === Status.DRAFT;
-  const isPending = status === Status.PENDING;
-  const isApproved = status === Status.APPROVED;
-  const notApproved = !isApproved;
-
-  const getContent = (): [Graphics, boolean, string] => {
-    switch (true) {
-      case isDraft:
-        return ['roundPencil', true, t('draft', 'Draft')];
-      case isApproved:
-        return ['roundTick', false, t('approved', 'Completed [08 Sep 2020]')];
-      case isPending:
-        return ['roundClock', false, t('pending', 'Pending')];
-      case isStateless:
-      default:
-        return ['roundAlert', true, t('alert', 'Your form is now available')];
+  const getContent = (status): [Graphics, Colors, Colors, boolean, string] => {
+    if (!status) {
+      return [
+        'roundAlert',
+        'pending',
+        'tescoBlue',
+        false,
+        t('review_form_not_available', 'This form is available now'),
+      ];
     }
+    const contents: { [key: string]: [Graphics, Colors, Colors, boolean, string] } = {
+      [Status.NOT_AVAILABLE]: [
+        'calender',
+        'tescoBlue',
+        'white',
+        true,
+        t('review_form_not_available', 'The form will be available in Sept 2021'),
+      ],
+      [Status.AVAILABLE]: [
+        'roundAlert',
+        'pending',
+        'tescoBlue',
+        false,
+        t('review_form_not_available', 'This form is available now'),
+      ],
+      [Status.OVERDUE]: [
+        'roundAlert',
+        'error',
+        'white',
+        true,
+        t('review_form_not_available', 'Submit by 08 Sept 2021'),
+      ],
+      [Status.DRAFT]: ['roundPencil', 'base', 'white', true, t('review_form_draft', 'Draft')],
+      [Status.APPROVED]: ['roundTick', 'green', 'white', true, t('review_form_approved', 'Completed [08 Sep 2020]')],
+      [Status.PENDING]: ['roundClock', 'pending', 'white', true, t('review_form_pending', 'Pending')],
+    };
+
+    return contents[status];
   };
 
-  const [graphic, clickable, event] = getContent();
+  const [graphic, iconColor, background, shadow, content] = getContent(status);
+
+  const descriptionColor = background === 'tescoBlue' ? colors.white : colors.base;
+  const titleColor = background === 'tescoBlue' ? colors.white : colors.tescoBlue;
+  const buttonVariant = background === 'tescoBlue' ? 'default' : 'inverse';
 
   const handleClick = () => {
-    notApproved && onClick();
+    onClick();
   };
 
   return (
-    <TileWrapper customStyle={{ ...customStyle }}>
-      <div className={css(wrapperStyle({ clickable }))} onClick={handleClick} data-test-id={TEST_ID}>
+    <TileWrapper customStyle={{ ...customStyle }} hover={shadow} boarder={shadow}>
+      <div className={css(wrapperStyle({ background }))} onClick={handleClick} data-test-id={TEST_ID}>
         <div className={css(headStyle)}>
           <div className={css(headerBlockStyle)}>
-            <span className={css(titleStyle)}>
+            <span className={css(titleStyle({ color: titleColor }))}>
               <Trans i18nKey='mid_year_review'>Mid-year review</Trans>
             </span>
-            <span className={css(descriptionStyle)}>{description}</span>
+            <span className={css(descriptionStyle({ color: descriptionColor }))}>{description}</span>
             <span
-              className={css(descriptionStyle, {
+              className={css(descriptionStyle({ color: descriptionColor }), {
                 paddingTop: '16px',
                 verticalAlign: 'middle',
               })}
             >
-              {clickable ? (
-                <Icon
-                  graphic={graphic}
-                  iconStyles={{ verticalAlign: 'middle', margin: '0px 10px 0px 0px' }}
-                  backgroundRadius={10}
-                />
-              ) : (
-                <Icon graphic={graphic} iconStyles={{ verticalAlign: 'middle', margin: '0px 10px 0px 0px' }} />
-              )}
-              {event}
+              <Icon
+                graphic={graphic}
+                iconStyles={{ verticalAlign: 'middle', margin: '0px 10px 0px 0px' }}
+                backgroundRadius={12}
+                fill={colors[iconColor]}
+              />
+              {content}
             </span>
           </div>
         </div>
-        <div className={css(bodyStyle)}>
-          <div className={css(bodyBlockStyle)}>
-            <TriggerModalButton
-              name={t('fill_review_form', 'Fill Review Form')}
-              title={t('mid_year_review_form', 'Mid-year review form')}
-              customStyle={{
-                border: `1px solid ${clickable ? theme.colors.white : theme.colors.tescoBlue}`,
-                backgroundColor: clickable ? theme.colors.tescoBlue : theme.colors.white,
-                color: clickable ? theme.colors.white : theme.colors.tescoBlue,
-              }}
-            >
-              <ReviewFormModal />
-            </TriggerModalButton>
+        {status !== Status.NOT_AVAILABLE && (
+          <div className={css(bodyStyle)}>
+            <div className={css(bodyBlockStyle)}>
+              <TriggerModalButton
+                name={t('view', 'View')}
+                title={t('mid_year_review_form', 'Mid-year review form')}
+                customStyle={{
+                  border: 'none',
+                }}
+                mode={buttonVariant}
+              >
+                <>
+                  <ReviewFormModal />
+                </>
+              </TriggerModalButton>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </TileWrapper>
   );
 };
 
-const wrapperStyle: CreateRule<{ clickable: boolean }> =
-  ({ clickable }) =>
-  ({ theme }) => ({
-    padding: '24px 30px',
-    backgroundColor: clickable ? theme.colors.tescoBlue : theme.colors.white,
-    color: clickable ? theme.colors.white : theme.colors.tescoBlue,
-    width: '100%',
-    height: '100%',
-    justifyContent: 'space-between',
-    flexDirection: 'column',
-    display: 'flex',
-    ...(clickable && {
-      cursor: 'pointer',
-      '&:hover': {
-        opacity: 0.8,
-      },
-    }),
-  });
+const wrapperStyle: CreateRule<{ background: string }> = ({ background }) => ({
+  padding: '24px 30px',
+  backgroundColor: colors[background],
+  width: '100%',
+  height: '100%',
+  justifyContent: 'space-between',
+  flexDirection: 'column',
+  display: 'flex',
+});
 
 const headStyle: Rule = {
   display: 'flex',
@@ -128,19 +143,21 @@ const bodyBlockStyle: Rule = {
   paddingTop: '14px',
 };
 
-const titleStyle: Rule = {
+const titleStyle: CreateRule<{ color: string }> = ({ color }) => ({
   fontStyle: 'normal',
   fontWeight: 'bold',
   fontSize: '18px',
   marginBottom: '12px',
-};
+  color,
+});
 
-const descriptionStyle: Rule = {
+const descriptionStyle: CreateRule<{ color: string }> = ({ color }) => ({
   position: 'relative',
   fontStyle: 'normal',
   fontWeight: 'normal',
   fontSize: '14px',
-};
+  color,
+});
 
 const bodyStyle: Rule = {
   flexWrap: 'wrap',
