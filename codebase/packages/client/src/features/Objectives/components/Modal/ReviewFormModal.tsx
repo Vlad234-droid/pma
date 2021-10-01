@@ -4,16 +4,38 @@ import { Trans } from 'components/Translation';
 
 import { Icon, Button, useStyle, useBreakpoints } from '@dex-ddl/core';
 
+// todo use Generic form in future. For now just not use it because of more flexibility
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as Yup from 'yup';
+
 import { TileWrapper } from 'components/Tile';
 import { Icon as IconComponent } from 'components/Icon';
 import { Item, Input, Select, Textarea } from 'components/Form';
+import { GenericItemField } from 'components/GenericForm';
 import { SubmitButton } from './index';
+import { reviewFormSchema } from './config';
 
 export type ReviewFormModal = {};
 
 type Props = HTMLProps<HTMLInputElement> & ReviewFormModal;
 
-const objectives = [
+type ObjectiveComponentProps = {
+  objective_id: string;
+  objective_main_title: string;
+  objective_title: string;
+  objective_description?: string;
+  objective_fields?: {
+    field_id: string;
+    field_type: string;
+    field_title?: string;
+    field_description?: string | undefined;
+    field_placeholder?: string | undefined;
+    field_value?: string | undefined;
+    field_options?: any;
+  }[];
+}[];
+const objectives: ObjectiveComponentProps = [
   {
     objective_id: '1',
     objective_main_title: 'Objective 1',
@@ -143,95 +165,26 @@ const objectives = [
   },
 ];
 
-type ObjectiveComponentProps = {
-  objective: {
-    objective_id: string;
-    objective_main_title: string;
-    objective_title: string;
-    objective_description?: string;
-    objective_fields?: {
-      field_id: string;
-      field_type: string;
-      field_title?: string;
-      field_description?: string | undefined;
-      field_placeholder?: string | undefined;
-      field_value?: string | undefined;
-      field_options?: any;
-    }[];
-  };
-};
-
-const ObjectiveComponent: FC<ObjectiveComponentProps> = ({ objective }) => {
-  const { css, theme } = useStyle();
-
-  return (
-    <TileWrapper customStyle={{ marginBottom: '10px' }}>
-      <div style={{ padding: '24px' }}>
-        <div
-          className={css({
-            fontSize: '18px',
-            lineHeight: '22px',
-            color: theme.colors.tescoBlue,
-            fontWeight: theme.font.weight.bold,
-          })}
-        >
-          {objective.objective_main_title}
-        </div>
-        <div
-          className={css({
-            fontSize: '16px',
-            lineHeight: '20px',
-            fontWeight: theme.font.weight.bold,
-            paddingTop: theme.spacing.s5,
-          })}
-        >
-          {objective.objective_title}
-        </div>
-        <div
-          className={css({
-            fontSize: '16px',
-            lineHeight: '20px',
-            paddingBottom: theme.spacing.s5,
-          })}
-        >
-          {objective.objective_description}
-        </div>
-        {objective.objective_fields &&
-          objective.objective_fields.map((field) => {
-            if (field.field_type === 'select') {
-              const { field_options } = field;
-              return (
-                <Item label={field.field_title} withIcon={false}>
-                  <Select
-                    options={field_options}
-                    placeholder={field.field_placeholder}
-                    value={field.field_value || ''}
-                  />
-                </Item>
-              );
-            } else if (field.field_type === 'textarea') {
-              return (
-                <Item label={field.field_title}>
-                  <Textarea placeholder={field.field_placeholder} value={field.field_value || ''} />
-                </Item>
-              );
-            } else if (field.field_type === 'input') {
-              return (
-                <Item label={field.field_title}>
-                  <Input placeholder={field.field_placeholder} value={field.field_value || ''} />
-                </Item>
-              );
-            }
-          })}
-      </div>
-    </TileWrapper>
-  );
-};
-
 const ReviewFormModal: FC<Props> = () => {
   const { css, theme } = useStyle();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+
+  const methods = useForm({
+    mode: 'onChange',
+    resolver: yupResolver<Yup.AnyObjectSchema>(reviewFormSchema),
+  });
+  const {
+    handleSubmit,
+    formState: { errors, isValid },
+    reset,
+  } = methods;
+  console.log('errors', errors);
+  const onSubmit = async (data) => {
+    console.log('data', data);
+    reset();
+  };
+
   return (
     <div
       className={css({
@@ -288,55 +241,137 @@ const ReviewFormModal: FC<Props> = () => {
               </span>
             </div>
             {objectives.map((objective) => (
-              <ObjectiveComponent key={objective.objective_id} objective={objective} />
+              <TileWrapper key={objective.objective_id} customStyle={{ marginBottom: '10px' }}>
+                <div style={{ padding: '24px' }}>
+                  <div
+                    className={css({
+                      fontSize: '18px',
+                      lineHeight: '22px',
+                      color: theme.colors.tescoBlue,
+                      fontWeight: theme.font.weight.bold,
+                    })}
+                  >
+                    {objective.objective_main_title}
+                  </div>
+                  <div
+                    className={css({
+                      fontSize: '16px',
+                      lineHeight: '20px',
+                      fontWeight: theme.font.weight.bold,
+                      paddingTop: theme.spacing.s5,
+                    })}
+                  >
+                    {objective.objective_title}
+                  </div>
+                  <div
+                    className={css({
+                      fontSize: '16px',
+                      lineHeight: '20px',
+                      paddingBottom: theme.spacing.s5,
+                    })}
+                  >
+                    {objective.objective_description}
+                  </div>
+                  {objective.objective_fields &&
+                    objective.objective_fields.map((field) => {
+                      if (field.field_type === 'select') {
+                        const { field_options } = field;
+                        return (
+                          <GenericItemField
+                            name={`objective.${objective.objective_id}.field.${field.field_id}.value`}
+                            methods={methods}
+                            label={field.field_title}
+                            Wrapper={({ children }) => <Item withIcon={false}>{children}</Item>}
+                            Element={Select}
+                            options={field_options}
+                            placeholder={field.field_placeholder}
+                          />
+                        );
+                      } else if (field.field_type === 'textarea') {
+                        return (
+                          <GenericItemField
+                            name={`objective.${objective.objective_id}.field.${field.field_id}.value`}
+                            methods={methods}
+                            label={field.field_title}
+                            Wrapper={Item}
+                            Element={Textarea}
+                            placeholder={field.field_placeholder}
+                          />
+                        );
+                      } else if (field.field_type === 'input') {
+                        return (
+                          <GenericItemField
+                            name={`objective.${objective.objective_id}.field.${field.field_id}.value`}
+                            methods={methods}
+                            label={field.field_title}
+                            Wrapper={Item}
+                            Element={Input}
+                            placeholder={field.field_placeholder}
+                          />
+                        );
+                      }
+                    })}
+                </div>
+              </TileWrapper>
             ))}
           </div>
-        </form>
-      </div>
-      <div
-        className={css({
-          position: 'relative',
-          bottom: theme.spacing.s0,
-          left: theme.spacing.s0,
-          right: theme.spacing.s0,
-          borderTop: `${theme.border.width.b1} solid ${theme.colors.backgroundDarkest}`,
-        })}
-      >
-        <div
-          className={css({
-            padding: theme.spacing.s9,
-            display: 'flex',
-            justifyContent: 'center',
-          })}
-        >
-          <Button
-            styles={[
-              theme.font.fixed.f16,
-              {
-                fontWeight: theme.font.weight.bold,
-                width: '50%',
-                margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
-                background: theme.colors.white,
-                border: `${theme.border.width.b1} solid ${theme.colors.tescoBlue}`,
-                color: `${theme.colors.tescoBlue}`,
-              },
-            ]}
-            onPress={() => alert('1')}
+          <div
+            className={css({
+              position: 'absolute',
+              bottom: 0,
+              left: 0,
+              width: '100%',
+            })}
           >
-            <Trans i18nKey='save_as_draft'>Save as draft</Trans>
-          </Button>
-          <SubmitButton
-            styles={[
-              theme.font.fixed.f16,
-              {
-                fontWeight: theme.font.weight.bold,
-                width: '50%',
-                margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
-                background: `${theme.colors.tescoBlue}`,
-              },
-            ]}
-          />
-        </div>
+            <div
+              className={css({
+                position: 'relative',
+                bottom: theme.spacing.s0,
+                left: theme.spacing.s0,
+                right: theme.spacing.s0,
+                borderTop: `${theme.border.width.b1} solid ${theme.colors.backgroundDarkest}`,
+              })}
+            >
+              <div
+                className={css({
+                  padding: mobileScreen ? theme.spacing.s7 : theme.spacing.s9,
+                  display: 'flex',
+                  justifyContent: 'center',
+                })}
+              >
+                <Button
+                  styles={[
+                    theme.font.fixed.f16,
+                    {
+                      fontWeight: theme.font.weight.bold,
+                      width: '50%',
+                      margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
+                      background: theme.colors.white,
+                      border: `${theme.border.width.b1} solid ${theme.colors.tescoBlue}`,
+                      color: `${theme.colors.tescoBlue}`,
+                    },
+                  ]}
+                  onPress={() => alert('1')}
+                >
+                  <Trans i18nKey='save_as_draft'>Save as draft</Trans>
+                </Button>
+                <SubmitButton
+                  isDisabled={!isValid}
+                  onSave={handleSubmit(onSubmit)}
+                  styles={[
+                    theme.font.fixed.f16,
+                    {
+                      fontWeight: theme.font.weight.bold,
+                      width: '50%',
+                      margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
+                      background: `${theme.colors.tescoBlue}`,
+                    },
+                  ]}
+                />
+              </div>
+            </div>
+          </div>
+        </form>
       </div>
     </div>
   );

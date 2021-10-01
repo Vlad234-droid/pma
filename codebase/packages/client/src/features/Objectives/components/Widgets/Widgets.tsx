@@ -38,7 +38,7 @@ const Widgets: FC<Props> = () => {
 
   return (
     <div className={css(wrapperStyle)}>
-      <MainWidget customStyle={{ flex: '4 1 500px' }} onClick={() => alert('View')} count={3} />
+      <MainWidget customStyle={{ flex: '4 1 500px' }} onClick={() => console.log('View')} count={3} />
       {widgets.map((props, idx) => (
         <SecondaryWidget key={idx} {...props} />
       ))}

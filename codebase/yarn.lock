@@ -2124,10 +2124,10 @@
   dependencies:
     "@hapi/hoek" "^8.3.0"
 
-"@hookform/resolvers@^1.3.0":
-  version "1.3.7"
-  resolved "https://registry.yarnpkg.com/@hookform/resolvers/-/resolvers-1.3.7.tgz#7c164d438b788cc625e46c22885ca6edc254350b"
-  integrity sha512-gC06h1hky7gM31UO4Y7DrUQjgZyNIKA3s0/TxXbdeurwhOj07l8Zx8Pomjt93ANOKoZOU2rcHKaZtrEJx1w7tg==
+"@hookform/resolvers@^2.8.1":
+  version "2.8.1"
+  resolved "https://registry.yarnpkg.com/@hookform/resolvers/-/resolvers-2.8.1.tgz#0d4fdd25bdeb4b98bf4e177c63fc4efa173454dd"
+  integrity sha512-U5lgaCkvD+0e5X8iQmCHiF+jOqjTX6OHUA7zPdeIHI6xdAOoi3rH9MKNuwMwv5Hly2LL6XtDgDkS/k+YG9hOew==
 
 "@humanwhocodes/config-array@^0.5.0":
   version "0.5.0"
@@ -18480,10 +18480,10 @@ react-helmet-async@^1.0.2, react-helmet-async@^1.0.7:
     react-fast-compare "^3.2.0"
     shallowequal "^1.1.0"
 
-react-hook-form@^6.13.1:
-  version "6.15.8"
-  resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-6.15.8.tgz#725c139d308c431c4611e4b9d85a49f01cfc0e7a"
-  integrity sha512-prq82ofMbnRyj5wqDe8hsTRcdR25jQ+B8KtCS7BLCzjFHAwNuCjRwzPuP4eYLsEBjEIeYd6try+pdLdw0kPkpg==
+react-hook-form@^7.16.1:
+  version "7.16.1"
+  resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-7.16.1.tgz#669046df378a71949e5cf8a2398cbe20d5cb27bc"
+  integrity sha512-kcLDmSmlyLUFx2UU5bG/o4+3NeK753fhKodJa8gkplXohGkpAq0/p+TR24OWjZmkEc3ES7ppC5v5d6KUk+fJTA==
 
 react-i18next@^11.12.0:
   version "11.12.0"
@@ -18516,6 +18516,11 @@ react-lifecycles-compat@^3.0.4:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
   integrity sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==
+
+react-merge-refs@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/react-merge-refs/-/react-merge-refs-1.1.0.tgz#73d88b892c6c68cbb7a66e0800faa374f4c38b06"
+  integrity sha512-alTKsjEL0dKH/ru1Iyn7vliS2QRcBp9zZPGoWxUOvRGWPUYgjo+V01is7p04It6KhgrzhJGnIj9GgX8W4bZoCQ==
 
 react-plotly.js@^2.5.1:
   version "2.5.1"
@@ -23122,7 +23127,7 @@ yocto-queue@^0.1.0:
   resolved "https://registry.yarnpkg.com/yocto-queue/-/yocto-queue-0.1.0.tgz#0294eb3dee05028d31ee1a5fa2c556a6aaf10a1b"
   integrity sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==
 
-yup@^0.32.8:
+yup@^0.32.9:
   version "0.32.9"
   resolved "https://registry.yarnpkg.com/yup/-/yup-0.32.9.tgz#9367bec6b1b0e39211ecbca598702e106019d872"
   integrity sha512-Ci1qN+i2H0XpY7syDQ0k5zKQ/DoxO0LzPg8PAR/X4Mpj6DqaeCoIYEEjDJwhArh3Fa7GWbQQVDZKeXYlSH4JMg==

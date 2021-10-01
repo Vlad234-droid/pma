@@ -5,17 +5,23 @@ import { ConfirmModal } from 'features/Modal';
 
 export type SubmitButton = {
   styles?: Rule[];
+  onSave: () => void;
+  isDisabled?: boolean;
 };
 
 type Props = HTMLProps<HTMLInputElement> & SubmitButton;
 
-const SubmitButton: FC<Props> = ({ styles }) => {
+const SubmitButton: FC<Props> = ({ styles = [], onSave, isDisabled = false }) => {
   const [isOpen, setIsOpen] = useState(false);
   const { t } = useTranslation('');
 
   return (
     <>
-      <Button styles={styles} onPress={() => setIsOpen(true)}>
+      <Button
+        styles={[...styles, isDisabled ? { opacity: 0.4 } : {}]}
+        onPress={() => setIsOpen(true)}
+        isDisabled={isDisabled}
+      >
         <Trans i18nKey='submit'>Submit</Trans>
       </Button>
       {isOpen && (
@@ -25,7 +31,10 @@ const SubmitButton: FC<Props> = ({ styles }) => {
             'submit_objectives_confirmation',
             'Are you sure you want to submit all of your objectives to your manager?',
           )}
-          onSave={() => setIsOpen(false)}
+          onSave={() => {
+            onSave();
+            setIsOpen(false);
+          }}
           onCancel={() => setIsOpen(false)}
           onOverlayClick={() => setIsOpen(false)}
         />

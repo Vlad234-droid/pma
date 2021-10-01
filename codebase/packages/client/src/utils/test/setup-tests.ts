@@ -2,7 +2,7 @@ import '@testing-library/jest-dom/extend-expect';
 import { configure } from '@testing-library/react';
 import MatchMediaMock from 'jest-matchmedia-mock';
 
-configure({ testIdAttribute: 'data-test-id' });
+configure({ testIdAttribute: 'data-test-id', defaultHidden: true });
 
 export let matchMediaMock: MatchMediaMock;
 

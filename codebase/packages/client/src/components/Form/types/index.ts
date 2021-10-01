@@ -1,20 +1,25 @@
+import { RefObject } from 'react';
 import { Rule, Styles } from '@dex-ddl/core';
+import { Ref } from 'react-hook-form';
 
-export interface FormItem {
+export interface FormItemProps {
   disabled?: boolean;
   value?: string;
   name?: string;
   placeholder?: string;
   styles?: Styles | Rule;
   onChange?: (e: any) => any;
+  domRef?: Ref | RefObject<any>;
+  isValid?: boolean;
+  type?: string;
 }
 
-export type InputProps = FormItem
+export type InputProps = FormItemProps;
 
-export interface SelectProps extends FormItem {
+export interface SelectProps extends FormItemProps {
   options: { value: string; label: string }[] | [];
 }
 
-export interface TextareaProps extends FormItem {
+export interface TextareaProps extends FormItemProps {
   rows?: number;
 }
