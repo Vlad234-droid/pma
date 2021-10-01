@@ -1575,38 +1575,6 @@
     postinstall-postinstall "2.1.0"
     react-fela "11.6.1"
 
-"@dex-ddl/core@0.1.45":
-  version "0.1.45"
-  resolved "https://nexus.ourtesco.com/repository/colleague-ui-private/@dex-ddl/core/-/core-0.1.45.tgz#2761e8ad14a05683a282caa2c6a0595efcb3f849"
-  integrity sha512-vvhxnYyX4HU/WK5K7EQORYxyGkxNXYVv03c3bmNvtghDgOOP0+fgjbzDHbggJ37jvtJdEENhlyviiuHNFwR8tQ==
-  dependencies:
-    "@energon-components/hooks" "0.9.0"
-    "@energon/array-utils" "0.19.4"
-    "@energon/date-utils" "0.19.0"
-    "@energon/function-utils" "0.2.0"
-    "@energon/number-utils" "0.3.7"
-    "@react-aria/button" "3.3.2"
-    "@react-aria/dialog" "3.1.3"
-    "@react-aria/focus" "3.4.0"
-    "@react-aria/overlays" "3.7.1"
-    "@react-aria/radio" "3.1.4"
-    "@react-aria/visually-hidden" "3.2.2"
-    "@react-stately/overlays" "3.1.2"
-    "@react-stately/radio" "3.3.1"
-    "@react-types/button" "3.4.0"
-    "@react-types/dialog" "3.3.0"
-    "@react-types/overlays" "3.5.0"
-    "@react-types/radio" "3.1.1"
-    caniuse-api "3.0.0"
-    fela "11.6.1"
-    fela-plugin-fallback-value "11.6.1"
-    fela-plugin-prefixer "11.6.1"
-    fela-plugin-typescript "11.6.1"
-    inline-style-prefixer "6.0.0"
-    patch-package "6.4.7"
-    postinstall-postinstall "2.1.0"
-    react-fela "11.6.1"
-
 "@dex-runtime/root-state@0.5.1":
   version "0.5.1"
   resolved "https://nexus.ourtesco.com/repository/colleague-ui-private/@dex-runtime/root-state/-/root-state-0.5.1.tgz#d50945f5a4e136ddc6c5b7b64ad5b4ed1c8f7b9b"
@@ -1614,21 +1582,6 @@
   dependencies:
     "@dex-ddl/core" "0.1.43"
     rxjs "7.3.0"
-
-"@dex-runtime/routing@0.5.0":
-  version "0.5.0"
-  resolved "https://nexus.ourtesco.com/repository/colleague-ui-private/@dex-runtime/routing/-/routing-0.5.0.tgz#70619fe03c5063922216c27a35e996c2a8c5bbec"
-  integrity sha512-Ap8dpgqUkAs8313gIFI5EiH7AoO9fvbutRXysCIxd/okmecgacEvLkIVmxHuk6AKJ1hgG0IzGWwWNTq6hRk0FA==
-  dependencies:
-    query-string "7.0.0"
-
-"@dex-runtime/side-menu@^0.7.0":
-  version "0.7.0"
-  resolved "https://nexus.ourtesco.com/repository/colleague-ui-private/@dex-runtime/side-menu/-/side-menu-0.7.0.tgz#d5843aa604f59a5d858a651ac2318050360d87d6"
-  integrity sha512-7q99F5PwQU09ZQXZbhvyLk3g5IhlMR5auNcZNoNWKdOL5aO2RJFdzhe3+5VwzFzU3wzjJmag7OR9XUQpGFSvuQ==
-  dependencies:
-    "@dex-ddl/core" "0.1.45"
-    "@dex-runtime/routing" "0.5.0"
 
 "@discoveryjs/json-ext@^0.5.0", "@discoveryjs/json-ext@^0.5.3":
   version "0.5.3"
@@ -14946,11 +14899,6 @@ lodash.isstring@^4.0.1:
   resolved "https://registry.yarnpkg.com/lodash.isstring/-/lodash.isstring-4.0.1.tgz#d527dfb5456eca7cc9bb95d5daeaf88ba54a5451"
   integrity sha1-1SfftUVuynzJu5XV2ur4i6VKVFE=
 
-lodash.isplainobject@^4.0.6:
-  version "4.0.6"
-  resolved "https://registry.yarnpkg.com/lodash.isplainobject/-/lodash.isplainobject-4.0.6.tgz#7c526a52d89b45c45cc690b88163be0497f550cb"
-  integrity sha1-fFJqUtibRcRcxpC4gWO+BJf1UMs=
-
 lodash.map@^4.5.1:
   version "4.6.0"
   resolved "https://registry.yarnpkg.com/lodash.map/-/lodash.map-4.6.0.tgz#771ec7839e3473d9c4cde28b19394c3562f4f6d3"
@@ -18229,16 +18177,6 @@ query-string@5.1.1:
     decode-uri-component "^0.2.0"
     object-assign "^4.1.0"
     strict-uri-encode "^1.0.0"
-
-query-string@7.0.0:
-  version "7.0.0"
-  resolved "https://registry.yarnpkg.com/query-string/-/query-string-7.0.0.tgz#aaad2c8d5c6a6d0c6afada877fecbd56af79e609"
-  integrity sha512-Iy7moLybliR5ZgrK/1R3vjrXq03S13Vz4Rbm5Jg3EFq1LUmQppto0qtXz4vqZ386MSRjZgnTSZ9QC+NZOSd/XA==
-  dependencies:
-    decode-uri-component "^0.2.0"
-    filter-obj "^1.1.0"
-    split-on-first "^1.0.0"
-    strict-uri-encode "^2.0.0"
 
 query-string@^4.1.0:
   version "4.3.4"

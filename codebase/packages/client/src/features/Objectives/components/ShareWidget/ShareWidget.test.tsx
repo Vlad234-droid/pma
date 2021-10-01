@@ -15,10 +15,10 @@ describe('ShareWidget', () => {
   });
 
   it('while click', async () => {
-    const { queryByTestId } = renderWithTheme(<ShareWidget onClick={testHandler} />);
-    const widget = queryByTestId(TEST_ID);
+    const { getByRole } = renderWithTheme(<ShareWidget onClick={testHandler} />);
+    const btn = getByRole('button');
 
-    fireEvent.click(widget);
+    fireEvent.click(btn);
 
     expect(testHandler).toHaveBeenCalledTimes(1);
   });

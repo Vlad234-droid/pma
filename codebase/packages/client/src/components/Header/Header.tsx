@@ -1,7 +1,6 @@
 import React, { FC } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useStyle, Styles, Rule, IconButton } from '@dex-ddl/core';
-import { SideMenu } from '@dex-runtime/side-menu';
 
 export type HeaderProps = {
   title: string;
@@ -28,9 +27,7 @@ const Header: FC<HeaderProps> = ({ title, onBack, styles = {} }) => {
     <div className={css(wrapperStyles, styles)} data-test-id={TEST_ID}>
       <IconButton onPress={handleBack} graphic='backwardLink' data-test-id={BACK_BTN_TEST_ID} />
       <h3 className={css(headerStyles)}>{title}</h3>
-      <div className={css(sideMenuStyles)}>
-        <SideMenu context='my-work' />
-      </div>
+      <IconButton onPress={() => alert('menu')} graphic='hamburger' />
     </div>
   );
 };

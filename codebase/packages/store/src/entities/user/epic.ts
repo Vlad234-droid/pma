@@ -13,7 +13,7 @@ export const getCurrentUserEpic: Epic = (action$, _, { api }) =>
       from(api.getCurrentUser()).pipe(
         map(getCurrentUser.success),
         catchError((e) => {
-          const errors = e?.data.errors;
+          const errors = e?.data?.errors;
           return of(getCurrentUser.failure(errors?.[0]));
         }),
         takeUntil(action$.pipe(filter(isActionOf(getCurrentUser.cancel)))),

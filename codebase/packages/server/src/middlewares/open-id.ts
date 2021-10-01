@@ -1,4 +1,3 @@
-import { Request } from 'express';
 import {
   getOpenidMiddleware,
   identityTokenSwapPlugin,
@@ -7,9 +6,6 @@ import {
   Logger,
   LoggerEvent,
   OpenIdUserInfo,
-  AuthData,
-  PluginCookieConfig,
-  getDataFromCookie,
 } from '@energon/onelogin';
 
 import { isPROD, defaultConfig, ProcessConfig } from '../config';
@@ -23,33 +19,6 @@ interface ErrorMessage {
 interface LogMessage {
   message: string;
 }
-
-type OidcTokenExtractorConfig = {
-  /**
-   * onelogin strategy: oidc or saml
-   */
-  strategy: 'oidc';
-  /**
-   * optional, cookie configuration object
-   * if not present, data won't be saved in the cookie
-   * if maxAge is not present, expiration claims will be used instead
-   */
-  cookieConfig?: PluginCookieConfig;
-};
-
-const configOidcTokenCookie = (isProduction = false) => ({
-  cookieName: 'oidc_token_ookie',
-  secret: 'oidc_token_ookie_secret',
-  httpOnly: true,
-  secure: isProduction,
-  signed: isProduction,
-  compressed: false,
-});
-
-export const getOidcData = (isProduction: boolean, req: Request) => {
-  const { secret, cookieName, compressed } = configOidcTokenCookie(isProduction);
-  return getDataFromCookie<AuthData>(req, { secret, cookieName, compressed });
-};
 
 const OpenIdLogger: Logger = (event: LoggerEvent) => {
   switch (event.severity) {
@@ -211,8 +180,8 @@ export const openIdConfig = ({
         cookieConfig: {
           cookieName: applicationUserDataCookieName(),
           httpOnly: true,
-          secure: false,
-          signed: false,
+          secure: isProduction,
+          signed: isProduction,
           cookieShapeResolver: (userInfo) => enrichUserInfo(userInfo),
         },
       }),

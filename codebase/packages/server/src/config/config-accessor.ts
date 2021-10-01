@@ -20,6 +20,7 @@ export type ProcessConfig = {
   integrationBuildPath: () => string;
   integrationMFModule: () => string;
   integrationSSOLogoutPath: () => string;
+  integrationUIMountPath: () => string;
   // application specific settings
   applicationName: () => string;
   applicationPublicUrl: () => string;
@@ -56,6 +57,7 @@ export class ConfigAccessor {
 
   private constructor(processEnv: NodeJS.ProcessEnv) {
     const port = isNaN(Number(processEnv.NODE_PORT)) ? defaultConfig.port : Number(processEnv.NODE_PORT);
+    const coreMountPath = processEnv.INTEGRATION_CORE_MOUNT_PATH;
     this.config = {
       // general
       buildEnvironment: () => processEnv.BUILD_ENV,
@@ -65,19 +67,21 @@ export class ConfigAccessor {
       authPath: () => defaultConfig.authPath,
       // integration
       integrationMode: () => processEnv.INTEGRATION_MODE,
-      integrationCoreMountPath: () => processEnv.INTEGRATION_CORE_MOUNT_PATH,
+      integrationCoreMountPath: () => coreMountPath,
       integrationCoreMountUrl: () =>
-        processEnv.INTEGRATION_CORE_MOUNT_PATH === '/'
+        coreMountPath === '/'
           ? `${processEnv.INTEGRATION_CORE_URL}${processEnv.INTEGRATION_MOUNT_PATH}`
-          : `${processEnv.INTEGRATION_CORE_URL}${processEnv.INTEGRATION_CORE_MOUNT_PATH}${processEnv.INTEGRATION_MOUNT_PATH}`,
+          : `${processEnv.INTEGRATION_CORE_URL}${coreMountPath}${processEnv.INTEGRATION_MOUNT_PATH}`,
       integrationMountPath: () => processEnv.INTEGRATION_MOUNT_PATH,
       integrationNodeBFFUrl: () => `${processEnv.INTEGRATION_NODE_BFF_URL}:${port}${processEnv.INTEGRATION_MOUNT_PATH}`,
       integrationBuildPath: () => defaultConfig.buildPath,
       integrationMFModule: () => defaultConfig.mfModule,
       integrationSSOLogoutPath: () =>
-        processEnv.INTEGRATION_CORE_MOUNT_PATH === '/'
+        coreMountPath === '/'
           ? `${processEnv.INTEGRATION_CORE_URL}${defaultConfig.SSOLogoutPath}`
-          : `${processEnv.INTEGRATION_CORE_URL}${processEnv.INTEGRATION_CORE_MOUNT_PATH}${defaultConfig.SSOLogoutPath}`,
+          : `${processEnv.INTEGRATION_CORE_URL}${coreMountPath}${defaultConfig.SSOLogoutPath}`,
+      integrationUIMountPath: () =>
+        coreMountPath === '/' ? '' : `${coreMountPath}${processEnv.INTEGRATION_MOUNT_PATH}`,
       // application specific settings
       applicationName: () => defaultConfig.applicationName,
       applicationPublicUrl: () => processEnv.APPLICATION_PUBLIC_URL,

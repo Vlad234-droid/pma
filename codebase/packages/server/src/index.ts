@@ -45,7 +45,7 @@ if (!PROXY_API_SERVER_URL) {
 
     const nodeBFFUrl = config.integrationNodeBFFUrl();
     const mountPath = config.integrationMountPath();
-    const uiMountPath = `${config.integrationCoreMountPath()}${mountPath}`;
+    const uiMountPath = config.integrationUIMountPath();
 
     const proxy = httpProxy.createProxyServer({});
     const apiServer = (req, res) => proxy.web(req, res, { target: PROXY_API_SERVER_URL });
