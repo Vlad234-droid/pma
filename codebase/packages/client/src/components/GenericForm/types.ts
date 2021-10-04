@@ -9,6 +9,7 @@ type TestProps = {
 type FormField<T> = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Element: FC<any>;
+  Wrapper?: FC<any>;
   name: T;
   labels?: Array<string>;
   options?: Array<Record<string, number | string | boolean>>;

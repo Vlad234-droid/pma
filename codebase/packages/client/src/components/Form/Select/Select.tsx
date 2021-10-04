@@ -1,11 +1,22 @@
 import React, { FC, useState } from 'react';
+import mergeRefs from 'react-merge-refs';
 import { useStyle, Rule } from '@dex-ddl/core';
 import { Icon } from 'components/Icon';
 
+import { useRefContainer } from '../context/input';
 import { SelectProps } from '../types';
 
-const Select: FC<SelectProps> = ({ placeholder = '', value = undefined, options, disabled = false, name }) => {
+const Select: FC<SelectProps> = ({
+  domRef,
+  onChange,
+  placeholder = '',
+  value = undefined,
+  options,
+  disabled = false,
+  name,
+}) => {
   const { css, theme } = useStyle();
+  const refIcon = useRefContainer();
   const [selectedOptionValue, setSelectedOptionValue] = useState(value);
   const [isOptionOpen, toggleOption] = useState(false);
   const selectedOptionLabel = options.find(({ value }) => value === selectedOptionValue)?.label || '';
@@ -19,7 +30,9 @@ const Select: FC<SelectProps> = ({ placeholder = '', value = undefined, options,
         }}
       >
         <input
+          ref={mergeRefs([domRef, refIcon])}
           name={name}
+          value={selectedOptionLabel || value}
           disabled={disabled}
           className={css({
             width: '100%',
@@ -34,10 +47,15 @@ const Select: FC<SelectProps> = ({ placeholder = '', value = undefined, options,
             },
           })}
           placeholder={`- ${placeholder} -`}
-          value={selectedOptionLabel}
           readOnly={true}
+          onSelect={(e) => {
+            if (onChange && isOptionOpen) {
+              onChange(e);
+            }
+            toggleOption(false);
+          }}
           onClick={() => toggleOption(true)}
-          onBlur={(e) => toggleOption(false)}
+          onBlur={() => toggleOption(false)}
         />
         <span
           style={{
@@ -56,9 +74,12 @@ const Select: FC<SelectProps> = ({ placeholder = '', value = undefined, options,
           <div
             style={{
               display: 'block',
-              position: 'relative',
+              position: 'absolute',
               border: `1px solid ${theme.colors.backgroundDarkest}`,
               borderRadius: theme.border.radius.sm,
+              background: theme.colors.white,
+              width: '100%',
+              zIndex: 999,
             }}
           >
             {options.map((option) => {
@@ -76,9 +97,8 @@ const Select: FC<SelectProps> = ({ placeholder = '', value = undefined, options,
                     },
                   })}
                   onMouseDown={(e) => e.preventDefault()}
-                  onClick={(e) => {
+                  onClick={() => {
                     setSelectedOptionValue(option.value);
-                    toggleOption(false);
                   }}
                 >
                   {option.label}

@@ -3,11 +3,18 @@ import { Trans, useTranslation } from 'components/Translation';
 
 import { Icon, Button, useStyle, useBreakpoints } from '@dex-ddl/core';
 
+// todo use Generic form in future. For now just not use it because of more flexibility
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as Yup from 'yup';
+
 import { Icon as IconComponent } from 'components/Icon';
 import { StepIndicatorBasic } from 'components/StepIndicator/StepIndicator';
-import { Item, Input, Textarea } from 'components/Form';
+import { Input, Textarea, Item } from 'components/Form';
+import { GenericItemField } from 'components/GenericForm';
 
 import { SubmitButton } from './index';
+import { createObjectivesSchema } from './config';
 
 export type CreateModalProps = {};
 
@@ -19,10 +26,25 @@ export const CreateModal: FC<Props> = () => {
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
 
+  const methods = useForm({
+    mode: 'onChange',
+    resolver: yupResolver<Yup.AnyObjectSchema>(createObjectivesSchema),
+  });
+  const {
+    handleSubmit,
+    formState: { isValid },
+    reset,
+  } = methods;
+  const onSubmit = async (data) => {
+    console.log('data', data);
+    reset();
+  };
+
   return (
     <div
       className={css({
         height: '100%',
+        bottom: '80px',
       })}
     >
       <div
@@ -56,19 +78,25 @@ export const CreateModal: FC<Props> = () => {
               ]}
             />
           </div>
-          <Item label={t('objective_title', 'Objective title')}>
-            <Input
-              placeholder={t('objective_title_placeholder', 'Example: Build additional backlinks for Our Tesco.')}
-            />
-          </Item>
-          <Item label={t('description', 'Description')}>
-            <Textarea
-              placeholder={t(
-                'description_placeholder',
-                'Build 40 additional backlinks for Our Tesco by June. To do so I will connect with Ellie and Andrew from PR to develop an effective outreach strategy.',
-              )}
-            />
-          </Item>
+          <GenericItemField
+            name='objectiveTitle'
+            methods={methods}
+            label={t('objective_title', 'Objective title')}
+            Wrapper={Item}
+            Element={Input}
+            placeholder={t('objective_title_placeholder', 'Example: Build additional backlinks for Our Tesco.')}
+          />
+          <GenericItemField
+            name='objectiveDescription'
+            methods={methods}
+            label={t('description', 'Description')}
+            Wrapper={Item}
+            Element={Textarea}
+            placeholder={t(
+              'description_placeholder',
+              'Build 40 additional backlinks for Our Tesco by June. To do so I will connect with Ellie and Andrew from PR to develop an effective outreach strategy.',
+            )}
+          />
           <div className={css({ padding: `0 0 ${theme.spacing.s5}`, display: 'flex' })}>
             <Icon graphic='information' />
             <span
@@ -80,68 +108,93 @@ export const CreateModal: FC<Props> = () => {
               Need help writing your objectives?
             </span>
           </div>
-          <Item label='How will you MEET this objective?'>
-            <Textarea
-              rows={4}
-              placeholder='Example:
-1) Develop 60 additional backlinks for Our Tesco
-2) Develop outreach strategy and action first step of the strategy successfully'
-            />
-          </Item>
-          <Item label='How will you EXCEED this objective?'>
-            <Textarea
-              rows={4}
-              placeholder='Example:
-1) Develop 60 additional backlinks for Our Tesco
-2) Develop outreach strategy and action first step of the strategy successfully'
-            />
-          </Item>
-        </form>
-      </div>
-      <div
-        className={css({
-          position: 'relative',
-          bottom: theme.spacing.s0,
-          left: theme.spacing.s0,
-          right: theme.spacing.s0,
-          borderTop: `${theme.border.width.b1} solid ${theme.colors.backgroundDarkest}`,
-        })}
-      >
-        <div
-          className={css({
-            padding: theme.spacing.s9,
-            display: 'flex',
-            justifyContent: 'center',
-          })}
-        >
-          <Button
-            styles={[
-              theme.font.fixed.f16,
-              {
-                fontWeight: theme.font.weight.bold,
-                width: '50%',
-                margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
-                background: theme.colors.white,
-                border: `${theme.border.width.b1} solid ${theme.colors.tescoBlue}`,
-                color: `${theme.colors.tescoBlue}`,
-              },
-            ]}
-            onPress={() => alert('1')}
-          >
-            <Trans i18nKey='save_as_draft'>Save as draft</Trans>
-          </Button>
-          <SubmitButton
-            styles={[
-              theme.font.fixed.f16,
-              {
-                fontWeight: theme.font.weight.bold,
-                width: '50%',
-                margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
-                background: `${theme.colors.tescoBlue}`,
-              },
-            ]}
+          <GenericItemField
+            name='meetObjective'
+            methods={methods}
+            label='How will you MEET this objective?'
+            Wrapper={Item}
+            Element={(props) => (
+              <Textarea
+                {...props}
+                rows={4}
+                placeholder='Example:
+            1) Develop 60 additional backlinks for Our Tesco
+            2) Develop outreach strategy and action first step of the strategy successfully'
+              />
+            )}
           />
-        </div>
+          <GenericItemField
+            name='exceedObjective'
+            methods={methods}
+            label='How will you EXCEED this objective?'
+            Wrapper={Item}
+            Element={(props) => (
+              <Textarea
+                {...props}
+                rows={4}
+                placeholder='Example:
+1) Develop 60 additional backlinks for Our Tesco
+2) Develop outreach strategy and action first step of the strategy successfully'
+              />
+            )}
+          />
+          <div
+            className={css({
+              position: 'absolute',
+              bottom: 0,
+              left: 0,
+              width: '100%',
+            })}
+          >
+            <div
+              className={css({
+                position: 'relative',
+                bottom: theme.spacing.s0,
+                left: theme.spacing.s0,
+                right: theme.spacing.s0,
+                borderTop: `${theme.border.width.b1} solid ${theme.colors.backgroundDarkest}`,
+              })}
+            >
+              <div
+                className={css({
+                  padding: mobileScreen ? theme.spacing.s7 : theme.spacing.s9,
+                  display: 'flex',
+                  justifyContent: 'center',
+                })}
+              >
+                <Button
+                  styles={[
+                    theme.font.fixed.f16,
+                    {
+                      fontWeight: theme.font.weight.bold,
+                      width: '50%',
+                      margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
+                      background: theme.colors.white,
+                      border: `${theme.border.width.b1} solid ${theme.colors.tescoBlue}`,
+                      color: `${theme.colors.tescoBlue}`,
+                    },
+                  ]}
+                  onPress={() => alert('1')}
+                >
+                  <Trans i18nKey='save_as_draft'>Save as draft</Trans>
+                </Button>
+                <SubmitButton
+                  isDisabled={!isValid}
+                  onSave={handleSubmit(onSubmit)}
+                  styles={[
+                    theme.font.fixed.f16,
+                    {
+                      fontWeight: theme.font.weight.bold,
+                      width: '50%',
+                      margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
+                      background: `${theme.colors.tescoBlue}`,
+                    },
+                  ]}
+                />
+              </div>
+            </div>
+          </div>
+        </form>
       </div>
     </div>
   );
