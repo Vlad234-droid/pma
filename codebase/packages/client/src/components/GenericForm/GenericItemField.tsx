@@ -23,29 +23,24 @@ export const GenericItemField: FC<GenericItemFormProps> = ({
 }) => {
   const { register, formState } = methods;
   const { errors } = formState;
+  const element = (
+    <Element
+      {...props}
+      isValid={!errors[name]}
+      name={name}
+      onChange={register(name).onChange}
+      domRef={register(name).ref}
+      placeholder={placeholder}
+    />
+  );
+
   if (!Wrapper && !label) {
-    return (
-      <Element
-        {...props}
-        isValid={!errors[name]}
-        name={name}
-        onChange={register(name).onChange}
-        domRef={register(name).ref}
-        placeholder={placeholder}
-      />
-    );
+    return element;
   }
 
   return (
     <Wrapper label={label} errormessage={errors[name] && errors[name].type === 'required' ? errors[name].message : ''}>
-      <Element
-        {...props}
-        isValid={!errors[name]}
-        name={name}
-        onChange={register(name).onChange}
-        domRef={register(name).ref}
-        placeholder={placeholder}
-      />
+      {element}
     </Wrapper>
   );
 };
