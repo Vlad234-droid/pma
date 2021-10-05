@@ -1,0 +1,19 @@
+{
+  "name": "@pma/openapi",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "types": "src/types/**/*",
+  "scripts": {
+    "generate:api": "openapi-generator-cli generate -g typescript-fetch --additional-properties=typescriptThreePlus=true -i ./openapi-spec.json -o ./src",
+    "validate:api": "openapi-generator-cli validate -i ./openapi-spec.json",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {},
+  "devDependencies": {
+    "@openapitools/openapi-generator-cli": "^2.4.10"
+  }
+}
