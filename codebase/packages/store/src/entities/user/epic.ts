@@ -6,11 +6,11 @@ import { catchError, filter, map, switchMap, takeUntil } from 'rxjs/operators';
 
 import { getCurrentUser } from './actions';
 
-export const getCurrentUserEpic: Epic = (action$, _, { openapi }) =>
+export const getCurrentUserEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
     filter(isActionOf(getCurrentUser.request)),
     switchMap(() =>
-      from(openapi.profile.getProfileByColleagueUuid({ colleagueUuid: 'd158ebc0-d97d-4b2e-9e34-4bbb6099fdc6' })).pipe(
+      from(api.getCurrentUser()).pipe(
         map(getCurrentUser.success),
         catchError((e) => {
           const errors = e?.data?.errors;

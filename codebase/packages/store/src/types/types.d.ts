@@ -2,7 +2,6 @@ import { Reducer } from 'typesafe-actions';
 import { Observable } from 'rxjs';
 import { Epic as RoEpic, EpicMiddleware as RoEpicMiddleware } from 'redux-observable';
 import { Api } from '@pma/api';
-import { Api as OpenApi } from '@pma/openapi';
 
 type PromiseAsObservable<T> = {
   [K in keyof T]: T[K] extends () => Promise<infer U> ? () => Observable<U> | Promise<U> : T[K];
@@ -21,7 +20,7 @@ declare module 'typesafe-actions' {
 
   export type RootReducer = Reducer<RootState, RootAction>;
 
-  export type Services = EpicToDependency<{ api: Api; openapi: OpenApi }>;
+  export type Services = EpicToDependency<{ api: Api }>;
 
   export type Epic = RoEpic<RootAction, RootAction, RootState, Services>;
 
