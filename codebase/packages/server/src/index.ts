@@ -50,7 +50,6 @@ if (!PROXY_API_SERVER_URL) {
     const proxy = httpProxy.createProxyServer({});
     const apiServer = (req, res) => proxy.web(req, res, { target: PROXY_API_SERVER_URL });
 
-    appServer.use(cookieParser());
     appServer.use(
       cors({
         credentials: true,

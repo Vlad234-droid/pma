@@ -20,9 +20,7 @@
     "check-format": "prettier --check .",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "extract": "i18next --config i18next-parser.config.js",
-    "spa:start": "env-cmd -f .env craco start",
-    "spa:build": "craco build"
+    "extract": "i18next --config i18next-parser.config.js"
   },
   "browserslist": {
     "production": [
@@ -31,7 +29,7 @@
       "not op_mini all"
     ],
     "development": [
-      "chrome 79",
+      "last 1 chrome version",
       "last 1 firefox version",
       "last 1 safari version"
     ]
@@ -78,16 +76,14 @@
     "@storybook/react/babel-loader": "8.1.0"
   },
   "devDependencies": {
-    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.14.5",
-    "@babel/plugin-proposal-optional-chaining": "^7.14.5",
     "@babel/plugin-transform-runtime": "^7.15.0",
     "@babel/runtime": "^7.14.6",
     "@storybook/addon-a11y": "^6.3.7",
     "@storybook/addon-actions": "^6.3.7",
     "@storybook/addon-essentials": "^6.3.7",
     "@storybook/addon-links": "^6.3.7",
-    "@storybook/preset-create-react-app": "^3.2.0",
     "@storybook/react": "^6.3.7",
+    "@storybook/preset-create-react-app": "^3.2.0",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^12.0.0",
     "@testing-library/user-event": "^12.8.3",
@@ -105,7 +101,6 @@
     "@types/yup": "^0.29.11",
     "babel-jest": "^27.0.5",
     "core-js": "^2.6.5",
-    "craco-plugin-single-spa-application": "^1.0.8",
     "cross-env": "^7.0.3",
     "dotenv": "^10.0.0",
     "env-cmd": "^10.1.0",
@@ -125,7 +120,6 @@
     "react-scripts": "4.0.1",
     "redux-devtools-extension": "^2.13.9",
     "redux-mock-store": "^1.5.4",
-    "single-spa": "^5.9.3",
     "storybook-mobile": "^0.1.32",
     "ts-config-single-spa": "^2.0.1",
     "tsconfig-paths-webpack-plugin": "^3.3.0",
