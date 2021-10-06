@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { useStyle, Rule } from '@dex-ddl/core';
+import { useStyle, Rule, Styles } from '@dex-ddl/core';
 
 import { Accordion, Header, HeaderProps, Section, Panel } from 'components/Accordion';
 
@@ -100,6 +100,6 @@ const accordionList = {
       left: '-17px',
     },
   },
-};
+} as Styles;
 
 export default ObjectiveAccordion;

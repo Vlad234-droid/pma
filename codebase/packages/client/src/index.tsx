@@ -16,6 +16,7 @@ import Layout from './features/Layout';
 import Navigation from './features/Routes/components/Routes';
 import { buildRoutes } from './features/Routes';
 import { pages } from './pages';
+import { ToastProvider } from 'features/Toast';
 
 const routes = buildRoutes(pages);
 
@@ -52,15 +53,17 @@ const Root: FC = () => {
     <I18nextProvider i18n={i18n}>
       <DDLProvider rendererOptions={rendererOptions} theme={observableTheme}>
         <Provider store={store}>
-          <AuthProvider>
-            <Router history={history}>
-              <React.StrictMode>
-                <Layout>
-                  <Navigation routes={routes} />
-                </Layout>
-              </React.StrictMode>
-            </Router>
-          </AuthProvider>
+          <ToastProvider>
+            <AuthProvider>
+              <Router history={history}>
+                <React.StrictMode>
+                  <Layout>
+                    <Navigation routes={routes} />
+                  </Layout>
+                </React.StrictMode>
+              </Router>
+            </AuthProvider>
+          </ToastProvider>
         </Provider>
       </DDLProvider>
     </I18nextProvider>
