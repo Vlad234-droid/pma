@@ -9,6 +9,7 @@ import { IconButton, Position } from 'components/IconButton';
 
 import { Accordion, CreateButton, Reviews, Section, StatusBadge, ShareWidget } from 'features/Objectives';
 import { PreviousReviewFilesModal } from 'features/ReviewFiles/components';
+import { useToast, Variant } from 'features/Toast';
 
 const objectives = [
   {
@@ -73,6 +74,20 @@ const Objectives: FC = () => {
   const { t } = useTranslation();
   const [previousReviewFilesModalShow, setPreviousReviewFilesModalShow] = useState(false);
 
+  const { addToast } = useToast();
+
+  const handleClick = () => {
+    addToast({
+      id: Date.now().toString(),
+      title: t('do_you_know', 'Do you know?'),
+      variant: Variant.INFO,
+      description: t(
+        'that_you_can_submit',
+        'That you can submit new objectives at anytime during the performance cycle?',
+      ),
+    });
+  };
+
   return (
     <div className={css({ margin: '8px' })}>
       <Header title='Objectives' />
@@ -80,7 +95,7 @@ const Objectives: FC = () => {
         <CreateButton withIcon />
       </div>
       <div className={css(headWrapperStyles)}>
-        <div className={css(timelineWrapperStyles)}>
+        <div className={css(timelineWrapperStyles)} onClick={handleClick}>
           <StepIndicator
             currentStatus={'pending'}
             currentStep={0}
