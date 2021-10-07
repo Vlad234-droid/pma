@@ -161,7 +161,7 @@ const accordionHeaderTitleStyles: Rule = ({ theme }) => ({
 
 const accordionIconStyles: Rule = {
   transition: 'transform 0.6s ease',
-  marginRight: '10px',
+  marginRight: '18px',
 };
 
 const accordionIconExpandStyles: Rule = {

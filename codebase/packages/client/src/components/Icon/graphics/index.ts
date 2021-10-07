@@ -17,6 +17,8 @@ import { Share } from './share';
 import { Print } from './print';
 import { ArrowUp } from './arrow-up';
 import { ArrowDown } from './arrow-down';
+import { Download } from './download';
+import { Alert } from './alert';
 
 /**
  * Each icon we add needs to have viewbox set to "0 0 24 24".
@@ -42,7 +44,9 @@ export type Graphics =
   | 'share'
   | 'print'
   | 'arrowUp'
-  | 'arrowDown';
+  | 'arrowDown'
+  | 'download'
+  | 'alert';
 
 export const icons: Record<Graphics, FCGraphicProps> = {
   add: Add,
@@ -63,4 +67,6 @@ export const icons: Record<Graphics, FCGraphicProps> = {
   print: Print,
   arrowUp: ArrowUp,
   arrowDown: ArrowDown,
+  download: Download,
+  alert: Alert,
 };
