@@ -150,6 +150,7 @@ const Accordion: FC<Omit<AccordionProps, 'children'>> = ({ children, ...props })
 const wrapperStyles: Rule = ({ theme }) => ({
   position: 'relative',
   borderBottom: `1px solid ${theme.colors.disabled}`,
+  marginTop: '25px',
 });
 
 export default Accordion;

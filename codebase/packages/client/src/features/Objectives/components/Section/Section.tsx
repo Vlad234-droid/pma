@@ -9,8 +9,9 @@ type NodeOptions = {
 
 export type SectionProps = {
   title?: NodeOptions;
-  left: NodeOptions;
+  left?: NodeOptions;
   right?: NodeOptions;
+  contentCustomStyle?: React.CSSProperties | {};
 };
 
 const Section: FC<SectionProps> = ({
@@ -18,6 +19,7 @@ const Section: FC<SectionProps> = ({
   title: { content: title, styles: titleStyles = {} } = {},
   right: { content: rightContent, styles: rightStyles = {} } = {},
   left: { content: leftContent, styles: leftStyles = {} } = {},
+  contentCustomStyle = {},
 }) => {
   const { css } = useStyle();
 
@@ -28,7 +30,7 @@ const Section: FC<SectionProps> = ({
         {leftContent && <div className={css(leftStyles, baseLeftStyles)}>{leftContent}</div>}
         {rightContent && <div className={css(rightStyles, baseRightStyles)}>{rightContent}</div>}
       </div>
-      <div className={css(bodyStyles, descriptionStyles)}>{children}</div>
+      <div className={css(bodyStyles, descriptionStyles, contentCustomStyle)}>{children}</div>
     </section>
   );
 };

@@ -5,9 +5,19 @@ import { Status } from 'config/enum';
 
 import { StepIndicator } from 'components/StepIndicator/StepIndicator';
 import { Header } from 'components/Header';
-import { IconButton, Position } from 'components/IconButton';
+import { IconButton } from 'components/IconButton';
 
-import { Accordion, CreateButton, Reviews, Section, StatusBadge, ShareWidget } from 'features/Objectives';
+import {
+  Accordion,
+  CreateButton,
+  Reviews,
+  Section,
+  StatusBadge,
+  ShareWidget,
+  SecondaryWidget,
+  SecondaryWidgetProps,
+  ReviewWidget,
+} from 'features/Objectives';
 import { PreviousReviewFilesModal } from 'features/ReviewFiles/components';
 import { useToast, Variant } from 'features/Toast';
 
@@ -74,6 +84,30 @@ const Objectives: FC = () => {
   const { t } = useTranslation();
   const [previousReviewFilesModalShow, setPreviousReviewFilesModalShow] = useState(false);
 
+  const widgets: SecondaryWidgetProps[] = [
+    {
+      iconGraphic: 'add',
+      title: t('personal_development_plan', 'Personal development plan'),
+      date: t('personal_development_plan_date', 'Added 04 Apr 2021', { date: new Date(2021, 4, 4) }),
+      customStyle: { flex: '2 1 110px' },
+      onClick: () => alert('View1'),
+    },
+    {
+      iconGraphic: 'chatSq',
+      title: t('feedback', 'Feedback'),
+      date: t('feedback_date', 'Last updated Apr 2021', { date: new Date(2021, 4, 4) }),
+      customStyle: { flex: '2 1 110px' },
+      onClick: () => alert('View2'),
+    },
+    {
+      iconGraphic: 'alert',
+      title: t('overdue_actions', 'Overdue actions'),
+      date: t('collegue_reminders', 'Collegue reminders'),
+      customStyle: { flex: '2 1 110px' },
+      onClick: () => alert('View3'),
+    },
+  ];
+
   const { addToast } = useToast();
 
   const handleClick = () => {
@@ -110,13 +144,11 @@ const Objectives: FC = () => {
       </div>
       <div className={css(bodyWrapperStyles)} data-test-id={TEST_ID}>
         <Section
-          title={{
-            content: t('objectives', 'Objectives'),
-          }}
           left={{
             content: (
               <div className={css(tileStyles)}>
-                <StatusBadge status={Status.APPROVED} styles={{ background: 'transparent' }} />
+                <Trans i18nKey='business_objectives'>Business Objectives</Trans>
+                <StatusBadge status={Status.APPROVED} styles={{ marginLeft: '10px' }} />
               </div>
             ),
           }}
@@ -124,13 +156,28 @@ const Objectives: FC = () => {
             content: (
               <div>
                 <IconButton
+                  onPress={() => alert('download')}
+                  graphic='download'
+                  customVariantRules={{ default: iconButtonStyles }}
+                  iconStyles={iconStyles}
+                >
+                  <Trans i18nKey='download'>Download</Trans>
+                </IconButton>
+                <IconButton
                   onPress={() => alert('share')}
                   graphic='share'
                   customVariantRules={{ default: iconButtonStyles }}
                   iconStyles={iconStyles}
-                  iconPosition={Position.RIGHT}
                 >
-                  <Trans i18nKey='download'>Download</Trans>
+                  <Trans i18nKey='share'>Share</Trans>
+                </IconButton>
+                <IconButton
+                  onPress={() => alert('print')}
+                  graphic='print'
+                  customVariantRules={{ default: iconButtonStyles }}
+                  iconStyles={iconStyles}
+                >
+                  <Trans i18nKey='print'>Print</Trans>
                 </IconButton>
               </div>
             ),
@@ -186,6 +233,38 @@ const Objectives: FC = () => {
         >
           <Trans i18nKey='you_have_n_files'>You have 12 files</Trans>
         </Section>
+        <Section contentCustomStyle={widgetWrapperStyle}>
+          {widgets.map((props, idx) => (
+            <SecondaryWidget key={idx} {...props} />
+          ))}
+        </Section>
+        <Section
+          contentCustomStyle={widgetWrapperStyle}
+          left={{
+            content: (
+              <div className={css(tileStyles)}>
+                <Trans i18nKey='my_reviews'>My Reviews</Trans>
+              </div>
+            ),
+          }}
+        >
+          <div data-test-id='personal' className={css(basicTileStyle)}>
+            <ReviewWidget
+              status={Status.AVAILABLE}
+              onClick={() => console.log('ReviewWidget')}
+              description={t('tiles_description_id_3', 'Your mid-year review form and results will appear here.')}
+              customStyle={{ height: '182px' }}
+            />
+          </div>
+          <div data-test-id='feedback' className={css(basicTileStyle)}>
+            <ReviewWidget
+              status={Status.NOT_AVAILABLE}
+              onClick={() => console.log('ReviewWidget')}
+              description={t('tiles_description_id_3', 'Your mid-year review form and results will appear here.')}
+              customStyle={{ height: '182px' }}
+            />
+          </div>
+        </Section>
       </div>
       {previousReviewFilesModalShow && (
         <PreviousReviewFilesModal onOverlayClick={() => setPreviousReviewFilesModalShow(false)} />
@@ -221,20 +300,34 @@ const bodyWrapperStyles: Rule = {
   marginTop: '16px',
   alignItems: 'stretch',
   flexDirection: 'column',
+  paddingBottom: '20px',
+};
+
+const basicTileStyle: Rule = {
+  flex: '1 0 216px',
 };
 
 const iconStyles: Rule = {
-  marginLeft: '10px',
+  marginRight: '10px',
 };
 
 const iconButtonStyles: Rule = ({ theme }) => ({
-  padding: '10px 20px',
+  padding: '10px 10px',
   color: theme.colors.tescoBlue,
+  fontWeight: 700,
 });
 
 const tileStyles: Rule = {
   display: 'flex',
-  flexDirection: 'column',
+  alignItems: 'center',
+};
+
+const widgetWrapperStyle: Rule = {
+  display: 'flex',
+  flexWrap: 'wrap',
+  gridGap: '8px',
+  marginTop: '8px',
+  marginBottom: '20px',
 };
 
 const linkStyles = ({ theme }) => ({

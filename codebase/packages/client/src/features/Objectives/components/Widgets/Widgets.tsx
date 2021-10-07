@@ -28,9 +28,9 @@ const Widgets: FC<Props> = () => {
       onClick: () => alert('View2'),
     },
     {
-      iconGraphic: 'account',
-      title: t('check_ins', 'Check-ins'),
-      date: t('check_ins_date', 'Last updated Apr 2021', { date: new Date(2021, 4, 4) }),
+      iconGraphic: 'alert',
+      title: t('overdue_actions', 'Overdue actions'),
+      date: t('collegue_reminders', 'Collegue reminders'),
       customStyle: { flex: '2 1 110px' },
       onClick: () => alert('View3'),
     },

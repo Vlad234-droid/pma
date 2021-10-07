@@ -25,7 +25,7 @@ const ShareWidget: FC<Props> = ({ onClick, shared, customStyle }) => {
           t('stop_sharing', 'Stop sharing'),
         ]
       : [
-          'document',
+          'share',
           t('share_objectives_off_description', 'Make all objectives and measures visible to your team'),
           t('share_to_team', 'Share to team'),
         ];
