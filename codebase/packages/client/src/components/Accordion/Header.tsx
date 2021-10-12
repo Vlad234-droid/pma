@@ -130,7 +130,11 @@ const Header: FC<Omit<HeaderProps, 'children'> & { title: string }> = ({ title, 
           <div className={css(accordionHeaderStyles)} {...getElementToggleProps()}>
             <h3 className={css(accordionHeaderTitleStyles)}>{title}</h3>
             <Icon
-              iconStyles={{ ...accordionIconStyles, ...(expanded ? accordionIconExpandStyles : {}) }}
+              iconStyles={{
+                ...accordionIconStyles,
+                ...marginRightStyles,
+                ...(expanded ? accordionIconExpandStyles : {}),
+              }}
               graphic='arrowUp'
             />
           </div>
@@ -138,6 +142,27 @@ const Header: FC<Omit<HeaderProps, 'children'> & { title: string }> = ({ title, 
         </div>
       )}
     </BaseHeader>
+  );
+};
+
+export const ExpandButton = () => {
+  return (
+    <>
+      <BaseHeader>
+        {({ getHeadingProps, getElementToggleProps, expanded }) => {
+          return (
+            <div {...getHeadingProps()}>
+              <div {...getElementToggleProps()}>
+                <Icon
+                  iconStyles={{ ...accordionIconStyles, ...(expanded ? accordionIconExpandStyles : {}) }}
+                  graphic='arrowDown'
+                />
+              </div>
+            </div>
+          );
+        }}
+      </BaseHeader>
+    </>
   );
 };
 
@@ -161,6 +186,9 @@ const accordionHeaderTitleStyles: Rule = ({ theme }) => ({
 
 const accordionIconStyles: Rule = {
   transition: 'transform 0.6s ease',
+};
+
+const marginRightStyles: Rule = {
   marginRight: '18px',
 };
 

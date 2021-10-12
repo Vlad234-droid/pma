@@ -4,6 +4,8 @@ enum Page {
   CAREER_PERFORMANCE = 'career-performance',
   OBJECTIVES_VIEW = 'objectives',
   PROFILE = 'profile',
+  MY_TEAM = 'my-team',
+  ACTIONS = 'actions',
   NOT_FOUND = '*',
 }
 

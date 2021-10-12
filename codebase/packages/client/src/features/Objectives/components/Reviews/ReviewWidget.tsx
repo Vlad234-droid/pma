@@ -100,11 +100,8 @@ const ReviewWidget: FC<Props> = ({ customStyle, onClick, status, description }) 
           <div className={css(bodyStyle)}>
             <div className={css(bodyBlockStyle)}>
               <TriggerModalButton
-                name={t('view', 'View')}
+                name={t('view_and_edit', 'View and Edit')}
                 title={t('mid_year_review_form', 'Mid-year review form')}
-                customStyle={{
-                  border: 'none',
-                }}
                 mode={buttonVariant}
               >
                 <>
@@ -140,7 +137,6 @@ const headerBlockStyle: Rule = {
 
 const bodyBlockStyle: Rule = {
   display: 'grid',
-  paddingTop: '14px',
 };
 
 const titleStyle: CreateRule<{ color: string }> = ({ color }) => ({

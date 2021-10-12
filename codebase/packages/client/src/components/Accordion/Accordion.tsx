@@ -1,5 +1,5 @@
 import React, { FC, KeyboardEvent, ReactNode, useState, useEffect } from 'react';
-import { useStyle, Rule } from '@dex-ddl/core';
+import { useStyle, Rule, colors } from '@dex-ddl/core';
 
 import { ARROW_DOWN, ARROW_UP, HOME, END } from './constans';
 import { AccordionProvider } from './contexts';
@@ -13,6 +13,7 @@ export type AccordionProps = {
   id: string;
   wrapHeaderNavigation?: boolean;
   children: (renderProps: RenderProps) => ReactNode;
+  customStyle?: React.CSSProperties | {};
 };
 
 type Section = {
@@ -141,16 +142,18 @@ export const BaseAccordion: FC<AccordionProps> = ({ id, wrapHeaderNavigation, ch
   );
 };
 
-const Accordion: FC<Omit<AccordionProps, 'children'>> = ({ children, ...props }) => {
+const Accordion: FC<Omit<AccordionProps, 'children'>> = ({ children, customStyle = {}, ...props }) => {
   const { css } = useStyle();
 
-  return <BaseAccordion {...props}>{() => <div className={css(wrapperStyles)}>{children}</div>}</BaseAccordion>;
+  return (
+    <BaseAccordion {...props}>{() => <div className={css(wrapperStyles, customStyle)}>{children}</div>}</BaseAccordion>
+  );
 };
 
-const wrapperStyles: Rule = ({ theme }) => ({
+const wrapperStyles: Rule = {
   position: 'relative',
-  borderBottom: `1px solid ${theme.colors.disabled}`,
   marginTop: '25px',
-});
+  borderBottom: `1px solid ${colors.disabled}`,
+};
 
 export default Accordion;

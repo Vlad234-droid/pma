@@ -12,6 +12,7 @@ export interface FormItemProps {
   domRef?: Ref | RefObject<any>;
   isValid?: boolean;
   type?: string;
+  id?: string;
 }
 
 export type InputProps = FormItemProps;
@@ -22,4 +23,12 @@ export interface SelectProps extends FormItemProps {
 
 export interface TextareaProps extends FormItemProps {
   rows?: number;
+}
+
+export interface RadioProps extends FormItemProps {
+  checked?: boolean;
+}
+export interface CheckboxProps extends FormItemProps {
+  indeterminate?: boolean;
+  checked?: boolean;
 }

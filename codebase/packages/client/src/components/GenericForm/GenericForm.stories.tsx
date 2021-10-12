@@ -34,7 +34,6 @@ const fields: Array<FormField<Names>> = [
     testID: 'reason',
     label: 'Reason for change',
     options: [
-      { value: '', label: '' },
       { value: 'id_1', label: 'I met this objective' },
       { value: 'id_2', label: 'I exceeded this objective' },
       { value: 'id_3', label: 'I did not meet this objective' },

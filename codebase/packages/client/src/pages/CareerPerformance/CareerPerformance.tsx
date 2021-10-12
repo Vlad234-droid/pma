@@ -1,13 +1,14 @@
 import React, { FC } from 'react';
 import { Trans, useTranslation } from 'components/Translation';
 import { ReviewWidget, Widgets as ObjectiveWidgets } from 'features/Objectives';
-import i18n from 'utils/i18next';
 import { Styles, useStyle } from '@dex-ddl/core';
 
 import { DashboardProfile } from 'features/Profile';
 import { BasicTile } from 'components/Tile';
 import { StepIndicator } from 'components/StepIndicator/StepIndicator';
-import { Status } from '../../config/enum';
+import { Status } from 'config/enum';
+import { Header } from 'components/Header';
+import { RouterSwitch } from 'components/RouterSwitch';
 
 const CareerPerformance: FC = () => {
   const { css } = useStyle();
@@ -15,6 +16,17 @@ const CareerPerformance: FC = () => {
   return (
     <>
       <div className={css({ margin: '8px' })}>
+        <Header title='Performance Overview' />
+        <div className={css({ display: 'flex', justifyContent: 'space-between' })}>
+          <div />
+          <RouterSwitch
+            links={[
+              { link: 'career-performance', name: 'My  View' },
+              { link: 'my-team', name: 'My Team' },
+            ]}
+          />
+          <div />
+        </div>
         <div className={css(wrapperStyle)}>
           <div className={css({ flex: '3 1 504px', display: 'flex', flexDirection: 'column', gap: '8px' })}>
             <DashboardProfile />
@@ -54,7 +66,7 @@ const CareerPerformance: FC = () => {
                 status={Status.AVAILABLE}
                 onClick={() => console.log('ReviewWidget')}
                 description={t('tiles_description_id_3', 'Your mid-year review form and results will appear here.')}
-                customStyle={{ height: '182px' }}
+                customStyle={{ height: '100%' }}
               />
             </div>
             <div data-test-id='feedback' className={css(basicTileStyle)}>
@@ -62,7 +74,7 @@ const CareerPerformance: FC = () => {
                 status={Status.NOT_AVAILABLE}
                 onClick={() => console.log('ReviewWidget')}
                 description={t('tiles_description_id_3', 'Your mid-year review form and results will appear here.')}
-                customStyle={{ height: '182px' }}
+                customStyle={{ height: '100%' }}
               />
             </div>
           </div>
