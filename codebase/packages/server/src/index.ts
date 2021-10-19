@@ -47,6 +47,11 @@ if (!PROXY_API_SERVER_URL) {
     const mountPath = config.integrationMountPath();
     const uiMountPath = config.integrationUIMountPath();
 
+    if (!PROXY_API_SERVER_URL) {
+      console.error(`Required property is not set: PROXY_API_SERVER_URL. Server halted.`);
+      exit(-1);
+    }
+
     const proxy = httpProxy.createProxyServer({});
     const apiServer = (req, res) => proxy.web(req, res, { target: PROXY_API_SERVER_URL });
 
