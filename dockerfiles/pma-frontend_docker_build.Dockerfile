@@ -25,9 +25,7 @@ RUN dos2unix ./run.sh && dos2unix ./create-npmrc.sh && bash ./create-npmrc.sh --
 RUN yarn bootstrap
 
 ENV BUILD_ENV=production
-
 ENV NODE_ENV=$NODE_ENV
-
 ENV REACT_APP_API_URL=$REACT_APP_API_URL
 ENV PUBLIC_URL=$PUBLIC_URL
 
@@ -35,22 +33,7 @@ ENV SKIP_PREFLIGHT_CHECK=true
 
 RUN yarn build:prod
 
-# ==========================================
-# These ENV variable must be set to run app:
-# ==========================================
-# By default turn on SSO
-ENV WITH_ONE_LOGIN=true
-
-# Mock server (must not be empty)
-ENV MOCK_SERVER_URL=<none>
-
-# Confirmit
-ENV CONFIRMIT_PASSWORD=<none>
-
-#   WITH_ONE_LOGIN
-#   COOKIE_USER_KEY
-
 #ENTRYPOINT [ "yarn", "run:prod" ]
-CMD ./run.sh
+CMD /bin/sh ./run.sh
 
 EXPOSE 9000
