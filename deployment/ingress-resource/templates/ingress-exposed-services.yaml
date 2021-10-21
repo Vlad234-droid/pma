@@ -15,5 +15,5 @@ spec:
             name: pma-frontend-service
             port:
               number: 9000
-        path: /experience/MyPerformance/(.*)
+        path: /(.*)
         pathType: ImplementationSpecific
