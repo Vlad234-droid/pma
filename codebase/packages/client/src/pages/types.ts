@@ -6,7 +6,6 @@ enum Page {
   PROFILE = 'profile',
   MY_TEAM = 'my-team',
   ACTIONS = 'actions',
-  NOT_FOUND = '*',
 }
 
 type PageElement =

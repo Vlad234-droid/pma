@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { Link } from 'react-router-dom';
-import { useStyle, useBreakpoints , Icon as IconCore } from '@dex-ddl/core';
+import { useStyle, useBreakpoints, Icon as IconCore } from '@dex-ddl/core';
 import { Header } from 'components/Header';
 import { RouterSwitch } from 'components/RouterSwitch';
 import { Status } from 'config/enum';

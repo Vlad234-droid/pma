@@ -63,33 +63,9 @@ const Contacts: FC<Props> = ({ user }) => {
         <div className={css(bodyStyle)}>
           <div className={css(bodyBlockStyle)}>
             <span className={css(titleStyle)}>
-              <Trans>Mobile phone</Trans>
-            </span>
-            <span className={css(descriptionStyle)}>+44 20 4567 4321</span>
-          </div>
-          <div className={css(bodyBlockStyle)}>
-            <span className={css(titleStyle)}>
               <Trans>Email address</Trans>
             </span>
             <span className={css(descriptionStyle)}>{email}</span>
-          </div>
-          <div className={css(bodyBlockStyle)}>
-            <span className={css(titleStyle)}>
-              <Trans>Address</Trans>
-            </span>
-            <span className={css(descriptionStyle)}>The Cut, London SE1 8NB, GB</span>
-          </div>
-          <div className={css(bodyBlockStyle)}>
-            <span className={css(titleStyle)}>
-              <Trans>Emergency contact</Trans>
-            </span>
-            <span className={css(descriptionStyle)}>Madelyn Stanton</span>
-          </div>
-          <div className={css(bodyBlockStyle)}>
-            <span className={css(titleStyle)}>
-              <Trans>Emergency phone</Trans>
-            </span>
-            <span className={css(descriptionStyle)}>+44 20 7234 3456</span>
           </div>
         </div>
       </div>
