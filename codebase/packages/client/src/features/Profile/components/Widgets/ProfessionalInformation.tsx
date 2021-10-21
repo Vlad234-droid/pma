@@ -29,6 +29,7 @@ const bodyBlockStyle = {
   display: 'grid',
   paddingRight: '20px',
   paddingTop: '14px',
+  flex: '1 1 0',
 } as Styles;
 
 const titleStyle: Rule = ({ theme }) =>
@@ -56,7 +57,7 @@ const bodyStyle = {
 const ProfessionalInformation: FC<Props> = ({ user }) => {
   const { css } = useStyle();
   const { t } = useTranslation();
-  const { hireDate } = user;
+  const { hireDate, job, department, businessType, managerUUID, employmentType, countryCode } = user;
   return (
     <BasicTile title={t('ProfessionalInformation', 'Professional information')} description={''}>
       <div className={css(wrapperStyle)}>
@@ -65,37 +66,31 @@ const ProfessionalInformation: FC<Props> = ({ user }) => {
             <span className={css(titleStyle)}>
               <Trans>Job title</Trans>
             </span>
-            <span className={css(descriptionStyle)}>Manager</span>
+            <span className={css(descriptionStyle)}>{job}</span>
           </div>
           <div className={css(bodyBlockStyle)}>
             <span className={css(titleStyle)}>
               <Trans>Function</Trans>
             </span>
-            <span className={css(descriptionStyle)}>Store</span>
+            <span className={css(descriptionStyle)}>{department}</span>
           </div>
           <div className={css(bodyBlockStyle)}>
             <span className={css(titleStyle)}>
               <Trans>Business unit</Trans>
             </span>
-            <span className={css(descriptionStyle)}>CS 123</span>
+            <span className={css(descriptionStyle)}>{businessType}</span>
           </div>
           <div className={css(bodyBlockStyle)}>
             <span className={css(titleStyle)}>
               <Trans>Line Manager</Trans>
             </span>
-            <span className={css(descriptionStyle)}>Patric</span>
+            <span className={css(descriptionStyle)}>{managerUUID}</span>
           </div>
           <div className={css(bodyBlockStyle)}>
             <span className={css(titleStyle)}>
               <Trans>Employment</Trans>
             </span>
-            <span className={css(descriptionStyle)}>Full time</span>
-          </div>
-          <div className={css(bodyBlockStyle)}>
-            <span className={css(titleStyle)}>
-              <Trans>Status</Trans>
-            </span>
-            <span className={css(descriptionStyle)}>Permanent</span>
+            <span className={css(descriptionStyle)}>{employmentType}</span>
           </div>
           <div className={css(bodyBlockStyle)}>
             <span className={css(titleStyle)}>
@@ -107,7 +102,7 @@ const ProfessionalInformation: FC<Props> = ({ user }) => {
             <span className={css(titleStyle)}>
               <Trans>Location</Trans>
             </span>
-            <span className={css(descriptionStyle)}>London</span>
+            <span className={css(descriptionStyle)}>{countryCode}</span>
           </div>
         </div>
       </div>

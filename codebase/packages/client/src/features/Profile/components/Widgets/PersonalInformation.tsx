@@ -69,18 +69,6 @@ const PersonalInformation: FC<Props> = ({ user }) => {
             </span>
             <span className={css(descriptionStyle)}>{fullName}</span>
           </div>
-          <div className={css(bodyBlockStyle)}>
-            <span className={css(titleStyle)}>
-              <Trans>Birthday</Trans>
-            </span>
-            <span className={css(descriptionStyle)}>{dateOfBirth}</span>
-          </div>
-          <div className={css(bodyBlockStyle)}>
-            <span className={css(titleStyle)}>
-              <Trans>Gender</Trans>
-            </span>
-            <span className={css(descriptionStyle)}>{gender}</span>
-          </div>
         </div>
       </div>
     </BasicTile>

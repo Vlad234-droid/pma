@@ -1,7 +1,8 @@
 import React, { FC } from 'react';
-import { Route as ReactRoute, Switch, Redirect } from 'react-router';
+import { Redirect, Route as ReactRoute, Switch } from 'react-router';
 
 import { Route } from '../types';
+import { NotFound } from 'pages/NotFound';
 
 type Props = {
   routes: Route[];
@@ -12,7 +13,12 @@ const Routes: FC<Props> = ({ routes }) => (
     {routes.map((route, idx) => (
       <ReactRoute key={idx} {...route} />
     ))}
-    <Redirect to={'/career-performance'} />
+    <ReactRoute exact path='/'>
+      <Redirect to={'/career-performance'} />
+    </ReactRoute>
+    <ReactRoute path='*'>
+      <NotFound />
+    </ReactRoute>
   </Switch>
 );
 
