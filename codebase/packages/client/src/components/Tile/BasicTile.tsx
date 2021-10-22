@@ -46,8 +46,8 @@ export const BasicTile: FC<Props> = ({
         )}
         <div className={css(bodyStyle)}>
           <div className={css(titleStyle)}>{title}</div>
-          {children}
           <div className={css(descriptionStyle)}>{description}</div>
+          {children}
           {event && (
             <div className={css(descriptionStyle)}>
               <Icon graphic='calender' iconStyles={{ verticalAlign: 'middle' }} />
