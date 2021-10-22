@@ -1,6 +1,7 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useStyle, Styles, Rule, IconButton } from '@dex-ddl/core';
+import { IconButton, Rule, Styles, useStyle } from '@dex-ddl/core';
+import { MenuDrawer } from '../MenuDrawer/MenuDrawer';
 
 export type HeaderProps = {
   title: string;
@@ -14,6 +15,7 @@ export const BACK_BTN_TEST_ID = 'header-back';
 const Header: FC<HeaderProps> = ({ title, onBack, styles = {} }) => {
   const { css } = useStyle();
   const history = useHistory();
+  const [showMenu, setShowMenu] = useState(false);
 
   const handleBack = () => {
     if (onBack) {
@@ -27,7 +29,8 @@ const Header: FC<HeaderProps> = ({ title, onBack, styles = {} }) => {
     <div className={css(wrapperStyles, styles)} data-test-id={TEST_ID}>
       <IconButton onPress={handleBack} graphic='backwardLink' data-test-id={BACK_BTN_TEST_ID} />
       <h3 className={css(headerStyles)}>{title}</h3>
-      <IconButton onPress={() => alert('menu')} graphic='hamburger' />
+      <IconButton onPress={() => setShowMenu(true)} graphic='hamburger' />
+      {showMenu && <MenuDrawer onClose={() => setShowMenu(false)} />}
     </div>
   );
 };

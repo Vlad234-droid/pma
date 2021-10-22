@@ -21,6 +21,9 @@ import { Print } from './print';
 import { ArrowUp } from './arrow-up';
 import { ArrowDown } from './arrow-down';
 import { Settings } from './settings';
+import { SettingsGear } from './settings-gear';
+import { Question } from './question';
+import { SignOut } from './sign-out';
 import { Search } from './search';
 import { Download } from './download';
 import { Alert } from './alert';
@@ -56,6 +59,9 @@ export type Graphics =
   | 'arrowDown'
   | 'search'
   | 'settings'
+  | 'settingsGear'
+  | 'question'
+  | 'signOut'
   | 'information'
   | 'download'
   | 'alert';
@@ -84,6 +90,9 @@ export const icons: Record<Graphics, FCGraphicProps> = {
   arrowDown: ArrowDown,
   search: Search,
   settings: Settings,
+  settingsGear: SettingsGear,
+  question: Question,
+  signOut: SignOut,
   download: Download,
   alert: Alert,
   information: Information,
