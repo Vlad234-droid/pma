@@ -10,5 +10,6 @@ module.exports = {
     'react/prop-types': 'off',
     '@typescript-eslint/ban-ts-comment': 'off',
     'import/no-unresolved': 'off',
+    'import/namespace': ['error', { allowComputed: true }],
   },
 };
