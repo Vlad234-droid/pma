@@ -3,9 +3,9 @@ import { useTranslation } from 'components/Translation';
 import { Styles, useStyle } from '@dex-ddl/core';
 import { Header } from 'components/Header';
 import { Contacts, PersonalInformation, ProfessionalInformation } from '../../features/Profile';
-import { AuthConsumer } from '../../contexts/authContext';
-import { AvatarName } from '../../features/Profile/components/Widgets/DashboardProfile';
-import { TileWrapper } from '../../components/Tile';
+import { AuthConsumer } from 'contexts/authContext';
+import { AvatarName } from 'features/Profile/components/Widgets/DashboardProfile';
+import { TileWrapper } from 'components/Tile';
 
 export const TEST_ID = 'objectives-pave';
 

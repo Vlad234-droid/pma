@@ -1,5 +1,12 @@
-import React, { FC, HTMLProps } from 'react';
-import { Trans, useTranslation } from 'components/Translation';
+import React, { FC, HTMLProps, useCallback, useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
+
+import { Status } from 'config/enum';
+
+import { Trans } from 'components/Translation';
+import useDispatch from 'hooks/useDispatch';
+import useStore from 'hooks/useStore';
+import { ObjectiveActions, SchemaActions, objectivesSelector, objectivesMetaSelector } from '@pma/store';
 
 import { Icon, Button, useStyle, useBreakpoints } from '@dex-ddl/core';
 
@@ -10,43 +17,119 @@ import * as Yup from 'yup';
 
 import { Icon as IconComponent } from 'components/Icon';
 import { StepIndicatorBasic } from 'components/StepIndicator/StepIndicator';
-import { Input, Textarea, Item } from 'components/Form';
+import { Input, Textarea, Item, Select } from 'components/Form';
 import { GenericItemField } from 'components/GenericForm';
+import { createYupSchema } from 'utils/yup';
 
 import { SubmitButton } from './index';
-import { createObjectivesSchema } from './config';
+import SuccessModal from './SuccessModal';
 
-export type CreateModalProps = {};
+export type CreateModalProps = {
+  onClose?: () => void;
+};
 
 type Props = HTMLProps<HTMLInputElement> & CreateModalProps;
 
-export const CreateModal: FC<Props> = () => {
+export const CreateModal: FC<Props> = ({ onClose }) => {
   const { css, theme } = useStyle();
-  const { t } = useTranslation();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
 
+  const dispatch = useDispatch();
+
+  const stateSchema = useStore('schema');
+  const { loaded, status } = useSelector(objectivesMetaSelector);
+  const { currentObjectives: stateObjectives } = useSelector(objectivesSelector);
+
+  const addObjective = useCallback((payload) => dispatch(ObjectiveActions.addObjective(payload)), []);
+  // @ts-ignore
+  const { components = [], markup = { max: 0, min: 0 } } = stateSchema;
+
+  const objectiveTitles = [...Array(markup.max).keys()].map((key) => `Objective ${key + 1}`);
+  const [currentObjectiveNumber, setObjectiveNumber] = useState(1);
+
+  const formElements = components.filter((component) => component.type != 'text');
+  const formElementsFilledEmpty = formElements.reduce((acc, current) => {
+    acc[current.key] = '';
+    return acc;
+  }, {});
+
+  const yepSchema = formElements.reduce(createYupSchema, {});
   const methods = useForm({
     mode: 'onChange',
-    resolver: yupResolver<Yup.AnyObjectSchema>(createObjectivesSchema),
+    resolver: yupResolver<Yup.AnyObjectSchema>(Yup.object().shape(yepSchema)),
+    // defaultValues: stateObjectives[currentObjectiveNumber],
   });
   const {
+    trigger,
+    getValues,
     handleSubmit,
     formState: { isValid },
     reset,
   } = methods;
+  const formValues = getValues();
+
   const onSubmit = async (data) => {
-    console.log('data', data);
-    reset();
+    addObjective({ [currentObjectiveNumber]: data });
+    dispatch(
+      ObjectiveActions.updateObjective({
+        performanceCycleUuid: '',
+        colleagueUuid: '',
+        status: Status.WAITING_FOR_APPROVAL,
+      }),
+    );
   };
 
+  const onSaveDraft = () => {
+    const values = getValues();
+    addObjective({ [currentObjectiveNumber]: values });
+    dispatch(
+      ObjectiveActions.updateObjective({
+        performanceCycleUuid: '',
+        colleagueUuid: '',
+        status: Status.DRAFT,
+      }),
+    );
+  };
+
+  const setNextObjectiveNumber = async (data) => {
+    addObjective({ [currentObjectiveNumber]: data });
+    setObjectiveNumber(currentObjectiveNumber + 1);
+  };
+  const setPrevObjectiveNumber = async () => {
+    setObjectiveNumber(currentObjectiveNumber - 1);
+  };
+
+  useEffect(() => {
+    if (stateObjectives[currentObjectiveNumber]) {
+      reset(stateObjectives[currentObjectiveNumber]);
+      trigger();
+    } else {
+      reset(formElementsFilledEmpty);
+    }
+  }, [currentObjectiveNumber]);
+  useEffect(() => {
+    if (loaded && stateObjectives[currentObjectiveNumber]) {
+      reset(stateObjectives[currentObjectiveNumber]);
+    }
+  }, [loaded]);
+  useEffect(() => {
+    if (stateObjectives[currentObjectiveNumber]) {
+      reset(stateObjectives[currentObjectiveNumber]);
+    }
+    dispatch(SchemaActions.getSchema({ formId: 'colleague_objectives_form' }));
+    dispatch(ObjectiveActions.getObjective({ performanceCycleUuid: '', colleagueUuid: 'colleagueUuid' }));
+  }, []);
+
+  console.log(stateObjectives);
+
+  //  todo return is success page. pass onClose. use it in SuccessModal when click on OK
+  if (loaded && status === 'WAITING_FOR_APPROVAL') {
+    return <SuccessModal onClose={() => onClose && onClose()} />;
+  }
+
   return (
-    <div
-      className={css({
-        height: '100%',
-        bottom: '80px',
-      })}
-    >
+    <div className={css({ height: '100%', bottom: '80px' })}>
       <div
         className={css({
           height: '100%',
@@ -54,49 +137,29 @@ export const CreateModal: FC<Props> = () => {
           padding: mobileScreen ? `0 ${theme.spacing.s4}` : `0 ${theme.spacing.s10}`,
         })}
       >
-        <span
-          className={css({
-            position: 'fixed',
-            top: theme.spacing.s5,
-            left: mobileScreen ? theme.spacing.s5 : theme.spacing.s10,
-            textDecoration: 'none',
-            border: 'none',
-            cursor: 'pointer',
-          })}
-        >
-          <IconComponent graphic='arrowLeft' invertColors={true} />
-        </span>
+        {currentObjectiveNumber > 1 && (
+          <span
+            className={css({
+              position: 'fixed',
+              top: theme.spacing.s5,
+              left: mobileScreen ? theme.spacing.s5 : theme.spacing.s10,
+              textDecoration: 'none',
+              border: 'none',
+              cursor: 'pointer',
+            })}
+            onClick={setPrevObjectiveNumber}
+          >
+            <IconComponent graphic='arrowLeft' invertColors={true} />
+          </span>
+        )}
         <form>
           <div className={css({ padding: `0 0 ${theme.spacing.s5}` })}>
             <StepIndicatorBasic
-              currentStatus={'pending'}
-              currentStep={0}
-              titles={[
-                t('set_objectives', 'Set objectives'),
-                t('mid_year_review', 'Mid-year review'),
-                t('end_year_review', 'End year review'),
-              ]}
+              currentStatus={'draft'}
+              currentStep={currentObjectiveNumber - 1}
+              titles={objectiveTitles}
             />
           </div>
-          <GenericItemField
-            name='objectiveTitle'
-            methods={methods}
-            label={t('objective_title', 'Objective title')}
-            Wrapper={Item}
-            Element={Input}
-            placeholder={t('objective_title_placeholder', 'Example: Build additional backlinks for Our Tesco.')}
-          />
-          <GenericItemField
-            name='objectiveDescription'
-            methods={methods}
-            label={t('description', 'Description')}
-            Wrapper={Item}
-            Element={Textarea}
-            placeholder={t(
-              'description_placeholder',
-              'Build 40 additional backlinks for Our Tesco by June. To do so I will connect with Ellie and Andrew from PR to develop an effective outreach strategy.',
-            )}
-          />
           <div className={css({ padding: `0 0 ${theme.spacing.s5}`, display: 'flex' })}>
             <Icon graphic='information' />
             <span
@@ -108,36 +171,53 @@ export const CreateModal: FC<Props> = () => {
               Need help writing your objectives?
             </span>
           </div>
-          <GenericItemField
-            name='meetObjective'
-            methods={methods}
-            label='How will you MEET this objective?'
-            Wrapper={Item}
-            Element={(props) => (
-              <Textarea
-                {...props}
-                rows={4}
-                placeholder='Example:
-            1) Develop 60 additional backlinks for Our Tesco
-            2) Develop outreach strategy and action first step of the strategy successfully'
-              />
-            )}
-          />
-          <GenericItemField
-            name='exceedObjective'
-            methods={methods}
-            label='How will you EXCEED this objective?'
-            Wrapper={Item}
-            Element={(props) => (
-              <Textarea
-                {...props}
-                rows={4}
-                placeholder='Example:
-1) Develop 60 additional backlinks for Our Tesco
-2) Develop outreach strategy and action first step of the strategy successfully'
-              />
-            )}
-          />
+          {components.map((component) => {
+            const { id, key, label, description, type, validate, values = [] } = component;
+            const value = formValues[key] ? formValues[key] : '';
+            if (type === 'textfield' && validate?.maxLength <= 100) {
+              return (
+                <GenericItemField
+                  key={id}
+                  name={key}
+                  methods={methods}
+                  label={label}
+                  Wrapper={Item}
+                  Element={Input}
+                  placeholder={description}
+                  value={value}
+                />
+              );
+            }
+            if (type === 'textfield' && validate?.maxLength > 100) {
+              return (
+                <GenericItemField
+                  key={id}
+                  name={key}
+                  methods={methods}
+                  label={label}
+                  Wrapper={Item}
+                  Element={Textarea}
+                  placeholder={description}
+                  value={value}
+                />
+              );
+            }
+            if (type === 'select') {
+              return (
+                <GenericItemField
+                  key={id}
+                  name={key}
+                  methods={methods}
+                  label={label}
+                  Wrapper={({ children }) => <Item withIcon={false}>{children}</Item>}
+                  Element={Select}
+                  options={values}
+                  placeholder={description}
+                  value={value}
+                />
+              );
+            }
+          })}
           <div
             className={css({
               position: 'absolute',
@@ -174,23 +254,43 @@ export const CreateModal: FC<Props> = () => {
                       color: `${theme.colors.tescoBlue}`,
                     },
                   ]}
-                  onPress={() => alert('1')}
+                  onPress={onSaveDraft}
+                  // onPress={() => handleSubmit(onSaveDraft)()}
                 >
                   <Trans i18nKey='save_as_draft'>Save as draft</Trans>
                 </Button>
-                <SubmitButton
-                  isDisabled={!isValid}
-                  onSave={handleSubmit(onSubmit)}
-                  styles={[
-                    theme.font.fixed.f16,
-                    {
-                      fontWeight: theme.font.weight.bold,
-                      width: '50%',
-                      margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
-                      background: `${theme.colors.tescoBlue}`,
-                    },
-                  ]}
-                />
+                {markup.min === currentObjectiveNumber ? (
+                  <SubmitButton
+                    isDisabled={!isValid}
+                    onSave={handleSubmit(onSubmit)}
+                    styles={[
+                      theme.font.fixed.f16,
+                      {
+                        fontWeight: theme.font.weight.bold,
+                        width: '50%',
+                        margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
+                        background: `${theme.colors.tescoBlue}`,
+                      },
+                    ]}
+                  />
+                ) : (
+                  <Button
+                    styles={[
+                      theme.font.fixed.f16,
+                      {
+                        fontWeight: theme.font.weight.bold,
+                        width: '50%',
+                        margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
+                        background: `${theme.colors.tescoBlue}`,
+                      },
+                      isValid ? {} : { opacity: 0.4 },
+                    ]}
+                    onPress={() => handleSubmit(setNextObjectiveNumber)()}
+                    isDisabled={!isValid}
+                  >
+                    <Trans i18nKey='next'>Next</Trans>
+                  </Button>
+                )}
               </div>
             </div>
           </div>

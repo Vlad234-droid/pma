@@ -46,7 +46,7 @@ const Select: FC<SelectProps> = ({
               border: `1px solid ${theme.colors.tescoBlue}`,
             },
           })}
-          placeholder={`- ${placeholder} -`}
+          placeholder={placeholder ? `- ${placeholder} -` : ''}
           readOnly={true}
           onSelect={(e) => {
             if (onChange && isOptionOpen) {

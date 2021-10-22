@@ -5,6 +5,7 @@
   "license": "MIT",
   "scripts": {
     "run:dev": "env-cmd -f .env ts-node-dev -r tsconfig-paths/register --respawn --debug --inspect=12000 --no-notify --files src/index.ts",
+    "run:standalone:dev": "cross-env INTEGRATION_MODE=standalone NODE_ENV=development env-cmd -f .env ts-node-dev -r tsconfig-paths/register --respawn --debug --inspect=12000 --no-notify --files src/index.ts",
     "run:prod": "env-cmd --silent --no-override --fallback -f .env.${BUILD_ENV} ts-node --transpile-only -- src/index.ts",
     "build": "tsc --project ./",
     "clean": "rimraf build",
@@ -16,8 +17,9 @@
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "express": "^4.17.1",
-    "http-proxy": "^1.18.1",
-    "redux-first-router": "^2.1.5"
+    "http-proxy-middleware": "^2.0.1",
+    "redux-first-router": "^2.1.5",
+    "yup": "^0.32.9"
   },
   "devDependencies": {
     "@types/cors": "^2.8.10",

@@ -1,9 +1,13 @@
-import React, { FC, HTMLProps } from 'react';
+import React, { FC, HTMLProps, useEffect } from 'react';
 import { useTranslation } from 'components/Translation';
-import { useStyle, Styles } from '@dex-ddl/core';
+import { Styles, useStyle } from '@dex-ddl/core';
 
 import SecondaryWidget, { Props as SecondaryWidgetProps } from '../SecondaryWidget';
 import MainWidget from '../MainWidget';
+import { Status } from '../../../../config/enum';
+import useDispatch from '../../../../hooks/useDispatch';
+import { useSelector } from 'react-redux';
+import { ObjectiveActions, objectivesMetaSelector, objectivesSelector } from '@pma/store';
 
 export type MainWidgetProps = {};
 
@@ -12,6 +16,13 @@ type Props = HTMLProps<HTMLInputElement> & MainWidgetProps;
 const Widgets: FC<Props> = () => {
   const { css } = useStyle();
   const { t } = useTranslation();
+  const dispatch = useDispatch();
+  const { loaded, status = null } = useSelector(objectivesMetaSelector);
+  const { currentObjectives } = useSelector(objectivesSelector);
+  const countObjectives = Object.keys(currentObjectives).length;
+  useEffect(() => {
+    dispatch(ObjectiveActions.getObjective({ performanceCycleUuid: '', colleagueUuid: 'colleagueUuid' }));
+  }, []);
   const widgets: SecondaryWidgetProps[] = [
     {
       iconGraphic: 'add',
@@ -38,7 +49,12 @@ const Widgets: FC<Props> = () => {
 
   return (
     <div className={css(wrapperStyle)}>
-      <MainWidget customStyle={{ flex: '4 1 500px' }} onClick={() => console.log('View')} count={3} />
+      <MainWidget
+        status={status}
+        customStyle={{ flex: '4 1 500px' }}
+        onClick={() => console.log('View')}
+        count={countObjectives}
+      />
       {widgets.map((props, idx) => (
         <SecondaryWidget key={idx} {...props} />
       ))}

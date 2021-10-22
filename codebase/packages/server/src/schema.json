@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 2,
+  "exporter": {
+    "name": "form-js (https://demo.bpmn.io)",
+    "version": "0.4.1"
+  },
+  "markup": {
+    "min": 3,
+    "max": 3
+  },
+  "components": [
+    {
+      "key": "title_1",
+      "label": "Objective title",
+      "type": "textfield",
+      "id": "Field_141o520",
+      "description": "Increase sells for 10% annually",
+      "validate": {
+        "minLength": 10,
+        "required": true,
+        "maxLength": 100
+      }
+    },
+    {
+      "values": [
+        {
+          "label": "New to Tesco",
+          "value": "New to Tesco"
+        },
+        {
+          "label": "Missed",
+          "value": "Missed"
+        }
+      ],
+      "key": "rating_1",
+      "label": "Rating",
+      "type": "select",
+      "id": "Field_1ribi5m",
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "text": "Look back",
+      "type": "text",
+      "id": "Field_0hu83pj"
+    },
+    {
+      "key": "description_1",
+      "label": "Objective description",
+      "type": "textfield",
+      "id": "Field_05qgsfz",
+      "validate": {
+        "required": true,
+        "minLength": 10,
+        "maxLength": 500
+      },
+      "description": "type: textarea"
+    }
+  ],
+  "type": "default",
+  "id": "objectives_form"
+}

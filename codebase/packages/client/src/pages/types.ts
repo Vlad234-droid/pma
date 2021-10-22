@@ -2,6 +2,8 @@ import { ComponentType, FC, LazyExoticComponent } from 'react';
 
 enum Page {
   CAREER_PERFORMANCE = 'career-performance',
+  CREATE_PERFORMANCE_CYCLE = 'create-performance-cycle',
+  PERFORMANCE_CYCLE = 'performance-cycle',
   OBJECTIVES_VIEW = 'objectives',
   PROFILE = 'profile',
   SETTINGS = 'settings',

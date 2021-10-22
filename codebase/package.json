@@ -16,6 +16,7 @@
     "eslint:fix": "prettier --write --config ./prettier.config.js './packages/*/src/**/*.{ts,tsx}'",
     "on-pre-push": "commitlint --from=$(git merge-base master $(git rev-parse --abbrev-ref HEAD)) --to=HEAD",
     "run:dev": "lerna run --parallel run:dev",
+    "run:standalone:dev": "lerna run --parallel run:standalone:dev",
     "run:prod": "cross-env BUILD_ENV=production lerna run --parallel run:prod",
     "ws:server": "yarn workspace @pma/server",
     "ws:client": "yarn workspace @pma/client",

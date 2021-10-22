@@ -1,8 +1,11 @@
 export enum Status {
-  PENDING = 'pending',
-  DRAFT = 'draft',
-  APPROVED = 'approved',
-  OVERDUE = 'overdue',
-  NOT_AVAILABLE = 'not_available',
-  AVAILABLE = 'available',
+  PENDING = 'PENDING',
+  DRAFT = 'DRAFT',
+  WAITING_FOR_APPROVAL = 'WAITING_FOR_APPROVAL',
+  APPROVED = 'APPROVED',
+  OVERDUE = 'OVERDUE',
+  NOT_AVAILABLE = 'NOT_AVAILABLE',
+  AVAILABLE = 'AVAILABLE',
+  RETURNED = 'RETURNED',
+  COMPLETED = 'COMPLETED',
 }

@@ -1,18 +1,25 @@
 import React, { FC, HTMLProps, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Trans } from 'components/Translation';
 import { useBreakpoints, Rule, Modal, useStyle, Button } from '@dex-ddl/core';
 import { Icon } from 'components/Icon';
-import { CreateModal } from '../Modal';
+import { CreateModal, SuccessModal } from '../Modal';
 import { IconButton } from 'components/IconButton';
+import useStore from 'hooks/useStore';
+import useDispatch from 'hooks/useDispatch';
+import { ObjectiveActions, objectivesSelector } from '@pma/store';
+import { Status } from 'config/enum';
 
 export type CreateModalProps = {
   withIcon?: boolean;
+  buttonText?: string;
 };
 
 type Props = HTMLProps<HTMLInputElement> & CreateModalProps;
 
-const CreateButton: FC<Props> = ({ withIcon = false }) => {
+const CreateButton: FC<Props> = ({ withIcon = false, buttonText = 'Create objectives' }) => {
   const { theme } = useStyle();
+  const dispatch = useDispatch();
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -28,7 +35,7 @@ const CreateButton: FC<Props> = ({ withIcon = false }) => {
           iconProps={{ invertColors: true }}
           iconStyles={iconStyle}
         >
-          <Trans i18nKey='create_objectives'>Create objectives</Trans>
+          {buttonText}
         </IconButton>
       ) : (
         <Button
@@ -40,7 +47,7 @@ const CreateButton: FC<Props> = ({ withIcon = false }) => {
           ]}
           onPress={handleBtnClick}
         >
-          <Trans i18nKey='create_objectives'>Create objectives</Trans>
+          {buttonText}
         </Button>
       )}
 
@@ -51,7 +58,9 @@ const CreateButton: FC<Props> = ({ withIcon = false }) => {
           modalContainerRule={[containerRule]}
           closeOptions={{
             content: <Icon graphic='cancel' invertColors={true} />,
-            onClose: () => setIsOpen(false),
+            onClose: () => {
+              setIsOpen(false);
+            },
             styles: [modalCloseOptionStyle],
           }}
           title={{
@@ -62,7 +71,8 @@ const CreateButton: FC<Props> = ({ withIcon = false }) => {
             setIsOpen(false);
           }}
         >
-          <CreateModal />
+          <CreateModal onClose={() => setIsOpen(false)} />
+          {/*<CreateModal />*/}
           {/*<ArticleModal />*/}
           {/*<SuccessModal onClose={() => setIsOpen(false)} />*/}
         </Modal>

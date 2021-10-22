@@ -57,7 +57,7 @@ function genericForm<T>({
 
   return (
     <form noValidate onSubmit={handleSubmit(submit)} ref={refDom} className={css(formStyles)}>
-      {formFields.map(({ Element, Wrapper, testID, name, label, placeholder, ...props }) => (
+      {formFields.map(({ Element, Wrapper, testID, name, value, label, placeholder, ...props }) => (
         <Fragment key={name}>
           <GenericItemField
             {...props}

@@ -1,6 +1,6 @@
 import express, { Response, Router } from 'express';
 import path from 'path';
-import httpProxy from 'http-proxy';
+import { createProxyMiddleware, Options } from 'http-proxy-middleware';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import { withReturnTo, getIdentityData } from '@energon/onelogin';
@@ -17,6 +17,7 @@ import {
   errorHandler,
   openIdConfig,
 } from './middlewares';
+import schema from './schema.json';
 
 getEnv().validate();
 const config = getConfig();
@@ -52,8 +53,16 @@ if (!PROXY_API_SERVER_URL) {
       exit(-1);
     }
 
-    const proxy = httpProxy.createProxyServer({});
-    const apiServer = (req, res) => proxy.web(req, res, { target: PROXY_API_SERVER_URL });
+    const proxyMiddlewareOptions: Options = {
+      target: PROXY_API_SERVER_URL,
+      changeOrigin: true,
+      autoRewrite: true,
+      pathRewrite: { '^/api[0-9]?': '' },
+      logLevel: 'debug',
+    };
+    proxyMiddlewareOptions.onError = function (e) {
+      console.log('e', e);
+    };
 
     appServer.use(
       cors({
@@ -87,18 +96,23 @@ if (!PROXY_API_SERVER_URL) {
         }
       }
 
-      proxy.on('proxyReq', function (proxyReq, _, res) {
+      proxyMiddlewareOptions.onProxyReq = function (proxyReq, _, res) {
         const identityData = getIdentityData(res as Response);
 
         console.log('Authorization: bearer-jwt-identity', identityData?.access_token);
         proxyReq.setHeader('Authorization', `Bearer ${identityData?.access_token}`);
-      });
+      };
     }
 
     appServer.use(express.static(clientDistFolder, { index: false }));
     appServer.use(express.static('public'));
 
-    appServer.use('/api', apiServer);
+    const proxyMiddleware = createProxyMiddleware(proxyMiddlewareOptions);
+    appServer.use('/api/v1/schema/d158ebc0-d97d-4b2e-9e34-4bbb6099fdc6', (_, res) => res.json(schema).sendStatus(200));
+    appServer.use('/api', proxyMiddleware);
+    appServer.use('/_status', (_, res) => res.sendStatus(200));
+
+    console.log('version', process.version);
 
     // static file serving section
     switch (integrationMode) {
@@ -143,9 +157,6 @@ if (!PROXY_API_SERVER_URL) {
 
     server.disable('x-powered-by');
 
-    server.use('/_status', (_, res) => res.sendStatus(200));
-
-    //
     prettify(config);
 
     server.listen(NODE_PORT, () => {

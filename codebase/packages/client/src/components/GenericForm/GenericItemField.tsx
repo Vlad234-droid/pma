@@ -1,9 +1,10 @@
-import React, { FC } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 
 import { UseFormReturn } from 'react-hook-form';
 
 type GenericItemFormProps = {
   name: string;
+  value?: string;
   label?: string;
   placeholder?: string;
   methods: UseFormReturn;
@@ -14,6 +15,7 @@ type GenericItemFormProps = {
 };
 export const GenericItemField: FC<GenericItemFormProps> = ({
   name,
+  value,
   methods,
   Element,
   Wrapper = 'div',
@@ -21,6 +23,10 @@ export const GenericItemField: FC<GenericItemFormProps> = ({
   label,
   ...props
 }) => {
+  const [state, setState] = useState(value);
+  useEffect(() => {
+    setState(value);
+  }, [value]);
   const { register, formState } = methods;
   const { errors } = formState;
   const element = (
@@ -28,7 +34,11 @@ export const GenericItemField: FC<GenericItemFormProps> = ({
       {...props}
       isValid={!errors[name]}
       name={name}
-      onChange={register(name).onChange}
+      value={state}
+      onChange={(e) => {
+        setState(e.target.value);
+        register(name).onChange(e);
+      }}
       domRef={register(name).ref}
       placeholder={placeholder}
     />

@@ -1,4 +1,4 @@
-import React, { createContext, FC, useCallback, useEffect } from 'react';
+import React, { createContext, FC, useCallback, useContext, useEffect } from 'react';
 // store
 import { currentUserMetaSelector, currentUserSelector, UerActions } from '@pma/store';
 
@@ -57,5 +57,6 @@ export const AuthProvider: FC = ({ children }) => {
 };
 
 export const AuthConsumer = AuthContext.Consumer;
+export const useAuthContainer = () => useContext(AuthContext);
 
 export default AuthContext;

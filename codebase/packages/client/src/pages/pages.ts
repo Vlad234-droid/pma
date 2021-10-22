@@ -10,6 +10,8 @@ import Settings from './Settings';
 const pages: Record<Page, PageElement> = {
   [Page.MY_TEAM]: MyTeam,
   [Page.ACTIONS]: Actions,
+  [Page.CREATE_PERFORMANCE_CYCLE]: () => null,
+  [Page.PERFORMANCE_CYCLE]: () => null,
   [Page.CAREER_PERFORMANCE]: CareerPerformance,
   [Page.OBJECTIVES_VIEW]: Objectives,
   [Page.PROFILE]: Profile,

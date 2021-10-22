@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import { Trans, useTranslation } from 'components/Translation';
 import { Status } from 'config/enum';
 import { useStyle, Rule, CreateRule, Button } from '@dex-ddl/core';
@@ -6,6 +6,9 @@ import { useStyle, Rule, CreateRule, Button } from '@dex-ddl/core';
 import { CreateButton } from '../CreateButton';
 import { TileWrapper } from 'components/Tile';
 import { Icon, RoundIcon, Graphics } from 'components/Icon';
+import { ObjectiveActions, objectivesMetaSelector, SchemaActions } from '@pma/store';
+import useDispatch from '../../../../hooks/useDispatch';
+import { useSelector } from 'react-redux';
 
 export type Props = {
   onClick: () => void;
@@ -22,10 +25,9 @@ const MainWidget: FC<Props> = ({ customStyle, onClick, status, count = 0 }) => {
 
   const isStateless = !status;
   const isDraft = status === Status.DRAFT;
-  const isPending = status === Status.PENDING;
+  const isPending = status === Status.PENDING || status === Status.WAITING_FOR_APPROVAL;
   const isApproved = status === Status.APPROVED;
   const notApproved = !isApproved;
-
   const getContent = (): [Graphics, boolean, string] => {
     switch (true) {
       case isDraft:
@@ -72,7 +74,7 @@ const MainWidget: FC<Props> = ({ customStyle, onClick, status, count = 0 }) => {
             <span className={css(descriptionStyle)}>
               <span className={css(iconStyle)}>
                 {withStroke ? (
-                  <RoundIcon graphic={graphic} iconProps={{ invertColors: true }} />
+                  <RoundIcon graphic={graphic} iconProps={{ invertColors: true }} strokeWidth={3} />
                 ) : (
                   <Icon graphic={graphic} invertColors />
                 )}
@@ -85,19 +87,9 @@ const MainWidget: FC<Props> = ({ customStyle, onClick, status, count = 0 }) => {
           <div className={css(bodyStyle)}>
             <div className={css(bodyBlockStyle)}>
               {isStateless ? (
-                <CreateButton />
+                <CreateButton buttonText='Create objectives' />
               ) : (
-                <Button
-                  styles={[
-                    {
-                      border: `1px solid ${theme.colors.white}`,
-                      fontSize: '14px',
-                    },
-                  ]}
-                  onPress={() => alert('Test')}
-                >
-                  <Trans i18nKey='view_and_edit'>View and Edit</Trans>
-                </Button>
+                <CreateButton buttonText='View and edit' />
               )}
             </div>
           </div>
