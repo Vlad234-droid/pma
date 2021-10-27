@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import { Trans, useTranslation } from 'components/Translation';
 import { ReviewWidget, Widgets as ObjectiveWidgets } from 'features/Objectives';
 import { Styles, useStyle } from '@dex-ddl/core';
@@ -9,10 +9,21 @@ import { StepIndicator } from 'components/StepIndicator/StepIndicator';
 import { Status } from 'config/enum';
 import { Header } from 'components/Header';
 import { RouterSwitch } from 'components/RouterSwitch';
+import { useSelector } from 'react-redux';
+import { getTimelineMetaSelector, getTimelineSelector, TimelineActions } from '@pma/store';
+import useDispatch from '../../hooks/useDispatch';
 
 const CareerPerformance: FC = () => {
   const { css } = useStyle();
   const { t } = useTranslation();
+  const { descriptions, startDates } = useSelector(getTimelineSelector) || {};
+  const { loaded, error } = useSelector(getTimelineMetaSelector) || {};
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (!loaded) dispatch(TimelineActions.getTimeline());
+  }, [loaded]);
   return (
     <>
       <div className={css({ margin: '8px' })}>
@@ -34,12 +45,8 @@ const CareerPerformance: FC = () => {
               mainTitle={t('performance_timeline_title', 'My Performance Timeline')}
               currentStatus={'pending'}
               currentStep={0}
-              titles={[
-                t('set_objectives', 'Set objectives'),
-                t('mid_year_review', 'Mid-year review'),
-                t('end_year_review', 'End year review'),
-              ]}
-              descriptions={['April 2021', 'September 2022', 'March 2022']}
+              titles={descriptions}
+              descriptions={startDates}
             />
           </div>
           <div data-test-id='more' className={css(basicTileStyle)}>

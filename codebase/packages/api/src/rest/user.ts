@@ -3,7 +3,7 @@ import httpClient from '../config/client';
 const domain = '/colleague/v2/colleagues';
 
 export const getCurrentUser = (params?: any) => {
-  return httpClient.get(`${domain}/d158ebc0-d97d-4b2e-9e34-4bbb6099fdc6`, { params: { ...params } });
+  return httpClient.get(`${domain}/10000000-0000-0000-0000-000000000001`, { params: { ...params } });
 };
 
 export const getUserByIamId = (iamId: string) => httpClient.get(`${domain}/${iamId}`);

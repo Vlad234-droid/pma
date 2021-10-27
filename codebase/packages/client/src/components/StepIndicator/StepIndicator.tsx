@@ -151,6 +151,14 @@ const title2Style: Rule = ({
   fontWeight: 'bold',
   fontSize,
   paddingTop: '8px',
+  flex: '1 1 0',
+  textAlign: 'center',
+  ':first-child': {
+    textAlign: 'start',
+  },
+  ':last-child': {
+    textAlign: 'end',
+  },
 });
 
 const descriptionStyle: Rule = ({
@@ -162,6 +170,14 @@ const descriptionStyle: Rule = ({
 }) => ({
   fontStyle: 'normal',
   fontSize,
+  flex: '1 1 0',
+  textAlign: 'center',
+  ':first-child': {
+    textAlign: 'start',
+  },
+  ':last-child': {
+    textAlign: 'end',
+  },
 });
 
 const wrapperStyle = {

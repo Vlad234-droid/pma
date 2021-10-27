@@ -1,8 +1,9 @@
-import { StateType } from 'typesafe-actions';
-import { initialState as userInitialState } from '../entities/user/reducer';
-import { initialState as toastInitialState } from '../entities/toast/reducer';
-import { initialState as objectiveInitialState } from '../entities/objective/reducer';
-import { initialState as schemaInitialState } from '../entities/schema/reducer';
+import {StateType} from 'typesafe-actions';
+import {initialState as userInitialState} from '../entities/user/reducer';
+import {initialState as toastInitialState} from '../entities/toast/reducer';
+import {initialState as objectiveInitialState} from '../entities/objective/reducer';
+import {initialState as schemaInitialState} from '../entities/schema/reducer';
+import {initialState as timelineInitialState} from '../entities/timeline/reducer';
 
 //@ts-ignore
 export const initialState = {
@@ -10,6 +11,7 @@ export const initialState = {
   toasts: toastInitialState,
   objectives: objectiveInitialState,
   schema: schemaInitialState,
+  timeline: timelineInitialState,
 };
 
 export type State = StateType<typeof initialState>;

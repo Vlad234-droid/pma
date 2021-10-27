@@ -1,9 +1,8 @@
 import React, { FC, HTMLProps } from 'react';
 import { Trans, useTranslation } from 'components/Translation';
-import { Icon, Rule, Styles, useStyle } from '@dex-ddl/core';
+import { Rule, Styles, useStyle } from '@dex-ddl/core';
 import { TileWrapper } from 'components/Tile';
 import { Avatar } from 'components/Avatar';
-import { TooltipWrapper as Tooltip } from 'components/Tooltip';
 
 export type DashboardProfileProps = {};
 
@@ -90,19 +89,6 @@ const DashboardProfile: FC<Props> = () => {
               <Trans i18nKey='function'>Function</Trans>
             </span>
             <span className={css(descriptionStyle)}>Store</span>
-          </div>
-          <div className={css(bodyBlockStyle)}>
-            <span className={css(titleStyle)}>
-              <Trans i18nKey='business_unit_bonus'>Business unit bonus</Trans>
-              <span style={{ margin: '5px' }}>
-                <span style={{ top: '5px', position: 'relative' }}>
-                  <Tooltip text={t('tooltip_info', 'Accumsan proin ut in convallis eget turpis a pellentesque.')}>
-                    <Icon graphic='information' />
-                  </Tooltip>
-                </span>
-              </span>
-            </span>
-            <span className={css(descriptionStyle)}>CS 123</span>
           </div>
         </div>
       </div>
