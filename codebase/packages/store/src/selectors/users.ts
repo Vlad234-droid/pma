@@ -14,7 +14,8 @@ function getFullName(info) {
 }
 
 export const currentUserSelector = createSelector(usersSelector, ({ current }) => {
-  const info = current?.info;
+  // @ts-ignore
+  const info = current?.info?.data?.colleague;
   const fullName = getFullName(info);
   //@ts-ignore
   const workRelationship = info?.workRelationships?.[0];

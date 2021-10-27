@@ -44,8 +44,7 @@ const CareerPerformance: FC = () => {
   };
 
   const createTimeline = () => {
-    const url =
-      '/colleagues/10000000-0000-0000-0000-000000000000/performance-cycles/10000000-0000-0000-0000-000000000000/review-types/OBJECTIVE/numbers/1';
+    const url = '/processes/10000000-0000-0000-0000-000000000000/metadata';
     const payload = {
       cycle: {
         id: null,
