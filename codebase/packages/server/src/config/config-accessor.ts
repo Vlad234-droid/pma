@@ -81,7 +81,9 @@ export class ConfigAccessor {
           ? `${processEnv.INTEGRATION_CORE_URL}${defaultConfig.SSOLogoutPath}`
           : `${processEnv.INTEGRATION_CORE_URL}${coreMountPath}${defaultConfig.SSOLogoutPath}`,
       integrationUIMountPath: () =>
-        coreMountPath === '/' ? '' : `${coreMountPath}${processEnv.INTEGRATION_MOUNT_PATH}`,
+        coreMountPath === '/'
+          ? processEnv.INTEGRATION_MOUNT_PATH
+          : `${coreMountPath}${processEnv.INTEGRATION_MOUNT_PATH}`,
       // application specific settings
       applicationName: () => defaultConfig.applicationName,
       applicationPublicUrl: () => processEnv.APPLICATION_PUBLIC_URL,
