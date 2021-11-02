@@ -3,12 +3,9 @@ import { Trans, useTranslation } from 'components/Translation';
 import { Status } from 'config/enum';
 import { useStyle, Rule, CreateRule, Button } from '@dex-ddl/core';
 
-import { CreateButton } from '../CreateButton';
+import { CreateButton } from '../Buttons';
 import { TileWrapper } from 'components/Tile';
 import { Icon, RoundIcon, Graphics } from 'components/Icon';
-import { ObjectiveActions, objectivesMetaSelector, SchemaActions } from '@pma/store';
-import useDispatch from '../../../../hooks/useDispatch';
-import { useSelector } from 'react-redux';
 
 export type Props = {
   onClick: () => void;

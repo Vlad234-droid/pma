@@ -4,10 +4,9 @@ import { Styles, useStyle } from '@dex-ddl/core';
 
 import SecondaryWidget, { Props as SecondaryWidgetProps } from '../SecondaryWidget';
 import MainWidget from '../MainWidget';
-import { Status } from '../../../../config/enum';
-import useDispatch from '../../../../hooks/useDispatch';
+import useDispatch from 'hooks/useDispatch';
 import { useSelector } from 'react-redux';
-import { ObjectiveActions, objectivesMetaSelector, objectivesSelector } from '@pma/store';
+import { getObjectivesStatusSelector, ObjectiveActions, objectivesSelector } from '@pma/store';
 
 export type MainWidgetProps = {};
 
@@ -17,11 +16,11 @@ const Widgets: FC<Props> = () => {
   const { css } = useStyle();
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const { loaded, status = null } = useSelector(objectivesMetaSelector);
-  const { currentObjectives } = useSelector(objectivesSelector);
-  const countObjectives = Object.keys(currentObjectives).length;
+  const status = useSelector(getObjectivesStatusSelector);
+  const { origin } = useSelector(objectivesSelector);
+  const countObjectives = origin.length;
   useEffect(() => {
-    dispatch(ObjectiveActions.getObjective({ performanceCycleUuid: '', colleagueUuid: 'colleagueUuid' }));
+    dispatch(ObjectiveActions.getObjectives({ performanceCycleUuid: '', colleagueUuid: 'colleagueUuid' }));
   }, []);
   const widgets: SecondaryWidgetProps[] = [
     {

@@ -8,4 +8,4 @@ export { default as Accordion } from './components/Accordion';
 export { default as Reviews } from './components/Reviews';
 export { ReviewWidget } from './components/Reviews';
 export { ShareWidget } from './components/ShareWidget';
-export { CreateButton } from './components/CreateButton';
+export { CreateButton, EditButton } from './components/Buttons';

@@ -27,8 +27,10 @@ export const GenericItemField: FC<GenericItemFormProps> = ({
   useEffect(() => {
     setState(value);
   }, [value]);
-  const { register, formState } = methods;
-  const { errors } = formState;
+  const {
+    register,
+    formState: { errors },
+  } = methods;
   const element = (
     <Element
       {...props}

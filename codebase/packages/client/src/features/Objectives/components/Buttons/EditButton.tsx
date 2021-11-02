@@ -1,25 +1,20 @@
 import React, { FC, HTMLProps, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { Trans } from 'components/Translation';
 import { useBreakpoints, Rule, Modal, useStyle, Button } from '@dex-ddl/core';
-import { Icon } from 'components/Icon';
-import { CreateModal, SuccessModal } from '../Modal';
+import { Icon, Graphics } from 'components/Icon';
+import { CreateUpdateObjective } from '../ObjectiveModal';
 import { IconButton } from 'components/IconButton';
-import useStore from 'hooks/useStore';
-import useDispatch from 'hooks/useDispatch';
-import { ObjectiveActions, objectivesSelector } from '@pma/store';
-import { Status } from 'config/enum';
 
-export type CreateModalProps = {
-  withIcon?: boolean;
+export type EditAllModalProps = {
+  icon?: Graphics;
+  styles?: Rule;
   buttonText?: string;
+  editNumber?: number;
 };
 
-type Props = HTMLProps<HTMLInputElement> & CreateModalProps;
+type Props = HTMLProps<HTMLInputElement> & EditAllModalProps;
 
-const CreateButton: FC<Props> = ({ withIcon = false, buttonText = 'Create objectives' }) => {
+const EditButton: FC<Props> = ({ styles = {}, icon = 'add', buttonText = 'Edit all', editNumber }) => {
   const { theme } = useStyle();
-  const dispatch = useDispatch();
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -27,12 +22,11 @@ const CreateButton: FC<Props> = ({ withIcon = false, buttonText = 'Create object
 
   return (
     <>
-      {withIcon ? (
+      {icon ? (
         <IconButton
-          customVariantRules={{ default: iconBtnStyle }}
+          customVariantRules={{ default: { ...iconBtnStyle, ...styles } }}
           onPress={handleBtnClick}
-          graphic='add'
-          iconProps={{ invertColors: true }}
+          graphic={icon}
           iconStyles={iconStyle}
         >
           {buttonText}
@@ -40,6 +34,7 @@ const CreateButton: FC<Props> = ({ withIcon = false, buttonText = 'Create object
       ) : (
         <Button
           styles={[
+            styles,
             {
               border: `1px solid ${theme.colors.white}`,
               fontSize: '14px',
@@ -64,17 +59,18 @@ const CreateButton: FC<Props> = ({ withIcon = false, buttonText = 'Create object
             styles: [modalCloseOptionStyle],
           }}
           title={{
-            content: 'Create objectives',
+            content: 'Edit objectives',
             styles: [modalTitleOptionStyle],
           }}
           onOverlayClick={() => {
             setIsOpen(false);
           }}
         >
-          <CreateModal onClose={() => setIsOpen(false)} />
-          {/*<CreateModal />*/}
-          {/*<ArticleModal />*/}
-          {/*<SuccessModal onClose={() => setIsOpen(false)} />*/}
+          {editNumber ? (
+            <CreateUpdateObjective onClose={() => setIsOpen(false)} editNumber={editNumber} />
+          ) : (
+            <CreateUpdateObjective onClose={() => setIsOpen(false)} />
+          )}
         </Modal>
       )}
     </>
@@ -101,18 +97,12 @@ const containerRule: Rule = ({ colors }) => {
 };
 
 const iconBtnStyle: Rule = ({ theme }) => ({
-  padding: '0 16px',
-  display: 'flex',
-  height: '40px',
-  paddingLeft: '12px',
-  paddingRight: '12px',
-  borderRadius: '20px',
-  justifyContent: 'center',
-  alignItems: 'center',
-  outline: 0,
-  background: theme.colors.tescoBlue,
-  color: theme.colors.white,
+  fontWeight: theme.font.weight.bold,
+  color: theme.colors.tescoBlue,
   cursor: 'pointer',
+  border: `1px solid ${theme.colors.tescoBlue}`,
+  borderRadius: '30px',
+  padding: '10px 20px 10px 20px',
 });
 
 const modalCloseOptionStyle: Rule = () => {
@@ -159,4 +149,4 @@ const iconStyle: Rule = {
   marginRight: '10px',
 };
 
-export default CreateButton;
+export default EditButton;

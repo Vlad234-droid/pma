@@ -14,7 +14,6 @@ import { Icon as IconComponent } from 'components/Icon';
 import { Item, Input, Select, Textarea } from 'components/Form';
 import { GenericItemField } from 'components/GenericForm';
 import { SubmitButton } from './index';
-import { reviewFormSchema } from './config';
 
 export type ReviewFormModal = {};
 
@@ -172,16 +171,14 @@ const ReviewFormModal: FC<Props> = () => {
 
   const methods = useForm({
     mode: 'onChange',
-    resolver: yupResolver<Yup.AnyObjectSchema>(reviewFormSchema),
+    // resolver: yupResolver<Yup.AnyObjectSchema>(),
   });
   const {
     handleSubmit,
     formState: { errors, isValid },
     reset,
   } = methods;
-  console.log('errors', errors);
   const onSubmit = async (data) => {
-    console.log('data', data);
     reset();
   };
 

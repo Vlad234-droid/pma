@@ -108,7 +108,7 @@ if (!PROXY_API_SERVER_URL) {
     appServer.use(express.static('public'));
 
     const proxyMiddleware = createProxyMiddleware(proxyMiddlewareOptions);
-    appServer.use('/api/v1/schema/d158ebc0-d97d-4b2e-9e34-4bbb6099fdc6', (_, res) => res.json(schema).sendStatus(200));
+    // appServer.use('/api/v1/schema/d158ebc0-d97d-4b2e-9e34-4bbb6099fdc6', (_, res) => res.json(schema).sendStatus(200));
     appServer.use('/api', proxyMiddleware);
     appServer.use('/_status', (_, res) => res.sendStatus(200));
 

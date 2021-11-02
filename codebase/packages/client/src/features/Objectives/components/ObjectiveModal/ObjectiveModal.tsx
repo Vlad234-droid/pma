@@ -1,132 +1,53 @@
-import React, { FC, HTMLProps, useCallback, useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
-
-import { Status } from 'config/enum';
-
-import { Trans } from 'components/Translation';
-import useDispatch from 'hooks/useDispatch';
-import useStore from 'hooks/useStore';
-import { ObjectiveActions, SchemaActions, objectivesSelector, objectivesMetaSelector } from '@pma/store';
+import React, { FC, HTMLProps } from 'react';
+import { UseFormReturn } from 'react-hook-form';
 
 import { Icon, Button, useStyle, useBreakpoints } from '@dex-ddl/core';
 
-// todo use Generic form in future. For now just not use it because of more flexibility
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as Yup from 'yup';
-
+import { Trans } from 'components/Translation';
 import { Icon as IconComponent } from 'components/Icon';
 import { StepIndicatorBasic } from 'components/StepIndicator/StepIndicator';
 import { Input, Textarea, Item, Select } from 'components/Form';
 import { GenericItemField } from 'components/GenericForm';
-import { createYupSchema } from 'utils/yup';
 
-import { SubmitButton } from './index';
-import SuccessModal from './SuccessModal';
+import { ButtonWithConfirmation as SubmitButton } from '../Buttons';
 
-export type CreateModalProps = {
+export type ObjectiveModalProps = {
+  useSingleStep?: boolean;
   onClose?: () => void;
+  methods: UseFormReturn;
+  submitForm: boolean;
+  currentObjectiveNumber: number;
+  schemaComponents: [any]; // todo add schema type
+  formValues: {};
+  titles?: string[];
+  setPrevObjectiveNumber?: () => void;
+  onSaveDraft: () => void;
+  onSubmit: () => void;
+  setNextObjectiveNumber?: () => void;
 };
 
-type Props = HTMLProps<HTMLInputElement> & CreateModalProps;
+type Props = HTMLProps<HTMLInputElement> & ObjectiveModalProps;
 
-export const CreateModal: FC<Props> = ({ onClose }) => {
+export const ObjectiveModal: FC<Props> = ({
+  useSingleStep = false,
+  methods,
+  submitForm,
+  currentObjectiveNumber,
+  schemaComponents,
+  titles,
+  formValues,
+  setPrevObjectiveNumber,
+  onSaveDraft,
+  onSubmit,
+  setNextObjectiveNumber,
+}) => {
   const { css, theme } = useStyle();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
 
-  const dispatch = useDispatch();
-
-  const stateSchema = useStore('schema');
-  const { loaded, status } = useSelector(objectivesMetaSelector);
-  const { currentObjectives: stateObjectives } = useSelector(objectivesSelector);
-
-  const addObjective = useCallback((payload) => dispatch(ObjectiveActions.addObjective(payload)), []);
-  // @ts-ignore
-  const { components = [], markup = { max: 0, min: 0 } } = stateSchema;
-
-  const objectiveTitles = [...Array(markup.max).keys()].map((key) => `Objective ${key + 1}`);
-  const [currentObjectiveNumber, setObjectiveNumber] = useState(1);
-
-  const formElements = components.filter((component) => component.type != 'text');
-  const formElementsFilledEmpty = formElements.reduce((acc, current) => {
-    acc[current.key] = '';
-    return acc;
-  }, {});
-
-  const yepSchema = formElements.reduce(createYupSchema, {});
-  const methods = useForm({
-    mode: 'onChange',
-    resolver: yupResolver<Yup.AnyObjectSchema>(Yup.object().shape(yepSchema)),
-    // defaultValues: stateObjectives[currentObjectiveNumber],
-  });
   const {
-    trigger,
-    getValues,
-    handleSubmit,
     formState: { isValid },
-    reset,
   } = methods;
-  const formValues = getValues();
-
-  const onSubmit = async (data) => {
-    addObjective({ [currentObjectiveNumber]: data });
-    dispatch(
-      ObjectiveActions.updateObjective({
-        performanceCycleUuid: '',
-        colleagueUuid: '',
-        status: Status.WAITING_FOR_APPROVAL,
-      }),
-    );
-  };
-
-  const onSaveDraft = () => {
-    const values = getValues();
-    addObjective({ [currentObjectiveNumber]: values });
-    dispatch(
-      ObjectiveActions.updateObjective({
-        performanceCycleUuid: '',
-        colleagueUuid: '',
-        status: Status.DRAFT,
-      }),
-    );
-  };
-
-  const setNextObjectiveNumber = async (data) => {
-    addObjective({ [currentObjectiveNumber]: data });
-    setObjectiveNumber(currentObjectiveNumber + 1);
-  };
-  const setPrevObjectiveNumber = async () => {
-    setObjectiveNumber(currentObjectiveNumber - 1);
-  };
-
-  useEffect(() => {
-    if (stateObjectives[currentObjectiveNumber]) {
-      reset(stateObjectives[currentObjectiveNumber]);
-      trigger();
-    } else {
-      reset(formElementsFilledEmpty);
-    }
-  }, [currentObjectiveNumber]);
-  useEffect(() => {
-    if (loaded && stateObjectives[currentObjectiveNumber]) {
-      reset(stateObjectives[currentObjectiveNumber]);
-    }
-  }, [loaded]);
-  useEffect(() => {
-    if (stateObjectives[currentObjectiveNumber]) {
-      reset(stateObjectives[currentObjectiveNumber]);
-    }
-    dispatch(SchemaActions.getSchema({ formId: 'colleague_objectives_form' }));
-    dispatch(ObjectiveActions.getObjective({ performanceCycleUuid: '', colleagueUuid: 'colleagueUuid' }));
-  }, []);
-
-  console.log(stateObjectives);
-
-  //  todo return is success page. pass onClose. use it in SuccessModal when click on OK
-  if (loaded && status === 'WAITING_FOR_APPROVAL') {
-    return <SuccessModal onClose={() => onClose && onClose()} />;
-  }
 
   return (
     <div className={css({ height: '100%', bottom: '80px' })}>
@@ -137,7 +58,7 @@ export const CreateModal: FC<Props> = ({ onClose }) => {
           padding: mobileScreen ? `0 ${theme.spacing.s4}` : `0 ${theme.spacing.s10}`,
         })}
       >
-        {currentObjectiveNumber > 1 && (
+        {currentObjectiveNumber > 1 && setPrevObjectiveNumber && (
           <span
             className={css({
               position: 'fixed',
@@ -153,13 +74,11 @@ export const CreateModal: FC<Props> = ({ onClose }) => {
           </span>
         )}
         <form>
-          <div className={css({ padding: `0 0 ${theme.spacing.s5}` })}>
-            <StepIndicatorBasic
-              currentStatus={'draft'}
-              currentStep={currentObjectiveNumber - 1}
-              titles={objectiveTitles}
-            />
-          </div>
+          {!useSingleStep && (
+            <div className={css({ padding: `0 0 ${theme.spacing.s5}` })}>
+              <StepIndicatorBasic currentStatus={'draft'} currentStep={currentObjectiveNumber - 1} titles={titles} />
+            </div>
+          )}
           <div className={css({ padding: `0 0 ${theme.spacing.s5}`, display: 'flex' })}>
             <Icon graphic='information' />
             <span
@@ -171,7 +90,7 @@ export const CreateModal: FC<Props> = ({ onClose }) => {
               Need help writing your objectives?
             </span>
           </div>
-          {components.map((component) => {
+          {schemaComponents.map((component) => {
             const { id, key, label, description, type, validate, values = [] } = component;
             const value = formValues[key] ? formValues[key] : '';
             if (type === 'textfield' && validate?.maxLength <= 100) {
@@ -255,14 +174,13 @@ export const CreateModal: FC<Props> = ({ onClose }) => {
                     },
                   ]}
                   onPress={onSaveDraft}
-                  // onPress={() => handleSubmit(onSaveDraft)()}
                 >
                   <Trans i18nKey='save_as_draft'>Save as draft</Trans>
                 </Button>
-                {markup.min === currentObjectiveNumber ? (
+                {submitForm ? (
                   <SubmitButton
                     isDisabled={!isValid}
-                    onSave={handleSubmit(onSubmit)}
+                    onSave={onSubmit}
                     styles={[
                       theme.font.fixed.f16,
                       {
@@ -285,7 +203,7 @@ export const CreateModal: FC<Props> = ({ onClose }) => {
                       },
                       isValid ? {} : { opacity: 0.4 },
                     ]}
-                    onPress={() => handleSubmit(setNextObjectiveNumber)()}
+                    onPress={setNextObjectiveNumber}
                     isDisabled={!isValid}
                   >
                     <Trans i18nKey='next'>Next</Trans>

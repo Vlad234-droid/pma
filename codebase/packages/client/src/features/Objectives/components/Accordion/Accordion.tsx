@@ -1,7 +1,10 @@
 import React, { FC } from 'react';
-import { useStyle, Rule, Styles } from '@dex-ddl/core';
-
+import { useStyle, Rule, Styles, colors, fontWeight } from '@dex-ddl/core';
 import { Accordion, Header, HeaderProps, Section, Panel } from 'components/Accordion';
+import { ButtonWithConfirmation, EditButton } from '../Buttons';
+import { ObjectiveActions } from '@pma/store';
+import { Status } from 'config/enum';
+import useDispatch from 'hooks/useDispatch';
 
 type Explanation = {
   title: string;
@@ -9,11 +12,12 @@ type Explanation = {
 };
 
 type Objective = {
-  id: string;
+  id: number;
   title: string;
   subTitle: string;
   description: string;
   explanations: Explanation[];
+  status: Status;
 };
 
 type Props = {
@@ -21,14 +25,43 @@ type Props = {
 };
 
 export const TEST_ID = 'objective-accordion';
+const Buttons: FC<{ id: number }> = ({ id }) => {
+  const dispatch = useDispatch();
+
+  const remove = () => {
+    dispatch(
+      ObjectiveActions.deleteObjective({
+        performanceCycleUuid: '',
+        colleagueUuid: '',
+        number: id,
+      }),
+    );
+  };
+
+  return (
+    <div style={{ padding: '20px 0' }}>
+      <EditButton buttonText={'Edit'} editNumber={id} icon={'edit'} styles={AccordionButtonStyle} />
+      <ButtonWithConfirmation
+        onSave={remove}
+        withIcon={true}
+        buttonName='Delete'
+        confirmationTitle='Delete'
+        styles={[AccordionButtonStyle]}
+      />
+    </div>
+  );
+};
 
 const ObjectiveAccordion: FC<Props> = ({ objectives }) => (
   <Accordion id='objective-accordion'>
     <div data-test-id={TEST_ID}>
-      {objectives.map(({ id, title, subTitle, description, explanations }) => (
+      {objectives.map(({ id, title, subTitle, description, explanations, status }) => (
         <Section key={id}>
           <ObjectiveHeader {...{ title, subTitle, description }} />
-          <ObjectivePanel explanations={explanations} />
+          <Panel>
+            <ObjectivePanel explanations={explanations} />
+            {[Status.DRAFT].includes(status) && <Buttons id={id} />}
+          </Panel>
         </Section>
       ))}
     </div>
@@ -51,7 +84,7 @@ const ObjectivePanel: FC<{ explanations: Explanation[] }> = ({ explanations }) =
   const { css } = useStyle();
 
   return (
-    <Panel>
+    <>
       {explanations.map(({ title, steps }, idx) => (
         <div className={css(accordionExplanationStyles)} key={idx}>
           <h4 className={css(accordionSubTitleStyles)}>{title}</h4>
@@ -64,7 +97,7 @@ const ObjectivePanel: FC<{ explanations: Explanation[] }> = ({ explanations }) =
           </ol>
         </div>
       ))}
-    </Panel>
+    </>
   );
 };
 
@@ -99,6 +132,18 @@ const accordionList = {
       position: 'absolute',
       left: '-17px',
     },
+  },
+} as Styles;
+
+const AccordionButtonStyle: Rule = {
+  fontSize: '14px',
+  lineHeight: '18px',
+  color: colors.tescoBlue,
+  fontWeight: fontWeight.bold,
+  paddingRight: '20px',
+  '& svg': {
+    height: '14px',
+    width: '14px',
   },
 } as Styles;
 

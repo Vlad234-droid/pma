@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'components/Translation';
 import { Button, Rule, useStyle, Styles, useBreakpoints } from '@dex-ddl/core';
 import { Status } from 'config/enum';
@@ -20,49 +20,18 @@ import {
 } from 'features/Objectives';
 import { PreviousReviewFilesModal } from 'features/ReviewFiles/components';
 import { useToast, Variant } from 'features/Toast';
-
-const objectives = [
-  {
-    id: 'test-id-1',
-    title: 'Objective 1',
-    subTitle: 'Resolve customer issues and answers questions',
-    description: 'I want our customers to be satisfied and always return to us',
-    explanations: [
-      {
-        title: 'How will you MEET this objective?',
-        steps: ['Have a possibility to scan all items', 'Be polite'],
-      },
-      {
-        title: 'How will you EXCEED this objective??',
-        steps: ['To tell about sales and discounts', 'To help packing purchases'],
-      },
-    ],
-  },
-  {
-    id: 'test-id-2',
-    title: 'Objective 2',
-    subTitle: 'Resolve customer issues and answers questions',
-    description: 'Description of objective',
-    explanations: [
-      {
-        title: 'How will you MEET this objective?',
-        steps: ['Be polite'],
-      },
-    ],
-  },
-  {
-    id: 'test-id-3',
-    title: 'Objective 3',
-    subTitle: 'Process return transactions',
-    description: 'Description of objective',
-    explanations: [
-      {
-        title: 'How will you MEET this objective?',
-        steps: ['To tell about objectives'],
-      },
-    ],
-  },
-];
+import useDispatch from 'hooks/useDispatch';
+import { useSelector } from 'react-redux';
+import {
+  getObjectivesStatusSelector,
+  ObjectiveActions,
+  objectivesMetaSelector,
+  isObjectivesOverMinUnderMaxMarkup,
+  SchemaActions,
+  isObjectivesNumberInStatus,
+  objectivesSelector,
+} from '@pma/store';
+import { getObjectiveSchema } from '@pma/store/src/selectors/schema';
 
 const reviews = [
   {
@@ -80,9 +49,65 @@ const reviews = [
 export const TEST_ID = 'objectives-pave';
 
 const Objectives: FC = () => {
+  const mappedObjectives: any = [];
   const { css, theme } = useStyle();
   const { t } = useTranslation();
+  const dispatch = useDispatch();
   const [previousReviewFilesModalShow, setPreviousReviewFilesModalShow] = useState(false);
+  const [objectives, setObjectives] = useState([]);
+
+  const stateSchema = useSelector(getObjectiveSchema);
+  // @ts-ignore
+  const {
+    components = [],
+    meta: { loaded: schemaLoaded = false },
+  } = stateSchema;
+  const formElements = components.filter((component) => component.type != 'text');
+
+  // @ts-ignore
+  const { markup = { max: 0, min: 0 } } = useSelector(getObjectiveSchema);
+  const { loaded: objectivesLoaded } = useSelector(objectivesMetaSelector);
+  const status = useSelector(getObjectivesStatusSelector);
+  const { origin } = useSelector(objectivesSelector);
+  const isAllObjectivesByNumberApproved = useSelector(
+    isObjectivesNumberInStatus(
+      Status.APPROVED,
+      Array.from(Array(markup.min), (_, i) => i + 1),
+    ),
+  );
+
+  const canCreateSingleObjective = useSelector(isObjectivesOverMinUnderMaxMarkup(markup));
+
+  useEffect(() => {
+    dispatch(SchemaActions.getSchema({ formId: 'colleague_objectives_form' }));
+    dispatch(ObjectiveActions.getObjectives({ performanceCycleUuid: '', colleagueUuid: 'colleagueUuid' }));
+  }, []);
+  useEffect(() => {
+    if (objectivesLoaded && schemaLoaded) {
+      origin?.forEach((objectiveItem) => {
+        const status = objectiveItem.status;
+        const objective = objectiveItem?.properties?.mapJson;
+        const subTitle = objective['title'] || '';
+        const description = objective['description'] || '';
+        const explanations = formElements
+          .filter(({ key }) => !['title', 'description'].includes(key))
+          .map((component) => {
+            const { key, label } = component;
+
+            return { title: label, steps: objective[key] ? [objective[key]] : [] };
+          });
+        mappedObjectives.push({
+          id: Number(objectiveItem.number),
+          title: `Objective ${objectiveItem.number}`,
+          subTitle: subTitle,
+          description: description,
+          explanations,
+          status,
+        });
+      });
+      setObjectives(mappedObjectives);
+    }
+  }, [objectivesLoaded, schemaLoaded]);
 
   const widgets: SecondaryWidgetProps[] = [
     {
@@ -125,9 +150,11 @@ const Objectives: FC = () => {
   return (
     <div className={css({ margin: '8px' })}>
       <Header title='Objectives' />
-      <div className={css({ display: 'flex' })}>
-        <CreateButton withIcon />
-      </div>
+      {canCreateSingleObjective && isAllObjectivesByNumberApproved && (
+        <div className={css({ display: 'flex' })}>
+          <CreateButton withIcon useSingleStep={true} />
+        </div>
+      )}
       <div className={css(headWrapperStyles)}>
         <div className={css(timelineWrapperStyles)} onClick={handleClick}>
           <StepIndicator
@@ -148,7 +175,7 @@ const Objectives: FC = () => {
             content: (
               <div className={css(tileStyles)}>
                 <Trans i18nKey='business_objectives'>Business Objectives</Trans>
-                <StatusBadge status={Status.APPROVED} styles={{ marginLeft: '10px' }} />
+                <StatusBadge status={status} styles={{ marginLeft: '10px' }} />
               </div>
             ),
           }}

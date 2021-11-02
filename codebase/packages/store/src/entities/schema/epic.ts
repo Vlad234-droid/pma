@@ -12,7 +12,7 @@ export const getSchemaEpic: Epic = (action$, _, { api }) =>
     switchMap(() =>
       from(api.getSchema()).pipe(
         // @ts-ignore
-        map((data) => getSchema.success(data)),
+        map(({ success, data }) => getSchema.success(data)),
         catchError(({ errors }) => of(getSchema.failure(errors))),
         takeUntil(action$.pipe(filter(isActionOf(getSchema.cancel)))),
       ),

@@ -4,45 +4,88 @@ import { combineEpics } from 'redux-observable';
 import { from, of } from 'rxjs';
 import { catchError, filter, map, switchMap, takeUntil } from 'rxjs/operators';
 
-import { createObjective, updateObjective, getObjective } from './actions';
+import { updateObjectives, updateObjective, createObjective, getObjectives, deleteObjective } from './actions';
 
-export const getObjectiveEpic: Epic = (action$, _, { api }) =>
+export const getObjectivesEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
-    filter(isActionOf(getObjective.request)),
-    switchMap(() =>
-      from(api.getObjective()).pipe(
+    filter(isActionOf(getObjectives.request)),
+    switchMap(({ payload }) =>
+      from(api.getObjectives(payload)).pipe(
         // @ts-ignore
         map(({ success, data }) => {
-          return getObjective.success(data);
+          return getObjectives.success({ origin: data });
         }),
-        catchError(({ errors }) => of(getObjective.failure(errors))),
-        takeUntil(action$.pipe(filter(isActionOf(getObjective.cancel)))),
+        catchError(({ errors }) => of(getObjectives.failure(errors))),
+        takeUntil(action$.pipe(filter(isActionOf(getObjectives.cancel)))),
       ),
     ),
   );
 
-export const updateObjectiveEpic: Epic = (action$, state$, { api }) =>
+export const updateObjectiveEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
     filter(isActionOf(updateObjective.request)),
     switchMap(({ payload }) => {
-      const { status } = payload;
-      const { objectives } = state$.value;
-      const { currentObjectives } = objectives;
-      const mapObjectives = [];
-      Object.values(currentObjectives).forEach((val) => {
-        // @ts-ignore
-        mapObjectives.push({ properties: { mapJson: val }, status });
-      });
-      console.log('data_data', payload);
-      return from(api.createObjective(mapObjectives)).pipe(
+      const { data } = payload;
+      return from(api.updateObjective(data)).pipe(
         // @ts-ignore
         map(({ data }) => {
-          return updateObjective.success({ success: true, data });
+          return getObjectives.request(data);
         }),
         catchError(({ errors }) => of(updateObjective.failure(errors))),
         takeUntil(action$.pipe(filter(isActionOf(updateObjective.cancel)))),
       );
     }),
   );
+export const createObjectiveEpic: Epic = (action$, _, { api }) =>
+  action$.pipe(
+    filter(isActionOf(createObjective.request)),
+    switchMap(({ payload }) => {
+      const { data } = payload;
+      return from(api.createObjective(data)).pipe(
+        // @ts-ignore
+        map(({ data }) => {
+          return getObjectives.request(data);
+        }),
+        catchError(({ errors }) => of(createObjective.failure(errors))),
+      );
+    }),
+  );
 
-export default combineEpics(getObjectiveEpic, updateObjectiveEpic);
+export const updateObjectivesEpic: Epic = (action$, _, { api }) =>
+  action$.pipe(
+    filter(isActionOf(updateObjectives.request)),
+    switchMap(({ payload }) => {
+      const { origin } = payload;
+      return from(api.updateObjectives(origin)).pipe(
+        // @ts-ignore
+        map(({ data }) => {
+          return updateObjectives.success({ origin: data });
+        }),
+        catchError(({ errors }) => of(updateObjectives.failure(errors))),
+        takeUntil(action$.pipe(filter(isActionOf(updateObjectives.cancel)))),
+      );
+    }),
+  );
+
+export const deleteObjectiveEpic: Epic = (action$, _, { api }) =>
+  action$.pipe(
+    filter(isActionOf(deleteObjective.request)),
+    switchMap(({ payload }) => {
+      return from(api.deleteObjective(payload)).pipe(
+        // @ts-ignore
+        map(({ data }) => {
+          return getObjectives.request(data);
+        }),
+        catchError(({ errors }) => of(deleteObjective.failure(errors))),
+        takeUntil(action$.pipe(filter(isActionOf(deleteObjective.cancel)))),
+      );
+    }),
+  );
+
+export default combineEpics(
+  getObjectivesEpic,
+  updateObjectivesEpic,
+  updateObjectiveEpic,
+  deleteObjectiveEpic,
+  createObjectiveEpic,
+);
