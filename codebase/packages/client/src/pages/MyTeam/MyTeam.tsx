@@ -23,6 +23,7 @@ const MyTeam: FC = () => {
             className={css({
               display: 'flex',
               alignItems: 'center',
+              minWidth: '110px',
             })}
           />
         )}

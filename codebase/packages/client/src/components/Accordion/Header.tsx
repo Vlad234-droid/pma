@@ -151,7 +151,7 @@ export const ExpandButton = () => {
       <BaseHeader>
         {({ getHeadingProps, getElementToggleProps, expanded }) => {
           return (
-            <div {...getHeadingProps()}>
+            <div style={{ cursor: 'pointer' }} {...getHeadingProps()}>
               <div {...getElementToggleProps()}>
                 <Icon
                   iconStyles={{ ...accordionIconStyles, ...(expanded ? accordionIconExpandStyles : {}) }}

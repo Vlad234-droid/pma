@@ -18,7 +18,7 @@ const SecondaryWidget: FC<Props> = ({ iconGraphic, title, date, customStyle, onC
   const { css, theme } = useStyle();
 
   return (
-    <TileWrapper customStyle={customStyle}>
+    <TileWrapper customStyle={customStyle} hover={true} background={'white'}>
       <div className={css(wrapperStyle)} onClick={onClick} data-test-id={TEST_ID}>
         <div className={css(headStyle)}>
           <Icon graphic={iconGraphic} />
@@ -49,10 +49,6 @@ const wrapperStyle: Rule = ({ theme }) => {
     alignItems: 'center',
     flexDirection: 'column',
     display: 'flex',
-    '&:hover': {
-      opacity: 0.9,
-      backgroundColor: theme.colors.white,
-    },
   };
 };
 

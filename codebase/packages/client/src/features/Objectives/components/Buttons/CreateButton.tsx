@@ -138,15 +138,8 @@ const modalTitleOptionStyle: Rule = () => {
     left: 0,
     right: 0,
     color: 'white',
-    ...(mobileScreen
-      ? {
-          fontSize: '20px',
-          lineHeight: '24px',
-        }
-      : {
-          fontSize: '24px',
-          lineHeight: '28px',
-        }),
+    fontSize: '20px',
+    lineHeight: '24px',
   };
 };
 

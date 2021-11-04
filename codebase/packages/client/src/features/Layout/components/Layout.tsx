@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Rule, useStyle } from '@dex-ddl/core';
+import { Rule, useStyle, useBreakpoints } from '@dex-ddl/core';
 
 export const TEST_ID = 'layout-wrapper';
 
@@ -13,11 +13,16 @@ const Layout: FC = ({ children }) => {
   );
 };
 
-const layoutRule: Rule = () => ({
-  display: 'flex',
-  flex: 1,
-  flexDirection: 'column',
-  height: '100vh',
-});
+const layoutRule: Rule = () => {
+  const [, isBreakpoint] = useBreakpoints();
+  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+  return {
+    ...(!mobileScreen ? { padding: '0 40px' } : {}),
+    display: 'flex',
+    flex: 1,
+    flexDirection: 'column',
+    height: '100vh',
+  };
+};
 
 export default Layout;

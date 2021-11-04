@@ -43,7 +43,7 @@ const ReviewWidget: FC<Props> = ({ customStyle, onClick, status, description }) 
         'roundAlert',
         'pending',
         'tescoBlue',
-        false,
+        true,
         t('review_form_not_available', 'This form is available now'),
       ],
       [Status.OVERDUE]: [
@@ -72,8 +72,8 @@ const ReviewWidget: FC<Props> = ({ customStyle, onClick, status, description }) 
   };
 
   return (
-    <TileWrapper customStyle={{ ...customStyle }} hover={shadow} boarder={shadow}>
-      <div className={css(wrapperStyle({ background }))} onClick={handleClick} data-test-id={TEST_ID}>
+    <TileWrapper customStyle={{ ...customStyle }} hover={shadow} boarder={shadow} background={background}>
+      <div className={css(wrapperStyle)} onClick={handleClick} data-test-id={TEST_ID}>
         <div className={css(headStyle)}>
           <div className={css(headerBlockStyle)}>
             <span className={css(titleStyle({ color: titleColor }))}>
@@ -116,15 +116,14 @@ const ReviewWidget: FC<Props> = ({ customStyle, onClick, status, description }) 
   );
 };
 
-const wrapperStyle: CreateRule<{ background: string }> = ({ background }) => ({
+const wrapperStyle: Rule = {
   padding: '24px 30px',
-  backgroundColor: colors[background],
   width: '100%',
   height: '100%',
   justifyContent: 'space-between',
   flexDirection: 'column',
   display: 'flex',
-});
+};
 
 const headStyle: Rule = {
   display: 'flex',

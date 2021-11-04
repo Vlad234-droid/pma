@@ -165,133 +165,136 @@ const Objectives: FC = () => {
           />
         </div>
         <ShareWidget
-          customStyle={{ marginTop: '16px', flex: '1 1 30%', display: 'flex', flexDirection: 'column' }}
+          customStyle={{ flex: '1 1 30%', display: 'flex', flexDirection: 'column' }}
           onClick={() => alert('share')}
         />
       </div>
       <div className={css(bodyWrapperStyles)} data-test-id={TEST_ID}>
-        <Section
-          left={{
-            content: (
-              <div className={css(tileStyles)}>
-                <Trans i18nKey='business_objectives'>Business Objectives</Trans>
-                <StatusBadge status={status} styles={{ marginLeft: '10px' }} />
-              </div>
-            ),
-          }}
-          right={{
-            content: (
-              <div>
-                <IconButton
-                  onPress={() => alert('download')}
-                  graphic='download'
-                  customVariantRules={{ default: iconButtonStyles }}
-                  iconStyles={iconStyles}
-                >
-                  <Trans i18nKey='download'>Download</Trans>
-                </IconButton>
-                <IconButton
-                  onPress={() => alert('share')}
-                  graphic='share'
-                  customVariantRules={{ default: iconButtonStyles }}
-                  iconStyles={iconStyles}
-                >
-                  <Trans i18nKey='share'>Share</Trans>
-                </IconButton>
-                <IconButton
-                  onPress={() => alert('print')}
-                  graphic='print'
-                  customVariantRules={{ default: iconButtonStyles }}
-                  iconStyles={iconStyles}
-                >
-                  <Trans i18nKey='print'>Print</Trans>
-                </IconButton>
-              </div>
-            ),
-          }}
-        >
-          <Accordion objectives={objectives} />
-        </Section>
-        <Section
-          left={{
-            content: (
-              <div>
-                <Trans i18nKey='my_completed_reviews'>My Completed Reviews</Trans>
-              </div>
-            ),
-          }}
-          right={{
-            content: (
-              <div>
-                <Button mode='inverse' onPress={() => alert('view')} styles={[linkStyles({ theme })]}>
-                  <Trans i18nKey='view_history'>View history</Trans>
-                </Button>
-              </div>
-            ),
-          }}
-        >
-          {reviews.length > 0 ? (
-            <Reviews reviews={reviews} />
-          ) : (
-            t('no_completed_reviews', 'You have no completed reviews')
-          )}
-        </Section>
-        <Section
-          left={{
-            content: (
-              <div>
-                <Trans i18nKey='previous_review_files'>Previous Review Files</Trans>
-              </div>
-            ),
-          }}
-          right={{
-            content: (
-              <div>
-                <Button
-                  mode='inverse'
-                  onPress={() => setPreviousReviewFilesModalShow(true)}
-                  styles={[linkStyles({ theme })]}
-                >
-                  <Trans i18nKey='view_files'>View Files</Trans>
-                </Button>
-              </div>
-            ),
-          }}
-        >
-          <Trans i18nKey='you_have_n_files'>You have 12 files</Trans>
-        </Section>
-        <Section contentCustomStyle={widgetWrapperStyle}>
-          {widgets.map((props, idx) => (
-            <SecondaryWidget key={idx} {...props} />
-          ))}
-        </Section>
-        <Section
-          contentCustomStyle={widgetWrapperStyle}
-          left={{
-            content: (
-              <div className={css(tileStyles)}>
-                <Trans i18nKey='my_reviews'>My Reviews</Trans>
-              </div>
-            ),
-          }}
-        >
-          <div data-test-id='personal' className={css(basicTileStyle)}>
-            <ReviewWidget
-              status={Status.AVAILABLE}
-              onClick={() => console.log('ReviewWidget')}
-              description={t('tiles_description_id_3', 'Your mid-year review form and results will appear here.')}
-              customStyle={{ height: '182px' }}
-            />
-          </div>
-          <div data-test-id='feedback' className={css(basicTileStyle)}>
-            <ReviewWidget
-              status={Status.NOT_AVAILABLE}
-              onClick={() => console.log('ReviewWidget')}
-              description={t('tiles_description_id_3', 'Your mid-year review form and results will appear here.')}
-              customStyle={{ height: '182px' }}
-            />
-          </div>
-        </Section>
+        <div className={css(timelineWrapperStyles)}>
+          <Section
+            left={{
+              content: (
+                <div className={css(tileStyles)}>
+                  <Trans i18nKey='business_objectives'>Business Objectives</Trans>
+                  <StatusBadge status={status} styles={{ marginLeft: '10px' }} />
+                </div>
+              ),
+            }}
+            right={{
+              content: (
+                <div>
+                  <IconButton
+                    onPress={() => alert('download')}
+                    graphic='download'
+                    customVariantRules={{ default: iconButtonStyles }}
+                    iconStyles={iconStyles}
+                  >
+                    <Trans i18nKey='download'>Download</Trans>
+                  </IconButton>
+                  <IconButton
+                    onPress={() => alert('share')}
+                    graphic='share'
+                    customVariantRules={{ default: iconButtonStyles }}
+                    iconStyles={iconStyles}
+                  >
+                    <Trans i18nKey='share'>Share</Trans>
+                  </IconButton>
+                  <IconButton
+                    onPress={() => alert('print')}
+                    graphic='print'
+                    customVariantRules={{ default: iconButtonStyles }}
+                    iconStyles={iconStyles}
+                  >
+                    <Trans i18nKey='print'>Print</Trans>
+                  </IconButton>
+                </div>
+              ),
+            }}
+          >
+            <Accordion objectives={objectives} />
+          </Section>
+          <Section
+            left={{
+              content: (
+                <div>
+                  <Trans i18nKey='my_completed_reviews'>My Completed Reviews</Trans>
+                </div>
+              ),
+            }}
+            right={{
+              content: (
+                <div>
+                  <Button mode='inverse' onPress={() => alert('view')} styles={[linkStyles({ theme })]}>
+                    <Trans i18nKey='view_history'>View history</Trans>
+                  </Button>
+                </div>
+              ),
+            }}
+          >
+            {reviews.length > 0 ? (
+              <Reviews reviews={reviews} />
+            ) : (
+              t('no_completed_reviews', 'You have no completed reviews')
+            )}
+          </Section>
+          <Section
+            left={{
+              content: (
+                <div>
+                  <Trans i18nKey='previous_review_files'>Previous Review Files</Trans>
+                </div>
+              ),
+            }}
+            right={{
+              content: (
+                <div>
+                  <Button
+                    mode='inverse'
+                    onPress={() => setPreviousReviewFilesModalShow(true)}
+                    styles={[linkStyles({ theme })]}
+                  >
+                    <Trans i18nKey='view_files'>View Files</Trans>
+                  </Button>
+                </div>
+              ),
+            }}
+          >
+            <Trans i18nKey='you_have_n_files'>You have 12 files</Trans>
+          </Section>
+          <Section contentCustomStyle={widgetWrapperStyle}>
+            {widgets.map((props, idx) => (
+              <SecondaryWidget key={idx} {...props} />
+            ))}
+          </Section>
+          <Section
+            contentCustomStyle={widgetWrapperStyle}
+            left={{
+              content: (
+                <div className={css(tileStyles)}>
+                  <Trans i18nKey='my_reviews'>My Reviews</Trans>
+                </div>
+              ),
+            }}
+          >
+            <div data-test-id='personal' className={css(basicTileStyle)}>
+              <ReviewWidget
+                status={Status.AVAILABLE}
+                onClick={() => console.log('ReviewWidget')}
+                description={t('tiles_description_id_3', 'Your mid-year review form and results will appear here.')}
+                customStyle={{ height: '182px' }}
+              />
+            </div>
+            <div data-test-id='feedback' className={css(basicTileStyle)}>
+              <ReviewWidget
+                status={Status.NOT_AVAILABLE}
+                onClick={() => console.log('ReviewWidget')}
+                description={t('tiles_description_id_3', 'Your mid-year review form and results will appear here.')}
+                customStyle={{ height: '182px' }}
+              />
+            </div>
+          </Section>
+        </div>
+        <div className={css({ flex: '1 1 30%', display: 'flex', flexDirection: 'column' })} />
       </div>
       {previousReviewFilesModalShow && (
         <PreviousReviewFilesModal onOverlayClick={() => setPreviousReviewFilesModalShow(false)} />
@@ -320,14 +323,17 @@ const timelineWrapperStyles = {
   },
 } as Styles;
 
-const bodyWrapperStyles: Rule = {
-  maxWidth: '856px',
-  display: 'flex',
-  flexWrap: 'nowrap',
-  marginTop: '16px',
-  alignItems: 'stretch',
-  flexDirection: 'column',
-  paddingBottom: '20px',
+const bodyWrapperStyles: Rule = () => {
+  const [, isBreakpoint] = useBreakpoints();
+  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+  return {
+    display: 'flex',
+    flexWrap: 'nowrap',
+    marginTop: '16px',
+    alignItems: 'stretch',
+    paddingBottom: '20px',
+    flexDirection: mobileScreen ? 'column' : 'row',
+  };
 };
 
 const basicTileStyle: Rule = {

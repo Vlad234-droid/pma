@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import { Trans, useTranslation } from 'components/Translation';
 import { Rule, Styles, useStyle } from '@dex-ddl/core';
 import { TileWrapper } from 'components/Tile';
+import { Checkbox } from 'components/Form';
 
 export type Props = {};
 
@@ -24,8 +25,8 @@ export const EmailNotifications: FC<Props> = () => {
         </span>
         <div className={css(descriptionStyle)}>You will receive emails about marked actions</div>
         {settings.map(({ id, title }) => (
-          <div key={id}>
-            <input type='checkbox' id={id} />
+          <div key={id} className={css({ display: 'flex' })}>
+            <Checkbox id={id} onChange={() => console.log('settings')} />
             <label className={css({ marginLeft: '8px' })} htmlFor={id}>
               {title}
             </label>

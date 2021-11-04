@@ -161,9 +161,9 @@ const CareerPerformance: FC = () => {
         <ObjectiveWidgets />
 
         <section className={css({ marginTop: '32px' })}>
-          <h3 className={css({ margin: '12px 0' })}>
+          <div className={css({ margin: '12px 0', fontSize: '20px', lineHeight: '24px', fontWeight: 'bold' })}>
             <Trans i18nKey='my_reviews'>My reviews</Trans>
-          </h3>
+          </div>
           <div className={css(wrapperStyle)}>
             <div data-test-id='personal' className={css(basicTileStyle)}>
               <ReviewWidget
@@ -184,9 +184,9 @@ const CareerPerformance: FC = () => {
           </div>
         </section>
         <section className={css({ marginTop: '32px' })}>
-          <h3 className={css({ margin: '12px 0' })}>
+          <div className={css({ margin: '12px 0', fontSize: '20px', lineHeight: '24px', fontWeight: 'bold' })}>
             <Trans i18nKey='useful_resources'>Useful resources</Trans>
-          </h3>
+          </div>
           <div className={css(wrapperStyle)}>
             <div data-test-id='personal' className={css(basicTileStyle)} onClick={createReview}>
               <BasicTile

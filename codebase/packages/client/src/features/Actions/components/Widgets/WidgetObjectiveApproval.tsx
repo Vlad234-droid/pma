@@ -27,7 +27,7 @@ export const WidgetObjectiveApproval: FC<WidgetObjectiveApprovalProps> = ({ isDi
           </div>
           <div
             className={css({
-              justifyContent: 'space-around',
+              justifyContent: 'center',
               display: 'flex',
             })}
           >

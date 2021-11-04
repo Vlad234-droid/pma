@@ -18,6 +18,7 @@ const Checkbox: FC<CheckboxProps> = ({ id, type, name, onChange, checked, indete
             borderRadius: '0px',
             display: 'inline-block',
             position: 'relative',
+            cursor: 'pointer',
             ':checked': {
               backgroundColor: colors.tescoBlue,
               ':before': {

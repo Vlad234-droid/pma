@@ -15,6 +15,7 @@ const Radio: FC<RadioProps> = ({ id, value, type = 'radio', name, onChange, chec
         borderRadius: '10px',
         display: 'inline-block',
         position: 'relative',
+        cursor: 'pointer',
         ':checked': {
           border: `7px solid ${colors.tescoBlue}`,
         },

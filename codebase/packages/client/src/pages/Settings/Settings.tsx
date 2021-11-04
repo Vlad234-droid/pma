@@ -12,9 +12,24 @@ const Settings: FC = () => {
   return (
     <div className={css({ margin: '8px' })}>
       <Header title='Settings' />
-      <TileWrapper>
-        <EmailNotifications />
-      </TileWrapper>
+      <div
+        className={css({
+          display: 'flex',
+          flexWrap: 'wrap',
+          gridGap: '8px',
+        })}
+      >
+        <div className={css({ flex: '3 1 375px', display: 'flex', flexDirection: 'column', gap: '8px' })}>
+          <TileWrapper>
+            <EmailNotifications />
+          </TileWrapper>
+        </div>
+        <div
+          className={css({
+            flex: '1 0 216px',
+          })}
+        />
+      </div>
     </div>
   );
 };

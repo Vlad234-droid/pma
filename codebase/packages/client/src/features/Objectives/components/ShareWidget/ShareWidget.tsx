@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { Trans, useTranslation } from 'components/Translation';
-import { useStyle, Rule, Button, Styles } from '@dex-ddl/core';
+import { useStyle, Rule, Button, Styles, colors } from '@dex-ddl/core';
 
 import { TileWrapper } from 'components/Tile';
 import { Icon, Graphics } from 'components/Icon';
@@ -25,7 +25,7 @@ const ShareWidget: FC<Props> = ({ onClick, shared, customStyle }) => {
           t('stop_sharing', 'Stop sharing'),
         ]
       : [
-          'share',
+          'document',
           t('share_objectives_off_description', 'Make all objectives and measures visible to your team'),
           t('share_to_team', 'Share to team'),
         ];
@@ -100,6 +100,7 @@ const descriptionStyle: Rule = {
   fontStyle: 'normal',
   fontWeight: 'normal',
   fontSize: '14px',
+  color: colors.base,
 };
 
 const bodyStyle: Rule = {

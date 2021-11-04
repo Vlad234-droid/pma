@@ -130,7 +130,7 @@ export const StepIndicator: FC<StepIndicatorProps> = ({
 const titleStyle: Rule = ({
   font: {
     fluid: {
-      f18: { fontSize },
+      f16: { fontSize },
     },
   },
 }) => ({
@@ -181,5 +181,5 @@ const descriptionStyle: Rule = ({
 });
 
 const wrapperStyle = {
-  padding: '16px',
+  padding: '20px',
 };

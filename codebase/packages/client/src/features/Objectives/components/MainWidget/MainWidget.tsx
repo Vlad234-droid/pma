@@ -1,7 +1,7 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC } from 'react';
 import { Trans, useTranslation } from 'components/Translation';
 import { Status } from 'config/enum';
-import { useStyle, Rule, CreateRule, Button } from '@dex-ddl/core';
+import { useStyle, Rule, CreateRule, Colors } from '@dex-ddl/core';
 
 import { CreateButton } from '../Buttons';
 import { TileWrapper } from 'components/Tile';
@@ -25,6 +25,7 @@ const MainWidget: FC<Props> = ({ customStyle, onClick, status, count = 0 }) => {
   const isPending = status === Status.PENDING || status === Status.WAITING_FOR_APPROVAL;
   const isApproved = status === Status.APPROVED;
   const notApproved = !isApproved;
+  const backgroundColor: Colors = notApproved ? 'tescoBlue' : 'white';
   const getContent = (): [Graphics, boolean, string] => {
     switch (true) {
       case isDraft:
@@ -58,7 +59,7 @@ const MainWidget: FC<Props> = ({ customStyle, onClick, status, count = 0 }) => {
   };
 
   return (
-    <TileWrapper customStyle={customStyle}>
+    <TileWrapper customStyle={customStyle} hover={true} background={backgroundColor}>
       <div className={css(wrapperStyle({ clickable: notApproved }))} onClick={handleClick} data-test-id={TEST_ID}>
         <div className={css(headStyle)}>
           <div>
@@ -100,19 +101,12 @@ const wrapperStyle: CreateRule<{ clickable: boolean }> =
   ({ clickable }) =>
   ({ theme }) => ({
     padding: '24px 30px',
-    backgroundColor: clickable ? theme.colors.tescoBlue : theme.colors.white,
     color: clickable ? theme.colors.white : theme.colors.tescoBlue,
     width: '100%',
     height: '100%',
     justifyContent: 'space-between',
     flexDirection: 'column',
     display: 'flex',
-    ...(clickable && {
-      cursor: 'pointer',
-      '&:hover': {
-        opacity: 0.8,
-      },
-    }),
   });
 
 const iconStyles: Rule = () => ({

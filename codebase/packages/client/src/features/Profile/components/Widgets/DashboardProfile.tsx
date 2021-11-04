@@ -30,12 +30,20 @@ const bodyBlockStyle = {
   paddingTop: '14px',
 } as Styles;
 
-const titleStyle: Rule = ({ theme }) =>
+const mainTitleStyle: Rule = ({ theme }) =>
   ({
     fontStyle: 'normal',
     fontWeight: `${theme.font.weight.bold}`,
     fontSize: '20px',
     lineHeight: '24px',
+  } as Styles);
+
+const titleStyle: Rule = ({ theme }) =>
+  ({
+    fontStyle: 'normal',
+    fontWeight: `${theme.font.weight.bold}`,
+    fontSize: '16px',
+    lineHeight: '20px',
   } as Styles);
 
 const descriptionStyle = {
@@ -63,7 +71,7 @@ export const AvatarName: FC<AvatarNameProps> = ({ user }) => {
     <div className={css(headStyle)}>
       <Avatar size={65} />
       <div className={css(headerBlockStyle)}>
-        <span className={css(titleStyle)}>{fullName}</span>
+        <span className={css(mainTitleStyle)}>{fullName}</span>
         <span className={css(descriptionStyle)}>{job}</span>
       </div>
     </div>
