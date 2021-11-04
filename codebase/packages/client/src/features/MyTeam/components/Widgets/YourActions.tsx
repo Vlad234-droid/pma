@@ -1,10 +1,13 @@
 import React, { FC } from 'react';
-import { useStyle, colors, fontWeight } from '@dex-ddl/core';
+import { colors, fontWeight, useStyle } from '@dex-ddl/core';
 import { TileWrapper } from 'components/Tile';
 
-export type YourActionsProps = {};
+export type YourActionsProps = {
+  colleaguesWithStatusDraftCount: number;
+  waitingForApprovalCount: number;
+};
 
-export const YourActions: FC<YourActionsProps> = () => {
+export const YourActions: FC<YourActionsProps> = ({ colleaguesWithStatusDraftCount, waitingForApprovalCount }) => {
   const { css } = useStyle();
 
   return (
@@ -36,7 +39,7 @@ export const YourActions: FC<YourActionsProps> = () => {
                 fontWeight: fontWeight.bold,
               })}
             >
-              2
+              {waitingForApprovalCount}
             </div>
             <div className={css({ maxWidth: '128px', fontSize: '16px', lineHeight: '20px', color: colors.base })}>
               Your pending actions
@@ -46,10 +49,10 @@ export const YourActions: FC<YourActionsProps> = () => {
             <div
               className={css({ fontSize: '28px', lineHeight: '32px', color: colors.base, fontWeight: fontWeight.bold })}
             >
-              0
+              {colleaguesWithStatusDraftCount}
             </div>
             <div className={css({ maxWidth: '128px', fontSize: '16px', lineHeight: '20px', color: colors.base })}>
-              Your collegues pending actions
+              Your colleagues pending actions
             </div>
           </div>
         </div>

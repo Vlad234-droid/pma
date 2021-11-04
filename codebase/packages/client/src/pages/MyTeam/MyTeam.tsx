@@ -1,11 +1,14 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { useStyle, useBreakpoints, Icon as IconCore } from '@dex-ddl/core';
+import { Icon as IconCore, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { Header } from 'components/Header';
 import { RouterSwitch } from 'components/RouterSwitch';
 import { Status } from 'config/enum';
 import { WidgetPending, WidgetTeamMateProfile, YourActions } from 'features/MyTeam';
 import { FilterOption } from 'features/Shared';
+import { useSelector } from 'react-redux';
+import useDispatch from '../../hooks/useDispatch';
+import { getAllEmployees, getManagersMetaSelector, getPendingEmployees, ManagersActions } from '@pma/store';
 
 export const TEST_ID = 'my-team';
 
@@ -13,6 +16,19 @@ const MyTeam: FC = () => {
   const { css } = useStyle();
   const [, isBreakpoint] = useBreakpoints();
   const desktopScreen = !(isBreakpoint.small || isBreakpoint.xSmall);
+
+  const colleagues = useSelector(getAllEmployees) || [];
+  const { employeeWithPendingApprovals, employeeWithDraftApprovals } = useSelector(getPendingEmployees) || {};
+
+  const waitingForApprovalCount = employeeWithPendingApprovals?.length;
+  const colleaguesWithStatusDraftCount = employeeWithDraftApprovals?.length;
+
+  const { loaded, error } = useSelector(getManagersMetaSelector) || {};
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (!loaded) dispatch(ManagersActions.getManagers());
+  }, [loaded]);
 
   return (
     <div className={css({ margin: '8px' })}>
@@ -55,10 +71,12 @@ const MyTeam: FC = () => {
         <div className={css({ flex: '3 1 375px', display: 'flex', flexDirection: 'column', gap: '8px' })}>
           <div>
             <Link to={'/actions'}>
-              <WidgetPending count={2} />
+              <WidgetPending count={waitingForApprovalCount} />
             </Link>
             <div className={css({ paddingTop: '8px' })}>
-              <WidgetTeamMateProfile id='1' status={Status.PENDING} />
+              {colleagues.map((employee) => {
+                return <WidgetTeamMateProfile key={employee.uuid} id='1' status={Status.PENDING} employee={employee} />;
+              })}
             </div>
           </div>
         </div>
@@ -68,7 +86,10 @@ const MyTeam: FC = () => {
             flex: '1 0 216px',
           })}
         >
-          <YourActions />
+          <YourActions
+            colleaguesWithStatusDraftCount={colleaguesWithStatusDraftCount}
+            waitingForApprovalCount={waitingForApprovalCount}
+          />
         </div>
       </div>
     </div>

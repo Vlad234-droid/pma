@@ -4,7 +4,15 @@ import { combineEpics } from 'redux-observable';
 import { from, of } from 'rxjs';
 import { catchError, filter, map, switchMap, takeUntil } from 'rxjs/operators';
 
-import { updateObjectives, updateObjective, createObjective, getObjectives, deleteObjective } from './actions';
+import {
+  approveObjective,
+  createObjective,
+  declineObjective,
+  deleteObjective,
+  getObjectives,
+  updateObjective,
+  updateObjectives,
+} from './actions';
 
 export const getObjectivesEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
@@ -36,6 +44,7 @@ export const updateObjectiveEpic: Epic = (action$, _, { api }) =>
       );
     }),
   );
+
 export const createObjectiveEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
     filter(isActionOf(createObjective.request)),
@@ -67,6 +76,39 @@ export const updateObjectivesEpic: Epic = (action$, _, { api }) =>
     }),
   );
 
+export const approveObjectivesEpic: Epic = (action$, _, { api }) => {
+  console.log({ api });
+  return action$.pipe(
+    filter(isActionOf(approveObjective.request)),
+    switchMap(({ payload }) => {
+      return from(api.approveObjective(payload)).pipe(
+        map(approveObjective.success),
+        catchError((e) => {
+          const errors = e?.data?.errors;
+          return of(approveObjective.failure(errors?.[0]));
+        }),
+        takeUntil(action$.pipe(filter(isActionOf(approveObjective.cancel)))),
+      );
+    }),
+  );
+};
+
+export const declineObjectivesEpic: Epic = (action$, _, { api }) => {
+  return action$.pipe(
+    filter(isActionOf(declineObjective.request)),
+    switchMap(({ payload }) => {
+      return from(api.declineObjective(payload)).pipe(
+        map(declineObjective.success),
+        catchError((e) => {
+          const errors = e?.data?.errors;
+          return of(declineObjective.failure(errors?.[0]));
+        }),
+        takeUntil(action$.pipe(filter(isActionOf(declineObjective.cancel)))),
+      );
+    }),
+  );
+};
+
 export const deleteObjectiveEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
     filter(isActionOf(deleteObjective.request)),
@@ -85,6 +127,8 @@ export const deleteObjectiveEpic: Epic = (action$, _, { api }) =>
 export default combineEpics(
   getObjectivesEpic,
   updateObjectivesEpic,
+  approveObjectivesEpic,
+  declineObjectivesEpic,
   updateObjectiveEpic,
   deleteObjectiveEpic,
   createObjectiveEpic,

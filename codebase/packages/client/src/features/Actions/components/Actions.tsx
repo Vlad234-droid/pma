@@ -1,10 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { useStyle, colors, fontWeight, useBreakpoints } from '@dex-ddl/core';
+import React, { useEffect, useState } from 'react';
+import { colors, fontWeight, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { Trans } from 'components/Translation';
 import { Checkbox, Radio } from 'components/Form';
 import { Status } from 'config/enum';
-import { WidgetTeamMateObjectives, WidgetObjectiveApproval } from 'features/Actions';
+import { WidgetObjectiveApproval, WidgetTeamMateObjectives } from 'features/Actions';
 import { FilterOption } from 'features/Shared';
+import { useSelector } from 'react-redux';
+import { getManagersMetaSelector, getPendingEmployees, ManagersActions } from '@pma/store';
+import useDispatch from '../../../hooks/useDispatch';
 
 export const TEST_ID = 'objectives-pave';
 
@@ -14,9 +17,6 @@ const colleagues: { id: string }[] = [
   },
   {
     id: '2',
-  },
-  {
-    id: '3',
   },
 ];
 
@@ -53,9 +53,17 @@ export const Actions = () => {
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.medium || isBreakpoint.small || isBreakpoint.xSmall;
 
+  const { employeeWithPendingApprovals, employeeWithDraftApprovals } = useSelector(getPendingEmployees) || {};
+  const { loaded, error } = useSelector(getManagersMetaSelector) || {};
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (!loaded) dispatch(ManagersActions.getManagers());
+  }, [loaded]);
+
   const [indeterminate, setIndeterminate]: [boolean, (T) => void] = useState(false);
   const [isCheckAll, setIsCheckAll]: [boolean, (T) => void] = useState(false);
   const [isCheck, setIsCheck]: [string[], (T) => void] = useState([]);
+  const [reviewsForApproval, setReviewsForApproval]: [any[], (T) => void] = useState([]);
 
   useEffect(() => {
     if (colleagues.length && isCheck.length && colleagues.length > isCheck.length) {
@@ -80,12 +88,13 @@ export const Actions = () => {
     }
   };
 
-  const handleClick = (e) => {
+  const handleClick = (e, colleague) => {
     const { id, checked } = e.target;
     setIsCheck([...isCheck, id]);
     if (!checked) {
       setIsCheck(isCheck.filter((item) => item !== id));
     }
+    setReviewsForApproval((prev) => [...prev, { ...colleague }]);
   };
 
   return (
@@ -162,10 +171,10 @@ export const Actions = () => {
         })}
       >
         <div className={css({ flex: '3 1 375px', display: 'flex', flexDirection: 'column', gap: '8px' })}>
-          {colleagues.map((colleague) => {
+          {employeeWithPendingApprovals?.map((colleague) => {
             return (
               <div
-                key={colleague.id}
+                key={colleague.uuid}
                 className={css({
                   display: 'flex',
                   flexWrap: 'wrap',
@@ -183,7 +192,11 @@ export const Actions = () => {
                       top: '36px',
                     })}
                   >
-                    <Checkbox id={colleague.id} checked={isCheck.includes(colleague.id)} onChange={handleClick} />
+                    <Checkbox
+                      id={colleague.uuid}
+                      checked={isCheck.includes(colleague.uuid)}
+                      onChange={(e) => handleClick(e, colleague)}
+                    />
                   </span>
                 </div>
                 <div
@@ -191,7 +204,7 @@ export const Actions = () => {
                     width: 'calc(100% - 40px)',
                   })}
                 >
-                  <WidgetTeamMateObjectives id={colleague.id} status={Status.PENDING} />
+                  <WidgetTeamMateObjectives id={colleague.uuid} status={Status.PENDING} colleague={colleague} />
                 </div>
               </div>
             );
@@ -214,7 +227,7 @@ export const Actions = () => {
           })}
         >
           <div>
-            <WidgetObjectiveApproval isDisabled={!isCheck.length} />
+            <WidgetObjectiveApproval isDisabled={!isCheck.length} reviewsForApproval={reviewsForApproval} />
           </div>
         </div>
       </div>

@@ -1,12 +1,14 @@
 import React, { FC } from 'react';
-import { useStyle, colors, Rule, fontWeight, Colors, Button } from '@dex-ddl/core';
+import { Button, Colors, colors, fontWeight, Rule, useStyle } from '@dex-ddl/core';
 import { TileWrapper } from 'components/Tile';
 import { Graphics, Icon } from 'components/Icon';
 import { Avatar } from 'components/Avatar';
-import { Accordion, BaseAccordion, Section, Panel, ExpandButton } from 'components/Accordion';
+import { Accordion, BaseAccordion, ExpandButton, Panel, Section } from 'components/Accordion';
 import { Status } from 'config/enum';
 import { Trans } from 'components/Translation';
 import { Notification } from 'components/Notification';
+import { ObjectiveActions } from '@pma/store';
+import useDispatch from '../../../../hooks/useDispatch';
 
 type ObjectiveComponentProps = {
   objective_id: string;
@@ -156,9 +158,10 @@ const objectives: ObjectiveComponentProps = [
 export type WidgetTeamMateObjectivesProps = {
   id: string;
   status: Status;
+  colleague: any;
 };
 
-export const WidgetTeamMateObjectives: FC<WidgetTeamMateObjectivesProps> = ({ id, status }) => {
+export const WidgetTeamMateObjectives: FC<WidgetTeamMateObjectivesProps> = ({ id, status, colleague }) => {
   const { css, theme } = useStyle();
 
   const getIcon = (status): [Graphics, Colors] => {
@@ -179,17 +182,19 @@ export const WidgetTeamMateObjectives: FC<WidgetTeamMateObjectivesProps> = ({ id
 
   const [graphics, color] = getIcon(status);
 
+  const dispatch = useDispatch();
+
   return (
     <>
       <TileWrapper>
         <Accordion
-          id={`team-mate-accordion-${id}`}
+          id={`team-mate-accordion-${colleague.uuid}`}
           customStyle={{
             borderBottom: 'none',
             marginTop: 0,
           }}
         >
-          <BaseAccordion id={`team-mate-base-accordion-${id}`}>
+          <BaseAccordion id={`team-mate-base-accordion-${colleague.uuid}`}>
             {() => (
               <>
                 <Section defaultExpanded={false}>
@@ -198,8 +203,8 @@ export const WidgetTeamMateObjectives: FC<WidgetTeamMateObjectivesProps> = ({ id
                       <Avatar size={40} />
                     </div>
                     <div className={css(headerBlockStyle)}>
-                      <span className={css(titleStyle)}>Zaire Rosser</span>
-                      <span className={css(descriptionStyle)}>Cashier, Grocery</span>
+                      <span className={css(titleStyle)}>{`${colleague.firstName} ${colleague.lastName}`}</span>
+                      <span className={css(descriptionStyle)}>{`${colleague.jobName}, ${colleague.businessType}`}</span>
                     </div>
                     <div className={css({ marginLeft: 'auto', display: 'flex', alignItems: 'center' })}>
                       <div className={css({ paddingLeft: '12px' })}>
@@ -321,7 +326,9 @@ export const WidgetTeamMateObjectives: FC<WidgetTeamMateObjectivesProps> = ({ id
                                 margin: '0px 4px 1px 4px',
                               },
                             ]}
-                            onPress={console.log}
+                            onPress={() => {
+                              return dispatch(ObjectiveActions.approveObjective(1));
+                            }}
                           >
                             <Icon graphic='check' invertColors={true} iconStyles={{ paddingRight: '8px' }} />
                             <Trans i18nKey='approve'>Approve</Trans>

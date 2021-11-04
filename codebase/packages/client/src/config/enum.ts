@@ -9,3 +9,10 @@ export enum Status {
   RETURNED = 'RETURNED',
   COMPLETED = 'COMPLETED',
 }
+
+export enum ObjectiveType {
+  OBJECTIVE = 'Objectives',
+  QUARTER = 'Quarter year review',
+  MYR = 'Mid year review',
+  EYR = 'End year review',
+}

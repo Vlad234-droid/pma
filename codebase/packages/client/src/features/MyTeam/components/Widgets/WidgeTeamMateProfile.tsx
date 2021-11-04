@@ -1,23 +1,36 @@
 import React, { FC } from 'react';
-import { useStyle, colors, Rule, fontWeight, Colors } from '@dex-ddl/core';
+import { colors, Colors, fontWeight, Rule, useStyle } from '@dex-ddl/core';
 import { TileWrapper } from 'components/Tile';
 import { Graphics, Icon } from 'components/Icon';
 import { Avatar } from 'components/Avatar';
-import { Accordion, BaseAccordion, Section, Panel, ExpandButton } from 'components/Accordion';
-import { Status } from 'config/enum';
+import { Accordion, BaseAccordion, ExpandButton, Panel, Section } from 'components/Accordion';
+import { ObjectiveType, Status } from 'config/enum';
+
+export type Review = {
+  uuid: string;
+  status: string;
+  type: string;
+  number: number;
+};
+
+export type Employee = {
+  firstName: string;
+  lastName: string;
+  jobName: string;
+  businessType: string;
+  reviews: Review[];
+};
 
 export type WidgetTeamMateProfileProps = {
   id: string;
   status?: Status;
+  employee: Employee;
 };
 
-export const WidgetTeamMateProfile: FC<WidgetTeamMateProfileProps> = ({ id, status }) => {
-  const { css } = useStyle();
+export const WidgetTeamMateProfile: FC<WidgetTeamMateProfileProps> = ({id, status, employee}) => {
+  const {css} = useStyle();
 
   const getIcon = (status): [Graphics, Colors] => {
-    if (!status) {
-      return ['roundAlert', 'pending'];
-    }
     const contents: { [key: string]: [Graphics, Colors] } = {
       [Status.NOT_AVAILABLE]: ['calender', 'tescoBlue'],
       [Status.AVAILABLE]: ['roundAlert', 'pending'],
@@ -25,9 +38,10 @@ export const WidgetTeamMateProfile: FC<WidgetTeamMateProfileProps> = ({ id, stat
       [Status.DRAFT]: ['roundPencil', 'base'],
       [Status.APPROVED]: ['roundTick', 'green'],
       [Status.PENDING]: ['roundClock', 'pending'],
+      [Status.WAITING_FOR_APPROVAL]: ['roundClock', 'pending'],
     };
 
-    return contents[status];
+    return contents[status] || ['roundAlert', 'pending'];
   };
 
   const [graphics, color] = getIcon(status);
@@ -47,67 +61,40 @@ export const WidgetTeamMateProfile: FC<WidgetTeamMateProfileProps> = ({ id, stat
               <>
                 <Section defaultExpanded={false}>
                   <div className={css(wrapperStyle)}>
-                    <div className={css({ display: 'flex', alignItems: 'center' })}>
-                      <Avatar size={40} />
+                    <div className={css({display: 'flex', alignItems: 'center'})}>
+                      <Avatar size={40}/>
                     </div>
                     <div className={css(headerBlockStyle)}>
-                      <span className={css(titleStyle)}>Zaire Rosser</span>
-                      <span className={css(descriptionStyle)}>Cashier, Grocery</span>
+                      <span className={css(titleStyle)}>{`${employee.firstName} ${employee.lastName}`}</span>
+                      <span className={css(descriptionStyle)}>{`${employee.jobName}, ${employee.businessType}`}</span>
                     </div>
-                    <div className={css({ marginLeft: 'auto', display: 'flex', alignItems: 'center' })}>
-                      <div className={css({ padding: '12px 12px' })}>
-                        <span className={css({ fontSize: '16px', lineHeight: '20px', color: colors.tescoBlue })}>
+                    <div className={css({marginLeft: 'auto', display: 'flex', alignItems: 'center'})}>
+                      <div className={css({padding: '12px 12px'})}>
+                        <span className={css({fontSize: '16px', lineHeight: '20px', color: colors.tescoBlue})}>
                           View profile
                         </span>
                       </div>
-                      <div className={css({ padding: '0px 12px' })}>
-                        <Icon graphic={graphics} fill={color} />
+                      <div className={css({padding: '0px 12px'})}>
+                        <Icon graphic={graphics} fill={color}/>
                       </div>
-                      <div className={css({ paddingLeft: '12px' })}>
-                        <ExpandButton />
+                      <div className={css({paddingLeft: '12px'})}>
+                        <ExpandButton/>
                       </div>
                     </div>
                   </div>
                   <Panel>
-                    <div className={css({ padding: '24px 35px 24px 24px' })}>
-                      <div className={css({ background: '#F6F6F6', padding: '24px', borderRadius: '10px' })}>
-                        <div className={css({ justifyContent: 'flex-start' })}>
-                          <div
-                            className={css({
-                              display: 'inline-block',
-                              paddingRight: '30px',
-                              textAlign: 'center',
-                              fontSize: '14px',
-                              lineHeight: '18px',
-                            })}
-                          >
-                            <div className={css({ paddingBottom: '6px' })}>Objectives</div>
-                            <Icon graphic='roundClock' />
-                          </div>
-                          <div
-                            className={css({
-                              display: 'inline-block',
-                              paddingRight: '30px',
-                              textAlign: 'center',
-                              fontSize: '14px',
-                              lineHeight: '18px',
-                            })}
-                          >
-                            <div className={css({ paddingBottom: '6px' })}>Mid-year reveiw</div>
-                            <Icon graphic='roundCircle' />
-                          </div>
-                          <div
-                            className={css({
-                              display: 'inline-block',
-                              paddingRight: '30px',
-                              textAlign: 'center',
-                              fontSize: '14px',
-                              lineHeight: '18px',
-                            })}
-                          >
-                            <div className={css({ paddingBottom: '6px' })}>End-year reveiw</div>
-                            <Icon graphic='roundCircle' />
-                          </div>
+                    <div className={css({padding: '24px 35px 24px 24px'})}>
+                      <div className={css({background: '#F6F6F6', padding: '24px', borderRadius: '10px'})}>
+                        <div className={css({justifyContent: 'flex-start'})}>
+                          {employee.reviews.map((review) => {
+                            const [graphics, color] = getIcon(review.status);
+                            return (
+                              <div key={review.uuid} className={css(reviewItem)}>
+                                <div className={css({paddingBottom: '6px'})}>{ObjectiveType[review.type]}</div>
+                                <Icon graphic={graphics} fill={color}/>
+                              </div>
+                            );
+                          })}
                         </div>
                       </div>
                     </div>
@@ -147,4 +134,12 @@ const descriptionStyle: Rule = {
   fontSize: '16x',
   lineHeight: '20px',
   color: colors.base,
+};
+
+const reviewItem: Rule = {
+  display: 'inline-block',
+  paddingRight: '30px',
+  textAlign: 'center',
+  fontSize: '14px',
+  lineHeight: '18px',
 };

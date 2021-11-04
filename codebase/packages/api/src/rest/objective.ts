@@ -25,6 +25,20 @@ export const updateObjective = <T>(params: any) => {
   return httpClient.put(`${domain}`, params);
 };
 
+export const approveObjective = <T>(params: any) => {
+  // todo performanceCycleUuid ??
+  const performanceCycleUuid = 'd158ebc0-d97d-4b2e-9e34-4bbb6099fdc6';
+  const domain = `/colleagues/${params.colleagueUuid}/performance-cycles/${performanceCycleUuid}/review-types/OBJECTIVE/statuses/APPROVED`;
+  return httpClient.put(`${domain}`, params);
+};
+
+export const declineObjective = <T>(params: any) => {
+  // todo performanceCycleUuid ??
+  const performanceCycleUuid = 'd158ebc0-d97d-4b2e-9e34-4bbb6099fdc6';
+  const domain = `/colleagues/${params.colleagueUuid}/performance-cycles/${performanceCycleUuid}/review-types/OBJECTIVE/statuses/DECLINED`;
+  return httpClient.put(`${domain}`, params);
+};
+
 export const updateObjectives = <T>(params: any) => {
   // todo colleagueUuid performanceCycleUuid ??
   const colleagueUuid = 'd158ebc0-d97d-4b2e-9e34-4bbb6099fdc6';
