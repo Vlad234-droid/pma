@@ -28,6 +28,7 @@ import { Search } from './search';
 import { Download } from './download';
 import { Alert } from './alert';
 import { Information } from './information';
+import { ArrowRight } from './arrowRight';
 
 /**
  * Each icon we add needs to have viewbox set to "0 0 24 24".
@@ -64,7 +65,8 @@ export type Graphics =
   | 'signOut'
   | 'information'
   | 'download'
-  | 'alert';
+  | 'alert'
+  | 'arrowRight';
 
 export const icons: Record<Graphics, FCGraphicProps> = {
   add: Add,
@@ -96,4 +98,5 @@ export const icons: Record<Graphics, FCGraphicProps> = {
   download: Download,
   alert: Alert,
   information: Information,
+  arrowRight: ArrowRight,
 };

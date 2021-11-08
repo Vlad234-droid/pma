@@ -67,6 +67,8 @@ function genericForm<T>({
             label={label}
             Element={Element}
             Wrapper={Wrapper}
+            value={''}
+            domRef={null}
           />
         </Fragment>
       ))}

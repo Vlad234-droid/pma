@@ -1,8 +1,8 @@
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
-import Profile from './Profile';
-import { renderWithTheme as render } from 'utils/test';
-import { AuthProvider } from 'contexts/authContext';
+import Profile from './index';
+import { renderWithTheme as render } from '../../utils/test';
+import { AuthProvider } from '../../contexts/authContext';
 
 it('Profile', async () => {
   const { getAllByText } = render(

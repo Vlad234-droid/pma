@@ -1,7 +1,7 @@
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
 import CareerPerformance from './CareerPerformance';
-import { renderWithTheme } from 'utils/test';
+import { renderWithTheme } from '../../utils/test';
 import { Router } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
 

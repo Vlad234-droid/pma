@@ -26,6 +26,7 @@ const Radio: FC<RadioProps> = ({ id, value, type = 'radio', name, onChange, chec
       type={type}
       name={name}
       value={value}
+      data-test-id={name}
     />
   );
 };

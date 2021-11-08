@@ -34,6 +34,7 @@ const Select: FC<SelectProps> = ({
           name={name}
           value={selectedOptionLabel || value}
           disabled={disabled}
+          data-test-id={name}
           className={css({
             width: '100%',
             border: `1px solid ${theme.colors.backgroundDarkest}`,

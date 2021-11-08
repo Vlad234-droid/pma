@@ -1,6 +1,6 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useState, useEffect, RefObject } from 'react';
 
-import { UseFormReturn } from 'react-hook-form';
+import { Ref, UseFormReturn } from 'react-hook-form';
 
 type GenericItemFormProps = {
   name: string;
@@ -12,6 +12,7 @@ type GenericItemFormProps = {
   Wrapper?: FC<any>;
   rows?: number;
   options?: Array<Record<string, number | string | boolean>>;
+  domRef?: Ref | RefObject<any> | null;
 };
 export const GenericItemField: FC<GenericItemFormProps> = ({
   name,

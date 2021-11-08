@@ -9,6 +9,12 @@ enum Page {
   SETTINGS = 'settings',
   MY_TEAM = 'my-team',
   ACTIONS = 'actions',
+  FEEDBACK = 'feedback',
+  GIVE_FEEDBACK = 'give-feedback',
+  REQUEST_FEEDBACK = 'request-feedback',
+  RESPOND_FEEDBACK = 'respond-feedback',
+  VIEW_FEEDBACK = 'view-feedback',
+  NOT_FOUND = '*',
 }
 
 type PageElement =

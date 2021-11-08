@@ -5,6 +5,11 @@ import MyTeam from './MyTeam';
 import Actions from './Actions';
 import Objectives from './Objectives';
 import Profile from './Profile';
+import Feedback from './Feedback';
+import GiveFeedback from './GiveFeedback';
+import RequestFeedback from './RequestFeedback';
+import RespondFeedback from './RespondFeedback';
+import ViewFeedback from './ViewFeedback';
 import Settings from './Settings';
 
 const pages: Record<Page, PageElement> = {
@@ -15,7 +20,13 @@ const pages: Record<Page, PageElement> = {
   [Page.CAREER_PERFORMANCE]: CareerPerformance,
   [Page.OBJECTIVES_VIEW]: Objectives,
   [Page.PROFILE]: Profile,
-  [Page.SETTINGS]: Settings
+  [Page.FEEDBACK]: Feedback,
+  [Page.GIVE_FEEDBACK]: GiveFeedback,
+  [Page.REQUEST_FEEDBACK]: RequestFeedback,
+  [Page.RESPOND_FEEDBACK]: RespondFeedback,
+  [Page.VIEW_FEEDBACK]: ViewFeedback,
+  [Page.NOT_FOUND]: () => null,
+  [Page.SETTINGS]: Settings,
 };
 
 export default pages;
