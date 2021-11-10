@@ -2,6 +2,9 @@ FROM node:14.17-alpine
 
 # Ourtesco NEXUS repository access token
 ARG NEXUS_ACCESS_TOKEN
+ARG HTTP_PROXY
+ARG HTTPS_PROXY
+
 ARG NODE_ENV
 
 ARG REACT_APP_API_URL=/api
@@ -19,6 +22,8 @@ COPY ./scripts/create-npmrc.sh ./create-npmrc.sh
 COPY ./scripts/run.sh ./run.sh
 
 ENV NEXUS_ACCESS_TOKEN=$NEXUS_ACCESS_TOKEN
+ENV HTTP_PROXY=$HTTP_PROXY
+ENV HTTPS_PROXY=$HTTPS_PROXY
 
 RUN dos2unix ./run.sh && dos2unix ./create-npmrc.sh && bash ./create-npmrc.sh --token $NEXUS_ACCESS_TOKEN
 
