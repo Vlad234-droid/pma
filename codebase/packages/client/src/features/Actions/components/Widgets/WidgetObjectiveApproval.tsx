@@ -1,28 +1,36 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { Button, fontWeight, useStyle } from '@dex-ddl/core';
 import { TileWrapper } from 'components/Tile';
 import { Icon } from 'components/Icon';
+import ConfirmDeclineModal from './Modal/ConfirmDeclineModal';
 import { Trans } from 'components/Translation';
 import { ObjectiveActions } from '@pma/store';
 import useDispatch from 'hooks/useDispatch';
 import { Status } from 'config/enum';
+import { PayloadActionCreator } from 'typesafe-actions';
 
 export type WidgetObjectiveApprovalProps = {
   isDisabled?: boolean;
+  canDecline?: boolean;
   reviewsForApproval: any[];
 };
 
+type UpdateReviews = (method: PayloadActionCreator<any, any>, reason?: string) => void;
+
 export const WidgetObjectiveApproval: FC<WidgetObjectiveApprovalProps> = ({
   isDisabled = false,
+  canDecline = false,
   reviewsForApproval,
 }) => {
+  const [isOpen, setIsOpen] = useState(false);
   const { css, theme } = useStyle();
   const dispatch = useDispatch();
 
-  const updateReviews = (method) => {
+  const updateReviews: UpdateReviews = (method, reason) => {
     reviewsForApproval.forEach((colleague) => {
       dispatch(
         method({
+          ...(reason ? { reason } : {}),
           colleagueUuid: colleague.uuid,
           reviews: colleague.reviews.filter(({ status }) => status === Status.WAITING_FOR_APPROVAL),
         }),
@@ -30,7 +38,10 @@ export const WidgetObjectiveApproval: FC<WidgetObjectiveApprovalProps> = ({
     });
   };
   const approveColleagues = () => updateReviews(ObjectiveActions.approveObjective);
-  const declineColleagues = () => updateReviews(ObjectiveActions.declineObjective);
+  const declineColleagues = (reason) => {
+    updateReviews(ObjectiveActions.declineObjective, reason);
+    setIsOpen(false);
+  };
   return (
     <>
       <TileWrapper>
@@ -54,7 +65,7 @@ export const WidgetObjectiveApproval: FC<WidgetObjectiveApprovalProps> = ({
           >
             <div className={css({ display: 'inline-block' })}>
               <Button
-                isDisabled={isDisabled}
+                isDisabled={!canDecline}
                 styles={[
                   {
                     background: theme.colors.white,
@@ -65,8 +76,9 @@ export const WidgetObjectiveApproval: FC<WidgetObjectiveApprovalProps> = ({
                     color: `${theme.colors.tescoBlue}`,
                     margin: '0px 4px',
                   },
+                  !canDecline ? { opacity: '0.6' } : {},
                 ]}
-                onPress={declineColleagues}
+                onPress={() => setIsOpen(true)}
               >
                 <Icon graphic='decline' iconStyles={{ paddingRight: '8px' }} />
                 <Trans i18nKey='decline'>Decline</Trans>
@@ -90,6 +102,14 @@ export const WidgetObjectiveApproval: FC<WidgetObjectiveApprovalProps> = ({
                 <Trans i18nKey='approve'>Approve</Trans>
               </Button>
             </div>
+            {isOpen && (
+              <ConfirmDeclineModal
+                title={'Please provide decline reason'}
+                onSave={declineColleagues}
+                onCancel={() => setIsOpen(false)}
+                onOverlayClick={() => setIsOpen(false)}
+              />
+            )}
           </div>
         </div>
       </TileWrapper>

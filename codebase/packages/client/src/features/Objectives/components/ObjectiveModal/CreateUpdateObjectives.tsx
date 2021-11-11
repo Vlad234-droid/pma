@@ -2,7 +2,6 @@ import React, { FC, HTMLProps, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
-import { ObjectiveModal } from './ObjectiveModal';
 import useDispatch from 'hooks/useDispatch';
 import { useSelector } from 'react-redux';
 import { schemaMetaSelector } from '@pma/store/src/selectors/schema';
@@ -12,6 +11,7 @@ import { Status } from 'config/enum';
 import SuccessModal from '../Modal/SuccessModal';
 import useObjectives from '../../hooks/useObjectives';
 import useObjectivesSchema from '../../hooks/useObjectiveSchema';
+import { ObjectiveModal } from './ObjectiveModal';
 
 export type CreateUpdateObjectivesModalProps = {
   onClose: () => void;
@@ -23,6 +23,7 @@ type Props = HTMLProps<HTMLInputElement> & CreateUpdateObjectivesModalProps;
 export const CreateUpdateObjectives: FC<Props> = ({ onClose, editNumber = null }) => {
   const dispatch = useDispatch();
 
+  console.log(1);
   const [origin, objectives] = useObjectives();
   const [schema] = useObjectivesSchema();
 

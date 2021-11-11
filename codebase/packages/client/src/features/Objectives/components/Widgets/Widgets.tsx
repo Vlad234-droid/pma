@@ -20,7 +20,7 @@ const Widgets: FC<Props> = () => {
   const { origin } = useSelector(objectivesSelector);
   const countObjectives = origin.length;
   useEffect(() => {
-    dispatch(ObjectiveActions.getObjectives({ performanceCycleUuid: '', colleagueUuid: 'colleagueUuid' }));
+    dispatch(ObjectiveActions.getObjectives({ performanceCycleUuid: '' }));
   }, []);
   const widgets: SecondaryWidgetProps[] = [
     {

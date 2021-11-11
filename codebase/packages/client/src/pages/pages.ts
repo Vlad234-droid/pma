@@ -20,13 +20,13 @@ const pages: Record<Page, PageElement> = {
   [Page.CAREER_PERFORMANCE]: CareerPerformance,
   [Page.OBJECTIVES_VIEW]: Objectives,
   [Page.PROFILE]: Profile,
+  [Page.SETTINGS]: Settings,
   [Page.FEEDBACK]: Feedback,
   [Page.GIVE_FEEDBACK]: GiveFeedback,
   [Page.REQUEST_FEEDBACK]: RequestFeedback,
   [Page.RESPOND_FEEDBACK]: RespondFeedback,
   [Page.VIEW_FEEDBACK]: ViewFeedback,
   [Page.NOT_FOUND]: () => null,
-  [Page.SETTINGS]: Settings,
 };
 
 export default pages;

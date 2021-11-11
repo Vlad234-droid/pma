@@ -145,13 +145,17 @@ const Header: FC<Omit<HeaderProps, 'children'> & { title: string }> = ({ title, 
   );
 };
 
-export const ExpandButton = () => {
+type ExpandButtonProps = {
+  onClick?: (expanded: boolean) => void;
+};
+
+export const ExpandButton: FC<ExpandButtonProps> = ({ onClick }) => {
   return (
     <>
       <BaseHeader>
         {({ getHeadingProps, getElementToggleProps, expanded }) => {
           return (
-            <div style={{ cursor: 'pointer' }} {...getHeadingProps()}>
+            <div style={{ cursor: 'pointer' }} {...getHeadingProps()} onClick={() => onClick && onClick(!expanded)}>
               <div {...getElementToggleProps()}>
                 <Icon
                   iconStyles={{ ...accordionIconStyles, ...(expanded ? accordionIconExpandStyles : {}) }}

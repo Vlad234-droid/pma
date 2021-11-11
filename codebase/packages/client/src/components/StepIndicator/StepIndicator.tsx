@@ -3,19 +3,9 @@ import React, { FC } from 'react';
 import { Rule, useStyle } from '@dex-ddl/core';
 
 import { TileWrapper as Tile } from '../Tile/TileWrapper';
-import Confirmed from './Confirmed.svg';
-import Draft from './Draft.svg';
-import Pending from './Pending.svg';
-import Oval from './Oval.svg';
 import { StatusIcon } from './StatusIcon';
-
-type Status = 'pending' | 'draft' | 'confirmed';
-
-const statuses: { [S in Status]: string } = {
-  pending: Pending,
-  draft: Draft,
-  confirmed: Confirmed,
-};
+import { getIcon } from '../../features/MyTeam';
+import { Status } from 'config/enum';
 
 export type StepIndicatorProps = {
   mainTitle?: string;
@@ -23,11 +13,12 @@ export type StepIndicatorProps = {
   currentStatus?: Status;
   titles?: string[];
   descriptions?: string[];
+  statuses?: Status[];
 };
 
-const getIcon = (i: number, currentStep?: number, currentStatus?: Status) => {
-  if (currentStep === i && currentStatus) return statuses[currentStatus];
-  if (currentStep && currentStep > i) return statuses.confirmed;
+const getStatus = (i: number, currentStep?: number, currentStatus?: Status) => {
+  if (currentStep === i && currentStatus) return Status[currentStatus];
+  if (currentStep && currentStep > i) return Status.APPROVED;
 };
 
 export const StepIndicatorBasic: FC<StepIndicatorProps> = ({
@@ -35,6 +26,7 @@ export const StepIndicatorBasic: FC<StepIndicatorProps> = ({
   currentStatus,
   titles = [],
   descriptions = [],
+  statuses = [],
 }) => {
   const { css, theme } = useStyle();
 
@@ -59,28 +51,50 @@ export const StepIndicatorBasic: FC<StepIndicatorProps> = ({
         zIndex: 1,
       })}
     >
-      <StatusIcon icon={Oval} first={first} last={last} />
+      <StatusIcon graphics='roundCircle' color='base' first={first} last={last} />
       {CurrentStep}
     </div>
   );
 
-  const array = titles
-    .reduce((arr: Array<JSX.Element>, _, i) => {
-      const icon = getIcon(i, currentStep, currentStatus);
-      const first = i === 0;
-      const last = i === titles.length - 1;
-      arr.push(<Line key={`line${i}`} active={!!currentStep && currentStep >= i} />);
-      arr.push(
-        <Step
-          key={`step${i}`}
-          first={first}
-          last={last}
-          CurrentStep={icon && <StatusIcon icon={icon} first={first} last={last} />}
-        />,
-      );
-      return arr;
-    }, [])
-    .slice(1);
+  let array: JSX.Element[];
+  if (statuses && statuses.length > 0) {
+    array = statuses
+      .reduce((arr: JSX.Element[], status, i) => {
+        const [graphics, color] = getIcon(status);
+        const first = i === 0;
+        const last = i === statuses.length - 1;
+        arr.push(<Line key={`line${i}`} active={!!currentStep && currentStep >= i} />);
+        arr.push(
+          <Step
+            key={`step${i}`}
+            first={first}
+            last={last}
+            CurrentStep={<StatusIcon graphics={graphics} color={color} first={first} last={last} />}
+          />,
+        );
+        return arr;
+      }, [])
+      .slice(1);
+  } else {
+    array = titles
+      .reduce((arr: JSX.Element[], _, i) => {
+        const status = getStatus(i, currentStep, currentStatus);
+        const [graphics, color] = getIcon(status);
+        const first = i === 0;
+        const last = i === titles.length - 1;
+        arr.push(<Line key={`line${i}`} active={!!currentStep && currentStep >= i} />);
+        arr.push(
+          <Step
+            key={`step${i}`}
+            first={first}
+            last={last}
+            CurrentStep={graphics && <StatusIcon graphics={graphics} color={color} first={first} last={last} />}
+          />,
+        );
+        return arr;
+      }, [])
+      .slice(1);
+  }
 
   const titlesArray = titles.map((title, i) => (
     <span className={css(title2Style)} key={`title${i}`}>
@@ -110,6 +124,7 @@ export const StepIndicator: FC<StepIndicatorProps> = ({
   currentStatus,
   titles = [],
   descriptions = [],
+  statuses = [],
 }) => {
   const { css } = useStyle();
   return (
@@ -121,6 +136,7 @@ export const StepIndicator: FC<StepIndicatorProps> = ({
           currentStatus={currentStatus}
           titles={titles}
           descriptions={descriptions}
+          statuses={statuses}
         />
       </div>
     </Tile>

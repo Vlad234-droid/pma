@@ -3,6 +3,7 @@ import React from 'react';
 import { Meta, Story } from '@storybook/react';
 
 import { StepIndicator, StepIndicatorBasic, StepIndicatorProps } from './StepIndicator';
+import { Status } from 'config/enum';
 
 export default {
   title: 'components/StepIndicator',
@@ -18,14 +19,14 @@ const TemplateBasic: Story<StepIndicatorProps> = (args) => (
 
 export const StepIndicatorBasicComponent = TemplateBasic.bind({});
 StepIndicatorBasicComponent.args = {
-  currentStatus: 'confirmed',
+  currentStatus: Status.APPROVED,
   currentStep: 2,
   titles: ['Set objectives', 'Mid-year review', 'End year review'],
 };
 
 export const StepIndicatorPending = Template.bind({});
 StepIndicatorPending.args = {
-  currentStatus: 'pending',
+  currentStatus: Status.PENDING,
   currentStep: 0,
   titles: ['Set objectives', 'Mid-year review', 'End year review'],
   descriptions: ['April 2021', 'September 2022', 'March 2022'],
@@ -33,7 +34,7 @@ StepIndicatorPending.args = {
 
 export const StepIndicatorDraft = Template.bind({});
 StepIndicatorDraft.args = {
-  currentStatus: 'draft',
+  currentStatus: Status.DRAFT,
   currentStep: 1,
   titles: ['Set objectives', 'Mid-year review', 'End year review'],
   descriptions: ['April 2021', 'September 2022', 'March 2022'],
@@ -41,7 +42,7 @@ StepIndicatorDraft.args = {
 
 export const StepIndicatorConfirmed = Template.bind({});
 StepIndicatorConfirmed.args = {
-  currentStatus: 'confirmed',
+  currentStatus: Status.APPROVED,
   currentStep: 2,
   titles: ['Set objectives', 'Mid-year review', 'End year review'],
   descriptions: ['April 2021', 'September 2022', 'March 2022'],
@@ -49,7 +50,7 @@ StepIndicatorConfirmed.args = {
 
 export const StepIndicatorWithoutDescription = Template.bind({});
 StepIndicatorWithoutDescription.args = {
-  currentStatus: 'confirmed',
+  currentStatus: Status.APPROVED,
   currentStep: 2,
   titles: ['Set objectives', 'Mid-year review', 'End year review'],
 };

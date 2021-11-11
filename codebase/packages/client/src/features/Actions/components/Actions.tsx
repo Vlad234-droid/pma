@@ -7,18 +7,9 @@ import { WidgetObjectiveApproval, WidgetTeamMateObjectives } from 'features/Acti
 import { FilterOption } from 'features/Shared';
 import { useSelector } from 'react-redux';
 import { getManagersMetaSelector, getPendingEmployees, ManagersActions } from '@pma/store';
-import useDispatch from '../../../hooks/useDispatch';
+import useDispatch from 'hooks/useDispatch';
 
 export const TEST_ID = 'objectives-pave';
-
-const colleagues: { id: string }[] = [
-  {
-    id: '1',
-  },
-  {
-    id: '2',
-  },
-];
 
 const SelectAll = ({ onChange, checked, indeterminate }) => {
   const { css } = useStyle();
@@ -53,7 +44,7 @@ export const Actions = () => {
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.medium || isBreakpoint.small || isBreakpoint.xSmall;
 
-  const { employeeWithPendingApprovals, employeeWithDraftApprovals } = useSelector(getPendingEmployees) || {};
+  const { employeeWithPendingApprovals, employeeWithCompletedApprovals } = useSelector(getPendingEmployees) || {};
   const { loaded, error } = useSelector(getManagersMetaSelector) || {};
   const dispatch = useDispatch();
   useEffect(() => {
@@ -64,14 +55,21 @@ export const Actions = () => {
   const [isCheckAll, setIsCheckAll]: [boolean, (T) => void] = useState(false);
   const [isCheck, setIsCheck]: [string[], (T) => void] = useState([]);
   const [reviewsForApproval, setReviewsForApproval]: [any[], (T) => void] = useState([]);
+  const [colleagues, setColleagues] = useState(employeeWithPendingApprovals || []);
+  const [pending, setPending] = useState(true);
 
   useEffect(() => {
-    if (colleagues.length && isCheck.length && colleagues.length > isCheck.length) {
+    setColleagues(pending ? employeeWithPendingApprovals : employeeWithCompletedApprovals);
+  }, [pending, employeeWithPendingApprovals, employeeWithCompletedApprovals]);
+
+  //todo: refactor this
+  useEffect(() => {
+    if (colleagues?.length && isCheck.length && colleagues?.length > isCheck.length) {
       setIndeterminate(true);
-    } else if (colleagues.length && isCheck.length && colleagues.length === isCheck.length) {
+    } else if (colleagues?.length && isCheck.length && colleagues?.length === isCheck.length) {
       setIndeterminate(false);
       setIsCheckAll(true);
-    } else if (!colleagues.length && !isCheck.length) {
+    } else if (!colleagues?.length && !isCheck.length) {
       setIsCheckAll(false);
     } else {
       setIndeterminate(false);
@@ -81,10 +79,13 @@ export const Actions = () => {
 
   const handleSelectAll = () => {
     setIsCheckAll(!isCheckAll);
-    const checkedItems = colleagues.map((li) => li.id);
+    const checkedItems = employeeWithPendingApprovals.map((li) => li.uuid);
     setIsCheck(checkedItems);
     if (isCheckAll) {
       setIsCheck([]);
+      setReviewsForApproval([]);
+    } else {
+      setReviewsForApproval(employeeWithPendingApprovals);
     }
   };
 
@@ -93,8 +94,10 @@ export const Actions = () => {
     setIsCheck([...isCheck, id]);
     if (!checked) {
       setIsCheck(isCheck.filter((item) => item !== id));
+      setReviewsForApproval((prev) => [...prev.filter((item) => item.uuid !== colleague.uuid)]);
+    } else {
+      setReviewsForApproval((prev) => [...prev, { ...colleague }]);
     }
-    setReviewsForApproval((prev) => [...prev, { ...colleague }]);
   };
 
   return (
@@ -120,7 +123,14 @@ export const Actions = () => {
                 alignItems: 'center',
               })}
             >
-              <Radio type='radio' name='status' value='option1' checked={true} />
+              <Radio
+                id='option1'
+                type='radio'
+                name='status'
+                value='option1'
+                checked={pending}
+                onChange={() => setPending(true)}
+              />
               <span
                 className={css({
                   fontSize: '16px',
@@ -139,7 +149,14 @@ export const Actions = () => {
                 alignItems: 'center',
               })}
             >
-              <Radio type='radio' name='status' value='option2' />
+              <Radio
+                id='option2'
+                type='radio'
+                name='status'
+                value='option2'
+                checked={!pending}
+                onChange={() => setPending(false)}
+              />
               <span
                 className={css({
                   fontSize: '16px',
@@ -171,7 +188,7 @@ export const Actions = () => {
         })}
       >
         <div className={css({ flex: '3 1 375px', display: 'flex', flexDirection: 'column', gap: '8px' })}>
-          {employeeWithPendingApprovals?.map((colleague) => {
+          {colleagues?.map((colleague) => {
             return (
               <div
                 key={colleague.uuid}
@@ -227,7 +244,13 @@ export const Actions = () => {
           })}
         >
           <div>
-            <WidgetObjectiveApproval isDisabled={!isCheck.length} reviewsForApproval={reviewsForApproval} />
+            {pending && (
+              <WidgetObjectiveApproval
+                canDecline={isCheck.length === 1}
+                isDisabled={!isCheck.length}
+                reviewsForApproval={reviewsForApproval}
+              />
+            )}
           </div>
         </div>
       </div>

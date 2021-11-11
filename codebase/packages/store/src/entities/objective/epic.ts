@@ -77,12 +77,20 @@ export const updateObjectivesEpic: Epic = (action$, _, { api }) =>
   );
 
 export const approveObjectivesEpic: Epic = (action$, _, { api }) => {
-  console.log({ api });
   return action$.pipe(
     filter(isActionOf(approveObjective.request)),
     switchMap(({ payload }) => {
       return from(api.approveObjective(payload)).pipe(
-        map(approveObjective.success),
+        //TODO: update response modal and refactor success
+        // @ts-ignore
+        map(({ data }) => {
+          return approveObjective.success({
+            uuid: payload.colleagueUuid,
+            reviews: payload.reviews.map((review) => {
+              return { ...review, status: data };
+            }),
+          });
+        }),
         catchError((e) => {
           const errors = e?.data?.errors;
           return of(approveObjective.failure(errors?.[0]));
@@ -94,11 +102,21 @@ export const approveObjectivesEpic: Epic = (action$, _, { api }) => {
 };
 
 export const declineObjectivesEpic: Epic = (action$, _, { api }) => {
+  //TODO: update response modal and refactor success
   return action$.pipe(
     filter(isActionOf(declineObjective.request)),
     switchMap(({ payload }) => {
       return from(api.declineObjective(payload)).pipe(
-        map(declineObjective.success),
+        //TODO: update response modal and refactor success
+        // @ts-ignore
+        map(({ data }) => {
+          return declineObjective.success({
+            uuid: payload.colleagueUuid,
+            reviews: payload.reviews.map((review) => {
+              return { ...review, status: data };
+            }),
+          });
+        }),
         catchError((e) => {
           const errors = e?.data?.errors;
           return of(declineObjective.failure(errors?.[0]));

@@ -22,12 +22,16 @@ const MainWidget: FC<Props> = ({ customStyle, onClick, status, count = 0 }) => {
 
   const isStateless = !status;
   const isDraft = status === Status.DRAFT;
+  // todo do not forget find out what we use DECLINED or RETURNED
+  const isDeclined = status === Status.DECLINED || status === Status.RETURNED;
   const isPending = status === Status.PENDING || status === Status.WAITING_FOR_APPROVAL;
   const isApproved = status === Status.APPROVED;
   const notApproved = !isApproved;
   const backgroundColor: Colors = notApproved ? 'tescoBlue' : 'white';
   const getContent = (): [Graphics, boolean, string] => {
     switch (true) {
+      case isDeclined:
+        return ['roundAlert', true, t('objective_is_draft', `${count} objective(s) declined`, { count })];
       case isDraft:
         return ['roundPencil', true, t('objective_is_draft', `${count} objective(s) saved as a draft`, { count })];
       case isApproved:

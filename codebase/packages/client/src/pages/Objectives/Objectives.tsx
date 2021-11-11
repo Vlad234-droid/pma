@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'components/Translation';
-import { Button, Rule, useStyle, Styles, useBreakpoints } from '@dex-ddl/core';
+import { Button, Rule, Styles, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { Status } from 'config/enum';
 
 import { StepIndicator } from 'components/StepIndicator/StepIndicator';
@@ -11,27 +11,30 @@ import {
   Accordion,
   CreateButton,
   Reviews,
-  Section,
-  StatusBadge,
-  ShareWidget,
+  ReviewWidget,
   SecondaryWidget,
   SecondaryWidgetProps,
-  ReviewWidget,
+  Section,
+  ShareWidget,
+  StatusBadge,
 } from 'features/Objectives';
 import { PreviousReviewFilesModal } from 'features/ReviewFiles/components';
 import { useToast, Variant } from 'features/Toast';
 import useDispatch from 'hooks/useDispatch';
 import { useSelector } from 'react-redux';
 import {
+  getObjectiveSchema,
   getObjectivesStatusSelector,
+  getTimelineMetaSelector,
+  getTimelineSelector,
+  isObjectivesNumberInStatus,
+  isObjectivesOverMinUnderMaxMarkup,
   ObjectiveActions,
   objectivesMetaSelector,
-  isObjectivesOverMinUnderMaxMarkup,
-  SchemaActions,
-  isObjectivesNumberInStatus,
   objectivesSelector,
+  SchemaActions,
+  TimelineActions,
 } from '@pma/store';
-import { getObjectiveSchema } from '@pma/store/src/selectors/schema';
 
 const reviews = [
   {
@@ -56,16 +59,15 @@ const Objectives: FC = () => {
   const [previousReviewFilesModalShow, setPreviousReviewFilesModalShow] = useState(false);
   const [objectives, setObjectives] = useState([]);
 
-  const stateSchema = useSelector(getObjectiveSchema);
-  // @ts-ignore
   const {
     components = [],
     meta: { loaded: schemaLoaded = false },
-  } = stateSchema;
+    markup = { max: 0, min: 0 },
+  } = useSelector(getObjectiveSchema);
+  const { descriptions, startDates, statuses } = useSelector(getTimelineSelector) || {};
   const formElements = components.filter((component) => component.type != 'text');
 
   // @ts-ignore
-  const { markup = { max: 0, min: 0 } } = useSelector(getObjectiveSchema);
   const { loaded: objectivesLoaded } = useSelector(objectivesMetaSelector);
   const status = useSelector(getObjectivesStatusSelector);
   const { origin } = useSelector(objectivesSelector);
@@ -80,7 +82,7 @@ const Objectives: FC = () => {
 
   useEffect(() => {
     dispatch(SchemaActions.getSchema({ formId: 'colleague_objectives_form' }));
-    dispatch(ObjectiveActions.getObjectives({ performanceCycleUuid: '', colleagueUuid: 'colleagueUuid' }));
+    dispatch(ObjectiveActions.getObjectives({ performanceCycleUuid: '' }));
   }, []);
   useEffect(() => {
     if (objectivesLoaded && schemaLoaded) {
@@ -147,6 +149,12 @@ const Objectives: FC = () => {
     });
   };
 
+  const { loaded, error } = useSelector(getTimelineMetaSelector) || {};
+
+  useEffect(() => {
+    if (!loaded) dispatch(TimelineActions.getTimeline());
+  }, [loaded]);
+
   return (
     <div className={css({ margin: '8px' })}>
       <Header title='Objectives' />
@@ -158,10 +166,10 @@ const Objectives: FC = () => {
       <div className={css(headWrapperStyles)}>
         <div className={css(timelineWrapperStyles)} onClick={handleClick}>
           <StepIndicator
-            currentStatus={'pending'}
-            currentStep={0}
-            titles={['Set objectives', 'Mid-year review', 'End year review']}
-            descriptions={['April 2021', 'September 2022', 'March 2022']}
+            mainTitle={t('performance_timeline_title', 'My Performance Timeline')}
+            titles={descriptions}
+            descriptions={startDates}
+            statuses={statuses}
           />
         </div>
         <ShareWidget

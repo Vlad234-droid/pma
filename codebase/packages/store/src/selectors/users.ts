@@ -1,12 +1,11 @@
 //@ts-ignore
-import { createSelector } from 'reselect';
-//@ts-ignore
+import { createSelector } from 'reselect'; //@ts-ignore
 import { RootState } from 'typesafe-actions';
 
 export const usersSelector = (state: RootState) => state.users;
 
-function getFullName(info) {
-  const { firstName, middleName, lastName } = info?.profile || {};
+function getFullName(profile) {
+  const { firstName, middleName, lastName } = profile || {};
   let fullName = '';
   fullName = firstName ? firstName : '';
   fullName = middleName ? `${fullName} ${middleName}` : fullName;
@@ -16,10 +15,12 @@ function getFullName(info) {
 export const currentUserSelector = createSelector(usersSelector, ({ current }) => {
   // @ts-ignore
   const info = current?.info?.data?.colleague;
-  const fullName = getFullName(info);
+  const fullName = getFullName(info?.profile);
   //@ts-ignore
   const workRelationship = info?.workRelationships?.[0];
   const job = workRelationship?.job?.name;
+  const manager = getFullName(workRelationship?.manager?.profile);
+  workRelationship?.job?.name;
   const department = workRelationship?.department?.name;
   const { businessType } = workRelationship?.department || {};
   const { managerUUID, employmentType } = workRelationship || {};
@@ -28,7 +29,7 @@ export const currentUserSelector = createSelector(usersSelector, ({ current }) =
   // @ts-ignore
   const { hireDate } = info?.serviceDates || {};
   // @ts-ignore
-  const { countryCode } = info?.contact?.addresses || {};
+  const { countryCode } = info || {};
 
   // @ts-ignore
   return {
@@ -44,6 +45,7 @@ export const currentUserSelector = createSelector(usersSelector, ({ current }) =
       email,
       hireDate,
       countryCode,
+      manager,
     },
   };
 });

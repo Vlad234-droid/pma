@@ -3,6 +3,7 @@ import { Trans, useTranslation } from 'components/Translation';
 import { Rule, Styles, useStyle } from '@dex-ddl/core';
 import { TileWrapper } from 'components/Tile';
 import { Avatar } from 'components/Avatar';
+import { AuthConsumer } from '../../../../contexts/authContext';
 
 export type DashboardProfileProps = {};
 
@@ -82,25 +83,33 @@ const DashboardProfile: FC<Props> = () => {
   const { css } = useStyle();
   const { t } = useTranslation();
   return (
-    <TileWrapper>
-      <div className={css(wrapperStyle)}>
-        <AvatarName user={{ fullName: 'Jane Jefferies', job: 'Bakery' }} />
-        <div className={css(bodyStyle)}>
-          <div className={css(bodyBlockStyle)}>
-            <span className={css(titleStyle)}>
-              <Trans i18nKey='line_manager'>Line manager</Trans>
-            </span>
-            <span className={css(descriptionStyle)}>Justin Thomas</span>
-          </div>
-          <div className={css(bodyBlockStyle)}>
-            <span className={css(titleStyle)}>
-              <Trans i18nKey='function'>Function</Trans>
-            </span>
-            <span className={css(descriptionStyle)}>Store</span>
-          </div>
-        </div>
-      </div>
-    </TileWrapper>
+    <AuthConsumer>
+      {({ user }) => {
+        // @ts-ignore
+        const { fullName, job, department, manager } = user;
+        return (
+          <TileWrapper>
+            <div className={css(wrapperStyle)}>
+              <AvatarName user={{ fullName, job }} />
+              <div className={css(bodyStyle)}>
+                <div className={css(bodyBlockStyle)}>
+                  <span className={css(titleStyle)}>
+                    <Trans i18nKey='line_manager'>Line manager</Trans>
+                  </span>
+                  <span className={css(descriptionStyle)}>{manager}</span>
+                </div>
+                <div className={css(bodyBlockStyle)}>
+                  <span className={css(titleStyle)}>
+                    <Trans i18nKey='function'>Function</Trans>
+                  </span>
+                  <span className={css(descriptionStyle)}>{department}</span>
+                </div>
+              </div>
+            </div>
+          </TileWrapper>
+        );
+      }}
+    </AuthConsumer>
   );
 };
 

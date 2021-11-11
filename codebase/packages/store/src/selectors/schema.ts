@@ -11,11 +11,12 @@ export const getObjectiveSchema = createSelector(schemaSelector, (schema: any) =
   const {
     cycle: { reviews = [] },
   } = schema;
+  const review = reviews.find((review) => review.code === 'Objectives');
 
   const reviewMarkup = {
     ...schema,
-    ...JSON.parse(reviews[0].form.json),
-    markup: { min: reviews[0].properties.pm_review_min, max: reviews[0].properties.pm_review_max },
+    ...JSON.parse(review.form.json),
+    markup: { min: Number(review.properties.pm_review_max), max: Number(review.properties.pm_review_max) },
   };
   return reviewMarkup;
 });

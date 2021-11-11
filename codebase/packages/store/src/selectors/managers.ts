@@ -5,10 +5,6 @@ import { Status } from '@pma/client/src/config/enum';
 
 export const managersSelector = (state: RootState) => state.managers || {};
 
-/*const colleagueUuid = employee.uuid;
-const fullName = `${employee.firstName} ${employee.lastName}`;
-const jobBusinessType = `${employee.jobName}, ${employee.businessType}`;*/
-
 // @ts-ignore
 export const getAllEmployees = createSelector(managersSelector, ({ data }) => {
   return data;
@@ -17,14 +13,18 @@ export const getAllEmployees = createSelector(managersSelector, ({ data }) => {
 // @ts-ignore
 export const getPendingEmployees = createSelector(managersSelector, ({ data }) => {
   const employeeWithPendingApprovals = data?.filter((employee) =>
-    employee.reviews.some((review) => review.status === Status.WAITING_FOR_APPROVAL),
+    employee.timeline.some((review) => review.status === Status.WAITING_FOR_APPROVAL),
   );
-  const employeeWithDraftApprovals = data?.filter((employee) =>
-    employee.reviews.some((review) => review.status === Status.DRAFT),
+  const employeePendingApprovals = data?.filter((employee) =>
+    employee.timeline.some((review) => review.status === Status.DRAFT || review.status === Status.DECLINED),
+  );
+  const employeeWithCompletedApprovals = data?.filter((employee) =>
+    employee.timeline.some((review) => review.status === Status.APPROVED),
   );
   return {
     employeeWithPendingApprovals,
-    employeeWithDraftApprovals,
+    employeePendingApprovals,
+    employeeWithCompletedApprovals,
   };
 });
 

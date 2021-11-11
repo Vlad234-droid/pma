@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { Button, Colors, colors, fontWeight, Rule, useStyle } from '@dex-ddl/core';
 import { TileWrapper } from 'components/Tile';
 import { Graphics, Icon } from 'components/Icon';
@@ -7,8 +7,19 @@ import { Accordion, BaseAccordion, ExpandButton, Panel, Section } from 'componen
 import { Status } from 'config/enum';
 import { Trans } from 'components/Translation';
 import { Notification } from 'components/Notification';
-import { ObjectiveActions } from '@pma/store';
-import useDispatch from '../../../../hooks/useDispatch';
+import useDispatch from 'hooks/useDispatch';
+import ConfirmDeclineModal from './Modal/ConfirmDeclineModal';
+import { useSelector } from 'react-redux';
+
+import { Tile as ObjectiveTile } from 'features/Objectives';
+
+import {
+  getObjectiveSchema,
+  ObjectiveActions,
+  objectivesMetaSelector,
+  objectivesSelector,
+  SchemaActions,
+} from '@pma/store';
 
 type ObjectiveComponentProps = {
   objective_id: string;
@@ -25,135 +36,6 @@ type ObjectiveComponentProps = {
     field_options?: any;
   }[];
 }[];
-const objectives: ObjectiveComponentProps = [
-  {
-    objective_id: '1',
-    objective_main_title: 'Objective 1',
-    objective_title: 'Provide a positive customer experience',
-    objective_description: 'I want our customers to be satisfied and always return to us',
-    objective_fields: [
-      {
-        field_id: '1',
-        field_type: 'select',
-        field_title: 'Organization objective',
-        field_description: undefined,
-        field_placeholder: 'Select organization objective',
-        field_value: 'I exceeded this objective',
-        field_options: [
-          { value: 'id_1', label: 'I met this objective' },
-          { value: 'id_2', label: 'I exceeded this objective' },
-          { value: 'id_3', label: 'I did not meet this objective' },
-        ],
-      },
-      {
-        field_id: '2',
-        field_type: 'textarea',
-        field_title: 'How',
-        field_description: 'Please fill in how you met this objective (e.g. Values, Behaviours, etc.)',
-        field_placeholder: 'Don’t worry, only your approcal manager will see this',
-        field_value: 'Don’t worry, only your approcal manager will see this',
-      },
-      {
-        field_id: '3',
-        field_type: 'textarea',
-        field_title: 'What',
-        field_description: 'Please fill in what did you achieve this objective',
-        field_placeholder: 'Don’t worry, only your approcal manager will see this',
-        field_value: 'Don’t worry, only your approcal manager will see this',
-      },
-    ],
-  },
-  {
-    objective_id: '2',
-    objective_main_title: 'Objective 2',
-    objective_title: 'Provide a positive customer experience',
-    objective_description: 'I want our customers to be satisfied and always return to us',
-    objective_fields: [
-      {
-        field_id: '4',
-        field_type: 'select',
-        field_title: 'Organization objective',
-        field_description: undefined,
-        field_placeholder: 'Select organization objective',
-        field_value: 'I met this objective',
-        field_options: [
-          { value: 'id_1', label: 'I met this objective' },
-          { value: 'id_2', label: 'I exceeded this objective' },
-          { value: 'id_3', label: 'I did not meet this objective' },
-        ],
-      },
-      {
-        field_id: '5',
-        field_type: 'textarea',
-        field_title: 'How',
-        field_description: 'Please fill in how you met this objective (e.g. Values, Behaviours, etc.)',
-        field_placeholder: 'Don’t worry, only your approcal manager will see this',
-        field_value: 'Don’t worry, only your approcal manager will see this',
-      },
-      {
-        field_id: '6',
-        field_type: 'textarea',
-        field_title: 'What',
-        field_description: 'Please fill in what did you achieve this objective',
-        field_placeholder: 'Don’t worry, only your approcal manager will see this',
-        field_value: 'Don’t worry, only your approcal manager will see this',
-      },
-    ],
-  },
-  {
-    objective_id: '3',
-    objective_main_title: 'Objective 3',
-    objective_title: 'Provide a positive customer experience',
-    objective_description: 'I want our customers to be satisfied and always return to us',
-    objective_fields: [
-      {
-        field_id: '7',
-        field_type: 'select',
-        field_title: 'Organization objective',
-        field_description: undefined,
-        field_placeholder: 'Select organization objective',
-        field_value: 'I met this objective',
-        field_options: [
-          { value: 'id_1', label: 'I met this objective' },
-          { value: 'id_2', label: 'I exceeded this objective' },
-          { value: 'id_3', label: 'I did not meet this objective' },
-        ],
-      },
-      {
-        field_id: '8',
-        field_type: 'textarea',
-        field_title: 'How',
-        field_description: 'Please fill in how you met this objective (e.g. Values, Behaviours, etc.)',
-        field_placeholder: 'Don’t worry, only your approcal manager will see this',
-        field_value: 'Don’t worry, only your approcal manager will see this',
-      },
-      {
-        field_id: '9',
-        field_type: 'textarea',
-        field_title: 'What',
-        field_description: 'Please fill in what did you achieve this objective',
-        field_placeholder: 'Don’t worry, only your approcal manager will see this',
-        field_value: 'Don’t worry, only your approcal manager will see this',
-      },
-    ],
-  },
-  {
-    objective_id: '4',
-    objective_main_title: 'Additional development',
-    objective_title: 'Add anything outside of your objectives',
-    objective_description: 'Have you taken additional responsibility?',
-    objective_fields: [
-      {
-        field_id: '10',
-        field_type: 'textarea',
-        field_title: 'Comment here',
-        field_description: undefined,
-        field_placeholder: 'Don’t worry, only your approcal manager will see this',
-        field_value: 'Don’t worry, only your approcal manager will see this',
-      },
-    ],
-  },
-];
 
 export type WidgetTeamMateObjectivesProps = {
   id: string;
@@ -163,6 +45,44 @@ export type WidgetTeamMateObjectivesProps = {
 
 export const WidgetTeamMateObjectives: FC<WidgetTeamMateObjectivesProps> = ({ id, status, colleague }) => {
   const { css, theme } = useStyle();
+  const [isOpen, setIsOpen] = useState(false);
+  const [objectives, setObjectives] = useState([]);
+
+  const {
+    components = [],
+    meta: { loaded: schemaLoaded = false },
+    markup = { max: 0, min: 0 },
+  } = useSelector(getObjectiveSchema);
+  const formElements = components.filter((component) => component.type != 'text');
+  const { loaded: objectivesLoaded } = useSelector(objectivesMetaSelector);
+  const { origin } = useSelector(objectivesSelector);
+
+  useEffect(() => {
+    if (objectivesLoaded && schemaLoaded) {
+      const mappedObjectives = origin?.map((objectiveItem) => {
+        const status = objectiveItem.status;
+        const objective = objectiveItem?.properties?.mapJson;
+        const subTitle = objective['title'] || '';
+        const description = objective['description'] || '';
+        const explanations = formElements
+          .filter(({ key }) => !['title', 'description'].includes(key))
+          .map((component) => {
+            const { key, label } = component;
+
+            return { title: label, steps: objective[key] ? [objective[key]] : [] };
+          });
+        return {
+          id: Number(objectiveItem.number),
+          title: `Objective ${objectiveItem.number}`,
+          subTitle: subTitle,
+          description: description,
+          explanations,
+          status,
+        };
+      });
+      setObjectives(mappedObjectives);
+    }
+  }, [objectivesLoaded, schemaLoaded]);
 
   const getIcon = (status): [Graphics, Colors] => {
     if (!status) {
@@ -183,6 +103,30 @@ export const WidgetTeamMateObjectives: FC<WidgetTeamMateObjectivesProps> = ({ id
   const [graphics, color] = getIcon(status);
 
   const dispatch = useDispatch();
+
+  const fetchData = () => {
+    dispatch(SchemaActions.getSchema({ formId: 'colleague_objectives_form' }));
+    dispatch(ObjectiveActions.getObjectives({ performanceCycleUuid: '', colleagueUuid: colleague.uuid }));
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const updateReviews = (method, reason = null) => {
+    dispatch(
+      method({
+        ...(reason ? { reason } : {}),
+        colleagueUuid: colleague.uuid,
+        reviews: colleague.reviews.filter(({ status }) => status === Status.WAITING_FOR_APPROVAL),
+      }),
+    );
+  };
+  const approveColleague = () => updateReviews(ObjectiveActions.approveObjective);
+  const declineColleague = (reason) => {
+    updateReviews(ObjectiveActions.declineObjective, reason);
+    setIsOpen(false);
+  };
 
   return (
     <>
@@ -208,7 +152,7 @@ export const WidgetTeamMateObjectives: FC<WidgetTeamMateObjectivesProps> = ({ id
                     </div>
                     <div className={css({ marginLeft: 'auto', display: 'flex', alignItems: 'center' })}>
                       <div className={css({ paddingLeft: '12px' })}>
-                        <ExpandButton />
+                        <ExpandButton onClick={(expanded) => expanded && fetchData()} />
                       </div>
                     </div>
                   </div>
@@ -223,57 +167,8 @@ export const WidgetTeamMateObjectives: FC<WidgetTeamMateObjectivesProps> = ({ id
                           marginBottom: '20px',
                         }}
                       />
-                      {objectives.map((objective) => (
-                        <TileWrapper key={objective.objective_id} customStyle={{ marginBottom: '10px' }}>
-                          <div style={{ padding: '24px' }}>
-                            <div
-                              className={css({
-                                fontSize: '18px',
-                                lineHeight: '22px',
-                                color: colors.tescoBlue,
-                                fontWeight: fontWeight.bold,
-                              })}
-                            >
-                              {objective.objective_main_title}
-                            </div>
-                            <div
-                              className={css({
-                                fontSize: '16px',
-                                lineHeight: '20px',
-                                fontWeight: fontWeight.bold,
-                                paddingTop: theme.spacing.s5,
-                              })}
-                            >
-                              {objective.objective_title}
-                            </div>
-                            <div
-                              className={css({
-                                fontSize: '16px',
-                                lineHeight: '20px',
-                                paddingBottom: theme.spacing.s5,
-                              })}
-                            >
-                              {objective.objective_description}
-                            </div>
-                            {objective.objective_fields &&
-                              objective.objective_fields.map((field) => {
-                                return (
-                                  <>
-                                    <div
-                                      className={css({
-                                        fontSize: '14px',
-                                        lineHeight: '18px',
-                                        fontWeight: fontWeight.bold,
-                                      })}
-                                    >
-                                      {field.field_title}
-                                    </div>
-                                    <div className={css({ padding: '10px 0' })}>{field.field_value}</div>
-                                  </>
-                                );
-                              })}
-                          </div>
-                        </TileWrapper>
+                      {objectives.map(({ id, title, subTitle, description, explanations }) => (
+                        <ObjectiveTile key={id} {...{ id, title, subTitle, description, explanations }} />
                       ))}
                     </div>
                     <div
@@ -309,7 +204,7 @@ export const WidgetTeamMateObjectives: FC<WidgetTeamMateObjectivesProps> = ({ id
                                 margin: '0px 4px',
                               },
                             ]}
-                            onPress={console.log}
+                            onPress={() => setIsOpen(true)}
                           >
                             <Icon graphic='decline' iconStyles={{ paddingRight: '8px' }} />
                             <Trans i18nKey='decline'>Decline</Trans>
@@ -326,14 +221,20 @@ export const WidgetTeamMateObjectives: FC<WidgetTeamMateObjectivesProps> = ({ id
                                 margin: '0px 4px 1px 4px',
                               },
                             ]}
-                            onPress={() => {
-                              return dispatch(ObjectiveActions.approveObjective(1));
-                            }}
+                            onPress={approveColleague}
                           >
                             <Icon graphic='check' invertColors={true} iconStyles={{ paddingRight: '8px' }} />
                             <Trans i18nKey='approve'>Approve</Trans>
                           </Button>
                         </div>
+                        {isOpen && (
+                          <ConfirmDeclineModal
+                            title={'Please provide decline reason'}
+                            onSave={declineColleague}
+                            onCancel={() => setIsOpen(false)}
+                            onOverlayClick={() => setIsOpen(false)}
+                          />
+                        )}
                       </div>
                     </div>
                   </Panel>

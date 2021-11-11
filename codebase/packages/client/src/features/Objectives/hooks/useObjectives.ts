@@ -1,9 +1,9 @@
-import { useEffect, useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getObjectivesSelector, ObjectiveActions, objectivesSelector } from '@pma/store';
 
-function useObjectives(params = { performanceCycleUuid: '', colleagueUuid: 'colleagueUuid' }) {
-  const { performanceCycleUuid, colleagueUuid } = params;
+function useObjectives(params = { performanceCycleUuid: '' }) {
+  const { performanceCycleUuid } = params;
   const dispatch = useDispatch();
 
   const { origin } = useSelector(objectivesSelector);
@@ -11,9 +11,9 @@ function useObjectives(params = { performanceCycleUuid: '', colleagueUuid: 'coll
 
   const getObjectives = useCallback(() => {
     if (!origin?.length) {
-      dispatch(ObjectiveActions.getObjectives({ performanceCycleUuid, colleagueUuid }));
+      dispatch(ObjectiveActions.getObjectives({ performanceCycleUuid }));
     }
-  }, [performanceCycleUuid, colleagueUuid, origin]);
+  }, [performanceCycleUuid, origin]);
 
   useEffect(() => {
     getObjectives();

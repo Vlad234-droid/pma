@@ -57,7 +57,7 @@ const bodyStyle = {
 const ProfessionalInformation: FC<Props> = ({ user }) => {
   const { css } = useStyle();
   const { t } = useTranslation();
-  const { hireDate, job, department, businessType, managerUUID, employmentType, countryCode } = user;
+  const { hireDate, job, department, businessType, manager, employmentType, countryCode } = user;
   return (
     <BasicTile title={t('ProfessionalInformation', 'Professional information')} description={''}>
       <div className={css(wrapperStyle)}>
@@ -84,7 +84,7 @@ const ProfessionalInformation: FC<Props> = ({ user }) => {
             <span className={css(titleStyle)}>
               <Trans>Line Manager</Trans>
             </span>
-            <span className={css(descriptionStyle)}>{managerUUID}</span>
+            <span className={css(descriptionStyle)}>{manager}</span>
           </div>
           <div className={css(bodyBlockStyle)}>
             <span className={css(titleStyle)}>

@@ -1,5 +1,4 @@
-import React, { FC, useState } from 'react';
-import { useTranslation } from 'components/Translation';
+import React, { FC } from 'react';
 import { Styles, useStyle } from '@dex-ddl/core';
 import { Header } from 'components/Header';
 import { Contacts, PersonalInformation, ProfessionalInformation } from '../../features/Profile';
@@ -10,9 +9,7 @@ import { TileWrapper } from 'components/Tile';
 export const TEST_ID = 'objectives-pave';
 
 const Profile: FC = () => {
-  const { css, theme } = useStyle();
-  const { t } = useTranslation();
-  const [previousReviewFilesModalShow, setPreviousReviewFilesModalShow] = useState(false);
+  const { css } = useStyle();
 
   return (
     <div className={css({ margin: '8px' })}>

@@ -15,23 +15,26 @@ const StatusBadge: FC<StatusBadgeProps> = ({ status, styles }) => {
   const { t } = useTranslation();
 
   const isDraft = status === Status.DRAFT;
-  const isPending = status === Status.PENDING;
+  const isPending = status === Status.PENDING || status === Status.WAITING_FOR_APPROVAL;
   const isApproved = status === Status.APPROVED;
+  // todo do not forget find out what we use DECLINED or RETURNED
+  const isDeclined = status === Status.DECLINED || status === Status.RETURNED;
 
   const getContent = (): [Graphics, string, string] => {
     switch (true) {
-      case isDraft:
-        return ['roundPencil', t('draft', 'Draft'), colors.base];
       case isApproved:
         return ['roundTick', t('approved', 'Approved'), colors.green];
       case isPending:
-      default:
         return ['roundClock', t('pending', 'Pending'), colors.pending];
+      case isDeclined:
+        return ['roundAlert', t('decline', 'Decline'), colors.base];
+      case isDraft:
+      default:
+        return ['roundPencil', t('draft', 'Draft'), colors.base];
     }
   };
 
   const [graphic, label, color] = getContent();
-
   return (
     <div className={css(wrapperStyles, styles)}>
       <Icon graphic={graphic} invertColors iconStyles={iconStyles} />

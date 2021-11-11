@@ -1,7 +1,13 @@
 import React, { FC } from 'react';
 import { useStyle } from '@dex-ddl/core';
+import { Graphics, Icon } from '../Icon';
 
-export const StatusIcon: FC<{ icon: string; first?: boolean; last?: boolean }> = ({ icon, first, last }) => {
+export const StatusIcon: FC<{
+  first?: boolean;
+  last?: boolean;
+  color: string;
+  graphics: Graphics;
+}> = ({ first, last, color, graphics }) => {
   const { css } = useStyle();
   const translateFirst = first ? 'translateX(25%)' : '';
   const translateLast = last ? 'translateX(-25%)' : '';
@@ -15,7 +21,7 @@ export const StatusIcon: FC<{ icon: string; first?: boolean; last?: boolean }> =
         zIndex: 1,
       })}
     >
-      <img className={css({ maxWidth: 'inherit' })} src={icon} alt='StatusIcon' />
+      <Icon graphic={graphics} fill={color} />
     </div>
   );
 };

@@ -18,7 +18,7 @@ export type Employee = {
   lastName: string;
   jobName: string;
   businessType: string;
-  reviews: Review[];
+  timeline: Review[];
 };
 
 export type WidgetTeamMateProfileProps = {
@@ -27,22 +27,23 @@ export type WidgetTeamMateProfileProps = {
   employee: Employee;
 };
 
-export const WidgetTeamMateProfile: FC<WidgetTeamMateProfileProps> = ({id, status, employee}) => {
-  const {css} = useStyle();
-
-  const getIcon = (status): [Graphics, Colors] => {
-    const contents: { [key: string]: [Graphics, Colors] } = {
-      [Status.NOT_AVAILABLE]: ['calender', 'tescoBlue'],
-      [Status.AVAILABLE]: ['roundAlert', 'pending'],
-      [Status.OVERDUE]: ['roundAlert', 'error'],
-      [Status.DRAFT]: ['roundPencil', 'base'],
-      [Status.APPROVED]: ['roundTick', 'green'],
-      [Status.PENDING]: ['roundClock', 'pending'],
-      [Status.WAITING_FOR_APPROVAL]: ['roundClock', 'pending'],
-    };
-
-    return contents[status] || ['roundAlert', 'pending'];
+export const getIcon = (status): [Graphics, Colors] => {
+  const contents: { [key: string]: [Graphics, Colors] } = {
+    [Status.NOT_AVAILABLE]: ['calender', 'tescoBlue'],
+    [Status.AVAILABLE]: ['roundAlert', 'pending'],
+    [Status.OVERDUE]: ['roundAlert', 'error'],
+    [Status.DRAFT]: ['roundPencil', 'base'],
+    [Status.APPROVED]: ['roundTick', 'green'],
+    [Status.PENDING]: ['roundClock', 'pending'],
+    [Status.WAITING_FOR_APPROVAL]: ['roundClock', 'pending'],
+    [Status.DECLINED]: ['roundAlert', 'pending'],
   };
+
+  return contents[status] || ['roundCircle', 'pending'];
+};
+
+export const WidgetTeamMateProfile: FC<WidgetTeamMateProfileProps> = ({ id, status, employee }) => {
+  const { css } = useStyle();
 
   const [graphics, color] = getIcon(status);
 
@@ -61,37 +62,37 @@ export const WidgetTeamMateProfile: FC<WidgetTeamMateProfileProps> = ({id, statu
               <>
                 <Section defaultExpanded={false}>
                   <div className={css(wrapperStyle)}>
-                    <div className={css({display: 'flex', alignItems: 'center'})}>
-                      <Avatar size={40}/>
+                    <div className={css({ display: 'flex', alignItems: 'center' })}>
+                      <Avatar size={40} />
                     </div>
                     <div className={css(headerBlockStyle)}>
                       <span className={css(titleStyle)}>{`${employee.firstName} ${employee.lastName}`}</span>
                       <span className={css(descriptionStyle)}>{`${employee.jobName}, ${employee.businessType}`}</span>
                     </div>
-                    <div className={css({marginLeft: 'auto', display: 'flex', alignItems: 'center'})}>
-                      <div className={css({padding: '12px 12px'})}>
-                        <span className={css({fontSize: '16px', lineHeight: '20px', color: colors.tescoBlue})}>
+                    <div className={css({ marginLeft: 'auto', display: 'flex', alignItems: 'center' })}>
+                      <div className={css({ padding: '12px 12px' })}>
+                        <span className={css({ fontSize: '16px', lineHeight: '20px', color: colors.tescoBlue })}>
                           View profile
                         </span>
                       </div>
-                      <div className={css({padding: '0px 12px'})}>
-                        <Icon graphic={graphics} fill={color}/>
+                      <div className={css({ padding: '0px 12px' })}>
+                        <Icon graphic={graphics} fill={color} />
                       </div>
-                      <div className={css({paddingLeft: '12px'})}>
-                        <ExpandButton/>
+                      <div className={css({ paddingLeft: '12px' })}>
+                        <ExpandButton />
                       </div>
                     </div>
                   </div>
                   <Panel>
-                    <div className={css({padding: '24px 35px 24px 24px'})}>
-                      <div className={css({background: '#F6F6F6', padding: '24px', borderRadius: '10px'})}>
-                        <div className={css({justifyContent: 'flex-start'})}>
-                          {employee.reviews.map((review) => {
+                    <div className={css({ padding: '24px 35px 24px 24px' })}>
+                      <div className={css({ background: '#F6F6F6', padding: '24px', borderRadius: '10px' })}>
+                        <div className={css({ justifyContent: 'flex-start' })}>
+                          {employee.timeline.map((review) => {
                             const [graphics, color] = getIcon(review.status);
                             return (
                               <div key={review.uuid} className={css(reviewItem)}>
-                                <div className={css({paddingBottom: '6px'})}>{ObjectiveType[review.type]}</div>
-                                <Icon graphic={graphics} fill={color}/>
+                                <div className={css({ paddingBottom: '6px' })}>{ObjectiveType[review.type]}</div>
+                                <Icon graphic={graphics} fill={color} />
                               </div>
                             );
                           })}

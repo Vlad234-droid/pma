@@ -1,15 +1,16 @@
 import React, { FC, HTMLProps } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 
-import { Icon, Button, useStyle, useBreakpoints } from '@dex-ddl/core';
+import { Button, Icon, useBreakpoints, useStyle } from '@dex-ddl/core';
 
 import { Trans } from 'components/Translation';
 import { Icon as IconComponent } from 'components/Icon';
 import { StepIndicatorBasic } from 'components/StepIndicator/StepIndicator';
-import { Input, Textarea, Item, Select } from 'components/Form';
+import { Input, Item, Select, Textarea } from 'components/Form';
 import { GenericItemField } from 'components/GenericForm';
 
 import { ButtonWithConfirmation as SubmitButton } from '../Buttons';
+import { Status } from 'config/enum';
 
 export type ObjectiveModalProps = {
   useSingleStep?: boolean;
@@ -76,7 +77,11 @@ export const ObjectiveModal: FC<Props> = ({
         <form>
           {!useSingleStep && (
             <div className={css({ padding: `0 0 ${theme.spacing.s5}` })}>
-              <StepIndicatorBasic currentStatus={'draft'} currentStep={currentObjectiveNumber - 1} titles={titles} />
+              <StepIndicatorBasic
+                currentStatus={Status.DRAFT}
+                currentStep={currentObjectiveNumber - 1}
+                titles={titles}
+              />
             </div>
           )}
           <div className={css({ padding: `0 0 ${theme.spacing.s5}`, display: 'flex' })}>
