@@ -1,3 +1,4 @@
+import { Response, Request, NextFunction, Handler } from 'express';
 import {
   getOpenidMiddleware,
   identityTokenSwapPlugin,
@@ -6,6 +7,11 @@ import {
   Logger,
   LoggerEvent,
   OpenIdUserInfo,
+  getDataFromCookie,
+  AuthData,
+  PluginCookieConfig,
+  getIdentitySwapToken,
+  setDataToCookie,
 } from '@energon/onelogin';
 
 import { isPROD, defaultConfig, ProcessConfig } from '../config';
@@ -19,6 +25,49 @@ interface ErrorMessage {
 interface LogMessage {
   message: string;
 }
+
+type OidcTokenExtractorConfig = {
+  /**
+   * onelogin strategy: oidc or saml
+   */
+  strategy: 'oidc';
+  /**
+   * optional, cookie configuration object
+   * if not present, data won't be saved in the cookie
+   * if maxAge is not present, expiration claims will be used instead
+   */
+  cookieConfig?: PluginCookieConfig;
+};
+
+const configOidcTokenCookie = (isProduction = false) => ({
+  cookieName: 'oidc_token_cookie',
+  secret: 'oidc_token_cookie_secret',
+  httpOnly: true,
+  secure: isProduction,
+  signed: isProduction,
+  compressed: false,
+});
+
+const oidcTokenExtractorPlugin = (config: OidcTokenExtractorConfig) => {
+  const plugin = async (_: Request, res: Response, next: NextFunction) => {
+    const { strategy, cookieConfig } = config;
+
+    try {
+      const idToken = getIdentitySwapToken(res, strategy);
+      console.log(idToken);
+      setDataToCookie(res, { idToken }, cookieConfig!);
+    } catch (e: any) {
+      console.error(e);
+      console.log(e);
+      console.log(e.stack);
+      console.log(`Oidc token extractor error: ${e.message}`);
+    }
+
+    if (typeof next === 'function') next();
+  };
+
+  return plugin;
+};
 
 const OpenIdLogger: Logger = (event: LoggerEvent) => {
   switch (event.severity) {
@@ -185,8 +234,19 @@ export const openIdConfig = ({
           cookieShapeResolver: (userInfo) => enrichUserInfo(userInfo),
         },
       }),
+      oidcTokenExtractorPlugin({
+        strategy: 'oidc',
+        cookieConfig: {
+          ...configOidcTokenCookie(isProduction),
+        },
+      }),
     ],
   });
 
   return { openId };
+};
+
+export const getOidcData = (isProduction: boolean, req: Request) => {
+  const { secret, cookieName, compressed } = configOidcTokenCookie(isProduction);
+  return getDataFromCookie<AuthData>(req, { secret, cookieName, compressed });
 };

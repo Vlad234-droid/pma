@@ -1,4 +1,4 @@
-import express, { Response, Router } from 'express';
+import express, { Response, Request, Router } from 'express';
 import path from 'path';
 import { createProxyMiddleware, Options } from 'http-proxy-middleware';
 import cors from 'cors';
@@ -8,7 +8,7 @@ import { withReturnTo, getIdentityData } from '@energon/onelogin';
 import { getPackageDistFolder } from './utils/package';
 import { exit } from 'process';
 // config
-import { getEnv, isDEV, getConfig, prettify } from './config';
+import { getEnv, isDEV, isPROD, getConfig, prettify } from './config';
 // middlewares
 import {
   authMiddleware,
@@ -16,8 +16,8 @@ import {
   standaloneIndexAssetHandler,
   errorHandler,
   openIdConfig,
+  getOidcData,
 } from './middlewares';
-import schema from './schema.json';
 
 getEnv().validate();
 const config = getConfig();
@@ -96,11 +96,18 @@ if (!PROXY_API_SERVER_URL) {
         }
       }
 
-      proxyMiddlewareOptions.onProxyReq = function (proxyReq, _, res) {
+      proxyMiddlewareOptions.onProxyReq = function (proxyReq, req, res) {
         const identityData = getIdentityData(res as Response);
+        const oidcData = getOidcData(isPROD(config.buildEnvironment()), req as Request);
 
-        console.log('Authorization: bearer-jwt-identity', identityData?.access_token);
+        console.log('[HPM] Clear all cookies');
+        proxyReq.setHeader('Cookie', '');
+
+        console.log('[HPM] Authorization: bearer-jwt-identity', identityData?.access_token);
         proxyReq.setHeader('Authorization', `Bearer ${identityData?.access_token}`);
+
+        console.log('[HPM] Authorization-App: additional-auth-jwt', oidcData?.idToken);
+        proxyReq.setHeader('Authorization-App', oidcData?.idToken || '');
       };
     }
 
