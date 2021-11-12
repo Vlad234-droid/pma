@@ -1,6 +1,8 @@
 import axios, { AxiosRequestConfig } from 'axios';
 import qs from 'qs';
 
+import { redirectToAuth } from '../utils/redirectToAuth';
+
 export type Config = {
   [key: string]: string | number | object | undefined;
 };
@@ -11,6 +13,12 @@ const API_VERSION = process.env.REACT_APP_API_VERSION;
 let baseURL = `${API_URL}/`;
 if (API_VERSION) {
   baseURL += `${API_VERSION}/`;
+}
+
+enum ResponseStatus {
+  UNAUTHORIZED = 401,
+  FORBIDDEN = 403,
+  SERVER_ERROR = 500,
 }
 
 const httpClient = axios.create({ baseURL });
@@ -31,11 +39,12 @@ httpClient.interceptors.response.use(
     const data = response.data;
     const status = response.status;
 
-    return Promise.reject({
-      data,
-      message,
-      status,
-    });
+    if (ResponseStatus.UNAUTHORIZED === status) {
+      console.log(`Got 401 Unauthorized response from API. Enforcing authentication.`);
+      redirectToAuth(window.location.pathname);
+    } else {
+      return Promise.reject({ data, message, status });
+    }
   },
 );
 
