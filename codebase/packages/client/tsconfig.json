@@ -15,5 +15,5 @@
     "noImplicitAny": false
   },
   "include": ["./src/**/*"],
-  "exclude": ["src/**/*.test*"]
+  "exclude": ["node_modules", "src/**/*.test*", "./src/setupProxy.js"]
 }

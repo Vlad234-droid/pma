@@ -1,14 +1,18 @@
 import httpClient from '../config/client';
 
-const domain = '/colleagues';
+const usersDomain = '/users';
 const colleagueUuid = localStorage.getItem('colleagueUuid');
 
-export const getCurrentUser = (params?: any) => {
-  return httpClient.get(`${domain}/${colleagueUuid}`, { params: { ...params } });
+const colleaguesDomain = '/colleagues';
+
+export const getColleagueByUuid = (params?: any) => {
+  return httpClient.get(`${colleaguesDomain}/${colleagueUuid}`, { params: { ...params } });
 };
 
 export const updateUserNotification = (params: any) => {
-  return httpClient.put(`${domain}/${colleagueUuid}/attributes`, params);
+  return httpClient.put(`${colleaguesDomain}/${colleagueUuid}/attributes`, params);
 };
 
-export const getUserByIamId = (iamId: string) => httpClient.get(`${domain}/${iamId}`);
+export const getCurrentUser = (params?: any) => httpClient.get(`${usersDomain}/me`, { params: { ...params } });
+
+export const getUserByIamId = (iamId: string) => httpClient.get(`${usersDomain}/iam-ids/${iamId}`);
