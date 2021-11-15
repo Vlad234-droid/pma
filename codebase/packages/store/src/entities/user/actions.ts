@@ -21,10 +21,18 @@ export const getCurrentUser = createAsyncAction(
   'user/current/CANCEL',
 )<undefined, any, Error, undefined>();
 
+export const updateUserNotification = createAsyncAction(
+  'user/notification/REQUEST',
+  'user/notification/SUCCESS',
+  'user/notification/FAILURE',
+  'user/notification/CANCEL',
+)<any, any, Error, undefined>();
+
 export const Actions = {
   login: loginAsync.request,
   logout: logoutAsync.request,
   getCurrentUser: getCurrentUser.request,
+  updateUserNotification: updateUserNotification.request,
 };
 
 export type Action = ActionType<typeof loginAsync>;

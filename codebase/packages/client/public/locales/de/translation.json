@@ -61,5 +61,6 @@
   "objectives": "Ziele",
   "download": "Herunterladen",
   "do_you_know": "Do you know?",
-  "that_you_can_submit": "That you can submit new objectives at anytime during the performance cycle?"
+  "that_you_can_submit": "That you can submit new objectives at anytime during the performance cycle?",
+  "notification.receive_tips": "Receive tips"
 }

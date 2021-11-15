@@ -3,20 +3,28 @@ import { Trans, useTranslation } from 'components/Translation';
 import { Rule, Styles, useStyle } from '@dex-ddl/core';
 import { TileWrapper } from 'components/Tile';
 import { Checkbox } from 'components/Form';
+import { UerActions } from '@pma/store';
+import useDispatch from 'hooks/useDispatch';
+import { useAuthContainer } from 'contexts/authContext';
 
 export type Props = {};
-
-const settings = [
-  { id: 'objectives-are-cascaded-by-line-manager', title: 'When objectives are cascaded by Line manager' },
-  { id: 'line-manager-comments-on-objectives', title: 'When Line manager comments on objectives' },
-  { id: 'objectives-are-approved-by-line-manager', title: 'When objectives are approved by Line manager' },
-  { id: 'objectives-are-returned-by-line-manager', title: 'When objectives are returned by Line manager' },
-  { id: 'tips-are-pushed', title: 'When tips are pushed' },
-];
 
 export const EmailNotifications: FC<Props> = () => {
   const { css } = useStyle();
   const { t } = useTranslation();
+  const dispatch = useDispatch();
+  const { user } = useAuthContainer();
+  // @ts-ignore
+  const profileAttributes = user?.data?.profileAttributes || [];
+  const settings = profileAttributes
+    .filter(({ name }) => name.includes('.') && name.split('.')[0] === 'notification')
+    .map((attr) => ({
+      ...attr,
+      value: attr.type === 'BOOLEAN' ? attr.value === 'true' : attr.value,
+    }));
+
+  const updateSettingAction = (setting) => dispatch(UerActions.updateUserNotification(setting));
+
   return (
     <TileWrapper title={t('Email notifications', 'Email notifications')}>
       <div className={css({ display: 'flex', flexDirection: 'column', gap: '24px', padding: '24px' })}>
@@ -24,11 +32,23 @@ export const EmailNotifications: FC<Props> = () => {
           <Trans>Email notifications</Trans>
         </span>
         <div className={css(descriptionStyle)}>You will receive emails about marked actions</div>
-        {settings.map(({ id, title }) => (
-          <div key={id} className={css({ display: 'flex' })}>
-            <Checkbox id={id} onChange={() => console.log('settings')} />
-            <label className={css({ marginLeft: '8px' })} htmlFor={id}>
-              {title}
+        {settings.map(({ name, value, type }) => (
+          <div key={name} className={css({ display: 'flex' })}>
+            <Checkbox
+              id={name}
+              onChange={(e) =>
+                updateSettingAction([
+                  {
+                    name,
+                    type,
+                    value: e.target.checked,
+                  },
+                ])
+              }
+              checked={value}
+            />
+            <label className={css({ marginLeft: '8px' })} htmlFor={name}>
+              <Trans i18nKey={name} />
             </label>
           </div>
         ))}

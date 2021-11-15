@@ -4,7 +4,7 @@ import { combineEpics } from 'redux-observable';
 import { from, of } from 'rxjs';
 import { catchError, filter, map, switchMap, takeUntil } from 'rxjs/operators';
 
-import { getCurrentUser } from './actions';
+import { getCurrentUser, updateUserNotification } from './actions';
 
 export const getCurrentUserEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
@@ -21,4 +21,19 @@ export const getCurrentUserEpic: Epic = (action$, _, { api }) =>
     ),
   );
 
-export default combineEpics(getCurrentUserEpic);
+export const updateUserNotificationEpic: Epic = (action$, state$, { api }) =>
+  action$.pipe(
+    filter(isActionOf(updateUserNotification.request)),
+    switchMap(({ payload }) =>
+      from(api.updateUserNotification(payload)).pipe(
+        map(getCurrentUser.request),
+        catchError((e) => {
+          const errors = e?.data?.errors;
+          return of(updateUserNotification.failure(errors?.[0]));
+        }),
+        takeUntil(action$.pipe(filter(isActionOf(updateUserNotification.cancel)))),
+      ),
+    ),
+  );
+
+export default combineEpics(getCurrentUserEpic, updateUserNotificationEpic);
