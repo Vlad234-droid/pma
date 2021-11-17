@@ -149,7 +149,7 @@ const Objectives: FC = () => {
     });
   };
 
-  const { loaded, error } = useSelector(getTimelineMetaSelector) || {};
+  const { loaded } = useSelector(getTimelineMetaSelector) || {};
 
   useEffect(() => {
     if (!loaded) dispatch(TimelineActions.getTimeline());

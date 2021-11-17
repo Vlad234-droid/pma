@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { useStyle, colors } from '@dex-ddl/core';
 
 import { CheckboxProps } from '../types';
-const Checkbox: FC<CheckboxProps> = ({ id, type, name, onChange, checked, indeterminate = false }) => {
+const Checkbox: FC<CheckboxProps> = ({ id, name, onChange, checked, indeterminate = false }) => {
   const { css } = useStyle();
   return (
     <span>

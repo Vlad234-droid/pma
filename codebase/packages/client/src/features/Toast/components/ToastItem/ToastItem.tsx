@@ -12,7 +12,7 @@ type Props = ToastPayload;
 
 export const TEST_ID = 'toast-item-test-id';
 
-const ToastItem: FC<Props> = ({ id, variant, title, description, timeout }) => {
+const ToastItem: FC<Props> = ({ id, title, description, timeout }) => {
   const { css } = useStyle();
   const dispatch = useDispatch();
 

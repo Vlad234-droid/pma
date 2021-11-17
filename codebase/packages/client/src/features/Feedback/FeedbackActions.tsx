@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react';
 import { Trans } from 'components/Translation';
-import { Radio, Item, Select } from 'components/Form';
-import { Icon as IconCore, useStyle, Rule, useBreakpoints, Modal } from '@dex-ddl/core';
+import { Item, Select } from 'components/Form';
+import { Icon as IconCore, Modal, Rule, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { Chat } from '../../components/Icon/graphics/chat';
 import { NotiBell } from '../../components/Icon/graphics/notiBell';
 import { People } from '../../components/Icon/graphics/people';
@@ -18,23 +18,13 @@ import { Icon } from '../../components/Icon';
 const FEEDBACK_ACTIONS = 'feedback_actions';
 
 const FeedbackActions: FC = () => {
-  const { css, theme } = useStyle();
+  const { css } = useStyle();
   const [info360Modal, setInfo360Modal] = useState<boolean>(false);
 
   const methods = useForm({
     mode: 'onChange',
     resolver: yupResolver<Yup.AnyObjectSchema>(createObjectivesSchema),
   });
-  const {
-    handleSubmit,
-    formState: { errors, isValid },
-    reset,
-  } = methods;
-
-  const onSubmit = async (data) => {
-    console.log('data', data);
-    reset();
-  };
 
   const cards: ConfigProps[] = [
     {

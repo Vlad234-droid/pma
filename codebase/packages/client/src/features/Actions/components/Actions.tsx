@@ -45,7 +45,7 @@ export const Actions = () => {
   const mobileScreen = isBreakpoint.medium || isBreakpoint.small || isBreakpoint.xSmall;
 
   const { employeeWithPendingApprovals, employeeWithCompletedApprovals } = useSelector(getPendingEmployees) || {};
-  const { loaded, error } = useSelector(getManagersMetaSelector) || {};
+  const { loaded } = useSelector(getManagersMetaSelector) || {};
   const dispatch = useDispatch();
   useEffect(() => {
     if (!loaded) dispatch(ManagersActions.getManagers());

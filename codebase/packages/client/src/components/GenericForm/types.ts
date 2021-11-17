@@ -11,6 +11,7 @@ type FormField<T> = {
   Element: FC<any>;
   Wrapper?: FC<any>;
   name: T;
+  value?: any;
   labels?: Array<string>;
   options?: Array<Record<string, number | string | boolean>>;
 } & TestProps &

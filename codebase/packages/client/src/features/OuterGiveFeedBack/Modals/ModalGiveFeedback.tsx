@@ -1,12 +1,11 @@
 import React, { FC, useState } from 'react';
-import { useStyle, useBreakpoints } from '@dex-ddl/core';
-import { PeopleTypes, ModalGiveFeedbackProps } from '../type';
-import { SearchPart, SuccessModal, SubmitPart, InfoModal } from './index';
+import { useBreakpoints, useStyle } from '@dex-ddl/core';
+import { ModalGiveFeedbackProps, PeopleTypes } from '../type';
+import { InfoModal, SearchPart, SubmitPart, SuccessModal } from './index';
 import { IconButton } from 'components/IconButton';
 //import { SubmitButton } from '../../../features/Objectives/components/Modal/index';
 
 const ModalGiveFeedback: FC<ModalGiveFeedbackProps> = ({
-  isOpenMainModal,
   setIsOpen,
   setSelectedPerson,
   selectedPerson,
@@ -22,7 +21,7 @@ const ModalGiveFeedback: FC<ModalGiveFeedbackProps> = ({
   const { css, theme } = useStyle();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
-  const [people, setPeople] = useState<PeopleTypes[]>([
+  const [people] = useState<PeopleTypes[]>([
     {
       id: 1,
       img: 'https://media-exp1.licdn.com/dms/image/C560BAQH9Cnv1weU07g/company-logo_200_200/0/1575479070098?e=2159024400&v=beta&t=QM9VSoWVooxDwCONWh22cw0jBBlBPcBOqAxbZIE18jw',

@@ -30,7 +30,7 @@ const AuthContext = createContext<AuthData>(defaultData);
 
 export const AuthProvider: FC = ({ children }) => {
   const { info, authenticated } = useSelector(currentUserSelector) || {};
-  const { loaded, error } = useSelector(currentUserMetaSelector) || {};
+  const { loaded } = useSelector(currentUserMetaSelector) || {};
 
   const dispatch = useDispatch();
 

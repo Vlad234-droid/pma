@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { useStyle, Rule, useBreakpoints, Button } from '@dex-ddl/core';
+import { Button, Rule, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { Radio } from 'components/Form';
 import { Trans } from 'components/Translation';
 import { FilterOption } from 'features/Shared';
@@ -10,22 +10,13 @@ import { Notification } from 'components/Notification';
 import { Icon } from 'components/Icon';
 
 const ViewFeedbackComp: FC = () => {
-  const { css, theme } = useStyle();
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.medium || isBreakpoint.small || isBreakpoint.xSmall;
+  const { css } = useStyle();
 
-  const [isOpenMainModal, setIsOpen] = useState<boolean>(false);
-  const [title, setTitle] = useState<string>('');
-  const [searchValue, setSearchValue] = useState<string>('');
+  const [, setIsOpen] = useState<boolean>(false);
+  const [, setTitle] = useState<string>('');
+  const [, setSearchValue] = useState<string>('');
 
-  const [selectedPerson, setSelectedPerson] = useState<PeopleTypes | null>(null);
-  const [infoModal, setInfoModal] = useState<boolean>(false);
-  const [modalSuccess, setModalSuccess] = useState<boolean>(false);
-
-  const handleBtnClick = (): void => {
-    setTitle(() => 'Give feedback');
-    setIsOpen(() => true);
-  };
+  const [, setSelectedPerson] = useState<PeopleTypes | null>(null);
 
   const drafts = [
     {

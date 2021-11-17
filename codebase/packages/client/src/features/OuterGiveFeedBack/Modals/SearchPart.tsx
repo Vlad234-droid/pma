@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { createObjectivesSearchPeopleSchema } from '../config';
-import { useStyle, useBreakpoints, Button, Rule } from '@dex-ddl/core';
+import { Button, Rule, useBreakpoints, useStyle } from '@dex-ddl/core';
 import * as Yup from 'yup';
 import { Item } from 'components/Form';
 import { SearchInput } from '../components/SearchInput';
@@ -28,15 +28,9 @@ const SearchPart: FC<SearchPartProps> = ({
     resolver: yupResolver<Yup.AnyObjectSchema>(createObjectivesSearchPeopleSchema),
   });
   const {
-    handleSubmit,
-    formState: { errors, isValid },
-    reset,
+    formState: { errors },
   } = methods;
 
-  const onSubmit = async (data) => {
-    console.log('data', data);
-    reset();
-  };
   const { register } = methods;
   return (
     <>

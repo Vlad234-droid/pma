@@ -1,10 +1,10 @@
 import React, { FC } from 'react';
-import { SubmitPartProps, GiveFeedbackType } from '../type';
+import { GiveFeedbackType, SubmitPartProps } from '../type';
 import { createGiveFeedbackSchema } from '../config';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
-import { useStyle, Rule, Styles, useBreakpoints, Button } from '@dex-ddl/core';
+import { Button, Rule, Styles, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { IconButton, Position } from 'components/IconButton';
 import video_explanation from 'components/Icon/img/video_explanation.jpg';
 import { TileWrapper } from 'components/Tile';
@@ -14,7 +14,7 @@ import { Trans } from 'components/Translation';
 
 export const WITH_SELECTED_TEST = 'with_selected_test';
 
-const SubmitPart: FC<SubmitPartProps> = ({ setSelectedPerson, selectedPerson, setInfoModal, setModalSuccess }) => {
+const SubmitPart: FC<SubmitPartProps> = ({ selectedPerson, setInfoModal, setModalSuccess }) => {
   const giveFeedback: GiveFeedbackType[] = [
     {
       giveFeedback_id: '1',
@@ -66,7 +66,7 @@ const SubmitPart: FC<SubmitPartProps> = ({ setSelectedPerson, selectedPerson, se
     reset,
   } = methods;
   console.log('errors', errors);
-  const onSubmit = async (data) => {
+  const onSubmit = async () => {
     setModalSuccess(() => true);
     reset();
   };

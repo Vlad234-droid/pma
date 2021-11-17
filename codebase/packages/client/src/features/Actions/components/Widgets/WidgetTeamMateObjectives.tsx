@@ -21,29 +21,13 @@ import {
   SchemaActions,
 } from '@pma/store';
 
-type ObjectiveComponentProps = {
-  objective_id: string;
-  objective_main_title: string;
-  objective_title: string;
-  objective_description?: string;
-  objective_fields?: {
-    field_id: string;
-    field_type: string;
-    field_title?: string;
-    field_description?: string | undefined;
-    field_placeholder?: string | undefined;
-    field_value?: string | undefined;
-    field_options?: any;
-  }[];
-}[];
-
 export type WidgetTeamMateObjectivesProps = {
   id: string;
   status: Status;
   colleague: any;
 };
 
-export const WidgetTeamMateObjectives: FC<WidgetTeamMateObjectivesProps> = ({ id, status, colleague }) => {
+export const WidgetTeamMateObjectives: FC<WidgetTeamMateObjectivesProps> = ({ status, colleague }) => {
   const { css, theme } = useStyle();
   const [isOpen, setIsOpen] = useState(false);
   const [objectives, setObjectives] = useState([]);
@@ -51,7 +35,6 @@ export const WidgetTeamMateObjectives: FC<WidgetTeamMateObjectivesProps> = ({ id
   const {
     components = [],
     meta: { loaded: schemaLoaded = false },
-    markup = { max: 0, min: 0 },
   } = useSelector(getObjectiveSchema);
   const formElements = components.filter((component) => component.type != 'text');
   const { loaded: objectivesLoaded } = useSelector(objectivesMetaSelector);
@@ -99,8 +82,6 @@ export const WidgetTeamMateObjectives: FC<WidgetTeamMateObjectivesProps> = ({ id
 
     return contents[status];
   };
-
-  const [graphics, color] = getIcon(status);
 
   const dispatch = useDispatch();
 

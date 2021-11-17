@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { useStyle, colors } from '@dex-ddl/core';
+import { colors, useStyle } from '@dex-ddl/core';
 import mergeRefs from 'react-merge-refs';
 import { InputProps } from './type';
 import { useRefContainer } from 'components/Form/context/input';
@@ -17,7 +17,6 @@ const MultiplySearchInput: FC<InputProps> = ({
   setSelectedPersons,
   searchValue,
   setSearchValue,
-  disabled = false,
   setPeopleFiltered,
   selectedPersons,
   multiple,

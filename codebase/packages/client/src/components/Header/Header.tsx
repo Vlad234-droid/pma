@@ -13,7 +13,7 @@ export type HeaderProps = {
 export const TEST_ID = 'header';
 export const BACK_BTN_TEST_ID = 'header-back';
 
-const Header: FC<HeaderProps> = ({ title, onBack, styles = {}, customSize = false }) => {
+const Header: FC<HeaderProps> = ({ title, onBack, styles = {} }) => {
   const { css } = useStyle();
   const history = useHistory();
   const [showMenu, setShowMenu] = useState(false);
@@ -46,16 +46,4 @@ const headerStyles: Rule = ({ theme }) => ({
   fontSize: '20px',
   color: theme.colors.tescoBlue,
 });
-const headerStylesCustom: Rule = ({ theme }) => ({
-  lineHeight: '24px',
-  fontSize: '24px',
-  color: theme.colors.tescoBlue,
-});
-
-const sideMenuStyles: Rule = {
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-};
-
 export default Header;

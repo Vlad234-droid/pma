@@ -1,24 +1,10 @@
 import React, { FC } from 'react';
-import { useStyle, Rule, Styles } from '@dex-ddl/core';
+import { Rule, Styles, useStyle } from '@dex-ddl/core';
 import { TileWrapper } from 'components/Tile';
-import { Accordion, BaseAccordion, Section, Panel, ExpandButton } from 'components/Accordion';
+import { Accordion, BaseAccordion, ExpandButton, Panel, Section } from 'components/Accordion';
 import { IconButton } from 'components/IconButton';
 import { Trans } from 'components/Translation';
 
-type Question = {
-  answer: string;
-  ask: string;
-};
-
-type ItemType = {
-  f_name: string;
-  id: number;
-  img: string;
-  l_name: string;
-  question1: Question;
-  question2: Question;
-  question3: Question;
-};
 type DraftItemProps = {
   item: any;
   draftFeedback: (id: number) => void;

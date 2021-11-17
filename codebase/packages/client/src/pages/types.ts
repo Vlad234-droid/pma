@@ -14,7 +14,6 @@ enum Page {
   REQUEST_FEEDBACK = 'request-feedback',
   RESPOND_FEEDBACK = 'respond-feedback',
   VIEW_FEEDBACK = 'view-feedback',
-  NOT_FOUND = '*',
 }
 
 type PageElement =

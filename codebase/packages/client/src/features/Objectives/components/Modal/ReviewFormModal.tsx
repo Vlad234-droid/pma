@@ -2,16 +2,13 @@ import React, { FC, HTMLProps } from 'react';
 
 import { Trans } from 'components/Translation';
 
-import { Icon, Button, useStyle, useBreakpoints } from '@dex-ddl/core';
+import { Button, Icon, useBreakpoints, useStyle } from '@dex-ddl/core';
 
 // todo use Generic form in future. For now just not use it because of more flexibility
 import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as Yup from 'yup';
-
 import { TileWrapper } from 'components/Tile';
 import { Icon as IconComponent } from 'components/Icon';
-import { Item, Input, Select, Textarea } from 'components/Form';
+import { Input, Item, Select, Textarea } from 'components/Form';
 import { GenericItemField } from 'components/GenericForm';
 import { SubmitButton } from './index';
 
@@ -175,10 +172,10 @@ const ReviewFormModal: FC<Props> = () => {
   });
   const {
     handleSubmit,
-    formState: { errors, isValid },
+    formState: { isValid },
     reset,
   } = methods;
-  const onSubmit = async (data) => {
+  const onSubmit = async () => {
     reset();
   };
 

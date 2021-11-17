@@ -13,17 +13,6 @@ const wrapperStyle = {
   padding: '0',
 } as Styles;
 
-const headStyle = {
-  display: 'flex',
-  alignItems: 'flex-start',
-} as Styles;
-
-const headerBlockStyle = {
-  display: 'grid',
-  padding: '0 20px',
-  alignSelf: 'center',
-} as Styles;
-
 const bodyBlockStyle = {
   minWidth: '200px',
   display: 'grid',

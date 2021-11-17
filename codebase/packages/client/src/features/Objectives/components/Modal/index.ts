@@ -1,4 +1,4 @@
 export { default as SubmitButton } from './SubmitButton';
-export { default as SuccessModal } from './SuccessModal';
+export { SuccessModal } from './SuccessModal';
 export { default as ReviewFormModal } from './ReviewFormModal';
 export * from './ArticleModal';

@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { useStyle, useBreakpoints, Rule, Modal } from '@dex-ddl/core';
+import { Modal, Rule, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { Radio } from 'components/Form';
 import { Trans } from 'components/Translation';
 import { FilterOption } from 'features/Shared';
@@ -20,11 +20,6 @@ const RespondFeedbackContainer: FC = () => {
   const [selectedPerson, setSelectedPerson] = useState<PeopleTypes | null>(null);
   const [infoModal, setInfoModal] = useState<boolean>(false);
   const [modalSuccess, setModalSuccess] = useState<boolean>(false);
-
-  const handleBtnClick = (): void => {
-    setTitle(() => 'Give feedback');
-    setIsOpen(() => true);
-  };
 
   const drafts = [
     {

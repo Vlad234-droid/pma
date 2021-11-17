@@ -4,9 +4,8 @@ import FeedbackActions from './FeedbackActions';
 import { Router } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
 import { renderWithTheme } from '../../utils/test';
-import UserEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
-import { fireEvent, waitFor } from '@testing-library/react';
+import { fireEvent } from '@testing-library/react';
 import { INFO_360_MODAL } from './components/Info360Modal';
 
 describe('Feedback actions', () => {

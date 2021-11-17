@@ -13,17 +13,6 @@ const wrapperStyle = {
   padding: '0',
 } as Styles;
 
-const headStyle = {
-  display: 'flex',
-  alignItems: 'flex-start',
-} as Styles;
-
-const headerBlockStyle = {
-  display: 'grid',
-  padding: '0 20px',
-  alignSelf: 'center',
-} as Styles;
-
 const bodyBlockStyle = {
   minWidth: '200px',
   display: 'grid',
@@ -57,7 +46,6 @@ const PersonalInformation: FC<Props> = ({ user }) => {
   const { css } = useStyle();
   const { t } = useTranslation();
 
-  const { dateOfBirth, gender } = user?.profile || {};
   const { fullName } = user;
   return (
     <BasicTile title={t('Personal', 'Personal information')} description={''}>

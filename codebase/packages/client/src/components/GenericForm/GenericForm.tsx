@@ -1,8 +1,8 @@
-import React, { RefObject, Fragment, useEffect } from 'react';
+import React, { Fragment, RefObject, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { AnyObjectSchema } from 'yup';
-import { Button, useStyle, Rule } from '@dex-ddl/core';
+import { Button, Rule, useStyle } from '@dex-ddl/core';
 
 import { GenericItemField } from './GenericItemField';
 import type { FormField, Handler } from './types';
@@ -57,7 +57,7 @@ function genericForm<T>({
 
   return (
     <form noValidate onSubmit={handleSubmit(submit)} ref={refDom} className={css(formStyles)}>
-      {formFields.map(({ Element, Wrapper, testID, name, value, label, placeholder, ...props }) => (
+      {formFields.map(({ Element, Wrapper, name, label, placeholder, ...props }) => (
         <Fragment key={name}>
           <GenericItemField
             {...props}

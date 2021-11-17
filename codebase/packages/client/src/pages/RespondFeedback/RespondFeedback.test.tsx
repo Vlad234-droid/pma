@@ -1,12 +1,10 @@
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
-import RespondFeedback from './RespondFeedback';
+import RespondFeedback, { RESPOND_FEEDBACK } from './RespondFeedback';
 import { Router } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
 import { renderWithTheme } from '../../utils/test';
-import UserEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
-import { RESPOND_FEEDBACK } from './RespondFeedback';
 
 describe('RespondFeedback', () => {
   it('RespondFeedback', async () => {

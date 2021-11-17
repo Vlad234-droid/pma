@@ -17,7 +17,7 @@ export type Props = {
 export const TEST_ID = 'main-widget';
 
 const MainWidget: FC<Props> = ({ customStyle, onClick, status, count = 0 }) => {
-  const { css, theme } = useStyle();
+  const { css } = useStyle();
   const { t } = useTranslation();
 
   const isStateless = !status;

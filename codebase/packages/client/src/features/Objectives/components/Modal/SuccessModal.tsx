@@ -1,6 +1,6 @@
 import React, { FC, HTMLProps } from 'react';
 import { Trans } from 'components/Translation';
-import { Styles, useStyle, useBreakpoints, Button } from '@dex-ddl/core';
+import { Button, Styles, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { Icon as IconComponent } from 'components/Icon';
 
 export type SuccessModal = {
@@ -9,7 +9,7 @@ export type SuccessModal = {
 
 type Props = HTMLProps<HTMLInputElement> & SuccessModal;
 
-const SuccessModal: FC<Props> = ({ onClose }) => {
+export const SuccessModal: FC<Props> = ({ onClose }) => {
   const { css, theme } = useStyle();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
@@ -118,5 +118,3 @@ const SuccessModal: FC<Props> = ({ onClose }) => {
     </div>
   );
 };
-
-export default SuccessModal;

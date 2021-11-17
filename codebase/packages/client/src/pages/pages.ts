@@ -26,7 +26,6 @@ const pages: Record<Page, PageElement> = {
   [Page.REQUEST_FEEDBACK]: RequestFeedback,
   [Page.RESPOND_FEEDBACK]: RespondFeedback,
   [Page.VIEW_FEEDBACK]: ViewFeedback,
-  [Page.NOT_FOUND]: () => null,
 };
 
 export default pages;

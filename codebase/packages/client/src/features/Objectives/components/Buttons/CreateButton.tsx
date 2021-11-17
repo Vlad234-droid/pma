@@ -1,7 +1,7 @@
 import React, { FC, HTMLProps, useState } from 'react';
-import { useBreakpoints, Rule, Modal, useStyle, Button } from '@dex-ddl/core';
+import { Button, Modal, Rule, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { Icon } from 'components/Icon';
-import { CreateUpdateObjectives, CreateUpdateObjective } from 'features/Objectives/components/ObjectiveModal';
+import { CreateUpdateObjective, CreateUpdateObjectives } from 'features/Objectives/components/ObjectiveModal';
 import { IconButton } from 'components/IconButton';
 
 export type CreateModalProps = {
@@ -128,9 +128,6 @@ const modalCloseOptionStyle: Rule = () => {
 };
 
 const modalTitleOptionStyle: Rule = () => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
-
   return {
     position: 'fixed',
     top: '22px',

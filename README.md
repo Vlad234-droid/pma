@@ -11,6 +11,24 @@ This application requires `yarn v.1.22.x` and `node v.14.4.x`.
 - Workspaces - https://classic.yarnpkg.com/en/docs/workspaces
 
 ## Prerequisites
+    -  Need to create .npmrc file on your PC and add needed configuration.
+        For MAC: nano ~./.npmrc
+        For Windows - navigate to C:\Users\<username> and create here .npmrc file.
+    Fill this file with next data:
+        //nexus.ourtesco.com/repository/colleague-ui/:_auth=<TOKEN>
+        //nexus.ourtesco.com/repository/colleague-ui-private/:_auth=<TOKEN>
+        //nexus.ourtesco.com/repository/online-web-group/:_auth=<TOKEN>
+        always-auth=true
+        https-proxy=http://10.251.0.42:80
+
+    Your personal token you can found here - https://nexus.ourtesco.com/
+    -  SET Proxy
+        For MAC:
+            export HTTP_PROXY= http://uk2.proxy.tesco.org:80
+            export HTTPS_PROXY=http://uk2.proxy.tesco.org:80
+        For Windows
+            set HTTP_PROXY= http://uk2.proxy.tesco.org:80
+            set HTTPS_PROXY=http://uk2.proxy.tesco.org:80
 
 ### 1. Install tools
 
@@ -18,9 +36,15 @@ This application requires `yarn v.1.22.x` and `node v.14.4.x`.
 
 Check that Yarn is installed by running: `yarn --version`
 
-- NodeJS - https://nodejs.org
+- NodeJS - https://nodejs.org (version 14.17.x)
 
-Check that NodeJS is installed by running: `node --version`
+If some other version installed use NVM to install needed node version
+-NVM - https://github.com/nvm-sh/nvm#installing-and-updating and for Windows https://github.com/coreybutler/nvm-windows/releases/tag/1.1.8
+
+Check that NodeJS is installed by running: `node --version` or 'nvm ls'
+To install and use 14.17.x version of node - use commands:
+    - nvm install 14.17.0
+    - nvm use 14.17.0
 
 ### 2. Install dependencies
 

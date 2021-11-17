@@ -8,7 +8,7 @@ import { schemaMetaSelector } from '@pma/store/src/selectors/schema';
 import { isObjectivesNumberInStatus, ObjectiveActions, objectivesMetaSelector } from '@pma/store';
 import { createYupSchema } from 'utils/yup';
 import { Status } from 'config/enum';
-import SuccessModal from '../Modal/SuccessModal';
+import { SuccessModal } from '../Modal/SuccessModal';
 import useObjectives from '../../hooks/useObjectives';
 import useObjectivesSchema from '../../hooks/useObjectiveSchema';
 import { ObjectiveModal } from './ObjectiveModal';
@@ -22,8 +22,6 @@ type Props = HTMLProps<HTMLInputElement> & CreateUpdateObjectivesModalProps;
 
 export const CreateUpdateObjectives: FC<Props> = ({ onClose, editNumber = null }) => {
   const dispatch = useDispatch();
-
-  console.log(1);
   const [origin, objectives] = useObjectives();
   const [schema] = useObjectivesSchema();
 

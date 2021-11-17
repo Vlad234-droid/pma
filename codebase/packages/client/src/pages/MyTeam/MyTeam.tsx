@@ -23,7 +23,7 @@ const MyTeam: FC = () => {
   const waitingForApprovalCount = employeeWithPendingApprovals?.length;
   const colleaguesWithStatusDraftCount = employeePendingApprovals?.length;
 
-  const { loaded, error } = useSelector(getManagersMetaSelector) || {};
+  const { loaded } = useSelector(getManagersMetaSelector) || {};
   const dispatch = useDispatch();
 
   useEffect(() => {

@@ -1,5 +1,5 @@
 import React, { FC, HTMLProps } from 'react';
-import { Trans, useTranslation } from 'components/Translation';
+import { Trans } from 'components/Translation';
 import { Rule, Styles, useStyle } from '@dex-ddl/core';
 import { TileWrapper } from 'components/Tile';
 import { Avatar } from 'components/Avatar';
@@ -81,7 +81,6 @@ export const AvatarName: FC<AvatarNameProps> = ({ user }) => {
 
 const DashboardProfile: FC<Props> = () => {
   const { css } = useStyle();
-  const { t } = useTranslation();
   return (
     <AuthConsumer>
       {({ user }) => {

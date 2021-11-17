@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { useStyle, Rule, Styles, CreateRule } from '@dex-ddl/core';
+import { CreateRule, Rule, Styles, useStyle } from '@dex-ddl/core';
 import { PeopleTypes } from './type';
 import { SuccessModal } from './ModalParts';
 import { Item, Select, Textarea } from 'components/Form';
@@ -20,7 +20,7 @@ const ModalRequestFeedback: FC = () => {
   const [peopleFiltered, setPeopleFiltered] = useState<PeopleTypes[]>([]);
   const [inputValue, setInputValue] = useState<string>('');
 
-  const [peopleCopy, setPeopleCopy] = useState<PeopleTypes[]>([
+  const [peopleCopy] = useState<PeopleTypes[]>([
     {
       id: 1,
       img: 'https://media-exp1.licdn.com/dms/image/C560BAQH9Cnv1weU07g/company-logo_200_200/0/1575479070098?e=2159024400&v=beta&t=QM9VSoWVooxDwCONWh22cw0jBBlBPcBOqAxbZIE18jw',
@@ -90,9 +90,7 @@ const ModalRequestFeedback: FC = () => {
     resolver: yupResolver<Yup.AnyObjectSchema>(createRequestFeedbackSchema),
   });
   const {
-    handleSubmit,
     formState: { errors, isValid },
-    reset,
   } = methods;
   const { register } = methods;
 
