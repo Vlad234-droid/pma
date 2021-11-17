@@ -13,7 +13,19 @@ export enum Status {
 
 export enum ObjectiveType {
   OBJECTIVE = 'Objectives',
-  QUARTER = 'Quarter year review',
-  MYR = 'Mid year review',
-  EYR = 'End year review',
+  MYR = 'Mid Year Review',
+  EYR = 'End of Year Review',
+}
+
+export enum ReviewType {
+  OBJECTIVE = 'OBJECTIVE',
+  MYR = 'MYR',
+  EYR = 'EYR',
+}
+
+export enum TimelineType {
+  REVIEW = 'REVIEW',
+  ELEMENT = 'ELEMENT',
+  TIMELINE_POINT = 'TIMELINE_POINT',
+  CYCLE = 'CYCLE',
 }

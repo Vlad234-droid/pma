@@ -10,7 +10,7 @@ function useObjectivesSchema() {
 
   const getSchema = useCallback(() => {
     if (!components?.length) {
-      dispatch(SchemaActions.getSchema({ formId: 'colleague_objectives_form' }));
+      dispatch(SchemaActions.getSchema());
     }
   }, [components]);
 

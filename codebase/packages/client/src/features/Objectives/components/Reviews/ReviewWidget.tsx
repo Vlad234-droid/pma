@@ -12,12 +12,13 @@ export type Props = {
   onClick: () => void;
   status?: Status;
   customStyle?: React.CSSProperties | {};
+  title?: string;
   description?: string;
 };
 
 export const TEST_ID = 'review-widget';
 
-const ReviewWidget: FC<Props> = ({ customStyle, onClick, status, description }) => {
+const ReviewWidget: FC<Props> = ({ customStyle, onClick, status, description, title }) => {
   const { css } = useStyle();
   const { t } = useTranslation();
 
@@ -76,9 +77,7 @@ const ReviewWidget: FC<Props> = ({ customStyle, onClick, status, description }) 
       <div className={css(wrapperStyle)} onClick={handleClick} data-test-id={TEST_ID}>
         <div className={css(headStyle)}>
           <div className={css(headerBlockStyle)}>
-            <span className={css(titleStyle({ color: titleColor }))}>
-              <Trans i18nKey='mid_year_review'>Mid-year review</Trans>
-            </span>
+            <span className={css(titleStyle({ color: titleColor }))}>{title}</span>
             <span className={css(descriptionStyle({ color: descriptionColor }))}>{description}</span>
             <span
               className={css(descriptionStyle({ color: descriptionColor }), {

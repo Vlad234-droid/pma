@@ -4,12 +4,14 @@ import { TileWrapper } from 'components/Tile';
 import { Graphics, Icon } from 'components/Icon';
 import { Avatar } from 'components/Avatar';
 import { Accordion, BaseAccordion, ExpandButton, Panel, Section } from 'components/Accordion';
-import { ObjectiveType, Status } from 'config/enum';
+import { ObjectiveType, Status, TimelineType } from 'config/enum';
 
 export type Review = {
   uuid: string;
   status: string;
   type: string;
+  code: string;
+  reviewType: string;
   number: number;
 };
 
@@ -87,15 +89,19 @@ export const WidgetTeamMateProfile: FC<WidgetTeamMateProfileProps> = ({ id, stat
                     <div className={css({ padding: '24px 35px 24px 24px' })}>
                       <div className={css({ background: '#F6F6F6', padding: '24px', borderRadius: '10px' })}>
                         <div className={css({ justifyContent: 'flex-start' })}>
-                          {employee.timeline.map((review) => {
-                            const [graphics, color] = getIcon(review.status);
-                            return (
-                              <div key={review.uuid} className={css(reviewItem)}>
-                                <div className={css({ paddingBottom: '6px' })}>{ObjectiveType[review.type]}</div>
-                                <Icon graphic={graphics} fill={color} />
-                              </div>
-                            );
-                          })}
+                          {employee?.timeline
+                            ?.filter((review) => review.type !== TimelineType.TIMELINE_POINT)
+                            ?.map((review) => {
+                              const [graphics, color] = getIcon(review.status);
+                              return (
+                                <div key={review.uuid} className={css(reviewItem)}>
+                                  <div className={css({ paddingBottom: '6px' })}>
+                                    {ObjectiveType[review.reviewType]}
+                                  </div>
+                                  <Icon graphic={graphics} fill={color} />
+                                </div>
+                              );
+                            })}
                         </div>
                       </div>
                     </div>

@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'components/Translation';
 import { Button, Rule, Styles, useBreakpoints, useStyle } from '@dex-ddl/core';
-import { Status } from 'config/enum';
+import { ObjectiveType, Status } from 'config/enum';
 
 import { StepIndicator } from 'components/StepIndicator/StepIndicator';
 import { Header } from 'components/Header';
@@ -27,8 +27,9 @@ import {
   getObjectivesStatusSelector,
   getTimelineMetaSelector,
   getTimelineSelector,
-  isObjectivesNumberInStatus,
-  isObjectivesOverMinUnderMaxMarkup,
+  timelineTypesAvailabilitySelector,
+  isObjectivesInStatus,
+  isObjectivesLessMaxMarkup,
   ObjectiveActions,
   objectivesMetaSelector,
   objectivesSelector,
@@ -49,6 +50,14 @@ const reviews = [
   },
 ];
 
+const annualReviews = [
+  {
+    id: 'test-3',
+    title: 'Annual performance review',
+    description: 'Pharetra donec enim aenean aliquet consectetur ultrices amet vitae',
+  },
+];
+
 export const TEST_ID = 'objectives-pave';
 
 const Objectives: FC = () => {
@@ -65,23 +74,32 @@ const Objectives: FC = () => {
     markup = { max: 0, min: 0 },
   } = useSelector(getObjectiveSchema);
   const { descriptions, startDates, statuses } = useSelector(getTimelineSelector) || {};
+  const timelineTypes = useSelector(timelineTypesAvailabilitySelector);
+  const canShowObjectives = timelineTypes[ObjectiveType.OBJECTIVE];
+  const canShowMyReview = timelineTypes[ObjectiveType.MYR] && timelineTypes[ObjectiveType.EYR];
+  const canShowAnnualReview = !timelineTypes[ObjectiveType.MYR] && timelineTypes[ObjectiveType.EYR];
+
   const formElements = components.filter((component) => component.type != 'text');
 
   // @ts-ignore
   const { loaded: objectivesLoaded } = useSelector(objectivesMetaSelector);
   const status = useSelector(getObjectivesStatusSelector);
   const { origin } = useSelector(objectivesSelector);
-  const isAllObjectivesByNumberApproved = useSelector(
-    isObjectivesNumberInStatus(
-      Status.APPROVED,
-      Array.from(Array(markup.min), (_, i) => i + 1),
-    ),
-  );
+  const isAllObjectivesInSameStatus = useSelector(isObjectivesInStatus(status));
 
-  const canCreateSingleObjective = useSelector(isObjectivesOverMinUnderMaxMarkup(markup));
+  const canCreateSingleObjective = useSelector(isObjectivesLessMaxMarkup(markup));
+
+  // todo not clear where reviews might come from. remove this block when its clear
+  const createdReviews: any = [];
+  if (canShowMyReview) {
+    createdReviews.push(...reviews);
+  } else if (canShowAnnualReview) {
+    createdReviews.push(...annualReviews);
+  }
+  // todo remove block end
 
   useEffect(() => {
-    dispatch(SchemaActions.getSchema({ formId: 'colleague_objectives_form' }));
+    dispatch(SchemaActions.getSchema());
     dispatch(ObjectiveActions.getObjectives({ performanceCycleUuid: '' }));
   }, []);
   useEffect(() => {
@@ -157,21 +175,23 @@ const Objectives: FC = () => {
 
   return (
     <div className={css({ margin: '8px' })}>
-      <Header title='Objectives' />
-      {canCreateSingleObjective && isAllObjectivesByNumberApproved && (
+      <Header title={canShowObjectives ? 'Objectives' : 'Review'} />
+      {canCreateSingleObjective && canShowObjectives && (
         <div className={css({ display: 'flex' })}>
           <CreateButton withIcon useSingleStep={true} />
         </div>
       )}
       <div className={css(headWrapperStyles)}>
-        <div className={css(timelineWrapperStyles)} onClick={handleClick}>
-          <StepIndicator
-            mainTitle={t('performance_timeline_title', 'My Performance Timeline')}
-            titles={descriptions}
-            descriptions={startDates}
-            statuses={statuses}
-          />
-        </div>
+        {canShowMyReview && (
+          <div className={css(timelineWrapperStyles)} onClick={handleClick}>
+            <StepIndicator
+              mainTitle={t('performance_timeline_title', 'My Performance Timeline')}
+              titles={descriptions}
+              descriptions={startDates}
+              statuses={statuses}
+            />
+          </div>
+        )}
         <ShareWidget
           customStyle={{ flex: '1 1 30%', display: 'flex', flexDirection: 'column' }}
           onClick={() => alert('share')}
@@ -179,48 +199,50 @@ const Objectives: FC = () => {
       </div>
       <div className={css(bodyWrapperStyles)} data-test-id={TEST_ID}>
         <div className={css(timelineWrapperStyles)}>
-          <Section
-            left={{
-              content: (
-                <div className={css(tileStyles)}>
-                  <Trans i18nKey='business_objectives'>Business Objectives</Trans>
-                  <StatusBadge status={status} styles={{ marginLeft: '10px' }} />
-                </div>
-              ),
-            }}
-            right={{
-              content: (
-                <div>
-                  <IconButton
-                    onPress={() => alert('download')}
-                    graphic='download'
-                    customVariantRules={{ default: iconButtonStyles }}
-                    iconStyles={iconStyles}
-                  >
-                    <Trans i18nKey='download'>Download</Trans>
-                  </IconButton>
-                  <IconButton
-                    onPress={() => alert('share')}
-                    graphic='share'
-                    customVariantRules={{ default: iconButtonStyles }}
-                    iconStyles={iconStyles}
-                  >
-                    <Trans i18nKey='share'>Share</Trans>
-                  </IconButton>
-                  <IconButton
-                    onPress={() => alert('print')}
-                    graphic='print'
-                    customVariantRules={{ default: iconButtonStyles }}
-                    iconStyles={iconStyles}
-                  >
-                    <Trans i18nKey='print'>Print</Trans>
-                  </IconButton>
-                </div>
-              ),
-            }}
-          >
-            <Accordion objectives={objectives} />
-          </Section>
+          {canShowObjectives && (
+            <Section
+              left={{
+                content: (
+                  <div className={css(tileStyles)}>
+                    <Trans i18nKey='business_objectives'>Business Objectives</Trans>
+                    {isAllObjectivesInSameStatus && <StatusBadge status={status} styles={{ marginLeft: '10px' }} />}
+                  </div>
+                ),
+              }}
+              right={{
+                content: (
+                  <div>
+                    <IconButton
+                      onPress={() => alert('download')}
+                      graphic='download'
+                      customVariantRules={{ default: iconButtonStyles }}
+                      iconStyles={iconStyles}
+                    >
+                      <Trans i18nKey='download'>Download</Trans>
+                    </IconButton>
+                    <IconButton
+                      onPress={() => alert('share')}
+                      graphic='share'
+                      customVariantRules={{ default: iconButtonStyles }}
+                      iconStyles={iconStyles}
+                    >
+                      <Trans i18nKey='share'>Share</Trans>
+                    </IconButton>
+                    <IconButton
+                      onPress={() => alert('print')}
+                      graphic='print'
+                      customVariantRules={{ default: iconButtonStyles }}
+                      iconStyles={iconStyles}
+                    >
+                      <Trans i18nKey='print'>Print</Trans>
+                    </IconButton>
+                  </div>
+                ),
+              }}
+            >
+              <Accordion objectives={objectives} canShowStatus={!isAllObjectivesInSameStatus} />
+            </Section>
+          )}
           <Section
             left={{
               content: (
@@ -240,7 +262,7 @@ const Objectives: FC = () => {
             }}
           >
             {reviews.length > 0 ? (
-              <Reviews reviews={reviews} />
+              <Reviews reviews={createdReviews} />
             ) : (
               t('no_completed_reviews', 'You have no completed reviews')
             )}
@@ -284,22 +306,39 @@ const Objectives: FC = () => {
               ),
             }}
           >
-            <div data-test-id='personal' className={css(basicTileStyle)}>
-              <ReviewWidget
-                status={Status.AVAILABLE}
-                onClick={() => console.log('ReviewWidget')}
-                description={t('tiles_description_id_3', 'Your mid-year review form and results will appear here.')}
-                customStyle={{ height: '182px' }}
-              />
-            </div>
-            <div data-test-id='feedback' className={css(basicTileStyle)}>
-              <ReviewWidget
-                status={Status.NOT_AVAILABLE}
-                onClick={() => console.log('ReviewWidget')}
-                description={t('tiles_description_id_3', 'Your mid-year review form and results will appear here.')}
-                customStyle={{ height: '182px' }}
-              />
-            </div>
+            {canShowMyReview && (
+              <>
+                <div data-test-id='personal' className={css(basicTileStyle)}>
+                  <ReviewWidget
+                    status={Status.AVAILABLE}
+                    onClick={() => console.log('ReviewWidget')}
+                    title={'Mid-year review'}
+                    description={t('tiles_description_id_3', 'Your mid-year review form and results will appear here.')}
+                    customStyle={{ height: '182px' }}
+                  />
+                </div>
+                <div data-test-id='feedback' className={css(basicTileStyle)}>
+                  <ReviewWidget
+                    status={Status.NOT_AVAILABLE}
+                    onClick={() => console.log('ReviewWidget')}
+                    title={'End-year review'}
+                    description={t('tiles_description_id_3', 'Your mid-year review form and results will appear here.')}
+                    customStyle={{ height: '182px' }}
+                  />
+                </div>
+              </>
+            )}
+            {canShowAnnualReview && (
+              <div data-test-id='feedback' className={css(basicTileStyle)}>
+                <ReviewWidget
+                  status={Status.NOT_AVAILABLE}
+                  onClick={() => console.log('ReviewWidget')}
+                  title={'Annual performance review'}
+                  description={t('tiles_description_id_3', 'Your mid-year review form and results will appear here.')}
+                  customStyle={{ height: '182px' }}
+                />
+              </div>
+            )}
           </Section>
         </div>
         <div className={css({ flex: '1 1 30%', display: 'flex', flexDirection: 'column' })} />

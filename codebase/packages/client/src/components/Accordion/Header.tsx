@@ -1,10 +1,12 @@
-import React, { KeyboardEvent, ReactNode, FC } from 'react';
-import { useStyle, Rule } from '@dex-ddl/core';
+import React, { FC, KeyboardEvent, ReactNode } from 'react';
+import { Rule, useStyle } from '@dex-ddl/core';
 
 import { AccordionConsumer, SectionConsumer } from './contexts';
 import { EventListener, KeyboardEventListener } from './types';
 import { ENTER, SPACE } from './constans';
 import { Icon } from '../Icon';
+import { StatusBadge } from 'features/Objectives';
+import { Status } from 'config/enum';
 
 type HeadingProps = {
   'aria-level': number;
@@ -120,7 +122,12 @@ export const BaseHeader: FC<HeaderProps> = ({ children, headingLevel, disabled, 
   );
 };
 
-const Header: FC<Omit<HeaderProps, 'children'> & { title: string }> = ({ title, children, ...props }) => {
+const Header: FC<Omit<HeaderProps, 'children'> & { title: string; status?: Status }> = ({
+  title,
+  status,
+  children,
+  ...props
+}) => {
   const { css } = useStyle();
 
   return (
@@ -128,7 +135,15 @@ const Header: FC<Omit<HeaderProps, 'children'> & { title: string }> = ({ title, 
       {({ getHeadingProps, getElementToggleProps, expanded }) => (
         <div className={css(accordionHeaderWrapperStyles)} {...getHeadingProps()}>
           <div className={css(accordionHeaderStyles)} {...getElementToggleProps()}>
-            <h3 className={css(accordionHeaderTitleStyles)}>{title}</h3>
+            <div
+              className={css({
+                display: 'flex',
+                alignItems: 'center',
+              })}
+            >
+              <h3 className={css(accordionHeaderTitleStyles)}>{title}</h3>
+              {status && <StatusBadge status={status} styles={{ marginLeft: '10px' }} />}
+            </div>
             <Icon
               iconStyles={{
                 ...accordionIconStyles,

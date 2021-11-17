@@ -24,6 +24,7 @@ type Objective = {
 
 type Props = {
   objectives: Objective[];
+  canShowStatus: boolean;
 };
 
 export const TEST_ID = 'objective-accordion';
@@ -54,12 +55,12 @@ const Buttons: FC<{ id: number }> = ({ id }) => {
   );
 };
 
-const ObjectiveAccordion: FC<Props> = ({ objectives }) => (
+const ObjectiveAccordion: FC<Props> = ({ objectives, canShowStatus }) => (
   <Accordion id='objective-accordion'>
     <div data-test-id={TEST_ID}>
       {objectives.map(({ id, title, subTitle, description, explanations, status }) => (
         <Section key={id}>
-          <ObjectiveHeader {...{ title, subTitle, description }} />
+          <ObjectiveHeader {...{ title, subTitle, description, ...(canShowStatus ? { status } : {}) }} />
           <Panel>
             <ObjectivePanel explanations={explanations} />
             {/*todo do not forget find out what we use DECLINED or RETURNED*/}
@@ -72,10 +73,15 @@ const ObjectiveAccordion: FC<Props> = ({ objectives }) => (
 );
 
 export const ObjectiveHeader: FC<
-  Omit<HeaderProps, 'children'> & { title: string; subTitle?: string; description?: string }
-> = ({ title, subTitle, description, ...rest }) => {
+  Omit<HeaderProps, 'children'> & {
+    title: string;
+    subTitle?: string;
+    description?: string;
+    status?: Status;
+  }
+> = ({ title, subTitle, description, status, ...rest }) => {
   return (
-    <Header headingLevel={1} title={title} {...rest}>
+    <Header headingLevel={1} title={title} status={status} {...rest}>
       <ObjectiveTileHeader {...{ subTitle, description, withSpacing: false }} />
     </Header>
   );

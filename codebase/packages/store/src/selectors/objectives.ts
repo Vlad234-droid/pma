@@ -42,6 +42,11 @@ export const isObjectivesOverMinUnderMaxMarkup = ({ max, min }) =>
     return false;
   });
 
+export const isObjectivesLessMaxMarkup = ({ max }) =>
+  createSelector(objectivesSelector, (objectives: any) => {
+    return max > objectives?.origin?.length;
+  });
+
 export const getObjectivesSelector = createSelector(objectivesSelector, (objectives: any) => {
   const mapObjectives = {};
   if (objectives.origin.length) {

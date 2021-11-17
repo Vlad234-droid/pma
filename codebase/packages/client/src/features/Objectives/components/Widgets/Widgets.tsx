@@ -6,7 +6,16 @@ import SecondaryWidget, { Props as SecondaryWidgetProps } from '../SecondaryWidg
 import MainWidget from '../MainWidget';
 import useDispatch from 'hooks/useDispatch';
 import { useSelector } from 'react-redux';
-import { getObjectivesStatusSelector, ObjectiveActions, objectivesSelector } from '@pma/store';
+import {
+  getObjectivesStatusSelector,
+  timelineTypesAvailabilitySelector,
+  ObjectiveActions,
+  SchemaActions,
+  objectivesSelector,
+  schemaSelector,
+  getObjectiveSchema,
+} from '@pma/store';
+import { ObjectiveType } from 'config/enum';
 
 export type MainWidgetProps = {};
 
@@ -18,9 +27,14 @@ const Widgets: FC<Props> = () => {
   const dispatch = useDispatch();
   const status = useSelector(getObjectivesStatusSelector);
   const { origin } = useSelector(objectivesSelector);
-  const countObjectives = origin.length;
+  const { markup = { min: 0 } } = useSelector(getObjectiveSchema);
+  const countObjectives = origin.length > markup.min ? markup.min : origin.length;
+  const timelineTypes = useSelector(timelineTypesAvailabilitySelector);
+  const canShowObjectives = timelineTypes[ObjectiveType.OBJECTIVE];
+
   useEffect(() => {
     dispatch(ObjectiveActions.getObjectives({ performanceCycleUuid: '' }));
+    dispatch(SchemaActions.getSchema());
   }, []);
   const widgets: SecondaryWidgetProps[] = [
     {
@@ -48,12 +62,15 @@ const Widgets: FC<Props> = () => {
 
   return (
     <div className={css(wrapperStyle)}>
-      <MainWidget
-        status={status}
-        customStyle={{ flex: '4 1 500px' }}
-        onClick={() => console.log('View')}
-        count={countObjectives}
-      />
+      {canShowObjectives && (
+        <MainWidget
+          status={status}
+          customStyle={{ flex: '4 1 500px' }}
+          onClick={() => console.log('View')}
+          count={countObjectives}
+        />
+      )}
+
       {widgets.map((props, idx) => (
         <SecondaryWidget key={idx} {...props} />
       ))}

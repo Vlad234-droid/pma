@@ -86,7 +86,7 @@ export const WidgetTeamMateObjectives: FC<WidgetTeamMateObjectivesProps> = ({ st
   const dispatch = useDispatch();
 
   const fetchData = () => {
-    dispatch(SchemaActions.getSchema({ formId: 'colleague_objectives_form' }));
+    dispatch(SchemaActions.getSchema());
     dispatch(ObjectiveActions.getObjectives({ performanceCycleUuid: '', colleagueUuid: colleague.uuid }));
   };
 

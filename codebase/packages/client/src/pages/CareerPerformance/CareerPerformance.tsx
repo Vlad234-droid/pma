@@ -6,18 +6,26 @@ import { Styles, useStyle } from '@dex-ddl/core';
 import { DashboardProfile } from 'features/Profile';
 import { BasicTile } from 'components/Tile';
 import { StepIndicator } from 'components/StepIndicator/StepIndicator';
-import { Status } from 'config/enum';
+import { ObjectiveType, Status } from 'config/enum';
 import { Header } from 'components/Header';
 import { RouterSwitch } from 'components/RouterSwitch';
 import { useSelector } from 'react-redux';
-import { getTimelineMetaSelector, getTimelineSelector, TimelineActions } from '@pma/store';
-import useDispatch from '../../hooks/useDispatch';
+import {
+  getTimelineMetaSelector,
+  getTimelineSelector,
+  timelineTypesAvailabilitySelector,
+  TimelineActions,
+} from '@pma/store';
+import useDispatch from 'hooks/useDispatch';
 
 const CareerPerformance: FC = () => {
   const { css } = useStyle();
   const { t } = useTranslation();
   const { descriptions, startDates, statuses } = useSelector(getTimelineSelector) || {};
   const { loaded } = useSelector(getTimelineMetaSelector) || {};
+  const timelineTypes = useSelector(timelineTypesAvailabilitySelector);
+  const canShowMyReview = timelineTypes[ObjectiveType.MYR] && timelineTypes[ObjectiveType.EYR];
+  const canShowAnnualReview = !timelineTypes[ObjectiveType.MYR] && timelineTypes[ObjectiveType.EYR];
 
   const dispatch = useDispatch();
 
@@ -41,12 +49,14 @@ const CareerPerformance: FC = () => {
         <div className={css(wrapperStyle)}>
           <div className={css({ flex: '3 1 504px', display: 'flex', flexDirection: 'column', gap: '8px' })}>
             <DashboardProfile />
-            <StepIndicator
-              mainTitle={t('performance_timeline_title', 'My Performance Timeline')}
-              titles={descriptions}
-              descriptions={startDates}
-              statuses={statuses}
-            />
+            {canShowMyReview && (
+              <StepIndicator
+                mainTitle={t('performance_timeline_title', 'My Performance Timeline')}
+                titles={descriptions}
+                descriptions={startDates}
+                statuses={statuses}
+              />
+            )}
           </div>
           <div data-test-id='more' className={css(basicTileStyle)}>
             <BasicTile
@@ -67,22 +77,39 @@ const CareerPerformance: FC = () => {
             <Trans i18nKey='my_reviews'>My reviews</Trans>
           </div>
           <div className={css(wrapperStyle)}>
-            <div data-test-id='personal' className={css(basicTileStyle)}>
-              <ReviewWidget
-                status={Status.AVAILABLE}
-                onClick={() => console.log('ReviewWidget')}
-                description={t('tiles_description_id_3', 'Your mid-year review form and results will appear here.')}
-                customStyle={{ height: '100%' }}
-              />
-            </div>
-            <div data-test-id='feedback' className={css(basicTileStyle)}>
-              <ReviewWidget
-                status={Status.NOT_AVAILABLE}
-                onClick={() => console.log('ReviewWidget')}
-                description={t('tiles_description_id_3', 'Your mid-year review form and results will appear here.')}
-                customStyle={{ height: '100%' }}
-              />
-            </div>
+            {canShowMyReview && (
+              <>
+                <div data-test-id='personal' className={css(basicTileStyle)}>
+                  <ReviewWidget
+                    status={Status.AVAILABLE}
+                    onClick={() => console.log('ReviewWidget')}
+                    title={'Mid-year review'}
+                    description={t('tiles_description_id_3', 'Your mid-year review form and results will appear here.')}
+                    customStyle={{ height: '100%' }}
+                  />
+                </div>
+                <div data-test-id='feedback' className={css(basicTileStyle)}>
+                  <ReviewWidget
+                    status={Status.NOT_AVAILABLE}
+                    onClick={() => console.log('ReviewWidget')}
+                    title={'End-year review'}
+                    description={'Your end-year review form and results will appear here.'}
+                    customStyle={{ height: '100%' }}
+                  />
+                </div>
+              </>
+            )}
+            {canShowAnnualReview && (
+              <div data-test-id='feedback' className={css(basicTileStyle)}>
+                <ReviewWidget
+                  status={Status.NOT_AVAILABLE}
+                  onClick={() => console.log('ReviewWidget')}
+                  title={'Annual performance review'}
+                  description={'Your end-year review form and results will appear here.'}
+                  customStyle={{ height: '100%' }}
+                />
+              </div>
+            )}
           </div>
         </section>
         <section className={css({ marginTop: '32px' })}>
