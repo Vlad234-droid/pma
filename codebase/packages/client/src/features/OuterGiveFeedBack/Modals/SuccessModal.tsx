@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { SuccessModalProps } from '../type';
 import { Button, Rule, Styles, useBreakpoints, useStyle } from '@dex-ddl/core';
 
-import success from '../../../components/Icon/img/success.jpg';
+import success from '../../../../public/success.jpg';
 import { Trans } from '../../../components/Translation';
 
 export const SUCCES_GIVE_FEEDBACK = 'SUCCESS_GIVE_FEEDBACK';

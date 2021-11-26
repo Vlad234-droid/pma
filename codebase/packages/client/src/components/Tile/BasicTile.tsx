@@ -1,18 +1,20 @@
 import React, { FC, HTMLProps } from 'react';
 
-import { Rule, useBreakpoints, useStyle } from '@dex-ddl/core';
+import { Rule, useBreakpoints, useStyle, CreateRule } from '@dex-ddl/core';
 import { TileWrapper } from './TileWrapper';
 import { Icon } from '../Icon';
 
 export type TileProps = {
   title: string;
-  description: string;
+  description?: string;
   event?: string;
   boarder?: boolean;
   hover?: boolean;
   link?: string;
   img?: string;
+  icon?: boolean;
   customStyle?: React.CSSProperties | {};
+  imgCustomStyle?: React.CSSProperties | {};
 };
 
 type Props = HTMLProps<HTMLInputElement> & TileProps;
@@ -26,6 +28,8 @@ export const BasicTile: FC<Props> = ({
   link,
   img,
   customStyle = {},
+  imgCustomStyle = {},
+  icon = false,
   children,
 }) => {
   const { css } = useStyle();
@@ -38,10 +42,10 @@ export const BasicTile: FC<Props> = ({
         ...customStyle,
       }}
     >
-      <a className={css(wrapperStyle)} href={link}>
+      <a className={css(wrapperStyle({ icon }))} href={link}>
         {img && (
-          <div>
-            <img className={css(imageStyle)} src={img} />
+          <div className={css(imgCustomStyle)}>
+            <img className={css(imageStyle({ icon }))} src={img} />
           </div>
         )}
         <div className={css(bodyStyle)}>
@@ -61,11 +65,11 @@ export const BasicTile: FC<Props> = ({
 };
 
 const bodyStyle = {
-  padding: '24px',
+  padding: '10px 14px 14px 14px',
   color: '#333333',
 };
 
-const wrapperStyle: Rule = () => {
+const wrapperStyle: CreateRule<{ icon: boolean }> = ({ icon }) => {
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
   if (mobileScreen) {
@@ -73,6 +77,7 @@ const wrapperStyle: Rule = () => {
       display: 'flex',
       textDecoration: 'none',
       minWidth: '300px',
+      ...(icon && { flexDirection: 'column' }),
     };
   }
   return {
@@ -80,9 +85,14 @@ const wrapperStyle: Rule = () => {
   };
 };
 
-const imageStyle: Rule = () => {
+const imageStyle: CreateRule<{ icon: boolean }> = ({ icon }) => {
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+  if (icon) {
+    return {
+      width: '100%',
+    };
+  }
   if (mobileScreen) {
     return {
       width: '100px',

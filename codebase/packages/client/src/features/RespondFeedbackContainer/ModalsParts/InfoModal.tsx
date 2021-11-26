@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { IconButton } from 'components/IconButton';
 import { useStyle, useBreakpoints, Rule, Styles } from '@dex-ddl/core';
 import { InfoModalProps } from '../type';
-import video_explanation from 'components/Icon/img/video_explanation.jpg';
+import video_explanation from '../../../../public/video_explanation.jpg';
 
 const InfoModal: FC<InfoModalProps> = ({ setInfoModal }) => {
   const { css, theme } = useStyle();

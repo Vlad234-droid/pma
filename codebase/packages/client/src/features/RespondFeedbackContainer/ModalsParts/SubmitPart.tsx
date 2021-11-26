@@ -6,7 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { Button, Rule, Styles, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { IconButton, Position } from 'components/IconButton';
-import video_explanation from 'components/Icon/img/video_explanation.jpg';
+import video_explanation from '../../../../public/video_explanation.jpg';
 import { TileWrapper } from 'components/Tile';
 import { Item, Textarea } from 'components/Form';
 import { GenericItemField } from 'components/GenericForm';

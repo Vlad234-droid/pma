@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { SuccessModalProps } from '../type';
 import { Button, Rule, Styles, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { IconButton } from 'components/IconButton';
-import success from 'components/Icon/img/success.jpg';
+import success from '../../../../public/success.jpg';
 import { Trans } from 'components/Translation';
 
 const SuccessModal: FC<SuccessModalProps> = ({ setModalSuccess, setIsOpen, setSelectedPerson, selectedPerson }) => {
