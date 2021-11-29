@@ -55,6 +55,13 @@ export const updateObjectives = createAsyncAction(
   'objectives/UPDATE_ALL_CANCEL',
 )<any, any, Error>();
 
+export const getReviewByUuid = createAsyncAction(
+  'objectives/getReviewByUuid_REQUEST',
+  'objectives/getReviewByUuid_SUCCESS',
+  'objectives/getReviewByUuid_FAILURE',
+  'objectives/UPDATE_ALL_CANCEL',
+)<any, any, Error>();
+
 export const clearObjectiveData = createAction('objectives/CLEAR')<undefined>();
 
 export const Actions = {
@@ -66,5 +73,6 @@ export const Actions = {
   declineObjective: declineObjective.request,
   updateObjectives: updateObjectives.request,
   deleteObjective: deleteObjective.request,
+  getReviewByUuid: getReviewByUuid.request,
   clearObjectiveData,
 };

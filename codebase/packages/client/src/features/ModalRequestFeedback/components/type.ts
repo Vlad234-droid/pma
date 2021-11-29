@@ -1,7 +1,8 @@
 import { RefObject, SetStateAction, Dispatch } from 'react';
 import { Rule, Styles } from '@dex-ddl/core';
 import { Ref } from 'react-hook-form';
-import { PeopleTypes } from '../../../features/Feedback/type';
+import { PeopleTypes } from '../type';
+import { UseFormReturn } from 'react-hook-form';
 
 export interface FormItemProps {
   disabled?: boolean;
@@ -14,20 +15,17 @@ export interface FormItemProps {
   isValid?: boolean;
   type?: string;
   id?: string;
-  options: { id: number; f_name: string; l_name: string; img: string }[];
   setSelectedPersons?: any;
-  setSearchValue?: any;
-  searchValue?: string;
-  setPeopleFiltered?: any;
-  selectedPersons?: PeopleTypes[] | null;
-  multiple?: boolean | undefined;
+
   setInputValue?: Dispatch<SetStateAction<string>>;
-  setPeople?: Dispatch<SetStateAction<any>>;
+  options: Array<PeopleTypes>;
 }
 
 export interface ButtonsComponentProps {
   isValid: boolean;
+  onSubmit: () => void;
   setShowSuccesModal: Dispatch<SetStateAction<boolean>>;
+  methods: UseFormReturn;
 }
 
 export type InputProps = FormItemProps;

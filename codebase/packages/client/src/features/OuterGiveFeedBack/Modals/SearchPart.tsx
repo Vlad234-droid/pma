@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { createObjectivesSearchPeopleSchema } from '../config';
@@ -9,16 +9,14 @@ import { SearchInput } from '../components/SearchInput';
 import { SearchPartProps } from '../type';
 import { Trans } from 'components/Translation';
 import { IconButton, Position } from 'components/IconButton';
+import { useDispatch } from 'react-redux';
+import { ColleaguesActions, getFindedColleguesS } from '@pma/store';
+import { useSelector } from 'react-redux';
 
-const SearchPart: FC<SearchPartProps> = ({
-  setSearchValue,
-  setPeopleFiltered,
-  people,
-  setSelectedPerson,
-  peopleFiltered,
-  searchValue,
-  selectedPerson,
-}) => {
+const SearchPart: FC<SearchPartProps> = ({ setSearchValue, setSelectedPerson, searchValue, selectedPerson }) => {
+  const dispatch = useDispatch();
+
+  const [inputValue, setInputValue] = useState('');
   const { css, theme } = useStyle();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
@@ -32,6 +30,9 @@ const SearchPart: FC<SearchPartProps> = ({
   } = methods;
 
   const { register } = methods;
+
+  const findedCollegues = useSelector(getFindedColleguesS) || [];
+
   return (
     <>
       <form className={css({ marginTop: '32px' })} data-test-id='search-part'>
@@ -46,30 +47,23 @@ const SearchPart: FC<SearchPartProps> = ({
             isValid={!errors[`search_option`]}
             name={`search_option`}
             onChange={(e) => {
+              setInputValue(() => e.target.value);
+              if (e.target.value !== '' && e.target.value.length > 1) {
+                dispatch(
+                  ColleaguesActions.getColleagues({ firstName_like: e.target.value, lastName_like: e.target.value }),
+                );
+              }
+
               register(`search_option`).onChange(e);
-              if (e.target.value === '') {
-                setPeopleFiltered(() => []);
-              }
-              if (e.target.value.length > 1) {
-                const arr = people.filter((item) => {
-                  const mult = `${item.f_name.toLowerCase()}${item.l_name.toLowerCase()}`;
-                  return (
-                    item.l_name.toLowerCase().includes(e.target.value.toLowerCase().split(/\s+/).join('')) ||
-                    item.f_name.toLowerCase().includes(e.target.value.toLowerCase().split(/\s+/).join('')) ||
-                    mult.includes(e.target.value.toLowerCase().split(/\s+/).join(''))
-                  );
-                });
-                setPeopleFiltered(() => arr);
-              }
             }}
             setSelectedPerson={setSelectedPerson}
             domRef={register(`search_option`).ref}
             placeholder={'Search'}
-            options={peopleFiltered}
+            options={findedCollegues}
             setSearchValue={setSearchValue}
             searchValue={searchValue}
-            setPeopleFiltered={setPeopleFiltered}
             selectedPerson={selectedPerson}
+            value={inputValue}
           />
         </Item>
       </form>

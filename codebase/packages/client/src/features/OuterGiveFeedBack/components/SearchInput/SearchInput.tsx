@@ -1,9 +1,10 @@
 import React, { FC } from 'react';
 import { useStyle, colors } from '@dex-ddl/core';
 import mergeRefs from 'react-merge-refs';
-
 import { InputProps } from './type';
 import { useRefContainer } from 'components/Form/context/input';
+import { ColleaguesActions } from '@pma/store';
+import { useDispatch } from 'react-redux';
 
 const SearchInput: FC<InputProps> = ({
   domRef,
@@ -13,17 +14,18 @@ const SearchInput: FC<InputProps> = ({
   value,
   isValid = true,
   type = 'text',
-  options,
+  options = [],
   setSelectedPerson,
   searchValue,
   setSearchValue,
   disabled = false,
-  setPeopleFiltered,
   selectedPerson,
   multiple,
 }) => {
   const { css, theme } = useStyle();
   const refIcon = useRefContainer();
+
+  const dispatch = useDispatch();
 
   const getPropperValue = (maches) => {
     if (maches === undefined) {
@@ -76,7 +78,7 @@ const SearchInput: FC<InputProps> = ({
         >
           {options.map((item) => (
             <div
-              key={item.id}
+              key={item.colleagueUUID}
               className={css({
                 display: 'block',
                 width: '100%',
@@ -89,16 +91,18 @@ const SearchInput: FC<InputProps> = ({
               })}
               onMouseDown={(e) => e.preventDefault()}
               onClick={() => {
-                setPeopleFiltered(() => []);
-                setSearchValue(() => `${item.f_name} ${item.l_name}`);
+                setSearchValue(() => `${item?.profile?.firstName} ${item?.profile?.lastName}`);
                 setSelectedPerson(() => item);
+                dispatch(ColleaguesActions.clearGettedCollegues());
               }}
             >
               <div className={css({ display: 'flex', justifyContent: 'flex-start', alignItems: 'center' })}>
-                <img className={css({ width: '50px', height: '50px', borderRadius: '50%' })} src={item.img} />
+                <img className={css({ width: '50px', height: '50px', borderRadius: '50%' })} src='' />
                 <div className={css({ marginLeft: '16px' })}>
-                  <div className={css({ fontWeight: 'bold', fontSize: '16px', color: '#00539F' })}>{item.f_name}</div>
-                  <div>{item.l_name}</div>
+                  <div className={css({ fontWeight: 'bold', fontSize: '16px', color: '#00539F' })}>
+                    {item?.profile?.firstName}
+                  </div>
+                  <div>{item?.profile?.lastName}</div>
                 </div>
               </div>
             </div>

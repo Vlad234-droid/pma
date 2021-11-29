@@ -55,3 +55,9 @@ export const deleteObjective = <T>(params: any) => {
   const domain = `/colleagues/${colleagueUuid}/pm-cycles/CURRENT/review-types/OBJECTIVE/numbers/${number}`;
   return httpClient.delete(`${domain}`);
 };
+
+export const getReviewByUuid = (params: any) => {
+  const { uuid } = params;
+  const domain = `/reviews/${uuid}`;
+  return httpClient.get(`${domain}`);
+};

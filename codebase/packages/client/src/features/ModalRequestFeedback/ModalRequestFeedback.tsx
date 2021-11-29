@@ -1,6 +1,6 @@
-import React, { FC, useState } from 'react';
-import { CreateRule, Rule, Styles, useStyle } from '@dex-ddl/core';
-import { PeopleTypes } from './type';
+import React, { FC, useState, useEffect } from 'react';
+import { useStyle, Rule, Styles, CreateRule } from '@dex-ddl/core';
+import { PeopleTypes, ObjectiveOptionsType } from './type';
 import { SuccessModal } from './ModalParts';
 import { Item, Select, Textarea } from 'components/Form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -11,96 +11,80 @@ import { createRequestFeedbackSchema } from './config';
 import { Close } from 'components/Icon/graphics/Close';
 import { GenericItemField } from 'components/GenericForm';
 import { TileWrapper } from 'components/Tile';
+import { useDispatch, useSelector } from 'react-redux';
+import { FeedbackActions, getReviewsS, ColleaguesActions, getFindedColleguesS } from '@pma/store';
+
+enum TargetType {
+  Objectives = 'OBJECTIVE',
+}
 
 const ModalRequestFeedback: FC = () => {
-  const { css } = useStyle();
-
-  const [showSuccessModal, setShowSuccesModal] = useState<boolean>(false);
-  const [selectedPersons, setSelectedPersons] = useState<PeopleTypes[] | []>([]);
-  const [peopleFiltered, setPeopleFiltered] = useState<PeopleTypes[]>([]);
-  const [inputValue, setInputValue] = useState<string>('');
-
-  const [peopleCopy] = useState<PeopleTypes[]>([
-    {
-      id: 1,
-      img: 'https://media-exp1.licdn.com/dms/image/C560BAQH9Cnv1weU07g/company-logo_200_200/0/1575479070098?e=2159024400&v=beta&t=QM9VSoWVooxDwCONWh22cw0jBBlBPcBOqAxbZIE18jw',
-      f_name: 'Vlad',
-      l_name: 'Baryshpolets',
-    },
-    {
-      id: 2,
-      img: 'https://media-exp1.licdn.com/dms/image/C560BAQH9Cnv1weU07g/company-logo_200_200/0/1575479070098?e=2159024400&v=beta&t=QM9VSoWVooxDwCONWh22cw0jBBlBPcBOqAxbZIE18jw',
-      f_name: 'Andrey',
-      l_name: 'Sorokov',
-    },
-    {
-      id: 3,
-      img: 'https://media-exp1.licdn.com/dms/image/C560BAQH9Cnv1weU07g/company-logo_200_200/0/1575479070098?e=2159024400&v=beta&t=QM9VSoWVooxDwCONWh22cw0jBBlBPcBOqAxbZIE18jw',
-      f_name: 'Anton',
-      l_name: 'Ryndy',
-    },
-    {
-      id: 4,
-      img: 'https://media-exp1.licdn.com/dms/image/C560BAQH9Cnv1weU07g/company-logo_200_200/0/1575479070098?e=2159024400&v=beta&t=QM9VSoWVooxDwCONWh22cw0jBBlBPcBOqAxbZIE18jw',
-      f_name: 'Anton',
-      l_name: 'Pylypenko',
-    },
-    {
-      id: 5,
-      img: 'https://media-exp1.licdn.com/dms/image/C560BAQH9Cnv1weU07g/company-logo_200_200/0/1575479070098?e=2159024400&v=beta&t=QM9VSoWVooxDwCONWh22cw0jBBlBPcBOqAxbZIE18jw',
-      f_name: 'Slava',
-      l_name: 'Li',
-    },
-  ]);
-  const [people, setPeople] = useState<PeopleTypes[]>([
-    {
-      id: 1,
-      img: 'https://media-exp1.licdn.com/dms/image/C560BAQH9Cnv1weU07g/company-logo_200_200/0/1575479070098?e=2159024400&v=beta&t=QM9VSoWVooxDwCONWh22cw0jBBlBPcBOqAxbZIE18jw',
-      f_name: 'Vlad',
-      l_name: 'Baryshpolets',
-    },
-    {
-      id: 2,
-      img: 'https://media-exp1.licdn.com/dms/image/C560BAQH9Cnv1weU07g/company-logo_200_200/0/1575479070098?e=2159024400&v=beta&t=QM9VSoWVooxDwCONWh22cw0jBBlBPcBOqAxbZIE18jw',
-      f_name: 'Andrey',
-      l_name: 'Sorokov',
-    },
-    {
-      id: 3,
-      img: 'https://media-exp1.licdn.com/dms/image/C560BAQH9Cnv1weU07g/company-logo_200_200/0/1575479070098?e=2159024400&v=beta&t=QM9VSoWVooxDwCONWh22cw0jBBlBPcBOqAxbZIE18jw',
-      f_name: 'Anton',
-      l_name: 'Ryndy',
-    },
-    {
-      id: 4,
-      img: 'https://media-exp1.licdn.com/dms/image/C560BAQH9Cnv1weU07g/company-logo_200_200/0/1575479070098?e=2159024400&v=beta&t=QM9VSoWVooxDwCONWh22cw0jBBlBPcBOqAxbZIE18jw',
-      f_name: 'Anton',
-      l_name: 'Pylypenko',
-    },
-    {
-      id: 5,
-      img: 'https://media-exp1.licdn.com/dms/image/C560BAQH9Cnv1weU07g/company-logo_200_200/0/1575479070098?e=2159024400&v=beta&t=QM9VSoWVooxDwCONWh22cw0jBBlBPcBOqAxbZIE18jw',
-      f_name: 'Slava',
-      l_name: 'Li',
-    },
-  ]);
-
   const methods = useForm({
     mode: 'onChange',
     resolver: yupResolver<Yup.AnyObjectSchema>(createRequestFeedbackSchema),
   });
   const {
     formState: { errors, isValid },
+    getValues,
+    trigger,
+    handleSubmit,
   } = methods;
+
   const { register } = methods;
 
-  console.log('isValid', isValid);
-  const handleDeleteSelectedPerson = (id: number) => {
-    setSelectedPersons(() => selectedPersons.filter((person) => person.id !== id));
+  const formValues = getValues();
+  const [objectiveOptions, setObjectiveOptions] = useState<Array<ObjectiveOptionsType>>([]);
+  const [uuidTargetType, setUuidTargetType] = useState('');
+  const [showSuccessModal, setShowSuccesModal] = useState<boolean>(false);
+  const [selectedPersons, setSelectedPersons] = useState<PeopleTypes[] | []>([]);
+  const [inputValue, setInputValue] = useState<string>('');
+  const dispatch = useDispatch();
+  const { css } = useStyle();
+  const reviews = useSelector(getReviewsS) || [];
+
+  const findedCollegues = useSelector(getFindedColleguesS) || [];
+
+  useEffect(() => {
+    if (formValues.area_options === 'Objectives') {
+      dispatch(FeedbackActions.getObjectiveReviews({ type: 'OBJECTIVE' }));
+    }
+  }, [formValues.area_options]);
+
+  useEffect(() => {
+    if (reviews.length) {
+      setObjectiveOptions(() =>
+        reviews
+          .map((item) => {
+            const { title } = item.properties.mapJson;
+            if (title) {
+              return {
+                value: [title][0],
+                label: title,
+                uuid: item.uuid,
+              };
+            }
+          })
+          .filter(Boolean),
+      );
+    }
+  }, [reviews]);
+
+  const filteredFindedColleguesHandler = () => {
+    if (!selectedPersons.length) return findedCollegues;
+    return findedCollegues
+      .map((item) => {
+        if (selectedPersons.some((person) => person.colleagueUUID === item.colleagueUUID)) return;
+        return item;
+      })
+      .filter(Boolean);
+  };
+
+  const handleDeleteSelectedPerson = (id: string) => {
+    setSelectedPersons(() => selectedPersons.filter((person) => person.colleagueUUID !== id));
   };
   const handleDeleteAllSelectedPersons = () => {
     setSelectedPersons(() => []);
-    setPeople(() => peopleCopy);
+    formValues.search_option = '';
   };
 
   const area_options = [
@@ -109,7 +93,37 @@ const ModalRequestFeedback: FC = () => {
     { value: 'id_3', label: 'Value and behaviour' },
     { value: 'id_4', label: 'Other' },
   ];
-  const objective_options = [{ value: 'id_1', label: 'Provide a positive customer experience' }];
+
+  const getSelected = (option) => {
+    setUuidTargetType(() => option.uuid);
+  };
+
+  const onSubmit = async (data) => {
+    const getPropperFeedbackItems = () => {
+      if (data.comment_to_request) {
+        return {
+          feedbackItems: [{ code: 'comment_to_request', content: data.comment_to_request }],
+        };
+      }
+      return;
+    };
+
+    const listPeoples = selectedPersons.map((person) => {
+      const formData = {
+        colleagueUuid: '10000000-0000-0000-0000-000000000001',
+        targetColleagueUuid: person.colleagueUUID,
+        targetType: TargetType[data.area_options],
+        targetColleagueProfile: {
+          colleague: person,
+        },
+        targetId: uuidTargetType,
+        status: 'PENDING',
+        ...getPropperFeedbackItems(),
+      };
+      return formData;
+    });
+    dispatch(FeedbackActions.createNewFeedback(listPeoples));
+  };
 
   return (
     <>
@@ -134,52 +148,37 @@ const ModalRequestFeedback: FC = () => {
                 isValid={!errors[`search_option`]}
                 name={`search_option`}
                 onChange={(e) => {
-                  register(`search_option`).onChange(e);
                   setInputValue(() => e.target.value);
-
-                  if (e.target.value === '') {
-                    setPeopleFiltered(() => []);
+                  if (e.target.value !== '' && e.target.value.length > 1) {
+                    dispatch(
+                      ColleaguesActions.getColleagues({
+                        firstName_like: e.target.value,
+                        lastName_like: e.target.value,
+                      }),
+                    );
                   }
-                  if (e.target.value.length > 1) {
-                    const arr = people.filter((item) => {
-                      const mult = `${item.f_name.toLowerCase()}${item.l_name.toLowerCase()}`;
-                      return (
-                        item.l_name.toLowerCase().includes(e.target.value.toLowerCase().split(/\s+/).join('')) ||
-                        item.f_name.toLowerCase().includes(e.target.value.toLowerCase().split(/\s+/).join('')) ||
-                        mult.includes(e.target.value.toLowerCase().split(/\s+/).join(''))
-                      );
-                    });
-                    setPeopleFiltered(() => arr);
-                  }
+                  register(`search_option`).onChange(e);
                 }}
                 setSelectedPersons={setSelectedPersons}
                 domRef={register(`search_option`).ref}
                 placeholder={'Search name'}
-                options={peopleFiltered}
-                setPeopleFiltered={setPeopleFiltered}
-                selectedPersons={selectedPersons}
-                multiple={true}
-                value={inputValue}
+                options={filteredFindedColleguesHandler()}
                 setInputValue={setInputValue}
-                setPeople={setPeople}
+                value={inputValue}
               />
             </Item>
 
-            <div
-              className={css({
-                position: 'relative',
-                display: 'flex',
-                justifyContent: 'flex-start',
-                alignItems: 'center',
-                flexWrap: 'wrap',
-                width: '90%',
-              })}
-            >
+            <div className={css(Relative_styles)}>
               {!!selectedPersons.length &&
                 (selectedPersons as Array<PeopleTypes>).map((person: PeopleTypes): any => (
-                  <div key={person.id} className={css(Selected_peoples_style)}>
-                    <span className={css({ marginRight: '10px' })}>{`${person.f_name} ${person.l_name}`}</span>
-                    <div className={css({ cursor: 'pointer' })} onClick={() => handleDeleteSelectedPerson(person.id)}>
+                  <div key={person.colleagueUUID} className={css(Selected_peoples_style)}>
+                    <span
+                      className={css({ marginRight: '10px' })}
+                    >{`${person.profile.firstName} ${person.profile.lastName}`}</span>
+                    <div
+                      className={css({ cursor: 'pointer' })}
+                      onClick={() => handleDeleteSelectedPerson(person.colleagueUUID)}
+                    >
                       <Close />
                     </div>
                   </div>
@@ -203,6 +202,8 @@ const ModalRequestFeedback: FC = () => {
                 Element={Select}
                 options={area_options}
                 placeholder={'Choose an area'}
+                value={formValues.area_options}
+                onChange={() => trigger('area_options')}
               />
             </div>
             <div className={css({ marginTop: '24px' })}>
@@ -210,16 +211,18 @@ const ModalRequestFeedback: FC = () => {
                 name={`objective_options`}
                 methods={methods}
                 Wrapper={({ children }) => (
-                  <Item label='Choose an objectove you want feedback on' withIcon={false}>
+                  <Item label='Choose an objective you want feedback on' withIcon={false}>
                     {children}
                   </Item>
                 )}
                 Element={Select}
-                options={objective_options}
+                options={objectiveOptions}
                 placeholder='Choose objective'
+                value={formValues.objective_options}
+                getSelected={getSelected}
               />
             </div>
-            <TileWrapper customStyle={{ padding: '24px' }}>
+            <TileWrapper customStyle={{ padding: '24px', border: '1px solid #E5E5E5' }}>
               <h3 className={css(Tile_title)}>Anything else?</h3>
               <h3 className={css(Commnet_style)}>Add any other comment here</h3>
               <p className={css(Tile_description)}>
@@ -227,21 +230,36 @@ const ModalRequestFeedback: FC = () => {
                 you’d like to hear feedabck on or leave them a note to say thank you.
               </p>
               <GenericItemField
-                name={`tile_else`}
+                name={`comment_to_request`}
                 methods={methods}
                 Wrapper={Item}
                 Element={Textarea}
                 placeholder='Add your question here'
+                value={formValues.comment_to_request}
               />
             </TileWrapper>
           </form>
-          <ButtonsComponent isValid={isValid} setShowSuccesModal={setShowSuccesModal} />
+          <ButtonsComponent
+            isValid={isValid}
+            setShowSuccesModal={setShowSuccesModal}
+            onSubmit={handleSubmit(onSubmit)}
+            methods={methods}
+          />
         </div>
       ) : (
         <SuccessModal />
       )}
     </>
   );
+};
+
+const Relative_styles: Rule = {
+  position: 'relative',
+  display: 'flex',
+  justifyContent: 'flex-start',
+  alignItems: 'center',
+  flexWrap: 'wrap',
+  width: '90%',
 };
 
 const Selected_peoples_style: Rule = {

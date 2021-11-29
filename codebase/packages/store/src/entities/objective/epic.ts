@@ -12,6 +12,7 @@ import {
   getObjectives,
   updateObjective,
   updateObjectives,
+  getReviewByUuid,
 } from './actions';
 
 export const getObjectivesEpic: Epic = (action$, _, { api }) =>
@@ -142,6 +143,19 @@ export const deleteObjectiveEpic: Epic = (action$, _, { api }) =>
     }),
   );
 
+export const getReviewByUuidEpic: Epic = (action$, _, { api }) =>
+  action$.pipe(
+    filter(isActionOf(getReviewByUuid.request)),
+    switchMap(({ payload }) => {
+      return from(api.getReviewByUuid(payload)).pipe(
+        // @ts-ignore
+        map(({ data }) => {
+          return getReviewByUuid.success(data);
+        }),
+      );
+    }),
+  );
+
 export default combineEpics(
   getObjectivesEpic,
   updateObjectivesEpic,
@@ -150,4 +164,5 @@ export default combineEpics(
   updateObjectiveEpic,
   deleteObjectiveEpic,
   createObjectiveEpic,
+  getReviewByUuidEpic,
 );

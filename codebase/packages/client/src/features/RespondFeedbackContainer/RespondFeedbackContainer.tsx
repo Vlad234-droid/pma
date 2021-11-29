@@ -5,7 +5,7 @@ import { Trans } from 'components/Translation';
 import { FilterOption } from 'features/Shared';
 import { IconButton } from 'components/IconButton';
 import { Icon } from 'components/Icon';
-import { PeopleTypes } from './type';
+import { PeopleTypes, TypefeedbackItems } from './type';
 import { ModalRespondFeedback } from './ModalsParts';
 import { DraftItem } from './components';
 
@@ -20,57 +20,63 @@ const RespondFeedbackContainer: FC = () => {
   const [selectedPerson, setSelectedPerson] = useState<PeopleTypes | null>(null);
   const [infoModal, setInfoModal] = useState<boolean>(false);
   const [modalSuccess, setModalSuccess] = useState<boolean>(false);
+  const [feedbackItems, setFeedbackItems] = useState<TypefeedbackItems[] | []>([]);
 
-  const drafts = [
-    {
-      id: 1,
-      img: 'https://media-exp1.licdn.com/dms/image/C560BAQH9Cnv1weU07g/company-logo_200_200/0/1575479070098?e=2159024400&v=beta&t=QM9VSoWVooxDwCONWh22cw0jBBlBPcBOqAxbZIE18jw',
-      f_name: 'Vlad',
-      l_name: 'Baryshpolets',
-      title: '“Objective: Provide a posititve customer experience”',
-    },
-    {
-      id: 2,
-      img: 'https://media-exp1.licdn.com/dms/image/C560BAQH9Cnv1weU07g/company-logo_200_200/0/1575479070098?e=2159024400&v=beta&t=QM9VSoWVooxDwCONWh22cw0jBBlBPcBOqAxbZIE18jw',
-      f_name: 'Andrey',
-      l_name: 'Sorokov',
-      title: '“Objective: Provide a posititve customer experience”',
-    },
-  ];
+  const [checkedRadio, setCheckedRadio] = useState({
+    pending: true,
+    completed: false,
+  });
 
-  const draftFeedback = (id: number): void => {
-    const findSelectedDraft = drafts.filter((item) => id === item.id);
-    const [selectedDraft] = findSelectedDraft;
-    setSearchValue(() => `${selectedDraft.f_name} ${selectedDraft.l_name}`);
+  const [, isBreakpoint] = useBreakpoints();
+  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+
+  const draftFeedback = (selectedNote): void => {
+    if (selectedNote.feedbackItems) {
+      setFeedbackItems(() => selectedNote.feedbackItems);
+    }
+    setSearchValue(
+      () =>
+        `${selectedNote.targetColleagueProfile?.colleague?.profile?.firstName} ${selectedNote.targetColleagueProfile?.colleague?.profile?.lastName}`,
+    );
     setTitle(() => 'Respond to feedback requests');
     setSelectedPerson(() => ({
-      id: selectedDraft.id,
-      img: selectedDraft.img,
-      f_name: selectedDraft.f_name,
-      l_name: selectedDraft.l_name,
+      id: selectedNote.uuid,
+      img: 'selectedDraft.img',
+      f_name: selectedNote.targetColleagueProfile?.colleague?.profile?.firstName,
+      l_name: selectedNote.targetColleagueProfile?.colleague?.profile?.lastName,
+      targetId: selectedNote.targetId,
+      targetType: selectedNote.targetType,
     }));
     setIsOpen(() => true);
   };
   return (
     <>
       <div data-test-id={RESPOND_FEEDBACK_CONTAINER}>
-        <div
-          className={css({
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            paddingTop: '24px',
-          })}
-        >
-          <div className={css({ display: 'flex', marginRight: '129px' })}>
-            <div className={css({ padding: '0px 10px' })}>
+        <div className={css(header_styled)}>
+          <div className={css({ display: 'flex', ...(mobileScreen && { marginTop: '12px' }) })}>
+            <div className={css({ padding: '0px 10px 00px 0px', cursor: 'pointer' })}>
               <label
+                htmlFor='pending'
                 className={css({
                   display: 'flex',
                   alignItems: 'center',
                 })}
               >
-                <Radio type='radio' name='status1' value='option1' checked={true} />
+                <Radio
+                  type='radio'
+                  name='status1'
+                  value='option1'
+                  checked={checkedRadio.pending}
+                  id='pending'
+                  onChange={() => {
+                    setCheckedRadio(() => {
+                      return {
+                        pending: true,
+                        completed: false,
+                      };
+                    });
+                  }}
+                />
                 <span
                   className={css({
                     fontSize: '16px',
@@ -78,18 +84,33 @@ const RespondFeedbackContainer: FC = () => {
                     padding: '0px 5px',
                   })}
                 >
-                  <Trans i18nKey='drafts'>Drafts</Trans>
+                  <Trans i18nKey='drafts'>Pending</Trans>
                 </span>
               </label>
             </div>
-            <div className={css({ padding: '0px 10px' })}>
+            <div className={css({ padding: '0px 0px 10px 0px', cursor: 'pointer' })}>
               <label
+                htmlFor='completed'
                 className={css({
                   display: 'flex',
                   alignItems: 'center',
                 })}
               >
-                <Radio type='radio' name='status2' value='option2' />
+                <Radio
+                  id='completed'
+                  type='radio'
+                  name='status2'
+                  value='option2'
+                  checked={checkedRadio.completed}
+                  onChange={() => {
+                    setCheckedRadio(() => {
+                      return {
+                        pending: false,
+                        completed: true,
+                      };
+                    });
+                  }}
+                />
                 <span
                   className={css({
                     fontSize: '16px',
@@ -97,7 +118,7 @@ const RespondFeedbackContainer: FC = () => {
                     padding: '0px 5px',
                   })}
                 >
-                  <Trans i18nKey='submitted'>Submitted</Trans>
+                  <Trans i18nKey='submitted'>Completed</Trans>
                 </span>
               </label>
             </div>
@@ -106,6 +127,7 @@ const RespondFeedbackContainer: FC = () => {
             className={css({
               display: 'flex',
               alignItems: 'center',
+              ...(mobileScreen && { order: -1, flexBasis: '250px' }),
             })}
           >
             <IconButton graphic='information' iconStyles={iconStyle} />
@@ -113,9 +135,7 @@ const RespondFeedbackContainer: FC = () => {
           </div>
         </div>
         <div className={css(Drafts_style)}>
-          {drafts.map((item) => (
-            <DraftItem key={item.id} item={item} draftFeedback={draftFeedback} />
-          ))}
+          <DraftItem draftFeedback={draftFeedback} checkedRadio={checkedRadio} />
         </div>
       </div>
       {isOpenMainModal && (
@@ -155,11 +175,25 @@ const RespondFeedbackContainer: FC = () => {
             setModalSuccess={setModalSuccess}
             searchValue={searchValue}
             setSearchValue={setSearchValue}
+            setFeedbackItems={setFeedbackItems}
+            feedbackItems={feedbackItems}
           />
         </Modal>
       )}
     </>
   );
+};
+
+const header_styled: Rule = () => {
+  const [, isBreakpoint] = useBreakpoints();
+  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+  return {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingTop: '24px',
+    ...(mobileScreen && { flexWrap: 'wrap', flexBasis: '240px' }),
+  };
 };
 
 const iconStyle: Rule = {

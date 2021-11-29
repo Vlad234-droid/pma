@@ -7,7 +7,13 @@ import { Trans } from '../../../components/Translation';
 
 export const SUCCES_GIVE_FEEDBACK = 'SUCCESS_GIVE_FEEDBACK';
 
-const SuccessModal: FC<SuccessModalProps> = ({ setModalSuccess, setIsOpen, setSelectedPerson, selectedPerson }) => {
+const SuccessModal: FC<SuccessModalProps> = ({
+  setModalSuccess,
+  setIsOpen,
+  setSelectedPerson,
+  selectedPerson,
+  setFeedbackItems,
+}) => {
   const { css, theme } = useStyle();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
@@ -18,7 +24,8 @@ const SuccessModal: FC<SuccessModalProps> = ({ setModalSuccess, setIsOpen, setSe
       </div>
       <h2 className={css(Done_text)}>Done!</h2>
       <p className={css(Description)}>
-        {`${selectedPerson?.f_name} ${selectedPerson?.l_name}`} will now be able to see your feedback
+        {`${selectedPerson?.profile?.firstName} ${selectedPerson?.profile?.lastName}`} will now be able to see your
+        feedback
       </p>
       <div
         className={css({
@@ -61,6 +68,7 @@ const SuccessModal: FC<SuccessModalProps> = ({ setModalSuccess, setIsOpen, setSe
                 setModalSuccess(() => false);
                 setIsOpen(() => false);
                 setSelectedPerson(() => null);
+                setFeedbackItems(() => []);
               }}
             >
               <Trans i18nKey='OK'>Okay</Trans>

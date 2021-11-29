@@ -2,98 +2,70 @@ import React, { FC, useState } from 'react';
 import { useStyle, useBreakpoints, Rule, Modal } from '@dex-ddl/core';
 import { Radio } from 'components/Form';
 import { Trans } from 'components/Translation';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { createGiveFeedbackSchema } from './config';
+import * as Yup from 'yup';
 import { FilterOption } from 'features/Shared';
 import { IconButton } from 'components/IconButton';
 import { Icon } from 'components/Icon';
-import { PeopleTypes } from './type';
+import { useForm } from 'react-hook-form';
+import { PeopleTypes, TypefeedbackItems } from './type';
 import { ModalGiveFeedback } from './Modals';
 import { DraftItem } from './components';
+import { getFindedColleguesS, ColleaguesActions } from '@pma/store';
+import { useDispatch, useSelector } from 'react-redux';
 
 const OuterGiveFeedBack: FC = () => {
+  const findedColleagues = useSelector(getFindedColleguesS) || [];
+  const dispatch = useDispatch();
   const { css } = useStyle();
-
   const [isOpenMainModal, setIsOpen] = useState<boolean>(false);
   const [title, setTitle] = useState<string>('');
   const [searchValue, setSearchValue] = useState<string>('');
-
   const [selectedPerson, setSelectedPerson] = useState<PeopleTypes | null>(null);
   const [infoModal, setInfoModal] = useState<boolean>(false);
   const [modalSuccess, setModalSuccess] = useState<boolean>(false);
+  const [feedbackItemsS, setFeedbackItems] = useState<TypefeedbackItems[] | []>([]);
+
+  const [checkedRadio, setCheckedRadio] = useState({
+    draft: true,
+    submitted: false,
+  });
+  const [, isBreakpoint] = useBreakpoints();
+  const medium = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
+  const small = isBreakpoint.small || isBreakpoint.xSmall;
+
+  const methods = useForm({
+    mode: 'onChange',
+    resolver: yupResolver<Yup.AnyObjectSchema>(createGiveFeedbackSchema),
+  });
 
   const handleBtnClick = (): void => {
     setTitle(() => 'Give feedback');
     setIsOpen(() => true);
   };
 
-  const drafts = [
-    {
-      id: 1,
-      img: 'https://media-exp1.licdn.com/dms/image/C560BAQH9Cnv1weU07g/company-logo_200_200/0/1575479070098?e=2159024400&v=beta&t=QM9VSoWVooxDwCONWh22cw0jBBlBPcBOqAxbZIE18jw',
-      f_name: 'Vlad',
-      l_name: 'Baryshpolets',
-      title: 'Objective: Provide a posititve customer experience ',
-      question1: {
-        ask: 'What strengths does this colleague have?',
-        answer:
-          'Iaculis amet, nec quis congue aliquam facilisis et amet et. Quam magna ut ultricies enim id morbi. Est enim ipsum commodo quis dolor pellentesque. Massa elit quis vitae libero donec.',
-      },
-      question2: {
-        ask: 'What should the colleague improve on?',
-        answer: '',
-      },
-      question3: {
-        ask: 'How should the colleague act on this feedback?',
-        answer: '',
-      },
-    },
-    {
-      id: 2,
-      img: 'https://media-exp1.licdn.com/dms/image/C560BAQH9Cnv1weU07g/company-logo_200_200/0/1575479070098?e=2159024400&v=beta&t=QM9VSoWVooxDwCONWh22cw0jBBlBPcBOqAxbZIE18jw',
-      f_name: 'Andrey',
-      l_name: 'Sorokov',
-      title: 'Objective: Provide a posititve customer experience ',
-      question1: {
-        ask: 'What strengths does this colleague have?',
-        answer:
-          'Iaculis amet, nec quis congue aliquam facilisis et amet et. Quam magna ut ultricies enim id morbi. Est enim ipsum commodo quis dolor pellentesque. Massa elit quis vitae libero donec.',
-      },
-      question2: {
-        ask: 'What should the colleague improve on?',
-        answer: '',
-      },
-      question3: {
-        ask: 'How should the colleague act on this feedback?',
-        answer: '',
-      },
-    },
-  ];
+  const draftFeedback = (selectedNote): void => {
+    setFeedbackItems(() => selectedNote.feedbackItems);
 
-  const draftFeedback = (id: number): void => {
-    const findSelectedDraft = drafts.filter((item) => id === item.id);
-    const [selectedDraft] = findSelectedDraft;
-    console.log('selectedDraft', selectedDraft);
-    setSearchValue(() => `${selectedDraft.f_name} ${selectedDraft.l_name}`);
+    setSearchValue(
+      () =>
+        `${selectedNote.targetColleagueProfile?.colleague?.profile?.firstName} ${selectedNote.targetColleagueProfile?.colleague?.profile?.lastName}`,
+    );
     setTitle(() => 'Give feedback');
-    setSelectedPerson(() => ({
-      id: selectedDraft.id,
-      img: selectedDraft.img,
-      f_name: selectedDraft.f_name,
-      l_name: selectedDraft.l_name,
-    }));
+    setSelectedPerson(() => {
+      return {
+        ...selectedNote.targetColleagueProfile.colleague,
+        uuid: selectedNote.uuid,
+      };
+    });
     setIsOpen(() => true);
   };
 
   return (
     <>
       <div>
-        <div
-          className={css({
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            paddingTop: '24px',
-          })}
-        >
+        <div className={css(header_styled)}>
           <IconButton
             customVariantRules={{ default: iconBtnStyle }}
             onPress={handleBtnClick}
@@ -103,15 +75,39 @@ const OuterGiveFeedBack: FC = () => {
           >
             <Trans i18nKey='give_new_feedback'>Give new feedback</Trans>
           </IconButton>
-          <div className={css({ display: 'flex', marginRight: '129px' })}>
-            <div className={css({ padding: '0px 10px' })}>
+
+          <div
+            className={css({
+              display: 'flex',
+              order: medium ? 1 : 0,
+              gap: '10px',
+              ...(medium && { flexBasis: '816px', marginTop: '24px' }),
+            })}
+          >
+            <div className={css({ padding: '0px 10px 0px 0px', cursor: 'pointer' })}>
               <label
+                htmlFor='draft'
                 className={css({
                   display: 'flex',
                   alignItems: 'center',
+                  cursor: 'pointer',
                 })}
               >
-                <Radio type='radio' name='status' value='option1' checked={true} />
+                <Radio
+                  type='radio'
+                  name='status'
+                  value='option1'
+                  checked={checkedRadio.draft}
+                  id='draft'
+                  onChange={() => {
+                    setCheckedRadio(() => {
+                      return {
+                        draft: true,
+                        submitted: false,
+                      };
+                    });
+                  }}
+                />
                 <span
                   className={css({
                     fontSize: '16px',
@@ -123,14 +119,30 @@ const OuterGiveFeedBack: FC = () => {
                 </span>
               </label>
             </div>
-            <div className={css({ padding: '0px 10px' })}>
+            <div className={css({ padding: '0px 10px', cursor: 'pointer' })}>
               <label
+                htmlFor='submitted'
                 className={css({
                   display: 'flex',
                   alignItems: 'center',
+                  cursor: 'pointer',
                 })}
               >
-                <Radio type='radio' name='status' value='option2' />
+                <Radio
+                  type='radio'
+                  name='status'
+                  value='option2'
+                  checked={checkedRadio.submitted}
+                  id='submitted'
+                  onChange={() => {
+                    setCheckedRadio(() => {
+                      return {
+                        draft: false,
+                        submitted: true,
+                      };
+                    });
+                  }}
+                />
                 <span
                   className={css({
                     fontSize: '16px',
@@ -147,6 +159,7 @@ const OuterGiveFeedBack: FC = () => {
             className={css({
               display: 'flex',
               alignItems: 'center',
+              ...(small && { flexBasis: '300px', marginTop: '24px' }),
             })}
           >
             <IconButton graphic='information' iconStyles={iconStyle} />
@@ -154,9 +167,7 @@ const OuterGiveFeedBack: FC = () => {
           </div>
         </div>
         <div className={css(Drafts_style)}>
-          {drafts.map((item) => (
-            <DraftItem key={item.id} item={item} draftFeedback={draftFeedback} />
-          ))}
+          <DraftItem draftFeedback={draftFeedback} checkedRadio={checkedRadio} />
         </div>
       </div>
       {isOpenMainModal && (
@@ -167,10 +178,14 @@ const OuterGiveFeedBack: FC = () => {
           closeOptions={{
             content: <Icon graphic='cancel' invertColors={true} />,
             onClose: () => {
+              if (findedColleagues.length) {
+                dispatch(ColleaguesActions.clearGettedCollegues());
+              }
               setModalSuccess(() => false);
               setSelectedPerson(() => null);
               setIsOpen(() => false);
               setInfoModal(() => false);
+              setFeedbackItems(() => []);
             },
             styles: [modalCloseOptionStyle],
           }}
@@ -179,10 +194,14 @@ const OuterGiveFeedBack: FC = () => {
             styles: [modalTitleOptionStyle],
           }}
           onOverlayClick={() => {
+            if (findedColleagues.length) {
+              dispatch(ColleaguesActions.clearGettedCollegues());
+            }
             if (infoModal) setInfoModal(() => false);
             if (modalSuccess) setModalSuccess(() => false);
             setSelectedPerson(() => null);
             setIsOpen(() => false);
+            setFeedbackItems(() => []);
           }}
         >
           <ModalGiveFeedback
@@ -196,11 +215,27 @@ const OuterGiveFeedBack: FC = () => {
             setModalSuccess={setModalSuccess}
             searchValue={searchValue}
             setSearchValue={setSearchValue}
+            methods={methods}
+            feedbackItemsS={feedbackItemsS}
+            setFeedbackItems={setFeedbackItems}
           />
         </Modal>
       )}
     </>
   );
+};
+
+const header_styled: Rule = () => {
+  const [, isBreakpoint] = useBreakpoints();
+  const medium = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
+  return {
+    display: 'flex',
+    flexWrap: medium ? 'wrap' : 'nowrap',
+    ...(medium && { flexBasis: '250px' }),
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingTop: '24px',
+  };
 };
 
 const iconBtnStyle: Rule = ({ theme }) => ({

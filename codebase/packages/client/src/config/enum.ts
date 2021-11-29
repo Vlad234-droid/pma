@@ -29,3 +29,10 @@ export enum TimelineType {
   TIMELINE_POINT = 'TIMELINE_POINT',
   CYCLE = 'CYCLE',
 }
+
+export enum FeedbackStatus {
+  SUBMITTED = 'SUBMITTED',
+  PENDING = 'PENDING',
+  DRAFT = 'DRAFT',
+  COMPLETED = 'COMPLETED',
+}

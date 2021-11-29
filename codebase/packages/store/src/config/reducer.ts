@@ -7,6 +7,8 @@ import objectiveReducer from '../entities/objective/reducer';
 import schemaReducer from '../entities/schema/reducer';
 import timelineReducer from '../entities/timeline/reducer';
 import managersReducer from '../entities/managers/reducer';
+import feedbackReducer from '../entities/feedback/reducer';
+import colleaguesReducer from '../entities/colleagues/reducer';
 
 export const rootReducer = combineReducers({
   users: userReducer,
@@ -16,4 +18,6 @@ export const rootReducer = combineReducers({
   schema: schemaReducer,
   timeline: timelineReducer,
   managers: managersReducer,
+  feedback: feedbackReducer,
+  colleagues: colleaguesReducer,
 });

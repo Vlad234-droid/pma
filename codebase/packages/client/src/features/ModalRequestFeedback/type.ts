@@ -1,6 +1,6 @@
-export type PeopleTypes = {
-  img: string;
-  f_name: string;
-  l_name: string;
-  id: number;
+export type PeopleTypes = any;
+export type ObjectiveOptionsType = {
+  value: string;
+  label: string;
+  uuid: string;
 };

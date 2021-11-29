@@ -1,89 +1,186 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import { Rule, Styles, useStyle } from '@dex-ddl/core';
 import { TileWrapper } from 'components/Tile';
 import { Accordion, BaseAccordion, ExpandButton, Panel, Section } from 'components/Accordion';
 import { IconButton } from 'components/IconButton';
 import { Trans } from 'components/Translation';
+import { useDispatch, useSelector } from 'react-redux';
+import { FeedbackActions, getReviewByUuidS, ObjectiveActions, getPropperNotesByStatusSelector } from '@pma/store';
+import { getPropperTime } from '../../../utils';
+import { FeedbackStatus } from '../../../config/enum';
+
+enum TargetType {
+  OBJECTIVE = 'Objective',
+}
 
 type DraftItemProps = {
-  item: any;
   draftFeedback: (id: number) => void;
+  checkedRadio: { read: boolean; unread: boolean };
 };
 
-const DraftItem: FC<DraftItemProps> = ({ item, draftFeedback }) => {
+const DraftItem: FC<DraftItemProps> = ({ draftFeedback, checkedRadio }) => {
   const { css } = useStyle();
+  const dispatch = useDispatch();
+  const submittedCompletedNotes =
+    useSelector(getPropperNotesByStatusSelector([FeedbackStatus.SUBMITTED, FeedbackStatus.COMPLETED])) || [];
+  const unReadNotes = submittedCompletedNotes.filter((item) => !item.read) || [];
+  const readNotes = submittedCompletedNotes.filter((item) => item.read) || [];
+  const review = useSelector(getReviewByUuidS) || [];
 
-  const getPropperTime = (): string => {
-    return '2 weeks ago';
+  useEffect(() => {
+    dispatch(FeedbackActions.getAllFeedbacks({}));
+  }, []);
+
+  useEffect(() => {
+    if (unReadNotes.length && checkedRadio.unread) {
+      dispatch(FeedbackActions.readFeedback({ uuid: unReadNotes[0].uuid }));
+    }
+  }, [unReadNotes.length]);
+
+  useEffect(() => {
+    if (unReadNotes.length) {
+      for (const item of unReadNotes) {
+        if (item.targetId) {
+          dispatch(ObjectiveActions.getReviewByUuid({ uuid: item.targetId }));
+        }
+      }
+    }
+  }, [unReadNotes.length]);
+
+  useEffect(() => {
+    if (readNotes.length) {
+      for (const item of readNotes) {
+        if (item.targetId) {
+          dispatch(ObjectiveActions.getReviewByUuid({ uuid: item.targetId }));
+        }
+      }
+    }
+  }, [readNotes.length]);
+
+  if (checkedRadio.unread && !submittedCompletedNotes.length && !unReadNotes.length) {
+    return null;
+  }
+  if (checkedRadio.read && !submittedCompletedNotes.length && !readNotes.length) {
+    return null;
+  }
+
+  const getPropperNotes = () => {
+    if (checkedRadio.unread) return unReadNotes;
+    return readNotes;
+  };
+
+  const markAsReadFeedback = (uuid) => {
+    if (checkedRadio.unread) {
+      dispatch(FeedbackActions.readFeedback({ uuid }));
+    }
+  };
+
+  const getPropperTargetType = (targetType, targetId) => {
+    const capitalType =
+      TargetType[targetType] && TargetType[targetType].charAt(0).toUpperCase() + TargetType[targetType].slice(1);
+
+    if (capitalType) {
+      let targetTypeStr = '';
+      review.forEach((item) => {
+        if (item.uuid === targetId) {
+          targetTypeStr = item.title;
+        }
+      });
+
+      return `“${capitalType}: ${targetTypeStr}”`;
+    }
+    return '';
   };
 
   return (
-    <TileWrapper>
-      <Accordion
-        id={`draft-accordion-${item.id}`}
-        customStyle={{
-          borderBottom: 'none',
-          marginTop: 0,
-        }}
-      >
-        <BaseAccordion id={`draft-base-accordion-${item.id}`}>
-          {() => (
-            <>
-              <Section defaultExpanded={false}>
-                <div className={css(Draft_Styles)}>
-                  <div className={css(Block_info)}>
-                    <div className={css({ alignSelf: 'flex-start' })}>
-                      <img className={css(Img_style)} src={item.img} alt='photo' />
-                    </div>
-                    <div className={css({ marginLeft: '16px' })}>
-                      <h3 className={css(Names_Style)}>{`${item.f_name} ${item.l_name}`}</h3>
-                      <p className={css(Industry_Style)}>Cashier, Grocery</p>
-                    </div>
-                  </div>
-                  <div className={css({ display: 'flex', justifyContent: 'center', alignItems: 'center' })}>
-                    <div className={css({ marginRight: '26px' })}>{getPropperTime()}</div>
-                    <ExpandButton />
-                  </div>
-                </div>
+    <>
+      {getPropperNotes().map((item, i) => (
+        <div key={item.uuid}>
+          <TileWrapper>
+            <Accordion
+              id={`draft-accordion-${item.uuid}`}
+              customStyle={{
+                borderBottom: 'none',
+                marginTop: 0,
+              }}
+            >
+              <BaseAccordion id={`draft-base-accordion-${item.uuid}`}>
+                {() => (
+                  <>
+                    <Section defaultExpanded={checkedRadio.unread ? !i : false}>
+                      <div className={css(Draft_Styles)}>
+                        <div className={css(Block_info)}>
+                          <div className={css({ alignSelf: 'flex-start' })}>
+                            <img className={css(Img_style)} src={item.img} alt='photo' />
+                          </div>
+                          <div className={css({ marginLeft: '16px' })}>
+                            <h3
+                              className={css(Names_Style)}
+                            >{`${item?.targetColleagueProfile?.colleague?.profile?.firstName} ${item?.targetColleagueProfile?.colleague?.profile?.lastName}`}</h3>
+                            <p
+                              className={css(Industry_Style)}
+                            >{`${item?.targetColleagueProfile?.colleague?.workRelationships[0].job.name}, ${item?.targetColleagueProfile?.colleague?.workRelationships[0].department?.name}`}</p>
+                          </div>
+                        </div>
+                        <div className={css({ display: 'flex', justifyContent: 'center', alignItems: 'center' })}>
+                          <div className={css({ marginRight: '26px' })}>{getPropperTime(item.updatedTime)}</div>
+                          <ExpandButton onClick={(expanded) => expanded && markAsReadFeedback(item.uuid)} />
+                        </div>
+                      </div>
 
-                <Panel>
-                  <TileWrapper customStyle={{ padding: '24px', margin: '0px 28px 28px 24px' }}>
-                    <h2 className={css(Title_style)}>{item.title}</h2>
-                    <div className={css(Info_block_style)}>
-                      <h3>{item.question1.ask}</h3>
-                      <p>{item.question1.answer ? item.question1.answer : '-'}</p>
-                    </div>
-                    <div className={css(Info_block_style)}>
-                      <h3>{item.question2.ask}</h3>
-                      <p>{item.question2.answer ? item.question1.answer : '-'}</p>
-                    </div>
-                    <div className={css(Info_block_style)}>
-                      <h3>{item.question3.ask}</h3>
-                      <p>{item.question3.answer ? item.question1.answer : '-'}</p>
-                    </div>
-                  </TileWrapper>
-                  <IconButton
-                    customVariantRules={{ default: iconBtnStyle }}
-                    onPress={() => draftFeedback(item.id)}
-                    graphic='share'
-                    iconProps={{ invertColors: false }}
-                    iconStyles={iconStyle}
-                  >
-                    <Trans i18nKey='sahre'>Share</Trans>
-                  </IconButton>
-                </Panel>
-              </Section>
-            </>
-          )}
-        </BaseAccordion>
-      </Accordion>
-    </TileWrapper>
+                      <Panel>
+                        <TileWrapper
+                          customStyle={{ padding: '24px', margin: '0px 28px 28px 24px', border: '1px solid #E5E5E5' }}
+                        >
+                          <h2 className={css(Title_style)}>{getPropperTargetType(item.targetType, item.targetId)}</h2>
+                          <>
+                            <div className={css(Info_block_style)}>
+                              <h3>Question 1</h3>
+                              {item.feedbackItems.map((question) => {
+                                return <p key={question.code}>{question.code === 'Question 1' && question.content}</p>;
+                              })}
+                            </div>
+                            <div className={css(Info_block_style)}>
+                              <h3>Question 2</h3>
+                              {item.feedbackItems.map((question) => {
+                                return <p key={question.code}>{question.code === 'Question 2' && question.content}</p>;
+                              })}
+                            </div>
+                            <div className={css(Info_block_style)}>
+                              <h3>Anything else?</h3>
+                              {item.feedbackItems.map((question) => {
+                                return (
+                                  <p key={question.code}>{question.code === 'Anything else?' && question.content}</p>
+                                );
+                              })}
+                            </div>
+                          </>
+                        </TileWrapper>
+                        <IconButton
+                          customVariantRules={{ default: iconBtnStyle }}
+                          onPress={() => draftFeedback(item.id)}
+                          graphic='share'
+                          iconProps={{ invertColors: false }}
+                          iconStyles={iconStyle}
+                        >
+                          <Trans>Share</Trans>
+                        </IconButton>
+                      </Panel>
+                    </Section>
+                  </>
+                )}
+              </BaseAccordion>
+            </Accordion>
+          </TileWrapper>
+        </div>
+      ))}
+    </>
   );
 };
 
 const Draft_Styles: Rule = {
   padding: '24px',
-  height: '96px',
+
   display: 'flex',
   justifyContent: 'space-between',
 };

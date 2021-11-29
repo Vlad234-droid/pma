@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction, ReactElement } from 'react';
-
+import { UseFormReturn } from 'react-hook-form';
 export type ConfigProps = {
   id: number;
   action: string;
@@ -10,11 +10,13 @@ export type ConfigProps = {
   link: string;
 };
 
-export type PeopleTypes = {
-  img: string;
-  f_name: string;
-  l_name: string;
-  id: number;
+export type PeopleTypes = any;
+
+export type TypefeedbackItems = {
+  uuid: string;
+  code: string;
+  content: string;
+  feedbackUuid: string;
 };
 export type ModalGiveFeedbackProps = {
   isOpenMainModal: boolean;
@@ -27,23 +29,27 @@ export type ModalGiveFeedbackProps = {
   setModalSuccess: Dispatch<SetStateAction<boolean>>;
   searchValue: string;
   setSearchValue: Dispatch<SetStateAction<string>>;
+  methods: UseFormReturn;
+  feedbackItemsS?: TypefeedbackItems[] | [];
+  setFeedbackItems: Dispatch<SetStateAction<TypefeedbackItems[] | []>>;
 };
 
 export type SearchPartProps = {
-  setPeopleFiltered: any;
-  people: PeopleTypes[];
   setSelectedPerson: any;
-  peopleFiltered: PeopleTypes[];
   setSearchValue?: any;
   searchValue?: string;
   selectedPerson: PeopleTypes | null;
 };
 
 export type SubmitPartProps = {
-  setSelectedPerson: any;
   selectedPerson: PeopleTypes | null;
   setInfoModal: Dispatch<SetStateAction<boolean>>;
   setModalSuccess: Dispatch<SetStateAction<boolean>>;
+  setIsOpen: Dispatch<SetStateAction<boolean>>;
+  methods: UseFormReturn;
+  feedbackItemsS?: TypefeedbackItems[] | [];
+  setFeedbackItems: Dispatch<SetStateAction<TypefeedbackItems[] | []>>;
+  setSelectedPerson: Dispatch<SetStateAction<PeopleTypes | null>>;
 };
 export type InfoModalProps = {
   setInfoModal: Dispatch<SetStateAction<boolean>>;
@@ -65,9 +71,9 @@ export type GiveFeedbackType = {
 };
 
 export type SuccessModalProps = {
-  modalSuccess: boolean;
   setModalSuccess: Dispatch<SetStateAction<boolean>>;
   selectedPerson: PeopleTypes | null;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
   setSelectedPerson: Dispatch<SetStateAction<PeopleTypes | null>>;
+  setFeedbackItems: Dispatch<SetStateAction<TypefeedbackItems[] | []>>;
 };

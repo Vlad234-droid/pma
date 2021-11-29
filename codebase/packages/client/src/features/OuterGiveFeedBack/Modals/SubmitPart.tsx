@@ -1,25 +1,33 @@
 import React, { FC } from 'react';
-import { GiveFeedbackType, SubmitPartProps } from '../type';
-import { createGiveFeedbackSchema } from '../config';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as Yup from 'yup';
-import { Button, Rule, Styles, useBreakpoints, useStyle } from '@dex-ddl/core';
+import { SubmitPartProps, GiveFeedbackType } from '../type';
+import { useStyle, Rule, Styles, useBreakpoints, Button } from '@dex-ddl/core';
 import { IconButton, Position } from 'components/IconButton';
 import video_explanation from '../../../../public/video_explanation.jpg';
 import { TileWrapper } from 'components/Tile';
 import { Item, Textarea } from 'components/Form';
 import { GenericItemField } from 'components/GenericForm';
 import { Trans } from 'components/Translation';
+import { useDispatch } from 'react-redux';
+import { FeedbackActions } from '../../../../../store';
 
 export const WITH_SELECTED_TEST = 'with_selected_test';
 
-const SubmitPart: FC<SubmitPartProps> = ({ selectedPerson, setInfoModal, setModalSuccess }) => {
+const SubmitPart: FC<SubmitPartProps> = ({
+  selectedPerson,
+  setInfoModal,
+  setModalSuccess,
+  setIsOpen,
+  methods,
+  feedbackItemsS,
+  setSelectedPerson,
+}) => {
+  const dispatch = useDispatch();
+
   const giveFeedback: GiveFeedbackType[] = [
     {
       giveFeedback_id: '1',
       giveFeedbacka_main_title: 'Question 1',
-      giveFeedback_title: 'Looking back, waht has this colleague done well?',
+      giveFeedback_title: 'Looking back, what has this colleague done well?',
       giveFeedback_description: 'Share specific example of where you view this colleague’s strenght',
       giveFeedback_field: {
         field_id: '1',
@@ -52,22 +60,100 @@ const SubmitPart: FC<SubmitPartProps> = ({ selectedPerson, setInfoModal, setModa
       },
     },
   ];
-  const { css, theme } = useStyle();
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
 
-  const methods = useForm({
-    mode: 'onChange',
-    resolver: yupResolver<Yup.AnyObjectSchema>(createGiveFeedbackSchema),
-  });
+  const { css, theme } = useStyle();
+
   const {
     handleSubmit,
-    formState: { errors, isValid },
+    formState: { isValid },
     reset,
+    getValues,
   } = methods;
-  console.log('errors', errors);
-  const onSubmit = async () => {
+  const values = getValues();
+
+  const onSubmit = async (data) => {
+    const conv = data.feedback.slice(1);
+
+    const getIfNeedUuid = (selectedPerson) => {
+      if (!selectedPerson.uuid) return;
+      return {
+        uuid: selectedPerson.uuid,
+      };
+    };
+
+    const getFeedbackUuidItems = (i) => {
+      if (!feedbackItemsS!.length) return;
+      return {
+        uuid: feedbackItemsS![feedbackItemsS!.findIndex((y) => y.code === giveFeedback[i].giveFeedbacka_main_title)]
+          .uuid,
+      };
+    };
+
+    const formData = {
+      ...getIfNeedUuid(selectedPerson),
+      colleagueUuid: '10000000-0000-0000-0000-000000000001',
+      targetColleagueUuid: selectedPerson.colleagueUUID,
+      status: 'SUBMITTED',
+      feedbackItems: conv.map((item, i) => {
+        return {
+          ...getFeedbackUuidItems(i),
+          code: giveFeedback[i].giveFeedbacka_main_title,
+          content: item.field,
+        };
+      }),
+    };
+
+    if (!feedbackItemsS!.length) {
+      dispatch(FeedbackActions.createNewFeedback([formData]));
+    } else {
+      dispatch(FeedbackActions.updatedFeedback(formData));
+    }
+
     setModalSuccess(() => true);
+    reset();
+  };
+
+  const onDraft = () => {
+    const conv = values.feedback.slice(1);
+
+    const getIfNeedUuid = (selectedPerson) => {
+      if (!selectedPerson.uuid) return;
+      return {
+        uuid: selectedPerson.uuid,
+      };
+    };
+
+    const getFeedbackUuidItems = (i) => {
+      if (!selectedPerson.uuid) return;
+      return {
+        uuid: feedbackItemsS![feedbackItemsS!.findIndex((y) => y.code === giveFeedback[i].giveFeedbacka_main_title)]
+          .uuid,
+      };
+    };
+
+    const formData = {
+      ...getIfNeedUuid(selectedPerson),
+      colleagueUuid: '10000000-0000-0000-0000-000000000001',
+      targetColleagueUuid: selectedPerson.colleagueUUID,
+      status: 'DRAFT',
+      feedbackItems: conv.map((item, i) => {
+        return {
+          ...getFeedbackUuidItems(i),
+
+          code: giveFeedback[i].giveFeedbacka_main_title,
+          content: item.field,
+        };
+      }),
+    };
+
+    if (selectedPerson.uuid) {
+      dispatch(FeedbackActions.updatedFeedback(formData));
+    } else {
+      dispatch(FeedbackActions.createNewFeedback([formData]));
+    }
+
+    setIsOpen(() => false);
+    setSelectedPerson(() => null);
     reset();
   };
 
@@ -81,11 +167,15 @@ const SubmitPart: FC<SubmitPartProps> = ({ selectedPerson, setInfoModal, setModa
       <div className={css({ marginTop: '16px' })}>
         <div className={css(Block_info)}>
           <div className={css({ alignSelf: 'flex-start' })}>
-            <img className={css(Img_style)} src={selectedPerson?.img} alt='photo' />
+            <img className={css(Img_style)} src='' alt='photo' />
           </div>
           <div className={css({ marginLeft: '16px' })}>
-            <h3 className={css(Names_Style)}>{`${selectedPerson?.f_name} ${selectedPerson?.l_name}`}</h3>
-            <p className={css(Industry_Style)}>Cashier, Grocery</p>
+            <h3
+              className={css(Names_Style)}
+            >{`${selectedPerson?.profile?.firstName} ${selectedPerson?.profile?.lastName}`}</h3>
+            <p className={css(Industry_Style)}>
+              {`${selectedPerson?.workRelationships[0].job?.name}, ${selectedPerson?.workRelationships[0].department?.name}`}
+            </p>
             <span className={css(Treatment_Style)}>Please treat me kindly</span>
           </div>
         </div>
@@ -104,71 +194,48 @@ const SubmitPart: FC<SubmitPartProps> = ({ selectedPerson, setInfoModal, setModa
       </div>
       <form>
         <div>
-          {giveFeedback.map((item) => (
-            <TileWrapper
-              key={item.giveFeedback_id}
-              customStyle={{
-                marginBottom: '16px !important',
-                '&:last-child': {
-                  marginBottom: '32px !important',
-                },
-                ...TileCustomStyles,
-              }}
-            >
-              <h2 className={css(GiveFeedbacka_main_title)}>{item.giveFeedbacka_main_title}</h2>
-              <h3 className={css(GiveFeedback_title)}>{item.giveFeedback_title}</h3>
-              <p className={css(GiveFeedback_description)}>{item?.giveFeedback_description}</p>
-              <GenericItemField
-                name={`feedback.${item.giveFeedback_id}.field`}
-                methods={methods}
-                Wrapper={Item}
-                Element={Textarea}
-                placeholder={item?.giveFeedback_field?.field_placeholder}
-              />
-            </TileWrapper>
-          ))}
-        </div>
-        <div
-          className={css({
-            position: 'absolute',
-            left: 0,
-            bottom: 0,
-            width: '100%',
-            background: '#FFFFFF',
-            height: '112px',
-          })}
-        >
-          <div
-            className={css({
-              position: 'relative',
-              bottom: theme.spacing.s0,
-              left: theme.spacing.s0,
-              right: theme.spacing.s0,
-              borderTop: `${theme.border.width.b1} solid ${theme.colors.backgroundDarkest}`,
-            })}
-          >
-            <div
-              className={css({
-                padding: mobileScreen ? theme.spacing.s6 : theme.spacing.s8,
-                display: 'flex',
-                justifyContent: 'space-between',
-              })}
-            >
-              <Button
-                styles={[
-                  theme.font.fixed.f16,
-                  {
-                    fontWeight: theme.font.weight.bold,
-                    width: '49%',
-                    margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
-                    background: theme.colors.white,
-                    border: `${theme.border.width.b1} solid ${theme.colors.tescoBlue}`,
-                    color: `${theme.colors.tescoBlue}`,
+          {giveFeedback.map((item) => {
+            const value = feedbackItemsS?.length
+              ? feedbackItemsS[feedbackItemsS.findIndex((items) => items.code === item.giveFeedbacka_main_title)]
+                  .content
+              : '';
+
+            return (
+              <div
+                key={item.giveFeedback_id}
+                className={css({
+                  ':last-child': {
+                    marginBottom: '32px',
                   },
-                ]}
-                onPress={() => alert('1')}
+                })}
               >
-                <Trans i18nKey='save_as_draft'>Save as draft</Trans>
+                <TileWrapper
+                  customStyle={{
+                    marginBottom: '16px !important',
+                    ...TileCustomStyles,
+                  }}
+                >
+                  <h2 className={css(GiveFeedbacka_main_title)}>{item.giveFeedbacka_main_title}</h2>
+                  <h3 className={css(GiveFeedback_title)}>{item.giveFeedback_title}</h3>
+                  <p className={css(GiveFeedback_description)}>{item?.giveFeedback_description}</p>
+                  <GenericItemField
+                    name={`feedback.${item.giveFeedback_id}.field`}
+                    methods={methods}
+                    Wrapper={Item}
+                    Element={Textarea}
+                    placeholder={item?.giveFeedback_field?.field_placeholder}
+                    value={value}
+                  />
+                </TileWrapper>
+              </div>
+            );
+          })}
+        </div>
+        <div className={css(Absolute_style)}>
+          <div className={css(Relative_btn_styled)}>
+            <div className={css(Spacing_style)}>
+              <Button styles={[theme.font.fixed.f16, Button_style]} onPress={() => onDraft()}>
+                <Trans>Save as draft</Trans>
               </Button>
 
               <IconButton
@@ -188,6 +255,41 @@ const SubmitPart: FC<SubmitPartProps> = ({ selectedPerson, setInfoModal, setModa
     </div>
   );
 };
+
+const Absolute_style: Rule = {
+  position: 'absolute',
+  left: 0,
+  bottom: 0,
+  width: '100%',
+  background: '#FFFFFF',
+  height: '112px',
+};
+
+const Relative_btn_styled: Rule = ({ theme }) => ({
+  position: 'relative',
+  bottom: theme.spacing.s0,
+  left: theme.spacing.s0,
+  right: theme.spacing.s0,
+  borderTop: `${theme.border.width.b1} solid ${theme.colors.backgroundDarkest}`,
+});
+const Spacing_style: Rule = ({ theme }) => {
+  const [, isBreakpoint] = useBreakpoints();
+  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+  return {
+    padding: mobileScreen ? theme.spacing.s6 : theme.spacing.s8,
+    display: 'flex',
+    justifyContent: 'space-between',
+  };
+};
+
+const Button_style: Rule = ({ theme }) => ({
+  fontWeight: theme.font.weight.bold,
+  width: '49%',
+  margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
+  background: theme.colors.white,
+  border: `${theme.border.width.b1} solid ${theme.colors.tescoBlue}`,
+  color: `${theme.colors.tescoBlue}`,
+});
 
 const Block_info: Rule = {
   display: 'inline-flex',
@@ -225,7 +327,6 @@ const Notification_Block__Style: Rule = {
   padding: '16px 40px 16px 16px',
   background: '#F3F9FC',
   borderRadius: '10px',
-  maxHeight: '68px',
   '& > p': {
     fontSize: '14px',
     lineHeight: '18px',
@@ -304,7 +405,8 @@ const iconBtnStyleDisabled: Rule = ({ theme }) => ({
 });
 
 const TileCustomStyles: Rule = {
-  padding: '24px',
+  padding: '24px 24px 0px 24px',
+  border: '1px solid #E5E5E5',
 };
 
 export default SubmitPart;

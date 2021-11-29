@@ -9,14 +9,23 @@ export type ConfigProps = {
   modalTitle?: string;
   link: string;
 };
-
+export type TypefeedbackItems = {
+  uuid?: string;
+  code: string;
+  content: string;
+  feedbackUuid: string;
+};
 export type PeopleTypes = {
   img: string;
   f_name: string;
   l_name: string;
   id: number;
+  targetId: string;
+  targetType: string;
 };
 export type ModalGiveFeedbackProps = {
+  feedbackItems: Array<TypefeedbackItems>;
+  setFeedbackItems: Dispatch<SetStateAction<[] | TypefeedbackItems[]>>;
   isOpenMainModal: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
   setSelectedPerson: Dispatch<SetStateAction<PeopleTypes | null>>;
@@ -40,7 +49,8 @@ export type SearchPartProps = {
 };
 
 export type SubmitPartProps = {
-  setSelectedPerson: any;
+  setIsOpen: Dispatch<SetStateAction<boolean>>;
+  feedbackItems: Array<TypefeedbackItems>;
   selectedPerson: PeopleTypes | null;
   setInfoModal: Dispatch<SetStateAction<boolean>>;
   setModalSuccess: Dispatch<SetStateAction<boolean>>;
@@ -65,7 +75,7 @@ export type GiveFeedbackType = {
 };
 
 export type SuccessModalProps = {
-  modalSuccess: boolean;
+  setFeedbackItems: Dispatch<SetStateAction<[] | TypefeedbackItems[]>>;
   setModalSuccess: Dispatch<SetStateAction<boolean>>;
   selectedPerson: PeopleTypes | null;
   setIsOpen: Dispatch<SetStateAction<boolean>>;

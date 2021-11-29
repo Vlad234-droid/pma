@@ -29,6 +29,7 @@ import { Download } from './download';
 import { Alert } from './alert';
 import { Information } from './information';
 import { ArrowRight } from './arrowRight';
+import { NotiBellCirlceOut } from './notiBellCirlceOut';
 
 /**
  * Each icon we add needs to have viewbox set to "0 0 24 24".
@@ -66,6 +67,7 @@ export type Graphics =
   | 'information'
   | 'download'
   | 'alert'
+  | 'notiBellCircleOut'
   | 'arrowRight';
 
 export const icons: Record<Graphics, FCGraphicProps> = {
@@ -99,4 +101,5 @@ export const icons: Record<Graphics, FCGraphicProps> = {
   alert: Alert,
   information: Information,
   arrowRight: ArrowRight,
+  notiBellCircleOut: NotiBellCirlceOut,
 };

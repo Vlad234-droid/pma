@@ -12,4 +12,7 @@ export * from './users';
 export * from './objectives';
 export * from './timeline';
 export * from './managers';
+export * from './feedback';
+// export * from './schema';
 export * from './schema';
+export * from './finded_colleagues';

@@ -13,6 +13,8 @@ type GenericItemFormProps = {
   rows?: number;
   options?: Array<Record<string, number | string | boolean>>;
   domRef?: Ref | RefObject<any> | null;
+  onChange?: any;
+  getSelected?: (option: any) => void;
 };
 export const GenericItemField: FC<GenericItemFormProps> = ({
   name,
@@ -22,6 +24,8 @@ export const GenericItemField: FC<GenericItemFormProps> = ({
   Wrapper = 'div',
   placeholder,
   label,
+  onChange,
+  getSelected,
   ...props
 }) => {
   const [state, setState] = useState(value);
@@ -32,15 +36,20 @@ export const GenericItemField: FC<GenericItemFormProps> = ({
     register,
     formState: { errors },
   } = methods;
+
   const element = (
     <Element
       {...props}
+      getSelected={getSelected}
       isValid={!errors[name]}
       name={name}
       value={state}
       onChange={(e) => {
         setState(e.target.value);
         register(name).onChange(e);
+        if (onChange) {
+          onChange();
+        }
       }}
       domRef={register(name).ref}
       placeholder={placeholder}

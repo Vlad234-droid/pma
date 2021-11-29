@@ -10,6 +10,7 @@ import ModalGiveFeedback from './Modals/ModalGiveFeedback';
 import { WITH_SELECTED_TEST } from './Modals/SubmitPart';
 import { fireEvent, waitFor } from '@testing-library/react';
 import { SUCCES_GIVE_FEEDBACK } from './Modals/SuccessModal';
+import '@types/jest';
 
 type Selected = {
   img: string;

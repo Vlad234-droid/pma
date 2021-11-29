@@ -5,11 +5,12 @@ import { useHistory } from 'react-router-dom';
 import { Trans } from 'components/Translation';
 import { ButtonsComponentProps } from './type';
 
-const ButtonsComponent: FC<ButtonsComponentProps> = ({ isValid, setShowSuccesModal }) => {
+const ButtonsComponent: FC<ButtonsComponentProps> = ({ methods, onSubmit, isValid, setShowSuccesModal }) => {
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
   const { css, theme } = useStyle();
   const history = useHistory();
+  const { reset } = methods;
   return (
     <>
       <span
@@ -71,7 +72,11 @@ const ButtonsComponent: FC<ButtonsComponentProps> = ({ isValid, setShowSuccesMod
               graphic='arrowRight'
               iconProps={{ invertColors: true }}
               iconPosition={Position.RIGHT}
-              onPress={() => setShowSuccesModal(() => true)}
+              onPress={() => {
+                onSubmit();
+                setShowSuccesModal(() => true);
+                reset();
+              }}
             >
               Submit
             </IconButton>

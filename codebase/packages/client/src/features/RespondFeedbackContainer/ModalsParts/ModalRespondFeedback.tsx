@@ -13,6 +13,8 @@ const ModalRespondFeedback: FC<ModalGiveFeedbackProps> = ({
   setInfoModal,
   modalSuccess,
   setModalSuccess,
+  feedbackItems,
+  setFeedbackItems,
 }) => {
   const { css, theme } = useStyle();
   const [, isBreakpoint] = useBreakpoints();
@@ -27,10 +29,10 @@ const ModalRespondFeedback: FC<ModalGiveFeedbackProps> = ({
     return (
       <SuccessModal
         setModalSuccess={setModalSuccess}
-        modalSuccess={modalSuccess}
         selectedPerson={selectedPerson}
         setIsOpen={setIsOpen}
         setSelectedPerson={setSelectedPerson}
+        setFeedbackItems={setFeedbackItems}
       />
     );
 
@@ -48,10 +50,11 @@ const ModalRespondFeedback: FC<ModalGiveFeedbackProps> = ({
         </div>
         {selectedPerson && (
           <SubmitPart
-            setSelectedPerson={setSelectedPerson}
             selectedPerson={selectedPerson}
             setInfoModal={setInfoModal}
             setModalSuccess={setModalSuccess}
+            feedbackItems={feedbackItems}
+            setIsOpen={setIsOpen}
           />
         )}
         <span

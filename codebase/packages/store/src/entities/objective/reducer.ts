@@ -6,10 +6,12 @@ import {
   getObjectives,
   updateObjective,
   updateObjectives,
+  getReviewByUuid,
 } from './actions';
 
 export const initialState = {
   origin: [],
+  review: [],
   meta: { loading: false, loaded: false, error: null, status: null },
 };
 
@@ -72,6 +74,16 @@ export default createReducer(initialState)
   .handleAction(updateObjectives.success, (state, { payload }) => ({
     ...state,
     ...payload,
+    meta: { ...state.meta, loading: false, loaded: true },
+  }))
+
+  .handleAction(getReviewByUuid.request, (state) => ({
+    ...state,
+    meta: { ...state.meta, loading: true, error: null, loaded: false },
+  }))
+  .handleAction(getReviewByUuid.success, (state, { payload }) => ({
+    ...state,
+    review: [...state.review, { ...payload }],
     meta: { ...state.meta, loading: false, loaded: true },
   }))
 

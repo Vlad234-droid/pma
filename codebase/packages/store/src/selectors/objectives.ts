@@ -69,4 +69,16 @@ export const getNextObjectiveNumberSelector = createSelector(objectivesSelector,
 
   return 1;
 });
+
+export const getReviewByUuidS = createSelector(objectivesSelector, (objectives: any) => {
+  const { review } = objectives;
+  const arr = review.map((item) => {
+    const title = item?.properties?.mapJson?.title;
+    return {
+      uuid: item.uuid,
+      title: title,
+    };
+  });
+  return arr;
+});
 export const objectivesMetaSelector = createSelector(objectivesSelector, ({ meta }) => meta);

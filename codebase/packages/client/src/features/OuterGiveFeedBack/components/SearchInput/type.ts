@@ -14,11 +14,10 @@ export interface FormItemProps {
   isValid?: boolean;
   type?: string;
   id?: string;
-  options: { id: number; f_name: string; l_name: string; img: string }[];
+  options?: Array<any>;
   setSelectedPerson?: any;
   setSearchValue?: any;
   searchValue?: string;
-  setPeopleFiltered?: any;
   selectedPerson?: PeopleTypes | null;
   multiple?: boolean | undefined;
 }

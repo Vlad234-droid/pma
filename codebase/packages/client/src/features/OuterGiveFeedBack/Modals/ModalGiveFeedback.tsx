@@ -1,9 +1,11 @@
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
 import { useBreakpoints, useStyle } from '@dex-ddl/core';
-import { ModalGiveFeedbackProps, PeopleTypes } from '../type';
+import { ModalGiveFeedbackProps } from '../type';
 import { InfoModal, SearchPart, SubmitPart, SuccessModal } from './index';
 import { IconButton } from 'components/IconButton';
 //import { SubmitButton } from '../../../features/Objectives/components/Modal/index';
+import { getFindedColleguesS, ColleaguesActions } from '@pma/store';
+import { useDispatch, useSelector } from 'react-redux';
 
 const ModalGiveFeedback: FC<ModalGiveFeedbackProps> = ({
   setIsOpen,
@@ -15,34 +17,23 @@ const ModalGiveFeedback: FC<ModalGiveFeedbackProps> = ({
   setModalSuccess,
   searchValue,
   setSearchValue,
+  feedbackItemsS,
+  methods,
+  setFeedbackItems,
 }) => {
-  const [peopleFiltered, setPeopleFiltered] = useState<PeopleTypes[]>([]);
-
   const { css, theme } = useStyle();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
-  const [people] = useState<PeopleTypes[]>([
-    {
-      id: 1,
-      img: 'https://media-exp1.licdn.com/dms/image/C560BAQH9Cnv1weU07g/company-logo_200_200/0/1575479070098?e=2159024400&v=beta&t=QM9VSoWVooxDwCONWh22cw0jBBlBPcBOqAxbZIE18jw',
-      f_name: 'Vlad',
-      l_name: 'Baryshpolets',
-    },
-    {
-      id: 2,
-      img: 'https://media-exp1.licdn.com/dms/image/C560BAQH9Cnv1weU07g/company-logo_200_200/0/1575479070098?e=2159024400&v=beta&t=QM9VSoWVooxDwCONWh22cw0jBBlBPcBOqAxbZIE18jw',
-      f_name: 'Andrey',
-      l_name: 'Sorokov',
-    },
-    {
-      id: 3,
-      img: 'https://media-exp1.licdn.com/dms/image/C560BAQH9Cnv1weU07g/company-logo_200_200/0/1575479070098?e=2159024400&v=beta&t=QM9VSoWVooxDwCONWh22cw0jBBlBPcBOqAxbZIE18jw',
-      f_name: 'Anton',
-      l_name: 'Ryndy',
-    },
-  ]);
+
+  const findedColleagues = useSelector(getFindedColleguesS) || [];
+
+  const dispatch = useDispatch();
 
   const switchClose = (): void => {
+    if (findedColleagues.length) {
+      dispatch(ColleaguesActions.clearGettedCollegues());
+    }
+    setFeedbackItems(() => []);
     if (selectedPerson !== null) {
       setSelectedPerson(() => null);
     } else {
@@ -54,10 +45,10 @@ const ModalGiveFeedback: FC<ModalGiveFeedbackProps> = ({
     return (
       <SuccessModal
         setModalSuccess={setModalSuccess}
-        modalSuccess={modalSuccess}
         selectedPerson={selectedPerson}
         setIsOpen={setIsOpen}
         setSelectedPerson={setSelectedPerson}
+        setFeedbackItems={setFeedbackItems}
       />
     );
 
@@ -66,27 +57,42 @@ const ModalGiveFeedback: FC<ModalGiveFeedbackProps> = ({
   return (
     <>
       <div className={css({ paddingLeft: '40px', paddingRight: '40px', height: '100%', overflow: 'auto' })}>
-        <div className={css({ fontWeight: 'bold', fontSize: '24px', lineHeight: '28px' })}>
+        <div
+          className={css({
+            fontWeight: 'bold',
+            fontSize: '24px',
+            lineHeight: '28px',
+            ...(mobileScreen && { textAlign: 'center' }),
+          })}
+        >
           Let a colleague know how they are doing
         </div>
-        <div className={css({ marginTop: '8px', fontSize: '18px', lineHeight: '22px' })}>
+        <div
+          className={css({
+            marginTop: '8px',
+            fontSize: '18px',
+            lineHeight: '22px',
+            ...(mobileScreen && { textAlign: 'center' }),
+          })}
+        >
           Select which colleague you want to provide feedback for.
         </div>
         <SearchPart
-          setPeopleFiltered={setPeopleFiltered}
-          people={people}
           setSelectedPerson={setSelectedPerson}
-          peopleFiltered={peopleFiltered}
           setSearchValue={setSearchValue}
           searchValue={searchValue}
           selectedPerson={selectedPerson}
         />
         {selectedPerson && (
           <SubmitPart
-            setSelectedPerson={setSelectedPerson}
             selectedPerson={selectedPerson}
             setInfoModal={setInfoModal}
             setModalSuccess={setModalSuccess}
+            setIsOpen={setIsOpen}
+            methods={methods}
+            feedbackItemsS={feedbackItemsS}
+            setFeedbackItems={setFeedbackItems}
+            setSelectedPerson={setSelectedPerson}
           />
         )}
         <span

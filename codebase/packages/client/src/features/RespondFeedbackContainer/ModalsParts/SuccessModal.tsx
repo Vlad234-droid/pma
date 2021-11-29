@@ -5,7 +5,13 @@ import { IconButton } from 'components/IconButton';
 import success from '../../../../public/success.jpg';
 import { Trans } from 'components/Translation';
 
-const SuccessModal: FC<SuccessModalProps> = ({ setModalSuccess, setIsOpen, setSelectedPerson, selectedPerson }) => {
+const SuccessModal: FC<SuccessModalProps> = ({
+  setModalSuccess,
+  setIsOpen,
+  setSelectedPerson,
+  selectedPerson,
+  setFeedbackItems,
+}) => {
   const { css, theme } = useStyle();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
@@ -59,6 +65,7 @@ const SuccessModal: FC<SuccessModalProps> = ({ setModalSuccess, setIsOpen, setSe
                 setModalSuccess(() => false);
                 setIsOpen(() => false);
                 setSelectedPerson(() => null);
+                setFeedbackItems(() => []);
               }}
             >
               <Trans i18nKey='OK'>Okay</Trans>

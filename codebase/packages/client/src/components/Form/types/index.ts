@@ -19,6 +19,7 @@ export type InputProps = FormItemProps;
 
 export interface SelectProps extends FormItemProps {
   options: { value: string; label: string }[] | [];
+  getSelected?: (option: any) => void;
 }
 
 export interface TextareaProps extends FormItemProps {

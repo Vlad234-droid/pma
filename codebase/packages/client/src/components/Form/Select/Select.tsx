@@ -14,6 +14,7 @@ const Select: FC<SelectProps> = ({
   options,
   disabled = false,
   name,
+  getSelected,
 }) => {
   const { css, theme } = useStyle();
   const refIcon = useRefContainer();
@@ -71,7 +72,7 @@ const Select: FC<SelectProps> = ({
             fill='#A8A8A8'
           />
         </span>
-        {isOptionOpen && options.length && (
+        {isOptionOpen && !!options.length && (
           <div
             style={{
               display: 'block',
@@ -100,6 +101,9 @@ const Select: FC<SelectProps> = ({
                   onMouseDown={(e) => e.preventDefault()}
                   onClick={() => {
                     setSelectedOptionValue(option.value);
+                    if (getSelected !== undefined) {
+                      getSelected(option);
+                    }
                   }}
                 >
                   {option.label}

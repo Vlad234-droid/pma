@@ -11,8 +11,18 @@ import { TileWrapper } from 'components/Tile';
 import { Item, Textarea } from 'components/Form';
 import { GenericItemField } from 'components/GenericForm';
 import { Trans } from 'components/Translation';
+import { FeedbackActions } from '@pma/store';
+import { useDispatch } from 'react-redux';
 
-const SubmitPart: FC<SubmitPartProps> = ({ selectedPerson, setInfoModal, setModalSuccess }) => {
+const SubmitPart: FC<SubmitPartProps> = ({
+  selectedPerson,
+  setInfoModal,
+  setModalSuccess,
+  feedbackItems,
+  setIsOpen,
+}) => {
+  const dispatch = useDispatch();
+
   const giveFeedback: GiveFeedbackType[] = [
     {
       giveFeedback_id: '1',
@@ -53,19 +63,82 @@ const SubmitPart: FC<SubmitPartProps> = ({ selectedPerson, setInfoModal, setModa
   const { css, theme } = useStyle();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
-
   const methods = useForm({
     mode: 'onChange',
     resolver: yupResolver<Yup.AnyObjectSchema>(createGiveFeedbackSchema),
   });
   const {
     handleSubmit,
-    formState: { errors, isValid },
+    formState: { isValid },
     reset,
+    getValues,
   } = methods;
-  console.log('errors', errors);
-  const onSubmit = async () => {
+
+  const checkForValidInputsKeys = () => {
+    if (
+      (feedbackItems.every((item) => item.uuid) && feedbackItems.some((item) => item.code === 'Question 1')) ||
+      feedbackItems.some((item) => item.code === 'Question 2') ||
+      feedbackItems.some((item) => item.code === 'Anything else?')
+    ) {
+      return true;
+    }
+    return false;
+  };
+
+  const UUID = (i) => {
+    if (checkForValidInputsKeys()) {
+      return {
+        uuid: feedbackItems![feedbackItems!.findIndex((y) => y.code === giveFeedback[i].giveFeedbacka_main_title)]
+          ?.uuid,
+      };
+    }
+    return;
+  };
+
+  const values = getValues();
+
+  const onSubmit = async (data) => {
+    const conv = data.feedback.slice(1);
+    const formData = {
+      uuid: selectedPerson?.id,
+      colleagueUuid: '10000000-0000-0000-0000-000000000001',
+      targetColleagueUuid: '10000000-0000-0000-0000-000000000002',
+      status: 'COMPLETED',
+      targetId: selectedPerson?.targetId,
+      targetType: selectedPerson?.targetType,
+      feedbackItems: conv.map((item, i) => {
+        return {
+          ...UUID(i),
+          code: giveFeedback[i].giveFeedbacka_main_title,
+          content: item.field,
+        };
+      }),
+    };
+    dispatch(FeedbackActions.updatedFeedback(formData));
     setModalSuccess(() => true);
+    reset();
+  };
+
+  const onDraft = () => {
+    const conv = values.feedback.slice(1);
+    const formData = {
+      uuid: selectedPerson?.id,
+      colleagueUuid: '10000000-0000-0000-0000-000000000001',
+      targetColleagueUuid: '10000000-0000-0000-0000-000000000002',
+      status: 'PENDING',
+      targetId: selectedPerson?.targetId,
+      targetType: selectedPerson?.targetType,
+      feedbackItems: conv.map((item, i) => {
+        return {
+          ...UUID(i),
+          code: giveFeedback[i].giveFeedbacka_main_title,
+          content: item.field,
+        };
+      }),
+    };
+
+    dispatch(FeedbackActions.updatedFeedback(formData));
+    setIsOpen(() => false);
     reset();
   };
 
@@ -101,29 +174,36 @@ const SubmitPart: FC<SubmitPartProps> = ({ selectedPerson, setInfoModal, setModa
       </div>
       <form>
         <div>
-          {giveFeedback.map((item) => (
-            <TileWrapper
-              key={item.giveFeedback_id}
-              customStyle={{
-                marginBottom: '16px !important',
-                '&:last-child': {
-                  marginBottom: '32px !important',
-                },
-                ...TileCustomStyles,
-              }}
-            >
-              <h2 className={css(GiveFeedbacka_main_title)}>{item.giveFeedbacka_main_title}</h2>
-              <h3 className={css(GiveFeedback_title)}>{item.giveFeedback_title}</h3>
-              <p className={css(GiveFeedback_description)}>{item?.giveFeedback_description}</p>
-              <GenericItemField
-                name={`feedback.${item.giveFeedback_id}.field`}
-                methods={methods}
-                Wrapper={Item}
-                Element={Textarea}
-                placeholder={item?.giveFeedback_field?.field_placeholder}
-              />
-            </TileWrapper>
-          ))}
+          {giveFeedback.map((item) => {
+            const value = feedbackItems?.length
+              ? feedbackItems[feedbackItems.findIndex((items) => items.code === item.giveFeedbacka_main_title)]?.content
+              : '';
+            return (
+              <TileWrapper
+                key={item.giveFeedback_id}
+                customStyle={{
+                  marginBottom: '16px !important',
+                  border: '1px solid #E5E5E5',
+                  '&:last-child': {
+                    marginBottom: '32px !important',
+                  },
+                  ...TileCustomStyles,
+                }}
+              >
+                <h2 className={css(GiveFeedbacka_main_title)}>{item.giveFeedbacka_main_title}</h2>
+                <h3 className={css(GiveFeedback_title)}>{item.giveFeedback_title}</h3>
+                <p className={css(GiveFeedback_description)}>{item?.giveFeedback_description}</p>
+                <GenericItemField
+                  name={`feedback.${item.giveFeedback_id}.field`}
+                  methods={methods}
+                  Wrapper={Item}
+                  Element={Textarea}
+                  placeholder={item?.giveFeedback_field?.field_placeholder}
+                  value={value}
+                />
+              </TileWrapper>
+            );
+          })}
         </div>
         <div
           className={css({
@@ -131,38 +211,12 @@ const SubmitPart: FC<SubmitPartProps> = ({ selectedPerson, setInfoModal, setModa
             left: 0,
             bottom: 0,
             width: '100%',
+            background: 'white',
           })}
         >
-          <div
-            className={css({
-              position: 'relative',
-              bottom: theme.spacing.s0,
-              left: theme.spacing.s0,
-              right: theme.spacing.s0,
-              borderTop: `${theme.border.width.b1} solid ${theme.colors.backgroundDarkest}`,
-            })}
-          >
-            <div
-              className={css({
-                padding: mobileScreen ? theme.spacing.s6 : theme.spacing.s8,
-                display: 'flex',
-                justifyContent: 'space-between',
-              })}
-            >
-              <Button
-                styles={[
-                  theme.font.fixed.f16,
-                  {
-                    fontWeight: theme.font.weight.bold,
-                    width: '49%',
-                    margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
-                    background: theme.colors.white,
-                    border: `${theme.border.width.b1} solid ${theme.colors.tescoBlue}`,
-                    color: `${theme.colors.tescoBlue}`,
-                  },
-                ]}
-                onPress={() => alert('1')}
-              >
+          <div className={css(Relative_btn_styled)}>
+            <div className={css(Spacing_style)}>
+              <Button styles={[theme.font.fixed.f16, Button_style]} onPress={() => onDraft()}>
                 <Trans i18nKey='save_as_draft'>Save as draft</Trans>
               </Button>
 
@@ -183,6 +237,30 @@ const SubmitPart: FC<SubmitPartProps> = ({ selectedPerson, setInfoModal, setModa
     </div>
   );
 };
+const Relative_btn_styled: Rule = ({ theme }) => ({
+  position: 'relative',
+  bottom: theme.spacing.s0,
+  left: theme.spacing.s0,
+  right: theme.spacing.s0,
+  borderTop: `${theme.border.width.b1} solid ${theme.colors.backgroundDarkest}`,
+});
+const Spacing_style: Rule = ({ theme }) => {
+  const [, isBreakpoint] = useBreakpoints();
+  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+  return {
+    padding: mobileScreen ? theme.spacing.s6 : theme.spacing.s8,
+    display: 'flex',
+    justifyContent: 'space-between',
+  };
+};
+const Button_style: Rule = ({ theme }) => ({
+  fontWeight: theme.font.weight.bold,
+  width: '49%',
+  margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
+  background: theme.colors.white,
+  border: `${theme.border.width.b1} solid ${theme.colors.tescoBlue}`,
+  color: `${theme.colors.tescoBlue}`,
+});
 
 const Block_info: Rule = {
   display: 'inline-flex',
@@ -299,7 +377,8 @@ const iconBtnStyleDisabled: Rule = ({ theme }) => ({
 });
 
 const TileCustomStyles: Rule = {
-  padding: '24px',
+  padding: '24px 24px 0px 24px',
+  border: '1px solid #E5E5E5',
 };
 
 export default SubmitPart;

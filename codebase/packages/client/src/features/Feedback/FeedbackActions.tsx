@@ -1,9 +1,10 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import { Trans } from 'components/Translation';
 import { Item, Select } from 'components/Form';
 import { Icon as IconCore, Modal, Rule, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { Chat } from '../../components/Icon/graphics/chat';
 import { NotiBell } from '../../components/Icon/graphics/notiBell';
+import { NotiBellCirlceOut } from '../../components/Icon/graphics/notiBellCirlceOut';
 import { People } from '../../components/Icon/graphics/people';
 import Info360Modal, { FeedbackCard } from './components';
 import { ConfigProps } from './type';
@@ -14,17 +15,39 @@ import * as Yup from 'yup';
 import { createObjectivesSchema } from './config';
 import { IconButton } from '../../components/IconButton';
 import { Icon } from '../../components/Icon';
+import { useDispatch, useSelector } from 'react-redux';
+import { FeedbackActions as FeedbackActionsGet, getPropperNotesByStatusSelector } from '@pma/store';
+import { FeedbackStatus } from '../../config/enum';
 
 const FEEDBACK_ACTIONS = 'feedback_actions';
 
 const FeedbackActions: FC = () => {
   const { css } = useStyle();
+  const dispatch = useDispatch();
   const [info360Modal, setInfo360Modal] = useState<boolean>(false);
+  const pendingNotes = useSelector(getPropperNotesByStatusSelector(FeedbackStatus.PENDING)) || [];
+  const submittedCompletedNotes =
+    useSelector(getPropperNotesByStatusSelector([FeedbackStatus.SUBMITTED, FeedbackStatus.COMPLETED])) || [];
+
+  const unReadNotes = submittedCompletedNotes.filter((item) => !item.read) || [];
 
   const methods = useForm({
     mode: 'onChange',
     resolver: yupResolver<Yup.AnyObjectSchema>(createObjectivesSchema),
   });
+
+  useEffect(() => {
+    dispatch(FeedbackActionsGet.getAllFeedbacks({}));
+  }, []);
+
+  const getProppeIconForunReadNotes = () => {
+    if (unReadNotes.length) return <NotiBell />;
+    return <NotiBellCirlceOut />;
+  };
+  const getProppeIconForPendingNotes = () => {
+    if (pendingNotes.length) return <NotiBell />;
+    return <NotiBellCirlceOut />;
+  };
 
   const cards: ConfigProps[] = [
     {
@@ -40,16 +63,20 @@ const FeedbackActions: FC = () => {
       id: 2,
       action: 'View your feedback',
       text: 'See the feedback your colleagues have shared with you',
-      icon: <NotiBell />,
-      iconText: 'The feedback will be able to your colleague',
+      icon: getProppeIconForunReadNotes(),
+      iconText: unReadNotes.length
+        ? `You have ${unReadNotes.length} new feedback to view`
+        : 'You have 0 new feedback to view',
       link: '/view-feedback',
     },
     {
       id: 3,
       action: 'Respond to feedback requests',
       text: 'See and respond to feedback requests from your colleagues',
-      icon: <NotiBell />,
-      iconText: 'You have 2 new feedback requests',
+      icon: getProppeIconForPendingNotes(),
+      iconText: pendingNotes.length
+        ? `You have ${pendingNotes.length} new feedback requests`
+        : 'You have 0 new feedback requests',
       link: '/respond-feedback',
     },
     {
@@ -80,11 +107,9 @@ const FeedbackActions: FC = () => {
     <>
       {!info360Modal ? (
         <div data-test-id={FEEDBACK_ACTIONS}>
-          <div className={css({ display: 'flex', justifyContent: 'space-between', alignItems: 'center' })}>
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-              <h2 className={css({ fontWeight: 'bold', fontSize: '20px', lineHeight: '24px' })}>
-                Feedback in the moment
-              </h2>
+          <div className={css(In_moment_Style)}>
+            <div className={css(Center_flex_style)}>
+              <h2 className={css(In_the_moment_style)}>Feedback in the moment</h2>
               <IconButton
                 graphic='information'
                 iconStyles={{ marginLeft: '8px' }}
@@ -93,7 +118,7 @@ const FeedbackActions: FC = () => {
               />
             </div>
 
-            <div>
+            <div className={css({ maxWidth: '174px' })}>
               <IconButton
                 customVariantRules={{ default: iconBtnStyle }}
                 onPress={handleBtnClick360}
@@ -101,7 +126,7 @@ const FeedbackActions: FC = () => {
                 iconProps={{ invertColors: true }}
                 iconStyles={iconStyle}
               >
-                <Trans i18nKey='give_new_feedback'>360 Feedback</Trans>
+                <Trans>360 Feedback</Trans>
               </IconButton>
             </div>
           </div>
@@ -110,11 +135,9 @@ const FeedbackActions: FC = () => {
               <FeedbackCard card={item} key={item.id} />
             ))}
           </div>
-          <div className={css({ marginTop: '32px', width: '568px' })}>
-            <div className={css({ display: 'flex', justifyContent: 'space-between', marginBottom: '16px' })}>
-              <div className={css({ fontWeight: 'bold', fontSize: '20px', lineHeight: '24px', maxWidth: '450px' })}>
-                What tone of voice would you prefer to receive feedback in?
-              </div>
+          <div className={css({ marginTop: '32px', maxWidth: '568px' })}>
+            <div className={css(Icon_text_style)}>
+              <div className={css(Voice_style)}>What tone of voice would you prefer to receive feedback in?</div>
               <div>
                 <IconCore graphic='information' />
               </div>
@@ -159,6 +182,45 @@ const FeedbackActions: FC = () => {
   );
 };
 
+const Voice_style: Rule = {
+  fontWeight: 'bold',
+  fontSize: '20px',
+  lineHeight: '24px',
+  maxWidth: '450px',
+};
+
+const Icon_text_style: Rule = {
+  display: 'flex',
+  justifyContent: 'space-between',
+  marginBottom: '16px',
+};
+
+const In_the_moment_style: Rule = {
+  fontWeight: 'bold',
+  fontSize: '20px',
+  lineHeight: '24px',
+};
+
+const Center_flex_style: Rule = {
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+};
+
+const In_moment_Style: Rule = () => {
+  const [, isBreakpoint] = useBreakpoints();
+  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
+  if (mobileScreen) {
+    return {
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+    };
+  }
+  return { display: 'flex', justifyContent: 'space-between', alignItems: 'center' };
+};
+
 const CardsBlock: Rule = () => {
   return {
     display: 'flex',
@@ -179,6 +241,7 @@ const iconBtnStyle: Rule = ({ theme }) => ({
   justifyContent: 'center',
   alignItems: 'center',
   outline: 0,
+  whiteSpace: 'nowrap',
   background: theme.colors.tescoBlue,
   color: theme.colors.white,
   cursor: 'pointer',

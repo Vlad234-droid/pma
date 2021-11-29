@@ -23,6 +23,19 @@ export const DATE_TIME_STRING_FORMAT = 'dd LLL yyyy HH:mm';
 export const DATE_FORMAT = 'yyyy-MM-dd';
 export type DateFormat = string;
 
+export const getPropperTime = (updatedTime) => {
+  const date1 = new Date(updatedTime);
+  const date2 = new Date();
+  const diff = (date2.getTime() - date1.getTime()) / (1000 * 3600 * 24);
+  if (diff < 1) {
+    return 'just now';
+  } else if (diff >= 1 && diff < 2) {
+    return `${Math.floor(diff)} day ago`;
+  } else if (Math.floor(diff) >= 2) {
+    return `${Math.floor(diff)} days ago`;
+  }
+};
+
 export const getLocalNow = () => DateTime.local();
 export const resolveTimezone = () => Intl.DateTimeFormat().resolvedOptions().timeZone;
 

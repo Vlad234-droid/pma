@@ -1,104 +1,62 @@
 import React, { FC, useState } from 'react';
-import { Button, Rule, useBreakpoints, useStyle } from '@dex-ddl/core';
+import { Button, Rule, useBreakpoints, useStyle, Modal } from '@dex-ddl/core';
 import { Radio } from 'components/Form';
 import { Trans } from 'components/Translation';
 import { FilterOption } from 'features/Shared';
 import { IconButton } from 'components/IconButton';
-import { PeopleTypes } from './type';
 import { DraftItem } from './components';
 import { Notification } from 'components/Notification';
 import { Icon } from 'components/Icon';
+import { ModalDownloadFeedback } from './components/ModalParts';
+import { ColleaguesActions } from '@pma/store';
+import { useDispatch } from 'react-redux';
 
 const ViewFeedbackComp: FC = () => {
   const { css } = useStyle();
+  const dispatch = useDispatch();
 
-  const [, setIsOpen] = useState<boolean>(false);
-  const [, setTitle] = useState<string>('');
-  const [, setSearchValue] = useState<string>('');
+  const [openMainModal, setOpenMainModal] = useState<boolean>(false);
+  const [ModalSuccess, setModalSuccess] = useState<boolean>(false);
+  const [checkedRadio, setCheckedRadio] = useState({
+    unread: true,
+    read: false,
+  });
 
-  const [, setSelectedPerson] = useState<PeopleTypes | null>(null);
+  const draftFeedback = (id) => {
+    console.log('id', id);
+  };
 
-  const drafts = [
-    {
-      id: 1,
-      img: 'https://media-exp1.licdn.com/dms/image/C560BAQH9Cnv1weU07g/company-logo_200_200/0/1575479070098?e=2159024400&v=beta&t=QM9VSoWVooxDwCONWh22cw0jBBlBPcBOqAxbZIE18jw',
-      f_name: 'Vlad',
-      l_name: 'Baryshpolets',
-      title: 'Objective: Provide a posititve customer experience ',
-      question1: {
-        ask: 'What strengths does this colleague have?',
-        answer:
-          'Iaculis amet, nec quis congue aliquam facilisis et amet et. Quam magna ut ultricies enim id morbi. Est enim ipsum commodo quis dolor pellentesque. Massa elit quis vitae libero donec.',
-      },
-      question2: {
-        ask: 'What should the colleague improve on?',
-        answer:
-          'Iaculis amet, nec quis congue aliquam facilisis et amet et. Quam magna ut ultricies enim id morbi. Est enim ipsum commodo quis dolor pellentesque. Massa elit quis vitae libero donec. ',
-      },
-      question3: {
-        ask: 'How should the colleague act on this feedback?',
-        answer:
-          'Fermentum risus netus vestibulum est. Accumsan et, convallis magna consequat amet et. Turpis tortor pulvinar quisque eget.',
-      },
-    },
-    {
-      id: 2,
-      img: 'https://media-exp1.licdn.com/dms/image/C560BAQH9Cnv1weU07g/company-logo_200_200/0/1575479070098?e=2159024400&v=beta&t=QM9VSoWVooxDwCONWh22cw0jBBlBPcBOqAxbZIE18jw',
-      f_name: 'Andrey',
-      l_name: 'Sorokov',
-      title: 'Objective: Provide a posititve customer experience ',
-      question1: {
-        ask: 'What strengths does this colleague have?',
-        answer:
-          'Iaculis amet, nec quis congue aliquam facilisis et amet et. Quam magna ut ultricies enim id morbi. Est enim ipsum commodo quis dolor pellentesque. Massa elit quis vitae libero donec.',
-      },
-      question2: {
-        ask: 'What should the colleague improve on?',
-        answer:
-          'Fermentum risus netus vestibulum est. Accumsan et, convallis magna consequat amet et. Turpis tortor pulvinar quisque eget.',
-      },
-      question3: {
-        ask: 'How should the colleague act on this feedback?',
-        answer:
-          'Fermentum risus netus vestibulum est. Accumsan et, convallis magna consequat amet et. Turpis tortor pulvinar quisque eget.',
-      },
-    },
-  ];
-
-  const draftFeedback = (id: number): void => {
-    const findSelectedDraft = drafts.filter((item) => id === item.id);
-    const [selectedDraft] = findSelectedDraft;
-    console.log('selectedDraft', selectedDraft);
-    setSearchValue(() => `${selectedDraft.f_name} ${selectedDraft.l_name}`);
-    setTitle(() => 'Give feedback');
-    setSelectedPerson(() => ({
-      id: selectedDraft.id,
-      img: selectedDraft.img,
-      f_name: selectedDraft.f_name,
-      l_name: selectedDraft.l_name,
-    }));
-    setIsOpen(() => true);
+  const closeHandler = () => {
+    setOpenMainModal(() => false);
   };
   return (
-    <div>
+    <>
       <div>
-        <div
-          className={css({
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            paddingTop: '24px',
-          })}
-        >
-          <div className={css({ display: 'flex', marginRight: '129px' })}>
-            <div className={css({ padding: '0px 10px' })}>
+        <div className={css(SpaceBeetweenStyled)}>
+          <div className={css({ display: 'flex' })}>
+            <div className={css({ padding: '0px 10px', cursor: 'pointer' })}>
               <label
+                htmlFor='unread'
                 className={css({
                   display: 'flex',
                   alignItems: 'center',
                 })}
               >
-                <Radio type='radio' name='status' value='option1' checked={true} />
+                <Radio
+                  type='radio'
+                  name='status'
+                  value='option1'
+                  checked={checkedRadio.unread}
+                  id='unread'
+                  onChange={() => {
+                    setCheckedRadio(() => {
+                      return {
+                        unread: true,
+                        read: false,
+                      };
+                    });
+                  }}
+                />
                 <span
                   className={css({
                     fontSize: '16px',
@@ -106,18 +64,31 @@ const ViewFeedbackComp: FC = () => {
                     padding: '0px 5px',
                   })}
                 >
-                  <Trans i18nKey='drafts'>Unread</Trans>
+                  <Trans>Unread</Trans>
                 </span>
               </label>
             </div>
-            <div className={css({ padding: '0px 10px' })}>
+            <div className={css({ padding: '0px 10px', cursor: 'pointer' })}>
               <label
                 className={css({
                   display: 'flex',
                   alignItems: 'center',
                 })}
               >
-                <Radio type='radio' name='status' value='option2' />
+                <Radio
+                  type='radio'
+                  name='status'
+                  value='option2'
+                  checked={checkedRadio.read}
+                  onChange={() => {
+                    setCheckedRadio(() => {
+                      return {
+                        unread: false,
+                        read: true,
+                      };
+                    });
+                  }}
+                />
                 <span
                   className={css({
                     fontSize: '16px',
@@ -125,7 +96,7 @@ const ViewFeedbackComp: FC = () => {
                     padding: '0px 5px',
                   })}
                 >
-                  <Trans i18nKey='submitted'>Read</Trans>
+                  <Trans>Read</Trans>
                 </span>
               </label>
             </div>
@@ -140,19 +111,9 @@ const ViewFeedbackComp: FC = () => {
             <FilterOption />
           </div>
         </div>
-        <div
-          className={css({
-            display: 'flex',
-            flexWrap: 'wrap-reverse',
-            gridGap: '8px',
-            marginTop: '34px',
-            alignItems: 'stretch',
-          })}
-        >
+        <div className={css(Reverse_Items_Styled)}>
           <div className={css(Drafts_style)}>
-            {drafts.map((item) => (
-              <DraftItem key={item.id} item={item} draftFeedback={draftFeedback} />
-            ))}
+            <DraftItem draftFeedback={draftFeedback} checkedRadio={checkedRadio} />
           </div>
           <div className={css(Buttons_actions_style)}>
             <div className={css(Button_container_style)}>
@@ -162,27 +123,9 @@ const ViewFeedbackComp: FC = () => {
                   iconStyles={{ verticalAlign: 'middle', margin: '2px 10px 0px 0px' }}
                   backgroundRadius={10}
                 />
-                <span
-                  className={css({
-                    fontWeight: 'bold',
-                    fontSize: '18px',
-                    lineHeight: '22px',
-                    color: '#00539F',
-                  })}
-                >
-                  Share feedback
-                </span>
+                <span className={css(ShareFeedback_Styled)}>Share feedback</span>
               </div>
-              <p
-                className={css({
-                  fontWeight: 'normal',
-                  fontSize: '16px',
-                  lineHeight: '20px',
-                  margin: '4px 0px 0px 0px',
-                })}
-              >
-                Why not give feedback back to your colleagues?
-              </p>
+              <p className={css(Question_Styled)}>Why not give feedback back to your colleagues?</p>
               <Button
                 styles={[iconBtnStyle]}
                 onPress={() => {
@@ -223,10 +166,10 @@ const ViewFeedbackComp: FC = () => {
               <Button
                 styles={[iconBtnStyle, { maxWidth: '161px !important' }]}
                 onPress={() => {
-                  console.log('hello');
+                  setOpenMainModal(() => true);
                 }}
               >
-                <Trans i18nKey='download_feedback'>Download feedback</Trans>
+                <Trans>Download feedback</Trans>
               </Button>
             </div>
             <Notification
@@ -242,8 +185,71 @@ const ViewFeedbackComp: FC = () => {
           </div>
         </div>
       </div>
-    </div>
+      {openMainModal && (
+        <Modal
+          modalPosition={'middle'}
+          overlayColor={'tescoBlue'}
+          modalContainerRule={[containerRule]}
+          closeOptions={{
+            content: <Icon graphic='cancel' invertColors={true} />,
+            onClose: () => {
+              dispatch(ColleaguesActions.clearGettedCollegues());
+              setModalSuccess(() => false);
+              setOpenMainModal(() => false);
+            },
+            styles: [modalCloseOptionStyle],
+          }}
+          title={{
+            content: 'Download feedback',
+            styles: [modalTitleOptionStyle],
+          }}
+          onOverlayClick={() => {
+            dispatch(ColleaguesActions.clearGettedCollegues());
+            if (ModalSuccess) setModalSuccess(() => false);
+            setOpenMainModal(() => false);
+          }}
+        >
+          <ModalDownloadFeedback
+            setOpenMainModal={setOpenMainModal}
+            ModalSuccess={ModalSuccess}
+            setModalSuccess={setModalSuccess}
+            closeHandler={closeHandler}
+            downloadTitle='Which feedback do you want to download?'
+            downloadDescription='Select which colleagues feedback do you want to download, then download it to your device'
+          />
+        </Modal>
+      )}
+    </>
   );
+};
+
+const SpaceBeetweenStyled: Rule = {
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  paddingTop: '24px',
+};
+
+const Question_Styled: Rule = {
+  fontWeight: 'normal',
+  fontSize: '16px',
+  lineHeight: '20px',
+  margin: '4px 0px 0px 0px',
+};
+
+const ShareFeedback_Styled: Rule = {
+  fontWeight: 'bold',
+  fontSize: '18px',
+  lineHeight: '22px',
+  color: '#00539F',
+};
+
+const Reverse_Items_Styled: Rule = {
+  display: 'flex',
+  flexWrap: 'wrap-reverse',
+  gridGap: '8px',
+  marginTop: '34px',
+  alignItems: 'stretch',
 };
 
 const iconStyle: Rule = {
@@ -272,7 +278,6 @@ const Drafts_style: Rule = {
 };
 
 const Button_container_style: Rule = {
-  height: '150px',
   background: '#FFFFFF',
   boxShadow: '3px 3px 1px 1px rgba(0, 0, 0, 0.05)',
   borderRadius: '10px',
@@ -298,5 +303,66 @@ const iconBtnStyle: Rule = ({ theme }) => ({
   fontSize: '14px',
   fontWeight: 'bold',
 });
+
+//
+const containerRule: Rule = ({ colors }) => {
+  const [, isBreakpoint] = useBreakpoints();
+  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+  return {
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'relative',
+    ...(mobileScreen
+      ? { borderRadius: '24px 24px 0 0 ', padding: '16px 0 84px' }
+      : { borderRadius: '32px', padding: `40px 0 102px` }),
+    width: '640px',
+    height: mobileScreen ? 'calc(100% - 72px)' : 'calc(100% - 102px)',
+    marginTop: '72px',
+    marginBottom: mobileScreen ? 0 : '30px',
+    background: colors.white,
+    cursor: 'default',
+    overflow: 'auto',
+  };
+};
+
+const modalCloseOptionStyle: Rule = () => {
+  const [, isBreakpoint] = useBreakpoints();
+  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+  return {
+    display: 'inline-block',
+    height: '24px',
+    paddingLeft: '0px',
+    paddingRight: '0px',
+    position: 'fixed',
+    top: '22px',
+    right: mobileScreen ? '20px' : '40px',
+    textDecoration: 'none',
+    border: 'none',
+    cursor: 'pointer',
+  };
+};
+
+const modalTitleOptionStyle: Rule = () => {
+  const [, isBreakpoint] = useBreakpoints();
+  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+
+  return {
+    position: 'fixed',
+    top: '22px',
+    textAlign: 'center',
+    left: 0,
+    right: 0,
+    color: 'white',
+    ...(mobileScreen
+      ? {
+          fontSize: '20px',
+          lineHeight: '24px',
+        }
+      : {
+          fontSize: '24px',
+          lineHeight: '28px',
+        }),
+  };
+};
 
 export default ViewFeedbackComp;

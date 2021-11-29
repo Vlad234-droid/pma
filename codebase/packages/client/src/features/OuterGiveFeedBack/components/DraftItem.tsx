@@ -1,105 +1,161 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import { useStyle, Rule, Styles } from '@dex-ddl/core';
 import { TileWrapper } from 'components/Tile';
 import { Accordion, BaseAccordion, Section, Panel, ExpandButton } from 'components/Accordion';
 import { IconButton } from 'components/IconButton';
 import { Trans } from 'components/Translation';
+import { FeedbackActions, getPropperNotesByStatusSelector } from '@pma/store';
+import { useDispatch, useSelector } from 'react-redux';
+import { getPropperTime } from '../../../utils';
+import { FeedbackStatus } from '../../../config/enum';
 
-type Question = {
-  ask: string;
-  answer: string;
-};
-
-type DraftType = {
-  id: number;
-  img: string;
-  f_name: string;
-  l_name: string;
-  title: string;
-  question1: Question;
-  question2: Question;
-  question3: Question;
+type TypecheckedRadio = {
+  draft: boolean;
+  submitted: boolean;
 };
 
 type DraftItemProps = {
-  item: DraftType;
   draftFeedback: (id: number) => void;
+  checkedRadio: TypecheckedRadio;
 };
 
-const DraftItem: FC<DraftItemProps> = ({ item, draftFeedback }) => {
+const DraftItem: FC<DraftItemProps> = ({ draftFeedback, checkedRadio }) => {
   const { css } = useStyle();
+  const dispatch = useDispatch();
 
-  const getPropperTime = (): string => {
-    return '2 weeks ago';
+  useEffect(() => {
+    dispatch(FeedbackActions.getAllFeedbacks({}));
+  }, []);
+  const draftedNotes = useSelector(getPropperNotesByStatusSelector(FeedbackStatus.DRAFT)) || [];
+  const submittedNotes = useSelector(getPropperNotesByStatusSelector(FeedbackStatus.SUBMITTED)) || [];
+
+  if (checkedRadio.submitted && !submittedNotes.length) {
+    return null;
+  }
+  if (checkedRadio.draft && !draftedNotes.length) {
+    return null;
+  }
+
+  const getPropperNotes = () => {
+    if (checkedRadio.submitted) {
+      return submittedNotes;
+    }
+    if (checkedRadio.draft) {
+      return draftedNotes;
+    }
   };
 
   return (
-    <TileWrapper>
-      <Accordion
-        id={`draft-accordion-${item.id}`}
-        customStyle={{
-          borderBottom: 'none',
-          marginTop: 0,
-        }}
-      >
-        <BaseAccordion id={`draft-base-accordion-${item.id}`}>
-          {() => (
-            <>
-              <Section defaultExpanded={false}>
-                <div className={css(Draft_Styles)}>
-                  <div className={css(Block_info)}>
-                    <div className={css({ alignSelf: 'flex-start' })}>
-                      <img className={css(Img_style)} src={item.img} alt='photo' />
-                    </div>
-                    <div className={css({ marginLeft: '16px' })}>
-                      <h3 className={css(Names_Style)}>{`${item.f_name} ${item.l_name}`}</h3>
-                      <p className={css(Industry_Style)}>Cashier, Grocery</p>
-                    </div>
-                  </div>
-                  <div className={css({ display: 'flex', justifyContent: 'center', alignItems: 'center' })}>
-                    <div className={css({ marginRight: '26px' })}>{getPropperTime()}</div>
-                    <ExpandButton />
-                  </div>
-                </div>
+    <>
+      {getPropperNotes().map((item) => (
+        <div key={item.uuid}>
+          <TileWrapper>
+            <Accordion
+              id={`draft-accordion-${item.uuid}`}
+              customStyle={{
+                borderBottom: 'none',
+                marginTop: 0,
+              }}
+            >
+              <BaseAccordion id={`draft-base-accordion-${item.uuid}`}>
+                {() => (
+                  <>
+                    <Section defaultExpanded={false}>
+                      <div className={css(Draft_Styles)}>
+                        <div className={css(Block_info)}>
+                          <div className={css({ alignSelf: 'flex-start' })}>
+                            <img className={css(Img_style)} alt='photo' />
+                          </div>
+                          <div className={css({ marginLeft: '16px' })}>
+                            <h3
+                              className={css(Names_Style)}
+                            >{`${item?.targetColleagueProfile?.colleague?.profile?.firstName} ${item?.targetColleagueProfile?.colleague?.profile?.lastName}`}</h3>
+                            <p
+                              className={css(Industry_Style)}
+                            >{`${item?.targetColleagueProfile?.colleague?.workRelationships[0].job.name}, ${item?.targetColleagueProfile?.colleague?.workRelationships[0].department?.name}`}</p>
+                          </div>
+                        </div>
+                        <div className={css({ display: 'flex', justifyContent: 'center', alignItems: 'center' })}>
+                          <div className={css({ marginRight: '26px' })}>{getPropperTime(item.updatedTime)}</div>
+                          <ExpandButton />
+                        </div>
+                      </div>
 
-                <Panel>
-                  <TileWrapper customStyle={{ padding: '24px', margin: '0px 28px 88px 24px' }}>
-                    <h2 className={css(Title_style)}>{item.title}</h2>
-                    <div className={css(Info_block_style)}>
-                      <h3>{item.question1.ask}</h3>
-                      <p>{item.question1.answer ? item.question1.answer : '-'}</p>
-                    </div>
-                    <div className={css(Info_block_style)}>
-                      <h3>{item.question2.ask}</h3>
-                      <p>{item.question2.answer ? item.question1.answer : '-'}</p>
-                    </div>
-                    <div className={css(Info_block_style)}>
-                      <h3>{item.question3.ask}</h3>
-                      <p>{item.question3.answer ? item.question1.answer : '-'}</p>
-                    </div>
-                  </TileWrapper>
-                  <IconButton
-                    customVariantRules={{ default: iconBtnStyle }}
-                    onPress={() => draftFeedback(item.id)}
-                    graphic='edit'
-                    iconProps={{ invertColors: false }}
-                    iconStyles={iconStyle}
-                  >
-                    <Trans i18nKey='give_feedback'>Give feedback</Trans>
-                  </IconButton>
-                </Panel>
-              </Section>
-            </>
-          )}
-        </BaseAccordion>
-      </Accordion>
-    </TileWrapper>
+                      <Panel>
+                        <TileWrapper
+                          customStyle={{ padding: '24px', margin: '0px 28px 24px 24px', border: '1px solid #E5E5E5' }}
+                        >
+                          <h2 className={css(Title_style)}>Objective: Provide a posititve customer experience</h2>
+
+                          <div className={css(Info_block_style)}>
+                            <h3>Question 1</h3>
+                            {item.feedbackItems.map((question) => {
+                              return (
+                                <p key={question.code}>
+                                  {question.code === 'Question 1'
+                                    ? question.content !== ''
+                                      ? question.content
+                                      : '-'
+                                    : ''}
+                                </p>
+                              );
+                            })}
+                          </div>
+                          <div className={css(Info_block_style)}>
+                            <h3>Question 2</h3>
+                            {item.feedbackItems.map((question) => {
+                              return (
+                                <p key={question.code}>
+                                  {question.code === 'Question 2'
+                                    ? question.content !== ''
+                                      ? question.content
+                                      : '-'
+                                    : ''}
+                                </p>
+                              );
+                            })}
+                          </div>
+                          <div className={css(Info_block_style)}>
+                            <h3>Anything else?</h3>
+                            {item.feedbackItems.map((question) => {
+                              return (
+                                <p key={question.code}>
+                                  {question.code === 'Anything else?'
+                                    ? question.content !== ''
+                                      ? question.content
+                                      : '-'
+                                    : ''}
+                                </p>
+                              );
+                            })}
+                          </div>
+                        </TileWrapper>
+                        {!checkedRadio.submitted && (
+                          <IconButton
+                            customVariantRules={{ default: iconBtnStyle }}
+                            onPress={() => draftFeedback(item)}
+                            graphic='edit'
+                            iconProps={{ invertColors: false }}
+                            iconStyles={iconStyle}
+                          >
+                            <Trans i18nKey='give_feedback'>Give feedback</Trans>
+                          </IconButton>
+                        )}
+                      </Panel>
+                    </Section>
+                  </>
+                )}
+              </BaseAccordion>
+            </Accordion>
+          </TileWrapper>
+        </div>
+      ))}
+    </>
   );
 };
 
 const Draft_Styles: Rule = {
   padding: '24px',
-  height: '96px',
   display: 'flex',
   justifyContent: 'space-between',
 };
