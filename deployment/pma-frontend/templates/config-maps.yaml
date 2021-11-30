@@ -5,6 +5,7 @@ metadata:
 data:
   NODE_PORT: {{ .Values.NODE_PORT | quote }}
   NODE_ENV: {{ .Values.NODE_ENV }}
+  NODE_CONFIG_ENV: {{ .Values.NODE_CONFIG_ENV }}
   BUILD_ENV: {{ .Values.BUILD_ENV }}
   PROXY_API_SERVER_URL: {{ .Values.PROXY_API_SERVER_URL | quote }}
   INTEGRATION_MODE: {{ .Values.INTEGRATION_MODE }}

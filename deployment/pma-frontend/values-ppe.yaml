@@ -83,6 +83,7 @@ affinity: {}
 
 NODE_PORT: 9000
 NODE_ENV: ppe
+NODE_CONFIG_ENV: ppe
 BUILD_ENV: ppe
 PROXY_API_SERVER_URL: http://pma-api-service:8083
 INTEGRATION_MODE: standalone
@@ -91,7 +92,7 @@ INTEGRATION_CORE_URL: /
 INTEGRATION_MOUNT_PATH: /experience/myperformance
 INTEGRATION_NODE_BFF_URL: /
 APPLICATION_PUBLIC_URL: /experience/myperformance
-APPLICATION_URL_ROOT: http://10.114.147.7
+APPLICATION_URL_ROOT: https://frontend.ppe.pma.tescocloud.com/experience/myperformance
 APPLICATION_USER_DATA_COOKIE_NAME: pma.user.data
 USE_ONELOGIN: true
 ONELOGIN_ISSUER_URL: https://loginppe.ourtesco.com/oidc/2
