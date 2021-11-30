@@ -96,7 +96,7 @@ APPLICATION_URL_ROOT: https://frontend.dev.pma.tescocloud.com
 APPLICATION_USER_DATA_COOKIE_NAME: pma.user.data
 USE_ONELOGIN: true
 ONELOGIN_ISSUER_URL: https://loginppe.ourtesco.com/oidc/2
-ONELOGIN_CALLBACK_PATH: /sso/auth/callback
+ONELOGIN_CALLBACK_PATH: /auth/openid/callback
 ONELOGIN_REDIRECT_AFTER_LOGOUT_URL: /sso/logout/callback
 OIDC_GROUPS_ADMIN_ROLE: Admin
 OIDC_GROUPS_MANAGER_ROLE: Manager
