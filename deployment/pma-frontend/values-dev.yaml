@@ -94,7 +94,7 @@ APPLICATION_PUBLIC_URL: /experience/myperformance
 APPLICATION_URL_ROOT: http://10.123.22.23
 APPLICATION_USER_DATA_COOKIE_NAME: pma.user.data
 USE_ONELOGIN: true
-ONELOGIN_ISSUER_URL: none
+ONELOGIN_ISSUER_URL: https://loginppe.ourtesco.com/oidc/2
 ONELOGIN_CALLBACK_PATH: /sso/auth/callback
 ONELOGIN_REDIRECT_AFTER_LOGOUT_URL: /sso/logout/callback
 OIDC_GROUPS_ADMIN_ROLE: Admin
