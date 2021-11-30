@@ -91,7 +91,7 @@ INTEGRATION_CORE_URL: /
 INTEGRATION_MOUNT_PATH: /experience/myperformance
 INTEGRATION_NODE_BFF_URL: /
 APPLICATION_PUBLIC_URL: /experience/myperformance
-APPLICATION_URL_ROOT: http://10.123.22.23
+APPLICATION_URL_ROOT: https://frontend.dev.pma.tescocloud.com/experience/myperformance
 APPLICATION_USER_DATA_COOKIE_NAME: pma.user.data
 USE_ONELOGIN: true
 ONELOGIN_ISSUER_URL: https://loginppe.ourtesco.com/oidc/2
