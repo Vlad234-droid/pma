@@ -11,6 +11,7 @@ type ErrorHandlerParams = Omit<SorryPageProps, 'type'>;
 export const errorHandler =
   ({ appName, logoutPath, tryAgainPath, username }: ErrorHandlerParams) =>
   (error: Error, req: Request, res: Response, next: NextFunction) => {
+    console.log('ERROR HANDLER: ', error);
     if (OneloginError.is(error) && error.status === 403) {
       ssr({
         render: () => (
