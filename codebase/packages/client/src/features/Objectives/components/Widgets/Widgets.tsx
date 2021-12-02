@@ -1,21 +1,12 @@
-import React, { FC, HTMLProps, useEffect } from 'react';
+import React, { FC, HTMLProps } from 'react';
 import { useTranslation } from 'components/Translation';
 import { Styles, useStyle } from '@dex-ddl/core';
 
 import SecondaryWidget, { Props as SecondaryWidgetProps } from '../SecondaryWidget';
 import MainWidget from '../MainWidget';
-import useDispatch from 'hooks/useDispatch';
 import { useSelector } from 'react-redux';
-import {
-  getObjectivesStatusSelector,
-  timelineTypesAvailabilitySelector,
-  ObjectiveActions,
-  SchemaActions,
-  objectivesSelector,
-  schemaSelector,
-  getObjectiveSchema,
-} from '@pma/store';
-import { ObjectiveType } from 'config/enum';
+import { getTimelineByReviewTypeSelector, timelineTypesAvailabilitySelector } from '@pma/store';
+import { ReviewType } from 'config/enum';
 
 export type MainWidgetProps = {};
 
@@ -24,18 +15,14 @@ type Props = HTMLProps<HTMLInputElement> & MainWidgetProps;
 const Widgets: FC<Props> = () => {
   const { css } = useStyle();
   const { t } = useTranslation();
-  const dispatch = useDispatch();
-  const status = useSelector(getObjectivesStatusSelector);
-  const { origin } = useSelector(objectivesSelector);
-  const { markup = { min: 0 } } = useSelector(getObjectiveSchema);
-  const countObjectives = origin.length > markup.min ? markup.min : origin.length;
-  const timelineTypes = useSelector(timelineTypesAvailabilitySelector);
-  const canShowObjectives = timelineTypes[ObjectiveType.OBJECTIVE];
 
-  useEffect(() => {
-    dispatch(ObjectiveActions.getObjectives({ performanceCycleUuid: '' }));
-    dispatch(SchemaActions.getSchema());
-  }, []);
+  const timelineObjective = useSelector(getTimelineByReviewTypeSelector(ReviewType.OBJECTIVE));
+  const timelineTypes = useSelector(timelineTypesAvailabilitySelector);
+
+  const status = timelineObjective?.status;
+  const countObjectives = timelineObjective?.count || null;
+  const canShowObjectives = timelineTypes[ReviewType.OBJECTIVE];
+
   const widgets: SecondaryWidgetProps[] = [
     {
       iconGraphic: 'add',

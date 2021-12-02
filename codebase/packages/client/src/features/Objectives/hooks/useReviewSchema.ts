@@ -1,13 +1,14 @@
 import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getObjectiveSchema } from '@pma/store/src/selectors/schema';
+import { getReviewSchema } from '@pma/store/src/selectors/schema';
 import { colleagueUUIDSelector, SchemaActions } from '@pma/store';
+import { ReviewType } from 'config/enum';
 
-function useObjectivesSchema() {
+function useReviewSchema(type: ReviewType) {
   const dispatch = useDispatch();
-  const schema = useSelector(getObjectiveSchema);
-  const { components = [] } = useSelector(getObjectiveSchema);
+  const schema = useSelector(getReviewSchema(type));
   const colleagueUuid = useSelector(colleagueUUIDSelector);
+  const { components = [] } = schema;
 
   const getSchema = useCallback(() => {
     if (!components?.length) {
@@ -22,4 +23,4 @@ function useObjectivesSchema() {
   return [schema, getSchema];
 }
 
-export default useObjectivesSchema;
+export default useReviewSchema;

@@ -8,7 +8,13 @@ import { WidgetPending, WidgetTeamMateProfile, YourActions } from 'features/MyTe
 import { FilterOption } from 'features/Shared';
 import { useSelector } from 'react-redux';
 import useDispatch from 'hooks/useDispatch';
-import { getAllEmployees, getManagersMetaSelector, getPendingEmployees, ManagersActions } from '@pma/store';
+import {
+  colleagueUUIDSelector,
+  getAllEmployees,
+  getManagersMetaSelector,
+  getPendingEmployees,
+  ManagersActions,
+} from '@pma/store';
 
 export const TEST_ID = 'my-team';
 
@@ -24,11 +30,12 @@ const MyTeam: FC = () => {
   const colleaguesWithStatusDraftCount = employeePendingApprovals?.length;
 
   const { loaded } = useSelector(getManagersMetaSelector) || {};
+  const colleagueUuid = useSelector(colleagueUUIDSelector);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!loaded) dispatch(ManagersActions.getManagers());
-  }, [loaded]);
+    if (!loaded) dispatch(ManagersActions.getManagers({ colleagueUuid }));
+  }, [loaded, colleagueUuid]);
 
   return (
     <div className={css({ margin: '8px' })}>

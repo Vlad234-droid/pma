@@ -4,18 +4,15 @@ import { TileWrapper } from 'components/Tile';
 import { Icon } from 'components/Icon';
 import ConfirmDeclineModal from './Modal/ConfirmDeclineModal';
 import { Trans } from 'components/Translation';
-import { ObjectiveActions } from '@pma/store';
+import { ReviewsActions } from '@pma/store';
 import useDispatch from 'hooks/useDispatch';
 import { Status } from 'config/enum';
-import { PayloadActionCreator } from 'typesafe-actions';
 
 export type WidgetObjectiveApprovalProps = {
   isDisabled?: boolean;
   canDecline?: boolean;
   reviewsForApproval: any[];
 };
-
-type UpdateReviews = (method: PayloadActionCreator<any, any>, reason?: string) => void;
 
 export const WidgetObjectiveApproval: FC<WidgetObjectiveApprovalProps> = ({
   isDisabled = false,
@@ -26,22 +23,33 @@ export const WidgetObjectiveApproval: FC<WidgetObjectiveApprovalProps> = ({
   const { css, theme } = useStyle();
   const dispatch = useDispatch();
 
-  const updateReviews: UpdateReviews = (method, reason) => {
-    reviewsForApproval.forEach((colleague) => {
-      dispatch(
-        method({
-          ...(reason ? { reason } : {}),
-          colleagueUuid: colleague.uuid,
-          reviews: colleague.reviews.filter(({ status }) => status === Status.WAITING_FOR_APPROVAL),
-        }),
-      );
-    });
-  };
-  const approveColleagues = () => updateReviews(ObjectiveActions.approveObjective);
-  const declineColleagues = (reason) => {
-    updateReviews(ObjectiveActions.declineObjective, reason);
-    setIsOpen(false);
-  };
+  const updateReviewStatus =
+    (status: Status) =>
+    ({ reason }: { reason?: string }) => {
+      reviewsForApproval.forEach((colleague) => {
+        const timelineApproved = colleague.timeline.filter((tl) => tl.status === Status.WAITING_FOR_APPROVAL);
+        if (timelineApproved.length > 1) {
+          console.log('colleague', colleague);
+        } else {
+          const [timeline] = timelineApproved;
+          const update = {
+            pathParams: { colleagueUuid: colleague.uuid, type: timeline.reviewType, cycleUuid: 'CURRENT', status },
+            data: {
+              ...(reason ? { reason } : {}),
+              status,
+              colleagueUuid: colleague.uuid,
+              reviews: colleague.reviews.filter(
+                ({ status, type }) => status === Status.WAITING_FOR_APPROVAL && type === timeline.reviewType,
+              ),
+            },
+          };
+          dispatch(ReviewsActions.updateReviewStatus(update));
+        }
+      });
+    };
+  const approveColleagues = updateReviewStatus(Status.APPROVED);
+  const declineColleagues = updateReviewStatus(Status.DECLINED);
+
   return (
     <>
       <TileWrapper>
@@ -55,7 +63,7 @@ export const WidgetObjectiveApproval: FC<WidgetObjectiveApprovalProps> = ({
               fontWeight: fontWeight.bold,
             })}
           >
-            Approve or decline colleague’s objectives
+            Approve or decline colleague’s objectives or reviews
           </div>
           <div
             className={css({
@@ -96,7 +104,7 @@ export const WidgetObjectiveApproval: FC<WidgetObjectiveApprovalProps> = ({
                     margin: '0px 4px 1px 4px',
                   },
                 ]}
-                onPress={approveColleagues}
+                onPress={() => approveColleagues({})}
               >
                 <Icon graphic='check' invertColors={true} iconStyles={{ paddingRight: '8px' }} />
                 <Trans i18nKey='approve'>Approve</Trans>
@@ -106,7 +114,7 @@ export const WidgetObjectiveApproval: FC<WidgetObjectiveApprovalProps> = ({
               <ConfirmDeclineModal
                 title={'Please provide decline reason'}
                 onSave={declineColleagues}
-                onCancel={() => setIsOpen(false)}
+                onClose={() => setIsOpen(false)}
                 onOverlayClick={() => setIsOpen(false)}
               />
             )}

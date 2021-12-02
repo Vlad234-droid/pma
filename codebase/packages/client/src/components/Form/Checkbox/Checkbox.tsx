@@ -2,11 +2,12 @@ import React, { FC } from 'react';
 import { useStyle, colors } from '@dex-ddl/core';
 
 import { CheckboxProps } from '../types';
-const Checkbox: FC<CheckboxProps> = ({ id, name, onChange, checked, indeterminate = false }) => {
+const Checkbox: FC<CheckboxProps> = ({ id, name, onChange, checked, disabled = false, indeterminate = false }) => {
   const { css } = useStyle();
   return (
     <span>
       <input
+        disabled={disabled}
         className={css(
           {
             width: '20px',
@@ -51,6 +52,12 @@ const Checkbox: FC<CheckboxProps> = ({ id, name, onChange, checked, indeterminat
                   bottom: '-2px',
                   right: '7px',
                 },
+              }
+            : {},
+          disabled
+            ? {
+                backgroundColor: colors.disabled,
+                opacity: 0.2,
               }
             : {},
         )}

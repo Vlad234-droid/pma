@@ -2,11 +2,12 @@ import React, { FC } from 'react';
 import { colors, fontWeight, Rule, Styles } from '@dex-ddl/core';
 import { Accordion, Header, HeaderProps, Panel, Section } from 'components/Accordion';
 import { ButtonWithConfirmation, EditButton } from '../Buttons';
-import { ObjectiveActions } from '@pma/store';
-import { Status } from 'config/enum';
+import { currentUserSelector, ReviewsActions } from '@pma/store';
+import { ReviewType, Status } from 'config/enum';
 import useDispatch from 'hooks/useDispatch';
 
-import { ObjectiveTileHeader, ObjectiveTileExplanations } from '../Tile';
+import { ObjectiveTileExplanations, ObjectiveTileHeader } from '../Tile';
+import { useSelector } from 'react-redux';
 
 type Explanation = {
   title: string;
@@ -30,13 +31,12 @@ type Props = {
 export const TEST_ID = 'objective-accordion';
 const Buttons: FC<{ id: number }> = ({ id }) => {
   const dispatch = useDispatch();
+  const { info } = useSelector(currentUserSelector);
 
   const remove = () => {
     dispatch(
-      ObjectiveActions.deleteObjective({
-        performanceCycleUuid: '',
-        colleagueUuid: '',
-        number: id,
+      ReviewsActions.deleteReview({
+        pathParams: { colleagueUuid: info.colleagueUUID, type: ReviewType.OBJECTIVE, cycleUuid: 'CURRENT', number: id },
       }),
     );
   };

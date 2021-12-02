@@ -133,7 +133,11 @@ export const ObjectiveModal: FC<Props> = ({
                   name={key}
                   methods={methods}
                   label={label}
-                  Wrapper={({ children }) => <Item withIcon={false}>{children}</Item>}
+                  Wrapper={({ children, label }) => (
+                    <Item withIcon={false} label={label}>
+                      {children}
+                    </Item>
+                  )}
                   Element={Select}
                   options={values}
                   placeholder={description}

@@ -9,7 +9,5 @@ export const getColleagues = (params: any) => {
 
 export const getObjectivesRewiews = (params: any) => {
   const { type } = params;
-  return httpClient.get(
-    `${colleagues}/10000000-0000-0000-0000-000000000001/pm-cycles/CURRENT/review-types/${type}/reviews`,
-  );
+  return httpClient.get(`${colleagues}/${params.colleagueUuid}/pm-cycles/CURRENT/review-types/${type}/reviews`);
 };

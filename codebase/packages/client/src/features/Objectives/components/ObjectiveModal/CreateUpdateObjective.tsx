@@ -5,11 +5,17 @@ import * as Yup from 'yup';
 import { ObjectiveModal } from './ObjectiveModal';
 import useDispatch from 'hooks/useDispatch';
 import { useSelector } from 'react-redux';
-import { getNextObjectiveNumberSelector, ObjectiveActions } from '@pma/store';
+import {
+  currentUserSelector,
+  getNextReviewNumberSelector,
+  getReviewPropertiesSelector,
+  ReviewsActions,
+  reviewsMetaSelector,
+} from '@pma/store';
 import { createYupSchema } from 'utils/yup';
-import { Status } from 'config/enum';
-import useObjectives from '../../hooks/useObjectives';
-import useObjectivesSchema from '../../hooks/useObjectiveSchema';
+import { ReviewType, Status } from 'config/enum';
+import useReviews from '../../hooks/useReviews';
+import useReviewSchema from '../../hooks/useReviewSchema';
 
 export type CreateUpdateObjectiveModalProps = {
   onClose: () => void;
@@ -20,11 +26,16 @@ type Props = HTMLProps<HTMLInputElement> & CreateUpdateObjectiveModalProps;
 
 export const CreateUpdateObjective: FC<Props> = ({ onClose, editNumber = null }) => {
   const dispatch = useDispatch();
+  const { loaded: reviewLoaded } = useSelector(reviewsMetaSelector);
+  const { info } = useSelector(currentUserSelector);
 
-  const [, objectives] = useObjectives();
-  const [schema] = useObjectivesSchema();
+  const pathParams = { colleagueUuid: info.colleagueUUID, type: ReviewType.OBJECTIVE, cycleUuid: 'CURRENT' };
 
-  const nextNumber = useSelector(getNextObjectiveNumberSelector);
+  const [origin] = useReviews({ pathParams });
+  const objectives = useSelector(getReviewPropertiesSelector(ReviewType.OBJECTIVE));
+  const [schema] = useReviewSchema(ReviewType.OBJECTIVE);
+
+  const nextNumber = useSelector(getNextReviewNumberSelector(ReviewType.OBJECTIVE));
   const currentObjectiveNumber = editNumber ? editNumber : nextNumber;
 
   const { components = [] } = schema;
@@ -55,17 +66,37 @@ export const CreateUpdateObjective: FC<Props> = ({ onClose, editNumber = null })
     };
     if (objectives[currentObjectiveNumber]) {
       dispatch(
-        ObjectiveActions.updateObjective({
-          data: currentObjective,
+        ReviewsActions.updateReview({
+          pathParams: { ...pathParams, number: currentObjectiveNumber },
+          data: [currentObjective],
         }),
       );
     } else {
       dispatch(
-        ObjectiveActions.createObjective({
-          data: currentObjective,
+        ReviewsActions.createReview({
+          pathParams: { ...pathParams, number: currentObjectiveNumber },
+          data: [currentObjective],
         }),
       );
     }
+    // if (!origin[currentObjectiveNumber - 1]) {
+    //   origin[currentObjectiveNumber - 1] = { number: currentObjectiveNumber, status: Status.DRAFT };
+    // }
+    // if (objectives[currentObjectiveNumber]) {
+    //   dispatch(
+    //     ReviewsActions.updateReview({
+    //       pathParams: { ...pathParams, number: currentObjectiveNumber },
+    //       data: [currentObjective],
+    //     }),
+    //   );
+    // } else {
+    //   dispatch(
+    //     ReviewsActions.createReview({
+    //       pathParams: { ...pathParams, number: currentObjectiveNumber },
+    //       data: [currentObjective],
+    //     }),
+    //   );
+    // }
   };
   const onSaveDraft = () => {
     const data = getValues();
@@ -78,14 +109,16 @@ export const CreateUpdateObjective: FC<Props> = ({ onClose, editNumber = null })
     };
     if (objectives[currentObjectiveNumber]) {
       dispatch(
-        ObjectiveActions.updateObjective({
-          data: currentObjective,
+        ReviewsActions.updateReview({
+          pathParams: { ...pathParams, number: currentObjectiveNumber },
+          data: [currentObjective],
         }),
       );
     } else {
       dispatch(
-        ObjectiveActions.createObjective({
-          data: currentObjective,
+        ReviewsActions.createReview({
+          pathParams: { ...pathParams, number: currentObjectiveNumber },
+          data: [currentObjective],
         }),
       );
     }
@@ -93,7 +126,7 @@ export const CreateUpdateObjective: FC<Props> = ({ onClose, editNumber = null })
 
   useEffect(() => {
     reset(stateObjective);
-  }, [currentObjectiveNumber]);
+  }, [currentObjectiveNumber, reviewLoaded]);
 
   return (
     <ObjectiveModal

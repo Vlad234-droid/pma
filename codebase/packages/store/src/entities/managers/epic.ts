@@ -8,16 +8,17 @@ import { getManagers } from './actions';
 export const getManagersEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
     filter(isActionOf(getManagers.request)),
-    switchMap(() =>
-      from(api.getManagers()).pipe(
+    switchMap(({ payload }) => {
+      console.log(payload);
+      return from(api.getManagers(payload)).pipe(
         map(getManagers.success),
         catchError((e) => {
           const errors = e?.data?.errors;
           return of(getManagers.failure(errors?.[0]));
         }),
         takeUntil(action$.pipe(filter(isActionOf(getManagers.cancel)))),
-      ),
-    ),
+      );
+    }),
   );
 
 export default combineEpics(getManagersEpic);

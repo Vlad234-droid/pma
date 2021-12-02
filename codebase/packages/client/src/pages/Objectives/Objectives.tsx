@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'components/Translation';
 import { Button, Rule, Styles, useBreakpoints, useStyle } from '@dex-ddl/core';
-import { ObjectiveType, Status } from 'config/enum';
+import { ObjectiveType, ReviewType } from 'config/enum';
 
 import { StepIndicator } from 'components/StepIndicator/StepIndicator';
 import { Header } from 'components/Header';
@@ -23,30 +23,33 @@ import { useToast, Variant } from 'features/Toast';
 import useDispatch from 'hooks/useDispatch';
 import { useSelector } from 'react-redux';
 import {
-  getObjectiveSchema,
-  getObjectivesStatusSelector,
+  colleagueUUIDSelector,
+  currentUserSelector,
+  getTimelineByCodeSelector,
+  getTimelineByReviewTypeSelector,
   getTimelineMetaSelector,
   getTimelineSelector,
-  timelineTypesAvailabilitySelector,
-  isObjectivesInStatus,
-  isObjectivesLessMaxMarkup,
-  ObjectiveActions,
-  objectivesMetaSelector,
-  objectivesSelector,
-  SchemaActions,
+  isReviewsInStatus,
+  reviewsMetaSelector,
+  schemaMetaSelector,
   TimelineActions,
+  timelineTypesAvailabilitySelector,
 } from '@pma/store';
+import useReviews from '../../features/Objectives/hooks/useReviews';
+import useReviewSchema from '../../features/Objectives/hooks/useReviewSchema';
 
 const reviews = [
   {
     id: 'test-1',
     title: 'Mid-year review',
     description: 'Pharetra donec enim aenean aliquet consectetur ultrices amet vitae',
+    reviewType: ReviewType.MYR,
   },
   {
     id: 'test-2',
     title: 'End-year review',
     description: 'Pharetra donec enim aenean aliquet consectetur ultrices amet vitae',
+    reviewType: ReviewType.EYR,
   },
 ];
 
@@ -65,29 +68,33 @@ const Objectives: FC = () => {
   const { css, theme } = useStyle();
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const { info } = useSelector(currentUserSelector);
+  const pathParams = { colleagueUuid: info.colleagueUUID, type: ReviewType.OBJECTIVE, cycleUuid: 'CURRENT' };
+  const midYearReview = useSelector(getTimelineByCodeSelector(ObjectiveType.MYR));
+  const endYearReview = useSelector(getTimelineByCodeSelector(ObjectiveType.EYR));
   const [previousReviewFilesModalShow, setPreviousReviewFilesModalShow] = useState(false);
   const [objectives, setObjectives] = useState([]);
 
-  const {
-    components = [],
-    meta: { loaded: schemaLoaded = false },
-    markup = { max: 0, min: 0 },
-  } = useSelector(getObjectiveSchema);
+  const { loaded: schemaLoaded } = useSelector(schemaMetaSelector);
+  const { loaded: reviewLoaded } = useSelector(reviewsMetaSelector);
+  const colleagueUuid = useSelector(colleagueUUIDSelector);
+  const [schema] = useReviewSchema(ReviewType.OBJECTIVE);
+  const { components = [], markup = { max: 0, min: 0 } } = schema;
   const { descriptions, startDates, statuses } = useSelector(getTimelineSelector) || {};
   const timelineTypes = useSelector(timelineTypesAvailabilitySelector);
-  const canShowObjectives = timelineTypes[ObjectiveType.OBJECTIVE];
-  const canShowMyReview = timelineTypes[ObjectiveType.MYR] && timelineTypes[ObjectiveType.EYR];
-  const canShowAnnualReview = !timelineTypes[ObjectiveType.MYR] && timelineTypes[ObjectiveType.EYR];
+  const canShowObjectives = timelineTypes[ReviewType.OBJECTIVE];
+  const canShowMyReview = timelineTypes[ReviewType.MYR] && timelineTypes[ReviewType.EYR];
+  const canShowAnnualReview = !timelineTypes[ReviewType.MYR] && timelineTypes[ReviewType.EYR];
 
   const formElements = components.filter((component) => component.type != 'text');
 
-  // @ts-ignore
-  const { loaded: objectivesLoaded } = useSelector(objectivesMetaSelector);
-  const status = useSelector(getObjectivesStatusSelector);
-  const { origin } = useSelector(objectivesSelector);
-  const isAllObjectivesInSameStatus = useSelector(isObjectivesInStatus(status));
+  const timelineObjective = useSelector(getTimelineByReviewTypeSelector(ReviewType.OBJECTIVE));
+  const status = timelineObjective?.status || undefined;
 
-  const canCreateSingleObjective = useSelector(isObjectivesLessMaxMarkup(markup));
+  const [origin] = useReviews({ pathParams });
+  const isAllObjectivesInSameStatus = useSelector(isReviewsInStatus(ReviewType.OBJECTIVE)(status));
+
+  const canCreateSingleObjective = markup.max > origin?.length;
 
   // todo not clear where reviews might come from. remove this block when its clear
   const createdReviews: any = [];
@@ -99,11 +106,7 @@ const Objectives: FC = () => {
   // todo remove block end
 
   useEffect(() => {
-    dispatch(SchemaActions.getSchema());
-    dispatch(ObjectiveActions.getObjectives({ performanceCycleUuid: '' }));
-  }, []);
-  useEffect(() => {
-    if (objectivesLoaded && schemaLoaded) {
+    if (reviewLoaded && schemaLoaded) {
       origin?.forEach((objectiveItem) => {
         const status = objectiveItem.status;
         const objective = objectiveItem?.properties?.mapJson;
@@ -127,7 +130,7 @@ const Objectives: FC = () => {
       });
       setObjectives(mappedObjectives);
     }
-  }, [objectivesLoaded, schemaLoaded]);
+  }, [reviewLoaded, schemaLoaded]);
 
   const widgets: SecondaryWidgetProps[] = [
     {
@@ -170,7 +173,7 @@ const Objectives: FC = () => {
   const { loaded } = useSelector(getTimelineMetaSelector) || {};
 
   useEffect(() => {
-    if (!loaded) dispatch(TimelineActions.getTimeline());
+    if (!loaded) dispatch(TimelineActions.getTimeline({ colleagueUuid }));
   }, [loaded]);
 
   return (
@@ -310,8 +313,10 @@ const Objectives: FC = () => {
               <>
                 <div data-test-id='personal' className={css(basicTileStyle)}>
                   <ReviewWidget
-                    status={Status.AVAILABLE}
+                    reviewType={ReviewType.MYR}
+                    status={midYearReview.status}
                     onClick={() => console.log('ReviewWidget')}
+                    onClose={() => console.log('ReviewWidget')}
                     title={'Mid-year review'}
                     description={t('tiles_description_id_3', 'Your mid-year review form and results will appear here.')}
                     customStyle={{ height: '182px' }}
@@ -319,8 +324,10 @@ const Objectives: FC = () => {
                 </div>
                 <div data-test-id='feedback' className={css(basicTileStyle)}>
                   <ReviewWidget
-                    status={Status.NOT_AVAILABLE}
+                    reviewType={ReviewType.EYR}
+                    status={endYearReview.status}
                     onClick={() => console.log('ReviewWidget')}
+                    onClose={() => console.log('ReviewWidget')}
                     title={'End-year review'}
                     description={t('tiles_description_id_3', 'Your mid-year review form and results will appear here.')}
                     customStyle={{ height: '182px' }}
@@ -331,8 +338,10 @@ const Objectives: FC = () => {
             {canShowAnnualReview && (
               <div data-test-id='feedback' className={css(basicTileStyle)}>
                 <ReviewWidget
-                  status={Status.NOT_AVAILABLE}
+                  reviewType={ReviewType.MYR}
+                  status={midYearReview.status}
                   onClick={() => console.log('ReviewWidget')}
+                  onClose={() => console.log('ReviewWidget')}
                   title={'Annual performance review'}
                   description={t('tiles_description_id_3', 'Your mid-year review form and results will appear here.')}
                   customStyle={{ height: '182px' }}

@@ -1,7 +1,7 @@
 //@ts-ignore
 import { createSelector } from 'reselect'; //@ts-ignore
 import { RootState } from 'typesafe-actions';
-import { ObjectiveType } from '@pma/client/src/config/enum';
+import { ObjectiveType, ReviewType } from '@pma/client/src/config/enum';
 
 export const timelineSelector = (state: RootState) => state.timeline || {};
 
@@ -49,12 +49,12 @@ export const hasTimelineAccessesSelector = ({
 export const timelineTypesAvailabilitySelector = createSelector(timelineSelector, ({ meta, ...rest }) => {
   // @ts-ignore
   const { data } = rest;
-  const codes = data?.map(({ code }) => code);
-  if (codes?.length) {
+  const reviewTypes = data?.map(({ reviewType }) => reviewType);
+  if (reviewTypes?.length) {
     return {
-      [ObjectiveType.OBJECTIVE]: codes.includes(ObjectiveType.OBJECTIVE),
-      [ObjectiveType.MYR]: codes.includes(ObjectiveType.MYR),
-      [ObjectiveType.EYR]: codes.includes(ObjectiveType.EYR),
+      [ReviewType.OBJECTIVE]: reviewTypes.includes(ReviewType.OBJECTIVE),
+      [ReviewType.MYR]: reviewTypes.includes(ReviewType.MYR),
+      [ReviewType.EYR]: reviewTypes.includes(ReviewType.EYR),
     };
   }
   return {};
@@ -65,4 +65,11 @@ export const getTimelineByCodeSelector = (code) =>
     // @ts-ignore
     const { data } = rest;
     return data?.find((timeline) => timeline.code === code);
+  });
+
+export const getTimelineByReviewTypeSelector = (type: ReviewType) =>
+  createSelector(timelineSelector, ({ meta, ...rest }) => {
+    // @ts-ignore
+    const { data } = rest;
+    return data?.find((timeline) => timeline.reviewType === type);
   });

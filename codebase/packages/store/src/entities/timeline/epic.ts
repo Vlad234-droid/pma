@@ -8,8 +8,8 @@ import { getTimeline } from './actions';
 export const getTimelineEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
     filter(isActionOf(getTimeline.request)),
-    switchMap(() =>
-      from(api.getTimeline()).pipe(
+    switchMap(({ payload }) =>
+      from(api.getTimeline(payload)).pipe(
         map(getTimeline.success),
         catchError((e) => {
           const errors = e?.data?.errors;

@@ -6,6 +6,7 @@ import timelineEpic from '../entities/timeline/epic';
 import managersEpic from '../entities/managers/epic';
 import feedBackEpic from '../entities/feedback/epic';
 import colleaguesEpic from '../entities/colleagues/epic';
+import reviewsEpic from '../entities/reviews/epic';
 
 export const rootEpic = combineEpics(
   userEpic,
@@ -15,4 +16,5 @@ export const rootEpic = combineEpics(
   managersEpic,
   feedBackEpic,
   colleaguesEpic,
+  reviewsEpic,
 );

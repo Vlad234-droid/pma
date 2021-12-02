@@ -5,7 +5,7 @@ export const getManagers = createAsyncAction(
   'managers/SUCCESS',
   'managers/FAILURE',
   'managers/CANCEL',
-)<undefined, any, Error, undefined>();
+)<any, any, Error, undefined>();
 
 export const Actions = {
   getManagers: getManagers.request,
