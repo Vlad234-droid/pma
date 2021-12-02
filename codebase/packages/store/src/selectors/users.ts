@@ -12,12 +12,18 @@ function getFullName(profile) {
   return lastName ? `${fullName} ${lastName}` : fullName;
 }
 
+export const colleagueUUIDSelector = createSelector(usersSelector, ({ current }) => {
+  // @ts-ignore
+  return current?.info?.data?.colleague?.colleagueUUID;
+});
+
 export const currentUserSelector = createSelector(usersSelector, ({ current }) => {
   // @ts-ignore
   const info = current?.info?.data?.colleague;
   const fullName = getFullName(info?.profile);
   //@ts-ignore
   const workRelationship = info?.workRelationships?.[0];
+  const colleagueUUID = info?.colleagueUUID;
   const job = workRelationship?.job?.name;
   const manager = getFullName(workRelationship?.manager?.profile);
   workRelationship?.job?.name;
@@ -46,6 +52,7 @@ export const currentUserSelector = createSelector(usersSelector, ({ current }) =
       hireDate,
       countryCode,
       manager,
+      colleagueUUID,
     },
   };
 });

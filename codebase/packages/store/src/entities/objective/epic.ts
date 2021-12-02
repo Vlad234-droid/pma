@@ -135,7 +135,9 @@ export const deleteObjectiveEpic: Epic = (action$, _, { api }) =>
       return from(api.deleteObjective(payload)).pipe(
         // @ts-ignore
         map(({ data }) => {
-          return getObjectives.request(data);
+          console.log('payload', payload);
+          console.log('params', data);
+          return getObjectives.request(payload);
         }),
         catchError(({ errors }) => of(deleteObjective.failure(errors))),
         takeUntil(action$.pipe(filter(isActionOf(deleteObjective.cancel)))),

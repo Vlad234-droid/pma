@@ -19,7 +19,7 @@ type Props = {
 
 const ObjectiveTile: FC<Props> = ({ id, title, subTitle, description, explanations, withSpacing = true }) => {
   return (
-    <TileWrapper key={id} customStyle={tileWrapperStyles}>
+    <TileWrapper key={id} customStyle={tileWrapperStyles} boarder={true}>
       <div style={{ padding: '24px' }}>
         <ObjectiveTileHeader {...{ title, subTitle, description, withSpacing }} />
         <ObjectiveTileExplanations explanations={explanations} />

@@ -5,15 +5,17 @@ import { Styles, useStyle } from '@dex-ddl/core';
 import { DashboardProfile } from 'features/Profile';
 import { BasicTile } from 'components/Tile';
 import { StepIndicator } from 'components/StepIndicator/StepIndicator';
-import { ObjectiveType, Status } from 'config/enum';
+import { ObjectiveType, ReviewType, Status } from 'config/enum';
 import { Header } from 'components/Header';
 import { RouterSwitch } from 'components/RouterSwitch';
 import { useSelector } from 'react-redux';
 import {
+  colleagueUUIDSelector,
+  getTimelineByCodeSelector,
   getTimelineMetaSelector,
   getTimelineSelector,
-  timelineTypesAvailabilitySelector,
   TimelineActions,
+  timelineTypesAvailabilitySelector,
 } from '@pma/store';
 import useDispatch from 'hooks/useDispatch';
 import Check from '../../../public/Check.jpg';
@@ -27,14 +29,17 @@ const CareerPerformance: FC = () => {
   const { descriptions, startDates, statuses } = useSelector(getTimelineSelector) || {};
   const { loaded } = useSelector(getTimelineMetaSelector) || {};
   const timelineTypes = useSelector(timelineTypesAvailabilitySelector);
-  const canShowMyReview = timelineTypes[ObjectiveType.MYR] && timelineTypes[ObjectiveType.EYR];
-  const canShowAnnualReview = !timelineTypes[ObjectiveType.MYR] && timelineTypes[ObjectiveType.EYR];
+  const midYearReview = useSelector(getTimelineByCodeSelector(ObjectiveType.MYR));
+  const endYearReview = useSelector(getTimelineByCodeSelector(ObjectiveType.EYR));
+  const colleagueUuid = useSelector(colleagueUUIDSelector);
+  const canShowMyReview = timelineTypes[ReviewType.MYR] && timelineTypes[ReviewType.EYR];
+  const canShowAnnualReview = !timelineTypes[ReviewType.MYR] && timelineTypes[ReviewType.EYR];
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!loaded) dispatch(TimelineActions.getTimeline());
-  }, [loaded]);
+    if (!loaded && colleagueUuid) dispatch(TimelineActions.getTimeline({ colleagueUuid }));
+  }, [loaded, colleagueUuid]);
   return (
     <>
       <div className={css({ margin: '8px' })}>
@@ -96,19 +101,25 @@ const CareerPerformance: FC = () => {
               <>
                 <div data-test-id='personal' className={css(basicTileStyle)}>
                   <ReviewWidget
-                    status={Status.AVAILABLE}
+                    reviewType={ReviewType.MYR}
+                    status={Status.STARTED}
+                    startDate={midYearReview.startDate}
                     onClick={() => console.log('ReviewWidget')}
+                    onClose={() => console.log('ReviewWidget')}
                     title={'Mid-year review'}
-                    description={t("Complete this once you've had your mid-year conversation with your line manager.")}
+                    description={t('Your mid-year review form and results will appear here.')}
                     customStyle={{ height: '100%' }}
                   />
                 </div>
                 <div data-test-id='feedback' className={css(basicTileStyle)}>
                   <ReviewWidget
-                    status={Status.NOT_AVAILABLE}
+                    reviewType={ReviewType.EYR}
+                    status={Status.STARTED}
+                    startDate={endYearReview.startDate}
                     onClick={() => console.log('ReviewWidget')}
+                    onClose={() => console.log('ReviewWidget')}
                     title={'End-year review'}
-                    description={"Complete this once you've had your mid-year conversation with your line manager."}
+                    description={'Your end-year review form and results will appear here.'}
                     customStyle={{ height: '100%' }}
                   />
                 </div>
@@ -117,8 +128,10 @@ const CareerPerformance: FC = () => {
             {canShowAnnualReview && (
               <div data-test-id='feedback' className={css(basicTileStyle)}>
                 <ReviewWidget
-                  status={Status.NOT_AVAILABLE}
+                  reviewType={ReviewType.EYR}
+                  status={Status.STARTED}
                   onClick={() => console.log('ReviewWidget')}
+                  onClose={() => console.log('ReviewWidget')}
                   title={'Annual performance review'}
                   description={'Your end-year review form and results will appear here.'}
                   customStyle={{ height: '100%' }}

@@ -9,6 +9,7 @@ import timelineReducer from '../entities/timeline/reducer';
 import managersReducer from '../entities/managers/reducer';
 import feedbackReducer from '../entities/feedback/reducer';
 import colleaguesReducer from '../entities/colleagues/reducer';
+import reviewsReducer from '../entities/reviews/reducer';
 
 export const rootReducer = combineReducers({
   users: userReducer,
@@ -20,4 +21,5 @@ export const rootReducer = combineReducers({
   managers: managersReducer,
   feedback: feedbackReducer,
   colleagues: colleaguesReducer,
+  reviews: reviewsReducer,
 });

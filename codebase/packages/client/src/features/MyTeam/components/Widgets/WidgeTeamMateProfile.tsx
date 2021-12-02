@@ -4,7 +4,7 @@ import { TileWrapper } from 'components/Tile';
 import { Graphics, Icon } from 'components/Icon';
 import { Avatar } from 'components/Avatar';
 import { Accordion, BaseAccordion, ExpandButton, Panel, Section } from 'components/Accordion';
-import { ObjectiveType, Status, TimelineType } from 'config/enum';
+import { Status, TimelineType } from 'config/enum';
 
 export type Review = {
   uuid: string;
@@ -95,9 +95,7 @@ export const WidgetTeamMateProfile: FC<WidgetTeamMateProfileProps> = ({ id, stat
                               const [graphics, color] = getIcon(review.status);
                               return (
                                 <div key={review.uuid} className={css(reviewItem)}>
-                                  <div className={css({ paddingBottom: '6px' })}>
-                                    {ObjectiveType[review.reviewType]}
-                                  </div>
+                                  <div className={css({ paddingBottom: '6px' })}>{review.code}</div>
                                   <Icon graphic={graphics} fill={color} />
                                 </div>
                               );

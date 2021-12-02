@@ -5,7 +5,7 @@ export const getTimeline = createAsyncAction(
   'timeline/SUCCESS',
   'timeline/FAILURE',
   'timeline/CANCEL',
-)<undefined, any, Error, undefined>();
+)<any, any, Error, undefined>();
 
 export const Actions = {
   getTimeline: getTimeline.request,

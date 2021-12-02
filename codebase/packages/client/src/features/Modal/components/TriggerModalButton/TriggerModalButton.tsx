@@ -2,6 +2,7 @@ import React, { FC, HTMLProps, useState } from 'react';
 import { useBreakpoints, Rule, Modal, useStyle, Button } from '@dex-ddl/core';
 import { Icon, Graphics } from 'components/Icon';
 import { IconButton } from 'components/IconButton';
+import { Provider } from './context';
 
 export type TriggerModalProps = {
   name: string;
@@ -46,7 +47,7 @@ const TriggerModalButton: FC<Props> = ({
           mode={mode}
           styles={[
             {
-              border: `1px solid ${theme.colors.white}`,
+              border: `1px solid ${mode === 'default' ? theme.colors.white : theme.colors.tescoBlue}`,
               fontSize: '14px',
             },
             customStyle,
@@ -75,7 +76,7 @@ const TriggerModalButton: FC<Props> = ({
             setIsOpen(false);
           }}
         >
-          {children}
+          <Provider value={{ onClose: () => setIsOpen(false) }}>{children}</Provider>
         </Modal>
       )}
     </>

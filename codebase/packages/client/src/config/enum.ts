@@ -9,6 +9,8 @@ export enum Status {
   RETURNED = 'RETURNED',
   DECLINED = 'DECLINED',
   COMPLETED = 'COMPLETED',
+  STARTED = 'STARTED',
+  NOT_STARTED = 'NOT_STARTED',
 }
 
 export enum ObjectiveType {

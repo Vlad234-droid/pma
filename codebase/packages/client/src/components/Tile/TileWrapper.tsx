@@ -3,6 +3,7 @@ import { CreateRule, Theme, useStyle, Colors, colors } from '@dex-ddl/core';
 
 export type TileWrapperProps = {
   boarder?: boolean;
+  boxShadow?: boolean;
   hover?: boolean;
   background?: Colors;
   children: any;
@@ -12,7 +13,8 @@ export type TileWrapperProps = {
 type Props = HTMLProps<HTMLInputElement> & TileWrapperProps;
 
 export const TileWrapper: FC<Props> = ({
-  boarder = true,
+  boarder = false,
+  boxShadow = true,
   hover = false,
   customStyle = {},
   background = 'white',
@@ -21,7 +23,14 @@ export const TileWrapper: FC<Props> = ({
   const { css, theme } = useStyle();
 
   return (
-    <div className={css(containerStyle({ hover, background, theme }), borderStyle({ boarder, theme }), customStyle)}>
+    <div
+      className={css(
+        containerStyle({ hover, background, theme }),
+        borderStyle({ boarder, theme }),
+        borderShadowStyle({ boxShadow, theme }),
+        customStyle,
+      )}
+    >
       {children}
     </div>
   );
@@ -51,10 +60,22 @@ const containerStyle: CreateRule<{ hover: boolean; background: Colors; theme: Th
 };
 const borderStyle: CreateRule<{ boarder: boolean; theme: Theme }> = (props) => {
   if (props == null) return {};
-  const { boarder } = props;
+  const { boarder, theme } = props;
   if (boarder) {
     return {
-      border: 0,
+      border: `1px solid ${theme.colors.backgroundDarkest}`,
+    };
+  }
+  return {
+    border: 0,
+  };
+};
+
+const borderShadowStyle: CreateRule<{ theme: Theme; boxShadow: boolean }> = (props) => {
+  if (props == null) return {};
+  const { boxShadow } = props;
+  if (boxShadow) {
+    return {
       boxShadow: '3px 3px 1px 1px rgba(0, 0, 0, 0.05)',
     };
   }

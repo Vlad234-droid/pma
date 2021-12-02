@@ -32,4 +32,5 @@ export interface RadioProps extends FormItemProps {
 export interface CheckboxProps extends FormItemProps {
   indeterminate?: boolean;
   checked?: boolean;
+  disabled?: boolean;
 }

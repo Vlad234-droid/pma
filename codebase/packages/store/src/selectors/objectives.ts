@@ -1,9 +1,21 @@
 import { createSelector } from 'reselect';
 //@ts-ignore
 import { RootState } from 'typesafe-actions';
+import { ReviewType, Status } from '@pma/client/src/config/enum';
 
 //@ts-ignore
 export const objectivesSelector = (state: RootState) => state.objectives;
+
+export const getObjectivesByTypeSelector = (reviewType: ReviewType) =>
+  createSelector(objectivesSelector, (objectives: any) => {
+    return objectives?.origin?.filter((objective) => objective.type === reviewType);
+  });
+
+export const getObjectivesByStatusSelector = (status: Status) =>
+  createSelector(objectivesSelector, (objectives: any) => {
+    return objectives?.origin?.filter((objective) => objective.status === status);
+  });
+
 export const getObjectivesStatusSelector = createSelector(objectivesSelector, (objectives: any) => {
   const [objective] = objectives?.origin;
   return objective?.status;

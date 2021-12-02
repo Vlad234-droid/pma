@@ -1,6 +1,6 @@
-import React, { FC, useState, useEffect } from 'react';
-import { useStyle, Rule, Styles, CreateRule } from '@dex-ddl/core';
-import { PeopleTypes, ObjectiveOptionsType } from './type';
+import React, { FC, useEffect, useState } from 'react';
+import { CreateRule, Rule, Styles, useStyle } from '@dex-ddl/core';
+import { ObjectiveOptionsType, PeopleTypes } from './type';
 import { SuccessModal } from './ModalParts';
 import { Item, Select, Textarea } from 'components/Form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -12,7 +12,13 @@ import { Close } from 'components/Icon/graphics/Close';
 import { GenericItemField } from 'components/GenericForm';
 import { TileWrapper } from 'components/Tile';
 import { useDispatch, useSelector } from 'react-redux';
-import { FeedbackActions, getReviewsS, ColleaguesActions, getFindedColleguesS } from '@pma/store';
+import {
+  ColleaguesActions,
+  colleagueUUIDSelector,
+  FeedbackActions,
+  getFindedColleguesS,
+  getReviewsS,
+} from '@pma/store';
 
 enum TargetType {
   Objectives = 'OBJECTIVE',
@@ -43,10 +49,11 @@ const ModalRequestFeedback: FC = () => {
   const reviews = useSelector(getReviewsS) || [];
 
   const findedCollegues = useSelector(getFindedColleguesS) || [];
+  const colleagueUuid = useSelector(colleagueUUIDSelector);
 
   useEffect(() => {
     if (formValues.area_options === 'Objectives') {
-      dispatch(FeedbackActions.getObjectiveReviews({ type: 'OBJECTIVE' }));
+      dispatch(FeedbackActions.getObjectiveReviews({ type: 'OBJECTIVE', colleagueUuid }));
     }
   }, [formValues.area_options]);
 

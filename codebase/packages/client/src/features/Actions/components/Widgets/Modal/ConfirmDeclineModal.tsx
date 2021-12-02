@@ -7,14 +7,14 @@ import { useBreakpoints, useStyle, CreateRule, Modal, Button, fontWeight } from 
 export type ConfirmDeclineModalProps = {
   title: string;
   description?: string;
-  onCancel: () => void;
+  onClose: () => void;
   onSave: (reason?) => void;
   onOverlayClick?: () => void;
 };
 
 type Props = HTMLProps<HTMLInputElement> & ConfirmDeclineModalProps;
 
-const ConfirmDeclineModal: FC<Props> = ({ title, description, onCancel, onSave, onOverlayClick }) => {
+const ConfirmDeclineModal: FC<Props> = ({ title, description, onClose, onSave, onOverlayClick }) => {
   const [reason, setReason] = useState('');
   const { theme, css } = useStyle();
   const [, isBreakpoint] = useBreakpoints();
@@ -68,7 +68,7 @@ const ConfirmDeclineModal: FC<Props> = ({ title, description, onCancel, onSave, 
               margin: '0px 4px',
             },
           ]}
-          onPress={onCancel}
+          onPress={onClose}
         >
           <Trans i18nKey='cancel'>Cancel</Trans>
         </Button>
@@ -85,7 +85,10 @@ const ConfirmDeclineModal: FC<Props> = ({ title, description, onCancel, onSave, 
             },
             !reason ? { opacity: '0.6' } : {},
           ]}
-          onPress={() => onSave(reason)}
+          onPress={() => {
+            onSave({ reason });
+            onClose();
+          }}
         >
           <Trans i18nKey='submit'>Submit</Trans>
         </Button>

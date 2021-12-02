@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { colors, fontWeight, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { Trans } from 'components/Translation';
 import { Checkbox, Radio } from 'components/Form';
@@ -6,16 +6,30 @@ import { Status } from 'config/enum';
 import { WidgetObjectiveApproval, WidgetTeamMateObjectives } from 'features/Actions';
 import { FilterOption } from 'features/Shared';
 import { useSelector } from 'react-redux';
-import { getManagersMetaSelector, getPendingEmployees, ManagersActions } from '@pma/store';
+import {
+  colleagueUUIDSelector,
+  getManagersMetaSelector,
+  getPendingEmployees,
+  ManagersActions,
+  SchemaActions,
+  schemaMetaSelector,
+} from '@pma/store';
 import useDispatch from 'hooks/useDispatch';
 
 export const TEST_ID = 'objectives-pave';
 
-const SelectAll = ({ onChange, checked, indeterminate }) => {
+type SelectAllProps = {
+  onChange: () => void;
+  checked: boolean;
+  indeterminate: boolean;
+  disabled?: boolean;
+};
+const SelectAll: FC<SelectAllProps> = ({ onChange, checked, indeterminate, disabled }) => {
   const { css } = useStyle();
   return (
     <label>
       <Checkbox
+        disabled={disabled}
         type='checkbox'
         name='selectAll'
         id='selectAll'
@@ -44,12 +58,16 @@ export const Actions = () => {
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.medium || isBreakpoint.small || isBreakpoint.xSmall;
 
+  const { loaded: schemaLoaded } = useSelector(schemaMetaSelector);
+
   const { employeeWithPendingApprovals, employeeWithCompletedApprovals } = useSelector(getPendingEmployees) || {};
   const { loaded } = useSelector(getManagersMetaSelector) || {};
+  const colleagueUuid = useSelector(colleagueUUIDSelector);
   const dispatch = useDispatch();
   useEffect(() => {
-    if (!loaded) dispatch(ManagersActions.getManagers());
-  }, [loaded]);
+    if (!loaded) dispatch(ManagersActions.getManagers({ colleagueUuid }));
+    if (!schemaLoaded) dispatch(SchemaActions.getSchema({ colleagueUuid }));
+  }, [loaded, schemaLoaded, colleagueUuid]);
 
   const [indeterminate, setIndeterminate]: [boolean, (T) => void] = useState(false);
   const [isCheckAll, setIsCheckAll]: [boolean, (T) => void] = useState(false);
@@ -57,6 +75,7 @@ export const Actions = () => {
   const [reviewsForApproval, setReviewsForApproval]: [any[], (T) => void] = useState([]);
   const [colleagues, setColleagues] = useState(employeeWithPendingApprovals || []);
   const [pending, setPending] = useState(true);
+  const [colleagueReviews, setColleagueReviews]: [any, (T) => void] = useState({});
 
   useEffect(() => {
     setColleagues(pending ? employeeWithPendingApprovals : employeeWithCompletedApprovals);
@@ -105,14 +124,14 @@ export const Actions = () => {
       <div
         className={css({ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '24px' })}
       >
-        {!mobileScreen && (
+        {!mobileScreen && pending && (
           <div
             className={css({
               display: 'flex',
               alignItems: 'center',
             })}
           >
-            <SelectAll onChange={handleSelectAll} checked={isCheckAll} indeterminate={indeterminate} />
+            <SelectAll onChange={handleSelectAll} checked={isCheckAll} indeterminate={indeterminate} disabled={true} />
           </div>
         )}
         <div className={css({ display: 'flex' })}>
@@ -189,52 +208,41 @@ export const Actions = () => {
       >
         <div className={css({ flex: '3 1 375px', display: 'flex', flexDirection: 'column', gap: '8px' })}>
           {colleagues?.map((colleague) => {
+            const timelineApproved = colleague.timeline.filter((tl) => tl.status === Status.WAITING_FOR_APPROVAL);
             return (
-              <div
-                key={colleague.uuid}
-                className={css({
-                  display: 'flex',
-                  flexWrap: 'wrap',
-                })}
-              >
-                <div
-                  className={css({
-                    width: '40px',
-                    position: 'relative',
-                  })}
-                >
-                  <span
-                    className={css({
-                      position: 'absolute',
-                      top: '36px',
-                    })}
-                  >
+              <div key={colleague.uuid} className={css({ display: 'flex', flexWrap: 'wrap' })}>
+                <div className={css({ width: '40px', position: 'relative' })}>
+                  <span className={css({ position: 'absolute', top: '36px' })}>
                     <Checkbox
+                      disabled={timelineApproved?.length > 1}
                       id={colleague.uuid}
                       checked={isCheck.includes(colleague.uuid)}
                       onChange={(e) => handleClick(e, colleague)}
                     />
                   </span>
                 </div>
-                <div
-                  className={css({
-                    width: 'calc(100% - 40px)',
-                  })}
-                >
-                  <WidgetTeamMateObjectives id={colleague.uuid} status={Status.PENDING} colleague={colleague} />
+                <div className={css({ width: 'calc(100% - 40px)' })}>
+                  <WidgetTeamMateObjectives
+                    key={colleague.uuid}
+                    id={colleague.uuid}
+                    status={pending ? Status.WAITING_FOR_APPROVAL : Status.APPROVED}
+                    colleague={colleague}
+                    colleagueReviews={colleagueReviews}
+                    setColleagueReviews={setColleagueReviews}
+                  />
                 </div>
               </div>
             );
           })}
         </div>
-        {mobileScreen && (
+        {mobileScreen && pending && (
           <div
             className={css({
               width: '100%',
               padding: '16px 0',
             })}
           >
-            <SelectAll onChange={handleSelectAll} checked={isCheckAll} indeterminate={indeterminate} />
+            <SelectAll onChange={handleSelectAll} checked={isCheckAll} indeterminate={indeterminate} disabled={true} />
           </div>
         )}
         <div

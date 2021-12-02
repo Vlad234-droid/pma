@@ -5,12 +5,18 @@ import * as Yup from 'yup';
 import useDispatch from 'hooks/useDispatch';
 import { useSelector } from 'react-redux';
 import { schemaMetaSelector } from '@pma/store/src/selectors/schema';
-import { isObjectivesNumberInStatus, ObjectiveActions, objectivesMetaSelector } from '@pma/store';
+import {
+  currentUserSelector,
+  getReviewPropertiesSelector,
+  getTimelineByReviewTypeSelector,
+  ReviewsActions,
+  reviewsMetaSelector,
+} from '@pma/store';
 import { createYupSchema } from 'utils/yup';
-import { Status } from 'config/enum';
-import { SuccessModal } from '../Modal/SuccessModal';
-import useObjectives from '../../hooks/useObjectives';
-import useObjectivesSchema from '../../hooks/useObjectiveSchema';
+import { ReviewType, Status } from 'config/enum';
+import { SuccessModal } from '../Modal';
+import useReviewSchema from '../../hooks/useReviewSchema';
+import useReviews from '../../hooks/useReviews';
 import { ObjectiveModal } from './ObjectiveModal';
 
 export type CreateUpdateObjectivesModalProps = {
@@ -22,8 +28,15 @@ type Props = HTMLProps<HTMLInputElement> & CreateUpdateObjectivesModalProps;
 
 export const CreateUpdateObjectives: FC<Props> = ({ onClose, editNumber = null }) => {
   const dispatch = useDispatch();
-  const [origin, objectives] = useObjectives();
-  const [schema] = useObjectivesSchema();
+  const { loaded: schemaLoaded } = useSelector(schemaMetaSelector);
+  const { loaded: reviewLoaded } = useSelector(reviewsMetaSelector);
+  const { info } = useSelector(currentUserSelector);
+  const pathParams = { colleagueUuid: info.colleagueUUID, type: ReviewType.OBJECTIVE, cycleUuid: 'CURRENT' };
+
+  const [origin] = useReviews({ pathParams });
+  const objectives = useSelector(getReviewPropertiesSelector(ReviewType.OBJECTIVE));
+  const [schema] = useReviewSchema(ReviewType.OBJECTIVE);
+  const timelineObjective = useSelector(getTimelineByReviewTypeSelector(ReviewType.OBJECTIVE));
 
   const [currentObjectiveNumber, setObjectiveNumber] = useState(editNumber ? editNumber : 1);
 
@@ -46,12 +59,6 @@ export const CreateUpdateObjectives: FC<Props> = ({ onClose, editNumber = null }
   });
   const { getValues, handleSubmit, reset } = methods;
   const formValues = getValues();
-  const isAllObjectivesByNumberPending = useSelector(
-    isObjectivesNumberInStatus(
-      Status.WAITING_FOR_APPROVAL,
-      Array.from(Array(markup.min), (_, i) => i + 1),
-    ),
-  );
 
   const onSubmit = async (data) => {
     if (!origin[currentObjectiveNumber - 1]) {
@@ -69,13 +76,7 @@ export const CreateUpdateObjectives: FC<Props> = ({ onClose, editNumber = null }
       }
       return { ...objective, status: Status.WAITING_FOR_APPROVAL };
     });
-    dispatch(
-      ObjectiveActions.updateObjectives({
-        performanceCycleUuid: '',
-        colleagueUuid: '',
-        origin: updatedObjectives,
-      }),
-    );
+    dispatch(ReviewsActions.updateReviews({ pathParams, data: updatedObjectives }));
   };
   const onSaveDraft = () => {
     const data = getValues();
@@ -95,13 +96,7 @@ export const CreateUpdateObjectives: FC<Props> = ({ onClose, editNumber = null }
       }
       return { ...objective, status: Status.DRAFT };
     });
-    dispatch(
-      ObjectiveActions.updateObjectives({
-        performanceCycleUuid: '',
-        colleagueUuid: '',
-        origin: updatedObjectives,
-      }),
-    );
+    dispatch(ReviewsActions.updateReviews({ pathParams, data: updatedObjectives }));
   };
   const setNextObjectiveNumber = async (data) => {
     if (!origin[currentObjectiveNumber - 1]) {
@@ -120,13 +115,7 @@ export const CreateUpdateObjectives: FC<Props> = ({ onClose, editNumber = null }
       }
       return { ...objective, status: Status.DRAFT };
     });
-    dispatch(
-      ObjectiveActions.updateObjectives({
-        performanceCycleUuid: '',
-        colleagueUuid: '',
-        origin: updatedObjectives,
-      }),
-    );
+    dispatch(ReviewsActions.updateReviews({ pathParams, data: updatedObjectives }));
 
     setObjectiveNumber(currentObjectiveNumber + 1);
   };
@@ -136,11 +125,9 @@ export const CreateUpdateObjectives: FC<Props> = ({ onClose, editNumber = null }
 
   useEffect(() => {
     reset(stateObjective);
-  }, [currentObjectiveNumber]);
+  }, [currentObjectiveNumber, reviewLoaded]);
 
-  const { loaded: schemaLoaded } = useSelector(schemaMetaSelector);
-  const { loaded: objectivesLoaded } = useSelector(objectivesMetaSelector);
-  if (isAllObjectivesByNumberPending && schemaLoaded && objectivesLoaded) {
+  if (timelineObjective?.status === Status.WAITING_FOR_APPROVAL && schemaLoaded && reviewLoaded) {
     return <SuccessModal onClose={onClose} />;
   }
 

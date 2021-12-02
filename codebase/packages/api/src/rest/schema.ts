@@ -1,8 +1,6 @@
 import httpClient from '../config/client';
 
-const colleagueUuid = localStorage.getItem('colleagueUuid');
-const domain = `/colleagues/${colleagueUuid}/metadata`;
-
-export const getSchema = (params?: any) => {
-  return httpClient.get(`${domain}`, params);
+export const getSchema = (params: any = {}) => {
+  const { colleagueUuid } = params;
+  return httpClient.get(`/colleagues/${colleagueUuid}/metadata`, params);
 };

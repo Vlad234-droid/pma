@@ -7,6 +7,7 @@ import { initialState as timelineInitialState } from '../entities/timeline/reduc
 import { initialState as managersInitialState } from '../entities/managers/reducer';
 import { initialState as feedbackInitialState } from '../entities/feedback/reducer';
 import { initialState as colleaguessState } from '../entities/colleagues/reducer';
+import { initialState as reviewsInitialState } from '../entities/reviews/reducer';
 
 //@ts-ignore
 export const initialState = {
@@ -18,6 +19,7 @@ export const initialState = {
   managers: managersInitialState,
   feedback: feedbackInitialState,
   colleagues: colleaguessState,
+  reviewsInitialState: reviewsInitialState,
 };
 
 export type State = StateType<typeof initialState>;
