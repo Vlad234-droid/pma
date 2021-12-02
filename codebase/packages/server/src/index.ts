@@ -57,7 +57,10 @@ if (!PROXY_API_SERVER_URL) {
       target: PROXY_API_SERVER_URL,
       changeOrigin: true,
       autoRewrite: true,
-      pathRewrite: { '^/api[0-9]?': '' },
+      pathRewrite: { 
+        ['^/api']: '', 
+        [`^${config.applicationPublicUrl() === '/' ? '' : config.applicationPublicUrl()}/api`]: '' 
+      },
       logLevel: 'debug',
     };
     proxyMiddlewareOptions.onError = function (e) {
