@@ -89,7 +89,7 @@ PROXY_API_SERVER_URL: http://pma-api-service:8083
 INTEGRATION_MODE: standalone
 INTEGRATION_CORE_MOUNT_PATH: /
 INTEGRATION_CORE_URL: /
-INTEGRATION_MOUNT_PATH: /experience/myperformance
+INTEGRATION_MOUNT_PATH: /
 INTEGRATION_NODE_BFF_URL: /
 APPLICATION_PUBLIC_URL: /experience/myperformance
 APPLICATION_URL_ROOT: https://frontend.ppe.pma.tescocloud.com
