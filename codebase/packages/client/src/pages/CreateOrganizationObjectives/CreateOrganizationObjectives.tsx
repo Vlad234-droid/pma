@@ -1,5 +1,5 @@
 import React, { FC, HTMLProps, useCallback, useEffect, useState } from 'react';
-import { Button, Rule, useStyle } from '@dex-ddl/core';
+import { Button, CreateRule, Rule, Theme, useStyle } from '@dex-ddl/core';
 import { Header } from 'components/Header';
 import { LeftsideMenu } from 'components/LeftsideMenu';
 import DescriptionBlock from 'components/DescriptionBlock';
@@ -66,7 +66,7 @@ const formInputs = [
 const historaTable = { headers: ['Name', 'Action Type', 'Time'] };
 
 const CreateOrganizationObjectives: FC<Props> = ({ onClose, editNumber = null }) => {
-  const { css } = useStyle();
+  const { css, theme } = useStyle();
   const dispatch = useDispatch();
   const auditLogs = useSelector(auditLogsSelector) || [];
 
@@ -149,9 +149,9 @@ const CreateOrganizationObjectives: FC<Props> = ({ onClose, editNumber = null })
         <Header title='Create Organization Objectives' />
 
         <DescriptionBlock>
-          <div className={css(decsriptionHeader)}>Organization objectives</div>
+          <div className={css(decsriptionHeader({ theme }))}>Organization objectives</div>
 
-          <div className={css(descriptionText)}>
+          <div className={css(descriptionText({ theme }))}>
             Create titles for organization objectives. Click “Save” button to keep the changes. Or “Publish” to cascade
             them on the colleagues.
           </div>
@@ -174,21 +174,21 @@ const CreateOrganizationObjectives: FC<Props> = ({ onClose, editNumber = null })
           </div>
 
           <div className={css(descriptionFooter)}>
-            <Button onPress={() => setHistoryOpen(!isHistoryOpen)} styles={[historyBtn]}>
+            <Button onPress={() => setHistoryOpen(!isHistoryOpen)} styles={[historyBtn({ theme })]}>
               History of changes{' '}
               <span className={`${css(arrow)} ${!isHistoryOpen ? css(arrowRight) : css(arrowDown)}`} />
             </Button>
             <div className={css(publishBlock)}>
               <Button
                 isDisabled={isSaveBtnDisabled}
-                styles={isSaveBtnDisabled ? [buttons, saveBtn, saveBtnMargined] : [buttons, saveBtnMargined]}
+                styles={isSaveBtnDisabled ? [buttons, saveBtn({ theme }), saveBtnMargined] : [buttons, saveBtnMargined]}
                 onPress={save}
               >
                 Save
               </Button>
               <Button
                 isDisabled={isPublishBtnDisabled}
-                styles={isPublishBtnDisabled ? [buttons, publishBtn] : [buttons]}
+                styles={isPublishBtnDisabled ? [buttons, publishBtn({ theme })] : [buttons]}
                 onPress={publish}
               >
                 Publish
@@ -206,37 +206,49 @@ const saveBtnMargined = {
   marginRight: '8px',
 } as Rule;
 
-const saveBtn = {
-  border: '2px solid #00539F',
-  backgroundColor: '#ffffff',
-  color: '#00539F',
-  cursor: 'auto',
-  ':disabled': {
-    background: 'transparent',
-  },
-  '@media(max-width: 600px)': {
-    marginBottom: '10px',
-  },
-} as Rule;
+const saveBtn: CreateRule<{ theme: Theme; }> = (props) => {
+  if (props == null) return {};
+  const { theme } = props;
+  return {
+    border: `2px solid ${theme.colors.tescoBlue}`,
+    backgroundColor: `${theme.colors.white}`,
+    color: `${theme.colors.tescoBlue}`,
+    cursor: 'auto',
+    ':disabled': {
+      background: 'transparent',
+    },
+    '@media(max-width: 600px)': {
+      marginBottom: '10px',
+    },
+  };
+};
 
-const publishBtn = {
-  border: '2px solid #00539F',
-  backgroundColor: '#ffffff',
-  color: '#00539F',
-  cursor: 'auto',
-  ':disabled': {
-    background: 'transparent',
-  },
-  '@media(max-width: 600px)': {
-    marginBottom: '10px',
-  },
-} as Rule;
+const publishBtn: CreateRule<{ theme: Theme; }> = (props) => {
+  if (props == null) return {};
+  const { theme } = props;
+  return {
+    border: `2px solid ${theme.colors.tescoBlue}`,
+    backgroundColor: `${theme.colors.white}`,
+    color: `${theme.colors.tescoBlue}`,
+    cursor: 'auto',
+    ':disabled': {
+      background: 'transparent',
+    },
+    '@media(max-width: 600px)': {
+      marginBottom: '10px',
+    },
+  };
+};
 
-const historyBtn = {
-  backgroundColor: 'transparent',
-  color: '#00539F',
-  fontWeight: 'bold',
-} as Rule;
+const historyBtn: CreateRule<{ theme: Theme; }> = (props) => {
+  if (props == null) return {};
+  const { theme } = props;
+  return {
+    backgroundColor: 'transparent',
+    color: `${theme.colors.tescoBlue}`,
+    fontWeight: 'bold',
+  };
+};
 
 const arrow = {
   marginLeft: '13.75px',
@@ -283,18 +295,26 @@ const descriptionFooter = {
   },
 } as Rule;
 
-const descriptionText = {
-  fontSize: '16px',
-  lineHeight: '20px',
-  paddingBottom: '32px',
-} as Rule;
+const descriptionText: CreateRule<{ theme: Theme; }> = (props) => {
+  if (props == null) return {};
+  const { theme } = props;
+  return {
+    fontSize: `${theme.font.fixed.f16}`,
+    lineHeight: '20px',
+    paddingBottom: '32px',
+  };
+}
 
-const decsriptionHeader = {
-  fontSize: '20px',
-  lineHeight: '24px',
-  fontWeight: 'bold',
-  paddingBottom: '8px',
-} as Rule;
+const decsriptionHeader: CreateRule<{ theme: Theme; }> = (props) => {
+  if (props == null) return {};
+  const { theme } = props;
+  return {
+    fontSize: `${theme.font.fixed.f20}`,
+    lineHeight: '24px',
+    fontWeight: 'bold',
+    paddingBottom: '8px',
+  };
+};
 
 const main = {
   display: 'flex',

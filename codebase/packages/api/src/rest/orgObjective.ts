@@ -9,8 +9,6 @@ export const createOrgObjective = <T>(params: any) => {
 
 export const createAndPublishOrgObjective = <T>(params: any) => {
   const domain = `/org-objectives/publish`;
-  console.log('domain: ', domain);
-  console.log(typeof params);
   return httpClient.post(`${domain}`, params);
 };
 

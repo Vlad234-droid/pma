@@ -1,12 +1,12 @@
 import React from 'react';
-import { Rule, useStyle } from '@dex-ddl/core';
+import { CreateRule, Rule, Theme, useStyle } from '@dex-ddl/core';
 import { Close } from 'assets/img/objectives';
 import DescriptionBlock from 'components/DescriptionBlock';
 import ObjectiveDetails from 'components/ObjectiveDetails/ObjectiveDetails';
 import { useHistory } from 'react-router';
 
 const Popup = (props) => {
-  const { css } = useStyle();
+  const { css, theme } = useStyle();
   const { items } = props;
   const history = useHistory();
 
@@ -14,7 +14,7 @@ const Popup = (props) => {
 
   return (
     <div className={css(popup)}>
-      <div className={css(header)}>
+      <div className={css(header({ theme }))}>
         <div
           className={css(arrow)}
           onClick={() => {
@@ -28,9 +28,9 @@ const Popup = (props) => {
       </div>
 
       <DescriptionBlock>
-        <div className={css(decsriptionHeader)}>Your organization has 6 objectives</div>
+        <div className={css(decsriptionHeader({ theme }))}>Your organization has 6 objectives</div>
 
-        <div className={css(descriptionText)}>
+        <div className={css(descriptionText({ theme }))}>
           Organization objactives – are stategic goals that help all company-wide activities lead to one single
           direction.
         </div>
@@ -46,18 +46,26 @@ const close = {
   cursor: 'pointer',
 } as Rule;
 
-const descriptionText = {
-  fontSize: '18px',
-  lineHeight: '22px',
-  paddingBottom: '32px',
-} as Rule;
+const descriptionText: CreateRule<{ theme: Theme; }> = (props) => {
+  if (props == null) return {};
+  const { theme } = props;
+  return {
+    fontSize: `${theme.font.fixed.f18}`,
+    lineHeight: '22px',
+    paddingBottom: '32px',
+  };
+};
 
-const decsriptionHeader = {
-  fontSize: '24px',
-  lineHeight: '28px',
-  fontWeight: 'bold',
-  paddingBottom: '8px',
-} as Rule;
+const decsriptionHeader: CreateRule<{ theme: Theme; }> = (props) => {
+  if (props == null) return {};
+  const { theme } = props;
+  return {
+    fontSize: `${theme.font.fixed.f24}`,
+    lineHeight: '28px',
+    fontWeight: 'bold',
+    paddingBottom: '8px',
+  };
+};
 
 const arrow = {
   marginLeft: '13.75px',
@@ -70,16 +78,20 @@ const arrow = {
   cursor: 'pointer',
 } as Rule;
 
-const header: Rule = {
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  fontSize: '24px',
-  lineHeight: '28px',
-  fontWeight: 'bold',
-  color: '#ffffff',
-  width: '100%',
-  padding: '22px 42px 22px 40px',
+const header: CreateRule<{ theme: Theme; }> = (props) => {
+  if (props == null) return {};
+  const { theme } = props;
+  return {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    fontSize: `${theme.font.fixed.f24}`,
+    lineHeight: '28px',
+    fontWeight: 'bold',
+    color: `${theme.colors.white}`,
+    width: '100%',
+    padding: '22px 42px 22px 40px',
+  };
 };
 
 const popup: Rule = {

@@ -1,11 +1,11 @@
 import React from 'react';
-import { Rule, useStyle } from '@dex-ddl/core';
+import { CreateRule, Rule, Theme, useStyle } from '@dex-ddl/core';
 import LeftsideMenuItem from './LeftsideMenuItem';
 import unionImg from '../../assets/img/pdp/Union.png';
 import { Dashboard, Pma, Settings, Alerts, Help, Chat } from 'assets/img/objectives';
 
 const LeftsideMenu = () => {
-  const { css } = useStyle();
+  const { css, theme } = useStyle();
   const notifyBadge = 3;
   const menuItems = [
     { id: 0, name: 'Dashboard', imgUrl: Dashboard },
@@ -17,7 +17,7 @@ const LeftsideMenu = () => {
   ];
 
   return (
-    <div className={css(main)}>
+    <div className={css(main({ theme }))}>
       <div>
         {menuItems.map((item) => {
           return (
@@ -31,43 +31,50 @@ const LeftsideMenu = () => {
         })}
       </div>
 
-      <div className={css(union)}>
+      <div className={css(union({ theme }))}>
         <img className={css(imgUnion)} src={unionImg} />
       </div>
     </div>
   );
 };
 
-const union = {
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  width: '52px',
-  height: '52px',
-  borderRadius: '30px',
-  backgroundColor: '#CC3232',
-  marginBottom: '24px',
-} as Rule;
+const union: CreateRule<{ theme: Theme; }> = (props) => {
+  if (props == null) return {};
+  const { theme } = props;
+  return {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '52px',
+    height: '52px',
+    borderRadius: '30px',
+    backgroundColor: `${theme.colors.error}`,
+    marginBottom: '24px',
+  };
+};
 
 const imgUnion = {
   maxWidth: '26.18px',
 } as Rule;
 
-const main = {
-  position: 'absolute',
-  height: '100vh',
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  flexDirection: 'column',
-  width: '80px',
-  minWidth: '80px',
-  backgroundColor: '#00539F',
-  marginRight: '40px',
-  '@media(max-width: 600px)': {
-    // marginRight: '15px',
-    display: 'none',
-  },
-} as Rule;
+const main: CreateRule<{ theme: Theme; }> = (props) => {
+  if (props == null) return {};
+  const { theme } = props;
+  return {
+    position: 'absolute',
+    height: '100vh',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flexDirection: 'column',
+    width: '80px',
+    minWidth: '80px',
+    backgroundColor: `${theme.colors.tescoBlue}`,
+    marginRight: '40px',
+    '@media(max-width: 600px)': {
+      display: 'none',
+    },
+  };
+};
 
 export default LeftsideMenu;
