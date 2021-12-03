@@ -61,7 +61,7 @@ const DraftItem: FC<DraftItemProps> = ({
     if (!colleagueUuid) return;
     dispatch(
       FeedbackActions.getAllFeedbacks({
-        'colleague-uuid': colleagueUuid,
+        'target-colleague-uuid': colleagueUuid,
       }),
     );
   }, [colleagueUuid]);
