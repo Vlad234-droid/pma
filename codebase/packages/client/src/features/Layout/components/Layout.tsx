@@ -15,9 +15,9 @@ const Layout: FC = ({ children }) => {
 
 const layoutRule: Rule = () => {
   const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
   return {
-    ...(!mobileScreen ? { padding: '0 40px' } : {}),
+    ...(!mobileScreen ? {} : { padding: '0 15px 0 0' }),
     display: 'flex',
     flex: 1,
     flexDirection: 'column',

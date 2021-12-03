@@ -6,3 +6,4 @@ export * from './timeline';
 export * from './managers';
 export * from './colleagues';
 export * from './reviews';
+export * from './orgObjective';
