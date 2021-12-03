@@ -79,24 +79,6 @@ export const CreateUpdateObjective: FC<Props> = ({ onClose, editNumber = null })
         }),
       );
     }
-    // if (!origin[currentObjectiveNumber - 1]) {
-    //   origin[currentObjectiveNumber - 1] = { number: currentObjectiveNumber, status: Status.DRAFT };
-    // }
-    // if (objectives[currentObjectiveNumber]) {
-    //   dispatch(
-    //     ReviewsActions.updateReview({
-    //       pathParams: { ...pathParams, number: currentObjectiveNumber },
-    //       data: [currentObjective],
-    //     }),
-    //   );
-    // } else {
-    //   dispatch(
-    //     ReviewsActions.createReview({
-    //       pathParams: { ...pathParams, number: currentObjectiveNumber },
-    //       data: [currentObjective],
-    //     }),
-    //   );
-    // }
   };
   const onSaveDraft = () => {
     const data = getValues();
@@ -122,6 +104,7 @@ export const CreateUpdateObjective: FC<Props> = ({ onClose, editNumber = null })
         }),
       );
     }
+    onClose();
   };
 
   useEffect(() => {

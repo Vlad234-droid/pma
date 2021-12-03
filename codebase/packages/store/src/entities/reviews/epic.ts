@@ -20,6 +20,7 @@ export const getReviewsEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
     filter(isActionOf(getReviews.request)),
     switchMap(({ payload }) =>
+      // @ts-ignore
       from(api.getReviews(payload)).pipe(
         map(({ success, data, errors }: any) => {
           if (!success) {
@@ -37,6 +38,7 @@ export const getColleagueReviewsEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
     filter(isActionOf(getColleagueReviews.request)),
     switchMap(({ payload }) =>
+      // @ts-ignore
       from(api.getReviews(payload)).pipe(
         mergeMap(({ data }: any) =>
           from([
@@ -54,12 +56,13 @@ export const updateReviewEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
     filter(isActionOf(updateReview.request)),
     switchMap(({ payload }) => {
+      // @ts-ignore
       return from(api.updateReview(payload)).pipe(
         mergeMap(() =>
           from([
             updateReview.success({ ...payload }),
             getReviews.request({ ...payload }),
-            getTimeline.request(payload),
+            getTimeline.request(payload.pathParams),
           ]),
         ),
         catchError(({ errors }) => of(updateReview.failure(errors))),
@@ -72,6 +75,7 @@ export const createReviewEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
     filter(isActionOf(createReview.request)),
     switchMap(({ payload }) => {
+      // @ts-ignore
       return from(api.createReview(payload)).pipe(
         mergeMap(({ data }: any) =>
           from([
@@ -80,7 +84,7 @@ export const createReviewEpic: Epic = (action$, _, { api }) =>
               ...payload,
               data,
             }),
-            getTimeline.request(payload),
+            getTimeline.request(payload.pathParams),
           ]),
         ),
         catchError(({ errors }) => of(createReview.failure(errors))),
@@ -91,15 +95,16 @@ export const createReviewEpic: Epic = (action$, _, { api }) =>
 export const updateReviewsEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
     filter(isActionOf(updateReviews.request)),
-    switchMap(({ payload }) =>
+    switchMap(({ payload }: any) =>
+      // @ts-ignore
       from(api.updateReviews(payload)).pipe(
-        mergeMap(({ data }: any) =>
-          from([
-            updateReviews.success({ ...payload, data }),
-            getReviews.success({ ...payload, data }),
-            getTimeline.request(payload),
-          ]),
-        ),
+        mergeMap(({ data }: any) => {
+          return from([
+            updateReviews.success({ data }),
+            getReviews.success({ data }),
+            getTimeline.request(payload.pathParams),
+          ]);
+        }),
         catchError(({ errors }) => of(updateReviews.failure(errors))),
         takeUntil(action$.pipe(filter(isActionOf(updateReviews.cancel)))),
       ),
@@ -110,6 +115,7 @@ export const deleteReviewEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
     filter(isActionOf(deleteReview.request)),
     switchMap(({ payload }) => {
+      // @ts-ignore
       return from(api.deleteReview(payload)).pipe(
         mergeMap(({ data }: any) =>
           from([
@@ -118,7 +124,7 @@ export const deleteReviewEpic: Epic = (action$, _, { api }) =>
               ...payload,
               data,
             }),
-            getTimeline.request(payload),
+            getTimeline.request(payload.pathParams),
           ]),
         ),
         catchError(({ errors }) => of(deleteReview.failure(errors))),
@@ -131,9 +137,10 @@ export const updateReviewStatusEpic: Epic = (action$, _, { api }) => {
   return action$.pipe(
     filter(isActionOf(updateReviewStatus.request)),
     switchMap(({ payload }: any) => {
+      // @ts-ignore
       return from(api.updateReviewStatus(payload)).pipe(
         map(() => {
-          return getManagers.request(payload);
+          return getManagers.request(payload.pathParams);
         }),
         catchError((e) => {
           const errors = e?.data?.errors;
