@@ -4,7 +4,7 @@ import { ArrowUp } from '../../assets/img/objectives';
 
 const ObjectiveDetails = ({ title, description }) => {
   const { css, theme  } = useStyle();
-  const [isVisibleDescription, setDescriptionVisibility] = useState(false);
+  const [isVisibleDescription, setDescriptionVisibility] = useState(true);
 
   return (
     <div className={css(main)}>

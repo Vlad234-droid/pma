@@ -1,5 +1,5 @@
 import React, { FC, HTMLProps, useCallback, useEffect, useState } from 'react';
-import { Button, CreateRule, Rule, Theme, useStyle } from '@dex-ddl/core';
+import { Button, CreateRule, flexRule, Rule, Theme, useStyle } from '@dex-ddl/core';
 import { Header } from 'components/Header';
 import { LeftsideMenu } from 'components/LeftsideMenu';
 import DescriptionBlock from 'components/DescriptionBlock';
@@ -156,55 +156,57 @@ const CreateOrganizationObjectives: FC<Props> = ({ onClose, editNumber = null })
       <div className={css(page)}>
         <Header title='Create Organization Objectives' />
 
-        <DescriptionBlock>
-          <div className={css(decsriptionHeader({ theme }))}>Organization objectives</div>
+        <div className={css(contentArea)}>
+          <DescriptionBlock>
+            <div className={css(decsriptionHeader({ theme }))}>Organization objectives</div>
 
-          <div className={css(descriptionText({ theme }))}>
-            Create titles for organization objectives. Click “Save” button to keep the changes. Or “Publish” to cascade
-            them on the colleagues.
-          </div>
-          <div>
-            {formInputs.map((item, idx) => {
-              return (
-                <GenericItemField
-                  key={item.id}
-                  name={item.name}
-                  label={item.name}
-                  methods={methods}
-                  Wrapper={Item}
-                  Element={Input}
-                  onChange={(event) => onChangeInput(event, idx)}
-                  placeholder={item.placeholder}
-                  value={orgObjectives[idx]?.title}
-                />
-              );
-            })}
-          </div>
-
-          <div className={css(descriptionFooter)}>
-            <Button onPress={() => setHistoryOpen(!isHistoryOpen)} styles={[historyBtn({ theme })]}>
-              History of changes{' '}
-              <span className={`${css(arrow)} ${!isHistoryOpen ? css(arrowRight) : css(arrowDown)}`} />
-            </Button>
-            <div className={css(publishBlock)}>
-              <Button
-                isDisabled={isSaveBtnDisabled}
-                styles={isSaveBtnDisabled ? [buttons, saveBtn({ theme }), saveBtnMargined] : [buttons, saveBtnMargined]}
-                onPress={save}
-              >
-                Save
-              </Button>
-              <Button
-                isDisabled={isPublishBtnDisabled}
-                styles={isPublishBtnDisabled ? [buttons, publishBtn({ theme })] : [buttons]}
-                onPress={publish}
-              >
-                Publish
-              </Button>
+            <div className={css(descriptionText({ theme }))}>
+              Create titles for organization objectives. Click “Save” button to keep the changes. Or “Publish” to cascade
+              them on the colleagues.
             </div>
-          </div>
-          <HistoryTable headers={historaTable.headers} items={auditLogs} isVisible={isHistoryOpen} />
-        </DescriptionBlock>
+            <div>
+              {formInputs.map((item, idx) => {
+                return (
+                  <GenericItemField
+                    key={item.id}
+                    name={item.name}
+                    label={item.name}
+                    methods={methods}
+                    Wrapper={Item}
+                    Element={Input}
+                    onChange={(event) => onChangeInput(event, idx)}
+                    placeholder={item.placeholder}
+                    value={orgObjectives[idx]?.title}
+                  />
+                );
+              })}
+            </div>
+
+            <div className={css(descriptionFooter)}>
+              <Button onPress={() => setHistoryOpen(!isHistoryOpen)} styles={[historyBtn({ theme })]}>
+                History of changes{' '}
+                <span className={`${css(arrow)} ${!isHistoryOpen ? css(arrowRight) : css(arrowDown)}`} />
+              </Button>
+              <div className={css(publishBlock)}>
+                <Button
+                  isDisabled={isSaveBtnDisabled}
+                  styles={isSaveBtnDisabled ? [buttons, saveBtn({ theme }), saveBtnMargined] : [buttons, saveBtnMargined]}
+                  onPress={save}
+                >
+                  Save
+                </Button>
+                <Button
+                  isDisabled={isPublishBtnDisabled}
+                  styles={isPublishBtnDisabled ? [buttons, publishBtn({ theme })] : [buttons]}
+                  onPress={publish}
+                >
+                  Publish
+                </Button>
+              </div>
+            </div>
+            <HistoryTable headers={historaTable.headers} items={auditLogs} isVisible={isHistoryOpen} />
+          </DescriptionBlock>
+        </div>
       </div>
     </div>
   );
@@ -212,6 +214,12 @@ const CreateOrganizationObjectives: FC<Props> = ({ onClose, editNumber = null })
 
 const saveBtnMargined = {
   marginRight: '8px',
+} as Rule;
+
+const contentArea = {
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
 } as Rule;
 
 const saveBtn: CreateRule<{ theme: Theme; }> = (props) => {
