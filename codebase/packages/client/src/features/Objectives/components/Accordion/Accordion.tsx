@@ -49,6 +49,7 @@ const Buttons: FC<{ id: number }> = ({ id }) => {
         withIcon={true}
         buttonName='Delete'
         confirmationTitle='Delete'
+        confirmationDescription='Are you sure you want to delete objective?'
         styles={[AccordionButtonStyle]}
       />
     </div>

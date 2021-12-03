@@ -15,14 +15,16 @@ export type TypefeedbackItems = {
   content: string;
   feedbackUuid: string;
 };
-export type PeopleTypes = {
-  img: string;
-  f_name: string;
-  l_name: string;
-  id: number;
-  targetId: string;
-  targetType: string;
-};
+// export type PeopleTypes = {
+//   img: string;
+//   f_name: string;
+//   l_name: string;
+//   id: number;
+//   targetId: string;
+//   targetType: string;
+//   targetColleagueUuid?: string;
+// };
+export type PeopleTypes = any;
 export type ModalGiveFeedbackProps = {
   feedbackItems: Array<TypefeedbackItems>;
   setFeedbackItems: Dispatch<SetStateAction<[] | TypefeedbackItems[]>>;

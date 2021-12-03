@@ -12,6 +12,7 @@ import { Close } from 'components/Icon/graphics/Close';
 import { GenericItemField } from 'components/GenericForm';
 import { TileWrapper } from 'components/Tile';
 import { useDispatch, useSelector } from 'react-redux';
+
 import {
   ColleaguesActions,
   colleagueUUIDSelector,
@@ -106,6 +107,7 @@ const ModalRequestFeedback: FC = () => {
   };
 
   const onSubmit = async (data) => {
+    if (!colleagueUuid) return;
     const getPropperFeedbackItems = () => {
       if (data.comment_to_request) {
         return {
@@ -117,12 +119,9 @@ const ModalRequestFeedback: FC = () => {
 
     const listPeoples = selectedPersons.map((person) => {
       const formData = {
-        colleagueUuid: '10000000-0000-0000-0000-000000000001',
-        targetColleagueUuid: person.colleagueUUID,
+        colleagueUuid: person.colleagueUUID,
+        targetColleagueUuid: colleagueUuid,
         targetType: TargetType[data.area_options],
-        targetColleagueProfile: {
-          colleague: person,
-        },
         targetId: uuidTargetType,
         status: 'PENDING',
         ...getPropperFeedbackItems(),

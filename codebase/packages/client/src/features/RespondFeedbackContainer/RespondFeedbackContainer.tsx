@@ -1,13 +1,14 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import { Modal, Rule, useBreakpoints, useStyle } from '@dex-ddl/core';
-import { Radio } from 'components/Form';
-import { Trans } from 'components/Translation';
+
 import { FilterOption } from 'features/Shared';
 import { IconButton } from 'components/IconButton';
 import { Icon } from 'components/Icon';
 import { PeopleTypes, TypefeedbackItems } from './type';
 import { ModalRespondFeedback } from './ModalsParts';
 import { DraftItem } from './components';
+import { RadioBtns } from './components';
+import { FilterModal } from '../Shared/components/FilterModal';
 
 export const RESPOND_FEEDBACK_CONTAINER = 'respond_feedback_container';
 
@@ -27,8 +28,23 @@ const RespondFeedbackContainer: FC = () => {
     completed: false,
   });
 
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+  //filter
+  const [focus, setFocus] = useState(false);
+  const [searchValueFilterOption, setSearchValueFilterOption] = useState('');
+  const [filterModal, setFilterModal] = useState(false);
+  const [filterFeedbacks, setFilterFeedbacks] = useState({
+    AZ: false,
+    ZA: false,
+    newToOld: false,
+    oldToNew: false,
+  });
+  useEffect(() => {
+    if (!focus) setSearchValueFilterOption(() => '');
+    if (focus) {
+      setFilterFeedbacks(() => ({ AZ: false, ZA: false, newToOld: false, oldToNew: false }));
+      setFilterModal(() => false);
+    }
+  }, [focus]);
 
   const draftFeedback = (selectedNote): void => {
     if (selectedNote.feedbackItems) {
@@ -40,12 +56,17 @@ const RespondFeedbackContainer: FC = () => {
     );
     setTitle(() => 'Respond to feedback requests');
     setSelectedPerson(() => ({
-      id: selectedNote.uuid,
-      img: 'selectedDraft.img',
-      f_name: selectedNote.targetColleagueProfile?.colleague?.profile?.firstName,
-      l_name: selectedNote.targetColleagueProfile?.colleague?.profile?.lastName,
-      targetId: selectedNote.targetId,
-      targetType: selectedNote.targetType,
+      // id: selectedNote.uuid,
+      // img: 'selectedDraft.img',
+      // f_name: selectedNote.targetColleagueProfile?.colleague?.profile?.firstName,
+      // l_name: selectedNote.targetColleagueProfile?.colleague?.profile?.lastName,
+      // targetId: selectedNote?.targetId,
+      // targetType: selectedNote?.targetType,
+      // targetColleagueUuid: selectedPerson?.targetColleagueUuid,
+      ...selectedNote.targetColleagueProfile.colleague,
+      targetId: selectedNote?.targetId,
+      targetType: selectedNote?.targetType,
+      uuid: selectedNote.uuid,
     }));
     setIsOpen(() => true);
   };
@@ -53,89 +74,53 @@ const RespondFeedbackContainer: FC = () => {
     <>
       <div data-test-id={RESPOND_FEEDBACK_CONTAINER}>
         <div className={css(header_styled)}>
-          <div className={css({ display: 'flex', ...(mobileScreen && { marginTop: '12px' }) })}>
-            <div className={css({ padding: '0px 10px 00px 0px', cursor: 'pointer' })}>
-              <label
-                htmlFor='pending'
-                className={css({
-                  display: 'flex',
-                  alignItems: 'center',
-                })}
-              >
-                <Radio
-                  type='radio'
-                  name='status1'
-                  value='option1'
-                  checked={checkedRadio.pending}
-                  id='pending'
-                  onChange={() => {
-                    setCheckedRadio(() => {
-                      return {
-                        pending: true,
-                        completed: false,
-                      };
-                    });
-                  }}
-                />
-                <span
-                  className={css({
-                    fontSize: '16px',
-                    lineHeight: '20px',
-                    padding: '0px 5px',
-                  })}
-                >
-                  <Trans i18nKey='drafts'>Pending</Trans>
-                </span>
-              </label>
-            </div>
-            <div className={css({ padding: '0px 0px 10px 0px', cursor: 'pointer' })}>
-              <label
-                htmlFor='completed'
-                className={css({
-                  display: 'flex',
-                  alignItems: 'center',
-                })}
-              >
-                <Radio
-                  id='completed'
-                  type='radio'
-                  name='status2'
-                  value='option2'
-                  checked={checkedRadio.completed}
-                  onChange={() => {
-                    setCheckedRadio(() => {
-                      return {
-                        pending: false,
-                        completed: true,
-                      };
-                    });
-                  }}
-                />
-                <span
-                  className={css({
-                    fontSize: '16px',
-                    lineHeight: '20px',
-                    padding: '0px 5px',
-                  })}
-                >
-                  <Trans i18nKey='submitted'>Completed</Trans>
-                </span>
-              </label>
-            </div>
-          </div>
-          <div
-            className={css({
-              display: 'flex',
-              alignItems: 'center',
-              ...(mobileScreen && { order: -1, flexBasis: '250px' }),
-            })}
-          >
+          <RadioBtns
+            checkedRadio={checkedRadio}
+            setCheckedRadio={setCheckedRadio}
+            focus={focus}
+            setFocus={setFocus}
+            setFilterModal={setFilterModal}
+            filterModal={filterModal}
+            setFilterFeedbacks={setFilterFeedbacks}
+          />
+          <div className={css(Flex_styled)}>
             <IconButton graphic='information' iconStyles={iconStyle} />
-            <FilterOption />
+            <FilterOption
+              focus={focus}
+              customIcon={true}
+              searchValue={searchValueFilterOption}
+              onFocus={() => setFocus(() => true)}
+              withIcon={false}
+              customStyles={{
+                ...(focus ? { padding: '10px 20px 10px 16px' } : { padding: '0px' }),
+                ...(focus ? { borderRadius: '50px' } : { transitionDelay: '.3s' }),
+              }}
+              onChange={(e) => setSearchValueFilterOption(() => e.target.value)}
+              onSettingsPress={() => {
+                setFilterModal((prev) => !prev);
+                setFocus(() => false);
+              }}
+            />
+            <FilterModal
+              filterModal={filterModal}
+              filterFeedbacks={filterFeedbacks}
+              setFilterFeedbacks={setFilterFeedbacks}
+              setFilterModal={setFilterModal}
+            />
           </div>
         </div>
         <div className={css(Drafts_style)}>
-          <DraftItem draftFeedback={draftFeedback} checkedRadio={checkedRadio} />
+          <DraftItem
+            draftFeedback={draftFeedback}
+            checkedRadio={checkedRadio}
+            searchValue={searchValueFilterOption}
+            focus={focus}
+            setFocus={setFocus}
+            filterModal={filterModal}
+            setFilterModal={setFilterModal}
+            setFilterFeedbacks={setFilterFeedbacks}
+            filterFeedbacks={filterFeedbacks}
+          />
         </div>
       </div>
       {isOpenMainModal && (
@@ -184,15 +169,27 @@ const RespondFeedbackContainer: FC = () => {
   );
 };
 
-const header_styled: Rule = () => {
+const Flex_styled: Rule = () => {
   const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
   return {
     display: 'flex',
+    alignItems: 'center',
+    ...(mobileScreen && { flexBasis: '250px' }),
+    position: 'relative',
+  };
+};
+
+const header_styled: Rule = () => {
+  const [, isBreakpoint] = useBreakpoints();
+  const medium = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
+  return {
+    display: 'flex',
+    flexWrap: medium ? 'wrap' : 'nowrap',
+    ...(medium && { flexBasis: '250px' }),
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingTop: '24px',
-    ...(mobileScreen && { flexWrap: 'wrap', flexBasis: '240px' }),
   };
 };
 

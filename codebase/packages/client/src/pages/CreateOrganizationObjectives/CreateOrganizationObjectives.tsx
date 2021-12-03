@@ -148,8 +148,6 @@ const CreateOrganizationObjectives: FC<Props> = ({ onClose, editNumber = null })
     dispatch(OrgObjectiveActions.getOrgObjectives({}));
   }, []);
 
-  console.log('orgObjectives: ', orgObjectives);
-
   return (
     <div className={css(main)}>
       {/* <LeftsideMenu /> */}

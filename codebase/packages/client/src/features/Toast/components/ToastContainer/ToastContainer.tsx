@@ -24,6 +24,7 @@ const ToastContainer: FC<Props> = ({ items }) => {
 };
 
 const wrapperStyles: Rule = {
+  display: 'none', // after demo remove this
   position: 'fixed',
   top: '24px',
   right: '16px',

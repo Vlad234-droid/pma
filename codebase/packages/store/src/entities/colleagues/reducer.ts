@@ -4,6 +4,7 @@ import { getColleagues, clearGettedCollegues } from './actions';
 export const initialState = {
   finded_colleagues: [],
   meta: { loading: false, loaded: false, error: null },
+  profile: [],
 };
 
 export default createReducer(initialState)

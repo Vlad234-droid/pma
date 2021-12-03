@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect, Dispatch, SetStateAction } from 'react';
 import { useStyle, Rule, Styles } from '@dex-ddl/core';
 import { TileWrapper } from 'components/Tile';
 import { Accordion, BaseAccordion, Section, Panel, ExpandButton } from 'components/Accordion';
@@ -8,13 +8,21 @@ import { useDispatch, useSelector } from 'react-redux';
 import { FeedbackActions, ObjectiveActions, getReviewByUuidS, getPropperNotesByStatusSelector } from '@pma/store';
 import { getPropperTime } from '../../../utils';
 import { FeedbackStatus } from '../../../config/enum';
+import { filteredByInputSearchHandler, filteredNotesByRadiosBtnsHandler } from '../../../utils';
+import defaultImg from '../../../../public/default.png';
+import { colleagueUUIDSelector } from '@pma/store';
 
 export const TEST_ID = 'test_id';
 
 enum TargetType {
   OBJECTIVE = 'Objective',
 }
-
+type filterFeedbacksType = {
+  AZ: boolean;
+  ZA: boolean;
+  newToOld: boolean;
+  oldToNew: boolean;
+};
 type TypecheckedRadio = {
   pending: boolean;
   completed: boolean;
@@ -22,17 +30,40 @@ type TypecheckedRadio = {
 type DraftItemProps = {
   draftFeedback: (id: number) => void;
   checkedRadio: TypecheckedRadio;
+  searchValue: string;
+  focus: boolean;
+  setFocus: Dispatch<SetStateAction<boolean>>;
+  filterModal: boolean;
+  setFilterModal: Dispatch<SetStateAction<boolean>>;
+  setFilterFeedbacks: Dispatch<SetStateAction<filterFeedbacksType>>;
+  filterFeedbacks: filterFeedbacksType;
 };
-const DraftItem: FC<DraftItemProps> = ({ draftFeedback, checkedRadio }) => {
+const DraftItem: FC<DraftItemProps> = ({
+  draftFeedback,
+  checkedRadio,
+  searchValue,
+  focus,
+  setFocus,
+  filterModal,
+  setFilterModal,
+  setFilterFeedbacks,
+  filterFeedbacks,
+}) => {
   const { css } = useStyle();
   const dispatch = useDispatch();
   const pendingNotes = useSelector(getPropperNotesByStatusSelector(FeedbackStatus.PENDING)) || [];
   const completedNotes = useSelector(getPropperNotesByStatusSelector(FeedbackStatus.COMPLETED)) || [];
   const review = useSelector(getReviewByUuidS) || [];
+  const colleagueUuid = useSelector(colleagueUUIDSelector);
 
   useEffect(() => {
-    dispatch(FeedbackActions.getAllFeedbacks({}));
-  }, []);
+    if (!colleagueUuid) return;
+    dispatch(
+      FeedbackActions.getAllFeedbacks({
+        'colleague-uuid': colleagueUuid,
+      }),
+    );
+  }, [colleagueUuid]);
 
   useEffect(() => {
     if (pendingNotes.length) {
@@ -62,11 +93,28 @@ const DraftItem: FC<DraftItemProps> = ({ draftFeedback, checkedRadio }) => {
   }
 
   const getPropperNotes = () => {
-    if (checkedRadio.completed) {
+    if (checkedRadio.completed && searchValue.length <= 2 && Object.values(filterFeedbacks).every((item) => !item)) {
       return completedNotes;
+    } else if (
+      checkedRadio.completed &&
+      searchValue.length >= 2 &&
+      Object.values(filterFeedbacks).every((item) => !item)
+    ) {
+      return filteredByInputSearchHandler(completedNotes, searchValue);
+    } else if (Object.values(filterFeedbacks).some((item) => item === true) && checkedRadio.completed) {
+      return filteredNotesByRadiosBtnsHandler(completedNotes, filterFeedbacks);
     }
-    if (checkedRadio.pending) {
+
+    if (checkedRadio.pending && searchValue.length <= 2 && Object.values(filterFeedbacks).every((item) => !item)) {
       return pendingNotes;
+    } else if (
+      checkedRadio.pending &&
+      searchValue.length >= 2 &&
+      Object.values(filterFeedbacks).every((item) => !item)
+    ) {
+      return filteredByInputSearchHandler(pendingNotes, searchValue);
+    } else if (Object.values(filterFeedbacks).some((item) => item === true) && checkedRadio.pending) {
+      return filteredNotesByRadiosBtnsHandler(pendingNotes, filterFeedbacks);
     }
   };
 
@@ -85,7 +133,7 @@ const DraftItem: FC<DraftItemProps> = ({ draftFeedback, checkedRadio }) => {
 
   return (
     <>
-      {getPropperNotes().map((item) => (
+      {getPropperNotes()?.map((item) => (
         <div key={item.uuid}>
           <TileWrapper>
             <Accordion
@@ -102,7 +150,7 @@ const DraftItem: FC<DraftItemProps> = ({ draftFeedback, checkedRadio }) => {
                       <div className={css(Draft_Styles)}>
                         <div className={css(Block_info)}>
                           <div className={css({ alignSelf: 'flex-start' })}>
-                            <img className={css(Img_style)} src={item.img} alt='photo' />
+                            <img className={css(Img_style)} src={defaultImg} alt='photo' />
                           </div>
                           <div className={css({ marginLeft: '16px' })}>
                             <h3
@@ -179,11 +227,16 @@ const DraftItem: FC<DraftItemProps> = ({ draftFeedback, checkedRadio }) => {
                             <IconButton
                               customVariantRules={{ default: iconBtnStyle }}
                               iconPosition={Position.RIGHT}
-                              onPress={() => draftFeedback(item)}
+                              onPress={() => {
+                                if (filterModal) setFilterModal(() => false);
+                                setFilterFeedbacks(() => ({ AZ: false, ZA: false, newToOld: false, oldToNew: false }));
+                                if (focus) setFocus(() => false);
+                                draftFeedback(item);
+                              }}
                               graphic='arrowRight'
                               iconProps={{ invertColors: false }}
                             >
-                              <Trans i18nKey='give_feedback'>Give feedback</Trans>
+                              <Trans>Give feedback</Trans>
                             </IconButton>
                           )
                         )}

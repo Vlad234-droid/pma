@@ -14,6 +14,7 @@ export type StepIndicatorProps = {
   titles?: string[];
   descriptions?: string[];
   statuses?: Status[];
+  customStyle?: React.CSSProperties | {};
 };
 
 const getStatus = (i: number, currentStep?: number, currentStatus?: Status) => {
@@ -125,10 +126,11 @@ export const StepIndicator: FC<StepIndicatorProps> = ({
   titles = [],
   descriptions = [],
   statuses = [],
+  customStyle = {},
 }) => {
   const { css } = useStyle();
   return (
-    <Tile>
+    <Tile customStyle={customStyle}>
       <div className={css(wrapperStyle)} data-test-id='timeline'>
         <span className={css(titleStyle)}>{mainTitle}</span>
         <StepIndicatorBasic

@@ -136,7 +136,7 @@ export const WidgetTeamMateObjectives: FC<WidgetTeamMateObjectivesProps> = ({
                         <Notification
                           graphic='information'
                           iconColor='pending'
-                          text='It’s time to approve or decline your collegues objectives'
+                          text='It’s time to approve or decline your colleagues objectives'
                           customStyle={{
                             background: '#FFDBC2',
                             marginBottom: '20px',

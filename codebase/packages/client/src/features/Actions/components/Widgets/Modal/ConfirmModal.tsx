@@ -4,21 +4,24 @@ import { Textarea } from 'components/Form';
 
 import { useBreakpoints, useStyle, CreateRule, Modal, Button, fontWeight } from '@dex-ddl/core';
 
-export type ConfirmDeclineModalProps = {
+export type ConfirmAcceptModalProps = {
   title: string;
   description?: string;
   onClose: () => void;
   onSave: (reason?) => void;
   onOverlayClick?: () => void;
+  hasReason?: boolean;
 };
 
-type Props = HTMLProps<HTMLInputElement> & ConfirmDeclineModalProps;
+type Props = HTMLProps<HTMLInputElement> & ConfirmAcceptModalProps;
 
-const ConfirmDeclineModal: FC<Props> = ({ title, description, onClose, onSave, onOverlayClick }) => {
+const ConfirmModal: FC<Props> = ({ title, description, hasReason = false, onClose, onSave, onOverlayClick }) => {
   const [reason, setReason] = useState('');
   const { theme, css } = useStyle();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+
+  const canSubmit = hasReason ? Boolean(reason.length) : true;
 
   return (
     <Modal
@@ -45,9 +48,11 @@ const ConfirmDeclineModal: FC<Props> = ({ title, description, onClose, onSave, o
           {description}
         </div>
       )}
-      <div className={css({ padding: '20px 0' })}>
-        <Textarea onChange={(e) => setReason(e.target.value)} value={reason} />
-      </div>
+      {hasReason && (
+        <div className={css({ padding: '20px 0' })}>
+          <Textarea onChange={(e) => setReason(e.target.value)} value={reason} />
+        </div>
+      )}
 
       <div
         className={css({
@@ -73,7 +78,7 @@ const ConfirmDeclineModal: FC<Props> = ({ title, description, onClose, onSave, o
           <Trans i18nKey='cancel'>Cancel</Trans>
         </Button>
         <Button
-          isDisabled={!reason}
+          isDisabled={!canSubmit}
           styles={[
             {
               background: `${theme.colors.tescoBlue}`,
@@ -83,7 +88,7 @@ const ConfirmDeclineModal: FC<Props> = ({ title, description, onClose, onSave, o
               width: '50%',
               margin: '0px 4px 1px 4px',
             },
-            !reason ? { opacity: '0.6' } : {},
+            !canSubmit ? { opacity: '0.6' } : {},
           ]}
           onPress={() => {
             onSave({ reason });
@@ -104,4 +109,4 @@ const containerRule: CreateRule<{
   padding: '24px 38px 24px',
 });
 
-export default ConfirmDeclineModal;
+export default ConfirmModal;

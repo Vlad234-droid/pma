@@ -16,12 +16,17 @@ import { createObjectivesSchema } from './config';
 import { IconButton } from '../../components/IconButton';
 import { Icon } from '../../components/Icon';
 import { useDispatch, useSelector } from 'react-redux';
-import { FeedbackActions as FeedbackActionsGet, getPropperNotesByStatusSelector } from '@pma/store';
+import {
+  FeedbackActions as FeedbackActionsGet,
+  getPropperNotesByStatusSelector,
+  colleagueUUIDSelector,
+} from '@pma/store';
 import { FeedbackStatus } from '../../config/enum';
 
 const FEEDBACK_ACTIONS = 'feedback_actions';
 
 const FeedbackActions: FC = () => {
+  const colleagueUuid = useSelector(colleagueUUIDSelector);
   const { css } = useStyle();
   const dispatch = useDispatch();
   const [info360Modal, setInfo360Modal] = useState<boolean>(false);
@@ -37,8 +42,13 @@ const FeedbackActions: FC = () => {
   });
 
   useEffect(() => {
-    dispatch(FeedbackActionsGet.getAllFeedbacks({}));
-  }, []);
+    if (!colleagueUuid) return;
+    dispatch(
+      FeedbackActionsGet.getAllFeedbacks({
+        'colleague-uuid': colleagueUuid,
+      }),
+    );
+  }, [colleagueUuid]);
 
   const getProppeIconForunReadNotes = () => {
     if (unReadNotes.length) return <NotiBell />;
@@ -55,7 +65,7 @@ const FeedbackActions: FC = () => {
       action: 'Give feedback',
       text: 'Share in the moment feedback with your colleagues',
       icon: <Chat />,
-      iconText: 'The feedback will be able to your colleague',
+      iconText: 'The feedback will be available to your colleague',
       modalTitle: 'Give feedback',
       link: '/give-feedback',
     },

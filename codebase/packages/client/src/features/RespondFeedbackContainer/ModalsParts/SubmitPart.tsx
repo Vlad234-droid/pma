@@ -11,8 +11,10 @@ import { TileWrapper } from 'components/Tile';
 import { Item, Textarea } from 'components/Form';
 import { GenericItemField } from 'components/GenericForm';
 import { Trans } from 'components/Translation';
-import { FeedbackActions } from '@pma/store';
+import { FeedbackActions, colleagueUUIDSelector } from '@pma/store';
 import { useDispatch } from 'react-redux';
+import defaultImg from '../../../../public/default.png';
+import { useSelector } from 'react-redux';
 
 const SubmitPart: FC<SubmitPartProps> = ({
   selectedPerson,
@@ -22,6 +24,7 @@ const SubmitPart: FC<SubmitPartProps> = ({
   setIsOpen,
 }) => {
   const dispatch = useDispatch();
+  const colleagueUuid = useSelector(colleagueUUIDSelector);
 
   const giveFeedback: GiveFeedbackType[] = [
     {
@@ -62,7 +65,7 @@ const SubmitPart: FC<SubmitPartProps> = ({
   ];
   const { css, theme } = useStyle();
   const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+
   const methods = useForm({
     mode: 'onChange',
     resolver: yupResolver<Yup.AnyObjectSchema>(createGiveFeedbackSchema),
@@ -98,11 +101,12 @@ const SubmitPart: FC<SubmitPartProps> = ({
   const values = getValues();
 
   const onSubmit = async (data) => {
+    if (!colleagueUuid) return;
     const conv = data.feedback.slice(1);
     const formData = {
-      uuid: selectedPerson?.id,
-      colleagueUuid: '10000000-0000-0000-0000-000000000001',
-      targetColleagueUuid: '10000000-0000-0000-0000-000000000002',
+      uuid: selectedPerson?.uuid,
+      colleagueUuid: colleagueUuid,
+      targetColleagueUuid: selectedPerson?.colleagueUUID,
       status: 'COMPLETED',
       targetId: selectedPerson?.targetId,
       targetType: selectedPerson?.targetType,
@@ -120,11 +124,11 @@ const SubmitPart: FC<SubmitPartProps> = ({
   };
 
   const onDraft = () => {
+    if (!colleagueUuid) return;
     const conv = values.feedback.slice(1);
     const formData = {
       uuid: selectedPerson?.id,
-      colleagueUuid: '10000000-0000-0000-0000-000000000001',
-      targetColleagueUuid: '10000000-0000-0000-0000-000000000002',
+      colleagueUuid: colleagueUuid,
       status: 'PENDING',
       targetId: selectedPerson?.targetId,
       targetType: selectedPerson?.targetType,
@@ -151,11 +155,15 @@ const SubmitPart: FC<SubmitPartProps> = ({
       <div className={css({ marginTop: '30px' })}>
         <div className={css(Block_info)}>
           <div className={css({ alignSelf: 'flex-start' })}>
-            <img className={css(Img_style)} src={selectedPerson?.img} alt='photo' />
+            <img className={css(Img_style)} src={defaultImg} alt='photo' />
           </div>
           <div className={css({ marginLeft: '16px' })}>
-            <h3 className={css(Names_Style)}>{`${selectedPerson?.f_name} ${selectedPerson?.l_name}`}</h3>
-            <p className={css(Industry_Style)}>Cashier, Grocery</p>
+            <h3
+              className={css(Names_Style)}
+            >{`${selectedPerson?.profile?.firstName} ${selectedPerson?.profile?.lastName}`}</h3>
+            <p
+              className={css(Industry_Style)}
+            >{`${selectedPerson?.workRelationships[0].job?.name}${selectedPerson?.workRelationships[0].department?.name}`}</p>
             <span className={css(Treatment_Style)}>Please treat me kindly</span>
           </div>
         </div>

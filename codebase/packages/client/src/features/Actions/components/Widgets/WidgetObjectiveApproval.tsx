@@ -2,7 +2,7 @@ import React, { FC, useState } from 'react';
 import { Button, fontWeight, useStyle } from '@dex-ddl/core';
 import { TileWrapper } from 'components/Tile';
 import { Icon } from 'components/Icon';
-import ConfirmDeclineModal from './Modal/ConfirmDeclineModal';
+import ConfirmModal from './Modal/ConfirmModal';
 import { Trans } from 'components/Translation';
 import { ReviewsActions } from '@pma/store';
 import useDispatch from 'hooks/useDispatch';
@@ -19,7 +19,8 @@ export const WidgetObjectiveApproval: FC<WidgetObjectiveApprovalProps> = ({
   canDecline = false,
   reviewsForApproval,
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpenDeclinePopup, setIsOpenDeclinePopup] = useState(false);
+  const [isOpenApprovePopup, setIsOpenApprovePopup] = useState(false);
   const { css, theme } = useStyle();
   const dispatch = useDispatch();
 
@@ -86,7 +87,7 @@ export const WidgetObjectiveApproval: FC<WidgetObjectiveApprovalProps> = ({
                   },
                   !canDecline ? { opacity: '0.6' } : {},
                 ]}
-                onPress={() => setIsOpen(true)}
+                onPress={() => setIsOpenDeclinePopup(true)}
               >
                 <Icon graphic='decline' iconStyles={{ paddingRight: '8px' }} />
                 <Trans i18nKey='decline'>Decline</Trans>
@@ -104,18 +105,29 @@ export const WidgetObjectiveApproval: FC<WidgetObjectiveApprovalProps> = ({
                     margin: '0px 4px 1px 4px',
                   },
                 ]}
-                onPress={() => approveColleagues({})}
+                onPress={() => setIsOpenApprovePopup(true)}
               >
                 <Icon graphic='check' invertColors={true} iconStyles={{ paddingRight: '8px' }} />
                 <Trans i18nKey='approve'>Approve</Trans>
               </Button>
             </div>
-            {isOpen && (
-              <ConfirmDeclineModal
+            {isOpenDeclinePopup && (
+              <ConfirmModal
                 title={'Please provide decline reason'}
+                hasReason={true}
                 onSave={declineColleagues}
-                onClose={() => setIsOpen(false)}
-                onOverlayClick={() => setIsOpen(false)}
+                onClose={() => setIsOpenDeclinePopup(false)}
+                onOverlayClick={() => setIsOpenDeclinePopup(false)}
+              />
+            )}
+            {isOpenApprovePopup && (
+              <ConfirmModal
+                title={'Submit objectives or reviews'}
+                description={'Are you sure you want to approve objectives or reviews?'}
+                hasReason={false}
+                onSave={approveColleagues}
+                onClose={() => setIsOpenApprovePopup(false)}
+                onOverlayClick={() => setIsOpenApprovePopup(false)}
               />
             )}
           </div>

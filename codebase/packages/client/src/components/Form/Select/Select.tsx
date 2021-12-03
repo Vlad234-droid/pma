@@ -36,18 +36,26 @@ const Select: FC<SelectProps> = ({
           value={selectedOptionLabel || value}
           disabled={disabled}
           data-test-id={name}
-          className={css({
-            width: '100%',
-            border: `1px solid ${theme.colors.backgroundDarkest}`,
-            borderRadius: '5px',
-            fontSize: '16px',
-            lineHeight: '20px',
-            padding: '10px 30px 10px 16px',
-            ':focus': {
-              outline: 'none !important',
-              border: `1px solid ${theme.colors.tescoBlue}`,
+          className={css(
+            {
+              width: '100%',
+              border: `1px solid ${theme.colors.backgroundDarkest}`,
+              borderRadius: '5px',
+              fontSize: '16px',
+              lineHeight: '20px',
+              padding: '10px 30px 10px 16px',
+              ':focus': {
+                outline: 'none !important',
+                border: `1px solid ${theme.colors.tescoBlue}`,
+              },
             },
-          })}
+            isOptionOpen
+              ? {
+                  outline: 'none !important',
+                  border: `1px solid ${theme.colors.tescoBlue}`,
+                }
+              : {},
+          )}
           placeholder={placeholder ? `- ${placeholder} -` : ''}
           readOnly={true}
           onSelect={(e) => {
@@ -60,6 +68,7 @@ const Select: FC<SelectProps> = ({
           onBlur={() => toggleOption(false)}
         />
         <span
+          onClick={() => toggleOption(!isOptionOpen)}
           style={{
             position: 'absolute',
             right: '10px',
@@ -119,6 +128,7 @@ const Select: FC<SelectProps> = ({
 
 const iconStyles: Rule = {
   transition: 'transform 0.4s ease',
+  cursor: 'pointer',
 };
 
 const iconExpandStyles: Rule = {

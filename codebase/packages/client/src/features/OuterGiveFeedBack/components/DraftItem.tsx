@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC, SetStateAction, useEffect, Dispatch } from 'react';
 import { useStyle, Rule, Styles } from '@dex-ddl/core';
 import { TileWrapper } from 'components/Tile';
 import { Accordion, BaseAccordion, Section, Panel, ExpandButton } from 'components/Accordion';
@@ -8,6 +8,16 @@ import { FeedbackActions, getPropperNotesByStatusSelector } from '@pma/store';
 import { useDispatch, useSelector } from 'react-redux';
 import { getPropperTime } from '../../../utils';
 import { FeedbackStatus } from '../../../config/enum';
+import { filteredByInputSearchHandler, filteredNotesByRadiosBtnsHandler } from '../../../utils';
+import defaultImg from '../../../../public/default.png';
+import { colleagueUUIDSelector } from '@pma/store';
+
+type filterFeedbacksType = {
+  AZ: boolean;
+  ZA: boolean;
+  newToOld: boolean;
+  oldToNew: boolean;
+};
 
 type TypecheckedRadio = {
   draft: boolean;
@@ -17,15 +27,38 @@ type TypecheckedRadio = {
 type DraftItemProps = {
   draftFeedback: (id: number) => void;
   checkedRadio: TypecheckedRadio;
+  searchValue: string;
+  focus: boolean;
+  setFocus: Dispatch<SetStateAction<boolean>>;
+  filterModal: boolean;
+  setFilterModal: Dispatch<SetStateAction<boolean>>;
+  setFilterFeedbacks: Dispatch<SetStateAction<filterFeedbacksType>>;
+  filterFeedbacks: filterFeedbacksType;
 };
 
-const DraftItem: FC<DraftItemProps> = ({ draftFeedback, checkedRadio }) => {
+const DraftItem: FC<DraftItemProps> = ({
+  draftFeedback,
+  checkedRadio,
+  searchValue,
+  focus,
+  setFocus,
+  filterModal,
+  setFilterModal,
+  setFilterFeedbacks,
+  filterFeedbacks,
+}) => {
+  const colleagueUuid = useSelector(colleagueUUIDSelector);
   const { css } = useStyle();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(FeedbackActions.getAllFeedbacks({}));
-  }, []);
+    if (!colleagueUuid) return;
+    dispatch(
+      FeedbackActions.getAllFeedbacks({
+        'colleague-uuid': colleagueUuid,
+      }),
+    );
+  }, [colleagueUuid]);
   const draftedNotes = useSelector(getPropperNotesByStatusSelector(FeedbackStatus.DRAFT)) || [];
   const submittedNotes = useSelector(getPropperNotesByStatusSelector(FeedbackStatus.SUBMITTED)) || [];
 
@@ -37,17 +70,30 @@ const DraftItem: FC<DraftItemProps> = ({ draftFeedback, checkedRadio }) => {
   }
 
   const getPropperNotes = () => {
-    if (checkedRadio.submitted) {
-      return submittedNotes;
-    }
-    if (checkedRadio.draft) {
+    if (checkedRadio.draft && searchValue.length <= 2 && Object.values(filterFeedbacks).every((item) => !item)) {
       return draftedNotes;
+    } else if (checkedRadio.draft && searchValue.length >= 2 && Object.values(filterFeedbacks).every((item) => !item)) {
+      return filteredByInputSearchHandler(draftedNotes, searchValue);
+    } else if (Object.values(filterFeedbacks).some((item) => item === true) && checkedRadio.draft) {
+      return filteredNotesByRadiosBtnsHandler(draftedNotes, filterFeedbacks);
+    }
+
+    if (checkedRadio.submitted && searchValue.length <= 2 && Object.values(filterFeedbacks).every((item) => !item)) {
+      return submittedNotes;
+    } else if (
+      checkedRadio.submitted &&
+      searchValue.length >= 2 &&
+      Object.values(filterFeedbacks).every((item) => !item)
+    ) {
+      return filteredByInputSearchHandler(submittedNotes, searchValue);
+    } else if (Object.values(filterFeedbacks).some((item) => item === true) && checkedRadio.submitted) {
+      return filteredNotesByRadiosBtnsHandler(submittedNotes, filterFeedbacks);
     }
   };
 
   return (
     <>
-      {getPropperNotes().map((item) => (
+      {getPropperNotes()?.map((item) => (
         <div key={item.uuid}>
           <TileWrapper>
             <Accordion
@@ -64,7 +110,7 @@ const DraftItem: FC<DraftItemProps> = ({ draftFeedback, checkedRadio }) => {
                       <div className={css(Draft_Styles)}>
                         <div className={css(Block_info)}>
                           <div className={css({ alignSelf: 'flex-start' })}>
-                            <img className={css(Img_style)} alt='photo' />
+                            <img className={css(Img_style)} alt='photo' src={defaultImg} />
                           </div>
                           <div className={css({ marginLeft: '16px' })}>
                             <h3
@@ -133,7 +179,12 @@ const DraftItem: FC<DraftItemProps> = ({ draftFeedback, checkedRadio }) => {
                         {!checkedRadio.submitted && (
                           <IconButton
                             customVariantRules={{ default: iconBtnStyle }}
-                            onPress={() => draftFeedback(item)}
+                            onPress={() => {
+                              if (filterModal) setFilterModal(() => false);
+                              setFilterFeedbacks(() => ({ AZ: false, ZA: false, newToOld: false, oldToNew: false }));
+                              if (focus) setFocus(() => false);
+                              draftFeedback(item);
+                            }}
                             graphic='edit'
                             iconProps={{ invertColors: false }}
                             iconStyles={iconStyle}

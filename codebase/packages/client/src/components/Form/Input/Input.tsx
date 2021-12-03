@@ -5,7 +5,17 @@ import mergeRefs from 'react-merge-refs';
 import { InputProps } from '../types';
 import { useRefContainer } from '../context/input';
 
-const Input: FC<InputProps> = ({ domRef, placeholder = '', onChange, name, value, isValid = true, type = 'text' }) => {
+const Input: FC<InputProps> = ({
+  domRef,
+  placeholder = '',
+  onChange,
+  name,
+  value,
+  isValid = true,
+  type = 'text',
+  customStyles,
+  onFocus,
+}) => {
   const { css } = useStyle();
   const refIcon = useRefContainer();
 
@@ -16,6 +26,9 @@ const Input: FC<InputProps> = ({ domRef, placeholder = '', onChange, name, value
       data-test-id={name}
       value={value}
       onChange={onChange}
+      onFocus={() => {
+        onFocus && onFocus();
+      }}
       type={type}
       className={css({
         width: '100%',
@@ -28,6 +41,7 @@ const Input: FC<InputProps> = ({ domRef, placeholder = '', onChange, name, value
           outline: 'none !important',
           border: `1px solid ${isValid ? colors.tescoBlue : colors.error}`,
         },
+        ...(customStyles && customStyles),
       })}
       placeholder={placeholder}
     />

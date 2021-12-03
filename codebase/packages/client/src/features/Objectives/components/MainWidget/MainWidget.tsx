@@ -71,7 +71,7 @@ const MainWidget: FC<Props> = ({ customStyle, onClick, status, count = 0 }) => {
           </div>
           <div className={css(headerBlockStyle)}>
             <span className={css(titleStyle)}>
-              <Trans i18nKey='my_business_objectives'>My Business Objectives</Trans>
+              <Trans i18nKey='my_business_objectives'>My Objectives</Trans>
             </span>
             <span className={css(descriptionStyle)}>
               <span className={css(iconStyle)}>
@@ -93,7 +93,7 @@ const MainWidget: FC<Props> = ({ customStyle, onClick, status, count = 0 }) => {
               </div>
             )}
             <div className={css(bodyBlockStyle)}>
-              {isStateless ? <CreateButton buttonText='Create objectives' /> : <CreateButton buttonText='View' />}
+              {isStateless ? <CreateButton buttonText='Create my objectives' /> : <CreateButton buttonText='View' />}
             </div>
           </div>
         )}

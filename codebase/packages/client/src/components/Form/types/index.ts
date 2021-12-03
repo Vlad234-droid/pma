@@ -13,6 +13,8 @@ export interface FormItemProps {
   isValid?: boolean;
   type?: string;
   id?: string;
+  customStyles?: Rule | Styles;
+  onFocus?: () => any;
 }
 
 export type InputProps = FormItemProps;
