@@ -3,7 +3,7 @@ import { Epic, isActionOf } from 'typesafe-actions';
 import { combineEpics } from 'redux-observable';
 import { from, of } from 'rxjs';
 import { catchError, filter, map, switchMap, debounceTime } from 'rxjs/operators';
-import { getColleagues } from './actions';
+import { getColleagues, getProfileColleague } from './actions';
 
 export const getColleaguesEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
@@ -21,4 +21,19 @@ export const getColleaguesEpic: Epic = (action$, _, { api }) =>
     }),
   );
 
-export default combineEpics(getColleaguesEpic);
+export const getProfileColleagueEpic: Epic = (action$, _, { api }) =>
+  action$.pipe(
+    filter(isActionOf(getProfileColleague.request)),
+    switchMap(({ payload }) => {
+      //@ts-ignore
+      return from(api.getProfileColleague(payload)).pipe(
+        //@ts-ignore
+        map(({ data }) => {
+          return getProfileColleague.success(data);
+        }),
+        catchError(({ errors }) => of(getColleagues.failure(errors))),
+      );
+    }),
+  );
+
+export default combineEpics(getColleaguesEpic, getProfileColleagueEpic);

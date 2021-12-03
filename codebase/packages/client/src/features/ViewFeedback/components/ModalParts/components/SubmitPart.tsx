@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import { useStyle, Rule } from '@dex-ddl/core';
 import { SubmitPartProps } from './type';
 import { TileWrapper } from 'components/Tile';
+import defaultImg from '../../../../../../public/default.png';
 
 export const WITH_SELECTED_TEST = 'with_selected_test';
 
@@ -29,7 +30,7 @@ const SubmitPart: FC<SubmitPartProps> = ({ selectedPerson }) => {
       <div className={css({ marginTop: '16px' })}>
         <div className={css(Block_info)}>
           <div className={css({ alignSelf: 'flex-start' })}>
-            <img className={css(Img_style)} src='' alt='photo' />
+            <img className={css(Img_style)} src={defaultImg} alt='photo' />
           </div>
           <div className={css({ marginLeft: '16px' })}>
             <h3

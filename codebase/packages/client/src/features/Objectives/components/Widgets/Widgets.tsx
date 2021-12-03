@@ -1,18 +1,19 @@
 import React, { FC, HTMLProps } from 'react';
 import { useTranslation } from 'components/Translation';
 import { Styles, useStyle } from '@dex-ddl/core';
-
 import SecondaryWidget, { Props as SecondaryWidgetProps } from '../SecondaryWidget';
 import MainWidget from '../MainWidget';
 import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { ObjectiveType , ReviewType } from 'config/enum';
 import { getTimelineByReviewTypeSelector, timelineTypesAvailabilitySelector } from '@pma/store';
-import { ReviewType } from 'config/enum';
 
 export type MainWidgetProps = {};
 
 type Props = HTMLProps<HTMLInputElement> & MainWidgetProps;
 
 const Widgets: FC<Props> = () => {
+  const history = useHistory();
   const { css } = useStyle();
   const { t } = useTranslation();
 
@@ -36,14 +37,14 @@ const Widgets: FC<Props> = () => {
       title: t('feedback', 'Feedback'),
       date: t('feedback_date', 'Last updated Apr 2021', { date: new Date(2021, 4, 4) }),
       customStyle: { flex: '2 1 110px' },
-      onClick: () => alert('View2'),
+      onClick: () => history.push('feedback'),
     },
     {
-      iconGraphic: 'alert',
-      title: t('overdue_actions', 'Overdue actions'),
-      date: t('collegue_reminders', 'Collegue reminders'),
+      iconGraphic: 'edit',
+      title: t('My notes'),
+      date: t('Last updated Apr 2021', { date: new Date(2021, 4, 4) }),
       customStyle: { flex: '2 1 110px' },
-      onClick: () => alert('View3'),
+      onClick: () => history.push('notes'),
     },
   ];
 

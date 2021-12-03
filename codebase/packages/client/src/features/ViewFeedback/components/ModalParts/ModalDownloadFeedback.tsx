@@ -47,8 +47,6 @@ const ModalDownloadFeedback: FC<ModalDownloadFeedbackProps> = ({
     );
   }
 
-  console.log('selectedPerson', selectedPerson);
-
   return (
     <div className={css({ padding: '0px 40px' })}>
       <h2 className={css(downloadTitle_Styled)}>{downloadTitle}</h2>

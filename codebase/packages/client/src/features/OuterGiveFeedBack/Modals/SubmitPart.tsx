@@ -9,6 +9,9 @@ import { GenericItemField } from 'components/GenericForm';
 import { Trans } from 'components/Translation';
 import { useDispatch } from 'react-redux';
 import { FeedbackActions } from '../../../../../store';
+import defaultImg from '../../../../public/default.png';
+import { colleagueUUIDSelector } from '@pma/store';
+import { useSelector } from 'react-redux';
 
 export const WITH_SELECTED_TEST = 'with_selected_test';
 
@@ -60,6 +63,7 @@ const SubmitPart: FC<SubmitPartProps> = ({
       },
     },
   ];
+  const colleagueUuid = useSelector(colleagueUUIDSelector);
 
   const { css, theme } = useStyle();
 
@@ -72,8 +76,8 @@ const SubmitPart: FC<SubmitPartProps> = ({
   const values = getValues();
 
   const onSubmit = async (data) => {
+    if (!colleagueUuid) return;
     const conv = data.feedback.slice(1);
-
     const getIfNeedUuid = (selectedPerson) => {
       if (!selectedPerson.uuid) return;
       return {
@@ -88,10 +92,9 @@ const SubmitPart: FC<SubmitPartProps> = ({
           .uuid,
       };
     };
-
     const formData = {
       ...getIfNeedUuid(selectedPerson),
-      colleagueUuid: '10000000-0000-0000-0000-000000000001',
+      colleagueUuid: colleagueUuid,
       targetColleagueUuid: selectedPerson.colleagueUUID,
       status: 'SUBMITTED',
       feedbackItems: conv.map((item, i) => {
@@ -114,8 +117,8 @@ const SubmitPart: FC<SubmitPartProps> = ({
   };
 
   const onDraft = () => {
+    if (!colleagueUuid) return;
     const conv = values.feedback.slice(1);
-
     const getIfNeedUuid = (selectedPerson) => {
       if (!selectedPerson.uuid) return;
       return {
@@ -133,13 +136,12 @@ const SubmitPart: FC<SubmitPartProps> = ({
 
     const formData = {
       ...getIfNeedUuid(selectedPerson),
-      colleagueUuid: '10000000-0000-0000-0000-000000000001',
+      colleagueUuid: colleagueUuid,
       targetColleagueUuid: selectedPerson.colleagueUUID,
       status: 'DRAFT',
       feedbackItems: conv.map((item, i) => {
         return {
           ...getFeedbackUuidItems(i),
-
           code: giveFeedback[i].giveFeedbacka_main_title,
           content: item.field,
         };
@@ -167,7 +169,7 @@ const SubmitPart: FC<SubmitPartProps> = ({
       <div className={css({ marginTop: '16px' })}>
         <div className={css(Block_info)}>
           <div className={css({ alignSelf: 'flex-start' })}>
-            <img className={css(Img_style)} src='' alt='photo' />
+            <img className={css(Img_style)} src={defaultImg} alt='photo' />
           </div>
           <div className={css({ marginLeft: '16px' })}>
             <h3

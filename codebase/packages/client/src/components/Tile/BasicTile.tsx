@@ -1,4 +1,4 @@
-import React, { FC, HTMLProps } from 'react';
+import React, { FC, HTMLProps, ReactElement } from 'react';
 
 import { Rule, useBreakpoints, useStyle, CreateRule } from '@dex-ddl/core';
 import { TileWrapper } from './TileWrapper';
@@ -11,7 +11,7 @@ export type TileProps = {
   boarder?: boolean;
   hover?: boolean;
   link?: string;
-  img?: string;
+  img?: string | ReactElement;
   icon?: boolean;
   customStyle?: React.CSSProperties | {};
   imgCustomStyle?: React.CSSProperties | {};
@@ -45,7 +45,8 @@ export const BasicTile: FC<Props> = ({
       <a className={css(wrapperStyle({ icon }))} href={link}>
         {img && (
           <div className={css(imgCustomStyle)}>
-            <img className={css(imageStyle({ icon }))} src={img} />
+            {typeof img === 'string' && <img className={css(imageStyle({ icon }))} src={img} />}
+            {typeof img === 'object' && img}
           </div>
         )}
         <div className={css(bodyStyle)}>

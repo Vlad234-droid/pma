@@ -1,6 +1,5 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import { Button, Rule, useBreakpoints, useStyle, Modal } from '@dex-ddl/core';
-import { Radio } from 'components/Form';
 import { Trans } from 'components/Translation';
 import { FilterOption } from 'features/Shared';
 import { IconButton } from 'components/IconButton';
@@ -10,6 +9,8 @@ import { Icon } from 'components/Icon';
 import { ModalDownloadFeedback } from './components/ModalParts';
 import { ColleaguesActions } from '@pma/store';
 import { useDispatch } from 'react-redux';
+import { RadioBtns } from './components';
+import { FilterModal } from '../Shared/components/FilterModal';
 
 const ViewFeedbackComp: FC = () => {
   const { css } = useStyle();
@@ -22,6 +23,24 @@ const ViewFeedbackComp: FC = () => {
     read: false,
   });
 
+  // filter
+  const [focus, setFocus] = useState(false);
+  const [searchValueFilterOption, setSearchValueFilterOption] = useState('');
+  const [filterModal, setFilterModal] = useState(false);
+  const [filterFeedbacks, setFilterFeedbacks] = useState({
+    AZ: false,
+    ZA: false,
+    newToOld: false,
+    oldToNew: false,
+  });
+  useEffect(() => {
+    if (!focus) setSearchValueFilterOption(() => '');
+    if (focus) {
+      setFilterFeedbacks(() => ({ AZ: false, ZA: false, newToOld: false, oldToNew: false }));
+      setFilterModal(() => false);
+    }
+  }, [focus]);
+
   const draftFeedback = (id) => {
     console.log('id', id);
   };
@@ -33,87 +52,54 @@ const ViewFeedbackComp: FC = () => {
     <>
       <div>
         <div className={css(SpaceBeetweenStyled)}>
-          <div className={css({ display: 'flex' })}>
-            <div className={css({ padding: '0px 10px', cursor: 'pointer' })}>
-              <label
-                htmlFor='unread'
-                className={css({
-                  display: 'flex',
-                  alignItems: 'center',
-                })}
-              >
-                <Radio
-                  type='radio'
-                  name='status'
-                  value='option1'
-                  checked={checkedRadio.unread}
-                  id='unread'
-                  onChange={() => {
-                    setCheckedRadio(() => {
-                      return {
-                        unread: true,
-                        read: false,
-                      };
-                    });
-                  }}
-                />
-                <span
-                  className={css({
-                    fontSize: '16px',
-                    lineHeight: '20px',
-                    padding: '0px 5px',
-                  })}
-                >
-                  <Trans>Unread</Trans>
-                </span>
-              </label>
-            </div>
-            <div className={css({ padding: '0px 10px', cursor: 'pointer' })}>
-              <label
-                className={css({
-                  display: 'flex',
-                  alignItems: 'center',
-                })}
-              >
-                <Radio
-                  type='radio'
-                  name='status'
-                  value='option2'
-                  checked={checkedRadio.read}
-                  onChange={() => {
-                    setCheckedRadio(() => {
-                      return {
-                        unread: false,
-                        read: true,
-                      };
-                    });
-                  }}
-                />
-                <span
-                  className={css({
-                    fontSize: '16px',
-                    lineHeight: '20px',
-                    padding: '0px 5px',
-                  })}
-                >
-                  <Trans>Read</Trans>
-                </span>
-              </label>
-            </div>
-          </div>
-          <div
-            className={css({
-              display: 'flex',
-              alignItems: 'center',
-            })}
-          >
+          <RadioBtns
+            checkedRadio={checkedRadio}
+            setCheckedRadio={setCheckedRadio}
+            focus={focus}
+            setFocus={setFocus}
+            setFilterModal={setFilterModal}
+            filterModal={filterModal}
+            setFilterFeedbacks={setFilterFeedbacks}
+          />
+          <div className={css(Flex_center_styled)}>
             <IconButton graphic='information' iconStyles={iconStyle} />
-            <FilterOption />
+            <FilterOption
+              focus={focus}
+              customIcon={true}
+              searchValue={searchValueFilterOption}
+              onFocus={() => setFocus(() => true)}
+              withIcon={false}
+              customStyles={{
+                ...(focus ? { padding: '10px 20px 10px 16px' } : { padding: '0px' }),
+                ...(focus ? { borderRadius: '50px' } : { transitionDelay: '.3s' }),
+              }}
+              onChange={(e) => setSearchValueFilterOption(() => e.target.value)}
+              onSettingsPress={() => {
+                setFilterModal((prev) => !prev);
+                setFocus(() => false);
+              }}
+            />
+            <FilterModal
+              filterModal={filterModal}
+              filterFeedbacks={filterFeedbacks}
+              setFilterFeedbacks={setFilterFeedbacks}
+              setFilterModal={setFilterModal}
+            />
           </div>
         </div>
         <div className={css(Reverse_Items_Styled)}>
           <div className={css(Drafts_style)}>
-            <DraftItem draftFeedback={draftFeedback} checkedRadio={checkedRadio} />
+            <DraftItem
+              draftFeedback={draftFeedback}
+              checkedRadio={checkedRadio}
+              searchValue={searchValueFilterOption}
+              focus={focus}
+              setFocus={setFocus}
+              filterModal={filterModal}
+              setFilterModal={setFilterModal}
+              setFilterFeedbacks={setFilterFeedbacks}
+              filterFeedbacks={filterFeedbacks}
+            />
           </div>
           <div className={css(Buttons_actions_style)}>
             <div className={css(Button_container_style)}>
@@ -142,16 +128,7 @@ const ViewFeedbackComp: FC = () => {
                   iconStyles={{ verticalAlign: 'middle', margin: '2px 10px 0px 0px' }}
                   backgroundRadius={10}
                 />
-                <span
-                  className={css({
-                    fontWeight: 'bold',
-                    fontSize: '18px',
-                    lineHeight: '22px',
-                    color: '#00539F',
-                  })}
-                >
-                  Download feedback
-                </span>
+                <span className={css(Size_style)}>Download feedback</span>
               </div>
               <p
                 className={css({
@@ -223,11 +200,30 @@ const ViewFeedbackComp: FC = () => {
   );
 };
 
-const SpaceBeetweenStyled: Rule = {
+const Size_style: Rule = {
+  fontWeight: 'bold',
+  fontSize: '18px',
+  lineHeight: '22px',
+  color: '#00539F',
+};
+
+const Flex_center_styled: Rule = {
   display: 'flex',
-  justifyContent: 'space-between',
   alignItems: 'center',
-  paddingTop: '24px',
+  position: 'relative',
+};
+
+const SpaceBeetweenStyled: Rule = () => {
+  const [, isBreakpoint] = useBreakpoints();
+  const medium = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
+  return {
+    display: 'flex',
+    flexWrap: medium ? 'wrap' : 'nowrap',
+    ...(medium && { flexBasis: '250px' }),
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingTop: '24px',
+  };
 };
 
 const Question_Styled: Rule = {

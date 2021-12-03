@@ -17,9 +17,7 @@ const FeedBack: FC = () => {
 
   return (
     <div className={css({ margin: '22px 42px 0px 40px' })} data-test-id={FEED_BACK_PAGE}>
-      {/* <div ref={myElementRef}>hello</div><button onClick={() => handleClick()}>Button</button> */}
       <Header title='Feedback' styles={titleStyle} customSize={true} />
-
       <FeedbackActions />
     </div>
   );

@@ -5,6 +5,7 @@ import { InputProps } from './type';
 import { useRefContainer } from 'components/Form/context/input';
 import { ColleaguesActions } from '@pma/store';
 import { useDispatch } from 'react-redux';
+import defaultImg from '../../../../public/default.png';
 
 const MultiplySearchInput: FC<InputProps> = ({
   domRef,
@@ -81,7 +82,7 @@ const MultiplySearchInput: FC<InputProps> = ({
               }}
             >
               <div className={css({ display: 'flex', justifyContent: 'flex-start', alignItems: 'center' })}>
-                <img className={css({ width: '50px', height: '50px', borderRadius: '50%' })} src='' />
+                <img className={css({ width: '50px', height: '50px', borderRadius: '50%' })} src={defaultImg} />
                 <div className={css({ marginLeft: '16px' })}>
                   <div className={css({ fontWeight: 'bold', fontSize: '16px', color: '#00539F' })}>
                     {item?.profile?.firstName}

@@ -1,7 +1,5 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import { useStyle, useBreakpoints, Rule, Modal } from '@dex-ddl/core';
-import { Radio } from 'components/Form';
-import { Trans } from 'components/Translation';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { createGiveFeedbackSchema } from './config';
 import * as Yup from 'yup';
@@ -11,9 +9,10 @@ import { Icon } from 'components/Icon';
 import { useForm } from 'react-hook-form';
 import { PeopleTypes, TypefeedbackItems } from './type';
 import { ModalGiveFeedback } from './Modals';
-import { DraftItem } from './components';
+import { DraftItem, RadioBtns } from './components';
 import { getFindedColleguesS, ColleaguesActions } from '@pma/store';
 import { useDispatch, useSelector } from 'react-redux';
+import { FilterModal } from '../Shared/components/FilterModal';
 
 const OuterGiveFeedBack: FC = () => {
   const findedColleagues = useSelector(getFindedColleguesS) || [];
@@ -26,14 +25,28 @@ const OuterGiveFeedBack: FC = () => {
   const [infoModal, setInfoModal] = useState<boolean>(false);
   const [modalSuccess, setModalSuccess] = useState<boolean>(false);
   const [feedbackItemsS, setFeedbackItems] = useState<TypefeedbackItems[] | []>([]);
-
   const [checkedRadio, setCheckedRadio] = useState({
     draft: true,
     submitted: false,
   });
-  const [, isBreakpoint] = useBreakpoints();
-  const medium = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
-  const small = isBreakpoint.small || isBreakpoint.xSmall;
+
+  // filter
+  const [focus, setFocus] = useState(false);
+  const [searchValueFilterOption, setSearchValueFilterOption] = useState('');
+  const [filterModal, setFilterModal] = useState(false);
+  const [filterFeedbacks, setFilterFeedbacks] = useState({
+    AZ: false,
+    ZA: false,
+    newToOld: false,
+    oldToNew: false,
+  });
+  useEffect(() => {
+    if (!focus) setSearchValueFilterOption(() => '');
+    if (focus) {
+      setFilterFeedbacks(() => ({ AZ: false, ZA: false, newToOld: false, oldToNew: false }));
+      setFilterModal(() => false);
+    }
+  }, [focus]);
 
   const methods = useForm({
     mode: 'onChange',
@@ -66,108 +79,54 @@ const OuterGiveFeedBack: FC = () => {
     <>
       <div>
         <div className={css(header_styled)}>
-          <IconButton
-            customVariantRules={{ default: iconBtnStyle }}
-            onPress={handleBtnClick}
-            graphic='add'
-            iconProps={{ invertColors: true }}
-            iconStyles={iconStyle}
-          >
-            <Trans i18nKey='give_new_feedback'>Give new feedback</Trans>
-          </IconButton>
-
-          <div
-            className={css({
-              display: 'flex',
-              order: medium ? 1 : 0,
-              gap: '10px',
-              ...(medium && { flexBasis: '816px', marginTop: '24px' }),
-            })}
-          >
-            <div className={css({ padding: '0px 10px 0px 0px', cursor: 'pointer' })}>
-              <label
-                htmlFor='draft'
-                className={css({
-                  display: 'flex',
-                  alignItems: 'center',
-                  cursor: 'pointer',
-                })}
-              >
-                <Radio
-                  type='radio'
-                  name='status'
-                  value='option1'
-                  checked={checkedRadio.draft}
-                  id='draft'
-                  onChange={() => {
-                    setCheckedRadio(() => {
-                      return {
-                        draft: true,
-                        submitted: false,
-                      };
-                    });
-                  }}
-                />
-                <span
-                  className={css({
-                    fontSize: '16px',
-                    lineHeight: '20px',
-                    padding: '0px 5px',
-                  })}
-                >
-                  <Trans i18nKey='drafts'>Drafts</Trans>
-                </span>
-              </label>
-            </div>
-            <div className={css({ padding: '0px 10px', cursor: 'pointer' })}>
-              <label
-                htmlFor='submitted'
-                className={css({
-                  display: 'flex',
-                  alignItems: 'center',
-                  cursor: 'pointer',
-                })}
-              >
-                <Radio
-                  type='radio'
-                  name='status'
-                  value='option2'
-                  checked={checkedRadio.submitted}
-                  id='submitted'
-                  onChange={() => {
-                    setCheckedRadio(() => {
-                      return {
-                        draft: false,
-                        submitted: true,
-                      };
-                    });
-                  }}
-                />
-                <span
-                  className={css({
-                    fontSize: '16px',
-                    lineHeight: '20px',
-                    padding: '0px 5px',
-                  })}
-                >
-                  <Trans i18nKey='submitted'>Submitted</Trans>
-                </span>
-              </label>
-            </div>
-          </div>
-          <div
-            className={css({
-              display: 'flex',
-              alignItems: 'center',
-              ...(small && { flexBasis: '300px', marginTop: '24px' }),
-            })}
-          >
+          <RadioBtns
+            checkedRadio={checkedRadio}
+            setCheckedRadio={setCheckedRadio}
+            handleBtnClick={handleBtnClick}
+            focus={focus}
+            setFocus={setFocus}
+            setFilterModal={setFilterModal}
+            filterModal={filterModal}
+            setFilterFeedbacks={setFilterFeedbacks}
+          />
+          <div className={css(Filter_Icon_styled)}>
             <IconButton graphic='information' iconStyles={iconStyle} />
-            <FilterOption />
+            <FilterOption
+              focus={focus}
+              customIcon={true}
+              searchValue={searchValueFilterOption}
+              onFocus={() => setFocus(() => true)}
+              withIcon={false}
+              customStyles={{
+                ...(focus ? { padding: '10px 20px 10px 16px' } : { padding: '0px' }),
+                ...(focus ? { borderRadius: '50px' } : { transitionDelay: '.3s' }),
+              }}
+              onChange={(e) => setSearchValueFilterOption(() => e.target.value)}
+              onSettingsPress={() => {
+                setFilterModal((prev) => !prev);
+                setFocus(() => false);
+              }}
+            />
+            <FilterModal
+              filterModal={filterModal}
+              filterFeedbacks={filterFeedbacks}
+              setFilterFeedbacks={setFilterFeedbacks}
+              setFilterModal={setFilterModal}
+            />
           </div>
         </div>
         <div className={css(Drafts_style)}>
-          <DraftItem draftFeedback={draftFeedback} checkedRadio={checkedRadio} />
+          <DraftItem
+            draftFeedback={draftFeedback}
+            checkedRadio={checkedRadio}
+            searchValue={searchValueFilterOption}
+            focus={focus}
+            setFocus={setFocus}
+            filterModal={filterModal}
+            setFilterModal={setFilterModal}
+            setFilterFeedbacks={setFilterFeedbacks}
+            filterFeedbacks={filterFeedbacks}
+          />
         </div>
       </div>
       {isOpenMainModal && (
@@ -224,7 +183,16 @@ const OuterGiveFeedBack: FC = () => {
     </>
   );
 };
-
+const Filter_Icon_styled: Rule = () => {
+  const [, isBreakpoint] = useBreakpoints();
+  const small = isBreakpoint.small || isBreakpoint.xSmall;
+  return {
+    display: 'flex',
+    alignItems: 'center',
+    ...(small && { flexBasis: '300px', marginTop: '24px' }),
+    position: 'relative',
+  };
+};
 const header_styled: Rule = () => {
   const [, isBreakpoint] = useBreakpoints();
   const medium = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
@@ -237,19 +205,6 @@ const header_styled: Rule = () => {
     paddingTop: '24px',
   };
 };
-
-const iconBtnStyle: Rule = ({ theme }) => ({
-  padding: '12px 20px 12px 22px',
-  display: 'flex',
-  height: '40px',
-  borderRadius: '20px',
-  justifyContent: 'center',
-  alignItems: 'center',
-  outline: 0,
-  background: theme.colors.tescoBlue,
-  color: theme.colors.white,
-  cursor: 'pointer',
-});
 
 const iconStyle: Rule = {
   marginRight: '10px',

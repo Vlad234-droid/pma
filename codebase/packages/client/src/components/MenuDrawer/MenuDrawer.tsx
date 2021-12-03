@@ -25,8 +25,8 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
             <MenuItem iconGraphic={'document'} linkTo={Page.OBJECTIVES_VIEW} title={'My business objectives'} />
             <MenuItem iconGraphic={'add'} title={'Development plan'} />
             <MenuItem iconGraphic={'account'} linkTo={Page.PROFILE} title={'My Profile'} />
-            <MenuItem iconGraphic={'chatSq'} title={'Feedback'} />
-            <MenuItem iconGraphic={'edit'} title={'My Notes'} />
+            <MenuItem iconGraphic={'chatSq'} linkTo={Page.FEEDBACK} title={'Feedback'} />
+            <MenuItem iconGraphic={'edit'} linkTo='notes' title={'My Notes'} />
           </div>
         </div>
         <div className={css(menuDrawerSettingsStyle)}>
