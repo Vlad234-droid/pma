@@ -2,8 +2,6 @@ import React, { FC, HTMLProps, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
-import { useHistory } from 'react-router-dom';
-import { Page } from 'pages';
 import useDispatch from 'hooks/useDispatch';
 import { useSelector } from 'react-redux';
 import { schemaMetaSelector } from '@pma/store/src/selectors/schema';
@@ -30,7 +28,6 @@ type Props = HTMLProps<HTMLInputElement> & CreateUpdateObjectivesModalProps;
 
 export const CreateUpdateObjectives: FC<Props> = ({ onClose, editNumber = null }) => {
   const dispatch = useDispatch();
-  const history = useHistory();
   const { loaded: schemaLoaded } = useSelector(schemaMetaSelector);
   const { loaded: reviewLoaded } = useSelector(reviewsMetaSelector);
   const { info } = useSelector(currentUserSelector);
@@ -44,7 +41,7 @@ export const CreateUpdateObjectives: FC<Props> = ({ onClose, editNumber = null }
   const [currentObjectiveNumber, setObjectiveNumber] = useState(editNumber ? editNumber : 1);
 
   const { components = [], markup = { max: 0, min: 0 } } = schema;
-  const markupMin = markup.min > origin.length ? markup.min : origin.length;
+  const markupMin = markup.min;
   const titles = [...Array(markupMin).keys()].map((key) => `Objective ${key + 1}`);
   const formElements = components.filter((component) => component.type != 'text');
   const formElementsFilledEmpty = formElements.reduce((acc, current) => {
@@ -101,7 +98,6 @@ export const CreateUpdateObjectives: FC<Props> = ({ onClose, editNumber = null }
     });
     dispatch(ReviewsActions.updateReviews({ pathParams, data: updatedObjectives }));
     onClose();
-    history.push(Page.OBJECTIVES_VIEW);
   };
   const setNextObjectiveNumber = async (data) => {
     if (!origin[currentObjectiveNumber - 1]) {

@@ -18,6 +18,7 @@ const Textarea: FC<TextareaProps> = ({ domRef, placeholder = '', rows = 3, name,
       onChange={onChange}
       className={css({
         width: '100%',
+        minHeight: '40px',
         border: `1px solid ${isValid ? colors.backgroundDarkest : colors.error}`,
         borderRadius: '5px',
         fontSize: '16px',
@@ -27,6 +28,7 @@ const Textarea: FC<TextareaProps> = ({ domRef, placeholder = '', rows = 3, name,
           outline: 'none !important',
           border: `1px solid ${isValid ? colors.tescoBlue : colors.error}`,
         },
+        resize: 'vertical',
       })}
       placeholder={placeholder}
       rows={rows}

@@ -2,7 +2,7 @@ import React, { useState, FC } from 'react';
 import { Button, fontWeight, useStyle } from '@dex-ddl/core';
 import { Icon } from 'components/Icon';
 import { Trans } from 'components/Translation';
-import ConfirmDeclineModal from './Modal/ConfirmDeclineModal';
+import ConfirmModal from './Modal/ConfirmModal';
 
 type ActionButtonsProps = {
   approveColleagues: (T) => void;
@@ -10,7 +10,8 @@ type ActionButtonsProps = {
 };
 export const ActionButtons: FC<ActionButtonsProps> = ({ approveColleagues, declineColleagues }) => {
   const { css, theme } = useStyle();
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpenDeclinePopup, setIsOpenDeclinePopup] = useState(false);
+  const [isOpenApprovePopup, setIsOpenApprovePopup] = useState(false);
 
   return (
     <div
@@ -46,7 +47,7 @@ export const ActionButtons: FC<ActionButtonsProps> = ({ approveColleagues, decli
                 margin: '0px 4px',
               },
             ]}
-            onPress={() => setIsOpen(true)}
+            onPress={() => setIsOpenDeclinePopup(true)}
           >
             <Icon graphic='decline' iconStyles={{ paddingRight: '8px' }} />
             <Trans i18nKey='decline'>Decline</Trans>
@@ -63,18 +64,29 @@ export const ActionButtons: FC<ActionButtonsProps> = ({ approveColleagues, decli
                 margin: '0px 4px 1px 4px',
               },
             ]}
-            onPress={() => approveColleagues({ reason: '' })}
+            onPress={() => setIsOpenApprovePopup(true)}
           >
             <Icon graphic='check' invertColors={true} iconStyles={{ paddingRight: '8px' }} />
             <Trans i18nKey='approve'>Approve</Trans>
           </Button>
         </div>
-        {isOpen && (
-          <ConfirmDeclineModal
+        {isOpenDeclinePopup && (
+          <ConfirmModal
             title={'Please provide decline reason'}
+            hasReason={true}
             onSave={declineColleagues}
-            onClose={() => setIsOpen(false)}
-            onOverlayClick={() => setIsOpen(false)}
+            onClose={() => setIsOpenDeclinePopup(false)}
+            onOverlayClick={() => setIsOpenDeclinePopup(false)}
+          />
+        )}
+        {isOpenApprovePopup && (
+          <ConfirmModal
+            title={'Submit objectives or reviews'}
+            description={'Are you sure you want to submit objectives or reviews to your manager?'}
+            hasReason={false}
+            onSave={approveColleagues}
+            onClose={() => setIsOpenApprovePopup(false)}
+            onOverlayClick={() => setIsOpenApprovePopup(false)}
           />
         )}
       </div>

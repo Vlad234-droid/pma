@@ -25,7 +25,7 @@ const StatusBadge: FC<StatusBadgeProps> = ({ status, styles }) => {
       case isApproved:
         return ['roundTick', t('approved', 'Approved'), colors.green];
       case isPending:
-        return ['roundClock', t('pending', 'Pending'), colors.pending];
+        return ['roundClock', t('waiting_for_approval', 'Waiting for approval'), colors.pending];
       case isDeclined:
         return ['roundAlert', t('decline', 'Decline'), colors.base];
       case isDraft:

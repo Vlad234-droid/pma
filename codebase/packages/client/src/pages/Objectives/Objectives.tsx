@@ -215,7 +215,7 @@ const Objectives: FC = () => {
               left={{
                 content: (
                   <div className={css(tileStyles)}>
-                    <Trans i18nKey='business_objectives'>Business Objectives</Trans>
+                    <Trans i18nKey='my_objectives'>My objectives</Trans>
                     {isAllObjectivesInSameStatus && <StatusBadge status={status} styles={{ marginLeft: '10px' }} />}
                   </div>
                 ),
@@ -238,14 +238,6 @@ const Objectives: FC = () => {
                       iconStyles={iconStyles}
                     >
                       <Trans i18nKey='share'>Share</Trans>
-                    </IconButton>
-                    <IconButton
-                      onPress={() => alert('print')}
-                      graphic='print'
-                      customVariantRules={{ default: iconButtonStyles }}
-                      iconStyles={iconStyles}
-                    >
-                      <Trans i18nKey='print'>Print</Trans>
                     </IconButton>
                   </div>
                 ),
