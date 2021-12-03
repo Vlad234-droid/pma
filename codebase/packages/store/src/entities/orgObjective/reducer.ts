@@ -12,6 +12,7 @@ export const initialState = {
   origin: [],
   meta: { loading: false, loaded: false, error: null, status: null },
   objectives: [],
+  auditLogs: [],
 };
 
 export default createReducer(initialState)

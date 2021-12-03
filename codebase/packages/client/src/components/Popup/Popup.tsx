@@ -100,6 +100,7 @@ const popup: Rule = {
   alignItems: 'center',
   flexDirection: 'column',
   marginBottom: '50px',
+  padding: '0 20px',
 };
 
 export default Popup;

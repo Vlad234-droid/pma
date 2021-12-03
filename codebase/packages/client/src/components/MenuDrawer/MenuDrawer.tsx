@@ -23,6 +23,7 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
           <div className={css(menuDrawerButtonsStyle)}>
             <MenuItem iconGraphic={'calender'} linkTo={Page.CAREER_PERFORMANCE} title={'Performance overview'} />
             <MenuItem iconGraphic={'document'} linkTo={Page.OBJECTIVES_VIEW} title={'My business objectives'} />
+            <MenuItem iconGraphic={'document'} linkTo={Page.CREATE_ORGANIZATION_OBJECTIVES} title={'Organization objectives'} />
             <MenuItem iconGraphic={'add'} title={'Development plan'} />
             <MenuItem iconGraphic={'account'} linkTo={Page.PROFILE} title={'My Profile'} />
             <MenuItem iconGraphic={'chatSq'} linkTo={Page.FEEDBACK} title={'Feedback'} />

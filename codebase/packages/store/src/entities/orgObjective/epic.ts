@@ -29,7 +29,7 @@ export const getOrgAuditLogsEpic: Epic = (action$, _, { api }) =>
       from(api.getOrgAuditLogs(payload)).pipe(
         // @ts-ignore
         map(({ success, data }) => {
-          return getOrgAuditLogs.success({ origin: data });
+          return getOrgAuditLogs.success({ auditLogs: data });
         }),
         catchError(({ errors }) => of(getOrgAuditLogs.failure(errors))),
         takeUntil(action$.pipe(filter(isActionOf(getOrgAuditLogs.cancel)))),
