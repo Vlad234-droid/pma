@@ -4,6 +4,7 @@ import userReducer from '../entities/user/reducer';
 import toastReducer from '../entities/toast/reducer';
 import testReducer from '../entities/test/reducer';
 import objectiveReducer from '../entities/objective/reducer';
+import orgObjectiveReducer from '../entities/orgObjective/reducer';
 import schemaReducer from '../entities/schema/reducer';
 import timelineReducer from '../entities/timeline/reducer';
 import managersReducer from '../entities/managers/reducer';
@@ -16,6 +17,7 @@ export const rootReducer = combineReducers({
   toasts: toastReducer,
   test: testReducer,
   objectives: objectiveReducer,
+  orgObjectives: orgObjectiveReducer,
   schema: schemaReducer,
   timeline: timelineReducer,
   managers: managersReducer,

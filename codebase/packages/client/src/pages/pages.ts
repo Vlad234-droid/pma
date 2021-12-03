@@ -1,6 +1,7 @@
 import { Page, PageElement } from './types';
 
 import CareerPerformance from './CareerPerformance';
+import PersonalDevelopmentPlan from './PersonalDevelopmentPlan';
 import MyTeam from './MyTeam';
 import Actions from './Actions';
 import Objectives from './Objectives';
@@ -11,6 +12,8 @@ import RequestFeedback from './RequestFeedback';
 import RespondFeedback from './RespondFeedback';
 import ViewFeedback from './ViewFeedback';
 import Settings from './Settings';
+import CreateOrganizationObjectives from './CreateOrganizationObjectives';
+import ObjectivesView from './ObjectivesView/ObjectivesView';
 
 const pages: Record<Page, PageElement> = {
   [Page.MY_TEAM]: MyTeam,
@@ -18,6 +21,9 @@ const pages: Record<Page, PageElement> = {
   [Page.CREATE_PERFORMANCE_CYCLE]: () => null,
   [Page.PERFORMANCE_CYCLE]: () => null,
   [Page.CAREER_PERFORMANCE]: CareerPerformance,
+  [Page.CREATE_ORGANIZATION_OBJECTIVES]: CreateOrganizationObjectives,
+  [Page.VIEW_ORGANIZATION_OBJECTIVES]: ObjectivesView,
+  [Page.PERSONAL_DEVELOPMENT_PLAN]: PersonalDevelopmentPlan,
   [Page.OBJECTIVES_VIEW]: Objectives,
   [Page.PROFILE]: Profile,
   [Page.SETTINGS]: Settings,

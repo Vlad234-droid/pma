@@ -35,8 +35,10 @@ import {
   TimelineActions,
   timelineTypesAvailabilitySelector,
 } from '@pma/store';
-import useReviews from '../../features/Objectives/hooks/useReviews';
-import useReviewSchema from '../../features/Objectives/hooks/useReviewSchema';
+import OrganizationWidget from 'features/Objectives/components/OrganizationWidget/OrganizationWidget';
+import { useHistory } from 'react-router-dom';
+import useReviewSchema from 'features/Objectives/hooks/useReviewSchema';
+import useReviews from 'features/Objectives/hooks/useReviews';
 
 const reviews = [
   {
@@ -66,6 +68,7 @@ export const TEST_ID = 'objectives-pave';
 const Objectives: FC = () => {
   const mappedObjectives: any = [];
   const { css, theme } = useStyle();
+  const history = useHistory();
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const { info } = useSelector(currentUserSelector);
@@ -82,9 +85,9 @@ const Objectives: FC = () => {
   const { components = [], markup = { max: 0, min: 0 } } = schema;
   const { descriptions, startDates, statuses } = useSelector(getTimelineSelector) || {};
   const timelineTypes = useSelector(timelineTypesAvailabilitySelector);
-  const canShowObjectives = timelineTypes[ReviewType.OBJECTIVE];
-  const canShowMyReview = timelineTypes[ReviewType.MYR] && timelineTypes[ReviewType.EYR];
-  const canShowAnnualReview = !timelineTypes[ReviewType.MYR] && timelineTypes[ReviewType.EYR];
+  const canShowObjectives = true || timelineTypes[ObjectiveType.OBJECTIVE];
+  const canShowMyReview = timelineTypes[ObjectiveType.MYR] && timelineTypes[ObjectiveType.EYR];
+  const canShowAnnualReview = !timelineTypes[ObjectiveType.MYR] && timelineTypes[ObjectiveType.EYR];
 
   const formElements = components.filter((component) => component.type != 'text');
 
@@ -198,6 +201,11 @@ const Objectives: FC = () => {
         <ShareWidget
           customStyle={{ flex: '1 1 30%', display: 'flex', flexDirection: 'column' }}
           onClick={() => alert('share')}
+        />
+
+        <OrganizationWidget
+          customStyle={{ flex: '1 1 30%', display: 'flex', flexDirection: 'column' }}
+          onClick={() => history.push('/view-organization-objectives')}
         />
       </div>
       <div className={css(bodyWrapperStyles)} data-test-id={TEST_ID}>
