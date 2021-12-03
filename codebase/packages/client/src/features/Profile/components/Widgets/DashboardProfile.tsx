@@ -83,7 +83,7 @@ const DashboardProfile: FC<Props> = () => {
   const { css } = useStyle();
   return (
     <AuthConsumer>
-      {({ user }) => {
+      {({ user = {} }) => {
         // @ts-ignore
         const { fullName, job, department, manager } = user;
         return (

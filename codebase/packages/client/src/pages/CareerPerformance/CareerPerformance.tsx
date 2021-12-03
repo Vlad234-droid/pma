@@ -14,6 +14,7 @@ import {
   getTimelineByCodeSelector,
   getTimelineMetaSelector,
   getTimelineSelector,
+  isManager,
   TimelineActions,
   timelineTypesAvailabilitySelector,
 } from '@pma/store';
@@ -22,6 +23,7 @@ import Check from '../../../public/Check.jpg';
 import Feedback from '../../../public/Feedback.jpg';
 import Learning from '../../../public/Learning.jpg';
 import Contribution from '../../../public/Contribution.jpg';
+import { createMemoryHistory } from 'history';
 
 const CareerPerformance: FC = () => {
   const { css } = useStyle();
@@ -32,6 +34,8 @@ const CareerPerformance: FC = () => {
   const midYearReview = useSelector(getTimelineByCodeSelector(ObjectiveType.MYR));
   const endYearReview = useSelector(getTimelineByCodeSelector(ObjectiveType.EYR));
   const colleagueUuid = useSelector(colleagueUUIDSelector);
+  const isRoleManager = useSelector(isManager);
+  const history = createMemoryHistory();
   const canShowMyReview = timelineTypes[ReviewType.MYR] && timelineTypes[ReviewType.EYR];
   const canShowAnnualReview = !timelineTypes[ReviewType.MYR] && timelineTypes[ReviewType.EYR];
 
@@ -46,12 +50,14 @@ const CareerPerformance: FC = () => {
         <Header title='Your contribution' />
         <div className={css({ display: 'flex', justifyContent: 'space-between' })}>
           <div />
-          <RouterSwitch
-            links={[
-              { link: 'career-performance', name: 'My profile' },
-              { link: 'my-team', name: 'My Team' },
-            ]}
-          />
+          {isRoleManager && (
+            <RouterSwitch
+              links={[
+                { link: 'career-performance', name: 'My profile' },
+                { link: 'my-team', name: 'My Team' },
+              ]}
+            />
+          )}
           <div />
         </div>
         <div className={css(wrapperStyle)}>
@@ -75,6 +81,7 @@ const CareerPerformance: FC = () => {
                 imgCustomStyle={{ width: '30px', margin: '10px auto 0px auto' }}
                 customStyle={{ background: '#fad919', textAlign: 'center', height: '100%' }}
                 icon={true}
+                link={'https://www.ourtesco.com/colleague/help'}
               />
             </div>
             <div data-test-id='more' className={css({ height: '100%' })}>

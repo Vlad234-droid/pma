@@ -65,8 +65,8 @@ export const Actions = () => {
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const dispatch = useDispatch();
   useEffect(() => {
-    if (!loaded) dispatch(ManagersActions.getManagers({ colleagueUuid }));
-    if (!schemaLoaded) dispatch(SchemaActions.getSchema({ colleagueUuid }));
+    if (!loaded && colleagueUuid) dispatch(ManagersActions.getManagers({ colleagueUuid }));
+    if (!schemaLoaded && colleagueUuid) dispatch(SchemaActions.getSchema({ colleagueUuid }));
   }, [loaded, schemaLoaded, colleagueUuid]);
 
   const [indeterminate, setIndeterminate]: [boolean, (T) => void] = useState(false);

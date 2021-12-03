@@ -17,6 +17,11 @@ export const colleagueUUIDSelector = createSelector(usersSelector, ({ current })
   return current?.info?.data?.colleague?.colleagueUUID;
 });
 
+export const isManager = createSelector(usersSelector, ({ current }) => {
+  // @ts-ignore
+  return current?.info?.data?.roles?.some((role) => role.toLowerCase().includes('manager'));
+});
+
 export const currentUserSelector = createSelector(usersSelector, ({ current }) => {
   // @ts-ignore
   const info = current?.info?.data?.colleague;
