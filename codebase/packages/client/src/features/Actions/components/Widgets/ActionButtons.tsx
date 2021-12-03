@@ -82,7 +82,7 @@ export const ActionButtons: FC<ActionButtonsProps> = ({ approveColleagues, decli
         {isOpenApprovePopup && (
           <ConfirmModal
             title={'Submit objectives or reviews'}
-            description={'Are you sure you want to submit objectives or reviews to your manager?'}
+            description={'Are you sure you want to approve objectives or reviews?'}
             hasReason={false}
             onSave={approveColleagues}
             onClose={() => setIsOpenApprovePopup(false)}
