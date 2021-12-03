@@ -26,14 +26,15 @@ const HistoryTable = ({ headers, items, isVisible }) => {
           );
         })}
       </div>
+
       {items.map((el) => {
         return (
           <div key={el.updatedTime} className={`${css(row)} ${css(separator)}`}>
             <div className={`${css(col)} ${css(colBody)}`}>
-              {el.updatedBy.firstName} {el.updatedBy.lastName}
+              {el?.updatedBy.firstName} {el.updatedBy.lastName}
             </div>
-            <div className={`${css(col)} ${css(colBody)}`}>{el.action}</div>
-            <div className={`${css(col)} ${css(colBody)}`}>{modifyTime(el.updatedTime)}</div>
+            <div className={`${css(col)} ${css(colBody)}`}>{el?.action}</div>
+            <div className={`${css(col)} ${css(colBody)}`}>{modifyTime(el?.updatedTime)}</div>
           </div>
         );
       })}

@@ -17,7 +17,7 @@ const layoutRule: Rule = () => {
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
   return {
-    ...(!mobileScreen ? {} : { padding: '0 15px 0 0' }),
+    ...(!mobileScreen ? {} : {}),
     display: 'flex',
     flex: 1,
     flexDirection: 'column',

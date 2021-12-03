@@ -8,7 +8,7 @@ import { Input, Item } from 'components/Form';
 import { useForm } from 'react-hook-form';
 import HistoryTable from 'components/HistoryTable/HistoryTable';
 import useDispatch from 'hooks/useDispatch';
-import { OrgObjectiveActions } from '@pma/store';
+import { OrgObjectiveActions, orgObjectivesSelector } from '@pma/store';
 import { auditLogsSelector } from '@pma/store/src/selectors/audit-log';
 import { useSelector } from 'react-redux';
 
@@ -142,9 +142,17 @@ const CreateOrganizationObjectives: FC<Props> = ({ onClose, editNumber = null })
     dispatch(OrgObjectiveActions.getOrgAuditLogs({ start: 1, limit: 3 }));
   }, []);
 
+  const orgObjectives = useSelector(orgObjectivesSelector) || [];
+
+  useEffect(() => {
+    dispatch(OrgObjectiveActions.getOrgObjectives({}));
+  }, []);
+
+  console.log('orgObjectives: ', orgObjectives);
+
   return (
     <div className={css(main)}>
-      <LeftsideMenu />
+      {/* <LeftsideMenu /> */}
       <div className={css(page)}>
         <Header title='Create Organization Objectives' />
 
@@ -167,7 +175,7 @@ const CreateOrganizationObjectives: FC<Props> = ({ onClose, editNumber = null })
                   Element={Input}
                   onChange={(event) => onChangeInput(event, idx)}
                   placeholder={item.placeholder}
-                  value={item.value}
+                  value={orgObjectives[idx]?.title}
                 />
               );
             })}
@@ -330,7 +338,7 @@ const main = {
 
 const page = {
   width: '100%',
-  marginLeft: '100px',
+  marginLeft: '15px',
   '@media(max-width: 600px)': {
     marginLeft: '0',
     paddingLeft: '15px',
