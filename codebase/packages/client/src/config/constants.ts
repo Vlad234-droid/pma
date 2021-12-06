@@ -6,7 +6,7 @@ export const INTEGRATION_MODE = process.env.REACT_APP_INTEGRATION_MODE ?? 'integ
 export const LOGOUT_URL = process.env.REACT_APP_LOGOUT_URL ?? '/sso/logout';
 
 export const LINKS = {
-  signOut: LOGOUT_URL,
+  signOut: PUBLIC_URL === '/' ? LOGOUT_URL : `${PUBLIC_URL}${LOGOUT_URL}`,
 };
 
 export enum ViewportSize {

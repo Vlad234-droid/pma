@@ -58,6 +58,9 @@ export class ConfigAccessor {
   private constructor(processEnv: NodeJS.ProcessEnv) {
     const port = isNaN(Number(processEnv.NODE_PORT)) ? defaultConfig.port : Number(processEnv.NODE_PORT);
     const coreMountPath = processEnv.INTEGRATION_CORE_MOUNT_PATH;
+    const oneLoginApplicationPath = processEnv.APPLICATION_PUBLIC_URL === '/' ? '' : processEnv.APPLICATION_PUBLIC_URL;
+    const oneLoginRedirectAfterLogoutUrl =
+      processEnv.ONELOGIN_REDIRECT_AFTER_LOGOUT_URL || defaultConfig.oidcRedirectAfterLogoutPath;
     this.config = {
       // general
       buildEnvironment: () => processEnv.BUILD_ENV,
@@ -97,16 +100,10 @@ export class ConfigAccessor {
       useOneLogin: () => yn(processEnv.USE_ONELOGIN, { default: false }),
       // onelogin
       oneLoginIssuerUrl: () => processEnv.ONELOGIN_ISSUER_URL,
-      oneLoginApplicationPath: () =>
-        processEnv.APPLICATION_PUBLIC_URL === '/' ? '' : processEnv.APPLICATION_PUBLIC_URL,
+      oneLoginApplicationPath: () => oneLoginApplicationPath,
       oneLoginCallbackUrlRoot: () => processEnv.APPLICATION_URL_ROOT,
       oneLoginCallbackPath: () => processEnv.ONELOGIN_CALLBACK_PATH,
-      oneLoginRedirectAfterLogoutUrl: () =>
-        processEnv.ONELOGIN_REDIRECT_AFTER_LOGOUT_URL
-          ? processEnv.ONELOGIN_REDIRECT_AFTER_LOGOUT_URL
-          : processEnv.APPLICATION_PUBLIC_URL === '/'
-          ? processEnv.APPLICATION_URL_ROOT
-          : `${processEnv.APPLICATION_URL_ROOT}${processEnv.APPLICATION_PUBLIC_URL}`,
+      oneLoginRedirectAfterLogoutUrl: () => `${oneLoginApplicationPath}${oneLoginRedirectAfterLogoutUrl}`,
       oidcClientId: () => processEnv.OIDC_CLIENT_ID,
       oidcClientSecret: () => processEnv.OIDC_CLIENT_SECRET,
       oidcRefreshTokenSecret: () => processEnv.OIDC_REFRESH_TOKEN_SECRET,
