@@ -68,7 +68,6 @@ const annualReviews = [
 export const TEST_ID = 'objectives-pave';
 
 const Objectives: FC = () => {
-  const mappedObjectives: any = [];
   const { css, theme } = useStyle();
   const history = useHistory();
   const { t } = useTranslation();

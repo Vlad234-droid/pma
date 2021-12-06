@@ -3,13 +3,12 @@ import { Button, Rule, useBreakpoints, useStyle, Modal } from '@dex-ddl/core';
 import { Trans } from 'components/Translation';
 import { FilterOption } from 'features/Shared';
 import { IconButton } from 'components/IconButton';
-import { DraftItem } from './components';
+import { DraftItem, RadioBtns } from './components';
 import { Notification } from 'components/Notification';
 import { Icon } from 'components/Icon';
 import { ModalDownloadFeedback } from './components/ModalParts';
 import { ColleaguesActions } from '@pma/store';
 import { useDispatch } from 'react-redux';
-import { RadioBtns } from './components';
 import { FilterModal } from '../Shared/components/FilterModal';
 
 const ViewFeedbackComp: FC = () => {

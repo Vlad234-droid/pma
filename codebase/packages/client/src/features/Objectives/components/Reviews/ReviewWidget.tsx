@@ -1,14 +1,12 @@
 import React, { FC } from 'react';
 import { useTranslation } from 'components/Translation';
-import { Status, ReviewType, ObjectiveType } from 'config/enum';
+import { Status, ReviewType } from 'config/enum';
 import { useStyle, Rule, CreateRule, Colors, colors } from '@dex-ddl/core';
 
 import { ReviewFormModal } from '../Modal';
 import { TileWrapper } from 'components/Tile';
 import { Icon, Graphics } from 'components/Icon';
 import { TriggerModalButton, ConsumerTriggerButton } from 'features/Modal';
-import { useSelector } from 'react-redux';
-import { getTimelineByCodeSelector } from '@pma/store';
 
 export type Props = {
   onClick: () => void;
@@ -23,7 +21,7 @@ export type Props = {
 
 export const TEST_ID = 'review-widget';
 
-const getContent = ({ status, startDate = '', endDate = '' }): [Graphics, Colors, Colors, boolean, string, string] => {
+const getContent = ({ status, startDate = '' }): [Graphics, Colors, Colors, boolean, string, string] => {
   const { t } = useTranslation();
   if (!status) {
     return ['calender', 'tescoBlue', 'white', false, `The form will be available in ${startDate}`, ''];
@@ -56,8 +54,6 @@ const getContent = ({ status, startDate = '', endDate = '' }): [Graphics, Colors
 
 const ReviewWidget: FC<Props> = ({ customStyle, onClick, reviewType, status, startDate, description, title }) => {
   const { css } = useStyle();
-  // const review =  useSelector(getTimelineByCodeSelector(reviewType))
-
   const [graphic, iconColor, background, shadow, content, buttonContent] = getContent({
     status,
     startDate,

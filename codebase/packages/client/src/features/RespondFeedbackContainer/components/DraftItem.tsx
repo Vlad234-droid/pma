@@ -5,13 +5,16 @@ import { Accordion, BaseAccordion, Section, Panel, ExpandButton } from 'componen
 import { IconButton, Position } from 'components/IconButton';
 import { Trans } from 'components/Translation';
 import { useDispatch, useSelector } from 'react-redux';
-import { FeedbackActions, ObjectiveActions, getReviewByUuidS, getPropperNotesByStatusSelector } from '@pma/store';
-import { getPropperTime } from '../../../utils';
-import { FeedbackStatus } from '../../../config/enum';
-import { filteredByInputSearchHandler, filteredNotesByRadiosBtnsHandler } from '../../../utils';
+import {
+  FeedbackActions,
+  ObjectiveActions,
+  getReviewByUuidS,
+  getPropperNotesByStatusSelector,
+  colleagueUUIDSelector,
+} from '@pma/store';
+import { filteredByInputSearchHandler, filteredNotesByRadiosBtnsHandler, getPropperTime } from '../../../utils';
 import defaultImg from '../../../../public/default.png';
-import { colleagueUUIDSelector } from '@pma/store';
-import { TargetTypeReverse } from '../../../config/enum';
+import { TargetTypeReverse, FeedbackStatus } from 'config/enum';
 
 export const TEST_ID = 'test_id';
 

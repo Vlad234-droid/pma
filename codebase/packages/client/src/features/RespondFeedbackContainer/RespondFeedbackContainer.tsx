@@ -6,8 +6,7 @@ import { IconButton } from 'components/IconButton';
 import { Icon } from 'components/Icon';
 import { PeopleTypes, TypefeedbackItems } from './type';
 import { ModalRespondFeedback } from './ModalsParts';
-import { DraftItem } from './components';
-import { RadioBtns } from './components';
+import { DraftItem, RadioBtns } from './components';
 import { FilterModal } from '../Shared/components/FilterModal';
 
 export const RESPOND_FEEDBACK_CONTAINER = 'respond_feedback_container';

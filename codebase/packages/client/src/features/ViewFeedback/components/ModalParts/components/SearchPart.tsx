@@ -3,9 +3,8 @@ import { SearchPartProps } from './type';
 import { useStyle } from '@dex-ddl/core';
 import { Item } from 'components/Form';
 import { SearchInput } from './SearchInput';
-import { useDispatch } from 'react-redux';
 import { ColleaguesActions, getFindedColleguesS } from '@pma/store';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 const SearchPart: FC<SearchPartProps> = ({
   setSelectedPerson,

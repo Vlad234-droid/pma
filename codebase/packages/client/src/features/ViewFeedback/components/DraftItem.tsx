@@ -5,14 +5,16 @@ import { Accordion, BaseAccordion, ExpandButton, Panel, Section } from 'componen
 import { IconButton } from 'components/IconButton';
 import { Trans } from 'components/Translation';
 import { useDispatch, useSelector } from 'react-redux';
-import { FeedbackActions, getReviewByUuidS, ObjectiveActions, getPropperNotesByStatusSelector } from '@pma/store';
-import { getPropperTime } from '../../../utils';
-import { FeedbackStatus } from '../../../config/enum';
-import { filteredByInputSearchHandler, filteredNotesByRadiosBtnsHandler } from '../../../utils';
+import {
+  FeedbackActions,
+  getReviewByUuidS,
+  ObjectiveActions,
+  getPropperNotesByStatusSelector,
+  colleagueUUIDSelector,
+} from '@pma/store';
+import { FeedbackStatus, TargetTypeReverse } from '../../../config/enum';
+import { filteredByInputSearchHandler, filteredNotesByRadiosBtnsHandler, getPropperTime } from '../../../utils';
 import defaultImg from '../../../../public/default.png';
-import { TargetTypeReverse } from '../../../config/enum';
-
-import { colleagueUUIDSelector } from '@pma/store';
 
 type filterFeedbacksType = {
   AZ: boolean;

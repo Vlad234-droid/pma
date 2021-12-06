@@ -5,7 +5,7 @@ import SecondaryWidget, { Props as SecondaryWidgetProps } from '../SecondaryWidg
 import MainWidget from '../MainWidget';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { ObjectiveType, ReviewType } from 'config/enum';
+import { ReviewType } from 'config/enum';
 import { getTimelineByReviewTypeSelector, timelineTypesAvailabilitySelector } from '@pma/store';
 
 export type MainWidgetProps = {};
