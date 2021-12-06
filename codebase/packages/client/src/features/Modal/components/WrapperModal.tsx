@@ -1,4 +1,4 @@
-import React, { FC, ReactNode } from 'react';
+import React, { FC } from 'react';
 
 import { useBreakpoints, Rule, Modal } from '@dex-ddl/core';
 import { Icon } from 'components/Icon';

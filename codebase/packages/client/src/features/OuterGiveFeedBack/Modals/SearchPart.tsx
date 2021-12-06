@@ -9,9 +9,8 @@ import { SearchInput } from '../components/SearchInput';
 import { SearchPartProps } from '../type';
 import { Trans } from 'components/Translation';
 import { IconButton, Position } from 'components/IconButton';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { ColleaguesActions, getFindedColleguesS } from '@pma/store';
-import { useSelector } from 'react-redux';
 
 const SearchPart: FC<SearchPartProps> = ({ setSearchValue, setSelectedPerson, searchValue, selectedPerson }) => {
   const dispatch = useDispatch();

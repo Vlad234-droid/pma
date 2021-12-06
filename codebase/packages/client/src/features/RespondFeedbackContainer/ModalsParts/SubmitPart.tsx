@@ -12,9 +12,8 @@ import { Item, Textarea } from 'components/Form';
 import { GenericItemField } from 'components/GenericForm';
 import { Trans } from 'components/Translation';
 import { FeedbackActions, colleagueUUIDSelector } from '@pma/store';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import defaultImg from '../../../../public/default.png';
-import { useSelector } from 'react-redux';
 
 const SubmitPart: FC<SubmitPartProps> = ({
   selectedPerson,
@@ -64,7 +63,6 @@ const SubmitPart: FC<SubmitPartProps> = ({
     },
   ];
   const { css, theme } = useStyle();
-  const [, isBreakpoint] = useBreakpoints();
 
   const methods = useForm({
     mode: 'onChange',

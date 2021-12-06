@@ -14,7 +14,6 @@ import {
 } from '@pma/store';
 import { createYupSchema } from 'utils/yup';
 import { ReviewType, Status } from 'config/enum';
-import useReviews from '../../hooks/useReviews';
 import useReviewSchema from '../../hooks/useReviewSchema';
 
 export type CreateUpdateObjectiveModalProps = {
@@ -31,7 +30,6 @@ export const CreateUpdateObjective: FC<Props> = ({ onClose, editNumber = null })
 
   const pathParams = { colleagueUuid: info.colleagueUUID, type: ReviewType.OBJECTIVE, cycleUuid: 'CURRENT' };
 
-  const [origin] = useReviews({ pathParams });
   const objectives = useSelector(getReviewPropertiesSelector(ReviewType.OBJECTIVE));
   const [schema] = useReviewSchema(ReviewType.OBJECTIVE);
 

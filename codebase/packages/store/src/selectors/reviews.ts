@@ -50,11 +50,7 @@ export const getNextReviewNumberSelector = (reviewType: ReviewType) =>
 export const isReviewsInStatus = (reviewType: ReviewType) => (status: Status) =>
   createSelector(filterReviewsByTypeSelector(reviewType), (reviews: any) => {
     const statuses = reviews?.map((review) => review.status);
-    console.log('statuses', statuses);
     statuses.every((elem) => {
-      console.log('elem', elem);
-      console.log('status', status);
-
       return elem === status;
     });
 

@@ -14,7 +14,7 @@ export const ShareObjectivesModal: FC<Props> = ({ manager, objectives = [] }) =>
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
 
-  const sharedObjectivesCount = objectives.length;
+  const count = objectives.length;
 
   return (
     <div
@@ -34,8 +34,8 @@ export const ShareObjectivesModal: FC<Props> = ({ manager, objectives = [] }) =>
         </span>
         <div>
           <div className={css(titleStyle)}>
-            <Trans i18nKey='you_have_shared_objectives' count={sharedObjectivesCount}>
-              You have {sharedObjectivesCount} shared objectives
+            <Trans i18nKey='you_have_shared_objectives' count={count}>
+              You have {{ count }} shared objectives
             </Trans>
           </div>
         </div>

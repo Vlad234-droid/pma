@@ -12,7 +12,7 @@ import { Close } from 'components/Icon/graphics/Close';
 import { GenericItemField } from 'components/GenericForm';
 import { TileWrapper } from 'components/Tile';
 import { useDispatch, useSelector } from 'react-redux';
-import { FeedbackArea } from '../../config/enum';
+import { FeedbackArea, TargetType } from '../../config/enum';
 import {
   ColleaguesActions,
   colleagueUUIDSelector,
@@ -20,7 +20,6 @@ import {
   getFindedColleguesS,
   getReviewsS,
 } from '@pma/store';
-import { TargetType } from '../../config/enum';
 
 const ModalRequestFeedback: FC = () => {
   const { css } = useStyle();

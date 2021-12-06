@@ -1,7 +1,6 @@
-import React, { FC, HTMLProps, useCallback, useEffect, useState } from 'react';
-import { Button, CreateRule, flexRule, Rule, Theme, useStyle } from '@dex-ddl/core';
+import React, { FC, HTMLProps, useEffect, useState } from 'react';
+import { Button, CreateRule, Rule, Theme, useStyle } from '@dex-ddl/core';
 import { Header } from 'components/Header';
-import { LeftsideMenu } from 'components/LeftsideMenu';
 import DescriptionBlock from 'components/DescriptionBlock';
 import { GenericItemField } from 'components/GenericForm';
 import { Input, Item } from 'components/Form';
@@ -65,7 +64,7 @@ const formInputs = [
 
 const historaTable = { headers: ['Name', 'Action Type', 'Time'] };
 
-const CreateOrganizationObjectives: FC<Props> = ({ onClose, editNumber = null }) => {
+const CreateOrganizationObjectives: FC<Props> = () => {
   const { css, theme } = useStyle();
   const dispatch = useDispatch();
   const auditLogs = useSelector(auditLogsSelector) || [];
@@ -159,8 +158,8 @@ const CreateOrganizationObjectives: FC<Props> = ({ onClose, editNumber = null })
             <div className={css(decsriptionHeader({ theme }))}>Organization objectives</div>
 
             <div className={css(descriptionText({ theme }))}>
-              Create titles for organization objectives. Click “Save” button to keep the changes. Or “Publish” to cascade
-              them on the colleagues.
+              Create titles for organization objectives. Click “Save” button to keep the changes. Or “Publish” to
+              cascade them on the colleagues.
             </div>
             <div>
               {formInputs.map((item, idx) => {
@@ -188,7 +187,9 @@ const CreateOrganizationObjectives: FC<Props> = ({ onClose, editNumber = null })
               <div className={css(publishBlock)}>
                 <Button
                   isDisabled={isSaveBtnDisabled}
-                  styles={isSaveBtnDisabled ? [buttons, saveBtn({ theme }), saveBtnMargined] : [buttons, saveBtnMargined]}
+                  styles={
+                    isSaveBtnDisabled ? [buttons, saveBtn({ theme }), saveBtnMargined] : [buttons, saveBtnMargined]
+                  }
                   onPress={save}
                 >
                   Save
@@ -220,7 +221,7 @@ const contentArea = {
   alignItems: 'center',
 } as Rule;
 
-const saveBtn: CreateRule<{ theme: Theme; }> = (props) => {
+const saveBtn: CreateRule<{ theme: Theme }> = (props) => {
   if (props == null) return {};
   const { theme } = props;
   return {
@@ -237,7 +238,7 @@ const saveBtn: CreateRule<{ theme: Theme; }> = (props) => {
   };
 };
 
-const publishBtn: CreateRule<{ theme: Theme; }> = (props) => {
+const publishBtn: CreateRule<{ theme: Theme }> = (props) => {
   if (props == null) return {};
   const { theme } = props;
   return {
@@ -254,7 +255,7 @@ const publishBtn: CreateRule<{ theme: Theme; }> = (props) => {
   };
 };
 
-const historyBtn: CreateRule<{ theme: Theme; }> = (props) => {
+const historyBtn: CreateRule<{ theme: Theme }> = (props) => {
   if (props == null) return {};
   const { theme } = props;
   return {
@@ -309,7 +310,7 @@ const descriptionFooter = {
   },
 } as Rule;
 
-const descriptionText: CreateRule<{ theme: Theme; }> = (props) => {
+const descriptionText: CreateRule<{ theme: Theme }> = (props) => {
   if (props == null) return {};
   const { theme } = props;
   return {
@@ -317,9 +318,9 @@ const descriptionText: CreateRule<{ theme: Theme; }> = (props) => {
     lineHeight: '20px',
     paddingBottom: '32px',
   };
-}
+};
 
-const decsriptionHeader: CreateRule<{ theme: Theme; }> = (props) => {
+const decsriptionHeader: CreateRule<{ theme: Theme }> = (props) => {
   if (props == null) return {};
   const { theme } = props;
   return {

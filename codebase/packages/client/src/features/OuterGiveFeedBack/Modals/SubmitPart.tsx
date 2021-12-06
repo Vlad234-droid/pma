@@ -7,11 +7,9 @@ import { TileWrapper } from 'components/Tile';
 import { Item, Textarea } from 'components/Form';
 import { GenericItemField } from 'components/GenericForm';
 import { Trans } from 'components/Translation';
-import { useDispatch } from 'react-redux';
-import { FeedbackActions } from '../../../../../store';
+import { useDispatch, useSelector } from 'react-redux';
 import defaultImg from '../../../../public/default.png';
-import { colleagueUUIDSelector } from '@pma/store';
-import { useSelector } from 'react-redux';
+import { colleagueUUIDSelector, FeedbackActions } from '@pma/store';
 
 export const WITH_SELECTED_TEST = 'with_selected_test';
 

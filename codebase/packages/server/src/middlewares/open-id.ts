@@ -16,6 +16,8 @@ import {
 
 import { isPROD, defaultConfig, ProcessConfig } from '../config';
 
+import { isEmpty } from '../utils';
+
 interface ErrorMessage {
   errorType: string;
   errorMessage: string;
@@ -53,9 +55,11 @@ const oidcTokenExtractorPlugin = (config: OidcTokenExtractorConfig) => {
     const { strategy, cookieConfig } = config;
 
     try {
-      const idToken = getIdentitySwapToken(res, strategy);
-      console.log(idToken);
-      setDataToCookie(res, { idToken }, cookieConfig!);
+      if (!isEmpty(res.oneLoginAuthData)) {
+        const idToken = getIdentitySwapToken(res, strategy);
+        console.log('idToken', idToken);
+        setDataToCookie(res, { idToken }, cookieConfig!);
+      }
     } catch (e: any) {
       console.error(e);
       console.log(e);

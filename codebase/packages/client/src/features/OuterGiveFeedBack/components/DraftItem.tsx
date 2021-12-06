@@ -4,13 +4,11 @@ import { TileWrapper } from 'components/Tile';
 import { Accordion, BaseAccordion, Section, Panel, ExpandButton } from 'components/Accordion';
 import { IconButton } from 'components/IconButton';
 import { Trans } from 'components/Translation';
-import { FeedbackActions, getPropperNotesByStatusSelector } from '@pma/store';
+import { FeedbackActions, getPropperNotesByStatusSelector, colleagueUUIDSelector } from '@pma/store';
 import { useDispatch, useSelector } from 'react-redux';
-import { getPropperTime } from '../../../utils';
 import { FeedbackStatus } from '../../../config/enum';
-import { filteredByInputSearchHandler, filteredNotesByRadiosBtnsHandler } from '../../../utils';
+import { filteredByInputSearchHandler, filteredNotesByRadiosBtnsHandler, getPropperTime } from '../../../utils';
 import defaultImg from '../../../../public/default.png';
-import { colleagueUUIDSelector } from '@pma/store';
 
 type filterFeedbacksType = {
   AZ: boolean;
