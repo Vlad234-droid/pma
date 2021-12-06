@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 
-import { Rule, useStyle } from '@dex-ddl/core';
+import { CreateRule, Rule, useStyle } from '@dex-ddl/core';
 
 import { TileWrapper as Tile } from '../Tile/TileWrapper';
 import { StatusIcon } from './StatusIcon';
@@ -42,79 +42,95 @@ export const StepIndicatorBasic: FC<StepIndicatorProps> = ({
     />
   );
 
-  const Step: FC<{ CurrentStep?: any; first; last }> = ({ CurrentStep, first, last }) => (
-    <div
-      className={css({
-        display: 'flex',
-        alignItems: 'center',
-        flexDirection: 'column',
-        position: 'relative',
-        zIndex: 1,
-      })}
-    >
-      <StatusIcon graphics='roundCircle' color='base' first={first} last={last} />
-      {CurrentStep}
-    </div>
-  );
+  const Step: FC<{ CurrentStep?: any; alignItems }> = ({ CurrentStep, alignItems }) => {
+    return (
+      <div
+        className={css({
+          display: 'flex',
+          alignItems: alignItems,
+          flexDirection: 'column',
+          position: 'relative',
+          zIndex: 1,
+          paddingBottom: '16px',
+        })}
+      >
+        <StatusIcon graphics='roundCircle' color='base' />
+        {CurrentStep}
+      </div>
+    );
+  };
 
   let array: JSX.Element[];
   if (statuses && statuses.length > 0) {
-    array = statuses
-      .reduce((arr: JSX.Element[], status, i) => {
-        const [graphics, color] = getIcon(status);
-        const first = i === 0;
-        const last = i === statuses.length - 1;
-        arr.push(<Line key={`line${i}`} active={!!currentStep && currentStep >= i} />);
-        arr.push(
+    array = statuses.reduce((arr: JSX.Element[], status, i) => {
+      const [graphics, color] = getIcon(status);
+      const alignItems = getTextAlign(statuses?.length, i);
+      arr.push(
+        <div>
+          <Line key={`line${i}`} active={!!currentStep && currentStep >= i} />
           <Step
             key={`step${i}`}
-            first={first}
-            last={last}
-            CurrentStep={<StatusIcon graphics={graphics} color={color} first={first} last={last} />}
-          />,
-        );
-        return arr;
-      }, [])
-      .slice(1);
+            alignItems={alignItems}
+            CurrentStep={<StatusIcon graphics={graphics} color={color} />}
+          />
+        </div>,
+      );
+      return arr;
+    }, []);
   } else {
-    array = titles
-      .reduce((arr: JSX.Element[], _, i) => {
-        const status = getStatus(i, currentStep, currentStatus);
-        const [graphics, color] = getIcon(status);
-        const first = i === 0;
-        const last = i === titles.length - 1;
-        arr.push(<Line key={`line${i}`} active={!!currentStep && currentStep >= i} />);
-        arr.push(
+    array = titles.reduce((arr: JSX.Element[], _, i) => {
+      const status = getStatus(i, currentStep, currentStatus);
+      const [graphics, color] = getIcon(status);
+      const alignItems = getTextAlign(titles?.length, i);
+      arr.push(
+        <div>
+          <Line key={`line${i}`} active={!!currentStep && currentStep >= i} />
           <Step
             key={`step${i}`}
-            first={first}
-            last={last}
-            CurrentStep={graphics && <StatusIcon graphics={graphics} color={color} first={first} last={last} />}
-          />,
-        );
-        return arr;
-      }, [])
-      .slice(1);
+            alignItems={alignItems}
+            CurrentStep={graphics && <StatusIcon graphics={graphics} color={color} />}
+          />
+        </div>,
+      );
+      return arr;
+    }, []);
   }
 
-  const titlesArray = titles.map((title, i) => (
-    <span className={css(title2Style)} key={`title${i}`}>
-      {title}
-    </span>
-  ));
-  const descriptionArray = descriptions.map((title, i) => (
-    <span className={css(descriptionStyle)} key={`desc${i}`}>
-      {title}
-    </span>
-  ));
+  function getTextAlign(length, i) {
+    if (i === length - 1) return 'end';
+    if (i === 0) return 'start';
+    return 'center';
+  }
+
+  const titlesArray = titles.map((title, i) => {
+    const textAlign = getTextAlign(titles?.length, i);
+    return (
+      <span className={css(title2Style({ textAlign }))} key={`title${i}`}>
+        {title}
+      </span>
+    );
+  });
+
+  const descriptionArray = descriptions.map((title, i) => {
+    const textAlign = getTextAlign(descriptions?.length, i);
+    return (
+      <span className={css(descriptionStyle({ textAlign }))} key={`desc${i}`}>
+        {title}
+      </span>
+    );
+  });
 
   return (
-    <div className={css({ paddingTop: '8px' })}>
-      <section className={css({ display: 'flex', alignItems: 'center', paddingTop: '8px' })}>{array}</section>
-      <section className={css({ display: 'flex', justifyContent: 'space-between', paddingTop: '8px' })}>
-        {titlesArray}
-      </section>
-      <section className={css({ display: 'flex', justifyContent: 'space-between' })}>{descriptionArray}</section>
+    <div
+      className={css({
+        paddingTop: '16px',
+        display: 'grid',
+        gridTemplateColumns: ` 1fr repeat(${array.length - 2}, 2fr) 1fr`,
+      })}
+    >
+      {array}
+      {titlesArray}
+      {descriptionArray}
     </div>
   );
 };
@@ -155,48 +171,50 @@ const titleStyle: Rule = ({
   fontStyle: 'normal',
   fontWeight: 'bold',
   fontSize,
-  marginBottom: '20px',
+  marginBottom: '30px',
 });
 
-const title2Style: Rule = ({
-  font: {
-    fluid: {
-      f14: { fontSize },
-    },
-  },
-}) => ({
-  fontStyle: 'normal',
-  fontWeight: 'bold',
-  fontSize,
-  paddingTop: '8px',
-  flex: '1 1 0',
-  textAlign: 'center',
-  ':first-child': {
-    textAlign: 'start',
-  },
-  ':last-child': {
-    textAlign: 'end',
-  },
-});
+const title2Style: CreateRule<{ textAlign: string }> =
+  ({ textAlign }) =>
+  // @ts-ignore
+  ({ theme }) => {
+    const {
+      font: {
+        fluid: {
+          f14: { fontSize },
+        },
+      },
+    } = theme;
 
-const descriptionStyle: Rule = ({
-  font: {
-    fluid: {
-      f14: { fontSize },
-    },
-  },
-}) => ({
-  fontStyle: 'normal',
-  fontSize,
-  flex: '1 1 0',
-  textAlign: 'center',
-  ':first-child': {
-    textAlign: 'start',
-  },
-  ':last-child': {
-    textAlign: 'end',
-  },
-});
+    return {
+      fontStyle: 'normal',
+      fontWeight: 'bold',
+      fontSize,
+      paddingTop: '8px',
+      flex: '0 1 0',
+      textAlign: textAlign,
+    };
+  };
+
+const descriptionStyle: CreateRule<{ textAlign: string }> =
+  ({ textAlign }) =>
+  // @ts-ignore
+  ({ theme }) => {
+    const {
+      font: {
+        fluid: {
+          f14: { fontSize },
+        },
+      },
+    } = theme;
+
+    return {
+      fontStyle: 'normal',
+      fontSize,
+      flex: '0 1 0',
+      textAlign: textAlign,
+    };
+  };
 
 const wrapperStyle = {
   padding: '20px',
