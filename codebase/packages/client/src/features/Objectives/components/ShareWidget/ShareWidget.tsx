@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useState, useEffect, useMemo } from 'react';
 import { useTranslation } from 'components/Translation';
 import { useStyle, Rule, Button, Styles, colors } from '@dex-ddl/core';
 
@@ -48,11 +48,16 @@ const ShareWidget: FC<Props> = ({ customStyle }) => {
   const formElements = components.filter((component) => component.type != 'text');
   const isManager = (info && info.isManager) ?? false;
 
-  const pathParams = { colleagueUuid: info.colleagueUUID, cycleUuid: timelineObjective?.cycleUuid };
+  const pathParams = useMemo(
+    () => ({ colleagueUuid: info.colleagueUUID, cycleUuid: timelineObjective?.cycleUuid }),
+    [info.colleagueUUID, timelineObjective?.cycleUuid],
+  );
   const manager = info.manager;
 
   const isManagerShared = isManager && isShared;
   const sharedObjectivesCount = sharedObjectives.length;
+  const formElementsCount = formElements.length;
+  const isValidPathParams = pathParams.colleagueUuid && pathParams.cycleUuid;
 
   const handleShareSaveBtnClick = async () => {
     setIsSuccessModalOpen(true);
@@ -72,16 +77,16 @@ const ShareWidget: FC<Props> = ({ customStyle }) => {
   };
 
   useEffect(() => {
-    timelineObjective && isManager && dispatch(ObjectiveSharingActions.checkSharing(pathParams));
-  }, [isManager, timelineObjective]);
+    isValidPathParams && isManager && dispatch(ObjectiveSharingActions.checkSharing(pathParams));
+  }, [isManager, isValidPathParams]);
 
   useEffect(() => {
-    timelineObjective && !isManager && dispatch(ObjectiveSharingActions.getSharings(pathParams));
-  }, [isManager, timelineObjective]);
+    isValidPathParams && !isManager && dispatch(ObjectiveSharingActions.getSharings(pathParams));
+  }, [isManager, isValidPathParams]);
 
   useEffect(() => {
     sharedObjectivesCount && setObjectives(transformReviewsToObjectives(sharedObjectives, formElements));
-  }, [sharedObjectivesCount, formElements]);
+  }, [sharedObjectivesCount, formElementsCount]);
 
   const getContent = (): [string, string, string, () => void] => {
     if (isManagerShared) {
