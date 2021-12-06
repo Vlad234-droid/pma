@@ -10,4 +10,5 @@ export const defaultConfig = {
   buildPath: 'build',
   mfModule: 'tesco-pma.js',
   SSOLogoutPath: '/sso/logout',
+  oidcRedirectAfterLogoutPath: '/sso/logout/callback',
 };
