@@ -12,6 +12,4 @@ export default {
 const Template: Story<Props> = (props) => <ShareWidget {...props} />;
 
 export const Widget = Template.bind({});
-Widget.args = {
-  onClick: () => alert('share'),
-};
+Widget.args = {};

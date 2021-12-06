@@ -60,3 +60,8 @@ export const isReviewsInStatus = (reviewType: ReviewType) => (status: Status) =>
 
     return statuses.every((elem) => elem === status);
   });
+
+export const hasStatusInReviews = (reviewType: ReviewType, status: Status) =>
+  createSelector(filterReviewsByTypeSelector(reviewType), (reviews: any) => {
+    return reviews?.map((review) => review.status).some((elem) => elem === status);
+  });

@@ -9,22 +9,10 @@ import useDispatch from 'hooks/useDispatch';
 import { ObjectiveTileExplanations, ObjectiveTileHeader } from '../Tile';
 import { useSelector } from 'react-redux';
 
-type Explanation = {
-  title: string;
-  steps: string[];
-};
+import * as T from '../../types';
 
-type Objective = {
-  id: number;
-  title: string;
-  subTitle: string;
-  description: string;
-  explanations: Explanation[];
-  status: Status;
-};
-
-type Props = {
-  objectives: Objective[];
+export type ObjectiveAccordionProps = {
+  objectives: T.Objective[];
   canShowStatus: boolean;
 };
 
@@ -56,7 +44,7 @@ const Buttons: FC<{ id: number }> = ({ id }) => {
   );
 };
 
-const ObjectiveAccordion: FC<Props> = ({ objectives, canShowStatus }) => (
+const ObjectiveAccordion: FC<ObjectiveAccordionProps> = ({ objectives, canShowStatus }) => (
   <Accordion id='objective-accordion'>
     <div data-test-id={TEST_ID}>
       {objectives.map(({ id, title, subTitle, description, explanations, status }) => (
@@ -88,7 +76,7 @@ export const ObjectiveHeader: FC<
   );
 };
 
-export const ObjectivePanel: FC<{ explanations: Explanation[] }> = ({ explanations }) => (
+export const ObjectivePanel: FC<{ explanations: T.Explanation[] }> = ({ explanations }) => (
   <ObjectiveTileExplanations explanations={explanations} />
 );
 

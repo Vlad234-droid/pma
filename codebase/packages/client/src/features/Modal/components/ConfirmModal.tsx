@@ -9,11 +9,12 @@ export type ConfirmModal = {
   onCancel: () => void;
   onSave: () => void;
   onOverlayClick?: () => void;
+  submitBtnTitle?: string;
 };
 
 type Props = HTMLProps<HTMLInputElement> & ConfirmModal;
 
-const ConfirmModal: FC<Props> = ({ title, description, onCancel, onSave, onOverlayClick }) => {
+const ConfirmModal: FC<Props> = ({ title, description, onCancel, onSave, onOverlayClick, submitBtnTitle }) => {
   const { theme, css } = useStyle();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
@@ -80,7 +81,7 @@ const ConfirmModal: FC<Props> = ({ title, description, onCancel, onSave, onOverl
           ]}
           onPress={onSave}
         >
-          <Trans i18nKey='submit'>Submit</Trans>
+          {submitBtnTitle || <Trans i18nKey='submit'>Submit</Trans>}
         </Button>
       </div>
     </Modal>

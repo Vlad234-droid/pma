@@ -10,3 +10,7 @@ export { ReviewWidget } from './components/Reviews';
 export { ShareWidget } from './components/ShareWidget';
 export { CreateButton, EditButton } from './components/Buttons';
 export { default as Tile, ObjectiveTileHeader, ObjectiveTileExplanations } from './components/Tile';
+// utils
+export * from './utils';
+// types
+export * as ObjectiveTypes from './types';

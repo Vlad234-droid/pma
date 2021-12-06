@@ -8,6 +8,7 @@ import managersEpic from '../entities/managers/epic';
 import feedBackEpic from '../entities/feedback/epic';
 import colleaguesEpic from '../entities/colleagues/epic';
 import reviewsEpic from '../entities/reviews/epic';
+import objectiveSharingEpic from '../entities/objectiveSharing/epic';
 
 export const rootEpic = combineEpics(
   userEpic,
@@ -19,4 +20,8 @@ export const rootEpic = combineEpics(
   orgObjectiveEpic,
   timelineEpic,
   managersEpic,
+  feedBackEpic,
+  colleaguesEpic,
+  reviewsEpic,
+  objectiveSharingEpic,
 );

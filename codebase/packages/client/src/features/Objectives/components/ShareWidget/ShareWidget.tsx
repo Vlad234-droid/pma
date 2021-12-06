@@ -1,65 +1,201 @@
-import React, { FC } from 'react';
-import { Trans, useTranslation } from 'components/Translation';
+import React, { FC, useState, useEffect } from 'react';
+import { useTranslation } from 'components/Translation';
 import { useStyle, Rule, Button, Styles, colors } from '@dex-ddl/core';
 
 import { TileWrapper } from 'components/Tile';
-import { Icon, Graphics } from 'components/Icon';
+import { Icon } from 'components/Icon';
+import { ConfirmModal, WrapperModal } from 'features/Modal';
+import { SuccessModal, ShareObjectivesModal } from '../Modal';
+import { Status, ReviewType } from 'config/enum';
+import useDispatch from 'hooks/useDispatch';
+import { useSelector } from 'react-redux';
+import * as T from '../../types';
+import { transformReviewsToObjectives } from '../../utils';
+
+import {
+  ObjectiveSharingActions,
+  currentUserSelector,
+  getTimelineByReviewTypeSelector,
+  isSharedSelector,
+  hasStatusInReviews,
+  getAllSharedObjectives,
+  getReviewSchema,
+  // add selectors
+} from '@pma/store';
 
 export type Props = {
-  onClick: () => void;
-  shared?: boolean;
   customStyle?: React.CSSProperties | {};
 };
 
 export const TEST_ID = 'share-widget';
 
-const ShareWidget: FC<Props> = ({ onClick, shared, customStyle }) => {
+const ShareWidget: FC<Props> = ({ customStyle }) => {
+  const dispatch = useDispatch();
   const { css, theme } = useStyle();
   const { t } = useTranslation();
+  const [isConfirmDeclineModalOpen, setIsConfirmDeclineModalOpen] = useState(false);
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const [isViewObjectivesModalOpen, setIsViewObjectivesModalOpen] = useState(false);
+  const [objectives, setObjectives] = useState<T.Objective[]>([]);
 
-  const getContent = (): [Graphics, string, string] => {
-    return shared
-      ? [
-          'roundTick',
-          t('share_objectives_on_description', 'You are currently sharing your objectives with your team'),
-          t('stop_sharing', 'Stop sharing'),
-        ]
-      : [
-          'document',
-          t('share_objectives_off_description', 'Make all objectives and measures visible to your team'),
-          t('share_to_team', 'Share to team'),
-        ];
+  // TODO: add selectors
+  const { info } = useSelector(currentUserSelector);
+  const timelineObjective = useSelector(getTimelineByReviewTypeSelector(ReviewType.OBJECTIVE));
+  const isShared = useSelector(isSharedSelector);
+  const hasApprovedObjective: boolean = useSelector(hasStatusInReviews(ReviewType.OBJECTIVE, Status.APPROVED));
+  const { components = [] } = useSelector(getReviewSchema(ReviewType.OBJECTIVE));
+  const sharedObjectives = useSelector(getAllSharedObjectives);
+  const formElements = components.filter((component) => component.type != 'text');
+  const isManager = (info && info.isManager) ?? false;
+
+  const pathParams = { colleagueUuid: info.colleagueUUID, cycleUuid: timelineObjective?.cycleUuid };
+  const manager = info.manager;
+
+  const isManagerShared = isManager && isShared;
+  const sharedObjectivesCount = sharedObjectives.length;
+
+  const handleShareSaveBtnClick = async () => {
+    setIsSuccessModalOpen(true);
+    setIsConfirmDeclineModalOpen(false);
+
+    dispatch(ObjectiveSharingActions.startSharing(pathParams));
   };
 
-  const [graphic, description, actionTitle] = getContent();
+  const handleStopShareBtnClick = () => {
+    setIsSuccessModalOpen(true);
+
+    dispatch(ObjectiveSharingActions.stopSharing(pathParams));
+  };
+
+  const handleViewObjectivesBtnClick = () => {
+    setIsViewObjectivesModalOpen(true);
+  };
+
+  useEffect(() => {
+    timelineObjective && isManager && dispatch(ObjectiveSharingActions.checkSharing(pathParams));
+  }, [isManager, timelineObjective]);
+
+  useEffect(() => {
+    timelineObjective && !isManager && dispatch(ObjectiveSharingActions.getSharings(pathParams));
+  }, [isManager, timelineObjective]);
+
+  useEffect(() => {
+    sharedObjectivesCount && setObjectives(transformReviewsToObjectives(sharedObjectives, formElements));
+  }, [sharedObjectivesCount, formElements]);
+
+  const getContent = (): [string, string, string, () => void] => {
+    if (isManagerShared) {
+      return [
+        t('share_objectives', 'Share Objectives'),
+        t('share_objectives_on_description', 'You are currently sharing your objectives with your team'),
+        t('stop_sharing', 'Stop sharing'),
+        () => {
+          handleStopShareBtnClick();
+        },
+      ];
+    } else if (isManager && !isShared) {
+      return [
+        t('share_objectives', 'Share Objectives'),
+        t('share_objectives_off_description', 'Make all objectives and measures visible to your team'),
+        t('share_to_team', 'Share to team'),
+        () => {
+          setIsConfirmDeclineModalOpen(true);
+        },
+      ];
+    } else if (!isManager && sharedObjectivesCount) {
+      return [
+        t('shared_objectives', 'Shared objectives'),
+        t(
+          'you_have_shared_objectives_from_your_manager',
+          `You have ${sharedObjectivesCount} shared objective(s) from your manager.`,
+          { count: sharedObjectivesCount },
+        ),
+        t('view_objectives', 'View objectives'),
+        () => {
+          handleViewObjectivesBtnClick();
+        },
+      ];
+    } else {
+      return ['N/A', 'N/A', 'N/A', () => null];
+      // throw Error('ShareWidget: impossible case');
+    }
+  };
+
+  const [title, description, actionTitle, handleBtnClick] = getContent();
+
+  if ((!hasApprovedObjective && isManager) || (!isManager && !sharedObjectivesCount)) {
+    return null;
+  }
 
   return (
-    <TileWrapper customStyle={{ ...customStyle }}>
-      <div className={css(wrapperStyle)} data-test-id={TEST_ID}>
-        <div className={css(headStyle)}>
-          <div className={css(headerBlockStyle)}>
-            <div className={css({ display: 'flex', alignItems: 'center' })}>
-              <Icon
-                graphic={graphic}
-                iconStyles={{ verticalAlign: 'middle', margin: '0px 10px 0px 0px' }}
-                backgroundRadius={10}
-              />
-              <span className={css(titleStyle)}>
-                <Trans i18nKey='share_objectives'>Share Objectives</Trans>
-              </span>
+    <>
+      <TileWrapper customStyle={{ ...customStyle }}>
+        <div className={css(wrapperStyle)} data-test-id={TEST_ID}>
+          <div className={css(headStyle)}>
+            <div className={css(headerBlockStyle)}>
+              <div className={css({ display: 'flex', alignItems: 'center' })}>
+                <Icon
+                  graphic={'document'}
+                  iconStyles={{ verticalAlign: 'middle', margin: '0px 10px 0px 0px' }}
+                  backgroundRadius={10}
+                />
+                <span className={css(titleStyle)}>{title}</span>
+              </div>
+              <span className={css(descriptionStyle)}>{description}</span>
             </div>
-            <span className={css(descriptionStyle)}>{description}</span>
+          </div>
+          <div className={css(bodyStyle)}>
+            <div className={css(bodyBlockStyle)}>
+              <Button mode='inverse' styles={[btnStyle({ theme, isManagerShared }) as Styles]} onPress={handleBtnClick}>
+                {actionTitle}
+              </Button>
+            </div>
           </div>
         </div>
-        <div className={css(bodyStyle)}>
-          <div className={css(bodyBlockStyle)}>
-            <Button mode='inverse' styles={[btnStyle({ theme }) as Styles]} onPress={onClick}>
-              {actionTitle}
-            </Button>
-          </div>
-        </div>
-      </div>
-    </TileWrapper>
+      </TileWrapper>
+      {isConfirmDeclineModalOpen && (
+        <ConfirmModal
+          title={t('share_objectives', 'Share Objectives')}
+          description={t(
+            'are_you_sure_you_want_to_make_your_objectives_visible',
+            'Are you sure you want to make your objectives visible?',
+          )}
+          submitBtnTitle={t('share', 'Share')}
+          onSave={() => handleShareSaveBtnClick()}
+          onCancel={() => setIsConfirmDeclineModalOpen(false)}
+          onOverlayClick={() => setIsConfirmDeclineModalOpen(false)}
+        />
+      )}
+      {isSuccessModalOpen && (
+        <WrapperModal
+          title={t('share_objectives', 'Share Objectives')}
+          onClose={() => setIsSuccessModalOpen(false)}
+          onOverlayClick={() => setIsSuccessModalOpen(false)}
+        >
+          <SuccessModal
+            description={
+              isShared
+                ? t('your_objectives_have_been_visible', 'Your objectives have been visible to your team.')
+                : t(
+                    'you_have_stopped_sharing_your_objectives',
+                    'You have stopped sharing your objectives to your team.',
+                  )
+            }
+            onClose={() => setIsSuccessModalOpen(false)}
+            withСheckMark
+          />
+        </WrapperModal>
+      )}
+      {isViewObjectivesModalOpen && (
+        <WrapperModal
+          title={t('shared_objectives', 'Shared objectives')}
+          onClose={() => setIsViewObjectivesModalOpen(false)}
+          onOverlayClick={() => setIsViewObjectivesModalOpen(false)}
+        >
+          <ShareObjectivesModal manager={manager} objectives={objectives} />
+        </WrapperModal>
+      )}
+    </>
   );
 };
 
@@ -111,11 +247,13 @@ const bodyStyle: Rule = {
   justifyContent: 'flex-end',
 };
 
-const btnStyle = ({ theme }) => ({
-  fontSize: '16px',
-  color: theme.colors.tescoBlue,
+const btnStyle = ({ theme, isManagerShared }) => ({
+  fontSize: '14px',
+  fontWeight: 'bold',
+  color: isManagerShared ? theme.colors.tescoRed : theme.colors.tescoBlue,
   height: '30px',
   background: 'transparent',
+  border: `1px solid ${isManagerShared ? theme.colors.tescoRed : theme.colors.tescoBlue}`,
 });
 
 export default ShareWidget;

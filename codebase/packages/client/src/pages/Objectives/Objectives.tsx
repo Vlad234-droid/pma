@@ -17,6 +17,8 @@ import {
   Section,
   ShareWidget,
   StatusBadge,
+  transformReviewsToObjectives,
+  ObjectiveTypes as OT,
 } from 'features/Objectives';
 import { PreviousReviewFilesModal } from 'features/ReviewFiles/components';
 import { useToast, Variant } from 'features/Toast';
@@ -76,7 +78,7 @@ const Objectives: FC = () => {
   const midYearReview = useSelector(getTimelineByCodeSelector(ObjectiveType.MYR));
   const endYearReview = useSelector(getTimelineByCodeSelector(ObjectiveType.EYR));
   const [previousReviewFilesModalShow, setPreviousReviewFilesModalShow] = useState(false);
-  const [objectives, setObjectives] = useState([]);
+  const [objectives, setObjectives] = useState<OT.Objective[]>([]);
 
   const { loaded: schemaLoaded } = useSelector(schemaMetaSelector);
   const { loaded: reviewLoaded } = useSelector(reviewsMetaSelector);
@@ -110,28 +112,7 @@ const Objectives: FC = () => {
 
   useEffect(() => {
     if (reviewLoaded && schemaLoaded) {
-      origin?.forEach((objectiveItem) => {
-        const status = objectiveItem.status;
-        const objective = objectiveItem?.properties?.mapJson;
-        const subTitle = objective['title'] || '';
-        const description = objective['description'] || '';
-        const explanations = formElements
-          .filter(({ key }) => !['title', 'description'].includes(key))
-          .map((component) => {
-            const { key, label } = component;
-
-            return { title: label, steps: objective[key] ? [objective[key]] : [] };
-          });
-        mappedObjectives.push({
-          id: Number(objectiveItem.number),
-          title: `Objective ${objectiveItem.number}`,
-          subTitle: subTitle,
-          description: description,
-          explanations,
-          status,
-        });
-      });
-      setObjectives(mappedObjectives);
+      setObjectives(transformReviewsToObjectives(origin, formElements));
     }
   }, [reviewLoaded, schemaLoaded]);
 
@@ -179,6 +160,10 @@ const Objectives: FC = () => {
     if (!loaded) dispatch(TimelineActions.getTimeline({ colleagueUuid }));
   }, [loaded]);
 
+  // TODO: check is manager ?
+  // form btn click action
+  //
+
   return (
     <div className={css({ margin: '8px' })}>
       <Header title={canShowObjectives ? 'Objectives' : 'Review'} />
@@ -198,10 +183,7 @@ const Objectives: FC = () => {
             />
           </div>
         )}
-        <ShareWidget
-          customStyle={{ flex: '1 1 30%', display: 'flex', flexDirection: 'column' }}
-          onClick={() => alert('share')}
-        />
+        <ShareWidget customStyle={shareWidgetStyles} />
 
         <OrganizationWidget
           customStyle={{ flex: '1 1 30%', display: 'flex', flexDirection: 'column' }}
@@ -377,6 +359,12 @@ const timelineWrapperStyles = {
   '& > div': {
     height: '100%',
   },
+} as Styles;
+
+const shareWidgetStyles = {
+  flex: '1 1 30%',
+  display: 'flex',
+  flexDirection: 'column',
 } as Styles;
 
 const bodyWrapperStyles: Rule = () => {

@@ -34,7 +34,7 @@ export const currentUserSelector = createSelector(usersSelector, ({ current }) =
   workRelationship?.job?.name;
   const department = workRelationship?.department?.name;
   const { businessType } = workRelationship?.department || {};
-  const { managerUUID, employmentType } = workRelationship || {};
+  const { managerUUID, employmentType, isManager } = workRelationship || {};
   // @ts-ignore
   const { email } = info?.contact || {};
   // @ts-ignore
@@ -53,6 +53,7 @@ export const currentUserSelector = createSelector(usersSelector, ({ current }) =
       businessType,
       managerUUID,
       employmentType,
+      isManager,
       email,
       hireDate,
       countryCode,

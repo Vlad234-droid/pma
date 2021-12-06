@@ -5,6 +5,10 @@ export const INTEGRATION_MODE = process.env.REACT_APP_INTEGRATION_MODE ?? 'integ
 
 export const LOGOUT_URL = process.env.REACT_APP_LOGOUT_URL ?? '/sso/logout';
 
+export const LINKS = {
+  signOut: LOGOUT_URL,
+};
+
 export enum ViewportSize {
   PHONE = 320,
   LARGE_PHONE = 504,

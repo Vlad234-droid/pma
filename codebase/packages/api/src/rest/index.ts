@@ -7,3 +7,4 @@ export * from './managers';
 export * from './colleagues';
 export * from './reviews';
 export * from './orgObjective';
+export * from './objectiveSharing';

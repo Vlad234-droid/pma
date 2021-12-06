@@ -1,4 +1,5 @@
 import React, { createContext, FC, useCallback, useContext, useEffect } from 'react';
+import { LINKS } from 'config/constants';
 // store
 import { currentUserMetaSelector, currentUserSelector, UerActions } from '@pma/store';
 
@@ -30,7 +31,7 @@ const AuthContext = createContext<AuthData>(defaultData);
 
 export const AuthProvider: FC = ({ children }) => {
   const { info, authenticated } = useSelector(currentUserSelector) || {};
-  const { loaded } = useSelector(currentUserMetaSelector) || {};
+  const { loaded, error } = useSelector(currentUserMetaSelector) || {};
 
   const dispatch = useDispatch();
 
@@ -41,6 +42,13 @@ export const AuthProvider: FC = ({ children }) => {
   const loginAction: LoginAction = useCallback((payload) => dispatch(UerActions.login(payload)), []);
 
   const logoutAction: LogoutAction = useCallback(() => dispatch(UerActions.logout()), []);
+
+  if (error?.code === 'UNAUTHENTICATED') {
+    window?.location.replace(LINKS.signOut);
+    return null;
+  }
+
+  if (!loaded) return null;
 
   return (
     <AuthContext.Provider

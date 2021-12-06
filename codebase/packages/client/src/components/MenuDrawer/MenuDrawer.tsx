@@ -6,6 +6,7 @@ import TescoLogo from './TescoLogo.svg';
 import { Icon } from '../Icon';
 import { IconButton } from '../IconButton';
 import { Page } from '../../pages';
+import { LINKS } from 'config/constants';
 
 export type MenuDrawerProps = { onClose: () => void };
 
@@ -23,7 +24,11 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
           <div className={css(menuDrawerButtonsStyle)}>
             <MenuItem iconGraphic={'calender'} linkTo={Page.CAREER_PERFORMANCE} title={'Performance overview'} />
             <MenuItem iconGraphic={'document'} linkTo={Page.OBJECTIVES_VIEW} title={'My business objectives'} />
-            <MenuItem iconGraphic={'document'} linkTo={Page.CREATE_ORGANIZATION_OBJECTIVES} title={'Organization objectives'} />
+            <MenuItem
+              iconGraphic={'document'}
+              linkTo={Page.CREATE_ORGANIZATION_OBJECTIVES}
+              title={'Organization objectives'}
+            />
             <MenuItem iconGraphic={'add'} title={'Development plan'} />
             <MenuItem iconGraphic={'account'} linkTo={Page.PROFILE} title={'My Profile'} />
             <MenuItem iconGraphic={'chatSq'} linkTo={Page.FEEDBACK} title={'Feedback'} />
@@ -43,10 +48,10 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
             <Icon graphic={'question'} />
             <span className={css(itemSettingsTextStyle)}>Help and FAQ</span>
           </Link>
-          <Link to={Page.SETTINGS} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
+          <a href={LINKS.signOut} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
             <Icon graphic={'signOut'} />
             <span className={css(itemSettingsTextStyle)}>Sign out</span>
-          </Link>
+          </a>
         </div>
       </div>
     </div>

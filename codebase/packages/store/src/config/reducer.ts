@@ -11,6 +11,7 @@ import managersReducer from '../entities/managers/reducer';
 import feedbackReducer from '../entities/feedback/reducer';
 import colleaguesReducer from '../entities/colleagues/reducer';
 import reviewsReducer from '../entities/reviews/reducer';
+import objectiveSharingReducer from '../entities/objectiveSharing/reducer';
 
 export const rootReducer = combineReducers({
   users: userReducer,
@@ -24,4 +25,5 @@ export const rootReducer = combineReducers({
   feedback: feedbackReducer,
   colleagues: colleaguesReducer,
   reviews: reviewsReducer,
+  objectivesSharing: objectiveSharingReducer,
 });
