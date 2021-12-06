@@ -6,7 +6,6 @@ import TescoLogo from './TescoLogo.svg';
 import { Icon } from '../Icon';
 import { IconButton } from '../IconButton';
 import { Page } from '../../pages';
-import { LINKS } from 'config/constants';
 
 export type MenuDrawerProps = { onClose: () => void };
 
@@ -51,6 +50,7 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
           <Link to={''} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
             <Icon graphic={'signOut'} />
             <span className={css(itemSettingsTextStyle)}>Sign out</span>
+          </Link>
         </div>
       </div>
     </div>

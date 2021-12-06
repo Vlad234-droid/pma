@@ -68,11 +68,10 @@ const CareerPerformance: FC = () => {
             <DashboardProfile />
             {canShowMyReview && (
               <StepIndicator
-                mainTitle={t('Contribution timeline')}
+                mainTitle={t('Your contribution timeline')}
                 titles={descriptions}
                 descriptions={startDates}
                 statuses={statuses}
-                customStyle={{ maxHeight: '142px', minHeight: '142px' }}
               />
             )}
           </div>
