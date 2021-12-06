@@ -32,26 +32,25 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
             <MenuItem iconGraphic={'add'} title={'Development plan'} />
             <MenuItem iconGraphic={'account'} linkTo={Page.PROFILE} title={'My Profile'} />
             <MenuItem iconGraphic={'chatSq'} linkTo={Page.FEEDBACK} title={'Feedback'} />
-            <MenuItem iconGraphic={'edit'} linkTo='notes' title={'My Notes'} />
+            <MenuItem iconGraphic={'edit'} linkTo='' title={'My Notes'} />
           </div>
         </div>
         <div className={css(menuDrawerSettingsStyle)}>
-          <Link to={Page.SETTINGS} className={css(itemSettingsStyle)}>
+          <Link to={''} className={css(itemSettingsStyle)}>
             <Icon graphic={'settingsGear'} />
             <span className={css(itemSettingsTextStyle)}>Settings</span>
           </Link>
-          <Link to={Page.PERFORMANCE_CYCLE} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
+          <Link to={''} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
             <Icon graphic={'alert'} />
             <span className={css(itemSettingsTextStyle)}>Performance Cycle</span>
           </Link>
-          <Link to={Page.SETTINGS} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
+          <Link to={''} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
             <Icon graphic={'question'} />
             <span className={css(itemSettingsTextStyle)}>Help and FAQ</span>
           </Link>
-          <a href={LINKS.signOut} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
+          <Link to={''} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
             <Icon graphic={'signOut'} />
             <span className={css(itemSettingsTextStyle)}>Sign out</span>
-          </a>
         </div>
       </div>
     </div>

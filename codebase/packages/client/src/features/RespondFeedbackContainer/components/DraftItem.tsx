@@ -11,12 +11,10 @@ import { FeedbackStatus } from '../../../config/enum';
 import { filteredByInputSearchHandler, filteredNotesByRadiosBtnsHandler } from '../../../utils';
 import defaultImg from '../../../../public/default.png';
 import { colleagueUUIDSelector } from '@pma/store';
+import { TargetTypeReverse } from '../../../config/enum';
 
 export const TEST_ID = 'test_id';
 
-enum TargetType {
-  OBJECTIVE = 'Objective',
-}
 type filterFeedbacksType = {
   AZ: boolean;
   ZA: boolean;
@@ -119,16 +117,21 @@ const DraftItem: FC<DraftItemProps> = ({
   };
 
   const getPropperTargetType = (targetType, targetId) => {
-    const capitalType = TargetType[targetType].charAt(0).toUpperCase() + TargetType[targetType].slice(1);
+    const capitalType =
+      TargetTypeReverse[targetType] &&
+      TargetTypeReverse[targetType].charAt(0).toUpperCase() + TargetTypeReverse[targetType].slice(1);
 
-    let targetTypeStr = '';
-    review.forEach((item) => {
-      if (item.uuid === targetId) {
-        targetTypeStr = item.title;
-      }
-    });
+    if (capitalType) {
+      let targetTypeStr = '';
+      review.forEach((item) => {
+        if (item.uuid === targetId) {
+          targetTypeStr = item.title;
+        }
+      });
 
-    return `“${capitalType}: ${targetTypeStr}”`;
+      return `“${capitalType}: ${targetTypeStr}”`;
+    }
+    return '';
   };
 
   return (

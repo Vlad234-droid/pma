@@ -56,13 +56,6 @@ const RespondFeedbackContainer: FC = () => {
     );
     setTitle(() => 'Respond to feedback requests');
     setSelectedPerson(() => ({
-      // id: selectedNote.uuid,
-      // img: 'selectedDraft.img',
-      // f_name: selectedNote.targetColleagueProfile?.colleague?.profile?.firstName,
-      // l_name: selectedNote.targetColleagueProfile?.colleague?.profile?.lastName,
-      // targetId: selectedNote?.targetId,
-      // targetType: selectedNote?.targetType,
-      // targetColleagueUuid: selectedPerson?.targetColleagueUuid,
       ...selectedNote.targetColleagueProfile.colleague,
       targetId: selectedNote?.targetId,
       targetType: selectedNote?.targetType,

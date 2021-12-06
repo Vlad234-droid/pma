@@ -38,3 +38,21 @@ export enum FeedbackStatus {
   DRAFT = 'DRAFT',
   COMPLETED = 'COMPLETED',
 }
+
+export enum FeedbackArea {
+  OBJECTIVES = 'Objectives',
+}
+
+export enum TargetType {
+  'Objectives' = 'OBJECTIVE',
+  'Development goal' = 'GOAL',
+  'Value and behaviour' = 'VALUE_BEHAVIOR',
+  'Other' = 'OTHER',
+}
+
+export enum TargetTypeReverse {
+  'OBJECTIVE' = 'Objectives',
+  'GOAL' = 'Development goal',
+  'VALUE_BEHAVIOR' = 'Value and behaviour',
+  'OTHER' = 'Other',
+}

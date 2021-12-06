@@ -22,7 +22,8 @@ const SuccessModal: FC<SuccessModalProps> = ({
       </div>
       <h2 className={css(Done_text)}>Done!</h2>
       <p className={css(Description)}>
-        {`${selectedPerson?.f_name} ${selectedPerson?.l_name}`} will now be able to see your feedback
+        {`${selectedPerson?.profile?.firstName} ${selectedPerson?.profile?.lastName}`} will now be able to see your
+        feedback
       </p>
       <div
         className={css({

@@ -5,7 +5,7 @@ import SecondaryWidget, { Props as SecondaryWidgetProps } from '../SecondaryWidg
 import MainWidget from '../MainWidget';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { ObjectiveType , ReviewType } from 'config/enum';
+import { ObjectiveType, ReviewType } from 'config/enum';
 import { getTimelineByReviewTypeSelector, timelineTypesAvailabilitySelector } from '@pma/store';
 
 export type MainWidgetProps = {};
@@ -30,7 +30,7 @@ const Widgets: FC<Props> = () => {
       title: t('personal_development_plan', 'Personal development plan'),
       date: t('personal_development_plan_date', 'Added 04 Apr 2021', { date: new Date(2021, 4, 4) }),
       customStyle: { flex: '2 1 110px' },
-      onClick: () => alert('View1'),
+      onClick: () => console.log(),
     },
     {
       iconGraphic: 'chatSq',
@@ -44,7 +44,7 @@ const Widgets: FC<Props> = () => {
       title: t('My notes'),
       date: t('Last updated Apr 2021', { date: new Date(2021, 4, 4) }),
       customStyle: { flex: '2 1 110px' },
-      onClick: () => history.push('notes'),
+      onClick: () => console.log(),
     },
   ];
 

@@ -130,16 +130,7 @@ const ViewFeedbackComp: FC = () => {
                 />
                 <span className={css(Size_style)}>Download feedback</span>
               </div>
-              <p
-                className={css({
-                  fontWeight: 'normal',
-                  fontSize: '16px',
-                  lineHeight: '20px',
-                  margin: '4px 0px 0px 0px',
-                })}
-              >
-                Save feedback to your device
-              </p>
+              <p className={css(Saved_styled)}>Save feedback to your device</p>
               <Button
                 styles={[iconBtnStyle, { maxWidth: '161px !important' }]}
                 onPress={() => {
@@ -198,6 +189,13 @@ const ViewFeedbackComp: FC = () => {
       )}
     </>
   );
+};
+
+const Saved_styled: Rule = {
+  fontWeight: 'normal',
+  fontSize: '16px',
+  lineHeight: '20px',
+  margin: '4px 0px 0px 0px',
 };
 
 const Size_style: Rule = {

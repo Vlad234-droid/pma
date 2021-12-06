@@ -10,12 +10,9 @@ import { getPropperTime } from '../../../utils';
 import { FeedbackStatus } from '../../../config/enum';
 import { filteredByInputSearchHandler, filteredNotesByRadiosBtnsHandler } from '../../../utils';
 import defaultImg from '../../../../public/default.png';
+import { TargetTypeReverse } from '../../../config/enum';
 
 import { colleagueUUIDSelector } from '@pma/store';
-
-enum TargetType {
-  OBJECTIVE = 'Objective',
-}
 
 type filterFeedbacksType = {
   AZ: boolean;
@@ -128,7 +125,8 @@ const DraftItem: FC<DraftItemProps> = ({
 
   const getPropperTargetType = (targetType, targetId) => {
     const capitalType =
-      TargetType[targetType] && TargetType[targetType].charAt(0).toUpperCase() + TargetType[targetType].slice(1);
+      TargetTypeReverse[targetType] &&
+      TargetTypeReverse[targetType].charAt(0).toUpperCase() + TargetTypeReverse[targetType].slice(1);
 
     if (capitalType) {
       let targetTypeStr = '';
@@ -145,92 +143,98 @@ const DraftItem: FC<DraftItemProps> = ({
 
   return (
     <>
-      {getPropperNotes()?.map((item, i) => (
-        <div key={item.uuid}>
-          <TileWrapper>
-            <Accordion
-              id={`draft-accordion-${item.uuid}`}
-              customStyle={{
-                borderBottom: 'none',
-                marginTop: 0,
-              }}
-            >
-              <BaseAccordion id={`draft-base-accordion-${item.uuid}`}>
-                {() => (
-                  <>
-                    <Section defaultExpanded={checkedRadio.unread ? !i : false}>
-                      <div className={css(Draft_Styles)}>
-                        <div className={css(Block_info)}>
-                          <div className={css({ alignSelf: 'flex-start' })}>
-                            <img className={css(Img_style)} src={defaultImg} alt='photo' />
+      {getPropperNotes()?.map((item, i) => {
+        return (
+          <div key={item.uuid}>
+            <TileWrapper>
+              <Accordion
+                id={`draft-accordion-${item.uuid}`}
+                customStyle={{
+                  borderBottom: 'none',
+                  marginTop: 0,
+                }}
+              >
+                <BaseAccordion id={`draft-base-accordion-${item.uuid}`}>
+                  {() => (
+                    <>
+                      <Section defaultExpanded={checkedRadio.unread ? !i : false}>
+                        <div className={css(Draft_Styles)}>
+                          <div className={css(Block_info)}>
+                            <div className={css({ alignSelf: 'flex-start' })}>
+                              <img className={css(Img_style)} src={defaultImg} alt='photo' />
+                            </div>
+                            <div className={css({ marginLeft: '16px' })}>
+                              <h3
+                                className={css(Names_Style)}
+                              >{`${item?.colleagueProfile?.colleague?.profile?.firstName} ${item?.colleagueProfile?.colleague?.profile?.lastName}`}</h3>
+                              <p
+                                className={css(Industry_Style)}
+                              >{`${item?.colleagueProfile?.colleague?.workRelationships[0].job.name}, ${item?.colleagueProfile?.colleague?.workRelationships[0].department?.name}`}</p>
+                            </div>
                           </div>
-                          <div className={css({ marginLeft: '16px' })}>
-                            <h3
-                              className={css(Names_Style)}
-                            >{`${item?.targetColleagueProfile?.colleague?.profile?.firstName} ${item?.targetColleagueProfile?.colleague?.profile?.lastName}`}</h3>
-                            <p
-                              className={css(Industry_Style)}
-                            >{`${item?.targetColleagueProfile?.colleague?.workRelationships[0].job.name}, ${item?.targetColleagueProfile?.colleague?.workRelationships[0].department?.name}`}</p>
+                          <div className={css({ display: 'flex', justifyContent: 'center', alignItems: 'center' })}>
+                            <div className={css({ marginRight: '26px' })}>{getPropperTime(item.updatedTime)}</div>
+                            <ExpandButton onClick={(expanded) => expanded && markAsReadFeedback(item.uuid)} />
                           </div>
                         </div>
-                        <div className={css({ display: 'flex', justifyContent: 'center', alignItems: 'center' })}>
-                          <div className={css({ marginRight: '26px' })}>{getPropperTime(item.updatedTime)}</div>
-                          <ExpandButton onClick={(expanded) => expanded && markAsReadFeedback(item.uuid)} />
-                        </div>
-                      </div>
 
-                      <Panel>
-                        <TileWrapper
-                          customStyle={{ padding: '24px', margin: '0px 28px 28px 24px', border: '1px solid #E5E5E5' }}
-                        >
-                          <h2 className={css(Title_style)}>{getPropperTargetType(item.targetType, item.targetId)}</h2>
-                          <>
-                            <div className={css(Info_block_style)}>
-                              <h3>Question 1</h3>
-                              {item.feedbackItems.map((question) => {
-                                return <p key={question.code}>{question.code === 'Question 1' && question.content}</p>;
-                              })}
-                            </div>
-                            <div className={css(Info_block_style)}>
-                              <h3>Question 2</h3>
-                              {item.feedbackItems.map((question) => {
-                                return <p key={question.code}>{question.code === 'Question 2' && question.content}</p>;
-                              })}
-                            </div>
-                            <div className={css(Info_block_style)}>
-                              <h3>Anything else?</h3>
-                              {item.feedbackItems.map((question) => {
-                                return (
-                                  <p key={question.code}>{question.code === 'Anything else?' && question.content}</p>
-                                );
-                              })}
-                            </div>
-                          </>
-                        </TileWrapper>
-                        <IconButton
-                          customVariantRules={{ default: iconBtnStyle }}
-                          onPress={() => {
-                            if (focus) setFocus(() => false);
-                            if (filterModal) setFilterModal(() => false);
-                            setFilterFeedbacks(() => ({ AZ: false, ZA: false, newToOld: false, oldToNew: false }));
+                        <Panel>
+                          <TileWrapper
+                            customStyle={{ padding: '24px', margin: '0px 28px 28px 24px', border: '1px solid #E5E5E5' }}
+                          >
+                            <h2 className={css(Title_style)}>{getPropperTargetType(item.targetType, item.targetId)}</h2>
+                            <>
+                              <div className={css(Info_block_style)}>
+                                <h3>Question 1</h3>
+                                {item.feedbackItems.map((question) => {
+                                  return (
+                                    <p key={question.code}>{question.code === 'Question 1' && question.content}</p>
+                                  );
+                                })}
+                              </div>
+                              <div className={css(Info_block_style)}>
+                                <h3>Question 2</h3>
+                                {item.feedbackItems.map((question) => {
+                                  return (
+                                    <p key={question.code}>{question.code === 'Question 2' && question.content}</p>
+                                  );
+                                })}
+                              </div>
+                              <div className={css(Info_block_style)}>
+                                <h3>Anything else?</h3>
+                                {item.feedbackItems.map((question) => {
+                                  return (
+                                    <p key={question.code}>{question.code === 'Anything else?' && question.content}</p>
+                                  );
+                                })}
+                              </div>
+                            </>
+                          </TileWrapper>
+                          <IconButton
+                            customVariantRules={{ default: iconBtnStyle }}
+                            onPress={() => {
+                              if (focus) setFocus(() => false);
+                              if (filterModal) setFilterModal(() => false);
+                              setFilterFeedbacks(() => ({ AZ: false, ZA: false, newToOld: false, oldToNew: false }));
 
-                            draftFeedback(item.id);
-                          }}
-                          graphic='share'
-                          iconProps={{ invertColors: false }}
-                          iconStyles={iconStyle}
-                        >
-                          <Trans>Share</Trans>
-                        </IconButton>
-                      </Panel>
-                    </Section>
-                  </>
-                )}
-              </BaseAccordion>
-            </Accordion>
-          </TileWrapper>
-        </div>
-      ))}
+                              draftFeedback(item.id);
+                            }}
+                            graphic='share'
+                            iconProps={{ invertColors: false }}
+                            iconStyles={iconStyle}
+                          >
+                            <Trans>Share</Trans>
+                          </IconButton>
+                        </Panel>
+                      </Section>
+                    </>
+                  )}
+                </BaseAccordion>
+              </Accordion>
+            </TileWrapper>
+          </div>
+        );
+      })}
     </>
   );
 };

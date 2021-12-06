@@ -12,7 +12,7 @@ import { Close } from 'components/Icon/graphics/Close';
 import { GenericItemField } from 'components/GenericForm';
 import { TileWrapper } from 'components/Tile';
 import { useDispatch, useSelector } from 'react-redux';
-
+import { FeedbackArea } from '../../config/enum';
 import {
   ColleaguesActions,
   colleagueUUIDSelector,
@@ -20,12 +20,12 @@ import {
   getFindedColleguesS,
   getReviewsS,
 } from '@pma/store';
-
-enum TargetType {
-  Objectives = 'OBJECTIVE',
-}
+import { TargetType } from '../../config/enum';
 
 const ModalRequestFeedback: FC = () => {
+  const { css } = useStyle();
+  const dispatch = useDispatch();
+
   const methods = useForm({
     mode: 'onChange',
     resolver: yupResolver<Yup.AnyObjectSchema>(createRequestFeedbackSchema),
@@ -40,21 +40,18 @@ const ModalRequestFeedback: FC = () => {
   const { register } = methods;
 
   const formValues = getValues();
+
   const [objectiveOptions, setObjectiveOptions] = useState<Array<ObjectiveOptionsType>>([]);
-  const [uuidTargetType, setUuidTargetType] = useState('');
   const [showSuccessModal, setShowSuccesModal] = useState<boolean>(false);
   const [selectedPersons, setSelectedPersons] = useState<PeopleTypes[] | []>([]);
   const [inputValue, setInputValue] = useState<string>('');
-  const dispatch = useDispatch();
-  const { css } = useStyle();
   const reviews = useSelector(getReviewsS) || [];
-
   const findedCollegues = useSelector(getFindedColleguesS) || [];
   const colleagueUuid = useSelector(colleagueUUIDSelector);
 
   useEffect(() => {
-    if (formValues.area_options === 'Objectives') {
-      dispatch(FeedbackActions.getObjectiveReviews({ type: 'OBJECTIVE', colleagueUuid }));
+    if (formValues.area_options === FeedbackArea.OBJECTIVES) {
+      dispatch(FeedbackActions.getObjectiveReviews({ type: TargetType.Objectives, colleagueUuid }));
     }
   }, [formValues.area_options]);
 
@@ -102,12 +99,8 @@ const ModalRequestFeedback: FC = () => {
     { value: 'id_4', label: 'Other' },
   ];
 
-  const getSelected = (option) => {
-    setUuidTargetType(() => option.uuid);
-  };
-
   const onSubmit = async (data) => {
-    if (!colleagueUuid) return;
+    const [review] = reviews;
     const getPropperFeedbackItems = () => {
       if (data.comment_to_request) {
         return {
@@ -122,7 +115,9 @@ const ModalRequestFeedback: FC = () => {
         colleagueUuid: person.colleagueUUID,
         targetColleagueUuid: colleagueUuid,
         targetType: TargetType[data.area_options],
-        targetId: uuidTargetType,
+        ...(!!reviews.length && {
+          targetId: review.uuid,
+        }),
         status: 'PENDING',
         ...getPropperFeedbackItems(),
       };
@@ -212,22 +207,25 @@ const ModalRequestFeedback: FC = () => {
                 onChange={() => trigger('area_options')}
               />
             </div>
-            <div className={css({ marginTop: '24px' })}>
-              <GenericItemField
-                name={`objective_options`}
-                methods={methods}
-                Wrapper={({ children }) => (
-                  <Item label='Choose an objective you want feedback on' withIcon={false}>
-                    {children}
-                  </Item>
-                )}
-                Element={Select}
-                options={objectiveOptions}
-                placeholder='Choose objective'
-                value={formValues.objective_options}
-                getSelected={getSelected}
-              />
-            </div>
+            {formValues.area_options === FeedbackArea.OBJECTIVES && (
+              <div className={css({ marginTop: '24px' })}>
+                <GenericItemField
+                  name={`objective_options`}
+                  methods={methods}
+                  Wrapper={({ children }) => (
+                    <Item label='Choose an objective you want feedback on' withIcon={false}>
+                      {children}
+                    </Item>
+                  )}
+                  Element={Select}
+                  options={objectiveOptions}
+                  placeholder='Choose objective'
+                  value={formValues.objective_options}
+                  onChange={() => trigger('objective_options')}
+                />
+              </div>
+            )}
+
             <TileWrapper customStyle={{ padding: '24px', border: '1px solid #E5E5E5' }}>
               <h3 className={css(Tile_title)}>Anything else?</h3>
               <h3 className={css(Commnet_style)}>Add any other comment here</h3>
