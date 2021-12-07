@@ -107,7 +107,7 @@ const ReviewFormModal: FC<Props> = ({ reviewType, onClose }) => {
     return null;
   }
   if (reviewLoaded && timelineReview?.status === Status.WAITING_FOR_APPROVAL) {
-    return <SuccessModal onClose={onClose} />;
+    return <SuccessModal onClose={onClose} reviewType={reviewType} />;
   }
 
   return (

@@ -110,6 +110,7 @@ const Select: FC<SelectProps> = ({
                   onMouseDown={(e) => e.preventDefault()}
                   onClick={() => {
                     setSelectedOptionValue(option.value);
+                    toggleOption(false);
                     if (getSelected !== undefined) {
                       getSelected(option);
                     }

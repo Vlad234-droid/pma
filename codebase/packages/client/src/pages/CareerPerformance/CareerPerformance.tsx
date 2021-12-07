@@ -124,7 +124,7 @@ const CareerPerformance: FC = () => {
                 <div data-test-id='personal' className={css(basicTileStyle)}>
                   <ReviewWidget
                     reviewType={ReviewType.MYR}
-                    status={Status.STARTED}
+                    status={midYearReview.status}
                     startDate={midYearReview.startDate}
                     onClick={() => console.log('ReviewWidget')}
                     onClose={() => console.log('ReviewWidget')}
@@ -136,7 +136,7 @@ const CareerPerformance: FC = () => {
                 <div data-test-id='feedback' className={css(basicTileStyle)}>
                   <ReviewWidget
                     reviewType={ReviewType.EYR}
-                    status={Status.STARTED}
+                    status={endYearReview.status}
                     startDate={endYearReview.startDate}
                     onClick={() => console.log('ReviewWidget')}
                     onClose={() => console.log('ReviewWidget')}
@@ -151,7 +151,7 @@ const CareerPerformance: FC = () => {
               <div data-test-id='feedback' className={css(basicTileStyle)}>
                 <ReviewWidget
                   reviewType={ReviewType.EYR}
-                  status={Status.STARTED}
+                  status={endYearReview.status}
                   onClick={() => console.log('ReviewWidget')}
                   onClose={() => console.log('ReviewWidget')}
                   title={'Annual performance review'}

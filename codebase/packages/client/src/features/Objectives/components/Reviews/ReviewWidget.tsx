@@ -24,9 +24,10 @@ export const TEST_ID = 'review-widget';
 const getContent = ({ status, startDate = '' }): [Graphics, Colors, Colors, boolean, string, string] => {
   const { t } = useTranslation();
   if (!status) {
-    return ['calender', 'tescoBlue', 'white', false, `The form will be available in ${startDate}`, ''];
+    return ['roundAlert', 'pending', 'tescoBlue', true, 'Your form is now available', 'View Review Form'];
   }
   const contents: { [key: string]: [Graphics, Colors, Colors, boolean, string, string] } = {
+    [Status.NOT_STARTED]: ['calender', 'tescoBlue', 'white', false, `The form will be available in ${startDate}`, ''],
     [Status.STARTED]: ['roundAlert', 'pending', 'tescoBlue', true, 'Your form is now available', 'View Review Form'],
     [Status.DECLINED]: ['roundPencil', 'base', 'white', true, t('review_form_declined', 'Declined'), 'View and Edit'],
     [Status.DRAFT]: ['roundPencil', 'base', 'white', true, t('review_form_draft', 'Draft'), 'View and Edit'],
@@ -43,7 +44,7 @@ const getContent = ({ status, startDate = '' }): [Graphics, Colors, Colors, bool
       'pending',
       'white',
       true,
-      t('review_form_pending', 'Pending'),
+      t('review_form_waiting_for_approval', 'Waiting for approval'),
       'View Review Form',
     ],
     [Status.COMPLETED]: ['roundTick', 'green', 'white', true, t('review_form_pending', 'Pending'), 'View Review Form'],
@@ -90,18 +91,17 @@ const ReviewWidget: FC<Props> = ({ customStyle, onClick, reviewType, status, sta
             </span>
           </div>
         </div>
-        {!status ||
-          (status !== Status.NOT_STARTED && (
-            <div className={css(bodyStyle)}>
-              <div className={css(bodyBlockStyle)}>
-                <TriggerModalButton name={buttonContent} title={title} mode={buttonVariant}>
-                  <ConsumerTriggerButton>
-                    {({ onClose }) => <ReviewFormModal reviewType={reviewType} onClose={onClose} />}
-                  </ConsumerTriggerButton>
-                </TriggerModalButton>
-              </div>
+        {status !== Status.NOT_STARTED && (
+          <div className={css(bodyStyle)}>
+            <div className={css(bodyBlockStyle)}>
+              <TriggerModalButton name={buttonContent} title={title} mode={buttonVariant}>
+                <ConsumerTriggerButton>
+                  {({ onClose }) => <ReviewFormModal reviewType={reviewType} onClose={onClose} />}
+                </ConsumerTriggerButton>
+              </TriggerModalButton>
             </div>
-          ))}
+          </div>
+        )}
       </div>
     </TileWrapper>
   );
