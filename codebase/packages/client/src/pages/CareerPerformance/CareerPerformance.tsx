@@ -9,6 +9,7 @@ import { ObjectiveType, ReviewType, Status } from 'config/enum';
 import { Header } from 'components/Header';
 import { RouterSwitch } from 'components/RouterSwitch';
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import {
   colleagueUUIDSelector,
   getTimelineByCodeSelector,
@@ -24,6 +25,7 @@ import Feedback from '../../../public/Feedback.jpg';
 import Learning from '../../../public/Learning.jpg';
 import Contribution from '../../../public/Contribution.jpg';
 import { Icon } from 'components/Icon';
+import { Page } from '../types';
 
 const CareerPerformance: FC = () => {
   const { css } = useStyle();
@@ -65,7 +67,9 @@ const CareerPerformance: FC = () => {
         </div>
         <div className={css(wrapperStylee)}>
           <div className={css({ flex: '3 1 504px', display: 'flex', flexDirection: 'column', gap: '8px' })}>
-            <DashboardProfile />
+            <Link to={Page.PROFILE}>
+              <DashboardProfile />
+            </Link>
             {canShowMyReview && (
               <StepIndicator
                 mainTitle={t('Your contribution timeline')}

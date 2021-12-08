@@ -15,6 +15,7 @@ import {
   getPendingEmployees,
   ManagersActions,
 } from '@pma/store';
+import { Page } from '../types';
 
 export const TEST_ID = 'my-team';
 
@@ -77,7 +78,7 @@ const MyTeam: FC = () => {
       >
         <div className={css({ flex: '3 1 375px', display: 'flex', flexDirection: 'column', gap: '8px' })}>
           <div>
-            <Link to={'/actions'}>
+            <Link to={Page.ACTIONS}>
               <WidgetPending count={waitingForApprovalCount} />
             </Link>
             <div className={css(allColleagues)}>
