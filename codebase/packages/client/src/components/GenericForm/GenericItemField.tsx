@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect, RefObject } from 'react';
+import React, { FC, RefObject, useEffect, useState } from 'react';
 
 import { Ref, UseFormReturn } from 'react-hook-form';
 
@@ -44,11 +44,11 @@ export const GenericItemField: FC<GenericItemFormProps> = ({
       isValid={!errors[name]}
       name={name}
       value={state}
-      onChange={(e) => {
+      onChange={(e, value) => {
         setState(e.target.value);
         register(name).onChange(e);
         if (onChange) {
-          onChange(e.target.value);
+          onChange(e.target.value, value);
         }
       }}
       domRef={register(name).ref}

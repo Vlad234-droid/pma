@@ -1,10 +1,10 @@
 import React from 'react';
 
-import { Request, Response, NextFunction } from 'express';
+import { NextFunction, Request, Response } from 'express';
 
 import { OneloginError } from '@energon/onelogin';
 
-import { ssr, SorryPage, SorryPageProps } from '@dex-ddl/core';
+import { SorryPage, SorryPageProps, ssr } from '@dex-ddl/core';
 
 type ErrorHandlerParams = Omit<SorryPageProps, 'type'>;
 

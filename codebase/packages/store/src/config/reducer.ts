@@ -11,6 +11,9 @@ import feedbackReducer from '../entities/feedback/reducer';
 import colleaguesReducer from '../entities/colleagues/reducer';
 import reviewsReducer from '../entities/reviews/reducer';
 import objectiveSharingReducer from '../entities/objectiveSharing/reducer';
+import performanceCycleReducer from '../entities/performanceCycle/reducer';
+import configEntriesReducer from '../entities/configEntries/reducer';
+import processTemplateReducer from '../entities/processTemplate/reducer';
 
 export const rootReducer = combineReducers({
   users: userReducer,
@@ -24,4 +27,7 @@ export const rootReducer = combineReducers({
   colleagues: colleaguesReducer,
   reviews: reviewsReducer,
   objectivesSharing: objectiveSharingReducer,
+  performanceCycle: performanceCycleReducer,
+  configEntries: configEntriesReducer,
+  processTemplate: processTemplateReducer,
 });

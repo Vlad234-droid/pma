@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react';
 import mergeRefs from 'react-merge-refs';
-import { useStyle, Rule } from '@dex-ddl/core';
+import { Rule, useStyle } from '@dex-ddl/core';
 import { Icon } from 'components/Icon';
 
 import { useRefContainer } from '../context/input';
@@ -60,7 +60,7 @@ const Select: FC<SelectProps> = ({
           readOnly={true}
           onSelect={(e) => {
             if (onChange && isOptionOpen) {
-              onChange(e);
+              onChange(e, selectedOptionValue);
             }
             toggleOption(false);
           }}

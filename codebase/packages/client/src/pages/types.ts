@@ -4,7 +4,7 @@ enum Page {
   CAREER_PERFORMANCE = 'career-performance',
   CREATE_ORGANIZATION_OBJECTIVES = 'create-organization-objectives',
   VIEW_ORGANIZATION_OBJECTIVES = 'view-organization-objectives',
-  CREATE_PERFORMANCE_CYCLE = 'create-performance-cycle',
+  CREATE_PERFORMANCE_CYCLE = 'performance-cycle/:performanceCycleUuid',
   PERFORMANCE_CYCLE = 'performance-cycle',
   PERSONAL_DEVELOPMENT_PLAN = 'personal-development-plan',
   OBJECTIVES_VIEW = 'objectives',

@@ -42,7 +42,7 @@ const bodyStyle = {
   display: 'inline-flex',
 } as Styles;
 
-const PersonalInformation: FC<Props> = ({ user }) => {
+const PersonalInformation: FC<Props> = ({ user = {} }) => {
   const { css } = useStyle();
   const { t } = useTranslation();
 
