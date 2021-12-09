@@ -10,6 +10,7 @@ import { initialState as feedbackInitialState } from '../entities/feedback/reduc
 import { initialState as colleaguessState } from '../entities/colleagues/reducer';
 import { initialState as reviewsInitialState } from '../entities/reviews/reducer';
 import { initialState as objectiveSharingState } from '../entities/objectiveSharing/reducer';
+import { initialState as tipsInitialState } from '../entities/tips/reducer';
 
 //@ts-ignore
 export const initialState = {
@@ -24,6 +25,7 @@ export const initialState = {
   colleagues: colleaguessState,
   reviewsInitialState: reviewsInitialState,
   objectivesSharing: objectiveSharingState,
+  tips: tipsInitialState,
 };
 
 export type State = StateType<typeof initialState>;

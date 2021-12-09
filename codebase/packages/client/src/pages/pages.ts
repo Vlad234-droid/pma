@@ -14,6 +14,7 @@ import ViewFeedback from './ViewFeedback';
 import Settings from './Settings';
 import CreateOrganizationObjectives from './CreateOrganizationObjectives';
 import ObjectivesView from './ObjectivesView/ObjectivesView';
+import TipsAdministration from './Tips'
 
 const pages: Record<Page, PageElement> = {
   [Page.MY_TEAM]: MyTeam,
@@ -32,6 +33,7 @@ const pages: Record<Page, PageElement> = {
   [Page.REQUEST_FEEDBACK]: RequestFeedback,
   [Page.RESPOND_FEEDBACK]: RespondFeedback,
   [Page.VIEW_FEEDBACK]: ViewFeedback,
+  [Page.TIPS]: TipsAdministration,
 };
 
 export default pages;

@@ -9,6 +9,7 @@ import feedBackEpic from '../entities/feedback/epic';
 import colleaguesEpic from '../entities/colleagues/epic';
 import reviewsEpic from '../entities/reviews/epic';
 import objectiveSharingEpic from '../entities/objectiveSharing/epic';
+import tipsEpic from '../entities/tips/epic';
 
 export const rootEpic = combineEpics(
   userEpic,
@@ -24,4 +25,5 @@ export const rootEpic = combineEpics(
   colleaguesEpic,
   reviewsEpic,
   objectiveSharingEpic,
+  tipsEpic,
 );

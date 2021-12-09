@@ -8,3 +8,4 @@ export * from './colleagues';
 export * from './reviews';
 export * from './orgObjective';
 export * from './objectiveSharing';
+export * from './tips';
