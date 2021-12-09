@@ -5,7 +5,7 @@ import { Styles, useStyle } from '@dex-ddl/core';
 import { DashboardProfile } from 'features/Profile';
 import { BasicTile } from 'components/Tile';
 import { StepIndicator } from 'components/StepIndicator/StepIndicator';
-import { ObjectiveType, ReviewType, Status } from 'config/enum';
+import { ObjectiveType, ReviewType } from 'config/enum';
 import { Header } from 'components/Header';
 import { RouterSwitch } from 'components/RouterSwitch';
 import { useSelector } from 'react-redux';
@@ -128,8 +128,8 @@ const CareerPerformance: FC = () => {
                 <div data-test-id='personal' className={css(basicTileStyle)}>
                   <ReviewWidget
                     reviewType={ReviewType.MYR}
-                    status={midYearReview.status}
-                    startDate={midYearReview.startDate}
+                    status={midYearReview?.status}
+                    startDate={midYearReview?.startDate}
                     onClick={() => console.log('ReviewWidget')}
                     onClose={() => console.log('ReviewWidget')}
                     title={'Mid-year review'}
@@ -140,8 +140,8 @@ const CareerPerformance: FC = () => {
                 <div data-test-id='feedback' className={css(basicTileStyle)}>
                   <ReviewWidget
                     reviewType={ReviewType.EYR}
-                    status={endYearReview.status}
-                    startDate={endYearReview.startDate}
+                    status={endYearReview?.status}
+                    startDate={endYearReview?.startDate}
                     onClick={() => console.log('ReviewWidget')}
                     onClose={() => console.log('ReviewWidget')}
                     title={'Year-end review'}
@@ -155,7 +155,7 @@ const CareerPerformance: FC = () => {
               <div data-test-id='feedback' className={css(basicTileStyle)}>
                 <ReviewWidget
                   reviewType={ReviewType.EYR}
-                  status={endYearReview.status}
+                  status={endYearReview?.status}
                   onClick={() => console.log('ReviewWidget')}
                   onClose={() => console.log('ReviewWidget')}
                   title={'Annual performance review'}
