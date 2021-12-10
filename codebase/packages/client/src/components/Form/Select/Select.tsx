@@ -68,7 +68,6 @@ const Select: FC<SelectProps> = ({
           onBlur={() => toggleOption(false)}
         />
         <span
-          onClick={() => toggleOption(!isOptionOpen)}
           style={{
             position: 'absolute',
             right: '10px',
@@ -110,7 +109,6 @@ const Select: FC<SelectProps> = ({
                   onMouseDown={(e) => e.preventDefault()}
                   onClick={() => {
                     setSelectedOptionValue(option.value);
-                    toggleOption(false);
                     if (getSelected !== undefined) {
                       getSelected(option);
                     }

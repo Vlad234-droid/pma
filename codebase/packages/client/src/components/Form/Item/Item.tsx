@@ -6,6 +6,7 @@ import Provider from '../context/input';
 
 export type Props = {
   label?: string;
+  description?: string;
   withIcon?: boolean;
   styles?: Styles | Rule;
   errormessage?: string;

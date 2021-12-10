@@ -7,6 +7,7 @@ type GenericItemFormProps = {
   value?: string;
   label?: string;
   placeholder?: string;
+  description?: string;
   methods: UseFormReturn;
   Element: FC<any>;
   Wrapper?: FC<any>;
@@ -23,6 +24,7 @@ export const GenericItemField: FC<GenericItemFormProps> = ({
   Element,
   Wrapper = 'div',
   placeholder,
+  description,
   label,
   onChange,
   getSelected,
