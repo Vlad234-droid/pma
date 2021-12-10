@@ -12,7 +12,6 @@ import {
   CreateButton,
   Reviews,
   ReviewWidget,
-  SecondaryWidget,
   SecondaryWidgetProps,
   Section,
   ShareWidget,
@@ -228,59 +227,6 @@ const Objectives: FC = () => {
             </Section>
           )}
           <Section
-            left={{
-              content: (
-                <div>
-                  <Trans i18nKey='my_completed_reviews'>My Completed Reviews</Trans>
-                </div>
-              ),
-            }}
-            right={{
-              content: (
-                <div>
-                  <Button mode='inverse' onPress={() => alert('view')} styles={[linkStyles({ theme })]}>
-                    <Trans i18nKey='view_history'>View history</Trans>
-                  </Button>
-                </div>
-              ),
-            }}
-          >
-            {reviews.length > 0 ? (
-              <Reviews reviews={createdReviews} />
-            ) : (
-              t('no_completed_reviews', 'You have no completed reviews')
-            )}
-          </Section>
-          <Section
-            left={{
-              content: (
-                <div>
-                  <Trans i18nKey='previous_review_files'>Previous Review Files</Trans>
-                </div>
-              ),
-            }}
-            right={{
-              content: (
-                <div>
-                  <Button
-                    mode='inverse'
-                    onPress={() => setPreviousReviewFilesModalShow(true)}
-                    styles={[linkStyles({ theme })]}
-                  >
-                    <Trans i18nKey='view_files'>View Files</Trans>
-                  </Button>
-                </div>
-              ),
-            }}
-          >
-            <Trans i18nKey='you_have_n_files'>You have 12 files</Trans>
-          </Section>
-          <Section contentCustomStyle={widgetWrapperStyle}>
-            {widgets.map((props, idx) => (
-              <SecondaryWidget key={idx} {...props} />
-            ))}
-          </Section>
-          <Section
             contentCustomStyle={widgetWrapperStyle}
             left={{
               content: (
@@ -328,6 +274,30 @@ const Objectives: FC = () => {
                   customStyle={{ height: '182px' }}
                 />
               </div>
+            )}
+          </Section>
+          <Section
+            left={{
+              content: (
+                <div>
+                  <Trans i18nKey='my_completed_reviews'>My Completed Reviews</Trans>
+                </div>
+              ),
+            }}
+            right={{
+              content: (
+                <div>
+                  <Button mode='inverse' onPress={() => alert('view')} styles={[linkStyles({ theme })]}>
+                    <Trans i18nKey='view_history'>View history</Trans>
+                  </Button>
+                </div>
+              ),
+            }}
+          >
+            {reviews.length > 0 ? (
+              <Reviews reviews={createdReviews} />
+            ) : (
+              t('no_completed_reviews', 'You have no completed reviews')
             )}
           </Section>
         </div>
@@ -403,7 +373,6 @@ const widgetWrapperStyle: Rule = {
   flexWrap: 'wrap',
   gridGap: '8px',
   marginTop: '8px',
-  marginBottom: '20px',
 };
 
 const linkStyles = ({ theme }) => ({
