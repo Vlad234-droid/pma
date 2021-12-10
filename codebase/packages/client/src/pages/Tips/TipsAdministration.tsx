@@ -38,7 +38,7 @@ const TipsAdministration: FC = () => {
       
       {/* <NoTips /> */}
 
-      {tips.map(item => {
+      {tips?.map(item => {
         return <TipsCard card={item} key={item.uuid} />
       })}
     </Fragment>

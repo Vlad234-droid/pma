@@ -1,7 +1,8 @@
-import React, { FC, Fragment } from 'react';
-import { useStyle, Rule, useBreakpoints, Icon as IconCore, Button, theme } from '@dex-ddl/core';
+import React, { FC, Fragment, useState } from 'react';
+import { useStyle, Rule, useBreakpoints, Icon as IconCore, Button, theme, Modal } from '@dex-ddl/core';
 import { TileWrapper } from 'components/Tile';
 import { TipsProps } from '../types';
+import { ViewHistoryModal } from '.';
 
 export type TipsCardProps = {
   card: TipsProps;
@@ -20,11 +21,20 @@ const handlePushTip = () => {
 }
 
 const TipsCard: FC<TipsCardProps> = ({card}) => {
-  console.log(card);
   const { css } = useStyle();
 
   const date = new Date(card.createdTime)
   const createdTime = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`
+
+  const [isShowViewHistoryModal, setShowViewHistoryModal] = useState(false);
+
+  const handleShowViewHistoryModal = () => {
+    setShowViewHistoryModal(true)
+  }
+
+  const handleCloseViewHistoryModal = () => {
+    setShowViewHistoryModal(false)
+  }
 
   return (
     <Fragment>
@@ -34,11 +44,11 @@ const TipsCard: FC<TipsCardProps> = ({card}) => {
             <div className={css(tipImage, { backgroundImage: `url(${card.imageLink})` })} />
           </div>
           <div className={css()}>
-            <div className={css(tipTitle)}>{card?.title}</div>
+            <div className={css(tipTitle)}>{card.title}</div>
             <div className={css(tipText)}>{card.description}</div>
             <div className={css({ marginTop: '8px', display: 'flex' })}>
               <div className={css( lastPushStyle )}>Last push: {card.published ? 'sometime ago' : 'haven\'t pushed yet'}</div>
-              <div className={css( viewHistoryStyle )} onClick={handleViewHistoryClick}>View history</div>
+              <div className={css( viewHistoryStyle )} onClick={handleShowViewHistoryModal}>View history</div>
             </div>
           </div>
           <div className={css(cardRightBlock)}>
@@ -50,6 +60,8 @@ const TipsCard: FC<TipsCardProps> = ({card}) => {
           </div>
         </TileWrapper>
       </div>
+
+      { isShowViewHistoryModal && <ViewHistoryModal card={card} handleCloseModal={handleCloseViewHistoryModal} /> }
     </Fragment>
   )
 }
