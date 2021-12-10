@@ -3,6 +3,7 @@ import yn from 'yn';
 
 import { getEnv } from './env-accessor';
 import { defaultConfig } from './default';
+import { isUrlAbsolute } from '../utils';
 
 export type ProcessConfig = {
   // general
@@ -103,7 +104,10 @@ export class ConfigAccessor {
       oneLoginApplicationPath: () => oneLoginApplicationPath,
       oneLoginCallbackUrlRoot: () => processEnv.APPLICATION_URL_ROOT,
       oneLoginCallbackPath: () => processEnv.ONELOGIN_CALLBACK_PATH,
-      oneLoginRedirectAfterLogoutUrl: () => `${oneLoginApplicationPath}${oneLoginRedirectAfterLogoutUrl}`,
+      oneLoginRedirectAfterLogoutUrl: () =>
+        isUrlAbsolute(oneLoginRedirectAfterLogoutUrl)
+          ? oneLoginRedirectAfterLogoutUrl
+          : `${oneLoginApplicationPath}${oneLoginRedirectAfterLogoutUrl}`,
       oidcClientId: () => processEnv.OIDC_CLIENT_ID,
       oidcClientSecret: () => processEnv.OIDC_CLIENT_SECRET,
       oidcRefreshTokenSecret: () => processEnv.OIDC_REFRESH_TOKEN_SECRET,
