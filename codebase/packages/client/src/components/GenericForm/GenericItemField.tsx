@@ -28,6 +28,7 @@ export const GenericItemField: FC<GenericItemFormProps> = ({
   label,
   onChange,
   getSelected,
+  options,
   ...props
 }) => {
   const [state, setState] = useState(value);
@@ -40,22 +41,32 @@ export const GenericItemField: FC<GenericItemFormProps> = ({
   } = methods;
 
   const element = (
-    <Element
-      {...props}
-      getSelected={getSelected}
-      isValid={!errors[name]}
-      name={name}
-      value={state}
-      onChange={(e, value) => {
-        setState(e.target.value);
-        register(name).onChange(e);
-        if (onChange) {
-          onChange(e.target.value, value);
-        }
-      }}
-      domRef={register(name).ref}
-      placeholder={placeholder}
-    />
+    <div>
+      <Element
+        {...props}
+        options={options}
+        getSelected={getSelected}
+        isValid={!errors[name]}
+        name={name}
+        value={state}
+        onChange={(e, value) => {
+          setState(e.target.value);
+          register(name).onChange(e);
+          if (onChange) {
+            onChange(e.target.value, value);
+          }
+        }}
+        domRef={register(name).ref}
+        placeholder={placeholder}
+        list={`datalist-${name}`}
+      />
+      <datalist id={`datalist-${name}`}>
+        {options?.map((option) => (
+          /*@ts-ignore*/
+          <option key={`option-${name}-${option.value}`} value={option.value} label={option.label} />
+        ))}
+      </datalist>
+    </div>
   );
 
   if (!Wrapper && !label) {

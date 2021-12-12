@@ -20,7 +20,7 @@ import {
 } from '@pma/store';
 import { useTranslation } from 'components/Translation';
 import { configEntriesMetaSelector, configEntriesSelector } from '@pma/store/src/selectors/config-entries';
-import { getProcessTemplateSelector } from '@pma/store/src/selectors/processTemplate';
+import { getProcessTemplateByUuidSelector, getProcessTemplateSelector } from '@pma/store/src/selectors/processTemplate';
 import useDispatch from 'hooks/useDispatch';
 import { createPMCycleSchema } from './schema';
 import { getConfigEntriesByPerformanceCycle } from '@pma/store/src/selectors/performance-cycle';
@@ -30,14 +30,56 @@ import { Input, Item, Select } from 'components/Form';
 import TemplatesModal from './TemplatesModal';
 import { Accordion } from '../../Objectives';
 
+function getChildren(data, options11: any, key, value) {
+  return data
+    .filter((item) => {
+      return item[key] === options11;
+    })
+    .reduce((prev, item) => {
+      return [
+        ...prev,
+        ...item.children?.map((child) => ({
+          value: child[value],
+          label: child.name,
+          children: child.children,
+        })),
+      ];
+    }, []);
+}
+
 export const PerformanceCycleForm: FC = () => {
   const params = useParams();
+  const performanceCycleUuid = params['performanceCycleUuid'];
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const mappedObjectives: any = [];
 
   const { t } = useTranslation();
 
   const [objectives, setObjectives] = useState([]);
+  const [entryConfigUuid, setEntryConfigUuid] = useState('');
+  const [options11, setOptions11] = useState([]);
+  const [options2, setOptions2] = useState([]);
+  const [options12, setOptions12] = useState([]);
+  const [options13, setOptions13] = useState([]);
+  const [options131, setOptions131] = useState([]);
+  const [options14, setOptions14] = useState([]);
+  const [processSelected, setProcessSelected] = useState(false);
+  const [entryConfigKey, setEntryConfigKey] = useState('');
+  const [isTemplatesModalOpen, showTemplatesModal] = useState(false);
+
+  const dispatch = useDispatch();
+
+  const methods = useForm({
+    mode: 'onChange',
+    resolver: yupResolver<Yup.AnyObjectSchema>(createPMCycleSchema),
+  });
+  const {
+    formState: { errors, isValid },
+    getValues,
+    setValue,
+    reset,
+    trigger,
+  } = methods;
 
   const {
     components = [],
@@ -52,12 +94,45 @@ export const PerformanceCycleForm: FC = () => {
   const status = useSelector(getObjectivesStatusSelector);
   const { origin } = useSelector(objectivesSelector);
   const isAllObjectivesInSameStatus = useSelector(isObjectivesInStatus(status));
+  const { data } = useSelector(configEntriesSelector) || {};
+  const processTemplates = useSelector(getProcessTemplateSelector) || {};
+  const processTemplate = useSelector(getProcessTemplateByUuidSelector(processSelected));
+  const { loaded } = useSelector(configEntriesMetaSelector) || {};
+  const { configEntryItem, formDataToFillObj, performanceCycleItem } = useSelector(
+    getConfigEntriesByPerformanceCycle(performanceCycleUuid),
+  );
 
   useEffect(() => {
     dispatch(SchemaActions.getSchema({ colleagueUuid }));
     dispatch(ObjectiveActions.getObjectives({ performanceCycleUuid: '' }));
   }, []);
 
+  useEffect(() => {
+    if (!loaded) {
+      dispatch(ConfigEntriesActions.getConfigEntries());
+    }
+  }, [loaded]);
+
+  useEffect(() => {
+    if (!loaded) {
+      dispatch(ProcessTemplateActions.getProcessTemplate());
+    }
+  }, [loaded]);
+
+  const getItems = (params) => {
+    dispatch(ConfigEntriesActions.getConfigEntriesByUuid({ uuid: params.value }));
+  };
+
+  useEffect(() => {
+    if (performanceCycleUuid !== 'new')
+      dispatch(PerformanceCycleActions.getPerformanceCycleByUuid({ performanceCycleUuid }));
+  }, [performanceCycleUuid]);
+
+  if (configEntryItem && !entryConfigUuid) {
+    setEntryConfigUuid(configEntryItem.uuid);
+  }
+
+  // TODO: objectivesLoaded always false
   useEffect(() => {
     if (objectivesLoaded && schemaLoaded) {
       origin?.forEach((objectiveItem) => {
@@ -87,61 +162,28 @@ export const PerformanceCycleForm: FC = () => {
 
   const { css, theme } = useStyle();
 
-  const { data } = useSelector(configEntriesSelector) || {};
-  const processTemplates = useSelector(getProcessTemplateSelector) || {};
-  const { loaded } = useSelector(configEntriesMetaSelector) || {};
-
-  const dispatch = useDispatch();
-
   useEffect(() => {
-    if (!loaded) {
-      dispatch(ConfigEntriesActions.getConfigEntries());
+    if (processTemplate) {
+      reset({
+        ...processTemplate,
+        ...processTemplate?.cycle,
+        ...processTemplate?.cycle?.properties,
+      });
     }
-  }, [loaded]);
-
-  useEffect(() => {
-    if (!loaded) {
-      dispatch(ProcessTemplateActions.getProcessTemplate());
-    }
-  }, [loaded]);
-
-  const methods = useForm({
-    mode: 'onChange',
-    resolver: yupResolver<Yup.AnyObjectSchema>(createPMCycleSchema),
-  });
-  const {
-    formState: { errors, isValid },
-    getValues,
-    setValue,
-    reset,
-    trigger,
-  } = methods;
-
-  const getItems = (params) => {
-    dispatch(ConfigEntriesActions.getConfigEntriesByUuid({ uuid: params.value }));
-  };
-
-  const performanceCycleUuid = params['performanceCycleUuid'];
-  const { configEntryItem, formDataToFillObj, performanceCycleItem } = useSelector(
-    getConfigEntriesByPerformanceCycle(performanceCycleUuid),
-  );
-  const [entryConfigUuid, setEntryConfigUuid] = useState('');
-
-  if (configEntryItem && !entryConfigUuid) {
-    setEntryConfigUuid(configEntryItem.uuid);
-  }
+  }, [processTemplate]);
 
   useEffect(() => {
     reset({
       ...formDataToFillObj,
       ...performanceCycleItem,
       ...performanceCycleItem?.metadata?.cycle?.timelinePoints?.[0].properties,
+      startTime: performanceCycleItem?.startTime?.substr(0, 10),
+      endTime: performanceCycleItem?.endTime?.substr(0, 10),
     });
-  }, [performanceCycleItem]);
 
-  useEffect(() => {
-    dispatch(PerformanceCycleActions.getPerformanceCycleByUuid({ performanceCycleUuid }));
-  }, []);
+    setProcessSelected(performanceCycleItem?.templateUUID);
+    setEntryConfigKey(performanceCycleItem?.entryConfigKey);
+  }, [performanceCycleItem]);
 
   useEffect(() => {
     if (entryConfigUuid) {
@@ -149,10 +191,9 @@ export const PerformanceCycleForm: FC = () => {
     }
   }, [entryConfigUuid]);
 
-  const onSaveDraft = () => {
+  function getData() {
     const {
       name,
-      template_uuid,
       pm_cycle_before_end,
       pm_cycle_before_start,
       pm_cycle_max,
@@ -165,6 +206,7 @@ export const PerformanceCycleForm: FC = () => {
     debugger;
     const temp = {
       data: {
+        uuid: performanceCycleUuid,
         entryConfigKey: entryConfigKey,
         templateUUID: processSelected,
         name: name,
@@ -199,92 +241,42 @@ export const PerformanceCycleForm: FC = () => {
         },
       },
     };
-    dispatch(PerformanceCycleActions.createPerformanceCycle(temp));
+    return temp;
+  }
+
+  const onSaveDraft = () => {
+    const data = getData();
+    if (performanceCycleUuid !== 'new') {
+      return dispatch(PerformanceCycleActions.updatePerformanceCycle(data));
+    }
+    dispatch(PerformanceCycleActions.createPerformanceCycle(data));
   };
 
-  //const [options1, setOptions1] = useState([]);
-  const [options11, setOptions11] = useState([]);
-  const [options2, setOptions2] = useState([]);
-  const [options12, setOptions12] = useState([]);
-  const [options13, setOptions13] = useState([]);
-  const [options131, setOptions131] = useState([]);
-  const [options14, setOptions14] = useState([]);
+  const onPublish = () => {
+    const data = getData();
+    dispatch(PerformanceCycleActions.publishPerformanceCycle(data));
+  };
 
-  useEffect(() => {
-    setOptions2(
-      data
-        .filter((item) => {
-          return item.uuid === options11;
-        })
-        .reduce((prev, item) => {
-          return [
-            ...prev,
-            ...item.children?.map((child) => ({
-              value: child.uuid,
-              label: child.name,
-              children: child.children,
-            })),
-          ];
-        }, []),
-    );
-  }, [options11, data]);
+  useEffect(() => setOptions2(getChildren(data, options11, 'uuid', 'uuid')), [options11, data]);
 
-  useEffect(() => {
-    // @ts-ignore
-    setOptions13(
-      options2
-        .filter((item) => {
-          // @ts-ignore
-          return item.value === options12;
-        })
-        // @ts-ignore
-        .reduce((prev, item) => {
-          return [
-            ...prev,
-            // @ts-ignore
-            ...item.children?.map((child) => ({
-              value: child.uuid,
-              label: child.name,
-              children: child.children,
-            })),
-          ];
-        }, []),
-    );
-  }, [options12, options2]);
+  useEffect(() => setOptions13(getChildren(options2, options12, 'value', 'uuid')), [options12, options2]);
 
-  useEffect(() => {
-    setOptions14(
-      options13
-        ?.filter((item) => {
-          // @ts-ignore
-          return item.value === options131;
-        })
-        // @ts-ignore
-        ?.reduce((prev, item) => {
-          // @ts-ignore
-          if (item?.children)
-            return [
-              ...prev,
-              // @ts-ignore
-              ...item?.children?.map((child) => ({
-                value: child.compositeKey,
-                label: child.name,
-              })),
-            ];
-          return prev;
-        }, []),
-    );
-  }, [options131, options13, options12]);
-
-  const [processSelected, setProcessSelected] = useState(false);
-  const [entryConfigKey, setEntryConfigKey] = useState('');
-
-  const [isTemplatesModalOpen, showTemplatesModal] = useState(false);
+  useEffect(
+    () => setOptions14(getChildren(options13, options131, 'value', 'compositeKey')),
+    [options131, options13, options12],
+  );
 
   const closeTemplatesModal = () => {
     showTemplatesModal(false);
   };
 
+  const selectTemplate = (value) => {
+    showTemplatesModal(false);
+    dispatch(ProcessTemplateActions.getProcessTemplateMetadata({ fileUuid: value }));
+    setProcessSelected(value);
+  };
+
+  /*---------Render---------*/
   // @ts-ignore
   return (
     <form className={css({ marginTop: '32px' })}>
@@ -318,12 +310,12 @@ export const PerformanceCycleForm: FC = () => {
             </Item>
           )}
           Element={Select}
+          /*Element={(props) => <input type={'text'} {...props} />}*/
           options={data.map((item) => {
             return { value: item.uuid, label: item.name };
           })}
           placeholder={'- Select organization level -   '}
           onChange={(_, data) => {
-            console.log({ data });
             setOptions11(data);
             getItems({ value: data });
           }}
@@ -390,11 +382,9 @@ export const PerformanceCycleForm: FC = () => {
           }}
         />
 
-        <button type='button' onClick={() => showTemplatesModal(true)}>
-          Choose Template
-        </button>
+        <Button onPress={() => showTemplatesModal(true)}>Choose Template</Button>
 
-        {isTemplatesModalOpen && <TemplatesModal closeModal={closeTemplatesModal} />}
+        {isTemplatesModalOpen && <TemplatesModal selectTemplate={selectTemplate} closeModal={closeTemplatesModal} />}
 
         {/*<Button mode='inverse'>Import process</Button>*/}
       </TileWrapper>
@@ -606,7 +596,9 @@ export const PerformanceCycleForm: FC = () => {
           Save as draft
         </Button>
         {/*@ts-ignore*/}
-        <Button>Publish</Button>
+        <Button styles={[btnStyle({ theme }) as Styles]} onPress={onPublish}>
+          Publish
+        </Button>
       </div>
     </form>
   );

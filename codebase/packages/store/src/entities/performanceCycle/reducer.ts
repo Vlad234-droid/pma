@@ -23,10 +23,13 @@ const byIdRequest = (state) => ({ ...state, meta: { ...state.meta, loading: true
 
 const byIdSuccess = (state, { payload }) => {
   return {
-    data: state.data.map((pmCycle) => {
-      if (pmCycle.uuid !== payload.data.uuid) return pmCycle;
-      return { ...pmCycle, ...payload.data };
-    }),
+    data:
+      state?.data?.length > 0
+        ? state.data.map((pmCycle) => {
+            if (pmCycle.uuid !== payload.data.uuid) return pmCycle;
+            return { ...pmCycle, ...payload.data };
+          })
+        : [payload.data],
     meta: { ...state.meta, loading: false, loaded: true },
   };
 };

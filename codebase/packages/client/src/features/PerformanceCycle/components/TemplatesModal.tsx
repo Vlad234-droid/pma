@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { Rule, useStyle, useBreakpoints, ModalWithHeader, Button } from '@dex-ddl/core';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
@@ -7,74 +7,46 @@ import { useForm } from 'react-hook-form';
 import { Icon } from 'components/Icon';
 import { Input } from 'components/Form';
 import { GenericItemField } from 'components/GenericForm';
+import { useSelector } from 'react-redux';
+import { getProcessTemplateSelector } from '@pma/store/src/selectors/processTemplate';
 
 type TemplateModalProps = {
   closeModal: () => void;
+  selectTemplate: (value) => void;
 };
 
-const TemplatesModal: FC<TemplateModalProps> = ({ closeModal }) => {
-  const { css, theme } = useStyle();
-  const templatesList = [
-    {
-      name: 'Template 1'
-    },
-    {
-      name: 'Template 1'
-    },
-    {
-      name: 'Template 1'
-    },
-    {
-      name: 'Template 1'
-    },
-    {
-      name: 'Template 1'
-    },
-    {
-      name: 'Template 1'
-    },
-    {
-      name: 'Template 1'
-    },
-    {
-      name: 'Template 1'
-    },
-    {
-      name: 'Template 1'
-    },
-    {
-      name: 'Template 1'
-    },
-    {
-      name: 'Template 1'
-    },
-    {
-      name: 'Template 1'
-    },
-    {
-      name: 'Template 1'
-    },
-    {
-      name: 'Template 1'
-    },
-    {
-      name: 'Template 1'
-    },
-    {
-      name: 'Template 1'
-    },
-    {
-      name: 'Template 2'
-    }
-  ];
+const TemplatesModal: FC<TemplateModalProps> = ({ closeModal, selectTemplate }) => {
+  const { css } = useStyle();
+  const processTemplate = useSelector(getProcessTemplateSelector);
+  const [templatesList, setTemplatesList] = useState([] as any);
+
+  useEffect(() => { 
+    setTemplatesList(processTemplate);
+  }, [])
 
   const templateChooseMethods = useForm({
     mode: 'onChange',
     resolver: yupResolver<Yup.AnyObjectSchema>(chooseTemplateSchema),
   })
 
+  const { getValues } = templateChooseMethods;
+
   const handleTemplateClick = () => {
     console.log("Template clicked");
+  }
+
+  const handleSearchTemplate = () => {
+    const searchValue = getValues('template_search').toLowerCase();
+    const filtredTemplatesList = [] as any;
+    processTemplate.map(item => {
+      const date = new Date(item?.createdTime)
+      const createdTime = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
+      if(`${item.label.toLowerCase()}${createdTime}`.includes(searchValue)) {
+        filtredTemplatesList.push(item)
+      }
+      return filtredTemplatesList;
+    })
+    setTemplatesList(filtredTemplatesList)
   }
 
   return (
@@ -95,13 +67,22 @@ const TemplatesModal: FC<TemplateModalProps> = ({ closeModal }) => {
           Element={Input}
           placeholder={'Enter template name'}
           value={''}
+          onChange={handleSearchTemplate}
         />
 
         <div className={css(templatesListStyles)}>
           {
             templatesList.map(item => {
+              const date = new Date(item?.createdTime)
+              const createdTime = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
               return (
-                <div className={css(templatesListItemStyles)} key={Math.random()} onClick={handleTemplateClick}>{item.name}</div>
+                <div 
+                  className={css(templatesListItemStyles)} 
+                  key={Math.random()} 
+                  onClick={() => selectTemplate(item.value)}
+                >
+                  <div>{item?.label}</div><div className={css({ fontSize: '14px' })}>{createdTime}</div>
+                </div>
               )
             })
           }
@@ -134,8 +115,6 @@ const templatesModalWindowStyles: Rule = () => {
   }
 }
 
-
-
 const templatesModalContentWrapperStyles: Rule = () => {
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
@@ -148,25 +127,25 @@ const templatesModalContentWrapperStyles: Rule = () => {
   }
 }
 
-
 const templatesListStyles: Rule = ({ theme }) => ({
   margin: '25px 0 0',
   height: '100%',
   overflowY: 'scroll'
 })
 
-
 const templatesListItemStyles: Rule = ({ theme }) => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+  // const [, isBreakpoint] = useBreakpoints();
+  // const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
   return {
-    margin: mobileScreen ? 0 : '5px 0',
+    // margin: mobileScreen ? 0 : '5px 0',
     padding: '15px 0',
     borderBottom: '1px solid #ddd',
-    cursor: 'pointer'
+    cursor: 'pointer',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center'
   }
 }
-
 
 const templatesModalFooter: Rule = ({ theme }) => {
   const [, isBreakpoint] = useBreakpoints();

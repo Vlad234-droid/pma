@@ -20,8 +20,22 @@ export const createPerformanceCycle = createAsyncAction(
   'performance-cycles/CREATE_FAILURE',
 )<any, any, Error>();
 
+export const updatePerformanceCycle = createAsyncAction(
+  'performance-cycles/UPDATE_REQUEST',
+  'performance-cycles/UPDATE_SUCCESS',
+  'performance-cycles/UPDATE_FAILURE',
+)<any, any, Error>();
+
+export const publishPerformanceCycle = createAsyncAction(
+  'performance-cycles/PUBLISH_REQUEST',
+  'performance-cycles/PUBLISH_SUCCESS',
+  'performance-cycles/PUBLISH_FAILURE',
+)<any, any, Error>();
+
 export const Actions = {
   getGetAllPerformanceCycles: getGetAllPerformanceCycles.request,
   getPerformanceCycleByUuid: getPerformanceCycleByUuid.request,
   createPerformanceCycle: createPerformanceCycle.request,
+  updatePerformanceCycle: updatePerformanceCycle.request,
+  publishPerformanceCycle: publishPerformanceCycle.request,
 };

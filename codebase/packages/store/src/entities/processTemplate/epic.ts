@@ -25,7 +25,8 @@ export const getProcessTemplateMetadataEpic: Epic = (action$, _, { api }) =>
     filter(isActionOf(getProcessTemplateMetadata.request)),
     switchMap(({ payload }) =>
       from(api.getProcessTemplateMetadata(payload)).pipe(
-        map(getProcessTemplateMetadata.success),
+        // @ts-ignore
+        map(({ data }) => getProcessTemplateMetadata.success({ data, fileUuid: payload.fileUuid })),
         catchError((e) => {
           const errors = e?.data?.errors;
           return of(getProcessTemplateMetadata.failure(errors?.[0]));

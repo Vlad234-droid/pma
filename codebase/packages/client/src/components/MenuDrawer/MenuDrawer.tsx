@@ -40,7 +40,7 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
             <Icon graphic={'settingsGear'} />
             <span className={css(itemSettingsTextStyle)}>Settings</span>
           </Link>
-          <Link to={''} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
+          <Link to={Page.PERFORMANCE_CYCLE} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
             <Icon graphic={'alert'} />
             <span className={css(itemSettingsTextStyle)}>Performance Cycle</span>
           </Link>

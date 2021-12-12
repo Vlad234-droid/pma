@@ -19,7 +19,7 @@ export const colleagueUUIDSelector = createSelector(usersSelector, ({ current })
 
 export const isManager = createSelector(usersSelector, ({ current }) => {
   // @ts-ignore
-  return current?.info?.data?.colleague?.workRelationship?.[0]?.isManager;
+  return current?.info?.data?.roles?.some((role) => role.toLowerCase().includes('manager'));
 });
 
 export const currentUserSelector = createSelector(usersSelector, ({ current }) => {

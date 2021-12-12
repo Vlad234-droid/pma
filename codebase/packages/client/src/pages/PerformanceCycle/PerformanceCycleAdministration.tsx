@@ -111,7 +111,7 @@ const PerformanceCycleAdministration: FC = () => {
             </label>
           </div>
         </div>
-        <Button onPress={() => history.push(Page.CREATE_PERFORMANCE_CYCLE)}>Create performance cycle</Button>
+        <Button onPress={() => history.push('performance-cycle/new')}>Create performance cycle</Button>
       </div>
       <div className={css(headWrapperStyles)}>
         <TileWrapper customStyle={{ padding: '24px' }}>
