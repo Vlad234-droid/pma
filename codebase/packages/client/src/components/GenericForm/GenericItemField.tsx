@@ -7,7 +7,7 @@ type GenericItemFormProps = {
   value?: string;
   label?: string;
   placeholder?: string;
-  description?: string;
+  withMarkdown?: boolean;
   methods: UseFormReturn;
   Element: FC<any>;
   Wrapper?: FC<any>;
@@ -24,7 +24,7 @@ export const GenericItemField: FC<GenericItemFormProps> = ({
   Element,
   Wrapper = 'div',
   placeholder,
-  description,
+  withMarkdown,
   label,
   onChange,
   getSelected,
@@ -74,7 +74,7 @@ export const GenericItemField: FC<GenericItemFormProps> = ({
   }
 
   return (
-    <Wrapper label={label} errormessage={errors[name] && errors[name].type === 'required' ? errors[name].message : ''}>
+    <Wrapper label={label} withMarkdown={withMarkdown} errormessage={errors[name] && errors[name].type === 'required' ? errors[name].message : ''}>
       {element}
     </Wrapper>
   );

@@ -168,14 +168,13 @@ const ReviewFormModal: FC<Props> = ({ reviewType, onClose }) => {
               const { id, key, text, label, description, type, validate, values = [] } = component;
               const value = formValues[key] ? formValues[key] : '';
               if (type === 'text') {
+                //todo add markdown here instead of text
                 return (
-                  <div style={{ padding: '24px 0' }}>
+                  <div style={{ padding: '10px 0' }}>
                     <div
                       className={css({
-                        fontSize: '18px',
-                        lineHeight: '22px',
-                        color: theme.colors.tescoBlue,
-                        fontWeight: theme.font.weight.bold,
+                        fontSize: '16px',
+                        lineHeight: '20px'
                       })}
                     >
                       {text}
@@ -193,8 +192,8 @@ const ReviewFormModal: FC<Props> = ({ reviewType, onClose }) => {
                     Wrapper={Item}
                     Element={Input}
                     placeholder={description}
-                    description={description}
                     value={value}
+                    withMarkdown={true}
                   />
                 );
               }
@@ -208,8 +207,8 @@ const ReviewFormModal: FC<Props> = ({ reviewType, onClose }) => {
                     Wrapper={Item}
                     Element={Textarea}
                     placeholder={description}
-                    description={description}
                     value={value}
+                    withMarkdown={true}
                   />
                 );
               }
@@ -221,15 +220,15 @@ const ReviewFormModal: FC<Props> = ({ reviewType, onClose }) => {
                     methods={methods}
                     label={label}
                     Wrapper={({ children, label }) => (
-                      <Item withIcon={false} label={label}>
+                      <Item withIcon={false} label={label} withMarkdown={true}>
                         {children}
                       </Item>
                     )}
                     Element={Select}
                     options={values}
                     placeholder={description}
-                    description={description}
                     value={value}
+                    withMarkdown={true}
                   />
                 );
               }
