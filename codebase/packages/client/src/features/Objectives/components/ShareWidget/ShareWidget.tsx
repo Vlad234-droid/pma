@@ -15,7 +15,6 @@ import { transformReviewsToObjectives } from '../../utils';
 import {
   ObjectiveSharingActions,
   currentUserSelector,
-  getTimelineByReviewTypeSelector,
   isSharedSelector,
   hasStatusInReviews,
   getAllSharedObjectives,
@@ -40,7 +39,6 @@ const ShareWidget: FC<Props> = ({ customStyle }) => {
 
   // TODO: add selectors
   const { info } = useSelector(currentUserSelector);
-  const timelineObjective = useSelector(getTimelineByReviewTypeSelector(ReviewType.OBJECTIVE));
   const isShared = useSelector(isSharedSelector);
   const hasApprovedObjective: boolean = useSelector(hasStatusInReviews(ReviewType.OBJECTIVE, Status.APPROVED));
   const { components = [] } = useSelector(getReviewSchema(ReviewType.OBJECTIVE));
@@ -48,16 +46,13 @@ const ShareWidget: FC<Props> = ({ customStyle }) => {
   const formElements = components.filter((component) => component.type != 'text');
   const isManager = (info && info.isManager) ?? false;
 
-  const pathParams = useMemo(
-    () => ({ colleagueUuid: info.colleagueUUID, cycleUuid: timelineObjective?.cycleUuid }),
-    [info.colleagueUUID, timelineObjective?.cycleUuid],
-  );
+  const pathParams = useMemo(() => ({ colleagueUuid: info.colleagueUUID, cycleUuid: 'CURRENT' }), [info.colleagueUUID]);
   const manager = info.manager;
 
   const isManagerShared = isManager && isShared;
   const sharedObjectivesCount = sharedObjectives.length;
   const formElementsCount = formElements.length;
-  const isValidPathParams = pathParams.colleagueUuid && pathParams.cycleUuid;
+  const isValidPathParams = pathParams.colleagueUuid;
 
   const handleShareSaveBtnClick = async () => {
     setIsSuccessModalOpen(true);
