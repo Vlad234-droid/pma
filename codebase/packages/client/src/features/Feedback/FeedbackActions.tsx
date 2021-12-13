@@ -20,15 +20,21 @@ import {
   FeedbackActions as FeedbackActionsGet,
   getPropperNotesByStatusSelector,
   colleagueUUIDSelector,
-} from '@pma/store';
+ UserActions } from '@pma/store';
 import { FeedbackStatus } from '../../config/enum';
+import { useAuthContainer } from 'contexts/authContext';
 
 const FEEDBACK_ACTIONS = 'feedback_actions';
 
 const FeedbackActions: FC = () => {
+  const { user } = useAuthContainer();
+
+  const profileAttr = user?.data?.profileAttributes;
+
   const [info360Modal, setInfo360Modal] = useState<boolean>(false);
   const dispatch = useDispatch();
   const colleagueUuid = useSelector(colleagueUUIDSelector);
+
   useEffect(() => {
     if (!colleagueUuid) return;
     dispatch(
@@ -109,6 +115,24 @@ const FeedbackActions: FC = () => {
     { value: 'id_4', label: 'I don`t have a preference' },
   ];
 
+  const checkForVoiceValue = () =>
+    profileAttr?.[profileAttr?.findIndex((item) => item?.name === 'voice')]?.value ?? 'id_1';
+
+  const createToneOfVoiceHandler = (inputValue) => {
+    const value = field_options[field_options.findIndex((item) => item.value === inputValue)].label;
+    const payload = {
+      colleagueUuid,
+      name: 'voice',
+      value,
+      type: 'STRING',
+    };
+    if (profileAttr?.[profileAttr?.findIndex((item) => item?.name === 'voice')]) {
+      dispatch(UserActions.updateProfileAttribute([payload]));
+      return;
+    }
+    dispatch(UserActions.createProfileAttribute([payload]));
+  };
+
   return (
     <>
       {info360Modal && (
@@ -183,7 +207,10 @@ const FeedbackActions: FC = () => {
               Element={Select}
               options={field_options}
               placeholder={'Choose tone of voice'}
-              value='id_2'
+              value={checkForVoiceValue()}
+              onChange={(_, value) => {
+                createToneOfVoiceHandler(value);
+              }}
             />
           </form>
         </div>

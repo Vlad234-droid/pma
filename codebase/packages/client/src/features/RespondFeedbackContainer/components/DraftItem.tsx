@@ -37,8 +37,6 @@ const DraftItem: FC<DraftItemProps> = ({
   const review = useSelector(getReviewByUuidS) || [];
   const colleagueUuid = useSelector(colleagueUUIDSelector);
 
-  console.log('pendingNotes', pendingNotes);
-
   useEffect(() => {
     if (!colleagueUuid) return;
     dispatch(

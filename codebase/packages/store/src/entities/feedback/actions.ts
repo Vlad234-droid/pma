@@ -1,10 +1,11 @@
 import { createAsyncAction } from 'typesafe-actions';
 
-export const createNewFeedback = createAsyncAction('feedback/REQUEST', 'feedback/SUCCESS', 'feedback/FAILURE')<
-  any,
-  any,
-  Error
->();
+export const createNewFeedback = createAsyncAction(
+  'feedback/CREATE_NEW_FEEDBACK_REQUEST',
+  'feedback/CREATE_NEW_FEEDBACK_SUCCESS',
+  'feedback/CREATE_NEW_FEEDBACK_FAILURE',
+  'feedback/CREATE_NEW_FEEDBACK_CANCEL',
+)<any, any, Error>();
 export const getAllFeedbacks = createAsyncAction(
   'feedback/GET_ALL_REQUEST',
   'feedback/GET_ALL_SUCCESS',

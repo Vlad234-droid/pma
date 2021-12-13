@@ -28,15 +28,8 @@ const SubmitPart: FC<SubmitPartProps> = ({
 
   const valuess = getValues();
 
-  const getPropperToneOfVoice = () => {
-    if (!selectedPerson.profileAttributes.length) {
-      return 'Direct and simple';
-    } else if (selectedPerson.profileAttributes.length) {
-      return selectedPerson.profileAttributes[
-        selectedPerson.profileAttributes.findIndex((item) => item.name === 'voice')
-      ].value;
-    }
-  };
+  const getPropperToneOfVoice = () =>
+    selectedPerson?.profileAttributes?.find((item) => item?.name === 'voice')?.value ?? 'Direct and simple';
 
   return (
     <div data-test-id={WITH_SELECTED_TEST}>

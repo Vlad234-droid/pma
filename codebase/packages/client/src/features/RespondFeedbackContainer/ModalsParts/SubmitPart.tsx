@@ -11,10 +11,9 @@ import { TileWrapper } from 'components/Tile';
 import { Item, Textarea } from 'components/Form';
 import { GenericItemField } from 'components/GenericForm';
 import { Trans } from 'components/Translation';
-import { FeedbackActions, colleagueUUIDSelector } from '@pma/store';
+import { FeedbackActions, colleagueUUIDSelector , getReviewByUuidS } from '@pma/store';
 import { useDispatch, useSelector } from 'react-redux';
 import defaultImg from '../../../../public/default.png';
-import { getReviewByUuidS } from '@pma/store';
 import { TargetTypeReverse } from 'config/enum';
 
 const SubmitPart: FC<SubmitPartProps> = ({
@@ -149,15 +148,8 @@ const SubmitPart: FC<SubmitPartProps> = ({
     handleSubmit(onSubmit)(e);
   };
 
-  const getPropperToneOfVoice = () => {
-    if (!selectedPerson.profileAttributes.length) {
-      return 'Direct and simple';
-    } else if (selectedPerson.profileAttributes.length) {
-      return selectedPerson.profileAttributes[
-        selectedPerson.profileAttributes.findIndex((item) => item.name === 'voice')
-      ].value;
-    }
-  };
+  const getPropperToneOfVoice = () =>
+    selectedPerson?.profileAttributes?.find((item) => item?.name === 'voice')?.value ?? 'Direct and simple';
 
   const getPropperTargetType = (targetType, targetId) => {
     const capitalType =
@@ -176,7 +168,6 @@ const SubmitPart: FC<SubmitPartProps> = ({
     }
     return '';
   };
-  console.log('feedbackItems', feedbackItems);
 
   const getPropperCommentRequested = () => {
     if (feedbackItems[feedbackItems.findIndex((item) => item.code === 'comment_to_request')]) {

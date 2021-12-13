@@ -13,6 +13,15 @@ export const updateUserNotification = (params: any = {}) => {
   const { colleagueUuid } = params;
   return httpClient.put(`${colleaguesDomain}/${colleagueUuid}/attributes`, params);
 };
+export const createProfileAttribute = (params: any) => {
+  const [tone] = params;
+  return httpClient.post(`${colleaguesDomain}/${tone.colleagueUuid}/attributes`, params);
+};
+
+export const updateProfileAttribute = (params: any) => {
+  const [tone] = params;
+  return httpClient.put(`${colleaguesDomain}/${tone.colleagueUuid}/attributes`, params);
+};
 
 export const getCurrentUser = (params: any = {}) => httpClient.get(`${usersDomain}/me`, { params: { ...params } });
 

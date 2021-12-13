@@ -15,9 +15,6 @@ import processTemplateEpic from '../entities/processTemplate/epic';
 
 export const rootEpic = combineEpics(
   userEpic,
-  feedBackEpic,
-  colleaguesEpic,
-  reviewsEpic,
   schemaEpic,
   objectiveEpic,
   orgObjectiveEpic,
