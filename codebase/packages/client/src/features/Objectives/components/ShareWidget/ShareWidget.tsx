@@ -115,7 +115,7 @@ const ShareWidget: FC<Props> = ({ customStyle }) => {
           `You have ${sharedObjectivesCount} shared objective(s) from your manager.`,
           { count: sharedObjectivesCount },
         ),
-        t('view_objectives', 'View objectives'),
+        t('view_objectives', 'View'),
         () => {
           handleViewObjectivesBtnClick();
         },

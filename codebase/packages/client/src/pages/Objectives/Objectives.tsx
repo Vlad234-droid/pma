@@ -174,7 +174,7 @@ const Objectives: FC = () => {
         {canShowMyReview && (
           <div className={css(timelineWrapperStyles)} onClick={handleClick}>
             <StepIndicator
-              mainTitle={t('performance_timeline_title', 'My Performance Timeline')}
+              mainTitle={t('performance_timeline_title', 'Your Contribution timeline')}
               titles={descriptions}
               descriptions={startDates}
               statuses={statuses}

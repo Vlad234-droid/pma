@@ -90,7 +90,7 @@ const CareerPerformance: FC = () => {
           >
             <div data-test-id='more' className={css({ height: '112%' })} onClick={handleBtnHelp}>
               <BasicTile
-                img={<Icon graphic='support' />}
+                img={<Icon graphic='settingsGear' />}
                 hover={false}
                 title={"Something doesn't look right? Raise a ticket on colleague help."}
                 imgCustomStyle={{ width: '30px', margin: '10px auto 0px auto' }}
@@ -159,7 +159,7 @@ const CareerPerformance: FC = () => {
                   onClick={() => console.log('ReviewWidget')}
                   onClose={() => console.log('ReviewWidget')}
                   title={'Annual performance review'}
-                  description={'Your end-year review form and results will appear here.'}
+                  description={"Complete this once you've had your year-end conversation with your line manager."}
                   customStyle={{ height: '100%' }}
                 />
               </div>
@@ -176,7 +176,7 @@ const CareerPerformance: FC = () => {
                 hover={true}
                 img={Contribution}
                 title={t('Your Contribution')}
-                description={t('Click here to find the Your Contribution Guide')}
+                description={t('Click here to find the Your Contribution Guide.')}
                 customStyle={{
                   height: '100%',
                 }}
@@ -187,7 +187,7 @@ const CareerPerformance: FC = () => {
                 hover={true}
                 img={Check}
                 title={t('Everyday conversations')}
-                description={t('Tile description: Useful guidance on having great performance conversations.')}
+                description={t('Useful guidance on having great performance conversations')}
                 customStyle={{
                   height: '100%',
                 }}
@@ -209,7 +209,7 @@ const CareerPerformance: FC = () => {
                 hover={true}
                 img={Learning}
                 title={t('Learning')}
-                description={t('Click to access further information about Your Contribution.')}
+                description={t('Click here to find the Your Contribution Guide.')}
                 customStyle={{
                   height: '100%',
                 }}

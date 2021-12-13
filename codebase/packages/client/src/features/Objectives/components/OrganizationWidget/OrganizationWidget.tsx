@@ -20,7 +20,7 @@ const OrganizationWidget: FC<Props> = ({ onClick, customStyle }) => {
     return [
       'calender',
       t('organization_objectives_description', 'Your organization has 6 objectives share to all colleagues'),
-      t('view_objectives', 'View objectives'),
+      t('view_objectives', 'View'),
     ];
   };
 
