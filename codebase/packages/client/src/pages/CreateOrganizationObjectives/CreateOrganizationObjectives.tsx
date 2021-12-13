@@ -130,18 +130,23 @@ const CreateOrganizationObjectives: FC<Props> = () => {
   const callCheckValidation = debounce(() => checkInputData());
 
   const onChangeInput = (value, idx) => {
-    callCheckValidation();
+    if (formInputs.every((el) => el.value !== null && el.value.length > 20)) {
+      setSaveBtnDisabled(false);
+      setPublishBtnDisabled(false);
+    } else {
+      callCheckValidation();
+    }
     const newData = getOrgObjectivesData;
     newData[idx].title = value;
 
     setOrgObjectivesData(newData);
   };
 
+  const orgObjectives = useSelector(orgObjectivesSelector) || [];
+
   useEffect(() => {
     dispatch(OrgObjectiveActions.getOrgAuditLogs({ start: 1, limit: 3 }));
   }, []);
-
-  const orgObjectives = useSelector(orgObjectivesSelector) || [];
 
   useEffect(() => {
     dispatch(OrgObjectiveActions.getOrgObjectives({}));
@@ -163,6 +168,7 @@ const CreateOrganizationObjectives: FC<Props> = () => {
             </div>
             <div>
               {formInputs.map((item, idx) => {
+                formInputs[idx].value = orgObjectives[idx]?.title;
                 return (
                   <GenericItemField
                     key={item.id}
