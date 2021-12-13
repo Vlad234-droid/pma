@@ -2,13 +2,13 @@ import React, { FC, Fragment, useEffect } from 'react';
 import { useStyle, Rule, useBreakpoints } from '@dex-ddl/core';
 import { IconButton } from 'components/IconButton';
 import { NoTips, TipsCard } from 'features/Tips';
-import { tipsActions, getTips } from '@pma/store';
+import { tipsActions, getTipsSelector } from '@pma/store';
 import { useDispatch, useSelector } from 'react-redux';
 
 const TipsAdministration: FC = () => {
   const { css } = useStyle();
   const dispatch = useDispatch();
-  const tips = useSelector(getTips);
+  const tips = useSelector(getTipsSelector);
 
   useEffect(() => {
     dispatch(
@@ -38,9 +38,9 @@ const TipsAdministration: FC = () => {
       
       {/* <NoTips /> */}
 
-      {/* {tips.map(item => {
+      {tips.map(item => {
         return <TipsCard card={item} key={item.uuid} />
-      })} */}
+      })}
     </Fragment>
   )
 }

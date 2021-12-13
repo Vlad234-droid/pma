@@ -2,7 +2,8 @@ import { createReducer } from 'typesafe-actions';
 import { getAllTips, getTipHistory } from './actions';
 
 export const initialState = {
-  data: [],
+  tipsList: [],
+  viewHistory: [],
   meta: { loading: false, loaded: false, error: null },
 };
 
@@ -14,7 +15,7 @@ export default createReducer(initialState)
   .handleAction(getAllTips.success, (state, { payload }) => {
     return {
       ...state,
-      data: payload,
+      tipsList: payload,
       meta: { ...state.meta, loading: false, loaded: true },
     }
   })
@@ -28,14 +29,9 @@ export default createReducer(initialState)
     meta: { ...state.meta, loading: true },
   }))
   .handleAction(getTipHistory.success, (state, { payload }) => {
-    const uuid = payload.uuid;
-    const a = state.data[0];
-    // console.log(a, uuid)
     return {
       ...state,
-      data: {
-        ...state.data,
-      },
+      viewHistory: payload,
       meta: { ...state.meta, loading: false, loaded: true },
     }
   })

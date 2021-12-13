@@ -13,7 +13,6 @@ export const getAllTipsEpic: Epic = (action$, _, { api }) => {
       return from(api.getAllTips(payload)).pipe(
         //@ts-ignore
         map(({ data }) => {
-          console.log(data)
           return getAllTips.success(data);
         }),
         catchError(({ errors }) => of(getAllTips.failure(errors))),

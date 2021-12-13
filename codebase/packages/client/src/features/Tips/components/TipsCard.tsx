@@ -1,5 +1,5 @@
 import React, { FC, Fragment, useState } from 'react';
-import { useStyle, Rule, useBreakpoints, Icon as IconCore, Button, theme, Modal } from '@dex-ddl/core';
+import { useStyle, Rule, useBreakpoints, Button, theme } from '@dex-ddl/core';
 import { TileWrapper } from 'components/Tile';
 import { TipsProps } from '../types';
 import { ViewHistoryModal } from '.';
@@ -7,10 +7,6 @@ import { ViewHistoryModal } from '.';
 export type TipsCardProps = {
   card: TipsProps;
 };
-
-const handleViewHistoryClick = () => {
-  alert("View History")
-}
 
 const handleEditTip = () => {
   alert("View Edit Tip")
@@ -133,7 +129,7 @@ const lastPushStyle: Rule = () => {
   }
 }
 
-const targetStyle: Rule = ({ theme }) => {
+const targetStyle: Rule = () => {
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
   return { 

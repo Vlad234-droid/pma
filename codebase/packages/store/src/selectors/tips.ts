@@ -4,6 +4,10 @@ import { RootState } from 'typesafe-actions';
 
 export const tipsSelector = (state: RootState) => state.tips;
 
-export const getTips = createSelector(tipsSelector, (tips: any) => {
-  return tips?.data;
+export const getTipsSelector = createSelector(tipsSelector, (tips: any) => {
+  return tips?.tipsList;
 });
+
+export const getTipHistorySelector = createSelector(tipsSelector, (tips: any) => {
+  return tips?.viewHistory;
+})
