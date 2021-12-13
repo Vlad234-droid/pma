@@ -7,164 +7,45 @@ import { TileWrapper } from 'components/Tile';
 import { Item, Textarea } from 'components/Form';
 import { GenericItemField } from 'components/GenericForm';
 import { Trans } from 'components/Translation';
-import { useDispatch, useSelector } from 'react-redux';
 import defaultImg from '../../../../public/default.png';
-import { colleagueUUIDSelector, FeedbackActions } from '@pma/store';
 
 export const WITH_SELECTED_TEST = 'with_selected_test';
 
 const SubmitPart: FC<SubmitPartProps> = ({
   selectedPerson,
   setInfoModal,
-  setModalSuccess,
-  setIsOpen,
   methods,
   feedbackItemsS,
-  setSelectedPerson,
+  giveFeedback,
+  setConfirmModal,
+  onDraft,
 }) => {
-  const dispatch = useDispatch();
-
-  const giveFeedback: GiveFeedbackType[] = [
-    {
-      giveFeedback_id: '1',
-      giveFeedbacka_main_title: 'Question 1',
-      giveFeedback_title: 'Looking back, what has this colleague done well?',
-      giveFeedback_description: 'Share specific example of where you view this colleague’s strenght',
-      giveFeedback_field: {
-        field_id: '1',
-        field_type: 'textarea',
-        field_placeholder: 'Your colleague will see your feedback',
-        field_value: undefined,
-      },
-    },
-    {
-      giveFeedback_id: '2',
-      giveFeedbacka_main_title: 'Question 2',
-      giveFeedback_title: 'Looking forward, what should this colleague focus on?',
-      giveFeedback_description: 'Share specific examples of opportinities to make this colleague even better',
-      giveFeedback_field: {
-        field_id: '2',
-        field_type: 'textarea',
-        field_placeholder: 'Your colleague will see your feedback',
-        field_value: undefined,
-      },
-    },
-    {
-      giveFeedback_id: '3',
-      giveFeedbacka_main_title: 'Anything else?',
-      giveFeedback_title: 'Share any other comments you have for your colleague which you think could be useful',
-      giveFeedback_field: {
-        field_id: '3',
-        field_type: 'textarea',
-        field_placeholder: 'Your colleague will see your feedback',
-        field_value: undefined,
-      },
-    },
-  ];
-  const colleagueUuid = useSelector(colleagueUUIDSelector);
-
   const { css, theme } = useStyle();
-
   const {
-    handleSubmit,
     formState: { isValid },
-    reset,
     getValues,
   } = methods;
-  const values = getValues();
 
-  const onSubmit = async (data) => {
-    if (!colleagueUuid) return;
-    const conv = data.feedback.slice(1);
-    const getIfNeedUuid = (selectedPerson) => {
-      if (!selectedPerson.uuid) return;
-      return {
-        uuid: selectedPerson.uuid,
-      };
-    };
+  const valuess = getValues();
 
-    const getFeedbackUuidItems = (i) => {
-      if (!feedbackItemsS!.length) return;
-      return {
-        uuid: feedbackItemsS![feedbackItemsS!.findIndex((y) => y.code === giveFeedback[i].giveFeedbacka_main_title)]
-          .uuid,
-      };
-    };
-    const formData = {
-      ...getIfNeedUuid(selectedPerson),
-      colleagueUuid: colleagueUuid,
-      targetColleagueUuid: selectedPerson.colleagueUUID,
-      status: 'SUBMITTED',
-      feedbackItems: conv.map((item, i) => {
-        return {
-          ...getFeedbackUuidItems(i),
-          code: giveFeedback[i].giveFeedbacka_main_title,
-          content: item.field,
-        };
-      }),
-    };
-
-    if (!feedbackItemsS!.length) {
-      dispatch(FeedbackActions.createNewFeedback([formData]));
-    } else {
-      dispatch(FeedbackActions.updatedFeedback(formData));
+  const getPropperToneOfVoice = () => {
+    if (!selectedPerson.profileAttributes.length) {
+      return 'Direct and simple';
+    } else if (selectedPerson.profileAttributes.length) {
+      return selectedPerson.profileAttributes[
+        selectedPerson.profileAttributes.findIndex((item) => item.name === 'voice')
+      ].value;
     }
-
-    setModalSuccess(() => true);
-    reset();
-  };
-
-  const onDraft = () => {
-    if (!colleagueUuid) return;
-    const conv = values.feedback.slice(1);
-    const getIfNeedUuid = (selectedPerson) => {
-      if (!selectedPerson.uuid) return;
-      return {
-        uuid: selectedPerson.uuid,
-      };
-    };
-
-    const getFeedbackUuidItems = (i) => {
-      if (!selectedPerson.uuid) return;
-      return {
-        uuid: feedbackItemsS![feedbackItemsS!.findIndex((y) => y.code === giveFeedback[i].giveFeedbacka_main_title)]
-          .uuid,
-      };
-    };
-
-    const formData = {
-      ...getIfNeedUuid(selectedPerson),
-      colleagueUuid: colleagueUuid,
-      targetColleagueUuid: selectedPerson.colleagueUUID,
-      status: 'DRAFT',
-      feedbackItems: conv.map((item, i) => {
-        return {
-          ...getFeedbackUuidItems(i),
-          code: giveFeedback[i].giveFeedbacka_main_title,
-          content: item.field,
-        };
-      }),
-    };
-
-    if (selectedPerson.uuid) {
-      dispatch(FeedbackActions.updatedFeedback(formData));
-    } else {
-      dispatch(FeedbackActions.createNewFeedback([formData]));
-    }
-
-    setIsOpen(() => false);
-    setSelectedPerson(() => null);
-    reset();
-  };
-
-  const submitForm = (e) => {
-    handleSubmit(onSubmit)(e);
   };
 
   return (
     <div data-test-id={WITH_SELECTED_TEST}>
       <div className={css({ height: '1px', background: '#E5E5E5' })} />
       <div className={css({ marginTop: '16px' })}>
+        <div className={css(Video_wrapper)}>
+          <h2 className={css(Video_explanation_title)}>Watch video explanation</h2>
+          <img src={video_explanation} alt='video_explanation' />
+        </div>
         <div className={css(Block_info)}>
           <div className={css({ alignSelf: 'flex-start' })}>
             <img className={css(Img_style)} src={defaultImg} alt='photo' />
@@ -176,60 +57,62 @@ const SubmitPart: FC<SubmitPartProps> = ({
             <p className={css(Industry_Style)}>
               {`${selectedPerson?.workRelationships[0].job?.name}, ${selectedPerson?.workRelationships[0].department?.name}`}
             </p>
-            <span className={css(Treatment_Style)}>Please treat me kindly</span>
+            <span className={css(Treatment_Style)}>I prefer feedback that is: {getPropperToneOfVoice()}</span>
           </div>
         </div>
       </div>
       <div className={css(Notification_Block__Style)}>
         <p>This colleague has requested feedback on what they have done well and what they should focus on</p>
       </div>
-      <div className={css({ marginTop: '24px' })}>
+      <div className={css({ marginTop: '24px', marginBottom: '14px' })}>
         <IconButton graphic='information' onPress={() => setInfoModal(() => true)}>
-          <p className={css(Info_help__Style)}>Need help with providing feedback?</p>
+          <p className={css(Info_help__Style)}>Learn more about how to give great feedback</p>
         </IconButton>
       </div>
-      <h2 className={css(Video_explanation_title)}>Watch video explanation</h2>
-      <div className={css(Video_wrapper)}>
-        <img src={video_explanation} alt='video_explanation' />
-      </div>
+
       <form>
         <div>
-          {giveFeedback.map((item) => {
-            const value = feedbackItemsS?.length
-              ? feedbackItemsS[feedbackItemsS.findIndex((items) => items.code === item.giveFeedbacka_main_title)]
-                  .content
-              : '';
+          {!!Object.keys(valuess) &&
+            giveFeedback.map((item, i) => {
+              let splittedValues;
+              const conv = valuess;
+              if (conv.feedback) {
+                splittedValues = conv.feedback.slice(1);
+              }
 
-            return (
-              <div
-                key={item.giveFeedback_id}
-                className={css({
-                  ':last-child': {
-                    marginBottom: '32px',
-                  },
-                })}
-              >
-                <TileWrapper
-                  customStyle={{
-                    marginBottom: '16px !important',
-                    ...TileCustomStyles,
-                  }}
+              const value = feedbackItemsS?.length
+                ? feedbackItemsS[feedbackItemsS.findIndex((items) => items.code === item.giveFeedbacka_main_title)]
+                    .content
+                : splittedValues && splittedValues[i].field;
+
+              return (
+                <div
+                  key={item.giveFeedback_id}
+                  className={css({
+                    ':last-child': {
+                      marginBottom: '32px',
+                    },
+                  })}
                 >
-                  <h2 className={css(GiveFeedbacka_main_title)}>{item.giveFeedbacka_main_title}</h2>
-                  <h3 className={css(GiveFeedback_title)}>{item.giveFeedback_title}</h3>
-                  <p className={css(GiveFeedback_description)}>{item?.giveFeedback_description}</p>
-                  <GenericItemField
-                    name={`feedback.${item.giveFeedback_id}.field`}
-                    methods={methods}
-                    Wrapper={Item}
-                    Element={Textarea}
-                    placeholder={item?.giveFeedback_field?.field_placeholder}
-                    value={value}
-                  />
-                </TileWrapper>
-              </div>
-            );
-          })}
+                  <TileWrapper
+                    customStyle={{
+                      marginBottom: '16px !important',
+                      ...TileCustomStyles,
+                    }}
+                  >
+                    <h3 className={css(GiveFeedback_title)}>{item.giveFeedback_title}</h3>
+                    <p className={css(GiveFeedback_description)}>{item?.giveFeedback_description}</p>
+                    <GenericItemField
+                      name={`feedback.${item.giveFeedback_id}.field`}
+                      methods={methods}
+                      Wrapper={Item}
+                      Element={Textarea}
+                      value={value}
+                    />
+                  </TileWrapper>
+                </div>
+              );
+            })}
         </div>
         <div className={css(Absolute_style)}>
           <div className={css(Relative_btn_styled)}>
@@ -244,7 +127,9 @@ const SubmitPart: FC<SubmitPartProps> = ({
                 graphic='arrowRight'
                 iconProps={{ invertColors: true }}
                 iconPosition={Position.RIGHT}
-                onPress={submitForm}
+                onPress={() => {
+                  setConfirmModal(() => true);
+                }}
               >
                 Submit
               </IconButton>
@@ -349,7 +234,7 @@ const Video_explanation_title: Rule = {
 const Video_wrapper: Rule = {
   width: '100%',
   maxHeight: '304px',
-  marginBottom: '17px',
+  marginBottom: '56px',
   '& > img': {
     maxWidth: '100%',
     height: '100%',
@@ -366,7 +251,7 @@ const GiveFeedback_title: Rule = {
   fontWeight: 'bold',
   fontSize: '16px',
   lineHeight: '20px',
-  margin: '24px 0px 0px 0px',
+  margin: '2px 0px 0px 0px',
 };
 const GiveFeedback_description: Rule = {
   margin: '4px 0px 16px 0px',

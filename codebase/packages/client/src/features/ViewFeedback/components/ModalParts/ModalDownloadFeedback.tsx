@@ -132,7 +132,7 @@ const ModalDownloadFeedback: FC<ModalDownloadFeedbackProps> = ({
         <IconButton
           graphic='arrowLeft'
           onPress={() => {
-            dispatch(ColleaguesActions.clearGettedCollegues());
+            dispatch(ColleaguesActions.clearGettedColleagues());
 
             if (selectedPerson) {
               setSelectedPerson(() => null);

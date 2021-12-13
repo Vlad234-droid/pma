@@ -17,7 +17,7 @@ import {
   ColleaguesActions,
   colleagueUUIDSelector,
   FeedbackActions,
-  getFindedColleguesS,
+  getFindedColleaguesSelector,
   getReviewsS,
 } from '@pma/store';
 
@@ -45,7 +45,7 @@ const ModalRequestFeedback: FC = () => {
   const [selectedPersons, setSelectedPersons] = useState<PeopleTypes[] | []>([]);
   const [inputValue, setInputValue] = useState<string>('');
   const reviews = useSelector(getReviewsS) || [];
-  const findedCollegues = useSelector(getFindedColleguesS) || [];
+  const findedCollegues = useSelector(getFindedColleaguesSelector) || [];
   const colleagueUuid = useSelector(colleagueUUIDSelector);
 
   useEffect(() => {
@@ -91,7 +91,7 @@ const ModalRequestFeedback: FC = () => {
     formValues.search_option = '';
   };
 
-  const area_options = [
+  const area_options_data = [
     { value: 'id_1', label: 'Development goal' },
     { value: 'id_2', label: 'Objectives' },
     { value: 'id_3', label: 'Value and behaviour' },
@@ -122,6 +122,7 @@ const ModalRequestFeedback: FC = () => {
       };
       return formData;
     });
+
     dispatch(FeedbackActions.createNewFeedback(listPeoples));
   };
 
@@ -133,7 +134,7 @@ const ModalRequestFeedback: FC = () => {
             Ask your colleagues for feedback
           </div>
           <div className={css({ marginTop: '8px', fontSize: '18px', lineHeight: '22px' })}>
-            Select which colleague you want to ask feedback from
+            Select which colleague(s) you would like to ask feedback from
           </div>
 
           <form className={css({ marginTop: '32px' })}>
@@ -152,8 +153,8 @@ const ModalRequestFeedback: FC = () => {
                   if (e.target.value !== '' && e.target.value.length > 1) {
                     dispatch(
                       ColleaguesActions.getColleagues({
-                        firstName_like: e.target.value,
-                        lastName_like: e.target.value,
+                        'first-name_like': e.target.value,
+                        'last-name_like': e.target.value,
                       }),
                     );
                   }
@@ -192,18 +193,20 @@ const ModalRequestFeedback: FC = () => {
 
             <div className={css(Toggle_margin({ selectedPersons }))}>
               <GenericItemField
-                name={`area_options`}
+                name='area_options'
                 methods={methods}
                 Wrapper={({ children }) => (
-                  <Item label='Choose what area you would like feedback on' withIcon={false}>
+                  <Item label='Choose what you`d like feedback on' withIcon={false}>
                     {children}
                   </Item>
                 )}
                 Element={Select}
-                options={area_options}
+                options={area_options_data}
                 placeholder={'Choose an area'}
                 value={formValues.area_options}
-                onChange={() => trigger('area_options')}
+                onChange={() => {
+                  trigger('area_options');
+                }}
               />
             </div>
             {formValues.area_options === FeedbackArea.OBJECTIVES && (
@@ -225,13 +228,8 @@ const ModalRequestFeedback: FC = () => {
               </div>
             )}
 
-            <TileWrapper customStyle={{ padding: '24px', border: '1px solid #E5E5E5' }}>
-              <h3 className={css(Tile_title)}>Anything else?</h3>
-              <h3 className={css(Commnet_style)}>Add any other comment here</h3>
-              <p className={css(Tile_description)}>
-                Add any direction you have for the colleague you are requesting feedback from. Clarify specific areas
-                you’d like to hear feedabck on or leave them a note to say thank you.
-              </p>
+            <TileWrapper customStyle={{ padding: '24px', border: '1px solid #E5E5E5', marginBottom: '50px' }}>
+              <h3 className={css(Commnet_style)}>Add any other comments you would like to share with your colleague</h3>
               <GenericItemField
                 name={`comment_to_request`}
                 methods={methods}
@@ -303,21 +301,11 @@ const CleanAll_button_style: Rule = {
   cursor: 'pointer',
 };
 
-const Tile_title: Rule = {
-  fontWeight: 'bold',
-  fontSize: '18px',
-  lineHeight: '22px',
-  color: '#00539F',
-  margin: '0px 0px 24px 0px',
-};
 const Commnet_style: Rule = {
   fontWeight: 'bold',
   fontSize: '16px',
   lineHeight: '20px',
-};
-const Tile_description: Rule = {
-  fontSize: '16px',
-  lineHeight: '20px',
+  marginTop: '0px',
 };
 
 export default ModalRequestFeedback;

@@ -10,7 +10,7 @@ import { SearchPartProps } from '../type';
 import { Trans } from 'components/Translation';
 import { IconButton, Position } from 'components/IconButton';
 import { useDispatch, useSelector } from 'react-redux';
-import { ColleaguesActions, getFindedColleguesS } from '@pma/store';
+import { ColleaguesActions, getFindedColleaguesSelector } from '@pma/store';
 
 const SearchPart: FC<SearchPartProps> = ({ setSearchValue, setSelectedPerson, searchValue, selectedPerson }) => {
   const dispatch = useDispatch();
@@ -30,7 +30,7 @@ const SearchPart: FC<SearchPartProps> = ({ setSearchValue, setSelectedPerson, se
 
   const { register } = methods;
 
-  const findedCollegues = useSelector(getFindedColleguesS) || [];
+  const findedCollegues = useSelector(getFindedColleaguesSelector) || [];
 
   return (
     <>
@@ -49,7 +49,10 @@ const SearchPart: FC<SearchPartProps> = ({ setSearchValue, setSelectedPerson, se
               setInputValue(() => e.target.value);
               if (e.target.value !== '' && e.target.value.length > 1) {
                 dispatch(
-                  ColleaguesActions.getColleagues({ firstName_like: e.target.value, lastName_like: e.target.value }),
+                  ColleaguesActions.getColleagues({
+                    'first-name_like': e.target.value,
+                    'last-name_like': e.target.value,
+                  }),
                 );
               }
 

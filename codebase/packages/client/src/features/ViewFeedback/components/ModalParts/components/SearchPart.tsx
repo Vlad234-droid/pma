@@ -3,7 +3,7 @@ import { SearchPartProps } from './type';
 import { useStyle } from '@dex-ddl/core';
 import { Item } from 'components/Form';
 import { SearchInput } from './SearchInput';
-import { ColleaguesActions, getFindedColleguesS } from '@pma/store';
+import { ColleaguesActions, getFindedColleaguesSelector } from '@pma/store';
 import { useSelector, useDispatch } from 'react-redux';
 
 const SearchPart: FC<SearchPartProps> = ({
@@ -22,7 +22,7 @@ const SearchPart: FC<SearchPartProps> = ({
   } = methods;
 
   const { register } = methods;
-  const findedCollegues = useSelector(getFindedColleguesS) || [];
+  const findedCollegues = useSelector(getFindedColleaguesSelector) || [];
 
   return (
     <div className={css({ marginTop: '32px' })}>
@@ -38,7 +38,10 @@ const SearchPart: FC<SearchPartProps> = ({
             setInputValue(() => e.target.value);
             if (e.target.value !== '' && e.target.value.length > 1) {
               dispatch(
-                ColleaguesActions.getColleagues({ firstName_like: e.target.value, lastName_like: e.target.value }),
+                ColleaguesActions.getColleagues({
+                  'first-name_like': e.target.value,
+                  'last-name_like': e.target.value,
+                }),
               );
             }
 

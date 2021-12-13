@@ -25,9 +25,11 @@ export type ModalGiveFeedbackProps = {
   selectedPerson: PeopleTypes | null;
   infoModal: boolean;
   setInfoModal: Dispatch<SetStateAction<boolean>>;
+  setConfirmModal: Dispatch<SetStateAction<boolean>>;
   modalSuccess: boolean;
   setModalSuccess: Dispatch<SetStateAction<boolean>>;
   searchValue: string;
+  confirmModal: boolean;
   setSearchValue: Dispatch<SetStateAction<string>>;
   methods: UseFormReturn;
   feedbackItemsS?: TypefeedbackItems[] | [];
@@ -44,12 +46,11 @@ export type SearchPartProps = {
 export type SubmitPartProps = {
   selectedPerson: PeopleTypes | null;
   setInfoModal: Dispatch<SetStateAction<boolean>>;
-  setModalSuccess: Dispatch<SetStateAction<boolean>>;
-  setIsOpen: Dispatch<SetStateAction<boolean>>;
   methods: UseFormReturn;
   feedbackItemsS?: TypefeedbackItems[] | [];
-  setFeedbackItems: Dispatch<SetStateAction<TypefeedbackItems[] | []>>;
-  setSelectedPerson: Dispatch<SetStateAction<PeopleTypes | null>>;
+  setConfirmModal: Dispatch<SetStateAction<boolean>>;
+  giveFeedback: Array<GiveFeedbackType>;
+  onDraft: () => void;
 };
 export type InfoModalProps = {
   setInfoModal: Dispatch<SetStateAction<boolean>>;
@@ -58,7 +59,7 @@ export type InfoModalProps = {
 type FieldType = {
   field_id: string;
   field_type: string;
-  field_placeholder: string;
+
   field_value: undefined | string;
 };
 

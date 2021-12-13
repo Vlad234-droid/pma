@@ -50,8 +50,7 @@ const DraftItem: FC<DraftItemProps> = ({
 
   const { css } = useStyle();
   const dispatch = useDispatch();
-  const submittedCompletedNotes =
-    useSelector(getPropperNotesByStatusSelector([FeedbackStatus.SUBMITTED, FeedbackStatus.COMPLETED])) || [];
+  const submittedCompletedNotes = useSelector(getPropperNotesByStatusSelector(FeedbackStatus.SUBMITTED)) || [];
   const unReadNotes = submittedCompletedNotes.filter((item) => !item.read) || [];
   const readNotes = submittedCompletedNotes.filter((item) => item.read) || [];
   const review = useSelector(getReviewByUuidS) || [];
@@ -138,7 +137,7 @@ const DraftItem: FC<DraftItemProps> = ({
         }
       });
 
-      return `“${capitalType}: ${targetTypeStr}”`;
+      return `“${capitalType}${targetTypeStr !== '' ? ':' : ''} ${targetTypeStr}”`;
     }
     return '';
   };

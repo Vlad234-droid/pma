@@ -15,30 +15,10 @@ import {
 import { filteredByInputSearchHandler, filteredNotesByRadiosBtnsHandler, getPropperTime } from '../../../utils';
 import defaultImg from '../../../../public/default.png';
 import { TargetTypeReverse, FeedbackStatus } from 'config/enum';
+import { DraftItemProps } from '../type';
 
 export const TEST_ID = 'test_id';
 
-type filterFeedbacksType = {
-  AZ: boolean;
-  ZA: boolean;
-  newToOld: boolean;
-  oldToNew: boolean;
-};
-type TypecheckedRadio = {
-  pending: boolean;
-  completed: boolean;
-};
-type DraftItemProps = {
-  draftFeedback: (id: number) => void;
-  checkedRadio: TypecheckedRadio;
-  searchValue: string;
-  focus: boolean;
-  setFocus: Dispatch<SetStateAction<boolean>>;
-  filterModal: boolean;
-  setFilterModal: Dispatch<SetStateAction<boolean>>;
-  setFilterFeedbacks: Dispatch<SetStateAction<filterFeedbacksType>>;
-  filterFeedbacks: filterFeedbacksType;
-};
 const DraftItem: FC<DraftItemProps> = ({
   draftFeedback,
   checkedRadio,
@@ -56,6 +36,8 @@ const DraftItem: FC<DraftItemProps> = ({
   const completedNotes = useSelector(getPropperNotesByStatusSelector(FeedbackStatus.COMPLETED)) || [];
   const review = useSelector(getReviewByUuidS) || [];
   const colleagueUuid = useSelector(colleagueUUIDSelector);
+
+  console.log('pendingNotes', pendingNotes);
 
   useEffect(() => {
     if (!colleagueUuid) return;
@@ -132,7 +114,7 @@ const DraftItem: FC<DraftItemProps> = ({
         }
       });
 
-      return `“${capitalType}: ${targetTypeStr}”`;
+      return `“${capitalType}${targetTypeStr !== '' ? ':' : ''} ${targetTypeStr}”`;
     }
     return '';
   };
@@ -187,11 +169,14 @@ const DraftItem: FC<DraftItemProps> = ({
                         >
                           {checkedRadio.pending && (
                             <>
-                              <h3 className={css(Tile_title)}>Your colleague has requested feedback from you on:</h3>
+                              <h3 className={css(Tile_title)}>
+                                This colleague has requested feedback from you. Fill out the questions below to share
+                                your feedback.
+                              </h3>
                               <h3 className={css(Sphere_resond_style)}>
                                 {getPropperTargetType(item.targetType, item.targetId)}
                               </h3>
-                              <p className={css(Question_style)}>Can you give them feedback on this objective?</p>
+                              <p className={css(Question_style)}>Let the colleague know how they`re doing</p>
                             </>
                           )}
                           {checkedRadio.completed && (

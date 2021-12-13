@@ -26,13 +26,21 @@ import { FeedbackStatus } from '../../config/enum';
 const FEEDBACK_ACTIONS = 'feedback_actions';
 
 const FeedbackActions: FC = () => {
-  const colleagueUuid = useSelector(colleagueUUIDSelector);
-  const { css } = useStyle();
-  const dispatch = useDispatch();
   const [info360Modal, setInfo360Modal] = useState<boolean>(false);
+  const dispatch = useDispatch();
+  const colleagueUuid = useSelector(colleagueUUIDSelector);
+  useEffect(() => {
+    if (!colleagueUuid) return;
+    dispatch(
+      FeedbackActionsGet.getAllFeedbacks({
+        'target-colleague-uuid': colleagueUuid,
+        'colleague-uuid': colleagueUuid,
+      }),
+    );
+  }, [colleagueUuid]);
+  const { css } = useStyle();
   const pendingNotes = useSelector(getPropperNotesByStatusSelector(FeedbackStatus.PENDING)) || [];
-  const submittedCompletedNotes =
-    useSelector(getPropperNotesByStatusSelector([FeedbackStatus.SUBMITTED, FeedbackStatus.COMPLETED])) || [];
+  const submittedCompletedNotes = useSelector(getPropperNotesByStatusSelector(FeedbackStatus.SUBMITTED)) || [];
 
   const unReadNotes = submittedCompletedNotes.filter((item) => !item.read) || [];
 
@@ -40,15 +48,6 @@ const FeedbackActions: FC = () => {
     mode: 'onChange',
     resolver: yupResolver<Yup.AnyObjectSchema>(createObjectivesSchema),
   });
-
-  useEffect(() => {
-    if (!colleagueUuid) return;
-    dispatch(
-      FeedbackActionsGet.getAllFeedbacks({
-        'colleague-uuid': colleagueUuid,
-      }),
-    );
-  }, [colleagueUuid]);
 
   const getProppeIconForunReadNotes = () => {
     if (unReadNotes.length) return <NotiBell />;
@@ -63,9 +62,9 @@ const FeedbackActions: FC = () => {
     {
       id: 1,
       action: 'Give feedback',
-      text: 'Share in the moment feedback with your colleagues',
+      text: 'Give in the moment feedback to a colleague',
       icon: <Chat />,
-      iconText: 'The feedback will be available to your colleague',
+      iconText: 'Your feedback will be immediately available for your colleague to view',
       modalTitle: 'Give feedback',
       link: '/give-feedback',
     },
@@ -94,7 +93,7 @@ const FeedbackActions: FC = () => {
       action: 'Request feedback',
       text: 'Ask for feedback from your colleagues',
       icon: <People />,
-      iconText: 'Direct request to your colleagues',
+      iconText: 'Send new feedback requests',
       link: '/request-feedback',
     },
   ];
@@ -103,69 +102,16 @@ const FeedbackActions: FC = () => {
     window.open('https://feedback.etsplc.com/Tesco360/', '_blank')?.focus();
   };
 
-  const handleModal360 = (): void => {
-    setInfo360Modal(() => true);
-  };
-
   const field_options = [
-    { value: 'id_1', label: 'Be direct' },
-    { value: 'id_2', label: 'Treat me kindly' },
-    { value: 'id_3', label: 'Be kind but direct' },
+    { value: 'id_1', label: 'Direct and simple' },
+    { value: 'id_2', label: 'Friendly and constructive' },
+    { value: 'id_3', label: 'Informative and detailed' },
+    { value: 'id_4', label: 'I don`t have a preference' },
   ];
 
   return (
     <>
-      {!info360Modal ? (
-        <div data-test-id={FEEDBACK_ACTIONS}>
-          <div className={css(In_moment_Style)}>
-            <div className={css(Center_flex_style)}>
-              <h2 className={css(In_the_moment_style)}>Feedback in the moment</h2>
-              <IconButton
-                graphic='information'
-                iconStyles={{ marginLeft: '8px' }}
-                onPress={handleModal360}
-                data-test-id='iconButton'
-              />
-            </div>
-
-            <div className={css({ maxWidth: '174px' })}>
-              <IconButton
-                customVariantRules={{ default: iconBtnStyle }}
-                onPress={handleBtnClick360}
-                graphic='add'
-                iconProps={{ invertColors: true }}
-                iconStyles={iconStyle}
-              >
-                <Trans>360 Feedback</Trans>
-              </IconButton>
-            </div>
-          </div>
-          <div className={css(CardsBlock)}>
-            {cards.map((item) => (
-              <FeedbackCard card={item} key={item.id} />
-            ))}
-          </div>
-          <div className={css({ marginTop: '32px', maxWidth: '568px' })}>
-            <div className={css(Icon_text_style)}>
-              <div className={css(Voice_style)}>What tone of voice would you prefer to receive feedback in?</div>
-              <div>
-                <IconCore graphic='information' />
-              </div>
-            </div>
-            <form>
-              <GenericItemField
-                name={`treatment_options`}
-                methods={methods}
-                Wrapper={({ children }) => <Item withIcon={false}>{children}</Item>}
-                Element={Select}
-                options={field_options}
-                placeholder={'Choose feedback type'}
-                value='id_2'
-              />
-            </form>
-          </div>
-        </div>
-      ) : (
+      {info360Modal && (
         <Modal
           modalPosition={'middle'}
           overlayColor={'tescoBlue'}
@@ -178,7 +124,7 @@ const FeedbackActions: FC = () => {
             styles: [modalCloseOptionStyle],
           }}
           title={{
-            content: 'Feedbackl',
+            content: 'Feedback',
             styles: [modalTitleOptionStyle],
           }}
           onOverlayClick={() => {
@@ -188,6 +134,60 @@ const FeedbackActions: FC = () => {
           <Info360Modal setInfo360Modal={setInfo360Modal} />
         </Modal>
       )}
+      <div data-test-id={FEEDBACK_ACTIONS}>
+        <div className={css(In_moment_Style)}>
+          <div className={css(Center_flex_style)}>
+            <h2 className={css(In_the_moment_style)}>Learn more about your feedback options</h2>
+            <IconButton
+              graphic='information'
+              iconStyles={{ marginLeft: '8px' }}
+              data-test-id='iconButton'
+              onPress={() => {
+                setInfo360Modal(() => true);
+              }}
+            />
+          </div>
+
+          <div className={css({ maxWidth: '174px' })}>
+            <IconButton
+              customVariantRules={{ default: iconBtnStyle }}
+              onPress={handleBtnClick360}
+              graphic='add'
+              iconProps={{ invertColors: true }}
+              iconStyles={iconStyle}
+            >
+              <Trans>360 Feedback</Trans>
+            </IconButton>
+          </div>
+        </div>
+        <div className={css(CardsBlock)}>
+          {cards.map((item) => (
+            <FeedbackCard card={item} key={item.id} />
+          ))}
+        </div>
+        <div className={css({ marginTop: '32px', maxWidth: '568px' })}>
+          <div className={css(Icon_text_style)}>
+            <div className={css(Voice_style)}>Do you have a preference in the way you`d like to receive feedback?</div>
+            <div className={css({ cursor: 'pointer' })}>
+              <IconCore
+                graphic='information'
+                title='This will be shared with feedback providers when they are giving you feedback to guide them on how you’d like to receive it. You can update this at any time if your preference changes.'
+              />
+            </div>
+          </div>
+          <form>
+            <GenericItemField
+              name={`treatment_options`}
+              methods={methods}
+              Wrapper={({ children }) => <Item withIcon={false}>{children}</Item>}
+              Element={Select}
+              options={field_options}
+              placeholder={'Choose tone of voice'}
+              value='id_2'
+            />
+          </form>
+        </div>
+      </div>
     </>
   );
 };

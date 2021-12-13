@@ -16,7 +16,7 @@ const SuccessModal: FC = () => {
         <img src={success} alt='success' />
       </div>
       <h2 className={css(Done_text)}>Done!</h2>
-      <p className={css(Description)}>You have requested feedback from your colleague</p>
+      <p className={css(Description)}>Your feedback request has been shared.</p>
       <div
         className={css({
           position: 'absolute',

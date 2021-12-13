@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { useStyle, colors } from '@dex-ddl/core';
+import { useStyle, colors, Rule } from '@dex-ddl/core';
 import mergeRefs from 'react-merge-refs';
 import { InputProps } from './type';
 import { useRefContainer } from 'components/Form/context/input';
@@ -77,7 +77,7 @@ const SearchInput: FC<InputProps> = ({
             zIndex: 999,
           }}
         >
-          {options.map((item) => (
+          {options?.map((item) => (
             <div
               key={item.colleagueUUID}
               className={css({
@@ -92,18 +92,16 @@ const SearchInput: FC<InputProps> = ({
               })}
               onMouseDown={(e) => e.preventDefault()}
               onClick={() => {
-                setSearchValue(() => `${item?.profile?.firstName} ${item?.profile?.lastName}`);
-                setSelectedPerson(() => item);
-                dispatch(ColleaguesActions.clearGettedCollegues());
+                setSearchValue(() => `${item?.colleague?.profile?.firstName} ${item?.colleague?.profile?.lastName}`);
+                setSelectedPerson(() => ({ ...item.colleague, profileAttributes: item.profileAttributes }));
+                dispatch(ColleaguesActions.clearGettedColleagues());
               }}
             >
               <div className={css({ display: 'flex', justifyContent: 'flex-start', alignItems: 'center' })}>
                 <img className={css({ width: '50px', height: '50px', borderRadius: '50%' })} src={defaultImg} />
                 <div className={css({ marginLeft: '16px' })}>
-                  <div className={css({ fontWeight: 'bold', fontSize: '16px', color: '#00539F' })}>
-                    {item?.profile?.firstName}
-                  </div>
-                  <div>{item?.profile?.lastName}</div>
+                  <div className={css(Selected_item_style)}>{item?.colleague?.profile?.firstName}</div>
+                  <div>{item?.colleague?.profile?.lastName}</div>
                 </div>
               </div>
             </div>
@@ -113,5 +111,11 @@ const SearchInput: FC<InputProps> = ({
     </>
   );
 };
+
+const Selected_item_style: Rule = ({ colors }) => ({
+  fontWeight: 'bold',
+  fontSize: '16px',
+  color: colors.link,
+});
 
 export default SearchInput;

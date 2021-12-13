@@ -12,10 +12,10 @@ export const getProfileColleague = createAsyncAction(
   'collegues/GET_PROFILE_COLLEAGUE_FAILURE',
 )<any, any, Error>();
 
-export const clearGettedCollegues = createAction('collegues/CLEAR')<undefined>();
+export const clearGettedColleagues = createAction('collegues/CLEAR')<undefined>();
 
 export const Actions = {
   getColleagues: getColleagues.request,
   getProfileColleague: getProfileColleague.request,
-  clearGettedCollegues,
+  clearGettedColleagues,
 };
