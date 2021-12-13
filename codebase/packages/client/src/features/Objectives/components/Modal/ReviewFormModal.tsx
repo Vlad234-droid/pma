@@ -11,6 +11,7 @@ import { useForm } from 'react-hook-form';
 import { Icon as IconComponent } from 'components/Icon';
 import { Input, Item, Select, Textarea } from 'components/Form';
 import { GenericItemField } from 'components/GenericForm';
+import MarkdownRenderer from 'components/MarkdownRenderer';
 import { SubmitButton, SuccessModal } from './index';
 import { ReviewType, Status } from 'config/enum';
 import { useDispatch, useSelector } from 'react-redux';
@@ -109,7 +110,16 @@ const ReviewFormModal: FC<Props> = ({ reviewType, onClose }) => {
     return null;
   }
   if (reviewLoaded && timelineReview?.status === Status.WAITING_FOR_APPROVAL) {
-    return <SuccessModal onClose={onClose} description={ timelineReview.description ? `Your ${timelineReview.description} has been sent to your line manager.` : 'Your review has been sent to your line manager.'} />;
+    return (
+      <SuccessModal
+        onClose={onClose}
+        description={
+          timelineReview.description
+            ? `Your ${timelineReview.description} has been sent to your line manager.`
+            : 'Your review has been sent to your line manager.'
+        }
+      />
+    );
   }
 
   return (
@@ -148,7 +158,8 @@ const ReviewFormModal: FC<Props> = ({ reviewType, onClose }) => {
               })}
             >
               <Trans i18nKey='id_year_review_help_text'>
-                Use this to capture a summary of the mid-year conversation you’ve had with your line manager. Remember to focus as much on your how as your what.
+                Use this to capture a summary of the mid-year conversation you’ve had with your line manager. Remember
+                to focus as much on your how as your what.
               </Trans>
             </div>
             <div className={css({ padding: `0 0 ${theme.spacing.s5}`, display: 'flex' })}>
@@ -174,10 +185,10 @@ const ReviewFormModal: FC<Props> = ({ reviewType, onClose }) => {
                     <div
                       className={css({
                         fontSize: '16px',
-                        lineHeight: '20px'
+                        lineHeight: '20px',
                       })}
                     >
-                      {text}
+                      <MarkdownRenderer source={text} />
                     </div>
                   </div>
                 );
