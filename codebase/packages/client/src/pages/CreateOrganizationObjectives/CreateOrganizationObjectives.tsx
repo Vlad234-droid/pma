@@ -118,7 +118,7 @@ const CreateOrganizationObjectives: FC<Props> = () => {
   };
 
   const checkInputData = () => {
-    if (getOrgObjectivesData.filter((el) => el.title !== null && el.title.length > 20).length == 6) {
+    if (getOrgObjectivesData.every((el) => el.title !== null && el.title?.length > 20)) {
       setSaveBtnDisabled(false);
       setPublishBtnDisabled(false);
     } else {
@@ -130,7 +130,7 @@ const CreateOrganizationObjectives: FC<Props> = () => {
   const callCheckValidation = debounce(() => checkInputData());
 
   const onChangeInput = (value, idx) => {
-    if (formInputs.every((el) => el.value !== null && el.value.length > 20)) {
+    if (formInputs.every((el) => el.value !== null && el.value?.length > 20)) {
       setSaveBtnDisabled(false);
       setPublishBtnDisabled(false);
     } else {
