@@ -18,6 +18,7 @@ enum Page {
   RESPOND_FEEDBACK = 'respond-feedback',
   VIEW_FEEDBACK = 'view-feedback',
   TIPS = 'tips',
+  CREATE_TIP = 'create-tip'
 }
 
 type PageElement =

@@ -20,48 +20,56 @@ const ViewHistoryModal: FC<ViewHistoryModal> = ({ handleCloseModal, card }) => {
     );
   }, []);
 
-  //TODO: add scroll when there're a lot of items; remove border from last item;
+  //TODO: remove border from last item;
   return (
-    <Modal modalPosition="middle" modalContainerRule={[cardWrapper]}>
+    <Modal modalPosition="middle" modalContainerRule={[modalWrapper]}>
       <div className={css(vhTitleStyle)}>Activity History</div>
       <div className={css(vhSubTitleStyle)}>For tip: {card.title}</div>
-      { tipHistory?.map(item => {
-        const date = new Date(item.updatedTime);
-        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-        const minutes = date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes();
-        const titleDate = `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()} ${date.getHours()}:${minutes}`;
-        
-        return (
-          <div key={item.uuid} className={css(vhItemStyle)}>
-            <div>
-              <div className={css(vhItemTitle)}>
-                <Icon graphic="calendar" fill="white" stroke={theme.colors.tescoBlue} size="16px" strokeWidth={2} iconStyles={{ marginRight: '5px' }} />
-                {titleDate}
+      <div className={css(vhItemsWrap)}>
+        { tipHistory?.map(item => {
+          const date = new Date(item.updatedTime);
+          const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+          const minutes = date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes();
+          const titleDate = `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()} ${date.getHours()}:${minutes}`;
+          
+          return (
+            <div key={item.uuid} className={css(vhItemStyle)}>
+              <div>
+                <div className={css(vhItemTitle)}>
+                  <Icon graphic="calendar" fill="white" stroke={theme.colors.tescoBlue} size="16px" strokeWidth={2} iconStyles={{ marginRight: '5px' }} />
+                  {titleDate}
+                </div>
+                <div className={css(vhItemSubtitle)}>Target: {item.targetOrganisation.name}</div>
               </div>
-              <div className={css(vhItemSubtitle)}>Target: {item.targetOrganisation.name}</div>
+              { item.published ? 
+                  <div className={css(vhItemStatus)}>Pushed</div>
+                  : 
+                  <div className={css(vhItemStatus)}>{ item.createdTime === item.updatedTime ? 'Created' : 'Edited' }</div>
+              }
             </div>
-            { item.published ? 
-                <div className={css(vhItemStatus)}>Published</div>
-                : 
-                <div className={css(vhItemStatus)}>{ item.createdTime === item.updatedTime ? 'Created' : 'Edited' }</div>
-            }
-          </div>
-        )
-      })}
-      <Button onPress={handleCloseModal} styles={[{ width: '145px', margin: '30px auto 0', fontWeight: 700 }]}>Okay</Button>
+          )
+        })}
+      </div>
+      <Button onPress={handleCloseModal} styles={[{ width: '145px', margin: 'auto auto 0', fontWeight: 700 }]}>Okay</Button>
     </Modal>
   )
 }
 
 //vh - View History
 
-const cardWrapper: Rule = () => {
+const modalWrapper: Rule = () => {
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.medium || isBreakpoint.small || isBreakpoint.xSmall;
   return {
     padding: mobileScreen ? '24px 30px' : '24px 38px',
     maxWidth: '500px',
     width: mobileScreen ? 'calc(100% - 50px)' : '100%',
+    maxHeight: '404px',
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
   }
 }
 
@@ -83,6 +91,16 @@ const vhSubTitleStyle: Rule = () => {
     fontSize: mobileScreen ? '14px' : '16px',
     lineHeight: mobileScreen ? '18px' : '20px',
     marginBottom: '20px'
+  }
+}
+
+const vhItemsWrap: Rule = () => {
+  return {
+    marginBottom: '10px',
+    width: '100%',
+    maxHeight: '230px',
+    height: '100%',
+    overflowY: 'auto'
   }
 }
 

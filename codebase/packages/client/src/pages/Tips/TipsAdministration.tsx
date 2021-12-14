@@ -4,11 +4,14 @@ import { IconButton } from 'components/IconButton';
 import { NoTips, TipsCard } from 'features/Tips';
 import { tipsActions, getTipsSelector } from '@pma/store';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router';
+import { Page } from 'pages';
 
 const TipsAdministration: FC = () => {
   const { css } = useStyle();
   const dispatch = useDispatch();
   const tips = useSelector(getTipsSelector);
+  const history = useHistory();
 
   useEffect(() => {
     dispatch(
@@ -17,7 +20,7 @@ const TipsAdministration: FC = () => {
   }, []);
 
   const handleCreateTip = () => {
-    console.log("Button Clicked!")
+    history.push(`${Page.CREATE_TIP}`)
   };
 
   return (
