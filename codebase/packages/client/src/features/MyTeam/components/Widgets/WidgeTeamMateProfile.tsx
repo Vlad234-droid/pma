@@ -11,6 +11,7 @@ export type Review = {
   status: string;
   type: string;
   code: string;
+  description: string;
   reviewType: string;
   number: number;
 };
@@ -95,7 +96,7 @@ export const WidgetTeamMateProfile: FC<WidgetTeamMateProfileProps> = ({ id, stat
                               const [graphics, color] = getIcon(review.status);
                               return (
                                 <div key={review.uuid} className={css(reviewItem)}>
-                                  <div className={css({ paddingBottom: '6px' })}>{review.code}</div>
+                                  <div className={css({ paddingBottom: '6px' })}>{review.description}</div>
                                   <Icon graphic={graphics} fill={color} />
                                 </div>
                               );
