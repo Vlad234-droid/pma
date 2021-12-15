@@ -18,6 +18,13 @@ spec:
             name: pma-frontend-service
             port:
               number: 9000
+      - path: /identity(/|$)(/v1/internal/.*)
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: pma-api-service
+            port:
+              number: 8084
       - path: /()(v1/.*)
         pathType: ImplementationSpecific
         backend:
