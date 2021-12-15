@@ -14,9 +14,9 @@ export enum Status {
 }
 
 export enum ObjectiveType {
-  OBJECTIVE = 'Objectives',
-  MYR = 'Mid Year Review',
-  EYR = 'End of Year Review',
+  OBJECTIVE = 'OBJECTIVE',
+  MYR = 'MYR',
+  EYR = 'EYR',
 }
 
 export enum ReviewType {

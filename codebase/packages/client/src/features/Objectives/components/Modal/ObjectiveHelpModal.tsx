@@ -1,12 +1,12 @@
 import React, { FC, HTMLProps } from 'react';
 import { useStyle, useBreakpoints } from '@dex-ddl/core';
-import { Icon as IconComponent } from 'components/Icon';
+import { Trans } from 'components/Translation';
 
-export type ArticleModal = {};
+export type ObjectiveHelpModal = {};
 
-type Props = HTMLProps<HTMLInputElement> & ArticleModal;
+type Props = HTMLProps<HTMLInputElement> & ObjectiveHelpModal;
 
-const ArticleModal: FC<Props> = () => {
+const ObjectiveHelpModal: FC<Props> = () => {
   const { css } = useStyle();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
@@ -24,18 +24,6 @@ const ArticleModal: FC<Props> = () => {
           padding: mobileScreen ? '0 16px' : '0 40px',
         })}
       >
-        <span
-          className={css({
-            position: 'fixed',
-            top: '22px',
-            left: mobileScreen ? '20px' : '40px',
-            textDecoration: 'none',
-            border: 'none',
-            cursor: 'pointer',
-          })}
-        >
-          <IconComponent graphic='arrowLeft' invertColors={true} />
-        </span>
         <div>
           <div
             className={css({
@@ -45,7 +33,7 @@ const ArticleModal: FC<Props> = () => {
               paddingBottom: '32px',
             })}
           >
-            Need help with writing your objectives?
+            <Trans i18nKey={'need_help_with_objectives'}>Need help with writing your objectives?</Trans>
           </div>
           <div
             className={css({
@@ -53,8 +41,9 @@ const ArticleModal: FC<Props> = () => {
               lineHeight: '20px',
             })}
           >
-            Below we have listed some resources to help you write objectives that are meaningful and relevant to your
-            role.
+            <Trans i18nKey={'need_help_with_objectives_description'}>
+              Here are some resources to help you write relevant and meaningful objectives.
+            </Trans>
           </div>
         </div>
 
@@ -67,7 +56,7 @@ const ArticleModal: FC<Props> = () => {
             paddingBottom: '16px',
           })}
         >
-          What to write in your objectives
+          <Trans i18nKey={'learn'}>Learn</Trans>
         </div>
         <div
           className={css({
@@ -75,8 +64,10 @@ const ArticleModal: FC<Props> = () => {
             lineHeight: '20px',
           })}
         >
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-          magna aliqua view.
+          <Trans i18nKey={'learn_objectives'}>
+            This self-led eLearning will help you set objectives that are aligned, ambitious and assessable. Visit Click
+            and Learn HERE or Learning at Tesco HERE (15 mins)
+          </Trans>
         </div>
         <div
           className={css({
@@ -87,7 +78,7 @@ const ArticleModal: FC<Props> = () => {
             paddingBottom: '16px',
           })}
         >
-          How to write your objectives
+          <Trans i18nKey={'read'}>Read</Trans>
         </div>
         <div
           className={css({
@@ -95,8 +86,32 @@ const ArticleModal: FC<Props> = () => {
             lineHeight: '20px',
           })}
         >
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-          magna aliqua view.
+          <Trans i18nKey={'read_description'}>
+            Explore how the 3 A s model can help you write great strategic objectives with real examples to bring it to
+            life.
+          </Trans>
+        </div>
+
+        <div
+          className={css({
+            fontSize: '20px',
+            lineHeight: '24px',
+            fontWeight: 'bold',
+            paddingTop: '32px',
+            paddingBottom: '16px',
+          })}
+        >
+          <Trans i18nKey={'watch'}>Watch</Trans>
+        </div>
+        <div
+          className={css({
+            fontSize: '16px',
+            lineHeight: '20px',
+          })}
+        >
+          <Trans i18nKey={'watch_description'}>
+            Understand the 3 A s model and how this approach can help you write strong objectives (3 mins).
+          </Trans>
         </div>
 
         <div
@@ -119,4 +134,4 @@ const ArticleModal: FC<Props> = () => {
   );
 };
 
-export default ArticleModal;
+export default ObjectiveHelpModal;

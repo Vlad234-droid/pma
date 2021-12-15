@@ -8,14 +8,14 @@ import { IconButton } from 'components/IconButton';
 import { Icon } from 'components/Icon';
 import { useForm } from 'react-hook-form';
 import { PeopleTypes, TypefeedbackItems } from './type';
-import { ModalGiveFeedback } from './Modals';
+import { ModalGiveFeedback, ModalGreatFeedback } from './Modals';
 import { DraftItem, RadioBtns } from './components';
-import { getFindedColleguesS, ColleaguesActions } from '@pma/store';
+import { getFindedColleaguesSelector, ColleaguesActions } from '@pma/store';
 import { useDispatch, useSelector } from 'react-redux';
 import { FilterModal } from '../Shared/components/FilterModal';
 
 const OuterGiveFeedBack: FC = () => {
-  const findedColleagues = useSelector(getFindedColleguesS) || [];
+  const findedColleagues = useSelector(getFindedColleaguesSelector) || [];
   const dispatch = useDispatch();
   const { css } = useStyle();
   const [isOpenMainModal, setIsOpen] = useState<boolean>(false);
@@ -25,6 +25,9 @@ const OuterGiveFeedBack: FC = () => {
   const [infoModal, setInfoModal] = useState<boolean>(false);
   const [modalSuccess, setModalSuccess] = useState<boolean>(false);
   const [feedbackItemsS, setFeedbackItems] = useState<TypefeedbackItems[] | []>([]);
+  const [confirmModal, setConfirmModal] = useState<boolean>(false);
+  const [modalGreatFeedback, setModalGreatFeedback] = useState<boolean>(false);
+
   const [checkedRadio, setCheckedRadio] = useState({
     draft: true,
     submitted: false,
@@ -53,6 +56,8 @@ const OuterGiveFeedBack: FC = () => {
     resolver: yupResolver<Yup.AnyObjectSchema>(createGiveFeedbackSchema),
   });
 
+  const { reset } = methods;
+
   const handleBtnClick = (): void => {
     setTitle(() => 'Give feedback');
     setIsOpen(() => true);
@@ -69,6 +74,7 @@ const OuterGiveFeedBack: FC = () => {
     setSelectedPerson(() => {
       return {
         ...selectedNote.targetColleagueProfile.colleague,
+        profileAttributes: selectedNote.targetColleagueProfile.profileAttributes,
         uuid: selectedNote.uuid,
       };
     });
@@ -77,6 +83,29 @@ const OuterGiveFeedBack: FC = () => {
 
   return (
     <>
+      {modalGreatFeedback && (
+        <Modal
+          modalPosition={'middle'}
+          overlayColor={'tescoBlue'}
+          modalContainerRule={[containerRule]}
+          closeOptions={{
+            content: <Icon graphic='cancel' invertColors={true} />,
+            onClose: () => {
+              setModalGreatFeedback(() => false);
+            },
+            styles: [modalCloseOptionStyle],
+          }}
+          title={{
+            content: 'Feedback',
+            styles: [modalTitleOptionStyle],
+          }}
+          onOverlayClick={() => {
+            setModalGreatFeedback(() => false);
+          }}
+        >
+          <ModalGreatFeedback setModalGreatFeedback={setModalGreatFeedback} />
+        </Modal>
+      )}
       <div>
         <div className={css(header_styled)}>
           <RadioBtns
@@ -90,7 +119,13 @@ const OuterGiveFeedBack: FC = () => {
             setFilterFeedbacks={setFilterFeedbacks}
           />
           <div className={css(Filter_Icon_styled)}>
-            <IconButton graphic='information' iconStyles={iconStyle} />
+            <IconButton
+              graphic='information'
+              iconStyles={iconStyle}
+              onPress={() => {
+                setModalGreatFeedback(() => true);
+              }}
+            />
             <FilterOption
               focus={focus}
               customIcon={true}
@@ -137,9 +172,11 @@ const OuterGiveFeedBack: FC = () => {
           closeOptions={{
             content: <Icon graphic='cancel' invertColors={true} />,
             onClose: () => {
+              reset();
               if (findedColleagues.length) {
-                dispatch(ColleaguesActions.clearGettedCollegues());
+                dispatch(ColleaguesActions.clearGettedColleagues());
               }
+              if (confirmModal) setConfirmModal(() => false);
               setModalSuccess(() => false);
               setSelectedPerson(() => null);
               setIsOpen(() => false);
@@ -153,9 +190,11 @@ const OuterGiveFeedBack: FC = () => {
             styles: [modalTitleOptionStyle],
           }}
           onOverlayClick={() => {
+            reset();
             if (findedColleagues.length) {
-              dispatch(ColleaguesActions.clearGettedCollegues());
+              dispatch(ColleaguesActions.clearGettedColleagues());
             }
+            if (confirmModal) setConfirmModal(() => false);
             if (infoModal) setInfoModal(() => false);
             if (modalSuccess) setModalSuccess(() => false);
             setSelectedPerson(() => null);
@@ -177,6 +216,8 @@ const OuterGiveFeedBack: FC = () => {
             methods={methods}
             feedbackItemsS={feedbackItemsS}
             setFeedbackItems={setFeedbackItems}
+            confirmModal={confirmModal}
+            setConfirmModal={setConfirmModal}
           />
         </Modal>
       )}

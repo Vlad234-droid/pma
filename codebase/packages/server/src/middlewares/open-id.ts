@@ -1,20 +1,20 @@
-import { Response, Request, NextFunction, Handler } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import {
+  AuthData,
+  getDataFromCookie,
+  getIdentitySwapToken,
   getOpenidMiddleware,
-  identityTokenSwapPlugin,
   identityClientScopedTokenPlugin,
-  userDataPlugin,
+  identityTokenSwapPlugin,
   Logger,
   LoggerEvent,
   OpenIdUserInfo,
-  getDataFromCookie,
-  AuthData,
   PluginCookieConfig,
-  getIdentitySwapToken,
   setDataToCookie,
+  userDataPlugin,
 } from '@energon/onelogin';
 
-import { isPROD, defaultConfig, ProcessConfig } from '../config';
+import { defaultConfig, isPROD, ProcessConfig } from '../config';
 
 import { isEmpty } from '../utils';
 

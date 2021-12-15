@@ -5,10 +5,11 @@ import { Styles, useStyle } from '@dex-ddl/core';
 import { DashboardProfile } from 'features/Profile';
 import { BasicTile } from 'components/Tile';
 import { StepIndicator } from 'components/StepIndicator/StepIndicator';
-import { ObjectiveType, ReviewType, Status } from 'config/enum';
+import { ObjectiveType, ReviewType } from 'config/enum';
 import { Header } from 'components/Header';
 import { RouterSwitch } from 'components/RouterSwitch';
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import {
   colleagueUUIDSelector,
   getTimelineByCodeSelector,
@@ -24,6 +25,7 @@ import Feedback from '../../../public/Feedback.jpg';
 import Learning from '../../../public/Learning.jpg';
 import Contribution from '../../../public/Contribution.jpg';
 import { Icon } from 'components/Icon';
+import { Page } from '../types';
 
 const CareerPerformance: FC = () => {
   const { css } = useStyle();
@@ -65,7 +67,9 @@ const CareerPerformance: FC = () => {
         </div>
         <div className={css(wrapperStylee)}>
           <div className={css({ flex: '3 1 504px', display: 'flex', flexDirection: 'column', gap: '8px' })}>
-            <DashboardProfile />
+            <Link to={Page.PROFILE}>
+              <DashboardProfile />
+            </Link>
             {canShowMyReview && (
               <StepIndicator
                 mainTitle={t('Your contribution timeline')}
@@ -86,7 +90,7 @@ const CareerPerformance: FC = () => {
           >
             <div data-test-id='more' className={css({ height: '112%' })} onClick={handleBtnHelp}>
               <BasicTile
-                img={<Icon graphic='support' />}
+                img={<Icon graphic='settingsGear' />}
                 hover={false}
                 title={"Something doesn't look right? Raise a ticket on colleague help."}
                 imgCustomStyle={{ width: '30px', margin: '10px auto 0px auto' }}
@@ -124,8 +128,8 @@ const CareerPerformance: FC = () => {
                 <div data-test-id='personal' className={css(basicTileStyle)}>
                   <ReviewWidget
                     reviewType={ReviewType.MYR}
-                    status={Status.STARTED}
-                    startDate={midYearReview.startDate}
+                    status={midYearReview?.status}
+                    startDate={midYearReview?.startDate}
                     onClick={() => console.log('ReviewWidget')}
                     onClose={() => console.log('ReviewWidget')}
                     title={'Mid-year review'}
@@ -136,8 +140,8 @@ const CareerPerformance: FC = () => {
                 <div data-test-id='feedback' className={css(basicTileStyle)}>
                   <ReviewWidget
                     reviewType={ReviewType.EYR}
-                    status={Status.STARTED}
-                    startDate={endYearReview.startDate}
+                    status={endYearReview?.status}
+                    startDate={endYearReview?.startDate}
                     onClick={() => console.log('ReviewWidget')}
                     onClose={() => console.log('ReviewWidget')}
                     title={'Year-end review'}
@@ -151,11 +155,11 @@ const CareerPerformance: FC = () => {
               <div data-test-id='feedback' className={css(basicTileStyle)}>
                 <ReviewWidget
                   reviewType={ReviewType.EYR}
-                  status={Status.STARTED}
+                  status={endYearReview?.status}
                   onClick={() => console.log('ReviewWidget')}
                   onClose={() => console.log('ReviewWidget')}
                   title={'Annual performance review'}
-                  description={'Your end-year review form and results will appear here.'}
+                  description={"Complete this once you've had your year-end conversation with your line manager."}
                   customStyle={{ height: '100%' }}
                 />
               </div>
@@ -172,7 +176,7 @@ const CareerPerformance: FC = () => {
                 hover={true}
                 img={Contribution}
                 title={t('Your Contribution')}
-                description={t('Click here to find the Your Contribution Guide')}
+                description={t('Click here to find the Your Contribution Guide.')}
                 customStyle={{
                   height: '100%',
                 }}
@@ -183,7 +187,7 @@ const CareerPerformance: FC = () => {
                 hover={true}
                 img={Check}
                 title={t('Everyday conversations')}
-                description={t('Tile description: Useful guidance on having great performance conversations.')}
+                description={t('Useful guidance on having great performance conversations')}
                 customStyle={{
                   height: '100%',
                 }}
@@ -205,7 +209,7 @@ const CareerPerformance: FC = () => {
                 hover={true}
                 img={Learning}
                 title={t('Learning')}
-                description={t('Click to access further information about Your Contribution.')}
+                description={t('Click here to find the Your Contribution Guide.')}
                 customStyle={{
                   height: '100%',
                 }}

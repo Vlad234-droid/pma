@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { colors, useStyle } from '@dex-ddl/core';
+import { colors, useStyle, Rule } from '@dex-ddl/core';
 import mergeRefs from 'react-merge-refs';
 import { InputProps } from './type';
 import { useRefContainer } from 'components/Form/context/input';
@@ -17,7 +17,6 @@ const MultiplySearchInput: FC<InputProps> = ({
   type = 'text',
   options,
   setSelectedPersons,
-
   setInputValue,
 }) => {
   const { css, theme } = useStyle();
@@ -61,41 +60,58 @@ const MultiplySearchInput: FC<InputProps> = ({
             zIndex: 999,
           }}
         >
-          {options.map((item) => (
-            <div
-              key={item.colleagueUUID}
-              className={css({
-                display: 'block',
-                width: '100%',
-                fontSize: '16px',
-                lineHeight: '20px',
-                padding: '10px 30px 10px 16px',
-                ':hover': {
-                  background: '#F3F9FC',
-                },
-              })}
-              onMouseDown={(e) => e.preventDefault()}
-              onClick={() => {
-                setInputValue!(() => '');
-                setSelectedPersons((prev) => [...prev, item]);
-                dispatch(ColleaguesActions.clearGettedCollegues());
-              }}
-            >
-              <div className={css({ display: 'flex', justifyContent: 'flex-start', alignItems: 'center' })}>
-                <img className={css({ width: '50px', height: '50px', borderRadius: '50%' })} src={defaultImg} />
-                <div className={css({ marginLeft: '16px' })}>
-                  <div className={css({ fontWeight: 'bold', fontSize: '16px', color: '#00539F' })}>
-                    {item?.profile?.firstName}
+          {options?.map((item) => {
+            return (
+              <div
+                key={item?.colleague?.colleagueUUID}
+                className={css({
+                  display: 'block',
+                  width: '100%',
+                  fontSize: '16px',
+                  lineHeight: '20px',
+                  padding: '10px 30px 10px 16px',
+                  ':hover': {
+                    background: '#F3F9FC',
+                  },
+                })}
+                onMouseDown={(e) => e.preventDefault()}
+                onClick={() => {
+                  setInputValue(() => '');
+                  setSelectedPersons((prev) => [...prev, item?.colleague]);
+                  dispatch(ColleaguesActions.clearGettedColleagues());
+                }}
+              >
+                <div className={css({ display: 'flex', justifyContent: 'flex-start', alignItems: 'center' })}>
+                  <img className={css({ width: '50px', height: '50px', borderRadius: '50%' })} src={defaultImg} />
+                  <div className={css({ marginLeft: '16px' })}>
+                    <div className={css(Selected_item_style, Flex_gap_style)}>
+                      <div>{item?.colleague?.profile?.firstName}</div>
+                      <div>{item?.colleague?.profile?.lastName}</div>
+                    </div>
+                    <div className={css(Flex_gap_style, { marginTop: '4px' })}>
+                      <div>{item?.colleague?.workRelationships[0].job?.name}</div>
+                      <div>{item?.colleague?.workRelationships[0].department?.name}</div>
+                    </div>
                   </div>
-                  <div>{item?.profile?.lastName}</div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
     </>
   );
 };
+
+const Flex_gap_style: Rule = {
+  display: 'flex',
+  gap: '8px',
+};
+
+const Selected_item_style: Rule = ({ colors }) => ({
+  fontWeight: 'bold',
+  fontSize: '16px',
+  color: colors.link,
+});
 
 export default MultiplySearchInput;

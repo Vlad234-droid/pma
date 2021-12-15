@@ -8,7 +8,7 @@ export interface FormItemProps {
   name?: string;
   placeholder?: string;
   styles?: Styles | Rule;
-  onChange?: (e: any) => any;
+  onChange?: (e: any, value?: string) => any;
   domRef?: Ref | RefObject<any>;
   isValid?: boolean;
   type?: string;
@@ -31,6 +31,7 @@ export interface TextareaProps extends FormItemProps {
 export interface RadioProps extends FormItemProps {
   checked?: boolean;
 }
+
 export interface CheckboxProps extends FormItemProps {
   indeterminate?: boolean;
   checked?: boolean;

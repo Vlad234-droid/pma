@@ -6,7 +6,7 @@ import { FeedbackStatus } from '@pma/client/src/config/enum';
 //@ts-ignore
 export const colleguesSelector = (state: RootState) => state.colleagues;
 
-export const getFindedColleguesS = createSelector(colleguesSelector, (colleagues: any) => {
+export const getFindedColleaguesSelector = createSelector(colleguesSelector, (colleagues: any) => {
   const { finded_colleagues } = colleagues;
   return finded_colleagues;
 });

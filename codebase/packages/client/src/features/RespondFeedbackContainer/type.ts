@@ -64,7 +64,6 @@ export type InfoModalProps = {
 type FieldType = {
   field_id: string;
   field_type: string;
-  field_placeholder: string;
   field_value: undefined | string;
 };
 
@@ -82,4 +81,28 @@ export type SuccessModalProps = {
   selectedPerson: PeopleTypes | null;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
   setSelectedPerson: Dispatch<SetStateAction<PeopleTypes | null>>;
+};
+
+export type filterFeedbacksType = {
+  AZ: boolean;
+  ZA: boolean;
+  newToOld: boolean;
+  oldToNew: boolean;
+};
+
+export type TypecheckedRadio = {
+  pending: boolean;
+  completed: boolean;
+};
+
+export type DraftItemProps = {
+  draftFeedback: (id: number) => void;
+  checkedRadio: TypecheckedRadio;
+  searchValue: string;
+  focus: boolean;
+  setFocus: Dispatch<SetStateAction<boolean>>;
+  filterModal: boolean;
+  setFilterModal: Dispatch<SetStateAction<boolean>>;
+  setFilterFeedbacks: Dispatch<SetStateAction<filterFeedbacksType>>;
+  filterFeedbacks: filterFeedbacksType;
 };

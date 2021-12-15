@@ -11,9 +11,10 @@ import { TileWrapper } from 'components/Tile';
 import { Item, Textarea } from 'components/Form';
 import { GenericItemField } from 'components/GenericForm';
 import { Trans } from 'components/Translation';
-import { FeedbackActions, colleagueUUIDSelector } from '@pma/store';
+import { FeedbackActions, colleagueUUIDSelector , getReviewByUuidS } from '@pma/store';
 import { useDispatch, useSelector } from 'react-redux';
 import defaultImg from '../../../../public/default.png';
+import { TargetTypeReverse } from 'config/enum';
 
 const SubmitPart: FC<SubmitPartProps> = ({
   selectedPerson,
@@ -22,42 +23,41 @@ const SubmitPart: FC<SubmitPartProps> = ({
   feedbackItems,
   setIsOpen,
 }) => {
+  const review = useSelector(getReviewByUuidS) || [];
   const dispatch = useDispatch();
   const colleagueUuid = useSelector(colleagueUUIDSelector);
-
   const giveFeedback: GiveFeedbackType[] = [
     {
       giveFeedback_id: '1',
       giveFeedbacka_main_title: 'Question 1',
-      giveFeedback_title: 'Looking back, waht has this colleague done well?',
-      giveFeedback_description: 'Share specific example of where you view this colleague’s strenght',
+      giveFeedback_title:
+        'Looking back at what you`ve seen recently, in relation to the area I`ve asked for feedback on, what can you tell me about what I`ve delivered or how I`ve gone about it?',
+      giveFeedback_description: 'Share specific examples of what you`ve seen.',
       giveFeedback_field: {
         field_id: '1',
         field_type: 'textarea',
-        field_placeholder: 'Your colleague will see your feedback',
         field_value: undefined,
       },
     },
     {
       giveFeedback_id: '2',
       giveFeedbacka_main_title: 'Question 2',
-      giveFeedback_title: 'Looking forward, what should this colleague focus on?',
-      giveFeedback_description: 'Share specific examples of opportinities to make this colleague even better',
+      giveFeedback_title:
+        'Looking forward, in relation to the area I’ve asked for feedback on, what should I do more (or less) of in order to be at my best?',
+      giveFeedback_description: 'Share your suggestions',
       giveFeedback_field: {
         field_id: '2',
         field_type: 'textarea',
-        field_placeholder: 'Your colleague will see your feedback',
         field_value: undefined,
       },
     },
     {
       giveFeedback_id: '3',
       giveFeedbacka_main_title: 'Anything else?',
-      giveFeedback_title: 'Share any other comments you have for your colleague which you think could be useful',
+      giveFeedback_title: 'Add any other comments you would like to share with your colleague.',
       giveFeedback_field: {
         field_id: '3',
         field_type: 'textarea',
-        field_placeholder: 'Your colleague will see your feedback',
         field_value: undefined,
       },
     },
@@ -148,6 +148,34 @@ const SubmitPart: FC<SubmitPartProps> = ({
     handleSubmit(onSubmit)(e);
   };
 
+  const getPropperToneOfVoice = () =>
+    selectedPerson?.profileAttributes?.find((item) => item?.name === 'voice')?.value ?? 'Direct and simple';
+
+  const getPropperTargetType = (targetType, targetId) => {
+    const capitalType =
+      TargetTypeReverse[targetType] &&
+      TargetTypeReverse[targetType].charAt(0).toUpperCase() + TargetTypeReverse[targetType].slice(1);
+
+    if (capitalType) {
+      let targetTypeStr = '';
+      review.forEach((item) => {
+        if (item.uuid === targetId) {
+          targetTypeStr = item.title;
+        }
+      });
+
+      return `“${capitalType}${targetTypeStr !== '' ? ':' : ''} ${targetTypeStr}”`;
+    }
+    return '';
+  };
+
+  const getPropperCommentRequested = () => {
+    if (feedbackItems[feedbackItems.findIndex((item) => item.code === 'comment_to_request')]) {
+      return feedbackItems[feedbackItems.findIndex((item) => item.code === 'comment_to_request')].content;
+    }
+    return '';
+  };
+
   return (
     <div>
       <div className={css({ marginTop: '30px' })}>
@@ -162,16 +190,20 @@ const SubmitPart: FC<SubmitPartProps> = ({
             <p
               className={css(Industry_Style)}
             >{`${selectedPerson?.workRelationships[0].job?.name}${selectedPerson?.workRelationships[0].department?.name}`}</p>
-            <span className={css(Treatment_Style)}>Please treat me kindly</span>
+            <span className={css(Treatment_Style)}>I prefer feedback that is: {getPropperToneOfVoice()}</span>
           </div>
         </div>
       </div>
       <div className={css(Notification_Block__Style)}>
-        <p>This colleague has requested feedback on what they have done well and what they should focus on</p>
+        <p>{`${selectedPerson?.profile?.firstName} has requested feedback on: ${getPropperTargetType(
+          selectedPerson.targetType,
+          selectedPerson.targetId,
+        )}`}</p>
+        <p>{getPropperCommentRequested()}</p>
       </div>
       <div className={css({ marginTop: '24px' })}>
         <IconButton graphic='information' onPress={() => setInfoModal(() => true)}>
-          <p className={css(Info_help__Style)}>Need help with providing feedback?</p>
+          <p className={css(Info_help__Style)}>Learn more about how to give great feedback</p>
         </IconButton>
       </div>
       <h2 className={css(Video_explanation_title)}>Watch video explanation</h2>
@@ -196,7 +228,6 @@ const SubmitPart: FC<SubmitPartProps> = ({
                   ...TileCustomStyles,
                 }}
               >
-                <h2 className={css(GiveFeedbacka_main_title)}>{item.giveFeedbacka_main_title}</h2>
                 <h3 className={css(GiveFeedback_title)}>{item.giveFeedback_title}</h3>
                 <p className={css(GiveFeedback_description)}>{item?.giveFeedback_description}</p>
                 <GenericItemField
@@ -204,7 +235,6 @@ const SubmitPart: FC<SubmitPartProps> = ({
                   methods={methods}
                   Wrapper={Item}
                   Element={Textarea}
-                  placeholder={item?.giveFeedback_field?.field_placeholder}
                   value={value}
                 />
               </TileWrapper>
@@ -304,7 +334,6 @@ const Notification_Block__Style: Rule = {
   padding: '16px 40px 16px 16px',
   background: '#F3F9FC',
   borderRadius: '10px',
-  maxHeight: '68px',
   '& > p': {
     fontSize: '14px',
     lineHeight: '18px',
@@ -344,7 +373,7 @@ const GiveFeedback_title: Rule = {
   fontWeight: 'bold',
   fontSize: '16px',
   lineHeight: '20px',
-  margin: '24px 0px 0px 0px',
+  margin: '2px 0px 0px 0px',
 };
 const GiveFeedback_description: Rule = {
   margin: '4px 0px 16px 0px',

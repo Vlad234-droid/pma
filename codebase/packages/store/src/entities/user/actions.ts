@@ -28,11 +28,25 @@ export const updateUserNotification = createAsyncAction(
   'user/notification/CANCEL',
 )<any, any, Error, undefined>();
 
+export const createProfileAttribute = createAsyncAction(
+  'user/CREATE_PROFILE_ATTRIBUTE_REQUEST',
+  'user/CREATE_PROFILE_ATTRIBUTE_SUCCESS',
+  'user/CREATE_PROFILE_ATTRIBUTE_FAILURE',
+)<any, any, Error>();
+
+export const updateProfileAttribute = createAsyncAction(
+  'user/UPDATE_PROFILE_ATTRIBUTE_REQUEST',
+  'user/UPDATE_PROFILE_ATTRIBUTE_SUCCESS',
+  'user/UPDATE_PROFILE_ATTRIBUTE_FAILURE',
+)<any, any, Error>();
+
 export const Actions = {
   login: loginAsync.request,
   logout: logoutAsync.request,
   getCurrentUser: getCurrentUser.request,
   updateUserNotification: updateUserNotification.request,
+  createProfileAttribute: createProfileAttribute.request,
+  updateProfileAttribute: updateProfileAttribute.request,
 };
 
 export type Action = ActionType<typeof loginAsync>;

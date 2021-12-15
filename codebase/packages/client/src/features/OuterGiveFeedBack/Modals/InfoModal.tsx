@@ -56,14 +56,13 @@ const Title: Rule = {
   lineHeight: '28px',
 };
 const List_info: Rule = {
-  marginTop: '24px',
   marginBottom: '32px',
   '& > li': {
     fontWeight: 'normal',
     fontSize: '16px',
     lineHeight: '20px',
     '&:last-child': {
-      marginTop: '30px',
+      marginTop: '10px',
     },
   },
 } as Styles;

@@ -31,6 +31,7 @@ const ButtonsComponent: FC<ButtonsComponentProps> = ({ methods, onSubmit, isVali
           left: 0,
           bottom: 0,
           width: '100%',
+          background: 'white',
         })}
       >
         <div

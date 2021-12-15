@@ -12,6 +12,9 @@ import colleaguesReducer from '../entities/colleagues/reducer';
 import reviewsReducer from '../entities/reviews/reducer';
 import objectiveSharingReducer from '../entities/objectiveSharing/reducer';
 import tipsReducer from '../entities/tips/reducer';
+import performanceCycleReducer from '../entities/performanceCycle/reducer';
+import configEntriesReducer from '../entities/configEntries/reducer';
+import processTemplateReducer from '../entities/processTemplate/reducer';
 
 export const rootReducer = combineReducers({
   users: userReducer,
@@ -26,4 +29,7 @@ export const rootReducer = combineReducers({
   reviews: reviewsReducer,
   objectivesSharing: objectiveSharingReducer,
   tips: tipsReducer,
+  performanceCycle: performanceCycleReducer,
+  configEntries: configEntriesReducer,
+  processTemplate: processTemplateReducer,
 });

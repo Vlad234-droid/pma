@@ -1,4 +1,4 @@
-import React, { FC, HTMLProps, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
@@ -19,26 +19,21 @@ import useReviewSchema from '../../hooks/useReviewSchema';
 import useReviews from '../../hooks/useReviews';
 import { ObjectiveModal } from './ObjectiveModal';
 
-export type CreateUpdateObjectivesModalProps = {
+type ObjectivesProps = {
   onClose: () => void;
+  schema: any;
+  objectives: any;
+  origin: any;
+  colleagueUUID: string;
   editNumber?: number;
 };
 
-type Props = HTMLProps<HTMLInputElement> & CreateUpdateObjectivesModalProps;
-
-export const CreateUpdateObjectives: FC<Props> = ({ onClose, editNumber = null }) => {
+const Objectives: FC<ObjectivesProps> = ({ colleagueUUID, schema, objectives, origin, onClose, editNumber = null }) => {
   const dispatch = useDispatch();
-  const { loaded: schemaLoaded } = useSelector(schemaMetaSelector);
-  const { loaded: reviewLoaded } = useSelector(reviewsMetaSelector);
-  const { info } = useSelector(currentUserSelector);
-  const pathParams = { colleagueUuid: info.colleagueUUID, type: ReviewType.OBJECTIVE, cycleUuid: 'CURRENT' };
-
-  const [origin] = useReviews({ pathParams });
-  const objectives = useSelector(getReviewPropertiesSelector(ReviewType.OBJECTIVE));
-  const [schema] = useReviewSchema(ReviewType.OBJECTIVE);
-  const timelineObjective = useSelector(getTimelineByReviewTypeSelector(ReviewType.OBJECTIVE));
+  const pathParams = { colleagueUuid: colleagueUUID, type: ReviewType.OBJECTIVE, cycleUuid: 'CURRENT' };
 
   const [currentObjectiveNumber, setObjectiveNumber] = useState(editNumber ? editNumber : 1);
+  const [objectivesHashMap, setObjectiveHashMap] = useState(objectives);
 
   const { components = [], markup = { max: 0, min: 0 } } = schema;
   const markupMin = markup.min;
@@ -48,8 +43,9 @@ export const CreateUpdateObjectives: FC<Props> = ({ onClose, editNumber = null }
     acc[current.key] = '';
     return acc;
   }, {});
-  const stateObjective = objectives[currentObjectiveNumber]
-    ? objectives[currentObjectiveNumber]
+
+  const stateObjective = objectivesHashMap[currentObjectiveNumber]
+    ? objectivesHashMap[currentObjectiveNumber]
     : formElementsFilledEmpty;
 
   const yepSchema = formElements.reduce(createYupSchema, {});
@@ -116,20 +112,31 @@ export const CreateUpdateObjectives: FC<Props> = ({ onClose, editNumber = null }
       }
       return { ...objective, status: Status.DRAFT };
     });
-    dispatch(ReviewsActions.updateReviews({ pathParams, data: updatedObjectives }));
 
+    objectivesHashMap[currentObjectiveNumber] = getValues();
+    setObjectiveHashMap(objectivesHashMap);
+    dispatch(ReviewsActions.updateReviews({ pathParams, data: updatedObjectives }));
     setObjectiveNumber(currentObjectiveNumber + 1);
   };
   const setPrevObjectiveNumber = async () => {
+    objectivesHashMap[currentObjectiveNumber] = getValues();
+    setObjectiveHashMap(objectivesHashMap);
     setObjectiveNumber(currentObjectiveNumber - 1);
   };
 
   useEffect(() => {
     reset(stateObjective);
-  }, [currentObjectiveNumber, reviewLoaded]);
+  }, [currentObjectiveNumber, origin.length]);
 
-  if (timelineObjective?.status === Status.WAITING_FOR_APPROVAL && schemaLoaded && reviewLoaded) {
-    return <SuccessModal onClose={onClose} />;
+  useEffect(() => {
+    if (objectives[currentObjectiveNumber] && !objectivesHashMap[currentObjectiveNumber]) {
+      setObjectiveHashMap(objectives);
+      reset(objectives[currentObjectiveNumber]);
+    }
+  }, [objectives, objectivesHashMap]);
+
+  if (objectives[currentObjectiveNumber] && !objectivesHashMap[currentObjectiveNumber]) {
+    return null;
   }
 
   return (
@@ -149,3 +156,41 @@ export const CreateUpdateObjectives: FC<Props> = ({ onClose, editNumber = null }
     />
   );
 };
+
+export type CreateUpdateObjectivesModalProps = {
+  onClose: () => void;
+  editNumber?: number;
+};
+
+const CreateUpdateObjectives: FC<CreateUpdateObjectivesModalProps> = ({ onClose, editNumber }) => {
+  const { loaded: schemaLoaded, loading: schemaLoading } = useSelector(schemaMetaSelector);
+  const { loaded: reviewLoaded, loading: reviewLoading } = useSelector(reviewsMetaSelector);
+  const { info } = useSelector(currentUserSelector);
+  const pathParams = { colleagueUuid: info.colleagueUUID, type: ReviewType.OBJECTIVE, cycleUuid: 'CURRENT' };
+
+  const [origin] = useReviews({ pathParams });
+  const objectives = useSelector(getReviewPropertiesSelector(ReviewType.OBJECTIVE));
+  const [schema] = useReviewSchema(ReviewType.OBJECTIVE);
+  const timelineObjective = useSelector(getTimelineByReviewTypeSelector(ReviewType.OBJECTIVE));
+
+  if (timelineObjective?.status === Status.WAITING_FOR_APPROVAL && schemaLoaded && reviewLoaded) {
+    return <SuccessModal onClose={onClose} description={'Your objectives has been sent to your line manager.'}  />;
+  }
+
+  if ((!schemaLoaded && !reviewLoaded) || (reviewLoading && schemaLoading)) {
+    return null;
+  }
+
+  return (
+    <Objectives
+      onClose={onClose}
+      editNumber={editNumber}
+      schema={schema}
+      colleagueUUID={info.colleagueUUID}
+      origin={origin}
+      objectives={objectives}
+    />
+  );
+};
+
+export { CreateUpdateObjectives };

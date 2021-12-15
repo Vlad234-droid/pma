@@ -65,7 +65,7 @@ export type AvatarNameProps = {
   user?: any;
 };
 
-export const AvatarName: FC<AvatarNameProps> = ({ user }) => {
+export const AvatarName: FC<AvatarNameProps> = ({ user = {} }) => {
   const { css } = useStyle();
   const { fullName, job } = user || {};
   return (

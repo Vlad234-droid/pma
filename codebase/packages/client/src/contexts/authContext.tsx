@@ -1,7 +1,7 @@
 import React, { createContext, FC, useCallback, useContext, useEffect } from 'react';
 import { LINKS } from 'config/constants';
 // store
-import { currentUserMetaSelector, currentUserSelector, UerActions } from '@pma/store';
+import { currentUserMetaSelector, currentUserSelector, UserActions } from '@pma/store';
 
 // config
 import User from 'config/entities/User';
@@ -36,12 +36,12 @@ export const AuthProvider: FC = ({ children }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!loaded) dispatch(UerActions.getCurrentUser());
+    if (!loaded) dispatch(UserActions.getCurrentUser());
   }, [loaded]);
 
-  const loginAction: LoginAction = useCallback((payload) => dispatch(UerActions.login(payload)), []);
+  const loginAction: LoginAction = useCallback((payload) => dispatch(UserActions.login(payload)), []);
 
-  const logoutAction: LogoutAction = useCallback(() => dispatch(UerActions.logout()), []);
+  const logoutAction: LogoutAction = useCallback(() => dispatch(UserActions.logout()), []);
 
   if (error?.code === 'UNAUTHENTICATED') {
     window?.location.replace(LINKS.signOut);

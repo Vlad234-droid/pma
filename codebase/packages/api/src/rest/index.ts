@@ -9,3 +9,6 @@ export * from './reviews';
 export * from './orgObjective';
 export * from './objectiveSharing';
 export * from './tips';
+export * from './performanceCycle';
+export * from './config-entries';
+export * from './files';

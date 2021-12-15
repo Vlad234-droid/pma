@@ -11,6 +11,8 @@ import { GenericItemField } from 'components/GenericForm';
 
 import { ButtonWithConfirmation as SubmitButton } from '../Buttons';
 import { Status } from 'config/enum';
+import { TriggerModal } from 'features/Modal/components/TriggerModal';
+import ObjectiveHelpModal from 'features/Objectives/components/Modal/ObjectiveHelpModal';
 
 export type ObjectiveModalProps = {
   useSingleStep?: boolean;
@@ -85,7 +87,9 @@ export const ObjectiveModal: FC<Props> = ({
             </div>
           )}
           <div className={css({ padding: `0 0 ${theme.spacing.s5}`, display: 'flex' })}>
-            <Icon graphic='information' />
+            <TriggerModal triggerComponent={<Icon graphic='information' />} title={'Writing your objectives'}>
+              <ObjectiveHelpModal />
+            </TriggerModal>
             <span
               className={css(theme.font.fixed.f14, {
                 color: theme.colors.tescoBlue,

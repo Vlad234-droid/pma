@@ -1,22 +1,22 @@
-import express, { Response, Request, Router } from 'express';
+import express, { Request, Response, Router } from 'express';
 import path from 'path';
 import { createProxyMiddleware, Options } from 'http-proxy-middleware';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
-import { withReturnTo, getIdentityData } from '@energon/onelogin';
+import { getIdentityData, withReturnTo } from '@energon/onelogin';
 // utils
 import { getPackageDistFolder } from './utils/package';
 import { exit } from 'process';
 // config
-import { getEnv, isDEV, isPROD, getConfig, prettify } from './config';
+import { getConfig, getEnv, isDEV, isPROD, prettify } from './config';
 // middlewares
 import {
   authMiddleware,
-  mfModuleAssetHandler,
-  standaloneIndexAssetHandler,
   errorHandler,
-  openIdConfig,
   getOidcData,
+  mfModuleAssetHandler,
+  openIdConfig,
+  standaloneIndexAssetHandler,
 } from './middlewares';
 
 getEnv().validate();

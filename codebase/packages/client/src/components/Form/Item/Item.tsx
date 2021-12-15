@@ -2,10 +2,12 @@ import React, { FC, useRef, useState } from 'react';
 import { useStyle, Rule, Styles, colors, CreateRule } from '@dex-ddl/core';
 
 import { Icon } from 'components/Icon';
+import MarkdownRenderer from 'components/MarkdownRenderer';
 import Provider from '../context/input';
 
 export type Props = {
   label?: string;
+  withMarkdown?: boolean;
   withIcon?: boolean;
   styles?: Styles | Rule;
   errormessage?: string;
@@ -19,6 +21,7 @@ export type Props = {
 export const Item: FC<Props> = ({
   children,
   label,
+  withMarkdown,
   withIcon = true,
   errormessage = '',
   marginBot = true,
@@ -42,10 +45,18 @@ export const Item: FC<Props> = ({
 
   return (
     <div className={css(wrapperItem({ marginBot }))}>
-      {label && (
+      {label && !withMarkdown && (
         <div className={css(labelWrapperStyle)}>
           <label className={css(labelStyle)} title={label}>
             {label}
+          </label>
+        </div>
+      )}
+      {/*todo add markdown here instead of label*/}
+      {label && withMarkdown && (
+        <div className={css(labelWrapperStyle)}>
+          <label className={css(labelStyle)} title={label}>
+            <MarkdownRenderer source={label} />
           </label>
         </div>
       )}
@@ -105,7 +116,6 @@ const labelStyle: Rule = {
   display: 'inline-flex',
   fontSize: '16px',
   lineHeight: '20px',
-  fontWeight: 'bold',
 };
 const labelWrapperStyle: Rule = {
   maxWidth: '100%',

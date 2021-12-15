@@ -16,8 +16,7 @@ export interface FormItemProps {
   type?: string;
   id?: string;
   setSelectedPersons?: any;
-
-  setInputValue?: Dispatch<SetStateAction<string>>;
+  setInputValue: Dispatch<SetStateAction<string | ''>>;
   options: Array<PeopleTypes>;
 }
 

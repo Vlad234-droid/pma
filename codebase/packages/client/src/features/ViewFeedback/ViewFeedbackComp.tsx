@@ -6,7 +6,7 @@ import { IconButton } from 'components/IconButton';
 import { DraftItem, RadioBtns } from './components';
 import { Notification } from 'components/Notification';
 import { Icon } from 'components/Icon';
-import { ModalDownloadFeedback } from './components/ModalParts';
+import { ModalDownloadFeedback, HelpModalReceiveFeedback } from './components/ModalParts';
 import { ColleaguesActions } from '@pma/store';
 import { useDispatch } from 'react-redux';
 import { FilterModal } from '../Shared/components/FilterModal';
@@ -14,7 +14,7 @@ import { FilterModal } from '../Shared/components/FilterModal';
 const ViewFeedbackComp: FC = () => {
   const { css } = useStyle();
   const dispatch = useDispatch();
-
+  const [helpModalReceiveFeedback, setHelpModalReceiveFeedback] = useState<boolean>(false);
   const [openMainModal, setOpenMainModal] = useState<boolean>(false);
   const [ModalSuccess, setModalSuccess] = useState<boolean>(false);
   const [checkedRadio, setCheckedRadio] = useState({
@@ -49,6 +49,29 @@ const ViewFeedbackComp: FC = () => {
   };
   return (
     <>
+      {helpModalReceiveFeedback && (
+        <Modal
+          modalPosition={'middle'}
+          overlayColor={'tescoBlue'}
+          modalContainerRule={[containerRule]}
+          closeOptions={{
+            content: <Icon graphic='cancel' invertColors={true} />,
+            onClose: () => {
+              setHelpModalReceiveFeedback(() => false);
+            },
+            styles: [modalCloseOptionStyle],
+          }}
+          title={{
+            content: 'Feedback',
+            styles: [modalTitleOptionStyle],
+          }}
+          onOverlayClick={() => {
+            setHelpModalReceiveFeedback(() => false);
+          }}
+        >
+          <HelpModalReceiveFeedback setHelpModalReceiveFeedback={setHelpModalReceiveFeedback} />
+        </Modal>
+      )}
       <div>
         <div className={css(SpaceBeetweenStyled)}>
           <RadioBtns
@@ -61,7 +84,13 @@ const ViewFeedbackComp: FC = () => {
             setFilterFeedbacks={setFilterFeedbacks}
           />
           <div className={css(Flex_center_styled)}>
-            <IconButton graphic='information' iconStyles={iconStyle} />
+            <IconButton
+              graphic='information'
+              iconStyles={iconStyle}
+              onPress={() => {
+                setHelpModalReceiveFeedback(() => true);
+              }}
+            />
             <FilterOption
               focus={focus}
               customIcon={true}
@@ -110,7 +139,7 @@ const ViewFeedbackComp: FC = () => {
                 />
                 <span className={css(ShareFeedback_Styled)}>Share feedback</span>
               </div>
-              <p className={css(Question_Styled)}>Why not give feedback back to your colleagues?</p>
+              <p className={css(Question_Styled)}>Give feedback to a colleague</p>
               <Button
                 styles={[iconBtnStyle]}
                 onPress={() => {
@@ -129,7 +158,7 @@ const ViewFeedbackComp: FC = () => {
                 />
                 <span className={css(Size_style)}>Download feedback</span>
               </div>
-              <p className={css(Saved_styled)}>Save feedback to your device</p>
+              <p className={css(Saved_styled)}>Download feedback to your device</p>
               <Button
                 styles={[iconBtnStyle, { maxWidth: '161px !important' }]}
                 onPress={() => {
@@ -142,7 +171,7 @@ const ViewFeedbackComp: FC = () => {
             <Notification
               graphic='information'
               iconColor='pending'
-              text='If you feel feedback is [x.y.z.] – please speak to your line manager or people team.'
+              text='If you`re worried the content of any feedback you`ve received is inappropriate, please contact your line manager or People team as soon as possible.'
               customStyle={{
                 background: '#FFDBC2',
                 marginBottom: '20px',
@@ -160,7 +189,7 @@ const ViewFeedbackComp: FC = () => {
           closeOptions={{
             content: <Icon graphic='cancel' invertColors={true} />,
             onClose: () => {
-              dispatch(ColleaguesActions.clearGettedCollegues());
+              dispatch(ColleaguesActions.clearGettedColleagues());
               setModalSuccess(() => false);
               setOpenMainModal(() => false);
             },
@@ -171,7 +200,7 @@ const ViewFeedbackComp: FC = () => {
             styles: [modalTitleOptionStyle],
           }}
           onOverlayClick={() => {
-            dispatch(ColleaguesActions.clearGettedCollegues());
+            dispatch(ColleaguesActions.clearGettedColleagues());
             if (ModalSuccess) setModalSuccess(() => false);
             setOpenMainModal(() => false);
           }}

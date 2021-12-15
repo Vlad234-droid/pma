@@ -12,15 +12,16 @@ const InfoModal: FC<InfoModalProps> = ({ setInfoModal }) => {
   return (
     <div className={css(WrapperInfo)}>
       <h2 className={css(Title)}>Need help with providing feedback?</h2>
+      <h2 className={css(Title_video)}>Watch this 2-minute video on how to give great feedback</h2>
+      <div className={css(Block_video_explanation)}>
+        <img src={video_explanation} alt='video_explanation' />
+      </div>
       <p className={css(Pre_title)}>Here are some examples of the types of things you could write:</p>
       <ul className={css(List_info)}>
         <li>List out some of the strengths your colleadue has, what makes them good collague to work with?</li>
         <li>Can you provide further detail on what they should keep doing or what they improve on?</li>
       </ul>
-      <h2 className={css(Title_video)}>Watch video explanation</h2>
-      <div className={css(Block_video_explanation)}>
-        <img src={video_explanation} alt='video_explanation' />
-      </div>
+
       <h3 className={css(Recomendation_info)}>Face to face meetings are recommended for delivering feedback</h3>
       <p className={css(Pre_recomendation_info)}>Please try and find time to give your feedback in person.</p>
       <span
@@ -56,14 +57,12 @@ const Title: Rule = {
   lineHeight: '28px',
 };
 const List_info: Rule = {
-  marginTop: '24px',
   marginBottom: '32px',
   '& > li': {
     fontWeight: 'normal',
     fontSize: '16px',
-    lineHeight: '20px',
     '&:last-child': {
-      marginTop: '30px',
+      marginTop: '10px',
     },
   },
 } as Styles;
@@ -72,7 +71,7 @@ const Title_video: Rule = {
   fontWeight: 'bold',
   fontSize: '20px',
   lineHeight: '24px',
-  margin: '0px 0px 16px 0px',
+  margin: '16px 0px 16px 0px',
 };
 const Block_video_explanation: Rule = {
   maxHeight: '300px',

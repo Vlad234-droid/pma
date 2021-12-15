@@ -11,6 +11,7 @@ import { useForm } from 'react-hook-form';
 import { Icon as IconComponent } from 'components/Icon';
 import { Input, Item, Select, Textarea } from 'components/Form';
 import { GenericItemField } from 'components/GenericForm';
+import MarkdownRenderer from 'components/MarkdownRenderer';
 import { SubmitButton, SuccessModal } from './index';
 import { ReviewType, Status } from 'config/enum';
 import { useDispatch, useSelector } from 'react-redux';
@@ -23,6 +24,8 @@ import {
 } from '@pma/store';
 import { createYupSchema } from 'utils/yup';
 import useReviewSchema from '../../hooks/useReviewSchema';
+import { TriggerModal } from 'features/Modal/components/TriggerModal';
+import MidYearHelpModal from './MidYearHelpModal';
 
 export type ReviewFormModal = {
   reviewType: ReviewType;
@@ -107,7 +110,16 @@ const ReviewFormModal: FC<Props> = ({ reviewType, onClose }) => {
     return null;
   }
   if (reviewLoaded && timelineReview?.status === Status.WAITING_FOR_APPROVAL) {
-    return <SuccessModal onClose={onClose} />;
+    return (
+      <SuccessModal
+        onClose={onClose}
+        description={
+          timelineReview.description
+            ? `Your ${timelineReview.description} has been sent to your line manager.`
+            : 'Your review has been sent to your line manager.'
+        }
+      />
+    );
   }
 
   return (
@@ -134,7 +146,7 @@ const ReviewFormModal: FC<Props> = ({ reviewType, onClose }) => {
         <form>
           <div className={css({ padding: `0 0 ${theme.spacing.s5}` })}>
             <div className={css({ fontSize: '24px', lineHeight: '28px', color: theme.colors.tescoBlue })}>
-              <Trans i18nKey='mid_year_review_main_title'>How did you do against your objectives?</Trans>
+              <Trans i18nKey='year_review_main_title'>How is your year going so far?</Trans>
             </div>
             <div
               className={css({
@@ -146,36 +158,37 @@ const ReviewFormModal: FC<Props> = ({ reviewType, onClose }) => {
               })}
             >
               <Trans i18nKey='id_year_review_help_text'>
-                Please complete this form before reviewing with your manager. Add detail in the comment boxes for each
-                section
+                Use this to capture a summary of the mid-year conversation you’ve had with your line manager. Remember
+                to focus as much on your how as your what.
               </Trans>
             </div>
             <div className={css({ padding: `0 0 ${theme.spacing.s5}`, display: 'flex' })}>
-              <Icon graphic='information' />
+              <TriggerModal triggerComponent={<Icon graphic='information' />} title={'Writing your review'}>
+                <MidYearHelpModal />
+              </TriggerModal>
               <span
                 className={css(theme.font.fixed.f14, {
                   color: theme.colors.tescoBlue,
                   padding: `${theme.spacing.s0} ${theme.spacing.s2}`,
                 })}
               >
-                <Trans i18nKey='need_help_write_objectives'>Need help writing your objectives?</Trans>
+                <Trans i18nKey='need_help_to_write'>Need help with what to write?</Trans>
               </span>
             </div>
             {components.map((component) => {
               const { id, key, text, label, description, type, validate, values = [] } = component;
               const value = formValues[key] ? formValues[key] : '';
               if (type === 'text') {
+                //todo add markdown here instead of text
                 return (
-                  <div style={{ padding: '24px 0' }}>
+                  <div style={{ padding: '10px 0' }}>
                     <div
                       className={css({
-                        fontSize: '18px',
-                        lineHeight: '22px',
-                        color: theme.colors.tescoBlue,
-                        fontWeight: theme.font.weight.bold,
+                        fontSize: '16px',
+                        lineHeight: '20px',
                       })}
                     >
-                      {text}
+                      <MarkdownRenderer source={text} />
                     </div>
                   </div>
                 );
@@ -191,6 +204,7 @@ const ReviewFormModal: FC<Props> = ({ reviewType, onClose }) => {
                     Element={Input}
                     placeholder={description}
                     value={value}
+                    withMarkdown={true}
                   />
                 );
               }
@@ -205,6 +219,7 @@ const ReviewFormModal: FC<Props> = ({ reviewType, onClose }) => {
                     Element={Textarea}
                     placeholder={description}
                     value={value}
+                    withMarkdown={true}
                   />
                 );
               }
@@ -216,7 +231,7 @@ const ReviewFormModal: FC<Props> = ({ reviewType, onClose }) => {
                     methods={methods}
                     label={label}
                     Wrapper={({ children, label }) => (
-                      <Item withIcon={false} label={label}>
+                      <Item withIcon={false} label={label} withMarkdown={true}>
                         {children}
                       </Item>
                     )}
@@ -224,6 +239,7 @@ const ReviewFormModal: FC<Props> = ({ reviewType, onClose }) => {
                     options={values}
                     placeholder={description}
                     value={value}
+                    withMarkdown={true}
                   />
                 );
               }
@@ -270,6 +286,8 @@ const ReviewFormModal: FC<Props> = ({ reviewType, onClose }) => {
                   <Trans i18nKey='save_as_draft'>Save as draft</Trans>
                 </Button>
                 <SubmitButton
+                  title={'Review'}
+                  description={'Are you sure you want to submit review?'}
                   isDisabled={!isValid}
                   onSave={handleSubmit(onSubmit)}
                   styles={[

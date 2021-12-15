@@ -3,7 +3,7 @@ import { Trans, useTranslation } from 'components/Translation';
 import { Rule, Styles, useStyle } from '@dex-ddl/core';
 import { TileWrapper } from 'components/Tile';
 import { Checkbox } from 'components/Form';
-import { UerActions } from '@pma/store';
+import { UserActions } from '@pma/store';
 import useDispatch from 'hooks/useDispatch';
 import { useAuthContainer } from 'contexts/authContext';
 
@@ -23,7 +23,7 @@ export const EmailNotifications: FC<Props> = () => {
       value: attr.type === 'BOOLEAN' ? attr.value === 'true' : attr.value,
     }));
 
-  const updateSettingAction = (setting) => dispatch(UerActions.updateUserNotification(setting));
+  const updateSettingAction = (setting) => dispatch(UserActions.updateUserNotification(setting));
 
   return (
     <TileWrapper title={t('Email notifications', 'Email notifications')}>

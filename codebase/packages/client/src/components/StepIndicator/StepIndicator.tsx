@@ -136,7 +136,7 @@ export const StepIndicatorBasic: FC<StepIndicatorProps> = ({
 };
 
 export const StepIndicator: FC<StepIndicatorProps> = ({
-  mainTitle = 'My Performance Timeline',
+  mainTitle = 'Your Contribution timeline',
   currentStep,
   currentStatus,
   titles = [],

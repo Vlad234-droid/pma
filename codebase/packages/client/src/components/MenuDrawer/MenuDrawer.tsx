@@ -2,11 +2,11 @@ import React, { FC } from 'react';
 import { MenuItem } from 'components/MenuItem';
 import { Rule, useStyle } from '@dex-ddl/core';
 import { Link } from 'react-router-dom';
+import { Page } from 'pages';
+import { LINKS } from 'config/constants';
 import TescoLogo from './TescoLogo.svg';
 import { Icon } from '../Icon';
 import { IconButton } from '../IconButton';
-import { Page } from '../../pages';
-import { LINKS } from 'config/constants';
 
 export type MenuDrawerProps = { onClose: () => void };
 
@@ -22,8 +22,8 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
           </div>
           <div className={css(menuDrawerTitleStyle)}>Performance management application</div>
           <div className={css(menuDrawerButtonsStyle)}>
-            <MenuItem iconGraphic={'calender'} linkTo={Page.CAREER_PERFORMANCE} title={'Performance overview'} />
-            <MenuItem iconGraphic={'document'} linkTo={Page.OBJECTIVES_VIEW} title={'My business objectives'} />
+            <MenuItem iconGraphic={'calender'} linkTo={Page.CAREER_PERFORMANCE} title={'Your contribution'} />
+            <MenuItem iconGraphic={'document'} linkTo={Page.OBJECTIVES_VIEW} title={'My Objectives'} />
             <MenuItem
               iconGraphic={'document'}
               linkTo={Page.CREATE_ORGANIZATION_OBJECTIVES}
@@ -40,7 +40,7 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
             <Icon graphic={'settingsGear'} />
             <span className={css(itemSettingsTextStyle)}>Settings</span>
           </Link>
-          <Link to={''} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
+          <Link to={Page.PERFORMANCE_CYCLE} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
             <Icon graphic={'alert'} />
             <span className={css(itemSettingsTextStyle)}>Performance Cycle</span>
           </Link>

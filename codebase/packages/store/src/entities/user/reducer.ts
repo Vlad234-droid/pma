@@ -1,5 +1,5 @@
 import { createReducer } from 'typesafe-actions';
-import { getCurrentUser } from './actions';
+import { getCurrentUser, createProfileAttribute, updateProfileAttribute } from './actions';
 
 export const initialState = {
   current: {
@@ -17,6 +17,11 @@ const success = (state, { payload }) => ({
   meta: { ...state.meta, loading: false, loaded: true },
 });
 
+const ProfileAttributeSuccess = (state) => ({
+  ...state,
+  meta: { ...state.meta, loading: false, loaded: true },
+});
+
 const failure = (state, { payload }) => ({
   ...state,
   current: { ...state.current, authenticated: false },
@@ -26,4 +31,8 @@ const failure = (state, { payload }) => ({
 export default createReducer(initialState)
   .handleAction(getCurrentUser.request, request)
   .handleAction(getCurrentUser.success, success)
-  .handleAction(getCurrentUser.failure, failure);
+  .handleAction(getCurrentUser.failure, failure)
+  .handleAction(createProfileAttribute.request, request)
+  .handleAction(createProfileAttribute.success, ProfileAttributeSuccess)
+  .handleAction(updateProfileAttribute.request, request)
+  .handleAction(updateProfileAttribute.success, ProfileAttributeSuccess);

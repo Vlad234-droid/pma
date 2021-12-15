@@ -1,8 +1,6 @@
 import React, { FC, useState, useEffect } from 'react';
 import { Modal, Rule, useBreakpoints, useStyle } from '@dex-ddl/core';
-
 import { FilterOption } from 'features/Shared';
-import { IconButton } from 'components/IconButton';
 import { Icon } from 'components/Icon';
 import { PeopleTypes, TypefeedbackItems } from './type';
 import { ModalRespondFeedback } from './ModalsParts';
@@ -56,6 +54,7 @@ const RespondFeedbackContainer: FC = () => {
     setTitle(() => 'Respond to feedback requests');
     setSelectedPerson(() => ({
       ...selectedNote.targetColleagueProfile.colleague,
+      profileAttributes: selectedNote.targetColleagueProfile.profileAttributes,
       targetId: selectedNote?.targetId,
       targetType: selectedNote?.targetType,
       uuid: selectedNote.uuid,
@@ -76,7 +75,6 @@ const RespondFeedbackContainer: FC = () => {
             setFilterFeedbacks={setFilterFeedbacks}
           />
           <div className={css(Flex_styled)}>
-            <IconButton graphic='information' iconStyles={iconStyle} />
             <FilterOption
               focus={focus}
               customIcon={true}
@@ -183,10 +181,6 @@ const header_styled: Rule = () => {
     alignItems: 'center',
     paddingTop: '24px',
   };
-};
-
-const iconStyle: Rule = {
-  marginRight: '10px',
 };
 
 const Drafts_style: Rule = {

@@ -87,11 +87,11 @@ const MainWidget: FC<Props> = ({ customStyle, onClick, status, count = 0 }) => {
         </div>
         {notApproved && (
           <div className={css(bodyStyle)}>
-            {isStateless && (
-              <div className={css({ marginTop: '14px', marginLeft: '9px' })}>
-                Remember your objectives should be strategic, relevant and up to date.
-              </div>
-            )}
+            <div className={css({ marginTop: '14px', marginLeft: '9px' })}>
+              {isStateless
+                ? 'Remember your objectives should be strategic, relevant and up to date.'
+                : 'Remember if your priorities change, review your objectives'}
+            </div>
             <div className={css(bodyBlockStyle)}>
               {isStateless ? <CreateButton buttonText='Create my objectives' /> : <CreateButton buttonText='View' />}
             </div>

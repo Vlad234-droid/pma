@@ -15,12 +15,14 @@ import Settings from './Settings';
 import CreateOrganizationObjectives from './CreateOrganizationObjectives';
 import ObjectivesView from './ObjectivesView/ObjectivesView';
 import { TipsAdministration, TipsForm } from './Tips';
+import CreatePerformanceCycle from './PerformanceCycle/CreatePerformanceCycle';
+import PerformanceCycleAdministration from './PerformanceCycle/PerformanceCycleAdministration';
 
 const pages: Record<Page, PageElement> = {
   [Page.MY_TEAM]: MyTeam,
   [Page.ACTIONS]: Actions,
-  [Page.CREATE_PERFORMANCE_CYCLE]: () => null,
-  [Page.PERFORMANCE_CYCLE]: () => null,
+  [Page.CREATE_PERFORMANCE_CYCLE]: CreatePerformanceCycle,
+  [Page.PERFORMANCE_CYCLE]: PerformanceCycleAdministration,
   [Page.CAREER_PERFORMANCE]: CareerPerformance,
   [Page.CREATE_ORGANIZATION_OBJECTIVES]: CreateOrganizationObjectives,
   [Page.VIEW_ORGANIZATION_OBJECTIVES]: ObjectivesView,

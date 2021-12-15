@@ -1,5 +1,6 @@
 import React, { FC, HTMLProps } from 'react';
 import { Trans } from 'components/Translation';
+import { ReviewType, ObjectiveType } from 'config/enum';
 import { Button, Styles, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { Icon as IconComponent } from 'components/Icon';
 
@@ -7,11 +8,12 @@ export type SuccessModal = {
   onClose: () => void;
   description?: string;
   withСheckMark?: boolean;
+  reviewType?: ReviewType;
 };
 
 type Props = HTMLProps<HTMLInputElement> & SuccessModal;
 
-export const SuccessModal: FC<Props> = ({ onClose, description, withСheckMark = false }) => {
+export const SuccessModal: FC<Props> = ({ onClose, reviewType, description, withСheckMark = false }) => {
   const { css, theme } = useStyle();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
@@ -88,7 +90,7 @@ export const SuccessModal: FC<Props> = ({ onClose, description, withСheckMark =
               description
             ) : (
               <Trans i18nKey='objective_sent_for_approval'>
-                Your objectives
+                Your {reviewType ? ObjectiveType[reviewType] : 'Objectives'}
                 <br /> have been sent to your manager
                 <br /> for approval.
               </Trans>

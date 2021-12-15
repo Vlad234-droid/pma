@@ -19,4 +19,5 @@ export default interface User {
   name: string;
   status: Status;
   role: Role;
+  data?: any;
 }

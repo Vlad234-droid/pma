@@ -62,7 +62,7 @@ const SearchInput: FC<InputProps> = ({
               onClick={() => {
                 setSearchValue(() => `${item?.profile?.firstName} ${item?.profile?.lastName}`);
                 setSelectedPerson(() => item);
-                dispatch(ColleaguesActions.clearGettedCollegues());
+                dispatch(ColleaguesActions.clearGettedColleagues());
               }}
             >
               <div className={css({ display: 'flex', justifyContent: 'flex-start', alignItems: 'center' })}>

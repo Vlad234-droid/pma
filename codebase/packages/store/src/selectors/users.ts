@@ -4,13 +4,13 @@ import { RootState } from 'typesafe-actions';
 
 export const usersSelector = (state: RootState) => state.users;
 
-function getFullName(profile) {
+export const getFullName = (profile) => {
   const { firstName, middleName, lastName } = profile || {};
   let fullName = '';
   fullName = firstName ? firstName : '';
   fullName = middleName ? `${fullName} ${middleName}` : fullName;
   return lastName ? `${fullName} ${lastName}` : fullName;
-}
+};
 
 export const colleagueUUIDSelector = createSelector(usersSelector, ({ current }) => {
   // @ts-ignore
