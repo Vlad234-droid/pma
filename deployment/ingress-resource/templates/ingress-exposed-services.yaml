@@ -18,7 +18,7 @@ spec:
             name: pma-frontend-service
             port:
               number: 9000
-      - path: (/identity)(/v1/internal/.*)
+      - path: /(identity/)(v1/internal/.*)
         pathType: ImplementationSpecific
         backend:
           service:
