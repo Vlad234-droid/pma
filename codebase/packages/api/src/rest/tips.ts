@@ -9,3 +9,7 @@ export const getAllTips = (params: any) => {
 export const getTipHistory = (params: any) => {
   return httpClient.get(`${domain}/${params}/history`);
 }
+
+export const createTip = (params: any) => {
+  return httpClient.post(`${domain}`, params);
+}

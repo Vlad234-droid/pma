@@ -25,18 +25,16 @@ const TipsAdministration: FC = () => {
 
   return (
     <Fragment>
-      <div className={css({ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '25px' })}>
-        <div>
-          <IconButton
-            customVariantRules={{ default: iconBtnStyle }}
-            onPress={handleCreateTip}
-            graphic='add'
-            iconProps={{ invertColors: true }}
-            iconStyles={iconStyle}
-          >
-            <span>Create new tip</span>
-          </IconButton>
-        </div>
+      <div className={css({ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '20px 0 25px' })}>
+        <IconButton
+          customVariantRules={{ default: iconBtnStyle }}
+          onPress={handleCreateTip}
+          graphic='add'
+          iconProps={{ invertColors: true }}
+          iconStyles={iconStyle}
+        >
+          <span>Create new tip</span>
+        </IconButton>
       </div>
       
       {/* <NoTips /> */}

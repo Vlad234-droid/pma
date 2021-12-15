@@ -1,27 +1,89 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { useStyle, Rule, useBreakpoints, Button, ModalWithHeader, Icon, theme } from '@dex-ddl/core';
 import { useHistory } from 'react-router-dom';
 import { Page } from 'pages';
 import { Input, Item, Textarea, Select } from 'components/Form';
 import { GenericItemField } from 'components/GenericForm';
 import { useForm } from 'react-hook-form';
+import { useDispatch, useSelector } from 'react-redux';
+import { ConfigEntriesActions, tipsActions } from '@pma/store';
+import { configEntriesSelector } from '@pma/store/src/selectors/config-entries';
 
 // export type ViewHistoryModal = {
 //   handleCloseModal: () => void;
 //   card: TipsProps;
 // };
 
+function getChildren(data, options: any, key, value) {
+  return data
+    .filter((item) => {
+      return item[key] === options;
+    })
+    .reduce((prev, item) => {
+      return [
+        ...prev,
+        ...item.children?.map((child) => ({
+          value: child[value],
+          label: child.name,
+          children: child.children,
+          uuid: child.uuid
+        })),
+      ];
+    }, []);
+}
+
 const TipsForm: FC = () => {
   const { css } = useStyle();
   const history = useHistory();
   const methods = useForm();
-  const imgName = '';
-  const field_options = [
-    { value: 'id_1', label: 'Option 1' },
-    { value: 'id_2', label: 'Option 2' },
-    { value: 'id_3', label: 'Option 3' },
-  ];
+  const dispatch = useDispatch();
+  const configEntries = useSelector(configEntriesSelector);
+  const [createTipBtnStatus, setCreateTipBtnStatus] = useState(true)
 
+
+  const [options1, setOptions1] = useState([]);
+  const [options2, setOptions2] = useState([]);
+  const [options12, setOptions12] = useState([]);
+  const [options3, setOptions3] = useState([]);
+  const [options131, setOptions131] = useState([]);
+  const [options4, setOptions4] = useState([]);
+  // const [entryConfigKey, setEntryConfigKey] = useState('');
+  const [targetOrganisation, setTargetOrganisation] = useState('')
+  
+  useEffect(() => {
+    dispatch(ConfigEntriesActions.getConfigEntries());
+  }, []);
+
+  useEffect(() => {
+    setOptions2(getChildren(configEntries.data, options1, 'uuid', 'uuid'))
+  }, [options1, configEntries]);
+
+  useEffect(() => setOptions3(getChildren(options2, options12, 'value', 'uuid')), [options12, options2]);
+
+  useEffect(
+    () => setOptions4(getChildren(options3, options131, 'value', 'compositeKey')),
+    [options131, options3, options12],
+  );
+
+  const handleCreateTip = () => {
+    const data = {
+      title: methods.getValues('tipTitle'),
+      description: methods.getValues('tipDescription'),
+      key: `/${Math.random().toFixed(5)}`,
+      targetOrganisation: {
+        uuid: targetOrganisation
+      },
+      imageLink: "https://www.google.com/gmail/about/static-2.0/images/logo-gmail.png"
+    }
+    dispatch(
+      tipsActions.createTip(data),
+    );
+    history.push(`${Page.TIPS}`)
+  }
+  
+  
+  //temp
+  const imgName = '';
   const handleUploadFile = () => {
     console.log("Upload File Button")
   }
@@ -75,8 +137,14 @@ const TipsForm: FC = () => {
             methods={methods}
             Wrapper={({ children }) => <Item label='Level 1' withIcon={false}>{children}</Item>}
             Element={Select}
-            options={field_options}
+            options={configEntries.data.map((item) => {
+              return { value: item.uuid, label: item.name };
+            })}
             placeholder='Please select'
+            onChange={(_, value) => {
+              dispatch(ConfigEntriesActions.getConfigEntriesByUuid({ uuid: value }))
+              setOptions1(value);
+            }}
             value={''}
           />
           <GenericItemField
@@ -84,7 +152,8 @@ const TipsForm: FC = () => {
             methods={methods}
             Wrapper={({ children }) => <Item label='Level 2' withIcon={false}>{children}</Item>}
             Element={Select}
-            options={field_options}
+            options={options2}
+            onChange={(_, value) => setOptions12(value)}
             placeholder='Please select'
             value={''}
           />
@@ -93,7 +162,10 @@ const TipsForm: FC = () => {
             methods={methods}
             Wrapper={({ children }) => <Item label='Level 3' withIcon={false}>{children}</Item>}
             Element={Select}
-            options={field_options}
+            options={options3}
+            onChange={(_, value) => {
+              setOptions131(value);
+            }}
             placeholder='Please select'
             value={''}
           />
@@ -102,7 +174,13 @@ const TipsForm: FC = () => {
             methods={methods}
             Wrapper={({ children }) => <Item label='Level 4' withIcon={false}>{children}</Item>}
             Element={Select}
-            options={field_options}
+            options={options4}
+            onChange={(_, value) => {
+              const item = options4.filter(item => item['value'] === value)[0]
+              // setEntryConfigKey(value)
+              setTargetOrganisation(item['uuid'])
+              setCreateTipBtnStatus(false)
+            }}
             placeholder='Please select'
             value={''}
           />
@@ -116,8 +194,8 @@ const TipsForm: FC = () => {
             Discard
           </Button>
           <Button 
-            isDisabled={true}
-            onPress={() => console.log("Created tip")} 
+            isDisabled={createTipBtnStatus}
+            onPress={handleCreateTip} 
             styles={[formControlBtn]}
           >
             Create
@@ -129,16 +207,29 @@ const TipsForm: FC = () => {
 }
 
 const modalWrapper: Rule = () => {
-  // const [, isBreakpoint] = useBreakpoints();
-  // const mobileScreen = isBreakpoint.medium || isBreakpoint.small || isBreakpoint.xSmall;
+  const [, isBreakpoint] = useBreakpoints();
+  const mobileScreen = isBreakpoint.medium || isBreakpoint.small || isBreakpoint.xSmall;
   return {
     padding: 0,
+    ...(mobileScreen 
+      ? 
+      {
+        width: '100%',
+        height: 'calc(100% - 50px)',
+        marginTop: '50px',
+        borderRadius: '24px 24px 0 0'
+      }
+      :
+      { width: '60%' }
+    )
   }
 }
 
 const modalInner: Rule = () => {
+  const [, isBreakpoint] = useBreakpoints();
+  const mobileScreen = isBreakpoint.medium || isBreakpoint.small || isBreakpoint.xSmall;
   return {
-    padding: '40px 40px 100px',
+    padding: mobileScreen ? '30px 15px 100px' : '40px 40px 100px',
     height: '100%'
   }
 }
@@ -176,11 +267,14 @@ const uploadPicBtnStyle: Rule = ({ theme }) => {
 const hrSeparatorLine: Rule = ({ theme }) => {
   return {
     height: '1px',
-    background: theme.colors.backgroundDarkest
+    background: theme.colors.backgroundDarkest,
+    marginBottom: '20px',
   }
 }
 
 const formControlBtnsWrap: Rule = ({ theme }) => {
+  const [, isBreakpoint] = useBreakpoints();
+  const mobileScreen = isBreakpoint.medium || isBreakpoint.small || isBreakpoint.xSmall;
   return {
     display: 'flex',
     alignItems: 'center',
@@ -188,9 +282,14 @@ const formControlBtnsWrap: Rule = ({ theme }) => {
     position: 'absolute',
     bottom: 0,
     left: 0,
-    padding: '0 40px',
     width: '100%',
     borderTop: `1px solid ${theme.colors.backgroundDarkest}`,
+    ...(mobileScreen
+      ?
+      { padding: '0 10px' }
+      :
+      { padding: '0 40px', }
+    )
   }
 }
 
