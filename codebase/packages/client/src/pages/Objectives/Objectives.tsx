@@ -50,7 +50,7 @@ const reviews = [
   },
   {
     id: 'test-2',
-    title: 'End-year review',
+    title: 'Year-end review',
     description: 'Pharetra donec enim aenean aliquet consectetur ultrices amet vitae',
     reviewType: ReviewType.EYR,
   },
@@ -255,7 +255,7 @@ const Objectives: FC = () => {
                     status={endYearReview.status}
                     onClick={() => console.log('ReviewWidget')}
                     onClose={() => console.log('ReviewWidget')}
-                    title={'End-year review'}
+                    title={'Year-end review'}
                     description={t('tiles_description_id_3', 'Your mid-year review form and results will appear here.')}
                     customStyle={{ height: '182px' }}
                   />
