@@ -144,10 +144,6 @@ export const StepIndicator: FC<StepIndicatorProps> = ({
   statuses = [],
   customStyle = {},
 }) => {
-  console.log('titles', titles);
-  console.log('descriptions', descriptions);
-  console.log('statuses', statuses);
-
   const { css } = useStyle();
   return (
     <Tile customStyle={customStyle}>
