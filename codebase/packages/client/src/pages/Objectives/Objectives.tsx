@@ -158,10 +158,6 @@ const Objectives: FC = () => {
     if (!loaded) dispatch(TimelineActions.getTimeline({ colleagueUuid }));
   }, [loaded]);
 
-  // TODO: check is manager ?
-  // form btn click action
-  //
-
   return (
     <div className={css({ margin: '8px' })}>
       <Header title={canShowObjectives ? 'Objectives' : 'Review'} />
@@ -181,12 +177,15 @@ const Objectives: FC = () => {
             />
           </div>
         )}
-        <ShareWidget customStyle={shareWidgetStyles} />
 
-        <OrganizationWidget
-          customStyle={{ flex: '1 1 30%', display: 'flex', flexDirection: 'column' }}
-          onClick={() => history.push('/view-organization-objectives')}
-        />
+        <div className={css(widgetsBlock)}>
+          <ShareWidget customStyle={shareWidgetStyles} />
+
+          <OrganizationWidget
+            customStyle={{ flex: '1 1 30%', display: 'flex', flexDirection: 'column' }}
+            onClick={() => history.push('/view-organization-objectives')}
+          />
+        </div>
       </div>
       <div className={css(bodyWrapperStyles)} data-test-id={TEST_ID}>
         <div className={css(timelineWrapperStyles)}>
@@ -310,6 +309,14 @@ const Objectives: FC = () => {
   );
 };
 
+const widgetsBlock = {
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  flexDirection: 'column',
+  // margin: '20px',
+} as Rule;
+
 const headWrapperStyles: Rule = () => {
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
@@ -331,9 +338,10 @@ const timelineWrapperStyles = {
 } as Styles;
 
 const shareWidgetStyles = {
-  flex: '1 1 30%',
   display: 'flex',
   flexDirection: 'column',
+  marginBottom: '20px',
+  width: '100%',
 } as Styles;
 
 const bodyWrapperStyles: Rule = () => {

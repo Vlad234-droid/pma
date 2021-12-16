@@ -52,7 +52,7 @@ const CareerPerformance: FC = () => {
   return (
     <>
       <div className={css({ margin: '8px' })}>
-        <Header title='Your contribution' />
+        <Header title='Your Contribution' />
         <div className={css({ display: 'flex', justifyContent: 'space-between' })}>
           <div />
           {isRoleManager && (

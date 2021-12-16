@@ -10,7 +10,8 @@ export const getTimelineSelector = createSelector(timelineSelector, ({ meta, ...
   const { data } = rest;
   const descriptions = data?.map(({ description }) => description);
   const statuses = data?.map(({ status }) => status);
-  const startDates = data?.map(({ startTime }) => {
+  const startDates = data?.map(({ code, startTime }) => {
+    if (code === 'Q1' || code === 'Q3') return '';
     const date = new Date(startTime);
     return `${date.toLocaleString('default', { month: 'long' })} ${date.getFullYear()}`;
   });

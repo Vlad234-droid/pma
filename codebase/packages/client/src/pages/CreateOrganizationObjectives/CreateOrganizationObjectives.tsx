@@ -20,44 +20,44 @@ type Props = HTMLProps<HTMLInputElement> & CreateUpdateObjectiveModalProps;
 const formInputs = [
   {
     id: 0,
-    name: 'Objective 1',
-    label: 'Objective 1 label',
-    placeholder: 'Enter title for this objectives',
+    name: 'Strategic Priorities 1',
+    label: 'Strategic Priorities 1 label',
+    placeholder: 'Enter title for this Strategic Priorities',
     value: '',
   },
   {
     id: 1,
-    name: 'Objective 2',
-    label: 'Objective 2 label',
-    placeholder: 'Enter title for this objectives',
+    name: 'Strategic Priorities 2',
+    label: 'Strategic Priorities 2 label',
+    placeholder: 'Enter title for this Strategic Priorities',
     value: '',
   },
   {
     id: 2,
-    name: 'Objective 3',
-    label: 'Objective 3 label',
-    placeholder: 'Enter title for this objectives',
+    name: 'Strategic Priorities 3',
+    label: 'Strategic Priorities 3 label',
+    placeholder: 'Enter title for this Strategic Priorities',
     value: '',
   },
   {
     id: 3,
-    name: 'Objective 4',
-    label: 'Objective 4 label',
-    placeholder: 'Enter title for this objectives',
+    name: 'Strategic Priorities 4',
+    label: 'Strategic Priorities 4 label',
+    placeholder: 'Enter title for this Strategic Priorities',
     value: '',
   },
   {
     id: 4,
-    name: 'Objective 5',
-    label: 'Objective 5 label',
-    placeholder: 'Enter title for this objectives',
+    name: 'Strategic Priorities 5',
+    label: 'Strategic Priorities 5 label',
+    placeholder: 'Enter title for this Strategic Priorities',
     value: '',
   },
   {
     id: 5,
-    name: 'Objective 6',
-    label: 'Objective 6 label',
-    placeholder: 'Enter title for this objectives',
+    name: 'Strategic Priorities 6',
+    label: 'Strategic Priorities 6 label',
+    placeholder: 'Enter title for this Strategic Priorities',
     value: '',
   },
 ];
@@ -156,14 +156,14 @@ const CreateOrganizationObjectives: FC<Props> = () => {
     <div className={css(main)}>
       {/* <LeftsideMenu /> */}
       <div className={css(page)}>
-        <Header title='Create Organization Objectives' />
+        <Header title='Create Strategic Priorities' />
 
         <div className={css(contentArea)}>
           <DescriptionBlock>
-            <div className={css(decsriptionHeader({ theme }))}>Organization objectives</div>
+            <div className={css(decsriptionHeader({ theme }))}>Strategic Priorities</div>
 
             <div className={css(descriptionText({ theme }))}>
-              Create titles for organization objectives. Click “Save” button to keep the changes. Or “Publish” to
+              Create titles for Strategic Priorities. Click “Save” button to keep the changes. Or “Publish” to
               cascade them on the colleagues.
             </div>
             <div>
