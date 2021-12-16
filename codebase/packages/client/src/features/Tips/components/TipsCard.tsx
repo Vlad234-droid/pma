@@ -3,24 +3,27 @@ import { useStyle, Rule, useBreakpoints, Button, theme } from '@dex-ddl/core';
 import { TileWrapper } from 'components/Tile';
 import { TipsProps } from '../types';
 import { ViewHistoryModal } from '.';
+import { useHistory } from 'react-router-dom';
+import { Page } from 'pages';
 
 export type TipsCardProps = {
   card: TipsProps;
 };
 
-const handleEditTip = () => {
-  alert("View Edit Tip")
-}
-
-const handlePushTip = () => {
-  alert("View Push Tip")
-}
-
 const TipsCard: FC<TipsCardProps> = ({card}) => {
   const { css } = useStyle();
+  const history = useHistory();
 
-  const date = new Date(card.createdTime)
-  const createdTime = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`
+  const handleEditTip = () => {
+    // history.push(`${Page.EDIT_TIP}`)
+  }
+
+  const handlePushTip = () => {
+    alert("View Push Tip")
+  }
+
+  const date = new Date(card.updatedTime)
+  const pushedTime = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`
 
   const [isShowViewHistoryModal, setShowViewHistoryModal] = useState(false);
 
@@ -43,7 +46,7 @@ const TipsCard: FC<TipsCardProps> = ({card}) => {
             <div className={css(tipTitle)}>{card.title}</div>
             <div className={css(tipText)}>{card.description}</div>
             <div className={css({ marginTop: '8px', display: 'flex' })}>
-              <div className={css( lastPushStyle )}>Last push: {card.published ? 'sometime ago' : 'haven\'t pushed yet'}</div>
+              <div className={css( lastPushStyle )}>Last push: {card.published ? pushedTime : 'haven\'t pushed yet'}</div>
               <div className={css( viewHistoryStyle )} onClick={handleShowViewHistoryModal}>View history</div>
             </div>
           </div>
