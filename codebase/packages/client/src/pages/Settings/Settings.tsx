@@ -1,6 +1,5 @@
 import React, { FC } from 'react';
 import { useStyle } from '@dex-ddl/core';
-import { Header } from 'components/Header';
 import { TileWrapper } from 'components/Tile';
 import { EmailNotifications } from 'features/EmailNotifications';
 
@@ -10,8 +9,7 @@ const Settings: FC = () => {
   const { css } = useStyle();
 
   return (
-    <div className={css({ margin: '8px' })}>
-      <Header title='Settings' />
+    <div>
       <div
         className={css({
           display: 'flex',

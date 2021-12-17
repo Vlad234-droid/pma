@@ -2,9 +2,7 @@ import React, { FC, useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'components/Translation';
 import { Button, Rule, Styles, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { ObjectiveType, ReviewType } from 'config/enum';
-
 import { StepIndicator } from 'components/StepIndicator/StepIndicator';
-import { Header } from 'components/Header';
 import { IconButton } from 'components/IconButton';
 
 import {
@@ -85,6 +83,7 @@ const Objectives: FC = () => {
   const { components = [], markup = { max: 0, min: 0 } } = schema;
   const { descriptions, startDates, statuses } = useSelector(getTimelineSelector) || {};
   const timelineTypes = useSelector(timelineTypesAvailabilitySelector);
+  // TODO: always true
   const canShowObjectives = true || timelineTypes[ObjectiveType.OBJECTIVE];
   const canShowMyReview = timelineTypes[ObjectiveType.MYR] && timelineTypes[ObjectiveType.EYR];
   const canShowAnnualReview = !timelineTypes[ObjectiveType.MYR] && timelineTypes[ObjectiveType.EYR];
@@ -159,8 +158,7 @@ const Objectives: FC = () => {
   }, [loaded]);
 
   return (
-    <div className={css({ margin: '8px' })}>
-      <Header title={canShowObjectives ? 'Objectives' : 'Review'} />
+    <div>
       {canCreateSingleObjective && canShowObjectives && (
         <div className={css({ display: 'flex' })}>
           <CreateButton withIcon useSingleStep={true} />

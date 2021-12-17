@@ -1,11 +1,11 @@
-import React, { FC, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { FC } from 'react';
+import { useHistory, useLocation, Route } from 'react-router-dom';
 import { IconButton, Rule, Styles, useStyle } from '@dex-ddl/core';
 import { MenuDrawer } from '../MenuDrawer/MenuDrawer';
 
 export type HeaderProps = {
   title: string;
-  onBack?: () => void;
+  onBack: () => void;
   styles?: Styles | Rule;
   customSize?: boolean;
 };
@@ -16,22 +16,27 @@ export const BACK_BTN_TEST_ID = 'header-back';
 const Header: FC<HeaderProps> = ({ title, onBack, styles = {} }) => {
   const { css } = useStyle();
   const history = useHistory();
-  const [showMenu, setShowMenu] = useState(false);
+  const { pathname } = useLocation();
 
-  const handleBack = () => {
-    if (onBack) {
-      onBack();
-    } else {
-      history.goBack();
-    }
+  const handleOpen = () => {
+    history.replace({
+      pathname,
+      state: {
+        isOpen: true,
+      },
+    });
+  };
+
+  const handleClose = () => {
+    history.replace(pathname);
   };
 
   return (
     <div className={css(wrapperStyles, styles)} data-test-id={TEST_ID}>
-      <IconButton onPress={handleBack} graphic='backwardLink' data-test-id={BACK_BTN_TEST_ID} />
+      <IconButton onPress={onBack} graphic='backwardLink' data-test-id={BACK_BTN_TEST_ID} />
       <h3 className={css(headerStyles)}>{title}</h3>
-      <IconButton onPress={() => setShowMenu(true)} graphic='hamburger' />
-      {showMenu && <MenuDrawer onClose={() => setShowMenu(false)} />}
+      <IconButton onPress={handleOpen} graphic='hamburger' />
+      <Route>{({ location: { state = {} } }) => (state as any).isOpen && <MenuDrawer onClose={handleClose} />}</Route>
     </div>
   );
 };
@@ -42,8 +47,8 @@ const wrapperStyles: Rule = {
 };
 
 const headerStyles: Rule = ({ theme }) => ({
-  lineHeight: '24px',
-  fontSize: '20px',
+  lineHeight: '1.2',
+  fontSize: '24px',
   color: theme.colors.tescoBlue,
 });
 export default Header;

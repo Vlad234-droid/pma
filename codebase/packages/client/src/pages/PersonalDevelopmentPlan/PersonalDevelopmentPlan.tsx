@@ -1,5 +1,4 @@
 import React from 'react';
-import { Header } from 'components/Header';
 import { Rule, useStyle } from '@dex-ddl/core';
 import DescriptionBlock from 'components/DescriptionBlock';
 import { LeftsideMenu } from 'components/LeftsideMenu';
@@ -19,8 +18,6 @@ const PersonalDevelopmentPlan = () => {
     <div className={css(main)}>
       <LeftsideMenu />
       <div>
-        <Header title='Personal Development Plan' />
-
         <button className={css(buttonIcon)} onClick={navToGoalPage}>
           <div className={css(plusIcon)}>
             <div>+</div>

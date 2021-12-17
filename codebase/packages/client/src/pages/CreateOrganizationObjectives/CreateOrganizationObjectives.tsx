@@ -1,6 +1,5 @@
 import React, { FC, HTMLProps, useEffect, useState } from 'react';
 import { Button, CreateRule, Rule, Theme, useStyle } from '@dex-ddl/core';
-import { Header } from 'components/Header';
 import DescriptionBlock from 'components/DescriptionBlock';
 import { GenericItemField } from 'components/GenericForm';
 import { Input, Item } from 'components/Form';
@@ -62,7 +61,7 @@ const formInputs = [
   },
 ];
 
-const historaTable = { headers: ['Name', 'Action Type', 'Time'] };
+const historyTable = { headers: ['Name', 'Action Type', 'Time'] };
 
 const CreateOrganizationObjectives: FC<Props> = () => {
   const { css, theme } = useStyle();
@@ -156,15 +155,13 @@ const CreateOrganizationObjectives: FC<Props> = () => {
     <div className={css(main)}>
       {/* <LeftsideMenu /> */}
       <div className={css(page)}>
-        <Header title='Create Strategic Priorities' />
-
         <div className={css(contentArea)}>
           <DescriptionBlock>
-            <div className={css(decsriptionHeader({ theme }))}>Strategic Priorities</div>
+            <div className={css(descriptionHeader({ theme }))}>Strategic Priorities</div>
 
             <div className={css(descriptionText({ theme }))}>
-              Create titles for Strategic Priorities. Click “Save” button to keep the changes. Or “Publish” to
-              cascade them on the colleagues.
+              Create titles for Strategic Priorities. Click “Save” button to keep the changes. Or “Publish” to cascade
+              them on the colleagues.
             </div>
             <div>
               {formInputs.map((item, idx) => {
@@ -202,14 +199,14 @@ const CreateOrganizationObjectives: FC<Props> = () => {
                 </Button>
                 <Button
                   isDisabled={isPublishBtnDisabled}
-                  styles={isPublishBtnDisabled ? [buttons, publishBtn({ theme })] : [buttons]}
+                  styles={isPublishBtnDisabled ? [buttons, publishBtn] : [buttons]}
                   onPress={publish}
                 >
                   Publish
                 </Button>
               </div>
             </div>
-            <HistoryTable headers={historaTable.headers} items={auditLogs} isVisible={isHistoryOpen} />
+            <HistoryTable headers={historyTable.headers} items={auditLogs} isVisible={isHistoryOpen} />
           </DescriptionBlock>
         </div>
       </div>
@@ -244,9 +241,7 @@ const saveBtn: CreateRule<{ theme: Theme }> = (props) => {
   };
 };
 
-const publishBtn: CreateRule<{ theme: Theme }> = (props) => {
-  if (props == null) return {};
-  const { theme } = props;
+const publishBtn: Rule = ({ theme }) => {
   return {
     border: `2px solid ${theme.colors.tescoBlue}`,
     backgroundColor: `${theme.colors.white}`,
@@ -326,7 +321,7 @@ const descriptionText: CreateRule<{ theme: Theme }> = (props) => {
   };
 };
 
-const decsriptionHeader: CreateRule<{ theme: Theme }> = (props) => {
+const descriptionHeader: CreateRule<{ theme: Theme }> = (props) => {
   if (props == null) return {};
   const { theme } = props;
   return {

@@ -1,6 +1,5 @@
 import React, { FC } from 'react';
 import { useStyle } from '@dex-ddl/core';
-import { Header } from 'components/Header';
 import { Actions } from 'features/Actions';
 
 const MyTeam: FC = () => {
@@ -8,7 +7,6 @@ const MyTeam: FC = () => {
 
   return (
     <div className={css({ margin: '8px' })}>
-      <Header title='Actions' />
       <Actions />
     </div>
   );
