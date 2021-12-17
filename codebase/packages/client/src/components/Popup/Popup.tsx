@@ -21,7 +21,7 @@ const Popup = (props) => {
             history.goBack();
           }}
         />
-        <div>Organization objectives</div>
+        <div>Strategic Priorities</div>
         <div>
           <img className={css(close)} alt='close' src={Close} onClick={() => history.push('/')} />
         </div>
