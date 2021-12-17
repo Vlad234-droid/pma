@@ -27,7 +27,7 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
             <MenuItem
               iconGraphic={'document'}
               linkTo={Page.CREATE_ORGANIZATION_OBJECTIVES}
-              title={'Organization objectives'}
+              title={'Strategic Priorities'}
             />
             <MenuItem iconGraphic={'add'} title={'Personal Development Plan'} />
             <MenuItem iconGraphic={'account'} linkTo={Page.PROFILE} title={'My Profile'} />
