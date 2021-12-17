@@ -175,7 +175,7 @@ const ShareWidget: FC<Props> = ({ customStyle }) => {
           <SuccessModal
             description={
               isShared
-                ? t('your_objectives_have_been_visible', 'Your objectives have been visible to your team.')
+                ? t('your_objectives_have_been_visible', 'Your objectives have been made visible to your team.')
                 : t(
                     'you_have_stopped_sharing_your_objectives',
                     'You have stopped sharing your objectives to your team.',

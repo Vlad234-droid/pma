@@ -6,7 +6,6 @@ import Upload from 'components/DropZone/Upload.svg';
 import Download from 'components/DropZone/Download.svg';
 import Trash from 'components/DropZone/Trash.svg';
 import { Input } from 'components/Form';
-import { Header } from 'components/Header';
 
 export type PreviousReviewFilesModal = {
   onOverlayClick: () => void;
@@ -27,7 +26,6 @@ const PreviousReviewFilesModal: FC<Props> = ({ onOverlayClick }) => {
 
   return (
     <>
-      <Header title='Previous review files' />
       <Modal
         modalPosition={mobileScreen ? 'bottom' : 'middle'}
         modalContainerRule={[containerRule({ mobileScreen })]}

@@ -1,6 +1,5 @@
 import React, { FC } from 'react';
 import { Styles, useStyle } from '@dex-ddl/core';
-import { Header } from 'components/Header';
 import { Contacts, PersonalInformation, ProfessionalInformation } from '../../features/Profile';
 import { AuthConsumer } from 'contexts/authContext';
 import { AvatarName } from 'features/Profile/components/Widgets/DashboardProfile';
@@ -13,7 +12,6 @@ const Profile: FC = () => {
 
   return (
     <div className={css({ margin: '8px' })}>
-      <Header title='My profile' />
       <AuthConsumer>
         {({ user }) => {
           return (

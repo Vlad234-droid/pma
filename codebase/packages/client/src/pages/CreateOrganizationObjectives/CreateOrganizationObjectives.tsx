@@ -1,6 +1,5 @@
 import React, { FC, HTMLProps, useEffect, useState } from 'react';
 import { Button, CreateRule, Rule, Theme, useStyle } from '@dex-ddl/core';
-import { Header } from 'components/Header';
 import DescriptionBlock from 'components/DescriptionBlock';
 import { GenericItemField } from 'components/GenericForm';
 import { Input, Item } from 'components/Form';
@@ -20,49 +19,49 @@ type Props = HTMLProps<HTMLInputElement> & CreateUpdateObjectiveModalProps;
 const formInputs = [
   {
     id: 0,
-    name: 'Objective 1',
-    label: 'Objective 1 label',
-    placeholder: 'Enter title for this objectives',
+    name: 'Strategic Priorities 1',
+    label: 'Strategic Priorities 1 label',
+    placeholder: 'Enter title for this Strategic Priorities',
     value: '',
   },
   {
     id: 1,
-    name: 'Objective 2',
-    label: 'Objective 2 label',
-    placeholder: 'Enter title for this objectives',
+    name: 'Strategic Priorities 2',
+    label: 'Strategic Priorities 2 label',
+    placeholder: 'Enter title for this Strategic Priorities',
     value: '',
   },
   {
     id: 2,
-    name: 'Objective 3',
-    label: 'Objective 3 label',
-    placeholder: 'Enter title for this objectives',
+    name: 'Strategic Priorities 3',
+    label: 'Strategic Priorities 3 label',
+    placeholder: 'Enter title for this Strategic Priorities',
     value: '',
   },
   {
     id: 3,
-    name: 'Objective 4',
-    label: 'Objective 4 label',
-    placeholder: 'Enter title for this objectives',
+    name: 'Strategic Priorities 4',
+    label: 'Strategic Priorities 4 label',
+    placeholder: 'Enter title for this Strategic Priorities',
     value: '',
   },
   {
     id: 4,
-    name: 'Objective 5',
-    label: 'Objective 5 label',
-    placeholder: 'Enter title for this objectives',
+    name: 'Strategic Priorities 5',
+    label: 'Strategic Priorities 5 label',
+    placeholder: 'Enter title for this Strategic Priorities',
     value: '',
   },
   {
     id: 5,
-    name: 'Objective 6',
-    label: 'Objective 6 label',
-    placeholder: 'Enter title for this objectives',
+    name: 'Strategic Priorities 6',
+    label: 'Strategic Priorities 6 label',
+    placeholder: 'Enter title for this Strategic Priorities',
     value: '',
   },
 ];
 
-const historaTable = { headers: ['Name', 'Action Type', 'Time'] };
+const historyTable = { headers: ['Name', 'Action Type', 'Time'] };
 
 const CreateOrganizationObjectives: FC<Props> = () => {
   const { css, theme } = useStyle();
@@ -156,15 +155,13 @@ const CreateOrganizationObjectives: FC<Props> = () => {
     <div className={css(main)}>
       {/* <LeftsideMenu /> */}
       <div className={css(page)}>
-        <Header title='Create Organization Objectives' />
-
         <div className={css(contentArea)}>
           <DescriptionBlock>
-            <div className={css(decsriptionHeader({ theme }))}>Organization objectives</div>
+            <div className={css(descriptionHeader({ theme }))}>Strategic Priorities</div>
 
             <div className={css(descriptionText({ theme }))}>
-              Create titles for organization objectives. Click “Save” button to keep the changes. Or “Publish” to
-              cascade them on the colleagues.
+              Create titles for Strategic Priorities. Click “Save” button to keep the changes. Or “Publish” to cascade
+              them on the colleagues.
             </div>
             <div>
               {formInputs.map((item, idx) => {
@@ -202,14 +199,14 @@ const CreateOrganizationObjectives: FC<Props> = () => {
                 </Button>
                 <Button
                   isDisabled={isPublishBtnDisabled}
-                  styles={isPublishBtnDisabled ? [buttons, publishBtn({ theme })] : [buttons]}
+                  styles={isPublishBtnDisabled ? [buttons, publishBtn] : [buttons]}
                   onPress={publish}
                 >
                   Publish
                 </Button>
               </div>
             </div>
-            <HistoryTable headers={historaTable.headers} items={auditLogs} isVisible={isHistoryOpen} />
+            <HistoryTable headers={historyTable.headers} items={auditLogs} isVisible={isHistoryOpen} />
           </DescriptionBlock>
         </div>
       </div>
@@ -244,9 +241,7 @@ const saveBtn: CreateRule<{ theme: Theme }> = (props) => {
   };
 };
 
-const publishBtn: CreateRule<{ theme: Theme }> = (props) => {
-  if (props == null) return {};
-  const { theme } = props;
+const publishBtn: Rule = ({ theme }) => {
   return {
     border: `2px solid ${theme.colors.tescoBlue}`,
     backgroundColor: `${theme.colors.white}`,
@@ -326,7 +321,7 @@ const descriptionText: CreateRule<{ theme: Theme }> = (props) => {
   };
 };
 
-const decsriptionHeader: CreateRule<{ theme: Theme }> = (props) => {
+const descriptionHeader: CreateRule<{ theme: Theme }> = (props) => {
   if (props == null) return {};
   const { theme } = props;
   return {

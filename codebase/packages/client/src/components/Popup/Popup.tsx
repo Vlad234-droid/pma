@@ -21,7 +21,7 @@ const Popup = (props) => {
             history.goBack();
           }}
         />
-        <div>Organization objectives</div>
+        <div>Strategic Priorities</div>
         <div>
           <img className={css(close)} alt='close' src={Close} onClick={() => history.push('/')} />
         </div>
@@ -46,7 +46,7 @@ const close = {
   cursor: 'pointer',
 } as Rule;
 
-const descriptionText: CreateRule<{ theme: Theme; }> = (props) => {
+const descriptionText: CreateRule<{ theme: Theme }> = (props) => {
   if (props == null) return {};
   const { theme } = props;
   return {
@@ -56,7 +56,7 @@ const descriptionText: CreateRule<{ theme: Theme; }> = (props) => {
   };
 };
 
-const decsriptionHeader: CreateRule<{ theme: Theme; }> = (props) => {
+const decsriptionHeader: CreateRule<{ theme: Theme }> = (props) => {
   if (props == null) return {};
   const { theme } = props;
   return {
@@ -78,7 +78,7 @@ const arrow = {
   cursor: 'pointer',
 } as Rule;
 
-const header: CreateRule<{ theme: Theme; }> = (props) => {
+const header: CreateRule<{ theme: Theme }> = (props) => {
   if (props == null) return {};
   const { theme } = props;
   return {

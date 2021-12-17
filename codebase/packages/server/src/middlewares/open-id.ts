@@ -107,9 +107,6 @@ export const openIdConfig = ({
   oidcClientId,
   oidcClientSecret,
   oidcRefreshTokenSecret,
-  oidcGroupFiltersRegex,
-  oidcAdminGroups,
-  oidcManagerGroups,
   identityClientId,
   identityClientSecret,
   identityUserScopedTokenCookieSecret,
@@ -121,23 +118,7 @@ export const openIdConfig = ({
   const enrichUserInfo = (userInfo: OpenIdUserInfo) => {
     console.log(` --> OpenID: [userInfo]: ${JSON.stringify(userInfo)}`);
 
-    const userGroups = (
-      Array.isArray(userInfo.groups) ? userInfo.groups : ((userInfo.groups as unknown as string) || '').split(',') || []
-    )
-      .filter(Boolean)
-      .filter((group) => oidcGroupFiltersRegex().some((rr) => rr.test(group)));
-
-    const userRoles: Set<string> = new Set([defaultConfig.defaultRole]);
-
-    if (oidcManagerGroups().some((g) => userGroups.includes(g))) {
-      userRoles.add('Manager');
-    }
-    if (oidcAdminGroups().some((g) => userGroups.includes(g))) {
-      userRoles.add('Admin');
-    }
-
     const userData = {
-      //...userInfo,
       fullName: userInfo.name,
       firstName: userInfo.given_name || userInfo.name.split(/\s+/)[0],
       lastName: userInfo.family_name || userInfo.name.split(/\s+/)[1],
@@ -145,7 +126,6 @@ export const openIdConfig = ({
       params: {
         employeeNumber: (userInfo.params?.employeeNumber || userInfo.params?.EmployeeNumber) as string,
       },
-      //groups: userGroups,
       aud: userInfo.aud,
       sid: userInfo.sid,
       iat: userInfo.iat,
@@ -153,7 +133,6 @@ export const openIdConfig = ({
       sub: userInfo.sub,
       exp: userInfo.exp,
       updatedAt: userInfo.updated_at,
-      roles: Array.from(userRoles.values()),
     };
 
     return userData;
@@ -190,7 +169,7 @@ export const openIdConfig = ({
     /**
      * Paths that won't be part of token validation and refreshing
      */
-    ignoredPathsFragments: ['/api/cms-events'],
+    // ignoredPathsFragments: [],
 
     /**
      * In case of error, calls containg that path framgents won't result in redirect.
@@ -199,7 +178,7 @@ export const openIdConfig = ({
     //noRedirectPathFragments: [],
 
     /** Scopes of the data that we want to be present in the id_token */
-    scope: ['openid', 'profile', 'params', 'groups'],
+    scope: ['openid', 'profile', 'params'],
 
     /** Optional, callback that will be called with Event type objects durring authentication process */
     logger: OpenIdLogger,
