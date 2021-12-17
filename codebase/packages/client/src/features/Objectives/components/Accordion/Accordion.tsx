@@ -17,6 +17,7 @@ export type ObjectiveAccordionProps = {
 };
 
 export const TEST_ID = 'objective-accordion';
+
 const Buttons: FC<{ id: number }> = ({ id }) => {
   const dispatch = useDispatch();
   const { info } = useSelector(currentUserSelector);

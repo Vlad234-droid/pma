@@ -13,9 +13,8 @@ import RespondFeedback from './RespondFeedback';
 import ViewFeedback from './ViewFeedback';
 import Settings from './Settings';
 import CreateOrganizationObjectives from './CreateOrganizationObjectives';
-import ObjectivesView from './ObjectivesView/ObjectivesView';
-import CreatePerformanceCycle from './PerformanceCycle/CreatePerformanceCycle';
-import PerformanceCycleAdministration from './PerformanceCycle/PerformanceCycleAdministration';
+import ObjectivesView from './ObjectivesView';
+import { CreatePerformanceCycle, PerformanceCycleAdministration } from './PerformanceCycle';
 
 const pages: Record<
   Page,
