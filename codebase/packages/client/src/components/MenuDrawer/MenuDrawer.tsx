@@ -33,16 +33,13 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
             <MenuItem iconGraphic={'account'} linkTo={Page.PROFILE} title={'My Profile'} />
             <MenuItem iconGraphic={'chatSq'} linkTo={Page.FEEDBACK} title={'Feedback'} />
             <MenuItem iconGraphic={'edit'} linkTo='' title={'My Notes'} />
+            <MenuItem iconGraphic={'alert'} linkTo={Page.PERFORMANCE_CYCLE} title={'Performance Cycle'} />
           </div>
         </div>
         <div className={css(menuDrawerSettingsStyle)}>
           <Link to={''} className={css(itemSettingsStyle)}>
             <Icon graphic={'settingsGear'} />
             <span className={css(itemSettingsTextStyle)}>Settings</span>
-          </Link>
-          <Link to={Page.PERFORMANCE_CYCLE} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
-            <Icon graphic={'alert'} />
-            <span className={css(itemSettingsTextStyle)}>Performance Cycle</span>
           </Link>
           <Link to={''} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
             <Icon graphic={'question'} />

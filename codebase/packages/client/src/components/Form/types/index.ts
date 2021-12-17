@@ -15,6 +15,7 @@ export interface FormItemProps {
   id?: string;
   customStyles?: Rule | Styles;
   onFocus?: () => any;
+  readonly?: boolean;
 }
 
 export type InputProps = FormItemProps;

@@ -12,7 +12,7 @@ const Layout: FC = ({ children }) => {
   const { css } = useStyle();
   const history = useHistory();
 
-  const handleBack = () => history.replace(Page.CAREER_PERFORMANCE);
+  const handleBack = () => history.goBack();
 
   return (
     <div data-test-id={TEST_ID} className={css(layoutRule)}>

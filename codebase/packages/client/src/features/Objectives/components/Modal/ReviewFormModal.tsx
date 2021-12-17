@@ -204,7 +204,6 @@ const ReviewFormModal: FC<Props> = ({ reviewType, onClose }) => {
                     Element={Input}
                     placeholder={description}
                     value={value}
-                    withMarkdown={true}
                   />
                 );
               }
@@ -219,7 +218,6 @@ const ReviewFormModal: FC<Props> = ({ reviewType, onClose }) => {
                     Element={Textarea}
                     placeholder={description}
                     value={value}
-                    withMarkdown={true}
                   />
                 );
               }
@@ -231,7 +229,7 @@ const ReviewFormModal: FC<Props> = ({ reviewType, onClose }) => {
                     methods={methods}
                     label={label}
                     Wrapper={({ children, label }) => (
-                      <Item withIcon={false} label={label} withMarkdown={true}>
+                      <Item withIcon={false} label={label}>
                         {children}
                       </Item>
                     )}
@@ -239,7 +237,6 @@ const ReviewFormModal: FC<Props> = ({ reviewType, onClose }) => {
                     options={values}
                     placeholder={description}
                     value={value}
-                    withMarkdown={true}
                   />
                 );
               }

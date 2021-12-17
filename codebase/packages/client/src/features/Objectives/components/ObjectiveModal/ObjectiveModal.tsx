@@ -20,13 +20,14 @@ export type ObjectiveModalProps = {
   methods: UseFormReturn;
   submitForm: boolean;
   currentObjectiveNumber: number;
-  schemaComponents: [any]; // todo add schema type
+  schemaComponents: any; // todo add schema type
   formValues: {};
   titles?: string[];
   setPrevObjectiveNumber?: () => void;
   onSaveDraft: () => void;
   onSubmit: () => void;
   setNextObjectiveNumber?: () => void;
+  skipFooter?: boolean;
 };
 
 type Props = HTMLProps<HTMLInputElement> & ObjectiveModalProps;
@@ -43,6 +44,7 @@ export const ObjectiveModal: FC<Props> = ({
   onSaveDraft,
   onSubmit,
   setNextObjectiveNumber,
+  skipFooter,
 }) => {
   const { css, theme } = useStyle();
   const [, isBreakpoint] = useBreakpoints();
@@ -150,61 +152,31 @@ export const ObjectiveModal: FC<Props> = ({
               );
             }
           })}
-          <div
-            className={css({
-              position: 'absolute',
-              bottom: 0,
-              left: 0,
-              width: '100%',
-            })}
-          >
+          {!skipFooter && (
             <div
               className={css({
-                position: 'relative',
-                bottom: theme.spacing.s0,
-                left: theme.spacing.s0,
-                right: theme.spacing.s0,
-                borderTop: `${theme.border.width.b1} solid ${theme.colors.backgroundDarkest}`,
+                position: 'absolute',
+                bottom: 0,
+                left: 0,
+                width: '100%',
               })}
             >
               <div
                 className={css({
-                  padding: mobileScreen ? theme.spacing.s7 : theme.spacing.s9,
-                  display: 'flex',
-                  justifyContent: 'center',
+                  position: 'relative',
+                  bottom: theme.spacing.s0,
+                  left: theme.spacing.s0,
+                  right: theme.spacing.s0,
+                  borderTop: `${theme.border.width.b1} solid ${theme.colors.backgroundDarkest}`,
                 })}
               >
-                <Button
-                  styles={[
-                    theme.font.fixed.f16,
-                    {
-                      fontWeight: theme.font.weight.bold,
-                      width: '50%',
-                      margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
-                      background: theme.colors.white,
-                      border: `${theme.border.width.b1} solid ${theme.colors.tescoBlue}`,
-                      color: `${theme.colors.tescoBlue}`,
-                    },
-                  ]}
-                  onPress={onSaveDraft}
+                <div
+                  className={css({
+                    padding: mobileScreen ? theme.spacing.s7 : theme.spacing.s9,
+                    display: 'flex',
+                    justifyContent: 'center',
+                  })}
                 >
-                  <Trans i18nKey='save_as_draft'>Save as draft</Trans>
-                </Button>
-                {submitForm ? (
-                  <SubmitButton
-                    isDisabled={!isValid}
-                    onSave={onSubmit}
-                    styles={[
-                      theme.font.fixed.f16,
-                      {
-                        fontWeight: theme.font.weight.bold,
-                        width: '50%',
-                        margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
-                        background: `${theme.colors.tescoBlue}`,
-                      },
-                    ]}
-                  />
-                ) : (
                   <Button
                     styles={[
                       theme.font.fixed.f16,
@@ -212,19 +184,51 @@ export const ObjectiveModal: FC<Props> = ({
                         fontWeight: theme.font.weight.bold,
                         width: '50%',
                         margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
-                        background: `${theme.colors.tescoBlue}`,
+                        background: theme.colors.white,
+                        border: `${theme.border.width.b1} solid ${theme.colors.tescoBlue}`,
+                        color: `${theme.colors.tescoBlue}`,
                       },
-                      isValid ? {} : { opacity: 0.4 },
                     ]}
-                    onPress={setNextObjectiveNumber}
-                    isDisabled={!isValid}
+                    onPress={onSaveDraft}
                   >
-                    <Trans i18nKey='next'>Next</Trans>
+                    <Trans i18nKey='save_as_draft'>Save as draft</Trans>
                   </Button>
-                )}
+                  {submitForm ? (
+                    <SubmitButton
+                      isDisabled={!isValid}
+                      onSave={onSubmit}
+                      styles={[
+                        theme.font.fixed.f16,
+                        {
+                          fontWeight: theme.font.weight.bold,
+                          width: '50%',
+                          margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
+                          background: `${theme.colors.tescoBlue}`,
+                        },
+                      ]}
+                    />
+                  ) : (
+                    <Button
+                      styles={[
+                        theme.font.fixed.f16,
+                        {
+                          fontWeight: theme.font.weight.bold,
+                          width: '50%',
+                          margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
+                          background: `${theme.colors.tescoBlue}`,
+                        },
+                        isValid ? {} : { opacity: 0.4 },
+                      ]}
+                      onPress={setNextObjectiveNumber}
+                      isDisabled={!isValid}
+                    >
+                      <Trans i18nKey='next'>Next</Trans>
+                    </Button>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
+          )}
         </form>
       </div>
     </div>

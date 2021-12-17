@@ -22,6 +22,7 @@ import { useTranslation } from 'components/Translation';
 import { configEntriesMetaSelector, configEntriesSelector } from '@pma/store/src/selectors/config-entries';
 import {
   durationOptions,
+  getFormsByProcessTemplateUuidSelector,
   getProcessTemplateByUuidSelector,
   getProcessTemplateSelector,
   getTimelinePointsByUuidSelector,
@@ -30,13 +31,19 @@ import {
 } from '@pma/store/src/selectors/processTemplate';
 import useDispatch from 'hooks/useDispatch';
 import { createPMCycleSchema } from './schema';
-import { getConfigEntriesByPerformanceCycle } from '@pma/store/src/selectors/performance-cycle';
+import {
+  getConfigEntriesByPerformanceCycle,
+  getFormsByPerformanceCycleUuidSelector,
+  getTimelinePointsByPerformanceCycleUuidSelector,
+  getTimelinePointsReviewTypesByPerformanceCycleUuidSelector,
+} from '@pma/store/src/selectors/performance-cycle';
 import { TileWrapper } from 'components/Tile';
 import { GenericItemField } from 'components/GenericForm';
 import { Input, Item, Select } from 'components/Form';
 import TemplatesModal from './TemplatesModal';
-import { Accordion } from '../../Objectives';
 import { Page } from '../../../pages';
+import { ObjectiveModal } from '../../Objectives/components/ObjectiveModal/ObjectiveModal';
+import { Accordion, BaseAccordion } from 'components/Accordion';
 
 function getChildren(data, options11: any, key, value) {
   return data
@@ -88,7 +95,10 @@ export const PerformanceCycleForm: FC = () => {
     setValue,
     reset,
     trigger,
+    watch,
   } = methods;
+
+  const watchStartTime = watch(['startTime']);
 
   const {
     components = [],
@@ -108,10 +118,22 @@ export const PerformanceCycleForm: FC = () => {
   const processTemplate = useSelector(getProcessTemplateByUuidSelector(processSelected));
   const timelinePoints = useSelector(getTimelinePointsByUuidSelector(processSelected));
   const timelinePointsReviewTypes = useSelector(getTimelinePointsReviewTypesByUuidSelector(processSelected));
+  const formsByPerformanceCycleUuid = useSelector(getFormsByPerformanceCycleUuidSelector(processSelected));
+  const formsProcessTemplate = useSelector(getFormsByProcessTemplateUuidSelector(processSelected));
   const { loaded } = useSelector(configEntriesMetaSelector) || {};
   const { configEntryItem, formDataToFillObj, performanceCycleItem } = useSelector(
     getConfigEntriesByPerformanceCycle(performanceCycleUuid),
   );
+
+  const timelinePointsFromPMCycle = useSelector(getTimelinePointsByPerformanceCycleUuidSelector(performanceCycleUuid));
+  const timelinePointsReviewTypesFromPMCycle = useSelector(
+    getTimelinePointsReviewTypesByPerformanceCycleUuidSelector(performanceCycleUuid),
+  );
+
+  useEffect(() => {
+    if (watchStartTime?.length > 0 && watchStartTime?.[0])
+      setValue('endTime', getDate(addYear(new Date(watchStartTime[0]))));
+  }, [watchStartTime]);
 
   useEffect(() => {
     dispatch(SchemaActions.getSchema({ colleagueUuid }));
@@ -173,14 +195,17 @@ export const PerformanceCycleForm: FC = () => {
 
   const { css, theme } = useStyle();
 
+  const getDate = (date) => date.toISOString().substr(0, 10);
+  const addYear = (date) => new Date(date.setFullYear(date.getFullYear() + 1));
   useEffect(() => {
     if (timelinePoints) {
+      const currentDate = new Date();
       reset({
         ...processTemplate,
         ...processTemplate?.cycle,
         ...processTemplate?.cycle?.properties,
-        startTime: new Date().toISOString().substr(0, 10),
-        endTime: new Date(new Date().getFullYear(), 11, 31).toISOString().substr(0, 10),
+        startTime: getDate(currentDate),
+        endTime: getDate(addYear(currentDate)),
         pm_cycle_before_start_number: processTemplate?.cycle?.properties?.pm_cycle_before_start?.[1],
         pm_cycle_before_start_type: getType(processTemplate?.cycle?.properties?.pm_cycle_before_start),
         pm_cycle_before_end_number: processTemplate?.cycle?.properties?.pm_cycle_before_end?.[1],
@@ -193,13 +218,23 @@ export const PerformanceCycleForm: FC = () => {
   useEffect(() => {
     setProcessSelected(performanceCycleItem?.templateUUID);
     setEntryConfigKey(performanceCycleItem?.entryConfigKey);
-    reset({
-      ...formDataToFillObj,
-      ...performanceCycleItem,
-      ...performanceCycleItem?.metadata?.cycle?.timelinePoints?.[0].properties,
-      startTime: performanceCycleItem?.startTime?.substr(0, 10),
-      endTime: performanceCycleItem?.endTime?.substr(0, 10),
-    });
+  }, [performanceCycleItem]);
+
+  useEffect(() => {
+    if (performanceCycleItem) {
+      reset({
+        ...formDataToFillObj,
+        ...performanceCycleItem,
+        ...performanceCycleItem?.metadata?.cycle?.properties,
+        startTime: performanceCycleItem?.startTime?.substr(0, 10),
+        endTime: performanceCycleItem?.endTime?.substr(0, 10),
+        pm_cycle_before_start_number: performanceCycleItem?.metadata?.cycle?.properties?.pm_cycle_before_start?.[1],
+        pm_cycle_before_start_type: getType(performanceCycleItem?.metadata?.cycle?.properties?.pm_cycle_before_start),
+        pm_cycle_before_end_number: performanceCycleItem?.metadata?.cycle?.properties?.pm_cycle_before_end?.[1],
+        pm_cycle_before_end_type: getType(performanceCycleItem?.metadata?.cycle?.properties?.pm_cycle_before_end),
+        ...timelinePointsFromPMCycle,
+      });
+    }
   }, [performanceCycleItem]);
 
   useEffect(() => {
@@ -345,11 +380,13 @@ export const PerformanceCycleForm: FC = () => {
     setProcessSelected(value);
   };
 
+  const reviewTypes = timelinePointsReviewTypes || timelinePointsReviewTypesFromPMCycle;
+
   /*---------Render---------*/
   // @ts-ignore
   return (
     <form className={css({ marginTop: '32px' })}>
-      <TileWrapper customStyle={{ margin: '8px', padding: '25px', maxWidth: '1200px', overflowY: 'visible' }}>
+      <TileWrapper customStyle={{ margin: '8px', padding: '25px', maxWidth: '1300px', overflowY: 'visible' }}>
         <div
           className={css({
             fontWeight: 'bold',
@@ -432,7 +469,8 @@ export const PerformanceCycleForm: FC = () => {
           value={formDataToFillObj['entryConfigKey'] || ''}
         />
 
-        <div className={css({ marginBottom: '23px' })}>{processSelected}</div>
+        {/*TODO: replace to process name*/}
+        {/*<div className={css({ marginBottom: '23px' })}>{processSelected}</div>*/}
 
         <Button onPress={() => showTemplatesModal(true)}>Choose Template</Button>
 
@@ -442,7 +480,7 @@ export const PerformanceCycleForm: FC = () => {
         customStyle={{
           margin: '8px',
           padding: '25px',
-          maxWidth: '1200px',
+          maxWidth: '1300px',
           ...(!processSelected && { color: '#E5E5E5' }),
         }}
       >
@@ -482,7 +520,7 @@ export const PerformanceCycleForm: FC = () => {
                   {children}
                 </Item>
               )}
-              Element={(props) => <Input type={'date'} {...props} />}
+              Element={(props) => <Input type={'date'} readonly={true} {...props} />}
             />
           </div>
           <div className={css(item)}>
@@ -558,7 +596,7 @@ export const PerformanceCycleForm: FC = () => {
         customStyle={{
           margin: '8px',
           padding: '25px',
-          maxWidth: '1200px',
+          maxWidth: '1300px',
           overflowY: 'visible',
           ...(!processSelected && { color: '#E5E5E5' }),
         }}
@@ -577,8 +615,9 @@ export const PerformanceCycleForm: FC = () => {
             processSelected
               ? {
                   display: 'grid',
-                  gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))',
+                  gridTemplateColumns: 'repeat(4, minmax(180px, 1fr)) repeat(2, 100px)',
                   gap: '8px',
+                  overflowY: 'scroll',
                 }
               : container,
           )}
@@ -587,8 +626,13 @@ export const PerformanceCycleForm: FC = () => {
           <Item label='Duration' withIcon={false} marginBot={false} />
           <Item label='Before start' withIcon={false} marginBot={false} />
           <Item label='Before end' withIcon={false} marginBot={false} />
-          <Item label='Min-max objectives' withIcon={false} marginBot={false} />
-          {timelinePointsReviewTypes?.map((pm_review_type) => {
+          <div className={css(item, { maxWidth: '100px' })}>
+            <Item label='Min' withIcon={false} marginBot={false} />
+          </div>
+          <div className={css(item, { maxWidth: '100px' })}>
+            <Item label='Max' withIcon={false} marginBot={false} />
+          </div>
+          {reviewTypes?.map((pm_review_type) => {
             return (
               <>
                 <div className={css(item)}>
@@ -651,28 +695,29 @@ export const PerformanceCycleForm: FC = () => {
                   </div>
                 </div>
 
-                <div className={css({ display: 'flex', gap: '8px' })}>
-                  {pm_review_type === 'objective' ? (
-                    <>
-                      <div className={css(item)}>
-                        <GenericItemField
-                          name={`cyclereviews__${pm_review_type}__pm_review_min`}
-                          methods={methods}
-                          Element={Input}
-                        />
-                      </div>
-                      <div className={css(item)}>
-                        <GenericItemField
-                          name={`cyclereviews__${pm_review_type}__pm_review_max`}
-                          methods={methods}
-                          Element={Input}
-                        />
-                      </div>
-                    </>
-                  ) : (
-                    <div />
-                  )}
-                </div>
+                {pm_review_type === 'objective' ? (
+                  <>
+                    <div className={css(item, { maxWidth: '100px' })}>
+                      <GenericItemField
+                        name={`cyclereviews__${pm_review_type}__pm_review_min`}
+                        methods={methods}
+                        Element={Input}
+                      />
+                    </div>
+                    <div className={css(item, { maxWidth: '100px' })}>
+                      <GenericItemField
+                        name={`cyclereviews__${pm_review_type}__pm_review_max`}
+                        methods={methods}
+                        Element={Input}
+                      />
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className={css(item, { maxWidth: '100px' })} />
+                    <div className={css(item, { maxWidth: '100px' })} />
+                  </>
+                )}
               </>
             );
           })}
@@ -684,7 +729,7 @@ export const PerformanceCycleForm: FC = () => {
         customStyle={{
           margin: '8px',
           padding: '25px',
-          maxWidth: '1200px',
+          maxWidth: '1300px',
           ...(!processSelected && { color: '#E5E5E5' }),
         }}
       >
@@ -694,13 +739,88 @@ export const PerformanceCycleForm: FC = () => {
             fontSize: '20px',
           })}
         >
-          5. Forms builder
+          {t('5. Forms')}
         </div>
         <div className={`${processSelected ? css(containerVisible) : css(container)}`}>
-          <Accordion objectives={objectives} canShowStatus={!isAllObjectivesInSameStatus} />
+          {formsByPerformanceCycleUuid &&
+            formsByPerformanceCycleUuid?.map((form, i) => {
+              return (
+                <Accordion
+                  key={i}
+                  id={`form-accordion-${i}`}
+                  customStyle={{
+                    borderBottom: 'none',
+                    marginTop: 0,
+                  }}
+                >
+                  <BaseAccordion id={`form-base-accordion-${i}`}>
+                    {() => (
+                      <ObjectiveModal
+                        formValues={{
+                          title: '',
+                          description: '',
+                          how_archieved: '',
+                          how_over_achieved: '',
+                          strategic_priority: '',
+                        }}
+                        schemaComponents={form.components}
+                        methods={methods}
+                        currentObjectiveNumber={1}
+                        useSingleStep={false}
+                        submitForm={false}
+                        setPrevObjectiveNumber={() => console.log}
+                        onSaveDraft={() => console.log}
+                        onSubmit={() => console.log}
+                        setNextObjectiveNumber={() => console.log}
+                        onClose={() => console.log}
+                        skipFooter={true}
+                      />
+                    )}
+                  </BaseAccordion>
+                </Accordion>
+              );
+            })}
+          {formsProcessTemplate &&
+            formsProcessTemplate?.map((form, i) => {
+              return (
+                <Accordion
+                  key={i}
+                  id={`form-accordion-${i}`}
+                  customStyle={{
+                    borderBottom: 'none',
+                    marginTop: 0,
+                  }}
+                >
+                  <BaseAccordion id={`form-base-accordion-${i}`}>
+                    {() => (
+                      <ObjectiveModal
+                        formValues={{
+                          title: '',
+                          description: '',
+                          how_archieved: '',
+                          how_over_achieved: '',
+                          strategic_priority: '',
+                        }}
+                        schemaComponents={form.components}
+                        methods={methods}
+                        currentObjectiveNumber={1}
+                        useSingleStep={false}
+                        submitForm={false}
+                        setPrevObjectiveNumber={() => console.log}
+                        onSaveDraft={() => console.log}
+                        onSubmit={() => console.log}
+                        setNextObjectiveNumber={() => console.log}
+                        onClose={() => console.log}
+                        skipFooter={true}
+                      />
+                    )}
+                  </BaseAccordion>
+                </Accordion>
+              );
+            })}
         </div>
       </TileWrapper>
-      <div className={css({ display: 'flex', justifyContent: 'flex-end', paddingBottom: '100px', maxWidth: '1200px' })}>
+      <div className={css({ display: 'flex', justifyContent: 'flex-end', paddingBottom: '100px', maxWidth: '1300px' })}>
         {/*@ts-ignore*/}
         <Button mode='inverse' styles={[btnStyle({ theme }) as Styles]} onPress={onSaveDraft}>
           Save as draft
