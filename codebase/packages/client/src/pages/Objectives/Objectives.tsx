@@ -2,9 +2,7 @@ import React, { FC, useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'components/Translation';
 import { Button, Rule, Styles, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { ObjectiveType, ReviewType } from 'config/enum';
-
 import { StepIndicator } from 'components/StepIndicator/StepIndicator';
-import { Header } from 'components/Header';
 import { IconButton } from 'components/IconButton';
 
 import {
@@ -85,6 +83,7 @@ const Objectives: FC = () => {
   const { components = [], markup = { max: 0, min: 0 } } = schema;
   const { descriptions, startDates, statuses } = useSelector(getTimelineSelector) || {};
   const timelineTypes = useSelector(timelineTypesAvailabilitySelector);
+  // TODO: always true
   const canShowObjectives = true || timelineTypes[ObjectiveType.OBJECTIVE];
   const canShowMyReview = timelineTypes[ObjectiveType.MYR] && timelineTypes[ObjectiveType.EYR];
   const canShowAnnualReview = !timelineTypes[ObjectiveType.MYR] && timelineTypes[ObjectiveType.EYR];
@@ -158,13 +157,8 @@ const Objectives: FC = () => {
     if (!loaded) dispatch(TimelineActions.getTimeline({ colleagueUuid }));
   }, [loaded]);
 
-  // TODO: check is manager ?
-  // form btn click action
-  //
-
   return (
-    <div className={css({ margin: '8px' })}>
-      <Header title={canShowObjectives ? 'Objectives' : 'Review'} />
+    <div>
       {canCreateSingleObjective && canShowObjectives && (
         <div className={css({ display: 'flex' })}>
           <CreateButton withIcon useSingleStep={true} />
@@ -181,12 +175,15 @@ const Objectives: FC = () => {
             />
           </div>
         )}
-        <ShareWidget customStyle={shareWidgetStyles} />
 
-        <OrganizationWidget
-          customStyle={{ flex: '1 1 30%', display: 'flex', flexDirection: 'column' }}
-          onClick={() => history.push('/view-organization-objectives')}
-        />
+        <div className={css(widgetsBlock)}>
+          <ShareWidget customStyle={shareWidgetStyles} />
+
+          <OrganizationWidget
+            customStyle={{ flex: '1 1 30%', display: 'flex', flexDirection: 'column' }}
+            onClick={() => history.push('/view-organization-objectives')}
+          />
+        </div>
       </div>
       <div className={css(bodyWrapperStyles)} data-test-id={TEST_ID}>
         <div className={css(timelineWrapperStyles)}>
@@ -245,7 +242,10 @@ const Objectives: FC = () => {
                     onClick={() => console.log('ReviewWidget')}
                     onClose={() => console.log('ReviewWidget')}
                     title={'Mid-year review'}
-                    description={t('tiles_description_id_3', 'Your mid-year review form and results will appear here.')}
+                    description={t(
+                      'tiles_description_id_3',
+                      "Complete this once you've had your mid-year conversation with your line manager.",
+                    )}
                     customStyle={{ height: '182px' }}
                   />
                 </div>
@@ -256,7 +256,10 @@ const Objectives: FC = () => {
                     onClick={() => console.log('ReviewWidget')}
                     onClose={() => console.log('ReviewWidget')}
                     title={'End-year review'}
-                    description={t('tiles_description_id_3', 'Your mid-year review form and results will appear here.')}
+                    description={t(
+                      'tiles_description_id_3',
+                      "Complete this once you've had your year-end conversation with your line manager.",
+                    )}
                     customStyle={{ height: '182px' }}
                   />
                 </div>
@@ -270,7 +273,10 @@ const Objectives: FC = () => {
                   onClick={() => console.log('ReviewWidget')}
                   onClose={() => console.log('ReviewWidget')}
                   title={'Annual performance review'}
-                  description={t('tiles_description_id_3', 'Your mid-year review form and results will appear here.')}
+                  description={t(
+                    'tiles_description_id_3',
+                    "Complete this once you've had your annual conversation with your line manager.",
+                  )}
                   customStyle={{ height: '182px' }}
                 />
               </div>
@@ -310,6 +316,14 @@ const Objectives: FC = () => {
   );
 };
 
+const widgetsBlock = {
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  flexDirection: 'column',
+  // margin: '20px',
+} as Rule;
+
 const headWrapperStyles: Rule = () => {
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
@@ -331,9 +345,10 @@ const timelineWrapperStyles = {
 } as Styles;
 
 const shareWidgetStyles = {
-  flex: '1 1 30%',
   display: 'flex',
   flexDirection: 'column',
+  marginBottom: '20px',
+  width: '100%',
 } as Styles;
 
 const bodyWrapperStyles: Rule = () => {

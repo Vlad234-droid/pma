@@ -18,26 +18,92 @@ import { TipsAdministration, CreateTip, EditTip } from './Tips';
 import CreatePerformanceCycle from './PerformanceCycle/CreatePerformanceCycle';
 import PerformanceCycleAdministration from './PerformanceCycle/PerformanceCycleAdministration';
 
-const pages: Record<Page, PageElement> = {
-  [Page.MY_TEAM]: MyTeam,
-  [Page.ACTIONS]: Actions,
-  [Page.CREATE_PERFORMANCE_CYCLE]: CreatePerformanceCycle,
-  [Page.PERFORMANCE_CYCLE]: PerformanceCycleAdministration,
-  [Page.CAREER_PERFORMANCE]: CareerPerformance,
-  [Page.CREATE_ORGANIZATION_OBJECTIVES]: CreateOrganizationObjectives,
-  [Page.VIEW_ORGANIZATION_OBJECTIVES]: ObjectivesView,
-  [Page.PERSONAL_DEVELOPMENT_PLAN]: PersonalDevelopmentPlan,
-  [Page.OBJECTIVES_VIEW]: Objectives,
-  [Page.PROFILE]: Profile,
-  [Page.SETTINGS]: Settings,
-  [Page.FEEDBACK]: Feedback,
-  [Page.GIVE_FEEDBACK]: GiveFeedback,
-  [Page.REQUEST_FEEDBACK]: RequestFeedback,
-  [Page.RESPOND_FEEDBACK]: RespondFeedback,
-  [Page.VIEW_FEEDBACK]: ViewFeedback,
-  [Page.TIPS]: TipsAdministration,
-  [Page.CREATE_TIP]: CreateTip,
-  [Page.EDIT_TIP]: EditTip,
+const pages: Record<
+  Page,
+  {
+    component: PageElement;
+    withHeader: boolean;
+    title?: string;
+  }
+> = {
+  [Page.MY_TEAM]: {
+    component: MyTeam,
+    title: 'My Team',
+    withHeader: true,
+  },
+  [Page.ACTIONS]: {
+    component: Actions,
+    title: 'Actions',
+    withHeader: true,
+  },
+  [Page.CREATE_PERFORMANCE_CYCLE]: {
+    component: CreatePerformanceCycle,
+    title: 'Create Performance Cycle',
+    withHeader: true,
+  },
+  [Page.PERFORMANCE_CYCLE]: {
+    component: PerformanceCycleAdministration,
+    title: 'Performance Cycle Administration',
+    withHeader: true,
+  },
+  [Page.CAREER_PERFORMANCE]: {
+    component: CareerPerformance,
+    title: 'Your Сontribution',
+    withHeader: true,
+  },
+  [Page.CREATE_ORGANIZATION_OBJECTIVES]: {
+    component: CreateOrganizationObjectives,
+    title: 'Create Organization Objectives',
+    withHeader: true,
+  },
+  [Page.VIEW_ORGANIZATION_OBJECTIVES]: {
+    component: ObjectivesView,
+    withHeader: false,
+  },
+  [Page.PERSONAL_DEVELOPMENT_PLAN]: {
+    component: PersonalDevelopmentPlan,
+    title: 'Personal Development Plan',
+    withHeader: true,
+  },
+  [Page.OBJECTIVES_VIEW]: {
+    component: Objectives,
+    title: 'My Objectives',
+    withHeader: true,
+  },
+  [Page.PROFILE]: {
+    component: Profile,
+    title: 'My profile',
+    withHeader: true,
+  },
+  [Page.SETTINGS]: {
+    component: Settings,
+    title: 'Settings',
+    withHeader: true,
+  },
+  [Page.FEEDBACK]: {
+    component: Feedback,
+    title: 'Feedback',
+    withHeader: true,
+  },
+  [Page.GIVE_FEEDBACK]: {
+    component: GiveFeedback,
+    title: 'Give feedback',
+    withHeader: true,
+  },
+  [Page.REQUEST_FEEDBACK]: {
+    component: RequestFeedback,
+    withHeader: false,
+  },
+  [Page.RESPOND_FEEDBACK]: {
+    component: RespondFeedback,
+    title: 'Respond to feedback requests',
+    withHeader: true,
+  },
+  [Page.VIEW_FEEDBACK]: {
+    component: ViewFeedback,
+    title: 'View feedback',
+    withHeader: true,
+  },
 };
 
 export default pages;

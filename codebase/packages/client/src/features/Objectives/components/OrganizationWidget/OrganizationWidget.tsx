@@ -38,7 +38,7 @@ const OrganizationWidget: FC<Props> = ({ onClick, customStyle }) => {
                 backgroundRadius={10}
               />
               <span className={css(titleStyle)}>
-                <Trans i18nKey='organization_objectives'>Organization Objectives</Trans>
+                <Trans i18nKey='organization_objectives'>Strategic Priorities</Trans>
               </span>
             </div>
             <span className={css(descriptionStyle)}>{description}</span>

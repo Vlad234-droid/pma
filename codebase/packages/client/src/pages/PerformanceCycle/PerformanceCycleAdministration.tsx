@@ -1,6 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Button, Rule, useBreakpoints, useStyle } from '@dex-ddl/core';
-import { Header } from 'components/Header';
 import { TileWrapper } from 'components/Tile';
 import { PerformanceCycleActions } from '@pma/store';
 import useDispatch from 'hooks/useDispatch';
@@ -15,7 +14,7 @@ import { useHistory } from 'react-router-dom';
 import { Page } from '../types';
 
 const PerformanceCycleAdministration: FC = () => {
-  const { css, theme } = useStyle();
+  const { css } = useStyle();
   const history = useHistory();
 
   const data = useSelector(getPerformanceCycleSelector) || {};
@@ -31,8 +30,7 @@ const PerformanceCycleAdministration: FC = () => {
 
   const item: Rule = { padding: '14px', textAlign: 'start' };
   return (
-    <div className={css({ margin: '8px' })}>
-      <Header title='Performance Cycle Administration' />
+    <div>
       <div className={css({ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap-reverse' })}>
         <div className={css({ display: 'flex' })}>
           <div className={css({ padding: '0px 10px' })}>
@@ -152,11 +150,10 @@ const PerformanceCycleAdministration: FC = () => {
                     <td className={css(item)}>{entryConfigKey}</td>
                     <td className={css(item)}>{date}</td>
                     <td className={css(item)}>{createdBy}</td>
-                    {/*@ts-ignore*/}
                     <Button
                       mode={'inverse'}
                       onPress={() => history.push(`${Page.PERFORMANCE_CYCLE}/${uuid}`)}
-                      styles={[btnStyle({ theme })]}
+                      styles={[btnStyle]}
                     >
                       Edit
                     </Button>
@@ -181,10 +178,10 @@ const headWrapperStyles: Rule = () => {
   };
 };
 
-const btnStyle = ({ theme }) => ({
+const btnStyle = {
   fontSize: '14px',
   border: '1px solid rgb(0, 83, 159)',
   minWidth: '20px',
-});
+};
 
 export default PerformanceCycleAdministration;

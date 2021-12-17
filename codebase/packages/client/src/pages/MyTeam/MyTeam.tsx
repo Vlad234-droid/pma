@@ -1,7 +1,6 @@
 import React, { FC, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Icon as IconCore, Rule, useBreakpoints, useStyle } from '@dex-ddl/core';
-import { Header } from 'components/Header';
 import { RouterSwitch } from 'components/RouterSwitch';
 import { Status } from 'config/enum';
 import { WidgetPending, WidgetTeamMateProfile, YourActions } from 'features/MyTeam';
@@ -39,8 +38,7 @@ const MyTeam: FC = () => {
   }, [loaded, colleagueUuid]);
 
   return (
-    <div className={css({ margin: '8px' })}>
-      <Header title='My Team' />
+    <div>
       <div className={css({ display: 'flex', justifyContent: 'space-between' })}>
         {desktopScreen && (
           <div

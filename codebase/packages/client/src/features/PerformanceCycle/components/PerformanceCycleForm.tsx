@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
-import { useParams } from 'react-router';
+import { useHistory, useParams } from 'react-router';
 import { useSelector } from 'react-redux';
 import { Button, Rule, useStyle } from '@dex-ddl/core';
 import { useForm } from 'react-hook-form';
@@ -20,7 +20,14 @@ import {
 } from '@pma/store';
 import { useTranslation } from 'components/Translation';
 import { configEntriesMetaSelector, configEntriesSelector } from '@pma/store/src/selectors/config-entries';
-import { getProcessTemplateByUuidSelector, getProcessTemplateSelector } from '@pma/store/src/selectors/processTemplate';
+import {
+  durationOptions,
+  getProcessTemplateByUuidSelector,
+  getProcessTemplateSelector,
+  getTimelinePointsByUuidSelector,
+  getTimelinePointsReviewTypesByUuidSelector,
+  getType,
+} from '@pma/store/src/selectors/processTemplate';
 import useDispatch from 'hooks/useDispatch';
 import { createPMCycleSchema } from './schema';
 import { getConfigEntriesByPerformanceCycle } from '@pma/store/src/selectors/performance-cycle';
@@ -29,6 +36,7 @@ import { GenericItemField } from 'components/GenericForm';
 import { Input, Item, Select } from 'components/Form';
 import TemplatesModal from './TemplatesModal';
 import { Accordion } from '../../Objectives';
+import { Page } from '../../../pages';
 
 function getChildren(data, options11: any, key, value) {
   return data
@@ -54,6 +62,7 @@ export const PerformanceCycleForm: FC = () => {
   const mappedObjectives: any = [];
 
   const { t } = useTranslation();
+  const history = useHistory();
 
   const [objectives, setObjectives] = useState([]);
   const [entryConfigUuid, setEntryConfigUuid] = useState('');
@@ -97,6 +106,8 @@ export const PerformanceCycleForm: FC = () => {
   const { data } = useSelector(configEntriesSelector) || {};
   const processTemplates = useSelector(getProcessTemplateSelector) || {};
   const processTemplate = useSelector(getProcessTemplateByUuidSelector(processSelected));
+  const timelinePoints = useSelector(getTimelinePointsByUuidSelector(processSelected));
+  const timelinePointsReviewTypes = useSelector(getTimelinePointsReviewTypesByUuidSelector(processSelected));
   const { loaded } = useSelector(configEntriesMetaSelector) || {};
   const { configEntryItem, formDataToFillObj, performanceCycleItem } = useSelector(
     getConfigEntriesByPerformanceCycle(performanceCycleUuid),
@@ -163,16 +174,25 @@ export const PerformanceCycleForm: FC = () => {
   const { css, theme } = useStyle();
 
   useEffect(() => {
-    if (processTemplate) {
+    if (timelinePoints) {
       reset({
         ...processTemplate,
         ...processTemplate?.cycle,
         ...processTemplate?.cycle?.properties,
+        startTime: new Date().toISOString().substr(0, 10),
+        endTime: new Date(new Date().getFullYear(), 11, 31).toISOString().substr(0, 10),
+        pm_cycle_before_start_number: processTemplate?.cycle?.properties?.pm_cycle_before_start?.[1],
+        pm_cycle_before_start_type: getType(processTemplate?.cycle?.properties?.pm_cycle_before_start),
+        pm_cycle_before_end_number: processTemplate?.cycle?.properties?.pm_cycle_before_end?.[1],
+        pm_cycle_before_end_type: getType(processTemplate?.cycle?.properties?.pm_cycle_before_end),
+        ...timelinePoints,
       });
     }
   }, [processTemplate]);
 
   useEffect(() => {
+    setProcessSelected(performanceCycleItem?.templateUUID);
+    setEntryConfigKey(performanceCycleItem?.entryConfigKey);
     reset({
       ...formDataToFillObj,
       ...performanceCycleItem,
@@ -180,9 +200,6 @@ export const PerformanceCycleForm: FC = () => {
       startTime: performanceCycleItem?.startTime?.substr(0, 10),
       endTime: performanceCycleItem?.endTime?.substr(0, 10),
     });
-
-    setProcessSelected(performanceCycleItem?.templateUUID);
-    setEntryConfigKey(performanceCycleItem?.entryConfigKey);
   }, [performanceCycleItem]);
 
   useEffect(() => {
@@ -191,22 +208,65 @@ export const PerformanceCycleForm: FC = () => {
     }
   }, [entryConfigUuid]);
 
+  function getValue(type) {
+    return durationOptions.find((el) => el.label === type)?.value;
+  }
+
   function getData() {
     const {
       name,
-      pm_cycle_before_end,
-      pm_cycle_before_start,
+      pm_cycle_before_start_type,
+      pm_cycle_before_start_number,
+      pm_cycle_before_end_type,
+      pm_cycle_before_end_number,
       pm_cycle_max,
       pm_cycle_start_time,
       pm_cycle_type,
       pm_type,
       startTime,
       endTime,
+      ...rest
     } = getValues();
-    debugger;
+
+    const cycle_reviews = Object.keys(rest)
+      .filter((key) => key.includes('cyclereviews__'))
+      .reduce(
+        // @ts-ignore
+        (prev, key) => {
+          const type = key.split('__')?.[1];
+          const newKey = key.split('__')?.[2];
+          const value = rest[key];
+          // @ts-ignore
+          if (prev.types.includes(type)) {
+            return {
+              result: [
+                ...prev.result.map((item) => {
+                  // @ts-ignore
+                  if (item?.pm_review_type === type) {
+                    // @ts-ignore
+                    return { ...item, [newKey]: value };
+                  }
+                  return item;
+                }),
+              ],
+              types: prev.types,
+            };
+          } else {
+            return {
+              result: [...prev.result, { pm_review_type: type, [newKey]: value }],
+              types: [...prev.types, type],
+            };
+          }
+        },
+        { result: [], types: [] },
+      );
+
+    const pm_cycle_before_start = `P${pm_cycle_before_start_number}${getValue(pm_cycle_before_start_type)}`;
+    const pm_cycle_before_end = `P${pm_cycle_before_end_number}${getValue(pm_cycle_before_end_type)}`;
+
     const temp = {
       data: {
-        uuid: performanceCycleUuid,
+        ...(performanceCycleUuid !== 'new' && { uuid: performanceCycleUuid }),
         entryConfigKey: entryConfigKey,
         templateUUID: processSelected,
         name: name,
@@ -217,26 +277,34 @@ export const PerformanceCycleForm: FC = () => {
         type: 'FISCAL',
         startTime: new Date(startTime).toISOString(),
         endTime: new Date(endTime).toISOString(),
-        properties: null,
+        properties: {
+          pm_cycle_before_end,
+          pm_cycle_before_start,
+          pm_cycle_max,
+          pm_cycle_start_time,
+          pm_cycle_type,
+          pm_type,
+        },
         jsonMetadata: null,
         metadata: {
           cycle: {
             type: 'ELEMENT',
-            properties: {},
+            properties: {
+              pm_cycle_before_end,
+              pm_cycle_before_start,
+              pm_cycle_max,
+              pm_cycle_start_time,
+              pm_cycle_type,
+              pm_type,
+            },
             cycleType: 'FISCAL',
-            timelinePoints: [
-              {
-                type: 'ELEMENT',
-                properties: {
-                  pm_cycle_before_end,
-                  pm_cycle_before_start,
-                  pm_cycle_max,
-                  pm_cycle_start_time,
-                  pm_cycle_type,
-                  pm_type,
-                },
+            // @ts-ignore
+            timelinePoints: cycle_reviews.result.map((el) => ({
+              type: 'REVIEW',
+              properties: {
+                ...el,
               },
-            ],
+            })),
           },
         },
       },
@@ -250,6 +318,7 @@ export const PerformanceCycleForm: FC = () => {
       return dispatch(PerformanceCycleActions.updatePerformanceCycle(data));
     }
     dispatch(PerformanceCycleActions.createPerformanceCycle(data));
+    history.push(`/${Page.PERFORMANCE_CYCLE}`);
   };
 
   const onPublish = () => {
@@ -280,7 +349,7 @@ export const PerformanceCycleForm: FC = () => {
   // @ts-ignore
   return (
     <form className={css({ marginTop: '32px' })}>
-      <TileWrapper customStyle={{ margin: '8px', padding: '25px', maxWidth: '900px' }}>
+      <TileWrapper customStyle={{ margin: '8px', padding: '25px', maxWidth: '1200px', overflowY: 'visible' }}>
         <div
           className={css({
             fontWeight: 'bold',
@@ -332,7 +401,6 @@ export const PerformanceCycleForm: FC = () => {
           options={options2}
           placeholder={'- Select organization level -   '}
           onChange={(_, value) => setOptions12(value)}
-          value={formDataToFillObj['level2'] || ''}
         />
         <GenericItemField
           name={`level3`}
@@ -348,7 +416,6 @@ export const PerformanceCycleForm: FC = () => {
           onChange={(_, value) => {
             setOptions131(value);
           }}
-          value={formDataToFillObj['level3'] || ''}
         />
         <GenericItemField
           name={`entryConfigKey`}
@@ -364,35 +431,18 @@ export const PerformanceCycleForm: FC = () => {
           onChange={(_, value) => setEntryConfigKey(value)}
           value={formDataToFillObj['entryConfigKey'] || ''}
         />
-        <GenericItemField
-          name={`template_uuid`}
-          methods={methods}
-          Wrapper={({ children }) => (
-            <Item label='Process' withIcon={false}>
-              {children}
-            </Item>
-          )}
-          Element={Select}
-          options={processTemplates || []}
-          placeholder={'- Select process - '}
-          onChange={(_, value) => {
-            // TODO: fetch
-            dispatch(ProcessTemplateActions.getProcessTemplateMetadata({ fileUuid: value }));
-            setProcessSelected(value);
-          }}
-        />
+
+        <div className={css({ marginBottom: '23px' })}>{processSelected}</div>
 
         <Button onPress={() => showTemplatesModal(true)}>Choose Template</Button>
 
         {isTemplatesModalOpen && <TemplatesModal selectTemplate={selectTemplate} closeModal={closeTemplatesModal} />}
-
-        {/*<Button mode='inverse'>Import process</Button>*/}
       </TileWrapper>
       <TileWrapper
         customStyle={{
           margin: '8px',
           padding: '25px',
-          maxWidth: '900px',
+          maxWidth: '1200px',
           ...(!processSelected && { color: '#E5E5E5' }),
         }}
       >
@@ -400,15 +450,16 @@ export const PerformanceCycleForm: FC = () => {
           className={css({
             fontWeight: 'bold',
             fontSize: '20px',
+            marginBottom: '8px',
           })}
         >
           2. Cycle details
         </div>
         <div className={`${processSelected ? css(containerVisible) : css(container)}`}>
-          <div className={css(item)}>
+          {/*<div className={css(item)}>
             <div>Type</div>
             <div className={css({ fontWeight: 'normal' })}>Fiscal year</div>
-          </div>
+          </div>*/}
 
           <div className={css(item)}>
             <GenericItemField
@@ -436,7 +487,7 @@ export const PerformanceCycleForm: FC = () => {
           </div>
           <div className={css(item)}>
             <GenericItemField
-              name={`Recurrence`}
+              name={`pm_cycle_max`}
               methods={methods}
               Wrapper={({ children }) => (
                 <Item label='Recurrence' withIcon={false}>
@@ -446,92 +497,7 @@ export const PerformanceCycleForm: FC = () => {
               Element={Input}
             />
           </div>
-          <div className={css(item)}>
-            <GenericItemField
-              name={`min_objectives_number`}
-              methods={methods}
-              Wrapper={({ children }) => (
-                <Item label='Min objectives number' withIcon={false}>
-                  {children}
-                </Item>
-              )}
-              Element={Input}
-            />
-          </div>
-          <div className={css(item)}>
-            <GenericItemField
-              name={`pm_cycle_max`}
-              methods={methods}
-              Wrapper={({ children }) => (
-                <Item label='Max objectives number' withIcon={false}>
-                  {children}
-                </Item>
-              )}
-              Element={Input}
-            />
-          </div>
-        </div>
-      </TileWrapper>
-      <TileWrapper
-        customStyle={{
-          margin: '8px',
-          padding: '25px',
-          maxWidth: '900px',
-          ...(!processSelected && { color: '#E5E5E5' }),
-        }}
-      >
-        <div
-          className={css({
-            fontWeight: 'bold',
-            fontSize: '20px',
-          })}
-        >
-          3. Cycle reviews
-        </div>
-        <div className={`${processSelected ? css(containerVisible) : css(container)}`}>
-          <div className={css(item)}>
-            <GenericItemField
-              name={`type_of_reviews`}
-              methods={methods}
-              Wrapper={({ children }) => (
-                <Item label='Type of reviews' withIcon={false}>
-                  {children}
-                </Item>
-              )}
-              Element={Input}
-            />
-          </div>
-          <div className={css(item)}>
-            <GenericItemField
-              name={`length_of_reviews`}
-              methods={methods}
-              Wrapper={({ children }) => (
-                <Item label='Length of reviews' withIcon={false}>
-                  {children}
-                </Item>
-              )}
-              Element={Input}
-            />
-          </div>
-        </div>
-      </TileWrapper>
-      <TileWrapper
-        customStyle={{
-          margin: '8px',
-          padding: '25px',
-          maxWidth: '900px',
-          ...(!processSelected && { color: '#E5E5E5' }),
-        }}
-      >
-        <div
-          className={css({
-            fontWeight: 'bold',
-            fontSize: '20px',
-          })}
-        >
-          4. Cycle notification
-        </div>
-        <div className={`${processSelected ? css(containerVisible) : css(container)}`}>
+
           <div className={css(item)}>
             <GenericItemField
               name={`pm_cycle_before_start`}
@@ -541,7 +507,21 @@ export const PerformanceCycleForm: FC = () => {
                   {children}
                 </Item>
               )}
-              Element={Input}
+              Element={(props) => (
+                <div className={css({ display: 'flex', gap: '8px' })}>
+                  <GenericItemField
+                    name={`pm_cycle_before_start_number`}
+                    methods={methods}
+                    Element={(props) => <Input type={'number'} {...props} />}
+                  />
+                  <GenericItemField
+                    name={`pm_cycle_before_start_type`}
+                    methods={methods}
+                    Element={Select}
+                    options={durationOptions}
+                  />
+                </div>
+              )}
             />
           </div>
           <div className={css(item)}>
@@ -553,28 +533,158 @@ export const PerformanceCycleForm: FC = () => {
                   {children}
                 </Item>
               )}
-              Element={Input}
-            />
-          </div>
-          <div className={css(item)}>
-            <GenericItemField
-              name={`before_review`}
-              methods={methods}
-              Wrapper={({ children }) => (
-                <Item label='Before review' withIcon={false}>
-                  {children}
-                </Item>
+              Element={(props) => (
+                <div className={css({ display: 'flex', gap: '8px' })}>
+                  <GenericItemField
+                    name={`pm_cycle_before_end_number`}
+                    methods={methods}
+                    Element={(props) => <Input type={'number'} {...props} />}
+                  />
+                  <GenericItemField
+                    name={`pm_cycle_before_end_type`}
+                    methods={methods}
+                    Element={Select}
+                    options={durationOptions}
+                  />
+                </div>
               )}
-              Element={Input}
             />
           </div>
         </div>
       </TileWrapper>
+
+      {/*------------3. Cycle reviews-------------*/}
       <TileWrapper
         customStyle={{
           margin: '8px',
           padding: '25px',
-          maxWidth: '900px',
+          maxWidth: '1200px',
+          overflowY: 'visible',
+          ...(!processSelected && { color: '#E5E5E5' }),
+        }}
+      >
+        <div
+          className={css({
+            fontWeight: 'bold',
+            fontSize: '20px',
+            marginBottom: '8px',
+          })}
+        >
+          3. Cycle reviews
+        </div>
+        <div
+          className={css(
+            processSelected
+              ? {
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))',
+                  gap: '8px',
+                }
+              : container,
+          )}
+        >
+          <Item label='Type of reviews' withIcon={false} marginBot={false} />
+          <Item label='Duration' withIcon={false} marginBot={false} />
+          <Item label='Before start' withIcon={false} marginBot={false} />
+          <Item label='Before end' withIcon={false} marginBot={false} />
+          <Item label='Min-max objectives' withIcon={false} marginBot={false} />
+          {timelinePointsReviewTypes?.map((pm_review_type) => {
+            return (
+              <>
+                <div className={css(item)}>
+                  <GenericItemField
+                    name={`cyclereviews__${pm_review_type}__pm_review_type`}
+                    methods={methods}
+                    Element={Input}
+                  />
+                </div>
+                <div className={css({ display: 'flex', gap: '8px' })}>
+                  <div className={css(item)}>
+                    <GenericItemField
+                      name={`cyclereviews__${pm_review_type}__pm_review_duration__number`}
+                      methods={methods}
+                      Element={(props) => <Input type={'number'} {...props} />}
+                    />
+                  </div>
+                  <div className={css(item)}>
+                    <GenericItemField
+                      name={`cyclereviews__${pm_review_type}__pm_review_duration__type`}
+                      methods={methods}
+                      Element={Select}
+                      options={durationOptions}
+                    />
+                  </div>
+                </div>
+
+                <div className={css({ display: 'flex', gap: '8px' })}>
+                  <div className={css(item)}>
+                    <GenericItemField
+                      name={`cyclereviews__${pm_review_type}__pm_review_before_start__number`}
+                      methods={methods}
+                      Element={(props) => <Input type={'number'} {...props} />}
+                    />
+                  </div>
+                  <div className={css(item)}>
+                    <GenericItemField
+                      name={`cyclereviews__${pm_review_type}__pm_review_before_start__type`}
+                      methods={methods}
+                      Element={Select}
+                      options={durationOptions}
+                    />
+                  </div>
+                </div>
+                <div className={css({ display: 'flex', gap: '8px' })}>
+                  <div className={css(item)}>
+                    <GenericItemField
+                      name={`cyclereviews__${pm_review_type}__pm_review_before_end__number`}
+                      methods={methods}
+                      Element={(props) => <Input type={'number'} {...props} />}
+                    />
+                  </div>
+                  <div className={css(item)}>
+                    <GenericItemField
+                      name={`cyclereviews__${pm_review_type}__pm_review_before_end__type`}
+                      methods={methods}
+                      Element={Select}
+                      options={durationOptions}
+                    />
+                  </div>
+                </div>
+
+                <div className={css({ display: 'flex', gap: '8px' })}>
+                  {pm_review_type === 'objective' ? (
+                    <>
+                      <div className={css(item)}>
+                        <GenericItemField
+                          name={`cyclereviews__${pm_review_type}__pm_review_min`}
+                          methods={methods}
+                          Element={Input}
+                        />
+                      </div>
+                      <div className={css(item)}>
+                        <GenericItemField
+                          name={`cyclereviews__${pm_review_type}__pm_review_max`}
+                          methods={methods}
+                          Element={Input}
+                        />
+                      </div>
+                    </>
+                  ) : (
+                    <div />
+                  )}
+                </div>
+              </>
+            );
+          })}
+        </div>
+      </TileWrapper>
+
+      {/*------------4. Cycle notification-------------*/}
+      <TileWrapper
+        customStyle={{
+          margin: '8px',
+          padding: '25px',
+          maxWidth: '1200px',
           ...(!processSelected && { color: '#E5E5E5' }),
         }}
       >
@@ -590,7 +700,7 @@ export const PerformanceCycleForm: FC = () => {
           <Accordion objectives={objectives} canShowStatus={!isAllObjectivesInSameStatus} />
         </div>
       </TileWrapper>
-      <div className={css({ display: 'flex', justifyContent: 'flex-end', paddingBottom: '100px', maxWidth: '900px' })}>
+      <div className={css({ display: 'flex', justifyContent: 'flex-end', paddingBottom: '100px', maxWidth: '1200px' })}>
         {/*@ts-ignore*/}
         <Button mode='inverse' styles={[btnStyle({ theme }) as Styles]} onPress={onSaveDraft}>
           Save as draft
@@ -617,11 +727,6 @@ const item: Rule = ({ theme }) => ({
   fontWeight: theme.font.weight.bold,
   fontSize: '16px',
   lineHeight: '24px',
-  minWidth: '200px',
-  display: 'grid',
-  paddingRight: '20px',
-  paddingTop: '14px',
-  flex: '1 1 0',
 });
 
 const container: Rule = () => ({
