@@ -242,7 +242,10 @@ const Objectives: FC = () => {
                     onClick={() => console.log('ReviewWidget')}
                     onClose={() => console.log('ReviewWidget')}
                     title={'Mid-year review'}
-                    description={t('tiles_description_id_3', 'Your mid-year review form and results will appear here.')}
+                    description={t(
+                      'tiles_description_id_3',
+                      "Complete this once you've had your mid-year conversation with your line manager.",
+                    )}
                     customStyle={{ height: '182px' }}
                   />
                 </div>
@@ -253,7 +256,10 @@ const Objectives: FC = () => {
                     onClick={() => console.log('ReviewWidget')}
                     onClose={() => console.log('ReviewWidget')}
                     title={'End-year review'}
-                    description={t('tiles_description_id_3', 'Your mid-year review form and results will appear here.')}
+                    description={t(
+                      'tiles_description_id_3',
+                      "Complete this once you've had your year-end conversation with your line manager.",
+                    )}
                     customStyle={{ height: '182px' }}
                   />
                 </div>
@@ -267,7 +273,10 @@ const Objectives: FC = () => {
                   onClick={() => console.log('ReviewWidget')}
                   onClose={() => console.log('ReviewWidget')}
                   title={'Annual performance review'}
-                  description={t('tiles_description_id_3', 'Your mid-year review form and results will appear here.')}
+                  description={t(
+                    'tiles_description_id_3',
+                    "Complete this once you've had your annual conversation with your line manager.",
+                  )}
                   customStyle={{ height: '182px' }}
                 />
               </div>
