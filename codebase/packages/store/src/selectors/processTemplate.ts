@@ -31,33 +31,31 @@ export const getType = (val) => {
   return durationOptions.find((el) => el.value === val?.[2])?.label;
 };
 
+export const flatValues = () => {
+  return (acc, { properties }) => ({
+    ...acc,
+    ...Object.keys(properties).reduce((prev, key) => {
+      const value = properties[key];
+      if ('pm_review_duration pm_review_before_start pm_review_before_end'.includes(key)) {
+        return {
+          ...prev,
+          [`cyclereviews__${properties?.pm_review_type}__${key}__number`]: value[1],
+          [`cyclereviews__${properties?.pm_review_type}__${key}__type`]: getType(value),
+        };
+      }
+      return {
+        ...prev,
+        [`cyclereviews__${properties?.pm_review_type}__${key}`]: value,
+      };
+    }, {}),
+  });
+};
+
 export const getTimelinePointsByUuidSelector = (uuid) =>
   // @ts-ignore
   createSelector(processTemplateSelector, ({ data }) => {
     const processTemplate = data?.filter((process) => process.uuid === uuid)?.[0];
-
-    return processTemplate?.cycle?.timelinePoints
-      .filter((point) => point.type === 'REVIEW')
-      .reduce(
-        (acc, { properties }) => ({
-          ...acc,
-          ...Object.keys(properties).reduce((prev, key) => {
-            const value = properties[key];
-            if ('pm_review_duration pm_review_before_start pm_review_before_end'.includes(key)) {
-              return {
-                ...prev,
-                [`cyclereviews__${properties?.pm_review_type}__${key}__number`]: value[1],
-                [`cyclereviews__${properties?.pm_review_type}__${key}__type`]: getType(value),
-              };
-            }
-            return {
-              ...prev,
-              [`cyclereviews__${properties?.pm_review_type}__${key}`]: value,
-            };
-          }, {}),
-        }),
-        {},
-      );
+    return processTemplate?.cycle?.timelinePoints.filter((point) => point.type === 'REVIEW').reduce(flatValues(), {});
   });
 
 export const getTimelinePointsReviewTypesByUuidSelector = (uuid) =>
@@ -71,4 +69,15 @@ export const getTimelinePointsReviewTypesByUuidSelector = (uuid) =>
       });
   });
 
-export const getProcessTemplateMetaSelector = createSelector(processTemplateSelector, ({ meta }) => meta);
+export const getFormsByProcessTemplateUuidSelector = (uuid) =>
+  // @ts-ignore
+  createSelector(processTemplateSelector, ({ data }) => {
+    // @ts-ignore
+    const processTemplate = data?.filter((process) => process.uuid === uuid)?.[0];
+    // @ts-ignore
+    return processTemplate?.cycle?.timelinePoints
+      .filter((point) => point.type === 'REVIEW')
+      .map((point) => {
+        return JSON.parse(point?.form?.json);
+      });
+  });

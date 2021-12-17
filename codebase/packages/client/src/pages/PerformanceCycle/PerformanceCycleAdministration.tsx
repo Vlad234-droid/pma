@@ -120,7 +120,7 @@ const PerformanceCycleAdministration: FC = () => {
               paddingBottom: '24px',
             })}
           >
-            {`Active Performance cycles (${
+            {`${active.charAt(0).toUpperCase() + active.slice(1).toLowerCase()} Performance cycles (${
               data.filter((item) => {
                 return item.status === active;
               }).length

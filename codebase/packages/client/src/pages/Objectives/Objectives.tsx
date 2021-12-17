@@ -8,6 +8,7 @@ import { IconButton } from 'components/IconButton';
 import {
   Accordion,
   CreateButton,
+  ObjectiveTypes as OT,
   Reviews,
   ReviewWidget,
   SecondaryWidgetProps,
@@ -15,7 +16,6 @@ import {
   ShareWidget,
   StatusBadge,
   transformReviewsToObjectives,
-  ObjectiveTypes as OT,
 } from 'features/Objectives';
 import { PreviousReviewFilesModal } from 'features/ReviewFiles/components';
 import { useToast, Variant } from 'features/Toast';
@@ -238,7 +238,7 @@ const Objectives: FC = () => {
                 <div data-test-id='personal' className={css(basicTileStyle)}>
                   <ReviewWidget
                     reviewType={ReviewType.MYR}
-                    status={midYearReview.status}
+                    status={midYearReview?.status}
                     onClick={() => console.log('ReviewWidget')}
                     onClose={() => console.log('ReviewWidget')}
                     title={'Mid-year review'}
@@ -252,7 +252,7 @@ const Objectives: FC = () => {
                 <div data-test-id='feedback' className={css(basicTileStyle)}>
                   <ReviewWidget
                     reviewType={ReviewType.EYR}
-                    status={endYearReview.status}
+                    status={endYearReview?.status}
                     onClick={() => console.log('ReviewWidget')}
                     onClose={() => console.log('ReviewWidget')}
                     title={'Year-end review'}

@@ -4,6 +4,7 @@ import { RootState } from 'typesafe-actions';
 import { DateTime } from 'luxon';
 import { getFullName } from './users';
 import { configEntriesSelector } from './config-entries';
+import { flatValues } from './processTemplate';
 
 export const performanceCycleSelector = (state: RootState) => state.performanceCycle || {};
 
@@ -59,3 +60,39 @@ export const getConfigEntriesByPerformanceCycle = (performanceCycleUuid) =>
       return { formDataToFillObj, configEntryItem, performanceCycleItem };
     },
   );
+
+export const getTimelinePointsByPerformanceCycleUuidSelector = (performanceCycleUuid) =>
+  createSelector(performanceCycleSelector, ({ data }) => {
+    // @ts-ignore
+    const performanceCycleItem = data.filter((item) => item.uuid === performanceCycleUuid)?.[0];
+    // @ts-ignore
+    return performanceCycleItem?.metadata?.cycle?.timelinePoints
+      .filter((point) => point.type === 'REVIEW')
+      .reduce(flatValues(), {});
+  });
+
+export const getTimelinePointsReviewTypesByPerformanceCycleUuidSelector = (performanceCycleUuid) =>
+  // @ts-ignore
+  createSelector(performanceCycleSelector, ({ data }) => {
+    // @ts-ignore
+    const performanceCycleItem = data.filter((item) => item.uuid === performanceCycleUuid)?.[0];
+    // @ts-ignore
+    return performanceCycleItem?.metadata?.cycle?.timelinePoints
+      .filter((point) => point.type === 'REVIEW')
+      .map((point) => {
+        return point?.properties?.pm_review_type;
+      });
+  });
+
+export const getFormsByPerformanceCycleUuidSelector = (performanceCycleUuid) =>
+  // @ts-ignore
+  createSelector(performanceCycleSelector, ({ data }) => {
+    // @ts-ignore
+    const performanceCycleItem = data.filter((item) => item.uuid === performanceCycleUuid)?.[0];
+    // @ts-ignore
+    return performanceCycleItem?.metadata?.cycle?.timelinePoints
+      .filter((point) => point.type === 'REVIEW')
+      .map((point) => {
+        return JSON.parse(point?.form?.json);
+      });
+  });

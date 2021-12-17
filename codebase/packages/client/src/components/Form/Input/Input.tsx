@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { useStyle, colors } from '@dex-ddl/core';
+import { colors, useStyle } from '@dex-ddl/core';
 import mergeRefs from 'react-merge-refs';
 
 import { InputProps } from '../types';
@@ -15,6 +15,7 @@ const Input: FC<InputProps> = ({
   type = 'text',
   customStyles,
   onFocus,
+  readonly,
 }) => {
   const { css } = useStyle();
   const refIcon = useRefContainer();
@@ -30,6 +31,7 @@ const Input: FC<InputProps> = ({
         onFocus && onFocus();
       }}
       type={type}
+      readOnly={readonly}
       className={css({
         width: '100%',
         border: `1px solid ${isValid ? colors.backgroundDarkest : colors.error}`,
