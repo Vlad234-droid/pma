@@ -145,14 +145,6 @@ const Header: FC<Omit<HeaderProps, 'children'> & { title: string; status?: Statu
               {status && <StatusBadge status={status} styles={{ marginLeft: '10px' }} />}
             </div>
             <ExpandButton extraStyles={marginRightStyles} />
-            {/*<Icon*/}
-            {/*  iconStyles={{*/}
-            {/*    ...accordionIconStyles,*/}
-            {/*    ...marginRightStyles,*/}
-            {/*    ...(expanded ? accordionIconExpandStyles : {}),*/}
-            {/*  }}*/}
-            {/*  graphic='arrowUp'*/}
-            {/*/>*/}
           </div>
           {children && <div>{children}</div>}
         </div>
