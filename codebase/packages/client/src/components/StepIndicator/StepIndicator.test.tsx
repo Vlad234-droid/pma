@@ -9,7 +9,7 @@ it('StepIndicator', async () => {
     <StepIndicator
       currentStatus={'pending'}
       currentStep={0}
-      titles={['Set objectives', 'Mid-year review', 'End year review']}
+      titles={['Set objectives', 'Mid-year review', 'Year-end review']}
       descriptions={['April 2021', 'September 2022', 'March 2022']}
     />,
   );
