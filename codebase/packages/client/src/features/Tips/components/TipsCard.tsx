@@ -4,7 +4,7 @@ import { TileWrapper } from 'components/Tile';
 import { TipsProps } from '../types';
 import { ViewHistoryModal } from '.';
 import { useHistory } from 'react-router-dom';
-import { Page } from 'pages';
+import { Page } from '../../../pages/types';
 
 export type TipsCardProps = {
   card: TipsProps;
@@ -15,7 +15,7 @@ const TipsCard: FC<TipsCardProps> = ({card}) => {
   const history = useHistory();
 
   const handleEditTip = () => {
-    // history.push(`${Page.EDIT_TIP}`)
+    history.push(`${Page.EDIT_TIP}/${card.uuid}`)
   }
 
   const handlePushTip = () => {

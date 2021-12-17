@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useStyle, Rule, useBreakpoints, Button, ModalWithHeader, Icon, theme } from '@dex-ddl/core';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { Page } from 'pages';
 import { Input, Item, Textarea, Select } from 'components/Form';
 import { GenericItemField } from 'components/GenericForm';
@@ -37,12 +37,13 @@ function getChildren(data, options: any, key, value) {
 const TipsForm: FC<TipsFormProps> = ({ mode }) => {
   const { css } = useStyle();
   const history = useHistory();
+  const params = useParams();
   const methods = useForm({
     mode: 'onChange',
     resolver: yupResolver<Yup.AnyObjectSchema>(createTipSchema),
   });
   const { handleSubmit, formState: { isValid } } = methods;
-  
+
   const dispatch = useDispatch();
   const configEntries = useSelector(configEntriesSelector);
 
@@ -57,6 +58,7 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
   
   useEffect(() => {
     dispatch(ConfigEntriesActions.getConfigEntries());
+    console.log(params);
   }, []);
 
   useEffect(() => {
@@ -298,12 +300,18 @@ const formControlBtnsWrap: Rule = ({ theme }) => {
     bottom: 0,
     left: 0,
     width: '100%',
+    background: '#fff',
     borderTop: `1px solid ${theme.colors.backgroundDarkest}`,
     ...(mobileScreen
       ?
-      { padding: '0 10px' }
+      { 
+        padding: '0 10px', 
+      }
       :
-      { padding: '0 40px', }
+      { 
+        padding: '0 40px', 
+        borderRadius: '0 0 32px 32px',
+      }
     )
   }
 }

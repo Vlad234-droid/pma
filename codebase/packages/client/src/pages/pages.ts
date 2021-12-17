@@ -14,7 +14,7 @@ import ViewFeedback from './ViewFeedback';
 import Settings from './Settings';
 import CreateOrganizationObjectives from './CreateOrganizationObjectives';
 import ObjectivesView from './ObjectivesView/ObjectivesView';
-import { TipsAdministration, CreateTip } from './Tips';
+import { TipsAdministration, CreateTip, EditTip } from './Tips';
 import CreatePerformanceCycle from './PerformanceCycle/CreatePerformanceCycle';
 import PerformanceCycleAdministration from './PerformanceCycle/PerformanceCycleAdministration';
 
@@ -37,6 +37,7 @@ const pages: Record<Page, PageElement> = {
   [Page.VIEW_FEEDBACK]: ViewFeedback,
   [Page.TIPS]: TipsAdministration,
   [Page.CREATE_TIP]: CreateTip,
+  [Page.EDIT_TIP]: EditTip,
 };
 
 export default pages;
