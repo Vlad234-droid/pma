@@ -8,6 +8,7 @@ export * from './toast';
 // export * from './colleague-data';
 // export * from './audit-log';
 // export * from './statistics';
+export * from './config-entries';
 export * from './users';
 export * from './objectives';
 export * from './timeline';

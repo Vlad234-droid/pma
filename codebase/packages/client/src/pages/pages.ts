@@ -104,6 +104,21 @@ const pages: Record<
     title: 'View feedback',
     withHeader: true,
   },
+  [Page.TIPS]: {
+    component: TipsAdministration,
+    title: 'Tips',
+    withHeader: true,
+  },
+  [Page.CREATE_TIP]: {
+    component: CreateTip,
+    title: 'Create Tip',
+    withHeader: true,
+  },
+  [Page.EDIT_TIP]: {
+    component: EditTip,
+    title: 'Edit Tip',
+    withHeader: true,
+  },
 };
 
 export default pages;
