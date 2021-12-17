@@ -11,6 +11,10 @@ export type WidgetPendingProps = {
 export const WidgetPending: FC<WidgetPendingProps> = ({ count = 0 }) => {
   const { css } = useStyle();
 
+  if (!count) {
+    return null;
+  }
+
   return (
     <TileWrapper customStyle={{ background: colors.pending }}>
       <div className={css(wrapperStyle)}>
