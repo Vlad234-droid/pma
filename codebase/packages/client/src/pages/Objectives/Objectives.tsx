@@ -321,7 +321,6 @@ const widgetsBlock = {
   justifyContent: 'center',
   alignItems: 'center',
   flexDirection: 'column',
-  // margin: '20px',
 } as Rule;
 
 const headWrapperStyles: Rule = () => {
@@ -339,9 +338,6 @@ const timelineWrapperStyles = {
   flex: '3 1 70%',
   display: 'flex',
   flexDirection: 'column',
-  '& > div': {
-    height: '100%',
-  },
 } as Styles;
 
 const shareWidgetStyles = {

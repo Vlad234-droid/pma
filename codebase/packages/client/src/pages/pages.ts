@@ -52,7 +52,7 @@ const pages: Record<
   },
   [Page.CREATE_ORGANIZATION_OBJECTIVES]: {
     component: CreateOrganizationObjectives,
-    title: 'Create Organization Objectives',
+    title: 'Create Strategic Priorities',
     withHeader: true,
   },
   [Page.VIEW_ORGANIZATION_OBJECTIVES]: {
