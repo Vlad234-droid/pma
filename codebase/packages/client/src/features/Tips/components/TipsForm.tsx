@@ -16,6 +16,7 @@ import {
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { createTipSchema } from '../../../pages/Tips/config';
+import { TipsFormModal } from '.';
 
 export type TipsFormProps = {
   mode: string
@@ -62,6 +63,7 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
   const [options4, setOptions4] = useState([]);
   // const [entryConfigKey, setEntryConfigKey] = useState('');
   const [targetOrganisation, setTargetOrganisation] = useState('');
+  const [showTipsFormModal, setshowTipsFormModal] = useState(false);
 
   useEffect(() => {
     dispatch(ConfigEntriesActions.getConfigEntries());
@@ -75,7 +77,7 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
       setValue('tipTitle', currentTip?.title)
       setValue('tipDescription', currentTip?.description)
       if(configEntries) {
-        const tipUuid = params['tipUuid'];
+        // const tipUuid = params['tipUuid'];
         const targetCompositeKey = currentTip?.targetOrganisation?.compositeKey;
         const targetCompositeKeyLevel1 = `${targetCompositeKey?.split('/').slice(0, 1)}/${targetCompositeKey?.split('/').slice(1, 2)}/${targetCompositeKey?.split('/').slice(-1)}`
         const configEntry = configEntries.data.filter(item => item.compositeKey === targetCompositeKeyLevel1)[0];
@@ -123,9 +125,8 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
       targetOrganisation: {
         uuid: targetOrganisation
       },
-      imageLink: "https://cdn-icons-png.flaticon.com/512/189/189667.png"
+      // imageLink: "https://cdn-icons-png.flaticon.com/512/189/189667.png"
     }
-    // console.log(data)
     dispatch(
       tipsActions.createTip(data),
     );
@@ -142,16 +143,10 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
 
   const handleDiscard = () => {
     if(isDirty) {
-      alert("Confirmation popup")
+      setshowTipsFormModal(true)
     } else {
       history.push(`${Page.TIPS}`)
     }
-  }
-  
-  //temp
-  const imgName = '';
-  const handleUploadFile = () => {
-    console.log("Upload File Button")
   }
 
   return (
@@ -160,30 +155,23 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
       // closeOptionStyles: {}
       onClose: () => handleDiscard()
     }}>
+      {/* TODO: змінити назву змінної для різних модалок */}
+      { showTipsFormModal && 
+          <TipsFormModal 
+            handleCloseModal={() => setshowTipsFormModal(false)} 
+            action="discard"
+            handleLeavePage={() => history.push(`${Page.TIPS}`)}
+          /> 
+      }
       <div className={css(modalInner)}>
         <form className={css({ height: '100%', })}>
-          <div className={css({ marginBottom: '25px', })}>
-            <div className={css({ display: 'flex', justifyContent: 'flex-start'})}>
-              <div className={css(tipIamgeStyle)}></div>
-              <div className={css({ display: 'flex', flexDirection: 'column', alignItems: 'flex-start'})}>
-                {imgName && <div className={css(uploadPicLabelStyle, { color: theme.colors.tescoBlue})}>{imgName}</div> }
-                <div className={css(uploadPicLabelStyle)}>Maxim upload size 5MB, <br /> .jpg or .png format</div>
-                <Button 
-                  onPress={handleUploadFile} 
-                  mode="inverse" 
-                  styles={[uploadPicBtnStyle]}
-                >
-                  Choose Picture
-                </Button>
-              </div>
-            </div>
-          </div>
-          <div className={css({ overflowY: 'auto', height: '80%'})}>
+          <div className={css(formFieldsWrapStyle)}>
             <GenericItemField
               name={'tipTitle'}
               methods={methods}
-              label='Title'
-              Wrapper={Item}
+              // label='Title'
+              // Wrapper={Item}
+              Wrapper={({ children }) => <Item label='Title' withIcon={false}>{children}</Item>}
               Element={Input}
               placeholder='Example: Share objectives easily'
               // value={''}
@@ -308,33 +296,10 @@ const modalInner: Rule = () => {
   }
 }
 
-const tipIamgeStyle: Rule = () => {
+const formFieldsWrapStyle: Rule = () => {
   return {
-    width: '104px',
-    height: '104px',
-    background: '#f1f2f4',
-    marginRight: '15px',
-  }
-}
-
-const uploadPicLabelStyle: Rule = ({ theme }) => {
-  return {
-    fontSize: '14px',
-    lineHeight: '18px',
-    color: theme.colors.grayscale,
-    marginBottom: '5px',
-  }
-}
-
-const uploadPicBtnStyle: Rule = ({ theme }) => {
-  return {
-    border: `1px solid ${theme.colors.tescoBlue}`, 
-    fontWeight: 700, 
-    fontSize: '14px',
-    lineHeight: '18px',
-    height: 'auto',
-    padding: '7px 16px',
-    marginTop: '10px',
+    overflowY: 'auto', 
+    height: '100%',
   }
 }
 
@@ -342,7 +307,6 @@ const hrSeparatorLine: Rule = ({ theme }) => {
   return {
     height: '1px',
     background: theme.colors.backgroundDarkest,
-    marginBottom: '20px',
   }
 }
 

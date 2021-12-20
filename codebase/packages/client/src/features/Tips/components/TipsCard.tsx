@@ -2,7 +2,7 @@ import React, { FC, Fragment, useState } from 'react';
 import { useStyle, Rule, useBreakpoints, Button, theme } from '@dex-ddl/core';
 import { TileWrapper } from 'components/Tile';
 import { TipsProps } from '../types';
-import { ViewHistoryModal } from '.';
+import { ViewHistoryModal, PushTipModal } from '.';
 import { useHistory } from 'react-router-dom';
 import { Page } from '../../../pages/types';
 
@@ -18,14 +18,11 @@ const TipsCard: FC<TipsCardProps> = ({card}) => {
     history.push(`${Page.EDIT_TIP}/${card.uuid}`)
   }
 
-  const handlePushTip = () => {
-    alert("View Push Tip")
-  }
-
   const date = new Date(card.updatedTime)
   const pushedTime = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`
 
   const [isShowViewHistoryModal, setShowViewHistoryModal] = useState(false);
+  const [isShowPushModal, setShowPushModal] = useState(false);
 
   const handleShowViewHistoryModal = () => {
     setShowViewHistoryModal(true)
@@ -35,6 +32,14 @@ const TipsCard: FC<TipsCardProps> = ({card}) => {
     setShowViewHistoryModal(false)
   }
 
+  const handlePushTip = () => {
+    setShowPushModal(true)
+  }
+
+  const handleClosePushTipModal = () => {
+    setShowPushModal(false)
+  }
+
   return (
     <Fragment>
       <div className={css(cardWrapper)}>
@@ -42,11 +47,11 @@ const TipsCard: FC<TipsCardProps> = ({card}) => {
           <div>
             <div className={css(tipImage, { backgroundImage: `url(${card.imageLink})` })} />
           </div>
-          <div className={css()}>
+          <div className={css(tipInfoWrap)}>
             <div className={css(tipTitle)}>{card.title}</div>
             <div className={css(tipText)}>{card.description}</div>
             <div className={css({ marginTop: '8px', display: 'flex' })}>
-              <div className={css( lastPushStyle )}>Last push: {card.published ? pushedTime : 'haven\'t pushed yet'}</div>
+              <div className={css( lastPushStyle )}>Last push: {card.published ? pushedTime : 'was not pushed'}</div>
               <div className={css( viewHistoryStyle )} onClick={handleShowViewHistoryModal}>View history</div>
             </div>
           </div>
@@ -61,6 +66,7 @@ const TipsCard: FC<TipsCardProps> = ({card}) => {
       </div>
 
       { isShowViewHistoryModal && <ViewHistoryModal card={card} handleCloseModal={handleCloseViewHistoryModal} /> }
+      { isShowPushModal && <PushTipModal card={card} handleCloseModal={handleClosePushTipModal} />}
     </Fragment>
   )
 }
@@ -82,6 +88,14 @@ const cardStyle: Rule = () => {
     marginBottom: '10px',
     display: 'flex',
     flexWrap: mobileScreen ? 'wrap' : 'nowrap'
+  };
+};
+
+const tipInfoWrap: Rule = () => {
+  const [, isBreakpoint] = useBreakpoints();
+  const mobileScreen = isBreakpoint.medium || isBreakpoint.small || isBreakpoint.xSmall;
+  return {
+    maxWidth: mobileScreen ? '239px' : 'auto',
   };
 };
 

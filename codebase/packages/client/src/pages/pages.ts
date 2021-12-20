@@ -112,12 +112,12 @@ const pages: Record<
   [Page.CREATE_TIP]: {
     component: CreateTip,
     title: 'Create Tip',
-    withHeader: true,
+    withHeader: false,
   },
   [Page.EDIT_TIP]: {
     component: EditTip,
     title: 'Edit Tip',
-    withHeader: true,
+    withHeader: false,
   },
 };
 
