@@ -2,7 +2,7 @@
 import { Epic, isActionOf } from 'typesafe-actions';
 import { combineEpics } from 'redux-observable';
 import { from, of } from 'rxjs';
-import { catchError, filter, map, switchMap, takeUntil } from 'rxjs/operators';
+import { catchError, filter, map, switchMap, takeUntil, mergeMap } from 'rxjs/operators';
 
 import { getCurrentUser, updateUserNotification, createProfileAttribute, updateProfileAttribute } from './actions';
 
@@ -27,7 +27,12 @@ export const createProfileAttributeEpic: Epic = (action$, _, { api }) =>
     //@ts-ignore
     switchMap(({ payload }) =>
       //@ts-ignore
-      from(api.createProfileAttribute(payload)).pipe(map(createProfileAttribute.success)),
+      from(api.createProfileAttribute(payload)).pipe(
+        mergeMap(() =>
+          //@ts-ignore
+          from([createProfileAttribute.success({}), getCurrentUser.request()]),
+        ),
+      ),
     ),
   );
 

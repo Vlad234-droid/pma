@@ -20,7 +20,8 @@ import {
   FeedbackActions as FeedbackActionsGet,
   getPropperNotesByStatusSelector,
   colleagueUUIDSelector,
- UserActions } from '@pma/store';
+  UserActions,
+} from '@pma/store';
 import { FeedbackStatus } from '../../config/enum';
 import { useAuthContainer } from 'contexts/authContext';
 
@@ -191,7 +192,9 @@ const FeedbackActions: FC = () => {
         </div>
         <div className={css({ marginTop: '32px', maxWidth: '568px' })}>
           <div className={css(Icon_text_style)}>
-            <div className={css(Voice_style)}>Do you have a preference in the way you`d like to receive feedback?</div>
+            <div className={css(Voice_style)}>
+              Do you have a preference in the way you&apos;d like to receive feedback?
+            </div>
             <div className={css({ cursor: 'pointer' })}>
               <IconCore
                 graphic='information'

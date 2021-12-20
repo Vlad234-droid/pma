@@ -56,8 +56,8 @@ const ModalGiveFeedback: FC<ModalGiveFeedbackProps> = ({
       giveFeedback_id: '1',
       giveFeedbacka_main_title: 'Question 1',
       giveFeedback_title:
-        'Looking back at what you`ve seen recently, what would you like to say to this colleague about what they`ve delivered or how they`ve gone about it?',
-      giveFeedback_description: 'Share specific example of where you view this colleague’s strenght',
+        "Looking back at what you've seen recently, what would you like to say to this colleague about what they`ve delivered or how they've gone about it?",
+      giveFeedback_description: "Share specific example of where you view this colleague's strenght",
       giveFeedback_field: {
         field_id: '1',
         field_type: 'textarea',
@@ -133,7 +133,9 @@ const ModalGiveFeedback: FC<ModalGiveFeedbackProps> = ({
   const onDraft = () => {
     if (!colleagueUuid) return;
     trigger();
-    const conv = values?.feedback.slice(1);
+    const valuess = getValues();
+
+    const conv = valuess?.feedback.slice(1);
     const getIfNeedUuid = (selectedPerson) => {
       if (!selectedPerson.uuid) return;
       return {
@@ -211,7 +213,7 @@ const ModalGiveFeedback: FC<ModalGiveFeedbackProps> = ({
             ...(mobileScreen && { textAlign: 'center' }),
           })}
         >
-          Select who you`d like to give feedback to
+          Select who you&apos;d like to give feedback to
         </div>
         <SearchPart
           setSelectedPerson={setSelectedPerson}

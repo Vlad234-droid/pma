@@ -9,9 +9,17 @@ export type NotificationProps = {
   text: string;
   customStyle?: React.CSSProperties | {};
   onClick?: () => void;
+  closable?: boolean;
 };
 
-const Notification: FC<NotificationProps> = ({ graphic, iconColor, text, customStyle = {}, onClick }) => {
+const Notification: FC<NotificationProps> = ({
+  graphic,
+  iconColor,
+  text,
+  customStyle = {},
+  onClick,
+  closable = true,
+}) => {
   const { css } = useStyle();
   const [show, setStatus] = useState(true);
   const handleOnClick = () => {
@@ -31,14 +39,16 @@ const Notification: FC<NotificationProps> = ({ graphic, iconColor, text, customS
         <Icon graphic={graphic} fill={colors[iconColor]} iconStyles={{ width: '16px', height: '16px' }} />
       </div>
       <div className={css(textStyle)}>{text}</div>
-      <IconButton
-        graphic='decline'
-        customVariantRules={{
-          default: buttonDefaultStyle,
-        }}
-        iconStyles={{ width: '14px', height: '14px' }}
-        onPress={handleOnClick}
-      />
+      {closable && (
+        <IconButton
+          graphic='decline'
+          customVariantRules={{
+            default: buttonDefaultStyle,
+          }}
+          iconStyles={{ width: '14px', height: '14px' }}
+          onPress={handleOnClick}
+        />
+      )}
     </div>
   );
 };

@@ -11,7 +11,7 @@ import { TileWrapper } from 'components/Tile';
 import { Item, Textarea } from 'components/Form';
 import { GenericItemField } from 'components/GenericForm';
 import { Trans } from 'components/Translation';
-import { FeedbackActions, colleagueUUIDSelector , getReviewByUuidS } from '@pma/store';
+import { FeedbackActions, colleagueUUIDSelector, getReviewByUuidS } from '@pma/store';
 import { useDispatch, useSelector } from 'react-redux';
 import defaultImg from '../../../../public/default.png';
 import { TargetTypeReverse } from 'config/enum';
@@ -31,8 +31,8 @@ const SubmitPart: FC<SubmitPartProps> = ({
       giveFeedback_id: '1',
       giveFeedbacka_main_title: 'Question 1',
       giveFeedback_title:
-        'Looking back at what you`ve seen recently, in relation to the area I`ve asked for feedback on, what can you tell me about what I`ve delivered or how I`ve gone about it?',
-      giveFeedback_description: 'Share specific examples of what you`ve seen.',
+        "Looking back at what you've seen recently, in relation to the area I've asked for feedback on, what can you tell me about what I've delivered or how I've gone about it?",
+      giveFeedback_description: "Share specific examples of what you've seen.",
       giveFeedback_field: {
         field_id: '1',
         field_type: 'textarea',
@@ -43,7 +43,7 @@ const SubmitPart: FC<SubmitPartProps> = ({
       giveFeedback_id: '2',
       giveFeedbacka_main_title: 'Question 2',
       giveFeedback_title:
-        'Looking forward, in relation to the area I’ve asked for feedback on, what should I do more (or less) of in order to be at my best?',
+        "Looking forward, in relation to the area I've asked for feedback on, what should I do more (or less) of in order to be at my best?",
       giveFeedback_description: 'Share your suggestions',
       giveFeedback_field: {
         field_id: '2',
