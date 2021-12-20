@@ -246,7 +246,7 @@ const Objectives: FC = () => {
                       'tiles_description_id_3',
                       "Complete this once you've had your mid-year conversation with your line manager.",
                     )}
-                    customStyle={{ height: '182px' }}
+                    customStyle={{ height: '100%' }}
                   />
                 </div>
                 <div data-test-id='feedback' className={css(basicTileStyle)}>
@@ -260,7 +260,7 @@ const Objectives: FC = () => {
                       'tiles_description_id_3',
                       "Complete this once you've had your year-end conversation with your line manager.",
                     )}
-                    customStyle={{ height: '182px' }}
+                    customStyle={{ height: '100%' }}
                   />
                 </div>
               </>
@@ -277,7 +277,7 @@ const Objectives: FC = () => {
                     'tiles_description_id_3',
                     "Complete this once you've had your annual conversation with your line manager.",
                   )}
-                  customStyle={{ height: '182px' }}
+                  customStyle={{ height: '100%' }}
                 />
               </div>
             )}

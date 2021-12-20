@@ -69,7 +69,7 @@ const CareerPerformance: FC = () => {
           </Link>
           {canShowMyReview && (
             <StepIndicator
-              mainTitle={t('Your contribution timeline')}
+              mainTitle={t('Your Contribution timeline')}
               titles={descriptions}
               descriptions={startDates}
               statuses={statuses}
