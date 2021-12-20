@@ -144,14 +144,7 @@ const Header: FC<Omit<HeaderProps, 'children'> & { title: string; status?: Statu
               <h3 className={css(accordionHeaderTitleStyles)}>{title}</h3>
               {status && <StatusBadge status={status} styles={{ marginLeft: '10px' }} />}
             </div>
-            <Icon
-              iconStyles={{
-                ...accordionIconStyles,
-                ...marginRightStyles,
-                ...(expanded ? accordionIconExpandStyles : {}),
-              }}
-              graphic='arrowUp'
-            />
+            <ExpandButton extraStyles={marginRightStyles} />
           </div>
           {children && <div>{children}</div>}
         </div>
@@ -162,28 +155,25 @@ const Header: FC<Omit<HeaderProps, 'children'> & { title: string; status?: Statu
 
 type ExpandButtonProps = {
   onClick?: (expanded: boolean) => void;
+  extraStyles?: Rule;
 };
 
-export const ExpandButton: FC<ExpandButtonProps> = ({ onClick }) => {
-  return (
-    <>
-      <BaseHeader>
-        {({ getHeadingProps, getElementToggleProps, expanded }) => {
-          return (
-            <div style={{ cursor: 'pointer' }} {...getHeadingProps()} onClick={() => onClick && onClick(!expanded)}>
-              <div {...getElementToggleProps()}>
-                <Icon
-                  iconStyles={{ ...accordionIconStyles, ...(expanded ? accordionIconExpandStyles : {}) }}
-                  graphic='arrowDown'
-                />
-              </div>
-            </div>
-          );
-        }}
-      </BaseHeader>
-    </>
-  );
-};
+export const ExpandButton: FC<ExpandButtonProps> = ({ onClick, extraStyles }) => (
+  <>
+    <BaseHeader>
+      {({ getHeadingProps, getElementToggleProps, expanded }) => (
+        <div style={{ cursor: 'pointer' }} {...getHeadingProps()} onClick={() => onClick && onClick(!expanded)}>
+          <div {...getElementToggleProps()}>
+            <Icon
+              iconStyles={{ ...accordionIconStyles, ...(expanded ? accordionIconExpandStyles : {}), ...extraStyles }}
+              graphic='arrowDown'
+            />
+          </div>
+        </div>
+      )}
+    </BaseHeader>
+  </>
+);
 
 const accordionHeaderWrapperStyles: Rule = {
   paddingBottom: '25px',
