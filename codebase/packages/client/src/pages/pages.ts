@@ -22,37 +22,43 @@ const pages: Record<
     component: PageElement;
     withHeader: boolean;
     title?: string;
+    backPath?: string;
   }
 > = {
   [Page.MY_TEAM]: {
     component: MyTeam,
     title: 'My Team',
     withHeader: true,
+    backPath: Page.MY_VIEW,
   },
   [Page.ACTIONS]: {
     component: Actions,
     title: 'Actions',
     withHeader: true,
+    backPath: Page.MY_VIEW,
   },
   [Page.CREATE_PERFORMANCE_CYCLE]: {
     component: CreatePerformanceCycle,
     title: 'Create Performance Cycle',
     withHeader: true,
+    backPath: Page.PERFORMANCE_CYCLE,
   },
   [Page.PERFORMANCE_CYCLE]: {
     component: PerformanceCycleAdministration,
     title: 'Performance Cycle Administration',
     withHeader: true,
+    backPath: Page.MY_VIEW,
   },
-  [Page.CAREER_PERFORMANCE]: {
+  [Page.MY_VIEW]: {
     component: CareerPerformance,
-    title: 'Your Сontribution',
+    title: 'My View',
     withHeader: true,
   },
   [Page.CREATE_ORGANIZATION_OBJECTIVES]: {
     component: CreateOrganizationObjectives,
     title: 'Create Strategic Priorities',
     withHeader: true,
+    backPath: Page.MY_VIEW,
   },
   [Page.VIEW_ORGANIZATION_OBJECTIVES]: {
     component: ObjectivesView,
@@ -62,45 +68,54 @@ const pages: Record<
     component: PersonalDevelopmentPlan,
     title: 'Personal Development Plan',
     withHeader: true,
+    backPath: Page.MY_VIEW,
   },
   [Page.OBJECTIVES_VIEW]: {
     component: Objectives,
     title: 'My Objectives',
     withHeader: true,
+    backPath: Page.MY_VIEW,
   },
   [Page.PROFILE]: {
     component: Profile,
-    title: 'My profile',
+    title: 'My View',
     withHeader: true,
+    backPath: Page.MY_VIEW,
   },
   [Page.SETTINGS]: {
     component: Settings,
     title: 'Settings',
     withHeader: true,
+    backPath: Page.MY_VIEW,
   },
   [Page.FEEDBACK]: {
     component: Feedback,
     title: 'Feedback',
     withHeader: true,
+    backPath: Page.MY_VIEW,
   },
   [Page.GIVE_FEEDBACK]: {
     component: GiveFeedback,
     title: 'Give feedback',
     withHeader: true,
+    backPath: Page.MY_VIEW,
   },
   [Page.REQUEST_FEEDBACK]: {
     component: RequestFeedback,
     withHeader: false,
+    backPath: Page.MY_VIEW,
   },
   [Page.RESPOND_FEEDBACK]: {
     component: RespondFeedback,
     title: 'Respond to feedback requests',
     withHeader: true,
+    backPath: Page.MY_VIEW,
   },
   [Page.VIEW_FEEDBACK]: {
     component: ViewFeedback,
     title: 'View feedback',
     withHeader: true,
+    backPath: Page.MY_VIEW,
   },
 };
 

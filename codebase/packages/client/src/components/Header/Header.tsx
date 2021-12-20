@@ -5,7 +5,7 @@ import { MenuDrawer } from '../MenuDrawer/MenuDrawer';
 
 export type HeaderProps = {
   title: string;
-  onBack: () => void;
+  onBack?: () => void;
   styles?: Styles | Rule;
   customSize?: boolean;
 };
@@ -33,10 +33,10 @@ const Header: FC<HeaderProps> = ({ title, onBack, styles = {} }) => {
 
   return (
     <div className={css(wrapperStyles, styles)} data-test-id={TEST_ID}>
-      <IconButton onPress={onBack} graphic='backwardLink' data-test-id={BACK_BTN_TEST_ID} />
+      {onBack ? <IconButton onPress={onBack} graphic='backwardLink' data-test-id={BACK_BTN_TEST_ID} /> : <div />}
       <h3 className={css(headerStyles)}>{title}</h3>
       <IconButton onPress={handleOpen} graphic='hamburger' />
-      <Route>{({ location: { state = {} } }) => (state as any).isOpen && <MenuDrawer onClose={handleClose} />}</Route>
+      <Route>{({ location: { state = {} } }) => (state as any)?.isOpen && <MenuDrawer onClose={handleClose} />}</Route>
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import { ComponentType, FC, LazyExoticComponent } from 'react';
 
 enum Page {
-  CAREER_PERFORMANCE = 'career-performance',
+  MY_VIEW = 'my-view',
   CREATE_ORGANIZATION_OBJECTIVES = 'create-strategic-priorities',
   VIEW_ORGANIZATION_OBJECTIVES = 'view-strategic-priorities',
   CREATE_PERFORMANCE_CYCLE = 'performance-cycle/:performanceCycleUuid',

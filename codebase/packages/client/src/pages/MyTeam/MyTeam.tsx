@@ -14,7 +14,8 @@ import {
   getPendingEmployees,
   ManagersActions,
 } from '@pma/store';
-import { Page } from '../types';
+import { buildPath } from 'features/Routes';
+import { Page } from 'pages';
 
 export const TEST_ID = 'my-team';
 
@@ -51,8 +52,8 @@ const MyTeam: FC = () => {
         )}
         <RouterSwitch
           links={[
-            { link: 'career-performance', name: 'My  View' },
-            { link: 'my-team', name: 'My Team' },
+            { link: buildPath(Page.MY_VIEW), name: 'My View' },
+            { link: buildPath(Page.MY_TEAM), name: 'My Team' },
           ]}
         />
         <div

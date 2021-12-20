@@ -1,10 +1,12 @@
+import '@testing-library/jest-dom/extend-expect';
+//@ts-ignore
 import React from 'react';
 import { Router } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
 import { fireEvent } from '@testing-library/react';
-import { renderWithTheme as render } from 'utils/test';
-import '@testing-library/jest-dom/extend-expect';
-
+import { renderWithTheme as render } from '../../utils/test';
+import { buildPath } from '../../features/Routes';
+import { Page } from '../../pages';
 import { RouterSwitch } from '../RouterSwitch';
 
 it('render RouterSwitch', async () => {
@@ -14,8 +16,8 @@ it('render RouterSwitch', async () => {
     <Router history={history}>
       <RouterSwitch
         links={[
-          { link: 'career-performance', name: 'View' },
-          { link: 'my-team', name: 'Team' },
+          { link: buildPath(Page.MY_VIEW), name: 'View' },
+          { link: buildPath(Page.MY_TEAM), name: 'Team' },
         ]}
       />
     </Router>,
