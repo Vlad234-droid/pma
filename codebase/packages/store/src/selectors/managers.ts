@@ -12,7 +12,6 @@ export const getAllEmployees = createSelector(managersSelector, ({ data }) => {
 
 // @ts-ignore
 export const getPendingEmployees = createSelector(managersSelector, ({ data }) => {
-  console.log('data', data);
   const employeeWithPendingApprovals = data?.filter((employee) =>
     employee.timeline.some((review) => review.status === Status.WAITING_FOR_APPROVAL),
   );
