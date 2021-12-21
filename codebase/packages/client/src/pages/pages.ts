@@ -15,6 +15,7 @@ import Settings from './Settings';
 import CreateOrganizationObjectives from './CreateOrganizationObjectives';
 import ObjectivesView from './ObjectivesView';
 import { CreatePerformanceCycle, PerformanceCycleAdministration } from './PerformanceCycle';
+import UserObjectives from './UserObjectives';
 
 const pages: Record<
   Page,
@@ -75,6 +76,12 @@ const pages: Record<
     title: 'My Objectives',
     withHeader: true,
     backPath: Page.CONTRIBUTION,
+  },
+  [Page.USER_OBJECTIVES]: {
+    component: UserObjectives,
+    title: 'User Objectives',
+    withHeader: true,
+    backPath: Page.MY_TEAM,
   },
   [Page.PROFILE]: {
     component: Profile,
