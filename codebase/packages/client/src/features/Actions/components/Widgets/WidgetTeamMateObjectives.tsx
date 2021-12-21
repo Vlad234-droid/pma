@@ -133,15 +133,17 @@ export const WidgetTeamMateObjectives: FC<WidgetTeamMateObjectivesProps> = ({
                     </div>
                     <Panel>
                       <div className={css({ padding: '24px 35px 24px 24px' })}>
-                        <Notification
-                          graphic='information'
-                          iconColor='pending'
-                          text='It’s time to approve or decline your colleagues objectives'
-                          customStyle={{
-                            background: '#FFDBC2',
-                            marginBottom: '20px',
-                          }}
-                        />
+                        {status === Status.WAITING_FOR_APPROVAL && (
+                          <Notification
+                            graphic='information'
+                            iconColor='pending'
+                            text='It’s time to approve or decline your colleagues objectives'
+                            customStyle={{
+                              background: '#FFDBC2',
+                              marginBottom: '20px',
+                            }}
+                          />
+                        )}
                         {timeLine.map((timeline) => {
                           return (
                             <div key={`element-${timeline.reviewType}-${colleague.uuid}`}>
