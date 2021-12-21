@@ -1,10 +1,12 @@
 import React, { FC, Fragment, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { useStyle, Rule, useBreakpoints, Button, theme } from '@dex-ddl/core';
 import { TileWrapper } from 'components/Tile';
+import { Page } from 'pages';
+import { paramsReplacer } from 'utils';
+import { buildPath } from 'features/Routes/utils';
 import { TipsProps } from '../types';
 import { ViewHistoryModal, PushTipModal } from '.';
-import { useHistory } from 'react-router-dom';
-import { Page } from '../../../pages/types';
 
 export type TipsCardProps = {
   card: TipsProps;
@@ -15,7 +17,8 @@ const TipsCard: FC<TipsCardProps> = ({card}) => {
   const history = useHistory();
 
   const handleEditTip = () => {
-    history.push(`${Page.EDIT_TIP}/${card.uuid}`)
+    const pathname = paramsReplacer(buildPath(`${Page.EDIT_TIP}`), { ":tipUuid": card.uuid })
+    history.push(pathname)
   }
 
   const date = new Date(card.updatedTime)

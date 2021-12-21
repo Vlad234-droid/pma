@@ -17,3 +17,8 @@ export const createTip = (params: any) => {
 export const getTipByUuid = (params: any) => {
   return httpClient.get(`${domain}/${params}`);
 }
+
+export const deleteTip = (params: any) => {
+  const { uuid, withHistory } = params;
+  return httpClient.delete(`${domain}/${uuid}/?withHistory=${withHistory}`);
+}

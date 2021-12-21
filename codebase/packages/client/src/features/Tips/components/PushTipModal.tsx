@@ -26,7 +26,7 @@ const PushTipModal: FC<PushTipModalProps> = ({ card, handleCloseModal }) => {
           <>
             <img src={success} alt='success' />
             <div className={css(modalTitle)}>Done!</div>
-            <div className={css(modalSubTitleStyle)}>Tip has been pushed</div>
+            <div className={css(modalSubTitleStyle)}>Tip pushed successfully.</div>
             <div className={css(modalBtnsWrap)}>
               <Button onPress={handleCloseModal} styles={[modalBtn, { margin: '0 auto' }]}>Close</Button>
             </div>
@@ -40,7 +40,7 @@ const PushTipModal: FC<PushTipModalProps> = ({ card, handleCloseModal }) => {
             <div className={css(modalText)}><span className={css({ fontWeight: 700 })}>Target:</span> {card.targetOrganisation.name}</div>
             <div className={css(modalBtnsWrap)}>
               <Button onPress={handleCloseModal} mode='inverse' styles={[modalBtn, { border: `1px solid ${theme.colors.tescoBlue}`}]}>Cancel</Button>
-              <Button onPress={handlePushTip} styles={[modalBtn]}>Push</Button>
+              <Button onPress={handlePushTip} styles={[modalBtn]}>Confirm</Button>
             </div>
           </>
         }

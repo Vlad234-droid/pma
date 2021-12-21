@@ -1,44 +1,71 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { useStyle, Rule, Button, theme, useBreakpoints } from '@dex-ddl/core';
 import success from '../../../../public/success.jpg';
 
 export type TipsFormModalProps = {
-  handleCloseModal: () => void;
-  handleLeavePage: () => void;
-  text?: string;
+  negativeBtnAction: () => void;
+  positiveBtnAction: () => void;
   action: string;
+  tipTitle?: string;
 };
 
-const TipsFormModal: FC<TipsFormModalProps> = ({ text, action, handleCloseModal, handleLeavePage }) => {
+const TipsFormModal: FC<TipsFormModalProps> = ({ action, negativeBtnAction, positiveBtnAction, tipTitle }) => {
   const { css } = useStyle();
 
-  const discardModalText = {
-    title: 'Discard changes',
-    body: 'You have not saved your changes, are you sure you want to leave this page?'
-  }
-
-  const successModalText = {
-    title: '',
-    body: 'New Tip successfully created.'
+  const options = {
+    discard: {
+      title: 'Discard changes',
+      body: 'You have not saved your changes, are you sure you want to leave this page?',
+      negativeBtnText: 'Stay on this page',
+      positiveBtnText: 'Leave this page',
+    },
+    create: {
+      title: 'Success',
+      body: 'New Tip successfully created.',
+      negativeBtnText: '',
+      positiveBtnText: 'Leave this page',
+    },
+    edit: {
+      title: 'Success',
+      body: 'Tip updated successfully.',
+      negativeBtnText: '',
+      positiveBtnText: 'Leave this page',
+    },
+    confirmDelete: {
+      title: 'Delete',
+      body: `Do you want to delete [${tipTitle}] tip?`,
+      negativeBtnText: 'Cancel',
+      positiveBtnText: 'Delete',
+    },
+    successDelete: {
+      title: 'Delete',
+      body: 'Tip successfully deleted.',
+      negativeBtnText: '',
+      positiveBtnText: 'Leave this page',
+    }
   }
 
   return (
     <div className={css(TipsFormModalStyle)}>
-      { action === 'success' ? <img src={success} alt='success' /> : '' }
+      { action === 'create' || action === 'edit' || action === 'delete' ? <img src={success} alt='success' /> : '' }
       <div className={css(modalTitle)}>
-        { action === 'discard' ? 'Discard changes' : action === 'success' ? 'Success' : ''}
+        { options[action]['title'] }
       </div>
-      <div className={css()}>You have not saved your changes, are you sure you want to leave this page?</div>
+      <div className={css()}>
+        { options[action]['body'] }
+      </div>
       <div className={css(formControlBtnsWrap)}>
+      { options[action]['negativeBtnText'] && 
+          <Button 
+            onPress={negativeBtnAction} 
+            mode="inverse" 
+            styles={[formControlBtn, { border: `1px solid ${theme.colors.tescoBlue}` }]}
+          >{ options[action]['negativeBtnText'] }</Button> 
+      } 
         <Button 
-          onPress={handleCloseModal} 
-          mode="inverse" 
-          styles={[formControlBtn, { border: `1px solid ${theme.colors.tescoBlue}` }]}
-        >Stay on this page</Button>
-        <Button 
-          onPress={handleLeavePage} 
+          onPress={positiveBtnAction} 
           styles={[formControlBtn]}
-        >Leave this page</Button>
+        >{ options[action]['positiveBtnText'] }</Button>
       </div>
     </div>
   )
@@ -49,6 +76,8 @@ const TipsFormModalStyle: Rule = () => {
   const mobileScreen = isBreakpoint.medium || isBreakpoint.small || isBreakpoint.xSmall;
   return {
     position: "absolute", 
+    top: 0,
+    left: 0,
     background: "#fff", 
     width: "100%", 
     height: "100%", 
@@ -89,6 +118,7 @@ const formControlBtnsWrap: Rule = ({ theme }) => {
     alignItems: 'center',
     height: '100px',
     position: 'absolute',
+    justifyContent: 'center',
     bottom: 0,
     left: 0,
     width: '100%',

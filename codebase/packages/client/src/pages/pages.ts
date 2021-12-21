@@ -127,11 +127,13 @@ const pages: Record<
     component: CreateTip,
     title: 'Create Tip',
     withHeader: false,
+    backPath: Page.TIPS
   },
   [Page.EDIT_TIP]: {
     component: EditTip,
     title: 'Edit Tip',
     withHeader: false,
+    backPath: Page.TIPS
   },
 };
 

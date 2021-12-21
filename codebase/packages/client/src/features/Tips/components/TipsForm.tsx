@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
-import { useStyle, Rule, useBreakpoints, Button, ModalWithHeader, Icon, theme } from '@dex-ddl/core';
+import { useStyle, Rule, useBreakpoints, Button, ModalWithHeader, Icon, theme, IconButton } from '@dex-ddl/core';
 import { useHistory, useParams } from 'react-router-dom';
 import { Page } from 'pages';
 import { Input, Item, Textarea, Select } from 'components/Form';
@@ -17,6 +17,7 @@ import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { createTipSchema } from '../../../pages/Tips/config';
 import { TipsFormModal } from '.';
+import { buildPath } from 'features/Routes/utils';
 
 export type TipsFormProps = {
   mode: string
@@ -39,6 +40,8 @@ function getChildren(data, options: any, key, value) {
       ];
     }, []);
 }
+
+//TODO: пофіксити інпути, іконку видалення тіпсів
 
 const TipsForm: FC<TipsFormProps> = ({ mode }) => {
   const { css } = useStyle();
@@ -63,7 +66,9 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
   const [options4, setOptions4] = useState([]);
   // const [entryConfigKey, setEntryConfigKey] = useState('');
   const [targetOrganisation, setTargetOrganisation] = useState('');
-  const [showTipsFormModal, setshowTipsFormModal] = useState(false);
+  const [showTipsFormModal, setShowTipsFormModal] = useState(false);
+  const [successTipsFormModal, setSuccessTipsModal] = useState(false);
+  const [tipsFormModalAction, setTipsFormModalAction] = useState('discard')
 
   useEffect(() => {
     dispatch(ConfigEntriesActions.getConfigEntries());
@@ -113,7 +118,10 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
     dispatch(
       tipsActions.createTip(data),
     );
-    history.push(`${Page.TIPS}`)
+    setShowTipsFormModal(true);
+    setSuccessTipsModal(true);
+    setTipsFormModalAction("create")
+    // history.push(`${Page.TIPS}`)
   }
 
   const handleEditTip = () => {
@@ -125,12 +133,15 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
       targetOrganisation: {
         uuid: targetOrganisation
       },
-      // imageLink: "https://cdn-icons-png.flaticon.com/512/189/189667.png"
+      imageLink: "https://cdn-icons-png.flaticon.com/512/189/189667.png"
     }
     dispatch(
+      //TODO: додати можливість відловлювання помилкових заптів(коли сервер повертає failure)
       tipsActions.createTip(data),
     );
-    history.push(`${Page.TIPS}`)
+    setTipsFormModalAction("edit")
+    setShowTipsFormModal(true);
+    setSuccessTipsModal(true);
   }
 
   const submitForm = (e) => {
@@ -143,10 +154,22 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
 
   const handleDiscard = () => {
     if(isDirty) {
-      setshowTipsFormModal(true)
+      setTipsFormModalAction("discard")
+      setShowTipsFormModal(true)
     } else {
-      history.push(`${Page.TIPS}`)
+      history.push(buildPath(`${Page.TIPS}`))
     }
+  }
+
+  const confirmDeleteTip = () => {
+    setTipsFormModalAction("confirmDelete")
+    setShowTipsFormModal(true)
+  }
+
+  const handleDeleteTip = () => {
+    dispatch(
+      tipsActions.deleteTip({ uuid: params['tipUuid'], withHistory: true}),
+    );
   }
 
   return (
@@ -155,12 +178,19 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
       // closeOptionStyles: {}
       onClose: () => handleDiscard()
     }}>
-      {/* TODO: змінити назву змінної для різних модалок */}
-      { showTipsFormModal && 
+      { showTipsFormModal && !successTipsFormModal && 
           <TipsFormModal 
-            handleCloseModal={() => setshowTipsFormModal(false)} 
-            action="discard"
-            handleLeavePage={() => history.push(`${Page.TIPS}`)}
+            negativeBtnAction={() => setShowTipsFormModal(false)} 
+            action={tipsFormModalAction}
+            positiveBtnAction={() => {
+              if(tipsFormModalAction === 'confirmDelete') {
+                setTipsFormModalAction("successDelete")
+                handleDeleteTip()
+              } else {
+                history.push(buildPath(`${Page.TIPS}`))
+              }
+            }}
+            tipTitle={currentTip.title}
           /> 
       }
       <div className={css(modalInner)}>
@@ -243,6 +273,16 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
               placeholder='Please select'
               // value={''}
             />
+            { mode === 'edit' && 
+                <IconButton 
+                  onPress={confirmDeleteTip} 
+                  graphic='tool'
+                  iconStyles={{ marginRight: '5px' }}
+                  customVariantRules={{
+                    default: { fontWeight: 700, fontSize: '14px', lineHeight: '18px', padding: '5px 0' },
+                  }}
+                >Delete this tip</IconButton>
+            }
           </div>
           <div className={css(formControlBtnsWrap)}>
             <Button 
@@ -263,6 +303,13 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
           </div>
         </form>
       </div>
+      { showTipsFormModal && successTipsFormModal &&
+          <TipsFormModal 
+            negativeBtnAction={() => setShowTipsFormModal(false)} 
+            action={tipsFormModalAction}
+            positiveBtnAction={() => history.push(buildPath(`${Page.TIPS}`))}
+          /> 
+      }
     </ModalWithHeader>
   )
 }
