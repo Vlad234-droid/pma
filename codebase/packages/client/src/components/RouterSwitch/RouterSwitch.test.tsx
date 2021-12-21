@@ -11,12 +11,12 @@ import { RouterSwitch } from '../RouterSwitch';
 
 it('render RouterSwitch', async () => {
   const history = createMemoryHistory();
-  history.push('/career-performance');
+  history.push(buildPath(Page.CONTRIBUTION));
   const { getByText } = render(
     <Router history={history}>
       <RouterSwitch
         links={[
-          { link: buildPath(Page.MY_VIEW), name: 'View' },
+          { link: buildPath(Page.CONTRIBUTION), name: 'View' },
           { link: buildPath(Page.MY_TEAM), name: 'Team' },
         ]}
       />

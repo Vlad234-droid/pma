@@ -52,7 +52,7 @@ const MyTeam: FC = () => {
         )}
         <RouterSwitch
           links={[
-            { link: buildPath(Page.MY_VIEW), name: 'My View' },
+            { link: buildPath(Page.CONTRIBUTION), name: 'My View' },
             { link: buildPath(Page.MY_TEAM), name: 'My Team' },
           ]}
         />

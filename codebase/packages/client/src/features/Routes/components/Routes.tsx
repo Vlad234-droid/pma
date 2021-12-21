@@ -16,7 +16,7 @@ const Routes: FC<Props> = ({ routes }) => (
       <ReactRoute key={idx} {...route} />
     ))}
     <ReactRoute exact path='/'>
-      <Redirect to={buildPath(Page.MY_VIEW)} />
+      <Redirect to={buildPath(Page.CONTRIBUTION)} />
     </ReactRoute>
     <ReactRoute path='*'>
       <NotFound />
