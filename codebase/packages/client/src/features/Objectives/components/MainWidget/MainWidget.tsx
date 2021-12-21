@@ -1,11 +1,14 @@
 import React, { FC } from 'react';
 import { Trans, useTranslation } from 'components/Translation';
 import { Status } from 'config/enum';
-import { useStyle, Rule, CreateRule, Colors } from '@dex-ddl/core';
+import { useStyle, Rule, CreateRule, Colors, Button, theme } from '@dex-ddl/core';
 
 import { CreateButton } from '../Buttons';
 import { TileWrapper } from 'components/Tile';
 import { Icon, RoundIcon, Graphics } from 'components/Icon';
+import epic from '@pma/store/src/entities/user/epic';
+import { useHistory } from 'react-router-dom';
+import { Page } from 'pages';
 
 export type Props = {
   onClick: () => void;
@@ -19,6 +22,7 @@ export const TEST_ID = 'main-widget';
 const MainWidget: FC<Props> = ({ customStyle, onClick, status, count = 0 }) => {
   const { css } = useStyle();
   const { t } = useTranslation();
+  const history = useHistory();
 
   const isStateless = !status;
   const isDraft = status === Status.DRAFT;
@@ -88,12 +92,14 @@ const MainWidget: FC<Props> = ({ customStyle, onClick, status, count = 0 }) => {
         {notApproved && (
           <div className={css(bodyStyle)}>
             <div className={css({ marginTop: '14px', marginLeft: '9px' })}>
-              {isStateless
+              {!isStateless
                 ? 'Remember your objectives should be strategic, relevant and up to date.'
                 : 'Remember if your priorities change, review your objectives'}
             </div>
             <div className={css(bodyBlockStyle)}>
-              {isStateless ? <CreateButton buttonText='Create my objectives' /> : <CreateButton buttonText='View' />}
+              {!isApproved ? 
+                <CreateButton buttonText='Create my objectives' /> : 
+                <Button styles={[viewButtonStyle]} onPress={() => history.push(Page.OBJECTIVES_VIEW)}>View</Button>}
             </div>
           </div>
         )}
@@ -101,6 +107,11 @@ const MainWidget: FC<Props> = ({ customStyle, onClick, status, count = 0 }) => {
     </TileWrapper>
   );
 };
+
+
+const viewButtonStyle = {
+  border: `1px solid ${theme.colors.white}`,
+} as Rule;
 
 const wrapperStyle: CreateRule<{ clickable: boolean }> =
   ({ clickable }) =>

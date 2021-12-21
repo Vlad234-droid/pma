@@ -55,7 +55,7 @@ const SubmitPart: FC<SubmitPartProps> = ({
         </div>
       </div>
       <div className={css(Notification_Block__Style)}>
-        <p>This colleague has requested feedback on what they have done well and what they should focus on</p>
+        <p>Fill out the questions below to share your feedback</p>
       </div>
       <div className={css({ marginTop: '24px', marginBottom: '14px' })}>
         <IconButton graphic='information' onPress={() => setInfoModal(() => true)}>

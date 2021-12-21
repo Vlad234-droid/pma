@@ -47,7 +47,6 @@ export const createNewFeedbackEpic: Epic = (action$, _, { api }) =>
           });
         }),
         catchError(({ errors }) => of(createNewFeedback.failure(errors))),
-        takeUntil(action$.pipe(filter(isActionOf(createNewFeedback.cancel)))),
       );
     }),
   );
@@ -60,9 +59,8 @@ export const updateFeedbackEpic: Epic = (action$, _, { api }) =>
       return from(api.updateFeedback(payload)).pipe(
         //@ts-ignore
         map(({ data }) => {
-          const [obj] = data;
           return getAllFeedbacks.request({
-            'colleague-uuid': obj.colleagueUuid,
+            'colleague-uuid': data.colleagueUuid,
           });
         }),
         catchError(({ errors }) => of(createNewFeedback.failure(errors))),

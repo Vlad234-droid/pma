@@ -1,4 +1,4 @@
-import React, { ReactNode, useRef, RefObject, CSSProperties, FC } from 'react';
+import React, { ReactNode, useRef, RefObject, CSSProperties, FC, useState, useEffect } from 'react';
 import { useStyle, Rule } from '@dex-ddl/core';
 
 import { AccordionConsumer, SectionConsumer } from './contexts';
@@ -23,6 +23,11 @@ export type Props = {
 
 export const BasePanel = ({ children, ...baseRest }: Props) => {
   const content = useRef<HTMLElement>(null);
+  const [height, setHeight] = useState<number>(0);
+
+  useEffect(() => {
+    content.current && setHeight(content.current.scrollHeight);
+  });
 
   return (
     <AccordionConsumer>
@@ -39,7 +44,7 @@ export const BasePanel = ({ children, ...baseRest }: Props) => {
                 role: disableRegions ? undefined : 'region',
                 'aria-labelledby': `${sectionId}-header`,
                 'aria-hidden': expanded ? undefined : true,
-                style: { maxHeight: expanded && content.current ? `${content.current.scrollHeight}px` : '0px' },
+                style: { maxHeight: expanded ? `${height}px` : '0px' },
               }),
             })
           }

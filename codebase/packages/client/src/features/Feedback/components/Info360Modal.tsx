@@ -17,18 +17,18 @@ const Info360Modal: FC<Info360ModalProps> = ({ setInfo360Modal }) => {
         You can give and receive feedback with your colleagues using Everyday Feedback or 360 Feedback. <br />
         <br />
         Meaning they can take the feedback onboard and start to make changes straight away. It can and should relate to
-        any part of their Full Contribution: someone’s personal development, their impact on others, their day job or
-        strategic objectives. Colleagues have the option to request Everyday Feedback, focusing on any area of interest.{' '}
-        <br />
+        any part of their Full Contribution: someone&apos;s personal development, their impact on others, their day job
+        or strategic objectives. Colleagues have the option to request Everyday Feedback, focusing on any area of
+        interest. <br />
         <br />
         Everyday Feedback will be visible to your colleague as soon as you give it. The receiver will be able to see who
         left the feedback so that they can arrange follow-up conversations where needed. <br />
         <br />
-        360 Feedback is more structured. The questionnaire of pre-set questions provides an in-depth view of someone’s
-        performance against our Win Together behaviours. Usually, 360 Feedback would be used once a year to gather a
-        detailed understanding on your decisions and how they impact others from a group of self-selected colleagues,
-        including your line manager, direct reports and other people you work with regularly, for example project
-        stakeholders.
+        360 Feedback is more structured. The questionnaire of pre-set questions provides an in-depth view of
+        someone&apos;s performance against our Win Together behaviours. Usually, 360 Feedback would be used once a year
+        to gather a detailed understanding on your decisions and how they impact others from a group of self-selected
+        colleagues, including your line manager, direct reports and other people you work with regularly, for example
+        project stakeholders.
         <br />
         <br /> You will find supporting videos to guide you when giving and receiving feedback on the giving and
         receiving feedback pages.
@@ -41,8 +41,8 @@ const Info360Modal: FC<Info360ModalProps> = ({ setInfo360Modal }) => {
       <h3 className={css(Recomendation_info)}>Face-to-face conversations are best for giving feedback.</h3>
       <p className={css(Pre_recomendation_info)}>
         Sharing feedback face-to-face gives you the space to have a two-way conversation, building trust and working
-        together on what the colleague could do next. Where this isn’t possible, you can use the feedback function in
-        the Your Contribution system.
+        together on what the colleague could do next. Where this isn&apos;t possible, you can use the feedback function
+        in the Your Contribution system.
       </p>
       <h3 className={css(Recomendation_info)}>Want to say “thank you” to a colleague?</h3>
       <p className={css(Pre_recomendation_info)}>Head to the Recognition platform.</p>

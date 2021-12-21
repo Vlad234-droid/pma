@@ -76,6 +76,7 @@ const borderShadowStyle: CreateRule<{ theme: Theme; boxShadow: boolean }> = (pro
   const { boxShadow } = props;
   if (boxShadow) {
     return {
+      width: '100%',
       boxShadow: '3px 3px 1px 1px rgba(0, 0, 0, 0.05)',
     };
   }

@@ -174,7 +174,7 @@ const DraftItem: FC<DraftItemProps> = ({
                               <h3 className={css(Sphere_resond_style)}>
                                 {getPropperTargetType(item.targetType, item.targetId)}
                               </h3>
-                              <p className={css(Question_style)}>Let the colleague know how they`re doing</p>
+                              <p className={css(Question_style)}>Let the colleague know how they&apos;re doing</p>
                             </>
                           )}
                           {checkedRadio.completed && (

@@ -169,9 +169,10 @@ const ViewFeedbackComp: FC = () => {
               </Button>
             </div>
             <Notification
+              closable={false}
               graphic='information'
               iconColor='pending'
-              text='If you`re worried the content of any feedback you`ve received is inappropriate, please contact your line manager or People team as soon as possible.'
+              text="If you're worried the content of any feedback you`ve received is inappropriate, please contact your line manager or People team as soon as possible."
               customStyle={{
                 background: '#FFDBC2',
                 marginBottom: '20px',

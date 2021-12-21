@@ -24,20 +24,20 @@ const HelpModalReceiveFeedback: FC<Info360ModalProps> = ({ setHelpModalReceiveFe
       </p>
       <ol className={css(ordered_list)}>
         <li>
-          <b>Take a step back.</b> Take time to reflect on the feedback you`ve received, don`t feel like you must take
-          action right away. If you`re having a bad day, you`re more likely to receive feedback negatively, so making
-          sure you`re in a positive frame of mind where you can stay curious about your feedback will set you up to
-          receive feedback as constructive and well meaning.
+          <b>Take a step back.</b> Take time to reflect on the feedback you&apos;ve received, don&apos;t feel like you
+          must take action right away. If you&apos;re having a bad day, you&apos;re more likely to receive feedback
+          negatively, so making sure you&apos;re in a positive frame of mind where you can stay curious about your
+          feedback will set you up to receive feedback as constructive and well meaning.
         </li>
         <li>
           Remember to stay <b>balanced</b>: If you only focus on your developmental feedback, you risk overlooking the
-          value of positive feedback, but focusing only on your positive feedback can create blind spots. It`s important
-          to take a balanced perspective.
+          value of positive feedback, but focusing only on your positive feedback can create blind spots. It&apos;s
+          important to take a balanced perspective.
         </li>
         <li>
           <b>Separate opinions and facts.</b> Focus on the facts in your feedback, these will be helpful when you start
-          to plan what you`ll do next. Opinions are also worth considering as this shows how you come across to an
-          individual but remember someone`s opinion is just one perspective.
+          to plan what you&apos;ll do next. Opinions are also worth considering as this shows how you come across to an
+          individual but remember someone&apos;s opinion is just one perspective.
         </li>
         <li>
           Be <b>future focused.</b> Feedback is about learning from the past to make a plan for the future. Try not to
@@ -98,12 +98,6 @@ const WrapperInfo: Rule = {
   padding: '0px 36px',
 };
 
-const Pre_title: Rule = {
-  margin: '16px 0px 0px 0px',
-  fontWeight: 'normal',
-  fontSize: '16px',
-  lineHeight: '20px',
-};
 const Title: Rule = {
   margin: '0px',
   fontWeight: 'normal',
@@ -112,12 +106,6 @@ const Title: Rule = {
   marginBottom: '12px',
 };
 
-const Title_video: Rule = {
-  fontWeight: 'bold',
-  fontSize: '20px',
-  lineHeight: '24px',
-  margin: '32px 0px 16px 0px',
-};
 const Block_video_explanation: Rule = {
   maxHeight: '300px',
   width: '100%',
@@ -128,13 +116,6 @@ const Block_video_explanation: Rule = {
     objectFit: 'contain',
   },
 } as Styles;
-
-const Recomendation_info: Rule = {
-  fontWeight: 'bold',
-  fontSize: '24px',
-  lineHeight: '28px',
-  marginBottom: '16px',
-};
 
 const Pre_recomendation_info: Rule = {
   fontWeight: 'normal',

@@ -13,10 +13,9 @@ import RespondFeedback from './RespondFeedback';
 import ViewFeedback from './ViewFeedback';
 import Settings from './Settings';
 import CreateOrganizationObjectives from './CreateOrganizationObjectives';
-import ObjectivesView from './ObjectivesView/ObjectivesView';
+import ObjectivesView from './ObjectivesView';
+import { CreatePerformanceCycle, PerformanceCycleAdministration } from './PerformanceCycle';
 import { TipsAdministration, CreateTip, EditTip } from './Tips';
-import CreatePerformanceCycle from './PerformanceCycle/CreatePerformanceCycle';
-import PerformanceCycleAdministration from './PerformanceCycle/PerformanceCycleAdministration';
 
 const pages: Record<
   Page,
@@ -24,37 +23,43 @@ const pages: Record<
     component: PageElement;
     withHeader: boolean;
     title?: string;
+    backPath?: string;
   }
 > = {
   [Page.MY_TEAM]: {
     component: MyTeam,
     title: 'My Team',
     withHeader: true,
+    backPath: Page.CONTRIBUTION,
   },
   [Page.ACTIONS]: {
     component: Actions,
     title: 'Actions',
     withHeader: true,
+    backPath: Page.CONTRIBUTION,
   },
   [Page.CREATE_PERFORMANCE_CYCLE]: {
     component: CreatePerformanceCycle,
     title: 'Create Performance Cycle',
     withHeader: true,
+    backPath: Page.PERFORMANCE_CYCLE,
   },
   [Page.PERFORMANCE_CYCLE]: {
     component: PerformanceCycleAdministration,
     title: 'Performance Cycle Administration',
     withHeader: true,
+    backPath: Page.CONTRIBUTION,
   },
-  [Page.CAREER_PERFORMANCE]: {
+  [Page.CONTRIBUTION]: {
     component: CareerPerformance,
-    title: 'Your Сontribution',
+    title: 'Your Contribution',
     withHeader: true,
   },
   [Page.CREATE_ORGANIZATION_OBJECTIVES]: {
     component: CreateOrganizationObjectives,
-    title: 'Create Organization Objectives',
+    title: 'Create Strategic Priorities',
     withHeader: true,
+    backPath: Page.CONTRIBUTION,
   },
   [Page.VIEW_ORGANIZATION_OBJECTIVES]: {
     component: ObjectivesView,
@@ -64,45 +69,54 @@ const pages: Record<
     component: PersonalDevelopmentPlan,
     title: 'Personal Development Plan',
     withHeader: true,
+    backPath: Page.CONTRIBUTION,
   },
   [Page.OBJECTIVES_VIEW]: {
     component: Objectives,
     title: 'My Objectives',
     withHeader: true,
+    backPath: Page.CONTRIBUTION,
   },
   [Page.PROFILE]: {
     component: Profile,
-    title: 'My profile',
+    title: 'My View',
     withHeader: true,
+    backPath: Page.CONTRIBUTION,
   },
   [Page.SETTINGS]: {
     component: Settings,
     title: 'Settings',
     withHeader: true,
+    backPath: Page.CONTRIBUTION,
   },
   [Page.FEEDBACK]: {
     component: Feedback,
     title: 'Feedback',
     withHeader: true,
+    backPath: Page.CONTRIBUTION,
   },
   [Page.GIVE_FEEDBACK]: {
     component: GiveFeedback,
     title: 'Give feedback',
     withHeader: true,
+    backPath: Page.CONTRIBUTION,
   },
   [Page.REQUEST_FEEDBACK]: {
     component: RequestFeedback,
     withHeader: false,
+    backPath: Page.CONTRIBUTION,
   },
   [Page.RESPOND_FEEDBACK]: {
     component: RespondFeedback,
     title: 'Respond to feedback requests',
     withHeader: true,
+    backPath: Page.CONTRIBUTION,
   },
   [Page.VIEW_FEEDBACK]: {
     component: ViewFeedback,
     title: 'View feedback',
     withHeader: true,
+    backPath: Page.CONTRIBUTION,
   },
   [Page.TIPS]: {
     component: TipsAdministration,

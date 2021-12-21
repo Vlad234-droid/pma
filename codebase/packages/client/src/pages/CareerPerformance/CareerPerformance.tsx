@@ -19,6 +19,7 @@ import {
   timelineTypesAvailabilitySelector,
 } from '@pma/store';
 import useDispatch from 'hooks/useDispatch';
+import { buildPath } from 'features/Routes';
 import Check from '../../../public/Check.jpg';
 import Feedback from '../../../public/Feedback.jpg';
 import Learning from '../../../public/Learning.jpg';
@@ -55,8 +56,8 @@ const CareerPerformance: FC = () => {
         {isRoleManager && (
           <RouterSwitch
             links={[
-              { link: 'career-performance', name: 'My profile' },
-              { link: 'my-team', name: 'My Team' },
+              { link: buildPath(Page.CONTRIBUTION), name: 'My View' },
+              { link: buildPath(Page.MY_TEAM), name: 'My Team' },
             ]}
           />
         )}
@@ -69,7 +70,7 @@ const CareerPerformance: FC = () => {
           </Link>
           {canShowMyReview && (
             <StepIndicator
-              mainTitle={t('Your contribution timeline')}
+              mainTitle={t('Your Contribution timeline')}
               titles={descriptions}
               descriptions={startDates}
               statuses={statuses}

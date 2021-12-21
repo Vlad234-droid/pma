@@ -158,7 +158,7 @@ const ReviewFormModal: FC<Props> = ({ reviewType, onClose }) => {
               })}
             >
               <Trans i18nKey='id_year_review_help_text'>
-                Use this to capture a summary of the mid-year conversation you’ve had with your line manager. Remember
+                Use this to capture a summary of the end-year conversation you’ve had with your line manager. Remember
                 to focus as much on your how as your what.
               </Trans>
             </div>

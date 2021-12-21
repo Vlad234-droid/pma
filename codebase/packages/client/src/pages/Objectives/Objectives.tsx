@@ -246,7 +246,7 @@ const Objectives: FC = () => {
                       'tiles_description_id_3',
                       "Complete this once you've had your mid-year conversation with your line manager.",
                     )}
-                    customStyle={{ height: '182px' }}
+                    customStyle={{ height: '100%' }}
                   />
                 </div>
                 <div data-test-id='feedback' className={css(basicTileStyle)}>
@@ -260,7 +260,7 @@ const Objectives: FC = () => {
                       'tiles_description_id_3',
                       "Complete this once you've had your year-end conversation with your line manager.",
                     )}
-                    customStyle={{ height: '182px' }}
+                    customStyle={{ height: '100%' }}
                   />
                 </div>
               </>
@@ -277,7 +277,7 @@ const Objectives: FC = () => {
                     'tiles_description_id_3',
                     "Complete this once you've had your annual conversation with your line manager.",
                   )}
-                  customStyle={{ height: '182px' }}
+                  customStyle={{ height: '100%' }}
                 />
               </div>
             )}
@@ -321,7 +321,6 @@ const widgetsBlock = {
   justifyContent: 'center',
   alignItems: 'center',
   flexDirection: 'column',
-  // margin: '20px',
 } as Rule;
 
 const headWrapperStyles: Rule = () => {
@@ -339,9 +338,6 @@ const timelineWrapperStyles = {
   flex: '3 1 70%',
   display: 'flex',
   flexDirection: 'column',
-  '& > div': {
-    height: '100%',
-  },
 } as Styles;
 
 const shareWidgetStyles = {
