@@ -38,7 +38,7 @@ const layoutRule: Rule = () => {
     display: 'flex',
     flex: 1,
     flexDirection: 'column',
-    height: '100vh',
+    minHeight: '100vh',
     padding: '8px',
   };
 };

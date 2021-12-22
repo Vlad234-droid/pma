@@ -56,7 +56,7 @@ const pages: Record<
   },
   [Page.CREATE_ORGANIZATION_OBJECTIVES]: {
     component: CreateOrganizationObjectives,
-    title: 'Create Strategic Priorities',
+    title: 'Create Strategic drivers',
     withHeader: true,
     backPath: Page.CONTRIBUTION,
   },

@@ -19,7 +19,7 @@ const OrganizationWidget: FC<Props> = ({ onClick, customStyle }) => {
   const getContent = (): [Graphics, string, string] => {
     return [
       'calender',
-      t('organization_objectives_description', 'Your organization has priorities to share with all colleagues'),
+      t('organization_objectives_description', 'Your organization has 6 drivers share to all colleagues'),
       t('view_objectives', 'View'),
     ];
   };
@@ -38,7 +38,7 @@ const OrganizationWidget: FC<Props> = ({ onClick, customStyle }) => {
                 backgroundRadius={10}
               />
               <span className={css(titleStyle)}>
-                <Trans i18nKey='organization_objectives'>Strategic Priorities</Trans>
+                <Trans i18nKey='organization_objectives'>Strategic drivers</Trans>
               </span>
             </div>
             <span className={css(descriptionStyle)}>{description}</span>

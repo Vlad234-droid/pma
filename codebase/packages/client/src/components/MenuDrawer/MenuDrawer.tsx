@@ -7,6 +7,7 @@ import { LINKS } from 'config/constants';
 import TescoLogo from './TescoLogo.svg';
 import { Icon } from '../Icon';
 import { IconButton } from '../IconButton';
+import { buildPath } from 'features/Routes';
 
 export type MenuDrawerProps = { onClose: () => void };
 
@@ -22,18 +23,18 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
           </div>
           <div className={css(menuDrawerTitleStyle)}>Performance management application</div>
           <div className={css(menuDrawerButtonsStyle)}>
-            <MenuItem iconGraphic={'calender'} linkTo={Page.CONTRIBUTION} title={'Your Contribution'} />
-            <MenuItem iconGraphic={'document'} linkTo={Page.OBJECTIVES_VIEW} title={'My Objectives'} />
+            <MenuItem iconGraphic={'calender'} linkTo={buildPath(Page.CONTRIBUTION)} title={'Your Contribution'} />
+            <MenuItem iconGraphic={'document'} linkTo={buildPath(Page.OBJECTIVES_VIEW)} title={'My Objectives'} />
             <MenuItem
               iconGraphic={'document'}
-              linkTo={Page.CREATE_ORGANIZATION_OBJECTIVES}
-              title={'Strategic Priorities'}
+              linkTo={buildPath(Page.CREATE_ORGANIZATION_OBJECTIVES)}
+              title={'Strategic drivers'}
             />
             <MenuItem iconGraphic={'add'} title={'Personal Development Plan'} />
-            <MenuItem iconGraphic={'account'} linkTo={Page.PROFILE} title={'My Profile'} />
-            <MenuItem iconGraphic={'chatSq'} linkTo={Page.FEEDBACK} title={'Feedback'} />
+            <MenuItem iconGraphic={'account'} linkTo={buildPath(Page.PROFILE)} title={'My Profile'} />
+            <MenuItem iconGraphic={'chatSq'} linkTo={buildPath(Page.FEEDBACK)} title={'Feedback'} />
             <MenuItem iconGraphic={'edit'} linkTo='' title={'My Notes'} />
-            <MenuItem iconGraphic={'alert'} linkTo={Page.PERFORMANCE_CYCLE} title={'Performance Cycle'} />
+            <MenuItem iconGraphic={'alert'} linkTo={buildPath(Page.PERFORMANCE_CYCLE)} title={'Performance Cycle'} />
           </div>
         </div>
         <div className={css(menuDrawerSettingsStyle)}>
