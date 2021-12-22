@@ -1,11 +1,14 @@
 import React, { FC, useEffect, useState } from 'react';
-import { useStyle, Rule, useBreakpoints, Button, ModalWithHeader, Icon, theme, IconButton } from '@dex-ddl/core';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import { useStyle, Rule, useBreakpoints, Button, ModalWithHeader, Icon, theme } from '@dex-ddl/core';
+import * as Yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { Page } from 'pages';
 import { Input, Item, Textarea, Select } from 'components/Form';
 import { GenericItemField } from 'components/GenericForm';
-import { useForm } from 'react-hook-form';
-import { useDispatch, useSelector } from 'react-redux';
+import { IconButton } from 'components/IconButton';
 import { 
   ConfigEntriesActions, 
   getCurrentTipSelector, 
@@ -13,9 +16,7 @@ import {
   configEntriesSelector, 
   configEntriesMetaSelector,
 } from '@pma/store';
-import * as Yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { createTipSchema } from '../../../pages/Tips/config';
+import { createTipSchema } from 'pages/Tips/config';
 import { TipsFormModal } from '.';
 import { buildPath } from 'features/Routes/utils';
 
@@ -41,8 +42,6 @@ function getChildren(data, options: any, key, value) {
     }, []);
 }
 
-//TODO: пофіксити інпути, іконку видалення тіпсів
-
 const TipsForm: FC<TipsFormProps> = ({ mode }) => {
   const { css } = useStyle();
   const history = useHistory();
@@ -52,7 +51,7 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
     mode: 'onChange',
     resolver: yupResolver<Yup.AnyObjectSchema>(createTipSchema),
   });
-  const { handleSubmit, formState: { isValid, isDirty }, setValue } = methods;
+  const { handleSubmit, formState: { isValid, isDirty }, setValue,  } = methods;
 
   const configEntries = useSelector(configEntriesSelector);
   const currentTip = useSelector(getCurrentTipSelector);
@@ -70,6 +69,8 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
   const [successTipsFormModal, setSuccessTipsModal] = useState(false);
   const [tipsFormModalAction, setTipsFormModalAction] = useState('discard')
 
+  const [tipsTarget, setTipsTarget] = useState({})
+
   useEffect(() => {
     dispatch(ConfigEntriesActions.getConfigEntries());
     if(mode === 'edit') {
@@ -79,8 +80,9 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
 
   useEffect(() => {
     if(mode === 'edit' && loaded) {
-      setValue('tipTitle', currentTip?.title)
-      setValue('tipDescription', currentTip?.description)
+      setValue('tipTitle', currentTip?.title, { shouldValidate: true })
+      setValue('tipDescription', currentTip?.description, { shouldValidate: true })
+      setValue('tipTargetLevel1', tipsTarget['configEntry']?.name, { shouldValidate: true })
       if(configEntries) {
         // const tipUuid = params['tipUuid'];
         const targetCompositeKey = currentTip?.targetOrganisation?.compositeKey;
@@ -88,6 +90,9 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
         const configEntry = configEntries.data.filter(item => item.compositeKey === targetCompositeKeyLevel1)[0];
         if(configEntry) {
           dispatch(ConfigEntriesActions.getConfigEntriesByUuid({ uuid: configEntry['uuid']}));
+          setOptions1(configEntry['uuid']);
+          setTargetOrganisation(configEntry['uuid']);
+          setTipsTarget({ configEntry, targetCompositeKey })
         }
       }
     }
@@ -121,7 +126,6 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
     setShowTipsFormModal(true);
     setSuccessTipsModal(true);
     setTipsFormModalAction("create")
-    // history.push(`${Page.TIPS}`)
   }
 
   const handleEditTip = () => {
@@ -135,6 +139,7 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
       },
       imageLink: "https://cdn-icons-png.flaticon.com/512/189/189667.png"
     }
+    // console.log(data)
     dispatch(
       //TODO: додати можливість відловлювання помилкових заптів(коли сервер повертає failure)
       tipsActions.createTip(data),
@@ -199,12 +204,12 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
             <GenericItemField
               name={'tipTitle'}
               methods={methods}
-              // label='Title'
-              // Wrapper={Item}
-              Wrapper={({ children }) => <Item label='Title' withIcon={false}>{children}</Item>}
+              label='Title'
+              Wrapper={Item}
+              // Wrapper={({ children }) => <Item label='Title' withIcon={false}>{children}</Item>}
               Element={Input}
               placeholder='Example: Share objectives easily'
-              // value={''}
+              value={ mode === 'edit' ? currentTip?.title || '' : '' }
             />
             <GenericItemField
               name={'tipDescription'}
@@ -214,7 +219,7 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
               Element={Textarea}
               placeholder='Example: Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus'
               rows={2}
-              // value={''}
+              value={ mode === 'edit' ? currentTip?.description || '' : '' }
             />
             <div className={css(hrSeparatorLine)}></div>
             <GenericItemField
@@ -231,7 +236,7 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
                 setOptions1(value);
                 setTargetOrganisation(value);
               }}
-              // value={''}
+              value={ mode === 'edit' ? tipsTarget['configEntry']?.name || '' : ''}
             />
             <GenericItemField
               name={'tipTargetLevel2'}
@@ -276,10 +281,10 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
             { mode === 'edit' && 
                 <IconButton 
                   onPress={confirmDeleteTip} 
-                  graphic='tool'
+                  graphic='trash'
                   iconStyles={{ marginRight: '5px' }}
                   customVariantRules={{
-                    default: { fontWeight: 700, fontSize: '14px', lineHeight: '18px', padding: '5px 0' },
+                    default: deleteTipBtnStyles,
                   }}
                 >Delete this tip</IconButton>
             }
@@ -390,6 +395,17 @@ const formControlBtn: Rule = () => {
     margin: '0 3px',
     fontWeight: 700,
     lineHeight: '20px',
+  }
+}
+
+const deleteTipBtnStyles: Rule = () => {
+  return { 
+    fontWeight: 700, 
+    fontSize: '14px', 
+    lineHeight: '18px', 
+    padding: '5px 0', 
+    color: `${theme.colors.error}`,
+    marginBottom: '20px',
   }
 }
 

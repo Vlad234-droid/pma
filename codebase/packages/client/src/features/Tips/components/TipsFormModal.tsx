@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC } from 'react';
 import { useStyle, Rule, Button, theme, useBreakpoints } from '@dex-ddl/core';
 import success from '../../../../public/success.jpg';
 
