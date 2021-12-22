@@ -82,9 +82,9 @@ export const WidgetTeamMateProfile: FC<WidgetTeamMateProfileProps> = ({ id, stat
                     </div>
                     <div className={css({ marginLeft: 'auto', display: 'flex', alignItems: 'center' })}>
                       <div className={css({ padding: '12px 12px' })}>
-                        <span onClick={() => viewUserObjectives(employee.uuid)} className={css({ fontSize: '16px', lineHeight: '20px', color: colors.tescoBlue, cursor: 'pointer' })}>
+                        <button onClick={() => viewUserObjectives(employee.uuid)} className={css({ fontSize: '16px', lineHeight: '20px', color: colors.tescoBlue, cursor: 'pointer', border: 'none', backgroundColor: 'transparent' })}>
                           View profile
-                        </span>
+                        </button>
                       </div>
                       <div className={css({ padding: '0px 12px' })}>
                         <Icon graphic={graphics} fill={color} />
