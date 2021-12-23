@@ -18,10 +18,12 @@ const Widgets: FC<Props> = () => {
   const { t } = useTranslation();
 
   const timelineObjective = useSelector(getTimelineByReviewTypeSelector(ReviewType.OBJECTIVE));
+  const timelineMYR = useSelector(getTimelineByReviewTypeSelector(ReviewType.MYR));
   const timelineTypes = useSelector(timelineTypesAvailabilitySelector);
 
   const status = timelineObjective?.status;
-  const countObjectives = timelineObjective?.count || null;
+  const count = timelineObjective?.count || 0;
+  const nextReviewDate = timelineMYR?.startTime || null;
   const canShowObjectives = timelineTypes[ReviewType.OBJECTIVE];
 
   const widgets: SecondaryWidgetProps[] = [
@@ -53,9 +55,10 @@ const Widgets: FC<Props> = () => {
       {canShowObjectives && (
         <MainWidget
           status={status}
+          count={count}
+          nextReviewDate={nextReviewDate}
           customStyle={{ flex: '4 1 500px' }}
           onClick={() => console.log('View')}
-          count={countObjectives}
         />
       )}
 

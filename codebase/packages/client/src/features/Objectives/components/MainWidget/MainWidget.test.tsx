@@ -4,6 +4,8 @@ import { renderWithTheme } from 'utils/test';
 import { screen, fireEvent } from '@testing-library/react';
 import MainWidget, { TEST_ID } from './MainWidget';
 
+jest.mock('react-markdown', () => ({ ReactMarkdown: () => 'mocked ReactMarkdown' }));
+
 describe('MainWidget', () => {
   const testHandler = jest.fn();
 

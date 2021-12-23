@@ -13,7 +13,8 @@ export type Props = {
   onClose?: () => void;
   reviewType: ReviewType;
   status?: Status;
-  startDate?: string;
+  startTime?: string;
+  endTime?: string;
   customStyle?: React.CSSProperties | {};
   title: string;
   description?: string;
@@ -21,13 +22,20 @@ export type Props = {
 
 export const TEST_ID = 'review-widget';
 
-const getContent = ({ status, startDate = '' }): [Graphics, Colors, Colors, boolean, string, string] => {
+const getContent = ({ status, startTime = '', endTime = '' }): [Graphics, Colors, Colors, boolean, string, string] => {
   const { t } = useTranslation();
   if (!status) {
     return ['roundAlert', 'pending', 'tescoBlue', true, 'Your form is now available', 'View Review Form'];
   }
   const contents: { [key: string]: [Graphics, Colors, Colors, boolean, string, string] } = {
-    [Status.NOT_STARTED]: ['calender', 'tescoBlue', 'white', false, `The form will be available in ${startDate}`, ''],
+    [Status.NOT_STARTED]: [
+      'calender',
+      'tescoBlue',
+      'white',
+      false,
+      t('form_available_in_date', `The form will be available in ${startTime}`, { date: new Date(startTime) }),
+      '',
+    ],
     [Status.STARTED]: ['roundAlert', 'pending', 'tescoBlue', true, 'Your form is now available', 'View Review Form'],
     [Status.DECLINED]: ['roundPencil', 'base', 'white', true, t('review_form_declined', 'Declined'), 'View and Edit'],
     [Status.DRAFT]: ['roundPencil', 'base', 'white', true, t('review_form_draft', 'Draft'), 'View and Edit'],
@@ -36,7 +44,7 @@ const getContent = ({ status, startDate = '' }): [Graphics, Colors, Colors, bool
       'green',
       'white',
       true,
-      t('review_form_approved', 'Completed [08 Sep 2020]'),
+      t('review_form_approved', t('completed_at_date', `Completed [${endTime}]`, { date: new Date(endTime) })),
       'View Review Form',
     ],
     [Status.WAITING_FOR_APPROVAL]: [
@@ -53,11 +61,21 @@ const getContent = ({ status, startDate = '' }): [Graphics, Colors, Colors, bool
   return contents[status];
 };
 
-const ReviewWidget: FC<Props> = ({ customStyle, onClick, reviewType, status, startDate, description, title }) => {
+const ReviewWidget: FC<Props> = ({
+  customStyle,
+  onClick,
+  reviewType,
+  status,
+  startTime,
+  endTime,
+  description,
+  title,
+}) => {
   const { css } = useStyle();
   const [graphic, iconColor, background, shadow, content, buttonContent] = getContent({
     status,
-    startDate,
+    startTime,
+    endTime,
   });
 
   const descriptionColor = background === 'tescoBlue' ? colors.white : colors.base;

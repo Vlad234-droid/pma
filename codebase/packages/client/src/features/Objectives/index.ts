@@ -1,4 +1,5 @@
 export { default as MainWidget } from './components/MainWidget';
+export { default as MyObjective } from './components/MyObjective';
 export { default as SecondaryWidget } from './components/SecondaryWidget';
 export type { Props as SecondaryWidgetProps } from './components/SecondaryWidget';
 export { default as Widgets } from './components/Widgets';
