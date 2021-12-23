@@ -72,5 +72,8 @@
   "download": "Herunterladen",
   "do_you_know": "Do you know?",
   "that_you_can_submit": "That you can submit new objectives at anytime during the performance cycle?",
-  "notification.receive_tips": "Receive tips"
+  "notification.receive_tips": "Receive tips",
+  "are_you_sure_you_want_to_log_out": "Are you sure you want to log out?",
+  "sign_out": "Sign out",
+  "confirm": "Confirm"
 }
