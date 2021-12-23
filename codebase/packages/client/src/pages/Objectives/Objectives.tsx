@@ -182,7 +182,7 @@ const Objectives: FC = () => {
 
           <OrganizationWidget
             customStyle={{ flex: '1 1 30%', display: 'flex', flexDirection: 'column' }}
-            onClick={() =>  history.push(`/${Page.VIEW_ORGANIZATION_OBJECTIVES}`)}
+            onClick={() =>  history.push(`/${Page.VIEW_STRATEGIC_DRIVERS}`)}
           />
         </div>
       </div>
@@ -241,7 +241,7 @@ const Objectives: FC = () => {
                     reviewType={ReviewType.MYR}
                     status={midYearReview?.status}
                     onClick={() => console.log('ReviewWidget')}
-                    onClose={() => console.log('ReviewWidget')}
+                    // onClose={() => console.log('ReviewWidget')}
                     title={'Mid-year review'}
                     description={t(
                       'tiles_description_id_3',

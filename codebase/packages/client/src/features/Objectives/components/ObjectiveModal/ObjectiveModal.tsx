@@ -89,17 +89,21 @@ export const ObjectiveModal: FC<Props> = ({
             </div>
           )}
           <div className={css({ padding: `0 0 ${theme.spacing.s5}`, display: 'flex' })}>
-            <TriggerModal triggerComponent={<Icon graphic='information' />} title={'Writing your objectives'}>
+            <TriggerModal triggerComponent={
+              <div className={css({display: 'flex', alignItems: 'center'})}>
+                <Icon graphic='information' />
+                <span
+                  className={css(theme.font.fixed.f14, {
+                    color: theme.colors.tescoBlue,
+                    padding: `${theme.spacing.s0} ${theme.spacing.s2}`,
+                  })}
+                >
+                  Need help writing your objectives?
+                </span>
+              </div>
+            } title={'Writing your objectives'}>
               <ObjectiveHelpModal />
             </TriggerModal>
-            <span
-              className={css(theme.font.fixed.f14, {
-                color: theme.colors.tescoBlue,
-                padding: `${theme.spacing.s0} ${theme.spacing.s2}`,
-              })}
-            >
-              Need help writing your objectives?
-            </span>
           </div>
           {schemaComponents.map((component) => {
             const { id, key, label, description, type, validate, values = [] } = component;
