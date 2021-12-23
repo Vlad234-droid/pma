@@ -157,10 +157,10 @@ const CreateOrganizationObjectives: FC<Props> = () => {
       <div className={css(page)}>
         <div className={css(contentArea)}>
           <DescriptionBlock>
-            <div className={css(descriptionHeader({ theme }))}>Strategic Priorities</div>
+            <div className={css(descriptionHeader({ theme }))}>Strategic drivers</div>
 
             <div className={css(descriptionText({ theme }))}>
-              Create titles for Strategic Priorities. Click “Save” button to keep the changes. Or “Publish” to cascade
+              Create titles for Strategic drivers. Click “Save” button to keep the changes. Or “Publish” to cascade
               them on the colleagues.
             </div>
             <div>
