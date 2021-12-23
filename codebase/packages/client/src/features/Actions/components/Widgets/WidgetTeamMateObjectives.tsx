@@ -1,16 +1,6 @@
-import React, { FC, useEffect } from 'react';
-import { colors, fontWeight, Rule, useStyle } from '@dex-ddl/core';
-import { TileWrapper } from 'components/Tile';
-import { Avatar } from 'components/Avatar';
-import { Accordion, BaseAccordion, ExpandButton, Panel, Section } from 'components/Accordion';
-import { ObjectiveType, ReviewType, Status } from 'config/enum';
-import { Notification } from 'components/Notification';
-import useDispatch from 'hooks/useDispatch';
-import { ActionButtons } from './ActionButtons';
+import React, { FC, useEffect, useMemo } from 'react';
 import { useSelector } from 'react-redux';
-
-import { Tile as ObjectiveTile } from 'features/Objectives';
-
+import { colors, fontWeight, Rule, useStyle } from '@dex-ddl/core';
 import {
   ReviewsActions,
   reviewsMetaSelector,
@@ -18,6 +8,16 @@ import {
   schemaMetaSelector,
   getAllColleagueReviews,
 } from '@pma/store';
+
+import { TileWrapper } from 'components/Tile';
+import { Avatar } from 'components/Avatar';
+import { Accordion, BaseAccordion, ExpandButton, Panel, Section } from 'components/Accordion';
+import { ObjectiveType, ReviewType, Status } from 'config/enum';
+import { Notification } from 'components/Notification';
+import useDispatch from 'hooks/useDispatch';
+import { Tile as ObjectiveTile } from 'features/Objectives';
+
+import { ActionButtons } from './ActionButtons';
 
 export type WidgetTeamMateObjectivesProps = {
   id: string;
@@ -39,7 +39,7 @@ export const WidgetTeamMateObjectives: FC<WidgetTeamMateObjectivesProps> = ({
   const { loaded: schemaLoaded = false } = useSelector(schemaMetaSelector);
   const allColleagueReviews = useSelector(getAllColleagueReviews);
   const { loaded: reviewsLoaded } = useSelector(reviewsMetaSelector);
-  const timeLine = colleague?.timeline?.filter((timeline) => timeline.status === status);
+  const timeLine = useMemo(() => colleague?.timeline?.filter((timeline) => timeline.status === status), [colleague]);
 
   useEffect(() => {
     if (reviewsLoaded && schemaLoaded) {
@@ -80,23 +80,21 @@ export const WidgetTeamMateObjectives: FC<WidgetTeamMateObjectivesProps> = ({
     );
   };
 
-  const updateReviewStatus =
-    (status: Status) =>
-    (reviewType: ReviewType) =>
-    ({ reason }: { reason?: string }) => {
-      const update = {
-        pathParams: { colleagueUuid: colleague.uuid, type: reviewType, cycleUuid: 'CURRENT', status },
-        data: {
-          ...(reason ? { reason } : {}),
-          status,
-          colleagueUuid: colleague.uuid,
-          reviews: colleague.reviews.filter(
-            ({ status, type }) => status === Status.WAITING_FOR_APPROVAL && type === reviewType,
-          ),
-        },
-      };
-      dispatch(ReviewsActions.updateReviewStatus(update));
+  const updateReviewStatus = (status: Status) => (reviewType: ReviewType) => (reason: string) => {
+    const update = {
+      pathParams: { colleagueUuid: colleague.uuid, type: reviewType, cycleUuid: 'CURRENT', status },
+      data: {
+        ...(reason ? { reason } : {}),
+        status,
+        colleagueUuid: colleague.uuid,
+        reviews: colleague.reviews.filter(
+          ({ status, type }) => status === Status.WAITING_FOR_APPROVAL && type === reviewType,
+        ),
+      },
     };
+
+    dispatch(ReviewsActions.updateReviewStatus(update));
+  };
   const approveColleagues = updateReviewStatus(Status.APPROVED);
   const declineColleagues = updateReviewStatus(Status.DECLINED);
 
@@ -111,65 +109,62 @@ export const WidgetTeamMateObjectives: FC<WidgetTeamMateObjectivesProps> = ({
           }}
         >
           <BaseAccordion id={`team-mate-base-accordion-${colleague.uuid}`}>
-            {() => {
-              return (
-                <>
-                  <Section defaultExpanded={false}>
-                    <div className={css(wrapperStyle)}>
-                      <div className={css({ display: 'flex', alignItems: 'center' })}>
-                        <Avatar size={40} />
-                      </div>
-                      <div className={css(headerBlockStyle)}>
-                        <span className={css(titleStyle)}>{`${colleague.firstName} ${colleague.lastName}`}</span>
-                        <span
-                          className={css(descriptionStyle)}
-                        >{`${colleague.jobName}, ${colleague.businessType}`}</span>
-                      </div>
-                      <div className={css({ marginLeft: 'auto', display: 'flex', alignItems: 'center' })}>
-                        <div className={css({ paddingLeft: '12px' })}>
-                          <ExpandButton onClick={(expanded) => expanded && fetchData(colleague.uuid)} />
-                        </div>
+            {() => (
+              <>
+                <Section defaultExpanded={false}>
+                  <div className={css(wrapperStyle)}>
+                    <div className={css({ display: 'flex', alignItems: 'center' })}>
+                      <Avatar size={40} />
+                    </div>
+                    <div className={css(headerBlockStyle)}>
+                      <span className={css(titleStyle)}>{`${colleague.firstName} ${colleague.lastName}`}</span>
+                      <span className={css(descriptionStyle)}>{`${colleague.jobName}, ${colleague.businessType}`}</span>
+                    </div>
+                    <div className={css({ marginLeft: 'auto', display: 'flex', alignItems: 'center' })}>
+                      <div className={css({ paddingLeft: '12px' })}>
+                        <ExpandButton onClick={(expanded) => expanded && fetchData(colleague.uuid)} />
                       </div>
                     </div>
-                    <Panel>
-                      <div className={css({ padding: '24px 35px 24px 24px' })}>
-                        {status === Status.WAITING_FOR_APPROVAL && (
-                          <Notification
-                            graphic='information'
-                            iconColor='pending'
-                            text='It’s time to approve or decline your colleagues objectives'
-                            customStyle={{
-                              background: '#FFDBC2',
-                              marginBottom: '20px',
-                            }}
-                          />
-                        )}
-                        {timeLine.map((timeline) => {
-                          return (
-                            <div key={`element-${timeline.reviewType}-${colleague.uuid}`}>
-                              {(colleagueReviews[colleague.uuid] || [])
-                                .filter((review) => review.type === timeline.reviewType)
-                                .map(({ id, title, subTitle, description, explanations }) => (
-                                  <ObjectiveTile
-                                    key={`${timeline.reviewType}-${id}`}
-                                    {...{ id, title, subTitle, description, explanations }}
-                                  />
-                                ))}
-                              {status === Status.WAITING_FOR_APPROVAL && (
-                                <ActionButtons
-                                  approveColleagues={approveColleagues(timeline.reviewType)}
-                                  declineColleagues={declineColleagues(timeline.reviewType)}
+                  </div>
+                  <Panel>
+                    <div className={css({ padding: '24px 35px 24px 24px' })}>
+                      {status === Status.WAITING_FOR_APPROVAL && (
+                        <Notification
+                          graphic='information'
+                          iconColor='pending'
+                          text='It’s time to approve or decline your colleagues objectives'
+                          customStyle={{
+                            background: '#FFDBC2',
+                            marginBottom: '20px',
+                          }}
+                        />
+                      )}
+                      {timeLine.map((timeline) => {
+                        return (
+                          <div key={`element-${timeline.reviewType}-${colleague.uuid}`}>
+                            {(colleagueReviews[colleague.uuid] || [])
+                              .filter((review) => review.type === timeline.reviewType)
+                              .map(({ id, title, subTitle, description, explanations }) => (
+                                <ObjectiveTile
+                                  key={`${timeline.reviewType}-${id}`}
+                                  {...{ id, title, subTitle, description, explanations }}
                                 />
-                              )}
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </Panel>
-                  </Section>
-                </>
-              );
-            }}
+                              ))}
+                            {status === Status.WAITING_FOR_APPROVAL && (
+                              <ActionButtons
+                                approveColleagues={approveColleagues(timeline.reviewType)}
+                                declineColleagues={declineColleagues(timeline.reviewType)}
+                                reviewType={timeline.reviewType}
+                              />
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </Panel>
+                </Section>
+              </>
+            )}
           </BaseAccordion>
         </Accordion>
       </TileWrapper>

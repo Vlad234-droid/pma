@@ -28,6 +28,7 @@ const Select: FC<SelectProps> = ({
         style={{
           display: 'table',
           width: '100%',
+          position: 'relative',
         }}
       >
         <input
@@ -44,6 +45,7 @@ const Select: FC<SelectProps> = ({
               fontSize: '16px',
               lineHeight: '20px',
               padding: '10px 30px 10px 16px',
+              cursor: 'pointer',
               ':focus': {
                 outline: 'none !important',
                 border: `1px solid ${theme.colors.tescoBlue}`,
@@ -102,6 +104,7 @@ const Select: FC<SelectProps> = ({
                     fontSize: '16px',
                     lineHeight: '20px',
                     padding: '10px 30px 10px 16px',
+                    cursor: 'pointer',
                     ':hover': {
                       background: '#F3F9FC',
                     },

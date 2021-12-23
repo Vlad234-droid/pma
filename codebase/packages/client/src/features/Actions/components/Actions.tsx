@@ -1,11 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
-import { colors, fontWeight, useBreakpoints, useStyle } from '@dex-ddl/core';
-import { Trans } from 'components/Translation';
-import { Checkbox, Radio } from 'components/Form';
-import { Status } from 'config/enum';
-import { WidgetObjectiveApproval, WidgetTeamMateObjectives } from 'features/Actions';
-import { FilterOption } from 'features/Shared';
 import { useSelector } from 'react-redux';
+import { colors, fontWeight, useBreakpoints, useStyle } from '@dex-ddl/core';
 import {
   colleagueUUIDSelector,
   getManagersMetaSelector,
@@ -14,7 +9,15 @@ import {
   SchemaActions,
   schemaMetaSelector,
 } from '@pma/store';
+
+import { Trans } from 'components/Translation';
+import { Checkbox, Radio } from 'components/Form';
+import { Status } from 'config/enum';
+import { WidgetObjectiveApproval, WidgetTeamMateObjectives } from 'features/Actions';
+import { FilterOption } from 'features/Shared';
 import useDispatch from 'hooks/useDispatch';
+
+import { filterApprovedFn } from '../utils';
 
 export const TEST_ID = 'objectives-pave';
 
@@ -24,8 +27,10 @@ type SelectAllProps = {
   indeterminate: boolean;
   disabled?: boolean;
 };
+
 const SelectAll: FC<SelectAllProps> = ({ onChange, checked, indeterminate, disabled }) => {
   const { css } = useStyle();
+
   return (
     <label>
       <Checkbox
@@ -64,6 +69,8 @@ export const Actions = () => {
   const { loaded } = useSelector(getManagersMetaSelector) || {};
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const dispatch = useDispatch();
+
+  // TODO: load not based on loaded state to keep data always up to date
   useEffect(() => {
     if (!loaded && colleagueUuid) dispatch(ManagersActions.getManagers({ colleagueUuid }));
     if (!schemaLoaded && colleagueUuid) dispatch(SchemaActions.getSchema({ colleagueUuid }));
@@ -98,13 +105,20 @@ export const Actions = () => {
 
   const handleSelectAll = () => {
     setIsCheckAll(!isCheckAll);
-    const checkedItems = employeeWithPendingApprovals.map((li) => li.uuid);
+
+    // filter employee with more and less than 1 timeline
+    const filteredEmployee = employeeWithPendingApprovals.filter(
+      (colleague) => colleague.timeline.filter(filterApprovedFn)?.length === 1,
+    );
+
+    const checkedItems = filteredEmployee.map((colleague) => colleague.uuid);
+
     setIsCheck(checkedItems);
     if (isCheckAll) {
       setIsCheck([]);
       setReviewsForApproval([]);
     } else {
-      setReviewsForApproval(employeeWithPendingApprovals);
+      setReviewsForApproval(filteredEmployee);
     }
   };
 
@@ -131,7 +145,7 @@ export const Actions = () => {
               alignItems: 'center',
             })}
           >
-            <SelectAll onChange={handleSelectAll} checked={isCheckAll} indeterminate={indeterminate} disabled={true} />
+            <SelectAll onChange={handleSelectAll} checked={isCheckAll} indeterminate={indeterminate} />
           </div>
         )}
         <div className={css({ display: 'flex' })}>
@@ -208,7 +222,8 @@ export const Actions = () => {
       >
         <div className={css({ flex: '3 1 375px', display: 'flex', flexDirection: 'column', gap: '8px' })}>
           {colleagues?.map((colleague) => {
-            const timelineApproved = colleague.timeline.filter((tl) => tl.status === Status.WAITING_FOR_APPROVAL);
+            const timelineApproved = colleague.timeline.filter(filterApprovedFn);
+
             return (
               <div key={colleague.uuid} className={css({ display: 'flex', flexWrap: 'wrap' })}>
                 <div className={css({ width: '40px', position: 'relative' })}>
@@ -242,7 +257,7 @@ export const Actions = () => {
               padding: '16px 0',
             })}
           >
-            <SelectAll onChange={handleSelectAll} checked={isCheckAll} indeterminate={indeterminate} disabled={true} />
+            <SelectAll onChange={handleSelectAll} checked={isCheckAll} indeterminate={indeterminate} />
           </div>
         )}
         <div
@@ -254,9 +269,10 @@ export const Actions = () => {
           <div>
             {pending && (
               <WidgetObjectiveApproval
-                canDecline={isCheck.length === 1}
+                canDecline
                 isDisabled={!isCheck.length}
                 reviewsForApproval={reviewsForApproval}
+                onSave={() => setIsCheck([])}
               />
             )}
           </div>

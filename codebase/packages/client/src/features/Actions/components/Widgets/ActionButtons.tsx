@@ -1,17 +1,46 @@
-import React, { useState, FC } from 'react';
+import React, { FC, useState } from 'react';
 import { Button, fontWeight, useStyle } from '@dex-ddl/core';
+
 import { Icon } from 'components/Icon';
 import { Trans } from 'components/Translation';
-import ConfirmModal from './Modal/ConfirmModal';
+import { ReviewType } from 'config/enum';
+
+import { DeclineModal, SubmitModal } from '../Modal';
 
 type ActionButtonsProps = {
   approveColleagues: (T) => void;
   declineColleagues: (T) => void;
+  reviewType: ReviewType;
 };
-export const ActionButtons: FC<ActionButtonsProps> = ({ approveColleagues, declineColleagues }) => {
+
+const title = {
+  [ReviewType.OBJECTIVE]: 'objectives',
+  [ReviewType.MYR]: 'Mid-year review',
+  [ReviewType.EYR]: 'Year-end review',
+};
+
+export const ActionButtons: FC<ActionButtonsProps> = ({ approveColleagues, declineColleagues, reviewType }) => {
   const { css, theme } = useStyle();
   const [isOpenDeclinePopup, setIsOpenDeclinePopup] = useState(false);
   const [isOpenApprovePopup, setIsOpenApprovePopup] = useState(false);
+
+  const handleDeclineBtnClick = (event) => {
+    setIsOpenDeclinePopup(true);
+
+    if (reviewType !== ReviewType.OBJECTIVE) {
+      declineColleagues(event);
+    }
+  };
+
+  const handleApproveSubmit = (event) => {
+    approveColleagues(event);
+    setIsOpenApprovePopup(false);
+  };
+
+  const handleDeclineSubmit = (event) => {
+    declineColleagues(event);
+    setIsOpenDeclinePopup(false);
+  };
 
   return (
     <div
@@ -30,9 +59,7 @@ export const ActionButtons: FC<ActionButtonsProps> = ({ approveColleagues, decli
           lineHeight: '20px',
           fontWeight: fontWeight.bold,
         })}
-      >
-        Approve or decline objectives
-      </div>
+      >{`Approve or decline ${title[reviewType]}`}</div>
       <div>
         <div className={css({ display: 'inline-block' })}>
           <Button
@@ -47,7 +74,7 @@ export const ActionButtons: FC<ActionButtonsProps> = ({ approveColleagues, decli
                 margin: '0px 4px',
               },
             ]}
-            onPress={() => setIsOpenDeclinePopup(true)}
+            onPress={handleDeclineBtnClick}
           >
             <Icon graphic='decline' iconStyles={{ paddingRight: '8px' }} />
             <Trans i18nKey='decline'>Decline</Trans>
@@ -71,23 +98,14 @@ export const ActionButtons: FC<ActionButtonsProps> = ({ approveColleagues, decli
           </Button>
         </div>
         {isOpenDeclinePopup && (
-          <ConfirmModal
-            title={'Please provide decline reason'}
-            hasReason={true}
-            onSave={declineColleagues}
+          <DeclineModal
+            onSave={handleDeclineSubmit}
             onClose={() => setIsOpenDeclinePopup(false)}
-            onOverlayClick={() => setIsOpenDeclinePopup(false)}
+            reviewType={reviewType}
           />
         )}
         {isOpenApprovePopup && (
-          <ConfirmModal
-            title={'Submit objectives or reviews'}
-            description={'Are you sure you want to approve objectives or reviews?'}
-            hasReason={false}
-            onSave={approveColleagues}
-            onClose={() => setIsOpenApprovePopup(false)}
-            onOverlayClick={() => setIsOpenApprovePopup(false)}
-          />
+          <SubmitModal onSave={handleApproveSubmit} onClose={() => setIsOpenApprovePopup(false)} />
         )}
       </div>
     </div>

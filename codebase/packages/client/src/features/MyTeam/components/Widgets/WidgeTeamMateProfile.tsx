@@ -1,10 +1,12 @@
 import React, { FC } from 'react';
-import { colors, Colors, fontWeight, Rule, useStyle } from '@dex-ddl/core';
+import { colors, Colors, Rule, useStyle } from '@dex-ddl/core';
+
 import { TileWrapper } from 'components/Tile';
 import { Graphics, Icon } from 'components/Icon';
-import { Avatar } from 'components/Avatar';
 import { Accordion, BaseAccordion, ExpandButton, Panel, Section } from 'components/Accordion';
 import { Status, TimelineType } from 'config/enum';
+
+import ColleagueInfo from '../ColleagueInfo';
 
 export type Review = {
   uuid: string;
@@ -65,13 +67,12 @@ export const WidgetTeamMateProfile: FC<WidgetTeamMateProfileProps> = ({ id, stat
               <>
                 <Section defaultExpanded={false}>
                   <div className={css(wrapperStyle)}>
-                    <div className={css({ display: 'flex', alignItems: 'center' })}>
-                      <Avatar size={40} />
-                    </div>
-                    <div className={css(headerBlockStyle)}>
-                      <span className={css(titleStyle)}>{`${employee.firstName} ${employee.lastName}`}</span>
-                      <span className={css(descriptionStyle)}>{`${employee.jobName}, ${employee.businessType}`}</span>
-                    </div>
+                    <ColleagueInfo
+                      firstName={employee.firstName}
+                      lastName={employee.lastName}
+                      jobName={employee.jobName}
+                      businessType={employee.businessType}
+                    />
                     <div className={css({ marginLeft: 'auto', display: 'flex', alignItems: 'center' })}>
                       <div className={css({ padding: '12px 12px' })}>
                         <span className={css({ fontSize: '16px', lineHeight: '20px', color: colors.tescoBlue })}>
@@ -118,28 +119,6 @@ export const WidgetTeamMateProfile: FC<WidgetTeamMateProfileProps> = ({ id, stat
 const wrapperStyle: Rule = {
   padding: '24px',
   display: 'flex',
-};
-
-const headerBlockStyle: Rule = {
-  display: 'grid',
-  padding: '0 20px',
-  alignSelf: 'center',
-};
-
-const titleStyle: Rule = {
-  fontStyle: 'normal',
-  fontWeight: fontWeight.bold,
-  fontSize: '18px',
-  lineHeight: '22px',
-  color: colors.tescoBlue,
-};
-
-const descriptionStyle: Rule = {
-  fontStyle: 'normal',
-  fontWeight: 'normal',
-  fontSize: '16x',
-  lineHeight: '20px',
-  color: colors.base,
 };
 
 const reviewItem: Rule = {
