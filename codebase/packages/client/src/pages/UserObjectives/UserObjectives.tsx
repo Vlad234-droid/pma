@@ -78,7 +78,7 @@ const UserObjectives: FC = () => {
   const canShowObjectives = timelineTypes[ObjectiveType.OBJECTIVE];
   const canShowMyReview = timelineTypes[ObjectiveType.MYR] && timelineTypes[ObjectiveType.EYR];
   const canShowAnnualReview = !timelineTypes[ObjectiveType.MYR] && timelineTypes[ObjectiveType.EYR];
-  const uuid = location.search.replace(/.*=/g, '');
+  const uuid = location.pathname.substring(location.pathname.lastIndexOf('/') + 1);
   const pathParams = { colleagueUuid: uuid, type: ReviewType.OBJECTIVE, cycleUuid: 'CURRENT' };
   const [origin] = useReviews({ pathParams });
   const formElements = components.filter((component) => component.type != 'text');

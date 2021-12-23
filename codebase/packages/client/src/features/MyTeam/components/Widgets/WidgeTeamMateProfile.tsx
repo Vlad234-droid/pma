@@ -7,6 +7,8 @@ import { Accordion, BaseAccordion, ExpandButton, Panel, Section } from 'componen
 import { Status, TimelineType } from 'config/enum';
 import { Page } from 'pages/types';
 import { useHistory } from 'react-router-dom';
+import { paramsReplacer } from 'utils';
+import { buildPath } from 'features/Routes';
 
 export type Review = {
   uuid: string;
@@ -55,7 +57,7 @@ export const WidgetTeamMateProfile: FC<WidgetTeamMateProfileProps> = ({ id, stat
   const [graphics, color] = getIcon(status);
 
   const viewUserObjectives = (uuid) => {
-    history.push(`${Page.USER_OBJECTIVES}?id=${uuid}`);
+    history.push(buildPath(paramsReplacer(`${Page.USER_OBJECTIVES}`, {':uuid': uuid})));
   } 
 
   return (
