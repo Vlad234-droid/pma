@@ -46,7 +46,11 @@ export const createTipEpic: Epic = (action$, _, { api }) =>
         map((data) => {
           return getAllTips.request({});
         }),
-        catchError(({ errors }) => of(createTip.failure(errors))),
+        // catchError(({ errors }) => of(createTip.failure(errors))),
+        catchError((e) => {
+          const errors = e?.data?.errors;
+          return of(createTip.failure(errors[0]));
+        }),
       );
     }),
   );
@@ -61,7 +65,11 @@ export const getTipByUuidEpic: Epic = (action$, _, { api }) => {
         map(({ data }) => {
           return getTipByUuid.success(data);
         }),
-        catchError(({ errors }) => of(getTipByUuid.failure(errors))),
+        // catchError(({ errors }) => of(getTipByUuid.failure(errors))),
+        catchError((e) => {
+          const errors = e?.data?.errors;
+          return of(getTipByUuid.failure(errors?.[0]));
+        }),
       );
     }),
   );

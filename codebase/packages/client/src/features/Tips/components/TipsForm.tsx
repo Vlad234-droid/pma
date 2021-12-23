@@ -11,8 +11,9 @@ import { GenericItemField } from 'components/GenericForm';
 import { IconButton } from 'components/IconButton';
 import { 
   ConfigEntriesActions, 
-  getCurrentTipSelector, 
   tipsActions,
+  getCurrentTipSelector,
+  getTipsMetaSelector,
   configEntriesSelector, 
   configEntriesMetaSelector,
 } from '@pma/store';
@@ -51,10 +52,17 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
     mode: 'onChange',
     resolver: yupResolver<Yup.AnyObjectSchema>(createTipSchema),
   });
-  const { handleSubmit, formState: { isValid, isDirty }, setValue,  } = methods;
+  const { 
+    handleSubmit, 
+    formState: { isValid, isDirty }, 
+    setValue, 
+    reset, 
+    resetField 
+  } = methods;
 
   const configEntries = useSelector(configEntriesSelector);
   const currentTip = useSelector(getCurrentTipSelector);
+  const tipsMeta = useSelector(getTipsMetaSelector);
   const { loaded } = useSelector(configEntriesMetaSelector) || {};
 
   const [options1, setOptions1] = useState([]);
@@ -80,9 +88,7 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
 
   useEffect(() => {
     if(mode === 'edit' && loaded) {
-      setValue('tipTitle', currentTip?.title, { shouldValidate: true })
-      setValue('tipDescription', currentTip?.description, { shouldValidate: true })
-      setValue('tipTargetLevel1', tipsTarget['configEntry']?.name, { shouldValidate: true })
+      reset()
       if(configEntries) {
         // const tipUuid = params['tipUuid'];
         const targetCompositeKey = currentTip?.targetOrganisation?.compositeKey;
@@ -92,11 +98,72 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
           dispatch(ConfigEntriesActions.getConfigEntriesByUuid({ uuid: configEntry['uuid']}));
           setOptions1(configEntry['uuid']);
           setTargetOrganisation(configEntry['uuid']);
-          setTipsTarget({ configEntry, targetCompositeKey })
         }
       }
     }
   }, [loaded, currentTip])
+
+  useEffect(() => {
+    if(mode === 'edit' && loaded) {
+      if(configEntries) {
+        const targetCompositeKey = currentTip?.targetOrganisation?.compositeKey;
+        const configEntry = configEntries.data.filter(item => item.uuid === options1)[0];
+        setTipsTarget({ configEntry, targetCompositeKey })
+      }
+    }
+  }, [configEntries.data])
+
+  useEffect(() => {
+    if(mode === 'edit' && loaded) {
+      const targetCompositeKey = currentTip?.targetOrganisation?.compositeKey;
+      const compositeKeyLevels = {
+        level1: '',
+        level2: '',
+        level3: '',
+        level4: '',
+      }
+
+     
+      const temp = targetCompositeKey?.split("/");
+      let count = 1;
+      for(let i = 0; i < temp?.length - 1; i += 2) {
+        if(count == 1) {
+          compositeKeyLevels[`level${count}`] = `${temp[i]}/${temp[i+1]}`
+        } else {
+          compositeKeyLevels[`level${count}`] = `${compositeKeyLevels[`level${count - 1}`]}/${temp[i]}/${temp[i+1]}`
+        }
+        count++;
+      }
+
+      const level2 = tipsTarget['configEntry']?.children.filter(item => item.compositeKey === compositeKeyLevels.level2 + `/${temp[temp?.length - 1]}`)[0]
+      const level3 = level2?.children.filter(item => item.compositeKey === compositeKeyLevels.level3 + `/${temp[temp?.length - 1]}`)[0]
+      const level4 = level3?.children.filter(item => item.compositeKey === compositeKeyLevels.level4 + `/${temp[temp?.length - 1]}`)[0]
+
+      setValue('tipTitle', currentTip?.title, { shouldValidate: true })
+      setValue('tipDescription', currentTip?.description, { shouldValidate: true })
+      setValue('tipTargetLevel1', tipsTarget['configEntry']?.name, { shouldValidate: true })
+      if(level2) {
+        setValue('tipTargetLevel2', level2?.name, { shouldValidate: true })
+        setOptions12(level2?.uuid)
+        setTargetOrganisation(level2?.uuid)
+      }
+      if(level3) {
+        setValue('tipTargetLevel3', level3?.name, { shouldValidate: true })
+        setOptions131(level3?.uuid)
+        setTargetOrganisation(level3?.uuid)
+      }
+      if(level4) {
+        setValue('tipTargetLevel4', level4?.name, { shouldValidate: true })
+        setTargetOrganisation(level4?.uuid)
+      }
+      
+      compositeKeyLevels.level1 = '';
+      compositeKeyLevels.level2 = '';
+      compositeKeyLevels.level3 = '';
+      compositeKeyLevels.level4 = '';
+
+    }
+  }, [loaded, tipsTarget])
 
   useEffect(() => {
     setOptions2(getChildren(configEntries.data, options1, 'uuid', 'uuid'))
@@ -121,10 +188,11 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
     }
     // console.log(data)
     dispatch(
-      tipsActions.createTip(data),
+      tipsActions.createTip({}),
+      // tipsActions.createTip(data),
     );
-    setShowTipsFormModal(true);
-    setSuccessTipsModal(true);
+    // setShowTipsFormModal(true);
+    // setSuccessTipsModal(true);
     setTipsFormModalAction("create")
   }
 
@@ -141,13 +209,22 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
     }
     // console.log(data)
     dispatch(
-      //TODO: додати можливість відловлювання помилкових заптів(коли сервер повертає failure)
-      tipsActions.createTip(data),
+      tipsActions.createTip({}),
+      // tipsActions.createTip(data),
     );
     setTipsFormModalAction("edit")
-    setShowTipsFormModal(true);
-    setSuccessTipsModal(true);
   }
+
+  //TODO: написати функцію, яка буде отримувати екшн і показувати модалки(додатковий параметр - success)
+  useEffect(() => {
+    if(tipsMeta?.error) {
+      console.log('a')
+      setShowTipsFormModal(true);
+      setSuccessTipsModal(true);
+      setTipsFormModalAction("failure")
+    }
+
+  }, [tipsMeta])
 
   const submitForm = (e) => {
     if(mode === 'edit') {
@@ -162,6 +239,7 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
       setTipsFormModalAction("discard")
       setShowTipsFormModal(true)
     } else {
+      setTipsTarget({})
       history.push(buildPath(`${Page.TIPS}`))
     }
   }
@@ -209,7 +287,6 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
               // Wrapper={({ children }) => <Item label='Title' withIcon={false}>{children}</Item>}
               Element={Input}
               placeholder='Example: Share objectives easily'
-              value={ mode === 'edit' ? currentTip?.title || '' : '' }
             />
             <GenericItemField
               name={'tipDescription'}
@@ -219,7 +296,6 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
               Element={Textarea}
               placeholder='Example: Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus'
               rows={2}
-              value={ mode === 'edit' ? currentTip?.description || '' : '' }
             />
             <div className={css(hrSeparatorLine)}></div>
             <GenericItemField
@@ -235,8 +311,10 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
                 dispatch(ConfigEntriesActions.getConfigEntriesByUuid({ uuid: value }))
                 setOptions1(value);
                 setTargetOrganisation(value);
+                resetField('tipTargetLevel2');
+                resetField('tipTargetLevel3');
+                resetField('tipTargetLevel4');
               }}
-              value={ mode === 'edit' ? tipsTarget['configEntry']?.name || '' : ''}
             />
             <GenericItemField
               name={'tipTargetLevel2'}
@@ -249,7 +327,6 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
                 setTargetOrganisation(value)
               }}
               placeholder='Please select'
-              // value={''}
             />
             <GenericItemField
               name={'tipTargetLevel3'}
@@ -262,7 +339,6 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
                 setTargetOrganisation(value)
               }}
               placeholder='Please select'
-              // value={''}
             />
             <GenericItemField
               name={'tipTargetLevel4'}
@@ -276,7 +352,6 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
                 setTargetOrganisation(item['uuid'])
               }}
               placeholder='Please select'
-              // value={''}
             />
             { mode === 'edit' && 
                 <IconButton 
@@ -298,7 +373,7 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
               Discard
             </Button>
             <Button 
-              isDisabled={!isValid}
+              isDisabled={!isDirty || !isValid}
               onPress={submitForm} 
               styles={[formControlBtn]}
             >

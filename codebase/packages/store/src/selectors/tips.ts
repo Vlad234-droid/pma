@@ -15,3 +15,7 @@ export const getTipHistorySelector = createSelector(tipsSelector, (tips: any) =>
 export const getCurrentTipSelector = createSelector(tipsSelector, (tips: any) => {
   return tips?.currentTip;
 })
+
+export const getTipsMetaSelector = createSelector(tipsSelector, (tips: any) => {
+  return tips?.meta;
+})

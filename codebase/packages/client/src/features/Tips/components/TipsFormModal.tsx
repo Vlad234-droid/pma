@@ -42,6 +42,12 @@ const TipsFormModal: FC<TipsFormModalProps> = ({ action, negativeBtnAction, posi
       body: 'Tip successfully deleted.',
       negativeBtnText: '',
       positiveBtnText: 'Leave this page',
+    },
+    failure: {
+      title: 'Oops',
+      body: 'Something went wrong',
+      negativeBtnText: '',
+      positiveBtnText: 'Leave this page',
     }
   }
 
