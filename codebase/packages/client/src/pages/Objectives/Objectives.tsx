@@ -182,7 +182,7 @@ const Objectives: FC = () => {
 
           <OrganizationWidget
             customStyle={{ flex: '1 1 30%', display: 'flex', flexDirection: 'column' }}
-            onClick={() =>  history.push(`/${Page.VIEW_STRATEGIC_DRIVERS}`)}
+            onClick={() =>  history.push(`/${Page.STRATEGIC_DRIVERS}`)}
           />
         </div>
       </div>

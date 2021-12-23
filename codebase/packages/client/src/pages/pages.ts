@@ -60,7 +60,7 @@ const pages: Record<
     withHeader: true,
     backPath: Page.CONTRIBUTION,
   },
-  [Page.VIEW_STRATEGIC_DRIVERS]: {
+  [Page.STRATEGIC_DRIVERS]: {
     component: ObjectivesView,
     withHeader: false,
   },

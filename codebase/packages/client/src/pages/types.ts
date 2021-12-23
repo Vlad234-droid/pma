@@ -3,8 +3,7 @@ import { ComponentType, FC, LazyExoticComponent } from 'react';
 enum Page {
   CONTRIBUTION = 'contribution',
   CREATE_STRATEGIC_DRIVERS = 'strategic-drivers/create',
-  VIEW_STRATEGIC_DRIVER = 'strategic-drivers/:uuid',
-  VIEW_STRATEGIC_DRIVERS = 'strategic-drivers',
+  STRATEGIC_DRIVERS = 'strategic-drivers',
   CREATE_PERFORMANCE_CYCLE = 'performance-cycle/:performanceCycleUuid',
   PERFORMANCE_CYCLE = 'performance-cycle',
   PERSONAL_DEVELOPMENT_PLAN = 'personal-development-plan',
