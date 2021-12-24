@@ -127,7 +127,8 @@ const CareerPerformance: FC = () => {
                 <ReviewWidget
                   reviewType={ReviewType.MYR}
                   status={midYearReview?.status}
-                  startDate={midYearReview?.startDate}
+                  startTime={midYearReview?.startTime}
+                  endTime={midYearReview?.endTime}
                   onClick={() => console.log('ReviewWidget')}
                   onClose={() => console.log('ReviewWidget')}
                   title={'Mid-year review'}
@@ -139,7 +140,8 @@ const CareerPerformance: FC = () => {
                 <ReviewWidget
                   reviewType={ReviewType.EYR}
                   status={endYearReview?.status}
-                  startDate={endYearReview?.startDate}
+                  startTime={endYearReview?.startTime}
+                  endTime={endYearReview?.endTime}
                   onClick={() => console.log('ReviewWidget')}
                   onClose={() => console.log('ReviewWidget')}
                   title={'Year-end review'}

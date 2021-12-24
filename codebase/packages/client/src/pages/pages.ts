@@ -79,7 +79,7 @@ const pages: Record<
   },
   [Page.PROFILE]: {
     component: Profile,
-    title: 'My View',
+    title: 'My profile',
     withHeader: true,
     backPath: Page.CONTRIBUTION,
   },

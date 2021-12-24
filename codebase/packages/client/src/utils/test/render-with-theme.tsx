@@ -32,6 +32,9 @@ export const renderWithTheme = <TProps extends {} = {}>(
         },
       },
     },
+    schema: { meta: { loading: false, loaded: false, error: null } },
+    reviews: { meta: { loading: false, loaded: false, error: null } },
+    objectivesSharing: { meta: { loading: false, loaded: false, error: null }, objectives: [], isShared: false },
   });
 
   store.dispatch = jest.fn();
