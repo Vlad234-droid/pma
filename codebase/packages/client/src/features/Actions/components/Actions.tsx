@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { colors, fontWeight, useBreakpoints, useStyle } from '@dex-ddl/core';
 import {
@@ -70,7 +70,6 @@ export const Actions = () => {
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const dispatch = useDispatch();
 
-  // TODO: load not based on loaded state to keep data always up to date
   useEffect(() => {
     if (!loaded && colleagueUuid) dispatch(ManagersActions.getManagers({ colleagueUuid }));
     if (!schemaLoaded && colleagueUuid) dispatch(SchemaActions.getSchema({ colleagueUuid }));
@@ -103,7 +102,7 @@ export const Actions = () => {
     }
   }, [isCheck, colleagues]);
 
-  const handleSelectAll = () => {
+  const handleSelectAll = useCallback(() => {
     setIsCheckAll(!isCheckAll);
 
     // filter employee with more and less than 1 timeline
@@ -114,13 +113,14 @@ export const Actions = () => {
     const checkedItems = filteredEmployee.map((colleague) => colleague.uuid);
 
     setIsCheck(checkedItems);
+
     if (isCheckAll) {
       setIsCheck([]);
       setReviewsForApproval([]);
     } else {
       setReviewsForApproval(filteredEmployee);
     }
-  };
+  }, [isCheckAll, employeeWithPendingApprovals]);
 
   const handleClick = (e, colleague) => {
     const { id, checked } = e.target;

@@ -1,4 +1,4 @@
-import { BusinessType, ReviewType, Status, TimelineType } from './enum';
+import { ReviewType, Status, TimelineType } from './enum';
 
 export type Timeline = {
   code: string; // TODO: set correct type
@@ -21,7 +21,7 @@ export type Review = {
 };
 
 export type ReviewForApproval = {
-  businessType: BusinessType;
+  businessType: string;
   firstName: string;
   jobName: string;
   lastName: string;

@@ -56,7 +56,3 @@ export enum TargetTypeReverse {
   'VALUE_BEHAVIOR' = 'Value and behaviour',
   'OTHER' = 'Other',
 }
-
-export enum BusinessType {
-  Office = 'Office',
-}

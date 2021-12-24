@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useMemo } from 'react';
+import React, { FC, useCallback, useEffect, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { colors, fontWeight, Rule, useStyle } from '@dex-ddl/core';
 import {
@@ -80,21 +80,25 @@ export const WidgetTeamMateObjectives: FC<WidgetTeamMateObjectivesProps> = ({
     );
   };
 
-  const updateReviewStatus = (status: Status) => (reviewType: ReviewType) => (reason: string) => {
-    const update = {
-      pathParams: { colleagueUuid: colleague.uuid, type: reviewType, cycleUuid: 'CURRENT', status },
-      data: {
-        ...(reason ? { reason } : {}),
-        status,
-        colleagueUuid: colleague.uuid,
-        reviews: colleague.reviews.filter(
-          ({ status, type }) => status === Status.WAITING_FOR_APPROVAL && type === reviewType,
-        ),
-      },
-    };
+  const updateReviewStatus = useCallback(
+    (status: Status) => (reviewType: ReviewType) => (reason: string) => {
+      const update = {
+        pathParams: { colleagueUuid: colleague.uuid, type: reviewType, cycleUuid: 'CURRENT', status },
+        data: {
+          ...(reason ? { reason } : {}),
+          status,
+          colleagueUuid: colleague.uuid,
+          reviews: colleague.reviews.filter(
+            ({ status, type }) => status === Status.WAITING_FOR_APPROVAL && type === reviewType,
+          ),
+        },
+      };
 
-    dispatch(ReviewsActions.updateReviewStatus(update));
-  };
+      dispatch(ReviewsActions.updateReviewStatus(update));
+    },
+    [colleague],
+  );
+
   const approveColleagues = updateReviewStatus(Status.APPROVED);
   const declineColleagues = updateReviewStatus(Status.DECLINED);
 

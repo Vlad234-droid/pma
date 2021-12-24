@@ -43,8 +43,8 @@ const CareerPerformance: FC = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!loaded && colleagueUuid) dispatch(TimelineActions.getTimeline({ colleagueUuid }));
-  }, [loaded, colleagueUuid]);
+    if (colleagueUuid) dispatch(TimelineActions.getTimeline({ colleagueUuid }));
+  }, [colleagueUuid]);
 
   const handleBtnHelp = () => {
     window.open('https://www.ourtesco.com/colleague/help', '_blank')?.focus();
