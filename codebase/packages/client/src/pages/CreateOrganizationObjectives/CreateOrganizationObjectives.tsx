@@ -160,8 +160,8 @@ const CreateOrganizationObjectives: FC<Props> = () => {
             <div className={css(descriptionHeader({ theme }))}>Strategic drivers</div>
 
             <div className={css(descriptionText({ theme }))}>
-              Create titles for Strategic drivers. Click “Save” button to keep the changes. Or “Publish” to cascade
-              them on the colleagues.
+              Create titles for Strategic drivers. Click “Save” button to keep the changes. Or “Publish” to cascade them
+              on the colleagues.
             </div>
             <div>
               {formInputs.map((item, idx) => {
