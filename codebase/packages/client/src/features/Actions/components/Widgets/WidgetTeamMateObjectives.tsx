@@ -16,6 +16,7 @@ import { ObjectiveType, ReviewType, Status } from 'config/enum';
 import { Notification } from 'components/Notification';
 import useDispatch from 'hooks/useDispatch';
 import { Tile as ObjectiveTile } from 'features/Objectives';
+import { useTranslation } from 'components/Translation';
 
 import { ActionButtons } from './ActionButtons';
 
@@ -40,6 +41,7 @@ export const WidgetTeamMateObjectives: FC<WidgetTeamMateObjectivesProps> = ({
   const allColleagueReviews = useSelector(getAllColleagueReviews);
   const { loaded: reviewsLoaded } = useSelector(reviewsMetaSelector);
   const timeLine = useMemo(() => colleague?.timeline?.filter((timeline) => timeline.status === status), [colleague]);
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (reviewsLoaded && schemaLoaded) {
@@ -136,7 +138,10 @@ export const WidgetTeamMateObjectives: FC<WidgetTeamMateObjectivesProps> = ({
                         <Notification
                           graphic='information'
                           iconColor='pending'
-                          text='It’s time to approve or decline your colleagues objectives'
+                          text={t(
+                            'time_to_approve_or_decline',
+                            'It’s time to review your colleague’s objectives and / or reviews',
+                          )}
                           customStyle={{
                             background: '#FFDBC2',
                             marginBottom: '20px',
