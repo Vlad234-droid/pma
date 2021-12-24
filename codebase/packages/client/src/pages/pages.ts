@@ -54,13 +54,13 @@ const pages: Record<
     title: 'Your Contribution',
     withHeader: true,
   },
-  [Page.CREATE_ORGANIZATION_OBJECTIVES]: {
+  [Page.CREATE_STRATEGIC_DRIVERS]: {
     component: CreateOrganizationObjectives,
     title: 'Create Strategic drivers',
     withHeader: true,
     backPath: Page.CONTRIBUTION,
   },
-  [Page.VIEW_ORGANIZATION_OBJECTIVES]: {
+  [Page.STRATEGIC_DRIVERS]: {
     component: ObjectivesView,
     withHeader: false,
   },

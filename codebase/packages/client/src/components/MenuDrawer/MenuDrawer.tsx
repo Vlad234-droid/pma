@@ -42,7 +42,7 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
             <MenuItem iconGraphic={'document'} linkTo={buildPath(Page.OBJECTIVES_VIEW)} title={'My Objectives'} />
             <MenuItem
               iconGraphic={'document'}
-              linkTo={buildPath(Page.CREATE_ORGANIZATION_OBJECTIVES)}
+              linkTo={buildPath(Page.CREATE_STRATEGIC_DRIVERS)}
               title={'Strategic drivers'}
             />
             <MenuItem iconGraphic={'add'} title={'Personal Development Plan'} />
