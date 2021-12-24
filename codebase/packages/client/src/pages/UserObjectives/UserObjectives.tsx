@@ -78,8 +78,9 @@ const UserObjectives: FC = () => {
   const canShowMyReview = timelineTypes[ObjectiveType.MYR] && timelineTypes[ObjectiveType.EYR];
   const canShowAnnualReview = !timelineTypes[ObjectiveType.MYR] && timelineTypes[ObjectiveType.EYR];
   const { uuid } = useParams<{uuid: string}>();
-  const [origin] = useReviews({pathParams :{ colleagueUuid: uuid, type: ReviewType.OBJECTIVE, cycleUuid: 'CURRENT' }});
-  const formElements = components.filter((component) => component.type != 'text');``
+  const params = useMemo(() => ({ pathParams:{ colleagueUuid: uuid, type: ReviewType.OBJECTIVE, cycleUuid: 'CURRENT' }}), [uuid]);
+  const [origin] = useReviews(params);
+  const formElements = components.filter((component) => component.type != 'text');
   
   const timelineObjective = useSelector(getTimelineByReviewTypeSelector(ReviewType.OBJECTIVE));
   const status = timelineObjective?.status || undefined;
