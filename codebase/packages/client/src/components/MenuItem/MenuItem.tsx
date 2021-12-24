@@ -33,6 +33,6 @@ const wrapperStyles: Rule = {
 };
 
 const iconStyles: Rule = {
-  width: '20px',
-  height: '20px',
+  minWidth: '20px',
+  minHeight: '20px',
 };
