@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'components/Translation';
 import { Button, Rule, Styles, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { ObjectiveType, ReviewType } from 'config/enum';
@@ -28,7 +28,7 @@ import {
   timelineTypesAvailabilitySelector,
 } from '@pma/store';
 import OrganizationWidget from 'features/Objectives/components/OrganizationWidget/OrganizationWidget';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import useReviewSchema from 'features/Objectives/hooks/useReviewSchema';
 import useReviews from 'features/Objectives/hooks/useReviews';
 
@@ -62,7 +62,6 @@ const UserObjectives: FC = () => {
   const history = useHistory();
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const location = useLocation();
 
   const [previousReviewFilesModalShow, setPreviousReviewFilesModalShow] = useState(false);
   const [objectives, setObjectives] = useState<OT.Objective[]>([]);
@@ -78,8 +77,8 @@ const UserObjectives: FC = () => {
   const canShowObjectives = timelineTypes[ObjectiveType.OBJECTIVE];
   const canShowMyReview = timelineTypes[ObjectiveType.MYR] && timelineTypes[ObjectiveType.EYR];
   const canShowAnnualReview = !timelineTypes[ObjectiveType.MYR] && timelineTypes[ObjectiveType.EYR];
-  const uuid = location.pathname.substring(location.pathname.lastIndexOf('/') + 1);
-  const pathParams = { colleagueUuid: uuid, type: ReviewType.OBJECTIVE, cycleUuid: 'CURRENT' };
+  const {uuid} = useParams<{uuid: string}>();
+  const pathParams = useMemo(() => ({ colleagueUuid: uuid, type: ReviewType.OBJECTIVE, cycleUuid: 'CURRENT' }), [uuid]);
   const [origin] = useReviews({ pathParams });
   const formElements = components.filter((component) => component.type != 'text');
   
