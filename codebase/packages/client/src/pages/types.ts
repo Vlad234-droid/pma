@@ -8,6 +8,7 @@ enum Page {
   PERFORMANCE_CYCLE = 'performance-cycle',
   PERSONAL_DEVELOPMENT_PLAN = 'personal-development-plan',
   OBJECTIVES_VIEW = 'objectives',
+  USER_OBJECTIVES = 'user-objective/:uuid',
   PROFILE = 'profile',
   SETTINGS = 'settings',
   MY_TEAM = 'my-team',
