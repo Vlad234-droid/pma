@@ -2,10 +2,11 @@ import React, { FC, useState } from 'react';
 import { Button, fontWeight, useStyle } from '@dex-ddl/core';
 
 import { Icon } from 'components/Icon';
-import { Trans } from 'components/Translation';
+import { Trans, useTranslation } from 'components/Translation';
 import { ReviewType } from 'config/enum';
 
 import { DeclineModal, SubmitModal } from '../Modal';
+import { getReviewTypeTitle } from '../../utils';
 
 type ActionButtonsProps = {
   approveColleagues: (T) => void;
@@ -13,16 +14,12 @@ type ActionButtonsProps = {
   reviewType: ReviewType;
 };
 
-const title = {
-  [ReviewType.OBJECTIVE]: 'objectives',
-  [ReviewType.MYR]: 'Mid-year review',
-  [ReviewType.EYR]: 'Year-end review',
-};
-
 export const ActionButtons: FC<ActionButtonsProps> = ({ approveColleagues, declineColleagues, reviewType }) => {
   const { css, theme } = useStyle();
+  const { t } = useTranslation();
   const [isOpenDeclinePopup, setIsOpenDeclinePopup] = useState(false);
   const [isOpenApprovePopup, setIsOpenApprovePopup] = useState(false);
+  const title = getReviewTypeTitle(t);
 
   const handleDeclineBtnClick = (event) => {
     setIsOpenDeclinePopup(true);
@@ -59,7 +56,7 @@ export const ActionButtons: FC<ActionButtonsProps> = ({ approveColleagues, decli
           lineHeight: '20px',
           fontWeight: fontWeight.bold,
         })}
-      >{`Approve or decline ${title[reviewType]}`}</div>
+      >{`${t('approve_or_decline', 'Approve or decline')} ${title[reviewType]}`}</div>
       <div>
         <div className={css({ display: 'inline-block' })}>
           <Button
