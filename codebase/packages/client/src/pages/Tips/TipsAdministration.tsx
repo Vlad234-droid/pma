@@ -37,7 +37,7 @@ const TipsAdministration: FC = () => {
         </IconButton>
       </div>
       
-      {/* <NoTips /> */}
+      { tips.length == 0 && <NoTips /> }
 
       {tips.map(item => {
         return <TipsCard card={item} key={item.uuid} />

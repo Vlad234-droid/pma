@@ -18,42 +18,48 @@ const TipsFormModal: FC<TipsFormModalProps> = ({ action, negativeBtnAction, posi
       body: 'You have not saved your changes, are you sure you want to leave this page?',
       negativeBtnText: 'Stay on this page',
       positiveBtnText: 'Leave this page',
+      showImage: false,
     },
     create: {
       title: 'Success',
       body: 'New Tip successfully created.',
       negativeBtnText: '',
       positiveBtnText: 'Leave this page',
+      showImage: true,
     },
     edit: {
       title: 'Success',
       body: 'Tip updated successfully.',
       negativeBtnText: '',
       positiveBtnText: 'Leave this page',
+      showImage: true,
     },
     confirmDelete: {
       title: 'Delete',
       body: `Do you want to delete [${tipTitle}] tip?`,
       negativeBtnText: 'Cancel',
       positiveBtnText: 'Delete',
+      showImage: false,
     },
     successDelete: {
       title: 'Delete',
       body: 'Tip successfully deleted.',
       negativeBtnText: '',
       positiveBtnText: 'Leave this page',
+      showImage: true,
     },
     failure: {
       title: 'Oops',
       body: 'Something went wrong',
       negativeBtnText: '',
       positiveBtnText: 'Leave this page',
+      showImage: false,
     }
   }
 
   return (
     <div className={css(TipsFormModalStyle)}>
-      { action === 'create' || action === 'edit' || action === 'delete' ? <img src={success} alt='success' /> : '' }
+      { options[action]['showImage'] && <img src={success} alt='success' /> }
       <div className={css(modalTitle)}>
         { options[action]['title'] }
       </div>

@@ -85,7 +85,11 @@ export const deleteTipEpic: Epic = (action$, _, { api }) => {
         map(({ data }) => {
           return deleteTip.success(data);
         }),
-        catchError(({ errors }) => of(deleteTip.failure(errors))),
+        // catchError(({ errors }) => of(deleteTip.failure(errors))),
+        catchError((e) => {
+          const errors = e?.data?.errors;
+          return of(deleteTip.failure(errors?.[0]));
+        }),
       );
     }),
   );

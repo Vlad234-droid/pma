@@ -7,7 +7,7 @@ const NoTips: FC = () => {
 
   return (
     <Fragment>
-      <div className={css({ })}>
+      <div className={css({ margin: '0 0 15px' })}>
         <TileWrapper customStyle={cardStyle}>
           <div className={css(cardInner)}>
             <div className={css({ marginRight: '10px' })}>
