@@ -39,7 +39,7 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
           <div className={css(menuDrawerTitleStyle)}>Performance management application</div>
           <div className={css(menuDrawerButtonsStyle)}>
             <MenuItem iconGraphic={'calender'} linkTo={buildPath(Page.CONTRIBUTION)} title={'Your Contribution'} />
-            <MenuItem iconGraphic={'document'} linkTo={buildPath(Page.OBJECTIVES_VIEW)} title={'My Objectives'} />
+            <MenuItem iconGraphic={'document'} linkTo={buildPath(Page.OBJECTIVES_VIEW)} title={'My objectives'} />
             <MenuItem
               iconGraphic={'document'}
               linkTo={buildPath(Page.CREATE_STRATEGIC_DRIVERS)}
