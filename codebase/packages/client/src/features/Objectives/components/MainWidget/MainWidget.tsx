@@ -1,13 +1,14 @@
 import React, { FC } from 'react';
 import { Trans, useTranslation } from 'components/Translation';
 import { Status } from 'config/enum';
-import { useStyle, Rule, CreateRule, Colors, Button, theme } from '@dex-ddl/core';
+import { useStyle, Rule, CreateRule, Colors, Button } from '@dex-ddl/core';
 
 import { CreateButton } from '../Buttons';
 import { TileWrapper } from 'components/Tile';
 import { Icon, Graphics } from 'components/Icon';
 import { useHistory } from 'react-router-dom';
 import { Page } from 'pages';
+import { buildPath } from 'features/Routes/utils';
 
 export type Props = {
   onClick: () => void;
@@ -123,6 +124,7 @@ const MainWidget: FC<Props> = ({ nextReviewDate = '', count = 0, status, customS
   const history = useHistory();
 
   const notApproved = status !== Status.APPROVED;
+  const mode = notApproved ? 'default' : 'inverse';
 
   const { graphic, backgroundColor, subTitle, description, buttonText, redirectToObjective, invertColors } = getContent(
     {
@@ -159,28 +161,32 @@ const MainWidget: FC<Props> = ({ nextReviewDate = '', count = 0, status, customS
             </span>
           </div>
         </div>
-        {notApproved && (
-          <div className={css(bodyStyle)}>
-            <div className={css({ marginTop: '14px', marginLeft: '9px' })}>{description}</div>
-            <div className={css(bodyBlockStyle)}>
-              {redirectToObjective ? (
-                <Button styles={[viewButtonStyle]} onPress={() => history.push(Page.OBJECTIVES_VIEW)}>
-                  {buttonText}
-                </Button>
-              ) : (
-                <CreateButton buttonText={buttonText} />
-              )}
-            </div>
+        <div className={css(bodyStyle)}>
+          <div className={css({ marginTop: '14px', marginLeft: '9px' })}>{description}</div>
+          <div className={css(bodyBlockStyle)}>
+            {redirectToObjective ? (
+              <Button
+                mode={mode}
+                styles={[viewButtonStyle({ inverse: notApproved })]}
+                onPress={() => history.push(buildPath(Page.OBJECTIVES_VIEW))}
+              >
+                {buttonText}
+              </Button>
+            ) : (
+              <CreateButton buttonText={buttonText} />
+            )}
           </div>
-        )}
+        </div>
       </div>
     </TileWrapper>
   );
 };
 
-const viewButtonStyle = {
-  border: `1px solid ${theme.colors.white}`,
-} as Rule;
+const viewButtonStyle: CreateRule<{ inverse: boolean }> =
+  ({ inverse }) =>
+  ({ theme }) => ({
+    border: `1px solid ${inverse ? theme.colors.white : theme.colors.tescoBlue}`,
+  });
 
 const wrapperStyle: CreateRule<{ clickable: boolean }> =
   ({ clickable }) =>

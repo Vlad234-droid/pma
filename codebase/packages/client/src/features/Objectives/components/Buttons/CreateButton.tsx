@@ -61,9 +61,6 @@ const CreateButton: FC<Props> = ({ withIcon = false, buttonText = 'Create object
             content: 'Create objectives',
             styles: [modalTitleOptionStyle],
           }}
-          onOverlayClick={() => {
-            setIsOpen(false);
-          }}
         >
           {useSingleStep ? (
             <CreateUpdateObjective onClose={() => setIsOpen(false)} />

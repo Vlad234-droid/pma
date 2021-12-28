@@ -16,6 +16,7 @@ import CreateOrganizationObjectives from './CreateOrganizationObjectives';
 import ObjectivesView from './ObjectivesView';
 import { CreatePerformanceCycle, PerformanceCycleAdministration } from './PerformanceCycle';
 import { TipsAdministration, CreateTip, EditTip } from './Tips';
+import UserObjectives from './UserObjectives';
 
 const pages: Record<
   Page,
@@ -55,13 +56,13 @@ const pages: Record<
     title: 'Your Contribution',
     withHeader: true,
   },
-  [Page.CREATE_ORGANIZATION_OBJECTIVES]: {
+  [Page.CREATE_STRATEGIC_DRIVERS]: {
     component: CreateOrganizationObjectives,
     title: 'Create Strategic drivers',
     withHeader: true,
     backPath: Page.CONTRIBUTION,
   },
-  [Page.VIEW_ORGANIZATION_OBJECTIVES]: {
+  [Page.STRATEGIC_DRIVERS]: {
     component: ObjectivesView,
     withHeader: false,
   },
@@ -76,6 +77,12 @@ const pages: Record<
     title: 'My Objectives',
     withHeader: true,
     backPath: Page.CONTRIBUTION,
+  },
+  [Page.USER_OBJECTIVES]: {
+    component: UserObjectives,
+    title: 'User Objectives',
+    withHeader: true,
+    backPath: Page.MY_TEAM,
   },
   [Page.PROFILE]: {
     component: Profile,
