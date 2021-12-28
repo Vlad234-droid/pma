@@ -737,7 +737,7 @@ export const PerformanceCycleForm: FC = () => {
           </div>
           {forms &&
             forms?.map((form, i) => {
-              if (i?.displayName !== selectedForm) return null;
+              if (form?.displayName !== selectedForm) return null;
               return (
                 <ObjectiveModal
                   key={i}
