@@ -93,6 +93,7 @@ export const getFormsByPerformanceCycleUuidSelector = (performanceCycleUuid) =>
     return performanceCycleItem?.metadata?.cycle?.timelinePoints
       .filter((point) => point.type === 'REVIEW')
       .map((point) => {
-        return JSON.parse(point?.form?.json);
+        const { json, code: displayName } = point?.form || {};
+        if (json) return { ...JSON.parse(json), displayName };
       });
   });
