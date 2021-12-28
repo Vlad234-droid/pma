@@ -36,6 +36,8 @@ import OrganizationWidget from 'features/Objectives/components/OrganizationWidge
 import { useHistory } from 'react-router-dom';
 import useReviewSchema from 'features/Objectives/hooks/useReviewSchema';
 import useReviews from 'features/Objectives/hooks/useReviews';
+import { Page } from 'pages';
+import { buildPath } from 'features/Routes';
 
 const reviews = [
   {
@@ -164,7 +166,7 @@ const MyObjectives: FC = () => {
 
           <OrganizationWidget
             customStyle={{ flex: '1 1 30%', display: 'flex', flexDirection: 'column' }}
-            onClick={() => history.push('/view-organization-objectives')}
+            onClick={() => history.push(buildPath(Page.STRATEGIC_DRIVERS))}
           />
         </div>
       </div>
