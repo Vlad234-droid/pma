@@ -74,7 +74,7 @@ const pages: Record<
   },
   [Page.OBJECTIVES_VIEW]: {
     component: Objectives,
-    title: 'My Objectives',
+    title: 'My objectives',
     withHeader: true,
     backPath: Page.CONTRIBUTION,
   },

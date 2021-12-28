@@ -147,7 +147,7 @@ const MainWidget: FC<Props> = ({ nextReviewDate = '', count = 0, status, customS
           </div>
           <div className={css(headerBlockStyle)}>
             <span className={css(titleStyle)}>
-              <Trans i18nKey='my_business_objectives'>My Objectives</Trans>
+              <Trans i18nKey='my_business_objectives'>My objectives</Trans>
             </span>
             <span className={css(descriptionStyle)}>
               <span className={css(iconStyle)}>

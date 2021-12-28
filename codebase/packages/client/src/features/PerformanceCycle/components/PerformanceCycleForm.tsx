@@ -8,23 +8,16 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import {
   colleagueUUIDSelector,
   ConfigEntriesActions,
-  getObjectiveSchema,
-  getObjectivesStatusSelector,
-  isObjectivesInStatus,
-  ObjectiveActions,
-  objectivesMetaSelector,
-  objectivesSelector,
   PerformanceCycleActions,
   ProcessTemplateActions,
   SchemaActions,
 } from '@pma/store';
-import { useTranslation } from 'components/Translation';
+import { Trans, useTranslation } from 'components/Translation';
 import { configEntriesMetaSelector, configEntriesSelector } from '@pma/store/src/selectors/config-entries';
 import {
   durationOptions,
   getFormsByProcessTemplateUuidSelector,
   getProcessTemplateByUuidSelector,
-  getProcessTemplateSelector,
   getTimelinePointsByUuidSelector,
   getTimelinePointsReviewTypesByUuidSelector,
   getType,
@@ -39,11 +32,10 @@ import {
 } from '@pma/store/src/selectors/performance-cycle';
 import { TileWrapper } from 'components/Tile';
 import { GenericItemField } from 'components/GenericForm';
-import { Input, Item, Select } from 'components/Form';
+import { Input, Item, Radio, Select } from 'components/Form';
 import TemplatesModal from './TemplatesModal';
 import { Page } from '../../../pages';
 import { ObjectiveModal } from '../../Objectives/components/ObjectiveModal/ObjectiveModal';
-import { Accordion, BaseAccordion } from 'components/Accordion';
 
 function getChildren(data, options11: any, key, value) {
   return data
@@ -66,12 +58,10 @@ export const PerformanceCycleForm: FC = () => {
   const params = useParams();
   const performanceCycleUuid = params['performanceCycleUuid'];
   const colleagueUuid = useSelector(colleagueUUIDSelector);
-  const mappedObjectives: any = [];
 
   const { t } = useTranslation();
   const history = useHistory();
 
-  const [objectives, setObjectives] = useState([]);
   const [entryConfigUuid, setEntryConfigUuid] = useState('');
   const [options11, setOptions11] = useState([]);
   const [options2, setOptions2] = useState([]);
@@ -82,6 +72,8 @@ export const PerformanceCycleForm: FC = () => {
   const [processSelected, setProcessSelected] = useState(false);
   const [entryConfigKey, setEntryConfigKey] = useState('');
   const [isTemplatesModalOpen, showTemplatesModal] = useState(false);
+  const [processTemplateName, setProcessTemplateName] = useState('');
+  const [selectedForm, setSelectedForm] = useState('');
 
   const dispatch = useDispatch();
 
@@ -89,36 +81,15 @@ export const PerformanceCycleForm: FC = () => {
     mode: 'onChange',
     resolver: yupResolver<Yup.AnyObjectSchema>(createPMCycleSchema),
   });
-  const {
-    formState: { errors, isValid },
-    getValues,
-    setValue,
-    reset,
-    trigger,
-    watch,
-  } = methods;
+  const { getValues, setValue, reset, watch, handleSubmit } = methods;
 
   const watchStartTime = watch(['startTime']);
 
-  const {
-    components = [],
-    meta: { loaded: schemaLoaded = false },
-    markup = { max: 0, min: 0 },
-  } = useSelector(getObjectiveSchema);
-
-  const formElements = components.filter((component) => component.type != 'text');
-
-  // @ts-ignore
-  const { loaded: objectivesLoaded } = useSelector(objectivesMetaSelector);
-  const status = useSelector(getObjectivesStatusSelector);
-  const { origin } = useSelector(objectivesSelector);
-  const isAllObjectivesInSameStatus = useSelector(isObjectivesInStatus(status));
   const { data } = useSelector(configEntriesSelector) || {};
-  const processTemplates = useSelector(getProcessTemplateSelector) || {};
   const processTemplate = useSelector(getProcessTemplateByUuidSelector(processSelected));
   const timelinePoints = useSelector(getTimelinePointsByUuidSelector(processSelected));
   const timelinePointsReviewTypes = useSelector(getTimelinePointsReviewTypesByUuidSelector(processSelected));
-  const formsByPerformanceCycleUuid = useSelector(getFormsByPerformanceCycleUuidSelector(processSelected));
+  const formsByPerformanceCycleUuid = useSelector(getFormsByPerformanceCycleUuidSelector(performanceCycleUuid));
   const formsProcessTemplate = useSelector(getFormsByProcessTemplateUuidSelector(processSelected));
   const { loaded } = useSelector(configEntriesMetaSelector) || {};
   const { configEntryItem, formDataToFillObj, performanceCycleItem } = useSelector(
@@ -137,7 +108,6 @@ export const PerformanceCycleForm: FC = () => {
 
   useEffect(() => {
     dispatch(SchemaActions.getSchema({ colleagueUuid }));
-    dispatch(ObjectiveActions.getObjectives({ performanceCycleUuid: '' }));
   }, []);
 
   useEffect(() => {
@@ -161,37 +131,13 @@ export const PerformanceCycleForm: FC = () => {
       dispatch(PerformanceCycleActions.getPerformanceCycleByUuid({ performanceCycleUuid }));
   }, [performanceCycleUuid]);
 
+  useEffect(() => {
+    setProcessTemplateName(processTemplate?.cycle?.code);
+  }, [processTemplate]);
+
   if (configEntryItem && !entryConfigUuid) {
     setEntryConfigUuid(configEntryItem.uuid);
   }
-
-  // TODO: objectivesLoaded always false
-  useEffect(() => {
-    if (objectivesLoaded && schemaLoaded) {
-      origin?.forEach((objectiveItem) => {
-        const status = objectiveItem.status;
-        const objective = objectiveItem?.properties?.mapJson;
-        const subTitle = objective['title'] || '';
-        const description = objective['description'] || '';
-        const explanations = formElements
-          .filter(({ key }) => !['title', 'description'].includes(key))
-          .map((component) => {
-            const { key, label } = component;
-
-            return { title: label, steps: objective[key] ? [objective[key]] : [] };
-          });
-        mappedObjectives.push({
-          id: Number(objectiveItem.number),
-          title: `Objective ${objectiveItem.number}`,
-          subTitle: subTitle,
-          description: description,
-          explanations,
-          status,
-        });
-      });
-      setObjectives(mappedObjectives);
-    }
-  }, [objectivesLoaded, schemaLoaded]);
 
   const { css, theme } = useStyle();
 
@@ -216,12 +162,13 @@ export const PerformanceCycleForm: FC = () => {
   }, [processTemplate]);
 
   useEffect(() => {
-    setProcessSelected(performanceCycleItem?.templateUUID);
+    setProcessSelected(performanceCycleItem?.template.uuid);
     setEntryConfigKey(performanceCycleItem?.entryConfigKey);
   }, [performanceCycleItem]);
 
   useEffect(() => {
     if (performanceCycleItem) {
+      setProcessTemplateName(performanceCycleItem?.template?.fileName);
       reset({
         ...formDataToFillObj,
         ...performanceCycleItem,
@@ -268,9 +215,15 @@ export const PerformanceCycleForm: FC = () => {
       .reduce(
         // @ts-ignore
         (prev, key) => {
-          const type = key.split('__')?.[1];
-          const newKey = key.split('__')?.[2];
-          const value = rest[key];
+          const [, type, newKey, isDuration] = key.split('__');
+          let value;
+          if (isDuration === 'number' || isDuration === 'type') {
+            value = `P${rest[`cyclereviews__${type}__${newKey}__number`]}${getValue(
+              rest[`cyclereviews__${type}__${newKey}__type`],
+            )}`;
+          } else {
+            value = rest[key];
+          }
           // @ts-ignore
           if (prev.types.includes(type)) {
             return {
@@ -299,7 +252,7 @@ export const PerformanceCycleForm: FC = () => {
     const pm_cycle_before_start = `P${pm_cycle_before_start_number}${getValue(pm_cycle_before_start_type)}`;
     const pm_cycle_before_end = `P${pm_cycle_before_end_number}${getValue(pm_cycle_before_end_type)}`;
 
-    const temp = {
+    return {
       data: {
         ...(performanceCycleUuid !== 'new' && { uuid: performanceCycleUuid }),
         entryConfigKey: entryConfigKey,
@@ -334,17 +287,17 @@ export const PerformanceCycleForm: FC = () => {
             },
             cycleType: 'FISCAL',
             // @ts-ignore
-            timelinePoints: cycle_reviews.result.map((el) => ({
+            timelinePoints: cycle_reviews.result.map(({ description, ...rest }) => ({
               type: 'REVIEW',
+              description,
               properties: {
-                ...el,
+                ...rest,
               },
             })),
           },
         },
       },
     };
-    return temp;
   }
 
   const onSaveDraft = () => {
@@ -384,6 +337,7 @@ export const PerformanceCycleForm: FC = () => {
 
   /*---------Render---------*/
   // @ts-ignore
+  const forms = formsProcessTemplate || formsByPerformanceCycleUuid;
   return (
     <form className={css({ marginTop: '32px' })}>
       <TileWrapper customStyle={{ margin: '8px', padding: '25px', maxWidth: '1300px', overflowY: 'visible' }}>
@@ -469,8 +423,9 @@ export const PerformanceCycleForm: FC = () => {
           value={formDataToFillObj['entryConfigKey'] || ''}
         />
 
-        {/*TODO: replace to process name*/}
-        {/*<div className={css({ marginBottom: '23px' })}>{processSelected}</div>*/}
+        <div className={css({ marginBottom: '23px' })}>
+          {performanceCycleItem?.template?.fileName || processTemplateName}
+        </div>
 
         <Button onPress={() => showTemplatesModal(true)}>Choose Template</Button>
 
@@ -488,7 +443,6 @@ export const PerformanceCycleForm: FC = () => {
           className={css({
             fontWeight: 'bold',
             fontSize: '20px',
-            marginBottom: '8px',
           })}
         >
           2. Cycle details
@@ -537,56 +491,59 @@ export const PerformanceCycleForm: FC = () => {
           </div>
 
           <div className={css(item)}>
-            <GenericItemField
-              name={`pm_cycle_before_start`}
-              methods={methods}
-              Wrapper={({ children }) => (
-                <Item label='Before cycle start' withIcon={false}>
-                  {children}
-                </Item>
-              )}
-              Element={(props) => (
-                <div className={css({ display: 'flex', gap: '8px' })}>
-                  <GenericItemField
-                    name={`pm_cycle_before_start_number`}
-                    methods={methods}
-                    Element={(props) => <Input type={'number'} {...props} />}
-                  />
-                  <GenericItemField
-                    name={`pm_cycle_before_start_type`}
-                    methods={methods}
-                    Element={Select}
-                    options={durationOptions}
-                  />
-                </div>
-              )}
-            />
-          </div>
-          <div className={css(item)}>
-            <GenericItemField
-              name={`pm_cycle_before_end`}
-              methods={methods}
-              Wrapper={({ children }) => (
-                <Item label='Before cycle end' withIcon={false}>
-                  {children}
-                </Item>
-              )}
-              Element={(props) => (
-                <div className={css({ display: 'flex', gap: '8px' })}>
-                  <GenericItemField
-                    name={`pm_cycle_before_end_number`}
-                    methods={methods}
-                    Element={(props) => <Input type={'number'} {...props} />}
-                  />
-                  <GenericItemField
-                    name={`pm_cycle_before_end_type`}
-                    methods={methods}
-                    Element={Select}
-                    options={durationOptions}
-                  />
-                </div>
-              )}
-            />
+            <Item label='Notifications' withIcon={false} />
+            <div>
+              <GenericItemField
+                name={`pm_cycle_before_start`}
+                methods={methods}
+                Wrapper={({ children }) => (
+                  <Item label='Before start' withIcon={false}>
+                    {children}
+                  </Item>
+                )}
+                Element={(props) => (
+                  <div className={css({ display: 'flex', gap: '8px' })}>
+                    <GenericItemField
+                      name={`pm_cycle_before_start_number`}
+                      methods={methods}
+                      Element={(props) => <Input type={'number'} {...props} />}
+                    />
+                    <GenericItemField
+                      name={`pm_cycle_before_start_type`}
+                      methods={methods}
+                      Element={Select}
+                      options={durationOptions}
+                    />
+                  </div>
+                )}
+              />
+            </div>
+            <div className={css(item)}>
+              <GenericItemField
+                name={`pm_cycle_before_end`}
+                methods={methods}
+                Wrapper={({ children }) => (
+                  <Item label='Before end' withIcon={false}>
+                    {children}
+                  </Item>
+                )}
+                Element={(props) => (
+                  <div className={css({ display: 'flex', gap: '8px' })}>
+                    <GenericItemField
+                      name={`pm_cycle_before_end_number`}
+                      methods={methods}
+                      Element={(props) => <Input type={'number'} {...props} />}
+                    />
+                    <GenericItemField
+                      name={`pm_cycle_before_end_type`}
+                      methods={methods}
+                      Element={Select}
+                      options={durationOptions}
+                    />
+                  </div>
+                )}
+              />
+            </div>
           </div>
         </div>
       </TileWrapper>
@@ -605,7 +562,6 @@ export const PerformanceCycleForm: FC = () => {
           className={css({
             fontWeight: 'bold',
             fontSize: '20px',
-            marginBottom: '8px',
           })}
         >
           3. Cycle reviews
@@ -637,6 +593,13 @@ export const PerformanceCycleForm: FC = () => {
               <>
                 <div className={css(item)}>
                   <GenericItemField
+                    name={`cyclereviews__${pm_review_type}__description`}
+                    methods={methods}
+                    Element={Input}
+                  />
+                </div>
+                <div className={css(item)} hidden={true}>
+                  <GenericItemField
                     name={`cyclereviews__${pm_review_type}__pm_review_type`}
                     methods={methods}
                     Element={Input}
@@ -659,7 +622,6 @@ export const PerformanceCycleForm: FC = () => {
                     />
                   </div>
                 </div>
-
                 <div className={css({ display: 'flex', gap: '8px' })}>
                   <div className={css(item)}>
                     <GenericItemField
@@ -694,7 +656,6 @@ export const PerformanceCycleForm: FC = () => {
                     />
                   </div>
                 </div>
-
                 {pm_review_type === 'objective' ? (
                   <>
                     <div className={css(item, { maxWidth: '100px' })}>
@@ -739,94 +700,72 @@ export const PerformanceCycleForm: FC = () => {
             fontSize: '20px',
           })}
         >
-          {t('5. Forms')}
+          {t('4. Forms')}
         </div>
         <div className={`${processSelected ? css(containerVisible) : css(container)}`}>
-          {formsByPerformanceCycleUuid &&
-            formsByPerformanceCycleUuid?.map((form, i) => {
-              return (
-                <Accordion
-                  key={i}
-                  id={`form-accordion-${i}`}
-                  customStyle={{
-                    borderBottom: 'none',
-                    marginTop: 0,
-                  }}
-                >
-                  <BaseAccordion id={`form-base-accordion-${i}`}>
-                    {() => (
-                      <ObjectiveModal
-                        formValues={{
-                          title: '',
-                          description: '',
-                          how_archieved: '',
-                          how_over_achieved: '',
-                          strategic_priority: '',
-                        }}
-                        schemaComponents={form.components}
-                        methods={methods}
-                        currentObjectiveNumber={1}
-                        useSingleStep={false}
-                        submitForm={false}
-                        setPrevObjectiveNumber={() => console.log}
-                        onSaveDraft={() => console.log}
-                        onSubmit={() => console.log}
-                        setNextObjectiveNumber={() => console.log}
-                        onClose={() => console.log}
-                        skipFooter={true}
+          <div className={css({ display: 'flex', marginTop: '8px' })}>
+            {forms &&
+              forms?.map((form, i) => {
+                return (
+                  <div key={i} className={css({ padding: '0px 10px' })}>
+                    <label
+                      className={css({
+                        display: 'flex',
+                        alignItems: 'center',
+                      })}
+                    >
+                      <Radio
+                        type='radio'
+                        name='status'
+                        value={form?.displayName}
+                        checked={selectedForm === form?.displayName}
+                        onChange={() => setSelectedForm(form?.displayName)}
                       />
-                    )}
-                  </BaseAccordion>
-                </Accordion>
-              );
-            })}
-          {formsProcessTemplate &&
-            formsProcessTemplate?.map((form, i) => {
+                      <span
+                        className={css({
+                          fontSize: '16px',
+                          lineHeight: '20px',
+                          padding: '0px 5px',
+                        })}
+                      >
+                        <Trans>{form?.displayName}</Trans>
+                      </span>
+                    </label>
+                  </div>
+                );
+              })}
+          </div>
+          {forms &&
+            forms?.map((form, i) => {
+              if (i?.displayName !== selectedForm) return null;
               return (
-                <Accordion
+                <ObjectiveModal
                   key={i}
-                  id={`form-accordion-${i}`}
-                  customStyle={{
-                    borderBottom: 'none',
-                    marginTop: 0,
-                  }}
-                >
-                  <BaseAccordion id={`form-base-accordion-${i}`}>
-                    {() => (
-                      <ObjectiveModal
-                        formValues={{
-                          title: '',
-                          description: '',
-                          how_archieved: '',
-                          how_over_achieved: '',
-                          strategic_priority: '',
-                        }}
-                        schemaComponents={form.components}
-                        methods={methods}
-                        currentObjectiveNumber={1}
-                        useSingleStep={false}
-                        submitForm={false}
-                        setPrevObjectiveNumber={() => console.log}
-                        onSaveDraft={() => console.log}
-                        onSubmit={() => console.log}
-                        setNextObjectiveNumber={() => console.log}
-                        onClose={() => console.log}
-                        skipFooter={true}
-                      />
-                    )}
-                  </BaseAccordion>
-                </Accordion>
+                  formValues={{}}
+                  schemaComponents={form?.components}
+                  methods={methods}
+                  currentObjectiveNumber={1}
+                  useSingleStep={false}
+                  submitForm={false}
+                  setPrevObjectiveNumber={() => console.log}
+                  onSaveDraft={() => console.log}
+                  onSubmit={() => console.log}
+                  setNextObjectiveNumber={() => console.log}
+                  onClose={() => console.log}
+                  skipFooter={true}
+                  skipHelp={true}
+                />
               );
             })}
         </div>
       </TileWrapper>
       <div className={css({ display: 'flex', justifyContent: 'flex-end', paddingBottom: '100px', maxWidth: '1300px' })}>
         {/*@ts-ignore*/}
-        <Button mode='inverse' styles={[btnStyle({ theme }) as Styles]} onPress={onSaveDraft}>
+        <Button mode='inverse' styles={[btnStyle({ theme }) as Styles]} onPress={handleSubmit(onSaveDraft)}>
           Save as draft
         </Button>
         {/*@ts-ignore*/}
-        <Button styles={[btnStyle({ theme }) as Styles]} onPress={onPublish}>
+        <Button styles={[btnStyle({ theme }) as Styles]} onPress={handleSubmit(onPublish)}>
           Publish
         </Button>
       </div>
@@ -860,5 +799,4 @@ const containerVisible: Rule = () => ({
   display: 'inline-flex',
   flexWrap: 'wrap',
   gap: '16px 8px',
-  alignItems: 'center',
 });

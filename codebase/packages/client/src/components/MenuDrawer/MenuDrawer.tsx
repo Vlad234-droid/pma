@@ -39,17 +39,17 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
           <div className={css(menuDrawerTitleStyle)}>Performance management application</div>
           <div className={css(menuDrawerButtonsStyle)}>
             <MenuItem iconGraphic={'calender'} linkTo={buildPath(Page.CONTRIBUTION)} title={'Your Contribution'} />
-            <MenuItem iconGraphic={'document'} linkTo={buildPath(Page.OBJECTIVES_VIEW)} title={'My Objectives'} />
+            <MenuItem iconGraphic={'document'} linkTo={buildPath(Page.OBJECTIVES_VIEW)} title={'My objectives'} />
             <MenuItem
               iconGraphic={'document'}
               linkTo={buildPath(Page.CREATE_STRATEGIC_DRIVERS)}
               title={'Strategic drivers'}
             />
-            <MenuItem iconGraphic={'add'} title={'Personal Development Plan'} />
-            <MenuItem iconGraphic={'account'} linkTo={buildPath(Page.PROFILE)} title={'My Profile'} />
+            <MenuItem iconGraphic={'add'} title={'Personal Development plan'} />
+            <MenuItem iconGraphic={'account'} linkTo={buildPath(Page.PROFILE)} title={'My profile'} />
             <MenuItem iconGraphic={'chatSq'} linkTo={buildPath(Page.FEEDBACK)} title={'Feedback'} />
-            <MenuItem iconGraphic={'edit'} linkTo='' title={'My Notes'} />
-            <MenuItem iconGraphic={'alert'} linkTo={buildPath(Page.PERFORMANCE_CYCLE)} title={'Performance Cycle'} />
+            <MenuItem iconGraphic={'edit'} linkTo='' title={'My notes'} />
+            <MenuItem iconGraphic={'alert'} linkTo={buildPath(Page.PERFORMANCE_CYCLE)} title={'Performance cycle'} />
           </div>
         </div>
         <div className={css(menuDrawerSettingsStyle)}>
@@ -59,7 +59,7 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
           </Link>
           <Link to={''} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
             <Icon graphic={'question'} />
-            <span className={css(itemSettingsTextStyle)}>Help and FAQ</span>
+            <span className={css(itemSettingsTextStyle)}>{`Help and FAQ's`}</span>
           </Link>
           <a href={LINKS.signOut} className={css(itemSettingsStyle, itemSettingsBorderStyle)} onClick={handleSignOut}>
             <Icon graphic={'signOut'} />

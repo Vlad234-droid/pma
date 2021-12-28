@@ -90,7 +90,7 @@ const CareerPerformance: FC = () => {
             <BasicTile
               img={<Icon graphic='settingsGear' />}
               hover={false}
-              title={"Something doesn't look right? Raise a ticket on colleague help."}
+              title={"Something doesn't look right? Raise a ticket on Colleague Help "}
               imgCustomStyle={{ width: '30px', margin: '10px auto 0px auto' }}
               customStyle={{
                 background: '#fad919',
@@ -187,7 +187,7 @@ const CareerPerformance: FC = () => {
               hover={true}
               img={Check}
               title={t('Everyday conversations')}
-              description={t('Useful guidance on having great performance conversations')}
+              description={t('Useful guidance on having great performance conversations.')}
               customStyle={{
                 height: '100%',
               }}
