@@ -5,6 +5,10 @@ import { TileWrapper } from 'components/Tile';
 import { Graphics, Icon } from 'components/Icon';
 import { Accordion, BaseAccordion, ExpandButton, Panel, Section } from 'components/Accordion';
 import { Status, TimelineType } from 'config/enum';
+import { Page } from 'pages/types';
+import { useHistory } from 'react-router-dom';
+import { paramsReplacer } from 'utils';
+import { buildPath } from 'features/Routes';
 
 import ColleagueInfo from '../ColleagueInfo';
 
@@ -23,6 +27,7 @@ export type Employee = {
   lastName: string;
   jobName: string;
   businessType: string;
+  uuid: string;
   timeline: Review[];
 };
 
@@ -49,8 +54,13 @@ export const getIcon = (status): [Graphics, Colors] => {
 
 export const WidgetTeamMateProfile: FC<WidgetTeamMateProfileProps> = ({ id, status, employee }) => {
   const { css } = useStyle();
+  const history = useHistory();
 
   const [graphics, color] = getIcon(status);
+
+  const viewUserObjectives = (uuid) => {
+    history.push(buildPath(paramsReplacer(`${Page.USER_OBJECTIVES}`, { ':uuid': uuid })));
+  };
 
   return (
     <>
@@ -75,9 +85,19 @@ export const WidgetTeamMateProfile: FC<WidgetTeamMateProfileProps> = ({ id, stat
                     />
                     <div className={css({ marginLeft: 'auto', display: 'flex', alignItems: 'center' })}>
                       <div className={css({ padding: '12px 12px' })}>
-                        <span className={css({ fontSize: '16px', lineHeight: '20px', color: colors.tescoBlue })}>
+                        <button
+                          onClick={() => viewUserObjectives(employee.uuid)}
+                          className={css({
+                            fontSize: '16px',
+                            lineHeight: '20px',
+                            color: colors.tescoBlue,
+                            cursor: 'pointer',
+                            border: 'none',
+                            backgroundColor: 'transparent',
+                          })}
+                        >
                           View profile
-                        </span>
+                        </button>
                       </div>
                       <div className={css({ padding: '0px 12px' })}>
                         <Icon graphic={graphics} fill={color} />

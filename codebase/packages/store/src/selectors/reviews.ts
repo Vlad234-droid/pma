@@ -40,7 +40,7 @@ export const getReviewPropertiesSelector = (reviewType: ReviewType) =>
 export const getNextReviewNumberSelector = (reviewType: ReviewType) =>
   createSelector(filterReviewsByTypeSelector(reviewType), (reviews: any) => {
     if (reviews?.length) {
-      const number = reviews[reviews?.length - 1].number;
+      const number = reviews?.length;
       return number + 1;
     }
 

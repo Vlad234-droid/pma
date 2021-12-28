@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { MenuItem } from 'components/MenuItem';
 import { Rule, useStyle } from '@dex-ddl/core';
 import { Link } from 'react-router-dom';
@@ -7,11 +7,27 @@ import { LINKS } from 'config/constants';
 import TescoLogo from './TescoLogo.svg';
 import { Icon } from '../Icon';
 import { IconButton } from '../IconButton';
+import { buildPath } from 'features/Routes';
+import { ConfirmModal } from 'features/Modal';
+import { useTranslation } from 'components/Translation';
 
 export type MenuDrawerProps = { onClose: () => void };
 
 export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
+  const [isOpen, setIsOpen] = useState(false);
   const { css } = useStyle();
+  const { t } = useTranslation();
+
+  const handleSignOut = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    setIsOpen(true);
+  };
+
+  const handleSignOutConfirm = () => {
+    window.location.href = LINKS.signOut;
+    setIsOpen(false);
+  };
+
   return (
     <div className={css(menuDrawerWrapperStyle)}>
       <div className={css(menuDrawerContentStyle)}>
@@ -22,18 +38,18 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
           </div>
           <div className={css(menuDrawerTitleStyle)}>Performance management application</div>
           <div className={css(menuDrawerButtonsStyle)}>
-            <MenuItem iconGraphic={'calender'} linkTo={Page.CONTRIBUTION} title={'Your Contribution'} />
-            <MenuItem iconGraphic={'document'} linkTo={Page.OBJECTIVES_VIEW} title={'My Objectives'} />
+            <MenuItem iconGraphic={'calender'} linkTo={buildPath(Page.CONTRIBUTION)} title={'Your Contribution'} />
+            <MenuItem iconGraphic={'document'} linkTo={buildPath(Page.OBJECTIVES_VIEW)} title={'My objectives'} />
             <MenuItem
               iconGraphic={'document'}
-              linkTo={Page.CREATE_ORGANIZATION_OBJECTIVES}
-              title={'Strategic Priorities'}
+              linkTo={buildPath(Page.CREATE_STRATEGIC_DRIVERS)}
+              title={'Strategic drivers'}
             />
-            <MenuItem iconGraphic={'add'} title={'Personal Development Plan'} />
-            <MenuItem iconGraphic={'account'} linkTo={Page.PROFILE} title={'My Profile'} />
-            <MenuItem iconGraphic={'chatSq'} linkTo={Page.FEEDBACK} title={'Feedback'} />
-            <MenuItem iconGraphic={'edit'} linkTo='' title={'My Notes'} />
-            <MenuItem iconGraphic={'alert'} linkTo={Page.PERFORMANCE_CYCLE} title={'Performance Cycle'} />
+            <MenuItem iconGraphic={'add'} title={'Personal Development plan'} />
+            <MenuItem iconGraphic={'account'} linkTo={buildPath(Page.PROFILE)} title={'My profile'} />
+            <MenuItem iconGraphic={'chatSq'} linkTo={buildPath(Page.FEEDBACK)} title={'Feedback'} />
+            <MenuItem iconGraphic={'edit'} linkTo='' title={'My notes'} />
+            <MenuItem iconGraphic={'alert'} linkTo={buildPath(Page.PERFORMANCE_CYCLE)} title={'Performance cycle'} />
           </div>
         </div>
         <div className={css(menuDrawerSettingsStyle)}>
@@ -43,14 +59,24 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
           </Link>
           <Link to={''} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
             <Icon graphic={'question'} />
-            <span className={css(itemSettingsTextStyle)}>Help and FAQ</span>
+            <span className={css(itemSettingsTextStyle)}>{`Help and FAQ's`}</span>
           </Link>
-          <a href={LINKS.signOut} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
+          <a href={LINKS.signOut} className={css(itemSettingsStyle, itemSettingsBorderStyle)} onClick={handleSignOut}>
             <Icon graphic={'signOut'} />
-            <span className={css(itemSettingsTextStyle)}>Sign out</span>
+            <span className={css(itemSettingsTextStyle)}>{t('sign_out', 'Sign out')}</span>
           </a>
         </div>
       </div>
+      {isOpen && (
+        <ConfirmModal
+          title={''}
+          description={t('are_you_sure_you_want_to_log_out', 'Are you sure you want to log out?')}
+          submitBtnTitle={t('confirm', 'Confirm')}
+          onSave={handleSignOutConfirm}
+          onCancel={() => setIsOpen(false)}
+          onOverlayClick={() => setIsOpen(false)}
+        />
+      )}
     </div>
   );
 };

@@ -90,7 +90,7 @@ const CareerPerformance: FC = () => {
             <BasicTile
               img={<Icon graphic='settingsGear' />}
               hover={false}
-              title={"Something doesn't look right? Raise a ticket on colleague help."}
+              title={"Something doesn't look right? Raise a ticket on Colleague Help "}
               imgCustomStyle={{ width: '30px', margin: '10px auto 0px auto' }}
               customStyle={{
                 background: '#fad919',
@@ -127,7 +127,8 @@ const CareerPerformance: FC = () => {
                 <ReviewWidget
                   reviewType={ReviewType.MYR}
                   status={midYearReview?.status}
-                  startDate={midYearReview?.startDate}
+                  startTime={midYearReview?.startTime}
+                  endTime={midYearReview?.endTime}
                   onClick={() => console.log('ReviewWidget')}
                   onClose={() => console.log('ReviewWidget')}
                   title={'Mid-year review'}
@@ -139,7 +140,8 @@ const CareerPerformance: FC = () => {
                 <ReviewWidget
                   reviewType={ReviewType.EYR}
                   status={endYearReview?.status}
-                  startDate={endYearReview?.startDate}
+                  startTime={endYearReview?.startTime}
+                  endTime={endYearReview?.endTime}
                   onClick={() => console.log('ReviewWidget')}
                   onClose={() => console.log('ReviewWidget')}
                   title={'Year-end review'}
@@ -185,7 +187,7 @@ const CareerPerformance: FC = () => {
               hover={true}
               img={Check}
               title={t('Everyday conversations')}
-              description={t('Useful guidance on having great performance conversations')}
+              description={t('Useful guidance on having great performance conversations.')}
               customStyle={{
                 height: '100%',
               }}

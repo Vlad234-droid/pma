@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
-import { Rule, useStyle, useBreakpoints, ModalWithHeader, Button } from '@dex-ddl/core';
+import { Button, ModalWithHeader, Rule, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { chooseTemplateSchema } from 'pages/PerformanceCycle/schema';
@@ -20,41 +20,42 @@ const TemplatesModal: FC<TemplateModalProps> = ({ closeModal, selectTemplate }) 
   const processTemplate = useSelector(getProcessTemplateSelector);
   const [templatesList, setTemplatesList] = useState([] as any);
 
-  useEffect(() => { 
+  useEffect(() => {
     setTemplatesList(processTemplate);
-  }, [])
+  }, []);
 
   const templateChooseMethods = useForm({
     mode: 'onChange',
     resolver: yupResolver<Yup.AnyObjectSchema>(chooseTemplateSchema),
-  })
+  });
 
   const { getValues } = templateChooseMethods;
-
-  const handleTemplateClick = () => {
-    console.log("Template clicked");
-  }
 
   const handleSearchTemplate = () => {
     const searchValue = getValues('template_search').toLowerCase();
     const filtredTemplatesList = [] as any;
-    processTemplate.map(item => {
-      const date = new Date(item?.createdTime)
+    processTemplate.map((item) => {
+      const date = new Date(item?.createdTime);
       const createdTime = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
-      if(`${item.label.toLowerCase()}${createdTime}`.includes(searchValue)) {
-        filtredTemplatesList.push(item)
+      if (`${item.label.toLowerCase()}${createdTime}`.includes(searchValue)) {
+        filtredTemplatesList.push(item);
       }
       return filtredTemplatesList;
-    })
-    setTemplatesList(filtredTemplatesList)
-  }
+    });
+    setTemplatesList(filtredTemplatesList);
+  };
 
   return (
-    <ModalWithHeader containerRule={templatesModalWindowStyles} title="Choose Template" modalPosition="middle" closeOptions={{
-      closeOptionContent: <Icon graphic='cancel' invertColors={true} />,
-      closeOptionStyles: {},
-      onClose: closeModal
-    }}>
+    <ModalWithHeader
+      containerRule={templatesModalWindowStyles}
+      title='Choose Template'
+      modalPosition='middle'
+      closeOptions={{
+        closeOptionContent: <Icon graphic='cancel' invertColors={true} />,
+        closeOptionStyles: {},
+        onClose: closeModal,
+      }}
+    >
       <div className={css(templatesModalContentWrapperStyles)}>
         <GenericItemField
           name={`template_search`}
@@ -71,21 +72,26 @@ const TemplatesModal: FC<TemplateModalProps> = ({ closeModal, selectTemplate }) 
         />
 
         <div className={css(templatesListStyles)}>
-          {
-            templatesList.map(item => {
-              const date = new Date(item?.createdTime)
-              const createdTime = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
-              return (
-                <div 
-                  className={css(templatesListItemStyles)} 
-                  key={Math.random()} 
-                  onClick={() => selectTemplate(item.value)}
-                >
-                  <div>{item?.label}</div><div className={css({ fontSize: '14px' })}>{createdTime}</div>
+          {templatesList.map((item) => {
+            const date = new Date(item?.createdTime);
+            const createdTime = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
+            return (
+              <div
+                className={css(templatesListItemStyles)}
+                key={Math.random()}
+                onClick={() => selectTemplate(item.value)}
+              >
+                <div>
+                  {item?.label}
+                  <div className={css(row)}>
+                    {' '}
+                    {item?.fileName} {item?.path}
+                  </div>
                 </div>
-              )
-            })
-          }
+                <div className={css(timeStyles)}>{createdTime}</div>
+              </div>
+            );
+          })}
         </div>
         <div className={css(templatesModalFooter)}>
           <Button mode='inverse' onPress={closeModal} styles={[btnStyle]}>
@@ -93,8 +99,7 @@ const TemplatesModal: FC<TemplateModalProps> = ({ closeModal, selectTemplate }) 
           </Button>
         </div>
       </div>
-
-    </ModalWithHeader> 
+    </ModalWithHeader>
   );
 };
 
@@ -112,26 +117,26 @@ const templatesModalWindowStyles: Rule = () => {
     padding: '0',
     height: mobileScreen ? 'calc(100% - 50px)' : 'calc(100% - 100px)',
     marginTop: mobileScreen ? '50px' : 0,
-  }
-}
+  };
+};
 
 const templatesModalContentWrapperStyles: Rule = () => {
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
   return {
-    display: "flex",
+    display: 'flex',
     flexDirection: 'column',
     height: '100%',
     padding: mobileScreen ? '30px 20px 60px' : '40px 40px 100px',
-    positin: 'relative'
-  }
-}
+    positin: 'relative',
+  };
+};
 
 const templatesListStyles: Rule = ({ theme }) => ({
   margin: '25px 0 0',
   height: '100%',
-  overflowY: 'scroll'
-})
+  overflowY: 'scroll',
+});
 
 const templatesListItemStyles: Rule = ({ theme }) => {
   // const [, isBreakpoint] = useBreakpoints();
@@ -143,9 +148,9 @@ const templatesListItemStyles: Rule = ({ theme }) => {
     cursor: 'pointer',
     display: 'flex',
     justifyContent: 'space-between',
-    alignItems: 'center'
-  }
-}
+    alignItems: 'center',
+  };
+};
 
 const templatesModalFooter: Rule = ({ theme }) => {
   const [, isBreakpoint] = useBreakpoints();
@@ -161,8 +166,16 @@ const templatesModalFooter: Rule = ({ theme }) => {
     borderBottomLeftRadius: mobileScreen ? 0 : '32px',
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center'
-  }
-}
+    justifyContent: 'center',
+  };
+};
+
+const row: Rule = ({ theme }) => {
+  return { fontSize: `${theme.font.fixed.f12}`, color: `${theme.colors.tescoBlue}` };
+};
+
+const timeStyles: Rule = ({ theme }) => {
+  return { fontSize: `${theme.font.fixed.f14}` };
+};
 
 export default TemplatesModal;

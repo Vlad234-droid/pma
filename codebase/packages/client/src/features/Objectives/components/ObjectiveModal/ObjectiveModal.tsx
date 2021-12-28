@@ -28,6 +28,7 @@ export type ObjectiveModalProps = {
   onSubmit: () => void;
   setNextObjectiveNumber?: () => void;
   skipFooter?: boolean;
+  skipHelp?: boolean;
 };
 
 type Props = HTMLProps<HTMLInputElement> & ObjectiveModalProps;
@@ -45,6 +46,7 @@ export const ObjectiveModal: FC<Props> = ({
   onSubmit,
   setNextObjectiveNumber,
   skipFooter,
+  skipHelp,
 }) => {
   const { css, theme } = useStyle();
   const [, isBreakpoint] = useBreakpoints();
@@ -88,19 +90,28 @@ export const ObjectiveModal: FC<Props> = ({
               />
             </div>
           )}
-          <div className={css({ padding: `0 0 ${theme.spacing.s5}`, display: 'flex' })}>
-            <TriggerModal triggerComponent={<Icon graphic='information' />} title={'Writing your objectives'}>
-              <ObjectiveHelpModal />
-            </TriggerModal>
-            <span
-              className={css(theme.font.fixed.f14, {
-                color: theme.colors.tescoBlue,
-                padding: `${theme.spacing.s0} ${theme.spacing.s2}`,
-              })}
-            >
-              Need help writing your objectives?
-            </span>
-          </div>
+          {!skipHelp && (
+            <div className={css({ padding: `0 0 ${theme.spacing.s5}`, display: 'flex' })}>
+              <TriggerModal
+                triggerComponent={
+                  <div className={css({ display: 'flex', alignItems: 'center' })}>
+                    <Icon graphic='information' />
+                    <span
+                      className={css(theme.font.fixed.f14, {
+                        color: theme.colors.tescoBlue,
+                        padding: `${theme.spacing.s0} ${theme.spacing.s2}`,
+                      })}
+                    >
+                      Need help writing your objectives?
+                    </span>
+                  </div>
+                }
+                title={'Writing your objectives'}
+              >
+                <ObjectiveHelpModal />
+              </TriggerModal>
+            </div>
+          )}
           {schemaComponents.map((component) => {
             const { id, key, label, description, type, validate, values = [] } = component;
             const value = formValues[key] ? formValues[key] : '';

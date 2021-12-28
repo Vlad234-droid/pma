@@ -2,12 +2,13 @@ import { ComponentType, FC, LazyExoticComponent } from 'react';
 
 enum Page {
   CONTRIBUTION = 'contribution',
-  CREATE_ORGANIZATION_OBJECTIVES = 'create-strategic-priorities',
-  VIEW_ORGANIZATION_OBJECTIVES = 'view-strategic-priorities',
+  CREATE_STRATEGIC_DRIVERS = 'strategic-drivers/create',
+  STRATEGIC_DRIVERS = 'strategic-drivers',
   CREATE_PERFORMANCE_CYCLE = 'performance-cycle/:performanceCycleUuid',
   PERFORMANCE_CYCLE = 'performance-cycle',
   PERSONAL_DEVELOPMENT_PLAN = 'personal-development-plan',
   OBJECTIVES_VIEW = 'objectives',
+  USER_OBJECTIVES = 'user-objective/:uuid',
   PROFILE = 'profile',
   SETTINGS = 'settings',
   MY_TEAM = 'my-team',
