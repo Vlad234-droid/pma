@@ -17,6 +17,7 @@ import processTemplateEpic from '../entities/processTemplate/epic';
 import pdpEpic from '../entities/pdp/epic';
 import reportEpic from '../entities/report/epic';
 import previousReviewFilesEpic from '../entities/previousReviewFiles/epic';
+import messagesEpic from '../entities/messages/epic';
 
 export const rootEpic = combineEpics(
   userEpic,
@@ -37,4 +38,5 @@ export const rootEpic = combineEpics(
   pdpEpic,
   reportEpic,
   previousReviewFilesEpic,
+  messagesEpic,
 );

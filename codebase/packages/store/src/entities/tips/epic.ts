@@ -3,7 +3,7 @@ import { Epic, isActionOf } from 'typesafe-actions';
 import { combineEpics } from 'redux-observable';
 import { from, of } from 'rxjs';
 import { catchError, filter, map, switchMap } from 'rxjs/operators';
-import { getAllTips, getTipHistory, createTip, getTipByUuid, deleteTip } from './actions';
+import { getAllTips, getTipHistory, createTip, getTipByUuid, deleteTip, publishTipByUuid } from './actions';
 import { concatWithErrorToast, errorPayloadConverter } from '../../utils/toastHelper';
 
 export const getAllTipsEpic: Epic = (action$, _, { api }) => {
@@ -102,4 +102,31 @@ export const deleteTipEpic: Epic = (action$, _, { api }) => {
   );
 };
 
-export default combineEpics(getAllTipsEpic, getTipHistoryEpic, createTipEpic, getTipByUuidEpic, deleteTipEpic);
+export const publishTipByUuidEpic: Epic = (action$, _, { api }) => {
+  return action$.pipe(
+    filter(isActionOf(publishTipByUuid.request)),
+    switchMap(({ payload }) => {
+      //@ts-ignore
+      return from(api.publishTipByUuid(payload)).pipe(
+        //@ts-ignore
+        map(({ data }) => {
+          return publishTipByUuid.success(data);
+        }),
+        catchError(({ errors }) => of(publishTipByUuid.failure(errors))),
+        catchError((e) => {
+          const errors = e?.data?.errors;
+          return of(publishTipByUuid.failure(errors?.[0]));
+        }),
+      );
+    }),
+  );
+};
+
+export default combineEpics(
+  getAllTipsEpic,
+  getTipHistoryEpic,
+  createTipEpic,
+  getTipByUuidEpic,
+  deleteTipEpic,
+  publishTipByUuidEpic,
+);

@@ -18,6 +18,7 @@ import { pages } from 'pages';
 import { ToastProvider } from 'features/Toast';
 import { AppStateProvider } from 'features/AppState';
 import fontSettings from 'theme/font/fontSettings';
+import { MessagesProvider } from 'features/Messages';
 
 const routes = buildRoutes(pages);
 
@@ -35,19 +36,21 @@ const Root: FC = () => {
     <I18nextProvider i18n={i18n}>
       <DDLProvider rendererOptions={rendererOptions} theme={merge(dexDDLTheme, theme)}>
         <Provider store={store}>
-          <ToastProvider>
-            <AuthProvider>
-              <AppStateProvider>
-                <BrowserRouter basename={PUBLIC_URL}>
-                  <React.StrictMode>
-                    <Layout>
-                      <Navigation routes={routes} />
-                    </Layout>
-                  </React.StrictMode>
-                </BrowserRouter>
-              </AppStateProvider>
-            </AuthProvider>
-          </ToastProvider>
+          <AuthProvider>
+            <ToastProvider>
+              <MessagesProvider>
+                <AppStateProvider>
+                  <BrowserRouter basename={PUBLIC_URL}>
+                    <React.StrictMode>
+                      <Layout>
+                        <Navigation routes={routes} />
+                      </Layout>
+                    </React.StrictMode>
+                  </BrowserRouter>
+                </AppStateProvider>
+              </MessagesProvider>
+            </ToastProvider>
+          </AuthProvider>
         </Provider>
       </DDLProvider>
     </I18nextProvider>

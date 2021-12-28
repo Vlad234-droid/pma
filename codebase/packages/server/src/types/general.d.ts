@@ -8,10 +8,17 @@ declare namespace NodeJS {
     integrity = 'integrity',
   }
 
+  enum Environment {
+    local = 'local',
+    dev = 'dev',
+    ppe = 'ppe',
+    prod = 'prod',
+  }
+
   interface ProcessEnv {
     // General
     NODE_PORT: number;
-    NODE_ENV: 'local' | 'development' | 'ppe' | 'production';
+    NODE_ENV: keyof typeof Environment;
     BUILD_ENV: 'development' | 'ppe' | 'production';
     PROXY_API_SERVER_URL: string;
 
