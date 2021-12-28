@@ -68,7 +68,6 @@ const UserObjectives: FC = () => {
   const [schema] = useReviewSchema(ReviewType.OBJECTIVE);
   const { components = [], markup = { max: 0, min: 0 } } = schema;
 
-
   const { loaded: schemaLoaded } = useSelector(schemaMetaSelector);
   const { loaded: reviewLoaded } = useSelector(reviewsMetaSelector);
 
@@ -77,14 +76,16 @@ const UserObjectives: FC = () => {
   const canShowObjectives = timelineTypes[ObjectiveType.OBJECTIVE];
   const canShowMyReview = timelineTypes[ObjectiveType.MYR] && timelineTypes[ObjectiveType.EYR];
   const canShowAnnualReview = !timelineTypes[ObjectiveType.MYR] && timelineTypes[ObjectiveType.EYR];
-  const { uuid } = useParams<{uuid: string}>();
-  const params = useMemo(() => ({ pathParams:{ colleagueUuid: uuid, type: ReviewType.OBJECTIVE, cycleUuid: 'CURRENT' }}), [uuid]);
+  const { uuid } = useParams<{ uuid: string }>();
+  const params = useMemo(
+    () => ({ pathParams: { colleagueUuid: uuid, type: ReviewType.OBJECTIVE, cycleUuid: 'CURRENT' } }),
+    [uuid],
+  );
   const [origin] = useReviews(params);
   const formElements = components.filter((component) => component.type != 'text');
-  
+
   const timelineObjective = useSelector(getTimelineByReviewTypeSelector(ReviewType.OBJECTIVE));
   const status = timelineObjective?.status || undefined;
-  
 
   const isAllObjectivesInSameStatus = useSelector(isReviewsInStatus(ReviewType.OBJECTIVE)(status));
 
@@ -145,11 +146,7 @@ const UserObjectives: FC = () => {
           {canShowObjectives && (
             <Section
               left={{
-                content: (
-                  <div className={css(tileStyles)}>
-                    User objectives
-                  </div>
-                ),
+                content: <div className={css(tileStyles)}>User objectives</div>,
               }}
               right={{
                 content: (
@@ -177,14 +174,10 @@ const UserObjectives: FC = () => {
               <Accordion objectives={objectives} canShowStatus={!isAllObjectivesInSameStatus} />
             </Section>
           )}
-          
+
           <Section
             left={{
-              content: (
-                <div>
-                  User Completed Reviews
-                </div>
-              ),
+              content: <div>User Completed Reviews</div>,
             }}
             right={{
               content: (

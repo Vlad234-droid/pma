@@ -35,8 +35,8 @@ const MyTeam: FC = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!loaded && colleagueUuid) dispatch(ManagersActions.getManagers({ colleagueUuid }));
-  }, [loaded, colleagueUuid]);
+    if (colleagueUuid) dispatch(ManagersActions.getManagers({ colleagueUuid }));
+  }, [colleagueUuid]);
 
   return (
     <div>
