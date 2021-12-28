@@ -1,17 +1,20 @@
-import React, { FC, Fragment, useEffect } from 'react';
+import React, { FC, useEffect } from 'react';
+import { useHistory } from 'react-router';
+import { useDispatch, useSelector } from 'react-redux';
 import { useStyle, Rule, useBreakpoints } from '@dex-ddl/core';
+import { tipsActions, getTipsSelector } from '@pma/store';
+import { Page } from 'pages';
+import { buildPath } from 'features/Routes/utils';
 import { IconButton } from 'components/IconButton';
 import { NoTips, TipsCard } from 'features/Tips';
-import { tipsActions, getTipsSelector } from '@pma/store';
-import { useDispatch, useSelector } from 'react-redux';
-import { useHistory } from 'react-router';
-import { Page } from 'pages';
+
+const TIPS_ADMINISTRATION = 'tips-adminiation';
 
 const TipsAdministration: FC = () => {
   const { css } = useStyle();
   const dispatch = useDispatch();
-  const tips = useSelector(getTipsSelector);
   const history = useHistory();
+  const tips = useSelector(getTipsSelector) || [];
 
   useEffect(() => {
     dispatch(
@@ -20,11 +23,11 @@ const TipsAdministration: FC = () => {
   }, []);
 
   const handleCreateTip = () => {
-    history.push(`${Page.CREATE_TIP}`)
+    history.push(buildPath(`${Page.CREATE_TIP}`))
   };
 
   return (
-    <Fragment>
+    <div data-test-id={TIPS_ADMINISTRATION}>
       <div className={css({ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '20px 0 25px' })}>
         <IconButton
           customVariantRules={{ default: iconBtnStyle }}
@@ -37,12 +40,12 @@ const TipsAdministration: FC = () => {
         </IconButton>
       </div>
       
-      { tips.length == 0 && <NoTips /> }
+      { tips.length === 0 && <NoTips /> }
 
       {tips.map(item => {
         return <TipsCard card={item} key={item.uuid} />
       })}
-    </Fragment>
+    </div>
   )
 }
 
