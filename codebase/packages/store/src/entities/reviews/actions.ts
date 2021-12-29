@@ -1,13 +1,14 @@
 import { createAction, createAsyncAction } from 'typesafe-actions';
 import { ReviewActionParams, ActionParams } from '@pma/client/src/config/interface';
-import { ReviewType } from '@pma/client/src/config/enum';
+import { ReviewType, Status } from '@pma/client/src/config/enum';
+import { Review } from '@pma/client/src/config/types';
 
 interface ReviewUpdateStatusAction extends ActionParams {
-  pathParams: { colleagueUuid: string; type?: ReviewType; cycleUuid?: string; status?: string };
+  pathParams: { colleagueUuid: string; type?: ReviewType; cycleUuid?: string; status?: Status };
   data: {
     reason?: string;
-    reviews?: [];
-    status?: string;
+    reviews?: Review[];
+    status?: Status;
     colleagueUuid?: string;
   };
 }
