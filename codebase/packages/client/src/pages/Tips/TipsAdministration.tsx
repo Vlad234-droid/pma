@@ -8,7 +8,7 @@ import { buildPath } from 'features/Routes/utils';
 import { IconButton } from 'components/IconButton';
 import { NoTips, TipsCard } from 'features/Tips';
 
-const TIPS_ADMINISTRATION = 'tips-adminiation';
+const TIPS_ADMINISTRATION = 'tips-administration';
 
 const TipsAdministration: FC = () => {
   const { css } = useStyle();

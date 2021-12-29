@@ -19,33 +19,31 @@ const PushTipModal: FC<PushTipModalProps> = ({ card, handleCloseModal }) => {
   }
 
   return (
-    <>
-      <Modal modalPosition="middle" modalContainerRule={[modalWrapper]}>
-        { successText 
-          ?
-          <>
-            <img src={success} alt='success' />
-            <div className={css(modalTitle)}>Done!</div>
-            <div className={css(modalSubTitleStyle)}>Tip pushed successfully.</div>
-            <div className={css(modalBtnsWrap)}>
-              <Button onPress={handleCloseModal} styles={[modalBtn, { margin: '0 auto' }]}>Close</Button>
-            </div>
-          </>
-          :
-          <>
-            <div className={css(modalTitle)}>Push Tip</div>
-            <div className={css(modalSubTitleStyle)}>Do you want to push the below Tip?</div>
-            <div className={css(modalText)}><span className={css({ fontWeight: 700 })}>Title:</span> {card.title}</div>
-            <div className={css(modalText)}><span className={css({ fontWeight: 700 })}>Description:</span> {card.description}</div>
-            <div className={css(modalText)}><span className={css({ fontWeight: 700 })}>Target:</span> {card.targetOrganisation.name}</div>
-            <div className={css(modalBtnsWrap)}>
-              <Button onPress={handleCloseModal} mode='inverse' styles={[modalBtn, { border: `1px solid ${theme.colors.tescoBlue}`}]}>Cancel</Button>
-              <Button onPress={handlePushTip} styles={[modalBtn]}>Confirm</Button>
-            </div>
-          </>
-        }
-      </Modal>
-    </>
+    <Modal modalPosition="middle" modalContainerRule={[modalWrapper]}>
+      { successText 
+        ? 
+        <>
+          <img src={success} alt='success' />
+          <div className={css(modalTitle)}>Done!</div>
+          <div className={css(modalSubTitleStyle)}>Tip pushed successfully.</div>
+          <div className={css(modalBtnsWrap)}>
+            <Button onPress={handleCloseModal} styles={[modalBtn, { margin: '0 auto' }]}>Close</Button>
+          </div>
+        </>
+        :
+        <>
+          <div className={css(modalTitle)}>Push Tip</div>
+          <div className={css(modalSubTitleStyle)}>Do you want to push the below Tip?</div>
+          <div className={css(modalText)}><span className={css({ fontWeight: 700 })}>Title:</span> {card.title}</div>
+          <div className={css(modalText)}><span className={css({ fontWeight: 700 })}>Description:</span> {card.description}</div>
+          <div className={css(modalText)}><span className={css({ fontWeight: 700 })}>Target:</span> {card.targetOrganisation.name}</div>
+          <div className={css(modalBtnsWrap)}>
+            <Button onPress={handleCloseModal} mode='inverse' styles={[modalBtn, { border: `1px solid ${theme.colors.tescoBlue}`}]}>Cancel</Button>
+            <Button onPress={handlePushTip} styles={[modalBtn]}>Confirm</Button>
+          </div>
+        </>
+      }
+    </Modal>
   )
 }
 
