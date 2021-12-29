@@ -120,13 +120,13 @@ const CreateOrganizationObjectives: FC<Props> = () => {
                 return (
                   <GenericItemField
                     key={idx}
-                    name={`Strategic Priority ${idx + 1}`}
-                    label={`Strategic Priority ${idx + 1} label`}
+                    name={`Strategic Driver ${idx + 1}`}
+                    label={`Strategic Driver ${idx + 1} label`}
                     methods={methods}
                     Wrapper={Item}
                     Element={Input}
                     onChange={(event) => onChangeInput(event, idx)}
-                    placeholder={'Enter title for this Strategic Priority'}
+                    placeholder={'Enter title for this Strategic Driver'}
                     value={item?.title || ''}
                   />
                 );
