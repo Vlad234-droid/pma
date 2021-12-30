@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useRef } from 'react';
 import mergeRefs from 'react-merge-refs';
 import { Rule, useStyle } from '@dex-ddl/core';
 import { Icon } from 'components/Icon';
@@ -21,6 +21,7 @@ const Select: FC<SelectProps> = ({
   const [selectedOptionValue, setSelectedOptionValue] = useState(value);
   const [isOptionOpen, toggleOption] = useState(false);
   const selectedOptionLabel = options.find(({ value }) => value === selectedOptionValue)?.label || '';
+  const inputRef = useRef<HTMLInputElement>();
 
   const handleClick = () => {
     toggleOption((isOptionOpen) => !isOptionOpen);
@@ -42,9 +43,8 @@ const Select: FC<SelectProps> = ({
     setSelectedOptionValue(option.value);
 
     // hack trigger manually select event on input
-    const element = document.getElementById('select-input');
     const event = new Event('select');
-    element && element.dispatchEvent(event);
+    inputRef && inputRef.current?.dispatchEvent(event);
 
     toggleOption(false);
   };
@@ -60,7 +60,7 @@ const Select: FC<SelectProps> = ({
       >
         <input
           id='select-input'
-          ref={mergeRefs([domRef, refIcon])}
+          ref={mergeRefs([domRef, refIcon, inputRef])}
           name={name}
           value={selectedOptionLabel || value}
           disabled={disabled}
