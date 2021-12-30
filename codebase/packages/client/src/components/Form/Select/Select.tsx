@@ -30,10 +30,12 @@ const Select: FC<SelectProps> = ({
     toggleOption(false);
   };
 
-  const handleSelect = (option) => {
+  const handleSelect = (event, option) => {
+    console.log('option', option);
+
     setSelectedOptionValue(option.value);
 
-    onChange && onChange(option.value);
+    onChange && onChange(event, option.value);
 
     if (getSelected !== undefined) {
       getSelected(option);
@@ -124,7 +126,7 @@ const Select: FC<SelectProps> = ({
                   },
                 })}
                 onMouseDown={(e) => e.preventDefault()}
-                onClick={() => handleSelect(option)}
+                onClick={(event) => handleSelect(event, option)}
               >
                 {option.label}
               </span>
