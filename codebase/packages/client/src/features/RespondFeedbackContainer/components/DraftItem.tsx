@@ -163,6 +163,7 @@ const DraftItem: FC<DraftItemProps> = ({
                             margin: '0px 28px 16px 24px',
                             borderRadius: '10px',
                             background: '#F3F9FC',
+                            width: 'auto'
                           }}
                         >
                           {checkedRadio.pending && (

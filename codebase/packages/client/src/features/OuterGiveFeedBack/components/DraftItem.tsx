@@ -127,7 +127,7 @@ const DraftItem: FC<DraftItemProps> = ({
 
                       <Panel>
                         <TileWrapper
-                          customStyle={{ padding: '24px', margin: '0px 28px 24px 24px', border: '1px solid #E5E5E5' }}
+                          customStyle={{ width: 'auto', padding: '24px', margin: '0px 28px 24px 24px', border: '1px solid #E5E5E5' }}
                         >
                           <h2 className={css(Title_style)}>Objective: Provide a posititve customer experience</h2>
 

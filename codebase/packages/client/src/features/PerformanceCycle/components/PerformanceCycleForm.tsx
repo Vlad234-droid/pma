@@ -783,7 +783,6 @@ const btnStyle: Rule = ({ theme }) => ({
 // @ts-ignore
 const item: Rule = ({ theme }) => ({
   fontStyle: 'normal',
-  fontWeight: theme.font.weight.bold,
   fontSize: '16px',
   lineHeight: '24px',
 });
