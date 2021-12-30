@@ -32,7 +32,7 @@ const DeclineModal: FC<Props> = ({ onSave, onClose, review, reviewType }) => {
             <Select
               options={options}
               placeholder={t('please_select', 'Please select')}
-              onChange={(event, value) => setReason(value as string)}
+              onChange={(e) => setReason(e.target.value)}
             />
           ) : (
             t(

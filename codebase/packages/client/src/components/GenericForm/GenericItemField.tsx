@@ -48,10 +48,10 @@ export const GenericItemField: FC<GenericItemFormProps> = ({
         name={name}
         value={state}
         onChange={(e, value) => {
-          setState(value);
+          setState(e.target.value);
           register(name).onChange(e);
           if (onChange) {
-            onChange(value, value);
+            onChange(e.target.value, value);
           }
         }}
         domRef={register(name).ref}

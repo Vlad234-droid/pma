@@ -30,14 +30,21 @@ const Select: FC<SelectProps> = ({
     toggleOption(false);
   };
 
-  const handleSelect = (event, option) => {
-    setSelectedOptionValue(option.value);
-
-    onChange && onChange(event, option.value);
+  const handleSelectOnInput = (event) => {
+    onChange && onChange(event, selectedOptionValue);
 
     if (getSelected !== undefined) {
-      getSelected(option);
+      getSelected(selectedOptionValue);
     }
+  };
+
+  const handleSelect = (option) => {
+    setSelectedOptionValue(option.value);
+
+    // hack trigger manually select event on input
+    const element = document.getElementById('select-input');
+    const event = new Event('select');
+    element && element.dispatchEvent(event);
 
     toggleOption(false);
   };
@@ -52,6 +59,7 @@ const Select: FC<SelectProps> = ({
         }}
       >
         <input
+          id='select-input'
           ref={mergeRefs([domRef, refIcon])}
           name={name}
           value={selectedOptionLabel || value}
@@ -82,6 +90,7 @@ const Select: FC<SelectProps> = ({
           readOnly={true}
           onClick={handleClick}
           onBlur={handleBlur}
+          onSelect={handleSelectOnInput}
         />
         <span
           style={{
@@ -124,7 +133,7 @@ const Select: FC<SelectProps> = ({
                   },
                 })}
                 onMouseDown={(e) => e.preventDefault()}
-                onClick={(event) => handleSelect(event, option)}
+                onClick={() => handleSelect(option)}
               >
                 {option.label}
               </span>
