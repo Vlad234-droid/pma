@@ -129,6 +129,7 @@ const pages: Record<
     component: TipsAdministration,
     title: 'Tips',
     withHeader: true,
+    backPath: Page.CONTRIBUTION,
   },
   [Page.CREATE_TIP]: {
     component: CreateTip,

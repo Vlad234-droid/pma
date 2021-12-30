@@ -53,7 +53,12 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
           </div>
         </div>
         <div className={css(menuDrawerSettingsStyle)}>
-          <Link to={''} className={css(itemSettingsStyle)}>
+          <Link to={buildPath(Page.TIPS)} className={css(itemSettingsStyle)}>
+            {/* TODO: change tips' icon */}
+            <Icon graphic={'support'} />
+            <span className={css(itemSettingsTextStyle)}>Tips</span>
+          </Link>
+          <Link to={''} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
             <Icon graphic={'settingsGear'} />
             <span className={css(itemSettingsTextStyle)}>Settings</span>
           </Link>
