@@ -31,8 +31,6 @@ const Select: FC<SelectProps> = ({
   };
 
   const handleSelect = (event, option) => {
-    console.log('option', option);
-
     setSelectedOptionValue(option.value);
 
     onChange && onChange(event, option.value);
