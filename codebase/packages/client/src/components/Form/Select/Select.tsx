@@ -22,6 +22,26 @@ const Select: FC<SelectProps> = ({
   const [isOptionOpen, toggleOption] = useState(false);
   const selectedOptionLabel = options.find(({ value }) => value === selectedOptionValue)?.label || '';
 
+  const handleClick = () => {
+    toggleOption((isOptionOpen) => !isOptionOpen);
+  };
+
+  const handleBlur = () => {
+    toggleOption(false);
+  };
+
+  const handleSelect = (option) => {
+    setSelectedOptionValue(option.value);
+
+    onChange && onChange(option.value);
+
+    if (getSelected !== undefined) {
+      getSelected(option);
+    }
+
+    toggleOption(false);
+  };
+
   return (
     <>
       <div
@@ -60,14 +80,8 @@ const Select: FC<SelectProps> = ({
           )}
           placeholder={placeholder ? `- ${placeholder} -` : ''}
           readOnly={true}
-          onSelect={(e) => {
-            if (onChange && isOptionOpen) {
-              onChange(e, selectedOptionValue);
-            }
-            toggleOption(false);
-          }}
-          onClick={() => toggleOption(true)}
-          onBlur={() => toggleOption(false)}
+          onClick={handleClick}
+          onBlur={handleBlur}
         />
         <span
           style={{
@@ -80,6 +94,7 @@ const Select: FC<SelectProps> = ({
             graphic='arrowDown'
             iconStyles={{ ...iconStyles, ...(isOptionOpen ? iconExpandStyles : {}) }}
             fill='#A8A8A8'
+            onClick={handleClick}
           />
         </span>
         {isOptionOpen && !!options.length && (
@@ -94,33 +109,26 @@ const Select: FC<SelectProps> = ({
               zIndex: 999,
             }}
           >
-            {options.map((option) => {
-              return (
-                <span
-                  key={option.value}
-                  className={css({
-                    display: 'block',
-                    width: '100%',
-                    fontSize: '16px',
-                    lineHeight: '20px',
-                    padding: '10px 30px 10px 16px',
-                    cursor: 'pointer',
-                    ':hover': {
-                      background: '#F3F9FC',
-                    },
-                  })}
-                  onMouseDown={(e) => e.preventDefault()}
-                  onClick={() => {
-                    setSelectedOptionValue(option.value);
-                    if (getSelected !== undefined) {
-                      getSelected(option);
-                    }
-                  }}
-                >
-                  {option.label}
-                </span>
-              );
-            })}
+            {options.map((option) => (
+              <span
+                key={option.value}
+                className={css({
+                  display: 'block',
+                  width: '100%',
+                  fontSize: '16px',
+                  lineHeight: '20px',
+                  padding: '10px 30px 10px 16px',
+                  cursor: 'pointer',
+                  ':hover': {
+                    background: '#F3F9FC',
+                  },
+                })}
+                onMouseDown={(e) => e.preventDefault()}
+                onClick={() => handleSelect(option)}
+              >
+                {option.label}
+              </span>
+            ))}
           </div>
         )}
       </div>

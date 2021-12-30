@@ -12,6 +12,7 @@ export type IconBaseProps = {
   iconStyles?: Rule;
   invertColors?: boolean;
   testId?: string;
+  onClick?: () => void;
 };
 
 export type IconStyleProps = {
@@ -31,6 +32,7 @@ export const Icon: FC<IconProps> = ({
   invertColors = false,
   testId,
   backgroundRadius,
+  onClick,
   ...styles
 }) => {
   const { css } = useStyle();
@@ -41,19 +43,21 @@ export const Icon: FC<IconProps> = ({
   const customTitle = title ?? getTitle(CustomIcon.name);
 
   return (
-    <svg
-      data-test-id={testId}
-      fill='none'
-      className={css(customStylesRule(styles), iconStyles)}
-      viewBox='0 0 24 24'
-      xmlns='http://www.w3.org/2000/svg'
-      xmlnsXlink='http://www.w3.org/1999/xlink'
-      aria-labelledby={titleId}
-    >
-      <title id={titleId}>{customTitle}</title>
-      {backgroundRadius && <circle cx={backgroundRadius} cy={backgroundRadius} r={backgroundRadius} fill='white' />}
-      <CustomIcon invertColors={invertColors} />
-    </svg>
+    <span onClick={onClick}>
+      <svg
+        data-test-id={testId}
+        fill='none'
+        className={css(customStylesRule(styles), iconStyles)}
+        viewBox='0 0 24 24'
+        xmlns='http://www.w3.org/2000/svg'
+        xmlnsXlink='http://www.w3.org/1999/xlink'
+        aria-labelledby={titleId}
+      >
+        <title id={titleId}>{customTitle}</title>
+        {backgroundRadius && <circle cx={backgroundRadius} cy={backgroundRadius} r={backgroundRadius} fill='white' />}
+        <CustomIcon invertColors={invertColors} />
+      </svg>
+    </span>
   );
 };
 
