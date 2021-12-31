@@ -84,11 +84,11 @@ const MultiplySearchInput: FC<InputProps> = ({
                 <div className={css({ display: 'flex', justifyContent: 'flex-start', alignItems: 'center' })}>
                   <img className={css({ width: '50px', height: '50px', borderRadius: '50%' })} src={defaultImg} />
                   <div className={css({ marginLeft: '16px' })}>
-                    <div className={css(Selected_item_style, Flex_gap_style)}>
+                    <div className={css(SelectedItemStyle, FlexGapStyle)}>
                       <div>{item?.colleague?.profile?.firstName}</div>
                       <div>{item?.colleague?.profile?.lastName}</div>
                     </div>
-                    <div className={css(Flex_gap_style, { marginTop: '4px' })}>
+                    <div className={css(FlexGapStyle, { marginTop: '4px' })}>
                       <div>{item?.colleague?.workRelationships[0].job?.name}</div>
                       <div>{item?.colleague?.workRelationships[0].department?.name}</div>
                     </div>
@@ -103,12 +103,12 @@ const MultiplySearchInput: FC<InputProps> = ({
   );
 };
 
-const Flex_gap_style: Rule = {
+const FlexGapStyle: Rule = {
   display: 'flex',
   gap: '8px',
 };
 
-const Selected_item_style: Rule = ({ colors }) => ({
+const SelectedItemStyle: Rule = ({ colors }) => ({
   fontWeight: 'bold',
   fontSize: '16px',
   color: colors.link,

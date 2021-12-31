@@ -135,7 +135,7 @@ const RadioBtns: FC<RadioBtnsProps> = ({
                 padding: '0px 5px',
               })}
             >
-              <Trans>Submitted</Trans>
+              <Trans>Shared</Trans>
             </span>
           </label>
         </div>

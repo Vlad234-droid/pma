@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import { GiveFeedbackType, SubmitPartProps } from '../type';
 import { createGiveFeedbackSchema } from '../config';
 import { useForm } from 'react-hook-form';
@@ -14,7 +14,7 @@ import { Trans } from 'components/Translation';
 import { FeedbackActions, colleagueUUIDSelector, getReviewByUuidS } from '@pma/store';
 import { useDispatch, useSelector } from 'react-redux';
 import defaultImg from '../../../../public/default.png';
-import { TargetTypeReverse } from 'config/enum';
+import { TargetTypeReverse, TargetFeedbackKeys } from 'config/enum';
 
 const SubmitPart: FC<SubmitPartProps> = ({
   selectedPerson,
@@ -26,6 +26,7 @@ const SubmitPart: FC<SubmitPartProps> = ({
   const review = useSelector(getReviewByUuidS) || [];
   const dispatch = useDispatch();
   const colleagueUuid = useSelector(colleagueUUIDSelector);
+
   const giveFeedback: GiveFeedbackType[] = [
     {
       giveFeedback_id: '1',
@@ -101,6 +102,7 @@ const SubmitPart: FC<SubmitPartProps> = ({
   const onSubmit = async (data) => {
     if (!colleagueUuid) return;
     const conv = data.feedback.slice(1);
+
     const formData = {
       uuid: selectedPerson?.uuid,
       colleagueUuid: colleagueUuid,
@@ -116,6 +118,7 @@ const SubmitPart: FC<SubmitPartProps> = ({
         };
       }),
     };
+
     dispatch(FeedbackActions.updatedFeedback(formData));
     setModalSuccess(() => true);
     reset();
@@ -125,10 +128,11 @@ const SubmitPart: FC<SubmitPartProps> = ({
     if (!colleagueUuid) return;
     const conv = values.feedback.slice(1);
     const formData = {
-      uuid: selectedPerson?.id,
-      colleagueUuid: colleagueUuid,
+      uuid: selectedPerson?.uuid,
+      colleagueUuid: selectedPerson.colleague.colleagueUUID,
+      targetColleagueUuid: colleagueUuid,
       status: 'PENDING',
-      targetId: selectedPerson?.targetId,
+      ...(selectedPerson?.targetId && { targetId: selectedPerson?.targetId }),
       targetType: selectedPerson?.targetType,
       feedbackItems: conv.map((item, i) => {
         return {
@@ -156,7 +160,7 @@ const SubmitPart: FC<SubmitPartProps> = ({
       TargetTypeReverse[targetType] &&
       TargetTypeReverse[targetType].charAt(0).toUpperCase() + TargetTypeReverse[targetType].slice(1);
 
-    if (capitalType) {
+    if (capitalType && targetType && targetId) {
       let targetTypeStr = '';
       review.forEach((item) => {
         if (item.uuid === targetId) {
@@ -164,37 +168,42 @@ const SubmitPart: FC<SubmitPartProps> = ({
         }
       });
 
-      return `“${capitalType}${targetTypeStr !== '' ? ':' : ''} ${targetTypeStr}”`;
+      return `“${capitalType}${targetTypeStr !== '' ? ':' : ''}${`${
+        targetTypeStr !== '' ? ` ${targetTypeStr}` : `${targetTypeStr}`
+      }`}”`;
+    }
+    if (feedbackItems.length) {
+      const value =
+        feedbackItems?.[feedbackItems?.findIndex((item) => item?.code === TargetFeedbackKeys[targetType])]?.content ??
+        '';
+      return `“${capitalType}${value !== '' ? ':' : ''}${`${value !== '' ? ` ${value}` : `${value}`}`}”`;
     }
     return '';
   };
 
   const getPropperCommentRequested = () => {
-    if (feedbackItems[feedbackItems.findIndex((item) => item.code === 'comment_to_request')]) {
-      return feedbackItems[feedbackItems.findIndex((item) => item.code === 'comment_to_request')].content;
-    }
-    return '';
+    return feedbackItems?.[feedbackItems?.findIndex((item) => item?.code === 'comment_to_request')]?.content ?? '';
   };
 
   return (
     <div>
       <div className={css({ marginTop: '30px' })}>
-        <div className={css(Block_info)}>
+        <div className={css(BlockInfo)}>
           <div className={css({ alignSelf: 'flex-start' })}>
-            <img className={css(Img_style)} src={defaultImg} alt='photo' />
+            <img className={css(ImgStyle)} src={defaultImg} alt='photo' />
           </div>
           <div className={css({ marginLeft: '16px' })}>
             <h3
-              className={css(Names_Style)}
+              className={css(NamesStyle)}
             >{`${selectedPerson?.profile?.firstName} ${selectedPerson?.profile?.lastName}`}</h3>
             <p
-              className={css(Industry_Style)}
+              className={css(IndustryStyle)}
             >{`${selectedPerson?.workRelationships[0].job?.name}${selectedPerson?.workRelationships[0].department?.name}`}</p>
-            <span className={css(Treatment_Style)}>I prefer feedback that is: {getPropperToneOfVoice()}</span>
+            <span className={css(TreatmentStyle)}>I prefer feedback that is: {getPropperToneOfVoice()}</span>
           </div>
         </div>
       </div>
-      <div className={css(Notification_Block__Style)}>
+      <div className={css(NotificationBlockStyle)}>
         <p>{`${selectedPerson?.profile?.firstName} has requested feedback on: ${getPropperTargetType(
           selectedPerson.targetType,
           selectedPerson.targetId,
@@ -203,11 +212,11 @@ const SubmitPart: FC<SubmitPartProps> = ({
       </div>
       <div className={css({ marginTop: '24px' })}>
         <IconButton graphic='information' onPress={() => setInfoModal(() => true)}>
-          <p className={css(Info_help__Style)}>Learn more about how to give great feedback</p>
+          <p className={css(InfoHelpStyle)}>Learn more about how to give great feedback</p>
         </IconButton>
       </div>
-      <h2 className={css(Video_explanation_title)}>Watch video explanation</h2>
-      <div className={css(Video_wrapper)}>
+      <h2 className={css(VideoExplanationTitle)}>Watch video explanation</h2>
+      <div className={css(VideoWrapper)}>
         <img src={video_explanation} alt='video_explanation' />
       </div>
       <form>
@@ -228,8 +237,8 @@ const SubmitPart: FC<SubmitPartProps> = ({
                   ...TileCustomStyles,
                 }}
               >
-                <h3 className={css(GiveFeedback_title)}>{item.giveFeedback_title}</h3>
-                <p className={css(GiveFeedback_description)}>{item?.giveFeedback_description}</p>
+                <h3 className={css(GiveFeedbackTitle)}>{item.giveFeedback_title}</h3>
+                <p className={css(GiveFeedbackDescription)}>{item?.giveFeedback_description}</p>
                 <GenericItemField
                   name={`feedback.${item.giveFeedback_id}.field`}
                   methods={methods}
@@ -250,9 +259,9 @@ const SubmitPart: FC<SubmitPartProps> = ({
             background: 'white',
           })}
         >
-          <div className={css(Relative_btn_styled)}>
-            <div className={css(Spacing_style)}>
-              <Button styles={[theme.font.fixed.f16, Button_style]} onPress={() => onDraft()}>
+          <div className={css(RelativeBtnStyled)}>
+            <div className={css(SpacingStyle)}>
+              <Button styles={[theme.font.fixed.f16, ButtonStyle]} onPress={() => onDraft()}>
                 <Trans i18nKey='save_as_draft'>Save as draft</Trans>
               </Button>
 
@@ -273,14 +282,14 @@ const SubmitPart: FC<SubmitPartProps> = ({
     </div>
   );
 };
-const Relative_btn_styled: Rule = ({ theme }) => ({
+const RelativeBtnStyled: Rule = ({ theme }) => ({
   position: 'relative',
   bottom: theme.spacing.s0,
   left: theme.spacing.s0,
   right: theme.spacing.s0,
   borderTop: `${theme.border.width.b1} solid ${theme.colors.backgroundDarkest}`,
 });
-const Spacing_style: Rule = ({ theme }) => {
+const SpacingStyle: Rule = ({ theme }) => {
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
   return {
@@ -289,7 +298,7 @@ const Spacing_style: Rule = ({ theme }) => {
     justifyContent: 'space-between',
   };
 };
-const Button_style: Rule = ({ theme }) => ({
+const ButtonStyle: Rule = ({ theme }) => ({
   fontWeight: theme.font.weight.bold,
   width: '49%',
   margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
@@ -298,38 +307,38 @@ const Button_style: Rule = ({ theme }) => ({
   color: `${theme.colors.tescoBlue}`,
 });
 
-const Block_info: Rule = {
+const BlockInfo: Rule = {
   display: 'inline-flex',
   alignItems: 'center',
 };
 
-const Img_style: Rule = {
+const ImgStyle: Rule = {
   width: '72px',
   height: '72px',
   borderRadius: '50%',
 };
-const Names_Style: Rule = {
+const NamesStyle: Rule = {
   fontWeight: 'bold',
   fontSize: '20px',
   lineHeight: '24px',
   margin: '0px',
 };
 
-const Industry_Style: Rule = {
+const IndustryStyle: Rule = {
   fontWeight: 'normal',
   fontSize: '16px',
   lineHeight: '20px',
   margin: '0px 0px 4px 0px',
 };
 
-const Treatment_Style: Rule = {
+const TreatmentStyle: Rule = {
   fontWeight: 'normal',
   fontSize: '16px',
   lineHeight: '20px',
   color: '#00539F',
 };
 
-const Notification_Block__Style: Rule = {
+const NotificationBlockStyle: Rule = {
   marginTop: '16px',
   padding: '16px 40px 16px 16px',
   background: '#F3F9FC',
@@ -341,19 +350,19 @@ const Notification_Block__Style: Rule = {
   },
 } as Styles;
 
-const Info_help__Style: Rule = {
+const InfoHelpStyle: Rule = {
   color: '#00539F',
   fontSize: '14px',
   margin: '0px 0px 0px 8px',
 };
 
-const Video_explanation_title: Rule = {
+const VideoExplanationTitle: Rule = {
   margin: '16px 0px 16px 0px',
   fontWeight: 'bold',
   fontSize: '20px',
   lineHeight: '24px',
 };
-const Video_wrapper: Rule = {
+const VideoWrapper: Rule = {
   width: '100%',
   maxHeight: '304px',
   marginBottom: '17px',
@@ -362,20 +371,14 @@ const Video_wrapper: Rule = {
     height: '100%',
   },
 } as Styles;
-const GiveFeedbacka_main_title: Rule = {
-  fontWeight: 'bold',
-  fontSize: '18px',
-  lineHeight: '22px',
-  color: '#00539F',
-  margin: '0px',
-};
-const GiveFeedback_title: Rule = {
+
+const GiveFeedbackTitle: Rule = {
   fontWeight: 'bold',
   fontSize: '16px',
   lineHeight: '20px',
   margin: '2px 0px 0px 0px',
 };
-const GiveFeedback_description: Rule = {
+const GiveFeedbackDescription: Rule = {
   margin: '4px 0px 16px 0px',
   fontWeight: 'normal',
   fontSize: '16px',

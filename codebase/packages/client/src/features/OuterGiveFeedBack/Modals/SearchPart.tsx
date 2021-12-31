@@ -34,7 +34,7 @@ const SearchPart: FC<SearchPartProps> = ({ setSearchValue, setSelectedPerson, se
 
   return (
     <>
-      <form className={css({ marginTop: '32px' })} data-test-id='search-part'>
+      <div className={css({ marginTop: '32px' })} data-test-id='search-part'>
         <Item
           errormessage={
             errors['search_option'] && errors['search_option'].type === 'required'
@@ -68,7 +68,7 @@ const SearchPart: FC<SearchPartProps> = ({ setSearchValue, setSelectedPerson, se
             value={inputValue}
           />
         </Item>
-      </form>
+      </div>
       {selectedPerson === null && (
         <div
           className={css({

@@ -6,11 +6,14 @@ import { PeopleTypes, TypefeedbackItems } from './type';
 import { ModalRespondFeedback } from './ModalsParts';
 import { DraftItem, RadioBtns } from './components';
 import { FilterModal } from '../Shared/components/FilterModal';
+import { useDispatch } from 'react-redux';
+import { FeedbackActions } from '@pma/store';
 
 export const RESPOND_FEEDBACK_CONTAINER = 'respond_feedback_container';
 
 const RespondFeedbackContainer: FC = () => {
   const { css } = useStyle();
+  const dispatch = useDispatch();
 
   const [isOpenMainModal, setIsOpen] = useState<boolean>(false);
   const [title, setTitle] = useState<string>('');
@@ -53,6 +56,7 @@ const RespondFeedbackContainer: FC = () => {
     );
     setTitle(() => 'Respond to feedback requests');
     setSelectedPerson(() => ({
+      ...selectedNote.colleagueProfile,
       ...selectedNote.targetColleagueProfile.colleague,
       profileAttributes: selectedNote.targetColleagueProfile.profileAttributes,
       targetId: selectedNote?.targetId,
@@ -61,10 +65,11 @@ const RespondFeedbackContainer: FC = () => {
     }));
     setIsOpen(() => true);
   };
+
   return (
     <>
       <div data-test-id={RESPOND_FEEDBACK_CONTAINER}>
-        <div className={css(header_styled)}>
+        <div className={css(headerStyled)}>
           <RadioBtns
             checkedRadio={checkedRadio}
             setCheckedRadio={setCheckedRadio}
@@ -74,7 +79,7 @@ const RespondFeedbackContainer: FC = () => {
             filterModal={filterModal}
             setFilterFeedbacks={setFilterFeedbacks}
           />
-          <div className={css(Flex_styled)}>
+          <div className={css(FlexStyled)}>
             <FilterOption
               focus={focus}
               customIcon={true}
@@ -99,7 +104,7 @@ const RespondFeedbackContainer: FC = () => {
             />
           </div>
         </div>
-        <div className={css(Drafts_style)}>
+        <div className={css(DraftsStyle)}>
           <DraftItem
             draftFeedback={draftFeedback}
             checkedRadio={checkedRadio}
@@ -159,7 +164,7 @@ const RespondFeedbackContainer: FC = () => {
   );
 };
 
-const Flex_styled: Rule = () => {
+const FlexStyled: Rule = () => {
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
   return {
@@ -170,7 +175,7 @@ const Flex_styled: Rule = () => {
   };
 };
 
-const header_styled: Rule = () => {
+const headerStyled: Rule = () => {
   const [, isBreakpoint] = useBreakpoints();
   const medium = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
   return {
@@ -183,7 +188,7 @@ const header_styled: Rule = () => {
   };
 };
 
-const Drafts_style: Rule = {
+const DraftsStyle: Rule = {
   display: 'flex',
   flexDirection: 'column',
   maxWidth: '856px',

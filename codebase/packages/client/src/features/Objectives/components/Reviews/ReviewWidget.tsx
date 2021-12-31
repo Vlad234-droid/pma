@@ -1,12 +1,11 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { useTranslation } from 'components/Translation';
 import { Status, ReviewType } from 'config/enum';
-import { useStyle, Rule, CreateRule, Colors, colors } from '@dex-ddl/core';
+import { useStyle, Rule, CreateRule, Colors, colors, Button } from '@dex-ddl/core';
 
-import { ReviewFormModal } from '../Modal';
+import { ReviewFormModal, ModalComponent } from '../Modal';
 import { TileWrapper } from 'components/Tile';
 import { Icon, Graphics } from 'components/Icon';
-import { TriggerModalButton, ConsumerTriggerButton } from 'features/Modal';
 
 export type Props = {
   onClick: () => void;
@@ -15,6 +14,7 @@ export type Props = {
   status?: Status;
   startTime?: string;
   endTime?: string;
+  lastUpdatedTime?: string;
   customStyle?: React.CSSProperties | {};
   title: string;
   description?: string;
@@ -22,10 +22,21 @@ export type Props = {
 
 export const TEST_ID = 'review-widget';
 
-const getContent = ({ status, startTime = '', endTime = '' }): [Graphics, Colors, Colors, boolean, string, string] => {
+const getContent = ({
+  status,
+  startTime = '',
+  lastUpdatedTime = '',
+}): [Graphics, Colors, Colors, boolean, string, string] => {
   const { t } = useTranslation();
   if (!status) {
-    return ['roundAlert', 'pending', 'tescoBlue', true, 'Your form is now available', 'View Review Form'];
+    return [
+      'roundAlert',
+      'pending',
+      'tescoBlue',
+      true,
+      t('Your form is now available'),
+      t('view_review_form', 'View review form'),
+    ];
   }
   const contents: { [key: string]: [Graphics, Colors, Colors, boolean, string, string] } = {
     [Status.NOT_STARTED]: [
@@ -36,26 +47,57 @@ const getContent = ({ status, startTime = '', endTime = '' }): [Graphics, Colors
       t('form_available_in_date', `The form will be available in ${startTime}`, { date: new Date(startTime) }),
       '',
     ],
-    [Status.STARTED]: ['roundAlert', 'pending', 'tescoBlue', true, 'Your form is now available', 'View Review Form'],
-    [Status.DECLINED]: ['roundPencil', 'base', 'white', true, t('review_form_declined', 'Declined'), 'View and Edit'],
-    [Status.DRAFT]: ['roundPencil', 'base', 'white', true, t('review_form_draft', 'Draft'), 'View and Edit'],
+    [Status.STARTED]: [
+      'roundAlert',
+      'pending',
+      'tescoBlue',
+      true,
+      t('your_form_is_now_available', 'Your form is now available'),
+      t('view_review_form', 'View review form'),
+    ],
+    [Status.DECLINED]: [
+      'roundPencil',
+      'base',
+      'white',
+      true,
+      t('review_form_declined', 'Declined'),
+      t('view_and_edit', 'View and edit'),
+    ],
+    [Status.DRAFT]: [
+      'roundPencil',
+      'base',
+      'tescoBlue',
+      true,
+      t('review_widget_saved_as_draft', 'Your form is currently saved as a draft'),
+      t('view_and_edit', 'View and edit'),
+    ],
     [Status.APPROVED]: [
       'roundTick',
       'green',
       'white',
       true,
-      t('review_form_approved', t('completed_at_date', `Completed [${endTime}]`, { date: new Date(endTime) })),
-      'View Review Form',
+      t(
+        'review_form_approved',
+        t('completed_at_date', `Completed [${lastUpdatedTime}]`, { date: new Date(lastUpdatedTime) }),
+      ),
+      t('view', 'View'),
     ],
     [Status.WAITING_FOR_APPROVAL]: [
       'roundClock',
       'pending',
-      'white',
+      'tescoBlue',
       true,
       t('review_form_waiting_for_approval', 'Waiting for approval'),
-      'View Review Form',
+      t('view_review_form', 'View review form'),
     ],
-    [Status.COMPLETED]: ['roundTick', 'green', 'white', true, t('review_form_pending', 'Pending'), 'View Review Form'],
+    [Status.COMPLETED]: [
+      'roundTick',
+      'green',
+      'white',
+      true,
+      t('review_form_pending', 'Pending'),
+      t('view_review_form', 'View review form'),
+    ],
   };
 
   return contents[status];
@@ -63,32 +105,35 @@ const getContent = ({ status, startTime = '', endTime = '' }): [Graphics, Colors
 
 const ReviewWidget: FC<Props> = ({
   customStyle,
-  onClick,
   reviewType,
   status,
   startTime,
-  endTime,
+  lastUpdatedTime,
   description,
   title,
 }) => {
   const { css } = useStyle();
+  const [isOpen, setIsOpen] = useState(false);
   const [graphic, iconColor, background, shadow, content, buttonContent] = getContent({
     status,
     startTime,
-    endTime,
+    lastUpdatedTime,
   });
 
   const descriptionColor = background === 'tescoBlue' ? colors.white : colors.base;
   const titleColor = background === 'tescoBlue' ? colors.white : colors.tescoBlue;
   const buttonVariant = background === 'tescoBlue' ? 'default' : 'inverse';
 
-  const handleClick = () => {
-    onClick();
+  const handleClickOpen = () => {
+    status !== Status.NOT_STARTED && setIsOpen(true);
+  };
+  const handleClickClose = () => {
+    setIsOpen(false);
   };
 
   return (
     <TileWrapper customStyle={{ ...customStyle }} hover={shadow} boarder={shadow} background={background}>
-      <div className={css(wrapperStyle)} onClick={handleClick} data-test-id={TEST_ID}>
+      <div className={css(wrapperStyle)} onClick={handleClickOpen} data-test-id={TEST_ID}>
         <div className={css(headStyle)}>
           <div className={css(headerBlockStyle)}>
             <span className={css(titleStyle({ color: titleColor }))}>{title}</span>
@@ -112,15 +157,22 @@ const ReviewWidget: FC<Props> = ({
         {status !== Status.NOT_STARTED && (
           <div className={css(bodyStyle)}>
             <div className={css(bodyBlockStyle)}>
-              <TriggerModalButton name={buttonContent} title={title} mode={buttonVariant}>
-                <ConsumerTriggerButton>
-                  {({ onClose }) => <ReviewFormModal reviewType={reviewType} onClose={onClose} />}
-                </ConsumerTriggerButton>
-              </TriggerModalButton>
+              <Button
+                mode={buttonVariant}
+                styles={[buttonStyle({ inverse: buttonVariant === 'default' })]}
+                onPress={handleClickOpen}
+              >
+                {buttonContent}
+              </Button>
             </div>
           </div>
         )}
       </div>
+      {isOpen && (
+        <ModalComponent onClose={handleClickClose} title={title}>
+          <ReviewFormModal reviewType={reviewType} onClose={handleClickClose} />
+        </ModalComponent>
+      )}
     </TileWrapper>
   );
 };
@@ -170,5 +222,12 @@ const bodyStyle: Rule = {
   display: 'flex',
   justifyContent: 'flex-end',
 };
+
+const buttonStyle: CreateRule<{ inverse: boolean }> =
+  ({ inverse }) =>
+  ({ theme }) => ({
+    border: `1px solid ${inverse ? theme.colors.white : theme.colors.tescoBlue}`,
+    ...theme.font.fixed.f14,
+  });
 
 export default ReviewWidget;

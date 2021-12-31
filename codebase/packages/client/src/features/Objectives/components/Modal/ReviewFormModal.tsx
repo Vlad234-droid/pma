@@ -1,6 +1,6 @@
-import React, { FC, HTMLProps, useEffect } from 'react';
+import React, { FC, HTMLProps, useEffect, useState } from 'react';
 
-import { Trans } from 'components/Translation';
+import { Trans, useTranslation, TFunction } from 'components/Translation';
 
 import { Button, Icon, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -8,7 +8,6 @@ import * as Yup from 'yup';
 
 // todo use Generic form in future. For now just not use it because of more flexibility
 import { useForm } from 'react-hook-form';
-import { Icon as IconComponent } from 'components/Icon';
 import { Input, Item, Select, Textarea } from 'components/Form';
 import { GenericItemField } from 'components/GenericForm';
 import MarkdownRenderer from 'components/MarkdownRenderer';
@@ -34,14 +33,52 @@ export type ReviewFormModal = {
 
 type Props = HTMLProps<HTMLInputElement> & ReviewFormModal;
 
+const getContent = (reviewType: ReviewType, t: TFunction) => {
+  const contents: {
+    [key: string]: {
+      helperText: string;
+    };
+  } = {
+    [ReviewType.MYR]: {
+      helperText: t(
+        'mid_year_review_help_text',
+        'Use this to capture a summary of the mid-year conversation you’ve had with your line manager. Remember to focus as much on your how as your what.',
+      ),
+    },
+    [ReviewType.EYR]: {
+      helperText: t(
+        'end_year_review_help_text',
+        'Use this to capture a summary of the end-year conversation you’ve had with your line manager. Remember to focus as much on your how as your what.',
+      ),
+    },
+  };
+
+  return contents[reviewType];
+};
+
+const getSuccessMessage = (reviewType: ReviewType, t: TFunction) => {
+  const content = {
+    [ReviewType.MYR]: t('mid_year_review_sent_to_manager', 'Your mid-year review has been sent to your line manager.'),
+    [ReviewType.EYR]: t('end_year_review_sent_to_manager', 'Your end-year review has been sent to your line manager.'),
+  };
+
+  return content[reviewType];
+};
+
 const ReviewFormModal: FC<Props> = ({ reviewType, onClose }) => {
   const { css, theme } = useStyle();
+  const { t } = useTranslation();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+  const [successModal, setSuccessModal] = useState(false);
   const { info } = useSelector(currentUserSelector);
   const [review] = useSelector(getReviewByTypeSelector(reviewType));
-  const { loaded: reviewLoaded, loading: reviewLoading } = useSelector(reviewsMetaSelector);
+  const { loading: reviewLoading } = useSelector(reviewsMetaSelector);
   const timelineReview = useSelector(getTimelineByReviewTypeSelector(reviewType));
+  const readonly = [Status.WAITING_FOR_APPROVAL, Status.APPROVED].includes(timelineReview.status);
+  const successMessage = getSuccessMessage(timelineReview?.code, t);
+
+  const { helperText } = getContent(reviewType, t);
 
   const [schema] = useReviewSchema(reviewType);
   const { components = [] } = schema;
@@ -92,6 +129,7 @@ const ReviewFormModal: FC<Props> = ({ reviewType, onClose }) => {
       }),
     );
     reset();
+    setSuccessModal(true);
   };
 
   const dispatch = useDispatch();
@@ -109,15 +147,12 @@ const ReviewFormModal: FC<Props> = ({ reviewType, onClose }) => {
   if (reviewLoading) {
     return null;
   }
-  if (reviewLoaded && timelineReview?.status === Status.WAITING_FOR_APPROVAL) {
+
+  if (successModal) {
     return (
       <SuccessModal
         onClose={onClose}
-        description={
-          timelineReview.description
-            ? `Your ${timelineReview.description} has been sent to your line manager.`
-            : 'Your review has been sent to your line manager.'
-        }
+        description={successMessage || 'Your review has been sent to your line manager.'}
       />
     );
   }
@@ -131,18 +166,6 @@ const ReviewFormModal: FC<Props> = ({ reviewType, onClose }) => {
           padding: mobileScreen ? `0 ${theme.spacing.s4}` : `0 ${theme.spacing.s10}`,
         })}
       >
-        <span
-          className={css({
-            position: 'fixed',
-            top: theme.spacing.s5,
-            left: mobileScreen ? theme.spacing.s5 : theme.spacing.s10,
-            textDecoration: 'none',
-            border: 'none',
-            cursor: 'pointer',
-          })}
-        >
-          <IconComponent graphic='arrowLeft' invertColors={true} />
-        </span>
         <form>
           <div className={css({ padding: `0 0 ${theme.spacing.s5}` })}>
             <div className={css({ fontSize: '24px', lineHeight: '28px', color: theme.colors.tescoBlue })}>
@@ -157,10 +180,7 @@ const ReviewFormModal: FC<Props> = ({ reviewType, onClose }) => {
                 paddingBottom: theme.spacing.s5,
               })}
             >
-              <Trans i18nKey='id_year_review_help_text'>
-                Use this to capture a summary of the end-year conversation you’ve had with your line manager. Remember
-                to focus as much on your how as your what.
-              </Trans>
+              {helperText}
             </div>
             <div className={css({ padding: `0 0 ${theme.spacing.s5}`, display: 'flex' })}>
               <TriggerModal triggerComponent={<Icon graphic='information' />} title={'Writing your review'}>
@@ -179,7 +199,6 @@ const ReviewFormModal: FC<Props> = ({ reviewType, onClose }) => {
               const { id, key, text, label, description, type, validate, values = [] } = component;
               const value = formValues[key] ? formValues[key] : '';
               if (type === 'text') {
-                //todo add markdown here instead of text
                 return (
                   <div style={{ padding: '10px 0' }}>
                     <div
@@ -204,6 +223,7 @@ const ReviewFormModal: FC<Props> = ({ reviewType, onClose }) => {
                     Element={Input}
                     placeholder={description}
                     value={value}
+                    readonly={readonly}
                   />
                 );
               }
@@ -218,6 +238,7 @@ const ReviewFormModal: FC<Props> = ({ reviewType, onClose }) => {
                     Element={Textarea}
                     placeholder={description}
                     value={value}
+                    readonly={readonly}
                   />
                 );
               }
@@ -237,69 +258,72 @@ const ReviewFormModal: FC<Props> = ({ reviewType, onClose }) => {
                     options={values}
                     placeholder={description}
                     value={value}
+                    readonly={readonly}
                   />
                 );
               }
             })}
           </div>
-          <div
-            className={css({
-              position: 'absolute',
-              bottom: 0,
-              left: 0,
-              width: '100%',
-            })}
-          >
+          {!readonly && (
             <div
               className={css({
-                position: 'relative',
-                bottom: theme.spacing.s0,
-                left: theme.spacing.s0,
-                right: theme.spacing.s0,
-                borderTop: `${theme.border.width.b1} solid ${theme.colors.backgroundDarkest}`,
+                position: 'absolute',
+                bottom: 0,
+                left: 0,
+                width: '100%',
               })}
             >
               <div
                 className={css({
-                  padding: mobileScreen ? theme.spacing.s7 : theme.spacing.s9,
-                  display: 'flex',
-                  justifyContent: 'center',
+                  position: 'relative',
+                  bottom: theme.spacing.s0,
+                  left: theme.spacing.s0,
+                  right: theme.spacing.s0,
+                  borderTop: `${theme.border.width.b1} solid ${theme.colors.backgroundDarkest}`,
                 })}
               >
-                <Button
-                  styles={[
-                    theme.font.fixed.f16,
-                    {
-                      fontWeight: theme.font.weight.bold,
-                      width: '50%',
-                      margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
-                      background: theme.colors.white,
-                      border: `${theme.border.width.b1} solid ${theme.colors.tescoBlue}`,
-                      color: `${theme.colors.tescoBlue}`,
-                    },
-                  ]}
-                  onPress={onSaveDraft}
+                <div
+                  className={css({
+                    padding: mobileScreen ? theme.spacing.s7 : theme.spacing.s9,
+                    display: 'flex',
+                    justifyContent: 'center',
+                  })}
                 >
-                  <Trans i18nKey='save_as_draft'>Save as draft</Trans>
-                </Button>
-                <SubmitButton
-                  title={'Review'}
-                  description={'Are you sure you want to submit review?'}
-                  isDisabled={!isValid}
-                  onSave={handleSubmit(onSubmit)}
-                  styles={[
-                    theme.font.fixed.f16,
-                    {
-                      fontWeight: theme.font.weight.bold,
-                      width: '50%',
-                      margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
-                      background: `${theme.colors.tescoBlue}`,
-                    },
-                  ]}
-                />
+                  <Button
+                    styles={[
+                      theme.font.fixed.f16,
+                      {
+                        fontWeight: theme.font.weight.bold,
+                        width: '50%',
+                        margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
+                        background: theme.colors.white,
+                        border: `${theme.border.width.b1} solid ${theme.colors.tescoBlue}`,
+                        color: `${theme.colors.tescoBlue}`,
+                      },
+                    ]}
+                    onPress={onSaveDraft}
+                  >
+                    <Trans i18nKey='save_as_draft'>Save as draft</Trans>
+                  </Button>
+                  <SubmitButton
+                    title={''}
+                    description={'Are you sure you want to submit your review to your line manager for approval?'}
+                    isDisabled={!isValid}
+                    onSave={handleSubmit(onSubmit)}
+                    styles={[
+                      theme.font.fixed.f16,
+                      {
+                        fontWeight: theme.font.weight.bold,
+                        width: '50%',
+                        margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
+                        background: `${theme.colors.tescoBlue}`,
+                      },
+                    ]}
+                  />
+                </div>
               </div>
             </div>
-          </div>
+          )}
         </form>
       </div>
     </div>

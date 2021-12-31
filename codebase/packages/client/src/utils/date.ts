@@ -38,3 +38,7 @@ export const formatDate = (date: Date, format: DateFormat = DATE_FORMAT) =>
   DateTime.fromISO(date.toISOString()).toFormat(format);
 
 export const formatDateStringToIsoDate = (date: string) => DateTime.fromISO(date).setLocale('en').toISODate();
+
+export const formatToRelativeDate = (date: string) => {
+  return DateTime.fromISO(date).setLocale('en').toRelative();
+};

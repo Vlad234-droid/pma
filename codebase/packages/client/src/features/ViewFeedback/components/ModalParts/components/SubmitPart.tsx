@@ -28,26 +28,26 @@ const SubmitPart: FC<SubmitPartProps> = ({ selectedPerson }) => {
     <div data-test-id={WITH_SELECTED_TEST}>
       <div className={css({ height: '1px', background: '#E5E5E5' })} />
       <div className={css({ marginTop: '16px' })}>
-        <div className={css(Block_info)}>
+        <div className={css(BlockInfo)}>
           <div className={css({ alignSelf: 'flex-start' })}>
-            <img className={css(Img_style)} src={defaultImg} alt='photo' />
+            <img className={css(ImgStyle)} src={defaultImg} alt='photo' />
           </div>
           <div className={css({ marginLeft: '16px' })}>
             <h3
-              className={css(Names_Style)}
+              className={css(NamesStyle)}
             >{`${selectedPerson?.profile?.firstName} ${selectedPerson?.profile?.lastName}`}</h3>
             <p
-              className={css(Industry_Style)}
+              className={css(IndustryStyle)}
             >{`${selectedPerson?.workRelationships[0].job?.name}, ${selectedPerson?.workRelationships[0].department?.name}`}</p>
-            <span className={css(Treatment_Style)}>Please treat me kindly</span>
+            <span className={css(TreatmentStyle)}>Please treat me kindly</span>
           </div>
         </div>
         <TileWrapper customStyle={{ padding: '24px', margin: '32px 0px 0px 0px', border: '1px solid #E5E5E5' }}>
-          <span className={css(Objective_Styled)}>Objective: Provide a posititve customer experience </span>
+          <span className={css(ObjectiveStyled)}>Objective: Provide a posititve customer experience </span>
           {data.map((item, i) => (
             <div key={i} className={css({ marginTop: '16px' })}>
-              <h3 className={css(title_Styled)}>{item.title}</h3>
-              <p className={css(desc_Styled)}>{item.desc}</p>
+              <h3 className={css(titleStyled)}>{item.title}</h3>
+              <p className={css(descStyled)}>{item.desc}</p>
             </div>
           ))}
         </TileWrapper>
@@ -56,51 +56,51 @@ const SubmitPart: FC<SubmitPartProps> = ({ selectedPerson }) => {
   );
 };
 
-const Block_info: Rule = {
+const BlockInfo: Rule = {
   display: 'inline-flex',
   alignItems: 'center',
 };
-const Objective_Styled: Rule = {
+const ObjectiveStyled: Rule = {
   fontWeight: 'bold',
   fontSize: '16px',
   lineHeight: '20px',
   color: '#00539F',
 };
 
-const desc_Styled: Rule = {
+const descStyled: Rule = {
   fontWeight: 'normal',
   fontSize: '14px',
   lineHeight: '18px',
   margin: '0px',
 };
 
-const title_Styled: Rule = {
+const titleStyled: Rule = {
   margin: '0px',
   fontWeight: 'bold',
   fontSize: '14px',
   lineHeight: '18px',
 };
 
-const Img_style: Rule = {
+const ImgStyle: Rule = {
   width: '72px',
   height: '72px',
   borderRadius: '50%',
 };
-const Names_Style: Rule = {
+const NamesStyle: Rule = {
   fontWeight: 'bold',
   fontSize: '20px',
   lineHeight: '24px',
   margin: '0px',
 };
 
-const Industry_Style: Rule = {
+const IndustryStyle: Rule = {
   fontWeight: 'normal',
   fontSize: '16px',
   lineHeight: '20px',
   margin: '0px 0px 4px 0px',
 };
 
-const Treatment_Style: Rule = {
+const TreatmentStyle: Rule = {
   fontWeight: 'normal',
   fontSize: '16px',
   lineHeight: '20px',

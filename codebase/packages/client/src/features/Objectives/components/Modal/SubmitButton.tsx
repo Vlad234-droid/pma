@@ -4,8 +4,8 @@ import { Rule, Button } from '@dex-ddl/core';
 import { ConfirmModal } from 'features/Modal';
 
 export type SubmitButton = {
-  title: string,
-  description: string,
+  title: string;
+  description?: string;
   styles?: Rule[];
   onSave: () => void;
   isDisabled?: boolean;
@@ -34,7 +34,6 @@ const SubmitButton: FC<Props> = ({ styles = [], onSave, isDisabled = false, titl
             setIsOpen(false);
           }}
           onCancel={() => setIsOpen(false)}
-          onOverlayClick={() => setIsOpen(false)}
         />
       )}
     </>

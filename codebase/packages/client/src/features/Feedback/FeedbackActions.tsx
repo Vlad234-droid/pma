@@ -73,7 +73,7 @@ const FeedbackActions: FC = () => {
       icon: <Chat />,
       iconText: 'Your feedback will be immediately available for your colleague to view',
       modalTitle: 'Give feedback',
-      link: '/give-feedback',
+      link: '/feedback/give-feedback',
     },
     {
       id: 2,
@@ -83,7 +83,7 @@ const FeedbackActions: FC = () => {
       iconText: unReadNotes.length
         ? `You have ${unReadNotes.length} new feedback to view`
         : 'You have 0 new feedback to view',
-      link: '/view-feedback',
+      link: '/feedback/view-feedback',
     },
     {
       id: 3,
@@ -93,7 +93,7 @@ const FeedbackActions: FC = () => {
       iconText: pendingNotes.length
         ? `You have ${pendingNotes.length} new feedback requests`
         : 'You have 0 new feedback requests',
-      link: '/respond-feedback',
+      link: '/feedback/respond-feedback',
     },
     {
       id: 4,
@@ -101,7 +101,7 @@ const FeedbackActions: FC = () => {
       text: 'Ask for feedback from your colleagues',
       icon: <People />,
       iconText: 'Send new feedback requests',
-      link: '/request-feedback',
+      link: '/feedback/request-feedback',
     },
   ];
 
@@ -116,18 +116,18 @@ const FeedbackActions: FC = () => {
     { value: 'id_4', label: 'I don`t have a preference' },
   ];
 
-  const checkForVoiceValue = () =>
-    profileAttr?.[profileAttr?.findIndex((item) => item?.name === 'voice')]?.value ?? 'id_1';
+  const checkForVoiceValue = () => profileAttr?.find((item) => item?.name === 'voice')?.value ?? 'id_1';
 
   const createToneOfVoiceHandler = (inputValue) => {
-    const value = field_options[field_options.findIndex((item) => item.value === inputValue)].label;
+    const findedValue = field_options?.find((item) => item.value === inputValue)?.label;
     const payload = {
       colleagueUuid,
       name: 'voice',
-      value,
+      value: findedValue,
       type: 'STRING',
     };
-    if (profileAttr?.[profileAttr?.findIndex((item) => item?.name === 'voice')]) {
+
+    if (profileAttr?.find((item) => item?.name === 'voice')) {
       dispatch(UserActions.updateProfileAttribute([payload]));
       return;
     }
@@ -160,9 +160,9 @@ const FeedbackActions: FC = () => {
         </Modal>
       )}
       <div data-test-id={FEEDBACK_ACTIONS}>
-        <div className={css(In_moment_Style)}>
-          <div className={css(Center_flex_style)}>
-            <h2 className={css(In_the_moment_style)}>Learn more about your feedback options</h2>
+        <div className={css(InMomentStyle)}>
+          <div className={css(CenterFlexStyle)}>
+            <h2 className={css(InTheMomentStyle)}>Learn more about your feedback options</h2>
             <IconButton
               graphic='information'
               iconStyles={{ marginLeft: '8px' }}
@@ -191,8 +191,8 @@ const FeedbackActions: FC = () => {
           ))}
         </div>
         <div className={css({ marginTop: '32px', maxWidth: '568px' })}>
-          <div className={css(Icon_text_style)}>
-            <div className={css(Voice_style)}>
+          <div className={css(IconTextStyle)}>
+            <div className={css(VoiceStyle)}>
               Do you have a preference in the way you&apos;d like to receive feedback?
             </div>
             <div className={css({ cursor: 'pointer' })}>
@@ -212,6 +212,8 @@ const FeedbackActions: FC = () => {
               placeholder={'Choose tone of voice'}
               value={checkForVoiceValue()}
               onChange={(_, value) => {
+                console.log('value', value);
+
                 createToneOfVoiceHandler(value);
               }}
             />
@@ -222,32 +224,32 @@ const FeedbackActions: FC = () => {
   );
 };
 
-const Voice_style: Rule = {
+const VoiceStyle: Rule = {
   fontWeight: 'bold',
   fontSize: '20px',
   lineHeight: '24px',
   maxWidth: '450px',
 };
 
-const Icon_text_style: Rule = {
+const IconTextStyle: Rule = {
   display: 'flex',
   justifyContent: 'space-between',
   marginBottom: '16px',
 };
 
-const In_the_moment_style: Rule = {
+const InTheMomentStyle: Rule = {
   fontWeight: 'bold',
   fontSize: '20px',
   lineHeight: '24px',
 };
 
-const Center_flex_style: Rule = {
+const CenterFlexStyle: Rule = {
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
 };
 
-const In_moment_Style: Rule = () => {
+const InMomentStyle: Rule = () => {
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
   if (mobileScreen) {
@@ -298,8 +300,8 @@ const containerRule: Rule = ({ colors }) => {
     justifyContent: 'center',
     position: 'relative',
     ...(mobileScreen
-      ? { borderRadius: '24px 24px 0 0 ', padding: '16px 0 84px' }
-      : { borderRadius: '32px', padding: `40px 0 102px` }),
+      ? { borderRadius: '24px 24px 0 0 ', padding: '16px 0 54px' }
+      : { borderRadius: '32px', padding: `40px 0 72px` }),
     width: '640px',
     height: mobileScreen ? 'calc(100% - 72px)' : 'calc(100% - 102px)',
     marginTop: '72px',

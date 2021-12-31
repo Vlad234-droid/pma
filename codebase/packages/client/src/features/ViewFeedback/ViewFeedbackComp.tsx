@@ -10,8 +10,10 @@ import { ModalDownloadFeedback, HelpModalReceiveFeedback } from './components/Mo
 import { ColleaguesActions } from '@pma/store';
 import { useDispatch } from 'react-redux';
 import { FilterModal } from '../Shared/components/FilterModal';
+import { useHistory } from 'react-router-dom';
 
 const ViewFeedbackComp: FC = () => {
+  const history = useHistory();
   const { css } = useStyle();
   const dispatch = useDispatch();
   const [helpModalReceiveFeedback, setHelpModalReceiveFeedback] = useState<boolean>(false);
@@ -83,7 +85,7 @@ const ViewFeedbackComp: FC = () => {
             filterModal={filterModal}
             setFilterFeedbacks={setFilterFeedbacks}
           />
-          <div className={css(Flex_center_styled)}>
+          <div className={css(FlexCenterStyled)}>
             <IconButton
               graphic='information'
               iconStyles={iconStyle}
@@ -115,8 +117,8 @@ const ViewFeedbackComp: FC = () => {
             />
           </div>
         </div>
-        <div className={css(Reverse_Items_Styled)}>
-          <div className={css(Drafts_style)}>
+        <div className={css(ReverseItemsStyled)}>
+          <div className={css(DraftsStyle)}>
             <DraftItem
               draftFeedback={draftFeedback}
               checkedRadio={checkedRadio}
@@ -129,36 +131,36 @@ const ViewFeedbackComp: FC = () => {
               filterFeedbacks={filterFeedbacks}
             />
           </div>
-          <div className={css(Buttons_actions_style)}>
-            <div className={css(Button_container_style)}>
+          <div className={css(ButtonsActionsStyle)}>
+            <div className={css(ButtonContainerStyle)}>
               <div className={css({ display: 'inline-flex' })}>
                 <Icon
                   graphic='chatSq'
                   iconStyles={{ verticalAlign: 'middle', margin: '2px 10px 0px 0px' }}
                   backgroundRadius={10}
                 />
-                <span className={css(ShareFeedback_Styled)}>Share feedback</span>
+                <span className={css(ShareFeedbackStyled)}>Share feedback</span>
               </div>
-              <p className={css(Question_Styled)}>Give feedback to a colleague</p>
+              <p className={css(QuestionStyled)}>Give feedback to a colleague</p>
               <Button
                 styles={[iconBtnStyle]}
                 onPress={() => {
-                  console.log('hello');
+                  history.push('/feedback/give-feedback');
                 }}
               >
-                <Trans i18nKey='share_feedback'>Share feedback</Trans>
+                <Trans>Share feedback</Trans>
               </Button>
             </div>
-            <div className={css(Button_container_style)}>
+            <div className={css(ButtonContainerStyle)}>
               <div className={css({ display: 'inline-flex' })}>
                 <Icon
                   graphic='download'
                   iconStyles={{ verticalAlign: 'middle', margin: '2px 10px 0px 0px' }}
                   backgroundRadius={10}
                 />
-                <span className={css(Size_style)}>Download feedback</span>
+                <span className={css(SizeStyle)}>Download feedback</span>
               </div>
-              <p className={css(Saved_styled)}>Download feedback to your device</p>
+              <p className={css(SavedStyled)}>Download feedback to your device</p>
               <Button
                 styles={[iconBtnStyle, { maxWidth: '161px !important' }]}
                 onPress={() => {
@@ -220,21 +222,21 @@ const ViewFeedbackComp: FC = () => {
   );
 };
 
-const Saved_styled: Rule = {
+const SavedStyled: Rule = {
   fontWeight: 'normal',
   fontSize: '16px',
   lineHeight: '20px',
   margin: '4px 0px 0px 0px',
 };
 
-const Size_style: Rule = {
+const SizeStyle: Rule = {
   fontWeight: 'bold',
   fontSize: '18px',
   lineHeight: '22px',
   color: '#00539F',
 };
 
-const Flex_center_styled: Rule = {
+const FlexCenterStyled: Rule = {
   display: 'flex',
   alignItems: 'center',
   position: 'relative',
@@ -253,21 +255,21 @@ const SpaceBeetweenStyled: Rule = () => {
   };
 };
 
-const Question_Styled: Rule = {
+const QuestionStyled: Rule = {
   fontWeight: 'normal',
   fontSize: '16px',
   lineHeight: '20px',
   margin: '4px 0px 0px 0px',
 };
 
-const ShareFeedback_Styled: Rule = {
+const ShareFeedbackStyled: Rule = {
   fontWeight: 'bold',
   fontSize: '18px',
   lineHeight: '22px',
   color: '#00539F',
 };
 
-const Reverse_Items_Styled: Rule = {
+const ReverseItemsStyled: Rule = {
   display: 'flex',
   flexWrap: 'wrap-reverse',
   gridGap: '8px',
@@ -279,7 +281,7 @@ const iconStyle: Rule = {
   marginRight: '10px',
 };
 
-const Buttons_actions_style: Rule = () => {
+const ButtonsActionsStyle: Rule = () => {
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
   return {
@@ -293,14 +295,14 @@ const Buttons_actions_style: Rule = () => {
   };
 };
 
-const Drafts_style: Rule = {
+const DraftsStyle: Rule = {
   flex: '3 1 676px',
   display: 'flex',
   flexDirection: 'column',
   gap: '8px',
 };
 
-const Button_container_style: Rule = {
+const ButtonContainerStyle: Rule = {
   background: '#FFFFFF',
   boxShadow: '3px 3px 1px 1px rgba(0, 0, 0, 0.05)',
   borderRadius: '10px',

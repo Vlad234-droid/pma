@@ -12,18 +12,18 @@ const InfoModal: FC<InfoModalProps> = ({ setInfoModal }) => {
   return (
     <div className={css(WrapperInfo)}>
       <h2 className={css(Title)}>Need help with providing feedback?</h2>
-      <h2 className={css(Title_video)}>Watch this 2-minute video on how to give great feedback</h2>
-      <div className={css(Block_video_explanation)}>
+      <h2 className={css(TitleVideo)}>Watch this 2-minute video on how to give great feedback</h2>
+      <div className={css(BlockVideoExplanation)}>
         <img src={video_explanation} alt='video_explanation' />
       </div>
-      <p className={css(Pre_title)}>Here are some examples of the types of things you could write:</p>
-      <ul className={css(List_info)}>
+      <p className={css(PreTitle)}>Here are some examples of the types of things you could write:</p>
+      <ul className={css(ListInfo)}>
         <li>List out some of the strengths your colleadue has, what makes them good collague to work with?</li>
         <li>Can you provide further detail on what they should keep doing or what they improve on?</li>
       </ul>
 
-      <h3 className={css(Recomendation_info)}>Face to face meetings are recommended for delivering feedback</h3>
-      <p className={css(Pre_recomendation_info)}>Please try and find time to give your feedback in person.</p>
+      <h3 className={css(RecomendationInfo)}>Face to face meetings are recommended for delivering feedback</h3>
+      <p className={css(PreRecomendationInfo)}>Please try and find time to give your feedback in person.</p>
       <span
         className={css({
           position: 'fixed',
@@ -42,9 +42,11 @@ const InfoModal: FC<InfoModalProps> = ({ setInfoModal }) => {
 
 const WrapperInfo: Rule = {
   padding: '0px 36px',
+  overflow: 'auto',
+  height: '100%',
 };
 
-const Pre_title: Rule = {
+const PreTitle: Rule = {
   margin: '16px 0px 0px 0px',
   fontWeight: 'normal',
   fontSize: '16px',
@@ -56,7 +58,7 @@ const Title: Rule = {
   fontSize: '24px',
   lineHeight: '28px',
 };
-const List_info: Rule = {
+const ListInfo: Rule = {
   marginBottom: '32px',
   '& > li': {
     fontWeight: 'normal',
@@ -67,13 +69,13 @@ const List_info: Rule = {
   },
 } as Styles;
 
-const Title_video: Rule = {
+const TitleVideo: Rule = {
   fontWeight: 'bold',
   fontSize: '20px',
   lineHeight: '24px',
   margin: '16px 0px 16px 0px',
 };
-const Block_video_explanation: Rule = {
+const BlockVideoExplanation: Rule = {
   maxHeight: '300px',
   width: '100%',
   '& > img': {
@@ -84,14 +86,14 @@ const Block_video_explanation: Rule = {
   },
 } as Styles;
 
-const Recomendation_info: Rule = {
+const RecomendationInfo: Rule = {
   fontWeight: 'bold',
   fontSize: '24px',
   lineHeight: '28px',
   marginBottom: '16px',
 };
 
-const Pre_recomendation_info: Rule = {
+const PreRecomendationInfo: Rule = {
   fontWeight: 'normal',
   fontSize: '16px',
   lineHeight: '20px',

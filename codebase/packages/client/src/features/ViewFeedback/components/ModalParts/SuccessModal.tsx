@@ -8,20 +8,20 @@ const SuccessModal: FC<SuccessModalProps> = ({ setModalSuccess, setOpenMainModal
 
   return (
     <div className={css(WrapperSuccessContainer)}>
-      <div className={css(Success_img)}>
+      <div className={css(SuccessImg)}>
         <svg width='165' height='164' viewBox='0 0 165 164' fill='none' xmlns='http://www.w3.org/2000/svg'>
           <circle opacity='0.1' cx='82.5' cy='82.0002' r='65.2653' fill='#009E47' />
           <path d='M51.9166 78.5832L70.9166 97.5832L112.083 56.4165' stroke='#009E47' strokeWidth='1.2' />
           <circle cx='82' cy='82' r='65' stroke='#009E47' strokeWidth='1.2' />
         </svg>
       </div>
-      <h2 className={css(Done_text)}>Done!</h2>
+      <h2 className={css(DoneText)}>Done!</h2>
       <p className={css(Description)}>Your feedback downloaded to your device</p>
-      <div className={css(Absolute_style)}>
-        <div className={css(Container_Styled)}>
-          <div className={css(Align_Buttons_style)}>
+      <div className={css(AbsoluteStyle)}>
+        <div className={css(ContainerStyled)}>
+          <div className={css(AlignButtonsStyle)}>
             <Button
-              styles={[font_style, Button_OK_style]}
+              styles={[fontStyle, ButtonOkStyle]}
               onPress={() => {
                 setModalSuccess(() => false);
                 setOpenMainModal(() => false);
@@ -36,11 +36,11 @@ const SuccessModal: FC<SuccessModalProps> = ({ setModalSuccess, setOpenMainModal
     </div>
   );
 };
-const font_style: Rule = ({ theme }) => {
+const fontStyle: Rule = ({ theme }) => {
   return theme.font.fixed.f16;
 };
 
-const Button_OK_style: Rule = ({ theme }) => {
+const ButtonOkStyle: Rule = ({ theme }) => {
   return {
     fontWeight: theme.font.weight.bold,
     width: '49%',
@@ -51,7 +51,7 @@ const Button_OK_style: Rule = ({ theme }) => {
   };
 };
 
-const Align_Buttons_style: Rule = ({ theme }) => {
+const AlignButtonsStyle: Rule = ({ theme }) => {
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
   return {
@@ -62,13 +62,13 @@ const Align_Buttons_style: Rule = ({ theme }) => {
   };
 };
 
-const Absolute_style: Rule = {
+const AbsoluteStyle: Rule = {
   position: 'absolute',
   left: 0,
   bottom: 0,
   width: '100%',
 };
-const Container_Styled: Rule = ({ theme }) => ({
+const ContainerStyled: Rule = ({ theme }) => ({
   position: 'relative',
   bottom: theme.spacing.s0,
   left: theme.spacing.s0,
@@ -83,7 +83,7 @@ const WrapperSuccessContainer: Rule = {
   alignItems: 'center',
   flexDirection: 'column',
 };
-const Success_img: Rule = {
+const SuccessImg: Rule = {
   width: '164px',
   height: '164px',
   '& > img': {
@@ -92,7 +92,7 @@ const Success_img: Rule = {
   },
 } as Styles;
 
-const Done_text: Rule = {
+const DoneText: Rule = {
   fontWeight: 'bold',
   fontSize: '28px',
   lineHeight: '32px',

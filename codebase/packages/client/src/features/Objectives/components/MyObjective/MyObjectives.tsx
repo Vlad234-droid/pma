@@ -27,6 +27,7 @@ import {
   getTimelineMetaSelector,
   getTimelineSelector,
   isReviewsInStatus,
+  isReviewsNumbersInStatus,
   reviewsMetaSelector,
   schemaMetaSelector,
   TimelineActions,
@@ -83,6 +84,9 @@ const MyObjectives: FC = () => {
   const { components = [], markup = { max: 0, min: 0 } } = schema;
   const { descriptions, startDates, statuses } = useSelector(getTimelineSelector) || {};
   const timelineTypes = useSelector(timelineTypesAvailabilitySelector);
+  const reviewsMinNumbersInStatusApproved = useSelector(
+    isReviewsNumbersInStatus(ReviewType.OBJECTIVE)(Status.APPROVED, markup.min),
+  );
   const canShowObjectives = timelineTypes[ObjectiveType.OBJECTIVE];
   const canShowMyReview = timelineTypes[ObjectiveType.MYR] && timelineTypes[ObjectiveType.EYR];
   const canShowAnnualReview = !timelineTypes[ObjectiveType.MYR] && timelineTypes[ObjectiveType.EYR];
@@ -98,7 +102,7 @@ const MyObjectives: FC = () => {
   const canCreateSingleObjective =
     markup.max > originObjectives?.length &&
     markup.min <= originObjectives?.length &&
-    timelineObjective.status === Status.APPROVED;
+    reviewsMinNumbersInStatusApproved;
 
   const canCreateMultiObjective = markup.min >= originObjectives?.length && timelineObjective.status === Status.DRAFT;
 
@@ -146,7 +150,7 @@ const MyObjectives: FC = () => {
       )}
       {canCreateMultiObjective && (
         <div className={css({ display: 'flex' })}>
-          <CreateButton withIcon buttonText='Create objectives' />
+          <CreateButton useSingleStep={false} withIcon buttonText='Create objectives' />
         </div>
       )}
       <div className={css(headWrapperStyles)}>
@@ -225,7 +229,8 @@ const MyObjectives: FC = () => {
                     reviewType={ReviewType.MYR}
                     status={midYearReview?.status}
                     startTime={midYearReview?.startTime}
-                    endTime={endYearReview?.endTime}
+                    endTime={midYearReview?.endTime}
+                    lastUpdatedTime={midYearReview?.lastUpdatedTime}
                     onClick={() => console.log('ReviewWidget')}
                     onClose={() => console.log('ReviewWidget')}
                     title={'Mid-year review'}
@@ -242,6 +247,7 @@ const MyObjectives: FC = () => {
                     status={endYearReview?.status}
                     startTime={endYearReview?.startTime}
                     endTime={endYearReview?.endTime}
+                    lastUpdatedTime={endYearReview?.lastUpdatedTime}
                     onClick={() => console.log('ReviewWidget')}
                     onClose={() => console.log('ReviewWidget')}
                     title={'Year-end review'}
@@ -257,10 +263,11 @@ const MyObjectives: FC = () => {
             {canShowAnnualReview && (
               <div data-test-id='feedback' className={css(basicTileStyle)}>
                 <ReviewWidget
-                  reviewType={ReviewType.MYR}
-                  status={midYearReview.status}
-                  startTime={midYearReview?.startTime}
+                  reviewType={ReviewType.EYR}
+                  status={endYearReview.status}
+                  startTime={endYearReview?.startTime}
                   endTime={endYearReview?.endTime}
+                  lastUpdatedTime={endYearReview?.lastUpdatedTime}
                   onClick={() => console.log('ReviewWidget')}
                   onClose={() => console.log('ReviewWidget')}
                   title={'Annual performance review'}

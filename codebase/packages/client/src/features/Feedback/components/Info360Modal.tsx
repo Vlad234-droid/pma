@@ -12,40 +12,42 @@ const Info360Modal: FC<Info360ModalProps> = ({ setInfo360Modal }) => {
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
   return (
     <div className={css(WrapperInfo)} data-test-id={INFO_360_MODAL}>
-      <h2 className={css(Title)}>What is the difference between “in the moment” and “360 Feedback”?</h2>
-      <p className={css(Pre_title)}>
-        You can give and receive feedback with your colleagues using Everyday Feedback or 360 Feedback. <br />
-        <br />
-        Meaning they can take the feedback onboard and start to make changes straight away. It can and should relate to
-        any part of their Full Contribution: someone&apos;s personal development, their impact on others, their day job
-        or strategic objectives. Colleagues have the option to request Everyday Feedback, focusing on any area of
-        interest. <br />
-        <br />
-        Everyday Feedback will be visible to your colleague as soon as you give it. The receiver will be able to see who
-        left the feedback so that they can arrange follow-up conversations where needed. <br />
-        <br />
-        360 Feedback is more structured. The questionnaire of pre-set questions provides an in-depth view of
-        someone&apos;s performance against our Win Together behaviours. Usually, 360 Feedback would be used once a year
-        to gather a detailed understanding on your decisions and how they impact others from a group of self-selected
-        colleagues, including your line manager, direct reports and other people you work with regularly, for example
-        project stakeholders.
-        <br />
-        <br /> You will find supporting videos to guide you when giving and receiving feedback on the giving and
-        receiving feedback pages.
-      </p>
+      <div className={css({ height: '100%' })}>
+        <h2 className={css(Title)}>What is the difference between “in the moment” and “360 Feedback”?</h2>
+        <p className={css(PreTitle)}>
+          You can give and receive feedback with your colleagues using Everyday Feedback or 360 Feedback. <br />
+          <br />
+          Meaning they can take the feedback onboard and start to make changes straight away. It can and should relate
+          to any part of their Full Contribution: someone&apos;s personal development, their impact on others, their day
+          job or strategic objectives. Colleagues have the option to request Everyday Feedback, focusing on any area of
+          interest. <br />
+          <br />
+          Everyday Feedback will be visible to your colleague as soon as you give it. The receiver will be able to see
+          who left the feedback so that they can arrange follow-up conversations where needed. <br />
+          <br />
+          360 Feedback is more structured. The questionnaire of pre-set questions provides an in-depth view of
+          someone&apos;s performance against our Win Together behaviours. Usually, 360 Feedback would be used once a
+          year to gather a detailed understanding on your decisions and how they impact others from a group of
+          self-selected colleagues, including your line manager, direct reports and other people you work with
+          regularly, for example project stakeholders.
+          <br />
+          <br /> You will find supporting videos to guide you when giving and receiving feedback on the giving and
+          receiving feedback pages.
+        </p>
 
-      <h2 className={css(Title_video)}>Watch video explanation</h2>
-      <div className={css(Block_video_explanation)}>
-        <img src={video_explanation} alt='video_explanation' />
+        <h2 className={css(TitleVideo)}>Watch video explanation</h2>
+        <div className={css(BlockVideoExplanation)}>
+          <img src={video_explanation} alt='video_explanation' />
+        </div>
+        <h3 className={css(RecomendationInfo)}>Face-to-face conversations are best for giving feedback.</h3>
+        <p className={css(PreRecomendationInfo)}>
+          Sharing feedback face-to-face gives you the space to have a two-way conversation, building trust and working
+          together on what the colleague could do next. Where this isn&apos;t possible, you can use the feedback
+          function in the Your Contribution system.
+        </p>
+        <h3 className={css(RecomendationInfo)}>Want to say “thank you” to a colleague?</h3>
+        <p className={css(PreRecomendationInfo)}>Head to the Recognition platform.</p>
       </div>
-      <h3 className={css(Recomendation_info)}>Face-to-face conversations are best for giving feedback.</h3>
-      <p className={css(Pre_recomendation_info)}>
-        Sharing feedback face-to-face gives you the space to have a two-way conversation, building trust and working
-        together on what the colleague could do next. Where this isn&apos;t possible, you can use the feedback function
-        in the Your Contribution system.
-      </p>
-      <h3 className={css(Recomendation_info)}>Want to say “thank you” to a colleague?</h3>
-      <p className={css(Pre_recomendation_info)}>Head to the Recognition platform.</p>
       <span
         className={css({
           position: 'fixed',
@@ -68,9 +70,11 @@ const Info360Modal: FC<Info360ModalProps> = ({ setInfo360Modal }) => {
 
 const WrapperInfo: Rule = {
   padding: '0px 36px',
+  overflow: 'auto',
+  height: '100%',
 };
 
-const Pre_title: Rule = {
+const PreTitle: Rule = {
   margin: '16px 0px 0px 0px',
   fontWeight: 'normal',
   fontSize: '16px',
@@ -83,13 +87,13 @@ const Title: Rule = {
   lineHeight: '28px',
 };
 
-const Title_video: Rule = {
+const TitleVideo: Rule = {
   fontWeight: 'bold',
   fontSize: '20px',
   lineHeight: '24px',
   margin: '32px 0px 16px 0px',
 };
-const Block_video_explanation: Rule = {
+const BlockVideoExplanation: Rule = {
   maxHeight: '300px',
   width: '100%',
   '& > img': {
@@ -100,14 +104,14 @@ const Block_video_explanation: Rule = {
   },
 } as Styles;
 
-const Recomendation_info: Rule = {
+const RecomendationInfo: Rule = {
   fontWeight: 'bold',
   fontSize: '24px',
   lineHeight: '28px',
   marginBottom: '16px',
 };
 
-const Pre_recomendation_info: Rule = {
+const PreRecomendationInfo: Rule = {
   fontWeight: 'normal',
   fontSize: '16px',
   lineHeight: '20px',

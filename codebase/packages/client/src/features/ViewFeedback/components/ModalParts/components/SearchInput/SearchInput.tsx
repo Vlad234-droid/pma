@@ -53,11 +53,11 @@ const SearchInput: FC<InputProps> = ({
         placeholder={placeholder}
       />
       {!!options.length && (
-        <div className={css(Container_style)}>
+        <div className={css(ContainerStyle)}>
           {options.map((item) => (
             <div
               key={item.colleagueUUID}
-              className={css(Selected_container_style)}
+              className={css(SelectedContainerStyle)}
               onMouseDown={(e) => e.preventDefault()}
               onClick={() => {
                 setSearchValue(() => `${item?.profile?.firstName} ${item?.profile?.lastName}`);
@@ -82,7 +82,7 @@ const SearchInput: FC<InputProps> = ({
   );
 };
 
-const Selected_container_style: Rule = {
+const SelectedContainerStyle: Rule = {
   display: 'block',
   width: '100%',
   fontSize: '16px',
@@ -93,7 +93,7 @@ const Selected_container_style: Rule = {
   },
 } as Styles;
 
-const Container_style: Rule = ({ theme }) => {
+const ContainerStyle: Rule = ({ theme }) => {
   return {
     display: 'block',
     position: 'absolute',

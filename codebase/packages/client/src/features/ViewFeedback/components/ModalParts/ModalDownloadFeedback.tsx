@@ -49,8 +49,8 @@ const ModalDownloadFeedback: FC<ModalDownloadFeedbackProps> = ({
 
   return (
     <div className={css({ padding: '0px 40px' })}>
-      <h2 className={css(downloadTitle_Styled)}>{downloadTitle}</h2>
-      <p className={css(downloadDescription_Styled)}>{downloadDescription}</p>
+      <h2 className={css(downloadTitleStyled)}>{downloadTitle}</h2>
+      <p className={css(downloadDescriptionStyled)}>{downloadDescription}</p>
       <form>
         <SearchPart
           searchValue={searchValue}
@@ -147,14 +147,14 @@ const ModalDownloadFeedback: FC<ModalDownloadFeedbackProps> = ({
   );
 };
 
-const downloadTitle_Styled: Rule = {
+const downloadTitleStyled: Rule = {
   margin: '0px 0px 8px 0px',
   fontWeight: 'bold',
   fontSize: '24px',
   lineHeight: '28px',
 };
 
-const downloadDescription_Styled: Rule = {
+const downloadDescriptionStyled: Rule = {
   margin: '0px',
   fontWeight: 'normal',
   fontSize: '18px',
