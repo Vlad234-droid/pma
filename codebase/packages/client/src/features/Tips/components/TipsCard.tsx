@@ -98,7 +98,7 @@ const tipInfoWrap: Rule = () => {
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.medium || isBreakpoint.small || isBreakpoint.xSmall;
   return {
-    maxWidth: mobileScreen ? '239px' : 'auto',
+    maxWidth: mobileScreen ?  '300px' : 'auto',
   };
 };
 

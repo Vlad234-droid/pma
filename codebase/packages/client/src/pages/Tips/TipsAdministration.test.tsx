@@ -6,7 +6,7 @@ import { createMemoryHistory } from 'history';
 import { renderWithTheme } from '../../utils/test';
 
 import '@testing-library/jest-dom';
-jest.mock('react-markdown', () => ({ ReactMarkdown: () => 'mocked ReactMarkdown' }));
+// jest.mock('react-markdown', () => ({ ReactMarkdown: () => 'mocked ReactMarkdown' }));
 
 it('TipsAdministration', async () => {
   const history = createMemoryHistory();
@@ -16,7 +16,7 @@ it('TipsAdministration', async () => {
       <TipsAdministration />
     </Router>,
   );
-  const timeline = getByTestId('tips-adminiation');
+  const timeline = getByTestId('tips-administration');
 
   expect(timeline).toBeInTheDocument();
 });
