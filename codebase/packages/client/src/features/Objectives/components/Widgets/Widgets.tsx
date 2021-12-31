@@ -2,7 +2,7 @@ import React, { FC, HTMLProps } from 'react';
 import { useTranslation } from 'components/Translation';
 import { Styles, useStyle } from '@dex-ddl/core';
 import SecondaryWidget, { Props as SecondaryWidgetProps } from '../SecondaryWidget';
-import MainWidget from '../MainWidget';
+import { default as MainWidget } from '../MainWidget';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { ReviewType } from 'config/enum';

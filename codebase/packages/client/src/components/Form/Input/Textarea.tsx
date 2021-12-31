@@ -5,7 +5,16 @@ import mergeRefs from 'react-merge-refs';
 import { TextareaProps } from '../types';
 import { useRefContainer } from '../context/input';
 
-const Textarea: FC<TextareaProps> = ({ domRef, placeholder = '', rows = 3, name, value, onChange, isValid = true }) => {
+const Textarea: FC<TextareaProps> = ({
+  domRef,
+  placeholder = '',
+  rows = 3,
+  name,
+  value,
+  readonly,
+  onChange,
+  isValid = true,
+}) => {
   const { css } = useStyle();
   const refIcon = useRefContainer();
 
@@ -15,6 +24,7 @@ const Textarea: FC<TextareaProps> = ({ domRef, placeholder = '', rows = 3, name,
       name={name}
       data-test-id={name}
       value={value}
+      readOnly={readonly}
       onChange={onChange}
       className={css({
         width: '100%',

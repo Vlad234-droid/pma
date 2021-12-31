@@ -152,7 +152,10 @@ export const WidgetTeamMateObjectives: FC<WidgetTeamMateObjectivesProps> = ({
                         return (
                           <div key={`element-${timeline.reviewType}-${colleague.uuid}`}>
                             {(colleagueReviews[colleague.uuid] || [])
-                              .filter((review) => review.type === timeline.reviewType)
+                              .filter(
+                                (review) =>
+                                  review.type === timeline.reviewType && review.status === Status.WAITING_FOR_APPROVAL,
+                              )
                               .map(({ id, title, subTitle, description, explanations }) => (
                                 <ObjectiveTile
                                   key={`${timeline.reviewType}-${id}`}

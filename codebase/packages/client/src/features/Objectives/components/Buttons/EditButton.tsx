@@ -1,19 +1,26 @@
 import React, { FC, HTMLProps, useState } from 'react';
 import { useBreakpoints, Rule, Modal, useStyle, Button } from '@dex-ddl/core';
 import { Icon, Graphics } from 'components/Icon';
-import { CreateUpdateObjective } from '../ObjectiveModal';
+import { CreateUpdateObjective, CreateUpdateObjectives } from '../ObjectiveModal';
 import { IconButton } from 'components/IconButton';
 
 export type EditAllModalProps = {
+  isSingleObjectivesEditMode: boolean;
+  editNumber?: number;
   icon?: Graphics;
   styles?: Rule;
   buttonText?: string;
-  editNumber?: number;
 };
 
 type Props = HTMLProps<HTMLInputElement> & EditAllModalProps;
 
-const EditButton: FC<Props> = ({ styles = {}, icon = 'add', buttonText = 'Edit all', editNumber }) => {
+const EditButton: FC<Props> = ({
+  isSingleObjectivesEditMode,
+  styles = {},
+  icon = 'add',
+  buttonText = 'Edit all',
+  editNumber,
+}) => {
   const { theme } = useStyle();
 
   const [isOpen, setIsOpen] = useState(false);
@@ -24,7 +31,7 @@ const EditButton: FC<Props> = ({ styles = {}, icon = 'add', buttonText = 'Edit a
     <>
       {icon ? (
         <IconButton
-          customVariantRules={{ default: { ...iconBtnStyle, ...styles } }}
+          customVariantRules={{ default: styles }}
           onPress={handleBtnClick}
           graphic={icon}
           iconStyles={iconStyle}
@@ -66,10 +73,10 @@ const EditButton: FC<Props> = ({ styles = {}, icon = 'add', buttonText = 'Edit a
             setIsOpen(false);
           }}
         >
-          {editNumber ? (
+          {isSingleObjectivesEditMode ? (
             <CreateUpdateObjective onClose={() => setIsOpen(false)} editNumber={editNumber} />
           ) : (
-            <CreateUpdateObjective onClose={() => setIsOpen(false)} />
+            <CreateUpdateObjectives onClose={() => setIsOpen(false)} editNumber={editNumber} />
           )}
         </Modal>
       )}

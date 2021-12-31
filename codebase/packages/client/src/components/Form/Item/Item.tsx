@@ -43,7 +43,6 @@ export const Item: FC<Props> = ({
 
   return (
     <div className={css(wrapperItem({ marginBot }))}>
-      {/*todo add markdown here instead of label*/}
       {label && (
         <div className={css(labelWrapperStyle)}>
           <label className={css(labelStyle)} title={label}>

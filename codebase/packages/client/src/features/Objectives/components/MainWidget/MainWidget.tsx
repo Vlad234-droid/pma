@@ -1,14 +1,15 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { Trans, useTranslation } from 'components/Translation';
 import { Status } from 'config/enum';
 import { useStyle, Rule, CreateRule, Colors, Button } from '@dex-ddl/core';
 
-import { CreateButton } from '../Buttons';
 import { TileWrapper } from 'components/Tile';
 import { Icon, Graphics } from 'components/Icon';
 import { useHistory } from 'react-router-dom';
 import { Page } from 'pages';
 import { buildPath } from 'features/Routes/utils';
+import { ModalComponent } from '../Modal';
+import { CreateUpdateObjectives } from '../ObjectiveModal';
 
 export type Props = {
   onClick: () => void;
@@ -122,6 +123,8 @@ const getContent = (props: {
 const MainWidget: FC<Props> = ({ nextReviewDate = '', count = 0, status, customStyle, onClick }) => {
   const { css } = useStyle();
   const history = useHistory();
+  const { t } = useTranslation();
+  const [isOpen, setIsOpen] = useState(false);
 
   const notApproved = status !== Status.APPROVED;
   const mode = notApproved ? 'default' : 'inverse';
@@ -135,50 +138,49 @@ const MainWidget: FC<Props> = ({ nextReviewDate = '', count = 0, status, customS
   );
 
   const handleClick = () => {
-    notApproved && onClick();
+    redirectToObjective ? history.push(buildPath(Page.OBJECTIVES_VIEW)) : setIsOpen(true);
   };
 
   return (
-    <TileWrapper customStyle={customStyle} hover={true} background={backgroundColor}>
-      <div className={css(wrapperStyle({ clickable: notApproved }))} onClick={handleClick} data-test-id={TEST_ID}>
-        <div className={css(headStyle)}>
-          <div>
-            <Icon graphic='document' invertColors={notApproved} iconStyles={iconStyles} />
-          </div>
-          <div className={css(headerBlockStyle)}>
-            <span className={css(titleStyle)}>
-              <Trans i18nKey='my_business_objectives'>My objectives</Trans>
-            </span>
-            <span className={css(descriptionStyle)}>
-              <span className={css(iconStyle)}>
-                {invertColors ? (
-                  <Icon graphic={graphic} invertColors />
-                ) : (
-                  <Icon graphic={graphic} backgroundRadius={12} />
-                )}
+    <>
+      <TileWrapper customStyle={customStyle} hover={true} background={backgroundColor}>
+        <div className={css(wrapperStyle({ clickable: notApproved }))} onClick={handleClick} data-test-id={TEST_ID}>
+          <div className={css(headStyle)}>
+            <div>
+              <Icon graphic='document' invertColors={notApproved} iconStyles={iconStyles} />
+            </div>
+            <div className={css(headerBlockStyle)}>
+              <span className={css(titleStyle)}>
+                <Trans i18nKey='my_business_objectives'>My Objectives</Trans>
               </span>
-              {subTitle}
-            </span>
+              <span className={css(descriptionStyle)}>
+                <span className={css(iconStyle)}>
+                  {invertColors ? (
+                    <Icon graphic={graphic} invertColors />
+                  ) : (
+                    <Icon graphic={graphic} backgroundRadius={12} />
+                  )}
+                </span>
+                {subTitle}
+              </span>
+            </div>
           </div>
-        </div>
-        <div className={css(bodyStyle)}>
-          <div className={css({ marginTop: '14px', marginLeft: '9px' })}>{description}</div>
-          <div className={css(bodyBlockStyle)}>
-            {redirectToObjective ? (
-              <Button
-                mode={mode}
-                styles={[viewButtonStyle({ inverse: notApproved })]}
-                onPress={() => history.push(buildPath(Page.OBJECTIVES_VIEW))}
-              >
+          <div className={css(bodyStyle)}>
+            <div className={css({ marginTop: '14px', marginLeft: '9px' })}>{description}</div>
+            <div className={css(bodyBlockStyle)}>
+              <Button mode={mode} styles={[viewButtonStyle({ inverse: notApproved })]} onPress={handleClick}>
                 {buttonText}
               </Button>
-            ) : (
-              <CreateButton buttonText={buttonText} />
-            )}
+            </div>
           </div>
         </div>
-      </div>
-    </TileWrapper>
+      </TileWrapper>
+      {isOpen && (
+        <ModalComponent onClose={() => setIsOpen(false)} title={t('create_objectives', 'Create objectives')}>
+          <CreateUpdateObjectives onClose={() => setIsOpen(false)} />
+        </ModalComponent>
+      )}
+    </>
   );
 };
 

@@ -6,7 +6,7 @@ import { Rule, Button } from '@dex-ddl/core';
 
 import { Icon, IconProps, Graphics } from '../Icon';
 
-type VariantRule = {
+export type VariantRule = {
   default?: Rule;
   disabled?: Rule;
 };

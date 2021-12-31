@@ -1,3 +1,4 @@
-import { Trans, useTranslation } from 'react-i18next';
+import { Trans, useTranslation, TFunction } from 'react-i18next';
 
 export { Trans, useTranslation };
+export type { TFunction };

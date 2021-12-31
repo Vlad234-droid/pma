@@ -52,7 +52,7 @@
   "tooltip_info": "Accumsan proin ut in convallis eget turpis a pellentesque.",
   "useful_resources": "Useful resources",
   "view": "View",
-  "view_and_edit": "View and Edit",
+  "view_and_edit": "View and edit",
   "view_files": "View Files",
   "view_history": "View history",
   "you_have_n_files": "You have 12 files",
@@ -92,5 +92,10 @@
   "submit_objectives_or_reviews": "Submit objectives or reviews",
   "approve_objectives_or_reviews": "Are you sure you want to approve objectives or reviews?",
   "approve_or_decline": "Approve or decline",
-  "time_to_approve_or_decline": "It’s time to review your colleague’s objectives and / or reviews"
+  "time_to_approve_or_decline": "It’s time to review your colleague’s objectives and / or reviews",
+  "mid_year_review_help_text": "Use this to capture a summary of the mid-year conversation you’ve had with your line manager. Remember to focus as much on your how as your what.",
+  "end_year_review_help_text": "Use this to capture a summary of the end-year conversation you’ve had with your line manager. Remember to focus as much on your how as your what.",
+  "mid_year_review_sent_to_manager": "Your mid-year review has been sent to your line manager.",
+  "end_year_review_sent_to_manager": "Your end-year review has been sent to your line manager.",
+  "review_widget_saved_as_draft": "Your form is currently saved as a draft"
 }

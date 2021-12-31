@@ -14,6 +14,7 @@ const Select: FC<SelectProps> = ({
   options,
   disabled = false,
   name,
+  readonly = false,
   getSelected,
 }) => {
   const { css, theme } = useStyle();
@@ -24,7 +25,9 @@ const Select: FC<SelectProps> = ({
   const inputRef = useRef<HTMLInputElement>();
 
   const handleClick = () => {
-    toggleOption((isOptionOpen) => !isOptionOpen);
+    if (!readonly) {
+      toggleOption((isOptionOpen) => !isOptionOpen);
+    }
   };
 
   const handleBlur = () => {
