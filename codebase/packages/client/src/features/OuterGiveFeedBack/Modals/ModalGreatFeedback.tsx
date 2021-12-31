@@ -16,10 +16,10 @@ const Info360Modal: FC<Info360ModalProps> = ({ setModalGreatFeedback }) => {
         Giving feedback helps us to make sure we&apos;re all contributing our best, whether that&apos;s celebrating
         what&apos;s gone well or letting someone know when something could be better.
       </h2>
-      <p className={css(Pre_title)}>
+      <p className={css(PreTitle)}>
         To help you give great feedback to your colleagues, follow these steps: <br />
       </p>
-      <ol className={css(ordered_list)}>
+      <ol className={css(orderedList)}>
         <li>
           Make your good intentions clear. This builds trust and lets the receiver know that your words come from a
           positive place. This means they&apos;ll be more likely to listen and reflect on what you&apos;ve shared. An
@@ -44,8 +44,8 @@ const Info360Modal: FC<Info360ModalProps> = ({ setModalGreatFeedback }) => {
         </li>
       </ol>
 
-      <p className={css(Pre_recomendation_info)}>Remember:</p>
-      <ul className={css(dots_list)}>
+      <p className={css(PreRecomendationInfo)}>Remember:</p>
+      <ul className={css(dotsList)}>
         <li>make your good intentions clear</li>
         <li>be specific about the situation</li>
         <li>describe the behaviour you observed</li>
@@ -71,7 +71,7 @@ const Info360Modal: FC<Info360ModalProps> = ({ setModalGreatFeedback }) => {
     </div>
   );
 };
-const ordered_list: Rule = {
+const orderedList: Rule = {
   '& li': {
     marginTop: '8px',
     fontWeight: 'normal',
@@ -80,7 +80,7 @@ const ordered_list: Rule = {
   },
 } as Styles;
 
-const dots_list: Rule = {
+const dotsList: Rule = {
   marginTop: '0px',
   '& li': {
     marginTop: '8px',
@@ -92,9 +92,11 @@ const dots_list: Rule = {
 
 const WrapperInfo: Rule = {
   padding: '0px 36px',
+  overflow: 'auto',
+  height: '100%',
 };
 
-const Pre_title: Rule = {
+const PreTitle: Rule = {
   margin: '16px 0px 0px 0px',
   fontWeight: 'normal',
   fontSize: '16px',
@@ -107,21 +109,7 @@ const Title: Rule = {
   lineHeight: '20px',
 };
 
-const Title_video: Rule = {
-  fontWeight: 'bold',
-  fontSize: '20px',
-  lineHeight: '24px',
-  margin: '32px 0px 16px 0px',
-};
-
-const Recomendation_info: Rule = {
-  fontWeight: 'bold',
-  fontSize: '24px',
-  lineHeight: '28px',
-  marginBottom: '16px',
-};
-
-const Pre_recomendation_info: Rule = {
+const PreRecomendationInfo: Rule = {
   fontWeight: 'normal',
   fontSize: '16px',
   lineHeight: '20px',

@@ -8,11 +8,9 @@ export const createObjectivesSearchPeopleSchema = Yup.object().shape({
 });
 
 export const createGiveFeedbackSchema = Yup.object().shape({
-  feedback: Yup.array()
-    .of(
-      Yup.object().shape({
-        field: Yup.string().required(),
-      }),
-    )
-    .required(),
+  feedback: Yup.array().of(
+    Yup.object().shape({
+      field: Yup.string().required(),
+    }),
+  ),
 });

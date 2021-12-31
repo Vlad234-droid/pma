@@ -36,9 +36,9 @@ const RadioBtns: FC<RadioBtnsProps> = ({
   const { css } = useStyle();
 
   return (
-    <div className={css(Flex_mobile_style)}>
+    <div className={css(FlexMobileStyle)}>
       <div className={css({ padding: '0px 10px 0px 0px', cursor: 'pointer' })}>
-        <label htmlFor='pending' className={css(Flex_center_style)}>
+        <label htmlFor='pending' className={css(FlexCenterStyle)}>
           <Radio
             type='radio'
             name='status1'
@@ -57,13 +57,13 @@ const RadioBtns: FC<RadioBtnsProps> = ({
               });
             }}
           />
-          <span className={css(Size_style)}>
+          <span className={css(SizeStyle)}>
             <Trans>Pending</Trans>
           </span>
         </label>
       </div>
       <div className={css({ padding: '0px', cursor: 'pointer' })}>
-        <label htmlFor='completed' className={css(Flex_center_style)}>
+        <label htmlFor='completed' className={css(FlexCenterStyle)}>
           <Radio
             id='completed'
             type='radio'
@@ -82,7 +82,7 @@ const RadioBtns: FC<RadioBtnsProps> = ({
               });
             }}
           />
-          <span className={css(Size_style)}>
+          <span className={css(SizeStyle)}>
             <Trans>Completed</Trans>
           </span>
         </label>
@@ -91,19 +91,19 @@ const RadioBtns: FC<RadioBtnsProps> = ({
   );
 };
 
-const Size_style: Rule = {
+const SizeStyle: Rule = {
   fontSize: '16px',
   lineHeight: '20px',
   padding: '0px 5px',
 };
 
-const Flex_center_style: Rule = {
+const FlexCenterStyle: Rule = {
   display: 'flex',
   alignItems: 'center',
   cursor: 'pointer',
 };
 
-const Flex_mobile_style: Rule = () => {
+const FlexMobileStyle: Rule = () => {
   const [, isBreakpoint] = useBreakpoints();
   const medium = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
   return {

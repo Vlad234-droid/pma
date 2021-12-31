@@ -17,10 +17,10 @@ const SuccessModal: FC<SuccessModalProps> = ({
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
   return (
     <div className={css(WrapperSuccessContainer)}>
-      <div className={css(Success_img)}>
+      <div className={css(SuccessImg)}>
         <img src={success} alt='success' />
       </div>
-      <h2 className={css(Done_text)}>Done!</h2>
+      <h2 className={css(DoneText)}>Done!</h2>
       <p className={css(Description)}>
         {`${selectedPerson?.profile?.firstName} ${selectedPerson?.profile?.lastName}`} will now be able to see your
         feedback
@@ -101,7 +101,7 @@ const WrapperSuccessContainer: Rule = {
   alignItems: 'center',
   flexDirection: 'column',
 };
-const Success_img: Rule = {
+const SuccessImg: Rule = {
   width: '164px',
   height: '164px',
   '& > img': {
@@ -110,7 +110,7 @@ const Success_img: Rule = {
   },
 } as Styles;
 
-const Done_text: Rule = {
+const DoneText: Rule = {
   fontWeight: 'bold',
   fontSize: '28px',
   lineHeight: '32px',

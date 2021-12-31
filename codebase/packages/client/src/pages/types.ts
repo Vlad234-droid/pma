@@ -14,10 +14,10 @@ enum Page {
   MY_TEAM = 'my-team',
   ACTIONS = 'actions',
   FEEDBACK = 'feedback',
-  GIVE_FEEDBACK = 'give-feedback',
-  REQUEST_FEEDBACK = 'request-feedback',
-  RESPOND_FEEDBACK = 'respond-feedback',
-  VIEW_FEEDBACK = 'view-feedback',
+  GIVE_FEEDBACK = 'feedback/give-feedback',
+  REQUEST_FEEDBACK = 'feedback/request-feedback',
+  RESPOND_FEEDBACK = 'feedback/respond-feedback',
+  VIEW_FEEDBACK = 'feedback/view-feedback',
 }
 
 type PageElement =

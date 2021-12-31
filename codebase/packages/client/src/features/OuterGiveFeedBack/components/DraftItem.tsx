@@ -1,5 +1,5 @@
 import React, { FC, SetStateAction, useEffect, Dispatch } from 'react';
-import { useStyle, Rule, Styles } from '@dex-ddl/core';
+import { useStyle, Rule, Styles, colors } from '@dex-ddl/core';
 import { TileWrapper } from 'components/Tile';
 import { Accordion, BaseAccordion, Section, Panel, ExpandButton } from 'components/Accordion';
 import { IconButton } from 'components/IconButton';
@@ -7,8 +7,9 @@ import { Trans } from 'components/Translation';
 import { FeedbackActions, getPropperNotesByStatusSelector, colleagueUUIDSelector } from '@pma/store';
 import { useDispatch, useSelector } from 'react-redux';
 import { FeedbackStatus } from '../../../config/enum';
-import { filteredByInputSearchHandler, filteredNotesByRadiosBtnsHandler, getPropperTime } from '../../../utils';
+import { filteredByInputSearchHandler, filteredNotesByRadiosBtnsHandler, formatToRelativeDate } from '../../../utils';
 import defaultImg from '../../../../public/default.png';
+import { NoFeedback } from '../../Feedback/components';
 
 type filterFeedbacksType = {
   AZ: boolean;
@@ -60,13 +61,6 @@ const DraftItem: FC<DraftItemProps> = ({
   const draftedNotes = useSelector(getPropperNotesByStatusSelector(FeedbackStatus.DRAFT)) || [];
   const submittedNotes = useSelector(getPropperNotesByStatusSelector(FeedbackStatus.SUBMITTED)) || [];
 
-  if (checkedRadio.submitted && !submittedNotes.length) {
-    return null;
-  }
-  if (checkedRadio.draft && !draftedNotes.length) {
-    return null;
-  }
-
   const getPropperNotes = () => {
     if (checkedRadio.draft && searchValue.length <= 2 && Object.values(filterFeedbacks).every((item) => !item)) {
       return draftedNotes;
@@ -89,11 +83,18 @@ const DraftItem: FC<DraftItemProps> = ({
     }
   };
 
+  if (checkedRadio.submitted && !getPropperNotes().length) {
+    return <NoFeedback />;
+  }
+  if (checkedRadio.draft && !getPropperNotes().length) {
+    return <NoFeedback />;
+  }
+
   return (
     <>
       {getPropperNotes()?.map((item) => (
         <div key={item.uuid}>
-          <TileWrapper>
+          <TileWrapper customStyle={{ padding: '24px' }}>
             <Accordion
               id={`draft-accordion-${item.uuid}`}
               customStyle={{
@@ -105,31 +106,36 @@ const DraftItem: FC<DraftItemProps> = ({
                 {() => (
                   <>
                     <Section defaultExpanded={false}>
-                      <div className={css(Draft_Styles)}>
-                        <div className={css(Block_info)}>
+                      <div className={css(DraftStyles)}>
+                        <div className={css(BlockInfo)}>
                           <div className={css({ alignSelf: 'flex-start' })}>
-                            <img className={css(Img_style)} alt='photo' src={defaultImg} />
+                            <img className={css(ImgStyle)} alt='photo' src={defaultImg} />
                           </div>
                           <div className={css({ marginLeft: '16px' })}>
                             <h3
-                              className={css(Names_Style)}
+                              className={css(NamesStyle)}
                             >{`${item?.targetColleagueProfile?.colleague?.profile?.firstName} ${item?.targetColleagueProfile?.colleague?.profile?.lastName}`}</h3>
                             <p
-                              className={css(Industry_Style)}
+                              className={css(IndustryStyle)}
                             >{`${item?.targetColleagueProfile?.colleague?.workRelationships[0].job.name}, ${item?.targetColleagueProfile?.colleague?.workRelationships[0].department?.name}`}</p>
                           </div>
                         </div>
                         <div className={css({ display: 'flex', justifyContent: 'center', alignItems: 'center' })}>
-                          <div className={css({ marginRight: '26px' })}>{getPropperTime(item.updatedTime)}</div>
+                          <div className={css({ marginRight: '26px' })}>{formatToRelativeDate(item.updatedTime)}</div>
                           <ExpandButton />
                         </div>
                       </div>
 
                       <Panel>
                         <TileWrapper
-                          customStyle={{ width: 'auto', padding: '24px', margin: '0px 28px 24px 24px', border: '1px solid #E5E5E5' }}
+                          customStyle={{
+                            width: 'auto',
+                            padding: '24px',
+                            margin: '0px 28px 24px 24px',
+                            border: `1px solid ${colors.backgroundDarkest}`,
+                          }}
                         >
-                          <h2 className={css(Title_style)}>Objective: Provide a posititve customer experience</h2>
+                          <h2 className={css(TitleStyle)}>Objective: Provide a posititve customer experience</h2>
 
                           <div className={css(Info_block_style)}>
                             <h3>Question 1</h3>
@@ -179,7 +185,12 @@ const DraftItem: FC<DraftItemProps> = ({
                             customVariantRules={{ default: iconBtnStyle }}
                             onPress={() => {
                               if (filterModal) setFilterModal(() => false);
-                              setFilterFeedbacks(() => ({ AZ: false, ZA: false, newToOld: false, oldToNew: false }));
+                              setFilterFeedbacks(() => ({
+                                AZ: false,
+                                ZA: false,
+                                newToOld: false,
+                                oldToNew: false,
+                              }));
                               if (focus) setFocus(() => false);
                               draftFeedback(item);
                             }}
@@ -203,36 +214,35 @@ const DraftItem: FC<DraftItemProps> = ({
   );
 };
 
-const Draft_Styles: Rule = {
-  padding: '24px',
+const DraftStyles: Rule = {
   display: 'flex',
   justifyContent: 'space-between',
 };
 
-const Block_info: Rule = {
+const BlockInfo: Rule = {
   display: 'inline-flex',
   alignItems: 'center',
 };
 
-const Img_style: Rule = {
+const ImgStyle: Rule = {
   width: '48px',
   height: '48px',
   borderRadius: '50%',
 };
-const Names_Style: Rule = {
+const NamesStyle: Rule = {
   fontWeight: 'bold',
   fontSize: '18px',
   lineHeight: '22px',
   margin: '0px',
   color: '#00539F',
 };
-const Industry_Style: Rule = {
+const IndustryStyle: Rule = {
   fontWeight: 'normal',
   fontSize: '16px',
   lineHeight: '20px',
   margin: '4px 0px 0px 0px',
 };
-const Title_style: Rule = {
+const TitleStyle: Rule = {
   margin: '0px 0px 16px 0px',
   fontSize: '16px',
   color: '#00539F',
@@ -266,8 +276,7 @@ const iconBtnStyle: Rule = ({ theme }) => ({
   border: '1px solid #00539F',
   whiteSpace: 'nowrap',
   marginLeft: 'auto',
-  marginRight: '24px',
-  marginBottom: '24px',
+  marginTop: '24px',
 });
 
 const iconStyle: Rule = {

@@ -1,5 +1,5 @@
 import React, { FC, useEffect, Dispatch, SetStateAction } from 'react';
-import { Rule, Styles, useStyle } from '@dex-ddl/core';
+import { Rule, Styles, useStyle, colors } from '@dex-ddl/core';
 import { TileWrapper } from 'components/Tile';
 import { Accordion, BaseAccordion, ExpandButton, Panel, Section } from 'components/Accordion';
 import { IconButton } from 'components/IconButton';
@@ -13,8 +13,9 @@ import {
   colleagueUUIDSelector,
 } from '@pma/store';
 import { FeedbackStatus, TargetTypeReverse } from '../../../config/enum';
-import { filteredByInputSearchHandler, filteredNotesByRadiosBtnsHandler, getPropperTime } from '../../../utils';
+import { filteredByInputSearchHandler, filteredNotesByRadiosBtnsHandler, formatToRelativeDate } from '../../../utils';
 import defaultImg from '../../../../public/default.png';
+import { NoFeedback } from '../../Feedback/components';
 
 type filterFeedbacksType = {
   AZ: boolean;
@@ -90,13 +91,6 @@ const DraftItem: FC<DraftItemProps> = ({
     }
   }, [readNotes.length]);
 
-  if (checkedRadio.unread && !submittedCompletedNotes.length && !unReadNotes.length) {
-    return null;
-  }
-  if (checkedRadio.read && !submittedCompletedNotes.length && !readNotes.length) {
-    return null;
-  }
-
   const getPropperNotes = () => {
     if (checkedRadio.unread && searchValue.length <= 2 && Object.values(filterFeedbacks).every((item) => !item)) {
       return unReadNotes;
@@ -137,17 +131,26 @@ const DraftItem: FC<DraftItemProps> = ({
         }
       });
 
-      return `“${capitalType}${targetTypeStr !== '' ? ':' : ''} ${targetTypeStr}”`;
+      return `“${capitalType}${targetTypeStr !== '' ? ':' : ''}${`${
+        targetTypeStr !== '' ? ` ${targetTypeStr}` : `${targetTypeStr}`
+      }`}”`;
     }
     return '';
   };
+
+  if (checkedRadio.unread && !getPropperNotes().length) {
+    return <NoFeedback />;
+  }
+  if (checkedRadio.read && !getPropperNotes().length) {
+    return <NoFeedback />;
+  }
 
   return (
     <>
       {getPropperNotes()?.map((item, i) => {
         return (
           <div key={item.uuid}>
-            <TileWrapper>
+            <TileWrapper customStyle={{ padding: '24px 24px 24px 24px' }}>
               <Accordion
                 id={`draft-accordion-${item.uuid}`}
                 customStyle={{
@@ -159,33 +162,38 @@ const DraftItem: FC<DraftItemProps> = ({
                   {() => (
                     <>
                       <Section defaultExpanded={checkedRadio.unread ? !i : false}>
-                        <div className={css(Draft_Styles)}>
-                          <div className={css(Block_info)}>
+                        <div className={css(DraftStyles)}>
+                          <div className={css(BlockInfo)}>
                             <div className={css({ alignSelf: 'flex-start' })}>
-                              <img className={css(Img_style)} src={defaultImg} alt='photo' />
+                              <img className={css(ImgStyle)} src={defaultImg} alt='photo' />
                             </div>
                             <div className={css({ marginLeft: '16px' })}>
                               <h3
-                                className={css(Names_Style)}
+                                className={css(NamesStyle)}
                               >{`${item?.colleagueProfile?.colleague?.profile?.firstName} ${item?.colleagueProfile?.colleague?.profile?.lastName}`}</h3>
                               <p
-                                className={css(Industry_Style)}
+                                className={css(IndustryStyle)}
                               >{`${item?.colleagueProfile?.colleague?.workRelationships[0].job.name}, ${item?.colleagueProfile?.colleague?.workRelationships[0].department?.name}`}</p>
                             </div>
                           </div>
                           <div className={css({ display: 'flex', justifyContent: 'center', alignItems: 'center' })}>
-                            <div className={css({ marginRight: '26px' })}>{getPropperTime(item.updatedTime)}</div>
+                            <div className={css({ marginRight: '26px' })}>{formatToRelativeDate(item.updatedTime)}</div>
                             <ExpandButton onClick={(expanded) => expanded && markAsReadFeedback(item.uuid)} />
                           </div>
                         </div>
 
                         <Panel>
                           <TileWrapper
-                            customStyle={{ width: 'auto', padding: '24px', margin: '0px 28px 28px 24px', border: '1px solid #E5E5E5' }}
+                            customStyle={{
+                              width: 'auto',
+                              padding: '24px',
+                              margin: '0px 28px 28px 24px',
+                              border: `1px solid ${colors.backgroundDarkest}`,
+                            }}
                           >
-                            <h2 className={css(Title_style)}>{getPropperTargetType(item.targetType, item.targetId)}</h2>
+                            <h2 className={css(TitleStyle)}>{getPropperTargetType(item.targetType, item.targetId)}</h2>
                             <>
-                              <div className={css(Info_block_style)}>
+                              <div className={css(InfoBlockStyle)}>
                                 <h3>Question 1</h3>
                                 {item.feedbackItems.map((question) => {
                                   return (
@@ -193,7 +201,7 @@ const DraftItem: FC<DraftItemProps> = ({
                                   );
                                 })}
                               </div>
-                              <div className={css(Info_block_style)}>
+                              <div className={css(InfoBlockStyle)}>
                                 <h3>Question 2</h3>
                                 {item.feedbackItems.map((question) => {
                                   return (
@@ -201,11 +209,17 @@ const DraftItem: FC<DraftItemProps> = ({
                                   );
                                 })}
                               </div>
-                              <div className={css(Info_block_style)}>
+                              <div className={css(InfoBlockStyle)}>
                                 <h3>Anything else?</h3>
                                 {item.feedbackItems.map((question) => {
                                   return (
-                                    <p key={question.code}>{question.code === 'Anything else?' && question.content}</p>
+                                    <p key={question.code}>
+                                      {question.code === 'Anything else?'
+                                        ? question.content !== ''
+                                          ? question.content
+                                          : '-'
+                                        : ''}
+                                    </p>
                                   );
                                 })}
                               </div>
@@ -240,43 +254,41 @@ const DraftItem: FC<DraftItemProps> = ({
   );
 };
 
-const Draft_Styles: Rule = {
-  padding: '24px',
-
+const DraftStyles: Rule = {
   display: 'flex',
   justifyContent: 'space-between',
 };
 
-const Block_info: Rule = {
+const BlockInfo: Rule = {
   display: 'inline-flex',
   alignItems: 'center',
 };
 
-const Img_style: Rule = {
+const ImgStyle: Rule = {
   width: '48px',
   height: '48px',
   borderRadius: '50%',
 };
-const Names_Style: Rule = {
+const NamesStyle: Rule = {
   fontWeight: 'bold',
   fontSize: '18px',
   lineHeight: '22px',
   margin: '0px',
   color: '#00539F',
 };
-const Industry_Style: Rule = {
+const IndustryStyle: Rule = {
   fontWeight: 'normal',
   fontSize: '16px',
   lineHeight: '20px',
   margin: '4px 0px 0px 0px',
 };
-const Title_style: Rule = {
+const TitleStyle: Rule = {
   margin: '0px 0px 16px 0px',
   fontSize: '16px',
   color: '#00539F',
   lineHeight: '20px',
 };
-const Info_block_style: Rule = {
+const InfoBlockStyle: Rule = {
   marginBottom: '16px',
   '& > h3': {
     margin: '0px',
@@ -307,7 +319,6 @@ const iconBtnStyle: Rule = ({ theme }) => ({
   whiteSpace: 'nowrap',
   marginLeft: 'auto',
   marginRight: '24px',
-  marginBottom: '24px',
 });
 
 const iconStyle: Rule = {

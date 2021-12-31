@@ -23,7 +23,13 @@ const ButtonsComponent: FC<ButtonsComponentProps> = ({ methods, onSubmit, isVali
           cursor: 'pointer',
         })}
       >
-        <IconButton graphic='arrowLeft' onPress={() => history.goBack()} iconProps={{ invertColors: true }} />
+        <IconButton
+          graphic='arrowLeft'
+          onPress={() => {
+            history.goBack();
+          }}
+          iconProps={{ invertColors: true }}
+        />
       </span>
       <div
         className={css({

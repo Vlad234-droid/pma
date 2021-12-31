@@ -15,14 +15,14 @@ const HelpModalReceiveFeedback: FC<Info360ModalProps> = ({ setHelpModalReceiveFe
     <div className={css(WrapperInfo)}>
       <h2 className={css(Title)}>Watch this 2-minute video on receiving your feedback.</h2>
 
-      <div className={css(Block_video_explanation)}>
+      <div className={css(BlockVideoExplanation)}>
         <img src={video_explanation} alt='video_explanation' />
       </div>
-      <p className={css(Pre_recomendation_info, { marginTop: '8px' })}>
+      <p className={css(PreRecomendationInfo, { marginTop: '8px' })}>
         We all have strengths and development areas. Feedback is all about helping you be the best you can be. When
         receiving feedback, think about these four elements:
       </p>
-      <ol className={css(ordered_list)}>
+      <ol className={css(orderedList)}>
         <li>
           <b>Take a step back.</b> Take time to reflect on the feedback you&apos;ve received, don&apos;t feel like you
           must take action right away. If you&apos;re having a bad day, you&apos;re more likely to receive feedback
@@ -45,14 +45,14 @@ const HelpModalReceiveFeedback: FC<Info360ModalProps> = ({ setHelpModalReceiveFe
           contribution can be even better.
         </li>
       </ol>
-      <p className={css(Pre_recomendation_info)}>Remember:</p>
-      <ul className={css(dots_list)}>
+      <p className={css(PreRecomendationInfo)}>Remember:</p>
+      <ul className={css(dotsList)}>
         <li>make your good intentions clear</li>
         <li>be specific about the situation</li>
         <li>describe the behaviour you observed</li>
         <li>highlight the impact it had</li>
       </ul>
-      <p className={css(Pre_recomendation_info, { marginTop: '8px' })}>
+      <p className={css(PreRecomendationInfo, { marginTop: '8px' })}>
         If you want to learn more about your feedback, speak to the colleague who shared the feedback. This is a great
         way to understand more about the feedback they shared and when they observed it. Remember to take time to
         reflect on the feedback before you approach them, so the conversation is constructive. Having open conversations
@@ -77,7 +77,7 @@ const HelpModalReceiveFeedback: FC<Info360ModalProps> = ({ setHelpModalReceiveFe
     </div>
   );
 };
-const dots_list: Rule = {
+const dotsList: Rule = {
   marginTop: '0px',
   '& li': {
     marginTop: '8px',
@@ -86,7 +86,7 @@ const dots_list: Rule = {
     lineHeight: '20px',
   },
 } as Styles;
-const ordered_list: Rule = {
+const orderedList: Rule = {
   '& li': {
     marginTop: '8px',
     fontWeight: 'normal',
@@ -96,6 +96,8 @@ const ordered_list: Rule = {
 } as Styles;
 const WrapperInfo: Rule = {
   padding: '0px 36px',
+  overflow: 'auto',
+  height: '100%',
 };
 
 const Title: Rule = {
@@ -106,7 +108,7 @@ const Title: Rule = {
   marginBottom: '12px',
 };
 
-const Block_video_explanation: Rule = {
+const BlockVideoExplanation: Rule = {
   maxHeight: '300px',
   width: '100%',
   '& > img': {
@@ -117,7 +119,7 @@ const Block_video_explanation: Rule = {
   },
 } as Styles;
 
-const Pre_recomendation_info: Rule = {
+const PreRecomendationInfo: Rule = {
   fontWeight: 'normal',
   fontSize: '16px',
   lineHeight: '20px',
