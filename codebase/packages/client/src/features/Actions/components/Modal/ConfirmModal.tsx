@@ -53,11 +53,7 @@ const ConfirmModal: FC<Props> = ({
       }}
       onOverlayClick={onOverlayClick}
     >
-      <div
-        className={css({
-          padding: '16px 0',
-        })}
-      >
+      <div>
         {review && (
           <ColleagueInfo
             firstName={review.firstName}

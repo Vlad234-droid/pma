@@ -86,7 +86,8 @@
   "easily_assessable": "Easily assessable",
   "something_else": "Something else",
   "i_will_pick_up_with_you_offline": "I will pick up with you offline",
-  "decline_review_agreement": "You are going to reject this form as it doesn’t reflect the conversation you had with your colleague. Please pick up with them directly to discuss more.",
+  "decline_objective_agreement": "You’ve rejected your colleague’s objectives because they were not:",
+  "decline_review_agreement": "Done, you’ve rejected this form as it doesn’t reflect the conversation you had with your colleague. Please pick up with them directly to discuss more.",
   "decline_reason": "Decline reason",
   "please_select": "Please select",
   "submit_objectives_or_reviews": "Submit objectives or reviews",
@@ -99,5 +100,9 @@
   "end_year_review_sent_to_manager": "Your end-year review has been sent to your line manager.",
   "review_widget_saved_as_draft": "Your form is currently saved as a draft",
   "mid_year_review_title": "How is your year going so far?",
-  "end_year_review_title": "What have you contributed this year and how have you gone about it?"
+  "end_year_review_title": "What have you contributed this year and how have you gone about it?",
+  "newest_to_oldest": "Newest to oldest",
+  "oldest_to-newest": "Oldest to newest",
+  "z_a": "Z-A",
+  "a_z": "A-Z"
 }

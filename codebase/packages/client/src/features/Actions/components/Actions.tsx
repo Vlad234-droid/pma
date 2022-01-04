@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState, useCallback } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, shallowEqual } from 'react-redux';
 import { colors, fontWeight, useBreakpoints, useStyle } from '@dex-ddl/core';
 import {
   colleagueUUIDSelector,
@@ -10,15 +10,14 @@ import {
   schemaMetaSelector,
 } from '@pma/store';
 
-import { Trans } from 'components/Translation';
+import { Trans, useTranslation } from 'components/Translation';
 import { Checkbox, Radio } from 'components/Form';
 import { Status } from 'config/enum';
 import { WidgetObjectiveApproval, WidgetTeamMateObjectives } from 'features/Actions';
-import { FilterOption } from 'features/Shared';
+import Filters, { useSortFilter, useSearchFilter, getEmployeesSortingOptions } from 'features/Filters';
 import useDispatch from 'hooks/useDispatch';
 
 import { filterApprovedFn } from '../utils';
-
 export const TEST_ID = 'objectives-pave';
 
 type SelectAllProps = {
@@ -62,10 +61,17 @@ export const Actions = () => {
   const { css } = useStyle();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.medium || isBreakpoint.small || isBreakpoint.xSmall;
+  const [sortValue, setSortValue] = useSortFilter();
+  const [searchValue, setSearchValue] = useSearchFilter();
+  const { t } = useTranslation();
+  const options = getEmployeesSortingOptions(t);
 
   const { loaded: schemaLoaded } = useSelector(schemaMetaSelector);
 
-  const { employeeWithPendingApprovals, employeeWithCompletedApprovals } = useSelector(getPendingEmployees) || {};
+  // @ts-ignore
+  const { employeeWithPendingApprovals, employeeWithCompletedApprovals } =
+    useSelector((state) => getPendingEmployees(state, searchValue, sortValue), shallowEqual) || {};
+
   const { loaded } = useSelector(getManagersMetaSelector) || {};
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const dispatch = useDispatch();
@@ -79,6 +85,7 @@ export const Actions = () => {
   const [isCheckAll, setIsCheckAll]: [boolean, (T) => void] = useState(false);
   const [isCheck, setIsCheck]: [string[], (T) => void] = useState([]);
   const [reviewsForApproval, setReviewsForApproval]: [any[], (T) => void] = useState([]);
+
   const [colleagues, setColleagues] = useState(employeeWithPendingApprovals || []);
   const [pending, setPending] = useState(true);
   const [colleagueReviews, setColleagueReviews]: [any, (T) => void] = useState({});
@@ -208,7 +215,13 @@ export const Actions = () => {
             alignItems: 'center',
           })}
         >
-          <FilterOption />
+          <Filters
+            sortValue={sortValue}
+            onSort={setSortValue}
+            searchValue={searchValue}
+            onSearch={setSearchValue}
+            sortingOptions={options}
+          />
         </div>
       </div>
       <div

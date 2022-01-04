@@ -27,17 +27,24 @@ const DeclineModal: FC<Props> = ({ onSave, onClose, review, reviewType }) => {
       title={t('decline_reason', 'Decline reason')}
       hasReason={isObjective}
       renderContent={(setReason) => (
-        <div className={css({ padding: '20px 0' })}>
+        <div className={css({ padding: '16px 0 8px' })}>
           {isObjective ? (
-            <Select
-              options={options}
-              placeholder={t('please_select', 'Please select')}
-              onChange={(e) => setReason(e.target.value)}
-            />
+            <>
+              <div className={css({ fontSize: '16px', lineHeight: '20px', marginBottom: '8px' })}>
+                {t('decline_objective_agreement', `You’ve rejected your colleague’s objectives because they were not:`)}
+              </div>
+              <div className={css({ padding: '0 40px' })}>
+                <Select
+                  options={options}
+                  placeholder={t('please_select', 'Please select')}
+                  onChange={(e) => setReason(e.target.value)}
+                />
+              </div>
+            </>
           ) : (
             t(
               'decline_review_agreement',
-              `You are going to reject this form as it doesn’t reflect the conversation you had with your colleague. Please pick up with them directly to discuss more.`,
+              `Done, you’ve rejected this form as it doesn’t reflect the conversation you had with your colleague. Please pick up with them directly to discuss more.`,
             )
           )}
         </div>
