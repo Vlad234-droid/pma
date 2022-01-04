@@ -1,6 +1,6 @@
 import { RefObject, SetStateAction, Dispatch } from 'react';
 import { Rule, Styles } from '@dex-ddl/core';
-import { Ref , UseFormReturn } from 'react-hook-form';
+import { Ref, UseFormReturn } from 'react-hook-form';
 import { PeopleTypes } from '../type';
 
 export interface FormItemProps {

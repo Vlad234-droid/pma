@@ -80,7 +80,7 @@ const pages: Record<
   },
   [Page.OBJECTIVES_VIEW]: {
     component: Objectives,
-    title: 'My objectives',
+    title: 'My objectives and reviews',
     withHeader: true,
     backPath: Page.CONTRIBUTION,
   },
@@ -141,13 +141,13 @@ const pages: Record<
     component: CreateTip,
     title: 'Create Tip',
     withHeader: false,
-    backPath: Page.TIPS
+    backPath: Page.TIPS,
   },
   [Page.EDIT_TIP]: {
     component: EditTip,
     title: 'Edit Tip',
     withHeader: false,
-    backPath: Page.TIPS
+    backPath: Page.TIPS,
   },
 };
 

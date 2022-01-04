@@ -12,7 +12,6 @@ import { Link } from 'react-router-dom';
 import {
   colleagueUUIDSelector,
   getTimelineByCodeSelector,
-  getTimelineMetaSelector,
   getTimelineSelector,
   isManager,
   TimelineActions,
@@ -31,7 +30,6 @@ const CareerPerformance: FC = () => {
   const { css } = useStyle();
   const { t } = useTranslation();
   const { descriptions, startDates, statuses } = useSelector(getTimelineSelector) || {};
-  const { loaded } = useSelector(getTimelineMetaSelector) || {};
   const timelineTypes = useSelector(timelineTypesAvailabilitySelector);
   const midYearReview = useSelector(getTimelineByCodeSelector(ObjectiveType.MYR));
   const endYearReview = useSelector(getTimelineByCodeSelector(ObjectiveType.EYR));

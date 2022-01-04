@@ -23,6 +23,7 @@ import { useSelector } from 'react-redux';
 import {
   colleagueUUIDSelector,
   currentUserSelector,
+  filterReviewsByTypeSelector,
   getTimelineByCodeSelector,
   getTimelineMetaSelector,
   getTimelineSelector,
@@ -72,6 +73,8 @@ const MyObjectives: FC = () => {
   const dispatch = useDispatch();
   const { info } = useSelector(currentUserSelector);
   const pathParams = { colleagueUuid: info.colleagueUUID, type: ReviewType.OBJECTIVE, cycleUuid: 'CURRENT' };
+  useReviews({ pathParams });
+  const originObjectives = useSelector(filterReviewsByTypeSelector(ReviewType.OBJECTIVE));
   const midYearReview = useSelector(getTimelineByCodeSelector(ObjectiveType.MYR));
   const endYearReview = useSelector(getTimelineByCodeSelector(ObjectiveType.EYR));
   const [previousReviewFilesModalShow, setPreviousReviewFilesModalShow] = useState(false);
@@ -95,8 +98,6 @@ const MyObjectives: FC = () => {
 
   const timelineObjective = useSelector(getTimelineByCodeSelector(ReviewType.OBJECTIVE)) || {};
   const status = timelineObjective?.status || undefined;
-
-  const [originObjectives] = useReviews({ pathParams });
   const isAllObjectivesInSameStatus = useSelector(isReviewsInStatus(ReviewType.OBJECTIVE)(status));
 
   const canCreateSingleObjective =

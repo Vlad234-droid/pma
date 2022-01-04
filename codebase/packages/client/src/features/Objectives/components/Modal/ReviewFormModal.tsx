@@ -138,9 +138,7 @@ const ReviewFormModal: FC<Props> = ({ reviewType, onClose }) => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(
-      ReviewsActions.getReviews({
-        pathParams: { colleagueUuid: info.colleagueUUID, type: ReviewType.MYR, cycleUuid: 'CURRENT' },
-      }),
+      ReviewsActions.getColleagueReviews({ pathParams: { colleagueUuid: info.colleagueUUID, cycleUuid: 'CURRENT' } }),
     );
   }, []);
   useEffect(() => {

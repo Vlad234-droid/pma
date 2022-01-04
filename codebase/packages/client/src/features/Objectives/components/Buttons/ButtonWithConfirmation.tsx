@@ -8,6 +8,7 @@ export type ButtonWithConfirmation = {
   onSave: () => void;
   isDisabled?: boolean;
   buttonName?: string;
+  confirmationButtonTitle?: string;
   confirmationTitle?: string;
   confirmationDescription?: string;
   withIcon?: boolean;
@@ -17,6 +18,7 @@ type Props = HTMLProps<HTMLInputElement> & ButtonWithConfirmation;
 
 const ButtonWithConfirmation: FC<Props> = ({
   buttonName = 'Submit',
+  confirmationButtonTitle = 'Submit',
   confirmationTitle = 'Submit Objectives',
   confirmationDescription = 'Are you sure you want to submit all of your objectives to your manager?',
   styles = [],
@@ -56,6 +58,7 @@ const ButtonWithConfirmation: FC<Props> = ({
             onSave();
             setIsOpen(false);
           }}
+          submitBtnTitle={confirmationButtonTitle}
           onCancel={() => setIsOpen(false)}
           onOverlayClick={() => setIsOpen(false)}
         />

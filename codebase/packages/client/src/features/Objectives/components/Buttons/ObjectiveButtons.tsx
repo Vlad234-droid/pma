@@ -24,7 +24,7 @@ const ObjectiveButtons: FC<ObjectiveButtonsProps> = ({ id, status }) => {
   const [schema] = useReviewSchema(ReviewType.OBJECTIVE) || {};
   const { markup = { max: 0, min: 0 } } = schema;
   const canDelete = [Status.DRAFT, Status.APPROVED].includes(status) && countApprovedReviews > markup.min;
-  const canEdit = [Status.DRAFT, Status.APPROVED].includes(status);
+  const canEdit = [Status.DRAFT, Status.APPROVED, Status.DECLINED].includes(status);
   const isSingleObjectivesEditMode = countReviews > markup.min;
 
   const remove = () => {
@@ -51,7 +51,8 @@ const ObjectiveButtons: FC<ObjectiveButtonsProps> = ({ id, status }) => {
           onSave={remove}
           withIcon={true}
           buttonName={t('delete', 'Delete')}
-          confirmationTitle={t('delete', 'Delete')}
+          confirmationButtonTitle={t('confirm', 'Confirm')}
+          confirmationTitle={t('objective_number', `Objective ${id}`, { number: id })}
           confirmationDescription={t('delete_objective_confirmation', 'Are you sure you want to delete objective?')}
           styles={[buttonStyle]}
         />
