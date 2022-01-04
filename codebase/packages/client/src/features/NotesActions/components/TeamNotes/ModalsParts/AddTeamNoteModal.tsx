@@ -58,7 +58,7 @@ const AddTeamNoteModal: FC<AddTeamNoteModalProps> = ({
   } = teamMethods;
 
   return (
-    <div>
+    <div className={css(WrapperModalGiveFeedbackStyle)}>
       <span
         className={css(arrowLeftStyle)}
         onClick={() => {
@@ -101,38 +101,45 @@ const AddTeamNoteModal: FC<AddTeamNoteModalProps> = ({
             foldersWithNotesTEAM={foldersWithNotesTEAM}
           />
         )}
-        <div className={css(absolueStyle)}>
-          <div className={css(selectedRelativeStyle)}>
-            <div
-              className={css({
-                padding: mobileScreen ? theme.spacing.s6 : theme.spacing.s8,
-                display: 'flex',
-                justifyContent: 'space-between',
-              })}
-            >
-              <Button styles={[theme.font.fixed.f16, buttonCoreStyled]} onPress={cancelTEAMModal} isDisabled={true}>
-                <Trans>Cancel</Trans>
-              </Button>
+      </form>
+      <div className={css(absolueStyle)}>
+        <div className={css(selectedRelativeStyle)}>
+          <div
+            className={css({
+              padding: mobileScreen ? theme.spacing.s6 : theme.spacing.s8,
+              display: 'flex',
+              justifyContent: 'space-between',
+            })}
+          >
+            <Button styles={[theme.font.fixed.f16, buttonCoreStyled]} onPress={cancelTEAMModal} isDisabled={true}>
+              <Trans>Cancel</Trans>
+            </Button>
 
-              <IconButton
-                isDisabled={!isValid}
-                customVariantRules={{ default: iconBtnStyle, disabled: iconBtnStyleDisabled }}
-                graphic='arrowRight'
-                iconProps={{ invertColors: true }}
-                iconPosition={Position.RIGHT}
-                onPress={() => {
-                  setSuccessTEAMModal(() => true);
-                  handleTEAMSubmit();
-                }}
-              >
-                <Trans>Submit</Trans>
-              </IconButton>
-            </div>
+            <IconButton
+              isDisabled={!isValid}
+              customVariantRules={{ default: iconBtnStyle, disabled: iconBtnStyleDisabled }}
+              graphic='arrowRight'
+              iconProps={{ invertColors: true }}
+              iconPosition={Position.RIGHT}
+              onPress={() => {
+                setSuccessTEAMModal(() => true);
+                handleTEAMSubmit();
+              }}
+            >
+              <Trans>Submit</Trans>
+            </IconButton>
           </div>
         </div>
-      </form>
+      </div>
     </div>
   );
+};
+
+const WrapperModalGiveFeedbackStyle: Rule = {
+  paddingLeft: '40px',
+  paddingRight: '40px',
+  height: '100%',
+  overflow: 'auto',
 };
 
 const collegueStyled: Rule = {

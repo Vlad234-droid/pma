@@ -136,7 +136,7 @@ const PersonalFolders: FC<PersonalFoldersProps> = ({
           display: 'flex',
           flexDirection: 'column',
           right: '28px',
-          bottom: !userArchivedMode ? (notesLength ? '-92px' : '-106px') : '-36px',
+          bottom: !userArchivedMode ? (notesLength ? '-101px' : '-110px') : !notesLength ? '-53px' : '-46px',
           background: theme.colors.white,
           zIndex: 2,
           borderRadius: '8px',

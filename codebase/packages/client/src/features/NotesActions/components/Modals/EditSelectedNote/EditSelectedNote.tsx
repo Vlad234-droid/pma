@@ -96,7 +96,7 @@ const EditSelectedNote: FC<EditSelectedNoteProps> = ({
   }
 
   return (
-    <div>
+    <div className={css(WrapperModalGiveFeedbackStyle)}>
       <div>
         <div className={css(headerInfoStyle({ editMode }))}>
           {!editMode && <h2 className={css(noteTitleStyle)}>{selectedNoteToEdit.title}</h2>}
@@ -279,6 +279,12 @@ const EditSelectedNote: FC<EditSelectedNoteProps> = ({
       </span>
     </div>
   );
+};
+const WrapperModalGiveFeedbackStyle: Rule = {
+  paddingLeft: '40px',
+  paddingRight: '40px',
+  height: '100%',
+  overflow: 'auto',
 };
 const formStyle: CreateRule<{ editMode: boolean }> = ({ editMode }) => ({
   ...(!editMode && { marginTop: '40px' }),

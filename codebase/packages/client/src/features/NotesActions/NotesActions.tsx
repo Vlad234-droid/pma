@@ -769,14 +769,14 @@ const containerRule: Rule = () => {
     justifyContent: 'center',
     position: 'relative',
     ...(mobileScreen
-      ? { borderRadius: '24px 24px 0 0 ', padding: '16px 40px 97px' }
-      : { borderRadius: '32px', padding: `40px 40px 112px` }),
+      ? { borderRadius: '24px 24px 0 0 ', padding: '16px 0px 97px' }
+      : { borderRadius: '32px', padding: `40px 0px 112px` }),
     width: '640px',
     height: mobileScreen ? 'calc(100% - 72px)' : 'calc(100% - 102px)',
     marginTop: '72px',
     marginBottom: mobileScreen ? 0 : '30px',
-
     cursor: 'default',
+    overflow: 'auto',
   };
 };
 

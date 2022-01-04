@@ -102,32 +102,32 @@ const pages: Record<
     withHeader: true,
     backPath: Page.CONTRIBUTION,
   },
-  [Page.FEEDBACK]: {
-    component: Feedback,
-    title: 'Feedback',
-    withHeader: true,
-    backPath: Page.CONTRIBUTION,
-  },
   [Page.GIVE_FEEDBACK]: {
     component: GiveFeedback,
     title: 'Give feedback',
     withHeader: true,
-    backPath: Page.CONTRIBUTION,
+    backPath: Page.FEEDBACK,
   },
   [Page.REQUEST_FEEDBACK]: {
     component: RequestFeedback,
     withHeader: false,
-    backPath: Page.CONTRIBUTION,
   },
   [Page.RESPOND_FEEDBACK]: {
     component: RespondFeedback,
     title: 'Respond to feedback requests',
     withHeader: true,
-    backPath: Page.CONTRIBUTION,
+    backPath: Page.FEEDBACK,
   },
   [Page.VIEW_FEEDBACK]: {
     component: ViewFeedback,
     title: 'View feedback',
+    withHeader: true,
+    backPath: Page.FEEDBACK,
+  },
+
+  [Page.FEEDBACK]: {
+    component: Feedback,
+    title: 'Feedback',
     withHeader: true,
     backPath: Page.CONTRIBUTION,
   },

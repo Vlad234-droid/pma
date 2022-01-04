@@ -7,6 +7,8 @@ import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { ReviewType } from 'config/enum';
 import { getTimelineByReviewTypeSelector, timelineTypesAvailabilitySelector } from '@pma/store';
+import { buildPath } from 'features/Routes';
+import { Page } from 'pages';
 
 export type MainWidgetProps = {};
 
@@ -39,14 +41,14 @@ const Widgets: FC<Props> = () => {
       title: t('feedback', 'Feedback'),
       date: t('feedback_date', 'Last updated Apr 2021', { date: new Date(2021, 4, 4) }),
       customStyle: { flex: '2 1 110px' },
-      onClick: () => history.push('feedback'),
+      onClick: () => history.push(buildPath(Page.FEEDBACK)),
     },
     {
       iconGraphic: 'edit',
       title: t('My notes'),
       date: t('Last updated Apr 2021', { date: new Date(2021, 4, 4) }),
       customStyle: { flex: '2 1 110px' },
-      onClick: () => console.log(),
+      onClick: () => history.push(buildPath(Page.NOTES)),
     },
   ];
 

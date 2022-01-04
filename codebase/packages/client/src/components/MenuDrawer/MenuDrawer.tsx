@@ -52,7 +52,7 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
             <MenuItem iconGraphic={'add'} title={'Personal Development plan'} />
             <MenuItem iconGraphic={'account'} linkTo={buildPath(Page.PROFILE)} title={'My profile'} />
             <MenuItem iconGraphic={'chatSq'} linkTo={buildPath(Page.FEEDBACK)} title={'Feedback'} />
-            <MenuItem iconGraphic={'edit'} linkTo='' title={'My notes'} />
+            <MenuItem iconGraphic={'edit'} linkTo={buildPath(Page.NOTES)} title={'My notes'} />
             <MenuItem iconGraphic={'alert'} linkTo={buildPath(Page.PERFORMANCE_CYCLE)} title={'Performance cycle'} />
           </div>
         </div>

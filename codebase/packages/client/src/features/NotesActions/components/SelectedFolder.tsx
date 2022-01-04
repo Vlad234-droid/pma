@@ -269,7 +269,7 @@ const modalButtonsStyle: CreateRule<{ userArchivedMode: boolean }> = ({ userArch
     display: 'flex',
     flexDirection: 'column',
     right: '-30px',
-    bottom: !userArchivedMode ? '-161px' : '-52px',
+    bottom: !userArchivedMode ? '-174px' : '-56px',
     background: colors.white,
     zIndex: 2,
     borderRadius: '8px',

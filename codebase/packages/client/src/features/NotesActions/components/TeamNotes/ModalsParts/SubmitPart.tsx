@@ -1,8 +1,8 @@
-import React, { Dispatch, FC, SetStateAction, ChangeEvent } from 'react';
+import React, { FC } from 'react';
 import { useStyle, Rule } from '@dex-ddl/core';
 import { UseFormReturn } from 'react-hook-form';
 import { PeopleTypes } from './type';
-import { NoteData, FoldersWithNotesTypesTEAM } from 'features/NotesActions/type';
+import { FoldersWithNotesTypesTEAM } from 'features/NotesActions/type';
 import { GenericItemField } from 'components/GenericForm';
 import { Input, Item, Select, Textarea } from 'components/Form';
 import defaultImg from '../../../../../../public/default.png';
@@ -13,13 +13,7 @@ type SubmitPartProps = {
   foldersWithNotesTEAM: Array<FoldersWithNotesTypesTEAM> | [];
 };
 
-export const SubmitPart: FC<SubmitPartProps> = ({
-  selectedPerson,
-
-  teamMethods,
-
-  foldersWithNotesTEAM,
-}) => {
+export const SubmitPart: FC<SubmitPartProps> = ({ selectedPerson, teamMethods, foldersWithNotesTEAM }) => {
   const { css } = useStyle();
   const { trigger, getValues, setValue } = teamMethods;
   const notes: any = {

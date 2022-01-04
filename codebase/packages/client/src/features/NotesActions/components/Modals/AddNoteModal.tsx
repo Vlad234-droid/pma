@@ -89,7 +89,7 @@ const AddNoteModal: FC<AddNoteModalProps> = ({
   }
 
   return (
-    <>
+    <div className={css(WrapperModalGiveFeedbackStyle)}>
       <div>
         <Notification
           graphic='information'
@@ -259,10 +259,15 @@ const AddNoteModal: FC<AddNoteModalProps> = ({
           <IconComponent graphic='arrowLeft' invertColors={true} />
         </span>
       </div>
-    </>
+    </div>
   );
 };
-
+const WrapperModalGiveFeedbackStyle: Rule = {
+  paddingLeft: '40px',
+  paddingRight: '40px',
+  height: '100%',
+  overflow: 'auto',
+};
 const blockStyle: Rule = () => {
   return {
     position: 'absolute',

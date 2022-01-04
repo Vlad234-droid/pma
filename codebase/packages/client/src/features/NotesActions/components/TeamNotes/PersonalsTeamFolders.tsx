@@ -151,7 +151,7 @@ const PersonalsTeamFolders: FC<PersonalsTeamFoldersProps> = ({
           display: 'flex',
           flexDirection: 'column',
           right: '28px',
-          bottom: !teamArchivedMode ? (notesLength ? '-92px' : '-106px') : notesLength ? '-40px' : '-50px',
+          bottom: !teamArchivedMode ? (notesLength ? '-101px' : '-110px') : !notesLength ? '-53px' : '-46px',
           background: theme.colors.white,
           zIndex: 2,
           borderRadius: '8px',

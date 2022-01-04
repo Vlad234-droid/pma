@@ -234,7 +234,7 @@ const Modal_buttons_style: CreateRule<{ teamArchivedMode: boolean }> = ({ teamAr
     display: 'flex',
     flexDirection: 'column',
     right: '-30px',
-    bottom: !teamArchivedMode ? '-161px' : '-52px',
+    bottom: !teamArchivedMode ? '-174px' : '-56px',
     background: colors.white,
     zIndex: 2,
     borderRadius: '8px',
