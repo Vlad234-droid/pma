@@ -1,9 +1,9 @@
 import React, { FC, useState } from 'react';
 import { Trans, useTranslation } from 'components/Translation';
 import { Status } from 'config/enum';
-import { useStyle, Rule, CreateRule, Colors, Button } from '@dex-ddl/core';
+import { Button, Colors, CreateRule, Rule, useStyle } from '@dex-ddl/core';
 import { TileWrapper } from 'components/Tile';
-import { Icon, Graphics } from 'components/Icon';
+import { Graphics, Icon } from 'components/Icon';
 import { useHistory } from 'react-router-dom';
 import { Page } from 'pages';
 import { buildPath } from 'features/Routes/utils';
@@ -150,7 +150,7 @@ const MainWidget: FC<Props> = ({ nextReviewDate = '', count = 0, status, customS
             </div>
             <div className={css(headerBlockStyle)}>
               <span className={css(titleStyle)}>
-                <Trans i18nKey='my_business_objectives'>My Objectives</Trans>
+                <Trans i18nKey='my_business_objectives'>My objectives</Trans>
               </span>
               <span className={css(descriptionStyle)}>
                 <span className={css(iconStyle)}>

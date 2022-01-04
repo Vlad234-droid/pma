@@ -27,7 +27,6 @@ const ColleagueInfo: FC<Props> = ({ firstName, lastName, jobName, businessType }
 };
 
 const wrapperStyle: Rule = {
-  padding: '24px',
   display: 'flex',
 };
 

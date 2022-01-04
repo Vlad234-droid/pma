@@ -162,7 +162,7 @@ export const PerformanceCycleForm: FC = () => {
   }, [processTemplate]);
 
   useEffect(() => {
-    setProcessSelected(performanceCycleItem?.template.uuid);
+    setProcessSelected(performanceCycleItem?.template?.uuid);
     setEntryConfigKey(performanceCycleItem?.entryConfigKey);
   }, [performanceCycleItem]);
 
