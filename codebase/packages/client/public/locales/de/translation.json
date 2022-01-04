@@ -93,5 +93,7 @@
   "end_year_review_help_text": "Use this to capture a summary of the end-year conversation you’ve had with your line manager. Remember to focus as much on your how as your what.",
   "mid_year_review_sent_to_manager": "Your mid-year review has been sent to your line manager.",
   "end_year_review_sent_to_manager": "Your end-year review has been sent to your line manager.",
-  "review_widget_saved_as_draft": "Your form is currently saved as a draft"
+  "review_widget_saved_as_draft": "Your form is currently saved as a draft",
+  "mid_year_review_title": "How is your year going so far?",
+  "end_year_review_title": "What have you contributed this year and how have you gone about it?"
 }

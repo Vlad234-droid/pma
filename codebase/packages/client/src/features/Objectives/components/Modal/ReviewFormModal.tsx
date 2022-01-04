@@ -36,19 +36,22 @@ type Props = HTMLProps<HTMLInputElement> & ReviewFormModal;
 const getContent = (reviewType: ReviewType, t: TFunction) => {
   const contents: {
     [key: string]: {
+      title: string;
       helperText: string;
     };
   } = {
     [ReviewType.MYR]: {
+      title: t('mid_year_review_title', 'How is your year going so far?'),
       helperText: t(
         'mid_year_review_help_text',
         'Use this to capture a summary of the mid-year conversation you’ve had with your line manager. Remember to focus as much on your how as your what.',
       ),
     },
     [ReviewType.EYR]: {
+      title: t('end_year_review_title', 'What have you contributed this year and how have you gone about it?'),
       helperText: t(
         'end_year_review_help_text',
-        'Use this to capture a summary of the end-year conversation you’ve had with your line manager. Remember to focus as much on your how as your what.',
+        'Use this to capture the outcome of the conversation you’ve had with your line manager. Remember to focus as much on your how as your what. Use the look forward section to capture your priorities and development for the year ahead.',
       ),
     },
   };
@@ -78,7 +81,7 @@ const ReviewFormModal: FC<Props> = ({ reviewType, onClose }) => {
   const readonly = [Status.WAITING_FOR_APPROVAL, Status.APPROVED].includes(timelineReview.status);
   const successMessage = getSuccessMessage(timelineReview?.code, t);
 
-  const { helperText } = getContent(reviewType, t);
+  const { helperText, title } = getContent(reviewType, t);
 
   const [schema] = useReviewSchema(reviewType);
   const { components = [] } = schema;
@@ -168,9 +171,7 @@ const ReviewFormModal: FC<Props> = ({ reviewType, onClose }) => {
       >
         <form>
           <div className={css({ padding: `0 0 ${theme.spacing.s5}` })}>
-            <div className={css({ fontSize: '24px', lineHeight: '28px', color: theme.colors.tescoBlue })}>
-              <Trans i18nKey='year_review_main_title'>How is your year going so far?</Trans>
-            </div>
+            <div className={css({ fontSize: '24px', lineHeight: '28px', color: theme.colors.tescoBlue })}>{title}</div>
             <div
               className={css({
                 fontSize: '18px',

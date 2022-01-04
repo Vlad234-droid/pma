@@ -234,10 +234,6 @@ const MyObjectives: FC = () => {
                     onClick={() => console.log('ReviewWidget')}
                     onClose={() => console.log('ReviewWidget')}
                     title={'Mid-year review'}
-                    description={t(
-                      'tiles_description_id_3',
-                      "Complete this once you've had your mid-year conversation with your line manager.",
-                    )}
                     customStyle={{ height: '100%' }}
                   />
                 </div>
@@ -251,10 +247,6 @@ const MyObjectives: FC = () => {
                     onClick={() => console.log('ReviewWidget')}
                     onClose={() => console.log('ReviewWidget')}
                     title={'Year-end review'}
-                    description={t(
-                      'tiles_description_id_3',
-                      "Complete this once you've had your year-end conversation with your line manager.",
-                    )}
                     customStyle={{ height: '100%' }}
                   />
                 </div>
@@ -271,10 +263,6 @@ const MyObjectives: FC = () => {
                   onClick={() => console.log('ReviewWidget')}
                   onClose={() => console.log('ReviewWidget')}
                   title={'Annual performance review'}
-                  description={t(
-                    'tiles_description_id_3',
-                    "Complete this once you've had your annual conversation with your line manager.",
-                  )}
                   customStyle={{ height: '100%' }}
                 />
               </div>

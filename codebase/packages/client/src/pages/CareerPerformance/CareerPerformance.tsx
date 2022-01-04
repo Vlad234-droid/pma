@@ -129,10 +129,10 @@ const CareerPerformance: FC = () => {
                   status={midYearReview?.status}
                   startTime={midYearReview?.startTime}
                   endTime={midYearReview?.endTime}
+                  lastUpdatedTime={midYearReview?.lastUpdatedTime}
                   onClick={() => console.log('ReviewWidget')}
                   onClose={() => console.log('ReviewWidget')}
                   title={'Mid-year review'}
-                  description={t("Complete this once you've had your mid-year conversation with your line manager.")}
                   customStyle={{ height: '100%' }}
                 />
               </div>
@@ -142,10 +142,10 @@ const CareerPerformance: FC = () => {
                   status={endYearReview?.status}
                   startTime={endYearReview?.startTime}
                   endTime={endYearReview?.endTime}
+                  lastUpdatedTime={endYearReview?.lastUpdatedTime}
                   onClick={() => console.log('ReviewWidget')}
                   onClose={() => console.log('ReviewWidget')}
                   title={'Year-end review'}
-                  description={"Complete this once you've had your year-end conversation with your line manager."}
                   customStyle={{ height: '100%' }}
                 />
               </div>
@@ -156,10 +156,12 @@ const CareerPerformance: FC = () => {
               <ReviewWidget
                 reviewType={ReviewType.EYR}
                 status={endYearReview?.status}
+                startTime={endYearReview?.startTime}
+                endTime={endYearReview?.endTime}
+                lastUpdatedTime={endYearReview?.lastUpdatedTime}
                 onClick={() => console.log('ReviewWidget')}
                 onClose={() => console.log('ReviewWidget')}
                 title={'Annual performance review'}
-                description={"Complete this once you've had your year-end conversation with your line manager."}
                 customStyle={{ height: '100%' }}
               />
             </div>

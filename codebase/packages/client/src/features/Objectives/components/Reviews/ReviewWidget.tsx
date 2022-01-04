@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { useTranslation } from 'components/Translation';
+import { useTranslation, Trans } from 'components/Translation';
 import { Status, ReviewType } from 'config/enum';
 import { useStyle, Rule, CreateRule, Colors, colors, Button } from '@dex-ddl/core';
 
@@ -17,7 +17,6 @@ export type Props = {
   lastUpdatedTime?: string;
   customStyle?: React.CSSProperties | {};
   title: string;
-  description?: string;
 };
 
 export const TEST_ID = 'review-widget';
@@ -26,7 +25,7 @@ const getContent = ({
   status,
   startTime = '',
   lastUpdatedTime = '',
-}): [Graphics, Colors, Colors, boolean, string, string] => {
+}): [Graphics, Colors, Colors, boolean, boolean, string, string] => {
   const { t } = useTranslation();
   if (!status) {
     return [
@@ -34,15 +33,17 @@ const getContent = ({
       'pending',
       'tescoBlue',
       true,
+      true,
       t('Your form is now available'),
       t('view_review_form', 'View review form'),
     ];
   }
-  const contents: { [key: string]: [Graphics, Colors, Colors, boolean, string, string] } = {
+  const contents: { [key: string]: [Graphics, Colors, Colors, boolean, boolean, string, string] } = {
     [Status.NOT_STARTED]: [
       'calender',
       'tescoBlue',
       'white',
+      true,
       false,
       t('form_available_in_date', `The form will be available in ${startTime}`, { date: new Date(startTime) }),
       '',
@@ -52,13 +53,15 @@ const getContent = ({
       'pending',
       'tescoBlue',
       true,
+      true,
       t('your_form_is_now_available', 'Your form is now available'),
-      t('view_review_form', 'View review form'),
+      t('view', 'View'),
     ],
     [Status.DECLINED]: [
       'roundPencil',
       'base',
       'white',
+      true,
       true,
       t('review_form_declined', 'Declined'),
       t('view_and_edit', 'View and edit'),
@@ -68,6 +71,7 @@ const getContent = ({
       'base',
       'tescoBlue',
       true,
+      true,
       t('review_widget_saved_as_draft', 'Your form is currently saved as a draft'),
       t('view_and_edit', 'View and edit'),
     ],
@@ -75,6 +79,7 @@ const getContent = ({
       'roundTick',
       'green',
       'white',
+      true,
       true,
       t(
         'review_form_approved',
@@ -87,34 +92,28 @@ const getContent = ({
       'pending',
       'tescoBlue',
       true,
+      true,
       t('review_form_waiting_for_approval', 'Waiting for approval'),
-      t('view_review_form', 'View review form'),
+      t('view', 'View'),
     ],
     [Status.COMPLETED]: [
       'roundTick',
       'green',
       'white',
       true,
-      t('review_form_pending', 'Pending'),
-      t('view_review_form', 'View review form'),
+      false,
+      t('review_form_completed', 'Completed'),
+      t('view', 'View'),
     ],
   };
 
   return contents[status];
 };
 
-const ReviewWidget: FC<Props> = ({
-  customStyle,
-  reviewType,
-  status,
-  startTime,
-  lastUpdatedTime,
-  description,
-  title,
-}) => {
+const ReviewWidget: FC<Props> = ({ customStyle, reviewType, status, startTime, lastUpdatedTime, title }) => {
   const { css } = useStyle();
   const [isOpen, setIsOpen] = useState(false);
-  const [graphic, iconColor, background, shadow, content, buttonContent] = getContent({
+  const [graphic, iconColor, background, shadow, hasDescription, content, buttonContent] = getContent({
     status,
     startTime,
     lastUpdatedTime,
@@ -137,7 +136,13 @@ const ReviewWidget: FC<Props> = ({
         <div className={css(headStyle)}>
           <div className={css(headerBlockStyle)}>
             <span className={css(titleStyle({ color: titleColor }))}>{title}</span>
-            <span className={css(descriptionStyle({ color: descriptionColor }))}>{description}</span>
+            {hasDescription && (
+              <span className={css(descriptionStyle({ color: descriptionColor }))}>
+                <Trans i18nKey='tiles_description_id_3'>
+                  Complete this once you’ve had your mid-year conversation with your line manager.
+                </Trans>
+              </span>
+            )}
             <span
               className={css(descriptionStyle({ color: descriptionColor }), {
                 paddingTop: '16px',
