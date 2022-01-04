@@ -7,7 +7,7 @@
     "run:dev": "cross-env REACT_APP_INTEGRATION_MODE=standalone PORT=9000 env-cmd --silent --no-override --fallback -f .env react-app-rewired start",
     "build:prod": "cross-env REACT_APP_INTEGRATION_MODE=standalone env-cmd --silent --no-override --fallback -f .env.${BUILD_ENV} react-app-rewired build",
     "test:coverage": "jest test --coverage --watchAll",
-    "test": "cross-env BABEL_ENV=test react-app-rewired test",
+    "test": "cross-env BABEL_ENV=test react-app-rewired test --setupFilesAfterEnv ./setupTests.js",
     "eject": "react-scripts eject",
     "clean": "rimraf build",
     "clean:all": "yarn clean && rimraf node_modules",

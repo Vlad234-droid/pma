@@ -31,6 +31,7 @@ import { Information } from './information';
 import { ArrowRight } from './arrowRight';
 import { NotiBellCirlceOut } from './notiBellCirlceOut';
 import { Support } from './support';
+import { Trash } from './trash';
 
 /**
  * Each icon we add needs to have viewbox set to "0 0 24 24".
@@ -70,7 +71,8 @@ export type Graphics =
   | 'alert'
   | 'notiBellCircleOut'
   | 'support'
-  | 'arrowRight';
+  | 'arrowRight'
+  | 'trash';
 
 export const icons: Record<Graphics, FCGraphicProps> = {
   add: Add,
@@ -105,4 +107,5 @@ export const icons: Record<Graphics, FCGraphicProps> = {
   arrowRight: ArrowRight,
   notiBellCircleOut: NotiBellCirlceOut,
   support: Support,
+  trash: Trash,
 };

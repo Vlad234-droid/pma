@@ -15,6 +15,7 @@ import Settings from './Settings';
 import CreateOrganizationObjectives from './CreateOrganizationObjectives';
 import ObjectivesView from './ObjectivesView';
 import { CreatePerformanceCycle, PerformanceCycleAdministration } from './PerformanceCycle';
+import { TipsAdministration, CreateTip, EditTip } from './Tips';
 import UserObjectives from './UserObjectives';
 
 const pages: Record<
@@ -123,6 +124,24 @@ const pages: Record<
     title: 'View feedback',
     withHeader: true,
     backPath: Page.CONTRIBUTION,
+  },
+  [Page.TIPS]: {
+    component: TipsAdministration,
+    title: 'Tips',
+    withHeader: true,
+    backPath: Page.CONTRIBUTION,
+  },
+  [Page.CREATE_TIP]: {
+    component: CreateTip,
+    title: 'Create Tip',
+    withHeader: false,
+    backPath: Page.TIPS
+  },
+  [Page.EDIT_TIP]: {
+    component: EditTip,
+    title: 'Edit Tip',
+    withHeader: false,
+    backPath: Page.TIPS
   },
 };
 
