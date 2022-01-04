@@ -10,6 +10,7 @@ export { Actions as ManagersActions } from './managers/actions';
 export { Actions as ColleaguesActions } from './colleagues/actions';
 export { Actions as ReviewsActions } from './reviews/actions';
 export { Actions as ObjectiveSharingActions } from './objectiveSharing/actions';
+export { Actions as NotesActions } from './notes/actions';
 export { Actions as tipsActions } from './tips/actions';
 export { Actions as PerformanceCycleActions } from './performanceCycle/actions';
 export { Actions as ConfigEntriesActions } from './configEntries/actions';

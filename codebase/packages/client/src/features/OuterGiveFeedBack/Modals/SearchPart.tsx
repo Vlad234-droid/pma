@@ -112,7 +112,7 @@ const SearchPart: FC<SearchPartProps> = ({ setSearchValue, setSelectedPerson, se
                 onPress={() => alert('1')}
                 isDisabled={true}
               >
-                <Trans i18nKey='save_as_draft'>Save as draft</Trans>
+                <Trans>Save as draft</Trans>
               </Button>
 
               <IconButton

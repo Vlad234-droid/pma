@@ -1,4 +1,4 @@
-import { RefObject } from 'react';
+import React, { RefObject } from 'react';
 import { Rule, Styles } from '@dex-ddl/core';
 import { Ref } from 'react-hook-form';
 
@@ -14,7 +14,7 @@ export interface FormItemProps {
   type?: string;
   id?: string;
   customStyles?: Rule | Styles;
-  onFocus?: () => any;
+  onBlur?: () => void;
   readonly?: boolean;
 }
 
@@ -22,6 +22,7 @@ export type InputProps = FormItemProps;
 
 export interface SelectProps extends FormItemProps {
   options: { value: string; label: string }[] | [];
+  setSelected?: React.Dispatch<React.SetStateAction<'' | React.ChangeEvent<EventTarget>>>;
   getSelected?: (option: any) => void;
 }
 

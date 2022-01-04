@@ -9,5 +9,5 @@ export const createPMCycleSchema = Yup.object().shape({
 });
 
 export const chooseTemplateSchema = Yup.object().shape({
-  template_search: Yup.string()
-})
+  template_search: Yup.string(),
+});

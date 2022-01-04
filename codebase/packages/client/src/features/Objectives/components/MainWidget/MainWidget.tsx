@@ -2,7 +2,6 @@ import React, { FC, useState } from 'react';
 import { Trans, useTranslation } from 'components/Translation';
 import { Status } from 'config/enum';
 import { useStyle, Rule, CreateRule, Colors, Button } from '@dex-ddl/core';
-
 import { TileWrapper } from 'components/Tile';
 import { Icon, Graphics } from 'components/Icon';
 import { useHistory } from 'react-router-dom';

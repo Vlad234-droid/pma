@@ -1,9 +1,8 @@
 import React, { Fragment, RefObject, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, Ref } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { AnyObjectSchema } from 'yup';
 import { Button, Rule, useStyle } from '@dex-ddl/core';
-
 import { GenericItemField } from './GenericItemField';
 import type { FormField, Handler } from './types';
 
@@ -16,6 +15,7 @@ type Props<T> = {
   renderButtons?: (reset: () => void, isValid: boolean) => JSX.Element | null;
   renderContent?: () => JSX.Element | null;
   defaultValues?: Partial<T>;
+  domRef?: Ref | RefObject<any> | null;
 };
 
 const defaultRenderButtons = (isValid) => (

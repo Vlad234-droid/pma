@@ -14,8 +14,8 @@ const Input: FC<InputProps> = ({
   isValid = true,
   type = 'text',
   customStyles,
-  onFocus,
   readonly,
+  onBlur,
 }) => {
   const { css } = useStyle();
   const refIcon = useRefContainer();
@@ -27,10 +27,8 @@ const Input: FC<InputProps> = ({
       data-test-id={name}
       value={value}
       onChange={onChange}
-      onFocus={() => {
-        onFocus && onFocus();
-      }}
       type={type}
+      onBlur={onBlur}
       readOnly={readonly}
       className={css({
         width: '100%',

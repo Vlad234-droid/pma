@@ -13,6 +13,7 @@ enum Page {
   SETTINGS = 'settings',
   MY_TEAM = 'my-team',
   ACTIONS = 'actions',
+  NOTES = 'notes',
   FEEDBACK = 'feedback',
   GIVE_FEEDBACK = 'give-feedback',
   REQUEST_FEEDBACK = 'request-feedback',

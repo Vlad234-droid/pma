@@ -26,9 +26,9 @@ import useDispatch from 'hooks/useDispatch';
 import { createPMCycleSchema } from './schema';
 import {
   getConfigEntriesByPerformanceCycle,
-  getFormsByPerformanceCycleUuidSelector,
   getTimelinePointsByPerformanceCycleUuidSelector,
   getTimelinePointsReviewTypesByPerformanceCycleUuidSelector,
+  getFormsByPerformanceCycleUuidSelector,
 } from '@pma/store/src/selectors/performance-cycle';
 import { TileWrapper } from 'components/Tile';
 import { GenericItemField } from 'components/GenericForm';

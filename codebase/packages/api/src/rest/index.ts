@@ -8,6 +8,7 @@ export * from './colleagues';
 export * from './reviews';
 export * from './orgObjective';
 export * from './objectiveSharing';
+export * from './notes';
 export * from './tips';
 export * from './performanceCycle';
 export * from './config-entries';

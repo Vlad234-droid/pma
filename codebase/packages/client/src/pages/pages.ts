@@ -12,6 +12,7 @@ import RequestFeedback from './RequestFeedback';
 import RespondFeedback from './RespondFeedback';
 import ViewFeedback from './ViewFeedback';
 import Settings from './Settings';
+import Notes from './Notes';
 import CreateOrganizationObjectives from './CreateOrganizationObjectives';
 import ObjectivesView from './ObjectivesView';
 import { CreatePerformanceCycle, PerformanceCycleAdministration } from './PerformanceCycle';
@@ -32,6 +33,11 @@ const pages: Record<
     title: 'My Team',
     withHeader: true,
     backPath: Page.CONTRIBUTION,
+  },
+  [Page.NOTES]: {
+    component: Notes,
+    title: 'My Notes',
+    withHeader: true,
   },
   [Page.ACTIONS]: {
     component: Actions,

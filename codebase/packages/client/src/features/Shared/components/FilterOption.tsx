@@ -1,11 +1,23 @@
 import React, { FC } from 'react';
-import { Rule, colors, useStyle } from '@dex-ddl/core';
+import { Rule, colors, useStyle, Styles } from '@dex-ddl/core';
 import { IconButton } from 'components/IconButton';
 import { Input } from 'components/Form/Input';
 import { Icon } from 'components/Icon';
 import { Item } from 'components/Form';
 
-type FilterOptionProps = any;
+type FilterOptionProps = {
+  onSettingsPress?: () => void;
+  withIcon?: boolean;
+  marginBot?: boolean;
+  customIcon?: boolean;
+  onFocus?: React.Dispatch<React.SetStateAction<boolean>>;
+  setSearchValueFilterOption?: React.Dispatch<React.SetStateAction<string>>;
+  searchValue?: string;
+  focus?: boolean;
+  onChange?: (e: any) => any;
+  customStyles?: Rule | Styles;
+  visibleSettings?: boolean;
+};
 
 export const FilterOption: FC<FilterOptionProps> = ({
   onSettingsPress,
@@ -17,19 +29,25 @@ export const FilterOption: FC<FilterOptionProps> = ({
   focus = false,
   onChange,
   customStyles,
+  visibleSettings = true,
+  setSearchValueFilterOption,
 }) => {
   const { css } = useStyle();
 
   return (
     <>
-      <IconButton
-        graphic='settings'
-        customVariantRules={{
-          default: iconBtnStyle,
-        }}
-        iconStyles={iconStyle}
-        onPress={onSettingsPress}
-      />
+      {visibleSettings && (
+        <IconButton
+          graphic='settings'
+          customVariantRules={{
+            default: iconBtnStyle,
+          }}
+          iconStyles={iconStyle}
+          onPress={() => {
+            onSettingsPress && onSettingsPress();
+          }}
+        />
+      )}
       <div
         className={css({
           width: focus ? '240px' : '38px',
@@ -42,18 +60,19 @@ export const FilterOption: FC<FilterOptionProps> = ({
           marginBot={marginBot}
           customIcon={customIcon}
           onFocus={() => {
-            onFocus && onFocus();
+            onFocus && onFocus(() => true);
           }}
           customIconInserted={customIcon && <Icon graphic='search' iconStyles={iconStyle} />}
           focus={focus}
         >
           <Input
-            onFocus={() => {
-              onFocus && onFocus();
-            }}
             value={searchValue}
             onChange={(e) => {
               onChange && onChange(e);
+            }}
+            onBlur={() => {
+              onFocus && onFocus(() => false);
+              setSearchValueFilterOption && setSearchValueFilterOption(() => '');
             }}
             customStyles={{
               ...(customStyles && customStyles),

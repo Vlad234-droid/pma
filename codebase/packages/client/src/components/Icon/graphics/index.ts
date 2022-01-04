@@ -1,5 +1,6 @@
 import { Add } from './add';
 import { ArrowLeft } from './arrow-left';
+import { ArrowRight } from './arrow-right';
 import { Calender } from './calender';
 import { Cancel } from './cancel';
 import { Check } from './check';
@@ -28,7 +29,10 @@ import { Search } from './search';
 import { Download } from './download';
 import { Alert } from './alert';
 import { Information } from './information';
-import { ArrowRight } from './arrowRight';
+import { Delete } from './delete';
+import { Folder } from './folder';
+import { Archive } from './archive';
+// import { ArrowRight } from './arrowRight';
 import { NotiBellCirlceOut } from './notiBellCirlceOut';
 import { Support } from './support';
 import { Trash } from './trash';
@@ -69,6 +73,9 @@ export type Graphics =
   | 'information'
   | 'download'
   | 'alert'
+  | 'delete'
+  | 'folder'
+  | 'archive'
   | 'notiBellCircleOut'
   | 'support'
   | 'arrowRight'
@@ -77,6 +84,7 @@ export type Graphics =
 export const icons: Record<Graphics, FCGraphicProps> = {
   add: Add,
   arrowLeft: ArrowLeft,
+  arrowRight: ArrowRight,
   chatSq: ChatSq,
   document: Document,
   account: Account,
@@ -104,7 +112,10 @@ export const icons: Record<Graphics, FCGraphicProps> = {
   download: Download,
   alert: Alert,
   information: Information,
-  arrowRight: ArrowRight,
+  delete: Delete,
+  folder: Folder,
+  archive: Archive,
+  // arrowRight: ArrowRight,
   notiBellCircleOut: NotiBellCirlceOut,
   support: Support,
   trash: Trash,
