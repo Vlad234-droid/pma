@@ -8,7 +8,7 @@ const store = createStore({
   services: { api },
   state: {},
   withLogger: false,
-  composeEnhancer: composeWithDevTools,
+  composeEnhancer: composeWithDevTools({}),
 });
 
 export default store;

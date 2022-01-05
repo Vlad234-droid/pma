@@ -1,9 +1,10 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState, useMemo } from 'react';
 import { Trans, useTranslation } from 'components/Translation';
 import { Button, Rule, Styles, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { ObjectiveType, ReviewType, Status } from 'config/enum';
 import { StepIndicator } from 'components/StepIndicator/StepIndicator';
 import { IconButton } from 'components/IconButton';
+import { usePDF, ObjectiveDocument, downloadPDF } from '@pma/pdf-renderer';
 
 import {
   Accordion,
@@ -79,6 +80,16 @@ const MyObjectives: FC = () => {
   const endYearReview = useSelector(getTimelineByCodeSelector(ObjectiveType.EYR));
   const [previousReviewFilesModalShow, setPreviousReviewFilesModalShow] = useState(false);
   const [objectives, setObjectives] = useState<OT.Objective[]>([]);
+
+  const document = useMemo(() => <ObjectiveDocument items={objectives} />, [objectives.length]);
+
+  const [instance, updateInstance] = usePDF({ document });
+
+  useEffect(() => {
+    if (objectives.length) {
+      updateInstance();
+    }
+  }, [objectives.length]);
 
   const { loaded: schemaLoaded } = useSelector(schemaMetaSelector);
   const { loaded: reviewLoaded } = useSelector(reviewsMetaSelector);
@@ -191,7 +202,7 @@ const MyObjectives: FC = () => {
                 content: (
                   <div>
                     <IconButton
-                      onPress={() => alert('download')}
+                      onPress={() => downloadPDF(instance.url!, 'objectives.pdf')}
                       graphic='download'
                       customVariantRules={{ default: iconButtonStyles }}
                       iconStyles={iconStyles}
