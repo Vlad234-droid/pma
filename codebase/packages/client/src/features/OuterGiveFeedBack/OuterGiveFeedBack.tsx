@@ -130,7 +130,7 @@ const OuterGiveFeedBack: FC = () => {
               focus={focus}
               customIcon={true}
               searchValue={searchValueFilterOption}
-              onFocus={() => setFocus(() => true)}
+              onFocus={setFocus}
               withIcon={false}
               customStyles={{
                 ...(focus ? { padding: '10px 20px 10px 16px' } : { padding: '0px' }),

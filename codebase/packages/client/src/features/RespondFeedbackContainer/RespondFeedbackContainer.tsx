@@ -6,14 +6,11 @@ import { PeopleTypes, TypefeedbackItems } from './type';
 import { ModalRespondFeedback } from './ModalsParts';
 import { DraftItem, RadioBtns } from './components';
 import { FilterModal } from '../Shared/components/FilterModal';
-import { useDispatch } from 'react-redux';
-import { FeedbackActions } from '@pma/store';
 
 export const RESPOND_FEEDBACK_CONTAINER = 'respond_feedback_container';
 
 const RespondFeedbackContainer: FC = () => {
   const { css } = useStyle();
-  const dispatch = useDispatch();
 
   const [isOpenMainModal, setIsOpen] = useState<boolean>(false);
   const [title, setTitle] = useState<string>('');
@@ -84,7 +81,7 @@ const RespondFeedbackContainer: FC = () => {
               focus={focus}
               customIcon={true}
               searchValue={searchValueFilterOption}
-              onFocus={() => setFocus(() => true)}
+              onFocus={setFocus}
               withIcon={false}
               customStyles={{
                 ...(focus ? { padding: '10px 20px 10px 16px' } : { padding: '0px' }),

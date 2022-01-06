@@ -1,7 +1,8 @@
-import React, { Dispatch, FC, SetStateAction } from 'react';
+import React, { Dispatch, FC, SetStateAction, useRef, MouseEvent } from 'react';
 import { useStyle, Rule, CreateRule } from '@dex-ddl/core';
 import { Radio } from 'components/Form';
 import { Trans } from 'components/Translation';
+import useEventListener from 'hooks/useEventListener';
 
 type filterFeedbacksType = {
   AZ: boolean;
@@ -34,6 +35,7 @@ export const FilterModal: FC<FilterModalProps> = ({
     });
     setFilterModal(() => false);
   };
+  const ref = useRef<HTMLDivElement | null>(null);
 
   const btns_radio = [
     {
@@ -62,8 +64,17 @@ export const FilterModal: FC<FilterModalProps> = ({
     },
   ];
 
+  const handleClickOutside = (event: MouseEvent<HTMLElement>) => {
+    const element = event?.target as HTMLElement;
+    if (ref.current && !ref.current.contains(element)) {
+      setFilterModal(false);
+    }
+  };
+
+  useEventListener('mousedown', handleClickOutside);
+
   return (
-    <div className={css(wrapper_style({ filterModal }))}>
+    <div ref={ref} className={css(wrapper_style({ filterModal }))}>
       <div className={css(Flex_column_style)}>
         <span>Sort :</span>
         {btns_radio.map((item) => (

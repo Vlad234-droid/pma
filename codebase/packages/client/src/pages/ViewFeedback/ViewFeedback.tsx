@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { useStyle } from '@dex-ddl/core';
-import ViewFeedbackComp from '../../features/ViewFeedback';
+import ViewFeedbackComp from 'features/ViewFeedback';
 
 const ViewFeedback: FC = () => {
   const { css } = useStyle();

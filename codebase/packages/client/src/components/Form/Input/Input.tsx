@@ -9,6 +9,7 @@ const Input: FC<InputProps> = ({
   domRef,
   placeholder = '',
   onChange,
+  onFocus,
   name,
   value,
   isValid = true,
@@ -29,6 +30,7 @@ const Input: FC<InputProps> = ({
       onChange={onChange}
       type={type}
       onBlur={onBlur}
+      onFocus={onFocus}
       readOnly={readonly}
       className={css({
         width: '100%',
