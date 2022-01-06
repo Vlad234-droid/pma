@@ -39,20 +39,22 @@ export enum FeedbackStatus {
   COMPLETED = 'COMPLETED',
 }
 
-export enum FeedbackArea {
-  OBJECTIVES = 'Objectives',
-}
-
 export enum TargetType {
-  'Objectives' = 'OBJECTIVE',
-  'Development goal' = 'GOAL',
-  'Value and behaviour' = 'VALUE_BEHAVIOR',
-  'Other' = 'OTHER',
+  'id_1' = 'GOAL',
+  'id_2' = 'OBJECTIVE',
+  'id_3' = 'VALUE_BEHAVIOR',
+  'id_4' = 'OTHER',
 }
 
 export enum TargetTypeReverse {
+  'GOAL' = 'Day Job',
   'OBJECTIVE' = 'Objectives',
-  'GOAL' = 'Development goal',
-  'VALUE_BEHAVIOR' = 'Value and behaviour',
-  'OTHER' = 'Other',
+  'VALUE_BEHAVIOR' = 'Yourself (development goals, values & purpose)',
+  'OTHER' = 'Your impact on others',
+}
+
+export enum TargetFeedbackKeys {
+  'GOAL' = 'comment_to_day_job',
+  'VALUE_BEHAVIOR' = 'comment_to_your_self',
+  'OTHER' = 'comment_to_your_impact',
 }

@@ -22,7 +22,8 @@
     "run:prod": "cross-env BUILD_ENV=production lerna run --parallel run:prod",
     "ws:server": "yarn workspace @pma/server",
     "ws:client": "yarn workspace @pma/client",
-    "ws:store": "yarn workspace @pma/store"
+    "ws:store": "yarn workspace @pma/store",
+    "ws:pdf": "yarn workspace @pma/pdf-renderer"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.12.11",

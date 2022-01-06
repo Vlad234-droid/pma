@@ -8,7 +8,6 @@ import { FCGraphicProps } from './types';
 
 export const Add: FCGraphicProps = ({ invertColors }) => {
   const { theme } = useStyle();
-
   const stroke = invertColor(theme.colors.link, invertColors, theme);
 
   return (

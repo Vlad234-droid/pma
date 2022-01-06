@@ -1,14 +1,14 @@
 import React, { FC, HTMLProps, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import debounce from 'lodash.debounce';
+import { useForm } from 'react-hook-form';
 import { Button, CreateRule, Rule, Theme, useStyle } from '@dex-ddl/core';
 import DescriptionBlock from 'components/DescriptionBlock';
 import { GenericItemField } from 'components/GenericForm';
 import { Input, Item } from 'components/Form';
-import { useForm } from 'react-hook-form';
 import HistoryTable from 'components/HistoryTable/HistoryTable';
 import useDispatch from 'hooks/useDispatch';
-import { OrgObjectiveActions, orgObjectivesSelector } from '@pma/store';
-import { auditLogsSelector } from '@pma/store/src/selectors/audit-log';
-import { useSelector } from 'react-redux';
+import { OrgObjectiveActions, orgObjectivesSelector, auditLogsSelector } from '@pma/store';
 
 export type CreateUpdateObjectiveModalProps = {
   onClose: () => void;
@@ -16,50 +16,6 @@ export type CreateUpdateObjectiveModalProps = {
 };
 
 type Props = HTMLProps<HTMLInputElement> & CreateUpdateObjectiveModalProps;
-const formInputs = [
-  {
-    id: 0,
-    name: 'Strategic Priority 1',
-    label: 'Strategic Priority 1 label',
-    placeholder: 'Enter title for this Strategic Priority',
-    value: '',
-  },
-  {
-    id: 1,
-    name: 'Strategic Priority 2',
-    label: 'Strategic Priority 2 label',
-    placeholder: 'Enter title for this Strategic Priority',
-    value: '',
-  },
-  {
-    id: 2,
-    name: 'Strategic Priority 3',
-    label: 'Strategic Priority 3 label',
-    placeholder: 'Enter title for this Strategic Priority',
-    value: '',
-  },
-  {
-    id: 3,
-    name: 'Strategic Priority 4',
-    label: 'Strategic Priority 4 label',
-    placeholder: 'Enter title for this Strategic Priority',
-    value: '',
-  },
-  {
-    id: 4,
-    name: 'Strategic Priority 5',
-    label: 'Strategic Priority 5 label',
-    placeholder: 'Enter title for this Strategic Priority',
-    value: '',
-  },
-  {
-    id: 5,
-    name: 'Strategic Priority 6',
-    label: 'Strategic Priority 6 label',
-    placeholder: 'Enter title for this Strategic Priority',
-    value: '',
-  },
-];
 
 const historyTable = { headers: ['Name', 'Action Type', 'Time'] };
 
@@ -80,44 +36,39 @@ const CreateOrganizationObjectives: FC<Props> = () => {
   const [isSaveBtnDisabled, setSaveBtnDisabled] = useState<boolean>(true);
   const [isPublishBtnDisabled, setPublishBtnDisabled] = useState<boolean>(true);
   const [isHistoryOpen, setHistoryOpen] = useState<boolean>(false);
-  const [getOrgObjectivesData, setOrgObjectivesData] = useState<Array<any>>(initialObjectivesData);
+  const [orgObjectivesData, setOrgObjectivesData] = useState<Array<any>>(initialObjectivesData);
+
+  const orgObjectives = useSelector(orgObjectivesSelector) || [];
 
   const methods = useForm({
     mode: 'onChange',
   });
 
-  const save = async () => {
+  const save = () => {
     if (isSaveBtnDisabled) return;
 
     dispatch(
       OrgObjectiveActions.createOrgObjective({
-        data: getOrgObjectivesData,
+        data: orgObjectivesData,
       }),
     );
   };
 
-  const publish = async () => {
+  const publish = () => {
     if (isPublishBtnDisabled) return;
 
     dispatch(
       OrgObjectiveActions.createAndPublishOrgObjective({
-        data: getOrgObjectivesData,
+        data: orgObjectivesData,
       }),
     );
   };
 
-  const debounce = (func, timeout = 500) => {
-    let timer;
-    return (...args) => {
-      clearTimeout(timer);
-      timer = setTimeout(() => {
-        func.apply(this, args);
-      }, timeout);
-    };
-  };
-
   const checkInputData = () => {
-    if (getOrgObjectivesData.every((el) => el.title !== null && el.title?.length > 20)) {
+    const isValidInputs = orgObjectivesData.some((el) => el.title && el.title.length > 20);
+    const hasChanges = orgObjectivesData.some((el, idx) => el.title !== orgObjectives[idx]?.title);
+
+    if (isValidInputs && hasChanges) {
       setSaveBtnDisabled(false);
       setPublishBtnDisabled(false);
     } else {
@@ -126,22 +77,23 @@ const CreateOrganizationObjectives: FC<Props> = () => {
     }
   };
 
-  const callCheckValidation = debounce(() => checkInputData());
+  const callCheckValidation = debounce(checkInputData);
 
   const onChangeInput = (value, idx) => {
-    if (formInputs.every((el) => el.value !== null && el.value?.length > 20)) {
-      setSaveBtnDisabled(false);
-      setPublishBtnDisabled(false);
-    } else {
-      callCheckValidation();
-    }
-    const newData = getOrgObjectivesData;
-    newData[idx].title = value;
+    const newData = orgObjectivesData.map((item, index) => (index === idx ? { ...item, title: value } : { ...item }));
 
     setOrgObjectivesData(newData);
   };
 
-  const orgObjectives = useSelector(orgObjectivesSelector) || [];
+  useEffect(() => {
+    if (orgObjectives.length) {
+      setOrgObjectivesData([...orgObjectives]);
+    }
+  }, [orgObjectives]);
+
+  useEffect(() => {
+    callCheckValidation();
+  }, [orgObjectivesData]);
 
   useEffect(() => {
     dispatch(OrgObjectiveActions.getOrgAuditLogs({ start: 1, limit: 3 }));
@@ -157,26 +109,25 @@ const CreateOrganizationObjectives: FC<Props> = () => {
       <div className={css(page)}>
         <div className={css(contentArea)}>
           <DescriptionBlock>
-            <div className={css(descriptionHeader({ theme }))}>Strategic Priorities</div>
+            <div className={css(descriptionHeader({ theme }))}>Strategic drivers</div>
 
             <div className={css(descriptionText({ theme }))}>
-              Create titles for Strategic Priorities. Click “Save” button to keep the changes. Or “Publish” to cascade
-              them on the colleagues.
+              Create titles for Strategic drivers. Click “Save” button to keep the changes. Or “Publish” to cascade them
+              on the colleagues.
             </div>
             <div>
-              {formInputs.map((item, idx) => {
-                formInputs[idx].value = orgObjectives[idx]?.title;
+              {orgObjectivesData.map((item, idx) => {
                 return (
                   <GenericItemField
-                    key={item.id}
-                    name={item.name}
-                    label={item.name}
+                    key={idx}
+                    name={`strategic_driver_${idx + 1}`}
+                    label={`Strategic Driver ${idx + 1}`}
                     methods={methods}
                     Wrapper={Item}
                     Element={Input}
                     onChange={(event) => onChangeInput(event, idx)}
-                    placeholder={item.placeholder}
-                    value={orgObjectives[idx]?.title}
+                    placeholder={'Enter title for this Strategic Driver'}
+                    value={item?.title || ''}
                   />
                 );
               })}

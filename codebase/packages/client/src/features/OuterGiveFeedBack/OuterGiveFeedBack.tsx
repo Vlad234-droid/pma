@@ -107,7 +107,7 @@ const OuterGiveFeedBack: FC = () => {
         </Modal>
       )}
       <div>
-        <div className={css(header_styled)}>
+        <div className={css(headerStyled)}>
           <RadioBtns
             checkedRadio={checkedRadio}
             setCheckedRadio={setCheckedRadio}
@@ -118,7 +118,7 @@ const OuterGiveFeedBack: FC = () => {
             filterModal={filterModal}
             setFilterFeedbacks={setFilterFeedbacks}
           />
-          <div className={css(Filter_Icon_styled)}>
+          <div className={css(FilterIconStyled)}>
             <IconButton
               graphic='information'
               iconStyles={iconStyle}
@@ -224,7 +224,7 @@ const OuterGiveFeedBack: FC = () => {
     </>
   );
 };
-const Filter_Icon_styled: Rule = () => {
+const FilterIconStyled: Rule = () => {
   const [, isBreakpoint] = useBreakpoints();
   const small = isBreakpoint.small || isBreakpoint.xSmall;
   return {
@@ -234,7 +234,7 @@ const Filter_Icon_styled: Rule = () => {
     position: 'relative',
   };
 };
-const header_styled: Rule = () => {
+const headerStyled: Rule = () => {
   const [, isBreakpoint] = useBreakpoints();
   const medium = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
   return {

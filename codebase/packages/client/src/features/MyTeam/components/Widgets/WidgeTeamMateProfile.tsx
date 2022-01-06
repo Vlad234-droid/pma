@@ -1,10 +1,16 @@
 import React, { FC } from 'react';
-import { colors, Colors, fontWeight, Rule, useStyle } from '@dex-ddl/core';
+import { colors, Colors, Rule, useStyle } from '@dex-ddl/core';
+
 import { TileWrapper } from 'components/Tile';
 import { Graphics, Icon } from 'components/Icon';
-import { Avatar } from 'components/Avatar';
 import { Accordion, BaseAccordion, ExpandButton, Panel, Section } from 'components/Accordion';
 import { Status, TimelineType } from 'config/enum';
+import { Page } from 'pages/types';
+import { useHistory } from 'react-router-dom';
+import { paramsReplacer } from 'utils';
+import { buildPath } from 'features/Routes';
+
+import ColleagueInfo from '../ColleagueInfo';
 
 export type Review = {
   uuid: string;
@@ -21,6 +27,7 @@ export type Employee = {
   lastName: string;
   jobName: string;
   businessType: string;
+  uuid: string;
   timeline: Review[];
 };
 
@@ -47,8 +54,13 @@ export const getIcon = (status): [Graphics, Colors] => {
 
 export const WidgetTeamMateProfile: FC<WidgetTeamMateProfileProps> = ({ id, status, employee }) => {
   const { css } = useStyle();
+  const history = useHistory();
 
   const [graphics, color] = getIcon(status);
+
+  const viewUserObjectives = (uuid) => {
+    history.push(buildPath(paramsReplacer(`${Page.USER_OBJECTIVES}`, { ':uuid': uuid })));
+  };
 
   return (
     <>
@@ -65,18 +77,27 @@ export const WidgetTeamMateProfile: FC<WidgetTeamMateProfileProps> = ({ id, stat
               <>
                 <Section defaultExpanded={false}>
                   <div className={css(wrapperStyle)}>
-                    <div className={css({ display: 'flex', alignItems: 'center' })}>
-                      <Avatar size={40} />
-                    </div>
-                    <div className={css(headerBlockStyle)}>
-                      <span className={css(titleStyle)}>{`${employee.firstName} ${employee.lastName}`}</span>
-                      <span className={css(descriptionStyle)}>{`${employee.jobName}, ${employee.businessType}`}</span>
-                    </div>
+                    <ColleagueInfo
+                      firstName={employee.firstName}
+                      lastName={employee.lastName}
+                      jobName={employee.jobName}
+                      businessType={employee.businessType}
+                    />
                     <div className={css({ marginLeft: 'auto', display: 'flex', alignItems: 'center' })}>
                       <div className={css({ padding: '12px 12px' })}>
-                        <span className={css({ fontSize: '16px', lineHeight: '20px', color: colors.tescoBlue })}>
+                        <button
+                          onClick={() => viewUserObjectives(employee.uuid)}
+                          className={css({
+                            fontSize: '16px',
+                            lineHeight: '20px',
+                            color: colors.tescoBlue,
+                            cursor: 'pointer',
+                            border: 'none',
+                            backgroundColor: 'transparent',
+                          })}
+                        >
                           View profile
-                        </span>
+                        </button>
                       </div>
                       <div className={css({ padding: '0px 12px' })}>
                         <Icon graphic={graphics} fill={color} />
@@ -118,28 +139,6 @@ export const WidgetTeamMateProfile: FC<WidgetTeamMateProfileProps> = ({ id, stat
 const wrapperStyle: Rule = {
   padding: '24px',
   display: 'flex',
-};
-
-const headerBlockStyle: Rule = {
-  display: 'grid',
-  padding: '0 20px',
-  alignSelf: 'center',
-};
-
-const titleStyle: Rule = {
-  fontStyle: 'normal',
-  fontWeight: fontWeight.bold,
-  fontSize: '18px',
-  lineHeight: '22px',
-  color: colors.tescoBlue,
-};
-
-const descriptionStyle: Rule = {
-  fontStyle: 'normal',
-  fontWeight: 'normal',
-  fontSize: '16x',
-  lineHeight: '20px',
-  color: colors.base,
 };
 
 const reviewItem: Rule = {

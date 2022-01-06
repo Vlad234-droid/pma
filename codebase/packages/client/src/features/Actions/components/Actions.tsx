@@ -1,11 +1,6 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState, useCallback } from 'react';
+import { useSelector, shallowEqual } from 'react-redux';
 import { colors, fontWeight, useBreakpoints, useStyle } from '@dex-ddl/core';
-import { Trans } from 'components/Translation';
-import { Checkbox, Radio } from 'components/Form';
-import { Status } from 'config/enum';
-import { WidgetObjectiveApproval, WidgetTeamMateObjectives } from 'features/Actions';
-import { FilterOption } from 'features/Shared';
-import { useSelector } from 'react-redux';
 import {
   colleagueUUIDSelector,
   getManagersMetaSelector,
@@ -14,8 +9,15 @@ import {
   SchemaActions,
   schemaMetaSelector,
 } from '@pma/store';
+
+import { Trans, useTranslation } from 'components/Translation';
+import { Checkbox, Radio } from 'components/Form';
+import { Status } from 'config/enum';
+import { WidgetObjectiveApproval, WidgetTeamMateObjectives } from 'features/Actions';
+import Filters, { useSortFilter, useSearchFilter, getEmployeesSortingOptions } from 'features/Filters';
 import useDispatch from 'hooks/useDispatch';
 
+import { filterApprovedFn } from '../utils';
 export const TEST_ID = 'objectives-pave';
 
 type SelectAllProps = {
@@ -24,8 +26,10 @@ type SelectAllProps = {
   indeterminate: boolean;
   disabled?: boolean;
 };
+
 const SelectAll: FC<SelectAllProps> = ({ onChange, checked, indeterminate, disabled }) => {
   const { css } = useStyle();
+
   return (
     <label>
       <Checkbox
@@ -57,13 +61,21 @@ export const Actions = () => {
   const { css } = useStyle();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.medium || isBreakpoint.small || isBreakpoint.xSmall;
+  const [sortValue, setSortValue] = useSortFilter();
+  const [searchValue, setSearchValue] = useSearchFilter();
+  const { t } = useTranslation();
+  const options = getEmployeesSortingOptions(t);
 
   const { loaded: schemaLoaded } = useSelector(schemaMetaSelector);
 
-  const { employeeWithPendingApprovals, employeeWithCompletedApprovals } = useSelector(getPendingEmployees) || {};
+  // @ts-ignore
+  const { employeeWithPendingApprovals, employeeWithCompletedApprovals } =
+    useSelector((state) => getPendingEmployees(state, searchValue, sortValue), shallowEqual) || {};
+
   const { loaded } = useSelector(getManagersMetaSelector) || {};
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const dispatch = useDispatch();
+
   useEffect(() => {
     if (!loaded && colleagueUuid) dispatch(ManagersActions.getManagers({ colleagueUuid }));
     if (!schemaLoaded && colleagueUuid) dispatch(SchemaActions.getSchema({ colleagueUuid }));
@@ -73,6 +85,7 @@ export const Actions = () => {
   const [isCheckAll, setIsCheckAll]: [boolean, (T) => void] = useState(false);
   const [isCheck, setIsCheck]: [string[], (T) => void] = useState([]);
   const [reviewsForApproval, setReviewsForApproval]: [any[], (T) => void] = useState([]);
+
   const [colleagues, setColleagues] = useState(employeeWithPendingApprovals || []);
   const [pending, setPending] = useState(true);
   const [colleagueReviews, setColleagueReviews]: [any, (T) => void] = useState({});
@@ -96,17 +109,25 @@ export const Actions = () => {
     }
   }, [isCheck, colleagues]);
 
-  const handleSelectAll = () => {
+  const handleSelectAll = useCallback(() => {
     setIsCheckAll(!isCheckAll);
-    const checkedItems = employeeWithPendingApprovals.map((li) => li.uuid);
+
+    // filter employee with more and less than 1 timeline
+    const filteredEmployee = employeeWithPendingApprovals.filter(
+      (colleague) => colleague.timeline.filter(filterApprovedFn)?.length === 1,
+    );
+
+    const checkedItems = filteredEmployee.map((colleague) => colleague.uuid);
+
     setIsCheck(checkedItems);
+
     if (isCheckAll) {
       setIsCheck([]);
       setReviewsForApproval([]);
     } else {
-      setReviewsForApproval(employeeWithPendingApprovals);
+      setReviewsForApproval(filteredEmployee);
     }
-  };
+  }, [isCheckAll, employeeWithPendingApprovals]);
 
   const handleClick = (e, colleague) => {
     const { id, checked } = e.target;
@@ -131,7 +152,7 @@ export const Actions = () => {
               alignItems: 'center',
             })}
           >
-            <SelectAll onChange={handleSelectAll} checked={isCheckAll} indeterminate={indeterminate} disabled={true} />
+            <SelectAll onChange={handleSelectAll} checked={isCheckAll} indeterminate={indeterminate} />
           </div>
         )}
         <div className={css({ display: 'flex' })}>
@@ -194,7 +215,13 @@ export const Actions = () => {
             alignItems: 'center',
           })}
         >
-          <FilterOption />
+          <Filters
+            sortValue={sortValue}
+            onSort={setSortValue}
+            searchValue={searchValue}
+            onSearch={setSearchValue}
+            sortingOptions={options}
+          />
         </div>
       </div>
       <div
@@ -208,7 +235,8 @@ export const Actions = () => {
       >
         <div className={css({ flex: '3 1 375px', display: 'flex', flexDirection: 'column', gap: '8px' })}>
           {colleagues?.map((colleague) => {
-            const timelineApproved = colleague.timeline.filter((tl) => tl.status === Status.WAITING_FOR_APPROVAL);
+            const timelineApproved = colleague.timeline.filter(filterApprovedFn);
+
             return (
               <div key={colleague.uuid} className={css({ display: 'flex', flexWrap: 'wrap' })}>
                 <div className={css({ width: '40px', position: 'relative' })}>
@@ -242,7 +270,7 @@ export const Actions = () => {
               padding: '16px 0',
             })}
           >
-            <SelectAll onChange={handleSelectAll} checked={isCheckAll} indeterminate={indeterminate} disabled={true} />
+            <SelectAll onChange={handleSelectAll} checked={isCheckAll} indeterminate={indeterminate} />
           </div>
         )}
         <div
@@ -254,9 +282,10 @@ export const Actions = () => {
           <div>
             {pending && (
               <WidgetObjectiveApproval
-                canDecline={isCheck.length === 1}
+                canDecline
                 isDisabled={!isCheck.length}
                 reviewsForApproval={reviewsForApproval}
+                onSave={() => setIsCheck([])}
               />
             )}
           </div>

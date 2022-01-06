@@ -31,18 +31,6 @@ export const SuccessModal: FC<Props> = ({ onClose, reviewType, description, with
           padding: mobileScreen ? '0 16px' : '0 40px',
         })}
       >
-        <span
-          className={css({
-            position: 'fixed',
-            top: '22px',
-            left: mobileScreen ? '20px' : '40px',
-            textDecoration: 'none',
-            border: 'none',
-            cursor: 'pointer',
-          })}
-        >
-          <IconComponent graphic='arrowLeft' invertColors={true} />
-        </span>
         <div style={{ textAlign: 'center' }}>
           <span
             style={{

@@ -1,12 +1,7 @@
 import React, { FC, useEffect } from 'react';
+import { shallowEqual, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Icon as IconCore, Rule, useBreakpoints, useStyle } from '@dex-ddl/core';
-import { RouterSwitch } from 'components/RouterSwitch';
-import { Status } from 'config/enum';
-import { WidgetPending, WidgetTeamMateProfile, YourActions } from 'features/MyTeam';
-import { FilterOption } from 'features/Shared';
-import { useSelector } from 'react-redux';
-import useDispatch from 'hooks/useDispatch';
 import {
   colleagueUUIDSelector,
   getAllEmployees,
@@ -14,8 +9,16 @@ import {
   getPendingEmployees,
   ManagersActions,
 } from '@pma/store';
+
+import { RouterSwitch } from 'components/RouterSwitch';
+import { Status } from 'config/enum';
+import { WidgetPending, WidgetTeamMateProfile, YourActions } from 'features/MyTeam';
+import { FilterOption } from 'features/Shared';
+import useDispatch from 'hooks/useDispatch';
 import { buildPath } from 'features/Routes';
 import { Page } from 'pages';
+import Filters, { useSortFilter, useSearchFilter, getEmployeesSortingOptions } from 'features/Filters';
+import { useTranslation } from 'components/Translation';
 
 export const TEST_ID = 'my-team';
 
@@ -23,9 +26,16 @@ const MyTeam: FC = () => {
   const { css } = useStyle();
   const [, isBreakpoint] = useBreakpoints();
   const desktopScreen = !(isBreakpoint.small || isBreakpoint.xSmall);
+  const [sortValue, setSortValue] = useSortFilter();
+  const [searchValue, setSearchValue] = useSearchFilter();
+  const { t } = useTranslation();
+  const options = getEmployeesSortingOptions(t);
 
-  const colleagues = useSelector(getAllEmployees) || [];
-  const { employeeWithPendingApprovals, employeePendingApprovals } = useSelector(getPendingEmployees) || {};
+  // @ts-ignore
+  const colleagues = useSelector((state) => getAllEmployees(state, searchValue, sortValue), shallowEqual) || [];
+
+  const { employeeWithPendingApprovals, employeePendingApprovals } =
+    useSelector((state) => getPendingEmployees(state), shallowEqual) || {};
 
   const waitingForApprovalCount = employeeWithPendingApprovals?.length;
   const colleaguesWithStatusDraftCount = employeePendingApprovals?.length;
@@ -35,8 +45,8 @@ const MyTeam: FC = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!loaded && colleagueUuid) dispatch(ManagersActions.getManagers({ colleagueUuid }));
-  }, [loaded, colleagueUuid]);
+    if (colleagueUuid) dispatch(ManagersActions.getManagers({ colleagueUuid }));
+  }, [colleagueUuid]);
 
   return (
     <div>
@@ -62,8 +72,13 @@ const MyTeam: FC = () => {
             alignItems: 'center',
           })}
         >
-          <IconCore graphic='information' />
-          <FilterOption />
+          <Filters
+            sortValue={sortValue}
+            onSort={setSortValue}
+            searchValue={searchValue}
+            onSearch={setSearchValue}
+            sortingOptions={options}
+          />
         </div>
       </div>
       <div

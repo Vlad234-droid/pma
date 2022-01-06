@@ -1,6 +1,6 @@
 import React, { FC, HTMLProps, ReactElement } from 'react';
 
-import { Rule, useBreakpoints, useStyle, CreateRule } from '@dex-ddl/core';
+import { CreateRule, Rule, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { TileWrapper } from './TileWrapper';
 import { Icon } from '../Icon';
 
@@ -51,7 +51,7 @@ export const BasicTile: FC<Props> = ({
         )}
         <div className={css(bodyStyle)}>
           <div className={css(titleStyle)}>{title}</div>
-          <div className={css(descriptionStyle)}>{description}</div>
+          {description && <div className={css(descriptionStyle)}>{description}</div>}
           {children}
           {event && (
             <div className={css(descriptionStyle)}>

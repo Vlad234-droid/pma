@@ -1,15 +1,6 @@
-export const getPropperTime = (updatedTime) => {
-  const date1 = new Date(updatedTime);
-  const date2 = new Date();
-  const diff = (date2.getTime() - date1.getTime()) / (1000 * 3600 * 24);
-  if (diff < 1) {
-    return 'just now';
-  } else if (diff >= 1 && diff < 2) {
-    return `${Math.floor(diff)} day ago`;
-  } else if (Math.floor(diff) >= 2) {
-    return `${Math.floor(diff)} days ago`;
-  }
-};
+export const commentToYourImpact = 'comment_to_your_impact';
+export const commentToYourSelf = 'comment_to_your_self';
+export const commentToDayJob = 'comment_to_day_job';
 
 export const filteredByInputSearchHandler = (notes, value) => {
   return notes.filter((item) => {

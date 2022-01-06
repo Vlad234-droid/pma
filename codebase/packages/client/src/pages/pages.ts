@@ -12,9 +12,12 @@ import RequestFeedback from './RequestFeedback';
 import RespondFeedback from './RespondFeedback';
 import ViewFeedback from './ViewFeedback';
 import Settings from './Settings';
+import Notes from './Notes';
 import CreateOrganizationObjectives from './CreateOrganizationObjectives';
 import ObjectivesView from './ObjectivesView';
 import { CreatePerformanceCycle, PerformanceCycleAdministration } from './PerformanceCycle';
+import { TipsAdministration, CreateTip, EditTip } from './Tips';
+import UserObjectives from './UserObjectives';
 
 const pages: Record<
   Page,
@@ -30,6 +33,11 @@ const pages: Record<
     title: 'My Team',
     withHeader: true,
     backPath: Page.CONTRIBUTION,
+  },
+  [Page.NOTES]: {
+    component: Notes,
+    title: 'My Notes',
+    withHeader: true,
   },
   [Page.ACTIONS]: {
     component: Actions,
@@ -54,13 +62,13 @@ const pages: Record<
     title: 'Your Contribution',
     withHeader: true,
   },
-  [Page.CREATE_ORGANIZATION_OBJECTIVES]: {
+  [Page.CREATE_STRATEGIC_DRIVERS]: {
     component: CreateOrganizationObjectives,
-    title: 'Create Strategic Priorities',
+    title: 'Create Strategic drivers',
     withHeader: true,
     backPath: Page.CONTRIBUTION,
   },
-  [Page.VIEW_ORGANIZATION_OBJECTIVES]: {
+  [Page.STRATEGIC_DRIVERS]: {
     component: ObjectivesView,
     withHeader: false,
   },
@@ -72,13 +80,19 @@ const pages: Record<
   },
   [Page.OBJECTIVES_VIEW]: {
     component: Objectives,
-    title: 'My Objectives',
+    title: 'My objectives and reviews',
     withHeader: true,
     backPath: Page.CONTRIBUTION,
   },
+  [Page.USER_OBJECTIVES]: {
+    component: UserObjectives,
+    title: 'User Objectives',
+    withHeader: true,
+    backPath: Page.MY_TEAM,
+  },
   [Page.PROFILE]: {
     component: Profile,
-    title: 'My View',
+    title: 'My profile',
     withHeader: true,
     backPath: Page.CONTRIBUTION,
   },
@@ -88,34 +102,52 @@ const pages: Record<
     withHeader: true,
     backPath: Page.CONTRIBUTION,
   },
+  [Page.GIVE_FEEDBACK]: {
+    component: GiveFeedback,
+    title: 'Give feedback',
+    withHeader: true,
+    backPath: Page.FEEDBACK,
+  },
+  [Page.REQUEST_FEEDBACK]: {
+    component: RequestFeedback,
+    withHeader: false,
+  },
+  [Page.RESPOND_FEEDBACK]: {
+    component: RespondFeedback,
+    title: 'Respond to feedback requests',
+    withHeader: true,
+    backPath: Page.FEEDBACK,
+  },
+  [Page.VIEW_FEEDBACK]: {
+    component: ViewFeedback,
+    title: 'View feedback',
+    withHeader: true,
+    backPath: Page.FEEDBACK,
+  },
+
   [Page.FEEDBACK]: {
     component: Feedback,
     title: 'Feedback',
     withHeader: true,
     backPath: Page.CONTRIBUTION,
   },
-  [Page.GIVE_FEEDBACK]: {
-    component: GiveFeedback,
-    title: 'Give feedback',
+  [Page.TIPS]: {
+    component: TipsAdministration,
+    title: 'Tips',
     withHeader: true,
     backPath: Page.CONTRIBUTION,
   },
-  [Page.REQUEST_FEEDBACK]: {
-    component: RequestFeedback,
+  [Page.CREATE_TIP]: {
+    component: CreateTip,
+    title: 'Create Tip',
     withHeader: false,
-    backPath: Page.CONTRIBUTION,
+    backPath: Page.TIPS,
   },
-  [Page.RESPOND_FEEDBACK]: {
-    component: RespondFeedback,
-    title: 'Respond to feedback requests',
-    withHeader: true,
-    backPath: Page.CONTRIBUTION,
-  },
-  [Page.VIEW_FEEDBACK]: {
-    component: ViewFeedback,
-    title: 'View feedback',
-    withHeader: true,
-    backPath: Page.CONTRIBUTION,
+  [Page.EDIT_TIP]: {
+    component: EditTip,
+    title: 'Edit Tip',
+    withHeader: false,
+    backPath: Page.TIPS,
   },
 };
 

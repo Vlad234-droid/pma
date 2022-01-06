@@ -2,7 +2,6 @@ import { createSelector } from 'reselect';
 //@ts-ignore
 import { RootState } from 'typesafe-actions';
 import { ReviewType, Status } from '@pma/client/src/config/enum';
-import { objectivesSelector } from './objectives';
 
 //@ts-ignore
 export const reviewsSelector = (state: RootState) => state.reviews;
@@ -40,7 +39,7 @@ export const getReviewPropertiesSelector = (reviewType: ReviewType) =>
 export const getNextReviewNumberSelector = (reviewType: ReviewType) =>
   createSelector(filterReviewsByTypeSelector(reviewType), (reviews: any) => {
     if (reviews?.length) {
-      const number = reviews[reviews?.length - 1].number;
+      const number = reviews?.length;
       return number + 1;
     }
 
@@ -57,7 +56,30 @@ export const isReviewsInStatus = (reviewType: ReviewType) => (status: Status) =>
     return statuses.every((elem) => elem === status);
   });
 
+export const isReviewsNumbersInStatus = (reviewType: ReviewType) => (status: Status, num: number) =>
+  createSelector(filterReviewsByTypeSelector(reviewType), (reviews: any) => {
+    if (reviews?.length < num) {
+      return false;
+    }
+    const statuses = reviews?.filter((reviews) => reviews.number <= num)?.map((review) => review.status);
+    statuses.every((elem) => {
+      return elem === status;
+    });
+
+    return statuses.every((elem) => elem === status);
+  });
+
 export const hasStatusInReviews = (reviewType: ReviewType, status: Status) =>
   createSelector(filterReviewsByTypeSelector(reviewType), (reviews: any) => {
     return reviews?.map((review) => review.status).some((elem) => elem === status);
+  });
+
+export const countByStatusReviews = (reviewType: ReviewType, status: Status) =>
+  createSelector(filterReviewsByTypeSelector(reviewType), (reviews: any) => {
+    return reviews?.filter((review) => review.status === status)?.length || 0;
+  });
+
+export const countByTypeReviews = (reviewType: ReviewType) =>
+  createSelector(filterReviewsByTypeSelector(reviewType), (reviews: any) => {
+    return reviews?.length || 0;
   });

@@ -12,6 +12,4 @@ export default {
 const Template: Story<Props> = (props) => <ReviewWidget {...props} />;
 
 export const Widget = Template.bind({});
-Widget.args = {
-  description: 'test description',
-};
+Widget.args = {};

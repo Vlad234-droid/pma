@@ -12,8 +12,7 @@ export const getOrgObjectivesEpic: Epic = (action$, _, { api }) =>
     switchMap(({ payload }) =>
       from(api.getOrgObjectives()).pipe(
         // @ts-ignore
-        map(({ success, data }) => {
-          getOrgObjectives;
+        map(({ data }) => {
           return getOrgObjectives.success({ origin: data });
         }),
         catchError(({ errors }) => of(getOrgObjectives.failure(errors))),
@@ -28,7 +27,7 @@ export const getOrgAuditLogsEpic: Epic = (action$, _, { api }) =>
     switchMap(({ payload }) =>
       from(api.getOrgAuditLogs(payload)).pipe(
         // @ts-ignore
-        map(({ success, data }) => {
+        map(({ data }) => {
           return getOrgAuditLogs.success({ auditLogs: data });
         }),
         catchError(({ errors }) => of(getOrgAuditLogs.failure(errors))),
@@ -45,7 +44,7 @@ export const createOrgObjectiveEpic: Epic = (action$, _, { api }) =>
       return from(api.createOrgObjective(data)).pipe(
         // @ts-ignore
         map(({ data }) => {
-          return createOrgObjective.request(data);
+          return createOrgObjective.success(data);
         }),
         catchError(({ errors }) => of(createOrgObjective.failure(errors))),
       );
@@ -60,7 +59,7 @@ export const createAndPublishOrgObjectiveEpic: Epic = (action$, _, { api }) =>
       return from(api.createAndPublishOrgObjective(data)).pipe(
         // @ts-ignore
         map(({ data }) => {
-          return createAndPublishOrgObjective.request(data);
+          return createAndPublishOrgObjective.success(data);
         }),
         catchError(({ errors }) => of(createAndPublishOrgObjective.failure(errors))),
       );

@@ -39,7 +39,7 @@ const MidYearHelpModal: FC<Props> = () => {
             className={css({
               fontSize: '16px',
               lineHeight: '20px',
-              paddingTop: '20px'
+              paddingTop: '20px',
             })}
           >
             <Trans i18nKey={'need_help_with_objectives_description'}>
@@ -51,7 +51,7 @@ const MidYearHelpModal: FC<Props> = () => {
           className={css({
             fontSize: '16px',
             lineHeight: '20px',
-            paddingTop: '20px'
+            paddingTop: '20px',
           })}
         >
           List out some of the strengths your colleague has, what makes them a good colleague to work with?
@@ -60,7 +60,7 @@ const MidYearHelpModal: FC<Props> = () => {
           className={css({
             fontSize: '16px',
             lineHeight: '20px',
-            paddingTop: '20px'
+            paddingTop: '20px',
           })}
         >
           Can you provide further detail on what they should keep doing or what they improve on?
@@ -69,7 +69,7 @@ const MidYearHelpModal: FC<Props> = () => {
           className={css({
             fontSize: '16px',
             lineHeight: '20px',
-            paddingTop: '20px'
+            paddingTop: '20px',
           })}
         >
           <Trans i18nKey={'watch_video_explanation'}>Watch video explanation</Trans>

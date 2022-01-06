@@ -24,6 +24,7 @@ const SubmitPart: FC<SubmitPartProps> = ({
   const {
     formState: { isValid },
     getValues,
+    trigger,
   } = methods;
 
   const valuess = getValues();
@@ -35,31 +36,31 @@ const SubmitPart: FC<SubmitPartProps> = ({
     <div data-test-id={WITH_SELECTED_TEST}>
       <div className={css({ height: '1px', background: '#E5E5E5' })} />
       <div className={css({ marginTop: '16px' })}>
-        <div className={css(Video_wrapper)}>
-          <h2 className={css(Video_explanation_title)}>Watch video explanation</h2>
+        <div className={css(VideoWrapper)}>
+          <h2 className={css(VideoExplanationTitle)}>Watch video explanation</h2>
           <img src={video_explanation} alt='video_explanation' />
         </div>
-        <div className={css(Block_info)}>
+        <div className={css(BlockInfo)}>
           <div className={css({ alignSelf: 'flex-start' })}>
-            <img className={css(Img_style)} src={defaultImg} alt='photo' />
+            <img className={css(ImgStyle)} src={defaultImg} alt='photo' />
           </div>
           <div className={css({ marginLeft: '16px' })}>
             <h3
               className={css(Names_Style)}
             >{`${selectedPerson?.profile?.firstName} ${selectedPerson?.profile?.lastName}`}</h3>
-            <p className={css(Industry_Style)}>
+            <p className={css(IndustryStyle)}>
               {`${selectedPerson?.workRelationships[0].job?.name}, ${selectedPerson?.workRelationships[0].department?.name}`}
             </p>
-            <span className={css(Treatment_Style)}>I prefer feedback that is: {getPropperToneOfVoice()}</span>
+            <span className={css(TreatmentStyle)}>I prefer feedback that is: {getPropperToneOfVoice()}</span>
           </div>
         </div>
       </div>
-      <div className={css(Notification_Block__Style)}>
+      <div className={css(NotificationBlockStyle)}>
         <p>Fill out the questions below to share your feedback</p>
       </div>
       <div className={css({ marginTop: '24px', marginBottom: '14px' })}>
         <IconButton graphic='information' onPress={() => setInfoModal(() => true)}>
-          <p className={css(Info_help__Style)}>Learn more about how to give great feedback</p>
+          <p className={css(InfohelpStyle)}>Learn more about how to give great feedback</p>
         </IconButton>
       </div>
 
@@ -74,8 +75,8 @@ const SubmitPart: FC<SubmitPartProps> = ({
               }
 
               const value = feedbackItemsS?.length
-                ? feedbackItemsS[feedbackItemsS.findIndex((items) => items.code === item.giveFeedbacka_main_title)]
-                    .content
+                ? feedbackItemsS?.[feedbackItemsS.findIndex((items) => items.code === item.giveFeedbacka_main_title)]
+                    ?.content
                 : splittedValues && splittedValues[i].field;
 
               return (
@@ -93,8 +94,8 @@ const SubmitPart: FC<SubmitPartProps> = ({
                       ...TileCustomStyles,
                     }}
                   >
-                    <h3 className={css(GiveFeedback_title)}>{item.giveFeedback_title}</h3>
-                    <p className={css(GiveFeedback_description)}>{item?.giveFeedback_description}</p>
+                    <h3 className={css(GiveFeedbackTitle)}>{item.giveFeedback_title}</h3>
+                    <p className={css(GiveFeedbackDescription)}>{item?.giveFeedback_description}</p>
                     <GenericItemField
                       name={`feedback.${item.giveFeedback_id}.field`}
                       methods={methods}
@@ -107,10 +108,10 @@ const SubmitPart: FC<SubmitPartProps> = ({
               );
             })}
         </div>
-        <div className={css(Absolute_style)}>
-          <div className={css(Relative_btn_styled)}>
-            <div className={css(Spacing_style)}>
-              <Button styles={[theme.font.fixed.f16, Button_style]} onPress={() => onDraft()}>
+        <div className={css(AbsoluteStyle)}>
+          <div className={css(RelativeBtnStyled)}>
+            <div className={css(SpacingStyle)}>
+              <Button styles={[theme.font.fixed.f16, ButtonStyle]} onPress={() => onDraft()}>
                 <Trans>Save as draft</Trans>
               </Button>
 
@@ -134,7 +135,7 @@ const SubmitPart: FC<SubmitPartProps> = ({
   );
 };
 
-const Absolute_style: Rule = {
+const AbsoluteStyle: Rule = {
   position: 'absolute',
   left: 0,
   bottom: 0,
@@ -143,14 +144,14 @@ const Absolute_style: Rule = {
   height: '112px',
 };
 
-const Relative_btn_styled: Rule = ({ theme }) => ({
+const RelativeBtnStyled: Rule = ({ theme }) => ({
   position: 'relative',
   bottom: theme.spacing.s0,
   left: theme.spacing.s0,
   right: theme.spacing.s0,
   borderTop: `${theme.border.width.b1} solid ${theme.colors.backgroundDarkest}`,
 });
-const Spacing_style: Rule = ({ theme }) => {
+const SpacingStyle: Rule = ({ theme }) => {
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
   return {
@@ -160,7 +161,7 @@ const Spacing_style: Rule = ({ theme }) => {
   };
 };
 
-const Button_style: Rule = ({ theme }) => ({
+const ButtonStyle: Rule = ({ theme }) => ({
   fontWeight: theme.font.weight.bold,
   width: '49%',
   margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
@@ -169,12 +170,12 @@ const Button_style: Rule = ({ theme }) => ({
   color: `${theme.colors.tescoBlue}`,
 });
 
-const Block_info: Rule = {
+const BlockInfo: Rule = {
   display: 'inline-flex',
   alignItems: 'center',
 };
 
-const Img_style: Rule = {
+const ImgStyle: Rule = {
   width: '72px',
   height: '72px',
   borderRadius: '50%',
@@ -186,21 +187,21 @@ const Names_Style: Rule = {
   margin: '0px',
 };
 
-const Industry_Style: Rule = {
+const IndustryStyle: Rule = {
   fontWeight: 'normal',
   fontSize: '16px',
   lineHeight: '20px',
   margin: '0px 0px 4px 0px',
 };
 
-const Treatment_Style: Rule = {
+const TreatmentStyle: Rule = {
   fontWeight: 'normal',
   fontSize: '16px',
   lineHeight: '20px',
   color: '#00539F',
 };
 
-const Notification_Block__Style: Rule = {
+const NotificationBlockStyle: Rule = {
   marginTop: '16px',
   padding: '16px 40px 16px 16px',
   background: '#F3F9FC',
@@ -212,19 +213,19 @@ const Notification_Block__Style: Rule = {
   },
 } as Styles;
 
-const Info_help__Style: Rule = {
+const InfohelpStyle: Rule = {
   color: '#00539F',
   fontSize: '14px',
   margin: '0px 0px 0px 8px',
 };
 
-const Video_explanation_title: Rule = {
+const VideoExplanationTitle: Rule = {
   margin: '16px 0px 16px 0px',
   fontWeight: 'bold',
   fontSize: '20px',
   lineHeight: '24px',
 };
-const Video_wrapper: Rule = {
+const VideoWrapper: Rule = {
   width: '100%',
   maxHeight: '304px',
   marginBottom: '56px',
@@ -233,20 +234,14 @@ const Video_wrapper: Rule = {
     height: '100%',
   },
 } as Styles;
-const GiveFeedbacka_main_title: Rule = {
-  fontWeight: 'bold',
-  fontSize: '18px',
-  lineHeight: '22px',
-  color: '#00539F',
-  margin: '0px',
-};
-const GiveFeedback_title: Rule = {
+
+const GiveFeedbackTitle: Rule = {
   fontWeight: 'bold',
   fontSize: '16px',
   lineHeight: '20px',
   margin: '2px 0px 0px 0px',
 };
-const GiveFeedback_description: Rule = {
+const GiveFeedbackDescription: Rule = {
   margin: '4px 0px 16px 0px',
   fontWeight: 'normal',
   fontSize: '16px',

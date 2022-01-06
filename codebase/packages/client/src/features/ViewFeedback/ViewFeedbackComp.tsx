@@ -1,17 +1,37 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useState, useEffect, useMemo } from 'react';
 import { Button, Rule, useBreakpoints, useStyle, Modal } from '@dex-ddl/core';
 import { Trans } from 'components/Translation';
 import { FilterOption } from 'features/Shared';
 import { IconButton } from 'components/IconButton';
-import { DraftItem, RadioBtns } from './components';
+import { DraftItem, QUESTION_ORDER, RadioBtns } from './components';
+import { NoFeedback } from '../Feedback/components';
 import { Notification } from 'components/Notification';
 import { Icon } from 'components/Icon';
 import { ModalDownloadFeedback, HelpModalReceiveFeedback } from './components/ModalParts';
-import { ColleaguesActions } from '@pma/store';
-import { useDispatch } from 'react-redux';
+import { formatToRelativeDate } from '../../utils';
+import {
+  ColleaguesActions,
+  FeedbackActions,
+  ObjectiveActions,
+  getPropperNotesByCriterionSelector,
+  colleagueUUIDSelector,
+} from '@pma/store';
+import { useDispatch, useSelector } from 'react-redux';
 import { FilterModal } from '../Shared/components/FilterModal';
+import { useHistory } from 'react-router-dom';
+import { FeedbackStatus } from 'config/enum';
+
+import { usePDF, FeedbackDocument, downloadPDF } from '@pma/pdf-renderer';
+
+type filterFeedbacksType = {
+  AZ: boolean;
+  ZA: boolean;
+  newToOld: boolean;
+  oldToNew: boolean;
+};
 
 const ViewFeedbackComp: FC = () => {
+  const history = useHistory();
   const { css } = useStyle();
   const dispatch = useDispatch();
   const [helpModalReceiveFeedback, setHelpModalReceiveFeedback] = useState<boolean>(false);
@@ -26,7 +46,7 @@ const ViewFeedbackComp: FC = () => {
   const [focus, setFocus] = useState(false);
   const [searchValueFilterOption, setSearchValueFilterOption] = useState('');
   const [filterModal, setFilterModal] = useState(false);
-  const [filterFeedbacks, setFilterFeedbacks] = useState({
+  const [filterFeedbacks, setFilterFeedbacks] = useState<filterFeedbacksType>({
     AZ: false,
     ZA: false,
     newToOld: false,
@@ -40,13 +60,123 @@ const ViewFeedbackComp: FC = () => {
     }
   }, [focus]);
 
-  const draftFeedback = (id) => {
-    console.log('id', id);
-  };
-
   const closeHandler = () => {
     setOpenMainModal(() => false);
   };
+
+  // store
+  const isReaded = checkedRadio.read && !checkedRadio.unread;
+  const searchValue = searchValueFilterOption.replace(/\s+/g, '').toLowerCase();
+
+  const filterFn = (item, isReaded) => {
+    const fullName =
+      `${item?.colleagueProfile?.colleague?.profile?.firstName}${item?.colleagueProfile?.colleague?.profile?.lastName}`.toLowerCase();
+
+    return fullName.includes(searchValue) && isReaded === item.read;
+  };
+
+  const sortFn = (i1, i2) => {
+    const { AZ, ZA, newToOld, oldToNew } = filterFeedbacks;
+
+    let val1 = '';
+    let val2 = '';
+
+    const swapVariables = (a, b) => {
+      b = [a, (a = b)][0];
+      return [a, b];
+    };
+
+    switch (true) {
+      case AZ || ZA: {
+        const firstNameGetter = (item) => item.firstName || '';
+
+        val1 = firstNameGetter(i1);
+        val2 = firstNameGetter(i2);
+
+        if (ZA) {
+          [val1, val2] = swapVariables(val1, val2);
+        }
+
+        break;
+      }
+      case newToOld || oldToNew: {
+        const createdTimeGetter = (item) => String(item.createdTime || '');
+
+        val1 = createdTimeGetter(i1);
+        val2 = createdTimeGetter(i2);
+
+        if (newToOld) {
+          [val1, val2] = swapVariables(val1, val2);
+        }
+
+        break;
+      }
+    }
+
+    return val1.localeCompare(val2);
+  };
+
+  const colleagueUuid = useSelector(colleagueUUIDSelector);
+  const submittedCompletedNotes =
+    useSelector(
+      getPropperNotesByCriterionSelector({
+        status: FeedbackStatus.SUBMITTED,
+        isReaded,
+        filterFn,
+        sortFn,
+        serializer: (item) => ({
+          ...item,
+          firstName: item?.colleagueProfile?.colleague?.profile?.firstName || '',
+          lastName: item?.colleagueProfile?.colleague?.profile?.lastName || '',
+          jobName: item?.colleagueProfile?.colleague?.workRelationships[0].job.name || '',
+          departmentName: item?.colleagueProfile?.colleague?.workRelationships[0].department?.name || '',
+          feedbackItems: item?.feedbackItems.sort(
+            (i1, i2) => QUESTION_ORDER.indexOf(i1.code) - QUESTION_ORDER.indexOf(i2.code),
+          ),
+          updatedTime: formatToRelativeDate(item.updatedTime),
+        }),
+      }),
+    ) || [];
+
+  const document = useMemo(
+    () => <FeedbackDocument items={submittedCompletedNotes} />,
+    [submittedCompletedNotes.length],
+  );
+
+  const [instance, updateInstance] = usePDF({ document });
+
+  useEffect(() => {
+    if (submittedCompletedNotes.length) {
+      updateInstance();
+    }
+  }, [submittedCompletedNotes.length]);
+
+  useEffect(() => {
+    if (!colleagueUuid) {
+      return;
+    }
+
+    dispatch(
+      FeedbackActions.getAllFeedbacks({
+        'target-colleague-uuid': colleagueUuid,
+      }),
+    );
+  }, [colleagueUuid]);
+
+  useEffect(() => {
+    if (!submittedCompletedNotes.length) {
+      return;
+    }
+
+    if (isReaded) {
+      submittedCompletedNotes.forEach(
+        (item) => item.targetId && dispatch(ObjectiveActions.getReviewByUuid({ uuid: item.targetId })),
+      );
+    } else {
+      dispatch(FeedbackActions.readFeedback({ uuid: submittedCompletedNotes[0].uuid }));
+    }
+  }, [isReaded]);
+
   return (
     <>
       {helpModalReceiveFeedback && (
@@ -83,7 +213,7 @@ const ViewFeedbackComp: FC = () => {
             filterModal={filterModal}
             setFilterFeedbacks={setFilterFeedbacks}
           />
-          <div className={css(Flex_center_styled)}>
+          <div className={css(FlexCenterStyled)}>
             <IconButton
               graphic='information'
               iconStyles={iconStyle}
@@ -115,57 +245,53 @@ const ViewFeedbackComp: FC = () => {
             />
           </div>
         </div>
-        <div className={css(Reverse_Items_Styled)}>
-          <div className={css(Drafts_style)}>
-            <DraftItem
-              draftFeedback={draftFeedback}
-              checkedRadio={checkedRadio}
-              searchValue={searchValueFilterOption}
-              focus={focus}
-              setFocus={setFocus}
-              filterModal={filterModal}
-              setFilterModal={setFilterModal}
-              setFilterFeedbacks={setFilterFeedbacks}
-              filterFeedbacks={filterFeedbacks}
-            />
+        <div className={css(ReverseItemsStyled)}>
+          <div className={css(DraftsStyle)}>
+            {submittedCompletedNotes.length ? (
+              submittedCompletedNotes.map((item) => <DraftItem key={item.uuid} item={item} />)
+            ) : (
+              <NoFeedback />
+            )}
           </div>
-          <div className={css(Buttons_actions_style)}>
-            <div className={css(Button_container_style)}>
+          <div className={css(ButtonsActionsStyle)}>
+            <div className={css(ButtonContainerStyle)}>
               <div className={css({ display: 'inline-flex' })}>
                 <Icon
                   graphic='chatSq'
                   iconStyles={{ verticalAlign: 'middle', margin: '2px 10px 0px 0px' }}
                   backgroundRadius={10}
                 />
-                <span className={css(ShareFeedback_Styled)}>Share feedback</span>
+                <span className={css(ShareFeedbackStyled)}>Share feedback</span>
               </div>
-              <p className={css(Question_Styled)}>Give feedback to a colleague</p>
+              <p className={css(QuestionStyled)}>Give feedback to a colleague</p>
               <Button
                 styles={[iconBtnStyle]}
                 onPress={() => {
-                  console.log('hello');
+                  history.push('/feedback/give-feedback');
                 }}
               >
-                <Trans i18nKey='share_feedback'>Share feedback</Trans>
+                <Trans>Share feedback</Trans>
               </Button>
             </div>
-            <div className={css(Button_container_style)}>
+            <div className={css(ButtonContainerStyle)}>
               <div className={css({ display: 'inline-flex' })}>
                 <Icon
                   graphic='download'
                   iconStyles={{ verticalAlign: 'middle', margin: '2px 10px 0px 0px' }}
                   backgroundRadius={10}
                 />
-                <span className={css(Size_style)}>Download feedback</span>
+                <span className={css(SizeStyle)}>Download feedback</span>
               </div>
-              <p className={css(Saved_styled)}>Download feedback to your device</p>
+              <p className={css(SavedStyled)}>Download feedback to your device</p>
               <Button
-                styles={[iconBtnStyle, { maxWidth: '161px !important' }]}
-                onPress={() => {
-                  setOpenMainModal(() => true);
-                }}
+                styles={[iconBtnStyle, { maxWidth: '181px !important' }]}
+                onPress={() => downloadPDF(instance.url!, 'feedbacks.pdf')}
               >
-                <Trans>Download feedback</Trans>
+                {instance.loading ? (
+                  <Trans i18nKey='loading'>Loading...</Trans>
+                ) : (
+                  <Trans i18nKey='download_all_feedbacks'>Download all feedbacks</Trans>
+                )}
               </Button>
             </div>
             <Notification
@@ -220,21 +346,21 @@ const ViewFeedbackComp: FC = () => {
   );
 };
 
-const Saved_styled: Rule = {
+const SavedStyled: Rule = {
   fontWeight: 'normal',
   fontSize: '16px',
   lineHeight: '20px',
   margin: '4px 0px 0px 0px',
 };
 
-const Size_style: Rule = {
+const SizeStyle: Rule = {
   fontWeight: 'bold',
   fontSize: '18px',
   lineHeight: '22px',
   color: '#00539F',
 };
 
-const Flex_center_styled: Rule = {
+const FlexCenterStyled: Rule = {
   display: 'flex',
   alignItems: 'center',
   position: 'relative',
@@ -253,21 +379,21 @@ const SpaceBeetweenStyled: Rule = () => {
   };
 };
 
-const Question_Styled: Rule = {
+const QuestionStyled: Rule = {
   fontWeight: 'normal',
   fontSize: '16px',
   lineHeight: '20px',
   margin: '4px 0px 0px 0px',
 };
 
-const ShareFeedback_Styled: Rule = {
+const ShareFeedbackStyled: Rule = {
   fontWeight: 'bold',
   fontSize: '18px',
   lineHeight: '22px',
   color: '#00539F',
 };
 
-const Reverse_Items_Styled: Rule = {
+const ReverseItemsStyled: Rule = {
   display: 'flex',
   flexWrap: 'wrap-reverse',
   gridGap: '8px',
@@ -279,7 +405,7 @@ const iconStyle: Rule = {
   marginRight: '10px',
 };
 
-const Buttons_actions_style: Rule = () => {
+const ButtonsActionsStyle: Rule = () => {
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
   return {
@@ -293,14 +419,14 @@ const Buttons_actions_style: Rule = () => {
   };
 };
 
-const Drafts_style: Rule = {
+const DraftsStyle: Rule = {
   flex: '3 1 676px',
   display: 'flex',
   flexDirection: 'column',
   gap: '8px',
 };
 
-const Button_container_style: Rule = {
+const ButtonContainerStyle: Rule = {
   background: '#FFFFFF',
   boxShadow: '3px 3px 1px 1px rgba(0, 0, 0, 0.05)',
   borderRadius: '10px',

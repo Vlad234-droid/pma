@@ -32,7 +32,6 @@ const ModalGiveFeedback: FC<ModalGiveFeedbackProps> = ({
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
 
   const { handleSubmit, reset, getValues, trigger } = methods;
-  const values = getValues();
 
   const switchClose = (): void => {
     reset();
@@ -194,7 +193,7 @@ const ModalGiveFeedback: FC<ModalGiveFeedbackProps> = ({
 
   return (
     <>
-      <div className={css(Wrapper_modal_GiveFeedback_style)}>
+      <div className={css(WrapperModalGiveFeedbackStyle)}>
         <div
           className={css({
             fontWeight: 'bold',
@@ -248,7 +247,7 @@ const ModalGiveFeedback: FC<ModalGiveFeedbackProps> = ({
     </>
   );
 };
-const Wrapper_modal_GiveFeedback_style: Rule = {
+const WrapperModalGiveFeedbackStyle: Rule = {
   paddingLeft: '40px',
   paddingRight: '40px',
   height: '100%',

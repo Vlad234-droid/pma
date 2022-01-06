@@ -24,23 +24,21 @@ const FeedbackCard: FC<FeedbackCardProps> = ({ card }) => {
             <div className={css({ fontWeight: 'normal', fontSize: '14px', lineHeight: '18px' })}>{card.text}</div>
             <div className={css({ display: 'flex', alignItems: 'center', marginTop: '21px' })}>
               <div className={css(IconStyle)}>{card.icon}</div>
-              <div
-                className={css({
-                  marginLeft: '10px',
-                  fontStyle: 'normal',
-                  fontWeight: 'normal',
-                  fontSize: '16px',
-                  lineHeight: '20px',
-                })}
-              >
-                {card.iconText}
-              </div>
+              <div className={css(IconText)}>{card.iconText}</div>
             </div>
           </div>
         </TileWrapper>
       </Link>
     </div>
   );
+};
+
+const IconText: Rule = {
+  marginLeft: '10px',
+  fontStyle: 'normal',
+  fontWeight: 'normal',
+  fontSize: '16px',
+  lineHeight: '20px',
 };
 
 const cardStyle: Rule = () => {

@@ -7,6 +7,7 @@ type GenericItemFormProps = {
   value?: string;
   label?: string;
   placeholder?: string;
+  readonly?: boolean;
   methods: UseFormReturn;
   Element: FC<any>;
   Wrapper?: FC<any>;
@@ -24,6 +25,7 @@ export const GenericItemField: FC<GenericItemFormProps> = ({
   Wrapper = 'div',
   placeholder,
   label,
+  readonly,
   onChange,
   getSelected,
   options,
@@ -47,6 +49,7 @@ export const GenericItemField: FC<GenericItemFormProps> = ({
         isValid={!errors[name]}
         name={name}
         value={state}
+        readonly={readonly}
         onChange={(e, value) => {
           setState(e.target.value);
           register(name).onChange(e);

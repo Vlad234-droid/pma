@@ -5,17 +5,14 @@ import { Accordion, BaseAccordion, Section, Panel, ExpandButton } from 'componen
 import { IconButton, Position } from 'components/IconButton';
 import { Trans } from 'components/Translation';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  FeedbackActions,
-  ObjectiveActions,
-  getReviewByUuidS,
-  getPropperNotesByStatusSelector,
-  colleagueUUIDSelector,
-} from '@pma/store';
-import { filteredByInputSearchHandler, filteredNotesByRadiosBtnsHandler, getPropperTime } from '../../../utils';
+import { FeedbackActions, ObjectiveActions, getPropperNotesByStatusSelector, colleagueUUIDSelector } from '@pma/store';
+import { filteredByInputSearchHandler, filteredNotesByRadiosBtnsHandler, formatToRelativeDate } from '../../../utils';
 import defaultImg from '../../../../public/default.png';
-import { TargetTypeReverse, FeedbackStatus } from 'config/enum';
+import { FeedbackStatus } from 'config/enum';
 import { DraftItemProps } from '../type';
+import { NoFeedback } from '../../Feedback/components';
+import PendingNotes from './PendingNotes';
+import CompletedNotes from './CompletedNotes';
 
 export const TEST_ID = 'test_id';
 
@@ -34,7 +31,7 @@ const DraftItem: FC<DraftItemProps> = ({
   const dispatch = useDispatch();
   const pendingNotes = useSelector(getPropperNotesByStatusSelector(FeedbackStatus.PENDING)) || [];
   const completedNotes = useSelector(getPropperNotesByStatusSelector(FeedbackStatus.COMPLETED)) || [];
-  const review = useSelector(getReviewByUuidS) || [];
+
   const colleagueUuid = useSelector(colleagueUUIDSelector);
 
   useEffect(() => {
@@ -66,13 +63,6 @@ const DraftItem: FC<DraftItemProps> = ({
     }
   }, [completedNotes.length]);
 
-  if (checkedRadio.pending && !pendingNotes.length) {
-    return null;
-  }
-  if (checkedRadio.completed && !completedNotes.length) {
-    return null;
-  }
-
   const getPropperNotes = () => {
     if (checkedRadio.completed && searchValue.length <= 2 && Object.values(filterFeedbacks).every((item) => !item)) {
       return completedNotes;
@@ -99,29 +89,18 @@ const DraftItem: FC<DraftItemProps> = ({
     }
   };
 
-  const getPropperTargetType = (targetType, targetId) => {
-    const capitalType =
-      TargetTypeReverse[targetType] &&
-      TargetTypeReverse[targetType].charAt(0).toUpperCase() + TargetTypeReverse[targetType].slice(1);
-
-    if (capitalType) {
-      let targetTypeStr = '';
-      review.forEach((item) => {
-        if (item.uuid === targetId) {
-          targetTypeStr = item.title;
-        }
-      });
-
-      return `“${capitalType}${targetTypeStr !== '' ? ':' : ''} ${targetTypeStr}”`;
-    }
-    return '';
-  };
+  if (checkedRadio.pending && !getPropperNotes().length) {
+    return <NoFeedback />;
+  }
+  if (checkedRadio.completed && !getPropperNotes().length) {
+    return <NoFeedback />;
+  }
 
   return (
     <>
       {getPropperNotes()?.map((item) => (
         <div key={item.uuid}>
-          <TileWrapper>
+          <TileWrapper customStyle={{ padding: '24px 24px 24px 24px' }}>
             <Accordion
               id={`draft-accordion-${item.uuid}`}
               customStyle={{
@@ -133,22 +112,22 @@ const DraftItem: FC<DraftItemProps> = ({
                 {() => (
                   <>
                     <Section defaultExpanded={false}>
-                      <div className={css(Draft_Styles)}>
-                        <div className={css(Block_info)}>
+                      <div className={css(DraftStyles)}>
+                        <div className={css(BlockInfo)}>
                           <div className={css({ alignSelf: 'flex-start' })}>
-                            <img className={css(Img_style)} src={defaultImg} alt='photo' />
+                            <img className={css(ImgStyle)} src={defaultImg} alt='photo' />
                           </div>
                           <div className={css({ marginLeft: '16px' })}>
                             <h3
-                              className={css(Names_Style)}
+                              className={css(NamesStyle)}
                             >{`${item?.targetColleagueProfile?.colleague?.profile?.firstName} ${item?.targetColleagueProfile?.colleague?.profile?.lastName}`}</h3>
                             <p
-                              className={css(Industry_Style)}
+                              className={css(IndustryStyle)}
                             >{`${item?.targetColleagueProfile?.colleague?.workRelationships[0].job.name}, ${item?.targetColleagueProfile?.colleague?.workRelationships[0].department?.name}`}</p>
                           </div>
                         </div>
                         <div className={css({ display: 'flex', justifyContent: 'center', alignItems: 'center' })}>
-                          <div className={css({ marginRight: '26px' })}>{getPropperTime(item.updatedTime)}</div>
+                          <div className={css({ marginRight: '26px' })}>{formatToRelativeDate(item.updatedTime)}</div>
                           <div data-test-id={TEST_ID}>
                             <ExpandButton />
                           </div>
@@ -160,54 +139,14 @@ const DraftItem: FC<DraftItemProps> = ({
                           boarder={false}
                           customStyle={{
                             padding: '16px',
-                            margin: '0px 28px 16px 24px',
+                            margin: '24px 24px 24px 0px',
                             borderRadius: '10px',
                             background: '#F3F9FC',
+                            width: 'auto',
                           }}
                         >
-                          {checkedRadio.pending && (
-                            <>
-                              <h3 className={css(Tile_title)}>
-                                This colleague has requested feedback from you. Fill out the questions below to share
-                                your feedback.
-                              </h3>
-                              <h3 className={css(Sphere_resond_style)}>
-                                {getPropperTargetType(item.targetType, item.targetId)}
-                              </h3>
-                              <p className={css(Question_style)}>Let the colleague know how they&apos;re doing</p>
-                            </>
-                          )}
-                          {checkedRadio.completed && (
-                            <>
-                              <h3 className={css(Sphere_resond_style)}>
-                                {getPropperTargetType(item.targetType, item.targetId)}
-                              </h3>
-                              <div className={css(Info_block_style)}>
-                                <h3>Question 1</h3>
-                                {item.feedbackItems.map((question) => {
-                                  return (
-                                    <p key={question.code}>{question.code === 'Question 1' && question.content}</p>
-                                  );
-                                })}
-                              </div>
-                              <div className={css(Info_block_style)}>
-                                <h3>Question 2</h3>
-                                {item.feedbackItems.map((question) => {
-                                  return (
-                                    <p key={question.code}>{question.code === 'Question 2' && question.content}</p>
-                                  );
-                                })}
-                              </div>
-                              <div className={css(Info_block_style)}>
-                                <h3>Anything else?</h3>
-                                {item.feedbackItems.map((question) => {
-                                  return (
-                                    <p key={question.code}>{question.code === 'Anything else?' && question.content}</p>
-                                  );
-                                })}
-                              </div>
-                            </>
-                          )}
+                          {checkedRadio.pending && <PendingNotes item={item} />}
+                          {checkedRadio.completed && <CompletedNotes item={item} />}
                         </TileWrapper>
                         {checkedRadio.completed ? (
                           <></>
@@ -242,68 +181,35 @@ const DraftItem: FC<DraftItemProps> = ({
   );
 };
 
-const Draft_Styles: Rule = {
-  padding: '24px',
+const DraftStyles: Rule = {
   display: 'flex',
   justifyContent: 'space-between',
 };
 
-const Block_info: Rule = {
+const BlockInfo: Rule = {
   display: 'inline-flex',
   alignItems: 'center',
 };
 
-const Img_style: Rule = {
+const ImgStyle: Rule = {
   width: '48px',
   height: '48px',
   borderRadius: '50%',
 };
-const Names_Style: Rule = {
+const NamesStyle: Rule = {
   fontWeight: 'bold',
   fontSize: '18px',
   lineHeight: '22px',
   margin: '0px',
   color: '#00539F',
 };
-const Industry_Style: Rule = {
+const IndustryStyle: Rule = {
   fontWeight: 'normal',
   fontSize: '16px',
   lineHeight: '20px',
   margin: '4px 0px 0px 0px',
 };
 
-const Tile_title: Rule = {
-  fontWeight: 'normal',
-  fontSize: '16px',
-  lineHeight: '20px',
-  margin: '0px 0px 4px 0px',
-};
-
-const Sphere_resond_style: Rule = {
-  fontWeight: 'bold',
-  fontSize: '18px',
-  lineHeight: '22px',
-  color: '#00539F',
-  margin: '0px 0px 16px 0px',
-};
-const Question_style: Rule = {
-  fontWeight: 'normal',
-  fontSize: '16px',
-  lineHeight: '20px',
-  margin: '0px',
-};
-const Info_block_style: Rule = {
-  marginBottom: '16px',
-  '& > h3': {
-    margin: '0px',
-    fontWeight: 'bold',
-    fontSize: '14px',
-  },
-  '& > p': {
-    margin: '0px',
-    fontSize: '14px',
-  },
-} as Styles;
 const iconBtnStyle: Rule = ({ theme }) => ({
   padding: '12px 7px 12px 20px',
   display: 'flex',
@@ -320,7 +226,7 @@ const iconBtnStyle: Rule = ({ theme }) => ({
   whiteSpace: 'nowrap',
   marginLeft: 'auto',
   marginRight: '24px',
-  marginBottom: '24px',
+
   fontWeight: 'bold',
 });
 

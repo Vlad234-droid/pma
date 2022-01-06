@@ -27,7 +27,7 @@ const StatusBadge: FC<StatusBadgeProps> = ({ status, styles }) => {
       case isPending:
         return ['roundClock', t('waiting_for_approval', 'Waiting for approval'), colors.pending];
       case isDeclined:
-        return ['roundAlert', t('decline', 'Decline'), colors.base];
+        return ['roundAlert', t('declined', 'Declined'), colors.base];
       case isDraft:
       default:
         return ['roundPencil', t('draft', 'Draft'), colors.base];
