@@ -149,6 +149,12 @@ const MyObjectives: FC = () => {
 
   const { loaded } = useSelector(getTimelineMetaSelector) || {};
 
+  const handleShareClick = () => {
+    const link = window.document.createElement('a');
+    link.href = `mailto:`;
+    link.dispatchEvent(new MouseEvent('click'));
+  };
+
   useEffect(() => {
     if (!loaded) dispatch(TimelineActions.getTimeline({ colleagueUuid }));
   }, [loaded]);
@@ -210,7 +216,7 @@ const MyObjectives: FC = () => {
                       <Trans i18nKey='download'>Download</Trans>
                     </IconButton>
                     <IconButton
-                      onPress={() => alert('share')}
+                      onPress={() => handleShareClick()}
                       graphic='share'
                       customVariantRules={{ default: iconButtonStyles }}
                       iconStyles={iconStyles}
