@@ -1,5 +1,4 @@
 import React, { FC } from 'react';
-import { colors, fontWeight, Rule, Styles } from '@dex-ddl/core';
 import { Accordion, Header, HeaderProps, Panel, Section } from 'components/Accordion';
 import { ObjectiveButtons } from '../Buttons';
 import { Status } from 'config/enum';

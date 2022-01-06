@@ -3,12 +3,13 @@ import { Button, Rule, useBreakpoints, useStyle, Modal } from '@dex-ddl/core';
 import { Trans } from 'components/Translation';
 import { FilterOption } from 'features/Shared';
 import { IconButton } from 'components/IconButton';
-import { DraftItem, QUESTION_ORDER, RadioBtns } from './components';
-import { NoFeedback } from '../Feedback/components';
+import DraftItem, { QUESTION_ORDER } from '../DraftItem';
+import RadioBtns from '../RadioBtns';
+import { NoFeedback } from '../../../Feedback/components';
 import { Notification } from 'components/Notification';
 import { Icon } from 'components/Icon';
-import { ModalDownloadFeedback, HelpModalReceiveFeedback } from './components/ModalParts';
-import { formatToRelativeDate } from '../../utils';
+import { ModalDownloadFeedback, HelpModalReceiveFeedback } from '../ModalParts';
+import { formatToRelativeDate } from 'utils';
 import {
   ColleaguesActions,
   FeedbackActions,
@@ -17,7 +18,7 @@ import {
   colleagueUUIDSelector,
 } from '@pma/store';
 import { useDispatch, useSelector } from 'react-redux';
-import { FilterModal } from '../Shared/components/FilterModal';
+import { FilterModal } from '../../../Shared/components/FilterModal';
 import { useHistory } from 'react-router-dom';
 import { FeedbackStatus } from 'config/enum';
 
@@ -30,7 +31,7 @@ type filterFeedbacksType = {
   oldToNew: boolean;
 };
 
-const ViewFeedbackComp: FC = () => {
+const ViewFeedback: FC = () => {
   const history = useHistory();
   const { css } = useStyle();
   const dispatch = useDispatch();
@@ -146,9 +147,7 @@ const ViewFeedbackComp: FC = () => {
   const [instance, updateInstance] = usePDF({ document });
 
   useEffect(() => {
-    if (submittedCompletedNotes.length) {
-      updateInstance();
-    }
+    updateInstance();
   }, [submittedCompletedNotes.length]);
 
   useEffect(() => {
@@ -225,7 +224,7 @@ const ViewFeedbackComp: FC = () => {
               focus={focus}
               customIcon={true}
               searchValue={searchValueFilterOption}
-              onFocus={() => setFocus(() => true)}
+              onFocus={setFocus}
               withIcon={false}
               customStyles={{
                 ...(focus ? { padding: '10px 20px 10px 16px' } : { padding: '0px' }),
@@ -234,7 +233,7 @@ const ViewFeedbackComp: FC = () => {
               onChange={(e) => setSearchValueFilterOption(() => e.target.value)}
               onSettingsPress={() => {
                 setFilterModal((prev) => !prev);
-                setFocus(() => false);
+                setFocus(false);
               }}
             />
             <FilterModal
@@ -514,4 +513,4 @@ const modalTitleOptionStyle: Rule = () => {
   };
 };
 
-export default ViewFeedbackComp;
+export default ViewFeedback;
