@@ -23,7 +23,7 @@ export const getOrgObjectivesEpic: Epic = (action$, _, { api }) =>
 
 export const getOrgAuditLogsEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
-    filter(isActionOf(getOrgAuditLogs.request)),
+    filter(isActionOf(getOrgAuditLogs.request) || isActionOf(createAndPublishOrgObjective.success) ),
     switchMap(({ payload }) =>
       from(api.getOrgAuditLogs(payload)).pipe(
         // @ts-ignore

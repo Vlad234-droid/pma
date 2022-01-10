@@ -63,7 +63,6 @@ const CreateOrganizationObjectives: FC<Props> = () => {
       }),
     );
 
-    setTimeout(_ => dispatch(OrgObjectiveActions.getOrgAuditLogs({ start: 1, limit: 3 })), 100);
   };
 
   const checkInputData = () => {
@@ -99,9 +98,6 @@ const CreateOrganizationObjectives: FC<Props> = () => {
 
   useEffect(() => {
     dispatch(OrgObjectiveActions.getOrgAuditLogs({ start: 1, limit: 3 }));
-  }, []);
-
-  useEffect(() => {
     dispatch(OrgObjectiveActions.getOrgObjectives({}));
   }, []);
 
