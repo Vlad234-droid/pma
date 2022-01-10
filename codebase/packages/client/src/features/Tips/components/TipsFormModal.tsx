@@ -36,7 +36,7 @@ const TipsFormModal: FC<TipsFormModalProps> = ({ action, negativeBtnAction, posi
     },
     confirmDelete: {
       title: 'Delete',
-      body: `Do you want to delete [${tipTitle}] tip?`,
+      body: `Do you want to delete ${tipTitle} tip?`,
       negativeBtnText: 'Cancel',
       positiveBtnText: 'Delete',
       showImage: false,

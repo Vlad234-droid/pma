@@ -466,6 +466,7 @@ const hrSeparatorLine: Rule = ({ theme }) => {
   return {
     height: '1px',
     background: theme.colors.backgroundDarkest,
+    marginBottom: '25px',
   }
 }
 
