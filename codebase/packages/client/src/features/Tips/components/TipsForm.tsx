@@ -388,7 +388,7 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
             { mode === 'edit' && 
                 <IconButton 
                   onPress={confirmDeleteTip} 
-                  graphic='trash'
+                  graphic='delete'
                   iconStyles={{ marginRight: '5px' }}
                   customVariantRules={{
                     default: deleteTipBtnStyles,

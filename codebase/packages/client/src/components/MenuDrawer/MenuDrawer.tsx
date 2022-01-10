@@ -15,6 +15,8 @@ export type MenuDrawerProps = { onClose: () => void };
 
 export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isOpenDropdown, setIsOpenDropdown] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(true);
   const { css } = useStyle();
   const { t } = useTranslation();
 
@@ -28,6 +30,10 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
     setIsOpen(false);
   };
 
+  const handleOpenDropdown = () => {
+    setIsOpenDropdown(!isOpenDropdown)
+  }
+
   return (
     <div className={css(menuDrawerWrapperStyle)}>
       <div className={css(menuDrawerContentStyle)}>
@@ -38,31 +44,65 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
           </div>
           <div className={css(menuDrawerTitleStyle)}>Performance management application</div>
           <div className={css(menuDrawerButtonsStyle)}>
-            <MenuItem iconGraphic={'calender'} linkTo={buildPath(Page.CONTRIBUTION)} title={'Your Contribution'} />
+            <MenuItem iconGraphic={'home'} linkTo={buildPath(Page.CONTRIBUTION)} title={'Your Contribution'} />
             <MenuItem
-              iconGraphic={'document'}
+              iconGraphic={'aim'}
               linkTo={buildPath(Page.OBJECTIVES_VIEW)}
-              title={t('my_objectives_and_reviews', 'My objectives and reviews')}
+              title={'My Business Objectives'}
+              // title={t('my_objectives_and_reviews', 'My objectives and reviews')}
             />
-            <MenuItem
-              iconGraphic={'document'}
-              linkTo={buildPath(Page.CREATE_STRATEGIC_DRIVERS)}
-              title={'Strategic drivers'}
-            />
-            <MenuItem iconGraphic={'add'} title={'Personal Development plan'} />
-            <MenuItem iconGraphic={'account'} linkTo={buildPath(Page.PROFILE)} title={'My profile'} />
+            <MenuItem iconGraphic={'list'} title={'Development Plan'} />
+            <MenuItem iconGraphic={'edit'} linkTo={buildPath(Page.NOTES)} title={'My Notes'} />
+            <MenuItem iconGraphic={'account'} linkTo={buildPath(Page.PROFILE)} title={'My Profile'} />
             <MenuItem iconGraphic={'chatSq'} linkTo={buildPath(Page.FEEDBACK)} title={'Feedback'} />
-            <MenuItem iconGraphic={'edit'} linkTo={buildPath(Page.NOTES)} title={'My notes'} />
-            <MenuItem iconGraphic={'alert'} linkTo={buildPath(Page.PERFORMANCE_CYCLE)} title={'Performance cycle'} />
+            <MenuItem iconGraphic={'performance'} linkTo={buildPath(Page.PERFORMANCE_CYCLE)} title={'Support your Performance'} />
+            <MenuItem iconGraphic={'team'} linkTo={'/'} title={'Team Reporting'} />
+            <MenuItem iconGraphic={'calibration'} linkTo={'/'} title={'Calibration Ratings'} />
           </div>
         </div>
         <div className={css(menuDrawerSettingsStyle)}>
-          <Link to={buildPath(Page.TIPS)} className={css(itemSettingsStyle)}>
-            {/* TODO: change tips' icon */}
-            <Icon graphic={'support'} />
-            <span className={css(itemSettingsTextStyle)}>Tips</span>
-          </Link>
-          <Link to={''} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
+          { isAdmin && 
+              <div className={css(itemSettingsStyle, adminToolsStyle)} onClick={handleOpenDropdown}>
+                <Icon graphic={'tool'} />
+                <span className={css(itemSettingsTextStyle)}>Administrator tools</span>
+                <Icon 
+                  graphic={'arrowDown'} 
+                  iconStyles={{ 
+                    marginLeft: '15px', 
+                    transform: isOpenDropdown ? 'rotate(-0deg)': 'rotate(-90deg)',
+                    transition: 'all .2s ease-in-out',
+                  }} 
+                />
+              </div>
+          }
+
+          { isOpenDropdown && 
+              <div className={css(menuDropdownStyle)}>
+                <Link to={buildPath(Page.CREATE_PERFORMANCE_CYCLE)} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
+                  <Icon graphic={'createCycle'} />
+                  <span className={css(itemSettingsTextStyle)}>Create Performance cycle</span>
+                </Link>
+                <Link to={buildPath(Page.CREATE_STRATEGIC_DRIVERS)} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
+                  <Icon graphic={'strategicDriver'} />
+                  <span className={css(itemSettingsTextStyle)}>Strategic Drivers</span>
+                </Link>
+                <Link to={'/'} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
+                  <Icon graphic={'configuration'} />
+                  <span className={css(itemSettingsTextStyle)}>Configurations</span>
+                </Link>
+                <Link to={buildPath(Page.TIPS)} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
+                  <Icon graphic={'tip'} />
+                  <span className={css(itemSettingsTextStyle)}>Tips</span>
+                </Link>
+                <Link to={'/'} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
+                  <Icon graphic={'multiLanguage'} />
+                  <span className={css(itemSettingsTextStyle)}>Multi-lingual administration</span>
+                </Link>
+              </div>
+          }
+          { isAdmin && <div className={css(itemSettingsBorderStyle, {marginLeft: '20px'})}></div> }
+
+          <Link to={''} className={css(itemSettingsStyle)}>
             <Icon graphic={'settingsGear'} />
             <span className={css(itemSettingsTextStyle)}>Settings</span>
           </Link>
@@ -128,7 +168,7 @@ const menuDrawerButtonsStyle = {
 const menuDrawerSettingsStyle = {
   background: '#FFFFFF',
   height: '100%',
-  padding: '6px 0 0 18px',
+  padding: '6px 0 0 0',
 } as Rule;
 
 const itemSettingsTextStyle = {
@@ -139,8 +179,19 @@ const itemSettingsStyle = {
   display: 'flex',
   alignItems: 'center',
   padding: '12px 0',
+  margin: '0 0 0 20px',
 } as Rule;
 
 const itemSettingsBorderStyle: Rule = ({ theme }) => ({
   borderTop: `1px solid ${theme.colors.backgroundDarkest}`,
 });
+
+const menuDropdownStyle = { 
+  backgroundColor: '#F3F9FC',
+  transition: 'all .5s esea-in-out',
+} as Rule;
+
+const adminToolsStyle = {
+  cursor: 'pointer',
+  userSelect: 'none',
+} as Rule;
