@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
 import { Rule, Styles, useStyle, CreateRule } from '@dex-ddl/core';
+import MarkdownRenderer from 'components/MarkdownRenderer';
 
 import { TileWrapper } from 'components/Tile';
 
@@ -55,7 +56,9 @@ export const ObjectiveTileExplanations: FC<Pick<Props, 'explanations' | 'withSpa
     <>
       {explanations.map(({ title, steps }, idx) => (
         <div className={css(explanationStyles)} key={idx}>
-          <h4 className={css(explanationSubTitleStyles({ withSpacing }))}>{title}</h4>
+          <h4 className={css(explanationSubTitleStyles({ withSpacing }))}>
+            <MarkdownRenderer source={title} />
+          </h4>
           <div className={css(listStyles)}>
             {steps.map((step, idx) => (
               <div className={css(explanationDescriptionStyles)} key={idx}>

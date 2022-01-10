@@ -6,6 +6,7 @@ import { FeedbackStatus } from '@pma/client/src/config/enum';
 //@ts-ignore
 
 type statusType = 'DRAFT' | 'SUBMITTED' | 'PENDING' | 'COMPLETED';
+
 export const feedbackSelector = (state: RootState) => state.feedback;
 
 export const getCompletedFeedbackNotesS = createSelector(feedbackSelector, (feedback: any) => {
@@ -35,6 +36,31 @@ export const getPropperNotesByStatusSelector = (status) =>
           }
         });
       });
+
       return filteredByStatus;
     }
+  });
+
+export const getPropperNotesByCriterionSelector = ({ status, isReaded, filterFn, sortFn, serializer }) =>
+  createSelector(feedbackSelector, (feedback: any) => {
+    const { notes } = feedback;
+    let filteredByStatus = [] as any;
+
+    if (typeof status === 'string') {
+      filteredByStatus = notes.filter((item) => item.status === status);
+    }
+    if (typeof status === 'object' && !!status.length) {
+      (status as Array<statusType>).forEach((itemStatus) => {
+        notes.forEach((item) => {
+          if (item.status === itemStatus) {
+            filteredByStatus.push(item);
+          }
+        });
+      });
+    }
+
+    return filteredByStatus
+      .filter((item) => filterFn(item, isReaded))
+      .map(serializer)
+      .sort(sortFn);
   });

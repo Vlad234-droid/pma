@@ -1,18 +1,37 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useState, useEffect, useMemo } from 'react';
 import { Button, Rule, useBreakpoints, useStyle, Modal } from '@dex-ddl/core';
 import { Trans } from 'components/Translation';
 import { FilterOption } from 'features/Shared';
 import { IconButton } from 'components/IconButton';
-import { DraftItem, RadioBtns } from './components';
+import DraftItem, { QUESTION_ORDER } from '../DraftItem';
+import RadioBtns from '../RadioBtns';
+import { NoFeedback } from '../../../Feedback/components';
 import { Notification } from 'components/Notification';
 import { Icon } from 'components/Icon';
-import { ModalDownloadFeedback, HelpModalReceiveFeedback } from './components/ModalParts';
-import { ColleaguesActions } from '@pma/store';
-import { useDispatch } from 'react-redux';
-import { FilterModal } from '../Shared/components/FilterModal';
+import { ModalDownloadFeedback, HelpModalReceiveFeedback } from '../ModalParts';
+import { formatToRelativeDate } from 'utils';
+import {
+  ColleaguesActions,
+  FeedbackActions,
+  ObjectiveActions,
+  getPropperNotesByCriterionSelector,
+  colleagueUUIDSelector,
+} from '@pma/store';
+import { useDispatch, useSelector } from 'react-redux';
+import { FilterModal } from '../../../Shared/components/FilterModal';
 import { useHistory } from 'react-router-dom';
+import { FeedbackStatus } from 'config/enum';
 
-const ViewFeedbackComp: FC = () => {
+import { usePDF, FeedbackDocument, downloadPDF } from '@pma/pdf-renderer';
+
+type filterFeedbacksType = {
+  AZ: boolean;
+  ZA: boolean;
+  newToOld: boolean;
+  oldToNew: boolean;
+};
+
+const ViewFeedback: FC = () => {
   const history = useHistory();
   const { css } = useStyle();
   const dispatch = useDispatch();
@@ -28,7 +47,7 @@ const ViewFeedbackComp: FC = () => {
   const [focus, setFocus] = useState(false);
   const [searchValueFilterOption, setSearchValueFilterOption] = useState('');
   const [filterModal, setFilterModal] = useState(false);
-  const [filterFeedbacks, setFilterFeedbacks] = useState({
+  const [filterFeedbacks, setFilterFeedbacks] = useState<filterFeedbacksType>({
     AZ: false,
     ZA: false,
     newToOld: false,
@@ -42,13 +61,121 @@ const ViewFeedbackComp: FC = () => {
     }
   }, [focus]);
 
-  const draftFeedback = (id) => {
-    console.log('id', id);
-  };
-
   const closeHandler = () => {
     setOpenMainModal(() => false);
   };
+
+  // store
+  const isReaded = checkedRadio.read && !checkedRadio.unread;
+  const searchValue = searchValueFilterOption.replace(/\s+/g, '').toLowerCase();
+
+  const filterFn = (item, isReaded) => {
+    const fullName =
+      `${item?.colleagueProfile?.colleague?.profile?.firstName}${item?.colleagueProfile?.colleague?.profile?.lastName}`.toLowerCase();
+
+    return fullName.includes(searchValue) && isReaded === item.read;
+  };
+
+  const sortFn = (i1, i2) => {
+    const { AZ, ZA, newToOld, oldToNew } = filterFeedbacks;
+
+    let val1 = '';
+    let val2 = '';
+
+    const swapVariables = (a, b) => {
+      b = [a, (a = b)][0];
+      return [a, b];
+    };
+
+    switch (true) {
+      case AZ || ZA: {
+        const firstNameGetter = (item) => item.firstName || '';
+
+        val1 = firstNameGetter(i1);
+        val2 = firstNameGetter(i2);
+
+        if (ZA) {
+          [val1, val2] = swapVariables(val1, val2);
+        }
+
+        break;
+      }
+      case newToOld || oldToNew: {
+        const createdTimeGetter = (item) => String(item.createdTime || '');
+
+        val1 = createdTimeGetter(i1);
+        val2 = createdTimeGetter(i2);
+
+        if (newToOld) {
+          [val1, val2] = swapVariables(val1, val2);
+        }
+
+        break;
+      }
+    }
+
+    return val1.localeCompare(val2);
+  };
+
+  const colleagueUuid = useSelector(colleagueUUIDSelector);
+  const submittedCompletedNotes =
+    useSelector(
+      getPropperNotesByCriterionSelector({
+        status: FeedbackStatus.SUBMITTED,
+        isReaded,
+        filterFn,
+        sortFn,
+        serializer: (item) => ({
+          ...item,
+          firstName: item?.colleagueProfile?.colleague?.profile?.firstName || '',
+          lastName: item?.colleagueProfile?.colleague?.profile?.lastName || '',
+          jobName: item?.colleagueProfile?.colleague?.workRelationships[0].job.name || '',
+          departmentName: item?.colleagueProfile?.colleague?.workRelationships[0].department?.name || '',
+          feedbackItems: item?.feedbackItems.sort(
+            (i1, i2) => QUESTION_ORDER.indexOf(i1.code) - QUESTION_ORDER.indexOf(i2.code),
+          ),
+          updatedTime: formatToRelativeDate(item.updatedTime),
+        }),
+      }),
+    ) || [];
+
+  const document = useMemo(
+    () => <FeedbackDocument items={submittedCompletedNotes} />,
+    [submittedCompletedNotes.length],
+  );
+
+  const [instance, updateInstance] = usePDF({ document });
+
+  useEffect(() => {
+    updateInstance();
+  }, [submittedCompletedNotes.length]);
+
+  useEffect(() => {
+    if (!colleagueUuid) {
+      return;
+    }
+
+    dispatch(
+      FeedbackActions.getAllFeedbacks({
+        'target-colleague-uuid': colleagueUuid,
+      }),
+    );
+  }, [colleagueUuid]);
+
+  useEffect(() => {
+    if (!submittedCompletedNotes.length) {
+      return;
+    }
+
+    if (isReaded) {
+      submittedCompletedNotes.forEach(
+        (item) => item.targetId && dispatch(ObjectiveActions.getReviewByUuid({ uuid: item.targetId })),
+      );
+    } else {
+      dispatch(FeedbackActions.readFeedback({ uuid: submittedCompletedNotes[0].uuid }));
+    }
+  }, [isReaded]);
+
   return (
     <>
       {helpModalReceiveFeedback && (
@@ -97,7 +224,7 @@ const ViewFeedbackComp: FC = () => {
               focus={focus}
               customIcon={true}
               searchValue={searchValueFilterOption}
-              onFocus={() => setFocus(() => true)}
+              onFocus={setFocus}
               withIcon={false}
               customStyles={{
                 ...(focus ? { padding: '10px 20px 10px 16px' } : { padding: '0px' }),
@@ -106,7 +233,7 @@ const ViewFeedbackComp: FC = () => {
               onChange={(e) => setSearchValueFilterOption(() => e.target.value)}
               onSettingsPress={() => {
                 setFilterModal((prev) => !prev);
-                setFocus(() => false);
+                setFocus(false);
               }}
             />
             <FilterModal
@@ -119,17 +246,11 @@ const ViewFeedbackComp: FC = () => {
         </div>
         <div className={css(ReverseItemsStyled)}>
           <div className={css(DraftsStyle)}>
-            <DraftItem
-              draftFeedback={draftFeedback}
-              checkedRadio={checkedRadio}
-              searchValue={searchValueFilterOption}
-              focus={focus}
-              setFocus={setFocus}
-              filterModal={filterModal}
-              setFilterModal={setFilterModal}
-              setFilterFeedbacks={setFilterFeedbacks}
-              filterFeedbacks={filterFeedbacks}
-            />
+            {submittedCompletedNotes.length ? (
+              submittedCompletedNotes.map((item) => <DraftItem key={item.uuid} item={item} />)
+            ) : (
+              <NoFeedback />
+            )}
           </div>
           <div className={css(ButtonsActionsStyle)}>
             <div className={css(ButtonContainerStyle)}>
@@ -162,12 +283,14 @@ const ViewFeedbackComp: FC = () => {
               </div>
               <p className={css(SavedStyled)}>Download feedback to your device</p>
               <Button
-                styles={[iconBtnStyle, { maxWidth: '161px !important' }]}
-                onPress={() => {
-                  setOpenMainModal(() => true);
-                }}
+                styles={[iconBtnStyle, { maxWidth: '181px !important' }]}
+                onPress={() => downloadPDF(instance.url!, 'feedbacks.pdf')}
               >
-                <Trans>Download feedback</Trans>
+                {instance.loading ? (
+                  <Trans i18nKey='loading'>Loading...</Trans>
+                ) : (
+                  <Trans i18nKey='download_all_feedbacks'>Download all feedbacks</Trans>
+                )}
               </Button>
             </div>
             <Notification
@@ -390,4 +513,4 @@ const modalTitleOptionStyle: Rule = () => {
   };
 };
 
-export default ViewFeedbackComp;
+export default ViewFeedback;

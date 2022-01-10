@@ -40,7 +40,7 @@ export const FilterOption: FC<FilterOptionProps> = ({
         <IconButton
           graphic='settings'
           customVariantRules={{
-            default: iconBtnStyle,
+            default: iconBtnStyle as Rule,
           }}
           iconStyles={iconStyle}
           onPress={() => {
@@ -60,7 +60,7 @@ export const FilterOption: FC<FilterOptionProps> = ({
           marginBot={marginBot}
           customIcon={customIcon}
           onFocus={() => {
-            onFocus && onFocus(() => true);
+            onFocus && onFocus(true);
           }}
           customIconInserted={customIcon && <Icon graphic='search' iconStyles={iconStyle} />}
           focus={focus}
@@ -70,8 +70,10 @@ export const FilterOption: FC<FilterOptionProps> = ({
             onChange={(e) => {
               onChange && onChange(e);
             }}
+            onFocus={() => {
+              onFocus && onFocus(true);
+            }}
             onBlur={() => {
-              onFocus && onFocus(() => false);
               setSearchValueFilterOption && setSearchValueFilterOption(() => '');
             }}
             customStyles={{
@@ -88,18 +90,24 @@ export const FilterOption: FC<FilterOptionProps> = ({
   );
 };
 
-const iconBtnStyle: Rule = {
+const iconBtnStyle = {
   padding: '0',
   marginLeft: '5px',
   display: 'flex',
   height: '38px',
   width: '38px',
-  justifyContent: 'space-between',
+  justifyContent: 'center',
   alignItems: 'center',
   outline: 0,
   border: `1px solid ${colors.tescoBlue}`,
   borderRadius: '20px',
   cursor: 'pointer',
+  position: 'relative',
+  '& > span': {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 };
 
 const iconStyle: Rule = {
@@ -108,5 +116,4 @@ const iconStyle: Rule = {
   position: 'relative',
   top: '2px',
   left: '2px',
-  marginLeft: '8px',
 };

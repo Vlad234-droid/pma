@@ -15,6 +15,7 @@ export interface FormItemProps {
   id?: string;
   customStyles?: Rule | Styles;
   onBlur?: () => void;
+  onFocus?: () => void;
   readonly?: boolean;
 }
 
