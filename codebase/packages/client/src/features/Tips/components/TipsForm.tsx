@@ -388,7 +388,7 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
             { mode === 'edit' && 
                 <IconButton 
                   onPress={confirmDeleteTip} 
-                  graphic='trash'
+                  graphic='delete'
                   iconStyles={{ marginRight: '5px' }}
                   customVariantRules={{
                     default: deleteTipBtnStyles,
@@ -466,6 +466,7 @@ const hrSeparatorLine: Rule = ({ theme }) => {
   return {
     height: '1px',
     background: theme.colors.backgroundDarkest,
+    marginBottom: '25px',
   }
 }
 

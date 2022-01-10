@@ -56,7 +56,7 @@ const ModalGiveFeedback: FC<ModalGiveFeedbackProps> = ({
       giveFeedbacka_main_title: 'Question 1',
       giveFeedback_title:
         "Looking back at what you've seen recently, what would you like to say to this colleague about what they`ve delivered or how they've gone about it?",
-      giveFeedback_description: "Share specific example of where you view this colleague's strenght",
+      giveFeedback_description: "Share specific examples of what you've seen.",
       giveFeedback_field: {
         field_id: '1',
         field_type: 'textarea',

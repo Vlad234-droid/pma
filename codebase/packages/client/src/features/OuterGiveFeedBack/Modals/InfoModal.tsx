@@ -17,7 +17,7 @@ const InfoModal: FC<InfoModalProps> = ({ setInfoModal }) => {
         <li>List out some of the strengths your colleadue has, what makes them good collague to work with?</li>
         <li>Can you provide further detail on what they should keep doing or what they improve on?</li>
       </ul>
-      <h2 className={css(TitleVideo)}>Watch video explanation</h2>
+      <h2 className={css(TitleVideo)}>Watch this 2-minute video on how to give great feedback</h2>
       <div className={css(BlockVideoExplanation)}>
         <img src={video_explanation} alt='video_explanation' />
       </div>

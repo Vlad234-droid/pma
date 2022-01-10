@@ -10,7 +10,7 @@ export const createObjectivesSearchPeopleSchema = Yup.object().shape({
 export const createGiveFeedbackSchema = Yup.object().shape({
   feedback: Yup.array().of(
     Yup.object().shape({
-      field: Yup.string().required(),
+      field: Yup.string().required().max(500),
     }),
   ),
 });

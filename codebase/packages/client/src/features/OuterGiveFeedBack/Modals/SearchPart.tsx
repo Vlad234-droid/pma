@@ -37,9 +37,7 @@ const SearchPart: FC<SearchPartProps> = ({ setSearchValue, setSelectedPerson, se
       <div className={css({ marginTop: '32px' })} data-test-id='search-part'>
         <Item
           errormessage={
-            errors['search_option'] && errors['search_option'].type === 'required'
-              ? errors['search_option'].message
-              : ''
+            errors['search_option'] && errors['search_option'].type === 'required' ? 'Search option is required' : ''
           }
         >
           <SearchInput
@@ -47,7 +45,10 @@ const SearchPart: FC<SearchPartProps> = ({ setSearchValue, setSelectedPerson, se
             name={`search_option`}
             onChange={(e) => {
               setInputValue(() => e.target.value);
-              if (e.target.value !== '' && e.target.value.length > 1) {
+              if (e.target.value === '' || e.target.value.length <= 1) {
+                dispatch(ColleaguesActions.clearGettedColleagues());
+              }
+              if (e.target.value !== '' && e.target.value.length >= 2) {
                 dispatch(
                   ColleaguesActions.getColleagues({
                     'first-name_like': e.target.value,
