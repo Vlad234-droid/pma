@@ -55,8 +55,8 @@ const ShareWidget: FC<Props> = ({ customStyle }) => {
   const isValidPathParams = pathParams.colleagueUuid;
 
   const handleShareSaveBtnClick = async () => {
-    setIsSuccessModalOpen(true);
     setIsConfirmDeclineModalOpen(false);
+    setTimeout(() => setIsSuccessModalOpen(true), 500);
 
     dispatch(ObjectiveSharingActions.startSharing(pathParams));
   };
