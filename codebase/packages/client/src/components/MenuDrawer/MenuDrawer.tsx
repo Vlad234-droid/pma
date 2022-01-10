@@ -49,7 +49,7 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
               linkTo={buildPath(Page.CREATE_STRATEGIC_DRIVERS)}
               title={'Strategic drivers'}
             />
-            <MenuItem iconGraphic={'add'} title={'Personal Development plan'} />
+            <MenuItem iconGraphic={'add'} title={'Personal Development Plan'} />
             <MenuItem iconGraphic={'account'} linkTo={buildPath(Page.PROFILE)} title={'My profile'} />
             <MenuItem iconGraphic={'chatSq'} linkTo={buildPath(Page.FEEDBACK)} title={'Feedback'} />
             <MenuItem iconGraphic={'edit'} linkTo={buildPath(Page.NOTES)} title={'My notes'} />

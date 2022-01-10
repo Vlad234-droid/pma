@@ -171,7 +171,7 @@ const UserObjectives: FC = () => {
                 ),
               }}
             >
-              <Accordion objectives={objectives} canShowStatus={!isAllObjectivesInSameStatus} />
+              <Accordion objectives={objectives} canShowStatus={!isAllObjectivesInSameStatus} isButtonsVisible={false}/>
             </Section>
           )}
 

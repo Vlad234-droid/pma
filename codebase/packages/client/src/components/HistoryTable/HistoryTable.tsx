@@ -8,8 +8,8 @@ const HistoryTable = ({ headers, items, isVisible }) => {
   const modifyTime = (time) => {
     const newDate = new Date(time);
     const year = newDate.getFullYear();
-    const month = newDate.getMonth();
-    const day = newDate.getDay();
+    const month = newDate.getMonth()+1;
+    const day = newDate.getDate();
     const hour = newDate.getHours();
     const minutes = newDate.getMinutes();
     return `${day}/${month}/${year} at ${hour}:${minutes}`;
@@ -31,7 +31,7 @@ const HistoryTable = ({ headers, items, isVisible }) => {
         return (
           <div key={el.updatedTime} className={`${css(row)} ${css(separator)}`}>
             <div className={`${css(col)} ${css(colBody)}`}>
-              {el?.updatedBy.firstName} {el.updatedBy.lastName}
+              {el?.updatedBy?.firstName || ''} {el.updatedBy?.lastName || ''}
             </div>
             <div className={`${css(col)} ${css(colBody)}`}>{el?.action}</div>
             <div className={`${css(col)} ${css(colBody)}`}>{modifyTime(el?.updatedTime)}</div>
