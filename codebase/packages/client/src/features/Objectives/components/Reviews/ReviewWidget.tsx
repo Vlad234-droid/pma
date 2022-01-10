@@ -1,11 +1,11 @@
 import React, { FC, useState } from 'react';
-import { useTranslation, Trans } from 'components/Translation';
-import { Status, ReviewType } from 'config/enum';
-import { useStyle, Rule, CreateRule, Colors, colors, Button } from '@dex-ddl/core';
+import { TFunction, useTranslation } from 'components/Translation';
+import { ReviewType, Status } from 'config/enum';
+import { Button, colors, Colors, CreateRule, Rule, useStyle } from '@dex-ddl/core';
 
-import { ReviewFormModal, ModalComponent } from '../Modal';
+import { ModalComponent, ReviewFormModal } from '../Modal';
 import { TileWrapper } from 'components/Tile';
-import { Icon, Graphics } from 'components/Icon';
+import { Graphics, Icon } from 'components/Icon';
 
 export type Props = {
   onClick: () => void;
@@ -21,12 +21,10 @@ export type Props = {
 
 export const TEST_ID = 'review-widget';
 
-const getContent = ({
-  status,
-  startTime = '',
-  lastUpdatedTime = '',
-}): [Graphics, Colors, Colors, boolean, boolean, string, string] => {
-  const { t } = useTranslation();
+const getContent = (
+  { status, startTime = '', lastUpdatedTime = '' },
+  t: TFunction,
+): [Graphics, Colors, Colors, boolean, boolean, string, string] => {
   if (!status) {
     return [
       'roundAlert',
@@ -110,14 +108,56 @@ const getContent = ({
   return contents[status];
 };
 
-const ReviewWidget: FC<Props> = ({ customStyle, reviewType, status, startTime, lastUpdatedTime, title }) => {
+const getReviewTypeContent = (reviewType: ReviewType, status: Status, t: TFunction) => {
+  const contents: {
+    [key: string]: {
+      reviewTypeContent: string;
+    };
+  } = {
+    [ReviewType.MYR]: {
+      reviewTypeContent:
+        status === Status.APPROVED
+          ? t('mid_year_review_widget_title_approved', 'Your mid-year review is complete.')
+          : t(
+              'mid_year_review_widget_title',
+              'Complete this once you’ve had your mid-year conversation with your line manager.',
+            ),
+    },
+    [ReviewType.EYR]: {
+      reviewTypeContent:
+        status === Status.APPROVED
+          ? t('end_year_review_widget_title_approved', 'Your year-end review is complete.')
+          : t(
+              'end_year_review_widget_title',
+              'Complete this once you’ve had your year-end conversation with your line manager.',
+            ),
+    },
+  };
+
+  return contents[reviewType];
+};
+
+const ReviewWidget: FC<Props> = ({
+  customStyle,
+  reviewType,
+  status = Status.NOT_STARTED,
+  startTime,
+  lastUpdatedTime,
+  title,
+}) => {
+  const { t } = useTranslation();
   const { css } = useStyle();
   const [isOpen, setIsOpen] = useState(false);
-  const [graphic, iconColor, background, shadow, hasDescription, content, buttonContent] = getContent({
-    status,
-    startTime,
-    lastUpdatedTime,
-  });
+  const [graphic, iconColor, background, shadow, hasDescription, content, buttonContent] = getContent(
+    {
+      status,
+      startTime,
+      lastUpdatedTime,
+    },
+    t,
+  );
+
+  const { reviewTypeContent } = getReviewTypeContent(reviewType, status, t);
 
   const descriptionColor = background === 'tescoBlue' ? colors.white : colors.base;
   const titleColor = background === 'tescoBlue' ? colors.white : colors.tescoBlue;
@@ -137,11 +177,7 @@ const ReviewWidget: FC<Props> = ({ customStyle, reviewType, status, startTime, l
           <div className={css(headerBlockStyle)}>
             <span className={css(titleStyle({ color: titleColor }))}>{title}</span>
             {hasDescription && (
-              <span className={css(descriptionStyle({ color: descriptionColor }))}>
-                <Trans i18nKey='tiles_description_id_3'>
-                  Complete this once you’ve had your mid-year conversation with your line manager.
-                </Trans>
-              </span>
+              <span className={css(descriptionStyle({ color: descriptionColor }))}>{reviewTypeContent}</span>
             )}
             <span
               className={css(descriptionStyle({ color: descriptionColor }), {
