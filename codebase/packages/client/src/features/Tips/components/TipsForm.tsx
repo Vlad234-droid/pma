@@ -517,14 +517,14 @@ const deleteTipBtnStyles: Rule = () => {
     fontSize: '14px', 
     lineHeight: '18px', 
     padding: '5px 0', 
-    color: `${theme.colors.error}`,
+    color: theme.colors.error,
     marginBottom: '20px',
   }
 }
 
-const modalInnerPlaceholder: Rule = () => {
+const modalInnerPlaceholder: Rule = ({ theme }) => {
   return {
-    backgroundColor: '#fff',
+    backgroundColor: theme.colors.white,
     position: 'absolute',
     width: '100%',
     height: '100%',
