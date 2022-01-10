@@ -103,19 +103,48 @@ const DraftItem: FC<DraftItemProps> = ({ item }) => {
                   customStyle={{
                     width: 'auto',
                     padding: '24px',
-                    margin: '0px 28px 28px 24px',
+                    margin: '24px 28px 28px 0px',
                     border: `1px solid ${colors.backgroundDarkest}`,
                   }}
                 >
-                  <h2 className={css(TitleStyle)}>{getPropperTargetType(item.targetType, item.targetId)}</h2>
-                  {item.feedbackItems.map((question) => {
-                    return (
-                      <div key={question.code} className={css(InfoBlockStyle)}>
-                        <h3>{question.code}</h3>
-                        <p>{question.content}</p>
-                      </div>
-                    );
-                  })}
+                  {getPropperTargetType(item.targetType, item.targetId) !== '' && (
+                    <h2 className={css(TitleStyle)}>{getPropperTargetType(item.targetType, item.targetId)}</h2>
+                  )}
+                  <div className={css(infoBlockStyle)}>
+                    <h3>
+                      Looking back at what you&apos;ve seen recently, what would you like to say to this colleague about
+                      what they&apos;ve delivered or how they&apos;ve gone about it?
+                    </h3>
+                    {item.feedbackItems.map((question) => {
+                      return (
+                        <p key={question.code}>
+                          {question.code === 'Question 1' ? (question.content !== '' ? question.content : '-') : ''}
+                        </p>
+                      );
+                    })}
+                  </div>
+                  <div className={css(infoBlockStyle)}>
+                    <h3>
+                      Looking forward, what should this colleague do more (or less) of in order to be at their best?
+                    </h3>
+                    {item.feedbackItems.map((question) => {
+                      return (
+                        <p key={question.code}>
+                          {question.code === 'Question 2' ? (question.content !== '' ? question.content : '-') : ''}
+                        </p>
+                      );
+                    })}
+                  </div>
+                  <div className={css(infoBlockStyle)}>
+                    <h3>Add any other comments you would like to share with your colleague.</h3>
+                    {item.feedbackItems.map((question) => {
+                      return (
+                        <p key={question.code}>
+                          {question.code === 'Anything else?' ? (question.content !== '' ? question.content : '-') : ''}
+                        </p>
+                      );
+                    })}
+                  </div>
                 </TileWrapper>
                 <IconButton
                   customVariantRules={{ default: iconBtnStyle }}
@@ -138,6 +167,19 @@ const DraftItem: FC<DraftItemProps> = ({ item }) => {
     </TileWrapper>
   );
 };
+
+const infoBlockStyle: Rule = {
+  marginBottom: '16px',
+  '& > h3': {
+    margin: '0px',
+    fontWeight: 'bold',
+    fontSize: '14px',
+  },
+  '& > p': {
+    margin: '0px',
+    fontSize: '14px',
+  },
+} as Styles;
 
 const wrapperStyles: Rule = {
   padding: '24px 24px 24px 24px',
