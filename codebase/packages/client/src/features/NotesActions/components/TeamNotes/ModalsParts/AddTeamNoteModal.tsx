@@ -1,4 +1,4 @@
-import React, { Dispatch, FC, SetStateAction, useState, ChangeEvent } from 'react';
+import React, { Dispatch, FC, SetStateAction } from 'react';
 import { Notification } from 'components/Notification';
 import { useStyle, Rule, useBreakpoints, Button } from '@dex-ddl/core';
 import { SearchPart } from './SearchPart';

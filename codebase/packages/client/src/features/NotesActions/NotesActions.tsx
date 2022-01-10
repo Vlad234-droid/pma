@@ -1,5 +1,6 @@
 import React, { FC, useState, useEffect } from 'react';
-import FilterOptions, { MainFolders } from './components';
+import { FilterOptions, MainFolders } from './components';
+import AddNoteModal, { InfoModal , AddTeamNoteModal } from './components/Modals';
 import { useStyle, Rule, Styles, Modal, useBreakpoints } from '@dex-ddl/core';
 import {
   NoteData,
@@ -14,7 +15,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { IconButton } from 'components/IconButton';
 import { Icon, Icon as IconComponent } from 'components/Icon';
-import AddNoteModal, { AddTeamNoteModal } from './components/Modals';
 import { EditSelectedNote } from './components/Modals/EditSelectedNote';
 import { schemaNotes, schemaTEAMNotes, schemaFolder, schemaNoteToEdit } from './components/Modals/schema/schema';
 import { useDispatch, useSelector } from 'react-redux';
@@ -31,6 +31,11 @@ import {
 import { AllNotesFolderId, AllNotesFolderIdTEAM, filterNotesHandler } from '../../utils/note';
 import { PeopleTypes } from './components/TeamNotes/ModalsParts/type';
 import { useHistory } from 'react-router-dom';
+
+export const NOTES_WRAPPER = 'note_wrapper';
+export const PLUS_BUTTON = 'plus_button';
+export const MODAL_BUTTONS = 'modal_buttons';
+export const PLUS_PERSONAL_NOTE = 'plus_personal_note';
 
 const NotesActions: FC = () => {
   const { css } = useStyle();
@@ -78,6 +83,10 @@ const NotesActions: FC = () => {
   const [focus, setFocus] = useState(false);
   const [searchValueFilterOption, setSearchValueFilterOption] = useState('');
   const history = useHistory();
+
+  //info
+
+  const [infoModal, setInfoModal] = useState(false);
 
   useEffect(() => {
     if (folders !== null && notesSelect !== null) {
@@ -344,6 +353,7 @@ const NotesActions: FC = () => {
           customVariantRules={{
             default: iconBtnStyleSmall,
           }}
+          data-test-id={PLUS_PERSONAL_NOTE}
           onPress={() => {
             setSelectedFolder(() => null);
             setChoseAdd(() => false);
@@ -394,7 +404,30 @@ const NotesActions: FC = () => {
   ];
 
   return (
-    <>
+    <div data-test-id={NOTES_WRAPPER}>
+      {infoModal && (
+        <Modal
+          modalPosition={'middle'}
+          overlayColor={'tescoBlue'}
+          modalContainerRule={[containerRule]}
+          closeOptions={{
+            content: <Icon graphic='cancel' invertColors={true} />,
+            onClose: () => {
+              setInfoModal(() => false);
+            },
+            styles: [modalCloseOptionStyle],
+          }}
+          title={{
+            content: 'Notes',
+            styles: [modalTitleOptionStyle],
+          }}
+          onOverlayClick={() => {
+            setInfoModal(() => false);
+          }}
+        >
+          <InfoModal setInfoModal={setInfoModal} TEAM={TEAM} />
+        </Modal>
+      )}
       {personalNoteModal && (
         <Modal
           modalPosition={'middle'}
@@ -556,6 +589,7 @@ const NotesActions: FC = () => {
           setFocus={setFocus}
           searchValueFilterOption={searchValueFilterOption}
           setSearchValueFilterOption={setSearchValueFilterOption}
+          setInfoModal={setInfoModal}
         />
         <MainFolders
           setSelectedFolder={setSelectedFolder}
@@ -583,6 +617,7 @@ const NotesActions: FC = () => {
               customVariantRules={{
                 default: iconBtnStyle,
               }}
+              data-test-id={PLUS_BUTTON}
               onPress={() => {
                 setChoseAdd(() => true);
                 if (foldersWithNotes.length) {
@@ -603,7 +638,12 @@ const NotesActions: FC = () => {
             />
           </div>
         ) : (
-          <div className={css(choseOptionsStyle)} id='chose_options' onClick={clickHandler}>
+          <div
+            className={css(choseOptionsStyle)}
+            id='chose_options'
+            onClick={clickHandler}
+            data-test-id={MODAL_BUTTONS}
+          >
             <div className={`${css(choseContainerStyle)}`} id='container_'>
               <div className={css({ width: '72%' })}>
                 {chosesButton.map((item) => {
@@ -647,7 +687,7 @@ const NotesActions: FC = () => {
       >
         <IconComponent graphic='arrowLeft' invertColors={false} />
       </span>
-    </>
+    </div>
   );
 };
 

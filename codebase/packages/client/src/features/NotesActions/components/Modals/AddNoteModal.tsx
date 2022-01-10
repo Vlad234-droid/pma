@@ -9,6 +9,8 @@ import { IconButton, Position } from 'components/IconButton';
 import { Icon as IconComponent } from 'components/Icon';
 import { SuccessModal } from '../Modals';
 
+export const ADD_NOTE_MODAL_WRAPPER = 'add_note_modal_wrapper';
+
 const AddNoteModal: FC<AddNoteModalProps> = ({
   methods,
   cancelModal,
@@ -89,7 +91,7 @@ const AddNoteModal: FC<AddNoteModalProps> = ({
   }
 
   return (
-    <div className={css(WrapperModalGiveFeedbackStyle)}>
+    <div className={css(WrapperModalGiveFeedbackStyle)} data-test-id={ADD_NOTE_MODAL_WRAPPER}>
       <div>
         <Notification
           graphic='information'
