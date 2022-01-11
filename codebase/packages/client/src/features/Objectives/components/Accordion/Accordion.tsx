@@ -15,7 +15,7 @@ export type ObjectiveAccordionProps = {
 
 export const TEST_ID = 'objective-accordion';
 
-const ObjectiveAccordion: FC<ObjectiveAccordionProps> = ({ objectives, canShowStatus,isButtonsVisible = true }) => (
+const ObjectiveAccordion: FC<ObjectiveAccordionProps> = ({ objectives, canShowStatus, isButtonsVisible = true }) => (
   <Accordion id='objective-accordion'>
     <div data-test-id={TEST_ID}>
       {objectives.map(({ id, title, subTitle, description, explanations, status }) => (
@@ -23,9 +23,7 @@ const ObjectiveAccordion: FC<ObjectiveAccordionProps> = ({ objectives, canShowSt
           <ObjectiveHeader {...{ title, subTitle, description, ...(canShowStatus ? { status } : {}) }} />
           <Panel>
             <ObjectivePanel explanations={explanations} />
-            {
-              isButtonsVisible && <ObjectiveButtons id={id} status={status} />
-            }
+            {isButtonsVisible && <ObjectiveButtons id={id} status={status} />}
           </Panel>
         </Section>
       ))}

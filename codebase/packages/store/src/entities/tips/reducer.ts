@@ -18,7 +18,7 @@ export default createReducer(initialState)
       ...state,
       tipsList: payload,
       meta: { ...state.meta, loading: false, loaded: true },
-    }
+    };
   })
   .handleAction(getAllTips.failure, (state, { payload }) => ({
     ...state,
@@ -34,7 +34,7 @@ export default createReducer(initialState)
       ...state,
       viewHistory: payload,
       meta: { ...state.meta, loading: false, loaded: true },
-    }
+    };
   })
   .handleAction(getTipHistory.failure, (state, { payload }) => ({
     ...state,
@@ -50,7 +50,7 @@ export default createReducer(initialState)
       ...state,
       currentTip: payload,
       meta: { ...state.meta, loading: false, loaded: true },
-    }
+    };
   })
   .handleAction(getTipByUuid.failure, (state, { payload }) => ({
     ...state,
@@ -65,7 +65,7 @@ export default createReducer(initialState)
     return {
       ...state,
       meta: { ...state.meta, loading: false, loaded: true },
-    }
+    };
   })
   .handleAction(createTip.failure, (state, { payload }) => ({
     ...state,
@@ -80,11 +80,9 @@ export default createReducer(initialState)
     return {
       ...state,
       meta: { ...state.meta, loading: false, loaded: true },
-    }
+    };
   })
   .handleAction(deleteTip.failure, (state, { payload }) => ({
     ...state,
     meta: { ...state.meta, loading: false, loaded: true, error: payload },
-  }))
-
-
+  }));

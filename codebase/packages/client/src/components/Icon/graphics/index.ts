@@ -42,7 +42,7 @@ import { Performance } from './performance';
 import { Team } from './team';
 import { Calibration } from './calibration';
 import { Tool } from './tool';
-import { CreateCycle } from './createCycle'
+import { CreateCycle } from './createCycle';
 import { StrategicDriver } from './strategicDriver';
 import { Configuration } from './configuration';
 import { Tip } from './tip';

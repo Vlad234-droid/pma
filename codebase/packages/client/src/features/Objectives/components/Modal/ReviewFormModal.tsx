@@ -1,7 +1,5 @@
 import React, { FC, HTMLProps, useEffect, useState } from 'react';
-
 import { Trans, useTranslation, TFunction } from 'components/Translation';
-
 import { Button, Icon, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
@@ -75,6 +73,7 @@ const ReviewFormModal: FC<Props> = ({ reviewType, onClose }) => {
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
   const [successModal, setSuccessModal] = useState(false);
   const { info } = useSelector(currentUserSelector);
+  const dispatch = useDispatch();
   const [review] = useSelector(getReviewByTypeSelector(reviewType));
   const { loading: reviewLoading } = useSelector(reviewsMetaSelector);
   const timelineReview = useSelector(getTimelineByReviewTypeSelector(reviewType));
@@ -135,12 +134,12 @@ const ReviewFormModal: FC<Props> = ({ reviewType, onClose }) => {
     setSuccessModal(true);
   };
 
-  const dispatch = useDispatch();
   useEffect(() => {
     dispatch(
       ReviewsActions.getColleagueReviews({ pathParams: { colleagueUuid: info.colleagueUUID, cycleUuid: 'CURRENT' } }),
     );
   }, []);
+
   useEffect(() => {
     reset(review);
   }, [review]);
@@ -149,7 +148,7 @@ const ReviewFormModal: FC<Props> = ({ reviewType, onClose }) => {
     return null;
   }
 
-  if (successModal) {
+  if (timelineReview?.status === Status.WAITING_FOR_APPROVAL) {
     return (
       <SuccessModal
         onClose={onClose}
@@ -199,7 +198,7 @@ const ReviewFormModal: FC<Props> = ({ reviewType, onClose }) => {
               const value = formValues[key] ? formValues[key] : '';
               if (type === 'text') {
                 return (
-                  <div style={{ padding: '10px 0' }}>
+                  <div style={{ padding: '10px 0' }} key={id}>
                     <div
                       className={css({
                         fontSize: '16px',
@@ -226,7 +225,7 @@ const ReviewFormModal: FC<Props> = ({ reviewType, onClose }) => {
                   />
                 );
               }
-              if (type === 'textfield' && validate?.maxLength > 100) {
+              if (type === 'textfield') {
                 return (
                   <GenericItemField
                     key={id}
@@ -234,7 +233,7 @@ const ReviewFormModal: FC<Props> = ({ reviewType, onClose }) => {
                     methods={methods}
                     label={label}
                     Wrapper={Item}
-                    Element={Textarea}
+                    Element={validate?.maxLength > 100 ? Textarea : Input}
                     placeholder={description}
                     value={value}
                     readonly={readonly}

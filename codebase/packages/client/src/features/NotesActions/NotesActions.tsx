@@ -1,6 +1,6 @@
 import React, { FC, useState, useEffect } from 'react';
 import { FilterOptions, MainFolders } from './components';
-import AddNoteModal, { InfoModal , AddTeamNoteModal } from './components/Modals';
+import AddNoteModal, { InfoModal, AddTeamNoteModal } from './components/Modals';
 import { useStyle, Rule, Styles, Modal, useBreakpoints } from '@dex-ddl/core';
 import {
   NoteData,

@@ -19,7 +19,7 @@ const Filters: FC<Props> = ({ sortingOptions, sortValue, onSort, searchValue, on
   const [sortingOpen, setSortingOpen] = useState<boolean>(false);
   const [searchOpened, setSearchOpened] = useState<boolean>(false);
 
-  const handleSearch = (event) => onSearch(event.target.value);
+  const handleSearch = (value) => onSearch(value);
 
   const handleSearchOpen = () => {
     setSortingOpen(false);

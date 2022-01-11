@@ -34,7 +34,6 @@ const SelectAll: FC<SelectAllProps> = ({ onChange, checked, indeterminate, disab
     <label>
       <Checkbox
         disabled={disabled}
-        type='checkbox'
         name='selectAll'
         id='selectAll'
         onChange={onChange}
@@ -163,14 +162,7 @@ export const Actions = () => {
                 alignItems: 'center',
               })}
             >
-              <Radio
-                id='option1'
-                type='radio'
-                name='status'
-                value='option1'
-                checked={pending}
-                onChange={() => setPending(true)}
-              />
+              <Radio id='option1' name='status' checked={pending} onChange={() => setPending(true)} />
               <span
                 className={css({
                   fontSize: '16px',
@@ -189,14 +181,7 @@ export const Actions = () => {
                 alignItems: 'center',
               })}
             >
-              <Radio
-                id='option2'
-                type='radio'
-                name='status'
-                value='option2'
-                checked={!pending}
-                onChange={() => setPending(false)}
-              />
+              <Radio id='option2' name='status' checked={!pending} onChange={() => setPending(false)} />
               <span
                 className={css({
                   fontSize: '16px',

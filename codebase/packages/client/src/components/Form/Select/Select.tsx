@@ -4,9 +4,9 @@ import { Rule, useStyle } from '@dex-ddl/core';
 import { Icon } from 'components/Icon';
 
 import { useRefContainer } from '../context/input';
-import { SelectProps } from '../types';
+import { SelectField } from '../types';
 
-const Select: FC<SelectProps> = ({
+const Select: FC<SelectField> = ({
   domRef,
   onChange,
   placeholder = '',
@@ -18,9 +18,8 @@ const Select: FC<SelectProps> = ({
 }) => {
   const { css, theme } = useStyle();
   const refIcon = useRefContainer();
-  const [selectedOptionValue, setSelectedOptionValue] = useState(value);
+  const [currentValue, setCurrentValue] = useState(value);
   const [isOptionOpen, toggleOption] = useState(false);
-  const selectedOptionLabel = options.find(({ value }) => value === selectedOptionValue)?.label || '';
 
   return (
     <>
@@ -33,7 +32,7 @@ const Select: FC<SelectProps> = ({
         <input
           ref={mergeRefs([domRef, refIcon])}
           name={name}
-          value={selectedOptionLabel || value}
+          value={currentValue}
           disabled={disabled}
           data-test-id={name}
           className={css(
@@ -59,9 +58,7 @@ const Select: FC<SelectProps> = ({
           placeholder={placeholder ? `- ${placeholder} -` : ''}
           readOnly={true}
           onSelect={(e) => {
-            if (onChange && isOptionOpen) {
-              onChange(e, selectedOptionValue);
-            }
+            onChange(e);
             toggleOption(false);
           }}
           onClick={() => toggleOption(true)}
@@ -108,7 +105,7 @@ const Select: FC<SelectProps> = ({
                   })}
                   onMouseDown={(e) => e.preventDefault()}
                   onClick={() => {
-                    setSelectedOptionValue(option.value);
+                    setCurrentValue(option.value);
                     if (getSelected !== undefined) {
                       getSelected(option);
                     }
