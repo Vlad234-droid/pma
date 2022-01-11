@@ -40,10 +40,12 @@ export const ShareObjectivesModal: FC<Props> = ({ manager, objectives = [] }) =>
           </div>
         </div>
         <div>
-          <div className={css(managerNameStyle)}>{manager}</div>
+          <div className={css(managerNameStyle)}>
+            <Trans i18nKey='from_person' values={{ person: manager }} defaults='From {{ person }}' />
+          </div>
         </div>
         <div>
-          <Accordion objectives={objectives} canShowStatus={false} />
+          <Accordion objectives={objectives} canShowStatus={false} isButtonsVisible={false} />
         </div>
       </div>
     </div>
