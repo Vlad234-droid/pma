@@ -10,7 +10,7 @@ type RenderContent = (setReason: (reason: string) => void) => JSX.Element;
 export type ConfirmAcceptModalProps = {
   title?: string;
   onClose: () => void;
-  onSave: (reason?: string) => void;
+  onSave: (hasReason?: boolean, reason?: string) => void;
   onOverlayClick?: () => void;
   hasReason?: boolean;
   review?: Employee;
@@ -53,12 +53,14 @@ const ConfirmModal: FC<Props> = ({
     >
       <div>
         {review && (
-          <ColleagueInfo
-            firstName={review.firstName}
-            lastName={review.lastName}
-            jobName={review.jobName}
-            businessType={review.businessType}
-          />
+          <div className={css({ padding: '16px 0 0'})}>
+            <ColleagueInfo
+              firstName={review.firstName}
+              lastName={review.lastName}
+              jobName={review.jobName}
+              businessType={review.businessType}
+            />
+          </div>
         )}
         {children}
       </div>
@@ -100,7 +102,7 @@ const ConfirmModal: FC<Props> = ({
             },
             !canSubmit ? { opacity: '0.6' } : {},
           ]}
-          onPress={() => onSave(reason)}
+          onPress={() => onSave(hasReason, reason)}
         >
           <Trans i18nKey='submit'>Submit</Trans>
         </Button>

@@ -1,16 +1,18 @@
 import React, { FC } from 'react';
+import { useStyle } from '@dex-ddl/core';
 
 import { useTranslation } from 'components/Translation';
 
 import ConfirmModal from '../ConfirmModal';
 
 type Props = {
-  onSave: (reason?: string) => void;
+  onSave: (hasReason?: boolean, reason?: string) => void;
   onClose: () => void;
 };
 
 const ApproveModal: FC<Props> = ({ onSave, onClose }) => {
   const { t } = useTranslation();
+  const { css } = useStyle();
 
   return (
     <ConfirmModal
@@ -18,7 +20,7 @@ const ApproveModal: FC<Props> = ({ onSave, onClose }) => {
       onSave={onSave}
       onClose={onClose}
     >
-      <div>{t('approve_objectives_or_reviews', 'Are you sure you want to approve objectives or reviews?')}</div>
+      <div className={css({ padding: '16px 0' })}>{t('approve_objectives_or_reviews', 'Are you sure you want to approve objectives or reviews?')}</div>
     </ConfirmModal>
   );
 };

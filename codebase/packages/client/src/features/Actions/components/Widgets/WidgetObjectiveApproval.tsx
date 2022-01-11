@@ -38,8 +38,9 @@ export const WidgetObjectiveApproval: FC<WidgetObjectiveApprovalProps> = ({
   useEffect(() => {
     if (declines.length && declines.length === reviewsForApproval.length) {
       // if there is at least one declined entity
-      if (declines.some((decline) => !!decline) || reviewsForApproval.some(filterApprovedReviewFn)) {
-        declineColleagues(declines);
+      if (declines.some((decline) => decline !== null)) {
+        console.log('will decline');
+        // declineColleagues(declines);
       } else {
         // in other case, clear declines to start again
         setDeclines([]);
@@ -58,16 +59,18 @@ export const WidgetObjectiveApproval: FC<WidgetObjectiveApprovalProps> = ({
   };
 
   const handleDeclineSubmit = useCallback(
-    (reason?: string) => {
+    (hasReason?: boolean, reason?: string) => {
       if (declines.length + 1 < reviewsForApproval.length) {
-        setCurrentReview(reviewsForApproval[declines.length]);
+        setCurrentReview(reviewsForApproval[declines.length + 1]);
         setIsOpenDeclinePopup(false);
         setIsOpenDeclinePopup(true);
       } else {
         setIsOpenDeclinePopup(false);
       }
 
-      reason && setDeclines((declines) => [...declines, reason]);
+      !hasReason && setDeclines((declines) => [...declines, '']);
+
+      hasReason && reason && setDeclines((declines) => [...declines, reason]);
     },
     [reviewsForApproval, declines],
   );

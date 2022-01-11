@@ -10,7 +10,7 @@ import ConfirmModal from '../ConfirmModal';
 import { getDeclineReasonOptions } from '../../utils';
 
 type Props = {
-  onSave: (reason?: string) => void;
+  onSave: (hasReason?:boolean, reason?: string) => void;
   onClose: () => void;
   review?: Employee;
   reviewType: ReviewType;
@@ -32,7 +32,7 @@ const DeclineModal: FC<Props> = ({ onSave, onClose, review, reviewType }) => {
       review={review}
       reason={reason}
     >
-      <div className={css({ padding: '16px 0 8px' })}>
+      <div className={css({ padding: '16px 0' })}>
         {isObjective ? (
           <>
             <div className={css({ fontSize: '16px', lineHeight: '20px', marginBottom: '8px' })}>
