@@ -30,11 +30,7 @@ const Widgets: FC<Props> = () => {
 
   const widgets: SecondaryWidgetProps[] = [
     {
-<<<<<<< HEAD
       iconGraphic: 'list',
-=======
-      iconGraphic: 'add',
->>>>>>> master
       title: t('personal_development_plan', 'Personal Development Plan'),
       date: t('personal_development_plan_date', 'Added 04 Apr 2021', { date: new Date(2021, 4, 4) }),
       customStyle: { flex: '2 1 110px' },
