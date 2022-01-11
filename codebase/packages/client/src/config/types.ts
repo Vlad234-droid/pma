@@ -1,7 +1,7 @@
 import { ReviewType, Status, TimelineType } from './enum';
 
 export type Timeline = {
-  code: string; // TODO: set correct type
+  code: string;
   colleagueCycleUuid: string;
   count: number;
   description: string;
@@ -20,7 +20,7 @@ export type Review = {
   uuid: string;
 };
 
-export type ReviewForApproval = {
+export type Employee = {
   businessType: string;
   firstName: string;
   jobName: string;
@@ -30,3 +30,5 @@ export type ReviewForApproval = {
   reviews: Review[];
   timeline: Timeline[];
 };
+
+export { ReviewType, Status, TimelineType };

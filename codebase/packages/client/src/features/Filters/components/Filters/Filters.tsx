@@ -3,9 +3,9 @@ import { Rule } from '@dex-ddl/core';
 
 import InfoIcon from 'components/InfoIcon';
 
-import Sorting from './Sorting';
-import Search from './Search';
-import { SortBy, SortOption } from './config/types';
+import Sorting from '../Sorting';
+import Search from '../Search';
+import { SortBy, SortOption } from '../../config/types';
 
 type Props = {
   sortValue?: SortBy;

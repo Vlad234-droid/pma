@@ -44,3 +44,5 @@ export const formatToRelativeDate = (date: string) => {
     ? 'just now'
     : DateTime.fromISO(date).setLocale('en').toRelative();
 };
+
+export const dateToIso = (date: Date) => DateTime.fromJSDate(date).toISO();

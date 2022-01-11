@@ -3,39 +3,37 @@ import { useBreakpoints, useStyle, CreateRule, Modal, Button, fontWeight } from 
 
 import { Trans } from 'components/Translation';
 import { ColleagueInfo } from 'features/MyTeam';
-import { ReviewForApproval } from 'config/types';
+import { Employee } from 'config/types';
 
 type RenderContent = (setReason: (reason: string) => void) => JSX.Element;
 
 export type ConfirmAcceptModalProps = {
   title?: string;
-  renderContent: RenderContent;
   onClose: () => void;
-  onSave: (reason) => void;
+  onSave: (reason?: string) => void;
   onOverlayClick?: () => void;
   hasReason?: boolean;
-  review?: ReviewForApproval;
+  review?: Employee;
+  reason?: string;
 };
 
 type Props = HTMLProps<HTMLInputElement> & ConfirmAcceptModalProps;
 
 const ConfirmModal: FC<Props> = ({
   title,
-  renderContent,
+  reason,
+  children,
   hasReason = false,
   onClose,
   onSave,
   onOverlayClick,
   review,
 }) => {
-  const [reason, setReason] = useState('');
   const { theme, css } = useStyle();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
 
-  const handleReasonChange = (reason: string) => setReason(reason);
-
-  const canSubmit = hasReason ? Boolean(reason.length) : true;
+  const canSubmit = hasReason ? Boolean(reason?.length) : true;
 
   return (
     <Modal
@@ -62,7 +60,7 @@ const ConfirmModal: FC<Props> = ({
             businessType={review.businessType}
           />
         )}
-        {renderContent(handleReasonChange)}
+        {children}
       </div>
       <div
         className={css({
@@ -71,6 +69,7 @@ const ConfirmModal: FC<Props> = ({
         })}
       >
         <Button
+          data-test-id='cancel-btn'
           styles={[
             {
               background: theme.colors.white,
@@ -83,11 +82,12 @@ const ConfirmModal: FC<Props> = ({
               margin: '0px 4px',
             },
           ]}
-          onPress={() => onClose()}
+          onPress={onClose}
         >
           <Trans i18nKey='cancel'>Cancel</Trans>
         </Button>
         <Button
+          data-test-id='submit-btn'
           isDisabled={!canSubmit}
           styles={[
             {
@@ -100,9 +100,7 @@ const ConfirmModal: FC<Props> = ({
             },
             !canSubmit ? { opacity: '0.6' } : {},
           ]}
-          onPress={() => {
-            onSave(reason);
-          }}
+          onPress={() => onSave(reason)}
         >
           <Trans i18nKey='submit'>Submit</Trans>
         </Button>

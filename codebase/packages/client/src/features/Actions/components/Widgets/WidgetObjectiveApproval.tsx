@@ -7,15 +7,16 @@ import { Icon } from 'components/Icon';
 import { Trans } from 'components/Translation';
 import useDispatch from 'hooks/useDispatch';
 import { ReviewType, Status } from 'config/enum';
-import { ReviewForApproval } from 'config/types';
+import { Employee } from 'config/types';
 
-import { DeclineModal, SubmitModal } from '../Modal';
+import ApproveModal from '../ApproveModal';
+import DeclineModal from '../DeclineModal';
 import { filterApprovedFn, filterApprovedReviewFn } from '../../utils';
 import { useSelector } from 'react-redux';
 
 export type WidgetObjectiveApprovalProps = {
   isDisabled?: boolean;
-  reviewsForApproval: ReviewForApproval[];
+  reviewsForApproval: Employee[];
   onSave: () => void;
 };
 
@@ -27,7 +28,7 @@ export const WidgetObjectiveApproval: FC<WidgetObjectiveApprovalProps> = ({
   const [isOpenDeclinePopup, setIsOpenDeclinePopup] = useState(false);
   const [isOpenApprovePopup, setIsOpenApprovePopup] = useState(false);
   const [declines, setDeclines] = useState<(string | null)[]>([]);
-  const [currentReview, setCurrentReview] = useState<ReviewForApproval | null>(null);
+  const [currentReview, setCurrentReview] = useState<Employee | null>(null);
   const currentTimeline = currentReview?.timeline.filter(filterApprovedFn);
   const colleagueUuid = useSelector(colleagueUUIDSelector);
 
@@ -57,7 +58,7 @@ export const WidgetObjectiveApproval: FC<WidgetObjectiveApprovalProps> = ({
   };
 
   const handleDeclineSubmit = useCallback(
-    (reason: string) => {
+    (reason?: string) => {
       if (declines.length + 1 < reviewsForApproval.length) {
         setCurrentReview(reviewsForApproval[declines.length]);
         setIsOpenDeclinePopup(false);
@@ -66,7 +67,7 @@ export const WidgetObjectiveApproval: FC<WidgetObjectiveApprovalProps> = ({
         setIsOpenDeclinePopup(false);
       }
 
-      setDeclines((declines) => [...declines, reason]);
+      reason && setDeclines((declines) => [...declines, reason]);
     },
     [reviewsForApproval, declines],
   );
@@ -197,7 +198,7 @@ export const WidgetObjectiveApproval: FC<WidgetObjectiveApprovalProps> = ({
               />
             )}
             {isOpenApprovePopup && (
-              <SubmitModal onSave={handleApproveSubmit} onClose={() => setIsOpenApprovePopup(false)} />
+              <ApproveModal onSave={handleApproveSubmit} onClose={() => setIsOpenApprovePopup(false)} />
             )}
           </div>
         </div>

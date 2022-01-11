@@ -9,27 +9,9 @@ import { Page } from 'pages/types';
 import { useHistory } from 'react-router-dom';
 import { paramsReplacer } from 'utils';
 import { buildPath } from 'features/Routes';
+import { Employee } from 'config/types';
 
 import ColleagueInfo from '../ColleagueInfo';
-
-export type Review = {
-  uuid: string;
-  status: string;
-  type: string;
-  code: string;
-  description: string;
-  reviewType: string;
-  number: number;
-};
-
-export type Employee = {
-  firstName: string;
-  lastName: string;
-  jobName: string;
-  businessType: string;
-  uuid: string;
-  timeline: Review[];
-};
 
 export type WidgetTeamMateProfileProps = {
   uuid: string;
