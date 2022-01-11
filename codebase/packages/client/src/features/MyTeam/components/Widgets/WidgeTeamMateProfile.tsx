@@ -32,7 +32,7 @@ export type Employee = {
 };
 
 export type WidgetTeamMateProfileProps = {
-  id: string;
+  uuid: string;
   status?: Status;
   employee: Employee;
   simpleView?: boolean;
@@ -53,7 +53,7 @@ export const getIcon = (status): [Graphics, Colors] => {
   return contents[status] || ['roundCircle', 'pending'];
 };
 
-export const WidgetTeamMateProfile: FC<WidgetTeamMateProfileProps> = ({ id, status, employee, simpleView = false }) => {
+export const WidgetTeamMateProfile: FC<WidgetTeamMateProfileProps> = ({ uuid, status, employee, simpleView = false }) => {
   const { css } = useStyle();
   const history = useHistory();
 
@@ -67,13 +67,13 @@ export const WidgetTeamMateProfile: FC<WidgetTeamMateProfileProps> = ({ id, stat
     <>
       <TileWrapper>
         <Accordion
-          id={`team-mate-accordion-${id}`}
+          id={`team-mate-accordion-${uuid}`}
           customStyle={{
             borderBottom: 'none',
             marginTop: 0,
           }}
         >
-          <BaseAccordion id={`team-mate-base-accordion-${id}`}>
+          <BaseAccordion id={`team-mate-base-accordion-${uuid}`}>
             {() => (
               <>
                 <Section defaultExpanded={false}>

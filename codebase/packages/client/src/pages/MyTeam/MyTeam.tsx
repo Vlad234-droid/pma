@@ -96,7 +96,7 @@ const MyTeam: FC = () => {
                 <WidgetTeamMateProfile
                   simpleView={view === View.FULL_TEAM}
                   key={employee.uuid}
-                  id='1'
+                  uuid={employee.uuid}
                   status={Status.PENDING}
                   employee={employee}
                 />

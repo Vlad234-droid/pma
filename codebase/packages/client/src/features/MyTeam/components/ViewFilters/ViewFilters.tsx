@@ -44,10 +44,10 @@ const filterItemStyles: Rule = {
   alignItems: 'center',
 };
 
-const filterLabelStyles: Rule = {
+const filterLabelStyles: Rule = ({ theme }) => ({
   marginLeft: '11px',
-  fontSize: '16px',
-  lineHeight: '20px',
-};
+  fontSize: `${theme.font.fixed.f16.fontSize}`,
+  lineHeight: `${theme.font.fixed.f16.lineHeight}`,
+});
 
 export default ViewFilters;
