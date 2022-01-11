@@ -30,6 +30,7 @@ const Search: FC<Props> = ({ focus, iconStyles, onSearch, value }) => {
         customIcon
         customIconInserted={<Icon graphic='search' iconStyles={iconStyles} />}
         focus={focus}
+        onFocus={onFocus}
       >
         <Input
           value={focus ? value : ''}

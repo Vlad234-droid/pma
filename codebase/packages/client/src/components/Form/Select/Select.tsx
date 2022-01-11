@@ -30,6 +30,7 @@ const Select: FC<SelectField> = ({
         }}
       >
         <input
+          role='select'
           ref={mergeRefs([domRef, refIcon])}
           name={name}
           value={currentValue}
@@ -65,6 +66,7 @@ const Select: FC<SelectField> = ({
           onBlur={() => toggleOption(false)}
         />
         <span
+          data-test-id={`${name || ''}Options`}
           style={{
             position: 'absolute',
             right: '10px',
@@ -89,9 +91,10 @@ const Select: FC<SelectField> = ({
               zIndex: 999,
             }}
           >
-            {options.map((option) => {
+            {options.map((option, index) => {
               return (
                 <span
+                  data-test-id={`${name || ''}Options-${index}`}
                   key={option.value}
                   className={css({
                     display: 'block',

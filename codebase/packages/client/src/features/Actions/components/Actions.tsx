@@ -17,7 +17,7 @@ import { WidgetObjectiveApproval, WidgetTeamMateObjectives } from 'features/Acti
 import Filters, { useSortFilter, useSearchFilter, getEmployeesSortingOptions } from 'features/Filters';
 import useDispatch from 'hooks/useDispatch';
 
-import { filterApprovedFn } from '../utils';
+import { filterApprovedFn, filterCompletedFn } from '../utils';
 export const TEST_ID = 'objectives-pave';
 
 type SelectAllProps = {
@@ -82,12 +82,11 @@ export const Actions = () => {
 
   const [indeterminate, setIndeterminate]: [boolean, (T) => void] = useState(false);
   const [isCheckAll, setIsCheckAll]: [boolean, (T) => void] = useState(false);
-  const [isCheck, setIsCheck]: [string[], (T) => void] = useState([]);
+  const [checkedItems, setCheckedItems]: [string[], (T) => void] = useState([]);
   const [reviewsForApproval, setReviewsForApproval]: [any[], (T) => void] = useState([]);
 
   const [colleagues, setColleagues] = useState(employeeWithPendingApprovals || []);
   const [pending, setPending] = useState(true);
-  const [colleagueReviews, setColleagueReviews]: [any, (T) => void] = useState({});
 
   useEffect(() => {
     setColleagues(pending ? employeeWithPendingApprovals : employeeWithCompletedApprovals);
@@ -95,18 +94,18 @@ export const Actions = () => {
 
   //todo: refactor this
   useEffect(() => {
-    if (colleagues?.length && isCheck.length && colleagues?.length > isCheck.length) {
+    if (colleagues?.length && checkedItems.length && colleagues?.length > checkedItems.length) {
       setIndeterminate(true);
-    } else if (colleagues?.length && isCheck.length && colleagues?.length === isCheck.length) {
+    } else if (colleagues?.length && checkedItems.length && colleagues?.length === checkedItems.length) {
       setIndeterminate(false);
       setIsCheckAll(true);
-    } else if (!colleagues?.length && !isCheck.length) {
+    } else if (!colleagues?.length && !checkedItems.length) {
       setIsCheckAll(false);
     } else {
       setIndeterminate(false);
       setIsCheckAll(false);
     }
-  }, [isCheck, colleagues]);
+  }, [checkedItems, colleagues]);
 
   const handleSelectAll = useCallback(() => {
     setIsCheckAll(!isCheckAll);
@@ -116,12 +115,12 @@ export const Actions = () => {
       (colleague) => colleague.timeline.filter(filterApprovedFn)?.length === 1,
     );
 
-    const checkedItems = filteredEmployee.map((colleague) => colleague.uuid);
+    const checked = filteredEmployee.map((colleague) => colleague.uuid);
 
-    setIsCheck(checkedItems);
+    setCheckedItems(checked);
 
     if (isCheckAll) {
-      setIsCheck([]);
+      setCheckedItems([]);
       setReviewsForApproval([]);
     } else {
       setReviewsForApproval(filteredEmployee);
@@ -130,9 +129,9 @@ export const Actions = () => {
 
   const handleClick = (e, colleague) => {
     const { id, checked } = e.target;
-    setIsCheck([...isCheck, id]);
+    setCheckedItems([...checkedItems, id]);
     if (!checked) {
-      setIsCheck(isCheck.filter((item) => item !== id));
+      setCheckedItems(checkedItems.filter((item) => item !== id));
       setReviewsForApproval((prev) => [...prev.filter((item) => item.uuid !== colleague.uuid)]);
     } else {
       setReviewsForApproval((prev) => [...prev, { ...colleague }]);
@@ -220,18 +219,20 @@ export const Actions = () => {
       >
         <div className={css({ flex: '3 1 375px', display: 'flex', flexDirection: 'column', gap: '8px' })}>
           {colleagues?.map((colleague) => {
-            const timelineApproved = colleague.timeline.filter(filterApprovedFn);
+            const timelineApproved = colleague.timeline.filter(pending ? filterApprovedFn : filterCompletedFn);
 
             return (
               <div key={colleague.uuid} className={css({ display: 'flex', flexWrap: 'wrap' })}>
                 <div className={css({ width: '40px', position: 'relative' })}>
                   <span className={css({ position: 'absolute', top: '36px' })}>
-                    <Checkbox
-                      disabled={timelineApproved?.length > 1}
-                      id={colleague.uuid}
-                      checked={isCheck.includes(colleague.uuid)}
-                      onChange={(e) => handleClick(e, colleague)}
-                    />
+                    {pending && (
+                      <Checkbox
+                        disabled={timelineApproved?.length > 1}
+                        id={colleague.uuid}
+                        checked={checkedItems.includes(colleague.uuid)}
+                        onChange={(e) => handleClick(e, colleague)}
+                      />
+                    )}
                   </span>
                 </div>
                 <div className={css({ width: 'calc(100% - 40px)' })}>
@@ -240,8 +241,6 @@ export const Actions = () => {
                     id={colleague.uuid}
                     status={pending ? Status.WAITING_FOR_APPROVAL : Status.APPROVED}
                     colleague={colleague}
-                    colleagueReviews={colleagueReviews}
-                    setColleagueReviews={setColleagueReviews}
                   />
                 </div>
               </div>
@@ -267,10 +266,9 @@ export const Actions = () => {
           <div>
             {pending && (
               <WidgetObjectiveApproval
-                canDecline
-                isDisabled={!isCheck.length}
+                isDisabled={!checkedItems.length}
                 reviewsForApproval={reviewsForApproval}
-                onSave={() => setIsCheck([])}
+                onSave={() => setCheckedItems([])}
               />
             )}
           </div>

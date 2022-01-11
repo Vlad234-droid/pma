@@ -4,7 +4,7 @@ import { ReviewType, Status } from '@pma/client/src/config/enum';
 import { Review } from '@pma/client/src/config/types';
 
 interface ReviewUpdateStatusAction extends ActionParams {
-  pathParams: { colleagueUuid: string; type?: ReviewType; cycleUuid?: string; status?: Status };
+  pathParams: { colleagueUuid: string; approverUuid: string; type?: ReviewType; cycleUuid?: string; status?: Status };
   data: {
     reason?: string;
     reviews?: Review[];

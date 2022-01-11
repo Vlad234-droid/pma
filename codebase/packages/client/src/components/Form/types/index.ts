@@ -25,7 +25,7 @@ export interface InputField extends FormField {
 export interface SelectField extends FormField {
   options: Array<{ value: string; label: string }>;
   getSelected?: (option: any) => void;
-  onChange: (e: SyntheticEvent<HTMLInputElement>) => void;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
   value?: string;
 }
 

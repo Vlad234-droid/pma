@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useMemo } from 'react';
+import React, { FC, useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { colors, fontWeight, Rule, useStyle } from '@dex-ddl/core';
 import {
@@ -7,6 +7,7 @@ import {
   getAllReviewSchemas,
   schemaMetaSelector,
   getAllColleagueReviews,
+  colleagueUUIDSelector,
 } from '@pma/store';
 
 import { TileWrapper } from 'components/Tile';
@@ -24,24 +25,20 @@ export type WidgetTeamMateObjectivesProps = {
   id: string;
   status: Status;
   colleague: any;
-  colleagueReviews: any;
-  setColleagueReviews: any;
 };
 
-export const WidgetTeamMateObjectives: FC<WidgetTeamMateObjectivesProps> = ({
-  status,
-  colleague,
-  colleagueReviews,
-  setColleagueReviews,
-}) => {
+export const WidgetTeamMateObjectives: FC<WidgetTeamMateObjectivesProps> = ({ status, colleague }) => {
   const dispatch = useDispatch();
   const { css } = useStyle();
+  const colleagueUuid = useSelector(colleagueUUIDSelector);
   const allSchemas = useSelector(getAllReviewSchemas);
   const { loaded: schemaLoaded = false } = useSelector(schemaMetaSelector);
   const allColleagueReviews = useSelector(getAllColleagueReviews);
   const { loaded: reviewsLoaded } = useSelector(reviewsMetaSelector);
-  const timeLine = useMemo(() => colleague?.timeline?.filter((timeline) => timeline.status === status), [colleague]);
+  const timeLine = colleague?.timeline || [];
   const { t } = useTranslation();
+
+  const [colleagueReviews, setColleagueReviews]: [any, (T) => void] = useState({});
 
   useEffect(() => {
     if (reviewsLoaded && schemaLoaded) {
@@ -74,7 +71,7 @@ export const WidgetTeamMateObjectives: FC<WidgetTeamMateObjectivesProps> = ({
       }
       setColleagueReviews(mappedReviews);
     }
-  }, [reviewsLoaded, schemaLoaded, allColleagueReviews.length, colleague.uuid]);
+  }, [reviewsLoaded, schemaLoaded]);
 
   const fetchData = (colleagueUuid) => {
     dispatch(
@@ -85,7 +82,13 @@ export const WidgetTeamMateObjectives: FC<WidgetTeamMateObjectivesProps> = ({
   const updateReviewStatus = useCallback(
     (status: Status) => (reviewType: ReviewType) => (reason: string) => {
       const update = {
-        pathParams: { colleagueUuid: colleague.uuid, type: reviewType, cycleUuid: 'CURRENT', status },
+        pathParams: {
+          colleagueUuid: colleague.uuid,
+          approverUuid: colleagueUuid,
+          type: reviewType,
+          cycleUuid: 'CURRENT',
+          status,
+        },
         data: {
           ...(reason ? { reason } : {}),
           status,
@@ -97,6 +100,11 @@ export const WidgetTeamMateObjectives: FC<WidgetTeamMateObjectivesProps> = ({
       };
 
       dispatch(ReviewsActions.updateReviewStatus(update));
+      dispatch(
+        ReviewsActions.getReviews({
+          pathParams: { colleagueUuid: colleague.uuid, cycleUuid: 'CURRENT', status: Status.WAITING_FOR_APPROVAL },
+        }),
+      );
     },
     [colleague],
   );
@@ -152,23 +160,21 @@ export const WidgetTeamMateObjectives: FC<WidgetTeamMateObjectivesProps> = ({
                         return (
                           <div key={`element-${timeline.reviewType}-${colleague.uuid}`}>
                             {(colleagueReviews[colleague.uuid] || [])
-                              .filter(
-                                (review) =>
-                                  review.type === timeline.reviewType && review.status === Status.WAITING_FOR_APPROVAL,
-                              )
+                              .filter((review) => review.type === timeline.reviewType && review.status === status)
                               .map(({ id, title, subTitle, description, explanations }) => (
                                 <ObjectiveTile
                                   key={`${timeline.reviewType}-${id}`}
                                   {...{ id, title, subTitle, description, explanations }}
                                 />
                               ))}
-                            {status === Status.WAITING_FOR_APPROVAL && (
-                              <ActionButtons
-                                approveColleagues={approveColleagues(timeline.reviewType)}
-                                declineColleagues={declineColleagues(timeline.reviewType)}
-                                reviewType={timeline.reviewType}
-                              />
-                            )}
+                            {status === Status.WAITING_FOR_APPROVAL &&
+                              timeline.status === Status.WAITING_FOR_APPROVAL && (
+                                <ActionButtons
+                                  approveColleagues={approveColleagues(timeline.reviewType)}
+                                  declineColleagues={declineColleagues(timeline.reviewType)}
+                                  reviewType={timeline.reviewType}
+                                />
+                              )}
                           </div>
                         );
                       })}
