@@ -27,7 +27,7 @@ const PersonalDevelopmentPlan = () => {
 
         <div className={css(descriptionMain)}>
           <DescriptionBlock style={descriptionLeft}>
-            <div className={css(title)}>What is Personal Development plan?</div>
+            <div className={css(title)}>What is Personal Development Plan?</div>
             <div className={css(details, detailsWithMargin)}>
               Your Performance Development Plan (PDP) is a tailored plan that helps you reflect on the things you are
               great at and identify areas you want to improve.

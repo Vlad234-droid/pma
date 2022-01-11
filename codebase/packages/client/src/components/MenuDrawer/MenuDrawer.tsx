@@ -48,16 +48,15 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
             <MenuItem
               iconGraphic={'aim'}
               linkTo={buildPath(Page.OBJECTIVES_VIEW)}
-              title={'My Business Objectives'}
-              // title={t('my_objectives_and_reviews', 'My objectives and reviews')}
+              title={t('my_objectives_and_reviews', 'My objectives and reviews')}
             />
-            <MenuItem iconGraphic={'list'} title={'Development Plan'} />
-            <MenuItem iconGraphic={'edit'} linkTo={buildPath(Page.NOTES)} title={'My Notes'} />
-            <MenuItem iconGraphic={'account'} linkTo={buildPath(Page.PROFILE)} title={'My Profile'} />
+            <MenuItem iconGraphic={'list'} title={'Personal Development Plan'} />
+            <MenuItem iconGraphic={'edit'} linkTo={buildPath(Page.NOTES)} title={'My notes'} />
+            <MenuItem iconGraphic={'account'} linkTo={buildPath(Page.PROFILE)} title={'My profile'} />
             <MenuItem iconGraphic={'chatSq'} linkTo={buildPath(Page.FEEDBACK)} title={'Feedback'} />
-            <MenuItem iconGraphic={'performance'} linkTo={buildPath(Page.PERFORMANCE_CYCLE)} title={'Support your Performance'} />
-            <MenuItem iconGraphic={'team'} linkTo={'/'} title={'Team Reporting'} />
-            <MenuItem iconGraphic={'calibration'} linkTo={'/'} title={'Calibration Ratings'} />
+            <MenuItem iconGraphic={'performance'} linkTo={buildPath(Page.PERFORMANCE_CYCLE)} title={'Support your performance'} />
+            <MenuItem iconGraphic={'team'} linkTo={'/'} title={'Team reporting'} />
+            <MenuItem iconGraphic={'calibration'} linkTo={'/'} title={'Calibration ratings'} />
           </div>
         </div>
         <div className={css(menuDrawerSettingsStyle)}>
@@ -80,11 +79,11 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
               <div className={css(menuDropdownStyle)}>
                 <Link to={buildPath(Page.CREATE_PERFORMANCE_CYCLE)} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
                   <Icon graphic={'createCycle'} />
-                  <span className={css(itemSettingsTextStyle)}>Create Performance cycle</span>
+                  <span className={css(itemSettingsTextStyle)}>Create performance cycle</span>
                 </Link>
                 <Link to={buildPath(Page.CREATE_STRATEGIC_DRIVERS)} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
                   <Icon graphic={'strategicDriver'} />
-                  <span className={css(itemSettingsTextStyle)}>Strategic Drivers</span>
+                  <span className={css(itemSettingsTextStyle)}>Strategic drivers</span>
                 </Link>
                 <Link to={'/'} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
                   <Icon graphic={'configuration'} />
