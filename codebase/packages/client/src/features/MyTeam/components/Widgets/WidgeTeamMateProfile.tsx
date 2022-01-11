@@ -100,16 +100,16 @@ export const WidgetTeamMateProfile: FC<WidgetTeamMateProfileProps> = ({ uuid, st
                           View profile
                         </button>
                       </div>
-                      {!simpleView && (
-                        <>
+                      <>
+                        {!simpleView && (
                           <div className={css({ padding: '0px 12px' })}>
                             <Icon graphic={graphics} fill={color} />
                           </div>
-                          <div className={css({ paddingLeft: '12px' })}>
-                            <ExpandButton />
-                          </div>
-                        </>
-                      )}
+                        )}
+                        <div className={css({ paddingLeft: '12px' })}>
+                          <ExpandButton />
+                        </div>
+                      </>
                     </div>
                   </div>
                   <Panel>
