@@ -18,7 +18,6 @@ import {
   transformReviewsToObjectives,
 } from 'features/Objectives';
 import { PreviousReviewFilesModal } from 'features/ReviewFiles/components';
-import { useToast, Variant } from 'features/Toast';
 import useDispatch from 'hooks/useDispatch';
 import { useSelector } from 'react-redux';
 import {
@@ -133,20 +132,6 @@ const MyObjectives: FC = () => {
     }
   }, [reviewLoaded, schemaLoaded]);
 
-  const { addToast } = useToast();
-
-  const handleClick = () => {
-    addToast({
-      id: Date.now().toString(),
-      title: t('do_you_know', 'Do you know?'),
-      variant: Variant.INFO,
-      description: t(
-        'that_you_can_submit',
-        'That you can submit new objectives at anytime during the performance cycle?',
-      ),
-    });
-  };
-
   const { loaded } = useSelector(getTimelineMetaSelector) || {};
 
   const handleShareClick = () => {
@@ -173,7 +158,7 @@ const MyObjectives: FC = () => {
       )}
       <div className={css(headWrapperStyles)}>
         {canShowMyReview && (
-          <div className={css(timelineWrapperStyles)} onClick={handleClick}>
+          <div className={css(timelineWrapperStyles)}>
             <StepIndicator
               mainTitle={t('performance_timeline_title', 'Your Contribution timeline')}
               titles={descriptions}

@@ -1752,34 +1752,34 @@
     "@energon/function-utils" "0.2.0"
     "@energon/object-utils" "0.7.1"
 
-"@energon-connectors/colleague-cms-api@0.7.8":
-  version "0.7.8"
-  resolved "https://nexus.ourtesco.com/repository/colleague-ui-private/@energon-connectors/colleague-cms-api/-/colleague-cms-api-0.7.8.tgz#0189d985c5879cd628f3226ed05d782be733c66f"
-  integrity sha512-vQP1ifaSkPauZ0BXm62lLdb45UOuta/N4OaUGA0hmTz2JMHgEGWPI6A3KWvqy6WnMSFrj1y2p4ff4mlzNu09sA==
+"@energon-connectors/colleague-cms-api@0.7.10":
+  version "0.7.10"
+  resolved "https://nexus.ourtesco.com/repository/colleague-ui-private/@energon-connectors/colleague-cms-api/-/colleague-cms-api-0.7.10.tgz#3b228ea256d1707ff663cdf5a835f1852fa0ac5b"
+  integrity sha512-OrcOBHct699Pa+nzS/K4oxPB0SrJ/a0SWJb64rzak+MvqMtaaGzweocS8Y3ZJJmAB4aG3RTFQWeJ5JsdWNdnyw==
   dependencies:
-    "@energon-connectors/core" "0.11.0"
-    "@energon/fetch-client" "0.14.1"
-    "@energon/rest-api-consumer" "0.8.8"
-    "@energon/rest-api-definition" "0.6.8"
+    "@energon-connectors/core" "0.11.2"
+    "@energon/fetch-client" "0.14.3"
+    "@energon/rest-api-consumer" "0.8.10"
+    "@energon/rest-api-definition" "0.6.10"
 
-"@energon-connectors/core@0.11.0":
-  version "0.11.0"
-  resolved "https://nexus.ourtesco.com/repository/colleague-ui-private/@energon-connectors/core/-/core-0.11.0.tgz#96dbf5bd833c6dc2717701a7aae1b1a2e434263b"
-  integrity sha512-rV3DUGWGOsEtOMoeX1vCtI0m7P+RrW/Wbf3roT/HdFZBm4oflMSgXgJUKMG8MDz7rHwjCg2zZhXLID9R0ovlaA==
+"@energon-connectors/core@0.11.2":
+  version "0.11.2"
+  resolved "https://nexus.ourtesco.com/repository/colleague-ui-private/@energon-connectors/core/-/core-0.11.2.tgz#1813bbdcc0024ac7ce7a17eb50e629c8206df24e"
+  integrity sha512-pGKIwT05ioknUZcfkl8Vwt1Ff1TS2fAxoPdKiV4tNyeMlxRCy4JjN7anfe589H83w7d3NIC+yq2/qlBEdfR5aA==
   dependencies:
-    "@energon/fetch-client" "0.14.1"
+    "@energon/fetch-client" "0.14.3"
     cross-fetch "3.0.4"
 
-"@energon/app-utils@0.5.4":
-  version "0.5.4"
-  resolved "https://nexus.ourtesco.com/repository/colleague-ui-private/@energon/app-utils/-/app-utils-0.5.4.tgz#d02b0add503ae5bb98580efe33e9c7d0f0ef0c7d"
-  integrity sha512-FmPMZ3lASm45e1N0CczYoHkogplSS5pLr/M0yfhGjFg1+/CTieoO3E3yVxWAfuEt2b9pTIE6etB49Nf68HZyvw==
+"@energon/app-utils@0.5.5":
+  version "0.5.5"
+  resolved "https://nexus.ourtesco.com/repository/colleague-ui-private/@energon/app-utils/-/app-utils-0.5.5.tgz#ad479f4334c90673110b5bc94c340285331e6ca7"
+  integrity sha512-mGedfxz9RsawVm2nsdXf/GQIGXuo4Yu6aFbJLHXikL8GrF9PdcvFDYxzcaQaFlhwcdZEcBi6Xj1B1QkfYeeuxw==
   dependencies:
     "@energon/array-utils" "0.19.8"
     "@energon/date-utils" "0.19.0"
     "@energon/redux-utils" "1.8.0"
     "@energon/splunk-logger-core" "0.3.0"
-    "@energon/splunk-logger-ui" "0.7.1"
+    "@energon/splunk-logger-ui" "0.7.2"
     react "^16.8.0"
 
 "@energon/array-utils@0.19.2":
@@ -1876,29 +1876,29 @@
     "@energon/object-utils" "0.7.1"
     "@energon/period-utils" "0.0.2"
 
-"@energon/express-middlewares@0.23.2":
-  version "0.23.2"
-  resolved "https://nexus.ourtesco.com/repository/colleague-ui-private/@energon/express-middlewares/-/express-middlewares-0.23.2.tgz#12b773789ebe77f6d3dc9411492846871fff5f67"
-  integrity sha512-2tbqV6+gwMpsbclDRKLsC2wKROFnKMARZRwMEie8d5qhLAtj94Zh06feXCKujcT4QatDzAB/3vn7a5K5e+Lv0w==
+"@energon/express-middlewares@0.23.4":
+  version "0.23.4"
+  resolved "https://nexus.ourtesco.com/repository/colleague-ui-private/@energon/express-middlewares/-/express-middlewares-0.23.4.tgz#e804d744ffff8006f1e3eb1b921fa719a387fd59"
+  integrity sha512-0M+jw1agjYAJRjItz1T/5mA/49rP/8lo1JS3o8pXtdG0dftLsCakk7tQadhkj5YHJdPofRu1X/IWCrwIT6M9FA==
   dependencies:
-    "@energon-connectors/colleague-cms-api" "0.7.8"
-    "@energon-connectors/core" "0.11.0"
-    "@energon/app-utils" "0.5.4"
+    "@energon-connectors/colleague-cms-api" "0.7.10"
+    "@energon-connectors/core" "0.11.2"
+    "@energon/app-utils" "0.5.5"
     "@energon/array-utils" "0.19.2"
     "@energon/object-utils" "0.7.1"
-    "@energon/onelogin" "1.35.0"
-    "@energon/splunk-logger" "0.31.0"
+    "@energon/onelogin" "1.35.2"
+    "@energon/splunk-logger" "0.31.2"
     "@energon/splunk-logger-core" "0.3.0"
     crypto-js "4.0.0"
     http-proxy-middleware "0.20.0"
 
-"@energon/fetch-client@0.14.1":
-  version "0.14.1"
-  resolved "https://nexus.ourtesco.com/repository/colleague-ui-private/@energon/fetch-client/-/fetch-client-0.14.1.tgz#08dc0383368dd811ce7fd8f8647d49c709d508cd"
-  integrity sha512-1Z1MOaImb1XT1oUrdzXoZvwAnT54R5IMlymM+f62/cS8E9RJL1900VZUxqTe4ErZ4dK8dJ3H+jo8AqNPT2nMUQ==
+"@energon/fetch-client@0.14.3":
+  version "0.14.3"
+  resolved "https://nexus.ourtesco.com/repository/colleague-ui-private/@energon/fetch-client/-/fetch-client-0.14.3.tgz#dbc21b58ff87b2cf9738879bbf1fe42b7c408ea2"
+  integrity sha512-OSFG7CW0UA71MEJgTLZ6NU5NSIMsklBIQ+aiGSeGiUJGcszhG7uANdB2JU0Fiypzu/hYHeu27t0/T2vOBcB86Q==
   dependencies:
     "@energon/object-utils" "0.7.1"
-    "@energon/splunk-logger" "0.31.0"
+    "@energon/splunk-logger" "0.31.2"
     query-string "5.1.1"
     uuid "3.3.2"
 
@@ -1967,16 +1967,16 @@
     "@energon/array-utils" "0.19.2"
     "@energon/function-utils" "0.2.0"
 
-"@energon/onelogin@1.35.0", "@energon/onelogin@^1.31.5":
-  version "1.35.0"
-  resolved "https://nexus.ourtesco.com/repository/colleague-ui-private/@energon/onelogin/-/onelogin-1.35.0.tgz#7a63a551a2794097a0c1a2c653e640e0abe109d4"
-  integrity sha512-5nwFI8MwpFL4u9AspAZPpFCHsb2Jc+BUf+MGwpXRR8iFKVSvQmCIFkH1/ODts3Y8aepCwRQ1bCpBXdhOaLR03g==
+"@energon/onelogin@1.35.2", "@energon/onelogin@^1.35.2":
+  version "1.35.2"
+  resolved "https://nexus.ourtesco.com/repository/colleague-ui-private/@energon/onelogin/-/onelogin-1.35.2.tgz#6ca9582f533df52c45facabcb43f55bfa21ef305"
+  integrity sha512-9LM7i0pnNiWLh3nLtgGodxT9Su3U7DE+vUOmOVhN07YspxUZfihBFC/IRu5uQ5NH/nmFjjWZ/W5CKN76tJEMoQ==
   dependencies:
     "@energon/cookie-utils" "0.7.0"
-    "@energon/express-middlewares" "0.23.2"
-    "@energon/fetch-client" "0.14.1"
-    "@energon/rest-api-consumer" "0.8.8"
-    "@energon/splunk-logger" "0.31.0"
+    "@energon/express-middlewares" "0.23.4"
+    "@energon/fetch-client" "0.14.3"
+    "@energon/rest-api-consumer" "0.8.10"
+    "@energon/splunk-logger" "0.31.2"
     "@energon/type-utils" "0.11.0"
     "@types/cookie-parser" "^1.4.1"
     "@types/cookie-session" "^2.0.37"
@@ -1986,7 +1986,6 @@
     "@types/js-cookie" "^2.2.2"
     "@types/jsonwebtoken" "^8.3.2"
     "@types/passport" "^1.0.0"
-    "@types/passport-saml" "^1.1.0"
     cookie-parser "^1.4.4"
     cookie-session "^1.3.3"
     crypto-js "^4.0.0"
@@ -1997,7 +1996,6 @@
     jwks-rsa "^1.5.0"
     openid-client "^4.7.4"
     passport "^0.4.0"
-    passport-saml "^1.0.0"
     typemoq "^2.1.0"
     uuid "^3.3.2"
 
@@ -2035,23 +2033,23 @@
   resolved "https://nexus.ourtesco.com/repository/colleague-ui-private/@energon/redux-utils/-/redux-utils-1.8.0.tgz#d0bffd24fb22b05b7c25dbaa9fa01c4e74f9afe4"
   integrity sha512-7bub9ohWy3BrFmCTl4vsW1QzAnYhf6oLOJDJ9FP3uEf7UnPJKGw/V1h/J7hQkFzY7iU5uL73Ooq1Eeo6IjSTgA==
 
-"@energon/rest-api-consumer@0.8.8":
-  version "0.8.8"
-  resolved "https://nexus.ourtesco.com/repository/colleague-ui-private/@energon/rest-api-consumer/-/rest-api-consumer-0.8.8.tgz#d6d362a162f347340a7a1728f0b6f73ba1690275"
-  integrity sha512-4+WL2tewTKDclDp09oWd/fcnwQzz1FkXyoLL+UY2Wzq5j06rQWJZ+tIihrETj+QBM4l/PBQYQNZ4YQpqQNu7og==
+"@energon/rest-api-consumer@0.8.10":
+  version "0.8.10"
+  resolved "https://nexus.ourtesco.com/repository/colleague-ui-private/@energon/rest-api-consumer/-/rest-api-consumer-0.8.10.tgz#ac2572751ce0eec59b2544275d5ea4d5d2bf31e5"
+  integrity sha512-ke37j1X+iVXWx+eGzLbL9xaHiy5fpgjDkI7pIMo4dm8lxls+EyjOx7+PtitKD7kKquLMntjkygKLxALlhKcMcw==
   dependencies:
     "@energon/array-utils" "0.19.2"
-    "@energon/fetch-client" "0.14.1"
+    "@energon/fetch-client" "0.14.3"
     "@energon/function-utils" "0.2.0"
     "@energon/object-utils" "0.7.1"
-    "@energon/rest-api-definition" "0.6.8"
+    "@energon/rest-api-definition" "0.6.10"
 
-"@energon/rest-api-definition@0.6.8":
-  version "0.6.8"
-  resolved "https://nexus.ourtesco.com/repository/colleague-ui-private/@energon/rest-api-definition/-/rest-api-definition-0.6.8.tgz#7cad8cc83fb77e659fdfc5c6fb306a8b5a2877a9"
-  integrity sha512-KwcXo9hM+VYRZ573GwiFZBEg30t5YzssO+yfPPz2MgJzhHewaSRNTQGR+V00dXUsvIiBNBKiTOLU0gcIAf3wUg==
+"@energon/rest-api-definition@0.6.10":
+  version "0.6.10"
+  resolved "https://nexus.ourtesco.com/repository/colleague-ui-private/@energon/rest-api-definition/-/rest-api-definition-0.6.10.tgz#8e23f24fdc62220e98fef81ac269147cd3e7ab00"
+  integrity sha512-+UeWFDSUBliS/i5JadVCXrTtWTYlxZKCCLy+xnA8AuJgj6lDGh2FChLsBLTX2bXtJWBJx1bcB60xBkuBTFF0Tw==
   dependencies:
-    "@energon/fetch-client" "0.14.1"
+    "@energon/fetch-client" "0.14.3"
     "@energon/type-utils" "0.11.0"
 
 "@energon/splunk-logger-core@0.3.0":
@@ -2059,18 +2057,18 @@
   resolved "https://nexus.ourtesco.com/repository/colleague-ui-private/@energon/splunk-logger-core/-/splunk-logger-core-0.3.0.tgz#9af98e858c79cb542ba3b82403d0f0000ee59f8b"
   integrity sha512-QVkNodfFYJs9vV+c0v9vaiyNCro/lEuaGkwjeNTBtOlDDaZfdChZAh3y6g+7OV7rFxOWl+TviwUDrEAi9/+KNA==
 
-"@energon/splunk-logger-ui@0.7.1":
-  version "0.7.1"
-  resolved "https://nexus.ourtesco.com/repository/colleague-ui-private/@energon/splunk-logger-ui/-/splunk-logger-ui-0.7.1.tgz#8158513841651d68623c420cbd84e6f2b50f73c4"
-  integrity sha512-EEJVJ6/6A0C5Tmc1BxRSvr5V7mh52xqbbJOUwff/7yyW5TSnzCCZ5m61UyJPVpjFl2dKKkQgQuesdJk/3p5vHg==
+"@energon/splunk-logger-ui@0.7.2":
+  version "0.7.2"
+  resolved "https://nexus.ourtesco.com/repository/colleague-ui-private/@energon/splunk-logger-ui/-/splunk-logger-ui-0.7.2.tgz#af816c65c935bdc3c2ca8d4d0434d89fe0cd3ebe"
+  integrity sha512-CHi47Nu2ipEB4zH5e249trpY/+MKkzly6kZJca0ZcsPA35moy00hpjRn/DKtxftuC9faBxxekBX9SCEt3SG5FA==
   dependencies:
     "@energon/splunk-logger-core" "0.3.0"
     utility-types "3.7.0"
 
-"@energon/splunk-logger@0.31.0":
-  version "0.31.0"
-  resolved "https://nexus.ourtesco.com/repository/colleague-ui-private/@energon/splunk-logger/-/splunk-logger-0.31.0.tgz#5d0ed2c0066c745441ed7901bcfa741734d7ee0c"
-  integrity sha512-nzW7WyO6BORfbbC55IgU2zy4Yd0+IcU3a4HBmu1zLSua0Gs0EMlheF5V0doeu8XDOpgqy1Wrlekj18gjybiWUA==
+"@energon/splunk-logger@0.31.2":
+  version "0.31.2"
+  resolved "https://nexus.ourtesco.com/repository/colleague-ui-private/@energon/splunk-logger/-/splunk-logger-0.31.2.tgz#600730c99c69481618ab51b422d60d99b604037a"
+  integrity sha512-CQeIwM2ZTkv+OCcnKtO2mOS8bpb+ooLMQs3K1CVqyJocqTDKEHAMp0RN4ail04W3oYJRcpLvVpFhyxMc0pdCyQ==
   dependencies:
     "@energon/array-utils" "0.19.2"
     "@energon/redux-first-router-ext" "1.19.2"
@@ -2079,7 +2077,7 @@
     source-map "^0.7.3"
     splunk-logging "0.10.1"
     stacktrace-parser "^0.1.10"
-    ua-parser-js "0.7.23"
+    ua-parser-js "1.0.2"
     url-join "4.0.1"
     uuid "3.3.2"
 
@@ -5624,15 +5622,7 @@
   resolved "https://registry.yarnpkg.com/@types/parse5/-/parse5-5.0.3.tgz#e7b5aebbac150f8b5fdd4a46e7f0bd8e65e19109"
   integrity sha512-kUNnecmtkunAoQ3CnjmMkzNU/gtxG8guhi+Fk2U/kOpIKjIMKnXGp4IJCgQJrXSgMsWYimYG4TGjz/UzbGEBTw==
 
-"@types/passport-saml@^1.1.0":
-  version "1.1.3"
-  resolved "https://registry.yarnpkg.com/@types/passport-saml/-/passport-saml-1.1.3.tgz#efc57902a07ebe1ec114d00acd8d990e873813a1"
-  integrity sha512-4kqfyTN6Ud8xTPIdmsYDOBVs4vQFQRcLWhMcGLYiMBc0sFeC44k0Q8Z8v1TIYTmZUrqaO6rbf78GZXl4xAvCRA==
-  dependencies:
-    "@types/express" "*"
-    "@types/passport" "*"
-
-"@types/passport@*", "@types/passport@^1.0.0":
+"@types/passport@^1.0.0":
   version "1.0.7"
   resolved "https://registry.yarnpkg.com/@types/passport/-/passport-1.0.7.tgz#85892f14932168158c86aecafd06b12f5439467a"
   integrity sha512-JtswU8N3kxBYgo+n9of7C97YQBT+AYPP2aBfNGTzABqPAZnK/WOAaKfh3XesUYMZRrXFuoPc2Hv0/G/nQFveHw==
@@ -6340,11 +6330,6 @@
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/@webpack-cli/serve/-/serve-1.6.0.tgz#2c275aa05c895eccebbfc34cfb223c6e8bd591a2"
   integrity sha512-ZkVeqEmRpBV2GHvjjUZqEai2PpUbuq8Bqd//vEYsp63J8WyexI8ppCqVS3Zs0QADf6aWuPdU+0XsPI647PVlQA==
-
-"@xmldom/xmldom@^0.7.0":
-  version "0.7.5"
-  resolved "https://registry.yarnpkg.com/@xmldom/xmldom/-/xmldom-0.7.5.tgz#09fa51e356d07d0be200642b0e4f91d8e6dd408d"
-  integrity sha512-V3BIhmY36fXZ1OtVcI9W+FxQqxVLsPKcNjWigIaa81dLC9IolJl5Mt4Cvhmr0flUnjSpTdrbMTSbXqYqV5dT6A==
 
 "@xtuc/ieee754@^1.2.0":
   version "1.2.0"
@@ -10317,7 +10302,7 @@ escalade@^3.0.2, escalade@^3.1.1:
   resolved "https://registry.yarnpkg.com/escalade/-/escalade-3.1.1.tgz#d8cfdc7000965c5a0174b4a82eaa5c0552742e40"
   integrity sha512-k0er2gUkLf8O0zKJiAhmkTnJlTvINGv7ygDNPbeIsX/TJjGJZHuh9B2UxbsaEkmlEo9MfhrSzmhIlhRlI2GXnw==
 
-escape-html@^1.0.3, escape-html@~1.0.3:
+escape-html@~1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/escape-html/-/escape-html-1.0.3.tgz#0258eae4d3d0c0974de1c169188ef0051d1d1988"
   integrity sha1-Aljq5NPQwJdN4cFpGI7wBR0dGYg=
@@ -17555,20 +17540,7 @@ pascalcase@^0.1.1:
   resolved "https://registry.yarnpkg.com/pascalcase/-/pascalcase-0.1.1.tgz#b363e55e8006ca6fe21784d2db22bd15d7917f14"
   integrity sha1-s2PlXoAGym/iF4TS2yK9FdeRfxQ=
 
-passport-saml@^1.0.0:
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/passport-saml/-/passport-saml-1.5.0.tgz#4f22526b577987fb2304219c29e05d2172fca5cf"
-  integrity sha512-6f4bfnu/X2KNbuqshOryPap0g8BvhOrlt1qDtJdA44qzQXZ5QUMwaTmexAHIf96LTqPqQ91MzPvi5MGsOgTYTw==
-  dependencies:
-    debug "^3.1.0"
-    passport-strategy "*"
-    xml-crypto "^2.0.0"
-    xml-encryption "1.2.1"
-    xml2js "0.4.x"
-    xmlbuilder "^11.0.0"
-    xmldom "0.1.x"
-
-passport-strategy@*, passport-strategy@1.x.x:
+passport-strategy@1.x.x:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/passport-strategy/-/passport-strategy-1.0.0.tgz#b5539aa8fc225a3d1ad179476ddf236b440f52e4"
   integrity sha1-tVOaqPwiWj0a0XlHbd8ja0QPUuQ=
@@ -20500,7 +20472,7 @@ sass-loader@8.0.2:
     schema-utils "^2.6.1"
     semver "^6.3.0"
 
-sax@>=0.6.0, sax@~1.2.4:
+sax@~1.2.4:
   version "1.2.4"
   resolved "https://registry.yarnpkg.com/sax/-/sax-1.2.4.tgz#2816234e2378bddc4e5354fab5caa895df7100d9"
   integrity sha512-NqVDv9TpANUjFm0N8uM5GxL36UgKi9/atZw+x7YFnQ8ckwFGKrl4xX4yWtrey3UJm5nP1kUbnYgLopqWNSRhWw==
@@ -22437,10 +22409,10 @@ typescript@^4.0.3, typescript@^4.1.2, typescript@^4.1.3, typescript@^4.2.4, type
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.4.4.tgz#2cd01a1a1f160704d3101fd5a58ff0f9fcb8030c"
   integrity sha512-DqGhF5IKoBl8WNf8C1gu8q0xZSInh9j1kJJMqT3a94w1JzVaBU4EXOSMrz9yDqMT0xt3selp83fuFMQ0uzv6qA==
 
-ua-parser-js@0.7.23:
-  version "0.7.23"
-  resolved "https://registry.yarnpkg.com/ua-parser-js/-/ua-parser-js-0.7.23.tgz#704d67f951e13195fbcd3d78818577f5bc1d547b"
-  integrity sha512-m4hvMLxgGHXG3O3fQVAyyAQpZzDOvwnhOTjYz5Xmr7r/+LpkNy3vJXdVRWgd1TkAb7NGROZuSy96CrlNVjA7KA==
+ua-parser-js@1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/ua-parser-js/-/ua-parser-js-1.0.2.tgz#e2976c34dbfb30b15d2c300b2a53eac87c57a775"
+  integrity sha512-00y/AXhx0/SsnI51fTc0rLRmafiGOM4/O+ny10Ps7f+j/b8p/ZY11ytMgznXkOVo4GQ+KwQG5UQLkLGirsACRg==
 
 uglify-js@^3.1.4:
   version "3.14.3"
@@ -23998,61 +23970,15 @@ ws@^8.1.0:
   resolved "https://registry.yarnpkg.com/ws/-/ws-8.2.3.tgz#63a56456db1b04367d0b721a0b80cae6d8becbba"
   integrity sha512-wBuoj1BDpC6ZQ1B7DWQBYVLphPWkm8i9Y0/3YdHjHKHiohOJ1ws+3OccDWtH+PoC9DZD5WOTrJvNbWvjS6JWaA==
 
-xml-crypto@^2.0.0:
-  version "2.1.3"
-  resolved "https://registry.yarnpkg.com/xml-crypto/-/xml-crypto-2.1.3.tgz#6a7272b610ea3e4ea7f13e9e4876f1b20cbc32c8"
-  integrity sha512-MpXZwnn9JK0mNPZ5mnFIbNnQa+8lMGK4NtnX2FlJMfMWR60sJdFO9X72yO6ji068pxixzk53O7x0/iSKh6IhyQ==
-  dependencies:
-    "@xmldom/xmldom" "^0.7.0"
-    xpath "0.0.32"
-
-xml-encryption@1.2.1:
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/xml-encryption/-/xml-encryption-1.2.1.tgz#e6d18817c4309fd07ca7793cca93c3fd06745baa"
-  integrity sha512-hn5w3l5p2+nGjlmM0CAhMChDzVGhW+M37jH35Z+GJIipXbn9PUlAIRZ6I5Wm7ynlqZjFrMAr83d/CIp9VZJMTA==
-  dependencies:
-    escape-html "^1.0.3"
-    node-forge "^0.10.0"
-    xmldom "~0.1.15"
-    xpath "0.0.27"
-
 xml-name-validator@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/xml-name-validator/-/xml-name-validator-3.0.0.tgz#6ae73e06de4d8c6e47f9fb181f78d648ad457c6a"
   integrity sha512-A5CUptxDsvxKJEU3yO6DuWBSJz/qizqzJKOMIfUJHETbBw/sFaDxgd6fxm1ewUaM0jZ444Fc5vC5ROYurg/4Pw==
 
-xml2js@0.4.x:
-  version "0.4.23"
-  resolved "https://registry.yarnpkg.com/xml2js/-/xml2js-0.4.23.tgz#a0c69516752421eb2ac758ee4d4ccf58843eac66"
-  integrity sha512-ySPiMjM0+pLDftHgXY4By0uswI3SPKLDw/i3UXbnO8M/p28zqexCUoPmQFrYD+/1BzhGJSs2i1ERWKJAtiLrug==
-  dependencies:
-    sax ">=0.6.0"
-    xmlbuilder "~11.0.0"
-
-xmlbuilder@^11.0.0, xmlbuilder@~11.0.0:
-  version "11.0.1"
-  resolved "https://registry.yarnpkg.com/xmlbuilder/-/xmlbuilder-11.0.1.tgz#be9bae1c8a046e76b31127726347d0ad7002beb3"
-  integrity sha512-fDlsI/kFEx7gLvbecc0/ohLG50fugQp8ryHzMTuW9vSa1GJ0XYWKnhsUx7oie3G98+r56aTQIUB4kht42R3JvA==
-
 xmlchars@^2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/xmlchars/-/xmlchars-2.2.0.tgz#060fe1bcb7f9c76fe2a17db86a9bc3ab894210cb"
   integrity sha512-JZnDKK8B0RCDw84FNdDAIpZK+JuJw+s7Lz8nksI7SIuU3UXJJslUthsi+uWBUYOwPFwW7W7PRLRfUKpxjtjFCw==
-
-xmldom@0.1.x, xmldom@~0.1.15:
-  version "0.1.31"
-  resolved "https://registry.yarnpkg.com/xmldom/-/xmldom-0.1.31.tgz#b76c9a1bd9f0a9737e5a72dc37231cf38375e2ff"
-  integrity sha512-yS2uJflVQs6n+CyjHoaBmVSqIDevTAWrzMmjG1Gc7h1qQ7uVozNhEPJAwZXWyGQ/Gafo3fCwrcaokezLPupVyQ==
-
-xpath@0.0.27:
-  version "0.0.27"
-  resolved "https://registry.yarnpkg.com/xpath/-/xpath-0.0.27.tgz#dd3421fbdcc5646ac32c48531b4d7e9d0c2cfa92"
-  integrity sha512-fg03WRxtkCV6ohClePNAECYsmpKKTv5L8y/X3Dn1hQrec3POx2jHZ/0P2qQ6HvsrU1BmeqXcof3NGGueG6LxwQ==
-
-xpath@0.0.32:
-  version "0.0.32"
-  resolved "https://registry.yarnpkg.com/xpath/-/xpath-0.0.32.tgz#1b73d3351af736e17ec078d6da4b8175405c48af"
-  integrity sha512-rxMJhSIoiO8vXcWvSifKqhvV96GjiD5wYb8/QHdoRyQvraTpp4IEv944nhGausZZ3u7dhQXteZuZbaqfpB7uYw==
 
 xtend@^4.0.0, xtend@^4.0.1, xtend@~4.0.0, xtend@~4.0.1:
   version "4.0.2"
