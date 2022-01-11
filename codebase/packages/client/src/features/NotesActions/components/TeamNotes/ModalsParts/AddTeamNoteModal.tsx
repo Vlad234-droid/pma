@@ -111,7 +111,7 @@ const AddTeamNoteModal: FC<AddTeamNoteModalProps> = ({
               justifyContent: 'space-between',
             })}
           >
-            <Button styles={[theme.font.fixed.f16, buttonCoreStyled]} onPress={cancelTEAMModal} isDisabled={true}>
+            <Button styles={[theme.font.fixed.f16, buttonCoreStyled]} onPress={cancelTEAMModal}>
               <Trans>Cancel</Trans>
             </Button>
 
