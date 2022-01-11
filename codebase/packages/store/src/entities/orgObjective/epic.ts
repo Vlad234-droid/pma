@@ -23,9 +23,42 @@ export const getOrgObjectivesEpic: Epic = (action$, _, { api }) =>
 
 export const getOrgAuditLogsEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
-    filter(isActionOf(getOrgAuditLogs.request) || isActionOf(createAndPublishOrgObjective.success) ),
+    filter(isActionOf(getOrgAuditLogs.request)),
     switchMap(({ payload }) =>
       from(api.getOrgAuditLogs(payload)).pipe(
+        // @ts-ignore
+        map(({ data }) => {
+          return getOrgAuditLogs.success({ auditLogs: data });
+        }),
+        catchError(({ errors }) => of(getOrgAuditLogs.failure(errors))),
+        takeUntil(action$.pipe(filter(isActionOf(getOrgAuditLogs.cancel)))),
+      ),
+    ),
+  );
+  
+// try to optimiz in future
+export const getOrgAuditLogsOnPublishEpic: Epic = (action$, _, { api }) =>
+  action$.pipe(
+    filter(isActionOf(createOrgObjective.success) || isActionOf(createAndPublishOrgObjective.success)),
+    // filter(isActionOf(getOrgAuditLogs.request)    || isActionOf(createAndPublishOrgObjective.success) ),
+    switchMap(({ payload }) =>
+      from(api.getOrgAuditLogs({ start: 1, limit: 3 })).pipe(
+        // @ts-ignore
+        map(({ data }) => {
+          return getOrgAuditLogs.success({ auditLogs: data });
+        }),
+        catchError(({ errors }) => of(getOrgAuditLogs.failure(errors))),
+        takeUntil(action$.pipe(filter(isActionOf(getOrgAuditLogs.cancel)))),
+      ),
+    ),
+  );
+
+// try to optimiz in future
+export const getOrgAuditLogsOnCreateEpic: Epic = (action$, _, { api }) =>
+  action$.pipe(
+    filter(isActionOf(createAndPublishOrgObjective.success)),
+    switchMap(({ payload }) =>
+      from(api.getOrgAuditLogs({start: 1, limit: 3 })).pipe(
         // @ts-ignore
         map(({ data }) => {
           return getOrgAuditLogs.success({ auditLogs: data });
@@ -71,4 +104,6 @@ export default combineEpics(
   createOrgObjectiveEpic,
   getOrgAuditLogsEpic,
   createAndPublishOrgObjectiveEpic,
+  getOrgAuditLogsOnPublishEpic,
+  getOrgAuditLogsOnCreateEpic,
 );
