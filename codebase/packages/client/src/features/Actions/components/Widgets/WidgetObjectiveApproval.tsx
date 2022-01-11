@@ -39,8 +39,7 @@ export const WidgetObjectiveApproval: FC<WidgetObjectiveApprovalProps> = ({
     if (declines.length && declines.length === reviewsForApproval.length) {
       // if there is at least one declined entity
       if (declines.some((decline) => decline !== null)) {
-        console.log('will decline');
-        // declineColleagues(declines);
+        declineColleagues(declines);
       } else {
         // in other case, clear declines to start again
         setDeclines([]);
