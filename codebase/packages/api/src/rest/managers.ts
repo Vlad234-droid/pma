@@ -1,6 +1,14 @@
 import httpClient from '../config/client';
 
 const domain = '/managers';
+
+const REVIEWS = 'reviews';
+const FULL_TEAM_REVIEWS = 'full-team-reviews';
+
 export const getManagers = (params?: any) => {
-  return httpClient.get(`${domain}/${params.colleagueUuid}/reviews`, { params: { ...params } });
+  const { colleagueUuid, fullTeam } = params;
+
+  return httpClient.get(`${domain}/${colleagueUuid}/${fullTeam ? FULL_TEAM_REVIEWS : REVIEWS}`, {
+    params: { colleagueUuid },
+  });
 };
