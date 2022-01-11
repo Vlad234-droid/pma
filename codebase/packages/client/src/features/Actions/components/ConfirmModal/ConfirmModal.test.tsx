@@ -93,7 +93,7 @@ describe('<ConfirmModal />', () => {
       expect(props.onSave).not.toHaveBeenCalled();
     });
 
-    it('should call props.onSave with reason on Submit button click, if hasReason and reason.length', () => {
+    it('should call props.onSave with true and reason on Submit button click, if hasReason', () => {
       const newProps = {
         ...props,
         hasReason: true,
@@ -108,7 +108,25 @@ describe('<ConfirmModal />', () => {
 
       fireEvent.click(getByTestId('submit-btn'));
 
-      expect(props.onSave).toHaveBeenCalledWith('mocked_reason');
+      expect(props.onSave).toHaveBeenCalledWith(true, 'mocked_reason');
+    });
+
+    it('should call props.onSave with false and reason on Submit button click, if !hasReason', () => {
+      const newProps = {
+        ...props,
+        hasReason: false,
+        reason: '',
+      };
+
+      const { getByTestId } = render(
+        <ConfirmModal {...newProps} />,
+      );
+
+      expect(getByTestId('submit-btn')).toBeInTheDocument();
+
+      fireEvent.click(getByTestId('submit-btn'));
+
+      expect(props.onSave).toHaveBeenCalledWith(true, 'mocked_reason');
     });
   });
 });

@@ -5,8 +5,6 @@ import { Trans } from 'components/Translation';
 import { ColleagueInfo } from 'features/MyTeam';
 import { Employee } from 'config/types';
 
-type RenderContent = (setReason: (reason: string) => void) => JSX.Element;
-
 export type ConfirmAcceptModalProps = {
   title?: string;
   onClose: () => void;
