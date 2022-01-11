@@ -62,6 +62,7 @@ const CreateOrganizationObjectives: FC<Props> = () => {
         data: orgObjectivesData,
       }),
     );
+
   };
 
   const checkInputData = () => {
@@ -97,9 +98,6 @@ const CreateOrganizationObjectives: FC<Props> = () => {
 
   useEffect(() => {
     dispatch(OrgObjectiveActions.getOrgAuditLogs({ start: 1, limit: 3 }));
-  }, []);
-
-  useEffect(() => {
     dispatch(OrgObjectiveActions.getOrgObjectives({}));
   }, []);
 
@@ -146,14 +144,14 @@ const CreateOrganizationObjectives: FC<Props> = () => {
                   }
                   onPress={save}
                 >
-                  Save
+                  Save as draft
                 </Button>
                 <Button
                   isDisabled={isPublishBtnDisabled}
                   styles={isPublishBtnDisabled ? [buttons, publishBtn] : [buttons]}
                   onPress={publish}
                 >
-                  Publish
+                  Submit
                 </Button>
               </div>
             </div>
@@ -182,6 +180,7 @@ const saveBtn: CreateRule<{ theme: Theme }> = (props) => {
     border: `2px solid ${theme.colors.tescoBlue}`,
     backgroundColor: `${theme.colors.white}`,
     color: `${theme.colors.tescoBlue}`,
+    opacity: '0.5',
     cursor: 'auto',
     ':disabled': {
       background: 'transparent',
@@ -194,9 +193,10 @@ const saveBtn: CreateRule<{ theme: Theme }> = (props) => {
 
 const publishBtn: Rule = ({ theme }) => {
   return {
-    border: `2px solid ${theme.colors.tescoBlue}`,
-    backgroundColor: `${theme.colors.white}`,
-    color: `${theme.colors.tescoBlue}`,
+    // border: `2px solid ${theme.colors.tescoBlue}`,
+    backgroundColor: `${theme.colors.tescoBlue}`,
+    color: `${theme.colors.white}`,
+    opacity: '0.5',
     cursor: 'auto',
     ':disabled': {
       background: 'transparent',
