@@ -3,7 +3,7 @@ import { useStyle } from '@dex-ddl/core';
 
 import { ReviewForApproval } from 'config/types';
 import { ReviewType } from 'config/enum';
-import { Select } from 'components/Form';
+import { Select, Item } from 'components/Form';
 import { useTranslation } from 'components/Translation';
 
 import ConfirmModal from './ConfirmModal';
@@ -34,11 +34,14 @@ const DeclineModal: FC<Props> = ({ onSave, onClose, review, reviewType }) => {
                 {t('decline_objective_agreement', `You’ve rejected your colleague’s objectives because they were not:`)}
               </div>
               <div className={css({ padding: '0 40px' })}>
-                <Select
-                  options={options}
-                  placeholder={t('please_select', 'Please select')}
-                  onChange={(e) => setReason(e.target.value)}
-                />
+                <Item withIcon={false}>
+                  <Select
+                    options={options}
+                    placeholder={t('please_select', 'Please select')}
+                    onChange={(e) => setReason(e.target.value)}
+                    name='declineReason'
+                  />
+                </Item>
               </div>
             </>
           ) : (

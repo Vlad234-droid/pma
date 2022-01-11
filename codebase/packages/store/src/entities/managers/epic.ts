@@ -9,7 +9,6 @@ export const getManagersEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
     filter(isActionOf(getManagers.request)),
     switchMap(({ payload }) => {
-      console.log(payload);
       return from(api.getManagers(payload)).pipe(
         map(getManagers.success),
         catchError((e) => {

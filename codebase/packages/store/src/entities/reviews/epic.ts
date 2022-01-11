@@ -140,7 +140,7 @@ export const updateReviewStatusEpic: Epic = (action$, _, { api }) => {
       // @ts-ignore
       return from(api.updateReviewStatus(payload)).pipe(
         map(() => {
-          return getManagers.request(payload.pathParams);
+          return getManagers.request({ colleagueUuid: payload.pathParams.approverUuid });
         }),
         catchError((e) => {
           const errors = e?.data?.errors;
