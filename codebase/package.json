@@ -20,6 +20,7 @@
     "run:dev": "lerna run --parallel run:dev",
     "run:standalone:dev": "lerna run --parallel run:standalone:dev",
     "run:prod": "lerna run --parallel run:prod",
+    "run:server": "lerna run --parallel run:server --scope @pma/server",
     "ws:server": "yarn workspace @pma/server",
     "ws:client": "yarn workspace @pma/client",
     "ws:store": "yarn workspace @pma/store",
