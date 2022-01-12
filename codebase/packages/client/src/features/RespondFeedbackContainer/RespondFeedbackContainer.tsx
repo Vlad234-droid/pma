@@ -134,12 +134,6 @@ const RespondFeedbackContainer: FC = () => {
             content: title,
             styles: [modalTitleOptionStyle],
           }}
-          onOverlayClick={() => {
-            if (infoModal) setInfoModal(() => false);
-            if (modalSuccess) setModalSuccess(() => false);
-            setSelectedPerson(() => null);
-            setIsOpen(() => false);
-          }}
         >
           <ModalRespondFeedback
             setIsOpen={setIsOpen}

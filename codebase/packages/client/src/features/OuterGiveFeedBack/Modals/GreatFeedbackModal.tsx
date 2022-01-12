@@ -6,13 +6,13 @@ type Info360ModalProps = {
   setModalGreatFeedback: Dispatch<SetStateAction<boolean>>;
 };
 
-const Info360Modal: FC<Info360ModalProps> = ({ setModalGreatFeedback }) => {
+const GreatFeedbackModal: FC<Info360ModalProps> = ({ setModalGreatFeedback }) => {
   const { css, theme } = useStyle();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
   return (
     <div className={css(WrapperInfo)}>
-      <h2 className={css(Title)}>
+      <h2 className={css(title)}>
         Giving feedback helps us to make sure we&apos;re all contributing our best, whether that&apos;s celebrating
         what&apos;s gone well or letting someone know when something could be better.
       </h2>
@@ -43,7 +43,6 @@ const Info360Modal: FC<Info360ModalProps> = ({ setModalGreatFeedback }) => {
           </li>
         </li>
       </ol>
-
       <p className={css(PreRecomendationInfo)}>Remember:</p>
       <ul className={css(dotsList)}>
         <li>make your good intentions clear</li>
@@ -51,7 +50,10 @@ const Info360Modal: FC<Info360ModalProps> = ({ setModalGreatFeedback }) => {
         <li>describe the behaviour you observed</li>
         <li>highlight the impact it had</li>
       </ul>
-
+      <h3 className={css(titleFeedback)}>
+        Feedback shared will be named, this allows the receiver to ask you questions about the feedback when you next
+        speak.
+      </h3>
       <span
         className={css({
           position: 'fixed',
@@ -95,6 +97,11 @@ const WrapperInfo: Rule = {
   overflow: 'auto',
   height: '100%',
 };
+const titleFeedback: Rule = {
+  fontWeight: 'bold',
+  fontSize: '18px',
+  lineHeight: '20px',
+};
 
 const PreTitle: Rule = {
   margin: '16px 0px 0px 0px',
@@ -102,7 +109,7 @@ const PreTitle: Rule = {
   fontSize: '16px',
   lineHeight: '20px',
 };
-const Title: Rule = {
+const title: Rule = {
   margin: '0px',
   fontWeight: 'normal',
   fontSize: '16px',
@@ -116,4 +123,4 @@ const PreRecomendationInfo: Rule = {
   margin: '0px',
 };
 
-export default Info360Modal;
+export default GreatFeedbackModal;

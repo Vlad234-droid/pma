@@ -1,9 +1,8 @@
 import React, { FC } from 'react';
 import { useBreakpoints, useStyle, Rule } from '@dex-ddl/core';
 import { ModalGiveFeedbackProps, GiveFeedbackType } from '../type';
-import { InfoModal, SearchPart, SubmitPart, SuccessModal } from './index';
+import { InfoModal, SearchPart, SubmitPart, SuccessModal, GreatFeedbackModal } from './index';
 import { IconButton } from 'components/IconButton';
-//import { SubmitButton } from '../../../features/Objectives/components/Modal/index';
 import { getFindedColleaguesSelector, ColleaguesActions, colleagueUUIDSelector, FeedbackActions } from '@pma/store';
 import { useDispatch, useSelector } from 'react-redux';
 import { ConfirmModal } from '../../../pages/Feedback';
@@ -23,6 +22,8 @@ const ModalGiveFeedback: FC<ModalGiveFeedbackProps> = ({
   setFeedbackItems,
   setConfirmModal,
   confirmModal,
+  modalGreatFeedback,
+  setModalGreatFeedback,
 }) => {
   const dispatch = useDispatch();
   const findedColleagues = useSelector(getFindedColleaguesSelector) || [];
@@ -34,7 +35,7 @@ const ModalGiveFeedback: FC<ModalGiveFeedbackProps> = ({
   const { handleSubmit, reset, getValues, trigger } = methods;
 
   const switchClose = (): void => {
-    reset();
+    reset({ feedback: [{ field: '' }, { field: '' }, { field: '' }] });
     setFeedbackItems(() => []);
     if (confirmModal) {
       setConfirmModal(() => false);
@@ -52,7 +53,7 @@ const ModalGiveFeedback: FC<ModalGiveFeedbackProps> = ({
 
   const giveFeedback: GiveFeedbackType[] = [
     {
-      giveFeedback_id: '1',
+      giveFeedback_id: '0',
       giveFeedbacka_main_title: 'Question 1',
       giveFeedback_title:
         "Looking back at what you've seen recently, what would you like to say to this colleague about what they`ve delivered or how they've gone about it?",
@@ -60,11 +61,10 @@ const ModalGiveFeedback: FC<ModalGiveFeedbackProps> = ({
       giveFeedback_field: {
         field_id: '1',
         field_type: 'textarea',
-        field_value: undefined,
       },
     },
     {
-      giveFeedback_id: '2',
+      giveFeedback_id: '1',
       giveFeedbacka_main_title: 'Question 2',
       giveFeedback_title:
         'Looking forward, what should this colleague do more (or less) of in order to be at their best?',
@@ -72,17 +72,15 @@ const ModalGiveFeedback: FC<ModalGiveFeedbackProps> = ({
       giveFeedback_field: {
         field_id: '2',
         field_type: 'textarea',
-        field_value: undefined,
       },
     },
     {
-      giveFeedback_id: '3',
+      giveFeedback_id: '2',
       giveFeedbacka_main_title: 'Anything else?',
       giveFeedback_title: 'Add any other comments you would like to share with your colleague.',
       giveFeedback_field: {
         field_id: '3',
         field_type: 'textarea',
-        field_value: undefined,
       },
     },
   ];
@@ -90,7 +88,7 @@ const ModalGiveFeedback: FC<ModalGiveFeedbackProps> = ({
   const onSubmit = async (data) => {
     setConfirmModal(() => false);
     if (!colleagueUuid) return;
-    const conv = data.feedback.slice(1);
+    const values = data.feedback;
     const getIfNeedUuid = (selectedPerson) => {
       if (!selectedPerson.uuid) return;
       return {
@@ -110,7 +108,7 @@ const ModalGiveFeedback: FC<ModalGiveFeedbackProps> = ({
       colleagueUuid: colleagueUuid,
       targetColleagueUuid: selectedPerson.colleagueUUID,
       status: 'SUBMITTED',
-      feedbackItems: conv.map((item, i) => {
+      feedbackItems: values.map((item, i) => {
         return {
           ...getFeedbackUuidItems(i),
           code: giveFeedback[i].giveFeedbacka_main_title,
@@ -126,7 +124,6 @@ const ModalGiveFeedback: FC<ModalGiveFeedbackProps> = ({
     }
 
     setModalSuccess(() => true);
-    reset();
   };
 
   const onDraft = () => {
@@ -134,7 +131,7 @@ const ModalGiveFeedback: FC<ModalGiveFeedbackProps> = ({
     trigger();
     const valuess = getValues();
 
-    const conv = valuess?.feedback.slice(1);
+    const data = valuess?.feedback;
     const getIfNeedUuid = (selectedPerson) => {
       if (!selectedPerson.uuid) return;
       return {
@@ -155,7 +152,7 @@ const ModalGiveFeedback: FC<ModalGiveFeedbackProps> = ({
       colleagueUuid: colleagueUuid,
       targetColleagueUuid: selectedPerson.colleagueUUID,
       status: 'DRAFT',
-      feedbackItems: conv.map((item, i) => {
+      feedbackItems: data.map((item, i) => {
         return {
           ...getFeedbackUuidItems(i),
           code: giveFeedback[i].giveFeedbacka_main_title,
@@ -172,9 +169,14 @@ const ModalGiveFeedback: FC<ModalGiveFeedbackProps> = ({
 
     setIsOpen(() => false);
     setSelectedPerson(() => null);
-    reset();
+    reset({ feedback: [{ field: '' }, { field: '' }, { field: '' }] });
   };
 
+  if (infoModal) return <InfoModal setInfoModal={setInfoModal} />;
+  if (confirmModal) {
+    return <ConfirmModal setConfirmModal={setConfirmModal} onSubmit={handleSubmit(onSubmit)} />;
+  }
+  if (modalGreatFeedback) return <GreatFeedbackModal setModalGreatFeedback={setModalGreatFeedback} />;
   if (modalSuccess)
     return (
       <SuccessModal
@@ -183,13 +185,9 @@ const ModalGiveFeedback: FC<ModalGiveFeedbackProps> = ({
         setIsOpen={setIsOpen}
         setSelectedPerson={setSelectedPerson}
         setFeedbackItems={setFeedbackItems}
+        methods={methods}
       />
     );
-
-  if (infoModal) return <InfoModal setInfoModal={setInfoModal} />;
-  if (confirmModal) {
-    return <ConfirmModal setConfirmModal={setConfirmModal} onSubmit={handleSubmit(onSubmit)} />;
-  }
 
   return (
     <>
@@ -229,6 +227,7 @@ const ModalGiveFeedback: FC<ModalGiveFeedbackProps> = ({
             giveFeedback={giveFeedback}
             setConfirmModal={setConfirmModal}
             onDraft={onDraft}
+            setModalGreatFeedback={setModalGreatFeedback}
           />
         )}
         <span

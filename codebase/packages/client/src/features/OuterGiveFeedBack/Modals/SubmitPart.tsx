@@ -10,6 +10,7 @@ import { Trans } from 'components/Translation';
 import defaultImg from '../../../../public/default.png';
 
 export const WITH_SELECTED_TEST = 'with_selected_test';
+const QUESTION_ORDER = ['Question 1', 'Question 2', 'Anything else?'];
 
 const SubmitPart: FC<SubmitPartProps> = ({
   selectedPerson,
@@ -19,12 +20,13 @@ const SubmitPart: FC<SubmitPartProps> = ({
   giveFeedback,
   setConfirmModal,
   onDraft,
+  setModalGreatFeedback,
 }) => {
   const { css, theme } = useStyle();
   const {
     formState: { isValid },
     getValues,
-    trigger,
+    setValue,
   } = methods;
 
   const valuess = getValues();
@@ -37,7 +39,7 @@ const SubmitPart: FC<SubmitPartProps> = ({
       <div className={css({ height: '1px', background: '#E5E5E5' })} />
       <div className={css({ marginTop: '16px' })}>
         <div className={css(VideoWrapper)}>
-          <h2 className={css(VideoExplanationTitle)}>Share specific examples of what you&apos;ve seen.</h2>
+          <h2 className={css(VideoExplanationTitle)}>Watch this 2-minute video on how to give great feedback</h2>
           <img src={video_explanation} alt='video_explanation' />
         </div>
         <div className={css(BlockInfo)}>
@@ -59,7 +61,7 @@ const SubmitPart: FC<SubmitPartProps> = ({
         <p>Fill out the questions below to share your feedback</p>
       </div>
       <div className={css({ marginTop: '24px', marginBottom: '14px' })}>
-        <IconButton graphic='information' onPress={() => setInfoModal(() => true)}>
+        <IconButton graphic='information' onPress={() => setModalGreatFeedback(() => true)}>
           <p className={css(InfohelpStyle)}>Learn more about how to give great feedback</p>
         </IconButton>
       </div>
@@ -71,7 +73,22 @@ const SubmitPart: FC<SubmitPartProps> = ({
               let splittedValues;
               const conv = valuess;
               if (conv.feedback) {
-                splittedValues = conv.feedback.slice(1);
+                splittedValues = conv.feedback;
+              }
+
+              if (feedbackItemsS?.length) {
+                setValue(
+                  'feedback',
+                  feedbackItemsS
+                    .sort((i1, i2) => QUESTION_ORDER.indexOf(i1.code) - QUESTION_ORDER.indexOf(i2.code))
+                    .map((item) => {
+                      if (item.content !== '')
+                        return {
+                          field: item.content,
+                        };
+                    })
+                    .filter(Boolean),
+                );
               }
 
               const value = feedbackItemsS?.length

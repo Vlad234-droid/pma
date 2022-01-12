@@ -4,11 +4,10 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { createGiveFeedbackSchema } from './config';
 import * as Yup from 'yup';
 import { FilterOption } from 'features/Shared';
-import { IconButton } from 'components/IconButton';
 import { Icon } from 'components/Icon';
 import { useForm } from 'react-hook-form';
 import { PeopleTypes, TypefeedbackItems } from './type';
-import { ModalGiveFeedback, ModalGreatFeedback } from './Modals';
+import { ModalGiveFeedback } from './Modals';
 import { DraftItem, RadioBtns } from './components';
 import { getFindedColleaguesSelector, ColleaguesActions } from '@pma/store';
 import { useDispatch, useSelector } from 'react-redux';
@@ -83,29 +82,6 @@ const OuterGiveFeedBack: FC = () => {
 
   return (
     <>
-      {modalGreatFeedback && (
-        <Modal
-          modalPosition={'middle'}
-          overlayColor={'tescoBlue'}
-          modalContainerRule={[containerRule]}
-          closeOptions={{
-            content: <Icon graphic='cancel' invertColors={true} />,
-            onClose: () => {
-              setModalGreatFeedback(() => false);
-            },
-            styles: [modalCloseOptionStyle],
-          }}
-          title={{
-            content: 'Feedback',
-            styles: [modalTitleOptionStyle],
-          }}
-          onOverlayClick={() => {
-            setModalGreatFeedback(() => false);
-          }}
-        >
-          <ModalGreatFeedback setModalGreatFeedback={setModalGreatFeedback} />
-        </Modal>
-      )}
       <div>
         <div className={css(headerStyled)}>
           <RadioBtns
@@ -119,13 +95,6 @@ const OuterGiveFeedBack: FC = () => {
             setFilterFeedbacks={setFilterFeedbacks}
           />
           <div className={css(FilterIconStyled)}>
-            <IconButton
-              graphic='information'
-              iconStyles={iconStyle}
-              onPress={() => {
-                setModalGreatFeedback(() => true);
-              }}
-            />
             <FilterOption
               focus={focus}
               customIcon={true}
@@ -172,7 +141,6 @@ const OuterGiveFeedBack: FC = () => {
           closeOptions={{
             content: <Icon graphic='cancel' invertColors={true} />,
             onClose: () => {
-              reset();
               if (findedColleagues.length) {
                 dispatch(ColleaguesActions.clearGettedColleagues());
               }
@@ -182,24 +150,13 @@ const OuterGiveFeedBack: FC = () => {
               setIsOpen(() => false);
               setInfoModal(() => false);
               setFeedbackItems(() => []);
+              reset({ feedback: [{ field: '' }, { field: '' }, { field: '' }] });
             },
             styles: [modalCloseOptionStyle],
           }}
           title={{
             content: title,
             styles: [modalTitleOptionStyle],
-          }}
-          onOverlayClick={() => {
-            reset();
-            if (findedColleagues.length) {
-              dispatch(ColleaguesActions.clearGettedColleagues());
-            }
-            if (confirmModal) setConfirmModal(() => false);
-            if (infoModal) setInfoModal(() => false);
-            if (modalSuccess) setModalSuccess(() => false);
-            setSelectedPerson(() => null);
-            setIsOpen(() => false);
-            setFeedbackItems(() => []);
           }}
         >
           <ModalGiveFeedback
@@ -218,6 +175,8 @@ const OuterGiveFeedBack: FC = () => {
             setFeedbackItems={setFeedbackItems}
             confirmModal={confirmModal}
             setConfirmModal={setConfirmModal}
+            modalGreatFeedback={modalGreatFeedback}
+            setModalGreatFeedback={setModalGreatFeedback}
           />
         </Modal>
       )}
@@ -247,10 +206,6 @@ const headerStyled: Rule = () => {
   };
 };
 
-const iconStyle: Rule = {
-  marginRight: '10px',
-};
-
 const Drafts_style: Rule = {
   display: 'flex',
   flexDirection: 'column',
@@ -260,7 +215,6 @@ const Drafts_style: Rule = {
   gap: '8px',
 };
 
-//
 const containerRule: Rule = ({ colors }) => {
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;

@@ -26,9 +26,6 @@ const RequestFeedback: FC = () => {
           content: 'Request feedback',
           styles: [modalTitleOptionStyle],
         }}
-        onOverlayClick={() => {
-          history.goBack();
-        }}
       >
         <ModalRequestFeedback />
       </Modal>
