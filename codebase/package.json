@@ -19,7 +19,7 @@
     "on-pre-push": "commitlint --from=$(git merge-base master $(git rev-parse --abbrev-ref HEAD)) --to=HEAD",
     "run:dev": "lerna run --parallel run:dev",
     "run:standalone:dev": "lerna run --parallel run:standalone:dev",
-    "run:prod": "cross-env BUILD_ENV=production lerna run --parallel run:prod",
+    "run:prod": "lerna run --parallel run:prod",
     "ws:server": "yarn workspace @pma/server",
     "ws:client": "yarn workspace @pma/client",
     "ws:store": "yarn workspace @pma/store",
