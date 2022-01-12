@@ -3,8 +3,8 @@ import { Rule, colors, useStyle } from '@dex-ddl/core';
 
 import { IconButton } from 'components/IconButton';
 
-import SortingModal from './SortingModal';
-import { SortBy, SortOption } from './config/types';
+import SortingModal from '../SortingModal';
+import { SortBy, SortOption } from '../../config/types';
 
 type Props = {
   iconStyles?: Rule;
@@ -19,7 +19,7 @@ const Sorting: FC<Props> = ({ sortingOptions, iconStyles, isOpen, onClick, value
   const { css } = useStyle();
 
   return (
-    <div className={css(wrapperStyle)}>
+    <div className={css(wrapperStyle)} data-test-id='sorting-wrapper'>
       <IconButton
         graphic='settings'
         customVariantRules={{

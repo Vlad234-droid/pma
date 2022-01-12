@@ -53,7 +53,7 @@ export const Icon: FC<IconProps> = ({
         xmlnsXlink='http://www.w3.org/1999/xlink'
         aria-labelledby={titleId}
       >
-        <title id={titleId}>{customTitle}</title>
+        <title id={titleId} data-test-id={titleId}>{customTitle}</title>
         {backgroundRadius && <circle cx={backgroundRadius} cy={backgroundRadius} r={backgroundRadius} fill='white' />}
         <CustomIcon invertColors={invertColors} />
       </svg>
