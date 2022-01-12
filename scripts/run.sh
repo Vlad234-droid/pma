@@ -1,3 +1,3 @@
 #!/bin/sh
 
-yarn run:prod
+yarn run:server
