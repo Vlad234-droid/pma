@@ -1,0 +1,10 @@
+{
+  "name": "@pma/client",
+  "version": "0.1.0",
+  "main": "build/index.html",
+  "license": "MIT",
+  "scripts": {
+    "clean": "rimraf build",
+    "clean:all": "yarn clean && rimraf node_modules"
+  }
+}
