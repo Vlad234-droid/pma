@@ -8,6 +8,8 @@
   ],
   "scripts": {
     "bootstrap": "yarn install --frozen-lockfile && lerna bootstrap",
+    "bootstrap:dev": "yarn install --production=false --frozen-lockfile",
+    "bootstrap:prod": "yarn install --production=true --frozen-lockfile --ignore-optional",
     "build": "cross-env BUILD_ENV=development lerna run --parallel build",
     "build:prod": "cross-env BUILD_ENV=production lerna run --parallel build:prod",
     "clean": "lerna run --parallel clean",
