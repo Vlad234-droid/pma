@@ -93,7 +93,7 @@ const TipsFormModalStyle: Rule = () => {
     background: "#fff", 
     width: "100%", 
     height: "100%", 
-    zIndex: 1,
+    zIndex: 2,
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',

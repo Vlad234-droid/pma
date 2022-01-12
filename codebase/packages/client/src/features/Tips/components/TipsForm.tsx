@@ -19,6 +19,7 @@ import { GenericItemField } from 'components/GenericForm';
 import { IconButton } from 'components/IconButton';
 import { createTipSchema } from 'pages/Tips/config';
 import { TipsFormModal } from '.';
+import { zIndex } from 'html2canvas/dist/types/css/property-descriptors/z-index';
 
 export type TipsFormProps = {
   mode: string
@@ -45,6 +46,7 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
 
   const [showTipsFormModal, setShowTipsFormModal] = useState(false);
   const [successTipsFormModal, setSuccessTipsModal] = useState(false);
+  const [showEffectsPlaceholder, setShowEffectsPlaceholder] = useState(false);
   const [tipsFormModalAction, setTipsFormModalAction] = useState('discard')
   const [formData, setFormData] = useState({
     tipTitle: '',
@@ -220,6 +222,7 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
   }, [tipsMeta])
 
   const submitForm = (e) => {
+    setShowEffectsPlaceholder(true)
     if(mode === 'edit') {
       handleSubmit(handleEditTip)(e);
     } else {
@@ -228,7 +231,7 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
   };
 
   const handleDiscard = () => {
-    if(isDirty) {
+    if(isDirty && tipsFormModalAction === 'discard') {
       showModal('discard', false)
     } else {
       setFormData({
@@ -245,6 +248,7 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
 
   const confirmDeleteTip = () => {
     showModal('confirmDelete', false)
+    setShowEffectsPlaceholder(true)
   }
 
   const handleDeleteTip = () => {
@@ -276,6 +280,7 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
           /> 
       }
       <div className={css(modalInner)}>
+        { showEffectsPlaceholder && <div className={css(modalInnerPlaceholder)}></div> }
         <form className={css({ height: '100%', })}>
           <div className={css(formFieldsWrapStyle)}>
             <GenericItemField
@@ -389,7 +394,7 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
                 <IconButton 
                   onPress={confirmDeleteTip} 
                   graphic='delete'
-                  iconStyles={{ marginRight: '5px' }}
+                  iconStyles={{ width: '24px', height: '24px', display: 'block' }}
                   customVariantRules={{
                     default: deleteTipBtnStyles,
                   }}
@@ -512,8 +517,21 @@ const deleteTipBtnStyles: Rule = () => {
     fontSize: '14px', 
     lineHeight: '18px', 
     padding: '5px 0', 
-    color: `${theme.colors.error}`,
+    color: theme.colors.error,
     marginBottom: '20px',
+  }
+}
+
+const modalInnerPlaceholder: Rule = ({ theme }) => {
+  return {
+    backgroundColor: theme.colors.white,
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    top: 0,
+    left: 0,
+    zIndex: 1,
+    borderRadius: '32px'
   }
 }
 

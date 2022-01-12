@@ -77,7 +77,7 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
 
           { isOpenDropdown && 
               <div className={css(menuDropdownStyle)}>
-                <Link to={buildPath(Page.CREATE_PERFORMANCE_CYCLE)} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
+                <Link to={buildPath(Page.PERFORMANCE_CYCLE)} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
                   <Icon graphic={'createCycle'} />
                   <span className={css(itemSettingsTextStyle)}>Create performance cycle</span>
                 </Link>
