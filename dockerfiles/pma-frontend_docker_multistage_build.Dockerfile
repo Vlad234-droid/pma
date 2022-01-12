@@ -94,9 +94,9 @@ RUN --mount=type=cache,id=yarn_cache,target=/usr/local/share/.cache/yarn \
     && yarn build:prod \
     && find . -type d -name node_modules -prune -o -name 'package.json' -exec bash -c 'mkdir -p ../build/$(dirname {})' \; \
     && find . -type d -name node_modules -prune -o -name 'public' -exec cp -r '{}' '../build/{}' \; \
-    && find . -type d -name node_modules -prune -o -name 'build' -exec cp -r '{}' '../build/{}' \; \
-    && find . -type d -name node_modules -prune -o -name 'src' -exec cp -r '{}' '../build/{}' \; \
-    && rm -rf ../build/packages/client/src
+    && find . -type d -name node_modules -prune -o -name 'build' -exec cp -r '{}' '../build/{}' \;
+#    && find . -type d -name node_modules -prune -o -name 'src' -exec cp -r '{}' '../build/{}' \; \
+#    && rm -rf ../build/packages/client/src
 
 # ==========
 # main stage
@@ -128,6 +128,7 @@ COPY --from=build /opt/build/ ./
 
 RUN --mount=type=cache,id=yarn_cache,target=/usr/local/share/.cache/yarn \
     find . -type d -name node_modules -prune -o -name 'package.prod.json' -exec bash -c 'mv {} $(dirname {})/package.json' \; \
+#    && yarn global add ts-node@9.1.1 typescript@4.4.3 --prefix=/usr \
     && yarn bootstrap:prod \
     && dos2unix ./run.sh
 
