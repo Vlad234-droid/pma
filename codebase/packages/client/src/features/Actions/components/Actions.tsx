@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState, useCallback } from 'react';
+import React, { FC, useEffect, useState, useCallback, useMemo } from 'react';
 import { useSelector, shallowEqual } from 'react-redux';
 import { colors, fontWeight, useBreakpoints, useStyle } from '@dex-ddl/core';
 import {
@@ -17,7 +17,7 @@ import { WidgetObjectiveApproval, WidgetTeamMateObjectives } from 'features/Acti
 import Filters, { useSortFilter, useSearchFilter, getEmployeesSortingOptions } from 'features/Filters';
 import useDispatch from 'hooks/useDispatch';
 
-import { filterApprovedFn, filterCompletedFn } from '../utils';
+import { filterApprovedFn } from '../utils';
 export const TEST_ID = 'objectives-pave';
 
 type SelectAllProps = {
@@ -75,11 +75,6 @@ export const Actions = () => {
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    if (!loaded && colleagueUuid) dispatch(ManagersActions.getManagers({ colleagueUuid }));
-    if (!schemaLoaded && colleagueUuid) dispatch(SchemaActions.getSchema({ colleagueUuid }));
-  }, [loaded, schemaLoaded, colleagueUuid]);
-
   const [indeterminate, setIndeterminate]: [boolean, (T) => void] = useState(false);
   const [isCheckAll, setIsCheckAll]: [boolean, (T) => void] = useState(false);
   const [checkedItems, setCheckedItems]: [string[], (T) => void] = useState([]);
@@ -87,6 +82,17 @@ export const Actions = () => {
 
   const [colleagues, setColleagues] = useState(employeeWithPendingApprovals || []);
   const [pending, setPending] = useState(true);
+
+  // disable selectAll, if every colleague has more then one item for approve
+  const selectAllDisabled = useMemo(
+    () => colleagues.every(({ timeline }) => timeline.filter(filterApprovedFn)?.length > 1),
+    [colleagues],
+  );
+
+  useEffect(() => {
+    if (!loaded && colleagueUuid) dispatch(ManagersActions.getManagers({ colleagueUuid }));
+    if (!schemaLoaded && colleagueUuid) dispatch(SchemaActions.getSchema({ colleagueUuid }));
+  }, [loaded, schemaLoaded, colleagueUuid]);
 
   useEffect(() => {
     setColleagues(pending ? employeeWithPendingApprovals : employeeWithCompletedApprovals);
@@ -150,7 +156,12 @@ export const Actions = () => {
               alignItems: 'center',
             })}
           >
-            <SelectAll onChange={handleSelectAll} checked={isCheckAll} indeterminate={indeterminate} />
+            <SelectAll
+              onChange={handleSelectAll}
+              checked={isCheckAll}
+              indeterminate={indeterminate}
+              disabled={selectAllDisabled}
+            />
           </div>
         )}
         <div className={css({ display: 'flex' })}>
@@ -219,7 +230,7 @@ export const Actions = () => {
       >
         <div className={css({ flex: '3 1 375px', display: 'flex', flexDirection: 'column', gap: '8px' })}>
           {colleagues?.map((colleague) => {
-            const timelineApproved = colleague.timeline.filter(pending ? filterApprovedFn : filterCompletedFn);
+            const timelineApproved = colleague.timeline.filter(filterApprovedFn);
 
             return (
               <div key={colleague.uuid} className={css({ display: 'flex', flexWrap: 'wrap' })}>
@@ -254,7 +265,12 @@ export const Actions = () => {
               padding: '16px 0',
             })}
           >
-            <SelectAll onChange={handleSelectAll} checked={isCheckAll} indeterminate={indeterminate} />
+            <SelectAll
+              onChange={handleSelectAll}
+              checked={isCheckAll}
+              indeterminate={indeterminate}
+              disabled={selectAllDisabled}
+            />
           </div>
         )}
         <div

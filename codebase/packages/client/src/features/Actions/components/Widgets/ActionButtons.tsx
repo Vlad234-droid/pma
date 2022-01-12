@@ -5,7 +5,8 @@ import { Icon } from 'components/Icon';
 import { Trans, useTranslation } from 'components/Translation';
 import { ReviewType } from 'config/enum';
 
-import { DeclineModal, SubmitModal } from '../Modal';
+import ApproveModal from '../ApproveModal';
+import DeclineModal from '../DeclineModal';
 import { getReviewTypeTitle } from '../../utils';
 
 type ActionButtonsProps = {
@@ -102,7 +103,7 @@ export const ActionButtons: FC<ActionButtonsProps> = ({ approveColleagues, decli
           />
         )}
         {isOpenApprovePopup && (
-          <SubmitModal onSave={handleApproveSubmit} onClose={() => setIsOpenApprovePopup(false)} />
+          <ApproveModal onSave={handleApproveSubmit} onClose={() => setIsOpenApprovePopup(false)} />
         )}
       </div>
     </div>

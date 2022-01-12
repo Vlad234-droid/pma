@@ -1,4 +1,4 @@
-import { ReviewForApproval } from 'config/types';
+import { Employee } from 'config/types';
 
 import { SortBy } from '../config/types';
 
@@ -15,21 +15,21 @@ export const getEmployeesSortingOptions = (t) => [
   },
 ];
 
-export const searchEmployeesFn = (employees: ReviewForApproval[], search?: string) => {
+export const searchEmployeesFn = <T extends Employee, K extends string>(employees: T[], search?: K): T[] => {
   if (!search || search.length < 3) return employees;
 
   return employees.filter(
-    (employee: ReviewForApproval) =>
+    (employee: Employee) =>
       employee.firstName.toLowerCase().startsWith(search.toLowerCase()) ||
       employee.lastName.toLowerCase().startsWith(search.toLowerCase()) ||
       (employee.middleName && employee.middleName.toLowerCase().startsWith(search.toLowerCase())),
   );
 };
 
-export const sortEmployeesFn = (employees, sort) => {
+export const sortEmployeesFn = <T extends Employee, K extends SortBy>(employees: T[], sort?: K): T[] => {
   if (!sort) return employees;
 
-  let sorted = [];
+  let sorted = [] as T[];
 
   switch (sort) {
     case SortBy.AZ:
@@ -45,5 +45,7 @@ export const sortEmployeesFn = (employees, sort) => {
   return sorted;
 };
 
-const sortByAZNameFn = (a, b) => (a.firstName || '').toString().localeCompare((b.firstName || '').toString());
-const sortByZANameFn = (a, b) => (b.firstName || '').toString().localeCompare((a.firstName || '').toString());
+const sortByAZNameFn = <T extends { firstName?: string }, K extends T>(a: T, b: K): number =>
+  (a.firstName || '').toString().localeCompare((b.firstName || '').toString());
+const sortByZANameFn = <T extends { firstName?: string }, K extends T>(a: T, b: K): number =>
+  (b.firstName || '').toString().localeCompare((a.firstName || '').toString());

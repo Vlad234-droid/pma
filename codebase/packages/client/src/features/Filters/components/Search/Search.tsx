@@ -17,6 +17,7 @@ const Search: FC<Props> = ({ focus, onFocus, iconStyles, onSearch, value }) => {
 
   return (
     <div
+      data-test-id='search-wrapper'
       className={css({
         width: focus ? '240px' : '38px',
         transition: '.3s all ease',
@@ -32,6 +33,7 @@ const Search: FC<Props> = ({ focus, onFocus, iconStyles, onSearch, value }) => {
         onFocus={onFocus}
       >
         <Input
+          name='search-input'
           value={focus ? value : ''}
           onChange={onSearch}
           customStyles={{
@@ -42,6 +44,7 @@ const Search: FC<Props> = ({ focus, onFocus, iconStyles, onSearch, value }) => {
             border: '1px solid rgb(0, 83, 159)',
             ...(!focus && { borderRadius: '50%', padding: '0px' }),
           }}
+          onFocus={onFocus}
         />
       </FormItem>
     </div>

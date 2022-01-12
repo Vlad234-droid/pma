@@ -4,10 +4,10 @@ import { useStyle, Rule, CreateRule } from '@dex-ddl/core';
 import { Radio } from 'components/Form';
 import { Trans } from 'components/Translation';
 
-import { SortBy, SortOption } from './config/types';
+import { SortBy, SortOption } from '../../config/types';
 
 type Props = {
-  onSelect: (event) => void;
+  onSelect: (value: SortBy) => void;
   isOpen: boolean;
   value?: SortBy;
   options: SortOption[];
@@ -17,7 +17,7 @@ const SortingModal: FC<Props> = ({ options, onSelect, isOpen, value }) => {
   const { css } = useStyle();
 
   return (
-    <div className={css(wrapperStyles({ isOpen }))}>
+    <div data-test-id='sorting-modal' className={css(wrapperStyles({ isOpen }))}>
       <div className={css(innerStyles)}>
         <span>Sort :</span>
         {options.map((item) => (
@@ -27,6 +27,7 @@ const SortingModal: FC<Props> = ({ options, onSelect, isOpen, value }) => {
                 name={item.label}
                 checked={item.label === value}
                 id={item.label}
+                data-test-id={item.label}
                 onChange={() => onSelect(item.label)}
               />
               <span className={css(textStyles)}>
