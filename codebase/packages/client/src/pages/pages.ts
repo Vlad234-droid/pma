@@ -1,4 +1,4 @@
-import { Page } from './types';
+import { Page, PageElement } from './types';
 
 import CareerPerformance from './CareerPerformance';
 import PersonalDevelopmentPlan from './PersonalDevelopmentPlan';
@@ -19,15 +19,13 @@ import { CreatePerformanceCycle, PerformanceCycleAdministration } from './Perfor
 import { CreateTip, EditTip, TipsAdministration } from './Tips';
 import UserObjectives from './UserObjectives';
 
-const pages: Record<
-  Page,
-  {
-    element: any;
-    withHeader: boolean;
-    title?: string;
-    backPath?: string;
-  }
-> = {
+export type PageComponent = {
+  element: PageElement;
+  withHeader: boolean;
+  title?: string;
+  backPath?: string;
+};
+const pages: Record<Page, PageComponent> = {
   [Page.MY_TEAM]: {
     element: MyTeam,
     title: 'My Team',
