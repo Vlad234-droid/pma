@@ -11,7 +11,6 @@ const buildRoute: BuildRoute = (page, pageComponents, exact = true) => {
 
   return {
     path: buildPath(page),
-    exact,
     page,
     ...pageConfig,
   };

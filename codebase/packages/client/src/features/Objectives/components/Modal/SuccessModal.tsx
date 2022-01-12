@@ -1,8 +1,7 @@
 import React, { FC, HTMLProps } from 'react';
 import { Trans } from 'components/Translation';
-import { ReviewType, ObjectiveType } from 'config/enum';
-import { Button, Styles, useBreakpoints, useStyle } from '@dex-ddl/core';
-import { Icon as IconComponent } from 'components/Icon';
+import { ObjectiveType, ReviewType } from 'config/enum';
+import { Button, useBreakpoints, useStyle } from '@dex-ddl/core';
 
 export type SuccessModal = {
   onClose: () => void;
@@ -89,11 +88,11 @@ export const SuccessModal: FC<Props> = ({ onClose, reviewType, description, with
       <div
         className={css({
           position: 'relative',
-          bottom: '0',
+          bottom: 0,
           left: 0,
           right: 0,
           borderTop: '1px solid #E5E5E5',
-        } as Styles)}
+        })}
       >
         <div
           className={css({

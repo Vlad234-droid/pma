@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { NavLink } from 'react-router-dom';
-import { useStyle, colors } from '@dex-ddl/core';
+import { colors, useStyle } from '@dex-ddl/core';
 
 export const TEST_ID = 'objectives-pave';
 
@@ -27,12 +27,16 @@ const RouterSwitch: FC<RouterSwitchProps> = ({ links }) => {
         return (
           <NavLink
             key={link}
-            activeStyle={{
-              background: colors.tescoBlue,
-              color: colors.white,
-              borderRadius: '50px',
-              padding: '10px 20px',
-            }}
+            style={(isActive) =>
+              isActive
+                ? {
+                    background: colors.tescoBlue,
+                    color: colors.white,
+                    borderRadius: '50px',
+                    padding: '10px 20px',
+                  }
+                : {}
+            }
             className={css({
               fontSize: '16px',
               lineHeight: '20px',

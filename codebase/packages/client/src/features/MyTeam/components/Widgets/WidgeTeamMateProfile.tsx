@@ -6,7 +6,7 @@ import { Graphics, Icon } from 'components/Icon';
 import { Accordion, BaseAccordion, ExpandButton, Panel, Section } from 'components/Accordion';
 import { Status, TimelineType } from 'config/enum';
 import { Page } from 'pages/types';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { paramsReplacer } from 'utils';
 import { buildPath } from 'features/Routes';
 import { Employee } from 'config/types';
@@ -42,12 +42,12 @@ export const WidgetTeamMateProfile: FC<WidgetTeamMateProfileProps> = ({
   simpleView = false,
 }) => {
   const { css } = useStyle();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const [graphics, color] = getIcon(status);
 
   const viewUserObjectives = (uuid) => {
-    history.push(buildPath(paramsReplacer(`${Page.USER_OBJECTIVES}`, { ':uuid': uuid })));
+    navigate(buildPath(paramsReplacer(`${Page.USER_OBJECTIVES}`, { ':uuid': uuid })));
   };
 
   return (

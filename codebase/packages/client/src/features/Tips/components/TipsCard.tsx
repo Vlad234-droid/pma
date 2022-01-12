@@ -1,12 +1,12 @@
 import React, { FC, Fragment, useState } from 'react';
-import { useHistory } from 'react-router-dom';
-import { useStyle, Rule, useBreakpoints, Button, theme } from '@dex-ddl/core';
+import { useNavigate } from 'react-router-dom';
+import { Button, Rule, theme, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { TileWrapper } from 'components/Tile';
 import { Page } from 'pages';
 import { paramsReplacer } from 'utils';
 import { buildPath } from 'features/Routes/utils';
 import { TipsProps } from '../types';
-import { ViewHistoryModal, PushTipModal } from '.';
+import { PushTipModal, ViewHistoryModal } from '.';
 
 export type TipsCardProps = {
   card: TipsProps;
@@ -14,11 +14,11 @@ export type TipsCardProps = {
 
 const TipsCard: FC<TipsCardProps> = ({ card }) => {
   const { css } = useStyle();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const handleEditTip = () => {
     const pathname = paramsReplacer(buildPath(`${Page.EDIT_TIP}`), { ':tipUuid': card.uuid });
-    history.push(pathname);
+    navigate(pathname);
   };
 
   const date = new Date(card.updatedTime);

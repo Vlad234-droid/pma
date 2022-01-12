@@ -10,12 +10,12 @@ import {
 } from '@pma/store/src/selectors/performance-cycle';
 import { Radio } from 'components/Form';
 import { Trans } from 'components/Translation';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Page } from '../types';
 
 const PerformanceCycleAdministration: FC = () => {
   const { css } = useStyle();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const data = useSelector(getPerformanceCycleSelector) || {};
   const { loaded } = useSelector(getPerformanceCycleMetaSelector) || {};
@@ -91,7 +91,7 @@ const PerformanceCycleAdministration: FC = () => {
             </label>
           </div>
         </div>
-        <Button onPress={() => history.push('performance-cycle/new')}>Create performance cycle</Button>
+        <Button onPress={() => navigate('performance-cycle/new')}>Create performance cycle</Button>
       </div>
       <div className={css(headWrapperStyles)}>
         <TileWrapper customStyle={{ padding: '24px' }}>
@@ -134,7 +134,7 @@ const PerformanceCycleAdministration: FC = () => {
                     <td className={css(item)}>{createdBy}</td>
                     <Button
                       mode={'inverse'}
-                      onPress={() => history.push(`${Page.PERFORMANCE_CYCLE}/${uuid}`)}
+                      onPress={() => navigate(`${Page.PERFORMANCE_CYCLE}/${uuid}`)}
                       styles={[btnStyle]}
                     >
                       Edit

@@ -8,10 +8,10 @@ import { IconButton } from 'components/IconButton';
 
 import {
   Accordion,
+  ObjectiveTypes as OT,
   Reviews,
   Section,
   ShareWidget,
-  ObjectiveTypes as OT,
   transformReviewsToObjectives,
 } from 'features/Objectives';
 import { PreviousReviewFilesModal } from 'features/ReviewFiles/components';
@@ -28,7 +28,7 @@ import {
   timelineTypesAvailabilitySelector,
 } from '@pma/store';
 import OrganizationWidget from 'features/Objectives/components/OrganizationWidget/OrganizationWidget';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import useReviewSchema from 'features/Objectives/hooks/useReviewSchema';
 import useReviews from 'features/Objectives/hooks/useReviews';
 
@@ -59,7 +59,7 @@ export const TEST_ID = 'user-objectives-page';
 
 const UserObjectives: FC = () => {
   const { css, theme } = useStyle();
-  const history = useHistory();
+  const navigate = useNavigate();
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
@@ -138,7 +138,7 @@ const UserObjectives: FC = () => {
 
         <OrganizationWidget
           customStyle={{ flex: '1 1 30%', display: 'flex', flexDirection: 'column' }}
-          onClick={() => history.push('/view-organization-objectives')}
+          onClick={() => navigate('/view-organization-objectives')}
         />
       </div>
       <div className={css(bodyWrapperStyles)} data-test-id={TEST_ID}>

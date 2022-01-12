@@ -1,13 +1,13 @@
 import React, { FC } from 'react';
-import { Rule, Modal, useBreakpoints } from '@dex-ddl/core';
+import { Modal, Rule, useBreakpoints } from '@dex-ddl/core';
 import { Icon } from '../../components/Icon';
 import ModalRequestFeedback from '../../features/ModalRequestFeedback';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const REQUEST_FEEDBACK = 'request-feedback';
 
 const RequestFeedback: FC = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
 
   return (
     <div data-test-id={REQUEST_FEEDBACK}>
@@ -18,7 +18,7 @@ const RequestFeedback: FC = () => {
         closeOptions={{
           content: <Icon graphic='cancel' invertColors={true} />,
           onClose: () => {
-            history.goBack();
+            navigate(-1);
           },
           styles: [modalCloseOptionStyle],
         }}
@@ -27,7 +27,7 @@ const RequestFeedback: FC = () => {
           styles: [modalTitleOptionStyle],
         }}
         onOverlayClick={() => {
-          history.goBack();
+          navigate(-1);
         }}
       >
         <ModalRequestFeedback />

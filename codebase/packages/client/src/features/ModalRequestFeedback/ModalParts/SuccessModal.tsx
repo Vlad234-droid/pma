@@ -1,15 +1,15 @@
 import React, { FC } from 'react';
-import { useStyle, useBreakpoints, Rule, Styles, Button } from '@dex-ddl/core';
+import { Button, Rule, Styles, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { IconButton } from 'components/IconButton';
 import success from '../../../../public/success.jpg';
 import { Trans } from 'components/Translation';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const SuccessModal: FC = () => {
   const { css, theme } = useStyle();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
-  const history = useHistory();
+  const navigate = useNavigate();
   return (
     <div className={css(WrapperSuccessContainer)}>
       <div className={css(SuccessImg)}>
@@ -55,7 +55,7 @@ const SuccessModal: FC = () => {
                 },
               ]}
               onPress={() => {
-                history.goBack();
+                navigate(-1);
               }}
             >
               <Trans i18nKey='OK'>Okay</Trans>
@@ -73,7 +73,7 @@ const SuccessModal: FC = () => {
           cursor: 'pointer',
         })}
       >
-        <IconButton graphic='arrowLeft' onPress={() => history.goBack()} iconProps={{ invertColors: true }} />
+        <IconButton graphic='arrowLeft' onPress={() => navigate(-1)} iconProps={{ invertColors: true }} />
       </span>
     </div>
   );

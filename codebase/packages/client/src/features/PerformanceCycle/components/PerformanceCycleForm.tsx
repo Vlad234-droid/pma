@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
-import { useHistory, useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import { useSelector } from 'react-redux';
 import { Button, Rule, useStyle } from '@dex-ddl/core';
 import { useForm } from 'react-hook-form';
@@ -25,9 +25,9 @@ import {
 import useDispatch from 'hooks/useDispatch';
 import {
   getConfigEntriesByPerformanceCycle,
+  getFormsByPerformanceCycleUuidSelector,
   getTimelinePointsByPerformanceCycleUuidSelector,
   getTimelinePointsReviewTypesByPerformanceCycleUuidSelector,
-  getFormsByPerformanceCycleUuidSelector,
 } from '@pma/store/src/selectors/performance-cycle';
 import { TileWrapper } from 'components/Tile';
 import { GenericItemField } from 'components/GenericForm';
@@ -60,7 +60,7 @@ export const PerformanceCycleForm: FC = () => {
   const colleagueUuid = useSelector(colleagueUUIDSelector);
 
   const { t } = useTranslation();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const [entryConfigUuid, setEntryConfigUuid] = useState('');
   const [options11, setOptions11] = useState([]);
@@ -306,7 +306,7 @@ export const PerformanceCycleForm: FC = () => {
       return dispatch(PerformanceCycleActions.updatePerformanceCycle(data));
     }
     dispatch(PerformanceCycleActions.createPerformanceCycle(data));
-    history.push(`/${Page.PERFORMANCE_CYCLE}`);
+    navigate(`/${Page.PERFORMANCE_CYCLE}`);
   };
 
   const onPublish = () => {

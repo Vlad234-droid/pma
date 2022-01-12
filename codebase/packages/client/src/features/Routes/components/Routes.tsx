@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Redirect, Route as ReactRoute, Switch } from 'react-router';
+import { Navigate, Route as ReactRoute, Routes } from 'react-router';
 
 import { NotFound } from 'pages/NotFound';
 import { buildPath } from 'features/Routes/utils';
@@ -10,18 +10,17 @@ type Props = {
   routes: Route[];
 };
 
-const Routes: FC<Props> = ({ routes }) => (
-  <Switch>
-    {routes.map((route, idx) => (
-      <ReactRoute key={idx} {...route} />
-    ))}
-    <ReactRoute exact path='/'>
-      <Redirect to={buildPath(Page.CONTRIBUTION)} />
-    </ReactRoute>
-    <ReactRoute path='*'>
-      <NotFound />
-    </ReactRoute>
-  </Switch>
+const MainRoutes: FC<Props> = ({ routes }) => (
+  <Routes>
+    {/*<ReactRoute path='/contribution' element={MyTeam()} />*/}
+    {routes.map((route, idx) => {
+      //debugger;
+      // @ts-ignore
+      return <ReactRoute key={idx} element={route?.element()} path={route?.path} />;
+    })}
+    <ReactRoute path='/' element={<Navigate to={buildPath(Page.CONTRIBUTION)} />} />
+    <ReactRoute path='*' element={<NotFound />} />
+  </Routes>
 );
 
-export default Routes;
+export default MainRoutes;

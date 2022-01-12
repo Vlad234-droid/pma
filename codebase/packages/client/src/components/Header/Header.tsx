@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { useHistory, useLocation, Route } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { IconButton, Rule, Styles, useStyle } from '@dex-ddl/core';
 import { MenuDrawer } from '../MenuDrawer/MenuDrawer';
 
@@ -15,12 +15,11 @@ export const BACK_BTN_TEST_ID = 'header-back';
 
 const Header: FC<HeaderProps> = ({ title, onBack, styles = {} }) => {
   const { css } = useStyle();
-  const history = useHistory();
-  const { pathname } = useLocation();
+  const navigate = useNavigate();
+  const { pathname, state }: any = useLocation();
 
   const handleOpen = () => {
-    history.replace({
-      pathname,
+    navigate(pathname, {
       state: {
         isOpen: true,
       },
@@ -28,7 +27,7 @@ const Header: FC<HeaderProps> = ({ title, onBack, styles = {} }) => {
   };
 
   const handleClose = () => {
-    history.replace(pathname);
+    navigate(pathname, { replace: true });
   };
 
   return (
@@ -36,7 +35,7 @@ const Header: FC<HeaderProps> = ({ title, onBack, styles = {} }) => {
       {onBack ? <IconButton onPress={onBack} graphic='backwardLink' data-test-id={BACK_BTN_TEST_ID} /> : <div />}
       <h3 className={css(headerStyles)}>{title}</h3>
       <IconButton onPress={handleOpen} graphic='hamburger' />
-      <Route>{({ location: { state = {} } }) => (state as any)?.isOpen && <MenuDrawer onClose={handleClose} />}</Route>
+      {state?.isOpen && <MenuDrawer onClose={handleClose} />}
     </div>
   );
 };

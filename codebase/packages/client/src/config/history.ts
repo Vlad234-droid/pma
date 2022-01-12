@@ -1,7 +1,6 @@
-import { PUBLIC_URL } from 'config/constants';
 import { createBrowserHistory } from 'history';
 
-const history = createBrowserHistory({ basename: PUBLIC_URL });
+const history = createBrowserHistory({});
 
 export type History = typeof history;
 

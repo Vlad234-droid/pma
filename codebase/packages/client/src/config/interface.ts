@@ -13,5 +13,5 @@ export interface ActionPostData {
 }
 
 export interface ReviewActionParams extends ActionParams, ActionPostData, ActionGetParams {
-  pathParams: { colleagueUuid: string; type?: ReviewType; cycleUuid: string; number?: number; status?: string };
+  pathParams: { colleagueUuid?: string; type?: ReviewType; cycleUuid: string; number?: number; status?: string };
 }

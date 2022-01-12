@@ -1,9 +1,9 @@
 import React, { FC } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Button, Rule, useStyle } from '@dex-ddl/core';
 
 export const NotFound: FC = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const { css } = useStyle();
   return (
     <div className={css(container)}>
@@ -11,7 +11,7 @@ export const NotFound: FC = () => {
         <div className={css(textTop)}>OOPS! PAGE NOT FOUND</div>
         <div className={css(style404)}> 404</div>
         <div className={css(textBottom)}>WE ARE SORRY, BUT THE PAGE YOU REQUESTED WAS NOT FOUND</div>
-        <Button onPress={() => history.push('/')}>Back to Dashboard</Button>
+        <Button onPress={() => navigate('/')}>Back to Dashboard</Button>
       </div>
     </div>
   );

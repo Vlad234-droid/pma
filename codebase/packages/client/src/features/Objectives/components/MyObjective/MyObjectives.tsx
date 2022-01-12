@@ -1,10 +1,10 @@
-import React, { FC, useEffect, useState, useMemo } from 'react';
+import React, { FC, useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'components/Translation';
 import { Button, Rule, Styles, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { ObjectiveType, ReviewType, Status } from 'config/enum';
 import { StepIndicator } from 'components/StepIndicator/StepIndicator';
 import { IconButton } from 'components/IconButton';
-import { usePDF, ObjectiveDocument, downloadPDF } from '@pma/pdf-renderer';
+import { downloadPDF, ObjectiveDocument, usePDF } from '@pma/pdf-renderer';
 
 import {
   Accordion,
@@ -35,7 +35,7 @@ import {
   timelineTypesAvailabilitySelector,
 } from '@pma/store';
 import OrganizationWidget from 'features/Objectives/components/OrganizationWidget/OrganizationWidget';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import useReviewSchema from 'features/Objectives/hooks/useReviewSchema';
 import useReviews from 'features/Objectives/hooks/useReviews';
 import { Page } from 'pages';
@@ -68,7 +68,7 @@ export const TEST_ID = 'my-objectives-page';
 
 const MyObjectives: FC = () => {
   const { css, theme } = useStyle();
-  const history = useHistory();
+  const navigate = useNavigate();
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const { info } = useSelector(currentUserSelector);
@@ -173,7 +173,7 @@ const MyObjectives: FC = () => {
 
           <OrganizationWidget
             customStyle={{ flex: '1 1 30%', display: 'flex', flexDirection: 'column' }}
-            onClick={() => history.push(buildPath(Page.STRATEGIC_DRIVERS))}
+            onClick={() => navigate(buildPath(Page.STRATEGIC_DRIVERS))}
           />
         </div>
       </div>
