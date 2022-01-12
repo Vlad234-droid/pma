@@ -17,7 +17,7 @@ export default createReducer(initialState)
     return {
       ...state,
       tipsList: payload,
-      meta: { ...state.meta, loading: false, loaded: true },
+      meta: { ...state.meta, loading: false, loaded: true, error: null },
     };
   })
   .handleAction(getAllTips.failure, (state, { payload }) => ({

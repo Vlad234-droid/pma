@@ -2,14 +2,14 @@ import React, { FC } from 'react';
 import { useStyle, Rule, Button, theme, useBreakpoints } from '@dex-ddl/core';
 import success from '../../../../public/success.jpg';
 
-export type TipsFormModalProps = {
+export type Props = {
   negativeBtnAction: () => void;
   positiveBtnAction: () => void;
   action: string;
   tipTitle?: string;
 };
 
-const TipsFormModal: FC<TipsFormModalProps> = ({ action, negativeBtnAction, positiveBtnAction, tipTitle }) => {
+const TipsFormModal: FC<Props> = ({ action, negativeBtnAction, positiveBtnAction, tipTitle }) => {
   const { css } = useStyle();
 
   const options = {
@@ -90,7 +90,7 @@ const TipsFormModalStyle: Rule = () => {
     background: '#fff',
     width: '100%',
     height: '100%',
-    zIndex: 1,
+    zIndex: 2,
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',

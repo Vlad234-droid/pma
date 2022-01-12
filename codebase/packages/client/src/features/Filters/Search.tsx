@@ -1,4 +1,4 @@
-import React, { FC, SyntheticEvent } from 'react';
+import React, { FC, ChangeEvent } from 'react';
 import { Rule, useStyle } from '@dex-ddl/core';
 
 import { Input, Item as FormItem } from 'components/Form';
@@ -8,13 +8,12 @@ type Props = {
   focus: boolean;
   onFocus: () => void;
   iconStyles?: Rule;
-  onSearch: (value: string) => void;
+  onSearch: (event: ChangeEvent) => void;
   value: string;
 };
 
-const Search: FC<Props> = ({ focus, iconStyles, onSearch, value }) => {
+const Search: FC<Props> = ({ focus, onFocus, iconStyles, onSearch, value }) => {
   const { css } = useStyle();
-  const handleSearch = (e) => onSearch(e.target.value);
 
   return (
     <div
@@ -34,7 +33,7 @@ const Search: FC<Props> = ({ focus, iconStyles, onSearch, value }) => {
       >
         <Input
           value={focus ? value : ''}
-          onChange={handleSearch}
+          onChange={onSearch}
           customStyles={{
             ...(focus ? { padding: '10px 20px 10px 16px' } : { padding: '0px' }),
             ...(focus ? { borderRadius: '50px' } : { transitionDelay: '.3s' }),

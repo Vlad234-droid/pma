@@ -1,6 +1,5 @@
 import { RefObject, SyntheticEvent, ChangeEvent } from 'react';
 import { Rule, Styles } from '@dex-ddl/core';
-import { Ref } from 'react-hook-form';
 
 export interface FormField {
   styles?: Styles | Rule;
@@ -25,13 +24,13 @@ export interface InputField extends FormField {
 export interface SelectField extends FormField {
   options: Array<{ value: string; label: string }>;
   getSelected?: (option: any) => void;
-  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  onChange: (e: SyntheticEvent<HTMLInputElement>) => void;
   value?: string;
 }
 
 export interface TextareaField extends FormField {
   rows?: number;
-  onChange: (e: SyntheticEvent<HTMLTextAreaElement>) => void;
+  onChange: (e: ChangeEvent<HTMLTextAreaElement>) => void;
   value?: string;
 }
 

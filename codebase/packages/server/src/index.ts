@@ -90,7 +90,7 @@ if (!PROXY_API_SERVER_URL) {
 
           appServer.use(
             withReturnTo(await openId, {
-              isViewPath: (path) => !path.match('^(/api|/auth|/sso|/static|/favicon.ico)'),
+              isViewPath: (path) => !path.match('^(/api|/auth|/sso|/static|/favicon.ico|/locales)'),
               appPath: config.oneLoginApplicationPath(),
             }),
           );

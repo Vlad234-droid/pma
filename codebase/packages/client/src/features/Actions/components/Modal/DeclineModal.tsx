@@ -38,7 +38,7 @@ const DeclineModal: FC<Props> = ({ onSave, onClose, review, reviewType }) => {
                   <Select
                     options={options}
                     placeholder={t('please_select', 'Please select')}
-                    onChange={(e) => setReason(e.target.value)}
+                    onChange={(e) => setReason((e.target as HTMLInputElement).value)}
                     name='declineReason'
                   />
                 </Item>
