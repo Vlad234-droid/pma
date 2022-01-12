@@ -10,14 +10,13 @@ import ModalGiveFeedback from './Modals/ModalGiveFeedback';
 import { WITH_SELECTED_TEST } from './Modals/SubmitPart';
 import { fireEvent, waitFor } from '@testing-library/react';
 import { SUCCES_GIVE_FEEDBACK } from './Modals/SuccessModal';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as Yup from 'yup';
+import { useForm } from 'react-hook-form';
+import { createGiveFeedbackSchema } from './config';
 import '@types/jest';
 
-type Selected = {
-  img: string;
-  f_name: string;
-  l_name: string;
-  id: number;
-};
+type Selected = any;
 
 describe('ModalGiveFeedback', () => {
   it('FeedBackPage', async () => {
@@ -35,6 +34,10 @@ describe('ModalGiveFeedback', () => {
     expect(await search).toBeInTheDocument();
   });
   it('SearchPart', async () => {
+    const methods = useForm({
+      mode: 'onChange',
+      resolver: yupResolver<Yup.AnyObjectSchema>(createGiveFeedbackSchema),
+    });
     const selected: Selected = {
       img: 'link',
       f_name: 'Test',
@@ -59,6 +62,10 @@ describe('ModalGiveFeedback', () => {
           setModalSuccess={testHandler}
           searchValue={'test'}
           setSearchValue={testHandler}
+          setConfirmModal={testHandler}
+          confirmModal={false}
+          setFeedbackItems={testHandler}
+          methods={methods}
         />
       </Router>,
     );
@@ -100,6 +107,11 @@ describe('ModalGiveFeedback', () => {
     const history = createMemoryHistory();
     history.push('/give-feedback');
 
+    const methods = useForm({
+      mode: 'onChange',
+      resolver: yupResolver<Yup.AnyObjectSchema>(createGiveFeedbackSchema),
+    });
+
     const { getByTestId } = renderWithTheme(
       <Router history={history}>
         <ModalGiveFeedback
@@ -113,6 +125,10 @@ describe('ModalGiveFeedback', () => {
           setModalSuccess={testHandler}
           searchValue={'test'}
           setSearchValue={testHandler}
+          setConfirmModal={testHandler}
+          confirmModal={false}
+          setFeedbackItems={testHandler}
+          methods={methods}
         />
       </Router>,
     );

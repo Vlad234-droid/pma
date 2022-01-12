@@ -40,9 +40,7 @@ const RadioBtns: FC<RadioBtnsProps> = ({
       <div className={css({ padding: '0px 10px 0px 0px', cursor: 'pointer' })}>
         <label htmlFor='pending' className={css(FlexCenterStyle)}>
           <Radio
-            type='radio'
             name='status1'
-            value='option1'
             checked={checkedRadio.pending}
             id='pending'
             onChange={() => {
@@ -66,9 +64,7 @@ const RadioBtns: FC<RadioBtnsProps> = ({
         <label htmlFor='completed' className={css(FlexCenterStyle)}>
           <Radio
             id='completed'
-            type='radio'
             name='status2'
-            value='option2'
             checked={checkedRadio.completed}
             onChange={() => {
               if (filterModal) setFilterModal(() => false);

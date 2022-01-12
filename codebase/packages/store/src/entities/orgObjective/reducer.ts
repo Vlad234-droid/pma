@@ -8,10 +8,19 @@ import {
   getOrgAuditLogs,
 } from './actions';
 
+const initialObjectivesData = [
+  { number: 1, title: '' },
+  { number: 2, title: '' },
+  { number: 3, title: '' },
+  { number: 4, title: '' },
+  { number: 5, title: '' },
+  { number: 6, title: '' },
+];
+
 export const initialState = {
   origin: [],
   meta: { loading: false, loaded: false, error: null, status: null },
-  objectives: [],
+  objectives: initialObjectivesData,
   auditLogs: [],
 };
 

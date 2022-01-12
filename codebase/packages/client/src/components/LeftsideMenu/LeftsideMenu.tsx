@@ -38,7 +38,7 @@ const LeftsideMenu = () => {
   );
 };
 
-const union: CreateRule<{ theme: Theme; }> = (props) => {
+const union: CreateRule<{ theme: Theme }> = (props) => {
   if (props == null) return {};
   const { theme } = props;
   return {
@@ -57,7 +57,7 @@ const imgUnion = {
   maxWidth: '26.18px',
 } as Rule;
 
-const main: CreateRule<{ theme: Theme; }> = (props) => {
+const main: CreateRule<{ theme: Theme }> = (props) => {
   if (props == null) return {};
   const { theme } = props;
   return {

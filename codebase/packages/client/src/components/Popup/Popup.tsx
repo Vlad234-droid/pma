@@ -28,14 +28,13 @@ const Popup = (props) => {
       </div>
 
       <DescriptionBlock>
-        <div className={css(decsriptionHeader({ theme }))}>Your organization has 6 objectives</div>
+        <div className={css(decsriptionHeader({ theme }))}>Your organization has 6 drivers</div>
 
         <div className={css(descriptionText({ theme }))}>
-          Organization objactives – are stategic goals that help all company-wide activities lead to one single
-          direction.
+          Organization drivers – are stategic goals that help all company-wide activities lead to one single direction.
         </div>
         {items.map((obj, idx) => {
-          return <ObjectiveDetails key={obj.uuid} title={`Objective ${idx + 1}`} description={obj.title} />;
+          return <ObjectiveDetails key={obj.uuid} title={`Strategic driver ${idx + 1}`} description={obj.title} />;
         })}
       </DescriptionBlock>
     </div>

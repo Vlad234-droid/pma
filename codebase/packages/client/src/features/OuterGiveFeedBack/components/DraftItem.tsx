@@ -106,17 +106,17 @@ const DraftItem: FC<DraftItemProps> = ({
                 {() => (
                   <>
                     <Section defaultExpanded={false}>
-                      <div className={css(DraftStyles)}>
-                        <div className={css(BlockInfo)}>
+                      <div className={css(draftStyles)}>
+                        <div className={css(blockInfo)}>
                           <div className={css({ alignSelf: 'flex-start' })}>
-                            <img className={css(ImgStyle)} alt='photo' src={defaultImg} />
+                            <img className={css(imgStyle)} alt='photo' src={defaultImg} />
                           </div>
                           <div className={css({ marginLeft: '16px' })}>
                             <h3
-                              className={css(NamesStyle)}
+                              className={css(namesStyle)}
                             >{`${item?.targetColleagueProfile?.colleague?.profile?.firstName} ${item?.targetColleagueProfile?.colleague?.profile?.lastName}`}</h3>
                             <p
-                              className={css(IndustryStyle)}
+                              className={css(industryStyle)}
                             >{`${item?.targetColleagueProfile?.colleague?.workRelationships[0].job.name}, ${item?.targetColleagueProfile?.colleague?.workRelationships[0].department?.name}`}</p>
                           </div>
                         </div>
@@ -131,17 +131,18 @@ const DraftItem: FC<DraftItemProps> = ({
                           customStyle={{
                             width: 'auto',
                             padding: '24px',
-                            margin: '0px 28px 24px 24px',
+                            margin: '24px 28px 24px 0px',
                             border: `1px solid ${colors.backgroundDarkest}`,
                           }}
                         >
-                          <h2 className={css(TitleStyle)}>Objective: Provide a posititve customer experience</h2>
-
-                          <div className={css(Info_block_style)}>
-                            <h3>Question 1</h3>
+                          <div className={css(infoBlockStyle)}>
+                            <h3>
+                              Looking back at what you&apos;ve seen recently, what would you like to say to this
+                              colleague about what they&apos;ve delivered or how they&apos;ve gone about it?
+                            </h3>
                             {item.feedbackItems.map((question) => {
                               return (
-                                <p key={question.code}>
+                                <p className={css(wordBreakStyle)} key={question.code}>
                                   {question.code === 'Question 1'
                                     ? question.content !== ''
                                       ? question.content
@@ -151,11 +152,14 @@ const DraftItem: FC<DraftItemProps> = ({
                               );
                             })}
                           </div>
-                          <div className={css(Info_block_style)}>
-                            <h3>Question 2</h3>
+                          <div className={css(infoBlockStyle)}>
+                            <h3>
+                              Looking forward, what should this colleague do more (or less) of in order to be at their
+                              best?
+                            </h3>
                             {item.feedbackItems.map((question) => {
                               return (
-                                <p key={question.code}>
+                                <p className={css(wordBreakStyle)} key={question.code}>
                                   {question.code === 'Question 2'
                                     ? question.content !== ''
                                       ? question.content
@@ -165,11 +169,11 @@ const DraftItem: FC<DraftItemProps> = ({
                               );
                             })}
                           </div>
-                          <div className={css(Info_block_style)}>
-                            <h3>Anything else?</h3>
+                          <div className={css(infoBlockStyle)}>
+                            <h3>Add any other comments you would like to share with your colleague.</h3>
                             {item.feedbackItems.map((question) => {
                               return (
-                                <p key={question.code}>
+                                <p className={css(wordBreakStyle)} key={question.code}>
                                   {question.code === 'Anything else?'
                                     ? question.content !== ''
                                       ? question.content
@@ -214,41 +218,40 @@ const DraftItem: FC<DraftItemProps> = ({
   );
 };
 
-const DraftStyles: Rule = {
+const wordBreakStyle: Rule = {
+  wordBreak: 'break-all',
+};
+
+const draftStyles: Rule = {
   display: 'flex',
   justifyContent: 'space-between',
 };
 
-const BlockInfo: Rule = {
+const blockInfo: Rule = {
   display: 'inline-flex',
   alignItems: 'center',
 };
 
-const ImgStyle: Rule = {
+const imgStyle: Rule = {
   width: '48px',
   height: '48px',
   borderRadius: '50%',
 };
-const NamesStyle: Rule = {
+const namesStyle: Rule = {
   fontWeight: 'bold',
   fontSize: '18px',
   lineHeight: '22px',
   margin: '0px',
   color: '#00539F',
 };
-const IndustryStyle: Rule = {
+const industryStyle: Rule = {
   fontWeight: 'normal',
   fontSize: '16px',
   lineHeight: '20px',
   margin: '4px 0px 0px 0px',
 };
-const TitleStyle: Rule = {
-  margin: '0px 0px 16px 0px',
-  fontSize: '16px',
-  color: '#00539F',
-  lineHeight: '20px',
-};
-const Info_block_style: Rule = {
+
+const infoBlockStyle: Rule = {
   marginBottom: '16px',
   '& > h3': {
     margin: '0px',

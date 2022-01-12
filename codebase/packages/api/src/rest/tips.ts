@@ -8,17 +8,17 @@ export const getAllTips = (params: any) => {
 
 export const getTipHistory = (uuid: string) => {
   return httpClient.get(`${domain}/${uuid}/history`);
-}
+};
 
 export const createTip = (params: any) => {
   return httpClient.post(`${domain}`, params);
-}
+};
 
 export const getTipByUuid = (uuid: string) => {
   return httpClient.get(`${domain}/${uuid}`);
-}
+};
 
 export const deleteTip = (params: any) => {
   const { uuid, withHistory } = params;
-  return httpClient.delete(`${domain}/${uuid}`, { params: { withHistory }});
-}
+  return httpClient.delete(`${domain}/${uuid}`, { params: { withHistory } });
+};

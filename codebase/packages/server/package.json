@@ -12,7 +12,7 @@
     "clean:all": "yarn clean && rimraf node_modules"
   },
   "dependencies": {
-    "@energon/onelogin": "^1.31.5",
+    "@energon/onelogin": "^1.35.2",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "express": "^4.17.1",

@@ -1,35 +1,36 @@
-import React, { FC, useEffect, useState, useCallback } from 'react';
+import React, { FC, useCallback, useEffect, useState } from 'react';
 import { Button, fontWeight, useStyle } from '@dex-ddl/core';
-import { ReviewsActions } from '@pma/store';
+import { colleagueUUIDSelector, ReviewsActions } from '@pma/store';
 
 import { TileWrapper } from 'components/Tile';
 import { Icon } from 'components/Icon';
 import { Trans } from 'components/Translation';
 import useDispatch from 'hooks/useDispatch';
 import { ReviewType, Status } from 'config/enum';
-import { ReviewForApproval } from 'config/types';
+import { Employee } from 'config/types';
 
-import { DeclineModal, SubmitModal } from '../Modal';
-import { filterApprovedFn, filterApprovedReviewFn } from '../../utils';
+import ApproveModal from '../ApproveModal';
+import DeclineModal from '../DeclineModal';
+import { filterApprovedFn } from '../../utils';
+import { useSelector } from 'react-redux';
 
 export type WidgetObjectiveApprovalProps = {
   isDisabled?: boolean;
-  canDecline?: boolean;
-  reviewsForApproval: ReviewForApproval[];
+  reviewsForApproval: Employee[];
   onSave: () => void;
 };
 
 export const WidgetObjectiveApproval: FC<WidgetObjectiveApprovalProps> = ({
   isDisabled = false,
-  canDecline = false,
   reviewsForApproval,
   onSave,
 }) => {
   const [isOpenDeclinePopup, setIsOpenDeclinePopup] = useState(false);
   const [isOpenApprovePopup, setIsOpenApprovePopup] = useState(false);
   const [declines, setDeclines] = useState<(string | null)[]>([]);
-  const [currentReview, setCurrentReview] = useState<ReviewForApproval | null>(null);
+  const [currentReview, setCurrentReview] = useState<Employee | null>(null);
   const currentTimeline = currentReview?.timeline.filter(filterApprovedFn);
+  const colleagueUuid = useSelector(colleagueUUIDSelector);
 
   const { css, theme } = useStyle();
   const dispatch = useDispatch();
@@ -37,7 +38,7 @@ export const WidgetObjectiveApproval: FC<WidgetObjectiveApprovalProps> = ({
   useEffect(() => {
     if (declines.length && declines.length === reviewsForApproval.length) {
       // if there is at least one declined entity
-      if (declines.some((decline) => !!decline) || reviewsForApproval.some(filterApprovedReviewFn)) {
+      if (declines.some((decline) => decline !== null)) {
         declineColleagues(declines);
       } else {
         // in other case, clear declines to start again
@@ -53,19 +54,22 @@ export const WidgetObjectiveApproval: FC<WidgetObjectiveApprovalProps> = ({
 
   const handleApproveBtnClick = () => {
     setIsOpenApprovePopup(true);
+    setCurrentReview(reviewsForApproval[0]);
   };
 
   const handleDeclineSubmit = useCallback(
-    (reason: string) => {
+    (hasReason?: boolean, reason?: string) => {
       if (declines.length + 1 < reviewsForApproval.length) {
-        setCurrentReview(reviewsForApproval[declines.length]);
+        setCurrentReview(reviewsForApproval[declines.length + 1]);
         setIsOpenDeclinePopup(false);
         setIsOpenDeclinePopup(true);
       } else {
         setIsOpenDeclinePopup(false);
       }
 
-      setDeclines((declines) => [...declines, reason]);
+      !hasReason && setDeclines((declines) => [...declines, '']);
+
+      hasReason && reason && setDeclines((declines) => [...declines, reason]);
     },
     [reviewsForApproval, declines],
   );
@@ -90,13 +94,19 @@ export const WidgetObjectiveApproval: FC<WidgetObjectiveApprovalProps> = ({
 
   const updateReviewStatus = useCallback(
     (status: Status) => (reasons?: (string | null)[]) => {
-      reviewsForApproval.forEach((colleague, index) => {
+      reviewsForApproval?.forEach((colleague, index) => {
         if ((reasons && !reasons[index] && currentTimeline![0].reviewType === ReviewType.OBJECTIVE) || !currentTimeline)
           return;
 
-        const [timeline] = currentTimeline;
+        const [timeline] = currentTimeline || [];
         const update = {
-          pathParams: { colleagueUuid: colleague.uuid, type: timeline.reviewType, cycleUuid: 'CURRENT', status },
+          pathParams: {
+            colleagueUuid: colleague.uuid,
+            approverUuid: colleagueUuid,
+            type: timeline.reviewType,
+            cycleUuid: 'CURRENT',
+            status,
+          },
           data: {
             ...(reasons ? { reason: reasons[index] as string } : {}),
             status,
@@ -144,7 +154,7 @@ export const WidgetObjectiveApproval: FC<WidgetObjectiveApprovalProps> = ({
           >
             <div className={css({ display: 'inline-block' })}>
               <Button
-                isDisabled={!canDecline}
+                isDisabled={isDisabled}
                 styles={[
                   {
                     background: theme.colors.white,
@@ -155,7 +165,7 @@ export const WidgetObjectiveApproval: FC<WidgetObjectiveApprovalProps> = ({
                     color: `${theme.colors.tescoBlue}`,
                     margin: '0px 4px',
                   },
-                  !canDecline ? { opacity: '0.6' } : {},
+                  isDisabled ? { opacity: '0.6' } : {},
                 ]}
                 onPress={handleDeclineBtnClick}
               >
@@ -190,7 +200,7 @@ export const WidgetObjectiveApproval: FC<WidgetObjectiveApprovalProps> = ({
               />
             )}
             {isOpenApprovePopup && (
-              <SubmitModal onSave={handleApproveSubmit} onClose={() => setIsOpenApprovePopup(false)} />
+              <ApproveModal onSave={handleApproveSubmit} onClose={() => setIsOpenApprovePopup(false)} />
             )}
           </div>
         </div>

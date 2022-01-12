@@ -4,6 +4,10 @@ import { IconButton } from 'components/IconButton';
 import { defineNotesHandler, AllNotesFolderIdTEAM } from '../../../../utils';
 import { NoteData } from '../../type';
 
+export const TEAM_FOLDER_WRAPPER = 'team_folder_wrapper';
+export const CHANGE_TEAM_MODE = 'change_team_mode';
+export const FOLDER_TITLE = 'folder_title';
+
 type PersonalsTeamFoldersProps = {
   handleTEAMSelected: (itemID: string) => any;
   setConfirmTEAMModal: Dispatch<SetStateAction<boolean>>;
@@ -179,9 +183,9 @@ const PersonalsTeamFolders: FC<PersonalsTeamFoldersProps> = ({
   };
 
   return (
-    <div className={css(MainFolderContainerStyle)}>
+    <div className={css(MainFolderContainerStyle)} data-test-id={TEAM_FOLDER_WRAPPER}>
       <div className={css(Title_style)}>
-        <h2 className={css({ padding: '24px' })}>
+        <h2 className={css({ padding: '24px' })} data-test-id={FOLDER_TITLE}>
           {!teamArchivedMode ? 'Folders for Notes on my Team' : 'Archived Folders for Notes on my Team'}
         </h2>
       </div>
@@ -228,6 +232,7 @@ const PersonalsTeamFolders: FC<PersonalsTeamFoldersProps> = ({
       <Button
         styles={[Archive_Style]}
         mode='inverse'
+        data-test-id={CHANGE_TEAM_MODE}
         onPress={() => {
           setTeamArchivedMode((prev) => !prev);
           setSelectedTEAMFolder(() => null);

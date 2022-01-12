@@ -17,18 +17,23 @@ const TipsAdministration: FC = () => {
   const tips = useSelector(getTipsSelector) || [];
 
   useEffect(() => {
-    dispatch(
-      tipsActions.getAllTips({}),
-    );
+    dispatch(tipsActions.getAllTips({}));
   }, []);
 
   const handleCreateTip = () => {
-    history.push(buildPath(`${Page.CREATE_TIP}`))
+    history.push(buildPath(`${Page.CREATE_TIP}`));
   };
 
   return (
     <div data-test-id={TIPS_ADMINISTRATION}>
-      <div className={css({ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '20px 0 25px' })}>
+      <div
+        className={css({
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          margin: '20px 0 25px',
+        })}
+      >
         <IconButton
           customVariantRules={{ default: iconBtnStyle }}
           onPress={handleCreateTip}
@@ -39,15 +44,15 @@ const TipsAdministration: FC = () => {
           <span>Create new tip</span>
         </IconButton>
       </div>
-      
-      { tips.length === 0 && <NoTips /> }
 
-      {tips.map(item => {
-        return <TipsCard card={item} key={item.uuid} />
+      {tips.length === 0 && <NoTips />}
+
+      {tips.map((item) => {
+        return <TipsCard card={item} key={item.uuid} />;
       })}
     </div>
-  )
-}
+  );
+};
 
 const iconBtnStyle: Rule = ({ theme }) => {
   const [, isBreakpoint] = useBreakpoints();
@@ -64,13 +69,13 @@ const iconBtnStyle: Rule = ({ theme }) => {
     color: theme.colors.white,
     cursor: 'pointer',
     fontSize: mobileScreen ? '14px' : '16px',
-    fontWeight: 'bold'
-  }
+    fontWeight: 'bold',
+  };
 };
 
 const iconStyle: Rule = {
   marginRight: '10px',
-  height: '20px'
+  height: '20px',
 };
 
 export default TipsAdministration;

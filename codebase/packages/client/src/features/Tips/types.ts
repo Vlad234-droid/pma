@@ -8,5 +8,5 @@ export type TipsProps = {
   published: boolean;
   targetOrganisation: {
     name: string;
-  }
-}
+  };
+};

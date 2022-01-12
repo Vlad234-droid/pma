@@ -1,1 +1,1 @@
-export { default } from './ViewFeedbackComp';
+export { ViewFeedback as default } from './components';

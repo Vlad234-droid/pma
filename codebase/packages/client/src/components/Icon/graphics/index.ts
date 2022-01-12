@@ -35,7 +35,18 @@ import { Archive } from './archive';
 // import { ArrowRight } from './arrowRight';
 import { NotiBellCirlceOut } from './notiBellCirlceOut';
 import { Support } from './support';
-import { Trash } from './trash';
+import { Home } from './home';
+import { Aim } from './aim';
+import { List } from './list';
+import { Performance } from './performance';
+import { Team } from './team';
+import { Calibration } from './calibration';
+import { Tool } from './tool';
+import { CreateCycle } from './createCycle';
+import { StrategicDriver } from './strategicDriver';
+import { Configuration } from './configuration';
+import { Tip } from './tip';
+import { MultiLanguage } from './multiLanguage';
 
 /**
  * Each icon we add needs to have viewbox set to "0 0 24 24".
@@ -44,42 +55,53 @@ import { Trash } from './trash';
  * for that we can use https://products.aspose.app/imaging/image-resize/svg or https://editor.method.ac/.
  */
 export type Graphics =
-  | 'add'
-  | 'chatSq'
-  | 'document'
   | 'account'
-  | 'calender'
-  | 'cancel'
-  | 'check'
-  | 'decline'
-  | 'microphone'
+  | 'add'
+  | 'aim'
+  | 'alert'
+  | 'archive'
+  | 'arrowDown'
   | 'arrowLeft'
+  | 'arrowRight'
+  | 'arrowUp'
+  | 'calender'
+  | 'calibration'
+  | 'cancel'
+  | 'chatSq'
+  | 'check'
+  | 'configuration'
+  | 'createCycle'
+  | 'decline'
+  | 'delete'
+  | 'document'
+  | 'download'
+  | 'edit'
+  | 'folder'
+  | 'home'
+  | 'information'
+  | 'multiLanguage'
+  | 'list'
+  | 'microphone'
+  | 'notiBellCircleOut'
+  | 'performance'
+  | 'print'
+  | 'question'
+  | 'roundAlert'
+  | 'roundCircle'
   | 'roundClock'
   | 'roundPencil'
-  | 'roundAlert'
-  | 'roundTick'
   | 'roundStop'
-  | 'roundCircle'
-  | 'edit'
-  | 'share'
-  | 'print'
-  | 'arrowUp'
-  | 'arrowDown'
+  | 'roundTick'
   | 'search'
   | 'settings'
   | 'settingsGear'
-  | 'question'
+  | 'share'
   | 'signOut'
-  | 'information'
-  | 'download'
-  | 'alert'
-  | 'delete'
-  | 'folder'
-  | 'archive'
-  | 'notiBellCircleOut'
+  | 'strategicDriver'
   | 'support'
-  | 'arrowRight'
-  | 'trash';
+  | 'team'
+  | 'tip'
+  | 'tool';
 
 export const icons: Record<Graphics, FCGraphicProps> = {
   add: Add,
@@ -118,5 +140,16 @@ export const icons: Record<Graphics, FCGraphicProps> = {
   // arrowRight: ArrowRight,
   notiBellCircleOut: NotiBellCirlceOut,
   support: Support,
-  trash: Trash,
+  home: Home,
+  aim: Aim,
+  list: List,
+  performance: Performance,
+  team: Team,
+  calibration: Calibration,
+  tool: Tool,
+  createCycle: CreateCycle,
+  strategicDriver: StrategicDriver,
+  configuration: Configuration,
+  tip: Tip,
+  multiLanguage: MultiLanguage,
 };

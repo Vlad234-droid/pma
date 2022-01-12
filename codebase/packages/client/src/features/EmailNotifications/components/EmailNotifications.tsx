@@ -41,7 +41,7 @@ export const EmailNotifications: FC<Props> = () => {
                   {
                     name,
                     type,
-                    value: e.target.checked,
+                    value: (e.target as HTMLInputElement).checked,
                   },
                 ])
               }

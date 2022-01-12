@@ -50,19 +50,22 @@ const CompletedNotes: FC<CompletedNotesProps> = ({ item }) => {
         {item?.feedbackItems?.find((feed) => feed?.code === 'comment_to_request')?.content ?? ''}
       </p>
       <div className={css(InfoBlockStyle)}>
-        <h3>Question 1</h3>
+        <h3>
+          Looking back at what you&apos;ve seen recently, what would you like to say to this colleague about what
+          they&apos;ve delivered or how they&apos;ve gone about it?
+        </h3>
         {item.feedbackItems.map((question) => {
           return <p key={question.code}>{question.code === 'Question 1' && question.content}</p>;
         })}
       </div>
       <div className={css(InfoBlockStyle)}>
-        <h3>Question 2</h3>
+        <h3>Looking forward, what should this colleague do more (or less) of in order to be at their best?</h3>
         {item.feedbackItems.map((question) => {
           return <p key={question.code}>{question.code === 'Question 2' && question.content}</p>;
         })}
       </div>
       <div className={css(InfoBlockStyle)}>
-        <h3>Anything else?</h3>
+        <h3>Add any other comments you would like to share with your colleague.</h3>
         {item.feedbackItems.map((question) => {
           return <p key={question.code}>{question.code === 'Anything else?' && question.content}</p>;
         })}

@@ -72,9 +72,7 @@ const RadioBtns: FC<RadioBtnsProps> = ({
             })}
           >
             <Radio
-              type='radio'
               name='status'
-              value='option1'
               checked={checkedRadio.draft}
               id='draft'
               onChange={() => {
@@ -110,9 +108,7 @@ const RadioBtns: FC<RadioBtnsProps> = ({
             })}
           >
             <Radio
-              type='radio'
               name='status'
-              value='option2'
               checked={checkedRadio.submitted}
               id='submitted'
               onChange={() => {

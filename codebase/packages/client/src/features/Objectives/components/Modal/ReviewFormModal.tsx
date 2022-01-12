@@ -1,7 +1,5 @@
 import React, { FC, HTMLProps, useEffect, useState } from 'react';
-
 import { Trans, useTranslation, TFunction } from 'components/Translation';
-
 import { Button, Icon, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
@@ -75,6 +73,7 @@ const ReviewFormModal: FC<Props> = ({ reviewType, onClose }) => {
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
   const [successModal, setSuccessModal] = useState(false);
   const { info } = useSelector(currentUserSelector);
+  const dispatch = useDispatch();
   const [review] = useSelector(getReviewByTypeSelector(reviewType));
   const { loading: reviewLoading } = useSelector(reviewsMetaSelector);
   const timelineReview = useSelector(getTimelineByReviewTypeSelector(reviewType));
@@ -135,12 +134,12 @@ const ReviewFormModal: FC<Props> = ({ reviewType, onClose }) => {
     setSuccessModal(true);
   };
 
-  const dispatch = useDispatch();
   useEffect(() => {
     dispatch(
       ReviewsActions.getColleagueReviews({ pathParams: { colleagueUuid: info.colleagueUUID, cycleUuid: 'CURRENT' } }),
     );
   }, []);
+
   useEffect(() => {
     reset(review);
   }, [review]);
@@ -149,7 +148,7 @@ const ReviewFormModal: FC<Props> = ({ reviewType, onClose }) => {
     return null;
   }
 
-  if (successModal) {
+  if (timelineReview?.status === Status.WAITING_FOR_APPROVAL) {
     return (
       <SuccessModal
         onClose={onClose}
@@ -182,24 +181,31 @@ const ReviewFormModal: FC<Props> = ({ reviewType, onClose }) => {
               {helperText}
             </div>
             <div className={css({ padding: `0 0 ${theme.spacing.s5}`, display: 'flex' })}>
-              <TriggerModal triggerComponent={<Icon graphic='information' />} title={'Writing your review'}>
+              <TriggerModal
+                triggerComponent={
+                  <div className={css({ display: 'flex', alignItems: 'center' })}>
+                    <Icon graphic='information' />
+                    <span
+                      className={css(theme.font.fixed.f14, {
+                        color: theme.colors.tescoBlue,
+                        padding: `${theme.spacing.s0} ${theme.spacing.s2}`,
+                      })}
+                    >
+                      <Trans i18nKey='need_help_to_write'>Need help with what to write?</Trans>
+                    </span>
+                  </div>
+                }
+                title={'Writing your objectives'}
+              >
                 <MidYearHelpModal />
               </TriggerModal>
-              <span
-                className={css(theme.font.fixed.f14, {
-                  color: theme.colors.tescoBlue,
-                  padding: `${theme.spacing.s0} ${theme.spacing.s2}`,
-                })}
-              >
-                <Trans i18nKey='need_help_to_write'>Need help with what to write?</Trans>
-              </span>
             </div>
             {components.map((component) => {
               const { id, key, text, label, description, type, validate, values = [] } = component;
               const value = formValues[key] ? formValues[key] : '';
               if (type === 'text') {
                 return (
-                  <div style={{ padding: '10px 0' }}>
+                  <div style={{ padding: '10px 0' }} key={id}>
                     <div
                       className={css({
                         fontSize: '16px',
@@ -226,7 +232,7 @@ const ReviewFormModal: FC<Props> = ({ reviewType, onClose }) => {
                   />
                 );
               }
-              if (type === 'textfield' && validate?.maxLength > 100) {
+              if (type === 'textfield') {
                 return (
                   <GenericItemField
                     key={id}
@@ -234,7 +240,7 @@ const ReviewFormModal: FC<Props> = ({ reviewType, onClose }) => {
                     methods={methods}
                     label={label}
                     Wrapper={Item}
-                    Element={Textarea}
+                    Element={validate?.maxLength > 100 ? Textarea : Input}
                     placeholder={description}
                     value={value}
                     readonly={readonly}

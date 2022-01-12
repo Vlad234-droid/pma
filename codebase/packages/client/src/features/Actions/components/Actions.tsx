@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState, useCallback } from 'react';
+import React, { FC, useEffect, useState, useCallback, useMemo } from 'react';
 import { useSelector, shallowEqual } from 'react-redux';
 import { colors, fontWeight, useBreakpoints, useStyle } from '@dex-ddl/core';
 import {
@@ -34,7 +34,6 @@ const SelectAll: FC<SelectAllProps> = ({ onChange, checked, indeterminate, disab
     <label>
       <Checkbox
         disabled={disabled}
-        type='checkbox'
         name='selectAll'
         id='selectAll'
         onChange={onChange}
@@ -76,19 +75,24 @@ export const Actions = () => {
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    if (!loaded && colleagueUuid) dispatch(ManagersActions.getManagers({ colleagueUuid }));
-    if (!schemaLoaded && colleagueUuid) dispatch(SchemaActions.getSchema({ colleagueUuid }));
-  }, [loaded, schemaLoaded, colleagueUuid]);
-
   const [indeterminate, setIndeterminate]: [boolean, (T) => void] = useState(false);
   const [isCheckAll, setIsCheckAll]: [boolean, (T) => void] = useState(false);
-  const [isCheck, setIsCheck]: [string[], (T) => void] = useState([]);
+  const [checkedItems, setCheckedItems]: [string[], (T) => void] = useState([]);
   const [reviewsForApproval, setReviewsForApproval]: [any[], (T) => void] = useState([]);
 
   const [colleagues, setColleagues] = useState(employeeWithPendingApprovals || []);
   const [pending, setPending] = useState(true);
-  const [colleagueReviews, setColleagueReviews]: [any, (T) => void] = useState({});
+
+  // disable selectAll, if every colleague has more then one item for approve
+  const selectAllDisabled = useMemo(
+    () => colleagues.every(({ timeline }) => timeline.filter(filterApprovedFn)?.length > 1),
+    [colleagues],
+  );
+
+  useEffect(() => {
+    if (!loaded && colleagueUuid) dispatch(ManagersActions.getManagers({ colleagueUuid }));
+    if (!schemaLoaded && colleagueUuid) dispatch(SchemaActions.getSchema({ colleagueUuid }));
+  }, [loaded, schemaLoaded, colleagueUuid]);
 
   useEffect(() => {
     setColleagues(pending ? employeeWithPendingApprovals : employeeWithCompletedApprovals);
@@ -96,18 +100,18 @@ export const Actions = () => {
 
   //todo: refactor this
   useEffect(() => {
-    if (colleagues?.length && isCheck.length && colleagues?.length > isCheck.length) {
+    if (colleagues?.length && checkedItems.length && colleagues?.length > checkedItems.length) {
       setIndeterminate(true);
-    } else if (colleagues?.length && isCheck.length && colleagues?.length === isCheck.length) {
+    } else if (colleagues?.length && checkedItems.length && colleagues?.length === checkedItems.length) {
       setIndeterminate(false);
       setIsCheckAll(true);
-    } else if (!colleagues?.length && !isCheck.length) {
+    } else if (!colleagues?.length && !checkedItems.length) {
       setIsCheckAll(false);
     } else {
       setIndeterminate(false);
       setIsCheckAll(false);
     }
-  }, [isCheck, colleagues]);
+  }, [checkedItems, colleagues]);
 
   const handleSelectAll = useCallback(() => {
     setIsCheckAll(!isCheckAll);
@@ -117,12 +121,12 @@ export const Actions = () => {
       (colleague) => colleague.timeline.filter(filterApprovedFn)?.length === 1,
     );
 
-    const checkedItems = filteredEmployee.map((colleague) => colleague.uuid);
+    const checked = filteredEmployee.map((colleague) => colleague.uuid);
 
-    setIsCheck(checkedItems);
+    setCheckedItems(checked);
 
     if (isCheckAll) {
-      setIsCheck([]);
+      setCheckedItems([]);
       setReviewsForApproval([]);
     } else {
       setReviewsForApproval(filteredEmployee);
@@ -131,9 +135,9 @@ export const Actions = () => {
 
   const handleClick = (e, colleague) => {
     const { id, checked } = e.target;
-    setIsCheck([...isCheck, id]);
+    setCheckedItems([...checkedItems, id]);
     if (!checked) {
-      setIsCheck(isCheck.filter((item) => item !== id));
+      setCheckedItems(checkedItems.filter((item) => item !== id));
       setReviewsForApproval((prev) => [...prev.filter((item) => item.uuid !== colleague.uuid)]);
     } else {
       setReviewsForApproval((prev) => [...prev, { ...colleague }]);
@@ -152,7 +156,12 @@ export const Actions = () => {
               alignItems: 'center',
             })}
           >
-            <SelectAll onChange={handleSelectAll} checked={isCheckAll} indeterminate={indeterminate} />
+            <SelectAll
+              onChange={handleSelectAll}
+              checked={isCheckAll}
+              indeterminate={indeterminate}
+              disabled={selectAllDisabled}
+            />
           </div>
         )}
         <div className={css({ display: 'flex' })}>
@@ -163,14 +172,7 @@ export const Actions = () => {
                 alignItems: 'center',
               })}
             >
-              <Radio
-                id='option1'
-                type='radio'
-                name='status'
-                value='option1'
-                checked={pending}
-                onChange={() => setPending(true)}
-              />
+              <Radio id='option1' name='status' checked={pending} onChange={() => setPending(true)} />
               <span
                 className={css({
                   fontSize: '16px',
@@ -189,14 +191,7 @@ export const Actions = () => {
                 alignItems: 'center',
               })}
             >
-              <Radio
-                id='option2'
-                type='radio'
-                name='status'
-                value='option2'
-                checked={!pending}
-                onChange={() => setPending(false)}
-              />
+              <Radio id='option2' name='status' checked={!pending} onChange={() => setPending(false)} />
               <span
                 className={css({
                   fontSize: '16px',
@@ -241,12 +236,14 @@ export const Actions = () => {
               <div key={colleague.uuid} className={css({ display: 'flex', flexWrap: 'wrap' })}>
                 <div className={css({ width: '40px', position: 'relative' })}>
                   <span className={css({ position: 'absolute', top: '36px' })}>
-                    <Checkbox
-                      disabled={timelineApproved?.length > 1}
-                      id={colleague.uuid}
-                      checked={isCheck.includes(colleague.uuid)}
-                      onChange={(e) => handleClick(e, colleague)}
-                    />
+                    {pending && (
+                      <Checkbox
+                        disabled={timelineApproved?.length > 1}
+                        id={colleague.uuid}
+                        checked={checkedItems.includes(colleague.uuid)}
+                        onChange={(e) => handleClick(e, colleague)}
+                      />
+                    )}
                   </span>
                 </div>
                 <div className={css({ width: 'calc(100% - 40px)' })}>
@@ -255,8 +252,6 @@ export const Actions = () => {
                     id={colleague.uuid}
                     status={pending ? Status.WAITING_FOR_APPROVAL : Status.APPROVED}
                     colleague={colleague}
-                    colleagueReviews={colleagueReviews}
-                    setColleagueReviews={setColleagueReviews}
                   />
                 </div>
               </div>
@@ -270,7 +265,12 @@ export const Actions = () => {
               padding: '16px 0',
             })}
           >
-            <SelectAll onChange={handleSelectAll} checked={isCheckAll} indeterminate={indeterminate} />
+            <SelectAll
+              onChange={handleSelectAll}
+              checked={isCheckAll}
+              indeterminate={indeterminate}
+              disabled={selectAllDisabled}
+            />
           </div>
         )}
         <div
@@ -282,10 +282,9 @@ export const Actions = () => {
           <div>
             {pending && (
               <WidgetObjectiveApproval
-                canDecline
-                isDisabled={!isCheck.length}
+                isDisabled={!checkedItems.length}
                 reviewsForApproval={reviewsForApproval}
-                onSave={() => setIsCheck([])}
+                onSave={() => setCheckedItems([])}
               />
             )}
           </div>

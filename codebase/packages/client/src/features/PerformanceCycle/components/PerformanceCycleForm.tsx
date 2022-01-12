@@ -23,7 +23,6 @@ import {
   getType,
 } from '@pma/store/src/selectors/processTemplate';
 import useDispatch from 'hooks/useDispatch';
-import { createPMCycleSchema } from './schema';
 import {
   getConfigEntriesByPerformanceCycle,
   getTimelinePointsByPerformanceCycleUuidSelector,
@@ -33,9 +32,10 @@ import {
 import { TileWrapper } from 'components/Tile';
 import { GenericItemField } from 'components/GenericForm';
 import { Input, Item, Radio, Select } from 'components/Form';
+import { Page } from 'pages';
+import { ObjectiveModal } from 'features/Objectives/components/ObjectiveModal/ObjectiveModal';
 import TemplatesModal from './TemplatesModal';
-import { Page } from '../../../pages';
-import { ObjectiveModal } from '../../Objectives/components/ObjectiveModal/ObjectiveModal';
+import { createPMCycleSchema } from './schema';
 
 function getChildren(data, options11: any, key, value) {
   return data
@@ -715,9 +715,7 @@ export const PerformanceCycleForm: FC = () => {
                       })}
                     >
                       <Radio
-                        type='radio'
                         name='status'
-                        value={form?.displayName}
                         checked={selectedForm === form?.displayName}
                         onChange={() => setSelectedForm(form?.displayName)}
                       />

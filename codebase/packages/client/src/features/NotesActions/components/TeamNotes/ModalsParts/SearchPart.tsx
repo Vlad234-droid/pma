@@ -36,13 +36,16 @@ export const SearchPart: FC<SearchPartProps> = ({
     <div className={css({ marginTop: '32px' })}>
       <Item
         errormessage={
-          errors['search_option'] && errors['search_option'].type === 'required' ? errors['search_option'].message : ''
+          errors['search_option'] && errors['search_option'].type === 'required' ? 'Search option is required' : ''
         }
       >
         <SearchInput
           isValid={!errors[`search_option`]}
           name={`search_option`}
           onChange={(e) => {
+            if (e.target.value === '' || e.target.value.length <= 1) {
+              dispatch(ColleaguesActions.clearGettedColleagues());
+            }
             if (e.target.value !== '' && e.target.value.length > 1) {
               dispatch(
                 ColleaguesActions.getColleagues({

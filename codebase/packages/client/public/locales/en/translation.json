@@ -30,7 +30,7 @@
   "objective_is_pending": "{{count}} objective(s) are waiting for approval",
   "pending": "Pending",
   "performance_timeline_title": "Your Contribution timeline",
-  "personal_development_plan": "Personal Development plan",
+  "personal_development_plan": "Personal Development Plan",
   "personal_development_plan_date": "Added {{date, d LLL yyyy}}",
   "previous_review_files": "Previous Review Files",
   "print": "Print",
@@ -63,10 +63,10 @@
   "share_objectives_on_description": "You are currently sharing your objectives with your team",
   "stop_sharing": "Stop sharing",
   "organizatin_objectives": "Strategic Priorities",
-  "organization_objectives_description": "Your organization has 6 objectives share to all colleagues",
+  "organization_objectives_description": "Your organisation has strategic drivers shared with you",
   "shared_objectives": "Shared objectives",
   "you_have_shared_objectives_from_your_manager": "You have {{count}} shared objective(s) from your manager.",
-  "view_objectives": "View objectives",
+  "view_objectives": "View",
   "you_have_shared_objectives": "You have {{count}} shared objectives",
   "from_person": "From {{person}}",
   "done": "Done",
@@ -108,5 +108,9 @@
   "z_a": "Z-A",
   "a_z": "A-Z",
   "my_objectives_and_reviews": "My objectives and reviews",
-  "download_all_feedbacks": "Download all feedbacks"
+  "download_all_feedbacks": "Download all feedbacks",
+  "mid_year_review_widget_title": "Complete this once you’ve had your mid-year conversation with your line manager.",
+  "mid_year_review_widget_title_approved": "Your mid-year review is complete.",
+  "end_year_review_widget_title": "Complete this once you’ve had your year-end conversation with your line manager.",
+  "end_year_review_widget_title_approved": "Your year-end review is complete."
 }

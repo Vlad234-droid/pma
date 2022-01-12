@@ -1,5 +1,4 @@
 import React, { FC } from 'react';
-import { colors, fontWeight, Rule, Styles } from '@dex-ddl/core';
 import { Accordion, Header, HeaderProps, Panel, Section } from 'components/Accordion';
 import { ObjectiveButtons } from '../Buttons';
 import { Status } from 'config/enum';
@@ -11,11 +10,12 @@ import * as T from '../../types';
 export type ObjectiveAccordionProps = {
   objectives: T.Objective[];
   canShowStatus: boolean;
+  isButtonsVisible?: boolean;
 };
 
 export const TEST_ID = 'objective-accordion';
 
-const ObjectiveAccordion: FC<ObjectiveAccordionProps> = ({ objectives, canShowStatus }) => (
+const ObjectiveAccordion: FC<ObjectiveAccordionProps> = ({ objectives, canShowStatus, isButtonsVisible = true }) => (
   <Accordion id='objective-accordion'>
     <div data-test-id={TEST_ID}>
       {objectives.map(({ id, title, subTitle, description, explanations, status }) => (
@@ -23,7 +23,7 @@ const ObjectiveAccordion: FC<ObjectiveAccordionProps> = ({ objectives, canShowSt
           <ObjectiveHeader {...{ title, subTitle, description, ...(canShowStatus ? { status } : {}) }} />
           <Panel>
             <ObjectivePanel explanations={explanations} />
-            <ObjectiveButtons id={id} status={status} />
+            {isButtonsVisible && <ObjectiveButtons id={id} status={status} />}
           </Panel>
         </Section>
       ))}

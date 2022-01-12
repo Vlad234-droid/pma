@@ -4,6 +4,9 @@ import { IconButton } from 'components/IconButton';
 import { PersonalFoldersProps } from '../type';
 import { defineNotesHandler, AllNotesFolderId } from '../../../utils';
 
+export const PERSONAL_FOLDER_WRAPPER = 'personal_folder_wrapper';
+export const CHANGE_USER_MODE = 'change_user_mode';
+
 const PersonalFolders: FC<PersonalFoldersProps> = ({
   handleSelected,
   setConfirmModal,
@@ -164,7 +167,7 @@ const PersonalFolders: FC<PersonalFoldersProps> = ({
   };
 
   return (
-    <div className={css(mainFolderContainerStyle)}>
+    <div className={css(mainFolderContainerStyle)} data-test-id={PERSONAL_FOLDER_WRAPPER}>
       <div className={css(titleStyle)}>
         <h2 className={css({ padding: '24px' })}>{!userArchivedMode ? 'Personal Folders' : 'Archived Folders'}</h2>
       </div>
@@ -211,6 +214,7 @@ const PersonalFolders: FC<PersonalFoldersProps> = ({
       <Button
         styles={[archiveStyle]}
         mode='inverse'
+        data-test-id={CHANGE_USER_MODE}
         onPress={() => {
           setUserArchivedMode((prev) => !prev);
           setSelectedFolder(() => null);

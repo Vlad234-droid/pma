@@ -52,9 +52,6 @@ export const SubmitPart: FC<SubmitPartProps> = ({ selectedPerson, teamMethods, f
 
   const values = getValues();
 
-  const getPropperToneOfVoice = () =>
-    selectedPerson?.profileAttributes?.find((item) => item?.name === 'voice')?.value ?? 'Direct and simple';
-
   return (
     <div>
       <div className={css(lineStyle)} />
@@ -70,7 +67,6 @@ export const SubmitPart: FC<SubmitPartProps> = ({ selectedPerson, teamMethods, f
           <p className={css(industryStyle)}>
             {`${selectedPerson?.workRelationships[0].job?.name}, ${selectedPerson?.workRelationships[0].department?.name}`}
           </p>
-          <span className={css(treatmentStyle)}>I prefer feedback that is: {getPropperToneOfVoice()}</span>
         </div>
       </div>
 

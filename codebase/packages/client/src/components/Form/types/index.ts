@@ -1,41 +1,44 @@
-import React, { RefObject } from 'react';
+import { RefObject, SyntheticEvent, ChangeEvent } from 'react';
 import { Rule, Styles } from '@dex-ddl/core';
-import { Ref } from 'react-hook-form';
 
-export interface FormItemProps {
-  disabled?: boolean;
-  value?: string;
-  name?: string;
-  placeholder?: string;
+export interface FormField {
   styles?: Styles | Rule;
-  onChange?: (e: any, value?: string) => any;
-  domRef?: Ref | RefObject<any>;
+  domRef?: RefObject<any>;
   isValid?: boolean;
-  type?: string;
-  id?: string;
   customStyles?: Rule | Styles;
-  onBlur?: () => void;
   readonly?: boolean;
+  onFocus?: () => void;
+  placeholder?: string;
+  name?: string;
+  id?: string;
+  disabled?: boolean;
+  readOnly?: boolean;
 }
 
-export type InputProps = FormItemProps;
+export interface InputField extends FormField {
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  onBlur?: (e: SyntheticEvent<HTMLInputElement>) => void;
+  value?: string;
+}
 
-export interface SelectProps extends FormItemProps {
-  options: { value: string; label: string }[] | [];
-  setSelected?: React.Dispatch<React.SetStateAction<'' | React.ChangeEvent<EventTarget>>>;
+export interface SelectField extends FormField {
+  options: Array<{ value: string; label: string }>;
   getSelected?: (option: any) => void;
+  onChange: (e: SyntheticEvent<HTMLInputElement>) => void;
+  value?: string;
 }
 
-export interface TextareaProps extends FormItemProps {
+export interface TextareaField extends FormField {
   rows?: number;
+  onChange: (e: ChangeEvent<HTMLTextAreaElement>) => void;
+  value?: string;
 }
 
-export interface RadioProps extends FormItemProps {
+export interface RadioField extends InputField {
   checked?: boolean;
 }
 
-export interface CheckboxProps extends FormItemProps {
+export interface CheckboxField extends InputField {
   indeterminate?: boolean;
   checked?: boolean;
-  disabled?: boolean;
 }

@@ -9,32 +9,15 @@ import { Page } from 'pages/types';
 import { useHistory } from 'react-router-dom';
 import { paramsReplacer } from 'utils';
 import { buildPath } from 'features/Routes';
+import { Employee } from 'config/types';
 
 import ColleagueInfo from '../ColleagueInfo';
 
-export type Review = {
-  uuid: string;
-  status: string;
-  type: string;
-  code: string;
-  description: string;
-  reviewType: string;
-  number: number;
-};
-
-export type Employee = {
-  firstName: string;
-  lastName: string;
-  jobName: string;
-  businessType: string;
-  uuid: string;
-  timeline: Review[];
-};
-
 export type WidgetTeamMateProfileProps = {
-  id: string;
+  uuid: string;
   status?: Status;
   employee: Employee;
+  simpleView?: boolean;
 };
 
 export const getIcon = (status): [Graphics, Colors] => {
@@ -52,7 +35,12 @@ export const getIcon = (status): [Graphics, Colors] => {
   return contents[status] || ['roundCircle', 'pending'];
 };
 
-export const WidgetTeamMateProfile: FC<WidgetTeamMateProfileProps> = ({ id, status, employee }) => {
+export const WidgetTeamMateProfile: FC<WidgetTeamMateProfileProps> = ({
+  uuid,
+  status,
+  employee,
+  simpleView = false,
+}) => {
   const { css } = useStyle();
   const history = useHistory();
 
@@ -66,13 +54,13 @@ export const WidgetTeamMateProfile: FC<WidgetTeamMateProfileProps> = ({ id, stat
     <>
       <TileWrapper>
         <Accordion
-          id={`team-mate-accordion-${id}`}
+          id={`team-mate-accordion-${uuid}`}
           customStyle={{
             borderBottom: 'none',
             marginTop: 0,
           }}
         >
-          <BaseAccordion id={`team-mate-base-accordion-${id}`}>
+          <BaseAccordion id={`team-mate-base-accordion-${uuid}`}>
             {() => (
               <>
                 <Section defaultExpanded={false}>
@@ -99,12 +87,16 @@ export const WidgetTeamMateProfile: FC<WidgetTeamMateProfileProps> = ({ id, stat
                           View profile
                         </button>
                       </div>
-                      <div className={css({ padding: '0px 12px' })}>
-                        <Icon graphic={graphics} fill={color} />
-                      </div>
-                      <div className={css({ paddingLeft: '12px' })}>
-                        <ExpandButton />
-                      </div>
+                      <>
+                        {!simpleView && (
+                          <div className={css({ padding: '0px 12px' })}>
+                            <Icon graphic={graphics} fill={color} />
+                          </div>
+                        )}
+                        <div className={css({ paddingLeft: '12px' })}>
+                          <ExpandButton />
+                        </div>
+                      </>
                     </div>
                   </div>
                   <Panel>

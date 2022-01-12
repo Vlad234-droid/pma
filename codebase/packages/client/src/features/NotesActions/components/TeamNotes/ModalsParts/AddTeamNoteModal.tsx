@@ -1,4 +1,4 @@
-import React, { Dispatch, FC, SetStateAction, useState, ChangeEvent } from 'react';
+import React, { Dispatch, FC, SetStateAction } from 'react';
 import { Notification } from 'components/Notification';
 import { useStyle, Rule, useBreakpoints, Button } from '@dex-ddl/core';
 import { SearchPart } from './SearchPart';
@@ -111,7 +111,7 @@ const AddTeamNoteModal: FC<AddTeamNoteModalProps> = ({
               justifyContent: 'space-between',
             })}
           >
-            <Button styles={[theme.font.fixed.f16, buttonCoreStyled]} onPress={cancelTEAMModal} isDisabled={true}>
+            <Button styles={[theme.font.fixed.f16, buttonCoreStyled]} onPress={cancelTEAMModal}>
               <Trans>Cancel</Trans>
             </Button>
 

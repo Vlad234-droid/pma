@@ -2,17 +2,17 @@ import React, { FC } from 'react';
 import { colors, useStyle } from '@dex-ddl/core';
 import mergeRefs from 'react-merge-refs';
 
-import { InputProps } from '../types';
+import { InputField } from '../types';
 import { useRefContainer } from '../context/input';
 
-const Input: FC<InputProps> = ({
+const Input: FC<InputField> = ({
   domRef,
   placeholder = '',
   onChange,
+  onFocus,
   name,
   value,
   isValid = true,
-  type = 'text',
   customStyles,
   readonly,
   onBlur,
@@ -22,13 +22,14 @@ const Input: FC<InputProps> = ({
 
   return (
     <input
+      type={'text'}
       ref={mergeRefs([domRef, refIcon])}
       name={name}
       data-test-id={name}
       value={value}
       onChange={onChange}
-      type={type}
       onBlur={onBlur}
+      onFocus={onFocus}
       readOnly={readonly}
       className={css({
         width: '100%',

@@ -1,21 +1,21 @@
-import React, { Fragment, RefObject, useEffect } from 'react';
-import { useForm, Ref } from 'react-hook-form';
+import React, { Fragment, RefObject, useRef } from 'react';
+import { useForm, UseFormHandleSubmit } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { AnyObjectSchema } from 'yup';
 import { Button, Rule, useStyle } from '@dex-ddl/core';
-import { GenericItemField } from './GenericItemField';
+import get from 'lodash.get';
+import { Field, Item } from 'components/Form';
 import type { FormField, Handler } from './types';
 
 type Props<T> = {
   formFields: FormField<keyof T>[];
   schema: AnyObjectSchema;
-  onSubmit: Handler<T>;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  onSubmit?: Handler<T>;
   refDom?: RefObject<any>;
-  renderButtons?: (reset: () => void, isValid: boolean) => JSX.Element | null;
+  renderButtons?: (isValid: boolean, handleSubmit: UseFormHandleSubmit<T>) => JSX.Element | null;
   renderContent?: () => JSX.Element | null;
   defaultValues?: Partial<T>;
-  domRef?: Ref | RefObject<any> | null;
+  domRef?: RefObject<any> | null;
 };
 
 const defaultRenderButtons = (isValid) => (
@@ -31,49 +31,43 @@ function genericForm<T>({
   onSubmit,
   renderButtons = defaultRenderButtons,
   renderContent = defaultRenderContent,
-  refDom,
   defaultValues,
 }: Props<T>) {
+  const formRef = useRef<HTMLFormElement | null>(null);
   const methods = useForm({
     mode: 'onChange',
+    reValidateMode: 'onChange',
     resolver: yupResolver(schema),
+    // @ts-ignore
+    defaultValues,
   });
-  const {
-    handleSubmit,
-    formState: { isValid },
-    reset,
-  } = methods;
+  const { handleSubmit, formState, register, getValues } = methods;
+
   const { css } = useStyle();
 
-  useEffect(() => {
-    if (defaultValues) {
-      reset(defaultValues);
-    }
-  }, [defaultValues, reset]);
-
-  const submit: Handler<T> = (data) => {
-    onSubmit(data);
-  };
+  const { isValid, errors } = formState;
+  const values = getValues();
 
   return (
-    <form noValidate onSubmit={handleSubmit(submit)} ref={refDom} className={css(formStyles)}>
-      {formFields.map(({ Element, Wrapper, name, label, placeholder, ...props }) => (
+    <form noValidate onSubmit={onSubmit ? handleSubmit(onSubmit) : undefined} ref={formRef} className={css(formStyles)}>
+      {formFields.map(({ Element, Wrapper = Item, name, label, placeholder, ...props }) => (
         <Fragment key={name}>
-          <GenericItemField
+          <Field
             {...props}
-            name={name}
-            methods={methods}
+            // @ts-ignore
+            error={get(errors, `${name}.message`)}
             placeholder={placeholder}
             label={label}
+            value={get(values, name)}
             Element={Element}
             Wrapper={Wrapper}
-            value={''}
-            domRef={null}
+            // @ts-ignore
+            {...register(name)}
           />
         </Fragment>
       ))}
       {renderContent && renderContent()}
-      {renderButtons && renderButtons(reset, isValid)}
+      {renderButtons && renderButtons(isValid, handleSubmit)}
     </form>
   );
 }

@@ -40,5 +40,9 @@ export const formatDate = (date: Date, format: DateFormat = DATE_FORMAT) =>
 export const formatDateStringToIsoDate = (date: string) => DateTime.fromISO(date).setLocale('en').toISODate();
 
 export const formatToRelativeDate = (date: string) => {
-  return DateTime.fromISO(date).setLocale('en').toRelative();
+  return DateTime.fromISO(date).setLocale('en').toRelative()?.includes('second')
+    ? 'just now'
+    : DateTime.fromISO(date).setLocale('en').toRelative();
 };
+
+export const dateToIso = (date: Date) => DateTime.fromJSDate(date).toISO();

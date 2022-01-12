@@ -15,14 +15,16 @@ const LeftsideMenuItem = (props: MenuItemInterface) => {
     <div className={css(menuItem({ theme }))}>
       <div className={css(icon)}>
         <img alt={props.imgUrl} src={props.imgUrl} />
-        {props.notifyCount && props.notifyCount > 0 ? <span className={css(redBadge({ theme }))}>{props.notifyCount}</span> : null}
+        {props.notifyCount && props.notifyCount > 0 ? (
+          <span className={css(redBadge({ theme }))}>{props.notifyCount}</span>
+        ) : null}
       </div>
       <div>{props.name}</div>
     </div>
   );
 };
 
-const redBadge: CreateRule<{ theme: Theme; }> = (props) => {
+const redBadge: CreateRule<{ theme: Theme }> = (props) => {
   if (props == null) return {};
   const { theme } = props;
   return {
@@ -43,7 +45,7 @@ const redBadge: CreateRule<{ theme: Theme; }> = (props) => {
   };
 };
 
-const menuItem: CreateRule<{ theme: Theme; }> = (props) => {
+const menuItem: CreateRule<{ theme: Theme }> = (props) => {
   if (props == null) return {};
   const { theme } = props;
   return {

@@ -37,7 +37,7 @@ const SubmitPart: FC<SubmitPartProps> = ({
       <div className={css({ height: '1px', background: '#E5E5E5' })} />
       <div className={css({ marginTop: '16px' })}>
         <div className={css(VideoWrapper)}>
-          <h2 className={css(VideoExplanationTitle)}>Watch video explanation</h2>
+          <h2 className={css(VideoExplanationTitle)}>Share specific examples of what you&apos;ve seen.</h2>
           <img src={video_explanation} alt='video_explanation' />
         </div>
         <div className={css(BlockInfo)}>
@@ -216,7 +216,7 @@ const NotificationBlockStyle: Rule = {
 const InfohelpStyle: Rule = {
   color: '#00539F',
   fontSize: '14px',
-  margin: '0px 0px 0px 8px',
+  margin: '0px 0px 5px 8px',
 };
 
 const VideoExplanationTitle: Rule = {

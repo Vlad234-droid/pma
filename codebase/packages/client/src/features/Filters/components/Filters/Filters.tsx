@@ -3,9 +3,9 @@ import { Rule } from '@dex-ddl/core';
 
 import InfoIcon from 'components/InfoIcon';
 
-import Sorting from './Sorting';
-import Search from './Search';
-import { SortBy, SortOption } from './config/types';
+import Sorting from '../Sorting';
+import Search from '../Search';
+import { SortBy, SortOption } from '../../config/types';
 
 type Props = {
   sortValue?: SortBy;
@@ -19,7 +19,7 @@ const Filters: FC<Props> = ({ sortingOptions, sortValue, onSort, searchValue, on
   const [sortingOpen, setSortingOpen] = useState<boolean>(false);
   const [searchOpened, setSearchOpened] = useState<boolean>(false);
 
-  const handleSearch = (event) => onSearch(event.target.value);
+  const handleSearch = (value) => onSearch(value);
 
   const handleSearchOpen = () => {
     setSortingOpen(false);

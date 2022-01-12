@@ -8,4 +8,3 @@ export const createTipSchema = Yup.object().shape({
   tipTargetLevel3: Yup.string(),
   tipTargetLevel4: Yup.string(),
 });
-

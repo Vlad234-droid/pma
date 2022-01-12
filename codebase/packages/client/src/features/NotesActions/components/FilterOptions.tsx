@@ -5,12 +5,16 @@ import { IconButton } from 'components/IconButton';
 
 type FilterOptionProps = any;
 
+export const INFO_ICON = 'info_icon';
+export const FILTER_WRAPPER = 'filter_wrapper';
+
 const FilterOption: FC<FilterOptionProps> = ({
   focus,
   setFocus,
   searchValueFilterOption,
   setSearchValueFilterOption,
   TEAM,
+  setInfoModal,
 }) => {
   const { css } = useStyle();
   return (
@@ -22,6 +26,7 @@ const FilterOption: FC<FilterOptionProps> = ({
         justifyContent: 'flex-end',
         marginTop: '17px',
       })}
+      data-test-id={FILTER_WRAPPER}
     >
       <IconButton
         iconProps={{
@@ -33,7 +38,11 @@ const FilterOption: FC<FilterOptionProps> = ({
         customVariantRules={{
           default: iconBtnStyleInfo,
         }}
+        data-test-id={INFO_ICON}
         iconStyles={iconStyle}
+        onPress={() => {
+          setInfoModal(() => true);
+        }}
       />
 
       <FilterOptionInput
@@ -60,7 +69,7 @@ const iconBtnStyleInfo: Rule = {
   height: '38px',
   width: '38px',
   outline: 0,
-  paddingBottom: '6px',
+
   cursor: 'pointer',
   '& > svg': {
     width: '24px',

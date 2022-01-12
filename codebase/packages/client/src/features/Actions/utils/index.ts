@@ -2,6 +2,8 @@ import { ReviewType, Status } from 'config/enum';
 
 export const filterApprovedFn = (tl) => tl.status === Status.WAITING_FOR_APPROVAL;
 
+export const filterCompletedFn = (tl) => tl.status === Status.APPROVED;
+
 export const filterApprovedReviewTimelineFn = (tl) =>
   tl.status === Status.WAITING_FOR_APPROVAL && tl.reviewType !== ReviewType.OBJECTIVE;
 

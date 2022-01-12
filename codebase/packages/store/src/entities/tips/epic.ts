@@ -3,7 +3,7 @@ import { Epic, isActionOf } from 'typesafe-actions';
 import { combineEpics } from 'redux-observable';
 import { from, of } from 'rxjs';
 import { catchError, filter, map, switchMap } from 'rxjs/operators';
-import { getAllTips, getTipHistory, createTip, getTipByUuid, deleteTip } from './actions'
+import { getAllTips, getTipHistory, createTip, getTipByUuid, deleteTip } from './actions';
 
 export const getAllTipsEpic: Epic = (action$, _, { api }) => {
   return action$.pipe(
@@ -95,10 +95,4 @@ export const deleteTipEpic: Epic = (action$, _, { api }) => {
   );
 };
 
-export default combineEpics(
-  getAllTipsEpic,
-  getTipHistoryEpic,
-  createTipEpic,
-  getTipByUuidEpic,
-  deleteTipEpic,
-);
+export default combineEpics(getAllTipsEpic, getTipHistoryEpic, createTipEpic, getTipByUuidEpic, deleteTipEpic);

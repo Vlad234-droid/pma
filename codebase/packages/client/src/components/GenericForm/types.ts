@@ -1,4 +1,4 @@
-import { FC, HTMLProps } from 'react';
+import { FC, HTMLProps, RefObject } from 'react';
 import { SubmitHandler } from 'react-hook-form';
 
 // type for testing purpose
@@ -14,6 +14,7 @@ type FormField<T> = {
   value?: any;
   labels?: Array<string>;
   options?: Array<Record<string, number | string | boolean>>;
+  domRef?: RefObject<any>;
 } & TestProps &
   HTMLProps<HTMLInputElement | HTMLSelectElement>;
 

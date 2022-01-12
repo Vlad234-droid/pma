@@ -16,6 +16,9 @@ export type SuccessModalProps = {
   methods: UseFormReturn;
 };
 
+export const OK_BTN = 'ok_btn';
+export const SUCCESS_MODAL_WRAPPER = 'success_modal_wrapper';
+
 const SuccessModal: FC<SuccessModalProps> = ({
   values,
   setPersonalNoteModal,
@@ -48,6 +51,7 @@ const SuccessModal: FC<SuccessModalProps> = ({
       className={css({
         height: '100%',
       })}
+      data-test-id={SUCCESS_MODAL_WRAPPER}
     >
       <div
         className={css({
@@ -116,6 +120,7 @@ const SuccessModal: FC<SuccessModalProps> = ({
         >
           <Button
             styles={[buttonStyle]}
+            data-test-id={OK_BTN}
             onPress={() => {
               reset();
               setPersonalNoteModal(() => false);
