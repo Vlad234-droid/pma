@@ -14,6 +14,7 @@ const Template: Story<Props> = (args) => (
     <div style={{ maxWidth: '500px', padding: '10px' }}>
       <Item {...args} withIcon={false}>
         <Select
+          onChange={() => undefined}
           placeholder='Select'
           options={[
             { value: '1', label: 'test 1' },
@@ -22,38 +23,38 @@ const Template: Story<Props> = (args) => (
         />
       </Item>
       <Item {...args}>
-        <Input />
+        <Input onChange={() => undefined} />
       </Item>
       <Item {...args}>
-        <Input placeholder='First name' />
+        <Input placeholder='First name' onChange={() => undefined} />
       </Item>
       <Item {...args}>
-        <Textarea rows={4} placeholder={'rows 4'} />
+        <Textarea rows={4} placeholder={'rows 4'} onChange={() => undefined} />
       </Item>
       <Item {...args}>
-        <Textarea rows={6} placeholder={'rows 6'} />
+        <Textarea rows={6} placeholder={'rows 6'} onChange={() => undefined} />
       </Item>
       <div style={{ display: 'flex', paddingTop: '20px' }}>
         <label style={{ display: 'flex', alignItems: 'center' }}>
-          <Radio checked={true} name={'test'} />
+          <Radio checked={true} name={'test'} onChange={() => undefined} />
           <span>label 1</span>
         </label>
         <label style={{ display: 'flex', alignItems: 'center' }}>
-          <Radio name={'test'} />
+          <Radio name={'test'} onChange={() => undefined} />
           <span> label 2</span>
         </label>
       </div>
       <div style={{ display: 'flex', paddingTop: '20px' }}>
         <label style={{ display: 'flex', alignItems: 'center' }}>
-          <Checkbox indeterminate={true} name={'test1'} />
+          <Checkbox indeterminate={true} name={'test1'} onChange={() => undefined} />
           <span>label 1</span>
         </label>
         <label style={{ display: 'flex', alignItems: 'center' }}>
-          <Checkbox checked={true} name={'test1'} />
+          <Checkbox checked={true} name={'test1'} onChange={() => undefined} />
           <span>label 1</span>
         </label>
         <label style={{ display: 'flex', alignItems: 'center' }}>
-          <Checkbox name={'test2'} />
+          <Checkbox name={'test2'} onChange={() => undefined} />
           <span> label 2</span>
         </label>
       </div>

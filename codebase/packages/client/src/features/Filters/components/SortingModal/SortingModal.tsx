@@ -24,9 +24,7 @@ const SortingModal: FC<Props> = ({ options, onSelect, isOpen, value }) => {
           <div className={css({ cursor: 'pointer', marginTop: '10px' })} key={item.id}>
             <label htmlFor={item.label} className={css(labelStyles)}>
               <Radio
-                type='radio'
                 name={item.label}
-                value={item.label}
                 checked={item.label === value}
                 id={item.label}
                 data-test-id={item.label}

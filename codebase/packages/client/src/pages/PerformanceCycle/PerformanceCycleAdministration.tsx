@@ -40,13 +40,7 @@ const PerformanceCycleAdministration: FC = () => {
                 alignItems: 'center',
               })}
             >
-              <Radio
-                type='radio'
-                name='status'
-                value='option1'
-                checked={active === 'ACTIVE'}
-                onChange={() => setActive('ACTIVE')}
-              />
+              <Radio name='status' checked={active === 'ACTIVE'} onChange={() => setActive('ACTIVE')} />
               <span
                 className={css({
                   fontSize: '16px',
@@ -65,13 +59,7 @@ const PerformanceCycleAdministration: FC = () => {
                 alignItems: 'center',
               })}
             >
-              <Radio
-                type='radio'
-                name='status'
-                value='option2'
-                checked={active === 'INACTIVE'}
-                onChange={() => setActive('INACTIVE')}
-              />
+              <Radio name='status' checked={active === 'INACTIVE'} onChange={() => setActive('INACTIVE')} />
               <span
                 className={css({
                   fontSize: '16px',
@@ -90,13 +78,7 @@ const PerformanceCycleAdministration: FC = () => {
                 alignItems: 'center',
               })}
             >
-              <Radio
-                type='radio'
-                name='status'
-                value='option2'
-                checked={active === 'DRAFT'}
-                onChange={() => setActive('DRAFT')}
-              />
+              <Radio name='status' checked={active === 'DRAFT'} onChange={() => setActive('DRAFT')} />
               <span
                 className={css({
                   fontSize: '16px',

@@ -20,7 +20,9 @@ const ApproveModal: FC<Props> = ({ onSave, onClose }) => {
       onSave={onSave}
       onClose={onClose}
     >
-      <div className={css({ padding: '16px 0' })}>{t('approve_objectives_or_reviews', 'Are you sure you want to approve objectives or reviews?')}</div>
+      <div className={css({ padding: '16px 0' })}>
+        {t('approve_objectives_or_reviews', 'Are you sure you want to approve objectives or reviews?')}
+      </div>
     </ConfirmModal>
   );
 };

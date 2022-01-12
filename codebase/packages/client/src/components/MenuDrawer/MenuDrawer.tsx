@@ -31,8 +31,8 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
   };
 
   const handleOpenDropdown = () => {
-    setIsOpenDropdown(!isOpenDropdown)
-  }
+    setIsOpenDropdown(!isOpenDropdown);
+  };
 
   return (
     <div className={css(menuDrawerWrapperStyle)}>
@@ -54,53 +54,59 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
             <MenuItem iconGraphic={'edit'} linkTo={buildPath(Page.NOTES)} title={'My notes'} />
             <MenuItem iconGraphic={'account'} linkTo={buildPath(Page.PROFILE)} title={'My profile'} />
             <MenuItem iconGraphic={'chatSq'} linkTo={buildPath(Page.FEEDBACK)} title={'Feedback'} />
-            <MenuItem iconGraphic={'performance'} linkTo={buildPath(Page.PERFORMANCE_CYCLE)} title={'Support your performance'} />
+            <MenuItem
+              iconGraphic={'performance'}
+              linkTo={buildPath(Page.PERFORMANCE_CYCLE)}
+              title={'Support your performance'}
+            />
             <MenuItem iconGraphic={'team'} linkTo={'/'} title={'Team reporting'} />
             <MenuItem iconGraphic={'calibration'} linkTo={'/'} title={'Calibration ratings'} />
           </div>
         </div>
         <div className={css(menuDrawerSettingsStyle)}>
-          { isAdmin && 
-              <div className={css(itemSettingsStyle, adminToolsStyle)} onClick={handleOpenDropdown}>
-                <Icon graphic={'tool'} />
-                <span className={css(itemSettingsTextStyle)}>Administrator tools</span>
-                <Icon 
-                  graphic={'arrowDown'} 
-                  iconStyles={{ 
-                    marginLeft: '15px', 
-                    transform: isOpenDropdown ? 'rotate(-0deg)': 'rotate(-90deg)',
-                    transition: 'all .2s ease-in-out',
-                  }} 
-                />
-              </div>
-          }
+          {isAdmin && (
+            <div className={css(itemSettingsStyle, adminToolsStyle)} onClick={handleOpenDropdown}>
+              <Icon graphic={'tool'} />
+              <span className={css(itemSettingsTextStyle)}>Administrator tools</span>
+              <Icon
+                graphic={'arrowDown'}
+                iconStyles={{
+                  marginLeft: '15px',
+                  transform: isOpenDropdown ? 'rotate(-0deg)' : 'rotate(-90deg)',
+                  transition: 'all .2s ease-in-out',
+                }}
+              />
+            </div>
+          )}
 
-          { isOpenDropdown && 
-              <div className={css(menuDropdownStyle)}>
-                <Link to={buildPath(Page.PERFORMANCE_CYCLE)} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
-                  <Icon graphic={'createCycle'} />
-                  <span className={css(itemSettingsTextStyle)}>Create performance cycle</span>
-                </Link>
-                <Link to={buildPath(Page.CREATE_STRATEGIC_DRIVERS)} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
-                  <Icon graphic={'strategicDriver'} />
-                  <span className={css(itemSettingsTextStyle)}>Strategic drivers</span>
-                </Link>
-                <Link to={'/'} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
-                  <Icon graphic={'configuration'} />
-                  <span className={css(itemSettingsTextStyle)}>Configurations</span>
-                </Link>
-                <Link to={buildPath(Page.TIPS)} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
-                  <Icon graphic={'tip'} />
-                  <span className={css(itemSettingsTextStyle)}>Tips</span>
-                </Link>
-                <Link to={'/'} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
-                  <Icon graphic={'multiLanguage'} />
-                  <span className={css(itemSettingsTextStyle)}>Multi-lingual administration</span>
-                </Link>
-              </div>
-          }
-          { isAdmin && <div className={css(itemSettingsBorderStyle, {marginLeft: '20px'})}></div> }
-
+          {isOpenDropdown && (
+            <div className={css(menuDropdownStyle)}>
+              <Link to={buildPath(Page.PERFORMANCE_CYCLE)} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
+                <Icon graphic={'createCycle'} />
+                <span className={css(itemSettingsTextStyle)}>Create performance cycle</span>
+              </Link>
+              <Link
+                to={buildPath(Page.CREATE_STRATEGIC_DRIVERS)}
+                className={css(itemSettingsStyle, itemSettingsBorderStyle)}
+              >
+                <Icon graphic={'strategicDriver'} />
+                <span className={css(itemSettingsTextStyle)}>Strategic drivers</span>
+              </Link>
+              <Link to={'/'} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
+                <Icon graphic={'configuration'} />
+                <span className={css(itemSettingsTextStyle)}>Configurations</span>
+              </Link>
+              <Link to={buildPath(Page.TIPS)} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
+                <Icon graphic={'tip'} />
+                <span className={css(itemSettingsTextStyle)}>Tips</span>
+              </Link>
+              <Link to={'/'} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
+                <Icon graphic={'multiLanguage'} />
+                <span className={css(itemSettingsTextStyle)}>Multi-lingual administration</span>
+              </Link>
+            </div>
+          )}
+          {isAdmin && <div className={css(itemSettingsBorderStyle, { marginLeft: '20px' })} />}
           <Link to={''} className={css(itemSettingsStyle)}>
             <Icon graphic={'settingsGear'} />
             <span className={css(itemSettingsTextStyle)}>Settings</span>
@@ -185,7 +191,7 @@ const itemSettingsBorderStyle: Rule = ({ theme }) => ({
   borderTop: `1px solid ${theme.colors.backgroundDarkest}`,
 });
 
-const menuDropdownStyle = { 
+const menuDropdownStyle = {
   backgroundColor: '#F3F9FC',
   transition: 'all .5s esea-in-out',
 } as Rule;

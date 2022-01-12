@@ -2,18 +2,18 @@ import React, { FC } from 'react';
 import { useStyle, colors } from '@dex-ddl/core';
 import mergeRefs from 'react-merge-refs';
 
-import { TextareaProps } from '../types';
+import { TextareaField } from '../types';
 import { useRefContainer } from '../context/input';
 
-const Textarea: FC<TextareaProps> = ({
+const Textarea: FC<TextareaField> = ({
   domRef,
   placeholder = '',
   rows = 3,
   name,
   value,
-  readonly,
   onChange,
-  isValid = true,
+  isValid,
+  readonly = false,
 }) => {
   const { css } = useStyle();
   const refIcon = useRefContainer();
@@ -23,7 +23,6 @@ const Textarea: FC<TextareaProps> = ({
       ref={mergeRefs([domRef, refIcon])}
       name={name}
       data-test-id={name}
-      value={value}
       readOnly={readonly}
       onChange={onChange}
       className={css({
@@ -34,12 +33,14 @@ const Textarea: FC<TextareaProps> = ({
         fontSize: '16px',
         lineHeight: '20px',
         padding: '10px 30px 10px 16px',
+        resize: 'vertical',
+
         ':focus': {
           outline: 'none !important',
           border: `1px solid ${isValid ? colors.tescoBlue : colors.error}`,
         },
-        resize: 'vertical',
       })}
+      value={value}
       placeholder={placeholder}
       rows={rows}
     />

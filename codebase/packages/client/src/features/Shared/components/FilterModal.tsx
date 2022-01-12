@@ -81,13 +81,11 @@ export const FilterModal: FC<FilterModalProps> = ({
           <div className={css({ cursor: 'pointer', marginTop: '10px' })} key={item.id}>
             <label htmlFor={item.label} className={css(Flex_center_style)}>
               <Radio
-                type='radio'
                 name={item.label}
-                value={item.label}
                 checked={item.checked}
                 id={item.label}
-                onChange={(e) => {
-                  chosesHandler(e.target.id);
+                onChange={() => {
+                  chosesHandler(item.label);
                 }}
               />
               <span className={css(Size_style)}>

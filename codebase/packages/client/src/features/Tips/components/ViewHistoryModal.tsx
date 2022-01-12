@@ -15,45 +15,54 @@ const ViewHistoryModal: FC<ViewHistoryModal> = ({ handleCloseModal, card }) => {
   const tipHistory = useSelector(getTipHistorySelector);
 
   useEffect(() => {
-    dispatch(
-      tipsActions.getTipHistory(card.uuid),
-    );
+    dispatch(tipsActions.getTipHistory(card.uuid));
   }, []);
 
   //TODO: remove border from last item;
   return (
-    <Modal modalPosition="middle" modalContainerRule={[modalWrapper]}>
+    <Modal modalPosition='middle' modalContainerRule={[modalWrapper]}>
       <div className={css(vhTitleStyle)}>Activity History</div>
       <div className={css(vhSubTitleStyle)}>For tip: {card.title}</div>
       <div className={css(vhItemsWrap)}>
-        { tipHistory?.map(item => {
+        {tipHistory?.map((item) => {
           const date = new Date(item.updatedTime);
           const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
           const minutes = date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes();
-          const titleDate = `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()} ${date.getHours()}:${minutes}`;
-          
+          const titleDate = `${date.getDate()} ${
+            months[date.getMonth()]
+          } ${date.getFullYear()} ${date.getHours()}:${minutes}`;
+
           return (
             <div key={item.uuid} className={css(vhItemStyle)}>
               <div>
                 <div className={css(vhItemTitle)}>
-                  <Icon graphic="calendar" fill="white" stroke={theme.colors.tescoBlue} size="16px" strokeWidth={2} iconStyles={{ marginRight: '5px' }} />
+                  <Icon
+                    graphic='calendar'
+                    fill='white'
+                    stroke={theme.colors.tescoBlue}
+                    size='16px'
+                    strokeWidth={2}
+                    iconStyles={{ marginRight: '5px' }}
+                  />
                   {titleDate}
                 </div>
                 <div className={css(vhItemSubtitle)}>Target: {item.targetOrganisation.name}</div>
               </div>
-              { item.published ? 
-                  <div className={css(vhItemStatus)}>Pushed</div>
-                  : 
-                  <div className={css(vhItemStatus)}>{ item.createdTime === item.updatedTime ? 'Created' : 'Edited' }</div>
-              }
+              {item.published ? (
+                <div className={css(vhItemStatus)}>Pushed</div>
+              ) : (
+                <div className={css(vhItemStatus)}>{item.createdTime === item.updatedTime ? 'Created' : 'Edited'}</div>
+              )}
             </div>
-          )
+          );
         })}
       </div>
-      <Button onPress={handleCloseModal} styles={[{ width: '145px', margin: 'auto auto 0', fontWeight: 700 }]}>Okay</Button>
+      <Button onPress={handleCloseModal} styles={[{ width: '145px', margin: 'auto auto 0', fontWeight: 700 }]}>
+        Okay
+      </Button>
     </Modal>
-  )
-}
+  );
+};
 
 //vh - View History
 
@@ -70,8 +79,8 @@ const modalWrapper: Rule = () => {
     flexDirection: 'column',
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
-  }
-}
+  };
+};
 
 const vhTitleStyle: Rule = () => {
   const [, isBreakpoint] = useBreakpoints();
@@ -80,9 +89,9 @@ const vhTitleStyle: Rule = () => {
     fontSize: mobileScreen ? '18px' : '20px',
     lineHeight: mobileScreen ? '22px' : '24px',
     fontWeight: 700,
-    marginBottom: '8px'
-  }
-}
+    marginBottom: '8px',
+  };
+};
 
 const vhSubTitleStyle: Rule = () => {
   const [, isBreakpoint] = useBreakpoints();
@@ -90,9 +99,9 @@ const vhSubTitleStyle: Rule = () => {
   return {
     fontSize: mobileScreen ? '14px' : '16px',
     lineHeight: mobileScreen ? '18px' : '20px',
-    marginBottom: '20px'
-  }
-}
+    marginBottom: '20px',
+  };
+};
 
 const vhItemsWrap: Rule = () => {
   return {
@@ -100,9 +109,9 @@ const vhItemsWrap: Rule = () => {
     width: '100%',
     maxHeight: '230px',
     height: '100%',
-    overflowY: 'auto'
-  }
-}
+    overflowY: 'auto',
+  };
+};
 
 const vhItemStyle: Rule = ({ theme }) => {
   return {
@@ -111,8 +120,8 @@ const vhItemStyle: Rule = ({ theme }) => {
     alignItems: 'flex-start',
     padding: '15px 0',
     borderBottom: `1px solid ${theme.colors.backgroundDarkest}`,
-  }
-}
+  };
+};
 
 const vhItemTitle: Rule = ({ theme }) => {
   return {
@@ -123,15 +132,15 @@ const vhItemTitle: Rule = ({ theme }) => {
     marginBottom: '8px',
     display: 'flex',
     alignItems: 'center',
-  }
-}
+  };
+};
 
 const vhItemSubtitle: Rule = () => {
   return {
     fontSize: '14px',
     lineHeight: '18px',
-  }
-}
+  };
+};
 
 const vhItemStatus: Rule = ({ theme }) => {
   return {
@@ -143,7 +152,7 @@ const vhItemStatus: Rule = ({ theme }) => {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-  }
-}
+  };
+};
 
 export default ViewHistoryModal;

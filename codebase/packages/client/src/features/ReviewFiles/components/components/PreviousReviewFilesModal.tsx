@@ -1,4 +1,4 @@
-import React, { FC, HTMLProps, useState } from 'react';
+import React, { FC, HTMLProps, ChangeEvent, useState } from 'react';
 import filesize from 'filesize';
 import { CreateRule, Modal, Rule, Styles, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { DropZone } from 'components/DropZone';
@@ -23,6 +23,7 @@ const PreviousReviewFilesModal: FC<Props> = ({ onOverlayClick }) => {
   const onUpload = (file) => updateFiles((prev) => [...prev, file]);
   const filterFiles = (file) => !filter || file.name.toLowerCase().includes(filter);
   const deleteFile = (key) => updateFiles((prevState) => prevState.splice(key, 1));
+  const handleChangeFilter = (e: ChangeEvent<HTMLInputElement>) => setFilteredValue(e.target.value);
 
   return (
     <>
@@ -32,7 +33,7 @@ const PreviousReviewFilesModal: FC<Props> = ({ onOverlayClick }) => {
         title={{ content: '', styles: [modalStyles] }}
         onOverlayClick={onOverlayClick}
       >
-        <Input onChange={(e) => setFilteredValue(e.target.value)} />
+        <Input onChange={handleChangeFilter} />
         <div className={css({ marginTop: '32px' })}>
           <DropZone onUpload={onUpload}>
             <img className={css({ maxWidth: 'inherit' })} src={Upload} alt='Upload' />

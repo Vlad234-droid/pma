@@ -10,7 +10,7 @@ import ConfirmModal from '../ConfirmModal';
 import { getDeclineReasonOptions } from '../../utils';
 
 type Props = {
-  onSave: (hasReason?:boolean, reason?: string) => void;
+  onSave: (hasReason?: boolean, reason?: string) => void;
   onClose: () => void;
   review?: Employee;
   reviewType: ReviewType;
@@ -43,7 +43,7 @@ const DeclineModal: FC<Props> = ({ onSave, onClose, review, reviewType }) => {
                 <Select
                   options={options}
                   placeholder={t('please_select', 'Please select')}
-                  onChange={(e) => setReason(e.target.value)}
+                  onChange={(e) => setReason((e.target as HTMLInputElement).value)}
                   name='declineReason'
                 />
               </Item>

@@ -1,6 +1,7 @@
+// @ts-ignore
 import React from 'react';
 import { fireEvent, screen } from '@testing-library/react';
-
+// @ts-ignore
 import { renderWithTheme as render } from 'utils/test';
 
 import Search from './Search';
@@ -15,9 +16,7 @@ describe('<Search />', () => {
 
   describe('#render', () => {
     it('should render correctly', () => {
-      const { getByTestId } = render(
-        <Search {...props} />,
-      );
+      const { getByTestId } = render(<Search {...props} />);
 
       expect(getByTestId('search-wrapper')).toBeInTheDocument();
       expect(getByTestId('search')).toBeInTheDocument();
@@ -25,9 +24,7 @@ describe('<Search />', () => {
     });
 
     it('should render wide wrapper, if focus is true', () => {
-      const { getByTestId } = render(
-        <Search {...props} />,
-      );
+      const { getByTestId } = render(<Search {...props} />);
 
       expect(getByTestId('search-wrapper')).toHaveStyle('width: 240px');
     });
@@ -38,17 +35,13 @@ describe('<Search />', () => {
         focus: false,
       };
 
-      const { getByTestId } = render(
-        <Search {...newProps} />,
-      );
+      const { getByTestId } = render(<Search {...newProps} />);
 
       expect(getByTestId('search-wrapper')).toHaveStyle('width: 38px');
     });
 
     it('should render provided value, if focus is true', () => {
-      const { getByTestId } = render(
-        <Search {...props} />,
-      );
+      const { getByTestId } = render(<Search {...props} />);
 
       expect(getByTestId('search-input').value).toBe('mocked_value');
     });
@@ -59,9 +52,7 @@ describe('<Search />', () => {
         focus: false,
       };
 
-      const { getByTestId } = render(
-        <Search {...newProps} />,
-      );
+      const { getByTestId } = render(<Search {...newProps} />);
 
       expect(getByTestId('search-input').value).toBe('');
     });
@@ -69,18 +60,14 @@ describe('<Search />', () => {
 
   describe('#handlers', () => {
     it('should call props.onFocus on item focus', () => {
-      const { getByTestId } = render(
-        <Search {...props} />,
-      );
+      const { getByTestId } = render(<Search {...props} />);
 
       fireEvent.focus(getByTestId('search-input'));
       expect(props.onFocus).toHaveBeenCalled();
     });
 
     it('should call props.onSearch on input change', () => {
-      const { getByTestId } = render(
-        <Search {...props} />,
-      );
+      const { getByTestId } = render(<Search {...props} />);
 
       fireEvent.focus(getByTestId('search-input'));
       fireEvent.change(screen.getByTestId('search-input'), { target: { value: 'new_mocked_value' } });

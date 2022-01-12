@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react';
-import { Trans, useTranslation } from 'components/Translation';
+import { Trans, useTranslation, TFunction } from 'components/Translation';
 import { Status } from 'config/enum';
-import { Button, Colors, CreateRule, Rule, useStyle } from '@dex-ddl/core';
+import { useStyle, Rule, CreateRule, Colors, Button } from '@dex-ddl/core';
 import { TileWrapper } from 'components/Tile';
 import { Graphics, Icon } from 'components/Icon';
 import { useHistory } from 'react-router-dom';
@@ -20,11 +20,14 @@ export type Props = {
 
 export const TEST_ID = 'main-widget';
 
-const getContent = (props: {
-  status?: string;
-  count?: number;
-  date?: string;
-}): {
+const getContent = (
+  props: {
+    status?: string;
+    count?: number;
+    date?: string;
+  },
+  t: TFunction,
+): {
   graphic: Graphics;
   backgroundColor: Colors;
   subTitle: string;
@@ -34,7 +37,6 @@ const getContent = (props: {
   invertColors: boolean;
 } => {
   const { status, count, date = '' } = props;
-  const { t } = useTranslation();
   if (!status) {
     return {
       graphic: 'add',
@@ -134,6 +136,7 @@ const MainWidget: FC<Props> = ({ nextReviewDate = '', count = 0, status, customS
       count,
       date: nextReviewDate,
     },
+    t,
   );
 
   const handleClick = () => {

@@ -1,6 +1,7 @@
+// @ts-ignore
 import React from 'react';
 import { fireEvent } from '@testing-library/react';
-
+// @ts-ignore
 import { renderWithTheme as render, generateEmployeeReview } from 'utils/test';
 
 import ConfirmModal from './ConfirmModal';
@@ -16,16 +17,16 @@ describe('<ConfirmModal />', () => {
 
   describe('#render', () => {
     it('should render title', () => {
-      const { getByText } = render(
-        <ConfirmModal {...props} />,
-      );
+      const { getByText } = render(<ConfirmModal {...props} />);
 
       expect(getByText('mocked_title')).toBeInTheDocument();
     });
 
     it('should render children', () => {
       const { getByText } = render(
-        <ConfirmModal {...props}><div>mocked_children</div></ConfirmModal>,
+        <ConfirmModal {...props}>
+          <div>mocked_children</div>
+        </ConfirmModal>,
       );
 
       expect(getByText('mocked_children')).toBeInTheDocument();
@@ -39,12 +40,10 @@ describe('<ConfirmModal />', () => {
           firstName: 'mocked_first_name',
           lastName: 'mocked_last_name',
           jobName: 'mocked_job_name',
-          businessType: 'mocked_business_type'
-        }
-      }
-      const { getByText } = render(
-        <ConfirmModal {...newProps} />,
-      );
+          businessType: 'mocked_business_type',
+        },
+      };
+      const { getByText } = render(<ConfirmModal {...newProps} />);
 
       expect(getByText('mocked_first_name mocked_last_name')).toBeInTheDocument();
       expect(getByText('mocked_job_name, mocked_business_type')).toBeInTheDocument();
@@ -53,9 +52,7 @@ describe('<ConfirmModal />', () => {
 
   describe('#handlers', () => {
     it('should call props.onClose on Cancel button click', () => {
-      const { getByTestId } = render(
-        <ConfirmModal {...props} />,
-      );
+      const { getByTestId } = render(<ConfirmModal {...props} />);
 
       expect(getByTestId('cancel-btn')).toBeInTheDocument();
 
@@ -65,9 +62,7 @@ describe('<ConfirmModal />', () => {
     });
 
     it('should call props.onSave on Submit button click, if !hasReason', () => {
-      const { getByTestId } = render(
-        <ConfirmModal {...props} />,
-      );
+      const { getByTestId } = render(<ConfirmModal {...props} />);
 
       expect(getByTestId('submit-btn')).toBeInTheDocument();
 
@@ -82,9 +77,7 @@ describe('<ConfirmModal />', () => {
         hasReason: true,
       };
 
-      const { getByTestId } = render(
-        <ConfirmModal {...newProps} />,
-      );
+      const { getByTestId } = render(<ConfirmModal {...newProps} />);
 
       expect(getByTestId('submit-btn')).toBeInTheDocument();
 
@@ -100,9 +93,7 @@ describe('<ConfirmModal />', () => {
         reason: 'mocked_reason',
       };
 
-      const { getByTestId } = render(
-        <ConfirmModal {...newProps} />,
-      );
+      const { getByTestId } = render(<ConfirmModal {...newProps} />);
 
       expect(getByTestId('submit-btn')).toBeInTheDocument();
 
@@ -118,9 +109,7 @@ describe('<ConfirmModal />', () => {
         reason: '',
       };
 
-      const { getByTestId } = render(
-        <ConfirmModal {...newProps} />,
-      );
+      const { getByTestId } = render(<ConfirmModal {...newProps} />);
 
       expect(getByTestId('submit-btn')).toBeInTheDocument();
 

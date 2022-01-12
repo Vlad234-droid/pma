@@ -12,7 +12,7 @@ import { GenericItemField } from 'components/GenericForm';
 import { ButtonWithConfirmation as SubmitButton } from '../Buttons';
 import { Status } from 'config/enum';
 import { TriggerModal } from 'features/Modal/components/TriggerModal';
-import ObjectiveHelpModal from 'features/Objectives/components/Modal/ObjectiveHelpModal';
+import ObjectiveHelpModal from '../Modal/ObjectiveHelpModal';
 
 export type ObjectiveModalProps = {
   useSingleStep?: boolean;

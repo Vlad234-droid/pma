@@ -1,4 +1,6 @@
-function ReactMarkdown({ children }){
+import React from 'react';
+
+function ReactMarkdown({ children }) {
   return <>{children}</>;
 }
 

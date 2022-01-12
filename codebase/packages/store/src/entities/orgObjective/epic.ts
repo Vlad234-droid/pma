@@ -35,7 +35,7 @@ export const getOrgAuditLogsEpic: Epic = (action$, _, { api }) =>
       ),
     ),
   );
-  
+
 // try to optimiz in future
 export const getOrgAuditLogsOnPublishEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
@@ -58,7 +58,7 @@ export const getOrgAuditLogsOnCreateEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
     filter(isActionOf(createAndPublishOrgObjective.success)),
     switchMap(({ payload }) =>
-      from(api.getOrgAuditLogs({start: 1, limit: 3 })).pipe(
+      from(api.getOrgAuditLogs({ start: 1, limit: 3 })).pipe(
         // @ts-ignore
         map(({ data }) => {
           return getOrgAuditLogs.success({ auditLogs: data });

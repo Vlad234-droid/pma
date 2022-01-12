@@ -1,8 +1,8 @@
 import React, { FC } from 'react';
 import { useStyle, colors } from '@dex-ddl/core';
+import { RadioField } from '../types';
 
-import { RadioProps } from '../types';
-const Radio: FC<RadioProps> = ({ id, value, type = 'radio', name, readonly, onChange, checked }) => {
+const Radio: FC<RadioField> = ({ id, name, onChange, readonly, checked }) => {
   const { css } = useStyle();
   return (
     <input
@@ -23,9 +23,8 @@ const Radio: FC<RadioProps> = ({ id, value, type = 'radio', name, readonly, onCh
       id={id}
       onChange={onChange}
       checked={checked}
-      type={type}
+      type={'radio'}
       name={name}
-      value={value}
       readOnly={readonly}
       data-test-id={name}
     />

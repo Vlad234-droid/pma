@@ -3,7 +3,7 @@ import { useStyle, Rule, CreateRule, Theme } from '@dex-ddl/core';
 import { ArrowUp } from '../../assets/img/objectives';
 
 const ObjectiveDetails = ({ title, description }) => {
-  const { css, theme  } = useStyle();
+  const { css, theme } = useStyle();
   const [isVisibleDescription, setDescriptionVisibility] = useState(true);
 
   return (
@@ -19,7 +19,7 @@ const ObjectiveDetails = ({ title, description }) => {
   );
 };
 
-const header: CreateRule<{ theme: Theme; }> = (props) => {
+const header: CreateRule<{ theme: Theme }> = (props) => {
   if (props == null) return {};
   const { theme } = props;
   return {
@@ -41,10 +41,9 @@ const arrDown = {
   webkitTransform: 'rotate(180deg)',
 } as Rule;
 
-
-const desc: CreateRule<{ theme: Theme; }> = (props) => {
+const desc: CreateRule<{ theme: Theme }> = (props) => {
   if (props == null) return {};
-  const { theme } = props; 
+  const { theme } = props;
   return {
     width: '100%',
     color: '#333333',
@@ -54,7 +53,7 @@ const desc: CreateRule<{ theme: Theme; }> = (props) => {
     paddingBottom: '24px',
     borderBottom: `1px solid ${theme.colors.backgroundDarkest}`,
   };
-}
+};
 
 const main = {
   display: 'flex',

@@ -1,6 +1,7 @@
+// @ts-ignore
 import React from 'react';
 import { fireEvent } from '@testing-library/react';
-
+// @ts-ignore
 import { renderWithTheme as render } from 'utils/test';
 
 import SortingModal from './SortingModal';
@@ -27,26 +28,20 @@ describe('<SortingModal />', () => {
 
   describe('#render', () => {
     it('should render provided options', () => {
-      const { getByText } = render(
-        <SortingModal {...props} />,
-      );
+      const { getByText } = render(<SortingModal {...props} />);
 
       expect(getByText('ZA')).toBeInTheDocument();
       expect(getByText('AZ')).toBeInTheDocument();
     });
 
     it('should render provided options', () => {
-      const { getByTestId } = render(
-        <SortingModal {...props} />,
-      );
+      const { getByTestId } = render(<SortingModal {...props} />);
 
       expect(getByTestId('AZ')).toBeChecked();
     });
 
     it('should render opened styles if isOpen', () => {
-      const { getByTestId } = render(
-        <SortingModal {...props} />,
-      );
+      const { getByTestId } = render(<SortingModal {...props} />);
 
       expect(getByTestId('sorting-modal')).toHaveStyle('transform: scaleY(1)');
     });
@@ -57,10 +52,7 @@ describe('<SortingModal />', () => {
         isOpen: false,
       };
 
-
-      const { getByTestId } = render(
-        <SortingModal {...newProps} />,
-      );
+      const { getByTestId } = render(<SortingModal {...newProps} />);
 
       expect(getByTestId('sorting-modal')).toHaveStyle('transform: scaleY(0)');
     });
@@ -68,9 +60,7 @@ describe('<SortingModal />', () => {
 
   describe('#handlers', () => {
     it('should call onSelect with selected value', () => {
-      const { getByTestId, getByText } = render(
-        <SortingModal {...props} />,
-      );
+      const { getByTestId, getByText } = render(<SortingModal {...props} />);
 
       fireEvent.click(getByText('ZA'));
 

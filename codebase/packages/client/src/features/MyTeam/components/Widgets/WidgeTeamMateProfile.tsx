@@ -35,7 +35,12 @@ export const getIcon = (status): [Graphics, Colors] => {
   return contents[status] || ['roundCircle', 'pending'];
 };
 
-export const WidgetTeamMateProfile: FC<WidgetTeamMateProfileProps> = ({ uuid, status, employee, simpleView = false }) => {
+export const WidgetTeamMateProfile: FC<WidgetTeamMateProfileProps> = ({
+  uuid,
+  status,
+  employee,
+  simpleView = false,
+}) => {
   const { css } = useStyle();
   const history = useHistory();
 

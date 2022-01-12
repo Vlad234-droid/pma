@@ -1,6 +1,7 @@
+// @ts-ignore
 import React from 'react';
 import { fireEvent, screen } from '@testing-library/react';
-
+// @ts-ignore
 import { renderWithTheme as render } from 'utils/test';
 
 import Filters from './Filters';
@@ -28,9 +29,7 @@ describe('<Filters />', () => {
 
   describe('#render', () => {
     it('should render correctly', () => {
-      const { getByTestId } = render(
-        <Filters {...props} />,
-      );
+      const { getByTestId } = render(<Filters {...props} />);
 
       expect(getByTestId('search-wrapper')).toBeInTheDocument();
       expect(getByTestId('sorting-wrapper')).toBeInTheDocument();
@@ -39,9 +38,7 @@ describe('<Filters />', () => {
 
   describe('#handleSortOpen', () => {
     it('should open sorting and close search on sort icon click', () => {
-      const { getByTestId } = render(
-        <Filters {...props} />,
-      );
+      const { getByTestId } = render(<Filters {...props} />);
 
       fireEvent.focus(getByTestId('search-input')); // open search
       fireEvent.click(getByTestId('settings')); // open sort
@@ -55,9 +52,7 @@ describe('<Filters />', () => {
 
   describe('#handleSearchOpen', () => {
     it('should open search and close sorting', () => {
-      const { getByTestId } = render(
-        <Filters {...props} />,
-      );
+      const { getByTestId } = render(<Filters {...props} />);
 
       fireEvent.click(getByTestId('settings')); // open sort
       fireEvent.focus(getByTestId('search-input')); // open search
@@ -72,9 +67,7 @@ describe('<Filters />', () => {
 
   describe('#handleSearch', () => {
     it('should call props.onSearch with searched value', () => {
-      const { getByTestId } = render(
-        <Filters {...props} />,
-      );
+      const { getByTestId } = render(<Filters {...props} />);
 
       fireEvent.focus(getByTestId('search-input'));
       fireEvent.change(screen.getByTestId('search-input'), { target: { value: 'new_mocked_value' } });
@@ -85,9 +78,7 @@ describe('<Filters />', () => {
 
   describe('#handleSort', () => {
     it('should call onSort with selected value and close sorting', () => {
-      const { getByTestId, getByText } = render(
-        <Filters {...props} />,
-      );
+      const { getByTestId, getByText } = render(<Filters {...props} />);
 
       fireEvent.click(getByTestId('settings')); // open sort
       fireEvent.click(getByText('ZA')); // select another sorting

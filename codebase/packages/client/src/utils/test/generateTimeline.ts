@@ -6,9 +6,9 @@ import { generateArray } from './generateArray';
 import { dateToIso } from '../date';
 
 type Config = {
-  reviewType?: ReviewType,
-  status?: Status,
-  type?: TimelineType,
+  reviewType?: ReviewType;
+  status?: Status;
+  type?: TimelineType;
 };
 
 const generateTimeline = (config?: Config) => {

@@ -1,6 +1,8 @@
+// @ts-ignore
 import React from 'react';
-
+// @ts-ignore
 import { renderWithTheme as render, generateEmployeeReview } from 'utils/test';
+// @ts-ignore
 import { ReviewType } from 'config/types';
 
 import DeclineModal from './DeclineModal';
@@ -23,7 +25,11 @@ describe('<DeclineModal />', () => {
     it('should render simple content, if reviewType is not Objective', () => {
       const { getByText } = render(<DeclineModal {...props} />);
 
-      expect(getByText('Done, you’ve rejected this form as it doesn’t reflect the conversation you had with your colleague. Please pick up with them directly to discuss more.')).toBeInTheDocument();
+      expect(
+        getByText(
+          'Done, you’ve rejected this form as it doesn’t reflect the conversation you had with your colleague. Please pick up with them directly to discuss more.',
+        ),
+      ).toBeInTheDocument();
     });
 
     it('should render select, if reviewType is Objective', () => {

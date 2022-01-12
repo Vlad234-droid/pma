@@ -8,7 +8,7 @@ const HistoryTable = ({ headers, items, isVisible }) => {
   const modifyTime = (time) => {
     const newDate = new Date(time);
     const year = newDate.getFullYear();
-    const month = newDate.getMonth()+1;
+    const month = newDate.getMonth() + 1;
     const day = newDate.getDate();
     const hour = newDate.getHours();
     const minutes = newDate.getMinutes();

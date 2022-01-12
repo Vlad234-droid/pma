@@ -1,4 +1,4 @@
-import React, { FC, HTMLProps, useState } from 'react';
+import React, { FC, HTMLProps } from 'react';
 import { useBreakpoints, useStyle, CreateRule, Modal, Button, fontWeight } from '@dex-ddl/core';
 
 import { Trans } from 'components/Translation';
@@ -51,7 +51,7 @@ const ConfirmModal: FC<Props> = ({
     >
       <div>
         {review && (
-          <div className={css({ padding: '16px 0 0'})}>
+          <div className={css({ padding: '16px 0 0' })}>
             <ColleagueInfo
               firstName={review.firstName}
               lastName={review.lastName}

@@ -5,8 +5,8 @@ import { Review, ReviewType, Status } from 'config/types';
 import { generateArray } from './generateArray';
 
 type Config = {
-  reviewType?: ReviewType,
-  status?: Status,
+  reviewType?: ReviewType;
+  status?: Status;
 };
 
 const generateReview = (config?: Config) => {

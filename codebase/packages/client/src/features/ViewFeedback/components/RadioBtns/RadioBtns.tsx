@@ -15,7 +15,7 @@ type filterFeedbacksType = {
   oldToNew: boolean;
 };
 
-type RadioBtnsProps = {
+type Props = {
   checkedRadio: TypecheckedRadio;
   setCheckedRadio: Dispatch<SetStateAction<TypecheckedRadio>>;
   focus: boolean;
@@ -25,7 +25,7 @@ type RadioBtnsProps = {
   setFilterFeedbacks: Dispatch<SetStateAction<filterFeedbacksType>>;
 };
 
-const RadioBtns: FC<RadioBtnsProps> = ({
+const RadioBtns: FC<Props> = ({
   checkedRadio,
   setCheckedRadio,
   focus,
@@ -55,9 +55,7 @@ const RadioBtns: FC<RadioBtnsProps> = ({
           })}
         >
           <Radio
-            type='radio'
             name='status'
-            value='option1'
             checked={checkedRadio.unread}
             id='unread'
             onChange={() => {
@@ -91,9 +89,7 @@ const RadioBtns: FC<RadioBtnsProps> = ({
           })}
         >
           <Radio
-            type='radio'
             name='status'
-            value='option2'
             checked={checkedRadio.read}
             onChange={() => {
               if (filterModal) setFilterModal(() => false);

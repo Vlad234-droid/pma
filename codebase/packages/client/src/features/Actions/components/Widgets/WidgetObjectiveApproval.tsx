@@ -11,7 +11,7 @@ import { Employee } from 'config/types';
 
 import ApproveModal from '../ApproveModal';
 import DeclineModal from '../DeclineModal';
-import { filterApprovedFn, filterApprovedReviewFn } from '../../utils';
+import { filterApprovedFn } from '../../utils';
 import { useSelector } from 'react-redux';
 
 export type WidgetObjectiveApprovalProps = {

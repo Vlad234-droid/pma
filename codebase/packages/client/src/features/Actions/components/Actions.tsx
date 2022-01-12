@@ -17,7 +17,7 @@ import { WidgetObjectiveApproval, WidgetTeamMateObjectives } from 'features/Acti
 import Filters, { useSortFilter, useSearchFilter, getEmployeesSortingOptions } from 'features/Filters';
 import useDispatch from 'hooks/useDispatch';
 
-import { filterApprovedFn, filterCompletedFn } from '../utils';
+import { filterApprovedFn } from '../utils';
 export const TEST_ID = 'objectives-pave';
 
 type SelectAllProps = {
@@ -34,7 +34,6 @@ const SelectAll: FC<SelectAllProps> = ({ onChange, checked, indeterminate, disab
     <label>
       <Checkbox
         disabled={disabled}
-        type='checkbox'
         name='selectAll'
         id='selectAll'
         onChange={onChange}
@@ -85,8 +84,10 @@ export const Actions = () => {
   const [pending, setPending] = useState(true);
 
   // disable selectAll, if every colleague has more then one item for approve
-  const selectAllDisabled = useMemo(() => colleagues.every(({ timeline }) =>
-    timeline.filter(filterApprovedFn)?.length > 1), [colleagues])
+  const selectAllDisabled = useMemo(
+    () => colleagues.every(({ timeline }) => timeline.filter(filterApprovedFn)?.length > 1),
+    [colleagues],
+  );
 
   useEffect(() => {
     if (!loaded && colleagueUuid) dispatch(ManagersActions.getManagers({ colleagueUuid }));
@@ -155,7 +156,12 @@ export const Actions = () => {
               alignItems: 'center',
             })}
           >
-            <SelectAll onChange={handleSelectAll} checked={isCheckAll} indeterminate={indeterminate} disabled={selectAllDisabled} />
+            <SelectAll
+              onChange={handleSelectAll}
+              checked={isCheckAll}
+              indeterminate={indeterminate}
+              disabled={selectAllDisabled}
+            />
           </div>
         )}
         <div className={css({ display: 'flex' })}>
@@ -166,14 +172,7 @@ export const Actions = () => {
                 alignItems: 'center',
               })}
             >
-              <Radio
-                id='option1'
-                type='radio'
-                name='status'
-                value='option1'
-                checked={pending}
-                onChange={() => setPending(true)}
-              />
+              <Radio id='option1' name='status' checked={pending} onChange={() => setPending(true)} />
               <span
                 className={css({
                   fontSize: '16px',
@@ -192,14 +191,7 @@ export const Actions = () => {
                 alignItems: 'center',
               })}
             >
-              <Radio
-                id='option2'
-                type='radio'
-                name='status'
-                value='option2'
-                checked={!pending}
-                onChange={() => setPending(false)}
-              />
+              <Radio id='option2' name='status' checked={!pending} onChange={() => setPending(false)} />
               <span
                 className={css({
                   fontSize: '16px',
@@ -273,7 +265,12 @@ export const Actions = () => {
               padding: '16px 0',
             })}
           >
-            <SelectAll onChange={handleSelectAll} checked={isCheckAll} indeterminate={indeterminate} disabled={selectAllDisabled} />
+            <SelectAll
+              onChange={handleSelectAll}
+              checked={isCheckAll}
+              indeterminate={indeterminate}
+              disabled={selectAllDisabled}
+            />
           </div>
         )}
         <div
