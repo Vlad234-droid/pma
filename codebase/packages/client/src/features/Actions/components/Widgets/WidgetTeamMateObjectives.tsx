@@ -2,12 +2,12 @@ import React, { FC, useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { colors, fontWeight, Rule, useStyle } from '@dex-ddl/core';
 import {
+  colleagueUUIDSelector,
+  getAllColleagueReviews,
+  getAllReviewSchemas,
   ReviewsActions,
   reviewsMetaSelector,
-  getAllReviewSchemas,
   schemaMetaSelector,
-  getAllColleagueReviews,
-  colleagueUUIDSelector,
 } from '@pma/store';
 
 import { TileWrapper } from 'components/Tile';
@@ -100,11 +100,12 @@ export const WidgetTeamMateObjectives: FC<WidgetTeamMateObjectivesProps> = ({ st
       };
 
       dispatch(ReviewsActions.updateReviewStatus(update));
-      dispatch(
-        ReviewsActions.getReviews({
-          pathParams: { colleagueUuid: colleague.uuid, cycleUuid: 'CURRENT', status: Status.WAITING_FOR_APPROVAL },
-        }),
-      );
+      if (colleague?.uuid)
+        dispatch(
+          ReviewsActions.getReviews({
+            pathParams: { colleagueUuid: colleague.uuid, cycleUuid: 'CURRENT', status: Status.WAITING_FOR_APPROVAL },
+          }),
+        );
     },
     [colleague],
   );

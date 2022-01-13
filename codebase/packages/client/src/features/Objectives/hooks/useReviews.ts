@@ -10,8 +10,8 @@ function useReviews(params: ReviewActionParams) {
   const { loaded, loading } = useSelector(reviewsMetaSelector);
 
   const getReviews = useCallback(() => {
-    dispatch(ReviewsActions.getReviews(params));
-  }, [data, loaded, loading]);
+    if (params?.pathParams?.colleagueUuid) dispatch(ReviewsActions.getReviews(params));
+  }, [params?.pathParams, data, loaded, loading]);
 
   useEffect(() => {
     getReviews();
