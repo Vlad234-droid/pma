@@ -1,8 +1,8 @@
 import React, { FC, useEffect } from 'react';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
-import { useStyle, Rule, useBreakpoints } from '@dex-ddl/core';
-import { tipsActions, getTipsSelector } from '@pma/store';
+import { Rule, useBreakpoints, useStyle } from '@dex-ddl/core';
+import { getTipsSelector, tipsActions } from '@pma/store';
 import { Page } from 'pages';
 import { buildPath } from 'features/Routes/utils';
 import { IconButton } from 'components/IconButton';
@@ -13,7 +13,7 @@ const TIPS_ADMINISTRATION = 'tips-administration';
 const TipsAdministration: FC = () => {
   const { css } = useStyle();
   const dispatch = useDispatch();
-  const history = useHistory();
+  const navigate = useNavigate();
   const tips = useSelector(getTipsSelector) || [];
 
   useEffect(() => {
@@ -21,7 +21,7 @@ const TipsAdministration: FC = () => {
   }, []);
 
   const handleCreateTip = () => {
-    history.push(buildPath(`${Page.CREATE_TIP}`));
+    navigate(buildPath(`${Page.CREATE_TIP}`));
   };
 
   return (

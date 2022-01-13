@@ -1,20 +1,20 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Page } from 'pages';
 import {
   ConfigEntriesActions,
-  tipsActions,
+  configEntriesSelector,
   getCurrentTipSelector,
   getTipsMetaSelector,
-  configEntriesSelector,
+  tipsActions,
 } from '@pma/store';
 import { buildPath } from 'features/Routes/utils';
-import { useStyle, Rule, useBreakpoints, Button, ModalWithHeader, Icon, theme } from '@dex-ddl/core';
-import { Input, Item, Textarea, Select } from 'components/Form';
+import { Button, Icon, ModalWithHeader, Rule, theme, useBreakpoints, useStyle } from '@dex-ddl/core';
+import { Input, Item, Select, Textarea } from 'components/Form';
 import { GenericItemField } from 'components/GenericForm';
 import { IconButton } from 'components/IconButton';
 import { createTipSchema } from 'pages/Tips/config';
@@ -26,7 +26,7 @@ export type TipsFormProps = {
 
 const TipsForm: FC<TipsFormProps> = ({ mode }) => {
   const { css } = useStyle();
-  const history = useHistory();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const params = useParams();
   const methods = useForm({
@@ -246,7 +246,7 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
         tipTargetLevel3: '',
         tipTargetLevel4: '',
       });
-      history.push(buildPath(`${Page.TIPS}`));
+      navigate(buildPath(`${Page.TIPS}`));
     }
   };
 
@@ -280,7 +280,7 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
             if (tipsFormModalAction === 'confirmDelete') {
               handleDeleteTip();
             } else {
-              history.push(buildPath(`${Page.TIPS}`));
+              navigate(buildPath(`${Page.TIPS}`));
             }
           }}
           tipTitle={currentTip.title}
@@ -445,7 +445,7 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
         <TipsFormModal
           negativeBtnAction={() => setShowTipsFormModal(false)}
           action={tipsFormModalAction}
-          positiveBtnAction={() => history.push(buildPath(`${Page.TIPS}`))}
+          positiveBtnAction={() => navigate(buildPath(`${Page.TIPS}`))}
         />
       )}
     </ModalWithHeader>

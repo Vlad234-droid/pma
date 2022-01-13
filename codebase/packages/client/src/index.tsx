@@ -7,11 +7,10 @@ import ReactDOM from 'react-dom';
 import { DDLProvider } from '@dex-ddl/core';
 import { useObservableTheme } from '@dex-runtime/root-state';
 
-import { INTEGRATION_MODE } from './config/constants';
+import { INTEGRATION_MODE, PUBLIC_URL } from './config/constants';
 import store from './config/store';
 import { AuthProvider } from './contexts/authContext';
-import { Router } from 'react-router-dom';
-import history from './config/history';
+import { BrowserRouter } from 'react-router-dom';
 import Layout from './features/Layout';
 import Navigation from './features/Routes/components/Routes';
 import { buildRoutes } from './features/Routes';
@@ -55,13 +54,13 @@ const Root: FC = () => {
         <Provider store={store}>
           <ToastProvider>
             <AuthProvider>
-              <Router history={history}>
+              <BrowserRouter basename={PUBLIC_URL}>
                 <React.StrictMode>
                   <Layout>
                     <Navigation routes={routes} />
                   </Layout>
                 </React.StrictMode>
-              </Router>
+              </BrowserRouter>
             </AuthProvider>
           </ToastProvider>
         </Provider>

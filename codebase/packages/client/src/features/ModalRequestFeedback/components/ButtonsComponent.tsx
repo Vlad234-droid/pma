@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
-import { useBreakpoints, useStyle, Button, Rule } from '@dex-ddl/core';
+import { Button, Rule, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { IconButton, Position } from 'components/IconButton';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Trans } from 'components/Translation';
 import { ButtonsComponentProps } from './type';
 
@@ -9,7 +9,7 @@ const ButtonsComponent: FC<ButtonsComponentProps> = ({ methods, onSubmit, isVali
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
   const { css, theme } = useStyle();
-  const history = useHistory();
+  const navigate = useNavigate();
   const { reset } = methods;
   return (
     <>
@@ -26,7 +26,7 @@ const ButtonsComponent: FC<ButtonsComponentProps> = ({ methods, onSubmit, isVali
         <IconButton
           graphic='arrowLeft'
           onPress={() => {
-            history.goBack();
+            navigate(-1);
           }}
           iconProps={{ invertColors: true }}
         />
@@ -68,7 +68,7 @@ const ButtonsComponent: FC<ButtonsComponentProps> = ({ methods, onSubmit, isVali
                   color: `${theme.colors.tescoBlue}`,
                 },
               ]}
-              onPress={() => history.goBack()}
+              onPress={() => navigate(-1)}
             >
               <Trans i18nKey='cancel'>Cancel</Trans>
             </Button>

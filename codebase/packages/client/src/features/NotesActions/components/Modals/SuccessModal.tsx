@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { Trans } from 'components/Translation';
-import { Styles, useStyle, useBreakpoints, Button, Rule } from '@dex-ddl/core';
+import { Button, Rule, useBreakpoints, useStyle } from '@dex-ddl/core';
 
 import { UseFormReturn } from 'react-hook-form';
 import { AllNotesFolderId } from '../../../../utils/note';
@@ -105,11 +105,11 @@ const SuccessModal: FC<SuccessModalProps> = ({
       <div
         className={css({
           position: 'absolute',
-          bottom: '0',
+          bottom: 0,
           left: 0,
           right: 0,
           borderTop: '1px solid #E5E5E5',
-        } as Styles)}
+        })}
       >
         <div
           className={css({

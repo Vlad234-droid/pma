@@ -1,13 +1,13 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { FilterOptions, MainFolders } from './components';
-import AddNoteModal, { InfoModal, AddTeamNoteModal } from './components/Modals';
-import { useStyle, Rule, Styles, Modal, useBreakpoints } from '@dex-ddl/core';
+import AddNoteModal, { AddTeamNoteModal, InfoModal } from './components/Modals';
+import { Modal, Rule, Styles, useBreakpoints, useStyle } from '@dex-ddl/core';
 import {
-  NoteData,
   ChosesButtonType,
   FoldersWithNotesTypes,
-  NotesType,
   FoldersWithNotesTypesTEAM,
+  NoteData,
+  NotesType,
   NotesTypeTEAM,
 } from './type';
 import { useForm } from 'react-hook-form';
@@ -16,21 +16,21 @@ import * as Yup from 'yup';
 import { IconButton } from 'components/IconButton';
 import { Icon, Icon as IconComponent } from 'components/Icon';
 import { EditSelectedNote } from './components/Modals/EditSelectedNote';
-import { schemaNotes, schemaTEAMNotes, schemaFolder, schemaNoteToEdit } from './components/Modals/schema/schema';
+import { schemaFolder, schemaNotes, schemaNoteToEdit, schemaTEAMNotes } from './components/Modals/schema/schema';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  NotesActions as NotesActionsToDispatch,
   colleagueUUIDSelector,
   getFoldersSelector,
   getNotesSelector,
-  personalFolderUuidSelector,
+  NotesActions as NotesActionsToDispatch,
   notesFolderColleagueDataSelector,
-  teamFolderUuidSelector,
   notesFolderTeamDataSelector,
+  personalFolderUuidSelector,
+  teamFolderUuidSelector,
 } from '@pma/store';
 import { AllNotesFolderId, AllNotesFolderIdTEAM, filterNotesHandler } from '../../utils/note';
 import { PeopleTypes } from './components/TeamNotes/ModalsParts/type';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 export const NOTES_WRAPPER = 'note_wrapper';
 export const PLUS_BUTTON = 'plus_button';
@@ -82,7 +82,7 @@ const NotesActions: FC = () => {
   // filter
   const [focus, setFocus] = useState(false);
   const [searchValueFilterOption, setSearchValueFilterOption] = useState('');
-  const history = useHistory();
+  const navigate = useNavigate();
 
   //info
 
@@ -494,7 +494,8 @@ const NotesActions: FC = () => {
             setSuccessSelectedNoteToEdit={setSuccessSelectedNoteToEdit}
             methods={noteToEditMethods}
             cancelSelectedNoteModal={cancelTEAMSelectedNoteModal}
-            submitForm={handleSubmitSelectedEditedNote(onSubmitTEAMSelectedEditedNote)}
+            // TODO: check the logic
+            submitForm={onSubmitTEAMSelectedEditedNote}
             setSelectedNoteToEdit={setSelectedTEAMNoteToEdit}
             foldersWithNotes={foldersWithNotesTEAM}
             selectedNoteToEdit={selectedTEAMNoteToEdit}
@@ -572,7 +573,8 @@ const NotesActions: FC = () => {
             setSuccessSelectedNoteToEdit={setSuccessSelectedNoteToEdit}
             methods={noteToEditMethods}
             cancelSelectedNoteModal={cancelSelectedNoteModal}
-            submitForm={handleSubmitSelectedEditedNote(onSubmitSelectedEditedNote)}
+            // TODO: check the logic
+            submitForm={onSubmitSelectedEditedNote}
             setSelectedNoteToEdit={setSelectedNoteToEdit}
             foldersWithNotes={foldersWithNotes}
             selectedNoteToEdit={selectedNoteToEdit}
@@ -681,7 +683,7 @@ const NotesActions: FC = () => {
             if (!selectedFolder) setSelectedFolder(() => null);
             if (selectedTEAMFolder) setSelectedTEAMFolder(() => null);
           } else {
-            history.goBack();
+            navigate(-1);
           }
         }}
       >

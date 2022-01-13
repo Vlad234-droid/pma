@@ -1,10 +1,10 @@
 import React, { FC, useState } from 'react';
-import { Trans, useTranslation, TFunction } from 'components/Translation';
+import { TFunction, Trans, useTranslation } from 'components/Translation';
 import { Status } from 'config/enum';
-import { useStyle, Rule, CreateRule, Colors, Button } from '@dex-ddl/core';
+import { Button, Colors, CreateRule, Rule, useStyle } from '@dex-ddl/core';
 import { TileWrapper } from 'components/Tile';
 import { Graphics, Icon } from 'components/Icon';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Page } from 'pages';
 import { buildPath } from 'features/Routes/utils';
 import { ModalComponent } from '../Modal';
@@ -123,7 +123,7 @@ const getContent = (
 
 const MainWidget: FC<Props> = ({ nextReviewDate = '', count = 0, status, customStyle, onClick }) => {
   const { css } = useStyle();
-  const history = useHistory();
+  const navigate = useNavigate();
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -140,7 +140,7 @@ const MainWidget: FC<Props> = ({ nextReviewDate = '', count = 0, status, customS
   );
 
   const handleClick = () => {
-    redirectToObjective ? history.push(buildPath(Page.OBJECTIVES_VIEW)) : setIsOpen(true);
+    redirectToObjective ? navigate(buildPath(Page.OBJECTIVES_VIEW)) : setIsOpen(true);
   };
 
   return (

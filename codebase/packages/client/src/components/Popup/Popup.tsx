@@ -3,12 +3,12 @@ import { CreateRule, Rule, Theme, useStyle } from '@dex-ddl/core';
 import { Close } from 'assets/img/objectives';
 import DescriptionBlock from 'components/DescriptionBlock';
 import ObjectiveDetails from 'components/ObjectiveDetails/ObjectiveDetails';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router';
 
 const Popup = (props) => {
   const { css, theme } = useStyle();
   const { items } = props;
-  const history = useHistory();
+  const navigate = useNavigate();
 
   if (items.length < 1) return null;
 
@@ -18,12 +18,12 @@ const Popup = (props) => {
         <div
           className={css(arrow)}
           onClick={() => {
-            history.goBack();
+            navigate(-1);
           }}
         />
         <div>Strategic drivers</div>
         <div>
-          <img className={css(close)} alt='close' src={Close} onClick={() => history.push('/')} />
+          <img className={css(close)} alt='close' src={Close} onClick={() => navigate('/')} />
         </div>
       </div>
 

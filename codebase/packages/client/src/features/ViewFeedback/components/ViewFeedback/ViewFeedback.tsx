@@ -1,5 +1,5 @@
-import React, { FC, useState, useEffect, useMemo } from 'react';
-import { Button, Rule, useBreakpoints, useStyle, Modal } from '@dex-ddl/core';
+import React, { FC, useEffect, useMemo, useState } from 'react';
+import { Button, Modal, Rule, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { Trans } from 'components/Translation';
 import { FilterOption } from 'features/Shared';
 import { IconButton } from 'components/IconButton';
@@ -8,21 +8,21 @@ import RadioBtns from '../RadioBtns';
 import { NoFeedback } from '../../../Feedback/components';
 import { Notification } from 'components/Notification';
 import { Icon } from 'components/Icon';
-import { ModalDownloadFeedback, HelpModalReceiveFeedback } from '../ModalParts';
+import { HelpModalReceiveFeedback, ModalDownloadFeedback } from '../ModalParts';
 import { formatToRelativeDate } from 'utils';
 import {
   ColleaguesActions,
-  FeedbackActions,
-  ObjectiveActions,
-  getPropperNotesByCriterionSelector,
   colleagueUUIDSelector,
+  FeedbackActions,
+  getPropperNotesByCriterionSelector,
+  ObjectiveActions,
 } from '@pma/store';
 import { useDispatch, useSelector } from 'react-redux';
 import { FilterModal } from '../../../Shared/components/FilterModal';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { FeedbackStatus } from 'config/enum';
 
-import { usePDF, FeedbackDocument, downloadPDF } from '@pma/pdf-renderer';
+import { downloadPDF, FeedbackDocument, usePDF } from '@pma/pdf-renderer';
 
 type filterFeedbacksType = {
   AZ: boolean;
@@ -32,7 +32,7 @@ type filterFeedbacksType = {
 };
 
 const ViewFeedback: FC = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const { css } = useStyle();
   const dispatch = useDispatch();
   const [helpModalReceiveFeedback, setHelpModalReceiveFeedback] = useState<boolean>(false);
@@ -268,7 +268,7 @@ const ViewFeedback: FC = () => {
               <Button
                 styles={[iconBtnStyle]}
                 onPress={() => {
-                  history.push('/feedback/give-feedback');
+                  navigate('/feedback/give-feedback');
                 }}
               >
                 <Trans>Share feedback</Trans>

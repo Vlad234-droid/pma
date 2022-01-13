@@ -16,135 +16,133 @@ import Notes from './Notes';
 import CreateOrganizationObjectives from './CreateOrganizationObjectives';
 import ObjectivesView from './ObjectivesView';
 import { CreatePerformanceCycle, PerformanceCycleAdministration } from './PerformanceCycle';
-import { TipsAdministration, CreateTip, EditTip } from './Tips';
+import { CreateTip, EditTip, TipsAdministration } from './Tips';
 import UserObjectives from './UserObjectives';
 
-const pages: Record<
-  Page,
-  {
-    component: PageElement;
-    withHeader: boolean;
-    title?: string;
-    backPath?: string;
-  }
-> = {
+export type PageComponent = {
+  element: PageElement;
+  withHeader: boolean;
+  title?: string;
+  backPath?: string;
+};
+const pages: Record<Page, PageComponent> = {
   [Page.MY_TEAM]: {
-    component: MyTeam,
+    element: MyTeam,
     title: 'My Team',
     withHeader: true,
     backPath: Page.CONTRIBUTION,
   },
   [Page.NOTES]: {
-    component: Notes,
+    element: Notes,
     title: 'My Notes',
     withHeader: true,
   },
   [Page.ACTIONS]: {
-    component: Actions,
+    element: Actions,
     title: 'Actions',
     withHeader: true,
     backPath: Page.CONTRIBUTION,
   },
   [Page.CREATE_PERFORMANCE_CYCLE]: {
-    component: CreatePerformanceCycle,
+    element: CreatePerformanceCycle,
     title: 'Create Performance Cycle',
     withHeader: true,
     backPath: Page.PERFORMANCE_CYCLE,
   },
   [Page.PERFORMANCE_CYCLE]: {
-    component: PerformanceCycleAdministration,
+    element: PerformanceCycleAdministration,
     title: 'Performance Cycle Administration',
     withHeader: true,
     backPath: Page.CONTRIBUTION,
   },
   [Page.CONTRIBUTION]: {
-    component: CareerPerformance,
+    element: CareerPerformance,
     title: 'Your Contribution',
     withHeader: true,
   },
   [Page.CREATE_STRATEGIC_DRIVERS]: {
-    component: CreateOrganizationObjectives,
+    element: CreateOrganizationObjectives,
     title: 'Create Strategic drivers',
     withHeader: true,
     backPath: Page.CONTRIBUTION,
   },
   [Page.STRATEGIC_DRIVERS]: {
-    component: ObjectivesView,
+    element: ObjectivesView,
     withHeader: false,
   },
   [Page.PERSONAL_DEVELOPMENT_PLAN]: {
-    component: PersonalDevelopmentPlan,
+    element: PersonalDevelopmentPlan,
     title: 'Personal Development Plan',
     withHeader: true,
     backPath: Page.CONTRIBUTION,
   },
   [Page.OBJECTIVES_VIEW]: {
-    component: Objectives,
+    element: Objectives,
     title: 'My objectives and reviews',
     withHeader: true,
     backPath: Page.CONTRIBUTION,
   },
   [Page.USER_OBJECTIVES]: {
-    component: UserObjectives,
+    element: UserObjectives,
     title: 'User Objectives',
     withHeader: true,
     backPath: Page.MY_TEAM,
   },
   [Page.PROFILE]: {
-    component: Profile,
+    element: Profile,
     title: 'My profile',
     withHeader: true,
     backPath: Page.CONTRIBUTION,
   },
   [Page.SETTINGS]: {
-    component: Settings,
+    element: Settings,
     title: 'Settings',
     withHeader: true,
     backPath: Page.CONTRIBUTION,
   },
   [Page.GIVE_FEEDBACK]: {
-    component: GiveFeedback,
+    element: GiveFeedback,
     title: 'Give feedback',
     withHeader: true,
     backPath: Page.FEEDBACK,
   },
   [Page.REQUEST_FEEDBACK]: {
-    component: RequestFeedback,
+    element: RequestFeedback,
     withHeader: false,
   },
   [Page.RESPOND_FEEDBACK]: {
-    component: RespondFeedback,
+    element: RespondFeedback,
     title: 'Respond to feedback requests',
     withHeader: true,
     backPath: Page.FEEDBACK,
   },
   [Page.VIEW_FEEDBACK]: {
-    component: ViewFeedback,
+    element: ViewFeedback,
     title: 'View feedback',
     withHeader: true,
     backPath: Page.FEEDBACK,
   },
 
   [Page.FEEDBACK]: {
-    component: Feedback,
+    element: Feedback,
     title: 'Feedback',
     withHeader: true,
     backPath: Page.CONTRIBUTION,
   },
   [Page.TIPS]: {
-    component: TipsAdministration,
+    element: TipsAdministration,
     title: 'Tips',
     withHeader: true,
     backPath: Page.CONTRIBUTION,
   },
   [Page.CREATE_TIP]: {
-    component: CreateTip,
+    element: CreateTip,
     title: 'Create Tip',
     withHeader: false,
     backPath: Page.TIPS,
   },
   [Page.EDIT_TIP]: {
-    component: EditTip,
+    element: EditTip,
     title: 'Edit Tip',
     withHeader: false,
     backPath: Page.TIPS,
