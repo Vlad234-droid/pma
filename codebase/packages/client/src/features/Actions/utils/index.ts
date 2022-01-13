@@ -16,8 +16,7 @@ export const getDeclineReasonOptions = (t) => [
   },
   { value: 'Ambitious enough', label: t('ambitious_enough', 'Ambitious enough') },
   { value: 'Easily assessable', label: t('easily_assessable', 'Easily assessable') },
-  { value: 'Something else', label: t('something_else', 'Something else') },
-  { value: 'I will pick up with you offline', label: t('', 'I will pick up with you offline') },
+  { value: 'Something else, I will pick up with you offline', label: t('something_else', 'Something else') },
 ];
 
 export const getReviewTypeTitle = (t) => ({
