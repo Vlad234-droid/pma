@@ -16,7 +16,7 @@ if "%NPM_ACCESS_TOKEN%"=="" (
 
 docker build ^
     --progress plain ^
-    --tag pma_local:latest ^
+    --tag pma-frontend:latest ^
     --network=host ^
     --build-arg HTTP_PROXY=http://10.251.0.42:80 ^
     --build-arg HTTPS_PROXY=http://10.251.0.42:80 ^
@@ -24,7 +24,7 @@ docker build ^
     --build-arg NODE_ENV=ppe ^
     --build-arg REACT_APP_API_URL=/experience/myperformance/api/v1 ^
     --build-arg PUBLIC_URL=/experience/myperformance ^
-    --file dockerfiles/pma-frontend_docker_multistage_build.Dockerfile ^
+    --file dockerfiles/pma-frontend_docker_multistage_alpine.Dockerfile ^
    .
 
 :completed

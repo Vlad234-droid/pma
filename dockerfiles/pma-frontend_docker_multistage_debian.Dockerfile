@@ -12,29 +12,21 @@ ARG NODE_PORT
 ARG HTTP_PROXY
 ARG HTTPS_PROXY
 
-ARG NPM_ACCESS_TOKEN
-
 ENV NODE_ENV=$NODE_ENV
 ENV NODE_PORT=$NODE_PORT
 
 ENV HTTP_PROXY=$HTTP_PROXY
 ENV HTTPS_PROXY=$HTTPS_PROXY
 
-ENV NPM_ACCESS_TOKEN=$NPM_ACCESS_TOKEN
-
 RUN apt-get update \
     && apt-get install --yes --no-install-recommends \
         dos2unix \
     && rm -rf /var/lib/apt/lists/*
 
-COPY --chmod=0755 ./scripts/create-npmrc.sh /root/create-npmrc.sh
-
 RUN --mount=type=cache,id=yarn_cache,target=/usr/local/share/.cache/yarn \
-    dos2unix /root/create-npmrc.sh \
-    && bash /root/create-npmrc.sh --token $NPM_ACCESS_TOKEN \ 
-    && rm /root/create-npmrc.sh \
-    && yarn config set "strict-ssl" false -g \
-    && yarn global add lerna@3.22.1 --prefix=/usr 
+    echo "yarn cache folder: `yarn cache dir`" \
+    && yarn config set "strict-ssl" false -g 
+    # && yarn global add lerna@3.22.1 --prefix=/usr 
 
 # ==============
 # codebase stage 
@@ -78,6 +70,13 @@ ENV HTTPS_PROXY=$HTTPS_PROXY
 
 ENV NPM_ACCESS_TOKEN=$NPM_ACCESS_TOKEN
 
+COPY --chmod=0755 ./scripts/create-npmrc.sh /root/create-npmrc.sh
+
+RUN dos2unix /root/create-npmrc.sh \
+    && bash /root/create-npmrc.sh --token $NPM_ACCESS_TOKEN \ 
+    && rm /root/create-npmrc.sh \
+    && cd ~ && echo "home dir: `pwd`" && ls -a
+
 WORKDIR /opt/app
 
 COPY --from=codebase /opt/bootstrap/ ./
@@ -107,8 +106,6 @@ ARG NODE_PORT
 ARG HTTP_PROXY
 ARG HTTPS_PROXY
 
-ARG NPM_ACCESS_TOKEN
-
 ENV NODE_ENV=$NODE_ENV
 ENV NODE_PORT=$NODE_PORT
 ENV BUILD_ENV=production
@@ -116,18 +113,18 @@ ENV BUILD_ENV=production
 ENV HTTP_PROXY=$HTTP_PROXY
 ENV HTTPS_PROXY=$HTTPS_PROXY
 
-ENV NPM_ACCESS_TOKEN=$NPM_ACCESS_TOKEN
-
 WORKDIR /home/app
 
 COPY --chmod=0755 ./scripts/run.sh ./
 COPY --from=codebase /opt/bootstrap/ ./
+COPY --from=build /root/.npmrc /root
 COPY --from=build /opt/build/ ./
 
 RUN --mount=type=cache,id=yarn_cache,target=/usr/local/share/.cache/yarn \
     find . -type d -name node_modules -prune -o -name 'package.prod.json' -exec bash -c 'mv {} $(dirname {})/package.json' \; \
     && yarn bootstrap:prod \
-    && dos2unix ./run.sh
+    && dos2unix ./run.sh \
+    && rm /root/.npmrc
 
 CMD ./run.sh
 
