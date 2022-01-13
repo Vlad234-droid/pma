@@ -112,8 +112,8 @@ const UserObjectives: FC = () => {
   };
 
   useEffect(() => {
-    dispatch(TimelineActions.getTimeline({ colleagueUuid: uuid }));
-  }, []);
+    if (uuid) dispatch(TimelineActions.getTimeline({ colleagueUuid: uuid }));
+  }, [uuid]);
 
   useEffect(() => {
     if (reviewLoaded && schemaLoaded) {
