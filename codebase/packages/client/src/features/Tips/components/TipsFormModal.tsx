@@ -16,8 +16,8 @@ const TipsFormModal: FC<Props> = ({ action, negativeBtnAction, positiveBtnAction
     discard: {
       title: 'Discard changes',
       body: 'You have not saved your changes, are you sure you want to leave this page?',
-      negativeBtnText: 'Stay on this page',
-      positiveBtnText: 'Leave this page',
+      negativeBtnText: 'Cancel',
+      positiveBtnText: 'Okay',
       showImage: false,
     },
     create: {

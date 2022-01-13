@@ -310,37 +310,6 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
               value={formData['tipDescription']}
             />
             <div className={css(hrSeparatorLine)} />
-
-            <Select
-              options={level1Options.map((item) => {
-                return { value: item['uuid'], label: item['name'] };
-              })}
-              onChange={() => {
-                 console.log('a')
-              }}
-            />
-
-            <GenericItemField
-              name={'test'}
-              methods={methods}
-              Wrapper={({ children }) => (
-                <Item label='Test' withIcon={false}>
-                  {children}
-                </Item>
-              )}
-              Element={Select}
-              options={level1Options.map((item) => {
-                return { value: item['uuid'], label: item['name'] };
-              })}
-              placeholder='Please select'
-              // onChange={() => {
-              //   console.log(level1Options.map((item) => {
-              //     return { value: item['uuid'], label: item['name'] };
-              //   }))
-              // }}
-              // value={formData['tipTargetLevel1']}
-            />
-
             <GenericItemField
               name={'tipTargetLevel1'}
               methods={methods}
