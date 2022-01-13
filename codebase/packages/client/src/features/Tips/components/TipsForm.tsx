@@ -190,7 +190,8 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
       description: methods.getValues('tipDescription'),
       key: `/${Math.random().toFixed(5)}`,
       targetOrganisation: {
-        uuid: targetOrganisation,
+        uuid: '10000000-0000-0000-0001-000000000002'
+        // uuid: targetOrganisation,
       },
       imageLink: 'https://cdn-icons-png.flaticon.com/512/189/189667.png',
     };
@@ -206,7 +207,8 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
       description: methods.getValues('tipDescription'),
       key: `/${Math.random().toFixed(5)}`,
       targetOrganisation: {
-        uuid: targetOrganisation,
+        uuid: '10000000-0000-0000-0001-000000000002',
+        // uuid: targetOrganisation,
       },
       imageLink: 'https://cdn-icons-png.flaticon.com/512/189/189667.png',
     };
@@ -274,7 +276,10 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
     >
       {showTipsFormModal && !successTipsFormModal && (
         <TipsFormModal
-          negativeBtnAction={() => setShowTipsFormModal(false)}
+          negativeBtnAction={() => {
+            setShowTipsFormModal(false);
+            setShowEffectsPlaceholder(false);
+          }}
           action={tipsFormModalAction}
           positiveBtnAction={() => {
             if (tipsFormModalAction === 'confirmDelete') {
