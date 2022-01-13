@@ -52,14 +52,16 @@ const MyTeam: FC = () => {
 
   return (
     <div>
-      <div className={css({ display: 'flex', justifyContent: 'space-between' })}>
-        <ViewFilters view={view} onChange={handleViewChange} />
+      <div className={css({ display: 'flex', justifyContent: 'center' })}>
         <RouterSwitch
           links={[
             { link: buildPath(Page.CONTRIBUTION), name: 'My View' },
             { link: buildPath(Page.MY_TEAM), name: 'My Team' },
           ]}
         />
+      </div>
+      <div className={css({ display: 'flex', justifyContent: 'space-between' })}>
+        <ViewFilters view={view} onChange={handleViewChange} />
         <div
           className={css({
             display: 'flex',
