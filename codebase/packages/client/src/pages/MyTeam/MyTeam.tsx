@@ -29,8 +29,8 @@ const MyTeam: FC = () => {
   const options = getEmployeesSortingOptions(t);
   const [view, setView] = useState<View>(View.DIRECT_REPORTS);
 
-  const handleViewChange = (event) => {
-    setView(event.target.value);
+  const handleViewChange = (view: View) => {
+    setView(view);
   };
 
   // @ts-ignore
@@ -52,14 +52,16 @@ const MyTeam: FC = () => {
 
   return (
     <div>
-      <div className={css({ display: 'flex', justifyContent: 'space-between' })}>
-        <ViewFilters view={view} onChange={handleViewChange} />
+      <div className={css({ display: 'flex', justifyContent: 'center' })}>
         <RouterSwitch
           links={[
             { link: buildPath(Page.CONTRIBUTION), name: 'My View' },
             { link: buildPath(Page.MY_TEAM), name: 'My Team' },
           ]}
         />
+      </div>
+      <div className={css({ display: 'flex', justifyContent: 'space-between' })}>
+        <ViewFilters view={view} onChange={handleViewChange} />
         <div
           className={css({
             display: 'flex',
