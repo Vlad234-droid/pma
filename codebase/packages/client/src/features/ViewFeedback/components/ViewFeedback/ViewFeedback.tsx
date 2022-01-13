@@ -43,6 +43,8 @@ const ViewFeedback: FC = () => {
     read: false,
   });
 
+  const colleagueUuid = useSelector(colleagueUUIDSelector);
+
   // filter
   const [focus, setFocus] = useState(false);
   const [searchValueFilterOption, setSearchValueFilterOption] = useState('');
@@ -53,6 +55,7 @@ const ViewFeedback: FC = () => {
     newToOld: false,
     oldToNew: false,
   });
+
   useEffect(() => {
     if (!focus) setSearchValueFilterOption(() => '');
     if (focus) {
@@ -117,7 +120,18 @@ const ViewFeedback: FC = () => {
     return val1.localeCompare(val2);
   };
 
-  const colleagueUuid = useSelector(colleagueUUIDSelector);
+  useEffect(() => {
+    if (!colleagueUuid) {
+      return;
+    }
+
+    dispatch(
+      FeedbackActions.getAllFeedbacks({
+        'target-colleague-uuid': colleagueUuid,
+      }),
+    );
+  }, [colleagueUuid]);
+
   const submittedCompletedNotes =
     useSelector(
       getPropperNotesByCriterionSelector({
@@ -151,18 +165,6 @@ const ViewFeedback: FC = () => {
   }, [submittedCompletedNotes.length]);
 
   useEffect(() => {
-    if (!colleagueUuid) {
-      return;
-    }
-
-    dispatch(
-      FeedbackActions.getAllFeedbacks({
-        'target-colleague-uuid': colleagueUuid,
-      }),
-    );
-  }, [colleagueUuid]);
-
-  useEffect(() => {
     if (!submittedCompletedNotes.length) {
       return;
     }
@@ -171,10 +173,13 @@ const ViewFeedback: FC = () => {
       submittedCompletedNotes.forEach(
         (item) => item.targetId && dispatch(ObjectiveActions.getReviewByUuid({ uuid: item.targetId })),
       );
-    } else {
-      dispatch(FeedbackActions.readFeedback({ uuid: submittedCompletedNotes[0].uuid }));
     }
   }, [isReaded]);
+
+  useEffect(() => {
+    if (!submittedCompletedNotes.length) return;
+    dispatch(FeedbackActions.readFeedback({ uuid: submittedCompletedNotes[0].uuid }));
+  }, []);
 
   return (
     <>
@@ -193,9 +198,6 @@ const ViewFeedback: FC = () => {
           title={{
             content: 'Feedback',
             styles: [modalTitleOptionStyle],
-          }}
-          onOverlayClick={() => {
-            setHelpModalReceiveFeedback(() => false);
           }}
         >
           <HelpModalReceiveFeedback setHelpModalReceiveFeedback={setHelpModalReceiveFeedback} />
@@ -324,11 +326,6 @@ const ViewFeedback: FC = () => {
           title={{
             content: 'Download feedback',
             styles: [modalTitleOptionStyle],
-          }}
-          onOverlayClick={() => {
-            dispatch(ColleaguesActions.clearGettedColleagues());
-            if (ModalSuccess) setModalSuccess(() => false);
-            setOpenMainModal(() => false);
           }}
         >
           <ModalDownloadFeedback

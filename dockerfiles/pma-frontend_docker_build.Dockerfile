@@ -27,7 +27,7 @@ ENV HTTPS_PROXY=$HTTPS_PROXY
 
 RUN dos2unix ./run.sh && dos2unix ./create-npmrc.sh && bash ./create-npmrc.sh --token $NEXUS_ACCESS_TOKEN
 
-RUN yarn bootstrap
+RUN yarn bootstrap:dev
 
 ENV BUILD_ENV=production
 ENV NODE_ENV=$NODE_ENV

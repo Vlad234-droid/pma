@@ -13,10 +13,12 @@ const SuccessModal: FC<SuccessModalProps> = ({
   setSelectedPerson,
   selectedPerson,
   setFeedbackItems,
+  methods,
 }) => {
   const { css, theme } = useStyle();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+  const { reset } = methods;
   return (
     <div className={css(WrapperSuccessContainer)} data-test-id={SUCCES_GIVE_FEEDBACK}>
       <div className={css(SuccessImg)}>
@@ -69,6 +71,7 @@ const SuccessModal: FC<SuccessModalProps> = ({
                 setIsOpen(() => false);
                 setSelectedPerson(() => null);
                 setFeedbackItems(() => []);
+                reset({ feedback: [{ field: '' }, { field: '' }, { field: '' }] });
               }}
             >
               <Trans i18nKey='OK'>Okay</Trans>

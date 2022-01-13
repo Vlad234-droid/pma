@@ -38,8 +38,7 @@ const DraftItem: FC<DraftItemProps> = ({
     if (!colleagueUuid) return;
     dispatch(
       FeedbackActions.getAllFeedbacks({
-        //'colleague-uuid': colleagueUuid,
-        'colleague-uuid': '15818570-cd6b-4957-8a82-03d34dcb0b34',
+        'colleague-uuid': colleagueUuid,
       }),
     );
   }, [colleagueUuid]);

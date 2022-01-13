@@ -26,9 +26,6 @@ const RequestFeedback: FC = () => {
           content: 'Request feedback',
           styles: [modalTitleOptionStyle],
         }}
-        onOverlayClick={() => {
-          navigate(-1);
-        }}
       >
         <ModalRequestFeedback />
       </Modal>

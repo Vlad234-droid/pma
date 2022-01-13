@@ -246,6 +246,9 @@ const ModalRequestFeedback: FC = () => {
                 name={`search_option`}
                 onChange={(e) => {
                   setInputValue(() => e.target.value);
+                  if (e.target.value === '' || e.target.value.length <= 1) {
+                    dispatch(ColleaguesActions.clearGettedColleagues());
+                  }
                   if (e.target.value !== '' && e.target.value.length > 1) {
                     dispatch(
                       ColleaguesActions.getColleagues({

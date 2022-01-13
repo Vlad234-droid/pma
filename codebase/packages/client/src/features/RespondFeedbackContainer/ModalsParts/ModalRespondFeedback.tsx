@@ -3,7 +3,6 @@ import { useStyle, useBreakpoints } from '@dex-ddl/core';
 import { ModalGiveFeedbackProps } from '../type';
 import { SuccessModal, SubmitPart, InfoModal } from './index';
 import { IconButton } from 'components/IconButton';
-//import { SubmitButton } from '../../../features/Objectives/components/Modal/index';
 
 const ModalRespondFeedback: FC<ModalGiveFeedbackProps> = ({
   setIsOpen,
