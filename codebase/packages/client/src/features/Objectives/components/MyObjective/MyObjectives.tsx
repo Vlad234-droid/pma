@@ -141,8 +141,8 @@ const MyObjectives: FC = () => {
   };
 
   useEffect(() => {
-    if (!loaded) dispatch(TimelineActions.getTimeline({ colleagueUuid }));
-  }, [loaded]);
+    if (!loaded && colleagueUuid) dispatch(TimelineActions.getTimeline({ colleagueUuid }));
+  }, [loaded, colleagueUuid]);
 
   return (
     <div data-test-id={TEST_ID}>
