@@ -29,8 +29,8 @@ const MyTeam: FC = () => {
   const options = getEmployeesSortingOptions(t);
   const [view, setView] = useState<View>(View.DIRECT_REPORTS);
 
-  const handleViewChange = (event) => {
-    setView(event.target.value);
+  const handleViewChange = (view: View) => {
+    setView(view);
   };
 
   // @ts-ignore
