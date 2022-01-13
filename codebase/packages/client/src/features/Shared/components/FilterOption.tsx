@@ -74,6 +74,7 @@ export const FilterOption: FC<FilterOptionProps> = ({
               onFocus && onFocus(true);
             }}
             onBlur={() => {
+              onFocus && onFocus(() => false);
               setSearchValueFilterOption && setSearchValueFilterOption(() => '');
             }}
             customStyles={{

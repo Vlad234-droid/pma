@@ -456,7 +456,7 @@ const MainFolders: FC<MainFolderProps> = ({
             userArchivedMode={userArchivedMode}
           />
 
-          {mediumScreen && !!selectedFolder?.notes?.length && (
+          {mediumScreen && selectedFolder !== null && (
             <SelectedFolder
               selectedFolder={selectedFolder}
               setConfirmModal={setConfirmModal}
@@ -511,7 +511,7 @@ const MainFolders: FC<MainFolderProps> = ({
           )}
         </div>
         <div className={css(wrapperFolder, { height: '100%' })}>
-          {!mediumScreen && !!selectedFolder?.notes?.length && (
+          {!mediumScreen && selectedFolder !== null && (
             <SelectedFolder
               selectedFolder={selectedFolder}
               setConfirmModal={setConfirmModal}

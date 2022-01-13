@@ -2,7 +2,7 @@ import * as Yup from 'yup';
 
 export const schemaNotes = Yup.object().shape({
   noteTitle: Yup.string().required(),
-  noteText: Yup.string().required(),
+  noteText: Yup.string().required().max(500),
   folder: Yup.string().notRequired(),
   folderTitle: Yup.string()
     .notRequired()
@@ -17,7 +17,7 @@ export const schemaFolder = Yup.object().shape({
 export const schemaTEAMNotes = Yup.object().shape({
   search_option: Yup.string().required(),
   noteTitle: Yup.string().required(),
-  noteText: Yup.string().required(),
+  noteText: Yup.string().required().max(500),
   folder: Yup.string().notRequired(),
   folderTitle: Yup.string()
     .notRequired()
@@ -33,6 +33,6 @@ export const folderSchema = Yup.object().shape({
 
 export const schemaNoteToEdit = Yup.object().shape({
   noteTitle: Yup.string().required(),
-  noteText: Yup.string().required(),
+  noteText: Yup.string().required().max(500),
   folder: Yup.string().notRequired(),
 });
