@@ -31,7 +31,12 @@ export const getGetPerformanceCyclesByUuidEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
     filter(isActionOf(getPerformanceCycleByUuid.request)),
     switchMap(({ payload }) =>
-      from(api.getPerformanceCycleByUuid(payload)).pipe(
+      from(
+        api.getPerformanceCycleByUuid({
+          ...payload,
+          includeForms: payload?.includeForms ? payload?.includeForms : true,
+        }),
+      ).pipe(
         map(getPerformanceCycleByUuid.success),
         catchError((e) => {
           const errors = e?.data?.errors;

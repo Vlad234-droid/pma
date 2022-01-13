@@ -24,7 +24,8 @@ const metadataSuccess = (state, { payload }) => {
   return {
     data: state.data.map((template) => {
       if (template.uuid !== payload.fileUuid) return template;
-      return { ...template, cycle: payload.data.cycle };
+      // todo move to selector
+      return { ...template, cycle: payload.data?.metadata?.cycle, forms: payload.data?.forms };
     }),
     meta: { ...state.meta, loading: false, loaded: true },
   };

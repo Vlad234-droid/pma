@@ -88,12 +88,14 @@ export const getFormsByPerformanceCycleUuidSelector = (performanceCycleUuid) =>
   // @ts-ignore
   createSelector(performanceCycleSelector, ({ data }) => {
     // @ts-ignore
-    const performanceCycleItem = data.filter((item) => item.uuid === performanceCycleUuid)?.[0];
+    const performanceCycleItem = data.filter((item) => item.uuid === performanceCycleUuid)?.[0] || {};
     // @ts-ignore
     return performanceCycleItem?.metadata?.cycle?.timelinePoints
       .filter((point) => point.type === 'REVIEW')
       .map((point) => {
-        const { json, code: displayName } = point?.form || {};
+        // @ts-ignore
+        const form = performanceCycleItem?.forms.find((form) => form.id === point.form.id);
+        const { json, code: displayName } = form || {};
         if (json) return { ...JSON.parse(json), displayName };
       });
   });

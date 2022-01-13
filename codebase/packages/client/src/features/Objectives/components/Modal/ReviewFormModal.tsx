@@ -20,7 +20,7 @@ import {
   reviewsMetaSelector,
 } from '@pma/store';
 import { createYupSchema } from 'utils/yup';
-import useReviewSchema from '../../hooks/useReviewSchema';
+import { useReviewSchemaWithPermission } from '../../hooks/useReviewSchema';
 import { TriggerModal } from 'features/Modal/components/TriggerModal';
 import MidYearHelpModal from './MidYearHelpModal';
 
@@ -82,7 +82,7 @@ const ReviewFormModal: FC<Props> = ({ reviewType, onClose }) => {
 
   const { helperText, title } = getContent(reviewType, t);
 
-  const [schema] = useReviewSchema(reviewType);
+  const [schema] = useReviewSchemaWithPermission(reviewType);
   const { components = [] } = schema;
 
   const yepSchema = components.reduce(createYupSchema, {});

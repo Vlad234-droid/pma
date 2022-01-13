@@ -58,3 +58,10 @@ export enum TargetFeedbackKeys {
   'VALUE_BEHAVIOR' = 'comment_to_your_self',
   'OTHER' = 'comment_to_your_impact',
 }
+
+export enum DslType {
+  AUTH = 'auth',
+  ROLE = 'role',
+  WORK_LEVEL = 'work_level',
+  REQUEST = 'request',
+}
