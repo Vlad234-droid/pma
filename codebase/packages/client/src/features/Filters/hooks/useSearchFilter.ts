@@ -3,8 +3,8 @@ import { useState } from 'react';
 const useSearchFilter = (): [string, (value: string) => void] => {
   const [searchValue, setSearchValue] = useState<string>('');
 
-  const handleSearch = (value: string) => {
-    setSearchValue(value);
+  const handleSearch = (event) => {
+    setSearchValue(event.target.value);
   };
 
   return [searchValue, handleSearch];
