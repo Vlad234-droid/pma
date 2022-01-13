@@ -1,10 +1,11 @@
-import React, { ChangeEvent, FC, SyntheticEvent, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import mergeRefs from 'react-merge-refs';
 import { Rule, useStyle } from '@dex-ddl/core';
 import { Icon } from 'components/Icon';
 
 import { useRefContainer } from '../context/input';
-import { SelectField } from '../types';
+
+import { SelectField, Option } from '../types';
 
 const Select: FC<SelectField> = ({
   domRef,
@@ -17,9 +18,33 @@ const Select: FC<SelectField> = ({
   getSelected,
 }) => {
   const { css, theme } = useStyle();
+
   const refIcon = useRefContainer();
-  const [currentValue, setCurrentValue] = useState(value);
+
+  const initialOption = options.find((option) => option.value === value) || { label: '', value: '' };
+
+  const [currentOption, setCurrentOption] = useState<Option>(initialOption);
   const [isOptionOpen, toggleOption] = useState(false);
+
+  const handleOpen = () => {
+    toggleOption(true);
+  };
+
+  const handleClose = () => {
+    toggleOption(false);
+  };
+
+  const handleChange = (e) => {
+    if (currentOption && currentOption.value === value) return;
+
+    onChange({
+      ...e,
+      target: {
+        ...e.target,
+        value: currentOption.value,
+      },
+    });
+  };
 
   return (
     <>
@@ -31,9 +56,9 @@ const Select: FC<SelectField> = ({
       >
         <input
           role='select'
-          ref={mergeRefs([domRef, refIcon])}
           name={name}
-          value={currentValue}
+          ref={mergeRefs([domRef, refIcon])}
+          value={currentOption?.label}
           disabled={disabled}
           data-test-id={name}
           className={css(
@@ -58,12 +83,9 @@ const Select: FC<SelectField> = ({
           )}
           placeholder={placeholder ? `- ${placeholder} -` : ''}
           readOnly={true}
-          onSelect={(e) => {
-            onChange(e);
-            toggleOption(false);
-          }}
-          onClick={() => toggleOption(true)}
-          onBlur={() => toggleOption(false)}
+          onClick={handleOpen}
+          onBlur={handleClose}
+          onSelect={handleChange}
         />
         <span
           data-test-id={`${name || ''}Options`}
@@ -108,7 +130,8 @@ const Select: FC<SelectField> = ({
                   })}
                   onMouseDown={(e) => e.preventDefault()}
                   onClick={() => {
-                    setCurrentValue(option.value);
+                    setCurrentOption(option);
+                    handleClose();
                     if (getSelected !== undefined) {
                       getSelected(option);
                     }
