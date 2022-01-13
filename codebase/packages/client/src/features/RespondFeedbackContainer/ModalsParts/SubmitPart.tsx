@@ -29,7 +29,7 @@ const SubmitPart: FC<SubmitPartProps> = ({
 
   const giveFeedback: GiveFeedbackType[] = [
     {
-      giveFeedback_id: '1',
+      giveFeedback_id: '0',
       giveFeedbacka_main_title: 'Question 1',
       giveFeedback_title:
         "Looking back at what you've seen recently, in relation to the area I've asked for feedback on, what can you tell me about what I've delivered or how I've gone about it?",
@@ -41,7 +41,7 @@ const SubmitPart: FC<SubmitPartProps> = ({
       },
     },
     {
-      giveFeedback_id: '2',
+      giveFeedback_id: '1',
       giveFeedbacka_main_title: 'Question 2',
       giveFeedback_title:
         "Looking forward, in relation to the area I've asked for feedback on, what should I do more (or less) of in order to be at my best?",
@@ -53,7 +53,7 @@ const SubmitPart: FC<SubmitPartProps> = ({
       },
     },
     {
-      giveFeedback_id: '3',
+      giveFeedback_id: '2',
       giveFeedbacka_main_title: 'Anything else?',
       giveFeedback_title: 'Add any other comments you would like to share with your colleague.',
       giveFeedback_field: {
@@ -99,9 +99,10 @@ const SubmitPart: FC<SubmitPartProps> = ({
 
   const values = getValues();
 
+  console.log('values', values);
+
   const onSubmit = async (data) => {
     if (!colleagueUuid) return;
-    const conv = data.feedback.slice(1);
 
     const formData = {
       uuid: selectedPerson?.uuid,
@@ -110,7 +111,7 @@ const SubmitPart: FC<SubmitPartProps> = ({
       status: 'COMPLETED',
       targetId: selectedPerson?.targetId,
       targetType: selectedPerson?.targetType,
-      feedbackItems: conv.map((item, i) => {
+      feedbackItems: data.feedback.map((item, i) => {
         return {
           ...UUID(i),
           code: giveFeedback[i].giveFeedbacka_main_title,
@@ -126,7 +127,7 @@ const SubmitPart: FC<SubmitPartProps> = ({
 
   const onDraft = () => {
     if (!colleagueUuid) return;
-    const conv = values.feedback.slice(1);
+    const data = values.feedback;
     const formData = {
       uuid: selectedPerson?.uuid,
       colleagueUuid: selectedPerson.colleague.colleagueUUID,
@@ -134,7 +135,7 @@ const SubmitPart: FC<SubmitPartProps> = ({
       status: 'PENDING',
       ...(selectedPerson?.targetId && { targetId: selectedPerson?.targetId }),
       targetType: selectedPerson?.targetType,
-      feedbackItems: conv.map((item, i) => {
+      feedbackItems: data.map((item, i) => {
         return {
           ...UUID(i),
           code: giveFeedback[i].giveFeedbacka_main_title,

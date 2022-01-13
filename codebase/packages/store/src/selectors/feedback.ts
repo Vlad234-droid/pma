@@ -20,6 +20,27 @@ export const getReviewsS = createSelector(feedbackSelector, (feedback: any) => {
   return reviews;
 });
 
+export const getNotesByArgsSelector = (status, colleagueUuid) =>
+  createSelector(feedbackSelector, (feedback: any) => {
+    const { notes } = feedback;
+
+    const filterByArgs = notes
+      .filter((item) => item.status === status)
+      .filter((item) => item.colleagueUuid === colleagueUuid);
+    return filterByArgs;
+  });
+
+export const getUnReadSubmittedNotesSelector = (status, colleagueUuid) =>
+  createSelector(feedbackSelector, (feedback: any) => {
+    const { notes } = feedback;
+
+    const filterByArgs = notes
+      .filter((item) => item.status === status)
+      .filter((item) => item.targetColleagueUuid === colleagueUuid)
+      .filter((item) => !item.read);
+    return filterByArgs;
+  });
+
 export const getPropperNotesByStatusSelector = (status) =>
   createSelector(feedbackSelector, (feedback: any) => {
     const { notes } = feedback;

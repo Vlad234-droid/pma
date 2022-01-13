@@ -21,6 +21,8 @@ import {
   getPropperNotesByStatusSelector,
   colleagueUUIDSelector,
   UserActions,
+  getNotesByArgsSelector,
+  getUnReadSubmittedNotesSelector,
 } from '@pma/store';
 import { FeedbackStatus } from '../../config/enum';
 import { useAuthContainer } from 'contexts/authContext';
@@ -46,10 +48,9 @@ const FeedbackActions: FC = () => {
     );
   }, [colleagueUuid]);
   const { css } = useStyle();
-  const pendingNotes = useSelector(getPropperNotesByStatusSelector(FeedbackStatus.PENDING)) || [];
-  const submittedCompletedNotes = useSelector(getPropperNotesByStatusSelector(FeedbackStatus.SUBMITTED)) || [];
-
-  const unReadNotes = submittedCompletedNotes.filter((item) => !item.read) || [];
+  const pendingNotes = useSelector(getNotesByArgsSelector(FeedbackStatus.PENDING, colleagueUuid)) || [];
+  const unReadSubmittedNotes =
+    useSelector(getUnReadSubmittedNotesSelector(FeedbackStatus.SUBMITTED, colleagueUuid)) || [];
 
   const methods = useForm({
     mode: 'onChange',
@@ -57,7 +58,7 @@ const FeedbackActions: FC = () => {
   });
 
   const getProppeIconForunReadNotes = () => {
-    if (unReadNotes.length) return <NotiBell />;
+    if (unReadSubmittedNotes.length) return <NotiBell />;
     return <NotiBellCirlceOut />;
   };
   const getProppeIconForPendingNotes = () => {
@@ -80,8 +81,8 @@ const FeedbackActions: FC = () => {
       action: 'View your feedback',
       text: 'See the feedback your colleagues have shared with you',
       icon: getProppeIconForunReadNotes(),
-      iconText: unReadNotes.length
-        ? `You have ${unReadNotes.length} new feedback to view`
+      iconText: unReadSubmittedNotes.length
+        ? `You have ${unReadSubmittedNotes.length} new feedback to view`
         : 'You have 0 new feedback to view',
       link: '/feedback/view-feedback',
     },
@@ -151,9 +152,6 @@ const FeedbackActions: FC = () => {
           title={{
             content: 'Feedback',
             styles: [modalTitleOptionStyle],
-          }}
-          onOverlayClick={() => {
-            setInfo360Modal(() => false);
           }}
         >
           <Info360Modal setInfo360Modal={setInfo360Modal} />
