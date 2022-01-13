@@ -5,7 +5,13 @@ import { Accordion, BaseAccordion, Section, Panel, ExpandButton } from 'componen
 import { IconButton, Position } from 'components/IconButton';
 import { Trans } from 'components/Translation';
 import { useDispatch, useSelector } from 'react-redux';
-import { FeedbackActions, ObjectiveActions, getPropperNotesByStatusSelector, colleagueUUIDSelector } from '@pma/store';
+import {
+  FeedbackActions,
+  ObjectiveActions,
+  getPropperNotesByStatusSelector,
+  colleagueUUIDSelector,
+  getNotesArgsSelector,
+} from '@pma/store';
 import { filteredByInputSearchHandler, filteredNotesByRadiosBtnsHandler, formatToRelativeDate } from '../../../utils';
 import defaultImg from '../../../../public/default.png';
 import { FeedbackStatus } from 'config/enum';
@@ -29,16 +35,17 @@ const DraftItem: FC<DraftItemProps> = ({
 }) => {
   const { css } = useStyle();
   const dispatch = useDispatch();
-  const pendingNotes = useSelector(getPropperNotesByStatusSelector(FeedbackStatus.PENDING)) || [];
-  const completedNotes = useSelector(getPropperNotesByStatusSelector(FeedbackStatus.COMPLETED)) || [];
-
   const colleagueUuid = useSelector(colleagueUUIDSelector);
+
+  const pendingNotes = useSelector(getNotesArgsSelector(FeedbackStatus.PENDING, colleagueUuid)) || [];
+  const completedNotes = useSelector(getNotesArgsSelector(FeedbackStatus.COMPLETED, colleagueUuid)) || [];
 
   useEffect(() => {
     if (!colleagueUuid) return;
     dispatch(
       FeedbackActions.getAllFeedbacks({
         'colleague-uuid': colleagueUuid,
+        _limit: '300',
       }),
     );
   }, [colleagueUuid]);

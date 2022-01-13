@@ -59,7 +59,7 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
               linkTo={buildPath(Page.PERFORMANCE_CYCLE)}
               title={'Support your performance'}
             />
-            <MenuItem iconGraphic={'team'} linkTo={'/'} title={'Team reporting'} />
+            <MenuItem iconGraphic={'team'} linkTo={buildPath(Page.REPORT)} title={'Team reporting'} />
             <MenuItem iconGraphic={'calibration'} linkTo={'/'} title={'Calibration ratings'} />
           </div>
         </div>

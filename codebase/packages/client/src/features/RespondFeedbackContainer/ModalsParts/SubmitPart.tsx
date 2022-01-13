@@ -99,8 +99,6 @@ const SubmitPart: FC<SubmitPartProps> = ({
 
   const values = getValues();
 
-  console.log('values', values);
-
   const onSubmit = async (data) => {
     if (!colleagueUuid) return;
 

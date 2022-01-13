@@ -20,13 +20,14 @@ export const getReviewsS = createSelector(feedbackSelector, (feedback: any) => {
   return reviews;
 });
 
-export const getNotesByArgsSelector = (status, colleagueUuid) =>
+export const getNotesArgsSelector = (status, colleagueUuid) =>
   createSelector(feedbackSelector, (feedback: any) => {
     const { notes } = feedback;
 
     const filterByArgs = notes
       .filter((item) => item.status === status)
       .filter((item) => item.colleagueUuid === colleagueUuid);
+
     return filterByArgs;
   });
 

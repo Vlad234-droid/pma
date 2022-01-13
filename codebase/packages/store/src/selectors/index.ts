@@ -19,6 +19,6 @@ export * from './finded_colleagues';
 export * from './reviews';
 export * from './orgObjectives';
 export * from './objectivesSharing';
-export * from './notes';
 export * from './audit-log';
 export * from './tips';
+export * from './notes';
