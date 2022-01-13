@@ -25,8 +25,8 @@ RUN apt-get update \
 
 RUN --mount=type=cache,id=yarn_cache,target=/usr/local/share/.cache/yarn \
     echo "yarn cache folder: `yarn cache dir`" \
-    && yarn config set "strict-ssl" false -g 
-    # && yarn global add lerna@3.22.1 --prefix=/usr 
+    && yarn config set "strict-ssl" false -g \
+    && yarn global add lerna@3.22.1 --prefix=/usr 
 
 # ==============
 # codebase stage 
