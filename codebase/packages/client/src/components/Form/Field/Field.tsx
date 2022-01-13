@@ -46,9 +46,10 @@ const Field: FC<FieldProps & FieldValues> = ({
   const [currentValue, setCurrentValue] = useState(value);
 
   const handleChange = (e) => {
+    const changeObject = createChangeObject(e);
     setCurrentValue(e.target.value);
-    onChange && onChange(createChangeObject(e));
-    setValue(name, e.target.value);
+    onChange && onChange(changeObject);
+    setValue(name, changeObject.target.value);
     trigger(name);
   };
 
