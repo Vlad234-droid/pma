@@ -59,10 +59,6 @@ const CreateOrganizationObjectives: FC<Props> = () => {
 
   if (!orgObjectives.length) return null;
 
-  const handleChangeSelect = (e) => {
-    console.log(e);
-  };
-
   return (
     <div className={css(main)}>
       {/* <LeftsideMenu /> */}
