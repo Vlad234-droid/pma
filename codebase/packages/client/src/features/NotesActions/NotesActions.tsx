@@ -283,7 +283,8 @@ const NotesActions: FC = () => {
     setSelectedPerson(() => null);
   };
 
-  const onSubmitSelectedEditedNote = ({ noteTitle, noteText }) => {
+  const onSubmitSelectedEditedNote = (data) => {
+    const { noteTitle, noteText } = data;
     if (selectedNoteToEdit !== null) {
       const payload = {
         ...selectedNoteToEdit,
@@ -304,7 +305,8 @@ const NotesActions: FC = () => {
     resetNoteToEdit();
   };
 
-  const onSubmitTEAMSelectedEditedNote = ({ noteTitle, noteText }) => {
+  const onSubmitTEAMSelectedEditedNote = (data) => {
+    const { noteTitle, noteText } = data;
     if (selectedTEAMNoteToEdit !== null) {
       const payload = {
         ...selectedTEAMNoteToEdit,
@@ -421,9 +423,6 @@ const NotesActions: FC = () => {
             content: 'Notes',
             styles: [modalTitleOptionStyle],
           }}
-          onOverlayClick={() => {
-            setInfoModal(() => false);
-          }}
         >
           <InfoModal setInfoModal={setInfoModal} TEAM={TEAM} />
         </Modal>
@@ -446,12 +445,6 @@ const NotesActions: FC = () => {
           title={{
             content: createFolder ? 'Add a folder' : 'Add a note',
             styles: [modalTitleOptionStyle],
-          }}
-          onOverlayClick={() => {
-            if (successModal) setSuccessModal(() => false);
-            if (createFolder) setCreateFolder(() => false);
-            setPersonalNoteModal(false);
-            reset();
           }}
         >
           <AddNoteModal
@@ -484,18 +477,13 @@ const NotesActions: FC = () => {
             content: 'My notes',
             styles: [modalTitleOptionStyle],
           }}
-          onOverlayClick={() => {
-            setSelectedTEAMNoteToEdit(() => null);
-            resetNoteToEdit();
-          }}
         >
           <EditSelectedNote
             successSelectedNoteToEdit={successSelectedNoteToEdit}
             setSuccessSelectedNoteToEdit={setSuccessSelectedNoteToEdit}
             methods={noteToEditMethods}
             cancelSelectedNoteModal={cancelTEAMSelectedNoteModal}
-            // TODO: check the logic
-            submitForm={onSubmitTEAMSelectedEditedNote}
+            submitForm={handleSubmitSelectedEditedNote(onSubmitTEAMSelectedEditedNote)}
             setSelectedNoteToEdit={setSelectedTEAMNoteToEdit}
             foldersWithNotes={foldersWithNotesTEAM}
             selectedNoteToEdit={selectedTEAMNoteToEdit}
@@ -523,12 +511,6 @@ const NotesActions: FC = () => {
           title={{
             content: 'Add a team note',
             styles: [modalTitleOptionStyle],
-          }}
-          onOverlayClick={() => {
-            setSelectedPerson(() => null);
-            if (successTEAMModal) setSuccessTEAMModal(() => false);
-            setTeamNoteModal(() => false);
-            resetTeam();
           }}
         >
           <AddTeamNoteModal
@@ -563,18 +545,13 @@ const NotesActions: FC = () => {
             content: 'Edit note',
             styles: [modalTitleOptionStyle],
           }}
-          onOverlayClick={() => {
-            setSelectedNoteToEdit(() => null);
-            resetNoteToEdit();
-          }}
         >
           <EditSelectedNote
             successSelectedNoteToEdit={successSelectedNoteToEdit}
             setSuccessSelectedNoteToEdit={setSuccessSelectedNoteToEdit}
             methods={noteToEditMethods}
             cancelSelectedNoteModal={cancelSelectedNoteModal}
-            // TODO: check the logic
-            submitForm={onSubmitSelectedEditedNote}
+            submitForm={handleSubmitSelectedEditedNote(onSubmitSelectedEditedNote)}
             setSelectedNoteToEdit={setSelectedNoteToEdit}
             foldersWithNotes={foldersWithNotes}
             selectedNoteToEdit={selectedNoteToEdit}

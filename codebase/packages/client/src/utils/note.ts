@@ -137,7 +137,7 @@ export const clearRefsTEAMMoveHandler = (
 
 export const filterNotesByTitle = (notes, value) => {
   return notes.filter(({ title }) => {
-    return title.includes(value);
+    return title.toLowerCase().includes(value.toLowerCase());
   });
 };
 
@@ -188,7 +188,11 @@ export const filterNotesHandler = (
   const obj = {
     notes: filteredNotes,
 
-    title: `Searching results for “${searchValueFilterOption}” ${filteredNotes.length && `(${filteredNotes.length})`}`,
+    title: `${
+      filteredNotes.length
+        ? `Searching results for “${searchValueFilterOption}” ${filteredNotes.length && `(${filteredNotes.length})`}`
+        : `No results`
+    }`,
   };
   return obj;
 };
