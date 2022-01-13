@@ -29,7 +29,7 @@ export type Option = {
 export interface SelectField extends FormField {
   options: Array<Option>;
   getSelected?: (option: any) => void;
-  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  onChange: (e: SyntheticEvent<HTMLInputElement>) => void;
   value?: string;
 }
 
