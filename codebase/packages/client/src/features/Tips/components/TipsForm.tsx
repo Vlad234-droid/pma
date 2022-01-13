@@ -190,12 +190,10 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
       description: methods.getValues('tipDescription'),
       key: `/${Math.random().toFixed(5)}`,
       targetOrganisation: {
-        uuid: '10000000-0000-0000-0001-000000000002'
-        // uuid: targetOrganisation,
+        uuid: targetOrganisation,
       },
       imageLink: 'https://cdn-icons-png.flaticon.com/512/189/189667.png',
     };
-    // console.log(data)
     dispatch(tipsActions.createTip(data));
     setTipsFormModalAction('create');
   };
@@ -207,12 +205,10 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
       description: methods.getValues('tipDescription'),
       key: `/${Math.random().toFixed(5)}`,
       targetOrganisation: {
-        uuid: '10000000-0000-0000-0001-000000000002',
-        // uuid: targetOrganisation,
+        uuid: targetOrganisation,
       },
       imageLink: 'https://cdn-icons-png.flaticon.com/512/189/189667.png',
     };
-    // console.log(data)
     dispatch(tipsActions.createTip(data));
     setTipsFormModalAction('edit');
   };
