@@ -16,16 +16,16 @@ RUN apk --update add bash && apk --no-cache add dos2unix
 
 #COPY --chmod=0644 ./codebase ./
 #COPY --chmod=0755 ./scripts/create-npmrc.sh ./create-npmrc.sh
-#COPY --chmod=0755 ./scripts/run.sh ./run.sh
+#COPY --chmod=0755 ./scripts/start.sh ./start.sh
 COPY ./codebase ./
 COPY ./scripts/create-npmrc.sh ./create-npmrc.sh
-COPY ./scripts/run.sh ./run.sh
+COPY ./scripts/start.sh ./start.sh
 
 ENV NEXUS_ACCESS_TOKEN=$NEXUS_ACCESS_TOKEN
 ENV HTTP_PROXY=$HTTP_PROXY
 ENV HTTPS_PROXY=$HTTPS_PROXY
 
-RUN dos2unix ./run.sh && dos2unix ./create-npmrc.sh && bash ./create-npmrc.sh --token $NEXUS_ACCESS_TOKEN
+RUN dos2unix ./start.sh && dos2unix ./create-npmrc.sh && bash ./create-npmrc.sh --token $NEXUS_ACCESS_TOKEN
 
 RUN yarn bootstrap:dev
 
@@ -39,6 +39,6 @@ ENV SKIP_PREFLIGHT_CHECK=true
 RUN yarn build:prod
 
 #ENTRYPOINT [ "yarn", "run:prod" ]
-CMD /bin/sh ./run.sh
+CMD /bin/sh ./start.sh
 
 EXPOSE 9000

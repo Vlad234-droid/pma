@@ -73,8 +73,7 @@ COPY --chmod=0755 ./scripts/create-npmrc.sh /root/create-npmrc.sh
 
 RUN dos2unix /root/create-npmrc.sh \
     && bash /root/create-npmrc.sh --token $NPM_ACCESS_TOKEN \ 
-    && rm /root/create-npmrc.sh \
-    && cd ~ && echo "home dir: `pwd`" && ls -a
+    && rm /root/create-npmrc.sh 
 
 WORKDIR /opt/app
 
@@ -94,19 +93,17 @@ RUN --mount=type=cache,id=yarn_cache,target=/usr/local/share/.cache/yarn \
     && find . -type d -name node_modules -prune -o -name 'public' -exec cp -r '{}' '../build/{}' \; \
     && find . -type d -name node_modules -prune -o -name 'build' -exec cp -r '{}' '../build/{}' \;
 
-# ==========
-# main stage
-# ==========
-FROM node-base
+# ================
+# post-build stage
+# ================
+FROM node-base AS post-build
 
 ARG NODE_ENV
-ARG NODE_PORT
 
 ARG HTTP_PROXY
 ARG HTTPS_PROXY
 
 ENV NODE_ENV=$NODE_ENV
-ENV NODE_PORT=$NODE_PORT
 ENV BUILD_ENV=production
 
 ENV HTTP_PROXY=$HTTP_PROXY
@@ -114,7 +111,7 @@ ENV HTTPS_PROXY=$HTTPS_PROXY
 
 WORKDIR /home/app
 
-COPY --chmod=0755 ./scripts/run.sh ./
+COPY --chmod=0755 ./scripts/start.sh ./
 COPY --from=codebase /opt/bootstrap/ ./
 COPY --from=build /root/.npmrc /root
 COPY --from=build /opt/build/ ./
@@ -122,9 +119,23 @@ COPY --from=build /opt/build/ ./
 RUN --mount=type=cache,id=yarn_cache,target=/usr/local/share/.cache/yarn \
     find . -type d -name node_modules -prune -o -name 'package.prod.json' -exec bash -c 'mv {} $(dirname {})/package.json' \; \
     && yarn bootstrap:prod \
-    && dos2unix ./run.sh \
-    && rm /root/.npmrc
+    && dos2unix ./start.sh 
 
-CMD ./run.sh
+# ==========
+# main stage
+# ==========
+FROM node:14.17-alpine
+
+ARG NODE_ENV
+ARG NODE_PORT
+
+ENV NODE_ENV=$NODE_ENV
+ENV NODE_PORT=$NODE_PORT
+
+WORKDIR /home/app
+
+COPY --from=post-build /home/app ./
+
+CMD ./start.sh
 
 EXPOSE $NODE_PORT

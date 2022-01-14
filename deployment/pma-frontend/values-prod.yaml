@@ -94,7 +94,7 @@ INTEGRATION_NODE_BFF_URL: /
 APPLICATION_PUBLIC_URL: /experience/myperformance
 APPLICATION_URL_ROOT: https://frontend.pma.tescocloud.com
 APPLICATION_USER_DATA_COOKIE_NAME: pma.user.data
-USE_ONELOGIN: false   # turn off SSO
+USE_ONELOGIN: true
 ONELOGIN_ISSUER_URL: https://login.ourtesco.com/oidc/2
 ONELOGIN_CALLBACK_PATH: /auth/openid/callback
 ONELOGIN_REDIRECT_AFTER_LOGOUT_URL: https://login.ourtesco.com/oidc/2/logout?logout=true
