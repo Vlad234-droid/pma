@@ -10,9 +10,9 @@ type Props = {
 
 const MainRoutes: FC<Props> = ({ routes }) => (
   <Routes>
-    {routes.map((route, idx) => {
+    {routes.map(({ Element, path }, idx) => {
       // @ts-ignore
-      return <ReactRoute key={idx} element={route?.element()} path={route?.path} />;
+      return <ReactRoute key={idx} element={<Element />} path={path} />;
     })}
     <ReactRoute path='/' element={<Navigate to={buildPath(Page.CONTRIBUTION)} />} />
     <ReactRoute path='*' element={<NotFound />} />
