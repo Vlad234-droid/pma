@@ -1,7 +1,7 @@
 import { Page, PageElement } from './types';
 
 import CareerPerformance from './CareerPerformance';
-import PersonalDevelopmentPlan from './PersonalDevelopmentPlan';
+import { PersonalDevelopmentPlan, CreatePersonalDevelopmentGoal, PersonalDevelopmentHelp } from './PDP';
 import MyTeam from './MyTeam';
 import Actions from './Actions';
 import Objectives from './Objectives';
@@ -75,6 +75,18 @@ const pages: Record<Page, PageComponent> = {
     element: PersonalDevelopmentPlan,
     title: 'Personal Development Plan',
     withHeader: true,
+    backPath: Page.CONTRIBUTION,
+  },
+  [Page.CREATE_PERSONAL_DEVELOPMENT_GOAL]: {
+    element: CreatePersonalDevelopmentGoal,
+    title: 'Create Personal Development Goal',
+    withHeader: false,
+    backPath: Page.CONTRIBUTION,
+  },
+  [Page.PERSONAL_DEVELOPMENT_HELP]: {
+    element: PersonalDevelopmentHelp,
+    title: 'Personal Development Plan help',
+    withHeader: false,
     backPath: Page.CONTRIBUTION,
   },
   [Page.OBJECTIVES_VIEW]: {

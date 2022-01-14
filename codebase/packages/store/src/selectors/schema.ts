@@ -1,11 +1,13 @@
 import { createSelector } from 'reselect';
 //@ts-ignore
 import { RootState } from 'typesafe-actions';
-import { ReviewType } from '@pma/client/src/config/enum';
+import { ReviewType, PDPType } from '@pma/client/src/config/enum';
 import { hasPermission } from '@pma/client/src/utils';
 
 //@ts-ignore
 export const schemaSelector = (state: RootState) => state.schema;
+export const schemaPDPSelector = (state: RootState) => state.pdp;
+
 //TODO: remove
 export const getObjectiveSchema = createSelector(schemaSelector, (schema: any) => {
   if (!schema?.cycle) {
@@ -24,6 +26,7 @@ export const getObjectiveSchema = createSelector(schemaSelector, (schema: any) =
       max: Number(review?.properties?.pm_review_max || 0),
     },
   };
+
   return reviewMarkup;
 });
 
@@ -82,11 +85,35 @@ export const getReviewSchema = (type: ReviewType, withForms = true) =>
     return reviewMarkup;
   });
 
-export const getReviewSchemaWithPermission = (reviewType: ReviewType, dsl: any) =>
-  createSelector(getReviewSchema(reviewType), (schema: any) => {
-    const { components = [] } = schema;
-    if (!components?.length) {
-      return schema;
+export const getPDPSchema = (type: PDPType) =>
+  createSelector(schemaPDPSelector, (schema: any) => {
+    if (!schema?.cycle) {
+      return { ...schema };
+    }
+    const {
+      cycle: { timelinePoints = [] },
+    } = schema;
+    const pdp = timelinePoints.find((pdp) => pdp.PDPType === type);
+    const pdpMarkup = {
+      ...schema,
+      ...(pdp?.form?.json ? JSON.parse(pdp.form.json) : {}),
+      markup: {
+        min: Number(pdp?.properties?.pm_review_min || 0),
+        max: Number(pdp?.properties?.pm_review_max || 0),
+      },
+    };
+
+    console.log('-------PDP--------');
+    console.log(pdpMarkup);
+    console.log('-------END PDP--------');
+    return pdpMarkup;
+  });
+
+  export const getReviewSchemaWithPermission = (reviewType: ReviewType, dsl: any) =>
+    createSelector(getReviewSchema(reviewType), (schema: any) => {
+      const { components = [] } = schema;
+      if (!components?.length) {
+        return schema;
     }
 
     const filteredComponent = components.filter((component) => {

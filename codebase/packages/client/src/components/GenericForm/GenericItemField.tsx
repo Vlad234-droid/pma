@@ -1,9 +1,11 @@
+import { Rule, Styles } from '@dex-ddl/core';
 import React, { FC, RefObject, useEffect, useState } from 'react';
 
 import { Ref, UseFormReturn } from 'react-hook-form';
 
 type GenericItemFormProps = {
   name: string;
+  id?: number | string;
   value?: string;
   label?: string;
   placeholder?: string;
@@ -16,11 +18,14 @@ type GenericItemFormProps = {
   domRef?: Ref | RefObject<any> | null;
   onChange?: any;
   getSelected?: (option: any) => void;
+  styles?: Styles | Rule;
 };
 export const GenericItemField: FC<GenericItemFormProps> = ({
   name,
+  id,
   value,
   methods,
+  styles,
   Element,
   Wrapper = 'div',
   placeholder,
@@ -47,6 +52,7 @@ export const GenericItemField: FC<GenericItemFormProps> = ({
         options={options}
         getSelected={getSelected}
         isValid={!errors[name]}
+        styles={styles}
         name={name}
         value={state}
         readonly={readonly}
@@ -57,7 +63,7 @@ export const GenericItemField: FC<GenericItemFormProps> = ({
             onChange(e.target.value, value);
           }
         }}
-        domRef={register(name).ref}
+        domRef={id ? register(id.toString()) : register(name).ref} // when we have symbols in name it will broke an app
         placeholder={placeholder}
         list={`datalist-${name}`}
       />

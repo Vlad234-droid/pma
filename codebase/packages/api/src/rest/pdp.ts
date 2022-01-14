@@ -1,0 +1,16 @@
+import httpClient from '../config/client';
+
+export const createPDPGoal = <T>(params: any) => {
+  const domain = `/pdp/goals`;
+  return httpClient.post(`${domain}`, params);
+};
+
+export const updatePDPGoal = <T>(params: any) => {
+  const domain = `/pdp/goals`;
+  return httpClient.put(`${domain}`, params);
+};
+
+export const getPDPGoal = <T>() => {
+  const domain = `/pdp/goals`;
+  return httpClient.get(`${domain}`);
+};

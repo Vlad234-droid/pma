@@ -15,6 +15,7 @@ import { initialState as tipsInitialState } from '../entities/tips/reducer';
 import { initialState as performanceCycleInitialState } from '../entities/performanceCycle/reducer';
 import { initialState as configEntriesInitialState } from '../entities/configEntries/reducer';
 import { initialState as processTemplateInitialState } from '../entities/processTemplate/reducer';
+import { initialState as pdpInitialState } from '../entities/pdp/reducer';
 
 //@ts-ignore
 export const initialState = {
@@ -22,6 +23,7 @@ export const initialState = {
   toasts: toastInitialState,
   objectives: objectiveInitialState,
   orgObjectives: orgObjectiveInitialState,
+  pdp: pdpInitialState,
   schema: schemaInitialState,
   timeline: timelineInitialState,
   managers: managersInitialState,
