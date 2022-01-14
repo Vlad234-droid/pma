@@ -123,7 +123,6 @@ export const PerformanceCycleForm: FC = () => {
   }, [loaded]);
 
   const getItems = ({ value }) => {
-    console.log(value);
     if (value) dispatch(ConfigEntriesActions.getConfigEntriesByUuid({ uuid: value }));
   };
 
