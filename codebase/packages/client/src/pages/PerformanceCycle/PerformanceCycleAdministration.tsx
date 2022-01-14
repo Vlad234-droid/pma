@@ -91,7 +91,7 @@ const PerformanceCycleAdministration: FC = () => {
             </label>
           </div>
         </div>
-        <Button onPress={() => navigate('/performance-cycle/new')}>Create performance cycle</Button>
+        <Button onPress={() => navigate('new')}>Create performance cycle</Button>
       </div>
       <div className={css(headWrapperStyles)}>
         <TileWrapper customStyle={{ padding: '24px' }}>
@@ -134,7 +134,7 @@ const PerformanceCycleAdministration: FC = () => {
                     <td className={css(item)}>{createdBy}</td>
                     <Button
                       mode={'inverse'}
-                      onPress={() => navigate(`/${Page.PERFORMANCE_CYCLE}/${uuid}`)}
+                      onPress={() => navigate(`${Page.PERFORMANCE_CYCLE}/${uuid}`)}
                       styles={[btnStyle]}
                     >
                       Edit
