@@ -36,9 +36,12 @@ export const GenericItemField: FC<GenericItemFormProps> = ({
     setState(value);
   }, [value]);
   const {
+    trigger,
     register,
     formState: { errors },
+    setValue,
   } = methods;
+  register(name);
 
   const element = (
     <div>
@@ -50,12 +53,13 @@ export const GenericItemField: FC<GenericItemFormProps> = ({
         name={name}
         value={state}
         readonly={readonly}
-        onChange={(e, value) => {
+        onChange={(e) => {
           setState(e.target.value);
-          register(name).onChange(e);
+          setValue(name, e.target.value);
           if (onChange) {
-            onChange(e.target.value, value);
+            onChange(e.target.value);
           }
+          trigger(name);
         }}
         domRef={register(name).ref}
         placeholder={placeholder}
