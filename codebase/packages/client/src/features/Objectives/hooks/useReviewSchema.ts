@@ -1,8 +1,16 @@
 import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getReviewSchema } from '@pma/store/src/selectors/schema';
-import { colleagueUUIDSelector, SchemaActions } from '@pma/store';
-import { ReviewType } from 'config/enum';
+import { getReviewSchema, getReviewSchemaWithPermission } from '@pma/store/src/selectors/schema';
+import { getUserRoles, getUserWorkLevels } from '@pma/store/src/selectors/users';
+import {
+  colleagueUUIDSelector,
+  countByStatusReviews,
+  ReviewsActions,
+  reviewsMetaSelector,
+  SchemaActions,
+} from '@pma/store';
+import { ReviewType, Status } from 'config/enum';
+import { dslRequest, cleanFromDsl } from 'utils';
 
 function useReviewSchema(type: ReviewType) {
   const dispatch = useDispatch();
@@ -23,4 +31,55 @@ function useReviewSchema(type: ReviewType) {
   return [schema, getSchema];
 }
 
+function useReviewSchemaWithPermission(type: ReviewType) {
+  const dispatch = useDispatch();
+  const { loaded: reviewLoaded } = useSelector(reviewsMetaSelector) || {};
+  const objectiveCount = useSelector(countByStatusReviews(ReviewType.OBJECTIVE, Status.APPROVED));
+  const userRoles = useSelector(getUserRoles);
+  const userWorkLevels = useSelector(getUserWorkLevels);
+  const schema = useSelector(getReviewSchemaWithPermission(type, [...userRoles, ...userWorkLevels]));
+  const colleagueUuid = useSelector(colleagueUUIDSelector);
+  const { components = [] } = schema;
+
+  const newComponents: any[] = [];
+  components?.forEach((component) => {
+    const textWithDsl = component?.type === 'text' ? component?.text : component?.description;
+    const dslReviewArray: string[] = dslRequest(textWithDsl);
+    if (dslReviewArray?.length) {
+      [...Array(Number(objectiveCount))].forEach((_, index) =>
+        newComponents.push(
+          cleanFromDsl({
+            ...component,
+            // todo ask backend about rules for replace.
+            ...(component?.label ? { label: component?.label?.replace('Objective', `Objective ${index + 1}`) } : {}),
+          }),
+        ),
+      );
+    } else {
+      newComponents.push(cleanFromDsl(component));
+    }
+  });
+
+  const getSchema = useCallback(() => {
+    if (!components?.length) {
+      dispatch(SchemaActions.getSchema({ colleagueUuid }));
+    }
+  }, [components]);
+
+  useEffect(() => {
+    getSchema();
+  }, []);
+
+  useEffect(() => {
+    if (!reviewLoaded) {
+      dispatch(
+        ReviewsActions.getColleagueReviews({ pathParams: { colleagueUuid: colleagueUuid, cycleUuid: 'CURRENT' } }),
+      );
+    }
+  }, [reviewLoaded, colleagueUuid]);
+
+  return [{ ...schema, components: newComponents }, getSchema];
+}
+
 export default useReviewSchema;
+export { useReviewSchemaWithPermission };

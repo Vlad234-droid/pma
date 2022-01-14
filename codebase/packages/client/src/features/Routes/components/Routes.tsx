@@ -1,6 +1,5 @@
 import React, { FC } from 'react';
-import { Navigate, Route as ReactRoute, Routes } from 'react-router';
-
+import { Navigate, Route as ReactRoute, Routes } from 'react-router-dom';
 import { NotFound } from 'pages/NotFound';
 import { buildPath, RouteWithPath } from 'features/Routes/utils';
 import { Page } from 'pages';

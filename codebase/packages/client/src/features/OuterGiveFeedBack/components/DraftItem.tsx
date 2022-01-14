@@ -55,6 +55,7 @@ const DraftItem: FC<DraftItemProps> = ({
     dispatch(
       FeedbackActions.getAllFeedbacks({
         'colleague-uuid': colleagueUuid,
+        _limit: '300',
       }),
     );
   }, [colleagueUuid]);

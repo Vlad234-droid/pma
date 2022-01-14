@@ -44,6 +44,7 @@ export const createNewFeedbackEpic: Epic = (action$, _, { api }) =>
           const [obj] = data;
           return getAllFeedbacks.request({
             'colleague-uuid': obj.colleagueUuid,
+            _limit: '300',
           });
         }),
         catchError(({ errors }) => of(createNewFeedback.failure(errors))),
@@ -61,6 +62,7 @@ export const updateFeedbackEpic: Epic = (action$, _, { api }) =>
         map(({ data }) => {
           return getAllFeedbacks.request({
             'colleague-uuid': data.colleagueUuid,
+            _limit: '300',
           });
         }),
         catchError(({ errors }) => of(createNewFeedback.failure(errors))),

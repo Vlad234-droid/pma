@@ -22,12 +22,13 @@ const failure = (state, { payload }) => ({
 const byIdRequest = (state) => ({ ...state, meta: { ...state.meta, loading: true, error: null } });
 
 const byIdSuccess = (state, { payload }) => {
+  // todo refactor
   return {
     data:
       state?.data?.length > 0
         ? state.data.map((pmCycle) => {
-            if (pmCycle.uuid !== payload.data.uuid) return pmCycle;
-            return { ...pmCycle, ...payload.data };
+            if (pmCycle.uuid !== payload.data.cycle.uuid) return pmCycle;
+            return { ...pmCycle, ...payload.data.cycle, forms: payload.data.forms };
           })
         : [payload.data],
     meta: { ...state.meta, loading: false, loaded: true },

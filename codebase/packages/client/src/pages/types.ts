@@ -12,7 +12,7 @@ enum Page {
   PROFILE = 'profile',
   SETTINGS = 'settings',
   MY_TEAM = 'my-team',
-  ACTIONS = 'actions',
+  ACTIONS = 'my-team/actions',
   NOTES = 'notes',
   GIVE_FEEDBACK = 'feedback/give-feedback',
   REQUEST_FEEDBACK = 'feedback/request-feedback',
@@ -22,6 +22,7 @@ enum Page {
   TIPS = 'tips',
   CREATE_TIP = 'create-tips',
   EDIT_TIP = 'edit-tips/:tipUuid',
+  REPORT = 'report',
 }
 
 type PageElement =

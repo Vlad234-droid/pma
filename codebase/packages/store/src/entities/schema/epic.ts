@@ -9,14 +9,17 @@ import { getSchema } from './actions';
 export const getSchemaEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
     filter(isActionOf(getSchema.request)),
-    switchMap(({ payload }) =>
-      from(api.getSchema(payload)).pipe(
+    switchMap(({ payload }) => {
+      // todo includeForms for all metadata. Quick solution for demo
+      return from(
+        api.getSchema({ ...payload, includeForms: payload?.includeForms ? payload?.includeForms : true }),
+      ).pipe(
         // @ts-ignore
         map(({ success, data }) => getSchema.success(data)),
         catchError(({ errors }) => of(getSchema.failure(errors))),
         takeUntil(action$.pipe(filter(isActionOf(getSchema.cancel)))),
-      ),
-    ),
+      );
+    }),
   );
 
 export default combineEpics(getSchemaEpic);

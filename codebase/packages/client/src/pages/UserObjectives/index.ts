@@ -1,1 +1,1 @@
-export { default } from './UserObjectives';
+export * from './UserObjectives';

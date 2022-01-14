@@ -21,7 +21,7 @@ import {
   getPropperNotesByStatusSelector,
   colleagueUUIDSelector,
   UserActions,
-  getNotesByArgsSelector,
+  getNotesArgsSelector,
   getUnReadSubmittedNotesSelector,
 } from '@pma/store';
 import { FeedbackStatus } from '../../config/enum';
@@ -44,11 +44,12 @@ const FeedbackActions: FC = () => {
       FeedbackActionsGet.getAllFeedbacks({
         'target-colleague-uuid': colleagueUuid,
         'colleague-uuid': colleagueUuid,
+        _limit: '300',
       }),
     );
   }, [colleagueUuid]);
   const { css } = useStyle();
-  const pendingNotes = useSelector(getNotesByArgsSelector(FeedbackStatus.PENDING, colleagueUuid)) || [];
+  const pendingNotes = useSelector(getNotesArgsSelector(FeedbackStatus.PENDING, colleagueUuid)) || [];
   const unReadSubmittedNotes =
     useSelector(getUnReadSubmittedNotesSelector(FeedbackStatus.SUBMITTED, colleagueUuid)) || [];
 
@@ -120,6 +121,7 @@ const FeedbackActions: FC = () => {
   const checkForVoiceValue = () => profileAttr?.find((item) => item?.name === 'voice')?.value ?? 'id_1';
 
   const createToneOfVoiceHandler = (inputValue) => {
+    if (!inputValue) return;
     const findedValue = field_options?.find((item) => item.value === inputValue)?.label;
     const payload = {
       colleagueUuid,
@@ -210,8 +212,6 @@ const FeedbackActions: FC = () => {
               placeholder={'Choose tone of voice'}
               value={checkForVoiceValue()}
               onChange={(_, value) => {
-                console.log('value', value);
-
                 createToneOfVoiceHandler(value);
               }}
             />

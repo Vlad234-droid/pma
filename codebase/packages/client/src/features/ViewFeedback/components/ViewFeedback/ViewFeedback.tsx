@@ -128,6 +128,7 @@ const ViewFeedback: FC = () => {
     dispatch(
       FeedbackActions.getAllFeedbacks({
         'target-colleague-uuid': colleagueUuid,
+        _limit: '300',
       }),
     );
   }, [colleagueUuid]);

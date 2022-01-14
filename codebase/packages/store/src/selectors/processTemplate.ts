@@ -83,6 +83,7 @@ export const getFormsByProcessTemplateUuidSelector = (uuid) =>
     return processTemplate?.cycle?.timelinePoints
       .filter((point) => point.type === 'REVIEW')
       .map((point) => {
-        return { ...JSON.parse(point?.form?.json), displayName: point?.code };
+        const form = processTemplate?.forms.find((form) => form.id === point.form.id);
+        return { ...JSON.parse(form?.json), displayName: point?.code };
       });
   });

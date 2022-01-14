@@ -51,7 +51,7 @@ export const SearchPart: FC<SearchPartProps> = ({
                 ColleaguesActions.getColleagues({
                   'first-name_like': e.target.value,
                   'last-name_like': e.target.value,
-                  'manager-uuid_equals': colleagueUuid,
+                  'manager-uuid_eq': colleagueUuid,
                 }),
               );
             }

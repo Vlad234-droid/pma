@@ -54,12 +54,8 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
             <MenuItem iconGraphic={'edit'} linkTo={buildPath(Page.NOTES)} title={'My notes'} />
             <MenuItem iconGraphic={'account'} linkTo={buildPath(Page.PROFILE)} title={'My profile'} />
             <MenuItem iconGraphic={'chatSq'} linkTo={buildPath(Page.FEEDBACK)} title={'Feedback'} />
-            <MenuItem
-              iconGraphic={'performance'}
-              linkTo={buildPath(Page.PERFORMANCE_CYCLE)}
-              title={'Support your performance'}
-            />
-            <MenuItem iconGraphic={'team'} linkTo={'/'} title={'Team reporting'} />
+            <MenuItem iconGraphic={'performance'} linkTo={'/'} title={'Support your performance'} />
+            <MenuItem iconGraphic={'team'} linkTo={buildPath(Page.REPORT)} title={'Team reporting'} />
             <MenuItem iconGraphic={'calibration'} linkTo={'/'} title={'Calibration ratings'} />
           </div>
         </div>

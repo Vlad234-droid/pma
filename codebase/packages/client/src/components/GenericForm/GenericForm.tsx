@@ -41,7 +41,7 @@ function genericForm<T>({
     // @ts-ignore
     defaultValues,
   });
-  const { handleSubmit, formState, register, getValues } = methods;
+  const { handleSubmit, formState, register, getValues, setValue, trigger } = methods;
 
   const { css } = useStyle();
 
@@ -54,13 +54,14 @@ function genericForm<T>({
         <Fragment key={name}>
           <Field
             {...props}
-            // @ts-ignore
             error={get(errors, `${name}.message`)}
             placeholder={placeholder}
             label={label}
             value={get(values, name)}
             Element={Element}
             Wrapper={Wrapper}
+            setValue={setValue}
+            trigger={trigger}
             // @ts-ignore
             {...register(name)}
           />

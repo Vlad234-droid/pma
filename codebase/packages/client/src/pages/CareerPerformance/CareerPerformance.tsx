@@ -5,7 +5,7 @@ import { Styles, useStyle } from '@dex-ddl/core';
 import { DashboardProfile } from 'features/Profile';
 import { BasicTile } from 'components/Tile';
 import { StepIndicator } from 'components/StepIndicator/StepIndicator';
-import { ObjectiveType, ReviewType } from 'config/enum';
+import { ObjectiveType, ReviewType, Status } from 'config/enum';
 import { RouterSwitch } from 'components/RouterSwitch';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -63,7 +63,7 @@ const CareerPerformance: FC = () => {
       </div>
       <div className={css(wrapperStylee)}>
         <div className={css({ flex: '3 1 504px', display: 'flex', flexDirection: 'column', gap: '8px' })}>
-          <Link to={Page.PROFILE}>
+          <Link to={`../${Page.PROFILE}`}>
             <DashboardProfile />
           </Link>
           {canShowMyReview && (

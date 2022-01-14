@@ -7,7 +7,8 @@ export const getGetAllPerformanceCycles = () => {
 };
 
 export const getPerformanceCycleByUuid = (params: any) => {
-  return httpClient.get(`${performanceCyclesDomain}/${params.performanceCycleUuid}`);
+  const { performanceCycleUuid, ...restParams } = params;
+  return httpClient.get(`${performanceCyclesDomain}/${performanceCycleUuid}`, { params: restParams });
 };
 
 export const createPerformanceCycle = <T>(params: any) => {

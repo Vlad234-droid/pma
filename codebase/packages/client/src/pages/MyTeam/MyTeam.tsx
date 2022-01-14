@@ -89,7 +89,7 @@ const MyTeam: FC = () => {
         <div className={css({ flex: '3 1 375px', display: 'flex', flexDirection: 'column', gap: '8px' })}>
           <div>
             {view === View.DIRECT_REPORTS && (
-              <Link to={Page.ACTIONS}>
+              <Link to={`../${Page.ACTIONS}`}>
                 <WidgetPending count={waitingForApprovalCount} />
               </Link>
             )}

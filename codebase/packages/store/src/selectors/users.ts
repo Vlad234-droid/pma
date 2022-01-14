@@ -16,6 +16,15 @@ export const colleagueUUIDSelector = createSelector(usersSelector, ({ current })
   // @ts-ignore
   return current?.info?.data?.colleague?.colleagueUUID;
 });
+export const getUserRoles = createSelector(usersSelector, ({ current }) => {
+  // @ts-ignore
+  return current?.info?.data?.roles;
+});
+
+export const getUserWorkLevels = createSelector(usersSelector, ({ current }) => {
+  // @ts-ignore
+  return current?.info?.data?.colleague?.workRelationships?.map((workRelationship) => workRelationship.workLevel);
+});
 
 export const isManager = createSelector(usersSelector, ({ current }) => {
   // @ts-ignore

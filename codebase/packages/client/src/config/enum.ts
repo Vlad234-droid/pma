@@ -38,6 +38,12 @@ export enum FeedbackStatus {
   DRAFT = 'DRAFT',
   COMPLETED = 'COMPLETED',
 }
+export enum FeedbackRequestStatus {
+  DRAFT = '1',
+  SUBMITTED = '2',
+  PENDING = '3',
+  COMPLETED = '4',
+}
 
 export enum TargetType {
   'id_1' = 'GOAL',
@@ -57,4 +63,11 @@ export enum TargetFeedbackKeys {
   'GOAL' = 'comment_to_day_job',
   'VALUE_BEHAVIOR' = 'comment_to_your_self',
   'OTHER' = 'comment_to_your_impact',
+}
+
+export enum DslType {
+  AUTH = 'auth',
+  ROLE = 'role',
+  WORK_LEVEL = 'work_level',
+  REQUEST = 'request',
 }

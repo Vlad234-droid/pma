@@ -2,6 +2,7 @@ import { createSelector } from 'reselect';
 //@ts-ignore
 import { RootState } from 'typesafe-actions';
 import { ReviewType } from '@pma/client/src/config/enum';
+import { hasPermission } from '@pma/client/src/utils';
 
 //@ts-ignore
 export const schemaSelector = (state: RootState) => state.schema;
@@ -27,18 +28,21 @@ export const getObjectiveSchema = createSelector(schemaSelector, (schema: any) =
 });
 
 export const getAllReviewSchemas = createSelector(schemaSelector, (schema: any) => {
-  if (!schema?.cycle) {
-    return schema;
+  if (!schema?.metadata?.cycle) {
+    return { ...schema };
   }
   const {
-    cycle: { timelinePoints = [] },
+    metadata: {
+      cycle: { timelinePoints = [] },
+    },
   } = schema;
   const reviews: any = {};
   timelinePoints?.forEach((timelinePoint) => {
     if (timelinePoint.reviewType) {
+      const form = schema?.forms.find((form) => form.id === timelinePoint.form.id);
       reviews[timelinePoint.reviewType] = {
         ...schema,
-        ...(timelinePoint?.form?.json ? JSON.parse(timelinePoint.form.json) : {}),
+        ...(form?.json ? JSON.parse(form.json) : {}),
         markup: {
           min: Number(timelinePoint?.properties?.pm_review_min || 0),
           max: Number(timelinePoint?.properties?.pm_review_max || 0),
@@ -50,40 +54,26 @@ export const getAllReviewSchemas = createSelector(schemaSelector, (schema: any) 
   return reviews;
 });
 
-export const getReviewSchema = (type: ReviewType) =>
+export const getReviewSchema = (type: ReviewType, withForms = true) =>
   createSelector(schemaSelector, (schema: any) => {
-    if (!schema?.cycle) {
+    let form;
+    if (!schema?.metadata?.cycle) {
       return { ...schema };
     }
     const {
-      cycle: { timelinePoints = [] },
+      metadata: {
+        cycle: { timelinePoints = [] },
+      },
     } = schema;
     const review = timelinePoints.find((review) => review.reviewType === type);
 
-    const reviewMarkup = {
-      ...schema,
-      ...(review?.form?.json ? JSON.parse(review.form.json) : {}),
-      markup: {
-        min: Number(review?.properties?.pm_review_min || 0),
-        max: Number(review?.properties?.pm_review_max || 0),
-      },
-    };
-    return reviewMarkup;
-  });
-
-export const getSchemaSelector = (reviewType: ReviewType) =>
-  createSelector(schemaSelector, (schema: any) => {
-    if (!schema?.cycle) {
-      return { ...schema };
+    if (withForms && schema?.forms?.length) {
+      form = schema?.forms.find((form) => form.id === review.form.id);
     }
-    const {
-      cycle: { timelinePoints = [] },
-    } = schema;
-    const review = timelinePoints.find((review) => review.reviewType === reviewType);
 
     const reviewMarkup = {
       ...schema,
-      ...(review?.form?.json ? JSON.parse(review.form.json) : {}),
+      ...(form?.json ? JSON.parse(form.json) : {}),
       markup: {
         min: Number(review?.properties?.pm_review_min || 0),
         max: Number(review?.properties?.pm_review_max || 0),
@@ -91,4 +81,25 @@ export const getSchemaSelector = (reviewType: ReviewType) =>
     };
     return reviewMarkup;
   });
+
+export const getReviewSchemaWithPermission = (reviewType: ReviewType, dsl: any) =>
+  createSelector(getReviewSchema(reviewType), (schema: any) => {
+    const { components = [] } = schema;
+    if (!components?.length) {
+      return schema;
+    }
+
+    const filteredComponent = components.filter((component) => {
+      if (['textfield', 'select'].includes(component.type) && hasPermission(component.description, dsl)) {
+        return true;
+      }
+      return component.type === 'text' && hasPermission(component.text, dsl);
+    });
+
+    return {
+      ...schema,
+      components: filteredComponent,
+    };
+  });
+
 export const schemaMetaSelector = createSelector(schemaSelector, ({ meta }) => meta);

@@ -20,7 +20,7 @@ type Props = HTMLProps<HTMLInputElement> & CreateUpdateObjectiveModalProps;
 const historyTable = { headers: ['Name', 'Action Type', 'Time'] };
 
 const prepareOrgObjectivesData = (newData, orgObjectivesData) => {
-  return orgObjectivesData.map((objective) => ({ ...objective, title: get(newData, objective.number) }));
+  return orgObjectivesData.map((objective, idx) => ({ ...objective, title: get(newData, idx) }));
 };
 
 const CreateOrganizationObjectives: FC<Props> = () => {
@@ -75,18 +75,14 @@ const CreateOrganizationObjectives: FC<Props> = () => {
                 formFields={orgObjectives.map((item): any => {
                   return {
                     Element: Input,
-                    name: `objectives.${item.number}`,
+                    name: `objectives.${item.number - 1}`,
                     id: `objective_${item.number}`,
                     label: `Strategic Priority ${item.number}`,
                   };
                 })}
                 //@ts-ignore
                 schema={Yup.object().shape({
-                  objectives: Yup.object().shape({
-                    ...orgObjectives?.reduce((acc, { number }) => {
-                      return { ...acc, [number]: Yup.string().min(10).required() };
-                    }, {}),
-                  }),
+                  objectives: Yup.array().of(Yup.string().required().min(10)).length(orgObjectives.length).required(),
                 })}
                 renderButtons={(isValid, handleSubmit) => (
                   <div className={css(descriptionFooter)}>
@@ -96,14 +92,14 @@ const CreateOrganizationObjectives: FC<Props> = () => {
                     </Button>
                     <div className={css(publishBlock)}>
                       <Button
-                        isDisabled={!isValid}
+                        //isDisabled={!isValid}
                         onPress={() => handleSubmit(save)()}
                         styles={[button, saveBtnMargined, !isValid ? disabledButton : activeButton]}
                       >
                         Save
                       </Button>
                       <Button
-                        isDisabled={!isValid}
+                        //isDisabled={!isValid}
                         onPress={() => {
                           handleSubmit(publish)();
                         }}
@@ -115,7 +111,7 @@ const CreateOrganizationObjectives: FC<Props> = () => {
                   </div>
                 )}
                 defaultValues={{
-                  objectives: orgObjectives.reduce((acc, { title, number }) => ({ ...acc, [number]: title }), {}),
+                  objectives: orgObjectives.map(({ title }) => title),
                 }}
               />
             </div>
@@ -137,7 +133,6 @@ const button: Rule = ({ theme }) => {
     cursor: 'pointer',
     backgroundColor: `${theme.colors.white}`,
     color: `${theme.colors.tescoBlue}`,
-    opacity: '0.5',
 
     '@media(max-width: 600px)': {
       width: '100%',

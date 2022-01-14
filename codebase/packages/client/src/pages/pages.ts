@@ -15,9 +15,10 @@ import Settings from './Settings';
 import Notes from './Notes';
 import CreateOrganizationObjectives from './CreateOrganizationObjectives';
 import ObjectivesView from './ObjectivesView';
+import Report from './Report';
 import { CreatePerformanceCycle, PerformanceCycleAdministration } from './PerformanceCycle';
 import { CreateTip, EditTip, TipsAdministration } from './Tips';
-import UserObjectives from './UserObjectives';
+import { UserObjectives } from './UserObjectives';
 
 export type PageComponent = {
   element: PageElement;
@@ -146,6 +147,12 @@ const pages: Record<Page, PageComponent> = {
     title: 'Edit Tip',
     withHeader: false,
     backPath: Page.TIPS,
+  },
+  [Page.REPORT]: {
+    element: Report,
+    title: 'Team reporting',
+    withHeader: true,
+    backPath: Page.CONTRIBUTION,
   },
 };
 
