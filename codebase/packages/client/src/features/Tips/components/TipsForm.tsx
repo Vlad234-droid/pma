@@ -14,7 +14,7 @@ import {
 } from '@pma/store';
 import { buildPath } from 'features/Routes/utils';
 import { Button, Icon, ModalWithHeader, Rule, theme, useBreakpoints, useStyle } from '@dex-ddl/core';
-import { Input, Item, Select, Textarea } from 'components/Form';
+import { Field, Input, Item, Select, Textarea } from 'components/Form';
 import { GenericItemField } from 'components/GenericForm';
 import { IconButton } from 'components/IconButton';
 import { createTipSchema } from 'pages/Tips/config';
@@ -37,6 +37,7 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
     handleSubmit,
     formState: { isValid, isDirty, isSubmitted },
     setValue,
+    trigger,
   } = methods;
 
   const configEntries = useSelector(configEntriesSelector);
@@ -77,6 +78,7 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
     setValue('tipTargetLevel2', formData['tipTargetLevel2']);
     setValue('tipTargetLevel3', formData['tipTargetLevel3']);
     setValue('tipTargetLevel4', formData['tipTargetLevel4']);
+    console.log(formData)
   }, [formData]);
 
   useEffect(() => {
@@ -199,6 +201,7 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
   };
 
   const handleEditTip = () => {
+    console.log(isValid)
     const data = {
       uuid: params['tipUuid'],
       title: methods.getValues('tipTitle'),
@@ -210,7 +213,7 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
       imageLink: 'https://cdn-icons-png.flaticon.com/512/189/189667.png',
     };
     dispatch(tipsActions.createTip(data));
-    setTipsFormModalAction('edit');
+    // setTipsFormModalAction('edit');
   };
 
   useEffect(() => {
@@ -266,7 +269,6 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
       modalPosition='middle'
       closeOptions={{
         closeOptionContent: <Icon graphic='close' />,
-        // closeOptionStyles: {}
         onClose: () => handleDiscard(),
       }}
     >
@@ -288,10 +290,11 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
         />
       )}
       <div className={css(modalInner)}>
+        {/* TODO: uncomment next line */}
         {showEffectsPlaceholder && <div className={css(modalInnerPlaceholder)}></div>}
         <form className={css({ height: '100%' })}>
           <div className={css(formFieldsWrapStyle)}>
-            <GenericItemField
+            {/* <GenericItemField
               name={'tipTitle'}
               methods={methods}
               label='Title'
@@ -309,9 +312,153 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
               placeholder='Example: Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus'
               rows={2}
               value={formData['tipDescription']}
+            /> */}
+
+            <Field
+              name={'tipTitle'}
+              label='Title'
+              Wrapper={Item}
+              Element={Input}
+              placeholder='Example: Share objectives easily'
+              setValue={setValue}
+              trigger={trigger}
+              value={formData['tipTitle']}
             />
+            <Field
+              name={'tipDescription'}
+              label='Description'
+              Wrapper={Item}
+              Element={Textarea}
+              placeholder='Example: Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus'
+              setValue={setValue}
+              trigger={trigger}
+              rows={2}
+              value={formData['tipTitle']}
+            />
+            
             <div className={css(hrSeparatorLine)} />
-            <GenericItemField
+
+            <Field
+              name={'tipTargetLevel1'}
+              Wrapper={({ children }) => (
+                <Item label='Level 1' withIcon={false}>
+                  {children}
+                </Item>
+              )}
+              Element={Select}
+              options={level1Options.map((item) => {
+                return { value: item['uuid'], label: item['name'] };
+              })}
+              placeholder='Please select'
+              setValue={setValue}
+              trigger={trigger}
+              onChange={(e) => {
+                const label = e.currentTarget.value;
+                const value = e.target.value;
+                console.log('label', label)
+                console.log('value', value)
+                if(value) {
+                  setFormData({
+                    tipTitle: methods.getValues('tipTitle'),
+                    tipDescription: methods.getValues('tipDescription'),
+                    tipTargetLevel1: label,
+                    tipTargetLevel2: '',
+                    tipTargetLevel3: '',
+                    tipTargetLevel4: '',
+                  });
+                  setTargetOrganisation(value);
+                  const configEntry = level1Options.filter((item) => item['name'] === label)[0];
+                  dispatch(ConfigEntriesActions.getConfigEntriesByUuid({ uuid: configEntry['uuid'] }));
+                }
+              }}
+              value={formData['tipTargetLevel1']}
+            />
+            <Field
+              name={'tipTargetLevel2'}
+              Wrapper={({ children }) => (
+                <Item label='Level 2' withIcon={false}>
+                  {children}
+                </Item>
+              )}
+              Element={Select}
+              options={level2Options.map((item) => {
+                return { value: item['uuid'], label: item['name'] };
+              })}
+              placeholder='Please select'
+              setValue={setValue}
+              trigger={trigger}
+              onChange={(e) => {
+                const label = e.currentTarget.value;
+                const value = e.target.value;
+                setFormData({
+                  ...formData,
+                  tipTitle: methods.getValues('tipTitle'),
+                  tipDescription: methods.getValues('tipDescription'),
+                  tipTargetLevel2: label,
+                  tipTargetLevel3: '',
+                  tipTargetLevel4: '',
+                });
+                setTargetOrganisation(value);
+              }}
+              value={formData['tipTargetLevel2']}
+            />
+            <Field
+              name={'tipTargetLevel3'}
+              Wrapper={({ children }) => (
+                <Item label='Level 3' withIcon={false}>
+                  {children}
+                </Item>
+              )}
+              Element={Select}
+              options={level3Options.map((item) => {
+                return { value: item['uuid'], label: item['name'] };
+              })}
+              placeholder='Please select'
+              setValue={setValue}
+              trigger={trigger}
+              onChange={(e) => {
+                const label = e.currentTarget.value;
+                const value = e.target.value;
+                setFormData({
+                  ...formData,
+                  tipTitle: methods.getValues('tipTitle'),
+                  tipDescription: methods.getValues('tipDescription'),
+                  tipTargetLevel3: label,
+                  tipTargetLevel4: '',
+                });
+                setTargetOrganisation(value);
+              }}
+              value={formData['tipTargetLevel3']}
+            />
+            <Field
+              name={'tipTargetLevel4'}
+              Wrapper={({ children }) => (
+                <Item label='Level 4' withIcon={false}>
+                  {children}
+                </Item>
+              )}
+              Element={Select}
+              options={level4Options.map((item) => {
+                return { value: item['uuid'], label: item['name'] };
+              })}
+              placeholder='Please select'
+              setValue={setValue}
+              trigger={trigger}
+              onChange={(e) => {
+                const label = e.currentTarget.value;
+                const value = e.target.value;
+                setFormData({
+                  ...formData,
+                  tipTitle: methods.getValues('tipTitle'),
+                  tipDescription: methods.getValues('tipDescription'),
+                  tipTargetLevel4: label,
+                });
+                setTargetOrganisation(value);
+              }}
+              value={formData['tipTargetLevel4']}
+            />
+
+            {/* <GenericItemField
               name={'tipTargetLevel1'}
               methods={methods}
               Wrapper={({ children }) => (
@@ -338,8 +485,8 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
                 dispatch(ConfigEntriesActions.getConfigEntriesByUuid({ uuid: configEntry['uuid'] }));
               }}
               value={formData['tipTargetLevel1']}
-            />
-            <GenericItemField
+            /> */}
+            {/* <GenericItemField
               name={'tipTargetLevel2'}
               methods={methods}
               Wrapper={({ children }) => (
@@ -413,7 +560,7 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
               }}
               placeholder='Please select'
               value={formData['tipTargetLevel4']}
-            />
+            /> */}
             {mode === 'edit' && (
               <IconButton
                 onPress={confirmDeleteTip}
@@ -435,7 +582,8 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
             >
               Discard
             </Button>
-            <Button isDisabled={!isDirty || !isValid} onPress={submitForm} styles={[formControlBtn]}>
+            <Button onPress={submitForm} styles={[formControlBtn]}>
+            {/* <Button isDisabled={!isDirty || !isValid} onPress={submitForm} styles={[formControlBtn]}> */}
               {mode === 'create' && 'Create new tip'}
               {mode === 'edit' && 'Confirm changes'}
             </Button>
