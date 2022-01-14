@@ -51,6 +51,7 @@ function useReviewSchemaWithPermission(type: ReviewType) {
           cleanFromDsl({
             ...component,
             // todo ask backend about rules for replace.
+            ...(component?.key ? { key: component?.key?.replace(component?.key, `${component?.key}-${index}`) } : {}),
             ...(component?.label ? { label: component?.label?.replace('Objective', `Objective ${index + 1}`) } : {}),
           }),
         ),
