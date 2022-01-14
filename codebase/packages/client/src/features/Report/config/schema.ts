@@ -6,4 +6,4 @@ export const createYearSchema = Yup.object().shape({
 
 export const reportByYearSchema = Yup.object().shape({
   year: Yup.string().required(),
-})
+});

@@ -10,65 +10,65 @@ import success from '../../../../public/success.jpg';
 
 type ModalProps = {
   onClose: () => void;
-}
+};
 
 const checkboxes = [
   {
     id: '0',
     label: 'Objectives submitted',
-    isChecked: false
+    isChecked: false,
   },
   {
     id: '1',
     label: 'Objectives approved',
-    isChecked: false
+    isChecked: false,
   },
   {
     id: '2',
     label: 'Mid-year forms',
-    isChecked: false
+    isChecked: false,
   },
   {
     id: '3',
     label: 'Breakdown of mid-year ratings',
-    isChecked: false
+    isChecked: false,
   },
   {
     id: '4',
     label: 'Year-end forms',
-    isChecked: false
+    isChecked: false,
   },
   {
     id: '5',
     label: 'Breakdown of year-end ratings',
-    isChecked: false
+    isChecked: false,
   },
   {
     id: '6',
     label: 'In the moment feedback',
-    isChecked: false
+    isChecked: false,
   },
   {
     id: '7',
     label: 'Colleagues on Supporting Your Performance',
-    isChecked: false
+    isChecked: false,
   },
   {
     id: '8',
     label: 'New to business',
-    isChecked: false
+    isChecked: false,
   },
   {
     id: '9',
     label: 'Colleagues absences',
-    isChecked: false
+    isChecked: false,
   },
   {
     id: '10',
     label: 'Anniversary reviews completed per quarter',
-    isChecked: false
+    isChecked: false,
   },
-]
+];
 
 const DonwloadReportModal: FC<ModalProps> = ({ onClose }) => {
   const { css } = useStyle();
@@ -90,8 +90,8 @@ const DonwloadReportModal: FC<ModalProps> = ({ onClose }) => {
 
   useEffect(() => {
     setIsDisabledDownloadBtn(true);
-    for(const key in selectedCheckboxes) {
-      if(selectedCheckboxes[key]['isChecked']) {
+    for (const key in selectedCheckboxes) {
+      if (selectedCheckboxes[key]['isChecked']) {
         setIsDisabledDownloadBtn(false);
       }
     }
@@ -102,44 +102,45 @@ const DonwloadReportModal: FC<ModalProps> = ({ onClose }) => {
   };
 
   const handleCheck = (checkboxId) => {
-    const itemIndex = selectedCheckboxes.findIndex(item => item.id === checkboxId);
+    const itemIndex = selectedCheckboxes.findIndex((item) => item.id === checkboxId);
     const item = {
       ...selectedCheckboxes[itemIndex],
-      isChecked: !selectedCheckboxes[itemIndex]['isChecked']
-    }
+      isChecked: !selectedCheckboxes[itemIndex]['isChecked'],
+    };
     const newArray = [...selectedCheckboxes];
     newArray[itemIndex] = item;
-    setSelectedCheckboxes(newArray)
-  }
+    setSelectedCheckboxes(newArray);
+  };
 
   return (
-    <ModalWithHeader 
+    <ModalWithHeader
       modalPosition='middle'
       title='Download and Exctract'
       containerRule={modalWrapperStyle}
       closeOptions={{
         closeOptionContent: <Icon graphic='close' />,
-        onClose: onClose
+        onClose: onClose,
       }}
     >
       <h3 className={css(modalTitleStyle)}>Choose which topics you’d like to download into an excel report</h3>
       <div className={css(modalInnerWarp)}>
-        <div className={css({ display: 'flex', flexDirection: 'column', alignItems: 'flex-start'})}>
-          { selectedCheckboxes.map(item => (
+        <div className={css({ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' })}>
+          {selectedCheckboxes.map((item) => (
             <label key={item.id} className={css(checkboxItemStyle)}>
-              <Checkbox
-                checked={item.isChecked}
-                onChange={() => handleCheck(item.id)}
-              />
+              <Checkbox checked={item.isChecked} onChange={() => handleCheck(item.id)} />
               <span className={css({ marginLeft: '15px' })}>{item.label}</span>
             </label>
           ))}
         </div>
-          
+
         <GenericItemField
           name={'selectYear'}
           methods={methods}
-          Wrapper={({ children }) => <Item label='Select a year' withIcon={false}>{children}</Item>}
+          Wrapper={({ children }) => (
+            <Item label='Select a year' withIcon={false}>
+              {children}
+            </Item>
+          )}
           Element={Select}
           options={years}
           placeholder='Please select'
@@ -150,22 +151,22 @@ const DonwloadReportModal: FC<ModalProps> = ({ onClose }) => {
         />
 
         <div className={css(textBlock, { fontWeight: 700 })}>Guidance for colleagues</div>
-        <div className={css(textBlock, { marginBottom: '30px' })}>Vitae morbi ullamcorper venenatis ut. Mi auctor bibendum sed ut tempus senectus. Ullamcorper cursus purus lacus elementum nulla in lacus nunc. Ultrices urna magna viverra a, amet eget lorem quam. Id leo vel arcu nullam proin.</div>
+        <div className={css(textBlock, { marginBottom: '30px' })}>
+          Vitae morbi ullamcorper venenatis ut. Mi auctor bibendum sed ut tempus senectus. Ullamcorper cursus purus
+          lacus elementum nulla in lacus nunc. Ultrices urna magna viverra a, amet eget lorem quam. Id leo vel arcu
+          nullam proin.
+        </div>
       </div>
 
       <div className={css(formButtonsWrap)}>
-        <Button 
-          onPress={onClose} 
-          mode="inverse" 
+        <Button
+          onPress={onClose}
+          mode='inverse'
           styles={[formButton, { border: `1px solid ${theme.colors.tescoBlue}` }]}
         >
           Cancel
         </Button>
-        <Button 
-          isDisabled={isDisabledDownloadBtn}
-          onPress={handleDownloadReport}
-          styles={[formButton]}
-        >
+        <Button isDisabled={isDisabledDownloadBtn} onPress={handleDownloadReport} styles={[formButton]}>
           Download
         </Button>
       </div>
@@ -175,31 +176,33 @@ const DonwloadReportModal: FC<ModalProps> = ({ onClose }) => {
           <img src={success} alt='success' />
           <div className={css(successModalTitle)}>Done!</div>
           <div className={css(successModalText)}>You have downloaded the report onto your device.</div>
-          <Button styles={[successModalBtn]} onPress={onClose}>Okay</Button>
+          <Button styles={[successModalBtn]} onPress={onClose}>
+            Okay
+          </Button>
         </div>
       )}
     </ModalWithHeader>
-  )
-}
+  );
+};
 
 const modalWrapperStyle: Rule = () => {
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
   return {
-    ...(mobileScreen ?
-      { 
-        width: '100%',
-        height: 'calc(100% - 50px)',
-        marginTop: '50px',
-        padding: 0,
-      } : { 
-        width: '60%',
-        height: 'calc(100% - 100px)',
-        padding: 0,
-      }
-    )
-  }
-}
+    ...(mobileScreen
+      ? {
+          width: '100%',
+          height: 'calc(100% - 50px)',
+          marginTop: '50px',
+          padding: 0,
+        }
+      : {
+          width: '60%',
+          height: 'calc(100% - 100px)',
+          padding: 0,
+        }),
+  };
+};
 
 const modalInnerWarp: Rule = () => {
   const [, isBreakpoint] = useBreakpoints();
@@ -207,17 +210,17 @@ const modalInnerWarp: Rule = () => {
   return {
     width: '100%',
     overflowY: 'scroll',
-    ...(mobileScreen ?
-      { 
-        padding: '5px 15px',
-        height: 'calc(100% - 170px)',
-      } : { 
-        height: 'calc(100% - 257px)',
-        padding: '5px 40px',
-      }
-    )
-  }
-}
+    ...(mobileScreen
+      ? {
+          padding: '5px 15px',
+          height: 'calc(100% - 170px)',
+        }
+      : {
+          height: 'calc(100% - 257px)',
+          padding: '5px 40px',
+        }),
+  };
+};
 
 const checkboxItemStyle: Rule = () => {
   return {
@@ -227,29 +230,29 @@ const checkboxItemStyle: Rule = () => {
     fontSize: '16px',
     outline: 'none',
     marginBottom: '15px',
-  }
-}
+  };
+};
 
 const modalTitleStyle: Rule = ({ theme }) => {
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
   return {
     color: theme.colors.tescoBlue,
-    ...(mobileScreen ?
-      { 
-        fontSize: '20px',
-        lineHeight: '24px',
-        padding: '20px',
-        margin: 0,
-      } : { 
-        fontSize: '24px',
-        lineHeight: '28px',
-        padding: '40px',
-        margin: 0,
-      }
-    )
-  }
-}
+    ...(mobileScreen
+      ? {
+          fontSize: '20px',
+          lineHeight: '24px',
+          padding: '20px',
+          margin: 0,
+        }
+      : {
+          fontSize: '24px',
+          lineHeight: '28px',
+          padding: '40px',
+          margin: 0,
+        }),
+  };
+};
 
 const formButtonsWrap: Rule = ({ theme }) => {
   const [, isBreakpoint] = useBreakpoints();
@@ -261,17 +264,17 @@ const formButtonsWrap: Rule = ({ theme }) => {
     left: 0,
     width: '100%',
     borderTop: `1px solid ${theme.colors.backgroundDarkest}`,
-    ...(mobileScreen ?
-      { 
-        background: theme.colors.white,
-        padding: '20px 10px',
-      } : { 
-        background: 'none',
-        padding: '40px 30px',
-      }
-    )
-  }
-}
+    ...(mobileScreen
+      ? {
+          background: theme.colors.white,
+          padding: '20px 10px',
+        }
+      : {
+          background: 'none',
+          padding: '40px 30px',
+        }),
+  };
+};
 
 const formButton: Rule = () => {
   return {
@@ -280,18 +283,18 @@ const formButton: Rule = () => {
     fontSize: '16px',
     lineHeight: '20px',
     fontWeight: 700,
-  }
-}
+  };
+};
 
-const textBlock:Rule = () => {
+const textBlock: Rule = () => {
   return {
     fontSize: '16px',
     lineHeight: '20px',
     marginBottom: '5px',
-  }
-}
+  };
+};
 
-const successModalWrap: Rule = ({theme}) => {
+const successModalWrap: Rule = ({ theme }) => {
   return {
     position: 'absolute',
     width: '100%',
@@ -305,32 +308,32 @@ const successModalWrap: Rule = ({theme}) => {
     alignItems: 'center',
     flexDirection: 'column',
     textAlign: 'center',
-  }
-}
+  };
+};
 
 const successModalTitle: Rule = () => {
   return {
     fontSize: '28px',
     fontWeight: 700,
     margin: '40px 0 15px',
-  }
-}
+  };
+};
 
 const successModalText: Rule = () => {
   return {
     fontSize: '24px',
     lineHeight: '28px',
     maxWidth: '370px',
-  }
-}
+  };
+};
 
 const successModalBtn: Rule = () => {
-  return { 
+  return {
     marginTop: 'auto',
     maxWidth: '250px',
     width: '100%',
     fontWeight: 700,
-  }
-}
+  };
+};
 
 export default DonwloadReportModal;

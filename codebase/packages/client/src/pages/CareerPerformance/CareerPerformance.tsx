@@ -63,7 +63,7 @@ const CareerPerformance: FC = () => {
       </div>
       <div className={css(wrapperStylee)}>
         <div className={css({ flex: '3 1 504px', display: 'flex', flexDirection: 'column', gap: '8px' })}>
-          <Link to={Page.PROFILE}>
+          <Link to={`../${Page.PROFILE}`}>
             <DashboardProfile />
           </Link>
           {canShowMyReview && (

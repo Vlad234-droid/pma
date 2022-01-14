@@ -27,7 +27,8 @@ const RouterSwitch: FC<RouterSwitchProps> = ({ links }) => {
         return (
           <NavLink
             key={link}
-            style={(isActive) =>
+            // @ts-ignore
+            style={({ isActive }) =>
               isActive
                 ? {
                     background: colors.tescoBlue,

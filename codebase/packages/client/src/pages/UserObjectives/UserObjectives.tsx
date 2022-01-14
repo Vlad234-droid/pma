@@ -28,7 +28,7 @@ import {
   timelineTypesAvailabilitySelector,
 } from '@pma/store';
 import OrganizationWidget from 'features/Objectives/components/OrganizationWidget/OrganizationWidget';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router';
 import useReviewSchema from 'features/Objectives/hooks/useReviewSchema';
 import useReviews from 'features/Objectives/hooks/useReviews';
 
@@ -57,7 +57,7 @@ const annualReviews = [
 
 export const TEST_ID = 'user-objectives-page';
 
-const UserObjectives: FC = () => {
+export const UserObjectives: FC = () => {
   const { css, theme } = useStyle();
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -269,5 +269,3 @@ const linkStyles = ({ theme }) => ({
   color: theme.colors.tescoBlue,
   background: 'transparent',
 });
-
-export default UserObjectives;

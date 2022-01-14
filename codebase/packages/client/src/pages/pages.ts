@@ -18,7 +18,7 @@ import ObjectivesView from './ObjectivesView';
 import Report from './Report';
 import { CreatePerformanceCycle, PerformanceCycleAdministration } from './PerformanceCycle';
 import { CreateTip, EditTip, TipsAdministration } from './Tips';
-import UserObjectives from './UserObjectives';
+import { UserObjectives } from './UserObjectives';
 
 export type PageComponent = {
   element: PageElement;
