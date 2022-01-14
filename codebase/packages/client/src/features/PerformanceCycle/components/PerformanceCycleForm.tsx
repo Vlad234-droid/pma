@@ -122,8 +122,8 @@ export const PerformanceCycleForm: FC = () => {
     }
   }, [loaded]);
 
-  const getItems = (params) => {
-    dispatch(ConfigEntriesActions.getConfigEntriesByUuid({ uuid: params.value }));
+  const getItems = ({ value }) => {
+    if (value) dispatch(ConfigEntriesActions.getConfigEntriesByUuid({ uuid: value }));
   };
 
   useEffect(() => {
@@ -375,7 +375,7 @@ export const PerformanceCycleForm: FC = () => {
             return { value: item.uuid, label: item.name };
           })}
           placeholder={'- Select organization level -   '}
-          onChange={(_, data) => {
+          onChange={(data) => {
             setOptions11(data);
             getItems({ value: data });
           }}
@@ -391,7 +391,7 @@ export const PerformanceCycleForm: FC = () => {
           Element={Select}
           options={options2}
           placeholder={'- Select organization level -   '}
-          onChange={(_, value) => setOptions12(value)}
+          onChange={(value) => setOptions12(value)}
         />
         <GenericItemField
           name={`level3`}
@@ -404,7 +404,7 @@ export const PerformanceCycleForm: FC = () => {
           Element={Select}
           options={options13}
           placeholder={'- Select organization level - '}
-          onChange={(_, value) => {
+          onChange={(value) => {
             setOptions131(value);
           }}
         />
@@ -419,7 +419,7 @@ export const PerformanceCycleForm: FC = () => {
           Element={Select}
           options={options14}
           placeholder={'- Select organization level - '}
-          onChange={(_, value) => setEntryConfigKey(value)}
+          onChange={(value) => setEntryConfigKey(value)}
           value={formDataToFillObj['entryConfigKey'] || ''}
         />
 
