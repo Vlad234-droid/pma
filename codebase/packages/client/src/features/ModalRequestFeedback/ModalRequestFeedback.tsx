@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState, useCallback } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { CreateRule, Rule, Styles, useStyle } from '@dex-ddl/core';
 import { ObjectiveOptionsType, PeopleTypes } from './type';
 import { SuccessModal, InfoModalContent } from './ModalParts';
@@ -309,7 +309,7 @@ const ModalRequestFeedback: FC = () => {
                 options={area_options_data}
                 placeholder={'Choose an area'}
                 value={formValues.area_options}
-                onChange={(_, value) => {
+                onChange={(value) => {
                   trigger('area_options');
                   setValue('area_options', value);
                 }}
