@@ -134,7 +134,7 @@ const PerformanceCycleAdministration: FC = () => {
                     <td className={css(item)}>{createdBy}</td>
                     <Button
                       mode={'inverse'}
-                      onPress={() => navigate(`${Page.PERFORMANCE_CYCLE}/${uuid}`)}
+                      onPress={() => navigate(`/${Page.PERFORMANCE_CYCLE}/${uuid}`)}
                       styles={[btnStyle]}
                     >
                       Edit
