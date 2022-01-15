@@ -3,10 +3,11 @@ import { useSelector } from 'react-redux';
 import { Button, Rule, useStyle } from '@dex-ddl/core';
 import * as Yup from 'yup';
 import useDispatch from 'hooks/useDispatch';
-import { OrgObjectiveActions, orgObjectivesSelector } from '@pma/store';
+import { OrgObjectiveActions, orgObjectivesSelector, orgObjectivesMetaSelector, Status } from '@pma/store';
 import get from 'lodash.get';
 import GenericForm from 'components/GenericForm';
 import { Input } from 'components/Form';
+import { InfoModal } from 'features/Modal';
 
 const prepareOrgObjectivesData = (newData, orgObjectivesData) => {
   return orgObjectivesData.map((objective, idx) => ({ ...objective, title: get(newData, idx) }));
@@ -16,6 +17,7 @@ const StrategicDriversForm: FC = () => {
   const { css } = useStyle();
   const dispatch = useDispatch();
   const orgObjectives = useSelector(orgObjectivesSelector) || [];
+  const { status } = useSelector(orgObjectivesMetaSelector);
 
   const save = (newData) => {
     const data = prepareOrgObjectivesData(newData.objectives, orgObjectives);
@@ -40,6 +42,9 @@ const StrategicDriversForm: FC = () => {
   useEffect(() => {
     dispatch(OrgObjectiveActions.getOrgObjectives({}));
   }, []);
+
+  // @ts-ignore
+  const handleCancel = () => dispatch(OrgObjectiveActions.changeOrgObjectiveMetaStatus(Status.IDLE));
 
   if (!orgObjectives.length) return null;
 
@@ -75,6 +80,9 @@ const StrategicDriversForm: FC = () => {
           >
             Publish
           </Button>
+          {status === Status.SUCCEEDED && (
+            <InfoModal title={'Strategic drivers successfully saved'} onCancel={handleCancel} />
+          )}
         </div>
       )}
       defaultValues={{
