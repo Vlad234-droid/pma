@@ -71,7 +71,7 @@ const ProfessionalInformation: FC<Props> = ({ user }) => {
           </div>
           <div className={css(bodyBlockStyle)}>
             <span className={css(titleStyle)}>
-              <Trans>Line Manager</Trans>
+              <Trans>Line manager</Trans>
             </span>
             <span className={css(descriptionStyle)}>{manager}</span>
           </div>
@@ -83,7 +83,7 @@ const ProfessionalInformation: FC<Props> = ({ user }) => {
           </div>
           <div className={css(bodyBlockStyle)}>
             <span className={css(titleStyle)}>
-              <Trans>Hire Date</Trans>
+              <Trans>Hire date</Trans>
             </span>
             <span className={css(descriptionStyle)}>{hireDate}</span>
           </div>
