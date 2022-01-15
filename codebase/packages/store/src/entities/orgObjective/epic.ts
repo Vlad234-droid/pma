@@ -9,11 +9,11 @@ import { getOrgObjectives, createOrgObjective, createAndPublishOrgObjective, get
 export const getOrgObjectivesEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
     filter(isActionOf(getOrgObjectives.request)),
-    switchMap(({ payload }) =>
+    switchMap(() =>
       from(api.getOrgObjectives()).pipe(
         // @ts-ignore
         map(({ data }) => {
-          return getOrgObjectives.success({ origin: data });
+          return getOrgObjectives.success(data);
         }),
         catchError(({ errors }) => of(getOrgObjectives.failure(errors))),
         takeUntil(action$.pipe(filter(isActionOf(getOrgObjectives.cancel)))),
@@ -28,7 +28,7 @@ export const getOrgAuditLogsEpic: Epic = (action$, _, { api }) =>
       from(api.getOrgAuditLogs(payload)).pipe(
         // @ts-ignore
         map(({ data }) => {
-          return getOrgAuditLogs.success({ auditLogs: data });
+          return getOrgAuditLogs.success(data);
         }),
         catchError(({ errors }) => of(getOrgAuditLogs.failure(errors))),
         takeUntil(action$.pipe(filter(isActionOf(getOrgAuditLogs.cancel)))),
@@ -40,12 +40,11 @@ export const getOrgAuditLogsEpic: Epic = (action$, _, { api }) =>
 export const getOrgAuditLogsOnPublishEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
     filter(isActionOf(createOrgObjective.success) || isActionOf(createAndPublishOrgObjective.success)),
-    // filter(isActionOf(getOrgAuditLogs.request)    || isActionOf(createAndPublishOrgObjective.success) ),
-    switchMap(({ payload }) =>
-      from(api.getOrgAuditLogs({ start: 1, limit: 3 })).pipe(
+    switchMap(() =>
+      from(api.getOrgAuditLogs({ start: 0, limit: 3 })).pipe(
         // @ts-ignore
         map(({ data }) => {
-          return getOrgAuditLogs.success({ auditLogs: data });
+          return getOrgAuditLogs.success(data);
         }),
         catchError(({ errors }) => of(getOrgAuditLogs.failure(errors))),
         takeUntil(action$.pipe(filter(isActionOf(getOrgAuditLogs.cancel)))),
@@ -57,11 +56,11 @@ export const getOrgAuditLogsOnPublishEpic: Epic = (action$, _, { api }) =>
 export const getOrgAuditLogsOnCreateEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
     filter(isActionOf(createAndPublishOrgObjective.success)),
-    switchMap(({ payload }) =>
-      from(api.getOrgAuditLogs({ start: 1, limit: 3 })).pipe(
+    switchMap(() =>
+      from(api.getOrgAuditLogs({ start: 0, limit: 3 })).pipe(
         // @ts-ignore
         map(({ data }) => {
-          return getOrgAuditLogs.success({ auditLogs: data });
+          return getOrgAuditLogs.success(data);
         }),
         catchError(({ errors }) => of(getOrgAuditLogs.failure(errors))),
         takeUntil(action$.pipe(filter(isActionOf(getOrgAuditLogs.cancel)))),

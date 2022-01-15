@@ -32,6 +32,8 @@ export const getOrgAuditLogs = createAsyncAction(
   'orgObjectives/FETCH_AUDIT_CANCEL',
 )<any, any, Error>();
 
+export const changeOrgObjectiveMetaStatus = createAction('orgObjectives/meta/CHANGE_STATUS')<boolean>();
+
 export const clearOrgObjectiveData = createAction('orgObjectives/CLEAR')<undefined>();
 
 export const Actions = {

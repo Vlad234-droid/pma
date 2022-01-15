@@ -114,34 +114,38 @@ const PerformanceCycleAdministration: FC = () => {
               width: '100%',
             })}
           >
-            <tr className={css({ background: '#F3F9FC', fontSize: '14px', lineHeight: '18px' })}>
-              <th className={css(item)}>Name</th>
-              <th className={css(item)}>Organization</th>
-              <th className={css(item)}>Start Date-End date</th>
-              <th className={css(item)}>Created by</th>
-              <th className={css(item)}>Action</th>
-            </tr>
-            {data
-              .filter((item) => {
-                return item.status === active;
-              })
-              .map(({ name, entryConfigKey, date, createdBy, uuid }) => {
-                return (
-                  <tr key={uuid}>
-                    <td className={css(item)}>{name}</td>
-                    <td className={css(item)}>{entryConfigKey}</td>
-                    <td className={css(item)}>{date}</td>
-                    <td className={css(item)}>{createdBy}</td>
-                    <Button
-                      mode={'inverse'}
-                      onPress={() => navigate(`/${Page.PERFORMANCE_CYCLE}/${uuid}`)}
-                      styles={[btnStyle]}
-                    >
-                      Edit
-                    </Button>
-                  </tr>
-                );
-              })}
+            <thead>
+              <tr className={css({ background: '#F3F9FC', fontSize: '14px', lineHeight: '18px' })}>
+                <th className={css(item)}>Name</th>
+                <th className={css(item)}>Organization</th>
+                <th className={css(item)}>Start Date-End date</th>
+                <th className={css(item)}>Created by</th>
+                <th className={css(item)}>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data
+                .filter((item) => {
+                  return item.status === active;
+                })
+                .map(({ name, entryConfigKey, date, createdBy, uuid }) => {
+                  return (
+                    <tr key={uuid}>
+                      <td className={css(item)}>{name}</td>
+                      <td className={css(item)}>{entryConfigKey}</td>
+                      <td className={css(item)}>{date}</td>
+                      <td className={css(item)}>{createdBy}</td>
+                      <Button
+                        mode={'inverse'}
+                        onPress={() => navigate(`/${Page.PERFORMANCE_CYCLE}/${uuid}`)}
+                        styles={[btnStyle]}
+                      >
+                        Edit
+                      </Button>
+                    </tr>
+                  );
+                })}
+            </tbody>
           </table>
         </TileWrapper>
       </div>
