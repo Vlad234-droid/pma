@@ -62,21 +62,21 @@ const StrategicDriversForm: FC = () => {
       schema={Yup.object().shape({
         objectives: Yup.array().of(Yup.string().required().min(10)).length(orgObjectives.length).required(),
       })}
-      renderButtons={(isValid, handleSubmit) => (
+      renderButtons={(isValid, isDirty, handleSubmit) => (
         <div className={css(publishBlock)}>
           <Button
-            //isDisabled={!isValid}
+            isDisabled={!isValid || !isDirty}
             onPress={() => handleSubmit(save)()}
-            styles={[button, buttonWithMarginRight, !isValid ? disabledButton : activeButton]}
+            styles={[button, buttonWithMarginRight, !isValid || !isDirty ? disabledButton : activeButton]}
           >
             Save
           </Button>
           <Button
-            //isDisabled={!isValid}
+            isDisabled={!isValid || !isDirty}
             onPress={() => {
               handleSubmit(publish)();
             }}
-            styles={[button, !isValid ? disabledButton : activeButton]}
+            styles={[button, !isValid || !isDirty ? disabledButton : activeButton]}
           >
             Publish
           </Button>
