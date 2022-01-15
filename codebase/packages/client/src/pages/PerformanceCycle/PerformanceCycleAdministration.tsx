@@ -1,5 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Button, Rule, useBreakpoints, useStyle } from '@dex-ddl/core';
+import { useNavigate } from 'react-router-dom';
+
 import { TileWrapper } from 'components/Tile';
 import { PerformanceCycleActions } from '@pma/store';
 import useDispatch from 'hooks/useDispatch';
@@ -8,9 +10,11 @@ import {
   getPerformanceCycleMetaSelector,
   getPerformanceCycleSelector,
 } from '@pma/store/src/selectors/performance-cycle';
+
 import { Radio } from 'components/Form';
 import { Trans } from 'components/Translation';
-import { useNavigate } from 'react-router-dom';
+import { paramsReplacer } from 'utils';
+import { buildPath } from 'features/Routes';
 import { Page } from '../types';
 
 const PerformanceCycleAdministration: FC = () => {
@@ -91,7 +95,13 @@ const PerformanceCycleAdministration: FC = () => {
             </label>
           </div>
         </div>
-        <Button onPress={() => navigate('/performance-cycle/new')}>Create performance cycle</Button>
+        <Button
+          onPress={() =>
+            navigate(buildPath(paramsReplacer(Page.CREATE_PERFORMANCE_CYCLE, { ':performanceCycleUuid': 'new' })))
+          }
+        >
+          Create performance cycle
+        </Button>
       </div>
       <div className={css(headWrapperStyles)}>
         <TileWrapper customStyle={{ padding: '24px' }}>

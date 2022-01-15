@@ -3,7 +3,7 @@ import { Page, PageElement } from './types';
 import CareerPerformance from './CareerPerformance';
 import PersonalDevelopmentPlan from './PersonalDevelopmentPlan';
 import MyTeam from './MyTeam';
-import MyActions from './Actions';
+import MyActions from './MyActions';
 import Objectives from './Objectives';
 import Profile from './Profile';
 import Feedback from './Feedback';
