@@ -63,7 +63,7 @@ export const getPropperNotesByStatusSelector = (status) =>
     }
   });
 
-export const getPropperNotesByCriterionSelector = ({ status, isReaded, filterFn, sortFn, serializer }) =>
+export const getPropperNotesByCriteria = ({ status, filterFn, sortFn, serializer }) =>
   createSelector(feedbackSelector, (feedback: any) => {
     const { notes } = feedback;
     let filteredByStatus = [] as any;
@@ -81,8 +81,5 @@ export const getPropperNotesByCriterionSelector = ({ status, isReaded, filterFn,
       });
     }
 
-    return filteredByStatus
-      .filter((item) => filterFn(item, isReaded))
-      .map(serializer)
-      .sort(sortFn);
+    return filteredByStatus.filter(filterFn).map(serializer).sort(sortFn);
   });

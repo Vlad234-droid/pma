@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useMemo, useEffect } from 'react';
 import { ModalDownloadFeedbackProps, PeopleTypes } from './type';
 import { useStyle, useBreakpoints, Rule, Button } from '@dex-ddl/core';
 import { IconButton, Position } from 'components/IconButton';
@@ -11,10 +11,11 @@ import { createDownLoadSchema } from './config/schema';
 import { SuccessModal } from './index';
 import { ColleaguesActions } from '@pma/store';
 import { useDispatch } from 'react-redux';
+import { downloadPDF, FeedbackDocument, usePDF } from '@pma/pdf-renderer';
 
 const ModalDownloadFeedback: FC<ModalDownloadFeedbackProps> = ({
   setOpenMainModal,
-  ModalSuccess,
+  modalSuccess,
   setModalSuccess,
   closeHandler,
   downloadTitle,
@@ -24,8 +25,18 @@ const ModalDownloadFeedback: FC<ModalDownloadFeedbackProps> = ({
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
   const dispatch = useDispatch();
+  const [selected, setSelected] = useState([]);
+
+  const document = useMemo(() => <FeedbackDocument items={selected} />, [selected.length]);
+
+  const [instance, updateInstance] = usePDF({ document });
+
+  useEffect(() => {
+    updateInstance();
+  }, [selected.length]);
 
   const [searchValue, setSearchValue] = useState<string>('');
+  const [searchDate, setSearchDate] = useState<string>('');
   const [selectedPerson, setSelectedPerson] = useState<PeopleTypes | null>(null);
 
   const methods = useForm({
@@ -37,7 +48,7 @@ const ModalDownloadFeedback: FC<ModalDownloadFeedbackProps> = ({
     formState: { isValid },
   } = methods;
 
-  if (ModalSuccess) {
+  if (modalSuccess) {
     return (
       <SuccessModal
         setOpenMainModal={setOpenMainModal}
@@ -53,13 +64,17 @@ const ModalDownloadFeedback: FC<ModalDownloadFeedbackProps> = ({
       <p className={css(downloadDescriptionStyled)}>{downloadDescription}</p>
       <form>
         <SearchPart
+          setSearchDate={setSearchDate}
+          searchDate={searchDate}
           searchValue={searchValue}
           setSearchValue={setSearchValue}
           selectedPerson={selectedPerson}
           setSelectedPerson={setSelectedPerson}
           methods={methods}
         />
-        {selectedPerson && <SubmitPart selectedPerson={selectedPerson} />}
+        {selectedPerson && (
+          <SubmitPart selectedPerson={selectedPerson} searchDate={searchDate} onChange={setSelected} />
+        )}
         <div
           className={css({
             position: 'absolute',
@@ -84,36 +99,40 @@ const ModalDownloadFeedback: FC<ModalDownloadFeedbackProps> = ({
                 padding: mobileScreen ? theme.spacing.s6 : theme.spacing.s8,
                 display: 'flex',
                 justifyContent: 'space-between',
+                gap: '20px',
               })}
             >
-              <Button
-                styles={[
-                  theme.font.fixed.f16,
-                  {
-                    fontWeight: theme.font.weight.bold,
-                    width: '49%',
-                    margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
-                    background: theme.colors.white,
-                    border: `${theme.border.width.b1} solid ${theme.colors.tescoBlue}`,
-                    color: `${theme.colors.tescoBlue}`,
-                  },
-                ]}
-                onPress={closeHandler}
-              >
+              <Button styles={[outlineBtnRule]} onPress={closeHandler}>
                 <Trans>Cancel</Trans>
               </Button>
 
+              <Button
+                styles={[outlineBtnRule]}
+                onPress={() => {
+                  setSelectedPerson(null);
+                  setSearchValue('');
+                  setSearchDate('');
+                }}
+              >
+                <Trans>Search again</Trans>
+              </Button>
+
               <IconButton
-                isDisabled={!isValid}
+                isDisabled={!isValid || selected.length <= 0}
                 customVariantRules={{ default: iconBtnStyle, disabled: iconBtnStyleDisabled }}
                 graphic='arrowRight'
                 iconProps={{ invertColors: true }}
                 iconPosition={Position.RIGHT}
                 onPress={() => {
-                  setModalSuccess(() => true);
+                  downloadPDF(instance.url!);
+                  setModalSuccess(true);
                 }}
               >
-                Download
+                {instance.loading ? (
+                  <Trans i18nKey='loading'>Loading...</Trans>
+                ) : (
+                  <Trans i18nKey='download'>Download</Trans>
+                )}
               </IconButton>
             </div>
           </div>
@@ -161,7 +180,15 @@ const downloadDescriptionStyled: Rule = {
   lineHeight: '22px',
 };
 
-//
+const outlineBtnRule: Rule = (theme) => ({
+  ...theme.font.fixed.f16,
+  fontWeight: theme.font.weight.bold,
+  width: '49%',
+  margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
+  background: theme.colors.white,
+  border: `${theme.border.width.b1} solid ${theme.colors.tescoBlue}`,
+  color: `${theme.colors.tescoBlue}`,
+});
 
 const iconBtnStyle: Rule = ({ theme }) => ({
   padding: '0px 6px 0px 20px',

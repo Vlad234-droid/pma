@@ -7,9 +7,10 @@ import { default as Accordion, ObjectiveAccordionProps } from '../Accordion';
 export type Props = {
   manager: string;
   objectives?: ObjectiveAccordionProps['objectives'];
+  onClose?: () => void;
 };
 
-export const ShareObjectivesModal: FC<Props> = ({ manager, objectives = [] }) => {
+export const ShareObjectivesModal: FC<Props> = ({ manager, onClose, objectives = [] }) => {
   const { css } = useStyle();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
@@ -29,7 +30,7 @@ export const ShareObjectivesModal: FC<Props> = ({ manager, objectives = [] }) =>
           padding: mobileScreen ? '0 16px' : '0 40px',
         })}
       >
-        <span className={css(arrowStyle)}>
+        <span className={css(arrowStyle)} onClick={() => onClose && onClose()}>
           <IconComponent graphic='arrowLeft' invertColors={true} />
         </span>
         <div>

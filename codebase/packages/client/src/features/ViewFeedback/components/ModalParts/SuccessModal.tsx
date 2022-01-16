@@ -16,7 +16,9 @@ const SuccessModal: FC<SuccessModalProps> = ({ setModalSuccess, setOpenMainModal
         </svg>
       </div>
       <h2 className={css(DoneText)}>Done!</h2>
-      <p className={css(Description)}>Your feedback downloaded to your device</p>
+      <p className={css(Description)}>
+        <Trans key='you_downloaded_your_feedback_to_your_device'>You downloaded your feedback to your device</Trans>
+      </p>
       <div className={css(AbsoluteStyle)}>
         <div className={css(ContainerStyled)}>
           <div className={css(AlignButtonsStyle)}>
