@@ -1,14 +1,14 @@
-import React, { Dispatch, FC, SetStateAction } from 'react';
+import React, { FC } from 'react';
 import { Button, Rule, useStyle, useBreakpoints } from '@dex-ddl/core';
 import { Trans } from 'components/Translation';
 import { IconButton } from 'components/IconButton';
 
 type ConfirmModalType = {
-  onSubmit: (e: any) => void;
-  setConfirmModal: Dispatch<SetStateAction<boolean>>;
+  onConfirm: () => void;
+  goBack: () => void;
 };
 
-const ConfirmModal: FC<ConfirmModalType> = ({ onSubmit, setConfirmModal }) => {
+const ConfirmMassage: FC<ConfirmModalType> = ({ onConfirm, goBack }) => {
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
   const { css, theme } = useStyle();
@@ -28,15 +28,10 @@ const ConfirmModal: FC<ConfirmModalType> = ({ onSubmit, setConfirmModal }) => {
       <div className={css(Absolute_style)}>
         <div className={css(Relative_btn_styled)}>
           <div className={css(Spacing_style)}>
-            <Button
-              styles={[theme.font.fixed.f16, Button_styleback]}
-              onPress={() => {
-                setConfirmModal(() => false);
-              }}
-            >
+            <Button styles={[theme.font.fixed.f16, backButton]} onPress={goBack}>
               <Trans>Go back</Trans>
             </Button>
-            <Button styles={[theme.font.fixed.f16, Button_style_submit]} onPress={onSubmit}>
+            <Button styles={[theme.font.fixed.f16, submitButton]} onPress={onConfirm}>
               <Trans>Confirm</Trans>
             </Button>
           </div>
@@ -53,13 +48,7 @@ const ConfirmModal: FC<ConfirmModalType> = ({ onSubmit, setConfirmModal }) => {
           cursor: 'pointer',
         })}
       >
-        <IconButton
-          graphic='arrowLeft'
-          onPress={() => {
-            setConfirmModal(() => false);
-          }}
-          iconProps={{ invertColors: true }}
-        />
+        <IconButton graphic='arrowLeft' onPress={goBack} iconProps={{ invertColors: true }} />
       </span>
     </div>
   );
@@ -92,7 +81,7 @@ const Spacing_style: Rule = ({ theme }) => {
   };
 };
 
-const Button_styleback: Rule = ({ theme }) => ({
+const backButton: Rule = ({ theme }) => ({
   fontWeight: theme.font.weight.bold,
   width: '49%',
   margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
@@ -101,7 +90,7 @@ const Button_styleback: Rule = ({ theme }) => ({
   color: `${theme.colors.tescoBlue}`,
 });
 
-const Button_style_submit: Rule = ({ theme }) => ({
+const submitButton: Rule = ({ theme }) => ({
   fontWeight: theme.font.weight.bold,
   width: '49%',
   margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
@@ -124,4 +113,4 @@ const info_content_style: Rule = {
   fontWeight: 'normal',
 };
 
-export default ConfirmModal;
+export default ConfirmMassage;

@@ -13,9 +13,9 @@ type Props = {
   error: string;
 };
 
-const ColleaguesFinder: FC<Props> = ({ onSelect, error }) => {
+const ColleaguesFinder: FC<Props> = ({ onSelect, error, value }) => {
   const dispatch = useDispatch();
-  const [selectedColleagueName, setSelectedColleagueName] = useState('');
+  const [selectedColleagueName, setSelectedColleagueName] = useState(value);
   const { css } = useStyle();
 
   const colleagues = useSelector(getColleaguesSelector) || [];

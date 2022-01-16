@@ -1,32 +1,25 @@
-import React, { Dispatch, FC, SetStateAction } from 'react';
-import { PeopleTypes, TypefeedbackItems } from '../type';
+import React, { FC } from 'react';
 import { Button, Rule, Styles, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { Trans } from 'components/Translation';
 
 import success from '../../../../public/success.jpg';
+import { useSelector } from 'react-redux';
+import { getColleagueByUuidSelector } from '@pma/store';
 
 export const SUCCES_GIVE_FEEDBACK = 'SUCCESS_GIVE_FEEDBACK';
 
 export type Props = {
-  setModalSuccess: Dispatch<SetStateAction<boolean>>;
-  selectedPerson: PeopleTypes | null;
-  setIsOpen: Dispatch<SetStateAction<boolean>>;
-  setSelectedPerson: Dispatch<SetStateAction<PeopleTypes | null>>;
-  setFeedbackItems: Dispatch<SetStateAction<TypefeedbackItems[] | []>>;
-  reset: () => void;
+  onSuccess: () => void;
+  selectedColleagueUuid: string;
 };
 
-const SuccessModal: FC<Props> = ({
-  setModalSuccess,
-  setIsOpen,
-  setSelectedPerson,
-  selectedPerson,
-  setFeedbackItems,
-  reset,
-}) => {
+const SuccessMassage: FC<Props> = ({ selectedColleagueUuid, onSuccess }) => {
   const { css, theme } = useStyle();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+
+  const selectedColleague = useSelector(getColleagueByUuidSelector(selectedColleagueUuid));
+
   return (
     <div className={css(WrapperSuccessContainer)} data-test-id={SUCCES_GIVE_FEEDBACK}>
       <div className={css(SuccessImg)}>
@@ -34,8 +27,8 @@ const SuccessModal: FC<Props> = ({
       </div>
       <h2 className={css(DoneText)}>Done!</h2>
       <p className={css(Description)}>
-        {`${selectedPerson?.profile?.firstName} ${selectedPerson?.profile?.lastName}`} will now be able to view your
-        feedback
+        {`${selectedColleague?.colleague?.profile?.firstName} ${selectedColleague?.colleague?.profile?.lastName}`} will
+        now be able to view your feedback
       </p>
       <div
         className={css({
@@ -74,13 +67,7 @@ const SuccessModal: FC<Props> = ({
                   color: `${theme.colors.white}`,
                 },
               ]}
-              onPress={() => {
-                setModalSuccess(() => false);
-                setIsOpen(() => false);
-                setSelectedPerson(() => null);
-                setFeedbackItems(() => []);
-                reset();
-              }}
+              onPress={onSuccess}
             >
               <Trans i18nKey='OK'>Okay</Trans>
             </Button>
@@ -123,4 +110,4 @@ const Description: Rule = {
   textAlign: 'center',
 };
 
-export default SuccessModal;
+export default SuccessMassage;

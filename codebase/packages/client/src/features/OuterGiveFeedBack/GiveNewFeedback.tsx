@@ -1,12 +1,27 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useBreakpoints, Rule, Modal } from '@dex-ddl/core';
 import { Icon } from 'components/Icon';
 import { Page } from 'pages';
-import GiveFeedbackForm from './components/GiveFeedbackForm';
+import { GiveFeedbackForm, ConfirmMassage, SuccessMassage } from './components';
 
+enum Statuses {
+  PENDING = 'pending',
+  CONFIRMING = 'confirming',
+  SENDING = 'sending',
+}
 const GiveNewFeedback: FC = () => {
+  const [status, setStatus] = useState(Statuses.PENDING);
+  const [formData, setFormData] = useState({
+    targetColleagueUuid: '',
+    feedbackItems: [{ content: '' }, { content: '' }, { content: '' }],
+  });
   const navigate = useNavigate();
+
+  const handleSubmit = () => {
+    console.log(formData);
+  };
+
   return (
     <Modal
       modalPosition={'middle'}
@@ -25,7 +40,21 @@ const GiveNewFeedback: FC = () => {
         styles: [modalTitleOptionStyle],
       }}
     >
-      <GiveFeedbackForm onSubmit={(data) => console.log(data)} />
+      {status === Statuses.PENDING && (
+        <GiveFeedbackForm
+          defaultValues={formData}
+          onSubmit={(data) => {
+            setFormData(data);
+            setStatus(Statuses.CONFIRMING);
+          }}
+        />
+      )}
+      {status === Statuses.CONFIRMING && (
+        <ConfirmMassage onConfirm={() => setStatus(Statuses.SENDING)} goBack={() => setStatus(Statuses.PENDING)} />
+      )}
+      {status === Statuses.SENDING && (
+        <SuccessMassage onSuccess={handleSubmit} selectedColleagueUuid={formData.targetColleagueUuid} />
+      )}
     </Modal>
   );
 };

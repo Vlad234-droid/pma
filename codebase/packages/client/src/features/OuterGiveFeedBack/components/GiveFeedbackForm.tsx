@@ -3,8 +3,7 @@ import { useStyle, Rule, useBreakpoints, Button } from '@dex-ddl/core';
 import { useSelector } from 'react-redux';
 import { getColleagueByUuidSelector } from '@pma/store';
 import { GiveFeedbackType } from '../type';
-import { FeedbackInfo } from '../Modals';
-import ColleaguesFinder from '../components/ColleaguesFinder';
+import { FeedbackInfo, ColleaguesFinder } from '../components';
 import { IconButton, Position } from 'components/IconButton';
 
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -49,8 +48,18 @@ const feedbackItems: GiveFeedbackType[] = [
 
 type Props = {
   onSubmit: (data: any) => void;
+  defaultValues: any;
 };
-const GiveFeedbackForm: FC<Props> = ({ onSubmit }) => {
+
+const getColleagueName = (data) => {
+  if (!data) return '';
+  const {
+    profile: { firstName, lastName },
+  } = data.colleague;
+
+  return `${firstName} ${lastName}`;
+};
+const GiveFeedbackForm: FC<Props> = ({ onSubmit, defaultValues }) => {
   const { css, theme } = useStyle();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
@@ -63,10 +72,7 @@ const GiveFeedbackForm: FC<Props> = ({ onSubmit }) => {
   } = useForm({
     mode: 'onChange',
     resolver: yupResolver(createGiveFeedbackSchema),
-    defaultValues: {
-      targetColleagueUuid: '',
-      feedbackItems: [{ content: '' }, { content: '' }, { content: '' }],
-    },
+    defaultValues,
   });
 
   const { targetColleagueUuid } = getValues();
@@ -109,7 +115,7 @@ const GiveFeedbackForm: FC<Props> = ({ onSubmit }) => {
             setValue('targetColleagueUuid', colleagueUuid, { shouldValidate: true });
           }}
           selected={null}
-          value={''}
+          value={getColleagueName(selectedColleague)}
           error={''}
         />
         {selectedColleague && <FeedbackInfo selectedPerson={selectedColleague} onClickMore={() => undefined} />}

@@ -17,7 +17,6 @@ type Props = {
 const FeedbackInfo: FC<Props> = ({ selectedPerson, onClickMore }) => {
   const { css } = useStyle();
   const { colleague } = selectedPerson || {};
-  console.log(selectedPerson?.profileAttributes);
 
   return (
     <div data-test-id={WITH_SELECTED_TEST}>
