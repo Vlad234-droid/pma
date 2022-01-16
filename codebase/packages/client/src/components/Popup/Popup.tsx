@@ -2,7 +2,7 @@ import React from 'react';
 import { CreateRule, Rule, Theme, useStyle } from '@dex-ddl/core';
 import { Close } from 'assets/img/objectives';
 import DescriptionBlock from 'components/DescriptionBlock';
-import ObjectiveDetails from 'components/ObjectiveDetails/ObjectiveDetails';
+import Details from 'components/Details';
 import { useNavigate } from 'react-router';
 
 const Popup = (props) => {
@@ -34,7 +34,7 @@ const Popup = (props) => {
           Organization drivers – are stategic goals that help all company-wide activities lead to one single direction.
         </div>
         {items.map((obj, idx) => {
-          return <ObjectiveDetails key={obj.uuid} title={`Strategic driver ${idx + 1}`} description={obj.title} />;
+          return <Details key={obj.uuid} title={`Strategic driver ${idx + 1}`} description={obj.title} />;
         })}
       </DescriptionBlock>
     </div>

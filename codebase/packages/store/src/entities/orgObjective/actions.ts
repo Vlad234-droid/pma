@@ -1,4 +1,5 @@
 import { createAction, createAsyncAction } from 'typesafe-actions';
+import { Status } from 'config/types';
 
 export const createOrgObjective = createAsyncAction(
   'orgObjectives/CREATE_REQUEST',
@@ -32,6 +33,8 @@ export const getOrgAuditLogs = createAsyncAction(
   'orgObjectives/FETCH_AUDIT_CANCEL',
 )<any, any, Error>();
 
+export const changeOrgObjectiveMetaStatus = createAction('orgObjectives/meta/CHANGE_STATUS')<Status>();
+
 export const clearOrgObjectiveData = createAction('orgObjectives/CLEAR')<undefined>();
 
 export const Actions = {
@@ -41,4 +44,5 @@ export const Actions = {
   publishOrgObjective: publishOrgObjective.request,
   getOrgAuditLogs: getOrgAuditLogs.request,
   clearOrgObjectiveData,
+  changeOrgObjectiveMetaStatus,
 };
