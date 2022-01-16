@@ -55,7 +55,7 @@ const StrategicDriversForm: FC = () => {
           Element: Input,
           name: `objectives.${item.number - 1}`,
           id: `objective_${item.number}`,
-          label: `Strategic Priority ${item.number}`,
+          label: `Strategic driver ${item.number}`,
         };
       })}
       //@ts-ignore
