@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { useStyle } from '@dex-ddl/core';
 import { Actions } from 'features/Actions';
 
-const MyTeam: FC = () => {
+const MyActions: FC = () => {
   const { css } = useStyle();
 
   return (
@@ -12,4 +12,4 @@ const MyTeam: FC = () => {
   );
 };
 
-export default MyTeam;
+export default MyActions;
