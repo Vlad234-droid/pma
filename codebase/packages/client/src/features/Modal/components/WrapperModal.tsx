@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, cloneElement, Children, ReactElement } from 'react';
 
 import { useBreakpoints, Rule, Modal } from '@dex-ddl/core';
 import { Icon } from 'components/Icon';
@@ -26,7 +26,7 @@ const WrapperModal: FC<Props> = ({ title, onClose, onOverlayClick, children }) =
       }}
       onOverlayClick={onOverlayClick}
     >
-      {children}
+      {Children.map(children, (child) => cloneElement(child as ReactElement, { onClose }))}
     </Modal>
   );
 };

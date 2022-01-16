@@ -1,4 +1,4 @@
-import React, { useEffect, Dispatch, FC, SetStateAction, useRef, MouseEvent } from 'react';
+import React, { Dispatch, FC, SetStateAction, useRef, MouseEvent } from 'react';
 import { useStyle, Rule, CreateRule, Styles, useBreakpoints, Button } from '@dex-ddl/core';
 import useEventListener from 'hooks/useEventListener';
 import { IconButton } from 'components/IconButton';
