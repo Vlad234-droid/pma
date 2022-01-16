@@ -49,13 +49,9 @@ const ConfirmModalWithDropDown: FC<Props> = ({
   });
   const {
     trigger,
-    getValues,
     handleSubmit,
-    reset,
     formState: { isValid },
   } = methods;
-
-  const values = getValues();
 
   const data = {
     field_id: '1',
@@ -113,7 +109,7 @@ const ConfirmModalWithDropDown: FC<Props> = ({
           Element={Select}
           options={data.field_options}
           placeholder={data.field_placeholder}
-          onChange={(_, value) => {
+          onChange={(value) => {
             trigger('folder');
             setSelectedIdFolder(() => value);
           }}

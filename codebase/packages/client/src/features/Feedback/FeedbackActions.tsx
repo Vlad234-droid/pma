@@ -122,14 +122,13 @@ const FeedbackActions: FC = () => {
 
   const createToneOfVoiceHandler = (inputValue) => {
     if (!inputValue) return;
-    const findedValue = field_options?.find((item) => item.value === inputValue)?.label;
+    const findedValue = field_options?.find((item) => item.value === inputValue)?.value;
     const payload = {
       colleagueUuid,
       name: 'voice',
       value: findedValue,
       type: 'STRING',
     };
-
     if (profileAttr?.find((item) => item?.name === 'voice')) {
       dispatch(UserActions.updateProfileAttribute([payload]));
       return;
@@ -211,7 +210,7 @@ const FeedbackActions: FC = () => {
               options={field_options}
               placeholder={'Choose tone of voice'}
               value={checkForVoiceValue()}
-              onChange={(_, value) => {
+              onChange={(value) => {
                 createToneOfVoiceHandler(value);
               }}
             />

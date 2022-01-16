@@ -284,13 +284,15 @@ const NotesActions: FC = () => {
   };
 
   const onSubmitSelectedEditedNote = (data) => {
-    const { noteTitle, noteText } = data;
+    const { noteTitle, noteText, folder } = data;
     if (selectedNoteToEdit !== null) {
       const payload = {
         ...selectedNoteToEdit,
         title: noteTitle,
         content: noteText,
-        folderUuid: selectedNoteToEdit.folderUuid === AllNotesFolderId ? null : selectedNoteToEdit.folderUuid,
+        ...(folder !== '' && {
+          folderUuid: folder === AllNotesFolderId ? null : folder,
+        }),
       };
 
       dispatch(NotesActionsToDispatch.updateNote(payload));
@@ -306,14 +308,15 @@ const NotesActions: FC = () => {
   };
 
   const onSubmitTEAMSelectedEditedNote = (data) => {
-    const { noteTitle, noteText } = data;
+    const { noteTitle, noteText, folder } = data;
     if (selectedTEAMNoteToEdit !== null) {
       const payload = {
         ...selectedTEAMNoteToEdit,
         title: noteTitle,
         content: noteText,
-        folderUuid:
-          selectedTEAMNoteToEdit.folderUuid === AllNotesFolderIdTEAM ? null : selectedTEAMNoteToEdit.folderUuid,
+        ...(folder !== '' && {
+          folderUuid: folder === AllNotesFolderIdTEAM ? null : folder,
+        }),
       };
 
       dispatch(NotesActionsToDispatch.updateNote(payload));

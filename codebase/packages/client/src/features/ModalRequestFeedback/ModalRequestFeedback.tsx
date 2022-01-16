@@ -157,8 +157,7 @@ const ModalRequestFeedback: FC = () => {
   const choseFieldHandler = () => {
     if (!formValues || !formValues.area_options) return;
 
-    const labelValue = () =>
-      area_options_data[area_options_data.findIndex((item) => item.value === formValues.area_options)].label;
+    const labelValue = () => area_options_data.find((item) => item.value === formValues.area_options)?.label;
 
     const obj = {
       id_1: (
