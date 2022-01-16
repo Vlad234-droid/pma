@@ -247,7 +247,7 @@ const ModalRequestFeedback: FC = () => {
                 onChange={(e) => {
                   setInputValue(() => e.target.value);
                   if (e.target.value === '' || e.target.value.length <= 1) {
-                    dispatch(ColleaguesActions.clearGettedColleagues());
+                    dispatch(ColleaguesActions.clearColleagueList());
                   }
                   if (e.target.value !== '' && e.target.value.length > 1) {
                     dispatch(

@@ -23,7 +23,7 @@ const ColleaguesFinder: FC<Props> = ({ onSelect, error, value }) => {
   const handleSearchColleagues = (e) => {
     const value = e.target.value;
     if (value === '' || value.length <= 1) {
-      dispatch(ColleaguesActions.clearGettedColleagues());
+      dispatch(ColleaguesActions.clearColleagueList());
       return;
     }
     dispatch(

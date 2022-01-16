@@ -1,6 +1,8 @@
 import React, { FC, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { useBreakpoints, Rule, Modal } from '@dex-ddl/core';
+import { colleagueUUIDSelector, ColleaguesActions, FeedbackActions } from '@pma/store';
 import { Icon } from 'components/Icon';
 import { Page } from 'pages';
 import { GiveFeedbackForm, ConfirmMassage, SuccessMassage } from './components';
@@ -11,16 +13,21 @@ enum Statuses {
   SENDING = 'sending',
 }
 const GiveNewFeedback: FC = () => {
+  const dispatch = useDispatch();
   const [status, setStatus] = useState(Statuses.PENDING);
   const [formData, setFormData] = useState({
     targetColleagueUuid: '',
     feedbackItems: [{ content: '' }, { content: '' }, { content: '' }],
   });
+  const colleagueUuid = useSelector(colleagueUUIDSelector);
   const navigate = useNavigate();
 
   const handleSubmit = () => {
-    console.log(formData);
+    dispatch(FeedbackActions.createNewFeedback([{ ...formData, colleagueUuid }]));
+    dispatch(ColleaguesActions.clearColleagueList());
   };
+
+  const handleSuccess = () => navigate(`/${Page.GIVE_FEEDBACK}`);
 
   return (
     <Modal
@@ -50,10 +57,16 @@ const GiveNewFeedback: FC = () => {
         />
       )}
       {status === Statuses.CONFIRMING && (
-        <ConfirmMassage onConfirm={() => setStatus(Statuses.SENDING)} goBack={() => setStatus(Statuses.PENDING)} />
+        <ConfirmMassage
+          onConfirm={() => {
+            setStatus(Statuses.SENDING);
+            handleSubmit();
+          }}
+          goBack={() => setStatus(Statuses.PENDING)}
+        />
       )}
       {status === Statuses.SENDING && (
-        <SuccessMassage onSuccess={handleSubmit} selectedColleagueUuid={formData.targetColleagueUuid} />
+        <SuccessMassage onSuccess={handleSuccess} selectedColleagueUuid={formData.targetColleagueUuid} />
       )}
     </Modal>
   );

@@ -13,7 +13,7 @@ import { Trans } from 'components/Translation';
 import { TileWrapper } from 'components/Tile';
 import { Field, Item, Textarea } from 'components/Form';
 
-const feedbackItems: GiveFeedbackType[] = [
+const feedbackFields: GiveFeedbackType[] = [
   {
     id: '0',
     code: 'Question 1',
@@ -51,6 +51,10 @@ type Props = {
   defaultValues: any;
 };
 
+const prepareFeedbackItems = (fields, feedbackItems) => {
+  return feedbackItems.map(({ content }, idx) => ({ content, code: fields[idx].code }));
+};
+
 const getColleagueName = (data) => {
   if (!data) return '';
   const {
@@ -80,11 +84,11 @@ const GiveFeedbackForm: FC<Props> = ({ onSubmit, defaultValues }) => {
   const selectedColleague = useSelector(getColleagueByUuidSelector(targetColleagueUuid));
 
   const handleDraft = (data) => {
-    onSubmit({ ...data, status: 'DRAFT' });
+    onSubmit({ ...data, status: 'DRAFT', feedbackItems: prepareFeedbackItems(feedbackFields, data.feedbackItems) });
   };
 
   const handleSave = (data) => {
-    onSubmit({ ...data, status: 'SUBMITTED' });
+    onSubmit({ ...data, status: 'SUBMITTED', feedbackItems: prepareFeedbackItems(feedbackFields, data.feedbackItems) });
   };
 
   return (
@@ -121,7 +125,7 @@ const GiveFeedbackForm: FC<Props> = ({ onSubmit, defaultValues }) => {
         {selectedColleague && <FeedbackInfo selectedPerson={selectedColleague} onClickMore={() => undefined} />}
         {selectedColleague && (
           <div>
-            {feedbackItems.map((item, index) => {
+            {feedbackFields.map((item, index) => {
               return (
                 <div
                   key={item.id}

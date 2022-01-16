@@ -1,5 +1,5 @@
 import { createReducer } from 'typesafe-actions';
-import { getColleagues, clearGettedColleagues } from './actions';
+import { getColleagues, clearColleagueList } from './actions';
 
 export const initialState = {
   list: [],
@@ -22,7 +22,7 @@ export default createReducer(initialState)
     meta: { ...state.meta, loading: false, loaded: true, error: payload },
   }))
 
-  .handleAction(clearGettedColleagues, (state) => ({
+  .handleAction(clearColleagueList, (state) => ({
     ...state,
     list: [],
   }));

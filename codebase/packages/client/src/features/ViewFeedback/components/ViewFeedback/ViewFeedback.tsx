@@ -319,7 +319,7 @@ const ViewFeedback: FC = () => {
           closeOptions={{
             content: <Icon graphic='cancel' invertColors={true} />,
             onClose: () => {
-              dispatch(ColleaguesActions.clearGettedColleagues());
+              dispatch(ColleaguesActions.clearColleagueList());
               setModalSuccess(() => false);
               setOpenMainModal(() => false);
             },

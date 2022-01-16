@@ -44,7 +44,7 @@ export const SearchPart: FC<SearchPartProps> = ({
           name={`search_option`}
           onChange={(e) => {
             if (e.target.value === '' || e.target.value.length <= 1) {
-              dispatch(ColleaguesActions.clearGettedColleagues());
+              dispatch(ColleaguesActions.clearColleagueList());
             }
             if (e.target.value !== '' && e.target.value.length > 1) {
               dispatch(
