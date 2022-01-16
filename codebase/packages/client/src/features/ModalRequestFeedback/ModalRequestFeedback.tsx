@@ -12,12 +12,12 @@ import { Close } from 'components/Icon/graphics/Close';
 import { GenericItemField } from 'components/GenericForm';
 import { TileWrapper } from 'components/Tile';
 import { useDispatch, useSelector } from 'react-redux';
-import { TargetType } from '../../config/enum';
+import { TargetType } from 'config/enum';
 import {
   ColleaguesActions,
   colleagueUUIDSelector,
   FeedbackActions,
-  getFindedColleaguesSelector,
+  getColleaguesSelector,
   getReviewsS,
 } from '@pma/store';
 import { IconButton } from 'components/IconButton';
@@ -32,7 +32,7 @@ const ModalRequestFeedback: FC = () => {
   const [selectedPersons, setSelectedPersons] = useState<PeopleTypes[] | []>([]);
   const [inputValue, setInputValue] = useState<string>('');
   const reviews = useSelector(getReviewsS) || [];
-  const findedCollegues = useSelector(getFindedColleaguesSelector) || [];
+  const findedCollegues = useSelector(getColleaguesSelector) || [];
   const colleagueUuid = useSelector(colleagueUUIDSelector);
 
   const methods = useForm({

@@ -23,6 +23,7 @@ import { useNavigate } from 'react-router-dom';
 import { FeedbackStatus } from 'config/enum';
 
 import { downloadPDF, FeedbackDocument, usePDF } from '@pma/pdf-renderer';
+import { Page } from 'pages';
 
 type filterFeedbacksType = {
   AZ: boolean;
@@ -269,7 +270,7 @@ const ViewFeedback: FC = () => {
               <Button
                 styles={[iconBtnStyle]}
                 onPress={() => {
-                  navigate('/feedback/give-feedback');
+                  navigate(`/${Page.GIVE_FEEDBACK}`);
                 }}
               >
                 <Trans>Share feedback</Trans>

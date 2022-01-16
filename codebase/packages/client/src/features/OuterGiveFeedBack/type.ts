@@ -31,7 +31,6 @@ export type ModalGiveFeedbackProps = {
   searchValue: string;
   confirmModal: boolean;
   setSearchValue: Dispatch<SetStateAction<string>>;
-  methods: UseFormReturn;
   feedbackItemsS?: TypefeedbackItems[] | [];
   setFeedbackItems: Dispatch<SetStateAction<TypefeedbackItems[] | []>>;
   setModalGreatFeedback: Dispatch<SetStateAction<boolean>>;
@@ -49,7 +48,6 @@ export type SearchPartProps = {
 export type SubmitPartProps = {
   selectedPerson: PeopleTypes | null;
   setInfoModal: Dispatch<SetStateAction<boolean>>;
-  methods: UseFormReturn;
   feedbackItemsS?: TypefeedbackItems[] | [];
   setConfirmModal: Dispatch<SetStateAction<boolean>>;
   giveFeedback: Array<GiveFeedbackType>;
@@ -61,23 +59,14 @@ export type InfoModalProps = {
 };
 
 type FieldType = {
-  field_id: string;
-  field_type: string;
+  id: string;
+  type: string;
 };
 
 export type GiveFeedbackType = {
-  giveFeedback_id: string;
-  giveFeedbacka_main_title: string;
-  giveFeedback_title: string;
-  giveFeedback_description?: string;
-  giveFeedback_field: FieldType;
-};
-
-export type SuccessModalProps = {
-  setModalSuccess: Dispatch<SetStateAction<boolean>>;
-  selectedPerson: PeopleTypes | null;
-  setIsOpen: Dispatch<SetStateAction<boolean>>;
-  setSelectedPerson: Dispatch<SetStateAction<PeopleTypes | null>>;
-  setFeedbackItems: Dispatch<SetStateAction<TypefeedbackItems[] | []>>;
-  methods: UseFormReturn;
+  id: string;
+  code: string;
+  title: string;
+  description?: string;
+  field: FieldType;
 };

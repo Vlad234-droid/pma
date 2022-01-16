@@ -40,7 +40,6 @@ const Field: FC<FieldProps & FieldValues> = ({
   name,
   onChange,
   setValue,
-  trigger,
   ...props
 }) => {
   const [currentValue, setCurrentValue] = useState(value);
@@ -49,8 +48,7 @@ const Field: FC<FieldProps & FieldValues> = ({
     const changeObject = createChangeObject(e);
     setCurrentValue(e.target.value);
     onChange && onChange(changeObject);
-    setValue(name, changeObject.target.value);
-    trigger(name);
+    setValue(name, changeObject.target.value, { shouldValidate: true });
   };
 
   if (!Wrapper && !label) {

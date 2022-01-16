@@ -1,24 +1,32 @@
-import React, { FC } from 'react';
-import { SuccessModalProps } from '../type';
+import React, { Dispatch, FC, SetStateAction } from 'react';
+import { PeopleTypes, TypefeedbackItems } from '../type';
 import { Button, Rule, Styles, useBreakpoints, useStyle } from '@dex-ddl/core';
+import { Trans } from 'components/Translation';
 
 import success from '../../../../public/success.jpg';
-import { Trans } from '../../../components/Translation';
 
 export const SUCCES_GIVE_FEEDBACK = 'SUCCESS_GIVE_FEEDBACK';
 
-const SuccessModal: FC<SuccessModalProps> = ({
+export type Props = {
+  setModalSuccess: Dispatch<SetStateAction<boolean>>;
+  selectedPerson: PeopleTypes | null;
+  setIsOpen: Dispatch<SetStateAction<boolean>>;
+  setSelectedPerson: Dispatch<SetStateAction<PeopleTypes | null>>;
+  setFeedbackItems: Dispatch<SetStateAction<TypefeedbackItems[] | []>>;
+  reset: () => void;
+};
+
+const SuccessModal: FC<Props> = ({
   setModalSuccess,
   setIsOpen,
   setSelectedPerson,
   selectedPerson,
   setFeedbackItems,
-  methods,
+  reset,
 }) => {
   const { css, theme } = useStyle();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
-  const { reset } = methods;
   return (
     <div className={css(WrapperSuccessContainer)} data-test-id={SUCCES_GIVE_FEEDBACK}>
       <div className={css(SuccessImg)}>
@@ -71,7 +79,7 @@ const SuccessModal: FC<SuccessModalProps> = ({
                 setIsOpen(() => false);
                 setSelectedPerson(() => null);
                 setFeedbackItems(() => []);
-                reset({ feedback: [{ field: '' }, { field: '' }, { field: '' }] });
+                reset();
               }}
             >
               <Trans i18nKey='OK'>Okay</Trans>

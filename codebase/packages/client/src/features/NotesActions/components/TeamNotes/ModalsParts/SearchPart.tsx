@@ -5,7 +5,7 @@ import { UseFormReturn } from 'react-hook-form';
 import { SearchInput } from './SearchInput';
 import { PeopleTypes } from './type';
 import { useDispatch, useSelector } from 'react-redux';
-import { ColleaguesActions, getFindedColleaguesSelector, colleagueUUIDSelector } from '@pma/store';
+import { ColleaguesActions, getColleaguesSelector, colleagueUUIDSelector } from '@pma/store';
 
 type SearchPartProps = {
   teamMethods: UseFormReturn;
@@ -25,7 +25,7 @@ export const SearchPart: FC<SearchPartProps> = ({
   const { css } = useStyle();
   const dispatch = useDispatch();
 
-  const findedCollegues = useSelector(getFindedColleaguesSelector) || [];
+  const findedCollegues = useSelector(getColleaguesSelector) || [];
   const colleagueUuid = useSelector(colleagueUUIDSelector);
 
   const {

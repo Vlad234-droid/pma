@@ -15,7 +15,7 @@ export * from './timeline';
 export * from './managers';
 export * from './schema';
 export * from './feedback';
-export * from './finded_colleagues';
+export * from './colleagues';
 export * from './reviews';
 export * from './orgObjectives';
 export * from './objectivesSharing';

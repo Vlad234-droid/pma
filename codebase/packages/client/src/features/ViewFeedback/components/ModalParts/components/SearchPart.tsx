@@ -3,7 +3,7 @@ import { SearchPartProps } from './type';
 import { useStyle } from '@dex-ddl/core';
 import { Item } from 'components/Form';
 import { SearchInput } from './SearchInput';
-import { ColleaguesActions, getFindedColleaguesSelector } from '@pma/store';
+import { ColleaguesActions, getColleaguesSelector } from '@pma/store';
 import { useSelector, useDispatch } from 'react-redux';
 
 const SearchPart: FC<SearchPartProps> = ({
@@ -22,7 +22,7 @@ const SearchPart: FC<SearchPartProps> = ({
   } = methods;
 
   const { register } = methods;
-  const findedCollegues = useSelector(getFindedColleaguesSelector) || [];
+  const findedCollegues = useSelector(getColleaguesSelector) || [];
 
   return (
     <div className={css({ marginTop: '32px' })}>
