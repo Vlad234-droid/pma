@@ -10,7 +10,7 @@ const CreateStrategicDrivers: FC = () => {
   return (
     <div className={css(contentArea)}>
       <DescriptionBlock>
-        <div className={css(descriptionHeader({ theme }))}>Strategic Priorities</div>
+        <div className={css(descriptionHeader({ theme }))}>Strategic driver</div>
         <div className={css(descriptionText({ theme }))}>
           Create titles for Strategic drivers. Click “Save” button to keep the changes. Or “Publish” to cascade them on
           the colleagues.
