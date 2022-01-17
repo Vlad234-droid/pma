@@ -16,13 +16,14 @@ const Input: FC<InputField> = ({
   customStyles,
   readonly,
   onBlur,
+  type = 'text',
 }) => {
   const { css } = useStyle();
   const refIcon = useRefContainer();
 
   return (
     <input
-      type={'text'}
+      type={type}
       ref={mergeRefs([domRef, refIcon])}
       name={name}
       data-test-id={name}

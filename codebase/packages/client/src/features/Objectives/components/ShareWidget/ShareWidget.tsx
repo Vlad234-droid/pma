@@ -190,7 +190,6 @@ const ShareWidget: FC<Props> = ({ customStyle }) => {
         <WrapperModal
           title={t('shared_objectives', 'Shared objectives')}
           onClose={() => setIsViewObjectivesModalOpen(false)}
-          onOverlayClick={() => setIsViewObjectivesModalOpen(false)}
         >
           <ShareObjectivesModal manager={manager} objectives={objectives} />
         </WrapperModal>

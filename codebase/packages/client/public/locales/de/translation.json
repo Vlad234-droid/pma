@@ -103,5 +103,9 @@
   "z_a": "Z-A",
   "a_z": "A-Z",
   "my_objectives_and_reviews": "My objectives and reviews",
-  "download_all_feedbacks": "Download all feedbacks"
+  "download_all_feedbacks": "Download all feedbacks",
+  "download_your_feedback": "Download your feedback",
+  "which_feedback_would_you_like_to_download": "Which feedback would you like to download?",
+  "use_the_search_bar_to_look_for_colleagues": "Use the search bar to look for colleagues who have given you feedback.",
+  "you_downloaded_your_feedback_to_your_device": "you downloaded your feedback to your device."
 }

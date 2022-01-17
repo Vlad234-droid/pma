@@ -9,15 +9,17 @@ import defaultImg from '../../../../../public/default.png';
 import { FeedbackActions, getReviewByUuidS } from '@pma/store';
 import { TargetTypeReverse } from 'config/enum';
 import { usePDF, FeedbackDocument, downloadPDF } from '@pma/pdf-renderer';
+import { formatToRelativeDate } from 'utils';
 
 type QuestionItem = {
   code: string;
   content: string;
   feedbackUuid: string;
+  question: string;
   uuid: string;
 };
 
-type DraftItem = {
+export type DraftItem = {
   uuid: string;
   firstName: string;
   lastName: string;
@@ -32,11 +34,35 @@ type DraftItem = {
 
 type DraftItemProps = {
   item: DraftItem;
+  downloadable?: boolean;
 };
 
-export const QUESTION_ORDER = ['Question 1', 'Question 2', 'Anything else?'];
+const QUESTION_ORDER = ['Question 1', 'Question 2', 'Anything else?'];
+const HARDCODED_QUESTION = {
+  'Question 1':
+    "Looking back at what you've seen recently, what would you like to say to this colleague about what they've delivered or how they've gone about it?",
+  'Question 2': 'Looking forward, what should this colleague do more (or less) of in order to be at their best?',
+  'Anything else?': 'Add any other comments you would like to share with your colleague.',
+};
 
-const DraftItem: FC<DraftItemProps> = ({ item }) => {
+export const defaultSerializer = (item) => ({
+  ...item,
+  firstName: item?.colleagueProfile?.colleague?.profile?.firstName || '',
+  lastName: item?.colleagueProfile?.colleague?.profile?.lastName || '',
+  jobName: item?.colleagueProfile?.colleague?.workRelationships[0].job.name || '',
+  departmentName: item?.colleagueProfile?.colleague?.workRelationships[0].department?.name || '',
+  feedbackItems: item?.feedbackItems
+    .sort((i1, i2) => QUESTION_ORDER.indexOf(i1.code) - QUESTION_ORDER.indexOf(i2.code))
+    .map(({ code, content, ...rest }) => ({
+      ...rest,
+      code,
+      question: HARDCODED_QUESTION[code],
+      content: content ?? '-',
+    })),
+  updatedTime: formatToRelativeDate(item.updatedTime),
+});
+
+const DraftItem: FC<DraftItemProps> = ({ item, downloadable = true }) => {
   const { css } = useStyle();
   const dispatch = useDispatch();
 
@@ -97,68 +123,40 @@ const DraftItem: FC<DraftItemProps> = ({ item }) => {
                   <ExpandButton onClick={(expanded) => expanded && !item.read && markAsReadFeedback(item.uuid)} />
                 </div>
               </div>
-
               <Panel>
                 <TileWrapper
                   customStyle={{
                     width: 'auto',
                     padding: '24px',
-                    margin: '24px 28px 28px 0px',
+                    margin: '24px 28px 0 0',
                     border: `1px solid ${colors.backgroundDarkest}`,
                   }}
                 >
                   {getPropperTargetType(item.targetType, item.targetId) !== '' && (
                     <h2 className={css(TitleStyle)}>{getPropperTargetType(item.targetType, item.targetId)}</h2>
                   )}
-                  <div className={css(infoBlockStyle)}>
-                    <h3>
-                      Looking back at what you&apos;ve seen recently, what would you like to say to this colleague about
-                      what they&apos;ve delivered or how they&apos;ve gone about it?
-                    </h3>
-                    {item.feedbackItems.map((question) => {
-                      return (
-                        <p key={question.code}>
-                          {question.code === 'Question 1' ? (question.content !== '' ? question.content : '-') : ''}
-                        </p>
-                      );
-                    })}
-                  </div>
-                  <div className={css(infoBlockStyle)}>
-                    <h3>
-                      Looking forward, what should this colleague do more (or less) of in order to be at their best?
-                    </h3>
-                    {item.feedbackItems.map((question) => {
-                      return (
-                        <p key={question.code}>
-                          {question.code === 'Question 2' ? (question.content !== '' ? question.content : '-') : ''}
-                        </p>
-                      );
-                    })}
-                  </div>
-                  <div className={css(infoBlockStyle)}>
-                    <h3>Add any other comments you would like to share with your colleague.</h3>
-                    {item.feedbackItems.map((question) => {
-                      return (
-                        <p key={question.code}>
-                          {question.code === 'Anything else?' ? (question.content !== '' ? question.content : '-') : ''}
-                        </p>
-                      );
-                    })}
-                  </div>
+                  {item.feedbackItems.map(({ code, question, content }) => (
+                    <div key={code} className={css(infoBlockStyle)}>
+                      <h3>{`${question}`}</h3>
+                      <p>{content}</p>
+                    </div>
+                  ))}
                 </TileWrapper>
-                <IconButton
-                  customVariantRules={{ default: iconBtnStyle }}
-                  onPress={() => downloadPDF(instance.url!, 'feedback.pdf')}
-                  graphic='download'
-                  iconProps={{ invertColors: false }}
-                  iconStyles={iconStyle}
-                >
-                  {instance.loading ? (
-                    <Trans i18nKey='loading'>Loading...</Trans>
-                  ) : (
-                    <Trans i18nKey='download'>Download</Trans>
-                  )}
-                </IconButton>
+                {downloadable && (
+                  <IconButton
+                    customVariantRules={{ default: iconBtnStyle }}
+                    onPress={() => downloadPDF(instance.url!, 'feedback.pdf')}
+                    graphic='download'
+                    iconProps={{ invertColors: false }}
+                    iconStyles={iconStyle}
+                  >
+                    {instance.loading ? (
+                      <Trans i18nKey='loading'>Loading...</Trans>
+                    ) : (
+                      <Trans i18nKey='download'>Download</Trans>
+                    )}
+                  </IconButton>
+                )}
               </Panel>
             </Section>
           )}
@@ -219,18 +217,6 @@ const TitleStyle: Rule = {
   color: '#00539F',
   lineHeight: '20px',
 };
-const InfoBlockStyle: Rule = {
-  marginBottom: '16px',
-  '& > h3': {
-    margin: '0px',
-    fontWeight: 'bold',
-    fontSize: '14px',
-  },
-  '& > p': {
-    margin: '0px',
-    fontSize: '14px',
-  },
-} as Styles;
 
 const iconBtnStyle: Rule = ({ theme }) => ({
   padding: '12px 20px 12px 14px',
@@ -250,6 +236,7 @@ const iconBtnStyle: Rule = ({ theme }) => ({
   whiteSpace: 'nowrap',
   marginLeft: 'auto',
   marginRight: '24px',
+  marginTop: '28px',
 });
 
 const iconStyle: Rule = {

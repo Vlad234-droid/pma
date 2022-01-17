@@ -1,4 +1,4 @@
-import React, { useEffect, Dispatch, FC, SetStateAction, useRef, MouseEvent } from 'react';
+import React, { Dispatch, FC, SetStateAction, useRef, MouseEvent } from 'react';
 import { useStyle, Rule, CreateRule, Styles, useBreakpoints, Button } from '@dex-ddl/core';
 import useEventListener from 'hooks/useEventListener';
 import { IconButton } from 'components/IconButton';
@@ -29,7 +29,6 @@ const FilterModal: FC<FilterModalProps> = ({
   filterModal,
   setFilterModal,
   filterData,
-  setFilterData,
   checkedItems,
   setCheckedItems,
   isCheckAll,
@@ -269,7 +268,7 @@ const relativeBtnStyled: Rule = ({ theme }) => ({
   left: theme.spacing.s0,
   right: theme.spacing.s0,
 });
-const spacingStyle: Rule = ({ theme }) => {
+const spacingStyle: Rule = () => {
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
   return {

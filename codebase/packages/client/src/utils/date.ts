@@ -45,4 +45,9 @@ export const formatToRelativeDate = (date: string) => {
     : DateTime.fromISO(date).setLocale('en').toRelative();
 };
 
+export const inDayRange = (date: string, checkDate: string) => {
+  const compare = DateTime.fromISO(checkDate);
+  return compare >= DateTime.fromISO(date).startOf('day') && compare <= DateTime.fromISO(date).endOf('day');
+};
+
 export const dateToIso = (date: Date) => DateTime.fromJSDate(date).toISO();

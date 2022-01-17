@@ -12,7 +12,7 @@ enum Page {
   PROFILE = 'profile',
   SETTINGS = 'settings',
   MY_TEAM = 'my-team',
-  ACTIONS = 'my-team/actions',
+  MY_ACTIONS = 'my-team/actions',
   NOTES = 'notes',
   GIVE_FEEDBACK = 'feedback/give',
   GIVE_NEW_FEEDBACK = 'feedback/give/new',

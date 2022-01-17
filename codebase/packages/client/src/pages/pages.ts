@@ -3,7 +3,7 @@ import { Page, PageElement } from './types';
 import CareerPerformance from './CareerPerformance';
 import PersonalDevelopmentPlan from './PersonalDevelopmentPlan';
 import MyTeam from './MyTeam';
-import Actions from './Actions';
+import MyActions from './MyActions';
 import Objectives from './Objectives';
 import Profile from './Profile';
 import Feedback from './Feedback';
@@ -39,11 +39,11 @@ const pages: Record<Page, PageComponent> = {
     title: 'My Notes',
     withHeader: true,
   },
-  [Page.ACTIONS]: {
-    Element: Actions,
+  [Page.MY_ACTIONS]: {
+    Element: MyActions,
     title: 'Actions',
     withHeader: true,
-    backPath: Page.CONTRIBUTION,
+    backPath: Page.MY_TEAM,
   },
   [Page.CREATE_PERFORMANCE_CYCLE]: {
     Element: CreatePerformanceCycle,

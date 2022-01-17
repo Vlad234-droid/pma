@@ -6,7 +6,10 @@ import {
   createAndPublishOrgObjective,
   publishOrgObjective,
   getOrgAuditLogs,
+  changeOrgObjectiveMetaStatus,
 } from './actions';
+
+import { Status } from '../../config/types';
 
 const initialObjectivesData = [
   { number: 1, title: '' },
@@ -18,65 +21,67 @@ const initialObjectivesData = [
 ];
 
 export const initialState = {
-  origin: [],
-  meta: { loading: false, loaded: false, error: null, status: null },
-  objectives: initialObjectivesData,
+  objectives: [],
   auditLogs: [],
+  meta: { loading: false, loaded: false, error: null, status: Status.IDLE },
 };
 
 export default createReducer(initialState)
-  .handleAction(createOrgObjective.request, (state, { payload }) => ({
+  .handleAction(createOrgObjective.request, (state) => ({
     ...state,
-    ...payload,
-    meta: { ...state.meta, loading: true, error: null, loaded: false },
+    meta: { ...state.meta, loading: true, error: null, loaded: false, status: Status.PENDING },
   }))
   .handleAction(createOrgObjective.success, (state, { payload }) => ({
     ...state,
-    ...payload,
-    meta: { ...state.meta, loading: false, loaded: true },
+    objectives: payload,
+    meta: { ...state.meta, loading: false, loaded: true, status: Status.SUCCEEDED },
   }))
 
-  .handleAction(createAndPublishOrgObjective.request, (state, { payload }) => ({
+  .handleAction(createAndPublishOrgObjective.request, (state) => ({
     ...state,
-    ...payload,
     meta: { ...state.meta, loading: true, error: null, loaded: false },
   }))
   .handleAction(createAndPublishOrgObjective.success, (state, { payload }) => ({
     ...state,
-    ...payload,
-    meta: { ...state.meta, loading: false, loaded: true },
+    objectives: payload,
+    meta: { ...state.meta, loading: false, loaded: true, status: Status.SUCCEEDED },
   }))
 
-  .handleAction(publishOrgObjective.request, (state, { payload }) => ({
+  .handleAction(publishOrgObjective.request, (state) => ({
     ...state,
-    ...payload,
-    meta: { ...state.meta, loading: true, error: null, loaded: false },
+    meta: { ...state.meta, loading: true, error: null, loaded: false, status: Status.PENDING },
   }))
   .handleAction(publishOrgObjective.success, (state, { payload }) => ({
     ...state,
-    ...payload,
-    meta: { ...state.meta, loading: false, loaded: true },
+    objectives: payload,
+    meta: { ...state.meta, loading: false, loaded: true, status: Status.SUCCEEDED },
   }))
 
-  .handleAction(getOrgObjectives.request, (state, { payload }) => ({
+  .handleAction(getOrgObjectives.request, (state) => ({
     ...state,
-    ...payload,
     meta: { ...state.meta, loading: true, error: null, loaded: false },
   }))
   .handleAction(getOrgObjectives.success, (state, { payload }) => ({
     ...state,
-    ...payload,
+    objectives: payload,
     meta: { ...state.meta, loading: false, loaded: true },
   }))
-
-  .handleAction(getOrgAuditLogs.request, (state, { payload }) => ({
+  .handleAction(getOrgObjectives.failure, (state, { payload }) => ({
     ...state,
-    ...payload,
+    objectives: initialObjectivesData,
+    meta: { ...state.meta, error: payload },
+  }))
+  .handleAction(getOrgAuditLogs.request, (state) => ({
+    ...state,
     meta: { ...state.meta, loading: true, error: null, loaded: false },
   }))
   .handleAction(getOrgAuditLogs.success, (state, { payload }) => ({
     ...state,
-    ...payload,
+    auditLogs: payload,
     meta: { ...state.meta, loading: false, loaded: true },
+  }))
+  .handleAction(changeOrgObjectiveMetaStatus, (state, { payload }) => ({
+    ...state,
+    meta: { ...state.meta, status: payload },
   }))
   .handleAction(clearOrgObjectiveData, () => initialState);
