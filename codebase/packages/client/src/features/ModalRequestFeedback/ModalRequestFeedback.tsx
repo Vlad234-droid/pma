@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState, useCallback } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { CreateRule, Rule, Styles, useStyle } from '@dex-ddl/core';
 import { ObjectiveOptionsType, PeopleTypes } from './type';
 import { SuccessModal, InfoModalContent } from './ModalParts';
@@ -157,8 +157,7 @@ const ModalRequestFeedback: FC = () => {
   const choseFieldHandler = () => {
     if (!formValues || !formValues.area_options) return;
 
-    const labelValue = () =>
-      area_options_data[area_options_data.findIndex((item) => item.value === formValues.area_options)].label;
+    const labelValue = () => area_options_data.find((item) => item.value === formValues.area_options)?.label;
 
     const obj = {
       id_1: (
@@ -309,7 +308,7 @@ const ModalRequestFeedback: FC = () => {
                 options={area_options_data}
                 placeholder={'Choose an area'}
                 value={formValues.area_options}
-                onChange={(_, value) => {
+                onChange={(value) => {
                   trigger('area_options');
                   setValue('area_options', value);
                 }}

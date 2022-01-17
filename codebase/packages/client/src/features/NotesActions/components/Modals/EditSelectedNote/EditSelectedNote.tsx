@@ -183,18 +183,19 @@ const EditSelectedNote: FC<EditSelectedNoteProps> = ({
                   Element={Select}
                   options={field_options}
                   placeholder={item.field_placeholder}
-                  onChange={(_, value) => {
+                  onChange={(value) => {
+                    if (!value) return;
                     trigger('folder');
-                    setSelectedNoteToEdit((prev: any) => {
-                      return { ...prev, folderUuid: value };
-                    });
+                    // setSelectedNoteToEdit((prev: any) => {
+                    //   return { ...prev, folderUuid: value };
+                    // });
                   }}
                   value={
                     selectedNoteToEdit.folderUuid === null
                       ? 'All notes'
                       : foldersWithNotes[
                           foldersWithNotes.findIndex((item) => item.id === selectedNoteToEdit.folderUuid)
-                        ]?.title ?? ''
+                        ]?.id ?? ''
                   }
                 />
               );

@@ -114,7 +114,7 @@ export const SubmitPart: FC<SubmitPartProps> = ({ selectedPerson, teamMethods, f
                 Element={Select}
                 options={field_options}
                 placeholder={item.field_placeholder}
-                onChange={(_, value) => {
+                onChange={(value) => {
                   setValue('folder', value);
                   trigger('folder');
                 }}

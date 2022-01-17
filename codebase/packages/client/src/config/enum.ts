@@ -77,3 +77,10 @@ export enum DslType {
   WORK_LEVEL = 'work_level',
   REQUEST = 'request',
 }
+
+export enum VoiceType {
+  'id_1' = 'Direct and simple',
+  'id_2' = 'Friendly and constructive',
+  'id_3' = 'Informative and detailed',
+  'id_4' = 'I don`t have a preference',
+}

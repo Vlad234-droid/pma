@@ -1,1 +1,2 @@
-export { default, QUESTION_ORDER } from './DraftItem';
+export { default, defaultSerializer } from './DraftItem';
+export type { DraftItem } from './DraftItem';

@@ -1,9 +1,7 @@
-import React, { ChangeEvent, FC, RefObject, useState } from 'react';
-
-import { Ref } from 'react-hook-form';
+import React, { ChangeEvent, FC, useState } from 'react';
+import { FieldValues } from 'react-hook-form';
 
 type FieldProps = {
-  name: string;
   value?: string;
   label?: string;
   placeholder?: string;
@@ -12,19 +10,10 @@ type FieldProps = {
   Wrapper?: FC<any>;
   rows?: number;
   options?: Array<Record<string, number | string | boolean>>;
-  domRef?: Ref | RefObject<any> | null;
-  onChange?: any;
 };
 
 const createChangeObject = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
   switch (e.target.type) {
-    case 'text':
-      return {
-        target: {
-          value: e.target.value,
-          name: e.target.name,
-        },
-      };
     case 'radio':
     case 'checkbox': {
       return {
@@ -40,7 +29,7 @@ const createChangeObject = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElemen
   }
 };
 
-const Field: FC<FieldProps> = ({
+const Field: FC<FieldProps & FieldValues> = ({
   error,
   Element,
   Wrapper = 'div',
@@ -48,18 +37,24 @@ const Field: FC<FieldProps> = ({
   label,
   options,
   value,
+  name,
   onChange,
+  setValue,
+  trigger,
   ...props
 }) => {
   const [currentValue, setCurrentValue] = useState(value);
 
   const handleChange = (e) => {
+    const changeObject = createChangeObject(e);
     setCurrentValue(e.target.value);
-    onChange(createChangeObject(e));
+    onChange && onChange(changeObject);
+    setValue(name, changeObject.target.value, { shouldDirty: true });
+    trigger(name);
   };
 
-  const element = (
-    <div>
+  if (!Wrapper && !label) {
+    return (
       <Element
         options={options}
         isValid={Boolean(!error)}
@@ -68,16 +63,19 @@ const Field: FC<FieldProps> = ({
         onChange={handleChange}
         {...props}
       />
-    </div>
-  );
-
-  if (!Wrapper && !label) {
-    return element;
+    );
   }
 
   return (
     <Wrapper label={label} errormessage={error}>
-      {element}
+      <Element
+        options={options}
+        isValid={Boolean(!error)}
+        placeholder={placeholder}
+        value={currentValue}
+        onChange={handleChange}
+        {...props}
+      />
     </Wrapper>
   );
 };

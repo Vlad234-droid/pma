@@ -7,6 +7,7 @@ type QuestionItem = {
   code: string;
   content: string;
   feedbackUuid: string;
+  question: string;
   uuid: string;
 };
 
@@ -52,10 +53,10 @@ const FeedbackDocument: FC<Props> = ({ items }) => {
               </View>
             </View>
             <View style={styles.body}>
-              {feedback.feedbackItems.map((question) => (
-                <View key={question.code} style={styles.questions}>
-                  <Text style={styles.question}>{question.code}</Text>
-                  <Text style={styles.answer}>{question.content}</Text>
+              {feedback.feedbackItems.map(({ code, question, content }) => (
+                <View key={code} style={styles.questions}>
+                  <Text style={styles.question}>{question}</Text>
+                  <Text style={styles.answer}>{content}</Text>
                 </View>
               ))}
             </View>
@@ -126,6 +127,7 @@ const styles = StyleSheet.create({
   question: {
     fontSize: 14,
     fontWeight: 'bold',
+    marginBottom: 5,
   },
   answer: {
     fontSize: 14,

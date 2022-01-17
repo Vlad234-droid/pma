@@ -8,6 +8,7 @@ import { Item, Textarea } from 'components/Form';
 import { GenericItemField } from 'components/GenericForm';
 import { Trans } from 'components/Translation';
 import defaultImg from '../../../../public/default.png';
+import { VoiceType } from 'config/enum';
 
 export const WITH_SELECTED_TEST = 'with_selected_test';
 const QUESTION_ORDER = ['Question 1', 'Question 2', 'Anything else?'];
@@ -32,7 +33,7 @@ const SubmitPart: FC<SubmitPartProps> = ({
   const valuess = getValues();
 
   const getPropperToneOfVoice = () =>
-    selectedPerson?.profileAttributes?.find((item) => item?.name === 'voice')?.value ?? 'Direct and simple';
+    VoiceType[selectedPerson?.profileAttributes?.find((item) => item?.name === 'voice')?.value] ?? 'Direct and simple';
 
   return (
     <div data-test-id={WITH_SELECTED_TEST}>

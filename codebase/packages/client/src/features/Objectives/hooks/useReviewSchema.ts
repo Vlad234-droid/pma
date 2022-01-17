@@ -10,8 +10,7 @@ import {
   SchemaActions,
 } from '@pma/store';
 import { ReviewType, Status } from 'config/enum';
-import { dslRequest, replaceDslString } from 'utils';
-import { objectivesExtraSchemaOptions } from '../utils';
+import { dslRequest, cleanFromDsl } from 'utils';
 
 function useReviewSchema(type: ReviewType) {
   const dispatch = useDispatch();
@@ -48,14 +47,18 @@ function useReviewSchemaWithPermission(type: ReviewType) {
     const dslReviewArray: string[] = dslRequest(textWithDsl);
     if (dslReviewArray?.length) {
       [...Array(Number(objectiveCount))].forEach((_, index) =>
-        newComponents.push(objectivesExtraSchemaOptions(index + 1)),
+        newComponents.push(
+          cleanFromDsl({
+            ...component,
+            // todo ask backend about rules for replace.
+            ...(component?.key ? { key: component?.key?.replace(component?.key, `${component?.key}-${index}`) } : {}),
+            ...(component?.label ? { label: component?.label?.replace('Objective', `Objective ${index + 1}`) } : {}),
+          }),
+        ),
       );
+    } else {
+      newComponents.push(cleanFromDsl(component));
     }
-    newComponents.push({
-      ...component,
-      text: replaceDslString(component.text),
-      description: replaceDslString(component.description),
-    });
   });
 
   const getSchema = useCallback(() => {

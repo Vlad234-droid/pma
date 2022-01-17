@@ -12,7 +12,7 @@ type Props<T> = {
   schema: AnyObjectSchema;
   onSubmit?: Handler<T>;
   refDom?: RefObject<any>;
-  renderButtons?: (isValid: boolean, handleSubmit: UseFormHandleSubmit<T>) => JSX.Element | null;
+  renderButtons?: (isValid: boolean, isDirty: boolean, handleSubmit: UseFormHandleSubmit<T>) => JSX.Element | null;
   renderContent?: () => JSX.Element | null;
   defaultValues?: Partial<T>;
   domRef?: RefObject<any> | null;
@@ -41,11 +41,17 @@ function genericForm<T>({
     // @ts-ignore
     defaultValues,
   });
-  const { handleSubmit, formState, register, getValues } = methods;
+  const {
+    handleSubmit,
+    formState: { isValid, errors, isDirty },
+    register,
+    getValues,
+    setValue,
+    trigger,
+  } = methods;
 
   const { css } = useStyle();
 
-  const { isValid, errors } = formState;
   const values = getValues();
 
   return (
@@ -54,20 +60,21 @@ function genericForm<T>({
         <Fragment key={name}>
           <Field
             {...props}
-            // @ts-ignore
             error={get(errors, `${name}.message`)}
             placeholder={placeholder}
             label={label}
             value={get(values, name)}
             Element={Element}
             Wrapper={Wrapper}
+            setValue={setValue}
+            trigger={trigger}
             // @ts-ignore
             {...register(name)}
           />
         </Fragment>
       ))}
       {renderContent && renderContent()}
-      {renderButtons && renderButtons(isValid, handleSubmit)}
+      {renderButtons && renderButtons(isValid, isDirty, handleSubmit)}
     </form>
   );
 }

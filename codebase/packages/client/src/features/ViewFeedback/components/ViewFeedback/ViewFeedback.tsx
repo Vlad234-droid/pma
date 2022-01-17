@@ -1,28 +1,20 @@
-import React, { FC, useEffect, useMemo, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { Button, Modal, Rule, useBreakpoints, useStyle } from '@dex-ddl/core';
-import { Trans } from 'components/Translation';
+import { Trans, useTranslation } from 'components/Translation';
 import { FilterOption } from 'features/Shared';
 import { IconButton } from 'components/IconButton';
-import DraftItem, { QUESTION_ORDER } from '../DraftItem';
+import { defaultSerializer } from '../DraftItem';
+import DraftList from '../DraftList';
 import RadioBtns from '../RadioBtns';
-import { NoFeedback } from '../../../Feedback/components';
 import { Notification } from 'components/Notification';
 import { Icon } from 'components/Icon';
 import { HelpModalReceiveFeedback, ModalDownloadFeedback } from '../ModalParts';
-import { formatToRelativeDate } from 'utils';
-import {
-  ColleaguesActions,
-  colleagueUUIDSelector,
-  FeedbackActions,
-  getPropperNotesByCriterionSelector,
-  ObjectiveActions,
-} from '@pma/store';
+import { ColleaguesActions, colleagueUUIDSelector, FeedbackActions, ObjectiveActions } from '@pma/store';
 import { useDispatch, useSelector } from 'react-redux';
 import { FilterModal } from '../../../Shared/components/FilterModal';
 import { useNavigate } from 'react-router-dom';
 import { FeedbackStatus } from 'config/enum';
-
-import { downloadPDF, FeedbackDocument, usePDF } from '@pma/pdf-renderer';
+import useSubmittedCompletedNotes from '../../hooks/useSubmittedCompletedNotes';
 
 type filterFeedbacksType = {
   AZ: boolean;
@@ -37,7 +29,7 @@ const ViewFeedback: FC = () => {
   const dispatch = useDispatch();
   const [helpModalReceiveFeedback, setHelpModalReceiveFeedback] = useState<boolean>(false);
   const [openMainModal, setOpenMainModal] = useState<boolean>(false);
-  const [ModalSuccess, setModalSuccess] = useState<boolean>(false);
+  const [modalSuccess, setModalSuccess] = useState<boolean>(false);
   const [checkedRadio, setCheckedRadio] = useState({
     unread: true,
     read: false,
@@ -56,6 +48,8 @@ const ViewFeedback: FC = () => {
     oldToNew: false,
   });
 
+  const { t } = useTranslation();
+
   useEffect(() => {
     if (!focus) setSearchValueFilterOption(() => '');
     if (focus) {
@@ -72,7 +66,7 @@ const ViewFeedback: FC = () => {
   const isReaded = checkedRadio.read && !checkedRadio.unread;
   const searchValue = searchValueFilterOption.replace(/\s+/g, '').toLowerCase();
 
-  const filterFn = (item, isReaded) => {
+  const filterFn = (item) => {
     const fullName =
       `${item?.colleagueProfile?.colleague?.profile?.firstName}${item?.colleagueProfile?.colleague?.profile?.lastName}`.toLowerCase();
 
@@ -120,6 +114,10 @@ const ViewFeedback: FC = () => {
     return val1.localeCompare(val2);
   };
 
+  const handleDownloadAllPress = () => {
+    setOpenMainModal(true);
+  };
+
   useEffect(() => {
     if (!colleagueUuid) {
       return;
@@ -133,37 +131,12 @@ const ViewFeedback: FC = () => {
     );
   }, [colleagueUuid]);
 
-  const submittedCompletedNotes =
-    useSelector(
-      getPropperNotesByCriterionSelector({
-        status: FeedbackStatus.SUBMITTED,
-        isReaded,
-        filterFn,
-        sortFn,
-        serializer: (item) => ({
-          ...item,
-          firstName: item?.colleagueProfile?.colleague?.profile?.firstName || '',
-          lastName: item?.colleagueProfile?.colleague?.profile?.lastName || '',
-          jobName: item?.colleagueProfile?.colleague?.workRelationships[0].job.name || '',
-          departmentName: item?.colleagueProfile?.colleague?.workRelationships[0].department?.name || '',
-          feedbackItems: item?.feedbackItems.sort(
-            (i1, i2) => QUESTION_ORDER.indexOf(i1.code) - QUESTION_ORDER.indexOf(i2.code),
-          ),
-          updatedTime: formatToRelativeDate(item.updatedTime),
-        }),
-      }),
-    ) || [];
-
-  const document = useMemo(
-    () => <FeedbackDocument items={submittedCompletedNotes} />,
-    [submittedCompletedNotes.length],
-  );
-
-  const [instance, updateInstance] = usePDF({ document });
-
-  useEffect(() => {
-    updateInstance();
-  }, [submittedCompletedNotes.length]);
+  const submittedCompletedNotes = useSubmittedCompletedNotes({
+    status: FeedbackStatus.SUBMITTED,
+    sortFn,
+    filterFn,
+    serializer: defaultSerializer,
+  });
 
   useEffect(() => {
     if (!submittedCompletedNotes.length) {
@@ -248,13 +221,7 @@ const ViewFeedback: FC = () => {
           </div>
         </div>
         <div className={css(ReverseItemsStyled)}>
-          <div className={css(DraftsStyle)}>
-            {submittedCompletedNotes.length ? (
-              submittedCompletedNotes.map((item) => <DraftItem key={item.uuid} item={item} />)
-            ) : (
-              <NoFeedback />
-            )}
-          </div>
+          <DraftList items={submittedCompletedNotes} />
           <div className={css(ButtonsActionsStyle)}>
             <div className={css(ButtonContainerStyle)}>
               <div className={css({ display: 'inline-flex' })}>
@@ -285,15 +252,8 @@ const ViewFeedback: FC = () => {
                 <span className={css(SizeStyle)}>Download feedback</span>
               </div>
               <p className={css(SavedStyled)}>Download feedback to your device</p>
-              <Button
-                styles={[iconBtnStyle, { maxWidth: '181px !important' }]}
-                onPress={() => downloadPDF(instance.url!, 'feedbacks.pdf')}
-              >
-                {instance.loading ? (
-                  <Trans i18nKey='loading'>Loading...</Trans>
-                ) : (
-                  <Trans i18nKey='download_all_feedbacks'>Download all feedbacks</Trans>
-                )}
+              <Button styles={[iconBtnStyle, { maxWidth: '181px !important' }]} onPress={handleDownloadAllPress}>
+                <Trans i18nKey='download_feedbacks'>Download feedbacks</Trans>
               </Button>
             </div>
             <Notification
@@ -325,17 +285,23 @@ const ViewFeedback: FC = () => {
             styles: [modalCloseOptionStyle],
           }}
           title={{
-            content: 'Download feedback',
+            content: t('download_your_feedback', 'Download your feedback'),
             styles: [modalTitleOptionStyle],
           }}
         >
           <ModalDownloadFeedback
             setOpenMainModal={setOpenMainModal}
-            ModalSuccess={ModalSuccess}
+            modalSuccess={modalSuccess}
             setModalSuccess={setModalSuccess}
             closeHandler={closeHandler}
-            downloadTitle='Which feedback do you want to download?'
-            downloadDescription='Select which colleagues feedback do you want to download, then download it to your device'
+            downloadTitle={t(
+              'which_feedback_would_you_like_to_download',
+              'Which feedback would you like to download? ',
+            )}
+            downloadDescription={t(
+              'use_the_search_bar_to_look_for_colleagues',
+              'Use the search bar to look for colleagues who have given you feedback.',
+            )}
           />
         </Modal>
       )}
@@ -414,13 +380,6 @@ const ButtonsActionsStyle: Rule = () => {
       },
     },
   };
-};
-
-const DraftsStyle: Rule = {
-  flex: '3 1 676px',
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '8px',
 };
 
 const ButtonContainerStyle: Rule = {

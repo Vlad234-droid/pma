@@ -50,4 +50,10 @@ const hasPermission = (permissionString: string, whoCanAccess: string[]) => {
 
 const replaceDslString = (text) => text?.replace(dslReqExp, '');
 
-export { getDslObject, hasPermission, replaceDslString, dslRequest };
+const cleanFromDsl = (component) => ({
+  ...component,
+  ...(component?.text ? { text: replaceDslString(component.text) } : {}),
+  ...(component?.description ? { description: replaceDslString(component.description) } : {}),
+});
+
+export { getDslObject, hasPermission, replaceDslString, cleanFromDsl, dslRequest };

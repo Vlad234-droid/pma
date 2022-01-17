@@ -117,7 +117,7 @@ export const getPDPSchema = (type: PDPType) =>
     }
 
     const filteredComponent = components.filter((component) => {
-      if (component.type === 'textfield' && hasPermission(component.label, dsl)) {
+      if (['textfield', 'select'].includes(component.type) && hasPermission(component.description, dsl)) {
         return true;
       }
       return component.type === 'text' && hasPermission(component.text, dsl);

@@ -163,7 +163,7 @@ const Report: FC = () => {
                   Wrapper={({ children }) => <Item withIcon={false}>{children}</Item>}
                   Element={Select}
                   options={field_options}
-                  onChange={(_, value) => {
+                  onChange={(value) => {
                     changeYearHandler(value);
                   }}
                 />

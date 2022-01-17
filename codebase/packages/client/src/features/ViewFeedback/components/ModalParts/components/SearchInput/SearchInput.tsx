@@ -60,18 +60,22 @@ const SearchInput: FC<InputProps> = ({
               className={css(SelectedContainerStyle)}
               onMouseDown={(e) => e.preventDefault()}
               onClick={() => {
-                setSearchValue(() => `${item?.profile?.firstName} ${item?.profile?.lastName}`);
-                setSelectedPerson(() => item);
+                setSearchValue(() => `${item?.colleague?.profile?.firstName} ${item?.colleague?.profile?.lastName}`);
+                setSelectedPerson(() => ({ ...item.colleague, profileAttributes: item.profileAttributes }));
                 dispatch(ColleaguesActions.clearGettedColleagues());
               }}
             >
               <div className={css({ display: 'flex', justifyContent: 'flex-start', alignItems: 'center' })}>
                 <img className={css({ width: '50px', height: '50px', borderRadius: '50%' })} src={defaultImg} />
                 <div className={css({ marginLeft: '16px' })}>
-                  <div className={css({ fontWeight: 'bold', fontSize: '16px', color: '#00539F' })}>
-                    {item?.profile?.firstName}
+                  <div className={css(FlexGapStyle, SelectedItemStyle)}>
+                    <div>{item?.colleague?.profile?.firstName}</div>
+                    <div>{item?.colleague?.profile?.lastName}</div>
                   </div>
-                  <div>{item?.profile?.lastName}</div>
+                  <div className={css(FlexGapStyle, { marginTop: '4px' })}>
+                    <div>{item?.colleague?.workRelationships[0].job?.name}</div>
+                    <div>{item?.colleague?.workRelationships[0].department?.name}</div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -81,6 +85,17 @@ const SearchInput: FC<InputProps> = ({
     </>
   );
 };
+
+const FlexGapStyle: Rule = {
+  display: 'flex',
+  gap: '8px',
+};
+
+const SelectedItemStyle: Rule = ({ colors }) => ({
+  fontWeight: 'bold',
+  fontSize: '16px',
+  color: colors.link,
+});
 
 const SelectedContainerStyle: Rule = {
   display: 'block',
