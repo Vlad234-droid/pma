@@ -35,6 +35,7 @@ const RespondFeedbackContainer: FC = () => {
     newToOld: false,
     oldToNew: false,
   });
+
   useEffect(() => {
     if (!focus) setSearchValueFilterOption(() => '');
     if (focus) {
@@ -94,10 +95,10 @@ const RespondFeedbackContainer: FC = () => {
               }}
             />
             <FilterModal
-              filterModal={filterModal}
-              filterFeedbacks={filterFeedbacks}
-              setFilterFeedbacks={setFilterFeedbacks}
-              setFilterModal={setFilterModal}
+              isOpen={filterModal}
+              filter={filterFeedbacks}
+              setFilter={setFilterFeedbacks}
+              toggleOpen={setFilterModal}
             />
           </div>
         </div>

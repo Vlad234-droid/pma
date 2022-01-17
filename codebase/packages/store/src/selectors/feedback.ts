@@ -42,7 +42,7 @@ export const getUnReadSubmittedNotesSelector = (status, colleagueUuid) =>
     return filterByArgs;
   });
 
-export const getPropperNotesByStatusSelector = (status) =>
+export const feedbackByStatusSelector = (status) =>
   createSelector(feedbackSelector, (feedback: any) => {
     const { notes } = feedback;
     if (typeof status === 'string') {
@@ -61,6 +61,12 @@ export const getPropperNotesByStatusSelector = (status) =>
 
       return filteredByStatus;
     }
+  });
+
+export const feedbackByUuidSelector = (uuid) =>
+  createSelector(feedbackSelector, (feedback: any) => {
+    const { notes } = feedback;
+    return notes.find((item) => item.uuid === uuid);
   });
 
 export const getPropperNotesByCriteria = ({ status, filterFn, sortFn, serializer }) =>

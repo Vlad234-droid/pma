@@ -1,26 +1,32 @@
 import React, { FC, useState, useEffect } from 'react';
-import { useStyle, useBreakpoints, Rule } from '@dex-ddl/core';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { FilterOption } from 'features/Shared';
-import { PeopleTypes, TypefeedbackItems } from './type';
-import { DraftItem, RadioBtns } from './components';
-import { FilterModal } from '../Shared/components/FilterModal';
+import { useStyle, useBreakpoints, Rule } from '@dex-ddl/core';
+import { colleagueUUIDSelector, FeedbackActions, feedbackByStatusSelector } from '@pma/store';
+import { paramsReplacer } from 'utils';
 import { Page } from 'pages';
+import { FilterOption } from 'features/Shared';
+import { FeedbackStatus } from 'config/enum';
+import { FeedbackBlock, RadioBtns } from './components';
+import { FilterModal } from '../Shared/components/FilterModal';
 
 const OuterGiveFeedBack: FC = () => {
   const { css } = useStyle();
-  const [isOpenMainModal, setIsOpen] = useState<boolean>(false);
-  const [title, setTitle] = useState<string>('');
-  const [searchValue, setSearchValue] = useState<string>('');
-  const [selectedPerson, setSelectedPerson] = useState<PeopleTypes | null>(null);
-  const [feedbackItemsS, setFeedbackItems] = useState<TypefeedbackItems[] | []>([]);
-
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [checkedRadio, setCheckedRadio] = useState({
-    draft: true,
-    submitted: false,
-  });
+  const colleagueUuid = useSelector(colleagueUUIDSelector);
+  const [status, setCheckedStatus] = useState(FeedbackStatus.DRAFT);
+
+  useEffect(() => {
+    if (!colleagueUuid) return;
+    dispatch(
+      FeedbackActions.getAllFeedbacks({
+        'colleague-uuid': colleagueUuid,
+        _limit: '300',
+      }),
+    );
+  }, [colleagueUuid]);
 
   // filter
   const [focus, setFocus] = useState(false);
@@ -42,41 +48,16 @@ const OuterGiveFeedBack: FC = () => {
   }, [focus]);
 
   const handleBtnClick = (): void => {
-    navigate(`/${Page.GIVE_NEW_FEEDBACK}`);
+    navigate(paramsReplacer(`/${Page.GIVE_NEW_FEEDBACK}`, { ':uuid': 'new' }));
   };
 
-  const draftFeedback = (selectedNote): void => {
-    setFeedbackItems(() => selectedNote.feedbackItems);
-
-    setSearchValue(
-      () =>
-        `${selectedNote.targetColleagueProfile?.colleague?.profile?.firstName} ${selectedNote.targetColleagueProfile?.colleague?.profile?.lastName}`,
-    );
-    setTitle(() => 'Give feedback');
-    setSelectedPerson(() => {
-      return {
-        ...selectedNote.targetColleagueProfile.colleague,
-        profileAttributes: selectedNote.targetColleagueProfile.profileAttributes,
-        uuid: selectedNote.uuid,
-      };
-    });
-    setIsOpen(() => true);
-  };
+  const feedbackList = useSelector(feedbackByStatusSelector(status)) || [];
 
   return (
     <>
       <div>
         <div className={css(headerStyled)}>
-          <RadioBtns
-            checkedRadio={checkedRadio}
-            setCheckedRadio={setCheckedRadio}
-            handleBtnClick={handleBtnClick}
-            focus={focus}
-            setFocus={setFocus}
-            setFilterModal={setFilterModal}
-            filterModal={filterModal}
-            setFilterFeedbacks={setFilterFeedbacks}
-          />
+          <RadioBtns checkedRadio={status} onCheck={setCheckedStatus} handleBtnClick={handleBtnClick} />
           <div className={css(FilterIconStyled)}>
             <FilterOption
               focus={focus}
@@ -95,25 +76,15 @@ const OuterGiveFeedBack: FC = () => {
               }}
             />
             <FilterModal
-              filterModal={filterModal}
-              filterFeedbacks={filterFeedbacks}
-              setFilterFeedbacks={setFilterFeedbacks}
-              setFilterModal={setFilterModal}
+              isOpen={filterModal}
+              filter={filterFeedbacks}
+              setFilter={setFilterFeedbacks}
+              toggleOpen={setFilterModal}
             />
           </div>
         </div>
         <div className={css(Drafts_style)}>
-          <DraftItem
-            draftFeedback={draftFeedback}
-            checkedRadio={checkedRadio}
-            searchValue={searchValueFilterOption}
-            focus={focus}
-            setFocus={setFocus}
-            filterModal={filterModal}
-            setFilterModal={setFilterModal}
-            setFilterFeedbacks={setFilterFeedbacks}
-            filterFeedbacks={filterFeedbacks}
-          />
+          <FeedbackBlock list={feedbackList} />
         </div>
       </div>
     </>

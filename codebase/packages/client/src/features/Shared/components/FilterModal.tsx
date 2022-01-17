@@ -1,65 +1,54 @@
-import React, { Dispatch, FC, SetStateAction, useRef, MouseEvent } from 'react';
+import React, { FC, useRef, MouseEvent } from 'react';
 import { useStyle, Rule, CreateRule } from '@dex-ddl/core';
 import { Radio } from 'components/Form';
 import { Trans } from 'components/Translation';
 import useEventListener from 'hooks/useEventListener';
 
-type filterFeedbacksType = {
+type FilterType = {
   AZ: boolean;
   ZA: boolean;
   newToOld: boolean;
   oldToNew: boolean;
 };
 
-type FilterModalProps = {
-  filterModal: boolean;
-  filterFeedbacks: filterFeedbacksType;
-  setFilterFeedbacks: Dispatch<SetStateAction<filterFeedbacksType>>;
-  setFilterModal: Dispatch<SetStateAction<boolean>>;
+type Props = {
+  isOpen: boolean;
+  filter: FilterType;
+  setFilter: (filter: FilterType) => void;
+  toggleOpen: (open: boolean) => void;
 };
 
-export const FilterModal: FC<FilterModalProps> = ({
-  filterModal,
-  filterFeedbacks,
-  setFilterFeedbacks,
-  setFilterModal,
-}) => {
+export const FilterModal: FC<Props> = ({ isOpen, filter, setFilter, toggleOpen }) => {
   const { css } = useStyle();
-  const chosesHandler = (val: string) => {
-    setFilterFeedbacks(() => ({ AZ: false, ZA: false, newToOld: false, oldToNew: false }));
-    setFilterFeedbacks((prev) => {
-      return {
-        ...prev,
-        [val]: true,
-      };
-    });
-    setFilterModal(() => false);
+  const choseHandler = (val: string) => {
+    setFilter({ AZ: false, ZA: false, newToOld: false, oldToNew: false, [val]: true });
+    toggleOpen(false);
   };
   const ref = useRef<HTMLDivElement | null>(null);
 
-  const btns_radio = [
+  const fields = [
     {
       id: '1',
       label: 'AZ',
-      checked: filterFeedbacks.AZ,
+      checked: filter.AZ,
       text: 'A-Z',
     },
     {
       id: '2',
       label: 'ZA',
-      checked: filterFeedbacks.ZA,
+      checked: filter.ZA,
       text: 'Z-A',
     },
     {
       id: '3',
       label: 'newToOld',
-      checked: filterFeedbacks.newToOld,
+      checked: filter.newToOld,
       text: 'Newest to oldest',
     },
     {
       id: '4',
       label: 'oldToNew',
-      checked: filterFeedbacks.oldToNew,
+      checked: filter.oldToNew,
       text: 'Oldest to newest',
     },
   ];
@@ -67,28 +56,28 @@ export const FilterModal: FC<FilterModalProps> = ({
   const handleClickOutside = (event: MouseEvent<HTMLElement>) => {
     const element = event?.target as HTMLElement;
     if (ref.current && !ref.current.contains(element)) {
-      setFilterModal(false);
+      toggleOpen(false);
     }
   };
 
   useEventListener('mousedown', handleClickOutside);
 
   return (
-    <div ref={ref} className={css(wrapper_style({ filterModal }))}>
-      <div className={css(Flex_column_style)}>
+    <div ref={ref} className={css(wrapperStyle({ isOpen }))}>
+      <div className={css(columnStyle)}>
         <span>Sort :</span>
-        {btns_radio.map((item) => (
+        {fields.map((item) => (
           <div className={css({ cursor: 'pointer', marginTop: '10px' })} key={item.id}>
-            <label htmlFor={item.label} className={css(Flex_center_style)}>
+            <label htmlFor={item.label} className={css(labelStyle)}>
               <Radio
                 name={item.label}
                 checked={item.checked}
                 id={item.label}
                 onChange={() => {
-                  chosesHandler(item.label);
+                  choseHandler(item.label);
                 }}
               />
-              <span className={css(Size_style)}>
+              <span className={css(textStyle)}>
                 <Trans>{item.text}</Trans>
               </span>
             </label>
@@ -98,21 +87,21 @@ export const FilterModal: FC<FilterModalProps> = ({
     </div>
   );
 };
-const Flex_column_style: Rule = {
+const columnStyle: Rule = {
   display: 'flex',
   flexDirection: 'column',
 };
-const Size_style: Rule = {
+const textStyle: Rule = {
   fontSize: '16px',
   lineHeight: '20px',
   padding: '0px 5px',
 };
-const Flex_center_style: Rule = {
+const labelStyle: Rule = {
   display: 'flex',
   alignItems: 'center',
   cursor: 'pointer',
 };
-const wrapper_style: CreateRule<{ filterModal: boolean }> = ({ filterModal }) => {
+const wrapperStyle: CreateRule<{ isOpen: boolean }> = ({ isOpen }) => {
   const { theme } = useStyle();
   return {
     position: 'absolute',
@@ -121,8 +110,8 @@ const wrapper_style: CreateRule<{ filterModal: boolean }> = ({ filterModal }) =>
     padding: '10px 16px 16px 16px',
     top: '40px',
     right: '0px',
-    pointerEvents: filterModal ? 'all' : 'none',
-    transform: filterModal ? 'scaleY(1)' : 'scaleY(0)',
+    pointerEvents: isOpen ? 'all' : 'none',
+    transform: isOpen ? 'scaleY(1)' : 'scaleY(0)',
     transition: 'transform .3s ease',
     transformOrigin: '50% 0%',
     border: `1px solid ${theme.colors.tescoBlue}`,

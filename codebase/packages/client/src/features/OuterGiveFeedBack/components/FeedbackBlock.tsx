@@ -1,99 +1,31 @@
-import React, { FC, SetStateAction, useEffect, Dispatch } from 'react';
+import React, { FC } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useStyle, Rule, Styles, colors } from '@dex-ddl/core';
+
+import { NoFeedback } from 'features/Feedback/components';
 import { TileWrapper } from 'components/Tile';
 import { Accordion, BaseAccordion, Section, Panel, ExpandButton } from 'components/Accordion';
 import { IconButton } from 'components/IconButton';
 import { Trans } from 'components/Translation';
-import { FeedbackActions, getPropperNotesByStatusSelector, colleagueUUIDSelector } from '@pma/store';
-import { useDispatch, useSelector } from 'react-redux';
-import { FeedbackStatus } from '../../../config/enum';
-import { filteredByInputSearchHandler, filteredNotesByRadiosBtnsHandler, formatToRelativeDate } from '../../../utils';
+import { formatToRelativeDate, paramsReplacer } from 'utils';
+import { Page } from 'pages';
 import defaultImg from '../../../../public/default.png';
-import { NoFeedback } from '../../Feedback/components';
 
-type filterFeedbacksType = {
-  AZ: boolean;
-  ZA: boolean;
-  newToOld: boolean;
-  oldToNew: boolean;
+type Props = {
+  list: Array<any>;
 };
 
-type TypecheckedRadio = {
-  draft: boolean;
-  submitted: boolean;
-};
-
-type DraftItemProps = {
-  draftFeedback: (id: number) => void;
-  checkedRadio: TypecheckedRadio;
-  searchValue: string;
-  focus: boolean;
-  setFocus: Dispatch<SetStateAction<boolean>>;
-  filterModal: boolean;
-  setFilterModal: Dispatch<SetStateAction<boolean>>;
-  setFilterFeedbacks: Dispatch<SetStateAction<filterFeedbacksType>>;
-  filterFeedbacks: filterFeedbacksType;
-};
-
-const DraftItem: FC<DraftItemProps> = ({
-  draftFeedback,
-  checkedRadio,
-  searchValue,
-  focus,
-  setFocus,
-  filterModal,
-  setFilterModal,
-  setFilterFeedbacks,
-  filterFeedbacks,
-}) => {
-  const colleagueUuid = useSelector(colleagueUUIDSelector);
+const FeedbackBlock: FC<Props> = ({ list }) => {
   const { css } = useStyle();
-  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!colleagueUuid) return;
-    dispatch(
-      FeedbackActions.getAllFeedbacks({
-        'colleague-uuid': colleagueUuid,
-        _limit: '300',
-      }),
-    );
-  }, [colleagueUuid]);
-  const draftedNotes = useSelector(getPropperNotesByStatusSelector(FeedbackStatus.DRAFT)) || [];
-  const submittedNotes = useSelector(getPropperNotesByStatusSelector(FeedbackStatus.SUBMITTED)) || [];
-
-  const getPropperNotes = () => {
-    if (checkedRadio.draft && searchValue.length <= 2 && Object.values(filterFeedbacks).every((item) => !item)) {
-      return draftedNotes;
-    } else if (checkedRadio.draft && searchValue.length >= 2 && Object.values(filterFeedbacks).every((item) => !item)) {
-      return filteredByInputSearchHandler(draftedNotes, searchValue);
-    } else if (Object.values(filterFeedbacks).some((item) => item === true) && checkedRadio.draft) {
-      return filteredNotesByRadiosBtnsHandler(draftedNotes, filterFeedbacks);
-    }
-
-    if (checkedRadio.submitted && searchValue.length <= 2 && Object.values(filterFeedbacks).every((item) => !item)) {
-      return submittedNotes;
-    } else if (
-      checkedRadio.submitted &&
-      searchValue.length >= 2 &&
-      Object.values(filterFeedbacks).every((item) => !item)
-    ) {
-      return filteredByInputSearchHandler(submittedNotes, searchValue);
-    } else if (Object.values(filterFeedbacks).some((item) => item === true) && checkedRadio.submitted) {
-      return filteredNotesByRadiosBtnsHandler(submittedNotes, filterFeedbacks);
-    }
-  };
-
-  if (checkedRadio.submitted && !getPropperNotes().length) {
-    return <NoFeedback />;
-  }
-  if (checkedRadio.draft && !getPropperNotes().length) {
+  if (!list.length) {
     return <NoFeedback />;
   }
 
   return (
     <>
-      {getPropperNotes()?.map((item) => (
+      {list.map((item) => (
         <div key={item.uuid}>
           <TileWrapper customStyle={{ padding: '24px' }}>
             <Accordion
@@ -185,27 +117,15 @@ const DraftItem: FC<DraftItemProps> = ({
                             })}
                           </div>
                         </TileWrapper>
-                        {!checkedRadio.submitted && (
-                          <IconButton
-                            customVariantRules={{ default: iconBtnStyle }}
-                            onPress={() => {
-                              if (filterModal) setFilterModal(() => false);
-                              setFilterFeedbacks(() => ({
-                                AZ: false,
-                                ZA: false,
-                                newToOld: false,
-                                oldToNew: false,
-                              }));
-                              if (focus) setFocus(() => false);
-                              draftFeedback(item);
-                            }}
-                            graphic='edit'
-                            iconProps={{ invertColors: false }}
-                            iconStyles={iconStyle}
-                          >
-                            <Trans i18nKey='give_feedback'>Give feedback</Trans>
-                          </IconButton>
-                        )}
+                        <IconButton
+                          customVariantRules={{ default: iconBtnStyle }}
+                          onPress={() => navigate(paramsReplacer(`/${Page.GIVE_NEW_FEEDBACK}`, { ':uuid': item.uuid }))}
+                          graphic='edit'
+                          iconProps={{ invertColors: false }}
+                          iconStyles={iconStyle}
+                        >
+                          <Trans i18nKey='give_feedback'>Give feedback</Trans>
+                        </IconButton>
                       </Panel>
                     </Section>
                   </>
@@ -286,4 +206,4 @@ const iconBtnStyle: Rule = ({ theme }) => ({
 const iconStyle: Rule = {
   marginRight: '12px',
 };
-export default DraftItem;
+export default FeedbackBlock;
