@@ -188,10 +188,6 @@ const DraftStyles: Rule = {
   justifyContent: 'space-between',
 };
 
-const checkBoxRule: Rule = {
-  // position: 'absolute',
-};
-
 const BlockInfo: Rule = {
   display: 'inline-flex',
   alignItems: 'center',
@@ -221,18 +217,6 @@ const TitleStyle: Rule = {
   color: '#00539F',
   lineHeight: '20px',
 };
-const InfoBlockStyle: Rule = {
-  marginBottom: '16px',
-  '& > h3': {
-    margin: '0px',
-    fontWeight: 'bold',
-    fontSize: '14px',
-  },
-  '& > p': {
-    margin: '0px',
-    fontSize: '14px',
-  },
-} as Styles;
 
 const iconBtnStyle: Rule = ({ theme }) => ({
   padding: '12px 20px 12px 14px',

@@ -1,31 +1,33 @@
 import React, { FC, useState, useEffect } from 'react';
-import { Trans } from 'components/Translation';
-import { Item, Select } from 'components/Form';
-import { Icon as IconCore, Modal, Rule, useBreakpoints, useStyle } from '@dex-ddl/core';
-import { Chat } from '../../components/Icon/graphics/chat';
-import { NotiBell } from '../../components/Icon/graphics/notiBell';
-import { NotiBellCirlceOut } from '../../components/Icon/graphics/notiBellCirlceOut';
-import { People } from '../../components/Icon/graphics/people';
-import Info360Modal, { FeedbackCard } from './components';
-import { ConfigProps } from './type';
-import { GenericItemField } from '../../components/GenericForm';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as Yup from 'yup';
-import { createObjectivesSchema } from './config';
-import { IconButton } from '../../components/IconButton';
-import { Icon } from '../../components/Icon';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   FeedbackActions as FeedbackActionsGet,
-  getPropperNotesByStatusSelector,
   colleagueUUIDSelector,
   UserActions,
   getNotesArgsSelector,
   getUnReadSubmittedNotesSelector,
 } from '@pma/store';
-import { FeedbackStatus } from '../../config/enum';
+import { Icon as IconCore, Modal, Rule, useBreakpoints, useStyle } from '@dex-ddl/core';
+import * as Yup from 'yup';
+
+import { Trans } from 'components/Translation';
+import { Item, Select } from 'components/Form';
+import { Chat } from 'components/Icon/graphics/chat';
+import { NotiBell } from 'components/Icon/graphics/notiBell';
+import { NotiBellCirlceOut } from 'components/Icon/graphics/notiBellCirlceOut';
+import { People } from 'components/Icon/graphics/people';
+import Info360Modal, { FeedbackCard } from './components';
+import { ConfigProps } from './type';
+import { GenericItemField } from 'components/GenericForm';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { createObjectivesSchema } from './config';
+import { IconButton } from 'components/IconButton';
+import { Icon } from 'components/Icon';
+
+import { FeedbackStatus } from 'config/enum';
 import { useAuthContainer } from 'contexts/authContext';
+import { Page } from 'pages';
 
 const FEEDBACK_ACTIONS = 'feedback_actions';
 
@@ -62,6 +64,7 @@ const FeedbackActions: FC = () => {
     if (unReadSubmittedNotes.length) return <NotiBell />;
     return <NotiBellCirlceOut />;
   };
+
   const getProppeIconForPendingNotes = () => {
     if (pendingNotes.length) return <NotiBell />;
     return <NotiBellCirlceOut />;
@@ -75,7 +78,7 @@ const FeedbackActions: FC = () => {
       icon: <Chat />,
       iconText: 'Your feedback will be immediately available for your colleague to view',
       modalTitle: 'Give feedback',
-      link: '/feedback/give-feedback',
+      link: `/${Page.GIVE_FEEDBACK}`,
     },
     {
       id: 2,

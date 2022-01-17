@@ -93,7 +93,7 @@ export const SearchInput: FC<InputProps> = ({
               onClick={() => {
                 setSearchValue(() => `${item?.colleague?.profile?.firstName} ${item?.colleague?.profile?.lastName}`);
                 setSelectedPerson(() => ({ ...item.colleague, profileAttributes: item.profileAttributes }));
-                dispatch(ColleaguesActions.clearGettedColleagues());
+                dispatch(ColleaguesActions.clearColleagueList());
               }}
             >
               <div className={css({ display: 'flex', justifyContent: 'flex-start', alignItems: 'center' })}>

@@ -168,10 +168,3 @@ const industryStyle: Rule = {
   lineHeight: '20px',
   margin: '0px 0px 4px 0px',
 };
-
-const treatmentStyle: Rule = {
-  fontWeight: 'normal',
-  fontSize: '16px',
-  lineHeight: '20px',
-  color: '#00539F',
-};

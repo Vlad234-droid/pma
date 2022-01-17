@@ -65,7 +65,7 @@ const NotesActions: FC = () => {
   const [successSelectedNoteToEdit, setSuccessSelectedNoteToEdit] = useState(false);
 
   //
-  const [TEAM, setTEAM] = useState(true);
+  const [TEAM] = useState(true);
   const [successModal, setSuccessModal] = useState<boolean>(false);
   const [personalNoteModal, setPersonalNoteModal] = useState<boolean>(false);
   const [createFolder, setCreateFolder] = useState<boolean>(false);

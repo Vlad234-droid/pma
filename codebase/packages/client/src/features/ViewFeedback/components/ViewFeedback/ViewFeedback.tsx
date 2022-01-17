@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { FilterModal } from '../../../Shared/components/FilterModal';
 import { useNavigate } from 'react-router-dom';
 import { FeedbackStatus } from 'config/enum';
+import { Page } from 'pages';
 import useSubmittedCompletedNotes from '../../hooks/useSubmittedCompletedNotes';
 
 type filterFeedbacksType = {
@@ -236,7 +237,7 @@ const ViewFeedback: FC = () => {
               <Button
                 styles={[iconBtnStyle]}
                 onPress={() => {
-                  navigate('/feedback/give-feedback');
+                  navigate(`/${Page.GIVE_FEEDBACK}`);
                 }}
               >
                 <Trans>Share feedback</Trans>
@@ -278,7 +279,7 @@ const ViewFeedback: FC = () => {
           closeOptions={{
             content: <Icon graphic='cancel' invertColors={true} />,
             onClose: () => {
-              dispatch(ColleaguesActions.clearGettedColleagues());
+              dispatch(ColleaguesActions.clearColleagueList());
               setModalSuccess(() => false);
               setOpenMainModal(() => false);
             },

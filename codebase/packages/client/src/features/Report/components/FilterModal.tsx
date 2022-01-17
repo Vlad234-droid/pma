@@ -29,7 +29,6 @@ const FilterModal: FC<FilterModalProps> = ({
   filterModal,
   setFilterModal,
   filterData,
-  setFilterData,
   checkedItems,
   setCheckedItems,
   isCheckAll,
@@ -269,7 +268,7 @@ const relativeBtnStyled: Rule = ({ theme }) => ({
   left: theme.spacing.s0,
   right: theme.spacing.s0,
 });
-const spacingStyle: Rule = ({ theme }) => {
+const spacingStyle: Rule = () => {
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
   return {

@@ -42,7 +42,6 @@ const MyTeam: FC = () => {
   const waitingForApprovalCount = employeeWithPendingApprovals?.length;
   const colleaguesWithStatusDraftCount = employeePendingApprovals?.length;
 
-  const { loaded } = useSelector(getManagersMetaSelector) || {};
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const dispatch = useDispatch();
 

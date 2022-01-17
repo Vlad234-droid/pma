@@ -1,25 +1,20 @@
-import { RefObject } from 'react';
+import { ChangeEvent, RefObject } from 'react';
 import { Rule, Styles } from '@dex-ddl/core';
-import { Ref } from 'react-hook-form';
-import { PeopleTypes } from '../../../../features/Feedback/type';
 
-export interface FormItemProps {
+export interface SearchInputProps<T> {
   disabled?: boolean;
   value?: string;
   name?: string;
   placeholder?: string;
   styles?: Styles | Rule;
-  onChange?: (e: any) => any;
-  domRef?: Ref | RefObject<any>;
+  onSearch: (e: ChangeEvent<HTMLInputElement>) => void;
+  onChange: (e: any) => void;
+  renderOption: (item: any) => JSX.Element;
+  domRef?: RefObject<any>;
   isValid?: boolean;
-  type?: string;
   id?: string;
-  options?: Array<any>;
-  setSelectedPerson?: any;
-  setSearchValue?: any;
+  options?: Array<T>;
   searchValue?: string;
-  selectedPerson?: PeopleTypes | null;
-  multiple?: boolean | undefined;
+  selected?: T | null;
+  multiple?: boolean;
 }
-
-export type InputProps = FormItemProps;

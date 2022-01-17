@@ -78,7 +78,7 @@ const MultiplySearchInput: FC<InputProps> = ({
                 onClick={() => {
                   setInputValue(() => '');
                   setSelectedPersons((prev) => [...prev, item?.colleague]);
-                  dispatch(ColleaguesActions.clearGettedColleagues());
+                  dispatch(ColleaguesActions.clearColleagueList());
                 }}
               >
                 <div className={css({ display: 'flex', justifyContent: 'flex-start', alignItems: 'center' })}>

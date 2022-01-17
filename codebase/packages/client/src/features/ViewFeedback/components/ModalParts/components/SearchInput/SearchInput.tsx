@@ -60,9 +60,9 @@ const SearchInput: FC<InputProps> = ({
               className={css(SelectedContainerStyle)}
               onMouseDown={(e) => e.preventDefault()}
               onClick={() => {
-                setSearchValue(() => `${item?.colleague?.profile?.firstName} ${item?.colleague?.profile?.lastName}`);
-                setSelectedPerson(() => ({ ...item.colleague, profileAttributes: item.profileAttributes }));
-                dispatch(ColleaguesActions.clearGettedColleagues());
+                setSearchValue(() => `${item?.profile?.firstName} ${item?.profile?.lastName}`);
+                setSelectedPerson(() => item);
+                dispatch(ColleaguesActions.clearColleagueList());
               }}
             >
               <div className={css({ display: 'flex', justifyContent: 'flex-start', alignItems: 'center' })}>

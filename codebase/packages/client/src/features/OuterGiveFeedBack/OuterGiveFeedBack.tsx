@@ -1,31 +1,21 @@
 import React, { FC, useState, useEffect } from 'react';
-import { useStyle, useBreakpoints, Rule, Modal } from '@dex-ddl/core';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { createGiveFeedbackSchema } from './config';
-import * as Yup from 'yup';
+import { useStyle, useBreakpoints, Rule } from '@dex-ddl/core';
+import { useNavigate } from 'react-router-dom';
 import { FilterOption } from 'features/Shared';
-import { Icon } from 'components/Icon';
-import { useForm } from 'react-hook-form';
 import { PeopleTypes, TypefeedbackItems } from './type';
-import { ModalGiveFeedback } from './Modals';
 import { DraftItem, RadioBtns } from './components';
-import { getFindedColleaguesSelector, ColleaguesActions } from '@pma/store';
-import { useDispatch, useSelector } from 'react-redux';
 import { FilterModal } from '../Shared/components/FilterModal';
+import { Page } from 'pages';
 
 const OuterGiveFeedBack: FC = () => {
-  const findedColleagues = useSelector(getFindedColleaguesSelector) || [];
-  const dispatch = useDispatch();
   const { css } = useStyle();
   const [isOpenMainModal, setIsOpen] = useState<boolean>(false);
   const [title, setTitle] = useState<string>('');
   const [searchValue, setSearchValue] = useState<string>('');
   const [selectedPerson, setSelectedPerson] = useState<PeopleTypes | null>(null);
-  const [infoModal, setInfoModal] = useState<boolean>(false);
-  const [modalSuccess, setModalSuccess] = useState<boolean>(false);
   const [feedbackItemsS, setFeedbackItems] = useState<TypefeedbackItems[] | []>([]);
-  const [confirmModal, setConfirmModal] = useState<boolean>(false);
-  const [modalGreatFeedback, setModalGreatFeedback] = useState<boolean>(false);
+
+  const navigate = useNavigate();
 
   const [checkedRadio, setCheckedRadio] = useState({
     draft: true,
@@ -42,6 +32,7 @@ const OuterGiveFeedBack: FC = () => {
     newToOld: false,
     oldToNew: false,
   });
+
   useEffect(() => {
     if (!focus) setSearchValueFilterOption(() => '');
     if (focus) {
@@ -50,16 +41,8 @@ const OuterGiveFeedBack: FC = () => {
     }
   }, [focus]);
 
-  const methods = useForm({
-    mode: 'onChange',
-    resolver: yupResolver<Yup.AnyObjectSchema>(createGiveFeedbackSchema),
-  });
-
-  const { reset } = methods;
-
   const handleBtnClick = (): void => {
-    setTitle(() => 'Give feedback');
-    setIsOpen(() => true);
+    navigate(`/${Page.GIVE_NEW_FEEDBACK}`);
   };
 
   const draftFeedback = (selectedNote): void => {
@@ -133,53 +116,6 @@ const OuterGiveFeedBack: FC = () => {
           />
         </div>
       </div>
-      {isOpenMainModal && (
-        <Modal
-          modalPosition={'middle'}
-          overlayColor={'tescoBlue'}
-          modalContainerRule={[containerRule]}
-          closeOptions={{
-            content: <Icon graphic='cancel' invertColors={true} />,
-            onClose: () => {
-              if (findedColleagues.length) {
-                dispatch(ColleaguesActions.clearGettedColleagues());
-              }
-              if (confirmModal) setConfirmModal(() => false);
-              setModalSuccess(() => false);
-              setSelectedPerson(() => null);
-              setIsOpen(() => false);
-              setInfoModal(() => false);
-              setFeedbackItems(() => []);
-              reset({ feedback: [{ field: '' }, { field: '' }, { field: '' }] });
-            },
-            styles: [modalCloseOptionStyle],
-          }}
-          title={{
-            content: title,
-            styles: [modalTitleOptionStyle],
-          }}
-        >
-          <ModalGiveFeedback
-            setIsOpen={setIsOpen}
-            isOpenMainModal={isOpenMainModal}
-            selectedPerson={selectedPerson}
-            setSelectedPerson={setSelectedPerson}
-            infoModal={infoModal}
-            setInfoModal={setInfoModal}
-            modalSuccess={modalSuccess}
-            setModalSuccess={setModalSuccess}
-            searchValue={searchValue}
-            setSearchValue={setSearchValue}
-            methods={methods}
-            feedbackItemsS={feedbackItemsS}
-            setFeedbackItems={setFeedbackItems}
-            confirmModal={confirmModal}
-            setConfirmModal={setConfirmModal}
-            modalGreatFeedback={modalGreatFeedback}
-            setModalGreatFeedback={setModalGreatFeedback}
-          />
-        </Modal>
-      )}
     </>
   );
 };
@@ -215,63 +151,4 @@ const Drafts_style: Rule = {
   gap: '8px',
 };
 
-const containerRule: Rule = ({ colors }) => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
-  return {
-    alignItems: 'center',
-    justifyContent: 'center',
-    position: 'relative',
-    ...(mobileScreen
-      ? { borderRadius: '24px 24px 0 0 ', padding: '16px 0 84px' }
-      : { borderRadius: '32px', padding: `40px 0 102px` }),
-    width: '640px',
-    height: mobileScreen ? 'calc(100% - 72px)' : 'calc(100% - 102px)',
-    marginTop: '72px',
-    marginBottom: mobileScreen ? 0 : '30px',
-    background: colors.white,
-    cursor: 'default',
-    overflow: 'auto',
-  };
-};
-
-const modalCloseOptionStyle: Rule = () => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
-  return {
-    display: 'inline-block',
-    height: '24px',
-    paddingLeft: '0px',
-    paddingRight: '0px',
-    position: 'fixed',
-    top: '22px',
-    right: mobileScreen ? '20px' : '40px',
-    textDecoration: 'none',
-    border: 'none',
-    cursor: 'pointer',
-  };
-};
-
-const modalTitleOptionStyle: Rule = () => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
-
-  return {
-    position: 'fixed',
-    top: '22px',
-    textAlign: 'center',
-    left: 0,
-    right: 0,
-    color: 'white',
-    ...(mobileScreen
-      ? {
-          fontSize: '20px',
-          lineHeight: '24px',
-        }
-      : {
-          fontSize: '24px',
-          lineHeight: '28px',
-        }),
-  };
-};
 export default OuterGiveFeedBack;

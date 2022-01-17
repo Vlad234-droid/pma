@@ -1,6 +1,7 @@
 import React, { FC, useState, useEffect } from 'react';
 import { Rule, useStyle } from '@dex-ddl/core';
 
+// eslint-disable-next-line import/no-named-as-default
 import DraftItem, { DraftItem as DraftItemType } from '../DraftItem';
 
 import { Checkbox } from 'components/Form';

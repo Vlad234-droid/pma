@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC } from 'react';
 import { GiveFeedbackType, SubmitPartProps } from '../type';
 import { createGiveFeedbackSchema } from '../config';
 import { useForm } from 'react-hook-form';
