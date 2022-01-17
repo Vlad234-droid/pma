@@ -12,12 +12,12 @@ import { Close } from 'components/Icon/graphics/Close';
 import { GenericItemField } from 'components/GenericForm';
 import { TileWrapper } from 'components/Tile';
 import { useDispatch, useSelector } from 'react-redux';
-import { TargetType } from '../../config/enum';
+import { TargetType } from 'config/enum';
 import {
   ColleaguesActions,
   colleagueUUIDSelector,
   FeedbackActions,
-  getFindedColleaguesSelector,
+  getColleaguesSelector,
   getReviewsS,
 } from '@pma/store';
 import { IconButton } from 'components/IconButton';
@@ -32,7 +32,7 @@ const ModalRequestFeedback: FC = () => {
   const [selectedPersons, setSelectedPersons] = useState<PeopleTypes[] | []>([]);
   const [inputValue, setInputValue] = useState<string>('');
   const reviews = useSelector(getReviewsS) || [];
-  const findedCollegues = useSelector(getFindedColleaguesSelector) || [];
+  const findedCollegues = useSelector(getColleaguesSelector) || [];
   const colleagueUuid = useSelector(colleagueUUIDSelector);
 
   const methods = useForm({
@@ -157,8 +157,7 @@ const ModalRequestFeedback: FC = () => {
   const choseFieldHandler = () => {
     if (!formValues || !formValues.area_options) return;
 
-    const labelValue = () =>
-      area_options_data[area_options_data.findIndex((item) => item.value === formValues.area_options)].label;
+    const labelValue = () => area_options_data.find((item) => item.value === formValues.area_options)?.label;
 
     const obj = {
       id_1: (
@@ -247,7 +246,7 @@ const ModalRequestFeedback: FC = () => {
                 onChange={(e) => {
                   setInputValue(() => e.target.value);
                   if (e.target.value === '' || e.target.value.length <= 1) {
-                    dispatch(ColleaguesActions.clearGettedColleagues());
+                    dispatch(ColleaguesActions.clearColleagueList());
                   }
                   if (e.target.value !== '' && e.target.value.length > 1) {
                     dispatch(

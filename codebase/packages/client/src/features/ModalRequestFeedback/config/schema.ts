@@ -18,5 +18,8 @@ export const createRequestFeedbackSchema = Yup.object().shape({
     .when('area_options', { is: (val) => val === 'id_3', then: Yup.string().required() }),
   comment_to_your_impact: Yup.string()
     .notRequired()
-    .when('area_options', { is: (val) => val === 'id_4', then: Yup.string().required() }),
+    .when('area_options', {
+      is: (val) => val === 'id_4',
+      then: Yup.string().typeError('Custom not a number message!').required(),
+    }),
 });

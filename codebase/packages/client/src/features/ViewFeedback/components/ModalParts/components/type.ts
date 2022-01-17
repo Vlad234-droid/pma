@@ -7,8 +7,12 @@ export type SearchPartProps = {
   searchValue?: string;
   selectedPerson: PeopleTypes | null;
   methods: UseFormReturn;
+  setSearchDate?: (date) => void;
+  searchDate?: any;
 };
 
 export type SubmitPartProps = {
   selectedPerson: PeopleTypes;
+  onChange?: (items) => void;
+  searchDate?: any;
 };

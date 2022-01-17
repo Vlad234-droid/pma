@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction } from 'react';
 
 export type ModalDownloadFeedbackProps = {
   setOpenMainModal: Dispatch<SetStateAction<boolean>>;
-  ModalSuccess: boolean;
+  modalSuccess: boolean;
   setModalSuccess: Dispatch<SetStateAction<boolean>>;
   closeHandler: () => void;
   downloadTitle: string;

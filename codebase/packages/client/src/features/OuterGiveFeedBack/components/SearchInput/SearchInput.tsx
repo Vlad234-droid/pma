@@ -1,44 +1,28 @@
-import React, { FC } from 'react';
-import { useStyle, colors, Rule } from '@dex-ddl/core';
+import React, { FC, useCallback } from 'react';
+import { useStyle, colors } from '@dex-ddl/core';
 import mergeRefs from 'react-merge-refs';
-import { InputProps } from './type';
+import debounce from 'lodash.debounce';
+import { SearchInputProps } from './type';
 import { useRefContainer } from 'components/Form/context/input';
-import { ColleaguesActions } from '@pma/store';
-import { useDispatch } from 'react-redux';
-import defaultImg from '../../../../../public/default.png';
 
-const SearchInput: FC<InputProps> = ({
+const SearchInput: FC<SearchInputProps<any>> = ({
   domRef,
   placeholder = '',
   onChange,
+  onSearch,
   name,
   value,
   isValid = true,
-  type = 'text',
+  selected,
   options = [],
-  setSelectedPerson,
   searchValue,
-  setSearchValue,
   disabled = false,
-  selectedPerson,
-  multiple,
+  renderOption,
 }) => {
   const { css, theme } = useStyle();
   const refIcon = useRefContainer();
 
-  const dispatch = useDispatch();
-
-  const getPropperValue = (maches) => {
-    if (maches === undefined) {
-      return {
-        value: (selectedPerson && searchValue !== '' && searchValue) || value,
-      };
-    } else {
-      return {
-        value,
-      };
-    }
-  };
+  const handleSearch = useCallback(debounce(onSearch, 300), []);
 
   return (
     <>
@@ -46,11 +30,11 @@ const SearchInput: FC<InputProps> = ({
         ref={mergeRefs([domRef, refIcon])}
         name={name}
         data-test-id={name}
-        {...getPropperValue(multiple)}
-        onChange={onChange}
+        value={value || searchValue}
+        onChange={(e) => !disabled && handleSearch(e)}
         autoComplete={'off'}
-        disabled={(selectedPerson && searchValue !== '' && true) || disabled}
-        type={type}
+        disabled={(selected && searchValue !== '' && true) || disabled}
+        type={'text'}
         className={css({
           width: '100%',
           border: `1px solid ${isValid ? colors.backgroundDarkest : colors.error}`,
@@ -77,9 +61,9 @@ const SearchInput: FC<InputProps> = ({
             zIndex: 999,
           }}
         >
-          {options?.map((item) => (
+          {options?.map((item, idx) => (
             <div
-              key={item.colleagueUUID}
+              key={idx}
               className={css({
                 display: 'block',
                 width: '100%',
@@ -92,24 +76,10 @@ const SearchInput: FC<InputProps> = ({
               })}
               onMouseDown={(e) => e.preventDefault()}
               onClick={() => {
-                setSearchValue(() => `${item?.colleague?.profile?.firstName} ${item?.colleague?.profile?.lastName}`);
-                setSelectedPerson(() => ({ ...item.colleague, profileAttributes: item.profileAttributes }));
-                dispatch(ColleaguesActions.clearGettedColleagues());
+                onChange(item);
               }}
             >
-              <div className={css({ display: 'flex', justifyContent: 'flex-start', alignItems: 'center' })}>
-                <img className={css({ width: '50px', height: '50px', borderRadius: '50%' })} src={defaultImg} />
-                <div className={css({ marginLeft: '16px' })}>
-                  <div className={css(FlexGapStyle, SelectedItemStyle)}>
-                    <div>{item?.colleague?.profile?.firstName}</div>
-                    <div>{item?.colleague?.profile?.lastName}</div>
-                  </div>
-                  <div className={css(FlexGapStyle, { marginTop: '4px' })}>
-                    <div>{item?.colleague?.workRelationships[0].job?.name}</div>
-                    <div>{item?.colleague?.workRelationships[0].department?.name}</div>
-                  </div>
-                </div>
-              </div>
+              {renderOption(item)}
             </div>
           ))}
         </div>
@@ -117,16 +87,5 @@ const SearchInput: FC<InputProps> = ({
     </>
   );
 };
-
-const FlexGapStyle: Rule = {
-  display: 'flex',
-  gap: '8px',
-};
-
-const SelectedItemStyle: Rule = ({ colors }) => ({
-  fontWeight: 'bold',
-  fontSize: '16px',
-  color: colors.link,
-});
 
 export default SearchInput;

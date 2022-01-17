@@ -3,11 +3,12 @@ import { Page, PageElement } from './types';
 import CareerPerformance from './CareerPerformance';
 import PersonalDevelopmentPlan from './PersonalDevelopmentPlan';
 import MyTeam from './MyTeam';
-import Actions from './Actions';
+import MyActions from './MyActions';
 import Objectives from './Objectives';
 import Profile from './Profile';
 import Feedback from './Feedback';
 import GiveFeedback from './GiveFeedback';
+import GiveNewFeedBack from './GiveNewFeedBack';
 import RequestFeedback from './RequestFeedback';
 import RespondFeedback from './RespondFeedback';
 import ViewFeedback from './ViewFeedback';
@@ -38,11 +39,11 @@ const pages: Record<Page, PageComponent> = {
     title: 'My Notes',
     withHeader: true,
   },
-  [Page.ACTIONS]: {
-    Element: Actions,
+  [Page.MY_ACTIONS]: {
+    Element: MyActions,
     title: 'Actions',
     withHeader: true,
-    backPath: Page.CONTRIBUTION,
+    backPath: Page.MY_TEAM,
   },
   [Page.CREATE_PERFORMANCE_CYCLE]: {
     Element: CreatePerformanceCycle,
@@ -106,6 +107,12 @@ const pages: Record<Page, PageComponent> = {
     title: 'Give feedback',
     withHeader: true,
     backPath: Page.FEEDBACK,
+  },
+  [Page.GIVE_NEW_FEEDBACK]: {
+    Element: GiveNewFeedBack,
+    title: 'Give feedback',
+    withHeader: true,
+    backPath: Page.GIVE_FEEDBACK,
   },
   [Page.REQUEST_FEEDBACK]: {
     Element: RequestFeedback,

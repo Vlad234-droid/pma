@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC } from 'react';
 import { GiveFeedbackType, SubmitPartProps } from '../type';
 import { createGiveFeedbackSchema } from '../config';
 import { useForm } from 'react-hook-form';
@@ -14,7 +14,7 @@ import { Trans } from 'components/Translation';
 import { FeedbackActions, colleagueUUIDSelector, getReviewByUuidS } from '@pma/store';
 import { useDispatch, useSelector } from 'react-redux';
 import defaultImg from '../../../../public/default.png';
-import { TargetTypeReverse, TargetFeedbackKeys } from 'config/enum';
+import { TargetTypeReverse, TargetFeedbackKeys, VoiceType } from 'config/enum';
 
 const SubmitPart: FC<SubmitPartProps> = ({
   selectedPerson,
@@ -152,7 +152,7 @@ const SubmitPart: FC<SubmitPartProps> = ({
   };
 
   const getPropperToneOfVoice = () =>
-    selectedPerson?.profileAttributes?.find((item) => item?.name === 'voice')?.value ?? 'Direct and simple';
+    VoiceType[selectedPerson?.profileAttributes?.find((item) => item?.name === 'voice')?.value] ?? 'Direct and simple';
 
   const getPropperTargetType = (targetType, targetId) => {
     const capitalType =

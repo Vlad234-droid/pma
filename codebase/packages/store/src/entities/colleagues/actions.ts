@@ -1,21 +1,21 @@
 import { createAsyncAction, createAction } from 'typesafe-actions';
 
 export const getColleagues = createAsyncAction(
-  'collegues/GET_COLLEGUES_REQUEST',
-  'collegues/GET_COLLEGUES_SUCCESS',
-  'collegues/GET_COLLEGUES_FAILURE',
+  'colleagues/GET_COLLEAGUES_REQUEST',
+  'colleagues/GET_COLLEAGUES_SUCCESS',
+  'colleagues/GET_COLLEAGUES_FAILURE',
 )<any, any, Error>();
 
 export const getProfileColleague = createAsyncAction(
-  'collegues/GET_PROFILE_COLLEAGUE_REQUEST',
-  'collegues/GET_PROFILE_COLLEAGUE_SUCCESS',
-  'collegues/GET_PROFILE_COLLEAGUE_FAILURE',
+  'colleagues/GET_PROFILE_COLLEAGUE_REQUEST',
+  'colleagues/GET_PROFILE_COLLEAGUE_SUCCESS',
+  'colleagues/GET_PROFILE_COLLEAGUE_FAILURE',
 )<any, any, Error>();
 
-export const clearGettedColleagues = createAction('collegues/CLEAR')<undefined>();
+export const clearColleagueList = createAction('colleagues/CLEAR')<undefined>();
 
 export const Actions = {
   getColleagues: getColleagues.request,
   getProfileColleague: getProfileColleague.request,
-  clearGettedColleagues,
+  clearColleagueList,
 };

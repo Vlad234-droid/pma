@@ -5,7 +5,6 @@ import { Item, Select } from 'components/Form';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
-import { Handler } from '../../../components/GenericForm/types';
 
 import { useBreakpoints, useStyle, CreateRule, Modal, Button } from '@dex-ddl/core';
 
@@ -49,13 +48,9 @@ const ConfirmModalWithDropDown: FC<Props> = ({
   });
   const {
     trigger,
-    getValues,
     handleSubmit,
-    reset,
     formState: { isValid },
   } = methods;
-
-  const values = getValues();
 
   const data = {
     field_id: '1',
@@ -113,7 +108,7 @@ const ConfirmModalWithDropDown: FC<Props> = ({
           Element={Select}
           options={data.field_options}
           placeholder={data.field_placeholder}
-          onChange={(_, value) => {
+          onChange={(value) => {
             trigger('folder');
             setSelectedIdFolder(() => value);
           }}

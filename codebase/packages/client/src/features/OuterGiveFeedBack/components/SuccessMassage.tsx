@@ -1,24 +1,25 @@
 import React, { FC } from 'react';
-import { SuccessModalProps } from '../type';
 import { Button, Rule, Styles, useBreakpoints, useStyle } from '@dex-ddl/core';
+import { Trans } from 'components/Translation';
 
 import success from '../../../../public/success.jpg';
-import { Trans } from '../../../components/Translation';
+import { useSelector } from 'react-redux';
+import { getColleagueByUuidSelector } from '@pma/store';
 
 export const SUCCES_GIVE_FEEDBACK = 'SUCCESS_GIVE_FEEDBACK';
 
-const SuccessModal: FC<SuccessModalProps> = ({
-  setModalSuccess,
-  setIsOpen,
-  setSelectedPerson,
-  selectedPerson,
-  setFeedbackItems,
-  methods,
-}) => {
+export type Props = {
+  onSuccess: () => void;
+  selectedColleagueUuid: string;
+};
+
+const SuccessMassage: FC<Props> = ({ selectedColleagueUuid, onSuccess }) => {
   const { css, theme } = useStyle();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
-  const { reset } = methods;
+
+  const selectedColleague = useSelector(getColleagueByUuidSelector(selectedColleagueUuid));
+
   return (
     <div className={css(WrapperSuccessContainer)} data-test-id={SUCCES_GIVE_FEEDBACK}>
       <div className={css(SuccessImg)}>
@@ -26,8 +27,8 @@ const SuccessModal: FC<SuccessModalProps> = ({
       </div>
       <h2 className={css(DoneText)}>Done!</h2>
       <p className={css(Description)}>
-        {`${selectedPerson?.profile?.firstName} ${selectedPerson?.profile?.lastName}`} will now be able to view your
-        feedback
+        {`${selectedColleague?.colleague?.profile?.firstName} ${selectedColleague?.colleague?.profile?.lastName}`} will
+        now be able to view your feedback
       </p>
       <div
         className={css({
@@ -66,13 +67,7 @@ const SuccessModal: FC<SuccessModalProps> = ({
                   color: `${theme.colors.white}`,
                 },
               ]}
-              onPress={() => {
-                setModalSuccess(() => false);
-                setIsOpen(() => false);
-                setSelectedPerson(() => null);
-                setFeedbackItems(() => []);
-                reset({ feedback: [{ field: '' }, { field: '' }, { field: '' }] });
-              }}
+              onPress={onSuccess}
             >
               <Trans i18nKey='OK'>Okay</Trans>
             </Button>
@@ -115,4 +110,4 @@ const Description: Rule = {
   textAlign: 'center',
 };
 
-export default SuccessModal;
+export default SuccessMassage;

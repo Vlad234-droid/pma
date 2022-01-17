@@ -1,8 +1,8 @@
-import React, { FC } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import React, { FC, useMemo } from 'react';
+import { useLocation, useNavigate, matchPath } from 'react-router-dom';
 import { Rule, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { pages } from 'pages';
-import { buildPath, getPageFromPath } from 'features/Routes/utils';
+import { buildPath } from 'features/Routes/utils';
 import { Header } from 'components/Header';
 
 export const TEST_ID = 'layout-wrapper';
@@ -11,7 +11,11 @@ const Layout: FC = ({ children }) => {
   const { css } = useStyle();
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const { title, withHeader, backPath } = pages[getPageFromPath(pathname)] || {};
+
+  const { title, withHeader, backPath } = useMemo(() => {
+    const page = Object.keys(pages).find((page) => matchPath(page, pathname)) || '';
+    return pages[page] || {};
+  }, [pathname]);
 
   const handleBack = (backPath = '/') => navigate(backPath, { replace: true });
 

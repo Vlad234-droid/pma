@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useStyle, Rule, CreateRule, Theme } from '@dex-ddl/core';
 import { ArrowUp } from '../../assets/img/objectives';
 
-const ObjectiveDetails = ({ title, description }) => {
+const Details = ({ title, description }) => {
   const { css, theme } = useStyle();
   const [isVisibleDescription, setDescriptionVisibility] = useState(true);
 
@@ -63,4 +63,4 @@ const main = {
   overflow: 'auto',
 } as Rule;
 
-export default ObjectiveDetails;
+export default Details;

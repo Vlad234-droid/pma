@@ -114,7 +114,7 @@ export const SubmitPart: FC<SubmitPartProps> = ({ selectedPerson, teamMethods, f
                 Element={Select}
                 options={field_options}
                 placeholder={item.field_placeholder}
-                onChange={(_, value) => {
+                onChange={(value) => {
                   setValue('folder', value);
                   trigger('folder');
                 }}
@@ -167,11 +167,4 @@ const industryStyle: Rule = {
   fontSize: '16px',
   lineHeight: '20px',
   margin: '0px 0px 4px 0px',
-};
-
-const treatmentStyle: Rule = {
-  fontWeight: 'normal',
-  fontSize: '16px',
-  lineHeight: '20px',
-  color: '#00539F',
 };

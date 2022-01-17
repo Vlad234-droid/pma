@@ -1,5 +1,5 @@
 import React, { Dispatch, FC, SetStateAction } from 'react';
-import { IconButton } from '../../../components/IconButton';
+import { IconButton } from 'components/IconButton';
 import { useStyle, useBreakpoints, Rule, Styles } from '@dex-ddl/core';
 
 type Info360ModalProps = {

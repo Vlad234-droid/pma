@@ -13,6 +13,7 @@ export interface FormField {
   id?: string;
   disabled?: boolean;
   readOnly?: boolean;
+  type?: string;
 }
 
 export interface InputField extends FormField {
