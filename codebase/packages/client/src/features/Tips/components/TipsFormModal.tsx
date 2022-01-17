@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import { useStyle, Rule, Button, theme, useBreakpoints } from '@dex-ddl/core';
-import success from '../../../../public/success.jpg';
+import successIcon from '../../../../public/success.jpg';
+import deleteIcon from '../../../../public/delete.png';
 
 export type Props = {
   negativeBtnAction: () => void;
@@ -24,14 +25,14 @@ const TipsFormModal: FC<Props> = ({ action, negativeBtnAction, positiveBtnAction
       title: 'Success',
       body: 'New Tip successfully created.',
       negativeBtnText: '',
-      positiveBtnText: 'Leave this page',
+      positiveBtnText: 'Okay',
       showImage: true,
     },
     edit: {
       title: 'Success',
       body: 'Tip updated successfully.',
       negativeBtnText: '',
-      positiveBtnText: 'Leave this page',
+      positiveBtnText: 'Okay',
       showImage: true,
     },
     confirmDelete: {
@@ -43,25 +44,29 @@ const TipsFormModal: FC<Props> = ({ action, negativeBtnAction, positiveBtnAction
     },
     successDelete: {
       title: 'Delete',
-      body: 'Tip successfully deleted.',
+      body: `The Tip “${tipTitle}” have been permanently deleted.`,
       negativeBtnText: '',
-      positiveBtnText: 'Leave this page',
+      positiveBtnText: 'Okay',
       showImage: true,
     },
     failure: {
       title: 'Oops',
       body: 'Something went wrong',
       negativeBtnText: '',
-      positiveBtnText: 'Leave this page',
+      positiveBtnText: 'Okay',
       showImage: false,
     },
   };
 
   return (
     <div className={css(TipsFormModalStyle)}>
-      {options[action]['showImage'] && <img src={success} alt='success' />}
+      {options[action]['showImage'] && action === 'successDelete' || action === 'confirmDelete' ? 
+        <img src={deleteIcon} alt='delete' />
+        :
+        <img src={successIcon} alt='success' />
+      }
       <div className={css(modalTitle)}>{options[action]['title']}</div>
-      <div className={css()}>{options[action]['body']}</div>
+      <div className={css(modalBody)}>{options[action]['body']}</div>
       <div className={css(formControlBtnsWrap)}>
         {options[action]['negativeBtnText'] && (
           <Button
@@ -93,15 +98,15 @@ const TipsFormModalStyle: Rule = () => {
     zIndex: 2,
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'center',
     alignItems: 'center',
+    textAlign: 'center',
     ...(mobileScreen
       ? {
-          padding: '30px 15px 100px',
+          padding: '60px 15px 100px',
           borderRadius: '24px',
         }
       : {
-          padding: '40px 40px 100px',
+          padding: '90px 40px 100px',
           borderRadius: '32px',
         }),
   };
@@ -112,9 +117,17 @@ const modalTitle: Rule = () => {
     fontWeight: 700,
     fontSize: '28px',
     lineHeight: '32px',
-    margin: '0 0 16px',
+    margin: '30px 0 16px',
   };
 };
+
+const modalBody: Rule = () => {
+  return {
+    fontSize: '24px',
+    lineHeight: '28px,',
+    maxWidth: '360px',
+  }
+}
 
 const formControlBtnsWrap: Rule = ({ theme }) => {
   const [, isBreakpoint] = useBreakpoints();

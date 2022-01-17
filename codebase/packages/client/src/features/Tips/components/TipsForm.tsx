@@ -78,8 +78,15 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
     setValue('tipTargetLevel2', formData['tipTargetLevel2']);
     setValue('tipTargetLevel3', formData['tipTargetLevel3']);
     setValue('tipTargetLevel4', formData['tipTargetLevel4']);
-    console.log('isDirty', isDirty)
   }, [formData]);
+
+  //TODO: delete this function after form fixes (this is only for debugging)
+  const checkFormValid = () => {
+    console.log('----');
+    console.log('isDirty', isDirty);
+    console.log('isValid', isValid);
+    console.log('formData', formData);
+  }
 
   useEffect(() => {
     if (configEntries.meta.loaded) {
@@ -298,6 +305,7 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
               label='Title'
               Wrapper={Item}
               Element={Input}
+              onChange={() => checkFormValid()}
               placeholder='Example: Share objectives easily'
               value={formData['tipTitle']}
             />
@@ -307,6 +315,7 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
               label='Description'
               Wrapper={Item}
               Element={Textarea}
+              onChange={() => checkFormValid()}
               placeholder='Example: Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus'
               rows={2}
               value={formData['tipDescription']}
@@ -328,6 +337,7 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
               })}
               placeholder='Please select'
               onChange={(value) => {
+                checkFormValid()
                 if(value) {
                   setFormData({
                     tipTitle: methods.getValues('tipTitle'),
@@ -358,6 +368,7 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
                 return { value: item['uuid'], label: item['name'] };
               })}
               onChange={(value) => {
+                checkFormValid()
                 setFormData({
                   ...formData,
                   tipTitle: methods.getValues('tipTitle'),
@@ -384,6 +395,7 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
                 return { value: item['uuid'], label: item['name'] };
               })}
               onChange={(value) => {
+                checkFormValid()
                 setFormData({
                   ...formData,
                   tipTitle: methods.getValues('tipTitle'),
@@ -409,6 +421,7 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
                 return { value: item['uuid'], label: item['name'] };
               })}
               onChange={(value) => {
+                checkFormValid()
                 setFormData({
                   ...formData,
                   tipTitle: methods.getValues('tipTitle'),
@@ -453,6 +466,7 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
           negativeBtnAction={() => setShowTipsFormModal(false)}
           action={tipsFormModalAction}
           positiveBtnAction={() => navigate(buildPath(`${Page.TIPS}`))}
+          tipTitle={currentTip.title}
         />
       )}
     </ModalWithHeader>
