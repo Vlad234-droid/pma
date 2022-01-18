@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import { useStyle, Rule, useBreakpoints, Button } from '@dex-ddl/core';
 import { useSelector } from 'react-redux';
 import { getColleagueByUuidSelector } from '@pma/store';
+import get from 'lodash.get';
 import { GiveFeedbackType } from '../type';
 import { FeedbackInfo, ColleaguesFinder } from '../components';
 import { IconButton, Position } from 'components/IconButton';
@@ -46,11 +47,6 @@ const feedbackFields: GiveFeedbackType[] = [
   },
 ];
 
-type Props = {
-  onSubmit: (data: any) => void;
-  defaultValues: any;
-};
-
 const prepareFeedbackItems = (fields, feedbackItems) => {
   return feedbackItems.map(({ content }, idx) => ({ content, code: fields[idx].code }));
 };
@@ -63,7 +59,15 @@ const getColleagueName = (data) => {
 
   return `${firstName} ${lastName}`;
 };
-const GiveFeedbackForm: FC<Props> = ({ onSubmit, defaultValues }) => {
+
+type Props = {
+  onSubmit: (data: any) => void;
+  defaultValues: any;
+  currentColleague?: any;
+  goToInfo: (data: any) => void;
+};
+
+const GiveFeedbackForm: FC<Props> = ({ onSubmit, defaultValues, currentColleague, goToInfo }) => {
   const { css, theme } = useStyle();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
@@ -72,18 +76,21 @@ const GiveFeedbackForm: FC<Props> = ({ onSubmit, defaultValues }) => {
     handleSubmit,
     getValues,
     setValue,
-    formState: { isValid },
+    formState: { isValid, errors },
   } = useForm({
     mode: 'onChange',
     resolver: yupResolver(createGiveFeedbackSchema),
     defaultValues,
   });
 
-  const { targetColleagueUuid } = getValues();
+  const { targetColleagueUuid, feedbackItems } = getValues();
 
-  const selectedColleague = useSelector(getColleagueByUuidSelector(targetColleagueUuid));
+  const selectedColleague = useSelector(getColleagueByUuidSelector(targetColleagueUuid)) || currentColleague;
 
-  const handleDraft = (data) => {
+  const handleDraft = () => {
+    const data = getValues();
+
+    if (!targetColleagueUuid) return;
     onSubmit({ ...data, status: 'DRAFT', feedbackItems: prepareFeedbackItems(feedbackFields, data.feedbackItems) });
   };
 
@@ -120,9 +127,11 @@ const GiveFeedbackForm: FC<Props> = ({ onSubmit, defaultValues }) => {
           }}
           selected={null}
           value={getColleagueName(selectedColleague)}
-          error={''}
+          error={get(errors, 'targetColleagueUuid.message')}
         />
-        {selectedColleague && <FeedbackInfo selectedPerson={selectedColleague} onClickMore={() => undefined} />}
+        {selectedColleague && (
+          <FeedbackInfo selectedPerson={selectedColleague} onClickMore={() => goToInfo(getValues())} />
+        )}
         {selectedColleague && (
           <div>
             {feedbackFields.map((item, index) => {
@@ -147,8 +156,9 @@ const GiveFeedbackForm: FC<Props> = ({ onSubmit, defaultValues }) => {
                       name={`feedbackItems.${index}.content`}
                       Wrapper={Item}
                       Element={Textarea}
-                      value={''}
+                      value={feedbackItems[index].content}
                       setValue={setValue}
+                      error={get(errors, `feedbackItems[${index}].content.message`)}
                     />
                   </TileWrapper>
                 </div>
@@ -161,9 +171,9 @@ const GiveFeedbackForm: FC<Props> = ({ onSubmit, defaultValues }) => {
           <div className={css(relativeBtnStyled)}>
             <div className={css(spacingStyle)}>
               <Button
-                isDisabled={!isValid}
+                isDisabled={!targetColleagueUuid}
                 styles={[theme.font.fixed.f16, buttonStyle]}
-                onPress={() => handleSubmit(handleDraft)()}
+                onPress={handleDraft}
               >
                 <Trans>Save as draft</Trans>
               </Button>

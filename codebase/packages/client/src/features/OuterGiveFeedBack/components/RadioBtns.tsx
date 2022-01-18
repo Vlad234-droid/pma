@@ -1,40 +1,17 @@
-import React, { Dispatch, FC, SetStateAction } from 'react';
-import { useStyle, useBreakpoints, Rule } from '@dex-ddl/core';
+import React, { FC } from 'react';
+import { Rule, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { Trans } from 'components/Translation';
 import { Radio } from 'components/Form';
 import { IconButton } from 'components/IconButton';
+import { FeedbackStatus } from 'config/enum';
 
-type filterFeedbacksType = {
-  AZ: boolean;
-  ZA: boolean;
-  newToOld: boolean;
-  oldToNew: boolean;
-};
-type TypecheckedRadio = {
-  draft: boolean;
-  submitted: boolean;
-};
-type RadioBtnsProps = {
-  checkedRadio: TypecheckedRadio;
-  setCheckedRadio: Dispatch<SetStateAction<TypecheckedRadio>>;
+type Props = {
+  checkedRadio: FeedbackStatus;
+  onCheck: (item: FeedbackStatus) => void;
   handleBtnClick: () => void;
-  focus: boolean;
-  setFocus: Dispatch<SetStateAction<boolean>>;
-  setFilterModal: Dispatch<SetStateAction<boolean>>;
-  filterModal: boolean;
-  setFilterFeedbacks: Dispatch<SetStateAction<filterFeedbacksType>>;
 };
 
-const RadioBtns: FC<RadioBtnsProps> = ({
-  checkedRadio,
-  setCheckedRadio,
-  handleBtnClick,
-  focus,
-  setFocus,
-  setFilterModal,
-  filterModal,
-  setFilterFeedbacks,
-}) => {
+const RadioBtns: FC<Props> = ({ checkedRadio, onCheck, handleBtnClick }) => {
   const { css } = useStyle();
   const [, isBreakpoint] = useBreakpoints();
   const medium = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
@@ -42,12 +19,7 @@ const RadioBtns: FC<RadioBtnsProps> = ({
     <>
       <IconButton
         customVariantRules={{ default: iconBtnStyle }}
-        onPress={() => {
-          if (filterModal) setFilterModal(() => false);
-          if (focus) setFocus(() => false);
-          setFilterFeedbacks(() => ({ AZ: false, ZA: false, newToOld: false, oldToNew: false }));
-          handleBtnClick();
-        }}
+        onPress={handleBtnClick}
         graphic='add'
         iconProps={{ invertColors: true }}
         iconStyles={iconStyle}
@@ -73,19 +45,9 @@ const RadioBtns: FC<RadioBtnsProps> = ({
           >
             <Radio
               name='status'
-              checked={checkedRadio.draft}
+              checked={checkedRadio === FeedbackStatus.DRAFT}
               id='draft'
-              onChange={() => {
-                if (filterModal) setFilterModal(() => false);
-                setFilterFeedbacks(() => ({ AZ: false, ZA: false, newToOld: false, oldToNew: false }));
-                if (focus) setFocus(() => false);
-                setCheckedRadio(() => {
-                  return {
-                    draft: true,
-                    submitted: false,
-                  };
-                });
-              }}
+              onChange={() => onCheck(FeedbackStatus.DRAFT)}
             />
             <span
               className={css({
@@ -109,20 +71,9 @@ const RadioBtns: FC<RadioBtnsProps> = ({
           >
             <Radio
               name='status'
-              checked={checkedRadio.submitted}
-              id='submitted'
-              onChange={() => {
-                if (filterModal) setFilterModal(() => false);
-                setFilterFeedbacks(() => ({ AZ: false, ZA: false, newToOld: false, oldToNew: false }));
-
-                if (focus) setFocus(() => false);
-                setCheckedRadio(() => {
-                  return {
-                    draft: false,
-                    submitted: true,
-                  };
-                });
-              }}
+              checked={checkedRadio === FeedbackStatus.SUBMITTED}
+              id='draft'
+              onChange={() => onCheck(FeedbackStatus.SUBMITTED)}
             />
             <span
               className={css({

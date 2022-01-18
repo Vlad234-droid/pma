@@ -55,7 +55,7 @@ export type SubmitPartProps = {
   setModalGreatFeedback: Dispatch<SetStateAction<boolean>>;
 };
 export type InfoModalProps = {
-  setInfoModal: Dispatch<SetStateAction<boolean>>;
+  goBack: () => void;
 };
 
 type FieldType = {

@@ -4,7 +4,7 @@ import { useStyle, useBreakpoints, Rule, Styles } from '@dex-ddl/core';
 import { InfoModalProps } from '../type';
 import video_explanation from '../../../../public/video_explanation.jpg';
 
-const InfoModal: FC<InfoModalProps> = ({ setInfoModal }) => {
+const InfoMassage: FC<InfoModalProps> = ({ goBack }) => {
   const { css, theme } = useStyle();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
@@ -33,7 +33,7 @@ const InfoModal: FC<InfoModalProps> = ({ setInfoModal }) => {
           cursor: 'pointer',
         })}
       >
-        <IconButton graphic='arrowLeft' onPress={() => setInfoModal(() => false)} iconProps={{ invertColors: true }} />
+        <IconButton graphic='arrowLeft' onPress={goBack} iconProps={{ invertColors: true }} />
       </span>
     </div>
   );
@@ -100,4 +100,4 @@ const PreRecomendationInfo: Rule = {
   margin: '0px',
 };
 
-export default InfoModal;
+export default InfoMassage;
