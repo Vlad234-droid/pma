@@ -1,7 +1,5 @@
 import React from 'react';
-import { CreateRule, Rule, Theme, useStyle } from '@dex-ddl/core';
-import { Close } from 'assets/img/objectives';
-import DescriptionBlock from 'components/DescriptionBlock';
+import { CreateRule, Icon, ModalWithHeader, Rule, Theme, useBreakpoints, useStyle } from '@dex-ddl/core';
 import Details from 'components/Details';
 import { useNavigate } from 'react-router';
 
@@ -13,32 +11,54 @@ const Popup = (props) => {
   if (items.length < 1) return null;
 
   return (
-    <div className={css(popup)}>
-      <div className={css(header({ theme }))}>
-        <div
-          className={css(arrow)}
-          onClick={() => {
-            navigate(-1);
-          }}
-        />
-        <div>Strategic drivers</div>
-        <div>
-          <img className={css(close)} alt='close' src={Close} onClick={() => navigate('/')} />
-        </div>
-      </div>
+    <ModalWithHeader
+      containerRule={templatesModalWindowStyles}
+      title='Strategic drivers'
+      modalPosition='middle'
+      closeOptions={{
+        closeOptionContent: <Icon graphic={'close'} invertColors={true}/>,
+        closeOptionStyles: {},
+        onClose: () => navigate(-1),
+      }}
+      >
+            <div className={css(main)}>
+              <div className={css(decsriptionHeader({ theme }))}>Your organization has 6 drivers</div>
 
-      <DescriptionBlock>
-        <div className={css(decsriptionHeader({ theme }))}>Your organization has 6 drivers</div>
-
-        <div className={css(descriptionText({ theme }))}>
-          Organization drivers – are stategic goals that help all company-wide activities lead to one single direction.
-        </div>
-        {items.map((obj, idx) => {
-          return <Details key={obj.uuid} title={`Strategic driver ${idx + 1}`} description={obj.title} />;
-        })}
-      </DescriptionBlock>
-    </div>
+              <div className={css(descriptionText({ theme }))}>
+                Organization drivers – are stategic goals that help all company-wide activities lead to one single direction.
+              </div>
+              <div className={css(templatesListStyles)}>
+                {items.map((obj, idx) => {
+                  return <Details key={obj.uuid} title={`Strategic driver ${idx + 1}`} description={obj.title} />;
+                })}
+              </div>
+            </div>
+    </ModalWithHeader>
   );
+};
+
+const main = {
+  padding: '40px',
+  overflowY: 'scroll',
+  position: 'relative',
+  height: '100%',
+} as Rule;
+
+const templatesListStyles: Rule = ({ theme }) => ({
+  margin: '25px 0 0',
+  height: '100%',
+});
+
+const templatesModalWindowStyles: Rule = () => {
+  const [, isBreakpoint] = useBreakpoints();
+  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+  return {
+    width: mobileScreen ? '100%' : '60%',
+    padding: '0',
+    height: mobileScreen ? 'calc(100% - 50px)' : 'calc(100% - 100px)',
+    marginTop: mobileScreen ? '50px' : 0,
+    overflow: 'hidden',
+  };
 };
 
 const close = {
@@ -59,7 +79,7 @@ const decsriptionHeader: CreateRule<{ theme: Theme }> = (props) => {
   if (props == null) return {};
   const { theme } = props;
   return {
-    fontSize: `${theme.font.fixed.f24}`,
+    fontSize: '24px',
     lineHeight: '28px',
     fontWeight: 'bold',
     paddingBottom: '8px',

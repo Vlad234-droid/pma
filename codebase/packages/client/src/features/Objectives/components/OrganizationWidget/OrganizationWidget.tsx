@@ -18,7 +18,7 @@ const OrganizationWidget: FC<Props> = ({ onClick, customStyle }) => {
 
   const getContent = (): [Graphics, string, string] => {
     return [
-      'calender',
+      'multiLanguage',
       t('organization_objectives_description', 'Your organization has 6 drivers share to all colleagues'),
       t('view_objectives', 'View'),
     ];
