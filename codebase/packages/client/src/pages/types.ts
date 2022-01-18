@@ -15,7 +15,7 @@ enum Page {
   MY_ACTIONS = 'my-team/actions',
   NOTES = 'notes',
   GIVE_FEEDBACK = 'feedback/give',
-  GIVE_NEW_FEEDBACK = 'feedback/give/new',
+  GIVE_NEW_FEEDBACK = 'feedback/give/:uuid',
   REQUEST_FEEDBACK = 'feedback/request-feedback',
   RESPOND_FEEDBACK = 'feedback/respond-feedback',
   VIEW_FEEDBACK = 'feedback/view-feedback',

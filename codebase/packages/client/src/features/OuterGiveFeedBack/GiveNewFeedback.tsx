@@ -1,30 +1,43 @@
 import React, { FC, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useBreakpoints, Rule, Modal } from '@dex-ddl/core';
-import { colleagueUUIDSelector, ColleaguesActions, FeedbackActions } from '@pma/store';
+import { colleagueUUIDSelector, ColleaguesActions, FeedbackActions, feedbackByUuidSelector } from '@pma/store';
 import { Icon } from 'components/Icon';
 import { Page } from 'pages';
-import { GiveFeedbackForm, ConfirmMassage, SuccessMassage } from './components';
+import { GiveFeedbackForm, ConfirmMassage, SuccessMassage, InfoMassage } from './components';
 
 enum Statuses {
   PENDING = 'pending',
   CONFIRMING = 'confirming',
   SENDING = 'sending',
+  INFO = 'info',
 }
 const GiveNewFeedback: FC = () => {
   const dispatch = useDispatch();
   const [status, setStatus] = useState(Statuses.PENDING);
-  const [formData, setFormData] = useState({
+  const { uuid } = useParams<{ uuid: string }>();
+  const { feedbackItems, targetColleagueUuid, targetColleagueProfile } = useSelector(feedbackByUuidSelector(uuid)) || {
     targetColleagueUuid: '',
     feedbackItems: [{ content: '' }, { content: '' }, { content: '' }],
-  });
+  };
+  const [formData, setFormData] = useState({ feedbackItems, targetColleagueUuid });
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const navigate = useNavigate();
 
-  const handleSubmit = () => {
+  const handleSave = () => {
     dispatch(FeedbackActions.createNewFeedback([{ ...formData, colleagueUuid }]));
     dispatch(ColleaguesActions.clearColleagueList());
+  };
+
+  const handleSubmit = (data) => {
+    setFormData(data);
+
+    if (data.status === 'DRAFT') {
+      dispatch(FeedbackActions.createNewFeedback([{ ...data, colleagueUuid }]));
+      return;
+    }
+    setStatus(Statuses.CONFIRMING);
   };
 
   const handleSuccess = () => navigate(`/${Page.GIVE_FEEDBACK}`);
@@ -50,9 +63,11 @@ const GiveNewFeedback: FC = () => {
       {status === Statuses.PENDING && (
         <GiveFeedbackForm
           defaultValues={formData}
-          onSubmit={(data) => {
+          onSubmit={handleSubmit}
+          currentColleague={targetColleagueProfile}
+          goToInfo={(data) => {
+            setStatus(Statuses.INFO);
             setFormData(data);
-            setStatus(Statuses.CONFIRMING);
           }}
         />
       )}
@@ -60,7 +75,7 @@ const GiveNewFeedback: FC = () => {
         <ConfirmMassage
           onConfirm={() => {
             setStatus(Statuses.SENDING);
-            handleSubmit();
+            handleSave();
           }}
           goBack={() => setStatus(Statuses.PENDING)}
         />
@@ -68,6 +83,7 @@ const GiveNewFeedback: FC = () => {
       {status === Statuses.SENDING && (
         <SuccessMassage onSuccess={handleSuccess} selectedColleagueUuid={formData.targetColleagueUuid} />
       )}
+      {status === Statuses.INFO && <InfoMassage goBack={() => setStatus(Statuses.PENDING)} />}
     </Modal>
   );
 };
