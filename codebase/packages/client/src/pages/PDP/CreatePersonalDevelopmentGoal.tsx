@@ -109,7 +109,6 @@ const CreatePersonalDevelopmentGoal = (props) => {
       modalPosition='middle'
       closeOptions={{
         closeOptionContent: <Icon graphic='cancel' invertColors={true} />,
-        closeOptionStyles: {},
         onClose: () => navigate(-1),
       }}
       >
