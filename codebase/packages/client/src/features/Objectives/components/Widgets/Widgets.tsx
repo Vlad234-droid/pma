@@ -1,7 +1,7 @@
 import React, { FC, HTMLProps } from 'react';
 import { useTranslation } from 'components/Translation';
 import { Styles, useStyle } from '@dex-ddl/core';
-import SecondaryWidget, { Props as SecondaryWidgetProps } from '../SecondaryWidget';
+import SecondaryWidget, { Props as SecondaryWidgetProps } from 'features/SecondaryWidget';
 import { default as MainWidget } from '../MainWidget';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';

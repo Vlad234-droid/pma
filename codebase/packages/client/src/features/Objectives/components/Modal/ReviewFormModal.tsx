@@ -9,7 +9,7 @@ import { useForm } from 'react-hook-form';
 import { Input, Item, Select, Textarea } from 'components/Form';
 import { GenericItemField } from 'components/GenericForm';
 import MarkdownRenderer from 'components/MarkdownRenderer';
-import { SubmitButton, SuccessModal } from './index';
+import { SubmitButton } from './index';
 import { ReviewType, Status } from 'config/enum';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -23,6 +23,7 @@ import { createYupSchema } from 'utils/yup';
 import { useReviewSchemaWithPermission } from '../../hooks/useReviewSchema';
 import { TriggerModal } from 'features/Modal/components/TriggerModal';
 import MidYearHelpModal from './MidYearHelpModal';
+import SuccessModal from 'components/SuccessModal';
 
 export type ReviewFormModal = {
   reviewType: ReviewType;

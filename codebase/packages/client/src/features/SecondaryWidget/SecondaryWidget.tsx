@@ -7,14 +7,15 @@ import { Button, Rule, Styles, useStyle } from '@dex-ddl/core';
 export type Props = {
   iconGraphic: IconProps['graphic'];
   title: string;
-  date: string;
+  date?: string;
   customStyle?: React.CSSProperties | {};
   onClick: () => void;
+  withButton?: boolean;
 };
 
 export const TEST_ID = 'secondary-widget';
 
-const SecondaryWidget: FC<Props> = ({ iconGraphic, title, date, customStyle, onClick }) => {
+const SecondaryWidget: FC<Props> = ({ iconGraphic, title, date, customStyle, onClick, withButton = true }) => {
   const { css, theme } = useStyle();
 
   return (
@@ -23,15 +24,17 @@ const SecondaryWidget: FC<Props> = ({ iconGraphic, title, date, customStyle, onC
         <div className={css(headStyle)}>
           <Icon graphic={iconGraphic} />
           <span className={css(titleStyle)}>{title}</span>
-          <span className={css(descriptionStyle)}>{date}</span>
+          {date && <span className={css(descriptionStyle)}>{date}</span>}
         </div>
-        <div className={css(bodyStyle)}>
-          <div>
-            <Button mode='inverse' styles={[btnStyle({ theme }) as Styles]} onPress={onClick}>
-              <Trans i18nKey='view'>View</Trans>
-            </Button>
+        {withButton && (
+          <div className={css(bodyStyle)}>
+            <div>
+              <Button mode='inverse' styles={[btnStyle({ theme }) as Styles]} onPress={onClick}>
+                <Trans i18nKey='view'>View</Trans>
+              </Button>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </TileWrapper>
   );

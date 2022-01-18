@@ -36,6 +36,7 @@ import { Archive } from './archive';
 import { NotiBellCirlceOut } from './notiBellCirlceOut';
 import { Support } from './support';
 import { Home } from './home';
+import { Hamburger } from './hamburger';
 import { Aim } from './aim';
 import { List } from './list';
 import { Performance } from './performance';
@@ -78,6 +79,7 @@ export type Graphics =
   | 'edit'
   | 'folder'
   | 'home'
+  | 'hamburger'
   | 'information'
   | 'multiLanguage'
   | 'list'
@@ -141,6 +143,7 @@ export const icons: Record<Graphics, FCGraphicProps> = {
   notiBellCircleOut: NotiBellCirlceOut,
   support: Support,
   home: Home,
+  hamburger: Hamburger,
   aim: Aim,
   list: List,
   performance: Performance,

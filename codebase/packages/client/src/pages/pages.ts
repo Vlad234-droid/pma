@@ -20,6 +20,8 @@ import Report from './Report';
 import { CreatePerformanceCycle, PerformanceCycleAdministration } from './PerformanceCycle';
 import { CreateTip, EditTip, TipsAdministration } from './Tips';
 import { UserObjectives } from './UserObjectives';
+import PeopleTeam from './PeopleTeam';
+import Calibration from './Calibration';
 
 export type PageComponent = {
   Element: PageElement;
@@ -33,6 +35,18 @@ const pages: Record<Page, PageComponent> = {
     title: 'My Team',
     withHeader: true,
     backPath: Page.CONTRIBUTION,
+  },
+  [Page.PEOPLE_TEAM]: {
+    Element: PeopleTeam,
+    title: 'People Team',
+    withHeader: true,
+    backPath: Page.CONTRIBUTION,
+  },
+  [Page.CALIBRATION]: {
+    Element: Calibration,
+    title: 'Calibration',
+    withHeader: true,
+    backPath: Page.PEOPLE_TEAM,
   },
   [Page.NOTES]: {
     Element: Notes,

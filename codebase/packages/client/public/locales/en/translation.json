@@ -115,5 +115,10 @@
   "download_your_feedback": "Download your feedback",
   "which_feedback_would_you_like_to_download": "Which feedback would you like to download?",
   "use_the_search_bar_to_look_for_colleagues": "Use the search bar to look for colleagues who have given you feedback.",
-  "you_downloaded_your_feedback_to_your_device": "you downloaded your feedback to your device."
+  "you_downloaded_your_feedback_to_your_device": "you downloaded your feedback to your device.",
+  "save_change": "Save change",
+  "save": "Save",
+  "compare": "Compare",
+  "expected_distribution": "Expected distribution",
+  "none": "None"
 }

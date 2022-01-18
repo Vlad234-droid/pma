@@ -14,7 +14,7 @@ import {
 } from '@pma/store';
 import { createYupSchema } from 'utils/yup';
 import { ReviewType, Status } from 'config/enum';
-import { SuccessModal } from '../Modal';
+import SuccessModal from 'components/SuccessModal';
 import useReviewSchema from '../../hooks/useReviewSchema';
 import useReviews from '../../hooks/useReviews';
 import { ObjectiveModal } from './ObjectiveModal';

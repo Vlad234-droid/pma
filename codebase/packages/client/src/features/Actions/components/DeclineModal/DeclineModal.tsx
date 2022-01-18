@@ -29,7 +29,7 @@ const DeclineModal: FC<Props> = ({ onSave, onClose, review, reviewType }) => {
       hasReason={isObjective}
       onSave={onSave}
       onClose={onClose}
-      review={review}
+      employee={review}
       reason={reason}
     >
       <div className={css({ padding: '16px 0' })}>

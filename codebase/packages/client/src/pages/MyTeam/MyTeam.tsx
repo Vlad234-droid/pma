@@ -56,6 +56,7 @@ const MyTeam: FC = () => {
           links={[
             { link: buildPath(Page.CONTRIBUTION), name: 'My View' },
             { link: buildPath(Page.MY_TEAM), name: 'My Team' },
+            { link: buildPath(Page.PEOPLE_TEAM), name: 'People Team' },
           ]}
         />
       </div>

@@ -4,7 +4,7 @@ import { fireEvent } from '@testing-library/react';
 // @ts-ignore
 import { renderWithTheme as render, generateEmployeeReview } from 'utils/test';
 
-import ConfirmModal from './ConfirmModal';
+import ConfirmModal from '../../features/Actions/components/ConfirmModal/ConfirmModal';
 
 describe('<ConfirmModal />', () => {
   const props = {
@@ -12,7 +12,7 @@ describe('<ConfirmModal />', () => {
     onClose: jest.fn(),
     onSave: jest.fn(),
     hasReason: false,
-    review: generateEmployeeReview(),
+    employee: generateEmployeeReview(),
   };
 
   describe('#render', () => {
@@ -32,11 +32,11 @@ describe('<ConfirmModal />', () => {
       expect(getByText('mocked_children')).toBeInTheDocument();
     });
 
-    it('should render review data', () => {
+    it('should render employee data', () => {
       const newProps = {
         ...props,
         review: {
-          ...props.review,
+          ...props.employee,
           firstName: 'mocked_first_name',
           lastName: 'mocked_last_name',
           jobName: 'mocked_job_name',
