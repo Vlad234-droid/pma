@@ -63,29 +63,33 @@ const GiveNewFeedback: FC = () => {
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const navigate = useNavigate();
 
-  const handleSave = () => {
+  const handleCreate = () => {
     dispatch(FeedbackActions.createNewFeedback([{ ...formData, colleagueUuid }]));
+  };
+
+  const handleSave = (data) => {
+    if (uuid === 'new') {
+      dispatch(FeedbackActions.createNewFeedback([{ ...data, colleagueUuid }]));
+    } else {
+      dispatch(
+        FeedbackActions.updatedFeedback({
+          ...data,
+          feedbackItems: data.feedbackItems.map((item) => ({
+            ...item,
+            uuid: feedbackItems.find((feedback) => feedback.code === item.code)?.uuid,
+          })),
+          colleagueUuid,
+          uuid,
+        }),
+      );
+    }
   };
 
   const handleSubmit = (data) => {
     setFormData(data);
+    handleSave(data);
 
     if (data.status === 'DRAFT') {
-      if (uuid === 'new') {
-        dispatch(FeedbackActions.createNewFeedback([{ ...data, colleagueUuid }]));
-      } else {
-        dispatch(
-          FeedbackActions.updatedFeedback({
-            ...data,
-            feedbackItems: data.feedbackItems.map((item) => ({
-              ...item,
-              uuid: feedbackItems.find((feedback) => feedback.code === item.code)?.uuid,
-            })),
-            colleagueUuid,
-            uuid,
-          }),
-        );
-      }
       handleSuccess();
       return;
     }
@@ -128,7 +132,7 @@ const GiveNewFeedback: FC = () => {
         <ConfirmMassage
           onConfirm={() => {
             setStatus(Statuses.SENDING);
-            handleSave();
+            handleCreate();
           }}
           goBack={() => setStatus(Statuses.PENDING)}
         />

@@ -1,7 +1,7 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { useStyle, useBreakpoints, Rule } from '@dex-ddl/core';
+import { Rule, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { colleagueUUIDSelector, FeedbackActions, feedbackByStatusSelector } from '@pma/store';
 import { paramsReplacer } from 'utils';
 import { Page } from 'pages';
@@ -84,7 +84,7 @@ const OuterGiveFeedBack: FC = () => {
           </div>
         </div>
         <div className={css(Drafts_style)}>
-          <FeedbackBlock list={feedbackList} />
+          <FeedbackBlock list={feedbackList} canEdit={status === FeedbackStatus.DRAFT} />
         </div>
       </div>
     </>
