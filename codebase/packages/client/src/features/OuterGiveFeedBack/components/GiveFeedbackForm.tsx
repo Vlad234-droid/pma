@@ -124,7 +124,7 @@ const GiveFeedbackForm: FC<Props> = ({ onSubmit, defaultValues, currentColleague
                       name={`feedbackItems.${index}.content`}
                       Wrapper={Item}
                       Element={Textarea}
-                      value={feedbackItems[index].content}
+                      value={get(feedbackItems, `[${index}].content`, '')}
                       setValue={setValue}
                       error={get(errors, `feedbackItems[${index}].content.message`)}
                     />
@@ -132,7 +132,6 @@ const GiveFeedbackForm: FC<Props> = ({ onSubmit, defaultValues, currentColleague
                 </div>
               );
             })}
-            )
           </div>
         )}
         <div className={css(absoluteStyle)}>

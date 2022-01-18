@@ -54,10 +54,11 @@ const GiveNewFeedback: FC = () => {
   const { uuid } = useParams<{ uuid: string }>();
   const { feedbackItems, targetColleagueUuid, targetColleagueProfile } = useSelector(feedbackByUuidSelector(uuid)) || {
     targetColleagueUuid: '',
-    feedbackItems: [{ content: '' }, { content: '' }, { content: '' }],
   };
   const [formData, setFormData] = useState({
-    feedbackItems: feedbackFields.map(({ code }) => feedbackItems.find((item) => item.code === code)),
+    feedbackItems: feedbackItems
+      ? feedbackFields.map(({ code }) => feedbackItems.find((item) => item.code === code))
+      : [{ content: '' }, { content: '' }, { content: '' }],
     targetColleagueUuid,
   });
   const colleagueUuid = useSelector(colleagueUUIDSelector);
