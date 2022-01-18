@@ -1,5 +1,5 @@
 import React, { FC, useState, useEffect } from 'react';
-import { useStyle, Rule } from '@dex-ddl/core';
+import { useStyle, Rule, Styles } from '@dex-ddl/core';
 
 import { Employee } from 'config/types';
 import ConfirmModal from 'components/ConfirmModal';
@@ -97,9 +97,9 @@ const EditRatingsModal: FC<Props> = ({ employee, onClose, onSave }) => {
 
 export default EditRatingsModal;
 
-const Label: Rule = {
-  fontSize: '16px',
-  lineHeight: '20px',
+const Label: Rule = ({ theme }) => ({
+  fontSize: `${theme.font.fixed.f16.fontSize}`,
+  lineHeight: `${theme.font.fixed.f18.lineHeight}`,
   marginBottom: '8px',
   fontWeight: '600',
-};
+} as Styles);

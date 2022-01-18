@@ -18,6 +18,8 @@ const Calibration: FC = () => {
   const { css } = useStyle();
   const { t } = useTranslation();
   const [isEditMode, setEditMode] = useState<boolean>(false);
+  const [compareMode, setCompareMode] = useState<string>('None');
+  const isCompareMode = compareMode !== 'None';
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState<boolean>(false);
   const [isCompareModalOpen, setCompareModalOpen] = useState<boolean>(false);
   const colleagueUuid = useSelector(colleagueUUIDSelector);
@@ -45,7 +47,12 @@ const Calibration: FC = () => {
 
   const handleCompareClick = () => {
     setCompareModalOpen(true);
-  }
+  };
+
+  const handleSaveCompare = (compare: string) => {
+    setCompareMode(compare);
+    setCompareModalOpen(false);
+  };
 
   return (
     <div>
@@ -77,24 +84,32 @@ const Calibration: FC = () => {
           <TileWrapper>
             <Graph />
           </TileWrapper>
-          <div className={css(allColleagues)}>
-            {colleagues.length ? (
-              <Colleagues editMode={isEditMode} colleagues={colleagues} onSave={handleSaveRating} />
-            ) : (
-              <TileWrapper>
-                <div className={css({ padding: '32px' })}>
-                  No results
-                </div>
-              </TileWrapper>
-            )}
-          </div>
+          {!isCompareMode && (
+            <div className={css(allColleagues)}>
+              {colleagues.length ? (
+                <Colleagues editMode={isEditMode} colleagues={colleagues} onSave={handleSaveRating} />
+              ) : (
+                <TileWrapper>
+                  <div className={css({ padding: '32px' })}>
+                    No results
+                  </div>
+                </TileWrapper>
+              )}
+            </div>
+          )}
         </div>
-        <Widgets editMode={isEditMode} onEditClick={handleEditClick} onCompareClick={handleCompareClick} />
+        <Widgets
+          editMode={isEditMode}
+          compareMode={isCompareMode}
+          onEditClick={handleEditClick}
+          onCompareClick={handleCompareClick}
+        />
       </div>
       {isCompareModalOpen && (
         <CompareModal
           onClose={() => setCompareModalOpen(false)}
-          onSave={() => setCompareModalOpen(false)}
+          onSave={handleSaveCompare}
+          mode={compareMode}
         />
       )}
       {isSuccessModalOpen && (

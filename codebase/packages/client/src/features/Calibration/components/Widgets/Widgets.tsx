@@ -11,9 +11,10 @@ type Props = {
   onEditClick: () => void;
   onCompareClick: () => void;
   editMode: boolean;
+  compareMode: boolean;
 };
 
-const Calibration: FC<Props> = ({ onEditClick, onCompareClick, editMode }) => {
+const Calibration: FC<Props> = ({ onEditClick, onCompareClick, editMode, compareMode }) => {
   const { css } = useStyle();
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -21,23 +22,23 @@ const Calibration: FC<Props> = ({ onEditClick, onCompareClick, editMode }) => {
   const widgets: SecondaryWidgetProps[] = [
     {
       iconGraphic: 'edit',
-      title: editMode ? t('Exit calibration ratings') : t('Edit calibration ratings'),
-      date: t('Enter your team`s ratings to see live updates'),
+      title: editMode ? t('exit_calibration_ratings', 'Exit calibration ratings') : t('edit_calibration_ratings', 'Edit calibration ratings'),
+      data: t('enter_ratings', 'Enter your team`s ratings to see live updates'),
       customStyle: widgetStyle,
       onClick: onEditClick,
       withButton: false,
     },
     {
       iconGraphic: 'calender',
-      title: t('Compare to expected distribution or previous ears'),
+      title: t('compare_to_expected', 'Compare to expected distribution or previous years'),
       customStyle: widgetStyle,
       onClick: onCompareClick,
       withButton: false,
     },
     {
       iconGraphic: 'download',
-      title: t('Download'),
-      date: t('Save calibration ratings to your device'),
+      title: t('download', 'Download'),
+      data: t('save_calibration_ratings','Save calibration ratings to your device'),
       customStyle: widgetStyle,
       onClick: () => navigate(buildPath(Page.CALIBRATION)),
       withButton: false,
@@ -46,11 +47,15 @@ const Calibration: FC<Props> = ({ onEditClick, onCompareClick, editMode }) => {
 
   return (
     <div data-test-id='calibration-widgets' className={css({ flex: '1 0 216px' })}>
-      {widgets.map((props, idx) => (
-        <div key={idx} className={css({ marginBottom: '8px' })}>
-          <SecondaryWidget {...props} />
-        </div>
-      ))}
+      {widgets.map((props, idx) => {
+        if (compareMode && !idx) return;
+
+        return (
+          <div key={idx} className={css({ marginBottom: '8px' })}>
+            <SecondaryWidget {...props} />
+          </div>
+        )
+      })}
     </div>
   );
 };

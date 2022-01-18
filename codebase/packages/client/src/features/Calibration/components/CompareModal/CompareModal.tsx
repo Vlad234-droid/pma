@@ -9,18 +9,19 @@ import { getCompareOptions } from '../../utils';
 
 type Props = {
   onClose: () => void,
-  onSave: () => void;
+  onSave: (checked: string) => void;
+  mode: string;
 };
 
 // TODO: load prev years data for comparison
-const CompareModal: FC<Props> = ({ onClose, onSave }) => {
+const CompareModal: FC<Props> = ({ onClose, onSave, mode }) => {
   const { css } = useStyle();
   const { t } = useTranslation();
-  const [checked, setChecked] = useState<string>('None');
+  const [checked, setChecked] = useState<string>(mode);
   const options = getCompareOptions(t);
 
   const handleSave = () => {
-    onSave();
+    onSave(checked);
   };
 
   const handleCompareChange = (value: string) => {

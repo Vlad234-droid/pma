@@ -23,7 +23,7 @@ const PeopleTeam: FC = () => {
     {
       iconGraphic: 'calibration',
       title: t('Calibration'),
-      date: t('Purus id ut tempus euismod ut.'),
+      data: t('Purus id ut tempus euismod ut.'),
       customStyle: { flex: '2 1 110px' },
       onClick: () => navigate(buildPath(Page.CALIBRATION)),
       withButton: false,
@@ -31,7 +31,7 @@ const PeopleTeam: FC = () => {
     {
       iconGraphic: 'account',
       title: t('Reporting'),
-      date: t('Manga quis vivera sit tristique'),
+      data: t('Manga quis vivera sit tristique'),
       customStyle: { flex: '2 1 110px' },
       onClick: () => console.log('Navigate to reporting page'),
       withButton: false,
