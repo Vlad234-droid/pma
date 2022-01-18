@@ -25,7 +25,7 @@ const CreatePersonalDevelopmentGoal = (props) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const colleagueUuid = useSelector(colleagueUUIDSelector);
-  const pdpSelector = useSelector(schemaMetaPDPSelector)?.goals;
+  const pdpList = useSelector(schemaMetaPDPSelector)?.goals;
   const [pdpGoals, setPDPGoals] = useState<any[]>([]);
   const [schema] = usePDPShema(PDPType.PDP);
   const { components = [] } = schema;
@@ -59,7 +59,7 @@ const CreatePersonalDevelopmentGoal = (props) => {
     {
       "uuid": uuid ? uuid : uuidv4(),
       "colleagueUuid": colleagueUuid,
-      "number": pdpSelector && uuid ? pdpSelector[0].number : pdpSelector?.length+1,
+      "number": pdpList && uuid ? pdpList[0].number : pdpList?.length+1,
       "properties": {
         "mapJson": formValues,
       },
@@ -84,14 +84,12 @@ const CreatePersonalDevelopmentGoal = (props) => {
     dispatch(PDPActions.getPDPGoal({}));
   }
   
-  const navGoals = (goalNum = pdpSelector?.length-1) => {
+  const navGoals = (goalNum = pdpList?.length-1) => {
     
-    if (goalNum < 1 || !pdpSelector) {
+    if (goalNum < 1 || !pdpList) {
       return <div className={`${css(goal({theme}))} ${css(activeGoalItem({theme}))}`}>Goal 1</div>
     } else if (goalNum <= maxGoalCount) {
-      return pdpSelector.map( (el, idx) => {
-        console.log(el);
-        
+      return pdpList.map( (el, idx) => {
         return (
         <>
           <div key={el?.uuid} className={`${css(goal({theme}))} ${idx <= goalNum ? css(activeGoalItem({theme})) : css(defaultGoalItem({theme}))}`}>Goal {idx+1}</div>
@@ -114,7 +112,7 @@ const CreatePersonalDevelopmentGoal = (props) => {
       >
     <div className={css(mainContainer)}>
         <div className={css(goalListBlock({theme}))}>
-            {!uuid && pdpSelector && navGoals()}
+            {!uuid && pdpList && navGoals()}
         </div>
 
         <div className={css(infoBlock)}>
@@ -127,7 +125,7 @@ const CreatePersonalDevelopmentGoal = (props) => {
         <form>
           { pdpGoals.map((component) => {
               const { id, key, label, description, type, validate, values = [] } = component;
-              const value = pdpSelector? pdpSelector[0]?.properties?.mapJson[key] : '';
+              const value = pdpList? pdpList[0]?.properties?.mapJson[key] : '';
               
               if (description === '{datepicker}') {
                 return (
@@ -179,9 +177,9 @@ const CreatePersonalDevelopmentGoal = (props) => {
           {<Button
             isDisabled={!formState.isValid}
             onPress={() => uuid ? update() : save()} 
-            styles={uuid || pdpSelector?.length === maxGoalCount ?  [customBtnFullWidth] : [customBtn]}>Save & Exit</Button>
+            styles={uuid || pdpList?.length === maxGoalCount ?  [customBtnFullWidth] : [customBtn]}>Save & Exit</Button>
             }
-          {!uuid && pdpSelector?.length !== maxGoalCount && 
+          {!uuid && pdpList?.length !== maxGoalCount && 
             <Button 
               isDisabled={!formState.isValid}
               onPress={() => saveAndCreate()}

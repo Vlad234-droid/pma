@@ -59,7 +59,6 @@ export const deletePDPEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
     filter(isActionOf(deletePDPGoal.request)),
     switchMap(({ payload }) => {
-      console.log('payload: ', payload.data);
       const data = payload.data;
       return from(api.deletePDPGoal(data)).pipe(
         // @ts-ignore
