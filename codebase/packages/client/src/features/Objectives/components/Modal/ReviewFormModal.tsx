@@ -60,7 +60,7 @@ const getContent = (reviewType: ReviewType, t: TFunction) => {
 const getSuccessMessage = (reviewType: ReviewType, t: TFunction) => {
   const content = {
     [ReviewType.MYR]: t('mid_year_review_sent_to_manager', 'Your mid-year review has been sent to your line manager.'),
-    [ReviewType.EYR]: t('end_year_review_sent_to_manager', 'Your end-year review has been sent to your line manager.'),
+    [ReviewType.EYR]: t('end_year_review_sent_to_manager', 'Your year-end review has been sent to your line manager.'),
   };
 
   return content[reviewType];
