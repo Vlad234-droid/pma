@@ -13,9 +13,10 @@ import defaultImg from '../../../../public/default.png';
 
 type Props = {
   list: Array<any>;
+  canEdit: boolean;
 };
 
-const FeedbackBlock: FC<Props> = ({ list }) => {
+const FeedbackBlock: FC<Props> = ({ list, canEdit }) => {
   const { css } = useStyle();
   const navigate = useNavigate();
 
@@ -117,15 +118,19 @@ const FeedbackBlock: FC<Props> = ({ list }) => {
                             })}
                           </div>
                         </TileWrapper>
-                        <IconButton
-                          customVariantRules={{ default: iconBtnStyle }}
-                          onPress={() => navigate(paramsReplacer(`/${Page.GIVE_NEW_FEEDBACK}`, { ':uuid': item.uuid }))}
-                          graphic='edit'
-                          iconProps={{ invertColors: false }}
-                          iconStyles={iconStyle}
-                        >
-                          <Trans i18nKey='give_feedback'>Give feedback</Trans>
-                        </IconButton>
+                        {canEdit && (
+                          <IconButton
+                            customVariantRules={{ default: iconBtnStyle }}
+                            onPress={() =>
+                              navigate(paramsReplacer(`/${Page.GIVE_NEW_FEEDBACK}`, { ':uuid': item.uuid }))
+                            }
+                            graphic='edit'
+                            iconProps={{ invertColors: false }}
+                            iconStyles={iconStyle}
+                          >
+                            <Trans i18nKey='give_feedback'>Give feedback</Trans>
+                          </IconButton>
+                        )}
                       </Panel>
                     </Section>
                   </>
