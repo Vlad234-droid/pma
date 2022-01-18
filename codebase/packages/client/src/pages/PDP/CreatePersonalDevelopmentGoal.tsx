@@ -3,16 +3,15 @@ import { Button, CreateRule, ModalWithHeader, Rule, theme, Theme, useBreakpoints
 import { useNavigate } from 'react-router';
 import infoIcon from '../../assets/img/pdp/infoIcon.png';
 import { Icon } from 'components/Icon';
-import GenericForm, { GenericItemField } from 'components/GenericForm';
+import { GenericItemField } from 'components/GenericForm';
 import { Input, Item, Textarea } from 'components/Form';
 import { useForm } from 'react-hook-form';
 import arrLeft from '../../assets/img/pdp/arrLeft.png';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
-import { createPDPSchema } from 'features/PDP/config';
 import usePDPShema from 'features/PDP/hooks/usePDPShema';
 import { useSelector } from 'react-redux';
-import { colleagueUUIDSelector, filterPDPByTypeSelector, reviewsMetaSelector, schemaMetaSelector, schemaMetaPDPSelector, PDPActions } from '@pma/store';
+import { colleagueUUIDSelector, schemaMetaPDPSelector, PDPActions } from '@pma/store';
 import { PDPType } from 'config/enum';
 import { createYupSchema } from 'utils/yup';
 import useDispatch from 'hooks/useDispatch';
@@ -78,8 +77,6 @@ const CreatePersonalDevelopmentGoal = (props) => {
   const update = () => {
     dispatch(PDPActions.updatePDPGoal({data: requestData}));
     navigate(buildPath(Page.PERSONAL_DEVELOPMENT_PLAN));
-    console.log(requestData);
-    
   };
 
   const saveAndCreate = () => {
@@ -90,12 +87,14 @@ const CreatePersonalDevelopmentGoal = (props) => {
   const navGoals = (goalNum = pdpSelector?.length-1) => {
     
     if (goalNum < 1 || !pdpSelector) {
-      return <div key={Math.random()} className={`${css(goal({theme}))} ${css(activeGoalItem({theme}))}`}>Goal 1</div>
+      return <div className={`${css(goal({theme}))} ${css(activeGoalItem({theme}))}`}>Goal 1</div>
     } else if (goalNum <= maxGoalCount) {
-      return pdpSelector.map( (_, idx) => {
+      return pdpSelector.map( (el, idx) => {
+        console.log(el);
+        
         return (
         <>
-          <div key={Math.random()} className={`${css(goal({theme}))} ${idx <= goalNum ? css(activeGoalItem({theme})) : css(defaultGoalItem({theme}))}`}>Goal {idx+1}</div>
+          <div key={el?.uuid} className={`${css(goal({theme}))} ${idx <= goalNum ? css(activeGoalItem({theme})) : css(defaultGoalItem({theme}))}`}>Goal {idx+1}</div>
           {idx === goalNum && idx+1 < maxGoalCount && <div key={Math.random()} className={`${css(goal({theme}))} ${css(defaultGoalItem({theme}))}`}>Goal {idx+2}</div>}
         </>  
         )

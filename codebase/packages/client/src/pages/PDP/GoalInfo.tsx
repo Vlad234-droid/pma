@@ -17,14 +17,14 @@ const GoalInfo = (props) => {
     } = props;
     const modifiedTitleRegex = new RegExp(/\*/, 'g');
     const { css, theme} = useStyle();
-    const [getToogled, setToogled] = useState(false);
+    const [toogled, setToogled] = useState(false);
     
 
     return (
         <div className={css(fullGoals({theme}))}>
-            <div className={css(titleBlock({theme}))} onClick={() => setToogled(!getToogled)}>
+            <div className={css(titleBlock({theme}))} onClick={() => setToogled(!toogled)}>
                 {title.replace(modifiedTitleRegex, '')}
-                <div className={`${getToogled ? css(rotated) : ''}`}>
+                <div className={`${toogled ? css(rotated) : ''}`}>
                     <img alt={'arrow'} src={arrowUp} />
                 </div>
             </div>
@@ -33,7 +33,7 @@ const GoalInfo = (props) => {
                 <div>{description}</div>
             </div>
 
-            <div className={`${!getToogled ? css(hide) : ''}`}>
+            <div className={`${!toogled ? css(hide) : ''}`}>
                 {
                     data && Object.keys(data).map( (key, index) => {
                         if (index !== 0) 

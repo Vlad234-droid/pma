@@ -48,7 +48,7 @@ export const createPDPEpic: Epic = (action$, _, { api }) =>
       return from(api.createPDPGoal(data)).pipe(
         // @ts-ignore
         map(({ data }) => {
-          return createPDPGoal.request(data);
+          return createPDPGoal.success(data);
         }),
         catchError(({ errors }) => of(createPDPGoal.failure(errors))),
       );
@@ -64,7 +64,7 @@ export const deletePDPEpic: Epic = (action$, _, { api }) =>
       return from(api.deletePDPGoal(data)).pipe(
         // @ts-ignore
         map(({ data }) => {
-          return deletePDPGoal.request(data);
+          return deletePDPGoal.success(data);
         }),
         catchError(({ errors }) => of(deletePDPGoal.failure(errors))),
       );
@@ -94,7 +94,7 @@ export const updadePDPEpic: Epic = (action$, _, { api }) =>
       return from(api.updatePDPGoal(data)).pipe(
         // @ts-ignore
         map(({ data }) => {
-          return updatePDPGoal.request(data);
+          return updatePDPGoal.success(data);
         }),
         catchError(({ errors }) => of(updatePDPGoal.failure(errors))),
       );
