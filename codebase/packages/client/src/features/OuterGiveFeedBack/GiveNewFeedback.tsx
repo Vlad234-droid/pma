@@ -27,7 +27,6 @@ const GiveNewFeedback: FC = () => {
 
   const handleSave = () => {
     dispatch(FeedbackActions.createNewFeedback([{ ...formData, colleagueUuid }]));
-    dispatch(ColleaguesActions.clearColleagueList());
   };
 
   const handleSubmit = (data) => {
@@ -35,12 +34,16 @@ const GiveNewFeedback: FC = () => {
 
     if (data.status === 'DRAFT') {
       dispatch(FeedbackActions.createNewFeedback([{ ...data, colleagueUuid }]));
+      handleSuccess();
       return;
     }
     setStatus(Statuses.CONFIRMING);
   };
 
-  const handleSuccess = () => navigate(`/${Page.GIVE_FEEDBACK}`);
+  const handleSuccess = () => {
+    navigate(`/${Page.GIVE_FEEDBACK}`);
+    dispatch(ColleaguesActions.clearColleagueList());
+  };
 
   return (
     <Modal
@@ -49,10 +52,7 @@ const GiveNewFeedback: FC = () => {
       modalContainerRule={[containerRule]}
       closeOptions={{
         content: <Icon graphic='cancel' invertColors={true} />,
-        onClose: () => {
-          navigate(`/${Page.GIVE_FEEDBACK}`);
-          // TODO: clean store here
-        },
+        onClose: handleSuccess,
         styles: [modalCloseOptionStyle],
       }}
       title={{
