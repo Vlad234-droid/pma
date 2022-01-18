@@ -24,14 +24,11 @@ export const getCurrentUserEpic: Epic = (action$, _, { api }) =>
 export const createProfileAttributeEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
     filter(isActionOf(createProfileAttribute.request)),
-    //@ts-ignore
     switchMap(({ payload }) =>
       //@ts-ignore
       from(api.createProfileAttribute(payload)).pipe(
-        mergeMap(() =>
-          //@ts-ignore
-          from([createProfileAttribute.success({}), getCurrentUser.request()]),
-        ),
+        //@ts-ignore
+        mergeMap(({ data }) => from([createProfileAttribute.success(data)])),
       ),
     ),
   );
@@ -39,10 +36,14 @@ export const createProfileAttributeEpic: Epic = (action$, _, { api }) =>
 export const updateProfileAttributeEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
     filter(isActionOf(updateProfileAttribute.request)),
-    //@ts-ignore
     switchMap(({ payload }) =>
       //@ts-ignore
-      from(api.updateProfileAttribute(payload)).pipe(map(updateProfileAttribute.success)),
+      from(api.updateProfileAttribute(payload)).pipe(
+        //@ts-ignore
+        mergeMap(({ data }) => {
+          return from([updateProfileAttribute.success(data)]);
+        }),
+      ),
     ),
   );
 
