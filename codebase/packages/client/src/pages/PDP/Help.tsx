@@ -1,19 +1,15 @@
 import React from 'react';
-import { CreateRule, Rule, Theme, useStyle } from '@dex-ddl/core';
+import { CreateRule, Rule, theme, Theme, useStyle } from '@dex-ddl/core';
 import { Close } from 'assets/img/objectives';
 import DescriptionBlock from 'components/DescriptionBlock';
-import Details from 'components/Details';
 import { useNavigate } from 'react-router';
 
-const Popup = (props) => {
+const PersonalDevelopmentHelp = (props) => {
   const { css, theme } = useStyle();
-  const { items } = props;
   const navigate = useNavigate();
 
-  if (items.length < 1) return null;
-
   return (
-    <div className={css(popup)}>
+    <div className={css(main)}>
       <div className={css(header({ theme }))}>
         <div
           className={css(arrow)}
@@ -21,21 +17,17 @@ const Popup = (props) => {
             navigate(-1);
           }}
         />
-        <div>Strategic drivers</div>
+        <div>Personal Development Plan</div>
         <div>
-          <img className={css(close)} alt='close' src={Close} onClick={() => navigate('/')} />
+          <img className={css(close)} alt='close' src={Close} onClick={() => navigate(-1)} />
         </div>
       </div>
 
       <DescriptionBlock>
-        <div className={css(decsriptionHeader({ theme }))}>Your organization has 6 drivers</div>
-
-        <div className={css(descriptionText({ theme }))}>
-          Organization drivers – are stategic goals that help all company-wide activities lead to one single direction.
-        </div>
-        {items.map((obj, idx) => {
-          return <Details key={obj.uuid} title={`Strategic driver ${idx + 1}`} description={obj.title} />;
-        })}
+          <div>Need help with your Personal Development Plan?</div>
+          <div>
+              Below we have listed some points to help you write your personal plan and achieve your goals.
+          </div>
       </DescriptionBlock>
     </div>
   );
@@ -45,7 +37,7 @@ const close = {
   cursor: 'pointer',
 } as Rule;
 
-const descriptionText: CreateRule<{ theme: Theme }> = (props) => {
+const descriptionText: CreateRule<{ theme: Theme; }> = (props) => {
   if (props == null) return {};
   const { theme } = props;
   return {
@@ -55,7 +47,7 @@ const descriptionText: CreateRule<{ theme: Theme }> = (props) => {
   };
 };
 
-const decsriptionHeader: CreateRule<{ theme: Theme }> = (props) => {
+const decsriptionHeader: CreateRule<{ theme: Theme; }> = (props) => {
   if (props == null) return {};
   const { theme } = props;
   return {
@@ -77,7 +69,7 @@ const arrow = {
   cursor: 'pointer',
 } as Rule;
 
-const header: CreateRule<{ theme: Theme }> = (props) => {
+const header: CreateRule<{ theme: Theme; }> = (props) => {
   if (props == null) return {};
   const { theme } = props;
   return {
@@ -93,12 +85,14 @@ const header: CreateRule<{ theme: Theme }> = (props) => {
   };
 };
 
-const popup: Rule = {
+const main: Rule = {
   display: 'flex',
   justifyContent: 'flex-start',
   alignItems: 'center',
   flexDirection: 'column',
   padding: '0 20px',
+  backgroundColor: `${theme.colors.tescoBlue}`,
+  minHeight: '100vh',
 };
 
-export default Popup;
+export default PersonalDevelopmentHelp;

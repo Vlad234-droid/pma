@@ -1,10 +1,11 @@
 import { createSelector } from 'reselect';
 //@ts-ignore
 import { RootState } from 'typesafe-actions';
-import { ReviewType, Status } from '@pma/client/src/config/enum';
+import { ReviewType, PDPType, Status } from '@pma/client/src/config/enum';
 
 //@ts-ignore
 export const reviewsSelector = (state: RootState) => state.reviews;
+export const pdpSelector = (state: RootState) => state.pdp;
 
 export const reviewsMetaSelector = createSelector(reviewsSelector, ({ meta }) => meta);
 export const getAllReviews = createSelector(reviewsSelector, ({ data }) => data);
@@ -13,6 +14,11 @@ export const getAllColleagueReviews = createSelector(reviewsSelector, ({ colleag
 export const filterReviewsByTypeSelector = (reviewType: ReviewType) =>
   createSelector(reviewsSelector, (reviews: any) => {
     return reviews?.data?.filter((review) => review.type === reviewType) || [];
+  });
+
+export const filterPDPByTypeSelector = (pdpType: PDPType) =>
+  createSelector(pdpSelector, (pdps: any) => {
+    return pdps?.data?.filter((pdp) => pdp.type === pdpType) || [];
   });
 
 export const getReviewByTypeSelector = (reviewType: ReviewType) =>
