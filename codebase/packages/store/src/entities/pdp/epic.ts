@@ -4,7 +4,7 @@ import { combineEpics } from 'redux-observable';
 import { from, of } from 'rxjs';
 import { catchError, filter, map, switchMap, takeUntil } from 'rxjs/operators';
 
-import { getPDPGoal, createPDPGoal, updatePDPGoal } from './actions';
+import { getPDPGoal, createPDPGoal, updatePDPGoal, getPDPByUUIDGoal, deletePDPGoal } from './actions';
 
 export const getPDPEpic: Epic = (action$, _, { api }) => {
   return action$.pipe(
@@ -14,8 +14,24 @@ export const getPDPEpic: Epic = (action$, _, { api }) => {
         // @ts-ignore
         map(({ success, data }) => {
           getPDPGoal;
-          // console.log('============== ', data);
-          return getPDPGoal.success({ origin: data });
+          return getPDPGoal.success({pdp: data});
+        }),
+        catchError(({ errors }) => of(getPDPGoal.failure(errors))),
+        takeUntil(action$.pipe(filter(isActionOf(getPDPGoal.cancel)))),
+      ),
+    ),
+  );
+}
+
+export const getPDPByUUIDEpic: Epic = (action$, _, { api }) => {
+  return action$.pipe(
+    filter(isActionOf(getPDPByUUIDGoal.request)),
+    switchMap(({ payload }) =>
+      from(api.getPDPByUUIDGoal(payload)).pipe(
+        // @ts-ignore
+        map(({ success, data }) => {
+          getPDPByUUIDGoal;
+          return getPDPByUUIDGoal.success({pdp: data});
         }),
         catchError(({ errors }) => of(getPDPGoal.failure(errors))),
         takeUntil(action$.pipe(filter(isActionOf(getPDPGoal.cancel)))),
@@ -39,6 +55,37 @@ export const createPDPEpic: Epic = (action$, _, { api }) =>
     }),
   );
 
+export const deletePDPEpic: Epic = (action$, _, { api }) =>
+  action$.pipe(
+    filter(isActionOf(deletePDPGoal.request)),
+    switchMap(({ payload }) => {
+      console.log('payload: ', payload.data);
+      const data = payload.data;
+      return from(api.deletePDPGoal(data)).pipe(
+        // @ts-ignore
+        map(({ data }) => {
+          return deletePDPGoal.request(data);
+        }),
+        catchError(({ errors }) => of(deletePDPGoal.failure(errors))),
+      );
+    }),
+  );
+
+// try to optimiz in future
+export const deleteAndFetchPDPEpic: Epic = (action$, _, { api }) =>
+  action$.pipe(
+    filter(isActionOf(deletePDPGoal.success)),
+    switchMap(({ payload }) => {
+      return from(api.getPDPGoal()).pipe(
+        // @ts-ignore
+        map(({ data }) => {
+          return getPDPGoal.request({});
+        }),
+        catchError(({ errors }) => of(getPDPGoal.failure(errors))),
+      );
+    }),
+  );
+
 export const updadePDPEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
     filter(isActionOf(updatePDPGoal.request)),
@@ -56,6 +103,9 @@ export const updadePDPEpic: Epic = (action$, _, { api }) =>
 
   export default combineEpics(
     getPDPEpic,
+    getPDPByUUIDEpic,
     createPDPEpic,
     updadePDPEpic,
+    deletePDPEpic,
+    deleteAndFetchPDPEpic,
   );

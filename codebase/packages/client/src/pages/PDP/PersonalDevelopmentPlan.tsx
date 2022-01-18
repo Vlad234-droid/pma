@@ -2,33 +2,19 @@ import React, { FC, useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'components/Translation';
 import { CreateRule, Rule, Styles, theme, Theme, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { ObjectiveType, PDPType, ReviewType } from 'config/enum';
-
-import { IconButton } from 'components/IconButton';
-
-import {
-  Accordion,
-  Section,
-  transformReviewsToObjectives,
-  ObjectiveTypes as OT,
-} from 'features/Objectives';
-import { PreviousReviewFilesModal } from 'features/ReviewFiles/components';
 import useDispatch from 'hooks/useDispatch';
 import { useSelector } from 'react-redux';
 import {
   colleagueUUIDSelector,
   currentUserSelector,
-  getTimelineByReviewTypeSelector,
   getTimelineMetaSelector,
-  isReviewsInStatus,
   PDPActions,
   reviewsMetaSelector,
-  schemaMetaSelector,
+  schemaMetaPDPSelector,
   TimelineActions,
   timelineTypesAvailabilitySelector,
 } from '@pma/store';
 import { useNavigate } from 'react-router';
-import useReviewSchema from 'features/Objectives/hooks/useReviewSchema';
-import useReviews from 'features/Objectives/hooks/useReviews';
 import plus from '../../assets/img/pdp/plusIcon.png';
 import download from '../../assets/img/pdp/download.png';
 import infoIcon from '../../assets/img/pdp/infoIcon.png';
@@ -37,6 +23,7 @@ import GoalInfo from './GoalInfo';
 import { Page } from 'pages';
 import usePDPShema from 'features/PDP/hooks/usePDPShema';
 import { buildPath } from 'features/Routes';
+import { paramsReplacer } from 'utils';
 
 const reviews = [
   {
@@ -68,15 +55,10 @@ const PersonalDevelopmentPlan: FC = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const { info } = useSelector(currentUserSelector);
-  const pathParams = { colleagueUuid: info.colleagueUUID, type: PDPType.PDP, cycleUuid: 'CURRENT' };
-  const [objectives, setObjectives] = useState<OT.Objective[]>([]);
 
-  const { loaded: schemaLoaded } = useSelector(schemaMetaSelector);
-  const { loaded: reviewLoaded } = useSelector(reviewsMetaSelector);
+  const pdpSelector = useSelector(schemaMetaPDPSelector)?.goals;
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const [schema] = usePDPShema(PDPType.PDP);
-  // console.log('--------------', schema);
   const { components = [], markup = { max: 0, min: 0 } } = schema;
   const timelineTypes = useSelector(timelineTypesAvailabilitySelector);
   const canShowMyReview = timelineTypes[ObjectiveType.MYR] && timelineTypes[ObjectiveType.EYR];
@@ -84,7 +66,6 @@ const PersonalDevelopmentPlan: FC = () => {
 
   const formElements = components.filter((component) => component.type != 'text');
 
-  // todo not clear where reviews might come from. remove this block when its clear
   const createdReviews: any = [];
   if (canShowMyReview) {
     createdReviews.push(...reviews);
@@ -92,15 +73,7 @@ const PersonalDevelopmentPlan: FC = () => {
     createdReviews.push(...annualReviews);
   }
 
-  useEffect(() => {
-    if (reviewLoaded && schemaLoaded) {
-      console.log(reviewLoaded);
-      
-      // setObjectives(transformReviewsToObjectives(origin, formElements));
-    }
-  }, [reviewLoaded, schemaLoaded]);
-
-  const navToGoalPage = () => navigate(buildPath(Page.CREATE_PERSONAL_DEVELOPMENT_GOAL));
+  const navToGoalPage = () => navigate(buildPath(Page.CREATE_PERSONAL_DEVELOPMENT_PLAN));
 
   const { loaded } = useSelector(getTimelineMetaSelector) || {};
 
@@ -109,52 +82,16 @@ const PersonalDevelopmentPlan: FC = () => {
   }, [loaded]);
 
   useEffect(() => {
-    dispatch(PDPActions.getPDPGoal({}));
+    setTimeout(() => dispatch(PDPActions.getPDPGoal({})), 0);
   }, []);
 
-  const goalListOfItems = [
-    {
-      title: 'Personal Development Goal: 1',
-      subtitle: 'Develop a growth mindset', 
-      description: 'I want our customers to be satisfied and always return to us',
-      data: [
-        {
-          title: 'Develop a growth mindset', 
-          description: 'I want our customers to be satisfied and always return to us'
-        },
-        {
-          title: 'I want to achieve my goal by', 
-          description: '03 September 2022'
-        }
-      ]
-    },
-    {
-      title: 'Personal Development Goal: 2',
-      data: [
-        {
-          title: 'Develop a growth mindset', 
-          description: 'I want our customers to be satisfied and always return to us'
-        },
-        {
-          title: 'I want to achieve my goal by', 
-          description: '03 September 2022'
-        }
-      ]
-    },
-    {
-      title: 'Personal Development Goal: 3',
-      data: [
-        {
-          title: 'Develop a growth mindset', 
-          description: 'I want our customers to be satisfied and always return to us'
-        },
-        {
-          title: 'I want to achieve my goal by', 
-          description: '03 September 2022'
-        }
-      ]
-    }
-  ];
+  const deleteGoal = (uuid) => {
+    dispatch(PDPActions.deletePDPGoal({ data: [uuid]}))
+  }
+
+  const editGoal = (uuid) => {
+    navigate(buildPath(paramsReplacer(`${Page.UPDATE_PERSONAL_DEVELOPMENT_PLAN}`, { ':uuid': uuid })));
+  }
 
   return (
     <div className={css({ padding: '0 40px' })}>
@@ -167,12 +104,12 @@ const PersonalDevelopmentPlan: FC = () => {
 
           <button className={css(buttonIcon({theme}))} onClick={navToGoalPage}>
             <div className={css(btnIcon)}><img alt='create' src={plus} /></div>
-            Create PDP
+            {pdpSelector?.length === 6 ? 'Edit PDP' : 'Create PDP'}
           </button>
         </div>
 
         <div className={css(controlButtons({theme}))}>
-          <button onClick={() => navigate(buildPath(Page.PERSONAL_DEVELOPMENT_HELP))} className={css(infoBtn)}><img alt='info' src={infoIcon} /></button>
+          <button onClick={() => console.log('help')} className={css(infoBtn)}><img alt='info' src={infoIcon} /></button>
         </div>
       </div>
 
@@ -197,9 +134,19 @@ const PersonalDevelopmentPlan: FC = () => {
       <div className={css(bodyWrapperStyles)} data-test-id={TEST_ID}>
         <div className={css(timelineWrapperStyles)}>
             {
-              goalListOfItems.map( (el,idx) => {
+              pdpSelector
+              && pdpSelector.map( (el,idx) => {
                 return (
-                  <GoalInfo key={el.title+idx} data={el.data} title={el.title} subtitle={el.subtitle} description={el.description}/>
+                  <GoalInfo 
+                    id={el.uuid}
+                    key={`Personal Development Goal: ${idx+1}`} 
+                    data={el.properties.mapJson}
+                    title={`Personal Development Goal: ${idx+1}`} 
+                    subtitle={formElements[0].label}
+                    formElements={formElements}
+                    deleteGoal={deleteGoal}
+                    editGoal={editGoal}
+                    description={Object.values(el.properties.mapJson)[0]}/>
                 )
               })
             }
@@ -268,7 +215,6 @@ const buttonDownload: CreateRule<{ theme: Theme; }> = (props) => {
   return {
     border: `2px solid ${theme.colors.tescoBlue}`,
     backgroundColor: 'transparent',
-    // color: `${theme.colors.tescoBlue}`,
     color: '#00539F',
     fontWeight: 'bold',
     marginRight: '15px',
@@ -335,17 +281,6 @@ const controlButtons: CreateRule<{ theme: Theme; }> = (props) => {
   };
 };
 
-const headWrapperStyles: Rule = () => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
-  return {
-    display: 'flex',
-    gap: '10px',
-    margin: '15px 0',
-    flexDirection: mobileScreen ? 'column' : 'row',
-  };
-};
-
 const timelineWrapperStyles = {
   flex: '3 1 70%',
   display: 'flex',
@@ -353,12 +288,6 @@ const timelineWrapperStyles = {
   '& > div': {
     height: '100%',
   },
-} as Styles;
-
-const shareWidgetStyles = {
-  flex: '1 1 30%',
-  display: 'flex',
-  flexDirection: 'column',
 } as Styles;
 
 const bodyWrapperStyles: Rule = () => {
@@ -373,38 +302,5 @@ const bodyWrapperStyles: Rule = () => {
     flexDirection: mobileScreen ? 'column' : 'row',
   };
 };
-
-const basicTileStyle: Rule = {
-  flex: '1 0 216px',
-};
-
-const iconStyles: Rule = {
-  marginRight: '10px',
-};
-
-const iconButtonStyles: Rule = ({ theme }) => ({
-  padding: '10px 10px',
-  color: theme.colors.tescoBlue,
-  fontWeight: 700,
-});
-
-const tileStyles: Rule = {
-  display: 'flex',
-  alignItems: 'center',
-};
-
-const widgetWrapperStyle: Rule = {
-  display: 'flex',
-  flexWrap: 'wrap',
-  gridGap: '8px',
-  marginTop: '8px',
-};
-
-const linkStyles = ({ theme }) => ({
-  fontSize: '14px',
-  lineHeight: '18px',
-  color: theme.colors.tescoBlue,
-  background: 'transparent',
-});
 
 export default PersonalDevelopmentPlan;

@@ -77,14 +77,20 @@ const pages: Record<Page, PageComponent> = {
     withHeader: true,
     backPath: Page.CONTRIBUTION,
   },
-  [Page.CREATE_PERSONAL_DEVELOPMENT_GOAL]: {
-    element: CreatePersonalDevelopmentGoal,
+  [Page.CREATE_PERSONAL_DEVELOPMENT_PLAN]: {
+    Element: CreatePersonalDevelopmentGoal,
     title: 'Create Personal Development Goal',
     withHeader: false,
-    backPath: Page.CONTRIBUTION,
+    backPath: Page.PERSONAL_DEVELOPMENT_PLAN,
+  },
+  [Page.UPDATE_PERSONAL_DEVELOPMENT_PLAN]: {
+    Element: CreatePersonalDevelopmentGoal,
+    title: 'UPDATE Personal Development Goal',
+    withHeader: false,
+    backPath: Page.PERSONAL_DEVELOPMENT_PLAN,
   },
   [Page.PERSONAL_DEVELOPMENT_HELP]: {
-    element: PersonalDevelopmentHelp,
+    Element: PersonalDevelopmentHelp,
     title: 'Personal Development Plan help',
     withHeader: false,
     backPath: Page.CONTRIBUTION,

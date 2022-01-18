@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Button, CreateRule, ModalWithHeader, Rule, theme, Theme, useBreakpoints, useStyle } from '@dex-ddl/core';
-import { Close } from 'assets/img/objectives';
-import DescriptionBlock from 'components/DescriptionBlock';
 import { useNavigate } from 'react-router';
 import infoIcon from '../../assets/img/pdp/infoIcon.png';
 import { Icon } from 'components/Icon';
-import { GenericItemField } from 'components/GenericForm';
-import { Item, Textarea } from 'components/Form';
+import GenericForm, { GenericItemField } from 'components/GenericForm';
+import { Input, Item, Textarea } from 'components/Form';
 import { useForm } from 'react-hook-form';
 import arrLeft from '../../assets/img/pdp/arrLeft.png';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -14,92 +12,101 @@ import * as Yup from 'yup';
 import { createPDPSchema } from 'features/PDP/config';
 import usePDPShema from 'features/PDP/hooks/usePDPShema';
 import { useSelector } from 'react-redux';
-import { colleagueUUIDSelector, filterPDPByTypeSelector, reviewsMetaSelector, schemaMetaSelector } from '@pma/store';
+import { colleagueUUIDSelector, filterPDPByTypeSelector, reviewsMetaSelector, schemaMetaSelector, schemaMetaPDPSelector, PDPActions } from '@pma/store';
 import { PDPType } from 'config/enum';
+import { createYupSchema } from 'utils/yup';
+import useDispatch from 'hooks/useDispatch';
+import {v4 as uuidv4} from 'uuid';
+import { buildPath } from 'features/Routes';
+import { Page } from 'pages';
+import { useParams } from 'react-router-dom';
 
 const CreatePersonalDevelopmentGoal = (props) => {
   const { css, theme } = useStyle();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const colleagueUuid = useSelector(colleagueUUIDSelector);
-  const originObjectives = useSelector(filterPDPByTypeSelector(PDPType.PDP));
-  
-  const [objectives, setObjectives] = useState<[]>([]);
-  const { loaded: schemaLoaded } = useSelector(schemaMetaSelector);
-  const { loaded: reviewLoaded } = useSelector(reviewsMetaSelector);
-
+  const pdpSelector = useSelector(schemaMetaPDPSelector)?.goals;
+  const [pdpGoals, setPDPGoals] = useState<any[]>([]);
   const [schema] = usePDPShema(PDPType.PDP);
-  // console.log('--------------', schema);
-  const { components = [], markup = { max: 0, min: 0 } } = schema;
+  const { components = [] } = schema;
   const formElements = components.filter((component) => component.type != 'text');
-  // const canCreateMultiObjective = markup.min >= originObjectives?.length && timelineObjective.status === Status.DRAFT;
-
-
-
-
-
-  const goalList = ['Goal1', 'Goal2', 'Goal3'];
+  const maxGoalCount = 6;
+  const { uuid } = useParams<{ uuid: string }>();
 
   useEffect(() => {
-    if (reviewLoaded && schemaLoaded) {
-      console.log('Do things here with data');
+    if (schema.meta.loaded) {
+      setPDPGoals(formElements);
     }
-  }, [reviewLoaded, schemaLoaded]);
+  }, [schema.meta.loaded]);
 
-  const formInputs = [
-    {
-        id: 0,
-        name: 'Development goal',
-        label: 'Development goal',
-        placeholder: 'Example: Build great relationships with others outside my own team',
-        value: 'value',
-        height: 65,
-    },
-    {
-        id: 1,
-        name: 'By achieving this goal, I will be able to...',
-        label: 'By achieving this goal, I will be able to...',
-        placeholder: `Example: 
-        1) Collaborate in a more efficient way 
-        2) Build my credibility and personal brand`,
-        value: 'value',
-        height: 85,
-      },
-      {
-        id: 2,
-        name: 'How will I go about achieving my goals',
-        label: 'How will I go about achieving my goals',
-        placeholder: `Example: 
-        1) Hold a lunch and learn open to wider business to share insight on a topic 
-        2) Research self driven development opportunities around building my network, such as TED Talks 
-        3) Use my current network to support me in connectiong with others around the business`,
-        value: 'value',
-        height: 165,
-      },
-      {
-        id: 3,
-        name: 'I know I will have succeeded when...',
-        label: 'I know I will have succeeded when...',
-        placeholder: `Example: 
-        1) Positive feedback from stakeholders 
-        2) Able to demonstrate that I have a diverse network and can draw on their knowledge`,
-        value: 'value',
-        height: 105,
-      },
-  ];
+  useEffect(() => {
+    if (uuid) {
+      dispatch(PDPActions.getPDPByUUIDGoal({uuid}))
+    } else {
+      dispatch(PDPActions.getPDPGoal({}));
+    }
+  }, []);
 
+  const yepSchema = formElements.reduce(createYupSchema, {});
   const methods = useForm({
     mode: 'onChange',
-    resolver: yupResolver<Yup.AnyObjectSchema>(createPDPSchema),
+    resolver: yupResolver<Yup.AnyObjectSchema>(Yup.object().shape(yepSchema)),
   });
+  const { getValues, formState, handleSubmit, reset } = methods;
+  const formValues = getValues();
 
-  const onChangeInput = (value, idx) => {
-    console.log(value, idx);
+  const requestData = [
+    {
+      "uuid": uuid ? uuid : uuidv4(),
+      "colleagueUuid": colleagueUuid,
+      "number": pdpSelector && uuid ? pdpSelector[0].number : pdpSelector?.length+1,
+      "properties": {
+        "mapJson": formValues,
+      },
+      "achievementDate": formValues["expiration_date"],
+      "status": "DRAFT"
+    }
+  ];
+  
+
+  const save = () => {
+    dispatch(PDPActions.createPDPGoal({data: requestData}));
+    navigate(buildPath(Page.PERSONAL_DEVELOPMENT_PLAN));
   };
+
+  const update = () => {
+    dispatch(PDPActions.updatePDPGoal({data: requestData}));
+    navigate(buildPath(Page.PERSONAL_DEVELOPMENT_PLAN));
+    console.log(requestData);
+    
+  };
+
+  const saveAndCreate = () => {
+    dispatch(PDPActions.createPDPGoal({data: requestData}));
+    dispatch(PDPActions.getPDPGoal({}));
+  }
+  
+  const navGoals = (goalNum = pdpSelector?.length-1) => {
+    
+    if (goalNum < 1 || !pdpSelector) {
+      return <div key={Math.random()} className={`${css(goal({theme}))} ${css(activeGoalItem({theme}))}`}>Goal 1</div>
+    } else if (goalNum <= maxGoalCount) {
+      return pdpSelector.map( (_, idx) => {
+        return (
+        <>
+          <div key={Math.random()} className={`${css(goal({theme}))} ${idx <= goalNum ? css(activeGoalItem({theme})) : css(defaultGoalItem({theme}))}`}>Goal {idx+1}</div>
+          {idx === goalNum && idx+1 < maxGoalCount && <div key={Math.random()} className={`${css(goal({theme}))} ${css(defaultGoalItem({theme}))}`}>Goal {idx+2}</div>}
+        </>  
+        )
+      })
+    }
+  }
 
   return (
     <ModalWithHeader
       containerRule={templatesModalWindowStyles}
-      title='Create Personal Development Goal'
+      title={`${ uuid ? 'Update' : 'Create' } Personal Development Goal`}
       modalPosition='middle'
       closeOptions={{
         closeOptionContent: <Icon graphic='cancel' invertColors={true} />,
@@ -107,14 +114,9 @@ const CreatePersonalDevelopmentGoal = (props) => {
         onClose: () => navigate(-1),
       }}
       >
-    <div className={css(popup({theme}))}>
-      <DescriptionBlock>
+    <div className={css(mainContainer)}>
         <div className={css(goalListBlock({theme}))}>
-            {goalList.map( (el, idx) => {
-                return (
-                    <div key={el} className={`${css(goal({theme}))} ${idx < 1 ? css(activeGoalItem({theme})) : css(defaultGoalItem({theme}))}`}>{el}</div>
-                )
-            })}
+            {!uuid && pdpSelector && navGoals()}
         </div>
 
         <div className={css(infoBlock)}>
@@ -124,20 +126,20 @@ const CreatePersonalDevelopmentGoal = (props) => {
             Need help writing your development plan?
         </div>
 
-        <div className={css(dataBlock)}>
-          {
-            formInputs?.map((item, idx) => {
+        <form>
+          { pdpGoals.map((component) => {
+              const { id, key, label, description, type, validate, values = [] } = component;
+              const value = pdpSelector? pdpSelector[0]?.properties?.mapJson[key] : '';
+              
+              if (description === '{datepicker}') {
                 return (
                   <GenericItemField
-                    key={item.id}
-                    name={item.name}
-                    id={item.id}
-                    label={item.name}
+                    key={key}
+                    name={key}
                     methods={methods}
-                    Wrapper={Item}
-                    Element={Textarea}
+                    label={label}
+                    Element={(props) => <Input type='date' {...props} />}
                     styles={{
-                      height: `${item.height}px`,
                       fontFamily: 'TESCO Modern", Arial, sans-serif',
                       fontSize: '16px',
                       fontStyle: 'normal',
@@ -145,25 +147,56 @@ const CreatePersonalDevelopmentGoal = (props) => {
                       letterSpacing: '0px',
                       textAlign: 'left',
                     }}
-                    onChange={(event) => onChangeInput(event, idx)}
-                    placeholder={item.placeholder}
-                    value={''}
+                    placeholder={description}
+                    value={value}
                   />
                 )
+              }
+              return (
+                  <GenericItemField
+                    key={key}
+                    name={key}
+                    methods={methods}
+                    label={label}
+                    Wrapper={Item}
+                    Element={Textarea}
+                    styles={{
+                      fontFamily: 'TESCO Modern", Arial, sans-serif',
+                      fontSize: '16px',
+                      fontStyle: 'normal',
+                      lineHeight: '20px',
+                      letterSpacing: '0px',
+                      textAlign: 'left',
+                    }}
+                    placeholder={description}
+                    value={value}
+                  />
+
+                  
+                );
             })
           }
-        </div>
-        
+        </form>
         <div className={css(applyBlock)}>
-          <Button styles={[customBtn]}>Save & Exit</Button>
-          <Button styles={[customBtn, createBtn]}>Save & create a new goal <img className={css(imgArrow)} alt='arrow' src={arrLeft} /></Button>
+          {<Button
+            isDisabled={!formState.isValid}
+            onPress={() => uuid ? update() : save()} 
+            styles={uuid || pdpSelector?.length === maxGoalCount ?  [customBtnFullWidth] : [customBtn]}>Save & Exit</Button>
+            }
+          {!uuid && pdpSelector?.length !== maxGoalCount && 
+            <Button 
+              isDisabled={!formState.isValid}
+              onPress={() => saveAndCreate()}
+              styles={[customBtn, createBtn]}>Save & create a new goal <img className={css(imgArrow)} alt='arrow' src={arrLeft} /></Button>}
         </div>
-        
-      </DescriptionBlock>
     </div>
     </ModalWithHeader>
   );
 };
+
+const mainContainer = {
+  padding: '20px',
+} as Rule;
 
 const templatesModalWindowStyles: Rule = () => {
   const [, isBreakpoint] = useBreakpoints();
@@ -171,7 +204,6 @@ const templatesModalWindowStyles: Rule = () => {
   return {
     width: mobileScreen ? '100%' : '60%',
     padding: '0',
-    height: mobileScreen ? 'calc(100% - 50px)' : 'calc(100% - 100px)',
     marginTop: mobileScreen ? '50px' : 0,
   };
 };
@@ -186,7 +218,16 @@ const createBtn = {
 
 const customBtn = {
   padding: '10px 20px',
-  width: '45%',
+  width: '47%',
+  whiteSpace: 'nowrap',
+  cursor: 'pointer',
+} as Rule;
+
+const customBtnFullWidth = {
+  padding: '10px 20px',
+  width: '100%',
+  whiteSpace: 'nowrap',
+  cursor: 'pointer',
 } as Rule;
 
 const applyBlock = {

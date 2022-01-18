@@ -2,7 +2,6 @@ import React from 'react';
 import { CreateRule, Rule, theme, Theme, useStyle } from '@dex-ddl/core';
 import { Close } from 'assets/img/objectives';
 import DescriptionBlock from 'components/DescriptionBlock';
-import ObjectiveDetails from 'components/ObjectiveDetails/ObjectiveDetails';
 import { useNavigate } from 'react-router';
 
 const PersonalDevelopmentHelp = (props) => {

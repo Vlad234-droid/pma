@@ -87,25 +87,17 @@ export const getReviewSchema = (type: ReviewType, withForms = true) =>
 
 export const getPDPSchema = (type: PDPType) =>
   createSelector(schemaPDPSelector, (schema: any) => {
-    if (!schema?.cycle) {
+    
+    if (!schema?.pdp?.form) {
       return { ...schema };
     }
-    const {
-      cycle: { timelinePoints = [] },
-    } = schema;
-    const pdp = timelinePoints.find((pdp) => pdp.PDPType === type);
+
+    const form = schema?.pdp?.form;
     const pdpMarkup = {
       ...schema,
-      ...(pdp?.form?.json ? JSON.parse(pdp.form.json) : {}),
-      markup: {
-        min: Number(pdp?.properties?.pm_review_min || 0),
-        max: Number(pdp?.properties?.pm_review_max || 0),
-      },
+      ...(form?.json ? JSON.parse(form.json) : {}),
     };
 
-    console.log('-------PDP--------');
-    console.log(pdpMarkup);
-    console.log('-------END PDP--------');
     return pdpMarkup;
   });
 
@@ -124,9 +116,10 @@ export const getPDPSchema = (type: PDPType) =>
     });
 
     return {
-      ...schema,
-      components: filteredComponent,
-    };
-  });
+    ...schema,
+    components: filteredComponent,
+  };
+});
 
 export const schemaMetaSelector = createSelector(schemaSelector, ({ meta }) => meta);
+export const schemaMetaPDPSelector = createSelector(schemaPDPSelector, ({ pdp }) => pdp);

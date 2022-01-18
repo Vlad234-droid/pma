@@ -3,47 +3,61 @@ import { Button, CreateRule, Rule, theme, Theme, useStyle } from '@dex-ddl/core'
 import arrowUp from '../../assets/img/objectives/arrowUp.png';
 import editIcon from '../../assets/img/pdp/edit.png';
 import trashIcon from '../../assets/img/pdp/trash.png';
-import historyIcon from '../../assets/img/pdp/history.png';
 
 const GoalInfo = (props) => {
-    const {title, data} = props;
+    const {
+        id, 
+        title, 
+        subtitle, 
+        description, 
+        data, 
+        formElements, 
+        deleteGoal,
+        editGoal,
+    } = props;
+    const modifiedTitleRegex = new RegExp(/\*/, 'g');
     const { css, theme} = useStyle();
     const [getToogled, setToogled] = useState(false);
+    
+
     return (
         <div className={css(fullGoals({theme}))}>
             <div className={css(titleBlock({theme}))} onClick={() => setToogled(!getToogled)}>
-                {title}
+                {title.replace(modifiedTitleRegex, '')}
                 <div className={`${getToogled ? css(rotated) : ''}`}>
                     <img alt={'arrow'} src={arrowUp} />
                 </div>
             </div>
             <div className={css(goalBlock({theme}))}>
-                <div className={css({fontWeight: 'bold'})}>{data[0].title}</div>
-                <div>{data[0].description}</div>
+                <div className={css({fontWeight: 'bold'})}>{subtitle.replace(modifiedTitleRegex, '')}</div>
+                <div>{description}</div>
             </div>
 
             <div className={`${!getToogled ? css(hide) : ''}`}>
                 {
-                    data?.map( (el, idx) => {
-                        if (idx !== 0) 
+                    data && Object.keys(data).map( (key, index) => {
+                        if (index !== 0) 
+                        
                         return (
-                            <div key={el.title+idx} className={`${css(fullDesc)} ${css(goalBlock({theme}))}`}>
-                                <div className={css({fontWeight: 'bold'})}>{el.title}</div>
-                                <div>{el.description}</div>
+                            <div key={formElements[index].label+Math.random()} className={`${css(fullDesc)} ${css(goalBlock({theme}))}`}>
+                                <div className={css({fontWeight: 'bold'})}>{formElements[index].label.replace(modifiedTitleRegex, '')}</div>
+                                <div>{data[key]}</div>
                             </div>
                         )
                     })
                 }
 
+                
+
                 <div className={css(btnBlock)}>
-                    <Button styles={[btns]}>
+                    <Button styles={[btns]} onPress={() => editGoal(id)}>
                         <div>
                             <img className={`${css(icon)} ${css(editImg)}`} alt='edit' src={editIcon} />
                         </div>
                         <div className={css({marginLeft: '5px'})}>Edit</div>
                     </Button>
 
-                    <Button styles={[btns]}>
+                    <Button styles={[btns]} onPress={() => deleteGoal(id)}>
                         <img className={css(icon)} alt='edit' src={trashIcon} />
                         <div className={css({marginLeft: '5px'})}>Delete</div>
                     </Button>
