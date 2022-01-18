@@ -66,7 +66,7 @@ const pages: Record<Page, PageComponent> = {
     Element: CreateOrganizationObjectives,
     title: 'Create Strategic drivers',
     withHeader: true,
-    backPath: Page.CONTRIBUTION,
+    backPath: Page.OBJECTIVES_VIEW,
   },
   [Page.STRATEGIC_DRIVERS]: {
     Element: ObjectivesView,
