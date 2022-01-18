@@ -4,7 +4,7 @@ import { fireEvent } from '@testing-library/react';
 // @ts-ignore
 import { renderWithTheme as render, generateEmployeeReview } from 'utils/test';
 
-import ConfirmModal from '../../features/Actions/components/ConfirmModal/ConfirmModal';
+import ConfirmModal from './ConfirmModal';
 
 describe('<ConfirmModal />', () => {
   const props = {

@@ -8,12 +8,6 @@ import { Page } from 'pages';
 import { useTranslation } from 'components/Translation';
 import SecondaryWidget, { Props as SecondaryWidgetProps } from 'features/SecondaryWidget';
 
-export const TEST_ID = 'my-team';
-
-// TODO: People Team role?
-// TODO: icon for calibrations
-// TODO: add translation
-
 const PeopleTeam: FC = () => {
   const { css } = useStyle();
   const navigate = useNavigate();
@@ -22,7 +16,7 @@ const PeopleTeam: FC = () => {
   const widgets: SecondaryWidgetProps[] = [
     {
       iconGraphic: 'calibration',
-      title: t('Calibration'),
+      title: t('calibration', 'Calibration'),
       data: t('Purus id ut tempus euismod ut.'),
       customStyle: { flex: '2 1 110px' },
       onClick: () => navigate(buildPath(Page.CALIBRATION)),
@@ -30,7 +24,7 @@ const PeopleTeam: FC = () => {
     },
     {
       iconGraphic: 'account',
-      title: t('Reporting'),
+      title: t('reporting', 'Reporting'),
       data: t('Manga quis vivera sit tristique'),
       customStyle: { flex: '2 1 110px' },
       onClick: () => console.log('Navigate to reporting page'),
@@ -43,9 +37,9 @@ const PeopleTeam: FC = () => {
       <div className={css({ display: 'flex', justifyContent: 'center' })}>
         <RouterSwitch
           links={[
-            { link: buildPath(Page.CONTRIBUTION), name: 'My View' },
-            { link: buildPath(Page.MY_TEAM), name: 'My Team' },
-            { link: buildPath(Page.PEOPLE_TEAM), name: 'People Team' },
+            { link: buildPath(Page.CONTRIBUTION), name: t('my_view', 'My View') },
+            { link: buildPath(Page.MY_TEAM), name: t('my_team', 'My Team') },
+            { link: buildPath(Page.PEOPLE_TEAM), name: t('people_team', 'People Team') },
           ]}
         />
       </div>

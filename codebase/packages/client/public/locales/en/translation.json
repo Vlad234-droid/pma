@@ -133,5 +133,10 @@
   "edit_calibration_ratings": "Edit calibration ratings",
   "enter_ratings": "Enter your team`s ratings to see live updates",
   "compare_to_expected": "Compare to expected distribution or previous years",
-  "save_calibration_ratings": "Save calibration ratings to your device"
+  "save_calibration_ratings": "Save calibration ratings to your device",
+  "calibration": "Calibration",
+  "reporting": "Reporting",
+  "my_view": "My View",
+  "my_team": "My Team",
+  "people_team": "People Team"
 }
