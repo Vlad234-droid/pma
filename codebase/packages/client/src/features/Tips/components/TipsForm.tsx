@@ -74,19 +74,11 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
       setValue('tipTitle', formData['tipTitle']);
       setValue('tipDescription', formData['tipDescription']);
     }
-    setValue('tipTargetLevel1', formData['tipTargetLevel1']);
-    setValue('tipTargetLevel2', formData['tipTargetLevel2']);
-    setValue('tipTargetLevel3', formData['tipTargetLevel3']);
-    setValue('tipTargetLevel4', formData['tipTargetLevel4']);
+    setValue('tipTargetLevel1', formData['tipTargetLevel1'], { shouldValidate: true });
+    setValue('tipTargetLevel2', formData['tipTargetLevel2'], { shouldValidate: true });
+    setValue('tipTargetLevel3', formData['tipTargetLevel3'], { shouldValidate: true });
+    setValue('tipTargetLevel4', formData['tipTargetLevel4'], { shouldValidate: true });
   }, [formData]);
-
-  //TODO: delete this function after form fixes (this is only for debugging)
-  const checkFormValid = () => {
-    console.log('----');
-    console.log('isDirty', isDirty);
-    console.log('isValid', isValid);
-    console.log('formData', formData);
-  }
 
   useEffect(() => {
     if (configEntries.meta.loaded) {
@@ -305,7 +297,7 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
               label='Title'
               Wrapper={Item}
               Element={Input}
-              onChange={() => checkFormValid()}
+              onChange={(value) => setValue('tipTitle', value, { shouldDirty: true })}
               placeholder='Example: Share objectives easily'
               value={formData['tipTitle']}
             />
@@ -315,7 +307,7 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
               label='Description'
               Wrapper={Item}
               Element={Textarea}
-              onChange={() => checkFormValid()}
+              onChange={(value) => setValue('tipDescription', value, { shouldDirty: true })}
               placeholder='Example: Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus'
               rows={2}
               value={formData['tipDescription']}
@@ -337,8 +329,8 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
               })}
               placeholder='Please select'
               onChange={(value) => {
-                checkFormValid()
                 if(value) {
+                  setValue('tipTargetLevel1', value, { shouldDirty: true });
                   setFormData({
                     tipTitle: methods.getValues('tipTitle'),
                     tipDescription: methods.getValues('tipDescription'),
@@ -368,7 +360,7 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
                 return { value: item['uuid'], label: item['name'] };
               })}
               onChange={(value) => {
-                checkFormValid()
+                setValue('tipTargetLevel2', value, { shouldDirty: true });
                 setFormData({
                   ...formData,
                   tipTitle: methods.getValues('tipTitle'),
@@ -395,7 +387,7 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
                 return { value: item['uuid'], label: item['name'] };
               })}
               onChange={(value) => {
-                checkFormValid()
+                setValue('tipTargetLevel3', value, { shouldDirty: true });
                 setFormData({
                   ...formData,
                   tipTitle: methods.getValues('tipTitle'),
@@ -421,7 +413,7 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
                 return { value: item['uuid'], label: item['name'] };
               })}
               onChange={(value) => {
-                checkFormValid()
+                setValue('tipTargetLevel4', value, { shouldDirty: true });
                 setFormData({
                   ...formData,
                   tipTitle: methods.getValues('tipTitle'),

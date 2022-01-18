@@ -40,7 +40,7 @@ const TipsFormModal: FC<Props> = ({ action, negativeBtnAction, positiveBtnAction
       body: `Do you want to delete ${tipTitle} tip?`,
       negativeBtnText: 'Cancel',
       positiveBtnText: 'Delete',
-      showImage: false,
+      showImage: true,
     },
     successDelete: {
       title: 'Delete',
@@ -60,10 +60,10 @@ const TipsFormModal: FC<Props> = ({ action, negativeBtnAction, positiveBtnAction
 
   return (
     <div className={css(TipsFormModalStyle)}>
-      {options[action]['showImage'] && action === 'successDelete' || action === 'confirmDelete' ? 
+      {options[action]['showImage'] && (action === 'successDelete' || action === 'confirmDelete' ? 
         <img src={deleteIcon} alt='delete' />
         :
-        <img src={successIcon} alt='success' />
+        <img src={successIcon} alt='success' />)
       }
       <div className={css(modalTitle)}>{options[action]['title']}</div>
       <div className={css(modalBody)}>{options[action]['body']}</div>
