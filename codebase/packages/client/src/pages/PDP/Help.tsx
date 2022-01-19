@@ -1,5 +1,5 @@
 import React from 'react';
-import { Icon, ModalWithHeader, Rule, useBreakpoints, useStyle } from '@dex-ddl/core';
+import { CreateRule, Icon, ModalWithHeader, Rule, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { useNavigate } from 'react-router';
 import { buildPath } from 'features/Routes';
 import { Page } from 'pages';
@@ -7,10 +7,12 @@ import { Page } from 'pages';
 const PersonalDevelopmentHelp = (props) => {
   const { css } = useStyle();
   const navigate = useNavigate();
+  const [, isBreakpoint] = useBreakpoints();
+  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
 
   return (
     <ModalWithHeader
-      containerRule={templatesModalWindowStyles}
+      containerRule={templatesModalWindowStyles({ mobileScreen })}
       title='Personal Development Plan Help'
       modalPosition='middle'
       closeOptions={{
@@ -206,9 +208,9 @@ const largeSubtitle = {
   paddingTop: '24px',
 } as Rule;
 
-const templatesModalWindowStyles: Rule = () => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+const templatesModalWindowStyles: CreateRule<{ mobileScreen }> = (props) => {
+  const { mobileScreen } = props;
+
   return {
     width: mobileScreen ? '100%' : '60%',
     padding: '0',

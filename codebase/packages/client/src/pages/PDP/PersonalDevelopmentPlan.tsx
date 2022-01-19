@@ -55,6 +55,8 @@ const PersonalDevelopmentPlan: FC = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const [, isBreakpoint] = useBreakpoints();
+  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
 
   const pdpSelector = useSelector(schemaMetaPDPSelector)?.goals;
   const colleagueUuid = useSelector(colleagueUUIDSelector);
@@ -96,7 +98,7 @@ const PersonalDevelopmentPlan: FC = () => {
   return (
     <div className={css({ padding: '0 40px' })}>
       <div className={css(buttonBlock({ theme }))}>
-        <div className={css(controlButtons({ theme }))}>
+        <div className={css(controlButtons({ theme, mobileScreen }))}>
           {pdpSelector && pdpSelector.length === 5 ? null : (
             <>
               <button
@@ -119,7 +121,7 @@ const PersonalDevelopmentPlan: FC = () => {
           )}
         </div>
 
-        <div className={css(controlButtons({ theme }))}>
+        <div className={css(controlButtons({ theme, mobileScreen }))}>
           <button onClick={() => navigate(buildPath(Page.PERSONAL_DEVELOPMENT_HELP))} className={css(infoBtn)}>
             <img alt='info' src={infoIcon} />
           </button>
@@ -144,7 +146,7 @@ const PersonalDevelopmentPlan: FC = () => {
         </DescriptionBlock>
       </div>
 
-      <div className={css(bodyWrapperStyles)} data-test-id={TEST_ID}>
+      <div className={css(bodyWrapperStyles({ mobileScreen }))} data-test-id={TEST_ID}>
         <div className={css(timelineWrapperStyles)}>
           {pdpSelector &&
             pdpSelector.map((el, idx) => {
@@ -273,11 +275,9 @@ const buttonBlock: CreateRule<{ theme: Theme }> = (props) => {
   };
 };
 
-const controlButtons: CreateRule<{ theme: Theme }> = (props) => {
+const controlButtons: CreateRule<{ theme: Theme; mobileScreen: boolean }> = (props) => {
   if (props == null) return {};
-  const { theme } = props;
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+  const { theme, mobileScreen } = props;
 
   if (mobileScreen) {
     return {
@@ -301,9 +301,9 @@ const timelineWrapperStyles = {
   },
 } as Styles;
 
-const bodyWrapperStyles: Rule = () => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+const bodyWrapperStyles: CreateRule<{ mobileScreen: boolean }> = (props) => {
+  const { mobileScreen } = props;
+
   return {
     display: 'flex',
     flexWrap: 'nowrap',

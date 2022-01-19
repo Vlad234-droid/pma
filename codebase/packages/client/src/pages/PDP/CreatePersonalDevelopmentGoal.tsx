@@ -24,6 +24,8 @@ const CreatePersonalDevelopmentGoal = (props) => {
   const { css, theme } = useStyle();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [, isBreakpoint] = useBreakpoints();
+  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const pdpList = useSelector(schemaMetaPDPSelector)?.goals;
   const [pdpGoals, setPDPGoals] = useState<any[]>([]);
@@ -110,7 +112,7 @@ const CreatePersonalDevelopmentGoal = (props) => {
 
   return (
     <ModalWithHeader
-      containerRule={templatesModalWindowStyles}
+      containerRule={templatesModalWindowStyles({ mobileScreen })}
       title={`${uuid ? 'Update' : 'Create'} Personal Development Goal`}
       modalPosition='middle'
       closeOptions={{
@@ -223,9 +225,8 @@ const mainContainer = {
   height: '100%',
 } as Rule;
 
-const templatesModalWindowStyles: Rule = () => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+const templatesModalWindowStyles: CreateRule<{ mobileScreen: boolean }> = (props) => {
+  const { mobileScreen } = props;
   return {
     width: mobileScreen ? '100%' : '60%',
     padding: '0',
