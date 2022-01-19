@@ -86,70 +86,82 @@ const PersonalDevelopmentPlan: FC = () => {
   }, []);
 
   const deleteGoal = (uuid) => {
-    dispatch(PDPActions.deletePDPGoal({ data: [uuid]}))
-  }
+    dispatch(PDPActions.deletePDPGoal({ data: [uuid] }));
+  };
 
   const editGoal = (uuid) => {
     navigate(buildPath(paramsReplacer(`${Page.UPDATE_PERSONAL_DEVELOPMENT_PLAN}`, { ':uuid': uuid })));
-  }
+  };
 
   return (
     <div className={css({ padding: '0 40px' })}>
-      <div className={css(buttonBlock({theme}))}>
-        <div className={css(controlButtons({theme}))}>
-          <button className={`${css(buttonIcon({theme}))} ${css(buttonDownload({theme}))}`} onClick={() =>console.log('download template')}>
-            <div className={css(btnIcon)}><img alt='create' src={download} /></div>
-            Download template
-          </button>
+      <div className={css(buttonBlock({ theme }))}>
+        <div className={css(controlButtons({ theme }))}>
+          {pdpSelector && pdpSelector.length === 5 ? null : (
+            <>
+              <button
+                className={`${css(buttonIcon({ theme }))} ${css(buttonDownload({ theme }))}`}
+                onClick={() => console.log('download template')}
+              >
+                <div className={css(btnIcon)}>
+                  <img alt='create' src={download} />
+                </div>
+                Download template
+              </button>
 
-          <button className={css(buttonIcon({theme}))} onClick={navToGoalPage}>
-            <div className={css(btnIcon)}><img alt='create' src={plus} /></div>
-            {pdpSelector?.length === 6 ? 'Edit PDP' : 'Create PDP'}
-          </button>
+              <button className={css(buttonIcon({ theme }))} onClick={navToGoalPage}>
+                <div className={css(btnIcon)}>
+                  <img alt='create' src={plus} />
+                </div>
+                {pdpSelector && pdpSelector?.length < 5 && pdpSelector?.length >= 1 ? 'Edit PDP' : 'Create PDP'}
+              </button>
+            </>
+          )}
         </div>
 
-        <div className={css(controlButtons({theme}))}>
-          <button onClick={() => console.log('help')} className={css(infoBtn)}><img alt='info' src={infoIcon} /></button>
+        <div className={css(controlButtons({ theme }))}>
+          <button onClick={() => navigate(buildPath(Page.PERSONAL_DEVELOPMENT_HELP))} className={css(infoBtn)}>
+            <img alt='info' src={infoIcon} />
+          </button>
         </div>
       </div>
 
       <div className={css(descriptionMain)}>
-          <DescriptionBlock>
-            <div className={css(title({theme}))}>What is Personal Development Plan?</div>
-            <div className={css(details({theme}), detailsWithMargin)}>
-              Your Performance Development Plan (PDP) is a tailored plan that helps you reflect on the things you are
-              great at and identify areas you want to improve.
-            </div>
+        <DescriptionBlock>
+          <div className={css(title({ theme }))}>What is Personal Development Plan?</div>
+          <div className={css(details({ theme }), detailsWithMargin)}>
+            Your Performance Development Plan (PDP) is a tailored plan that helps you reflect on the things you are
+            great at and identify areas you want to improve.
+          </div>
 
-            <div className={css(title({theme}))}>How The Performance Development Plan works?</div>
-            <div className={css(details({theme}))}>
-              At Tesco, “how” you do your job is as important as “what” you deliver. An inspiring PDP will help you
-              focus on what to develop, whether that’s being at your best in your current role or moving towards a
-              bigger or broader role. What’s important is recording and regularly reviewing your plan to a format that
-              works for you.
-            </div>
-          </DescriptionBlock>
+          <div className={css(title({ theme }))}>How The Performance Development Plan works?</div>
+          <div className={css(details({ theme }))}>
+            At Tesco, “how” you do your job is as important as “what” you deliver. An inspiring PDP will help you focus
+            on what to develop, whether that’s being at your best in your current role or moving towards a bigger or
+            broader role. What’s important is recording and regularly reviewing your plan to a format that works for
+            you.
+          </div>
+        </DescriptionBlock>
       </div>
-      
+
       <div className={css(bodyWrapperStyles)} data-test-id={TEST_ID}>
         <div className={css(timelineWrapperStyles)}>
-            {
-              pdpSelector
-              && pdpSelector.map( (el,idx) => {
-                return (
-                  <GoalInfo 
-                    id={el.uuid}
-                    key={`Personal Development Goal: ${idx+1}`} 
-                    data={el.properties.mapJson}
-                    title={`Personal Development Goal: ${idx+1}`} 
-                    subtitle={formElements[0].label}
-                    formElements={formElements}
-                    deleteGoal={deleteGoal}
-                    editGoal={editGoal}
-                    description={Object.values(el.properties.mapJson)[0]}/>
-                )
-              })
-            }
+          {pdpSelector &&
+            pdpSelector.map((el, idx) => {
+              return (
+                <GoalInfo
+                  id={el.uuid}
+                  key={`Personal Development Goal: ${idx + 1}`}
+                  data={el.properties.mapJson}
+                  title={`Personal Development Goal: ${idx + 1}`}
+                  subtitle={formElements[0].label}
+                  formElements={formElements}
+                  deleteGoal={deleteGoal}
+                  editGoal={editGoal}
+                  description={Object.values(el.properties.mapJson)[0]}
+                />
+              );
+            })}
         </div>
         <div className={css({ flex: '1 1 30%', display: 'flex', flexDirection: 'column' })} />
       </div>
@@ -161,7 +173,7 @@ const detailsWithMargin = {
   marginBottom: '24px',
 } as Rule;
 
-const title: CreateRule<{ theme: Theme; }> = (props) => {
+const title: CreateRule<{ theme: Theme }> = (props) => {
   if (props == null) return {};
   const { theme } = props;
   return {
@@ -189,10 +201,9 @@ const descriptionMain = {
   lineHeight: '18px',
   letterSpacing: '0px',
   textAlign: 'left',
-
 } as Rule;
 
-const details: CreateRule<{ theme: Theme; }> = (props) => {
+const details: CreateRule<{ theme: Theme }> = (props) => {
   if (props == null) return {};
   const { theme } = props;
   return {
@@ -209,7 +220,7 @@ const infoBtn = {
   cursor: 'pointer',
 } as Rule;
 
-const buttonDownload: CreateRule<{ theme: Theme; }> = (props) => {
+const buttonDownload: CreateRule<{ theme: Theme }> = (props) => {
   if (props == null) return {};
   const { theme } = props;
   return {
@@ -226,7 +237,7 @@ const btnIcon = {
   height: '18px',
 } as Rule;
 
-const buttonIcon: CreateRule<{ theme: Theme; }> = (props) => {
+const buttonIcon: CreateRule<{ theme: Theme }> = (props) => {
   if (props == null) return {};
   const { theme } = props;
   return {
@@ -249,7 +260,7 @@ const buttonIcon: CreateRule<{ theme: Theme; }> = (props) => {
   };
 };
 
-const buttonBlock: CreateRule<{ theme: Theme; }> = (props) => {
+const buttonBlock: CreateRule<{ theme: Theme }> = (props) => {
   if (props == null) return {};
   const { theme } = props;
 
@@ -262,16 +273,16 @@ const buttonBlock: CreateRule<{ theme: Theme; }> = (props) => {
   };
 };
 
-const controlButtons: CreateRule<{ theme: Theme; }> = (props) => {
+const controlButtons: CreateRule<{ theme: Theme }> = (props) => {
   if (props == null) return {};
   const { theme } = props;
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
-  
+
   if (mobileScreen) {
     return {
       flexDirection: 'column',
-    }
+    };
   }
 
   return {

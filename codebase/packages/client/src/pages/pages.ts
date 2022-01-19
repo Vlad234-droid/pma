@@ -94,7 +94,7 @@ const pages: Record<Page, PageComponent> = {
     Element: PersonalDevelopmentHelp,
     title: 'Personal Development Plan help',
     withHeader: false,
-    backPath: Page.CONTRIBUTION,
+    backPath: Page.PERSONAL_DEVELOPMENT_PLAN,
   },
   [Page.OBJECTIVES_VIEW]: {
     Element: Objectives,

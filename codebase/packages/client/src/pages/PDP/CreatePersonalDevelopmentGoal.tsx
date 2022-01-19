@@ -15,7 +15,7 @@ import { colleagueUUIDSelector, schemaMetaPDPSelector, PDPActions } from '@pma/s
 import { PDPType } from 'config/enum';
 import { createYupSchema } from 'utils/yup';
 import useDispatch from 'hooks/useDispatch';
-import {v4 as uuidv4} from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 import { buildPath } from 'features/Routes';
 import { Page } from 'pages';
 import { useParams } from 'react-router-dom';
@@ -30,7 +30,7 @@ const CreatePersonalDevelopmentGoal = (props) => {
   const [schema] = usePDPShema(PDPType.PDP);
   const { components = [] } = schema;
   const formElements = components.filter((component) => component.type != 'text');
-  const maxGoalCount = 6;
+  const maxGoalCount = 5;
   const { uuid } = useParams<{ uuid: string }>();
 
   useEffect(() => {
@@ -41,7 +41,7 @@ const CreatePersonalDevelopmentGoal = (props) => {
 
   useEffect(() => {
     if (uuid) {
-      dispatch(PDPActions.getPDPByUUIDGoal({uuid}))
+      dispatch(PDPActions.getPDPByUUIDGoal({ uuid }));
     } else {
       dispatch(PDPActions.getPDPGoal({}));
     }
@@ -57,141 +57,170 @@ const CreatePersonalDevelopmentGoal = (props) => {
 
   const requestData = [
     {
-      "uuid": uuid ? uuid : uuidv4(),
-      "colleagueUuid": colleagueUuid,
-      "number": pdpList && uuid ? pdpList[0].number : pdpList?.length+1,
-      "properties": {
-        "mapJson": formValues,
+      uuid: uuid ? uuid : uuidv4(),
+      colleagueUuid: colleagueUuid,
+      number: pdpList && uuid ? pdpList[0].number : pdpList?.length + 1,
+      properties: {
+        mapJson: formValues,
       },
-      "achievementDate": formValues["expiration_date"],
-      "status": "DRAFT"
-    }
+      achievementDate: formValues['expiration_date'],
+      status: 'DRAFT',
+    },
   ];
-  
 
   const save = () => {
-    dispatch(PDPActions.createPDPGoal({data: requestData}));
+    dispatch(PDPActions.createPDPGoal({ data: requestData }));
     navigate(buildPath(Page.PERSONAL_DEVELOPMENT_PLAN));
   };
 
   const update = () => {
-    dispatch(PDPActions.updatePDPGoal({data: requestData}));
+    dispatch(PDPActions.updatePDPGoal({ data: requestData }));
     navigate(buildPath(Page.PERSONAL_DEVELOPMENT_PLAN));
   };
 
   const saveAndCreate = () => {
-    dispatch(PDPActions.createPDPGoal({data: requestData}));
-    dispatch(PDPActions.getPDPGoal({}));
-  }
-  
-  const navGoals = (goalNum = pdpList?.length-1) => {
-    
-    if (goalNum < 1 || !pdpList) {
-      return <div className={`${css(goal({theme}))} ${css(activeGoalItem({theme}))}`}>Goal 1</div>
+    dispatch(PDPActions.createPDPGoal({ data: requestData }));
+  };
+
+  const navGoals = (goalNum = pdpList?.length - 1) => {
+    if (pdpList.length < 1 || !pdpList) {
+      return <div className={`${css(goal({ theme }))} ${css(defaultGoalItem({ theme }))}`}>Goal 1</div>;
     } else if (goalNum <= maxGoalCount) {
-      return pdpList.map( (el, idx) => {
+      return pdpList.map((el, idx) => {
         return (
-        <>
-          <div key={el?.uuid} className={`${css(goal({theme}))} ${idx <= goalNum ? css(activeGoalItem({theme})) : css(defaultGoalItem({theme}))}`}>Goal {idx+1}</div>
-          {idx === goalNum && idx+1 < maxGoalCount && <div key={Math.random()} className={`${css(goal({theme}))} ${css(defaultGoalItem({theme}))}`}>Goal {idx+2}</div>}
-        </>  
-        )
-      })
+          <>
+            <div
+              key={el?.uuid}
+              className={`${css(goal({ theme }))} ${
+                idx <= goalNum ? css(activeGoalItem({ theme })) : css(defaultGoalItem({ theme }))
+              }`}
+            >
+              Goal {idx + 1}
+            </div>
+            {idx === goalNum && idx + 1 < maxGoalCount && (
+              <div key={Math.random()} className={`${css(goal({ theme }))} ${css(defaultGoalItem({ theme }))}`}>
+                Goal {idx + 2}
+              </div>
+            )}
+          </>
+        );
+      });
     }
-  }
+  };
 
   return (
     <ModalWithHeader
       containerRule={templatesModalWindowStyles}
-      title={`${ uuid ? 'Update' : 'Create' } Personal Development Goal`}
+      title={`${uuid ? 'Update' : 'Create'} Personal Development Goal`}
       modalPosition='middle'
       closeOptions={{
         closeOptionContent: <Icon graphic='cancel' invertColors={true} />,
         onClose: () => navigate(-1),
       }}
-      >
-    <div className={css(mainContainer)}>
-        <div className={css(goalListBlock({theme}))}>
-            {!uuid && pdpList && navGoals()}
-        </div>
+    >
+      <div className={css(mainContainer)}>
+        <div className={css(goalListBlock({ theme }))}>{!uuid && pdpList && navGoals()}</div>
 
-        <div className={css(infoBlock)}>
-            <div className={css(infoIconEl)}>
-                <img alt='info' src={infoIcon} />
-            </div>    
-            Need help writing your development plan?
+        <div className={css(infoBlock)} onClick={() => navigate(buildPath(Page.PERSONAL_DEVELOPMENT_HELP))}>
+          <div className={css(infoIconEl)}>
+            <img alt='info' src={infoIcon} />
+          </div>
+          Need help writing your development plan?
         </div>
 
         <form>
-          { pdpGoals.map((component) => {
-              const { id, key, label, description, type, validate, values = [] } = component;
-              const value = pdpList? pdpList[0]?.properties?.mapJson[key] : '';
-              
-              if (description === '{datepicker}') {
-                return (
-                  <GenericItemField
-                    key={key}
-                    name={key}
-                    methods={methods}
-                    label={label}
-                    Element={(props) => <Input type='date' {...props} />}
-                    styles={{
-                      fontFamily: 'TESCO Modern", Arial, sans-serif',
-                      fontSize: '16px',
-                      fontStyle: 'normal',
-                      lineHeight: '20px',
-                      letterSpacing: '0px',
-                      textAlign: 'left',
-                    }}
-                    placeholder={description}
-                    value={value}
-                  />
-                )
-              }
-              return (
-                  <GenericItemField
-                    key={key}
-                    name={key}
-                    methods={methods}
-                    label={label}
-                    Wrapper={Item}
-                    Element={Textarea}
-                    styles={{
-                      fontFamily: 'TESCO Modern", Arial, sans-serif',
-                      fontSize: '16px',
-                      fontStyle: 'normal',
-                      lineHeight: '20px',
-                      letterSpacing: '0px',
-                      textAlign: 'left',
-                    }}
-                    placeholder={description}
-                    value={value}
-                  />
+          {pdpGoals.map((component) => {
+            const { id, key, label, description } = component;
+            const value = pdpList ? pdpList[0]?.properties?.mapJson[key] : '';
 
-                  
-                );
-            })
-          }
+            if (description === '{datepicker}') {
+              return (
+                <GenericItemField
+                  key={key}
+                  name={key}
+                  methods={methods}
+                  label={label}
+                  Wrapper={({ children }) => {
+                    return (
+                      <Item withIcon={false}>
+                        <div className={css(genericLabel)}>{label.replace(/\*/g, '')}</div>
+                        {children}
+                      </Item>
+                    );
+                  }}
+                  Element={(props) => <Input type='date' {...props} />}
+                  styles={{
+                    fontFamily: 'TESCO Modern", Arial, sans-serif',
+                    fontSize: '16px',
+                    fontStyle: 'normal',
+                    lineHeight: '20px',
+                    letterSpacing: '0px',
+                    textAlign: 'left',
+                  }}
+                  placeholder={description}
+                  value={value}
+                />
+              );
+            }
+            return (
+              <GenericItemField
+                key={key}
+                name={key}
+                methods={methods}
+                label={label}
+                Wrapper={Item}
+                Element={Textarea}
+                styles={{
+                  fontFamily: 'TESCO Modern", Arial, sans-serif',
+                  fontSize: '16px',
+                  fontStyle: 'normal',
+                  lineHeight: '20px',
+                  letterSpacing: '0px',
+                  textAlign: 'left',
+                }}
+                placeholder={description}
+                value={value}
+              />
+            );
+          })}
         </form>
         <div className={css(applyBlock)}>
-          {<Button
-            isDisabled={!formState.isValid}
-            onPress={() => uuid ? update() : save()} 
-            styles={uuid || pdpList?.length === maxGoalCount ?  [customBtnFullWidth] : [customBtn]}>Save & Exit</Button>
-            }
-          {!uuid && pdpList?.length !== maxGoalCount && 
-            <Button 
+          {
+            <Button
               isDisabled={!formState.isValid}
-              onPress={() => saveAndCreate()}
-              styles={[customBtn, createBtn]}>Save & create a new goal <img className={css(imgArrow)} alt='arrow' src={arrLeft} /></Button>}
+              onPress={() => (uuid ? update() : save())}
+              styles={
+                uuid || pdpList?.length + 1 === maxGoalCount || pdpList?.length + 1 > maxGoalCount
+                  ? [customBtnFullWidth]
+                  : [customBtn]
+              }
+            >
+              Save & Exit
+            </Button>
+          }
+          {!uuid && (pdpList?.length + 1 !== maxGoalCount || pdpList?.length + 1 > maxGoalCount) && (
+            <Button isDisabled={!formState.isValid} onPress={() => saveAndCreate()} styles={[customBtn, createBtn]}>
+              Save & create a new goal <img className={css(imgArrow)} alt='arrow' src={arrLeft} />
+            </Button>
+          )}
         </div>
-    </div>
+      </div>
     </ModalWithHeader>
   );
 };
 
+const genericLabel = {
+  fontSize: '16px',
+  lineHeight: '20px',
+  fontWeight: 'bolder',
+  paddingBottom: '8px',
+} as Rule;
+
 const mainContainer = {
   padding: '20px',
+  position: 'relative',
+  overflowY: 'scroll',
+  height: '100%',
 } as Rule;
 
 const templatesModalWindowStyles: Rule = () => {
@@ -201,6 +230,7 @@ const templatesModalWindowStyles: Rule = () => {
     width: mobileScreen ? '100%' : '60%',
     padding: '0',
     marginTop: mobileScreen ? '50px' : 0,
+    overflow: 'hidden',
   };
 };
 
@@ -234,38 +264,37 @@ const applyBlock = {
 } as Rule;
 
 const dataBlock = {
-    borderBottom: `1px solid ${theme.colors.backgroundDarkest}`,
-    fontFamily: 'TESCO Modern", Arial, sans-serif', 
+  borderBottom: `1px solid ${theme.colors.backgroundDarkest}`,
+  fontFamily: 'TESCO Modern", Arial, sans-serif',
 } as Rule;
 
 const infoIconEl = {
-    marginRight: '8px',
+  marginRight: '8px',
 } as Rule;
 
 const infoBlock = {
-    display: 'flex',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    paddingBottom: '32px',
-    color: '#00539F',
-    fontSize: '14px',
-    fontStyle: 'normal',
-    lineHeight: '18px',
-    letterSpacing: '0px',
-    textAlign: 'left',
-    fontFamily: 'TESCO Modern", Arial, sans-serif',
-
+  display: 'flex',
+  justifyContent: 'flex-start',
+  alignItems: 'center',
+  paddingBottom: '32px',
+  color: '#00539F',
+  fontSize: '14px',
+  fontStyle: 'normal',
+  lineHeight: '18px',
+  letterSpacing: '0px',
+  textAlign: 'left',
+  fontFamily: 'TESCO Modern", Arial, sans-serif',
 } as Rule;
 
-const activeGoalItem: CreateRule<{ theme: Theme; }> = (props) => {
-    if (props == null) return {};
-    const { theme } = props;
-    return {
-        color: `${theme.colors.tescoBlue}`,   
-    };
+const activeGoalItem: CreateRule<{ theme: Theme }> = (props) => {
+  if (props == null) return {};
+  const { theme } = props;
+  return {
+    color: `${theme.colors.tescoBlue}`,
+  };
 };
 
-const defaultGoalItem: CreateRule<{ theme: Theme; }> = (props) => {
+const defaultGoalItem: CreateRule<{ theme: Theme }> = (props) => {
   if (props == null) return {};
   const { theme } = props;
   return {
@@ -277,19 +306,19 @@ const close = {
   cursor: 'pointer',
 } as Rule;
 
-const goalListBlock: CreateRule<{ theme: Theme; }> = (props) => {
-    if (props == null) return {};
-    const { theme } = props;
-    return {
-        display: 'flex',
-        justifyContent: 'flex-start',
-        alignItems: 'center',
-        flexDirection: 'row',
-        paddingBottom: '32px',
-    };
+const goalListBlock: CreateRule<{ theme: Theme }> = (props) => {
+  if (props == null) return {};
+  const { theme } = props;
+  return {
+    display: 'flex',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    flexDirection: 'row',
+    paddingBottom: '32px',
+  };
 };
 
-const goal: CreateRule<{ theme: Theme; }> = (props) => {
+const goal: CreateRule<{ theme: Theme }> = (props) => {
   if (props == null) return {};
   const { theme } = props;
   return {
@@ -304,7 +333,7 @@ const goal: CreateRule<{ theme: Theme; }> = (props) => {
   };
 };
 
-const decsriptionHeader: CreateRule<{ theme: Theme; }> = (props) => {
+const decsriptionHeader: CreateRule<{ theme: Theme }> = (props) => {
   if (props == null) return {};
   const { theme } = props;
   return {
@@ -326,7 +355,7 @@ const arrow = {
   cursor: 'pointer',
 } as Rule;
 
-const header: CreateRule<{ theme: Theme; }> = (props) => {
+const header: CreateRule<{ theme: Theme }> = (props) => {
   if (props == null) return {};
   const { theme } = props;
   return {
@@ -342,19 +371,19 @@ const header: CreateRule<{ theme: Theme; }> = (props) => {
   };
 };
 
-const popup: CreateRule<{ theme: Theme; }> = (props) => {
-    if (props == null) return {};
-    const { theme } = props;
-    return {
-        display: 'flex',
-        justifyContent: 'flex-start',
-        alignItems: 'center',
-        flexDirection: 'column',
-        padding: '0 20px',
-        paddingBottom: '60px',
-        backgroundColor: `${theme.colors.tescoBlue}`,
-        fontFamily: 'TESCO Modern", Arial, sans-serif',
-    };
+const popup: CreateRule<{ theme: Theme }> = (props) => {
+  if (props == null) return {};
+  const { theme } = props;
+  return {
+    display: 'flex',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    flexDirection: 'column',
+    padding: '0 20px',
+    paddingBottom: '60px',
+    backgroundColor: `${theme.colors.tescoBlue}`,
+    fontFamily: 'TESCO Modern", Arial, sans-serif',
+  };
 };
 
 export default CreatePersonalDevelopmentGoal;
