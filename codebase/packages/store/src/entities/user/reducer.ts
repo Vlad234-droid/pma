@@ -17,8 +17,18 @@ const success = (state, { payload }) => ({
   meta: { ...state.meta, loading: false, loaded: true },
 });
 
-const ProfileAttributeSuccess = (state) => ({
+const ProfileAttributeSuccess = (state, { payload }) => ({
   ...state,
+  current: {
+    ...state.current,
+    info: {
+      ...state.current.info,
+      data: {
+        ...state.current.info.data,
+        profileAttributes: payload,
+      },
+    },
+  },
   meta: { ...state.meta, loading: false, loaded: true },
 });
 

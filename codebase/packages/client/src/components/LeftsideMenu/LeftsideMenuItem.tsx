@@ -9,7 +9,6 @@ interface MenuItemInterface {
 
 const LeftsideMenuItem = (props: MenuItemInterface) => {
   const { css, theme } = useStyle();
-  console.log(props.imgUrl);
 
   return (
     <div className={css(menuItem({ theme }))}>

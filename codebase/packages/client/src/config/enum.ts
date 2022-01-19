@@ -25,6 +25,12 @@ export enum ReviewType {
   EYR = 'EYR',
 }
 
+export enum PDPType {
+  PDP = 'PDP',
+  MYR = 'MYR',
+  EYR = 'EYR',
+}
+
 export enum TimelineType {
   REVIEW = 'REVIEW',
   ELEMENT = 'ELEMENT',

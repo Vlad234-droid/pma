@@ -7,14 +7,15 @@ import { Button, Rule, Styles, useStyle } from '@dex-ddl/core';
 export type Props = {
   iconGraphic: IconProps['graphic'];
   title: string;
-  date: string;
+  date?: string;
+  description?: string;
   customStyle?: React.CSSProperties | {};
   onClick: () => void;
 };
 
 export const TEST_ID = 'secondary-widget';
 
-const SecondaryWidget: FC<Props> = ({ iconGraphic, title, date, customStyle, onClick }) => {
+const SecondaryWidget: FC<Props> = ({ iconGraphic, title, date, description, customStyle, onClick }) => {
   const { css, theme } = useStyle();
 
   return (
@@ -24,6 +25,7 @@ const SecondaryWidget: FC<Props> = ({ iconGraphic, title, date, customStyle, onC
           <Icon graphic={iconGraphic} />
           <span className={css(titleStyle)}>{title}</span>
           <span className={css(descriptionStyle)}>{date}</span>
+          <span className={css(descriptionStyle)}>{description}</span>
         </div>
         <div className={css(bodyStyle)}>
           <div>

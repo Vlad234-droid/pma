@@ -16,12 +16,14 @@ import tipsReducer from '../entities/tips/reducer';
 import performanceCycleReducer from '../entities/performanceCycle/reducer';
 import configEntriesReducer from '../entities/configEntries/reducer';
 import processTemplateReducer from '../entities/processTemplate/reducer';
+import pdpReducer from '../entities/pdp/reducer';
 
 export const rootReducer = combineReducers({
   users: userReducer,
   toasts: toastReducer,
   objectives: objectiveReducer,
   orgObjectives: orgObjectiveReducer,
+  pdp: pdpReducer,
   schema: schemaReducer,
   timeline: timelineReducer,
   managers: managersReducer,

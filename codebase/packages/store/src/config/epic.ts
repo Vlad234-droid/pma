@@ -14,6 +14,7 @@ import tipsEpic from '../entities/tips/epic';
 import performanceCycleEpic from '../entities/performanceCycle/epic';
 import configEntriesEpic from '../entities/configEntries/epic';
 import processTemplateEpic from '../entities/processTemplate/epic';
+import pdpEpic from '../entities/pdp/epic';
 
 export const rootEpic = combineEpics(
   userEpic,
@@ -31,4 +32,5 @@ export const rootEpic = combineEpics(
   performanceCycleEpic,
   configEntriesEpic,
   processTemplateEpic,
+  pdpEpic,
 );

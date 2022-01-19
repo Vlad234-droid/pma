@@ -14,39 +14,6 @@ import { Trans } from 'components/Translation';
 import { TileWrapper } from 'components/Tile';
 import { Field, Item, Textarea } from 'components/Form';
 
-const feedbackFields: GiveFeedbackType[] = [
-  {
-    id: '0',
-    code: 'Question 1',
-    title:
-      "Looking back at what you've seen recently, what would you like to say to this colleague about what they`ve delivered or how they've gone about it?",
-    description: "Share specific examples of what you've seen.",
-    field: {
-      id: '1',
-      type: 'textarea',
-    },
-  },
-  {
-    id: '1',
-    code: 'Question 2',
-    title: 'Looking forward, what should this colleague do more (or less) of in order to be at their best?',
-    description: 'Share your suggestions',
-    field: {
-      id: '2',
-      type: 'textarea',
-    },
-  },
-  {
-    id: '2',
-    code: 'Anything else?',
-    title: 'Add any other comments you would like to share with your colleague.',
-    field: {
-      id: '3',
-      type: 'textarea',
-    },
-  },
-];
-
 const prepareFeedbackItems = (fields, feedbackItems) => {
   return feedbackItems.map(({ content }, idx) => ({ content, code: fields[idx].code }));
 };
@@ -65,9 +32,10 @@ type Props = {
   defaultValues: any;
   currentColleague?: any;
   goToInfo: (data: any) => void;
+  feedbackFields: Array<GiveFeedbackType>;
 };
 
-const GiveFeedbackForm: FC<Props> = ({ onSubmit, defaultValues, currentColleague, goToInfo }) => {
+const GiveFeedbackForm: FC<Props> = ({ onSubmit, defaultValues, currentColleague, goToInfo, feedbackFields }) => {
   const { css, theme } = useStyle();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
@@ -156,7 +124,7 @@ const GiveFeedbackForm: FC<Props> = ({ onSubmit, defaultValues, currentColleague
                       name={`feedbackItems.${index}.content`}
                       Wrapper={Item}
                       Element={Textarea}
-                      value={feedbackItems[index].content}
+                      value={get(feedbackItems, `[${index}].content`, '')}
                       setValue={setValue}
                       error={get(errors, `feedbackItems[${index}].content.message`)}
                     />
@@ -164,7 +132,6 @@ const GiveFeedbackForm: FC<Props> = ({ onSubmit, defaultValues, currentColleague
                 </div>
               );
             })}
-            )
           </div>
         )}
         <div className={css(absoluteStyle)}>

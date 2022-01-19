@@ -1,4 +1,5 @@
 import { ReviewType, Status } from 'config/enum';
+import { cleanFromDsl, dslRequest } from '../../../utils';
 
 export const filterApprovedFn = (tl) => tl.status === Status.WAITING_FOR_APPROVAL;
 
@@ -24,3 +25,27 @@ export const getReviewTypeTitle = (t) => ({
   [ReviewType.MYR]: t('mid_year_review', 'Mid-year review'),
   [ReviewType.EYR]: t('year_end_review', 'Year-end review'),
 });
+
+// todo move to epic
+export const updateFormComponent = (components: any[], count: number) => {
+  const newComponents: any[] = [];
+  components?.forEach((component) => {
+    const textWithDsl = component?.type === 'text' ? component?.text : component?.description;
+    const dslReviewArray: string[] = dslRequest(textWithDsl);
+    if (dslReviewArray?.length) {
+      [...Array(count)].forEach((_, index) =>
+        newComponents.push(
+          cleanFromDsl({
+            ...component,
+            // todo ask backend about rules for replace.
+            ...(component?.key ? { key: component?.key?.replace(component?.key, `${component?.key}-${index}`) } : {}),
+            ...(component?.label ? { label: component?.label?.replace('Objective', `Objective ${index + 1}`) } : {}),
+          }),
+        ),
+      );
+    } else {
+      newComponents.push(cleanFromDsl(component));
+    }
+  });
+  return newComponents;
+};
