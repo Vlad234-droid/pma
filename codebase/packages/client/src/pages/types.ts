@@ -24,8 +24,8 @@ enum Page {
   VIEW_FEEDBACK = 'feedback/view-feedback',
   FEEDBACK = 'feedback',
   TIPS = 'tips',
-  CREATE_TIP = 'tips/create',
-  EDIT_TIP = 'tips/edit/:tipUuid',
+  CREATE_TIP = 'tips/new',
+  EDIT_TIP = 'tips/:tipUuid',
   REPORT = 'report',
 }
 
