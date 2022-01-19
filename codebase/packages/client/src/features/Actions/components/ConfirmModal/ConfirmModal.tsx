@@ -3,22 +3,22 @@ import { useStyle } from '@dex-ddl/core';
 
 import { ColleagueInfo } from 'features/MyTeam';
 import { Employee } from 'config/types';
-import ConfirmModal from 'components/ConfirmModal';
+import { ConfirmModal as Modal } from 'features/Modal';
 
 export type ConfirmAcceptModalProps = {
-  title?: string;
+  title: string;
   onClose: () => void;
   onSave: (hasReason?: boolean, reason?: string) => void;
   onOverlayClick?: () => void;
   hasReason?: boolean;
   employee?: Employee;
   reason?: string;
-  submitBtnText?: JSX.Element;
+  submitBtnTitle?: JSX.Element;
 };
 
 type Props = HTMLProps<HTMLInputElement> & ConfirmAcceptModalProps;
 
-const Modal: FC<Props> = ({
+const ConfirmModal: FC<Props> = ({
   title,
   reason,
   children,
@@ -27,20 +27,20 @@ const Modal: FC<Props> = ({
   onSave,
   onOverlayClick,
   employee,
-  submitBtnText
+  submitBtnTitle
 }) => {
   const { css } = useStyle();
 
   const canSubmit = hasReason ? Boolean(reason?.length) : true;
 
   return (
-    <ConfirmModal
+    <Modal
       title={title}
-      onClose={onClose}
+      onCancel={onClose}
       onSave={() => onSave(hasReason, reason)}
       canSubmit={canSubmit}
       onOverlayClick={onOverlayClick}
-      submitBtnText={submitBtnText}
+      submitBtnTitle={submitBtnTitle}
     >
       <div>
         {employee && (
@@ -55,8 +55,8 @@ const Modal: FC<Props> = ({
         )}
         {children}
       </div>
-    </ConfirmModal>
+    </Modal>
   )
 };
 
-export default Modal;
+export default ConfirmModal;

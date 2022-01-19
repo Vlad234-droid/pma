@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { Rule, useStyle } from '@dex-ddl/core';
-import { useTranslation } from 'components/Translation';
+import { Trans, useTranslation } from 'components/Translation';
 import useDispatch from 'hooks/useDispatch';
 import { useSelector } from 'react-redux';
 import { countByStatusReviews, countByTypeReviews, currentUserSelector, ReviewsActions } from '@pma/store';
@@ -51,7 +51,7 @@ const ObjectiveButtons: FC<ObjectiveButtonsProps> = ({ id, status }) => {
           onSave={remove}
           withIcon={true}
           buttonName={t('delete', 'Delete')}
-          confirmationButtonTitle={t('confirm', 'Confirm')}
+          confirmationButtonTitle={<Trans i18nKey='confirm'>Confirm</Trans>}
           confirmationTitle={t('objective_number', `Objective ${id}`, { number: id })}
           confirmationDescription={t('delete_objective_confirmation', 'Are you sure you want to delete objective?')}
           styles={[buttonStyle]}

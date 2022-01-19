@@ -2,10 +2,11 @@ import React, { FC, useState, useEffect } from 'react';
 import { useStyle, Rule, Styles } from '@dex-ddl/core';
 
 import { Employee } from 'config/types';
-import ConfirmModal from 'components/ConfirmModal';
+import { ConfirmModal } from 'features/Modal';
 import { Trans, useTranslation } from 'components/Translation';
 import { Item, Select } from 'components/Form';
 import { Rating } from 'config/enum';
+import { ColleagueInfo } from 'features/MyTeam';
 
 type Props = {
   employee: Employee,
@@ -56,14 +57,23 @@ const EditRatingsModal: FC<Props> = ({ employee, onClose, onSave }) => {
   return (
     <ConfirmModal
       title={t('edit_calibration', 'Edit calibration')}
-      onClose={onClose}
+      onCancel={onClose}
       onSave={handleSave}
-      employee={employee}
-      submitBtnText={<Trans i18nKey='save_change'>Save change</Trans>}
+      submitBtnTitle={<Trans i18nKey='save_change'>Save change</Trans>}
       canSubmit={!!overallRating}
     >
-      <div className={css({ padding: '32px 0' })}>
+      <div className={css({ padding: '16px 0 32px' })}>
         <>
+          {employee && (
+            <div className={css({ padding: '0 0 16px' })}>
+              <ColleagueInfo
+                firstName={employee.firstName}
+                lastName={employee.lastName}
+                jobName={employee.jobName}
+                businessType={employee.businessType}
+              />
+            </div>
+          )}
           <div className={css(Label)}>
             {t('select_what_rating', 'Select your colleague\'s \'What\' rating')}
           </div>

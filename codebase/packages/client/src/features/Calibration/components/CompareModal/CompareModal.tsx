@@ -33,7 +33,7 @@ const CompareModal: FC<Props> = ({ onClose, onSave, mode }) => {
       title={`${t('compare', 'Compare')} ${new Date().getFullYear()} ${t('calibration_submission', 'calibration submission')}`}
       onClose={onClose}
       onSave={handleSave}
-      submitBtnText={<Trans i18nKey='compare'>Compare</Trans>}
+      submitBtnTitle={<Trans i18nKey='compare'>Compare</Trans>}
     >
       <div className={css({ padding: '10px 0 48px' })}>
         <div className={css(Label)}>{t('choose_data_to_compare', 'Choose the data you would like to compare the 2021 calibration to:')}</div>

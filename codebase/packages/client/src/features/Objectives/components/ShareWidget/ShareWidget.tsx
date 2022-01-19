@@ -1,5 +1,5 @@
 import React, { FC, useState, useEffect, useMemo } from 'react';
-import { useTranslation } from 'components/Translation';
+import {Trans, useTranslation} from 'components/Translation';
 import { useStyle, Rule, Button, Styles, colors } from '@dex-ddl/core';
 
 import { TileWrapper } from 'components/Tile';
@@ -161,7 +161,7 @@ const ShareWidget: FC<Props> = ({ customStyle }) => {
             'are_you_sure_you_want_to_make_your_objectives_visible',
             'Are you sure you want to make your objectives visible?',
           )}
-          submitBtnTitle={t('share', 'Share')}
+          submitBtnTitle={<Trans i18nKey='share'>Share</Trans>}
           onSave={() => handleShareSaveBtnClick()}
           onCancel={() => setIsConfirmDeclineModalOpen(false)}
           onOverlayClick={() => setIsConfirmDeclineModalOpen(false)}

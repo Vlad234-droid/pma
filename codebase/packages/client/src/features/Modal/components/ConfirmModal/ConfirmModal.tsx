@@ -1,31 +1,29 @@
 import React, { FC, HTMLProps } from 'react';
-import { useBreakpoints, useStyle, CreateRule, Modal, Button, fontWeight } from '@dex-ddl/core';
-
 import { Trans } from 'components/Translation';
-import { Employee } from 'config/types';
 
-export type ConfirmAcceptModalProps = {
-  title?: string;
-  onClose: () => void;
+import { useBreakpoints, useStyle, CreateRule, Modal, Button } from '@dex-ddl/core';
+
+export type ConfirmModal = {
+  title: string;
+  description?: string;
+  onCancel: () => void;
   onSave: () => void;
   onOverlayClick?: () => void;
-  hasReason?: boolean;
-  employee?: Employee;
-  reason?: string;
-  submitBtnText?: JSX.Element;
+  submitBtnTitle?: JSX.Element;
   canSubmit?: boolean;
 };
 
-type Props = HTMLProps<HTMLInputElement> & ConfirmAcceptModalProps;
+type Props = HTMLProps<HTMLInputElement> & ConfirmModal;
 
 const ConfirmModal: FC<Props> = ({
- title,
- children,
- onClose,
- onSave,
- onOverlayClick,
- submitBtnText = <Trans i18nKey='submit'>Submit</Trans>,
- canSubmit = true,
+  title,
+  description,
+  onCancel,
+  onSave,
+  onOverlayClick,
+  submitBtnTitle = <Trans i18nKey='submit'>Submit</Trans>,
+  canSubmit = true,
+  children,
 }) => {
   const { theme, css } = useStyle();
   const [, isBreakpoint] = useBreakpoints();
@@ -39,7 +37,7 @@ const ConfirmModal: FC<Props> = ({
         content: title,
         styles: [
           {
-            fontWeight: fontWeight.bold,
+            fontWeight: 700,
             fontSize: '20px',
             lineHeight: '24px',
           },
@@ -47,9 +45,16 @@ const ConfirmModal: FC<Props> = ({
       }}
       onOverlayClick={onOverlayClick}
     >
-      <div>
-        {children}
-      </div>
+      {description && (
+        <div
+          className={css({
+            padding: '16px 0',
+          })}
+        >
+          {description}
+        </div>
+      )}
+      {children}
       <div
         className={css({
           display: 'flex',
@@ -57,10 +62,9 @@ const ConfirmModal: FC<Props> = ({
         })}
       >
         <Button
-          data-test-id='cancel-btn'
           styles={[
             {
-              background: theme.colors.white,
+              background: 'white',
               border: `1px solid ${theme.colors.tescoBlue}`,
               fontSize: '16px',
               lineHeight: '20px',
@@ -70,12 +74,11 @@ const ConfirmModal: FC<Props> = ({
               margin: '0px 4px',
             },
           ]}
-          onPress={onClose}
+          onPress={onCancel}
         >
           <Trans i18nKey='cancel'>Cancel</Trans>
         </Button>
         <Button
-          data-test-id='submit-btn'
           isDisabled={!canSubmit}
           styles={[
             {
@@ -90,7 +93,7 @@ const ConfirmModal: FC<Props> = ({
           ]}
           onPress={onSave}
         >
-          {submitBtnText}
+          {submitBtnTitle}
         </Button>
       </div>
     </Modal>
