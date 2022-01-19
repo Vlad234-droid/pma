@@ -86,7 +86,7 @@ const CareerPerformance: FC = () => {
         >
           <div data-test-id='more' className={css({ height: '112%' })} onClick={handleBtnHelp}>
             <BasicTile
-              img={<Icon graphic='settingsGear' />}
+              img={<Icon graphic='support' />}
               hover={false}
               title={"Something doesn't look right? Raise a ticket on Colleague Help "}
               imgCustomStyle={{ width: '30px', margin: '10px auto 0px auto' }}

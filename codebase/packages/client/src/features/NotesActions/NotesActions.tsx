@@ -477,7 +477,7 @@ const NotesActions: FC = () => {
             styles: [modalCloseOptionStyle],
           }}
           title={{
-            content: 'My notes',
+            content: 'My Notes',
             styles: [modalTitleOptionStyle],
           }}
         >
