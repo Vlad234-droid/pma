@@ -18,7 +18,7 @@ import CreateOrganizationObjectives from './CreateOrganizationObjectives';
 import ObjectivesView from './ObjectivesView';
 import Report from './Report';
 import { CreatePerformanceCycle, PerformanceCycleAdministration } from './PerformanceCycle';
-import { CreateTip, EditTip, TipsAdministration } from './Tips';
+import { EditTip, TipsAdministration } from './Tips';
 import { UserObjectives } from './UserObjectives';
 
 export type PageComponent = {
@@ -160,12 +160,6 @@ const pages: Record<Page, PageComponent> = {
     title: 'Tips',
     withHeader: true,
     backPath: Page.CONTRIBUTION,
-  },
-  [Page.CREATE_TIP]: {
-    Element: CreateTip,
-    title: 'Create Tip',
-    withHeader: false,
-    backPath: Page.TIPS,
   },
   [Page.EDIT_TIP]: {
     Element: EditTip,
