@@ -7,6 +7,7 @@ import { Page } from 'pages';
 import { buildPath } from 'features/Routes/utils';
 import { IconButton } from 'components/IconButton';
 import { NoTips, TipsCard } from 'features/Tips';
+import { paramsReplacer } from 'utils';
 
 const TIPS_ADMINISTRATION = 'tips-administration';
 
@@ -21,7 +22,7 @@ const TipsAdministration: FC = () => {
   }, []);
 
   const handleCreateTip = () => {
-    navigate(buildPath(`${Page.CREATE_TIP}`));
+    navigate(buildPath(paramsReplacer(Page.EDIT_TIP, {':tipUuid': 'new'})));
   };
 
   return (
