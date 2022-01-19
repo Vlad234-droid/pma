@@ -166,7 +166,7 @@ const title: CreateRule<{ theme: Theme; }> = (props) => {
   const { theme } = props;
   return {
     color: `${theme.colors.base}`,
-    fontFamily: 'TESCO Modern',
+    fontFamily: '"TESCO Modern", Arial, sans-serif',
     fontStyle: 'normal',
     fontWeight: 'bold',
     fontSize: `${theme.font.fixed.f18}`,
@@ -183,7 +183,7 @@ const descriptionMain = {
   '@media (max-width: 900px)': {
     flexDirection: 'column',
   },
-  fontFamily: 'TESCO Modern',
+  fontFamily: '"TESCO Modern", Arial, sans-serif',
   fontSize: `${theme.font.fixed.f14}`,
   fontStyle: 'normal',
   lineHeight: '18px',
@@ -258,7 +258,7 @@ const buttonBlock: CreateRule<{ theme: Theme; }> = (props) => {
     justifyContent: 'space-between',
     alignItems: 'center',
     flexDirection: 'row',
-    fontFamily: 'TESCO Modern',
+    fontFamily: '"TESCO Modern", Arial, sans-serif',
   };
 };
 
