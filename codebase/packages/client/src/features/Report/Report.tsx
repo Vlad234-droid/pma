@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { useStyle, useBreakpoints, Rule, colors } from '@dex-ddl/core';
+import { useStyle, useBreakpoints, Rule, colors, Styles, CreateRule } from '@dex-ddl/core';
 import { IconButton } from 'components/IconButton';
 import { FilterOption } from 'features/Shared';
 import { PieChart } from 'components/PieChart';
@@ -10,7 +10,8 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { createYearSchema } from './config';
-import { DonwloadReportModal, InfoTable, FilterModal } from './components';
+import { InfoTable, FilterModal } from './components';
+import { DonwloadReportModal } from './Modals';
 import { Rating } from 'config/enum';
 
 const Report: FC = () => {
@@ -39,8 +40,13 @@ const Report: FC = () => {
         { title: 'End-year Review' },
       ],
     },
+    {
+      title: 'Gender',
+      data: [{ title: 'Select All' }, { title: 'Male' }, { title: 'Female' }],
+    },
   ]);
   const [checkedItems, setCheckedItems]: [string[], (T) => void] = useState([]);
+
   const [isCheckAll, setIsCheckAll]: [string[], (T) => void] = useState([]);
 
   const { css } = useStyle();
@@ -63,10 +69,42 @@ const Report: FC = () => {
     setShowDownloadReportModal(false);
   };
 
+  const getAppliedReport = () => [...new Set(checkedItems.map((item) => item.split('-')[0]))];
+
+  const clearAppliedFilters = (filterTitle) => {
+    if (isCheckAll.length) setIsCheckAll((prev) => [...prev.filter((item) => item.split('-')[0] !== filterTitle)]);
+    setCheckedItems((prev) => [...prev.filter((item) => item.split('-')[0] !== filterTitle)]);
+  };
+
+  const quantity = getAppliedReport().length;
+
   return (
     <>
       <div className={css({ margin: '22px 42px 0px 40px' })}>
-        <div className={css(spaceBeetweenStyled)}>
+        <div className={css(spaceBeetweenStyled({ quantity }))}>
+          {!!getAppliedReport().length && (
+            <div className={css({ height: '92px' })}>
+              <div className={css(appliedWrapperFilters)}>
+                <span>Filtered applied:</span>
+                <div className={css(flexStyle)}>
+                  {getAppliedReport().map((item) => (
+                    <div key={item} className={css(filterAppliedStyle)}>
+                      <span className={css(filteredTitle)}>{item}</span>
+                      <IconButton
+                        graphic='decline'
+                        iconStyles={iconDeclineStyle}
+                        onPress={() => {
+                          clearAppliedFilters(item);
+                        }}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <span className={css(countStyle)}>Colleagues: 43</span>
+            </div>
+          )}
+
           <div className={css(flexCenterStyled)}>
             <IconButton
               graphic='information'
@@ -214,6 +252,60 @@ const Report: FC = () => {
   );
 };
 
+const appliedWrapperFilters: Rule = ({ theme }) => {
+  return {
+    display: 'flex',
+    alignItems: 'center',
+    '& > span': {
+      fontWeight: 'normal',
+      fontSize: '18px',
+      lineHeight: '22px',
+      color: theme.colors.base,
+    },
+  } as Styles;
+};
+const countStyle: Rule = ({ theme }) => {
+  return {
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    fontSize: '16px',
+    lineHeight: '20px',
+    color: theme.colors.base,
+    marginTop: '13px',
+    display: 'inline-block',
+  };
+};
+
+const flexStyle: Rule = {
+  display: 'flex',
+  gap: '10px',
+  marginLeft: '12px',
+};
+
+const filteredTitle: Rule = ({ theme }) => {
+  return {
+    fontWeight: 'normal',
+    fontSize: '16px',
+    lineHeight: '20px',
+    color: theme.colors.base,
+  };
+};
+
+const filterAppliedStyle: Rule = ({ theme }) => {
+  return {
+    border: `1px solid ${theme.colors.link}`,
+    borderRadius: '10px',
+    padding: '6px 12px',
+  };
+};
+
+const iconDeclineStyle: Rule = {
+  width: '15px',
+  height: '15px',
+  marginLeft: '10px',
+  cursor: 'pointer',
+};
+
 const iconDownloadStyle: Rule = {
   width: '22px',
   height: '22px',
@@ -246,7 +338,6 @@ const pieChartWrapper: Rule = {
   display: 'flex',
   gap: '8px',
   flexWrap: 'wrap',
-  marginTop: '36px',
 };
 const leftColumn: Rule = {
   display: 'flex',
@@ -267,18 +358,19 @@ const flexCenterStyled: Rule = {
   display: 'flex',
   alignItems: 'center',
   position: 'relative',
+  justifyContent: 'space-between',
+  height: '116px',
 };
 
-const spaceBeetweenStyled: Rule = () => {
+const spaceBeetweenStyled: CreateRule<{ quantity: number }> = ({ quantity }) => {
   const [, isBreakpoint] = useBreakpoints();
   const medium = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
   return {
     display: 'flex',
     flexWrap: medium ? 'wrap' : 'nowrap',
     ...(medium && { flexBasis: '250px' }),
-    justifyContent: 'flex-end',
+    justifyContent: quantity ? 'space-between' : 'flex-end',
     alignItems: 'center',
-    paddingTop: '24px',
   };
 };
 

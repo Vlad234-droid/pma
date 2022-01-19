@@ -5,14 +5,8 @@ import { Accordion, BaseAccordion, Section, Panel, ExpandButton } from 'componen
 import { IconButton, Position } from 'components/IconButton';
 import { Trans } from 'components/Translation';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  FeedbackActions,
-  ObjectiveActions,
-  getPropperNotesByStatusSelector,
-  colleagueUUIDSelector,
-  getNotesArgsSelector,
-} from '@pma/store';
-import { filteredByInputSearchHandler, filteredNotesByRadiosBtnsHandler, formatToRelativeDate } from '../../../utils';
+import { FeedbackActions, ObjectiveActions, colleagueUUIDSelector, getNotesArgsSelector } from '@pma/store';
+import { filteredByInputSearchHandler, filteredNotesByRadiosBtnsHandler, formatToRelativeDate } from 'utils';
 import defaultImg from '../../../../public/default.png';
 import { FeedbackStatus } from 'config/enum';
 import { DraftItemProps } from '../type';

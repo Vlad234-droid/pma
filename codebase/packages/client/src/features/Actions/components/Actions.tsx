@@ -91,7 +91,6 @@ export const Actions = () => {
 
   useEffect(() => {
     if (!loaded && colleagueUuid) dispatch(ManagersActions.getManagers({ colleagueUuid }));
-    if (!schemaLoaded && colleagueUuid) dispatch(SchemaActions.getSchema({ colleagueUuid }));
   }, [loaded, schemaLoaded, colleagueUuid]);
 
   useEffect(() => {

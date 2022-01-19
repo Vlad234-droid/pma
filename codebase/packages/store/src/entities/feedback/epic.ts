@@ -2,7 +2,7 @@
 import { Epic, isActionOf } from 'typesafe-actions';
 import { combineEpics } from 'redux-observable';
 import { from, of } from 'rxjs';
-import { catchError, filter, map, switchMap, takeUntil } from 'rxjs/operators';
+import { catchError, filter, map, switchMap } from 'rxjs/operators';
 import { createNewFeedback, getAllFeedbacks, readFeedback, updatedFeedback, getObjectiveReviews } from './actions';
 
 export const getAllFeedbackEpic: Epic = (action$, _, { api }) => {

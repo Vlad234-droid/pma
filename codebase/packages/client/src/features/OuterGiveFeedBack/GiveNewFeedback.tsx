@@ -1,33 +1,106 @@
 import React, { FC, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useBreakpoints, Rule, Modal } from '@dex-ddl/core';
-import { colleagueUUIDSelector, ColleaguesActions, FeedbackActions } from '@pma/store';
+import { colleagueUUIDSelector, ColleaguesActions, FeedbackActions, feedbackByUuidSelector } from '@pma/store';
 import { Icon } from 'components/Icon';
 import { Page } from 'pages';
-import { GiveFeedbackForm, ConfirmMassage, SuccessMassage } from './components';
+import { GiveFeedbackForm, ConfirmMassage, SuccessMassage, InfoMassage } from './components';
+import { GiveFeedbackType } from './type';
+
+const feedbackFields: GiveFeedbackType[] = [
+  {
+    id: '0',
+    code: 'Question 1',
+    title:
+      "Looking back at what you've seen recently, what would you like to say to this colleague about what they`ve delivered or how they've gone about it?",
+    description: "Share specific examples of what you've seen.",
+    field: {
+      id: '1',
+      type: 'textarea',
+    },
+  },
+  {
+    id: '1',
+    code: 'Question 2',
+    title: 'Looking forward, what should this colleague do more (or less) of in order to be at their best?',
+    description: 'Share your suggestions',
+    field: {
+      id: '2',
+      type: 'textarea',
+    },
+  },
+  {
+    id: '2',
+    code: 'Anything else?',
+    title: 'Add any other comments you would like to share with your colleague.',
+    field: {
+      id: '3',
+      type: 'textarea',
+    },
+  },
+];
 
 enum Statuses {
   PENDING = 'pending',
   CONFIRMING = 'confirming',
   SENDING = 'sending',
+  INFO = 'info',
 }
+
 const GiveNewFeedback: FC = () => {
   const dispatch = useDispatch();
   const [status, setStatus] = useState(Statuses.PENDING);
-  const [formData, setFormData] = useState({
+  const { uuid } = useParams<{ uuid: string }>();
+  const { feedbackItems, targetColleagueUuid, targetColleagueProfile } = useSelector(feedbackByUuidSelector(uuid)) || {
     targetColleagueUuid: '',
-    feedbackItems: [{ content: '' }, { content: '' }, { content: '' }],
+  };
+  const [formData, setFormData] = useState({
+    feedbackItems: feedbackItems
+      ? feedbackFields.map(({ code }) => feedbackItems.find((item) => item.code === code))
+      : [{ content: '' }, { content: '' }, { content: '' }],
+    targetColleagueUuid,
   });
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const navigate = useNavigate();
 
-  const handleSubmit = () => {
+  const handleCreate = () => {
     dispatch(FeedbackActions.createNewFeedback([{ ...formData, colleagueUuid }]));
-    dispatch(ColleaguesActions.clearColleagueList());
   };
 
-  const handleSuccess = () => navigate(`/${Page.GIVE_FEEDBACK}`);
+  const handleSave = (data) => {
+    if (uuid === 'new') {
+      dispatch(FeedbackActions.createNewFeedback([{ ...data, colleagueUuid }]));
+    } else {
+      dispatch(
+        FeedbackActions.updatedFeedback({
+          ...data,
+          feedbackItems: data.feedbackItems.map((item) => ({
+            ...item,
+            uuid: feedbackItems.find((feedback) => feedback.code === item.code)?.uuid,
+          })),
+          colleagueUuid,
+          uuid,
+        }),
+      );
+    }
+  };
+
+  const handleSubmit = (data) => {
+    setFormData(data);
+    handleSave(data);
+
+    if (data.status === 'DRAFT') {
+      handleSuccess();
+      return;
+    }
+    setStatus(Statuses.CONFIRMING);
+  };
+
+  const handleSuccess = () => {
+    navigate(`/${Page.GIVE_FEEDBACK}`);
+    dispatch(ColleaguesActions.clearColleagueList());
+  };
 
   return (
     <Modal
@@ -36,10 +109,7 @@ const GiveNewFeedback: FC = () => {
       modalContainerRule={[containerRule]}
       closeOptions={{
         content: <Icon graphic='cancel' invertColors={true} />,
-        onClose: () => {
-          navigate(`/${Page.GIVE_FEEDBACK}`);
-          // TODO: clean store here
-        },
+        onClose: handleSuccess,
         styles: [modalCloseOptionStyle],
       }}
       title={{
@@ -50,17 +120,20 @@ const GiveNewFeedback: FC = () => {
       {status === Statuses.PENDING && (
         <GiveFeedbackForm
           defaultValues={formData}
-          onSubmit={(data) => {
+          onSubmit={handleSubmit}
+          currentColleague={targetColleagueProfile}
+          goToInfo={(data) => {
+            setStatus(Statuses.INFO);
             setFormData(data);
-            setStatus(Statuses.CONFIRMING);
           }}
+          feedbackFields={feedbackFields}
         />
       )}
       {status === Statuses.CONFIRMING && (
         <ConfirmMassage
           onConfirm={() => {
             setStatus(Statuses.SENDING);
-            handleSubmit();
+            handleCreate();
           }}
           goBack={() => setStatus(Statuses.PENDING)}
         />
@@ -68,6 +141,7 @@ const GiveNewFeedback: FC = () => {
       {status === Statuses.SENDING && (
         <SuccessMassage onSuccess={handleSuccess} selectedColleagueUuid={formData.targetColleagueUuid} />
       )}
+      {status === Statuses.INFO && <InfoMassage goBack={() => setStatus(Statuses.PENDING)} />}
     </Modal>
   );
 };

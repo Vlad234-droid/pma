@@ -1,7 +1,7 @@
 import { Page, PageElement } from './types';
 
 import CareerPerformance from './CareerPerformance';
-import PersonalDevelopmentPlan from './PersonalDevelopmentPlan';
+import { PersonalDevelopmentPlan, CreatePersonalDevelopmentGoal, PersonalDevelopmentHelp } from './PDP';
 import MyTeam from './MyTeam';
 import MyActions from './MyActions';
 import Objectives from './Objectives';
@@ -18,7 +18,7 @@ import CreateOrganizationObjectives from './CreateOrganizationObjectives';
 import ObjectivesView from './ObjectivesView';
 import Report from './Report';
 import { CreatePerformanceCycle, PerformanceCycleAdministration } from './PerformanceCycle';
-import { CreateTip, EditTip, TipsAdministration } from './Tips';
+import { EditTip, TipsAdministration } from './Tips';
 import { UserObjectives } from './UserObjectives';
 import PeopleTeam from './PeopleTeam';
 import Calibration from './Calibration';
@@ -80,7 +80,7 @@ const pages: Record<Page, PageComponent> = {
     Element: CreateOrganizationObjectives,
     title: 'Create Strategic drivers',
     withHeader: true,
-    backPath: Page.CONTRIBUTION,
+    backPath: Page.OBJECTIVES_VIEW,
   },
   [Page.STRATEGIC_DRIVERS]: {
     Element: ObjectivesView,
@@ -91,6 +91,24 @@ const pages: Record<Page, PageComponent> = {
     title: 'Personal Development Plan',
     withHeader: true,
     backPath: Page.CONTRIBUTION,
+  },
+  [Page.CREATE_PERSONAL_DEVELOPMENT_PLAN]: {
+    Element: CreatePersonalDevelopmentGoal,
+    title: 'Create Personal Development Goal',
+    withHeader: false,
+    backPath: Page.PERSONAL_DEVELOPMENT_PLAN,
+  },
+  [Page.UPDATE_PERSONAL_DEVELOPMENT_PLAN]: {
+    Element: CreatePersonalDevelopmentGoal,
+    title: 'UPDATE Personal Development Goal',
+    withHeader: false,
+    backPath: Page.PERSONAL_DEVELOPMENT_PLAN,
+  },
+  [Page.PERSONAL_DEVELOPMENT_HELP]: {
+    Element: PersonalDevelopmentHelp,
+    title: 'Personal Development Plan help',
+    withHeader: false,
+    backPath: Page.PERSONAL_DEVELOPMENT_PLAN,
   },
   [Page.OBJECTIVES_VIEW]: {
     Element: Objectives,
@@ -156,12 +174,6 @@ const pages: Record<Page, PageComponent> = {
     title: 'Tips',
     withHeader: true,
     backPath: Page.CONTRIBUTION,
-  },
-  [Page.CREATE_TIP]: {
-    Element: CreateTip,
-    title: 'Create Tip',
-    withHeader: false,
-    backPath: Page.TIPS,
   },
   [Page.EDIT_TIP]: {
     Element: EditTip,

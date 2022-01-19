@@ -136,6 +136,7 @@ const FeedbackActions: FC = () => {
       dispatch(UserActions.updateProfileAttribute([payload]));
       return;
     }
+
     dispatch(UserActions.createProfileAttribute([payload]));
   };
 

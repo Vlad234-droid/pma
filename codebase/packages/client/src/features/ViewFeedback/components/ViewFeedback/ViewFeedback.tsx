@@ -214,10 +214,10 @@ const ViewFeedback: FC = () => {
               }}
             />
             <FilterModal
-              filterModal={filterModal}
-              filterFeedbacks={filterFeedbacks}
-              setFilterFeedbacks={setFilterFeedbacks}
-              setFilterModal={setFilterModal}
+              isOpen={filterModal}
+              filter={filterFeedbacks}
+              setFilter={setFilterFeedbacks}
+              toggleOpen={setFilterModal}
             />
           </div>
         </div>

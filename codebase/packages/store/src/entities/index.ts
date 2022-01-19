@@ -15,3 +15,4 @@ export { Actions as tipsActions } from './tips/actions';
 export { Actions as PerformanceCycleActions } from './performanceCycle/actions';
 export { Actions as ConfigEntriesActions } from './configEntries/actions';
 export { Actions as ProcessTemplateActions } from './processTemplate/actions';
+export { Actions as PDPActions } from './pdp/actions';

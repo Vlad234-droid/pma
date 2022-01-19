@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import { useStyle, Rule, useBreakpoints, Button } from '@dex-ddl/core';
 import { useSelector } from 'react-redux';
 import { getColleagueByUuidSelector } from '@pma/store';
+import get from 'lodash.get';
 import { GiveFeedbackType } from '../type';
 import { FeedbackInfo, ColleaguesFinder } from '../components';
 import { IconButton, Position } from 'components/IconButton';
@@ -12,44 +13,6 @@ import { useForm } from 'react-hook-form';
 import { Trans } from 'components/Translation';
 import { TileWrapper } from 'components/Tile';
 import { Field, Item, Textarea } from 'components/Form';
-
-const feedbackFields: GiveFeedbackType[] = [
-  {
-    id: '0',
-    code: 'Question 1',
-    title:
-      "Looking back at what you've seen recently, what would you like to say to this colleague about what they`ve delivered or how they've gone about it?",
-    description: "Share specific examples of what you've seen.",
-    field: {
-      id: '1',
-      type: 'textarea',
-    },
-  },
-  {
-    id: '1',
-    code: 'Question 2',
-    title: 'Looking forward, what should this colleague do more (or less) of in order to be at their best?',
-    description: 'Share your suggestions',
-    field: {
-      id: '2',
-      type: 'textarea',
-    },
-  },
-  {
-    id: '2',
-    code: 'Anything else?',
-    title: 'Add any other comments you would like to share with your colleague.',
-    field: {
-      id: '3',
-      type: 'textarea',
-    },
-  },
-];
-
-type Props = {
-  onSubmit: (data: any) => void;
-  defaultValues: any;
-};
 
 const prepareFeedbackItems = (fields, feedbackItems) => {
   return feedbackItems.map(({ content }, idx) => ({ content, code: fields[idx].code }));
@@ -63,7 +26,16 @@ const getColleagueName = (data) => {
 
   return `${firstName} ${lastName}`;
 };
-const GiveFeedbackForm: FC<Props> = ({ onSubmit, defaultValues }) => {
+
+type Props = {
+  onSubmit: (data: any) => void;
+  defaultValues: any;
+  currentColleague?: any;
+  goToInfo: (data: any) => void;
+  feedbackFields: Array<GiveFeedbackType>;
+};
+
+const GiveFeedbackForm: FC<Props> = ({ onSubmit, defaultValues, currentColleague, goToInfo, feedbackFields }) => {
   const { css, theme } = useStyle();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
@@ -72,18 +44,21 @@ const GiveFeedbackForm: FC<Props> = ({ onSubmit, defaultValues }) => {
     handleSubmit,
     getValues,
     setValue,
-    formState: { isValid },
+    formState: { isValid, errors },
   } = useForm({
     mode: 'onChange',
     resolver: yupResolver(createGiveFeedbackSchema),
     defaultValues,
   });
 
-  const { targetColleagueUuid } = getValues();
+  const { targetColleagueUuid, feedbackItems } = getValues();
 
-  const selectedColleague = useSelector(getColleagueByUuidSelector(targetColleagueUuid));
+  const selectedColleague = useSelector(getColleagueByUuidSelector(targetColleagueUuid)) || currentColleague;
 
-  const handleDraft = (data) => {
+  const handleDraft = () => {
+    const data = getValues();
+
+    if (!targetColleagueUuid) return;
     onSubmit({ ...data, status: 'DRAFT', feedbackItems: prepareFeedbackItems(feedbackFields, data.feedbackItems) });
   };
 
@@ -120,9 +95,11 @@ const GiveFeedbackForm: FC<Props> = ({ onSubmit, defaultValues }) => {
           }}
           selected={null}
           value={getColleagueName(selectedColleague)}
-          error={''}
+          error={get(errors, 'targetColleagueUuid.message')}
         />
-        {selectedColleague && <FeedbackInfo selectedPerson={selectedColleague} onClickMore={() => undefined} />}
+        {selectedColleague && (
+          <FeedbackInfo selectedPerson={selectedColleague} onClickMore={() => goToInfo(getValues())} />
+        )}
         {selectedColleague && (
           <div>
             {feedbackFields.map((item, index) => {
@@ -147,23 +124,23 @@ const GiveFeedbackForm: FC<Props> = ({ onSubmit, defaultValues }) => {
                       name={`feedbackItems.${index}.content`}
                       Wrapper={Item}
                       Element={Textarea}
-                      value={''}
+                      value={get(feedbackItems, `[${index}].content`, '')}
                       setValue={setValue}
+                      error={get(errors, `feedbackItems[${index}].content.message`)}
                     />
                   </TileWrapper>
                 </div>
               );
             })}
-            )
           </div>
         )}
         <div className={css(absoluteStyle)}>
           <div className={css(relativeBtnStyled)}>
             <div className={css(spacingStyle)}>
               <Button
-                isDisabled={!isValid}
+                isDisabled={!targetColleagueUuid}
                 styles={[theme.font.fixed.f16, buttonStyle]}
-                onPress={() => handleSubmit(handleDraft)()}
+                onPress={handleDraft}
               >
                 <Trans>Save as draft</Trans>
               </Button>

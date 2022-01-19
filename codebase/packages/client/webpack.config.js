@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-const path = require("path");
+const path = require('path');
 const dotenv = require('dotenv');
 const webpack = require('webpack');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
@@ -22,12 +22,13 @@ module.exports = (webpackConfigEnv, argv) => {
     plugins: [
       new webpack.DefinePlugin({
         'process.env': JSON.stringify(dotenv.config().parsed),
-      })
+      }),
+      new webpack.ProvidePlugin({
+        process: 'process/browser',
+      }),
     ],
     resolve: {
-      plugins: [
-        new TsconfigPathsPlugin({}),
-      ],
+      plugins: [new TsconfigPathsPlugin({})],
     },
   });
 };

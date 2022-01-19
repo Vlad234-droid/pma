@@ -1,4 +1,4 @@
-import { ActionType, createAsyncAction } from 'typesafe-actions';
+import { ActionType, createAsyncAction, createAction } from 'typesafe-actions';
 
 export const loginAsync = createAsyncAction(
   'user/LOGIN_REQUEST',

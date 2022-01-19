@@ -8,6 +8,7 @@ import { useRefContainer } from '../context/input';
 const Textarea: FC<TextareaField> = ({
   domRef,
   placeholder = '',
+  styles = {},
   rows = 3,
   name,
   value,

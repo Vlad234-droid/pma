@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
 import { Rule, useStyle } from '@dex-ddl/core';
 import { Item } from 'components/Form';
 import { SearchInput } from '../components/SearchInput';
@@ -15,7 +15,7 @@ type Props = {
 
 const ColleaguesFinder: FC<Props> = ({ onSelect, error, value }) => {
   const dispatch = useDispatch();
-  const [selectedColleagueName, setSelectedColleagueName] = useState(value);
+
   const { css } = useStyle();
 
   const colleagues = useSelector(getColleaguesSelector) || [];
@@ -35,12 +35,8 @@ const ColleaguesFinder: FC<Props> = ({ onSelect, error, value }) => {
   };
 
   const handleChange = (e: any) => {
-    const {
-      profile: { firstName, lastName },
-      colleagueUUID,
-    } = e.colleague;
+    const { colleagueUUID } = e.colleague;
     onSelect(colleagueUUID);
-    setSelectedColleagueName(`${firstName} ${lastName}`);
   };
 
   return (
@@ -52,10 +48,10 @@ const ColleaguesFinder: FC<Props> = ({ onSelect, error, value }) => {
             onChange={handleChange}
             onSearch={handleSearchColleagues}
             placeholder={'Search'}
-            options={selectedColleagueName ? [] : colleagues}
+            options={value ? [] : colleagues}
             selected={null}
-            value={selectedColleagueName}
-            disabled={Boolean(selectedColleagueName)}
+            value={value}
+            disabled={Boolean(value)}
             renderOption={(item) => (
               <div className={css({ display: 'flex', justifyContent: 'flex-start', alignItems: 'center' })}>
                 <img className={css({ width: '50px', height: '50px', borderRadius: '50%' })} src={defaultImg} />

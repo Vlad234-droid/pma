@@ -7,6 +7,7 @@ import {
   getAllReviewSchemas,
   ReviewsActions,
   reviewsMetaSelector,
+  SchemaActions,
   schemaMetaSelector,
 } from '@pma/store';
 
@@ -20,6 +21,7 @@ import { Tile as ObjectiveTile } from 'features/Objectives';
 import { useTranslation } from 'components/Translation';
 
 import { ActionButtons } from './ActionButtons';
+import { updateFormComponent } from '../../utils';
 
 export type WidgetTeamMateObjectivesProps = {
   id: string;
@@ -44,9 +46,15 @@ export const WidgetTeamMateObjectives: FC<WidgetTeamMateObjectivesProps> = ({ st
     if (reviewsLoaded && schemaLoaded) {
       const mappedReviews = {};
       for (const key of Object.keys(allColleagueReviews)) {
+        const elementCount =
+          allColleagueReviews[key]?.filter((review) => {
+            return review.status === Status.APPROVED && review.type === ReviewType.OBJECTIVE;
+          })?.length || 0;
         mappedReviews[key] = allColleagueReviews[key]?.map((reviewItem) => {
           const { components = [] } = allSchemas[reviewItem.type];
-          const formElements = components.filter((component) => component.type != 'text');
+
+          const newComponent = updateFormComponent(components, elementCount);
+          const formElements = newComponent.filter((component) => component.type != 'text');
 
           const status = reviewItem.status;
           const type = reviewItem.type;
@@ -60,7 +68,7 @@ export const WidgetTeamMateObjectives: FC<WidgetTeamMateObjectivesProps> = ({ st
           return {
             id: reviewItem.uuid,
             number: Number(reviewItem.number),
-            title: `${ObjectiveType[type]} ${reviewItem.number}`,
+            title: type === ReviewType.OBJECTIVE ? `${ObjectiveType[type]} ${reviewItem.number}` : ObjectiveType[type],
             subTitle: subTitle,
             description: description,
             explanations,
@@ -77,6 +85,7 @@ export const WidgetTeamMateObjectives: FC<WidgetTeamMateObjectivesProps> = ({ st
     dispatch(
       ReviewsActions.getColleagueReviews({ pathParams: { colleagueUuid: colleagueUuid, cycleUuid: 'CURRENT' } }),
     );
+    dispatch(SchemaActions.getSchema({ colleagueUuid: colleagueUuid }));
   };
 
   const updateReviewStatus = useCallback(
