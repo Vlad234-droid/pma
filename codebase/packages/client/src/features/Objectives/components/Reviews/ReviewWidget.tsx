@@ -182,9 +182,9 @@ const ReviewWidget: FC<Props> = ({
             <span
               className={css(descriptionStyle({ color: descriptionColor }), {
                 paddingTop: '16px',
-                // verticalAlign: 'middle',
                 display: 'flex',
-                alignItems: 'center'
+                alignItems: 'center',
+                lineHeight: '19px',
               })}
             >
               <Icon
@@ -193,7 +193,7 @@ const ReviewWidget: FC<Props> = ({
                 backgroundRadius={12}
                 fill={colors[iconColor]}
               />
-              <span>{content}</span>
+              {content}
             </span>
           </div>
         </div>
