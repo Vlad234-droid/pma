@@ -116,10 +116,10 @@
   "which_feedback_would_you_like_to_download": "Which feedback would you like to download?",
   "use_the_search_bar_to_look_for_colleagues": "Use the search bar to look for colleagues who have given you feedback.",
   "you_downloaded_your_feedback_to_your_device": "you downloaded your feedback to your device.",
+  "completing_your_review": "Completing your review",
   "your_note_has_been_added_into_the_folder": "Your note has been added into the folder: {{folder}}",
   "PERSONAL_NOTE": "Personal Note",
   "PERSONAL_FOLDER": "Personal Folder",
   "TEAM_NOTE": "Team Note",
-  "TEAM_FOLDER": "Team Folder",
-  "completing_your_review": "Completing your review"
+  "TEAM_FOLDER": "Team Folder"
 }

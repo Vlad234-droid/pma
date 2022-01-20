@@ -69,7 +69,7 @@ export const getReviewSchema = (type: ReviewType, withForms = true) =>
     } = schema;
     const review = timelinePoints.find((review) => review.reviewType === type);
 
-    if (withForms && schema?.forms?.length) {
+    if (withForms && schema?.forms?.length && review?.form) {
       form = schema?.forms.find((form) => form.id === review.form.id);
     }
 
@@ -86,7 +86,6 @@ export const getReviewSchema = (type: ReviewType, withForms = true) =>
 
 export const getPDPSchema = (type: PDPType) =>
   createSelector(schemaPDPSelector, (schema: any) => {
-
     if (!schema?.pdp?.form) {
       return { ...schema };
     }
