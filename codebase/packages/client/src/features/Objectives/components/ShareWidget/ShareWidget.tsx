@@ -1,5 +1,5 @@
 import React, { FC, useState, useEffect, useMemo } from 'react';
-import {Trans, useTranslation} from 'components/Translation';
+import { Trans, useTranslation } from 'components/Translation';
 import { useStyle, Rule, Button, Styles, colors } from '@dex-ddl/core';
 
 import { TileWrapper } from 'components/Tile';

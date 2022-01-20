@@ -9,7 +9,7 @@ import { Icon } from '../Icon';
 import { IconButton } from '../IconButton';
 import { buildPath } from 'features/Routes';
 import { ConfirmModal } from 'features/Modal';
-import {Trans, useTranslation} from 'components/Translation';
+import { Trans, useTranslation } from 'components/Translation';
 
 export type MenuDrawerProps = { onClose: () => void };
 
