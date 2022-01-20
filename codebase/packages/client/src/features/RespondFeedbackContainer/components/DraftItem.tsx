@@ -163,7 +163,8 @@ const DraftItem: FC<DraftItemProps> = ({
                                 draftFeedback(item);
                               }}
                               graphic='arrowRight'
-                              iconProps={{ invertColors: false }}
+                              iconProps={{ invertColors: true }}
+                              iconStyles={icontArrowRightStyle}
                             >
                               <Trans>Give feedback</Trans>
                             </IconButton>
@@ -185,6 +186,10 @@ const DraftItem: FC<DraftItemProps> = ({
 const DraftStyles: Rule = {
   display: 'flex',
   justifyContent: 'space-between',
+};
+const icontArrowRightStyle: Rule = {
+  height: '17px',
+  margin: '3px 9px 0px 3px',
 };
 
 const BlockInfo: Rule = {

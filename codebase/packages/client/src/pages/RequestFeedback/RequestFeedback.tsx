@@ -80,6 +80,7 @@ const modalTitleOptionStyle: Rule = () => {
     left: 0,
     right: 0,
     color: 'white',
+    fontWeight: 'bold',
     ...(mobileScreen
       ? {
           fontSize: '20px',

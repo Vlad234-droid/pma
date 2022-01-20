@@ -366,7 +366,8 @@ const ReverseItemsStyled: Rule = {
 };
 
 const iconStyle: Rule = {
-  marginRight: '10px',
+  marginRight: '2px',
+  marginTop: '3px',
 };
 
 const ButtonsActionsStyle: Rule = () => {
@@ -459,6 +460,7 @@ const modalTitleOptionStyle: Rule = () => {
     left: 0,
     right: 0,
     color: 'white',
+    fontWeight: 'bold',
     ...(mobileScreen
       ? {
           fontSize: '20px',

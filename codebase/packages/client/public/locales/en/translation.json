@@ -120,7 +120,6 @@
   "PERSONAL_NOTE": "Personal Note",
   "PERSONAL_FOLDER": "Personal Folder",
   "TEAM_NOTE": "Team Note",
-  "TEAM_FOLDER": "Team Folder",
   "completing_your_review": "Completing your review",
   "save_change": "Save change",
   "save": "Save",
@@ -144,5 +143,6 @@
   "reporting": "Reporting",
   "my_view": "My View",
   "my_team": "My Team",
-  "people_team": "People Team"
+  "people_team": "People Team",
+  "TEAM_FOLDER": "Team Folder"
 }
