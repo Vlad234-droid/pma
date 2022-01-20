@@ -137,15 +137,20 @@ export const PerformanceCycleForm: FC = () => {
   }, [processTemplate]);
 
   useEffect(() => {
-    setValue('cycle', performanceCycleItem);
-    setShowProperties(true);
+    if (performanceCycleItem) {
+      setValue('cycle', performanceCycleItem);
+      setShowProperties(true);
+    }
   }, [performanceCycleItem]);
 
   useEffect(() => {
-    for (const property in formDataToFillObj) {
-      setValue(property, formDataToFillObj[property]);
-    }
-  }, [formDataToFillObj]);
+    // TODO: remove this code after getConfigEntriesByPerformanceCycle is refactored
+    setTimeout(() => {
+      for (const property in formDataToFillObj) {
+        setValue(property, formDataToFillObj[property]);
+      }
+    }, 2000);
+  }, [formDataToFillObj['entryConfigKey']]);
 
   useEffect(() => {
     if (entryConfigUuid) {
