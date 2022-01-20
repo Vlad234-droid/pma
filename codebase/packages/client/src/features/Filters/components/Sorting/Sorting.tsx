@@ -1,9 +1,8 @@
 import React, { FC } from 'react';
-import { Rule, colors, useStyle } from '@dex-ddl/core';
-
-import { IconButton } from 'components/IconButton';
+import { Rule, useStyle } from '@dex-ddl/core';
 
 import SortingModal from '../SortingModal';
+import FilterIcon from '../FilterIcon';
 import { SortBy, SortOption } from '../../config/types';
 
 type Props = {
@@ -20,14 +19,7 @@ const Sorting: FC<Props> = ({ sortingOptions, iconStyles, isOpen, onClick, value
 
   return (
     <div className={css(wrapperStyle)} data-test-id='sorting-wrapper'>
-      <IconButton
-        graphic='settings'
-        customVariantRules={{
-          default: iconBtnStyle,
-        }}
-        iconStyles={iconStyles}
-        onPress={onClick}
-      />
+      <FilterIcon iconStyles={iconStyles} onClick={onClick} />
       <SortingModal options={sortingOptions} onSelect={onSort} isOpen={isOpen} value={value} />
     </div>
   );
@@ -35,20 +27,6 @@ const Sorting: FC<Props> = ({ sortingOptions, iconStyles, isOpen, onClick, value
 
 const wrapperStyle: Rule = {
   position: 'relative',
-};
-
-const iconBtnStyle: Rule = {
-  padding: '0',
-  marginLeft: '5px',
-  display: 'flex',
-  height: '38px',
-  width: '38px',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  outline: 0,
-  border: `1px solid ${colors.tescoBlue}`,
-  borderRadius: '20px',
-  cursor: 'pointer',
 };
 
 export default Sorting;

@@ -5,7 +5,7 @@ import { colleagueUUIDSelector, getAllEmployees, ManagersActions } from '@pma/st
 
 import { useTranslation } from 'components/Translation';
 import useDispatch from 'hooks/useDispatch';
-import Filters, { getEmployeesSortingOptions, useSearchFilter, useSortFilter } from 'features/Filters';
+import Filters, { useSearch, FilterOption, FilterValues } from 'features/Filters';
 import { TileWrapper } from 'components/Tile';
 import SuccessModal from 'components/SuccessModal';
 
@@ -13,6 +13,7 @@ import Widgets from '../Widgets';
 import Colleagues from '../Colleagues';
 import Graph from '../Graph';
 import CompareModal from '../CompareModal';
+import { getMockFilterOptions } from '../../utils';
 
 const Calibration: FC = () => {
   const { css } = useStyle();
@@ -24,18 +25,27 @@ const Calibration: FC = () => {
   const [isCompareModalOpen, setCompareModalOpen] = useState<boolean>(false);
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const dispatch = useDispatch();
-  // TODO: filters on be part
-  const [sortValue, setSortValue] = useSortFilter();
-  const [searchValue, setSearchValue] = useSearchFilter();
-  const options = getEmployeesSortingOptions(t);
+  const [filterOptions, setFilterOptions] = useState<FilterOption[]>();
+  const [searchValue, setSearchValue] = useSearch();
   // @ts-ignore
-  const colleagues = useSelector((state) => getAllEmployees(state, searchValue, sortValue), shallowEqual) || [];
+  const colleagues = useSelector((state) => getAllEmployees(state), shallowEqual) || [];
 
   // TODO: use correct endpoint
   // TODO: load first 5 and on click 'see more' load next 25
+  // TODO: add filters as params here
   useEffect(() => {
-    if (colleagueUuid) dispatch(ManagersActions.getManagers({ colleagueUuid }));
+    if (colleagueUuid) loadData({});
   }, [colleagueUuid]);
+
+  useEffect(() => {
+    // TODO: load filter options
+    setFilterOptions(getMockFilterOptions());
+  }, []);
+
+  const loadData = (filters: FilterValues) => {
+    console.log('filters', filters);
+    dispatch(ManagersActions.getManagers({ colleagueUuid }));
+  };
 
   const handleEditClick = () => {
     setEditMode((isEdit) => !isEdit);
@@ -54,6 +64,10 @@ const Calibration: FC = () => {
     setCompareModalOpen(false);
   };
 
+  const handleFilter = (filters: FilterValues) => {
+    loadData(filters);
+  };
+
   return (
     <div>
       <div
@@ -64,11 +78,10 @@ const Calibration: FC = () => {
         })}
       >
         <Filters
-          sortValue={sortValue}
-          onSort={setSortValue}
           searchValue={searchValue}
           onSearch={setSearchValue}
-          sortingOptions={options}
+          filterOptions={filterOptions}
+          onFilter={handleFilter}
         />
       </div>
       <div

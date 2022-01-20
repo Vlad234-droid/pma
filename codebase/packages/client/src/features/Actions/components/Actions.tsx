@@ -14,7 +14,7 @@ import { Trans, useTranslation } from 'components/Translation';
 import { Checkbox, Radio } from 'components/Form';
 import { Status } from 'config/enum';
 import { WidgetObjectiveApproval, WidgetTeamMateObjectives } from 'features/Actions';
-import Filters, { useSortFilter, useSearchFilter, getEmployeesSortingOptions } from 'features/Filters';
+import Filters, { useSorting, useSearch, getEmployeesSortingOptions } from 'features/Filters';
 import useDispatch from 'hooks/useDispatch';
 
 import { filterApprovedFn } from '../utils';
@@ -60,8 +60,8 @@ export const Actions = () => {
   const { css } = useStyle();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.medium || isBreakpoint.small || isBreakpoint.xSmall;
-  const [sortValue, setSortValue] = useSortFilter();
-  const [searchValue, setSearchValue] = useSearchFilter();
+  const [sortValue, setSortValue] = useSorting();
+  const [searchValue, setSearchValue] = useSearch();
   const { t } = useTranslation();
   const options = getEmployeesSortingOptions(t);
 

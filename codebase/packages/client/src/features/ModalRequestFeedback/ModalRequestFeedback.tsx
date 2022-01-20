@@ -8,7 +8,7 @@ import * as Yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { ButtonsComponent, MultiplySearchInput } from './components';
 import { createRequestFeedbackSchema } from './config';
-import { Close } from 'components/Icon/graphics/Close';
+import { Close } from 'components/Icon/graphics/close';
 import { GenericItemField } from 'components/GenericForm';
 import { TileWrapper } from 'components/Tile';
 import { useDispatch, useSelector } from 'react-redux';

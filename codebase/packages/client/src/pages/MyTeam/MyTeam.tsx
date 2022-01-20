@@ -16,15 +16,15 @@ import { View, ViewFilters, WidgetPending, WidgetTeamMateProfile, YourActions } 
 import useDispatch from 'hooks/useDispatch';
 import { buildPath } from 'features/Routes';
 import { Page } from 'pages';
-import Filters, { getEmployeesSortingOptions, useSearchFilter, useSortFilter } from 'features/Filters';
+import Filters, { getEmployeesSortingOptions, useSearch, useSorting } from 'features/Filters';
 import { useTranslation } from 'components/Translation';
 
 export const TEST_ID = 'my-team';
 
 const MyTeam: FC = () => {
   const { css } = useStyle();
-  const [sortValue, setSortValue] = useSortFilter();
-  const [searchValue, setSearchValue] = useSearchFilter();
+  const [sortValue, setSortValue] = useSorting();
+  const [searchValue, setSearchValue] = useSearch();
   const { t } = useTranslation();
   const options = getEmployeesSortingOptions(t);
   const [view, setView] = useState<View>(View.DIRECT_REPORTS);
