@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { useStyle, useBreakpoints, Button, Styles, Rule, CreateRule } from '@dex-ddl/core';
+import { useStyle, useBreakpoints, Button, Styles, Rule, CreateRule, Theme } from '@dex-ddl/core';
 import { GenericItemField } from 'components/GenericForm';
 import { Item, Input, Select, Textarea } from 'components/Form';
 import { EditSelectedNoteProps } from './type';
@@ -13,8 +13,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { NotesActions, colleagueUUIDSelector } from '@pma/store';
 
 const EditSelectedNote: FC<EditSelectedNoteProps> = ({
-  successSelectedNoteToEdit,
-  setSuccessSelectedNoteToEdit,
   foldersWithNotes,
   methods,
   cancelSelectedNoteModal,
@@ -32,6 +30,7 @@ const EditSelectedNote: FC<EditSelectedNoteProps> = ({
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
   const [editMode, setEditMode] = useState<boolean>(false);
   const [confirmModal, setConfirmModal] = useState(false);
+  const [successSelectedNoteToEdit, setSuccessSelectedNoteToEdit] = useState(false);
 
   const {
     formState: { isValid },
@@ -263,14 +262,7 @@ const EditSelectedNote: FC<EditSelectedNoteProps> = ({
         </div>
       </form>
       <span
-        className={css({
-          position: 'fixed',
-          top: theme.spacing.s5,
-          left: mobileScreen ? theme.spacing.s5 : theme.spacing.s10,
-          textDecoration: 'none',
-          border: 'none',
-          cursor: 'pointer',
-        })}
+        className={css(backIconStyle({ theme, mobileScreen }))}
         onClick={() => {
           setSuccessSelectedNoteToEdit(() => false);
           setSelectedNoteToEdit(() => null);
@@ -281,6 +273,16 @@ const EditSelectedNote: FC<EditSelectedNoteProps> = ({
     </div>
   );
 };
+
+const backIconStyle: CreateRule<{ theme: Theme; mobileScreen: boolean }> = ({ theme, mobileScreen }) => ({
+  position: 'fixed',
+  top: theme.spacing.s5,
+  left: mobileScreen ? theme.spacing.s5 : theme.spacing.s10,
+  textDecoration: 'none',
+  border: 'none',
+  cursor: 'pointer',
+});
+
 const WrapperModalGiveFeedbackStyle: Rule = {
   paddingLeft: '40px',
   paddingRight: '40px',

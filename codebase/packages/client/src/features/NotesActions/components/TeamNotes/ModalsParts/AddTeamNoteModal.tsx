@@ -1,6 +1,6 @@
-import React, { Dispatch, FC, SetStateAction } from 'react';
+import React, { Dispatch, FC, SetStateAction, useState } from 'react';
 import { Notification } from 'components/Notification';
-import { useStyle, Rule, useBreakpoints, Button } from '@dex-ddl/core';
+import { useStyle, Rule, useBreakpoints, Button, CreateRule, Theme } from '@dex-ddl/core';
 import { SearchPart } from './SearchPart';
 import { UseFormReturn } from 'react-hook-form';
 import { PeopleTypes } from './type';
@@ -15,39 +15,27 @@ type AddTeamNoteModalProps = {
   teamMethods: UseFormReturn;
   searchValue: string;
   setSearchValue: Dispatch<SetStateAction<string>>;
-  setTeamNoteModal: Dispatch<SetStateAction<boolean>>;
   setSelectedPerson: Dispatch<SetStateAction<NotesTypeTEAM | null>>;
   selectedPerson: PeopleTypes | null;
   foldersWithNotesTEAM: Array<FoldersWithNotesTypesTEAM> | [];
   cancelTEAMModal: () => void;
   handleTEAMSubmit: () => void;
-  setSuccessTEAMModal: Dispatch<SetStateAction<boolean>>;
-  successTEAMModal: boolean;
+  createFolder: boolean;
 };
 
 const AddTeamNoteModal: FC<AddTeamNoteModalProps> = ({
   teamMethods,
   searchValue,
   setSearchValue,
-  setTeamNoteModal,
   selectedPerson,
   setSelectedPerson,
   foldersWithNotesTEAM,
   cancelTEAMModal,
   handleTEAMSubmit,
-  setSuccessTEAMModal,
-  successTEAMModal,
+  createFolder,
 }) => {
-  if (successTEAMModal) {
-    return (
-      <SuccessModal
-        teamMethods={teamMethods}
-        setTeamNoteModal={setTeamNoteModal}
-        setSuccessTEAMModal={setSuccessTEAMModal}
-        setSelectedPerson={setSelectedPerson}
-      />
-    );
-  }
+  const [successTEAMModal, setSuccessTEAMModal] = useState<boolean>(false);
+
   const { css, theme } = useStyle();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
@@ -57,17 +45,21 @@ const AddTeamNoteModal: FC<AddTeamNoteModalProps> = ({
     reset,
   } = teamMethods;
 
+  if (successTEAMModal) {
+    return <SuccessModal teamMethods={teamMethods} cancelTEAMModal={cancelTEAMModal} createFolder={createFolder} />;
+  }
+
   return (
     <div className={css(WrapperModalGiveFeedbackStyle)}>
       <span
-        className={css(arrowLeftStyle)}
+        className={css(arrowLeftStyle({ theme, mobileScreen }))}
         onClick={() => {
           if (selectedPerson !== null) {
             setSearchValue(() => '');
             setSelectedPerson(() => null);
             reset();
           } else {
-            setTeamNoteModal(() => false);
+            cancelTEAMModal();
           }
         }}
       >
@@ -99,6 +91,7 @@ const AddTeamNoteModal: FC<AddTeamNoteModalProps> = ({
             selectedPerson={selectedPerson}
             teamMethods={teamMethods}
             foldersWithNotesTEAM={foldersWithNotesTEAM}
+            createFolder={createFolder}
           />
         )}
       </form>
@@ -211,9 +204,7 @@ const iconBtnStyleDisabled: Rule = ({ theme }) => ({
   opacity: '0.4',
 });
 
-const arrowLeftStyle: Rule = ({ theme }) => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+const arrowLeftStyle: CreateRule<{ theme: Theme; mobileScreen: boolean }> = ({ theme, mobileScreen }) => {
   return {
     position: 'fixed',
     top: theme.spacing.s5,

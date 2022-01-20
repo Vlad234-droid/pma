@@ -3,10 +3,10 @@ import { Rule, useStyle } from '@dex-ddl/core';
 import { Trans, useTranslation } from 'components/Translation';
 import useDispatch from 'hooks/useDispatch';
 import { useSelector } from 'react-redux';
-import { countByStatusReviews, countByTypeReviews, currentUserSelector, ReviewsActions } from '@pma/store';
+import { countByStatusReviews, getReviewSchema, currentUserSelector, ReviewsActions } from '@pma/store';
 import { ReviewType, Status } from 'config/enum';
 import { ButtonWithConfirmation } from './index';
-import useReviewSchema from '../../hooks/useReviewSchema';
+import { canEditSingleObjectiveFn, canDeleteSingleObjectiveFn } from '../../utils';
 import EditButton from './EditButton';
 
 export type ObjectiveButtonsProps = {
@@ -18,14 +18,27 @@ const ObjectiveButtons: FC<ObjectiveButtonsProps> = ({ id, status }) => {
   const dispatch = useDispatch();
   const { css } = useStyle();
   const { t } = useTranslation();
-  const countReviews = useSelector(countByTypeReviews(ReviewType.OBJECTIVE)) || {};
-  const countApprovedReviews = useSelector(countByStatusReviews(ReviewType.OBJECTIVE, Status.APPROVED)) || {};
   const { info } = useSelector(currentUserSelector);
-  const [schema] = useReviewSchema(ReviewType.OBJECTIVE) || {};
-  const { markup = { max: 0, min: 0 } } = schema;
-  const canDelete = [Status.DRAFT, Status.APPROVED].includes(status) && countApprovedReviews > markup.min;
-  const canEdit = [Status.DRAFT, Status.APPROVED, Status.DECLINED].includes(status);
-  const isSingleObjectivesEditMode = countReviews > markup.min;
+
+  const objectiveSchema = useSelector(getReviewSchema(ReviewType.OBJECTIVE));
+  const countDraftReviews = useSelector(countByStatusReviews(ReviewType.OBJECTIVE, Status.DRAFT)) || 0;
+  const countDeclinedReviews = useSelector(countByStatusReviews(ReviewType.OBJECTIVE, Status.DECLINED)) || 0;
+  const countApprovedReviews = useSelector(countByStatusReviews(ReviewType.OBJECTIVE, Status.APPROVED)) || 0;
+
+  const canEditSingleObjective = canEditSingleObjectiveFn({
+    status,
+    objectiveSchema,
+    countDraftReviews,
+    countDeclinedReviews,
+    countApprovedReviews,
+  });
+  const canDeleteSingleObjective = canDeleteSingleObjectiveFn({
+    status,
+    objectiveSchema,
+    countDraftReviews,
+    countDeclinedReviews,
+    countApprovedReviews,
+  });
 
   const remove = () => {
     dispatch(
@@ -37,16 +50,16 @@ const ObjectiveButtons: FC<ObjectiveButtonsProps> = ({ id, status }) => {
 
   return (
     <div className={css(WrapperStyle)}>
-      {canEdit && (
+      {canEditSingleObjective && (
         <EditButton
-          isSingleObjectivesEditMode={isSingleObjectivesEditMode}
+          isSingleObjectivesEditMode={true}
           buttonText={t('edit', 'Edit')}
           editNumber={id}
           icon={'edit'}
           styles={buttonStyle}
         />
       )}
-      {canDelete && (
+      {canDeleteSingleObjective && (
         <ButtonWithConfirmation
           onSave={remove}
           withIcon={true}

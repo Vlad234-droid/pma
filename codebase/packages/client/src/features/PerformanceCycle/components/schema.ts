@@ -1,7 +1,7 @@
 import * as Yup from 'yup';
 
 export const createPMCycleSchema = Yup.object().shape({
-  name: Yup.string().required(),
+  'cycle.name': Yup.string(),
   level1: Yup.string().required(),
   level2: Yup.string().required(),
   level3: Yup.string().required(),

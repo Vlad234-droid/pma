@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { FilterOption as FilterOptionInput } from 'features/Shared';
 import { Rule, Styles, useStyle } from '@dex-ddl/core';
 import { IconButton } from 'components/IconButton';
@@ -9,22 +9,18 @@ export const INFO_ICON = 'info_icon';
 export const FILTER_WRAPPER = 'filter_wrapper';
 
 const FilterOption: FC<FilterOptionProps> = ({
-  focus,
-  setFocus,
   searchValueFilterOption,
   setSearchValueFilterOption,
   TEAM,
-  setInfoModal,
+  openInfoModal,
 }) => {
   const { css } = useStyle();
+  const [focus, setFocus] = useState(false);
+
   return (
     <div
       className={css({
         display: 'flex',
-        alignItems: 'center',
-        marginLeft: 'auto',
-        justifyContent: 'flex-end',
-        marginTop: '17px',
       })}
       data-test-id={FILTER_WRAPPER}
     >
@@ -40,9 +36,7 @@ const FilterOption: FC<FilterOptionProps> = ({
         }}
         data-test-id={INFO_ICON}
         iconStyles={iconStyle}
-        onPress={() => {
-          setInfoModal(() => true);
-        }}
+        onPress={openInfoModal}
       />
 
       <FilterOptionInput

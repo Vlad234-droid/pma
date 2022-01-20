@@ -6,33 +6,23 @@ import { UseFormReturn } from 'react-hook-form';
 import { AllNotesFolderId } from '../../../../utils/note';
 import { getFoldersSelector } from '@pma/store';
 import { useSelector } from 'react-redux';
-
-export type SuccessModalProps = {
-  values: any;
-  setPersonalNoteModal: React.Dispatch<React.SetStateAction<boolean>>;
-  setSuccessModal: React.Dispatch<React.SetStateAction<boolean>>;
-  setCreateFolder: React.Dispatch<React.SetStateAction<boolean>>;
-  createFolder: boolean;
-  methods: UseFormReturn;
-};
+import successImg from '../../../../../public/success.jpg';
 
 export const OK_BTN = 'ok_btn';
 export const SUCCESS_MODAL_WRAPPER = 'success_modal_wrapper';
 
-const SuccessModal: FC<SuccessModalProps> = ({
-  values,
-  setPersonalNoteModal,
-  setSuccessModal,
-  createFolder,
-  setCreateFolder,
-  methods,
-}) => {
-  const { css, theme } = useStyle();
+export type SuccessModalProps = {
+  values: any;
+  createFolder: boolean;
+  cancelModal: () => void;
+};
+
+const SuccessModal: FC<SuccessModalProps> = ({ values, createFolder, cancelModal }) => {
+  const { css } = useStyle();
+
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
   const folders = useSelector(getFoldersSelector) || null;
-
-  const { reset } = methods;
 
   const propperValue = (): string => {
     let str = '';
@@ -67,10 +57,7 @@ const SuccessModal: FC<SuccessModalProps> = ({
               padding: '15px',
             }}
           >
-            <svg width='165' height='164' viewBox='0 0 165 164' fill='none' xmlns='http://www.w3.org/2000/svg'>
-              <path d='M51.917 78.5837L70.917 97.5837L112.084 56.417' stroke='#009E47' strokeWidth='1.2' />
-              <circle cx='82' cy='82' r='65' stroke='#009E47' strokeWidth='1.2' />
-            </svg>
+            <img src={successImg} alt='Success' />
           </span>
           <div
             className={css({
@@ -90,7 +77,7 @@ const SuccessModal: FC<SuccessModalProps> = ({
             })}
           >
             {!createFolder && (
-              <Trans>
+              <Trans id='your_note_has_been_added_into_the_folder' folder={propperValue()}>
                 <>
                   Your note has been added into
                   <br /> the folder:
@@ -118,16 +105,7 @@ const SuccessModal: FC<SuccessModalProps> = ({
             justifyContent: 'center',
           })}
         >
-          <Button
-            styles={[buttonStyle]}
-            data-test-id={OK_BTN}
-            onPress={() => {
-              reset();
-              setPersonalNoteModal(() => false);
-              setSuccessModal(() => false);
-              setCreateFolder(() => false);
-            }}
-          >
+          <Button styles={[buttonStyle]} data-test-id={OK_BTN} onPress={cancelModal}>
             <Trans>Okay</Trans>
           </Button>
         </div>

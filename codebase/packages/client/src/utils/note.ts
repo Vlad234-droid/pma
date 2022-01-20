@@ -144,7 +144,7 @@ export const filterNotesByTitle = (notes, value) => {
 export const defineBtnTitle = (actionTEAMModal) => {
   const obg = {
     delete: 'Delete',
-    archive: 'Save',
+    archive: 'Archive',
     move: 'Save',
   };
 

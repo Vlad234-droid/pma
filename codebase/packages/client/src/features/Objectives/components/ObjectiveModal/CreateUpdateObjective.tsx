@@ -77,6 +77,7 @@ export const CreateUpdateObjective: FC<Props> = ({ onClose, editNumber = null })
         }),
       );
     }
+    onClose();
   };
   const onSaveDraft = () => {
     const data = getValues();

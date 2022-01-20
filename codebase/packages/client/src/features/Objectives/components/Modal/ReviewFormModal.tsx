@@ -18,9 +18,11 @@ import {
   getTimelineByReviewTypeSelector,
   ReviewsActions,
   reviewsMetaSelector,
+  schemaMetaSelector,
+  SchemaActions,
+  getReviewSchema,
 } from '@pma/store';
 import { createYupSchema } from 'utils/yup';
-import { useReviewSchemaWithPermission } from '../../hooks/useReviewSchema';
 import { TriggerModal } from 'features/Modal/components/TriggerModal';
 import MidYearHelpModal from './MidYearHelpModal';
 import SuccessModal from 'components/SuccessModal';
@@ -77,13 +79,14 @@ const ReviewFormModal: FC<Props> = ({ reviewType, onClose }) => {
   const dispatch = useDispatch();
   const [review] = useSelector(getReviewByTypeSelector(reviewType));
   const { loading: reviewLoading } = useSelector(reviewsMetaSelector);
+  const { loading: schemaLoading } = useSelector(schemaMetaSelector);
+  const schema = useSelector(getReviewSchema(reviewType));
   const timelineReview = useSelector(getTimelineByReviewTypeSelector(reviewType));
   const readonly = [Status.WAITING_FOR_APPROVAL, Status.APPROVED].includes(timelineReview.status);
   const successMessage = getSuccessMessage(timelineReview?.code, t);
 
   const { helperText, title } = getContent(reviewType, t);
 
-  const [schema] = useReviewSchemaWithPermission(reviewType);
   const { components = [] } = schema;
 
   const yepSchema = components.reduce(createYupSchema, {});
@@ -136,6 +139,7 @@ const ReviewFormModal: FC<Props> = ({ reviewType, onClose }) => {
   };
 
   useEffect(() => {
+    dispatch(SchemaActions.getSchema({ colleagueUuid: info.colleagueUUID }));
     dispatch(
       ReviewsActions.getColleagueReviews({ pathParams: { colleagueUuid: info.colleagueUUID, cycleUuid: 'CURRENT' } }),
     );
@@ -145,11 +149,11 @@ const ReviewFormModal: FC<Props> = ({ reviewType, onClose }) => {
     reset(review);
   }, [review]);
 
-  if (reviewLoading) {
+  if (reviewLoading && schemaLoading) {
     return null;
   }
 
-  if (timelineReview?.status === Status.WAITING_FOR_APPROVAL) {
+  if (successModal) {
     return (
       <SuccessModal
         onClose={onClose}
@@ -196,7 +200,7 @@ const ReviewFormModal: FC<Props> = ({ reviewType, onClose }) => {
                     </span>
                   </div>
                 }
-                title={'Writing your objectives'}
+                title={t('completing_your_review', 'Completing your review')}
               >
                 <MidYearHelpModal />
               </TriggerModal>

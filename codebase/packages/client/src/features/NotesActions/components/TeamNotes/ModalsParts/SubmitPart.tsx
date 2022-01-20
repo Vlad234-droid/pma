@@ -11,30 +11,36 @@ type SubmitPartProps = {
   selectedPerson: PeopleTypes;
   teamMethods: UseFormReturn;
   foldersWithNotesTEAM: Array<FoldersWithNotesTypesTEAM> | [];
+  createFolder: boolean;
 };
 
-export const SubmitPart: FC<SubmitPartProps> = ({ selectedPerson, teamMethods, foldersWithNotesTEAM }) => {
+export const SubmitPart: FC<SubmitPartProps> = ({
+  selectedPerson,
+  teamMethods,
+  foldersWithNotesTEAM,
+  createFolder,
+}) => {
   const { css } = useStyle();
   const { trigger, getValues, setValue } = teamMethods;
   const notes: any = {
     require: [
       {
-        field_id: '1',
-        field_type: 'input',
-        field_title: 'Title',
-        field_placeholder: 'Enter a title for your note',
+        id: '1',
+        type: 'input',
+        title: 'Title',
+        placeholder: 'Enter a title for your note',
       },
       {
-        field_id: '2',
-        field_type: 'textarea',
-        field_title: 'Note',
-        field_placeholder: 'Write your note here',
+        id: '2',
+        type: 'textarea',
+        title: 'Note',
+        placeholder: 'Write your note here',
       },
       {
-        field_id: '3',
-        field_type: 'select',
-        field_title: 'Folder (optional)',
-        field_placeholder: 'Select a folder',
+        id: '3',
+        type: 'select',
+        title: 'Folder (optional)',
+        placeholder: 'Select a folder',
 
         field_options: [
           ...foldersWithNotesTEAM?.map((item) => ({ value: `${item.id}`, label: item.title })),
@@ -43,12 +49,21 @@ export const SubmitPart: FC<SubmitPartProps> = ({ selectedPerson, teamMethods, f
       },
     ],
     option: {
-      field_id: '4',
-      field_type: 'input',
-      field_title: 'Folder name',
-      field_placeholder: 'Enter a name for your new folder',
+      id: '4',
+      type: 'input',
+      title: 'Folder name',
+      placeholder: 'Enter a name for your new folder',
     },
   };
+
+  const folder = [
+    {
+      id: '1',
+      type: 'input',
+      title: 'Folder name',
+      placeholder: 'Enter a name for your new folder',
+    },
+  ];
 
   const values = getValues();
 
@@ -71,67 +86,85 @@ export const SubmitPart: FC<SubmitPartProps> = ({ selectedPerson, teamMethods, f
       </div>
 
       <div className={css({ marginTop: '28px' })}>
-        {notes.require.map((item) => {
-          if (item.field_type === 'input') {
-            return (
-              <GenericItemField
-                key={item.field_id}
-                name={`noteTitle`}
-                methods={teamMethods}
-                label={item.field_title}
-                Wrapper={Item}
-                Element={Input}
-                placeholder={item.field_placeholder}
-              />
-            );
-          }
-          if (item.field_type === 'textarea') {
-            return (
-              <GenericItemField
-                key={item.field_id}
-                name={`noteText`}
-                methods={teamMethods}
-                label={item.field_title}
-                Wrapper={Item}
-                Element={Textarea}
-                placeholder={item.field_placeholder}
-              />
-            );
-          }
-          if (item.field_type === 'select') {
-            const { field_options } = item;
-            return (
-              <GenericItemField
-                key={item.field_id}
-                name={`folder`}
-                methods={teamMethods}
-                label={item.field_title}
-                Wrapper={({ children }) => (
-                  <Item withIcon={false} label={item.field_title}>
-                    {children}
-                  </Item>
-                )}
-                Element={Select}
-                options={field_options}
-                placeholder={item.field_placeholder}
-                onChange={(value) => {
-                  setValue('folder', value);
-                  trigger('folder');
-                }}
-              />
-            );
-          }
-        })}
+        {!createFolder
+          ? notes.require.map((item) => {
+              if (item.type === 'input') {
+                return (
+                  <GenericItemField
+                    key={item.id}
+                    name={`noteTitle`}
+                    methods={teamMethods}
+                    label={item.title}
+                    Wrapper={Item}
+                    Element={Input}
+                    placeholder={item.placeholder}
+                  />
+                );
+              }
+              if (item.type === 'textarea') {
+                return (
+                  <GenericItemField
+                    key={item.id}
+                    name={`noteText`}
+                    methods={teamMethods}
+                    label={item.title}
+                    Wrapper={Item}
+                    Element={Textarea}
+                    placeholder={item.placeholder}
+                  />
+                );
+              }
+              if (item.type === 'select') {
+                const { field_options } = item;
+                return (
+                  <GenericItemField
+                    key={item.id}
+                    name={`folder`}
+                    methods={teamMethods}
+                    label={item.title}
+                    Wrapper={({ children }) => (
+                      <Item withIcon={false} label={item.title}>
+                        {children}
+                      </Item>
+                    )}
+                    Element={Select}
+                    options={field_options}
+                    placeholder={item.placeholder}
+                    onChange={(value) => {
+                      setValue('folder', value);
+                      trigger('folder');
+                    }}
+                  />
+                );
+              }
+            })
+          : folder.map((item) => {
+              return (
+                <GenericItemField
+                  key={item.id}
+                  name={`folderTitle`}
+                  methods={teamMethods}
+                  label={item.title}
+                  Wrapper={Item}
+                  Element={Input}
+                  placeholder={item.placeholder}
+                  onChange={() => {
+                    trigger('folderTitle');
+                  }}
+                  value={values.folderTitle}
+                />
+              );
+            })}
         {values.folder !== '' && values.folder === 'id_001' && (
           <GenericItemField
-            key={notes.option.field_id}
+            key={notes.option.id}
             name={`folderTitle`}
             methods={teamMethods}
             Wrapper={Item}
             Element={Input}
-            placeholder={notes.option.field_placeholder}
+            placeholder={notes.option.placeholder}
             value={values.folderTitle}
-            label={notes.option.field_title}
+            label={notes.option.title}
           />
         )}
       </div>

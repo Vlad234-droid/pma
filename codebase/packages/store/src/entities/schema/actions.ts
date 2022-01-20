@@ -5,7 +5,7 @@ export const getSchema = createAsyncAction(
   'schema/FETCH_SUCCESS',
   'schema/FETCH_FAILURE',
   'schema/CANCEL',
-)<any, any, Error, undefined>();
+)<{ colleagueUuid: string }, any, Error, undefined>();
 
 export const clearSchemaData = createAction('schema/CLEAR')<undefined>();
 

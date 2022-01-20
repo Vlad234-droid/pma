@@ -1,7 +1,6 @@
 import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getPDPSchema } from '@pma/store/src/selectors/schema';
-import { colleagueUUIDSelector, SchemaActions } from '@pma/store';
+import { colleagueUUIDSelector, SchemaActions, getPDPSchema } from '@pma/store';
 import { PDPType } from 'config/enum';
 
 function usePDPSchema(type: PDPType) {
