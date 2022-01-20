@@ -50,6 +50,13 @@ const CreatePersonalDevelopmentGoal = (props) => {
     }
   }, []);
 
+  useEffect(() => {
+    if (uuid) {
+      const goal = pdpList?.filter((el) => el.uuid === uuid)[0] || {};
+      setCurrentGoal(goal);
+    }
+  }, [pdpList]);
+
   const yepSchema = formElements.reduce(createYupSchema, {});
   const methods = useForm({
     mode: 'onChange',
@@ -60,14 +67,9 @@ const CreatePersonalDevelopmentGoal = (props) => {
 
   const requestData = [
     {
-      uuid: uuid ? uuid : Object.keys(currentGoal).length > 0 ? currentGoal?.uuid : uuidv4(),
+      uuid: uuid || Object.keys(currentGoal).length > 0 ? currentGoal?.uuid : uuidv4(),
       colleagueUuid: colleagueUuid,
-      number:
-        pdpList && uuid
-          ? pdpList[0].number
-          : Object.keys(currentGoal).length > 0
-          ? currentGoal?.number
-          : pdpList?.length + 1,
+      number: pdpList && (uuid || Object.keys(currentGoal).length > 0) ? currentGoal?.number : pdpList?.length + 1,
       properties: {
         mapJson: formValues,
       },
@@ -168,7 +170,7 @@ const CreatePersonalDevelopmentGoal = (props) => {
                     textAlign: 'left',
                   }}
                   placeholder={description}
-                  value={Object.keys(currentGoal).length > 0 ? updateGoalValue : ''}
+                  value={Object.keys(currentGoal)?.length > 0 ? updateGoalValue : ''}
                 />
               );
             }
@@ -189,7 +191,7 @@ const CreatePersonalDevelopmentGoal = (props) => {
                   textAlign: 'left',
                 }}
                 placeholder={description}
-                value={Object.keys(currentGoal).length > 0 ? updateGoalValue : ''}
+                value={Object.keys(currentGoal)?.length > 0 ? updateGoalValue : ''}
               />
             );
           })}
