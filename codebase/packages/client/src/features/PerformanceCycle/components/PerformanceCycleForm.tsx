@@ -10,24 +10,17 @@ import {
   ConfigEntriesActions,
   PerformanceCycleActions,
   ProcessTemplateActions,
-  SchemaActions,
 } from '@pma/store';
 import { Trans, useTranslation } from 'components/Translation';
 import { configEntriesMetaSelector, configEntriesSelector } from '@pma/store/src/selectors/config-entries';
 import {
-  durationOptions,
   getFormsByProcessTemplateUuidSelector,
   getProcessTemplateByUuidSelector,
-  getTimelinePointsByUuidSelector,
-  getTimelinePointsReviewTypesByUuidSelector,
-  getType,
 } from '@pma/store/src/selectors/processTemplate';
 import useDispatch from 'hooks/useDispatch';
 import {
   getConfigEntriesByPerformanceCycle,
   getFormsByPerformanceCycleUuidSelector,
-  getTimelinePointsByPerformanceCycleUuidSelector,
-  getTimelinePointsReviewTypesByPerformanceCycleUuidSelector,
 } from '@pma/store/src/selectors/performance-cycle';
 import { TileWrapper } from 'components/Tile';
 import { GenericItemField } from 'components/GenericForm';
@@ -36,6 +29,7 @@ import { Page } from 'pages';
 import { ObjectiveModal } from 'features/Objectives/components/ObjectiveModal/ObjectiveModal';
 import TemplatesModal from './TemplatesModal';
 import { createPMCycleSchema } from './schema';
+import { DurationPicker } from '../../../components/Form/DurationPicker';
 
 function getChildren(data, options11: any, key, value) {
   return data
@@ -74,6 +68,7 @@ export const PerformanceCycleForm: FC = () => {
   const [isTemplatesModalOpen, showTemplatesModal] = useState(false);
   const [processTemplateName, setProcessTemplateName] = useState('');
   const [selectedForm, setSelectedForm] = useState('');
+  const [showProperties, setShowProperties] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -81,14 +76,10 @@ export const PerformanceCycleForm: FC = () => {
     mode: 'onChange',
     resolver: yupResolver<Yup.AnyObjectSchema>(createPMCycleSchema),
   });
-  const { getValues, setValue, reset, watch, handleSubmit } = methods;
-
-  const watchStartTime = watch(['startTime']);
+  const { getValues, setValue, watch, handleSubmit, control } = methods;
 
   const { data } = useSelector(configEntriesSelector) || {};
   const processTemplate = useSelector(getProcessTemplateByUuidSelector(processSelected));
-  const timelinePoints = useSelector(getTimelinePointsByUuidSelector(processSelected));
-  const timelinePointsReviewTypes = useSelector(getTimelinePointsReviewTypesByUuidSelector(processSelected));
   const formsByPerformanceCycleUuid = useSelector(getFormsByPerformanceCycleUuidSelector(performanceCycleUuid));
   const formsProcessTemplate = useSelector(getFormsByProcessTemplateUuidSelector(processSelected));
   const { loaded } = useSelector(configEntriesMetaSelector) || {};
@@ -96,19 +87,15 @@ export const PerformanceCycleForm: FC = () => {
     getConfigEntriesByPerformanceCycle(performanceCycleUuid),
   );
 
-  const timelinePointsFromPMCycle = useSelector(getTimelinePointsByPerformanceCycleUuidSelector(performanceCycleUuid));
-  const timelinePointsReviewTypesFromPMCycle = useSelector(
-    getTimelinePointsReviewTypesByPerformanceCycleUuidSelector(performanceCycleUuid),
-  );
+  const watchStartTime = watch(['cycle.metadata.cycle.properties.pm_cycle_start_time']);
 
   useEffect(() => {
     if (watchStartTime?.length > 0 && watchStartTime?.[0])
-      setValue('endTime', getDate(addYear(new Date(watchStartTime[0]))));
+      setValue(
+        'cycle.metadata.cycle.properties.pm_cycle_end_time',
+        getDate(subDay(addYear(new Date(watchStartTime[0])))),
+      );
   }, [watchStartTime]);
-
-  useEffect(() => {
-    dispatch(SchemaActions.getSchema({ colleagueUuid }));
-  }, []);
 
   useEffect(() => {
     if (!loaded) {
@@ -143,46 +130,22 @@ export const PerformanceCycleForm: FC = () => {
 
   const getDate = (date) => date.toISOString().substr(0, 10);
   const addYear = (date) => new Date(date.setFullYear(date.getFullYear() + 1));
+  const subDay = (date) => new Date(date.setTime(date.getTime() - 24 * 60 * 60 * 1000));
+
   useEffect(() => {
-    if (timelinePoints) {
-      const currentDate = new Date();
-      reset({
-        ...processTemplate,
-        ...processTemplate?.cycle,
-        ...processTemplate?.cycle?.properties,
-        startTime: getDate(currentDate),
-        endTime: getDate(addYear(currentDate)),
-        pm_cycle_before_start_number: processTemplate?.cycle?.properties?.pm_cycle_before_start?.[1],
-        pm_cycle_before_start_type: getType(processTemplate?.cycle?.properties?.pm_cycle_before_start),
-        pm_cycle_before_end_number: processTemplate?.cycle?.properties?.pm_cycle_before_end?.[1],
-        pm_cycle_before_end_type: getType(processTemplate?.cycle?.properties?.pm_cycle_before_end),
-        ...timelinePoints,
-      });
-    }
+    setValue('cycle', { metadata: { cycle: processTemplate?.cycle } });
   }, [processTemplate]);
 
   useEffect(() => {
-    setProcessSelected(performanceCycleItem?.template?.uuid);
-    setEntryConfigKey(performanceCycleItem?.entryConfigKey);
+    setValue('cycle', performanceCycleItem);
+    setShowProperties(true);
   }, [performanceCycleItem]);
 
   useEffect(() => {
-    if (performanceCycleItem) {
-      setProcessTemplateName(performanceCycleItem?.template?.fileName);
-      reset({
-        ...formDataToFillObj,
-        ...performanceCycleItem,
-        ...performanceCycleItem?.metadata?.cycle?.properties,
-        startTime: performanceCycleItem?.startTime?.substr(0, 10),
-        endTime: performanceCycleItem?.endTime?.substr(0, 10),
-        pm_cycle_before_start_number: performanceCycleItem?.metadata?.cycle?.properties?.pm_cycle_before_start?.[1],
-        pm_cycle_before_start_type: getType(performanceCycleItem?.metadata?.cycle?.properties?.pm_cycle_before_start),
-        pm_cycle_before_end_number: performanceCycleItem?.metadata?.cycle?.properties?.pm_cycle_before_end?.[1],
-        pm_cycle_before_end_type: getType(performanceCycleItem?.metadata?.cycle?.properties?.pm_cycle_before_end),
-        ...timelinePointsFromPMCycle,
-      });
+    for (const property in formDataToFillObj) {
+      setValue(property, formDataToFillObj[property]);
     }
-  }, [performanceCycleItem]);
+  }, [formDataToFillObj]);
 
   useEffect(() => {
     if (entryConfigUuid) {
@@ -190,112 +153,24 @@ export const PerformanceCycleForm: FC = () => {
     }
   }, [entryConfigUuid]);
 
-  function getValue(type) {
-    return durationOptions.find((el) => el.label === type)?.value;
-  }
-
   function getData() {
-    const {
-      name,
-      pm_cycle_before_start_type,
-      pm_cycle_before_start_number,
-      pm_cycle_before_end_type,
-      pm_cycle_before_end_number,
-      pm_cycle_max,
-      pm_cycle_start_time,
-      pm_cycle_type,
-      pm_type,
-      startTime,
-      endTime,
-      ...rest
-    } = getValues();
-
-    const cycle_reviews = Object.keys(rest)
-      .filter((key) => key.includes('cyclereviews__'))
-      .reduce(
-        // @ts-ignore
-        (prev, key) => {
-          const [, type, newKey, isDuration] = key.split('__');
-          let value;
-          if (isDuration === 'number' || isDuration === 'type') {
-            value = `P${rest[`cyclereviews__${type}__${newKey}__number`]}${getValue(
-              rest[`cyclereviews__${type}__${newKey}__type`],
-            )}`;
-          } else {
-            value = rest[key];
-          }
-          // @ts-ignore
-          if (prev.types.includes(type)) {
-            return {
-              result: [
-                ...prev.result.map((item) => {
-                  // @ts-ignore
-                  if (item?.pm_review_type === type) {
-                    // @ts-ignore
-                    return { ...item, [newKey]: value };
-                  }
-                  return item;
-                }),
-              ],
-              types: prev.types,
-            };
-          } else {
-            return {
-              result: [...prev.result, { pm_review_type: type, [newKey]: value }],
-              types: [...prev.types, type],
-            };
-          }
-        },
-        { result: [], types: [] },
-      );
-
-    const pm_cycle_before_start = `P${pm_cycle_before_start_number}${getValue(pm_cycle_before_start_type)}`;
-    const pm_cycle_before_end = `P${pm_cycle_before_end_number}${getValue(pm_cycle_before_end_type)}`;
-
+    const { cycle } = getValues();
     return {
       data: {
         ...(performanceCycleUuid !== 'new' && { uuid: performanceCycleUuid }),
-        entryConfigKey: entryConfigKey,
-        templateUUID: processSelected,
-        name: name,
+        entryConfigKey: cycle.entryConfigKey,
+        templateUUID: cycle.template.uuid,
+        name: cycle.name,
         createdBy: {
           uuid: colleagueUuid,
         },
         status: 'ACTIVE',
         type: 'FISCAL',
-        startTime: new Date(startTime).toISOString(),
-        endTime: new Date(endTime).toISOString(),
-        properties: {
-          pm_cycle_before_end,
-          pm_cycle_before_start,
-          pm_cycle_max,
-          pm_cycle_start_time,
-          pm_cycle_type,
-          pm_type,
-        },
+        startTime: new Date(cycle.startTime).toISOString(),
+        endTime: new Date(cycle.endTime).toISOString(),
+        properties: cycle.properties,
         jsonMetadata: null,
-        metadata: {
-          cycle: {
-            type: 'ELEMENT',
-            properties: {
-              pm_cycle_before_end,
-              pm_cycle_before_start,
-              pm_cycle_max,
-              pm_cycle_start_time,
-              pm_cycle_type,
-              pm_type,
-            },
-            cycleType: 'FISCAL',
-            // @ts-ignore
-            timelinePoints: cycle_reviews.result.map(({ description, ...rest }) => ({
-              type: 'REVIEW',
-              description,
-              properties: {
-                ...rest,
-              },
-            })),
-          },
-        },
+        metadata: cycle.metadata,
       },
     };
   }
@@ -331,15 +206,18 @@ export const PerformanceCycleForm: FC = () => {
     showTemplatesModal(false);
     dispatch(ProcessTemplateActions.getProcessTemplateMetadata({ fileUuid: value }));
     setProcessSelected(value);
+    setShowProperties(true);
   };
 
-  const reviewTypes = timelinePointsReviewTypes || timelinePointsReviewTypesFromPMCycle;
+  const timelinePointsValues = getValues('cycle.metadata.cycle.timelinePoints');
+
+  const onError = (errors, e) => console.error(errors, e);
 
   /*---------Render---------*/
   // @ts-ignore
   const forms = formsProcessTemplate || formsByPerformanceCycleUuid;
   return (
-    <form className={css({ marginTop: '32px' })}>
+    <form className={css({ marginTop: '32px' })} autoComplete='off'>
       <TileWrapper customStyle={{ margin: '8px', padding: '25px', maxWidth: '1300px', overflowY: 'visible' }}>
         <div
           className={css({
@@ -351,26 +229,19 @@ export const PerformanceCycleForm: FC = () => {
           1. General settings
         </div>
         <GenericItemField
-          name={`name`}
+          name={`cycle.name`}
           methods={methods}
-          Wrapper={({ children }) => (
-            <Item label='Cycle name' withIcon={false}>
-              {children}
-            </Item>
-          )}
+          Wrapper={Item}
+          label={'Cycle name'}
           Element={Input}
           placeholder={'Enter performance cycle name'}
         />
         <GenericItemField
           name={`level1`}
           methods={methods}
-          Wrapper={({ children }) => (
-            <Item label='Level 1' withIcon={false}>
-              {children}
-            </Item>
-          )}
+          Wrapper={Item}
+          label={'Level 1'}
           Element={Select}
-          /*Element={(props) => <input type={'text'} {...props} />}*/
           options={data.map((item) => {
             return { value: item.uuid, label: item.name };
           })}
@@ -383,11 +254,8 @@ export const PerformanceCycleForm: FC = () => {
         <GenericItemField
           name={`level2`}
           methods={methods}
-          Wrapper={({ children }) => (
-            <Item label='Level 2' withIcon={false}>
-              {children}
-            </Item>
-          )}
+          Wrapper={Item}
+          label={'Level 2'}
           Element={Select}
           options={options2}
           placeholder={'- Select organization level -   '}
@@ -396,11 +264,8 @@ export const PerformanceCycleForm: FC = () => {
         <GenericItemField
           name={`level3`}
           methods={methods}
-          Wrapper={({ children }) => (
-            <Item label='Level 3' withIcon={false}>
-              {children}
-            </Item>
-          )}
+          Wrapper={Item}
+          label={'Level 3'}
           Element={Select}
           options={options13}
           placeholder={'- Select organization level - '}
@@ -411,11 +276,8 @@ export const PerformanceCycleForm: FC = () => {
         <GenericItemField
           name={`entryConfigKey`}
           methods={methods}
-          Wrapper={({ children }) => (
-            <Item label='Level 4' withIcon={false}>
-              {children}
-            </Item>
-          )}
+          Wrapper={Item}
+          label={'Level 4'}
           Element={Select}
           options={options14}
           placeholder={'- Select organization level - '}
@@ -436,7 +298,8 @@ export const PerformanceCycleForm: FC = () => {
           margin: '8px',
           padding: '25px',
           maxWidth: '1300px',
-          ...(!processSelected && { color: '#E5E5E5' }),
+          overflow: 'visible',
+          ...(!showProperties && { color: '#E5E5E5' }),
         }}
       >
         <div
@@ -447,15 +310,10 @@ export const PerformanceCycleForm: FC = () => {
         >
           2. Cycle details
         </div>
-        <div className={`${processSelected ? css(containerVisible) : css(container)}`}>
-          {/*<div className={css(item)}>
-            <div>Type</div>
-            <div className={css({ fontWeight: 'normal' })}>Fiscal year</div>
-          </div>*/}
-
+        <div className={`${showProperties ? css(containerVisible) : css(container)}`}>
           <div className={css(item)}>
             <GenericItemField
-              name={`startTime`}
+              name={`cycle.metadata.cycle.properties.pm_cycle_start_time`}
               methods={methods}
               Wrapper={({ children }) => (
                 <Item label='Start day' withIcon={false}>
@@ -467,7 +325,7 @@ export const PerformanceCycleForm: FC = () => {
           </div>
           <div className={css(item)}>
             <GenericItemField
-              name={`endTime`}
+              name={`cycle.metadata.cycle.properties.pm_cycle_end_time`}
               methods={methods}
               Wrapper={({ children }) => (
                 <Item label='End day' withIcon={false}>
@@ -479,7 +337,7 @@ export const PerformanceCycleForm: FC = () => {
           </div>
           <div className={css(item)}>
             <GenericItemField
-              name={`pm_cycle_max`}
+              name={`cycle.metadata.cycle.properties.pm_cycle_max`}
               methods={methods}
               Wrapper={({ children }) => (
                 <Item label='Recurrence' withIcon={false}>
@@ -494,7 +352,7 @@ export const PerformanceCycleForm: FC = () => {
             <Item label='Notifications' withIcon={false} />
             <div>
               <GenericItemField
-                name={`pm_cycle_before_start`}
+                name={`cycle.metadata.cycle.properties.pm_cycle_before_start`}
                 methods={methods}
                 Wrapper={({ children }) => (
                   <Item label='Before start' withIcon={false}>
@@ -502,25 +360,13 @@ export const PerformanceCycleForm: FC = () => {
                   </Item>
                 )}
                 Element={(props) => (
-                  <div className={css({ display: 'flex', gap: '8px' })}>
-                    <GenericItemField
-                      name={`pm_cycle_before_start_number`}
-                      methods={methods}
-                      Element={(props) => <Input type={'number'} {...props} />}
-                    />
-                    <GenericItemField
-                      name={`pm_cycle_before_start_type`}
-                      methods={methods}
-                      Element={Select}
-                      options={durationOptions}
-                    />
-                  </div>
+                  <DurationPicker control={control} name={'cycle.metadata.cycle.properties.pm_cycle_before_start'} />
                 )}
               />
             </div>
             <div className={css(item)}>
               <GenericItemField
-                name={`pm_cycle_before_end`}
+                name={`cycle.metadata.cycle.properties.pm_cycle_before_end`}
                 methods={methods}
                 Wrapper={({ children }) => (
                   <Item label='Before end' withIcon={false}>
@@ -528,19 +374,7 @@ export const PerformanceCycleForm: FC = () => {
                   </Item>
                 )}
                 Element={(props) => (
-                  <div className={css({ display: 'flex', gap: '8px' })}>
-                    <GenericItemField
-                      name={`pm_cycle_before_end_number`}
-                      methods={methods}
-                      Element={(props) => <Input type={'number'} {...props} />}
-                    />
-                    <GenericItemField
-                      name={`pm_cycle_before_end_type`}
-                      methods={methods}
-                      Element={Select}
-                      options={durationOptions}
-                    />
-                  </div>
+                  <DurationPicker control={control} name={'cycle.metadata.cycle.properties.pm_cycle_before_end'} />
                 )}
               />
             </div>
@@ -555,7 +389,7 @@ export const PerformanceCycleForm: FC = () => {
           padding: '25px',
           maxWidth: '1300px',
           overflowY: 'visible',
-          ...(!processSelected && { color: '#E5E5E5' }),
+          ...(!showProperties && { color: '#E5E5E5' }),
         }}
       >
         <div
@@ -568,7 +402,7 @@ export const PerformanceCycleForm: FC = () => {
         </div>
         <div
           className={css(
-            processSelected
+            showProperties
               ? {
                   display: 'grid',
                   gridTemplateColumns: 'repeat(4, minmax(180px, 1fr)) repeat(2, 100px)',
@@ -588,19 +422,13 @@ export const PerformanceCycleForm: FC = () => {
           <div className={css(item, { maxWidth: '100px' })}>
             <Item label='Max' withIcon={false} marginBot={false} />
           </div>
-          {reviewTypes?.map((pm_review_type) => {
+          {timelinePointsValues?.map((timelinePoint, index) => {
+            if (timelinePoint.type !== 'REVIEW') return null;
             return (
               <>
                 <div className={css(item)}>
                   <GenericItemField
-                    name={`cyclereviews__${pm_review_type}__description`}
-                    methods={methods}
-                    Element={Input}
-                  />
-                </div>
-                <div className={css(item)} hidden={true}>
-                  <GenericItemField
-                    name={`cyclereviews__${pm_review_type}__pm_review_type`}
+                    name={`cycle.metadata.cycle.timelinePoints[${index}].description`}
                     methods={methods}
                     Element={Input}
                   />
@@ -608,66 +436,57 @@ export const PerformanceCycleForm: FC = () => {
                 <div className={css({ display: 'flex', gap: '8px' })}>
                   <div className={css(item)}>
                     <GenericItemField
-                      name={`cyclereviews__${pm_review_type}__pm_review_duration__number`}
+                      name={`cycle.metadata.cycle.timelinePoints[${index}].properties.pm_review_duration`}
                       methods={methods}
-                      Element={(props) => <Input type={'number'} {...props} />}
-                    />
-                  </div>
-                  <div className={css(item)}>
-                    <GenericItemField
-                      name={`cyclereviews__${pm_review_type}__pm_review_duration__type`}
-                      methods={methods}
-                      Element={Select}
-                      options={durationOptions}
+                      Element={(props) => (
+                        <DurationPicker
+                          control={control}
+                          name={`cycle.metadata.cycle.timelinePoints[${index}].properties.pm_review_duration`}
+                        />
+                      )}
                     />
                   </div>
                 </div>
                 <div className={css({ display: 'flex', gap: '8px' })}>
                   <div className={css(item)}>
                     <GenericItemField
-                      name={`cyclereviews__${pm_review_type}__pm_review_before_start__number`}
+                      name={`cycle.metadata.cycle.timelinePoints[${index}].properties.pm_review_before_start`}
                       methods={methods}
-                      Element={(props) => <Input type={'number'} {...props} />}
-                    />
-                  </div>
-                  <div className={css(item)}>
-                    <GenericItemField
-                      name={`cyclereviews__${pm_review_type}__pm_review_before_start__type`}
-                      methods={methods}
-                      Element={Select}
-                      options={durationOptions}
+                      Element={(props) => (
+                        <DurationPicker
+                          control={control}
+                          name={`cycle.metadata.cycle.timelinePoints[${index}].properties.pm_review_before_start`}
+                        />
+                      )}
                     />
                   </div>
                 </div>
                 <div className={css({ display: 'flex', gap: '8px' })}>
                   <div className={css(item)}>
                     <GenericItemField
-                      name={`cyclereviews__${pm_review_type}__pm_review_before_end__number`}
+                      name={`cycle.metadata.cycle.timelinePoints[${index}].properties.pm_review_before_end`}
                       methods={methods}
-                      Element={(props) => <Input type={'number'} {...props} />}
-                    />
-                  </div>
-                  <div className={css(item)}>
-                    <GenericItemField
-                      name={`cyclereviews__${pm_review_type}__pm_review_before_end__type`}
-                      methods={methods}
-                      Element={Select}
-                      options={durationOptions}
+                      Element={(props) => (
+                        <DurationPicker
+                          control={control}
+                          name={`cycle.metadata.cycle.timelinePoints[${index}].properties.pm_review_before_end`}
+                        />
+                      )}
                     />
                   </div>
                 </div>
-                {pm_review_type === 'objective' ? (
+                {timelinePoint.reviewType === 'OBJECTIVE' ? (
                   <>
                     <div className={css(item, { maxWidth: '100px' })}>
                       <GenericItemField
-                        name={`cyclereviews__${pm_review_type}__pm_review_min`}
+                        name={`cycle.metadata.cycle.timelinePoints[${index}].properties.pm_review_min`}
                         methods={methods}
                         Element={Input}
                       />
                     </div>
                     <div className={css(item, { maxWidth: '100px' })}>
                       <GenericItemField
-                        name={`cyclereviews__${pm_review_type}__pm_review_max`}
+                        name={`cycle.metadata.cycle.timelinePoints[${index}].properties.pm_review_max`}
                         methods={methods}
                         Element={Input}
                       />
@@ -685,13 +504,13 @@ export const PerformanceCycleForm: FC = () => {
         </div>
       </TileWrapper>
 
-      {/*------------4. Cycle notification-------------*/}
+      {/*------------4. Forms-------------*/}
       <TileWrapper
         customStyle={{
           margin: '8px',
           padding: '25px',
           maxWidth: '1300px',
-          ...(!processSelected && { color: '#E5E5E5' }),
+          ...(!showProperties && { color: '#E5E5E5' }),
         }}
       >
         <div
@@ -702,7 +521,7 @@ export const PerformanceCycleForm: FC = () => {
         >
           {t('4. Forms')}
         </div>
-        <div className={`${processSelected ? css(containerVisible) : css(container)}`}>
+        <div className={`${showProperties ? css(containerVisible) : css(container)}`}>
           <div className={css({ display: 'flex', marginTop: '8px' })}>
             {forms &&
               forms?.map((form, i) => {
@@ -759,11 +578,11 @@ export const PerformanceCycleForm: FC = () => {
       </TileWrapper>
       <div className={css({ display: 'flex', justifyContent: 'flex-end', paddingBottom: '100px', maxWidth: '1300px' })}>
         {/*@ts-ignore*/}
-        <Button mode='inverse' styles={[btnStyle({ theme }) as Styles]} onPress={handleSubmit(onSaveDraft)}>
+        <Button mode='inverse' styles={[btnStyle({ theme }) as Styles]} onPress={handleSubmit(onSaveDraft, onError)}>
           Save as draft
         </Button>
         {/*@ts-ignore*/}
-        <Button styles={[btnStyle({ theme }) as Styles]} onPress={handleSubmit(onPublish)}>
+        <Button styles={[btnStyle({ theme }) as Styles]} onPress={handleSubmit(onPublish, onError)}>
           Publish
         </Button>
       </div>

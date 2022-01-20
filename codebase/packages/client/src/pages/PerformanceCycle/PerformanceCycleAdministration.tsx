@@ -6,10 +6,7 @@ import { TileWrapper } from 'components/Tile';
 import { PerformanceCycleActions } from '@pma/store';
 import useDispatch from 'hooks/useDispatch';
 import { useSelector } from 'react-redux';
-import {
-  getPerformanceCycleMetaSelector,
-  getPerformanceCycleSelector,
-} from '@pma/store/src/selectors/performance-cycle';
+import { getPerformanceCycleSelector } from '@pma/store/src/selectors/performance-cycle';
 
 import { Radio } from 'components/Form';
 import { Trans } from 'components/Translation';
@@ -22,13 +19,12 @@ const PerformanceCycleAdministration: FC = () => {
   const navigate = useNavigate();
 
   const data = useSelector(getPerformanceCycleSelector) || {};
-  const { loaded } = useSelector(getPerformanceCycleMetaSelector) || {};
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!loaded) dispatch(PerformanceCycleActions.getGetAllPerformanceCycles());
-  }, [loaded]);
+    dispatch(PerformanceCycleActions.getGetAllPerformanceCycles());
+  }, []);
 
   const [active, setActive] = useState('ACTIVE');
 

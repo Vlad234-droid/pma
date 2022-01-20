@@ -1,4 +1,4 @@
-import { RefObject, SyntheticEvent, ChangeEvent } from 'react';
+import { ChangeEvent, RefObject, SyntheticEvent } from 'react';
 import { Rule, Styles } from '@dex-ddl/core';
 
 export interface FormField {
@@ -20,6 +20,8 @@ export interface InputField extends FormField {
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
   onBlur?: (e: SyntheticEvent<HTMLInputElement>) => void;
   value?: string;
+  min?: number;
+  defaultValue?: string;
 }
 
 export type Option = {
