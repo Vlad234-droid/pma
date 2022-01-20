@@ -16,6 +16,7 @@ const wrapperStyle = {
 const headStyle = {
   display: 'flex',
   alignItems: 'flex-start',
+  marginBottom: '16px',
 } as Styles;
 
 const headerBlockStyle = {
@@ -50,8 +51,8 @@ const titleStyle: Rule = ({ theme }) =>
 const descriptionStyle = {
   fontStyle: 'normal',
   fontWeight: 'normal',
-  fontSize: '16px',
-  lineHeight: '20px',
+  fontSize: '20px',
+  lineHeight: '24px',
 } as Styles;
 
 const bodyStyle = {
@@ -95,13 +96,13 @@ const DashboardProfile: FC<Props> = () => {
                   <span className={css(titleStyle)}>
                     <Trans i18nKey='line_manager'>Line manager</Trans>
                   </span>
-                  <span className={css(descriptionStyle)}>{manager}</span>
+                  <span className={css(descriptionStyle, {fontSize: '16px', lineHeight: '20px'})}>{manager}</span>
                 </div>
                 <div className={css(bodyBlockStyle)}>
                   <span className={css(titleStyle)}>
                     <Trans i18nKey='function'>Function</Trans>
                   </span>
-                  <span className={css(descriptionStyle)}>{department}</span>
+                  <span className={css(descriptionStyle , {fontSize: '16px', lineHeight: '20px'})}>{department}</span>
                 </div>
               </div>
             </div>

@@ -24,8 +24,8 @@ const titleStyle: Rule = ({ theme }) =>
   ({
     fontStyle: 'normal',
     fontWeight: `${theme.font.weight.bold}`,
-    fontSize: '20px',
-    lineHeight: '24px',
+    fontSize: '16px',
+    lineHeight: '20px',
   } as Styles);
 
 const descriptionStyle = {
@@ -48,7 +48,11 @@ const PersonalInformation: FC<Props> = ({ user = {} }) => {
 
   const { fullName } = user;
   return (
-    <BasicTile title={t('Personal', 'Personal information')} description={''}>
+    <BasicTile
+      title={t('Personal', 'Personal information')}
+      description={''}
+      customStyle={{ padding: '14px 10px 10px' }}
+    >
       <div className={css(wrapperStyle)}>
         <div className={css(bodyStyle)}>
           <div className={css(bodyBlockStyle)}>
