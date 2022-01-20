@@ -43,6 +43,7 @@ const Header: FC<HeaderProps> = ({ title, onBack, styles = {} }) => {
 const wrapperStyles: Rule = {
   display: 'flex',
   justifyContent: 'space-between',
+  padding: '0px 40px',
 };
 
 const headerStyles: Rule = ({ theme }) => ({

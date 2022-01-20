@@ -214,7 +214,7 @@ const SubmitPart: FC<SubmitPartProps> = ({
           <p className={css(InfoHelpStyle)}>Learn more about how to give great feedback</p>
         </IconButton>
       </div>
-      <h2 className={css(VideoExplanationTitle)}>Watch video explanation</h2>
+      <h2 className={css(VideoExplanationTitle)}>Watch this 2-minute video on how to give great feedback</h2>
       <div className={css(VideoWrapper)}>
         <img src={video_explanation} alt='video_explanation' />
       </div>
