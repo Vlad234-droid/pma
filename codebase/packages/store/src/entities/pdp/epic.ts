@@ -14,14 +14,14 @@ export const getPDPEpic: Epic = (action$, _, { api }) => {
         // @ts-ignore
         map(({ success, data }) => {
           getPDPGoal;
-          return getPDPGoal.success({pdp: data});
+          return getPDPGoal.success({ pdp: data });
         }),
         catchError(({ errors }) => of(getPDPGoal.failure(errors))),
         takeUntil(action$.pipe(filter(isActionOf(getPDPGoal.cancel)))),
       ),
     ),
   );
-}
+};
 
 export const getPDPByUUIDEpic: Epic = (action$, _, { api }) => {
   return action$.pipe(
@@ -31,14 +31,14 @@ export const getPDPByUUIDEpic: Epic = (action$, _, { api }) => {
         // @ts-ignore
         map(({ success, data }) => {
           getPDPByUUIDGoal;
-          return getPDPByUUIDGoal.success({pdp: data});
+          return getPDPByUUIDGoal.success({ pdp: data });
         }),
         catchError(({ errors }) => of(getPDPGoal.failure(errors))),
         takeUntil(action$.pipe(filter(isActionOf(getPDPGoal.cancel)))),
       ),
     ),
   );
-}
+};
 
 export const createPDPEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
@@ -49,6 +49,21 @@ export const createPDPEpic: Epic = (action$, _, { api }) =>
         // @ts-ignore
         map(({ data }) => {
           return createPDPGoal.success(data);
+        }),
+        catchError(({ errors }) => of(createPDPGoal.failure(errors))),
+      );
+    }),
+  );
+
+// try to optimiz in future
+export const createAndFetchPDPEpic: Epic = (action$, _, { api }) =>
+  action$.pipe(
+    filter(isActionOf(createPDPGoal.success)),
+    switchMap(({ payload }) => {
+      return from(api.getPDPGoal()).pipe(
+        // @ts-ignore
+        map(({ data }) => {
+          return getPDPGoal.request({});
         }),
         catchError(({ errors }) => of(createPDPGoal.failure(errors))),
       );
@@ -100,11 +115,12 @@ export const updadePDPEpic: Epic = (action$, _, { api }) =>
     }),
   );
 
-  export default combineEpics(
-    getPDPEpic,
-    getPDPByUUIDEpic,
-    createPDPEpic,
-    updadePDPEpic,
-    deletePDPEpic,
-    deleteAndFetchPDPEpic,
-  );
+export default combineEpics(
+  getPDPEpic,
+  getPDPByUUIDEpic,
+  createPDPEpic,
+  updadePDPEpic,
+  deletePDPEpic,
+  deleteAndFetchPDPEpic,
+  createAndFetchPDPEpic,
+);

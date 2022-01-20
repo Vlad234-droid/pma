@@ -1,5 +1,5 @@
 import React, { FC, HTMLProps } from 'react';
-import { CreateRule, Theme, useStyle, Colors, colors } from '@dex-ddl/core';
+import { Colors, colors, CreateRule, Theme, useStyle } from '@dex-ddl/core';
 
 export type TileWrapperProps = {
   boarder?: boolean;

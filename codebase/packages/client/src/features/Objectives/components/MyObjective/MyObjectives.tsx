@@ -5,6 +5,7 @@ import { ObjectiveType, ReviewType, Status } from 'config/enum';
 import { StepIndicator } from 'components/StepIndicator/StepIndicator';
 import { IconButton } from 'components/IconButton';
 import { downloadPDF, ObjectiveDocument, usePDF } from '@pma/pdf-renderer';
+import { REVIEW_MODIFICATION_MODE, reviewModificationModeFn, canEditAllObjectiveFn } from '../../utils';
 
 import {
   Accordion,
@@ -22,13 +23,16 @@ import useDispatch from 'hooks/useDispatch';
 import { useSelector } from 'react-redux';
 import {
   colleagueUUIDSelector,
-  currentUserSelector,
+  countByStatusReviews,
+  countByTypeReviews,
   filterReviewsByTypeSelector,
+  getReviewSchema,
   getTimelineByCodeSelector,
   getTimelineMetaSelector,
   getTimelineSelector,
   isReviewsInStatus,
   isReviewsNumbersInStatus,
+  ReviewsActions,
   reviewsMetaSelector,
   schemaMetaSelector,
   TimelineActions,
@@ -37,9 +41,9 @@ import {
 import OrganizationWidget from 'features/Objectives/components/OrganizationWidget/OrganizationWidget';
 import { useNavigate } from 'react-router-dom';
 import useReviewSchema from 'features/Objectives/hooks/useReviewSchema';
-import useReviews from 'features/Objectives/hooks/useReviews';
 import { Page } from 'pages';
 import { buildPath } from 'features/Routes';
+import EditButton from '../Buttons/EditButton';
 
 const reviews = [
   {
@@ -71,9 +75,6 @@ const MyObjectives: FC = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const { info } = useSelector(currentUserSelector);
-  const pathParams = { colleagueUuid: info.colleagueUUID, type: ReviewType.OBJECTIVE, cycleUuid: 'CURRENT' };
-  useReviews({ pathParams });
   const originObjectives = useSelector(filterReviewsByTypeSelector(ReviewType.OBJECTIVE));
   const midYearReview = useSelector(getTimelineByCodeSelector(ObjectiveType.MYR));
   const endYearReview = useSelector(getTimelineByCodeSelector(ObjectiveType.EYR));
@@ -84,22 +85,13 @@ const MyObjectives: FC = () => {
 
   const [instance, updateInstance] = usePDF({ document });
 
-  useEffect(() => {
-    if (objectives.length) {
-      updateInstance();
-    }
-  }, [objectives.length]);
-
   const { loaded: schemaLoaded } = useSelector(schemaMetaSelector);
   const { loaded: reviewLoaded } = useSelector(reviewsMetaSelector);
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const [schema] = useReviewSchema(ReviewType.OBJECTIVE) || {};
   const { components = [], markup = { max: 0, min: 0 } } = schema;
   const { descriptions, startDates, statuses } = useSelector(getTimelineSelector) || {};
-  const timelineTypes = useSelector(timelineTypesAvailabilitySelector);
-  const reviewsMinNumbersInStatusApproved = useSelector(
-    isReviewsNumbersInStatus(ReviewType.OBJECTIVE)(Status.APPROVED, markup.min),
-  );
+  const timelineTypes = useSelector(timelineTypesAvailabilitySelector) || {};
   const canShowObjectives = timelineTypes[ObjectiveType.OBJECTIVE];
   const canShowMyReview = timelineTypes[ObjectiveType.MYR] && timelineTypes[ObjectiveType.EYR];
   const canShowAnnualReview = !timelineTypes[ObjectiveType.MYR] && timelineTypes[ObjectiveType.EYR];
@@ -109,13 +101,23 @@ const MyObjectives: FC = () => {
   const timelineObjective = useSelector(getTimelineByCodeSelector(ReviewType.OBJECTIVE)) || {};
   const status = timelineObjective?.status || undefined;
   const isAllObjectivesInSameStatus = useSelector(isReviewsInStatus(ReviewType.OBJECTIVE)(status));
+  const countReviews = useSelector(countByTypeReviews(ReviewType.OBJECTIVE)) || 0;
+  const objectiveSchema = useSelector(getReviewSchema(ReviewType.OBJECTIVE));
+  const countDraftReviews = useSelector(countByStatusReviews(ReviewType.OBJECTIVE, Status.DRAFT)) || 0;
+  const countDeclinedReviews = useSelector(countByStatusReviews(ReviewType.OBJECTIVE, Status.DECLINED)) || 0;
 
-  const canCreateSingleObjective =
-    markup.max > originObjectives?.length &&
-    markup.min <= originObjectives?.length &&
-    reviewsMinNumbersInStatusApproved;
+  const reviewsMinNumbersInStatusApproved = useSelector(
+    isReviewsNumbersInStatus(ReviewType.OBJECTIVE)(Status.APPROVED, markup.min),
+  );
 
-  const canCreateMultiObjective = markup.min >= originObjectives?.length && timelineObjective.status === Status.DRAFT;
+  const reviewModificationMode = reviewModificationModeFn(countReviews, objectiveSchema);
+  const canEditAllObjective = canEditAllObjectiveFn({ objectiveSchema, countDraftReviews, countDeclinedReviews });
+  const createIsAvailable =
+    (reviewsMinNumbersInStatusApproved ||
+      timelineObjective.status === Status.DRAFT ||
+      originObjectives?.length === 0) &&
+    countReviews < markup.max &&
+    reviewModificationMode !== REVIEW_MODIFICATION_MODE.NONE;
 
   // todo not clear where reviews might come from. remove this block when its clear
   const createdReviews: any = [];
@@ -127,6 +129,12 @@ const MyObjectives: FC = () => {
   // todo remove block end
 
   useEffect(() => {
+    if (objectives.length) {
+      updateInstance();
+    }
+  }, [objectives.length]);
+
+  useEffect(() => {
     if (reviewLoaded && schemaLoaded) {
       setObjectives(transformReviewsToObjectives(originObjectives, formElements));
     }
@@ -135,19 +143,25 @@ const MyObjectives: FC = () => {
   const { loaded } = useSelector(getTimelineMetaSelector) || {};
 
   useEffect(() => {
-    if (!loaded && colleagueUuid) dispatch(TimelineActions.getTimeline({ colleagueUuid }));
-  }, [loaded, colleagueUuid]);
+    if (!loaded && colleagueUuid) {
+      dispatch(TimelineActions.getTimeline({ colleagueUuid }));
+    }
+    if (loaded && colleagueUuid && canShowObjectives) {
+      dispatch(
+        ReviewsActions.getReviews({ pathParams: { colleagueUuid, type: ReviewType.OBJECTIVE, cycleUuid: 'CURRENT' } }),
+      );
+    }
+  }, [loaded, colleagueUuid, canShowObjectives]);
 
   return (
     <div data-test-id={TEST_ID}>
-      {canCreateSingleObjective && (
+      {createIsAvailable && (
         <div className={css({ display: 'flex' })}>
-          <CreateButton withIcon useSingleStep={true} buttonText='Create objective' />
-        </div>
-      )}
-      {canCreateMultiObjective && (
-        <div className={css({ display: 'flex' })}>
-          <CreateButton useSingleStep={false} withIcon buttonText='Create objectives' />
+          <CreateButton
+            withIcon
+            useSingleStep={reviewModificationMode === REVIEW_MODIFICATION_MODE.SINGLE}
+            buttonText='Create objective'
+          />
         </div>
       )}
       <div className={css(headWrapperStyles)}>
@@ -194,6 +208,14 @@ const MyObjectives: FC = () => {
                     >
                       <Trans i18nKey='download'>Download</Trans>
                     </IconButton>
+                    {canEditAllObjective && (
+                      <EditButton
+                        isSingleObjectivesEditMode={false}
+                        buttonText={t('edit_all', 'Edit all')}
+                        icon={'edit'}
+                        styles={borderButtonStyles}
+                      />
+                    )}
                   </div>
                 ),
               }}
@@ -346,7 +368,15 @@ const iconStyles: Rule = {
 const iconButtonStyles: Rule = ({ theme }) => ({
   padding: '10px 10px',
   color: theme.colors.tescoBlue,
-  fontWeight: 700,
+  fontWeight: theme.font.weight.bold,
+});
+
+const borderButtonStyles: Rule = ({ theme }) => ({
+  border: `1px solid ${theme.colors.tescoBlue}`,
+  borderRadius: '30px',
+  padding: '10px 20px',
+  color: theme.colors.tescoBlue,
+  fontWeight: theme.font.weight.bold,
 });
 
 const tileStyles: Rule = {

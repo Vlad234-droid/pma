@@ -8,11 +8,13 @@ export const initialState = {
 
 const request = (state) => ({ ...state, meta: { ...state.meta, loading: true, error: null } });
 
-const success = (state, { payload }) => ({
-  ...state,
-  ...payload,
-  meta: { ...state.meta, loading: false, loaded: true },
-});
+const success = (state, { payload }) => {
+  return {
+    ...state,
+    ...payload,
+    meta: { ...state.meta, loading: false, loaded: true },
+  };
+};
 
 const failure = (state, { payload }) => ({
   ...state,
@@ -22,15 +24,19 @@ const failure = (state, { payload }) => ({
 const byIdRequest = (state) => ({ ...state, meta: { ...state.meta, loading: true, error: null } });
 
 const byIdSuccess = (state, { payload }) => {
-  // todo refactor
+  const { cycle } = payload.data;
+  cycle.metadata.cycle.timelinePoints = cycle.metadata.cycle.timelinePoints.map((point) => {
+    const form = payload.data.forms.find((form) => form.id === point.form.id);
+    return { ...point, form };
+  });
   return {
     data:
       state?.data?.length > 0
         ? state.data.map((pmCycle) => {
-            if (pmCycle.uuid !== payload.data.cycle.uuid) return pmCycle;
-            return { ...pmCycle, ...payload.data.cycle, forms: payload.data.forms };
+            if (pmCycle.uuid !== cycle.uuid) return pmCycle;
+            return { ...pmCycle, ...cycle, forms: payload.data.forms };
           })
-        : [payload.data],
+        : [cycle],
     meta: { ...state.meta, loading: false, loaded: true },
   };
 };

@@ -4,7 +4,6 @@ import { RootState } from 'typesafe-actions';
 import { DateTime } from 'luxon';
 import { getFullName } from './users';
 import { configEntriesSelector } from './config-entries';
-import { flatValues } from './processTemplate';
 
 export const performanceCycleSelector = (state: RootState) => state.performanceCycle || {};
 
@@ -56,7 +55,6 @@ export const getConfigEntriesByPerformanceCycle = (performanceCycleUuid) =>
       formDataToFillObj['level2'] = level2?.name;
       formDataToFillObj['level3'] = level3?.name;
       formDataToFillObj['entryConfigKey'] = level4?.name;
-
       return { formDataToFillObj, configEntryItem, performanceCycleItem };
     },
   );
@@ -66,22 +64,7 @@ export const getTimelinePointsByPerformanceCycleUuidSelector = (performanceCycle
     // @ts-ignore
     const performanceCycleItem = data.filter((item) => item.uuid === performanceCycleUuid)?.[0];
     // @ts-ignore
-    return performanceCycleItem?.metadata?.cycle?.timelinePoints
-      .filter((point) => point.type === 'REVIEW')
-      .reduce(flatValues(), {});
-  });
-
-export const getTimelinePointsReviewTypesByPerformanceCycleUuidSelector = (performanceCycleUuid) =>
-  // @ts-ignore
-  createSelector(performanceCycleSelector, ({ data }) => {
-    // @ts-ignore
-    const performanceCycleItem = data.filter((item) => item.uuid === performanceCycleUuid)?.[0];
-    // @ts-ignore
-    return performanceCycleItem?.metadata?.cycle?.timelinePoints
-      .filter((point) => point.type === 'REVIEW')
-      .map((point) => {
-        return point?.properties?.pm_review_type;
-      });
+    return performanceCycleItem?.metadata?.cycle?.timelinePoints;
   });
 
 export const getFormsByPerformanceCycleUuidSelector = (performanceCycleUuid) =>
@@ -91,11 +74,9 @@ export const getFormsByPerformanceCycleUuidSelector = (performanceCycleUuid) =>
     const performanceCycleItem = data.filter((item) => item.uuid === performanceCycleUuid)?.[0] || {};
     // @ts-ignore
     return performanceCycleItem?.metadata?.cycle?.timelinePoints
-      .filter((point) => point.type === 'REVIEW')
+      ?.filter((point) => point.type === 'REVIEW')
       .map((point) => {
-        // @ts-ignore
-        const form = performanceCycleItem?.forms.find((form) => form.id === point.form.id);
-        const { json, code: displayName } = form || {};
+        const { json, code: displayName } = point?.form || {};
         if (json) return { ...JSON.parse(json), displayName };
       });
   });

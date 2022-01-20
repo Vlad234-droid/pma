@@ -148,7 +148,7 @@ const ReviewFormModal: FC<Props> = ({ reviewType, onClose }) => {
     return null;
   }
 
-  if (timelineReview?.status === Status.WAITING_FOR_APPROVAL) {
+  if (successModal) {
     return (
       <SuccessModal
         onClose={onClose}
@@ -195,7 +195,7 @@ const ReviewFormModal: FC<Props> = ({ reviewType, onClose }) => {
                     </span>
                   </div>
                 }
-                title={'Writing your objectives'}
+                title={t('completing_your_review', 'Completing your review')}
               >
                 <MidYearHelpModal />
               </TriggerModal>

@@ -17,6 +17,8 @@ const Input: FC<InputField> = ({
   readonly,
   onBlur,
   type = 'text',
+  min,
+  defaultValue,
 }) => {
   const { css } = useStyle();
   const refIcon = useRefContainer();
@@ -32,6 +34,8 @@ const Input: FC<InputField> = ({
       onBlur={onBlur}
       onFocus={onFocus}
       readOnly={readonly}
+      min={min}
+      defaultValue={defaultValue}
       className={css({
         width: '100%',
         border: `1px solid ${isValid ? colors.backgroundDarkest : colors.error}`,
