@@ -10,8 +10,10 @@ export default createReducer(initialState)
     ...state,
     meta: { ...state.meta, loading: true, error: null, loaded: false },
   }))
-  .handleAction(getSchema.success, (state, { payload }) => ({
-    ...state,
-    ...payload,
-    meta: { ...state.meta, loading: false, loaded: true },
-  }));
+  .handleAction(getSchema.success, (state, { payload }) => {
+    return {
+      ...state,
+      ...payload,
+      meta: { ...state.meta, loading: false, loaded: true },
+    };
+  });

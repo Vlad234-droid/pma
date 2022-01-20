@@ -21,7 +21,6 @@ import { Tile as ObjectiveTile } from 'features/Objectives';
 import { useTranslation } from 'components/Translation';
 
 import { ActionButtons } from './ActionButtons';
-import { updateFormComponent } from '../../utils';
 
 export type WidgetTeamMateObjectivesProps = {
   id: string;
@@ -46,15 +45,10 @@ export const WidgetTeamMateObjectives: FC<WidgetTeamMateObjectivesProps> = ({ st
     if (reviewsLoaded && schemaLoaded) {
       const mappedReviews = {};
       for (const key of Object.keys(allColleagueReviews)) {
-        const elementCount =
-          allColleagueReviews[key]?.filter((review) => {
-            return review.status === Status.APPROVED && review.type === ReviewType.OBJECTIVE;
-          })?.length || 0;
         mappedReviews[key] = allColleagueReviews[key]?.map((reviewItem) => {
           const { components = [] } = allSchemas[reviewItem.type];
 
-          const newComponent = updateFormComponent(components, elementCount);
-          const formElements = newComponent.filter((component) => component.type != 'text');
+          const formElements = components.filter((component) => component.type != 'text');
 
           const status = reviewItem.status;
           const type = reviewItem.type;
@@ -85,7 +79,7 @@ export const WidgetTeamMateObjectives: FC<WidgetTeamMateObjectivesProps> = ({ st
     dispatch(
       ReviewsActions.getColleagueReviews({ pathParams: { colleagueUuid: colleagueUuid, cycleUuid: 'CURRENT' } }),
     );
-    dispatch(SchemaActions.getSchema({ colleagueUuid: colleagueUuid }));
+    dispatch(SchemaActions.getSchema({ colleagueUuid }));
   };
 
   const updateReviewStatus = useCallback(
@@ -109,12 +103,13 @@ export const WidgetTeamMateObjectives: FC<WidgetTeamMateObjectivesProps> = ({ st
       };
 
       dispatch(ReviewsActions.updateReviewStatus(update));
-      if (colleague?.uuid)
+      if (colleague?.uuid) {
         dispatch(
           ReviewsActions.getReviews({
             pathParams: { colleagueUuid: colleague.uuid, cycleUuid: 'CURRENT', status: Status.WAITING_FOR_APPROVAL },
           }),
         );
+      }
     },
     [colleague],
   );
