@@ -25,7 +25,7 @@
   "no_completed_reviews": "You have no completed reviews",
   "objective_is_approved": "Well done! All {{count}} objective(s) have been approved. Your mid year review is scheduled for {{date, d LLL yyyy}}.",
   "form_available_in_date": "The form will be available in  {{date, d LLL yyyy}}.",
-  "completed_at_date": "Completed [{{date, d LLL yyyy}}]",
+  "completed_at_date": "Completed {{date, d LLL yyyy}}",
   "objective_is_draft": "{{count}} objective(s) saved as a draft",
   "objective_is_pending": "{{count}} objective(s) are waiting for approval",
   "pending": "Pending",

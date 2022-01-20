@@ -81,7 +81,7 @@ const getContent = (
       true,
       t(
         'review_form_approved',
-        t('completed_at_date', `Completed [${lastUpdatedTime}]`, { date: new Date(lastUpdatedTime) }),
+        t('completed_at_date', `Completed ${lastUpdatedTime}`, { date: new Date(lastUpdatedTime) }),
       ),
       t('view', 'View'),
     ],
