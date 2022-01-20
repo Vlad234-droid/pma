@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import { Trans } from 'components/Translation';
 import { Button, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { SuccessModalProps } from './type';
+import successImg from '../../../../../../public/success.jpg';
 
 const SuccessModal: FC<SuccessModalProps> = ({
   setSuccessSelectedNoteToEdit,
@@ -34,10 +35,7 @@ const SuccessModal: FC<SuccessModalProps> = ({
               padding: '15px',
             }}
           >
-            <svg width='165' height='164' viewBox='0 0 165 164' fill='none' xmlns='http://www.w3.org/2000/svg'>
-              <path d='M51.917 78.5837L70.917 97.5837L112.084 56.417' stroke='#009E47' strokeWidth='1.2' />
-              <circle cx='82' cy='82' r='65' stroke='#009E47' strokeWidth='1.2' />
-            </svg>
+            <img src={successImg} alt='Success' />
           </span>
           <div
             className={css({
