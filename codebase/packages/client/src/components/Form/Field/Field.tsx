@@ -48,6 +48,7 @@ const Field: FC<FieldProps & FieldValues> = ({
     const changeObject = createChangeObject(e);
     setCurrentValue(e.target.value);
     onChange && onChange(changeObject);
+    //TODO: should delete in future
     setValue(name, changeObject.target.value, { shouldValidate: true, shouldDirty: true });
   };
 

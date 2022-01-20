@@ -33,7 +33,7 @@ const SearchInput: FC<SearchInputProps<any>> = ({
         value={value || searchValue}
         onChange={(e) => !disabled && handleSearch(e)}
         autoComplete={'off'}
-        disabled={(selected && searchValue !== '' && true) || disabled}
+        disabled={(selected && value !== '') || disabled}
         type={'text'}
         className={css({
           width: '100%',
@@ -42,6 +42,7 @@ const SearchInput: FC<SearchInputProps<any>> = ({
           fontSize: '16px',
           lineHeight: '20px',
           padding: '10px 30px 10px 16px',
+
           ':focus': {
             outline: 'none !important',
             border: `1px solid ${isValid ? colors.tescoBlue : colors.error}`,

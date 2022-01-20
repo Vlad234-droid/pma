@@ -15,7 +15,7 @@ export const getCompletedFeedbackNotesS = createSelector(feedbackSelector, (feed
   return completedNotes;
 });
 
-export const getReviewsS = createSelector(feedbackSelector, (feedback: any) => {
+export const getReviews = createSelector(feedbackSelector, (feedback: any) => {
   const { reviews } = feedback;
   return reviews;
 });

@@ -1,26 +1,41 @@
-import React, { FC } from 'react';
-import { colors, useStyle, Rule } from '@dex-ddl/core';
+import React, { ChangeEvent, FC, RefObject } from 'react';
+import { colors, useStyle, Rule, Styles } from '@dex-ddl/core';
 import mergeRefs from 'react-merge-refs';
-import { InputProps } from './type';
 import { useRefContainer } from 'components/Form/context/input';
-import { ColleaguesActions } from '@pma/store';
-import { useDispatch } from 'react-redux';
 import defaultImg from '../../../../public/default.png';
+import { Close } from 'components/Icon/graphics/Close';
 
-const MultiplySearchInput: FC<InputProps> = ({
+export interface FormItemProps {
+  disabled?: boolean;
+  value?: string | undefined;
+  name?: string;
+  placeholder?: string;
+  styles?: Rule;
+  onChange: (e: any) => void;
+  onSearch: (e: ChangeEvent<HTMLInputElement>) => void;
+  onDelete: (e: any) => void;
+  onClear: () => void;
+  domRef?: RefObject<any>;
+  isValid?: boolean;
+  id?: string;
+  options: Array<any>;
+  selected: Array<any>;
+}
+
+const MultiplySearchInput: FC<FormItemProps> = ({
   domRef,
   placeholder = '',
   onChange,
+  onSearch,
+  onDelete,
+  onClear,
   name,
   value,
   isValid = true,
-  type = 'text',
   options,
-  setSelectedPersons,
-  setInputValue,
+  selected,
 }) => {
   const { css, theme } = useStyle();
-  const dispatch = useDispatch();
   const refIcon = useRefContainer();
 
   return (
@@ -30,10 +45,9 @@ const MultiplySearchInput: FC<InputProps> = ({
         name={name}
         data-test-id={name}
         value={value}
-        onChange={onChange}
+        onChange={onSearch}
         autoComplete={'off'}
         disabled={false}
-        type={type}
         className={css({
           width: '100%',
           border: `1px solid ${isValid ? colors.backgroundDarkest : colors.error}`,
@@ -60,6 +74,22 @@ const MultiplySearchInput: FC<InputProps> = ({
             zIndex: 999,
           }}
         >
+          <div className={css(relativeStyles)}>
+            {!!selected.length &&
+              selected.map((item): any => (
+                <div key={item.value} className={css(selectedStyle)}>
+                  <span className={css({ marginRight: '10px' })}>{`${item.label}`}</span>
+                  <div className={css({ cursor: 'pointer' })} onClick={onDelete}>
+                    <Close />
+                  </div>
+                </div>
+              ))}
+            {!!selected.length && (
+              <span className={css(cleanAllStyle)} onClick={onClear}>
+                Clear all
+              </span>
+            )}
+          </div>
           {options?.map((item) => {
             return (
               <div
@@ -76,19 +106,17 @@ const MultiplySearchInput: FC<InputProps> = ({
                 })}
                 onMouseDown={(e) => e.preventDefault()}
                 onClick={() => {
-                  setInputValue(() => '');
-                  setSelectedPersons((prev) => [...prev, item?.colleague]);
-                  dispatch(ColleaguesActions.clearColleagueList());
+                  onChange(item);
                 }}
               >
                 <div className={css({ display: 'flex', justifyContent: 'flex-start', alignItems: 'center' })}>
                   <img className={css({ width: '50px', height: '50px', borderRadius: '50%' })} src={defaultImg} />
                   <div className={css({ marginLeft: '16px' })}>
-                    <div className={css(SelectedItemStyle, FlexGapStyle)}>
+                    <div className={css(selectedItemStyle, flexGapStyle)}>
                       <div>{item?.colleague?.profile?.firstName}</div>
                       <div>{item?.colleague?.profile?.lastName}</div>
                     </div>
-                    <div className={css(FlexGapStyle, { marginTop: '4px' })}>
+                    <div className={css(flexGapStyle, { marginTop: '4px' })}>
                       <div>{item?.colleague?.workRelationships[0].job?.name}</div>
                       <div>{item?.colleague?.workRelationships[0].department?.name}</div>
                     </div>
@@ -103,15 +131,53 @@ const MultiplySearchInput: FC<InputProps> = ({
   );
 };
 
-const FlexGapStyle: Rule = {
+const flexGapStyle: Rule = {
   display: 'flex',
   gap: '8px',
 };
 
-const SelectedItemStyle: Rule = ({ colors }) => ({
+const selectedItemStyle: Rule = ({ colors }) => ({
   fontWeight: 'bold',
   fontSize: '16px',
   color: colors.link,
 });
+
+const relativeStyles: Rule = {
+  position: 'relative',
+  display: 'flex',
+  justifyContent: 'flex-start',
+  alignItems: 'center',
+  flexWrap: 'wrap',
+  width: '90%',
+};
+
+const selectedStyle = {
+  borderRadius: '10px',
+  border: '1px solid  #00539F',
+  height: '32px',
+  display: 'inline-flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  padding: '6px 12px',
+  marginRight: '16px',
+  marginTop: '15px',
+
+  '& > span': {
+    whiteSpace: 'nowrap',
+    fontSize: '16px',
+    lineHeight: '20px',
+    color: '#00539F',
+  },
+} as Styles;
+
+const cleanAllStyle: Rule = {
+  position: 'absolute',
+  top: '11px',
+  right: '-50px',
+  fontSize: '16px',
+  lineHeight: '20px',
+  color: '#00539F',
+  cursor: 'pointer',
+};
 
 export default MultiplySearchInput;

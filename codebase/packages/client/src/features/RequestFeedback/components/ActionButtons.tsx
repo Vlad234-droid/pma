@@ -3,14 +3,18 @@ import { Button, Rule, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { IconButton, Position } from 'components/IconButton';
 import { useNavigate } from 'react-router-dom';
 import { Trans } from 'components/Translation';
-import { ButtonsComponentProps } from './type';
 
-const ButtonsComponent: FC<ButtonsComponentProps> = ({ methods, onSubmit, isValid, setShowSuccesModal }) => {
+type Props = {
+  isValid: boolean;
+  onSubmit: () => void;
+  onCancel: () => void;
+};
+
+const ActionButtons: FC<Props> = ({ onSubmit, isValid }) => {
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
   const { css, theme } = useStyle();
   const navigate = useNavigate();
-  const { reset } = methods;
   return (
     <>
       <span
@@ -79,11 +83,7 @@ const ButtonsComponent: FC<ButtonsComponentProps> = ({ methods, onSubmit, isVali
               graphic='arrowRight'
               iconProps={{ invertColors: true }}
               iconPosition={Position.RIGHT}
-              onPress={() => {
-                onSubmit();
-                setShowSuccesModal(() => true);
-                reset();
-              }}
+              onPress={onSubmit}
             >
               Submit
             </IconButton>
@@ -123,4 +123,4 @@ const iconBtnStyleDisabled: Rule = ({ theme }) => ({
   opacity: '0.4',
 });
 
-export default ButtonsComponent;
+export default ActionButtons;

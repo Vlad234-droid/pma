@@ -8,8 +8,8 @@ export const getColleagues = (params: any) => {
 };
 
 export const getObjectivesRewiews = (params: any) => {
-  const { type } = params;
-  return httpClient.get(`${colleagues}/${params.colleagueUuid}/pm-cycles/CURRENT/review-types/${type}/reviews`);
+  const { type, colleagueUuid } = params;
+  return httpClient.get(`${colleagues}/${colleagueUuid}/pm-cycles/CURRENT/review-types/${type}/reviews`);
 };
 
 export const getProfileColleague = (params: any) => {
