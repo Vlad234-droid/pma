@@ -90,17 +90,8 @@ const PersonalDevelopmentHelp = (props) => {
               <b>What is a Personal Development Plan? </b> - label
             </li>
             <li>
-              Your Personal Development Plan (PDP) is a tailored plan that helps you reflect on the things you are great
-              at and identify areas you want to improve. It&apos;s completely personal to you, private to you, not
-              compulsory - can download or complete in the system. - text
-            </li>
-            <li>
-              <b>How does a Personal Development Plan work? </b> **- label
-            </li>
-            <li>
-              At Tesco, &quot;how&quot; you do your job is as important as &quot;what&quot; you deliver. An inspiring
-              PDP will help you focus on what to develop, whether that&apos;s being at your best in your current role or
-              moving towards a bigger or broader role. - text
+              Personal Development Plan (PDP) is a tailored plan that helps you reflect on the things you are great at
+              and identify areas you want to improve.
             </li>
             <li>
               What&apos;s important is recording and regularly reviewing your plan in a format that works for you. -

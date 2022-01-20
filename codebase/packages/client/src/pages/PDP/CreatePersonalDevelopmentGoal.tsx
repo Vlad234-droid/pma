@@ -34,6 +34,7 @@ const CreatePersonalDevelopmentGoal = (props) => {
   const formElements = components.filter((component) => component.type != 'text');
   const maxGoalCount = 5;
   const { uuid } = useParams<{ uuid: string }>();
+  const [currentGoal, setCurrentGoal] = useState<any>({});
 
   useEffect(() => {
     if (schema.meta.loaded) {
@@ -59,9 +60,14 @@ const CreatePersonalDevelopmentGoal = (props) => {
 
   const requestData = [
     {
-      uuid: uuid ? uuid : uuidv4(),
+      uuid: uuid ? uuid : Object.keys(currentGoal).length > 0 ? currentGoal?.uuid : uuidv4(),
       colleagueUuid: colleagueUuid,
-      number: pdpList && uuid ? pdpList[0].number : pdpList?.length + 1,
+      number:
+        pdpList && uuid
+          ? pdpList[0].number
+          : Object.keys(currentGoal).length > 0
+          ? currentGoal?.number
+          : pdpList?.length + 1,
       properties: {
         mapJson: formValues,
       },
@@ -81,6 +87,7 @@ const CreatePersonalDevelopmentGoal = (props) => {
   };
 
   const saveAndCreate = () => {
+    setCurrentGoal({});
     dispatch(PDPActions.createPDPGoal({ data: requestData }));
   };
 
@@ -93,14 +100,21 @@ const CreatePersonalDevelopmentGoal = (props) => {
           <>
             <div
               key={el?.uuid}
+              onClick={() => setCurrentGoal(el)}
               className={`${css(goal({ theme }))} ${
-                idx <= goalNum ? css(activeGoalItem({ theme })) : css(defaultGoalItem({ theme }))
+                idx <= goalNum && currentGoal?.uuid !== el.uuid
+                  ? css(activeGoalItem({ theme }))
+                  : css(defaultGoalItem({ theme }))
               }`}
             >
               Goal {idx + 1}
             </div>
             {idx === goalNum && idx + 1 < maxGoalCount && (
-              <div key={Math.random()} className={`${css(goal({ theme }))} ${css(defaultGoalItem({ theme }))}`}>
+              <div
+                key={Math.random()}
+                onClick={() => setCurrentGoal({})}
+                className={`${css(goal({ theme }))} ${css(defaultGoalItem({ theme }))}`}
+              >
                 Goal {idx + 2}
               </div>
             )}
@@ -122,18 +136,12 @@ const CreatePersonalDevelopmentGoal = (props) => {
     >
       <div className={css(mainContainer)}>
         <div className={css(goalListBlock({ theme }))}>{!uuid && pdpList && navGoals()}</div>
-
-        <div className={css(infoBlock)} onClick={() => navigate(buildPath(Page.PERSONAL_DEVELOPMENT_HELP))}>
-          <div className={css(infoIconEl)}>
-            <img alt='info' src={infoIcon} />
-          </div>
-          Need help writing your development plan?
-        </div>
-
         <form>
           {pdpGoals.map((component) => {
             const { id, key, label, description } = component;
-            const value = pdpList ? pdpList[0]?.properties?.mapJson[key] : '';
+            const updateGoalValue = pdpList
+              ? pdpList?.filter((el) => el.uuid === currentGoal.uuid)[0]?.properties?.mapJson[key]
+              : '';
 
             if (description === '{datepicker}') {
               return (
@@ -160,7 +168,7 @@ const CreatePersonalDevelopmentGoal = (props) => {
                     textAlign: 'left',
                   }}
                   placeholder={description}
-                  value={value}
+                  value={Object.keys(currentGoal).length > 0 ? updateGoalValue : ''}
                 />
               );
             }
@@ -181,7 +189,7 @@ const CreatePersonalDevelopmentGoal = (props) => {
                   textAlign: 'left',
                 }}
                 placeholder={description}
-                value={value}
+                value={Object.keys(currentGoal).length > 0 ? updateGoalValue : ''}
               />
             );
           })}
@@ -190,9 +198,12 @@ const CreatePersonalDevelopmentGoal = (props) => {
           {
             <Button
               isDisabled={!formState.isValid}
-              onPress={() => (uuid ? update() : save())}
+              onPress={() => (uuid || Object.keys(currentGoal).length > 0 ? update() : save())}
               styles={
-                uuid || pdpList?.length + 1 === maxGoalCount || pdpList?.length + 1 > maxGoalCount
+                uuid ||
+                Object.keys(currentGoal).length > 0 ||
+                pdpList?.length + 1 === maxGoalCount ||
+                pdpList?.length + 1 > maxGoalCount
                   ? [customBtnFullWidth]
                   : [customBtn]
               }
@@ -200,11 +211,13 @@ const CreatePersonalDevelopmentGoal = (props) => {
               Save & Exit
             </Button>
           }
-          {!uuid && (pdpList?.length + 1 !== maxGoalCount || pdpList?.length + 1 > maxGoalCount) && (
-            <Button isDisabled={!formState.isValid} onPress={() => saveAndCreate()} styles={[customBtn, createBtn]}>
-              Save & create a new goal <img className={css(imgArrow)} alt='arrow' src={arrLeft} />
-            </Button>
-          )}
+          {!uuid &&
+            Object.keys(currentGoal).length === 0 &&
+            (pdpList?.length + 1 !== maxGoalCount || pdpList?.length + 1 > maxGoalCount) && (
+              <Button isDisabled={!formState.isValid} onPress={() => saveAndCreate()} styles={[customBtn, createBtn]}>
+                Save & create a new goal <img className={css(imgArrow)} alt='arrow' src={arrLeft} />
+              </Button>
+            )}
         </div>
       </div>
     </ModalWithHeader>
@@ -292,6 +305,7 @@ const activeGoalItem: CreateRule<{ theme: Theme }> = (props) => {
   const { theme } = props;
   return {
     color: `${theme.colors.tescoBlue}`,
+    cursor: 'pointer',
   };
 };
 
@@ -300,6 +314,7 @@ const defaultGoalItem: CreateRule<{ theme: Theme }> = (props) => {
   const { theme } = props;
   return {
     color: '#b3cde5',
+    cursor: 'pointer',
   };
 };
 
