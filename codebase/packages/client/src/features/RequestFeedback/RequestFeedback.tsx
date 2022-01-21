@@ -1,9 +1,9 @@
 import React, { FC, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Modal, Rule, CreateRule, useBreakpoints, useStyle } from '@dex-ddl/core';
+import { Modal, CreateRule, useBreakpoints, useStyle } from '@dex-ddl/core';
 import RequestFeedbackForm from './components/RequestFeedbackForm';
-import SuccessMassage from './components/SacsessMassage';
+import SuccessMassage from './components/SuccessMassage';
 import { colleagueUUIDSelector, FeedbackActions } from '@pma/store';
 import { Icon } from 'components/Icon';
 import { Page } from 'pages';
