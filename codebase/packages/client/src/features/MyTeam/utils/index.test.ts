@@ -1,4 +1,4 @@
-import { Timeline, ReviewType, Status, TimelineType } from 'config/types';
+import { Status, TimelineType } from 'config/types';
 import { generateEmployeeReview, generateTimelines, generateTimeline } from 'utils/test';
 
 import { getLastTimelineStatus } from './index';
