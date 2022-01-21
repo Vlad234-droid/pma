@@ -52,10 +52,6 @@ export type AddNoteModalProps = {
   methods: UseFormReturn;
   cancelModal: () => void;
   submitForm: any;
-  setPersonalNoteModal: React.Dispatch<React.SetStateAction<boolean>>;
-  setSuccessModal: React.Dispatch<React.SetStateAction<boolean>>;
-  setCreateFolder: React.Dispatch<React.SetStateAction<boolean>>;
-  successModal: boolean;
   createFolder: boolean;
 };
 

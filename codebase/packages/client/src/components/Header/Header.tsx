@@ -51,6 +51,7 @@ const Header: FC<HeaderProps> = ({ title, onBack, withIcon, iconName = 'home', s
 const wrapperStyles: Rule = {
   display: 'flex',
   justifyContent: 'space-between',
+  padding: '0px 40px',
 };
 
 const headerStyles: CreateRule<{ mobileScreen }> = ({ mobileScreen }) => ({

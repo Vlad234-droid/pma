@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Rule, colors, useStyle, Styles } from '@dex-ddl/core';
+import { Rule, colors, useStyle, Styles, CreateRule, Theme } from '@dex-ddl/core';
 import { IconButton } from 'components/IconButton';
 import { Input } from 'components/Form/Input';
 import { Icon } from 'components/Icon';
@@ -32,7 +32,7 @@ export const FilterOption: FC<FilterOptionProps> = ({
   visibleSettings = true,
   setSearchValueFilterOption,
 }) => {
-  const { css } = useStyle();
+  const { css, theme } = useStyle();
 
   return (
     <>
@@ -40,7 +40,7 @@ export const FilterOption: FC<FilterOptionProps> = ({
         <IconButton
           graphic='settings'
           customVariantRules={{
-            default: iconBtnStyle as Rule,
+            default: iconBtnStyle({ theme }),
           }}
           iconStyles={iconStyle}
           onPress={() => {
@@ -80,7 +80,7 @@ export const FilterOption: FC<FilterOptionProps> = ({
             }}
             customStyles={{
               ...(customStyles && customStyles),
-              background: '#F6F6F6',
+              background: theme.colors.white,
               height: '38px',
               border: '1px solid rgb(0, 83, 159)',
               ...(!focus && { borderRadius: '50%', padding: '0px' }),
@@ -92,7 +92,8 @@ export const FilterOption: FC<FilterOptionProps> = ({
   );
 };
 
-const iconBtnStyle = {
+const iconBtnStyle: CreateRule<{ theme: Theme }> = ({ theme }) => ({
+  background: 'white',
   padding: '0',
   marginLeft: '5px',
   display: 'flex',
@@ -110,7 +111,7 @@ const iconBtnStyle = {
     justifyContent: 'center',
     alignItems: 'center',
   },
-};
+});
 
 const iconStyle: Rule = {
   width: '16px',

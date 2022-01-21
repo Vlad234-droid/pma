@@ -132,16 +132,30 @@ const PersonalDevelopmentPlan: FC = () => {
         <DescriptionBlock>
           <div className={css(title({ theme }))}>What is Personal Development Plan?</div>
           <div className={css(details({ theme }), detailsWithMargin)}>
-            Your Performance Development Plan (PDP) is a tailored plan that helps you reflect on the things you are
-            great at and identify areas you want to improve.
+            Your Personal Development Plan (PDP) is a tailored plan that helps you reflect on the things you are great
+            at and identify areas you want to improve.
+            <p>
+              Having a Personal Development Plan will help you to put some structure to your development and be clear
+              about what you are looking for in your career. How you want your plan to look and what you put in it is up
+              to you, the important thing is that it inspires and motivates you. You can use the system to write and
+              store your PDP, download the template or make a new plan that suits your ways of working.
+            </p>
+            <p>
+              Remember a PDP is completely personal to you, you don&apos;t have to share it but it might be helpful to
+              use it when having development conversations.
+            </p>
+            <p>
+              It&apos;s important you review and update your PDP regularly to ensure it reflects where you are in your
+              career at that moment in time.
+            </p>
           </div>
 
           <div className={css(title({ theme }))}>How The Performance Development Plan works?</div>
           <div className={css(details({ theme }))}>
             At Tesco, “how” you do your job is as important as “what” you deliver. An inspiring PDP will help you focus
-            on what to develop, whether that’s being at your best in your current role or moving towards a bigger or
-            broader role. What’s important is recording and regularly reviewing your plan to a format that works for
-            you.
+            on what to develop, whether that&apos;s being at your best in your current role or moving towards a bigger
+            or broader role. What&apos;s important is recording and regularly reviewing your plan to a format that works
+            for you.
           </div>
         </DescriptionBlock>
       </div>

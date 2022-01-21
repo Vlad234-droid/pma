@@ -2,14 +2,14 @@ import React, { Dispatch, FC, SetStateAction } from 'react';
 import { IconButton } from 'components/IconButton';
 import { useStyle, useBreakpoints, Rule } from '@dex-ddl/core';
 
-type Info360ModalProps = {
-  setInfoModal: Dispatch<SetStateAction<boolean>>;
+type Props = {
+  closeInfoModal: () => void;
   TEAM: boolean;
 };
 
 export const MODAL_WRAPPER = 'modal_wrapper';
 
-const InfoModal: FC<Info360ModalProps> = ({ setInfoModal, TEAM }) => {
+const InfoModal: FC<Props> = ({ closeInfoModal, TEAM }) => {
   const { css, theme } = useStyle();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
@@ -42,7 +42,7 @@ const InfoModal: FC<Info360ModalProps> = ({ setInfoModal, TEAM }) => {
           cursor: 'pointer',
         })}
       >
-        <IconButton graphic='arrowLeft' onPress={() => setInfoModal(() => false)} iconProps={{ invertColors: true }} />
+        <IconButton graphic='arrowLeft' onPress={closeInfoModal} iconProps={{ invertColors: true }} />
       </span>
     </div>
   );

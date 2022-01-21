@@ -2,7 +2,6 @@ import { createSelector } from 'reselect';
 //@ts-ignore
 import { RootState } from 'typesafe-actions';
 import { ReviewType, PDPType } from '@pma/client/src/config/enum';
-import { hasPermission } from '@pma/client/src/utils';
 
 //@ts-ignore
 export const schemaSelector = (state: RootState) => state.schema;
@@ -70,7 +69,7 @@ export const getReviewSchema = (type: ReviewType, withForms = true) =>
     } = schema;
     const review = timelinePoints.find((review) => review.reviewType === type);
 
-    if (withForms && schema?.forms?.length) {
+    if (withForms && schema?.forms?.length && review?.form) {
       form = schema?.forms.find((form) => form.id === review.form.id);
     }
 
@@ -87,7 +86,6 @@ export const getReviewSchema = (type: ReviewType, withForms = true) =>
 
 export const getPDPSchema = (type: PDPType) =>
   createSelector(schemaPDPSelector, (schema: any) => {
-    
     if (!schema?.pdp?.form) {
       return { ...schema };
     }
@@ -100,26 +98,6 @@ export const getPDPSchema = (type: PDPType) =>
 
     return pdpMarkup;
   });
-
-  export const getReviewSchemaWithPermission = (reviewType: ReviewType, dsl: any) =>
-    createSelector(getReviewSchema(reviewType), (schema: any) => {
-      const { components = [] } = schema;
-      if (!components?.length) {
-        return schema;
-    }
-
-    const filteredComponent = components.filter((component) => {
-      if (['textfield', 'select'].includes(component.type) && hasPermission(component.description, dsl)) {
-        return true;
-      }
-      return component.type === 'text' && hasPermission(component.text, dsl);
-    });
-
-    return {
-    ...schema,
-    components: filteredComponent,
-  };
-});
 
 export const schemaMetaSelector = createSelector(schemaSelector, ({ meta }) => meta);
 export const schemaMetaPDPSelector = createSelector(schemaPDPSelector, ({ pdp }) => pdp);

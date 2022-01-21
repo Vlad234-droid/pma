@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Rule, useBreakpoints, useStyle } from '@dex-ddl/core';
+import { CreateRule, Rule, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { colleagueUUIDSelector, FeedbackActions, feedbackByStatusSelector } from '@pma/store';
 import { paramsReplacer } from 'utils';
 import { Page } from 'pages';
@@ -14,6 +14,9 @@ const OuterGiveFeedBack: FC = () => {
   const { css } = useStyle();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [, isBreakpoint] = useBreakpoints();
+  const medium = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
+  const small = isBreakpoint.small || isBreakpoint.xSmall;
 
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const [status, setCheckedStatus] = useState(FeedbackStatus.DRAFT);
@@ -54,45 +57,41 @@ const OuterGiveFeedBack: FC = () => {
   const feedbackList = useSelector(feedbackByStatusSelector(status)) || [];
 
   return (
-    <>
-      <div>
-        <div className={css(headerStyled)}>
-          <RadioBtns checkedRadio={status} onCheck={setCheckedStatus} handleBtnClick={handleBtnClick} />
-          <div className={css(FilterIconStyled)}>
-            <FilterOption
-              focus={focus}
-              customIcon={true}
-              searchValue={searchValueFilterOption}
-              onFocus={setFocus}
-              withIcon={false}
-              customStyles={{
-                ...(focus ? { padding: '10px 20px 10px 16px' } : { padding: '0px' }),
-                ...(focus ? { borderRadius: '50px' } : { transitionDelay: '.3s' }),
-              }}
-              onChange={(e) => setSearchValueFilterOption(() => e.target.value)}
-              onSettingsPress={() => {
-                setFilterModal((prev) => !prev);
-                setFocus(() => false);
-              }}
-            />
-            <FilterModal
-              isOpen={filterModal}
-              filter={filterFeedbacks}
-              setFilter={setFilterFeedbacks}
-              toggleOpen={setFilterModal}
-            />
-          </div>
-        </div>
-        <div className={css(Drafts_style)}>
-          <FeedbackBlock list={feedbackList} canEdit={status === FeedbackStatus.DRAFT} />
+    <div>
+      <div className={css(headerStyled({ medium }))}>
+        <RadioBtns checkedRadio={status} onCheck={setCheckedStatus} handleBtnClick={handleBtnClick} />
+        <div className={css(filterIconStyled({ small }))}>
+          <FilterOption
+            focus={focus}
+            customIcon={true}
+            searchValue={searchValueFilterOption}
+            onFocus={setFocus}
+            withIcon={false}
+            customStyles={{
+              ...(focus ? { padding: '10px 20px 10px 16px' } : { padding: '0px' }),
+              ...(focus ? { borderRadius: '50px' } : { transitionDelay: '.3s' }),
+            }}
+            onChange={(e) => setSearchValueFilterOption(() => e.target.value)}
+            onSettingsPress={() => {
+              setFilterModal((prev) => !prev);
+              setFocus(() => false);
+            }}
+          />
+          <FilterModal
+            isOpen={filterModal}
+            filter={filterFeedbacks}
+            setFilter={setFilterFeedbacks}
+            toggleOpen={setFilterModal}
+          />
         </div>
       </div>
-    </>
+      <div className={css(draftsStyle)}>
+        <FeedbackBlock list={feedbackList} canEdit={status === FeedbackStatus.DRAFT} />
+      </div>
+    </div>
   );
 };
-const FilterIconStyled: Rule = () => {
-  const [, isBreakpoint] = useBreakpoints();
-  const small = isBreakpoint.small || isBreakpoint.xSmall;
+const filterIconStyled: CreateRule<{ small: boolean }> = ({ small }) => {
   return {
     display: 'flex',
     alignItems: 'center',
@@ -100,9 +99,7 @@ const FilterIconStyled: Rule = () => {
     position: 'relative',
   };
 };
-const headerStyled: Rule = () => {
-  const [, isBreakpoint] = useBreakpoints();
-  const medium = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
+const headerStyled: CreateRule<{ medium: boolean }> = ({ medium }) => {
   return {
     display: 'flex',
     flexWrap: medium ? 'wrap' : 'nowrap',
@@ -113,7 +110,7 @@ const headerStyled: Rule = () => {
   };
 };
 
-const Drafts_style: Rule = {
+const draftsStyle: Rule = {
   display: 'flex',
   flexDirection: 'column',
   maxWidth: '856px',

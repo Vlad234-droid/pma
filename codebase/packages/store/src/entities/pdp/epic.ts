@@ -115,6 +115,20 @@ export const updadePDPEpic: Epic = (action$, _, { api }) =>
     }),
   );
 
+export const updadeAndFetchPDPEpic: Epic = (action$, _, { api }) =>
+  action$.pipe(
+    filter(isActionOf(updatePDPGoal.success)),
+    switchMap(({ payload }) => {
+      return from(api.getPDPGoal()).pipe(
+        // @ts-ignore
+        map(({ data }) => {
+          return getPDPGoal.request({});
+        }),
+        catchError(({ errors }) => of(createPDPGoal.failure(errors))),
+      );
+    }),
+  );
+
 export default combineEpics(
   getPDPEpic,
   getPDPByUUIDEpic,
@@ -123,4 +137,5 @@ export default combineEpics(
   deletePDPEpic,
   deleteAndFetchPDPEpic,
   createAndFetchPDPEpic,
+  updadeAndFetchPDPEpic,
 );

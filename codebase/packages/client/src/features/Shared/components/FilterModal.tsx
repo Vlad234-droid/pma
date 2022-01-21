@@ -1,5 +1,5 @@
 import React, { FC, useRef, MouseEvent } from 'react';
-import { useStyle, Rule, CreateRule } from '@dex-ddl/core';
+import { useStyle, Rule, CreateRule, Theme } from '@dex-ddl/core';
 import { Radio } from 'components/Form';
 import { Trans } from 'components/Translation';
 import useEventListener from 'hooks/useEventListener';
@@ -19,7 +19,7 @@ type Props = {
 };
 
 export const FilterModal: FC<Props> = ({ isOpen, filter, setFilter, toggleOpen }) => {
-  const { css } = useStyle();
+  const { css, theme } = useStyle();
   const choseHandler = (val: string) => {
     setFilter({ AZ: false, ZA: false, newToOld: false, oldToNew: false, [val]: true });
     toggleOpen(false);
@@ -63,7 +63,7 @@ export const FilterModal: FC<Props> = ({ isOpen, filter, setFilter, toggleOpen }
   useEventListener('mousedown', handleClickOutside);
 
   return (
-    <div ref={ref} className={css(wrapperStyle({ isOpen }))}>
+    <div ref={ref} className={css(wrapperStyle({ theme, isOpen }))}>
       <div className={css(columnStyle)}>
         <span>Sort :</span>
         {fields.map((item) => (
@@ -101,8 +101,7 @@ const labelStyle: Rule = {
   alignItems: 'center',
   cursor: 'pointer',
 };
-const wrapperStyle: CreateRule<{ isOpen: boolean }> = ({ isOpen }) => {
-  const { theme } = useStyle();
+const wrapperStyle: CreateRule<{ theme: Theme; isOpen: boolean }> = ({ theme, isOpen }) => {
   return {
     position: 'absolute',
     width: '200px',
@@ -116,7 +115,7 @@ const wrapperStyle: CreateRule<{ isOpen: boolean }> = ({ isOpen }) => {
     transformOrigin: '50% 0%',
     border: `1px solid ${theme.colors.tescoBlue}`,
     boxShadow: '3px 3px 1px 1px rgba(0, 0, 0, 0.05)',
-    background: '#F6F6F6',
+    background: theme.colors.white,
     borderRadius: '10px',
     zIndex: 2,
   };

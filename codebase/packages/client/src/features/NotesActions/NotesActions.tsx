@@ -1,15 +1,8 @@
 import React, { FC, useEffect, useState } from 'react';
 import { FilterOptions, MainFolders } from './components';
 import AddNoteModal, { AddTeamNoteModal, InfoModal } from './components/Modals';
-import { Modal, Rule, Styles, useBreakpoints, useStyle } from '@dex-ddl/core';
-import {
-  ChosesButtonType,
-  FoldersWithNotesTypes,
-  FoldersWithNotesTypesTEAM,
-  NoteData,
-  NotesType,
-  NotesTypeTEAM,
-} from './type';
+import { Modal, Rule, useBreakpoints, useStyle, Theme, CreateRule } from '@dex-ddl/core';
+import { FoldersWithNotesTypes, FoldersWithNotesTypesTEAM, NoteData, NotesType, NotesTypeTEAM } from './type';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
@@ -18,6 +11,7 @@ import { Icon, Icon as IconComponent } from 'components/Icon';
 import { EditSelectedNote } from './components/Modals/EditSelectedNote';
 import { schemaFolder, schemaNotes, schemaNoteToEdit, schemaTEAMNotes } from './components/Modals/schema/schema';
 import { useDispatch, useSelector } from 'react-redux';
+
 import {
   colleagueUUIDSelector,
   getFoldersSelector,
@@ -27,18 +21,36 @@ import {
   notesFolderTeamDataSelector,
   personalFolderUuidSelector,
   teamFolderUuidSelector,
+  ColleaguesActions,
 } from '@pma/store';
 import { AllNotesFolderId, AllNotesFolderIdTEAM, filterNotesHandler } from '../../utils/note';
 import { PeopleTypes } from './components/TeamNotes/ModalsParts/type';
 import { useNavigate } from 'react-router-dom';
+import { Trans } from 'components/Translation';
+import { ConfirmModalWithSelectOptions } from '../Modal';
 
 export const NOTES_WRAPPER = 'note_wrapper';
 export const PLUS_BUTTON = 'plus_button';
 export const MODAL_BUTTONS = 'modal_buttons';
 export const PLUS_PERSONAL_NOTE = 'plus_personal_note';
 
+enum ModalStatuses {
+  ADD_NEW = 'ADD_NEW',
+  PENDING = 'PENDING',
+  PERSONAL_NOTE = 'PERSONAL_NOTE',
+  PERSONAL_FOLDER = 'PERSONAL_FOLDER',
+  TEAM_NOTE = 'TEAM_NOTE',
+  TEAM_FOLDER = 'TEAM_FOLDER',
+  INFO = 'INFO',
+}
+
 const NotesActions: FC = () => {
-  const { css } = useStyle();
+  const { css, theme } = useStyle();
+  const navigate = useNavigate();
+  const [status, setStatus] = useState(ModalStatuses.PENDING);
+
+  const [, isBreakpoint] = useBreakpoints();
+  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
   const dispatch = useDispatch();
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const [userArchivedMode, setUserArchivedMode] = useState<boolean>(false);
@@ -58,35 +70,22 @@ const NotesActions: FC = () => {
 
   const [selectedFolder, setSelectedFolder] = useState<NoteData | null>(null);
 
-  const [choseAdd, setChoseAdd] = useState<boolean>(false);
   const [foldersWithNotes, setFoldersWithNotes] = useState<Array<FoldersWithNotesTypes> | []>([]);
 
   const [selectedNoteToEdit, setSelectedNoteToEdit] = useState<NotesType | null>(null);
-  const [successSelectedNoteToEdit, setSuccessSelectedNoteToEdit] = useState(false);
 
-  //
   const [TEAM] = useState(true);
-  const [successModal, setSuccessModal] = useState<boolean>(false);
-  const [personalNoteModal, setPersonalNoteModal] = useState<boolean>(false);
-  const [createFolder, setCreateFolder] = useState<boolean>(false);
+
   //TEAM
-  const [successTEAMModal, setSuccessTEAMModal] = useState<boolean>(false);
   const [selectedTEAMFolder, setSelectedTEAMFolder] = useState<NoteData | null>(null);
   const [searchValue, setSearchValue] = useState<string>('');
 
-  const [teamNoteModal, setTeamNoteModal] = useState<boolean>(false);
   const [foldersWithNotesTEAM, setFoldersWithNotesTEAM] = useState<Array<FoldersWithNotesTypesTEAM> | []>([]);
   const [selectedTEAMNoteToEdit, setSelectedTEAMNoteToEdit] = useState<NotesTypeTEAM | null>(null);
 
   const [selectedPerson, setSelectedPerson] = useState<PeopleTypes | null>(null);
   // filter
-  const [focus, setFocus] = useState(false);
   const [searchValueFilterOption, setSearchValueFilterOption] = useState('');
-  const navigate = useNavigate();
-
-  //info
-
-  const [infoModal, setInfoModal] = useState(false);
 
   useEffect(() => {
     if (folders !== null && notesSelect !== null) {
@@ -97,7 +96,7 @@ const NotesActions: FC = () => {
   useEffect(() => {
     if (searchValueFilterOption.length > 2) {
       if (userArchivedMode) setUserArchivedMode(() => false);
-
+      if (teamArchivedMode) setTeamArchivedMode(() => false);
       const obj = filterNotesHandler(
         setSelectedTEAMFolder,
         setSelectedFolder,
@@ -121,12 +120,12 @@ const NotesActions: FC = () => {
 
   const methods = useForm({
     mode: 'onChange',
-    resolver: yupResolver<Yup.AnyObjectSchema>(!createFolder ? schemaNotes : schemaFolder),
+    resolver: yupResolver<Yup.AnyObjectSchema>(status !== ModalStatuses.PERSONAL_FOLDER ? schemaNotes : schemaFolder),
   });
 
   const teamMethods = useForm({
     mode: 'onChange',
-    resolver: yupResolver<Yup.AnyObjectSchema>(schemaTEAMNotes),
+    resolver: yupResolver<Yup.AnyObjectSchema>(status !== ModalStatuses.TEAM_FOLDER ? schemaTEAMNotes : schemaFolder),
   });
 
   const noteToEditMethods = useForm({
@@ -139,7 +138,7 @@ const NotesActions: FC = () => {
   const { handleSubmit, reset } = methods;
 
   const onSubmit = async (values) => {
-    if (createFolder) {
+    if (status === ModalStatuses.PERSONAL_FOLDER) {
       const { folderTitle } = values;
       dispatch(
         NotesActionsToDispatch.createFolderNotes({
@@ -215,7 +214,18 @@ const NotesActions: FC = () => {
     }
   };
 
-  const onTEAMSubmit = (values) => {
+  const onTEAMSubmit = async (values) => {
+    if (status === ModalStatuses.TEAM_FOLDER) {
+      const { folderTitle } = values;
+      dispatch(
+        NotesActionsToDispatch.createFolderNotes({
+          ownerColleagueUuid: colleagueUuid,
+          title: folderTitle,
+          parentFolderUuid: teamFolderUuid,
+        }),
+      );
+      return;
+    }
     if (values.folder === '' && values.noteTitle !== '' && values.noteText !== '') {
       dispatch(
         NotesActionsToDispatch.createNote({
@@ -280,10 +290,9 @@ const NotesActions: FC = () => {
       };
       dispatch(NotesActionsToDispatch.createFolderAndNote(body));
     }
-    setSelectedPerson(() => null);
   };
 
-  const onSubmitSelectedEditedNote = (data) => {
+  const onSubmitSelectedEditedNote = async (data) => {
     const { noteTitle, noteText, folder } = data;
     if (selectedNoteToEdit !== null) {
       const payload = {
@@ -303,11 +312,10 @@ const NotesActions: FC = () => {
   const cancelSelectedNoteModal = () => {
     if (selectedNoteToEdit !== null) setSelectedNoteToEdit(() => null);
     if (selectedTEAMNoteToEdit !== null) setSelectedTEAMNoteToEdit(() => null);
-    if (successSelectedNoteToEdit) setSuccessSelectedNoteToEdit(() => false);
     resetNoteToEdit();
   };
 
-  const onSubmitTEAMSelectedEditedNote = (data) => {
+  const onSubmitTEAMSelectedEditedNote = async (data) => {
     const { noteTitle, noteText, folder } = data;
     if (selectedTEAMNoteToEdit !== null) {
       const payload = {
@@ -326,253 +334,219 @@ const NotesActions: FC = () => {
 
   const cancelTEAMSelectedNoteModal = () => {
     setSelectedTEAMNoteToEdit(() => null);
-    if (successSelectedNoteToEdit) setSuccessSelectedNoteToEdit(() => false);
   };
 
   const cancelTEAMModal = () => {
-    if (successTEAMModal) setSuccessTEAMModal(() => false);
-    setTeamNoteModal(() => false);
+    setSelectedPerson(() => null);
+    dispatch(ColleaguesActions.clearColleagueList());
+    setStatus(() => ModalStatuses.PENDING);
     resetTeam();
   };
 
   const cancelModal = () => {
-    if (successModal) setSuccessModal(() => false);
-    setPersonalNoteModal(false);
-    if (createFolder) setCreateFolder(() => false);
+    setStatus(() => ModalStatuses.PENDING);
     reset();
   };
 
-  const clickHandler = (e) => {
-    if (e.target.id === 'chose_options') setChoseAdd(() => false);
-  };
+  if (status === ModalStatuses.INFO) {
+    return (
+      <Modal
+        modalPosition={'middle'}
+        overlayColor={'tescoBlue'}
+        modalContainerRule={[containerRule({ theme, mobileScreen })]}
+        closeOptions={{
+          content: <Icon graphic='cancel' invertColors={true} />,
+          onClose: () => {
+            setStatus(() => ModalStatuses.PENDING);
+          },
+          styles: [modalCloseOptionStyle({ mobileScreen })],
+        }}
+        title={{
+          content: 'Notes',
+          styles: [modalTitleOptionStyle({ mobileScreen })],
+        }}
+      >
+        <InfoModal
+          closeInfoModal={() => {
+            setStatus(() => ModalStatuses.PENDING);
+          }}
+          TEAM={TEAM}
+        />
+      </Modal>
+    );
+  }
 
-  const chosesButton: Array<ChosesButtonType> = [
-    {
-      id: '1',
-      title: 'Add a personal note',
-      show: true,
-      button: (
-        <IconButton
-          graphic='add'
-          iconStyles={{ height: '34px', width: '34px' }}
-          customVariantRules={{
-            default: iconBtnStyleSmall,
-          }}
-          data-test-id={PLUS_PERSONAL_NOTE}
-          onPress={() => {
-            setSelectedFolder(() => null);
-            setChoseAdd(() => false);
-            setPersonalNoteModal(() => true);
-          }}
+  if (status === ModalStatuses.PERSONAL_NOTE || status === ModalStatuses.PERSONAL_FOLDER) {
+    return (
+      <Modal
+        modalPosition={'middle'}
+        overlayColor={'tescoBlue'}
+        modalContainerRule={[containerRule({ theme, mobileScreen })]}
+        closeOptions={{
+          content: <Icon graphic='cancel' invertColors={true} />,
+          onClose: () => {
+            cancelModal();
+          },
+          styles: [modalCloseOptionStyle({ mobileScreen })],
+        }}
+        title={{
+          content: status === ModalStatuses.PERSONAL_FOLDER ? 'Add a folder' : 'Add a note',
+          styles: [modalTitleOptionStyle({ mobileScreen })],
+        }}
+      >
+        <AddNoteModal
+          methods={methods}
+          cancelModal={cancelModal}
+          submitForm={handleSubmit(onSubmit)}
+          createFolder={status === ModalStatuses.PERSONAL_FOLDER}
+          foldersWithNotes={foldersWithNotes}
         />
-      ),
-    },
-    {
-      id: '2',
-      title: 'Add a note',
-      show: TEAM,
-      button: (
-        <IconButton
-          graphic='add'
-          iconStyles={{ height: '34px', width: '34px' }}
-          customVariantRules={{
-            default: iconBtnStyleSmall,
-          }}
-          onPress={() => {
-            setSelectedFolder(() => null);
-            setChoseAdd(() => false);
-            setTeamNoteModal(() => true);
-          }}
+      </Modal>
+    );
+  }
+  if (selectedTEAMNoteToEdit) {
+    return (
+      <Modal
+        modalPosition={'middle'}
+        overlayColor={'tescoBlue'}
+        modalContainerRule={[containerRule({ theme, mobileScreen })]}
+        closeOptions={{
+          content: <Icon graphic='cancel' invertColors={true} />,
+          onClose: () => {
+            cancelSelectedNoteModal();
+          },
+          styles: [modalCloseOptionStyle({ mobileScreen })],
+        }}
+        title={{
+          content: 'My notes',
+          styles: [modalTitleOptionStyle({ mobileScreen })],
+        }}
+      >
+        <EditSelectedNote
+          methods={noteToEditMethods}
+          cancelSelectedNoteModal={cancelTEAMSelectedNoteModal}
+          submitForm={handleSubmitSelectedEditedNote(onSubmitTEAMSelectedEditedNote)}
+          setSelectedNoteToEdit={setSelectedTEAMNoteToEdit}
+          foldersWithNotes={foldersWithNotesTEAM}
+          selectedNoteToEdit={selectedTEAMNoteToEdit}
+          setSelectedFolder={setSelectedTEAMFolder}
+          definePropperEditMode={selectedNoteToEdit}
+          setSelectedFolderDynamic={setSelectedFolder}
         />
-      ),
-    },
-    {
-      id: '3',
-      title: 'Add a personal folder',
-      show: true,
-      button: (
-        <IconButton
-          graphic='add'
-          iconStyles={{ height: '34px', width: '34px' }}
-          customVariantRules={{
-            default: iconBtnStyleSmall,
-          }}
-          onPress={() => {
-            setCreateFolder(() => true);
-            setSelectedFolder(() => null);
-            setChoseAdd(() => false);
-            setPersonalNoteModal(() => true);
-          }}
+      </Modal>
+    );
+  }
+
+  if (status === ModalStatuses.TEAM_NOTE || status === ModalStatuses.TEAM_FOLDER) {
+    return (
+      <Modal
+        modalPosition={'middle'}
+        overlayColor={'tescoBlue'}
+        modalContainerRule={[containerRule({ theme, mobileScreen })]}
+        closeOptions={{
+          content: <Icon graphic='cancel' invertColors={true} />,
+          onClose: () => {
+            cancelTEAMModal();
+          },
+          styles: [modalCloseOptionStyle({ mobileScreen })],
+        }}
+        title={{
+          content: status === ModalStatuses.TEAM_FOLDER ? 'Add team folder' : 'Add a team note',
+          styles: [modalTitleOptionStyle({ mobileScreen })],
+        }}
+      >
+        <AddTeamNoteModal
+          teamMethods={teamMethods}
+          searchValue={searchValue}
+          setSearchValue={setSearchValue}
+          selectedPerson={selectedPerson}
+          setSelectedPerson={setSelectedPerson}
+          foldersWithNotesTEAM={foldersWithNotesTEAM}
+          cancelTEAMModal={cancelTEAMModal}
+          handleTEAMSubmit={handleTEAMSubmit(onTEAMSubmit)}
+          createFolder={status === ModalStatuses.TEAM_FOLDER}
         />
-      ),
-    },
+      </Modal>
+    );
+  }
+
+  if (selectedNoteToEdit) {
+    return (
+      <Modal
+        modalPosition={'middle'}
+        overlayColor={'tescoBlue'}
+        modalContainerRule={[containerRule({ theme, mobileScreen })]}
+        closeOptions={{
+          content: <Icon graphic='cancel' invertColors={true} />,
+          onClose: () => {
+            cancelSelectedNoteModal();
+          },
+          styles: [modalCloseOptionStyle({ mobileScreen })],
+        }}
+        title={{
+          content: 'Edit note',
+          styles: [modalTitleOptionStyle({ mobileScreen })],
+        }}
+      >
+        <EditSelectedNote
+          methods={noteToEditMethods}
+          cancelSelectedNoteModal={cancelSelectedNoteModal}
+          submitForm={handleSubmitSelectedEditedNote(onSubmitSelectedEditedNote)}
+          setSelectedNoteToEdit={setSelectedNoteToEdit}
+          foldersWithNotes={foldersWithNotes}
+          selectedNoteToEdit={selectedNoteToEdit}
+          setSelectedFolder={setSelectedFolder}
+          definePropperEditMode={selectedNoteToEdit}
+          setSelectedFolderDynamic={setSelectedFolder}
+        />
+      </Modal>
+    );
+  }
+
+  const confirmSelectOptions = [
+    { value: 'PersonalNote', label: ModalStatuses.PERSONAL_NOTE },
+    { value: 'PersonalFolder', label: ModalStatuses.PERSONAL_FOLDER },
+    { value: 'TeamNote', label: ModalStatuses.TEAM_NOTE },
+    { value: 'TeamFolder', label: ModalStatuses.TEAM_FOLDER },
   ];
 
   return (
     <div data-test-id={NOTES_WRAPPER}>
-      {infoModal && (
-        <Modal
-          modalPosition={'middle'}
-          overlayColor={'tescoBlue'}
-          modalContainerRule={[containerRule]}
-          closeOptions={{
-            content: <Icon graphic='cancel' invertColors={true} />,
-            onClose: () => {
-              setInfoModal(() => false);
-            },
-            styles: [modalCloseOptionStyle],
+      {status === ModalStatuses.ADD_NEW && (
+        <ConfirmModalWithSelectOptions
+          options={confirmSelectOptions}
+          description='Please choose the one option:'
+          onOverlayClick={() => setStatus(() => ModalStatuses.PENDING)}
+          title='Add new'
+          onSave={([checkedItem]) => {
+            setSelectedFolder(() => null);
+            setStatus(() => ModalStatuses[checkedItem]);
           }}
-          title={{
-            content: 'Notes',
-            styles: [modalTitleOptionStyle],
-          }}
-        >
-          <InfoModal setInfoModal={setInfoModal} TEAM={TEAM} />
-        </Modal>
-      )}
-      {personalNoteModal && (
-        <Modal
-          modalPosition={'middle'}
-          overlayColor={'tescoBlue'}
-          modalContainerRule={[containerRule]}
-          closeOptions={{
-            content: <Icon graphic='cancel' invertColors={true} />,
-            onClose: () => {
-              if (successModal) setSuccessModal(() => false);
-              setPersonalNoteModal(false);
-              if (createFolder) setCreateFolder(() => false);
-              reset();
-            },
-            styles: [modalCloseOptionStyle],
-          }}
-          title={{
-            content: createFolder ? 'Add a folder' : 'Add a note',
-            styles: [modalTitleOptionStyle],
-          }}
-        >
-          <AddNoteModal
-            methods={methods}
-            cancelModal={cancelModal}
-            submitForm={handleSubmit(onSubmit)}
-            setPersonalNoteModal={setPersonalNoteModal}
-            setSuccessModal={setSuccessModal}
-            successModal={successModal}
-            createFolder={createFolder}
-            setCreateFolder={setCreateFolder}
-            foldersWithNotes={foldersWithNotes}
-          />
-        </Modal>
-      )}
-      {selectedTEAMNoteToEdit && (
-        <Modal
-          modalPosition={'middle'}
-          overlayColor={'tescoBlue'}
-          modalContainerRule={[containerRule]}
-          closeOptions={{
-            content: <Icon graphic='cancel' invertColors={true} />,
-            onClose: () => {
-              setSelectedTEAMNoteToEdit(() => null);
-              resetNoteToEdit();
-            },
-            styles: [modalCloseOptionStyle],
-          }}
-          title={{
-            content: 'My Notes',
-            styles: [modalTitleOptionStyle],
-          }}
-        >
-          <EditSelectedNote
-            successSelectedNoteToEdit={successSelectedNoteToEdit}
-            setSuccessSelectedNoteToEdit={setSuccessSelectedNoteToEdit}
-            methods={noteToEditMethods}
-            cancelSelectedNoteModal={cancelTEAMSelectedNoteModal}
-            submitForm={handleSubmitSelectedEditedNote(onSubmitTEAMSelectedEditedNote)}
-            setSelectedNoteToEdit={setSelectedTEAMNoteToEdit}
-            foldersWithNotes={foldersWithNotesTEAM}
-            selectedNoteToEdit={selectedTEAMNoteToEdit}
-            setSelectedFolder={setSelectedTEAMFolder}
-            definePropperEditMode={selectedNoteToEdit}
-            setSelectedFolderDynamic={setSelectedFolder}
-          />
-        </Modal>
-      )}
-      {teamNoteModal && (
-        <Modal
-          modalPosition={'middle'}
-          overlayColor={'tescoBlue'}
-          modalContainerRule={[containerRule]}
-          closeOptions={{
-            content: <Icon graphic='cancel' invertColors={true} />,
-            onClose: () => {
-              setSelectedPerson(() => null);
-              if (successTEAMModal) setSuccessTEAMModal(() => false);
-              setTeamNoteModal(() => false);
-              resetTeam();
-            },
-            styles: [modalCloseOptionStyle],
-          }}
-          title={{
-            content: 'Add a team note',
-            styles: [modalTitleOptionStyle],
-          }}
-        >
-          <AddTeamNoteModal
-            teamMethods={teamMethods}
-            searchValue={searchValue}
-            setSearchValue={setSearchValue}
-            setTeamNoteModal={setTeamNoteModal}
-            selectedPerson={selectedPerson}
-            setSelectedPerson={setSelectedPerson}
-            foldersWithNotesTEAM={foldersWithNotesTEAM}
-            cancelTEAMModal={cancelTEAMModal}
-            setSuccessTEAMModal={setSuccessTEAMModal}
-            handleTEAMSubmit={handleTEAMSubmit(onTEAMSubmit)}
-            successTEAMModal={successTEAMModal}
-          />
-        </Modal>
-      )}
-      {selectedNoteToEdit !== null && (
-        <Modal
-          modalPosition={'middle'}
-          overlayColor={'tescoBlue'}
-          modalContainerRule={[containerRule]}
-          closeOptions={{
-            content: <Icon graphic='cancel' invertColors={true} />,
-            onClose: () => {
-              setSelectedNoteToEdit(() => null);
-              resetNoteToEdit();
-            },
-            styles: [modalCloseOptionStyle],
-          }}
-          title={{
-            content: 'Edit note',
-            styles: [modalTitleOptionStyle],
-          }}
-        >
-          <EditSelectedNote
-            successSelectedNoteToEdit={successSelectedNoteToEdit}
-            setSuccessSelectedNoteToEdit={setSuccessSelectedNoteToEdit}
-            methods={noteToEditMethods}
-            cancelSelectedNoteModal={cancelSelectedNoteModal}
-            submitForm={handleSubmitSelectedEditedNote(onSubmitSelectedEditedNote)}
-            setSelectedNoteToEdit={setSelectedNoteToEdit}
-            foldersWithNotes={foldersWithNotes}
-            selectedNoteToEdit={selectedNoteToEdit}
-            setSelectedFolder={setSelectedFolder}
-            definePropperEditMode={selectedNoteToEdit}
-            setSelectedFolderDynamic={setSelectedFolder}
-          />
-        </Modal>
-      )}
-      <div className={css({ paddingRight: '40px', position: 'relative' })}>
-        <FilterOptions
-          TEAM={TEAM}
-          focus={focus}
-          setFocus={setFocus}
-          searchValueFilterOption={searchValueFilterOption}
-          setSearchValueFilterOption={setSearchValueFilterOption}
-          setInfoModal={setInfoModal}
+          onCancel={() => setStatus(() => ModalStatuses.PENDING)}
         />
+      )}
+
+      <div className={css({ paddingRight: '40px', position: 'relative' })}>
+        <div className={css(wrapperHeaderStyle)}>
+          <IconButton
+            customVariantRules={{ default: iconBtnAddStyle }}
+            onPress={() => setStatus(() => ModalStatuses.ADD_NEW)}
+            graphic='add'
+            iconProps={{ invertColors: true }}
+            iconStyles={iconAddStyle}
+          >
+            <Trans>Add new</Trans>
+          </IconButton>
+          <FilterOptions
+            TEAM={TEAM}
+            searchValueFilterOption={searchValueFilterOption}
+            setSearchValueFilterOption={setSearchValueFilterOption}
+            openInfoModal={() => {
+              setStatus(() => ModalStatuses.INFO);
+            }}
+          />
+        </div>
+
         <MainFolders
           setSelectedFolder={setSelectedFolder}
           selectedFolder={selectedFolder}
@@ -590,72 +564,9 @@ const NotesActions: FC = () => {
           teamArchivedMode={teamArchivedMode}
           setTeamArchivedMode={setTeamArchivedMode}
         />
-
-        {!choseAdd ? (
-          <div className={css(buttonPosiitionStyle)}>
-            <IconButton
-              iconStyles={{ height: '74px', width: '74px' }}
-              graphic='add'
-              customVariantRules={{
-                default: iconBtnStyle,
-              }}
-              data-test-id={PLUS_BUTTON}
-              onPress={() => {
-                setChoseAdd(() => true);
-                if (foldersWithNotes.length) {
-                  setFoldersWithNotes((prev) => {
-                    const arr = [...prev];
-                    arr.forEach((item) => (item.selectedDots = false));
-                    return arr;
-                  });
-                }
-                if (selectedFolder !== null && selectedFolder.notes.length) {
-                  setSelectedFolder((prev) => {
-                    const arr = { ...prev };
-                    arr.notes.forEach((item) => (item.selected = false));
-                    return arr;
-                  });
-                }
-              }}
-            />
-          </div>
-        ) : (
-          <div
-            className={css(choseOptionsStyle)}
-            id='chose_options'
-            onClick={clickHandler}
-            data-test-id={MODAL_BUTTONS}
-          >
-            <div className={`${css(choseContainerStyle)}`} id='container_'>
-              <div className={css({ width: '72%' })}>
-                {chosesButton.map((item) => {
-                  return (
-                    item.show && (
-                      <div key={item.id} className={css(chosedContainerStyle)}>
-                        <>
-                          <span className={css(titleStyle)}>{item.title}</span>
-                          {item.button}
-                        </>
-                      </div>
-                    )
-                  );
-                })}
-              </div>
-              <div>
-                <IconButton
-                  graphic='cancel'
-                  customVariantRules={{
-                    default: iconBtnStyleCancel,
-                  }}
-                  onPress={() => setChoseAdd(() => false)}
-                />
-              </div>
-            </div>
-          </div>
-        )}
       </div>
       <span
-        className={css(arrowLeftStyle)}
+        className={css(arrowLeftStyle({ theme, mobileScreen }))}
         onClick={() => {
           if (userArchivedMode || teamArchivedMode) {
             if (userArchivedMode) setUserArchivedMode(() => false);
@@ -673,119 +584,39 @@ const NotesActions: FC = () => {
   );
 };
 
-const arrowLeftStyle: Rule = ({ theme }) => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+const wrapperHeaderStyle: Rule = {
+  marginLeft: '40px',
+  marginTop: '17px',
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+};
+
+const iconBtnAddStyle: Rule = ({ theme }) => ({
+  background: theme.colors.tescoBlue,
+  color: theme.colors.white,
+  padding: `${theme.spacing.s1_5} ${theme.spacing.s5}`,
+  borderRadius: theme.spacing.s8,
+  fontWeight: theme.font.weight.bold,
+});
+
+const iconAddStyle: Rule = {
+  marginRight: '10px',
+  marginTop: '2px',
+};
+
+const arrowLeftStyle: CreateRule<{ theme: Theme; mobileScreen: boolean }> = ({ theme, mobileScreen }) => {
   return {
     position: 'fixed',
     top: theme.spacing.s5,
-    left: mobileScreen ? theme.spacing.s5 : theme.spacing.s10,
     textDecoration: 'none',
     border: 'none',
     cursor: 'pointer',
+    left: mobileScreen ? theme.spacing.s5 : theme.spacing.s10,
   };
 };
 
-const buttonPosiitionStyle: Rule = {
-  position: 'fixed',
-  bottom: '50px',
-  right: '40px',
-};
-
-const iconBtnStyle: Rule = {
-  padding: '0',
-  height: '64px',
-  width: '64px',
-  outline: 0,
-  cursor: 'pointer',
-  borderRadius: '50%',
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  '& > svg': {
-    width: '64px',
-    height: '64px',
-  },
-} as Styles;
-
-const iconBtnStyleCancel: Rule = {
-  padding: '0',
-  height: '64px',
-  width: '64px',
-  outline: 0,
-  cursor: 'pointer',
-  borderRadius: '50%',
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  border: '1px solid #00539F',
-  alignSelf: 'flex-end',
-  '& > span': {
-    '& > svg': {
-      marginTop: '4px',
-    },
-  },
-} as Styles;
-
-const iconBtnStyleSmall: Rule = {
-  padding: '0',
-  height: '34px',
-  width: '34px',
-  outline: 0,
-  cursor: 'pointer',
-  borderRadius: '50%',
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  '& > svg': {
-    width: '34px',
-    height: '34px',
-  },
-} as Styles;
-
-const choseOptionsStyle: Rule = {
-  position: 'fixed',
-  top: '0px',
-  left: '0px',
-  right: '0px',
-  height: '100%',
-  background: 'rgba(24,76,148,0.7)',
-} as Styles;
-
-const choseContainerStyle: Rule = {
-  width: '400px',
-  position: 'fixed',
-  bottom: '0px',
-  right: '0px',
-  background: 'rgba(255,255,255,1)',
-  borderRadius: '16px',
-  padding: '46px 40px',
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-};
-const chosedContainerStyle: Rule = {
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  marginBottom: '28px',
-  ':last-child': {
-    marginBottom: '0px',
-  },
-} as Styles;
-const titleStyle: Rule = {
-  fontWeight: 'bold',
-  fontSize: '18px',
-  lineHeight: '22px',
-  color: '#00539F',
-  whiteSpace: 'nowrap',
-};
-
-//
-
-const containerRule: Rule = () => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+const containerRule: CreateRule<{ theme: Theme; mobileScreen: boolean }> = ({ theme, mobileScreen }) => {
   return {
     alignItems: 'center',
     justifyContent: 'center',
@@ -793,18 +624,17 @@ const containerRule: Rule = () => {
     ...(mobileScreen
       ? { borderRadius: '24px 24px 0 0 ', padding: '16px 0px 97px' }
       : { borderRadius: '32px', padding: `40px 0px 112px` }),
-    width: '640px',
     height: mobileScreen ? 'calc(100% - 72px)' : 'calc(100% - 102px)',
-    marginTop: '72px',
     marginBottom: mobileScreen ? 0 : '30px',
+    width: '640px',
+    marginTop: '72px',
     cursor: 'default',
     overflow: 'auto',
+    background: 'white',
   };
 };
 
-const modalCloseOptionStyle: Rule = () => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+const modalCloseOptionStyle: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => {
   return {
     display: 'inline-block',
     height: '24px',
@@ -819,10 +649,7 @@ const modalCloseOptionStyle: Rule = () => {
   };
 };
 
-const modalTitleOptionStyle: Rule = () => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
-
+const modalTitleOptionStyle: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => {
   return {
     position: 'fixed',
     top: '22px',
@@ -830,6 +657,7 @@ const modalTitleOptionStyle: Rule = () => {
     left: 0,
     right: 0,
     color: 'white',
+    fontWeight: 'bold',
     ...(mobileScreen
       ? {
           fontSize: '20px',

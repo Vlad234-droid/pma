@@ -97,7 +97,7 @@ const PersonalsTeamFolders: FC<PersonalsTeamFoldersProps> = ({
           id: '1',
           button: (
             <div
-              className={css(Align_flex_style)}
+              className={css(alignFlexStyle)}
               id='backdrop'
               onClick={() => {
                 selectedTEAMFolderId.current = itemId;
@@ -123,7 +123,7 @@ const PersonalsTeamFolders: FC<PersonalsTeamFoldersProps> = ({
         button: (
           <div
             id='backdrop'
-            className={css(Align_flex_styleLast)}
+            className={css(alignFlexStyleLast)}
             onClick={() => {
               selectedTEAMFolderId.current = itemId;
               actionTEAMModal.current = 'delete';
@@ -183,8 +183,8 @@ const PersonalsTeamFolders: FC<PersonalsTeamFoldersProps> = ({
   };
 
   return (
-    <div className={css(MainFolderContainerStyle)} data-test-id={TEAM_FOLDER_WRAPPER}>
-      <div className={css(Title_style)}>
+    <div className={css(mainFolderContainerStyle)} data-test-id={TEAM_FOLDER_WRAPPER}>
+      <div className={css(titleStyle)}>
         <h2 className={css({ padding: '24px' })} data-test-id={FOLDER_TITLE}>
           {!teamArchivedMode ? 'Folders for Notes on my Team' : 'Archived Folders for Notes on my Team'}
         </h2>
@@ -198,15 +198,15 @@ const PersonalsTeamFolders: FC<PersonalsTeamFoldersProps> = ({
               key={item.id}
               onClick={(e) => handleExpandFolder(e, item.id)}
             >
-              <div className={css(ItemList_Style({ selected }))}>
-                <div className={css(margin_flex)}>
-                  <span className={css(Folter_Style)}>{item.title}</span>
-                  <span className={css(Quantity_Style)}>{defineNotesHandler(item.notes.length)}</span>
+              <div className={css(itemListStyle({ selected }))}>
+                <div className={css(marginFlex)}>
+                  <span className={css(folterStyle)}>{item.title}</span>
+                  <span className={css(quantityStyle)}>{defineNotesHandler(item.notes.length)}</span>
                 </div>
                 <div className={css({ display: 'flex', alignItems: 'center' })}>
                   {item.id !== AllNotesFolderIdTEAM && (
-                    <div className={css(Flex_style)}>
-                      <div className={css(dots_style)} onClick={(e) => selectedDotsActionhandler(e, item.id)} id='dots'>
+                    <div className={css(flexStyle)}>
+                      <div className={css(dotsStyle)} onClick={(e) => selectedDotsActionhandler(e, item.id)} id='dots'>
                         <span></span>
                         <span></span>
                         <span></span>
@@ -230,7 +230,7 @@ const PersonalsTeamFolders: FC<PersonalsTeamFoldersProps> = ({
         })}
       </div>
       <Button
-        styles={[Archive_Style]}
+        styles={[archiveStyle]}
         mode='inverse'
         data-test-id={CHANGE_TEAM_MODE}
         onPress={() => {
@@ -244,12 +244,12 @@ const PersonalsTeamFolders: FC<PersonalsTeamFoldersProps> = ({
   );
 };
 
-const margin_flex: Rule = {
+const marginFlex: Rule = {
   display: 'flex',
   flexDirection: 'column',
   marginLeft: '24px',
 };
-const dots_style: Rule = ({ colors }) =>
+const dotsStyle: Rule = ({ colors }) =>
   ({
     display: 'flex',
     marginLeft: '30px',
@@ -263,7 +263,7 @@ const dots_style: Rule = ({ colors }) =>
     },
   } as Styles);
 
-const MainFolderContainerStyle: Rule = () => {
+const mainFolderContainerStyle: Rule = () => {
   const [, isBreakpoint] = useBreakpoints();
   const mediumScreen = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
   return {
@@ -276,14 +276,14 @@ const MainFolderContainerStyle: Rule = () => {
   };
 };
 
-const Flex_style: Rule = {
+const flexStyle: Rule = {
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
   cursor: 'pointer',
 };
 
-const Title_style: Rule = {
+const titleStyle: Rule = {
   display: 'flex',
   justifyContent: 'space-between',
   height: '24px',
@@ -295,7 +295,7 @@ const Title_style: Rule = {
     color: '#333333',
   },
 } as Styles;
-const Archive_Style: Rule = ({ theme }) => ({
+const archiveStyle: Rule = ({ theme }) => ({
   border: `1px solid ${theme.colors.tescoBlue}`,
   fontSize: '14px',
   height: '34px',
@@ -305,7 +305,7 @@ const Archive_Style: Rule = ({ theme }) => ({
   whiteSpace: 'nowrap',
 });
 
-const ItemList_Style: CreateRule<{ selected: boolean }> = ({ selected }) =>
+const itemListStyle: CreateRule<{ selected: boolean }> = ({ selected }) =>
   ({
     cursor: 'pointer',
     display: 'flex',
@@ -325,22 +325,22 @@ const ItemList_Style: CreateRule<{ selected: boolean }> = ({ selected }) =>
     },
   } as Styles);
 
-const Folter_Style: Rule = {
+const folterStyle: Rule = {
   fontWeight: 'bold',
   fontSize: '18px',
   lineHeight: '22px',
   color: '#00539F',
 };
 
-const Quantity_Style: Rule = {
+const quantityStyle: Rule = ({ theme }) => ({
   fontSize: '18px',
   lineHeight: '22px',
-  color: '#00539F',
+  color: theme.colors.base,
   position: 'relative',
   marginTop: '4px',
-};
+});
 
-const Align_flex_style: Rule = ({ colors }) => ({
+const alignFlexStyle: Rule = ({ colors }) => ({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'flex-start',
@@ -348,7 +348,7 @@ const Align_flex_style: Rule = ({ colors }) => ({
   borderBottom: `1px solid ${colors.backgroundDarkest}`,
   padding: '15px 24px',
 });
-const Align_flex_styleLast: Rule = {
+const alignFlexStyleLast: Rule = {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'flex-start',

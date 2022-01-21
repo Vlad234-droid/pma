@@ -312,13 +312,13 @@ const folterStyle: Rule = {
   color: '#00539F',
 };
 
-const quantityStyle: Rule = {
+const quantityStyle: Rule = ({ theme }) => ({
   fontSize: '18px',
   lineHeight: '22px',
-  color: '#00539F',
+  color: theme.colors.base,
   position: 'relative',
   marginTop: '4px',
-};
+});
 
 const alignFlexStyle: Rule = ({ colors }) => ({
   display: 'flex',
