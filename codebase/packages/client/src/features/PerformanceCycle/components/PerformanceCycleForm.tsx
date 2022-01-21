@@ -139,6 +139,8 @@ export const PerformanceCycleForm: FC = () => {
   useEffect(() => {
     if (performanceCycleItem) {
       setValue('cycle', performanceCycleItem);
+      setValue('name', performanceCycleItem.name);
+      setValue('entryConfigKey', performanceCycleItem.entryConfigKey);
       setShowProperties(true);
     }
   }, [performanceCycleItem]);
@@ -159,21 +161,21 @@ export const PerformanceCycleForm: FC = () => {
   }, [entryConfigUuid]);
 
   function getData() {
-    const { cycle } = getValues();
+    const { cycle, entryConfigKey, name } = getValues();
     return {
       data: {
         ...(performanceCycleUuid !== 'new' && { uuid: performanceCycleUuid }),
-        entryConfigKey: cycle.entryConfigKey,
-        templateUUID: cycle.template.uuid,
-        name: cycle.name,
+        entryConfigKey: entryConfigKey,
+        template: { uuid: processSelected } || performanceCycleItem.template,
+        name: name,
         createdBy: {
           uuid: colleagueUuid,
         },
         status: 'ACTIVE',
         type: 'FISCAL',
-        startTime: new Date(cycle.startTime).toISOString(),
-        endTime: new Date(cycle.endTime).toISOString(),
-        properties: cycle.properties,
+        startTime: new Date(cycle.metadata.cycle.properties.pm_cycle_start_time).toISOString(),
+        endTime: new Date(cycle.metadata.cycle.properties.pm_cycle_end_time).toISOString(),
+        properties: cycle.metadata.cycle.properties,
         jsonMetadata: null,
         metadata: cycle.metadata,
       },
@@ -234,7 +236,7 @@ export const PerformanceCycleForm: FC = () => {
           1. General settings
         </div>
         <GenericItemField
-          name={`cycle.name`}
+          name={`name`}
           methods={methods}
           Wrapper={Item}
           label={'Cycle name'}
