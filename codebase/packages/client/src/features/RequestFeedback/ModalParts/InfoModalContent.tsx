@@ -1,5 +1,5 @@
 import React, { FC, Dispatch, SetStateAction } from 'react';
-import { useStyle, Rule, Styles, useBreakpoints } from '@dex-ddl/core';
+import { useStyle, Rule, useBreakpoints } from '@dex-ddl/core';
 import requestInfoModal from '../../../../public/requestInfoModal.png';
 import { IconButton } from 'components/IconButton';
 
@@ -10,12 +10,12 @@ type InfoModalProps = {
 const InfoModalContent: FC<InfoModalProps> = ({ setInfoModal }) => {
   const { css } = useStyle();
   return (
-    <div className={css(WrapperInfo)}>
-      <p className={css(PreTitle)}>
+    <div className={css(wrapperStyle)}>
+      <p className={css(titleStyle)}>
         When you request feedback from you colleagues, follow these steps to guide your colleague to give you great
         feedback. <br />
       </p>
-      <ol className={css(orderedList)}>
+      <ol className={css(listStyle)}>
         <li>
           Make your good intentions clear. This builds trust and lets the receiver know that your words come from a
           positive place. This means they&apos;ll be more likely to listen and reflect on what you&apos;ve shared. An
@@ -52,7 +52,7 @@ const InfoModalContent: FC<InfoModalProps> = ({ setInfoModal }) => {
     </div>
   );
 };
-const WrapperInfo: Rule = {
+const wrapperStyle: Rule = {
   padding: '0px 36px',
   overflow: 'auto',
   height: '100%',
@@ -71,21 +71,22 @@ const iconStyle: Rule = (theme) => {
   };
 };
 
-const PreTitle: Rule = {
+const titleStyle: Rule = {
   margin: '0px 0px 0px 0px',
   fontWeight: 'normal',
   fontSize: '16px',
   lineHeight: '20px',
 };
 
-const orderedList: Rule = {
+const listStyle: Rule = () => ({
   paddingLeft: '24px',
+
   '& li': {
     marginTop: '8px',
     fontWeight: 'normal',
     fontSize: '16px',
     lineHeight: '20px',
   },
-} as Styles;
+});
 
 export default InfoModalContent;

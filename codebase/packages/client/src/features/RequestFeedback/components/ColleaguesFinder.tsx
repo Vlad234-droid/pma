@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import { Rule, useStyle } from '@dex-ddl/core';
 import { Item } from 'components/Form';
 import SearchInput from 'components/SearchInput';
@@ -8,36 +8,45 @@ import defaultImg from '../../../../public/default.png';
 
 type Props = {
   onSelect: (person: any) => void;
-  selected?: any;
-  value: string;
+  selected: Array<string>;
   error: string;
 };
 
-const ColleaguesFinder: FC<Props> = ({ onSelect, error, value }) => {
+const ColleaguesFinder: FC<Props> = ({ onSelect, error, selected }) => {
   const dispatch = useDispatch();
-
+  const [searchValue, setSearchValue] = useState('');
   const { css } = useStyle();
 
   const colleagues = useSelector(getColleaguesSelector) || [];
 
   const handleSearchColleagues = (e) => {
-    const value = e.target.value;
-    if (value === '' || value.length <= 1) {
+    setSearchValue(e.target.value);
+  };
+
+  useEffect(() => {
+    if (searchValue === '' || searchValue.length <= 1) {
       dispatch(ColleaguesActions.clearColleagueList());
       return;
     }
 
     dispatch(
       ColleaguesActions.getColleagues({
-        'first-name_like': value,
-        'last-name_like': value,
+        'first-name_like': searchValue,
+        'last-name_like': searchValue,
       }),
     );
-  };
+  }, [searchValue]);
+
+  useEffect(() => {
+    return () => {
+      dispatch(ColleaguesActions.clearColleagueList());
+    };
+  }, []);
 
   const handleChange = (e: any) => {
-    const { colleagueUUID } = e.colleague;
-    onSelect(colleagueUUID);
+    const { colleagueUUID, profile } = e.colleague;
+    onSelect([...selected, { value: colleagueUUID, label: `${profile?.firstName} ${profile?.lastName}` }]);
+    dispatch(ColleaguesActions.clearColleagueList());
   };
 
   return (
@@ -45,14 +54,16 @@ const ColleaguesFinder: FC<Props> = ({ onSelect, error, value }) => {
       <div className={css({ marginTop: '32px' })} data-test-id='search-part'>
         <Item errormessage={error}>
           <SearchInput
+            value={searchValue}
             name={`search_option`}
             onChange={handleChange}
             onSearch={handleSearchColleagues}
+            onClear={() => onSelect([])}
+            onDelete={(colleagueUuid) => onSelect(selected.filter((value) => value === colleagueUuid))}
             placeholder={'Search'}
-            options={value ? [] : colleagues}
-            selected={null}
-            value={value}
-            disabled={Boolean(value)}
+            options={colleagues || []}
+            selected={selected}
+            multiple
             renderOption={(item) => (
               <div className={css({ display: 'flex', justifyContent: 'flex-start', alignItems: 'center' })}>
                 <img className={css({ width: '50px', height: '50px', borderRadius: '50%' })} src={defaultImg} />
