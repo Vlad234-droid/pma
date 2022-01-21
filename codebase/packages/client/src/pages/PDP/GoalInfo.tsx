@@ -3,15 +3,30 @@ import { Button, CreateRule, Rule, theme, Theme, useStyle } from '@dex-ddl/core'
 import editIcon from '../../assets/img/pdp/edit.png';
 import trashIcon from '../../assets/img/pdp/trash.png';
 import { Accordion, BaseAccordion, ExpandButton, Panel, Section } from 'components/Accordion';
+import { ConfirmModal } from 'features/Modal';
 
 const GoalInfo = (props) => {
   const { id, title, subtitle, description, data, formElements, deleteGoal, editGoal } = props;
   const modifiedTitleRegex = new RegExp(/\*/, 'g');
   const { css, theme } = useStyle();
   const [toogled, setToogled] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState(false);
 
   return (
     <div className={css(fullGoals({ theme }))}>
+      {confirmDelete && (
+        <ConfirmModal
+          title={'Are you sure you want to delete this goal?'}
+          description={'This is permanent and cannot be undone.'}
+          submitBtnTitle={'Delete'}
+          onSave={() => {
+            deleteGoal(id);
+            setConfirmDelete(false);
+          }}
+          onCancel={() => setConfirmDelete(false)}
+          onOverlayClick={() => setConfirmDelete(false)}
+        />
+      )}
       <Accordion
         id={`pdp-goal-accordion-${title}`}
         customStyle={{
@@ -59,7 +74,7 @@ const GoalInfo = (props) => {
                         <div className={css({ marginLeft: '5px' })}>Edit</div>
                       </Button>
 
-                      <Button styles={[btns]} onPress={() => deleteGoal(id)}>
+                      <Button styles={[btns]} onPress={() => setConfirmDelete(!confirmDelete)}>
                         <img className={css(icon)} alt='edit' src={trashIcon} />
                         <div className={css({ marginLeft: '5px' })}>Delete</div>
                       </Button>

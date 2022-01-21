@@ -19,13 +19,14 @@ import { v4 as uuidv4 } from 'uuid';
 import { buildPath } from 'features/Routes';
 import { Page } from 'pages';
 import { useParams } from 'react-router-dom';
+import { ConfirmModal } from 'features/Modal';
 
 const CreatePersonalDevelopmentGoal = (props) => {
   const { css, theme } = useStyle();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const pdpList = useSelector(schemaMetaPDPSelector)?.goals;
   const [pdpGoals, setPDPGoals] = useState<any[]>([]);
@@ -35,6 +36,8 @@ const CreatePersonalDevelopmentGoal = (props) => {
   const maxGoalCount = 5;
   const { uuid } = useParams<{ uuid: string }>();
   const [currentGoal, setCurrentGoal] = useState<any>({});
+  const [confirmSaveModal, setConfirSavemModal] = useState(false);
+  const [confirmSaveNextModal, setConfirSaveNextmModal] = useState(false);
 
   useEffect(() => {
     if (schema.meta.loaded) {
@@ -113,7 +116,7 @@ const CreatePersonalDevelopmentGoal = (props) => {
             </div>
             {idx === goalNum && idx + 1 < maxGoalCount && (
               <div
-                key={Math.random()}
+                key={el.uuid + Math.random()}
                 onClick={() => setCurrentGoal({})}
                 className={`${css(goal({ theme }))} ${css(defaultGoalItem({ theme }))}`}
               >
@@ -136,6 +139,33 @@ const CreatePersonalDevelopmentGoal = (props) => {
         onClose: () => navigate(-1),
       }}
     >
+      {confirmSaveModal && (
+        <ConfirmModal
+          title={'Are you sure you want to save this goal?'}
+          description={' '}
+          submitBtnTitle={'Confirm'}
+          onSave={() => {
+            uuid || Object.keys(currentGoal).length > 0 ? update() : save();
+            setConfirSavemModal(false);
+          }}
+          onCancel={() => setConfirSavemModal(false)}
+          onOverlayClick={() => setConfirSavemModal(false)}
+        />
+      )}
+
+      {confirmSaveNextModal && (
+        <ConfirmModal
+          title={'Are you sure you want to save this goal?'}
+          description={' '}
+          submitBtnTitle={'Confirm'}
+          onSave={() => {
+            saveAndCreate();
+            setConfirSaveNextmModal(false);
+          }}
+          onCancel={() => setConfirSaveNextmModal(false)}
+          onOverlayClick={() => setConfirSaveNextmModal(false)}
+        />
+      )}
       <div className={css(mainContainer)}>
         <div className={css(goalListBlock({ theme }))}>{!uuid && pdpList && navGoals()}</div>
         <form>
@@ -196,18 +226,18 @@ const CreatePersonalDevelopmentGoal = (props) => {
             );
           })}
         </form>
-        <div className={css(applyBlock)}>
+        <div className={css(applyBlock({ mobileScreen }))}>
           {
             <Button
               isDisabled={!formState.isValid}
-              onPress={() => (uuid || Object.keys(currentGoal).length > 0 ? update() : save())}
+              onPress={() => setConfirSavemModal(!confirmSaveModal)}
               styles={
                 uuid ||
                 Object.keys(currentGoal).length > 0 ||
                 pdpList?.length + 1 === maxGoalCount ||
                 pdpList?.length + 1 > maxGoalCount
                   ? [customBtnFullWidth]
-                  : [customBtn]
+                  : [customBtn({ mobileScreen })]
               }
             >
               Save & Exit
@@ -216,7 +246,11 @@ const CreatePersonalDevelopmentGoal = (props) => {
           {!uuid &&
             Object.keys(currentGoal).length === 0 &&
             (pdpList?.length + 1 !== maxGoalCount || pdpList?.length + 1 > maxGoalCount) && (
-              <Button isDisabled={!formState.isValid} onPress={() => saveAndCreate()} styles={[customBtn, createBtn]}>
+              <Button
+                isDisabled={!formState.isValid}
+                onPress={() => setConfirSaveNextmModal(!confirmSaveNextModal)}
+                styles={[customBtn({ mobileScreen }), createBtn]}
+              >
                 Save & create a new goal <img className={css(imgArrow)} alt='arrow' src={arrLeft} />
               </Button>
             )}
@@ -258,12 +292,16 @@ const createBtn = {
   justifyContent: 'center',
 } as Rule;
 
-const customBtn = {
-  padding: '10px 20px',
-  width: '47%',
-  whiteSpace: 'nowrap',
-  cursor: 'pointer',
-} as Rule;
+const customBtn: CreateRule<{ mobileScreen: boolean }> = (props) => {
+  const { mobileScreen } = props;
+  return {
+    padding: '10px 20px',
+    width: mobileScreen ? '100%' : '47%',
+    whiteSpace: 'nowrap',
+    cursor: 'pointer',
+    margin: mobileScreen ? '10px 0' : '0px',
+  };
+};
 
 const customBtnFullWidth = {
   padding: '10px 20px',
@@ -272,35 +310,16 @@ const customBtnFullWidth = {
   cursor: 'pointer',
 } as Rule;
 
-const applyBlock = {
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  marginTop: '32px',
-} as Rule;
-
-const dataBlock = {
-  borderBottom: `1px solid ${theme.colors.backgroundDarkest}`,
-  fontFamily: 'TESCO Modern", Arial, sans-serif',
-} as Rule;
-
-const infoIconEl = {
-  marginRight: '8px',
-} as Rule;
-
-const infoBlock = {
-  display: 'flex',
-  justifyContent: 'flex-start',
-  alignItems: 'center',
-  paddingBottom: '32px',
-  color: '#00539F',
-  fontSize: '14px',
-  fontStyle: 'normal',
-  lineHeight: '18px',
-  letterSpacing: '0px',
-  textAlign: 'left',
-  fontFamily: 'TESCO Modern", Arial, sans-serif',
-} as Rule;
+const applyBlock: CreateRule<{ mobileScreen: boolean }> = (props) => {
+  const { mobileScreen } = props;
+  return {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: '32px',
+    flexDirection: mobileScreen ? 'column' : 'row',
+  };
+};
 
 const activeGoalItem: CreateRule<{ theme: Theme }> = (props) => {
   if (props == null) return {};
@@ -319,10 +338,6 @@ const defaultGoalItem: CreateRule<{ theme: Theme }> = (props) => {
     cursor: 'pointer',
   };
 };
-
-const close = {
-  cursor: 'pointer',
-} as Rule;
 
 const goalListBlock: CreateRule<{ theme: Theme }> = (props) => {
   if (props == null) return {};
@@ -347,60 +362,6 @@ const goal: CreateRule<{ theme: Theme }> = (props) => {
     lineHeight: '20px',
     letterSpacing: '0px',
     paddingRight: '16px',
-    // color: `${theme.colors.disabledTescoBlue}`,
-  };
-};
-
-const decsriptionHeader: CreateRule<{ theme: Theme }> = (props) => {
-  if (props == null) return {};
-  const { theme } = props;
-  return {
-    fontSize: `${theme.font.fixed.f24}`,
-    lineHeight: '28px',
-    fontWeight: 'bold',
-    paddingBottom: '8px',
-  };
-};
-
-const arrow = {
-  marginLeft: '13.75px',
-  border: 'solid',
-  borderWidth: '0 1px 1px 0',
-  display: 'inline-block',
-  padding: '6px',
-  transform: 'rotate(137deg)',
-  webkitTransform: 'rotate(137deg)',
-  cursor: 'pointer',
-} as Rule;
-
-const header: CreateRule<{ theme: Theme }> = (props) => {
-  if (props == null) return {};
-  const { theme } = props;
-  return {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    fontSize: `${theme.font.fixed.f24}`,
-    lineHeight: '28px',
-    fontWeight: 'bold',
-    color: `${theme.colors.white}`,
-    width: '100%',
-    padding: '22px 42px 22px 40px',
-  };
-};
-
-const popup: CreateRule<{ theme: Theme }> = (props) => {
-  if (props == null) return {};
-  const { theme } = props;
-  return {
-    display: 'flex',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    flexDirection: 'column',
-    padding: '0 20px',
-    paddingBottom: '60px',
-    backgroundColor: `${theme.colors.tescoBlue}`,
-    fontFamily: 'TESCO Modern", Arial, sans-serif',
   };
 };
 
