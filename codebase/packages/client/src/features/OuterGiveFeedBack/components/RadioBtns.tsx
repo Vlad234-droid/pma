@@ -6,7 +6,7 @@ import { IconButton } from 'components/IconButton';
 import { FeedbackStatus } from 'config/enum';
 
 type Props = {
-  checkedRadio: FeedbackStatus;
+  checkedRadio: string;
   onCheck: (item: FeedbackStatus) => void;
   handleBtnClick: () => void;
 };

@@ -17,6 +17,7 @@ import performanceCycleReducer from '../entities/performanceCycle/reducer';
 import configEntriesReducer from '../entities/configEntries/reducer';
 import processTemplateReducer from '../entities/processTemplate/reducer';
 import pdpReducer from '../entities/pdp/reducer';
+import reportReducer from '../entities/report/reducer';
 
 export const rootReducer = combineReducers({
   users: userReducer,
@@ -36,4 +37,5 @@ export const rootReducer = combineReducers({
   performanceCycle: performanceCycleReducer,
   configEntries: configEntriesReducer,
   processTemplate: processTemplateReducer,
+  report: reportReducer,
 });

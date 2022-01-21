@@ -1,19 +1,25 @@
 import React, { FC, useState } from 'react';
-import { useStyle, useBreakpoints, Rule, colors, Styles, CreateRule } from '@dex-ddl/core';
+import { useStyle, useBreakpoints, Rule, colors, Styles, CreateRule, Button, theme } from '@dex-ddl/core';
+import { ReportActions } from '@pma/store';
+import { useDispatch } from 'react-redux';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as Yup from 'yup';
+
 import { IconButton } from 'components/IconButton';
 import { FilterOption } from 'features/Shared';
 import { PieChart } from 'components/PieChart';
 import { View } from 'components/PieChart/PieChart';
 import { GenericItemField } from 'components/GenericForm';
 import { Item, Select } from 'components/Form';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as Yup from 'yup';
 import { createYearSchema } from './config';
 import { InfoTable, FilterModal } from './components';
 import { DonwloadReportModal } from './Modals';
+import { Trans } from 'components/Translation';
+import { BASE_URL_API } from 'config/constants';
 
 const Report: FC = () => {
+  const dispatch = useDispatch();
   const [focus, setFocus] = useState(false);
   const [showDownloadReportModal, setShowDownloadReportModal] = useState(false);
   const [searchValueFilterOption, setSearchValueFilterOption] = useState('');
@@ -76,6 +82,31 @@ const Report: FC = () => {
   };
 
   const quantity = getAppliedReport().length;
+
+  async function getData(url) {
+    const response = await fetch(
+      url +
+        new URLSearchParams({
+          year: '2021',
+          'statuses_in[0]': 'APPROVED',
+          'statuses_in[1]': 'DRAFT',
+        }),
+    );
+    return await response;
+  }
+
+  const downloadCsvFile = async () => {
+    getData(`${BASE_URL_API}/pm-linked-objective-report?`).then((resp) =>
+      resp.blob().then((blob) => {
+        const a = document.createElement('a');
+        a.href = window.URL.createObjectURL(blob);
+        a.download = 'ObjectivesReport.xlsx';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+      }),
+    );
+  };
 
   return (
     <>
@@ -155,7 +186,7 @@ const Report: FC = () => {
           <div className={css(leftColumn)}>
             <PieChart title='Objectives submitted' data={[{ percent: 67 }]} display={View.CHART} />
             <PieChart
-              title='Mid-year forms due Mar 2022'
+              title='Mid-year review'
               display={View.CHART}
               data={[
                 { percent: 82, title: 'Submitted' },
@@ -163,7 +194,7 @@ const Report: FC = () => {
               ]}
             />
             <PieChart
-              title='End-year forms due Sep 2022'
+              title='Year-end review'
               display={View.CHART}
               data={[
                 { percent: 82, title: 'Submitted' },
@@ -225,14 +256,14 @@ const Report: FC = () => {
                 { percent: 13, quantity: 15, title: 'Outstanding' },
               ]}
             />
-            <PieChart
-              title='Supporting your Performance'
-              data={[
-                { percent: 4, title: 'Colleagues' },
-                { percent: 6, title: 'Colleagues' },
-              ]}
-              display={View.QUANTITY}
-            />
+            <div className={css(flexContainer)}>
+              <PieChart
+                title='Supporting your Performance'
+                data={[{ percent: 4, title: 'Colleagues' }]}
+                display={View.QUANTITY}
+              />
+              <PieChart title='New to business' data={[{ percent: 6, title: 'Colleagues' }]} display={View.QUANTITY} />
+            </div>
             <InfoTable
               mainTitle='Anniversary Reviews completed per quarter'
               preTitle='Hourly paid colleagues only'
@@ -246,10 +277,30 @@ const Report: FC = () => {
           </div>
         </div>
       </div>
+      <Button styles={[buttonCoreStyled]} onPress={downloadCsvFile}>
+        <Trans>Download</Trans>
+      </Button>
       {showDownloadReportModal && <DonwloadReportModal onClose={handleCloseModal} />}
     </>
   );
 };
+
+const buttonCoreStyled: Rule = ({ theme }) => ({
+  fontWeight: theme.font.weight.bold,
+  width: '133px',
+  background: theme.colors.tescoBlue,
+  color: `${theme.colors.white}`,
+  margin: '20px 42px 0px auto',
+});
+
+const flexContainer: Rule = {
+  display: 'flex',
+  justifyContent: 'space-between',
+  gap: '8px',
+  '& > div': {
+    flex: 1,
+  },
+} as Styles;
 
 const appliedWrapperFilters: Rule = ({ theme }) => {
   return {
