@@ -1,6 +1,6 @@
 import React, { FC, HTMLProps } from 'react';
 import { Trans, useTranslation } from 'components/Translation';
-import { Rule, Styles, useStyle } from '@dex-ddl/core';
+import { CreateRule, Rule, Styles, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { BasicTile } from 'components/Tile';
 
 export type DashboardProfileProps = {
@@ -43,15 +43,25 @@ const bodyStyle = {
   display: 'inline-flex',
 } as Styles;
 
+const tileStyle: CreateRule<{ mobileScreen }> = ({ mobileScreen }) => ({
+  ...(mobileScreen ? {
+    padding: '6px 0 0',
+  } : {
+    padding: '14px 10px 10px',
+  })
+});
+
 const ProfessionalInformation: FC<Props> = ({ user }) => {
   const { css } = useStyle();
   const { t } = useTranslation();
+  const [, isBreakpoint] = useBreakpoints();
+  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
   const { hireDate, job, department, businessType, manager, employmentType, countryCode } = user;
   return (
     <BasicTile
       title={t('ProfessionalInformation', 'Professional information')}
       description={''}
-      customStyle={{ padding: '14px 10px 10px' }}
+      customStyle={tileStyle({mobileScreen})}
     >
       <div className={css(wrapperStyle)}>
         <div className={css(bodyStyle)}>

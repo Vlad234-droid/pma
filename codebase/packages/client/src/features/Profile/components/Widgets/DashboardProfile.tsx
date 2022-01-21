@@ -1,6 +1,6 @@
 import React, { FC, HTMLProps } from 'react';
 import { Trans } from 'components/Translation';
-import { Rule, Styles, useStyle } from '@dex-ddl/core';
+import { CreateRule, Rule, Styles, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { TileWrapper } from 'components/Tile';
 import { Avatar } from 'components/Avatar';
 import { AuthConsumer } from '../../../../contexts/authContext';
@@ -32,28 +32,36 @@ const bodyBlockStyle = {
   paddingTop: '14px',
 } as Styles;
 
-const mainTitleStyle: Rule = ({ theme }) =>
-  ({
-    fontStyle: 'normal',
-    fontWeight: `${theme.font.weight.bold}`,
+const mainTitleStyle: CreateRule<{ mobileScreen }> = ({ mobileScreen }) => ({
+  fontStyle: 'normal',
+  fontWeight: 700,
+  ...(mobileScreen ? {
+    fontSize: '18px',
+    lineHeight: '22px',
+  } : {
     fontSize: '20px',
     lineHeight: '24px',
-  } as Styles);
+  })
+});
 
-const titleStyle: Rule = ({ theme }) =>
-  ({
-    fontStyle: 'normal',
-    fontWeight: `${theme.font.weight.bold}`,
-    fontSize: '16px',
-    lineHeight: '20px',
-  } as Styles);
+const titleStyle: Rule = ({ theme }) => ({
+  fontStyle: 'normal',
+  fontWeight: `${theme.font.weight.bold}`,
+  fontSize: '16px',
+  lineHeight: '20px',
+} as Styles);
 
-const descriptionStyle = {
+const descriptionStyle: CreateRule<{ mobileScreen }> = ({ mobileScreen }) => ({
   fontStyle: 'normal',
   fontWeight: 'normal',
-  fontSize: '20px',
-  lineHeight: '24px',
-} as Styles;
+  ...(mobileScreen ? {
+    fontSize: '18px',
+    lineHeight: '22px',
+  } : {
+    fontSize: '20px',
+    lineHeight: '24px',
+  })
+});
 
 const bodyStyle = {
   flexWrap: 'wrap',
@@ -68,13 +76,15 @@ export type AvatarNameProps = {
 
 export const AvatarName: FC<AvatarNameProps> = ({ user = {} }) => {
   const { css } = useStyle();
+  const [, isBreakpoint] = useBreakpoints();
+  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
   const { fullName, job } = user || {};
   return (
     <div className={css(headStyle)}>
       <Avatar size={65} />
       <div className={css(headerBlockStyle)}>
-        <span className={css(mainTitleStyle)}>{fullName}</span>
-        <span className={css(descriptionStyle)}>{job}</span>
+        <span className={css(mainTitleStyle({mobileScreen}))}>{fullName}</span>
+        <span className={css(descriptionStyle({mobileScreen}))}>{job}</span>
       </div>
     </div>
   );
@@ -82,6 +92,8 @@ export const AvatarName: FC<AvatarNameProps> = ({ user = {} }) => {
 
 const DashboardProfile: FC<Props> = () => {
   const { css } = useStyle();
+  const [, isBreakpoint] = useBreakpoints();
+  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
   return (
     <AuthConsumer>
       {({ user = {} }) => {
@@ -96,13 +108,13 @@ const DashboardProfile: FC<Props> = () => {
                   <span className={css(titleStyle)}>
                     <Trans i18nKey='line_manager'>Line manager</Trans>
                   </span>
-                  <span className={css(descriptionStyle, {fontSize: '16px', lineHeight: '20px'})}>{manager}</span>
+                  <span className={css(descriptionStyle({mobileScreen}), {fontSize: '16px', lineHeight: '20px'})}>{manager}</span>
                 </div>
                 <div className={css(bodyBlockStyle)}>
                   <span className={css(titleStyle)}>
                     <Trans i18nKey='function'>Function</Trans>
                   </span>
-                  <span className={css(descriptionStyle , {fontSize: '16px', lineHeight: '20px'})}>{department}</span>
+                  <span className={css(descriptionStyle({mobileScreen}), {fontSize: '16px', lineHeight: '20px'})}>{department}</span>
                 </div>
               </div>
             </div>

@@ -37,7 +37,14 @@ const Header: FC<HeaderProps> = ({ title, onBack, withIcon, iconName = 'home', s
 
   return (
     <div className={css(wrapperStyles, styles)} data-test-id={TEST_ID}>
-      {onBack ? <IconButton onPress={onBack} graphic='backwardLink' data-test-id={BACK_BTN_TEST_ID} /> : <div />}
+      {onBack ? 
+        <IconButton
+          onPress={onBack}
+          graphic='backwardLink'
+          iconStyles={{ marginRight: '25px' }}
+          data-test-id={BACK_BTN_TEST_ID}
+        /> : <div />
+      }
       <h3 className={css(headerStyles({mobileScreen}))}>
         {withIcon && <div className={css({ height: '24px', marginRight: '10px' })}><Icon graphic={iconName} /></div>}
         {title}
@@ -51,7 +58,6 @@ const Header: FC<HeaderProps> = ({ title, onBack, withIcon, iconName = 'home', s
 const wrapperStyles: Rule = {
   display: 'flex',
   justifyContent: 'space-between',
-  padding: '0px 40px',
 };
 
 const headerStyles: CreateRule<{ mobileScreen }> = ({ mobileScreen }) => ({
@@ -61,7 +67,6 @@ const headerStyles: CreateRule<{ mobileScreen }> = ({ mobileScreen }) => ({
   alignItems: 'center',
   color: theme.colors.tescoBlue,
   ...(mobileScreen ? {
-    marginLeft: '25px',
     marginRight: 'auto',
   } : {})
 });
