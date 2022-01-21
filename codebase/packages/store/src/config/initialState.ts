@@ -16,6 +16,7 @@ import { initialState as performanceCycleInitialState } from '../entities/perfor
 import { initialState as configEntriesInitialState } from '../entities/configEntries/reducer';
 import { initialState as processTemplateInitialState } from '../entities/processTemplate/reducer';
 import { initialState as pdpInitialState } from '../entities/pdp/reducer';
+import { initialState as reportInitialState } from '../entities/report/reducer';
 
 //@ts-ignore
 export const initialState = {
@@ -36,6 +37,7 @@ export const initialState = {
   performanceCycle: performanceCycleInitialState,
   configEntries: configEntriesInitialState,
   processTemplate: processTemplateInitialState,
+  report: reportInitialState,
 };
 
 export type State = StateType<typeof initialState>;
