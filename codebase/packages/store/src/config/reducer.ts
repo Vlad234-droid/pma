@@ -18,6 +18,7 @@ import configEntriesReducer from '../entities/configEntries/reducer';
 import processTemplateReducer from '../entities/processTemplate/reducer';
 import pdpReducer from '../entities/pdp/reducer';
 import reportReducer from '../entities/report/reducer';
+import previousReviewFilesReducer from '../entities/previousReviewFiles/reducer';
 
 export const rootReducer = combineReducers({
   users: userReducer,
@@ -38,4 +39,5 @@ export const rootReducer = combineReducers({
   configEntries: configEntriesReducer,
   processTemplate: processTemplateReducer,
   report: reportReducer,
+  previousReviewFiles: previousReviewFilesReducer,
 });

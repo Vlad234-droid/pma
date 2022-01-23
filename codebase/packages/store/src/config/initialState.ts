@@ -17,6 +17,7 @@ import { initialState as configEntriesInitialState } from '../entities/configEnt
 import { initialState as processTemplateInitialState } from '../entities/processTemplate/reducer';
 import { initialState as pdpInitialState } from '../entities/pdp/reducer';
 import { initialState as reportInitialState } from '../entities/report/reducer';
+import { initialState as previousReviewFilesInitialState } from '../entities/previousReviewFiles/reducer';
 
 //@ts-ignore
 export const initialState = {
@@ -38,6 +39,7 @@ export const initialState = {
   configEntries: configEntriesInitialState,
   processTemplate: processTemplateInitialState,
   report: reportInitialState,
+  previousReviewFiles: previousReviewFilesInitialState,
 };
 
 export type State = StateType<typeof initialState>;

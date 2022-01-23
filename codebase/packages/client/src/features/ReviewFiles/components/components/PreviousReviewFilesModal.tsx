@@ -1,11 +1,14 @@
-import React, { FC, HTMLProps, ChangeEvent, useState } from 'react';
-import filesize from 'filesize';
+import React, { FC, HTMLProps, useEffect, useState } from 'react';
 import { CreateRule, Modal, Rule, Styles, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { DropZone } from 'components/DropZone';
 import Upload from 'components/DropZone/Upload.svg';
-import Download from 'components/DropZone/Download.svg';
-import Trash from 'components/DropZone/Trash.svg';
 import { Input } from 'components/Form';
+import { currentUserSelector, PreviousReviewFilesActions } from '@pma/store';
+import useDispatch from 'hooks/useDispatch';
+import { getPreviousReviewFilesSelector } from '@pma/store/src/selectors/previousReviewFiles';
+import { useSelector } from 'react-redux';
+import { File } from './File';
+import { useTranslation } from 'components/Translation';
 
 export type PreviousReviewFilesModal = {
   onOverlayClick: () => void;
@@ -15,15 +18,25 @@ type Props = HTMLProps<HTMLInputElement> & PreviousReviewFilesModal;
 
 const PreviousReviewFilesModal: FC<Props> = ({ onOverlayClick }) => {
   const { css } = useStyle();
+  const { t } = useTranslation();
   const [, isBreakpoint] = useBreakpoints();
-  const [files, updateFiles]: [any[], any] = useState([]);
+  const dispatch = useDispatch();
+  const {
+    info: { colleagueUUID },
+  } = useSelector(currentUserSelector);
+  const files: File[] = useSelector(getPreviousReviewFilesSelector) || [];
   const [filter, setFilteredValue] = useState('');
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
 
-  const onUpload = (file) => updateFiles((prev) => [...prev, file]);
-  const filterFiles = (file) => !filter || file.name.toLowerCase().includes(filter);
-  const deleteFile = (key) => updateFiles((prevState) => prevState.splice(key, 1));
-  const handleChangeFilter = (e: ChangeEvent<HTMLInputElement>) => setFilteredValue(e.target.value);
+  const onUpload = (file) => dispatch(PreviousReviewFilesActions.uploadFile({ file, colleagueUUID }));
+  const filteredFiles = files?.filter(
+    ({ fileName }) => !filter || fileName.toLowerCase().includes(filter.toLowerCase()),
+  );
+  const handleChangeFilter = ({ target }) => setFilteredValue(target.value);
+
+  useEffect(() => {
+    dispatch(PreviousReviewFilesActions.getPreviousReviewFiles());
+  }, []);
 
   return (
     <>
@@ -37,26 +50,13 @@ const PreviousReviewFilesModal: FC<Props> = ({ onOverlayClick }) => {
         <div className={css({ marginTop: '32px' })}>
           <DropZone onUpload={onUpload}>
             <img className={css({ maxWidth: 'inherit' })} src={Upload} alt='Upload' />
-            <span className={css(labelStyles)}>Drop file here or click to upload</span>
-            <span className={css(descriptionStyles)}>Maximum upload size 5MB</span>
+            <span className={css(labelStyles)}>{t('Drop file here or click to upload')}</span>
+            <span className={css(descriptionStyles)}>{t('Maximum upload size 5MB')}</span>
           </DropZone>
         </div>
-        <div className={css({ marginTop: '32px' })}>
-          {files.filter(filterFiles).map((file, key) => (
-            <div className={css(listItemStyles)} key={key}>
-              <div className={css({ margin: '24px 0' })}>
-                <div className={css(fileNameStyles)}>{file.name}</div>
-                <div className={css(filesizeStyles)}>{filesize(file.size)}</div>
-              </div>
-              <div className={css({ display: 'flex' })}>
-                <button className={css(buttonStyles)}>
-                  <img src={Download} alt='Download' />
-                </button>
-                <button className={css(buttonStyles)} onClick={() => deleteFile(key)}>
-                  <img src={Trash} alt='Trash' />
-                </button>
-              </div>
-            </div>
+        <div className={css(fileListStyles)}>
+          {filteredFiles?.map((file) => (
+            <File file={file} key={file.uuid} />
           ))}
         </div>
       </Modal>
@@ -64,27 +64,11 @@ const PreviousReviewFilesModal: FC<Props> = ({ onOverlayClick }) => {
   );
 };
 
-const buttonStyles = {
-  backgroundColor: 'inherit',
-  border: 'none',
-};
-
 const containerRule: CreateRule<{
   mobileScreen: boolean;
 }> = ({ mobileScreen }) => ({
   width: mobileScreen ? '345px' : '500px',
   padding: '24px 38px 24px',
-});
-
-const filesizeStyles: Rule = ({ theme }) => ({
-  fontSize: '14px',
-  color: theme.colors.tescoBlue,
-});
-
-const fileNameStyles: Rule = ({ theme }) => ({
-  fontSize: '16px',
-  fontWeight: 'bold',
-  color: theme.colors.tescoBlue,
 });
 
 const labelStyles: Rule = ({ theme }) => ({
@@ -98,17 +82,13 @@ const descriptionStyles: Rule = ({ theme }) => ({
   color: theme.colors.tescoBlue,
 });
 
-const listItemStyles: Rule = ({ theme }) => ({
-  display: 'flex',
-  justifyContent: 'space-between',
-  borderBottom: `1px solid ${theme.colors.backgroundDarkest}`,
-});
-
 const modalStyles = {
   fontWeight: 700,
   fontSize: '20px',
   lineHeight: '24px',
   minHeight: '700px',
 } as Styles;
+
+const fileListStyles = { marginTop: '32px', maxHeight: '300px', overflow: 'scroll' } as Styles;
 
 export default PreviousReviewFilesModal;
