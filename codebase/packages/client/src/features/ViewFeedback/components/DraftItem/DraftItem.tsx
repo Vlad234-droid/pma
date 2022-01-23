@@ -135,8 +135,8 @@ const DraftItem: FC<DraftItemProps> = ({ item, downloadable = true }) => {
                   {getPropperTargetType(item.targetType, item.targetId) !== '' && (
                     <h2 className={css(TitleStyle)}>{getPropperTargetType(item.targetType, item.targetId)}</h2>
                   )}
-                  {item.feedbackItems.map(({ code, question, content }) => (
-                    <div key={code} className={css(infoBlockStyle)}>
+                  {item.feedbackItems.map(({ question, content }, idx) => (
+                    <div key={idx} className={css(infoBlockStyle)}>
                       <h3>{`${question}`}</h3>
                       <p>{content}</p>
                     </div>

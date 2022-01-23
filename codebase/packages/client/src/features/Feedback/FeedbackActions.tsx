@@ -28,7 +28,6 @@ import { Icon } from 'components/Icon';
 import { FeedbackStatus } from 'config/enum';
 import { useAuthContainer } from 'contexts/authContext';
 import { Page } from 'pages';
-import { boolean } from 'yup/lib/locale';
 
 const FEEDBACK_ACTIONS = 'feedback_actions';
 
