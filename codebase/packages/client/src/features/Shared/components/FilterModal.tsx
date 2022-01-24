@@ -9,6 +9,7 @@ type FilterType = {
   ZA: boolean;
   newToOld: boolean;
   oldToNew: boolean;
+  search?: string;
 };
 
 type Props = {
@@ -21,7 +22,7 @@ type Props = {
 export const FilterModal: FC<Props> = ({ isOpen, filter, setFilter, toggleOpen }) => {
   const { css, theme } = useStyle();
   const choseHandler = (val: string) => {
-    setFilter({ AZ: false, ZA: false, newToOld: false, oldToNew: false, [val]: true });
+    setFilter({ AZ: false, ZA: false, newToOld: false, oldToNew: false, search: filter.search, [val]: true });
     toggleOpen(false);
   };
   const ref = useRef<HTMLDivElement | null>(null);
@@ -108,7 +109,7 @@ const wrapperStyle: CreateRule<{ theme: Theme; isOpen: boolean }> = ({ theme, is
     height: '186px',
     padding: '10px 16px 16px 16px',
     top: '40px',
-    right: '0px',
+    right: 0,
     pointerEvents: isOpen ? 'all' : 'none',
     transform: isOpen ? 'scaleY(1)' : 'scaleY(0)',
     transition: 'transform .3s ease',

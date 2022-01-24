@@ -15,6 +15,7 @@ export type Props = {
   customIconInserted?: any;
   onFocus?: () => void;
   focus?: boolean;
+  onKeyDown?: (e: KeyboardEvent) => void;
 };
 
 export const Item: FC<Props> = ({
@@ -27,6 +28,7 @@ export const Item: FC<Props> = ({
   customIconInserted,
   focus,
   onFocus,
+  onKeyDown,
 }) => {
   const { css } = useStyle();
   const [recordingState, setRecordingState] = useState(false);
@@ -42,7 +44,11 @@ export const Item: FC<Props> = ({
   };
 
   return (
-    <div className={css(wrapperItem({ marginBot }))}>
+    <div
+      className={css(wrapperItem({ marginBot }))}
+      // @ts-ignore
+      onKeyDown={onKeyDown}
+    >
       {label && (
         <div className={css(labelWrapperStyle)}>
           <label className={css(labelStyle)} title={label}>
