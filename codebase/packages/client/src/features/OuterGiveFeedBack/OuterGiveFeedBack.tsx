@@ -52,9 +52,9 @@ const OuterGiveFeedBack: FC = () => {
     debounce((filter) => {
       dispatch(
         FeedbackActions.getAllFeedbacks({
-          'colleague-uuid': colleagueUuid,
           _limit: '300',
-          _search: filter.search,
+          'colleague-uuid': colleagueUuid,
+          'target-colleague-first-name_contains': filter.search,
           _sort: getSortString(filter),
         }),
       );
