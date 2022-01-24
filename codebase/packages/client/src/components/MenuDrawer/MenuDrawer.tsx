@@ -51,7 +51,7 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
               title={t('my_objectives_and_reviews', 'My objectives and reviews')}
             />
             <MenuItem iconGraphic={'list'} linkTo={buildPath(Page.PERSONAL_DEVELOPMENT_PLAN)} title={'Personal Development Plan'} />
-            <MenuItem iconGraphic={'edit'} linkTo={buildPath(Page.NOTES)} title={'My notes'} />
+            <MenuItem iconGraphic={'edit'} linkTo={buildPath(Page.NOTES)} title={'My Notes'} />
             <MenuItem iconGraphic={'account'} linkTo={buildPath(Page.PROFILE)} title={'My profile'} />
             <MenuItem iconGraphic={'chatSq'} linkTo={buildPath(Page.FEEDBACK)} title={'Feedback'} />
             <MenuItem iconGraphic={'performance'} linkTo={'/'} title={'Support your performance'} />
