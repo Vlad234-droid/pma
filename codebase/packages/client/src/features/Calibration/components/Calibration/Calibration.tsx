@@ -13,7 +13,7 @@ import Widgets from '../Widgets';
 import Colleagues from '../Colleagues';
 import Graph from '../Graph';
 import CompareModal from '../CompareModal';
-import { getMockFilterOptions } from '../../utils';
+import { getCompareOptions, getMockFilterOptions, getCompareData, getCurrentData } from '../../utils';
 
 const Calibration: FC = () => {
   const { css } = useStyle();
@@ -27,6 +27,9 @@ const Calibration: FC = () => {
   const dispatch = useDispatch();
   const [filterOptions, setFilterOptions] = useState<FilterOption[]>();
   const [searchValue, setSearchValue] = useSearch();
+  const compareOptions = getCompareOptions(t);
+  const compareData = isCompareMode ? getCompareData(compareMode) : undefined;
+  const graphData = getCurrentData();
   // @ts-ignore
   const colleagues = useSelector((state) => getAllEmployees(state), shallowEqual) || [];
 
@@ -95,7 +98,10 @@ const Calibration: FC = () => {
       >
         <div className={css({ flex: '3 1 375px', display: 'flex', flexDirection: 'column', gap: '8px' })}>
           <TileWrapper>
-            <Graph />
+            <Graph
+              currentData={graphData}
+              compareData={compareData}
+            />
           </TileWrapper>
           {!isCompareMode && (
             <div className={css(allColleagues)}>
@@ -123,6 +129,7 @@ const Calibration: FC = () => {
           onClose={() => setCompareModalOpen(false)}
           onSave={handleSaveCompare}
           mode={compareMode}
+          options={compareOptions}
         />
       )}
       {isSuccessModalOpen && (

@@ -5,20 +5,18 @@ import { ConfirmModal } from 'features/Actions';
 import { Trans, useTranslation } from 'components/Translation';
 import { Radio } from 'components/Form';
 
-import { getCompareOptions } from '../../utils';
-
 type Props = {
   onClose: () => void,
   onSave: (checked: string) => void;
   mode: string;
+  options: { id: string; label: string; text: string }[];
 };
 
 // TODO: load prev years data for comparison
-const CompareModal: FC<Props> = ({ onClose, onSave, mode }) => {
+const CompareModal: FC<Props> = ({ onClose, onSave, mode, options }) => {
   const { css } = useStyle();
   const { t } = useTranslation();
   const [checked, setChecked] = useState<string>(mode);
-  const options = getCompareOptions(t);
 
   const handleSave = () => {
     onSave(checked);
