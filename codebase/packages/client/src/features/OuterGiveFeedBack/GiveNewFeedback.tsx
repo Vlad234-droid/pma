@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useBreakpoints, Rule, Modal } from '@dex-ddl/core';
 import { colleagueUUIDSelector, ColleaguesActions, FeedbackActions, feedbackByUuidSelector } from '@pma/store';
 import { Icon } from 'components/Icon';
+import { Page } from 'pages';
 import { GiveFeedbackForm, ConfirmMassage, SuccessMassage, InfoMassage } from './components';
 import { GiveFeedbackType } from './type';
 
@@ -97,7 +98,7 @@ const GiveNewFeedback: FC = () => {
   };
 
   const handleSuccess = () => {
-    navigate(-1);
+    navigate(`/${Page.GIVE_FEEDBACK}`);
     dispatch(ColleaguesActions.clearColleagueList());
   };
 
