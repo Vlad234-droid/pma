@@ -5,7 +5,7 @@ import { ObjectiveType, ReviewType, Status } from 'config/enum';
 import { StepIndicator } from 'components/StepIndicator/StepIndicator';
 import { IconButton } from 'components/IconButton';
 import { downloadPDF, ObjectiveDocument, usePDF } from '@pma/pdf-renderer';
-import { REVIEW_MODIFICATION_MODE, reviewModificationModeFn, canEditAllObjectiveFn } from '../../utils';
+import { canEditAllObjectiveFn, REVIEW_MODIFICATION_MODE, reviewModificationModeFn } from '../../utils';
 
 import {
   Accordion,
@@ -290,7 +290,11 @@ const MyObjectives: FC = () => {
             right={{
               content: (
                 <div>
-                  <Button mode='inverse' onPress={() => alert('view')} styles={[linkStyles({ theme })]}>
+                  <Button
+                    mode='inverse'
+                    onPress={() => setPreviousReviewFilesModalShow(true)}
+                    styles={[linkStyles({ theme })]}
+                  >
                     <Trans i18nKey='view_history'>View history</Trans>
                   </Button>
                 </div>
