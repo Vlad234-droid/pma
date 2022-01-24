@@ -12,7 +12,6 @@ import { TileWrapper } from 'components/Tile';
 import { colleagueUUIDSelector, FeedbackActions, getReviews } from '@pma/store';
 import { IconButton } from 'components/IconButton';
 import { TargetType } from '../type';
-import { FeedbackStatus } from 'config/enum';
 
 const AREA_OPTIONS = [
   { value: TargetType.GOAL, label: 'Day Job' },
@@ -80,12 +79,10 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel }) => {
           Select which colleague(s) you would like to ask feedback from
         </div>
         <form className={css({ marginTop: '20px' })}>
-          <Item errormessage={get(errors, 'targetColleagues', '')}>
+          <Item errormessage={get(errors, 'colleagues', '')}>
             <ColleaguesFinder
-              onSelect={(colleagues) =>
-                setValue('targetColleagues', colleagues, { shouldDirty: true, shouldValidate: true })
-              }
-              selected={formValues.targetColleagues || []}
+              onSelect={(colleagues) => setValue('colleagues', colleagues, { shouldDirty: true, shouldValidate: true })}
+              selected={formValues.colleagues || []}
               error={''}
             />
           </Item>

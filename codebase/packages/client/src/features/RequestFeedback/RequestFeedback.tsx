@@ -18,8 +18,8 @@ const RequestFeedback: FC = () => {
   const { theme } = useStyle();
 
   const handleSubmit = (data: any) => {
-    const { targetColleagues, targetType, targetId, ...feedbackItems } = data;
-    const formData = targetColleagues.map(({ value }) => ({
+    const { colleagues, targetType, targetId, ...feedbackItems } = data;
+    const formData = colleagues.map(({ value }) => ({
       targetColleagueUuid: colleagueUuid,
       targetType,
       targetId,
