@@ -16,14 +16,15 @@ const RequestFeedback: FC = () => {
   const [, isBreakpoint] = useBreakpoints();
   const isMobile = isBreakpoint.small || isBreakpoint.xSmall;
   const { theme } = useStyle();
+
   const handleSubmit = (data: any) => {
     const { targetColleagues, targetType, targetId, ...feedbackItems } = data;
     const formData = targetColleagues.map(({ value }) => ({
-      targetColleagueUuid: value,
+      targetColleagueUuid: colleagueUuid,
       targetType,
       targetId,
       status: 'PENDING',
-      colleagueUuid,
+      colleagueUuid: value,
       feedbackItems: Object.entries(feedbackItems)
         .filter((item) => item[1])
         .map(([key, value]) => ({ code: key, content: value })),
