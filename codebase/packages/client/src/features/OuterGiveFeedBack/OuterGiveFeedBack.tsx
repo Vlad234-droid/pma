@@ -41,10 +41,10 @@ const OuterGiveFeedBack: FC = () => {
   const [status, setCheckedStatus] = useState(FeedbackStatus.DRAFT);
 
   const getSortString = (filter: any) => {
-    if (filter.newToOld) return 'updatedTime:ASC';
-    if (filter.oldToNew) return 'updatedTime:DESC';
-    if (filter.AZ) return 'targetColleagueProfile.colleague.profile.firstName:ASC';
-    if (filter.ZA) return 'targetColleagueProfile.colleague.profile.firstName:DESC';
+    if (filter.newToOld) return 'updated-time:DESC';
+    if (filter.oldToNew) return 'updated-time:ASC';
+    if (filter.AZ) return 'target-colleague-first-name:ASC';
+    if (filter.ZA) return 'target-colleague-first-name:DESC';
     return undefined;
   };
 
