@@ -120,6 +120,10 @@ const ViewFeedback: FC = () => {
   };
 
   useEffect(() => {
+    dispatch(FeedbackActions.clearFeedback());
+  }, []);
+
+  useEffect(() => {
     if (!colleagueUuid) {
       return;
     }
