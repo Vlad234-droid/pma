@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
-import { Button, ModalWithHeader, Rule, useBreakpoints, useStyle } from '@dex-ddl/core';
+import { Button, CreateRule, ModalWithHeader, Rule, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { chooseTemplateSchema } from 'pages/PerformanceCycle/schema';
@@ -7,8 +7,12 @@ import { useForm } from 'react-hook-form';
 import { Icon } from 'components/Icon';
 import { Input } from 'components/Form';
 import { GenericItemField } from 'components/GenericForm';
-import { useSelector } from 'react-redux';
+import { DropZone } from 'components/DropZone';
+import Upload from 'components/DropZone/Upload.svg';
+import { useDispatch, useSelector } from 'react-redux';
 import { getProcessTemplateSelector } from '@pma/store/src/selectors/processTemplate';
+import { currentUserSelector, PreviousReviewFilesActions } from '@pma/store';
+import { useTranslation } from 'react-i18next';
 
 type TemplateModalProps = {
   closeModal: () => void;
@@ -17,8 +21,13 @@ type TemplateModalProps = {
 
 const TemplatesModal: FC<TemplateModalProps> = ({ closeModal, selectTemplate }) => {
   const { css } = useStyle();
+  const { t } = useTranslation();
+  const dispatch = useDispatch();
+  const [, isBreakpoint] = useBreakpoints();
+  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
   const processTemplate = useSelector(getProcessTemplateSelector);
   const [templatesList, setTemplatesList] = useState([] as any);
+  const { info: { colleagueUUID }, } = useSelector(currentUserSelector);
 
   useEffect(() => {
     setTemplatesList(processTemplate);
@@ -28,6 +37,8 @@ const TemplatesModal: FC<TemplateModalProps> = ({ closeModal, selectTemplate }) 
     mode: 'onChange',
     resolver: yupResolver<Yup.AnyObjectSchema>(chooseTemplateSchema),
   });
+
+  const onUpload = (file) => dispatch(PreviousReviewFilesActions.uploadFile({ file, colleagueUUID }));
 
   const { getValues } = templateChooseMethods;
 
@@ -47,7 +58,7 @@ const TemplatesModal: FC<TemplateModalProps> = ({ closeModal, selectTemplate }) 
 
   return (
     <ModalWithHeader
-      containerRule={templatesModalWindowStyles}
+      containerRule={templatesModalWindowStyles({mobileScreen})}
       title='Choose Template'
       modalPosition='middle'
       closeOptions={{
@@ -56,7 +67,7 @@ const TemplatesModal: FC<TemplateModalProps> = ({ closeModal, selectTemplate }) 
         onClose: closeModal,
       }}
     >
-      <div className={css(templatesModalContentWrapperStyles)}>
+      <div className={css(templatesModalContentWrapperStyles({mobileScreen}))}>
         <GenericItemField
           name={`template_search`}
           methods={templateChooseMethods}
@@ -70,6 +81,14 @@ const TemplatesModal: FC<TemplateModalProps> = ({ closeModal, selectTemplate }) 
           value={''}
           onChange={handleSearchTemplate}
         />
+
+        <div className={css({ marginTop: '32px' })}>
+          <DropZone onUpload={onUpload}>
+            <img className={css({ maxWidth: 'inherit' })} src={Upload} alt='Upload' />
+            <span className={css(labelStyles)}>{t('Drop file here or click to upload')}</span>
+            <span className={css(descriptionStyles)}>{t('Maximum upload size 5MB')}</span>
+          </DropZone>
+        </div>
 
         <div className={css(templatesListStyles)}>
           {templatesList.map((item) => {
@@ -93,7 +112,7 @@ const TemplatesModal: FC<TemplateModalProps> = ({ closeModal, selectTemplate }) 
             );
           })}
         </div>
-        <div className={css(templatesModalFooter)}>
+        <div className={css(templatesModalFooter({mobileScreen}))}>
           <Button mode='inverse' onPress={closeModal} styles={[btnStyle]}>
             Close
           </Button>
@@ -105,24 +124,37 @@ const TemplatesModal: FC<TemplateModalProps> = ({ closeModal, selectTemplate }) 
 
 const btnStyle: Rule = ({ theme }) => ({
   fontSize: '16px',
-  border: '1px solid rgb(0, 83, 159)',
+  border: `1px solid ${theme.colors.tescoBlue}`,
   minWidth: '200px',
 });
 
-const templatesModalWindowStyles: Rule = () => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+const labelStyles: Rule = ({ theme }) => ({
+  fontSize: '16px',
+  color: theme.colors.tescoBlue,
+  margin: '8px 0',
+});
+const descriptionStyles: Rule = ({ theme }) => ({
+  fontSize: '12px',
+  color: theme.colors.tescoBlue,
+});
+
+const templatesModalWindowStyles: CreateRule<{ mobileScreen }> = ({ mobileScreen }) => {
   return {
-    width: mobileScreen ? '100%' : '60%',
-    padding: '0',
-    height: mobileScreen ? 'calc(100% - 50px)' : 'calc(100% - 100px)',
-    marginTop: mobileScreen ? '50px' : 0,
+    padding: 0,
+    ...(mobileScreen ?
+      {
+        width: '100%',
+        height: 'calc(100% - 50px)',
+        marginTop: '50px',
+      } : {
+        width: '60%',
+        height: 'calc(100% - 100px)',
+        marginTop: 0,
+    }),
   };
 };
 
-const templatesModalContentWrapperStyles: Rule = () => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+const templatesModalContentWrapperStyles: CreateRule<{ mobileScreen }> = ({ mobileScreen }) => {
   return {
     display: 'flex',
     flexDirection: 'column',
@@ -132,17 +164,14 @@ const templatesModalContentWrapperStyles: Rule = () => {
   };
 };
 
-const templatesListStyles: Rule = ({ theme }) => ({
+const templatesListStyles: Rule = () => ({
   margin: '25px 0 0',
   height: '100%',
   overflowY: 'scroll',
 });
 
-const templatesListItemStyles: Rule = ({ theme }) => {
-  // const [, isBreakpoint] = useBreakpoints();
-  // const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+const templatesListItemStyles: Rule = () => {
   return {
-    // margin: mobileScreen ? 0 : '5px 0',
     padding: '15px 0',
     borderBottom: '1px solid #ddd',
     cursor: 'pointer',
@@ -152,30 +181,39 @@ const templatesListItemStyles: Rule = ({ theme }) => {
   };
 };
 
-const templatesModalFooter: Rule = ({ theme }) => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+const templatesModalFooter: CreateRule<{ mobileScreen }> = ({ mobileScreen }) => {
   return {
     position: 'absolute',
     bottom: 0,
     left: 0,
-    height: mobileScreen ? '75px' : '100px',
     width: '100%',
     backgroundColor: '#fff',
-    borderBottomRightRadius: mobileScreen ? 0 : '32px',
-    borderBottomLeftRadius: mobileScreen ? 0 : '32px',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    ...(mobileScreen ? {
+      borderBottomRightRadius: 0,
+      borderBottomLeftRadius: 0,
+      height: '75px',
+    } : {
+      height: '100px',
+      borderBottomRightRadius: '32px',
+      borderBottomLeftRadius: '32px',
+    })
   };
 };
 
 const row: Rule = ({ theme }) => {
-  return { fontSize: `${theme.font.fixed.f12}`, color: `${theme.colors.tescoBlue}` };
+  return { 
+    fontSize: `${theme.font.fixed.f12}`,
+    color: theme.colors.tescoBlue,
+  };
 };
 
 const timeStyles: Rule = ({ theme }) => {
-  return { fontSize: `${theme.font.fixed.f14}` };
+  return { 
+    fontSize: `${theme.font.fixed.f14}`,
+  };
 };
 
 export default TemplatesModal;

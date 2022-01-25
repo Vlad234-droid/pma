@@ -44,6 +44,7 @@ const buttonStyles: Rule = {
   inset: 0,
   opacity: 0,
   width: '100%',
+  cursor: 'pointer',
 };
 
 DropZone.displayName = 'DropZone';
