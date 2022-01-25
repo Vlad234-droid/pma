@@ -87,8 +87,6 @@ export const UserObjectives: FC = () => {
   const timelineObjective = useSelector(getTimelineByReviewTypeSelector(ReviewType.OBJECTIVE));
   const status = timelineObjective?.status || undefined;
 
-  const isAllObjectivesInSameStatus = useSelector(isReviewsInStatus(ReviewType.OBJECTIVE)(status));
-
   // todo not clear where reviews might come from. remove this block when its clear
   const createdReviews: any = [];
   if (canShowMyReview) {
@@ -171,11 +169,7 @@ export const UserObjectives: FC = () => {
                 ),
               }}
             >
-              <Accordion
-                objectives={objectives}
-                canShowStatus={!isAllObjectivesInSameStatus}
-                isButtonsVisible={false}
-              />
+              <Accordion objectives={objectives} canShowStatus={true} isButtonsVisible={false} />
             </Section>
           )}
 
