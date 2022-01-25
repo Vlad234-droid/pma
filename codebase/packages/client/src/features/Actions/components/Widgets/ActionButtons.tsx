@@ -22,12 +22,8 @@ export const ActionButtons: FC<ActionButtonsProps> = ({ approveColleagues, decli
   const [isOpenApprovePopup, setIsOpenApprovePopup] = useState(false);
   const title = getReviewTypeTitle(t);
 
-  const handleDeclineBtnClick = (event) => {
+  const handleDeclineBtnClick = () => {
     setIsOpenDeclinePopup(true);
-
-    if (reviewType !== ReviewType.OBJECTIVE) {
-      declineColleagues(event);
-    }
   };
 
   const handleApproveSubmit = (event) => {
@@ -35,8 +31,8 @@ export const ActionButtons: FC<ActionButtonsProps> = ({ approveColleagues, decli
     setIsOpenApprovePopup(false);
   };
 
-  const handleDeclineSubmit = (event) => {
-    declineColleagues(event);
+  const handleDeclineSubmit = (hasReason = false, reason?: string) => {
+    declineColleagues(hasReason ? reason: '');
     setIsOpenDeclinePopup(false);
   };
 
