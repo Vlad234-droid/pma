@@ -54,7 +54,7 @@ const OuterGiveFeedBack: FC = () => {
         FeedbackActions.getAllFeedbacks({
           _limit: '300',
           'colleague-uuid': colleagueUuid,
-          'target-colleague-first-name_contains': filter.search,
+          _search: filter.search,
           _sort: getSortString(filter),
         }),
       );
