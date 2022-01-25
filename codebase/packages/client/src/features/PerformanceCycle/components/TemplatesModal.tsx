@@ -1,18 +1,18 @@
 import React, { FC, useEffect, useState } from 'react';
-import { Button, CreateRule, ModalWithHeader, Rule, useBreakpoints, useStyle } from '@dex-ddl/core';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as Yup from 'yup';
-import { chooseTemplateSchema } from 'pages/PerformanceCycle/schema';
 import { useForm } from 'react-hook-form';
+import { useDispatch, useSelector } from 'react-redux';
+import * as Yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { chooseTemplateSchema } from 'pages/PerformanceCycle/schema';
+import { Button, CreateRule, ModalWithHeader, Rule, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { Icon } from 'components/Icon';
 import { Input } from 'components/Form';
 import { GenericItemField } from 'components/GenericForm';
 import { DropZone } from 'components/DropZone';
 import Upload from 'components/DropZone/Upload.svg';
-import { useDispatch, useSelector } from 'react-redux';
+import { useTranslation } from 'components/Translation';
 import { getProcessTemplateSelector } from '@pma/store/src/selectors/processTemplate';
-import { currentUserSelector, PreviousReviewFilesActions } from '@pma/store';
-import { useTranslation } from 'react-i18next';
+import { currentUserSelector, ProcessTemplateActions } from '@pma/store';
 
 type TemplateModalProps = {
   closeModal: () => void;
@@ -38,7 +38,7 @@ const TemplatesModal: FC<TemplateModalProps> = ({ closeModal, selectTemplate }) 
     resolver: yupResolver<Yup.AnyObjectSchema>(chooseTemplateSchema),
   });
 
-  const onUpload = (file) => dispatch(PreviousReviewFilesActions.uploadFile({ file, colleagueUUID }));
+  const onUpload = (file) => dispatch(ProcessTemplateActions.uploadProcessTemplate({ file, colleagueUUID }));
 
   const { getValues } = templateChooseMethods;
 
