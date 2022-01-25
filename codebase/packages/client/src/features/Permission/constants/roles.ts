@@ -4,3 +4,4 @@ export const PEOPLE_TEAM = 'PeopleTeam';
 export const COLLEAGUE = 'Colleague';
 export const LINE_MANAGER = 'LineManager';
 export const ADMIN = 'Admin';
+export const NEWER = 'NEWER';
