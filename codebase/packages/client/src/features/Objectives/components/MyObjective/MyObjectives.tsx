@@ -45,7 +45,20 @@ import { Page } from 'pages';
 import { buildPath } from 'features/Routes';
 import EditButton from '../Buttons/EditButton';
 
-const reviews = [];
+const reviews = [
+  {
+    id: 'test-1',
+    title: 'Mid-year review',
+    description: 'Pharetra donec enim aenean aliquet consectetur ultrices amet vitae',
+    reviewType: ReviewType.MYR,
+  },
+  {
+    id: 'test-2',
+    title: 'Year-end review',
+    description: 'Pharetra donec enim aenean aliquet consectetur ultrices amet vitae',
+    reviewType: ReviewType.EYR,
+  },
+];
 
 const annualReviews = [
   {
@@ -270,7 +283,7 @@ const MyObjectives: FC = () => {
             left={{
               content: (
                 <div>
-                  <Trans i18nKey='my_completed_reviews'>My Completed Reviews</Trans>
+                  <Trans i18nKey='my_completed_reviews'>My completed Reviews</Trans>
                 </div>
               ),
             }}

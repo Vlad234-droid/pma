@@ -44,13 +44,11 @@ const bodyStyle = {
 } as Styles;
 
 const tileStyle: CreateRule<{ mobileScreen }> = ({ mobileScreen }) => ({
-  ...(mobileScreen
-    ? {
-        padding: '6px 0 0',
-      }
-    : {
-        padding: '14px 10px 10px',
-      }),
+  ...(mobileScreen ? {
+    padding: '6px 0 0',
+  } : {
+    padding: '14px 10px 10px',
+  })
 });
 
 const ProfessionalInformation: FC<Props> = ({ user }) => {
@@ -63,7 +61,7 @@ const ProfessionalInformation: FC<Props> = ({ user }) => {
     <BasicTile
       title={t('ProfessionalInformation', 'Professional information')}
       description={''}
-      customStyle={tileStyle({ mobileScreen })}
+      customStyle={tileStyle({mobileScreen})}
     >
       <div className={css(wrapperStyle)}>
         <div className={css(bodyStyle)}>

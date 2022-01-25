@@ -113,7 +113,7 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
           </Link>
           <Link to={''} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
             <Icon graphic={'question'} />
-            <span className={css(itemSettingsTextStyle)}>{`Help and FAQ's`}</span>
+            <span className={css(itemSettingsTextStyle)}>{`Help and FAQs`}</span>
           </Link>
           <a href={LINKS.signOut} className={css(itemSettingsStyle, itemSettingsBorderStyle)} onClick={handleSignOut}>
             <Icon graphic={'signOut'} />
@@ -152,7 +152,7 @@ const menuDrawerContentStyle = {
   top: 0,
   maxWidth: '360px',
   background: '#F6F6F6',
-  height: '100%',
+  height: '100vh',
 } as Rule;
 
 const menuDrawerTopStyle = {

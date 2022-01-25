@@ -18,7 +18,7 @@ const Profile: FC = () => {
         {({ user }) => {
           return (
             <TileWrapper>
-              <div className={css(cardWrapper({ mobileScreen }))}>
+              <div className={css(cardWrapper({mobileScreen}))}>
                 <AvatarName user={user} />
                 <PersonalInformation user={user} />
                 <ProfessionalInformation user={user} />
@@ -36,13 +36,11 @@ const cardWrapper: CreateRule<{ mobileScreen }> = ({ mobileScreen }) => ({
   display: 'flex',
   flexDirection: 'column',
   gap: '8px',
-  ...(mobileScreen
-    ? {
-        padding: '16px',
-      }
-    : {
-        padding: '24px',
-      }),
+  ...(mobileScreen ? {
+    padding: '16px'
+  } : {
+    padding: '24px',
+  })
 });
 
 export default Profile;

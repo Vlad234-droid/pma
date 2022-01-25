@@ -35,37 +35,32 @@ const bodyBlockStyle = {
 const mainTitleStyle: CreateRule<{ mobileScreen }> = ({ mobileScreen }) => ({
   fontStyle: 'normal',
   fontWeight: 700,
-  ...(mobileScreen
-    ? {
-        fontSize: '18px',
-        lineHeight: '22px',
-      }
-    : {
-        fontSize: '20px',
-        lineHeight: '24px',
-      }),
+  ...(mobileScreen ? {
+    fontSize: '18px',
+    lineHeight: '22px',
+  } : {
+    fontSize: '20px',
+    lineHeight: '24px',
+  })
 });
 
-const titleStyle: Rule = ({ theme }) =>
-  ({
-    fontStyle: 'normal',
-    fontWeight: `${theme.font.weight.bold}`,
-    fontSize: '16px',
-    lineHeight: '20px',
-  } as Styles);
+const titleStyle: Rule = ({ theme }) => ({
+  fontStyle: 'normal',
+  fontWeight: `${theme.font.weight.bold}`,
+  fontSize: '16px',
+  lineHeight: '20px',
+} as Styles);
 
 const descriptionStyle: CreateRule<{ mobileScreen }> = ({ mobileScreen }) => ({
   fontStyle: 'normal',
   fontWeight: 'normal',
-  ...(mobileScreen
-    ? {
-        fontSize: '18px',
-        lineHeight: '22px',
-      }
-    : {
-        fontSize: '20px',
-        lineHeight: '24px',
-      }),
+  ...(mobileScreen ? {
+    fontSize: '18px',
+    lineHeight: '22px',
+  } : {
+    fontSize: '20px',
+    lineHeight: '24px',
+  })
 });
 
 const bodyStyle = {
@@ -88,8 +83,8 @@ export const AvatarName: FC<AvatarNameProps> = ({ user = {} }) => {
     <div className={css(headStyle)}>
       <Avatar size={65} />
       <div className={css(headerBlockStyle)}>
-        <span className={css(mainTitleStyle({ mobileScreen }))}>{fullName}</span>
-        <span className={css(descriptionStyle({ mobileScreen }))}>{job}</span>
+        <span className={css(mainTitleStyle({mobileScreen}))}>{fullName}</span>
+        <span className={css(descriptionStyle({mobileScreen}))}>{job}</span>
       </div>
     </div>
   );
@@ -113,17 +108,13 @@ const DashboardProfile: FC<Props> = () => {
                   <span className={css(titleStyle)}>
                     <Trans i18nKey='line_manager'>Line manager</Trans>
                   </span>
-                  <span className={css(descriptionStyle({ mobileScreen }), { fontSize: '16px', lineHeight: '20px' })}>
-                    {manager}
-                  </span>
+                  <span className={css(descriptionStyle({mobileScreen}), {fontSize: '16px', lineHeight: '20px'})}>{manager}</span>
                 </div>
                 <div className={css(bodyBlockStyle)}>
                   <span className={css(titleStyle)}>
                     <Trans i18nKey='function'>Function</Trans>
                   </span>
-                  <span className={css(descriptionStyle({ mobileScreen }), { fontSize: '16px', lineHeight: '20px' })}>
-                    {department}
-                  </span>
+                  <span className={css(descriptionStyle({mobileScreen}), {fontSize: '16px', lineHeight: '20px'})}>{department}</span>
                 </div>
               </div>
             </div>
