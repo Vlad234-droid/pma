@@ -151,11 +151,6 @@ const ViewFeedback: FC = () => {
     }
   }, [isReaded]);
 
-  useEffect(() => {
-    if (!submittedCompletedNotes.length) return;
-    dispatch(FeedbackActions.readFeedback({ uuid: submittedCompletedNotes[0].uuid }));
-  }, []);
-
   return (
     <>
       {helpModalReceiveFeedback && (
