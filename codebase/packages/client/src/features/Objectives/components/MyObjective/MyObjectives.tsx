@@ -45,20 +45,7 @@ import { Page } from 'pages';
 import { buildPath } from 'features/Routes';
 import EditButton from '../Buttons/EditButton';
 
-const reviews = [
-  {
-    id: 'test-1',
-    title: 'Mid-year review',
-    description: 'Pharetra donec enim aenean aliquet consectetur ultrices amet vitae',
-    reviewType: ReviewType.MYR,
-  },
-  {
-    id: 'test-2',
-    title: 'Year-end review',
-    description: 'Pharetra donec enim aenean aliquet consectetur ultrices amet vitae',
-    reviewType: ReviewType.EYR,
-  },
-];
+const reviews = [];
 
 const annualReviews = [
   {
