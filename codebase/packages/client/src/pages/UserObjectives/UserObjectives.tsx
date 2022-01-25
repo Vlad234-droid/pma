@@ -32,20 +32,7 @@ import { useNavigate, useParams } from 'react-router';
 import useReviewSchema from 'features/Objectives/hooks/useReviewSchema';
 import useReviews from 'features/Objectives/hooks/useReviews';
 
-const reviews = [
-  {
-    id: 'test-1',
-    title: 'Mid-year review',
-    description: 'Pharetra donec enim aenean aliquet consectetur ultrices amet vitae',
-    reviewType: ReviewType.MYR,
-  },
-  {
-    id: 'test-2',
-    title: 'End-year review',
-    description: 'Pharetra donec enim aenean aliquet consectetur ultrices amet vitae',
-    reviewType: ReviewType.EYR,
-  },
-];
+const reviews = [];
 
 const annualReviews = [
   {
