@@ -55,8 +55,6 @@ const FeedbackActions: FC = () => {
     useSelector(getUnReadSubmittedNotesSelector([FeedbackStatus.SUBMITTED, FeedbackStatus.COMPLETED], colleagueUuid)) ||
     [];
 
-  console.log(unReadSubmittedNotes);
-
   const methods = useForm({
     mode: 'onChange',
     resolver: yupResolver<Yup.AnyObjectSchema>(createObjectivesSchema),
