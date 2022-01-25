@@ -20,11 +20,7 @@ const SubmitPart: FC<SubmitPartProps> = ({ selectedPerson, searchDate, onChange 
 
     const searchValue = `${selectedPerson?.profile?.firstName}${selectedPerson?.profile?.lastName}`.toLowerCase();
 
-    if (searchDate) {
-      return fullName.includes(searchValue) && inDayRange(searchDate, item.createdTime);
-    }
-
-    return fullName.includes(searchValue);
+    return fullName.includes(searchValue) && (searchDate ? inDayRange(searchDate, item.createdTime) : true);
   };
 
   const sortFn = (i1, i2) => {
@@ -36,7 +32,7 @@ const SubmitPart: FC<SubmitPartProps> = ({ selectedPerson, searchDate, onChange 
   };
 
   const submittedCompletedNotes = useSubmittedCompletedNotes({
-    status: FeedbackStatus.SUBMITTED,
+    status: [FeedbackStatus.SUBMITTED, FeedbackStatus.COMPLETED],
     sortFn,
     filterFn,
     serializer: defaultSerializer,
