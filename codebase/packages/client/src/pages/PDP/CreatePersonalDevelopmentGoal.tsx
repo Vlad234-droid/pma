@@ -83,12 +83,12 @@ const CreatePersonalDevelopmentGoal = (props) => {
 
   const save = () => {
     dispatch(PDPActions.createPDPGoal({ data: requestData }));
-    navigate(buildPath(Page.PERSONAL_DEVELOPMENT_PLAN));
+    setTimeout((_) => navigate(buildPath(Page.PERSONAL_DEVELOPMENT_PLAN)), 0);
   };
 
   const update = () => {
     dispatch(PDPActions.updatePDPGoal({ data: requestData }));
-    navigate(buildPath(Page.PERSONAL_DEVELOPMENT_PLAN));
+    setTimeout((_) => navigate(buildPath(Page.PERSONAL_DEVELOPMENT_PLAN)), 0);
   };
 
   const saveAndCreate = () => {
@@ -325,7 +325,7 @@ const activeGoalItem: CreateRule<{ theme: Theme }> = (props) => {
   if (props == null) return {};
   const { theme } = props;
   return {
-    color: `${theme.colors.tescoBlue}`,
+    color: '#b3cde5',
     cursor: 'pointer',
   };
 };
@@ -334,7 +334,7 @@ const defaultGoalItem: CreateRule<{ theme: Theme }> = (props) => {
   if (props == null) return {};
   const { theme } = props;
   return {
-    color: '#b3cde5',
+    color: `${theme.colors.tescoBlue}`,
     cursor: 'pointer',
   };
 };

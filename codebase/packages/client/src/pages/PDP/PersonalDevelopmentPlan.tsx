@@ -80,11 +80,13 @@ const PersonalDevelopmentPlan: FC = () => {
   const { loaded } = useSelector(getTimelineMetaSelector) || {};
 
   useEffect(() => {
-    if (!loaded) dispatch(TimelineActions.getTimeline({ colleagueUuid }));
+    if (!loaded) {
+      dispatch(TimelineActions.getTimeline({ colleagueUuid }));
+    }
   }, [loaded]);
 
   useEffect(() => {
-    setTimeout(() => dispatch(PDPActions.getPDPGoal({})), 0);
+    dispatch(PDPActions.getPDPGoal({}));
   }, []);
 
   const deleteGoal = (uuid) => {
