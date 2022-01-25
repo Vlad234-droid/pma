@@ -42,7 +42,7 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
             <img className={css({ maxWidth: 'inherit' })} src={TescoLogo} alt='TescoLogo' />
             <IconButton graphic={'cancel'} onPress={onClose} />
           </div>
-          <div className={css(menuDrawerTitleStyle)}>Performance management application</div>
+          <div className={css(menuDrawerTitleStyle)}>Your Contribution</div>
           <div className={css(menuDrawerButtonsStyle)}>
             <MenuItem iconGraphic={'home'} linkTo={buildPath(Page.CONTRIBUTION)} title={'Your contribution'} />
             <MenuItem
@@ -152,7 +152,7 @@ const menuDrawerContentStyle = {
   top: 0,
   maxWidth: '360px',
   background: '#F6F6F6',
-  height: '100vh',
+  minHeight: '100vh',
 } as Rule;
 
 const menuDrawerTopStyle = {
