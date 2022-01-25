@@ -16,6 +16,7 @@ const Select: FC<SelectField> = ({
   disabled = false,
   name,
   getSelected,
+  readonly,
 }) => {
   const { css, theme } = useStyle();
 
@@ -27,7 +28,9 @@ const Select: FC<SelectField> = ({
   const [isOptionOpen, toggleOption] = useState(false);
 
   const handleOpen = () => {
-    toggleOption(true);
+    if (!readonly) {
+      toggleOption(true);
+    }
   };
 
   const handleClose = () => {
