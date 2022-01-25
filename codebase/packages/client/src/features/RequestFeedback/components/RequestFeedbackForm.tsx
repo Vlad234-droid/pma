@@ -67,7 +67,7 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel }) => {
       .filter(Boolean);
   }, [reviews]);
 
-  const labelValue = () => AREA_OPTIONS.find((item) => item.value === formValues.area)?.label;
+  const labelValue = AREA_OPTIONS.find((item) => item.value === formValues.targetType)?.label;
 
   return (
     <>
@@ -101,14 +101,14 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel }) => {
               Element={Select}
               options={AREA_OPTIONS}
               placeholder={'Choose an area'}
-              value={formValues.area}
+              value={formValues.targetType}
               {...register('targetType')}
               setValue={setValue}
             />
           </div>
           {formValues.targetType === TargetType.GOAL && (
             <TileWrapper customStyle={{ padding: '24px', border: '1px solid #E5E5E5', marginBottom: '24px' }}>
-              <h3 className={css(commentStyle)}>Add comment to {labelValue()}</h3>
+              <h3 className={css(commentStyle)}>Add comment to {labelValue}</h3>
               <Field
                 Wrapper={Item}
                 Element={Textarea}
@@ -137,7 +137,7 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel }) => {
           )}
           {formValues.targetType === TargetType.VALUE_BEHAVIOR && (
             <TileWrapper customStyle={{ padding: '24px', border: '1px solid #E5E5E5', marginBottom: '24px' }}>
-              <h3 className={css(commentStyle)}>Add comment to {labelValue()}</h3>
+              <h3 className={css(commentStyle)}>Add comment to {labelValue}</h3>
               <Field
                 Wrapper={Item}
                 Element={Textarea}
@@ -149,7 +149,7 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel }) => {
           )}
           {formValues.targetType === TargetType.OTHER && (
             <TileWrapper customStyle={{ padding: '24px', border: '1px solid #E5E5E5', marginBottom: '24px' }}>
-              <h3 className={css(commentStyle)}>Add comment to {labelValue()}</h3>
+              <h3 className={css(commentStyle)}>Add comment to {labelValue}</h3>
               <Field
                 methods={methods}
                 Wrapper={Item}
