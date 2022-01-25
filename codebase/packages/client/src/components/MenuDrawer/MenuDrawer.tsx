@@ -42,15 +42,19 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
             <img className={css({ maxWidth: 'inherit' })} src={TescoLogo} alt='TescoLogo' />
             <IconButton graphic={'cancel'} onPress={onClose} />
           </div>
-          <div className={css(menuDrawerTitleStyle)}>Performance management application</div>
+          <div className={css(menuDrawerTitleStyle)}>Your Contribution</div>
           <div className={css(menuDrawerButtonsStyle)}>
-            <MenuItem iconGraphic={'home'} linkTo={buildPath(Page.CONTRIBUTION)} title={'Your Contribution'} />
+            <MenuItem iconGraphic={'home'} linkTo={buildPath(Page.CONTRIBUTION)} title={'Your contribution'} />
             <MenuItem
               iconGraphic={'aim'}
               linkTo={buildPath(Page.OBJECTIVES_VIEW)}
               title={t('my_objectives_and_reviews', 'My objectives and reviews')}
             />
-            <MenuItem iconGraphic={'list'} linkTo={buildPath(Page.PERSONAL_DEVELOPMENT_PLAN)} title={'Personal Development Plan'} />
+            <MenuItem
+              iconGraphic={'list'}
+              linkTo={buildPath(Page.PERSONAL_DEVELOPMENT_PLAN)}
+              title={'Personal development plan'}
+            />
             <MenuItem iconGraphic={'edit'} linkTo={buildPath(Page.NOTES)} title={'My notes'} />
             <MenuItem iconGraphic={'account'} linkTo={buildPath(Page.PROFILE)} title={'My profile'} />
             <MenuItem iconGraphic={'chatSq'} linkTo={buildPath(Page.FEEDBACK)} title={'Feedback'} />
@@ -109,7 +113,7 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
           </Link>
           <Link to={''} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
             <Icon graphic={'question'} />
-            <span className={css(itemSettingsTextStyle)}>{`Help and FAQ's`}</span>
+            <span className={css(itemSettingsTextStyle)}>{`Help and FAQs`}</span>
           </Link>
           <a href={LINKS.signOut} className={css(itemSettingsStyle, itemSettingsBorderStyle)} onClick={handleSignOut}>
             <Icon graphic={'signOut'} />
@@ -148,7 +152,7 @@ const menuDrawerContentStyle = {
   top: 0,
   maxWidth: '360px',
   background: '#F6F6F6',
-  height: '100%',
+  minHeight: '100vh',
 } as Rule;
 
 const menuDrawerTopStyle = {

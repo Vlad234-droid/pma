@@ -105,7 +105,7 @@ const GiveFeedbackForm: FC<Props> = ({ onSubmit, defaultValues, currentColleague
             {feedbackFields.map((item, index) => {
               return (
                 <div
-                  key={item.id}
+                  key={index}
                   className={css({
                     ':last-child': {
                       marginBottom: '32px',

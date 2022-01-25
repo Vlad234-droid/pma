@@ -43,7 +43,6 @@ export const WidgetTeamMateProfile: FC<WidgetTeamMateProfileProps> = ({
 }) => {
   const { css } = useStyle();
   const navigate = useNavigate();
-
   const [graphics, color] = getIcon(status);
 
   const viewUserObjectives = (uuid) => {

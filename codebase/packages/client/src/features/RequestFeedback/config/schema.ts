@@ -2,7 +2,7 @@ import * as Yup from 'yup';
 import { TargetType } from '../type';
 
 export const createRequestFeedbackSchema = Yup.object().shape({
-  targetColleagues: Yup.array()
+  colleagues: Yup.array()
     .of(
       Yup.object().shape({
         value: Yup.string(),

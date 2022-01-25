@@ -64,10 +64,6 @@ const GiveNewFeedback: FC = () => {
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const navigate = useNavigate();
 
-  const handleCreate = () => {
-    dispatch(FeedbackActions.createNewFeedback([{ ...formData, colleagueUuid }]));
-  };
-
   const handleSave = (data) => {
     if (uuid === 'new') {
       dispatch(FeedbackActions.createNewFeedback([{ ...data, colleagueUuid }]));
@@ -87,13 +83,12 @@ const GiveNewFeedback: FC = () => {
   };
 
   const handleSubmit = (data) => {
-    setFormData(data);
-    handleSave(data);
-
     if (data.status === 'DRAFT') {
+      handleSave(data);
       handleSuccess();
       return;
     }
+    setFormData(data);
     setStatus(Statuses.CONFIRMING);
   };
 
@@ -133,13 +128,17 @@ const GiveNewFeedback: FC = () => {
         <ConfirmMassage
           onConfirm={() => {
             setStatus(Statuses.SENDING);
-            handleCreate();
+            handleSave(formData);
           }}
           goBack={() => setStatus(Statuses.PENDING)}
         />
       )}
       {status === Statuses.SENDING && (
-        <SuccessMassage onSuccess={handleSuccess} selectedColleagueUuid={formData.targetColleagueUuid} />
+        <SuccessMassage
+          onSuccess={handleSuccess}
+          selectedColleagueUuid={formData.targetColleagueUuid}
+          targetColleagueProfile={targetColleagueProfile}
+        />
       )}
       {status === Statuses.INFO && <InfoMassage goBack={() => setStatus(Statuses.PENDING)} />}
     </Modal>

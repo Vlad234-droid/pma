@@ -3,9 +3,8 @@ import { CreateRule, Modal, Rule, Styles, useBreakpoints, useStyle } from '@dex-
 import { DropZone } from 'components/DropZone';
 import Upload from 'components/DropZone/Upload.svg';
 import { Input } from 'components/Form';
-import { currentUserSelector, PreviousReviewFilesActions } from '@pma/store';
+import { currentUserSelector, getPreviousReviewFilesSelector, PreviousReviewFilesActions } from '@pma/store';
 import useDispatch from 'hooks/useDispatch';
-import { getPreviousReviewFilesSelector } from '@pma/store/src/selectors/previousReviewFiles';
 import { useSelector } from 'react-redux';
 import { File } from './File';
 import { useTranslation } from 'components/Translation';
@@ -33,6 +32,8 @@ const PreviousReviewFilesModal: FC<Props> = ({ onOverlayClick }) => {
     ({ fileName }) => !filter || fileName.toLowerCase().includes(filter.toLowerCase()),
   );
   const handleChangeFilter = ({ target }) => setFilteredValue(target.value);
+  // TODO: update delete when api is ready
+  const deleteFile = (fileUuid) => dispatch(PreviousReviewFilesActions.uploadFile(fileUuid));
 
   useEffect(() => {
     dispatch(PreviousReviewFilesActions.getPreviousReviewFiles());
@@ -56,7 +57,7 @@ const PreviousReviewFilesModal: FC<Props> = ({ onOverlayClick }) => {
         </div>
         <div className={css(fileListStyles)}>
           {filteredFiles?.map((file) => (
-            <File file={file} key={file.uuid} />
+            <File file={file} onDelete={deleteFile} key={file.uuid} />
           ))}
         </div>
       </Modal>

@@ -133,7 +133,7 @@ const ViewFeedback: FC = () => {
   }, [colleagueUuid]);
 
   const submittedCompletedNotes = useSubmittedCompletedNotes({
-    status: FeedbackStatus.SUBMITTED,
+    status: [FeedbackStatus.SUBMITTED, FeedbackStatus.COMPLETED],
     sortFn,
     filterFn,
     serializer: defaultSerializer,
@@ -150,11 +150,6 @@ const ViewFeedback: FC = () => {
       );
     }
   }, [isReaded]);
-
-  useEffect(() => {
-    if (!submittedCompletedNotes.length) return;
-    dispatch(FeedbackActions.readFeedback({ uuid: submittedCompletedNotes[0].uuid }));
-  }, []);
 
   return (
     <>

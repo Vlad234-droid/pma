@@ -182,7 +182,9 @@ const ReviewWidget: FC<Props> = ({
             <span
               className={css(descriptionStyle({ color: descriptionColor }), {
                 paddingTop: '16px',
-                verticalAlign: 'middle',
+                display: 'flex',
+                alignItems: 'center',
+                lineHeight: '19px',
               })}
             >
               <Icon
@@ -252,7 +254,7 @@ const descriptionStyle: CreateRule<{ color: string }> = ({ color }) => ({
   position: 'relative',
   fontStyle: 'normal',
   fontWeight: 'normal',
-  fontSize: '14px',
+  fontSize: '16px',
   color,
 });
 

@@ -6,22 +6,23 @@ import success from '../../../../public/success.jpg';
 import { useSelector } from 'react-redux';
 import { getColleagueByUuidSelector } from '@pma/store';
 
-export const SUCCES_GIVE_FEEDBACK = 'SUCCESS_GIVE_FEEDBACK';
+export const SUCCESS_GIVE_FEEDBACK = 'SUCCESS_GIVE_FEEDBACK';
 
 export type Props = {
   onSuccess: () => void;
   selectedColleagueUuid: string;
+  targetColleagueProfile?: any;
 };
 
-const SuccessMassage: FC<Props> = ({ selectedColleagueUuid, onSuccess }) => {
+const SuccessMassage: FC<Props> = ({ selectedColleagueUuid, targetColleagueProfile, onSuccess }) => {
   const { css, theme } = useStyle();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
 
-  const selectedColleague = useSelector(getColleagueByUuidSelector(selectedColleagueUuid));
+  const selectedColleague = useSelector(getColleagueByUuidSelector(selectedColleagueUuid)) || targetColleagueProfile;
 
   return (
-    <div className={css(WrapperSuccessContainer)} data-test-id={SUCCES_GIVE_FEEDBACK}>
+    <div className={css(WrapperSuccessContainer)} data-test-id={SUCCESS_GIVE_FEEDBACK}>
       <div className={css(SuccessImg)}>
         <img src={success} alt='success' />
       </div>

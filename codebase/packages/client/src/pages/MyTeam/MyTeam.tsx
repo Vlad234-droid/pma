@@ -5,19 +5,18 @@ import { Rule, useStyle } from '@dex-ddl/core';
 import {
   colleagueUUIDSelector,
   getAllEmployees,
-  getManagersMetaSelector,
   getPendingEmployees,
   ManagersActions,
 } from '@pma/store';
 
 import { RouterSwitch } from 'components/RouterSwitch';
-import { Status } from 'config/enum';
-import { View, ViewFilters, WidgetPending, WidgetTeamMateProfile, YourActions } from 'features/MyTeam';
+import { View, ViewFilters, WidgetPending, WidgetTeamMateProfile, YourActions, getLastTimelineStatus } from 'features/MyTeam';
 import useDispatch from 'hooks/useDispatch';
 import { buildPath } from 'features/Routes';
 import { Page } from 'pages';
 import Filters, { getEmployeesSortingOptions, useSearchFilter, useSortFilter } from 'features/Filters';
 import { useTranslation } from 'components/Translation';
+import { Employee } from 'config/types';
 
 export const TEST_ID = 'my-team';
 
@@ -93,12 +92,12 @@ const MyTeam: FC = () => {
               </Link>
             )}
             <div className={css(allColleagues)}>
-              {colleagues.map((employee) => (
+              {colleagues.map((employee: Employee) => (
                 <WidgetTeamMateProfile
                   simpleView={view === View.FULL_TEAM}
                   key={employee.uuid}
                   uuid={employee.uuid}
-                  status={Status.PENDING}
+                  status={getLastTimelineStatus(employee)}
                   employee={employee}
                 />
               ))}

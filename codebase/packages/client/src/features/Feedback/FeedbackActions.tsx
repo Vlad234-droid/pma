@@ -28,7 +28,6 @@ import { Icon } from 'components/Icon';
 import { FeedbackStatus } from 'config/enum';
 import { useAuthContainer } from 'contexts/authContext';
 import { Page } from 'pages';
-import { boolean } from 'yup/lib/locale';
 
 const FEEDBACK_ACTIONS = 'feedback_actions';
 
@@ -46,8 +45,6 @@ const FeedbackActions: FC = () => {
     if (!colleagueUuid) return;
     dispatch(
       FeedbackActionsGet.getAllFeedbacks({
-        'target-colleague-uuid': colleagueUuid,
-        'colleague-uuid': colleagueUuid,
         _limit: '300',
       }),
     );
@@ -55,7 +52,10 @@ const FeedbackActions: FC = () => {
   const { css, theme } = useStyle();
   const pendingNotes = useSelector(getNotesArgsSelector(FeedbackStatus.PENDING, colleagueUuid)) || [];
   const unReadSubmittedNotes =
-    useSelector(getUnReadSubmittedNotesSelector(FeedbackStatus.SUBMITTED, colleagueUuid)) || [];
+    useSelector(getUnReadSubmittedNotesSelector([FeedbackStatus.SUBMITTED, FeedbackStatus.COMPLETED], colleagueUuid)) ||
+    [];
+
+  console.log(unReadSubmittedNotes);
 
   const methods = useForm({
     mode: 'onChange',
@@ -87,9 +87,7 @@ const FeedbackActions: FC = () => {
       action: 'View your feedback',
       text: 'See the feedback your colleagues have shared with you',
       icon: getProppeIconForunReadNotes(),
-      iconText: unReadSubmittedNotes.length
-        ? `You have ${unReadSubmittedNotes.length} new feedback to view`
-        : 'You have 0 new feedback to view',
+      iconText: `You have ${unReadSubmittedNotes?.length || 0} new feedback to view`,
       link: '/feedback/view-feedback',
     },
     {

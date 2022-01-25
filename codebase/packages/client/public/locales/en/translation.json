@@ -20,7 +20,7 @@
   "line_manager": "Line manager",
   "mid_year_review": "Mid-year review",
   "business_objectives": "Business Objectives",
-  "my_completed_reviews": "My Completed Reviews",
+  "my_completed_reviews": "My completed Reviews",
   "my_reviews": "My reviews",
   "no_completed_reviews": "You have no completed reviews",
   "objective_is_approved": "Well done! All {{count}} objective(s) have been approved. Your mid year review is scheduled for {{date, d LLL yyyy}}.",

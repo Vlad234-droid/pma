@@ -8,24 +8,8 @@ export const getPreviousReviewFiles = () =>
     params: { type: previousReviewFileType, includeFileContent: false },
   });
 
-export const uploadFile = ({ file, colleagueUUID }: { file: File; colleagueUUID: string }) => {
-  const obj = {
-    uploadMetadataList: [
-      {
-        path: `/home/${colleagueUUID}/dev`,
-        fileName: file.name,
-        type: {
-          id: previousReviewFileType,
-          code: 'PDF',
-          description: 'Portable document format file',
-        },
-        status: 'ACTIVE',
-        description: 'text templates',
-        fileDate: new Date().toISOString(),
-      },
-    ],
-  };
-  const uploadMetadata = new Blob([JSON.stringify(obj)], { type: 'application/json' });
+export const uploadFile = ({ file, metadata }: { file: File; metadata: object }) => {
+  const uploadMetadata = new Blob([JSON.stringify(metadata)], { type: 'application/json' });
   const formData = new FormData();
   formData.append('files', file);
   formData.append('uploadMetadata', uploadMetadata);

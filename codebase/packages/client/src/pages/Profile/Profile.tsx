@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Styles, useStyle } from '@dex-ddl/core';
+import { CreateRule, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { Contacts, PersonalInformation, ProfessionalInformation } from '../../features/Profile';
 import { AuthConsumer } from 'contexts/authContext';
 import { AvatarName } from 'features/Profile/components/Widgets/DashboardProfile';
@@ -9,6 +9,8 @@ export const TEST_ID = 'objectives-pave';
 
 const Profile: FC = () => {
   const { css } = useStyle();
+  const [, isBreakpoint] = useBreakpoints();
+  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
 
   return (
     <div className={css({ margin: '8px' })}>
@@ -16,7 +18,7 @@ const Profile: FC = () => {
         {({ user }) => {
           return (
             <TileWrapper>
-              <div className={css(cardWrapper)}>
+              <div className={css(cardWrapper({mobileScreen}))}>
                 <AvatarName user={user} />
                 <PersonalInformation user={user} />
                 <ProfessionalInformation user={user} />
@@ -29,11 +31,16 @@ const Profile: FC = () => {
     </div>
   );
 };
-const cardWrapper = {
-  padding: '24px',
+
+const cardWrapper: CreateRule<{ mobileScreen }> = ({ mobileScreen }) => ({
   display: 'flex',
   flexDirection: 'column',
   gap: '8px',
-} as Styles;
+  ...(mobileScreen ? {
+    padding: '16px'
+  } : {
+    padding: '24px',
+  })
+});
 
 export default Profile;

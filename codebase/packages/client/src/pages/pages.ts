@@ -20,12 +20,15 @@ import Report from './Report';
 import { CreatePerformanceCycle, PerformanceCycleAdministration } from './PerformanceCycle';
 import { EditTip, TipsAdministration } from './Tips';
 import { UserObjectives } from './UserObjectives';
+import { Graphics } from 'components/Icon';
 
 export type PageComponent = {
   Element: PageElement;
   withHeader: boolean;
   title?: string;
   backPath?: string;
+  withIcon?: boolean;
+  iconName?: Graphics;
 };
 const pages: Record<Page, PageComponent> = {
   [Page.MY_TEAM]: {
@@ -61,6 +64,8 @@ const pages: Record<Page, PageComponent> = {
     Element: CareerPerformance,
     title: 'Your Contribution',
     withHeader: true,
+    withIcon: true,
+    iconName: 'home',
   },
   [Page.CREATE_STRATEGIC_DRIVERS]: {
     Element: CreateOrganizationObjectives,

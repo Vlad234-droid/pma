@@ -5,7 +5,7 @@ import { Styles, useStyle } from '@dex-ddl/core';
 import { DashboardProfile } from 'features/Profile';
 import { BasicTile } from 'components/Tile';
 import { StepIndicator } from 'components/StepIndicator/StepIndicator';
-import { ObjectiveType, ReviewType, Status } from 'config/enum';
+import { ObjectiveType, ReviewType } from 'config/enum';
 import { RouterSwitch } from 'components/RouterSwitch';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -86,7 +86,7 @@ const CareerPerformance: FC = () => {
         >
           <div data-test-id='more' className={css({ height: '112%' })} onClick={handleBtnHelp}>
             <BasicTile
-              img={<Icon graphic='settingsGear' />}
+              img={<Icon graphic='support' />}
               hover={false}
               title={"Something doesn't look right? Raise a ticket on Colleague Help "}
               imgCustomStyle={{ width: '30px', margin: '10px auto 0px auto' }}
@@ -94,6 +94,7 @@ const CareerPerformance: FC = () => {
                 background: '#fad919',
                 textAlign: 'center',
                 height: '100%',
+                padding: '24px 27px 24px 10px',
               }}
               icon={true}
               link={'https://www.ourtesco.com/colleague/help'}
@@ -105,7 +106,12 @@ const CareerPerformance: FC = () => {
               img={<Icon graphic='question' />}
               title={'Want to learn more about Your Contribution at Tesco?'}
               imgCustomStyle={{ width: '30px', margin: '8px auto 0px auto' }}
-              customStyle={{ textAlign: 'center', height: '100%', maxHeight: '142px' }}
+              customStyle={{ 
+                textAlign: 'center',
+                height: '100%',
+                maxHeight: '142px',
+                padding: '24px 27px 24px 10px',
+              }}
               icon={true}
             />
           </div>
