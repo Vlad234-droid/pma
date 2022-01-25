@@ -60,8 +60,8 @@ const SearchInput: FC<InputProps> = ({
               className={css(SelectedContainerStyle)}
               onMouseDown={(e) => e.preventDefault()}
               onClick={() => {
-                setSearchValue(() => `${item?.profile?.firstName} ${item?.profile?.lastName}`);
-                setSelectedPerson(() => item);
+                setSearchValue(() => `${item?.colleague?.profile?.firstName} ${item?.colleague?.profile?.lastName}`);
+                setSelectedPerson(() => item?.colleague);
                 dispatch(ColleaguesActions.clearColleagueList());
               }}
             >

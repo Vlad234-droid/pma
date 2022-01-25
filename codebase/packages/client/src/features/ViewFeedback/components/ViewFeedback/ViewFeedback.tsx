@@ -133,7 +133,7 @@ const ViewFeedback: FC = () => {
   }, [colleagueUuid]);
 
   const submittedCompletedNotes = useSubmittedCompletedNotes({
-    status: FeedbackStatus.SUBMITTED,
+    status: [FeedbackStatus.SUBMITTED, FeedbackStatus.COMPLETED],
     sortFn,
     filterFn,
     serializer: defaultSerializer,

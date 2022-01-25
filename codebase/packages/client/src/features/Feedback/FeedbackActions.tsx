@@ -52,7 +52,10 @@ const FeedbackActions: FC = () => {
   const { css, theme } = useStyle();
   const pendingNotes = useSelector(getNotesArgsSelector(FeedbackStatus.PENDING, colleagueUuid)) || [];
   const unReadSubmittedNotes =
-    useSelector(getUnReadSubmittedNotesSelector(FeedbackStatus.SUBMITTED, colleagueUuid)) || [];
+    useSelector(getUnReadSubmittedNotesSelector([FeedbackStatus.SUBMITTED, FeedbackStatus.COMPLETED], colleagueUuid)) ||
+    [];
+
+  console.log(unReadSubmittedNotes);
 
   const methods = useForm({
     mode: 'onChange',
