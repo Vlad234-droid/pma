@@ -44,14 +44,18 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
           </div>
           <div className={css(menuDrawerTitleStyle)}>Performance management application</div>
           <div className={css(menuDrawerButtonsStyle)}>
-            <MenuItem iconGraphic={'home'} linkTo={buildPath(Page.CONTRIBUTION)} title={'Your Contribution'} />
+            <MenuItem iconGraphic={'home'} linkTo={buildPath(Page.CONTRIBUTION)} title={'Your contribution'} />
             <MenuItem
               iconGraphic={'aim'}
               linkTo={buildPath(Page.OBJECTIVES_VIEW)}
               title={t('my_objectives_and_reviews', 'My objectives and reviews')}
             />
-            <MenuItem iconGraphic={'list'} linkTo={buildPath(Page.PERSONAL_DEVELOPMENT_PLAN)} title={'Personal Development Plan'} />
-            <MenuItem iconGraphic={'edit'} linkTo={buildPath(Page.NOTES)} title={'My Notes'} />
+            <MenuItem
+              iconGraphic={'list'}
+              linkTo={buildPath(Page.PERSONAL_DEVELOPMENT_PLAN)}
+              title={'Personal development plan'}
+            />
+            <MenuItem iconGraphic={'edit'} linkTo={buildPath(Page.NOTES)} title={'My notes'} />
             <MenuItem iconGraphic={'account'} linkTo={buildPath(Page.PROFILE)} title={'My profile'} />
             <MenuItem iconGraphic={'chatSq'} linkTo={buildPath(Page.FEEDBACK)} title={'Feedback'} />
             <MenuItem iconGraphic={'performance'} linkTo={'/'} title={'Support your performance'} />

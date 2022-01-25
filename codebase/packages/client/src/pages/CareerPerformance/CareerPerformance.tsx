@@ -106,7 +106,7 @@ const CareerPerformance: FC = () => {
               img={<Icon graphic='question' />}
               title={'Want to learn more about Your Contribution at Tesco?'}
               imgCustomStyle={{ width: '30px', margin: '8px auto 0px auto' }}
-              customStyle={{ 
+              customStyle={{
                 textAlign: 'center',
                 height: '100%',
                 maxHeight: '142px',
