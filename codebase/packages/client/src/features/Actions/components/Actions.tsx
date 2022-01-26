@@ -1,23 +1,26 @@
-import React, { FC, useEffect, useState, useCallback, useMemo } from 'react';
-import { useSelector, shallowEqual } from 'react-redux';
+import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
+import { shallowEqual, useSelector } from 'react-redux';
 import { colors, fontWeight, useBreakpoints, useStyle } from '@dex-ddl/core';
 import {
   colleagueUUIDSelector,
   getManagersMetaSelector,
   getPendingEmployees,
   ManagersActions,
+  reviewsMetaSelector,
   ReviewsActions,
   SchemaActions,
 } from '@pma/store';
 
 import { Trans, useTranslation } from 'components/Translation';
 import { Checkbox, Radio } from 'components/Form';
-import { Status } from 'config/enum';
+import { ReviewType, Status } from 'config/enum';
 import { WidgetObjectiveApproval, WidgetTeamMateObjectives } from 'features/Actions';
-import Filters, { useSortFilter, useSearchFilter, getEmployeesSortingOptions } from 'features/Filters';
+import Filters, { getEmployeesSortingOptions, useSearchFilter, useSortFilter } from 'features/Filters';
 import useDispatch from 'hooks/useDispatch';
 
 import { filterApprovedFn } from '../utils';
+import SuccessModal from './SuccessModal';
+
 export const TEST_ID = 'objectives-pave';
 
 type SelectAllProps = {
@@ -65,6 +68,10 @@ export const Actions = () => {
   const [searchValue, setSearchValue] = useSearchFilter();
   const { t } = useTranslation();
   const options = getEmployeesSortingOptions(t);
+  const { loaded: reviewsLoaded } = useSelector(reviewsMetaSelector);
+  const [reviewSubmitted, setReviewSubmitted] = useState<Status | null>(null);
+  const [reviewType, setReviewType] = useState<ReviewType | null>(null);
+  const [isOpenSuccessModal, setIsOpenSuccessModal] = useState<boolean>(false);
 
   // @ts-ignore
   const { employeeWithPendingApprovals, employeeWithCompletedApprovals } =
@@ -82,6 +89,12 @@ export const Actions = () => {
 
   const [colleagues, setColleagues] = useState(employeeWithPendingApprovals || []);
   const [pending, setPending] = useState(true);
+
+  useEffect(() => {
+    if (reviewSubmitted && reviewsLoaded) {
+      setIsOpenSuccessModal(true);
+    }
+  }, [reviewsLoaded, reviewSubmitted]);
 
   // disable selectAll, if every colleague has more then one item for approve
   const selectAllDisabled = useMemo(
@@ -148,6 +161,17 @@ export const Actions = () => {
     } else {
       setReviewsForApproval((prev) => [...prev, { ...colleague }]);
     }
+  };
+
+  const handleCloseSuccessModal = () => {
+    setReviewSubmitted(null);
+    setReviewType(null);
+    setIsOpenSuccessModal(false);
+  };
+
+  const handleSubmitReview = (status: Status, type: ReviewType) => {
+    setReviewSubmitted(status);
+    setReviewType(type);
   };
 
   return (
@@ -258,6 +282,7 @@ export const Actions = () => {
                     id={colleague.uuid}
                     status={pending ? Status.WAITING_FOR_APPROVAL : Status.APPROVED}
                     colleague={colleague}
+                    onSubmit={handleSubmitReview}
                     colleagueOpened={colleagueOpened}
                     setColleagueOpened={setColleagueOpened}
                   />
@@ -298,6 +323,13 @@ export const Actions = () => {
           </div>
         </div>
       </div>
+      {isOpenSuccessModal && (
+        <SuccessModal
+          status={reviewSubmitted as Status}
+          review={reviewType as ReviewType}
+          onClose={handleCloseSuccessModal}
+        />
+      )}
     </>
   );
 };

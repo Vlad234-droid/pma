@@ -43,6 +43,8 @@ const layoutRule: Rule = () => {
     flex: 1,
     flexDirection: 'column',
     minHeight: '100vh',
+    height: '100vh',
+    overflowY: 'auto',
     padding: '8px 16px 80px',
   };
 };

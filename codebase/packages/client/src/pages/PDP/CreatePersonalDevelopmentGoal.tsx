@@ -11,7 +11,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import usePDPShema from 'features/PDP/hooks/usePDPShema';
 import { useSelector } from 'react-redux';
-import { colleagueUUIDSelector, schemaMetaPDPSelector, PDPActions } from '@pma/store';
+import { colleagueUUIDSelector, schemaMetaPDPSelector, metaPDPSelector, PDPActions } from '@pma/store';
 import { PDPType } from 'config/enum';
 import { createYupSchema } from 'utils/yup';
 import useDispatch from 'hooks/useDispatch';
@@ -20,6 +20,7 @@ import { buildPath } from 'features/Routes';
 import { Page } from 'pages';
 import { useParams } from 'react-router-dom';
 import { ConfirmModal } from 'features/Modal';
+import colors from 'theme/colors';
 
 const CreatePersonalDevelopmentGoal = (props) => {
   const { css, theme } = useStyle();
@@ -29,6 +30,7 @@ const CreatePersonalDevelopmentGoal = (props) => {
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const pdpList = useSelector(schemaMetaPDPSelector)?.goals;
+  const { loaded: schemaLoaded = false } = useSelector(metaPDPSelector);
   const [pdpGoals, setPDPGoals] = useState<any[]>([]);
   const [schema] = usePDPShema(PDPType.PDP);
   const { components = [] } = schema;
@@ -81,14 +83,18 @@ const CreatePersonalDevelopmentGoal = (props) => {
     },
   ];
 
+  useEffect(() => {
+    reset(currentGoal?.properties?.mapJson);
+  }, [currentGoal]);
+
   const save = () => {
     dispatch(PDPActions.createPDPGoal({ data: requestData }));
-    navigate(buildPath(Page.PERSONAL_DEVELOPMENT_PLAN));
+    if (schemaLoaded) navigate(buildPath(Page.PERSONAL_DEVELOPMENT_PLAN));
   };
 
   const update = () => {
     dispatch(PDPActions.updatePDPGoal({ data: requestData }));
-    navigate(buildPath(Page.PERSONAL_DEVELOPMENT_PLAN));
+    if (schemaLoaded) navigate(buildPath(Page.PERSONAL_DEVELOPMENT_PLAN));
   };
 
   const saveAndCreate = () => {
@@ -170,7 +176,7 @@ const CreatePersonalDevelopmentGoal = (props) => {
         <div className={css(goalListBlock({ theme }))}>{!uuid && pdpList && navGoals()}</div>
         <form>
           {pdpGoals.map((component) => {
-            const { id, key, label, description } = component;
+            const { key, label, description } = component;
             const updateGoalValue = pdpList
               ? pdpList?.filter((el) => el.uuid === currentGoal.uuid)[0]?.properties?.mapJson[key]
               : '';
@@ -325,7 +331,7 @@ const activeGoalItem: CreateRule<{ theme: Theme }> = (props) => {
   if (props == null) return {};
   const { theme } = props;
   return {
-    color: `${theme.colors.tescoBlue}`,
+    color: `${colors.tescoLightBlue}`,
     cursor: 'pointer',
   };
 };
@@ -334,7 +340,7 @@ const defaultGoalItem: CreateRule<{ theme: Theme }> = (props) => {
   if (props == null) return {};
   const { theme } = props;
   return {
-    color: '#b3cde5',
+    color: `${theme.colors.tescoBlue}`,
     cursor: 'pointer',
   };
 };

@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, CreateRule, ModalWithHeader, Rule, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { Icon } from 'components/Icon';
