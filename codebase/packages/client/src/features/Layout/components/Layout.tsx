@@ -22,14 +22,14 @@ const Layout: FC = ({ children }) => {
   return (
     <div data-test-id={TEST_ID} className={css(layoutRule)}>
       {/*TODO: use separate component*/}
-      {withHeader && 
+      {withHeader && (
         <Header
           title={title}
           withIcon={withIcon}
           iconName={iconName}
-          onBack={backPath ? () => handleBack(buildPath(backPath)) : undefined} 
+          onBack={backPath ? () => handleBack(buildPath(backPath)) : undefined}
         />
-      }
+      )}
       {children}
     </div>
   );

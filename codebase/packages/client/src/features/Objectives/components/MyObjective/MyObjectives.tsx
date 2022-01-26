@@ -127,18 +127,19 @@ const MyObjectives: FC = () => {
     }
   }, [reviewLoaded, schemaLoaded]);
 
-  const { loaded } = useSelector(getTimelineMetaSelector) || {};
-
   useEffect(() => {
-    if (!loaded && colleagueUuid) {
+    if (colleagueUuid) {
       dispatch(TimelineActions.getTimeline({ colleagueUuid }));
     }
-    if (loaded && colleagueUuid && canShowObjectives) {
+  }, [colleagueUuid]);
+
+  useEffect(() => {
+    if (colleagueUuid && canShowObjectives) {
       dispatch(
         ReviewsActions.getReviews({ pathParams: { colleagueUuid, type: ReviewType.OBJECTIVE, cycleUuid: 'CURRENT' } }),
       );
     }
-  }, [loaded, colleagueUuid, canShowObjectives]);
+  }, [colleagueUuid, canShowObjectives]);
 
   return (
     <div data-test-id={TEST_ID}>

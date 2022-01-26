@@ -2,15 +2,17 @@ import React, { FC, useEffect, useState } from 'react';
 import { shallowEqual, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Rule, useStyle } from '@dex-ddl/core';
-import {
-  colleagueUUIDSelector,
-  getAllEmployees,
-  getPendingEmployees,
-  ManagersActions,
-} from '@pma/store';
+import { colleagueUUIDSelector, getAllEmployees, getPendingEmployees, ManagersActions } from '@pma/store';
 
 import { RouterSwitch } from 'components/RouterSwitch';
-import { View, ViewFilters, WidgetPending, WidgetTeamMateProfile, YourActions, getLastTimelineStatus } from 'features/MyTeam';
+import {
+  View,
+  ViewFilters,
+  WidgetPending,
+  WidgetTeamMateProfile,
+  YourActions,
+  getLastTimelineStatus,
+} from 'features/MyTeam';
 import useDispatch from 'hooks/useDispatch';
 import { buildPath } from 'features/Routes';
 import { Page } from 'pages';

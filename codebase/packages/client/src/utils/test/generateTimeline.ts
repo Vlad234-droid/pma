@@ -41,6 +41,7 @@ const generateTimeline = (config?: Config) => {
   return timeline;
 };
 
-const generateTimelines = (length: number, config?: Config) => generateArray(length).map(() => generateTimeline(config));
+const generateTimelines = (length: number, config?: Config) =>
+  generateArray(length).map(() => generateTimeline(config));
 
 export { generateTimeline, generateTimelines };

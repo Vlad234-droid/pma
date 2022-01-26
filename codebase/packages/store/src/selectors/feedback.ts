@@ -74,8 +74,8 @@ export const getPropperNotesByCriteria = ({ status, filterFn, sortFn, serializer
     const { notes } = feedback;
 
     return notes
-      .filter((item) =>
-        filterFn(item) && Array.isArray(status) ? status.includes(item.status) : item.status === status,
+      .filter(
+        (item) => filterFn(item) && (Array.isArray(status) ? status.includes(item.status) : item.status === status),
       )
       .map(serializer)
       .sort(sortFn);

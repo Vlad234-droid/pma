@@ -1,15 +1,15 @@
 import React, { FC } from 'react';
 import { useStyle } from '@dex-ddl/core';
-import ViewFeedbackComp from 'features/ViewFeedback';
+import ViewFeedback from 'features/ViewFeedback';
 
-const ViewFeedback: FC = () => {
+const ViewFeedbackPage: FC = () => {
   const { css } = useStyle();
 
   return (
     <div className={css({ margin: '22px 42px 0px 40px' })}>
-      <ViewFeedbackComp />
+      <ViewFeedback />
     </div>
   );
 };
 
-export default ViewFeedback;
+export default ViewFeedbackPage;

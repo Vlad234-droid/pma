@@ -43,11 +43,13 @@ const bodyStyle = {
 } as Styles;
 
 const tileStyle: CreateRule<{ mobileScreen }> = ({ mobileScreen }) => ({
-  ...(mobileScreen ? {
-    padding: '6px 0 0',
-  } : {
-    padding: '14px 10px 10px',
-  })
+  ...(mobileScreen
+    ? {
+        padding: '6px 0 0',
+      }
+    : {
+        padding: '14px 10px 10px',
+      }),
 });
 
 const Contacts: FC<Props> = ({ user }) => {
@@ -57,11 +59,7 @@ const Contacts: FC<Props> = ({ user }) => {
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
   const { email } = user;
   return (
-    <BasicTile
-      title={t('Contacts', 'Contacts')}
-      description={''}
-      customStyle={tileStyle({mobileScreen})}
-    >
+    <BasicTile title={t('Contacts', 'Contacts')} description={''} customStyle={tileStyle({ mobileScreen })}>
       <div className={css(wrapperStyle)}>
         <div className={css(bodyStyle)}>
           <div className={css(bodyBlockStyle)}>
