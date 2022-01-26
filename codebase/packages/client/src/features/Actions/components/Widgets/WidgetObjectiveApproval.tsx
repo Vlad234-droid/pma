@@ -13,7 +13,7 @@ import { Employee } from 'config/types';
 import ApproveModal from '../ApproveModal';
 import DeclineModal from '../DeclineModal';
 import { filterApprovedFn } from '../../utils';
-import SuccessModal from "../SuccessModal/SuccessModal";
+import SuccessModal from '../SuccessModal/SuccessModal';
 
 export type WidgetObjectiveApprovalProps = {
   isDisabled?: boolean;
