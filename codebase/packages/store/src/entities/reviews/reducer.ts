@@ -104,7 +104,6 @@ export default createReducer(initialState)
     });
   })
   .handleAction(updateReviewStatus.failure, (state, { payload }) => {
-    console.log('payload', payload);
     return {
       ...state,
       meta: { ...state.meta, loading: false, loaded: true, error: payload },
