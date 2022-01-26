@@ -20,6 +20,7 @@ import { buildPath } from 'features/Routes';
 import { Page } from 'pages';
 import { useParams } from 'react-router-dom';
 import { ConfirmModal } from 'features/Modal';
+import colors from 'theme/colors';
 
 const CreatePersonalDevelopmentGoal = (props) => {
   const { css, theme } = useStyle();
@@ -330,7 +331,7 @@ const activeGoalItem: CreateRule<{ theme: Theme }> = (props) => {
   if (props == null) return {};
   const { theme } = props;
   return {
-    color: '#b3cde5',
+    color: `${colors.tescoLightBlue}`,
     cursor: 'pointer',
   };
 };

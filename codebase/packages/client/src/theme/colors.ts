@@ -1,1 +1,3 @@
-export default {};
+export default {
+  tescoLightBlue: '#b3cde5',
+};
