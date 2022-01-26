@@ -38,7 +38,7 @@ const TemplatesModal: FC<TemplateModalProps> = ({ closeModal, selectTemplate }) 
     resolver: yupResolver<Yup.AnyObjectSchema>(chooseTemplateSchema),
   });
 
-  const onUpload = (file) => dispatch(ProcessTemplateActions.uploadProcessTemplate({ file, colleagueUUID }));
+  const onUpload = (file) => dispatch(ProcessTemplateActions.uploadProcessTemplate({ file }));
 
   const { getValues } = templateChooseMethods;
 

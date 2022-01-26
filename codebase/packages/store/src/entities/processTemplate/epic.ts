@@ -46,7 +46,7 @@ export const uploadProcessTemplateEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
     filter(isActionOf(uploadProcessTemplate.request)),
     switchMap(({ payload }) => {
-      const { colleagueUUID, file } = payload;
+      const { file } = payload;
       const metadata = {
         uploadMetadataList: [
           {
