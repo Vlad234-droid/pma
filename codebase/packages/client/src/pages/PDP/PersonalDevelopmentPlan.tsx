@@ -1,15 +1,13 @@
-import React, { FC, useEffect, useState } from 'react';
-import { Trans, useTranslation } from 'components/Translation';
+import React, { FC, useEffect } from 'react';
+import { useTranslation } from 'components/Translation';
 import { CreateRule, Rule, Styles, theme, Theme, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { ObjectiveType, PDPType, ReviewType } from 'config/enum';
 import useDispatch from 'hooks/useDispatch';
 import { useSelector } from 'react-redux';
 import {
   colleagueUUIDSelector,
-  currentUserSelector,
   getTimelineMetaSelector,
   PDPActions,
-  reviewsMetaSelector,
   schemaMetaPDPSelector,
   TimelineActions,
   timelineTypesAvailabilitySelector,
@@ -53,7 +51,6 @@ export const TEST_ID = 'pdp-page';
 const PersonalDevelopmentPlan: FC = () => {
   const { css, theme } = useStyle();
   const navigate = useNavigate();
-  const { t } = useTranslation();
   const dispatch = useDispatch();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
@@ -80,11 +77,13 @@ const PersonalDevelopmentPlan: FC = () => {
   const { loaded } = useSelector(getTimelineMetaSelector) || {};
 
   useEffect(() => {
-    if (!loaded) dispatch(TimelineActions.getTimeline({ colleagueUuid }));
+    if (!loaded) {
+      dispatch(TimelineActions.getTimeline({ colleagueUuid }));
+    }
   }, [loaded]);
 
   useEffect(() => {
-    setTimeout(() => dispatch(PDPActions.getPDPGoal({})), 0);
+    dispatch(PDPActions.getPDPGoal({}));
   }, []);
 
   const deleteGoal = (uuid) => {
