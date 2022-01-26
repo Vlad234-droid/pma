@@ -121,5 +121,6 @@
   "PERSONAL_NOTE": "Personal Note",
   "PERSONAL_FOLDER": "Personal Folder",
   "TEAM_NOTE": "Team Note",
-  "TEAM_FOLDER": "Team Folder"
+  "TEAM_FOLDER": "Team Folder",
+  "objective_decline_reason_prefix": "Your objective was declined because it was not:"
 }

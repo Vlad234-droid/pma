@@ -9,7 +9,8 @@ export const pdpSelector = (state: RootState) => state.pdp;
 
 export const reviewsMetaSelector = createSelector(reviewsSelector, ({ meta }) => meta);
 export const getAllReviews = createSelector(reviewsSelector, ({ data }) => data);
-export const getAllColleagueReviews = createSelector(reviewsSelector, ({ colleagueReviews }) => colleagueReviews);
+export const getAllColleagueReviews = (colleagueUuid) =>
+  createSelector(reviewsSelector, ({ colleagueReviews }) => colleagueReviews[colleagueUuid]);
 
 export const filterReviewsByTypeSelector = (reviewType: ReviewType) =>
   createSelector(reviewsSelector, (reviews: any) => {

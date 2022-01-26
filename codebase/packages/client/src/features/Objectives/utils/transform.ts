@@ -1,4 +1,5 @@
 import * as T from '../types';
+import { Status } from 'config/enum';
 
 export const transformReviewsToObjectives = (
   reviwes: T.Review[] = [],
@@ -6,6 +7,7 @@ export const transformReviewsToObjectives = (
 ): T.Objective[] => {
   return reviwes?.map((reviewItem) => {
     const status = reviewItem.status;
+    const declineReason = status === Status.DECLINED ? reviewItem?.changeStatusReason : '';
     const objective = reviewItem?.properties?.mapJson;
     const subTitle = objective['title'] || '';
     const description = objective['description'] || '';
@@ -26,6 +28,7 @@ export const transformReviewsToObjectives = (
       title: `Objective ${reviewItem.number}`,
       subTitle: subTitle,
       description: description,
+      declineReason,
       explanations,
       status,
     };

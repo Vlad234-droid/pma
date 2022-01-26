@@ -2,13 +2,37 @@
 import { Epic, isActionOf } from 'typesafe-actions';
 import { combineEpics } from 'redux-observable';
 import { forkJoin, from, of } from 'rxjs';
-import { catchError, filter, mergeMap, switchMap, takeUntil } from 'rxjs/operators';
+import { catchError, filter, map, mergeMap, switchMap, takeUntil } from 'rxjs/operators';
 
 import { ReviewType, Status } from '@pma/client/src/config/enum';
 
-import { getSchema } from './actions';
-import { cleanFormsDsl, checkFormsPermission, updateForms } from '../../utils/formDsl';
+import { getSchema, updateRatingSchema } from './actions';
+import { addStrategicObjectiveInForms, addOverallRatingInForms, getPermittedForms } from '../../utils/formExpression';
 import { colleagueUUIDSelector } from '../../selectors';
+
+export const updateRatingSchemaEpic: Epic = (action$, state$, { api }) =>
+  action$.pipe(
+    filter(isActionOf(updateRatingSchema.request)),
+    switchMap(({ payload }) =>
+      // @ts-ignore
+      from(api.getOverallRating(payload)).pipe(
+        // @ts-ignore
+        map(({ success, data }) => {
+          const state: any = state$.value;
+          // forms in schema already filtered with permission
+          const {
+            schema: { current: currentSchema },
+          } = state;
+
+          const updatedForms: any[] = addOverallRatingInForms(currentSchema.forms, data?.overall_rating);
+
+          return updateRatingSchema.success({ current: { ...currentSchema, forms: updatedForms } });
+        }),
+        catchError(({ errors }) => of(getSchema.failure(errors))),
+        takeUntil(action$.pipe(filter(isActionOf(getSchema.cancel)))),
+      ),
+    ),
+  );
 
 export const getSchemaEpic: Epic = (action$, state$, { api }) =>
   action$.pipe(
@@ -36,19 +60,20 @@ export const getSchemaEpic: Epic = (action$, state$, { api }) =>
               const reviews = data?.reviews?.data;
               const schema = data?.schema?.payload;
 
-              const { forms } = schema;
               const userRoles: string[] = user?.roles || [];
               const userWorkLevels: string[] =
                 user?.colleague?.workRelationships?.map((workRelationship) => workRelationship.workLevel) || [];
 
-              const formsComponentPermitted: any[] = checkFormsPermission(forms, [...userRoles, ...userWorkLevels]);
               const elementCount =
                 reviews?.filter((review) => {
                   return review.status === Status.APPROVED && review.type === ReviewType.OBJECTIVE;
                 })?.length || 0;
 
-              const updatedForms: any[] = updateForms(formsComponentPermitted, elementCount);
-              return of(getSchema.success({ ...schema, forms: cleanFormsDsl(updatedForms) }));
+              const updatedForms: any[] = addStrategicObjectiveInForms(
+                getPermittedForms(schema.forms, [...userRoles, ...userWorkLevels]),
+                elementCount,
+              );
+              return of(getSchema.success({ current: { ...schema, forms: updatedForms } }));
             }),
           );
         }),
@@ -58,4 +83,4 @@ export const getSchemaEpic: Epic = (action$, state$, { api }) =>
     ),
   );
 
-export default combineEpics(getSchemaEpic);
+export default combineEpics(getSchemaEpic, updateRatingSchemaEpic);

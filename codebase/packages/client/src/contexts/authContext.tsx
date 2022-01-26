@@ -19,12 +19,14 @@ type AuthData = {
   accessToken?: string;
   login: LoginAction;
   logout: LogoutAction;
+  roles: Array<string>;
 };
 
 const defaultData = {
   authenticated: false, // to check if authenticated or not
   login: () => undefined, // to start the login process
   logout: () => undefined, // logout the user
+  roles: [],
 };
 
 const AuthContext = createContext<AuthData>(defaultData);
@@ -57,6 +59,7 @@ export const AuthProvider: FC = ({ children }) => {
         user: info,
         login: loginAction,
         logout: logoutAction,
+        roles: info?.data?.roles || [],
       }}
     >
       {children}

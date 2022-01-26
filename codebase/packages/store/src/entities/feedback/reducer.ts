@@ -1,5 +1,12 @@
 import { createReducer } from 'typesafe-actions';
-import { createNewFeedback, getAllFeedbacks, readFeedback, updatedFeedback, getObjectiveReviews } from './actions';
+import {
+  createNewFeedback,
+  getAllFeedbacks,
+  readFeedback,
+  updatedFeedback,
+  getObjectiveReviews,
+  clearFeedback,
+} from './actions';
 
 export const initialState = {
   notes: [],
@@ -30,7 +37,7 @@ export default createReducer(initialState)
     notes: payload,
     meta: { ...state.meta, loading: false, loaded: true },
   }))
-
+  .handleAction(clearFeedback, (state) => ({ ...state, notes: [] }))
   .handleAction(readFeedback.request, (state) => ({
     ...state,
     meta: { ...state.meta, loading: true },

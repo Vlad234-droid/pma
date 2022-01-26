@@ -6,8 +6,8 @@ import {
   getManagersMetaSelector,
   getPendingEmployees,
   ManagersActions,
+  ReviewsActions,
   SchemaActions,
-  schemaMetaSelector,
 } from '@pma/store';
 
 import { Trans, useTranslation } from 'components/Translation';
@@ -57,6 +57,7 @@ const SelectAll: FC<SelectAllProps> = ({ onChange, checked, indeterminate, disab
 };
 
 export const Actions = () => {
+  const dispatch = useDispatch();
   const { css } = useStyle();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.medium || isBreakpoint.small || isBreakpoint.xSmall;
@@ -65,20 +66,19 @@ export const Actions = () => {
   const { t } = useTranslation();
   const options = getEmployeesSortingOptions(t);
 
-  const { loaded: schemaLoaded } = useSelector(schemaMetaSelector);
-
   // @ts-ignore
   const { employeeWithPendingApprovals, employeeWithCompletedApprovals } =
     useSelector((state) => getPendingEmployees(state, searchValue, sortValue), shallowEqual) || {};
 
   const { loaded } = useSelector(getManagersMetaSelector) || {};
   const colleagueUuid = useSelector(colleagueUUIDSelector);
-  const dispatch = useDispatch();
 
   const [indeterminate, setIndeterminate]: [boolean, (T) => void] = useState(false);
   const [isCheckAll, setIsCheckAll]: [boolean, (T) => void] = useState(false);
   const [checkedItems, setCheckedItems]: [string[], (T) => void] = useState([]);
   const [reviewsForApproval, setReviewsForApproval]: [any[], (T) => void] = useState([]);
+
+  const [colleagueOpened, setColleagueOpened] = useState<string>('');
 
   const [colleagues, setColleagues] = useState(employeeWithPendingApprovals || []);
   const [pending, setPending] = useState(true);
@@ -91,11 +91,18 @@ export const Actions = () => {
 
   useEffect(() => {
     if (!loaded && colleagueUuid) dispatch(ManagersActions.getManagers({ colleagueUuid }));
-  }, [loaded, schemaLoaded, colleagueUuid]);
+  }, [loaded, colleagueUuid]);
 
   useEffect(() => {
     setColleagues(pending ? employeeWithPendingApprovals : employeeWithCompletedApprovals);
   }, [pending, employeeWithPendingApprovals, employeeWithCompletedApprovals]);
+
+  useEffect(() => {
+    return () => {
+      dispatch(ReviewsActions.clearReviewData());
+      dispatch(SchemaActions.clearSchemaData());
+    };
+  }, []);
 
   //todo: refactor this
   useEffect(() => {
@@ -251,6 +258,8 @@ export const Actions = () => {
                     id={colleague.uuid}
                     status={pending ? Status.WAITING_FOR_APPROVAL : Status.APPROVED}
                     colleague={colleague}
+                    colleagueOpened={colleagueOpened}
+                    setColleagueOpened={setColleagueOpened}
                   />
                 </div>
               </div>
