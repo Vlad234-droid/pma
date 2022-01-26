@@ -29,6 +29,7 @@ export type WidgetTeamMateObjectivesProps = {
   colleague: any;
   colleagueOpened: string;
   setColleagueOpened: (T) => void;
+  onSubmit: (status: Status, type: ReviewType) => void;
 };
 
 export const WidgetTeamMateObjectives: FC<WidgetTeamMateObjectivesProps> = ({
@@ -36,6 +37,7 @@ export const WidgetTeamMateObjectives: FC<WidgetTeamMateObjectivesProps> = ({
   colleague,
   colleagueOpened,
   setColleagueOpened,
+  onSubmit,
 }) => {
   const dispatch = useDispatch();
   const { css } = useStyle();
@@ -136,6 +138,9 @@ export const WidgetTeamMateObjectives: FC<WidgetTeamMateObjectivesProps> = ({
       };
 
       dispatch(ReviewsActions.updateReviewStatus(update));
+
+      onSubmit(status, reviewType);
+
       if (colleague?.uuid) {
         dispatch(
           ReviewsActions.getReviews({

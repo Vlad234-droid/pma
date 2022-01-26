@@ -121,6 +121,10 @@
   "PERSONAL_NOTE": "Personal Note",
   "PERSONAL_FOLDER": "Personal Folder",
   "TEAM_NOTE": "Team Note",
-  "TEAM_FOLDER": "Team Folder",
   "objective_decline_reason_prefix": "Your objective was declined because it was not:"
+  "TEAM_FOLDER": "Team Folder",
+  "colleague_requested_feedback": "This colleague has requested feedback from you. Fill out the questions below to share your feedback.",
+  "you_have_rejected": "You’ve rejected this form as it doesn’t reflect the conversation you had with your colleague. Please pick up with them directly to discuss more.",
+  "you_have_approved": "You have approved",
+  "review": "Review"
 }
