@@ -113,5 +113,8 @@
   "colleague_requested_feedback": "This colleague has requested feedback from you. Fill out the questions below to share your feedback.",
   "you_have_rejected": "You’ve rejected this form as it doesn’t reflect the conversation you had with your colleague. Please pick up with them directly to discuss more.",
   "you_have_approved": "You have approved",
-  "review": "Review"
+  "review": "Review",
+  "review_type_description_objective": "Objective {{num}}",
+  "review_type_description_eyr": "Year-end review",
+  "review_type_description_myr": "Mid-year review"
 }

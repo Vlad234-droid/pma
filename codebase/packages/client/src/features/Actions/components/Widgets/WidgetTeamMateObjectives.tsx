@@ -96,7 +96,7 @@ export const WidgetTeamMateObjectives: FC<WidgetTeamMateObjectivesProps> = ({
         return {
           id: reviewItem.uuid,
           number: Number(reviewItem.number),
-          title: type === ReviewType.OBJECTIVE ? `${ObjectiveType[type]} ${reviewItem.number}` : ObjectiveType[type],
+          title: t(`review_type_description_${type?.toLowerCase()}`, ObjectiveType[type], { num: reviewItem.number }),
           subTitle: subTitle,
           description: description,
           explanations,
