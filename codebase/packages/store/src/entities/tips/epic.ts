@@ -4,6 +4,7 @@ import { combineEpics } from 'redux-observable';
 import { from, of } from 'rxjs';
 import { catchError, filter, map, switchMap } from 'rxjs/operators';
 import { getAllTips, getTipHistory, createTip, getTipByUuid, deleteTip } from './actions';
+import { concatWithErrorToast, errorPayloadConverter } from '../../utils/toastHelper';
 
 export const getAllTipsEpic: Epic = (action$, _, { api }) => {
   return action$.pipe(
@@ -68,7 +69,10 @@ export const getTipByUuidEpic: Epic = (action$, _, { api }) => {
         // catchError(({ errors }) => of(getTipByUuid.failure(errors))),
         catchError((e) => {
           const errors = e?.data?.errors;
-          return of(getTipByUuid.failure(errors?.[0]));
+          return concatWithErrorToast(
+            of(getTipByUuid.failure(errors?.[0])),
+            errorPayloadConverter({ ...errors?.[0], title: 'Tip by uuid fetch error' }),
+          );
         }),
       );
     }),
@@ -88,7 +92,10 @@ export const deleteTipEpic: Epic = (action$, _, { api }) => {
         // catchError(({ errors }) => of(deleteTip.failure(errors))),
         catchError((e) => {
           const errors = e?.data?.errors;
-          return of(deleteTip.failure(errors?.[0]));
+          return concatWithErrorToast(
+            of(deleteTip.failure(errors?.[0])),
+            errorPayloadConverter({ ...errors?.[0], title: 'Delete tip error' }),
+          );
         }),
       );
     }),

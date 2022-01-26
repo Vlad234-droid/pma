@@ -3,6 +3,7 @@ import { Epic, isActionOf } from 'typesafe-actions';
 import { combineEpics } from 'redux-observable';
 import { from, of } from 'rxjs';
 import { catchError, filter, map, mergeMap, switchMap, takeUntil } from 'rxjs/operators';
+import { concatWithErrorToast, errorPayloadConverter } from '../../utils/toastHelper';
 
 import {
   createReview,
@@ -147,7 +148,10 @@ export const updateReviewStatusEpic: Epic = (action$, _, { api }) => {
         ),
         catchError((e) => {
           const data = e?.data;
-          return of(updateReviewStatus.failure(data?.errors?.[0] || data?.error));
+          return concatWithErrorToast(
+            of(updateReviewStatus.failure(data?.errors?.[0] || data?.error)),
+            errorPayloadConverter({ ...data?.errors?.[0], title: 'Update review status error' }),
+          );
         }),
         takeUntil(action$.pipe(filter(isActionOf(updateReviewStatus.cancel)))),
       );

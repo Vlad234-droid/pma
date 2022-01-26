@@ -3,6 +3,7 @@ import { Epic, isActionOf } from 'typesafe-actions';
 import { combineEpics } from 'redux-observable';
 import { from, of } from 'rxjs';
 import { catchError, filter, map, switchMap, takeUntil } from 'rxjs/operators';
+import { concatWithErrorToast, errorPayloadConverter } from '../../utils/toastHelper';
 
 import {
   approveObjective,
@@ -94,7 +95,10 @@ export const approveObjectivesEpic: Epic = (action$, _, { api }) => {
         }),
         catchError((e) => {
           const errors = e?.data?.errors;
-          return of(approveObjective.failure(errors?.[0]));
+          return concatWithErrorToast(
+            of(approveObjective.failure(errors?.[0])),
+            errorPayloadConverter({ ...errors?.[0], title: 'Approve objective error' }),
+          );
         }),
         takeUntil(action$.pipe(filter(isActionOf(approveObjective.cancel)))),
       );
@@ -120,7 +124,10 @@ export const declineObjectivesEpic: Epic = (action$, _, { api }) => {
         }),
         catchError((e) => {
           const errors = e?.data?.errors;
-          return of(declineObjective.failure(errors?.[0]));
+          return concatWithErrorToast(
+            of(declineObjective.failure(errors?.[0])),
+            errorPayloadConverter({ ...errors?.[0], title: 'Decline objective error' }),
+          );
         }),
         takeUntil(action$.pipe(filter(isActionOf(declineObjective.cancel)))),
       );
