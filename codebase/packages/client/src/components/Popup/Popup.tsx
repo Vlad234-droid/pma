@@ -16,23 +16,23 @@ const Popup = (props) => {
       title='Strategic drivers'
       modalPosition='middle'
       closeOptions={{
-        closeOptionContent: <Icon graphic={'close'} invertColors={true}/>,
+        closeOptionContent: <Icon graphic={'close'} invertColors={true} />,
         closeOptionStyles: {},
         onClose: () => navigate(-1),
       }}
-      >
-            <div className={css(main)}>
-              <div className={css(decsriptionHeader({ theme }))}>Your organization has 6 drivers</div>
+    >
+      <div className={css(main)}>
+        <div className={css(decsriptionHeader({ theme }))}>Your organization has 6 drivers</div>
 
-              <div className={css(descriptionText({ theme }))}>
-                Organization drivers – are stategic goals that help all company-wide activities lead to one single direction.
-              </div>
-              <div className={css(templatesListStyles)}>
-                {items.map((obj, idx) => {
-                  return <Details key={obj.uuid} title={`Strategic driver ${idx + 1}`} description={obj.title} />;
-                })}
-              </div>
-            </div>
+        <div className={css(descriptionText({ theme }))}>
+          Organization drivers – are stategic goals that help all company-wide activities lead to one single direction.
+        </div>
+        <div className={css(templatesListStyles)}>
+          {items.map((obj, idx) => {
+            return <Details key={obj.uuid} title={`Strategic driver ${idx + 1}`} description={obj.title} />;
+          })}
+        </div>
+      </div>
     </ModalWithHeader>
   );
 };
