@@ -8,6 +8,7 @@ import Upload from 'images/Upload.svg';
 import { useTranslation } from 'components/Translation';
 import { getProcessTemplateSelector } from '@pma/store/src/selectors/processTemplate';
 import { ProcessTemplateActions } from '@pma/store';
+import { formatDateStringFromISO } from 'utils/date';
 
 type TemplateModalProps = {
   closeModal: () => void;
@@ -24,8 +25,7 @@ const TemplatesModal: FC<TemplateModalProps> = ({ closeModal, selectTemplate }) 
   const templatesList = useSelector(getProcessTemplateSelector) || [];
   
   const filteredTemplates = templatesList?.filter((item) => {
-    const date = new Date(item?.createdTime);
-    const createdTime = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
+    const createdTime = formatDateStringFromISO(item.createdTime, 'MM/dd/yyyy');
     if(!filter || item.fileName.toLowerCase().includes(filter.toLowerCase()) || createdTime.includes(filter)) return item;
   });
 
@@ -60,8 +60,7 @@ const TemplatesModal: FC<TemplateModalProps> = ({ closeModal, selectTemplate }) 
 
         <div className={css(templatesListStyles)}>
           {filteredTemplates.map((item) => {
-            const date = new Date(item?.createdTime);
-            const createdTime = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
+            const createdTime = formatDateStringFromISO(item.createdTime, 'MM/dd/yyyy');
             return (
               <div
                 className={css(templatesListItemStyles)}
