@@ -11,7 +11,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import usePDPShema from 'features/PDP/hooks/usePDPShema';
 import { useSelector } from 'react-redux';
-import { colleagueUUIDSelector, schemaMetaPDPSelector, PDPActions } from '@pma/store';
+import { colleagueUUIDSelector, schemaMetaPDPSelector, metaPDPSelector, PDPActions } from '@pma/store';
 import { PDPType } from 'config/enum';
 import { createYupSchema } from 'utils/yup';
 import useDispatch from 'hooks/useDispatch';
@@ -29,6 +29,7 @@ const CreatePersonalDevelopmentGoal = (props) => {
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const pdpList = useSelector(schemaMetaPDPSelector)?.goals;
+  const { loaded: schemaLoaded = false } = useSelector(metaPDPSelector);
   const [pdpGoals, setPDPGoals] = useState<any[]>([]);
   const [schema] = usePDPShema(PDPType.PDP);
   const { components = [] } = schema;
@@ -81,14 +82,18 @@ const CreatePersonalDevelopmentGoal = (props) => {
     },
   ];
 
+  useEffect(() => {
+    reset(currentGoal?.properties?.mapJson);
+  }, [currentGoal]);
+
   const save = () => {
     dispatch(PDPActions.createPDPGoal({ data: requestData }));
-    setTimeout((_) => navigate(buildPath(Page.PERSONAL_DEVELOPMENT_PLAN)), 0);
+    if (schemaLoaded) navigate(buildPath(Page.PERSONAL_DEVELOPMENT_PLAN));
   };
 
   const update = () => {
     dispatch(PDPActions.updatePDPGoal({ data: requestData }));
-    setTimeout((_) => navigate(buildPath(Page.PERSONAL_DEVELOPMENT_PLAN)), 0);
+    if (schemaLoaded) navigate(buildPath(Page.PERSONAL_DEVELOPMENT_PLAN));
   };
 
   const saveAndCreate = () => {
@@ -170,7 +175,7 @@ const CreatePersonalDevelopmentGoal = (props) => {
         <div className={css(goalListBlock({ theme }))}>{!uuid && pdpList && navGoals()}</div>
         <form>
           {pdpGoals.map((component) => {
-            const { id, key, label, description } = component;
+            const { key, label, description } = component;
             const updateGoalValue = pdpList
               ? pdpList?.filter((el) => el.uuid === currentGoal.uuid)[0]?.properties?.mapJson[key]
               : '';
