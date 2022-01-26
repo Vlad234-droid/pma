@@ -4,7 +4,8 @@ import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { I18nextProvider } from 'react-i18next';
 import i18n from 'utils/i18next';
-import { DDLProvider, theme as dexDDLTheme } from '@dex-ddl/core';
+import { DDLProvider } from '@dex-ddl/core';
+import { useObservableTheme } from '@dex-runtime/root-state';
 import merge from 'lodash.merge';
 import theme from 'theme';
 import { INTEGRATION_MODE, PUBLIC_URL } from 'config/constants';
@@ -27,6 +28,8 @@ const rendererOptions = {
 };
 
 const Root: FC = () => {
+  const dexDDLTheme = useObservableTheme();
+
   return (
     <I18nextProvider i18n={i18n}>
       <DDLProvider rendererOptions={rendererOptions} theme={merge(dexDDLTheme, theme)}>
