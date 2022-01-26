@@ -21,7 +21,7 @@ import { Page } from 'pages';
 import { useParams } from 'react-router-dom';
 import { ConfirmModal } from 'features/Modal';
 import colors from 'theme/colors';
-import { DateTime } from 'utils/date';
+import { DATE_FORMAT, formatDate } from 'utils/date';
 
 const CreatePersonalDevelopmentGoal = (props) => {
   const { css, theme } = useStyle();
@@ -192,7 +192,7 @@ const CreatePersonalDevelopmentGoal = (props) => {
               : '';
 
             if (description === '{datepicker}') {
-              const minDate = DateTime.fromISO(new Date().toISOString()).toFormat('yyyy-MM-dd');
+              const minDate = formatDate(new Date(), DATE_FORMAT);
 
               return (
                 <GenericItemField
