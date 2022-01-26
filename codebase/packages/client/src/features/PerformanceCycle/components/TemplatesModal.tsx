@@ -9,7 +9,7 @@ import { Icon } from 'components/Icon';
 import { Input } from 'components/Form';
 import { GenericItemField } from 'components/GenericForm';
 import { DropZone } from 'components/DropZone';
-import Upload from 'components/DropZone/Upload.svg';
+import Upload from 'images/Upload.svg';
 import { useTranslation } from 'components/Translation';
 import { getProcessTemplateSelector } from '@pma/store/src/selectors/processTemplate';
 import { currentUserSelector, ProcessTemplateActions } from '@pma/store';

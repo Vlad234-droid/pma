@@ -1,7 +1,7 @@
 import React, { FC, HTMLProps, useEffect, useState } from 'react';
 import { CreateRule, Modal, Rule, Styles, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { DropZone } from 'components/DropZone';
-import Upload from 'components/DropZone/Upload.svg';
+import Upload from 'images/Upload.svg';
 import { Input } from 'components/Form';
 import { currentUserSelector, getPreviousReviewFilesSelector, PreviousReviewFilesActions } from '@pma/store';
 import useDispatch from 'hooks/useDispatch';

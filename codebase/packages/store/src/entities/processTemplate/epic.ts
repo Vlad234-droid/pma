@@ -50,14 +50,18 @@ export const uploadProcessTemplateEpic: Epic = (action$, _, { api }) =>
       const metadata = {
         uploadMetadataList: [
           {
-            path: `/home/${colleagueUUID}/dev`,
+            path: `cycles`,
             fileName: file.name,
-            type: "BPMN",
-            status: "ACTIVE",
-            description: "text templates",
+            type: {
+              id: "1",
+              code: 'BPMN',
+              description: 'Business Process Model file',
+            },
+            status: 'ACTIVE',
+            description: 'text templates',
             fileDate: new Date().toISOString(),
-          }
-        ]
+          },
+        ],
       };
       return from(api.uploadFile({ file, metadata })).pipe(
         map(getProcessTemplate.request),
