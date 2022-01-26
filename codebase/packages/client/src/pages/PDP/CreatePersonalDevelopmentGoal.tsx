@@ -11,7 +11,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import usePDPShema from 'features/PDP/hooks/usePDPShema';
 import { useSelector } from 'react-redux';
-import { colleagueUUIDSelector, schemaMetaPDPSelector, metaPDPSelector, PDPActions } from '@pma/store';
+import { colleagueUUIDSelector, schemaMetaPDPSelector, metaPDPSelector, PDPActions, getFullName } from '@pma/store';
 import { PDPType } from 'config/enum';
 import { createYupSchema } from 'utils/yup';
 import useDispatch from 'hooks/useDispatch';
@@ -21,6 +21,7 @@ import { Page } from 'pages';
 import { useParams } from 'react-router-dom';
 import { ConfirmModal } from 'features/Modal';
 import colors from 'theme/colors';
+import { DateTime } from 'utils/date';
 
 const CreatePersonalDevelopmentGoal = (props) => {
   const { css, theme } = useStyle();
@@ -35,6 +36,10 @@ const CreatePersonalDevelopmentGoal = (props) => {
   const [schema] = usePDPShema(PDPType.PDP);
   const { components = [] } = schema;
   const formElements = components.filter((component) => component.type != 'text');
+  const formElementsFilledEmpty = formElements.reduce((acc, current) => {
+    acc[current.key] = '';
+    return acc;
+  }, {});
   const maxGoalCount = 5;
   const { uuid } = useParams<{ uuid: string }>();
   const [currentGoal, setCurrentGoal] = useState<any>({});
@@ -59,6 +64,8 @@ const CreatePersonalDevelopmentGoal = (props) => {
     if (uuid) {
       const goal = pdpList?.filter((el) => el.uuid === uuid)[0] || {};
       setCurrentGoal(goal);
+    } else {
+      setCurrentGoal({});
     }
   }, [pdpList]);
 
@@ -84,7 +91,8 @@ const CreatePersonalDevelopmentGoal = (props) => {
   ];
 
   useEffect(() => {
-    reset(currentGoal?.properties?.mapJson);
+    if (Object.keys(currentGoal).length) reset(currentGoal?.properties?.mapJson);
+    else reset(formElementsFilledEmpty);
   }, [currentGoal]);
 
   const save = () => {
@@ -124,7 +132,9 @@ const CreatePersonalDevelopmentGoal = (props) => {
               <div
                 key={el.uuid + Math.random()}
                 onClick={() => setCurrentGoal({})}
-                className={`${css(goal({ theme }))} ${css(defaultGoalItem({ theme }))}`}
+                className={`${css(goal({ theme }))} ${
+                  Object.keys(currentGoal).length ? css(activeGoalItem({ theme })) : css(defaultGoalItem({ theme }))
+                }`}
               >
                 Goal {idx + 2}
               </div>
@@ -182,6 +192,8 @@ const CreatePersonalDevelopmentGoal = (props) => {
               : '';
 
             if (description === '{datepicker}') {
+              const minDate = DateTime.fromISO(new Date().toISOString()).toFormat('yyyy-MM-dd');
+
               return (
                 <GenericItemField
                   key={key}
@@ -196,7 +208,7 @@ const CreatePersonalDevelopmentGoal = (props) => {
                       </Item>
                     );
                   }}
-                  Element={(props) => <Input type='date' {...props} />}
+                  Element={(props) => <Input min={minDate} type='date' {...props} />}
                   styles={{
                     fontFamily: 'TESCO Modern", Arial, sans-serif',
                     fontSize: '16px',
