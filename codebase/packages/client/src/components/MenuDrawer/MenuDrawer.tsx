@@ -1,22 +1,21 @@
 import React, { FC, useState } from 'react';
-import { MenuItem } from 'components/MenuItem';
-import { Rule, useStyle } from '@dex-ddl/core';
 import { Link } from 'react-router-dom';
+import { Rule, useStyle } from '@dex-ddl/core';
 import { Page } from 'pages';
 import { LINKS } from 'config/constants';
+import { buildPath } from 'features/Routes';
+import { ConfirmModal } from 'features/Modal';
+import { CanPerform, ADMIN } from 'features/Permission';
+import { useTranslation } from 'components/Translation';
+import { MenuItem } from 'components/MenuItem';
 import TescoLogo from './TescoLogo.svg';
 import { Icon } from '../Icon';
 import { IconButton } from '../IconButton';
-import { buildPath } from 'features/Routes';
-import { ConfirmModal } from 'features/Modal';
-import { useTranslation } from 'components/Translation';
 
 export type MenuDrawerProps = { onClose: () => void };
 
 export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isOpenDropdown, setIsOpenDropdown] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(true);
   const { css } = useStyle();
   const { t } = useTranslation();
 
@@ -28,10 +27,6 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
   const handleSignOutConfirm = () => {
     window.location.href = LINKS.signOut;
     setIsOpen(false);
-  };
-
-  const handleOpenDropdown = () => {
-    setIsOpenDropdown(!isOpenDropdown);
   };
 
   return (
@@ -64,49 +59,62 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
           </div>
         </div>
         <div className={css(menuDrawerSettingsStyle)}>
-          {isAdmin && (
-            <div className={css(itemSettingsStyle, adminToolsStyle)} onClick={handleOpenDropdown}>
-              <Icon graphic={'tool'} />
-              <span className={css(itemSettingsTextStyle)}>Administrator tools</span>
-              <Icon
-                graphic={'arrowDown'}
-                iconStyles={{
-                  marginLeft: '15px',
-                  transform: isOpenDropdown ? 'rotate(-0deg)' : 'rotate(-90deg)',
-                  transition: 'all .2s ease-in-out',
-                }}
-              />
-            </div>
-          )}
-
-          {isOpenDropdown && (
-            <div className={css(menuDropdownStyle)}>
-              <Link to={buildPath(Page.PERFORMANCE_CYCLE)} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
-                <Icon graphic={'createCycle'} />
-                <span className={css(itemSettingsTextStyle)}>Create performance cycle</span>
-              </Link>
-              <Link
-                to={buildPath(Page.CREATE_STRATEGIC_DRIVERS)}
-                className={css(itemSettingsStyle, itemSettingsBorderStyle)}
-              >
-                <Icon graphic={'strategicDriver'} />
-                <span className={css(itemSettingsTextStyle)}>Strategic drivers</span>
-              </Link>
-              <Link to={'/'} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
-                <Icon graphic={'configuration'} />
-                <span className={css(itemSettingsTextStyle)}>Configurations</span>
-              </Link>
-              <Link to={buildPath(Page.TIPS)} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
-                <Icon graphic={'tip'} />
-                <span className={css(itemSettingsTextStyle)}>Tips</span>
-              </Link>
-              <Link to={'/'} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
-                <Icon graphic={'multiLanguage'} />
-                <span className={css(itemSettingsTextStyle)}>Multi-lingual administration</span>
-              </Link>
-            </div>
-          )}
-          {isAdmin && <div className={css(itemSettingsBorderStyle, { marginLeft: '20px' })} />}
+          <CanPerform
+            perform={[ADMIN]}
+            yes={() => {
+              const [isOpenDropdown, toggleOpen] = useState(false);
+              const handleToggleDropdown = () => {
+                toggleOpen((isOpen) => !isOpen);
+              };
+              return (
+                <>
+                  <div className={css(itemSettingsStyle, adminToolsStyle)} onClick={handleToggleDropdown}>
+                    <Icon graphic={'tool'} />
+                    <span className={css(itemSettingsTextStyle)}>Administrator tools</span>
+                    <Icon
+                      graphic={'arrowDown'}
+                      iconStyles={{
+                        marginLeft: '15px',
+                        transform: isOpenDropdown ? 'rotate(-0deg)' : 'rotate(-90deg)',
+                        transition: 'all .2s ease-in-out',
+                      }}
+                    />
+                  </div>
+                  {isOpenDropdown && (
+                    <div className={css(menuDropdownStyle)}>
+                      <Link
+                        to={buildPath(Page.PERFORMANCE_CYCLE)}
+                        className={css(itemSettingsStyle, itemSettingsBorderStyle)}
+                      >
+                        <Icon graphic={'createCycle'} />
+                        <span className={css(itemSettingsTextStyle)}>Create performance cycle</span>
+                      </Link>
+                      <Link
+                        to={buildPath(Page.CREATE_STRATEGIC_DRIVERS)}
+                        className={css(itemSettingsStyle, itemSettingsBorderStyle)}
+                      >
+                        <Icon graphic={'strategicDriver'} />
+                        <span className={css(itemSettingsTextStyle)}>Strategic drivers</span>
+                      </Link>
+                      <Link to={'/'} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
+                        <Icon graphic={'configuration'} />
+                        <span className={css(itemSettingsTextStyle)}>Configurations</span>
+                      </Link>
+                      <Link to={buildPath(Page.TIPS)} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
+                        <Icon graphic={'tip'} />
+                        <span className={css(itemSettingsTextStyle)}>Tips</span>
+                      </Link>
+                      <Link to={'/'} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
+                        <Icon graphic={'multiLanguage'} />
+                        <span className={css(itemSettingsTextStyle)}>Multi-lingual administration</span>
+                      </Link>
+                    </div>
+                  )}
+                  <div className={css(itemSettingsBorderStyle, { marginLeft: '20px' })} />
+                </>
+              );
+            }}
+          />
           <Link to={''} className={css(itemSettingsStyle)}>
             <Icon graphic={'settingsGear'} />
             <span className={css(itemSettingsTextStyle)}>Settings</span>
@@ -135,7 +143,7 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
   );
 };
 
-const menuDrawerWrapperStyle = {
+const menuDrawerWrapperStyle: Rule = {
   position: 'fixed',
   left: 0,
   top: 0,
@@ -144,59 +152,59 @@ const menuDrawerWrapperStyle = {
   overflow: 'auto',
   backgroundColor: 'rgba(0, 83, 159, 0.7)',
   zIndex: 2,
-} as Rule;
+};
 
-const menuDrawerContentStyle = {
+const menuDrawerContentStyle: Rule = {
   position: 'absolute',
   right: 0,
   top: 0,
   maxWidth: '360px',
   background: '#F6F6F6',
   minHeight: '100vh',
-} as Rule;
+};
 
-const menuDrawerTopStyle = {
+const menuDrawerTopStyle: Rule = {
   padding: '24px',
-} as Rule;
+};
 
 const menuDrawerTitleStyle: Rule = ({ theme }) => ({
   color: theme.colors.tescoBlue,
   padding: '8px 0 24px',
 });
 
-const menuDrawerButtonsStyle = {
+const menuDrawerButtonsStyle: Rule = {
   display: 'flex',
   flexWrap: 'wrap',
   gap: '8px',
-} as Rule;
+};
 
-const menuDrawerSettingsStyle = {
+const menuDrawerSettingsStyle: Rule = {
   background: '#FFFFFF',
   height: '100%',
   padding: '6px 0 0 0',
-} as Rule;
+};
 
-const itemSettingsTextStyle = {
+const itemSettingsTextStyle: Rule = {
   paddingLeft: '16px',
-} as Rule;
+};
 
-const itemSettingsStyle = {
+const itemSettingsStyle: Rule = {
   display: 'flex',
   alignItems: 'center',
   padding: '12px 0',
   margin: '0 0 0 20px',
-} as Rule;
+};
 
 const itemSettingsBorderStyle: Rule = ({ theme }) => ({
   borderTop: `1px solid ${theme.colors.backgroundDarkest}`,
 });
 
-const menuDropdownStyle = {
+const menuDropdownStyle: Rule = {
   backgroundColor: '#F3F9FC',
   transition: 'all .5s esea-in-out',
-} as Rule;
+};
 
-const adminToolsStyle = {
+const adminToolsStyle: Rule = {
   cursor: 'pointer',
   userSelect: 'none',
-} as Rule;
+};
