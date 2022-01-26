@@ -1,17 +1,9 @@
-import React, { FC, HTMLProps, useEffect, useState } from 'react';
-import { Trans, useTranslation, TFunction } from 'components/Translation';
+import React, { FC, HTMLProps, useCallback, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import * as Yup from 'yup';
+import { useForm } from 'react-hook-form';
 import { Button, Icon, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { yupResolver } from '@hookform/resolvers/yup';
-import * as Yup from 'yup';
-
-// todo use Generic form in future. For now just not use it because of more flexibility
-import { useForm } from 'react-hook-form';
-import { Input, Item, Select, Textarea } from 'components/Form';
-import { GenericItemField } from 'components/GenericForm';
-import MarkdownRenderer from 'components/MarkdownRenderer';
-import { SubmitButton, SuccessModal } from './index';
-import { ReviewType, Status } from 'config/enum';
-import { useDispatch, useSelector } from 'react-redux';
 import {
   currentUserSelector,
   getReviewByTypeSelector,
@@ -21,9 +13,19 @@ import {
   schemaMetaSelector,
   SchemaActions,
   getReviewSchema,
+  getExpressionListenersKeys,
+  ExpressionValueType,
 } from '@pma/store';
+
+import { ReviewType, Status } from 'config/enum';
 import { createYupSchema } from 'utils/yup';
+import { Trans, useTranslation, TFunction } from 'components/Translation';
+import { Input, Item, Select, Textarea } from 'components/Form';
+import { GenericItemField } from 'components/GenericForm';
+import MarkdownRenderer from 'components/MarkdownRenderer';
 import { TriggerModal } from 'features/Modal/components/TriggerModal';
+
+import { SubmitButton, SuccessModal } from './index';
 import MidYearHelpModal from './MidYearHelpModal';
 
 export type ReviewFormModal = {
@@ -77,9 +79,12 @@ const ReviewFormModal: FC<Props> = ({ reviewType, onClose }) => {
   const { info } = useSelector(currentUserSelector);
   const dispatch = useDispatch();
   const [review] = useSelector(getReviewByTypeSelector(reviewType));
-  const { loading: reviewLoading } = useSelector(reviewsMetaSelector);
-  const { loading: schemaLoading } = useSelector(schemaMetaSelector);
+  const { loading: reviewLoading, loaded: reviewLoaded } = useSelector(reviewsMetaSelector);
+  const { loading: schemaLoading, loaded: schemaLoaded } = useSelector(schemaMetaSelector);
   const schema = useSelector(getReviewSchema(reviewType));
+  const overallRatingListeners: string[] = useSelector(
+    getExpressionListenersKeys(reviewType)(ExpressionValueType.OVERALL_RATING),
+  );
   const timelineReview = useSelector(getTimelineByReviewTypeSelector(reviewType));
   const readonly = [Status.WAITING_FOR_APPROVAL, Status.APPROVED].includes(timelineReview.status);
   const successMessage = getSuccessMessage(timelineReview?.code, t);
@@ -99,6 +104,7 @@ const ReviewFormModal: FC<Props> = ({ reviewType, onClose }) => {
     handleSubmit,
     formState: { isValid },
     reset,
+    watch,
   } = methods;
   const formValues = getValues();
 
@@ -137,18 +143,51 @@ const ReviewFormModal: FC<Props> = ({ reviewType, onClose }) => {
     setSuccessModal(true);
   };
 
-  useEffect(() => {
-    dispatch(SchemaActions.getSchema({ colleagueUuid: info.colleagueUUID }));
-    dispatch(
-      ReviewsActions.getColleagueReviews({ pathParams: { colleagueUuid: info.colleagueUUID, cycleUuid: 'CURRENT' } }),
-    );
-  }, []);
+  const updateRatingSchemaRequest = useCallback(
+    (review) => {
+      const permitToOverallRatingRequest = overallRatingListeners?.length
+        ? overallRatingListeners?.every((listener) => review[listener])
+        : false;
+      if (permitToOverallRatingRequest) {
+        const filteredData = Object.fromEntries(
+          Object.entries(review).filter(([key]) => overallRatingListeners?.includes(key)),
+        );
+        dispatch(SchemaActions.updateRatingSchema({ type: reviewType, fields: filteredData }));
+      }
+    },
+    [overallRatingListeners],
+  );
 
   useEffect(() => {
-    reset(review);
-  }, [review]);
+    if (!reviewLoaded) {
+      dispatch(
+        ReviewsActions.getColleagueReviews({ pathParams: { colleagueUuid: info.colleagueUUID, cycleUuid: 'CURRENT' } }),
+      );
+    }
+  }, [reviewLoaded]);
+
+  useEffect(() => {
+    if (!schemaLoaded && reviewLoaded) {
+      dispatch(SchemaActions.getSchema({ colleagueUuid: info.colleagueUUID }));
+    }
+  }, [schemaLoaded, reviewLoaded]);
+
+  useEffect(() => {
+    if (reviewLoaded && schemaLoaded && review) {
+      updateRatingSchemaRequest(review);
+      reset(review);
+    }
+  }, [review, reviewLoaded, schemaLoaded]);
+
+  useEffect(() => {
+    const subscription = watch((review) => {
+      updateRatingSchemaRequest(review);
+    });
+    return () => subscription.unsubscribe();
+  }, [watch, reviewLoaded, schemaLoaded]);
 
   if (reviewLoading && schemaLoading) {
+    // todo use loading component when we have
     return null;
   }
 

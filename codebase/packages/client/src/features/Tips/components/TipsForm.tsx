@@ -312,7 +312,7 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
               rows={2}
               value={formData['tipDescription']}
             />
-            
+
             <div className={css(hrSeparatorLine)} />
 
             <GenericItemField
@@ -329,7 +329,7 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
               })}
               placeholder='Please select'
               onChange={(value) => {
-                if(value) {
+                if (value) {
                   setValue('tipTargetLevel1', value, { shouldDirty: true });
                   setFormData({
                     tipTitle: methods.getValues('tipTitle'),

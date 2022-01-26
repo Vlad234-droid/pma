@@ -60,11 +60,12 @@ const TipsFormModal: FC<Props> = ({ action, negativeBtnAction, positiveBtnAction
 
   return (
     <div className={css(TipsFormModalStyle)}>
-      {options[action]['showImage'] && (action === 'successDelete' || action === 'confirmDelete' ? 
-        <img src={deleteIcon} alt='delete' />
-        :
-        <img src={successIcon} alt='success' />)
-      }
+      {options[action]['showImage'] &&
+        (action === 'successDelete' || action === 'confirmDelete' ? (
+          <img src={deleteIcon} alt='delete' />
+        ) : (
+          <img src={successIcon} alt='success' />
+        ))}
       <div className={css(modalTitle)}>{options[action]['title']}</div>
       <div className={css(modalBody)}>{options[action]['body']}</div>
       <div className={css(formControlBtnsWrap)}>
@@ -126,8 +127,8 @@ const modalBody: Rule = () => {
     fontSize: '24px',
     lineHeight: '28px,',
     maxWidth: '360px',
-  }
-}
+  };
+};
 
 const formControlBtnsWrap: Rule = ({ theme }) => {
   const [, isBreakpoint] = useBreakpoints();

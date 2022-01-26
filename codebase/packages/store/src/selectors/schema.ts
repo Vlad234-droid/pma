@@ -3,8 +3,14 @@ import { createSelector } from 'reselect';
 import { RootState } from 'typesafe-actions';
 import { ReviewType, PDPType } from '@pma/client/src/config/enum';
 
+import get from 'lodash.get';
+import { ExpressionType } from '../config/types';
+
 //@ts-ignore
-export const schemaSelector = (state: RootState) => state.schema;
+export const schemaMetaSelector = (state: RootState) => state.schema?.meta;
+export const schemaSelector = (state: RootState) => state.schema.current;
+export const colleagueSchemaSelector = (colleagueUuid) => (state: RootState) =>
+  state.schema.colleagueSchema[colleagueUuid] || [];
 export const schemaPDPSelector = (state: RootState) => state.pdp;
 
 //TODO: remove
@@ -44,7 +50,7 @@ export const getAllReviewSchemas = createSelector(schemaSelector, (schema: any) 
       const form = schema?.forms.find((form) => form.id === timelinePoint.form.id);
       reviews[timelinePoint.reviewType] = {
         ...schema,
-        ...(form?.json ? JSON.parse(form.json) : {}),
+        ...(form?.json || {}),
         markup: {
           min: Number(timelinePoint?.properties?.pm_review_min || 0),
           max: Number(timelinePoint?.properties?.pm_review_max || 0),
@@ -75,7 +81,7 @@ export const getReviewSchema = (type: ReviewType, withForms = true) =>
 
     const reviewMarkup = {
       ...schema,
-      ...(form?.json ? JSON.parse(form.json) : {}),
+      ...(form?.json || {}),
       markup: {
         min: Number(review?.properties?.pm_review_min || 0),
         max: Number(review?.properties?.pm_review_max || 0),
@@ -83,6 +89,19 @@ export const getReviewSchema = (type: ReviewType, withForms = true) =>
     };
     return reviewMarkup;
   });
+
+export const getExpressionListenersKeys =
+  (type: ReviewType, withForms = true) =>
+  (expressionValue: string) =>
+    createSelector(getReviewSchema(type, withForms), (schema: any) => {
+      const { components } = schema;
+      return components
+        ?.filter((component) => {
+          const listenerValues: string[] = get(component?.expression, `${ExpressionType.LISTENER}.rating`, []);
+          return listenerValues?.length && listenerValues.includes(expressionValue) && component?.key;
+        })
+        .map(({ key }) => key);
+    });
 
 export const getPDPSchema = (type: PDPType) =>
   createSelector(schemaPDPSelector, (schema: any) => {
@@ -99,6 +118,5 @@ export const getPDPSchema = (type: PDPType) =>
     return pdpMarkup;
   });
 
-export const schemaMetaSelector = createSelector(schemaSelector, ({ meta }) => meta);
 export const schemaMetaPDPSelector = createSelector(schemaPDPSelector, ({ pdp }) => pdp);
 export const metaPDPSelector = createSelector(schemaPDPSelector, ({ meta }) => meta);

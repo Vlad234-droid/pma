@@ -5,7 +5,7 @@ const previousReviewFileType = 3;
 
 export const getPreviousReviewFiles = () =>
   httpClient.get(`${domain}`, {
-    params: { type: previousReviewFileType, includeFileContent: false },
+    params: { type: previousReviewFileType },
   });
 
 export const uploadFile = ({ file, metadata }: { file: File; metadata: object }) => {

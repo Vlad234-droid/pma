@@ -1,4 +1,4 @@
-import { createAsyncAction } from 'typesafe-actions';
+import { createAsyncAction, createAction } from 'typesafe-actions';
 
 export const createNewFeedback = createAsyncAction(
   'feedback/CREATE_NEW_FEEDBACK_REQUEST',
@@ -30,10 +30,13 @@ export const getObjectiveReviews = createAsyncAction(
   'feedback/getObjectiveReviews_FAILURE',
 )<any, any, Error>();
 
+export const clearFeedback = createAction('feedback/CLEAR')<undefined>();
+
 export const Actions = {
   createNewFeedback: createNewFeedback.request,
   getAllFeedbacks: getAllFeedbacks.request,
   readFeedback: readFeedback.request,
   updatedFeedback: updatedFeedback.request,
   getObjectiveReviews: getObjectiveReviews.request,
+  clearFeedback,
 };

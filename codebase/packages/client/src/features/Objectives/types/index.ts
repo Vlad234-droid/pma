@@ -11,6 +11,7 @@ type Objective = {
   subTitle: string;
   description: string;
   explanations: Explanation[];
+  declineReason?: string;
   status: Status;
 };
 
