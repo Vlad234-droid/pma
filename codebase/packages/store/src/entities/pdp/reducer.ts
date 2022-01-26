@@ -1,12 +1,5 @@
 import { createReducer } from 'typesafe-actions';
-import {
-  createPDPGoal,
-  updatePDPGoal,
-  getPDPGoal,
-  getPDPByUUIDGoal,
-  clearPDPData,
-  deletePDPGoal,
-} from './actions';
+import { createPDPGoal, updatePDPGoal, getPDPGoal, getPDPByUUIDGoal, clearPDPData, deletePDPGoal } from './actions';
 
 export const initialState = {
   meta: { loading: false, loaded: false, error: null, status: null },
@@ -53,10 +46,10 @@ export default createReducer(initialState)
     meta: { ...state.meta, loading: true, error: null, loaded: false },
   }))
   .handleAction(getPDPByUUIDGoal.success, (state, { payload }) => ({
-      ...state,
-      ...payload,
-      meta: { ...state.meta, loading: false, loaded: true },
-    }))
+    ...state,
+    ...payload,
+    meta: { ...state.meta, loading: false, loaded: true },
+  }))
   .handleAction(getPDPByUUIDGoal.cancel, (state, { payload }) => ({
     ...state,
     ...payload,
@@ -74,10 +67,10 @@ export default createReducer(initialState)
     meta: { ...state.meta, loading: true, error: null, loaded: false },
   }))
   .handleAction(getPDPGoal.success, (state, { payload }) => ({
-      ...state,
-      ...payload,
-      meta: { ...state.meta, loading: false, loaded: true },
-    }))
+    ...state,
+    ...payload,
+    meta: { ...state.meta, loading: false, loaded: true },
+  }))
   .handleAction(getPDPGoal.cancel, (state, { payload }) => ({
     ...state,
     ...payload,

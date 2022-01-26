@@ -17,11 +17,13 @@ const bodyBlockStyle: CreateRule<{ mobileScreen }> = ({ mobileScreen }) => ({
   minWidth: '200px',
   display: 'grid',
   paddingRight: '20px',
-  ...(mobileScreen ? {
-    paddingTop: '5px',
-  } : {
-    paddingTop: '14px',
-  })
+  ...(mobileScreen
+    ? {
+        paddingTop: '5px',
+      }
+    : {
+        paddingTop: '14px',
+      }),
 });
 
 const titleStyle: Rule = ({ theme }) =>
@@ -47,11 +49,13 @@ const bodyStyle = {
 } as Styles;
 
 const tileStyle: CreateRule<{ mobileScreen }> = ({ mobileScreen }) => ({
-  ...(mobileScreen ? {
-    padding: '6px 0 0',
-  } : {
-    padding: '14px 10px 10px',
-  })
+  ...(mobileScreen
+    ? {
+        padding: '6px 0 0',
+      }
+    : {
+        padding: '14px 10px 10px',
+      }),
 });
 
 const PersonalInformation: FC<Props> = ({ user = {} }) => {
@@ -62,14 +66,10 @@ const PersonalInformation: FC<Props> = ({ user = {} }) => {
 
   const { fullName } = user;
   return (
-    <BasicTile
-      title={t('Personal', 'Personal information')}
-      description={''}
-      customStyle={tileStyle({mobileScreen})}
-    >
+    <BasicTile title={t('Personal', 'Personal information')} description={''} customStyle={tileStyle({ mobileScreen })}>
       <div className={css(wrapperStyle)}>
         <div className={css(bodyStyle)}>
-          <div className={css(bodyBlockStyle({mobileScreen}))}>
+          <div className={css(bodyBlockStyle({ mobileScreen }))}>
             <span className={css(titleStyle)}>
               <Trans>Full name</Trans>
             </span>
