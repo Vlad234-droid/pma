@@ -136,14 +136,6 @@ export const UserObjectives: FC = () => {
                     >
                       <Trans i18nKey='download'>Download</Trans>
                     </IconButton>
-                    <IconButton
-                      onPress={() => alert('share')}
-                      graphic='share'
-                      customVariantRules={{ default: iconButtonStyles }}
-                      iconStyles={iconStyles}
-                    >
-                      <Trans i18nKey='share'>Share</Trans>
-                    </IconButton>
                   </div>
                 ),
               }}
