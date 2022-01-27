@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import { Button, Icon, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
+  FormType,
   currentUserSelector,
   getReviewByTypeSelector,
   getTimelineByReviewTypeSelector,
@@ -61,15 +62,6 @@ const getContent = (reviewType: ReviewType, t: TFunction) => {
   return contents[reviewType];
 };
 
-const getSuccessMessage = (reviewType: ReviewType, t: TFunction) => {
-  const content = {
-    [ReviewType.MYR]: t('mid_year_review_sent_to_manager', 'Your mid-year review has been sent to your line manager.'),
-    [ReviewType.EYR]: t('end_year_review_sent_to_manager', 'Your year-end review has been sent to your line manager.'),
-  };
-
-  return content[reviewType];
-};
-
 const ReviewFormModal: FC<Props> = ({ reviewType, onClose }) => {
   const { css, theme } = useStyle();
   const { t } = useTranslation();
@@ -79,6 +71,7 @@ const ReviewFormModal: FC<Props> = ({ reviewType, onClose }) => {
   const { info } = useSelector(currentUserSelector);
   const dispatch = useDispatch();
   const [review] = useSelector(getReviewByTypeSelector(reviewType));
+  const formValues = review || {};
   const { loading: reviewLoading, loaded: reviewLoaded } = useSelector(reviewsMetaSelector);
   const { loading: schemaLoading, loaded: schemaLoaded } = useSelector(schemaMetaSelector);
   const schema = useSelector(getReviewSchema(reviewType));
@@ -87,7 +80,6 @@ const ReviewFormModal: FC<Props> = ({ reviewType, onClose }) => {
   );
   const timelineReview = useSelector(getTimelineByReviewTypeSelector(reviewType));
   const readonly = [Status.WAITING_FOR_APPROVAL, Status.APPROVED].includes(timelineReview.status);
-  const successMessage = getSuccessMessage(timelineReview?.code, t);
 
   const { helperText, title } = getContent(reviewType, t);
 
@@ -97,6 +89,7 @@ const ReviewFormModal: FC<Props> = ({ reviewType, onClose }) => {
   const methods = useForm({
     mode: 'onChange',
     resolver: yupResolver<Yup.AnyObjectSchema>(Yup.object().shape(yepSchema)),
+    defaultValues: formValues,
   });
 
   const {
@@ -106,7 +99,6 @@ const ReviewFormModal: FC<Props> = ({ reviewType, onClose }) => {
     reset,
     watch,
   } = methods;
-  const formValues = getValues();
 
   const onSaveDraft = () => {
     const data = getValues();
@@ -195,7 +187,10 @@ const ReviewFormModal: FC<Props> = ({ reviewType, onClose }) => {
     return (
       <SuccessModal
         onClose={onClose}
-        description={successMessage || 'Your review has been sent to your line manager.'}
+        description={t(
+          `${timelineReview?.code?.toLowerCase()}_review_sent_to_manager`,
+          'Your review has been sent to your line manager.',
+        )}
       />
     );
   }
@@ -209,7 +204,7 @@ const ReviewFormModal: FC<Props> = ({ reviewType, onClose }) => {
           padding: mobileScreen ? `0 ${theme.spacing.s4}` : `0 ${theme.spacing.s10}`,
         })}
       >
-        <form>
+        <form data-test-id={'REVIEW_FORM_MODAL'}>
           <div className={css({ padding: `0 0 ${theme.spacing.s5}` })}>
             <div className={css({ fontSize: '24px', lineHeight: '28px', color: theme.colors.tescoBlue })}>{title}</div>
             <div
@@ -246,7 +241,7 @@ const ReviewFormModal: FC<Props> = ({ reviewType, onClose }) => {
             {components.map((component) => {
               const { id, key, text, label, description, type, validate, values = [] } = component;
               const value = formValues[key] ? formValues[key] : '';
-              if (type === 'text') {
+              if (type === FormType.TEXT) {
                 return (
                   <div style={{ padding: '10px 0' }} key={id}>
                     <div
@@ -260,22 +255,7 @@ const ReviewFormModal: FC<Props> = ({ reviewType, onClose }) => {
                   </div>
                 );
               }
-              if (type === 'textfield' && validate?.maxLength <= 100) {
-                return (
-                  <GenericItemField
-                    key={id}
-                    name={key}
-                    methods={methods}
-                    label={label}
-                    Wrapper={Item}
-                    Element={Input}
-                    placeholder={description}
-                    value={value}
-                    readonly={readonly}
-                  />
-                );
-              }
-              if (type === 'textfield') {
+              if (type === FormType.TEXT_FIELD) {
                 return (
                   <GenericItemField
                     key={id}
@@ -290,7 +270,7 @@ const ReviewFormModal: FC<Props> = ({ reviewType, onClose }) => {
                   />
                 );
               }
-              if (type === 'select') {
+              if (type === FormType.SELECT) {
                 return (
                   <GenericItemField
                     key={id}
