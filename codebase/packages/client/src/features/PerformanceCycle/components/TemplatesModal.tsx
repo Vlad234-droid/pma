@@ -1,18 +1,14 @@
-import React, { FC, useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import React, { FC, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import * as Yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { chooseTemplateSchema } from 'pages/PerformanceCycle/schema';
 import { Button, CreateRule, ModalWithHeader, Rule, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { Icon } from 'components/Icon';
 import { Input } from 'components/Form';
-import { GenericItemField } from 'components/GenericForm';
 import { DropZone } from 'components/DropZone';
 import Upload from 'images/Upload.svg';
 import { useTranslation } from 'components/Translation';
 import { getProcessTemplateSelector } from '@pma/store/src/selectors/processTemplate';
-import { currentUserSelector, ProcessTemplateActions } from '@pma/store';
+import { ProcessTemplateActions } from '@pma/store';
+import { formatDateStringFromISO } from 'utils/date';
 
 type TemplateModalProps = {
   closeModal: () => void;
@@ -25,36 +21,17 @@ const TemplatesModal: FC<TemplateModalProps> = ({ closeModal, selectTemplate }) 
   const dispatch = useDispatch();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
-  const processTemplate = useSelector(getProcessTemplateSelector);
-  const [templatesList, setTemplatesList] = useState([] as any);
-  const { info: { colleagueUUID }, } = useSelector(currentUserSelector);
-
-  useEffect(() => {
-    setTemplatesList(processTemplate);
-  }, []);
-
-  const templateChooseMethods = useForm({
-    mode: 'onChange',
-    resolver: yupResolver<Yup.AnyObjectSchema>(chooseTemplateSchema),
+  const [filter, setFilteredValue] = useState('');
+  const templatesList = useSelector(getProcessTemplateSelector) || [];
+  
+  const filteredTemplates = templatesList?.filter((item) => {
+    const createdTime = formatDateStringFromISO(item.createdTime, 'MM/dd/yyyy');
+    if(!filter || item.fileName.toLowerCase().includes(filter.toLowerCase()) || createdTime.includes(filter)) return item;
   });
 
   const onUpload = (file) => dispatch(ProcessTemplateActions.uploadProcessTemplate({ file }));
 
-  const { getValues } = templateChooseMethods;
-
-  const handleSearchTemplate = () => {
-    const searchValue = getValues('template_search').toLowerCase();
-    const filtredTemplatesList = [] as any;
-    processTemplate.map((item) => {
-      const date = new Date(item?.createdTime);
-      const createdTime = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
-      if (`${item.label.toLowerCase()}${createdTime}`.includes(searchValue)) {
-        filtredTemplatesList.push(item);
-      }
-      return filtredTemplatesList;
-    });
-    setTemplatesList(filtredTemplatesList);
-  };
+  const handleSearchTemplate = ({ target }) => setFilteredValue(target.value);
 
   return (
     <ModalWithHeader
@@ -68,17 +45,8 @@ const TemplatesModal: FC<TemplateModalProps> = ({ closeModal, selectTemplate }) 
       }}
     >
       <div className={css(templatesModalContentWrapperStyles({mobileScreen}))}>
-        <GenericItemField
-          name={`template_search`}
-          methods={templateChooseMethods}
-          // Wrapper={({ children }) => (
-          //   <Item label='Template search' withIcon={false}>
-          //     {children}
-          //   </Item>
-          // )}
-          Element={Input}
+        <Input
           placeholder={'Enter template name'}
-          value={''}
           onChange={handleSearchTemplate}
         />
 
@@ -91,9 +59,8 @@ const TemplatesModal: FC<TemplateModalProps> = ({ closeModal, selectTemplate }) 
         </div>
 
         <div className={css(templatesListStyles)}>
-          {templatesList.map((item) => {
-            const date = new Date(item?.createdTime);
-            const createdTime = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
+          {filteredTemplates.map((item) => {
+            const createdTime = formatDateStringFromISO(item.createdTime, 'MM/dd/yyyy');
             return (
               <div
                 className={css(templatesListItemStyles)}

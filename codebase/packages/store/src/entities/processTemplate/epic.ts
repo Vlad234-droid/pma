@@ -8,8 +8,8 @@ import { getProcessTemplate, getProcessTemplateMetadata, uploadProcessTemplate }
 export const getProcessTemplateEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
     filter(isActionOf(getProcessTemplate.request)),
-    switchMap(() =>
-      from(api.getBPMNFiles()).pipe(
+    switchMap(({ payload }) =>
+      from(api.getFiles(payload)).pipe(
         map(getProcessTemplate.success),
         catchError((e) => {
           const errors = e?.data?.errors;

@@ -5,7 +5,7 @@ export const getProcessTemplate = createAsyncAction(
   'processTemplate/SUCCESS',
   'processTemplate/FAILURE',
   'processTemplate/CANCEL',
-)<undefined, any, Error, undefined>();
+)<any, any, Error, undefined>();
 
 export const getProcessTemplateMetadata = createAsyncAction(
   'processTemplate/METADATA_REQUEST',
