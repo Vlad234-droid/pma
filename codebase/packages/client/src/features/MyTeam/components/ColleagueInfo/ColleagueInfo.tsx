@@ -2,15 +2,17 @@ import React, { FC } from 'react';
 import { colors, fontWeight, Rule, useStyle } from '@dex-ddl/core';
 
 import { Avatar } from 'components/Avatar';
+import { BaseEmployee } from 'config/types';
 
 type Props = {
   firstName: string;
   lastName: string;
   jobName: string;
   businessType: string;
+  manager?: BaseEmployee;
 };
 
-const ColleagueInfo: FC<Props> = ({ firstName, lastName, jobName, businessType }) => {
+const ColleagueInfo: FC<Props> = ({ firstName, lastName, jobName, businessType, manager }) => {
   const { css } = useStyle();
 
   return (
@@ -21,6 +23,7 @@ const ColleagueInfo: FC<Props> = ({ firstName, lastName, jobName, businessType }
       <div className={css(headerBlockStyle)}>
         <span className={css(titleStyle)}>{`${firstName} ${lastName}`}</span>
         <span className={css(descriptionStyle)}>{`${jobName}, ${businessType}`}</span>
+        {manager && <span className={css(managerStyle)}>{`${manager.firstName} ${manager.lastName}`}</span>}
       </div>
     </div>
   );
@@ -48,7 +51,16 @@ const descriptionStyle: Rule = {
   fontStyle: 'normal',
   fontWeight: 'normal',
   fontSize: '16x',
-  lineHeight: '20px',
+  lineHeight: '18px',
+  color: colors.base,
+};
+
+const managerStyle: Rule = {
+  marginTop: '6px',
+  fontStyle: 'normal',
+  fontWeight: 'normal',
+  fontSize: '12px',
+  lineHeight: '14px',
   color: colors.base,
 };
 
