@@ -129,5 +129,6 @@
   "review": "Review",
   "review_type_description_objective": "Objective {{num}}",
   "review_type_description_eyr": "Year-end review",
-  "review_type_description_myr": "Mid-year review"
+  "review_type_description_myr": "Mid-year review",
+  "objectives_and_or_reviews": "objectives and / or reviews"
 }
