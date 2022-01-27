@@ -16,7 +16,7 @@ const Modal: FC<Props> = ({ review, status, onClose }) => {
 
   return (
     <SuccessModal
-      title={`${status === Status.DECLINED ? t('declined', 'Declined') : t('approved', 'Approved')} ${review === ReviewType.OBJECTIVE ? t('objectives', 'Objectives') : t('review', 'Review')}`}
+      title={`${status === Status.DECLINED ? t('declined', 'Declined') : t('approved', 'Approved')} ${t('objectives_and_or_reviews', 'objectives and / or reviews')}`}
       onClose={onClose}
       withСheckMark
       description={status === Status.DECLINED
