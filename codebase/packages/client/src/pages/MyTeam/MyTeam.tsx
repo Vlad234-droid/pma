@@ -2,7 +2,7 @@ import React, { FC, useEffect, useState } from 'react';
 import { shallowEqual, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Rule, useStyle } from '@dex-ddl/core';
-import { colleagueUUIDSelector, getAllEmployees, getPendingEmployees, ManagersActions } from '@pma/store';
+import { colleagueUUIDSelector, getAllEmployees, getAllEmployeesWithManagerSearch, getPendingEmployees, ManagersActions, getManagersMetaSelector } from '@pma/store';
 
 import { RouterSwitch } from 'components/RouterSwitch';
 import {
@@ -29,13 +29,16 @@ const MyTeam: FC = () => {
   const { t } = useTranslation();
   const options = getEmployeesSortingOptions(t);
   const [view, setView] = useState<View>(View.DIRECT_REPORTS);
+  const isFullTeamView = view === View.FULL_TEAM;
+  const currentSelector = isFullTeamView ? getAllEmployeesWithManagerSearch : getAllEmployees;
+  const { loaded } = useSelector(getManagersMetaSelector) || {};
 
   const handleViewChange = (view: View) => {
     setView(view);
   };
 
   // @ts-ignore
-  const colleagues = useSelector((state) => getAllEmployees(state, searchValue, sortValue), shallowEqual) || [];
+  const colleagues = useSelector((state) => currentSelector(state, searchValue, sortValue), shallowEqual) || [];
 
   const { employeeWithPendingApprovals, employeePendingApprovals } =
     useSelector((state) => getPendingEmployees(state), shallowEqual) || {};
@@ -94,9 +97,9 @@ const MyTeam: FC = () => {
               </Link>
             )}
             <div className={css(allColleagues)}>
-              {colleagues.map((employee: Employee) => (
+              {loaded && colleagues.map((employee: Employee) => (
                 <WidgetTeamMateProfile
-                  simpleView={view === View.FULL_TEAM}
+                  fullTeamView={isFullTeamView}
                   key={employee.uuid}
                   uuid={employee.uuid}
                   status={getLastTimelineStatus(employee)}

@@ -20,15 +20,20 @@ export type Review = {
   uuid: string;
 };
 
-export type Employee = {
-  businessType: string;
+export type BaseEmployee = {
+  uuid: string;
   firstName: string;
   jobName: string;
   lastName: string;
   middleName: string | null;
-  uuid: string;
+  businessType: string;
+};
+
+export type Employee = BaseEmployee & {
   reviews: Review[];
   timeline: Timeline[];
+  manager?: string;
+  lineManager?: BaseEmployee;
 };
 
 export { ReviewType, Status, TimelineType };
