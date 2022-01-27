@@ -105,7 +105,7 @@ export const PerformanceCycleForm: FC = () => {
 
   useEffect(() => {
     if (!loaded) {
-      dispatch(ProcessTemplateActions.getProcessTemplate());
+      dispatch(ProcessTemplateActions.getProcessTemplate({ type: '1', status: '2' }));
     }
   }, [loaded]);
 
