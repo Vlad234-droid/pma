@@ -164,19 +164,16 @@ export const PerformanceCycleForm: FC = () => {
     const { cycle, entryConfigKey, name } = getValues();
     return {
       data: {
-        ...(performanceCycleUuid !== 'new' && { uuid: performanceCycleUuid }),
         entryConfigKey: entryConfigKey,
-        template: { uuid: processSelected } || performanceCycleItem.template,
+        template: processSelected ? { uuid: processSelected } : performanceCycleItem.template,
         name: name,
         createdBy: {
           uuid: colleagueUuid,
         },
-        status: 'ACTIVE',
         type: 'FISCAL',
         startTime: new Date(cycle.metadata.cycle.properties.pm_cycle_start_time).toISOString(),
         endTime: new Date(cycle.metadata.cycle.properties.pm_cycle_end_time).toISOString(),
         properties: cycle.metadata.cycle.properties,
-        jsonMetadata: null,
         metadata: cycle.metadata,
       },
     };

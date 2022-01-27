@@ -21,14 +21,12 @@ import { useSelector } from 'react-redux';
 import {
   getTimelineByReviewTypeSelector,
   getTimelineSelector,
-  isReviewsInStatus,
   reviewsMetaSelector,
   schemaMetaSelector,
   TimelineActions,
   timelineTypesAvailabilitySelector,
 } from '@pma/store';
-import OrganizationWidget from 'features/Objectives/components/OrganizationWidget/OrganizationWidget';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
 import useReviewSchema from 'features/Objectives/hooks/useReviewSchema';
 import useReviews from 'features/Objectives/hooks/useReviews';
 
@@ -46,7 +44,6 @@ export const TEST_ID = 'user-objectives-page';
 
 export const UserObjectives: FC = () => {
   const { css, theme } = useStyle();
-  const navigate = useNavigate();
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
@@ -120,11 +117,6 @@ export const UserObjectives: FC = () => {
           </div>
         )}
         <ShareWidget customStyle={shareWidgetStyles} />
-
-        <OrganizationWidget
-          customStyle={{ flex: '1 1 30%', display: 'flex', flexDirection: 'column' }}
-          onClick={() => navigate('/view-organization-objectives')}
-        />
       </div>
       <div className={css(bodyWrapperStyles)} data-test-id={TEST_ID}>
         <div className={css(timelineWrapperStyles)}>
