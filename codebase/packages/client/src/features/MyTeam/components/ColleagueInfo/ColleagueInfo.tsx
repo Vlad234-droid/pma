@@ -39,29 +39,29 @@ const headerBlockStyle: Rule = {
   alignSelf: 'center',
 };
 
-const titleStyle: Rule = {
+const titleStyle: Rule = ({ theme }) => ({
   fontStyle: 'normal',
   fontWeight: fontWeight.bold,
-  fontSize: '18px',
-  lineHeight: '22px',
+  fontSize: `${theme.font.fixed.f18.fontSize}`,
+  lineHeight: `${theme.font.fixed.f18.lineHeight}`,
   color: colors.tescoBlue,
-};
+});
 
-const descriptionStyle: Rule = {
+const descriptionStyle: Rule = ({ theme }) => ({
   fontStyle: 'normal',
   fontWeight: 'normal',
-  fontSize: '16x',
-  lineHeight: '18px',
+  fontSize: `${theme.font.fixed.f16.fontSize}`,
+  lineHeight: `${theme.font.fixed.f16.lineHeight}`,
   color: colors.base,
-};
+});
 
-const managerStyle: Rule = {
+const managerStyle: Rule = ({ theme }) => ({
   marginTop: '6px',
   fontStyle: 'normal',
   fontWeight: 'normal',
-  fontSize: '12px',
-  lineHeight: '14px',
+  fontSize: `${theme.font.fixed.f12.fontSize}`,
+  lineHeight: `${theme.font.fixed.f12.lineHeight}`,
   color: colors.base,
-};
+});
 
 export default ColleagueInfo;

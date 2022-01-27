@@ -6,7 +6,7 @@ export const initialState = {
   meta: { loading: false, loaded: false, error: null },
 };
 
-const request = (state) => ({ ...state, meta: { ...state.meta, loading: true, error: null } });
+const request = (state) => ({ ...state, meta: { ...state.meta, loaded: false, loading: true, error: null } });
 
 const success = (state, { payload }) => ({
   ...state,
