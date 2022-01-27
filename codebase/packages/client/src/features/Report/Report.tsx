@@ -1,11 +1,10 @@
 import React, { FC, useState } from 'react';
-import { useStyle, useBreakpoints, Rule, colors, Styles, CreateRule, Button, theme } from '@dex-ddl/core';
-import { ReportActions } from '@pma/store';
-import { useDispatch } from 'react-redux';
+import { useStyle, useBreakpoints, Rule, colors, Styles, CreateRule, Button } from '@dex-ddl/core';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 
+import { CanPerform, PEOPLE_TEAM, TALENT_ADMIN } from 'features/Permission';
 import { IconButton } from 'components/IconButton';
 import { FilterOption } from 'features/Shared';
 import { PieChart } from 'components/PieChart';
@@ -19,7 +18,6 @@ import { Trans } from 'components/Translation';
 import { BASE_URL_API } from 'config/constants';
 
 const Report: FC = () => {
-  const dispatch = useDispatch();
   const [focus, setFocus] = useState(false);
   const [showDownloadReportModal, setShowDownloadReportModal] = useState(false);
   const [searchValueFilterOption, setSearchValueFilterOption] = useState('');
@@ -170,15 +168,20 @@ const Report: FC = () => {
               isCheckAll={isCheckAll}
               setIsCheckAll={setIsCheckAll}
             />
-            <IconButton
-              graphic='download'
-              customVariantRules={{
-                default: iconBtnStyle as Rule,
-              }}
-              iconStyles={iconDownloadStyle}
-              onPress={() => {
-                setShowDownloadReportModal(true);
-              }}
+            <CanPerform
+              perform={[PEOPLE_TEAM, TALENT_ADMIN]}
+              yes={() => (
+                <IconButton
+                  graphic='download'
+                  customVariantRules={{
+                    default: iconBtnStyle as Rule,
+                  }}
+                  iconStyles={iconDownloadStyle}
+                  onPress={() => {
+                    setShowDownloadReportModal(true);
+                  }}
+                />
+              )}
             />
           </div>
         </div>

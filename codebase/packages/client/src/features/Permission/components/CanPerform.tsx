@@ -1,5 +1,4 @@
 import { FC, ReactElement } from 'react';
-
 import { usePermission } from '../hooks';
 
 type Props = {

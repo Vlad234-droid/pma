@@ -5,7 +5,15 @@ import { Page } from 'pages';
 import { LINKS } from 'config/constants';
 import { buildPath } from 'features/Routes';
 import { ConfirmModal } from 'features/Modal';
-import { CanPerform, ADMIN } from 'features/Permission';
+import {
+  CanPerform,
+  ADMIN,
+  COLLEAGUE,
+  PEOPLE_TEAM,
+  TALENT_ADMIN,
+  LINE_MANAGER,
+  PROCESS_MANAGER,
+} from 'features/Permission';
 import { useTranslation } from 'components/Translation';
 import { MenuItem } from 'components/MenuItem';
 import TescoLogo from './TescoLogo.svg';
@@ -16,8 +24,14 @@ export type MenuDrawerProps = { onClose: () => void };
 
 export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isOpenDropdown, toggleOpen] = useState(false);
+
   const { css } = useStyle();
   const { t } = useTranslation();
+
+  const handleToggleDropdown = () => {
+    toggleOpen((isOpen) => !isOpen);
+  };
 
   const handleSignOut = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
@@ -45,76 +59,91 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
               linkTo={buildPath(Page.OBJECTIVES_VIEW)}
               title={t('my_objectives_and_reviews', 'My objectives and reviews')}
             />
-            <MenuItem
-              iconGraphic={'list'}
-              linkTo={buildPath(Page.PERSONAL_DEVELOPMENT_PLAN)}
-              title={'Personal development plan'}
+            <CanPerform
+              perform={[LINE_MANAGER, PEOPLE_TEAM, COLLEAGUE]}
+              yes={() => (
+                <MenuItem
+                  iconGraphic={'list'}
+                  linkTo={buildPath(Page.PERSONAL_DEVELOPMENT_PLAN)}
+                  title={'Personal development plan'}
+                />
+              )}
             />
             <MenuItem iconGraphic={'edit'} linkTo={buildPath(Page.NOTES)} title={'My notes'} />
             <MenuItem iconGraphic={'account'} linkTo={buildPath(Page.PROFILE)} title={'My profile'} />
             <MenuItem iconGraphic={'chatSq'} linkTo={buildPath(Page.FEEDBACK)} title={'Feedback'} />
             <MenuItem iconGraphic={'performance'} linkTo={'/'} title={'Support your performance'} />
-            <MenuItem iconGraphic={'team'} linkTo={buildPath(Page.REPORT)} title={'Team reporting'} />
+            <CanPerform
+              perform={[LINE_MANAGER, PEOPLE_TEAM, TALENT_ADMIN]}
+              yes={() => <MenuItem iconGraphic={'team'} linkTo={buildPath(Page.REPORT)} title={'Team reporting'} />}
+            />
             <MenuItem iconGraphic={'calibration'} linkTo={'/'} title={'Calibration ratings'} />
           </div>
         </div>
         <div className={css(menuDrawerSettingsStyle)}>
-          <CanPerform
-            perform={[ADMIN]}
-            yes={() => {
-              const [isOpenDropdown, toggleOpen] = useState(false);
-              const handleToggleDropdown = () => {
-                toggleOpen((isOpen) => !isOpen);
-              };
-              return (
-                <>
-                  <div className={css(itemSettingsStyle, adminToolsStyle)} onClick={handleToggleDropdown}>
-                    <Icon graphic={'tool'} />
-                    <span className={css(itemSettingsTextStyle)}>Administrator tools</span>
-                    <Icon
-                      graphic={'arrowDown'}
-                      iconStyles={{
-                        marginLeft: '15px',
-                        transform: isOpenDropdown ? 'rotate(-0deg)' : 'rotate(-90deg)',
-                        transition: 'all .2s ease-in-out',
-                      }}
-                    />
-                  </div>
-                  {isOpenDropdown && (
-                    <div className={css(menuDropdownStyle)}>
-                      <Link
-                        to={buildPath(Page.PERFORMANCE_CYCLE)}
-                        className={css(itemSettingsStyle, itemSettingsBorderStyle)}
-                      >
-                        <Icon graphic={'createCycle'} />
-                        <span className={css(itemSettingsTextStyle)}>Create performance cycle</span>
-                      </Link>
-                      <Link
-                        to={buildPath(Page.CREATE_STRATEGIC_DRIVERS)}
-                        className={css(itemSettingsStyle, itemSettingsBorderStyle)}
-                      >
-                        <Icon graphic={'strategicDriver'} />
-                        <span className={css(itemSettingsTextStyle)}>Strategic drivers</span>
-                      </Link>
-                      <Link to={'/'} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
-                        <Icon graphic={'configuration'} />
-                        <span className={css(itemSettingsTextStyle)}>Configurations</span>
-                      </Link>
-                      <Link to={buildPath(Page.TIPS)} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
-                        <Icon graphic={'tip'} />
-                        <span className={css(itemSettingsTextStyle)}>Tips</span>
-                      </Link>
-                      <Link to={'/'} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
-                        <Icon graphic={'multiLanguage'} />
-                        <span className={css(itemSettingsTextStyle)}>Multi-lingual administration</span>
-                      </Link>
-                    </div>
-                  )}
-                  <div className={css(itemSettingsBorderStyle, { marginLeft: '20px' })} />
-                </>
-              );
-            }}
-          />
+          <div className={css(itemSettingsStyle, adminToolsStyle)} onClick={handleToggleDropdown}>
+            <Icon graphic={'tool'} />
+            <span className={css(itemSettingsTextStyle)}>Administrator tools</span>
+            <Icon
+              graphic={'arrowDown'}
+              iconStyles={{
+                marginLeft: '15px',
+                transform: isOpenDropdown ? 'rotate(-0deg)' : 'rotate(-90deg)',
+                transition: 'all .2s ease-in-out',
+              }}
+            />
+          </div>
+          {isOpenDropdown && (
+            <div className={css(menuDropdownStyle)}>
+              <CanPerform
+                perform={[PEOPLE_TEAM, TALENT_ADMIN, PROCESS_MANAGER, ADMIN]}
+                yes={() => (
+                  <Link
+                    to={buildPath(Page.PERFORMANCE_CYCLE)}
+                    className={css(itemSettingsStyle, itemSettingsBorderStyle)}
+                  >
+                    <Icon graphic={'createCycle'} />
+                    <span className={css(itemSettingsTextStyle)}>Create performance cycle</span>
+                  </Link>
+                )}
+              />
+              <CanPerform
+                perform={[TALENT_ADMIN]}
+                yes={() => (
+                  <Link
+                    to={buildPath(Page.CREATE_STRATEGIC_DRIVERS)}
+                    className={css(itemSettingsStyle, itemSettingsBorderStyle)}
+                  >
+                    <Icon graphic={'strategicDriver'} />
+                    <span className={css(itemSettingsTextStyle)}>Strategic drivers</span>
+                  </Link>
+                )}
+              />
+              <Link to={'/'} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
+                <Icon graphic={'configuration'} />
+                <span className={css(itemSettingsTextStyle)}>Configurations</span>
+              </Link>
+              <CanPerform
+                perform={[COLLEAGUE, LINE_MANAGER, PEOPLE_TEAM, ADMIN]}
+                yes={() => (
+                  <Link to={buildPath(Page.TIPS)} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
+                    <Icon graphic={'tip'} />
+                    <span className={css(itemSettingsTextStyle)}>Tips</span>
+                  </Link>
+                )}
+              />
+              <CanPerform
+                perform={[TALENT_ADMIN]}
+                yes={() => (
+                  <Link to={'/'} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
+                    <Icon graphic={'multiLanguage'} />
+                    <span className={css(itemSettingsTextStyle)}>Multi-lingual administration</span>
+                  </Link>
+                )}
+              />
+            </div>
+          )}
+          <div className={css(itemSettingsBorderStyle, { marginLeft: '20px' })} />
           <Link to={''} className={css(itemSettingsStyle)}>
             <Icon graphic={'settingsGear'} />
             <span className={css(itemSettingsTextStyle)}>Settings</span>
