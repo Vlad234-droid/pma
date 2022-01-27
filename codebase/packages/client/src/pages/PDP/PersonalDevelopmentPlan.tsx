@@ -13,15 +13,13 @@ import {
   timelineTypesAvailabilitySelector,
 } from '@pma/store';
 import { useNavigate } from 'react-router';
-import plus from '../../assets/img/pdp/plusIcon.png';
-import download from '../../assets/img/pdp/download.png';
-import infoIcon from '../../assets/img/pdp/infoIcon.png';
 import DescriptionBlock from 'components/DescriptionBlock';
 import GoalInfo from './GoalInfo';
 import { Page } from 'pages';
 import usePDPShema from 'features/PDP/hooks/usePDPShema';
 import { buildPath } from 'features/Routes';
 import { paramsReplacer } from 'utils';
+import { Icon } from 'components/Icon';
 
 const reviews = [
   {
@@ -105,14 +103,14 @@ const PersonalDevelopmentPlan: FC = () => {
                 onClick={() => console.log('download template')}
               >
                 <div className={css(btnIcon)}>
-                  <img alt='create' src={download} />
+                  <Icon graphic='download' />
                 </div>
                 Download template
               </button>
 
               <button className={css(buttonIcon({ theme }))} onClick={navToGoalPage}>
                 <div className={css(btnIcon)}>
-                  <img alt='create' src={plus} />
+                  <Icon graphic='add' fill='#ffffff' iconStyles={{ height: '16.67px', width: '16.67px' }} />
                 </div>
                 {pdpSelector && pdpSelector?.length < 5 && pdpSelector?.length >= 1 ? 'Edit PDP' : 'Create PDP'}
               </button>
@@ -122,7 +120,7 @@ const PersonalDevelopmentPlan: FC = () => {
 
         <div className={css(controlButtons({ theme, mobileScreen }))}>
           <button onClick={() => navigate(buildPath(Page.PERSONAL_DEVELOPMENT_HELP))} className={css(infoBtn)}>
-            <img alt='info' src={infoIcon} />
+            <Icon graphic='information' />
           </button>
         </div>
       </div>
@@ -159,6 +157,23 @@ const PersonalDevelopmentPlan: FC = () => {
         </DescriptionBlock>
       </div>
 
+      {pdpSelector?.length > 0 && (
+        <div className={css(subtitleBlock({ theme }))}>
+          <div className={css(devPlanTitle({ theme }))}>My Development Plan</div>
+          <div>
+            <button
+              className={`${css(buttonIconItems({ theme }))} ${css(buttonDownloadItems({ theme }))}`}
+              onClick={() => console.log('download template')}
+            >
+              <div className={css(btnIcon)}>
+                <Icon graphic='download' />
+              </div>
+              Download template
+            </button>
+          </div>
+        </div>
+      )}
+
       <div className={css(bodyWrapperStyles({ mobileScreen }))} data-test-id={TEST_ID}>
         <div className={css(timelineWrapperStyles)}>
           {pdpSelector &&
@@ -184,6 +199,33 @@ const PersonalDevelopmentPlan: FC = () => {
   );
 };
 
+const subtitleBlock: CreateRule<{ theme: Theme }> = (props) => {
+  if (props == null) return {};
+  const { theme } = props;
+  return {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flexDirection: 'row',
+    width: '70%',
+    borderBottom: `1px solid ${theme.colors.backgroundDarkest}`,
+    paddingTop: '10px',
+  };
+};
+
+const devPlanTitle: CreateRule<{ theme: Theme }> = (props) => {
+  if (props == null) return {};
+  const { theme } = props;
+  return {
+    color: `${theme.colors.base}`,
+    fontFamily: '"TESCO Modern", Arial, sans-serif',
+    fontStyle: 'normal',
+    fontWeight: 'bold',
+    fontSize: `${theme.font.fixed.f18}`,
+    lineHeight: '22px',
+  };
+};
+
 const detailsWithMargin = {
   marginBottom: '24px',
 } as Rule;
@@ -207,6 +249,7 @@ const descriptionMain = {
   justifyContent: 'space-between',
   alignItems: 'flex-start',
   flexDirection: 'row',
+  width: '70%',
   '@media (max-width: 900px)': {
     flexDirection: 'column',
   },
@@ -247,6 +290,16 @@ const buttonDownload: CreateRule<{ theme: Theme }> = (props) => {
   };
 };
 
+const buttonDownloadItems: CreateRule<{ theme: Theme }> = (props) => {
+  if (props == null) return {};
+  const { theme } = props;
+  return {
+    backgroundColor: 'transparent',
+    color: '#00539F',
+    fontWeight: 'bold',
+  };
+};
+
 const btnIcon = {
   paddingRight: '9.67px',
   height: '18px',
@@ -268,6 +321,28 @@ const buttonIcon: CreateRule<{ theme: Theme }> = (props) => {
     fontWeight: 'bold',
     lineHeight: '20px',
     borderRadius: '32px',
+    border: 'none',
+    cursor: 'pointer',
+    marginTop: '16px',
+    marginBottom: '16px',
+  };
+};
+
+const buttonIconItems: CreateRule<{ theme: Theme }> = (props) => {
+  if (props == null) return {};
+  const { theme } = props;
+  return {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 'auto',
+    height: '40px',
+    padding: '10px 0',
+    color: `${theme.colors.white}`,
+    backgroundColor: `${theme.colors.tescoBlue}`,
+    fontSize: `${theme.font.fixed.f16}`,
+    fontWeight: 'bold',
+    lineHeight: '20px',
     border: 'none',
     cursor: 'pointer',
     marginTop: '16px',

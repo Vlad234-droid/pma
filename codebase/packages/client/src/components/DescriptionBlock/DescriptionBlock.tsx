@@ -17,7 +17,7 @@ const description = {
     width: '100%',
   },
   '@media (min-width: 900px)': {
-    width: '640px',
+    width: '100%',
   },
 } as Rule;
 
