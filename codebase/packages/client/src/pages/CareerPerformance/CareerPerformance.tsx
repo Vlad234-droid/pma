@@ -1,29 +1,30 @@
 import React, { FC, useEffect } from 'react';
-import { Trans, useTranslation } from 'components/Translation';
-import { ReviewWidget, Widgets as ObjectiveWidgets } from 'features/Objectives';
-import { Styles, useStyle } from '@dex-ddl/core';
-import { DashboardProfile } from 'features/Profile';
-import { BasicTile } from 'components/Tile';
-import { StepIndicator } from 'components/StepIndicator/StepIndicator';
-import { ObjectiveType, ReviewType } from 'config/enum';
-import { RouterSwitch } from 'components/RouterSwitch';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { Styles, useStyle } from '@dex-ddl/core';
+import { DashboardProfile } from 'features/Profile';
 import {
   colleagueUUIDSelector,
   getTimelineByCodeSelector,
   getTimelineSelector,
-  isManager,
   TimelineActions,
   timelineTypesAvailabilitySelector,
 } from '@pma/store';
-import useDispatch from 'hooks/useDispatch';
+
+import { ReviewWidget, Widgets as ObjectiveWidgets } from 'features/Objectives';
 import { buildPath } from 'features/Routes';
+import { CanPerform, LINE_MANAGER } from 'features/Permission';
+import useDispatch from 'hooks/useDispatch';
+import { BasicTile } from 'components/Tile';
+import { Trans, useTranslation } from 'components/Translation';
+import { StepIndicator } from 'components/StepIndicator/StepIndicator';
+import { ObjectiveType, ReviewType } from 'config/enum';
+import { RouterSwitch } from 'components/RouterSwitch';
+import { Icon } from 'components/Icon';
 import Check from '../../../public/Check.jpg';
 import Feedback from '../../../public/Feedback.jpg';
 import Learning from '../../../public/Learning.jpg';
 import Contribution from '../../../public/Contribution.jpg';
-import { Icon } from 'components/Icon';
 import { Page } from '../types';
 
 const CareerPerformance: FC = () => {
@@ -34,7 +35,6 @@ const CareerPerformance: FC = () => {
   const midYearReview = useSelector(getTimelineByCodeSelector(ObjectiveType.MYR));
   const endYearReview = useSelector(getTimelineByCodeSelector(ObjectiveType.EYR));
   const colleagueUuid = useSelector(colleagueUUIDSelector);
-  const isRoleManager = useSelector(isManager);
   const canShowMyReview = timelineTypes[ReviewType.MYR] && timelineTypes[ReviewType.EYR];
   const canShowAnnualReview = !timelineTypes[ReviewType.MYR] && timelineTypes[ReviewType.EYR];
 
@@ -51,14 +51,17 @@ const CareerPerformance: FC = () => {
     <>
       <div className={css({ display: 'flex', justifyContent: 'space-between' })}>
         <div />
-        {isRoleManager && (
-          <RouterSwitch
-            links={[
-              { link: buildPath(Page.CONTRIBUTION), name: 'My View' },
-              { link: buildPath(Page.MY_TEAM), name: 'My Team' },
-            ]}
-          />
-        )}
+        <CanPerform
+          perform={[LINE_MANAGER]}
+          yes={() => (
+            <RouterSwitch
+              links={[
+                { link: buildPath(Page.CONTRIBUTION), name: 'My View' },
+                { link: buildPath(Page.MY_TEAM), name: 'My Team' },
+              ]}
+            />
+          )}
+        />
         <div />
       </div>
       <div className={css(wrapperStylee)}>

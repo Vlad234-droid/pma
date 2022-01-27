@@ -55,6 +55,7 @@ export const currentUserSelector = createSelector(usersSelector, ({ current }) =
   return {
     ...current,
     info: {
+      // @ts-ignore
       ...current.info,
       fullName,
       job,
