@@ -15,4 +15,3 @@ export * from './config-entries';
 export * from './files';
 export * from './pdp';
 export * from './previousReviewFiles';
-export * from './objectivesReport';
