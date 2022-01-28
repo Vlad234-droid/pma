@@ -115,7 +115,7 @@ describe('<ConfirmModal />', () => {
 
       fireEvent.click(getByTestId('submit-btn'));
 
-      expect(props.onSave).toHaveBeenCalledWith(true, 'mocked_reason');
+      expect(props.onSave).toHaveBeenCalledWith(false, '');
     });
   });
 });
