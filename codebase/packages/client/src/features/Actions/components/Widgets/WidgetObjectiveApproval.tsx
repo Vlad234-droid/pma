@@ -232,7 +232,7 @@ export const WidgetObjectiveApproval: FC<WidgetObjectiveApprovalProps> = ({
       </TileWrapper>
       {isOpenSuccessModal && (
         <SuccessModal
-          status={reviewSubmitted as Status}
+          status={reviewSubmitted as (Status.DECLINED | Status.APPROVED)}
           review={reviewType as ReviewType}
           onClose={handleCloseSuccessModal}
         />
