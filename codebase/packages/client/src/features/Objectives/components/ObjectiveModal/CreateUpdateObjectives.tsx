@@ -174,7 +174,7 @@ const CreateUpdateObjectives: FC<CreateUpdateObjectivesModalProps> = ({ onClose,
   const timelineObjective = useSelector(getTimelineByReviewTypeSelector(ReviewType.OBJECTIVE));
 
   if (timelineObjective?.status === Status.WAITING_FOR_APPROVAL && schemaLoaded && reviewLoaded) {
-    return <SuccessModal onClose={onClose} description={'Your objectives has been sent to your line manager.'} />;
+    return <SuccessModal title='Objectives sent' onClose={onClose} description={'Your objectives has been sent to your line manager.'} />;
   }
 
   if ((!schemaLoaded && !reviewLoaded) || (reviewLoading && schemaLoading)) {

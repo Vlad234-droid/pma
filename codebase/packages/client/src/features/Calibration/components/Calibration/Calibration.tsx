@@ -134,6 +134,7 @@ const Calibration: FC = () => {
       )}
       {isSuccessModalOpen && (
         <SuccessModal
+          title='Calibration updated'
           withСheckMark
           description={t('saved_changes_to_calibration', 'You have saved your changes to calibration. These changes will now be reflected on the colleague profile as a record.')}
           onClose={() => setIsSuccessModalOpen(false)}

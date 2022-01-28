@@ -49,12 +49,14 @@ const pages: Record<Page, PageComponent> = {
     title: 'People Team',
     withHeader: true,
     backPath: Page.CONTRIBUTION,
+    perform: [roles.LINE_MANAGER],
   },
   [Page.CALIBRATION]: {
     Element: Calibration,
     title: 'Calibration',
     withHeader: true,
     backPath: Page.PEOPLE_TEAM,
+    perform: [roles.LINE_MANAGER],
   },
   [Page.NOTES]: {
     Element: Notes,

@@ -21,6 +21,7 @@ import { useParams } from 'react-router-dom';
 import { ConfirmModal } from 'features/Modal';
 import colors from 'theme/colors';
 import { DATE_FORMAT, formatDate } from 'utils/date';
+import { Trans } from 'components/Translation';
 
 const CreatePersonalDevelopmentGoal = () => {
   const { css, theme } = useStyle();
@@ -174,7 +175,7 @@ const CreatePersonalDevelopmentGoal = () => {
         <ConfirmModal
           title={'Are you sure you want to save this goal?'}
           description={' '}
-          submitBtnTitle={'Confirm'}
+          submitBtnTitle={<Trans i18nKey='confirm'>Confirm</Trans>}
           onSave={() => {
             currentUUID || Object.keys(currentGoal).length > 0 ? update() : save();
             setConfirSavemModal(false);
@@ -188,7 +189,7 @@ const CreatePersonalDevelopmentGoal = () => {
         <ConfirmModal
           title={'Are you sure you want to save this goal?'}
           description={' '}
-          submitBtnTitle={'Confirm'}
+          submitBtnTitle={<Trans i18nKey='confirm'>Confirm</Trans>}
           onSave={() => {
             saveAndCreate();
             setConfirSaveNextmModal(false);

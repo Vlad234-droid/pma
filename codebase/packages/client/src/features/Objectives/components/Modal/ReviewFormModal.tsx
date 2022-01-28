@@ -187,6 +187,7 @@ const ReviewFormModal: FC<Props> = ({ reviewType, onClose }) => {
   if (successModal) {
     return (
       <SuccessModal
+        title='Review sent'
         onClose={onClose}
         description={t(
           `${timelineReview?.code?.toLowerCase()}_review_sent_to_manager`,

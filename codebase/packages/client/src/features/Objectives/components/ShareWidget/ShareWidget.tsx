@@ -174,6 +174,7 @@ const ShareWidget: FC<Props> = ({ customStyle }) => {
           onOverlayClick={() => setIsSuccessModalOpen(false)}
         >
           <SuccessModal
+            title='Objectives shares'
             description={
               isShared
                 ? t('your_objectives_have_been_visible', 'Your objectives have been made visible to your team.')
