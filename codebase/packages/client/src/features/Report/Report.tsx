@@ -94,7 +94,7 @@ const Report: FC = () => {
   }
 
   const downloadCsvFile = async () => {
-    getData(`${BASE_URL_API}/pm-linked-objective-report?`).then((resp) =>
+    getData(`${BASE_URL_API}/reports/linked-objective-report/formats/excel?`).then((resp) =>
       resp.blob().then((blob) => {
         const a = document.createElement('a');
         a.href = window.URL.createObjectURL(blob);
