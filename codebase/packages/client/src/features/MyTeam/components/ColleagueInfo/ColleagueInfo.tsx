@@ -23,7 +23,7 @@ const ColleagueInfo: FC<Props> = ({ firstName, lastName, jobName, businessType, 
       <div className={css(headerBlockStyle)}>
         <span className={css(titleStyle)}>{`${firstName} ${lastName}`}</span>
         <span className={css(descriptionStyle)}>{`${jobName}, ${businessType}`}</span>
-        {manager && <span className={css(managerStyle)}>{`${manager.firstName} ${manager.lastName}`}</span>}
+        {manager && <span className={css(managerStyle)}>{`Line manager: ${manager.firstName} ${manager.lastName}`}</span>}
       </div>
     </div>
   );
