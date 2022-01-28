@@ -1,4 +1,6 @@
-import { ActionType, createAsyncAction, createAction } from 'typesafe-actions';
+import { ActionType, createAsyncAction } from 'typesafe-actions';
+
+import { RestResponseUser, RestResponseVoid } from '@pma/openapi';
 
 export const loginAsync = createAsyncAction(
   'user/LOGIN_REQUEST',
@@ -19,7 +21,7 @@ export const getCurrentUser = createAsyncAction(
   'user/current/SUCCESS',
   'user/current/FAILURE',
   'user/current/CANCEL',
-)<undefined, any, Error, undefined>();
+)<undefined, RestResponseUser, RestResponseVoid, undefined>();
 
 export const updateUserNotification = createAsyncAction(
   'user/notification/REQUEST',
