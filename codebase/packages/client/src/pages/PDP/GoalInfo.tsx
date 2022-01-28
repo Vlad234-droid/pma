@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { Button, CreateRule, Rule, theme, Theme, useStyle } from '@dex-ddl/core';
-import editIcon from '../../assets/img/pdp/edit.png';
-import trashIcon from '../../assets/img/pdp/trash.png';
 import { Accordion, BaseAccordion, ExpandButton, Panel, Section } from 'components/Accordion';
 import { ConfirmModal } from 'features/Modal';
+import { Icon } from 'components/Icon';
 
 const GoalInfo = (props) => {
   const { id, title, subtitle, description, data, formElements, deleteGoal, editGoal } = props;
@@ -69,13 +68,19 @@ const GoalInfo = (props) => {
                     <div className={css(btnBlock)}>
                       <Button styles={[btns]} onPress={() => editGoal(id)}>
                         <div>
-                          <img className={`${css(icon)} ${css(editImg)}`} alt='edit' src={editIcon} />
+                          <Icon graphic='edit' iconStyles={{ height: '13.33px', width: '13.33px' }} />
                         </div>
                         <div className={css({ marginLeft: '5px' })}>Edit</div>
                       </Button>
 
                       <Button styles={[btns]} onPress={() => setConfirmDelete(!confirmDelete)}>
-                        <img className={css(icon)} alt='edit' src={trashIcon} />
+                        <div className={css({ height: '16px' })}>
+                          <Icon
+                            graphic='delete'
+                            fill='#00539F'
+                            iconStyles={{ maxHeight: '16px', maxWidth: '14.84px' }}
+                          />
+                        </div>
                         <div className={css({ marginLeft: '5px' })}>Delete</div>
                       </Button>
                     </div>

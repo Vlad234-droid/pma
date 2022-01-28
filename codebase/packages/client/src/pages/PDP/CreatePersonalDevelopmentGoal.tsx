@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Button, CreateRule, ModalWithHeader, Rule, theme, Theme, useBreakpoints, useStyle } from '@dex-ddl/core';
+import { Button, CreateRule, ModalWithHeader, Rule, Theme, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { useNavigate } from 'react-router';
-import infoIcon from '../../assets/img/pdp/infoIcon.png';
 import { Icon } from 'components/Icon';
 import { GenericItemField } from 'components/GenericForm';
 import { Input, Item, Textarea } from 'components/Form';
@@ -23,7 +22,7 @@ import { ConfirmModal } from 'features/Modal';
 import colors from 'theme/colors';
 import { DATE_FORMAT, formatDate } from 'utils/date';
 
-const CreatePersonalDevelopmentGoal = (props) => {
+const CreatePersonalDevelopmentGoal = () => {
   const { css, theme } = useStyle();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -45,6 +44,7 @@ const CreatePersonalDevelopmentGoal = (props) => {
   const [currentGoal, setCurrentGoal] = useState<any>({});
   const [confirmSaveModal, setConfirSavemModal] = useState(false);
   const [confirmSaveNextModal, setConfirSaveNextmModal] = useState(false);
+  const [currentUUID, setUUID] = useState(uuid);
 
   useEffect(() => {
     if (schema.meta.loaded) {
@@ -53,16 +53,16 @@ const CreatePersonalDevelopmentGoal = (props) => {
   }, [schema.meta.loaded]);
 
   useEffect(() => {
-    if (uuid) {
-      dispatch(PDPActions.getPDPByUUIDGoal({ uuid }));
-    } else {
-      dispatch(PDPActions.getPDPGoal({}));
-    }
+    dispatch(PDPActions.getPDPGoal({}));
   }, []);
 
   useEffect(() => {
-    if (uuid) {
-      const goal = pdpList?.filter((el) => el.uuid === uuid)[0] || {};
+    setUUID(uuid);
+  }, [uuid]);
+
+  useEffect(() => {
+    if (currentUUID) {
+      const goal = pdpList?.filter((el) => el.uuid === currentUUID)[0] || {};
       setCurrentGoal(goal);
     } else {
       setCurrentGoal({});
@@ -79,9 +79,10 @@ const CreatePersonalDevelopmentGoal = (props) => {
 
   const requestData = [
     {
-      uuid: uuid || Object.keys(currentGoal).length > 0 ? currentGoal?.uuid : uuidv4(),
+      uuid: currentUUID || Object.keys(currentGoal).length > 0 ? currentGoal?.uuid : uuidv4(),
       colleagueUuid: colleagueUuid,
-      number: pdpList && (uuid || Object.keys(currentGoal).length > 0) ? currentGoal?.number : pdpList?.length + 1,
+      number:
+        pdpList && (currentUUID || Object.keys(currentGoal).length > 0) ? currentGoal?.number : pdpList?.length + 1,
       properties: {
         mapJson: formValues,
       },
@@ -91,8 +92,11 @@ const CreatePersonalDevelopmentGoal = (props) => {
   ];
 
   useEffect(() => {
-    if (Object.keys(currentGoal).length) reset(currentGoal?.properties?.mapJson);
-    else reset(formElementsFilledEmpty);
+    if (Object.keys(currentGoal).length > 0) {
+      reset(currentGoal?.properties?.mapJson);
+    } else {
+      reset(formElementsFilledEmpty);
+    }
   }, [currentGoal]);
 
   const save = () => {
@@ -106,8 +110,14 @@ const CreatePersonalDevelopmentGoal = (props) => {
   };
 
   const saveAndCreate = () => {
+    if (currentUUID && currentGoal.uuid === currentUUID) {
+      dispatch(PDPActions.updatePDPGoal({ data: requestData }));
+      if (schemaLoaded) navigate(buildPath(Page.CREATE_PERSONAL_DEVELOPMENT_PLAN));
+    } else {
+      dispatch(PDPActions.createPDPGoal({ data: requestData }));
+    }
+
     setCurrentGoal({});
-    dispatch(PDPActions.createPDPGoal({ data: requestData }));
   };
 
   const navGoals = (goalNum = pdpList?.length - 1) => {
@@ -116,7 +126,7 @@ const CreatePersonalDevelopmentGoal = (props) => {
     } else if (goalNum <= maxGoalCount) {
       return pdpList.map((el, idx) => {
         return (
-          <>
+          <React.Fragment key={el.uuid + idx}>
             <div
               key={el?.uuid}
               onClick={() => setCurrentGoal(el)}
@@ -131,15 +141,20 @@ const CreatePersonalDevelopmentGoal = (props) => {
             {idx === goalNum && idx + 1 < maxGoalCount && (
               <div
                 key={el.uuid + Math.random()}
-                onClick={() => setCurrentGoal({})}
+                onClick={() => {
+                  setCurrentGoal({});
+                  if (currentUUID) {
+                    navigate(buildPath(Page.CREATE_PERSONAL_DEVELOPMENT_PLAN));
+                  }
+                }}
                 className={`${css(goal({ theme }))} ${
-                  Object.keys(currentGoal).length ? css(activeGoalItem({ theme })) : css(defaultGoalItem({ theme }))
+                  Object.keys(currentGoal).length > 0 ? css(activeGoalItem({ theme })) : css(defaultGoalItem({ theme }))
                 }`}
               >
                 Goal {idx + 2}
               </div>
             )}
-          </>
+          </React.Fragment>
         );
       });
     }
@@ -148,11 +163,11 @@ const CreatePersonalDevelopmentGoal = (props) => {
   return (
     <ModalWithHeader
       containerRule={templatesModalWindowStyles({ mobileScreen })}
-      title={`${uuid ? 'Update' : 'Create'} Personal Development Goal`}
+      title={`${currentUUID ? 'Update' : 'Create'} Personal Development Goal`}
       modalPosition='middle'
       closeOptions={{
         closeOptionContent: <Icon graphic='cancel' invertColors={true} />,
-        onClose: () => navigate(-1),
+        onClose: () => navigate(buildPath(Page.PERSONAL_DEVELOPMENT_PLAN)),
       }}
     >
       {confirmSaveModal && (
@@ -161,7 +176,7 @@ const CreatePersonalDevelopmentGoal = (props) => {
           description={' '}
           submitBtnTitle={'Confirm'}
           onSave={() => {
-            uuid || Object.keys(currentGoal).length > 0 ? update() : save();
+            currentUUID || Object.keys(currentGoal).length > 0 ? update() : save();
             setConfirSavemModal(false);
           }}
           onCancel={() => setConfirSavemModal(false)}
@@ -183,7 +198,7 @@ const CreatePersonalDevelopmentGoal = (props) => {
         />
       )}
       <div className={css(mainContainer)}>
-        <div className={css(goalListBlock({ theme }))}>{!uuid && pdpList && navGoals()}</div>
+        <div className={css(goalListBlock({ theme }))}>{pdpList && navGoals()}</div>
         <form>
           {pdpGoals.map((component) => {
             const { key, label, description } = component;
@@ -208,7 +223,14 @@ const CreatePersonalDevelopmentGoal = (props) => {
                       </Item>
                     );
                   }}
-                  Element={(props) => <Input min={minDate} type='date' {...props} />}
+                  Element={(props) => (
+                    <Input
+                      customStyles={!formValues?.expiration_date && dateInputDefault}
+                      min={minDate}
+                      type={'date'}
+                      {...props}
+                    />
+                  )}
                   styles={{
                     fontFamily: 'TESCO Modern", Arial, sans-serif',
                     fontSize: '16px',
@@ -222,6 +244,7 @@ const CreatePersonalDevelopmentGoal = (props) => {
                 />
               );
             }
+
             return (
               <GenericItemField
                 key={key}
@@ -250,10 +273,7 @@ const CreatePersonalDevelopmentGoal = (props) => {
               isDisabled={!formState.isValid}
               onPress={() => setConfirSavemModal(!confirmSaveModal)}
               styles={
-                uuid ||
-                Object.keys(currentGoal).length > 0 ||
-                pdpList?.length + 1 === maxGoalCount ||
-                pdpList?.length + 1 > maxGoalCount
+                pdpList?.length + 1 === maxGoalCount || pdpList?.length + 1 > maxGoalCount
                   ? [customBtnFullWidth]
                   : [customBtn({ mobileScreen })]
               }
@@ -261,22 +281,27 @@ const CreatePersonalDevelopmentGoal = (props) => {
               Save & Exit
             </Button>
           }
-          {!uuid &&
-            Object.keys(currentGoal).length === 0 &&
-            (pdpList?.length + 1 !== maxGoalCount || pdpList?.length + 1 > maxGoalCount) && (
-              <Button
-                isDisabled={!formState.isValid}
-                onPress={() => setConfirSaveNextmModal(!confirmSaveNextModal)}
-                styles={[customBtn({ mobileScreen }), createBtn]}
-              >
-                Save & create a new goal <img className={css(imgArrow)} alt='arrow' src={arrLeft} />
-              </Button>
-            )}
+          {(pdpList?.length + 1 !== maxGoalCount || pdpList?.length + 1 > maxGoalCount) && (
+            <Button
+              isDisabled={!formState.isValid}
+              onPress={() => {
+                saveAndCreate();
+                reset(formElementsFilledEmpty);
+              }}
+              styles={[customBtn({ mobileScreen }), createBtn]}
+            >
+              Save & create a new goal <img className={css(imgArrow)} alt='arrow' src={arrLeft} />
+            </Button>
+          )}
         </div>
       </div>
     </ModalWithHeader>
   );
 };
+
+const dateInputDefault = {
+  color: `${colors.tescoGray}`,
+} as Rule;
 
 const genericLabel = {
   fontSize: '16px',
@@ -314,7 +339,7 @@ const customBtn: CreateRule<{ mobileScreen: boolean }> = (props) => {
   const { mobileScreen } = props;
   return {
     padding: '10px 20px',
-    width: mobileScreen ? '100%' : '47%',
+    width: mobileScreen ? '100%' : '49%',
     whiteSpace: 'nowrap',
     cursor: 'pointer',
     margin: mobileScreen ? '10px 0' : '0px',
