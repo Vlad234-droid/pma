@@ -65,7 +65,7 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
                 <MenuItem
                   iconGraphic={'list'}
                   linkTo={buildPath(Page.PERSONAL_DEVELOPMENT_PLAN)}
-                  title={'Personal development plan'}
+                  title={'Personal Development Plan'}
                 />
               )}
             />
