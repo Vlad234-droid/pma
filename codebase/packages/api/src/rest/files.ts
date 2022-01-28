@@ -1,8 +1,8 @@
 import httpClient from '../config/client';
 
 const domain = '/files';
-export const getBPMNFiles = (params?: any) => {
-  return httpClient.get(`${domain}?type_in%5B0%5D=BPMN&includeFileContent=false`, { params: { ...params } });
+export const getFiles = (params: any) => {
+  return httpClient.get(domain, { params });
 };
 
 export const getProcessTemplateMetadata = (params?: any) => {

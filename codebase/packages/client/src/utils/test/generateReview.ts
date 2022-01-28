@@ -1,4 +1,4 @@
-import faker from 'faker';
+// import faker from 'faker';
 
 import { Review, ReviewType, Status } from 'config/types';
 
@@ -11,11 +11,18 @@ type Config = {
 
 const generateReview = (config?: Config) => {
   const review: Review = {
-    number: faker.random.words(1),
+    number: 123,
     status: config?.status || Status.PENDING,
     type: config?.reviewType || ReviewType.OBJECTIVE,
-    uuid: faker.random.words(1),
+    uuid: 'mocked_review_uuid',
   };
+
+  // const review: Review = {
+  //   number: faker.random.words(1),
+  //   status: config?.status || Status.PENDING,
+  //   type: config?.reviewType || ReviewType.OBJECTIVE,
+  //   uuid: faker.random.words(1),
+  // };
 
   return review;
 };

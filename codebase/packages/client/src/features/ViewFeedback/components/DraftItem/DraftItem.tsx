@@ -4,10 +4,9 @@ import { TileWrapper } from 'components/Tile';
 import { Accordion, BaseAccordion, ExpandButton, Panel, Section } from 'components/Accordion';
 import { IconButton } from 'components/IconButton';
 import { Trans } from 'components/Translation';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import defaultImg from '../../../../../public/default.png';
-import { FeedbackActions, getReviewByUuidS } from '@pma/store';
-import { TargetTypeReverse } from 'config/enum';
+import { FeedbackActions } from '@pma/store';
 import { usePDF, FeedbackDocument, downloadPDF } from '@pma/pdf-renderer';
 import { formatToRelativeDate } from 'utils';
 
@@ -66,8 +65,6 @@ const DraftItem: FC<DraftItemProps> = ({ item, downloadable = true }) => {
   const { css } = useStyle();
   const dispatch = useDispatch();
 
-  const review = useSelector(getReviewByUuidS) || [];
-
   const markAsReadFeedback = (uuid) => {
     dispatch(FeedbackActions.readFeedback({ uuid }));
   };
@@ -75,26 +72,6 @@ const DraftItem: FC<DraftItemProps> = ({ item, downloadable = true }) => {
   const document = useMemo(() => <FeedbackDocument items={[item as any]} />, [item.uuid]);
 
   const [instance] = usePDF({ document });
-
-  const getPropperTargetType = (targetType, targetId) => {
-    const capitalType =
-      TargetTypeReverse[targetType] &&
-      TargetTypeReverse[targetType].charAt(0).toUpperCase() + TargetTypeReverse[targetType].slice(1);
-
-    if (capitalType) {
-      let targetTypeStr = '';
-      review.forEach((item) => {
-        if (item.uuid === targetId) {
-          targetTypeStr = item.title;
-        }
-      });
-
-      return `“${capitalType}${targetTypeStr !== '' ? ':' : ''}${`${
-        targetTypeStr !== '' ? ` ${targetTypeStr}` : `${targetTypeStr}`
-      }`}”`;
-    }
-    return '';
-  };
 
   return (
     <TileWrapper customStyle={wrapperStyles}>
@@ -132,15 +109,14 @@ const DraftItem: FC<DraftItemProps> = ({ item, downloadable = true }) => {
                     border: `1px solid ${colors.backgroundDarkest}`,
                   }}
                 >
-                  {getPropperTargetType(item.targetType, item.targetId) !== '' && (
-                    <h2 className={css(TitleStyle)}>{getPropperTargetType(item.targetType, item.targetId)}</h2>
-                  )}
-                  {item.feedbackItems.map(({ code, question, content }) => (
-                    <div key={code} className={css(infoBlockStyle)}>
-                      <h3>{`${question}`}</h3>
-                      <p>{content}</p>
-                    </div>
-                  ))}
+                  {item.feedbackItems
+                    .filter(({ question }) => question)
+                    .map(({ question, content }, idx) => (
+                      <div key={idx} className={css(infoBlockStyle)}>
+                        <h3>{`${question}`}</h3>
+                        <p>{content}</p>
+                      </div>
+                    ))}
                 </TileWrapper>
                 {downloadable && (
                   <IconButton

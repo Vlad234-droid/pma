@@ -1,4 +1,4 @@
-import faker from 'faker';
+// import faker from 'faker';
 
 import { Timeline, ReviewType, Status, TimelineType } from 'config/types';
 
@@ -13,21 +13,35 @@ type Config = {
 
 const generateTimeline = (config?: Config) => {
   const timeline: Timeline = {
-    code: faker.random.words(1),
-    count: faker.datatype.number(),
-    colleagueCycleUuid: faker.random.words(1),
-    description: faker.random.words(5),
+    code: 'mocked_code',
+    count: 222,
+    colleagueCycleUuid: 'mocked_colleague_cycle_id',
+    description: 'mocked_description',
     endTime: dateToIso(new Date()),
     reviewType: config?.reviewType || ReviewType.OBJECTIVE,
     startTime: dateToIso(new Date()),
     status: config?.status || Status.PENDING,
     type: config?.type || TimelineType.CYCLE,
-    uuid: faker.random.words(1),
+    uuid: 'mocked_timeline_uuid',
   };
+
+  // const timeline: Timeline = {
+  //   code: faker.random.words(1),
+  //   count: faker.datatype.number(),
+  //   colleagueCycleUuid: faker.random.words(1),
+  //   description: faker.random.words(5),
+  //   endTime: dateToIso(new Date()),
+  //   reviewType: config?.reviewType || ReviewType.OBJECTIVE,
+  //   startTime: dateToIso(new Date()),
+  //   status: config?.status || Status.PENDING,
+  //   type: config?.type || TimelineType.CYCLE,
+  //   uuid: faker.random.words(1),
+  // };
 
   return timeline;
 };
 
-const generateTimelines = (length: number) => generateArray(length).map(() => generateTimeline());
+const generateTimelines = (length: number, config?: Config) =>
+  generateArray(length).map(() => generateTimeline(config));
 
 export { generateTimeline, generateTimelines };

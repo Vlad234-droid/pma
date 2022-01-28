@@ -1,17 +1,31 @@
 import React, { useState } from 'react';
 import { Button, CreateRule, Rule, theme, Theme, useStyle } from '@dex-ddl/core';
-import editIcon from '../../assets/img/pdp/edit.png';
-import trashIcon from '../../assets/img/pdp/trash.png';
 import { Accordion, BaseAccordion, ExpandButton, Panel, Section } from 'components/Accordion';
+import { ConfirmModal } from 'features/Modal';
+import { Icon } from 'components/Icon';
 
 const GoalInfo = (props) => {
   const { id, title, subtitle, description, data, formElements, deleteGoal, editGoal } = props;
   const modifiedTitleRegex = new RegExp(/\*/, 'g');
   const { css, theme } = useStyle();
   const [toogled, setToogled] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState(false);
 
   return (
     <div className={css(fullGoals({ theme }))}>
+      {confirmDelete && (
+        <ConfirmModal
+          title={'Are you sure you want to delete this goal?'}
+          description={'This is permanent and cannot be undone.'}
+          submitBtnTitle={'Delete'}
+          onSave={() => {
+            deleteGoal(id);
+            setConfirmDelete(false);
+          }}
+          onCancel={() => setConfirmDelete(false)}
+          onOverlayClick={() => setConfirmDelete(false)}
+        />
+      )}
       <Accordion
         id={`pdp-goal-accordion-${title}`}
         customStyle={{
@@ -54,13 +68,19 @@ const GoalInfo = (props) => {
                     <div className={css(btnBlock)}>
                       <Button styles={[btns]} onPress={() => editGoal(id)}>
                         <div>
-                          <img className={`${css(icon)} ${css(editImg)}`} alt='edit' src={editIcon} />
+                          <Icon graphic='edit' iconStyles={{ height: '13.33px', width: '13.33px' }} />
                         </div>
                         <div className={css({ marginLeft: '5px' })}>Edit</div>
                       </Button>
 
-                      <Button styles={[btns]} onPress={() => deleteGoal(id)}>
-                        <img className={css(icon)} alt='edit' src={trashIcon} />
+                      <Button styles={[btns]} onPress={() => setConfirmDelete(!confirmDelete)}>
+                        <div className={css({ height: '16px' })}>
+                          <Icon
+                            graphic='delete'
+                            fill='#00539F'
+                            iconStyles={{ maxHeight: '16px', maxWidth: '14.84px' }}
+                          />
+                        </div>
                         <div className={css({ marginLeft: '5px' })}>Delete</div>
                       </Button>
                     </div>

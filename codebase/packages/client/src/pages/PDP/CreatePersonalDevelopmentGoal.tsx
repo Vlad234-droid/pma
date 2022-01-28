@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Button, CreateRule, ModalWithHeader, Rule, theme, Theme, useBreakpoints, useStyle } from '@dex-ddl/core';
+import { Button, CreateRule, ModalWithHeader, Rule, Theme, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { useNavigate } from 'react-router';
-import infoIcon from '../../assets/img/pdp/infoIcon.png';
 import { Icon } from 'components/Icon';
 import { GenericItemField } from 'components/GenericForm';
 import { Input, Item, Textarea } from 'components/Form';
@@ -11,7 +10,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import usePDPShema from 'features/PDP/hooks/usePDPShema';
 import { useSelector } from 'react-redux';
-import { colleagueUUIDSelector, schemaMetaPDPSelector, PDPActions } from '@pma/store';
+import { colleagueUUIDSelector, schemaMetaPDPSelector, metaPDPSelector, PDPActions } from '@pma/store';
 import { PDPType } from 'config/enum';
 import { createYupSchema } from 'utils/yup';
 import useDispatch from 'hooks/useDispatch';
@@ -19,22 +18,33 @@ import { v4 as uuidv4 } from 'uuid';
 import { buildPath } from 'features/Routes';
 import { Page } from 'pages';
 import { useParams } from 'react-router-dom';
+import { ConfirmModal } from 'features/Modal';
+import colors from 'theme/colors';
+import { DATE_FORMAT, formatDate } from 'utils/date';
 
-const CreatePersonalDevelopmentGoal = (props) => {
+const CreatePersonalDevelopmentGoal = () => {
   const { css, theme } = useStyle();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const pdpList = useSelector(schemaMetaPDPSelector)?.goals;
+  const { loaded: schemaLoaded = false } = useSelector(metaPDPSelector);
   const [pdpGoals, setPDPGoals] = useState<any[]>([]);
   const [schema] = usePDPShema(PDPType.PDP);
   const { components = [] } = schema;
   const formElements = components.filter((component) => component.type != 'text');
+  const formElementsFilledEmpty = formElements.reduce((acc, current) => {
+    acc[current.key] = '';
+    return acc;
+  }, {});
   const maxGoalCount = 5;
   const { uuid } = useParams<{ uuid: string }>();
   const [currentGoal, setCurrentGoal] = useState<any>({});
+  const [confirmSaveModal, setConfirSavemModal] = useState(false);
+  const [confirmSaveNextModal, setConfirSaveNextmModal] = useState(false);
+  const [currentUUID, setUUID] = useState(uuid);
 
   useEffect(() => {
     if (schema.meta.loaded) {
@@ -43,17 +53,19 @@ const CreatePersonalDevelopmentGoal = (props) => {
   }, [schema.meta.loaded]);
 
   useEffect(() => {
-    if (uuid) {
-      dispatch(PDPActions.getPDPByUUIDGoal({ uuid }));
-    } else {
-      dispatch(PDPActions.getPDPGoal({}));
-    }
+    dispatch(PDPActions.getPDPGoal({}));
   }, []);
 
   useEffect(() => {
-    if (uuid) {
-      const goal = pdpList?.filter((el) => el.uuid === uuid)[0] || {};
+    setUUID(uuid);
+  }, [uuid]);
+
+  useEffect(() => {
+    if (currentUUID) {
+      const goal = pdpList?.filter((el) => el.uuid === currentUUID)[0] || {};
       setCurrentGoal(goal);
+    } else {
+      setCurrentGoal({});
     }
   }, [pdpList]);
 
@@ -67,9 +79,10 @@ const CreatePersonalDevelopmentGoal = (props) => {
 
   const requestData = [
     {
-      uuid: uuid || Object.keys(currentGoal).length > 0 ? currentGoal?.uuid : uuidv4(),
+      uuid: currentUUID || Object.keys(currentGoal).length > 0 ? currentGoal?.uuid : uuidv4(),
       colleagueUuid: colleagueUuid,
-      number: pdpList && (uuid || Object.keys(currentGoal).length > 0) ? currentGoal?.number : pdpList?.length + 1,
+      number:
+        pdpList && (currentUUID || Object.keys(currentGoal).length > 0) ? currentGoal?.number : pdpList?.length + 1,
       properties: {
         mapJson: formValues,
       },
@@ -78,19 +91,33 @@ const CreatePersonalDevelopmentGoal = (props) => {
     },
   ];
 
+  useEffect(() => {
+    if (Object.keys(currentGoal).length > 0) {
+      reset(currentGoal?.properties?.mapJson);
+    } else {
+      reset(formElementsFilledEmpty);
+    }
+  }, [currentGoal]);
+
   const save = () => {
     dispatch(PDPActions.createPDPGoal({ data: requestData }));
-    navigate(buildPath(Page.PERSONAL_DEVELOPMENT_PLAN));
+    if (schemaLoaded) navigate(buildPath(Page.PERSONAL_DEVELOPMENT_PLAN));
   };
 
   const update = () => {
     dispatch(PDPActions.updatePDPGoal({ data: requestData }));
-    navigate(buildPath(Page.PERSONAL_DEVELOPMENT_PLAN));
+    if (schemaLoaded) navigate(buildPath(Page.PERSONAL_DEVELOPMENT_PLAN));
   };
 
   const saveAndCreate = () => {
+    if (currentUUID && currentGoal.uuid === currentUUID) {
+      dispatch(PDPActions.updatePDPGoal({ data: requestData }));
+      if (schemaLoaded) navigate(buildPath(Page.CREATE_PERSONAL_DEVELOPMENT_PLAN));
+    } else {
+      dispatch(PDPActions.createPDPGoal({ data: requestData }));
+    }
+
     setCurrentGoal({});
-    dispatch(PDPActions.createPDPGoal({ data: requestData }));
   };
 
   const navGoals = (goalNum = pdpList?.length - 1) => {
@@ -99,7 +126,7 @@ const CreatePersonalDevelopmentGoal = (props) => {
     } else if (goalNum <= maxGoalCount) {
       return pdpList.map((el, idx) => {
         return (
-          <>
+          <React.Fragment key={el.uuid + idx}>
             <div
               key={el?.uuid}
               onClick={() => setCurrentGoal(el)}
@@ -113,14 +140,21 @@ const CreatePersonalDevelopmentGoal = (props) => {
             </div>
             {idx === goalNum && idx + 1 < maxGoalCount && (
               <div
-                key={Math.random()}
-                onClick={() => setCurrentGoal({})}
-                className={`${css(goal({ theme }))} ${css(defaultGoalItem({ theme }))}`}
+                key={el.uuid + Math.random()}
+                onClick={() => {
+                  setCurrentGoal({});
+                  if (currentUUID) {
+                    navigate(buildPath(Page.CREATE_PERSONAL_DEVELOPMENT_PLAN));
+                  }
+                }}
+                className={`${css(goal({ theme }))} ${
+                  Object.keys(currentGoal).length > 0 ? css(activeGoalItem({ theme })) : css(defaultGoalItem({ theme }))
+                }`}
               >
                 Goal {idx + 2}
               </div>
             )}
-          </>
+          </React.Fragment>
         );
       });
     }
@@ -129,23 +163,52 @@ const CreatePersonalDevelopmentGoal = (props) => {
   return (
     <ModalWithHeader
       containerRule={templatesModalWindowStyles({ mobileScreen })}
-      title={`${uuid ? 'Update' : 'Create'} Personal Development Goal`}
+      title={`${currentUUID ? 'Update' : 'Create'} Personal Development Goal`}
       modalPosition='middle'
       closeOptions={{
         closeOptionContent: <Icon graphic='cancel' invertColors={true} />,
-        onClose: () => navigate(-1),
+        onClose: () => navigate(buildPath(Page.PERSONAL_DEVELOPMENT_PLAN)),
       }}
     >
+      {confirmSaveModal && (
+        <ConfirmModal
+          title={'Are you sure you want to save this goal?'}
+          description={' '}
+          submitBtnTitle={'Confirm'}
+          onSave={() => {
+            currentUUID || Object.keys(currentGoal).length > 0 ? update() : save();
+            setConfirSavemModal(false);
+          }}
+          onCancel={() => setConfirSavemModal(false)}
+          onOverlayClick={() => setConfirSavemModal(false)}
+        />
+      )}
+
+      {confirmSaveNextModal && (
+        <ConfirmModal
+          title={'Are you sure you want to save this goal?'}
+          description={' '}
+          submitBtnTitle={'Confirm'}
+          onSave={() => {
+            saveAndCreate();
+            setConfirSaveNextmModal(false);
+          }}
+          onCancel={() => setConfirSaveNextmModal(false)}
+          onOverlayClick={() => setConfirSaveNextmModal(false)}
+        />
+      )}
       <div className={css(mainContainer)}>
-        <div className={css(goalListBlock({ theme }))}>{!uuid && pdpList && navGoals()}</div>
+        <div className={css(goalListBlock({ theme }))}>{pdpList && navGoals()}</div>
         <form>
           {pdpGoals.map((component) => {
-            const { id, key, label, description } = component;
+            const { key, label, description } = component;
             const updateGoalValue = pdpList
               ? pdpList?.filter((el) => el.uuid === currentGoal.uuid)[0]?.properties?.mapJson[key]
               : '';
 
             if (description === '{datepicker}') {
+              const minDate = formatDate(new Date(), DATE_FORMAT);
+
               return (
                 <GenericItemField
                   key={key}
@@ -160,7 +223,14 @@ const CreatePersonalDevelopmentGoal = (props) => {
                       </Item>
                     );
                   }}
-                  Element={(props) => <Input type='date' {...props} />}
+                  Element={(props) => (
+                    <Input
+                      customStyles={!formValues?.expiration_date && dateInputDefault}
+                      min={minDate}
+                      type={'date'}
+                      {...props}
+                    />
+                  )}
                   styles={{
                     fontFamily: 'TESCO Modern", Arial, sans-serif',
                     fontSize: '16px',
@@ -174,6 +244,7 @@ const CreatePersonalDevelopmentGoal = (props) => {
                 />
               );
             }
+
             return (
               <GenericItemField
                 key={key}
@@ -196,35 +267,41 @@ const CreatePersonalDevelopmentGoal = (props) => {
             );
           })}
         </form>
-        <div className={css(applyBlock)}>
+        <div className={css(applyBlock({ mobileScreen }))}>
           {
             <Button
               isDisabled={!formState.isValid}
-              onPress={() => (uuid || Object.keys(currentGoal).length > 0 ? update() : save())}
+              onPress={() => setConfirSavemModal(!confirmSaveModal)}
               styles={
-                uuid ||
-                Object.keys(currentGoal).length > 0 ||
-                pdpList?.length + 1 === maxGoalCount ||
-                pdpList?.length + 1 > maxGoalCount
+                pdpList?.length + 1 === maxGoalCount || pdpList?.length + 1 > maxGoalCount
                   ? [customBtnFullWidth]
-                  : [customBtn]
+                  : [customBtn({ mobileScreen })]
               }
             >
               Save & Exit
             </Button>
           }
-          {!uuid &&
-            Object.keys(currentGoal).length === 0 &&
-            (pdpList?.length + 1 !== maxGoalCount || pdpList?.length + 1 > maxGoalCount) && (
-              <Button isDisabled={!formState.isValid} onPress={() => saveAndCreate()} styles={[customBtn, createBtn]}>
-                Save & create a new goal <img className={css(imgArrow)} alt='arrow' src={arrLeft} />
-              </Button>
-            )}
+          {(pdpList?.length + 1 !== maxGoalCount || pdpList?.length + 1 > maxGoalCount) && (
+            <Button
+              isDisabled={!formState.isValid}
+              onPress={() => {
+                saveAndCreate();
+                reset(formElementsFilledEmpty);
+              }}
+              styles={[customBtn({ mobileScreen }), createBtn]}
+            >
+              Save & create a new goal <img className={css(imgArrow)} alt='arrow' src={arrLeft} />
+            </Button>
+          )}
         </div>
       </div>
     </ModalWithHeader>
   );
 };
+
+const dateInputDefault = {
+  color: `${colors.tescoGray}`,
+} as Rule;
 
 const genericLabel = {
   fontSize: '16px',
@@ -258,12 +335,16 @@ const createBtn = {
   justifyContent: 'center',
 } as Rule;
 
-const customBtn = {
-  padding: '10px 20px',
-  width: '47%',
-  whiteSpace: 'nowrap',
-  cursor: 'pointer',
-} as Rule;
+const customBtn: CreateRule<{ mobileScreen: boolean }> = (props) => {
+  const { mobileScreen } = props;
+  return {
+    padding: '10px 20px',
+    width: mobileScreen ? '100%' : '49%',
+    whiteSpace: 'nowrap',
+    cursor: 'pointer',
+    margin: mobileScreen ? '10px 0' : '0px',
+  };
+};
 
 const customBtnFullWidth = {
   padding: '10px 20px',
@@ -272,41 +353,22 @@ const customBtnFullWidth = {
   cursor: 'pointer',
 } as Rule;
 
-const applyBlock = {
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  marginTop: '32px',
-} as Rule;
-
-const dataBlock = {
-  borderBottom: `1px solid ${theme.colors.backgroundDarkest}`,
-  fontFamily: 'TESCO Modern", Arial, sans-serif',
-} as Rule;
-
-const infoIconEl = {
-  marginRight: '8px',
-} as Rule;
-
-const infoBlock = {
-  display: 'flex',
-  justifyContent: 'flex-start',
-  alignItems: 'center',
-  paddingBottom: '32px',
-  color: '#00539F',
-  fontSize: '14px',
-  fontStyle: 'normal',
-  lineHeight: '18px',
-  letterSpacing: '0px',
-  textAlign: 'left',
-  fontFamily: 'TESCO Modern", Arial, sans-serif',
-} as Rule;
+const applyBlock: CreateRule<{ mobileScreen: boolean }> = (props) => {
+  const { mobileScreen } = props;
+  return {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: '32px',
+    flexDirection: mobileScreen ? 'column' : 'row',
+  };
+};
 
 const activeGoalItem: CreateRule<{ theme: Theme }> = (props) => {
   if (props == null) return {};
   const { theme } = props;
   return {
-    color: `${theme.colors.tescoBlue}`,
+    color: `${colors.tescoLightBlue}`,
     cursor: 'pointer',
   };
 };
@@ -315,14 +377,10 @@ const defaultGoalItem: CreateRule<{ theme: Theme }> = (props) => {
   if (props == null) return {};
   const { theme } = props;
   return {
-    color: '#b3cde5',
+    color: `${theme.colors.tescoBlue}`,
     cursor: 'pointer',
   };
 };
-
-const close = {
-  cursor: 'pointer',
-} as Rule;
 
 const goalListBlock: CreateRule<{ theme: Theme }> = (props) => {
   if (props == null) return {};
@@ -347,60 +405,6 @@ const goal: CreateRule<{ theme: Theme }> = (props) => {
     lineHeight: '20px',
     letterSpacing: '0px',
     paddingRight: '16px',
-    // color: `${theme.colors.disabledTescoBlue}`,
-  };
-};
-
-const decsriptionHeader: CreateRule<{ theme: Theme }> = (props) => {
-  if (props == null) return {};
-  const { theme } = props;
-  return {
-    fontSize: `${theme.font.fixed.f24}`,
-    lineHeight: '28px',
-    fontWeight: 'bold',
-    paddingBottom: '8px',
-  };
-};
-
-const arrow = {
-  marginLeft: '13.75px',
-  border: 'solid',
-  borderWidth: '0 1px 1px 0',
-  display: 'inline-block',
-  padding: '6px',
-  transform: 'rotate(137deg)',
-  webkitTransform: 'rotate(137deg)',
-  cursor: 'pointer',
-} as Rule;
-
-const header: CreateRule<{ theme: Theme }> = (props) => {
-  if (props == null) return {};
-  const { theme } = props;
-  return {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    fontSize: `${theme.font.fixed.f24}`,
-    lineHeight: '28px',
-    fontWeight: 'bold',
-    color: `${theme.colors.white}`,
-    width: '100%',
-    padding: '22px 42px 22px 40px',
-  };
-};
-
-const popup: CreateRule<{ theme: Theme }> = (props) => {
-  if (props == null) return {};
-  const { theme } = props;
-  return {
-    display: 'flex',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    flexDirection: 'column',
-    padding: '0 20px',
-    paddingBottom: '60px',
-    backgroundColor: `${theme.colors.tescoBlue}`,
-    fontFamily: 'TESCO Modern", Arial, sans-serif',
   };
 };
 

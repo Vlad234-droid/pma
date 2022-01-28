@@ -18,7 +18,7 @@ export type WidgetTeamMateProfileProps = {
   uuid: string;
   status?: Status;
   employee: Employee;
-  simpleView?: boolean;
+  fullTeamView?: boolean;
   rating?: Rating;
   onClick?: () => void;
 };
@@ -42,13 +42,12 @@ export const WidgetTeamMateProfile: FC<WidgetTeamMateProfileProps> = ({
   uuid,
   status,
   employee,
-  simpleView = false,
+  fullTeamView = false,
   rating,
   onClick,
 }) => {
   const { css } = useStyle();
   const navigate = useNavigate();
-
   const [graphics, color] = getIcon(status);
 
   const viewUserObjectives = (uuid) => {
@@ -75,6 +74,7 @@ export const WidgetTeamMateProfile: FC<WidgetTeamMateProfileProps> = ({
                       lastName={employee.lastName}
                       jobName={employee.jobName}
                       businessType={employee.businessType}
+                      manager={fullTeamView ? employee.lineManager : undefined}
                     />
                     <div className={css({ marginLeft: 'auto', display: 'flex', alignItems: 'center' })}>
                       <div className={css({ padding: '12px 12px' })}>
@@ -103,7 +103,7 @@ export const WidgetTeamMateProfile: FC<WidgetTeamMateProfileProps> = ({
                         )}
                       </div>
                       <>
-                        {!simpleView && !rating && (
+                        {!fullTeamView && !rating && (
                           <div className={css({ padding: '0px 12px' })}>
                             <Icon graphic={graphics} fill={color} />
                           </div>

@@ -7,7 +7,3 @@ export const createPMCycleSchema = Yup.object().shape({
   level3: Yup.string().required(),
   entryConfigKey: Yup.string().required(),
 });
-
-export const chooseTemplateSchema = Yup.object().shape({
-  template_search: Yup.string(),
-});

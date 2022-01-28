@@ -8,7 +8,6 @@ import {
   getUnReadSubmittedNotesSelector,
 } from '@pma/store';
 import { CreateRule, Icon as IconCore, Modal, Rule, Theme, useBreakpoints, useStyle } from '@dex-ddl/core';
-import * as Yup from 'yup';
 
 import { Trans } from 'components/Translation';
 import { Item, Select } from 'components/Form';
@@ -18,17 +17,12 @@ import { NotiBellCirlceOut } from 'components/Icon/graphics/notiBellCirlceOut';
 import { People } from 'components/Icon/graphics/people';
 import Info360Modal, { FeedbackCard } from './components';
 import { ConfigProps } from './type';
-import { GenericItemField } from 'components/GenericForm';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { createObjectivesSchema } from './config';
 import { IconButton } from 'components/IconButton';
 import { Icon } from 'components/Icon';
 
 import { FeedbackStatus } from 'config/enum';
 import { useAuthContainer } from 'contexts/authContext';
 import { Page } from 'pages';
-import { boolean } from 'yup/lib/locale';
 
 const FEEDBACK_ACTIONS = 'feedback_actions';
 
@@ -46,8 +40,6 @@ const FeedbackActions: FC = () => {
     if (!colleagueUuid) return;
     dispatch(
       FeedbackActionsGet.getAllFeedbacks({
-        'target-colleague-uuid': colleagueUuid,
-        'colleague-uuid': colleagueUuid,
         _limit: '300',
       }),
     );
@@ -55,19 +47,15 @@ const FeedbackActions: FC = () => {
   const { css, theme } = useStyle();
   const pendingNotes = useSelector(getNotesArgsSelector(FeedbackStatus.PENDING, colleagueUuid)) || [];
   const unReadSubmittedNotes =
-    useSelector(getUnReadSubmittedNotesSelector(FeedbackStatus.SUBMITTED, colleagueUuid)) || [];
+    useSelector(getUnReadSubmittedNotesSelector([FeedbackStatus.SUBMITTED, FeedbackStatus.COMPLETED], colleagueUuid)) ||
+    [];
 
-  const methods = useForm({
-    mode: 'onChange',
-    resolver: yupResolver<Yup.AnyObjectSchema>(createObjectivesSchema),
-  });
-
-  const getProppeIconForunReadNotes = () => {
+  const getIconForUnReadNotes = () => {
     if (unReadSubmittedNotes.length) return <NotiBell />;
     return <NotiBellCirlceOut />;
   };
 
-  const getProppeIconForPendingNotes = () => {
+  const getIconForPendingNotes = () => {
     if (pendingNotes.length) return <NotiBell />;
     return <NotiBellCirlceOut />;
   };
@@ -86,17 +74,15 @@ const FeedbackActions: FC = () => {
       id: 2,
       action: 'View your feedback',
       text: 'See the feedback your colleagues have shared with you',
-      icon: getProppeIconForunReadNotes(),
-      iconText: unReadSubmittedNotes.length
-        ? `You have ${unReadSubmittedNotes.length} new feedback to view`
-        : 'You have 0 new feedback to view',
+      icon: getIconForUnReadNotes(),
+      iconText: `You have ${unReadSubmittedNotes?.length || 0} new feedback to view`,
       link: '/feedback/view-feedback',
     },
     {
       id: 3,
       action: 'Respond to feedback requests',
       text: 'See and respond to feedback requests from your colleagues',
-      icon: getProppeIconForPendingNotes(),
+      icon: getIconForPendingNotes(),
       iconText: pendingNotes.length
         ? `You have ${pendingNotes.length} new feedback requests`
         : 'You have 0 new feedback requests',
@@ -117,22 +103,23 @@ const FeedbackActions: FC = () => {
   };
 
   const field_options = [
-    { value: 'id_1', label: 'Direct and simple' },
-    { value: 'id_2', label: 'Friendly and constructive' },
-    { value: 'id_3', label: 'Informative and detailed' },
-    { value: 'id_4', label: 'I don`t have a preference' },
+    { value: 'Direct and simple', label: 'Direct and simple' },
+    { value: 'Friendly and constructive', label: 'Friendly and constructive' },
+    { value: 'Informative and detailed', label: 'Informative and detailed' },
+    { value: 'I don`t have a preference', label: 'I don`t have a preference' },
   ];
 
   const checkForVoiceValue = () => profileAttr?.find((item) => item?.name === 'voice')?.value ?? 'id_1';
 
-  const createToneOfVoiceHandler = (inputValue) => {
-    if (!inputValue) return;
-    const findedValue = field_options?.find((item) => item.value === inputValue)?.value;
+  const createToneOfVoiceHandler = (e) => {
+    if (!e.target) return;
+    const { value } = e.target;
+
     const payload = {
       colleagueUuid,
       name: 'voice',
-      value: findedValue,
       type: 'STRING',
+      value,
     };
     if (profileAttr?.find((item) => item?.name === 'voice')) {
       dispatch(UserActions.updateProfileAttribute([payload]));
@@ -210,20 +197,17 @@ const FeedbackActions: FC = () => {
               />
             </div>
           </div>
-          <form>
-            <GenericItemField
+          <Item withIcon={false}>
+            <Select
               name={`treatment_options`}
-              methods={methods}
-              Wrapper={({ children }) => <Item withIcon={false}>{children}</Item>}
-              Element={Select}
               options={field_options}
               placeholder={'Choose tone of voice'}
               value={checkForVoiceValue()}
-              onChange={(value) => {
-                createToneOfVoiceHandler(value);
+              onChange={(e) => {
+                createToneOfVoiceHandler(e);
               }}
             />
-          </form>
+          </Item>
         </div>
       </div>
     </>

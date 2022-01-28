@@ -5,7 +5,7 @@ import { ObjectiveType, ReviewType, Status } from 'config/enum';
 import { StepIndicator } from 'components/StepIndicator/StepIndicator';
 import { IconButton } from 'components/IconButton';
 import { downloadPDF, ObjectiveDocument, usePDF } from '@pma/pdf-renderer';
-import { REVIEW_MODIFICATION_MODE, reviewModificationModeFn, canEditAllObjectiveFn } from '../../utils';
+import { canEditAllObjectiveFn, REVIEW_MODIFICATION_MODE, reviewModificationModeFn } from '../../utils';
 
 import {
   Accordion,
@@ -45,20 +45,7 @@ import { Page } from 'pages';
 import { buildPath } from 'features/Routes';
 import EditButton from '../Buttons/EditButton';
 
-const reviews = [
-  {
-    id: 'test-1',
-    title: 'Mid-year review',
-    description: 'Pharetra donec enim aenean aliquet consectetur ultrices amet vitae',
-    reviewType: ReviewType.MYR,
-  },
-  {
-    id: 'test-2',
-    title: 'Year-end review',
-    description: 'Pharetra donec enim aenean aliquet consectetur ultrices amet vitae',
-    reviewType: ReviewType.EYR,
-  },
-];
+const reviews = [];
 
 const annualReviews = [
   {
@@ -140,18 +127,19 @@ const MyObjectives: FC = () => {
     }
   }, [reviewLoaded, schemaLoaded]);
 
-  const { loaded } = useSelector(getTimelineMetaSelector) || {};
-
   useEffect(() => {
-    if (!loaded && colleagueUuid) {
+    if (colleagueUuid) {
       dispatch(TimelineActions.getTimeline({ colleagueUuid }));
     }
-    if (loaded && colleagueUuid && canShowObjectives) {
+  }, [colleagueUuid]);
+
+  useEffect(() => {
+    if (colleagueUuid && canShowObjectives) {
       dispatch(
-        ReviewsActions.getReviews({ pathParams: { colleagueUuid, type: ReviewType.OBJECTIVE, cycleUuid: 'CURRENT' } }),
+        ReviewsActions.getColleagueReviews({ pathParams: { colleagueUuid: colleagueUuid, cycleUuid: 'CURRENT' } }),
       );
     }
-  }, [loaded, colleagueUuid, canShowObjectives]);
+  }, [colleagueUuid, canShowObjectives]);
 
   return (
     <div data-test-id={TEST_ID}>
@@ -283,14 +271,18 @@ const MyObjectives: FC = () => {
             left={{
               content: (
                 <div>
-                  <Trans i18nKey='my_completed_reviews'>My Completed Reviews</Trans>
+                  <Trans i18nKey='my_completed_reviews'>My completed Reviews</Trans>
                 </div>
               ),
             }}
             right={{
               content: (
                 <div>
-                  <Button mode='inverse' onPress={() => alert('view')} styles={[linkStyles({ theme })]}>
+                  <Button
+                    mode='inverse'
+                    onPress={() => setPreviousReviewFilesModalShow(true)}
+                    styles={[linkStyles({ theme })]}
+                  >
                     <Trans i18nKey='view_history'>View history</Trans>
                   </Button>
                 </div>

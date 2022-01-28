@@ -45,8 +45,8 @@ const Widgets: FC<Props> = () => {
     },
     {
       iconGraphic: 'edit',
-      title: t('My notes'),
-      data: t('Last updated Apr 2021', { date: new Date(2021, 4, 4) }),
+      title: t('My Notes'),
+      date: t('Last updated Apr 2021', { date: new Date(2021, 4, 4) }),
       customStyle: { flex: '2 1 110px' },
       onClick: () => navigate(buildPath(Page.NOTES)),
     },

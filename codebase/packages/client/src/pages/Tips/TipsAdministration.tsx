@@ -22,7 +22,7 @@ const TipsAdministration: FC = () => {
   }, []);
 
   const handleCreateTip = () => {
-    navigate(buildPath(paramsReplacer(Page.EDIT_TIP, {':tipUuid': 'new'})));
+    navigate(buildPath(paramsReplacer(Page.EDIT_TIP, { ':tipUuid': 'new' })));
   };
 
   return (

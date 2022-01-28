@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { Rule, useStyle } from '@dex-ddl/core';
 import { Item } from 'components/Form';
-import { SearchInput } from '../components/SearchInput';
+import SearchInput from 'components/SearchInput';
 import { useDispatch, useSelector } from 'react-redux';
 import { ColleaguesActions, getColleaguesSelector } from '@pma/store';
 import defaultImg from '../../../../public/default.png';
@@ -26,6 +26,7 @@ const ColleaguesFinder: FC<Props> = ({ onSelect, error, value }) => {
       dispatch(ColleaguesActions.clearColleagueList());
       return;
     }
+
     dispatch(
       ColleaguesActions.getColleagues({
         'first-name_like': value,

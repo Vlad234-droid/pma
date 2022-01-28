@@ -23,8 +23,20 @@ export const searchEmployeesFn = <T extends Employee, K extends string>(employee
   return employees.filter(
     (employee: Employee) =>
       employee.firstName.toLowerCase().startsWith(search.toLowerCase()) ||
+      employee.lastName.toLowerCase().startsWith(search.toLowerCase()),
+  );
+};
+
+
+export const searchEmployeesAndManagersFn = <T extends Employee, K extends string>(employees: T[], search?: K): T[] => {
+  if (!search || search.length < 3) return employees;
+
+  return employees.filter(
+    (employee: Employee) =>
+      employee.firstName.toLowerCase().startsWith(search.toLowerCase()) ||
       employee.lastName.toLowerCase().startsWith(search.toLowerCase()) ||
-      (employee.middleName && employee.middleName.toLowerCase().startsWith(search.toLowerCase())),
+      employee.lineManager?.firstName.toLowerCase().startsWith(search.toLowerCase()) ||
+      employee.lineManager?.lastName.toLowerCase().startsWith(search.toLowerCase()),
   );
 };
 

@@ -12,8 +12,8 @@ export type Props = {
 
 export const MenuItem: FC<Props> = ({ iconGraphic, title, linkTo = '' }) => (
   <div>
-    <Link to={linkTo}>
-      <TileWrapper title={title} customStyle={wrapperStyles}>
+    <Link to={linkTo} replace>
+      <TileWrapper title={title} hover={true} customStyle={wrapperStyles}>
         <Icon graphic={iconGraphic} iconStyles={iconStyles} />
         <div style={{ paddingTop: '8px' }}>{title}</div>
       </TileWrapper>

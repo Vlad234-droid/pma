@@ -1,6 +1,7 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
 import { Button, fontWeight, useStyle } from '@dex-ddl/core';
-import { colleagueUUIDSelector, ReviewsActions } from '@pma/store';
+import { colleagueUUIDSelector, ReviewsActions, reviewsMetaSelector } from '@pma/store';
+import { useSelector } from 'react-redux';
 
 import { TileWrapper } from 'components/Tile';
 import { Icon } from 'components/Icon';
@@ -12,7 +13,7 @@ import { Employee } from 'config/types';
 import ApproveModal from '../ApproveModal';
 import DeclineModal from '../DeclineModal';
 import { filterApprovedFn } from '../../utils';
-import { useSelector } from 'react-redux';
+import SuccessModal from '../SuccessModal/SuccessModal';
 
 export type WidgetObjectiveApprovalProps = {
   isDisabled?: boolean;
@@ -31,9 +32,21 @@ export const WidgetObjectiveApproval: FC<WidgetObjectiveApprovalProps> = ({
   const [currentReview, setCurrentReview] = useState<Employee | null>(null);
   const currentTimeline = currentReview?.timeline.filter(filterApprovedFn);
   const colleagueUuid = useSelector(colleagueUUIDSelector);
+  const { loaded } = useSelector(reviewsMetaSelector);
+  const [reviewSubmitted, setReviewSubmitted] = useState<Status | null>(null);
+  const [reviewType, setReviewType] = useState<ReviewType | null>(null);
+  const [isOpenSuccessModal, setIsOpenSuccessModal] = useState<boolean>(false);
+  const [allReviewsProcessed, setAllReviewsProcessed] = useState<boolean>(false);
 
   const { css, theme } = useStyle();
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (reviewSubmitted && loaded && allReviewsProcessed) {
+      setIsOpenSuccessModal(true);
+    }
+
+  }, [loaded, reviewSubmitted, allReviewsProcessed]);
 
   useEffect(() => {
     if (declines.length && declines.length === reviewsForApproval.length) {
@@ -95,6 +108,8 @@ export const WidgetObjectiveApproval: FC<WidgetObjectiveApprovalProps> = ({
   const updateReviewStatus = useCallback(
     (status: Status) => (reasons?: (string | null)[]) => {
       reviewsForApproval?.forEach((colleague, index) => {
+        const currentTimeline = colleague?.timeline.filter(filterApprovedFn);
+
         if ((reasons && !reasons[index] && currentTimeline![0].reviewType === ReviewType.OBJECTIVE) || !currentTimeline)
           return;
 
@@ -112,24 +127,34 @@ export const WidgetObjectiveApproval: FC<WidgetObjectiveApprovalProps> = ({
             status,
             colleagueUuid: colleague.uuid,
             reviews: colleague.reviews.filter(
-              ({ status, type }) => status === Status.WAITING_FOR_APPROVAL && type === timeline.reviewType,
+              ({ status }) => status === Status.WAITING_FOR_APPROVAL,
             ),
           },
         };
 
         dispatch(ReviewsActions.updateReviewStatus(update));
+        setReviewSubmitted(status);
+        setReviewType(currentTimeline![0].reviewType);
 
         onSave();
         // clean declines after submit
         setDeclines([]);
         setCurrentReview(null);
       });
+
+      setAllReviewsProcessed(true);
     },
-    [reviewsForApproval, currentTimeline],
+    [reviewsForApproval],
   );
 
   const approveColleagues = updateReviewStatus(Status.APPROVED);
   const declineColleagues = updateReviewStatus(Status.DECLINED);
+
+  const handleCloseSuccessModal = () => {
+    setReviewSubmitted(null);
+    setReviewType(null);
+    setIsOpenSuccessModal(false);
+  };
 
   return (
     <>
@@ -205,6 +230,13 @@ export const WidgetObjectiveApproval: FC<WidgetObjectiveApprovalProps> = ({
           </div>
         </div>
       </TileWrapper>
+      {isOpenSuccessModal && (
+        <SuccessModal
+          status={reviewSubmitted as Status}
+          review={reviewType as ReviewType}
+          onClose={handleCloseSuccessModal}
+        />
+      )}
     </>
   );
 };

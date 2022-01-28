@@ -1,23 +1,26 @@
-import React, { FC, useEffect, useState, useCallback, useMemo } from 'react';
-import { useSelector, shallowEqual } from 'react-redux';
+import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
+import { shallowEqual, useSelector } from 'react-redux';
 import { colors, fontWeight, useBreakpoints, useStyle } from '@dex-ddl/core';
 import {
   colleagueUUIDSelector,
   getManagersMetaSelector,
   getPendingEmployees,
   ManagersActions,
+  reviewsMetaSelector,
+  ReviewsActions,
   SchemaActions,
-  schemaMetaSelector,
 } from '@pma/store';
 
 import { Trans, useTranslation } from 'components/Translation';
 import { Checkbox, Radio } from 'components/Form';
-import { Status } from 'config/enum';
+import { ReviewType, Status } from 'config/enum';
 import { WidgetObjectiveApproval, WidgetTeamMateObjectives } from 'features/Actions';
 import Filters, { useSorting, useSearch, getEmployeesSortingOptions } from 'features/Filters';
 import useDispatch from 'hooks/useDispatch';
 
 import { filterApprovedFn } from '../utils';
+import SuccessModal from './SuccessModal';
+
 export const TEST_ID = 'objectives-pave';
 
 type SelectAllProps = {
@@ -57,6 +60,7 @@ const SelectAll: FC<SelectAllProps> = ({ onChange, checked, indeterminate, disab
 };
 
 export const Actions = () => {
+  const dispatch = useDispatch();
   const { css } = useStyle();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.medium || isBreakpoint.small || isBreakpoint.xSmall;
@@ -64,8 +68,10 @@ export const Actions = () => {
   const [searchValue, setSearchValue] = useSearch();
   const { t } = useTranslation();
   const options = getEmployeesSortingOptions(t);
-
-  const { loaded: schemaLoaded } = useSelector(schemaMetaSelector);
+  const { loaded: reviewsLoaded } = useSelector(reviewsMetaSelector);
+  const [reviewSubmitted, setReviewSubmitted] = useState<Status | null>(null);
+  const [reviewType, setReviewType] = useState<ReviewType | null>(null);
+  const [isOpenSuccessModal, setIsOpenSuccessModal] = useState<boolean>(false);
 
   // @ts-ignore
   const { employeeWithPendingApprovals, employeeWithCompletedApprovals } =
@@ -73,15 +79,22 @@ export const Actions = () => {
 
   const { loaded } = useSelector(getManagersMetaSelector) || {};
   const colleagueUuid = useSelector(colleagueUUIDSelector);
-  const dispatch = useDispatch();
 
   const [indeterminate, setIndeterminate]: [boolean, (T) => void] = useState(false);
   const [isCheckAll, setIsCheckAll]: [boolean, (T) => void] = useState(false);
   const [checkedItems, setCheckedItems]: [string[], (T) => void] = useState([]);
   const [reviewsForApproval, setReviewsForApproval]: [any[], (T) => void] = useState([]);
 
+  const [colleagueOpened, setColleagueOpened] = useState<string>('');
+
   const [colleagues, setColleagues] = useState(employeeWithPendingApprovals || []);
   const [pending, setPending] = useState(true);
+
+  useEffect(() => {
+    if (reviewSubmitted && reviewsLoaded) {
+      setIsOpenSuccessModal(true);
+    }
+  }, [reviewsLoaded, reviewSubmitted]);
 
   // disable selectAll, if every colleague has more then one item for approve
   const selectAllDisabled = useMemo(
@@ -91,11 +104,18 @@ export const Actions = () => {
 
   useEffect(() => {
     if (!loaded && colleagueUuid) dispatch(ManagersActions.getManagers({ colleagueUuid }));
-  }, [loaded, schemaLoaded, colleagueUuid]);
+  }, [loaded, colleagueUuid]);
 
   useEffect(() => {
     setColleagues(pending ? employeeWithPendingApprovals : employeeWithCompletedApprovals);
   }, [pending, employeeWithPendingApprovals, employeeWithCompletedApprovals]);
+
+  useEffect(() => {
+    return () => {
+      dispatch(ReviewsActions.clearReviewData());
+      dispatch(SchemaActions.clearSchemaData());
+    };
+  }, []);
 
   //todo: refactor this
   useEffect(() => {
@@ -141,6 +161,17 @@ export const Actions = () => {
     } else {
       setReviewsForApproval((prev) => [...prev, { ...colleague }]);
     }
+  };
+
+  const handleCloseSuccessModal = () => {
+    setReviewSubmitted(null);
+    setReviewType(null);
+    setIsOpenSuccessModal(false);
+  };
+
+  const handleSubmitReview = (status: Status, type: ReviewType) => {
+    setReviewSubmitted(status);
+    setReviewType(type);
   };
 
   return (
@@ -251,6 +282,9 @@ export const Actions = () => {
                     id={colleague.uuid}
                     status={pending ? Status.WAITING_FOR_APPROVAL : Status.APPROVED}
                     colleague={colleague}
+                    onSubmit={handleSubmitReview}
+                    colleagueOpened={colleagueOpened}
+                    setColleagueOpened={setColleagueOpened}
                   />
                 </div>
               </div>
@@ -289,6 +323,13 @@ export const Actions = () => {
           </div>
         </div>
       </div>
+      {isOpenSuccessModal && (
+        <SuccessModal
+          status={reviewSubmitted as Status}
+          review={reviewType as ReviewType}
+          onClose={handleCloseSuccessModal}
+        />
+      )}
     </>
   );
 };

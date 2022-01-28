@@ -15,7 +15,7 @@ export const getCompletedFeedbackNotesS = createSelector(feedbackSelector, (feed
   return completedNotes;
 });
 
-export const getReviewsS = createSelector(feedbackSelector, (feedback: any) => {
+export const getReviews = createSelector(feedbackSelector, (feedback: any) => {
   const { reviews } = feedback;
   return reviews;
 });
@@ -36,7 +36,7 @@ export const getUnReadSubmittedNotesSelector = (status, colleagueUuid) =>
     const { notes } = feedback;
 
     const filterByArgs = notes
-      .filter((item) => item.status === status)
+      .filter((item) => (Array.isArray(status) ? status.includes(item.status) : item.status === status))
       .filter((item) => item.targetColleagueUuid === colleagueUuid)
       .filter((item) => !item.read);
     return filterByArgs;
@@ -72,20 +72,11 @@ export const feedbackByUuidSelector = (uuid) =>
 export const getPropperNotesByCriteria = ({ status, filterFn, sortFn, serializer }) =>
   createSelector(feedbackSelector, (feedback: any) => {
     const { notes } = feedback;
-    let filteredByStatus = [] as any;
 
-    if (typeof status === 'string') {
-      filteredByStatus = notes.filter((item) => item.status === status);
-    }
-    if (typeof status === 'object' && !!status.length) {
-      (status as Array<statusType>).forEach((itemStatus) => {
-        notes.forEach((item) => {
-          if (item.status === itemStatus) {
-            filteredByStatus.push(item);
-          }
-        });
-      });
-    }
-
-    return filteredByStatus.filter(filterFn).map(serializer).sort(sortFn);
+    return notes
+      .filter(
+        (item) => filterFn(item) && (Array.isArray(status) ? status.includes(item.status) : item.status === status),
+      )
+      .map(serializer)
+      .sort(sortFn);
   });

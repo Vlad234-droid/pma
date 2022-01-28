@@ -16,17 +16,15 @@ export const DropZone: FC<DropZoneProps> = ({ children, onUpload }) => {
   const { css } = useStyle();
 
   return (
-    <>
-      <label className={css(wrapperStyles)} htmlFor='DropZone'>
-        <input
-          className={css(buttonStyles)}
-          type='file'
-          id='DropZone'
-          onChange={(e) => onUpload(e.target.files?.[0])}
-        />
-        {children}
-      </label>
-    </>
+    <label className={css(wrapperStyles)} htmlFor='DropZone'>
+      <input
+        className={css(buttonStyles)}
+        type='file'
+        id='DropZone'
+        onChange={({ target }) => onUpload(target.files?.[0])}
+      />
+      {children}
+    </label>
   );
 };
 
@@ -46,6 +44,7 @@ const buttonStyles: Rule = {
   inset: 0,
   opacity: 0,
   width: '100%',
+  cursor: 'pointer',
 };
 
 DropZone.displayName = 'DropZone';

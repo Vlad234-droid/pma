@@ -5,7 +5,7 @@ export const getProcessTemplate = createAsyncAction(
   'processTemplate/SUCCESS',
   'processTemplate/FAILURE',
   'processTemplate/CANCEL',
-)<undefined, any, Error, undefined>();
+)<any, any, Error, undefined>();
 
 export const getProcessTemplateMetadata = createAsyncAction(
   'processTemplate/METADATA_REQUEST',
@@ -14,7 +14,15 @@ export const getProcessTemplateMetadata = createAsyncAction(
   'processTemplate/METADATA_CANCEL',
 )<any, any, Error, undefined>();
 
+export const uploadProcessTemplate = createAsyncAction(
+  'processTemplateFiles/DOWNLOAD_REQUEST',
+  'processTemplateFiles/DOWNLOAD_SUCCESS',
+  'processTemplateFiles/DOWNLOAD_FAILURE',
+  'processTemplateFiles/DOWNLOAD_CANCEL',
+)<any, any, Error, undefined>();
+
 export const Actions = {
   getProcessTemplate: getProcessTemplate.request,
   getProcessTemplateMetadata: getProcessTemplateMetadata.request,
+  uploadProcessTemplate: uploadProcessTemplate.request,
 };

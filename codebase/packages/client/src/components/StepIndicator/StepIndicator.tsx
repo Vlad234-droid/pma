@@ -66,7 +66,7 @@ export const StepIndicatorBasic: FC<StepIndicatorProps> = ({
       const [graphics, color] = getIcon(status);
       const alignItems = getTextAlign(statuses?.length, i);
       arr.push(
-        <div>
+        <div key={`wrapper${i}`}>
           <Line key={`line${i}`} active={!!currentStep && currentStep >= i} />
           <Step
             key={`step${i}`}
@@ -83,7 +83,7 @@ export const StepIndicatorBasic: FC<StepIndicatorProps> = ({
       const [graphics, color] = getIcon(status);
       const alignItems = getTextAlign(titles?.length, i);
       arr.push(
-        <div>
+        <div key={`wrapper${i}`}>
           <Line key={`line${i}`} active={!!currentStep && currentStep >= i} />
           <Step
             key={`step${i}`}

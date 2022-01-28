@@ -16,3 +16,5 @@ export { Actions as PerformanceCycleActions } from './performanceCycle/actions';
 export { Actions as ConfigEntriesActions } from './configEntries/actions';
 export { Actions as ProcessTemplateActions } from './processTemplate/actions';
 export { Actions as PDPActions } from './pdp/actions';
+export { Actions as PreviousReviewFilesActions } from './previousReviewFiles/actions';
+export { Actions as ReportActions } from './report/actions';

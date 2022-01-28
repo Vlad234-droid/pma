@@ -1,29 +1,30 @@
 import React, { FC, useEffect } from 'react';
-import { Trans, useTranslation } from 'components/Translation';
-import { ReviewWidget, Widgets as ObjectiveWidgets } from 'features/Objectives';
-import { Styles, useStyle } from '@dex-ddl/core';
-import { DashboardProfile } from 'features/Profile';
-import { BasicTile } from 'components/Tile';
-import { StepIndicator } from 'components/StepIndicator/StepIndicator';
-import { ObjectiveType, ReviewType, Status } from 'config/enum';
-import { RouterSwitch } from 'components/RouterSwitch';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { Styles, useStyle } from '@dex-ddl/core';
+import { DashboardProfile } from 'features/Profile';
 import {
   colleagueUUIDSelector,
   getTimelineByCodeSelector,
   getTimelineSelector,
-  isManager,
   TimelineActions,
   timelineTypesAvailabilitySelector,
 } from '@pma/store';
-import useDispatch from 'hooks/useDispatch';
+
+import { ReviewWidget, Widgets as ObjectiveWidgets } from 'features/Objectives';
 import { buildPath } from 'features/Routes';
+import { CanPerform, LINE_MANAGER } from 'features/Permission';
+import useDispatch from 'hooks/useDispatch';
+import { BasicTile } from 'components/Tile';
+import { Trans, useTranslation } from 'components/Translation';
+import { StepIndicator } from 'components/StepIndicator/StepIndicator';
+import { ObjectiveType, ReviewType } from 'config/enum';
+import { RouterSwitch } from 'components/RouterSwitch';
+import { Icon } from 'components/Icon';
 import Check from '../../../public/Check.jpg';
 import Feedback from '../../../public/Feedback.jpg';
 import Learning from '../../../public/Learning.jpg';
 import Contribution from '../../../public/Contribution.jpg';
-import { Icon } from 'components/Icon';
 import { Page } from '../types';
 
 const CareerPerformance: FC = () => {
@@ -34,7 +35,6 @@ const CareerPerformance: FC = () => {
   const midYearReview = useSelector(getTimelineByCodeSelector(ObjectiveType.MYR));
   const endYearReview = useSelector(getTimelineByCodeSelector(ObjectiveType.EYR));
   const colleagueUuid = useSelector(colleagueUUIDSelector);
-  const isRoleManager = useSelector(isManager);
   const canShowMyReview = timelineTypes[ReviewType.MYR] && timelineTypes[ReviewType.EYR];
   const canShowAnnualReview = !timelineTypes[ReviewType.MYR] && timelineTypes[ReviewType.EYR];
 
@@ -51,15 +51,18 @@ const CareerPerformance: FC = () => {
     <>
       <div className={css({ display: 'flex', justifyContent: 'space-between' })}>
         <div />
-        {isRoleManager && (
-          <RouterSwitch
-            links={[
-              { link: buildPath(Page.CONTRIBUTION), name: t('my_view', 'My View') },
-              { link: buildPath(Page.MY_TEAM), name: t('my_team', 'My Team') },
-              { link: buildPath(Page.PEOPLE_TEAM), name: t('people_team', 'People Team') },
-            ]}
-          />
-        )}
+        <CanPerform
+          perform={[LINE_MANAGER]}
+          yes={() => (
+            <RouterSwitch
+              links={[
+                { link: buildPath(Page.CONTRIBUTION), name: t('my_view', 'My View') },
+                { link: buildPath(Page.MY_TEAM), name: t('my_team', 'My Team') },
+                { link: buildPath(Page.PEOPLE_TEAM), name: t('people_team', 'People Team') },
+              ]}
+            />
+          )}
+        />
         <div />
       </div>
       <div className={css(wrapperStylee)}>
@@ -87,7 +90,7 @@ const CareerPerformance: FC = () => {
         >
           <div data-test-id='more' className={css({ height: '112%' })} onClick={handleBtnHelp}>
             <BasicTile
-              img={<Icon graphic='settingsGear' />}
+              img={<Icon graphic='support' />}
               hover={false}
               title={"Something doesn't look right? Raise a ticket on Colleague Help "}
               imgCustomStyle={{ width: '30px', margin: '10px auto 0px auto' }}
@@ -95,6 +98,7 @@ const CareerPerformance: FC = () => {
                 background: '#fad919',
                 textAlign: 'center',
                 height: '100%',
+                padding: '24px 27px 24px 10px',
               }}
               icon={true}
               link={'https://www.ourtesco.com/colleague/help'}
@@ -106,7 +110,12 @@ const CareerPerformance: FC = () => {
               img={<Icon graphic='question' />}
               title={'Want to learn more about Your Contribution at Tesco?'}
               imgCustomStyle={{ width: '30px', margin: '8px auto 0px auto' }}
-              customStyle={{ textAlign: 'center', height: '100%', maxHeight: '142px' }}
+              customStyle={{
+                textAlign: 'center',
+                height: '100%',
+                maxHeight: '142px',
+                padding: '24px 27px 24px 10px',
+              }}
               icon={true}
             />
           </div>

@@ -26,6 +26,7 @@ const SecondaryWidget: FC<Props> = ({ iconGraphic, title, data, description, cus
           <Icon graphic={iconGraphic} />
           <span className={css(titleStyle)}>{title}</span>
           {data && <span className={css(descriptionStyle)}>{data}</span>}
+          {/* <span className={css(descriptionStyle)}>{date}</span> */}
           <span className={css(descriptionStyle)}>{description}</span>
         </div>
         {withButton && (
@@ -62,6 +63,7 @@ const headStyle = {
   flexDirection: 'column',
   justifyContent: 'center',
   alignItems: 'center',
+  margin: 'auto 0',
   '& svg': {
     marginBottom: '10px',
   },

@@ -26,7 +26,7 @@ const byIdRequest = (state) => ({ ...state, meta: { ...state.meta, loading: true
 const byIdSuccess = (state, { payload }) => {
   const { cycle } = payload.data;
   cycle.metadata.cycle.timelinePoints = cycle.metadata.cycle.timelinePoints.map((point) => {
-    const form = payload.data.forms.find((form) => form.id === point.form.id);
+    const form = payload.data.forms.find((form) => form.id === point.form?.id);
     return { ...point, form };
   });
   return {

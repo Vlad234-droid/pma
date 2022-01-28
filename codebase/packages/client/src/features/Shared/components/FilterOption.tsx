@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Rule, colors, useStyle, Styles, CreateRule, Theme } from '@dex-ddl/core';
+import { Rule, CreateRule, useStyle, Styles } from '@dex-ddl/core';
 import { IconButton } from 'components/IconButton';
 import { Input } from 'components/Form/Input';
 import { Icon } from 'components/Icon';
@@ -10,13 +10,14 @@ type FilterOptionProps = {
   withIcon?: boolean;
   marginBot?: boolean;
   customIcon?: boolean;
-  onFocus?: React.Dispatch<React.SetStateAction<boolean>>;
-  setSearchValueFilterOption?: React.Dispatch<React.SetStateAction<string>>;
+  onFocus?: (status: boolean) => void;
+  hasActiveFilter?: boolean;
   searchValue?: string;
   focus?: boolean;
-  onChange?: (e: any) => any;
+  onChange?: (e: any) => void;
   customStyles?: Rule | Styles;
   visibleSettings?: boolean;
+  setSearchValueFilterOption?: React.Dispatch<React.SetStateAction<string>>;
 };
 
 export const FilterOption: FC<FilterOptionProps> = ({
@@ -30,7 +31,7 @@ export const FilterOption: FC<FilterOptionProps> = ({
   onChange,
   customStyles,
   visibleSettings = true,
-  setSearchValueFilterOption,
+  hasActiveFilter = false,
 }) => {
   const { css, theme } = useStyle();
 
@@ -40,9 +41,12 @@ export const FilterOption: FC<FilterOptionProps> = ({
         <IconButton
           graphic='settings'
           customVariantRules={{
-            default: iconBtnStyle({ theme }),
+            default: iconBtnStyle({ isActive: hasActiveFilter, colors: theme.colors }),
           }}
           iconStyles={iconStyle}
+          iconProps={{
+            invertColors: hasActiveFilter,
+          }}
           onPress={() => {
             onSettingsPress && onSettingsPress();
           }}
@@ -59,6 +63,11 @@ export const FilterOption: FC<FilterOptionProps> = ({
           withIcon={withIcon}
           marginBot={marginBot}
           customIcon={customIcon}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              onFocus && onFocus(false);
+            }
+          }}
           onFocus={() => {
             onFocus && onFocus(true);
           }}
@@ -74,9 +83,7 @@ export const FilterOption: FC<FilterOptionProps> = ({
               onFocus && onFocus(true);
             }}
             onBlur={() => {
-              onFocus && onFocus(() => false);
-              setSearchValueFilterOption && setSearchValueFilterOption(() => '');
-              onFocus && onFocus(() => false);
+              onFocus && !searchValue && onFocus(false);
             }}
             customStyles={{
               ...(customStyles && customStyles),
@@ -92,8 +99,8 @@ export const FilterOption: FC<FilterOptionProps> = ({
   );
 };
 
-const iconBtnStyle: CreateRule<{ theme: Theme }> = ({ theme }) => ({
-  background: 'white',
+const iconBtnStyle: CreateRule<{ isActive: boolean; colors: any }> = ({ colors, isActive }) => ({
+  background: isActive ? colors.tescoBlue : colors.white,
   padding: '0',
   marginLeft: '5px',
   display: 'flex',

@@ -22,9 +22,7 @@ module.exports = (webpackConfigEnv, argv) => {
     plugins: [
       new webpack.DefinePlugin({
         'process.env': JSON.stringify(dotenv.config().parsed),
-      }),
-      new webpack.ProvidePlugin({
-        process: 'process/browser',
+        'process.platform': '',
       }),
     ],
     resolve: {

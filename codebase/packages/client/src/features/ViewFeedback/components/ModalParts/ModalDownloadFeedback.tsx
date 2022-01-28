@@ -59,7 +59,7 @@ const ModalDownloadFeedback: FC<ModalDownloadFeedbackProps> = ({
   }
 
   return (
-    <div className={css({ padding: '0px 40px' })}>
+    <div className={css(wrapperDownloadRule)}>
       <h2 className={css(downloadTitleStyled)}>{downloadTitle}</h2>
       <p className={css(downloadDescriptionStyled)}>{downloadDescription}</p>
       <form>
@@ -164,6 +164,12 @@ const ModalDownloadFeedback: FC<ModalDownloadFeedbackProps> = ({
       </span>
     </div>
   );
+};
+
+const wrapperDownloadRule: Rule = {
+  padding: '0px 40px',
+  height: '100%',
+  overflow: 'auto',
 };
 
 const downloadTitleStyled: Rule = {

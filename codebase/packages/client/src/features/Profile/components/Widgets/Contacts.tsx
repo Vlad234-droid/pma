@@ -1,6 +1,6 @@
 import React, { FC, HTMLProps } from 'react';
 import { Trans, useTranslation } from 'components/Translation';
-import { Rule, Styles, useStyle } from '@dex-ddl/core';
+import { CreateRule, Rule, Styles, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { BasicTile } from 'components/Tile';
 
 export type DashboardProfileProps = {
@@ -24,8 +24,8 @@ const titleStyle: Rule = ({ theme }) =>
   ({
     fontStyle: 'normal',
     fontWeight: `${theme.font.weight.bold}`,
-    fontSize: '20px',
-    lineHeight: '24px',
+    fontSize: '16px',
+    lineHeight: '20px',
   } as Styles);
 
 const descriptionStyle = {
@@ -42,12 +42,24 @@ const bodyStyle = {
   display: 'inline-flex',
 } as Styles;
 
+const tileStyle: CreateRule<{ mobileScreen }> = ({ mobileScreen }) => ({
+  ...(mobileScreen
+    ? {
+        padding: '6px 0 0',
+      }
+    : {
+        padding: '14px 10px 10px',
+      }),
+});
+
 const Contacts: FC<Props> = ({ user }) => {
   const { css } = useStyle();
   const { t } = useTranslation();
+  const [, isBreakpoint] = useBreakpoints();
+  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
   const { email } = user;
   return (
-    <BasicTile title={t('Contacts', 'Contacts')} description={''}>
+    <BasicTile title={t('Contacts', 'Contacts')} description={''} customStyle={tileStyle({ mobileScreen })}>
       <div className={css(wrapperStyle)}>
         <div className={css(bodyStyle)}>
           <div className={css(bodyBlockStyle)}>

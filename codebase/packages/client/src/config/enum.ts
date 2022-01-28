@@ -71,13 +71,6 @@ export enum TargetFeedbackKeys {
   'OTHER' = 'comment_to_your_impact',
 }
 
-export enum DslType {
-  AUTH = 'auth',
-  ROLE = 'role',
-  WORK_LEVEL = 'work_level',
-  REQUEST = 'request',
-}
-
 export enum VoiceType {
   'id_1' = 'Direct and simple',
   'id_2' = 'Friendly and constructive',

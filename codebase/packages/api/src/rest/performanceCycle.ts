@@ -20,5 +20,5 @@ export const updatePerformanceCycle = <T>(params: any) => {
 };
 
 export const publishPerformanceCycle = <T>(params: any) => {
-  return httpClient.put(`${performanceCyclesDomain}/publish`, params);
+  return httpClient.post(`${performanceCyclesDomain}/publish`, params);
 };

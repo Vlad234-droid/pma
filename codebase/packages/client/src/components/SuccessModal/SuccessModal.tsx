@@ -8,18 +8,19 @@ export type SuccessModal = {
   onClose: () => void;
   description?: string;
   withСheckMark?: boolean;
+  title: string;
 };
 
 type Props = HTMLProps<HTMLInputElement> & SuccessModal;
 
-const SuccessModal: FC<Props> = ({ onClose, description, withСheckMark = false }) => {
+const SuccessModal: FC<Props> = ({ onClose, description, withСheckMark = false, title }) => {
   const { css, theme } = useStyle();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
 
   return (
     <WrapperModal
-      title='Share Objectives'
+      title={title}
       onClose={onClose}
       onOverlayClick={onClose}
     >

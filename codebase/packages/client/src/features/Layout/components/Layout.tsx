@@ -12,7 +12,7 @@ const Layout: FC = ({ children }) => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
-  const { title, withHeader, backPath } = useMemo(() => {
+  const { title, withHeader, backPath, withIcon, iconName } = useMemo(() => {
     const page = Object.keys(pages).find((page) => matchPath(page, pathname)) || '';
     return pages[page] || {};
   }, [pathname]);
@@ -22,7 +22,14 @@ const Layout: FC = ({ children }) => {
   return (
     <div data-test-id={TEST_ID} className={css(layoutRule)}>
       {/*TODO: use separate component*/}
-      {withHeader && <Header title={title} onBack={backPath ? () => handleBack(buildPath(backPath)) : undefined} />}
+      {withHeader && (
+        <Header
+          title={title}
+          withIcon={withIcon}
+          iconName={iconName}
+          onBack={backPath ? () => handleBack(buildPath(backPath)) : undefined}
+        />
+      )}
       {children}
     </div>
   );
@@ -36,7 +43,9 @@ const layoutRule: Rule = () => {
     flex: 1,
     flexDirection: 'column',
     minHeight: '100vh',
-    padding: '8px',
+    maxHeight: '100vh',
+    overflowY: 'auto',
+    padding: '8px 16px 80px',
   };
 };
 
