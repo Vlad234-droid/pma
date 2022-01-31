@@ -2,9 +2,7 @@
 import React from 'react';
 import { fireEvent } from '@testing-library/react';
 // @ts-ignore
-import { renderWithTheme as render, generateEmployeeReview } from 'utils/test';
-// @ts-ignore
-import { ReviewType } from 'config/types';
+import { renderWithTheme as render } from 'utils/test';
 
 import LinkButton from './LinkButton';
 

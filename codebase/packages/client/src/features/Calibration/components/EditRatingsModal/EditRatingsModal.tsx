@@ -62,7 +62,7 @@ const EditRatingsModal: FC<Props> = ({ employee, onClose, onSave }) => {
       submitBtnTitle={<Trans i18nKey='save_change'>Save change</Trans>}
       canSubmit={!!overallRating}
     >
-      <div className={css({ padding: '16px 0 32px' })}>
+      <div data-test-id='edit-rating-modal' className={css({ padding: '16px 0 32px' })}>
         <>
           {employee && (
             <div className={css({ padding: '0 0 16px' })}>
@@ -82,7 +82,7 @@ const EditRatingsModal: FC<Props> = ({ employee, onClose, onSave }) => {
               options={options}
               placeholder={t('please_select', 'Please select')}
               onChange={(e) => setWhatRating((e.target as HTMLInputElement).value as Rating)}
-              name='declineReason'
+              name='declineReasonWhat'
             />
           </Item>
         </>
@@ -95,7 +95,7 @@ const EditRatingsModal: FC<Props> = ({ employee, onClose, onSave }) => {
               options={options}
               placeholder={t('please_select', 'Please select')}
               onChange={(e) => setHowRating((e.target as HTMLInputElement).value as Rating)}
-              name='declineReason'
+              name='declineReasonHow'
             />
           </Item>
         </>

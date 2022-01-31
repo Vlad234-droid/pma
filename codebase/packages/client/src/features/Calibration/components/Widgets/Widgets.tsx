@@ -1,5 +1,4 @@
 import React, { FC } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useStyle } from '@dex-ddl/core';
 
 import { useTranslation } from 'components/Translation';
@@ -16,7 +15,6 @@ type Props = {
 
 const Calibration: FC<Props> = ({ onEditClick, onCompareClick, editMode, compareMode }) => {
   const { css } = useStyle();
-  const navigate = useNavigate();
   const { t } = useTranslation();
 
   const widgets: SecondaryWidgetProps[] = [
@@ -40,7 +38,7 @@ const Calibration: FC<Props> = ({ onEditClick, onCompareClick, editMode, compare
       title: t('download', 'Download'),
       data: t('save_calibration_ratings','Save calibration ratings to your device'),
       customStyle: widgetStyle,
-      onClick: () => navigate(buildPath(Page.CALIBRATION)),
+      onClick: () => console.log('download'),
       withButton: false,
     },
   ];

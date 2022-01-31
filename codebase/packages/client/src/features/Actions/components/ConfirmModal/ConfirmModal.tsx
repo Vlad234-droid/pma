@@ -42,7 +42,7 @@ const ConfirmModal: FC<Props> = ({
       onOverlayClick={onOverlayClick}
       submitBtnTitle={submitBtnTitle}
     >
-      <div>
+      <div data-test-id='actions-confirm-modal'>
         {employee && (
           <div className={css({ padding: '16px 0 0' })}>
             <ColleagueInfo

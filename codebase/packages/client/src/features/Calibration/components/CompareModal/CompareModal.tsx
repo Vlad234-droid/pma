@@ -33,7 +33,7 @@ const CompareModal: FC<Props> = ({ onClose, onSave, mode, options }) => {
       onSave={handleSave}
       submitBtnTitle={<Trans i18nKey='compare'>Compare</Trans>}
     >
-      <div className={css({ padding: '10px 0 48px' })}>
+      <div data-test-id='compare-modal' className={css({ padding: '10px 0 48px' })}>
         <div className={css(Label)}>{t('choose_data_to_compare', 'Choose the data you would like to compare the 2021 calibration to:')}</div>
         <div>
           {options.map(({ id, text }) => (

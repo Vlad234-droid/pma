@@ -10,6 +10,7 @@ type Props = {
 
 const FilterIcon: FC<Props> = ({ iconStyles, onClick }) => (
   <IconButton
+    data-test-id='filter-icon'
     graphic='settings'
     customVariantRules={{
       default: iconBtnStyle,

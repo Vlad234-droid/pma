@@ -57,7 +57,7 @@ const Filters: FC<Props> = ({
   };
 
   return (
-    <>
+    <div data-test-id='filters'>
       <InfoIcon onClick={() => console.log('info clicked')} />
       {sortingOptions && (
         <Sorting
@@ -86,7 +86,7 @@ const Filters: FC<Props> = ({
         onSearch={handleSearch}
         value={searchValue}
       />
-    </>
+    </div>
   );
 };
 

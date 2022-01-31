@@ -39,7 +39,7 @@ const Colleagues: FC<Props> = ({ colleagues, editMode, onSave }) => {
   };
 
   return (
-    <div>
+    <div data-test-id='calibration-colleagues'>
       {currentEmployee && (
         <EditRatingsModal
           employee={currentEmployee}

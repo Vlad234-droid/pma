@@ -1,21 +1,28 @@
 import React, { FC, useEffect, useState } from 'react';
-import { shallowEqual, useSelector } from 'react-redux';
 import { useStyle, Rule } from '@dex-ddl/core';
-import { colleagueUUIDSelector, getAllEmployees, ManagersActions } from '@pma/store';
 
 import { useTranslation } from 'components/Translation';
-import useDispatch from 'hooks/useDispatch';
 import Filters, { useSearch, FilterOption, FilterValues } from 'features/Filters';
 import { TileWrapper } from 'components/Tile';
 import SuccessModal from 'components/SuccessModal';
+import { Employee } from 'config/types';
 
 import Widgets from '../Widgets';
 import Colleagues from '../Colleagues';
 import Graph from '../Graph';
 import CompareModal from '../CompareModal';
-import { getCompareOptions, getMockFilterOptions, getCompareData, getCurrentData } from '../../utils';
+import { getCompareData, getCurrentData } from '../../utils';
+import { getCompareOptions } from '../../mock';
 
-const Calibration: FC = () => {
+type Props = {
+  loadData: (filters: FilterValues) => void;
+  loadFilterOptions: () => void;
+  colleagues?: Employee[];
+  colleagueUuid?: string;
+  filterOptions?: FilterOption[];
+};
+
+const Calibration: FC<Props> = ({ loadData, loadFilterOptions, colleagueUuid, colleagues, filterOptions }) => {
   const { css } = useStyle();
   const { t } = useTranslation();
   const [isEditMode, setEditMode] = useState<boolean>(false);
@@ -23,15 +30,10 @@ const Calibration: FC = () => {
   const isCompareMode = compareMode !== 'None';
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState<boolean>(false);
   const [isCompareModalOpen, setCompareModalOpen] = useState<boolean>(false);
-  const colleagueUuid = useSelector(colleagueUUIDSelector);
-  const dispatch = useDispatch();
-  const [filterOptions, setFilterOptions] = useState<FilterOption[]>();
   const [searchValue, setSearchValue] = useSearch();
   const compareOptions = getCompareOptions(t);
   const compareData = isCompareMode ? getCompareData(compareMode) : undefined;
   const graphData = getCurrentData();
-  // @ts-ignore
-  const colleagues = useSelector((state) => getAllEmployees(state), shallowEqual) || [];
 
   // TODO: use correct endpoint
   // TODO: load first 5 and on click 'see more' load next 25
@@ -41,14 +43,8 @@ const Calibration: FC = () => {
   }, [colleagueUuid]);
 
   useEffect(() => {
-    // TODO: load filter options
-    setFilterOptions(getMockFilterOptions());
+    loadFilterOptions();
   }, []);
-
-  const loadData = (filters: FilterValues) => {
-    console.log('filters', filters);
-    dispatch(ManagersActions.getManagers({ colleagueUuid }));
-  };
 
   const handleEditClick = () => {
     setEditMode((isEdit) => !isEdit);
@@ -105,7 +101,7 @@ const Calibration: FC = () => {
           </TileWrapper>
           {!isCompareMode && (
             <div className={css(allColleagues)}>
-              {colleagues.length ? (
+              {colleagues?.length ? (
                 <Colleagues editMode={isEditMode} colleagues={colleagues} onSave={handleSaveRating} />
               ) : (
                 <TileWrapper>

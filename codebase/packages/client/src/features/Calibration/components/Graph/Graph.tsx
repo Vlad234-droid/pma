@@ -17,7 +17,7 @@ const Graph: FC<Props> = ({ currentData, compareData  }) => {
   const bars = getGraphBars(data);
 
   return (
-    <div className={css({ height: '347px' })}>
+    <div className={css({ height: '347px' })} data-test-id='calibration-graph'>
       <div className={css(Title)}>{`Calibration submission ${new Date().getFullYear()}`}</div>
       <ResponsiveContainer width='100%' height={'100%'}>
         <BarChart

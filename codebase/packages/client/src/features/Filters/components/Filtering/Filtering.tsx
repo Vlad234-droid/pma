@@ -105,6 +105,7 @@ const Filtering: FC<Props> = ({ iconStyles, isOpen, onClick, onClose, filterOpti
                 Clear All
               </Button>
               <IconButton
+                data-test-id='filter'
                 graphic='arrowRight'
                 customVariantRules={{ default: iconBtnStyle }}
                 iconPosition={Position.RIGHT}
