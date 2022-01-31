@@ -116,7 +116,7 @@ export const UserObjectives: FC = () => {
             />
           </div>
         )}
-        <ShareWidget customStyle={shareWidgetStyles} />
+        <ShareWidget stopShare={true} customStyle={shareWidgetStyles} />
       </div>
       <div className={css(bodyWrapperStyles)} data-test-id={TEST_ID}>
         <div className={css(timelineWrapperStyles)}>
