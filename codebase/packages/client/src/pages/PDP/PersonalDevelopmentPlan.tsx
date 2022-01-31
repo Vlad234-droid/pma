@@ -1,5 +1,4 @@
 import React, { FC, useEffect } from 'react';
-import { useTranslation } from 'components/Translation';
 import { CreateRule, Rule, Styles, theme, Theme, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { ObjectiveType, PDPType, ReviewType } from 'config/enum';
 import useDispatch from 'hooks/useDispatch';
@@ -94,23 +93,20 @@ const PersonalDevelopmentPlan: FC = () => {
 
   return (
     <div className={css({ padding: '0 40px' })}>
-      <div className={css(buttonBlock({ theme }))}>
-        <div className={css(controlButtons({ theme, mobileScreen }))}>
+      <div className={css(buttonBlock)}>
+        <div className={css(controlButtons({ mobileScreen }))}>
           {pdpSelector && pdpSelector.length === 5 ? null : (
             <>
-              <button
-                className={`${css(buttonIcon({ theme }))} ${css(buttonDownload({ theme }))}`}
-                onClick={() => console.log('download template')}
-              >
+              <button className={css(buttonDownload)} onClick={() => console.log('download template')}>
                 <div className={css(btnIcon)}>
                   <Icon graphic='download' />
                 </div>
                 Download template
               </button>
 
-              <button className={css(buttonIcon({ theme }))} onClick={navToGoalPage}>
+              <button className={css(buttonIcon)} onClick={navToGoalPage}>
                 <div className={css(btnIcon)}>
-                  <Icon graphic='add' fill='#ffffff' iconStyles={{ height: '16.67px', width: '16.67px' }} />
+                  <Icon graphic='add' fill={theme.colors.white} iconStyles={{ height: '16.67px', width: '16.67px' }} />
                 </div>
                 {pdpSelector && pdpSelector?.length < 5 && pdpSelector?.length >= 1 ? 'Edit PDP' : 'Create PDP'}
               </button>
@@ -118,7 +114,7 @@ const PersonalDevelopmentPlan: FC = () => {
           )}
         </div>
 
-        <div className={css(controlButtons({ theme, mobileScreen }))}>
+        <div className={css(controlButtons({ mobileScreen }))}>
           <button onClick={() => navigate(buildPath(Page.PERSONAL_DEVELOPMENT_HELP))} className={css(infoBtn)}>
             <Icon graphic='information' />
           </button>
@@ -127,8 +123,8 @@ const PersonalDevelopmentPlan: FC = () => {
 
       <div className={css(descriptionMain)}>
         <DescriptionBlock>
-          <div className={css(title({ theme }))}>What is Personal Development Plan?</div>
-          <div className={css(details({ theme }), detailsWithMargin)}>
+          <div className={css(title)}>What is Personal Development Plan?</div>
+          <div className={css(details, detailsWithMargin)}>
             Your Personal Development Plan (PDP) is a tailored plan that helps you reflect on the things you are great
             at and identify areas you want to improve.
             <p>
@@ -147,8 +143,8 @@ const PersonalDevelopmentPlan: FC = () => {
             </p>
           </div>
 
-          <div className={css(title({ theme }))}>How The Performance Development Plan works?</div>
-          <div className={css(details({ theme }))}>
+          <div className={css(title)}>How The Performance Development Plan works?</div>
+          <div className={css(details)}>
             At Tesco, “how” you do your job is as important as “what” you deliver. An inspiring PDP will help you focus
             on what to develop, whether that&apos;s being at your best in your current role or moving towards a bigger
             or broader role. What&apos;s important is recording and regularly reviewing your plan to a format that works
@@ -158,13 +154,10 @@ const PersonalDevelopmentPlan: FC = () => {
       </div>
 
       {pdpSelector?.length > 0 && (
-        <div className={css(subtitleBlock({ theme }))}>
-          <div className={css(devPlanTitle({ theme }))}>My Development Plan</div>
+        <div className={css(subtitleBlock)}>
+          <div className={css(devPlanTitle)}>My Development Plan</div>
           <div>
-            <button
-              className={`${css(buttonIconItems({ theme }))} ${css(buttonDownloadItems({ theme }))}`}
-              onClick={() => console.log('download template')}
-            >
+            <button className={css(buttonDownloadItems)} onClick={() => console.log('download template')}>
               <div className={css(btnIcon)}>
                 <Icon graphic='download' />
               </div>
@@ -199,50 +192,38 @@ const PersonalDevelopmentPlan: FC = () => {
   );
 };
 
-const subtitleBlock: CreateRule<{ theme: Theme }> = (props) => {
-  if (props == null) return {};
-  const { theme } = props;
-  return {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    flexDirection: 'row',
-    width: '70%',
-    borderBottom: `1px solid ${theme.colors.backgroundDarkest}`,
-    paddingTop: '10px',
-  };
-};
+const subtitleBlock = {
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  flexDirection: 'row',
+  width: '70%',
+  borderBottom: `1px solid ${theme.colors.backgroundDarkest}`,
+  paddingTop: '10px',
+} as Rule;
 
-const devPlanTitle: CreateRule<{ theme: Theme }> = (props) => {
-  if (props == null) return {};
-  const { theme } = props;
-  return {
-    color: `${theme.colors.base}`,
-    fontFamily: '"TESCO Modern", Arial, sans-serif',
-    fontStyle: 'normal',
-    fontWeight: 'bold',
-    fontSize: `${theme.font.fixed.f18}`,
-    lineHeight: '22px',
-  };
-};
+const devPlanTitle = {
+  color: `${theme.colors.base}`,
+  fontFamily: '"TESCO Modern", Arial, sans-serif',
+  fontStyle: 'normal',
+  fontWeight: `${theme.font.weight.bold}`,
+  fontSize: `${theme.font.fixed.f18}`,
+  lineHeight: '22px',
+} as Rule;
 
 const detailsWithMargin = {
   marginBottom: '24px',
 } as Rule;
 
-const title: CreateRule<{ theme: Theme }> = (props) => {
-  if (props == null) return {};
-  const { theme } = props;
-  return {
-    color: `${theme.colors.base}`,
-    fontFamily: '"TESCO Modern", Arial, sans-serif',
-    fontStyle: 'normal',
-    fontWeight: 'bold',
-    fontSize: `${theme.font.fixed.f18}`,
-    lineHeight: '22px',
-    marginBottom: '8px',
-  };
-};
+const title = {
+  color: `${theme.colors.base}`,
+  fontFamily: '"TESCO Modern", Arial, sans-serif',
+  fontStyle: 'normal',
+  fontWeight: `${theme.font.weight.bold}`,
+  fontSize: `${theme.font.fixed.f18}`,
+  lineHeight: '22px',
+  marginBottom: '8px',
+} as Rule;
 
 const descriptionMain = {
   display: 'flex',
@@ -261,16 +242,12 @@ const descriptionMain = {
   textAlign: 'left',
 } as Rule;
 
-const details: CreateRule<{ theme: Theme }> = (props) => {
-  if (props == null) return {};
-  const { theme } = props;
-  return {
-    fontWeight: 'normal',
-    color: `${theme.colors.base}`,
-    fontSize: `${theme.font.fixed.f14}`,
-    lineHeight: '18px',
-  };
-};
+const details = {
+  fontWeight: 'normal',
+  color: `${theme.colors.base}`,
+  fontSize: `${theme.font.fixed.f14}`,
+  lineHeight: '18px',
+} as Rule;
 
 const infoBtn = {
   background: 'none',
@@ -278,94 +255,78 @@ const infoBtn = {
   cursor: 'pointer',
 } as Rule;
 
-const buttonDownload: CreateRule<{ theme: Theme }> = (props) => {
-  if (props == null) return {};
-  const { theme } = props;
-  return {
-    border: `2px solid ${theme.colors.tescoBlue}`,
-    backgroundColor: 'transparent',
-    color: '#00539F',
-    fontWeight: 'bold',
-    marginRight: '15px',
-  };
-};
+const buttonDownload = {
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  width: 'auto',
+  height: '40px',
+  padding: '10px 20px',
+  fontSize: `${theme.font.fixed.f16}`,
+  lineHeight: '20px',
+  borderRadius: '32px',
+  cursor: 'pointer',
+  marginTop: '16px',
+  marginBottom: '16px',
+  border: `2px solid ${theme.colors.tescoBlue}`,
+  backgroundColor: 'transparent',
+  color: `${theme.colors.tescoBlue}`,
+  fontWeight: `${theme.font.weight.bold}`,
+  marginRight: '15px',
+} as Rule;
 
-const buttonDownloadItems: CreateRule<{ theme: Theme }> = (props) => {
-  if (props == null) return {};
-  const { theme } = props;
-  return {
-    backgroundColor: 'transparent',
-    color: '#00539F',
-    fontWeight: 'bold',
-  };
-};
+const buttonDownloadItems = {
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  width: 'auto',
+  height: '40px',
+  padding: '10px 0',
+  fontSize: `${theme.font.fixed.f16}`,
+  lineHeight: '20px',
+  border: 'none',
+  cursor: 'pointer',
+  marginTop: '16px',
+  marginBottom: '16px',
+  backgroundColor: 'transparent',
+  color: `${theme.colors.tescoBlue}`,
+  fontWeight: `${theme.font.weight.bold}`,
+} as Rule;
 
 const btnIcon = {
   paddingRight: '9.67px',
   height: '18px',
 } as Rule;
 
-const buttonIcon: CreateRule<{ theme: Theme }> = (props) => {
-  if (props == null) return {};
-  const { theme } = props;
-  return {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: 'auto',
-    height: '40px',
-    padding: '10px 20px',
-    color: `${theme.colors.white}`,
-    backgroundColor: `${theme.colors.tescoBlue}`,
-    fontSize: `${theme.font.fixed.f16}`,
-    fontWeight: 'bold',
-    lineHeight: '20px',
-    borderRadius: '32px',
-    border: 'none',
-    cursor: 'pointer',
-    marginTop: '16px',
-    marginBottom: '16px',
-  };
-};
+const buttonIcon = {
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  width: 'auto',
+  height: '40px',
+  padding: '10px 20px',
+  color: `${theme.colors.white}`,
+  backgroundColor: `${theme.colors.tescoBlue}`,
+  fontSize: `${theme.font.fixed.f16}`,
+  fontWeight: `${theme.font.weight.bold}`,
+  lineHeight: '20px',
+  borderRadius: '32px',
+  border: 'none',
+  cursor: 'pointer',
+  marginTop: '16px',
+  marginBottom: '16px',
+} as Rule;
 
-const buttonIconItems: CreateRule<{ theme: Theme }> = (props) => {
-  if (props == null) return {};
-  const { theme } = props;
-  return {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: 'auto',
-    height: '40px',
-    padding: '10px 0',
-    color: `${theme.colors.white}`,
-    backgroundColor: `${theme.colors.tescoBlue}`,
-    fontSize: `${theme.font.fixed.f16}`,
-    fontWeight: 'bold',
-    lineHeight: '20px',
-    border: 'none',
-    cursor: 'pointer',
-    marginTop: '16px',
-    marginBottom: '16px',
-  };
-};
+const buttonBlock = {
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  flexDirection: 'row',
+  fontFamily: '"TESCO Modern", Arial, sans-serif',
+} as Rule;
 
-const buttonBlock: CreateRule<{ theme: Theme }> = (props) => {
-  if (props == null) return {};
-  const { theme } = props;
-
-  return {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    flexDirection: 'row',
-    fontFamily: '"TESCO Modern", Arial, sans-serif',
-  };
-};
-
-const controlButtons: CreateRule<{ theme: Theme; mobileScreen: boolean }> = (props) => {
-  if (props == null) return {};
-  const { theme, mobileScreen } = props;
+const controlButtons: CreateRule<{ mobileScreen: boolean }> = (props) => {
+  const { mobileScreen } = props;
 
   if (mobileScreen) {
     return {
