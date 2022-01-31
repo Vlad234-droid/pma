@@ -24,11 +24,12 @@ import {
 
 export type Props = {
   customStyle?: React.CSSProperties | {};
+  stopShare?: boolean;
 };
 
 export const TEST_ID = 'share-widget';
 
-const ShareWidget: FC<Props> = ({ customStyle }) => {
+const ShareWidget: FC<Props> = ({ customStyle, stopShare }) => {
   const dispatch = useDispatch();
   const { css, theme } = useStyle();
   const { t } = useTranslation();
@@ -84,7 +85,20 @@ const ShareWidget: FC<Props> = ({ customStyle }) => {
   }, [sharedObjectivesCount, formElementsCount]);
 
   const getContent = (): [string, string, string, () => void] => {
-    if (isManagerShared) {
+    if (stopShare) {
+      return [
+        t('shared_objectives', 'Shared objectives'),
+        t(
+          'you_have_shared_objectives_from_your_manager',
+          `You have ${sharedObjectivesCount} shared objective(s) from your manager.`,
+          { count: sharedObjectivesCount },
+        ),
+        t('view_objectives', 'View'),
+        () => {
+          handleViewObjectivesBtnClick();
+        },
+      ];
+    } else if (isManagerShared) {
       return [
         t('share_objectives', 'Share Objectives'),
         t('share_objectives_on_description', 'You are currently sharing your objectives with your team'),
