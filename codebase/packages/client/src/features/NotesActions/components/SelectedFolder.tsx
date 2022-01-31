@@ -48,6 +48,7 @@ const SelectedFolder: FC<SelectedFolderProps> = ({
               <IconButton
                 iconProps={{ title: 'Archive' }}
                 id='backdrop'
+                customVariantRules={{ default: { display: 'block', height: '24px' } }}
                 graphic='archive'
                 onPress={() => {
                   if (!item.referenceColleagueUuid) {
@@ -93,6 +94,7 @@ const SelectedFolder: FC<SelectedFolderProps> = ({
                 iconProps={{ title: 'Move to folder' }}
                 graphic='folder'
                 id='backdrop'
+                customVariantRules={{ default: { display: 'block', height: '24px' } }}
                 onPress={() => {
                   if (!item.referenceColleagueUuid) {
                     selectedNoteId.current = itemId;
@@ -136,6 +138,7 @@ const SelectedFolder: FC<SelectedFolderProps> = ({
               iconProps={{ title: 'Delete' }}
               graphic='delete'
               id='backdrop'
+              customVariantRules={{ default: { display: 'block', height: '24px' } }}
               onPress={() => {
                 if (!item.referenceColleagueUuid) {
                   selectedNoteId.current = itemId;
