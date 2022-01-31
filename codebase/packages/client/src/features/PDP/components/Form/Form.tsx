@@ -7,9 +7,8 @@ import { useForm } from 'react-hook-form';
 import { DATE_FORMAT, formatDate } from 'utils/date';
 import { createYupSchema } from 'utils/yup';
 import { v4 as uuidv4 } from 'uuid';
-import useDispatch from 'hooks/useDispatch';
 import { Button, CreateRule, Rule, theme, useBreakpoints, useStyle } from '@dex-ddl/core';
-import arrLeft from '../../../../../assets/img/pdp/arrLeft.png';
+import arrLeft from '../../../../assets/img/pdp/arrLeft.png';
 import colors from 'theme/colors';
 import { ConfirmModal } from 'features/Modal';
 import { useNavigate } from 'react-router-dom';
@@ -26,11 +25,14 @@ type Props = {
   formElements: any;
   confirmSaveModal: boolean;
   maxGoals: number;
+  goalNum: number;
   currentUUID: string | undefined;
   colleagueUuid: string;
+  requestMethods: any;
   setConfirSavemModal: (isActive: boolean) => void;
   setCurrentTab: (id: number) => void;
   setCurrentGoal: (obj: any) => void;
+  onChange: (schemaLoaded: boolean, requestData: any, method: string) => void;
 };
 
 const Form: FC<Props> = ({
@@ -41,15 +43,17 @@ const Form: FC<Props> = ({
   formElements,
   confirmSaveModal,
   maxGoals,
+  goalNum,
   currentUUID,
   colleagueUuid,
+  requestMethods,
   setConfirSavemModal,
   setCurrentTab,
   setCurrentGoal,
+  onChange,
 }) => {
   const { css } = useStyle();
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
   const { loaded: schemaLoaded = false } = useSelector(metaPDPSelector);
@@ -62,10 +66,11 @@ const Form: FC<Props> = ({
     mode: 'onChange',
     resolver: yupResolver<Yup.AnyObjectSchema>(Yup.object().shape(yepSchema)),
   });
-  const { getValues, formState, handleSubmit, reset } = methods;
+  const { getValues, formState, reset } = methods;
   const formValues = getValues();
 
   const [confirmSaveNextModal, setConfirSaveNextmModal] = useState<boolean>(false);
+  const isCurrentGoal = Object.keys(currentGoal)?.length > 0;
 
   useEffect(() => {
     pdpList &&
@@ -74,7 +79,7 @@ const Form: FC<Props> = ({
           setCurrentTab(idx);
           return true;
         } else {
-          setCurrentTab(pdpList.length + 1);
+          setCurrentTab(pdpList?.length + 1);
         }
       });
 
@@ -99,36 +104,53 @@ const Form: FC<Props> = ({
     },
   ];
 
-  const save = () => {
-    dispatch(PDPActions.createPDPGoal({ data: requestData }));
-    if (schemaLoaded) navigate(buildPath(Page.PERSONAL_DEVELOPMENT_PLAN));
-  };
-
-  const update = () => {
-    dispatch(PDPActions.updatePDPGoal({ data: requestData }));
-    if (schemaLoaded) navigate(buildPath(Page.PERSONAL_DEVELOPMENT_PLAN));
-  };
-
-  const saveAndCreate = () => {
-    if (currentUUID && currentGoal.uuid === currentUUID) {
-      dispatch(PDPActions.updatePDPGoal({ data: requestData }));
-      if (schemaLoaded) navigate(buildPath(Page.CREATE_PERSONAL_DEVELOPMENT_PLAN));
-    } else {
-      dispatch(PDPActions.createPDPGoal({ data: requestData }));
-    }
-
-    setCurrentGoal({});
-  };
-
   return (
     <React.Fragment>
+      {pdpList && (
+        <div className={css(goalListBlock)}>
+          {pdpList.length < 1 || !pdpList ? (
+            <div className={`${css(goal)} ${css(defaultGoalItem)}`}>Goal 1</div>
+          ) : (
+            pdpList.map((el, idx) => {
+              return (
+                <React.Fragment key={el.uuid + idx}>
+                  <div
+                    key={el?.uuid}
+                    onClick={() => setCurrentGoal(el)}
+                    className={`${css(goal)} ${
+                      idx <= goalNum && currentGoal?.uuid !== el.uuid ? css(activeGoalItem) : css(defaultGoalItem)
+                    }`}
+                  >
+                    Goal {idx + 1}
+                  </div>
+                  {idx === goalNum && idx + 1 < maxGoals && (
+                    <div
+                      onClick={() => {
+                        setCurrentGoal({});
+                        if (currentUUID) {
+                          navigate(buildPath(Page.CREATE_PERSONAL_DEVELOPMENT_PLAN));
+                        }
+                      }}
+                      className={`${css(goal)} ${isCurrentGoal ? css(activeGoalItem) : css(defaultGoalItem)}`}
+                    >
+                      Goal {idx + 2}
+                    </div>
+                  )}
+                </React.Fragment>
+              );
+            })
+          )}
+        </div>
+      )}
       {confirmSaveModal && (
         <ConfirmModal
           title={'Are you sure you want to save this goal?'}
           description={' '}
           submitBtnTitle={'Confirm'}
           onSave={() => {
-            currentUUID || Object.keys(currentGoal).length > 0 ? update() : save();
+            currentUUID || Object.keys(currentGoal)?.length > 0
+              ? onChange(schemaLoaded, requestData, requestMethods.UPDATE)
+              : onChange(schemaLoaded, requestData, requestMethods.SAVE);
             setConfirSavemModal(false);
           }}
           onCancel={() => setConfirSavemModal(false)}
@@ -142,7 +164,7 @@ const Form: FC<Props> = ({
           description={' '}
           submitBtnTitle={'Confirm'}
           onSave={() => {
-            saveAndCreate();
+            onChange(schemaLoaded, requestData, requestMethods.CREATE);
             setConfirSaveNextmModal(false);
           }}
           onCancel={() => setConfirSaveNextmModal(false)}
@@ -233,11 +255,11 @@ const Form: FC<Props> = ({
             Save & Exit
           </Button>
         }
-        {(pdpList?.length + 1 !== maxGoals || pdpList?.length + 1 > maxGoals) && (
+        {pdpList?.length + 1 !== maxGoals && pdpList?.length + 1 < maxGoals && (
           <Button
             isDisabled={!formState.isValid}
             onPress={() => {
-              saveAndCreate();
+              onChange(schemaLoaded, requestData, requestMethods.CREATE);
               reset(formElementsFilledEmpty);
             }}
             styles={[customBtn({ mobileScreen }), createBtn]}
@@ -249,6 +271,34 @@ const Form: FC<Props> = ({
     </React.Fragment>
   );
 };
+
+const goalListBlock = {
+  display: 'flex',
+  justifyContent: 'flex-start',
+  alignItems: 'center',
+  flexDirection: 'row',
+  paddingBottom: '32px',
+} as Rule;
+
+const goal = {
+  fontFamily: 'TESCO Modern", Arial, sans-serif',
+  fontSize: `${theme.font.fixed.f16}`,
+  fontStyle: 'normal',
+  fontWeight: `${theme.font.weight.bold}`,
+  lineHeight: '20px',
+  letterSpacing: '0px',
+  paddingRight: '16px',
+} as Rule;
+
+const defaultGoalItem = {
+  color: `${theme.colors.tescoBlue}`,
+  cursor: 'pointer',
+} as Rule;
+
+const activeGoalItem = {
+  color: `${colors.tescoLightBlue}`,
+  cursor: 'pointer',
+} as Rule;
 
 const imgArrow = {
   marginLeft: '15px',

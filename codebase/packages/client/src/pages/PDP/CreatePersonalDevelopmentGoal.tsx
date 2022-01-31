@@ -10,8 +10,7 @@ import useDispatch from 'hooks/useDispatch';
 import { buildPath } from 'features/Routes';
 import { Page } from 'pages';
 import { useParams } from 'react-router-dom';
-import NavTabs from 'features/PDP/components/NavTabs';
-import Form from 'features/PDP/components/NavTabs/Form';
+import Form from 'features/PDP/components/Form';
 
 const CreatePersonalDevelopmentGoal: FC = () => {
   const { css } = useStyle();
@@ -32,6 +31,12 @@ const CreatePersonalDevelopmentGoal: FC = () => {
 
   const [currentUUID, setUUID] = useState<string | undefined>(uuid);
   const [currentTab, setCurrentTab] = useState<number>(0);
+
+  enum METHODS {
+    SAVE = 'save',
+    UPDATE = 'update',
+    CREATE = 'create',
+  }
 
   useEffect(() => {
     if (schema.meta.loaded) {
@@ -56,6 +61,31 @@ const CreatePersonalDevelopmentGoal: FC = () => {
     }
   }, [pdpList]);
 
+  const onFormSubmit = (schemaLoaded, requestData, method) => {
+    if (method === METHODS.SAVE) {
+      dispatch(PDPActions.createPDPGoal({ data: requestData }));
+      if (schemaLoaded) navigate(buildPath(Page.PERSONAL_DEVELOPMENT_PLAN));
+    }
+
+    if (method === METHODS.UPDATE) {
+      dispatch(PDPActions.updatePDPGoal({ data: requestData }));
+      if (schemaLoaded) navigate(buildPath(Page.PERSONAL_DEVELOPMENT_PLAN));
+    }
+
+    if (method === METHODS.CREATE) {
+      if (currentUUID && currentGoal.uuid === currentUUID) {
+        dispatch(PDPActions.updatePDPGoal({ data: requestData }));
+        if (schemaLoaded) navigate(buildPath(Page.CREATE_PERSONAL_DEVELOPMENT_PLAN));
+      } else {
+        dispatch(PDPActions.createPDPGoal({ data: requestData }));
+      }
+
+      setCurrentGoal({});
+    }
+
+    return;
+  };
+
   return (
     <ModalWithHeader
       containerRule={templatesModalWindowStyles({ mobileScreen })}
@@ -67,16 +97,6 @@ const CreatePersonalDevelopmentGoal: FC = () => {
       }}
     >
       <div className={css(mainContainer)}>
-        {pdpList && (
-          <NavTabs
-            currentUUID={currentUUID}
-            maxGoals={maxGoalCount}
-            goalNum={pdpList?.length - 1}
-            goalList={pdpList}
-            currentGoal={currentGoal}
-            setCurrentGoal={setCurrentGoal}
-          />
-        )}
         <Form
           pdpGoals={pdpGoals}
           pdpList={pdpList}
@@ -86,10 +106,13 @@ const CreatePersonalDevelopmentGoal: FC = () => {
           formElements={formElements}
           confirmSaveModal={confirmSaveModal}
           maxGoals={maxGoalCount}
+          goalNum={pdpList?.length - 1}
           setConfirSavemModal={setConfirSavemModal}
           currentUUID={currentUUID}
           colleagueUuid={colleagueUuid}
           setCurrentGoal={setCurrentGoal}
+          onChange={onFormSubmit}
+          requestMethods={METHODS}
         />
       </div>
     </ModalWithHeader>
