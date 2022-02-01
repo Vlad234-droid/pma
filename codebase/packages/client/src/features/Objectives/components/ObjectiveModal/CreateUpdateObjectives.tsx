@@ -14,7 +14,7 @@ import {
 } from '@pma/store';
 import { createYupSchema } from 'utils/yup';
 import { ReviewType, Status } from 'config/enum';
-import { SuccessModal } from '../Modal';
+import SuccessModal from 'components/SuccessModal';
 import useReviewSchema from '../../hooks/useReviewSchema';
 import useReviews from '../../hooks/useReviews';
 import { ObjectiveModal } from './ObjectiveModal';
@@ -174,7 +174,13 @@ const CreateUpdateObjectives: FC<CreateUpdateObjectivesModalProps> = ({ onClose,
   const timelineObjective = useSelector(getTimelineByReviewTypeSelector(ReviewType.OBJECTIVE));
 
   if (timelineObjective?.status === Status.WAITING_FOR_APPROVAL && schemaLoaded && reviewLoaded) {
-    return <SuccessModal onClose={onClose} description={'Your objectives has been sent to your line manager.'} />;
+    return (
+      <SuccessModal
+        title='Objectives sent'
+        onClose={onClose}
+        description={'Your objectives has been sent to your line manager.'}
+      />
+    );
   }
 
   if ((!schemaLoaded && !reviewLoaded) || (reviewLoading && schemaLoading)) {

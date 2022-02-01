@@ -31,8 +31,6 @@ const Modal: FC<Props> = ({ review, status, onClose }) => {
     review === ReviewType.OBJECTIVE ? t('objectives', 'Objectives').toLowerCase() : reviewDescription;
   const approveDescription = `${t('you_have_approved', "You have approved your colleague's")} ${typeDescription}.`;
 
-  console.log('typeDescription', typeDescription);
-
   return (
     <SuccessModal
       title={title}

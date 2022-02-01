@@ -14,7 +14,7 @@ import {
   LINE_MANAGER,
   PROCESS_MANAGER,
 } from 'features/Permission';
-import { useTranslation } from 'components/Translation';
+import { Trans, useTranslation } from 'components/Translation';
 import { MenuItem } from 'components/MenuItem';
 import TescoLogo from './TescoLogo.svg';
 import { Icon } from '../Icon';
@@ -162,7 +162,7 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
         <ConfirmModal
           title={''}
           description={t('are_you_sure_you_want_to_log_out', 'Are you sure you want to log out?')}
-          submitBtnTitle={t('confirm', 'Confirm')}
+          submitBtnTitle={<Trans i18nKey='confirm'>Confirm</Trans>}
           onSave={handleSignOutConfirm}
           onCancel={() => setIsOpen(false)}
           onOverlayClick={() => setIsOpen(false)}

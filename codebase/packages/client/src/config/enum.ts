@@ -77,3 +77,10 @@ export enum VoiceType {
   'id_3' = 'Informative and detailed',
   'id_4' = 'I don`t have a preference',
 }
+
+export enum Rating {
+  BELOW_EXPECTED = 'Below expected',
+  SATISFACTORY = 'Satisfactory',
+  GREAT = 'Great',
+  OUTSTANDING = 'Outstanding',
+}

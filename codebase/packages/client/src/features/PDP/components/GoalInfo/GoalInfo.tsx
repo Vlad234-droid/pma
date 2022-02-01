@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Button, CreateRule, Rule, theme, useStyle } from '@dex-ddl/core';
-import { Accordion, BaseAccordion, ExpandButton, Panel, Section } from '../../../../components/Accordion';
-import { ConfirmModal } from '../../../Modal';
-import { Icon } from '../../../../components/Icon';
+import { Button, CreateRule, Rule, theme, Theme, useStyle } from '@dex-ddl/core';
+import { Accordion, BaseAccordion, ExpandButton, Panel, Section } from 'components/Accordion';
+import { ConfirmModal } from 'features/Modal';
+import { Icon } from 'components/Icon';
+import { Trans } from 'components/Translation';
 
 const GoalInfo = (props) => {
   const { id, title, subtitle, description, data, formElements, deleteGoal, editGoal } = props;
@@ -17,7 +18,7 @@ const GoalInfo = (props) => {
         <ConfirmModal
           title={'Are you sure you want to delete this goal?'}
           description={'This is permanent and cannot be undone.'}
-          submitBtnTitle={'Delete'}
+          submitBtnTitle={<Trans i18nKey='delete'>Delete</Trans>}
           onSave={() => {
             deleteGoal(id);
             setConfirmDelete(false);

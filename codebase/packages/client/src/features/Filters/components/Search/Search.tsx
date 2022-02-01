@@ -36,12 +36,14 @@ const Search: FC<Props> = ({ focus, onFocus, iconStyles, onSearch, value }) => {
           name='search-input'
           value={focus ? value : ''}
           onChange={onSearch}
+          placeholder={focus ? 'Search keyword' : ''}
           customStyles={{
             ...(focus ? { padding: '10px 20px 10px 16px' } : { padding: '0px' }),
             ...(focus ? { borderRadius: '50px' } : { transitionDelay: '.3s' }),
             background: '#F6F6F6',
             height: '38px',
             border: '1px solid rgb(0, 83, 159)',
+            cursor: 'pointer',
             ...(!focus && { borderRadius: '50%', padding: '0px' }),
           }}
           onFocus={onFocus}

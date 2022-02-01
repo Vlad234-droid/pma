@@ -9,12 +9,22 @@ export type ConfirmModal = {
   onCancel: () => void;
   onSave: () => void;
   onOverlayClick?: () => void;
-  submitBtnTitle?: string;
+  submitBtnTitle?: JSX.Element;
+  canSubmit?: boolean;
 };
 
 type Props = HTMLProps<HTMLInputElement> & ConfirmModal;
 
-const ConfirmModal: FC<Props> = ({ title, description, onCancel, onSave, onOverlayClick, submitBtnTitle }) => {
+const ConfirmModal: FC<Props> = ({
+  title,
+  description,
+  onCancel,
+  onSave,
+  onOverlayClick,
+  submitBtnTitle = <Trans i18nKey='submit'>Submit</Trans>,
+  canSubmit = true,
+  children,
+}) => {
   const { theme, css } = useStyle();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
@@ -44,7 +54,7 @@ const ConfirmModal: FC<Props> = ({ title, description, onCancel, onSave, onOverl
           {description}
         </div>
       )}
-
+      {children}
       <div
         className={css({
           display: 'flex',
@@ -69,6 +79,7 @@ const ConfirmModal: FC<Props> = ({ title, description, onCancel, onSave, onOverl
           <Trans i18nKey='cancel'>Cancel</Trans>
         </Button>
         <Button
+          isDisabled={!canSubmit}
           styles={[
             {
               background: `${theme.colors.tescoBlue}`,
@@ -78,10 +89,11 @@ const ConfirmModal: FC<Props> = ({ title, description, onCancel, onSave, onOverl
               width: '50%',
               margin: '0px 4px 1px 4px',
             },
+            !canSubmit ? { opacity: '0.6' } : {},
           ]}
           onPress={onSave}
         >
-          {submitBtnTitle || <Trans i18nKey='submit'>Submit</Trans>}
+          {submitBtnTitle}
         </Button>
       </div>
     </Modal>

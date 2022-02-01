@@ -3,7 +3,7 @@ import { useStyle, colors, Styles, Rule } from '@dex-ddl/core';
 import mergeRefs from 'react-merge-refs';
 import debounce from 'lodash.debounce';
 import { useRefContainer } from 'components/Form/context/input';
-import { Close } from 'components/Icon/graphics/Close';
+import { Close } from 'components/Icon/graphics/close';
 
 type Props<T> = {
   disabled?: boolean;
