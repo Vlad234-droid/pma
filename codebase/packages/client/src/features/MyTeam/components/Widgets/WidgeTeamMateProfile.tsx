@@ -79,15 +79,7 @@ export const WidgetTeamMateProfile: FC<WidgetTeamMateProfileProps> = ({
                     <div className={css({ marginLeft: 'auto', display: 'flex', alignItems: 'center' })}>
                       <div className={css({ padding: '12px 12px' })}>
                         {rating ? (
-                          <span
-                            className={css({
-                              fontSize: '16px',
-                              lineHeight: '20px',
-                              color: colors.tescoBlue,
-                            })}
-                          >
-                            {rating}
-                          </span>
+                          <span className={css(ratingStyle)}>{rating}</span>
                         ) : (
                           <button
                             onClick={() => viewUserObjectives(employee.uuid)}
@@ -151,6 +143,12 @@ const wrapperStyle: Rule = {
   padding: '24px',
   display: 'flex',
 };
+
+const ratingStyle: Rule = ({ theme }) => ({
+  fontSize: theme.spacing.s4,
+  lineHeight: '20px',
+  color: theme.colors.tescoBlue,
+});
 
 const reviewItem: Rule = {
   display: 'inline-block',

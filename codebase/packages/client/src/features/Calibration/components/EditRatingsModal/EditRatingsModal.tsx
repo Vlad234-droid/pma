@@ -96,7 +96,7 @@ const EditRatingsModal: FC<Props> = ({ employee, onClose, onSave }) => {
 
 export default EditRatingsModal;
 
-const Label: Rule = ({ theme }) =>
+const Label = ({ theme }) =>
   ({
     fontSize: `${theme.font.fixed.f16.fontSize}`,
     lineHeight: `${theme.font.fixed.f18.lineHeight}`,

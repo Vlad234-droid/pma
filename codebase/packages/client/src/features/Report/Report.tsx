@@ -18,7 +18,7 @@ import { InfoTable, FilterModal } from './components';
 import { DonwloadReportModal } from './Modals';
 import { Trans } from 'components/Translation';
 import { BASE_URL_API } from 'config/constants';
-import { Status , Rating } from '../../config/enum';
+import { Status, Rating } from '../../config/enum';
 
 const Report: FC = () => {
   const dispatch = useDispatch();

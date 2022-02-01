@@ -45,7 +45,7 @@ const main = {
 } as Rule;
 
 const templatesListStyles: Rule = ({ theme }) => ({
-  margin: '25px 0 0',
+  margin: '0px',
   height: '100%',
 });
 
@@ -71,7 +71,7 @@ const descriptionText: CreateRule<{ theme: Theme }> = (props) => {
   return {
     fontSize: `${theme.font.fixed.f18}`,
     lineHeight: '22px',
-    paddingBottom: '32px',
+    paddingBottom: '16px',
   };
 };
 

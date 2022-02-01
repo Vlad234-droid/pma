@@ -70,7 +70,7 @@ const CompareModal: FC<Props> = ({ onClose, onSave, mode, options }) => {
 
 export default CompareModal;
 
-const Label: Rule = ({ theme }) =>
+const Label = ({ theme }) =>
   ({
     fontSize: `${theme.font.fixed.f18.fontSize}`,
     lineHeight: `${theme.font.fixed.f18.lineHeight}`,
