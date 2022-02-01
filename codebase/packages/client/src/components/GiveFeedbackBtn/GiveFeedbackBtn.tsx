@@ -41,9 +41,9 @@ const iconBtnStyle: Rule = ({ theme }) => ({
   color: theme.colors.white,
   cursor: 'pointer',
   width: '176px',
-  border: '1px solid #00539F',
+  border: `1px solid ${theme.colors.link}`,
   whiteSpace: 'nowrap',
-  marginLeft: 'auto',
-  marginRight: '24px',
+  // marginLeft: 'auto',
+  // marginRight: '24px',
   fontWeight: 'bold',
 });

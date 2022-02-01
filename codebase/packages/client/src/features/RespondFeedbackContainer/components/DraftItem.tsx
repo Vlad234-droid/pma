@@ -164,7 +164,9 @@ const DraftItem: FC<DraftItemProps> = ({
                           <></>
                         ) : (
                           checkedRadio.pending && (
-                            <GiveFeedbackBtn onClick={() => handleFeedbackBtnClick(item)}/>
+                            <div className={css(wrapperBtnStyle)}>
+                              <GiveFeedbackBtn onClick={() => handleFeedbackBtnClick(item)}/>
+                            </div>
                           )
                         )}
                       </Panel>
@@ -195,6 +197,7 @@ const ImgStyle: Rule = {
   height: '48px',
   borderRadius: '50%',
 };
+
 const NamesStyle: Rule = {
   fontWeight: 'bold',
   fontSize: '18px',
@@ -202,11 +205,17 @@ const NamesStyle: Rule = {
   margin: '0px',
   color: '#00539F',
 };
+
 const IndustryStyle: Rule = {
   fontWeight: 'normal',
   fontSize: '16px',
   lineHeight: '20px',
   margin: '4px 0px 0px 0px',
 };
+
+const wrapperBtnStyle: Rule = ({
+  marginLeft: 'auto',
+  marginRight: '24px',
+});
 
 export default DraftItem;

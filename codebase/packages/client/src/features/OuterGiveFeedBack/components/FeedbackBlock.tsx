@@ -119,9 +119,11 @@ const FeedbackBlock: FC<Props> = ({ list, canEdit }) => {
                           </div>
                         </TileWrapper>
                         {canEdit && (
-                          <GiveFeedbackBtn onClick={() =>
-                            navigate(paramsReplacer(`/${Page.GIVE_NEW_FEEDBACK}`, { ':uuid': item.uuid }))
-                          }/>
+                          <div className={css(wrapperBtnStyle)}>
+                            <GiveFeedbackBtn onClick={() =>
+                              navigate(paramsReplacer(`/${Page.GIVE_NEW_FEEDBACK}`, { ':uuid': item.uuid }))
+                            }/>
+                          </div>
                         )}
                       </Panel>
                     </Section>
@@ -182,25 +184,8 @@ const infoBlockStyle: Rule = {
   },
 } as Styles;
 
-const iconBtnStyle: Rule = ({ theme }) => ({
-  padding: '12px 20px 12px 22px',
-  display: 'flex',
-  height: '40px',
-  borderRadius: '20px',
-  justifyContent: 'center',
-  alignItems: 'center',
-  outline: 0,
-  background: theme.colors.white,
-  color: theme.colors.tescoBlue,
-  cursor: 'pointer',
-  width: '176px',
-  border: '1px solid #00539F',
-  whiteSpace: 'nowrap',
+const wrapperBtnStyle: Rule = ({
   marginLeft: 'auto',
-  marginTop: '24px',
 });
 
-const iconStyle: Rule = {
-  marginRight: '12px',
-};
 export default FeedbackBlock;
