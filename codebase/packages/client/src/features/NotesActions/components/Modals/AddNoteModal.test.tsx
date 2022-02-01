@@ -4,9 +4,8 @@ import { renderWithTheme } from '../../../../utils/test';
 import '@testing-library/jest-dom';
 import { fireEvent, waitFor } from '@testing-library/react';
 import { ADD_NOTE_MODAL_WRAPPER } from './AddNoteModal';
-import NotesActions from '../../NotesActions';
 
-import { PLUS_BUTTON, PLUS_PERSONAL_NOTE } from '../../NotesActions';
+import NotesActions, { PLUS_BUTTON, PLUS_PERSONAL_NOTE } from '../../NotesActions';
 
 jest.mock('react-markdown', () => ({ ReactMarkdown: () => 'mocked ReactMarkdown' }));
 
