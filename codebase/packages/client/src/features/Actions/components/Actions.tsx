@@ -75,6 +75,7 @@ export const Actions = () => {
 
   // @ts-ignore
   const { employeeWithPendingApprovals, employeeWithCompletedApprovals } =
+    //@ts-ignore
     useSelector((state) => getPendingEmployees(state, searchValue, sortValue), shallowEqual) || {};
 
   const { loaded } = useSelector(getManagersMetaSelector) || {};
