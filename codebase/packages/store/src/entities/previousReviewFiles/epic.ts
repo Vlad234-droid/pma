@@ -4,6 +4,7 @@ import { combineEpics } from 'redux-observable';
 import { from, of } from 'rxjs';
 import { catchError, filter, map, switchMap, takeUntil } from 'rxjs/operators';
 import { getPreviousReviewFiles, uploadFile } from './actions';
+import { concatWithErrorToast, errorPayloadConverter } from '../../utils/toastHelper';
 
 export const getPreviousReviewFilesEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
@@ -13,7 +14,10 @@ export const getPreviousReviewFilesEpic: Epic = (action$, _, { api }) =>
         map(getPreviousReviewFiles.success),
         catchError((e) => {
           const errors = e?.data?.errors;
-          return of(getPreviousReviewFiles.failure(errors?.[0]));
+          return concatWithErrorToast(
+            of(getPreviousReviewFiles.failure(errors?.[0])),
+            errorPayloadConverter({ ...errors?.[0], title: 'Previous review file fetch error' }),
+          );
         }),
         takeUntil(action$.pipe(filter(isActionOf(getPreviousReviewFiles.cancel)))),
       ),
@@ -46,7 +50,10 @@ export const uploadFileEpic: Epic = (action$, _, { api }) =>
         map(getPreviousReviewFiles.request),
         catchError((e) => {
           const errors = e?.data?.errors;
-          return of(uploadFile.failure(errors?.[0]));
+          return concatWithErrorToast(
+            of(uploadFile.failure(errors?.[0])),
+            errorPayloadConverter({ ...errors?.[0], title: 'Upload file error' }),
+          );
         }),
         takeUntil(action$.pipe(filter(isActionOf(uploadFile.cancel)))),
       );

@@ -4,6 +4,7 @@ import { combineEpics } from 'redux-observable';
 import { from, of } from 'rxjs';
 import { catchError, filter, map, switchMap, takeUntil } from 'rxjs/operators';
 import { getProcessTemplate, getProcessTemplateMetadata, uploadProcessTemplate } from './actions';
+import { concatWithErrorToast, errorPayloadConverter } from '../../utils/toastHelper';
 
 export const getProcessTemplateEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
@@ -13,7 +14,10 @@ export const getProcessTemplateEpic: Epic = (action$, _, { api }) =>
         map(getProcessTemplate.success),
         catchError((e) => {
           const errors = e?.data?.errors;
-          return of(getProcessTemplate.failure(errors?.[0]));
+          return concatWithErrorToast(
+            of(getProcessTemplate.failure(errors?.[0])),
+            errorPayloadConverter({ ...errors?.[0], title: 'Process template fetch error' }),
+          );
         }),
         takeUntil(action$.pipe(filter(isActionOf(getProcessTemplate.cancel)))),
       ),
@@ -35,7 +39,10 @@ export const getProcessTemplateMetadataEpic: Epic = (action$, _, { api }) =>
         map(({ data }) => getProcessTemplateMetadata.success({ data, fileUuid: payload.fileUuid })),
         catchError((e) => {
           const errors = e?.data?.errors;
-          return of(getProcessTemplateMetadata.failure(errors?.[0]));
+          return concatWithErrorToast(
+            of(getProcessTemplateMetadata.failure(errors?.[0])),
+            errorPayloadConverter({ ...errors?.[0], title: 'Process template metadata fetch error' }),
+          );
         }),
         takeUntil(action$.pipe(filter(isActionOf(getProcessTemplateMetadata.cancel)))),
       ),

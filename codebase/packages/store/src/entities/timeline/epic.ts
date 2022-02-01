@@ -4,6 +4,7 @@ import { combineEpics } from 'redux-observable';
 import { from, of } from 'rxjs';
 import { catchError, filter, map, switchMap, takeUntil } from 'rxjs/operators';
 import { getTimeline } from './actions';
+import { concatWithErrorToast, errorPayloadConverter } from '../../utils/toastHelper';
 
 export const getTimelineEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
@@ -13,7 +14,10 @@ export const getTimelineEpic: Epic = (action$, _, { api }) =>
         map(getTimeline.success),
         catchError((e) => {
           const errors = e?.data?.errors;
-          return of(getTimeline.failure(errors?.[0]));
+          return concatWithErrorToast(
+            of(getTimeline.failure(errors?.[0])),
+            errorPayloadConverter({ ...errors?.[0], title: 'Timeline fetch error' }),
+          );
         }),
         takeUntil(action$.pipe(filter(isActionOf(getTimeline.cancel)))),
       ),

@@ -1,4 +1,5 @@
 import { createAction } from 'typesafe-actions';
+import { v4 as uuid } from 'uuid';
 
 export enum Variant {
   ERROR = 'error',
@@ -20,3 +21,24 @@ export const Actions = {
   addToast: addToast,
   removeToast: removeToast,
 };
+
+export type ToastFabricPayload = {
+  id?: string;
+  title?: string;
+  description?: string;
+};
+
+export const addToastFabric = ({ id, title, description }: ToastFabricPayload) => ({
+  error: addToast({
+    id: id ?? uuid(),
+    variant: Variant.ERROR,
+    title: title ?? 'Error',
+    description: description ?? 'Something going wrong',
+  }),
+  success: addToast({
+    id: id ?? uuid(),
+    variant: Variant.SUCCESS,
+    title: title ?? 'Success',
+    description: description ?? 'N/A',
+  }),
+});
