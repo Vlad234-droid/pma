@@ -264,7 +264,6 @@ const bodyStyle: Rule = {
 
 const btnStyle = ({ theme, isManagerShared }) => ({
   fontSize: '14px',
-  fontWeight: 'bold',
   color: isManagerShared ? theme.colors.tescoRed : theme.colors.tescoBlue,
   height: '30px',
   background: 'transparent',
