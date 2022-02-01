@@ -45,7 +45,6 @@ export const WidgetObjectiveApproval: FC<WidgetObjectiveApprovalProps> = ({
     if (reviewSubmitted && loaded && allReviewsProcessed) {
       setIsOpenSuccessModal(true);
     }
-
   }, [loaded, reviewSubmitted, allReviewsProcessed]);
 
   useEffect(() => {
@@ -108,6 +107,8 @@ export const WidgetObjectiveApproval: FC<WidgetObjectiveApprovalProps> = ({
   const updateReviewStatus = useCallback(
     (status: Status) => (reasons?: (string | null)[]) => {
       reviewsForApproval?.forEach((colleague, index) => {
+        const currentTimeline = colleague?.timeline.filter(filterApprovedFn);
+
         if ((reasons && !reasons[index] && currentTimeline![0].reviewType === ReviewType.OBJECTIVE) || !currentTimeline)
           return;
 
@@ -124,9 +125,7 @@ export const WidgetObjectiveApproval: FC<WidgetObjectiveApprovalProps> = ({
             ...(reasons ? { reason: reasons[index] as string } : {}),
             status,
             colleagueUuid: colleague.uuid,
-            reviews: colleague.reviews.filter(
-              ({ status, type }) => status === Status.WAITING_FOR_APPROVAL && type === timeline.reviewType,
-            ),
+            reviews: colleague.reviews.filter(({ status }) => status === Status.WAITING_FOR_APPROVAL),
           },
         };
 
@@ -142,7 +141,7 @@ export const WidgetObjectiveApproval: FC<WidgetObjectiveApprovalProps> = ({
 
       setAllReviewsProcessed(true);
     },
-    [reviewsForApproval, currentTimeline],
+    [reviewsForApproval],
   );
 
   const approveColleagues = updateReviewStatus(Status.APPROVED);
@@ -230,7 +229,7 @@ export const WidgetObjectiveApproval: FC<WidgetObjectiveApprovalProps> = ({
       </TileWrapper>
       {isOpenSuccessModal && (
         <SuccessModal
-          status={reviewSubmitted as Status}
+          status={reviewSubmitted as Status.DECLINED | Status.APPROVED}
           review={reviewType as ReviewType}
           onClose={handleCloseSuccessModal}
         />

@@ -136,7 +136,7 @@ const MyObjectives: FC = () => {
   useEffect(() => {
     if (colleagueUuid && canShowObjectives) {
       dispatch(
-        ReviewsActions.getReviews({ pathParams: { colleagueUuid, type: ReviewType.OBJECTIVE, cycleUuid: 'CURRENT' } }),
+        ReviewsActions.getColleagueReviews({ pathParams: { colleagueUuid: colleagueUuid, cycleUuid: 'CURRENT' } }),
       );
     }
   }, [colleagueUuid, canShowObjectives]);

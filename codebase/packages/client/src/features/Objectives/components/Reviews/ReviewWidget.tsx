@@ -56,8 +56,8 @@ const getContent = (
       t('view', 'View'),
     ],
     [Status.DECLINED]: [
-      'roundPencil',
-      'base',
+      'roundAlert',
+      'error',
       'white',
       true,
       true,

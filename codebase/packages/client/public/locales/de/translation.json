@@ -92,8 +92,8 @@
   "time_to_approve_or_decline": "It’s time to review your colleague’s objectives and / or reviews",
   "mid_year_review_help_text": "Use this to capture a summary of the mid-year conversation you’ve had with your line manager. Remember to focus as much on your how as your what.",
   "end_year_review_help_text": "Use this to capture a summary of the end-year conversation you’ve had with your line manager. Remember to focus as much on your how as your what.",
-  "mid_year_review_sent_to_manager": "Your mid-year review has been sent to your line manager.",
-  "end_year_review_sent_to_manager": "Your year-end review has been sent to your line manager.",
+  "myr_review_sent_to_manager": "Your mid-year review has been sent to your line manager.",
+  "eyr_review_sent_to_manager": "Your year-end review has been sent to your line manager.",
   "review_widget_saved_as_draft": "Your form is currently saved as a draft",
   "mid_year_review_title": "How is your year going so far?",
   "end_year_review_title": "What have you contributed this year and how have you gone about it?",
@@ -112,9 +112,10 @@
   "objective_decline_reason_prefix": "Your objective was declined because it was not:",
   "colleague_requested_feedback": "This colleague has requested feedback from you. Fill out the questions below to share your feedback.",
   "you_have_rejected": "You’ve rejected this form as it doesn’t reflect the conversation you had with your colleague. Please pick up with them directly to discuss more.",
-  "you_have_approved": "You have approved",
+  "you_have_approved": "You have approved your colleague's",
   "review": "Review",
   "review_type_description_objective": "Objective {{num}}",
   "review_type_description_eyr": "Year-end review",
-  "review_type_description_myr": "Mid-year review"
+  "review_type_description_myr": "Mid-year review",
+  "objectives_and_or_reviews": "objectives and / or reviews"
 }
