@@ -77,13 +77,24 @@ const Filtering: FC<Props> = ({ iconStyles, isOpen, onClick, onClose, filterOpti
                 <div key={index} className={css({ cursor: 'pointer', marginTop: '10px' })}>
                   <label style={{ display: 'flex', alignItems: 'center' }}>
                     {item.multi ? (
-                      <Checkbox id={option} name={option} checked={filters[item.id][option]} onChange={() => handleChangeMulti(item.id, option)} />
+                      <Checkbox
+                        id={option}
+                        name={option}
+                        checked={filters[item.id][option]}
+                        onChange={() => handleChangeMulti(item.id, option)}
+                      />
                     ) : (
-                      <Radio key={index} id={option} name={option} checked={filters[item.id] === option} onChange={() => handleChangeSingle(item.id, option)} />
+                      <Radio
+                        key={index}
+                        id={option}
+                        name={option}
+                        checked={filters[item.id] === option}
+                        onChange={() => handleChangeSingle(item.id, option)}
+                      />
                     )}
                     <span className={css({ fontSize: '16px', lineHeight: '20px', padding: '0px 5px' })}>
-                        <Trans>{option}</Trans>
-                      </span>
+                      <Trans>{option}</Trans>
+                    </span>
                   </label>
                 </div>
               ))}
@@ -97,11 +108,7 @@ const Filtering: FC<Props> = ({ iconStyles, isOpen, onClick, onClose, filterOpti
           <div className={css({ padding: '16px 0' })}>
             <div className={css(titleStyle)}>Filter results</div>
             <div className={css({ display: 'flex', alignItems: 'center', justifyContent: 'space-between' })}>
-              <Button
-                mode='inverse'
-                styles={[buttonStyle]}
-                onPress={handleClearAll}
-              >
+              <Button mode='inverse' styles={[buttonStyle]} onPress={handleClearAll}>
                 Clear All
               </Button>
               <IconButton
@@ -111,7 +118,9 @@ const Filtering: FC<Props> = ({ iconStyles, isOpen, onClick, onClose, filterOpti
                 iconPosition={Position.RIGHT}
                 iconStyles={iconStyle}
                 onPress={HandleFilterApply}
-              >Filter</IconButton>
+              >
+                Filter
+              </IconButton>
             </div>
           </div>
         </div>
@@ -134,12 +143,11 @@ const blockStyle: Rule = () => {
   };
 };
 
-const buttonStyle: Rule =
-  ({ theme }) => ({
-    border: `1px solid ${theme.colors.tescoBlue}`,
-    width: '50%',
-    marginRight: '8px',
-  });
+const buttonStyle: Rule = ({ theme }) => ({
+  border: `1px solid ${theme.colors.tescoBlue}`,
+  width: '50%',
+  marginRight: '8px',
+});
 
 const iconBtnStyle: Rule = ({ theme }) => ({
   width: '50%',

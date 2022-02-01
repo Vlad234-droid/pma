@@ -10,9 +10,7 @@ jest.mock('../EditRatingsModal', () => {
   return {
     __esModule: true,
     default: ({ onSave }) => {
-      return (
-        <div onClick={onSave}>mocked_ratings_modal</div>
-      );
+      return <div onClick={onSave}>mocked_ratings_modal</div>;
     },
   };
 });
@@ -25,7 +23,7 @@ jest.mock('features/MyTeam', () => {
     },
     ColleagueInfo: () => {
       return <div>mocked_colleague_info</div>;
-    }
+    },
   };
 });
 

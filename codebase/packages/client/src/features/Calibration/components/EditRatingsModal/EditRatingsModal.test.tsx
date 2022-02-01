@@ -11,7 +11,7 @@ jest.mock('features/MyTeam', () => {
     __esModule: true,
     ColleagueInfo: () => {
       return <div>mocked_colleague_info</div>;
-    }
+    },
   };
 });
 

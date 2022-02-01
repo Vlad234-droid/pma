@@ -16,7 +16,15 @@ export type Props = {
 
 export const TEST_ID = 'secondary-widget';
 
-const SecondaryWidget: FC<Props> = ({ iconGraphic, title, data, description, customStyle, onClick, withButton = true }) => {
+const SecondaryWidget: FC<Props> = ({
+  iconGraphic,
+  title,
+  data,
+  description,
+  customStyle,
+  onClick,
+  withButton = true,
+}) => {
   const { css, theme } = useStyle();
 
   return (

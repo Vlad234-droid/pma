@@ -41,11 +41,7 @@ const Colleagues: FC<Props> = ({ colleagues, editMode, onSave }) => {
   return (
     <div data-test-id='calibration-colleagues'>
       {currentEmployee && (
-        <EditRatingsModal
-          employee={currentEmployee}
-          onClose={handleCloseModal}
-          onSave={handleSaveChanges}
-        />
+        <EditRatingsModal employee={currentEmployee} onClose={handleCloseModal} onSave={handleSaveChanges} />
       )}
       <div className={css({ marginBottom: '16px', cursor: editMode ? 'pointer' : 'default' })}>
         {colleagues.map((employee) => (

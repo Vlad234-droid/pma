@@ -16,17 +16,20 @@ jest.mock('../Colleagues', () => {
 });
 
 describe('<Calibration />', () => {
-  const filterOptions = [{
-    options: ['11', '12', '13'],
-    title: 'mocked_option_title_1',
-    multi: true,
-    id: 'mocked_id_1',
-  }, {
-    options: ['21', '22', '23'],
-    title: 'mocked_option_title_2',
-    multi: false,
-    id: 'mocked_id_2',
-  }];
+  const filterOptions = [
+    {
+      options: ['11', '12', '13'],
+      title: 'mocked_option_title_1',
+      multi: true,
+      id: 'mocked_id_1',
+    },
+    {
+      options: ['21', '22', '23'],
+      title: 'mocked_option_title_2',
+      multi: false,
+      id: 'mocked_id_2',
+    },
+  ];
   const props = {
     colleagueUuid: 'mocked_uuid',
     loadData: jest.fn(),
@@ -65,7 +68,7 @@ describe('<Calibration />', () => {
     it('should render colleagues, if they are provided in props.colleagues', () => {
       const newProps = {
         ...props,
-        colleagues: [generateEmployeeReview()]
+        colleagues: [generateEmployeeReview()],
       };
 
       const { getByText } = render(<Calibration {...newProps} />);
@@ -120,7 +123,7 @@ describe('<Calibration />', () => {
     it('should handle click on edit calibration widget', () => {
       const newProps = {
         ...props,
-        colleagues: [generateEmployeeReview()]
+        colleagues: [generateEmployeeReview()],
       };
 
       const { getByText, getByTestId } = render(<Calibration {...newProps} />);
@@ -137,7 +140,7 @@ describe('<Calibration />', () => {
     it('should handle click on compare calibration widget', () => {
       const newProps = {
         ...props,
-        colleagues: [generateEmployeeReview()]
+        colleagues: [generateEmployeeReview()],
       };
       const { getByText, getByTestId, queryByTestId, queryByText } = render(<Calibration {...newProps} />);
 

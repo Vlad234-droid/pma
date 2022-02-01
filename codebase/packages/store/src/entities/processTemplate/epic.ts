@@ -53,7 +53,7 @@ export const uploadProcessTemplateEpic: Epic = (action$, _, { api }) =>
             path: `cycles`,
             fileName: file.name,
             type: {
-              id: "1",
+              id: '1',
               code: 'BPMN',
               description: 'Business Process Model file',
             },
@@ -74,8 +74,4 @@ export const uploadProcessTemplateEpic: Epic = (action$, _, { api }) =>
     }),
   );
 
-export default combineEpics(
-  getProcessTemplateEpic,
-  getProcessTemplateMetadataEpic,
-  uploadProcessTemplateEpic,
-);
+export default combineEpics(getProcessTemplateEpic, getProcessTemplateMetadataEpic, uploadProcessTemplateEpic);

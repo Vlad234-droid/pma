@@ -2,7 +2,14 @@ import React, { FC, useEffect, useState } from 'react';
 import { shallowEqual, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Rule, useStyle } from '@dex-ddl/core';
-import { colleagueUUIDSelector, getAllEmployees, getAllEmployeesWithManagerSearch, getPendingEmployees, ManagersActions, getManagersMetaSelector } from '@pma/store';
+import {
+  colleagueUUIDSelector,
+  getAllEmployees,
+  getAllEmployeesWithManagerSearch,
+  getPendingEmployees,
+  ManagersActions,
+  getManagersMetaSelector,
+} from '@pma/store';
 
 import { RouterSwitch } from 'components/RouterSwitch';
 import {
@@ -98,15 +105,16 @@ const MyTeam: FC = () => {
               </Link>
             )}
             <div className={css(allColleagues)}>
-              {loaded && colleagues.map((employee: Employee) => (
-                <WidgetTeamMateProfile
-                  fullTeamView={isFullTeamView}
-                  key={employee.uuid}
-                  uuid={employee.uuid}
-                  status={getLastTimelineStatus(employee)}
-                  employee={employee}
-                />
-              ))}
+              {loaded &&
+                colleagues.map((employee: Employee) => (
+                  <WidgetTeamMateProfile
+                    fullTeamView={isFullTeamView}
+                    key={employee.uuid}
+                    uuid={employee.uuid}
+                    status={getLastTimelineStatus(employee)}
+                    employee={employee}
+                  />
+                ))}
             </div>
           </div>
         </div>

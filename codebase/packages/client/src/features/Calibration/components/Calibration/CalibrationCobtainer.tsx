@@ -1,9 +1,9 @@
-import React, {FC, useState} from 'react';
+import React, { FC, useState } from 'react';
 import { shallowEqual, useSelector } from 'react-redux';
 import { colleagueUUIDSelector, getAllEmployees, ManagersActions } from '@pma/store';
 
 import useDispatch from 'hooks/useDispatch';
-import {FilterOption, FilterValues} from 'features/Filters';
+import { FilterOption, FilterValues } from 'features/Filters';
 
 import Calibration from './Calibration';
 import { getMockFilterOptions } from '../../mock';

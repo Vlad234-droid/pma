@@ -1,63 +1,61 @@
 import { Rating } from 'config/enum';
 
-export const getMockFilterOptions = () => (
-  [
-    {
-      id: 0,
-      options: ['Names A-Z', 'Names Z-A'],
-      title: 'Sort by',
-      multi: false,
-    },
-    {
-      id: 1,
-      options: ['Colleagues', 'Work level 1', 'Work level 2'],
-      title: 'Work level',
-      multi: true,
-    },
-    {
-      id: 2,
-      options: ['Name 1', 'Name 2', 'Name 3'],
-      title: 'Line manager',
-      multi: true,
-    },
-    {
-      id: 3,
-      options: ['F 1', 'F 2', 'F 3'],
-      title: 'Function',
-      multi: true,
-    },
-    {
-      id: 4,
-      options: ['F 1', 'F 2', 'F 3'],
-      title: 'Department',
-      multi: true,
-    },
-    {
-      id: 5,
-      options: ['F 1', 'F 2', 'F 3'],
-      title: 'Job title',
-      multi: true,
-    },
-    {
-      id: 6,
-      options: ['F 1', 'F 2', 'F 3'],
-      title: 'Rating',
-      multi: true,
-    },
-    {
-      id: 7,
-      options: ['F 1', 'F 2', 'F 3'],
-      title: 'Store',
-      multi: true,
-    },
-    {
-      id: 8,
-      options: ['F 1', 'F 2', 'F 3'],
-      title: 'Operational areas',
-      multi: true,
-    }
-  ]
-);
+export const getMockFilterOptions = () => [
+  {
+    id: 0,
+    options: ['Names A-Z', 'Names Z-A'],
+    title: 'Sort by',
+    multi: false,
+  },
+  {
+    id: 1,
+    options: ['Colleagues', 'Work level 1', 'Work level 2'],
+    title: 'Work level',
+    multi: true,
+  },
+  {
+    id: 2,
+    options: ['Name 1', 'Name 2', 'Name 3'],
+    title: 'Line manager',
+    multi: true,
+  },
+  {
+    id: 3,
+    options: ['F 1', 'F 2', 'F 3'],
+    title: 'Function',
+    multi: true,
+  },
+  {
+    id: 4,
+    options: ['F 1', 'F 2', 'F 3'],
+    title: 'Department',
+    multi: true,
+  },
+  {
+    id: 5,
+    options: ['F 1', 'F 2', 'F 3'],
+    title: 'Job title',
+    multi: true,
+  },
+  {
+    id: 6,
+    options: ['F 1', 'F 2', 'F 3'],
+    title: 'Rating',
+    multi: true,
+  },
+  {
+    id: 7,
+    options: ['F 1', 'F 2', 'F 3'],
+    title: 'Store',
+    multi: true,
+  },
+  {
+    id: 8,
+    options: ['F 1', 'F 2', 'F 3'],
+    title: 'Operational areas',
+    multi: true,
+  },
+];
 
 export const getCompareOptions = (t) => [
   {
@@ -124,17 +122,17 @@ export const getCompareData = (compareMode: string) => {
   ];
 
   return data.map((item) => ({
-    'name': item.name,
-    [compareMode]: item[compareMode]
+    name: item.name,
+    [compareMode]: item[compareMode],
   }));
 };
 
-export const getRatingsOptions = () => ([
+export const getRatingsOptions = () => [
   { value: Rating.OUTSTANDING, label: Rating.OUTSTANDING },
   { value: Rating.GREAT, label: Rating.GREAT },
   { value: Rating.SATISFACTORY, label: Rating.SATISFACTORY },
   { value: Rating.BELOW_EXPECTED, label: Rating.BELOW_EXPECTED },
-]);
+];
 
 export const getRatingValues = () => ({
   [Rating.BELOW_EXPECTED]: 1,

@@ -79,11 +79,13 @@ export const WidgetTeamMateProfile: FC<WidgetTeamMateProfileProps> = ({
                     <div className={css({ marginLeft: 'auto', display: 'flex', alignItems: 'center' })}>
                       <div className={css({ padding: '12px 12px' })}>
                         {rating ? (
-                          <span className={css({
-                            fontSize: '16px',
-                            lineHeight: '20px',
-                            color: colors.tescoBlue,
-                          })}>
+                          <span
+                            className={css({
+                              fontSize: '16px',
+                              lineHeight: '20px',
+                              color: colors.tescoBlue,
+                            })}
+                          >
                             {rating}
                           </span>
                         ) : (

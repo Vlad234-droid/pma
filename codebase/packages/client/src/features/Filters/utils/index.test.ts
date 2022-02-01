@@ -168,7 +168,7 @@ describe('Filters utils', () => {
           lastName: 'LLL77777',
           middleName: 'mocked_line_manager_middle_name',
           businessType: 'mocked_line_manager_business_type',
-        }
+        },
       },
       {
         ...generateEmployeeReview(),
@@ -180,7 +180,7 @@ describe('Filters utils', () => {
           lastName: 'LLL66666',
           middleName: 'mocked_line_manager_middle_name',
           businessType: 'mocked_line_manager_business_type',
-        }
+        },
       },
     ];
 
@@ -276,7 +276,7 @@ describe('Filters utils', () => {
         },
         {
           ...reviews[1],
-          lastName: 'yyysssssss'
+          lastName: 'yyysssssss',
         },
       ];
       const expected = [newReviews[0], newReviews[1]];

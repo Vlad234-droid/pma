@@ -27,7 +27,7 @@ const ConfirmModal: FC<Props> = ({
   onSave,
   onOverlayClick,
   employee,
-  submitBtnTitle
+  submitBtnTitle,
 }) => {
   const { css } = useStyle();
 
@@ -56,7 +56,7 @@ const ConfirmModal: FC<Props> = ({
         {children}
       </div>
     </Modal>
-  )
+  );
 };
 
 export default ConfirmModal;

@@ -64,9 +64,7 @@ const EditRatingsModal: FC<Props> = ({ employee, onClose, onSave }) => {
               />
             </div>
           )}
-          <div className={css(Label)}>
-            {t('select_what_rating', 'Select your colleague\'s \'What\' rating')}
-          </div>
+          <div className={css(Label)}>{t('select_what_rating', "Select your colleague's 'What' rating")}</div>
           <Item withIcon={false}>
             <Select
               options={options}
@@ -77,9 +75,7 @@ const EditRatingsModal: FC<Props> = ({ employee, onClose, onSave }) => {
           </Item>
         </>
         <>
-          <div className={css(Label)}>
-            {t('select_how_rating', 'Select your colleague\'s \'How\' rating')}
-          </div>
+          <div className={css(Label)}>{t('select_how_rating', "Select your colleague's 'How' rating")}</div>
           <Item withIcon={false}>
             <Select
               options={options}
@@ -89,17 +85,21 @@ const EditRatingsModal: FC<Props> = ({ employee, onClose, onSave }) => {
             />
           </Item>
         </>
-        <div className={css(Label)}>{`${t('overall_rating_is', 'Your colleague\'s overall rating is:')} ${overallRating}`}</div>
+        <div className={css(Label)}>{`${t(
+          'overall_rating_is',
+          "Your colleague's overall rating is:",
+        )} ${overallRating}`}</div>
       </div>
     </ConfirmModal>
-  )
+  );
 };
 
 export default EditRatingsModal;
 
-const Label: Rule = ({ theme }) => ({
-  fontSize: `${theme.font.fixed.f16.fontSize}`,
-  lineHeight: `${theme.font.fixed.f18.lineHeight}`,
-  marginBottom: '8px',
-  fontWeight: '600',
-} as Styles);
+const Label: Rule = ({ theme }) =>
+  ({
+    fontSize: `${theme.font.fixed.f16.fontSize}`,
+    lineHeight: `${theme.font.fixed.f18.lineHeight}`,
+    marginBottom: '8px',
+    fontWeight: '600',
+  } as Styles);

@@ -27,7 +27,6 @@ export const searchEmployeesFn = <T extends Employee, K extends string>(employee
   );
 };
 
-
 export const searchEmployeesAndManagersFn = <T extends Employee, K extends string>(employees: T[], search?: K): T[] => {
   if (!search || search.length < 3) return employees;
 
@@ -67,34 +66,29 @@ const sortByZANameFn = <T extends { firstName?: string }, K extends T>(a: T, b: 
 export const getInitialFilterValues = (options?: FilterOption[]) => {
   if (!options) return {};
 
-  return (
-    options.reduce((res, item) => {
-      const itemOptions = item.multi ? item.options.reduce((res, option) => (
-        {...res, [option]: false }
-      ), {}) : '';
+  return options.reduce((res, item) => {
+    const itemOptions = item.multi ? item.options.reduce((res, option) => ({ ...res, [option]: false }), {}) : '';
 
-      return {...res, [item.id]: itemOptions };
-    }, {})
-  );
+    return { ...res, [item.id]: itemOptions };
+  }, {});
 };
 
-export const getFiltersWithValues = (filters: FilterValues) => (
+export const getFiltersWithValues = (filters: FilterValues) =>
   Object.entries(filters).reduce((res, [key, value]) => {
     if (typeof value === 'string') {
-      return value ? {...res, [key]: value} : res;
+      return value ? { ...res, [key]: value } : res;
     } else {
       const validFilters = Object.entries(value).reduce((res, [key, value]) => {
         if (value) {
-          return {...res, [key]: value};
+          return { ...res, [key]: value };
         }
         return res;
       }, {});
 
       if (!isEmpty(validFilters)) {
-        return {...res, [key]: validFilters}
+        return { ...res, [key]: validFilters };
       }
 
       return res;
     }
-  }, {})
-);
+  }, {});

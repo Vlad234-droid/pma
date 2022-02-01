@@ -12,7 +12,7 @@ type Props = {
 
 const colors = ['#82ca9d', '#8884d8'];
 
-const RatingsChart: FC<Props> = ({ currentData, compareData  }) => {
+const RatingsChart: FC<Props> = ({ currentData, compareData }) => {
   const { css } = useStyle();
   const data = getComputedData(currentData, compareData);
   const bars = getGraphBars(data);
@@ -26,16 +26,18 @@ const RatingsChart: FC<Props> = ({ currentData, compareData  }) => {
           height={250}
           data={data}
           layout='vertical'
-          margin={{top: 32, right: 50, left: 100, bottom: 50 }}
+          margin={{ top: 32, right: 50, left: 100, bottom: 50 }}
           maxBarSize={100}
           barGap={0}
           barCategoryGap={0}
         >
-          <XAxis type='number' tickCount={11}/>
+          <XAxis type='number' tickCount={11} />
           <YAxis dataKey='name' type='category' />
-          <Tooltip/>
+          <Tooltip />
           <Legend content={renderLegend} />
-          {bars.map((bar, index) => <Bar key={bar} dataKey={bar} fill={colors[index]} barSize={50} label={<CustomizedLabel key={bar} />} />)}
+          {bars.map((bar, index) => (
+            <Bar key={bar} dataKey={bar} fill={colors[index]} barSize={50} label={<CustomizedLabel key={bar} />} />
+          ))}
         </BarChart>
       </ResponsiveContainer>
     </div>
@@ -54,7 +56,15 @@ const renderLegend = () => {
 };
 
 const CustomizedLabel = (props) => {
-  const { x, y, value, fill, height, width, content: { key } } = props;
+  const {
+    x,
+    y,
+    value,
+    fill,
+    height,
+    width,
+    content: { key },
+  } = props;
 
   return (
     <text x={x + width - 29} y={y + height / 1.5} dy={0} fontSize='12' fill={fill} fontWeight='Bold' textAnchor='start'>
@@ -88,7 +98,7 @@ const LabelHorizontal: Rule = ({ theme }) => ({
   fontSize: `${theme.font.fixed.f14.fontSize}`,
   lineHeight: `${theme.font.fixed.f14.lineHeight}`,
   fontWeight: '600',
-  marginTop: '16px'
+  marginTop: '16px',
 });
 
 export default RatingsChart;

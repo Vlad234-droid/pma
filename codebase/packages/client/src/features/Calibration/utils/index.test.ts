@@ -91,7 +91,7 @@ describe('<Calibratin /> utils', () => {
           2022: 37,
           'Expected distribution': 35,
         },
-      ]
+      ];
 
       expect(getComputedData(data, compareData)).toEqual(expected);
     });

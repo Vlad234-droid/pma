@@ -72,7 +72,7 @@ const Calibration: FC<Props> = ({ loadData, loadFilterOptions, colleagueUuid, co
         className={css({
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'flex-end'
+          justifyContent: 'flex-end',
         })}
       >
         <Filters
@@ -93,10 +93,7 @@ const Calibration: FC<Props> = ({ loadData, loadFilterOptions, colleagueUuid, co
       >
         <div className={css({ flex: '3 1 375px', display: 'flex', flexDirection: 'column', gap: '8px' })}>
           <TileWrapper>
-            <RatingsChart
-              currentData={graphData}
-              compareData={compareData}
-            />
+            <RatingsChart currentData={graphData} compareData={compareData} />
           </TileWrapper>
           {!isCompareMode && (
             <div className={css(allColleagues)}>
@@ -104,9 +101,7 @@ const Calibration: FC<Props> = ({ loadData, loadFilterOptions, colleagueUuid, co
                 <Colleagues editMode={isEditMode} colleagues={colleagues} onSave={handleSaveRating} />
               ) : (
                 <TileWrapper>
-                  <div className={css({ padding: '32px' })}>
-                    No results
-                  </div>
+                  <div className={css({ padding: '32px' })}>No results</div>
                 </TileWrapper>
               )}
             </div>
@@ -131,7 +126,10 @@ const Calibration: FC<Props> = ({ loadData, loadFilterOptions, colleagueUuid, co
         <SuccessModal
           title='Calibration updated'
           withСheckMark
-          description={t('saved_changes_to_calibration', 'You have saved your changes to calibration. These changes will now be reflected on the colleague profile as a record.')}
+          description={t(
+            'saved_changes_to_calibration',
+            'You have saved your changes to calibration. These changes will now be reflected on the colleague profile as a record.',
+          )}
           onClose={() => setIsSuccessModalOpen(false)}
         />
       )}

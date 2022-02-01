@@ -20,7 +20,9 @@ const Calibration: FC<Props> = ({ onEditClick, onCompareClick, editMode, compare
   const widgets: SecondaryWidgetProps[] = [
     {
       iconGraphic: 'edit',
-      title: editMode ? t('exit_calibration_ratings', 'Exit calibration ratings') : t('edit_calibration_ratings', 'Edit calibration ratings'),
+      title: editMode
+        ? t('exit_calibration_ratings', 'Exit calibration ratings')
+        : t('edit_calibration_ratings', 'Edit calibration ratings'),
       data: t('enter_ratings', 'Enter your team`s ratings to see live updates'),
       customStyle: widgetStyle,
       onClick: onEditClick,
@@ -36,7 +38,7 @@ const Calibration: FC<Props> = ({ onEditClick, onCompareClick, editMode, compare
     {
       iconGraphic: 'download',
       title: t('download', 'Download'),
-      data: t('save_calibration_ratings','Save calibration ratings to your device'),
+      data: t('save_calibration_ratings', 'Save calibration ratings to your device'),
       customStyle: widgetStyle,
       onClick: () => console.log('download'),
       withButton: false,
@@ -52,7 +54,7 @@ const Calibration: FC<Props> = ({ onEditClick, onCompareClick, editMode, compare
           <div key={idx} className={css({ marginBottom: '8px' })}>
             <SecondaryWidget {...props} />
           </div>
-        )
+        );
       })}
     </div>
   );

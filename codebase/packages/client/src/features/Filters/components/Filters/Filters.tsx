@@ -18,15 +18,7 @@ type Props = {
   onFilter?: (filters: FilterValues) => void;
 };
 
-const Filters: FC<Props> = ({
-  sortingOptions,
-  sortValue,
-  onSort,
-  searchValue,
-  onSearch,
-  filterOptions,
-  onFilter,
-}) => {
+const Filters: FC<Props> = ({ sortingOptions, sortValue, onSort, searchValue, onSearch, filterOptions, onFilter }) => {
   const [sortOpen, setSortOpen] = useState<boolean>(false);
   const [searchOpened, setSearchOpen] = useState<boolean>(false);
   const [filterOpened, setFilterOpen] = useState<boolean>(false);

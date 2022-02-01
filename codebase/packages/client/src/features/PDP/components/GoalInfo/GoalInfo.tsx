@@ -13,7 +13,7 @@ const GoalInfo = (props) => {
   const [confirmDelete, setConfirmDelete] = useState(false);
 
   return (
-    <div className={css(fullGoals({ theme }))}>
+    <div className={css(fullGoals)}>
       {confirmDelete && (
         <ConfirmModal
           title={'Are you sure you want to delete this goal?'}
@@ -38,14 +38,16 @@ const GoalInfo = (props) => {
           {() => (
             <>
               <Section defaultExpanded={false}>
-                <div className={css(titleBlock({ theme }))} onClick={() => setToogled(!toogled)}>
+                <div className={css(titleBlock)} onClick={() => setToogled(!toogled)}>
                   {title.replace(modifiedTitleRegex, '')}
                   <div className={css({ paddingLeft: '12px' })}>
                     <ExpandButton />
                   </div>
                 </div>
-                <div className={css(goalBlock({ theme }))}>
-                  <div className={css({ fontWeight: 'bold' })}>{subtitle.replace(modifiedTitleRegex, '')}</div>
+                <div className={css(goalBlock)}>
+                  <div className={css({ fontWeight: `${theme.font.weight.bold}` })}>
+                    {subtitle.replace(modifiedTitleRegex, '')}
+                  </div>
                   <div>{description}</div>
                 </div>
                 <Panel>
@@ -56,9 +58,9 @@ const GoalInfo = (props) => {
                           return (
                             <div
                               key={formElements[index].label + Math.random()}
-                              className={`${css(fullDesc)} ${css(goalBlock({ theme }))}`}
+                              className={`${css(fullDesc)} ${css(goalBlock)}`}
                             >
-                              <div className={css({ fontWeight: 'bold' })}>
+                              <div className={css({ fontWeight: `${theme.font.weight.bold}` })}>
                                 {formElements[index].label.replace(modifiedTitleRegex, '')}
                               </div>
                               <div>{data[key]}</div>
@@ -78,7 +80,7 @@ const GoalInfo = (props) => {
                         <div className={css({ height: '16px' })}>
                           <Icon
                             graphic='delete'
-                            fill='#00539F'
+                            fill={theme.colors.link}
                             iconStyles={{ maxHeight: '16px', maxWidth: '14.84px' }}
                           />
                         </div>
@@ -96,19 +98,10 @@ const GoalInfo = (props) => {
   );
 };
 
-const editImg = {
-  width: '14px',
-} as Rule;
-
-const icon = {
-  merginRight: '5px',
-  width: '16px',
-} as Rule;
-
 const btnBlock = {
   margin: '24px 0 32px 0',
   display: 'flex',
-  fontWeight: 'bold',
+  fontWeight: `${theme.font.weight.bold}`,
 } as Rule;
 
 const btns = {
@@ -124,25 +117,17 @@ const btns = {
   marginRight: '21px',
 } as Rule;
 
-const fullGoals: CreateRule<{ theme: Theme }> = (props) => {
-  if (props == null) return {};
-  const { theme } = props;
-  return {
-    borderBottom: `1px solid ${theme.colors.backgroundDarkest}`,
-  };
-};
+const fullGoals = {
+  borderBottom: `1px solid ${theme.colors.backgroundDarkest}`,
+} as Rule;
 
-const goalBlock: CreateRule<{ theme: Theme }> = (props) => {
-  if (props == null) return {};
-  const { theme } = props;
-  return {
-    paddingBottom: '16px',
-    fontSize: `${theme.font.fixed.f14}`,
-    lineHeight: '18px',
-    userSelect: 'none',
-    fontFamily: '"TESCO Modern", Arial, sans-serif',
-  };
-};
+const goalBlock = {
+  paddingBottom: '16px',
+  fontSize: `${theme.font.fixed.f14}`,
+  lineHeight: '18px',
+  userSelect: 'none',
+  fontFamily: '"TESCO Modern", Arial, sans-serif',
+} as Rule;
 
 const fullDesc = {
   display: 'flex',
@@ -151,22 +136,18 @@ const fullDesc = {
   flexDirection: 'column',
 } as Rule;
 
-const titleBlock: CreateRule<{ theme: Theme }> = (props) => {
-  if (props == null) return {};
-  const { theme } = props;
-  return {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: '24px 0 16px 0',
-    fontFamily: '"TESCO Modern", Arial, sans-serif',
-    fontSize: '16px',
-    fontStyle: 'normal',
-    fontWeight: 'bold',
-    lineHeight: '20px',
-    letterSpacing: '0px',
-    color: `${theme.colors.link}`,
-  };
-};
+const titleBlock = {
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  padding: '24px 0 16px 0',
+  fontFamily: '"TESCO Modern", Arial, sans-serif',
+  fontSize: '16px',
+  fontStyle: 'normal',
+  fontWeight: `${theme.font.weight.bold}`,
+  lineHeight: '20px',
+  letterSpacing: '0px',
+  color: `${theme.colors.link}`,
+} as Rule;
 
 export default GoalInfo;

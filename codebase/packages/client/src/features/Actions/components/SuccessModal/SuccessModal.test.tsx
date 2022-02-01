@@ -26,7 +26,8 @@ describe('<SuccessModal />', () => {
     it('should render expected title and content, if status is DECLINED and type is OBJECTIVE', () => {
       const { getByText } = render(<SuccessModal {...props} />);
       const expectedTitle = 'Declined objectives and / or reviews';
-      const expectedContent = 'You’ve rejected this form as it doesn’t reflect the conversation you had with your colleague. ' +
+      const expectedContent =
+        'You’ve rejected this form as it doesn’t reflect the conversation you had with your colleague. ' +
         'Please pick up with them directly to discuss more.';
 
       expect(getByText(expectedTitle)).toBeInTheDocument();
@@ -41,7 +42,8 @@ describe('<SuccessModal />', () => {
       };
       const { getByText } = render(<SuccessModal {...newProps} />);
       const expectedTitle = 'Declined objectives and / or reviews';
-      const expectedContent = 'You’ve rejected this form as it doesn’t reflect the conversation you had with your colleague. ' +
+      const expectedContent =
+        'You’ve rejected this form as it doesn’t reflect the conversation you had with your colleague. ' +
         'Please pick up with them directly to discuss more.';
 
       expect(getByText(expectedTitle)).toBeInTheDocument();
@@ -56,7 +58,8 @@ describe('<SuccessModal />', () => {
       };
       const { getByText } = render(<SuccessModal {...newProps} />);
       const expectedTitle = 'Declined objectives and / or reviews';
-      const expectedContent = 'You’ve rejected this form as it doesn’t reflect the conversation you had with your colleague. ' +
+      const expectedContent =
+        'You’ve rejected this form as it doesn’t reflect the conversation you had with your colleague. ' +
         'Please pick up with them directly to discuss more.';
 
       expect(getByText(expectedTitle)).toBeInTheDocument();
