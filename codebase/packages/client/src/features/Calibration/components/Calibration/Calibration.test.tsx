@@ -53,7 +53,7 @@ describe('<Calibration />', () => {
     it('should render graph', () => {
       const { getByTestId } = render(<Calibration {...props} />);
 
-      expect(getByTestId('calibration-graph')).toBeInTheDocument();
+      expect(getByTestId('ratings-chart')).toBeInTheDocument();
     });
 
     it('should render no results, if no items in props.colleagues', () => {

@@ -5,7 +5,17 @@ import { fireEvent } from '@testing-library/react';
 import { renderWithTheme as render, generateEmployeeReview } from 'utils/test';
 
 import Colleagues from './Colleagues';
-import {screen} from "../../../../utils/test";
+
+jest.mock('../EditRatingsModal', () => {
+  return {
+    __esModule: true,
+    default: ({ onSave }) => {
+      return (
+        <div onClick={onSave}>mocked_ratings_modal</div>
+      );
+    },
+  };
+});
 
 jest.mock('features/MyTeam', () => {
   return {
@@ -48,53 +58,24 @@ describe('<Colleagues />', () => {
 
   describe('#handlers', () => {
     it('should not render edit ratings modal, if !editMode', () => {
-      const { getByText, queryByTestId } = render(<Colleagues {...props} />);
+      const { getByText, queryByText } = render(<Colleagues {...props} />);
 
       fireEvent.click(getByText('Outstanding'));
 
-      expect(queryByTestId('edit-rating-modal')).not.toBeInTheDocument();
+      expect(queryByText('mocked_ratings_modal')).not.toBeInTheDocument();
     });
 
-    it('should render edit ratings modal, if editMode and hide it on close', () => {
+    it('should render edit ratings modal, if editMode', () => {
       const newProps = {
         ...props,
         editMode: true,
       };
 
-      const { getByText, getByTestId, queryByTestId } = render(<Colleagues {...newProps} />);
+      const { getByText } = render(<Colleagues {...newProps} />);
 
       fireEvent.click(getByText('Outstanding'));
 
-      expect(getByTestId('edit-rating-modal')).toBeInTheDocument();
-
-      fireEvent.click(getByText('Cancel'));
-
-      expect(queryByTestId('edit-rating-modal')).not.toBeInTheDocument();
+      expect(getByText('mocked_ratings_modal')).toBeInTheDocument();
     });
-
-    it('should', () => {
-      const newProps = {
-        ...props,
-        editMode: true,
-      };
-
-      const { getByText, getByTestId, queryByTestId } = render(<Colleagues {...newProps} />);
-
-      fireEvent.click(getByText('Outstanding'));
-
-      expect(getByTestId('edit-rating-modal')).toBeInTheDocument();
-
-      const selectWhat = (screen.getByTestId('declineReasonWhat'));
-      const selectHow = (screen.getByTestId('declineReasonHow'));
-
-      fireEvent.change(selectWhat, { target: { value: 'Great' } });
-      fireEvent.change(selectHow, { target: { value: 'Satisfactory' } });
-
-      fireEvent.click(getByText('Save change'));
-
-      expect(props.onSave).toHaveBeenCalled();
-      expect(queryByTestId('edit-rating-modal')).not.toBeInTheDocument();
-      expect(getByText('Satisfactory')).toBeInTheDocument();
-    })
   });
 });

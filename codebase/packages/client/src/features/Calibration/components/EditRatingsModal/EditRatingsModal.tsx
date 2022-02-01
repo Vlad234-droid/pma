@@ -8,24 +8,12 @@ import { Item, Select } from 'components/Form';
 import { Rating } from 'config/enum';
 import { ColleagueInfo } from 'features/MyTeam';
 
+import { getRatingsOptions, getRatingValues } from '../../mock';
+
 type Props = {
-  employee: Employee,
-  onClose: () => void,
+  employee: Employee;
+  onClose: () => void;
   onSave: (rating: Rating) => void;
-};
-
-const options = [
-  { value: Rating.OUTSTANDING, label: Rating.OUTSTANDING },
-  { value: Rating.GREAT, label: Rating.GREAT },
-  { value: Rating.SATISFACTORY, label: Rating.SATISFACTORY },
-  { value: Rating.BELOW_EXPECTED, label: Rating.BELOW_EXPECTED },
-];
-
-const ratingValue = {
-  [Rating.BELOW_EXPECTED]: 1,
-  [Rating.SATISFACTORY]: 2,
-  [Rating.GREAT]: 3,
-  [Rating.OUTSTANDING]: 4,
 };
 
 const EditRatingsModal: FC<Props> = ({ employee, onClose, onSave }) => {
@@ -34,6 +22,8 @@ const EditRatingsModal: FC<Props> = ({ employee, onClose, onSave }) => {
   const [overallRating, setOverallRating] = useState<Rating>();
   const [whatRating, setWhatRating] = useState<Rating>();
   const [howRating, setHowRating] = useState<Rating>();
+  const options = getRatingsOptions();
+  const ratingValue = getRatingValues();
 
   useEffect(() => {
     const what = whatRating;

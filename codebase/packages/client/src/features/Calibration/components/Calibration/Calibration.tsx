@@ -9,10 +9,9 @@ import { Employee } from 'config/types';
 
 import Widgets from '../Widgets';
 import Colleagues from '../Colleagues';
-import Graph from '../Graph';
+import RatingsChart from '../RatingsChart';
 import CompareModal from '../CompareModal';
-import { getCompareData, getCurrentData } from '../../utils';
-import { getCompareOptions } from '../../mock';
+import { getCompareOptions, getCompareData, getCurrentData } from '../../mock';
 
 type Props = {
   loadData: (filters: FilterValues) => void;
@@ -94,7 +93,7 @@ const Calibration: FC<Props> = ({ loadData, loadFilterOptions, colleagueUuid, co
       >
         <div className={css({ flex: '3 1 375px', display: 'flex', flexDirection: 'column', gap: '8px' })}>
           <TileWrapper>
-            <Graph
+            <RatingsChart
               currentData={graphData}
               compareData={compareData}
             />
