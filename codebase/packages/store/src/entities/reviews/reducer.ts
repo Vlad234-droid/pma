@@ -92,16 +92,16 @@ export default createReducer(initialState)
     meta: { ...state.meta, loading: false, loaded: true },
   }))
   .handleAction(updateReviewStatus.request, (state) => {
-    return ({
+    return {
       ...state,
       meta: { ...state.meta, loading: true, error: null, loaded: false },
-    });
+    };
   })
   .handleAction(updateReviewStatus.success, (state) => {
-    return ({
+    return {
       ...state,
       meta: { ...state.meta, loading: false, loaded: true },
-    });
+    };
   })
   .handleAction(updateReviewStatus.failure, (state, { payload }) => {
     return {

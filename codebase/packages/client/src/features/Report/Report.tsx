@@ -1,8 +1,10 @@
-import React, { FC, useState } from 'react';
-import { useStyle, useBreakpoints, Rule, colors, Styles, CreateRule, Button } from '@dex-ddl/core';
-import { useForm } from 'react-hook-form';
+import React, { FC, useState, useEffect } from 'react';
+import { ReportActions, approvedObjectivesSelector, notApprovedObjectivesSelector } from '@pma/store';
+import { useDispatch, useSelector } from 'react-redux';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
+import { useStyle, useBreakpoints, Rule, colors, Styles, CreateRule, Button } from '@dex-ddl/core';
+import { useForm } from 'react-hook-form';
 
 import { CanPerform, PEOPLE_TEAM, TALENT_ADMIN } from 'features/Permission';
 import { IconButton } from 'components/IconButton';
@@ -16,9 +18,10 @@ import { InfoTable, FilterModal } from './components';
 import { DonwloadReportModal } from './Modals';
 import { Trans } from 'components/Translation';
 import { BASE_URL_API } from 'config/constants';
-import { Rating } from 'config/enum';
+import { Status , Rating } from '../../config/enum';
 
 const Report: FC = () => {
+  const dispatch = useDispatch();
   const [focus, setFocus] = useState(false);
   const [showDownloadReportModal, setShowDownloadReportModal] = useState(false);
   const [searchValueFilterOption, setSearchValueFilterOption] = useState('');
@@ -50,8 +53,33 @@ const Report: FC = () => {
     },
   ]);
   const [checkedItems, setCheckedItems]: [string[], (T) => void] = useState([]);
-
   const [isCheckAll, setIsCheckAll]: [string[], (T) => void] = useState([]);
+
+  const [approvedObjPercent, approvedObjTitle] = useSelector(approvedObjectivesSelector);
+  const [notApprovedObjPercent, notApprovedObjTitle] = useSelector(notApprovedObjectivesSelector);
+
+  const years = {
+    2021: '2021',
+  };
+
+  useEffect(() => {
+    dispatch(
+      ReportActions.getObjectivesReport({
+        year: years[2021],
+        statuses_in: [
+          Status.APPROVED,
+          Status.DRAFT,
+          Status.WAITING_FOR_APPROVAL,
+          Status.DECLINED,
+          Status.COMPLETED,
+          Status.OVERDUE,
+          Status.STARTED,
+          Status.NOT_STARTED,
+          Status.NOT_CREATED,
+        ],
+      }),
+    );
+  }, []);
 
   const { css } = useStyle();
   const methods = useForm({
@@ -190,6 +218,14 @@ const Report: FC = () => {
           <div className={css(leftColumn)}>
             <PieChart title='Objectives submitted' data={[{ percent: 67 }]} display={View.CHART} />
             <PieChart
+              title='Wl4 & 5 Objectives submitted'
+              display={View.CHART}
+              data={[
+                { percent: approvedObjPercent, title: approvedObjTitle },
+                { percent: notApprovedObjPercent, title: notApprovedObjTitle },
+              ]}
+            />
+            <PieChart
               title='Mid-year review'
               display={View.CHART}
               data={[
@@ -197,6 +233,7 @@ const Report: FC = () => {
                 { percent: 82, title: 'Approved' },
               ]}
             />
+
             <PieChart
               title='Year-end review'
               display={View.CHART}
@@ -282,7 +319,7 @@ const Report: FC = () => {
         </div>
       </div>
       <Button styles={[buttonCoreStyled]} onPress={downloadCsvFile}>
-        <Trans>Download</Trans>
+        <Trans>WL4-5 report</Trans>
       </Button>
       {showDownloadReportModal && <DonwloadReportModal onClose={handleCloseModal} />}
     </>

@@ -7,8 +7,8 @@ export enum View {
 }
 
 type Obj = {
-  percent: number;
-  title?: string;
+  percent: any;
+  title?: any;
 };
 
 type PieChartProps = {

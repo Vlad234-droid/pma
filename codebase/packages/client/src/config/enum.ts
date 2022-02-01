@@ -11,6 +11,7 @@ export enum Status {
   COMPLETED = 'COMPLETED',
   STARTED = 'STARTED',
   NOT_STARTED = 'NOT_STARTED',
+  NOT_CREATED = 'NOT_CREATED',
 }
 
 export enum ObjectiveType {

@@ -14,7 +14,7 @@ export const getObjectivesReportEpic: Epic = (action$, _, { api }) =>
         //@ts-ignore
         map(({ data }) => {
           //@ts-ignore
-          return getObjectivesReport.success;
+          return getObjectivesReport.success(data.data);
         }),
         catchError(({ errors }) => of(getObjectivesReport.failure(errors))),
       );
