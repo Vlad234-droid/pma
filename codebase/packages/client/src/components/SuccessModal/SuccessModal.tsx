@@ -35,16 +35,36 @@ const SuccessModal: FC<Props> = ({ onClose, description, withСheckMark = false,
         >
           <div style={{ textAlign: 'center' }}>
             <span
-              data-test-id='success-check-mark'
               style={{
                 display: 'block',
                 padding: '15px',
               }}
+              data-test-id='success-check-mark'
             >
               <svg width='165' height='164' viewBox='0 0 165 164' fill='none' xmlns='http://www.w3.org/2000/svg'>
-                <circle opacity='0.1' cx='82.5' cy='82.0002' r='65.2653' fill='#009E47' />
-                  <path d='M51.9166 78.5832L70.9166 97.5832L112.083 56.4165' stroke='#009E47' strokeWidth='1.2' />
-                <circle cx='82' cy='82' r='65' stroke='#009E47' strokeWidth='1.2' />
+                {withСheckMark ? (
+                  <>
+                    <circle opacity='0.1' cx='82.5' cy='82.0002' r='65.2653' fill='#009E47' />
+                    <path d='M51.9166 78.5832L70.9166 97.5832L112.083 56.4165' stroke='#009E47' strokeWidth='1.2' />
+                    <circle cx='82' cy='82' r='65' stroke='#009E47' strokeWidth='1.2' />
+                  </>
+                ) : (
+                  <>
+                    <circle
+                      data-test-id='success-mark'
+                      opacity='0.1'
+                      cx='82.5'
+                      cy='82.0002'
+                      r='65.2653'
+                      fill='#FF9900'
+                    />
+                    <path
+                      d='M82.4999 37.583V85.4163H48.3333M147.417 81.9997C147.417 117.854 118.354 146.916 82.4999 146.916C46.6454 146.916 17.5833 117.854 17.5833 81.9997C17.5833 46.1452 46.6454 17.083 82.4999 17.083C118.354 17.083 147.417 46.1452 147.417 81.9997Z'
+                      stroke='#FF9900'
+                      strokeWidth='1.2'
+                    />
+                  </>
+                )}
               </svg>
             </span>
             <div
