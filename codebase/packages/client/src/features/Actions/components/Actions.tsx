@@ -325,7 +325,7 @@ export const Actions = () => {
       </div>
       {isOpenSuccessModal && (
         <SuccessModal
-          status={reviewSubmitted as Status}
+          status={reviewSubmitted as (Status.DECLINED | Status.APPROVED)}
           review={reviewType as ReviewType}
           onClose={handleCloseSuccessModal}
         />
