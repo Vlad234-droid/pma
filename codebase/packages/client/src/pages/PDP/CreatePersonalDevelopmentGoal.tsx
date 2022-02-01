@@ -74,7 +74,7 @@ const CreatePersonalDevelopmentGoal = () => {
     mode: 'onChange',
     resolver: yupResolver<Yup.AnyObjectSchema>(Yup.object().shape(yepSchema)),
   });
-  const { getValues, formState, handleSubmit, reset } = methods;
+  const { getValues, formState, reset } = methods;
   const formValues = getValues();
 
   const requestData = [
@@ -242,6 +242,19 @@ const CreatePersonalDevelopmentGoal = () => {
                   placeholder={description}
                   value={Object.keys(currentGoal)?.length > 0 ? updateGoalValue : ''}
                 />
+                // <Item key={key} withIcon={false}>
+                //   <div className={css(genericLabel)}>{label.replace(/\*/g, '')}</div>
+                //   <Input
+                //     name={key}
+                //     type='date'
+                //     //@ts-ignore
+                //     min={minDate}
+                //     onChange={(e) => {
+                //       methods.setValue(key, e.target.value);
+                //       methods.trigger(key);
+                //     }}
+                //   />
+                // </Item>
               );
             }
 

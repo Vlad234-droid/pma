@@ -325,7 +325,8 @@ export const Actions = () => {
       </div>
       {isOpenSuccessModal && (
         <SuccessModal
-          status={reviewSubmitted as (Status.APPROVED | Status.DECLINED)}
+          //@ts-ignore
+          status={reviewSubmitted as Status}
           review={reviewType as ReviewType}
           onClose={handleCloseSuccessModal}
         />
