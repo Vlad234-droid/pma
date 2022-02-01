@@ -16,6 +16,7 @@ import { metaPDPSelector } from '@pma/store';
 import { useSelector } from 'react-redux';
 import { buildPath } from 'features/Routes';
 import { Page } from 'pages';
+import { Trans } from 'components/Translation';
 
 type Props = {
   pdpGoals: any;
@@ -146,7 +147,7 @@ const Form: FC<Props> = ({
         <ConfirmModal
           title={'Are you sure you want to save this goal?'}
           description={' '}
-          submitBtnTitle={'Confirm'}
+          submitBtnTitle={<Trans i18nKey='confirm'>Confirm</Trans>}
           onSave={() => {
             currentUUID || Object.keys(currentGoal)?.length > 0
               ? onSubmit(schemaLoaded, requestData, requestMethods.UPDATE)
@@ -162,7 +163,7 @@ const Form: FC<Props> = ({
         <ConfirmModal
           title={'Are you sure you want to save this goal?'}
           description={' '}
-          submitBtnTitle={'Confirm'}
+          submitBtnTitle={<Trans i18nKey='confirm'>Confirm</Trans>}
           onSave={() => {
             onSubmit(schemaLoaded, requestData, requestMethods.CREATE);
             setConfirSaveNextmModal(false);
