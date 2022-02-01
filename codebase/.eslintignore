@@ -2,3 +2,4 @@
 **/*.test.jsx
 **/*.test.ts
 **/*.test.tsx
+**/openapi/src/openapi/**x
