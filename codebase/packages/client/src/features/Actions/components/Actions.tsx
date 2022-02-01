@@ -323,10 +323,13 @@ export const Actions = () => {
           </div>
         </div>
       </div>
-      {isOpenSuccessModal && (
+      {isOpenSuccessModal
+      && reviewType
+      && (reviewSubmitted === Status.DECLINED || reviewSubmitted === Status.APPROVED)
+      && (
         <SuccessModal
-          status={reviewSubmitted as (Status.DECLINED | Status.APPROVED)}
-          review={reviewType as ReviewType}
+          status={reviewSubmitted}
+          review={reviewType}
           onClose={handleCloseSuccessModal}
         />
       )}
