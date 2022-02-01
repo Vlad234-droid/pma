@@ -6,8 +6,8 @@ import {
   getManagersMetaSelector,
   getPendingEmployees,
   ManagersActions,
-  reviewsMetaSelector,
   ReviewsActions,
+  reviewsMetaSelector,
   SchemaActions,
 } from '@pma/store';
 
@@ -325,6 +325,7 @@ export const Actions = () => {
       </div>
       {isOpenSuccessModal && (
         <SuccessModal
+          // @ts-ignore
           status={reviewSubmitted as Status}
           review={reviewType as ReviewType}
           onClose={handleCloseSuccessModal}
