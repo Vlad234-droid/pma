@@ -29,6 +29,7 @@ const SuccessModal: FC<Props> = ({ onClose, description, withСheckMark = false,
         className={css({
           height: '100%',
         })}
+        data-test-id='success-modal'
       >
         <div
           className={css({
