@@ -5,10 +5,10 @@ import { useStyle, Rule, Styles, colors } from '@dex-ddl/core';
 import { NoFeedback } from 'features/Feedback/components';
 import { TileWrapper } from 'components/Tile';
 import { Accordion, BaseAccordion, Section, Panel, ExpandButton } from 'components/Accordion';
-import { IconButton } from 'components/IconButton';
-import { Trans } from 'components/Translation';
 import { formatToRelativeDate, paramsReplacer } from 'utils';
 import { Page } from 'pages';
+import GiveFeedbackBtn from 'components/GiveFeedbackBtn';
+
 import defaultImg from '../../../../public/default.png';
 
 type Props = {
@@ -119,17 +119,9 @@ const FeedbackBlock: FC<Props> = ({ list, canEdit }) => {
                           </div>
                         </TileWrapper>
                         {canEdit && (
-                          <IconButton
-                            customVariantRules={{ default: iconBtnStyle }}
-                            onPress={() =>
-                              navigate(paramsReplacer(`/${Page.GIVE_NEW_FEEDBACK}`, { ':uuid': item.uuid }))
-                            }
-                            graphic='edit'
-                            iconProps={{ invertColors: false }}
-                            iconStyles={iconStyle}
-                          >
-                            <Trans i18nKey='give_feedback'>Give feedback</Trans>
-                          </IconButton>
+                          <GiveFeedbackBtn onClick={() =>
+                            navigate(paramsReplacer(`/${Page.GIVE_NEW_FEEDBACK}`, { ':uuid': item.uuid }))
+                          }/>
                         )}
                       </Panel>
                     </Section>
