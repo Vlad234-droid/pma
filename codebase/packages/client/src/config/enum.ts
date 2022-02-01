@@ -66,10 +66,15 @@ export enum TargetTypeReverse {
   'OTHER' = 'Your impact on others',
 }
 
+export enum Tesco {
+  TescoBank = 'Tesco Bank: Big 6',
+}
+
 export enum TargetFeedbackKeys {
   'GOAL' = 'comment_to_day_job',
   'VALUE_BEHAVIOR' = 'comment_to_your_self',
   'OTHER' = 'comment_to_your_impact',
+  'OBJECTIVE' = 'comment_to_objective',
 }
 
 export enum VoiceType {

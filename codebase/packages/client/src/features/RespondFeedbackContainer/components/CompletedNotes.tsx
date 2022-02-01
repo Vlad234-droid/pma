@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { useStyle, Rule, Styles } from '@dex-ddl/core';
-import { TargetTypeReverse, TargetFeedbackKeys } from 'config/enum';
+import { TargetTypeReverse, TargetFeedbackKeys , Tesco } from 'config/enum';
 import { getReviewByUuidS } from '@pma/store';
 import { useSelector } from 'react-redux';
 
@@ -21,7 +21,7 @@ const CompletedNotes: FC<CompletedNotesProps> = ({ item }) => {
       TargetTypeReverse[targetType].charAt(0).toUpperCase() + TargetTypeReverse[targetType].slice(1);
 
     if (capitalType && targetType && targetId) {
-      let targetTypeStr = '';
+      let targetTypeStr = targetId === Tesco.TescoBank ? targetId : '';
       review.forEach((item) => {
         if (item.uuid === targetId) {
           targetTypeStr = item.title;
