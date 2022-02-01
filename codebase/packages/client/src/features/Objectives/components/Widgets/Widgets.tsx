@@ -1,7 +1,7 @@
 import React, { FC, HTMLProps } from 'react';
 import { useTranslation } from 'components/Translation';
 import { Styles, useStyle } from '@dex-ddl/core';
-import SecondaryWidget, { Props as SecondaryWidgetProps } from '../SecondaryWidget';
+import SecondaryWidget, { Props as SecondaryWidgetProps } from 'features/SecondaryWidget';
 import { default as MainWidget } from '../MainWidget';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -32,21 +32,21 @@ const Widgets: FC<Props> = () => {
     {
       iconGraphic: 'list',
       title: t('personal_development_plan', 'Personal Development Plan'),
-      date: t('personal_development_plan_date', 'Added 04 Apr 2021', { date: new Date(2021, 4, 4) }),
+      data: t('personal_development_plan_date', 'Added 04 Apr 2021', { date: new Date(2021, 4, 4) }),
       customStyle: { flex: '2 1 110px' },
       onClick: () => navigate(buildPath(Page.PERSONAL_DEVELOPMENT_PLAN)),
     },
     {
       iconGraphic: 'chatSq',
       title: t('feedback', 'Feedback'),
-      date: t('feedback_date', 'Last updated Apr 2021', { date: new Date(2021, 4, 4) }),
+      data: t('feedback_date', 'Last updated Apr 2021', { date: new Date(2021, 4, 4) }),
       customStyle: { flex: '2 1 110px' },
       onClick: () => navigate(buildPath(Page.FEEDBACK)),
     },
     {
       iconGraphic: 'edit',
       title: t('My Notes'),
-      date: t('Last updated Apr 2021', { date: new Date(2021, 4, 4) }),
+      data: t('Last updated Apr 2021', { date: new Date(2021, 4, 4) }),
       customStyle: { flex: '2 1 110px' },
       onClick: () => navigate(buildPath(Page.NOTES)),
     },

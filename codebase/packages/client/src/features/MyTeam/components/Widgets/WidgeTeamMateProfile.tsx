@@ -3,8 +3,9 @@ import { colors, Colors, Rule, useStyle } from '@dex-ddl/core';
 
 import { TileWrapper } from 'components/Tile';
 import { Graphics, Icon } from 'components/Icon';
+import LinkButton from 'components/LinkButton';
 import { Accordion, BaseAccordion, ExpandButton, Panel, Section } from 'components/Accordion';
-import { Status, TimelineType } from 'config/enum';
+import { Status, TimelineType, Rating } from 'config/enum';
 import { Page } from 'pages/types';
 import { useNavigate } from 'react-router-dom';
 import { paramsReplacer } from 'utils';
@@ -18,6 +19,8 @@ export type WidgetTeamMateProfileProps = {
   status?: Status;
   employee: Employee;
   fullTeamView?: boolean;
+  rating?: Rating;
+  onClick?: () => void;
 };
 
 export const getIcon = (status): [Graphics, Colors] => {
@@ -40,6 +43,8 @@ export const WidgetTeamMateProfile: FC<WidgetTeamMateProfileProps> = ({
   status,
   employee,
   fullTeamView = false,
+  rating,
+  onClick,
 }) => {
   const { css } = useStyle();
   const navigate = useNavigate();
@@ -63,7 +68,7 @@ export const WidgetTeamMateProfile: FC<WidgetTeamMateProfileProps> = ({
             {() => (
               <>
                 <Section defaultExpanded={false}>
-                  <div className={css(wrapperStyle)}>
+                  <div className={css(wrapperStyle)} onClick={onClick}>
                     <ColleagueInfo
                       firstName={employee.firstName}
                       lastName={employee.lastName}
@@ -73,29 +78,41 @@ export const WidgetTeamMateProfile: FC<WidgetTeamMateProfileProps> = ({
                     />
                     <div className={css({ marginLeft: 'auto', display: 'flex', alignItems: 'center' })}>
                       <div className={css({ padding: '12px 12px' })}>
-                        <button
-                          onClick={() => viewUserObjectives(employee.uuid)}
-                          className={css({
+                        {rating ? (
+                          <span className={css({
                             fontSize: '16px',
                             lineHeight: '20px',
                             color: colors.tescoBlue,
-                            cursor: 'pointer',
-                            border: 'none',
-                            backgroundColor: 'transparent',
-                          })}
-                        >
-                          View profile
-                        </button>
+                          })}>
+                            {rating}
+                          </span>
+                        ) : (
+                          <button
+                            onClick={() => viewUserObjectives(employee.uuid)}
+                            className={css({
+                              fontSize: '16px',
+                              lineHeight: '20px',
+                              color: colors.tescoBlue,
+                              cursor: 'pointer',
+                              border: 'none',
+                              backgroundColor: 'transparent',
+                            })}
+                          >
+                            View profile
+                          </button>
+                        )}
                       </div>
                       <>
-                        {!fullTeamView && (
+                        {!fullTeamView && !rating && (
                           <div className={css({ padding: '0px 12px' })}>
                             <Icon graphic={graphics} fill={color} />
                           </div>
                         )}
-                        <div className={css({ paddingLeft: '12px' })}>
-                          <ExpandButton />
-                        </div>
+                        {!rating && (
+                          <div className={css({ paddingLeft: '12px' })}>
+                            <ExpandButton />
+                          </div>
+                        )}
                       </>
                     </div>
                   </div>

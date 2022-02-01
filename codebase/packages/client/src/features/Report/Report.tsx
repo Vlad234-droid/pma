@@ -16,6 +16,7 @@ import { InfoTable, FilterModal } from './components';
 import { DonwloadReportModal } from './Modals';
 import { Trans } from 'components/Translation';
 import { BASE_URL_API } from 'config/constants';
+import { Rating } from 'config/enum';
 
 const Report: FC = () => {
   const [focus, setFocus] = useState(false);
@@ -244,19 +245,19 @@ const Report: FC = () => {
             <InfoTable
               mainTitle='Breakdown of Mid-year ratings'
               data={[
-                { percent: 4, quantity: 4, title: 'Below expected' },
-                { percent: 48, quantity: 54, title: 'Satisfactory' },
-                { percent: 35, quantity: 39, title: 'Great' },
-                { percent: 13, quantity: 15, title: 'Outstanding' },
+                { percent: 4, quantity: 4, title: Rating.BELOW_EXPECTED },
+                { percent: 48, quantity: 54, title: Rating.SATISFACTORY },
+                { percent: 35, quantity: 39, title: Rating.GREAT },
+                { percent: 13, quantity: 15, title: Rating.OUTSTANDING },
               ]}
             />
             <InfoTable
               mainTitle='Breakdown of Mid-year ratings'
               data={[
-                { percent: 4, quantity: 4, title: 'Below expected' },
-                { percent: 48, quantity: 54, title: 'Satisfactory' },
-                { percent: 35, quantity: 39, title: 'Great' },
-                { percent: 13, quantity: 15, title: 'Outstanding' },
+                { percent: 4, quantity: 4, title: Rating.BELOW_EXPECTED },
+                { percent: 48, quantity: 54, title: Rating.SATISFACTORY },
+                { percent: 35, quantity: 39, title: Rating.GREAT },
+                { percent: 13, quantity: 15, title: Rating.OUTSTANDING },
               ]}
             />
             <div className={css(flexContainer)}>
@@ -271,10 +272,10 @@ const Report: FC = () => {
               mainTitle='Anniversary Reviews completed per quarter'
               preTitle='Hourly paid colleagues only'
               data={[
-                { percent: 4, quantity: 4, title: 'Below expected' },
-                { percent: 48, quantity: 54, title: 'Satisfactory' },
-                { percent: 35, quantity: 39, title: 'Great' },
-                { percent: 13, quantity: 15, title: 'Outstanding' },
+                { percent: 4, quantity: 4, title: Rating.BELOW_EXPECTED },
+                { percent: 48, quantity: 54, title: Rating.SATISFACTORY },
+                { percent: 35, quantity: 39, title: Rating.GREAT },
+                { percent: 13, quantity: 15, title: Rating.OUTSTANDING },
               ]}
             />
           </div>

@@ -16,7 +16,7 @@ import {
 import useDispatch from 'hooks/useDispatch';
 import { buildPath } from 'features/Routes';
 import { Page } from 'pages';
-import Filters, { getEmployeesSortingOptions, useSearchFilter, useSortFilter } from 'features/Filters';
+import Filters, { getEmployeesSortingOptions, useSearch, useSorting } from 'features/Filters';
 import { useTranslation } from 'components/Translation';
 import { Employee } from 'config/types';
 
@@ -24,8 +24,8 @@ export const TEST_ID = 'my-team';
 
 const MyTeam: FC = () => {
   const { css } = useStyle();
-  const [sortValue, setSortValue] = useSortFilter();
-  const [searchValue, setSearchValue] = useSearchFilter();
+  const [sortValue, setSortValue] = useSorting();
+  const [searchValue, setSearchValue] = useSearch();
   const { t } = useTranslation();
   const options = getEmployeesSortingOptions(t);
   const [view, setView] = useState<View>(View.DIRECT_REPORTS);
@@ -58,8 +58,9 @@ const MyTeam: FC = () => {
       <div className={css({ display: 'flex', justifyContent: 'center' })}>
         <RouterSwitch
           links={[
-            { link: buildPath(Page.CONTRIBUTION), name: 'My View' },
-            { link: buildPath(Page.MY_TEAM), name: 'My Team' },
+            { link: buildPath(Page.CONTRIBUTION), name: t('my_view', 'My View') },
+            { link: buildPath(Page.MY_TEAM), name: t('my_team', 'My Team') },
+            { link: buildPath(Page.PEOPLE_TEAM), name: t('people_team', 'People Team') },
           ]}
         />
       </div>

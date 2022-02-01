@@ -3,51 +3,82 @@ import { Rule } from '@dex-ddl/core';
 
 import InfoIcon from 'components/InfoIcon';
 
-import Sorting from '../Sorting';
+import Filtering from '../Filtering';
 import Search from '../Search';
-import { SortBy, SortOption } from '../../config/types';
+import Sorting from '../Sorting';
+import { SortBy, SortOption, FilterOption, FilterValues } from '../../config/types';
 
 type Props = {
   sortValue?: SortBy;
-  onSort: (value: SortBy) => void;
+  onSort?: (value: SortBy) => void;
+  sortingOptions?: SortOption[];
   onSearch: (value: string) => void;
   searchValue: string;
-  sortingOptions: SortOption[];
+  filterOptions?: FilterOption[];
+  onFilter?: (filters: FilterValues) => void;
 };
 
-const Filters: FC<Props> = ({ sortingOptions, sortValue, onSort, searchValue, onSearch }) => {
-  const [sortingOpen, setSortingOpen] = useState<boolean>(false);
-  const [searchOpened, setSearchOpened] = useState<boolean>(false);
+const Filters: FC<Props> = ({
+  sortingOptions,
+  sortValue,
+  onSort,
+  searchValue,
+  onSearch,
+  filterOptions,
+  onFilter,
+}) => {
+  const [sortOpen, setSortOpen] = useState<boolean>(false);
+  const [searchOpened, setSearchOpen] = useState<boolean>(false);
+  const [filterOpened, setFilterOpen] = useState<boolean>(false);
 
   const handleSearch = (value) => onSearch(value);
 
   const handleSearchOpen = () => {
-    setSortingOpen(false);
-    setSearchOpened(true);
+    setSortOpen(false);
+    setSearchOpen(true);
   };
 
   const handleSortOpen = () => {
-    setSearchOpened(false);
-    setSortingOpen((sortingValue) => !sortingValue);
+    setSearchOpen(false);
+    setSortOpen((sortingValue) => !sortingValue);
   };
 
   const handleSort = (value: SortBy) => {
-    onSort(value);
+    onSort && onSort(value);
+    setSortOpen(false);
+  };
 
-    setSortingOpen(false);
+  const handleFilterClose = () => {
+    setFilterOpen(false);
+  };
+
+  const handleFilter = (filters: any) => {
+    onFilter && onFilter(filters);
   };
 
   return (
-    <>
+    <div data-test-id='filters'>
       <InfoIcon onClick={() => console.log('info clicked')} />
-      <Sorting
-        iconStyles={iconStyles}
-        isOpen={sortingOpen}
-        onClick={handleSortOpen}
-        onSort={handleSort}
-        value={sortValue}
-        sortingOptions={sortingOptions}
-      />
+      {sortingOptions && (
+        <Sorting
+          iconStyles={iconStyles}
+          isOpen={sortOpen}
+          onClick={handleSortOpen}
+          onSort={handleSort}
+          value={sortValue}
+          sortingOptions={sortingOptions}
+        />
+      )}
+      {filterOptions && (
+        <Filtering
+          iconStyles={iconStyles}
+          isOpen={filterOpened}
+          onClick={() => setFilterOpen(true)}
+          onClose={handleFilterClose}
+          filterOptions={filterOptions}
+          onFilter={handleFilter}
+        />
+      )}
       <Search
         iconStyles={iconStyles}
         focus={searchOpened}
@@ -55,7 +86,7 @@ const Filters: FC<Props> = ({ sortingOptions, sortValue, onSort, searchValue, on
         onSearch={handleSearch}
         value={searchValue}
       />
-    </>
+    </div>
   );
 };
 

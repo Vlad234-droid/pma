@@ -1,11 +1,12 @@
 import React, { FC, useState, useEffect, useMemo } from 'react';
-import { useTranslation } from 'components/Translation';
+import { Trans, useTranslation } from 'components/Translation';
 import { useStyle, Rule, Button, Styles, colors } from '@dex-ddl/core';
 
 import { TileWrapper } from 'components/Tile';
 import { Icon } from 'components/Icon';
 import { ConfirmModal, WrapperModal } from 'features/Modal';
-import { SuccessModal, ShareObjectivesModal } from '../Modal';
+import { ShareObjectivesModal } from '../Modal';
+import SuccessModal from 'components/SuccessModal';
 import { Status, ReviewType } from 'config/enum';
 import useDispatch from 'hooks/useDispatch';
 import { useSelector } from 'react-redux';
@@ -174,7 +175,7 @@ const ShareWidget: FC<Props> = ({ customStyle, stopShare }) => {
             'are_you_sure_you_want_to_make_your_objectives_visible',
             'Are you sure you want to make your objectives visible?',
           )}
-          submitBtnTitle={t('share', 'Share')}
+          submitBtnTitle={<Trans i18nKey='share'>Share</Trans>}
           onSave={() => handleShareSaveBtnClick()}
           onCancel={() => setIsConfirmDeclineModalOpen(false)}
           onOverlayClick={() => setIsConfirmDeclineModalOpen(false)}
@@ -187,6 +188,7 @@ const ShareWidget: FC<Props> = ({ customStyle, stopShare }) => {
           onOverlayClick={() => setIsSuccessModalOpen(false)}
         >
           <SuccessModal
+            title='Objectives shares'
             description={
               isShared
                 ? t('your_objectives_have_been_visible', 'Your objectives have been made visible to your team.')

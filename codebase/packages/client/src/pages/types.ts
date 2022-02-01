@@ -16,6 +16,8 @@ enum Page {
   SETTINGS = 'settings',
   MY_TEAM = 'my-team',
   MY_ACTIONS = 'my-team/actions',
+  PEOPLE_TEAM = 'people-team',
+  CALIBRATION = 'calibration',
   NOTES = 'notes',
   GIVE_FEEDBACK = 'feedback/give',
   GIVE_NEW_FEEDBACK = 'feedback/give/:uuid',
