@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Button, CreateRule, Rule, theme, Theme, useStyle } from '@dex-ddl/core';
-import { Accordion, BaseAccordion, ExpandButton, Panel, Section } from 'components/Accordion';
-import { ConfirmModal } from 'features/Modal';
-import { Icon } from 'components/Icon';
+import { Button, CreateRule, Rule, theme, useStyle } from '@dex-ddl/core';
+import { Accordion, BaseAccordion, ExpandButton, Panel, Section } from '../../../../components/Accordion';
+import { ConfirmModal } from '../../../Modal';
+import { Icon } from '../../../../components/Icon';
 
 const GoalInfo = (props) => {
   const { id, title, subtitle, description, data, formElements, deleteGoal, editGoal } = props;

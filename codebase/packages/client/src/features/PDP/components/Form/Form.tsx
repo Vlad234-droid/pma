@@ -12,7 +12,7 @@ import arrLeft from '../../../../assets/img/pdp/arrLeft.png';
 import colors from 'theme/colors';
 import { ConfirmModal } from 'features/Modal';
 import { useNavigate } from 'react-router-dom';
-import { metaPDPSelector, PDPActions } from '@pma/store';
+import { metaPDPSelector } from '@pma/store';
 import { useSelector } from 'react-redux';
 import { buildPath } from 'features/Routes';
 import { Page } from 'pages';
@@ -29,10 +29,10 @@ type Props = {
   currentUUID: string | undefined;
   colleagueUuid: string;
   requestMethods: any;
-  setConfirSavemModal: (isActive: boolean) => void;
+  setConfirmModal: (isActive: boolean) => void;
   setCurrentTab: (id: number) => void;
   setCurrentGoal: (obj: any) => void;
-  onChange: (schemaLoaded: boolean, requestData: any, method: string) => void;
+  onSubmit: (schemaLoaded: boolean, requestData: any, method: string) => void;
 };
 
 const Form: FC<Props> = ({
@@ -47,10 +47,10 @@ const Form: FC<Props> = ({
   currentUUID,
   colleagueUuid,
   requestMethods,
-  setConfirSavemModal,
+  setConfirmModal,
   setCurrentTab,
   setCurrentGoal,
-  onChange,
+  onSubmit,
 }) => {
   const { css } = useStyle();
   const navigate = useNavigate();
@@ -149,12 +149,12 @@ const Form: FC<Props> = ({
           submitBtnTitle={'Confirm'}
           onSave={() => {
             currentUUID || Object.keys(currentGoal)?.length > 0
-              ? onChange(schemaLoaded, requestData, requestMethods.UPDATE)
-              : onChange(schemaLoaded, requestData, requestMethods.SAVE);
-            setConfirSavemModal(false);
+              ? onSubmit(schemaLoaded, requestData, requestMethods.UPDATE)
+              : onSubmit(schemaLoaded, requestData, requestMethods.SAVE);
+            setConfirmModal(false);
           }}
-          onCancel={() => setConfirSavemModal(false)}
-          onOverlayClick={() => setConfirSavemModal(false)}
+          onCancel={() => setConfirmModal(false)}
+          onOverlayClick={() => setConfirmModal(false)}
         />
       )}
 
@@ -164,7 +164,7 @@ const Form: FC<Props> = ({
           description={' '}
           submitBtnTitle={'Confirm'}
           onSave={() => {
-            onChange(schemaLoaded, requestData, requestMethods.CREATE);
+            onSubmit(schemaLoaded, requestData, requestMethods.CREATE);
             setConfirSaveNextmModal(false);
           }}
           onCancel={() => setConfirSaveNextmModal(false)}
@@ -245,7 +245,7 @@ const Form: FC<Props> = ({
         {
           <Button
             isDisabled={!formState.isValid}
-            onPress={() => setConfirSavemModal(!confirmSaveModal)}
+            onPress={() => setConfirmModal(!confirmSaveModal)}
             styles={
               pdpList?.length + 1 === maxGoals || pdpList?.length + 1 > maxGoals
                 ? [customBtnFullWidth]
@@ -259,7 +259,7 @@ const Form: FC<Props> = ({
           <Button
             isDisabled={!formState.isValid}
             onPress={() => {
-              onChange(schemaLoaded, requestData, requestMethods.CREATE);
+              onSubmit(schemaLoaded, requestData, requestMethods.CREATE);
               reset(formElementsFilledEmpty);
             }}
             styles={[customBtn({ mobileScreen }), createBtn]}

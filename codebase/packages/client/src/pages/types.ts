@@ -9,7 +9,7 @@ enum Page {
   PERSONAL_DEVELOPMENT_PLAN = 'personal-development-plan',
   CREATE_PERSONAL_DEVELOPMENT_PLAN = 'personal-development-plan/create',
   UPDATE_PERSONAL_DEVELOPMENT_PLAN = 'personal-development-plan/update/:uuid',
-  PERSONAL_DEVELOPMENT_HELP = 'personal-devleopment-plan/help',
+  PERSONAL_DEVELOPMENT_HELP = 'personal-develeopment-plan/help',
   OBJECTIVES_VIEW = 'objectives',
   USER_OBJECTIVES = 'user-objective/:uuid',
   PROFILE = 'profile',
