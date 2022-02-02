@@ -19,8 +19,8 @@ export type StepIndicatorProps = {
 };
 
 const getStatus = (i: number, currentStep?: number, currentStatus?: Status, isValid?: boolean) => {
-  if ((isValid && i === currentStep) || (currentStep && currentStep > i) || i === currentStep) return Status.APPROVED;
-  else if (currentStep === i && currentStatus) return Status[currentStatus];
+  if ((isValid && i === currentStep) || (currentStep && currentStep > i)) return Status.APPROVED;
+  if (currentStep === i && currentStatus) return Status[currentStatus];
 };
 
 export const StepIndicatorBasic: FC<StepIndicatorProps> = ({
