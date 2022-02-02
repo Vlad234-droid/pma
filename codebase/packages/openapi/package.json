@@ -1,0 +1,21 @@
+{
+  "name": "@pma/openapi",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "types": "src/types/**/*",
+  "scripts": {
+    "generate": "openapi-generator-cli generate -g typescript-axios -i ./openapi-spec.json -o ./src/openapi --additional-properties=supportsES6=true,useSingleRequestParameter=true",
+    "validate": "openapi-generator-cli validate -i ./openapi-spec.json",
+    "clean": "rimraf ./src/openapi",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "@openapitools/openapi-generator-cli": "^2.4.25"
+  },
+  "devDependencies": {}
+}

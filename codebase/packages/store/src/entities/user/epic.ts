@@ -3,18 +3,23 @@ import { Epic, isActionOf } from 'typesafe-actions';
 import { combineEpics } from 'redux-observable';
 import { from, of } from 'rxjs';
 import { catchError, filter, map, switchMap, takeUntil, mergeMap } from 'rxjs/operators';
+import { concatWithErrorToast, errorPayloadConverter } from '../../utils/toastHelper';
 
 import { getCurrentUser, updateUserNotification, createProfileAttribute, updateProfileAttribute } from './actions';
 
-export const getCurrentUserEpic: Epic = (action$, _, { api }) =>
+export const getCurrentUserEpic: Epic = (action$, _, { openapi }) =>
   action$.pipe(
     filter(isActionOf(getCurrentUser.request)),
     switchMap(() =>
-      from(api.getCurrentUser()).pipe(
+      from(openapi.user.getMe()).pipe(
+        // @ts-ignore
         map(getCurrentUser.success),
         catchError((e) => {
           const errors = e?.data?.errors;
-          return of(getCurrentUser.failure(errors?.[0]));
+          return concatWithErrorToast(
+            of(getCurrentUser.failure(errors?.[0])),
+            errorPayloadConverter({ ...errors?.[0], title: 'User fetch error' }),
+          );
         }),
         takeUntil(action$.pipe(filter(isActionOf(getCurrentUser.cancel)))),
       ),

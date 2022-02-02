@@ -32,21 +32,18 @@ const Widgets: FC<Props> = () => {
     {
       iconGraphic: 'list',
       title: t('personal_development_plan', 'Personal Development Plan'),
-      data: t('personal_development_plan_date', 'Added 04 Apr 2021', { date: new Date(2021, 4, 4) }),
       customStyle: { flex: '2 1 110px' },
       onClick: () => navigate(buildPath(Page.PERSONAL_DEVELOPMENT_PLAN)),
     },
     {
       iconGraphic: 'chatSq',
       title: t('feedback', 'Feedback'),
-      data: t('feedback_date', 'Last updated Apr 2021', { date: new Date(2021, 4, 4) }),
       customStyle: { flex: '2 1 110px' },
       onClick: () => navigate(buildPath(Page.FEEDBACK)),
     },
     {
       iconGraphic: 'edit',
       title: t('My Notes'),
-      data: t('Last updated Apr 2021', { date: new Date(2021, 4, 4) }),
       customStyle: { flex: '2 1 110px' },
       onClick: () => navigate(buildPath(Page.NOTES)),
     },

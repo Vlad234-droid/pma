@@ -182,25 +182,16 @@ const ShareWidget: FC<Props> = ({ customStyle, stopShare }) => {
         />
       )}
       {isSuccessModalOpen && (
-        <WrapperModal
-          title={t('share_objectives', 'Share Objectives')}
+        <SuccessModal
+          title='Objectives shares'
+          description={
+            isShared
+              ? t('your_objectives_have_been_visible', 'Your objectives have been made visible to your team.')
+              : t('you_have_stopped_sharing_your_objectives', 'You have stopped sharing your objectives to your team.')
+          }
           onClose={() => setIsSuccessModalOpen(false)}
-          onOverlayClick={() => setIsSuccessModalOpen(false)}
-        >
-          <SuccessModal
-            title='Objectives shares'
-            description={
-              isShared
-                ? t('your_objectives_have_been_visible', 'Your objectives have been made visible to your team.')
-                : t(
-                    'you_have_stopped_sharing_your_objectives',
-                    'You have stopped sharing your objectives to your team.',
-                  )
-            }
-            onClose={() => setIsSuccessModalOpen(false)}
-            withСheckMark
-          />
-        </WrapperModal>
+          withСheckMark
+        />
       )}
       {isViewObjectivesModalOpen && (
         <WrapperModal
@@ -264,7 +255,6 @@ const bodyStyle: Rule = {
 
 const btnStyle = ({ theme, isManagerShared }) => ({
   fontSize: '14px',
-  fontWeight: 'bold',
   color: isManagerShared ? theme.colors.tescoRed : theme.colors.tescoBlue,
   height: '30px',
   background: 'transparent',

@@ -41,13 +41,12 @@ const Header: FC<HeaderProps> = ({ title, onBack, withIcon, iconName = 'home', s
         <IconButton
           onPress={onBack}
           graphic='backwardLink'
-          iconStyles={{ marginRight: '25px' }}
           data-test-id={BACK_BTN_TEST_ID}
         />
       ) : (
         <div />
       )}
-      <h3 className={css(headerStyles({ mobileScreen }))}>
+      <h3 className={css(headerStyles({ mobileScreen, onBack }))}>
         {withIcon && (
           <div className={css({ height: '24px', marginRight: '10px' })}>
             <Icon graphic={iconName} />
@@ -55,10 +54,23 @@ const Header: FC<HeaderProps> = ({ title, onBack, withIcon, iconName = 'home', s
         )}
         {title}
       </h3>
-      <IconButton onPress={handleOpen} graphic='hamburger' />
+      <div className={css(iconWrapperStyles)}>
+        <Icon onClick={handleOpen} graphic='hamburger' iconStyles={iconStyles} />
+      </div>
       {state?.isOpen && <MenuDrawer onClose={handleClose} />}
     </div>
   );
+};
+
+const iconWrapperStyles: Rule = {
+  display: 'flex',
+  alignItems: 'center',
+  marginTop: '10px',
+};
+
+const iconStyles: Rule = {
+  width: '24px',
+  height: '24px',
 };
 
 const wrapperStyles: Rule = {
@@ -66,17 +78,21 @@ const wrapperStyles: Rule = {
   justifyContent: 'space-between',
 };
 
-const headerStyles: CreateRule<{ mobileScreen }> = ({ mobileScreen }) => ({
+const headerStyles: CreateRule<{ mobileScreen, onBack }> = ({ mobileScreen, onBack }) => ({
   lineHeight: '1.2',
   fontSize: '24px',
   display: 'flex',
   alignItems: 'center',
   color: theme.colors.tescoBlue,
+  marginRight: 'auto',
   ...(mobileScreen
     ? {
-        marginRight: 'auto',
-      }
-    : {}),
+      marginLeft: '25px',
+      paddingLeft: 0,
+    } : {
+      marginLeft: 'auto',
+      paddingLeft: onBack ? 0 : '25px',
+    }),
 });
 
 export default Header;

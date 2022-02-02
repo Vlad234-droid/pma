@@ -265,19 +265,24 @@ const Report: FC = () => {
               <div className={css({ flex: '1' })}>
                 <PieChart title='Objectives approved' data={[{ percent: 67 }]} display={View.CHART} />
               </div>
-              <form>
-                <h2 className={css(yearLabel)}>View previous years</h2>
-                <GenericItemField
-                  name={`year_options`}
-                  methods={methods}
-                  Wrapper={({ children }) => <Item withIcon={false}>{children}</Item>}
-                  Element={Select}
-                  options={field_options}
-                  onChange={(value) => {
-                    changeYearHandler(value);
-                  }}
-                />
-              </form>
+              <div className={css({ display: 'flex', flexDirection: 'column' })}>
+                <Button styles={[buttonCoreStyled]} onPress={downloadCsvFile}>
+                  <Trans>WL4-5 report</Trans>
+                </Button>
+                <form>
+                  <h2 className={css(yearLabel)}>View previous years</h2>
+                  <GenericItemField
+                    name={`year_options`}
+                    methods={methods}
+                    Wrapper={({ children }) => <Item withIcon={false}>{children}</Item>}
+                    Element={Select}
+                    options={field_options}
+                    onChange={(value) => {
+                      changeYearHandler(value);
+                    }}
+                  />
+                </form>
+              </div>
             </div>
             <InfoTable
               mainTitle='Breakdown of Mid-year ratings'
@@ -318,9 +323,7 @@ const Report: FC = () => {
           </div>
         </div>
       </div>
-      <Button styles={[buttonCoreStyled]} onPress={downloadCsvFile}>
-        <Trans>WL4-5 report</Trans>
-      </Button>
+
       {showDownloadReportModal && <DonwloadReportModal onClose={handleCloseModal} />}
     </>
   );
@@ -331,7 +334,7 @@ const buttonCoreStyled: Rule = ({ theme }) => ({
   width: '133px',
   background: theme.colors.tescoBlue,
   color: `${theme.colors.white}`,
-  margin: '20px 42px 0px auto',
+  margin: '0px 42px 20px auto',
 });
 
 const flexContainer: Rule = {

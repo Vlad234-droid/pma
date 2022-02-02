@@ -89,6 +89,7 @@ export const ObjectiveModal: FC<Props> = ({
                 currentStatus={Status.DRAFT}
                 currentStep={currentObjectiveNumber - 1}
                 titles={titles}
+                isValid={isValid}
               />
             </div>
           )}

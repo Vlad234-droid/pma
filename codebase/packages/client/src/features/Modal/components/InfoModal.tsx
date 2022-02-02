@@ -1,6 +1,6 @@
 import React, { FC, HTMLProps } from 'react';
 
-import { useBreakpoints, useStyle, CreateRule, Modal, Button } from '@dex-ddl/core';
+import { useBreakpoints, useStyle, CreateRule, Modal, Button, Rule } from '@dex-ddl/core';
 
 export type ConfirmModal = {
   title: string;
@@ -22,13 +22,7 @@ const InfoModal: FC<Props> = ({ title, description, onCancel, onOverlayClick }) 
       modalContainerRule={[containerRule({ mobileScreen })]}
       title={{
         content: title,
-        styles: [
-          {
-            fontWeight: 700,
-            fontSize: '20px',
-            lineHeight: '24px',
-          },
-        ],
+        styles: [titleStyle],
       }}
       onOverlayClick={onOverlayClick}
     >
@@ -48,21 +42,7 @@ const InfoModal: FC<Props> = ({ title, description, onCancel, onOverlayClick }) 
           justifyContent: 'center',
         })}
       >
-        <Button
-          styles={[
-            {
-              background: 'white',
-              border: `1px solid ${theme.colors.tescoBlue}`,
-              fontSize: '16px',
-              lineHeight: '20px',
-              fontWeight: 'bold',
-              color: `${theme.colors.tescoBlue}`,
-              width: '50%',
-              margin: '0px 4px',
-            },
-          ]}
-          onPress={onCancel}
-        >
+        <Button styles={[btnOkStyle]} onPress={onCancel}>
           Ok
         </Button>
       </div>
@@ -70,11 +50,30 @@ const InfoModal: FC<Props> = ({ title, description, onCancel, onOverlayClick }) 
   );
 };
 
+const titleStyle: Rule = {
+  fontWeight: 700,
+  fontSize: '20px',
+  lineHeight: '24px',
+  marginBottom: '32px',
+  textAlign: 'center',
+};
+
 const containerRule: CreateRule<{
   mobileScreen: boolean;
 }> = ({ mobileScreen }) => ({
   width: mobileScreen ? '345px' : '500px',
   padding: '24px 38px 24px',
+});
+
+const btnOkStyle: Rule = (theme) => ({
+  background: 'white',
+  border: `1px solid ${theme.colors.tescoBlue}`,
+  fontSize: '16px',
+  lineHeight: '20px',
+  fontWeight: 'bold',
+  color: `${theme.colors.tescoBlue}`,
+  width: '50%',
+  margin: '0px 4px',
 });
 
 export default InfoModal;

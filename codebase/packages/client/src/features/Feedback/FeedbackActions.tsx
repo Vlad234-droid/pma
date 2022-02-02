@@ -191,7 +191,7 @@ const FeedbackActions: FC = () => {
               Do you have a preference in the way you&apos;d like to receive feedback?
             </div>
             <div className={css({ cursor: 'pointer' })}>
-              <IconCore
+              <Icon
                 graphic='information'
                 title='This will be shared with feedback providers when they are giving you feedback to guide them on how you’d like to receive it. You can update this at any time if your preference changes.'
               />

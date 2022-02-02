@@ -68,7 +68,7 @@ const MyObjectives: FC = () => {
   const [previousReviewFilesModalShow, setPreviousReviewFilesModalShow] = useState(false);
   const [objectives, setObjectives] = useState<OT.Objective[]>([]);
 
-  const document = useMemo(() => <ObjectiveDocument items={objectives} />, [objectives.length]);
+  const document = useMemo(() => <ObjectiveDocument items={objectives} />, [JSON.stringify(objectives)]);
 
   const [instance, updateInstance] = usePDF({ document });
 
@@ -119,7 +119,7 @@ const MyObjectives: FC = () => {
     if (objectives.length) {
       updateInstance();
     }
-  }, [objectives.length]);
+  }, [JSON.stringify(objectives)]);
 
   useEffect(() => {
     if (reviewLoaded && schemaLoaded) {
