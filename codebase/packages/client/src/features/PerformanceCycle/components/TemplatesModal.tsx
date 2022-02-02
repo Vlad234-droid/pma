@@ -23,10 +23,11 @@ const TemplatesModal: FC<TemplateModalProps> = ({ closeModal, selectTemplate }) 
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
   const [filter, setFilteredValue] = useState('');
   const templatesList = useSelector(getProcessTemplateSelector) || [];
-  
+
   const filteredTemplates = templatesList?.filter((item) => {
     const createdTime = formatDateStringFromISO(item.createdTime, 'MM/dd/yyyy');
-    if(!filter || item.fileName.toLowerCase().includes(filter.toLowerCase()) || createdTime.includes(filter)) return item;
+    if (!filter || item.fileName.toLowerCase().includes(filter.toLowerCase()) || createdTime.includes(filter))
+      return item;
   });
 
   const onUpload = (file) => dispatch(ProcessTemplateActions.uploadProcessTemplate({ file }));
@@ -35,7 +36,7 @@ const TemplatesModal: FC<TemplateModalProps> = ({ closeModal, selectTemplate }) 
 
   return (
     <ModalWithHeader
-      containerRule={templatesModalWindowStyles({mobileScreen})}
+      containerRule={templatesModalWindowStyles({ mobileScreen })}
       title='Choose Template'
       modalPosition='middle'
       closeOptions={{
@@ -44,11 +45,8 @@ const TemplatesModal: FC<TemplateModalProps> = ({ closeModal, selectTemplate }) 
         onClose: closeModal,
       }}
     >
-      <div className={css(templatesModalContentWrapperStyles({mobileScreen}))}>
-        <Input
-          placeholder={'Enter template name'}
-          onChange={handleSearchTemplate}
-        />
+      <div className={css(templatesModalContentWrapperStyles({ mobileScreen }))}>
+        <Input placeholder={'Enter template name'} onChange={handleSearchTemplate} />
 
         <div className={css({ marginTop: '32px' })}>
           <DropZone onUpload={onUpload}>
@@ -79,7 +77,7 @@ const TemplatesModal: FC<TemplateModalProps> = ({ closeModal, selectTemplate }) 
             );
           })}
         </div>
-        <div className={css(templatesModalFooter({mobileScreen}))}>
+        <div className={css(templatesModalFooter({ mobileScreen }))}>
           <Button mode='inverse' onPress={closeModal} styles={[btnStyle]}>
             Close
           </Button>
@@ -108,16 +106,17 @@ const descriptionStyles: Rule = ({ theme }) => ({
 const templatesModalWindowStyles: CreateRule<{ mobileScreen }> = ({ mobileScreen }) => {
   return {
     padding: 0,
-    ...(mobileScreen ?
-      {
-        width: '100%',
-        height: 'calc(100% - 50px)',
-        marginTop: '50px',
-      } : {
-        width: '60%',
-        height: 'calc(100% - 100px)',
-        marginTop: 0,
-    }),
+    ...(mobileScreen
+      ? {
+          width: '100%',
+          height: 'calc(100% - 50px)',
+          marginTop: '50px',
+        }
+      : {
+          width: '60%',
+          height: 'calc(100% - 100px)',
+          marginTop: 0,
+        }),
   };
 };
 
@@ -158,27 +157,29 @@ const templatesModalFooter: CreateRule<{ mobileScreen }> = ({ mobileScreen }) =>
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    ...(mobileScreen ? {
-      borderBottomRightRadius: 0,
-      borderBottomLeftRadius: 0,
-      height: '75px',
-    } : {
-      height: '100px',
-      borderBottomRightRadius: '32px',
-      borderBottomLeftRadius: '32px',
-    })
+    ...(mobileScreen
+      ? {
+          borderBottomRightRadius: 0,
+          borderBottomLeftRadius: 0,
+          height: '75px',
+        }
+      : {
+          height: '100px',
+          borderBottomRightRadius: '32px',
+          borderBottomLeftRadius: '32px',
+        }),
   };
 };
 
 const row: Rule = ({ theme }) => {
-  return { 
+  return {
     fontSize: `${theme.font.fixed.f12}`,
     color: theme.colors.tescoBlue,
   };
 };
 
 const timeStyles: Rule = ({ theme }) => {
-  return { 
+  return {
     fontSize: `${theme.font.fixed.f14}`,
   };
 };

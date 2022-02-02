@@ -3,6 +3,7 @@ import { Epic, isActionOf } from 'typesafe-actions';
 import { combineEpics } from 'redux-observable';
 import { from, of } from 'rxjs';
 import { catchError, filter, map, switchMap, takeUntil } from 'rxjs/operators';
+import { concatWithErrorToast, errorPayloadConverter } from '../../utils/toastHelper';
 
 import {
   createPerformanceCycle,
@@ -20,7 +21,10 @@ export const getGetAllPerformanceCyclesEpic: Epic = (action$, _, { api }) =>
         map(getGetAllPerformanceCycles.success),
         catchError((e) => {
           const errors = e?.data?.errors;
-          return of(getGetAllPerformanceCycles.failure(errors?.[0]));
+          return concatWithErrorToast(
+            of(getGetAllPerformanceCycles.failure(errors?.[0])),
+            errorPayloadConverter({ ...errors?.[0], title: 'Performance cycle fetch error' }),
+          );
         }),
         takeUntil(action$.pipe(filter(isActionOf(getGetAllPerformanceCycles.cancel)))),
       ),
@@ -40,7 +44,10 @@ export const getGetPerformanceCyclesByUuidEpic: Epic = (action$, _, { api }) =>
         map(getPerformanceCycleByUuid.success),
         catchError((e) => {
           const errors = e?.data?.errors;
-          return of(getPerformanceCycleByUuid.failure(errors?.[0]));
+          return concatWithErrorToast(
+            of(getPerformanceCycleByUuid.failure(errors?.[0])),
+            errorPayloadConverter({ ...errors?.[0], title: 'Performance cycle by UUID fetch error' }),
+          );
         }),
         takeUntil(action$.pipe(filter(isActionOf(getPerformanceCycleByUuid.cancel)))),
       ),

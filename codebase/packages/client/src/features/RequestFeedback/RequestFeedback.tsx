@@ -19,6 +19,7 @@ const RequestFeedback: FC = () => {
 
   const handleSubmit = (data: any) => {
     const { colleagues, targetType, targetId, ...feedbackItems } = data;
+
     const formData = colleagues.map(({ value }) => ({
       targetColleagueUuid: colleagueUuid,
       targetType,

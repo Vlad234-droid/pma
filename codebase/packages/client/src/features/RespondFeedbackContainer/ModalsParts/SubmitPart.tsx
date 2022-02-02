@@ -14,7 +14,7 @@ import { Trans } from 'components/Translation';
 import { FeedbackActions, colleagueUUIDSelector, getReviewByUuidS } from '@pma/store';
 import { useDispatch, useSelector } from 'react-redux';
 import defaultImg from '../../../../public/default.png';
-import { TargetTypeReverse, TargetFeedbackKeys, VoiceType } from 'config/enum';
+import { TargetTypeReverse, TargetFeedbackKeys, VoiceType, Tesco } from 'config/enum';
 
 const SubmitPart: FC<SubmitPartProps> = ({
   selectedPerson,
@@ -160,7 +160,8 @@ const SubmitPart: FC<SubmitPartProps> = ({
       TargetTypeReverse[targetType].charAt(0).toUpperCase() + TargetTypeReverse[targetType].slice(1);
 
     if (capitalType && targetType && targetId) {
-      let targetTypeStr = '';
+      let targetTypeStr = targetId === Tesco.TescoBank ? targetId : '';
+
       review.forEach((item) => {
         if (item.uuid === targetId) {
           targetTypeStr = item.title;

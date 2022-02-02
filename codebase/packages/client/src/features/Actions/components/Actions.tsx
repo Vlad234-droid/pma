@@ -6,8 +6,8 @@ import {
   getManagersMetaSelector,
   getPendingEmployees,
   ManagersActions,
-  reviewsMetaSelector,
   ReviewsActions,
+  reviewsMetaSelector,
   SchemaActions,
 } from '@pma/store';
 
@@ -15,7 +15,7 @@ import { Trans, useTranslation } from 'components/Translation';
 import { Checkbox, Radio } from 'components/Form';
 import { ReviewType, Status } from 'config/enum';
 import { WidgetObjectiveApproval, WidgetTeamMateObjectives } from 'features/Actions';
-import Filters, { getEmployeesSortingOptions, useSearchFilter, useSortFilter } from 'features/Filters';
+import Filters, { useSorting, useSearch, getEmployeesSortingOptions } from 'features/Filters';
 import useDispatch from 'hooks/useDispatch';
 
 import { filterApprovedFn } from '../utils';
@@ -64,8 +64,8 @@ export const Actions = () => {
   const { css } = useStyle();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.medium || isBreakpoint.small || isBreakpoint.xSmall;
-  const [sortValue, setSortValue] = useSortFilter();
-  const [searchValue, setSearchValue] = useSearchFilter();
+  const [sortValue, setSortValue] = useSorting();
+  const [searchValue, setSearchValue] = useSearch();
   const { t } = useTranslation();
   const options = getEmployeesSortingOptions(t);
   const { loaded: reviewsLoaded } = useSelector(reviewsMetaSelector);
@@ -75,6 +75,7 @@ export const Actions = () => {
 
   // @ts-ignore
   const { employeeWithPendingApprovals, employeeWithCompletedApprovals } =
+    //@ts-ignore
     useSelector((state) => getPendingEmployees(state, searchValue, sortValue), shallowEqual) || {};
 
   const { loaded } = useSelector(getManagersMetaSelector) || {};
@@ -325,8 +326,7 @@ export const Actions = () => {
       </div>
       {isOpenSuccessModal && (
         <SuccessModal
-          //@ts-ignore
-          status={reviewSubmitted as Status}
+          status={reviewSubmitted as Status.DECLINED | Status.APPROVED}
           review={reviewType as ReviewType}
           onClose={handleCloseSuccessModal}
         />

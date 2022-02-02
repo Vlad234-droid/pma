@@ -80,7 +80,11 @@ export const ConfirmModalWithSelectOptions: FC<Props> = ({
         <Button styles={[cancelBtnStyle]} onPress={onCancel}>
           <Trans>Cancel</Trans>
         </Button>
-        <Button styles={[submitBtnStyle]} onPress={submitForm}>
+        <Button
+          styles={[submitBtnStyle, !checkedItems.length ? { opacity: '0.6' } : {}]}
+          onPress={submitForm}
+          isDisabled={!checkedItems.length}
+        >
           {submitBtnTitle || <Trans>Submit</Trans>}
         </Button>
       </div>

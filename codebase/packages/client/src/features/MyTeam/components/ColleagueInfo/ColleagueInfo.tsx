@@ -18,14 +18,18 @@ const ColleagueInfo: FC<Props> = ({ firstName, lastName, jobName, businessType, 
   const { t } = useTranslation();
 
   return (
-    <div className={css(wrapperStyle)}>
+    <div data-test-id='colleague-info' className={css(wrapperStyle)}>
       <div className={css({ display: 'flex', alignItems: 'center' })}>
         <Avatar size={40} />
       </div>
       <div className={css(headerBlockStyle)}>
         <span className={css(titleStyle)}>{`${firstName} ${lastName}`}</span>
         <span className={css(descriptionStyle)}>{`${jobName}, ${businessType}`}</span>
-        {manager && <span className={css(managerStyle)}>{`${t('line_manager', 'Line manager')}: ${manager.firstName} ${manager.lastName}`}</span>}
+        {manager && (
+          <span className={css(managerStyle)}>{`${t('line_manager', 'Line manager')}: ${manager.firstName} ${
+            manager.lastName
+          }`}</span>
+        )}
       </div>
     </div>
   );

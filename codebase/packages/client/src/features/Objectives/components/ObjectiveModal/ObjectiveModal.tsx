@@ -13,6 +13,8 @@ import { ButtonWithConfirmation as SubmitButton } from '../Buttons';
 import { Status } from 'config/enum';
 import { TriggerModal } from 'features/Modal/components/TriggerModal';
 import ObjectiveHelpModal from '../Modal/ObjectiveHelpModal';
+import { FormType } from '@pma/store';
+import MarkdownRenderer from '../../../../components/MarkdownRenderer';
 
 export type ObjectiveModalProps = {
   useSingleStep?: boolean;
@@ -80,7 +82,7 @@ export const ObjectiveModal: FC<Props> = ({
             <IconComponent graphic='arrowLeft' invertColors={true} />
           </span>
         )}
-        <form>
+        <form data-test-id={'OBJECTIVE_FORM_MODAL'}>
           {!useSingleStep && (
             <div className={css({ padding: `0 0 ${theme.spacing.s5}` })}>
               <StepIndicatorBasic
@@ -113,8 +115,23 @@ export const ObjectiveModal: FC<Props> = ({
             </div>
           )}
           {schemaComponents.map((component) => {
-            const { id, key, label, description, type, validate, values = [] } = component;
+            const { id, key, label, text, description, type, validate, values = [] } = component;
             const value = formValues[key] ? formValues[key] : '';
+
+            if (type === FormType.TEXT) {
+              return (
+                <div style={{ padding: '10px 0' }} key={id}>
+                  <div
+                    className={css({
+                      fontSize: '16px',
+                      lineHeight: '20px',
+                    })}
+                  >
+                    <MarkdownRenderer source={text} />
+                  </div>
+                </div>
+              );
+            }
             if (type === 'textfield' && validate?.maxLength <= 100) {
               return (
                 <GenericItemField

@@ -45,7 +45,6 @@ export const WidgetObjectiveApproval: FC<WidgetObjectiveApprovalProps> = ({
     if (reviewSubmitted && loaded && allReviewsProcessed) {
       setIsOpenSuccessModal(true);
     }
-
   }, [loaded, reviewSubmitted, allReviewsProcessed]);
 
   useEffect(() => {
@@ -126,9 +125,7 @@ export const WidgetObjectiveApproval: FC<WidgetObjectiveApprovalProps> = ({
             ...(reasons ? { reason: reasons[index] as string } : {}),
             status,
             colleagueUuid: colleague.uuid,
-            reviews: colleague.reviews.filter(
-              ({ status }) => status === Status.WAITING_FOR_APPROVAL,
-            ),
+            reviews: colleague.reviews.filter(({ status }) => status === Status.WAITING_FOR_APPROVAL),
           },
         };
 
@@ -232,7 +229,7 @@ export const WidgetObjectiveApproval: FC<WidgetObjectiveApprovalProps> = ({
       </TileWrapper>
       {isOpenSuccessModal && (
         <SuccessModal
-          status={reviewSubmitted as (Status.DECLINED | Status.APPROVED)}
+          status={reviewSubmitted as Status.DECLINED | Status.APPROVED}
           review={reviewType as ReviewType}
           onClose={handleCloseSuccessModal}
         />

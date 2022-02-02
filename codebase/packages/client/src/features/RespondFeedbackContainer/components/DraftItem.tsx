@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { FeedbackActions, ObjectiveActions, colleagueUUIDSelector, getNotesArgsSelector } from '@pma/store';
 import { filteredByInputSearchHandler, filteredNotesByRadiosBtnsHandler, formatToRelativeDate } from 'utils';
 import defaultImg from '../../../../public/default.png';
-import { FeedbackStatus } from 'config/enum';
+import { FeedbackStatus , Tesco } from 'config/enum';
 import { DraftItemProps } from '../type';
 import { NoFeedback } from '../../Feedback/components';
 import PendingNotes from './PendingNotes';
@@ -47,7 +47,7 @@ const DraftItem: FC<DraftItemProps> = ({
   useEffect(() => {
     if (pendingNotes.length) {
       for (const item of pendingNotes) {
-        if (item.targetId) {
+        if (item.targetId && item.targetId !== Tesco.TescoBank) {
           dispatch(ObjectiveActions.getReviewByUuid({ uuid: item.targetId }));
         }
       }
@@ -57,7 +57,7 @@ const DraftItem: FC<DraftItemProps> = ({
   useEffect(() => {
     if (completedNotes.length) {
       for (const item of completedNotes) {
-        if (item.targetId) {
+        if (item.targetId && item.targetId !== Tesco.TescoBank) {
           dispatch(ObjectiveActions.getReviewByUuid({ uuid: item.targetId }));
         }
       }

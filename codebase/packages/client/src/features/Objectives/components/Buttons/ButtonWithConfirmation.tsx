@@ -2,13 +2,14 @@ import React, { FC, HTMLProps, useState } from 'react';
 import { Rule, Button } from '@dex-ddl/core';
 import { ConfirmModal } from 'features/Modal';
 import { IconButton } from 'components/IconButton';
+import { Trans } from 'components/Translation';
 
 export type ButtonWithConfirmation = {
   styles?: Rule[];
   onSave: () => void;
   isDisabled?: boolean;
   buttonName?: string;
-  confirmationButtonTitle?: string;
+  confirmationButtonTitle?: JSX.Element;
   confirmationTitle?: string;
   confirmationDescription?: string;
   withIcon?: boolean;
@@ -18,7 +19,7 @@ type Props = HTMLProps<HTMLInputElement> & ButtonWithConfirmation;
 
 const ButtonWithConfirmation: FC<Props> = ({
   buttonName = 'Submit',
-  confirmationButtonTitle = 'Submit',
+  confirmationButtonTitle = <Trans i18nKey='submit'>Submit</Trans>,
   confirmationTitle = 'Submit Objectives',
   confirmationDescription = 'Are you sure you want to submit all of your objectives to your manager?',
   styles = [],

@@ -11,7 +11,7 @@ const Details = ({ title, description }) => {
       <div className={css(header({ theme }))} onClick={() => setDescriptionVisibility(!isVisibleDescription)}>
         <div>{title}</div>
         <div>
-          <img className={isVisibleDescription ? css(arrDown) : ''} alt='arrow' src={ArrowUp} />
+          <img className={isVisibleDescription ? css(arrUp) : css(arrDown)} alt='arrow' src={ArrowUp} />
         </div>
       </div>
       {isVisibleDescription && <div className={css(desc({ theme }))}>{description}</div>}
@@ -30,7 +30,7 @@ const header: CreateRule<{ theme: Theme }> = (props) => {
     fontSize: `${theme.font.fixed.f16}`,
     lineHeight: '20px',
     fontWeight: 'bold',
-    padding: '36px 0 16px 0',
+    padding: '20px 0 16px 0',
     width: '100%',
     userSelect: 'none',
   };
@@ -39,6 +39,10 @@ const header: CreateRule<{ theme: Theme }> = (props) => {
 const arrDown = {
   transform: 'rotate(180deg)',
   webkitTransform: 'rotate(180deg)',
+} as Rule;
+const arrUp = {
+  transform: 'rotate(0deg)',
+  webkitTransform: 'rotate(0deg)',
 } as Rule;
 
 const desc: CreateRule<{ theme: Theme }> = (props) => {

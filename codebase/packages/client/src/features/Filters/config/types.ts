@@ -10,3 +10,13 @@ export type SortOption = {
   label: SortBy;
   text: string;
 };
+
+export type FilterOption = {
+  options: string[];
+  title: string;
+  multi?: boolean;
+  id: number;
+};
+
+type FilterValue = string | Record<string, boolean>;
+export type FilterValues = Record<number, FilterValue>;

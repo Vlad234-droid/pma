@@ -2,7 +2,12 @@
 import { createSelector } from 'reselect'; //@ts-ignore
 import { RootState } from 'typesafe-actions';
 import { Status } from '@pma/client/src/config/enum';
-import { SortBy, searchEmployeesFn, sortEmployeesFn, searchEmployeesAndManagersFn } from '@pma/client/src/features/Filters';
+import {
+  SortBy,
+  searchEmployeesFn,
+  sortEmployeesFn,
+  searchEmployeesAndManagersFn,
+} from '@pma/client/src/features/Filters';
 import { Employee } from '@pma/client/src/config/types';
 
 export const managersSelector = (state: RootState) => state.managers || {};

@@ -11,6 +11,9 @@ export const createRequestFeedbackSchema = Yup.object().shape({
     )
     .required(),
   targetType: Yup.string().required(),
+  comment_to_objective: Yup.string()
+    .notRequired()
+    .when('targetId', { is: (val) => val, then: Yup.string().required() }),
   targetId: Yup.string()
     .notRequired()
     .when('targetType', {

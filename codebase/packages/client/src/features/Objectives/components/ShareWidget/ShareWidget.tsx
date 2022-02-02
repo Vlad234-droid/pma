@@ -1,11 +1,12 @@
 import React, { FC, useState, useEffect, useMemo } from 'react';
-import { useTranslation } from 'components/Translation';
+import { Trans, useTranslation } from 'components/Translation';
 import { useStyle, Rule, Button, Styles, colors } from '@dex-ddl/core';
 
 import { TileWrapper } from 'components/Tile';
 import { Icon } from 'components/Icon';
 import { ConfirmModal, WrapperModal } from 'features/Modal';
-import { SuccessModal, ShareObjectivesModal } from '../Modal';
+import { ShareObjectivesModal } from '../Modal';
+import SuccessModal from 'components/SuccessModal';
 import { Status, ReviewType } from 'config/enum';
 import useDispatch from 'hooks/useDispatch';
 import { useSelector } from 'react-redux';
@@ -24,11 +25,12 @@ import {
 
 export type Props = {
   customStyle?: React.CSSProperties | {};
+  stopShare?: boolean;
 };
 
 export const TEST_ID = 'share-widget';
 
-const ShareWidget: FC<Props> = ({ customStyle }) => {
+const ShareWidget: FC<Props> = ({ customStyle, stopShare }) => {
   const dispatch = useDispatch();
   const { css, theme } = useStyle();
   const { t } = useTranslation();
@@ -84,7 +86,20 @@ const ShareWidget: FC<Props> = ({ customStyle }) => {
   }, [sharedObjectivesCount, formElementsCount]);
 
   const getContent = (): [string, string, string, () => void] => {
-    if (isManagerShared) {
+    if (stopShare) {
+      return [
+        t('shared_objectives', 'Shared objectives'),
+        t(
+          'you_have_shared_objectives_from_your_manager',
+          `You have ${sharedObjectivesCount} shared objective(s) from your manager.`,
+          { count: sharedObjectivesCount },
+        ),
+        t('view_objectives', 'View'),
+        () => {
+          handleViewObjectivesBtnClick();
+        },
+      ];
+    } else if (isManagerShared) {
       return [
         t('share_objectives', 'Share Objectives'),
         t('share_objectives_on_description', 'You are currently sharing your objectives with your team'),
@@ -160,31 +175,23 @@ const ShareWidget: FC<Props> = ({ customStyle }) => {
             'are_you_sure_you_want_to_make_your_objectives_visible',
             'Are you sure you want to make your objectives visible?',
           )}
-          submitBtnTitle={t('share', 'Share')}
+          submitBtnTitle={<Trans i18nKey='share'>Share</Trans>}
           onSave={() => handleShareSaveBtnClick()}
           onCancel={() => setIsConfirmDeclineModalOpen(false)}
           onOverlayClick={() => setIsConfirmDeclineModalOpen(false)}
         />
       )}
       {isSuccessModalOpen && (
-        <WrapperModal
-          title={t('share_objectives', 'Share Objectives')}
+        <SuccessModal
+          title='Objectives shares'
+          description={
+            isShared
+              ? t('your_objectives_have_been_visible', 'Your objectives have been made visible to your team.')
+              : t('you_have_stopped_sharing_your_objectives', 'You have stopped sharing your objectives to your team.')
+          }
           onClose={() => setIsSuccessModalOpen(false)}
-          onOverlayClick={() => setIsSuccessModalOpen(false)}
-        >
-          <SuccessModal
-            description={
-              isShared
-                ? t('your_objectives_have_been_visible', 'Your objectives have been made visible to your team.')
-                : t(
-                    'you_have_stopped_sharing_your_objectives',
-                    'You have stopped sharing your objectives to your team.',
-                  )
-            }
-            onClose={() => setIsSuccessModalOpen(false)}
-            withСheckMark
-          />
-        </WrapperModal>
+          withСheckMark
+        />
       )}
       {isViewObjectivesModalOpen && (
         <WrapperModal
@@ -248,7 +255,6 @@ const bodyStyle: Rule = {
 
 const btnStyle = ({ theme, isManagerShared }) => ({
   fontSize: '14px',
-  fontWeight: 'bold',
   color: isManagerShared ? theme.colors.tescoRed : theme.colors.tescoBlue,
   height: '30px',
   background: 'transparent',

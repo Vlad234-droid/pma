@@ -11,6 +11,7 @@ export enum Status {
   COMPLETED = 'COMPLETED',
   STARTED = 'STARTED',
   NOT_STARTED = 'NOT_STARTED',
+  NOT_CREATED = 'NOT_CREATED',
 }
 
 export enum ObjectiveType {
@@ -65,10 +66,15 @@ export enum TargetTypeReverse {
   'OTHER' = 'Your impact on others',
 }
 
+export enum Tesco {
+  TescoBank = 'Tesco Bank: Big 6',
+}
+
 export enum TargetFeedbackKeys {
   'GOAL' = 'comment_to_day_job',
   'VALUE_BEHAVIOR' = 'comment_to_your_self',
   'OTHER' = 'comment_to_your_impact',
+  'OBJECTIVE' = 'comment_to_objective',
 }
 
 export enum VoiceType {
@@ -76,4 +82,11 @@ export enum VoiceType {
   'id_2' = 'Friendly and constructive',
   'id_3' = 'Informative and detailed',
   'id_4' = 'I don`t have a preference',
+}
+
+export enum Rating {
+  BELOW_EXPECTED = 'Below expected',
+  SATISFACTORY = 'Satisfactory',
+  GREAT = 'Great',
+  OUTSTANDING = 'Outstanding',
 }

@@ -26,8 +26,9 @@ import { GenericItemField } from 'components/GenericForm';
 import MarkdownRenderer from 'components/MarkdownRenderer';
 import { TriggerModal } from 'features/Modal/components/TriggerModal';
 
-import { SubmitButton, SuccessModal } from './index';
+import { SubmitButton } from './index';
 import MidYearHelpModal from './MidYearHelpModal';
+import SuccessModal from 'components/SuccessModal';
 
 export type ReviewFormModal = {
   reviewType: ReviewType;
@@ -186,6 +187,7 @@ const ReviewFormModal: FC<Props> = ({ reviewType, onClose }) => {
   if (successModal) {
     return (
       <SuccessModal
+        title='Review sent'
         onClose={onClose}
         description={t(
           `${timelineReview?.code?.toLowerCase()}_review_sent_to_manager`,

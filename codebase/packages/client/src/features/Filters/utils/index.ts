@@ -1,6 +1,8 @@
+import isEmpty from 'lodash.isempty';
+
 import { Employee } from 'config/types';
 
-import { SortBy } from '../config/types';
+import { FilterOption, SortBy, FilterValues } from '../config/types';
 
 export const getEmployeesSortingOptions = (t) => [
   {
@@ -24,7 +26,6 @@ export const searchEmployeesFn = <T extends Employee, K extends string>(employee
       employee.lastName.toLowerCase().startsWith(search.toLowerCase()),
   );
 };
-
 
 export const searchEmployeesAndManagersFn = <T extends Employee, K extends string>(employees: T[], search?: K): T[] => {
   if (!search || search.length < 3) return employees;
@@ -61,3 +62,33 @@ const sortByAZNameFn = <T extends { firstName?: string }, K extends T>(a: T, b: 
   (a.firstName || '').toString().localeCompare((b.firstName || '').toString());
 const sortByZANameFn = <T extends { firstName?: string }, K extends T>(a: T, b: K): number =>
   (b.firstName || '').toString().localeCompare((a.firstName || '').toString());
+
+export const getInitialFilterValues = (options?: FilterOption[]) => {
+  if (!options) return {};
+
+  return options.reduce((res, item) => {
+    const itemOptions = item.multi ? item.options.reduce((res, option) => ({ ...res, [option]: false }), {}) : '';
+
+    return { ...res, [item.id]: itemOptions };
+  }, {});
+};
+
+export const getFiltersWithValues = (filters: FilterValues) =>
+  Object.entries(filters).reduce((res, [key, value]) => {
+    if (typeof value === 'string') {
+      return value ? { ...res, [key]: value } : res;
+    } else {
+      const validFilters = Object.entries(value).reduce((res, [key, value]) => {
+        if (value) {
+          return { ...res, [key]: value };
+        }
+        return res;
+      }, {});
+
+      if (!isEmpty(validFilters)) {
+        return { ...res, [key]: validFilters };
+      }
+
+      return res;
+    }
+  }, {});

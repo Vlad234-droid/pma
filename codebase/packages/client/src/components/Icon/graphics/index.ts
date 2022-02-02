@@ -36,6 +36,7 @@ import { Archive } from './archive';
 import { NotiBellCirlceOut } from './notiBellCirlceOut';
 import { Support } from './support';
 import { Home } from './home';
+import { Hamburger } from './hamburger';
 import { Aim } from './aim';
 import { List } from './list';
 import { Performance } from './performance';
@@ -47,6 +48,7 @@ import { StrategicDriver } from './strategicDriver';
 import { Configuration } from './configuration';
 import { Tip } from './tip';
 import { MultiLanguage } from './multiLanguage';
+import { Close } from './close';
 
 /**
  * Each icon we add needs to have viewbox set to "0 0 24 24".
@@ -69,6 +71,7 @@ export type Graphics =
   | 'cancel'
   | 'chatSq'
   | 'check'
+  | 'close'
   | 'configuration'
   | 'createCycle'
   | 'decline'
@@ -78,6 +81,7 @@ export type Graphics =
   | 'edit'
   | 'folder'
   | 'home'
+  | 'hamburger'
   | 'information'
   | 'multiLanguage'
   | 'list'
@@ -112,6 +116,7 @@ export const icons: Record<Graphics, FCGraphicProps> = {
   account: Account,
   calender: Calender,
   cancel: Cancel,
+  close: Close,
   decline: Decline,
   check: Check,
   microphone: Microphone,
@@ -141,6 +146,7 @@ export const icons: Record<Graphics, FCGraphicProps> = {
   notiBellCircleOut: NotiBellCirlceOut,
   support: Support,
   home: Home,
+  hamburger: Hamburger,
   aim: Aim,
   list: List,
   performance: Performance,

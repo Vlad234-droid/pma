@@ -3,6 +3,7 @@ import { Epic, isActionOf } from 'typesafe-actions';
 import { combineEpics } from 'redux-observable';
 import { from, of } from 'rxjs';
 import { catchError, filter, map, switchMap, takeUntil } from 'rxjs/operators';
+import { concatWithErrorToast, errorPayloadConverter } from '../../utils/toastHelper';
 
 import { getConfigEntries, getConfigEntriesByUuid } from './actions';
 
@@ -28,7 +29,10 @@ export const getConfigEntriesEpic: Epic = (action$, _, { api }) => {
         }),
         catchError((e) => {
           const errors = e?.data?.errors;
-          return of(getConfigEntries.failure(errors?.[0]));
+          return concatWithErrorToast(
+            of(getConfigEntries.failure(errors?.[0])),
+            errorPayloadConverter({ ...errors?.[0], title: 'Config fetch error' }),
+          );
         }),
         takeUntil(action$.pipe(filter(isActionOf(getConfigEntries.cancel)))),
       ),
@@ -45,7 +49,10 @@ export const getConfigEntriesByUuidEpic: Epic = (action$, _, { api }) =>
         map(getConfigEntriesByUuid.success),
         catchError((e) => {
           const errors = e?.data?.errors;
-          return of(getConfigEntriesByUuid.failure(errors?.[0]));
+          return concatWithErrorToast(
+            of(getConfigEntriesByUuid.failure(errors?.[0])),
+            errorPayloadConverter({ ...errors?.[0], title: 'Config entries by uuid fetch error' }),
+          );
         }),
         takeUntil(action$.pipe(filter(isActionOf(getConfigEntriesByUuid.cancel)))),
       ),

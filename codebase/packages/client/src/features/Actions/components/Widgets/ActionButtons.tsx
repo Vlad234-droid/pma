@@ -32,7 +32,7 @@ export const ActionButtons: FC<ActionButtonsProps> = ({ approveColleagues, decli
   };
 
   const handleDeclineSubmit = (hasReason = false, reason?: string) => {
-    declineColleagues(hasReason ? reason: '');
+    declineColleagues(hasReason ? reason : '');
     setIsOpenDeclinePopup(false);
   };
 

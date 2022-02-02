@@ -2,7 +2,7 @@ import { createReducer } from 'typesafe-actions';
 import { getObjectivesReport } from './actions';
 
 export const initialState = {
-  objectivesReport: [],
+  objectiveReports: [],
   meta: { loading: false, loaded: false, error: null },
 };
 
@@ -11,9 +11,10 @@ export default createReducer(initialState)
     ...state,
     meta: { ...state.meta, loading: true },
   }))
-  .handleAction(getObjectivesReport.success, (state) => ({
+  .handleAction(getObjectivesReport.success, (state, { payload }) => ({
     ...state,
     meta: { ...state.meta, loading: false, loaded: true },
+    objectiveReports: payload,
   }))
   .handleAction(getObjectivesReport.failure, (state, { payload }) => ({
     ...state,

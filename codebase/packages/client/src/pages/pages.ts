@@ -22,6 +22,8 @@ import Report from './Report';
 import { CreatePerformanceCycle, PerformanceCycleAdministration } from './PerformanceCycle';
 import { EditTip, TipsAdministration } from './Tips';
 import { UserObjectives } from './UserObjectives';
+import PeopleTeam from './PeopleTeam';
+import Calibration from './Calibration';
 
 type RoleKeys = keyof typeof roles;
 
@@ -40,6 +42,20 @@ const pages: Record<Page, PageComponent> = {
     title: 'My Team',
     withHeader: true,
     backPath: Page.CONTRIBUTION,
+    perform: [roles.LINE_MANAGER],
+  },
+  [Page.PEOPLE_TEAM]: {
+    Element: PeopleTeam,
+    title: 'People Team',
+    withHeader: true,
+    backPath: Page.CONTRIBUTION,
+    perform: [roles.LINE_MANAGER],
+  },
+  [Page.CALIBRATION]: {
+    Element: Calibration,
+    title: 'Calibration',
+    withHeader: true,
+    backPath: Page.PEOPLE_TEAM,
     perform: [roles.LINE_MANAGER],
   },
   [Page.NOTES]: {

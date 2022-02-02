@@ -1,7 +1,13 @@
 import { createReducer } from 'typesafe-actions';
 import { clearSchemaData, getSchema, updateRatingSchema } from './actions';
 
-export const initialState = {
+export type InitialStateType = {
+  meta: { loading: boolean; loaded: boolean; updating: boolean; updated: boolean; error: any };
+  current: { metadata?: any; forms?: any[] };
+  colleagueSchema: any;
+};
+
+export const initialState: InitialStateType = {
   meta: { loading: false, loaded: false, updating: false, updated: false, error: null },
   current: {},
   colleagueSchema: {},

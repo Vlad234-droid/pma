@@ -1,10 +1,9 @@
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
-import NotesActions from './NotesActions';
 import { renderWithTheme } from '../../utils/test';
 import '@testing-library/jest-dom';
 import { fireEvent } from '@testing-library/react';
-import { NOTES_WRAPPER, PLUS_BUTTON, MODAL_BUTTONS } from './NotesActions';
+import NotesActions, { NOTES_WRAPPER, PLUS_BUTTON, MODAL_BUTTONS } from './NotesActions';
 
 it('Notes page', async () => {
   const { getByTestId, queryByTestId, findByTestId } = renderWithTheme(<NotesActions />);

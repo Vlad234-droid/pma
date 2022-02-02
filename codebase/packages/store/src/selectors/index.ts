@@ -22,4 +22,6 @@ export * from './objectivesSharing';
 export * from './audit-log';
 export * from './tips';
 export * from './notes';
+export * from './report';
 export * from './previousReviewFiles';
+export * from './appState';

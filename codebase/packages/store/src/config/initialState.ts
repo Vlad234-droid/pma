@@ -18,6 +18,7 @@ import { initialState as processTemplateInitialState } from '../entities/process
 import { initialState as pdpInitialState } from '../entities/pdp/reducer';
 import { initialState as reportInitialState } from '../entities/report/reducer';
 import { initialState as previousReviewFilesInitialState } from '../entities/previousReviewFiles/reducer';
+import { initialState as appState } from '../entities/appState/reducer';
 
 //@ts-ignore
 export const initialState = {
@@ -40,6 +41,7 @@ export const initialState = {
   processTemplate: processTemplateInitialState,
   report: reportInitialState,
   previousReviewFiles: previousReviewFilesInitialState,
+  appState,
 };
 
 export type State = StateType<typeof initialState>;

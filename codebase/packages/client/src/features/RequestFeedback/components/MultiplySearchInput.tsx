@@ -3,7 +3,7 @@ import { colors, useStyle, Rule, Styles } from '@dex-ddl/core';
 import mergeRefs from 'react-merge-refs';
 import { useRefContainer } from 'components/Form/context/input';
 import defaultImg from '../../../../public/default.png';
-import { Close } from 'components/Icon/graphics/Close';
+import { Close } from 'components/Icon/graphics/close';
 
 export interface FormItemProps {
   disabled?: boolean;

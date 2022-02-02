@@ -56,8 +56,9 @@ const CareerPerformance: FC = () => {
           yes={() => (
             <RouterSwitch
               links={[
-                { link: buildPath(Page.CONTRIBUTION), name: 'My View' },
-                { link: buildPath(Page.MY_TEAM), name: 'My Team' },
+                { link: buildPath(Page.CONTRIBUTION), name: t('my_view', 'My View') },
+                { link: buildPath(Page.MY_TEAM), name: t('my_team', 'My Team') },
+                { link: buildPath(Page.PEOPLE_TEAM), name: t('people_team', 'People Team') },
               ]}
             />
           )}

@@ -12,6 +12,7 @@ import { TileWrapper } from 'components/Tile';
 import { colleagueUUIDSelector, FeedbackActions, getReviews } from '@pma/store';
 import { IconButton } from 'components/IconButton';
 import { TargetType } from '../type';
+import { Tesco } from '../../../config/enum';
 
 const AREA_OPTIONS = [
   { value: TargetType.GOAL, label: 'Day Job' },
@@ -68,6 +69,8 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel }) => {
   }, [reviews]);
 
   const labelValue = AREA_OPTIONS.find((item) => item.value === formValues.targetType)?.label;
+  const objectiveValue = (uuid) =>
+    reviews.find((item) => item.uuid === uuid)?.properties?.mapJson?.title ?? Tesco.TescoBank;
 
   return (
     <>
@@ -127,13 +130,25 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel }) => {
                   </Item>
                 )}
                 Element={Select}
-                options={objectiveOptions}
+                options={[...objectiveOptions, { value: Tesco.TescoBank, label: Tesco.TescoBank }]}
                 placeholder='Choose objective'
                 value={formValues.objective}
                 {...register('targetId')}
                 setValue={setValue}
               />
             </div>
+          )}
+          {formValues.targetId && (
+            <TileWrapper customStyle={{ padding: '24px', border: '1px solid #E5E5E5', marginBottom: '24px' }}>
+              <h3 className={css(commentStyle)}>Add comment to {objectiveValue(formValues.targetId)}</h3>
+              <Field
+                Wrapper={Item}
+                Element={Textarea}
+                value={formValues.comment_to_your_self}
+                {...register('comment_to_objective')}
+                setValue={setValue}
+              />
+            </TileWrapper>
           )}
           {formValues.targetType === TargetType.VALUE_BEHAVIOR && (
             <TileWrapper customStyle={{ padding: '24px', border: '1px solid #E5E5E5', marginBottom: '24px' }}>

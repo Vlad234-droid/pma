@@ -515,7 +515,7 @@ const NotesActions: FC = () => {
       {status === ModalStatuses.ADD_NEW && (
         <ConfirmModalWithSelectOptions
           options={confirmSelectOptions}
-          description='Please choose the one option:'
+          description='Please choose one of the options:'
           onOverlayClick={() => setStatus(() => ModalStatuses.PENDING)}
           title='Add new'
           onSave={([checkedItem]) => {
@@ -535,7 +535,7 @@ const NotesActions: FC = () => {
             iconProps={{ invertColors: true }}
             iconStyles={iconAddStyle}
           >
-            <Trans>Add new</Trans>
+            <Trans>Add</Trans>
           </IconButton>
           <FilterOptions
             TEAM={TEAM}
@@ -595,7 +595,7 @@ const wrapperHeaderStyle: Rule = {
 const iconBtnAddStyle: Rule = ({ theme }) => ({
   background: theme.colors.tescoBlue,
   color: theme.colors.white,
-  padding: `${theme.spacing.s1_5} ${theme.spacing.s5}`,
+  padding: `${theme.spacing.s1_5} ${theme.spacing.s6}`,
   borderRadius: theme.spacing.s8,
   fontWeight: theme.font.weight.bold,
 });

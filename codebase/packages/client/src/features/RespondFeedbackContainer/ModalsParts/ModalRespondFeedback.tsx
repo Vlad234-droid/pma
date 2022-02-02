@@ -48,7 +48,10 @@ const ModalRespondFeedback: FC<ModalGiveFeedbackProps> = ({
           How is the colleague performing?
         </div>
         <div className={css({ marginTop: '8px', fontSize: '18px', lineHeight: '22px' })}>
-          {t('colleague_requested_feedback', 'This colleague has requested feedback from you. Fill out the questions below to share your feedback.')}
+          {t(
+            'colleague_requested_feedback',
+            'This colleague has requested feedback from you. Fill out the questions below to share your feedback.',
+          )}
         </div>
         {selectedPerson && (
           <SubmitPart

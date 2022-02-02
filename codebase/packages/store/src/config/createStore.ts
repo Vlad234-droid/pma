@@ -10,6 +10,7 @@ import {
   Epic,
 } from 'typesafe-actions';
 import { Api } from '@pma/api';
+import { Api as OpenApi } from '@pma/openapi';
 
 export const createStore = ({
   reducer,
@@ -21,7 +22,7 @@ export const createStore = ({
 }: {
   reducer: RootReducer;
   epic: Epic;
-  services: { api: Api };
+  services: { api: Api; openapi: OpenApi };
   state: RootState;
   withLogger?: boolean;
   composeEnhancer?: (...func: StoreEnhancer<{ dispatch: unknown }>[]) => StoreEnhancer<{ dispatch: unknown }>;
