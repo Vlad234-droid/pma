@@ -3,7 +3,7 @@ import { CreateRule, Rule, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { Trans } from 'components/Translation';
 import { Radio } from 'components/Form';
 import { FeedbackStatus } from 'config/enum';
-import GiveFeedbackBtn from 'components/GiveFeedbackBtn';
+import IconButtonDefault from 'components/IconButtonDefault';
 
 type Props = {
   checkedRadio: string;
@@ -17,7 +17,7 @@ const RadioBtns: FC<Props> = ({ checkedRadio, onCheck, handleBtnClick }) => {
   const medium = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
   return (
     <>
-      <GiveFeedbackBtn onClick={handleBtnClick} />
+      <IconButtonDefault graphic='arrowRight' onClick={handleBtnClick} />
       <div className={css(wrapperBlock({ medium }))}>
         <div className={css({ padding: '0px 10px 0px 0px', cursor: 'pointer' })}>
           <label htmlFor='draft' className={css(flexStyle)}>

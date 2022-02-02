@@ -7,7 +7,7 @@ import { TileWrapper } from 'components/Tile';
 import { Accordion, BaseAccordion, Section, Panel, ExpandButton } from 'components/Accordion';
 import { formatToRelativeDate, paramsReplacer } from 'utils';
 import { Page } from 'pages';
-import GiveFeedbackBtn from 'components/GiveFeedbackBtn';
+import IconButtonDefault from 'components/IconButtonDefault';
 
 import defaultImg from '../../../../public/default.png';
 
@@ -120,7 +120,7 @@ const FeedbackBlock: FC<Props> = ({ list, canEdit }) => {
                         </TileWrapper>
                         {canEdit && (
                           <div className={css(wrapperBtnStyle)}>
-                            <GiveFeedbackBtn onClick={() =>
+                            <IconButtonDefault graphic='arrowRight' onClick={() =>
                               navigate(paramsReplacer(`/${Page.GIVE_NEW_FEEDBACK}`, { ':uuid': item.uuid }))
                             }/>
                           </div>

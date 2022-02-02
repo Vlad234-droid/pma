@@ -6,7 +6,7 @@ import { FeedbackActions, ObjectiveActions, colleagueUUIDSelector, getNotesArgsS
 import { TileWrapper } from 'components/Tile';
 import { Accordion, BaseAccordion, Section, Panel, ExpandButton } from 'components/Accordion';
 import { filteredByInputSearchHandler, filteredNotesByRadiosBtnsHandler, formatToRelativeDate } from 'utils';
-import GiveFeedbackBtn from 'components/GiveFeedbackBtn';
+import IconButtonDefault from 'components/IconButtonDefault';
 import { FeedbackStatus, Tesco } from 'config/enum';
 
 import defaultImg from '../../../../public/default.png';
@@ -165,7 +165,7 @@ const DraftItem: FC<DraftItemProps> = ({
                         ) : (
                           checkedRadio.pending && (
                             <div className={css(wrapperBtnStyle)}>
-                              <GiveFeedbackBtn onClick={() => handleFeedbackBtnClick(item)}/>
+                              <IconButtonDefault graphic='arrowRight' onClick={() => handleFeedbackBtnClick(item)}/>
                             </div>
                           )
                         )}

@@ -4,17 +4,20 @@ import { Rule } from '@dex-ddl/core';
 import { IconButton, Position } from 'components/IconButton';
 
 import { Trans } from '../Translation';
+import { Graphics } from '../Icon';
 
 type Props = {
   onClick: () => void;
+  iconPosition?: Position;
+  graphic: Graphics;
 };
 
-const GiveFeedbackBtn: FC<Props> = ({ onClick }) => (
+const IconButtonDefault: FC<Props> = ({ onClick, iconPosition = Position.RIGHT, graphic }) => (
   <IconButton
     customVariantRules={{ default: iconBtnStyle }}
-    iconPosition={Position.RIGHT}
+    iconPosition={iconPosition}
     onPress={onClick}
-    graphic='arrowRight'
+    graphic={graphic}
     iconProps={{ invertColors: true }}
     iconStyles={iconArrowRightStyle}
   >
@@ -22,7 +25,7 @@ const GiveFeedbackBtn: FC<Props> = ({ onClick }) => (
   </IconButton>
 );
 
-export default GiveFeedbackBtn;
+export default IconButtonDefault;
 
 const iconArrowRightStyle: Rule = {
   height: '17px',
@@ -43,7 +46,5 @@ const iconBtnStyle: Rule = ({ theme }) => ({
   width: '176px',
   border: `1px solid ${theme.colors.link}`,
   whiteSpace: 'nowrap',
-  // marginLeft: 'auto',
-  // marginRight: '24px',
   fontWeight: 'bold',
 });
