@@ -16,23 +16,29 @@ type Props = ToastPayload;
 
 export const TEST_ID = 'toast-item-test-id';
 
-const ToastItem: FC<Props> = ({ id, title, description, timeout, variant }) => {
+const ToastItem: FC<Props> = ({ id, title, description, timeout, onClose, variant, autoClose = true }) => {
+  console.log({ id, title, description, timeout, onClose, variant, autoClose });
   const { css } = useStyle();
   const dispatch = useDispatch();
 
   const [destroyTime, setDestroyTime] = useState(timeout || Infinity);
 
   useEffect(() => {
+    if (!autoClose) {
+      return;
+    }
+
     if (destroyTime <= 0) {
-      dispatch(ToastActions.removeToast(id));
+      handleClickClose();
     } else {
       setInterval(() => {
         setDestroyTime(destroyTime - 1000);
       }, 1000);
     }
-  }, [destroyTime]);
+  }, [destroyTime, autoClose]);
 
   const handleClickClose = () => {
+    onClose && onClose();
     dispatch(ToastActions.removeToast(id));
   };
 
@@ -66,7 +72,6 @@ const ToastItem: FC<Props> = ({ id, title, description, timeout, variant }) => {
 
 const wrapperStyles: Rule = ({ theme }) => ({
   position: 'relative',
-  marginBottom: '10px',
   border: `1px solid ${theme.colors.tescoBlue}`,
   boxShadow: '0px 0px 1px rgba(0, 0, 0, 0.1), 0px 2px 10px rgba(0, 0, 0, 0.3)',
 });

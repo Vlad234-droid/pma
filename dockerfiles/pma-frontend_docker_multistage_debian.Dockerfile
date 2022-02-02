@@ -20,7 +20,7 @@ ENV HTTPS_PROXY=$HTTPS_PROXY
 
 RUN apt-get update \
     && apt-get install --yes --no-install-recommends \
-        dos2unix \
+    dos2unix \
     && rm -rf /var/lib/apt/lists/*
 
 RUN --mount=type=cache,id=yarn_cache,target=/usr/local/share/.cache/yarn \
@@ -60,6 +60,7 @@ ARG NPM_ACCESS_TOKEN
 
 ARG PUBLIC_URL=/
 ARG REACT_APP_API_URL
+ARG REACT_APP_MY_INBOX_API_PATH
 
 ENV NODE_ENV=$NODE_ENV
 ENV NODE_PORT=$NODE_PORT
@@ -83,6 +84,7 @@ COPY --from=codebase /opt/src/ ./
 
 ENV PUBLIC_URL=$PUBLIC_URL
 ENV REACT_APP_API_URL=$REACT_APP_API_URL
+ENV REACT_APP_MY_INBOX_API_PATH=$REACT_APP_MY_INBOX_API_PATH
 
 ENV SKIP_PREFLIGHT_CHECK=true
 

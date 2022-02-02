@@ -11,6 +11,8 @@ type ToastPayload = {
   title: string;
   description: string;
   timeout?: number;
+  onClose?: () => void;
+  autoClose?: boolean;
 };
 
 export { Variant };

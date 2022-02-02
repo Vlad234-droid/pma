@@ -39,3 +39,33 @@ declare module '*.svg' {
   const src: string;
   export default src;
 }
+
+declare namespace NodeJS {
+  enum AppMode {
+    standalone = 'standalone',
+    integrity = 'integrity',
+  }
+
+  enum Environment {
+    local = 'local',
+    dev = 'dev',
+    ppe = 'ppe',
+    prod = 'prod',
+  }
+
+  interface ProcessEnv {
+    // General
+    PORT: number;
+    NODE_ENV: keyof typeof Environment;
+    PUBLIC_URL: string;
+
+    // Integration
+    REACT_APP_INTEGRATION_MODE: keyof typeof AppMode;
+    REACT_APP_API_URL: string;
+    REACT_APP_API_VERSION: vstring;
+  }
+
+  export interface Process {
+    env: ProcessEnv;
+  }
+}

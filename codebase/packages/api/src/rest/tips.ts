@@ -22,3 +22,7 @@ export const deleteTip = (params: any) => {
   const { uuid, withHistory } = params;
   return httpClient.delete(`${domain}/${uuid}`, { params: { withHistory } });
 };
+
+export const publishTipByUuid = (uuid: string) => {
+  return httpClient.patch(`${domain}/${uuid}/publish`);
+};

@@ -155,5 +155,6 @@
   "my_team": "My Team",
   "people_team": "People Team",
   "you_dont_have_access_to_pma": "You don't have access to PMA - TBC with PO",
-  "timeline_is_empty": "Timeline is empty"
+  "timeline_is_empty": "Timeline is empty",
+  "my_alerts": "My alerts"
 }

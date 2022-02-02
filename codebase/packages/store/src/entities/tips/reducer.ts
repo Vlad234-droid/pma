@@ -1,5 +1,5 @@
 import { createReducer } from 'typesafe-actions';
-import { getAllTips, getTipHistory, getTipByUuid, createTip, deleteTip } from './actions';
+import { getAllTips, getTipHistory, getTipByUuid, createTip, deleteTip, publishTipByUuid } from './actions';
 
 export const initialState = {
   tipsList: [],
@@ -83,6 +83,29 @@ export default createReducer(initialState)
     };
   })
   .handleAction(deleteTip.failure, (state, { payload }) => ({
+    ...state,
+    meta: { ...state.meta, loading: false, loaded: true, error: payload },
+  }))
+
+  .handleAction(publishTipByUuid.request, (state) => ({
+    ...state,
+    meta: { ...state.meta, loading: true },
+  }))
+  .handleAction(publishTipByUuid.success, (state, { payload }) => {
+    return {
+      ...state,
+      tipsList: state.tipsList.map((tip) => {
+        if (tip.uuid === payload.uuid) {
+          return payload;
+        }
+
+        return tip;
+      }),
+      currentTip: payload,
+      meta: { ...state.meta, loading: false, loaded: true },
+    };
+  })
+  .handleAction(publishTipByUuid.failure, (state, { payload }) => ({
     ...state,
     meta: { ...state.meta, loading: false, loaded: true, error: payload },
   }));

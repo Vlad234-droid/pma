@@ -19,3 +19,4 @@ export { Actions as PDPActions } from './pdp/actions';
 export { Actions as PreviousReviewFilesActions } from './previousReviewFiles/actions';
 export { Actions as ReportActions } from './report/actions';
 export { Actions as AppStateActions } from './appState/actions';
+export { Actions as MessagesActions } from './messages/actions';

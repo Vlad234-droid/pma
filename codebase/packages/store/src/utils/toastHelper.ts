@@ -7,6 +7,7 @@ type ErrorPayload = {
 };
 
 const concatWithErrorToast = <T>(action: Observable<T>, payload: ToastFabricPayload) => {
+  console.log('payload', payload);
   return concat(action, of(addToastFabric(payload).error));
 };
 
@@ -17,6 +18,7 @@ const errorPayloadConverter = ({
 }: ErrorPayload & Partial<ToastFabricPayload>): ToastFabricPayload => {
   return {
     id: code,
+    autoClose: false,
     description: message,
     ...rest,
   };
