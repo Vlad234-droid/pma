@@ -6,12 +6,12 @@ import GeneralDocument from '../General';
 type PDPGoal = {
   uuid: string;
   number: number;
-  properties: any;
+  items: any[];
 };
 
 type Props = {
   items: PDPGoal[];
-  formItems: any;
+  formItems: any[];
 };
 
 const PDPDocument: FC<Props> = ({ formItems, items }) => {
@@ -28,13 +28,12 @@ const PDPDocument: FC<Props> = ({ formItems, items }) => {
             )}
 
             <View style={styles.body}>
-              {value?.properties &&
-                Object.keys(value?.properties?.mapJson).map((key, idx) => (
-                  <View key={idx} style={styles.block}>
-                    <Text style={styles.subtitle}>{formItems[idx]?.label.replace(/\*./g, '')}:</Text>
-                    <Text style={styles.description}>{value?.properties?.mapJson[key]}</Text>
-                  </View>
-                ))}
+              {value.items.map((val, idx) => (
+                <View key={idx} style={styles.block}>
+                  <Text style={styles.subtitle}>{formItems[idx].label}:</Text>
+                  <Text style={styles.description}>{val}</Text>
+                </View>
+              ))}
             </View>
           </View>
         ))}

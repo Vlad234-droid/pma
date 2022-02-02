@@ -62,8 +62,18 @@ const MyPersonalDevelopmentPlan: FC = () => {
 
   const formElements = components.filter((component) => component.type != 'text');
 
+  const documentFormElements = formElements.map((el) => ({ label: el['label'].replace(/\*./g, '') }));
+
+  const documentFormItems = pdpSelector.map((el, idx) => {
+    return {
+      uuid: el.uuid,
+      number: pdpSelector[idx]?.number,
+      items: Object.values(el?.properties?.mapJson).map((value, idx) => value),
+    };
+  });
+
   const document = useMemo(
-    () => <PDPDocument formItems={formElements} items={pdpSelector} />,
+    () => <PDPDocument formItems={documentFormElements} items={documentFormItems} />,
     [pdpSelector, pdpSelector.length],
   );
 
