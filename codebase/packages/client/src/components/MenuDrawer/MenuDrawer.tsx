@@ -48,11 +48,8 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
         <div className={css(menuDrawerTopStyle)}>
           <div className={css({ display: 'flex', justifyContent: 'space-between' })}>
             <img className={css({ maxWidth: 'inherit' })} src={TescoLogo} alt='TescoLogo' />
-            <div className={css({ display: 'flex', alignItems: 'center', marginTop: '10px' })}>
-              <Icon onClick={onClose} graphic='cancel' iconStyles={{
-                width: '24px',
-                height: '24px',
-              }} />
+            <div className={css(iconWrapperStyles)}>
+              <Icon onClick={onClose} graphic='cancel' iconStyles={iconStyles} />
             </div>
           </div>
           <div className={css(menuDrawerTitleStyle)}>Your Contribution</div>
@@ -174,6 +171,17 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
       )}
     </div>
   );
+};
+
+const iconWrapperStyles: Rule = {
+  display: 'flex',
+  alignItems: 'center',
+  marginTop: '10px',
+};
+
+const iconStyles: Rule = {
+  width: '24px',
+  height: '24px',
 };
 
 const menuDrawerWrapperStyle: Rule = {
