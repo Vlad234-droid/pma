@@ -50,7 +50,7 @@ const EditRatingsModal: FC<Props> = ({ employee, onClose, onSave }) => {
       onCancel={onClose}
       onSave={handleSave}
       submitBtnTitle={<Trans i18nKey='save_change'>Save change</Trans>}
-      canSubmit={!!overallRating}
+      canSubmit={!!whatRating && !!howRating}
     >
       <div data-test-id='edit-rating-modal' className={css({ padding: '16px 0 32px' })}>
         <>
@@ -75,7 +75,7 @@ const EditRatingsModal: FC<Props> = ({ employee, onClose, onSave }) => {
           </Item>
         </>
         <>
-          <div className={css(Label)}>{t('select_how_rating', "Select your colleague's 'How' rating")}</div>
+          <div className={css(Label)}>{t('select_how_rating', `Select your colleague's 'How' rating`)}</div>
           <Item withIcon={false}>
             <Select
               options={options}
@@ -87,8 +87,8 @@ const EditRatingsModal: FC<Props> = ({ employee, onClose, onSave }) => {
         </>
         <div className={css(Label)}>{`${t(
           'overall_rating_is',
-          "Your colleague's overall rating is:",
-        )} ${overallRating}`}</div>
+          `Your colleague's overall rating is`,
+        )}: ${overallRating}`}</div>
       </div>
     </ConfirmModal>
   );

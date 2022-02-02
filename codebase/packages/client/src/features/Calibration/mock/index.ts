@@ -77,54 +77,41 @@ export const getCompareOptions = (t) => [
 
 export const getCurrentData = () => {
   const currentYear = new Date().getFullYear();
-  return [
-    {
-      name: Rating.OUTSTANDING,
-      [currentYear]: 13,
+
+  return ({
+    title: currentYear.toString(),
+    ratings: {
+      [Rating.OUTSTANDING]: 13,
+      [Rating.GREAT]: 37,
+      [Rating.SATISFACTORY]: 46,
+      [Rating.BELOW_EXPECTED]: 7,
     },
-    {
-      name: Rating.GREAT,
-      [currentYear]: 37,
-    },
-    {
-      name: Rating.SATISFACTORY,
-      [currentYear]: 46,
-    },
-    {
-      name: Rating.BELOW_EXPECTED,
-      [currentYear]: 6,
-    },
-  ];
+  });
 };
 
 export const getCompareData = (compareMode: string) => {
   const data = [
     {
-      name: Rating.OUTSTANDING,
-      '2021': 17,
-      'Expected distribution': 11,
+      title: '2021',
+      ratings: {
+        [Rating.OUTSTANDING]: 12,
+        [Rating.GREAT]: 31,
+        [Rating.SATISFACTORY]: 6,
+        [Rating.BELOW_EXPECTED]: 6,
+      },
     },
     {
-      name: Rating.GREAT,
-      '2021': 33,
-      'Expected distribution': 35,
-    },
-    {
-      name: Rating.SATISFACTORY,
-      '2021': 40,
-      'Expected distribution': 48,
-    },
-    {
-      name: Rating.BELOW_EXPECTED,
-      '2021': 12,
-      'Expected distribution': 4,
-    },
+      title: 'Expected distribution',
+      ratings: {
+        [Rating.OUTSTANDING]: 11,
+        [Rating.GREAT]: 35,
+        [Rating.SATISFACTORY]: 48,
+        [Rating.BELOW_EXPECTED]: 4,
+      },
+    }
   ];
 
-  return data.map((item) => ({
-    name: item.name,
-    [compareMode]: item[compareMode],
-  }));
+  return data.filter((item) => item.title === compareMode)[0];
 };
 
 export const getRatingsOptions = () => [
