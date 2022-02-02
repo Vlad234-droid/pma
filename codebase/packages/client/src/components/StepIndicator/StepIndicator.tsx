@@ -14,12 +14,13 @@ export type StepIndicatorProps = {
   titles?: string[];
   descriptions?: string[];
   statuses?: Status[];
+  isValid?: boolean;
   customStyle?: React.CSSProperties | {};
 };
 
-const getStatus = (i: number, currentStep?: number, currentStatus?: Status) => {
-  if (currentStep === i && currentStatus) return Status[currentStatus];
-  if (currentStep && currentStep > i) return Status.APPROVED;
+const getStatus = (i: number, currentStep?: number, currentStatus?: Status, isValid?: boolean) => {
+  if ((isValid && i === currentStep) || (currentStep && currentStep > i) || i === currentStep) return Status.APPROVED;
+  else if (currentStep === i && currentStatus) return Status[currentStatus];
 };
 
 export const StepIndicatorBasic: FC<StepIndicatorProps> = ({
@@ -28,6 +29,7 @@ export const StepIndicatorBasic: FC<StepIndicatorProps> = ({
   titles = [],
   descriptions = [],
   statuses = [],
+  isValid,
 }) => {
   const { css, theme } = useStyle();
 
@@ -79,7 +81,7 @@ export const StepIndicatorBasic: FC<StepIndicatorProps> = ({
     }, []);
   } else {
     array = titles.reduce((arr: JSX.Element[], _, i) => {
-      const status = getStatus(i, currentStep, currentStatus);
+      const status = getStatus(i, currentStep, currentStatus, isValid);
       const [graphics, color] = getIcon(status);
       const alignItems = getTextAlign(titles?.length, i);
       arr.push(
