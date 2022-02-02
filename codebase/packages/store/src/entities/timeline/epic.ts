@@ -13,6 +13,7 @@ export const getTimelineEpic: Epic = (action$, _, { api }) =>
     switchMap(({ payload }) =>
       from(api.getTimeline(payload)).pipe(
         map((response) => {
+          // @ts-ignore
           if (!response.data.length) {
             return addModalError({
               title: 'timeline_is_empty',
