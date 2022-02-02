@@ -2,8 +2,8 @@ import React, { FC } from 'react';
 import { CreateRule, Rule, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { Trans } from 'components/Translation';
 import { Radio } from 'components/Form';
-import { IconButton } from 'components/IconButton';
 import { FeedbackStatus } from 'config/enum';
+import IconButtonDefault from 'components/IconButtonDefault';
 
 type Props = {
   checkedRadio: string;
@@ -17,15 +17,7 @@ const RadioBtns: FC<Props> = ({ checkedRadio, onCheck, handleBtnClick }) => {
   const medium = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
   return (
     <>
-      <IconButton
-        customVariantRules={{ default: iconBtnStyle }}
-        onPress={handleBtnClick}
-        graphic='add'
-        iconProps={{ invertColors: true }}
-        iconStyles={iconStyle}
-      >
-        <Trans>Give new feedback</Trans>
-      </IconButton>
+      <IconButtonDefault graphic='arrowRight' onClick={handleBtnClick} />
       <div className={css(wrapperBlock({ medium }))}>
         <div className={css({ padding: '0px 10px 0px 0px', cursor: 'pointer' })}>
           <label htmlFor='draft' className={css(flexStyle)}>
@@ -66,24 +58,6 @@ const wrapperBlock: CreateRule<{ medium: boolean }> = ({ medium }) => ({
   ...(medium && { flexBasis: '816px', marginTop: '24px' }),
 });
 
-const iconBtnStyle: Rule = ({ theme }) => ({
-  padding: '12px 20px 12px 22px',
-  display: 'flex',
-  height: '40px',
-  borderRadius: '20px',
-  justifyContent: 'center',
-  alignItems: 'center',
-  outline: 0,
-  background: theme.colors.tescoBlue,
-  color: theme.colors.white,
-  cursor: 'pointer',
-  fontWeight: theme.font.weight.bold,
-});
-
-const iconStyle: Rule = {
-  marginRight: '10px',
-  marginTop: '2px',
-};
 const titleStyle: Rule = {
   fontSize: '16px',
   lineHeight: '20px',

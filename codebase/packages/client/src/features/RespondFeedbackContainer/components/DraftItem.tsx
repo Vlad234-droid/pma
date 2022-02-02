@@ -1,14 +1,15 @@
 import React, { FC, useEffect } from 'react';
 import { useStyle, Rule } from '@dex-ddl/core';
-import { TileWrapper } from 'components/Tile';
-import { Accordion, BaseAccordion, Section, Panel, ExpandButton } from 'components/Accordion';
-import { IconButton, Position } from 'components/IconButton';
-import { Trans } from 'components/Translation';
 import { useDispatch, useSelector } from 'react-redux';
 import { FeedbackActions, ObjectiveActions, colleagueUUIDSelector, getNotesArgsSelector } from '@pma/store';
+
+import { TileWrapper } from 'components/Tile';
+import { Accordion, BaseAccordion, Section, Panel, ExpandButton } from 'components/Accordion';
 import { filteredByInputSearchHandler, filteredNotesByRadiosBtnsHandler, formatToRelativeDate } from 'utils';
+import IconButtonDefault from 'components/IconButtonDefault';
+import { FeedbackStatus, Tesco } from 'config/enum';
+
 import defaultImg from '../../../../public/default.png';
-import { FeedbackStatus , Tesco } from 'config/enum';
 import { DraftItemProps } from '../type';
 import { NoFeedback } from '../../Feedback/components';
 import PendingNotes from './PendingNotes';
@@ -63,6 +64,16 @@ const DraftItem: FC<DraftItemProps> = ({
       }
     }
   }, [completedNotes.length]);
+
+  const handleFeedbackBtnClick = (item) => {
+    if (filterModal) setFilterModal(() => false);
+
+    setFilterFeedbacks(() => ({ AZ: false, ZA: false, newToOld: false, oldToNew: false }));
+
+    if (focus) setFocus(() => false);
+
+    draftFeedback(item);
+  }
 
   const getPropperNotes = () => {
     if (checkedRadio.completed && searchValue.length <= 2 && Object.values(filterFeedbacks).every((item) => !item)) {
@@ -153,21 +164,9 @@ const DraftItem: FC<DraftItemProps> = ({
                           <></>
                         ) : (
                           checkedRadio.pending && (
-                            <IconButton
-                              customVariantRules={{ default: iconBtnStyle }}
-                              iconPosition={Position.RIGHT}
-                              onPress={() => {
-                                if (filterModal) setFilterModal(() => false);
-                                setFilterFeedbacks(() => ({ AZ: false, ZA: false, newToOld: false, oldToNew: false }));
-                                if (focus) setFocus(() => false);
-                                draftFeedback(item);
-                              }}
-                              graphic='arrowRight'
-                              iconProps={{ invertColors: true }}
-                              iconStyles={icontArrowRightStyle}
-                            >
-                              <Trans>Give feedback</Trans>
-                            </IconButton>
+                            <div className={css(wrapperBtnStyle)}>
+                              <IconButtonDefault graphic='arrowRight' onClick={() => handleFeedbackBtnClick(item)}/>
+                            </div>
                           )
                         )}
                       </Panel>
@@ -187,10 +186,6 @@ const DraftStyles: Rule = {
   display: 'flex',
   justifyContent: 'space-between',
 };
-const icontArrowRightStyle: Rule = {
-  height: '17px',
-  margin: '3px 9px 0px 3px',
-};
 
 const BlockInfo: Rule = {
   display: 'inline-flex',
@@ -202,6 +197,7 @@ const ImgStyle: Rule = {
   height: '48px',
   borderRadius: '50%',
 };
+
 const NamesStyle: Rule = {
   fontWeight: 'bold',
   fontSize: '18px',
@@ -209,6 +205,7 @@ const NamesStyle: Rule = {
   margin: '0px',
   color: '#00539F',
 };
+
 const IndustryStyle: Rule = {
   fontWeight: 'normal',
   fontSize: '16px',
@@ -216,24 +213,9 @@ const IndustryStyle: Rule = {
   margin: '4px 0px 0px 0px',
 };
 
-const iconBtnStyle: Rule = ({ theme }) => ({
-  padding: '12px 7px 12px 20px',
-  display: 'flex',
-  height: '40px',
-  borderRadius: '20px',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  outline: 0,
-  background: theme.colors.tescoBlue,
-  color: theme.colors.white,
-  cursor: 'pointer',
-  width: '176px',
-  border: '1px solid #00539F',
-  whiteSpace: 'nowrap',
+const wrapperBtnStyle: Rule = ({
   marginLeft: 'auto',
   marginRight: '24px',
-
-  fontWeight: 'bold',
 });
 
 export default DraftItem;

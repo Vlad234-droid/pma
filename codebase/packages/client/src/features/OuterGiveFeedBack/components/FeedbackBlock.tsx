@@ -5,10 +5,10 @@ import { useStyle, Rule, Styles, colors } from '@dex-ddl/core';
 import { NoFeedback } from 'features/Feedback/components';
 import { TileWrapper } from 'components/Tile';
 import { Accordion, BaseAccordion, Section, Panel, ExpandButton } from 'components/Accordion';
-import { IconButton } from 'components/IconButton';
-import { Trans } from 'components/Translation';
 import { formatToRelativeDate, paramsReplacer } from 'utils';
 import { Page } from 'pages';
+import IconButtonDefault from 'components/IconButtonDefault';
+
 import defaultImg from '../../../../public/default.png';
 
 type Props = {
@@ -119,17 +119,11 @@ const FeedbackBlock: FC<Props> = ({ list, canEdit }) => {
                           </div>
                         </TileWrapper>
                         {canEdit && (
-                          <IconButton
-                            customVariantRules={{ default: iconBtnStyle }}
-                            onPress={() =>
+                          <div className={css(wrapperBtnStyle)}>
+                            <IconButtonDefault graphic='arrowRight' onClick={() =>
                               navigate(paramsReplacer(`/${Page.GIVE_NEW_FEEDBACK}`, { ':uuid': item.uuid }))
-                            }
-                            graphic='edit'
-                            iconProps={{ invertColors: false }}
-                            iconStyles={iconStyle}
-                          >
-                            <Trans i18nKey='give_feedback'>Give feedback</Trans>
-                          </IconButton>
+                            }/>
+                          </div>
                         )}
                       </Panel>
                     </Section>
@@ -190,25 +184,8 @@ const infoBlockStyle: Rule = {
   },
 } as Styles;
 
-const iconBtnStyle: Rule = ({ theme }) => ({
-  padding: '12px 20px 12px 22px',
-  display: 'flex',
-  height: '40px',
-  borderRadius: '20px',
-  justifyContent: 'center',
-  alignItems: 'center',
-  outline: 0,
-  background: theme.colors.white,
-  color: theme.colors.tescoBlue,
-  cursor: 'pointer',
-  width: '176px',
-  border: '1px solid #00539F',
-  whiteSpace: 'nowrap',
+const wrapperBtnStyle: Rule = ({
   marginLeft: 'auto',
-  marginTop: '24px',
 });
 
-const iconStyle: Rule = {
-  marginRight: '12px',
-};
 export default FeedbackBlock;
