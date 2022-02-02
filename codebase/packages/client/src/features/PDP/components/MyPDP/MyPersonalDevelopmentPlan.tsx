@@ -1,6 +1,7 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect, useMemo } from 'react';
 import { CreateRule, Rule, Styles, theme, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { useDispatch, useSelector } from 'react-redux';
+import { downloadPDF, PDPDocument, usePDF } from '@pma/pdf-renderer';
 import {
   colleagueUUIDSelector,
   getTimelineMetaSelector,
@@ -51,7 +52,7 @@ const MyPersonalDevelopmentPlan: FC = () => {
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
 
-  const pdpSelector = useSelector(schemaMetaPDPSelector)?.goals;
+  const pdpSelector = useSelector(schemaMetaPDPSelector)?.goals || [];
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const [schema] = usePDPShema(PDPType.PDP);
   const { components = [] } = schema;
@@ -60,6 +61,23 @@ const MyPersonalDevelopmentPlan: FC = () => {
   const canShowAnnualReview = !timelineTypes[ObjectiveType.MYR] && timelineTypes[ObjectiveType.EYR];
 
   const formElements = components.filter((component) => component.type != 'text');
+
+  const documentFormElements = formElements.map((el) => ({ label: el['label'].replace(/\*./g, '') }));
+
+  const documentFormItems = pdpSelector.map((el, idx) => {
+    return {
+      uuid: el.uuid,
+      number: pdpSelector[idx]?.number,
+      items: Object.values(el?.properties?.mapJson).map((value, idx) => value),
+    };
+  });
+
+  const document = useMemo(
+    () => <PDPDocument formItems={documentFormElements} items={documentFormItems} />,
+    [pdpSelector, pdpSelector.length],
+  );
+
+  const [instance, updateInstance] = usePDF({ document });
 
   const createdReviews: any = [];
   if (canShowMyReview) {
@@ -71,6 +89,12 @@ const MyPersonalDevelopmentPlan: FC = () => {
   const navToGoalPage = () => navigate(buildPath(Page.CREATE_PERSONAL_DEVELOPMENT_PLAN));
 
   const { loaded } = useSelector(getTimelineMetaSelector) || {};
+
+  useEffect(() => {
+    if (pdpSelector?.length) {
+      updateInstance();
+    }
+  }, [pdpSelector, pdpSelector?.length]);
 
   useEffect(() => {
     if (!loaded) {
@@ -94,9 +118,9 @@ const MyPersonalDevelopmentPlan: FC = () => {
     <div className={css({ padding: '0 40px' })}>
       <div className={css(buttonBlock)}>
         <div className={css(controlButtons({ mobileScreen }))}>
-          {pdpSelector && pdpSelector.length === 5 ? null : (
+          {pdpSelector && pdpSelector?.length === 5 ? null : (
             <>
-              <button className={css(buttonDownload)} onClick={() => console.log('download template')}>
+              <button className={css(buttonDownload)} onClick={() => console.log('download')}>
                 <div className={css(btnIcon)}>
                   <Icon graphic='download' />
                 </div>
@@ -156,11 +180,11 @@ const MyPersonalDevelopmentPlan: FC = () => {
         <div className={css(subtitleBlock)}>
           <div className={css(devPlanTitle)}>My Development Plan</div>
           <div>
-            <button className={css(buttonDownloadItems)} onClick={() => console.log('download template')}>
+            <button className={css(buttonDownloadItems)} onClick={() => downloadPDF(instance.url!, 'pdp-goals.pdf')}>
               <div className={css(btnIcon)}>
                 <Icon graphic='download' />
               </div>
-              Download template
+              Download
             </button>
           </div>
         </div>
