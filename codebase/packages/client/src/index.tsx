@@ -16,6 +16,7 @@ import Navigation from 'features/Routes/components/Routes';
 import { buildRoutes } from 'features/Routes';
 import { pages } from 'pages';
 import { ToastProvider } from 'features/Toast';
+import { AppStateProvider } from 'features/AppState';
 import fontSettings from 'theme/font/fontSettings';
 
 const routes = buildRoutes(pages);
@@ -36,13 +37,15 @@ const Root: FC = () => {
         <Provider store={store}>
           <ToastProvider>
             <AuthProvider>
-              <BrowserRouter basename={PUBLIC_URL}>
-                <React.StrictMode>
-                  <Layout>
-                    <Navigation routes={routes} />
-                  </Layout>
-                </React.StrictMode>
-              </BrowserRouter>
+              <AppStateProvider>
+                <BrowserRouter basename={PUBLIC_URL}>
+                  <React.StrictMode>
+                    <Layout>
+                      <Navigation routes={routes} />
+                    </Layout>
+                  </React.StrictMode>
+                </BrowserRouter>
+              </AppStateProvider>
             </AuthProvider>
           </ToastProvider>
         </Provider>

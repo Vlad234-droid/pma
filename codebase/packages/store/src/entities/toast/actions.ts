@@ -18,8 +18,8 @@ export const addToast = createAction('toasts/ADD_REQUEST')<{
 export const removeToast = createAction('toasts/REMOVE_REQUEST')<string>();
 
 export const Actions = {
-  addToast: addToast,
-  removeToast: removeToast,
+  addToast,
+  removeToast,
 };
 
 export type ToastFabricPayload = {
@@ -39,6 +39,12 @@ export const addToastFabric = ({ id, title, description }: ToastFabricPayload) =
     id: id ?? uuid(),
     variant: Variant.SUCCESS,
     title: title ?? 'Success',
+    description: description ?? 'N/A',
+  }),
+  info: addToast({
+    id: id ?? uuid(),
+    variant: Variant.INFO,
+    title: title ?? 'Info',
     description: description ?? 'N/A',
   }),
 });
