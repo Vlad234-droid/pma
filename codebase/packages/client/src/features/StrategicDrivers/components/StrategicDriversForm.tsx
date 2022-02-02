@@ -39,8 +39,6 @@ const StrategicDriversForm: FC = () => {
 
   const publish = (newData) => {
     const data = prepareOrgObjectivesData(newData.objectives, orgObjectives);
-    console.log('data', data);
-    return;
     dispatch(
       OrgObjectiveActions.createAndPublishOrgObjective({
         data,
