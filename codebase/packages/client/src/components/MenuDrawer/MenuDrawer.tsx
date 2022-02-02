@@ -18,7 +18,6 @@ import { Trans, useTranslation } from 'components/Translation';
 import { MenuItem } from 'components/MenuItem';
 import TescoLogo from './TescoLogo.svg';
 import { Icon } from '../Icon';
-import { IconButton } from '../IconButton';
 
 export type MenuDrawerProps = { onClose: () => void };
 
@@ -49,7 +48,9 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
         <div className={css(menuDrawerTopStyle)}>
           <div className={css({ display: 'flex', justifyContent: 'space-between' })}>
             <img className={css({ maxWidth: 'inherit' })} src={TescoLogo} alt='TescoLogo' />
-            <IconButton graphic={'cancel'} onPress={onClose} />
+            <div className={css(iconWrapperStyles)}>
+              <Icon onClick={onClose} graphic='cancel' iconStyles={iconStyles} />
+            </div>
           </div>
           <div className={css(menuDrawerTitleStyle)}>Your Contribution</div>
           <div className={css(menuDrawerButtonsStyle)}>
@@ -170,6 +171,17 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
       )}
     </div>
   );
+};
+
+const iconWrapperStyles: Rule = {
+  display: 'flex',
+  alignItems: 'center',
+  marginTop: '10px',
+};
+
+const iconStyles: Rule = {
+  width: '24px',
+  height: '24px',
 };
 
 const menuDrawerWrapperStyle: Rule = {

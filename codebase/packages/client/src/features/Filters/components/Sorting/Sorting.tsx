@@ -9,18 +9,19 @@ type Props = {
   iconStyles?: Rule;
   isOpen: boolean;
   onClick: () => void;
+  onClose: () => void;
   value?: SortBy;
   onSort: (value: SortBy) => void;
   sortingOptions: SortOption[];
 };
 
-const Sorting: FC<Props> = ({ sortingOptions, iconStyles, isOpen, onClick, value, onSort }) => {
+const Sorting: FC<Props> = ({ sortingOptions, iconStyles, isOpen, onClick, value, onSort, onClose }) => {
   const { css } = useStyle();
 
   return (
     <div className={css(wrapperStyle)} data-test-id='sorting-wrapper'>
       <FilterIcon iconStyles={iconStyles} onClick={onClick} />
-      <SortingModal options={sortingOptions} onSelect={onSort} isOpen={isOpen} value={value} />
+      <SortingModal options={sortingOptions} onSelect={onSort} isOpen={isOpen} value={value} onClose={onClose} />
     </div>
   );
 };
