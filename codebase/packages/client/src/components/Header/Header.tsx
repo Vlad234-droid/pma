@@ -55,10 +55,17 @@ const Header: FC<HeaderProps> = ({ title, onBack, withIcon, iconName = 'home', s
         )}
         {title}
       </h3>
-      <IconButton onPress={handleOpen} graphic='hamburger' />
+      <div className={css({ display: 'flex', alignItems: 'center', marginTop: '10px' })}>
+        <Icon onClick={handleOpen} graphic='hamburger' iconStyles={iconStyles} />
+      </div>
       {state?.isOpen && <MenuDrawer onClose={handleClose} />}
     </div>
   );
+};
+
+const iconStyles: Rule = {
+  width: '24px',
+  height: '24px',
 };
 
 const wrapperStyles: Rule = {

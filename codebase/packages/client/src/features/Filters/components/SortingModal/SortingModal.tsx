@@ -1,8 +1,9 @@
-import React, { FC } from 'react';
+import React, { FC, useRef, MouseEvent } from 'react';
 import { useStyle, Rule, CreateRule } from '@dex-ddl/core';
 
 import { Radio } from 'components/Form';
 import { Trans } from 'components/Translation';
+import useEventListener from 'hooks/useEventListener';
 
 import { SortBy, SortOption } from '../../config/types';
 
@@ -11,13 +12,24 @@ type Props = {
   isOpen: boolean;
   value?: SortBy;
   options: SortOption[];
+  onClose: () => void;
 };
 
-const SortingModal: FC<Props> = ({ options, onSelect, isOpen, value }) => {
+const SortingModal: FC<Props> = ({ options, onSelect, isOpen, value, onClose }) => {
   const { css } = useStyle();
+  const ref = useRef<HTMLDivElement | null>(null);
+
+  const handleClickOutside = (event: MouseEvent<HTMLElement>) => {
+    const element = event?.target as HTMLElement;
+    if (ref.current && !ref.current.contains(element)) {
+      onClose();
+    }
+  };
+
+  useEventListener('click', handleClickOutside);
 
   return (
-    <div data-test-id='sorting-modal' className={css(wrapperStyles({ isOpen }))}>
+    <div data-test-id='sorting-modal' ref={ref} className={css(wrapperStyles({ isOpen }))}>
       <div className={css(innerStyles)}>
         <span>Sort :</span>
         {options.map((item) => (

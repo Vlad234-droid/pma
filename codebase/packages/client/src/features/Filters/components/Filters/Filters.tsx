@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { Rule } from '@dex-ddl/core';
+import { useStyle, Rule } from '@dex-ddl/core';
 
 import InfoIcon from 'components/InfoIcon';
 
@@ -19,6 +19,7 @@ type Props = {
 };
 
 const Filters: FC<Props> = ({ sortingOptions, sortValue, onSort, searchValue, onSearch, filterOptions, onFilter }) => {
+  const { css } = useStyle();
   const [sortOpen, setSortOpen] = useState<boolean>(false);
   const [searchOpened, setSearchOpen] = useState<boolean>(false);
   const [filterOpened, setFilterOpen] = useState<boolean>(false);
@@ -49,7 +50,7 @@ const Filters: FC<Props> = ({ sortingOptions, sortValue, onSort, searchValue, on
   };
 
   return (
-    <div data-test-id='filters'>
+    <div className={css(wrapperStyles)} data-test-id='filters'>
       <InfoIcon onClick={() => console.log('info clicked')} />
       {sortingOptions && (
         <Sorting
@@ -59,6 +60,7 @@ const Filters: FC<Props> = ({ sortingOptions, sortValue, onSort, searchValue, on
           onSort={handleSort}
           value={sortValue}
           sortingOptions={sortingOptions}
+          onClose={() => setSortOpen(false)}
         />
       )}
       {filterOptions && (
@@ -83,6 +85,10 @@ const Filters: FC<Props> = ({ sortingOptions, sortValue, onSort, searchValue, on
 };
 
 export default Filters;
+
+const wrapperStyles: Rule = {
+  display: 'flex',
+};
 
 const iconStyles: Rule = {
   width: '16px',
