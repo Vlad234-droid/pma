@@ -9,6 +9,8 @@ const PRECISE_UNITS: Record<string, DurationUnit> = {
   seconds: 'milliseconds',
 };
 
+export const EXPIRATION_DATE = 'expiration_date';
+
 const diffBy = (unit: DurationUnit) => (endDate: DateTime, startDate?: DateTime) => {
   const units = [unit, PRECISE_UNITS[unit]];
   const diff = endDate.diff(startDate || DateTime.local(), units);

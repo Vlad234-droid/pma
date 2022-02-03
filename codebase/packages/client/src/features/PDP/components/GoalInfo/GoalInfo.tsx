@@ -4,7 +4,7 @@ import { Accordion, BaseAccordion, ExpandButton, Panel, Section } from 'componen
 import { ConfirmModal } from 'features/Modal';
 import { Icon } from 'components/Icon';
 import { Trans } from 'components/Translation';
-import { DATE_STRING_FORMAT, formatDateString } from 'utils';
+import { DATE_STRING_FORMAT, EXPIRATION_DATE, formatDateString } from 'utils';
 
 const GoalInfo = (props) => {
   const { id, title, subtitle, description, data, formElements, deleteGoal, editGoal } = props;
@@ -55,7 +55,7 @@ const GoalInfo = (props) => {
                   <div>
                     {data &&
                       Object.keys(data).map((key, index) => {
-                        const isExpDate = key === 'expiration_date';
+                        const isExpDate = key === EXPIRATION_DATE;
 
                         if (index !== 0)
                           return (
