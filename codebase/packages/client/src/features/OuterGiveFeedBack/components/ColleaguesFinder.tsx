@@ -61,7 +61,7 @@ const ColleaguesFinder: FC<Props> = ({ onSelect, error, value }) => {
                     <div>{item?.colleague?.profile?.firstName}</div>
                     <div>{item?.colleague?.profile?.lastName}</div>
                   </div>
-                  <div className={css(FlexGapStyle, { marginTop: '4px' })}>
+                  <div className={css({ marginTop: '4px' })}>
                     <div>{item?.colleague?.workRelationships[0].job?.name}</div>
                     <div>{item?.colleague?.workRelationships[0].department?.name}</div>
                   </div>
