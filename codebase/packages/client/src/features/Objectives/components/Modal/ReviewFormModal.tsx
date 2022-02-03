@@ -27,7 +27,7 @@ import MarkdownRenderer from 'components/MarkdownRenderer';
 import { TriggerModal } from 'features/Modal/components/TriggerModal';
 
 import { SubmitButton } from './index';
-import MidYearHelpModal from './MidYearHelpModal';
+import ReviewHelpModal from './ReviewHelpModal';
 import SuccessModal from 'components/SuccessModal';
 
 export type ReviewFormModal = {
@@ -239,7 +239,7 @@ const ReviewFormModal: FC<Props> = ({ reviewType, onClose }) => {
                 }
                 title={t('completing_your_review', 'Completing your review')}
               >
-                <MidYearHelpModal />
+                <ReviewHelpModal />
               </TriggerModal>
             </div>
             {components.map((component) => {
