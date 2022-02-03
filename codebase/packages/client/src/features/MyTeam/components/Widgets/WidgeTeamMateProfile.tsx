@@ -21,6 +21,7 @@ export type WidgetTeamMateProfileProps = {
   fullTeamView?: boolean;
   rating?: Rating;
   onClick?: () => void;
+  customWrapperStyle?: React.CSSProperties | {};
 };
 
 export const getIcon = (status): [Graphics, Colors] => {
@@ -45,6 +46,7 @@ export const WidgetTeamMateProfile: FC<WidgetTeamMateProfileProps> = ({
   fullTeamView = false,
   rating,
   onClick,
+  customWrapperStyle,
 }) => {
   const { css } = useStyle();
   const navigate = useNavigate();
@@ -56,7 +58,7 @@ export const WidgetTeamMateProfile: FC<WidgetTeamMateProfileProps> = ({
 
   return (
     <>
-      <TileWrapper>
+      <TileWrapper customStyle={customWrapperStyle}>
         <Accordion
           id={`team-mate-accordion-${uuid}`}
           customStyle={{

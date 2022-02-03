@@ -16,7 +16,7 @@ type Props = {
 };
 
 const Colleagues: FC<Props> = ({ colleagues, editMode, onSave }) => {
-  const { css } = useStyle();
+  const { css, theme } = useStyle();
   const { t } = useTranslation();
   const [currentEmployee, setCurrentEmployee] = useState<null | Employee>(null);
   const [currentRating, setCurrentRating] = useState<Rating>(Rating.OUTSTANDING);
@@ -52,6 +52,7 @@ const Colleagues: FC<Props> = ({ colleagues, editMode, onSave }) => {
             employee={employee}
             rating={currentRating}
             onClick={() => handleEditRating(employee)}
+            customWrapperStyle={{ border: `1px solid ${editMode ? theme.colors.tescoBlue : 'transparent'}` }}
           />
         ))}
       </div>

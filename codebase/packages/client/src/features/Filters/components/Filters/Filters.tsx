@@ -41,6 +41,11 @@ const Filters: FC<Props> = ({ sortingOptions, sortValue, onSort, searchValue, on
     setSortOpen(false);
   };
 
+  const handleFilterOpen = () => {
+    setSearchOpen(false);
+    setFilterOpen(true);
+  };
+
   const handleFilterClose = () => {
     setFilterOpen(false);
   };
@@ -67,7 +72,7 @@ const Filters: FC<Props> = ({ sortingOptions, sortValue, onSort, searchValue, on
         <Filtering
           iconStyles={iconStyles}
           isOpen={filterOpened}
-          onClick={() => setFilterOpen(true)}
+          onClick={handleFilterOpen}
           onClose={handleFilterClose}
           filterOptions={filterOptions}
           onFilter={handleFilter}

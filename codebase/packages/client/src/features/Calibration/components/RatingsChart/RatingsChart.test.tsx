@@ -9,12 +9,15 @@ import RatingsChart from './RatingsChart';
 
 describe('<RatingsChart />', () => {
   const props = {
-    currentData: [
-      { name: Rating.OUTSTANDING, 2022: 13 },
-      { name: Rating.GREAT, 2022: 37 },
-      { name: Rating.SATISFACTORY, 2022: 46 },
-      { name: Rating.BELOW_EXPECTED, 2022: 6 },
-    ],
+    currentData: {
+      title: '2022',
+      ratings: {
+        [Rating.OUTSTANDING]: 13,
+        [Rating.GREAT]: 37,
+        [Rating.SATISFACTORY]: 46,
+        [Rating.BELOW_EXPECTED]: 6,
+      },
+    },
   };
 
   describe('#render', () => {

@@ -1,6 +1,8 @@
+import { Rating } from 'config/enum';
+
 import { RatingChartData } from '../config/types';
 
-export const getGraphBars = (data: RatingChartData) => {
+export const getGraphBars = (data: Record<string, number | Rating>[]) => {
   const bars: string[] = [];
   Object.keys(data[0]).forEach((key) => {
     if (key !== 'name') {
@@ -12,10 +14,14 @@ export const getGraphBars = (data: RatingChartData) => {
 };
 
 export const getComputedData = (data: RatingChartData, compareData?: RatingChartData) => {
-  if (!compareData) return data;
+  return Object.entries(data.ratings).reduce((res, [key, value]) => {
+    // @ts-ignore
+    res.data.push({ name: key, [data.title]: value, ...(compareData && { [compareData.title]: compareData.ratings[key] }) });
+    res.total[data.title] = res.total[data.title] + value;
 
-  return data.map((item, index) => ({
-    ...item,
-    ...compareData[index],
-  }));
+      if (compareData) {
+        res.total[compareData.title] = res.total[compareData.title] + compareData.ratings[key];
+      }
+    return res;
+  }, { data: [], total: { [data.title]: 0, ...(compareData && { [compareData.title]: 0 }) } });
 };

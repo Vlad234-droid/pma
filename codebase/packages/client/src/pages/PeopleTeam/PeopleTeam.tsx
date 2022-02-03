@@ -17,7 +17,7 @@ const PeopleTeam: FC = () => {
     {
       iconGraphic: 'calibration',
       title: t('calibration', 'Calibration'),
-      data: t('Purus id ut tempus euismod ut.'),
+      data: t('click_here_to_access_calibration', 'Click here to access the calibration area'),
       customStyle: { flex: '2 1 110px' },
       onClick: () => navigate(buildPath(Page.CALIBRATION)),
       withButton: false,
