@@ -72,7 +72,7 @@ export const ObjectiveTileExplanations: FC<Pick<Props, 'explanations' | 'withSpa
 
   return (
     <>
-      {explanations.map(({ title, description, readonly, key }, idx) => (
+      {explanations.map(({ title, description, readonly = true, key }, idx) => (
         <div className={css(explanationStyles)} key={idx}>
           <h4 className={css(explanationSubTitleStyles({ withSpacing }))}>
             <MarkdownRenderer source={title} />

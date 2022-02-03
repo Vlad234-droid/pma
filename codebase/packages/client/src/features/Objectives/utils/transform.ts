@@ -2,10 +2,10 @@ import * as T from '../types';
 import { Status } from 'config/enum';
 
 export const transformReviewsToObjectives = (
-  reviwes: T.Review[] = [],
+  reviews: T.Review[] = [],
   formElements?: Record<string, string>[],
 ): T.Objective[] => {
-  return reviwes?.map((reviewItem) => {
+  return reviews?.map((reviewItem) => {
     const status = reviewItem.status;
     const declineReason = status === Status.DECLINED ? reviewItem?.changeStatusReason : '';
     const objective = reviewItem?.properties?.mapJson;
@@ -19,7 +19,7 @@ export const transformReviewsToObjectives = (
         .map((component) => {
           const { key, label } = component;
 
-          return { title: label, steps: objective[key] ? [objective[key]] : [] };
+          return { title: label, description: objective[key] };
         });
     }
 
