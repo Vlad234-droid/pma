@@ -10,5 +10,5 @@ export const getMessagesCount = createSelector(messagesSelector, ({ meta }: any)
 
 export const getMessagesByCriteria = ({ filterFn, sortFn, serializer, size }) =>
   createSelector(messagesSelector, ({ messages }: any) => {
-    return messages.slice(0, size).filter(filterFn).sort(sortFn).map(serializer);
+    return messages?.slice(0, size)?.filter(filterFn).sort(sortFn).map(serializer) || [];
   });
