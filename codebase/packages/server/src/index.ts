@@ -58,10 +58,7 @@ if (!PROXY_API_SERVER_URL) {
       target: PROXY_API_SERVER_URL,
       changeOrigin: true,
       autoRewrite: true,
-      pathRewrite:
-        config.applicationPublicUrl() === '/'
-          ? { ['^/api']: '' }
-          : { ['^/api']: '', [`^${config.applicationPublicUrl()}/api`]: '' },
+      pathRewrite: { ['^/api']: '' },
       logLevel: 'debug',
     };
     proxyMiddlewareOptions.onError = function (e) {
@@ -120,13 +117,13 @@ if (!PROXY_API_SERVER_URL) {
 
     const myInboxMiddleware = await myInboxConfig(config);
 
-    appServer.use(myInboxMiddleware);
     const proxyMiddleware = createProxyMiddleware(
       ['/api/**', '!/api/colleague-inbox/**', '!/api/manager-bff/**'],
       proxyMiddlewareOptions,
     );
     appServer.use('/api', proxyMiddleware);
     appServer.use('/_status', (_, res) => res.sendStatus(200));
+    appServer.use(myInboxMiddleware);
 
     console.log('version', process.version);
 
