@@ -5,15 +5,17 @@ import success from '../../../../public/success.jpg';
 
 export type PushTipModalProps = {
   handleCloseModal: () => void;
+  handleConfirm: () => void;
   card: TipsProps;
 };
 
-const PushTipModal: FC<PushTipModalProps> = ({ card, handleCloseModal }) => {
+const PushTipModal: FC<PushTipModalProps> = ({ card, handleCloseModal, handleConfirm }) => {
   const { css } = useStyle();
 
   const [successText, showSuccessText] = useState(false);
 
   const handlePushTip = () => {
+    handleConfirm();
     showSuccessText(true);
     console.log('Tip is pushed!');
   };

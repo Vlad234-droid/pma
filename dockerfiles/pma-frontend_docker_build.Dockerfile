@@ -8,11 +8,15 @@ ARG HTTPS_PROXY
 ARG NODE_ENV
 
 ARG REACT_APP_API_URL=/api
+ARG REACT_APP_MY_INBOX_API_PATH=/api/colleague-inbox
 ARG PUBLIC_URL=/
 
 WORKDIR /home/app
 
-RUN apk --update add bash && apk --no-cache add dos2unix
+RUN apk --update --no-cache add \
+    bash \
+    dos2unix \
+    git 
 
 #COPY --chmod=0644 ./codebase ./
 #COPY --chmod=0755 ./scripts/create-npmrc.sh ./create-npmrc.sh
@@ -32,6 +36,7 @@ RUN yarn bootstrap:dev
 ENV BUILD_ENV=production
 ENV NODE_ENV=$NODE_ENV
 ENV REACT_APP_API_URL=$REACT_APP_API_URL
+ENV REACT_APP_MY_INBOX_API_PATH=$REACT_APP_MY_INBOX_API_PATH
 ENV PUBLIC_URL=$PUBLIC_URL
 
 ENV SKIP_PREFLIGHT_CHECK=true

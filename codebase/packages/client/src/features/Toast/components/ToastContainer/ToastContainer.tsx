@@ -14,6 +14,7 @@ export type Props = {
 
 const ToastContainer: FC<Props> = ({ items }) => {
   const { css } = useStyle();
+
   return (
     <div className={css(wrapperStyles)} data-test-id={TEST_ID}>
       {items.map(({ timeout = DEFAULT_TIMEOUT, ...rest }, idx) => (
@@ -23,12 +24,15 @@ const ToastContainer: FC<Props> = ({ items }) => {
   );
 };
 
-const wrapperStyles: Rule = {
+const wrapperStyles: Rule = ({ zIndex }) => ({
   position: 'fixed',
-  top: '24px',
+  top: '75px',
   right: '16px',
-  zIndex: 999,
+  zIndex: zIndex.i40,
   marginLeft: '16px',
-};
+  gap: '10px',
+  display: 'flex',
+  flexDirection: 'column',
+});
 
 export default ToastContainer;

@@ -17,6 +17,7 @@ import {
   mfModuleAssetHandler,
   openIdConfig,
   standaloneIndexAssetHandler,
+  myInboxConfig,
 } from './middlewares';
 
 getEnv().validate();
@@ -117,14 +118,19 @@ if (!PROXY_API_SERVER_URL) {
     appServer.use(express.static(clientDistFolder, { index: false }));
     appServer.use(express.static('public'));
 
-    const proxyMiddleware = createProxyMiddleware(proxyMiddlewareOptions);
-    // appServer.use('/api/v1/schema/d158ebc0-d97d-4b2e-9e34-4bbb6099fdc6', (_, res) => res.json(schema).sendStatus(200));
+    const myInboxMiddleware = await myInboxConfig(config);
+
+    const proxyMiddleware = createProxyMiddleware(
+      ['/api/**', '!/api/colleague-inbox/**', '!/api/manager-bff/**'],
+      proxyMiddlewareOptions,
+    );
     appServer.use('/api', proxyMiddleware);
     appServer.use('/_status', (_, res) => res.sendStatus(200));
+    appServer.use(myInboxMiddleware);
 
     console.log('version', process.version);
 
-    // static file serving section
+    // static file serving sectionmy
     switch (integrationMode) {
       case 'integrity': {
         appServer.use(

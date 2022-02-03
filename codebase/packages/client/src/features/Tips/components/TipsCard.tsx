@@ -7,6 +7,8 @@ import { paramsReplacer } from 'utils';
 import { buildPath } from 'features/Routes/utils';
 import { TipsProps } from '../types';
 import { PushTipModal, ViewHistoryModal } from '.';
+import { tipsActions } from '@pma/store';
+import { useDispatch } from 'react-redux';
 
 export type TipsCardProps = {
   card: TipsProps;
@@ -15,6 +17,7 @@ export type TipsCardProps = {
 const TipsCard: FC<TipsCardProps> = ({ card }) => {
   const { css } = useStyle();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleEditTip = () => {
     const pathname = paramsReplacer(buildPath(`${Page.EDIT_TIP}`), { ':tipUuid': card.uuid });
@@ -43,6 +46,10 @@ const TipsCard: FC<TipsCardProps> = ({ card }) => {
 
   const handleClosePushTipModal = () => {
     setShowPushModal(false);
+  };
+
+  const handleConfirmBtnClick = () => {
+    dispatch(tipsActions.publishTip(card.uuid));
   };
 
   return (
@@ -79,7 +86,9 @@ const TipsCard: FC<TipsCardProps> = ({ card }) => {
       </div>
 
       {isShowViewHistoryModal && <ViewHistoryModal card={card} handleCloseModal={handleCloseViewHistoryModal} />}
-      {isShowPushModal && <PushTipModal card={card} handleCloseModal={handleClosePushTipModal} />}
+      {isShowPushModal && (
+        <PushTipModal card={card} handleCloseModal={handleClosePushTipModal} handleConfirm={handleConfirmBtnClick} />
+      )}
     </Fragment>
   );
 };

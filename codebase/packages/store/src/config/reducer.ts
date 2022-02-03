@@ -20,6 +20,7 @@ import pdpReducer from '../entities/pdp/reducer';
 import reportReducer from '../entities/report/reducer';
 import previousReviewFilesReducer from '../entities/previousReviewFiles/reducer';
 import appStateReducer from '../entities/appState/reducer';
+import messagesReducer from '../entities/messages/reducer';
 
 export const rootReducer = combineReducers({
   users: userReducer,
@@ -42,4 +43,5 @@ export const rootReducer = combineReducers({
   report: reportReducer,
   previousReviewFiles: previousReviewFilesReducer,
   appState: appStateReducer,
+  messages: messagesReducer,
 });

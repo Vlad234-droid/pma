@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Button, CreateRule, Rule, theme, Theme, useStyle } from '@dex-ddl/core';
+import { Button, Rule, theme, useStyle } from '@dex-ddl/core';
 import { Accordion, BaseAccordion, ExpandButton, Panel, Section } from 'components/Accordion';
 import { ConfirmModal } from 'features/Modal';
 import { Icon } from 'components/Icon';
 import { Trans } from 'components/Translation';
+import { DATE_STRING_FORMAT, EXPIRATION_DATE, formatDateString } from 'utils';
 
 const GoalInfo = (props) => {
   const { id, title, subtitle, description, data, formElements, deleteGoal, editGoal } = props;
@@ -54,6 +55,8 @@ const GoalInfo = (props) => {
                   <div>
                     {data &&
                       Object.keys(data).map((key, index) => {
+                        const isExpDate = key === EXPIRATION_DATE;
+
                         if (index !== 0)
                           return (
                             <div
@@ -63,7 +66,7 @@ const GoalInfo = (props) => {
                               <div className={css({ fontWeight: `${theme.font.weight.bold}` })}>
                                 {formElements[index].label.replace(modifiedTitleRegex, '')}
                               </div>
-                              <div>{data[key]}</div>
+                              <div>{isExpDate ? formatDateString(data[key], DATE_STRING_FORMAT) : data[key]}</div>
                             </div>
                           );
                       })}

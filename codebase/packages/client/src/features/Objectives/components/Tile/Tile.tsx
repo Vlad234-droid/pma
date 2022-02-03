@@ -1,12 +1,15 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { Rule, Styles, useStyle, CreateRule } from '@dex-ddl/core';
 import MarkdownRenderer from 'components/MarkdownRenderer';
+import { Textarea } from 'components/Form';
 
 import { TileWrapper } from 'components/Tile';
 
 type Explanation = {
   title: string;
-  steps: string[];
+  description?: string;
+  readonly?: boolean;
+  key?: string;
 };
 
 type Props = {
@@ -16,14 +19,23 @@ type Props = {
   description?: string;
   explanations: Explanation[];
   withSpacing?: boolean;
+  updateReview?: (properties: any) => void;
 };
 
-const ObjectiveTile: FC<Props> = ({ id, title, subTitle, description, explanations, withSpacing = true }) => {
+const ObjectiveTile: FC<Props> = ({
+  id,
+  title,
+  subTitle,
+  description,
+  explanations,
+  withSpacing = true,
+  updateReview,
+}) => {
   return (
     <TileWrapper key={id} customStyle={tileWrapperStyles} boarder={true}>
       <div style={{ padding: '24px' }}>
         <ObjectiveTileHeader {...{ title, subTitle, description, withSpacing }} />
-        <ObjectiveTileExplanations explanations={explanations} />
+        <ObjectiveTileExplanations explanations={explanations} updateReview={updateReview} />
       </div>
     </TileWrapper>
   );
@@ -46,26 +58,35 @@ export const ObjectiveTileHeader: FC<Pick<Props, 'title' | 'subTitle' | 'descrip
   );
 };
 
-export const ObjectiveTileExplanations: FC<Pick<Props, 'explanations' | 'withSpacing'>> = ({
+export const ObjectiveTileExplanations: FC<Pick<Props, 'explanations' | 'withSpacing' | 'updateReview'>> = ({
   explanations,
   withSpacing = false,
+  updateReview,
 }) => {
   const { css } = useStyle();
+  const handleOnChange = (key) => (e) => {
+    if (key && updateReview) {
+      updateReview({ [key]: e.target.value });
+    }
+  };
 
   return (
     <>
-      {explanations.map(({ title, steps }, idx) => (
+      {explanations.map(({ title, description, readonly, key }, idx) => (
         <div className={css(explanationStyles)} key={idx}>
           <h4 className={css(explanationSubTitleStyles({ withSpacing }))}>
             <MarkdownRenderer source={title} />
           </h4>
-          <div className={css(listStyles)}>
-            {steps.map((step, idx) => (
-              <div className={css(explanationDescriptionStyles)} key={idx}>
-                {step}
-              </div>
-            ))}
-          </div>
+          {readonly ? (
+            <div className={css(listStyles)}>
+              <div className={css(explanationDescriptionStyles)}>{description}</div>
+            </div>
+          ) : (
+            <div className={css(inputsStyles)}>
+              {/*todo not only textarea*/}
+              <Textarea isValid={true} value={description} onChange={handleOnChange(key)} />
+            </div>
+          )}
         </div>
       ))}
     </>
@@ -117,6 +138,7 @@ const explanationDescriptionStyles: Rule = () => ({
 const explanationStyles: Rule = {
   marginBottom: '15px',
 };
+const inputsStyles: Rule = { paddingTop: '10px' };
 
 const listStyles = {
   padding: '0 17px',

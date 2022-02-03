@@ -6,3 +6,6 @@ export * from './formModification';
 // {auth.role:LineManager,admin;auth.work_level:WL3}
 // {request.review:OBJECTIVE}
 // {request.rating:overall_rating}
+// {auth.permission.read:Colleague}
+// {auth.permission.write:LineManager}
+// {auth.permission.read:Colleague,LineManager;auth.permission.write:LineManager}

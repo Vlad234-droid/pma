@@ -6,8 +6,28 @@ export const INTEGRATION_MODE = process.env.REACT_APP_INTEGRATION_MODE ?? 'integ
 
 export const LOGOUT_URL = process?.env?.REACT_APP_LOGOUT_URL ?? '/sso/logout';
 
+const SIGN_OUT = PUBLIC_URL === '/' ? LOGOUT_URL : `${PUBLIC_URL}${LOGOUT_URL}`;
+
 export const LINKS = {
-  signOut: PUBLIC_URL === '/' ? LOGOUT_URL : `${PUBLIC_URL}${LOGOUT_URL}`,
+  signOut: SIGN_OUT,
+};
+
+const { protocol, hostname, port } = location;
+
+const rootPath = `${protocol}//${hostname}${port ? `:${port}` : ''}`;
+const mountPath = `${rootPath}${PUBLIC_URL == '/' ? '' : PUBLIC_URL}`;
+
+export const CONFIG = {
+  mountPath,
+  env: (process.env.NODE_ENV == 'development'
+    ? 'dev'
+    : process.env.NODE_ENV == 'production'
+    ? 'prod'
+    : 'local') as NodeJS.Environment,
+  applicationName: 'Performance Management Application',
+  signOut: `${rootPath}}${SIGN_OUT}`,
+  isDevelopment: process.env.NODE_ENV == 'development',
+  myInboxPath: `${mountPath}/my-inbox/api/colleague-inbox`,
 };
 
 let baseURL = `${API_URL}/`;

@@ -7,10 +7,16 @@ export const initialState = {
 };
 
 export default createReducer(initialState)
-  .handleAction(addToast, (state, { payload }) => ({
-    ...state,
-    data: [...state.data, payload],
-  }))
+  .handleAction(addToast, (state, { payload }) => {
+    if (state.data.some(({ id }) => id === payload.id)) {
+      return state;
+    }
+
+    return {
+      ...state,
+      data: [...state.data, payload],
+    };
+  })
   .handleAction(removeToast, (state, { payload }) => ({
     ...state,
     data: state.data.filter((toast) => toast.id !== payload),

@@ -1,36 +1,32 @@
 import React, { FC, memo } from 'react';
 
-import { useStyle, Rule, CreateRule } from '@dex-ddl/core';
-
-import { Icon, IconProps, Graphics } from './';
+import { useStyle, CreateRule, colors } from '@dex-ddl/core';
 
 export type RoundIconProps = {
-  graphic: Graphics;
-  iconStyles?: Rule;
-  iconProps?: Omit<IconProps, 'graphic' | 'iconStyles'>;
   strokeWidth?: number;
+  strokeColor?: string;
 };
 
 const ICON_WIDTH = 24;
 
-export const RoundIcon: FC<RoundIconProps> = memo(({ graphic, iconStyles, iconProps, strokeWidth = 2 }) => {
+export const RoundIcon: FC<RoundIconProps> = memo(({ strokeWidth = 12, strokeColor = colors.tescoBlue, children }) => {
   const { css } = useStyle();
 
-  return (
-    <span className={css(roundIconStyle({ strokeWidth }))}>
-      <Icon graphic={graphic} iconStyles={iconStyles} {...iconProps} />
-    </span>
-  );
+  return <div className={css(roundIconStyle({ strokeWidth, strokeColor }))}>{children}</div>;
 });
 
-const roundIconStyle: CreateRule<{ strokeWidth: number }> =
-  ({ strokeWidth }) =>
-  ({ theme }) => ({
-    display: 'flex',
+const roundIconStyle: CreateRule<Required<RoundIconProps>> =
+  ({ strokeWidth, strokeColor }) =>
+  () => ({
+    position: 'relative',
+    display: 'inline-flex',
     width: `${ICON_WIDTH + strokeWidth}px`,
     height: `${ICON_WIDTH + strokeWidth}px`,
     borderRadius: `${ICON_WIDTH + strokeWidth}px`,
+    borderWidth: '1px',
+    borderStyle: 'solid',
+    borderColor: strokeColor,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: theme.colors.white,
+    alignSelf: 'center',
   });

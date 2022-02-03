@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useRef, MouseEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { Rule, useStyle } from '@dex-ddl/core';
 import { Page } from 'pages';
@@ -32,7 +32,11 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
     toggleOpen((isOpen) => !isOpen);
   };
 
-  const handleSignOut = (e: React.MouseEvent<HTMLAnchorElement>) => {
+  const underlayRef = useRef(null);
+
+  const underlayClick = (e: MouseEvent<HTMLDivElement>) => e.target === underlayRef.current && onClose();
+
+  const handleSignOut = (e: MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     setIsOpen(true);
   };
@@ -43,7 +47,7 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
   };
 
   return (
-    <div className={css(menuDrawerWrapperStyle)}>
+    <div className={css(menuDrawerWrapperStyle)} onClick={underlayClick} ref={underlayRef}>
       <div className={css(menuDrawerContentStyle)}>
         <div className={css(menuDrawerTopStyle)}>
           <div className={css({ display: 'flex', justifyContent: 'space-between' })}>
@@ -184,16 +188,16 @@ const iconStyles: Rule = {
   height: '24px',
 };
 
-const menuDrawerWrapperStyle: Rule = {
+const menuDrawerWrapperStyle: Rule = ({ colors, zIndex }) => ({
   position: 'fixed',
   left: 0,
   top: 0,
   width: '100%',
   height: '100%',
   overflow: 'auto',
-  backgroundColor: 'rgba(0, 83, 159, 0.7)',
-  zIndex: 2,
-};
+  backgroundColor: colors.link30,
+  zIndex: zIndex.i50,
+});
 
 const menuDrawerContentStyle: Rule = {
   position: 'absolute',

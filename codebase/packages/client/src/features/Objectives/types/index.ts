@@ -2,7 +2,7 @@ import { Status, ReviewType } from 'config/enum';
 
 type Explanation = {
   title: string;
-  steps: string[];
+  description?: string;
 };
 
 type Objective = {

@@ -25,3 +25,4 @@ export * from './notes';
 export * from './report';
 export * from './previousReviewFiles';
 export * from './appState';
+export * from './messages';

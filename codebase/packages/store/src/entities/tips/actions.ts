@@ -30,10 +30,17 @@ export const deleteTip = createAsyncAction('tips/DELETE_REQUEST', 'tips/DELETE_S
   Error
 >();
 
+export const publishTipByUuid = createAsyncAction(
+  'tips/PUBLISH_BY_UUID_REQUEST',
+  'tips/PUBLISH_BY_UUID_SUCCESS',
+  'tips/PUBLISH_BY_UUID_FAILURE',
+)<any, any, Error>();
+
 export const Actions = {
   getAllTips: getAllTips.request,
   getTipHistory: getTipHistory.request,
   createTip: createTip.request,
   getTipByUuid: getTipByUuid.request,
   deleteTip: deleteTip.request,
+  publishTip: publishTipByUuid.request,
 };

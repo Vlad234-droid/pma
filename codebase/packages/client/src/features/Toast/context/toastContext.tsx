@@ -8,10 +8,12 @@ import { ToastActions, toastsSelector } from '@pma/store';
 
 type Props = {
   addToast: (payload: ToastPayload) => void;
+  checkIsToastExist: (toastId: string) => boolean;
 };
 
 const defaultData = {
   addToast: () => null,
+  checkIsToastExist: () => true,
 };
 
 const ToastContext = createContext<Props>(defaultData);
@@ -22,8 +24,13 @@ const ToastProvider: FC = ({ children }) => {
 
   const addToast = useCallback((payload: ToastPayload) => dispatch(ToastActions.addToast(payload)), []);
 
+  const checkIsToastExist = useCallback(
+    (toastId) => toasts.some((toast) => toast.id === toastId),
+    [JSON.stringify(toasts)],
+  );
+
   return (
-    <ToastContext.Provider value={{ addToast }}>
+    <ToastContext.Provider value={{ addToast, checkIsToastExist }}>
       <ToastContainer items={toasts} />
       {children}
     </ToastContext.Provider>

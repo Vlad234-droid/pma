@@ -84,11 +84,18 @@ export const WidgetTeamMateObjectives: FC<WidgetTeamMateObjectivesProps> = ({
         const description = review['description'] || '';
         const explanations = components
           .filter(({ key }) => !['title', 'description'].includes(key))
-          .map(({ key, label, text, type }) => {
+          .map((component) => {
+            const { key, label, text, type, expression } = component;
             if (FormType.TEXT === type) {
-              return { title: text, steps: [] };
+              return { title: text, readonly: true };
             }
-            return { title: label, steps: review[key] ? [review[key]] : [] };
+
+            return {
+              title: label,
+              description: review[key] || '',
+              readonly: Boolean(!expression?.auth?.permission?.write?.length),
+              key,
+            };
           });
 
         updateRatingSchemaRequest(review, type);
@@ -106,7 +113,7 @@ export const WidgetTeamMateObjectives: FC<WidgetTeamMateObjectivesProps> = ({
       });
       setColleagueReviews(mappedReviews);
     }
-  }, [schemaUpdated, reviewsLoaded, schemaLoaded]);
+  }, [schemaUpdated, reviewsLoaded, schemaLoaded, allColleagueReviews]);
 
   const fetchData = (colleagueUuid) => {
     dispatch(SchemaActions.clearSchemaData());
@@ -116,6 +123,22 @@ export const WidgetTeamMateObjectives: FC<WidgetTeamMateObjectivesProps> = ({
     dispatch(SchemaActions.getSchema({ colleagueUuid }));
     setColleagueOpened(colleagueUuid);
   };
+
+  const updateReviewState = useCallback(
+    (reviewId) => (properties) => {
+      const reviews = allColleagueReviews?.filter(({ uuid }) => uuid !== reviewId) || {};
+      const currentReview = allColleagueReviews?.find(({ uuid }) => uuid === reviewId) || {};
+      const newState = {
+        data: [
+          ...reviews,
+          { ...currentReview, properties: { mapJson: { ...currentReview?.properties?.mapJson, ...properties } } },
+        ],
+      };
+
+      dispatch(ReviewsActions.updateReviewsState(newState));
+    },
+    [colleague, allColleagueReviews],
+  );
 
   const updateReviewStatus = useCallback(
     (status: Status) => (reviewType: ReviewType) => (reason: string) => {
@@ -131,7 +154,7 @@ export const WidgetTeamMateObjectives: FC<WidgetTeamMateObjectivesProps> = ({
           ...(reason ? { reason } : {}),
           status,
           colleagueUuid: colleague.uuid,
-          reviews: colleague.reviews.filter(
+          reviews: allColleagueReviews.filter(
             ({ status, type }) => status === Status.WAITING_FOR_APPROVAL && type === reviewType,
           ),
         },
@@ -140,16 +163,8 @@ export const WidgetTeamMateObjectives: FC<WidgetTeamMateObjectivesProps> = ({
       dispatch(ReviewsActions.updateReviewStatus(update));
 
       onSubmit(status, reviewType);
-
-      if (colleague?.uuid) {
-        dispatch(
-          ReviewsActions.getReviews({
-            pathParams: { colleagueUuid: colleague.uuid, cycleUuid: 'CURRENT', status: Status.WAITING_FOR_APPROVAL },
-          }),
-        );
-      }
     },
-    [colleague],
+    [colleague, allColleagueReviews],
   );
 
   const approveColleagues = updateReviewStatus(Status.APPROVED);
@@ -214,7 +229,14 @@ export const WidgetTeamMateObjectives: FC<WidgetTeamMateObjectivesProps> = ({
                                   .map(({ id, title, subTitle, description, explanations }) => (
                                     <ObjectiveTile
                                       key={`${timeline.reviewType}-${id}`}
-                                      {...{ id, title, subTitle, description, explanations }}
+                                      {...{
+                                        id,
+                                        title,
+                                        subTitle,
+                                        description,
+                                        explanations,
+                                        updateReview: updateReviewState(id),
+                                      }}
                                     />
                                   ))}
                                 {status === Status.WAITING_FOR_APPROVAL &&

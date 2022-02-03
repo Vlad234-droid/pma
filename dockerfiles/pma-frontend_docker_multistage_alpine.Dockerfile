@@ -59,6 +59,7 @@ ARG NPM_ACCESS_TOKEN
 
 ARG PUBLIC_URL=/
 ARG REACT_APP_API_URL
+ARG REACT_APP_MY_INBOX_API_PATH
 
 ENV NODE_ENV=$NODE_ENV
 ENV NODE_PORT=$NODE_PORT
@@ -71,6 +72,9 @@ ENV NPM_ACCESS_TOKEN=$NPM_ACCESS_TOKEN
 
 COPY --chmod=0755 ./scripts/create-npmrc.sh /root/create-npmrc.sh
 
+RUN apk --update --no-cache add \
+    git 
+
 RUN dos2unix /root/create-npmrc.sh \
     && bash /root/create-npmrc.sh --token $NPM_ACCESS_TOKEN \ 
     && rm /root/create-npmrc.sh 
@@ -82,6 +86,7 @@ COPY --from=codebase /opt/src/ ./
 
 ENV PUBLIC_URL=$PUBLIC_URL
 ENV REACT_APP_API_URL=$REACT_APP_API_URL
+ENV REACT_APP_MY_INBOX_API_PATH=$REACT_APP_MY_INBOX_API_PATH
 
 ENV SKIP_PREFLIGHT_CHECK=true
 

@@ -8,7 +8,7 @@ import { isUrlAbsolute } from '../utils';
 export type ProcessConfig = {
   // general
   buildEnvironment: () => string;
-  environment: () => string;
+  environment: () => keyof typeof NodeJS.Environment;
   port: () => number;
   proxyApiServerUrl: () => string;
   authPath: () => string;
@@ -26,6 +26,7 @@ export type ProcessConfig = {
   applicationName: () => string;
   applicationPublicUrl: () => string;
   applicationUrlRoot: () => string;
+  applicationUrlRootWithApplicationPublicUrl: () => string;
   // cookies settings
   applicationCookieParserSecret: () => string;
   applicationUserDataCookieName: () => string;
@@ -59,7 +60,9 @@ export class ConfigAccessor {
   private constructor(processEnv: NodeJS.ProcessEnv) {
     const port = isNaN(Number(processEnv.NODE_PORT)) ? defaultConfig.port : Number(processEnv.NODE_PORT);
     const coreMountPath = processEnv.INTEGRATION_CORE_MOUNT_PATH;
-    const oneLoginApplicationPath = processEnv.APPLICATION_PUBLIC_URL === '/' ? '' : processEnv.APPLICATION_PUBLIC_URL;
+    const applicationPublicUrl = processEnv.APPLICATION_PUBLIC_URL === '/' ? '' : processEnv.APPLICATION_PUBLIC_URL;
+    const oneLoginApplicationPath = applicationPublicUrl;
+    const applicationUrlRoot = processEnv.APPLICATION_URL_ROOT;
     const oneLoginRedirectAfterLogoutUrl =
       processEnv.ONELOGIN_REDIRECT_AFTER_LOGOUT_URL || defaultConfig.oidcRedirectAfterLogoutPath;
     this.config = {
@@ -91,7 +94,8 @@ export class ConfigAccessor {
       // application specific settings
       applicationName: () => defaultConfig.applicationName,
       applicationPublicUrl: () => processEnv.APPLICATION_PUBLIC_URL,
-      applicationUrlRoot: () => processEnv.APPLICATION_URL_ROOT,
+      applicationUrlRoot: () => applicationUrlRoot,
+      applicationUrlRootWithApplicationPublicUrl: () => `${applicationUrlRoot}${applicationPublicUrl}`,
       // cookies settings
       applicationCookieParserSecret: () =>
         processEnv.APPLICATION_COOKIE_PARSER_SECRET || defaultConfig.applicationCookieParserSecret,
