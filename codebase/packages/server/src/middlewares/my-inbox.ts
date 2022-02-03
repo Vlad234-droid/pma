@@ -10,7 +10,7 @@ export const myInboxConfig = async ({
 }: ProcessConfig) => {
   const mountPath = applicationPublicUrl();
   return await myInboxMiddleware({
-    mountPath: mountPath === '/' ? '' : mountPath,
+    mountPath: '',
     origin: applicationUrlRoot(),
     configEnvironment: environment(),
     appName: applicationName(),
