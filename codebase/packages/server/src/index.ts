@@ -120,13 +120,13 @@ if (!PROXY_API_SERVER_URL) {
 
     const myInboxMiddleware = await myInboxConfig(config);
 
+    appServer.use(myInboxMiddleware);
     const proxyMiddleware = createProxyMiddleware(
       ['/api/**', '!/api/colleague-inbox/**', '!/api/manager-bff/**'],
       proxyMiddlewareOptions,
     );
     appServer.use('/api', proxyMiddleware);
     appServer.use('/_status', (_, res) => res.sendStatus(200));
-    appServer.use(myInboxMiddleware);
 
     console.log('version', process.version);
 
