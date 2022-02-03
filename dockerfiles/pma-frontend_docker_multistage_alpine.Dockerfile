@@ -72,6 +72,9 @@ ENV NPM_ACCESS_TOKEN=$NPM_ACCESS_TOKEN
 
 COPY --chmod=0755 ./scripts/create-npmrc.sh /root/create-npmrc.sh
 
+RUN apk --update --no-cache add \
+    git 
+
 RUN dos2unix /root/create-npmrc.sh \
     && bash /root/create-npmrc.sh --token $NPM_ACCESS_TOKEN \ 
     && rm /root/create-npmrc.sh 

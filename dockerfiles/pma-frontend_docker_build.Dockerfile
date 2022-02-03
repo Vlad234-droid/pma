@@ -13,7 +13,10 @@ ARG PUBLIC_URL=/
 
 WORKDIR /home/app
 
-RUN apk --update add bash && apk --no-cache add dos2unix
+RUN apk --update --no-cache add \
+    bash \
+    dos2unix \
+    git 
 
 #COPY --chmod=0644 ./codebase ./
 #COPY --chmod=0755 ./scripts/create-npmrc.sh ./create-npmrc.sh

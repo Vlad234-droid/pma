@@ -73,6 +73,11 @@ ENV NPM_ACCESS_TOKEN=$NPM_ACCESS_TOKEN
 
 COPY --chmod=0755 ./scripts/create-npmrc.sh /root/create-npmrc.sh
 
+RUN apt-get update \
+    && apt-get install --yes --no-install-recommends \
+    git \
+    && rm -rf /var/lib/apt/lists/*
+
 RUN dos2unix /root/create-npmrc.sh \
     && bash /root/create-npmrc.sh --token $NPM_ACCESS_TOKEN \ 
     && rm /root/create-npmrc.sh 
