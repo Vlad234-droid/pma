@@ -5,8 +5,8 @@ import removeMD from 'remove-markdown';
 import GeneralDocument from '../General';
 
 type Explanation = {
-  steps: string[];
   title: string;
+  description?: string;
 };
 
 type Objective = {
@@ -38,10 +38,10 @@ const ObjectiveDocument: FC<Props> = ({ items }) => {
               <Text style={styles.description}>{description}</Text>
             </View>
             <View style={styles.body}>
-              {explanations.map(({ steps, title }, idx) => (
+              {explanations.map(({ description, title }, idx) => (
                 <View key={idx} style={styles.explanations}>
                   <Text style={styles.explanationTitle}>{removeMD(title)}</Text>
-                  <Text style={styles.step}>{steps[0]}</Text>
+                  <Text style={styles.step}>{description}</Text>
                 </View>
               ))}
             </View>

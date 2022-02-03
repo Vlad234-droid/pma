@@ -8,6 +8,7 @@ import {
   clearReviewData,
   getColleagueReviews,
   updateReviewStatus,
+  updateReviewsState,
 } from './actions';
 
 export const initialState = {
@@ -91,23 +92,20 @@ export default createReducer(initialState)
     ...payload,
     meta: { ...state.meta, loading: false, loaded: true },
   }))
-  .handleAction(updateReviewStatus.request, (state) => {
-    return {
-      ...state,
-      meta: { ...state.meta, loading: true, error: null, loaded: false },
-    };
-  })
-  .handleAction(updateReviewStatus.success, (state) => {
-    return {
-      ...state,
-      meta: { ...state.meta, loading: false, loaded: true },
-    };
-  })
-  .handleAction(updateReviewStatus.failure, (state, { payload }) => {
-    return {
-      ...state,
-      meta: { ...state.meta, loading: false, loaded: true, error: payload },
-    };
-  })
-
+  .handleAction(updateReviewStatus.request, (state) => ({
+    ...state,
+    meta: { ...state.meta, loading: true, error: null, loaded: false },
+  }))
+  .handleAction(updateReviewStatus.success, (state) => ({
+    ...state,
+    meta: { ...state.meta, loading: false, loaded: true },
+  }))
+  .handleAction(updateReviewStatus.failure, (state, { payload }) => ({
+    ...state,
+    meta: { ...state.meta, loading: false, loaded: true, error: payload },
+  }))
+  .handleAction(updateReviewsState, (state, { payload }) => ({
+    ...state,
+    ...payload,
+  }))
   .handleAction(clearReviewData, () => initialState);

@@ -166,18 +166,20 @@ const ReviewFormModal: FC<Props> = ({ reviewType, onClose }) => {
   }, [schemaLoaded, reviewLoaded]);
 
   useEffect(() => {
-    if (reviewLoaded && schemaLoaded && review) {
+    if (reviewLoaded && schemaLoaded && review && !successModal) {
       updateRatingSchemaRequest(review);
       reset(review);
     }
-  }, [review, reviewLoaded, schemaLoaded]);
+  }, [review, reviewLoaded, schemaLoaded, successModal]);
 
   useEffect(() => {
-    const subscription = watch((review) => {
-      updateRatingSchemaRequest(review);
+    const subscription = watch((review, { name = '' }) => {
+      if (overallRatingListeners.includes(name)) {
+        updateRatingSchemaRequest(review);
+      }
     });
     return () => subscription.unsubscribe();
-  }, [watch, reviewLoaded, schemaLoaded]);
+  }, [watch, reviewLoaded, schemaLoaded, overallRatingListeners]);
 
   if (reviewLoading && schemaLoading) {
     // todo use loading component when we have
@@ -241,8 +243,18 @@ const ReviewFormModal: FC<Props> = ({ reviewType, onClose }) => {
               </TriggerModal>
             </div>
             {components.map((component) => {
-              const { id, key, text, label, description, type, validate, values = [] } = component;
+              const { id, key, text, label, description, type, validate, values = [], expression = {} } = component;
               const value = formValues[key] ? formValues[key] : '';
+
+              // todo temporary solution. Do not have full permission requirements. might be wrapper around field
+              let componentReadonly = readonly;
+              if (expression?.auth?.permission?.read?.length && !value) {
+                return null;
+              } else if (expression?.auth?.permission?.read?.length && value) {
+                componentReadonly = true;
+              }
+              // todo end temporary solution
+
               if (type === FormType.TEXT) {
                 return (
                   <div style={{ padding: '10px 0' }} key={id}>
@@ -268,7 +280,7 @@ const ReviewFormModal: FC<Props> = ({ reviewType, onClose }) => {
                     Element={validate?.maxLength > 100 ? Textarea : Input}
                     placeholder={description}
                     value={value}
-                    readonly={readonly}
+                    readonly={componentReadonly}
                   />
                 );
               }
@@ -288,7 +300,7 @@ const ReviewFormModal: FC<Props> = ({ reviewType, onClose }) => {
                     options={values}
                     placeholder={description}
                     value={value}
-                    readonly={readonly}
+                    readonly={componentReadonly}
                   />
                 );
               }
