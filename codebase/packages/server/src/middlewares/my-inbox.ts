@@ -3,7 +3,7 @@ import { ProcessConfig } from '../config';
 
 export const myInboxConfig = async ({
   applicationPublicUrl,
-  applicationUrlRootWithApplicationPublicUrl,
+  applicationUrlRoot,
   environment,
   applicationName,
   integrationSSOLogoutPath,
@@ -11,7 +11,7 @@ export const myInboxConfig = async ({
   const mountPath = applicationPublicUrl();
   return await myInboxMiddleware({
     mountPath: mountPath === '/' ? '' : mountPath,
-    origin: applicationUrlRootWithApplicationPublicUrl(),
+    origin: applicationUrlRoot(),
     configEnvironment: environment(),
     appName: applicationName(),
     logoutPath: integrationSSOLogoutPath(),
