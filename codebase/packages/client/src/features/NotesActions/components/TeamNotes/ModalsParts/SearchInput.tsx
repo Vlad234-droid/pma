@@ -3,7 +3,7 @@ import { useStyle, colors, Rule } from '@dex-ddl/core';
 import mergeRefs from 'react-merge-refs';
 import { InputProps } from './type';
 import { useRefContainer } from 'components/Form/context/input';
-import defaultImg from '../../../../../../public/default.png';
+import defaultImg from 'images/default.png';
 import { ColleaguesActions } from '@pma/store';
 import { useDispatch } from 'react-redux';
 

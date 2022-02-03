@@ -9,7 +9,7 @@ import { formatToRelativeDate, paramsReplacer } from 'utils';
 import { Page } from 'pages';
 import IconButtonDefault from 'components/IconButtonDefault';
 
-import defaultImg from '../../../../public/default.png';
+import defaultImg from 'images/default.png';
 
 type Props = {
   list: Array<any>;
@@ -120,9 +120,12 @@ const FeedbackBlock: FC<Props> = ({ list, canEdit }) => {
                         </TileWrapper>
                         {canEdit && (
                           <div className={css(wrapperBtnStyle)}>
-                            <IconButtonDefault graphic='arrowRight' onClick={() =>
-                              navigate(paramsReplacer(`/${Page.GIVE_NEW_FEEDBACK}`, { ':uuid': item.uuid }))
-                            }/>
+                            <IconButtonDefault
+                              graphic='arrowRight'
+                              onClick={() =>
+                                navigate(paramsReplacer(`/${Page.GIVE_NEW_FEEDBACK}`, { ':uuid': item.uuid }))
+                              }
+                            />
                           </div>
                         )}
                       </Panel>
@@ -184,8 +187,8 @@ const infoBlockStyle: Rule = {
   },
 } as Styles;
 
-const wrapperBtnStyle: Rule = ({
+const wrapperBtnStyle: Rule = {
   marginLeft: 'auto',
-});
+};
 
 export default FeedbackBlock;

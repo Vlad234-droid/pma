@@ -6,7 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { reportByYearSchema } from '../config';
 import { Select, Checkbox, Item } from 'components/Form';
 import { GenericItemField } from 'components/GenericForm';
-import success from '../../../../public/success.jpg';
+import success from 'images/success.jpg';
 
 type ModalProps = {
   onClose: () => void;

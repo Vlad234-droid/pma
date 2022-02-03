@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { useStyle, Rule, Button, theme, useBreakpoints } from '@dex-ddl/core';
-import successIcon from '../../../../public/success.jpg';
-import deleteIcon from '../../../../public/delete.png';
+import successIcon from 'images/success.jpg';
+import deleteIcon from 'images/delete.png';
 
 export type Props = {
   negativeBtnAction: () => void;

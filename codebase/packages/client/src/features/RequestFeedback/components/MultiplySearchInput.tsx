@@ -2,7 +2,7 @@ import React, { ChangeEvent, FC, RefObject } from 'react';
 import { colors, useStyle, Rule, Styles } from '@dex-ddl/core';
 import mergeRefs from 'react-merge-refs';
 import { useRefContainer } from 'components/Form/context/input';
-import defaultImg from '../../../../public/default.png';
+import defaultImg from 'images/default.png';
 import { Close } from 'components/Icon/graphics/close';
 
 export interface FormItemProps {

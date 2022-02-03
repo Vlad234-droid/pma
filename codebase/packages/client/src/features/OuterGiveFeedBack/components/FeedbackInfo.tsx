@@ -1,8 +1,8 @@
 import React, { FC } from 'react';
 import { useStyle, Rule, Styles } from '@dex-ddl/core';
 import { IconButton } from 'components/IconButton';
-import video_explanation from '../../../../public/video_explanation.jpg';
-import defaultImg from '../../../../public/default.png';
+import video_explanation from 'images/video_explanation.jpg';
+import defaultImg from 'images/default.png';
 
 export const WITH_SELECTED_TEST = 'with_selected_test';
 

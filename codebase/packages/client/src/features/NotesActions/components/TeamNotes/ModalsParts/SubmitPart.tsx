@@ -5,7 +5,7 @@ import { PeopleTypes } from './type';
 import { FoldersWithNotesTypesTEAM } from 'features/NotesActions/type';
 import { GenericItemField } from 'components/GenericForm';
 import { Input, Item, Select, Textarea } from 'components/Form';
-import defaultImg from '../../../../../../public/default.png';
+import defaultImg from 'images/default.png';
 
 type SubmitPartProps = {
   selectedPerson: PeopleTypes;

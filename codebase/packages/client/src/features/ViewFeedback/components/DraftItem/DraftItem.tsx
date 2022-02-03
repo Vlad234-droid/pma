@@ -5,7 +5,7 @@ import { Accordion, BaseAccordion, ExpandButton, Panel, Section } from 'componen
 import { IconButton } from 'components/IconButton';
 import { Trans } from 'components/Translation';
 import { useDispatch } from 'react-redux';
-import defaultImg from '../../../../../public/default.png';
+import defaultImg from 'images/default.png';
 import { FeedbackActions } from '@pma/store';
 import { usePDF, FeedbackDocument, downloadPDF } from '@pma/pdf-renderer';
 import { formatToRelativeDate } from 'utils';

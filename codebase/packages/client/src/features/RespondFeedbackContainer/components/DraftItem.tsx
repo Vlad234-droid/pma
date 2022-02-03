@@ -9,7 +9,7 @@ import { filteredByInputSearchHandler, filteredNotesByRadiosBtnsHandler, formatT
 import IconButtonDefault from 'components/IconButtonDefault';
 import { FeedbackStatus, Tesco } from 'config/enum';
 
-import defaultImg from '../../../../public/default.png';
+import defaultImg from 'images/default.png';
 import { DraftItemProps } from '../type';
 import { NoFeedback } from '../../Feedback/components';
 import PendingNotes from './PendingNotes';
@@ -73,7 +73,7 @@ const DraftItem: FC<DraftItemProps> = ({
     if (focus) setFocus(() => false);
 
     draftFeedback(item);
-  }
+  };
 
   const getPropperNotes = () => {
     if (checkedRadio.completed && searchValue.length <= 2 && Object.values(filterFeedbacks).every((item) => !item)) {
@@ -165,7 +165,7 @@ const DraftItem: FC<DraftItemProps> = ({
                         ) : (
                           checkedRadio.pending && (
                             <div className={css(wrapperBtnStyle)}>
-                              <IconButtonDefault graphic='arrowRight' onClick={() => handleFeedbackBtnClick(item)}/>
+                              <IconButtonDefault graphic='arrowRight' onClick={() => handleFeedbackBtnClick(item)} />
                             </div>
                           )
                         )}
@@ -213,9 +213,9 @@ const IndustryStyle: Rule = {
   margin: '4px 0px 0px 0px',
 };
 
-const wrapperBtnStyle: Rule = ({
+const wrapperBtnStyle: Rule = {
   marginLeft: 'auto',
   marginRight: '24px',
-});
+};
 
 export default DraftItem;

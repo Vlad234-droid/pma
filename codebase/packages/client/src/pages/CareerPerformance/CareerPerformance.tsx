@@ -21,10 +21,10 @@ import { StepIndicator } from 'components/StepIndicator/StepIndicator';
 import { ObjectiveType, ReviewType } from 'config/enum';
 import { RouterSwitch } from 'components/RouterSwitch';
 import { Icon } from 'components/Icon';
-import Check from '../../../public/Check.jpg';
-import Feedback from '../../../public/Feedback.jpg';
-import Learning from '../../../public/Learning.jpg';
-import Contribution from '../../../public/Contribution.jpg';
+import checkImage from 'images/Check.jpg';
+import feedbackImage from 'images/Feedback.jpg';
+import learningImage from 'images/Learning.jpg';
+import contributionImage from 'images/Contribution.jpg';
 import { Page } from '../types';
 
 const CareerPerformance: FC = () => {
@@ -184,7 +184,7 @@ const CareerPerformance: FC = () => {
           <div data-test-id='personal' className={css(basicTileStyle)} onClick={console.log}>
             <BasicTile
               hover={true}
-              img={Contribution}
+              img={contributionImage}
               title={t('Your Contribution')}
               description={t('Click here to find the Your Contribution Guide.')}
               customStyle={{
@@ -195,7 +195,7 @@ const CareerPerformance: FC = () => {
           <div data-test-id='personal' className={css(basicTileStyle)} onClick={console.log}>
             <BasicTile
               hover={true}
-              img={Check}
+              img={checkImage}
               title={t('Everyday conversations')}
               description={t('Useful guidance on having great performance conversations.')}
               customStyle={{
@@ -206,7 +206,7 @@ const CareerPerformance: FC = () => {
           <div data-test-id='feedback' className={css(basicTileStyle)}>
             <BasicTile
               hover={true}
-              img={Feedback}
+              img={feedbackImage}
               title={t('Feedback at Tesco')}
               description={t('Learn more about giving and receiving great feedback.')}
               customStyle={{
@@ -217,7 +217,7 @@ const CareerPerformance: FC = () => {
           <div data-test-id='feedback' className={css(basicTileStyle)}>
             <BasicTile
               hover={true}
-              img={Learning}
+              img={learningImage}
               title={t('Learning')}
               description={t('Click here to find the Your Contribution Guide.')}
               customStyle={{

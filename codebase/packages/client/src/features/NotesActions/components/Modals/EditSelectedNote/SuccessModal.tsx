@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { Trans } from 'components/Translation';
 import { Button, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { SuccessModalProps } from './type';
-import successImg from '../../../../../../public/success.jpg';
+import successImg from 'images/success.jpg';
 
 const SuccessModal: FC<SuccessModalProps> = ({
   setSuccessSelectedNoteToEdit,

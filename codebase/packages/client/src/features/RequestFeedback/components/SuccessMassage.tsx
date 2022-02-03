@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { Button, Rule, Styles, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { IconButton } from 'components/IconButton';
-import success from '../../../../public/success.jpg';
+import success from 'images/success.jpg';
 import { Trans } from 'components/Translation';
 import { useNavigate } from 'react-router-dom';
 

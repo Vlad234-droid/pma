@@ -1,7 +1,7 @@
 import React, { Dispatch, FC, SetStateAction } from 'react';
 import { IconButton } from 'components/IconButton';
 import { useStyle, useBreakpoints, Rule, Styles } from '@dex-ddl/core';
-import video_explanation from '../../../../../public/video_explanation.jpg';
+import video_explanation from 'images/video_explanation.jpg';
 
 type Info360ModalProps = {
   setHelpModalReceiveFeedback: Dispatch<SetStateAction<boolean>>;

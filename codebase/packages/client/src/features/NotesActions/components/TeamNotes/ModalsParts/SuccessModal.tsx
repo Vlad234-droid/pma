@@ -5,7 +5,7 @@ import { UseFormReturn } from 'react-hook-form';
 import { AllNotesFolderIdTEAM } from '../../../../../utils/note';
 import { getFoldersSelector } from '@pma/store';
 import { useSelector } from 'react-redux';
-import SuccessImg from '../../../../../../public/success.jpg';
+import SuccessImg from 'images/success.jpg';
 
 export type SuccessModalProps = {
   teamMethods: UseFormReturn;

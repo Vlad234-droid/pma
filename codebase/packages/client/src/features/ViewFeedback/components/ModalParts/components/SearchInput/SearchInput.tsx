@@ -5,7 +5,7 @@ import { InputProps } from './type';
 import { useRefContainer } from 'components/Form/context/input';
 import { ColleaguesActions } from '@pma/store';
 import { useDispatch } from 'react-redux';
-import defaultImg from '../../../../../../../public/default.png';
+import defaultImg from 'images/default.png';
 
 const SearchInput: FC<InputProps> = ({
   domRef,

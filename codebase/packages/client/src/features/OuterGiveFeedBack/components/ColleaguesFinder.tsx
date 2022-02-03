@@ -4,7 +4,7 @@ import { Item } from 'components/Form';
 import SearchInput from 'components/SearchInput';
 import { useDispatch, useSelector } from 'react-redux';
 import { ColleaguesActions, getColleaguesSelector } from '@pma/store';
-import defaultImg from '../../../../public/default.png';
+import defaultImg from 'images/default.png';
 
 type Props = {
   onSelect: (person: any) => void;

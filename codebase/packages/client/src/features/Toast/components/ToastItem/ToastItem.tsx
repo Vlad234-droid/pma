@@ -6,9 +6,9 @@ import { TileWrapper } from 'components/Tile';
 
 import { ToastPayload, Variant } from '../../config/types';
 
-import tip from '../../../../../public/tip.png';
-import error from '../../../../../public/error.png';
-import info from '../../../../../public/info.png';
+import tip from 'images/tip.png';
+import error from 'images/error.png';
+import info from 'images/info.png';
 
 import { ToastActions } from '@pma/store';
 

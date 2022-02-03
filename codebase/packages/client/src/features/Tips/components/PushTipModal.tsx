@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react';
 import { useStyle, Rule, Modal, Button, theme } from '@dex-ddl/core';
 import { TipsProps } from '../types';
-import success from '../../../../public/success.jpg';
+import success from 'images/success.jpg';
 
 export type PushTipModalProps = {
   handleCloseModal: () => void;

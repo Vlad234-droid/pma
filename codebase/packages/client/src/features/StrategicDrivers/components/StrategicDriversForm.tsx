@@ -61,13 +61,31 @@ const StrategicDriversForm: FC = () => {
 
   const validate = (value) => {
     const stringValidationSchema = Yup.string().required().min(10);
+    return stringValidationSchema.isValidSync(value[0]);
+    const stringValidationSchemar = Yup.string().notRequired().min(10);
+
+    console.log('value', value);
+    console.log('stringValidationSchema', stringValidationSchema.isValidSync(value[0]));
+
     for (let i = 0; i === 0; i++) {
       if (!stringValidationSchema.isValidSync(value[i])) {
         return false;
       }
     }
+    for (let i = 1; i < value.length; i++) {
+      if (!stringValidationSchemar.isValidSync(value[i])) {
+        return false;
+      }
+    }
     return true;
   };
+
+  const fn = () => true;
+
+  const shema = Yup.object().shape({
+    objectives: Yup.array(),
+    'objectives[0]': Yup.string().required().min(10),
+  });
 
   return (
     <GenericForm
@@ -80,9 +98,7 @@ const StrategicDriversForm: FC = () => {
         };
       })}
       //@ts-ignore
-      schema={Yup.object().shape({
-        objectives: Yup.array().of(Yup.string()).test(validate),
-      })}
+      schema={shema}
       renderButtons={(isValid, isDirty, handleSubmit) => (
         <div className={css(publishBlock)}>
           <Button

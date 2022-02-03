@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { Button, Rule, Styles, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { Trans } from 'components/Translation';
 
-import success from '../../../../public/success.jpg';
+import success from 'images/success.jpg';
 import { useSelector } from 'react-redux';
 import { getColleagueByUuidSelector } from '@pma/store';
 

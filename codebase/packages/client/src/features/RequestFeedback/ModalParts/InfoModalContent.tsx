@@ -1,6 +1,6 @@
 import React, { FC, Dispatch, SetStateAction } from 'react';
 import { useStyle, Rule, useBreakpoints } from '@dex-ddl/core';
-import requestInfoModal from '../../../../public/requestInfoModal.png';
+import requestInfoModal from 'images/requestInfoModal.png';
 import { IconButton } from 'components/IconButton';
 
 type InfoModalProps = {

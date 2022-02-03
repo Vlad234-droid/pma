@@ -6,7 +6,7 @@ import { UseFormReturn } from 'react-hook-form';
 import { AllNotesFolderId } from '../../../../utils/note';
 import { getFoldersSelector } from '@pma/store';
 import { useSelector } from 'react-redux';
-import successImg from '../../../../../public/success.jpg';
+import successImg from 'images/success.jpg';
 
 export const OK_BTN = 'ok_btn';
 export const SUCCESS_MODAL_WRAPPER = 'success_modal_wrapper';

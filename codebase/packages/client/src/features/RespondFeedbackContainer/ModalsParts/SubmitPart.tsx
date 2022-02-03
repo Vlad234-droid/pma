@@ -6,14 +6,14 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { Button, Rule, Styles, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { IconButton, Position } from 'components/IconButton';
-import video_explanation from '../../../../public/video_explanation.jpg';
+import video_explanation from 'images/video_explanation.jpg';
 import { TileWrapper } from 'components/Tile';
 import { Item, Textarea } from 'components/Form';
 import { GenericItemField } from 'components/GenericForm';
 import { Trans } from 'components/Translation';
 import { FeedbackActions, colleagueUUIDSelector, getReviewByUuidS } from '@pma/store';
 import { useDispatch, useSelector } from 'react-redux';
-import defaultImg from '../../../../public/default.png';
+import defaultImg from 'images/default.png';
 import { TargetTypeReverse, TargetFeedbackKeys, VoiceType, Tesco } from 'config/enum';
 
 const SubmitPart: FC<SubmitPartProps> = ({
