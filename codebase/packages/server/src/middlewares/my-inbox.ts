@@ -2,15 +2,13 @@ import { myInboxMiddleware } from '@my-inbox/middleware';
 import { ProcessConfig } from '../config';
 
 export const myInboxConfig = async ({
-  applicationPublicUrl,
   applicationUrlRoot,
   environment,
   applicationName,
   integrationSSOLogoutPath,
 }: ProcessConfig) => {
-  const mountPath = applicationPublicUrl();
   return await myInboxMiddleware({
-    mountPath: '',
+    mountPath: '', // ingress overwrites the paths and discards the mountPath part
     origin: applicationUrlRoot(),
     configEnvironment: environment(),
     appName: applicationName(),
