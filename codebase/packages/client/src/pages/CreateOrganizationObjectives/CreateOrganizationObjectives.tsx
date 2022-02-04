@@ -12,7 +12,6 @@ const StrategicDriversPage: FC = () => {
 
   return (
     <div className={css(main)}>
-      {/* <LeftsideMenu /> */}
       <div className={css(page)}>
         <StrategicDrivers />
       </div>

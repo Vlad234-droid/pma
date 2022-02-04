@@ -4,7 +4,6 @@ import { Button, Rule, useStyle } from '@dex-ddl/core';
 import * as Yup from 'yup';
 import useDispatch from 'hooks/useDispatch';
 import { OrgObjectiveActions, orgObjectivesSelector, Status } from '@pma/store';
-import get from 'lodash.get';
 import GenericForm from 'components/GenericForm';
 import { Input } from 'components/Form';
 import { InfoModal } from 'features/Modal';
@@ -16,7 +15,9 @@ enum Statuses {
 }
 
 const prepareOrgObjectivesData = (newData, orgObjectivesData) => {
-  return orgObjectivesData.map((objective, idx) => ({ ...objective, title: get(newData, idx) }));
+  return orgObjectivesData.map((objective, idx) => {
+    return { ...objective, title: newData[`Strategic Driver ${idx + 1}`] || objective.title };
+  });
 };
 
 const StrategicDriversForm: FC = () => {
@@ -27,8 +28,8 @@ const StrategicDriversForm: FC = () => {
   const [status, setStatus] = useState<Statuses>(Statuses.PENDING);
 
   const save = (newData) => {
-    const data = prepareOrgObjectivesData(newData.objectives, orgObjectives);
-
+    delete newData.objectives;
+    const data = prepareOrgObjectivesData(newData, orgObjectives);
     dispatch(
       OrgObjectiveActions.createOrgObjective({
         data,
@@ -38,7 +39,8 @@ const StrategicDriversForm: FC = () => {
   };
 
   const publish = (newData) => {
-    const data = prepareOrgObjectivesData(newData.objectives, orgObjectives);
+    delete newData.objectives;
+    const data = prepareOrgObjectivesData(newData, orgObjectives);
     dispatch(
       OrgObjectiveActions.createAndPublishOrgObjective({
         data,
@@ -59,32 +61,13 @@ const StrategicDriversForm: FC = () => {
 
   if (!orgObjectives.length) return null;
 
-  const validate = (value) => {
-    const stringValidationSchema = Yup.string().required().min(10);
-    return stringValidationSchema.isValidSync(value[0]);
-    const stringValidationSchemar = Yup.string().notRequired().min(10);
-
-    console.log('value', value);
-    console.log('stringValidationSchema', stringValidationSchema.isValidSync(value[0]));
-
-    for (let i = 0; i === 0; i++) {
-      if (!stringValidationSchema.isValidSync(value[i])) {
-        return false;
-      }
-    }
-    for (let i = 1; i < value.length; i++) {
-      if (!stringValidationSchemar.isValidSync(value[i])) {
-        return false;
-      }
-    }
-    return true;
-  };
-
-  const fn = () => true;
-
-  const shema = Yup.object().shape({
-    objectives: Yup.array(),
-    'objectives[0]': Yup.string().required().min(10),
+  const shame = Yup.object().shape({
+    'Strategic Driver 1': Yup.string().required().min(10),
+    'Strategic Driver 2': Yup.string().min(10),
+    'Strategic Driver 3': Yup.string().min(10),
+    'Strategic Driver 4': Yup.string().min(10),
+    'Strategic Driver 5': Yup.string().min(10),
+    'Strategic Driver 6': Yup.string().min(10),
   });
 
   return (
@@ -92,13 +75,12 @@ const StrategicDriversForm: FC = () => {
       formFields={orgObjectives.map((item): any => {
         return {
           Element: Input,
-          name: `objectives.${item.number - 1}`,
-          id: `objective_${item.number}`,
+          name: `Strategic Driver ${item.number}`,
+          id: `driver_${item.number}`,
           label: `Strategic driver ${item.number}`,
         };
       })}
-      //@ts-ignore
-      schema={shema}
+      schema={shame}
       renderButtons={(isValid, isDirty, handleSubmit) => (
         <div className={css(publishBlock)}>
           <Button
