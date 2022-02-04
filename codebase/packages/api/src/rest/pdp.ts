@@ -5,9 +5,9 @@ export const createPDPGoal = <T>(params: any) => {
   return httpClient.post(`${domain}`, params);
 };
 
-export const deletePDPGoal = <T>(params: any) => {
-  const domain = `/pdp/goals/delete`;
-  return httpClient.post(`${domain}`, params);
+export const deletePDPGoal = <T>(uuid: string) => {
+  const domain = `/pdp/goals/${uuid}`;
+  return httpClient.delete(`${domain}`);
 };
 
 export const updatePDPGoal = <T>(params: any) => {
