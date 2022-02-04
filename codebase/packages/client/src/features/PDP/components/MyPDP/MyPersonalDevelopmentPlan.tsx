@@ -19,6 +19,7 @@ import usePDPShema from '../../hooks/usePDPShema';
 import { buildPath } from '../../../Routes';
 import { paramsReplacer } from '../../../../utils';
 import { Icon } from '../../../../components/Icon';
+import { BASE_URL_API } from 'config/constants';
 
 const reviews = [
   {
@@ -114,18 +115,20 @@ const MyPersonalDevelopmentPlan: FC = () => {
     navigate(buildPath(paramsReplacer(`${Page.UPDATE_PERSONAL_DEVELOPMENT_PLAN}`, { ':uuid': uuid })));
   };
 
+  const downloadHref = () => `${BASE_URL_API}/pdp/template`;
+
   return (
     <div className={css({ padding: '0 40px' })}>
       <div className={css(buttonBlock)}>
         <div className={css(controlButtons({ mobileScreen }))}>
           {pdpSelector && pdpSelector?.length === 5 ? null : (
             <>
-              <button className={css(buttonDownload)} onClick={() => console.log('download')}>
+              <a className={css(buttonDownload)} href={downloadHref()} download>
                 <div className={css(btnIcon)}>
                   <Icon graphic='download' />
                 </div>
                 Download template
-              </button>
+              </a>
 
               <button className={css(buttonIcon)} onClick={navToGoalPage}>
                 <div className={css(btnIcon)}>
@@ -296,6 +299,12 @@ const buttonDownload = {
   color: `${theme.colors.tescoBlue}`,
   fontWeight: `${theme.font.weight.bold}`,
   marginRight: '15px',
+  ':hover': {
+    color: `${theme.colors.tescoBlue}`,
+  },
+  ':focus': {
+    color: `${theme.colors.tescoBlue}`,
+  },
 } as Rule;
 
 const buttonDownloadItems = {
