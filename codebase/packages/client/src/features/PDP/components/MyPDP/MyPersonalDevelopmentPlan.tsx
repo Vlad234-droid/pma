@@ -115,7 +115,7 @@ const MyPersonalDevelopmentPlan: FC = () => {
     navigate(buildPath(paramsReplacer(`${Page.UPDATE_PERSONAL_DEVELOPMENT_PLAN}`, { ':uuid': uuid })));
   };
 
-  const getDownloadHref = () => `${BASE_URL_API}/pdp/template`;
+  const downloadHref = () => `${BASE_URL_API}/pdp/template`;
 
   return (
     <div className={css({ padding: '0 40px' })}>
@@ -123,7 +123,7 @@ const MyPersonalDevelopmentPlan: FC = () => {
         <div className={css(controlButtons({ mobileScreen }))}>
           {pdpSelector && pdpSelector?.length === 5 ? null : (
             <>
-              <a className={css(buttonDownload)} href={getDownloadHref()} download>
+              <a className={css(buttonDownload)} href={downloadHref()} download>
                 <div className={css(btnIcon)}>
                   <Icon graphic='download' />
                 </div>
