@@ -12,13 +12,9 @@ type Props = {
 const MainRoutes: FC<Props> = ({ routes }) => {
   return (
     <Routes>
-      {routes.map(({ Element, path, perform }, idx) => {
-        const hasPermission = usePermission(perform);
-        return hasPermission ? (
-          <ReactRoute key={idx} element={<Element />} path={path} />
-        ) : (
-          <ReactRoute key={idx} path={path} element={<Navigate to={buildPath(Page.CONTRIBUTION)} />} />
-        );
+      {routes.map(({ Element, path, roles }, idx) => {
+        if (!usePermission({ roles })) return null;
+        return <ReactRoute key={idx} element={<Element />} path={path} />;
       })}
       <ReactRoute path='/' element={<Navigate to={buildPath(Page.CONTRIBUTION)} />} />
       <ReactRoute path='*' element={<NotFound />} />

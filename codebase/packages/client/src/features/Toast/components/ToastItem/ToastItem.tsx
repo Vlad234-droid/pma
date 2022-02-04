@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { Rule, useStyle, Icon, Styles, useBreakpoints } from '@dex-ddl/core';
+import { Icon, Rule, Styles, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { TileWrapper } from 'components/Tile';
 
 import { ToastPayload, Variant } from '../../config/types';
@@ -17,7 +17,6 @@ type Props = ToastPayload;
 export const TEST_ID = 'toast-item-test-id';
 
 const ToastItem: FC<Props> = ({ id, title, description, timeout, onClose, variant, autoClose = true }) => {
-  console.log({ id, title, description, timeout, onClose, variant, autoClose });
   const { css } = useStyle();
   const dispatch = useDispatch();
 

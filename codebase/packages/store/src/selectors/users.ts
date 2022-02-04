@@ -1,6 +1,8 @@
 //@ts-ignore
 import { createSelector } from 'reselect'; //@ts-ignore
 import { RootState } from 'typesafe-actions';
+import { timelineSelector } from './timeline';
+import { PermissionProps } from '@pma/client/src/features/Permission/components/PermissionProvider';
 
 export const usersSelector = (state: RootState) => state.users;
 
@@ -40,7 +42,6 @@ export const currentUserSelector = createSelector(usersSelector, ({ current }) =
   const colleagueUUID = info?.colleagueUUID;
   const job = workRelationship?.job?.name;
   const manager = getFullName(workRelationship?.manager?.profile);
-  workRelationship?.job?.name;
   const department = workRelationship?.department?.name;
   const { businessType } = workRelationship?.department || {};
   const { managerUUID, employmentType, isManager } = workRelationship || {};
@@ -72,5 +73,20 @@ export const currentUserSelector = createSelector(usersSelector, ({ current }) =
     },
   };
 });
+
+export const checkPermissions = ({ roles, workLevels, reviewTypes }: PermissionProps) =>
+  createSelector(usersSelector, timelineSelector, ({ current }, { data }) => {
+    if (!roles && !workLevels && !reviewTypes) return true;
+
+    const userRoles = current?.info?.data?.roles || [];
+    const userWorkLevel = current?.info?.data?.colleague?.workRelationships?.[0]?.workLevel;
+    const userReviewTypes = data?.map((item) => item.code);
+
+    const allowedByRole = roles?.some((role) => userRoles?.includes(role));
+    const allowedByWorkLevel = workLevels?.some((workLevel) => workLevel === userWorkLevel);
+    const allowedByReviewType = reviewTypes?.some((reviewType) => userReviewTypes?.includes(reviewType));
+
+    return !!allowedByRole || !!allowedByWorkLevel || !!allowedByReviewType;
+  });
 
 export const currentUserMetaSelector = createSelector(usersSelector, ({ meta }) => meta);

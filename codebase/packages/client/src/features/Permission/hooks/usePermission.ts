@@ -1,9 +1,7 @@
-import { useContext } from 'react';
-import authContext from 'contexts/authContext';
-import { checkPermissions } from '../utils';
+import { useSelector } from 'react-redux';
+import { checkPermissions } from '@pma/store';
+import { PermissionProps } from '../components/PermissionProvider';
 
-export default (actions: Array<string>) => {
-  const { roles } = useContext(authContext);
-
-  return checkPermissions(actions, roles);
+export const usePermission = (props: PermissionProps) => {
+  return useSelector(checkPermissions(props));
 };

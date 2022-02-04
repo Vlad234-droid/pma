@@ -5,15 +5,7 @@ import { Page } from 'pages';
 import { LINKS } from 'config/constants';
 import { buildPath } from 'features/Routes';
 import { ConfirmModal } from 'features/Modal';
-import {
-  CanPerform,
-  ADMIN,
-  COLLEAGUE,
-  PEOPLE_TEAM,
-  TALENT_ADMIN,
-  LINE_MANAGER,
-  PROCESS_MANAGER,
-} from 'features/Permission';
+import { PermissionProvider, role } from 'features/Permission';
 import { Trans, useTranslation } from 'components/Translation';
 import { MenuItem } from 'components/MenuItem';
 import TescoLogo from './TescoLogo.svg';
@@ -64,24 +56,20 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
               linkTo={buildPath(Page.OBJECTIVES_VIEW)}
               title={t('my_objectives_and_reviews', 'My objectives and reviews')}
             />
-            <CanPerform
-              perform={[LINE_MANAGER, PEOPLE_TEAM, COLLEAGUE]}
-              yes={() => (
-                <MenuItem
-                  iconGraphic={'list'}
-                  linkTo={buildPath(Page.PERSONAL_DEVELOPMENT_PLAN)}
-                  title={'Personal Development Plan'}
-                />
-              )}
-            />
+            <PermissionProvider roles={[role.LINE_MANAGER, role.PEOPLE_TEAM, role.COLLEAGUE]}>
+              <MenuItem
+                iconGraphic={'list'}
+                linkTo={buildPath(Page.PERSONAL_DEVELOPMENT_PLAN)}
+                title={'Personal Development Plan'}
+              />
+            </PermissionProvider>
             <MenuItem iconGraphic={'edit'} linkTo={buildPath(Page.NOTES)} title={'My notes'} />
             <MenuItem iconGraphic={'account'} linkTo={buildPath(Page.PROFILE)} title={'My profile'} />
             <MenuItem iconGraphic={'chatSq'} linkTo={buildPath(Page.FEEDBACK)} title={'Feedback'} />
             <MenuItem iconGraphic={'performance'} linkTo={'/'} title={'Support your performance'} />
-            <CanPerform
-              perform={[LINE_MANAGER, PEOPLE_TEAM, TALENT_ADMIN]}
-              yes={() => <MenuItem iconGraphic={'team'} linkTo={buildPath(Page.REPORT)} title={'Team reporting'} />}
-            />
+            <PermissionProvider roles={[role.LINE_MANAGER, role.PEOPLE_TEAM, role.TALENT_ADMIN]}>
+              <MenuItem iconGraphic={'team'} linkTo={buildPath(Page.REPORT)} title={'Team reporting'} />
+            </PermissionProvider>
             <MenuItem iconGraphic={'calibration'} linkTo={'/'} title={'Calibration ratings'} />
           </div>
         </div>
@@ -100,56 +88,44 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
           </div>
           {isOpenDropdown && (
             <div className={css(menuDropdownStyle)}>
-              <CanPerform
-                perform={[PEOPLE_TEAM, TALENT_ADMIN, PROCESS_MANAGER, ADMIN]}
-                yes={() => (
-                  <Link
-                    to={buildPath(Page.PERFORMANCE_CYCLE)}
-                    className={css(itemSettingsStyle, itemSettingsBorderStyle)}
-                  >
-                    <Icon graphic={'createCycle'} />
-                    <span className={css(itemSettingsTextStyle)}>Create performance cycle</span>
-                  </Link>
-                )}
-              />
-              <CanPerform
-                perform={[TALENT_ADMIN]}
-                yes={() => (
-                  <Link
-                    to={buildPath(Page.CREATE_STRATEGIC_DRIVERS)}
-                    className={css(itemSettingsStyle, itemSettingsBorderStyle)}
-                  >
-                    <Icon graphic={'strategicDriver'} />
-                    <span className={css(itemSettingsTextStyle)}>Strategic drivers</span>
-                  </Link>
-                )}
-              />
+              <PermissionProvider roles={[role.PEOPLE_TEAM, role.TALENT_ADMIN, role.PROCESS_MANAGER, role.ADMIN]}>
+                <Link
+                  to={buildPath(Page.PERFORMANCE_CYCLE)}
+                  className={css(itemSettingsStyle, itemSettingsBorderStyle)}
+                >
+                  <Icon graphic={'createCycle'} />
+                  <span className={css(itemSettingsTextStyle)}>Create performance cycle</span>
+                </Link>
+              </PermissionProvider>
+              <PermissionProvider roles={[role.TALENT_ADMIN]}>
+                <Link
+                  to={buildPath(Page.CREATE_STRATEGIC_DRIVERS)}
+                  className={css(itemSettingsStyle, itemSettingsBorderStyle)}
+                >
+                  <Icon graphic={'strategicDriver'} />
+                  <span className={css(itemSettingsTextStyle)}>Strategic drivers</span>
+                </Link>
+              </PermissionProvider>
               <Link to={'/'} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
                 <Icon graphic={'configuration'} />
                 <span className={css(itemSettingsTextStyle)}>Configurations</span>
               </Link>
-              <CanPerform
-                perform={[COLLEAGUE, LINE_MANAGER, PEOPLE_TEAM, ADMIN]}
-                yes={() => (
-                  <Link to={buildPath(Page.TIPS)} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
-                    <Icon graphic={'tip'} />
-                    <span className={css(itemSettingsTextStyle)}>Tips</span>
-                  </Link>
-                )}
-              />
-              <CanPerform
-                perform={[TALENT_ADMIN]}
-                yes={() => (
-                  <Link to={'/'} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
-                    <Icon graphic={'multiLanguage'} />
-                    <span className={css(itemSettingsTextStyle)}>Multi-lingual administration</span>
-                  </Link>
-                )}
-              />
+              <PermissionProvider roles={[role.COLLEAGUE, role.LINE_MANAGER, role.PEOPLE_TEAM, role.ADMIN]}>
+                <Link to={buildPath(Page.TIPS)} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
+                  <Icon graphic={'tip'} />
+                  <span className={css(itemSettingsTextStyle)}>Tips</span>
+                </Link>
+              </PermissionProvider>
+              <PermissionProvider roles={[role.TALENT_ADMIN]}>
+                <Link to={'/'} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
+                  <Icon graphic={'multiLanguage'} />
+                  <span className={css(itemSettingsTextStyle)}>Multi-lingual administration</span>
+                </Link>
+              </PermissionProvider>
             </div>
           )}
           <div className={css(itemSettingsBorderStyle, { marginLeft: '20px' })} />
-          <Link to={''} className={css(itemSettingsStyle)}>
+          <Link to={buildPath(Page.SETTINGS)} className={css(itemSettingsStyle)}>
             <Icon graphic={'settingsGear'} />
             <span className={css(itemSettingsTextStyle)}>Settings</span>
           </Link>

@@ -3,10 +3,10 @@ import { ReportActions, approvedObjectivesSelector, notApprovedObjectivesSelecto
 import { useDispatch, useSelector } from 'react-redux';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
-import { useStyle, useBreakpoints, Rule, colors, Styles, CreateRule, Button } from '@dex-ddl/core';
+import { Button, colors, CreateRule, Rule, Styles, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { useForm } from 'react-hook-form';
 
-import { CanPerform, PEOPLE_TEAM, TALENT_ADMIN } from 'features/Permission';
+import { PermissionProvider, role } from 'features/Permission';
 import { IconButton } from 'components/IconButton';
 import { FilterOption } from 'features/Shared';
 import { PieChart } from 'components/PieChart';
@@ -14,7 +14,7 @@ import { View } from 'components/PieChart/PieChart';
 import { GenericItemField } from 'components/GenericForm';
 import { Item, Select } from 'components/Form';
 import { createYearSchema } from './config';
-import { InfoTable, FilterModal } from './components';
+import { FilterModal, InfoTable } from './components';
 import { DonwloadReportModal } from './Modals';
 import { Trans } from 'components/Translation';
 import { BASE_URL_API } from 'config/constants';
@@ -197,21 +197,18 @@ const Report: FC = () => {
               isCheckAll={isCheckAll}
               setIsCheckAll={setIsCheckAll}
             />
-            <CanPerform
-              perform={[PEOPLE_TEAM, TALENT_ADMIN]}
-              yes={() => (
-                <IconButton
-                  graphic='download'
-                  customVariantRules={{
-                    default: iconBtnStyle as Rule,
-                  }}
-                  iconStyles={iconDownloadStyle}
-                  onPress={() => {
-                    setShowDownloadReportModal(true);
-                  }}
-                />
-              )}
-            />
+            <PermissionProvider roles={[role.PEOPLE_TEAM, role.TALENT_ADMIN]}>
+              <IconButton
+                graphic='download'
+                customVariantRules={{
+                  default: iconBtnStyle as Rule,
+                }}
+                iconStyles={iconDownloadStyle}
+                onPress={() => {
+                  setShowDownloadReportModal(true);
+                }}
+              />
+            </PermissionProvider>
           </div>
         </div>
         <div className={css(pieChartWrapper)}>

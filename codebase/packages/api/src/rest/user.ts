@@ -10,7 +10,8 @@ export const getColleagueByUuid = (params: any = {}) => {
 };
 
 export const updateUserNotification = (params: any = {}) => {
-  const { colleagueUuid } = params;
+  // TODO: update payload and epic. split params and query params
+  const { colleagueUuid } = params?.[0];
   return httpClient.put(`${colleaguesDomain}/${colleagueUuid}/attributes`, params);
 };
 export const createProfileAttribute = (params: any) => {

@@ -13,7 +13,7 @@ import {
 
 import { ReviewWidget, Widgets as ObjectiveWidgets } from 'features/Objectives';
 import { buildPath } from 'features/Routes';
-import { CanPerform, LINE_MANAGER } from 'features/Permission';
+import { PermissionProvider, role } from 'features/Permission';
 import useDispatch from 'hooks/useDispatch';
 import { BasicTile } from 'components/Tile';
 import { Trans, useTranslation } from 'components/Translation';
@@ -51,18 +51,15 @@ const CareerPerformance: FC = () => {
     <>
       <div className={css({ display: 'flex', justifyContent: 'space-between' })}>
         <div />
-        <CanPerform
-          perform={[LINE_MANAGER]}
-          yes={() => (
-            <RouterSwitch
-              links={[
-                { link: buildPath(Page.CONTRIBUTION), name: t('my_view', 'My View') },
-                { link: buildPath(Page.MY_TEAM), name: t('my_team', 'My Team') },
-                { link: buildPath(Page.PEOPLE_TEAM), name: t('people_team', 'People Team') },
-              ]}
-            />
-          )}
-        />
+        <PermissionProvider roles={[role.LINE_MANAGER]}>
+          <RouterSwitch
+            links={[
+              { link: buildPath(Page.CONTRIBUTION), name: t('my_view', 'My View') },
+              { link: buildPath(Page.MY_TEAM), name: t('my_team', 'My Team') },
+              { link: buildPath(Page.PEOPLE_TEAM), name: t('people_team', 'People Team') },
+            ]}
+          />
+        </PermissionProvider>
         <div />
       </div>
       <div className={css(wrapperStylee)}>

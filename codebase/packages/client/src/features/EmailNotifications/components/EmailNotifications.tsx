@@ -1,11 +1,15 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import { Trans, useTranslation } from 'components/Translation';
 import { Rule, Styles, useStyle } from '@dex-ddl/core';
 import { TileWrapper } from 'components/Tile';
 import { Checkbox } from 'components/Form';
-import { UserActions } from '@pma/store';
+import { colleagueUUIDSelector, TimelineActions, UserActions } from '@pma/store';
 import useDispatch from 'hooks/useDispatch';
 import { useAuthContainer } from 'contexts/authContext';
+import { PermissionProvider } from 'features/Permission';
+import { useSelector } from 'react-redux';
+import { accessByRole, accessByWorkLevel } from '../config';
+import { accessByTimelinePoints } from '../config/accessByTimelinePoints';
 
 export type Props = {};
 
@@ -14,43 +18,51 @@ export const EmailNotifications: FC<Props> = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const { user } = useAuthContainer();
-  // @ts-ignore
-  const profileAttributes = user?.data?.profileAttributes || [];
-  const settings = profileAttributes
-    .filter(({ name }) => name.includes('.') && name.split('.')[0] === 'notification')
-    .map((attr) => ({
-      ...attr,
-      value: attr.type === 'BOOLEAN' ? attr.value === 'true' : attr.value,
-    }));
+  const { profileAttributes } = user?.data || [];
+  const colleagueUuid = useSelector(colleagueUUIDSelector);
+  useEffect(() => {
+    if (colleagueUuid) dispatch(TimelineActions.getTimeline({ colleagueUuid }));
+  }, [colleagueUuid]);
 
   const updateSettingAction = (setting) => dispatch(UserActions.updateUserNotification(setting));
 
+  const profileAttributesFiltered = profileAttributes
+    // TODO: remove when new types are added
+    ?.filter(({ type }) => type === 'BOOLEAN')
+    .sort(({ name: name1 }, { name: name2 }) => {
+      if (name1 < name2) return -1;
+      if (name2 > name1) return 1;
+      return 0;
+    });
   return (
     <TileWrapper title={t('Email notifications', 'Email notifications')}>
-      <div className={css({ display: 'flex', flexDirection: 'column', gap: '24px', padding: '24px' })}>
+      <div className={css(listStyles)}>
         <span className={css(titleStyle)}>
-          <Trans>Email notifications</Trans>
+          <Trans>Notifications</Trans>
         </span>
-        <div className={css(descriptionStyle)}>You will receive emails about marked actions</div>
-        {settings.map(({ name, value, type }) => (
-          <div key={name} className={css({ display: 'flex' })}>
-            <Checkbox
-              id={name}
-              onChange={(e) =>
-                updateSettingAction([
-                  {
-                    name,
-                    type,
-                    value: (e.target as HTMLInputElement).checked,
-                  },
-                ])
-              }
-              checked={value}
-            />
-            <label className={css({ marginLeft: '8px' })} htmlFor={name}>
-              <Trans i18nKey={name} />
-            </label>
-          </div>
+        <div className={css(descriptionStyle)}>
+          <Trans>You will receive notification about marked actions</Trans>
+        </div>
+        {profileAttributesFiltered.map(({ name, value, type }) => (
+          <PermissionProvider
+            key={name}
+            roles={accessByRole[name]}
+            workLevels={accessByWorkLevel[name]}
+            reviewTypes={accessByTimelinePoints[name]}
+          >
+            <div className={css({ display: 'flex' })}>
+              <Checkbox
+                id={name}
+                onChange={({ target: { checked: value } }) =>
+                  updateSettingAction([{ colleagueUuid, name, type, value }])
+                }
+                checked={value === 'true'}
+              />
+              <label className={css({ marginLeft: '8px' })} htmlFor={name}>
+                <Trans i18nKey={name} />
+              </label>
+            </div>
+          </PermissionProvider>
         ))}
       </div>
     </TileWrapper>
@@ -72,3 +84,10 @@ const descriptionStyle = {
   lineHeight: '20px',
   marginBottom: '8px',
 } as Styles;
+
+const listStyles: Rule = {
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '24px',
+  padding: '24px',
+};

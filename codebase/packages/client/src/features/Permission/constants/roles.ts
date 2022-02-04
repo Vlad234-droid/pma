@@ -1,7 +1,9 @@
-export const TALENT_ADMIN = 'TalentAdmin';
-export const PROCESS_MANAGER = 'ProcessManager';
-export const PEOPLE_TEAM = 'PeopleTeam';
-export const COLLEAGUE = 'Colleague';
-export const LINE_MANAGER = 'LineManager';
-export const ADMIN = 'Admin';
-export const NEWER = 'NEWER';
+export enum role {
+  TALENT_ADMIN = 'TalentAdmin',
+  PROCESS_MANAGER = 'ProcessManager',
+  PEOPLE_TEAM = 'PeopleTeam',
+  COLLEAGUE = 'Colleague',
+  LINE_MANAGER = 'LineManager',
+  ADMIN = 'Admin',
+  NEWER = 'NEWER',
+}
