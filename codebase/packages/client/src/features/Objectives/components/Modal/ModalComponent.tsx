@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Modal, Rule, useBreakpoints } from '@dex-ddl/core';
+import { Modal, useBreakpoints, theme, CreateRule } from '@dex-ddl/core';
 import { Icon } from 'components/Icon';
 
 export type ModalComponentProps = {
@@ -8,19 +8,21 @@ export type ModalComponentProps = {
   children: any;
 };
 export const ModalComponent: FC<ModalComponentProps> = ({ onClose, title, children }) => {
+  const [, isBreakpoint] = useBreakpoints();
+  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
   return (
     <Modal
       modalPosition={'middle'}
       overlayColor={'tescoBlue'}
-      modalContainerRule={[containerRule]}
+      modalContainerRule={[containerRule({mobileScreen})]}
       closeOptions={{
         content: <Icon graphic='cancel' invertColors={true} />,
         onClose,
-        styles: [modalCloseOptionStyle],
+        styles: [modalCloseOptionStyle({mobileScreen})],
       }}
       title={{
         content: title,
-        styles: [modalTitleOptionStyle],
+        styles: [modalTitleOptionStyle({mobileScreen})],
       }}
     >
       {children}
@@ -28,9 +30,8 @@ export const ModalComponent: FC<ModalComponentProps> = ({ onClose, title, childr
   );
 };
 
-const containerRule: Rule = ({ colors }) => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+const containerRule: CreateRule<{ mobileScreen }> = (props) => {
+  const { mobileScreen } = props;
   return {
     alignItems: 'center',
     justifyContent: 'center',
@@ -42,14 +43,13 @@ const containerRule: Rule = ({ colors }) => {
     height: mobileScreen ? 'calc(100% - 72px)' : 'calc(100% - 102px)',
     marginTop: '72px',
     marginBottom: mobileScreen ? 0 : '30px',
-    background: colors.white,
+    background: theme.colors.white,
     cursor: 'default',
   };
 };
 
-const modalCloseOptionStyle: Rule = () => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+const modalCloseOptionStyle: CreateRule<{ mobileScreen }> = (props) => {
+  const { mobileScreen } = props;
   return {
     display: 'inline-block',
     height: '24px',
@@ -64,7 +64,8 @@ const modalCloseOptionStyle: Rule = () => {
   };
 };
 
-const modalTitleOptionStyle: Rule = () => {
+const modalTitleOptionStyle: CreateRule<{ mobileScreen }> = (props) => {
+  const { mobileScreen } = props;
   return {
     position: 'fixed',
     top: '22px',
@@ -72,7 +73,13 @@ const modalTitleOptionStyle: Rule = () => {
     left: 0,
     right: 0,
     color: 'white',
-    fontSize: '24px',
-    lineHeight: '28px',
+    ...(mobileScreen ?
+      {
+        fontSize: `${theme.font.fixed.f20.fontSize}`,
+        lineHeight: `${theme.font.fluid.f24.lineHeight}`,
+      } : {
+        fontSize: `${theme.font.fixed.f24.fontSize}`,
+        lineHeight: `${theme.font.fluid.f28.lineHeight}`,
+    }),
   };
 };
