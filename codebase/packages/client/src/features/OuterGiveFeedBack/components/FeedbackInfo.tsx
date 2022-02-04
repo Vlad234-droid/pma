@@ -1,8 +1,8 @@
 import React, { FC } from 'react';
 import { useStyle, Rule, Styles } from '@dex-ddl/core';
 import { IconButton } from 'components/IconButton';
-import video_explanation from 'images/video_explanation.jpg';
 import defaultImg from 'images/default.png';
+import { VideoPlayer, VideoId } from 'features/VideoPlayer';
 
 export const WITH_SELECTED_TEST = 'with_selected_test';
 
@@ -24,7 +24,7 @@ const FeedbackInfo: FC<Props> = ({ selectedPerson, onClickMore }) => {
       <div className={css({ marginTop: '16px' })}>
         <div className={css(VideoWrapper)}>
           <h2 className={css(VideoExplanationTitle)}>Watch this 2-minute video on how to give great feedback</h2>
-          <img src={video_explanation} alt='video_explanation' />
+          <VideoPlayer videoId={VideoId.GIVE_FEEDBACK} />
         </div>
         <div className={css(BlockInfo)}>
           <div className={css({ alignSelf: 'flex-start' })}>
@@ -108,7 +108,6 @@ const VideoExplanationTitle: Rule = {
 };
 const VideoWrapper: Rule = {
   width: '100%',
-  maxHeight: '304px',
   marginBottom: '56px',
   '& > img': {
     maxWidth: '100%',

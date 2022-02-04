@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { IconButton } from 'components/IconButton';
 import { useStyle, useBreakpoints, Rule, Styles } from '@dex-ddl/core';
 import { InfoModalProps } from '../type';
-import video_explanation from 'images/video_explanation.jpg';
+import { VideoPlayer, VideoId } from 'features/VideoPlayer';
 
 const InfoModal: FC<InfoModalProps> = ({ setInfoModal }) => {
   const { css, theme } = useStyle();
@@ -14,7 +14,7 @@ const InfoModal: FC<InfoModalProps> = ({ setInfoModal }) => {
       <h2 className={css(Title)}>Need help with providing feedback?</h2>
       <h2 className={css(TitleVideo)}>Watch this 2-minute video on how to give great feedback</h2>
       <div className={css(BlockVideoExplanation)}>
-        <img src={video_explanation} alt='video_explanation' />
+        <VideoPlayer videoId={VideoId.GIVE_FEEDBACK} />
       </div>
       <p className={css(PreTitle)}>Here are some examples of the types of things you could write:</p>
       <ul className={css(ListInfo)}>
@@ -76,7 +76,6 @@ const TitleVideo: Rule = {
   margin: '16px 0px 16px 0px',
 };
 const BlockVideoExplanation: Rule = {
-  maxHeight: '300px',
   width: '100%',
   '& > img': {
     maxWidth: '100%',
