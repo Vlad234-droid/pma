@@ -61,7 +61,7 @@ const StrategicDriversForm: FC = () => {
 
   if (!orgObjectives.length) return null;
 
-  const shame = Yup.object().shape({
+  const schema = Yup.object().shape({
     'Strategic Driver 1': Yup.string().required().min(10),
     'Strategic Driver 2': Yup.string().min(10),
     'Strategic Driver 3': Yup.string().min(10),
@@ -80,7 +80,7 @@ const StrategicDriversForm: FC = () => {
           label: `Strategic driver ${item.number}`,
         };
       })}
-      schema={shame}
+      schema={schema}
       renderButtons={(isValid, isDirty, handleSubmit) => (
         <div className={css(publishBlock)}>
           <Button
