@@ -118,7 +118,7 @@ const headerStyles: CreateRule<{ mobileScreen; onBack }> = ({ mobileScreen, onBa
       }
     : {
         marginLeft: 'auto',
-        paddingLeft: onBack ? 0 : '25px',
+        paddingLeft: onBack ? '66px' : '91px',
       }),
 });
 
