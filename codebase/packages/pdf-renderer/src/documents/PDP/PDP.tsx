@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   body: {
-    maxHeight: 220,
+    maxHeight: 600,
   },
   block: {
     marginTop: 5,
