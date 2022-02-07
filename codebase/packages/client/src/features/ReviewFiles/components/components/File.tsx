@@ -41,6 +41,7 @@ export const File: FC<Props> = ({ file, onDelete }) => {
 const buttonStyles = {
   backgroundColor: 'inherit',
   border: 'none',
+  cursor: 'pointer',
 };
 
 const filesizeStyles: Rule = ({ theme }) => ({

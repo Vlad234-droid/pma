@@ -32,8 +32,7 @@ const PreviousReviewFilesModal: FC<Props> = ({ onOverlayClick }) => {
     ({ fileName }) => !filter || fileName.toLowerCase().includes(filter.toLowerCase()),
   );
   const handleChangeFilter = ({ target }) => setFilteredValue(target.value);
-  // TODO: update delete when api is ready
-  const deleteFile = (fileUuid) => dispatch(PreviousReviewFilesActions.uploadFile(fileUuid));
+  const deleteFile = (fileUuid) => dispatch(PreviousReviewFilesActions.deleteFile({ fileUuid }));
 
   useEffect(() => {
     dispatch(PreviousReviewFilesActions.getPreviousReviewFiles());

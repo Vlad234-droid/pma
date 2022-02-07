@@ -3,7 +3,7 @@ import { Epic, isActionOf } from 'typesafe-actions';
 import { combineEpics } from 'redux-observable';
 import { from, of } from 'rxjs';
 import { catchError, filter, map, switchMap, takeUntil } from 'rxjs/operators';
-import { getPreviousReviewFiles, uploadFile } from './actions';
+import { deleteFile, getPreviousReviewFiles, uploadFile } from './actions';
 import { concatWithErrorToast, errorPayloadConverter } from '../../utils/toastHelper';
 
 export const getPreviousReviewFilesEpic: Epic = (action$, _, { api }) =>
@@ -60,4 +60,23 @@ export const uploadFileEpic: Epic = (action$, _, { api }) =>
     }),
   );
 
-export default combineEpics(getPreviousReviewFilesEpic, uploadFileEpic);
+export const deleteFileEpic: Epic = (action$, _, { openapi }) =>
+  action$.pipe(
+    filter(isActionOf(deleteFile.request)),
+    switchMap(({ payload }) => {
+      const { fileUuid } = payload;
+      return from(openapi.file.delete1({ fileUuid })).pipe(
+        map(getPreviousReviewFiles.request),
+        catchError((e) => {
+          const errors = e?.data?.errors;
+          return concatWithErrorToast(
+            of(uploadFile.failure(errors?.[0])),
+            errorPayloadConverter({ ...errors?.[0], title: 'Delete file error' }),
+          );
+        }),
+        takeUntil(action$.pipe(filter(isActionOf(uploadFile.cancel)))),
+      );
+    }),
+  );
+
+export default combineEpics(getPreviousReviewFilesEpic, uploadFileEpic, deleteFileEpic);

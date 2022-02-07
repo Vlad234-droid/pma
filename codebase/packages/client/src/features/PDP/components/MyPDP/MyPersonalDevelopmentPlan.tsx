@@ -108,7 +108,7 @@ const MyPersonalDevelopmentPlan: FC = () => {
   }, []);
 
   const deleteGoal = (uuid) => {
-    dispatch(PDPActions.deletePDPGoal({ data: [uuid] }));
+    dispatch(PDPActions.deletePDPGoal({ uuid }));
   };
 
   const editGoal = (uuid) => {
