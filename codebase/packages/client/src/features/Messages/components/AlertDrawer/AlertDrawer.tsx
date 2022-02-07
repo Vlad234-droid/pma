@@ -67,9 +67,12 @@ export const AlertDrawer: FC<AlertDrawerProps> = ({ onClose }) => {
 };
 
 const slideInModalRule: Rule = ({ zIndex }) => ({
-  position: 'absolute',
+  position: 'fixed',
   top: 0,
   right: 0,
+  bottom: 0,
+  left: 0,
+  overflow: 'hidden',
   width: '100%',
   zIndex: zIndex.i40,
   height: '100%',
@@ -89,10 +92,12 @@ const underlayRule: Rule = ({ colors }) => ({
 const containerRule: CreateRule<Record<'width', Spacing> & { isDesktop: boolean }> =
   ({ width, isDesktop }) =>
   ({ zIndex }) => ({
-    position: 'absolute',
+    position: 'fixed',
     top: 0,
     right: 0,
     width,
+    display: 'flex',
+    flexDirection: 'column',
     transition: 'width .4s ease-in-out',
     ...(isDesktop && {
       width: width === '100%' ? '50%' : 0,
@@ -123,8 +128,7 @@ const pointerRule: Rule = { cursor: 'default' };
 
 const parcelRule: Rule = ({ colors }) => ({
   background: colors.backgroundDark,
-  marginTop: '6px',
-  height: 'calc(100% - 50px)',
+  flexGrow: 1,
   '& > div': {
     height: '100%',
   },

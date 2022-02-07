@@ -26,7 +26,7 @@ const Header: FC<HeaderProps> = ({ title, onBack, withIcon, iconName = 'home', s
 
   const { fetchMessagesCount } = useMessagesContext();
 
-  const handleMenyOpen = () => {
+  const handleMenuOpen = () => {
     navigate(pathname, {
       state: {
         isMenuOpen: true,
@@ -76,7 +76,7 @@ const Header: FC<HeaderProps> = ({ title, onBack, withIcon, iconName = 'home', s
           <IconButton onPress={handleAlertOpen} graphic='alert' />
           <AlertBadge />
         </RoundIcon>
-        <Icon onClick={handleMenyOpen} graphic='hamburger' iconStyles={iconStyles} />
+        <Icon onClick={handleMenuOpen} graphic='hamburger' iconStyles={iconStyles} />
       </div>
       {state?.isMenuOpen && <MenuDrawer onClose={handleClose} />}
       {state?.isAlertOpen && <AlertDrawer onClose={handleAlertClose} />}
