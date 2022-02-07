@@ -10,7 +10,9 @@ import { formatDateStringFromISO } from 'utils/date';
 import { FilterOption } from 'features/Shared';
 import { IconButton } from 'components/IconButton';
 import { ConfirmModal } from 'features/Modal';
-import { Trans } from 'components/Translation';
+import { Trans , useTranslation } from 'components/Translation';
+import { DropZone } from 'components/DropZone';
+import Upload from 'images/Upload.svg';
 
 import { BASE_URL_API } from 'config/constants';
 
@@ -24,13 +26,16 @@ const initialFilters = {
   search: '',
 };
 
-const AdministratorContainer: FC = () => {
+const PerfomanceCyclesTemplates: FC = () => {
+  const { t } = useTranslation();
   const { css } = useStyle();
   const dispatch = useDispatch();
   const [, isBreakpoint] = useBreakpoints();
   const { loaded } = useSelector(configEntriesMetaSelector) || {};
   const templatesList = useSelector(getProcessTemplateSelector) || [];
   const small = isBreakpoint.small || isBreakpoint.xSmall;
+  console.log('small', small);
+
   const [focus, setFocus] = useState(false);
   const [filter, setFilter] = useState<any>(initialFilters);
 
@@ -81,24 +86,36 @@ const AdministratorContainer: FC = () => {
     dispatch(ProcessTemplateActions.deleteProcessTemplate(payload));
   };
 
+  const onUpload = (file) => {
+    dispatch(ProcessTemplateActions.uploadProcessTemplate({ file }));
+  };
+
   return (
     <div>
       <div className={css(filterIconStyled({ small }))}>
-        <FilterOption
-          focus={focus}
-          customIcon={true}
-          onFocus={setFocus}
-          searchValue={filter.search}
-          onChange={(e) => setFilter({ ...filter, search: e.target.value })}
-          hasActiveFilter={hasActiveFilter}
-          withIcon={false}
-          customStyles={{
-            ...(focus ? { padding: '10px 20px 10px 16px' } : { padding: 0 }),
-            ...(focus ? { borderRadius: '50px' } : { transitionDelay: '.3s' }),
-          }}
-          visibleSettings={false}
-          marginLeftAuto={true}
-        />
+        <div className={css(containerWrapper({ small }))}>
+          <DropZone onUpload={onUpload} styles={{ width: '270px' }}>
+            <img className={css({ maxWidth: 'inherit' })} src={Upload} alt='Upload' />
+            <span className={css(labelStyles)}>{t('Drop file here or click to upload')}</span>
+            <span className={css(descriptionStyles)}>{t('Maximum upload size 5MB')}</span>
+          </DropZone>
+        </div>
+        <div className={css(containerWrapper({ small }))}>
+          <FilterOption
+            focus={focus}
+            customIcon={true}
+            onFocus={setFocus}
+            searchValue={filter.search}
+            onChange={(e) => setFilter({ ...filter, search: e.target.value })}
+            hasActiveFilter={hasActiveFilter}
+            withIcon={false}
+            customStyles={{
+              ...(focus ? { padding: '10px 20px 10px 16px' } : { padding: 0 }),
+              ...(focus ? { borderRadius: '50px' } : { transitionDelay: '.3s' }),
+            }}
+            visibleSettings={false}
+          />
+        </div>
       </div>
       <div className={css(templatesListStyles)}>
         {filteredTemplates.map((item) => {
@@ -181,7 +198,19 @@ const dateWrapper: Rule = {
 };
 
 const filterIconStyled: CreateRule<{ small: boolean }> = ({ small }) => {
-  return {};
+  return {
+    display: 'flex',
+    alignItems: 'center',
+    flexWrap: 'wrap',
+    flexDirection: small ? 'column' : 'row',
+    gap: small ? '16px' : '0px',
+    ...(!small && { justifyContent: 'space-between' }),
+  };
+};
+const containerWrapper: CreateRule<{ small: boolean }> = ({ small }) => {
+  return {
+    ...(small && { alignSelf: 'flex-start' }),
+  };
 };
 
 const templatesListStyles: Rule = () => ({
@@ -200,6 +229,16 @@ const templatesListItemStyles: Rule = () => {
   };
 };
 
+const labelStyles: Rule = ({ theme }) => ({
+  fontSize: '16px',
+  color: theme.colors.tescoBlue,
+  margin: '8px 0',
+});
+const descriptionStyles: Rule = ({ theme }) => ({
+  fontSize: '12px',
+  color: theme.colors.tescoBlue,
+});
+
 const row: Rule = ({ theme }) => {
   return {
     fontSize: `${theme.font.fixed.f12}`,
@@ -214,4 +253,4 @@ const timeStyles: Rule = ({ theme }) => {
   };
 };
 
-export default AdministratorContainer;
+export default PerfomanceCyclesTemplates;

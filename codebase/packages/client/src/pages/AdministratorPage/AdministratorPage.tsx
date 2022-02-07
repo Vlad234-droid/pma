@@ -1,8 +1,8 @@
 import React, { FC } from 'react';
-import AdministratorContainer from 'features/AdministratorContainer';
+import PerfomanceCyclesTemplates from 'features/PerfomanceCyclesTemplates';
 
 const AdministratorPage: FC = () => {
-  return <AdministratorContainer />;
+  return <PerfomanceCyclesTemplates />;
 };
 
 export default AdministratorPage;
