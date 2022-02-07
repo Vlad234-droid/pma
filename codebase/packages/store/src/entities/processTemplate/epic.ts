@@ -2,8 +2,13 @@
 import { Epic, isActionOf } from 'typesafe-actions';
 import { combineEpics } from 'redux-observable';
 import { from, of } from 'rxjs';
-import { catchError, filter, map, switchMap, takeUntil } from 'rxjs/operators';
-import { getProcessTemplate, getProcessTemplateMetadata, uploadProcessTemplate } from './actions';
+import { catchError, filter, map, switchMap, takeUntil, mergeMap } from 'rxjs/operators';
+import {
+  getProcessTemplate,
+  getProcessTemplateMetadata,
+  uploadProcessTemplate,
+  deleteProcessTemplate,
+} from './actions';
 import { concatWithErrorToast, errorPayloadConverter } from '../../utils/toastHelper';
 
 export const getProcessTemplateEpic: Epic = (action$, _, { api }) =>
@@ -71,7 +76,10 @@ export const uploadProcessTemplateEpic: Epic = (action$, _, { api }) =>
         ],
       };
       return from(api.uploadFile({ file, metadata })).pipe(
-        map(getProcessTemplate.request),
+        mergeMap(() => {
+          //@ts-ignore
+          return from([uploadProcessTemplate.success(), getProcessTemplate.request({ type: '1', status: '2' })]);
+        }),
         catchError((e) => {
           const errors = e?.data?.errors;
           return of(uploadProcessTemplate.failure(errors?.[0]));
@@ -81,4 +89,26 @@ export const uploadProcessTemplateEpic: Epic = (action$, _, { api }) =>
     }),
   );
 
-export default combineEpics(getProcessTemplateEpic, getProcessTemplateMetadataEpic, uploadProcessTemplateEpic);
+export const deleteProcessTemplateEpic: Epic = (action$, _, { api }) =>
+  action$.pipe(
+    filter(isActionOf(deleteProcessTemplate.request)),
+    switchMap(({ payload }) => {
+      const { deletePayload, processTemplatePayload } = payload;
+      //@ts-ignore
+      return from(api.deleteFile(deletePayload)).pipe(
+        //@ts-ignore
+        mergeMap(() => {
+          //@ts-ignore
+          return from([deleteProcessTemplate.success(), getProcessTemplate.request(processTemplatePayload)]);
+        }),
+        catchError(({ errors }) => of(deleteProcessTemplate.failure(errors))),
+      );
+    }),
+  );
+
+export default combineEpics(
+  getProcessTemplateEpic,
+  getProcessTemplateMetadataEpic,
+  uploadProcessTemplateEpic,
+  deleteProcessTemplateEpic,
+);

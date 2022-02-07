@@ -18,6 +18,7 @@ type FilterOptionProps = {
   customStyles?: Rule | Styles;
   visibleSettings?: boolean;
   setSearchValueFilterOption?: React.Dispatch<React.SetStateAction<string>>;
+  marginLeftAuto?: boolean;
 };
 
 export const FilterOption: FC<FilterOptionProps> = ({
@@ -32,6 +33,7 @@ export const FilterOption: FC<FilterOptionProps> = ({
   customStyles,
   visibleSettings = true,
   hasActiveFilter = false,
+  marginLeftAuto = false,
 }) => {
   const { css, theme } = useStyle();
 
@@ -56,7 +58,7 @@ export const FilterOption: FC<FilterOptionProps> = ({
         className={css({
           width: focus ? '240px' : '38px',
           transition: '.3s all ease',
-          marginLeft: '5px',
+          marginLeft: !marginLeftAuto ? '5px' : 'auto',
         })}
       >
         <Item

@@ -30,7 +30,9 @@ const TemplatesModal: FC<TemplateModalProps> = ({ closeModal, selectTemplate }) 
       return item;
   });
 
-  const onUpload = (file) => dispatch(ProcessTemplateActions.uploadProcessTemplate({ file }));
+  const onUpload = (file) => {
+    dispatch(ProcessTemplateActions.uploadProcessTemplate({ file }));
+  };
 
   const handleSearchTemplate = ({ target }) => setFilteredValue(target.value);
 

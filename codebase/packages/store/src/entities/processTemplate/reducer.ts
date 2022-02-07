@@ -1,5 +1,10 @@
 import { createReducer } from 'typesafe-actions';
-import { getProcessTemplate, getProcessTemplateMetadata } from './actions';
+import {
+  getProcessTemplate,
+  getProcessTemplateMetadata,
+  deleteProcessTemplate,
+  uploadProcessTemplate,
+} from './actions';
 
 export const initialState = {
   meta: { loading: false, loaded: false, error: null },
@@ -42,4 +47,24 @@ export default createReducer(initialState)
   .handleAction(getProcessTemplate.failure, failure)
   .handleAction(getProcessTemplateMetadata.request, metadataRequest)
   .handleAction(getProcessTemplateMetadata.success, metadataSuccess)
-  .handleAction(getProcessTemplateMetadata.failure, metadataFailure);
+  .handleAction(getProcessTemplateMetadata.failure, metadataFailure)
+  .handleAction(deleteProcessTemplate.request, (state) => ({
+    ...state,
+    meta: { ...state.meta, loading: true },
+  }))
+  .handleAction(deleteProcessTemplate.success, (state) => ({
+    ...state,
+    meta: { ...state.meta, loading: false, loaded: true },
+  }))
+  .handleAction(deleteProcessTemplate.failure, (state, { payload }) => ({
+    ...state,
+    meta: { ...state.meta, loading: false, loaded: true, error: payload },
+  }))
+  .handleAction(uploadProcessTemplate.request, (state) => ({
+    ...state,
+    meta: { ...state.meta, loading: true },
+  }))
+  .handleAction(uploadProcessTemplate.success, (state, { payload }) => ({
+    ...state,
+    meta: { ...state.meta, loading: false, loaded: true },
+  }));

@@ -97,6 +97,17 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
                   <span className={css(itemSettingsTextStyle)}>Create performance cycle</span>
                 </Link>
               </PermissionProvider>
+
+              <PermissionProvider roles={[role.PROCESS_MANAGER]}>
+                <Link
+                  to={buildPath(Page.AdministratorPage)}
+                  className={css(itemSettingsStyle, itemSettingsBorderStyle)}
+                >
+                  <Icon graphic={'strategicDriver'} />
+                  <span className={css(itemSettingsTextStyle)}>Administrator page</span>
+                </Link>
+              </PermissionProvider>
+
               <PermissionProvider roles={[role.TALENT_ADMIN]}>
                 <Link
                   to={buildPath(Page.CREATE_STRATEGIC_DRIVERS)}
