@@ -105,7 +105,7 @@ const bodyStyle: Rule = {
 };
 
 const btnStyle = ({ theme }) => ({
-  fontSize: '16px',
+  fontSize: `${theme.font.fixed.f14.fontSize}`,
   color: theme.colors.tescoBlue,
   height: '30px',
   background: 'transparent',
