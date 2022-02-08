@@ -19,6 +19,12 @@ import Upload from 'images/Upload.svg';
 
 import { BASE_URL_API } from 'config/constants';
 
+export const PERFOMANCE_WRAPPER = 'PERFOMANCE_WRAPPER';
+export const FILTER_MODAL_ID = 'FILTER_MODAL_ID';
+export const SETTINGS_BTN_ID = 'SETTINGS_BTN_ID';
+export const WRAPPER_INPUT_ID = 'WRAPPER_INPUT_ID';
+export const INPUT_TEST_ID = 'INPUT_TEST_ID';
+
 enum DeleteStatuses {
   PENDING = 'PENDING',
   CONFIRMING = 'CONFIRMING',
@@ -96,7 +102,7 @@ const PerfomanceCyclesTemplates: FC = () => {
   };
 
   return (
-    <div>
+    <div data-test-id={PERFOMANCE_WRAPPER}>
       <div className={css(filterIconStyled({ small }))}>
         <div className={css(containerWrapper({ small }))}>
           <DropZone onUpload={onUpload} styles={{ width: '270px' }}>
@@ -122,8 +128,17 @@ const PerfomanceCyclesTemplates: FC = () => {
             onSettingsPress={() => {
               setFilterModal((prev) => !prev);
             }}
+            testSettingsId={SETTINGS_BTN_ID}
+            wrapperInputId={WRAPPER_INPUT_ID}
+            inputTestId={INPUT_TEST_ID}
           />
-          <FilterModal isOpen={filterModal} filter={filter} setFilter={setFilter} toggleOpen={setFilterModal} />
+          <FilterModal
+            isOpen={filterModal}
+            filter={filter}
+            setFilter={setFilter}
+            toggleOpen={setFilterModal}
+            testId={FILTER_MODAL_ID}
+          />
         </div>
       </div>
       <div className={css(templatesListStyles)}>

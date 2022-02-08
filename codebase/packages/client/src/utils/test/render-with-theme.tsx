@@ -39,6 +39,7 @@ export const renderWithTheme = <TProps extends {} = {}>(
     notes: { notes: [], folders: [], meta: { loading: false, loaded: false, error: null } },
     feedback: { notes: [], reviews: [], meta: { loading: false, loaded: false, error: null } },
     report: { objectiveReports: [], meta: { loading: false, loaded: false, error: null } },
+    processTemplate: { meta: { loading: false, loaded: false, error: null }, success: true, data: [] },
     ...initState,
   });
 
