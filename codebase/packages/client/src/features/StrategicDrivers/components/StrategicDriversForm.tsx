@@ -2,22 +2,39 @@ import React, { FC, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Button, Rule, useStyle } from '@dex-ddl/core';
 import * as Yup from 'yup';
+import get from 'lodash.get';
 import useDispatch from 'hooks/useDispatch';
-import { OrgObjectiveActions, orgObjectivesSelector, Status } from '@pma/store';
+import { OrgObjectiveActions, orgObjectivesSelector, orgObjectivesMetaSelector, Status } from '@pma/store';
 import GenericForm from 'components/GenericForm';
 import { Input } from 'components/Form';
 import { InfoModal } from 'features/Modal';
 
-enum Statuses {
-  PENDING = 'PENDING',
-  SUBMITTED = 'SUBMITTED',
-  DRAFT = 'DRAFT',
+enum Mode {
+  SAVED = 'saved',
+  PUBLISHED = 'published',
 }
 
+const schema = Yup.object().shape({
+  objectives: Yup.array().of(
+    //@ts-ignore
+    Yup.string().test(
+      'firstMandatory',
+      'strategic driver 1 is required and must be at least 10 characters',
+      function () {
+        const { options } = this as Yup.TestContext;
+        //@ts-ignore
+        if (options && options?.index === 0) {
+          //@ts-ignore
+          return options.originalValue.length > 10;
+        }
+        return true;
+      },
+    ),
+  ),
+});
+
 const prepareOrgObjectivesData = (newData, orgObjectivesData) => {
-  return orgObjectivesData.map((objective, idx) => {
-    return { ...objective, title: newData[`Strategic Driver ${idx + 1}`] || objective.title };
-  });
+  return orgObjectivesData.map((objective, idx) => ({ ...objective, title: get(newData, idx) }));
 };
 
 const StrategicDriversForm: FC = () => {
@@ -25,28 +42,28 @@ const StrategicDriversForm: FC = () => {
   const dispatch = useDispatch();
   const orgObjectives = useSelector(orgObjectivesSelector) || [];
 
-  const [status, setStatus] = useState<Statuses>(Statuses.PENDING);
+  const { status } = useSelector(orgObjectivesMetaSelector);
+
+  const [mode, setMode] = useState<Mode>();
 
   const save = (newData) => {
-    delete newData.objectives;
-    const data = prepareOrgObjectivesData(newData, orgObjectives);
+    setMode(Mode.SAVED);
+    const data = prepareOrgObjectivesData(newData.objectives, orgObjectives);
     dispatch(
       OrgObjectiveActions.createOrgObjective({
         data,
       }),
     );
-    setStatus(() => Statuses.DRAFT);
   };
 
   const publish = (newData) => {
-    delete newData.objectives;
-    const data = prepareOrgObjectivesData(newData, orgObjectives);
+    const data = prepareOrgObjectivesData(newData.objectives, orgObjectives);
+    setMode(Mode.PUBLISHED);
     dispatch(
       OrgObjectiveActions.createAndPublishOrgObjective({
         data,
       }),
     );
-    setStatus(() => Statuses.SUBMITTED);
   };
 
   useEffect(() => {
@@ -56,27 +73,17 @@ const StrategicDriversForm: FC = () => {
   const handleCancel = () => {
     // @ts-ignore
     dispatch(OrgObjectiveActions.changeOrgObjectiveMetaStatus(Status.IDLE));
-    setStatus(() => Statuses.PENDING);
   };
 
   if (!orgObjectives.length) return null;
 
-  const schema = Yup.object().shape({
-    'Strategic Driver 1': Yup.string().required().min(10),
-    'Strategic Driver 2': Yup.string().min(10),
-    'Strategic Driver 3': Yup.string().min(10),
-    'Strategic Driver 4': Yup.string().min(10),
-    'Strategic Driver 5': Yup.string().min(10),
-    'Strategic Driver 6': Yup.string().min(10),
-  });
-
   return (
     <GenericForm
-      formFields={orgObjectives.map((item): any => {
+      formFields={orgObjectives.map((item, idx): any => {
         return {
           Element: Input,
-          name: `Strategic Driver ${item.number}`,
-          id: `driver_${item.number}`,
+          name: `objectives.${idx}`,
+          id: `objective_${idx}`,
           label: `Strategic driver ${item.number}`,
         };
       })}
@@ -100,11 +107,8 @@ const StrategicDriversForm: FC = () => {
             Publish
           </Button>
 
-          {status !== Statuses.PENDING && (
-            <InfoModal
-              title={`Strategic drivers successfully ${status === Statuses.DRAFT ? 'saved' : 'published'}`}
-              onCancel={handleCancel}
-            />
+          {status === Status.SUCCEEDED && (
+            <InfoModal title={`Strategic drivers successfully ${mode}`} onCancel={handleCancel} />
           )}
         </div>
       )}

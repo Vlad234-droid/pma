@@ -25,7 +25,7 @@ const defaultRenderButtons = (isValid) => (
 );
 const defaultRenderContent = () => null;
 
-function genericForm<T>({
+function GenericForm<T>({
   formFields,
   schema,
   onSubmit,
@@ -53,6 +53,8 @@ function genericForm<T>({
   const { css } = useStyle();
 
   const values = getValues();
+
+  console.log('errors', errors);
 
   return (
     <form noValidate onSubmit={onSubmit ? handleSubmit(onSubmit) : undefined} ref={formRef} className={css(formStyles)}>
@@ -83,4 +85,4 @@ const formStyles: Rule = {
   flexGrow: 1,
 };
 
-export default genericForm;
+export default GenericForm;
