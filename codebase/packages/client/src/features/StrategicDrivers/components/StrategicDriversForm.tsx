@@ -15,7 +15,7 @@ enum Mode {
 }
 
 const schema = Yup.object().shape({
-  objectives: Yup.array().of(
+  drivers: Yup.array().of(
     //@ts-ignore
     Yup.string().test(
       'firstMandatory',
@@ -48,7 +48,7 @@ const StrategicDriversForm: FC = () => {
 
   const save = (newData) => {
     setMode(Mode.SAVED);
-    const data = prepareOrgObjectivesData(newData.objectives, orgObjectives);
+    const data = prepareOrgObjectivesData(newData.drivers, orgObjectives);
     dispatch(
       OrgObjectiveActions.createOrgObjective({
         data,
@@ -57,7 +57,7 @@ const StrategicDriversForm: FC = () => {
   };
 
   const publish = (newData) => {
-    const data = prepareOrgObjectivesData(newData.objectives, orgObjectives);
+    const data = prepareOrgObjectivesData(newData.drivers, orgObjectives);
     setMode(Mode.PUBLISHED);
     dispatch(
       OrgObjectiveActions.createAndPublishOrgObjective({
@@ -82,8 +82,8 @@ const StrategicDriversForm: FC = () => {
       formFields={orgObjectives.map((item, idx): any => {
         return {
           Element: Input,
-          name: `objectives.${idx}`,
-          id: `objective_${idx}`,
+          name: `drivers.${idx}`,
+          id: `drivers_${idx}`,
           label: `Strategic driver ${item.number}`,
         };
       })}
@@ -113,7 +113,7 @@ const StrategicDriversForm: FC = () => {
         </div>
       )}
       defaultValues={{
-        objectives: orgObjectives.map(({ title }) => title),
+        drivers: orgObjectives.map(({ title }) => title),
       }}
     />
   );
