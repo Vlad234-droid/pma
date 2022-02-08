@@ -115,15 +115,15 @@ if (!PROXY_API_SERVER_URL) {
     appServer.use(express.static(clientDistFolder, { index: false }));
     appServer.use(express.static('public'));
 
-    const myInboxMiddleware = await myInboxConfig(config);
-
     const proxyMiddleware = createProxyMiddleware(
       ['/api/**', '!/api/colleague-inbox/**', '!/api/manager-bff/**'],
       proxyMiddlewareOptions,
     );
     appServer.use('/api', proxyMiddleware);
     appServer.use('/_status', (_, res) => res.sendStatus(200));
-    appServer.use(myInboxMiddleware);
+
+    const myInboxMiddleware = await myInboxConfig(config);
+    myInboxMiddleware && appServer.use(myInboxMiddleware);
 
     console.log('version', process.version);
 

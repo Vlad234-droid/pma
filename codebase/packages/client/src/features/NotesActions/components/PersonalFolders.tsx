@@ -91,6 +91,7 @@ const PersonalFolders: FC<PersonalFoldersProps> = ({
             >
               <IconButton
                 graphic='archive'
+                customVariantRules={{ default: folderPropertiesIconStyle }}
                 onPress={() => {
                   selectedFolderId.current = itemId;
                   actionModal.current = 'archive';
@@ -117,6 +118,7 @@ const PersonalFolders: FC<PersonalFoldersProps> = ({
             <IconButton
               iconProps={{ title: 'Delete' }}
               graphic='delete'
+              customVariantRules={{ default: folderPropertiesIconStyle }}
               onPress={() => {
                 selectedFolderId.current = itemId;
                 actionModal.current = 'delete';
@@ -333,8 +335,14 @@ const alignFlexStyleLast: Rule = {
   alignItems: 'center',
   justifyContent: 'flex-start',
   cursor: 'pointer',
-
   padding: '15px 24px',
 };
+
+const folderPropertiesIconStyle: Rule = () => {
+  return {
+    display: 'block',
+    height: '24px',
+  }
+}
 
 export default PersonalFolders;
