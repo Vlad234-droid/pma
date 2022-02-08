@@ -1,8 +1,11 @@
 import React, { FC } from 'react';
 import { Rule, Styles, useStyle, useBreakpoints, colors, CreateRule } from '@dex-ddl/core';
-import { IconButton } from 'components/IconButton';
+import { useSelector } from 'react-redux';
+import { getFoldersSelector } from '@pma/store';
 import { formatToRelativeDate } from '../../../utils/date';
+import { getNotesFolderTitle } from '../../../utils/note';
 import { SelectedFolderProps } from '../type';
+import { IconButton } from 'components/IconButton';
 
 const SelectedFolder: FC<SelectedFolderProps> = ({
   selectedFolder,
@@ -23,6 +26,7 @@ const SelectedFolder: FC<SelectedFolderProps> = ({
   noteTEAMFolderUuid,
 }) => {
   const { css } = useStyle();
+  const foldersList = useSelector(getFoldersSelector);
 
   const btnsActionsHandle = (itemId: string, itemFolderUuid: string | null, item: any) => {
     const btnsActions = [
@@ -232,7 +236,14 @@ const SelectedFolder: FC<SelectedFolderProps> = ({
             key={item.id}
             onClick={(e) => setSelectedNoteHandler(e, item)}
           >
-            <span className={css(noteTitleStyle)}>{item.title}</span>
+            <span className={css(noteTitleStyle)}>
+              {item.title}
+              {selectedFolder.isInSearch && (
+                <div className={css(noteFolderTitleStyle)}>
+                  {getNotesFolderTitle(item.folderUuid, foldersList)}
+                </div>
+              )}
+            </span>
             <div className={css(FlexStyle)}>
               <span className={css(timeStyled)}>{formatToRelativeDate(item?.updateTime)}</span>
               <div className={css(dotsStyle)} onClick={() => selectedNoteActionhandler(item.id)} id='backdrop'>
@@ -346,10 +357,20 @@ const noteTitleStyle: Rule = {
   color: '#00539F',
 };
 
+const noteFolderTitleStyle: Rule = ({ theme }) => {
+  return {
+    fontSize: `${theme.font.fixed.f16.fontSize}`,
+    lineHeight: `${theme.font.fixed.f16.lineHeight}`,
+    color: theme.colors.base,
+    fontWeight: `${theme.font.weight.regular}`,
+    marginTop: '5px',
+  }
+};
+
 const noteContainerStyle: Rule = {
-  height: '46px',
   position: 'relative',
   cursor: 'pointer',
+  padding: '10px 0',
   '&:before': {
     content: '""',
     position: 'absolute',

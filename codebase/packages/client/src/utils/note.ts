@@ -186,8 +186,8 @@ export const filterNotesHandler = (
   const filteredNotes = filterNotesByTitle(notesSelect, searchValueFilterOption);
 
   const obj = {
+    isInSearch: true,
     notes: filteredNotes,
-
     title: `${
       filteredNotes.length
         ? `Searching results for “${searchValueFilterOption}” ${filteredNotes.length && `(${filteredNotes.length})`}`
@@ -196,3 +196,10 @@ export const filterNotesHandler = (
   };
   return obj;
 };
+
+export const getNotesFolderTitle = (folderUuid: string, foldersList: Array<any>) => {
+  const folder = foldersList.find((item) => item.id === folderUuid);
+  const folderTitle = folder ? folder.title : 'All notes';
+
+  return folderTitle;
+}
