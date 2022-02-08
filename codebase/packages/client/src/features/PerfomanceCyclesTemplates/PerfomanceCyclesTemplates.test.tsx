@@ -11,32 +11,45 @@ import PerfomanceCyclesTemplates, {
   INPUT_TEST_ID,
 } from './PerfomanceCyclesTemplates';
 
-it('Perfomance page', async () => {
-  const { getByTestId, queryByTestId } = renderWithTheme(<PerfomanceCyclesTemplates />);
+describe('Perfomance page', () => {
+  it('Perfomance page wrapper', async () => {
+    const { getByTestId, queryByTestId } = renderWithTheme(<PerfomanceCyclesTemplates />);
 
-  const wrapper = getByTestId(PERFOMANCE_WRAPPER);
-  const settingsBtn = getByTestId(SETTINGS_BTN_ID);
-  const filterModal = queryByTestId(FILTER_MODAL_ID);
-  const filterModalStyle = window.getComputedStyle(filterModal);
-  const wrapperInputStyle = window.getComputedStyle(getByTestId(WRAPPER_INPUT_ID));
+    const wrapper = getByTestId(PERFOMANCE_WRAPPER);
+    const filterModal = queryByTestId(FILTER_MODAL_ID);
 
-  const input = getByTestId(INPUT_TEST_ID);
+    expect(filterModal).toBeInTheDocument();
+    expect(wrapper).toBeInTheDocument();
+  });
+  it('sort filter', async () => {
+    const { getByTestId, queryByTestId } = renderWithTheme(<PerfomanceCyclesTemplates />);
 
-  expect(filterModalStyle.transform).toBe('scaleY(0)');
+    const settingsBtn = getByTestId(SETTINGS_BTN_ID);
+    const filterModal = queryByTestId(FILTER_MODAL_ID);
+    const filterModalStyle = window.getComputedStyle(filterModal);
 
-  expect(wrapperInputStyle.width).toBe('38px');
+    expect(filterModalStyle.transform).toBe('scaleY(0)');
 
-  fireEvent.click(settingsBtn);
-  fireEvent.focus(input);
+    fireEvent.click(settingsBtn);
 
-  const filterModalPressedStyle = window.getComputedStyle(filterModal);
-  const wrapperInputPressedStyle = window.getComputedStyle(getByTestId(WRAPPER_INPUT_ID));
+    const filterModalPressedStyle = window.getComputedStyle(filterModal);
 
-  expect(filterModalPressedStyle.transform).toBe('scaleY(1)');
+    expect(filterModalPressedStyle.transform).toBe('scaleY(1)');
+    expect(filterModal).toBeInTheDocument();
+  });
 
-  expect(wrapperInputPressedStyle.width).toBe('240px');
+  it('search input', async () => {
+    const { getByTestId } = renderWithTheme(<PerfomanceCyclesTemplates />);
 
-  expect(filterModal).toBeInTheDocument();
+    const wrapperInputStyle = window.getComputedStyle(getByTestId(WRAPPER_INPUT_ID));
+    const input = getByTestId(INPUT_TEST_ID);
 
-  expect(wrapper).toBeInTheDocument();
+    expect(wrapperInputStyle.width).toBe('38px');
+
+    fireEvent.focus(input);
+
+    const wrapperInputPressedStyle = window.getComputedStyle(getByTestId(WRAPPER_INPUT_ID));
+
+    expect(wrapperInputPressedStyle.width).toBe('240px');
+  });
 });
