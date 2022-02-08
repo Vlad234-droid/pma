@@ -7,7 +7,7 @@ import {
   getNotesArgsSelector,
   getUnReadSubmittedNotesSelector,
 } from '@pma/store';
-import { CreateRule, Icon as IconCore, Modal, Rule, Theme, useBreakpoints, useStyle } from '@dex-ddl/core';
+import { CreateRule, Modal, Rule, Theme, useBreakpoints, useStyle } from '@dex-ddl/core';
 
 import { Trans } from 'components/Translation';
 import { Item, Select } from 'components/Form';
