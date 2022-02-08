@@ -173,6 +173,7 @@ const iconWrapperStyles: Rule = {
 const iconStyles: Rule = {
   width: '24px',
   height: '24px',
+  cursor: 'pointer',
 };
 
 const menuDrawerWrapperStyle: Rule = ({ colors, zIndex }) => ({
