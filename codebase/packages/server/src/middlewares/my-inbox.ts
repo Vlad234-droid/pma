@@ -1,5 +1,5 @@
 import { myInboxMiddleware } from '@my-inbox/middleware';
-import { ProcessConfig } from '../config';
+import { ProcessConfig, isPROD } from '../config';
 
 export const myInboxConfig = async ({
   applicationUrlRoot,
@@ -8,18 +8,19 @@ export const myInboxConfig = async ({
   integrationSSOLogoutPath,
 }: ProcessConfig) => {
   const origin = applicationUrlRoot();
-  const configEnvironment = environment();
+  const configEnvironment = isPROD(environment()) ? 'prod' : environment();
   const appName = applicationName();
   const logoutPath = integrationSSOLogoutPath();
 
   try {
+    // TODO: remove after testing
     console.log(`Initializing MyInbox middleware ...`);
     console.log(`   - origin: ${origin}`);
     console.log(`   - configEnvironment: ${configEnvironment}`);
     console.log(`   - appName: ${appName}`);
     console.log(`   - logoutPath: ${logoutPath}`);
-  
-    const m =  await myInboxMiddleware({
+
+    const m = await myInboxMiddleware({
       mountPath: '', // ingress overwrites the paths and discards the mountPath part
       origin,
       configEnvironment,
