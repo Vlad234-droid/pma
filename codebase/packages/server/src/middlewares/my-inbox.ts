@@ -7,12 +7,17 @@ export const myInboxConfig = async ({
   applicationName,
   integrationSSOLogoutPath,
 }: ProcessConfig) => {
+  const origin = applicationUrlRoot();
+  const configEnvironment = environment();
+  const appName = applicationName();
+  const logoutPath = integrationSSOLogoutPath();
+
   return await myInboxMiddleware({
     mountPath: '', // ingress overwrites the paths and discards the mountPath part
-    origin: applicationUrlRoot(),
-    configEnvironment: environment(),
-    appName: applicationName(),
-    logoutPath: integrationSSOLogoutPath(),
+    origin,
+    configEnvironment,
+    appName,
+    logoutPath,
     disableSplunk: true,
   });
 };
