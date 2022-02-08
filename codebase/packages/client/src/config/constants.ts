@@ -7,9 +7,11 @@ export const INTEGRATION_MODE = process.env.REACT_APP_INTEGRATION_MODE ?? 'integ
 export const LOGOUT_URL = process?.env?.REACT_APP_LOGOUT_URL ?? '/sso/logout';
 
 const SIGN_OUT = PUBLIC_URL === '/' ? LOGOUT_URL : `${PUBLIC_URL}${LOGOUT_URL}`;
+const HELP = 'https://www.ourtesco.com/colleague/help';
 
 export const LINKS = {
   signOut: SIGN_OUT,
+  help: HELP,
 };
 
 const { protocol, hostname, port } = location;
