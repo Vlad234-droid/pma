@@ -207,6 +207,8 @@ export const PerformanceCycleForm: FC = () => {
   };
 
   const selectTemplate = (value) => {
+    console.log('value', value);
+
     showTemplatesModal(false);
     dispatch(ProcessTemplateActions.getProcessTemplateMetadata({ fileUuid: value }));
     setProcessSelected(value);

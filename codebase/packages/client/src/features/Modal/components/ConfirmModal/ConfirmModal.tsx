@@ -1,7 +1,7 @@
 import React, { FC, HTMLProps } from 'react';
 import { Trans } from 'components/Translation';
 
-import { useBreakpoints, useStyle, CreateRule, Modal, Button } from '@dex-ddl/core';
+import { useBreakpoints, useStyle, CreateRule, Modal, Button, Rule } from '@dex-ddl/core';
 
 export type ConfirmModal = {
   title: string;
@@ -11,6 +11,7 @@ export type ConfirmModal = {
   onOverlayClick?: () => void;
   submitBtnTitle?: JSX.Element;
   canSubmit?: boolean;
+  visibleCancelBtn?: boolean;
 };
 
 type Props = HTMLProps<HTMLInputElement> & ConfirmModal;
@@ -24,8 +25,9 @@ const ConfirmModal: FC<Props> = ({
   submitBtnTitle = <Trans i18nKey='submit'>Submit</Trans>,
   canSubmit = true,
   children,
+  visibleCancelBtn = true,
 }) => {
-  const { theme, css } = useStyle();
+  const { css } = useStyle();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
 
@@ -35,20 +37,14 @@ const ConfirmModal: FC<Props> = ({
       modalContainerRule={[containerRule({ mobileScreen })]}
       title={{
         content: title,
-        styles: [
-          {
-            fontWeight: 700,
-            fontSize: '20px',
-            lineHeight: '24px',
-          },
-        ],
+        styles: [titleStyle],
       }}
       onOverlayClick={onOverlayClick}
     >
       {description && (
         <div
           className={css({
-            padding: '16px 0',
+            padding: '16px 0px 0px 0px',
           })}
         >
           {description}
@@ -59,45 +55,47 @@ const ConfirmModal: FC<Props> = ({
         className={css({
           display: 'flex',
           justifyContent: 'center',
+          marginTop: '22px',
         })}
       >
-        <Button
-          styles={[
-            {
-              background: 'white',
-              border: `1px solid ${theme.colors.tescoBlue}`,
-              fontSize: '16px',
-              lineHeight: '20px',
-              fontWeight: 'bold',
-              color: `${theme.colors.tescoBlue}`,
-              width: '50%',
-              margin: '0px 4px',
-            },
-          ]}
-          onPress={onCancel}
-        >
-          <Trans i18nKey='cancel'>Cancel</Trans>
-        </Button>
-        <Button
-          isDisabled={!canSubmit}
-          styles={[
-            {
-              background: `${theme.colors.tescoBlue}`,
-              fontSize: '16px',
-              lineHeight: '20px',
-              fontWeight: 'bold',
-              width: '50%',
-              margin: '0px 4px 1px 4px',
-            },
-            !canSubmit ? { opacity: '0.6' } : {},
-          ]}
-          onPress={onSave}
-        >
+        {visibleCancelBtn && (
+          <Button styles={[cancelBtn]} onPress={onCancel}>
+            <Trans i18nKey='cancel'>Cancel</Trans>
+          </Button>
+        )}
+
+        <Button isDisabled={!canSubmit} styles={[saveBtn, !canSubmit ? { opacity: '0.6' } : {}]} onPress={onSave}>
           {submitBtnTitle}
         </Button>
       </div>
     </Modal>
   );
+};
+
+const cancelBtn: Rule = ({ theme }) => ({
+  background: 'white',
+  border: `1px solid ${theme.colors.tescoBlue}`,
+  fontSize: '16px',
+  lineHeight: '20px',
+  fontWeight: 'bold',
+  color: `${theme.colors.tescoBlue}`,
+  width: '50%',
+  margin: '0px 4px',
+});
+
+const saveBtn: Rule = ({ theme }) => ({
+  background: `${theme.colors.tescoBlue}`,
+  fontSize: '16px',
+  lineHeight: '20px',
+  fontWeight: 'bold',
+  width: '50%',
+  margin: '0px 4px 1px 4px',
+});
+
+const titleStyle: Rule = {
+  fontWeight: 700,
+  fontSize: '20px',
+  lineHeight: '24px',
 };
 
 const containerRule: CreateRule<{

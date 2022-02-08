@@ -9,3 +9,8 @@ export const getProcessTemplateMetadata = (params?: any) => {
   const { fileUuid } = params;
   return httpClient.get(`/pm-cycles/files/${fileUuid}/metadata`, { params: { ...params } });
 };
+
+export const deleteFile = (params: any) => {
+  const { fileUuid } = params;
+  return httpClient.delete(`${domain}/${fileUuid}`);
+};

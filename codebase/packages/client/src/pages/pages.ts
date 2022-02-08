@@ -24,6 +24,7 @@ import { EditTip, TipsAdministration } from './Tips';
 import { UserObjectives } from './UserObjectives';
 import PeopleTeam from './PeopleTeam';
 import Calibration from './Calibration';
+import AdministratorPage from './AdministratorPage';
 
 export type PageComponent = {
   Element: PageElement;
@@ -198,14 +199,14 @@ const pages: Record<Page, PageComponent> = {
     title: 'Tips',
     withHeader: true,
     backPath: Page.CONTRIBUTION,
-    roles: [role.COLLEAGUE, role.LINE_MANAGER, role.PEOPLE_TEAM, role.ADMIN],
+    roles: [role.ADMIN],
   },
   [Page.EDIT_TIP]: {
     Element: EditTip,
     title: 'Edit Tip',
     withHeader: false,
     backPath: Page.TIPS,
-    roles: [role.TALENT_ADMIN],
+    roles: [role.ADMIN],
   },
   [Page.REPORT]: {
     Element: Report,
@@ -213,6 +214,13 @@ const pages: Record<Page, PageComponent> = {
     withHeader: true,
     backPath: Page.CONTRIBUTION,
     roles: [role.LINE_MANAGER, role.PEOPLE_TEAM, role.TALENT_ADMIN],
+  },
+  [Page.AdministratorPage]: {
+    Element: AdministratorPage,
+    title: 'Administrator page',
+    withHeader: true,
+    backPath: Page.CONTRIBUTION,
+    roles: [role.PROCESS_MANAGER],
   },
 };
 

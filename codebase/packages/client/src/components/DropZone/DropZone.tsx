@@ -12,19 +12,21 @@ export type DropZoneProps = {
   onUpload: (file: any) => void;
 } & AriaButtonProps;
 
-export const DropZone: FC<DropZoneProps> = ({ children, onUpload }) => {
+export const DropZone: FC<DropZoneProps> = ({ children, onUpload, styles = {} }) => {
   const { css } = useStyle();
 
   return (
-    <label className={css(wrapperStyles)} htmlFor='DropZone'>
-      <input
-        className={css(buttonStyles)}
-        type='file'
-        id='DropZone'
-        onChange={({ target }) => onUpload(target.files?.[0])}
-      />
-      {children}
-    </label>
+    <div className={css({ ...styles })}>
+      <label className={css(wrapperStyles)} htmlFor='DropZone'>
+        <input
+          className={css(buttonStyles)}
+          type='file'
+          id='DropZone'
+          onChange={({ target }) => onUpload(target.files?.[0])}
+        />
+        {children}
+      </label>
+    </div>
   );
 };
 

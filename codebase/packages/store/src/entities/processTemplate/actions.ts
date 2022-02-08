@@ -7,6 +7,12 @@ export const getProcessTemplate = createAsyncAction(
   'processTemplate/CANCEL',
 )<any, any, Error, undefined>();
 
+export const deleteProcessTemplate = createAsyncAction(
+  'deleteProcessTemplate/REQUEST',
+  'deleteProcessTemplate/SUCCESS',
+  'deleteProcessTemplate/FAILURE',
+)<any, any, Error>();
+
 export const getProcessTemplateMetadata = createAsyncAction(
   'processTemplate/METADATA_REQUEST',
   'processTemplate/METADATA_SUCCESS',
@@ -25,4 +31,5 @@ export const Actions = {
   getProcessTemplate: getProcessTemplate.request,
   getProcessTemplateMetadata: getProcessTemplateMetadata.request,
   uploadProcessTemplate: uploadProcessTemplate.request,
+  deleteProcessTemplate: deleteProcessTemplate.request,
 };
