@@ -89,13 +89,14 @@ export const uploadProcessTemplateEpic: Epic = (action$, _, { api }) =>
     }),
   );
 
-export const deleteProcessTemplateEpic: Epic = (action$, _, { api }) =>
+export const deleteProcessTemplateEpic: Epic = (action$, _, { openapi }) =>
   action$.pipe(
     filter(isActionOf(deleteProcessTemplate.request)),
     switchMap(({ payload }) => {
       const { deletePayload, processTemplatePayload } = payload;
+      const { fileUuid } = deletePayload;
       //@ts-ignore
-      return from(api.deleteFile(deletePayload)).pipe(
+      return from(openapi.file.delete1({ fileUuid })).pipe(
         //@ts-ignore
         mergeMap(() => {
           //@ts-ignore

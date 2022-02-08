@@ -79,17 +79,7 @@ const PerfomanceCyclesTemplates: FC = () => {
     getAllTemplates(filter);
   }, [filter]);
 
-  const getDownloadHref = (uuid) => `${BASE_URL_API}/files/${uuid}/download`;
-
-  const downloadFile = ({ value: uuid, label }) => {
-    const href = getDownloadHref(uuid);
-    const a = document.createElement('a');
-    a.href = href;
-    a.download = label;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-  };
+  const downloadFile = (uuid) => `${BASE_URL_API}/files/${uuid}/download`;
 
   const deleteFileHandler = () => {
     const payload = {
@@ -125,8 +115,9 @@ const PerfomanceCyclesTemplates: FC = () => {
             hasActiveFilter={hasActiveFilter}
             withIcon={false}
             customStyles={{
-              ...(focus ? { padding: '10px 20px 10px 16px' } : { padding: 0 }),
-              ...(focus ? { borderRadius: '50px' } : { transitionDelay: '.3s' }),
+              ...(focus
+                ? { padding: '10px 20px 10px 16px', borderRadius: '50px' }
+                : { padding: 0, transitionDelay: '.3s' }),
             }}
             onSettingsPress={() => {
               setFilterModal((prev) => !prev);
@@ -150,14 +141,9 @@ const PerfomanceCyclesTemplates: FC = () => {
               </div>
               <div className={css(dateWrapper)}>
                 <div className={css(timeStyles)}>{createdTime}</div>
-
-                <IconButton
-                  iconProps={{ title: 'Download' }}
-                  graphic='download'
-                  onPress={() => {
-                    downloadFile(item);
-                  }}
-                />
+                <a href={downloadFile(value)} download>
+                  <IconButton iconProps={{ title: 'Download' }} graphic='download' />
+                </a>
 
                 <IconButton
                   iconStyles={{ marginLeft: '10px' }}

@@ -199,14 +199,14 @@ const pages: Record<Page, PageComponent> = {
     title: 'Tips',
     withHeader: true,
     backPath: Page.CONTRIBUTION,
-    roles: [role.COLLEAGUE, role.LINE_MANAGER, role.PEOPLE_TEAM, role.ADMIN],
+    roles: [role.ADMIN],
   },
   [Page.EDIT_TIP]: {
     Element: EditTip,
     title: 'Edit Tip',
     withHeader: false,
     backPath: Page.TIPS,
-    roles: [role.TALENT_ADMIN],
+    roles: [role.ADMIN],
   },
   [Page.REPORT]: {
     Element: Report,

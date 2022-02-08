@@ -12,15 +12,11 @@ export type DropZoneProps = {
   onUpload: (file: any) => void;
 } & AriaButtonProps;
 
-export const DropZone: FC<DropZoneProps> = ({ children, onUpload, styles }) => {
+export const DropZone: FC<DropZoneProps> = ({ children, onUpload, styles = {} }) => {
   const { css } = useStyle();
 
   return (
-    <div
-      className={css({
-        ...(styles && styles),
-      })}
-    >
+    <div className={css({ ...styles })}>
       <label className={css(wrapperStyles)} htmlFor='DropZone'>
         <input
           className={css(buttonStyles)}
