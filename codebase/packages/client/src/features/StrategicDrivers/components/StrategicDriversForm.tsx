@@ -2,7 +2,6 @@ import React, { FC, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Button, Rule, useStyle } from '@dex-ddl/core';
 import * as Yup from 'yup';
-import get from 'lodash.get';
 import useDispatch from 'hooks/useDispatch';
 import { OrgObjectiveActions, orgObjectivesSelector, orgObjectivesMetaSelector, Status } from '@pma/store';
 import GenericForm from 'components/GenericForm';
@@ -42,7 +41,7 @@ const schema = Yup.object().shape({
 });
 
 const prepareOrgObjectivesData = (newData, orgObjectivesData) => {
-  return orgObjectivesData.map((objective, idx) => ({ ...objective, title: get(newData, idx) }));
+  return orgObjectivesData.map((objective, idx) => ({ ...objective, title: newData[idx] }));
 };
 
 const StrategicDriversForm: FC = () => {
