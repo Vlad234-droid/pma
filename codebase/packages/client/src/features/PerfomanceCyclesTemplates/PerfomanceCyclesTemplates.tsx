@@ -1,17 +1,20 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState, useCallback } from 'react';
 import { CreateRule, Rule, useStyle, useBreakpoints } from '@dex-ddl/core';
+
+import debounce from 'lodash.debounce';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { getProcessTemplateSelector } from '@pma/store/src/selectors/processTemplate';
-import { configEntriesMetaSelector } from '@pma/store/src/selectors/config-entries';
 import { ProcessTemplateActions } from '@pma/store';
 
 import { formatDateStringFromISO } from 'utils/date';
 import { FilterOption } from 'features/Shared';
 import { IconButton } from 'components/IconButton';
 import { ConfirmModal } from 'features/Modal';
-import { Trans , useTranslation } from 'components/Translation';
+import { Trans, useTranslation } from 'components/Translation';
 import { DropZone } from 'components/DropZone';
+import { FilterModal } from '../Shared/components/FilterModal';
+
 import Upload from 'images/Upload.svg';
 
 import { BASE_URL_API } from 'config/constants';
@@ -22,7 +25,19 @@ enum DeleteStatuses {
   SUBMITTED = 'SUBMITTED',
 }
 
+export const getSortString = (filter: any) => {
+  if (filter.newToOld) return 'created-time:DESC';
+  if (filter.oldToNew) return 'created-time:ASC';
+  if (filter.AZ) return 'file-name:ASC';
+  if (filter.ZA) return 'file-name:DESC';
+  return undefined;
+};
+
 const initialFilters = {
+  AZ: false,
+  ZA: false,
+  newToOld: false,
+  oldToNew: false,
   search: '',
 };
 
@@ -31,10 +46,10 @@ const PerfomanceCyclesTemplates: FC = () => {
   const { css } = useStyle();
   const dispatch = useDispatch();
   const [, isBreakpoint] = useBreakpoints();
-  const { loaded } = useSelector(configEntriesMetaSelector) || {};
   const templatesList = useSelector(getProcessTemplateSelector) || [];
+  const [filterModal, setFilterModal] = useState(false);
+
   const small = isBreakpoint.small || isBreakpoint.xSmall;
-  console.log('small', small);
 
   const [focus, setFocus] = useState(false);
   const [filter, setFilter] = useState<any>(initialFilters);
@@ -42,24 +57,27 @@ const PerfomanceCyclesTemplates: FC = () => {
   const [modalStatus, setModalStatus] = useState<DeleteStatuses>(DeleteStatuses.PENDING);
   const [selectedFile, setSelectedFile] = useState<Record<string, string>>({});
 
-  const filteredTemplates = templatesList?.filter((item) => {
-    const createdTime = formatDateStringFromISO(item.createdTime, 'MM/dd/yyyy');
-    if (filter.search.length > 2) {
-      if (item.fileName.toLowerCase().includes(filter.search.toLowerCase()) || createdTime.includes(filter.search)) {
-        return item;
-      }
-    } else {
-      return templatesList;
-    }
-  });
-
   const hasActiveFilter = Object.values(filter).some((f) => f);
 
+  const processTemplatePayload = (filter) => {
+    return {
+      type: '1',
+      status: '2',
+      ...(filter.search.length > 2 && { _search: filter.search }),
+      _sort: getSortString(filter),
+    };
+  };
+
+  const getAllTemplates = useCallback(
+    debounce((filter) => {
+      dispatch(ProcessTemplateActions.getProcessTemplate(processTemplatePayload(filter)));
+    }, 300),
+    [],
+  );
+
   useEffect(() => {
-    if (!loaded) {
-      dispatch(ProcessTemplateActions.getProcessTemplate({ type: '1', status: '2' }));
-    }
-  }, [loaded]);
+    getAllTemplates(filter);
+  }, [filter]);
 
   const getDownloadHref = (uuid) => `${BASE_URL_API}/files/${uuid}/download`;
 
@@ -78,10 +96,7 @@ const PerfomanceCyclesTemplates: FC = () => {
       deletePayload: {
         fileUuid: selectedFile.value,
       },
-      processTemplatePayload: {
-        type: '1',
-        status: '2',
-      },
+      processTemplatePayload: processTemplatePayload(filter),
     };
     dispatch(ProcessTemplateActions.deleteProcessTemplate(payload));
   };
@@ -113,12 +128,15 @@ const PerfomanceCyclesTemplates: FC = () => {
               ...(focus ? { padding: '10px 20px 10px 16px' } : { padding: 0 }),
               ...(focus ? { borderRadius: '50px' } : { transitionDelay: '.3s' }),
             }}
-            visibleSettings={false}
+            onSettingsPress={() => {
+              setFilterModal((prev) => !prev);
+            }}
           />
+          <FilterModal isOpen={filterModal} filter={filter} setFilter={setFilter} toggleOpen={setFilterModal} />
         </div>
       </div>
       <div className={css(templatesListStyles)}>
-        {filteredTemplates.map((item) => {
+        {templatesList.map((item) => {
           const { value } = item;
 
           const createdTime = formatDateStringFromISO(item.createdTime, 'MM/dd/yyyy');
@@ -209,6 +227,8 @@ const filterIconStyled: CreateRule<{ small: boolean }> = ({ small }) => {
 };
 const containerWrapper: CreateRule<{ small: boolean }> = ({ small }) => {
   return {
+    display: 'flex',
+    position: 'relative',
     ...(small && { alignSelf: 'flex-start' }),
   };
 };
