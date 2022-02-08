@@ -14,22 +14,30 @@ enum Mode {
   PUBLISHED = 'published',
 }
 
+const strLength = Yup.string().min(10);
+
 const schema = Yup.object().shape({
   drivers: Yup.array().of(
     //@ts-ignore
-    Yup.string().test(
-      'firstMandatory',
-      'strategic driver 1 is required and must be at least 10 characters',
-      function () {
+    Yup.string()
+      .test('firstMandatory', 'strategic driver 1 is required', function () {
         const { options } = this as Yup.TestContext;
         //@ts-ignore
         if (options && options?.index === 0) {
           //@ts-ignore
-          return options.originalValue.length > 10;
+          return options.originalValue.length > 0;
         }
         return true;
-      },
-    ),
+      })
+      .test('minLength', 'must be at least 10 characters', function () {
+        const { options } = this as Yup.TestContext;
+        //@ts-ignore
+        if (options && options.originalValue) {
+          //@ts-ignore
+          return strLength.isValidSync(options.originalValue);
+        }
+        return true;
+      }),
   ),
 });
 

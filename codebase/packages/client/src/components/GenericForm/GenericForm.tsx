@@ -54,8 +54,6 @@ function GenericForm<T>({
 
   const values = getValues();
 
-  console.log('errors', errors);
-
   return (
     <form noValidate onSubmit={onSubmit ? handleSubmit(onSubmit) : undefined} ref={formRef} className={css(formStyles)}>
       {formFields.map(({ Element, Wrapper = Item, name, label, placeholder, ...props }) => (
