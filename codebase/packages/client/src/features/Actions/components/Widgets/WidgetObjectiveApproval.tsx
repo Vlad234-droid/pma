@@ -121,7 +121,7 @@ export const WidgetObjectiveApproval: FC<WidgetObjectiveApprovalProps> = ({
             cycleUuid: 'CURRENT',
             status,
           },
-          ...(timeline.reviewType === ReviewType.MYR  ? {
+          ...(timeline.reviewType !== ReviewType.MYR  ? {
             data: {
               ...(reasons ? { reason: reasons[index] as string } : {}),
               status,
