@@ -98,13 +98,13 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
                 </Link>
               </PermissionProvider>
 
-              <PermissionProvider roles={[role.PROCESS_MANAGER]}>
+              <PermissionProvider roles={[role.PROCESS_MANAGER, role.ADMIN]}>
                 <Link
                   to={buildPath(Page.AdministratorPage)}
                   className={css(itemSettingsStyle, itemSettingsBorderStyle)}
                 >
-                  <Icon graphic={'strategicDriver'} />
-                  <span className={css(itemSettingsTextStyle)}>Administrator page</span>
+                  <Icon graphic={'configuration'} />
+                  <span className={css(itemSettingsTextStyle)}>Configurations</span>
                 </Link>
               </PermissionProvider>
 
@@ -117,10 +117,7 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
                   <span className={css(itemSettingsTextStyle)}>Strategic drivers</span>
                 </Link>
               </PermissionProvider>
-              <Link to={'/'} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
-                <Icon graphic={'configuration'} />
-                <span className={css(itemSettingsTextStyle)}>Configurations</span>
-              </Link>
+
               <PermissionProvider roles={[role.COLLEAGUE, role.LINE_MANAGER, role.PEOPLE_TEAM, role.ADMIN]}>
                 <Link to={buildPath(Page.TIPS)} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
                   <Icon graphic={'tip'} />

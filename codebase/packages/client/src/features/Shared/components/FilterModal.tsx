@@ -17,9 +17,10 @@ type Props = {
   filter: FilterType;
   setFilter: (filter: FilterType) => void;
   toggleOpen: (open: boolean) => void;
+  testId?: string;
 };
 
-export const FilterModal: FC<Props> = ({ isOpen, filter, setFilter, toggleOpen }) => {
+export const FilterModal: FC<Props> = ({ isOpen, filter, setFilter, toggleOpen, testId = '' }) => {
   const { css, theme } = useStyle();
   const choseHandler = (val: string) => {
     setFilter({ AZ: false, ZA: false, newToOld: false, oldToNew: false, search: filter.search, [val]: true });
@@ -64,7 +65,7 @@ export const FilterModal: FC<Props> = ({ isOpen, filter, setFilter, toggleOpen }
   useEventListener('mousedown', handleClickOutside);
 
   return (
-    <div ref={ref} className={css(wrapperStyle({ theme, isOpen }))}>
+    <div ref={ref} className={css(wrapperStyle({ theme, isOpen }))} data-test-id={testId}>
       <div className={css(columnStyle)}>
         <span>Sort :</span>
         {fields.map((item) => (

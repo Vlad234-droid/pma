@@ -19,6 +19,9 @@ type FilterOptionProps = {
   visibleSettings?: boolean;
   setSearchValueFilterOption?: React.Dispatch<React.SetStateAction<string>>;
   marginLeftAuto?: boolean;
+  testSettingsId?: string;
+  wrapperInputId?: string;
+  inputTestId?: string;
 };
 
 export const FilterOption: FC<FilterOptionProps> = ({
@@ -34,6 +37,9 @@ export const FilterOption: FC<FilterOptionProps> = ({
   visibleSettings = true,
   hasActiveFilter = false,
   marginLeftAuto = false,
+  testSettingsId = '',
+  wrapperInputId = '',
+  inputTestId = '',
 }) => {
   const { css, theme } = useStyle();
 
@@ -52,9 +58,11 @@ export const FilterOption: FC<FilterOptionProps> = ({
           onPress={() => {
             onSettingsPress && onSettingsPress();
           }}
+          data-test-id={testSettingsId}
         />
       )}
       <div
+        data-test-id={wrapperInputId}
         className={css({
           width: focus ? '240px' : '38px',
           transition: '.3s all ease',
@@ -94,6 +102,7 @@ export const FilterOption: FC<FilterOptionProps> = ({
               border: '1px solid rgb(0, 83, 159)',
               ...(!focus && { borderRadius: '50%', padding: '0px' }),
             }}
+            name={inputTestId}
           />
         </Item>
       </div>
