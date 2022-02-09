@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { useTranslation } from 'components/Translation';
 import { Status } from 'config/enum';
-import { Rule, useStyle, colors, CreateRule } from '@dex-ddl/core';
+import { Rule, useStyle, colors, CreateRule, Theme } from '@dex-ddl/core';
 
 import { Icon, Graphics } from 'components/Icon';
 
@@ -11,7 +11,7 @@ export type StatusBadgeProps = {
 };
 
 const StatusBadge: FC<StatusBadgeProps> = ({ status, styles }) => {
-  const { css } = useStyle();
+  const { css, theme } = useStyle();
   const { t } = useTranslation();
 
   const isDraft = status === Status.DRAFT;
@@ -38,7 +38,7 @@ const StatusBadge: FC<StatusBadgeProps> = ({ status, styles }) => {
   return (
     <div className={css(wrapperStyles, styles)}>
       <Icon graphic={graphic} invertColors iconStyles={iconStyles} />
-      <span className={css(labelStyles({ color }))}>{label}</span>
+      <span className={css(labelStyles({ color, theme }))}>{label}</span>
     </div>
   );
 };
@@ -48,20 +48,24 @@ const wrapperStyles: Rule = ({ theme }) => ({
   padding: '8px 16px',
   background: theme.colors.white,
   borderRadius: '40px',
+  alignItems: 'center',
 });
 
 const iconStyles: Rule = {
   marginRight: '10px',
+  width: '24px',
+  height: '24px',
+  display: 'block',
 };
 
-const labelStyles: CreateRule<{ color: string }> =
-  ({ color }) =>
+const labelStyles: CreateRule<{ color: string, theme: Theme }> =
+  ({ color, theme }) =>
   () => ({
-    fontSize: '14px',
-    lineHeight: '18px',
-    fontWeight: 700,
-    display: 'contents',
+    fontSize: `${theme.font.fixed.f14.fontSize}`,
+    lineHeight: `${theme.font.fixed.f14.lineHeight}`,
+    fontWeight: `${theme.font.weight.bold}`,
+    display: 'block',
     color,
-  });
+});
 
 export default StatusBadge;

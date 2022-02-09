@@ -56,7 +56,9 @@ const Filters: FC<Props> = ({ sortingOptions, sortValue, onSort, searchValue, on
 
   return (
     <div className={css(wrapperStyles)} data-test-id='filters'>
-      <InfoIcon onClick={() => console.log('info clicked')} />
+      <div className={css({ height: '24px', })}>
+        <InfoIcon onClick={() => console.log('info clicked')} />
+      </div>
       {sortingOptions && (
         <Sorting
           iconStyles={iconStyles}
@@ -93,6 +95,7 @@ export default Filters;
 
 const wrapperStyles: Rule = {
   display: 'flex',
+  alignItems: 'center',
 };
 
 const iconStyles: Rule = {
@@ -101,5 +104,4 @@ const iconStyles: Rule = {
   position: 'relative',
   top: '2px',
   left: '2px',
-  marginLeft: '8px',
 };

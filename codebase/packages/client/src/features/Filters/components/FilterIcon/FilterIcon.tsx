@@ -20,18 +20,23 @@ const FilterIcon: FC<Props> = ({ iconStyles, onClick }) => (
   />
 );
 
-const iconBtnStyle: Rule = {
+const iconBtnStyle: Rule = () => ({
   padding: '0',
   marginLeft: '5px',
   display: 'flex',
   height: '38px',
   width: '38px',
-  justifyContent: 'space-between',
+  justifyContent: 'center',
   alignItems: 'center',
   outline: 0,
   border: `1px solid ${colors.tescoBlue}`,
   borderRadius: '20px',
   cursor: 'pointer',
-};
+  '& > span': {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
 
 export default FilterIcon;
