@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
-import { Button, Rule, theme, useStyle } from '@dex-ddl/core';
 import { Accordion, BaseAccordion, ExpandButton, Panel, Section } from 'components/Accordion';
+import { Button, Rule, theme, useStyle } from '@dex-ddl/core';
 import { ConfirmModal } from 'features/Modal';
 import { Icon } from 'components/Icon';
 import { Trans } from 'components/Translation';
 import { DATE_STRING_FORMAT, EXPIRATION_DATE, formatDateString } from 'utils';
+
+export const DELETE_TEST_ID = 'goal-delete';
+export const EDIT_TEST_ID = 'goal-edit';
 
 const GoalInfo = (props) => {
   const { id, title, subtitle, description, data, formElements, deleteGoal, editGoal } = props;
@@ -40,7 +43,7 @@ const GoalInfo = (props) => {
             <>
               <Section defaultExpanded={false}>
                 <div className={css(titleBlock)} onClick={() => setToogled(!toogled)}>
-                  {title.replace(modifiedTitleRegex, '')}
+                  {title?.replace(modifiedTitleRegex, '')}
                   <div className={css({ paddingLeft: '12px' })}>
                     <ExpandButton />
                   </div>
@@ -72,14 +75,18 @@ const GoalInfo = (props) => {
                       })}
 
                     <div className={css(btnBlock)}>
-                      <Button styles={[btns]} onPress={() => editGoal(id)}>
+                      <Button data-test-id={EDIT_TEST_ID} styles={[btns]} onPress={() => editGoal(id)}>
                         <div>
                           <Icon graphic='edit' iconStyles={{ height: '13.33px', width: '13.33px' }} />
                         </div>
                         <div className={css({ marginLeft: '5px' })}>Edit</div>
                       </Button>
 
-                      <Button styles={[btns]} onPress={() => setConfirmDelete(!confirmDelete)}>
+                      <Button
+                        data-test-id={DELETE_TEST_ID}
+                        styles={[btns]}
+                        onPress={() => setConfirmDelete(!confirmDelete)}
+                      >
                         <div className={css({ height: '16px' })}>
                           <Icon
                             graphic='delete'

@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { CreateRule, ModalWithHeader, Rule, useBreakpoints, useStyle } from '@dex-ddl/core';
-import { useNavigate } from 'react-router';
+import { useNavigate , useParams } from 'react-router-dom';
 import { Icon } from '../../../../components/Icon';
 import usePDPShema from '../../hooks/usePDPShema';
 import { useDispatch, useSelector } from 'react-redux';
 import { colleagueUUIDSelector, PDPActions, schemaMetaPDPSelector } from '@pma/store';
 import { buildPath } from '../../../Routes';
 import { Page } from '../../../../pages';
-import { useParams } from 'react-router-dom';
+
 import Form from '../Form';
 import { PDPType } from '../../../../config/enum';
+
+export const TEST_ID = 'create-pdp';
 
 const CreateMyPDP = () => {
   const { css } = useStyle();
@@ -18,7 +20,7 @@ const CreateMyPDP = () => {
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
   const colleagueUuid = useSelector(colleagueUUIDSelector);
-  const pdpList = useSelector(schemaMetaPDPSelector)?.goals;
+  const pdpList = useSelector(schemaMetaPDPSelector)?.goals || [];
   const [pdpGoals, setPDPGoals] = useState<any[]>([]);
   const [schema] = usePDPShema(PDPType.PDP);
   const { components = [] } = schema;
@@ -38,10 +40,10 @@ const CreateMyPDP = () => {
   }
 
   useEffect(() => {
-    if (schema.meta.loaded) {
+    if (schema?.meta?.loaded) {
       setPDPGoals(formElements);
     }
-  }, [schema.meta.loaded]);
+  }, [schema?.meta?.loaded]);
 
   useEffect(() => {
     dispatch(PDPActions.getPDPGoal({}));
@@ -58,7 +60,7 @@ const CreateMyPDP = () => {
     } else {
       setCurrentGoal({});
     }
-  }, [pdpList]);
+  }, [pdpList.length]);
 
   // TODO: simplify nested conditions
   const onFormSubmit = (schemaLoaded, requestData, method) => {
@@ -94,7 +96,7 @@ const CreateMyPDP = () => {
         onClose: () => navigate(buildPath(Page.PERSONAL_DEVELOPMENT_PLAN)),
       }}
     >
-      <div className={css(mainContainer)}>
+      <div data-test-id={TEST_ID} className={css(mainContainer)}>
         <Form
           pdpGoals={pdpGoals}
           pdpList={pdpList}

@@ -5,6 +5,9 @@ import { IconButton } from 'components/IconButton';
 import success from 'images/success.jpg';
 import { Trans } from 'components/Translation';
 
+export const TEST_ID = 'success-modal-wrapper';
+export const OK_BUTTON_TEST_ID = 'ok-button';
+
 const SuccessModal: FC<SuccessModalProps> = ({
   setModalSuccess,
   setIsOpen,
@@ -16,7 +19,7 @@ const SuccessModal: FC<SuccessModalProps> = ({
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
   return (
-    <div className={css(WrapperSuccessContainer)}>
+    <div data-test-id={TEST_ID} className={css(WrapperSuccessContainer)}>
       <div className={css(SuccessImg)}>
         <img src={success} alt='success' />
       </div>
@@ -51,6 +54,7 @@ const SuccessModal: FC<SuccessModalProps> = ({
             })}
           >
             <Button
+              data-test-id={OK_BUTTON_TEST_ID}
               styles={[
                 theme.font.fixed.f16,
                 {

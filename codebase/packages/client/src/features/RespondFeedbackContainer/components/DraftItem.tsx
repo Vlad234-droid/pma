@@ -88,10 +88,10 @@ const DraftItem: FC<DraftItemProps> = ({
       return filteredNotesByRadiosBtnsHandler(completedNotes, filterFeedbacks);
     }
 
-    if (checkedRadio.pending && searchValue.length <= 2 && Object.values(filterFeedbacks).every((item) => !item)) {
+    if (checkedRadio?.pending && searchValue.length <= 2 && Object.values(filterFeedbacks).every((item) => !item)) {
       return pendingNotes;
     } else if (
-      checkedRadio.pending &&
+      checkedRadio?.pending &&
       searchValue.length >= 2 &&
       Object.values(filterFeedbacks).every((item) => !item)
     ) {
@@ -101,10 +101,10 @@ const DraftItem: FC<DraftItemProps> = ({
     }
   };
 
-  if (checkedRadio.pending && !getPropperNotes().length) {
+  if (checkedRadio?.pending && !getPropperNotes().length) {
     return <NoFeedback />;
   }
-  if (checkedRadio.completed && !getPropperNotes().length) {
+  if (checkedRadio?.completed && !getPropperNotes().length) {
     return <NoFeedback />;
   }
 
@@ -157,13 +157,13 @@ const DraftItem: FC<DraftItemProps> = ({
                             width: 'auto',
                           }}
                         >
-                          {checkedRadio.pending && <PendingNotes item={item} />}
-                          {checkedRadio.completed && <CompletedNotes item={item} />}
+                          {checkedRadio?.pending && <PendingNotes item={item} />}
+                          {checkedRadio?.completed && <CompletedNotes item={item} />}
                         </TileWrapper>
-                        {checkedRadio.completed ? (
+                        {checkedRadio?.completed ? (
                           <></>
                         ) : (
-                          checkedRadio.pending && (
+                          checkedRadio?.pending && (
                             <div className={css(wrapperBtnStyle)}>
                               <IconButtonDefault graphic='arrowRight' onClick={() => handleFeedbackBtnClick(item)} />
                             </div>
