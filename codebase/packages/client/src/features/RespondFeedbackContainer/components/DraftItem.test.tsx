@@ -1,22 +1,35 @@
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
-import { renderWithTheme } from '../../../utils/test';
+// @ts-ignore
+import { renderWithTheme as render } from 'utils/test';
 import { screen } from '@testing-library/react';
-import DraftItem, { TEST_ID } from './DraftItem';
+import DraftItem from './DraftItem';
 
 describe('ReviewDraftItems', () => {
   const testHandler = jest.fn();
+  const props = {
+    draftFeedback: testHandler,
+    checkedRadio: {
+      pending: false,
+      completed: true,
+    },
+    searchValue: 'string',
+    focus: true,
+    setFocus: testHandler,
+    filterModal: true,
+    setFilterModal: testHandler,
+    setFilterFeedbacks: testHandler,
+    filterFeedbacks: {
+      AZ: true,
+      ZA: false,
+      newToOld: false,
+      oldToNew: false,
+    },
+  };
 
-  it('should render ReviewDraftItems', async () => {
-    const draftItem = {
-      id: 1,
-      img: 'string',
-      f_name: 'string',
-      l_name: 'string',
-      title: 'string',
-    };
-    renderWithTheme(<DraftItem draftFeedback={testHandler} item={draftItem} />);
-    const draft = screen.getByTestId(TEST_ID);
+  it('should render DraftItems', async () => {
+    const { getByTestId } = render(<DraftItem {...props} />);
+    const draft = getByTestId('information');
 
     expect(draft).toBeInTheDocument();
   });

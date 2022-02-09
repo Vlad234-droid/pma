@@ -36,6 +36,9 @@ type Props = {
   onSubmit: (schemaLoaded: boolean, requestData: any, method: string) => void;
 };
 
+export const TEST_ID = 'pdp-form';
+export const SUBMIT_TEST_ID = 'pdp-form-submit';
+
 const Form: FC<Props> = ({
   pdpGoals,
   pdpList,
@@ -57,7 +60,7 @@ const Form: FC<Props> = ({
   const navigate = useNavigate();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
-  const { loaded: schemaLoaded = false } = useSelector(metaPDPSelector);
+  const { loaded: schemaLoaded = false } = useSelector(metaPDPSelector) || false;
   const formElementsFilledEmpty = formElements.reduce((acc, current) => {
     acc[current.key] = '';
     return acc;
@@ -172,7 +175,7 @@ const Form: FC<Props> = ({
           onOverlayClick={() => setConfirSaveNextmModal(false)}
         />
       )}
-      <form>
+      <form data-test-id={TEST_ID}>
         {pdpGoals.map((component, idx) => {
           const { key, label, description } = component;
           const updateGoalValue = pdpList
@@ -258,6 +261,7 @@ const Form: FC<Props> = ({
         }
         {pdpList?.length + 1 !== maxGoals && pdpList?.length + 1 < maxGoals && (
           <Button
+            data-test-id={SUBMIT_TEST_ID}
             isDisabled={!formState.isValid}
             onPress={() => {
               onSubmit(schemaLoaded, requestData, requestMethods.CREATE);
