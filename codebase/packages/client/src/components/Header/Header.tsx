@@ -1,6 +1,6 @@
 import React, { FC, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { IconButton, Rule, Styles, useBreakpoints, useStyle, CreateRule, theme } from '@dex-ddl/core';
+import { IconButton, Rule, Styles, useBreakpoints, useStyle, CreateRule, Theme } from '@dex-ddl/core';
 import { MenuDrawer } from '../MenuDrawer/MenuDrawer';
 import { Graphics, RoundIcon, Icon } from 'components/Icon';
 import { AlertDrawer, AlertBadge, useMessagesContext } from 'features/Messages';
@@ -18,7 +18,7 @@ export const TEST_ID = 'header';
 export const BACK_BTN_TEST_ID = 'header-back';
 
 const Header: FC<HeaderProps> = ({ title, onBack, withIcon, iconName = 'home', styles = {} }) => {
-  const { css } = useStyle();
+  const { css, theme } = useStyle();
   const navigate = useNavigate();
   const { pathname, state }: any = useLocation();
   const [, isBreakpoint] = useBreakpoints();
@@ -63,7 +63,7 @@ const Header: FC<HeaderProps> = ({ title, onBack, withIcon, iconName = 'home', s
   return (
     <div className={css(wrapperStyles, styles)} data-test-id={TEST_ID}>
       {onBack ? <IconButton onPress={onBack} graphic='backwardLink' data-test-id={BACK_BTN_TEST_ID} /> : <div />}
-      <h3 className={css(headerStyles({ mobileScreen, onBack }))}>
+      <h3 className={css(headerStyles({ mobileScreen, onBack, theme }))}>
         {withIcon && (
           <div className={css({ height: '24px', marginRight: '10px' })}>
             <Icon graphic={iconName} />
@@ -105,7 +105,7 @@ const wrapperStyles: Rule = {
   justifyContent: 'space-between',
 };
 
-const headerStyles: CreateRule<{ mobileScreen; onBack }> = ({ mobileScreen, onBack }) => ({
+const headerStyles: CreateRule<{ mobileScreen; onBack, theme: Theme }> = ({ mobileScreen, onBack, theme }) => ({
   lineHeight: '1.2',
   fontSize: '24px',
   display: 'flex',
