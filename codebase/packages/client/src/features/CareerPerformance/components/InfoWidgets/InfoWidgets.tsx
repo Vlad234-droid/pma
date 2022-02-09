@@ -6,20 +6,21 @@ import { Page } from 'pages';
 import { DashboardProfile } from 'features/Profile';
 import { StepIndicator } from 'components/StepIndicator';
 import { useTranslation } from 'components/Translation';
+import { Status } from 'config/enum';
 
 type Props = {
-  showMyReview: boolean;
-  statuses: any;
-  descriptions: any;
-  startDates: any;
+  showMyReview?: boolean;
+  statuses: Status[];
+  descriptions: string[];
+  startDates: string[];
 }
 
-const InfoWidgets: FC<Props> = ({ showMyReview, statuses, descriptions, startDates }) => {
+const InfoWidgets: FC<Props> = ({ showMyReview = false, statuses, descriptions, startDates }) => {
   const { css } = useStyle();
   const { t } = useTranslation();
 
   return (
-    <div className={css(wrapperStyles)}>
+    <div data-test-id='info-widgets' className={css(wrapperStyles)}>
       <Link to={`../${Page.PROFILE}`}>
         <DashboardProfile />
       </Link>

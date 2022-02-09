@@ -5,21 +5,21 @@ import { ReviewWidget } from 'features/Objectives';
 import { ReviewType } from 'config/enum';
 
 type Props = {
-  showMyReview: boolean;
-  showAnnualReview: boolean;
+  showMyReview?: boolean;
+  showAnnualReview?: boolean;
   basicTileStyle: Rule;
-  midYearReview: any;
-  endYearReview: any;
+  midYearReview: any; // TODO: fix
+  endYearReview: any; // TODO: fix
 }
 
-const ReviewWidgets: FC<Props> = ({ showMyReview, showAnnualReview, basicTileStyle, midYearReview, endYearReview }) => {
+const ReviewWidgets: FC<Props> = ({ showMyReview = false, showAnnualReview = false, basicTileStyle, midYearReview, endYearReview }) => {
   const { css } = useStyle();
 
   return (
     <>
       {showMyReview && (
         <>
-          <div data-test-id='personal' className={css(basicTileStyle)}>
+          <div data-test-id='mid-year-review' className={css(basicTileStyle)}>
             <ReviewWidget
               reviewType={ReviewType.MYR}
               status={midYearReview?.status}
@@ -32,7 +32,7 @@ const ReviewWidgets: FC<Props> = ({ showMyReview, showAnnualReview, basicTileSty
               customStyle={{ height: '100%' }}
             />
           </div>
-          <div data-test-id='feedback' className={css(basicTileStyle)}>
+          <div data-test-id='end-year-review' className={css(basicTileStyle)}>
             <ReviewWidget
               reviewType={ReviewType.EYR}
               status={endYearReview?.status}
@@ -48,7 +48,7 @@ const ReviewWidgets: FC<Props> = ({ showMyReview, showAnnualReview, basicTileSty
         </>
       )}
       {showAnnualReview && (
-        <div data-test-id='feedback' className={css(basicTileStyle)}>
+        <div data-test-id='annual-performance-review' className={css(basicTileStyle)}>
           <ReviewWidget
             reviewType={ReviewType.EYR}
             status={endYearReview?.status}

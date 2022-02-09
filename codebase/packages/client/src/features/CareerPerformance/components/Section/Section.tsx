@@ -10,7 +10,7 @@ const Section: FC<Props> = ({ title, children }) => {
   const { css } = useStyle();
 
   return (
-    <section className={css(wrapperStyles)}>
+    <section data-test-id='section' className={css(wrapperStyles)}>
       <div className={css(titleStyles)}>
         {title}
       </div>

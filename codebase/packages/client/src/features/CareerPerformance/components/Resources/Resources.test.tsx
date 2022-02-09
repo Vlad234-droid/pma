@@ -14,10 +14,10 @@ describe('<Resources />', () => {
     };
 
     it('should render expected components', () => {
-      const { getByTestId, getByText } = render(<Resources {...props} />);
+      const { getByTestId, getAllByText, getByText } = render(<Resources {...props} />);
 
       expect(getByTestId('personal-contribution')).toBeInTheDocument();
-      expect(getByText('Click here to find the Your Contribution Guide.')).toBeInTheDocument();
+      expect(getAllByText('Click here to find the Your Contribution Guide.')).toHaveLength(2);
       expect(getByTestId('personal-conversation')).toBeInTheDocument();
       expect(getByText('Useful guidance on having great performance conversations.')).toBeInTheDocument();
       expect(getByTestId('feedback')).toBeInTheDocument();

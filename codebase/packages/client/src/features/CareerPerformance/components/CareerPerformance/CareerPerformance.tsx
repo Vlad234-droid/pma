@@ -20,8 +20,8 @@ type Props = {
   startDates: string[];
   statuses: Status[];
   timelineTypes: TimelineTypes;
-  midYearReview: any;
-  endYearReview: any;
+  midYearReview: any; // TODO; fix
+  endYearReview: any; // TODO; fix
   colleagueUuid?: string;
 };
 
@@ -35,10 +35,6 @@ const CareerPerformance: FC<Props> = ({
   endYearReview,
   colleagueUuid,
 }) => {
-  console.log('timelineTypes', timelineTypes);
-  console.log('midYearReview', midYearReview);
-  console.log('endYearReview', endYearReview);
-
   const { css } = useStyle();
   const showMyReview = timelineTypes[ReviewType.MYR] && timelineTypes[ReviewType.EYR];
   const showAnnualReview = !timelineTypes[ReviewType.MYR] && timelineTypes[ReviewType.EYR];

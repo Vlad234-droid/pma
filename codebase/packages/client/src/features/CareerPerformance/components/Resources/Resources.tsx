@@ -19,23 +19,23 @@ const Resources: FC<Props> = ({ basicTileStyle }) => {
 
   return (
     <>
-      <div data-test-id='personal' className={css(basicTileStyle)} onClick={console.log}>
+      <div data-test-id='personal-contribution' className={css(basicTileStyle)} onClick={console.log}>
         <BasicTile
           hover={true}
           img={contributionImage}
-          title={t('Your Contribution')}
-          description={t('Click here to find the Your Contribution Guide.')}
+          title={t('your_contribution', 'Your Contribution')}
+          description={t('click_here_to_find_contribution_guide', 'Click here to find the Your Contribution Guide.')}
           customStyle={{
             height: '100%',
           }}
         />
       </div>
-      <div data-test-id='personal' className={css(basicTileStyle)} onClick={console.log}>
+      <div data-test-id='personal-conversation' className={css(basicTileStyle)} onClick={console.log}>
         <BasicTile
           hover={true}
           img={checkImage}
-          title={t('Everyday conversations')}
-          description={t('Useful guidance on having great performance conversations.')}
+          title={t('everyday_conversations', 'Everyday conversations')}
+          description={t('guidance_on_conversations', 'Useful guidance on having great performance conversations.')}
           customStyle={{
             height: '100%',
           }}
@@ -45,19 +45,19 @@ const Resources: FC<Props> = ({ basicTileStyle }) => {
         <BasicTile
           hover={true}
           img={feedbackImage}
-          title={t('Feedback at Tesco')}
-          description={t('Learn more about giving and receiving great feedback.')}
+          title={t('feedback_tesco', 'Feedback at Tesco')}
+          description={t('learn_giving_receiving_feedback', 'Learn more about giving and receiving great feedback.')}
           customStyle={{
             height: '100%',
           }}
         />
       </div>
-      <div data-test-id='feedback' className={css(basicTileStyle)}>
+      <div data-test-id='learning' className={css(basicTileStyle)}>
         <BasicTile
           hover={true}
           img={learningImage}
-          title={t('Learning')}
-          description={t('Click here to find the Your Contribution Guide.')}
+          title={t('learning', 'Learning')}
+          description={t('click_here_to_find_contribution_guide', 'Click here to find the Your Contribution Guide.')}
           customStyle={{
             height: '100%',
           }}

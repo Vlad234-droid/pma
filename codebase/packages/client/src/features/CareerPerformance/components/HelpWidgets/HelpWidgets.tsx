@@ -16,9 +16,10 @@ const HelpWidgets: FC = () => {
 
   return (
     <div
+      data-test-id='help-widgets'
       className={css(wrapperStyles)}
     >
-      <div data-test-id='support' className={css({ height: '112%' })} onClick={handleSupportClick}>
+      <div data-test-id='support-tile' className={css({ height: '112%' })} onClick={handleSupportClick}>
         <BasicTile
           img={<Icon graphic='support' />}
           hover={false}
@@ -26,13 +27,13 @@ const HelpWidgets: FC = () => {
           imgCustomStyle={imageStyles}
           customStyle={{
             ...widgetStyles,
-            background: '#fad919',
+            background: '#fad919', // TODO: fix
           }}
           icon={true}
           link={LINKS.help}
         />
       </div>
-      <div data-test-id='question' className={css({ height: '100%' })}>
+      <div data-test-id='question-tile' className={css({ height: '100%' })}>
         <BasicTile
           hover={true}
           img={<Icon graphic='question' />}
