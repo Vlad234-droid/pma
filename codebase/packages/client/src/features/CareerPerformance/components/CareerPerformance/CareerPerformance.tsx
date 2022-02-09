@@ -13,15 +13,16 @@ import InfoWidgets from '../InfoWidgets';
 import ReviewWidgets from '../ReviewWidgets';
 import Resources from '../Resources';
 import Section from '../Section';
+import { Review } from '../../config/types';
 
 type Props = {
   loadTimeline: (uuid: string) => void;
   descriptions: string[];
   startDates: string[];
   statuses: Status[];
-  timelineTypes: TimelineTypes;
-  midYearReview: any; // TODO; fix
-  endYearReview: any; // TODO; fix
+  timelineTypes: TimelineTypes | {};
+  midYearReview: Review;
+  endYearReview: Review;
   colleagueUuid?: string;
 };
 

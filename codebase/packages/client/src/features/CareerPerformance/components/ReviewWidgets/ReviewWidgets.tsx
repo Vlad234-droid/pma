@@ -4,12 +4,14 @@ import { Rule, useStyle } from '@dex-ddl/core';
 import { ReviewWidget } from 'features/Objectives';
 import { ReviewType } from 'config/enum';
 
+import { Review } from '../../config/types';
+
 type Props = {
   showMyReview?: boolean;
   showAnnualReview?: boolean;
   basicTileStyle: Rule;
-  midYearReview: any; // TODO: fix
-  endYearReview: any; // TODO: fix
+  midYearReview: Review;
+  endYearReview: Review;
 }
 
 const ReviewWidgets: FC<Props> = ({ showMyReview = false, showAnnualReview = false, basicTileStyle, midYearReview, endYearReview }) => {
@@ -24,7 +26,7 @@ const ReviewWidgets: FC<Props> = ({ showMyReview = false, showAnnualReview = fal
               reviewType={ReviewType.MYR}
               status={midYearReview?.status}
               startTime={midYearReview?.startTime}
-              endTime={midYearReview?.endTime}
+              endTime={midYearReview?.endTime || undefined}
               lastUpdatedTime={midYearReview?.lastUpdatedTime}
               onClick={() => console.log('ReviewWidget')}
               onClose={() => console.log('ReviewWidget')}
@@ -37,7 +39,7 @@ const ReviewWidgets: FC<Props> = ({ showMyReview = false, showAnnualReview = fal
               reviewType={ReviewType.EYR}
               status={endYearReview?.status}
               startTime={endYearReview?.startTime}
-              endTime={endYearReview?.endTime}
+              endTime={endYearReview?.endTime || undefined}
               lastUpdatedTime={endYearReview?.lastUpdatedTime}
               onClick={() => console.log('ReviewWidget')}
               onClose={() => console.log('ReviewWidget')}
@@ -53,7 +55,7 @@ const ReviewWidgets: FC<Props> = ({ showMyReview = false, showAnnualReview = fal
             reviewType={ReviewType.EYR}
             status={endYearReview?.status}
             startTime={endYearReview?.startTime}
-            endTime={endYearReview?.endTime}
+            endTime={endYearReview?.endTime || undefined}
             lastUpdatedTime={endYearReview?.lastUpdatedTime}
             onClick={() => console.log('ReviewWidget')}
             onClose={() => console.log('ReviewWidget')}

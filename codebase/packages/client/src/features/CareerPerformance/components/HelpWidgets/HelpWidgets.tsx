@@ -27,7 +27,7 @@ const HelpWidgets: FC = () => {
           imgCustomStyle={imageStyles}
           customStyle={{
             ...widgetStyles,
-            background: '#fad919', // TODO: fix
+            background: '#fad919', // missed in theme, will be replaced by another widget in future
           }}
           icon={true}
           link={LINKS.help}
