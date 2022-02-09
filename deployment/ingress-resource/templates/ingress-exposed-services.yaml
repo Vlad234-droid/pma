@@ -28,7 +28,8 @@ spec:
             name: pma-api-service
             port:
               number: 8084
-      # to backend IAM services
+      # to backend Management services
+      {{- if .Values.serviceManagement.enabled }}
       - path: /(management/)(actuator/.*)
         pathType: ImplementationSpecific
         backend:
@@ -36,6 +37,7 @@ spec:
             name: pma-api-service
             port:
               number: 8090
+      {{- end }}
       # to all other backend APIs
       # !!! souldn't be exposed in PROD
       - path: /()(v1/.*)
