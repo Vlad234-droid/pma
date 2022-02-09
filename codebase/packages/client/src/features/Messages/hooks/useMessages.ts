@@ -1,6 +1,6 @@
 import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { MessagesActions, getMessagesByCriteria } from '@pma/store';
+import { getMessagesByCriteria, MessagesActions } from '@pma/store';
 import { Status } from '../types';
 import { MAX_COUNT } from '../config';
 import { formatToRelativeDate } from 'utils';
@@ -14,8 +14,6 @@ type Props = {
 
 export const useMessages = ({ status, initFetch = false, page = 0, size = MAX_COUNT }: Props) => {
   const dispatch = useDispatch();
-
-  // const filterFn = (item) => item.status == status;
   const filterFn = (item) => item;
 
   const serializer = (item) => ({ ...item, sentAt: formatToRelativeDate(item.sentAt) });

@@ -1,10 +1,10 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { CreateRule, ModalWithHeader, Rule, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { useNavigate } from 'react-router';
 import { Icon } from '../../../../components/Icon';
 import usePDPShema from '../../hooks/usePDPShema';
 import { useDispatch, useSelector } from 'react-redux';
-import { colleagueUUIDSelector, schemaMetaPDPSelector, PDPActions } from '@pma/store';
+import { colleagueUUIDSelector, PDPActions, schemaMetaPDPSelector } from '@pma/store';
 import { buildPath } from '../../../Routes';
 import { Page } from '../../../../pages';
 import { useParams } from 'react-router-dom';
@@ -60,6 +60,7 @@ const CreateMyPDP = () => {
     }
   }, [pdpList]);
 
+  // TODO: simplify nested conditions
   const onFormSubmit = (schemaLoaded, requestData, method) => {
     if (method === METHODS.SAVE) {
       dispatch(PDPActions.createPDPGoal({ data: requestData }));
@@ -81,8 +82,6 @@ const CreateMyPDP = () => {
 
       setCurrentGoal({});
     }
-
-    return;
   };
 
   return (

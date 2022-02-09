@@ -2,8 +2,7 @@ import React, { FC } from 'react';
 import { Trans } from 'components/Translation';
 import { Button, Rule, useBreakpoints, useStyle } from '@dex-ddl/core';
 
-import { UseFormReturn } from 'react-hook-form';
-import { AllNotesFolderId } from '../../../../utils/note';
+import { AllNotesFolderId } from '../../../../utils';
 import { getFoldersSelector } from '@pma/store';
 import { useSelector } from 'react-redux';
 import successImg from 'images/success.jpg';
@@ -25,7 +24,7 @@ const SuccessModal: FC<SuccessModalProps> = ({ values, createFolder, cancelModal
   const folders = useSelector(getFoldersSelector) || null;
 
   const propperValue = (): string => {
-    let str = '';
+    let str: string;
     if (values.folder === AllNotesFolderId || values.folder === '') {
       str = 'All notes';
     } else if (values.folder === 'id_001') {

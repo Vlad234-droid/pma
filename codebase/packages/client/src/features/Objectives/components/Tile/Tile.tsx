@@ -1,5 +1,5 @@
-import React, { FC, useState } from 'react';
-import { Rule, Styles, useStyle, CreateRule } from '@dex-ddl/core';
+import React, { FC } from 'react';
+import { CreateRule, Rule, Styles, useStyle } from '@dex-ddl/core';
 import MarkdownRenderer from 'components/MarkdownRenderer';
 import { Textarea } from 'components/Form';
 

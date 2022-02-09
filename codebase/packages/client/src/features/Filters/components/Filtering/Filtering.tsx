@@ -1,6 +1,5 @@
 import React, { FC, useState } from 'react';
-import { Rule, colors, useStyle, Button } from '@dex-ddl/core';
-import isEmpty from 'lodash.isempty';
+import { Button, colors, Rule, useStyle } from '@dex-ddl/core';
 
 import { IconButton, Position } from 'components/IconButton';
 import SideBar from 'components/Sidebar';
@@ -8,7 +7,7 @@ import LinkButton from 'components/LinkButton';
 import { Checkbox, Radio } from 'components/Form';
 import { Trans } from 'components/Translation';
 
-import { getInitialFilterValues, getFiltersWithValues } from '../../utils';
+import { getFiltersWithValues, getInitialFilterValues } from '../../utils';
 import { FilterOption, FilterValues } from '../../config/types';
 import FilterIcon from '../FilterIcon';
 

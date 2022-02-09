@@ -28,7 +28,6 @@ import {
   filterReviewsByTypeSelector,
   getReviewSchema,
   getTimelineByCodeSelector,
-  getTimelineMetaSelector,
   getTimelineSelector,
   isReviewsInStatus,
   isReviewsNumbersInStatus,

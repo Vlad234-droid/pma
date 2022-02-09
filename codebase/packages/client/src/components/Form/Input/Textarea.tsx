@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { useStyle, colors } from '@dex-ddl/core';
+import { colors, useStyle } from '@dex-ddl/core';
 import mergeRefs from 'react-merge-refs';
 
 import { TextareaField } from '../types';
@@ -8,7 +8,6 @@ import { useRefContainer } from '../context/input';
 const Textarea: FC<TextareaField> = ({
   domRef,
   placeholder = '',
-  styles = {},
   rows = 3,
   name,
   value,

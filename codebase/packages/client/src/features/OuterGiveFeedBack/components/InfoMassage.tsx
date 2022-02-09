@@ -1,6 +1,6 @@
-import React, { Dispatch, FC, SetStateAction } from 'react';
+import React, { FC } from 'react';
 import { IconButton } from 'components/IconButton';
-import { useStyle, useBreakpoints, Rule, Styles } from '@dex-ddl/core';
+import { Rule, Styles, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { InfoModalProps } from '../type';
 
 const InfoMassage: FC<InfoModalProps> = ({ goBack }) => {

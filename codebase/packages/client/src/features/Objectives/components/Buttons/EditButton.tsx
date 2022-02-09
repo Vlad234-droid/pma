@@ -1,6 +1,6 @@
 import React, { FC, HTMLProps, useState } from 'react';
-import { useBreakpoints, Rule, Modal, useStyle, Button } from '@dex-ddl/core';
-import { Icon, Graphics } from 'components/Icon';
+import { Button, Modal, Rule, useBreakpoints, useStyle } from '@dex-ddl/core';
+import { Graphics, Icon } from 'components/Icon';
 import { CreateUpdateObjective, CreateUpdateObjectives } from '../ObjectiveModal';
 import { IconButton } from 'components/IconButton';
 
@@ -102,15 +102,6 @@ const containerRule: Rule = ({ colors }) => {
     cursor: 'default',
   };
 };
-
-const iconBtnStyle: Rule = ({ theme }) => ({
-  fontWeight: theme.font.weight.bold,
-  color: theme.colors.tescoBlue,
-  cursor: 'pointer',
-  border: `1px solid ${theme.colors.tescoBlue}`,
-  borderRadius: '30px',
-  padding: '10px 20px 10px 20px',
-});
 
 const modalCloseOptionStyle: Rule = () => {
   const [, isBreakpoint] = useBreakpoints();

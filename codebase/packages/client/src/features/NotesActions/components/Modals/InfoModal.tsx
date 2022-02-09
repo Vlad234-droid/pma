@@ -1,6 +1,6 @@
-import React, { Dispatch, FC, SetStateAction } from 'react';
+import React, { FC } from 'react';
 import { IconButton } from 'components/IconButton';
-import { useStyle, useBreakpoints, Rule } from '@dex-ddl/core';
+import { Rule, useBreakpoints, useStyle } from '@dex-ddl/core';
 
 type Props = {
   closeInfoModal: () => void;

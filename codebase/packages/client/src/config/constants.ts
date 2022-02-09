@@ -14,16 +14,19 @@ export const LINKS = {
 
 const { protocol, hostname, port } = location;
 
-const rootPath = `${protocol}//${hostname}${port ? `:${port}` : ''}`;
+const portValue = port ? `:${port}` : '';
+const rootPath = `${protocol}//${hostname}${portValue}`;
 const mountPath = `${rootPath}${PUBLIC_URL == '/' ? '' : PUBLIC_URL}`;
+
+function getEnv(): 'dev' | 'prod' | 'local' {
+  if (process.env.NODE_ENV == 'development') return 'dev';
+  if (process.env.NODE_ENV == 'production') return 'prod';
+  return 'local';
+}
 
 export const CONFIG = {
   mountPath,
-  env: (process.env.NODE_ENV == 'development'
-    ? 'dev'
-    : process.env.NODE_ENV == 'production'
-    ? 'prod'
-    : 'local') as NodeJS.Environment,
+  env: getEnv(),
   applicationName: 'Performance Management Application',
   signOut: `${rootPath}}${SIGN_OUT}`,
   isDevelopment: process.env.NODE_ENV == 'development',

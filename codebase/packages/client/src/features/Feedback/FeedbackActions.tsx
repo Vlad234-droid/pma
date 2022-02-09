@@ -1,11 +1,11 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  FeedbackActions as FeedbackActionsGet,
   colleagueUUIDSelector,
-  UserActions,
+  FeedbackActions as FeedbackActionsGet,
   getNotesArgsSelector,
   getUnReadSubmittedNotesSelector,
+  UserActions,
 } from '@pma/store';
 import { CreateRule, Modal, Rule, Theme, useBreakpoints, useStyle } from '@dex-ddl/core';
 

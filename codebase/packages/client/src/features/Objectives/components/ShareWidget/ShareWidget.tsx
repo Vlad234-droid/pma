@@ -1,26 +1,25 @@
-import React, { FC, useState, useEffect, useMemo } from 'react';
+import React, { FC, useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'components/Translation';
-import { useStyle, Rule, Button, Styles, colors } from '@dex-ddl/core';
+import { Button, colors, Rule, Styles, useStyle } from '@dex-ddl/core';
 
 import { TileWrapper } from 'components/Tile';
 import { Icon } from 'components/Icon';
 import { ConfirmModal, WrapperModal } from 'features/Modal';
 import { ShareObjectivesModal } from '../Modal';
 import SuccessModal from 'components/SuccessModal';
-import { Status, ReviewType } from 'config/enum';
+import { ReviewType, Status } from 'config/enum';
 import useDispatch from 'hooks/useDispatch';
 import { useSelector } from 'react-redux';
 import * as T from '../../types';
 import { transformReviewsToObjectives } from '../../utils';
 
 import {
-  ObjectiveSharingActions,
   currentUserSelector,
-  isSharedSelector,
-  hasStatusInReviews,
   getAllSharedObjectives,
   getReviewSchema,
-  // add selectors
+  hasStatusInReviews,
+  isSharedSelector,
+  ObjectiveSharingActions,
 } from '@pma/store';
 
 export type Props = {
@@ -86,7 +85,7 @@ const ShareWidget: FC<Props> = ({ customStyle, stopShare }) => {
   }, [sharedObjectivesCount, formElementsCount]);
 
   const getContent = (): [string, string, string, () => void] => {
-    if (stopShare) {
+    if (stopShare || (!isManager && sharedObjectivesCount)) {
       return [
         t('shared_objectives', 'Shared objectives'),
         t(
@@ -99,7 +98,8 @@ const ShareWidget: FC<Props> = ({ customStyle, stopShare }) => {
           handleViewObjectivesBtnClick();
         },
       ];
-    } else if (isManagerShared) {
+    }
+    if (isManagerShared) {
       return [
         t('share_objectives', 'Share Objectives'),
         t('share_objectives_on_description', 'You are currently sharing your objectives with your team'),
@@ -108,7 +108,8 @@ const ShareWidget: FC<Props> = ({ customStyle, stopShare }) => {
           handleStopShareBtnClick();
         },
       ];
-    } else if (isManager && !isShared) {
+    }
+    if (isManager && !isShared) {
       return [
         t('share_objectives', 'Share Objectives'),
         t('share_objectives_off_description', 'Make all objectives and measures visible to your team'),
@@ -117,23 +118,8 @@ const ShareWidget: FC<Props> = ({ customStyle, stopShare }) => {
           setIsConfirmDeclineModalOpen(true);
         },
       ];
-    } else if (!isManager && sharedObjectivesCount) {
-      return [
-        t('shared_objectives', 'Shared objectives'),
-        t(
-          'you_have_shared_objectives_from_your_manager',
-          `You have ${sharedObjectivesCount} shared objective(s) from your manager.`,
-          { count: sharedObjectivesCount },
-        ),
-        t('view_objectives', 'View'),
-        () => {
-          handleViewObjectivesBtnClick();
-        },
-      ];
-    } else {
-      return ['N/A', 'N/A', 'N/A', () => null];
-      // throw Error('ShareWidget: impossible case');
     }
+    return ['N/A', 'N/A', 'N/A', () => null];
   };
 
   const [title, description, actionTitle, handleBtnClick] = getContent();

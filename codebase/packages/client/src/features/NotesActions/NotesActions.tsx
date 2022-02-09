@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import { FilterOptions, MainFolders } from './components';
 import AddNoteModal, { AddTeamNoteModal, InfoModal } from './components/Modals';
-import { Modal, Rule, useBreakpoints, useStyle, Theme, CreateRule } from '@dex-ddl/core';
+import { CreateRule, Modal, Rule, Theme, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { FoldersWithNotesTypes, FoldersWithNotesTypesTEAM, NoteData, NotesType, NotesTypeTEAM } from './type';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -13,6 +13,7 @@ import { schemaFolder, schemaNotes, schemaNoteToEdit, schemaTEAMNotes } from './
 import { useDispatch, useSelector } from 'react-redux';
 
 import {
+  ColleaguesActions,
   colleagueUUIDSelector,
   getFoldersSelector,
   getNotesSelector,
@@ -21,9 +22,8 @@ import {
   notesFolderTeamDataSelector,
   personalFolderUuidSelector,
   teamFolderUuidSelector,
-  ColleaguesActions,
 } from '@pma/store';
-import { AllNotesFolderId, AllNotesFolderIdTEAM, filterNotesHandler } from '../../utils/note';
+import { AllNotesFolderId, AllNotesFolderIdTEAM, filterNotesHandler } from '../../utils';
 import { PeopleTypes } from './components/TeamNotes/ModalsParts/type';
 import { useNavigate } from 'react-router-dom';
 import { Trans } from 'components/Translation';
@@ -616,7 +616,7 @@ const arrowLeftStyle: CreateRule<{ theme: Theme; mobileScreen: boolean }> = ({ t
   };
 };
 
-const containerRule: CreateRule<{ theme: Theme; mobileScreen: boolean }> = ({ theme, mobileScreen }) => {
+const containerRule: CreateRule<{ theme: Theme; mobileScreen: boolean }> = ({ mobileScreen }) => {
   return {
     alignItems: 'center',
     justifyContent: 'center',

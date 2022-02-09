@@ -1,6 +1,6 @@
 import React, { FC, HTMLProps } from 'react';
 
-import { useBreakpoints, useStyle, CreateRule, Modal, Button, Rule } from '@dex-ddl/core';
+import { Button, CreateRule, Modal, Rule, useBreakpoints, useStyle } from '@dex-ddl/core';
 
 export type ConfirmModal = {
   title: string;
@@ -12,7 +12,7 @@ export type ConfirmModal = {
 type Props = HTMLProps<HTMLInputElement> & ConfirmModal;
 
 const InfoModal: FC<Props> = ({ title, description, onCancel, onOverlayClick }) => {
-  const { theme, css } = useStyle();
+  const { css } = useStyle();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
 

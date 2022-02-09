@@ -3,9 +3,8 @@ import { colors, Colors, Rule, useStyle } from '@dex-ddl/core';
 
 import { TileWrapper } from 'components/Tile';
 import { Graphics, Icon } from 'components/Icon';
-import LinkButton from 'components/LinkButton';
 import { Accordion, BaseAccordion, ExpandButton, Panel, Section } from 'components/Accordion';
-import { Status, TimelineType, Rating } from 'config/enum';
+import { Rating, Status, TimelineType } from 'config/enum';
 import { Page } from 'pages/types';
 import { useNavigate } from 'react-router-dom';
 import { paramsReplacer } from 'utils';

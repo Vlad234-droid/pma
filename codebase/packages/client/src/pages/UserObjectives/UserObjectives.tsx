@@ -19,7 +19,6 @@ import { useToast, Variant } from 'features/Toast';
 import useDispatch from 'hooks/useDispatch';
 import { useSelector } from 'react-redux';
 import {
-  getTimelineByReviewTypeSelector,
   getTimelineSelector,
   reviewsMetaSelector,
   schemaMetaSelector,
@@ -67,9 +66,6 @@ export const UserObjectives: FC = () => {
   );
   const [origin] = useReviews(params);
   const formElements = components.filter((component) => component.type != 'text');
-
-  const timelineObjective = useSelector(getTimelineByReviewTypeSelector(ReviewType.OBJECTIVE));
-  const status = timelineObjective?.status || undefined;
 
   // todo not clear where reviews might come from. remove this block when its clear
   const createdReviews: any = [];

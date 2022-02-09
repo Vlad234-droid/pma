@@ -1,5 +1,5 @@
-import React, { FC, useState, useEffect } from 'react';
-import { useStyle, Rule, Styles } from '@dex-ddl/core';
+import React, { FC, useEffect, useState } from 'react';
+import { Styles, useStyle } from '@dex-ddl/core';
 
 import { Employee } from 'config/types';
 import { ConfirmModal } from 'features/Modal';
@@ -44,6 +44,8 @@ const EditRatingsModal: FC<Props> = ({ employee, onClose, onSave }) => {
     overallRating && onSave(overallRating);
   };
 
+  const overall = t('overall_rating_is', `Your colleague's overall rating is`);
+  const label = `${overall}: ${overallRating}`;
   return (
     <ConfirmModal
       title={t('edit_calibration', 'Edit calibration')}
@@ -85,10 +87,7 @@ const EditRatingsModal: FC<Props> = ({ employee, onClose, onSave }) => {
             />
           </Item>
         </>
-        <div className={css(Label)}>{`${t(
-          'overall_rating_is',
-          `Your colleague's overall rating is`,
-        )}: ${overallRating}`}</div>
+        <div className={css(Label)}>{label}</div>
       </div>
     </ConfirmModal>
   );

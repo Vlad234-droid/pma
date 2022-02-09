@@ -3,8 +3,6 @@ import { useStyle } from '@dex-ddl/core';
 
 import { useTranslation } from 'components/Translation';
 import SecondaryWidget, { Props as SecondaryWidgetProps } from 'features/SecondaryWidget';
-import { buildPath } from 'features/Routes';
-import { Page } from 'pages';
 
 type Props = {
   onEditClick: () => void;

@@ -132,7 +132,7 @@ const Header: FC<Omit<HeaderProps, 'children'> & { title: string; status?: Statu
 
   return (
     <BaseHeader {...props}>
-      {({ getHeadingProps, getElementToggleProps, expanded }) => (
+      {({ getHeadingProps, getElementToggleProps }) => (
         <div className={css(accordionHeaderWrapperStyles)} {...getHeadingProps()}>
           <div className={css(accordionHeaderStyles)} {...getElementToggleProps()}>
             <div

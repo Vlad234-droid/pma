@@ -44,7 +44,7 @@ const main = {
   height: '100%',
 } as Rule;
 
-const templatesListStyles: Rule = ({ theme }) => ({
+const templatesListStyles: Rule = () => ({
   margin: '0px',
   height: '100%',
 });
@@ -61,10 +61,6 @@ const templatesModalWindowStyles: Rule = () => {
   };
 };
 
-const close = {
-  cursor: 'pointer',
-} as Rule;
-
 const descriptionText: CreateRule<{ theme: Theme }> = (props) => {
   if (props == null) return {};
   const { theme } = props;
@@ -77,48 +73,12 @@ const descriptionText: CreateRule<{ theme: Theme }> = (props) => {
 
 const decsriptionHeader: CreateRule<{ theme: Theme }> = (props) => {
   if (props == null) return {};
-  const { theme } = props;
   return {
     fontSize: '24px',
     lineHeight: '28px',
     fontWeight: 'bold',
     paddingBottom: '8px',
   };
-};
-
-const arrow = {
-  marginLeft: '13.75px',
-  border: 'solid',
-  borderWidth: '0 1px 1px 0',
-  display: 'inline-block',
-  padding: '6px',
-  transform: 'rotate(137deg)',
-  webkitTransform: 'rotate(137deg)',
-  cursor: 'pointer',
-} as Rule;
-
-const header: CreateRule<{ theme: Theme }> = (props) => {
-  if (props == null) return {};
-  const { theme } = props;
-  return {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    fontSize: `${theme.font.fixed.f24}`,
-    lineHeight: '28px',
-    fontWeight: 'bold',
-    color: `${theme.colors.white}`,
-    width: '100%',
-    padding: '22px 42px 22px 40px',
-  };
-};
-
-const popup: Rule = {
-  display: 'flex',
-  justifyContent: 'flex-start',
-  alignItems: 'center',
-  flexDirection: 'column',
-  padding: '0 20px',
 };
 
 export default Popup;

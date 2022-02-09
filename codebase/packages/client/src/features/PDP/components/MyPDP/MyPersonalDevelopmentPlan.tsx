@@ -46,6 +46,11 @@ const annualReviews = [
 
 export const TEST_ID = 'pdp-page';
 
+function getEditOrCreatePDP(pdpSelector: any[]) {
+  if (pdpSelector?.length >= 1 && pdpSelector?.length < 5) return 'Edit PDP';
+  return 'Create PDP';
+}
+
 const MyPersonalDevelopmentPlan: FC = () => {
   const { css, theme } = useStyle();
   const navigate = useNavigate();
@@ -69,7 +74,7 @@ const MyPersonalDevelopmentPlan: FC = () => {
     return {
       uuid: el.uuid,
       number: pdpSelector[idx]?.number,
-      items: Object.values(el?.properties?.mapJson).map((value, idx) => value),
+      items: Object.values(el?.properties?.mapJson).map((value) => value),
     };
   });
 
@@ -80,6 +85,7 @@ const MyPersonalDevelopmentPlan: FC = () => {
 
   const [instance, updateInstance] = usePDF({ document });
 
+  // TODO: this probably should be removed or used somewhere
   const createdReviews: any = [];
   if (canShowMyReview) {
     createdReviews.push(...reviews);
@@ -121,7 +127,7 @@ const MyPersonalDevelopmentPlan: FC = () => {
     <div className={css({ padding: '0 40px' })}>
       <div className={css(buttonBlock)}>
         <div className={css(controlButtons({ mobileScreen }))}>
-          {pdpSelector && pdpSelector?.length === 5 ? null : (
+          {pdpSelector?.length !== 5 && (
             <>
               <a className={css(buttonDownload)} href={downloadHref()} download>
                 <div className={css(btnIcon)}>
@@ -134,7 +140,7 @@ const MyPersonalDevelopmentPlan: FC = () => {
                 <div className={css(btnIcon)}>
                   <Icon graphic='add' fill={theme.colors.white} iconStyles={{ height: '16.67px', width: '16.67px' }} />
                 </div>
-                {pdpSelector && pdpSelector?.length < 5 && pdpSelector?.length >= 1 ? 'Edit PDP' : 'Create PDP'}
+                {getEditOrCreatePDP(pdpSelector)}
               </button>
             </>
           )}

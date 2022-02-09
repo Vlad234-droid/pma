@@ -121,7 +121,7 @@ const getContent = (
   return contents[status];
 };
 
-const MainWidget: FC<Props> = ({ nextReviewDate = '', count = 0, status, customStyle, onClick }) => {
+const MainWidget: FC<Props> = ({ nextReviewDate = '', count = 0, status, customStyle }) => {
   const { css } = useStyle();
   const navigate = useNavigate();
   const { t } = useTranslation();
