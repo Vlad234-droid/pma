@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { useTranslation } from 'components/Translation';
 import { Status } from 'config/enum';
-import { Rule, useStyle, colors, CreateRule } from '@dex-ddl/core';
+import { Rule, useStyle, colors, CreateRule, theme } from '@dex-ddl/core';
 
 import { Icon, Graphics } from 'components/Icon';
 
@@ -48,19 +48,23 @@ const wrapperStyles: Rule = ({ theme }) => ({
   padding: '8px 16px',
   background: theme.colors.white,
   borderRadius: '40px',
+  alignItems: 'center',
 });
 
 const iconStyles: Rule = {
   marginRight: '10px',
+  width: '24px',
+  height: '24px',
+  display: 'block',
 };
 
 const labelStyles: CreateRule<{ color: string }> =
   ({ color }) =>
   () => ({
-    fontSize: '14px',
-    lineHeight: '18px',
-    fontWeight: 700,
-    display: 'contents',
+    fontSize: `${theme.font.fixed.f14.fontSize}`,
+    lineHeight: `${theme.font.fixed.f14.lineHeight}`,
+    fontWeight: `${theme.font.weight.bold}`,
+    display: 'block',
     color,
   });
 
