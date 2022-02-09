@@ -3486,10 +3486,10 @@
     call-me-maybe "^1.0.1"
     glob-to-regexp "^0.3.0"
 
-"@my-inbox/client@^0.3.15":
-  version "0.3.15"
-  resolved "https://nexus.ourtesco.com/repository/colleague-ui-private/@my-inbox/client/-/client-0.3.15.tgz#e50f141ee8fa2bd8c5f52f76fb364c7696a6a7dc"
-  integrity sha512-786Grd0kuXzRGRlGfiTrcq+CEsHOUYYTle+6MasSfLwnfywo//ngnLvxDMd/v8EDVmvqznvV45NVXFHSpAQaNg==
+"@my-inbox/client@^0.3.17":
+  version "0.3.17"
+  resolved "https://nexus.ourtesco.com/repository/colleague-ui-private/@my-inbox/client/-/client-0.3.17.tgz#4a16c1d16beff61620d6cb95408d934931c453ab"
+  integrity sha512-YtLCuakTWi6wvzIKaIooKu4ddremvNFAwFxErLIGWpZIseXuKLD2/++/GLIkEAg6TaQK4cqn8XpJdRHjKUlo+w==
   dependencies:
     "@dex-ddl/core" "0.1.102"
     "@dex-runtime/routing" "0.5.0"
@@ -3517,10 +3517,10 @@
     redux-first-router "2.1.1"
     single-spa-react "4.1.1"
 
-"@my-inbox/middleware@^0.2.20":
-  version "0.2.20"
-  resolved "https://nexus.ourtesco.com/repository/colleague-ui-private/@my-inbox/middleware/-/middleware-0.2.20.tgz#cfabd15797e6e5db9b5ebb5726de7319a72896c5"
-  integrity sha512-4B1aNiEZetun33lIDAcpMzQyGj2aXmCZwlToUsWe7T6Y7i85f4+Wo2QzCCv1kjNoYwXsU824sJPh8R9BMvszRg==
+"@my-inbox/middleware@^0.2.22":
+  version "0.2.22"
+  resolved "https://nexus.ourtesco.com/repository/colleague-ui-private/@my-inbox/middleware/-/middleware-0.2.22.tgz#8319f70373630d73043ec969f45b1863af62a123"
+  integrity sha512-hHltxnr//NukGa72OnhkgFT1CL/Dqu4+zODo8CyjwL3Y9wBXuyBtSaySqFO1WPpIOvWxwhVPbMGe5fBWujZHgA==
   dependencies:
     "@dex-ddl/core" "0.1.102"
     "@dex-runtime/routing" "0.5.0"

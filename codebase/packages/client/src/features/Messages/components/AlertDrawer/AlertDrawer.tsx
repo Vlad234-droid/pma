@@ -132,6 +132,13 @@ const parcelRule: Rule = ({ colors }) => ({
   '& > div': {
     height: '100%',
   },
+  '& > div div[role="button"] > div > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(1)': {
+    opacity: 0,
+  },
+  '& > div div[role="rowgroup"] > div > div > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(1)':
+    {
+      opacity: 0,
+    },
 });
 
 export default AlertDrawer;

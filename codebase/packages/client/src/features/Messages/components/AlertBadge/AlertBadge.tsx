@@ -24,6 +24,7 @@ const alertRule: Rule = ({ colors, font, zIndex }) => ({
   zIndex: zIndex.i0,
   padding: '0 5px',
   borderRadius: '10px',
+  color: colors.white,
 });
 
 export default AlertBadge;
