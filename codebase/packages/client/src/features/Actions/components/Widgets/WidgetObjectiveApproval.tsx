@@ -121,12 +121,14 @@ export const WidgetObjectiveApproval: FC<WidgetObjectiveApprovalProps> = ({
             cycleUuid: 'CURRENT',
             status,
           },
-          data: {
-            ...(reasons ? { reason: reasons[index] as string } : {}),
-            status,
-            colleagueUuid: colleague.uuid,
-            reviews: colleague.reviews.filter(({ status }) => status === Status.WAITING_FOR_APPROVAL),
-          },
+          ...(timeline.reviewType !== ReviewType.MYR  ? {
+            data: {
+              ...(reasons ? { reason: reasons[index] as string } : {}),
+              status,
+              colleagueUuid: colleague.uuid,
+              reviews: colleague.reviews.filter(({ status }) => status === Status.WAITING_FOR_APPROVAL),
+            }
+          } : {}),
         };
 
         dispatch(ReviewsActions.updateReviewStatus(update));
