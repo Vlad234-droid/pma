@@ -90,6 +90,7 @@ const iconStyles: Rule = {
   display: 'flex',
   alignItems: 'center',
   marginTop: '10px',
+  cursor: 'pointer',
 };
 
 const itemsStyles: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => ({

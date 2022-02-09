@@ -25,7 +25,7 @@ const defaultRenderButtons = (isValid) => (
 );
 const defaultRenderContent = () => null;
 
-function genericForm<T>({
+function GenericForm<T>({
   formFields,
   schema,
   onSubmit,
@@ -83,4 +83,4 @@ const formStyles: Rule = {
   flexGrow: 1,
 };
 
-export default genericForm;
+export default GenericForm;
