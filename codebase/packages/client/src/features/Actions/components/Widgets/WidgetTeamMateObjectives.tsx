@@ -4,6 +4,7 @@ import { colors, fontWeight, Rule, useStyle } from '@dex-ddl/core';
 import {
   FormType,
   colleagueUUIDSelector,
+  getUserRoles,
   getAllReviewSchemas,
   ReviewsActions,
   reviewsMetaSelector,
@@ -11,6 +12,7 @@ import {
   schemaMetaSelector,
   getAllReviews,
 } from '@pma/store';
+import intersection from 'lodash.intersection';
 
 import { TileWrapper } from 'components/Tile';
 import { Avatar } from 'components/Avatar';
@@ -43,6 +45,7 @@ export const WidgetTeamMateObjectives: FC<WidgetTeamMateObjectivesProps> = ({
   const { css } = useStyle();
 
   const colleagueUuid = useSelector(colleagueUUIDSelector);
+  const roles = useSelector(getUserRoles);
   const allSchemas = useSelector(getAllReviewSchemas);
   const { loaded: schemaLoaded = false, updated: schemaUpdated = false } = useSelector(schemaMetaSelector);
   const { loaded: reviewsLoaded } = useSelector(reviewsMetaSelector);
@@ -93,7 +96,7 @@ export const WidgetTeamMateObjectives: FC<WidgetTeamMateObjectivesProps> = ({
             return {
               title: label,
               description: review[key] || '',
-              readonly: Boolean(!expression?.auth?.permission?.write?.length),
+              readonly: !intersection(roles, expression?.auth?.role).length,
               key,
             };
           });
@@ -113,7 +116,7 @@ export const WidgetTeamMateObjectives: FC<WidgetTeamMateObjectivesProps> = ({
       });
       setColleagueReviews(mappedReviews);
     }
-  }, [schemaUpdated, reviewsLoaded, schemaLoaded, allColleagueReviews]);
+  }, [schemaUpdated, reviewsLoaded, schemaLoaded, allColleagueReviews, roles]);
 
   const fetchData = (colleagueUuid) => {
     dispatch(SchemaActions.clearSchemaData());
