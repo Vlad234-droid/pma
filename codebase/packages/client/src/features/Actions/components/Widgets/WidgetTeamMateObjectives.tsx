@@ -4,7 +4,6 @@ import { colors, fontWeight, Rule, useStyle } from '@dex-ddl/core';
 import {
   FormType,
   colleagueUUIDSelector,
-  getUserRoles,
   getAllReviewSchemas,
   ReviewsActions,
   reviewsMetaSelector,
@@ -12,7 +11,6 @@ import {
   schemaMetaSelector,
   getAllReviews,
 } from '@pma/store';
-import intersection from 'lodash.intersection';
 
 import { TileWrapper } from 'components/Tile';
 import { Avatar } from 'components/Avatar';
@@ -45,7 +43,6 @@ export const WidgetTeamMateObjectives: FC<WidgetTeamMateObjectivesProps> = ({
   const { css } = useStyle();
 
   const colleagueUuid = useSelector(colleagueUUIDSelector);
-  const roles = useSelector(getUserRoles);
   const allSchemas = useSelector(getAllReviewSchemas);
   const { loaded: schemaLoaded = false, updated: schemaUpdated = false } = useSelector(schemaMetaSelector);
   const { loaded: reviewsLoaded } = useSelector(reviewsMetaSelector);
@@ -96,7 +93,7 @@ export const WidgetTeamMateObjectives: FC<WidgetTeamMateObjectivesProps> = ({
             return {
               title: label,
               description: review[key] || '',
-              readonly: !intersection(roles, expression?.auth?.role).length,
+              readonly: Boolean(!expression?.auth?.permission?.write?.length),
               key,
             };
           });
@@ -116,7 +113,7 @@ export const WidgetTeamMateObjectives: FC<WidgetTeamMateObjectivesProps> = ({
       });
       setColleagueReviews(mappedReviews);
     }
-  }, [schemaUpdated, reviewsLoaded, schemaLoaded, allColleagueReviews, roles]);
+  }, [schemaUpdated, reviewsLoaded, schemaLoaded, allColleagueReviews]);
 
   const fetchData = (colleagueUuid) => {
     dispatch(SchemaActions.clearSchemaData());
@@ -153,14 +150,14 @@ export const WidgetTeamMateObjectives: FC<WidgetTeamMateObjectivesProps> = ({
           cycleUuid: 'CURRENT',
           status,
         },
-        data: {
-          ...(reason ? { reason } : {}),
-          status,
-          colleagueUuid: colleague.uuid,
-          reviews: allColleagueReviews.filter(
-            ({ status, type }) => status === Status.WAITING_FOR_APPROVAL && type === reviewType,
-          ),
-        },
+        ...(reviewType !== ReviewType.MYR  ? {
+          data: {
+            ...(reason ? { reason } : {}),
+            status,
+            colleagueUuid: colleague.uuid,
+            reviews: colleague.reviews.filter(({ status }) => status === Status.WAITING_FOR_APPROVAL),
+          }
+        } : {}),
       };
 
       dispatch(ReviewsActions.updateReviewStatus(update));
