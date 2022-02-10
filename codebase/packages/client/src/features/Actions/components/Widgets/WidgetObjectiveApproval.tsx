@@ -131,9 +131,7 @@ export const WidgetObjectiveApproval: FC<WidgetObjectiveApprovalProps> = ({
           } : {}),
         };
 
-        console.log('update', update);
-
-        // dispatch(ReviewsActions.updateReviewStatus(update));
+        dispatch(ReviewsActions.updateReviewStatus(update));
         setReviewSubmitted(status);
         setReviewType(currentTimeline![0].reviewType);
 
