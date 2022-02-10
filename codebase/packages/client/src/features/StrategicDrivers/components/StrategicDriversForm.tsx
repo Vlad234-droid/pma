@@ -21,6 +21,7 @@ const schema = Yup.object().shape({
     Yup.string()
       .test('firstMandatory', 'strategic driver 1 is required', function () {
         const { options } = this as Yup.TestContext;
+
         //@ts-ignore
         if (options && options?.index === 0) {
           //@ts-ignore

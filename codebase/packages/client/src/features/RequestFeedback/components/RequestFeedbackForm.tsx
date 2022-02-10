@@ -16,7 +16,7 @@ import { Tesco } from '../../../config/enum';
 
 const AREA_OPTIONS = [
   { value: TargetType.GOAL, label: 'Day Job' },
-  { value: TargetType.OBJECTIVE, label: 'Objectives' },
+  { value: TargetType.OBJECTIVE, label: 'Strategic Objectives (if applicable)' },
   { value: TargetType.VALUE_BEHAVIOR, label: 'Yourself (development goals, values & purpose)' },
   { value: TargetType.OTHER, label: 'Your impact on others' },
 ];

@@ -50,13 +50,11 @@ const RequestFeedback: FC = () => {
         styles: [modalTitleOptionStyle({ isMobile })],
       }}
     >
-      {/* TODO: get sent value from meta */}
       {sent ? <SuccessMassage /> : <RequestFeedbackForm onSubmit={handleSubmit} onCancel={handleClose} />}
     </Modal>
   );
 };
 
-// TODO: create component Modal with style and use here
 const containerRule: CreateRule<{ isMobile: boolean; colors: any }> = ({ colors, isMobile }) => {
   return {
     alignItems: 'center',
