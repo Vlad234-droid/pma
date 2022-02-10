@@ -19,21 +19,7 @@ const HelpWidgets: FC = () => {
       data-test-id='help-widgets'
       className={css(wrapperStyles)}
     >
-      <div data-test-id='support-tile' className={css({ height: '112%' })} onClick={handleSupportClick}>
-        <BasicTile
-          img={<Icon graphic='support' />}
-          hover={false}
-          title={t('something_does_not_look_right', `Something doesn't look right? Raise a ticket on Colleague Help`)}
-          imgCustomStyle={imageStyles}
-          customStyle={{
-            ...widgetStyles,
-            background: '#fad919', // missed in theme, will be replaced by another widget in future
-          }}
-          icon={true}
-          link={LINKS.help}
-        />
-      </div>
-      <div data-test-id='question-tile' className={css({ height: '100%' })}>
+      <div data-test-id='question-tile' className={css({ height: '100%' })} onClick={handleSupportClick}>
         <BasicTile
           hover={true}
           img={<Icon graphic='question' />}
@@ -41,10 +27,10 @@ const HelpWidgets: FC = () => {
           imgCustomStyle={imageStyles}
           customStyle={{
             ...widgetStyles,
-            maxHeight: '142px',
+            // maxHeight: '142px',
           }}
           icon={true}
-        />
+        >Coming soon</BasicTile>
       </div>
     </div>
   )

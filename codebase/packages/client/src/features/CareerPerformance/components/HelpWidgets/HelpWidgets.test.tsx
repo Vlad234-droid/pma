@@ -20,9 +20,6 @@ describe('<HelpWidgets />', () => {
     it('should render tiles', () => {
       const { getByTestId, getByText } = render(<HelpWidgets />);
 
-      expect(getByTestId('support-tile')).toBeInTheDocument();
-      expect(getByTestId('support')).toBeInTheDocument();
-      expect(getByText(`Something doesn't look right? Raise a ticket on Colleague Help`)).toBeInTheDocument();
       expect(getByTestId('question-tile')).toBeInTheDocument();
       expect(getByTestId('question')).toBeInTheDocument();
       expect(getByText('Want to learn more about Your Contribution at Tesco?')).toBeInTheDocument();
@@ -34,7 +31,7 @@ describe('<HelpWidgets />', () => {
       window.open = jest.fn();
       const { getByTestId } = render(<HelpWidgets />);
 
-      fireEvent.click(getByTestId('support-tile'));
+      fireEvent.click(getByTestId('question-tile'));
 
       expect(window.open).toHaveBeenCalledWith(LINKS.help, '_blank');
     });
