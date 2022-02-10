@@ -210,9 +210,7 @@ const iconBtnStyle: Rule = ({ theme }) => ({
   width: '176px',
   border: '1px solid #00539F',
   whiteSpace: 'nowrap',
-  marginLeft: 'auto',
-  marginRight: '24px',
-  marginTop: '28px',
+  margin: '28px 24px 4px auto',
 });
 
 const iconStyle: Rule = {
