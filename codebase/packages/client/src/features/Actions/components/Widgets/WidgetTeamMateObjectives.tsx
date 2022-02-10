@@ -154,7 +154,7 @@ export const WidgetTeamMateObjectives: FC<WidgetTeamMateObjectivesProps> = ({
           ...(reason ? { reason } : {}),
           status,
           colleagueUuid: colleague.uuid,
-          reviews: colleague.reviews
+          reviews: allColleagueReviews
             .filter(({ status, type }) => status === Status.WAITING_FOR_APPROVAL && type === reviewType)
             .map(({ number, properties }) => {
               if (reviewType !== ReviewType.MYR) {
