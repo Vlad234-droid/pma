@@ -21,10 +21,9 @@ const Resources: FC<Props> = ({ basicTileStyle }) => {
     <>
       <div data-test-id='personal-contribution' className={css(basicTileStyle)} onClick={console.log}>
         <BasicTile
-          hover={true}
           img={contributionImage}
           title={t('your_contribution', 'Your Contribution')}
-          description={t('click_here_to_find_contribution_guide', 'Click here to find the Your Contribution Guide.')}
+          description={t('Coming soon')}
           customStyle={{
             height: '100%',
           }}
@@ -32,10 +31,9 @@ const Resources: FC<Props> = ({ basicTileStyle }) => {
       </div>
       <div data-test-id='personal-conversation' className={css(basicTileStyle)} onClick={console.log}>
         <BasicTile
-          hover={true}
           img={checkImage}
           title={t('everyday_conversations', 'Everyday conversations')}
-          description={t('guidance_on_conversations', 'Useful guidance on having great performance conversations.')}
+          description={t('Coming soon')}
           customStyle={{
             height: '100%',
           }}
@@ -43,10 +41,9 @@ const Resources: FC<Props> = ({ basicTileStyle }) => {
       </div>
       <div data-test-id='feedback' className={css(basicTileStyle)}>
         <BasicTile
-          hover={true}
           img={feedbackImage}
           title={t('feedback_tesco', 'Feedback at Tesco')}
-          description={t('learn_giving_receiving_feedback', 'Learn more about giving and receiving great feedback.')}
+          description={t('Coming soon')}
           customStyle={{
             height: '100%',
           }}
@@ -54,10 +51,9 @@ const Resources: FC<Props> = ({ basicTileStyle }) => {
       </div>
       <div data-test-id='learning' className={css(basicTileStyle)}>
         <BasicTile
-          hover={true}
           img={learningImage}
           title={t('learning', 'Learning')}
-          description={t('click_here_to_find_contribution_guide', 'Click here to find the Your Contribution Guide.')}
+          description={t('Coming soon')}
           customStyle={{
             height: '100%',
           }}
