@@ -10,6 +10,8 @@ import SuccessModal from 'components/SuccessModal';
 import { ReviewType, Status } from 'config/enum';
 import useDispatch from 'hooks/useDispatch';
 import { useSelector } from 'react-redux';
+import { SuccessMark } from 'components/Icon';
+
 import * as T from '../../types';
 import { transformReviewsToObjectives } from '../../utils';
 
@@ -176,7 +178,7 @@ const ShareWidget: FC<Props> = ({ customStyle, stopShare }) => {
               : t('you_have_stopped_sharing_your_objectives', 'You have stopped sharing your objectives to your team.')
           }
           onClose={() => setIsSuccessModalOpen(false)}
-          withСheckMark
+          mark={<SuccessMark />}
         />
       )}
       {isViewObjectivesModalOpen && (

@@ -160,7 +160,9 @@ export const WidgetTeamMateObjectives: FC<WidgetTeamMateObjectivesProps> = ({
         } : {}),
       };
 
-      dispatch(ReviewsActions.updateReviewStatus(update));
+      console.log('update', update);
+
+      // dispatch(ReviewsActions.updateReviewStatus(update));
 
       onSubmit(status, reviewType);
     },
