@@ -10,12 +10,15 @@ import { FilterOption } from 'features/Shared';
 import { FeedbackStatus } from 'config/enum';
 import { FeedbackBlock, RadioBtns } from './components';
 import { FilterModal } from '../Shared/components/FilterModal';
+import { getSortString } from 'utils/feedback';
 
-const initialFilters = {
-  AZ: false,
-  ZA: false,
-  newToOld: false,
-  oldToNew: false,
+type TypeinitialFilters = {
+  sort: string;
+  search: string;
+};
+
+const initialFilters: TypeinitialFilters = {
+  sort: '',
   search: '',
 };
 
@@ -28,11 +31,9 @@ const OuterGiveFeedBack: FC = () => {
   // filter
   const [focus, setFocus] = useState(false);
   const [filterModal, setFilterModal] = useState(false);
-  const [filter, setFilter] = useState<any>(initialFilters);
+  const [filter, setFilter] = useState<TypeinitialFilters>(initialFilters);
 
-  const hasActiveFilter = Object.values(filter)
-    .filter((f) => typeof f === 'boolean')
-    .some((f) => f);
+  const hasActiveFilter = Object.values(filter).some((f) => f);
 
   const medium = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
   const small = isBreakpoint.small || isBreakpoint.xSmall;
@@ -40,21 +41,13 @@ const OuterGiveFeedBack: FC = () => {
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const [status, setCheckedStatus] = useState(FeedbackStatus.DRAFT);
 
-  const getSortString = (filter: any) => {
-    if (filter.newToOld) return 'updated-time:DESC';
-    if (filter.oldToNew) return 'updated-time:ASC';
-    if (filter.AZ) return 'target-colleague-first-name:ASC';
-    if (filter.ZA) return 'target-colleague-first-name:DESC';
-    return undefined;
-  };
-
   const getAllFeedback = useCallback(
     debounce((filter) => {
       dispatch(
         FeedbackActions.getAllFeedbacks({
           _limit: '300',
           'colleague-uuid': colleagueUuid,
-          _search: filter.search,
+          ...(filter.search.length > 2 && { _search: filter.search }),
           _sort: getSortString(filter),
         }),
       );

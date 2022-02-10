@@ -116,7 +116,6 @@ const Report: FC = () => {
         new URLSearchParams({
           year: '2021',
           'statuses_in[0]': 'APPROVED',
-          'statuses_in[1]': 'DRAFT',
         }),
     );
     return await response;

@@ -27,24 +27,19 @@ const RespondFeedbackContainer: FC = () => {
 
   //filter
   const [focus, setFocus] = useState(false);
-  const [searchValueFilterOption, setSearchValueFilterOption] = useState('');
   const [filterModal, setFilterModal] = useState(false);
   const [filterFeedbacks, setFilterFeedbacks] = useState({
-    AZ: false,
-    ZA: false,
-    newToOld: false,
-    oldToNew: false,
+    sort: '',
+    search: '',
   });
 
   useEffect(() => {
-    if (!focus) setSearchValueFilterOption(() => '');
     if (focus) {
-      setFilterFeedbacks(() => ({ AZ: false, ZA: false, newToOld: false, oldToNew: false }));
       setFilterModal(() => false);
     }
   }, [focus]);
 
-  const draftFeedback = (selectedNote): void => {
+  const draftFeedback = (selectedNote) => {
     if (selectedNote.feedbackItems) {
       setFeedbackItems(() => selectedNote.feedbackItems);
     }
@@ -64,6 +59,8 @@ const RespondFeedbackContainer: FC = () => {
     setIsOpen(() => true);
   };
 
+  const hasActiveFilter = Object.values(filterFeedbacks).some((f) => f);
+
   return (
     <>
       <div data-test-id={RESPOND_FEEDBACK_CONTAINER}>
@@ -71,8 +68,6 @@ const RespondFeedbackContainer: FC = () => {
           <RadioBtns
             checkedRadio={checkedRadio}
             setCheckedRadio={setCheckedRadio}
-            focus={focus}
-            setFocus={setFocus}
             setFilterModal={setFilterModal}
             filterModal={filterModal}
             setFilterFeedbacks={setFilterFeedbacks}
@@ -81,18 +76,19 @@ const RespondFeedbackContainer: FC = () => {
             <FilterOption
               focus={focus}
               customIcon={true}
-              searchValue={searchValueFilterOption}
+              searchValue={filterFeedbacks.search}
               onFocus={setFocus}
               withIcon={false}
               customStyles={{
                 ...(focus ? { padding: '10px 20px 10px 16px' } : { padding: '0px' }),
                 ...(focus ? { borderRadius: '50px' } : { transitionDelay: '.3s' }),
               }}
-              onChange={(e) => setSearchValueFilterOption(() => e.target.value)}
+              onChange={(e) => setFilterFeedbacks((prev) => ({ ...prev, search: e.target.value }))}
               onSettingsPress={() => {
                 setFilterModal((prev) => !prev);
                 setFocus(() => false);
               }}
+              hasActiveFilter={hasActiveFilter}
             />
             <FilterModal
               isOpen={filterModal}
@@ -106,9 +102,6 @@ const RespondFeedbackContainer: FC = () => {
           <DraftItem
             draftFeedback={draftFeedback}
             checkedRadio={checkedRadio}
-            searchValue={searchValueFilterOption}
-            focus={focus}
-            setFocus={setFocus}
             filterModal={filterModal}
             setFilterModal={setFilterModal}
             setFilterFeedbacks={setFilterFeedbacks}

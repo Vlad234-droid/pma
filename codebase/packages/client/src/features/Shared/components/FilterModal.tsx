@@ -1,29 +1,41 @@
-import React, { FC, useRef, MouseEvent } from 'react';
+import React, { FC, useRef, MouseEvent, SetStateAction, Dispatch } from 'react';
 import { useStyle, Rule, CreateRule, Theme } from '@dex-ddl/core';
 import { Radio } from 'components/Form';
 import { Trans } from 'components/Translation';
 import useEventListener from 'hooks/useEventListener';
 
 type FilterType = {
-  AZ: boolean;
-  ZA: boolean;
-  newToOld: boolean;
-  oldToNew: boolean;
-  search?: string;
+  sort: string;
+  search: string;
+};
+
+type AdditionalFieldsType = {
+  id: string;
+  label: string;
+  checked: boolean;
+  text: string;
 };
 
 type Props = {
   isOpen: boolean;
   filter: FilterType;
-  setFilter: (filter: FilterType) => void;
-  toggleOpen: (open: boolean) => void;
+  setFilter: (T) => void;
+  toggleOpen: Dispatch<SetStateAction<boolean>>;
   testId?: string;
+  additionalFields?: Array<AdditionalFieldsType>;
 };
 
-export const FilterModal: FC<Props> = ({ isOpen, filter, setFilter, toggleOpen, testId = '' }) => {
+export const FilterModal: FC<Props> = ({
+  isOpen,
+  filter,
+  setFilter,
+  toggleOpen,
+  testId = '',
+  additionalFields = [],
+}) => {
   const { css, theme } = useStyle();
   const choseHandler = (val: string) => {
-    setFilter({ AZ: false, ZA: false, newToOld: false, oldToNew: false, search: filter.search, [val]: true });
+    setFilter((prev) => ({ ...prev, sort: val }));
     toggleOpen(false);
   };
   const ref = useRef<HTMLDivElement | null>(null);
@@ -32,27 +44,28 @@ export const FilterModal: FC<Props> = ({ isOpen, filter, setFilter, toggleOpen, 
     {
       id: '1',
       label: 'AZ',
-      checked: filter.AZ,
+      checked: filter.sort.includes('AZ'),
       text: 'A-Z',
     },
     {
       id: '2',
       label: 'ZA',
-      checked: filter.ZA,
+      checked: filter.sort.includes('ZA'),
       text: 'Z-A',
     },
     {
       id: '3',
       label: 'newToOld',
-      checked: filter.newToOld,
+      checked: filter.sort.includes('newToOld'),
       text: 'Newest to oldest',
     },
     {
       id: '4',
       label: 'oldToNew',
-      checked: filter.oldToNew,
+      checked: filter.sort.includes('oldToNew'),
       text: 'Oldest to newest',
     },
+    ...additionalFields,
   ];
 
   const handleClickOutside = (event: MouseEvent<HTMLElement>) => {
@@ -107,7 +120,6 @@ const wrapperStyle: CreateRule<{ theme: Theme; isOpen: boolean }> = ({ theme, is
   return {
     position: 'absolute',
     width: '200px',
-    height: '186px',
     padding: '10px 16px 16px 16px',
     top: '40px',
     right: 0,

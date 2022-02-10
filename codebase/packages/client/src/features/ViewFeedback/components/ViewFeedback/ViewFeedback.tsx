@@ -18,10 +18,8 @@ import { Page } from 'pages';
 import useSubmittedCompletedNotes from '../../hooks/useSubmittedCompletedNotes';
 
 type filterFeedbacksType = {
-  AZ: boolean;
-  ZA: boolean;
-  newToOld: boolean;
-  oldToNew: boolean;
+  sort: string;
+  search: string;
 };
 
 const ViewFeedback: FC = () => {
@@ -40,21 +38,16 @@ const ViewFeedback: FC = () => {
 
   // filter
   const [focus, setFocus] = useState(false);
-  const [searchValueFilterOption, setSearchValueFilterOption] = useState('');
   const [filterModal, setFilterModal] = useState(false);
   const [filterFeedbacks, setFilterFeedbacks] = useState<filterFeedbacksType>({
-    AZ: false,
-    ZA: false,
-    newToOld: false,
-    oldToNew: false,
+    sort: '',
+    search: '',
   });
 
   const { t } = useTranslation();
 
   useEffect(() => {
-    if (!focus) setSearchValueFilterOption(() => '');
     if (focus) {
-      setFilterFeedbacks(() => ({ AZ: false, ZA: false, newToOld: false, oldToNew: false }));
       setFilterModal(() => false);
     }
   }, [focus]);
@@ -65,7 +58,7 @@ const ViewFeedback: FC = () => {
 
   // store
   const isReaded = checkedRadio.read && !checkedRadio.unread;
-  const searchValue = searchValueFilterOption.replace(/\s+/g, '').toLowerCase();
+  const searchValue = filterFeedbacks.search.replace(/\s+/g, '').toLowerCase();
 
   const filterFn = (item) => {
     const fullName =
@@ -75,8 +68,6 @@ const ViewFeedback: FC = () => {
   };
 
   const sortFn = (i1, i2) => {
-    const { AZ, ZA, newToOld, oldToNew } = filterFeedbacks;
-
     let val1 = '';
     let val2 = '';
 
@@ -85,31 +76,34 @@ const ViewFeedback: FC = () => {
       return [a, b];
     };
 
-    switch (true) {
-      case AZ || ZA: {
-        const firstNameGetter = (item) => item.firstName || '';
+    function sortAZ() {
+      const firstNameGetter = (item) => item.firstName || '';
 
-        val1 = firstNameGetter(i1);
-        val2 = firstNameGetter(i2);
+      val1 = firstNameGetter(i1);
+      val2 = firstNameGetter(i2);
 
-        if (ZA) {
-          [val1, val2] = swapVariables(val1, val2);
-        }
-
-        break;
+      if (filterFeedbacks.sort === 'ZA') {
+        [val1, val2] = swapVariables(val1, val2);
       }
-      case newToOld || oldToNew: {
-        const createdTimeGetter = (item) => String(item.createdTime || '');
+    }
 
-        val1 = createdTimeGetter(i1);
-        val2 = createdTimeGetter(i2);
+    function sortByTime() {
+      const createdTimeGetter = (item) => String(item.createdTime || '');
 
-        if (newToOld) {
-          [val1, val2] = swapVariables(val1, val2);
-        }
+      val1 = createdTimeGetter(i1);
+      val2 = createdTimeGetter(i2);
 
-        break;
+      if (filterFeedbacks.sort === 'newToOld') {
+        [val1, val2] = swapVariables(val1, val2);
       }
+    }
+
+    if (filterFeedbacks.sort === 'AZ' || filterFeedbacks.sort === 'ZA') {
+      sortAZ();
+    }
+
+    if (filterFeedbacks.sort === 'newToOld' || filterFeedbacks.sort === 'oldToNew') {
+      sortByTime();
     }
 
     return val1.localeCompare(val2);
@@ -199,17 +193,16 @@ const ViewFeedback: FC = () => {
             <FilterOption
               focus={focus}
               customIcon={true}
-              searchValue={searchValueFilterOption}
+              searchValue={filterFeedbacks.search}
               onFocus={setFocus}
               withIcon={false}
               customStyles={{
                 ...(focus ? { padding: '10px 20px 10px 16px' } : { padding: '0px' }),
                 ...(focus ? { borderRadius: '50px' } : { transitionDelay: '.3s' }),
               }}
-              onChange={(e) => setSearchValueFilterOption(() => e.target.value)}
+              onChange={(e) => setFilterFeedbacks({ ...filterFeedbacks, search: e.target.value })}
               onSettingsPress={() => {
                 setFilterModal((prev) => !prev);
-                setFocus(false);
               }}
             />
             <FilterModal

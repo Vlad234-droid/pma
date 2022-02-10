@@ -1,14 +1,14 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect, useCallback } from 'react';
 import { useStyle, Rule } from '@dex-ddl/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { FeedbackActions, ObjectiveActions, colleagueUUIDSelector, getNotesArgsSelector } from '@pma/store';
-
+import debounce from 'lodash.debounce';
 import { TileWrapper } from 'components/Tile';
 import { Accordion, BaseAccordion, Section, Panel, ExpandButton } from 'components/Accordion';
-import { filteredByInputSearchHandler, filteredNotesByRadiosBtnsHandler, formatToRelativeDate } from 'utils';
+import { formatToRelativeDate } from 'utils';
 import IconButtonDefault from 'components/IconButtonDefault';
 import { FeedbackStatus, Tesco } from 'config/enum';
-
+import { getSortString } from 'utils/feedback';
 import defaultImg from 'images/default.png';
 import { DraftItemProps } from '../type';
 import { NoFeedback } from '../../Feedback/components';
@@ -20,9 +20,6 @@ export const TEST_ID = 'test_id';
 const DraftItem: FC<DraftItemProps> = ({
   draftFeedback,
   checkedRadio,
-  searchValue,
-  focus,
-  setFocus,
   filterModal,
   setFilterModal,
   setFilterFeedbacks,
@@ -35,15 +32,24 @@ const DraftItem: FC<DraftItemProps> = ({
   const pendingNotes = useSelector(getNotesArgsSelector(FeedbackStatus.PENDING, colleagueUuid)) || [];
   const completedNotes = useSelector(getNotesArgsSelector(FeedbackStatus.COMPLETED, colleagueUuid)) || [];
 
+  const getAllFeedback = useCallback(
+    debounce((filter) => {
+      dispatch(
+        FeedbackActions.getAllFeedbacks({
+          _limit: '300',
+          'colleague-uuid': colleagueUuid,
+          ...(filter.search.length > 2 && { _search: filter.search }),
+          _sort: getSortString(filter),
+        }),
+      );
+    }, 300),
+    [],
+  );
+
   useEffect(() => {
     if (!colleagueUuid) return;
-    dispatch(
-      FeedbackActions.getAllFeedbacks({
-        'colleague-uuid': colleagueUuid,
-        _limit: '300',
-      }),
-    );
-  }, [colleagueUuid]);
+    getAllFeedback(filterFeedbacks);
+  }, [colleagueUuid, filterFeedbacks]);
 
   useEffect(() => {
     if (pendingNotes.length) {
@@ -68,37 +74,14 @@ const DraftItem: FC<DraftItemProps> = ({
   const handleFeedbackBtnClick = (item) => {
     if (filterModal) setFilterModal(() => false);
 
-    setFilterFeedbacks(() => ({ AZ: false, ZA: false, newToOld: false, oldToNew: false }));
-
-    if (focus) setFocus(() => false);
+    setFilterFeedbacks(() => ({ sort: '', search: '' }));
 
     draftFeedback(item);
   };
 
   const getPropperNotes = () => {
-    if (checkedRadio.completed && searchValue.length <= 2 && Object.values(filterFeedbacks).every((item) => !item)) {
-      return completedNotes;
-    } else if (
-      checkedRadio.completed &&
-      searchValue.length >= 2 &&
-      Object.values(filterFeedbacks).every((item) => !item)
-    ) {
-      return filteredByInputSearchHandler(completedNotes, searchValue);
-    } else if (Object.values(filterFeedbacks).some((item) => item === true) && checkedRadio.completed) {
-      return filteredNotesByRadiosBtnsHandler(completedNotes, filterFeedbacks);
-    }
-
-    if (checkedRadio?.pending && searchValue.length <= 2 && Object.values(filterFeedbacks).every((item) => !item)) {
-      return pendingNotes;
-    } else if (
-      checkedRadio?.pending &&
-      searchValue.length >= 2 &&
-      Object.values(filterFeedbacks).every((item) => !item)
-    ) {
-      return filteredByInputSearchHandler(pendingNotes, searchValue);
-    } else if (Object.values(filterFeedbacks).some((item) => item === true) && checkedRadio.pending) {
-      return filteredNotesByRadiosBtnsHandler(pendingNotes, filterFeedbacks);
-    }
+    if (checkedRadio.completed) return completedNotes;
+    return pendingNotes;
   };
 
   if (checkedRadio?.pending && !getPropperNotes().length) {

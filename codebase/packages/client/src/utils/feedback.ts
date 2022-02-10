@@ -1,3 +1,5 @@
+import { SortFeedbackValue } from 'config/enum';
+
 export const commentToYourImpact = 'comment_to_your_impact';
 export const commentToYourSelf = 'comment_to_your_self';
 export const commentToDayJob = 'comment_to_day_job';
@@ -60,3 +62,5 @@ export const filteredNotesByRadiosBtnsHandler = (notes, optionsRadioBtns) => {
 
   return defineFilterOption[Object.values(optionsRadioBtns).findIndex((item) => item)];
 };
+
+export const getSortString = ({ sort }) => SortFeedbackValue[sort];

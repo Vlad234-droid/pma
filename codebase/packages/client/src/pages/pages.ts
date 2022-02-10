@@ -213,7 +213,7 @@ const pages: Record<Page, PageComponent> = {
     title: 'Team reporting',
     withHeader: true,
     backPath: Page.CONTRIBUTION,
-    roles: [role.LINE_MANAGER, role.PEOPLE_TEAM, role.TALENT_ADMIN],
+    roles: [role.PEOPLE_TEAM, role.TALENT_ADMIN, role.ADMIN],
   },
   [Page.AdministratorPage]: {
     Element: AdministratorPage,

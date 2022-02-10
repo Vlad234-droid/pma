@@ -1,18 +1,12 @@
-import React, { FC } from 'react';
-
-import type { AriaButtonProps } from '@react-types/button';
-
+import React, { FC, InputHTMLAttributes } from 'react';
 import { Rule, Styles, useStyle } from '@dex-ddl/core';
 
-type Mode = 'default' | 'inverse';
-
-export type DropZoneProps = {
-  mode?: Mode;
+export interface DropZoneProps extends InputHTMLAttributes<HTMLInputElement> {
   styles?: Styles | Rule;
-  onUpload: (file: any) => void;
-} & AriaButtonProps;
+  onUpload: (file?: File) => void;
+}
 
-export const DropZone: FC<DropZoneProps> = ({ children, onUpload, styles = {} }) => {
+export const DropZone: FC<DropZoneProps> = ({ children, onUpload, styles = {}, accept }) => {
   const { css } = useStyle();
 
   return (
@@ -23,6 +17,7 @@ export const DropZone: FC<DropZoneProps> = ({ children, onUpload, styles = {} })
           type='file'
           id='DropZone'
           onChange={({ target }) => onUpload(target.files?.[0])}
+          accept={accept}
         />
         {children}
       </label>

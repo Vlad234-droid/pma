@@ -39,6 +39,40 @@ export enum TimelineType {
   CYCLE = 'CYCLE',
 }
 
+export enum FileDescription {
+  BPMN = 'Business Process Model file',
+  FORM = 'FORM',
+  PDF = 'Portable document format file',
+  PPT = 'PowerPoint presentation file',
+  XLS = 'Excel file',
+  DMN = 'Decision Matrix file',
+  DOC = 'Word document',
+}
+
+export enum FileId {
+  BPMN = 1,
+  FORM,
+  PDF,
+  PPT,
+  XLS,
+  DMN,
+  DOC,
+}
+
+export enum SortFileValue {
+  newToOld = 'created-time:DESC',
+  oldToNew = 'created-time:ASC',
+  AZ = 'file-name:ASC',
+  ZA = 'file-name:DESC',
+}
+
+export enum SortFeedbackValue {
+  newToOld = 'updated-time:DESC',
+  oldToNew = 'updated-time:ASC',
+  AZ = 'target-colleague-first-name:ASC',
+  ZA = 'target-colleague-first-name:DESC',
+}
+
 export enum FeedbackStatus {
   SUBMITTED = 'SUBMITTED',
   PENDING = 'PENDING',
