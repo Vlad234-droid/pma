@@ -1,6 +1,8 @@
 import React, { ReactNode, useRef, RefObject, CSSProperties, FC, useState, useEffect } from 'react';
 import { useStyle, Rule } from '@dex-ddl/core';
 
+import useEventListener from 'hooks/useEventListener';
+
 import { AccordionConsumer, SectionConsumer } from './contexts';
 
 type PanelProps = {
@@ -26,8 +28,14 @@ export const BasePanel = ({ children, ...baseRest }: Props) => {
   const [height, setHeight] = useState<number>(0);
 
   useEffect(() => {
-    content.current && setHeight(content.current.scrollHeight);
+    updateHeight();
   });
+
+  const updateHeight = () => {
+    content.current && setHeight(content.current.scrollHeight);
+  }
+
+  useEventListener('resize', updateHeight);
 
   return (
     <AccordionConsumer>
