@@ -7,12 +7,14 @@ const Popup = (props) => {
   const { css, theme } = useStyle();
   const { items } = props;
   const navigate = useNavigate();
+  const [, isBreakpoint] = useBreakpoints();
+  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
 
   if (items.length < 1) return null;
 
   return (
     <ModalWithHeader
-      containerRule={templatesModalWindowStyles}
+      containerRule={templatesModalWindowStyles({mobileScreen})}
       title='Strategic drivers'
       modalPosition='middle'
       closeOptions={{
@@ -22,14 +24,13 @@ const Popup = (props) => {
       }}
     >
       <div className={css(main)}>
-        <div className={css(decsriptionHeader({ theme }))}>Your organization has 6 drivers</div>
-
-        <div className={css(descriptionText({ theme }))}>
-          Organization drivers – are stategic goals that help all company-wide activities lead to one single direction.
-        </div>
+        <div className={css(decsriptionHeader({ theme }))}>Your organisation drivers</div>
         <div className={css(templatesListStyles)}>
           {items.map((obj, idx) => {
-            return <Details key={obj.uuid} title={`Strategic driver ${idx + 1}`} description={obj.title} />;
+            if(obj.title) {
+              return <Details key={obj.uuid} title={`Strategic driver ${idx + 1}`} description={obj.title} />;
+            }
+            return null;
           })}
         </div>
       </div>
@@ -49,25 +50,13 @@ const templatesListStyles: Rule = () => ({
   height: '100%',
 });
 
-const templatesModalWindowStyles: Rule = () => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+const templatesModalWindowStyles: CreateRule<{mobileScreen}> = ({mobileScreen}) => {
   return {
     width: mobileScreen ? '100%' : '60%',
     padding: '0',
     height: mobileScreen ? 'calc(100% - 50px)' : 'calc(100% - 100px)',
     marginTop: mobileScreen ? '50px' : 0,
     overflow: 'hidden',
-  };
-};
-
-const descriptionText: CreateRule<{ theme: Theme }> = (props) => {
-  if (props == null) return {};
-  const { theme } = props;
-  return {
-    fontSize: `${theme.font.fixed.f18}`,
-    lineHeight: '22px',
-    paddingBottom: '16px',
   };
 };
 
