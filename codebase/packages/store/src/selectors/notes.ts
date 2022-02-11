@@ -45,18 +45,18 @@ export const teamFolderUuidSelector = createSelector(notesSelector, (notes: any)
   return folders?.[folders.findIndex((item) => item.parentFolderUuid === null && item.title === 'TEAM_FOLDER')]?.id;
 });
 
-export const notesFolderColleagueDataSelector = (colleagueUuid, userArchivedMode) =>
+export const notesFolderColleagueDataSelector = (colleagueUuid, isUserArchived) =>
   createSelector(notesSelector, (notes: any) => {
     const { folders } = notes;
 
     const notesData = notes.notes.filter((item) =>
-      !userArchivedMode ? item.status === 'CREATED' : item.status === 'ARCHIVED',
+      !isUserArchived ? item.status === 'CREATED' : item.status === 'ARCHIVED',
     );
 
     const personalFolderUuid =
       folders?.[
         folders.findIndex((item) =>
-          item.parentFolderUuid === null && !userArchivedMode
+          item.parentFolderUuid === null && !isUserArchived
             ? item.title === 'PERSONAL_FOLDER'
             : item.title === 'ARCHIVED_FOLDER',
         )

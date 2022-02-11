@@ -20,8 +20,8 @@ const PersonalFolders: FC<PersonalFoldersProps> = ({
   selectedFolder,
   setSelectedFolder,
   selectedNoteId,
-  setUserArchivedMode,
-  userArchivedMode,
+  setIsUserArchived,
+  isUserArchived,
 }) => {
   const { css, theme } = useStyle();
 
@@ -77,7 +77,7 @@ const PersonalFolders: FC<PersonalFoldersProps> = ({
   const btnsActionsHandle = (itemId: string, notesLength: number) => {
     const btnsActions = [
       {
-        ...(!userArchivedMode && {
+        ...(!isUserArchived && {
           id: '1',
           button: (
             <div
@@ -141,7 +141,7 @@ const PersonalFolders: FC<PersonalFoldersProps> = ({
           display: 'flex',
           flexDirection: 'column',
           right: '28px',
-          bottom: !userArchivedMode ? (notesLength ? '-101px' : '-110px') : !notesLength ? '-53px' : '-46px',
+          bottom: !isUserArchived ? (notesLength ? '-101px' : '-110px') : !notesLength ? '-53px' : '-46px',
           background: theme.colors.white,
           zIndex: 2,
           borderRadius: '8px',
@@ -171,7 +171,7 @@ const PersonalFolders: FC<PersonalFoldersProps> = ({
   return (
     <div className={css(mainFolderContainerStyle)} data-test-id={PERSONAL_FOLDER_WRAPPER}>
       <div className={css(titleStyle)}>
-        <h2 className={css({ padding: '24px' })}>{!userArchivedMode ? 'Personal Folders' : 'Archived Folders'}</h2>
+        <h2 className={css({ padding: '24px' })}>{!isUserArchived ? 'Personal Folders' : 'Archived Folders'}</h2>
       </div>
       <div className={css({ marginTop: '48px' })}>
         {foldersWithNotes?.map((item) => {
@@ -218,11 +218,11 @@ const PersonalFolders: FC<PersonalFoldersProps> = ({
         mode='inverse'
         data-test-id={CHANGE_USER_MODE}
         onPress={() => {
-          setUserArchivedMode((prev) => !prev);
+          setIsUserArchived((prev) => !prev);
           setSelectedFolder(() => null);
         }}
       >
-        {!userArchivedMode ? 'Archived Folders' : 'Personal Folders'}
+        {!isUserArchived ? 'Archived Folders' : 'Personal Folders'}
       </Button>
     </div>
   );
@@ -342,7 +342,7 @@ const folderPropertiesIconStyle: Rule = () => {
   return {
     display: 'block',
     height: '24px',
-  }
-}
+  };
+};
 
 export default PersonalFolders;

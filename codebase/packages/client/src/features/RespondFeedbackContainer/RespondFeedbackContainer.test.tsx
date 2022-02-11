@@ -1,9 +1,9 @@
 import React from 'react';
-import '@testing-library/jest-dom/extend-expect';
 import RespondFeedbackContainer, { RESPOND_FEEDBACK_CONTAINER } from './RespondFeedbackContainer';
 import { Router } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
 import { renderWithTheme } from '../../utils/test';
+import '@testing-library/jest-dom/extend-expect';
 import '@testing-library/jest-dom';
 import { fireEvent } from '@testing-library/react';
 

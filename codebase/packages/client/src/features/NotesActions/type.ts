@@ -73,10 +73,10 @@ export type MainFolderProps = {
   selectedTEAMFolder: NoteData | null;
   setSelectedTEAMFolder: Dispatch<SetStateAction<NoteData | null>>;
   setFoldersWithNotesTEAM: Dispatch<SetStateAction<Array<NoteData>>>;
-  setUserArchivedMode: Dispatch<SetStateAction<boolean>>;
+  setIsUserArchived: Dispatch<SetStateAction<boolean>>;
   setTeamArchivedMode: Dispatch<SetStateAction<boolean>>;
   foldersWithNotesTEAM: any;
-  userArchivedMode: boolean;
+  isUserArchived: boolean;
   teamArchivedMode: boolean;
 };
 
@@ -95,8 +95,9 @@ export type SelectedFolderProps = {
   noteFolderUuid: MutableRefObject<null | string>;
   noteTEAMFolderUuid: MutableRefObject<null | string>;
   setSelectedNoteToEdit: Dispatch<SetStateAction<NotesType | null>>;
-  userArchivedMode?: boolean;
+  isUserArchived?: boolean;
   setSelectedTEAMNoteToEdit: Dispatch<SetStateAction<NotesTypeTEAM | null>>;
+  testId?: string;
 };
 
 export type PersonalFoldersProps = {
@@ -112,6 +113,6 @@ export type PersonalFoldersProps = {
   setFoldersWithNotes: Dispatch<SetStateAction<Array<FoldersWithNotesTypes>>>;
   selectedFolder: NoteData | null;
   setSelectedFolder: Dispatch<SetStateAction<NoteData | null>>;
-  setUserArchivedMode: Dispatch<SetStateAction<boolean>>;
-  userArchivedMode: boolean;
+  setIsUserArchived: Dispatch<SetStateAction<boolean>>;
+  isUserArchived: boolean;
 };

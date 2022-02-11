@@ -16,6 +16,7 @@ export type ConfirmModal = {
   onOverlayClick?: () => void;
   submitBtnTitle?: string;
   options: Array<LabelType>;
+  testId?: string;
 };
 
 type Props = HTMLProps<HTMLInputElement> & ConfirmModal;
@@ -28,6 +29,7 @@ export const ConfirmModalWithSelectOptions: FC<Props> = ({
   onOverlayClick,
   submitBtnTitle,
   options,
+  testId = '',
 }) => {
   const { css } = useStyle();
   const [, isBreakpoint] = useBreakpoints();
@@ -48,45 +50,47 @@ export const ConfirmModalWithSelectOptions: FC<Props> = ({
       }}
       onOverlayClick={onOverlayClick}
     >
-      {description && (
-        <div
-          className={css({
-            padding: '16px 0',
-          })}
-        >
-          {description}
+      <div data-test-id={testId}>
+        {description && (
+          <div
+            className={css({
+              padding: '16px 0',
+            })}
+          >
+            {description}
+          </div>
+        )}
+
+        {options?.map((item) => {
+          const { label } = item;
+
+          return (
+            <label key={label} htmlFor={`${label}-status`} className={css(labelStyle)}>
+              <Radio
+                name={`${label}-status`}
+                checked={checkedItems.includes(label)}
+                id={`${label}-status`}
+                onChange={() => setCheckedItems(() => [label])}
+              />
+              <span className={css(textLabel)}>
+                <Trans>{label}</Trans>
+              </span>
+            </label>
+          );
+        })}
+
+        <div className={css(flexStyle)}>
+          <Button styles={[cancelBtnStyle]} onPress={onCancel}>
+            <Trans>Cancel</Trans>
+          </Button>
+          <Button
+            styles={[submitBtnStyle, !checkedItems.length ? { opacity: '0.6' } : {}]}
+            onPress={submitForm}
+            isDisabled={!checkedItems.length}
+          >
+            {submitBtnTitle || <Trans>Submit</Trans>}
+          </Button>
         </div>
-      )}
-
-      {options?.map((item) => {
-        const { label } = item;
-
-        return (
-          <label key={label} htmlFor={`${label}-status`} className={css(labelStyle)}>
-            <Radio
-              name={`${label}-status`}
-              checked={checkedItems.includes(label)}
-              id={`${label}-status`}
-              onChange={() => setCheckedItems(() => [label])}
-            />
-            <span className={css(textLabel)}>
-              <Trans>{label}</Trans>
-            </span>
-          </label>
-        );
-      })}
-
-      <div className={css(flexStyle)}>
-        <Button styles={[cancelBtnStyle]} onPress={onCancel}>
-          <Trans>Cancel</Trans>
-        </Button>
-        <Button
-          styles={[submitBtnStyle, !checkedItems.length ? { opacity: '0.6' } : {}]}
-          onPress={submitForm}
-          isDisabled={!checkedItems.length}
-        >
-          {submitBtnTitle || <Trans>Submit</Trans>}
-        </Button>
       </div>
     </Modal>
   );

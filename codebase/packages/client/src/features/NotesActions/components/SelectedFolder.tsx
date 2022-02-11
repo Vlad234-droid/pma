@@ -18,12 +18,13 @@ const SelectedFolder: FC<SelectedFolderProps> = ({
   selectedFolderId,
   noteFolderUuid,
   setSelectedNoteToEdit,
-  userArchivedMode = false,
+  isUserArchived = false,
   setSelectedTEAMNoteToEdit,
   selectedTEAMNoteId,
   actionTEAMModal,
   setConfirmTEAMModal,
   noteTEAMFolderUuid,
+  testId = '',
 }) => {
   const { css } = useStyle();
   const foldersList = useSelector(getFoldersSelector);
@@ -31,7 +32,7 @@ const SelectedFolder: FC<SelectedFolderProps> = ({
   const btnsActionsHandle = (itemId: string, itemFolderUuid: string | null, item: any) => {
     const btnsActions = [
       {
-        ...(!userArchivedMode && {
+        ...(!isUserArchived && {
           id: '1',
           button: (
             <div
@@ -74,7 +75,7 @@ const SelectedFolder: FC<SelectedFolderProps> = ({
         }),
       },
       {
-        ...(!userArchivedMode && {
+        ...(!isUserArchived && {
           id: '2',
           button: (
             <div
@@ -164,7 +165,7 @@ const SelectedFolder: FC<SelectedFolderProps> = ({
     ];
 
     return (
-      <div className={css(modalButtonsStyle({ userArchivedMode }))}>
+      <div className={css(modalButtonsStyle({ isUserArchived }))}>
         {btnsActions.filter(Boolean).map((item) => (
           <div key={item.id} className={css({})}>
             {item.button}
@@ -208,7 +209,7 @@ const SelectedFolder: FC<SelectedFolderProps> = ({
   };
 
   const setSelectedNoteHandler = (e, item) => {
-    if (userArchivedMode) return;
+    if (isUserArchived) return;
     if (e.target.parentElement.id === 'backdrop' || e.target.id === 'backdrop') return;
     if (selectedFolder.notes[selectedFolder?.notes?.findIndex((item) => item.selected === true)]) {
       setSelectedFolder((prev) => {
@@ -225,7 +226,7 @@ const SelectedFolder: FC<SelectedFolderProps> = ({
   };
 
   return (
-    <div className={css(expandedNoteStyle)}>
+    <div className={css(expandedNoteStyle)} data-test-id={testId}>
       <div className={css(flexBeetweenStyle)}>
         <span className={css(folderTitleStyled)}>{selectedFolder?.title}</span>
       </div>
@@ -239,9 +240,7 @@ const SelectedFolder: FC<SelectedFolderProps> = ({
             <span className={css(noteTitleStyle)}>
               {item.title}
               {selectedFolder.isInSearch && (
-                <div className={css(noteFolderTitleStyle)}>
-                  {getNotesFolderTitle(item.folderUuid, foldersList)}
-                </div>
+                <div className={css(noteFolderTitleStyle)}>{getNotesFolderTitle(item.folderUuid, foldersList)}</div>
               )}
             </span>
             <div className={css(FlexStyle)}>
@@ -277,13 +276,13 @@ const Align_flex_styleLast: Rule = {
   padding: '15px 24px',
 };
 
-const modalButtonsStyle: CreateRule<{ userArchivedMode: boolean }> = ({ userArchivedMode }) =>
+const modalButtonsStyle: CreateRule<{ isUserArchived: boolean }> = ({ isUserArchived }) =>
   ({
     position: 'absolute',
     display: 'flex',
     flexDirection: 'column',
     right: '-30px',
-    bottom: !userArchivedMode ? '-174px' : '-56px',
+    bottom: !isUserArchived ? '-174px' : '-56px',
     background: colors.white,
     zIndex: 2,
     borderRadius: '8px',
@@ -364,7 +363,7 @@ const noteFolderTitleStyle: Rule = ({ theme }) => {
     color: theme.colors.base,
     fontWeight: `${theme.font.weight.regular}`,
     marginTop: '5px',
-  }
+  };
 };
 
 const noteContainerStyle: Rule = {
@@ -393,6 +392,6 @@ const timeStyled: Rule = {
 const notePropertiesIconStyle: Rule = {
   display: 'block',
   height: '24px',
-}
+};
 
 export default SelectedFolder;

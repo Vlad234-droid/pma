@@ -13,12 +13,16 @@ import { PieChart } from 'components/PieChart';
 import { View } from 'components/PieChart/PieChart';
 import { GenericItemField } from 'components/GenericForm';
 import { Item, Select } from 'components/Form';
-import { createYearSchema } from './config';
-import { FilterModal, InfoTable } from './components';
+import { createYearSchema , field_options, years, listOfStatuses } from './config';
+import FilterModal from './components/FilterModal';
+import InfoTable from './components/InfoTable';
 import { DonwloadReportModal } from './Modals';
 import { Trans } from 'components/Translation';
 import { BASE_URL_API } from 'config/constants';
-import { Status, Rating } from '../../config/enum';
+import { Rating } from 'config/enum';
+import AppliedFilters from './components/AppliedFilters';
+
+export const REPORT_WRAPPER = 'REPORT_WRAPPER';
 
 const Report: FC = () => {
   const dispatch = useDispatch();
@@ -58,25 +62,11 @@ const Report: FC = () => {
   const [approvedObjPercent, approvedObjTitle] = useSelector(approvedObjectivesSelector);
   const [notApprovedObjPercent, notApprovedObjTitle] = useSelector(notApprovedObjectivesSelector);
 
-  const years = {
-    2021: '2021',
-  };
-
   useEffect(() => {
     dispatch(
       ReportActions.getObjectivesReport({
         year: years[2021],
-        statuses_in: [
-          Status.APPROVED,
-          Status.DRAFT,
-          Status.WAITING_FOR_APPROVAL,
-          Status.DECLINED,
-          Status.COMPLETED,
-          Status.OVERDUE,
-          Status.STARTED,
-          Status.NOT_STARTED,
-          Status.NOT_CREATED,
-        ],
+        statuses_in: [...listOfStatuses],
       }),
     );
   }, []);
@@ -86,12 +76,6 @@ const Report: FC = () => {
     mode: 'onChange',
     resolver: yupResolver<Yup.AnyObjectSchema>(createYearSchema),
   });
-  const field_options = [
-    { value: 'id_1', label: '2222' },
-    { value: 'id_2', label: '2022' },
-    { value: 'id_3', label: '2021' },
-    { value: 'id_4', label: '2020' },
-  ];
 
   const changeYearHandler = (value) => {
     console.log('value', value);
@@ -136,29 +120,10 @@ const Report: FC = () => {
 
   return (
     <>
-      <div className={css({ margin: '22px 42px 0px 40px' })}>
+      <div className={css({ margin: '22px 42px 0px 40px' })} data-test-id={REPORT_WRAPPER}>
         <div className={css(spaceBeetweenStyled({ quantity }))}>
           {!!getAppliedReport().length && (
-            <div className={css({ height: '92px' })}>
-              <div className={css(appliedWrapperFilters)}>
-                <span>Filtered applied:</span>
-                <div className={css(flexStyle)}>
-                  {getAppliedReport().map((item) => (
-                    <div key={item} className={css(filterAppliedStyle)}>
-                      <span className={css(filteredTitle)}>{item}</span>
-                      <IconButton
-                        graphic='decline'
-                        iconStyles={iconDeclineStyle}
-                        onPress={() => {
-                          clearAppliedFilters(item);
-                        }}
-                      />
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <span className={css(countStyle)}>Colleagues: 43</span>
-            </div>
+            <AppliedFilters clearAppliedFilters={clearAppliedFilters} getAppliedReport={getAppliedReport} />
           )}
 
           <div className={css(flexCenterStyled)}>
@@ -341,60 +306,6 @@ const flexContainer: Rule = {
     flex: 1,
   },
 } as Styles;
-
-const appliedWrapperFilters: Rule = ({ theme }) => {
-  return {
-    display: 'flex',
-    alignItems: 'center',
-    '& > span': {
-      fontWeight: 'normal',
-      fontSize: '18px',
-      lineHeight: '22px',
-      color: theme.colors.base,
-    },
-  } as Styles;
-};
-const countStyle: Rule = ({ theme }) => {
-  return {
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-    fontSize: '16px',
-    lineHeight: '20px',
-    color: theme.colors.base,
-    marginTop: '13px',
-    display: 'inline-block',
-  };
-};
-
-const flexStyle: Rule = {
-  display: 'flex',
-  gap: '10px',
-  marginLeft: '12px',
-};
-
-const filteredTitle: Rule = ({ theme }) => {
-  return {
-    fontWeight: 'normal',
-    fontSize: '16px',
-    lineHeight: '20px',
-    color: theme.colors.base,
-  };
-};
-
-const filterAppliedStyle: Rule = ({ theme }) => {
-  return {
-    border: `1px solid ${theme.colors.link}`,
-    borderRadius: '10px',
-    padding: '6px 12px',
-  };
-};
-
-const iconDeclineStyle: Rule = {
-  width: '15px',
-  height: '15px',
-  marginLeft: '10px',
-  cursor: 'pointer',
-};
 
 const iconDownloadStyle: Rule = {
   width: '22px',

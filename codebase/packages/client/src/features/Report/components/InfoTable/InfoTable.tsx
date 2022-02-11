@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { useStyle, useBreakpoints, Rule, Theme, CreateRule, Styles } from '@dex-ddl/core';
+import { useStyle, Rule, Theme, CreateRule, Styles } from '@dex-ddl/core';
 import { IconButton } from 'components/IconButton';
 
 type Obj = {
@@ -17,7 +17,7 @@ type InfoTableProps = {
 const InfoTable: FC<InfoTableProps> = ({ mainTitle, data, preTitle = '' }) => {
   const { css, theme } = useStyle();
   return (
-    <div className={css(infoTableWrapper)}>
+    <div className={css(infoTableWrapper)} data-test-id={'info_table_id'}>
       <h2 className={css(titleStyle({ preTitle, theme }))}>{mainTitle}</h2>
       {preTitle !== '' && (
         <div className={css(flexStyle)}>

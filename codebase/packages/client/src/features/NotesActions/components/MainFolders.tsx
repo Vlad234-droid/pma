@@ -28,6 +28,8 @@ import {
   AllNotesFolderIdTEAM,
 } from '../../../utils';
 
+export const SELECTED_FOLDER = 'SELECTED_FOLDER';
+
 const MainFolders: FC<MainFolderProps> = ({
   setSelectedFolder,
   selectedFolder,
@@ -40,8 +42,8 @@ const MainFolders: FC<MainFolderProps> = ({
   foldersWithNotesTEAM,
   setFoldersWithNotesTEAM,
   setSelectedTEAMNoteToEdit,
-  setUserArchivedMode,
-  userArchivedMode,
+  setIsUserArchived,
+  isUserArchived,
   setTeamArchivedMode,
   teamArchivedMode,
 }) => {
@@ -452,8 +454,8 @@ const MainFolders: FC<MainFolderProps> = ({
             selectedFolder={selectedFolder}
             setSelectedFolder={setSelectedFolder}
             selectedNoteId={selectedNoteId}
-            setUserArchivedMode={setUserArchivedMode}
-            userArchivedMode={userArchivedMode}
+            setIsUserArchived={setIsUserArchived}
+            isUserArchived={isUserArchived}
           />
 
           {mediumScreen && selectedFolder !== null && (
@@ -473,7 +475,7 @@ const MainFolders: FC<MainFolderProps> = ({
               actionTEAMModal={actionTEAMModal}
               setConfirmTEAMModal={setConfirmTEAMModal}
               noteTEAMFolderUuid={noteTEAMFolderUuid}
-              userArchivedMode={userArchivedMode}
+              testId={SELECTED_FOLDER}
             />
           )}
 
@@ -528,7 +530,8 @@ const MainFolders: FC<MainFolderProps> = ({
               actionTEAMModal={actionTEAMModal}
               setConfirmTEAMModal={setConfirmTEAMModal}
               noteTEAMFolderUuid={noteTEAMFolderUuid}
-              userArchivedMode={userArchivedMode}
+              isUserArchived={isUserArchived}
+              testId={SELECTED_FOLDER}
             />
           )}
 

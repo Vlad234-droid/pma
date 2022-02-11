@@ -30,9 +30,10 @@ import { Trans } from 'components/Translation';
 import { ConfirmModalWithSelectOptions } from '../Modal';
 
 export const NOTES_WRAPPER = 'note_wrapper';
-export const PLUS_BUTTON = 'plus_button';
+export const ADD_NEW = 'ADD_NEW';
 export const MODAL_BUTTONS = 'modal_buttons';
 export const PLUS_PERSONAL_NOTE = 'plus_personal_note';
+export const CONFIRM_MODAL_ID = 'CONFIRM_MODAL_ID';
 
 enum ModalStatuses {
   ADD_NEW = 'ADD_NEW',
@@ -53,10 +54,10 @@ const NotesActions: FC = () => {
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
   const dispatch = useDispatch();
   const colleagueUuid = useSelector(colleagueUUIDSelector);
-  const [userArchivedMode, setUserArchivedMode] = useState<boolean>(false);
+  const [isUserArchived, setIsUserArchived] = useState<boolean>(false);
   const [teamArchivedMode, setTeamArchivedMode] = useState<boolean>(false);
 
-  const notesFolderColleagueData = useSelector(notesFolderColleagueDataSelector(colleagueUuid, userArchivedMode)) || [];
+  const notesFolderColleagueData = useSelector(notesFolderColleagueDataSelector(colleagueUuid, isUserArchived)) || [];
   const notesFolderTeamData = useSelector(notesFolderTeamDataSelector(colleagueUuid, teamArchivedMode)) || [];
 
   useEffect(() => {
@@ -91,11 +92,11 @@ const NotesActions: FC = () => {
     if (folders !== null && notesSelect !== null) {
       setFoldersWithNotes(() => notesFolderColleagueData);
     }
-  }, [folders, notesSelect, userArchivedMode]);
+  }, [folders, notesSelect, isUserArchived]);
 
   useEffect(() => {
     if (searchValueFilterOption.length > 2) {
-      if (userArchivedMode) setUserArchivedMode(() => false);
+      if (isUserArchived) setIsUserArchived(() => false);
       if (teamArchivedMode) setTeamArchivedMode(() => false);
       const obj = filterNotesHandler(
         setSelectedTEAMFolder,
@@ -523,6 +524,7 @@ const NotesActions: FC = () => {
             setStatus(() => ModalStatuses[checkedItem]);
           }}
           onCancel={() => setStatus(() => ModalStatuses.PENDING)}
+          testId={CONFIRM_MODAL_ID}
         />
       )}
 
@@ -534,6 +536,7 @@ const NotesActions: FC = () => {
             graphic='add'
             iconProps={{ invertColors: true }}
             iconStyles={iconAddStyle}
+            data-test-id={ADD_NEW}
           >
             <Trans>Add</Trans>
           </IconButton>
@@ -559,8 +562,8 @@ const NotesActions: FC = () => {
           foldersWithNotesTEAM={foldersWithNotesTEAM}
           setFoldersWithNotesTEAM={setFoldersWithNotesTEAM}
           setSelectedTEAMNoteToEdit={setSelectedTEAMNoteToEdit}
-          setUserArchivedMode={setUserArchivedMode}
-          userArchivedMode={userArchivedMode}
+          setIsUserArchived={setIsUserArchived}
+          isUserArchived={isUserArchived}
           teamArchivedMode={teamArchivedMode}
           setTeamArchivedMode={setTeamArchivedMode}
         />
@@ -568,8 +571,8 @@ const NotesActions: FC = () => {
       <span
         className={css(arrowLeftStyle({ theme, mobileScreen }))}
         onClick={() => {
-          if (userArchivedMode || teamArchivedMode) {
-            if (userArchivedMode) setUserArchivedMode(() => false);
+          if (isUserArchived || teamArchivedMode) {
+            if (isUserArchived) setIsUserArchived(() => false);
             if (teamArchivedMode) setTeamArchivedMode(() => false);
             if (!selectedFolder) setSelectedFolder(() => null);
             if (selectedTEAMFolder) setSelectedTEAMFolder(() => null);

@@ -3,19 +3,27 @@ import '@testing-library/jest-dom/extend-expect';
 import { renderWithTheme } from '../../utils/test';
 import '@testing-library/jest-dom';
 import { fireEvent } from '@testing-library/react';
-import NotesActions, { NOTES_WRAPPER, PLUS_BUTTON, MODAL_BUTTONS } from './NotesActions';
+import NotesActions, { NOTES_WRAPPER, ADD_NEW, MODAL_BUTTONS, CONFIRM_MODAL_ID } from './NotesActions';
 
-it('Notes page', async () => {
-  const { getByTestId, queryByTestId, findByTestId } = renderWithTheme(<NotesActions />);
-  const wrapper = getByTestId(NOTES_WRAPPER);
-  const plusButton = getByTestId(PLUS_BUTTON);
-  const modalButtons = queryByTestId(MODAL_BUTTONS);
+jest.mock('react-router-dom', () => ({
+  ...(jest.requireActual('react-router-dom') as any),
+  useNavigate: () => ({
+    navigate: jest.fn().mockImplementation(() => ({})),
+  }),
+}));
 
-  expect(wrapper).toBeInTheDocument();
-  expect(modalButtons).not.toBeInTheDocument();
-  expect(modalButtons).toBeNull();
+describe('Note page', () => {
+  it('render confirm modal', async () => {
+    const { getByTestId, queryByTestId, findByTestId } = renderWithTheme(<NotesActions />);
+    const wrapper = getByTestId(NOTES_WRAPPER);
+    const addButton = getByTestId(ADD_NEW);
+    const confirmModal = queryByTestId(CONFIRM_MODAL_ID);
 
-  fireEvent.click(plusButton);
+    expect(wrapper).toBeInTheDocument();
+    expect(confirmModal).toBeNull();
 
-  expect(await findByTestId(MODAL_BUTTONS)).toBeInTheDocument();
+    fireEvent.click(addButton);
+
+    expect(await findByTestId(CONFIRM_MODAL_ID)).toBeInTheDocument();
+  });
 });

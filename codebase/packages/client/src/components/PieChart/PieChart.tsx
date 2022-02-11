@@ -15,20 +15,26 @@ type PieChartProps = {
   title?: string;
   data: Array<Obj>;
   display: View;
+  percentId?: string;
+  titleId?: string;
 };
 
-const PieChart: FC<PieChartProps> = ({ title, data, display }) => {
+const PieChart: FC<PieChartProps> = ({ title, data, display, percentId = 'percent_id', titleId = 'titleId' }) => {
   const { css, theme } = useStyle();
   return (
     <div className={css(pieChartWrapper)}>
-      {title && <h3 className={css(titleStyled({ data, theme }))}>{title}</h3>}
+      {title && (
+        <h3 data-test-id={titleId} className={css(titleStyled({ data, theme }))}>
+          {title}
+        </h3>
+      )}
       <div className={css(chartContainer({ display }))}>
         {data.map((item, i) => {
           const { percent } = item;
           return (
             <div className={css({ display: 'flex', flexDirection: 'column' })} key={i}>
               <div className={css(progress({ percent, theme, data, display }))}>
-                <div className={css(progressValue)}>
+                <div className={css(progressValue)} data-test-id={percentId}>
                   {percent}
                   {`${display === View.CHART ? `%` : ''}`}
                 </div>
