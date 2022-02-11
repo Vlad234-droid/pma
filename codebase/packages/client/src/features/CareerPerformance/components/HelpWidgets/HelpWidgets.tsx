@@ -27,7 +27,6 @@ const HelpWidgets: FC = () => {
           imgCustomStyle={imageStyles}
           customStyle={{
             ...widgetStyles,
-            // maxHeight: '142px',
           }}
           icon={true}
         >Coming soon</BasicTile>
@@ -47,6 +46,8 @@ const wrapperStyles: Rule = {
 };
 
 const widgetStyles: Rule = {
+  display: 'flex',
+  alignItems: 'center',
   textAlign: 'center',
   height: '100%',
   padding: '24px 27px 24px 10px',
