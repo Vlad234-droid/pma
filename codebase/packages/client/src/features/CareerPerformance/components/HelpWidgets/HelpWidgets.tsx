@@ -19,9 +19,8 @@ const HelpWidgets: FC = () => {
       data-test-id='help-widgets'
       className={css(wrapperStyles)}
     >
-      <div data-test-id='question-tile' className={css({ height: '100%' })} onClick={handleSupportClick}>
+      <div data-test-id='question-tile' className={css({ height: '100%' })}>
         <BasicTile
-          hover={true}
           img={<Icon graphic='question' />}
           title={t('want_to_learn_more', 'Want to learn more about Your Contribution at Tesco?')}
           imgCustomStyle={imageStyles}
