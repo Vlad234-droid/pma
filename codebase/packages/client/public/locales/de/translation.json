@@ -144,7 +144,6 @@
   "you_dont_have_access_to_pma": "You don't have access to PMA - TBC with PO",
   "my_alerts": "My alerts",
   "timeline_is_empty": "Timeline is empty",
-  "my_alerts": "My alerts",
   "hint_review_title": "Here are some hints and tips for writing your review:",
   "hint_review_1": "Keep it short and to the point. It’s just a summary.",
   "hint_review_2": "What’s most important is the quality of the review conversation you’ve had.",
@@ -153,5 +152,11 @@
   "hint_review_5": "But be equally honest about what didn’t go so well and what you can do better.",
   "hint_review_6": "Write and commit to what you’re going to work on for your development in the coming review period. This will then be helpful to look back on later in the year.",
   "hint_review_7": "Make sure what you write properly captures the conversation you and your manager had – remember they will be sent this for their approval.",
-  "click_here_to_access_calibration": "Click here to access the calibration area"
+  "click_here_to_access_calibration": "Click here to access the calibration area",
+  "something_does_not_look_right": "Something doesn't look right? Raise a ticket on Colleague Help",
+  "want_to_learn_more": "Want to learn more about Your Contribution at Tesco?",
+  "your_contribution": "Your Contribution",
+  "everyday_conversations": "Everyday conversations",
+  "feedback_tesco": "Feedback at Tesco",
+  "learning": "Learning"
 }

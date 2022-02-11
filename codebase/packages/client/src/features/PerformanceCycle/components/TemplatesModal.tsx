@@ -9,6 +9,7 @@ import { useTranslation } from 'components/Translation';
 import { getProcessTemplateSelector } from '@pma/store/src/selectors/processTemplate';
 import { ProcessTemplateActions } from '@pma/store';
 import { formatDateStringFromISO } from 'utils/date';
+import { fileType } from 'utils/file';
 
 type TemplateModalProps = {
   closeModal: () => void;
@@ -31,7 +32,12 @@ const TemplatesModal: FC<TemplateModalProps> = ({ closeModal, selectTemplate }) 
   });
 
   const onUpload = (file) => {
-    dispatch(ProcessTemplateActions.uploadProcessTemplate({ file }));
+    dispatch(
+      ProcessTemplateActions.uploadProcessTemplate({
+        file,
+        type: fileType(file.name),
+      }),
+    );
   };
 
   const handleSearchTemplate = ({ target }) => setFilteredValue(target.value);

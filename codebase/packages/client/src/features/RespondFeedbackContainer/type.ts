@@ -84,10 +84,8 @@ export type SuccessModalProps = {
 };
 
 export type filterFeedbacksType = {
-  AZ: boolean;
-  ZA: boolean;
-  newToOld: boolean;
-  oldToNew: boolean;
+  sort: string;
+  search: string;
 };
 
 export type TypecheckedRadio = {
@@ -98,9 +96,6 @@ export type TypecheckedRadio = {
 export type DraftItemProps = {
   draftFeedback: (id: number) => void;
   checkedRadio: TypecheckedRadio;
-  searchValue: string;
-  focus: boolean;
-  setFocus: Dispatch<SetStateAction<boolean>>;
   filterModal: boolean;
   setFilterModal: Dispatch<SetStateAction<boolean>>;
   setFilterFeedbacks: Dispatch<SetStateAction<filterFeedbacksType>>;

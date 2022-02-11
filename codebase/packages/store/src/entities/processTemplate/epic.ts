@@ -58,27 +58,25 @@ export const uploadProcessTemplateEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
     filter(isActionOf(uploadProcessTemplate.request)),
     switchMap(({ payload }) => {
-      const { file } = payload;
+      const { file, type } = payload;
+
       const metadata = {
         uploadMetadataList: [
           {
             path: `cycles`,
             fileName: file.name,
-            type: {
-              id: '1',
-              code: 'BPMN',
-              description: 'Business Process Model file',
-            },
+            type,
             status: 'ACTIVE',
             description: 'text templates',
             fileDate: new Date().toISOString(),
           },
         ],
       };
+
       return from(api.uploadFile({ file, metadata })).pipe(
         mergeMap(() => {
           //@ts-ignore
-          return from([uploadProcessTemplate.success(), getProcessTemplate.request({ type: '1', status: '2' })]);
+          return from([uploadProcessTemplate.success(), getProcessTemplate.request()]);
         }),
         catchError((e) => {
           const errors = e?.data?.errors;

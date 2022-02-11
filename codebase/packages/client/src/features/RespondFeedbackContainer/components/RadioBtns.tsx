@@ -5,10 +5,8 @@ import { Trans } from 'components/Translation';
 import { Radio } from 'components/Form';
 
 type filterFeedbacksType = {
-  AZ: boolean;
-  ZA: boolean;
-  newToOld: boolean;
-  oldToNew: boolean;
+  sort: string;
+  search: string;
 };
 type TypecheckedRadio = {
   pending: boolean;
@@ -17,8 +15,6 @@ type TypecheckedRadio = {
 type RadioBtnsProps = {
   checkedRadio: TypecheckedRadio;
   setCheckedRadio: Dispatch<SetStateAction<TypecheckedRadio>>;
-  focus: boolean;
-  setFocus: Dispatch<SetStateAction<boolean>>;
   setFilterModal: Dispatch<SetStateAction<boolean>>;
   filterModal: boolean;
   setFilterFeedbacks: Dispatch<SetStateAction<filterFeedbacksType>>;
@@ -27,8 +23,6 @@ type RadioBtnsProps = {
 const RadioBtns: FC<RadioBtnsProps> = ({
   checkedRadio,
   setCheckedRadio,
-  focus,
-  setFocus,
   setFilterModal,
   filterModal,
   setFilterFeedbacks,
@@ -45,8 +39,7 @@ const RadioBtns: FC<RadioBtnsProps> = ({
             id='pending'
             onChange={() => {
               if (filterModal) setFilterModal(() => false);
-              setFilterFeedbacks(() => ({ AZ: false, ZA: false, newToOld: false, oldToNew: false }));
-              if (focus) setFocus(() => false);
+              setFilterFeedbacks(() => ({ sort: '', search: '' }));
               setCheckedRadio(() => {
                 return {
                   pending: true,
@@ -68,8 +61,8 @@ const RadioBtns: FC<RadioBtnsProps> = ({
             checked={checkedRadio.completed}
             onChange={() => {
               if (filterModal) setFilterModal(() => false);
-              setFilterFeedbacks(() => ({ AZ: false, ZA: false, newToOld: false, oldToNew: false }));
-              if (focus) setFocus(() => false);
+              setFilterFeedbacks(() => ({ sort: '', search: '' }));
+
               setCheckedRadio(() => {
                 return {
                   pending: false,

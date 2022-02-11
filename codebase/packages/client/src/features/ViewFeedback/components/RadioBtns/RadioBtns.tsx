@@ -9,10 +9,8 @@ type TypecheckedRadio = {
 };
 
 type filterFeedbacksType = {
-  AZ: boolean;
-  ZA: boolean;
-  newToOld: boolean;
-  oldToNew: boolean;
+  sort: string;
+  search: string;
 };
 
 type Props = {
@@ -60,8 +58,7 @@ const RadioBtns: FC<Props> = ({
             id='unread'
             onChange={() => {
               if (filterModal) setFilterModal(() => false);
-              setFilterFeedbacks(() => ({ AZ: false, ZA: false, newToOld: false, oldToNew: false }));
-              if (focus) setFocus(() => false);
+              setFilterFeedbacks(() => ({ sort: '', search: '' }));
               setCheckedRadio(() => {
                 return {
                   unread: true,
@@ -93,7 +90,7 @@ const RadioBtns: FC<Props> = ({
             checked={checkedRadio.read}
             onChange={() => {
               if (filterModal) setFilterModal(() => false);
-              setFilterFeedbacks(() => ({ AZ: false, ZA: false, newToOld: false, oldToNew: false }));
+              setFilterFeedbacks(() => ({ sort: '', search: '' }));
               if (focus) setFocus(() => false);
               setCheckedRadio(() => {
                 return {

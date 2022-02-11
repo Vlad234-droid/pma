@@ -14,38 +14,23 @@ import { ConfirmModal } from 'features/Modal';
 import { Trans, useTranslation } from 'components/Translation';
 import { DropZone } from 'components/DropZone';
 import { FilterModal } from '../Shared/components/FilterModal';
+import {
+  getSortString,
+  PERFOMANCE_WRAPPER,
+  FILTER_MODAL_ID,
+  SETTINGS_BTN_ID,
+  WRAPPER_INPUT_ID,
+  INPUT_TEST_ID,
+  initialFilters,
+  DeleteStatuses,
+  exceptableFiles,
+  filterFileType,
+  FilterType,
+} from './config';
+import { fileType } from 'utils/file';
 
 import Upload from 'images/Upload.svg';
-
 import { BASE_URL_API } from 'config/constants';
-
-export const PERFOMANCE_WRAPPER = 'PERFOMANCE_WRAPPER';
-export const FILTER_MODAL_ID = 'FILTER_MODAL_ID';
-export const SETTINGS_BTN_ID = 'SETTINGS_BTN_ID';
-export const WRAPPER_INPUT_ID = 'WRAPPER_INPUT_ID';
-export const INPUT_TEST_ID = 'INPUT_TEST_ID';
-
-enum DeleteStatuses {
-  PENDING = 'PENDING',
-  CONFIRMING = 'CONFIRMING',
-  SUBMITTED = 'SUBMITTED',
-}
-
-export const getSortString = (filter: any) => {
-  if (filter.newToOld) return 'created-time:DESC';
-  if (filter.oldToNew) return 'created-time:ASC';
-  if (filter.AZ) return 'file-name:ASC';
-  if (filter.ZA) return 'file-name:DESC';
-  return undefined;
-};
-
-const initialFilters = {
-  AZ: false,
-  ZA: false,
-  newToOld: false,
-  oldToNew: false,
-  search: '',
-};
 
 const PerfomanceCyclesTemplates: FC = () => {
   const { t } = useTranslation();
@@ -53,12 +38,13 @@ const PerfomanceCyclesTemplates: FC = () => {
   const dispatch = useDispatch();
   const [, isBreakpoint] = useBreakpoints();
   const templatesList = useSelector(getProcessTemplateSelector) || [];
+
   const [filterModal, setFilterModal] = useState(false);
 
   const small = isBreakpoint.small || isBreakpoint.xSmall;
 
   const [focus, setFocus] = useState(false);
-  const [filter, setFilter] = useState<any>(initialFilters);
+  const [filter, setFilter] = useState<FilterType>(initialFilters);
 
   const [modalStatus, setModalStatus] = useState<DeleteStatuses>(DeleteStatuses.PENDING);
   const [selectedFile, setSelectedFile] = useState<Record<string, string>>({});
@@ -67,10 +53,9 @@ const PerfomanceCyclesTemplates: FC = () => {
 
   const processTemplatePayload = (filter) => {
     return {
-      type: '1',
-      status: '2',
       ...(filter.search.length > 2 && { _search: filter.search }),
       _sort: getSortString(filter),
+      type: filterFileType(filter.sort)?.toString(),
     };
   };
 
@@ -98,14 +83,21 @@ const PerfomanceCyclesTemplates: FC = () => {
   };
 
   const onUpload = (file) => {
-    dispatch(ProcessTemplateActions.uploadProcessTemplate({ file }));
+    setFilter(initialFilters);
+    if (focus) setFocus(false);
+    dispatch(
+      ProcessTemplateActions.uploadProcessTemplate({
+        file,
+        type: fileType(file.name),
+      }),
+    );
   };
 
   return (
     <div data-test-id={PERFOMANCE_WRAPPER}>
       <div className={css(filterIconStyled({ small }))}>
         <div className={css(containerWrapper({ small }))}>
-          <DropZone onUpload={onUpload} styles={{ width: '270px' }}>
+          <DropZone onUpload={onUpload} styles={{ width: '270px' }} accept={exceptableFiles as string}>
             <img className={css({ maxWidth: 'inherit' })} src={Upload} alt='Upload' />
             <span className={css(labelStyles)}>{t('Drop file here or click to upload')}</span>
             <span className={css(descriptionStyles)}>{t('Maximum upload size 5MB')}</span>
@@ -138,6 +130,15 @@ const PerfomanceCyclesTemplates: FC = () => {
             setFilter={setFilter}
             toggleOpen={setFilterModal}
             testId={FILTER_MODAL_ID}
+            additionalFields={[
+              { id: '5', label: 'BPMN', checked: filter.sort.includes('BPMN'), text: 'BPMN' },
+              { id: '6', label: 'FORM', checked: filter.sort.includes('FORM'), text: 'FORM' },
+              { id: '7', label: 'PDF', checked: filter.sort.includes('PDF'), text: 'PDF' },
+              { id: '8', label: 'PPT', checked: filter.sort.includes('PPT'), text: 'PPT' },
+              { id: '9', label: 'XLS', checked: filter.sort.includes('XLS'), text: 'XLS' },
+              { id: '10', label: 'DMN', checked: filter.sort.includes('DMN'), text: 'DMN' },
+              { id: '11', label: 'DOC', checked: filter.sort.includes('DOC'), text: 'DOC' },
+            ]}
           />
         </div>
       </div>

@@ -150,14 +150,19 @@ export const WidgetTeamMateObjectives: FC<WidgetTeamMateObjectivesProps> = ({
           cycleUuid: 'CURRENT',
           status,
         },
-        ...(reviewType !== ReviewType.MYR  ? {
-          data: {
-            ...(reason ? { reason } : {}),
-            status,
-            colleagueUuid: colleague.uuid,
-            reviews: colleague.reviews.filter(({ status }) => status === Status.WAITING_FOR_APPROVAL),
-          }
-        } : {}),
+        data: {
+          ...(reason ? { reason } : {}),
+          status,
+          colleagueUuid: colleague.uuid,
+          reviews: allColleagueReviews
+            .filter(({ status, type }) => status === Status.WAITING_FOR_APPROVAL && type === reviewType)
+            .map(({ number, properties }) => {
+              if (reviewType !== ReviewType.MYR) {
+                return { number, properties };
+              }
+              return { number };
+            }),
+        },
       };
 
       dispatch(ReviewsActions.updateReviewStatus(update));

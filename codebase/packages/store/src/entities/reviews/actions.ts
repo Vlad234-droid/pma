@@ -5,7 +5,7 @@ import { Review } from '@pma/client/src/config/types';
 
 interface ReviewUpdateStatusAction extends ActionParams {
   pathParams: { colleagueUuid: string; approverUuid: string; type?: ReviewType; cycleUuid?: string; status?: Status };
-  data?: {
+  data: {
     reason?: string;
     reviews?: Review[];
     status?: Status;
