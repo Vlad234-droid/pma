@@ -1,4 +1,4 @@
-import React, { FC, useState, useRef, MouseEvent } from 'react';
+import React, { FC, MouseEvent, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Rule, useStyle } from '@dex-ddl/core';
 import { Page } from 'pages';
@@ -8,7 +8,7 @@ import { ConfirmModal } from 'features/Modal';
 import { PermissionProvider, role } from 'features/Permission';
 import { Trans, useTranslation } from 'components/Translation';
 import { MenuItem } from 'components/MenuItem';
-import TescoLogo from './TescoLogo.svg';
+import TescoLogo from 'assets/img/TescoLogo.svg';
 import { Icon } from '../Icon';
 
 export type MenuDrawerProps = { onClose: () => void };

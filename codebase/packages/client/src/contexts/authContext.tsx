@@ -9,6 +9,7 @@ import User from 'config/entities/User';
 // hooks
 import useDispatch from 'hooks/useDispatch';
 import { useSelector } from 'react-redux';
+import { AccessDenied } from '../pages/AccessDenied';
 
 type LoginAction = (payload: { email: string; password: string }) => void;
 type LogoutAction = () => void;
@@ -51,6 +52,7 @@ export const AuthProvider: FC = ({ children }) => {
   }
 
   if (!loaded) return null;
+  if (!authenticated) return <AccessDenied />;
 
   return (
     <AuthContext.Provider
