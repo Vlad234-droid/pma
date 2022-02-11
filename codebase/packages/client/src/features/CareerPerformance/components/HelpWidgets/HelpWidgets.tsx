@@ -28,13 +28,18 @@ const HelpWidgets: FC = () => {
             ...widgetStyles,
           }}
           icon={true}
-        >Coming soon</BasicTile>
+        ><div className={css(contentStyle)}>Coming soon</div></BasicTile>
       </div>
     </div>
   )
 };
 
 export default HelpWidgets;
+
+const contentStyle: Rule = {
+  fontWeight: 'bold',
+  fontStyle: 'italic',
+};
 
 const wrapperStyles: Rule = {
   display: 'flex',

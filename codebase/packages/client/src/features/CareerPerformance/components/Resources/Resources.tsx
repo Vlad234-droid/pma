@@ -23,44 +23,45 @@ const Resources: FC<Props> = ({ basicTileStyle }) => {
         <BasicTile
           img={contributionImage}
           title={t('your_contribution', 'Your Contribution')}
-          description={t('Coming soon')}
           customStyle={{
             height: '100%',
           }}
-        />
+        ><div className={css(contentStyle)}>Coming soon</div></BasicTile>
       </div>
       <div data-test-id='personal-conversation' className={css(basicTileStyle)} onClick={console.log}>
         <BasicTile
           img={checkImage}
           title={t('everyday_conversations', 'Everyday conversations')}
-          description={t('Coming soon')}
           customStyle={{
             height: '100%',
           }}
-        />
+        ><div className={css(contentStyle)}>Coming soon</div></BasicTile>
       </div>
       <div data-test-id='feedback' className={css(basicTileStyle)}>
         <BasicTile
           img={feedbackImage}
           title={t('feedback_tesco', 'Feedback at Tesco')}
-          description={t('Coming soon')}
           customStyle={{
             height: '100%',
           }}
-        />
+        ><div className={css(contentStyle)}>Coming soon</div></BasicTile>
       </div>
       <div data-test-id='learning' className={css(basicTileStyle)}>
         <BasicTile
           img={learningImage}
           title={t('learning', 'Learning')}
-          description={t('Coming soon')}
           customStyle={{
             height: '100%',
           }}
-        />
+        ><div className={css(contentStyle)}>Coming soon</div></BasicTile>
       </div>
     </>
   )
 };
 
 export default Resources;
+
+const contentStyle: Rule = {
+  fontWeight: 'bold',
+  fontStyle: 'italic',
+};

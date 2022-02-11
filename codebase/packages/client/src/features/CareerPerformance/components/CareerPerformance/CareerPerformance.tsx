@@ -73,6 +73,11 @@ const CareerPerformance: FC<Props> = ({
   );
 };
 
+const contentStyle: Rule = {
+  fontWeight: 'bold',
+  fontStyle: 'italic',
+};
+
 const wrapperStyles: Rule = {
   display: 'flex',
   flexWrap: 'wrap',
