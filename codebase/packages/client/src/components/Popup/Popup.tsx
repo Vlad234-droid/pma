@@ -27,10 +27,7 @@ const Popup = (props) => {
         <div className={css(decsriptionHeader({ theme }))}>Your organisation drivers</div>
         <div className={css(templatesListStyles)}>
           {items.map((obj, idx) => {
-            if(obj.title) {
-              return <Details key={obj.uuid} title={`Strategic driver ${idx + 1}`} description={obj.title} />;
-            }
-            return null;
+            return obj.title && <Details key={obj.uuid} title={`Strategic driver ${idx + 1}`} description={obj.title} />
           })}
         </div>
       </div>
