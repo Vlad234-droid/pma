@@ -1,17 +1,19 @@
 import React, { useState, FC, useEffect, useCallback } from 'react';
+import debounce from 'lodash.debounce';
+import { Rule, useStyle } from '@dex-ddl/core';
 import Calendar from 'components/Calendar';
 import { Input } from 'components/Form';
 import { Icon } from 'components/Icon';
-import debounce from 'lodash.debounce';
-import { Rule, useStyle } from '@dex-ddl/core';
 
 type Props = {
   onChange: (date: Date) => void;
-  value: string;
+  value?: string;
 };
 
 const DATE_REGEXP = /\d{1,2}\/\d{1,2}\/\d{4}/;
 const INVALID_DATE = 'Invalid Date';
+export const TEST_ID = 'DatepickerId';
+export const INPUT_TEST_ID = 'DatepickerId';
 
 const checkIsValidDate = (date) => DATE_REGEXP.test(date);
 
@@ -36,6 +38,7 @@ const Datepicker: FC<Props> = ({ onChange, value }) => {
   );
 
   useEffect(() => {
+    if (!currentValue) return;
     dataChange(currentValue);
   }, [currentValue]);
 
@@ -51,8 +54,13 @@ const Datepicker: FC<Props> = ({ onChange, value }) => {
 
   return (
     <>
-      <div className={css(wrapperRule)}>
-        <Input value={currentValue} onChange={handleChangeValue} customStyles={inputRule} />
+      <div className={css(wrapperRule)} data-test-id={TEST_ID}>
+        <Input
+          value={currentValue}
+          onChange={handleChangeValue}
+          customStyles={inputRule}
+          data-test-id={INPUT_TEST_ID}
+        />
         <button onClick={() => toggleOpen(!isOpen)} className={css(buttonRule)}>
           <Icon graphic={'calender'} />
         </button>
