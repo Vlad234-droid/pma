@@ -5,6 +5,13 @@ import { renderWithTheme as render } from '../../utils/test';
 
 import Datepicker, { TEST_ID, INPUT_TEST_ID } from './Datepicker';
 
+jest.mock('lodash.debounce', () =>
+  jest.fn((fn) => {
+    fn.cancel = jest.fn();
+    return fn;
+  }),
+);
+
 describe('Datepicker', () => {
   it('Datepicker render correctly', () => {
     const { getByTestId } = render(<Datepicker onChange={jest.fn()} />);

@@ -26,13 +26,16 @@ const Datepicker: FC<Props> = ({ onChange, value }) => {
   const [date, changeDate] = useState<Date | undefined>();
   const { css } = useStyle();
 
-  const dataChange = useCallback((value: string) => {
-    if (!checkIsValidDate(value)) return;
-    const newDate = new Date(value);
-    if (newDate.toString() === INVALID_DATE) return;
-    changeDate(newDate);
-    if (value !== currentValue) onChange(newDate);
-  }, []);
+  const dataChange = useCallback(
+    debounce((value: string) => {
+      if (!checkIsValidDate(value)) return;
+      const newDate = new Date(value);
+      if (newDate.toString() === INVALID_DATE) return;
+      changeDate(newDate);
+      if (value !== currentValue) onChange(newDate);
+    }, 500),
+    [],
+  );
 
   useEffect(() => {
     if (!currentValue) return;
