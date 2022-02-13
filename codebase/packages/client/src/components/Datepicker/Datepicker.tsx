@@ -60,6 +60,7 @@ const Datepicker: FC<Props> = ({ onChange, value }) => {
           onChange={handleChangeValue}
           customStyles={inputRule}
           data-test-id={INPUT_TEST_ID}
+          placeholder={'dd/mm/yyyy'}
         />
         <button onClick={() => toggleOpen(!isOpen)} className={css(buttonRule)}>
           <Icon graphic={'calender'} />
