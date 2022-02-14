@@ -3,7 +3,7 @@ const config = {
   moduleDirectories: ['node_modules', 'src'],
   testEnvironment: 'jsdom',
   moduleNameMapper: {
-    '\\.css$': '__mocks__/styleMock.js',
+    '\\.(css|svg|jpg|png)$': '__mocks__/fileMock.js',
   },
 };
 
