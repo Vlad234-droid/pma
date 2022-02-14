@@ -34,6 +34,15 @@ export const BasicTile: FC<Props> = ({
 }) => {
   const { css } = useStyle();
 
+  const handleLinkClick = () => {
+    if (!link) {
+      return;
+    }
+    const aEl = window.document.createElement('a');
+    aEl.href = link;
+    aEl.dispatchEvent(new MouseEvent('click'));
+  };
+
   return (
     <TileWrapper
       boarder={boarder}
@@ -42,7 +51,7 @@ export const BasicTile: FC<Props> = ({
         ...customStyle,
       }}
     >
-      <a className={css(wrapperStyle({ icon }))} href={link}>
+      <div className={css(wrapperStyle({ icon }))} onClick={handleLinkClick}>
         {img && (
           <div className={css(imgCustomStyle)}>
             {typeof img === 'string' && <img className={css(imageStyle({ icon }))} src={img} />}
@@ -60,7 +69,7 @@ export const BasicTile: FC<Props> = ({
             </div>
           )}
         </div>
-      </a>
+      </div>
     </TileWrapper>
   );
 };

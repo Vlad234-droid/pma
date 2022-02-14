@@ -3,21 +3,19 @@ import { Rule, useStyle } from '@dex-ddl/core';
 
 import { BasicTile } from 'components/Tile';
 import { Icon } from 'components/Icon';
-import { LINKS } from 'config/constants';
 import { useTranslation } from 'components/Translation';
+import { buildPath } from 'features/Routes';
+import { Page } from 'pages';
 
 const HelpWidgets: FC = () => {
   const { css } = useStyle();
   const { t } = useTranslation();
 
-  const handleSupportClick = () => {
-    window.open(LINKS.help, '_blank')?.focus();
-  };
-
   return (
     <div data-test-id='help-widgets' className={css(wrapperStyles)}>
       <div data-test-id='question-tile' className={css({ height: '100%' })}>
         <BasicTile
+          link={buildPath(Page.KNOWLEDGE_LIBRARY)}
           img={<Icon graphic='question' />}
           title={t('want_to_learn_more', 'Want to learn more about Your Contribution at Tesco?')}
           imgCustomStyle={imageStyles}
