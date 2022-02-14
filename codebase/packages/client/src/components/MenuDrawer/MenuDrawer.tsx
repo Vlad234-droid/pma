@@ -66,11 +66,9 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
             <MenuItem iconGraphic={'edit'} linkTo={buildPath(Page.NOTES)} title={'My notes'} />
             <MenuItem iconGraphic={'account'} linkTo={buildPath(Page.PROFILE)} title={'My profile'} />
             <MenuItem iconGraphic={'chatSq'} linkTo={buildPath(Page.FEEDBACK)} title={'Feedback'} />
-            <MenuItem iconGraphic={'performance'} linkTo={'/'} title={'Support your performance'} />
             <PermissionProvider roles={[role.LINE_MANAGER, role.PEOPLE_TEAM, role.TALENT_ADMIN]}>
               <MenuItem iconGraphic={'team'} linkTo={buildPath(Page.REPORT)} title={'Team reporting'} />
             </PermissionProvider>
-            <MenuItem iconGraphic={'calibration'} linkTo={'/'} title={'Calibration ratings'} />
           </div>
         </div>
         <div className={css(menuDrawerSettingsStyle)}>
@@ -122,12 +120,6 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
                 <Link to={buildPath(Page.TIPS)} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
                   <Icon graphic={'tip'} />
                   <span className={css(itemSettingsTextStyle)}>Tips</span>
-                </Link>
-              </PermissionProvider>
-              <PermissionProvider roles={[role.TALENT_ADMIN]}>
-                <Link to={'/'} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
-                  <Icon graphic={'multiLanguage'} />
-                  <span className={css(itemSettingsTextStyle)}>Multi-lingual administration</span>
                 </Link>
               </PermissionProvider>
             </div>
