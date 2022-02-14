@@ -2,3 +2,5 @@
 export * from './Icon';
 export * from './RoundIcon';
 export * from './graphics';
+export { SuccessMark } from './graphics/success-mark';
+export { ExclamationMark } from './graphics/exclamation-mark';

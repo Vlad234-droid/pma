@@ -6,6 +6,7 @@ import Filters, { useSearch, FilterOption, FilterValues } from 'features/Filters
 import { TileWrapper } from 'components/Tile';
 import SuccessModal from 'components/SuccessModal';
 import { Employee } from 'config/types';
+import { SuccessMark } from 'components/Icon';
 
 import Widgets from '../Widgets';
 import Colleagues from '../Colleagues';
@@ -125,7 +126,7 @@ const Calibration: FC<Props> = ({ loadData, loadFilterOptions, colleagueUuid, co
       {isSuccessModalOpen && (
         <SuccessModal
           title='Calibration updated'
-          withСheckMark
+          mark={<SuccessMark />}
           description={t(
             'saved_changes_to_calibration',
             'You have saved your changes to calibration. These changes will now be reflected on the colleague profile as a record.',

@@ -19,24 +19,27 @@ const HelpWidgets: FC = () => {
       data-test-id='help-widgets'
       className={css(wrapperStyles)}
     >
-      <div data-test-id='question-tile' className={css({ height: '100%' })} onClick={handleSupportClick}>
+      <div data-test-id='question-tile' className={css({ height: '100%' })}>
         <BasicTile
-          hover={true}
           img={<Icon graphic='question' />}
           title={t('want_to_learn_more', 'Want to learn more about Your Contribution at Tesco?')}
           imgCustomStyle={imageStyles}
           customStyle={{
             ...widgetStyles,
-            // maxHeight: '142px',
           }}
           icon={true}
-        >Coming soon</BasicTile>
+        ><div className={css(contentStyle)}>Coming soon</div></BasicTile>
       </div>
     </div>
   )
 };
 
 export default HelpWidgets;
+
+const contentStyle: Rule = {
+  fontWeight: 'bold',
+  fontStyle: 'italic',
+};
 
 const wrapperStyles: Rule = {
   display: 'flex',
@@ -47,6 +50,8 @@ const wrapperStyles: Rule = {
 };
 
 const widgetStyles: Rule = {
+  display: 'flex',
+  alignItems: 'center',
   textAlign: 'center',
   height: '100%',
   padding: '24px 27px 24px 10px',

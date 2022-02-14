@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 
 import { useTranslation } from 'components/Translation';
 import SuccessModal from 'components/SuccessModal';
+import { SuccessMark, ExclamationMark } from 'components/Icon';
 
 import { ReviewType, Status } from 'config/enum';
 
@@ -35,7 +36,7 @@ const Modal: FC<Props> = ({ review, status, onClose }) => {
     <SuccessModal
       title={title}
       onClose={onClose}
-      withСheckMark
+      mark={status === Status.DECLINED ? <ExclamationMark /> : <SuccessMark />}
       description={status === Status.DECLINED ? declineDescription : approveDescription}
     />
   );
