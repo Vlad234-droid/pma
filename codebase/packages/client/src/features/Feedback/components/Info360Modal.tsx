@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { IconButton } from '../../../components/IconButton';
 import { useStyle, useBreakpoints, Rule, Styles } from '@dex-ddl/core';
 import { Info360ModalProps } from '../type';
-import video_explanation from 'images/video_explanation.jpg';
+import { VideoPlayer, VideoId } from 'features/VideoPlayer';
 
 export const INFO_360_MODAL = 'info_360_modal';
 
@@ -37,7 +37,7 @@ const Info360Modal: FC<Info360ModalProps> = ({ setInfo360Modal }) => {
 
         <h2 className={css(TitleVideo)}>Watch video explanation</h2>
         <div className={css(BlockVideoExplanation)}>
-          <img src={video_explanation} alt='video_explanation' />
+          <VideoPlayer videoId={VideoId.LEARN_FEEDBACK} />
         </div>
         <h3 className={css(RecomendationInfo)}>Face-to-face conversations are best for giving feedback.</h3>
         <p className={css(PreRecomendationInfo)}>
@@ -94,7 +94,6 @@ const TitleVideo: Rule = {
   margin: '32px 0px 16px 0px',
 };
 const BlockVideoExplanation: Rule = {
-  maxHeight: '300px',
   width: '100%',
   '& > img': {
     maxWidth: '100%',

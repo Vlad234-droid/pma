@@ -6,7 +6,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { Button, Rule, Styles, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { IconButton, Position } from 'components/IconButton';
-import video_explanation from 'images/video_explanation.jpg';
 import { TileWrapper } from 'components/Tile';
 import { Item, Textarea } from 'components/Form';
 import { GenericItemField } from 'components/GenericForm';
@@ -15,6 +14,7 @@ import { FeedbackActions, colleagueUUIDSelector, getReviewByUuidS } from '@pma/s
 import { useDispatch, useSelector } from 'react-redux';
 import defaultImg from 'images/default.png';
 import { TargetTypeReverse, TargetFeedbackKeys, VoiceType, Tesco } from 'config/enum';
+import { VideoPlayer, VideoId } from 'features/VideoPlayer';
 
 const SubmitPart: FC<SubmitPartProps> = ({
   selectedPerson,
@@ -217,7 +217,7 @@ const SubmitPart: FC<SubmitPartProps> = ({
       </div>
       <h2 className={css(VideoExplanationTitle)}>Watch this 2-minute video on how to give great feedback</h2>
       <div className={css(VideoWrapper)}>
-        <img src={video_explanation} alt='video_explanation' />
+        <VideoPlayer videoId={VideoId.GIVE_FEEDBACK} />
       </div>
       <form>
         <div>
@@ -364,7 +364,6 @@ const VideoExplanationTitle: Rule = {
 };
 const VideoWrapper: Rule = {
   width: '100%',
-  maxHeight: '304px',
   marginBottom: '17px',
   '& > img': {
     maxWidth: '100%',

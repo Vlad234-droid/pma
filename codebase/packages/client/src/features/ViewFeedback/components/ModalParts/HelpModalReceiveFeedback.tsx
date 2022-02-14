@@ -1,7 +1,7 @@
 import React, { Dispatch, FC, SetStateAction } from 'react';
 import { IconButton } from 'components/IconButton';
 import { useStyle, useBreakpoints, Rule, Styles } from '@dex-ddl/core';
-import video_explanation from 'images/video_explanation.jpg';
+import { VideoPlayer, VideoId } from 'features/VideoPlayer';
 
 type Info360ModalProps = {
   setHelpModalReceiveFeedback: Dispatch<SetStateAction<boolean>>;
@@ -16,7 +16,7 @@ const HelpModalReceiveFeedback: FC<Info360ModalProps> = ({ setHelpModalReceiveFe
       <h2 className={css(Title)}>Watch this 2-minute video on receiving your feedback.</h2>
 
       <div className={css(BlockVideoExplanation)}>
-        <img src={video_explanation} alt='video_explanation' />
+        <VideoPlayer videoId={VideoId.RECEIVE_FEEDBACK} />
       </div>
       <p className={css(PreRecomendationInfo, { marginTop: '8px' })}>
         We all have strengths and development areas. Feedback is all about helping you be the best you can be. When
@@ -109,7 +109,6 @@ const Title: Rule = {
 };
 
 const BlockVideoExplanation: Rule = {
-  maxHeight: '300px',
   width: '100%',
   '& > img': {
     maxWidth: '100%',
