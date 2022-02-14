@@ -223,7 +223,9 @@ const ViewFeedback: FC = () => {
                   iconStyles={{ verticalAlign: 'middle', margin: '2px 10px 0px 0px' }}
                   backgroundRadius={10}
                 />
-                <span className={css(ShareFeedbackStyled)}>Share feedback</span>
+                <span className={css(ShareFeedbackStyled)}>
+                  <Trans>Give Feedback</Trans>
+                </span>
               </div>
               <p className={css(QuestionStyled)}>Give feedback to a colleague</p>
               <Button
@@ -232,7 +234,7 @@ const ViewFeedback: FC = () => {
                   navigate(`/${Page.GIVE_FEEDBACK}`);
                 }}
               >
-                <Trans>Share feedback</Trans>
+                <Trans>Give Feedback</Trans>
               </Button>
             </div>
             <div className={css(ButtonContainerStyle)}>
@@ -246,7 +248,7 @@ const ViewFeedback: FC = () => {
               </div>
               <p className={css(SavedStyled)}>Download feedback to your device</p>
               <Button styles={[iconBtnStyle, { maxWidth: '181px !important' }]} onPress={handleDownloadAllPress}>
-                <Trans i18nKey='download_feedbacks'>Download feedbacks</Trans>
+                <Trans i18nKey='download_feedbacks'>Download feedback</Trans>
               </Button>
             </div>
             <Notification
