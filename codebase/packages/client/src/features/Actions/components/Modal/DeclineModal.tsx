@@ -6,7 +6,7 @@ import { ReviewType } from 'config/enum';
 import { Select, Item } from 'components/Form';
 import { useTranslation } from 'components/Translation';
 
-import ConfirmModal from '../ConfirmModal';
+import ConfirmModal from './ConfirmModal';
 import { getDeclineReasonOptions } from '../../utils';
 
 type Props = {

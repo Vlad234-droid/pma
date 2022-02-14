@@ -1,2 +1,1 @@
-export * from './WidgetTeamMateObjectives';
-export * from './WidgetObjectiveApproval';
+export * from './ApprovalWidget';

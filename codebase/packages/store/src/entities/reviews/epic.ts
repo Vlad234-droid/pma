@@ -144,6 +144,9 @@ export const updateReviewStatusEpic: Epic = (action$, _, { api }) => {
           from([
             getManagers.request({ colleagueUuid: payload.pathParams.approverUuid }),
             updateReviewStatus.success({ ...payload }),
+            getReviews.request({
+              pathParams: { colleagueUuid: payload.pathParams.colleagueUuid, cycleUuid: payload.pathParams.cycleUuid },
+            }),
           ]),
         ),
         catchError((e) => {

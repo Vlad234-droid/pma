@@ -24,3 +24,10 @@ export const getReviewTypeTitle = (t) => ({
   [ReviewType.MYR]: t('mid_year_review', 'Mid-year review'),
   [ReviewType.EYR]: t('year_end_review', 'Year-end review'),
 });
+
+export const groupArrayOfObjects = (list, key) => {
+  return list.reduce((rv, x) => {
+    (rv[x[key]] = rv[x[key]] || []).push(x);
+    return rv;
+  }, {});
+};

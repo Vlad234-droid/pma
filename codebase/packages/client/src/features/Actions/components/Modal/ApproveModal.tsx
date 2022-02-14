@@ -3,7 +3,7 @@ import { useStyle } from '@dex-ddl/core';
 
 import { useTranslation } from 'components/Translation';
 
-import ConfirmModal from '../ConfirmModal';
+import ConfirmModal from './ConfirmModal';
 
 type Props = {
   onSave: (hasReason?: boolean, reason?: string) => void;

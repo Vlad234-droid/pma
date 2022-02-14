@@ -46,10 +46,10 @@ const ConfirmModal: FC<Props> = ({
         {employee && (
           <div className={css({ padding: '16px 0 0' })}>
             <ColleagueInfo
-              firstName={employee.firstName}
-              lastName={employee.lastName}
-              jobName={employee.jobName}
-              businessType={employee.businessType}
+              firstName={employee.firstName || ''}
+              lastName={employee.lastName || ''}
+              jobName={employee.jobName || ''}
+              businessType={employee.businessType || ''}
             />
           </div>
         )}

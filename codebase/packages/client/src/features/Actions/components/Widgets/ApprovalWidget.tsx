@@ -1,54 +1,44 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
-import { Button, fontWeight, useStyle } from '@dex-ddl/core';
-import { colleagueUUIDSelector, ReviewsActions, reviewsMetaSelector } from '@pma/store';
-import { useSelector } from 'react-redux';
-
+import { useStyle, Rule, CreateRule, Button } from '@dex-ddl/core';
+import { Trans } from 'components/Translation/Translation';
 import { TileWrapper } from 'components/Tile';
 import { Icon } from 'components/Icon';
-import { Trans } from 'components/Translation';
+import { Employee, ReviewType, Status } from 'config/types';
+import { filterApprovedFn } from 'features/Actions/utils';
+import { useSelector } from 'react-redux';
+import { colleagueUUIDSelector, ReviewsActions } from '@pma/store';
 import useDispatch from 'hooks/useDispatch';
-import { ReviewType, Status } from 'config/enum';
-import { Employee } from 'config/types';
+import { DeclineModal, ApproveModal, SuccessModal } from '../Modal';
 
-import ApproveModal from '../ApproveModal';
-import DeclineModal from '../DeclineModal';
-import { filterApprovedFn } from '../../utils';
-import SuccessModal from '../SuccessModal/SuccessModal';
-
-export type WidgetObjectiveApprovalProps = {
-  isDisabled?: boolean;
-  reviewsForApproval: Employee[];
+type Props = {
+  isDisabled: boolean;
+  reviews: any;
   onSave: () => void;
 };
 
-export const WidgetObjectiveApproval: FC<WidgetObjectiveApprovalProps> = ({
-  isDisabled = false,
-  reviewsForApproval,
-  onSave,
-}) => {
+export const ApprovalWidget: FC<Props> = ({ isDisabled, reviews, onSave }) => {
+  const { css } = useStyle();
+  const dispatch = useDispatch();
+
   const [isOpenDeclinePopup, setIsOpenDeclinePopup] = useState(false);
   const [isOpenApprovePopup, setIsOpenApprovePopup] = useState(false);
   const [declines, setDeclines] = useState<(string | null)[]>([]);
   const [currentReview, setCurrentReview] = useState<Employee | null>(null);
-  const currentTimeline = currentReview?.timeline.filter(filterApprovedFn);
+  const currentTimeline = currentReview?.timeline?.filter(filterApprovedFn);
   const colleagueUuid = useSelector(colleagueUUIDSelector);
-  const { loaded } = useSelector(reviewsMetaSelector);
   const [reviewSubmitted, setReviewSubmitted] = useState<Status | null>(null);
   const [reviewType, setReviewType] = useState<ReviewType | null>(null);
   const [isOpenSuccessModal, setIsOpenSuccessModal] = useState<boolean>(false);
   const [allReviewsProcessed, setAllReviewsProcessed] = useState<boolean>(false);
 
-  const { css, theme } = useStyle();
-  const dispatch = useDispatch();
-
   useEffect(() => {
-    if (reviewSubmitted && loaded && allReviewsProcessed) {
+    if (reviewSubmitted && allReviewsProcessed) {
       setIsOpenSuccessModal(true);
     }
-  }, [loaded, reviewSubmitted, allReviewsProcessed]);
+  }, [reviewSubmitted, allReviewsProcessed]);
 
   useEffect(() => {
-    if (declines.length && declines.length === reviewsForApproval.length) {
+    if (declines.length && declines.length === reviews.length) {
       // if there is at least one declined entity
       if (declines.some((decline) => decline !== null)) {
         declineColleagues(declines);
@@ -57,22 +47,22 @@ export const WidgetObjectiveApproval: FC<WidgetObjectiveApprovalProps> = ({
         setDeclines([]);
       }
     }
-  }, [declines, reviewsForApproval]);
+  }, [declines, reviews]);
 
   const handleDeclineBtnClick = () => {
     setIsOpenDeclinePopup(true);
-    setCurrentReview(reviewsForApproval[0]);
+    setCurrentReview(reviews[0]);
   };
 
   const handleApproveBtnClick = () => {
     setIsOpenApprovePopup(true);
-    setCurrentReview(reviewsForApproval[0]);
+    setCurrentReview(reviews[0]);
   };
 
   const handleDeclineSubmit = useCallback(
     (hasReason?: boolean, reason?: string) => {
-      if (declines.length + 1 < reviewsForApproval.length) {
-        setCurrentReview(reviewsForApproval[declines.length + 1]);
+      if (declines.length + 1 < reviews.length) {
+        setCurrentReview(reviews[declines.length + 1]);
         setIsOpenDeclinePopup(false);
         setIsOpenDeclinePopup(true);
       } else {
@@ -83,21 +73,21 @@ export const WidgetObjectiveApproval: FC<WidgetObjectiveApprovalProps> = ({
 
       hasReason && reason && setDeclines((declines) => [...declines, reason]);
     },
-    [reviewsForApproval, declines],
+    [reviews, declines],
   );
 
   const handleDeclineClose = useCallback(() => {
-    if (reviewsForApproval.length === declines.length + 1) {
+    if (reviews.length === declines.length + 1) {
       // if all reviews were opened already, close popup
       setIsOpenDeclinePopup(false);
       setCurrentReview(null);
     } else {
       // update currentReview with next one
-      setCurrentReview(reviewsForApproval[declines.length + 1]);
+      setCurrentReview(reviews[declines.length + 1]);
     }
 
     setDeclines((declines) => [...declines, null]); // set empty decline
-  }, [reviewsForApproval, declines]);
+  }, [reviews, declines]);
 
   const handleApproveSubmit = () => {
     approveColleagues();
@@ -106,7 +96,7 @@ export const WidgetObjectiveApproval: FC<WidgetObjectiveApprovalProps> = ({
 
   const updateReviewStatus = useCallback(
     (status: Status) => (reasons?: (string | null)[]) => {
-      reviewsForApproval?.forEach((colleague, index) => {
+      reviews?.forEach((colleague, index) => {
         const currentTimeline = colleague?.timeline.filter(filterApprovedFn);
 
         if ((reasons && !reasons[index] && currentTimeline![0].reviewType === ReviewType.OBJECTIVE) || !currentTimeline)
@@ -143,7 +133,7 @@ export const WidgetObjectiveApproval: FC<WidgetObjectiveApprovalProps> = ({
 
       setAllReviewsProcessed(true);
     },
-    [reviewsForApproval],
+    [reviews],
   );
 
   const approveColleagues = updateReviewStatus(Status.APPROVED);
@@ -158,39 +148,15 @@ export const WidgetObjectiveApproval: FC<WidgetObjectiveApprovalProps> = ({
   return (
     <>
       <TileWrapper>
-        <div className={css({ textAlign: 'center', padding: '24px' }, isDisabled ? { opacity: '0.4' } : {})}>
-          <div
-            className={css({
-              display: 'block',
-              fontSize: '20px',
-              lineHeight: '24px',
-              paddingBottom: '10px',
-              fontWeight: fontWeight.bold,
-            })}
-          >
-            Approve or decline colleague’s objectives or reviews
+        <div className={css(wrapperStyle({ isDisabled }))}>
+          <div className={css(titleStyle)}>
+            <Trans i18nKey={'approve_or_decline_review'}>Approve or decline colleague’s objectives or reviews</Trans>
           </div>
-          <div
-            className={css({
-              justifyContent: 'center',
-              display: 'flex',
-            })}
-          >
-            <div className={css({ display: 'inline-block' })}>
+          <div className={css(buttonsWrapperStyle)}>
+            <div>
               <Button
                 isDisabled={isDisabled}
-                styles={[
-                  {
-                    background: theme.colors.white,
-                    border: `1px solid ${theme.colors.tescoBlue}`,
-                    fontSize: '16px',
-                    lineHeight: '20px',
-                    fontWeight: 'bold',
-                    color: `${theme.colors.tescoBlue}`,
-                    margin: '0px 4px',
-                  },
-                  isDisabled ? { opacity: '0.6' } : {},
-                ]}
+                styles={[buttonStyle({ inverse: true }), isDisabled ? { opacity: '0.6' } : {}]}
                 onPress={handleDeclineBtnClick}
               >
                 <Icon graphic='decline' iconStyles={{ paddingRight: '8px' }} />
@@ -200,15 +166,7 @@ export const WidgetObjectiveApproval: FC<WidgetObjectiveApprovalProps> = ({
             <div className={css({ display: 'inline-block' })}>
               <Button
                 isDisabled={isDisabled}
-                styles={[
-                  {
-                    background: `${theme.colors.tescoBlue}`,
-                    fontSize: '16px',
-                    lineHeight: '20px',
-                    fontWeight: 'bold',
-                    margin: '0px 4px 1px 4px',
-                  },
-                ]}
+                styles={[buttonStyle({ inverse: false })]}
                 onPress={handleApproveBtnClick}
               >
                 <Icon graphic='check' invertColors={true} iconStyles={{ paddingRight: '8px' }} />
@@ -239,3 +197,38 @@ export const WidgetObjectiveApproval: FC<WidgetObjectiveApprovalProps> = ({
     </>
   );
 };
+
+const wrapperStyle: CreateRule<{ isDisabled: boolean }> = ({ isDisabled }) => ({
+  textAlign: 'center',
+  padding: '24px',
+  ...(isDisabled ? { opacity: '0.4' } : {}),
+});
+
+const titleStyle: Rule = ({ theme }) => ({
+  display: 'block',
+  fontSize: '20px',
+  lineHeight: '24px',
+  paddingBottom: '10px',
+  fontWeight: theme.font.weight.bold,
+});
+
+const buttonsWrapperStyle: Rule = {
+  justifyContent: 'center',
+  display: 'flex',
+};
+
+const buttonStyle: CreateRule<{ inverse: boolean }> =
+  ({ inverse }) =>
+  ({ theme }) => ({
+    fontSize: '16px',
+    lineHeight: '20px',
+    fontWeight: theme.font.weight.bold,
+    margin: '0px 4px',
+    ...(inverse
+      ? {
+          background: theme.colors.white,
+          color: `${theme.colors.tescoBlue}`,
+          border: `1px solid ${theme.colors.tescoBlue}`,
+        }
+      : {}),
+  });

@@ -12,6 +12,23 @@ import { Employee } from '@pma/client/src/config/types';
 
 export const managersSelector = (state: RootState) => state.managers || {};
 
+export const getEmployeesWithReviewStatus = (status: Status) => (searchValue?: string, sortValue?: SortBy) =>
+  // @ts-ignore
+  createSelector(managersSelector, ({ data = [] }) => {
+    const filteredWithStatusData = data
+      ?.filter((employee) => employee.timeline.some((review) => review.status === status))
+      .map((employee) => ({
+        ...employee,
+        reviews: employee.reviews.filter((review) => review.status === status),
+        timeline: employee.timeline.filter((review) => review.status === status),
+      }));
+
+    const filteredData = filteredWithStatusData
+      ? sortEmployeesFn(searchEmployeesFn(filteredWithStatusData, searchValue), sortValue)
+      : [];
+    return filteredData;
+  });
+
 export const getAllEmployees = createSelector(
   managersSelector,
   (_, searchValue?: string, sortValue?: SortBy) => ({ search: searchValue, sort: sortValue }),
