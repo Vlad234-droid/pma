@@ -1,6 +1,6 @@
 // import faker from 'faker';
 
-import { Timeline, ReviewType, Status, TimelineType } from 'config/types';
+import { Timeline, ReviewType, Status, TimelineType } from '../../config/types';
 
 import { generateArray } from './generateArray';
 import { dateToIso } from '../date';

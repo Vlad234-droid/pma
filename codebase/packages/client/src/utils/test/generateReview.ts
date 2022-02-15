@@ -1,6 +1,6 @@
 // import faker from 'faker';
 
-import { Review, ReviewType, Status } from 'config/types';
+import { Review, ReviewType, Status } from '../../config/types';
 
 import { generateArray } from './generateArray';
 
