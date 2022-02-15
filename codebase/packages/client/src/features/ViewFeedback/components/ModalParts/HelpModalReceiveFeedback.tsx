@@ -45,13 +45,6 @@ const HelpModalReceiveFeedback: FC<Info360ModalProps> = ({ setHelpModalReceiveFe
           contribution can be even better.
         </li>
       </ol>
-      <p className={css(PreRecomendationInfo)}>Remember:</p>
-      <ul className={css(dotsList)}>
-        <li>make your good intentions clear</li>
-        <li>be specific about the situation</li>
-        <li>describe the behaviour you observed</li>
-        <li>highlight the impact it had</li>
-      </ul>
       <p className={css(PreRecomendationInfo, { marginTop: '8px' })}>
         If you want to learn more about your feedback, speak to the colleague who shared the feedback. This is a great
         way to understand more about the feedback they shared and when they observed it. Remember to take time to

@@ -15,38 +15,42 @@ const Info360Modal: FC<Info360ModalProps> = ({ setInfo360Modal }) => {
       <div className={css({ height: '100%' })}>
         <h2 className={css(Title)}>What is the difference between “in the moment” and “360 Feedback”?</h2>
         <p className={css(PreTitle)}>
-          You can give and receive feedback with your colleagues using Everyday Feedback or 360 Feedback. <br />
+          You can give and receive feedback with your colleagues using Everyday feedback or 360 feedback. <br />
           <br />
-          Meaning they can take the feedback onboard and start to make changes straight away. It can and should relate
-          to any part of their Full Contribution: someone&apos;s personal development, their impact on others, their day
-          job or strategic objectives. Colleagues have the option to request Everyday Feedback, focusing on any area of
-          interest. <br />
+          Everyday feedback lets you share your feedback with your colleagues across any work level and function in real
+          time. This type of feedback lets a colleague know what they&apos;re doing great at, the opportunities they
+          have to be even better and how to make improvements continuously, meaning they can take the feedback onboard
+          and start to make changes straight away. It can and should relate to any part of their full contribution:
+          someone&apos;s personal development, their impact on others, their day job or strategic objectives. Colleagues
+          have the option to request Everyday feedback, focusing on any area of interest. <br />
           <br />
-          Everyday Feedback will be visible to your colleague as soon as you give it. The receiver will be able to see
-          who left the feedback so that they can arrange follow-up conversations where needed. <br />
+          360 feedback is more structured. The questionnaire of pre-set questions provides an in-depth view of
+          someone&apos;s performance against our Win Together behaviours or our values. Usually, 360 feedback would be
+          used once a year to gather a detailed understanding on your decisions and how they impact others from a group
+          of self-selected colleagues, including your line manager, direct reports and other people you work with
+          regularly, for example project stakeholders. <br />
           <br />
-          360 Feedback is more structured. The questionnaire of pre-set questions provides an in-depth view of
-          someone&apos;s performance against our Win Together behaviours. Usually, 360 Feedback would be used once a
-          year to gather a detailed understanding on your decisions and how they impact others from a group of
-          self-selected colleagues, including your line manager, direct reports and other people you work with
-          regularly, for example project stakeholders.
-          <br />
-          <br /> You will find supporting videos to guide you when giving and receiving feedback on the giving and
-          receiving feedback pages.
+          You will find supporting videos to guide you when giving and receiving feedback on the giving and receiving
+          feedback pages.
         </p>
 
-        <h2 className={css(TitleVideo)}>Watch video explanation</h2>
+        <h2 className={css(TitleVideo)}>Watch this 2-minute video on the importance of feedback:</h2>
         <div className={css(BlockVideoExplanation)}>
           <VideoPlayer videoId={VideoId.LEARN_FEEDBACK} />
         </div>
-        <h3 className={css(RecomendationInfo)}>Face-to-face conversations are best for giving feedback.</h3>
+        <h3 className={css(RecomendationInfo)}>Face to face conversations are best for giving feedback.</h3>
         <p className={css(PreRecomendationInfo)}>
-          Sharing feedback face-to-face gives you the space to have a two-way conversation, building trust and working
+          Sharing feedback face to face gives you the space to have a two-way conversation, building trust and working
           together on what the colleague could do next. Where this isn&apos;t possible, you can use the feedback
           function in the Your Contribution system.
         </p>
         <h3 className={css(RecomendationInfo)}>Want to say “thank you” to a colleague?</h3>
-        <p className={css(PreRecomendationInfo)}>Head to the Recognition platform.</p>
+        <p className={css(PreRecomendationInfo)}>
+          Recognition is just as important as all other feedback. We need to remember to celebrate our successes, share
+          praise or say &apos;thank you&apos; to our colleagues when things have gone well. You can share recognition
+          with your colleagues during face to face conversations and using Values Awards. Where this isn&apos;t
+          possible, you can use the feedback function in the Your Contribution system.
+        </p>
       </div>
       <span
         className={css({

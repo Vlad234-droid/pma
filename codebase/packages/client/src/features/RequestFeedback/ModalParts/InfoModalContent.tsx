@@ -4,10 +4,10 @@ import requestInfoModal from 'images/requestInfoModal.png';
 import { IconButton } from 'components/IconButton';
 
 type InfoModalProps = {
-  setInfoModal: Dispatch<SetStateAction<boolean>>;
+  onClose: () => void;
 };
 
-const InfoModalContent: FC<InfoModalProps> = ({ setInfoModal }) => {
+const InfoModalContent: FC<InfoModalProps> = ({ onClose }) => {
   const { css } = useStyle();
   return (
     <div className={css(wrapperStyle)}>
@@ -17,28 +17,27 @@ const InfoModalContent: FC<InfoModalProps> = ({ setInfoModal }) => {
       </p>
       <ol className={css(listStyle)}>
         <li>
-          Make your good intentions clear. This builds trust and lets the receiver know that your words come from a
-          positive place. This means they&apos;ll be more likely to listen and reflect on what you&apos;ve shared. An
-          example of this would be starting your feedback with something like &quot;I&apos;m sharing this feedback with
-          you so we can work better together&quot;.
+          <b>Take a step back.</b> Take time to reflect on the feedback you&apos;ve received, don&apos;t feel like you
+          must take action right away. If you&apos;re having a bad day, you&apos;re more likely to receive feedback
+          negatively, so making sure you&apos;re in a positive frame of mind where you can stay curious about your
+          feedback will set you up to receive feedback as constructive and well meaning.
         </li>
         <li>
-          Describe the situation. It&apos;s important to be specific about the time, place, and situation you want to
-          give feedback on. Being specific helps provide context for the receiver and ensures your feedback is clear. An
-          example of this could be &quot;on Monday when we were working on the customer service desk&quot; or &quot;in
-          last week&apos;s team meeting&quot;.
-          <li>
-            Give great examples. Describe what you observed, assumptions aren&apos;t helpful. For example, &quot;I
-            noticed you&apos;ve been late twice this week&quot; is more helpful than &quot;you&apos;re never on
-            time&quot;.
-          </li>
-          <li>
-            Explain the impact. Sharing the impact your examples had gives the receiver an opportunity to reflect and
-            think about specific actions they could take going forward. An example of impact &quot;this meant the
-            customer received great service&quot; or &quot; this meant the rest of the team stayed late&quot;.
-          </li>
+          <b>Request feedback in real-time.</b> By requesting feedback in real time, your colleagues are more likely to
+          have a great memory of what happened meaning you&apos;re more likely to receive great feedback. For example,
+          if you&apos;re requesting feedback on your presentation style, request feedback straight after a meeting
+          you&apos;ve presented at.
+        </li>
+
+        <li>
+          <b>Seek a rounded view.</b> Request feedback from a range of colleagues such as your peers, line manager and
+          project stakeholders so you can build a rounded perspective of how your colleagues view you.
         </li>
       </ol>
+      <p className={css(titleStyle)}>
+        When requesting feedback, choose one area you&apos;d like feedback on. This could be any part of your role:
+        &apos;what&apos; you do or &apos;how&apos; you do it. We&apos;ve linked the options to your full contribution.
+      </p>
       <div className={css({ marginTop: '22px' })}>
         <img
           className={css({ width: '100%', height: '100%', objectFit: 'contain' })}
@@ -47,7 +46,7 @@ const InfoModalContent: FC<InfoModalProps> = ({ setInfoModal }) => {
         />
       </div>
       <span className={css(iconStyle)}>
-        <IconButton graphic='arrowLeft' onPress={() => setInfoModal(() => false)} iconProps={{ invertColors: true }} />
+        <IconButton graphic='arrowLeft' onPress={onClose} iconProps={{ invertColors: true }} />
       </span>
     </div>
   );

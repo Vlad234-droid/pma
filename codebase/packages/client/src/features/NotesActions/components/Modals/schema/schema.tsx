@@ -9,7 +9,7 @@ export const schemaNotes = Yup.object().shape({
     .notRequired()
     .when('folder', {
       is: (val) => val === 'id_001',
-      then: Yup.string().required(),
+      then: Yup.string().required('Title is a required field'),
     }),
 });
 export const schemaFolder = Yup.object().shape({
@@ -24,7 +24,7 @@ export const schemaTEAMNotes = Yup.object().shape({
     .notRequired()
     .when('folder', {
       is: (val) => val === 'id_001',
-      then: Yup.string().required(),
+      then: Yup.string().required('Title is a required field'),
     }),
 });
 
