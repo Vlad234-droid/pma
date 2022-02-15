@@ -46,4 +46,14 @@ const isDEV = (env: string) => {
   }
 };
 
-export { getAppEnv, isPPE, isPROD, isDEV };
+const isLocal = (env: string) => {
+  switch (env.toLowerCase()) {
+    case 'local':
+    case 'mock':
+      return true;
+    default:
+      return false;
+  }
+};
+
+export { getAppEnv, isPPE, isPROD, isDEV, isLocal };
