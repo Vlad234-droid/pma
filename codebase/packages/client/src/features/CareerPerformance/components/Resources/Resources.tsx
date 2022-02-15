@@ -7,7 +7,7 @@ import { useTranslation } from 'components/Translation';
 import contributionImage from 'images/Contribution.jpg';
 import checkImage from 'images/Check.jpg';
 import feedbackImage from 'images/Feedback.jpg';
-import learningImage from 'images/Learning.jpg';
+import systemGuidanceImage from 'images/SystemGuidance.jpg';
 
 type Props = {
   basicTileStyle: Rule;
@@ -48,8 +48,8 @@ const Resources: FC<Props> = ({ basicTileStyle }) => {
       </div>
       <div data-test-id='learning' className={css(basicTileStyle)}>
         <BasicTile
-          img={learningImage}
-          title={t('learning', 'Learning')}
+          img={systemGuidanceImage}
+          title={t('system_guidance_and_faqs', 'System guidance and FAQs')}
           customStyle={{
             height: '100%',
           }}
