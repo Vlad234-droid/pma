@@ -5,7 +5,6 @@ import TipsAdministration from './TipsAdministration';
 import { renderWithTheme } from '../../utils/test';
 
 import '@testing-library/jest-dom';
-// jest.mock('react-markdown', () => ({ ReactMarkdown: () => 'mocked ReactMarkdown' }));
 
 it('TipsAdministration', async () => {
   const { getByTestId } = renderWithTheme(
