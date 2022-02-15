@@ -61,6 +61,7 @@ const pages: Record<Page, PageComponent> = {
     Element: Notes,
     title: 'My Notes',
     withHeader: true,
+    roles: [role.COLLEAGUE],
   },
   [Page.MY_ACTIONS]: {
     Element: MyActions,

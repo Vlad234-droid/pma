@@ -26,7 +26,6 @@ jest.mock('features/ViewNavigation', () => {
   };
 });
 
-
 jest.mock('../HelpWidgets', () => {
   return {
     __esModule: true,
@@ -88,9 +87,9 @@ describe('<CareerPerformance />', () => {
       uuid: 'mocked_uuid',
       properties: {
         mapJson: {
-          'mocked': 'mocked',
+          mocked: 'mocked',
         },
-      }
+      },
     },
     endYearReview: {
       code: ReviewType.EYR,
@@ -106,9 +105,9 @@ describe('<CareerPerformance />', () => {
       uuid: 'mocked_uuid',
       properties: {
         mapJson: {
-          'mocked': 'mocked',
+          mocked: 'mocked',
         },
-      }
+      },
     },
   };
 

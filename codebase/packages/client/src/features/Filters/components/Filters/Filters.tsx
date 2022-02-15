@@ -56,7 +56,7 @@ const Filters: FC<Props> = ({ sortingOptions, sortValue, onSort, searchValue, on
 
   return (
     <div className={css(wrapperStyles)} data-test-id='filters'>
-      <div className={css({ height: '24px', })}>
+      <div className={css({ height: '24px' })}>
         <InfoIcon onClick={() => console.log('info clicked')} />
       </div>
       {sortingOptions && (

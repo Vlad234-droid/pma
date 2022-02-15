@@ -33,7 +33,7 @@ export const BasePanel = ({ children, ...baseRest }: Props) => {
 
   const updateHeight = () => {
     content.current && setHeight(content.current.scrollHeight);
-  }
+  };
 
   useEventListener('resize', updateHeight);
 

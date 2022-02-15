@@ -3,14 +3,13 @@ import { Trans, useTranslation } from 'components/Translation';
 import { Button, colors, Rule, Styles, useStyle } from '@dex-ddl/core';
 
 import { TileWrapper } from 'components/Tile';
-import { Icon } from 'components/Icon';
+import { Icon, SuccessMark } from 'components/Icon';
 import { ConfirmModal, WrapperModal } from 'features/Modal';
 import { ShareObjectivesModal } from '../Modal';
 import SuccessModal from 'components/SuccessModal';
 import { ReviewType, Status } from 'config/enum';
 import useDispatch from 'hooks/useDispatch';
 import { useSelector } from 'react-redux';
-import { SuccessMark } from 'components/Icon';
 
 import * as T from '../../types';
 import { transformReviewsToObjectives } from '../../utils';

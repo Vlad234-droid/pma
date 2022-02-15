@@ -40,5 +40,4 @@ const CareerPerformanceContainer: FC = () => {
   );
 };
 
-
 export default CareerPerformanceContainer;

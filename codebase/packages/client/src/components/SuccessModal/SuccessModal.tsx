@@ -13,23 +13,18 @@ export type SuccessModal = {
 
 type Props = HTMLProps<HTMLInputElement> & SuccessModal;
 
-const DefaultMark = <>
-  <circle
-    data-test-id='success-mark'
-    opacity='0.1'
-    cx='82.5'
-    cy='82.0002'
-    r='65.2653'
-    fill='#FF9900'
-  />
-  <path
-    d='M82.4999 37.583V85.4163H48.3333M147.417 81.9997C147.417 117.854 118.354 146.916 82.4999 146.916C46.6454 146.916 17.5833 117.854 17.5833 81.9997C17.5833 46.1452 46.6454 17.083 82.4999 17.083C118.354 17.083 147.417 46.1452 147.417 81.9997Z'
-    stroke='#FF9900'
-    strokeWidth='1.2'
-  />
-</>;
+const DefaultMark = (
+  <>
+    <circle data-test-id='success-mark' opacity='0.1' cx='82.5' cy='82.0002' r='65.2653' fill='#FF9900' />
+    <path
+      d='M82.4999 37.583V85.4163H48.3333M147.417 81.9997C147.417 117.854 118.354 146.916 82.4999 146.916C46.6454 146.916 17.5833 117.854 17.5833 81.9997C17.5833 46.1452 46.6454 17.083 82.4999 17.083C118.354 17.083 147.417 46.1452 147.417 81.9997Z'
+      stroke='#FF9900'
+      strokeWidth='1.2'
+    />
+  </>
+);
 
-const SuccessModal: FC<Props> = ({ onClose, description, mark = DefaultMark , title }) => {
+const SuccessModal: FC<Props> = ({ onClose, description, mark = DefaultMark, title }) => {
   const { css, theme } = useStyle();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;

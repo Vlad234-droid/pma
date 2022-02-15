@@ -26,9 +26,9 @@ describe('<ReviewWidgets />', () => {
         uuid: 'mocked_uuid',
         properties: {
           mapJson: {
-            'mocked': 'mocked',
+            mocked: 'mocked',
           },
-        }
+        },
       },
       endYearReview: {
         code: ReviewType.EYR,
@@ -44,9 +44,9 @@ describe('<ReviewWidgets />', () => {
         uuid: 'mocked_uuid',
         properties: {
           mapJson: {
-            'mocked': 'mocked',
+            mocked: 'mocked',
           },
-        }
+        },
       },
     };
 
