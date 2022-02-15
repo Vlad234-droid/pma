@@ -12,7 +12,19 @@ jest.mock('react-router-dom', () => ({
   }),
 }));
 
+jest.mock('@pma/pdf-renderer', () => {
+  return {
+    __esModule: true,
+    usePDF: () => {
+      return ['mock', () => true];
+    },
+  };
+});
+
 describe('MyObjectives', () => {
+  beforeEach(() => {
+    jest.spyOn(console, 'error').mockImplementation();
+  });
   it('should render MyObjectives', async () => {
     renderWithTheme(<MyObjectives />);
     const widget = screen.queryByTestId(TEST_ID);

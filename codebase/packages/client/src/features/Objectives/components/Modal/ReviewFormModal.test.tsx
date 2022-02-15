@@ -11,17 +11,9 @@ describe('ReviewFormModal', () => {
   const approvalSubmissionText = /Are you sure you want to submit your review to your line manager for approval?/i;
   let consoleErrorMock = jest.spyOn(console, 'error').mockImplementation();
   let addMockUpdateReviews;
-  beforeAll(() => {
-    consoleErrorMock = jest.spyOn(console, 'error').mockImplementation();
-    addMockUpdateReviews = jest.spyOn(ReviewsActions, 'updateReviews');
-  });
-  afterAll(() => {
-    consoleErrorMock.mockRestore();
-    addMockUpdateReviews.mockRestore();
-  });
+
   describe('ReviewFormModal with predefined review values', () => {
-    let renderer;
-    const onClose = jest.fn();
+    let renderer, onClose;
     const schema = {
       meta: {
         loading: false,
@@ -203,11 +195,19 @@ describe('ReviewFormModal', () => {
       ],
     };
     beforeEach(() => {
+      onClose = jest.fn();
+      consoleErrorMock = jest.spyOn(console, 'error').mockImplementation();
+      addMockUpdateReviews = jest.spyOn(ReviewsActions, 'updateReviews');
       renderer = render(<ReviewFormModal reviewType={'EYR'} onClose={onClose} />, {
         timeline,
         reviews,
         schema,
       });
+    });
+    afterEach(() => {
+      onClose.mockRestore();
+      consoleErrorMock.mockRestore();
+      addMockUpdateReviews.mockRestore();
     });
 
     it('should render ReviewFormModal', async () => {
@@ -287,8 +287,7 @@ describe('ReviewFormModal', () => {
   });
 
   describe('ReviewFormModal without predefined review values', () => {
-    let renderer;
-    const onClose = jest.fn();
+    let renderer, onClose;
     const schema = {
       meta: {
         loading: false,
@@ -444,11 +443,19 @@ describe('ReviewFormModal', () => {
       ],
     };
     beforeEach(() => {
+      onClose = jest.fn();
+      consoleErrorMock = jest.spyOn(console, 'error').mockImplementation();
+      addMockUpdateReviews = jest.spyOn(ReviewsActions, 'updateReviews');
       renderer = render(<ReviewFormModal reviewType={'EYR'} onClose={onClose} />, {
         timeline,
         reviews,
         schema,
       });
+    });
+    afterEach(() => {
+      onClose.mockRestore();
+      consoleErrorMock.mockRestore();
+      addMockUpdateReviews.mockRestore();
     });
 
     it('should render ReviewFormModal', async () => {

@@ -1,7 +1,7 @@
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
 import { renderWithTheme as render, screen } from 'utils/test';
-import { SchemaFixture, SchemaFixtureVariables } from 'utils/test/fixtures/schema';
+import { SchemaFixture } from 'utils/test/fixtures/schema';
 import { fireEvent, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
@@ -12,21 +12,15 @@ import { FormType, ReviewsActions } from '@pma/store';
 
 describe('CreateUpdateObjectives', () => {
   // const approvalSubmissionText = /Submit Objectives/i;
-  let addMockUpdateReviews;
+  let addMockUpdateReviews, onClose;
   let consoleErrorMock = jest.spyOn(console, 'error').mockImplementation();
-  beforeAll(() => {
-    consoleErrorMock = jest.spyOn(console, 'error').mockImplementation();
-    addMockUpdateReviews = jest.spyOn(ReviewsActions, 'updateReviews');
-  });
-  afterAll(() => {
-    consoleErrorMock.mockRestore();
-    addMockUpdateReviews.mockRestore();
-  });
 
   describe('CreateUpdateObjectives empty review state', () => {
-    const onClose = jest.fn();
     let renderer;
     beforeEach(() => {
+      onClose = jest.fn();
+      consoleErrorMock = jest.spyOn(console, 'error').mockImplementation();
+      addMockUpdateReviews = jest.spyOn(ReviewsActions, 'updateReviews');
       // todo min max review objectives 2 hardcoded
       const schema = new SchemaFixture().withMetadata().withForm().state;
       const reviews = {
@@ -40,6 +34,11 @@ describe('CreateUpdateObjectives', () => {
         },
       };
       renderer = render(<CreateUpdateObjectives onClose={onClose} />, { schema, reviews });
+    });
+    afterEach(() => {
+      onClose.mockRestore();
+      consoleErrorMock.mockRestore();
+      addMockUpdateReviews.mockRestore();
     });
 
     it('should render CreateUpdateObjective fill 1st form and fireEvent save as draft', async () => {
@@ -95,10 +94,12 @@ describe('CreateUpdateObjectives', () => {
   });
 
   describe('CreateUpdateObjectives one review in draft', () => {
-    const onClose = jest.fn();
-    let renderer, addMockReviewsQuery;
+    let renderer, addMockReviewsQuery, onClose;
     const approvalSubmissionText = /Submit Objectives/i;
     beforeEach(() => {
+      onClose = jest.fn();
+      consoleErrorMock = jest.spyOn(console, 'error').mockImplementation();
+      addMockUpdateReviews = jest.spyOn(ReviewsActions, 'updateReviews');
       // todo min max review objectives 2 hardcoded
       const schema = new SchemaFixture().withMetadata().withForm().state;
       const reviews = {
@@ -139,7 +140,9 @@ describe('CreateUpdateObjectives', () => {
       renderer = render(<CreateUpdateObjectives onClose={onClose} />, { schema, reviews });
     });
     afterEach(() => {
-      addMockReviewsQuery.mockRestore();
+      onClose.mockRestore();
+      consoleErrorMock.mockRestore();
+      addMockUpdateReviews.mockRestore();
     });
 
     it('should render CreateUpdateObjective fill 1st form and fireEvent next and submit', async () => {

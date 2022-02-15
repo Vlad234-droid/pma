@@ -1,5 +1,6 @@
 // @ts-ignore
 import React from 'react';
+import { Link, BrowserRouter } from 'react-router-dom';
 
 // @ts-ignore
 import { renderWithTheme as render } from 'utils/test';
@@ -20,7 +21,7 @@ jest.mock('features/Profile', () => {
 jest.mock('components/StepIndicator', () => {
   return {
     __esModule: true,
-    DashboardProfile: () => {
+    StepIndicator: () => {
       return <div>mocked_step_indicator</div>;
     },
   };
@@ -35,25 +36,41 @@ describe('<InfoWidgets />', () => {
     };
 
     it('should render wrapper', () => {
-      const { getByTestId } = render(<InfoWidgets {...props}/>);
+      const { getByTestId } = render(
+        <BrowserRouter>
+          <InfoWidgets {...props} />
+        </BrowserRouter>,
+      );
 
       expect(getByTestId('info-widgets')).toBeInTheDocument();
     });
 
     it('should render wrapper', () => {
-      const { getByTestId } = render(<InfoWidgets {...props}/>);
+      const { getByTestId } = render(
+        <BrowserRouter>
+          <InfoWidgets {...props} />
+        </BrowserRouter>,
+      );
 
       expect(getByTestId('info-widgets')).toBeInTheDocument();
     });
 
     it('should render <DashboardProfile />', () => {
-      const { getByText } = render(<InfoWidgets {...props}/>);
+      const { getByText } = render(
+        <BrowserRouter>
+          <InfoWidgets {...props} />
+        </BrowserRouter>,
+      );
 
       expect(getByText('mocked_dashboard_profile')).toBeInTheDocument();
     });
 
     it('should not render <StepIndicator />, if !props.showMyReview', () => {
-      const { queryByText } = render(<InfoWidgets {...props}/>);
+      const { queryByText } = render(
+        <BrowserRouter>
+          <InfoWidgets {...props} />
+        </BrowserRouter>,
+      );
 
       expect(queryByText('mocked_step_indicator')).not.toBeInTheDocument();
     });
@@ -64,7 +81,11 @@ describe('<InfoWidgets />', () => {
         showMyReview: true,
       };
 
-      const { getByText } = render(<InfoWidgets {...newProps}/>);
+      const { getByText } = render(
+        <BrowserRouter>
+          <InfoWidgets {...newProps} />
+        </BrowserRouter>,
+      );
 
       expect(getByText('mocked_step_indicator')).toBeInTheDocument();
     });

@@ -8,7 +8,7 @@ import { TileWrapper } from 'components/Tile';
 import { Graphics, Icon } from 'components/Icon';
 
 export type Props = {
-  onClick: () => void;
+  onClick?: () => void;
   onClose?: () => void;
   reviewType: ReviewType;
   status?: Status;

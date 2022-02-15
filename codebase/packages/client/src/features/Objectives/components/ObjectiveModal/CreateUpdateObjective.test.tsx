@@ -10,24 +10,23 @@ import { FormType, ReviewsActions } from '@pma/store';
 
 describe('CreateUpdateObjective', () => {
   const approvalSubmissionText = /Submit Objectives/i;
-  let addMockUpdateReview, addMockCreateReview;
+  let addMockUpdateReview, addMockCreateReview, onClose;
   let consoleErrorMock = jest.spyOn(console, 'error').mockImplementation();
-  beforeAll(() => {
-    consoleErrorMock = jest.spyOn(console, 'error').mockImplementation();
-    addMockUpdateReview = jest.spyOn(ReviewsActions, 'updateReview');
-    addMockCreateReview = jest.spyOn(ReviewsActions, 'createReview');
-  });
-  afterAll(() => {
-    consoleErrorMock.mockRestore();
-    addMockUpdateReview.mockRestore();
-    addMockCreateReview.mockRestore();
-  });
   describe('CreateUpdateObjective[CREATE] empty review state', () => {
     let renderer;
-    const onClose = jest.fn();
     beforeEach(() => {
+      onClose = jest.fn();
+      consoleErrorMock = jest.spyOn(console, 'error').mockImplementation();
+      addMockUpdateReview = jest.spyOn(ReviewsActions, 'updateReview');
+      addMockCreateReview = jest.spyOn(ReviewsActions, 'createReview');
+
       const schema = new SchemaFixture().withMetadata().withForm().state;
       renderer = render(<CreateUpdateObjective onClose={onClose} />, { schema });
+    });
+    afterEach(() => {
+      onClose.mockRestore();
+      addMockUpdateReview.mockRestore();
+      addMockCreateReview.mockRestore();
     });
 
     it('should render CreateUpdateObjective', async () => {
@@ -90,8 +89,11 @@ describe('CreateUpdateObjective', () => {
 
   describe('CreateUpdateObjective[UPDATE] empty review state', () => {
     let renderer;
-    const onClose = jest.fn();
     beforeEach(() => {
+      onClose = jest.fn();
+      consoleErrorMock = jest.spyOn(console, 'error').mockImplementation();
+      addMockUpdateReview = jest.spyOn(ReviewsActions, 'updateReview');
+      addMockCreateReview = jest.spyOn(ReviewsActions, 'createReview');
       const schema = new SchemaFixture().withMetadata().withForm().state;
       const reviews = {
         data: [
@@ -114,6 +116,12 @@ describe('CreateUpdateObjective', () => {
         },
       };
       renderer = render(<CreateUpdateObjective onClose={onClose} editNumber={1} />, { schema, reviews });
+    });
+
+    afterEach(() => {
+      onClose.mockRestore();
+      addMockUpdateReview.mockRestore();
+      addMockCreateReview.mockRestore();
     });
 
     it('should render CreateUpdateObjective fill form and fireEvent save as draft', async () => {
