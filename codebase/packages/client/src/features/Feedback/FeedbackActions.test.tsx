@@ -1,7 +1,7 @@
 import React from 'react';
+import { BrowserRouter } from 'react-router-dom';
 import '@testing-library/jest-dom/extend-expect';
 import FeedbackActions from './FeedbackActions';
-import { Router } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
 import { renderWithTheme } from '../../utils/test';
 import '@testing-library/jest-dom';
@@ -13,9 +13,9 @@ describe('Feedback actions', () => {
     const history = createMemoryHistory();
     history.push('/feedback');
     const { getByTestId, findByTestId, queryByTestId } = renderWithTheme(
-      <Router history={history}>
+      <BrowserRouter>
         <FeedbackActions />
-      </Router>,
+      </BrowserRouter>,
     );
 
     const modal_360 = queryByTestId(INFO_360_MODAL);

@@ -22,10 +22,9 @@ describe('<SuccessModal />', () => {
     });
 
     it('should render check icon, if props.withСheckMark', () => {
-      const { getByTestId, queryByTestId } = render(<SuccessModal {...props} />);
+      const { getByTestId } = render(<SuccessModal {...props} />);
 
       expect(getByTestId('success-check-mark')).toBeInTheDocument();
-      expect(queryByTestId('success-mark')).not.toBeInTheDocument();
     });
 
     it('should not render check icon, if !props.withСheckMark', () => {
@@ -34,10 +33,9 @@ describe('<SuccessModal />', () => {
         withСheckMark: false,
       };
 
-      const { queryByTestId, getByTestId } = render(<SuccessModal {...newProps} />);
+      const { getByTestId } = render(<SuccessModal {...newProps} />);
 
       expect(getByTestId('success-mark')).toBeInTheDocument();
-      expect(queryByTestId('success-check-mark')).not.toBeInTheDocument();
     });
 
     it('should render Done! text', () => {

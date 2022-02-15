@@ -1,6 +1,6 @@
 import React from 'react';
+import { BrowserRouter } from 'react-router-dom';
 import RespondFeedbackContainer, { RESPOND_FEEDBACK_CONTAINER } from './RespondFeedbackContainer';
-import { Router } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
 import { renderWithTheme } from '../../utils/test';
 import '@testing-library/jest-dom/extend-expect';
@@ -12,9 +12,9 @@ describe('RespondFeedbackContainer', () => {
     const history = createMemoryHistory();
     history.push('/respond-feedback');
     const { getByTestId } = renderWithTheme(
-      <Router history={history}>
+      <BrowserRouter>
         <RespondFeedbackContainer />
-      </Router>,
+      </BrowserRouter>,
     );
     const mainRespondPage = getByTestId(RESPOND_FEEDBACK_CONTAINER);
     expect(mainRespondPage).toBeInTheDocument();
@@ -24,9 +24,9 @@ describe('RespondFeedbackContainer', () => {
     const history = createMemoryHistory();
     history.push('/respond-feedback');
     const { getByTestId } = renderWithTheme(
-      <Router history={history}>
+      <BrowserRouter>
         <RespondFeedbackContainer />
-      </Router>,
+      </BrowserRouter>,
     );
     const radio = getByTestId('status2');
     expect(radio).toBeInTheDocument();

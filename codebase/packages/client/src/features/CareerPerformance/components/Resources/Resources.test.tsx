@@ -1,27 +1,38 @@
 // @ts-ignore
 import React from 'react';
-import { fireEvent } from '@testing-library/react';
+import { useStyle, Rule } from '@dex-ddl/core';
 
 // @ts-ignore
 import { renderWithTheme as render } from 'utils/test';
 
 import Resources from './Resources';
 
+jest.mock('images/Contribution.jpg', () => {
+  return 'Contribution';
+});
+jest.mock('images/Check.jpg', () => {
+  return 'Check';
+});
+jest.mock('images/Feedback.jpg', () => {
+  return 'Feedback';
+});
+jest.mock('images/Learning.jpg', () => {
+  return 'Learning';
+});
+
 describe('<Resources />', () => {
   describe('#render', () => {
+    const padding: Rule = { padding: '1px' };
     const props = {
-      basicTileStyle: {},
+      basicTileStyle: padding,
     };
 
     it('should render expected components', () => {
-      const { getByTestId, getAllByText, getByText } = render(<Resources {...props} />);
+      const { getByTestId } = render(<Resources {...props} />);
 
       expect(getByTestId('personal-contribution')).toBeInTheDocument();
-      expect(getAllByText('Click here to find the Your Contribution Guide.')).toHaveLength(2);
       expect(getByTestId('personal-conversation')).toBeInTheDocument();
-      expect(getByText('Useful guidance on having great performance conversations.')).toBeInTheDocument();
       expect(getByTestId('feedback')).toBeInTheDocument();
-      expect(getByText('Learn more about giving and receiving great feedback.')).toBeInTheDocument();
       expect(getByTestId('learning')).toBeInTheDocument();
     });
   });

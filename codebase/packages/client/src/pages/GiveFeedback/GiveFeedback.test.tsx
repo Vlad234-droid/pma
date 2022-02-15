@@ -1,19 +1,16 @@
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
 import GiveFeedback from './GiveFeedback';
-import { Router } from 'react-router-dom';
-import { createMemoryHistory } from 'history';
 import { renderWithTheme } from '../../utils/test';
+import { BrowserRouter } from 'react-router-dom';
 
 import '@testing-library/jest-dom';
 
 it('FeedBack', async () => {
-  const history = createMemoryHistory();
-  history.push('/give-feedback');
   const { getByTestId } = renderWithTheme(
-    <Router history={history}>
+    <BrowserRouter>
       <GiveFeedback />
-    </Router>,
+    </BrowserRouter>,
   );
   const timeline = getByTestId('give-feedback');
 
