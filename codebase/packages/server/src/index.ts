@@ -8,7 +8,7 @@ import { getIdentityData, withReturnTo } from '@energon/onelogin';
 import { getPackageDistFolder } from './utils/package';
 import { exit } from 'process';
 // config
-import { getConfig, getEnv, isDEV, isPROD, prettify } from './config';
+import { getConfig, getEnv, isDEV, isPROD, isLocal, prettify } from './config';
 // middlewares
 import {
   authMiddleware,
@@ -104,11 +104,13 @@ if (!PROXY_API_SERVER_URL) {
         console.log('[HPM] Clear all cookies');
         proxyReq.setHeader('Cookie', '');
 
-        console.log('[HPM] Authorization: bearer-jwt-identity', identityData?.access_token);
         proxyReq.setHeader('Authorization', `Bearer ${identityData?.access_token}`);
-
-        console.log('[HPM] Authorization-App: additional-auth-jwt', oidcData?.idToken);
         proxyReq.setHeader('Authorization-App', oidcData?.idToken || '');
+
+        if (isLocal(config.buildEnvironment())) {
+          console.log('[HPM] Authorization: bearer-jwt-identity', identityData?.access_token);
+          console.log('[HPM] Authorization-App: additional-auth-jwt', oidcData?.idToken);
+        }
       };
     }
 
@@ -170,7 +172,9 @@ if (!PROXY_API_SERVER_URL) {
 
     server.disable('x-powered-by');
 
-    prettify(config);
+    if (isLocal(config.buildEnvironment())) {
+      prettify(config);
+    }
 
     server.listen(NODE_PORT, () => {
       console.log(`⚡️[server]: Server is running at http://localhost:${NODE_PORT}`);
