@@ -24,7 +24,7 @@ const Popup = (props) => {
       }}
     >
       <div className={css(main)}>
-        <div className={css(decsriptionHeader({ theme }))}>Your organisation drivers</div>
+        <div className={css(decsriptionHeader({ theme }))}>Your organisation&#39;s strategic drivers</div>
         <div className={css(templatesListStyles)}>
           {items.map((obj, idx) => {
             return obj.title && <Details key={obj.uuid} title={`Strategic driver ${idx + 1}`} description={obj.title} />
