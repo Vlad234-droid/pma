@@ -13,7 +13,7 @@ spec:
   - http:
       paths:
       # to frontend BFF
-      - path: /experience/myperformance(/|$)(.*)
+      - path: /experience/yourcontribution(/|$)(.*)
         pathType: ImplementationSpecific
         backend:
           service:
