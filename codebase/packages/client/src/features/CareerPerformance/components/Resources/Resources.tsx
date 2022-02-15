@@ -26,7 +26,9 @@ const Resources: FC<Props> = ({ basicTileStyle }) => {
           customStyle={{
             height: '100%',
           }}
-        ><div className={css(contentStyle)}>Coming soon</div></BasicTile>
+        >
+          <div className={css(contentStyle)}>Coming soon</div>
+        </BasicTile>
       </div>
       <div data-test-id='personal-conversation' className={css(basicTileStyle)} onClick={console.log}>
         <BasicTile
@@ -35,7 +37,9 @@ const Resources: FC<Props> = ({ basicTileStyle }) => {
           customStyle={{
             height: '100%',
           }}
-        ><div className={css(contentStyle)}>Coming soon</div></BasicTile>
+        >
+          <div className={css(contentStyle)}>Coming soon</div>
+        </BasicTile>
       </div>
       <div data-test-id='feedback' className={css(basicTileStyle)}>
         <BasicTile
@@ -44,7 +48,9 @@ const Resources: FC<Props> = ({ basicTileStyle }) => {
           customStyle={{
             height: '100%',
           }}
-        ><div className={css(contentStyle)}>Coming soon</div></BasicTile>
+        >
+          <div className={css(contentStyle)}>Coming soon</div>
+        </BasicTile>
       </div>
       <div data-test-id='learning' className={css(basicTileStyle)}>
         <BasicTile
@@ -53,10 +59,12 @@ const Resources: FC<Props> = ({ basicTileStyle }) => {
           customStyle={{
             height: '100%',
           }}
-        ><div className={css(contentStyle)}>Coming soon</div></BasicTile>
+        >
+          <div className={css(contentStyle)}>Coming soon</div>
+        </BasicTile>
       </div>
     </>
-  )
+  );
 };
 
 export default Resources;

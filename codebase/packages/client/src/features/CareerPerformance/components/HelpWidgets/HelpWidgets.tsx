@@ -15,10 +15,7 @@ const HelpWidgets: FC = () => {
   };
 
   return (
-    <div
-      data-test-id='help-widgets'
-      className={css(wrapperStyles)}
-    >
+    <div data-test-id='help-widgets' className={css(wrapperStyles)}>
       <div data-test-id='question-tile' className={css({ height: '100%' })}>
         <BasicTile
           img={<Icon graphic='question' />}
@@ -28,10 +25,12 @@ const HelpWidgets: FC = () => {
             ...widgetStyles,
           }}
           icon={true}
-        ><div className={css(contentStyle)}>Coming soon</div></BasicTile>
+        >
+          <div className={css(contentStyle)}>Coming soon</div>
+        </BasicTile>
       </div>
     </div>
-  )
+  );
 };
 
 export default HelpWidgets;

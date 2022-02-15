@@ -22,7 +22,9 @@ import {
   notesFolderTeamDataSelector,
   personalFolderUuidSelector,
   teamFolderUuidSelector,
+  checkPermissions,
 } from '@pma/store';
+import { role } from 'features/Permission';
 import { AllNotesFolderId, AllNotesFolderIdTEAM, filterNotesHandler } from '../../utils';
 import { PeopleTypes } from './components/TeamNotes/ModalsParts/type';
 import { useNavigate } from 'react-router-dom';
@@ -50,6 +52,8 @@ const NotesActions: FC = () => {
   const navigate = useNavigate();
   const [status, setStatus] = useState(ModalStatuses.PENDING);
 
+  const isLineManager = useSelector(checkPermissions({ roles: [role.LINE_MANAGER] }));
+
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
   const dispatch = useDispatch();
@@ -75,9 +79,6 @@ const NotesActions: FC = () => {
 
   const [selectedNoteToEdit, setSelectedNoteToEdit] = useState<NotesType | null>(null);
 
-  const [TEAM] = useState(true);
-
-  //TEAM
   const [selectedTEAMFolder, setSelectedTEAMFolder] = useState<NoteData | null>(null);
   const [searchValue, setSearchValue] = useState<string>('');
 
@@ -85,7 +86,7 @@ const NotesActions: FC = () => {
   const [selectedTEAMNoteToEdit, setSelectedTEAMNoteToEdit] = useState<NotesTypeTEAM | null>(null);
 
   const [selectedPerson, setSelectedPerson] = useState<PeopleTypes | null>(null);
-  // filter
+
   const [searchValueFilterOption, setSearchValueFilterOption] = useState('');
 
   useEffect(() => {
@@ -114,7 +115,7 @@ const NotesActions: FC = () => {
   }, [searchValueFilterOption]);
 
   useEffect(() => {
-    if (TEAM && folders !== null && notesSelect !== null) {
+    if (isLineManager && folders !== null && notesSelect !== null) {
       setFoldersWithNotesTEAM(() => notesFolderTeamData);
     }
   }, [folders, notesSelect, teamArchivedMode]);
@@ -371,7 +372,7 @@ const NotesActions: FC = () => {
           closeInfoModal={() => {
             setStatus(() => ModalStatuses.PENDING);
           }}
-          TEAM={TEAM}
+          TEAM={isLineManager}
         />
       </Modal>
     );
@@ -504,18 +505,25 @@ const NotesActions: FC = () => {
     );
   }
 
-  const confirmSelectOptions = [
-    { value: 'PersonalNote', label: ModalStatuses.PERSONAL_NOTE },
-    { value: 'PersonalFolder', label: ModalStatuses.PERSONAL_FOLDER },
-    { value: 'TeamNote', label: ModalStatuses.TEAM_NOTE },
-    { value: 'TeamFolder', label: ModalStatuses.TEAM_FOLDER },
-  ];
+  const confirmSelectOptionsHandler = () => {
+    if (!isLineManager)
+      return [
+        { value: 'PersonalNote', label: ModalStatuses.PERSONAL_NOTE },
+        { value: 'PersonalFolder', label: ModalStatuses.PERSONAL_FOLDER },
+      ];
+    return [
+      { value: 'PersonalNote', label: ModalStatuses.PERSONAL_NOTE },
+      { value: 'PersonalFolder', label: ModalStatuses.PERSONAL_FOLDER },
+      { value: 'TeamNote', label: ModalStatuses.TEAM_NOTE },
+      { value: 'TeamFolder', label: ModalStatuses.TEAM_FOLDER },
+    ];
+  };
 
   return (
     <div data-test-id={NOTES_WRAPPER}>
       {status === ModalStatuses.ADD_NEW && (
         <ConfirmModalWithSelectOptions
-          options={confirmSelectOptions}
+          options={confirmSelectOptionsHandler()}
           description='Please choose one of the options:'
           onOverlayClick={() => setStatus(() => ModalStatuses.PENDING)}
           title='Add new'
@@ -541,7 +549,7 @@ const NotesActions: FC = () => {
             <Trans>Add</Trans>
           </IconButton>
           <FilterOptions
-            TEAM={TEAM}
+            TEAM={isLineManager}
             searchValueFilterOption={searchValueFilterOption}
             setSearchValueFilterOption={setSearchValueFilterOption}
             openInfoModal={() => {
@@ -553,7 +561,7 @@ const NotesActions: FC = () => {
         <MainFolders
           setSelectedFolder={setSelectedFolder}
           selectedFolder={selectedFolder}
-          TEAM={TEAM}
+          TEAM={isLineManager}
           selectedTEAMFolder={selectedTEAMFolder}
           setSelectedTEAMFolder={setSelectedTEAMFolder}
           foldersWithNotes={foldersWithNotes}

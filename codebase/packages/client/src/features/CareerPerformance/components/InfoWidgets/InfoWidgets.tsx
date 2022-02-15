@@ -13,7 +13,7 @@ type Props = {
   statuses: Status[];
   descriptions: string[];
   startDates: string[];
-}
+};
 
 const InfoWidgets: FC<Props> = ({ showMyReview = false, statuses, descriptions, startDates }) => {
   const { css } = useStyle();

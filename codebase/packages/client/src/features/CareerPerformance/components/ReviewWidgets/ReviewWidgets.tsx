@@ -12,9 +12,15 @@ type Props = {
   basicTileStyle: Rule;
   midYearReview: Review;
   endYearReview: Review;
-}
+};
 
-const ReviewWidgets: FC<Props> = ({ showMyReview = false, showAnnualReview = false, basicTileStyle, midYearReview, endYearReview }) => {
+const ReviewWidgets: FC<Props> = ({
+  showMyReview = false,
+  showAnnualReview = false,
+  basicTileStyle,
+  midYearReview,
+  endYearReview,
+}) => {
   const { css } = useStyle();
 
   return (

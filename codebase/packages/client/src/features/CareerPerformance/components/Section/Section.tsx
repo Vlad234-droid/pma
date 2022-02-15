@@ -11,14 +11,10 @@ const Section: FC<Props> = ({ title, children }) => {
 
   return (
     <section data-test-id='section' className={css(wrapperStyles)}>
-      <div className={css(titleStyles)}>
-        {title}
-      </div>
-      <div className={css(contentStyles)}>
-        {children}
-      </div>
+      <div className={css(titleStyles)}>{title}</div>
+      <div className={css(contentStyles)}>{children}</div>
     </section>
-  )
+  );
 };
 
 export default Section;

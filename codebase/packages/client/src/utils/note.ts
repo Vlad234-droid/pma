@@ -202,4 +202,4 @@ export const getNotesFolderTitle = (folderUuid: string, foldersList: Array<any>)
   const folderTitle = folder ? folder.title : 'All notes';
 
   return folderTitle;
-}
+};

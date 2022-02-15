@@ -14,7 +14,7 @@ const Popup = (props) => {
 
   return (
     <ModalWithHeader
-      containerRule={templatesModalWindowStyles({mobileScreen})}
+      containerRule={templatesModalWindowStyles({ mobileScreen })}
       title='Strategic drivers'
       modalPosition='middle'
       closeOptions={{
@@ -27,7 +27,9 @@ const Popup = (props) => {
         <div className={css(decsriptionHeader({ theme }))}>Your organisation&#39;s strategic drivers</div>
         <div className={css(templatesListStyles)}>
           {items.map((obj, idx) => {
-            return obj.title && <Details key={obj.uuid} title={`Strategic driver ${idx + 1}`} description={obj.title} />
+            return (
+              obj.title && <Details key={obj.uuid} title={`Strategic driver ${idx + 1}`} description={obj.title} />
+            );
           })}
         </div>
       </div>
@@ -47,7 +49,7 @@ const templatesListStyles: Rule = () => ({
   height: '100%',
 });
 
-const templatesModalWindowStyles: CreateRule<{mobileScreen}> = ({mobileScreen}) => {
+const templatesModalWindowStyles: CreateRule<{ mobileScreen }> = ({ mobileScreen }) => {
   return {
     width: mobileScreen ? '100%' : '60%',
     padding: '0',

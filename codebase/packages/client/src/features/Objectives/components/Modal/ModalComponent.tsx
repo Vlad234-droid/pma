@@ -14,15 +14,15 @@ export const ModalComponent: FC<ModalComponentProps> = ({ onClose, title, childr
     <Modal
       modalPosition={'middle'}
       overlayColor={'tescoBlue'}
-      modalContainerRule={[containerRule({mobileScreen})]}
+      modalContainerRule={[containerRule({ mobileScreen })]}
       closeOptions={{
         content: <Icon graphic='cancel' invertColors={true} />,
         onClose,
-        styles: [modalCloseOptionStyle({mobileScreen})],
+        styles: [modalCloseOptionStyle({ mobileScreen })],
       }}
       title={{
         content: title,
-        styles: [modalTitleOptionStyle({mobileScreen})],
+        styles: [modalTitleOptionStyle({ mobileScreen })],
       }}
     >
       {children}
@@ -73,13 +73,14 @@ const modalTitleOptionStyle: CreateRule<{ mobileScreen }> = (props) => {
     left: 0,
     right: 0,
     color: 'white',
-    ...(mobileScreen ?
-      {
-        fontSize: `${theme.font.fixed.f20.fontSize}`,
-        lineHeight: `${theme.font.fluid.f24.lineHeight}`,
-      } : {
-        fontSize: `${theme.font.fixed.f24.fontSize}`,
-        lineHeight: `${theme.font.fluid.f28.lineHeight}`,
-    }),
+    ...(mobileScreen
+      ? {
+          fontSize: `${theme.font.fixed.f20.fontSize}`,
+          lineHeight: `${theme.font.fluid.f24.lineHeight}`,
+        }
+      : {
+          fontSize: `${theme.font.fixed.f24.fontSize}`,
+          lineHeight: `${theme.font.fluid.f28.lineHeight}`,
+        }),
   };
 };

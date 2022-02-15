@@ -58,7 +58,7 @@ const iconStyles: Rule = {
   display: 'block',
 };
 
-const labelStyles: CreateRule<{ color: string, theme: Theme }> =
+const labelStyles: CreateRule<{ color: string; theme: Theme }> =
   ({ color, theme }) =>
   () => ({
     fontSize: `${theme.font.fixed.f14.fontSize}`,
@@ -66,6 +66,6 @@ const labelStyles: CreateRule<{ color: string, theme: Theme }> =
     fontWeight: `${theme.font.weight.bold}`,
     display: 'block',
     color,
-});
+  });
 
 export default StatusBadge;

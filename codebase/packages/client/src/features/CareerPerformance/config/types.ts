@@ -13,6 +13,6 @@ export type Review = {
   type: TimelineType;
   uuid: string;
   properties: {
-    mapJson: Record<string, string>,
-  }
+    mapJson: Record<string, string>;
+  };
 };

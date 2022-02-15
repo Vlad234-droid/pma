@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { CreateRule, ModalWithHeader, Rule, useBreakpoints, useStyle } from '@dex-ddl/core';
-import { useNavigate , useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Icon } from '../../../../components/Icon';
 import usePDPShema from '../../hooks/usePDPShema';
 import { useDispatch, useSelector } from 'react-redux';

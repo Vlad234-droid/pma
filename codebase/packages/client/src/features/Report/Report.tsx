@@ -13,7 +13,7 @@ import { PieChart } from 'components/PieChart';
 import { View } from 'components/PieChart/PieChart';
 import { GenericItemField } from 'components/GenericForm';
 import { Item, Select } from 'components/Form';
-import { createYearSchema , field_options, years, listOfStatuses } from './config';
+import { createYearSchema, field_options, years, listOfStatuses } from './config';
 import FilterModal from './components/FilterModal';
 import InfoTable from './components/InfoTable';
 import { DonwloadReportModal } from './Modals';

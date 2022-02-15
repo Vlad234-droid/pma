@@ -105,7 +105,7 @@ const wrapperStyles: Rule = {
   justifyContent: 'space-between',
 };
 
-const headerStyles: CreateRule<{ mobileScreen; onBack, theme: Theme }> = ({ mobileScreen, onBack, theme }) => ({
+const headerStyles: CreateRule<{ mobileScreen; onBack; theme: Theme }> = ({ mobileScreen, onBack, theme }) => ({
   lineHeight: '1.2',
   fontSize: '24px',
   display: 'flex',

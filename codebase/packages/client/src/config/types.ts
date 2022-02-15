@@ -40,6 +40,6 @@ export type TimelineTypes = {
   [ReviewType.EYR]: boolean;
   [ReviewType.MYR]: boolean;
   [ReviewType.OBJECTIVE]: boolean;
-}
+};
 
 export { ReviewType, Status, TimelineType };
