@@ -33,8 +33,6 @@ import { ConfirmModalWithSelectOptions } from '../Modal';
 
 export const NOTES_WRAPPER = 'note_wrapper';
 export const ADD_NEW = 'ADD_NEW';
-export const MODAL_BUTTONS = 'modal_buttons';
-export const PLUS_PERSONAL_NOTE = 'plus_personal_note';
 export const CONFIRM_MODAL_ID = 'CONFIRM_MODAL_ID';
 
 enum ModalStatuses {
