@@ -1,8 +1,9 @@
 import React, { FC, useEffect } from 'react';
-import { useStyle, Rule, useBreakpoints, Modal, Button, Icon, theme } from '@dex-ddl/core';
-import { TipsProps } from '../types';
 import { useDispatch, useSelector } from 'react-redux';
 import { tipsActions, getTipHistorySelector } from '@pma/store';
+import { useStyle, Rule, CreateRule, Theme, useBreakpoints, Modal, Button, Icon } from '@dex-ddl/core';
+import { TipsProps } from '../types';
+import { formatDateStringFromISO, DATE_TIME_STRING_FORMAT } from 'utils/date';
 
 export type ViewHistoryModal = {
   handleCloseModal: () => void;
@@ -10,30 +11,27 @@ export type ViewHistoryModal = {
 };
 
 const ViewHistoryModal: FC<ViewHistoryModal> = ({ handleCloseModal, card }) => {
-  const { css } = useStyle();
+  const { css, theme } = useStyle();
   const dispatch = useDispatch();
+  const [, isBreakpoint] = useBreakpoints();
+  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
   const tipHistory = useSelector(getTipHistorySelector);
 
   useEffect(() => {
     dispatch(tipsActions.getTipHistory(card.uuid));
   }, []);
 
-  //TODO: remove border from last item;
   return (
-    <Modal modalPosition='middle' modalContainerRule={[modalWrapper]}>
-      <div className={css(vhTitleStyle)}>Activity History</div>
-      <div className={css(vhSubTitleStyle)}>For tip: {card.title}</div>
+    <Modal modalPosition='middle' modalContainerRule={[modalWrapper({mobileScreen})]}>
+      <div className={css(vhTitleStyle({mobileScreen, theme}))}>Activity History</div>
+      <div className={css(vhSubTitleStyle({mobileScreen, theme}))}>For tip: {card.title}</div>
       <div className={css(vhItemsWrap)}>
-        {tipHistory?.map((item) => {
-          const date = new Date(item.updatedTime);
-          const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-          const minutes = date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes();
-          const titleDate = `${date.getDate()} ${
-            months[date.getMonth()]
-          } ${date.getFullYear()} ${date.getHours()}:${minutes}`;
+        {tipHistory?.map((item, idx) => {
+          const titleDate = formatDateStringFromISO(item.updatedTime, DATE_TIME_STRING_FORMAT);
+          const isLastItem: boolean = idx === tipHistory.length - 1 ? true : false;
 
           return (
-            <div key={item.uuid} className={css(vhItemStyle)}>
+            <div key={item.uuid} className={css(vhItemStyle({isLastItem, theme}))}>
               <div>
                 <div className={css(vhItemTitle)}>
                   <Icon
@@ -57,7 +55,7 @@ const ViewHistoryModal: FC<ViewHistoryModal> = ({ handleCloseModal, card }) => {
           );
         })}
       </div>
-      <Button onPress={handleCloseModal} styles={[{ width: '145px', margin: 'auto auto 0', fontWeight: 700 }]}>
+      <Button onPress={handleCloseModal} styles={[modalBtnStyles]}>
         Okay
       </Button>
     </Modal>
@@ -66,9 +64,7 @@ const ViewHistoryModal: FC<ViewHistoryModal> = ({ handleCloseModal, card }) => {
 
 //vh - View History
 
-const modalWrapper: Rule = () => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.medium || isBreakpoint.small || isBreakpoint.xSmall;
+const modalWrapper: CreateRule<{mobileScreen: boolean}> = ({mobileScreen}) => {
   return {
     padding: mobileScreen ? '24px 30px' : '24px 38px',
     maxWidth: '500px',
@@ -82,24 +78,32 @@ const modalWrapper: Rule = () => {
   };
 };
 
-const vhTitleStyle: Rule = () => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.medium || isBreakpoint.small || isBreakpoint.xSmall;
+const vhTitleStyle: CreateRule<{mobileScreen: boolean; theme: Theme}> = ({mobileScreen, theme}) => {
   return {
-    fontSize: mobileScreen ? '18px' : '20px',
-    lineHeight: mobileScreen ? '22px' : '24px',
-    fontWeight: 700,
+    fontWeight: theme.font.weight.bold,
     marginBottom: '8px',
+    ...(mobileScreen 
+      ? {
+          fontSize: theme.font.fixed.f18.fontSize,
+          lineHeight: theme.font.fixed.f18.lineHeight,
+        } : {
+          fontSize: theme.font.fixed.f20.fontSize,
+          lineHeight: theme.font.fixed.f20.lineHeight,
+        })
   };
 };
 
-const vhSubTitleStyle: Rule = () => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.medium || isBreakpoint.small || isBreakpoint.xSmall;
+const vhSubTitleStyle: CreateRule<{mobileScreen: boolean; theme: Theme}> = ({mobileScreen, theme}) => {
   return {
-    fontSize: mobileScreen ? '14px' : '16px',
-    lineHeight: mobileScreen ? '18px' : '20px',
     marginBottom: '20px',
+    ...(mobileScreen 
+      ? {
+          fontSize: theme.font.fixed.f14.fontSize,
+          lineHeight: theme.font.fixed.f14.lineHeight,
+        } : {
+          fontSize: theme.font.fixed.f16.fontSize,
+          lineHeight: theme.font.fixed.f16.lineHeight,
+        })
   };
 };
 
@@ -113,21 +117,21 @@ const vhItemsWrap: Rule = () => {
   };
 };
 
-const vhItemStyle: Rule = ({ theme }) => {
+const vhItemStyle: CreateRule<{isLastItem: boolean; theme: Theme}> = ({isLastItem, theme}) => {
   return {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
     padding: '15px 0',
-    borderBottom: `1px solid ${theme.colors.backgroundDarkest}`,
+    borderBottom: !isLastItem ? `1px solid ${theme.colors.backgroundDarkest}` : '',
   };
 };
 
-const vhItemTitle: Rule = ({ theme }) => {
+const vhItemTitle: Rule = ({theme}) => {
   return {
-    fontSize: '14px',
-    lineHeight: '18px',
-    fontWeight: 700,
+    fontSize: theme.font.fixed.f14.fontSize,
+    lineHeight: theme.font.fixed.f14.lineHeight,
+    fontWeight: theme.font.weight.bold,
     color: theme.colors.tescoBlue,
     marginBottom: '8px',
     display: 'flex',
@@ -135,17 +139,17 @@ const vhItemTitle: Rule = ({ theme }) => {
   };
 };
 
-const vhItemSubtitle: Rule = () => {
+const vhItemSubtitle: Rule = ({theme}) => {
   return {
-    fontSize: '14px',
-    lineHeight: '18px',
+    fontSize: theme.font.fixed.f14.fontSize,
+    lineHeight: theme.font.fixed.f14.lineHeight,
   };
 };
 
-const vhItemStatus: Rule = ({ theme }) => {
+const vhItemStatus: Rule = ({theme}) => {
   return {
-    fontSize: '14px',
-    lineHeight: '18px',
+    fontSize: theme.font.fixed.f14.fontSize,
+    lineHeight: theme.font.fixed.f14.lineHeight,
     padding: '6px 12px',
     borderRadius: '50px',
     backgroundColor: theme.colors.backgroundDark,
@@ -154,5 +158,15 @@ const vhItemStatus: Rule = ({ theme }) => {
     alignItems: 'center',
   };
 };
+
+const modalBtnStyles: Rule = ({theme}) => {
+  return {
+    width: '145px',
+    margin: 'auto auto 0',
+    fontSize: theme.font.fixed.f16.fontSize,
+    lineHeight: theme.font.fixed.f16.lineHeight,
+    fontWeight: theme.font.weight.bold,
+  }
+}
 
 export default ViewHistoryModal;

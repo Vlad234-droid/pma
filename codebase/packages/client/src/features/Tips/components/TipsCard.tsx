@@ -1,33 +1,34 @@
 import React, { FC, Fragment, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Rule, theme, useBreakpoints, useStyle } from '@dex-ddl/core';
-import { TileWrapper } from 'components/Tile';
+import { useDispatch } from 'react-redux';
+import { Button, Rule, CreateRule, Theme, useBreakpoints, useStyle } from '@dex-ddl/core';
+import { tipsActions } from '@pma/store';
 import { Page } from 'pages';
-import { paramsReplacer } from 'utils';
 import { buildPath } from 'features/Routes/utils';
+import { paramsReplacer } from 'utils';
+import { formatDateStringFromISO } from 'utils/date';
 import { TipsProps } from '../types';
 import { PushTipModal, ViewHistoryModal } from '.';
-import { tipsActions } from '@pma/store';
-import { useDispatch } from 'react-redux';
+import { TileWrapper } from 'components/Tile';
+import tipCardImage from 'images/tipCard.png';
 
 export type TipsCardProps = {
   card: TipsProps;
 };
 
 const TipsCard: FC<TipsCardProps> = ({ card }) => {
-  const { css } = useStyle();
+  const { css, theme } = useStyle();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [, isBreakpoint] = useBreakpoints();
+  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
 
   const handleEditTip = () => {
     const pathname = paramsReplacer(buildPath(`${Page.EDIT_TIP}`), { ':tipUuid': card.uuid });
     navigate(pathname);
   };
 
-  const date = new Date(card.updatedTime);
-  const pushedTime = `${date.getDate()}/${
-    date.getMonth() + 1
-  }/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`;
+  const tipPushedTime = formatDateStringFromISO(card.updatedTime, 'dd/MM/yyyy HH:mm');
 
   const [isShowViewHistoryModal, setShowViewHistoryModal] = useState(false);
   const [isShowPushModal, setShowPushModal] = useState(false);
@@ -54,23 +55,23 @@ const TipsCard: FC<TipsCardProps> = ({ card }) => {
 
   return (
     <Fragment>
-      <div className={css(cardWrapper)}>
-        <TileWrapper customStyle={cardStyle}>
-          <div>
-            <div className={css(tipImage, { backgroundImage: `url(${card.imageLink})` })} />
+      <div className={css(cardWrapper({mobileScreen}))}>
+        <TileWrapper customStyle={cardStyle({mobileScreen})}>
+          <div className={css(tipImageWrapStyle({mobileScreen}))}>
+            <div className={css(tipImage, { backgroundImage: `url(${tipCardImage})` })} />
           </div>
-          <div className={css(tipInfoWrap)}>
-            <div className={css(tipTitle)}>{card.title}</div>
-            <div className={css(tipText)}>{card.description}</div>
+          <div className={css(tipInfoWrap({mobileScreen}))}>
+            <div className={css(tipTitle({mobileScreen, theme}))}>{card.title}</div>
+            <div className={css(tipText({mobileScreen, theme}))}>{card.description}</div>
             <div className={css({ marginTop: '8px', display: 'flex' })}>
-              <div className={css(lastPushStyle)}>Last push: {card.published ? pushedTime : 'was not pushed'}</div>
-              <div className={css(viewHistoryStyle)} onClick={handleShowViewHistoryModal}>
+              <div className={css(lastPushStyle({mobileScreen, theme}))}>Last push: {card.published ? tipPushedTime : 'was not pushed'}</div>
+              <div className={css(viewHistoryStyle({mobileScreen, theme}))} onClick={handleShowViewHistoryModal}>
                 View history
               </div>
             </div>
           </div>
-          <div className={css(cardRightBlock)}>
-            <div className={css(targetStyle)}>
+          <div className={css(cardRightBlock({mobileScreen}))}>
+            <div className={css(targetStyle({mobileScreen, theme}))}>
               <span className={css({ color: theme.colors.tescoBlue })}>Target:</span> {card.targetOrganisation.name}
             </div>
             <div className={css(cardControls)}>
@@ -93,17 +94,13 @@ const TipsCard: FC<TipsCardProps> = ({ card }) => {
   );
 };
 
-const cardWrapper: Rule = () => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.medium || isBreakpoint.small || isBreakpoint.xSmall;
+const cardWrapper: CreateRule<{mobileScreen: boolean}> = ({mobileScreen}) => {
   return {
     padding: mobileScreen ? '0 8px' : 0,
   };
 };
 
-const cardStyle: Rule = () => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.medium || isBreakpoint.small || isBreakpoint.xSmall;
+const cardStyle: CreateRule<{mobileScreen: boolean}> = ({mobileScreen}) => {
   return {
     padding: mobileScreen ? '16px' : '24px',
     width: mobileScreen ? '100%' : '80%',
@@ -113,92 +110,126 @@ const cardStyle: Rule = () => {
   };
 };
 
-const tipInfoWrap: Rule = () => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.medium || isBreakpoint.small || isBreakpoint.xSmall;
+const tipInfoWrap: CreateRule<{mobileScreen: boolean}> = ({mobileScreen}) => {
   return {
     maxWidth: mobileScreen ? '300px' : 'auto',
   };
 };
 
+const tipImageWrapStyle: CreateRule<{mobileScreen: boolean}> = ({mobileScreen}) => {
+  return {
+    marginRight: mobileScreen ? '15px': '24px',
+    marginBottom: '10px',
+  }
+}
+
 const tipImage: Rule = () => {
   return {
     width: '48px',
     height: '48px',
-    marginRight: '24px',
     backgroundPosition: 'center center',
     backgroundSize: '48px auto',
     backgroundRepeat: 'no-repeat',
   };
 };
 
-const tipTitle: Rule = ({ theme }) => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+const tipTitle: CreateRule<{mobileScreen: boolean; theme: Theme}> = ({mobileScreen, theme}) => {
   return {
     fontWeight: 700,
-    fontSize: mobileScreen ? '16px' : '18px',
-    lineHeight: mobileScreen ? '20px' : '22px',
     color: theme.colors.tescoBlue,
+    ...(mobileScreen
+      ? {
+          fontSize: theme.font.fixed.f16.fontSize,
+          lineHeight: theme.font.fixed.f16.lineHeight
+        } : {
+          fontSize: theme.font.fixed.f18.fontSize,
+          lineHeight: theme.font.fixed.f18.lineHeight
+        })
   };
 };
 
-const tipText: Rule = () => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+const tipText: CreateRule<{mobileScreen: boolean; theme: Theme}> = ({mobileScreen, theme}) => {
   return {
-    lineHeight: mobileScreen ? '18px' : '20px',
-    fontSize: mobileScreen ? '14px' : '16px',
-    maxWidth: mobileScreen ? 'auto' : '400px',
     marginTop: '5px',
+    ...(mobileScreen
+      ? {
+          fontSize: theme.font.fixed.f14.fontSize,
+          lineHeight: theme.font.fixed.f14.lineHeight,
+          maxWidth: 'auto',
+        } : {
+          fontSize: theme.font.fixed.f16.fontSize,
+          lineHeight: theme.font.fixed.f16.lineHeight,
+          maxWidth: '400px',
+        })
   };
 };
 
-const lastPushStyle: Rule = () => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+const lastPushStyle: CreateRule<{mobileScreen: boolean; theme: Theme}> = ({mobileScreen, theme}) => {
   return {
-    lineHeight: mobileScreen ? '16px' : '18px',
-    fontSize: mobileScreen ? '12px' : '14px',
     color: '#666',
     ':after': {
       content: '"•"',
       margin: '0 7px 0',
     },
+    ...(mobileScreen
+      ? {
+          fontSize: theme.font.fixed.f12.fontSize,
+          lineHeight: theme.font.fixed.f12.lineHeight
+        } : {
+          fontSize: theme.font.fixed.f14.fontSize,
+          lineHeight: theme.font.fixed.f14.lineHeight
+        })
   };
 };
 
-const targetStyle: Rule = () => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+const targetStyle: CreateRule<{mobileScreen: boolean; theme: Theme}> = ({mobileScreen, theme}) => {
   return {
-    fontSize: mobileScreen ? '14px' : '16px',
-    lineHeight: mobileScreen ? '18px' : '20px',
+    ...(mobileScreen
+      ? {
+          fontSize: theme.font.fixed.f14.fontSize,
+          lineHeight: theme.font.fixed.f14.lineHeight,
+          maxWidth: 'auto',
+        } : {
+          fontSize: theme.font.fixed.f16.fontSize,
+          lineHeight: theme.font.fixed.f16.lineHeight,
+          maxWidth: '400px',
+        })
   };
 };
 
-const viewHistoryStyle: Rule = ({ theme }) => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+const viewHistoryStyle: CreateRule<{mobileScreen: boolean; theme: Theme}> = ({mobileScreen, theme}) => {
   return {
-    lineHeight: mobileScreen ? '16px' : '18px',
-    fontSize: mobileScreen ? '12px' : '14px',
     color: theme.colors.tescoBlue,
     cursor: 'pointer',
+    ...(mobileScreen
+      ? {
+          fontSize: theme.font.fixed.f12.fontSize,
+          lineHeight: theme.font.fixed.f12.lineHeight
+        } : {
+          fontSize: theme.font.fixed.f14.fontSize,
+          lineHeight: theme.font.fixed.f14.lineHeight
+        })
   };
 };
 
-const cardRightBlock: Rule = () => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+const cardRightBlock: CreateRule<{mobileScreen: boolean}> = ({mobileScreen}) => {
   return {
     display: 'flex',
-    flexDirection: mobileScreen ? 'row' : 'column',
     marginLeft: 'auto',
-    marginTop: mobileScreen ? '15px' : 0,
-    width: mobileScreen ? '100%' : 'auto',
-    alignItems: mobileScreen ? 'center' : 'flex-end',
-    justifyContent: mobileScreen ? 'space-between' : 'unset',
+    ...(mobileScreen
+      ? {
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          marginTop:'15px',
+          width: '100%',
+        } : {
+          flexDirection: 'column',
+          alignItems: 'flex-end',
+          justifyContent: 'unset',
+          marginTop: 0,
+          width: 'auto',
+        })
   };
 };
 
@@ -209,15 +240,15 @@ const cardControls: Rule = () => {
   };
 };
 
-const cardButton: Rule = () => {
+const cardButton: Rule = ({theme}) => {
   return {
-    fontSize: '14px',
+    fontSize: theme.font.fixed.f14.fontSize,
+    lineHeight: theme.font.fixed.f14.lineHeight,
     padding: '7px 16px',
-    lineHeight: '18px',
     height: 'auto',
     border: `1px solid ${theme.colors.tescoBlue}`,
     marginLeft: '10px',
-    fontWeight: 'bold',
+    fontWeight: theme.font.weight.bold,
   };
 };
 

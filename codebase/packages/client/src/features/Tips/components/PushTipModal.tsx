@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { useStyle, Rule, Modal, Button, theme } from '@dex-ddl/core';
+import { useStyle, Rule, Modal, Button } from '@dex-ddl/core';
 import { TipsProps } from '../types';
 import success from 'images/success.jpg';
 
@@ -10,14 +10,13 @@ export type PushTipModalProps = {
 };
 
 const PushTipModal: FC<PushTipModalProps> = ({ card, handleCloseModal, handleConfirm }) => {
-  const { css } = useStyle();
+  const { css, theme } = useStyle();
 
   const [successText, showSuccessText] = useState(false);
 
   const handlePushTip = () => {
     handleConfirm();
     showSuccessText(true);
-    console.log('Tip is pushed!');
   };
 
   return (
@@ -77,27 +76,27 @@ const modalWrapper: Rule = () => {
   };
 };
 
-const modalTitle: Rule = () => {
+const modalTitle: Rule = ({theme}) => {
   return {
-    fontSize: '20px',
-    lineHeight: '24px',
-    fontWeight: 700,
+    fontSize: theme.font.fixed.f20.fontSize,
+    lineHeight: theme.font.fixed.f20.lineHeight,
+    fontWeight: theme.font.weight.bold,
     marginBottom: '8px',
   };
 };
 
-const modalSubTitleStyle: Rule = () => {
+const modalSubTitleStyle: Rule = ({theme}) => {
   return {
-    fontSize: '16px',
-    lineHeight: '20px',
+    fontSize: theme.font.fixed.f16.fontSize,
+    lineHeight: theme.font.fixed.f16.lineHeight,
     marginBottom: '20px',
   };
 };
 
-const modalText: Rule = () => {
+const modalText: Rule = ({theme}) => {
   return {
-    fontSize: '16px',
-    lineHeight: '20px',
+    fontSize: theme.font.fixed.f16.fontSize,
+    lineHeight: theme.font.fixed.f16.lineHeight,
     marginBottom: '5px',
   };
 };
@@ -111,9 +110,9 @@ const modalBtnsWrap: Rule = () => {
   };
 };
 
-const modalBtn: Rule = () => {
+const modalBtn: Rule = ({theme}) => {
   return {
-    fontWeight: 700,
+    fontWeight: theme.font.weight.bold,
     width: '50%',
     margin: '0 5px',
     height: 'auto',
