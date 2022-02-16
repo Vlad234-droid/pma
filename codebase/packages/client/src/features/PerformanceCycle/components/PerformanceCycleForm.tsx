@@ -11,25 +11,25 @@ import {
   PerformanceCycleActions,
   ProcessTemplateActions,
 } from '@pma/store';
-import { Trans, useTranslation } from 'components/Translation';
 import { configEntriesMetaSelector, configEntriesSelector } from '@pma/store/src/selectors/config-entries';
 import {
   getFormsByProcessTemplateUuidSelector,
   getProcessTemplateByUuidSelector,
 } from '@pma/store/src/selectors/processTemplate';
-import useDispatch from 'hooks/useDispatch';
 import {
   getConfigEntriesByPerformanceCycle,
   getFormsByPerformanceCycleUuidSelector,
 } from '@pma/store/src/selectors/performance-cycle';
+import { ObjectiveModal } from 'features/Objectives/components/ObjectiveModal/ObjectiveModal';
+import useDispatch from 'hooks/useDispatch';
+import { Trans, useTranslation } from 'components/Translation';
 import { TileWrapper } from 'components/Tile';
 import { GenericItemField } from 'components/GenericForm';
 import { Input, Item, Radio, Select } from 'components/Form';
+import { DurationPicker } from 'components/Form/DurationPicker';
 import { Page } from 'pages';
-import { ObjectiveModal } from 'features/Objectives/components/ObjectiveModal/ObjectiveModal';
 import TemplatesModal from './TemplatesModal';
 import { createPMCycleSchema } from './schema';
-import { DurationPicker } from '../../../components/Form/DurationPicker';
 
 function getChildren(data, options11: any, key, value) {
   return data
@@ -596,19 +596,18 @@ export const PerformanceCycleForm: FC = () => {
   );
 };
 
-const btnStyle: Rule = ({ theme }) => ({
+const btnStyle: Rule = {
   fontSize: '16px',
   border: '1px solid rgb(0, 83, 159)',
   minWidth: '200px',
   marginLeft: '8px',
-});
+};
 
-// @ts-ignore
-const item: Rule = ({ theme }) => ({
+const item: Rule = {
   fontStyle: 'normal',
   fontSize: '16px',
   lineHeight: '24px',
-});
+};
 
 const container: Rule = () => ({
   flexWrap: 'wrap',
