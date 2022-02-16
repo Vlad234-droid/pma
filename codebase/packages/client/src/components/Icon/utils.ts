@@ -1,8 +1,8 @@
-import {Colors, Theme} from '@dex-ddl/core';
+import { Colors, Theme } from '@dex-ddl/core';
 
 import { IconColors } from './graphics/types';
-import {Graphics} from "./graphics";
-import {Status} from "../../config/enum";
+import { Graphics } from './graphics';
+import { Status } from 'config/enum';
 
 export const invertColor = (color: IconColors, shouldInvert: boolean, { colors: { white, link } }: Theme) => {
   if (!shouldInvert) return color;
