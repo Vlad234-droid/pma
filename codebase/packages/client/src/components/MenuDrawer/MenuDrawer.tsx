@@ -50,7 +50,11 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
           </div>
           <div className={css(menuDrawerTitleStyle)}>Your Contribution</div>
           <div className={css(menuDrawerButtonsStyle)}>
-            <MenuItem iconGraphic={'home'} linkTo={buildPath(Page.CONTRIBUTION)} title={'Your contribution'} />
+            <MenuItem
+              iconGraphic={'home'}
+              linkTo={buildPath(Page.CONTRIBUTION)}
+              title={t('your_contribution', 'Your contribution')}
+            />
             <MenuItem
               iconGraphic={'aim'}
               linkTo={buildPath(Page.OBJECTIVES_VIEW)}
@@ -62,16 +66,22 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
                 <MenuItem
                   iconGraphic={'list'}
                   linkTo={buildPath(Page.PERSONAL_DEVELOPMENT_PLAN)}
-                  title={'Personal Development Plan'}
+                  title={t('personal_development_plan', 'Personal Development Plan')}
                 />
               )}
             />
-            <MenuItem iconGraphic={'edit'} linkTo={buildPath(Page.NOTES)} title={'My notes'} />
-            <MenuItem iconGraphic={'account'} linkTo={buildPath(Page.PROFILE)} title={'My profile'} />
-            <MenuItem iconGraphic={'chatSq'} linkTo={buildPath(Page.FEEDBACK)} title={'Feedback'} />
+            <MenuItem iconGraphic={'edit'} linkTo={buildPath(Page.NOTES)} title={t('my_notes', 'My notes')} />
+            <MenuItem iconGraphic={'account'} linkTo={buildPath(Page.PROFILE)} title={t('my_profile', 'My profile')} />
+            <MenuItem iconGraphic={'chatSq'} linkTo={buildPath(Page.FEEDBACK)} title={t('feedback', 'Feedback')} />
             <CanPerform
               perform={[role.TALENT_ADMIN, role.ADMIN]}
-              yes={() => <MenuItem iconGraphic={'team'} linkTo={buildPath(Page.REPORT)} title={'Team reporting'} />}
+              yes={() => (
+                <MenuItem
+                  iconGraphic={'team'}
+                  linkTo={buildPath(Page.REPORT)}
+                  title={t('team_reporting', 'Team reporting')}
+                />
+              )}
             />
           </div>
         </div>
@@ -102,7 +112,9 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
                           className={css(itemSettingsStyle, itemSettingsBorderStyle)}
                         >
                           <Icon graphic={'createCycle'} />
-                          <span className={css(itemSettingsTextStyle)}>Create performance cycle</span>
+                          <span className={css(itemSettingsTextStyle)}>
+                            {t('create_performance_cycle', 'Create performance cycle')}
+                          </span>
                         </Link>
                       )}
                     />
@@ -115,14 +127,16 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
                             className={css(itemSettingsStyle, itemSettingsBorderStyle)}
                           >
                             <Icon graphic={'configuration'} />
-                            <span className={css(itemSettingsTextStyle)}>Configurations</span>
+                            <span className={css(itemSettingsTextStyle)}>{t('configurations', 'Configurations')}</span>
                           </Link>
                           <Link
                             to={buildPath(Page.CREATE_STRATEGIC_DRIVERS)}
                             className={css(itemSettingsStyle, itemSettingsBorderStyle)}
                           >
                             <Icon graphic={'strategicDriver'} />
-                            <span className={css(itemSettingsTextStyle)}>Strategic drivers</span>
+                            <span className={css(itemSettingsTextStyle)}>
+                              {t('strategic_drivers', 'Strategic drivers')}
+                            </span>
                           </Link>
                         </>
                       )}
@@ -132,7 +146,7 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
                       yes={() => (
                         <Link to={buildPath(Page.TIPS)} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
                           <Icon graphic={'tip'} />
-                          <span className={css(itemSettingsTextStyle)}>Tips</span>
+                          <span className={css(itemSettingsTextStyle)}>{t('tips', 'Tips')}</span>
                         </Link>
                       )}
                     />
@@ -141,11 +155,11 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
                 <div className={css(itemSettingsBorderStyle, { marginLeft: '20px' })} />
                 <Link to={buildPath(Page.SETTINGS)} className={css(itemSettingsStyle)}>
                   <Icon graphic={'settingsGear'} />
-                  <span className={css(itemSettingsTextStyle)}>Settings</span>
+                  <span className={css(itemSettingsTextStyle)}>{t('settings', 'Settings')}</span>
                 </Link>
                 <Link to={''} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
                   <Icon graphic={'question'} />
-                  <span className={css(itemSettingsTextStyle)}>{`Help and FAQs`}</span>
+                  <span className={css(itemSettingsTextStyle)}>{t('faqs', 'Help and FAQs')}</span>
                 </Link>
                 <a
                   href={LINKS.signOut}
