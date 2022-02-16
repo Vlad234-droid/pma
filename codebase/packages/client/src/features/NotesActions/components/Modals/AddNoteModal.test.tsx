@@ -1,26 +1,35 @@
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
-import { renderWithTheme } from '../../../../utils/test';
+import { renderWithTheme as render } from '../../../../utils/test';
 import '@testing-library/jest-dom';
 import { fireEvent, waitFor } from '@testing-library/react';
+import { BrowserRouter } from 'react-router-dom';
 import { ADD_NOTE_MODAL_WRAPPER } from './AddNoteModal';
 
-import NotesActions, { PLUS_BUTTON, PLUS_PERSONAL_NOTE } from '../../NotesActions';
+import NotesActions, { ADD_NEW, CONFIRM_MODAL_ID } from '../../NotesActions';
 
 jest.mock('react-markdown', () => ({ ReactMarkdown: () => 'mocked ReactMarkdown' }));
 
 it('render add note modal', async () => {
-  const { getByTestId, queryByTestId, findByTestId } = renderWithTheme(<NotesActions />);
+  const { getByTestId, queryByTestId, findByTestId } = render(
+    <BrowserRouter>
+      <NotesActions />
+    </BrowserRouter>,
+  );
 
-  const plusBtn = getByTestId(PLUS_BUTTON);
+  const addNew = getByTestId(ADD_NEW);
 
+  const addBtn = getByTestId(ADD_NEW);
   const addUserNoteModal = queryByTestId(ADD_NOTE_MODAL_WRAPPER);
+
   expect(addUserNoteModal).toBeNull();
-  fireEvent.click(plusBtn);
-  const btnPersonalNote = await findByTestId(PLUS_PERSONAL_NOTE);
 
-  await waitFor(() => expect(btnPersonalNote).toBeInTheDocument());
+  fireEvent.click(addBtn);
 
-  //fireEvent.click(btnPersonalNote);
+  const confimModal = await findByTestId(CONFIRM_MODAL_ID);
+
+  await waitFor(() => expect(confimModal).toBeInTheDocument());
+  fireEvent.click(addNew);
+
   expect(addUserNoteModal).toBeNull();
 });

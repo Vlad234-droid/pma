@@ -7,11 +7,13 @@ import SuccessMassage from './components/SuccessMassage';
 import { colleagueUUIDSelector, FeedbackActions } from '@pma/store';
 import { Icon } from 'components/Icon';
 import { Page } from 'pages';
+import { InfoModalContent } from './ModalParts';
 
 const RequestFeedback: FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [sent, setSent] = useState(false);
+  const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const [, isBreakpoint] = useBreakpoints();
   const isMobile = isBreakpoint.small || isBreakpoint.xSmall;
@@ -34,7 +36,10 @@ const RequestFeedback: FC = () => {
     setSent(true);
   };
 
-  const handleClose = () => navigate(`/${Page.FEEDBACK}`);
+  const handleClose = () => {
+    if (isInfoModalOpen) return setIsInfoModalOpen(false);
+    navigate(`/${Page.FEEDBACK}`);
+  };
   return (
     <Modal
       modalPosition={'middle'}
@@ -50,7 +55,19 @@ const RequestFeedback: FC = () => {
         styles: [modalTitleOptionStyle({ isMobile })],
       }}
     >
-      {sent ? <SuccessMassage /> : <RequestFeedbackForm onSubmit={handleSubmit} onCancel={handleClose} />}
+      {isInfoModalOpen ? (
+        <InfoModalContent onClose={() => setIsInfoModalOpen(false)} />
+      ) : sent ? (
+        <SuccessMassage />
+      ) : (
+        <RequestFeedbackForm
+          onSubmit={handleSubmit}
+          onCancel={handleClose}
+          setIsInfoModalOpen={() => {
+            setIsInfoModalOpen(true);
+          }}
+        />
+      )}
     </Modal>
   );
 };

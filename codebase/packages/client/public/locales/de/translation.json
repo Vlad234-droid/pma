@@ -22,7 +22,7 @@
   "my_completed_reviews": "My completed Reviews de",
   "my_reviews": "My reviews de",
   "no_completed_reviews": "You have no completed reviews de",
-  "objective_is_approved": "Well done! All {{count}} objective(s) have been approved. Your mid year review is scheduled for {{date, d LLL yyyy}}. de",
+  "objective_is_approved": "Well done! All {{count}} objective(s) have been approved.",
   "form_available_in_date": "The form will be available in {{date, d LLL yyyy}}.",
   "completed_at_date": "Completed {{date, d LLL yyyy}}",
   "objective_is_draft": "{{count}} objective(s) saved as a draft de",
@@ -159,7 +159,6 @@
   "your_contribution": "Your Contribution",
   "everyday_conversations": "Everyday conversations",
   "feedback_tesco": "Feedback at Tesco",
-  "learning": "Learning",
   "your_actions": "Your actions",
   "your_pending_actions": "Your pending actions",
   "your_colleagues_pending_actions": "Your colleagues pending actions",
@@ -167,4 +166,6 @@
   "my_direct_reports": "My direct reports",
   "pending_actions": "Pending actions",
   "you_have_pending_actions": "You have pending actions"
+  "learning": "Learning",
+  "system_guidance_and_faqs": "System guidance and FAQs"
 }

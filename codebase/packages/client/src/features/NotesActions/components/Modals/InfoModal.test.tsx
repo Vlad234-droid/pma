@@ -1,4 +1,5 @@
 import React from 'react';
+import { BrowserRouter } from 'react-router-dom';
 import '@testing-library/jest-dom/extend-expect';
 import { renderWithTheme } from '../../../../utils/test';
 import '@testing-library/jest-dom';
@@ -8,7 +9,11 @@ import NotesActions from '../../NotesActions';
 import { INFO_ICON } from '../FilterOptions';
 
 it('render info modal', async () => {
-  const { getByTestId, queryByTestId, findByTestId } = renderWithTheme(<NotesActions />);
+  const { getByTestId, queryByTestId, findByTestId } = renderWithTheme(
+    <BrowserRouter>
+      <NotesActions />
+    </BrowserRouter>,
+  );
   const infoIcon = getByTestId(INFO_ICON);
   const modalWrapper = queryByTestId(MODAL_WRAPPER);
 

@@ -74,6 +74,10 @@ const ShareWidget: FC<Props> = ({ customStyle, stopShare }) => {
   };
 
   useEffect(() => {
+    dispatch(ObjectiveSharingActions.getSharings(pathParams));
+  }, []);
+
+  useEffect(() => {
     isValidPathParams && isManager && dispatch(ObjectiveSharingActions.checkSharing(pathParams));
   }, [isManager, isValidPathParams]);
 

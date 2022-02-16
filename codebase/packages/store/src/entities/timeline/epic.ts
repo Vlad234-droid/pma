@@ -20,7 +20,8 @@ export const getTimelineEpic: Epic = (action$, _, { api }) =>
               description: 'you_dont_have_access_to_pma',
             });
           } else {
-            return getTimeline.success(response);
+            // @ts-ignore
+            return getTimeline.success({ success: response?.success, [payload.colleagueUuid]: response?.data });
           }
         }),
         catchError((e) => {

@@ -1,6 +1,7 @@
 import React, { FC, HTMLProps } from 'react';
 import { useStyle, useBreakpoints } from '@dex-ddl/core';
 import { Trans } from 'components/Translation';
+import { VideoPlayer, VideoId } from 'features/VideoPlayer';
 
 export type ObjectiveHelpModal = {};
 
@@ -119,15 +120,7 @@ const ObjectiveHelpModal: FC<Props> = () => {
             paddingTop: '32px',
           })}
         >
-          <img
-            className={css({
-              display: 'block',
-              width: '100%',
-              height: '100%',
-              borderRadius: '10px',
-            })}
-            src='https://digitalcontent.api.tesco.com/v2/media/ghs-mktg/d5606eb3-af6b-4200-a7b4-a59e72a20ad9/2321-GHS-743x430-GM-TescoHome.jpeg'
-          />
+          <VideoPlayer videoId={VideoId.CREATE_OBJECTIVE} />
         </div>
       </div>
     </div>

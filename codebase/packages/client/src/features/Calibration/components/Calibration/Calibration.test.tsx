@@ -97,10 +97,12 @@ describe('<Calibration />', () => {
         ...props,
         colleagueUuid: undefined,
       };
+      props.loadData = jest.fn();
 
       render(<Calibration {...newProps} />);
 
       expect(props.loadData).not.toHaveBeenCalled();
+      props.loadData.mockRestore();
     });
 
     it('should call loadFilterOptions', () => {

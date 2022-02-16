@@ -3,13 +3,8 @@ import '@testing-library/jest-dom/extend-expect';
 import { renderWithTheme } from '../../utils/test';
 import '@testing-library/jest-dom';
 import { fireEvent } from '@testing-library/react';
-import PerfomanceCyclesTemplates, {
-  PERFOMANCE_WRAPPER,
-  FILTER_MODAL_ID,
-  SETTINGS_BTN_ID,
-  WRAPPER_INPUT_ID,
-  INPUT_TEST_ID,
-} from './PerfomanceCyclesTemplates';
+import PerfomanceCyclesTemplates from './PerfomanceCyclesTemplates';
+import { PERFOMANCE_WRAPPER, FILTER_MODAL_ID, SETTINGS_BTN_ID, WRAPPER_INPUT_ID, INPUT_TEST_ID } from './config';
 
 describe('Perfomance page', () => {
   it('Perfomance page wrapper', async () => {

@@ -16,6 +16,7 @@ type InfoTableProps = {
 
 const InfoTable: FC<InfoTableProps> = ({ mainTitle, data, preTitle = '' }) => {
   const { css, theme } = useStyle();
+
   return (
     <div className={css(infoTableWrapper)} data-test-id={'info_table_id'}>
       <h2 className={css(titleStyle({ preTitle, theme }))}>{mainTitle}</h2>
@@ -32,13 +33,17 @@ const InfoTable: FC<InfoTableProps> = ({ mainTitle, data, preTitle = '' }) => {
         </div>
       )}
       <div className={css(blockWrapper)}>
-        {data.map((block, i) => (
-          <div key={i} className={css({ display: 'flex', flexDirection: 'column' })}>
-            <span className={css(percentStyle)}>{block.percent}%</span>
-            <span className={css(quantityStyle)}>People {block.quantity}</span>
-            <p className={css(blockTitleStyle)}>{block.title}</p>
-          </div>
-        ))}
+        {data.map((block, i) => {
+          const percent = block.percent || 0;
+          const quantity = block.quantity || 0;
+          return (
+            <div key={i} className={css({ display: 'flex', flexDirection: 'column' })}>
+              <span className={css(percentStyle)}>{percent}%</span>
+              <span className={css(quantityStyle)}>People {quantity}</span>
+              <p className={css(blockTitleStyle)}>{block.title}</p>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

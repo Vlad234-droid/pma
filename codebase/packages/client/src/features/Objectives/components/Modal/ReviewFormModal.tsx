@@ -5,22 +5,22 @@ import { useForm } from 'react-hook-form';
 import { Button, Icon, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
-  FormType,
   currentUserSelector,
+  ExpressionValueType,
+  FormType,
+  getExpressionListenersKeys,
   getReviewByTypeSelector,
+  getReviewSchema,
   getTimelineByReviewTypeSelector,
   ReviewsActions,
   reviewsMetaSelector,
-  schemaMetaSelector,
   SchemaActions,
-  getReviewSchema,
-  getExpressionListenersKeys,
-  ExpressionValueType,
+  schemaMetaSelector,
 } from '@pma/store';
 
 import { ReviewType, Status } from 'config/enum';
 import { createYupSchema } from 'utils/yup';
-import { Trans, useTranslation, TFunction } from 'components/Translation';
+import { TFunction, Trans, useTranslation } from 'components/Translation';
 import { Input, Item, Select, Textarea } from 'components/Form';
 import { GenericItemField } from 'components/GenericForm';
 import MarkdownRenderer from 'components/MarkdownRenderer';
@@ -79,7 +79,7 @@ const ReviewFormModal: FC<Props> = ({ reviewType, onClose }) => {
   const overallRatingListeners: string[] = useSelector(
     getExpressionListenersKeys(reviewType)(ExpressionValueType.OVERALL_RATING),
   );
-  const timelineReview = useSelector(getTimelineByReviewTypeSelector(reviewType));
+  const timelineReview = useSelector(getTimelineByReviewTypeSelector(reviewType, 'me'));
   const readonly = [Status.WAITING_FOR_APPROVAL, Status.APPROVED].includes(timelineReview.status);
 
   const { helperText, title } = getContent(reviewType, t);

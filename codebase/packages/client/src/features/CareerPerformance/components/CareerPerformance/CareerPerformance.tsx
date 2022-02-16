@@ -1,6 +1,6 @@
 import React, { FC, useEffect } from 'react';
 
-import { useStyle, Rule } from '@dex-ddl/core';
+import { Rule, useStyle } from '@dex-ddl/core';
 
 import { Widgets as ObjectiveWidgets } from 'features/Objectives';
 import { Trans } from 'components/Translation';

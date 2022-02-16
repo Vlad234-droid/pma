@@ -10,10 +10,10 @@ const InfoMassage: FC<InfoModalProps> = ({ goBack }) => {
 
   return (
     <div className={css(wrapperInfo)}>
-      <h2 className={css(title)}>
-        Giving feedback helps us to make sure we&apos;re all contributing our best, whether that&apos;s celebrating
-        what&apos;s gone well or letting someone know when something could be better.
-      </h2>
+      <p className={css(preTitle)}>
+        Giving feedback helps us to make sure we&apos;re all contributing our best; whether that&apos;s celebrating
+        what&apos;s gone well or letting someone know when something could be better. <br />
+      </p>
       <p className={css(preTitle)}>
         To help you give great feedback to your colleagues, follow these steps: <br />
       </p>
@@ -21,33 +21,28 @@ const InfoMassage: FC<InfoModalProps> = ({ goBack }) => {
         <li>
           Make your good intentions clear. This builds trust and lets the receiver know that your words come from a
           positive place. This means they&apos;ll be more likely to listen and reflect on what you&apos;ve shared. An
-          example of this would be starting your feedback with something like &quot;I&apos;m sharing this feedback with
-          you so we can work better together&quot;.
+          example of this would be starting your feedback with something like{' '}
+          <i>&apos;I&apos;m sharing this feedback with you so we can work better together&apos;.</i>
         </li>
         <li>
           Describe the situation. It&apos;s important to be specific about the time, place, and situation you want to
           give feedback on. Being specific helps provide context for the receiver and ensures your feedback is clear. An
-          example of this could be &quot;on Monday when we were working on the customer service desk&quot; or &quot;in
-          last week&apos;s team meeting&quot;.
+          example of this could be <i>&apos;on Monday when we were working on the customer service desk&apos;</i> or{' '}
+          <i>&apos;in last week&apos;s team meeting&apos;.</i>
           <li>
-            Give great examples. Describe what you observed, assumptions aren&apos;t helpful. For example, &quot;I
-            noticed you&apos;ve been late twice this week&quot; is more helpful than &quot;you&apos;re never on
-            time&quot;.
+            Give great examples. Describe what you observed, assumptions aren&apos;t helpful. For example,{' '}
+            <i>&apos;I noticed you&apos;ve been late twice this week&apos;</i> is more helpful than{' '}
+            <i>&apos;you&apos;re never on time&apos;.</i>
           </li>
           <li>
             Explain the impact. Sharing the impact your examples had gives the receiver an opportunity to reflect and
-            think about specific actions they could take going forward. An example of impact &quot;this meant the
-            customer received great service&quot; or &quot; this meant the rest of the team stayed late&quot;.
+            think about specific actions they could take going forward. An example of impact{' '}
+            <i>&apos;this meant the customer received great service&apos;</i> or{' '}
+            <i>&apos;this meant the rest of the team stayed late&apos;.</i>
           </li>
         </li>
       </ol>
-      <p className={css(preRecomendationInfo)}>Remember:</p>
-      <ul className={css(dotsList)}>
-        <li>make your good intentions clear</li>
-        <li>be specific about the situation</li>
-        <li>describe the behaviour you observed</li>
-        <li>highlight the impact it had</li>
-      </ul>
+
       <h3 className={css(titleFeedback)}>
         Feedback shared will be named, this allows the receiver to ask you questions about the feedback when you next
         speak.

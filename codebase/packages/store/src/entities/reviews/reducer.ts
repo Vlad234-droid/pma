@@ -9,11 +9,13 @@ import {
   getColleagueReviews,
   updateReviewStatus,
   updateReviewsState,
+  getReviewByUuid,
 } from './actions';
 
 export const initialState = {
   data: [],
   colleagueReviews: {},
+  review: [],
   meta: { loading: false, loaded: false, error: null, status: null },
 };
 
@@ -107,5 +109,14 @@ export default createReducer(initialState)
   .handleAction(updateReviewsState, (state, { payload }) => ({
     ...state,
     ...payload,
+  }))
+  .handleAction(getReviewByUuid.request, (state) => ({
+    ...state,
+    meta: { ...state.meta, loading: true, error: null, loaded: false },
+  }))
+  .handleAction(getReviewByUuid.success, (state, { payload }) => ({
+    ...state,
+    review: [...state.review, { ...payload }],
+    meta: { ...state.meta, loading: false, loaded: true },
   }))
   .handleAction(clearReviewData, () => initialState);

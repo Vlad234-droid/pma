@@ -90,3 +90,15 @@ export const countByTypeReviews = (reviewType: ReviewType) =>
   createSelector(filterReviewsByTypeSelector(reviewType), (reviews: any) => {
     return reviews?.length || 0;
   });
+
+export const getReviewByUuidS = createSelector(reviewsSelector, (reviews: any) => {
+  const { review } = reviews;
+  const arr = review.map((item) => {
+    const title = item?.properties?.mapJson?.title;
+    return {
+      uuid: item.uuid,
+      title: title,
+    };
+  });
+  return arr;
+});

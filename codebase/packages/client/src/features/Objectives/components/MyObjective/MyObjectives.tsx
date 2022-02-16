@@ -62,8 +62,8 @@ const MyObjectives: FC = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const originObjectives = useSelector(filterReviewsByTypeSelector(ReviewType.OBJECTIVE));
-  const midYearReview = useSelector(getTimelineByCodeSelector(ObjectiveType.MYR));
-  const endYearReview = useSelector(getTimelineByCodeSelector(ObjectiveType.EYR));
+  const midYearReview = useSelector(getTimelineByCodeSelector(ObjectiveType.MYR, 'me'));
+  const endYearReview = useSelector(getTimelineByCodeSelector(ObjectiveType.EYR, 'me'));
   const [previousReviewFilesModalShow, setPreviousReviewFilesModalShow] = useState(false);
   const [objectives, setObjectives] = useState<OT.Objective[]>([]);
 
@@ -76,15 +76,15 @@ const MyObjectives: FC = () => {
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const [schema] = useReviewSchema(ReviewType.OBJECTIVE) || {};
   const { components = [], markup = { max: 0, min: 0 } } = schema;
-  const { descriptions, startDates, statuses } = useSelector(getTimelineSelector) || {};
-  const timelineTypes = useSelector(timelineTypesAvailabilitySelector) || {};
+  const { descriptions, startDates, statuses } = useSelector(getTimelineSelector(colleagueUuid)) || {};
+  const timelineTypes = useSelector(timelineTypesAvailabilitySelector(colleagueUuid)) || {};
   const canShowObjectives = timelineTypes[ObjectiveType.OBJECTIVE];
   const canShowMyReview = timelineTypes[ObjectiveType.MYR] && timelineTypes[ObjectiveType.EYR];
   const canShowAnnualReview = !timelineTypes[ObjectiveType.MYR] && timelineTypes[ObjectiveType.EYR];
 
   const formElements = components.filter((component) => component.type != 'text');
 
-  const timelineObjective = useSelector(getTimelineByCodeSelector(ReviewType.OBJECTIVE)) || {};
+  const timelineObjective = useSelector(getTimelineByCodeSelector(ReviewType.OBJECTIVE, 'me')) || {};
   const status = timelineObjective?.status || undefined;
   const isAllObjectivesInSameStatus = useSelector(isReviewsInStatus(ReviewType.OBJECTIVE)(status));
   const countReviews = useSelector(countByTypeReviews(ReviewType.OBJECTIVE)) || 0;
@@ -164,6 +164,8 @@ const MyObjectives: FC = () => {
         )}
 
         <div className={css(widgetsBlock)}>
+          <ShareWidget stopShare={true} customStyle={shareWidgetStyles} />
+
           <ShareWidget customStyle={shareWidgetStyles} />
 
           <OrganizationWidget

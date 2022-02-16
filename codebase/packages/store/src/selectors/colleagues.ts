@@ -6,7 +6,7 @@ import { RootState } from 'typesafe-actions';
 export const colleaguesSelector = (state: RootState) => state.colleagues;
 
 export const getColleaguesSelector = createSelector(colleaguesSelector, (colleagues: any) => {
-  return colleagues.list;
+  return colleagues?.list;
 });
 
 export const getColleagueByUuidSelector = (colleagueUUID) =>

@@ -25,9 +25,10 @@ type Props = {
   onSubmit: (data: any) => void;
   onCancel: () => void;
   defaultValues?: any;
+  setIsInfoModalOpen: () => void;
 };
 
-const RequestFeedback: FC<Props> = ({ onSubmit, onCancel }) => {
+const RequestFeedback: FC<Props> = ({ onSubmit, onCancel, setIsInfoModalOpen }) => {
   const { css } = useStyle();
   const dispatch = useDispatch();
   const reviews = useSelector(getReviews) || [];
@@ -90,7 +91,7 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel }) => {
             />
           </Item>
           <div className={css(withMargin)}>
-            <IconButton graphic='information' onPress={() => undefined}>
+            <IconButton graphic='information' onPress={setIsInfoModalOpen}>
               <p className={css(infoHelpStyle)}>Learn more about how to request great feedback</p>
             </IconButton>
           </div>

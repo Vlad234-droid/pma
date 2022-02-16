@@ -1,7 +1,6 @@
 export enum VideoId {
   CREATE_OBJECTIVE = '76s5twgvtw',
-  GIVE_FEEDBACK = 'bqfytfl3yy',
-  LEARN_FEEDBACK = '76s5twgvtw',
-  VIEW_FEEDBACK = '76s5twgvtw',
-  RECEIVE_FEEDBACK = 'beyo9klrjw',
+  GIVE_FEEDBACK = 'bxmifsixsk',
+  LEARN_FEEDBACK = 'c7hco8uu6e',
+  RECEIVE_FEEDBACK = 'guwo5i55yh',
 }

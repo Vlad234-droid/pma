@@ -171,7 +171,7 @@ const CreateUpdateObjectives: FC<CreateUpdateObjectivesModalProps> = ({ onClose,
   const [origin] = useReviews({ pathParams });
   const objectives = useSelector(getReviewPropertiesSelector(ReviewType.OBJECTIVE));
   const [schema] = useReviewSchema(ReviewType.OBJECTIVE);
-  const timelineObjective = useSelector(getTimelineByReviewTypeSelector(ReviewType.OBJECTIVE));
+  const timelineObjective = useSelector(getTimelineByReviewTypeSelector(ReviewType.OBJECTIVE, 'me'));
 
   if (timelineObjective?.status === Status.WAITING_FOR_APPROVAL && schemaLoaded && reviewLoaded) {
     return (

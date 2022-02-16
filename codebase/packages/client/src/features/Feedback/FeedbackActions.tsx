@@ -157,10 +157,12 @@ const FeedbackActions: FC = () => {
       <div data-test-id={FEEDBACK_ACTIONS}>
         <div className={css(InMomentStyle({ mobileScreen }))}>
           <div className={css(CenterFlexStyle)}>
-            <h2 className={css(InTheMomentStyle)}>Learn more about your feedback options:</h2>
+            <h2 className={css(InTheMomentStyle)}>
+              What is the difference between ‘Everyday feedback’ and ‘360 feedback’?
+            </h2>
             <IconButton
               graphic='information'
-              iconStyles={{ marginLeft: '8px' }}
+              iconStyles={{ marginLeft: '8px', marginRight: '20px' }}
               data-test-id='iconButton'
               onPress={() => {
                 setInfo360Modal(() => true);
