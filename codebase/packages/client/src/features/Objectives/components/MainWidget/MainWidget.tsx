@@ -20,14 +20,7 @@ export type Props = {
 
 export const TEST_ID = 'main-widget';
 
-const getContent = (
-  props: {
-    status?: string;
-    count?: number;
-    date?: string;
-  },
-  t: TFunction,
-): {
+type ContentGraphics = {
   graphic: Graphics;
   backgroundColor: Colors;
   subTitle: string;
@@ -35,29 +28,29 @@ const getContent = (
   buttonText: string;
   redirectToObjective: boolean;
   invertColors: boolean;
-} => {
+};
+
+const getContent = (
+  props: {
+    status?: string;
+    count?: number;
+    date?: string;
+  },
+  t: TFunction,
+): ContentGraphics => {
   const { status, count, date = '' } = props;
-  if (!status) {
-    return {
-      graphic: 'add',
-      backgroundColor: 'tescoBlue',
-      subTitle: t('create_my_objectives', 'Create my objectives'),
-      description: 'Remember your objectives should be strategic, relevant and up to date.',
-      buttonText: t('create_my_objectives', 'Create my objectives'),
-      redirectToObjective: false,
-      invertColors: true,
-    };
-  }
+  const defaultGraphics = {
+    graphic: 'add',
+    backgroundColor: 'tescoBlue',
+    subTitle: t('create_my_objectives', 'Create my objectives'),
+    description: 'Remember your objectives should be strategic, relevant and up to date.',
+    buttonText: t('create_my_objectives', 'Create my objectives'),
+    redirectToObjective: false,
+    invertColors: true,
+  };
+  if (!status) return defaultGraphics as ContentGraphics;
   const contents: {
-    [key: string]: {
-      graphic: Graphics;
-      backgroundColor: Colors;
-      subTitle: string;
-      description: string;
-      buttonText: string;
-      redirectToObjective: boolean;
-      invertColors: boolean;
-    };
+    [key: string]: ContentGraphics;
   } = {
     [Status.STARTED]: {
       graphic: 'add',
@@ -117,8 +110,26 @@ const getContent = (
       redirectToObjective: true,
       invertColors: false,
     },
+    [Status.PENDING]: {
+      graphic: 'roundAlert',
+      backgroundColor: 'tescoBlue',
+      subTitle: 'Objectives are pending',
+      description: '',
+      buttonText: t('create_my_objectives', 'Create my objectives'),
+      redirectToObjective: true,
+      invertColors: false,
+    },
+    [Status.NOT_STARTED]: {
+      graphic: 'roundAlert',
+      backgroundColor: 'tescoBlue',
+      subTitle: 'Objectives are not started',
+      description: '',
+      buttonText: t('create_my_objectives', 'Create my objectives'),
+      redirectToObjective: true,
+      invertColors: false,
+    },
   };
-  return contents[status];
+  return contents[status] || defaultGraphics;
 };
 
 const MainWidget: FC<Props> = ({ nextReviewDate = '', count = 0, status, customStyle }) => {
