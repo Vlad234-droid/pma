@@ -9,7 +9,7 @@ import RadioBtns from '../RadioBtns';
 import { Notification } from 'components/Notification';
 import { Icon } from 'components/Icon';
 import { HelpModalReceiveFeedback, ModalDownloadFeedback } from '../ModalParts';
-import { ColleaguesActions, colleagueUUIDSelector, FeedbackActions, ObjectiveActions } from '@pma/store';
+import { ColleaguesActions, colleagueUUIDSelector, FeedbackActions, ReviewsActions } from '@pma/store';
 import { useDispatch, useSelector } from 'react-redux';
 import { FilterModal } from '../../../Shared/components/FilterModal';
 import { useNavigate } from 'react-router-dom';
@@ -144,7 +144,7 @@ const ViewFeedback: FC = () => {
 
     if (isReaded) {
       submittedCompletedNotes.forEach(
-        (item) => item.targetId && dispatch(ObjectiveActions.getReviewByUuid({ uuid: item.targetId })),
+        (item) => item.targetId && dispatch(ReviewsActions.getReviewByUuid({ uuid: item.targetId })),
       );
     }
   }, [isReaded]);

@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useCallback } from 'react';
 import { useStyle, Rule } from '@dex-ddl/core';
 import { useDispatch, useSelector } from 'react-redux';
-import { FeedbackActions, ObjectiveActions, colleagueUUIDSelector, getNotesArgsSelector } from '@pma/store';
+import { FeedbackActions, ReviewsActions, colleagueUUIDSelector, getNotesArgsSelector } from '@pma/store';
 import debounce from 'lodash.debounce';
 import { TileWrapper } from 'components/Tile';
 import { Accordion, BaseAccordion, Section, Panel, ExpandButton } from 'components/Accordion';
@@ -55,7 +55,7 @@ const DraftItem: FC<DraftItemProps> = ({
     if (pendingNotes.length) {
       for (const item of pendingNotes) {
         if (item.targetId && item.targetId !== Tesco.TescoBank) {
-          dispatch(ObjectiveActions.getReviewByUuid({ uuid: item.targetId }));
+          dispatch(ReviewsActions.getReviewByUuid({ uuid: item.targetId }));
         }
       }
     }
@@ -65,7 +65,7 @@ const DraftItem: FC<DraftItemProps> = ({
     if (completedNotes.length) {
       for (const item of completedNotes) {
         if (item.targetId && item.targetId !== Tesco.TescoBank) {
-          dispatch(ObjectiveActions.getReviewByUuid({ uuid: item.targetId }));
+          dispatch(ReviewsActions.getReviewByUuid({ uuid: item.targetId }));
         }
       }
     }

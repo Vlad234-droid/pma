@@ -13,6 +13,7 @@ import {
   updateReview,
   updateReviews,
   updateReviewStatus,
+  getReviewByUuid,
 } from './actions';
 import { getTimeline } from '../timeline/actions';
 import { getManagers } from '../managers/actions';
@@ -162,6 +163,19 @@ export const updateReviewStatusEpic: Epic = (action$, _, { api }) => {
   );
 };
 
+export const getReviewByUuidEpic: Epic = (action$, _, { api }) =>
+  action$.pipe(
+    filter(isActionOf(getReviewByUuid.request)),
+    switchMap(({ payload }) => {
+      return from(api.getReviewByUuid(payload)).pipe(
+        // @ts-ignore
+        map(({ data }) => {
+          return getReviewByUuid.success(data);
+        }),
+      );
+    }),
+  );
+
 export default combineEpics(
   getReviewsEpic,
   getColleagueReviewsEpic,
@@ -170,4 +184,5 @@ export default combineEpics(
   updateReviewsEpic,
   deleteReviewEpic,
   updateReviewStatusEpic,
+  getReviewByUuidEpic,
 );

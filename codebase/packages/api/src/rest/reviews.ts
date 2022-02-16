@@ -77,3 +77,9 @@ export const declineReview = <T>(params: any = {}) => {
   const domain = `/colleagues/${colleagueUuid}/pm-cycles/${cycleUuid}/review-types/${type}/statuses/DECLINED`;
   return httpClient.put(`${domain}`, data);
 };
+
+export const getReviewByUuid = (params: any) => {
+  const { uuid } = params;
+  const domain = `/reviews/${uuid}`;
+  return httpClient.get(`${domain}`);
+};
