@@ -1,13 +1,20 @@
-//@ts-ignore
-import { createSelector } from 'reselect'; //@ts-ignore
+import { createSelector } from 'reselect';
+// @ts-ignore
 import { RootState } from 'typesafe-actions';
-import { ObjectiveType, ReviewType } from '@pma/client/src/config/enum';
 
-export const timelineSelector = (state: RootState) => state.timeline || {};
+export enum Type {
+  OBJECTIVE = 'OBJECTIVE',
+  MYR = 'MYR',
+  EYR = 'EYR',
+}
 
-export const getTimelineSelector = createSelector(timelineSelector, ({ meta, ...rest }) => {
-  // @ts-ignore
-  const { data } = rest;
+export const timelineSelector = (state: RootState) => state.timeline;
+
+export const userReviewTypesSelector = createSelector(timelineSelector, ({ data }) =>
+  data?.map((item: { code: string }) => item.code),
+);
+
+export const getTimelineSelector = createSelector(timelineSelector, ({ data }) => {
   const descriptions = data?.map(({ description }) => description);
   const statuses = data?.map(({ status }) => status);
   const startDates = data?.map(({ code, startTime }) => {
@@ -25,14 +32,12 @@ export const hasTimelineAccessesSelector = ({
   excludeTypes = [],
   method,
 }: {
-  types: ObjectiveType[];
-  excludeTypes?: ObjectiveType[];
+  types: Type[];
+  excludeTypes?: Type[];
   method: 'some' | 'every';
 }) =>
-  createSelector(timelineSelector, ({ meta, ...rest }) => {
-    // @ts-ignore
-    const { data } = rest;
-    const codes = data?.map(({ code }) => code) || [];
+  createSelector(timelineSelector, ({ data }) => {
+    const codes: Array<Type> = data?.map(({ code }) => code) || [];
     let canShow = false;
     if (method === 'every' && codes?.length) {
       canShow = types.every((type) => codes.includes(type));
@@ -47,30 +52,24 @@ export const hasTimelineAccessesSelector = ({
     return canShow;
   });
 
-export const timelineTypesAvailabilitySelector = createSelector(timelineSelector, ({ meta, ...rest }) => {
-  // @ts-ignore
-  const { data } = rest;
-  const reviewTypes = data?.map(({ reviewType }) => reviewType);
+export const timelineTypesAvailabilitySelector = createSelector(timelineSelector, ({ data }) => {
+  const reviewTypes = data?.map(({ reviewType }: { reviewType: string }) => reviewType);
   if (reviewTypes?.length) {
     return {
-      [ReviewType.OBJECTIVE]: reviewTypes.includes(ReviewType.OBJECTIVE),
-      [ReviewType.MYR]: reviewTypes.includes(ReviewType.MYR),
-      [ReviewType.EYR]: reviewTypes.includes(ReviewType.EYR),
+      [Type.OBJECTIVE]: reviewTypes.includes(Type.OBJECTIVE),
+      [Type.MYR]: reviewTypes.includes(Type.MYR),
+      [Type.EYR]: reviewTypes.includes(Type.EYR),
     };
   }
   return {};
 });
 
 export const getTimelineByCodeSelector = (code) =>
-  createSelector(timelineSelector, ({ meta, ...rest }) => {
-    // @ts-ignore
-    const { data } = rest;
-    return data?.find((timeline) => timeline.code === code);
+  createSelector(timelineSelector, ({ data }) => {
+    return data?.find((timeline: { code: string }) => timeline.code === code);
   });
 
-export const getTimelineByReviewTypeSelector = (type: ReviewType) =>
-  createSelector(timelineSelector, ({ meta, ...rest }) => {
-    // @ts-ignore
-    const { data } = rest;
-    return data?.find((timeline) => timeline.reviewType === type);
+export const getTimelineByReviewTypeSelector = (type: string) =>
+  createSelector(timelineSelector, ({ data }) => {
+    return data?.find((timeline: { reviewType: string }) => timeline.reviewType === type);
   });

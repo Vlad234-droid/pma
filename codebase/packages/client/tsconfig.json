@@ -1,5 +1,5 @@
 {
-  "extends": "ts-config-single-spa",
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
     "jsx": "react-jsx",
     "typeRoots": ["./node_modules/@types", "./src/types", "../../node_modules/@types"],
@@ -15,5 +15,5 @@
     "noImplicitAny": false
   },
   "include": ["./src/**/*"],
-  "exclude": ["node_modules", "src/**/*.test*", "./src/setupProxy.js", "./src/utils/test/**/*"]
+  "exclude": ["node_modules", "./src/setupProxy.js"]
 }

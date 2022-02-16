@@ -1,15 +1,14 @@
 import React, { FC, useEffect } from 'react';
-import { Trans, useTranslation } from 'components/Translation';
+import { useSelector } from 'react-redux';
 import { Rule, Styles, useStyle } from '@dex-ddl/core';
+import { colleagueUUIDSelector, TimelineActions, UserActions } from '@pma/store';
+import { usePermission, usePermissionByWorkLevel, usePermissionByReviewType } from 'features/Permission';
+import { Trans, useTranslation } from 'components/Translation';
 import { TileWrapper } from 'components/Tile';
 import { Checkbox } from 'components/Form';
-import { colleagueUUIDSelector, TimelineActions, UserActions } from '@pma/store';
 import useDispatch from 'hooks/useDispatch';
 import { useAuthContainer } from 'contexts/authContext';
-import { PermissionProvider } from 'features/Permission';
-import { useSelector } from 'react-redux';
-import { accessByRole, accessByWorkLevel } from '../config';
-import { accessByTimelinePoints } from '../config/accessByTimelinePoints';
+import { accessByRole, accessByWorkLevel, accessByTimelinePoints } from '../config';
 
 export type Props = {};
 
@@ -43,14 +42,12 @@ export const EmailNotifications: FC<Props> = () => {
         <div className={css(descriptionStyle)}>
           <Trans>You will receive notification about marked actions</Trans>
         </div>
-        {profileAttributesFiltered.map(({ name, value, type }) => (
-          <PermissionProvider
-            key={name}
-            roles={accessByRole[name]}
-            workLevels={accessByWorkLevel[name]}
-            reviewTypes={accessByTimelinePoints[name]}
-          >
-            <div className={css({ display: 'flex' })}>
+        {profileAttributesFiltered
+          .filter(({ name }) => usePermission(accessByRole[name]))
+          .filter(({ name }) => usePermissionByWorkLevel(accessByWorkLevel[name]))
+          .filter(({ name }) => usePermissionByReviewType(accessByTimelinePoints[name]))
+          .map(({ name, value, type }) => (
+            <div key={name} className={css({ display: 'flex' })}>
               <Checkbox
                 id={name}
                 onChange={({ target: { checked: value } }) =>
@@ -62,8 +59,7 @@ export const EmailNotifications: FC<Props> = () => {
                 <Trans i18nKey={name} />
               </label>
             </div>
-          </PermissionProvider>
-        ))}
+          ))}
       </div>
     </TileWrapper>
   );

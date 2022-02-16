@@ -28,7 +28,7 @@ enum Page {
   TIPS = 'tips',
   EDIT_TIP = 'tips/:tipUuid',
   REPORT = 'report',
-  AdministratorPage = 'administrator-page',
+  ADMINISTRATION = 'administration',
 }
 
 type PageElement =

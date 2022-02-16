@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { I18nextProvider } from 'react-i18next';
-import i18n from 'utils/i18next';
+import i18n from 'config/i18next';
 import { DDLProvider } from '@dex-ddl/core';
 import { useObservableTheme } from '@dex-runtime/root-state';
 import merge from 'lodash.merge';

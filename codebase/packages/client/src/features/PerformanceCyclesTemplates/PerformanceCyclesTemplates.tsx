@@ -1,12 +1,9 @@
 import React, { FC, useEffect, useState, useCallback } from 'react';
 import { CreateRule, Rule, useStyle, useBreakpoints } from '@dex-ddl/core';
-
+import { useDispatch, useSelector } from 'react-redux';
 import debounce from 'lodash.debounce';
 
-import { useDispatch, useSelector } from 'react-redux';
-import { getProcessTemplateSelector } from '@pma/store/src/selectors/processTemplate';
-import { ProcessTemplateActions } from '@pma/store';
-
+import { ProcessTemplateActions, getProcessTemplateSelector } from '@pma/store';
 import { formatDateStringFromISO } from 'utils/date';
 import { FilterOption } from 'features/Shared';
 import { IconButton } from 'components/IconButton';
@@ -27,12 +24,11 @@ import {
   filterFileType,
   FilterType,
 } from './config';
-import { fileType } from 'utils/file';
-
+import { getFileType } from 'utils/file';
 import Upload from 'images/Upload.svg';
 import { BASE_URL_API } from 'config/constants';
 
-const PerfomanceCyclesTemplates: FC = () => {
+const PerformanceCyclesTemplates: FC = () => {
   const { t } = useTranslation();
   const { css } = useStyle();
   const dispatch = useDispatch();
@@ -88,7 +84,7 @@ const PerfomanceCyclesTemplates: FC = () => {
     dispatch(
       ProcessTemplateActions.uploadProcessTemplate({
         file,
-        type: fileType(file.name),
+        type: getFileType(file.name),
       }),
     );
   };
@@ -275,4 +271,4 @@ const timeStyles: Rule = ({ theme }) => {
   };
 };
 
-export default PerfomanceCyclesTemplates;
+export default PerformanceCyclesTemplates;
