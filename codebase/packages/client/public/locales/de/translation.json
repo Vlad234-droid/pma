@@ -159,5 +159,12 @@
   "your_contribution": "Your Contribution",
   "everyday_conversations": "Everyday conversations",
   "feedback_tesco": "Feedback at Tesco",
-  "learning": "Learning"
+  "learning": "Learning",
+  "your_actions": "Your actions",
+  "your_pending_actions": "Your pending actions",
+  "your_colleagues_pending_actions": "Your colleagues pending actions",
+  "my_full_team": "My full team",
+  "my_direct_reports": "My direct reports",
+  "pending_actions": "Pending actions",
+  "you_have_pending_actions": "You have pending actions"
 }

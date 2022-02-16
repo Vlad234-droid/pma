@@ -4,7 +4,7 @@ import { CreateRule, Rule, useStyle } from '@dex-ddl/core';
 
 import { TileWrapper as Tile } from '../Tile/TileWrapper';
 import { StatusIcon } from './StatusIcon';
-import { getIcon } from '../../features/MyTeam';
+import { getIcon } from 'components/Icon';
 import { Status } from 'config/enum';
 
 export type StepIndicatorProps = {

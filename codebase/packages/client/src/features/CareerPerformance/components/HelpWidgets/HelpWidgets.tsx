@@ -10,10 +10,6 @@ const HelpWidgets: FC = () => {
   const { css } = useStyle();
   const { t } = useTranslation();
 
-  const handleSupportClick = () => {
-    window.open(LINKS.help, '_blank')?.focus();
-  };
-
   return (
     <div data-test-id='help-widgets' className={css(wrapperStyles)}>
       <div data-test-id='question-tile' className={css({ height: '100%' })}>

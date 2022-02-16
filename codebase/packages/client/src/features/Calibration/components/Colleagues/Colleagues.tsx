@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react';
 import { useStyle, Rule, colors } from '@dex-ddl/core';
 
-import { WidgetTeamMateProfile } from 'features/MyTeam';
+import { TeamMateProfile } from 'features/MyTeam';
 import { Rating, Status } from 'config/enum';
 import { IconButton } from 'components/IconButton';
 import { Employee } from 'config/types';
@@ -45,7 +45,7 @@ const Colleagues: FC<Props> = ({ colleagues, editMode, onSave }) => {
       )}
       <div className={css({ marginBottom: '16px', cursor: editMode ? 'pointer' : 'default' })}>
         {colleagues.map((employee) => (
-          <WidgetTeamMateProfile
+          <TeamMateProfile
             key={employee.uuid}
             uuid={employee.uuid}
             status={Status.PENDING}

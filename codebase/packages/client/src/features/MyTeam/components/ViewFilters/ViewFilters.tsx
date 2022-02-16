@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import { Rule, useStyle } from '@dex-ddl/core';
 
 import { Radio } from 'components/Form';
+import { useTranslation } from 'components/Translation';
 
 import { View } from '../../config/types';
 
@@ -12,9 +13,10 @@ type Props = {
 
 const ViewFilters: FC<Props> = ({ view, onChange }) => {
   const { css } = useStyle();
+  const { t } = useTranslation();
 
   return (
-    <div className={css({ display: 'flex', flexDirection: 'row' })}>
+    <div data-test-id='view-filters' className={css(wrapperStyles)}>
       <label className={css({ ...filterItemStyles, marginRight: '32px' })}>
         <Radio
           id={View.DIRECT_REPORTS}
@@ -23,7 +25,7 @@ const ViewFilters: FC<Props> = ({ view, onChange }) => {
           onChange={() => onChange(View.DIRECT_REPORTS)}
           checked={view === View.DIRECT_REPORTS}
         />
-        <span className={css(filterLabelStyles)}>My direct reports</span>
+        <span className={css(filterLabelStyles)}>{t('my_direct_reports', 'My direct reports')}</span>
       </label>
       <label className={css(filterItemStyles)}>
         <Radio
@@ -33,10 +35,15 @@ const ViewFilters: FC<Props> = ({ view, onChange }) => {
           onChange={() => onChange(View.FULL_TEAM)}
           checked={view === View.FULL_TEAM}
         />
-        <span className={css(filterLabelStyles)}>My full team</span>
+        <span className={css(filterLabelStyles)}>{t('my_full_team', 'My full team')}</span>
       </label>
     </div>
   );
+};
+
+const wrapperStyles: Rule = {
+  display: 'flex',
+  flexDirection: 'row',
 };
 
 const filterItemStyles: Rule = {

@@ -48,7 +48,7 @@ const imageStyle = {
 export const Avatar: FC<Props> = ({ img, size = 56 }) => {
   const { css, theme } = useStyle();
   return (
-    <span className={css(contentStyle({ theme, size }))}>
+    <span data-test-id='avatar' className={css(contentStyle({ theme, size }))}>
       {img ? <img style={imageStyle} src={img} /> : <Icon graphic='account' testId={'test-id-account-icon'} />}
     </span>
   );
