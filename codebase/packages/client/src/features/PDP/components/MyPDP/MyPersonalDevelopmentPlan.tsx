@@ -62,7 +62,7 @@ const MyPersonalDevelopmentPlan: FC = () => {
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const [schema] = usePDPShema(PDPType.PDP);
   const { components = [] } = schema;
-  const timelineTypes = useSelector(timelineTypesAvailabilitySelector);
+  const timelineTypes = useSelector(timelineTypesAvailabilitySelector('me'));
   const canShowMyReview = timelineTypes[ObjectiveType.MYR] && timelineTypes[ObjectiveType.EYR];
   const canShowAnnualReview = !timelineTypes[ObjectiveType.MYR] && timelineTypes[ObjectiveType.EYR];
 

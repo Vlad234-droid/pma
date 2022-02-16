@@ -53,13 +53,12 @@ export const UserObjectives: FC = () => {
 
   const { loaded: schemaLoaded } = useSelector(schemaMetaSelector);
   const { loaded: reviewLoaded } = useSelector(reviewsMetaSelector);
-
-  const { descriptions, startDates, statuses } = useSelector(getTimelineSelector) || {};
-  const timelineTypes = useSelector(timelineTypesAvailabilitySelector);
+  const { uuid } = useParams<{ uuid: string }>();
+  const { descriptions, startDates, statuses } = useSelector(getTimelineSelector(uuid)) || {};
+  const timelineTypes = useSelector(timelineTypesAvailabilitySelector(uuid));
   const canShowObjectives = timelineTypes[ObjectiveType.OBJECTIVE];
   const canShowMyReview = timelineTypes[ObjectiveType.MYR] && timelineTypes[ObjectiveType.EYR];
   const canShowAnnualReview = !timelineTypes[ObjectiveType.MYR] && timelineTypes[ObjectiveType.EYR];
-  const { uuid } = useParams<{ uuid: string }>();
   const params = useMemo(
     () => ({ pathParams: { colleagueUuid: uuid, type: ReviewType.OBJECTIVE, cycleUuid: 'CURRENT' } }),
     [uuid],
