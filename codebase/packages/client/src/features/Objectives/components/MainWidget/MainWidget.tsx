@@ -82,11 +82,10 @@ const getContent = (
     [Status.APPROVED]: {
       graphic: 'roundTick',
       backgroundColor: 'white',
-      subTitle: t(
-        'objective_is_approved',
-        `Well done! All ${count} objective(s) have been approved. Your mid year review is scheduled for ${date}.`,
-        { count, date: new Date(date) },
-      ),
+      subTitle: t('objective_is_approved', `Well done! All ${count} objective(s) have been approved.`, {
+        count,
+        date: new Date(date),
+      }),
       description: 'Remember if your priorities change, review your objectives',
       buttonText: t('view', 'View'),
       redirectToObjective: true,
