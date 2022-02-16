@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getMessagesByCriteria, MessagesActions } from '@pma/store';
+import { getKnowledgeLibraryData, KnowledgeLibraryActions } from '@pma/store';
 import { DataType, Item } from '../types';
 
 import { colleaguesData, managersData } from '../config';
@@ -15,11 +15,11 @@ const useData = ({ dataType, filterFn = () => true }: Props): [Item[], () => voi
   const [data, setData] = useState<Item[]>([]);
   const dispatch = useDispatch();
 
-  const linksMap = []; // useSelector(getKnowledgeLibraryData());
+  const linksMap = useSelector(getKnowledgeLibraryData);
 
   useEffect(() => {
     let mapFn = (item: Item) => item;
-    if (linksMap.length) {
+    if (Object.keys(linksMap).length) {
       mapFn = (item: Item) => ({ ...item, link: linksMap[item.id] ?? '' });
     }
 
@@ -42,8 +42,7 @@ const useData = ({ dataType, filterFn = () => true }: Props): [Item[], () => voi
   };
 
   const fetchData = useCallback(() => {
-    console.log('request');
-    // dispatch(KnowledgeLibraryActions.getData());
+    dispatch(KnowledgeLibraryActions.getHelpFaqUrls());
   }, []);
 
   return [data, fetchData];

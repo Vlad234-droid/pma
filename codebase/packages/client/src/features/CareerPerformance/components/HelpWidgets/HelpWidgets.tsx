@@ -13,7 +13,7 @@ const HelpWidgets: FC = () => {
 
   return (
     <div data-test-id='help-widgets' className={css(wrapperStyles)}>
-      <div data-test-id='question-tile' className={css({ height: '100%' })}>
+      <div data-test-id='question-tile' className={css(wrrapperRule)}>
         <BasicTile
           link={buildPath(Page.KNOWLEDGE_LIBRARY)}
           img={<Icon graphic='question' />}
@@ -23,9 +23,7 @@ const HelpWidgets: FC = () => {
             ...widgetStyles,
           }}
           icon={true}
-        >
-          <div className={css(contentStyle)}>Coming soon</div>
-        </BasicTile>
+        />
       </div>
     </div>
   );
@@ -33,9 +31,8 @@ const HelpWidgets: FC = () => {
 
 export default HelpWidgets;
 
-const contentStyle: Rule = {
-  fontWeight: 'bold',
-  fontStyle: 'italic',
+const wrrapperRule: Rule = {
+  height: '100%',
 };
 
 const wrapperStyles: Rule = {
@@ -50,6 +47,7 @@ const widgetStyles: Rule = {
   display: 'flex',
   alignItems: 'center',
   textAlign: 'center',
+  justifyContent: 'center',
   height: '100%',
   padding: '24px 27px 24px 10px',
 };

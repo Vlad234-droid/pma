@@ -67,9 +67,9 @@ const colleaguesData = [
     description: 'How to challenge bias so everyone has a voice and is treated fairly as part of Your Contribution.',
   },
   {
-    id: 'our-purpose-and-strategic-drivers',
+    id: 'our-purpose-and-strategic-pillars',
     img: OurStrategicPillars,
-    title: 'Our purpose and strategic drivers ',
+    title: 'Our purpose and strategic drivers',
     description: 'Knowing more about these will help keep your objectives and work aligned to our priorities.',
   },
 ];
@@ -83,7 +83,7 @@ const managersData = [
       'Currently for our leaders, click here to learn more about our behaviours and the high-performance culture we want to create at Tesco.',
   },
   {
-    id: 'managing-a-team-at-tesco ',
+    id: 'managing-a-team-at-tesco',
     img: ManagingATeamAtTesco,
     title: 'Managing a Team at Tesco',
     description: 'For managers, with a mix of face to face, virtual and self-led eLearning.',
