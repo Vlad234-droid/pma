@@ -75,8 +75,12 @@ export const currentUserSelector = createSelector(usersSelector, ({ current }) =
 });
 
 export const checkPermissions = ({ roles, workLevels, reviewTypes }: PermissionProps) =>
-  createSelector(usersSelector, timelineSelector, ({ current }, { data }) => {
+  createSelector(usersSelector, timelineSelector, ({ current }, rest) => {
     if (!roles && !workLevels && !reviewTypes) return true;
+
+    // @ts-ignore
+    const uuid = current.info.data.colleague.colleagueUUID;
+    const data = rest?.[uuid];
 
     const userRoles = current?.info?.data?.roles || [];
     const userWorkLevel = current?.info?.data?.colleague?.workRelationships?.[0]?.workLevel;

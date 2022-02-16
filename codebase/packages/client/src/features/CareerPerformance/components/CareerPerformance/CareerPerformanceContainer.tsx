@@ -14,10 +14,10 @@ import { ObjectiveType } from 'config/enum';
 import CareerPerformance from './CareerPerformance';
 
 const CareerPerformanceContainer: FC = () => {
-  const { descriptions, startDates, statuses } = useSelector(getTimelineSelector) || {};
-  const timelineTypes = useSelector(timelineTypesAvailabilitySelector);
-  const midYearReview = useSelector(getTimelineByCodeSelector(ObjectiveType.MYR));
-  const endYearReview = useSelector(getTimelineByCodeSelector(ObjectiveType.EYR));
+  const { descriptions, startDates, statuses } = useSelector(getTimelineSelector('me')) || {};
+  const timelineTypes = useSelector(timelineTypesAvailabilitySelector('me'));
+  const midYearReview = useSelector(getTimelineByCodeSelector(ObjectiveType.MYR, 'me'));
+  const endYearReview = useSelector(getTimelineByCodeSelector(ObjectiveType.EYR, 'me'));
   const colleagueUuid = useSelector(colleagueUUIDSelector);
 
   const dispatch = useDispatch();
