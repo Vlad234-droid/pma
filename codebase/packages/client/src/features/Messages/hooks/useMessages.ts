@@ -2,7 +2,7 @@ import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getMessagesByCriteria, MessagesActions } from '@pma/store';
 import { Status } from '../types';
-import { MAX_COUNT } from '../config';
+import { MAX_COUNT, DEFAULT_SENDER_NAME } from '../config';
 import { formatToRelativeDate } from 'utils';
 
 type Props = {
@@ -31,7 +31,7 @@ export const useMessages = ({ status, initFetch = false, page = 0, size = MAX_CO
   }, [initFetch]);
 
   const fetchMessages = useCallback(() => {
-    dispatch(MessagesActions.getMessages({ status, page, size }));
+    dispatch(MessagesActions.getMessages({ status, page, size, senders: DEFAULT_SENDER_NAME }));
   }, [status, page, size]);
 
   return [messages, fetchMessages];

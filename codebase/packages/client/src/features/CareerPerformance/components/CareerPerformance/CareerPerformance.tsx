@@ -14,6 +14,7 @@ import ReviewWidgets from '../ReviewWidgets';
 import Resources from '../Resources';
 import Section from '../Section';
 import { Review } from '../../config/types';
+import { KnowledgeLibraryWidget } from 'features/KnowledgeLibrary';
 
 type Props = {
   loadTimeline: (uuid: string) => void;
@@ -67,7 +68,7 @@ const CareerPerformance: FC<Props> = ({
         />
       </Section>
       <Section title={<Trans i18nKey='useful_resources'>Useful resources</Trans>}>
-        <Resources basicTileStyle={basicTileStyle} />
+        <KnowledgeLibraryWidget />
       </Section>
     </>
   );
