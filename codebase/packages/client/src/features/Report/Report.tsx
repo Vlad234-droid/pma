@@ -1,26 +1,27 @@
 import React, { FC, useState, useEffect } from 'react';
 import { ReportActions, approvedObjectivesSelector, notApprovedObjectivesSelector } from '@pma/store';
+import { Button, colors, CreateRule, Rule, Styles, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
-import { Button, colors, CreateRule, Rule, Styles, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { useForm } from 'react-hook-form';
 
-import { PermissionProvider, role } from 'features/Permission';
 import { IconButton } from 'components/IconButton';
 import { FilterOption } from 'features/Shared';
 import { PieChart } from 'components/PieChart';
 import { View } from 'components/PieChart/PieChart';
 import { GenericItemField } from 'components/GenericForm';
 import { Item, Select } from 'components/Form';
-import { createYearSchema, field_options, years, listOfStatuses } from './config';
 import FilterModal from './components/FilterModal';
 import InfoTable from './components/InfoTable';
 import { DonwloadReportModal } from './Modals';
 import { Trans } from 'components/Translation';
-import { BASE_URL_API } from 'config/constants';
-import { Rating } from 'config/enum';
+import { Rating, TitlesReport } from 'config/enum';
 import AppliedFilters from './components/AppliedFilters';
+import { createYearSchema, field_options, years, listOfStatuses, metaStatuses } from './config';
+import { downloadCsvFile } from './utils';
+
+import useStatisticsReport from './hooks';
 
 export const REPORT_WRAPPER = 'REPORT_WRAPPER';
 
@@ -62,6 +63,46 @@ const Report: FC = () => {
   const [approvedObjPercent, approvedObjTitle] = useSelector(approvedObjectivesSelector);
   const [notApprovedObjPercent, notApprovedObjTitle] = useSelector(notApprovedObjectivesSelector);
 
+  const {
+    myrSubmittedPercentage,
+    myrApprovedPercentage,
+    eyrSubmittedPercentage,
+    eyrApprovedPercentage,
+    feedbackRequestedPercentage,
+    feedbackGivenPercentage,
+    objectivesSubmittedPercentage,
+    objectivesApprovedPercentage,
+    myrRatingBreakdownBelowExpectedPercentage,
+    myrRatingBreakdownBelowExpectedCount,
+    myrRatingBreakdownSatisfactoryPercentage,
+    myrRatingBreakdownSatisfactoryCount,
+    myrRatingBreakdownGreatPercentage,
+    myrRatingBreakdownGreatCount,
+    myrRatingBreakdownOutstandingPercentage,
+    myrRatingBreakdownOutstandingCount,
+    eyrRatingBreakdownBelowExpectedPercentage,
+    eyrRatingBreakdownBelowExpectedCount,
+    eyrRatingBreakdownSatisfactoryPercentage,
+    eyrRatingBreakdownSatisfactoryCount,
+    eyrRatingBreakdownGreatPercentage,
+    eyrRatingBreakdownGreatCount,
+    eyrRatingBreakdownOutstandingPercentage,
+    eyrRatingBreakdownOutstandingCount,
+    newToBusinessCount,
+    anniversaryReviewPerQuarter1Percentage,
+    anniversaryReviewPerQuarter1Count,
+    anniversaryReviewPerQuarter2Percentage,
+    anniversaryReviewPerQuarter2Count,
+    anniversaryReviewPerQuarter3Percentage,
+    anniversaryReviewPerQuarter3Count,
+    anniversaryReviewPerQuarter4Percentage,
+    anniversaryReviewPerQuarter4Count,
+  } = useStatisticsReport([...metaStatuses]);
+
+  useEffect(() => {
+    dispatch(ReportActions.getObjectivesStatistics({ year: years[2021] }));
+  }, []);
+
   useEffect(() => {
     dispatch(
       ReportActions.getObjectivesReport({
@@ -93,30 +134,6 @@ const Report: FC = () => {
   };
 
   const quantity = getAppliedReport().length;
-
-  async function getData(url) {
-    const response = await fetch(
-      url +
-        new URLSearchParams({
-          year: '2021',
-          'statuses_in[0]': 'APPROVED',
-        }),
-    );
-    return await response;
-  }
-
-  const downloadCsvFile = async () => {
-    getData(`${BASE_URL_API}reports/linked-objective-report/formats/excel?`).then((resp) =>
-      resp.blob().then((blob) => {
-        const a = document.createElement('a');
-        a.href = window.URL.createObjectURL(blob);
-        a.download = 'ObjectivesReport.xlsx';
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-      }),
-    );
-  };
 
   return (
     <>
@@ -161,62 +178,58 @@ const Report: FC = () => {
               isCheckAll={isCheckAll}
               setIsCheckAll={setIsCheckAll}
             />
-            <PermissionProvider roles={[role.PEOPLE_TEAM, role.TALENT_ADMIN]}>
-              <IconButton
-                graphic='download'
-                customVariantRules={{
-                  default: iconBtnStyle as Rule,
-                }}
-                iconStyles={iconDownloadStyle}
-                onPress={() => {
-                  setShowDownloadReportModal(true);
-                }}
-              />
-            </PermissionProvider>
+
+            <IconButton
+              graphic='download'
+              customVariantRules={{
+                default: iconBtnStyle as Rule,
+              }}
+              iconStyles={iconDownloadStyle}
+              onPress={() => {
+                setShowDownloadReportModal(true);
+              }}
+            />
           </div>
         </div>
         <div className={css(pieChartWrapper)}>
           <div className={css(leftColumn)}>
-            <PieChart title='Objectives submitted' data={[{ percent: 67 }]} display={View.CHART} />
             <PieChart
-              title='Wl4 & 5 Objectives submitted'
+              title={TitlesReport.OBJECTIVES_SUBMITTED}
+              data={[{ percent: objectivesSubmittedPercentage }]}
+              display={View.CHART}
+            />
+            <PieChart
+              title={TitlesReport.WL4And5}
               display={View.CHART}
               data={[
                 { percent: approvedObjPercent, title: approvedObjTitle },
                 { percent: notApprovedObjPercent, title: notApprovedObjTitle },
               ]}
             />
+
             <PieChart
-              title='Mid-year review'
+              title={TitlesReport.MYR}
               display={View.CHART}
               data={[
-                { percent: 82, title: 'Submitted' },
-                { percent: 82, title: 'Approved' },
+                { percent: myrSubmittedPercentage, title: TitlesReport.SUBMITTED },
+                { percent: myrApprovedPercentage, title: TitlesReport.APPROVED },
               ]}
             />
 
             <PieChart
-              title='Year-end review'
+              title={TitlesReport.EYR}
               display={View.CHART}
               data={[
-                { percent: 82, title: 'Submitted' },
-                { percent: 82, title: 'Approved' },
+                { percent: eyrSubmittedPercentage, title: TitlesReport.SUBMITTED },
+                { percent: eyrApprovedPercentage, title: TitlesReport.APPROVED },
               ]}
             />
             <PieChart
-              title='In the moment feedback'
+              title={TitlesReport.MOMENT_FEEDBACK}
               display={View.CHART}
               data={[
-                { percent: 38, title: 'Requested' },
-                { percent: 12, title: 'Given' },
-              ]}
-            />
-            <PieChart
-              title='Colleagues absences'
-              display={View.QUANTITY}
-              data={[
-                { percent: 38, title: 'Parental leave' },
-                { percent: 12, title: 'Long-term absence' },
+                { percent: feedbackRequestedPercentage, title: TitlesReport.REQUESTED },
+                { percent: feedbackGivenPercentage, title: TitlesReport.GIVEN },
               ]}
             />
           </div>
@@ -224,7 +237,11 @@ const Report: FC = () => {
           <div className={css(rightColumn)}>
             <div className={css({ display: 'flex', gap: '8px' })}>
               <div className={css({ flex: '1' })}>
-                <PieChart title='Objectives approved' data={[{ percent: 67 }]} display={View.CHART} />
+                <PieChart
+                  title={TitlesReport.OBJECTIVES_APPROVED}
+                  data={[{ percent: objectivesApprovedPercentage }]}
+                  display={View.CHART}
+                />
               </div>
               <div className={css({ display: 'flex', flexDirection: 'column' })}>
                 <Button styles={[buttonCoreStyled]} onPress={downloadCsvFile}>
@@ -246,39 +263,86 @@ const Report: FC = () => {
               </div>
             </div>
             <InfoTable
-              mainTitle='Breakdown of Mid-year ratings'
+              mainTitle={TitlesReport.MYR_BREAKDOWN}
               data={[
-                { percent: 4, quantity: 4, title: Rating.BELOW_EXPECTED },
-                { percent: 48, quantity: 54, title: Rating.SATISFACTORY },
-                { percent: 35, quantity: 39, title: Rating.GREAT },
-                { percent: 13, quantity: 15, title: Rating.OUTSTANDING },
+                {
+                  percent: myrRatingBreakdownBelowExpectedPercentage,
+                  quantity: myrRatingBreakdownBelowExpectedCount,
+                  title: Rating.BELOW_EXPECTED,
+                },
+                {
+                  percent: myrRatingBreakdownSatisfactoryPercentage,
+                  quantity: myrRatingBreakdownSatisfactoryCount,
+                  title: Rating.SATISFACTORY,
+                },
+                {
+                  percent: myrRatingBreakdownGreatPercentage,
+                  quantity: myrRatingBreakdownGreatCount,
+                  title: Rating.GREAT,
+                },
+                {
+                  percent: myrRatingBreakdownOutstandingPercentage,
+                  quantity: myrRatingBreakdownOutstandingCount,
+                  title: Rating.OUTSTANDING,
+                },
               ]}
             />
             <InfoTable
-              mainTitle='Breakdown of Mid-year ratings'
+              mainTitle={TitlesReport.EYR_BREAKDOWN}
               data={[
-                { percent: 4, quantity: 4, title: Rating.BELOW_EXPECTED },
-                { percent: 48, quantity: 54, title: Rating.SATISFACTORY },
-                { percent: 35, quantity: 39, title: Rating.GREAT },
-                { percent: 13, quantity: 15, title: Rating.OUTSTANDING },
+                {
+                  percent: eyrRatingBreakdownBelowExpectedPercentage,
+                  quantity: eyrRatingBreakdownBelowExpectedCount,
+                  title: Rating.BELOW_EXPECTED,
+                },
+                {
+                  percent: eyrRatingBreakdownSatisfactoryPercentage,
+                  quantity: eyrRatingBreakdownSatisfactoryCount,
+                  title: Rating.SATISFACTORY,
+                },
+                {
+                  percent: eyrRatingBreakdownGreatPercentage,
+                  quantity: eyrRatingBreakdownGreatCount,
+                  title: Rating.GREAT,
+                },
+                {
+                  percent: eyrRatingBreakdownOutstandingPercentage,
+                  quantity: eyrRatingBreakdownOutstandingCount,
+                  title: Rating.OUTSTANDING,
+                },
               ]}
             />
             <div className={css(flexContainer)}>
               <PieChart
-                title='Supporting your Performance'
-                data={[{ percent: 4, title: 'Colleagues' }]}
+                title={TitlesReport.BUSINESS}
+                data={[{ percent: newToBusinessCount, title: Rating.COLLEAGUES }]}
                 display={View.QUANTITY}
               />
-              <PieChart title='New to business' data={[{ percent: 6, title: 'Colleagues' }]} display={View.QUANTITY} />
             </div>
             <InfoTable
-              mainTitle='Anniversary Reviews completed per quarter'
-              preTitle='Hourly paid colleagues only'
+              mainTitle={TitlesReport.ANNIVERSARY_REVIEWS}
+              preTitle={TitlesReport.HOURLY_PAID}
               data={[
-                { percent: 4, quantity: 4, title: Rating.BELOW_EXPECTED },
-                { percent: 48, quantity: 54, title: Rating.SATISFACTORY },
-                { percent: 35, quantity: 39, title: Rating.GREAT },
-                { percent: 13, quantity: 15, title: Rating.OUTSTANDING },
+                {
+                  percent: anniversaryReviewPerQuarter1Percentage,
+                  quantity: anniversaryReviewPerQuarter1Count,
+                  title: Rating.QUARTER_1,
+                },
+                {
+                  percent: anniversaryReviewPerQuarter2Percentage,
+                  quantity: anniversaryReviewPerQuarter2Count,
+                  title: Rating.QUARTER_2,
+                },
+                {
+                  percent: anniversaryReviewPerQuarter3Percentage,
+                  quantity: anniversaryReviewPerQuarter3Count,
+                  title: Rating.QUARTER_3,
+                },
+                {
+                  percent: anniversaryReviewPerQuarter4Percentage,
+                  quantity: anniversaryReviewPerQuarter4Count,
+                  title: Rating.QUARTER_4,
+                },
               ]}
             />
           </div>

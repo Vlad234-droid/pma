@@ -9,7 +9,7 @@ const statusIndex = 8;
 export const approvedObjectivesSelector = createSelector(reportSelector, (report: any) => {
   const { objectiveReports } = report;
   const approvedCount = objectiveReports.filter((item) => item[statusIndex] === Status.APPROVED).length;
-  const approvedPercent = Math.floor((100 * approvedCount) / objectiveReports.length);
+  const approvedPercent = Math.floor((100 * approvedCount) / objectiveReports.length) || 0;
   return [approvedPercent, 'Approved'];
 });
 
@@ -18,4 +18,21 @@ export const notApprovedObjectivesSelector = createSelector(reportSelector, (rep
   const notApprovedCount = objectiveReports.filter((item) => item[statusIndex] !== Status.APPROVED).length;
   const notApprovedPercent = Math.floor((100 * notApprovedCount) / objectiveReports.length) || 0;
   return [notApprovedPercent, 'Not approved'];
+});
+
+export const objectiveStatisticSelector = createSelector(reportSelector, (report: any) => {
+  const { objectiveStatistics } = report;
+  return objectiveStatistics;
+});
+
+export const getStatisticReportSelector = createSelector(reportSelector, (report: any) => {
+  if (Object.keys(report?.objectiveStatistics).length) {
+    const {
+      //@ts-ignore
+      objectiveStatistics: { data, metadata },
+    } = report;
+    const { columnMetadata } = metadata ?? [];
+    return [data, columnMetadata];
+  }
+  return [[], []];
 });
