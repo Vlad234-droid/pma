@@ -1,6 +1,6 @@
 // @ts-ignore
 import React from 'react';
-import { useStyle, Rule } from '@dex-ddl/core';
+import { Rule } from '@dex-ddl/core';
 
 // @ts-ignore
 import { renderWithTheme as render } from 'utils/test';

@@ -22,15 +22,20 @@ export const renderWithTheme = <TProps extends {} = {}>(
   const store = mockStore({
     users: {
       current: {
+        authenticated: true,
         info: {
-          profile: {
-            firstName: 'Test fullName',
-          },
+          data: {
+            colleague: {
+              profile: {
+                firstName: 'Test fullName',
+              },
+            }
+          }
         },
-        meta: {
-          loaded: true,
-          loading: false,
-        },
+      },
+      meta: {
+        loaded: true,
+        loading: false,
       },
     },
     schema: { meta: { loading: false, loaded: false, error: null } },
