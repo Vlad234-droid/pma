@@ -10,6 +10,9 @@ export type ViewHistoryModal = {
   card: TipsProps;
 };
 
+export const VIEW_HISTORY_MODAL = 'view-history-modal';
+export const CLOSE_VIEW_HISTORY_MODAL_BTN = 'close-view-history-modal-btn';
+
 const ViewHistoryModal: FC<ViewHistoryModal> = ({ handleCloseModal, card }) => {
   const { css, theme } = useStyle();
   const dispatch = useDispatch();
@@ -23,41 +26,47 @@ const ViewHistoryModal: FC<ViewHistoryModal> = ({ handleCloseModal, card }) => {
 
   return (
     <Modal modalPosition='middle' modalContainerRule={[modalWrapper({mobileScreen})]}>
-      <div className={css(vhTitleStyle({mobileScreen, theme}))}>Activity History</div>
-      <div className={css(vhSubTitleStyle({mobileScreen, theme}))}>For tip: {card.title}</div>
-      <div className={css(vhItemsWrap)}>
-        {tipHistory?.map((item, idx) => {
-          const titleDate = formatDateStringFromISO(item.updatedTime, DATE_TIME_STRING_FORMAT);
-          const isLastItem: boolean = idx === tipHistory.length - 1 ? true : false;
+      <div data-test-id={VIEW_HISTORY_MODAL} className={css(modalInner)}>
+        <div className={css(vhTitleStyle({mobileScreen, theme}))}>Activity History</div>
+        <div className={css(vhSubTitleStyle({mobileScreen, theme}))}>For tip: {card.title}</div>
+        <div className={css(vhItemsWrap)}>
+          {tipHistory?.map((item, idx) => {
+            const titleDate = formatDateStringFromISO(item.updatedTime, DATE_TIME_STRING_FORMAT);
+            const isLastItem: boolean = idx === tipHistory.length - 1 ? true : false;
 
-          return (
-            <div key={item.uuid} className={css(vhItemStyle({isLastItem, theme}))}>
-              <div>
-                <div className={css(vhItemTitle)}>
-                  <Icon
-                    graphic='calendar'
-                    fill='white'
-                    stroke={theme.colors.tescoBlue}
-                    size='16px'
-                    strokeWidth={2}
-                    iconStyles={{ marginRight: '5px' }}
-                  />
-                  {titleDate}
+            return (
+              <div key={item.uuid} className={css(vhItemStyle({isLastItem, theme}))}>
+                <div>
+                  <div className={css(vhItemTitle)}>
+                    <Icon
+                      graphic='calendar'
+                      fill='white'
+                      stroke={theme.colors.tescoBlue}
+                      size='16px'
+                      strokeWidth={2}
+                      iconStyles={{ marginRight: '5px' }}
+                    />
+                    {titleDate}
+                  </div>
+                  <div className={css(vhItemSubtitle)}>Target: {item.targetOrganisation.name}</div>
                 </div>
-                <div className={css(vhItemSubtitle)}>Target: {item.targetOrganisation.name}</div>
+                {item.published ? (
+                  <div className={css(vhItemStatus)}>Pushed</div>
+                ) : (
+                  <div className={css(vhItemStatus)}>{item.createdTime === item.updatedTime ? 'Created' : 'Edited'}</div>
+                )}
               </div>
-              {item.published ? (
-                <div className={css(vhItemStatus)}>Pushed</div>
-              ) : (
-                <div className={css(vhItemStatus)}>{item.createdTime === item.updatedTime ? 'Created' : 'Edited'}</div>
-              )}
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
+        <Button
+          data-test-id={CLOSE_VIEW_HISTORY_MODAL_BTN}
+          onPress={handleCloseModal}
+          styles={[modalBtnStyles]}
+        >
+          Okay
+        </Button>
       </div>
-      <Button onPress={handleCloseModal} styles={[modalBtnStyles]}>
-        Okay
-      </Button>
     </Modal>
   );
 };
@@ -71,12 +80,17 @@ const modalWrapper: CreateRule<{mobileScreen: boolean}> = ({mobileScreen}) => {
     width: mobileScreen ? 'calc(100% - 50px)' : '100%',
     maxHeight: '404px',
     height: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'flex-start',
-    justifyContent: 'flex-start',
   };
 };
+
+const modalInner: Rule = {
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'flex-start',
+  justifyContent: 'flex-start',
+  height: '100%',
+  width: '100%',
+}
 
 const vhTitleStyle: CreateRule<{mobileScreen: boolean; theme: Theme}> = ({mobileScreen, theme}) => {
   return {

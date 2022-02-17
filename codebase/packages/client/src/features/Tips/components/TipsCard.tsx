@@ -16,6 +16,10 @@ export type TipsCardProps = {
   card: TipsProps;
 };
 
+export const TIPS_CARD = 'tips-card';
+export const VIEW_HISTORY_BTN = 'view-history-btn';
+export const PUSH_TIP_BTN = 'push-tip-btn';
+
 const TipsCard: FC<TipsCardProps> = ({ card }) => {
   const { css, theme } = useStyle();
   const navigate = useNavigate();
@@ -55,7 +59,7 @@ const TipsCard: FC<TipsCardProps> = ({ card }) => {
 
   return (
     <Fragment>
-      <div className={css(cardWrapper({mobileScreen}))}>
+      <div data-test-id={TIPS_CARD} className={css(cardWrapper({mobileScreen}))}>
         <TileWrapper customStyle={cardStyle({mobileScreen})}>
           <div className={css(tipImageWrapStyle({mobileScreen}))}>
             <div className={css(tipImage, { backgroundImage: `url(${tipCardImage})` })} />
@@ -64,8 +68,14 @@ const TipsCard: FC<TipsCardProps> = ({ card }) => {
             <div className={css(tipTitle({mobileScreen, theme}))}>{card.title}</div>
             <div className={css(tipText({mobileScreen, theme}))}>{card.description}</div>
             <div className={css({ marginTop: '8px', display: 'flex' })}>
-              <div className={css(lastPushStyle({mobileScreen, theme}))}>Last push: {card.published ? tipPushedTime : 'was not pushed'}</div>
-              <div className={css(viewHistoryStyle({mobileScreen, theme}))} onClick={handleShowViewHistoryModal}>
+              <div className={css(lastPushStyle({mobileScreen, theme}))}>
+                Last push: {card.published ? tipPushedTime : 'was not pushed'}
+              </div>
+              <div
+                data-test-id={VIEW_HISTORY_BTN}
+                className={css(viewHistoryStyle({mobileScreen, theme}))}
+                onClick={handleShowViewHistoryModal}
+              >
                 View history
               </div>
             </div>
@@ -78,7 +88,7 @@ const TipsCard: FC<TipsCardProps> = ({ card }) => {
               <Button mode='inverse' onPress={handleEditTip} styles={[cardButton]}>
                 Edit
               </Button>
-              <Button onPress={handlePushTip} styles={[cardButton]}>
+              <Button data-test-id={PUSH_TIP_BTN} onPress={handlePushTip} styles={[cardButton]}>
                 Push
               </Button>
             </div>

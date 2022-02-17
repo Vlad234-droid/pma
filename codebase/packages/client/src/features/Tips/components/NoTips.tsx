@@ -3,6 +3,8 @@ import { useStyle, CreateRule, useBreakpoints, Theme } from '@dex-ddl/core';
 import { TileWrapper } from 'components/Tile';
 import { Icon } from 'components/Icon';
 
+export const NO_TIPS_TILE = 'no-tips-tile';
+
 const NoTips: FC = () => {
   const { css, theme } = useStyle();
   const [, isBreakpoint] = useBreakpoints();
@@ -10,7 +12,7 @@ const NoTips: FC = () => {
 
   return (
     <Fragment>
-      <div className={css({ margin: '0 0 15px' })}>
+      <div data-test-id={NO_TIPS_TILE} className={css({ margin: '0 0 15px' })}>
         <TileWrapper customStyle={cardStyle({mobileScreen})}>
           <div className={css(cardInner({mobileScreen}))}>
             <div className={css({ marginRight: '10px' })}>

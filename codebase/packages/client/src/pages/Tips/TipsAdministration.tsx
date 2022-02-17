@@ -9,7 +9,7 @@ import { IconButton } from 'components/IconButton';
 import { NoTips, TipsCard } from 'features/Tips';
 import { paramsReplacer } from 'utils';
 
-const TIPS_ADMINISTRATION = 'tips-administration';
+export const TIPS_ADMINISTRATION = 'tips-administration';
 
 const TipsAdministration: FC = () => {
   const { css, theme } = useStyle();

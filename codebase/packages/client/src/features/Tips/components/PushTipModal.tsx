@@ -9,6 +9,10 @@ export type PushTipModalProps = {
   card: TipsProps;
 };
 
+export const PUSH_TIP_MODAL = 'push-tip-modal';
+export const CONFIRM_PUSH_BTN = 'confirm-push-btn';
+export const CLOSE_PUSH_TIP_MODAL_BTN = 'close-push-tip-modal-btn';
+
 const PushTipModal: FC<PushTipModalProps> = ({ card, handleCloseModal, handleConfirm }) => {
   const { css, theme } = useStyle();
 
@@ -22,7 +26,7 @@ const PushTipModal: FC<PushTipModalProps> = ({ card, handleCloseModal, handleCon
   return (
     <Modal modalPosition='middle' modalContainerRule={[modalWrapper]}>
       {successText ? (
-        <>
+        <div className={css(modalInner)}>
           <img src={success} alt='success' />
           <div className={css(modalTitle)}>Done!</div>
           <div className={css(modalSubTitleStyle)}>Tip pushed successfully.</div>
@@ -31,9 +35,9 @@ const PushTipModal: FC<PushTipModalProps> = ({ card, handleCloseModal, handleCon
               Close
             </Button>
           </div>
-        </>
+        </div>
       ) : (
-        <>
+        <div className={css(modalInner)} data-test-id={PUSH_TIP_MODAL}>
           <div className={css(modalTitle)}>Push Tip</div>
           <div className={css(modalSubTitleStyle)}>Do you want to push the below Tip?</div>
           <div className={css(modalText)}>
@@ -47,34 +51,36 @@ const PushTipModal: FC<PushTipModalProps> = ({ card, handleCloseModal, handleCon
           </div>
           <div className={css(modalBtnsWrap)}>
             <Button
+              data-test-id={CLOSE_PUSH_TIP_MODAL_BTN}
               onPress={handleCloseModal}
               mode='inverse'
               styles={[modalBtn, { border: `1px solid ${theme.colors.tescoBlue}` }]}
             >
               Cancel
             </Button>
-            <Button onPress={handlePushTip} styles={[modalBtn]}>
+            <Button data-test-id={CONFIRM_PUSH_BTN} onPress={handlePushTip} styles={[modalBtn]}>
               Confirm
             </Button>
           </div>
-        </>
+        </div>
       )}
     </Modal>
   );
 };
 
-const modalWrapper: Rule = () => {
-  return {
-    padding: '24px 30px',
-    maxWidth: '500px',
-    width: 'calc(100% - 50px)',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    textAlign: 'center',
-  };
+const modalWrapper: Rule = {
+  padding: '24px 30px',
+  maxWidth: '500px',
+  width: 'calc(100% - 50px)',
 };
+
+const modalInner: Rule = {
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  justifyContent: 'flex-start',
+  textAlign: 'center',
+}
 
 const modalTitle: Rule = ({theme}) => {
   return {
