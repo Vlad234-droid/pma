@@ -16,6 +16,7 @@ import RespondFeedback from './RespondFeedback';
 import ViewFeedback from './ViewFeedback';
 import Settings from './Settings';
 import Notes from './Notes';
+import KnowledgeLibrary from './KnowledgeLibrary';
 import CreateOrganizationObjectives from './CreateOrganizationObjectives';
 import ObjectivesView from './ObjectivesView';
 import Report from './Report';
@@ -36,6 +37,18 @@ export type PageComponent = {
   iconName?: Graphics;
 };
 const pages: Record<Page, PageComponent> = {
+  [Page.KNOWLEDGE_LIBRARY]: {
+    Element: KnowledgeLibrary,
+    title: 'Want to learn more?',
+    withHeader: true,
+    backPath: Page.CONTRIBUTION,
+  },
+  [Page.KNOWLEDGE_LIBRARY_BY_ID]: {
+    Element: KnowledgeLibrary,
+    title: 'Want to learn more?',
+    withHeader: true,
+    backPath: Page.KNOWLEDGE_LIBRARY,
+  },
   [Page.MY_TEAM]: {
     Element: MyTeam,
     title: 'My Team',

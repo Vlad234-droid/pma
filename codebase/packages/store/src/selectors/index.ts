@@ -27,3 +27,4 @@ export * from './previousReviewFiles';
 export * from './appState';
 export * from './messages';
 export * from './processTemplate';
+export * from './knowledgeLibrary';

@@ -6,6 +6,7 @@ import { useTranslation } from 'components/Translation';
 import { CONFIG } from 'config/constants';
 import { useSelector } from 'react-redux';
 import { currentUserSelector } from '@pma/store';
+import { DEFAULT_SENDER_NAME } from '../../config';
 
 export type AlertDrawerProps = { onClose: () => void };
 
@@ -59,6 +60,7 @@ export const AlertDrawer: FC<AlertDrawerProps> = ({ onClose }) => {
             appName={applicationName}
             envConfig={{ env: mountPath as any, mountPath, logoutPath: signOut }}
             isManager={isManager}
+            senders={[DEFAULT_SENDER_NAME]}
           />
         </div>
       </div>
