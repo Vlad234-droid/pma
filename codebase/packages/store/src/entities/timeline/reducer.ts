@@ -3,6 +3,7 @@ import { getTimeline } from './actions';
 
 export const initialState = {
   meta: { loading: false, loaded: false, error: null },
+  data: [],
 };
 
 const request = (state) => ({ ...state, meta: { ...state.meta, loading: true, error: null } });

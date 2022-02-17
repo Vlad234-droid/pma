@@ -1,6 +1,6 @@
 import React, { FC, useEffect } from 'react';
 
-import { useStyle, Rule } from '@dex-ddl/core';
+import { Rule, useStyle } from '@dex-ddl/core';
 
 import { Widgets as ObjectiveWidgets } from 'features/Objectives';
 import ViewNavigation from 'features/ViewNavigation';
@@ -14,6 +14,7 @@ import ReviewWidgets from '../ReviewWidgets';
 import Resources from '../Resources';
 import Section from '../Section';
 import { Review } from '../../config/types';
+import { KnowledgeLibraryWidget } from 'features/KnowledgeLibrary';
 
 type Props = {
   loadTimeline: (uuid: string) => void;
@@ -67,15 +68,10 @@ const CareerPerformance: FC<Props> = ({
         />
       </Section>
       <Section title={<Trans i18nKey='useful_resources'>Useful resources</Trans>}>
-        <Resources basicTileStyle={basicTileStyle} />
+        <KnowledgeLibraryWidget />
       </Section>
     </>
   );
-};
-
-const contentStyle: Rule = {
-  fontWeight: 'bold',
-  fontStyle: 'italic',
 };
 
 const wrapperStyles: Rule = {

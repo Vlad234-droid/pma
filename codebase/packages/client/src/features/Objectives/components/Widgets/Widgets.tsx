@@ -19,9 +19,9 @@ const Widgets: FC<Props> = () => {
   const { css } = useStyle();
   const { t } = useTranslation();
 
-  const timelineObjective = useSelector(getTimelineByReviewTypeSelector(ReviewType.OBJECTIVE));
-  const timelineMYR = useSelector(getTimelineByReviewTypeSelector(ReviewType.MYR));
-  const timelineTypes = useSelector(timelineTypesAvailabilitySelector);
+  const timelineObjective = useSelector(getTimelineByReviewTypeSelector(ReviewType.OBJECTIVE, 'me'));
+  const timelineMYR = useSelector(getTimelineByReviewTypeSelector(ReviewType.MYR, 'me'));
+  const timelineTypes = useSelector(timelineTypesAvailabilitySelector('me'));
 
   const status = timelineObjective?.status;
   const count = timelineObjective?.count || 0;

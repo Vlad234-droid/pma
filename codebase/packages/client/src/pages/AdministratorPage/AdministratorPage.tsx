@@ -1,8 +1,8 @@
 import React, { FC } from 'react';
-import PerfomanceCyclesTemplates from 'features/PerfomanceCyclesTemplates';
+import PerformanceCyclesTemplates from 'features/PerformanceCyclesTemplates';
 
 const AdministratorPage: FC = () => {
-  return <PerfomanceCyclesTemplates />;
+  return <PerformanceCyclesTemplates />;
 };
 
 export default AdministratorPage;

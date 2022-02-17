@@ -1,19 +1,12 @@
 {
-  "extends": "ts-config-single-spa",
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
     "jsx": "react-jsx",
     "typeRoots": ["./node_modules/@types", "./src/types", "../../node_modules/@types"],
     "baseUrl": "./src",
     "types": ["node", "jest", "@testing-library/jest-dom"],
-    "target": "es2018",
-    "allowJs": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "noFallthroughCasesInSwitch": true,
-    "isolatedModules": true,
-    "noImplicitAny": false
+    "target": "es2018"
   },
   "include": ["./src/**/*"],
-  "exclude": ["node_modules", "src/**/*.test*", "./src/setupProxy.js", "./src/utils/test/**/*"]
+  "exclude": ["node_modules", "./src/setupProxy.js"]
 }

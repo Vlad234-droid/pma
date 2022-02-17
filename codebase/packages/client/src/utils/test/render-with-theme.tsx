@@ -43,7 +43,7 @@ export const renderWithTheme = <TProps extends {} = {}>(
     objectivesSharing: { meta: { loading: false, loaded: false, error: null }, objectives: [], isShared: false },
     notes: { notes: [], folders: [], meta: { loading: false, loaded: false, error: null } },
     feedback: { notes: [], reviews: [], meta: { loading: false, loaded: false, error: null } },
-    report: { objectiveReports: [], meta: { loading: false, loaded: false, error: null } },
+    report: { objectiveReports: [], objectiveStatistics: [], meta: { loading: false, loaded: false, error: null } },
     processTemplate: { meta: { loading: false, loaded: false, error: null }, success: true, data: [] },
     ...initState,
   });

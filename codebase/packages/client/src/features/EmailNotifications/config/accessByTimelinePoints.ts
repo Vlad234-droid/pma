@@ -1,5 +1,5 @@
+import { ObjectiveType } from 'config/enum';
 import { setting } from '../constants';
-import { ObjectiveType } from '../../../config/enum';
 
 export const accessByTimelinePoints = {
   [setting.MID_YEAR_BEFORE_REVIEW_START]: [ObjectiveType.MYR],

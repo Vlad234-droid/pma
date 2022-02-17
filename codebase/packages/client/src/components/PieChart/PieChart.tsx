@@ -21,6 +21,7 @@ type PieChartProps = {
 
 const PieChart: FC<PieChartProps> = ({ title, data, display, percentId = 'percent_id', titleId = 'titleId' }) => {
   const { css, theme } = useStyle();
+
   return (
     <div className={css(pieChartWrapper)}>
       {title && (
@@ -30,7 +31,7 @@ const PieChart: FC<PieChartProps> = ({ title, data, display, percentId = 'percen
       )}
       <div className={css(chartContainer({ display }))}>
         {data.map((item, i) => {
-          const { percent } = item;
+          const percent = item.percent || 0;
           return (
             <div className={css({ display: 'flex', flexDirection: 'column' })} key={i}>
               <div className={css(progress({ percent, theme, data, display }))}>

@@ -1,1 +1,1 @@
-export { PermissionProvider } from './PermissionProvider';
+export { default as CanPerform } from './CanPerform';

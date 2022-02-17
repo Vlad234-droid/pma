@@ -10,9 +10,6 @@ const InfoMassage: FC<InfoModalProps> = ({ goBack }) => {
 
   return (
     <div className={css(wrapperInfo)}>
-      <h2 className={css(title)}>
-        Give feedback page I pop-up, the wording on here needs updating, please copy and paste this wording:
-      </h2>
       <p className={css(preTitle)}>
         Giving feedback helps us to make sure we&apos;re all contributing our best; whether that&apos;s celebrating
         what&apos;s gone well or letting someone know when something could be better. <br />

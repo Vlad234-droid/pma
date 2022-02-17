@@ -22,9 +22,8 @@ import {
   notesFolderTeamDataSelector,
   personalFolderUuidSelector,
   teamFolderUuidSelector,
-  checkPermissions,
 } from '@pma/store';
-import { role } from 'features/Permission';
+import { role, usePermission } from 'features/Permission';
 import { AllNotesFolderId, AllNotesFolderIdTEAM, filterNotesHandler } from '../../utils';
 import { PeopleTypes } from './components/TeamNotes/ModalsParts/type';
 import { useNavigate } from 'react-router-dom';
@@ -33,8 +32,6 @@ import { ConfirmModalWithSelectOptions } from '../Modal';
 
 export const NOTES_WRAPPER = 'note_wrapper';
 export const ADD_NEW = 'ADD_NEW';
-export const MODAL_BUTTONS = 'modal_buttons';
-export const PLUS_PERSONAL_NOTE = 'plus_personal_note';
 export const CONFIRM_MODAL_ID = 'CONFIRM_MODAL_ID';
 
 enum ModalStatuses {
@@ -52,7 +49,7 @@ const NotesActions: FC = () => {
   const navigate = useNavigate();
   const [status, setStatus] = useState(ModalStatuses.PENDING);
 
-  const isLineManager = useSelector(checkPermissions({ roles: [role.LINE_MANAGER] }));
+  const isLineManager = usePermission([role.LINE_MANAGER]);
 
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;

@@ -3,7 +3,7 @@ import '@testing-library/jest-dom/extend-expect';
 import { renderWithTheme } from '../../utils/test';
 import '@testing-library/jest-dom';
 import { fireEvent } from '@testing-library/react';
-import NotesActions, { NOTES_WRAPPER, ADD_NEW, MODAL_BUTTONS, CONFIRM_MODAL_ID } from './NotesActions';
+import NotesActions, { NOTES_WRAPPER, ADD_NEW, CONFIRM_MODAL_ID } from './NotesActions';
 
 jest.mock('react-router-dom', () => ({
   ...(jest.requireActual('react-router-dom') as any),

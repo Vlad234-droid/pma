@@ -21,6 +21,7 @@ import reportReducer from '../entities/report/reducer';
 import previousReviewFilesReducer from '../entities/previousReviewFiles/reducer';
 import appStateReducer from '../entities/appState/reducer';
 import messagesReducer from '../entities/messages/reducer';
+import knowledgeLibraryReducer from '../entities/knowledgeLibrary/reducer';
 
 export const rootReducer = combineReducers({
   users: userReducer,
@@ -44,4 +45,5 @@ export const rootReducer = combineReducers({
   previousReviewFiles: previousReviewFilesReducer,
   appState: appStateReducer,
   messages: messagesReducer,
+  knowledgeLibrary: knowledgeLibraryReducer,
 });
