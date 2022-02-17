@@ -187,12 +187,6 @@ const IndustryStyle: Rule = {
   lineHeight: '20px',
   margin: '4px 0px 0px 0px',
 };
-const TitleStyle: Rule = {
-  margin: '0px 0px 16px 0px',
-  fontSize: '16px',
-  color: '#00539F',
-  lineHeight: '20px',
-};
 
 const iconBtnStyle: Rule = ({ theme }) => ({
   padding: '12px 20px 12px 14px',

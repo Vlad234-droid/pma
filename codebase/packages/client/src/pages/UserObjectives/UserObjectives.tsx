@@ -49,7 +49,7 @@ export const UserObjectives: FC = () => {
   const [previousReviewFilesModalShow, setPreviousReviewFilesModalShow] = useState(false);
   const [objectives, setObjectives] = useState<OT.Objective[]>([]);
   const [schema] = useReviewSchema(ReviewType.OBJECTIVE);
-  const { components = [], markup = { max: 0, min: 0 } } = schema;
+  const { components = [] } = schema;
 
   const { loaded: schemaLoaded } = useSelector(schemaMetaSelector);
   const { loaded: reviewLoaded } = useSelector(reviewsMetaSelector);
