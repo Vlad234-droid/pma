@@ -15,6 +15,7 @@ export type TileProps = {
   icon?: boolean;
   customStyle?: React.CSSProperties | {};
   imgCustomStyle?: React.CSSProperties | {};
+  tearget?: HTMLAnchorElement['target'];
 };
 
 type Props = HTMLProps<HTMLInputElement> & TileProps;
@@ -31,6 +32,7 @@ export const BasicTile: FC<Props> = ({
   imgCustomStyle = {},
   icon = false,
   children,
+  target = '_self',
 }) => {
   const { css } = useStyle();
 
@@ -40,6 +42,7 @@ export const BasicTile: FC<Props> = ({
     }
     const aEl = window.document.createElement('a');
     aEl.href = link;
+    aEl.target = target;
     aEl.dispatchEvent(new MouseEvent('click'));
   };
 
@@ -54,7 +57,11 @@ export const BasicTile: FC<Props> = ({
       <div className={css(wrapperStyle({ icon, isLink: !!link }))} onClick={handleLinkClick}>
         {img && (
           <div className={css(imgCustomStyle)}>
-            {typeof img === 'string' && <img className={css(imageStyle({ icon }))} src={img} />}
+            {typeof img === 'string' && (
+              <div className={css(imageWrapperRule, loadingRule)}>
+                <img className={css(imageStyle)} src={img} />
+              </div>
+            )}
             {typeof img === 'object' && img}
           </div>
         )}
@@ -95,24 +102,32 @@ const wrapperStyle: CreateRule<{ icon: boolean; isLink: boolean }> = ({ icon, is
   };
 };
 
-const imageStyle: CreateRule<{ icon: boolean }> = ({ icon }) => {
+const imageWrapperRule: Rule = () => {
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
-  if (icon) {
-    return {
-      width: '100%',
-    };
-  }
-  if (mobileScreen) {
-    return {
-      width: '100px',
-      minWidth: '100px',
-      objectFit: 'cover',
-      height: '100%',
-    };
-  }
+
   return {
+    height: '100%',
+    position: 'relative',
+    minWidth: mobileScreen ? '100px' : 'auto',
+    paddingTop: mobileScreen ? 'auto' : '66%', // 6:4
+  };
+};
+
+const loadingRule: Rule = {
+  animation: 'skeleton-loading 1s linear infinite alternate',
+};
+
+const imageStyle: Rule = () => {
+  const [, isBreakpoint] = useBreakpoints();
+  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+  return {
+    objectFit: 'cover',
     width: '100%',
+    minWidth: mobileScreen ? '100px' : 'auto',
+    height: mobileScreen ? '100%' : 'auto',
+    position: 'absolute',
+    top: 0,
   };
 };
 

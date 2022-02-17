@@ -12,6 +12,7 @@ const Tile: FC<Props> = ({ img, title, description, link = '' }) => {
   return (
     <div className={css(tileRule)}>
       <BasicTile
+        target='_blank'
         hover={!!link}
         {...{ img, title, description, link }}
         customStyle={{
