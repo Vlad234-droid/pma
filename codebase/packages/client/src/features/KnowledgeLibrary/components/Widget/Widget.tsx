@@ -11,7 +11,12 @@ const Widget: FC = () => {
 
   const [colleaguesData] = useData({ filterFn });
 
-  return <List data={colleaguesData.sort((i1, i2) => ids.indexOf(i1.id) - ids.indexOf(i2.id))} />;
+  return (
+    <List
+      data={colleaguesData.sort((i1, i2) => ids.indexOf(i1.id) - ids.indexOf(i2.id))}
+      customRule={{ width: '100%' }}
+    />
+  );
 };
 
 export default Widget;
