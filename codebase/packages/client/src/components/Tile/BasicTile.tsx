@@ -91,7 +91,7 @@ const wrapperStyle: CreateRule<{ icon: boolean; isLink: boolean }> = ({ icon, is
         }
       : {}),
     textDecoration: 'none',
-    cursor: isLink ? 'pointer' : 'default',
+    cursor: isLink ? 'pointer' : 'inheritance',
   };
 };
 

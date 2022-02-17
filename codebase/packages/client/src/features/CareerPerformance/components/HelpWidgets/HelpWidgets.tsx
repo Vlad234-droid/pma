@@ -6,6 +6,7 @@ import { Icon } from 'components/Icon';
 import { useTranslation } from 'components/Translation';
 import { buildPath } from 'features/Routes';
 import { Page } from 'pages';
+import { Link } from 'react-router-dom';
 
 const HelpWidgets: FC = () => {
   const { css } = useStyle();
@@ -14,16 +15,18 @@ const HelpWidgets: FC = () => {
   return (
     <div data-test-id='help-widgets' className={css(wrapperStyles)}>
       <div data-test-id='question-tile' className={css(wrrapperRule)}>
-        <BasicTile
-          link={buildPath(Page.KNOWLEDGE_LIBRARY)}
-          img={<Icon graphic='question' />}
-          title={t('want_to_learn_more', 'Want to learn more about Your Contribution at Tesco?')}
-          imgCustomStyle={imageStyles}
-          customStyle={{
-            ...widgetStyles,
-          }}
-          icon={true}
-        />
+        <Link to={buildPath(Page.KNOWLEDGE_LIBRARY)}>
+          <BasicTile
+            img={<Icon graphic='question' />}
+            hover
+            title={t('want_to_learn_more', 'Want to learn more about Your Contribution at Tesco?')}
+            imgCustomStyle={imageStyles}
+            customStyle={{
+              ...widgetStyles,
+            }}
+            icon={true}
+          />
+        </Link>
       </div>
     </div>
   );
