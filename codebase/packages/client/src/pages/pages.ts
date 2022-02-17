@@ -42,12 +42,14 @@ const pages: Record<Page, PageComponent> = {
     title: 'Want to learn more?',
     withHeader: true,
     backPath: Page.CONTRIBUTION,
+    perform: [],
   },
   [Page.KNOWLEDGE_LIBRARY_BY_ID]: {
     Element: KnowledgeLibrary,
     title: 'Want to learn more?',
     withHeader: true,
     backPath: Page.KNOWLEDGE_LIBRARY,
+    perform: [],
   },
   [Page.MY_TEAM]: {
     Element: MyTeam,
