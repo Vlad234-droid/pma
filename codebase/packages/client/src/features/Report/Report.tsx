@@ -138,7 +138,7 @@ const Report: FC = () => {
   return (
     <>
       <div className={css({ margin: '22px 42px 0px 40px' })} data-test-id={REPORT_WRAPPER}>
-        <div className={css(spaceBeetweenStyled({ quantity }))}>
+        <div className={css(spaceBetween({ quantity }))}>
           {!!getAppliedReport().length && (
             <AppliedFilters clearAppliedFilters={clearAppliedFilters} getAppliedReport={getAppliedReport} />
           )}
@@ -427,7 +427,7 @@ const flexCenterStyled: Rule = {
   height: '116px',
 };
 
-const spaceBeetweenStyled: CreateRule<{ quantity: number }> = ({ quantity }) => {
+const spaceBetween: CreateRule<{ quantity: number }> = ({ quantity }) => {
   const [, isBreakpoint] = useBreakpoints();
   const medium = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
   return {

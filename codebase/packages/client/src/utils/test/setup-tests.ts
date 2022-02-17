@@ -16,13 +16,3 @@ Object.defineProperty(window, 'matchMedia', {
 });
 
 configure({ testIdAttribute: 'data-test-id' });
-
-// export let matchMediaMock: MatchMediaMock;
-//
-// beforeEach(() => {
-//   matchMediaMock = new MatchMediaMock();
-// });
-//
-// afterEach(() => {
-//   matchMediaMock.clear();
-// });

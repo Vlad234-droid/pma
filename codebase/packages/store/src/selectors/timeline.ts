@@ -4,7 +4,17 @@ import { RootState } from 'typesafe-actions';
 import { ObjectiveType, ReviewType } from '@pma/client/src/config/enum';
 import { usersSelector } from './users';
 
-export const timelineSelector = (state: RootState) => state.timeline || {};
+export enum Type {
+  OBJECTIVE = 'OBJECTIVE',
+  MYR = 'MYR',
+  EYR = 'EYR',
+}
+
+export const timelineSelector = (state: RootState) => state.timeline;
+
+export const userReviewTypesSelector = createSelector(timelineSelector, ({ data }) =>
+  data?.map((item: { code: string }) => item.code),
+);
 
 export const getTimelineSelector = (colleagueUuid) =>
   createSelector(usersSelector, timelineSelector, (user, { meta, ...rest }) => {

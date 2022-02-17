@@ -7,12 +7,11 @@ export const makeBinaryFromObject = <T extends unknown>(data: T) =>
 
 const getFileExtension = (fileName) => fileName.split('.').pop();
 
-const fileDescription = (fileName) => FileDescription[getFileExtension(fileName).toUpperCase()];
-
-export const fileType = (fileName) => {
+export const getFileType = (fileName) => {
+  const code = getFileExtension(fileName);
   return {
-    code: getFileExtension(fileName),
-    description: fileDescription(fileName),
-    id: FileId[getFileExtension(fileName).toUpperCase()],
+    code,
+    description: FileDescription[code.toUpperCase()],
+    id: FileId[code.toUpperCase()],
   };
 };

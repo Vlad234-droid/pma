@@ -11,25 +11,25 @@ import {
   PerformanceCycleActions,
   ProcessTemplateActions,
 } from '@pma/store';
-import { Trans, useTranslation } from 'components/Translation';
 import { configEntriesMetaSelector, configEntriesSelector } from '@pma/store/src/selectors/config-entries';
 import {
   getFormsByProcessTemplateUuidSelector,
   getProcessTemplateByUuidSelector,
 } from '@pma/store/src/selectors/processTemplate';
-import useDispatch from 'hooks/useDispatch';
 import {
   getConfigEntriesByPerformanceCycle,
   getFormsByPerformanceCycleUuidSelector,
 } from '@pma/store/src/selectors/performance-cycle';
+import { ObjectiveModal } from 'features/Objectives/components/ObjectiveModal/ObjectiveModal';
+import useDispatch from 'hooks/useDispatch';
+import { Trans, useTranslation } from 'components/Translation';
 import { TileWrapper } from 'components/Tile';
 import { GenericItemField } from 'components/GenericForm';
 import { Input, Item, Radio, Select } from 'components/Form';
+import { DurationPicker } from 'components/Form/DurationPicker';
 import { Page } from 'pages';
-import { ObjectiveModal } from 'features/Objectives/components/ObjectiveModal/ObjectiveModal';
 import TemplatesModal from './TemplatesModal';
 import { createPMCycleSchema } from './schema';
-import { DurationPicker } from '../../../components/Form/DurationPicker';
 
 function getChildren(data, options11: any, key, value) {
   return data
@@ -317,7 +317,7 @@ export const PerformanceCycleForm: FC = () => {
           2. Cycle details
         </div>
         <div className={`${showProperties ? css(containerVisible) : css(container)}`}>
-          <div className={css(item)}>
+          <div className={css(itemRule)}>
             <GenericItemField
               name={`cycle.metadata.cycle.properties.pm_cycle_start_time`}
               methods={methods}
@@ -329,7 +329,7 @@ export const PerformanceCycleForm: FC = () => {
               Element={(props) => <Input type={'date'} {...props} />}
             />
           </div>
-          <div className={css(item)}>
+          <div className={css(itemRule)}>
             <GenericItemField
               name={`cycle.metadata.cycle.properties.pm_cycle_end_time`}
               methods={methods}
@@ -341,7 +341,7 @@ export const PerformanceCycleForm: FC = () => {
               Element={(props) => <Input type={'date'} readonly={true} {...props} />}
             />
           </div>
-          <div className={css(item)}>
+          <div className={css(itemRule)}>
             <GenericItemField
               name={`cycle.metadata.cycle.properties.pm_cycle_max`}
               methods={methods}
@@ -354,7 +354,7 @@ export const PerformanceCycleForm: FC = () => {
             />
           </div>
 
-          <div className={css(item)}>
+          <div className={css(itemRule)}>
             <Item label='Notifications' withIcon={false} />
             <div>
               <GenericItemField
@@ -365,12 +365,12 @@ export const PerformanceCycleForm: FC = () => {
                     {children}
                   </Item>
                 )}
-                Element={(props) => (
+                Element={() => (
                   <DurationPicker control={control} name={'cycle.metadata.cycle.properties.pm_cycle_before_start'} />
                 )}
               />
             </div>
-            <div className={css(item)}>
+            <div className={css(itemRule)}>
               <GenericItemField
                 name={`cycle.metadata.cycle.properties.pm_cycle_before_end`}
                 methods={methods}
@@ -379,7 +379,7 @@ export const PerformanceCycleForm: FC = () => {
                     {children}
                   </Item>
                 )}
-                Element={(props) => (
+                Element={() => (
                   <DurationPicker control={control} name={'cycle.metadata.cycle.properties.pm_cycle_before_end'} />
                 )}
               />
@@ -422,17 +422,17 @@ export const PerformanceCycleForm: FC = () => {
           <Item label='Duration' withIcon={false} marginBot={false} />
           <Item label='Before start' withIcon={false} marginBot={false} />
           <Item label='Before end' withIcon={false} marginBot={false} />
-          <div className={css(item, { maxWidth: '100px' })}>
+          <div className={css(itemRule, { maxWidth: '100px' })}>
             <Item label='Min' withIcon={false} marginBot={false} />
           </div>
-          <div className={css(item, { maxWidth: '100px' })}>
+          <div className={css(itemRule, { maxWidth: '100px' })}>
             <Item label='Max' withIcon={false} marginBot={false} />
           </div>
           {timelinePointsValues?.map((timelinePoint, index) => {
             if (timelinePoint.type !== 'REVIEW') return null;
             return (
               <>
-                <div className={css(item)}>
+                <div className={css(itemRule)}>
                   <GenericItemField
                     name={`cycle.metadata.cycle.timelinePoints[${index}].description`}
                     methods={methods}
@@ -440,11 +440,11 @@ export const PerformanceCycleForm: FC = () => {
                   />
                 </div>
                 <div className={css({ display: 'flex', gap: '8px' })}>
-                  <div className={css(item)}>
+                  <div className={css(itemRule)}>
                     <GenericItemField
                       name={`cycle.metadata.cycle.timelinePoints[${index}].properties.pm_review_duration`}
                       methods={methods}
-                      Element={(props) => (
+                      Element={() => (
                         <DurationPicker
                           control={control}
                           name={`cycle.metadata.cycle.timelinePoints[${index}].properties.pm_review_duration`}
@@ -454,7 +454,7 @@ export const PerformanceCycleForm: FC = () => {
                   </div>
                 </div>
                 <div className={css({ display: 'flex', gap: '8px' })}>
-                  <div className={css(item)}>
+                  <div className={css(itemRule)}>
                     <GenericItemField
                       name={`cycle.metadata.cycle.timelinePoints[${index}].properties.pm_review_before_start`}
                       methods={methods}
@@ -468,11 +468,11 @@ export const PerformanceCycleForm: FC = () => {
                   </div>
                 </div>
                 <div className={css({ display: 'flex', gap: '8px' })}>
-                  <div className={css(item)}>
+                  <div className={css(itemRule)}>
                     <GenericItemField
                       name={`cycle.metadata.cycle.timelinePoints[${index}].properties.pm_review_before_end`}
                       methods={methods}
-                      Element={(props) => (
+                      Element={() => (
                         <DurationPicker
                           control={control}
                           name={`cycle.metadata.cycle.timelinePoints[${index}].properties.pm_review_before_end`}
@@ -483,14 +483,14 @@ export const PerformanceCycleForm: FC = () => {
                 </div>
                 {timelinePoint.reviewType === 'OBJECTIVE' ? (
                   <>
-                    <div className={css(item, { maxWidth: '100px' })}>
+                    <div className={css(itemRule, { maxWidth: '100px' })}>
                       <GenericItemField
                         name={`cycle.metadata.cycle.timelinePoints[${index}].properties.pm_review_min`}
                         methods={methods}
                         Element={Input}
                       />
                     </div>
-                    <div className={css(item, { maxWidth: '100px' })}>
+                    <div className={css(itemRule, { maxWidth: '100px' })}>
                       <GenericItemField
                         name={`cycle.metadata.cycle.timelinePoints[${index}].properties.pm_review_max`}
                         methods={methods}
@@ -500,8 +500,8 @@ export const PerformanceCycleForm: FC = () => {
                   </>
                 ) : (
                   <>
-                    <div className={css(item, { maxWidth: '100px' })} />
-                    <div className={css(item, { maxWidth: '100px' })} />
+                    <div className={css(itemRule, { maxWidth: '100px' })} />
+                    <div className={css(itemRule, { maxWidth: '100px' })} />
                   </>
                 )}
               </>
@@ -598,16 +598,14 @@ export const PerformanceCycleForm: FC = () => {
 
 const btnStyle: Rule = ({ theme }) => ({
   fontSize: '16px',
-  border: '1px solid rgb(0, 83, 159)',
+  border: `1px solid ${theme.colors.tescoBlue}`,
   minWidth: '200px',
   marginLeft: '8px',
 });
 
-// @ts-ignore
-const item: Rule = ({ theme }) => ({
-  fontStyle: 'normal',
-  fontSize: '16px',
-  lineHeight: '24px',
+const itemRule: Rule = ({ theme }) => ({
+  fontSize: `${theme.font.fixed.f16}px`,
+  lineHeight: 1.5,
 });
 
 const container: Rule = () => ({

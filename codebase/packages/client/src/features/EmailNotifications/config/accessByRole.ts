@@ -1,5 +1,5 @@
+import { role } from 'features/Permission';
 import { setting } from '../constants';
-import { role } from '../../Permission';
 
 export const accessByRole = {
   [setting.LM_OBJECTIVES_APPROVED_FOR_SHARING]: [role.LINE_MANAGER],

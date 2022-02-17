@@ -22,9 +22,8 @@ import {
   notesFolderTeamDataSelector,
   personalFolderUuidSelector,
   teamFolderUuidSelector,
-  checkPermissions,
 } from '@pma/store';
-import { role } from 'features/Permission';
+import { role, usePermission } from 'features/Permission';
 import { AllNotesFolderId, AllNotesFolderIdTEAM, filterNotesHandler } from '../../utils';
 import { PeopleTypes } from './components/TeamNotes/ModalsParts/type';
 import { useNavigate } from 'react-router-dom';
@@ -50,7 +49,7 @@ const NotesActions: FC = () => {
   const navigate = useNavigate();
   const [status, setStatus] = useState(ModalStatuses.PENDING);
 
-  const isLineManager = useSelector(checkPermissions({ roles: [role.LINE_MANAGER] }));
+  const isLineManager = usePermission([role.LINE_MANAGER]);
 
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;

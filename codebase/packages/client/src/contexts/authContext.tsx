@@ -9,7 +9,8 @@ import User from 'config/entities/User';
 // hooks
 import useDispatch from 'hooks/useDispatch';
 import { useSelector } from 'react-redux';
-import { AccessDenied } from '../pages/AccessDenied';
+import { AccessDenied } from 'pages/AccessDenied';
+import { role } from 'features/Permission';
 
 type LoginAction = (payload: { email: string; password: string }) => void;
 type LogoutAction = () => void;
@@ -21,6 +22,7 @@ type AuthData = {
   login: LoginAction;
   logout: LogoutAction;
   roles: Array<string>;
+  userWorkLevel: Array<string>;
 };
 
 const defaultData = {
@@ -28,6 +30,7 @@ const defaultData = {
   login: () => undefined, // to start the login process
   logout: () => undefined, // logout the user
   roles: [],
+  userWorkLevel: [],
 };
 
 const AuthContext = createContext<AuthData>(defaultData);
@@ -62,6 +65,7 @@ export const AuthProvider: FC = ({ children }) => {
         login: loginAction,
         logout: logoutAction,
         roles: info?.data?.roles || [],
+        userWorkLevel: info?.data?.colleague?.workRelationships?.[0]?.workLevel || [],
       }}
     >
       {children}
