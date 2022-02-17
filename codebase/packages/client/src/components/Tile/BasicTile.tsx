@@ -40,6 +40,7 @@ export const BasicTile: FC<Props> = ({
     }
     const aEl = window.document.createElement('a');
     aEl.href = link;
+    aEl.target = '_blank';
     aEl.dispatchEvent(new MouseEvent('click'));
   };
 
