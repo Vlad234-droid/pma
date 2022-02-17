@@ -24,9 +24,9 @@ export const getTimelineSelector = (colleagueUuid) =>
     const data = rest?.[uuid];
     const descriptions = data?.map(({ description }) => description);
     const statuses = data?.map(({ status }) => status);
-    const startDates = data?.map(({ code, startTime }) => {
+    const startDates = data?.map(({ code, startTime, endTime }, index) => {
       if (code === 'Q1' || code === 'Q3') return '';
-      const date = new Date(startTime);
+      const date = new Date(index === 0 ? startTime : endTime);
       return `${date.toLocaleString('default', { month: 'long' })} ${date.getFullYear()}`;
     });
     return { descriptions, startDates, statuses };
