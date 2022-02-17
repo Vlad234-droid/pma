@@ -3,9 +3,9 @@ import { useStyle, useBreakpoints } from '@dex-ddl/core';
 import { Trans } from 'components/Translation';
 import { VideoPlayer, VideoId } from 'features/VideoPlayer';
 
-export type ObjectiveHelpModal = {};
+type ObjectiveHelpModalProps = {};
 
-type Props = HTMLProps<HTMLInputElement> & ObjectiveHelpModal;
+type Props = HTMLProps<HTMLInputElement> & ObjectiveHelpModalProps;
 
 const ObjectiveHelpModal: FC<Props> = () => {
   const { css } = useStyle();

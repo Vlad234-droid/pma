@@ -1,10 +1,12 @@
+// @ts-ignore
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
+// @ts-ignore
 import { renderWithTheme as render, screen } from 'utils/test';
 import { fireEvent, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import ReviewFormModal from './ReviewFormModal';
+import { default as ReviewFormModal } from './ReviewFormModal';
 import { ReviewsActions } from '@pma/store';
 
 describe('ReviewFormModal', () => {

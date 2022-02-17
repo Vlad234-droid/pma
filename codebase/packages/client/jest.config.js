@@ -5,6 +5,7 @@ const config = {
   moduleNameMapper: {
     '\\.(css|svg|jpg|png)$': '__mocks__/fileMock.js',
   },
+  collectCoverageFrom: ['!src/**/*.stories.tsx', '!src/utils/test/mocks/*', '!coverage/**', '!.storybook/**'],
 };
 
 module.exports = config;
