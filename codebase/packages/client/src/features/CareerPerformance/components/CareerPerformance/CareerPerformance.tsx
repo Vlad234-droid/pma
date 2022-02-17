@@ -11,7 +11,6 @@ import { TimelineTypes } from 'config/types';
 import HelpWidgets from '../HelpWidgets';
 import InfoWidgets from '../InfoWidgets';
 import ReviewWidgets from '../ReviewWidgets';
-import Resources from '../Resources';
 import Section from '../Section';
 import { Review } from '../../config/types';
 import { KnowledgeLibraryWidget } from 'features/KnowledgeLibrary';

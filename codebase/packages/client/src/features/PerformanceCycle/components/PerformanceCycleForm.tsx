@@ -64,7 +64,7 @@ export const PerformanceCycleForm: FC = () => {
   const [options131, setOptions131] = useState([]);
   const [options14, setOptions14] = useState([]);
   const [processSelected, setProcessSelected] = useState(false);
-  const [entryConfigKey, setEntryConfigKey] = useState('');
+  const [, setEntryConfigKey] = useState('');
   const [isTemplatesModalOpen, showTemplatesModal] = useState(false);
   const [processTemplateName, setProcessTemplateName] = useState('');
   const [selectedForm, setSelectedForm] = useState('');
@@ -458,7 +458,7 @@ export const PerformanceCycleForm: FC = () => {
                     <GenericItemField
                       name={`cycle.metadata.cycle.timelinePoints[${index}].properties.pm_review_before_start`}
                       methods={methods}
-                      Element={(props) => (
+                      Element={() => (
                         <DurationPicker
                           control={control}
                           name={`cycle.metadata.cycle.timelinePoints[${index}].properties.pm_review_before_start`}

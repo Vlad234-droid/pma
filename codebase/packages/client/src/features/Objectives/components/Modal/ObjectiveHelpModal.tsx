@@ -1,13 +1,9 @@
-import React, { FC, HTMLProps } from 'react';
+import React, { FC } from 'react';
 import { useStyle, useBreakpoints } from '@dex-ddl/core';
 import { Trans } from 'components/Translation';
 import { VideoPlayer, VideoId } from 'features/VideoPlayer';
 
-type ObjectiveHelpModalProps = {};
-
-type Props = HTMLProps<HTMLInputElement> & ObjectiveHelpModalProps;
-
-const ObjectiveHelpModal: FC<Props> = () => {
+const ObjectiveHelpModal: FC = () => {
   const { css } = useStyle();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;

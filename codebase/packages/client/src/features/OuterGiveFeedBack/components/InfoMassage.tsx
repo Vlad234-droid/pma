@@ -72,16 +72,6 @@ const orderedList: Rule = {
   },
 } as Styles;
 
-const dotsList: Rule = {
-  marginTop: '0px',
-  '& li': {
-    marginTop: '8px',
-    fontWeight: 'normal',
-    fontSize: '16px',
-    lineHeight: '20px',
-  },
-} as Styles;
-
 const wrapperInfo: Rule = {
   padding: '0px 36px',
   overflow: 'auto',
@@ -98,19 +88,6 @@ const preTitle: Rule = {
   fontWeight: 'normal',
   fontSize: '16px',
   lineHeight: '20px',
-};
-const title: Rule = {
-  margin: '0px',
-  fontWeight: 'normal',
-  fontSize: '16px',
-  lineHeight: '20px',
-};
-
-const preRecomendationInfo: Rule = {
-  fontWeight: 'normal',
-  fontSize: '16px',
-  lineHeight: '20px',
-  margin: '0px',
 };
 
 export default InfoMassage;

@@ -26,11 +26,12 @@ export const renderWithTheme = <TProps extends {} = {}>(
         info: {
           data: {
             colleague: {
+              colleagueUUID: 'test-colleagueUuid',
               profile: {
                 firstName: 'Test fullName',
               },
-            }
-          }
+            },
+          },
         },
       },
       meta: {
@@ -45,6 +46,7 @@ export const renderWithTheme = <TProps extends {} = {}>(
     feedback: { notes: [], reviews: [], meta: { loading: false, loaded: false, error: null } },
     report: { objectiveReports: [], objectiveStatistics: [], meta: { loading: false, loaded: false, error: null } },
     processTemplate: { meta: { loading: false, loaded: false, error: null }, success: true, data: [] },
+    timeline: { meta: { loading: false, loaded: false, error: null }, success: true, 'test-colleagueUuid': [] },
     ...initState,
   });
 

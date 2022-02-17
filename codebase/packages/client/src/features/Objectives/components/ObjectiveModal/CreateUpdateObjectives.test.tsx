@@ -2,7 +2,7 @@ import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
 import { renderWithTheme as render, screen } from 'utils/test';
 import { SchemaFixture } from 'utils/test/fixtures/schema';
-import { fireEvent, act } from '@testing-library/react';
+import { act, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { CreateUpdateObjectives } from './CreateUpdateObjectives';
@@ -33,7 +33,44 @@ describe('CreateUpdateObjectives', () => {
           status: null,
         },
       };
-      renderer = render(<CreateUpdateObjectives onClose={onClose} />, { schema, reviews });
+      const timeline = {
+        meta: {
+          loading: false,
+          loaded: true,
+          error: null,
+        },
+        success: true,
+        'test-colleagueUuid': [
+          {
+            uuid: 'bbc85acd-5fcf-af8b-cacc-7fda95743505',
+            colleagueCycleUuid: '3fa85f64-5717-4562-b3fc-2c963f66afa3',
+            code: 'EYR',
+            description: 'End of Year Review',
+            type: 'REVIEW',
+            startTime: '2022-03-15T00:00:00.000Z',
+            endTime: null,
+            properties: {
+              mapJson: {
+                pm_review_start_delay: 'P1Y',
+                pm_review_type: 'eyr',
+                pm_review_before_start: 'P2W',
+                pm_type: 'review',
+                pm_review_start_time: '2022-03-15',
+                pm_review_min: '1',
+                pm_review_before_end: 'P1W',
+                pm_review_max: '1',
+                pm_review_duration: 'P2W',
+                pm_form_key: 'forms/type_1_eyr.form',
+              },
+            },
+            status: 'DRAFT',
+            reviewType: 'EYR',
+            count: 1,
+            lastUpdatedTime: '2022-01-24T08:31:22.670Z',
+          },
+        ],
+      };
+      renderer = render(<CreateUpdateObjectives onClose={onClose} />, { schema, reviews, timeline });
     });
     afterEach(() => {
       onClose.mockRestore();
@@ -123,6 +160,43 @@ describe('CreateUpdateObjectives', () => {
           status: null,
         },
       };
+      const timeline = {
+        meta: {
+          loading: false,
+          loaded: true,
+          error: null,
+        },
+        success: true,
+        'test-colleagueUuid': [
+          {
+            uuid: 'bbc85acd-5fcf-af8b-cacc-7fda95743505',
+            colleagueCycleUuid: '3fa85f64-5717-4562-b3fc-2c963f66afa3',
+            code: 'EYR',
+            description: 'End of Year Review',
+            type: 'REVIEW',
+            startTime: '2022-03-15T00:00:00.000Z',
+            endTime: null,
+            properties: {
+              mapJson: {
+                pm_review_start_delay: 'P1Y',
+                pm_review_type: 'eyr',
+                pm_review_before_start: 'P2W',
+                pm_type: 'review',
+                pm_review_start_time: '2022-03-15',
+                pm_review_min: '1',
+                pm_review_before_end: 'P1W',
+                pm_review_max: '1',
+                pm_review_duration: 'P2W',
+                pm_form_key: 'forms/type_1_eyr.form',
+              },
+            },
+            status: 'DRAFT',
+            reviewType: 'EYR',
+            count: 1,
+            lastUpdatedTime: '2022-01-24T08:31:22.670Z',
+          },
+        ],
+      };
       addMockReviewsQuery = jest.spyOn(ReviewQuery, 'default').mockReturnValue([
         [
           {
@@ -137,7 +211,7 @@ describe('CreateUpdateObjectives', () => {
         ],
         () => true,
       ]);
-      renderer = render(<CreateUpdateObjectives onClose={onClose} />, { schema, reviews });
+      renderer = render(<CreateUpdateObjectives onClose={onClose} />, { schema, reviews, timeline });
     });
     afterEach(() => {
       onClose.mockRestore();

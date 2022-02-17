@@ -1,4 +1,4 @@
-import React, { FC, Dispatch, SetStateAction } from 'react';
+import React, { FC } from 'react';
 import { useStyle, Rule, useBreakpoints } from '@dex-ddl/core';
 import requestInfoModal from 'images/requestInfoModal.png';
 import { IconButton } from 'components/IconButton';

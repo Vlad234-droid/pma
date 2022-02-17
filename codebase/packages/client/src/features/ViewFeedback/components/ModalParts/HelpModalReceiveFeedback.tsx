@@ -70,15 +70,7 @@ const HelpModalReceiveFeedback: FC<Info360ModalProps> = ({ setHelpModalReceiveFe
     </div>
   );
 };
-const dotsList: Rule = {
-  marginTop: '0px',
-  '& li': {
-    marginTop: '8px',
-    fontWeight: 'normal',
-    fontSize: '16px',
-    lineHeight: '20px',
-  },
-} as Styles;
+
 const orderedList: Rule = {
   '& li': {
     marginTop: '8px',

@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { useStyle, Rule } from '@dex-ddl/core';
+import { useStyle } from '@dex-ddl/core';
 
 import { ReviewType, Status } from 'config/enum';
 import { useTranslation } from 'components/Translation';

@@ -1,12 +1,8 @@
-import React, { FC, HTMLProps } from 'react';
+import React, { FC } from 'react';
 import { useStyle, useBreakpoints, Rule } from '@dex-ddl/core';
 import { Trans } from 'components/Translation';
 
-export type ReviewHelpModal = {};
-
-type Props = HTMLProps<HTMLInputElement> & ReviewHelpModal;
-
-const ReviewHelpModal: FC<Props> = () => {
+const ReviewHelpModal: FC = () => {
   const { css } = useStyle();
 
   return (

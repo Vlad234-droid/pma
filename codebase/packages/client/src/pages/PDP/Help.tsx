@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router';
 import { buildPath } from 'features/Routes';
 import { Page } from 'pages';
 
-const PersonalDevelopmentHelp = (props) => {
+const PersonalDevelopmentHelp = () => {
   const { css } = useStyle();
   const navigate = useNavigate();
   const [, isBreakpoint] = useBreakpoints();
