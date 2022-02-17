@@ -1,5 +1,5 @@
 const config = {
-  setupFilesAfterEnv: ['./setupTests.js'],
+  setupFilesAfterEnv: ['./jest.setup.js'],
   roots: ['src'],
   moduleDirectories: ['node_modules', 'src'],
   testEnvironment: 'jsdom',
