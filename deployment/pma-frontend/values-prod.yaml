@@ -92,7 +92,7 @@ INTEGRATION_CORE_URL: /
 INTEGRATION_MOUNT_PATH: /
 INTEGRATION_NODE_BFF_URL: /
 APPLICATION_PUBLIC_URL: /experience/yourcontribution
-APPLICATION_URL_ROOT: https://frontend.pma.tescocloud.com
+APPLICATION_URL_ROOT: https://www.ourtesco.com
 APPLICATION_USER_DATA_COOKIE_NAME: pma.user.data
 USE_ONELOGIN: true
 ONELOGIN_ISSUER_URL: https://login.ourtesco.com/oidc/2
