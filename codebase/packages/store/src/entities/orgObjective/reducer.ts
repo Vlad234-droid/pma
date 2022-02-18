@@ -11,7 +11,7 @@ import {
 
 import { Status } from '../../config/types';
 
-const initialObjectivesData = [
+export const initialObjectivesData = [
   { number: 1, title: '' },
   { number: 2, title: '' },
   { number: 3, title: '' },
@@ -21,7 +21,7 @@ const initialObjectivesData = [
 ];
 
 export const initialState = {
-  objectives: [],
+  objectives: initialObjectivesData,
   auditLogs: [],
   meta: { loading: false, loaded: false, error: null, status: Status.IDLE },
 };
@@ -63,7 +63,7 @@ export default createReducer(initialState)
   }))
   .handleAction(getOrgObjectives.success, (state, { payload }) => ({
     ...state,
-    objectives: payload,
+    objectives: payload.length ? payload : initialObjectivesData,
     meta: { ...state.meta, loading: false, loaded: true },
   }))
   .handleAction(getOrgObjectives.failure, (state, { payload }) => ({
