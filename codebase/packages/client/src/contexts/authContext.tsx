@@ -54,7 +54,7 @@ export const AuthProvider: FC = ({ children }) => {
   }
 
   if (!loaded) return null;
-  if (!authenticated) return <AccessDenied />;
+  if (!authenticated) return <AccessDenied massage={error?.code === 'SERVER_ERROR' ? error?.message : undefined} />;
 
   return (
     <AuthContext.Provider
