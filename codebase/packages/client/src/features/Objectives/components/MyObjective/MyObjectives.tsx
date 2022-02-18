@@ -406,6 +406,7 @@ const iconButtonStyles: Rule = ({ theme }) => ({
 const borderButtonStyles: Rule = ({ theme }) => ({
   border: `1px solid ${theme.colors.tescoBlue}`,
   borderRadius: '30px',
+  padding: '0 10px',
   color: theme.colors.tescoBlue,
   fontWeight: theme.font.weight.bold,
 });
