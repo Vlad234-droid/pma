@@ -85,94 +85,89 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
             />
           </div>
         </div>
-        <CanPerform
-          perform={[role.TALENT_ADMIN, role.ADMIN]}
-          yes={() => {
-            return (
-              <div className={css(menuDrawerSettingsStyle)}>
-                <div className={css(itemSettingsStyle, adminToolsStyle)} onClick={handleToggleDropdown}>
-                  <Icon graphic={'tool'} />
-                  <span className={css(itemSettingsTextStyle)}>Administrator tools</span>
-                  <Icon
-                    graphic={'arrowDown'}
-                    iconStyles={{
-                      marginLeft: '15px',
-                      transform: isOpenDropdown ? 'rotate(-0deg)' : 'rotate(-90deg)',
-                      transition: 'all .2s ease-in-out',
-                    }}
-                  />
-                </div>
-                {isOpenDropdown && (
-                  <div className={css(menuDropdownStyle)}>
-                    <CanPerform
-                      perform={[role.ADMIN]}
-                      yes={() => (
-                        <Link
-                          to={buildPath(Page.PERFORMANCE_CYCLE)}
-                          className={css(itemSettingsStyle, itemSettingsBorderStyle)}
-                        >
-                          <Icon graphic={'createCycle'} />
-                          <span className={css(itemSettingsTextStyle)}>
-                            {t('create_performance_cycle', 'Create performance cycle')}
-                          </span>
-                        </Link>
-                      )}
-                    />
-                    <CanPerform
-                      perform={[role.TALENT_ADMIN, role.ADMIN]}
-                      yes={() => (
-                        <>
-                          <Link
-                            to={buildPath(Page.ADMINISTRATION)}
-                            className={css(itemSettingsStyle, itemSettingsBorderStyle)}
-                          >
-                            <Icon graphic={'configuration'} />
-                            <span className={css(itemSettingsTextStyle)}>{t('configurations', 'Configurations')}</span>
-                          </Link>
-                          <Link
-                            to={buildPath(Page.CREATE_STRATEGIC_DRIVERS)}
-                            className={css(itemSettingsStyle, itemSettingsBorderStyle)}
-                          >
-                            <Icon graphic={'strategicDriver'} />
-                            <span className={css(itemSettingsTextStyle)}>
-                              {t('strategic_drivers', 'Strategic drivers')}
-                            </span>
-                          </Link>
-                        </>
-                      )}
-                    />
-                    <CanPerform
-                      perform={[role.ADMIN]}
-                      yes={() => (
-                        <Link to={buildPath(Page.TIPS)} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
-                          <Icon graphic={'tip'} />
-                          <span className={css(itemSettingsTextStyle)}>{t('tips', 'Tips')}</span>
-                        </Link>
-                      )}
+        <div className={css(menuDrawerSettingsStyle)}>
+          <CanPerform
+            perform={[role.TALENT_ADMIN, role.ADMIN]}
+            yes={() => {
+              return (
+                <>
+                  <div className={css(itemSettingsStyle, adminToolsStyle)} onClick={handleToggleDropdown}>
+                    <Icon graphic={'tool'} />
+                    <span className={css(itemSettingsTextStyle)}>Administrator tools</span>
+                    <Icon
+                      graphic={'arrowDown'}
+                      iconStyles={{
+                        marginLeft: '15px',
+                        transform: isOpenDropdown ? 'rotate(-0deg)' : 'rotate(-90deg)',
+                        transition: 'all .2s ease-in-out',
+                      }}
                     />
                   </div>
-                )}
-                <div className={css(itemSettingsBorderStyle, { marginLeft: '20px' })} />
-                <Link to={buildPath(Page.SETTINGS)} className={css(itemSettingsStyle)}>
-                  <Icon graphic={'settingsGear'} />
-                  <span className={css(itemSettingsTextStyle)}>{t('settings', 'Settings')}</span>
-                </Link>
-                <Link to={''} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
-                  <Icon graphic={'question'} />
-                  <span className={css(itemSettingsTextStyle)}>{t('faqs', 'Help and FAQs')}</span>
-                </Link>
-                <a
-                  href={LINKS.signOut}
-                  className={css(itemSettingsStyle, itemSettingsBorderStyle)}
-                  onClick={handleSignOut}
-                >
-                  <Icon graphic={'signOut'} />
-                  <span className={css(itemSettingsTextStyle)}>{t('sign_out', 'Sign out')}</span>
-                </a>
-              </div>
-            );
-          }}
-        />
+                  {isOpenDropdown && (
+                    <div className={css(menuDropdownStyle)}>
+                      <CanPerform
+                        perform={[role.ADMIN]}
+                        yes={() => (
+                          <>
+                            <Link
+                              to={buildPath(Page.PERFORMANCE_CYCLE)}
+                              className={css(itemSettingsStyle, itemSettingsBorderStyle)}
+                            >
+                              <Icon graphic={'createCycle'} />
+                              <span className={css(itemSettingsTextStyle)}>
+                                {t('create_performance_cycle', 'Create performance cycle')}
+                              </span>
+                            </Link>
+                            <Link
+                              to={buildPath(Page.ADMINISTRATION)}
+                              className={css(itemSettingsStyle, itemSettingsBorderStyle)}
+                            >
+                              <Icon graphic={'configuration'} />
+                              <span className={css(itemSettingsTextStyle)}>
+                                {t('configurations', 'Configurations')}
+                              </span>
+                            </Link>
+                          </>
+                        )}
+                      />
+                      <Link
+                        to={buildPath(Page.CREATE_STRATEGIC_DRIVERS)}
+                        className={css(itemSettingsStyle, itemSettingsBorderStyle)}
+                      >
+                        <Icon graphic={'strategicDriver'} />
+                        <span className={css(itemSettingsTextStyle)}>
+                          {t('strategic_drivers', 'Strategic drivers')}
+                        </span>
+                      </Link>
+                      <CanPerform
+                        perform={[role.ADMIN]}
+                        yes={() => (
+                          <Link to={buildPath(Page.TIPS)} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
+                            <Icon graphic={'tip'} />
+                            <span className={css(itemSettingsTextStyle)}>{t('tips', 'Tips')}</span>
+                          </Link>
+                        )}
+                      />
+                    </div>
+                  )}
+                </>
+              );
+            }}
+          />
+          <div className={css(itemSettingsBorderStyle, { marginLeft: '20px' })} />
+          <Link to={buildPath(Page.SETTINGS)} className={css(itemSettingsStyle)}>
+            <Icon graphic={'settingsGear'} />
+            <span className={css(itemSettingsTextStyle)}>{t('settings', 'Settings')}</span>
+          </Link>
+          <Link to={buildPath(Page.KNOWLEDGE_LIBRARY)} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
+            <Icon graphic={'question'} />
+            <span className={css(itemSettingsTextStyle)}>{t('faqs', 'Help and FAQs')}</span>
+          </Link>
+          <a href={LINKS.signOut} className={css(itemSettingsStyle, itemSettingsBorderStyle)} onClick={handleSignOut}>
+            <Icon graphic={'signOut'} />
+            <span className={css(itemSettingsTextStyle)}>{t('sign_out', 'Sign out')}</span>
+          </a>
+        </div>
       </div>
       {isOpen && (
         <ConfirmModal

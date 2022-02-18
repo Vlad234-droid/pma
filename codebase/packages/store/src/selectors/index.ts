@@ -10,7 +10,6 @@ export * from './toast';
 // export * from './statistics';
 export * from './config-entries';
 export * from './users';
-export * from './objectives';
 export * from './timeline';
 export * from './managers';
 export * from './schema';

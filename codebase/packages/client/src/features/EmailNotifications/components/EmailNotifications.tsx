@@ -2,7 +2,7 @@ import React, { FC, useEffect, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { Rule, Styles, useStyle } from '@dex-ddl/core';
 import { colleagueUUIDSelector, TimelineActions, UserActions } from '@pma/store';
-import { usePermission, usePermissionByWorkLevel, usePermissionByReviewType } from 'features/Permission';
+import { usePermission, usePermissionByWorkLevel, usePermissionByReviewType, role } from 'features/Permission';
 import { Trans, useTranslation } from 'components/Translation';
 import { TileWrapper } from 'components/Tile';
 import { Checkbox } from 'components/Form';
@@ -26,17 +26,15 @@ export const EmailNotifications: FC<Props> = () => {
   const updateSettingAction = (setting) => dispatch(UserActions.updateUserNotification(setting));
 
   const profileAttributesFiltered = useMemo(() => {
-    if (!profileAttributes) return [];
-    return profileAttributes
-      .filter(({ name }) => usePermission(accessByRole[name]))
-      .filter(({ name }) => usePermissionByWorkLevel(accessByWorkLevel[name]))
-      .filter(({ name }) => usePermissionByReviewType(accessByTimelinePoints[name]))
-      .filter(({ type }) => type === 'BOOLEAN')
-      .sort(({ name: name1 }, { name: name2 }) => {
-        if (name1 < name2) return -1;
-        if (name2 > name1) return 1;
-        return 0;
-      });
+    return (
+      profileAttributes
+        ?.filter(({ type }) => type === 'BOOLEAN')
+        ?.sort(({ name: name1 }, { name: name2 }) => {
+          if (name1 < name2) return -1;
+          if (name2 > name1) return 1;
+          return 0;
+        }) || []
+    );
   }, [profileAttributes]);
 
   return (
@@ -48,18 +46,27 @@ export const EmailNotifications: FC<Props> = () => {
         <div className={css(descriptionStyle)}>
           <Trans>You will receive notification about marked actions</Trans>
         </div>
-        {profileAttributesFiltered.map(({ name, value, type }) => (
-          <div key={name} className={css({ display: 'flex' })}>
-            <Checkbox
-              id={name}
-              onChange={({ target: { checked: value } }) => updateSettingAction([{ colleagueUuid, name, type, value }])}
-              checked={value === 'true'}
-            />
-            <label className={css({ marginLeft: '8px' })} htmlFor={name}>
-              <Trans i18nKey={name} />
-            </label>
-          </div>
-        ))}
+        {profileAttributesFiltered
+          .filter(
+            ({ name }) =>
+              usePermission(accessByRole[name]) ||
+              usePermissionByWorkLevel(accessByWorkLevel[name]) ||
+              usePermissionByReviewType(accessByTimelinePoints[name]),
+          )
+          .map(({ name, value, type }) => (
+            <div key={name} className={css({ display: 'flex' })}>
+              <Checkbox
+                id={name}
+                onChange={({ target: { checked: value } }) =>
+                  updateSettingAction([{ colleagueUuid, name, type, value }])
+                }
+                checked={value === 'true'}
+              />
+              <label className={css({ marginLeft: '8px' })} htmlFor={name}>
+                <Trans i18nKey={name} />
+              </label>
+            </div>
+          ))}
       </div>
     </TileWrapper>
   );

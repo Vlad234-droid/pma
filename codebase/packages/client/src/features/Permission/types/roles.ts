@@ -5,5 +5,6 @@ export enum role {
   COLLEAGUE = 'Colleague',
   LINE_MANAGER = 'LineManager',
   ADMIN = 'Admin',
+  EXECUTIVE = 'Executive',
   NEWER = 'NEWER',
 }

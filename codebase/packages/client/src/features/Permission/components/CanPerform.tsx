@@ -8,6 +8,7 @@ type Props = {
   no?: () => ReactElement | null;
 };
 
+//TODO: from GPG lets discuss about name and implementation
 const CanPerform: FC<Props> = ({ perform, yes, no = () => null }) => {
   const hasPermission = usePermission(perform);
 
