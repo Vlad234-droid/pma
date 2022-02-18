@@ -27,7 +27,7 @@ import { role, usePermission } from 'features/Permission';
 import { AllNotesFolderId, AllNotesFolderIdTEAM, filterNotesHandler } from '../../utils';
 import { PeopleTypes } from './components/TeamNotes/ModalsParts/type';
 import { useNavigate } from 'react-router-dom';
-import { Trans } from 'components/Translation';
+import { Trans, useTranslation } from 'components/Translation';
 import { ConfirmModalWithSelectOptions } from '../Modal';
 
 export const NOTES_WRAPPER = 'note_wrapper';
@@ -48,6 +48,7 @@ const NotesActions: FC = () => {
   const { css, theme } = useStyle();
   const navigate = useNavigate();
   const [status, setStatus] = useState(ModalStatuses.PENDING);
+  const { t } = useTranslation();
 
   const isLineManager = usePermission([role.LINE_MANAGER]);
 
@@ -361,7 +362,7 @@ const NotesActions: FC = () => {
           styles: [modalCloseOptionStyle({ mobileScreen })],
         }}
         title={{
-          content: 'Notes',
+          content: t('notes', 'Notes'),
           styles: [modalTitleOptionStyle({ mobileScreen })],
         }}
       >
@@ -389,7 +390,10 @@ const NotesActions: FC = () => {
           styles: [modalCloseOptionStyle({ mobileScreen })],
         }}
         title={{
-          content: status === ModalStatuses.PERSONAL_FOLDER ? 'Add a folder' : 'Add a note',
+          content:
+            status === ModalStatuses.PERSONAL_FOLDER
+              ? t('add_a_folder', 'Add a folder')
+              : t('add_a_note', 'Add a note'),
           styles: [modalTitleOptionStyle({ mobileScreen })],
         }}
       >
@@ -417,7 +421,7 @@ const NotesActions: FC = () => {
           styles: [modalCloseOptionStyle({ mobileScreen })],
         }}
         title={{
-          content: 'My notes',
+          content: t('my_notes', 'My notes'),
           styles: [modalTitleOptionStyle({ mobileScreen })],
         }}
       >
@@ -450,7 +454,10 @@ const NotesActions: FC = () => {
           styles: [modalCloseOptionStyle({ mobileScreen })],
         }}
         title={{
-          content: status === ModalStatuses.TEAM_FOLDER ? 'Add team folder' : 'Add a team note',
+          content:
+            status === ModalStatuses.TEAM_FOLDER
+              ? t('add_team_folder', 'Add team folder')
+              : t('add_a_team_note', 'Add a team note'),
           styles: [modalTitleOptionStyle({ mobileScreen })],
         }}
       >
@@ -483,7 +490,7 @@ const NotesActions: FC = () => {
           styles: [modalCloseOptionStyle({ mobileScreen })],
         }}
         title={{
-          content: 'Edit note',
+          content: t('edit_note', 'Edit note'),
           styles: [modalTitleOptionStyle({ mobileScreen })],
         }}
       >
@@ -521,9 +528,9 @@ const NotesActions: FC = () => {
       {status === ModalStatuses.ADD_NEW && (
         <ConfirmModalWithSelectOptions
           options={confirmSelectOptionsHandler()}
-          description='Please choose one of the options:'
+          description={t('choose_options', 'Please choose one of the options:')}
           onOverlayClick={() => setStatus(() => ModalStatuses.PENDING)}
-          title='Add new'
+          title={t('add_new', 'Add new')}
           onSave={([checkedItem]) => {
             setSelectedFolder(() => null);
             setStatus(() => ModalStatuses[checkedItem]);
@@ -543,7 +550,7 @@ const NotesActions: FC = () => {
             iconStyles={iconAddStyle}
             data-test-id={ADD_NEW}
           >
-            <Trans>Add</Trans>
+            <Trans i18nKey='add'>Add</Trans>
           </IconButton>
           <FilterOptions
             TEAM={isLineManager}

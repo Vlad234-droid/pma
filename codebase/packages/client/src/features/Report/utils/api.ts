@@ -1,12 +1,13 @@
 import { BASE_URL_API } from 'config/constants';
-import { years } from '../config';
+
 import { Status } from 'config/enum';
+import { getCurrentYear } from 'utils/date';
 
 async function getData(url) {
   const response = await fetch(
     url +
       new URLSearchParams({
-        year: years[2021],
+        year: getCurrentYear(),
         'statuses_in[0]': Status.APPROVED,
       }),
   );

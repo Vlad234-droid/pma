@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import { useStyle, Rule, Theme, CreateRule, Styles } from '@dex-ddl/core';
 import { IconButton } from 'components/IconButton';
+import { Trans } from 'components/Translation/Translation';
 
 type Obj = {
   percent: number;
@@ -39,7 +40,9 @@ const InfoTable: FC<InfoTableProps> = ({ mainTitle, data, preTitle = '' }) => {
           return (
             <div key={i} className={css({ display: 'flex', flexDirection: 'column' })}>
               <span className={css(percentStyle)}>{percent}%</span>
-              <span className={css(quantityStyle)}>People {quantity}</span>
+              <span className={css(quantityStyle)}>
+                <Trans i18nKey='people'>People</Trans> {quantity}
+              </span>
               <p className={css(blockTitleStyle)}>{block.title}</p>
             </div>
           );

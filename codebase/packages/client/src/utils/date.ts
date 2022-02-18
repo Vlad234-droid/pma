@@ -52,3 +52,5 @@ export const inDayRange = (date: string, checkDate: string) => {
 };
 
 export const dateToIso = (date: Date) => DateTime.fromJSDate(date).toISO();
+
+export const getCurrentYear = () => DateTime.local().year.toString();

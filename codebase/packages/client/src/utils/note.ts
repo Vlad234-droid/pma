@@ -44,44 +44,28 @@ export const definePropperFieldTeamOptions = (foldersWithNotes, noteFolderUuid) 
   ];
 };
 
-export const getPropperInfoData = (actionModal, selectedNoteId, selectedFolder) => {
+export const getPropperInfoData = (actionModal, selectedNoteId, selectedFolderId, t) => {
   if (actionModal.current === 'delete') {
+    const option = selectedNoteId.current ? 'note' : 'folder';
     return {
-      title: `Are you sure you want to delete this ${selectedNoteId.current ? 'note' : 'folder'}?`,
-      description: `This is permanent and cannot be undone.`,
+      title: t('delete_folder_note', `Are you sure you want to delete this ${option}?`, { option }),
+      description: t('this_is_permanent_and_cannot_be_undone', 'This is permanent and cannot be undone.'),
     };
   }
   if (actionModal.current === 'archive') {
+    const option = !selectedFolderId.current ? 'note' : 'folder';
     return {
-      title: `Are you sure you want to archive this ${!selectedFolder.current ? 'note' : 'folder'}?`,
-      description: `The ${!selectedFolder.current ? 'note' : 'folder'} will be moved to “Archive” section`,
+      title: t('archive_folder_note', `Are you sure you want to archive this ${option} ?`, { option }),
+      description: t('moved_to_archive_section', `The ${option} will be moved to “Archive” section`, { option }),
     };
   }
   if (actionModal.current === 'move') {
     return {
-      title: 'Select the folder where you want to move the note',
-      description: 'The note will be moved to folder:',
-    };
-  }
-};
-
-export const getPropperTEAMInfoData = (actionTEAMModal, selectedTEAMNoteId, selectedTEAMFolderId) => {
-  if (actionTEAMModal.current === 'delete') {
-    return {
-      title: `Are you sure you want to delete this ${selectedTEAMNoteId.current ? 'note' : 'folder'}?`,
-      description: `This is permanent and cannot be undone.`,
-    };
-  }
-  if (actionTEAMModal.current === 'archive') {
-    return {
-      title: `Are you sure you want to archive this ${!selectedTEAMFolderId.current ? 'note' : 'folder'}?`,
-      description: `The ${!selectedTEAMFolderId.current ? 'note' : 'folder'} will be moved to “Archive” section`,
-    };
-  }
-  if (actionTEAMModal.current === 'move') {
-    return {
-      title: 'Select the folder where you want to move the note',
-      description: 'The note will be moved to folder:',
+      title: t(
+        'select_the_folder_where_you_want_to_move_the_note',
+        'Select the folder where you want to move the note',
+      ),
+      description: t('the_note_will_be_moved_to_folder', 'The note will be moved to folder:'),
     };
   }
 };
@@ -141,11 +125,11 @@ export const filterNotesByTitle = (notes, value) => {
   });
 };
 
-export const defineBtnTitle = (actionTEAMModal) => {
+export const defineBtnTitle = (actionTEAMModal, t) => {
   const obg = {
-    delete: 'Delete',
-    archive: 'Archive',
-    move: 'Save',
+    delete: t('delete', 'Delete'),
+    archive: t('archive', 'Archive'),
+    move: t('save', 'Save'),
   };
 
   return obg[actionTEAMModal];
@@ -202,4 +186,79 @@ export const getNotesFolderTitle = (folderUuid: string, foldersList: Array<any>)
   const folderTitle = folder ? folder.title : 'All notes';
 
   return folderTitle;
+};
+
+export const getNotes = (foldersWithNotes, t) => {
+  return {
+    require: [
+      {
+        id: '1',
+        type: 'input',
+        title: t('title', 'Title'),
+        placeholder: t('enter_a_title_for_your_note', 'Enter a title for your note'),
+      },
+      {
+        id: '2',
+        type: 'textarea',
+        title: t('note', 'Note'),
+        placeholder: t('write_your_note_here', 'Write your note here'),
+      },
+      {
+        id: '3',
+        type: 'select',
+        title: t('optional_folder', 'Folder (optional)'),
+        placeholder: t('select_a_folder', 'Select a folder'),
+
+        field_options: [
+          ...foldersWithNotes?.map((item) => ({ value: `${item.id}`, label: item.title })),
+          { value: 'id_001', label: t('add_new_folder', '+ Add new folder') },
+        ],
+      },
+    ],
+    option: {
+      id: '4',
+      type: 'input',
+      title: t('folder_name', 'Folder name'),
+      placeholder: t('enter_a_name_for_your_new_folder', 'Enter a name for your new folder'),
+    },
+  };
+};
+
+export const getFolder = (t) => {
+  return [
+    {
+      id: '1',
+      type: 'input',
+      title: t('folder_name', 'Folder name'),
+      placeholder: t('enter_a_name_for_your_new_folder', 'Enter a name for your new folder'),
+    },
+  ];
+};
+
+export const getEditedNote = (definePropperEditMode, foldersWithNotes, folderUuid, t) => {
+  return [
+    {
+      id: '1',
+      type: 'input',
+      title: t('title', 'Title'),
+      placeholder: t('enter_a_title_for_your_note', 'Enter a title for your note'),
+    },
+    {
+      id: '2',
+      type: 'textarea',
+      title: t('note', 'Note'),
+      placeholder: t('write_your_note_here', 'Write your note here'),
+    },
+    {
+      id: '3',
+      type: 'select',
+      title: t('optional_folder', 'Folder (optional)'),
+      placeholder: t('select_a_folder', 'Select a folder'),
+
+      field_options:
+        definePropperEditMode !== null
+          ? definePropperFieldOptions(foldersWithNotes, folderUuid)
+          : definePropperFieldTeamOptions(foldersWithNotes, folderUuid),
+    },
+  ];
 };
