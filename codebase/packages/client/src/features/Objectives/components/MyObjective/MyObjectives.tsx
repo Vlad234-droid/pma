@@ -408,6 +408,7 @@ const borderButtonStyles: Rule = ({ theme }) => ({
   borderRadius: '30px',
   color: theme.colors.tescoBlue,
   fontWeight: theme.font.weight.bold,
+  padding: '10px 20px 10px 20px',
 });
 
 const tileStyles: Rule = {
