@@ -26,6 +26,7 @@ import Filters, { getEmployeesSortingOptions, useSearch, useSorting } from 'feat
 import { useTranslation } from 'components/Translation';
 import { Employee } from 'config/types';
 import ViewNavigation from 'features/ViewNavigation';
+import { CanPerform, role } from 'features/Permission';
 
 export const TEST_ID = 'my-team';
 
@@ -64,7 +65,7 @@ const MyTeam: FC = () => {
     <div>
       <ViewNavigation />
       <div className={css({ display: 'flex', justifyContent: 'space-between' })}>
-        <ViewFilters view={view} onChange={handleViewChange} />
+        <CanPerform perform={[role.EXECUTIVE]} yes={() => <ViewFilters view={view} onChange={handleViewChange} />} />
         <div
           className={css({
             display: 'flex',
