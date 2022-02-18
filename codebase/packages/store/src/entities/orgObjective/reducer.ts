@@ -11,7 +11,7 @@ import {
 
 import { Status } from '../../config/types';
 
-export const initialObjectivesData = [
+const initialObjectivesData = [
   { number: 1, title: '' },
   { number: 2, title: '' },
   { number: 3, title: '' },
@@ -21,7 +21,7 @@ export const initialObjectivesData = [
 ];
 
 export const initialState = {
-  objectives: initialObjectivesData,
+  objectives: [],
   auditLogs: [],
   meta: { loading: false, loaded: false, error: null, status: Status.IDLE },
 };
