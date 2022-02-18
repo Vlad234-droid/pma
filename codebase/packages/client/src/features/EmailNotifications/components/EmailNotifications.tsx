@@ -26,13 +26,15 @@ export const EmailNotifications: FC<Props> = () => {
   const updateSettingAction = (setting) => dispatch(UserActions.updateUserNotification(setting));
 
   const profileAttributesFiltered = useMemo(() => {
-    return profileAttributes
-      .filter(({ type }) => type === 'BOOLEAN')
-      .sort(({ name: name1 }, { name: name2 }) => {
-        if (name1 < name2) return -1;
-        if (name2 > name1) return 1;
-        return 0;
-      });
+    return (
+      profileAttributes
+        ?.filter(({ type }) => type === 'BOOLEAN')
+        ?.sort(({ name: name1 }, { name: name2 }) => {
+          if (name1 < name2) return -1;
+          if (name2 > name1) return 1;
+          return 0;
+        }) || []
+    );
   }, [profileAttributes]);
 
   return (

@@ -159,7 +159,7 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
             <Icon graphic={'settingsGear'} />
             <span className={css(itemSettingsTextStyle)}>{t('settings', 'Settings')}</span>
           </Link>
-          <Link to={''} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
+          <Link to={buildPath(Page.KNOWLEDGE_LIBRARY)} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
             <Icon graphic={'question'} />
             <span className={css(itemSettingsTextStyle)}>{t('faqs', 'Help and FAQs')}</span>
           </Link>
