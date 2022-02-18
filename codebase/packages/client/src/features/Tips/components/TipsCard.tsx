@@ -107,6 +107,7 @@ const TipsCard: FC<TipsCardProps> = ({ card }) => {
 const cardWrapper: CreateRule<{mobileScreen: boolean}> = ({mobileScreen}) => {
   return {
     padding: mobileScreen ? '0 8px' : 0,
+    marginBottom: '10px',
   };
 };
 
@@ -114,7 +115,6 @@ const cardStyle: CreateRule<{mobileScreen: boolean}> = ({mobileScreen}) => {
   return {
     padding: mobileScreen ? '16px' : '24px',
     width: mobileScreen ? '100%' : '80%',
-    marginBottom: '10px',
     display: 'flex',
     flexWrap: mobileScreen ? 'wrap' : 'nowrap',
   };

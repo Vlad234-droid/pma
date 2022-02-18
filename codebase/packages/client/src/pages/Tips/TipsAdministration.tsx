@@ -2,12 +2,12 @@ import React, { FC, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { Rule, useBreakpoints, useStyle, CreateRule, Theme } from '@dex-ddl/core';
-import { getTipsSelector, tipsActions } from '@pma/store';
+import { getTipsSelector, tipsActions, getTipsMetaSelector } from '@pma/store';
 import { Page } from 'pages';
 import { buildPath } from 'features/Routes/utils';
+import { paramsReplacer } from 'utils';
 import { IconButton } from 'components/IconButton';
 import { NoTips, TipsCard } from 'features/Tips';
-import { paramsReplacer } from 'utils';
 
 export const TIPS_ADMINISTRATION = 'tips-administration';
 
@@ -18,7 +18,9 @@ const TipsAdministration: FC = () => {
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
   const tips = useSelector(getTipsSelector) || [];
-
+  const tipsMeta = useSelector(getTipsMetaSelector);
+  const isLoaded = tipsMeta?.loaded;
+  
   useEffect(() => {
     dispatch(tipsActions.getAllTips({}));
   }, []);
@@ -41,9 +43,9 @@ const TipsAdministration: FC = () => {
         </IconButton>
       </div>
 
-      {tips.length === 0 && <NoTips />}
+      {isLoaded && tips.length === 0 && <NoTips />}
 
-      {tips.map((item) => {
+      {isLoaded && tips.map((item) => {
         return <TipsCard card={item} key={item.uuid} />;
       })}
     </div>
@@ -70,7 +72,7 @@ const iconBtnStyle: CreateRule<{mobileScreen: boolean; theme: Theme}> = ({mobile
     color: theme.colors.white,
     cursor: 'pointer',
     fontSize: mobileScreen ? theme.font.fixed.f14.fontSize : theme.font.fixed.f16.fontSize,
-    fontWeight: 'bold',
+    fontWeight: theme.font.weight.bold,
   };
 };
 

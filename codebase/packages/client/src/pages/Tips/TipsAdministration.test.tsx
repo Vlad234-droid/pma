@@ -9,16 +9,16 @@ import '@testing-library/jest-dom';
 
 describe('Tips page', () => {
   it('Should render Tips page', async () => {
-    const { getByTestId } = renderWithTheme(
+    const { getByTestId, queryByTestId } = renderWithTheme(
       <BrowserRouter>
         <TipsAdministration />
       </BrowserRouter>,
     );
     const timeline = getByTestId(TIPS_ADMINISTRATION);
-    const noTips = getByTestId(NO_TIPS_TILE);
+    const noTips = queryByTestId(NO_TIPS_TILE);
 
     expect(timeline).toBeInTheDocument();
-    expect(noTips).toBeInTheDocument();
+    expect(noTips).toBeNull();
   });
 
   //TODO: add test for "Create new tip" button
