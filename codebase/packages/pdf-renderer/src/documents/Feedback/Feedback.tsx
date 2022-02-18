@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import { Text, View, StyleSheet } from '@react-pdf/renderer';
 
 import GeneralDocument from '../General';
+import colors from '@pma/client/src/theme/colors';
 
 type QuestionItem = {
   code: string;
@@ -76,7 +77,7 @@ const styles = StyleSheet.create({
   },
   border: {
     borderBottomWidth: 2,
-    borderBottomColor: '#000',
+    borderBottomColor: colors.black,
   },
   meta: {
     flexDirection: 'row',
