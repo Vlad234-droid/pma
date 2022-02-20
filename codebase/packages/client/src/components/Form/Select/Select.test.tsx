@@ -1,42 +1,90 @@
+// @ts-ignore
 import React from 'react';
 import { fireEvent } from '@testing-library/react';
-import { renderWithTheme as render, screen } from 'utils/test';
-import '@testing-library/jest-dom/extend-expect';
+// @ts-ignore
+import { renderWithTheme as render, generateEmployeeReview } from 'utils/test';
 
-import { Select } from '../Select';
+import Select from './Select';
 
-it('render item with placeholder', async () => {
-  render(<Select placeholder='this is a placeholder' options={[]} />);
+describe('<Select />', () => {
+  const options = [
+    {
+      value: 'mocked_value_1',
+      label: 'mocked_label_1',
+    },
+    {
+      value: 'mocked_value_2',
+      label: 'mocked_label_2',
+    },
+  ];
 
-  const placeholder = screen.queryByPlaceholderText(/this is a placeholder/i);
+  const props = {
+    name: 'mocked_name',
+    options: options,
+    placeholder: 'mocked_placeholder',
+    onChange: jest.fn(),
+  };
 
-  expect(placeholder).toBeInTheDocument();
-});
+  describe('#render', () => {
+    it('should render dropdown and wrapper', () => {
+      const { getByTestId } = render(<Select {...props} />);
 
-it('render item without placeholder', async () => {
-  render(<Select options={[]} />);
+      expect(getByTestId('mocked_name-wrapper')).toBeInTheDocument();
+      expect(getByTestId('mocked_name')).toBeInTheDocument();
+    });
 
-  const placeholder = screen.queryByPlaceholderText(/[.+]/);
+    it('should render placeholder, if no value passed', () => {
+      const { getByText } = render(<Select {...props} />);
 
-  expect(placeholder).not.toBeInTheDocument();
-});
+      expect(getByText('- mocked_placeholder -')).toBeInTheDocument();
+    });
 
-it('render item and choose option', async () => {
-  const { container } = render(
-    <Select
-      placeholder='this is a placeholder'
-      options={[
-        { value: '1', label: 'test 1' },
-        { value: '2', label: 'test 2' },
-      ]}
-    />,
-  );
+    it('should not render placeholder and render value, if value passed', () => {
+      const newProps = {
+        ...props,
+        value: 'mocked_value_2',
+      };
 
-  expect(container.querySelector('input').value).toEqual('');
-  expect(screen.queryByText('test 1')).not.toBeInTheDocument();
-  fireEvent.click(container.querySelector('input'));
-  expect(screen.getByText('test 1')).toBeInTheDocument();
-  expect(screen.getByText('test 2')).toBeInTheDocument();
-  fireEvent.click(screen.getByText('test 1'));
-  expect(container.querySelector('input').value).toEqual('test 1');
+      const { queryByText, getByText } = render(<Select {...newProps} />);
+
+      expect(queryByText('- mocked_placeholder -')).not.toBeInTheDocument();
+      expect(getByText('mocked_label_2')).toBeInTheDocument();
+    });
+
+    it('should render down arrow by default', () => {
+      const { getByTestId } = render(<Select {...props} />);
+
+      expect(getByTestId('arrowdown')).toBeInTheDocument();
+    });
+
+    it('should not render list by default', () => {
+      const { queryByTestId } = render(<Select {...props} />);
+
+      expect(queryByTestId('mocked_name-list')).not.toBeInTheDocument();
+    });
+
+    describe('#handlres', () => {
+      it('should display a list on select click', () => {
+        const { getByTestId, getByText } = render(<Select {...props} />);
+
+        fireEvent.click(getByTestId('mocked_name'));
+
+        expect(getByTestId('mocked_name-list')).toBeInTheDocument();
+        expect(getByText('mocked_label_1')).toBeInTheDocument();
+        expect(getByText('mocked_label_2')).toBeInTheDocument();
+      });
+
+      it('should call props.onChange on option click', () => {
+        const { getByTestId, getByText, queryByTestId, queryByText } = render(<Select {...props} />);
+
+        fireEvent.click(getByTestId('mocked_name'));
+        fireEvent.click(getByText('mocked_label_2'));
+
+        expect(props.onChange).toHaveBeenCalledWith('mocked_value_2');
+        expect(queryByTestId('mocked_name-list')).not.toBeInTheDocument();
+        expect(queryByText('- mocked_placeholder -')).not.toBeInTheDocument();
+        expect(getByText('mocked_label_2')).toBeInTheDocument();
+      });
+    });
+  });
 });

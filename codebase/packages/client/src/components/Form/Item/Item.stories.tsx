@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Meta, Story } from '@storybook/react';
 
-import { Input, Radio, Checkbox, Textarea, Dropdown, Item, Props } from '../index';
+import { Input, Radio, Checkbox, Textarea, Select, Item, Props } from '../index';
 
 export default {
   title: 'components/Form',
@@ -13,7 +13,7 @@ const Template: Story<Props> = (args) => (
   <div style={{ background: '#fff', maxWidth: '600px' }}>
     <div style={{ maxWidth: '500px', padding: '10px' }}>
       <Item {...args} withIcon={false}>
-        <Dropdown
+        <Select
           name='Dropdown'
           onChange={() => undefined}
           placeholder='Select'

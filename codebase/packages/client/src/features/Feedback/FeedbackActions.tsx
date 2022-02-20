@@ -10,7 +10,7 @@ import {
 import { CreateRule, Modal, Rule, Theme, useBreakpoints, useStyle } from '@dex-ddl/core';
 
 import { Trans } from 'components/Translation';
-import { Item, Dropdown } from 'components/Form';
+import { Item, Select } from 'components/Form';
 import { Chat } from 'components/Icon/graphics/chat';
 import { NotiBell } from 'components/Icon/graphics/notiBell';
 import { NotiBellCirlceOut } from 'components/Icon/graphics/notiBellCirlceOut';
@@ -193,7 +193,7 @@ const FeedbackActions: FC = () => {
             </div>
           </div>
           <Item withIcon={false}>
-            <Dropdown
+            <Select
               options={TREATMENT_FIELD_OPTIONS}
               name={'treatment-options'}
               placeholder={'Choose tone of voice'}

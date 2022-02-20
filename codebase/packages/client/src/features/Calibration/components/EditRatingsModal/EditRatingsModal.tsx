@@ -4,7 +4,7 @@ import { Styles, useStyle } from '@dex-ddl/core';
 import { Employee } from 'config/types';
 import { ConfirmModal } from 'features/Modal';
 import { Trans, useTranslation } from 'components/Translation';
-import { Item, Dropdown } from 'components/Form';
+import { Item, Select } from 'components/Form';
 import { Rating } from 'config/enum';
 import { ColleagueInfo } from 'features/MyTeam';
 
@@ -68,7 +68,7 @@ const EditRatingsModal: FC<Props> = ({ employee, onClose, onSave }) => {
           )}
           <div className={css(Label)}>{t('select_what_rating', "Select your colleague's 'What' rating")}</div>
           <Item withIcon={false}>
-            <Dropdown
+            <Select
               options={options}
               placeholder={t('please_select', 'Please select')}
               onChange={(value) => setWhatRating(value as Rating)}
@@ -79,7 +79,7 @@ const EditRatingsModal: FC<Props> = ({ employee, onClose, onSave }) => {
         <>
           <div className={css(Label)}>{t('select_how_rating', `Select your colleague's 'How' rating`)}</div>
           <Item withIcon={false}>
-            <Dropdown
+            <Select
               options={options}
               placeholder={t('please_select', 'Please select')}
               onChange={(value) => setHowRating(value as Rating)}

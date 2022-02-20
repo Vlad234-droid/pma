@@ -1,163 +1,162 @@
-import React, { FC, useState } from 'react';
+import React, {FC, MouseEvent, useRef, useState} from 'react';
 import mergeRefs from 'react-merge-refs';
 import { Rule, useStyle } from '@dex-ddl/core';
-import { Icon } from 'components/Icon';
 
-import { useRefContainer } from '../context/input';
+import { Icon } from 'components/Icon';
+import useEventListener from 'hooks/useEventListener';
 
 import { SelectField, Option } from '../types';
+import { useRefContainer } from '../context/input';
+
+const getSelectedOption = (options: Option[], value?: string) =>
+  value && options.filter((option) => option.value === value)[0];
 
 const Select: FC<SelectField> = ({
   domRef,
-  onChange,
-  placeholder = '',
-  value = undefined,
-  options,
-  disabled = false,
   name,
-  getSelected,
-  readonly,
+  options,
+  placeholder,
+  value,
+  onChange,
 }) => {
-  const { css, theme } = useStyle();
-
+  const { css } = useStyle();
   const refIcon = useRefContainer();
+  const ref = useRef<HTMLDivElement | null>(null);
+  const [isOpen, setOpen] = useState<boolean>(false);
+  const [selected, setSelected] = useState<Option | undefined>(getSelectedOption(options, value));
 
-  const initialOption = options.find((option) => option.value === value) || { label: '', value: '' };
-
-  const [currentOption, setCurrentOption] = useState<Option>(initialOption);
-  const [isOptionOpen, toggleOption] = useState(false);
-
-  const handleOpen = () => {
-    if (!readonly) {
-      toggleOption(true);
+  const handleClickOutside = (event: MouseEvent<HTMLElement>) => {
+    const element = event?.target as HTMLElement;
+    if (ref.current && !ref.current.contains(element)) {
+      setOpen(false);
     }
   };
 
-  const handleClose = () => {
-    toggleOption(false);
+  useEventListener('click', handleClickOutside);
+
+  const toggleList = () => {
+    setOpen((isOpen) => !isOpen);
   };
 
-  const handleChange = (e) => {
-    if (currentOption && currentOption.value === value) return;
-
-    onChange({
-      ...e,
-      target: {
-        ...e.target,
-        value: currentOption.value,
-      },
-    });
+  const handleSelect = (selected: Option) => {
+    setSelected(selected);
+    onChange(selected.value);
+    setOpen(false);
   };
 
   return (
-    <>
-      <div
-        style={{
-          display: 'table',
-          width: '100%',
-        }}
+    <div className={css(wrapperStyles)} data-test-id={`${name}-wrapper`} ref={ref}>
+      <button
+        type='button'
+        data-test-id={name}
+        onClick={toggleList}
+        className={css(fieldStyles, isOpen ? fieldActiveStyles : {})}
+        ref={mergeRefs([domRef, refIcon])}
       >
-        <input
-          role='select'
-          name={name}
-          ref={mergeRefs([domRef, refIcon])}
-          value={currentOption?.label}
-          disabled={disabled}
-          data-test-id={name}
-          className={css(
-            {
-              width: '100%',
-              border: `1px solid ${theme.colors.backgroundDarkest}`,
-              borderRadius: '5px',
-              fontSize: '16px',
-              lineHeight: '20px',
-              padding: '10px 30px 10px 16px',
-              ':focus': {
-                outline: 'none !important',
-                border: `1px solid ${theme.colors.tescoBlue}`,
-              },
-            },
-            isOptionOpen
-              ? {
-                  outline: 'none !important',
-                  border: `1px solid ${theme.colors.tescoBlue}`,
-                }
-              : {},
-          )}
-          placeholder={placeholder ? `- ${placeholder} -` : ''}
-          readOnly={true}
-          onClick={handleOpen}
-          onBlur={handleClose}
-          onSelect={handleChange}
-        />
-        <span
-          data-test-id={`${name || ''}Options`}
-          style={{
-            position: 'absolute',
-            right: '10px',
-            top: '10px',
-          }}
-        >
+        {selected ? (
+          <div>{selected.label}</div>
+        ) : (
+          <div className={css(placeholderStyles)}>{placeholder ? `- ${placeholder} -` : ''}</div>
+        )}
+        <div className={css(iconWrapperStyles)}>
           <Icon
             graphic='arrowDown'
-            iconStyles={{ ...iconStyles, ...(isOptionOpen ? iconExpandStyles : {}) }}
+            iconStyles={{ ...iconStyles, ...(isOpen ? iconExpandStyles : {}) }}
             fill='#A8A8A8'
           />
-        </span>
-        {isOptionOpen && !!options.length && (
-          <div
-            style={{
-              display: 'block',
-              position: 'absolute',
-              border: `1px solid ${theme.colors.backgroundDarkest}`,
-              borderRadius: theme.border.radius.sm,
-              background: theme.colors.white,
-              width: '100%',
-              zIndex: 999,
-            }}
-          >
-            {options.map((option, index) => {
-              return (
-                <span
-                  data-test-id={`${name || ''}Options-${index}`}
-                  key={option.value}
-                  className={css({
-                    display: 'block',
-                    width: '100%',
-                    fontSize: '16px',
-                    lineHeight: '20px',
-                    padding: '10px 30px 10px 16px',
-                    ':hover': {
-                      background: '#F3F9FC',
-                    },
-                  })}
-                  onMouseDown={(e) => e.preventDefault()}
-                  onClick={() => {
-                    setCurrentOption(option);
-                    handleClose();
-                    if (getSelected !== undefined) {
-                      getSelected(option);
-                    }
-                  }}
-                >
-                  {option.label}
-                </span>
-              );
-            })}
-          </div>
-        )}
-      </div>
-    </>
+        </div>
+      </button>
+      {isOpen && (
+        <div
+          role='list'
+          data-test-id={`${name}-list`}
+          className={css(listStyles)}
+        >
+          {options.map((item) => (
+            <button
+              type='button'
+              key={item.value}
+              className={css(optionStyles)}
+              onClick={() => handleSelect(item)}
+            >
+              {item.label}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
   );
 };
+
+export default Select;
+
+const wrapperStyles: Rule = {
+  display: 'table',
+  width: '100%',
+};
+
+const fieldStyles: Rule = ({ theme }) => ({
+  display: 'flex',
+  justifyContent: 'space-between',
+  width: '100%',
+  border: `1px solid ${theme.colors.backgroundDarkest}`,
+  background: `${theme.colors.white}`,
+  borderRadius: '5px',
+  fontSize: `${theme.font.fixed.f16.fontSize}`,
+  lineHeight: `${theme.font.fixed.f16.lineHeight}`,
+  padding: '10px 30px 10px 16px',
+  ':focus': {
+    outline: 'none !important',
+    border: `1px solid ${theme.colors.tescoBlue}`,
+  },
+  cursor: 'pointer',
+});
+
+const fieldActiveStyles: Rule = ({ theme }) => ({
+  outline: 'none !important',
+  border: `1px solid ${theme.colors.tescoBlue}`,
+});
+
+const placeholderStyles: Rule = ({ theme }) => ({
+  color: `${theme.colors.grayscale}`,
+});
 
 const iconStyles: Rule = {
   transition: 'transform 0.4s ease',
   cursor: 'pointer',
 };
 
+const iconWrapperStyles: Rule = {
+  position: 'absolute',
+  right: '10px',
+};
+
 const iconExpandStyles: Rule = {
   transform: 'rotate(180deg)',
 };
 
-export default Select;
+const listStyles: Rule = ({ theme }) => ({
+  display: 'block',
+  position: 'absolute',
+  border: `1px solid ${theme.colors.backgroundDarkest}`,
+  borderRadius: theme.border.radius.sm,
+  background: theme.colors.white,
+  width: '100%',
+  zIndex: 999,
+});
+
+const optionStyles: Rule = ({ theme }) => ({
+  display: 'block',
+  width: '100%',
+  fontSize: `${theme.font.fixed.f16.fontSize}`,
+  lineHeight: `${theme.font.fixed.f16.lineHeight}`,
+  padding: '10px 30px 10px 16px',
+  border: 'none',
+  background: `${theme.colors.white}`,
+  cursor: 'pointer',
+  textAlign: 'left',
+  ':hover': {
+    // @ts-ignore
+    background: `${theme.colors.lightBlue}`,
+  },
+});

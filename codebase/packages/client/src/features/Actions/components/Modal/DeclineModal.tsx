@@ -3,7 +3,7 @@ import { useStyle } from '@dex-ddl/core';
 
 import { Employee } from 'config/types';
 import { ReviewType } from 'config/enum';
-import { Item, Dropdown } from 'components/Form';
+import { Item, Select } from 'components/Form';
 import { useTranslation } from 'components/Translation';
 
 import ConfirmModal from './ConfirmModal';
@@ -40,7 +40,7 @@ const DeclineModal: FC<Props> = ({ onSave, onClose, review, reviewType }) => {
             </div>
             <div className={css({ padding: '0 40px' })}>
               <Item withIcon={false}>
-                <Dropdown
+                <Select
                   name='declineReason'
                   options={options}
                   placeholder={t('please_select', 'Please select')}

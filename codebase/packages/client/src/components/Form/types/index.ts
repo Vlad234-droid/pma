@@ -29,19 +29,12 @@ export type Option = {
   label: string;
 };
 
-export interface DropdownField extends FormField {
+export interface SelectField extends FormField {
   name: string;
   options: Array<Option>;
   placeholder: string;
   value?: string;
   onChange: (value: string) => void;
-}
-
-export interface SelectField extends FormField {
-  options: Array<Option>;
-  getSelected?: (option: any) => void;
-  onChange: (e: SyntheticEvent<HTMLInputElement>) => void;
-  value?: string;
 }
 
 export interface TextareaField extends FormField {
