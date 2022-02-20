@@ -4,7 +4,7 @@ import { Styles, useStyle } from '@dex-ddl/core';
 import { Employee } from 'config/types';
 import { ConfirmModal } from 'features/Modal';
 import { Trans, useTranslation } from 'components/Translation';
-import { Item, Select } from 'components/Form';
+import { Item, Dropdown } from 'components/Form';
 import { Rating } from 'config/enum';
 import { ColleagueInfo } from 'features/MyTeam';
 
@@ -68,10 +68,10 @@ const EditRatingsModal: FC<Props> = ({ employee, onClose, onSave }) => {
           )}
           <div className={css(Label)}>{t('select_what_rating', "Select your colleague's 'What' rating")}</div>
           <Item withIcon={false}>
-            <Select
+            <Dropdown
               options={options}
               placeholder={t('please_select', 'Please select')}
-              onChange={(e) => setWhatRating((e.target as HTMLInputElement).value as Rating)}
+              onChange={(value) => setWhatRating(value as Rating)}
               name='declineReasonWhat'
             />
           </Item>
@@ -79,10 +79,10 @@ const EditRatingsModal: FC<Props> = ({ employee, onClose, onSave }) => {
         <>
           <div className={css(Label)}>{t('select_how_rating', `Select your colleague's 'How' rating`)}</div>
           <Item withIcon={false}>
-            <Select
+            <Dropdown
               options={options}
               placeholder={t('please_select', 'Please select')}
-              onChange={(e) => setHowRating((e.target as HTMLInputElement).value as Rating)}
+              onChange={(value) => setHowRating(value as Rating)}
               name='declineReasonHow'
             />
           </Item>

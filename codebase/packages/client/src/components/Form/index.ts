@@ -1,5 +1,6 @@
 export * from './Input';
 export * from './Select';
+export { default as Dropdown } from './Dropdown';
 export * from './Checkbox';
 export * from './Radio';
 export * from './Item';

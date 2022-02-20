@@ -29,6 +29,14 @@ export type Option = {
   label: string;
 };
 
+export interface DropdownField extends FormField {
+  name: string;
+  options: Array<Option>;
+  placeholder: string;
+  value?: string;
+  onChange: (value: string) => void;
+}
+
 export interface SelectField extends FormField {
   options: Array<Option>;
   getSelected?: (option: any) => void;

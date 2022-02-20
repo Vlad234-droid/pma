@@ -159,3 +159,5 @@ export const icons: Record<Graphics, FCGraphicProps> = {
   tip: Tip,
   multiLanguage: MultiLanguage,
 };
+
+export { Chat } from './chat';

@@ -10,19 +10,22 @@ import {
 import { CreateRule, Modal, Rule, Theme, useBreakpoints, useStyle } from '@dex-ddl/core';
 
 import { Trans } from 'components/Translation';
-import { Item, Select } from 'components/Form';
+import { Item, Dropdown } from 'components/Form';
 import { Chat } from 'components/Icon/graphics/chat';
 import { NotiBell } from 'components/Icon/graphics/notiBell';
 import { NotiBellCirlceOut } from 'components/Icon/graphics/notiBellCirlceOut';
 import { People } from 'components/Icon/graphics/people';
-import Info360Modal, { FeedbackCard } from './components';
-import { ConfigProps } from './type';
 import { IconButton } from 'components/IconButton';
 import { Icon } from 'components/Icon';
-
 import { FeedbackStatus } from 'config/enum';
 import { useAuthContainer } from 'contexts/authContext';
 import { Page } from 'pages';
+import { UserprofileAttributes } from 'config/types';
+
+import { TREATMENT_FIELD_OPTIONS } from './config';
+import { getSelectedTreatmentValue } from './utils';
+import Info360Modal, { FeedbackCard } from './components';
+import { ConfigProps } from './config/types';
 
 const FEEDBACK_ACTIONS = 'feedback_actions';
 
@@ -30,7 +33,8 @@ const FeedbackActions: FC = () => {
   const { user } = useAuthContainer();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
-  const profileAttr = user?.data?.profileAttributes;
+  const profileAttr: UserprofileAttributes[] = user?.data?.profileAttributes;
+  const treatmentValue: string = getSelectedTreatmentValue(profileAttr);
 
   const [info360Modal, setInfo360Modal] = useState<boolean>(false);
   const dispatch = useDispatch();
@@ -102,25 +106,14 @@ const FeedbackActions: FC = () => {
     window.open('https://feedback.etsplc.com/Tesco360/', '_blank')?.focus();
   };
 
-  const field_options = [
-    { value: 'Direct and simple', label: 'Direct and simple' },
-    { value: 'Friendly and constructive', label: 'Friendly and constructive' },
-    { value: 'Informative and detailed', label: 'Informative and detailed' },
-    { value: 'I don`t have a preference', label: 'I don`t have a preference' },
-  ];
-
-  const checkForVoiceValue = () => profileAttr?.find((item) => item?.name === 'voice')?.value ?? 'id_1';
-
-  const createToneOfVoiceHandler = (e) => {
-    if (!e.target) return;
-    const { value } = e.target;
-
+  const createToneOfVoiceHandler = (value: string) => {
     const payload = {
       colleagueUuid,
       name: 'voice',
       type: 'STRING',
       value,
     };
+
     if (profileAttr?.find((item) => item?.name === 'voice')) {
       dispatch(UserActions.updateProfileAttribute([payload]));
       return;
@@ -200,14 +193,12 @@ const FeedbackActions: FC = () => {
             </div>
           </div>
           <Item withIcon={false}>
-            <Select
-              name={`treatment_options`}
-              options={field_options}
+            <Dropdown
+              options={TREATMENT_FIELD_OPTIONS}
+              name={'treatment-options'}
               placeholder={'Choose tone of voice'}
-              value={checkForVoiceValue()}
-              onChange={(e) => {
-                createToneOfVoiceHandler(e);
-              }}
+              value={treatmentValue}
+              onChange={createToneOfVoiceHandler}
             />
           </Item>
         </div>
