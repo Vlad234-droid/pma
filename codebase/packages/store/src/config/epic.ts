@@ -1,6 +1,5 @@
 import { combineEpics } from 'redux-observable';
 import userEpic from '../entities/user/epic';
-import objectiveEpic from '../entities/objective/epic';
 import orgObjectiveEpic from '../entities/orgObjective/epic';
 import schemaEpic from '../entities/schema/epic';
 import timelineEpic from '../entities/timeline/epic';
@@ -18,11 +17,11 @@ import pdpEpic from '../entities/pdp/epic';
 import reportEpic from '../entities/report/epic';
 import previousReviewFilesEpic from '../entities/previousReviewFiles/epic';
 import messagesEpic from '../entities/messages/epic';
+import knowledgeLibraryEpic from '../entities/knowledgeLibrary/epic';
 
 export const rootEpic = combineEpics(
   userEpic,
   schemaEpic,
-  objectiveEpic,
   orgObjectiveEpic,
   timelineEpic,
   managersEpic,
@@ -39,4 +38,5 @@ export const rootEpic = combineEpics(
   reportEpic,
   previousReviewFilesEpic,
   messagesEpic,
+  knowledgeLibraryEpic,
 );

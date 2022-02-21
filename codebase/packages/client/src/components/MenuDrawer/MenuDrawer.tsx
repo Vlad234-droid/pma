@@ -5,7 +5,7 @@ import { Page } from 'pages';
 import { LINKS } from 'config/constants';
 import { buildPath } from 'features/Routes';
 import { ConfirmModal } from 'features/Modal';
-import { PermissionProvider, role } from 'features/Permission';
+import { CanPerform, role } from 'features/Permission';
 import { Trans, useTranslation } from 'components/Translation';
 import { MenuItem } from 'components/MenuItem';
 import TescoLogo from 'assets/img/TescoLogo.svg';
@@ -50,88 +50,118 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
           </div>
           <div className={css(menuDrawerTitleStyle)}>Your Contribution</div>
           <div className={css(menuDrawerButtonsStyle)}>
-            <MenuItem iconGraphic={'home'} linkTo={buildPath(Page.CONTRIBUTION)} title={'Your contribution'} />
+            <MenuItem
+              iconGraphic={'home'}
+              linkTo={buildPath(Page.CONTRIBUTION)}
+              title={t('your_contribution', 'Your contribution')}
+            />
             <MenuItem
               iconGraphic={'aim'}
               linkTo={buildPath(Page.OBJECTIVES_VIEW)}
               title={t('my_objectives_and_reviews', 'My objectives and reviews')}
             />
-            <PermissionProvider roles={[role.LINE_MANAGER, role.PEOPLE_TEAM, role.COLLEAGUE]}>
-              <MenuItem
-                iconGraphic={'list'}
-                linkTo={buildPath(Page.PERSONAL_DEVELOPMENT_PLAN)}
-                title={'Personal Development Plan'}
-              />
-            </PermissionProvider>
-            <MenuItem iconGraphic={'edit'} linkTo={buildPath(Page.NOTES)} title={'My notes'} />
-            <MenuItem iconGraphic={'account'} linkTo={buildPath(Page.PROFILE)} title={'My profile'} />
-            <MenuItem iconGraphic={'chatSq'} linkTo={buildPath(Page.FEEDBACK)} title={'Feedback'} />
-            <PermissionProvider roles={[role.LINE_MANAGER, role.PEOPLE_TEAM, role.TALENT_ADMIN]}>
-              <MenuItem iconGraphic={'team'} linkTo={buildPath(Page.REPORT)} title={'Team reporting'} />
-            </PermissionProvider>
+            <CanPerform
+              perform={[role.LINE_MANAGER, role.PEOPLE_TEAM, role.COLLEAGUE]}
+              yes={() => (
+                <MenuItem
+                  iconGraphic={'list'}
+                  linkTo={buildPath(Page.PERSONAL_DEVELOPMENT_PLAN)}
+                  title={t('personal_development_plan', 'Personal Development Plan')}
+                />
+              )}
+            />
+            <MenuItem iconGraphic={'edit'} linkTo={buildPath(Page.NOTES)} title={t('my_notes', 'My notes')} />
+            <MenuItem iconGraphic={'account'} linkTo={buildPath(Page.PROFILE)} title={t('my_profile', 'My profile')} />
+            <MenuItem iconGraphic={'chatSq'} linkTo={buildPath(Page.FEEDBACK)} title={t('feedback', 'Feedback')} />
+            <CanPerform
+              perform={[role.TALENT_ADMIN, role.ADMIN]}
+              yes={() => (
+                <MenuItem
+                  iconGraphic={'team'}
+                  linkTo={buildPath(Page.REPORT)}
+                  title={t('team_reporting', 'Team reporting')}
+                />
+              )}
+            />
           </div>
         </div>
         <div className={css(menuDrawerSettingsStyle)}>
-          <div className={css(itemSettingsStyle, adminToolsStyle)} onClick={handleToggleDropdown}>
-            <Icon graphic={'tool'} />
-            <span className={css(itemSettingsTextStyle)}>Administrator tools</span>
-            <Icon
-              graphic={'arrowDown'}
-              iconStyles={{
-                marginLeft: '15px',
-                transform: isOpenDropdown ? 'rotate(-0deg)' : 'rotate(-90deg)',
-                transition: 'all .2s ease-in-out',
-              }}
-            />
-          </div>
-          {isOpenDropdown && (
-            <div className={css(menuDropdownStyle)}>
-              <PermissionProvider roles={[role.PEOPLE_TEAM, role.TALENT_ADMIN, role.PROCESS_MANAGER, role.ADMIN]}>
-                <Link
-                  to={buildPath(Page.PERFORMANCE_CYCLE)}
-                  className={css(itemSettingsStyle, itemSettingsBorderStyle)}
-                >
-                  <Icon graphic={'createCycle'} />
-                  <span className={css(itemSettingsTextStyle)}>Create performance cycle</span>
-                </Link>
-              </PermissionProvider>
-
-              <PermissionProvider roles={[role.PROCESS_MANAGER, role.ADMIN]}>
-                <Link
-                  to={buildPath(Page.AdministratorPage)}
-                  className={css(itemSettingsStyle, itemSettingsBorderStyle)}
-                >
-                  <Icon graphic={'configuration'} />
-                  <span className={css(itemSettingsTextStyle)}>Configurations</span>
-                </Link>
-              </PermissionProvider>
-
-              <PermissionProvider roles={[role.TALENT_ADMIN]}>
-                <Link
-                  to={buildPath(Page.CREATE_STRATEGIC_DRIVERS)}
-                  className={css(itemSettingsStyle, itemSettingsBorderStyle)}
-                >
-                  <Icon graphic={'strategicDriver'} />
-                  <span className={css(itemSettingsTextStyle)}>Strategic drivers</span>
-                </Link>
-              </PermissionProvider>
-
-              <PermissionProvider roles={[role.COLLEAGUE, role.LINE_MANAGER, role.PEOPLE_TEAM, role.ADMIN]}>
-                <Link to={buildPath(Page.TIPS)} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
-                  <Icon graphic={'tip'} />
-                  <span className={css(itemSettingsTextStyle)}>Tips</span>
-                </Link>
-              </PermissionProvider>
-            </div>
-          )}
+          <CanPerform
+            perform={[role.TALENT_ADMIN, role.ADMIN]}
+            yes={() => {
+              return (
+                <>
+                  <div className={css(itemSettingsStyle, adminToolsStyle)} onClick={handleToggleDropdown}>
+                    <Icon graphic={'tool'} />
+                    <span className={css(itemSettingsTextStyle)}>Administrator tools</span>
+                    <Icon
+                      graphic={'arrowDown'}
+                      iconStyles={{
+                        marginLeft: '15px',
+                        transform: isOpenDropdown ? 'rotate(-0deg)' : 'rotate(-90deg)',
+                        transition: 'all .2s ease-in-out',
+                      }}
+                    />
+                  </div>
+                  {isOpenDropdown && (
+                    <div className={css(menuDropdownStyle)}>
+                      <CanPerform
+                        perform={[role.ADMIN]}
+                        yes={() => (
+                          <>
+                            <Link
+                              to={buildPath(Page.PERFORMANCE_CYCLE)}
+                              className={css(itemSettingsStyle, itemSettingsBorderStyle)}
+                            >
+                              <Icon graphic={'createCycle'} />
+                              <span className={css(itemSettingsTextStyle)}>
+                                {t('create_performance_cycle', 'Create performance cycle')}
+                              </span>
+                            </Link>
+                            <Link
+                              to={buildPath(Page.ADMINISTRATION)}
+                              className={css(itemSettingsStyle, itemSettingsBorderStyle)}
+                            >
+                              <Icon graphic={'configuration'} />
+                              <span className={css(itemSettingsTextStyle)}>
+                                {t('configurations', 'Configurations')}
+                              </span>
+                            </Link>
+                          </>
+                        )}
+                      />
+                      <Link
+                        to={buildPath(Page.CREATE_STRATEGIC_DRIVERS)}
+                        className={css(itemSettingsStyle, itemSettingsBorderStyle)}
+                      >
+                        <Icon graphic={'strategicDriver'} />
+                        <span className={css(itemSettingsTextStyle)}>
+                          {t('strategic_drivers', 'Strategic drivers')}
+                        </span>
+                      </Link>
+                      <CanPerform
+                        perform={[role.ADMIN]}
+                        yes={() => (
+                          <Link to={buildPath(Page.TIPS)} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
+                            <Icon graphic={'tip'} />
+                            <span className={css(itemSettingsTextStyle)}>{t('tips', 'Tips')}</span>
+                          </Link>
+                        )}
+                      />
+                    </div>
+                  )}
+                </>
+              );
+            }}
+          />
           <div className={css(itemSettingsBorderStyle, { marginLeft: '20px' })} />
           <Link to={buildPath(Page.SETTINGS)} className={css(itemSettingsStyle)}>
             <Icon graphic={'settingsGear'} />
-            <span className={css(itemSettingsTextStyle)}>Settings</span>
+            <span className={css(itemSettingsTextStyle)}>{t('settings', 'Settings')}</span>
           </Link>
-          <Link to={''} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
+          <Link to={buildPath(Page.KNOWLEDGE_LIBRARY)} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
             <Icon graphic={'question'} />
-            <span className={css(itemSettingsTextStyle)}>{`Help and FAQs`}</span>
+            <span className={css(itemSettingsTextStyle)}>{t('faqs', 'Help and FAQs')}</span>
           </Link>
           <a href={LINKS.signOut} className={css(itemSettingsStyle, itemSettingsBorderStyle)} onClick={handleSignOut}>
             <Icon graphic={'signOut'} />
@@ -176,14 +206,14 @@ const menuDrawerWrapperStyle: Rule = ({ colors, zIndex }) => ({
   zIndex: zIndex.i50,
 });
 
-const menuDrawerContentStyle: Rule = {
+const menuDrawerContentStyle: Rule = ({ theme }) => ({
   position: 'absolute',
   right: 0,
   top: 0,
   maxWidth: '360px',
-  background: '#F6F6F6',
+  background: theme.colors.backgroundDark,
   minHeight: '100vh',
-};
+});
 
 const menuDrawerTopStyle: Rule = {
   padding: '24px',
@@ -200,11 +230,11 @@ const menuDrawerButtonsStyle: Rule = {
   gap: '8px',
 };
 
-const menuDrawerSettingsStyle: Rule = {
-  background: '#FFFFFF',
+const menuDrawerSettingsStyle: Rule = ({ theme }) => ({
+  background: theme.colors.white,
   height: '100%',
   padding: '6px 0 0 0',
-};
+});
 
 const itemSettingsTextStyle: Rule = {
   paddingLeft: '16px',
@@ -221,10 +251,11 @@ const itemSettingsBorderStyle: Rule = ({ theme }) => ({
   borderTop: `1px solid ${theme.colors.backgroundDarkest}`,
 });
 
-const menuDropdownStyle: Rule = {
-  backgroundColor: '#F3F9FC',
-  transition: 'all .5s esea-in-out',
-};
+const menuDropdownStyle: Rule = ({ theme }) => ({
+  // @ts-ignore
+  backgroundColor: theme.colors.lightBlue,
+  transition: 'all .5s ease-in-out',
+});
 
 const adminToolsStyle: Rule = {
   cursor: 'pointer',

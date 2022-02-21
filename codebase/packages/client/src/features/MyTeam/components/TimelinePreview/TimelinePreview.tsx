@@ -9,6 +9,7 @@ import { Page } from 'pages/types';
 import { paramsReplacer } from 'utils';
 import { buildPath } from 'features/Routes';
 import { Employee } from 'config/types';
+import { useTranslation } from 'components/Translation';
 
 import ColleagueInfo from '../ColleagueInfo';
 
@@ -28,6 +29,7 @@ const TimelinePreview: FC<Props> = ({
   onClick,
 }) => {
   const { css } = useStyle();
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [graphics, color] = getIcon(status);
 
@@ -54,7 +56,7 @@ const TimelinePreview: FC<Props> = ({
               onClick={() => viewUserObjectives(employee.uuid)}
               className={css(buttonStyles)}
             >
-              View profile
+              {t('view_profile', 'View profile')}
             </button>
           )}
         </div>

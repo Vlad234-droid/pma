@@ -1,11 +1,14 @@
+// @ts-ignore
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
+// @ts-ignore
 import { renderWithTheme as render, screen } from 'utils/test';
-import { fireEvent, act } from '@testing-library/react';
+import { act, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import ReviewFormModal from './ReviewFormModal';
+import { default as ReviewFormModal } from './ReviewFormModal';
 import { ReviewsActions } from '@pma/store';
+import { ReviewType } from '../../../../config/enum';
 
 describe('ReviewFormModal', () => {
   const approvalSubmissionText = /Are you sure you want to submit your review to your line manager for approval?/i;
@@ -164,7 +167,7 @@ describe('ReviewFormModal', () => {
         error: null,
       },
       success: true,
-      data: [
+      'test-colleagueUuid': [
         {
           uuid: 'bbc85acd-5fcf-af8b-cacc-7fda95743505',
           colleagueCycleUuid: '3fa85f64-5717-4562-b3fc-2c963f66afa3',
@@ -198,7 +201,7 @@ describe('ReviewFormModal', () => {
       onClose = jest.fn();
       consoleErrorMock = jest.spyOn(console, 'error').mockImplementation();
       addMockUpdateReviews = jest.spyOn(ReviewsActions, 'updateReviews');
-      renderer = render(<ReviewFormModal reviewType={'EYR'} onClose={onClose} />, {
+      renderer = render(<ReviewFormModal reviewType={ReviewType.EYR} onClose={onClose} />, {
         timeline,
         reviews,
         schema,
@@ -392,7 +395,7 @@ describe('ReviewFormModal', () => {
         loaded: true,
         error: null,
       },
-      data: [
+      'test-colleagueUuid': [
         {
           uuid: '0c1d5968-520c-4a56-be5c-391addca0b8c',
           type: 'EYR',
@@ -412,7 +415,7 @@ describe('ReviewFormModal', () => {
         error: null,
       },
       success: true,
-      data: [
+      'test-colleagueUuid': [
         {
           uuid: 'bbc85acd-5fcf-af8b-cacc-7fda95743505',
           colleagueCycleUuid: '3fa85f64-5717-4562-b3fc-2c963f66afa3',
@@ -446,7 +449,7 @@ describe('ReviewFormModal', () => {
       onClose = jest.fn();
       consoleErrorMock = jest.spyOn(console, 'error').mockImplementation();
       addMockUpdateReviews = jest.spyOn(ReviewsActions, 'updateReviews');
-      renderer = render(<ReviewFormModal reviewType={'EYR'} onClose={onClose} />, {
+      renderer = render(<ReviewFormModal reviewType={ReviewType.EYR} onClose={onClose} />, {
         timeline,
         reviews,
         schema,

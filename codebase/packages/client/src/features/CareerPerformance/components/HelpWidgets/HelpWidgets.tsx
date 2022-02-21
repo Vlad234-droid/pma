@@ -3,8 +3,10 @@ import { Rule, useStyle } from '@dex-ddl/core';
 
 import { BasicTile } from 'components/Tile';
 import { Icon } from 'components/Icon';
-import { LINKS } from 'config/constants';
 import { useTranslation } from 'components/Translation';
+import { buildPath } from 'features/Routes';
+import { Page } from 'pages';
+import { Link } from 'react-router-dom';
 
 const HelpWidgets: FC = () => {
   const { css } = useStyle();
@@ -12,18 +14,19 @@ const HelpWidgets: FC = () => {
 
   return (
     <div data-test-id='help-widgets' className={css(wrapperStyles)}>
-      <div data-test-id='question-tile' className={css({ height: '100%' })}>
-        <BasicTile
-          img={<Icon graphic='question' />}
-          title={t('want_to_learn_more', 'Want to learn more about Your Contribution at Tesco?')}
-          imgCustomStyle={imageStyles}
-          customStyle={{
-            ...widgetStyles,
-          }}
-          icon={true}
-        >
-          <div className={css(contentStyle)}>Coming soon</div>
-        </BasicTile>
+      <div data-test-id='question-tile' className={css(wrrapperRule)}>
+        <Link to={buildPath(Page.KNOWLEDGE_LIBRARY)}>
+          <BasicTile
+            img={<Icon graphic='question' />}
+            hover
+            title={t('want_to_learn_more', 'Want to learn more about Your Contribution at Tesco?')}
+            imgCustomStyle={imageStyles}
+            customStyle={{
+              ...widgetStyles,
+            }}
+            icon={true}
+          />
+        </Link>
       </div>
     </div>
   );
@@ -31,9 +34,8 @@ const HelpWidgets: FC = () => {
 
 export default HelpWidgets;
 
-const contentStyle: Rule = {
-  fontWeight: 'bold',
-  fontStyle: 'italic',
+const wrrapperRule: Rule = {
+  height: '100%',
 };
 
 const wrapperStyles: Rule = {
@@ -48,6 +50,7 @@ const widgetStyles: Rule = {
   display: 'flex',
   alignItems: 'center',
   textAlign: 'center',
+  justifyContent: 'center',
   height: '100%',
   padding: '24px 27px 24px 10px',
 };

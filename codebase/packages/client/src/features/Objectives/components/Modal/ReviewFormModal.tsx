@@ -1,4 +1,4 @@
-import React, { FC, HTMLProps, useCallback, useEffect, useState } from 'react';
+import React, { FC, useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
 import { useForm } from 'react-hook-form';
@@ -35,8 +35,6 @@ export type ReviewFormModal = {
   onClose: () => void;
 };
 
-type Props = HTMLProps<HTMLInputElement> & ReviewFormModal;
-
 const getContent = (reviewType: ReviewType, t: TFunction) => {
   const contents: {
     [key: string]: {
@@ -63,7 +61,7 @@ const getContent = (reviewType: ReviewType, t: TFunction) => {
   return contents[reviewType];
 };
 
-const ReviewFormModal: FC<Props> = ({ reviewType, onClose }) => {
+const ReviewFormModal: FC<ReviewFormModal> = ({ reviewType, onClose }) => {
   const { css, theme } = useStyle();
   const { t } = useTranslation();
   const [, isBreakpoint] = useBreakpoints();

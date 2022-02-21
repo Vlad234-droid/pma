@@ -4,12 +4,12 @@ import { useStyle, Rule, useBreakpoints, Button, CreateRule, Theme } from '@dex-
 import { SearchPart } from './SearchPart';
 import { UseFormReturn } from 'react-hook-form';
 import { PeopleTypes } from './type';
-import { Trans } from 'components/Translation';
 import { IconButton, Position } from 'components/IconButton';
 import { SubmitPart } from './SubmitPart';
 import { NotesTypeTEAM, FoldersWithNotesTypesTEAM } from 'features/NotesActions/type';
 import { Icon as IconComponent } from 'components/Icon';
 import { SuccessModal } from './SuccessModal';
+import { Trans, useTranslation } from 'components/Translation';
 
 type AddTeamNoteModalProps = {
   teamMethods: UseFormReturn;
@@ -35,7 +35,7 @@ const AddTeamNoteModal: FC<AddTeamNoteModalProps> = ({
   createFolder,
 }) => {
   const [successTEAMModal, setSuccessTEAMModal] = useState<boolean>(false);
-
+  const { t } = useTranslation();
   const { css, theme } = useStyle();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
@@ -68,15 +68,22 @@ const AddTeamNoteModal: FC<AddTeamNoteModalProps> = ({
       <Notification
         graphic='information'
         iconColor='link'
-        text='My Notes can be used to create and store notes about Your Contribution or that of your direct reports. Use this space to record achievements, thoughts on objectives or subjects to raise during your 1:1s. Although these notes are private, if you write something about anyone else they can request to see it so please remain professional.'
+        text={t(
+          'notes_description',
+          'My Notes can be used to create and store notes about Your Contribution or that of your direct reports. Use this space to record achievements, thoughts on objectives or subjects to raise during your 1:1s. Although these notes are private, if you write something about anyone else they can request to see it so please remain professional.',
+        )}
         closable={false}
         customStyle={{
           background: '#F3F9FC',
           marginBottom: '20px',
         }}
       />
-      <h2 className={css(collegueStyled)}>Select a colleague</h2>
-      <span className={css(discStyle)}>Select which colleague you want to add note about</span>
+      <h2 className={css(collegueStyled)}>
+        <Trans i18nKey='select_a_colleague'>Select a colleague</Trans>
+      </h2>
+      <span className={css(discStyle)}>
+        <Trans i18nKey='select_a_colleague_to_add'>Select which colleague you want to add note about</Trans>
+      </span>
 
       <form>
         <SearchPart
@@ -97,15 +104,9 @@ const AddTeamNoteModal: FC<AddTeamNoteModalProps> = ({
       </form>
       <div className={css(absolueStyle)}>
         <div className={css(selectedRelativeStyle)}>
-          <div
-            className={css({
-              padding: mobileScreen ? theme.spacing.s6 : theme.spacing.s8,
-              display: 'flex',
-              justifyContent: 'space-between',
-            })}
-          >
+          <div className={css(btnsStyle({ mobileScreen, theme }))}>
             <Button styles={[theme.font.fixed.f16, buttonCoreStyled]} onPress={cancelTEAMModal}>
-              <Trans>Cancel</Trans>
+              <Trans i18nKey='cancel'>Cancel</Trans>
             </Button>
 
             <IconButton
@@ -119,7 +120,7 @@ const AddTeamNoteModal: FC<AddTeamNoteModalProps> = ({
                 handleTEAMSubmit();
               }}
             >
-              <Trans>Submit</Trans>
+              <Trans i18nKey='submit'>Submit</Trans>
             </IconButton>
           </div>
         </div>
@@ -127,6 +128,12 @@ const AddTeamNoteModal: FC<AddTeamNoteModalProps> = ({
     </div>
   );
 };
+
+const btnsStyle: CreateRule<{ mobileScreen: boolean; theme: Theme }> = ({ mobileScreen, theme }) => ({
+  padding: mobileScreen ? theme.spacing.s6 : theme.spacing.s8,
+  display: 'flex',
+  justifyContent: 'space-between',
+});
 
 const WrapperModalGiveFeedbackStyle: Rule = {
   paddingLeft: '40px',

@@ -6,6 +6,8 @@ import { FoldersWithNotesTypesTEAM } from 'features/NotesActions/type';
 import { GenericItemField } from 'components/GenericForm';
 import { Input, Item, Select, Textarea } from 'components/Form';
 import defaultImg from 'images/default.png';
+import { getNotes, getFolder } from 'utils/note';
+import { useTranslation } from 'components/Translation';
 
 type SubmitPartProps = {
   selectedPerson: PeopleTypes;
@@ -20,50 +22,9 @@ export const SubmitPart: FC<SubmitPartProps> = ({
   foldersWithNotesTEAM,
   createFolder,
 }) => {
+  const { t } = useTranslation();
   const { css } = useStyle();
   const { trigger, getValues, setValue } = teamMethods;
-  const notes: any = {
-    require: [
-      {
-        id: '1',
-        type: 'input',
-        title: 'Title',
-        placeholder: 'Enter a title for your note',
-      },
-      {
-        id: '2',
-        type: 'textarea',
-        title: 'Note',
-        placeholder: 'Write your note here',
-      },
-      {
-        id: '3',
-        type: 'select',
-        title: 'Folder (optional)',
-        placeholder: 'Select a folder',
-
-        field_options: [
-          ...foldersWithNotesTEAM?.map((item) => ({ value: `${item.id}`, label: item.title })),
-          { value: 'id_001', label: '+ Add new folder' },
-        ],
-      },
-    ],
-    option: {
-      id: '4',
-      type: 'input',
-      title: 'Folder name',
-      placeholder: 'Enter a name for your new folder',
-    },
-  };
-
-  const folder = [
-    {
-      id: '1',
-      type: 'input',
-      title: 'Folder name',
-      placeholder: 'Enter a name for your new folder',
-    },
-  ];
 
   const values = getValues();
 
@@ -87,7 +48,7 @@ export const SubmitPart: FC<SubmitPartProps> = ({
 
       <div className={css({ marginTop: '28px' })}>
         {!createFolder
-          ? notes.require.map((item) => {
+          ? getNotes(foldersWithNotesTEAM, t)?.require.map((item) => {
               if (item.type === 'input') {
                 return (
                   <GenericItemField
@@ -138,7 +99,7 @@ export const SubmitPart: FC<SubmitPartProps> = ({
                 );
               }
             })
-          : folder.map((item) => {
+          : getFolder(t)?.map((item) => {
               return (
                 <GenericItemField
                   key={item.id}
@@ -157,14 +118,14 @@ export const SubmitPart: FC<SubmitPartProps> = ({
             })}
         {values.folder !== '' && values.folder === 'id_001' && (
           <GenericItemField
-            key={notes.option.id}
+            key={getNotes(foldersWithNotesTEAM, t)?.option.id}
             name={`folderTitle`}
             methods={teamMethods}
             Wrapper={Item}
             Element={Input}
-            placeholder={notes.option.placeholder}
+            placeholder={getNotes(foldersWithNotesTEAM, t)?.option.placeholder}
             value={values.folderTitle}
-            label={notes.option.title}
+            label={getNotes(foldersWithNotesTEAM, t)?.option.title}
           />
         )}
       </div>

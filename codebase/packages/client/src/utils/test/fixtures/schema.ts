@@ -218,7 +218,7 @@ const forms = [
 
 export class SchemaFixture {
   state;
-  constructor(state: InitialStateType) {
+  constructor(state?: InitialStateType) {
     this.state = state || initialState;
   }
   getInitialState() {

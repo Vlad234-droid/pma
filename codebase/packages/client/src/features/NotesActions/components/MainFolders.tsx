@@ -19,14 +19,13 @@ import {
   definePropperFieldTeamOptions,
   AllNotesFolderId,
   getPropperInfoData,
-  getPropperTEAMInfoData,
   confirmClearRefsHandler,
   clearRefsMoveHandler,
   confirmClearTEAMRefsHandler,
   clearRefsTEAMMoveHandler,
   defineBtnTitle,
   AllNotesFolderIdTEAM,
-} from '../../../utils';
+} from 'utils/note';
 
 export const SELECTED_FOLDER = 'SELECTED_FOLDER';
 
@@ -59,7 +58,7 @@ const MainFolders: FC<MainFolderProps> = ({
   const teamArchivedFolderUuid = useSelector(teamArchivedFolderUuidSelector) || null;
 
   const [confirmModal, setConfirmModal] = useState(false);
-  const { t } = useTranslation('');
+  const { t } = useTranslation();
   const selectedFolderId: MutableRefObject<null | string> = useRef(null);
   const selectedNoteId: MutableRefObject<null | string> = useRef(null);
   const noteFolderUuid: MutableRefObject<null | string> = useRef(null);
@@ -555,9 +554,9 @@ const MainFolders: FC<MainFolderProps> = ({
       {confirmModal &&
         (actionModal.current !== 'move' ? (
           <ConfirmModal
-            submitBtnTitle={t(defineBtnTitle(actionModal.current))}
-            title={t(getPropperInfoData(actionModal, selectedNoteId, selectedFolderId)!.title)}
-            description={t(getPropperInfoData(actionModal, selectedNoteId, selectedFolderId)!.description)}
+            submitBtnTitle={defineBtnTitle(actionModal.current, t)}
+            title={getPropperInfoData(actionModal, selectedNoteId, selectedFolderId, t)!.title}
+            description={getPropperInfoData(actionModal, selectedNoteId, selectedFolderId, t)!.description}
             onSave={() => {
               actionModal.current === 'delete' ? handleDelete() : handleUpdateNote();
               confirmClearRefsHandler(selectedNoteId, actionModal, selectedFolderId, setConfirmModal);
@@ -571,9 +570,9 @@ const MainFolders: FC<MainFolderProps> = ({
           />
         ) : (
           <ConfirmModalWithDropDown
-            submitBtnTitle={t(defineBtnTitle(actionModal.current))}
-            title={getPropperInfoData(actionModal, selectedNoteId, selectedFolderId)!.title}
-            description={getPropperInfoData(actionModal, selectedNoteId, selectedFolderId)!.description}
+            submitBtnTitle={defineBtnTitle(actionModal.current, t)}
+            title={getPropperInfoData(actionModal, selectedNoteId, selectedFolderId, t)!.title}
+            description={getPropperInfoData(actionModal, selectedNoteId, selectedFolderId, t)!.description}
             onSave={(data) => {
               submitMoveNoteToFolder(data);
               clearRefsMoveHandler(noteFolderUuid, selectedNoteId, actionModal, selectedFolderId, setConfirmModal);
@@ -593,11 +592,9 @@ const MainFolders: FC<MainFolderProps> = ({
       {confirmTEAMModal &&
         (actionTEAMModal.current !== 'move' ? (
           <ConfirmModal
-            submitBtnTitle={t(defineBtnTitle(actionTEAMModal.current))}
-            title={t(getPropperTEAMInfoData(actionTEAMModal, selectedTEAMNoteId, selectedTEAMFolderId)!.title)}
-            description={t(
-              getPropperTEAMInfoData(actionTEAMModal, selectedTEAMNoteId, selectedTEAMFolderId)!.description,
-            )}
+            submitBtnTitle={defineBtnTitle(actionTEAMModal.current, t)}
+            title={getPropperInfoData(actionTEAMModal, selectedTEAMNoteId, selectedTEAMFolderId, t)!.title}
+            description={getPropperInfoData(actionTEAMModal, selectedTEAMNoteId, selectedTEAMFolderId, t)!.description}
             onSave={() => {
               actionTEAMModal.current === 'delete' ? handleTEAMDelete() : handleUpdateTEAMNote();
               confirmClearTEAMRefsHandler(
@@ -629,9 +626,9 @@ const MainFolders: FC<MainFolderProps> = ({
           />
         ) : (
           <ConfirmModalWithDropDown
-            submitBtnTitle={t(defineBtnTitle(actionTEAMModal.current))}
-            title={getPropperTEAMInfoData(actionTEAMModal, selectedTEAMNoteId, selectedTEAMFolderId)!.title}
-            description={getPropperTEAMInfoData(actionTEAMModal, selectedTEAMNoteId, selectedTEAMFolderId)!.description}
+            submitBtnTitle={defineBtnTitle(actionTEAMModal.current, t)}
+            title={getPropperInfoData(actionTEAMModal, selectedTEAMNoteId, selectedTEAMFolderId, t)!.title}
+            description={getPropperInfoData(actionTEAMModal, selectedTEAMNoteId, selectedTEAMFolderId, t)!.description}
             onSave={(data) => {
               submitMoveNoteToTEAMFolder(data);
               clearRefsTEAMMoveHandler(

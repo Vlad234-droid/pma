@@ -2,10 +2,11 @@ import React, { FC } from 'react';
 import { Rule, Styles, useStyle, useBreakpoints, colors, CreateRule } from '@dex-ddl/core';
 import { useSelector } from 'react-redux';
 import { getFoldersSelector } from '@pma/store';
-import { formatToRelativeDate } from '../../../utils/date';
-import { getNotesFolderTitle } from '../../../utils/note';
+import { formatToRelativeDate } from 'utils/date';
+import { getNotesFolderTitle } from 'utils/note';
 import { SelectedFolderProps } from '../type';
 import { IconButton } from 'components/IconButton';
+import { Trans } from 'components/Translation';
 
 const SelectedFolder: FC<SelectedFolderProps> = ({
   selectedFolder,
@@ -68,7 +69,7 @@ const SelectedFolder: FC<SelectedFolderProps> = ({
                 }}
               />
               <span className={css({ whiteSpace: 'nowrap', marginLeft: '8px' })} id='backdrop'>
-                Archive note
+                <Trans i18nKey='archive_note'>Archive note</Trans>
               </span>
             </div>
           ),
@@ -115,7 +116,7 @@ const SelectedFolder: FC<SelectedFolderProps> = ({
                 }}
               />
               <span className={css({ whiteSpace: 'nowrap', marginLeft: '8px' })} id='backdrop'>
-                Move to folder
+                <Trans i18nKey='move_to_folder'>Move to folder</Trans>
               </span>
             </div>
           ),
@@ -157,7 +158,7 @@ const SelectedFolder: FC<SelectedFolderProps> = ({
               }}
             />
             <span className={css({ whiteSpace: 'nowrap', marginLeft: '8px' })} id='backdrop'>
-              Delete note
+              <Trans i18nKey='delete_note'>Delete note</Trans>
             </span>
           </div>
         ),
@@ -167,9 +168,7 @@ const SelectedFolder: FC<SelectedFolderProps> = ({
     return (
       <div className={css(modalButtonsStyle({ isUserArchived }))}>
         {btnsActions.filter(Boolean).map((item) => (
-          <div key={item.id} className={css({})}>
-            {item.button}
-          </div>
+          <div key={item.id}>{item.button}</div>
         ))}
       </div>
     );

@@ -4,7 +4,17 @@ import { RootState } from 'typesafe-actions';
 import { ObjectiveType, ReviewType } from '@pma/client/src/config/enum';
 import { usersSelector } from './users';
 
-export const timelineSelector = (state: RootState) => state.timeline || {};
+export enum Type {
+  OBJECTIVE = 'OBJECTIVE',
+  MYR = 'MYR',
+  EYR = 'EYR',
+}
+
+export const timelineSelector = (state: RootState) => state.timeline;
+
+export const userReviewTypesSelector = createSelector(timelineSelector, ({ data }) =>
+  data?.map((item: { code: string }) => item.code),
+);
 
 export const getTimelineSelector = (colleagueUuid) =>
   createSelector(usersSelector, timelineSelector, (user, { meta, ...rest }) => {
@@ -14,9 +24,9 @@ export const getTimelineSelector = (colleagueUuid) =>
     const data = rest?.[uuid];
     const descriptions = data?.map(({ description }) => description);
     const statuses = data?.map(({ status }) => status);
-    const startDates = data?.map(({ code, startTime }) => {
+    const startDates = data?.map(({ code, startTime, endTime }, index) => {
       if (code === 'Q1' || code === 'Q3') return '';
-      const date = new Date(startTime);
+      const date = new Date(index === 0 ? startTime : endTime);
       return `${date.toLocaleString('default', { month: 'long' })} ${date.getFullYear()}`;
     });
     return { descriptions, startDates, statuses };

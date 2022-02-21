@@ -15,6 +15,8 @@ enum Page {
   PROFILE = 'profile',
   SETTINGS = 'settings',
   MY_TEAM = 'my-team',
+  KNOWLEDGE_LIBRARY = 'knowledge-library',
+  KNOWLEDGE_LIBRARY_BY_ID = ':countryCode/knowledge-library/:id',
   MY_ACTIONS = 'my-team/actions',
   PEOPLE_TEAM = 'people-team',
   CALIBRATION = 'calibration',
@@ -28,7 +30,7 @@ enum Page {
   TIPS = 'tips',
   EDIT_TIP = 'tips/:tipUuid',
   REPORT = 'report',
-  AdministratorPage = 'administrator-page',
+  ADMINISTRATION = 'administration',
 }
 
 type PageElement =

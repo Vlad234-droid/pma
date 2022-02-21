@@ -1,5 +1,6 @@
 // @ts-ignore
 import React from 'react';
+import { BrowserRouter } from 'react-router-dom';
 import { fireEvent } from '@testing-library/react';
 
 // @ts-ignore

@@ -45,7 +45,7 @@ const SuccessModal: FC<SuccessModalProps> = ({
               padding: '10px',
             })}
           >
-            <Trans>Done</Trans>!
+            <Trans i18nKey='done'>Done</Trans>!
           </div>
           <div
             className={css({
@@ -54,7 +54,7 @@ const SuccessModal: FC<SuccessModalProps> = ({
               padding: '10px',
             })}
           >
-            <Trans>Your note has been changed</Trans>
+            <Trans i18nKey='your_note_has_been_changed'>Your note has been changed</Trans>
           </div>
         </div>
       </div>

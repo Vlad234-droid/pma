@@ -2,7 +2,6 @@ import { combineReducers } from 'redux';
 
 import userReducer from '../entities/user/reducer';
 import toastReducer from '../entities/toast/reducer';
-import objectiveReducer from '../entities/objective/reducer';
 import orgObjectiveReducer from '../entities/orgObjective/reducer';
 import schemaReducer from '../entities/schema/reducer';
 import timelineReducer from '../entities/timeline/reducer';
@@ -21,11 +20,11 @@ import reportReducer from '../entities/report/reducer';
 import previousReviewFilesReducer from '../entities/previousReviewFiles/reducer';
 import appStateReducer from '../entities/appState/reducer';
 import messagesReducer from '../entities/messages/reducer';
+import knowledgeLibraryReducer from '../entities/knowledgeLibrary/reducer';
 
 export const rootReducer = combineReducers({
   users: userReducer,
   toasts: toastReducer,
-  objectives: objectiveReducer,
   orgObjectives: orgObjectiveReducer,
   pdp: pdpReducer,
   schema: schemaReducer,
@@ -44,4 +43,5 @@ export const rootReducer = combineReducers({
   previousReviewFiles: previousReviewFilesReducer,
   appState: appStateReducer,
   messages: messagesReducer,
+  knowledgeLibrary: knowledgeLibraryReducer,
 });

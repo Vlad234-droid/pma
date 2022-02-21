@@ -1,7 +1,6 @@
 import { StateType } from 'typesafe-actions';
 import { initialState as userInitialState } from '../entities/user/reducer';
 import { initialState as toastInitialState } from '../entities/toast/reducer';
-import { initialState as objectiveInitialState } from '../entities/objective/reducer';
 import { initialState as orgObjectiveInitialState } from 'entities/orgObjective/reducer';
 import { initialState as schemaInitialState } from '../entities/schema/reducer';
 import { initialState as timelineInitialState } from '../entities/timeline/reducer';
@@ -20,12 +19,12 @@ import { initialState as reportInitialState } from '../entities/report/reducer';
 import { initialState as previousReviewFilesInitialState } from '../entities/previousReviewFiles/reducer';
 import { initialState as appState } from '../entities/appState/reducer';
 import { initialState as messagesState } from '../entities/messages/reducer';
+import { initialState as knowledgeLibraryState } from '../entities/knowledgeLibrary/reducer';
 
 //@ts-ignore
 export const initialState = {
   users: userInitialState,
   toasts: toastInitialState,
-  objectives: objectiveInitialState,
   orgObjectives: orgObjectiveInitialState,
   pdp: pdpInitialState,
   schema: schemaInitialState,
@@ -44,6 +43,7 @@ export const initialState = {
   previousReviewFiles: previousReviewFilesInitialState,
   appState,
   messages: messagesState,
+  knowledgeLibrary: knowledgeLibraryState,
 };
 
 export type State = StateType<typeof initialState>;
