@@ -9,7 +9,7 @@ import { SelectField, Option } from '../types';
 import { useRefContainer } from '../context/input';
 
 const getSelectedOption = (options: Option[], value?: string) =>
-  value && options.filter((option) => option.value === value)[0];
+  value ? options.filter((option) => option.value === value)[0] : undefined;
 
 const Select: FC<SelectField> = ({
   domRef,
