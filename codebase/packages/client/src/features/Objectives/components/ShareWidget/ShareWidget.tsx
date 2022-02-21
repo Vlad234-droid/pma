@@ -53,6 +53,7 @@ const ShareWidget: FC<Props> = ({ customStyle, stopShare }) => {
   const manager = info.manager;
 
   const isManagerShared = isManager && isShared;
+  const isViewSharedObjectivesActive = stopShare && !sharedObjectives.length;
   const sharedObjectivesCount = sharedObjectives.length;
   const formElementsCount = formElements.length;
   const isValidPathParams = pathParams.colleagueUuid;
@@ -130,11 +131,7 @@ const ShareWidget: FC<Props> = ({ customStyle, stopShare }) => {
 
   const [title, description, actionTitle, handleBtnClick] = getContent();
 
-  if (
-    (!hasApprovedObjective && isManager) ||
-    (!isManager && !sharedObjectivesCount) ||
-    (stopShare && !sharedObjectives.length)
-  ) {
+  if ((!hasApprovedObjective && isManager) || (!isManager && !sharedObjectivesCount) || isViewSharedObjectivesActive) {
     return null;
   }
 
@@ -157,7 +154,15 @@ const ShareWidget: FC<Props> = ({ customStyle, stopShare }) => {
           </div>
           <div className={css(bodyStyle)}>
             <div className={css(bodyBlockStyle)}>
-              <Button mode='inverse' styles={[btnStyle({ theme, isManagerShared }) as Styles]} onPress={handleBtnClick}>
+              <Button
+                mode='inverse'
+                styles={[
+                  actionTitle !== t('view_objectives')
+                    ? (btnStyle({ theme, isManagerShared }) as Styles)
+                    : (btnViewStyle({ theme }) as Styles),
+                ]}
+                onPress={handleBtnClick}
+              >
                 {actionTitle}
               </Button>
             </div>
@@ -255,6 +260,14 @@ const btnStyle = ({ theme, isManagerShared }) => ({
   height: '30px',
   background: 'transparent',
   border: `1px solid ${isManagerShared ? theme.colors.tescoRed : theme.colors.tescoBlue}`,
+});
+
+const btnViewStyle = ({ theme }) => ({
+  fontSize: '14px',
+  height: '30px',
+  background: 'transparent',
+  color: theme.colors.tescoBlue,
+  border: `1px solid ${theme.colors.tescoBlue}`,
 });
 
 export default ShareWidget;
