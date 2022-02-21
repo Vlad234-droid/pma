@@ -10,6 +10,7 @@ import SuccessModal from 'components/SuccessModal';
 import { ReviewType, Status } from 'config/enum';
 import useDispatch from 'hooks/useDispatch';
 import { useSelector } from 'react-redux';
+import { usePermission, role } from 'features/Permission';
 
 import * as T from '../../types';
 import { transformReviewsToObjectives } from '../../utils';
@@ -46,7 +47,7 @@ const ShareWidget: FC<Props> = ({ customStyle, stopShare }) => {
   const { components = [] } = useSelector(getReviewSchema(ReviewType.OBJECTIVE));
   const sharedObjectives = useSelector(getAllSharedObjectives);
   const formElements = components.filter((component) => component.type != 'text');
-  const isManager = (info && info.isManager) ?? false;
+  const isManager = usePermission([role.LINE_MANAGER]);
 
   const pathParams = useMemo(() => ({ colleagueUuid: info.colleagueUUID, cycleUuid: 'CURRENT' }), [info.colleagueUUID]);
   const manager = info.manager;
