@@ -1,6 +1,8 @@
+// @ts-ignore
 import React from 'react';
 import { fireEvent } from '@testing-library/react';
 
+// @ts-ignore
 import { renderWithTheme as render } from 'utils/test';
 
 import ViewFilters from './ViewFilters';
@@ -13,6 +15,12 @@ describe('<ViewFilters />', () => {
   };
 
   describe('#render', () => {
+    it('should render wrapper', () => {
+      const { getByTestId } = render(<ViewFilters {...props} />);
+
+      expect(getByTestId('view-filters')).toBeInTheDocument();
+    });
+
     it('should render correctly', () => {
       const { getByText, getByTestId } = render(<ViewFilters {...props} />);
 

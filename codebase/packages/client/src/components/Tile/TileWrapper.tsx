@@ -24,6 +24,7 @@ export const TileWrapper: FC<Props> = ({
 
   return (
     <div
+      data-test-id='tile-wrapper'
       className={css(
         containerStyle({ hover, background, theme }),
         borderStyle({ boarder, theme }),

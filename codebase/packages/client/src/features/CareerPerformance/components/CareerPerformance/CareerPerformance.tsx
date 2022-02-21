@@ -3,7 +3,6 @@ import React, { FC, useEffect } from 'react';
 import { Rule, useStyle } from '@dex-ddl/core';
 
 import { Widgets as ObjectiveWidgets } from 'features/Objectives';
-import ViewNavigation from 'features/ViewNavigation';
 import { Trans } from 'components/Translation';
 import { ReviewType, Status } from 'config/enum';
 import { TimelineTypes } from 'config/types';
@@ -46,7 +45,6 @@ const CareerPerformance: FC<Props> = ({
 
   return (
     <>
-      <ViewNavigation />
       <div className={css(wrapperStyles)}>
         <InfoWidgets
           showMyReview={showMyReview}

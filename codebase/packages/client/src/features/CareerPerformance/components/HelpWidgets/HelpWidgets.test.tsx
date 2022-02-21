@@ -26,15 +26,4 @@ describe('<HelpWidgets />', () => {
       expect(getByText('Want to learn more about Your Contribution at Tesco?')).toBeInTheDocument();
     });
   });
-
-  describe('#handlers', () => {
-    it('should call window.open', () => {
-      window.open = jest.fn();
-      const { getByTestId } = render(<HelpWidgets />);
-
-      fireEvent.click(getByTestId('question-tile'));
-
-      expect(window.open).toHaveBeenCalledWith(LINKS.help, '_blank');
-    });
-  });
 });
