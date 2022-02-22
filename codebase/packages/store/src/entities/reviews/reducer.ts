@@ -10,12 +10,13 @@ import {
   updateReviewStatus,
   updateReviewsState,
   getReviewByUuid,
+  updateRatingReview,
 } from './actions';
 
 export const initialState = {
   data: [],
   colleagueReviews: {},
-  meta: { loading: false, loaded: false, error: null, status: null },
+  meta: { loading: false, loaded: false, error: null, status: null, updating: false, updated: false },
 };
 
 export default createReducer(initialState)
@@ -117,5 +118,14 @@ export default createReducer(initialState)
     ...state,
     data: [...state.data, { ...payload }],
     meta: { ...state.meta, loading: false, loaded: true },
+  }))
+  .handleAction(updateRatingReview.request, (state) => ({
+    ...state,
+    meta: { ...state.meta, error: null, loading: false, loaded: true, updating: true, updated: false },
+  }))
+  .handleAction(updateRatingReview.success, (state, { payload }) => ({
+    ...state,
+    ...payload,
+    meta: { ...state.meta, loading: false, loaded: true, updating: false, updated: true },
   }))
   .handleAction(clearReviewData, () => initialState);

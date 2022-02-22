@@ -1,5 +1,5 @@
 import { createReducer } from 'typesafe-actions';
-import { clearSchemaData, getSchema, updateRatingSchema } from './actions';
+import { clearSchemaData, getSchema } from './actions';
 
 export type InitialStateType = {
   meta: { loading: boolean; loaded: boolean; updating: boolean; updated: boolean; error: any };
@@ -25,14 +25,4 @@ export default createReducer(initialState)
       meta: { ...state.meta, loading: false, loaded: true, updating: false, updated: false },
     };
   })
-  .handleAction(updateRatingSchema.request, (state) => ({
-    ...state,
-    // not needed in loading set to true. we not running schema request
-    meta: { ...state.meta, error: null, loading: false, loaded: true, updating: true, updated: false },
-  }))
-  .handleAction(updateRatingSchema.success, (state, { payload }) => ({
-    ...state,
-    ...payload,
-    meta: { ...state.meta, loading: false, loaded: true, updating: false, updated: true },
-  }))
   .handleAction(clearSchemaData, () => initialState);

@@ -69,7 +69,7 @@ export const addOverallRatingInForm = (form: any, value: string) => {
         if (component.type === FormType.TEXT) {
           return { ...component, text: `${component.text_origin || component.text} ${value}` };
         }
-        return { ...component, description: `${component.description_origin || component.description} ${value}` };
+        return { ...component, defaultValue: value, value };
       }
       return component;
     }) || [];
