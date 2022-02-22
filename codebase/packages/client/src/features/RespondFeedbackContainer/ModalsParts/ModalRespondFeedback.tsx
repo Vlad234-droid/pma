@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { useStyle, useBreakpoints } from '@dex-ddl/core';
 
 import { IconButton } from 'components/IconButton';
-import { useTranslation } from 'components/Translation';
+import { Trans, useTranslation } from 'components/Translation';
 
 import { ModalGiveFeedbackProps } from '../type';
 import { SuccessModal, SubmitPart, InfoModal } from './index';
@@ -45,13 +45,12 @@ const ModalRespondFeedback: FC<ModalGiveFeedbackProps> = ({
     <>
       <div className={css({ paddingLeft: '40px', paddingRight: '40px', height: '100%', overflow: 'auto' })}>
         <div className={css({ fontWeight: 'bold', fontSize: '24px', lineHeight: '28px' })}>
-          How is the colleague performing?
+          <Trans i18nKey='how_is_the_colleague_performing'>How is the colleague performing?</Trans>
         </div>
         <div className={css({ marginTop: '8px', fontSize: '18px', lineHeight: '22px' })}>
-          {t(
-            'colleague_requested_feedback',
-            'This colleague has requested feedback from you. Fill out the questions below to share your feedback.',
-          )}
+          <Trans i18nKey='colleague_requested_feedback'>
+            This colleague has requested feedback from you. Fill out the questions below to share your feedback.
+          </Trans>
         </div>
         {selectedPerson && (
           <SubmitPart

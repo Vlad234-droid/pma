@@ -6,7 +6,6 @@ export type ConfigProps = {
   text: string;
   icon: ReactElement;
   iconText: string;
-  modalTitle?: string;
   link: string;
 };
 

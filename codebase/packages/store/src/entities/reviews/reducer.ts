@@ -15,7 +15,6 @@ import {
 export const initialState = {
   data: [],
   colleagueReviews: {},
-  review: [],
   meta: { loading: false, loaded: false, error: null, status: null },
 };
 
@@ -116,7 +115,7 @@ export default createReducer(initialState)
   }))
   .handleAction(getReviewByUuid.success, (state, { payload }) => ({
     ...state,
-    review: [...state.review, { ...payload }],
+    data: [...state.data, { ...payload }],
     meta: { ...state.meta, loading: false, loaded: true },
   }))
   .handleAction(clearReviewData, () => initialState);

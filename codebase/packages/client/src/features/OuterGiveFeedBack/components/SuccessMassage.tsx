@@ -28,8 +28,8 @@ const SuccessMassage: FC<Props> = ({ selectedColleagueUuid, targetColleagueProfi
       </div>
       <h2 className={css(DoneText)}>Done!</h2>
       <p className={css(Description)}>
-        {`${selectedColleague?.colleague?.profile?.firstName} ${selectedColleague?.colleague?.profile?.lastName}`} will
-        now be able to view your feedback
+        {`${selectedColleague?.colleague?.profile?.firstName} ${selectedColleague?.colleague?.profile?.lastName}`}{' '}
+        <Trans i18nKey='will_now_be_able_to_view_your_feedback'>will now be able to view your feedback</Trans>
       </p>
       <div
         className={css({
