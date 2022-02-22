@@ -85,8 +85,7 @@ const MyObjectives: FC = () => {
   const status = timelineObjective?.status || undefined;
   const isAllObjectivesInSameStatus = useSelector(isReviewsInStatus(ReviewType.OBJECTIVE)(status));
 
-  const canShowObjectives =
-    timelineTypes[ObjectiveType.OBJECTIVE] && ![Status.STARTED, Status.NOT_STARTED].includes(status);
+  const canShowObjectives = timelineTypes[ObjectiveType.OBJECTIVE];
   const canShowMyReview = timelineTypes[ObjectiveType.MYR] && timelineTypes[ObjectiveType.EYR];
   const canShowAnnualReview = !timelineTypes[ObjectiveType.MYR] && timelineTypes[ObjectiveType.EYR];
 
@@ -175,7 +174,9 @@ const MyObjectives: FC = () => {
                   content: (
                     <div className={css(tileStyles)}>
                       <Trans i18nKey='my_objectives'>My objectives</Trans>
-                      {isAllObjectivesInSameStatus && <StatusBadge status={status} styles={{ marginLeft: '10px' }} />}
+                      {isAllObjectivesInSameStatus && ![Status.STARTED, Status.NOT_STARTED].includes(status) && (
+                        <StatusBadge status={status} styles={statusBadgeStyle} />
+                      )}
                     </div>
                   ),
                 }}
@@ -202,7 +203,13 @@ const MyObjectives: FC = () => {
                   ),
                 }}
               >
-                <Accordion objectives={objectives} canShowStatus={!isAllObjectivesInSameStatus} />
+                {objectives.length ? (
+                  <Accordion objectives={objectives} canShowStatus={!isAllObjectivesInSameStatus} />
+                ) : (
+                  <div className={css(emptyBlockStyle)}>
+                    <Trans i18nKey={'no_objectives_created'}>No objectives created</Trans>
+                  </div>
+                )}
               </Section>
             )}
             <Section
@@ -286,7 +293,9 @@ const MyObjectives: FC = () => {
               {reviews.length > 0 ? (
                 <Reviews reviews={createdReviews} />
               ) : (
-                t('no_completed_reviews', 'You have no completed reviews')
+                <div className={css(emptyBlockStyle)}>
+                  <Trans i18nKey={'no_completed_reviews'}>You have no completed reviews</Trans>
+                </div>
               )}
             </Section>
           </div>
@@ -431,5 +440,8 @@ const linkStyles = ({ theme }) => ({
   color: theme.colors.tescoBlue,
   background: 'transparent',
 });
+
+const statusBadgeStyle: Rule = { marginLeft: '10px' };
+const emptyBlockStyle: Rule = { paddingBottom: '20px' };
 
 export default MyObjectives;
