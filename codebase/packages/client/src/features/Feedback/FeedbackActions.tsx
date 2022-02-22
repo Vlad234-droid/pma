@@ -9,7 +9,7 @@ import {
 } from '@pma/store';
 import { CreateRule, Modal, Rule, Theme, useBreakpoints, useStyle } from '@dex-ddl/core';
 
-import { Trans } from 'components/Translation';
+import { Trans, useTranslation } from 'components/Translation';
 import { Item, Select } from 'components/Form';
 import { Chat } from 'components/Icon/graphics/chat';
 import { NotiBell } from 'components/Icon/graphics/notiBell';
@@ -30,6 +30,7 @@ import { ConfigProps } from './config/types';
 const FEEDBACK_ACTIONS = 'feedback_actions';
 
 const FeedbackActions: FC = () => {
+  const { t } = useTranslation();
   const { user } = useAuthContainer();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
@@ -54,6 +55,9 @@ const FeedbackActions: FC = () => {
     useSelector(getUnReadSubmittedNotesSelector([FeedbackStatus.SUBMITTED, FeedbackStatus.COMPLETED], colleagueUuid)) ||
     [];
 
+  const unReadSubmittedNotesLength = unReadSubmittedNotes?.length || 0;
+  const pendingNotesLength = pendingNotes?.length || 0;
+
   const getIconForUnReadNotes = () => {
     if (unReadSubmittedNotes.length) return <NotiBell />;
     return <NotiBellCirlceOut />;
@@ -67,38 +71,48 @@ const FeedbackActions: FC = () => {
   const cards: ConfigProps[] = [
     {
       id: 1,
-      action: 'Give feedback',
-      text: 'Give in the moment feedback to a colleague',
+      action: t('give_feedback', 'Give feedback'),
+      text: t('give_in_the_moment_feedback_to_a_colleague', 'Give in the moment feedback to a colleague'),
       icon: <Chat />,
-      iconText: 'Your feedback will be immediately available for your colleague to view',
-      modalTitle: 'Give feedback',
+      iconText: t(
+        'your_feedback_will_be_immediately_available_for_your_colleague_to_view',
+        'Your feedback will be immediately available for your colleague to view',
+      ),
       link: `/${Page.GIVE_FEEDBACK}`,
     },
     {
       id: 2,
-      action: 'View your feedback',
-      text: 'See the feedback your colleagues have shared with you',
+      action: t('view_your_feedback', 'View your feedback'),
+      text: t(
+        'see_the_feedback_your_colleagues_have_shared_with_you',
+        'See the feedback your colleagues have shared with you',
+      ),
       icon: getIconForUnReadNotes(),
-      iconText: `You have ${unReadSubmittedNotes?.length || 0} new feedback to view`,
-      link: '/feedback/view-feedback',
+      iconText: t('you_have_new_feedback_to_view', `You have ${unReadSubmittedNotesLength} new feedback to view`, {
+        unReadSubmittedNotesLength,
+      }),
+      link: `/${Page.VIEW_FEEDBACK}`,
     },
     {
       id: 3,
-      action: 'Respond to feedback requests',
-      text: 'See and respond to feedback requests from your colleagues',
+      action: t('respond_to_feedback_requests', 'Respond to feedback requests'),
+      text: t(
+        'see_and_respond_to_feedback_requests_from_your_colleagues',
+        'See and respond to feedback requests from your colleagues',
+      ),
       icon: getIconForPendingNotes(),
-      iconText: pendingNotes.length
-        ? `You have ${pendingNotes.length} new feedback requests`
-        : 'You have 0 new feedback requests',
-      link: '/feedback/respond-feedback',
+      iconText: t('you_have_new_feedback_requests', `You have ${pendingNotesLength} new feedback requests`, {
+        pendingNotesLength,
+      }),
+      link: `/${Page.RESPOND_FEEDBACK}`,
     },
     {
       id: 4,
-      action: 'Request feedback',
-      text: 'Ask for feedback from your colleagues',
+      action: t('request_feedback', 'Request feedback'),
+      text: t('ask_for_feedback_from_your_colleagues', 'Ask for feedback from your colleagues'),
       icon: <People />,
-      iconText: 'Send new feedback requests',
-      link: '/feedback/request-feedback',
+      iconText: t('send_new_feedback_requests', 'Send new feedback requests'),
+      link: `/${Page.REQUEST_FEEDBACK}`,
     },
   ];
 
@@ -106,7 +120,23 @@ const FeedbackActions: FC = () => {
     window.open('https://feedback.etsplc.com/Tesco360/', '_blank')?.focus();
   };
 
+<<<<<<< HEAD
   const createToneOfVoiceHandler = (value: string) => {
+=======
+  const field_options = [
+    { value: 'Direct and simple', label: 'Direct and simple' },
+    { value: 'Friendly and constructive', label: 'Friendly and constructive' },
+    { value: 'Informative and detailed', label: 'Informative and detailed' },
+    { value: 'I don`t have a preference', label: 'I don`t have a preference' },
+  ];
+
+  const checkForVoiceValue = () => profileAttr?.find((item) => item?.name === 'voice')?.value ?? 'Direct and simple';
+
+  const createToneOfVoiceHandler = (e) => {
+    if (!e.target) return;
+    const { value } = e.target;
+
+>>>>>>> master
     const payload = {
       colleagueUuid,
       name: 'voice',
@@ -136,7 +166,7 @@ const FeedbackActions: FC = () => {
           styles: [modalCloseOptionStyle({ mobileScreen })],
         }}
         title={{
-          content: 'Feedback',
+          content: t('everyday_feedback', 'Everyday Feedback'),
           styles: [modalTitleOptionStyle({ theme, mobileScreen })],
         }}
       >
@@ -151,7 +181,9 @@ const FeedbackActions: FC = () => {
         <div className={css(InMomentStyle({ mobileScreen }))}>
           <div className={css(CenterFlexStyle)}>
             <h2 className={css(InTheMomentStyle)}>
-              What is the difference between ‘Everyday feedback’ and ‘360 feedback’?
+              <Trans i18nKey='difference_between_everyday_feedback_and_feedback_360'>
+                What is the difference between ‘Everyday feedback’ and ‘360 feedback’?
+              </Trans>
             </h2>
             <IconButton
               graphic='information'
@@ -171,7 +203,7 @@ const FeedbackActions: FC = () => {
               iconProps={{ invertColors: true }}
               iconStyles={iconStyle}
             >
-              <Trans>360 Feedback</Trans>
+              <Trans i18nKey='feedback_360'>360 Feedback</Trans>
             </IconButton>
           </div>
         </div>
@@ -188,17 +220,30 @@ const FeedbackActions: FC = () => {
             <div className={css({ cursor: 'pointer' })}>
               <Icon
                 graphic='information'
-                title='This will be shared with feedback providers when they are giving you feedback to guide them on how you’d like to receive it. You can update this at any time if your preference changes.'
+                title={t(
+                  'this_will_be_shared_with_feedback_providers_when_they_are_giving_you_feedback',
+                  'This will be shared with feedback providers when they are giving you feedback to guide them on how you’d like to receive it. You can update this at any time if your preference changes.',
+                )}
               />
             </div>
           </div>
           <Item withIcon={false}>
             <Select
+<<<<<<< HEAD
               options={TREATMENT_FIELD_OPTIONS}
               name={'treatment-options'}
               placeholder={'Choose tone of voice'}
               value={treatmentValue}
               onChange={createToneOfVoiceHandler}
+=======
+              name={`treatment_options`}
+              options={field_options}
+              placeholder={t('choose_tone_of_voice', 'Choose tone of voice')}
+              value={checkForVoiceValue()}
+              onChange={(e) => {
+                createToneOfVoiceHandler(e);
+              }}
+>>>>>>> master
             />
           </Item>
         </div>

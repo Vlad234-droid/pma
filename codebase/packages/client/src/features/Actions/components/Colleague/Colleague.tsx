@@ -8,14 +8,11 @@ import { ColleagueInfo } from 'features/MyTeam';
 
 import {
   colleagueUUIDSelector,
-  ExpressionValueType,
   getAllReviews,
   getAllReviewSchemas,
-  getExpressionListenersKeys,
   ReviewsActions,
   reviewsMetaSelector,
   SchemaActions,
-  schemaMetaSelector,
 } from '@pma/store';
 
 import { ReviewType, Status } from 'config/enum';
@@ -34,11 +31,7 @@ type Props = {
 export const Colleague: FC<Props> = ({ status, colleague, colleagueExpanded, setColleagueExpanded }) => {
   const dispatch = useDispatch();
   const { css } = useStyle();
-  const { updated: schemaUpdated = false } = useSelector(schemaMetaSelector);
   const { loaded: reviewLoaded = false } = useSelector(reviewsMetaSelector);
-  const overallRatingListeners: string[] = useSelector(
-    getExpressionListenersKeys(ReviewType.EYR)(ExpressionValueType.OVERALL_RATING),
-  );
   const approverUuid = useSelector(colleagueUUIDSelector);
   const allColleagueReviews = useSelector(getAllReviews) || [];
   const allColleagueReviewsSchema = useSelector(getAllReviewSchemas) || [];
@@ -46,24 +39,6 @@ export const Colleague: FC<Props> = ({ status, colleague, colleagueExpanded, set
   const [colleagueReviews, updateColleagueReviews] = useState<any>([]);
 
   const groupColleagueReviews: { [key in ReviewType]: any[] } = groupArrayOfObjects(colleagueReviews, 'type');
-
-  const updateRatingSchemaRequest = useCallback(
-    (review, type) => {
-      const permitToOverallRatingRequest = overallRatingListeners?.length
-        ? overallRatingListeners?.every((listener) => review[listener])
-        : false;
-      if (permitToOverallRatingRequest) {
-        const filteredData = Object.fromEntries(
-          Object.entries(review).filter(([key]) => overallRatingListeners?.includes(key)),
-        );
-
-        if (!schemaUpdated && colleagueExpanded === colleague.uuid) {
-          dispatch(SchemaActions.updateRatingSchema({ type: type, fields: filteredData }));
-        }
-      }
-    },
-    [schemaUpdated, colleagueExpanded],
-  );
 
   const updateReviewStatus = useCallback(
     (status: Status) => (reviewType: ReviewType) => (reason: string) => {
@@ -108,9 +83,6 @@ export const Colleague: FC<Props> = ({ status, colleague, colleagueExpanded, set
     const colleaguesReviews = allColleagueReviews.filter(
       (review) => reviewsUuid.includes(review.uuid) && review.status === status,
     );
-    for (const review of colleaguesReviews) {
-      updateRatingSchemaRequest(review.properties.mapJson, review.type);
-    }
     updateColleagueReviews(colleaguesReviews);
   }, [reviewLoaded, status]);
 

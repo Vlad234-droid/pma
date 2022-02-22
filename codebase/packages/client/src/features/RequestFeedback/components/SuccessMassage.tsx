@@ -15,8 +15,12 @@ const SuccessMassage: FC = () => {
       <div className={css(SuccessImg)}>
         <img src={success} alt='success' />
       </div>
-      <h2 className={css(DoneText)}>Done!</h2>
-      <p className={css(Description)}>Your feedback request has been shared.</p>
+      <h2 className={css(DoneText)}>
+        <Trans i18nKey='done'>Done</Trans>!
+      </h2>
+      <p className={css(Description)}>
+        <Trans i18nKey='your_feedback_request_has_been_shared'>Your feedback request has been shared.</Trans>
+      </p>
       <div
         className={css({
           position: 'absolute',

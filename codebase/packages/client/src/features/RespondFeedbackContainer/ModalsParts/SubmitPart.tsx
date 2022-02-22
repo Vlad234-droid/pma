@@ -9,11 +9,11 @@ import { IconButton, Position } from 'components/IconButton';
 import { TileWrapper } from 'components/Tile';
 import { Item, Textarea } from 'components/Form';
 import { GenericItemField } from 'components/GenericForm';
-import { Trans } from 'components/Translation';
+import { Trans, useTranslation } from 'components/Translation';
 import { FeedbackActions, colleagueUUIDSelector, getReviewByUuidS } from '@pma/store';
 import { useDispatch, useSelector } from 'react-redux';
 import defaultImg from 'images/default.png';
-import { TargetTypeReverse, TargetFeedbackKeys, VoiceType, Tesco } from 'config/enum';
+import { TargetTypeReverse, TargetFeedbackKeys, Tesco } from 'config/enum';
 import { VideoPlayer, VideoId } from 'features/VideoPlayer';
 
 const SubmitPart: FC<SubmitPartProps> = ({
@@ -26,14 +26,17 @@ const SubmitPart: FC<SubmitPartProps> = ({
   const review = useSelector(getReviewByUuidS) || [];
   const dispatch = useDispatch();
   const colleagueUuid = useSelector(colleagueUUIDSelector);
+  const { t } = useTranslation();
 
   const giveFeedback: GiveFeedbackType[] = [
     {
       giveFeedback_id: '0',
       giveFeedbacka_main_title: 'Question 1',
-      giveFeedback_title:
+      giveFeedback_title: t(
+        'looking_back_at_what_you_seen_recently',
         "Looking back at what you've seen recently, in relation to the area I've asked for feedback on, what can you tell me about what I've delivered or how I've gone about it?",
-      giveFeedback_description: "Share specific examples of what you've seen.",
+      ),
+      giveFeedback_description: t('share_specific_examples', "Share specific examples of what you've seen."),
       giveFeedback_field: {
         field_id: '1',
         field_type: 'textarea',
@@ -43,9 +46,11 @@ const SubmitPart: FC<SubmitPartProps> = ({
     {
       giveFeedback_id: '1',
       giveFeedbacka_main_title: 'Question 2',
-      giveFeedback_title:
+      giveFeedback_title: t(
+        'looking_forward_in_relation',
         "Looking forward, in relation to the area I've asked for feedback on, what should I do more (or less) of in order to be at my best?",
-      giveFeedback_description: 'Share your suggestions',
+      ),
+      giveFeedback_description: t('share_your_suggestions', 'Share your suggestions'),
       giveFeedback_field: {
         field_id: '2',
         field_type: 'textarea',
@@ -55,7 +60,10 @@ const SubmitPart: FC<SubmitPartProps> = ({
     {
       giveFeedback_id: '2',
       giveFeedbacka_main_title: 'Anything else?',
-      giveFeedback_title: 'Add any other comments you would like to share with your colleague.',
+      giveFeedback_title: t(
+        'add_any_other_comments',
+        'Add any other comments you would like to share with your colleague.',
+      ),
       giveFeedback_field: {
         field_id: '3',
         field_type: 'textarea',
@@ -152,7 +160,7 @@ const SubmitPart: FC<SubmitPartProps> = ({
   };
 
   const getPropperToneOfVoice = () =>
-    VoiceType[selectedPerson?.profileAttributes?.find((item) => item?.name === 'voice')?.value] ?? 'Direct and simple';
+    selectedPerson?.profileAttributes?.find((item) => item?.name === 'voice')?.value ?? 'Direct and simple';
 
   const getPropperTargetType = (targetType, targetId) => {
     const capitalType =
@@ -212,10 +220,18 @@ const SubmitPart: FC<SubmitPartProps> = ({
       </div>
       <div className={css({ marginTop: '24px' })}>
         <IconButton graphic='information' onPress={() => setInfoModal(() => true)}>
-          <p className={css(InfoHelpStyle)}>Learn more about how to give great feedback</p>
+          <p className={css(InfoHelpStyle)}>
+            <Trans i18nKey='learn_more_about_how_to_give_great_feedback'>
+              Learn more about how to give great feedback
+            </Trans>
+          </p>
         </IconButton>
       </div>
-      <h2 className={css(VideoExplanationTitle)}>Watch this 2-minute video on how to give great feedback</h2>
+      <h2 className={css(VideoExplanationTitle)}>
+        <Trans i18nKey='watch_this_video_on_how_to_give_great_feedback'>
+          Watch this 2-minute video on how to give great feedback
+        </Trans>
+      </h2>
       <div className={css(VideoWrapper)}>
         <VideoPlayer videoId={VideoId.GIVE_FEEDBACK} />
       </div>
@@ -272,8 +288,9 @@ const SubmitPart: FC<SubmitPartProps> = ({
                 iconProps={{ invertColors: true }}
                 iconPosition={Position.RIGHT}
                 onPress={submitForm}
+                iconStyles={{ marginRight: '10px' }}
               >
-                Submit
+                <Trans i18nKey='submit'>Submit</Trans>
               </IconButton>
             </div>
           </div>

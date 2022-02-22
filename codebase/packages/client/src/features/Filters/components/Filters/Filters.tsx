@@ -24,7 +24,9 @@ const Filters: FC<Props> = ({ sortingOptions, sortValue, onSort, searchValue, on
   const [searchOpened, setSearchOpen] = useState<boolean>(false);
   const [filterOpened, setFilterOpen] = useState<boolean>(false);
 
-  const handleSearch = (event) => onSearch(event.target.value);
+  const handleSearch = (value: string) => {
+    onSearch(value);
+  };
 
   const handleSearchOpen = () => {
     setSortOpen(false);

@@ -44,11 +44,11 @@ jest.mock('../InfoWidgets', () => {
   };
 });
 
-jest.mock('../Resources', () => {
+jest.mock('features/KnowledgeLibrary', () => {
   return {
     __esModule: true,
-    default: () => {
-      return <div>mocked_resources</div>;
+    KnowledgeLibraryWidget: () => {
+      return <div>mocked_knowledge_library_widget</div>;
     },
   };
 });
@@ -112,7 +112,7 @@ describe('<CareerPerformance />', () => {
       expect(getByText('My reviews')).toBeInTheDocument();
       expect(getByText('Useful resources')).toBeInTheDocument();
       expect(getByText('mocked_review_widgets')).toBeInTheDocument();
-      expect(getByText('mocked_resources')).toBeInTheDocument();
+      expect(getByText('mocked_knowledge_library_widget')).toBeInTheDocument();
     });
   });
   describe('#useEffect', () => {

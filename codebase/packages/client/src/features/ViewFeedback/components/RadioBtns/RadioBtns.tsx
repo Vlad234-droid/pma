@@ -74,7 +74,7 @@ const RadioBtns: FC<Props> = ({
               padding: '0px 5px',
             })}
           >
-            <Trans>Unread</Trans>
+            <Trans i18nKey='unread'>Unread</Trans>
           </span>
         </label>
       </div>
@@ -107,7 +107,7 @@ const RadioBtns: FC<Props> = ({
               padding: '0px 5px',
             })}
           >
-            <Trans>Read</Trans>
+            <Trans i18nKey='read'>Read</Trans>
           </span>
         </label>
       </div>

@@ -89,6 +89,13 @@ export const getReviewByUuid = createAsyncAction(
   'objectives/UPDATE_ALL_CANCEL',
 )<any, any, Error>();
 
+export const updateRatingReview = createAsyncAction(
+  'reviews/rating/UPDATE_REQUEST',
+  'reviews/rating/UPDATE_SUCCESS',
+  'reviews/rating/UPDATE_FAILURE',
+  'reviews/rating/UPDATE_CANCEL',
+)<{ type: ReviewType; number: number; fields: any }, any, Error, undefined>();
+
 export const updateReviewsState = createAction('reviews/UPDATE_ALL_STATE')<any, any>();
 
 export const clearReviewData = createAction('reviews/CLEAR')<undefined>();
@@ -105,6 +112,7 @@ export const Actions = {
   approveReview: approveReview.request,
   declineReview: declineReview.request,
   getReviewByUuid: getReviewByUuid.request,
+  updateRatingReview: updateRatingReview.request,
   updateReviewsState,
   clearReviewData,
 };

@@ -8,8 +8,10 @@ import { colleagueUUIDSelector, FeedbackActions } from '@pma/store';
 import { Icon } from 'components/Icon';
 import { Page } from 'pages';
 import { InfoModalContent } from './ModalParts';
+import { useTranslation } from 'components/Translation';
 
 const RequestFeedback: FC = () => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [sent, setSent] = useState(false);
@@ -51,7 +53,7 @@ const RequestFeedback: FC = () => {
         styles: [modalCloseOptionStyle({ isMobile })],
       }}
       title={{
-        content: 'Request feedback',
+        content: t('request_feedback', 'Request feedback'),
         styles: [modalTitleOptionStyle({ isMobile })],
       }}
     >

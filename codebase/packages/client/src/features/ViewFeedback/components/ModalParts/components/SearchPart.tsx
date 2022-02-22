@@ -6,6 +6,7 @@ import { SearchInput } from './SearchInput';
 import { ColleaguesActions, getColleaguesSelector } from '@pma/store';
 import { useSelector, useDispatch } from 'react-redux';
 import { GenericItemField } from 'components/GenericForm';
+import { useTranslation } from 'components/Translation';
 
 const SearchPart: FC<SearchPartProps> = ({
   setSelectedPerson,
@@ -19,6 +20,7 @@ const SearchPart: FC<SearchPartProps> = ({
   const [inputValue, setInputValue] = useState('');
   const { css } = useStyle();
   const dispatch = useDispatch();
+  const { t } = useTranslation();
 
   const {
     getValues,
@@ -66,7 +68,7 @@ const SearchPart: FC<SearchPartProps> = ({
           }}
           setSelectedPerson={setSelectedPerson}
           domRef={register(`search_option`).ref}
-          placeholder={'Search'}
+          placeholder={t('search', 'Search')}
           options={findedCollegues}
           setSearchValue={setSearchValue}
           searchValue={searchValue}

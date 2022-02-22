@@ -15,10 +15,9 @@ const StatusBadge: FC<StatusBadgeProps> = ({ status, styles }) => {
   const { t } = useTranslation();
 
   const isDraft = status === Status.DRAFT;
-  const isPending = status === Status.PENDING || status === Status.WAITING_FOR_APPROVAL;
+  const isPending = status === Status.WAITING_FOR_APPROVAL;
   const isApproved = status === Status.APPROVED;
-  // todo do not forget find out what we use DECLINED or RETURNED
-  const isDeclined = status === Status.DECLINED || status === Status.RETURNED;
+  const isDeclined = status === Status.DECLINED;
 
   const getContent = (): [Graphics, string, string] => {
     switch (true) {

@@ -10,6 +10,15 @@ import { LINKS } from 'config/constants';
 
 import HelpWidgets from './HelpWidgets';
 
+jest.mock('react-router-dom', () => {
+  return {
+    __esModule: true,
+    Link: ({ children }) => {
+      return <div>{children}</div>;
+    },
+  };
+});
+
 describe('<HelpWidgets />', () => {
   describe('#render', () => {
     it('should render wrapper', () => {

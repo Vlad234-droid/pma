@@ -85,7 +85,7 @@ const ActionButtons: FC<Props> = ({ onSubmit, isValid }) => {
               iconPosition={Position.RIGHT}
               onPress={onSubmit}
             >
-              Submit
+              <Trans i18nKey='submit'>Submit</Trans>
             </IconButton>
           </div>
         </div>

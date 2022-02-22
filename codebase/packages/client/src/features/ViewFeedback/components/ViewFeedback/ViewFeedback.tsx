@@ -24,6 +24,7 @@ type filterFeedbacksType = {
 
 const ViewFeedback: FC = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { css } = useStyle();
   const dispatch = useDispatch();
   const [helpModalReceiveFeedback, setHelpModalReceiveFeedback] = useState<boolean>(false);
@@ -43,8 +44,6 @@ const ViewFeedback: FC = () => {
     sort: '',
     search: '',
   });
-
-  const { t } = useTranslation();
 
   useEffect(() => {
     if (focus) {
@@ -224,17 +223,19 @@ const ViewFeedback: FC = () => {
                   backgroundRadius={10}
                 />
                 <span className={css(ShareFeedbackStyled)}>
-                  <Trans>Give Feedback</Trans>
+                  <Trans i18nKey='give_feedback'>Give Feedback</Trans>
                 </span>
               </div>
-              <p className={css(QuestionStyled)}>Give feedback to a colleague</p>
+              <p className={css(QuestionStyled)}>
+                <Trans i18nKey='give_feedback_to_a_colleague'>Give feedback to a colleague</Trans>
+              </p>
               <Button
                 styles={[iconBtnStyle]}
                 onPress={() => {
                   navigate(`/${Page.GIVE_FEEDBACK}`);
                 }}
               >
-                <Trans>Give Feedback</Trans>
+                <Trans i18nKey='give_feedback'>Give Feedback</Trans>
               </Button>
             </div>
             <div className={css(ButtonContainerStyle)}>
@@ -244,9 +245,13 @@ const ViewFeedback: FC = () => {
                   iconStyles={{ verticalAlign: 'middle', margin: '2px 10px 0px 0px' }}
                   backgroundRadius={10}
                 />
-                <span className={css(SizeStyle)}>Download feedback</span>
+                <span className={css(SizeStyle)}>
+                  <Trans i18nKey='download_feedback'>Download feedback</Trans>
+                </span>
               </div>
-              <p className={css(SavedStyled)}>Download feedback to your device</p>
+              <p className={css(SavedStyled)}>
+                <Trans i18nKey='download_feedback_to_your_device'>Download feedback to your device</Trans>
+              </p>
               <Button styles={[iconBtnStyle, { maxWidth: '181px !important' }]} onPress={handleDownloadAllPress}>
                 <Trans i18nKey='download_feedbacks'>Download feedback</Trans>
               </Button>
@@ -255,7 +260,10 @@ const ViewFeedback: FC = () => {
               closable={false}
               graphic='information'
               iconColor='pending'
-              text="If you're worried the content of any feedback you`ve received is inappropriate, please contact your line manager or People team as soon as possible."
+              text={t(
+                'worried_the_content_of_any_feedback',
+                "If you're worried the content of any feedback you`ve received is inappropriate, please contact your line manager or People team as soon as possible.",
+              )}
               customStyle={{
                 background: '#FFDBC2',
                 marginBottom: '20px',

@@ -3,11 +3,9 @@ import { useStyle, Rule, Styles } from '@dex-ddl/core';
 import { IconButton } from 'components/IconButton';
 import defaultImg from 'images/default.png';
 import { VideoPlayer, VideoId } from 'features/VideoPlayer';
+import { Trans, useTranslation } from 'components/Translation';
 
 export const WITH_SELECTED_TEST = 'with_selected_test';
-
-const geToneOfVoice = (selectedPerson) =>
-  selectedPerson?.profileAttributes?.find((item) => item?.name === 'voice')?.value ?? 'Direct and simple';
 
 type Props = {
   selectedPerson: any;
@@ -17,13 +15,19 @@ type Props = {
 const FeedbackInfo: FC<Props> = ({ selectedPerson, onClickMore }) => {
   const { css } = useStyle();
   const { colleague } = selectedPerson || {};
+  const { t } = useTranslation();
+
+  const toneOfVoice =
+    selectedPerson?.profileAttributes?.find((item) => item?.name === 'voice')?.value ?? 'Direct and simple';
 
   return (
     <div data-test-id={WITH_SELECTED_TEST}>
       <div className={css({ height: '1px', background: '#E5E5E5' })} />
       <div className={css({ marginTop: '16px' })}>
         <div className={css(VideoWrapper)}>
-          <h2 className={css(VideoExplanationTitle)}>Watch this 2-minute video on how to give great feedback</h2>
+          <h2 className={css(VideoExplanationTitle)}>
+            <Trans i18nKey='Trans'>Watch this 2-minute video on how to give great feedback</Trans>
+          </h2>
           <VideoPlayer videoId={VideoId.GIVE_FEEDBACK} />
         </div>
         <div className={css(BlockInfo)}>
@@ -35,16 +39,26 @@ const FeedbackInfo: FC<Props> = ({ selectedPerson, onClickMore }) => {
             <p className={css(IndustryStyle)}>
               {`${colleague?.workRelationships?.[0].job?.name}, ${colleague?.workRelationships?.[0].department?.name}`}
             </p>
-            <span className={css(TreatmentStyle)}>I prefer feedback that is: {geToneOfVoice(selectedPerson)}</span>
+            <span className={css(TreatmentStyle)}>
+              {t('i_prefer_feedback_that_is', `I prefer feedback that is: ${toneOfVoice}`, { toneOfVoice })}
+            </span>
           </div>
         </div>
       </div>
       <div className={css(NotificationBlockStyle)}>
-        <p>Fill out the questions below to share your feedback</p>
+        <p>
+          <Trans i18nKey='fill_out_the_questions_below_to_share_your_feedback'>
+            Fill out the questions below to share your feedback
+          </Trans>
+        </p>
       </div>
       <div className={css({ marginTop: '24px', marginBottom: '14px' })}>
         <IconButton graphic='information' onPress={() => onClickMore()}>
-          <p className={css(InfohelpStyle)}>Learn more about how to give great feedback</p>
+          <p className={css(InfohelpStyle)}>
+            <Trans i18nKey='learn_more_about_how_to_give_great_feedback'>
+              Learn more about how to give great feedback
+            </Trans>
+          </p>
         </IconButton>
       </div>
     </div>

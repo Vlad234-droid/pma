@@ -14,6 +14,7 @@ import {
   updateReviews,
   updateReviewStatus,
   getReviewByUuid,
+  updateRatingReview,
 } from './actions';
 import { getTimeline } from '../timeline/actions';
 import { getManagers } from '../managers/actions';
@@ -103,7 +104,9 @@ export const updateReviewsEpic: Epic = (action$, _, { api }) =>
         mergeMap(({ data }: any) => {
           return from([
             updateReviews.success({ data }),
-            getReviews.success({ data }),
+            getReviews.request({
+              pathParams: { colleagueUuid: payload.pathParams.colleagueUuid, cycleUuid: payload.pathParams.cycleUuid },
+            }),
             getTimeline.request(payload.pathParams),
           ]);
         }),
@@ -176,6 +179,35 @@ export const getReviewByUuidEpic: Epic = (action$, _, { api }) =>
     }),
   );
 
+export const updateRatingReviewEpic: Epic = (action$, state$, { api }) =>
+  action$.pipe(
+    filter(isActionOf(updateRatingReview.request)),
+    switchMap(({ payload }) =>
+      // @ts-ignore
+      from(api.getOverallRating(payload)).pipe(
+        // @ts-ignore
+        map(({ success, data }) => {
+          const { reviews }: any = { ...state$.value };
+          const reviewsData = reviews?.data || [];
+          const reviewType = payload?.type;
+          const reviewNumber = payload?.number;
+          const reviewsUpdated = reviewsData.map((review) => {
+            if (reviewType === review.type && reviewNumber === review.number && review?.properties?.mapJson) {
+              review.properties.mapJson = { ...review.properties.mapJson, ...data };
+            }
+            return review;
+          });
+          if (!reviewsUpdated?.filter((review) => reviewType === review.type)?.length) {
+            reviewsUpdated.push({ type: reviewType, number: reviewNumber, properties: { mapJson: data } });
+          }
+          return updateRatingReview.success({ data: reviewsUpdated });
+        }),
+        catchError(({ errors }) => of(updateRatingReview.failure(errors))),
+        takeUntil(action$.pipe(filter(isActionOf(updateRatingReview.cancel)))),
+      ),
+    ),
+  );
+
 export default combineEpics(
   getReviewsEpic,
   getColleagueReviewsEpic,
@@ -185,4 +217,5 @@ export default combineEpics(
   deleteReviewEpic,
   updateReviewStatusEpic,
   getReviewByUuidEpic,
+  updateRatingReviewEpic,
 );
