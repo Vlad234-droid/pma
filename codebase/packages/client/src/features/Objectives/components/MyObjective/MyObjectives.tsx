@@ -81,15 +81,17 @@ const MyObjectives: FC = () => {
   const { components = [], markup = { max: 0, min: 0 } } = schema;
   const { descriptions, startDates, statuses } = useSelector(getTimelineSelector(colleagueUuid)) || {};
   const timelineTypes = useSelector(timelineTypesAvailabilitySelector(colleagueUuid)) || {};
-  const canShowObjectives = timelineTypes[ObjectiveType.OBJECTIVE];
+  const timelineObjective = useSelector(getTimelineByCodeSelector(ReviewType.OBJECTIVE, 'me')) || {};
+  const status = timelineObjective?.status || undefined;
+  const isAllObjectivesInSameStatus = useSelector(isReviewsInStatus(ReviewType.OBJECTIVE)(status));
+
+  const canShowObjectives =
+    timelineTypes[ObjectiveType.OBJECTIVE] && ![Status.STARTED, Status.NOT_STARTED].includes(status);
   const canShowMyReview = timelineTypes[ObjectiveType.MYR] && timelineTypes[ObjectiveType.EYR];
   const canShowAnnualReview = !timelineTypes[ObjectiveType.MYR] && timelineTypes[ObjectiveType.EYR];
 
   const formElements = components.filter((component) => component.type != 'text');
 
-  const timelineObjective = useSelector(getTimelineByCodeSelector(ReviewType.OBJECTIVE, 'me')) || {};
-  const status = timelineObjective?.status || undefined;
-  const isAllObjectivesInSameStatus = useSelector(isReviewsInStatus(ReviewType.OBJECTIVE)(status));
   const countReviews = useSelector(countByTypeReviews(ReviewType.OBJECTIVE)) || 0;
   const objectiveSchema = useSelector(getReviewSchema(ReviewType.OBJECTIVE));
   const countDraftReviews = useSelector(countByStatusReviews(ReviewType.OBJECTIVE, Status.DRAFT)) || 0;
