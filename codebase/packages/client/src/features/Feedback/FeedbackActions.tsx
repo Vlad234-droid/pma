@@ -17,6 +17,7 @@ import { NotiBellCirlceOut } from 'components/Icon/graphics/notiBellCirlceOut';
 import { People } from 'components/Icon/graphics/people';
 import { IconButton } from 'components/IconButton';
 import { Icon } from 'components/Icon';
+
 import { FeedbackStatus } from 'config/enum';
 import { useAuthContainer } from 'contexts/authContext';
 import { Page } from 'pages';
@@ -120,9 +121,6 @@ const FeedbackActions: FC = () => {
     window.open('https://feedback.etsplc.com/Tesco360/', '_blank')?.focus();
   };
 
-<<<<<<< HEAD
-  const createToneOfVoiceHandler = (value: string) => {
-=======
   const field_options = [
     { value: 'Direct and simple', label: 'Direct and simple' },
     { value: 'Friendly and constructive', label: 'Friendly and constructive' },
@@ -136,14 +134,12 @@ const FeedbackActions: FC = () => {
     if (!e.target) return;
     const { value } = e.target;
 
->>>>>>> master
     const payload = {
       colleagueUuid,
       name: 'voice',
       type: 'STRING',
       value,
     };
-
     if (profileAttr?.find((item) => item?.name === 'voice')) {
       dispatch(UserActions.updateProfileAttribute([payload]));
       return;
@@ -229,21 +225,11 @@ const FeedbackActions: FC = () => {
           </div>
           <Item withIcon={false}>
             <Select
-<<<<<<< HEAD
               options={TREATMENT_FIELD_OPTIONS}
               name={'treatment-options'}
               placeholder={'Choose tone of voice'}
               value={treatmentValue}
               onChange={createToneOfVoiceHandler}
-=======
-              name={`treatment_options`}
-              options={field_options}
-              placeholder={t('choose_tone_of_voice', 'Choose tone of voice')}
-              value={checkForVoiceValue()}
-              onChange={(e) => {
-                createToneOfVoiceHandler(e);
-              }}
->>>>>>> master
             />
           </Item>
         </div>
