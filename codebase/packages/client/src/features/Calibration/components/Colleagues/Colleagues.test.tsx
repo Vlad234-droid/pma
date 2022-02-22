@@ -50,7 +50,7 @@ describe('<Colleagues />', () => {
     it('should render colleagues with ratings', () => {
       const { getByText } = render(<Colleagues {...props} />);
 
-      expect(getByText('Outstanding')).toBeInTheDocument();
+      expect(getByText('outstanding')).toBeInTheDocument();
     });
   });
 
@@ -58,7 +58,7 @@ describe('<Colleagues />', () => {
     it('should not render edit ratings modal, if !editMode', () => {
       const { getByText, queryByText } = render(<Colleagues {...props} />);
 
-      fireEvent.click(getByText('Outstanding'));
+      fireEvent.click(getByText('outstanding'));
 
       expect(queryByText('mocked_ratings_modal')).not.toBeInTheDocument();
     });
@@ -71,7 +71,7 @@ describe('<Colleagues />', () => {
 
       const { getByText } = render(<Colleagues {...newProps} />);
 
-      fireEvent.click(getByText('Outstanding'));
+      fireEvent.click(getByText('outstanding'));
 
       expect(getByText('mocked_ratings_modal')).toBeInTheDocument();
     });

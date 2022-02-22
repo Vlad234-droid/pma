@@ -3,8 +3,8 @@ import { useState } from 'react';
 const useSearch = (): [string, (value: string) => void] => {
   const [searchValue, setSearchValue] = useState<string>('');
 
-  const handleSearch = (event) => {
-    setSearchValue(event.target.value);
+  const handleSearch = (value: string) => {
+    setSearchValue(value);
   };
 
   return [searchValue, handleSearch];

@@ -7,13 +7,13 @@ import ViewNavigation from 'features/ViewNavigation';
 import { Trans } from 'components/Translation';
 import { ReviewType, Status } from 'config/enum';
 import { TimelineTypes } from 'config/types';
+import { KnowledgeLibraryWidget } from 'features/KnowledgeLibrary';
 
 import HelpWidgets from '../HelpWidgets';
 import InfoWidgets from '../InfoWidgets';
 import ReviewWidgets from '../ReviewWidgets';
 import Section from '../Section';
 import { Review } from '../../config/types';
-import { KnowledgeLibraryWidget } from 'features/KnowledgeLibrary';
 
 type Props = {
   loadTimeline: (uuid: string) => void;
