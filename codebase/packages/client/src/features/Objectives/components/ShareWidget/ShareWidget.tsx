@@ -10,6 +10,7 @@ import SuccessModal from 'components/SuccessModal';
 import { ReviewType, Status } from 'config/enum';
 import useDispatch from 'hooks/useDispatch';
 import { useSelector } from 'react-redux';
+import { usePermission, role } from 'features/Permission';
 
 import * as T from '../../types';
 import { transformReviewsToObjectives } from '../../utils';
@@ -46,12 +47,13 @@ const ShareWidget: FC<Props> = ({ customStyle, stopShare }) => {
   const { components = [] } = useSelector(getReviewSchema(ReviewType.OBJECTIVE));
   const sharedObjectives = useSelector(getAllSharedObjectives);
   const formElements = components.filter((component) => component.type != 'text');
-  const isManager = (info && info.isManager) ?? false;
+  const isManager = usePermission([role.LINE_MANAGER]);
 
   const pathParams = useMemo(() => ({ colleagueUuid: info.colleagueUUID, cycleUuid: 'CURRENT' }), [info.colleagueUUID]);
   const manager = info.manager;
 
   const isManagerShared = isManager && isShared;
+  const isViewSharedObjectivesActive = stopShare && !sharedObjectives.length;
   const sharedObjectivesCount = sharedObjectives.length;
   const formElementsCount = formElements.length;
   const isValidPathParams = pathParams.colleagueUuid;
@@ -129,7 +131,7 @@ const ShareWidget: FC<Props> = ({ customStyle, stopShare }) => {
 
   const [title, description, actionTitle, handleBtnClick] = getContent();
 
-  if ((!hasApprovedObjective && isManager) || (!isManager && !sharedObjectivesCount)) {
+  if ((!hasApprovedObjective && isManager) || (!isManager && !sharedObjectivesCount) || isViewSharedObjectivesActive) {
     return null;
   }
 
@@ -152,7 +154,15 @@ const ShareWidget: FC<Props> = ({ customStyle, stopShare }) => {
           </div>
           <div className={css(bodyStyle)}>
             <div className={css(bodyBlockStyle)}>
-              <Button mode='inverse' styles={[btnStyle({ theme, isManagerShared }) as Styles]} onPress={handleBtnClick}>
+              <Button
+                mode='inverse'
+                styles={[
+                  actionTitle !== t('view_objectives')
+                    ? (btnStyle({ theme, isManagerShared }) as Styles)
+                    : (btnViewStyle({ theme }) as Styles),
+                ]}
+                onPress={handleBtnClick}
+              >
                 {actionTitle}
               </Button>
             </div>
@@ -250,6 +260,14 @@ const btnStyle = ({ theme, isManagerShared }) => ({
   height: '30px',
   background: 'transparent',
   border: `1px solid ${isManagerShared ? theme.colors.tescoRed : theme.colors.tescoBlue}`,
+});
+
+const btnViewStyle = ({ theme }) => ({
+  fontSize: '14px',
+  height: '30px',
+  background: 'transparent',
+  color: theme.colors.tescoBlue,
+  border: `1px solid ${theme.colors.tescoBlue}`,
 });
 
 export default ShareWidget;
