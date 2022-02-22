@@ -70,6 +70,8 @@ const MyTeam: FC = () => {
           className={css({
             display: 'flex',
             alignItems: 'center',
+            flexGrow: '1',
+            justifyContent: 'flex-end',
           })}
         >
           <Filters
