@@ -1,13 +1,11 @@
 import { Status, MetaDataReport } from 'config/enum';
 
-export const field_options = [
-  { value: 'id_1', label: '2022' },
-  { value: 'id_2', label: '2021' },
-  { value: 'id_3', label: '2020' },
-];
-
-export const years = {
-  2021: '2021',
+export const getFieldOptions = (currentYear) => {
+  return [
+    { value: (currentYear - 1).toString(), label: (currentYear - 1).toString() },
+    { value: (currentYear - 2).toString(), label: (currentYear - 2).toString() },
+    { value: (currentYear - 3).toString(), label: (currentYear - 3).toString() },
+  ];
 };
 
 export const listOfStatuses = [
@@ -24,21 +22,21 @@ export const listOfStatuses = [
 
 export const metaStatuses = [
   MetaDataReport.MYR_SUBMITTED_PERCENTAGE,
-  MetaDataReport.MYR_APPROVEDPERCENTAGE,
+  MetaDataReport.MYR_APPROVED_PERCENTAGE,
   MetaDataReport.EYR_SUBMITTED_PERCENTAGE,
   MetaDataReport.EYR_APPROVED_PERCENTAGE,
   MetaDataReport.FEEDBACK_REQUESTED_PERCENTAGE,
   MetaDataReport.FEEDBACK_GIVEN_PERCENTAGE,
-  MetaDataReport.OBJECTIVE_SUBMITTED_PERCENTAGE,
+  MetaDataReport.OBJECTIVES_SUBMITTED_PERCENTAGE,
   MetaDataReport.OBJECTIVES_APPROVED_PERCENTAGE,
-  MetaDataReport.MYER_RATING_BREAKDONW_BELOW_EXPECTED_PERCENTAGE,
+  MetaDataReport.MYR_RATING_BREAKDOWN_BELOW_EXPECTED_PERCENTAGE,
   MetaDataReport.MYR_RATING_BREAKDOWN_BELOW_EXPECTED_COUNT,
   MetaDataReport.MYR_RATING_BREAKDOWN_SATISFACTORY_PERCENTAGE,
-  MetaDataReport.MYRRATING_BREAKDOWN_SATISFACTORY_COUNT,
+  MetaDataReport.MYR_RATING_BREAKDOWN_SATISFACTORY_COUNT,
   MetaDataReport.MYR_RATING_BREAKDOWN_GREAT_PERCENTAGE,
   MetaDataReport.MYR_RATING_BREAKDOWN_GREAT_COUNT,
   MetaDataReport.MYR_RATING_BREAKDOWN_OUTSTANDING_PERCENTAGE,
-  MetaDataReport.MYR_RATING_BREAKDONW_OUTSTANDING_COUNT,
+  MetaDataReport.MYR_RATING_BREAKDOWN_OUTSTANDING_COUNT,
   MetaDataReport.EYR_RATING_BREAKDOWN_BELOW_EXPECTED_PERCENTAGE,
   MetaDataReport.EYR_RATING_BREAKDOWN_BELOW_EXPECTED_COUNT,
   MetaDataReport.EYR_RATING_BREAKDOWN_SATISFACTORY_PERCENTAGE,
@@ -56,4 +54,5 @@ export const metaStatuses = [
   MetaDataReport.ANNIVERSARY_REVIEW_PER_QUARTER_3_COUNT,
   MetaDataReport.ANNIVERSARY_REVIEW_PER_QUARTER_4_PERCENTAGE,
   MetaDataReport.ANNIVERSARY_REVIEW_PER_QUARTER_4_COUNT,
+  MetaDataReport.COLLEAGUES_COUNT,
 ];

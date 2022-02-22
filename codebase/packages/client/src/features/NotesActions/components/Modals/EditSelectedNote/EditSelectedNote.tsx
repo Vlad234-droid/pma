@@ -3,11 +3,11 @@ import { useStyle, useBreakpoints, Button, Styles, Rule, CreateRule, Theme } fro
 import { GenericItemField } from 'components/GenericForm';
 import { Item, Input, Select, Textarea } from 'components/Form';
 import { EditSelectedNoteProps } from './type';
-import { Trans } from 'components/Translation';
+import { Trans, useTranslation } from 'components/Translation';
 import { IconButton, Position } from 'components/IconButton';
 import { Icon as IconComponent } from 'components/Icon';
 import { SuccessModal } from './index';
-import { definePropperFieldTeamOptions, definePropperFieldOptions } from '../../../../../utils';
+import { getEditedNote } from 'utils/note';
 import { ConfirmModal } from 'features/Modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { NotesActions, colleagueUUIDSelector } from '@pma/store';
@@ -31,42 +31,19 @@ const EditSelectedNote: FC<EditSelectedNoteProps> = ({
   const [editMode, setEditMode] = useState<boolean>(false);
   const [confirmModal, setConfirmModal] = useState(false);
   const [successSelectedNoteToEdit, setSuccessSelectedNoteToEdit] = useState(false);
+  const { t } = useTranslation();
 
   const {
     formState: { isValid },
     trigger,
   } = methods;
 
-  const notes: any = [
-    {
-      field_id: '1',
-      field_type: 'input',
-      field_title: 'Title',
-      field_placeholder: 'Enter a title for your note',
-    },
-    {
-      field_id: '2',
-      field_type: 'textarea',
-      field_title: 'Note',
-      field_placeholder: 'Write your note here',
-    },
-    {
-      field_id: '3',
-      field_type: 'select',
-      field_title: 'Folder (optional)',
-      field_placeholder: 'Select a folder',
-
-      field_options:
-        definePropperEditMode !== null
-          ? definePropperFieldOptions(foldersWithNotes, selectedNoteToEdit.folderUuid)
-          : definePropperFieldTeamOptions(foldersWithNotes, selectedNoteToEdit.folderUuid),
-    },
-  ];
+  const notes = getEditedNote(definePropperEditMode, foldersWithNotes, selectedNoteToEdit.folderUuid, t);
 
   const getPropperInfoData = () => {
     return {
-      title: `Are you sure you want to delete this note?`,
-      description: `The note will be permanently deleted`,
+      title: t('delete_this_note', 'Are you sure you want to delete this note?'),
+      description: t('permanently_deleted', 'The note will be permanently deleted'),
     };
   };
 
@@ -132,16 +109,16 @@ const EditSelectedNote: FC<EditSelectedNoteProps> = ({
       <form className={css(formStyle({ editMode }))}>
         {editMode &&
           notes.map((item) => {
-            if (item.field_type === 'input') {
+            if (item.type === 'input') {
               return (
                 <GenericItemField
-                  key={item.field_id}
+                  key={item.id}
                   name={`noteTitle`}
                   methods={methods}
-                  label={item.field_title}
+                  label={item.title}
                   Wrapper={Item}
                   Element={Input}
-                  placeholder={item.field_placeholder}
+                  placeholder={item.placeholder}
                   value={selectedNoteToEdit.title}
                   onChange={() => {
                     trigger('noteTitle');
@@ -149,16 +126,16 @@ const EditSelectedNote: FC<EditSelectedNoteProps> = ({
                 />
               );
             }
-            if (item.field_type === 'textarea') {
+            if (item.type === 'textarea') {
               return (
                 <GenericItemField
-                  key={item.field_id}
+                  key={item.id}
                   name={`noteText`}
                   methods={methods}
-                  label={item.field_title}
+                  label={item.title}
                   Wrapper={Item}
                   Element={Textarea}
-                  placeholder={item.field_placeholder}
+                  placeholder={item.placeholder}
                   value={selectedNoteToEdit.content}
                   onChange={() => {
                     trigger('noteText');
@@ -166,22 +143,22 @@ const EditSelectedNote: FC<EditSelectedNoteProps> = ({
                 />
               );
             }
-            if (item.field_type === 'select') {
+            if (item.type === 'select') {
               const { field_options } = item;
               return (
                 <GenericItemField
-                  key={item.field_id}
+                  key={item.id}
                   name={`folder`}
                   methods={methods}
-                  label={item.field_title}
+                  label={item.title}
                   Wrapper={({ children }) => (
-                    <Item withIcon={false} label={item.field_title}>
+                    <Item withIcon={false} label={item.title}>
                       {children}
                     </Item>
                   )}
                   Element={Select}
                   options={field_options}
-                  placeholder={item.field_placeholder}
+                  placeholder={item.placeholder}
                   onChange={(value) => {
                     if (!value) return;
                     trigger('folder');
@@ -201,23 +178,8 @@ const EditSelectedNote: FC<EditSelectedNoteProps> = ({
             }
           })}
 
-        <div
-          className={css({
-            position: 'absolute',
-            bottom: 0,
-            left: 0,
-            width: '100%',
-          })}
-        >
-          <div
-            className={css({
-              position: 'relative',
-              bottom: theme.spacing.s0,
-              left: theme.spacing.s0,
-              right: theme.spacing.s0,
-              borderTop: `${theme.border.width.b1} solid ${theme.colors.backgroundDarkest}`,
-            })}
-          >
+        <div className={css(btnPositionContainer)}>
+          <div className={css(blockContainer({ theme }))}>
             <div
               className={css({
                 padding: mobileScreen ? theme.spacing.s7 : theme.spacing.s9,
@@ -225,21 +187,8 @@ const EditSelectedNote: FC<EditSelectedNoteProps> = ({
                 justifyContent: 'center',
               })}
             >
-              <Button
-                styles={[
-                  theme.font.fixed.f16,
-                  {
-                    fontWeight: theme.font.weight.bold,
-                    width: '50%',
-                    margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
-                    background: theme.colors.white,
-                    border: `${theme.border.width.b1} solid ${theme.colors.tescoBlue}`,
-                    color: `${theme.colors.tescoBlue}`,
-                  },
-                ]}
-                onPress={cancelSelectedNoteModal}
-              >
-                <Trans>Cancel</Trans>
+              <Button styles={[theme.font.fixed.f16, cancelBtnStyle({ theme })]} onPress={cancelSelectedNoteModal}>
+                <Trans i18nKe='cancel'>Cancel</Trans>
               </Button>
               <IconButton
                 onPress={() => {
@@ -255,7 +204,7 @@ const EditSelectedNote: FC<EditSelectedNoteProps> = ({
                 iconPosition={Position.RIGHT}
                 isDisabled={!isValid}
               >
-                Save
+                <Trans i18nKe='save'>Save</Trans>
               </IconButton>
             </div>
           </div>
@@ -273,6 +222,28 @@ const EditSelectedNote: FC<EditSelectedNoteProps> = ({
     </div>
   );
 };
+
+const btnPositionContainer: Rule = {
+  position: 'absolute',
+  bottom: 0,
+  left: 0,
+  width: '100%',
+};
+const blockContainer: CreateRule<{ theme: Theme }> = ({ theme }) => ({
+  position: 'relative',
+  bottom: theme.spacing.s0,
+  left: theme.spacing.s0,
+  right: theme.spacing.s0,
+  borderTop: `${theme.border.width.b1} solid ${theme.colors.backgroundDarkest}`,
+});
+const cancelBtnStyle: CreateRule<{ theme: Theme }> = ({ theme }) => ({
+  fontWeight: theme.font.weight.bold,
+  width: '50%',
+  margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
+  background: theme.colors.white,
+  border: `${theme.border.width.b1} solid ${theme.colors.tescoBlue}`,
+  color: `${theme.colors.tescoBlue}`,
+});
 
 const backIconStyle: CreateRule<{ theme: Theme; mobileScreen: boolean }> = ({ theme, mobileScreen }) => ({
   position: 'fixed',

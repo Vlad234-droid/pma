@@ -3,6 +3,7 @@ import { IconButton } from 'components/IconButton';
 import { useStyle, useBreakpoints, Rule, Styles } from '@dex-ddl/core';
 import { InfoModalProps } from '../type';
 import { VideoPlayer, VideoId } from 'features/VideoPlayer';
+import { Trans } from 'components/Translation';
 
 const InfoModal: FC<InfoModalProps> = ({ setInfoModal }) => {
   const { css, theme } = useStyle();
@@ -11,19 +12,43 @@ const InfoModal: FC<InfoModalProps> = ({ setInfoModal }) => {
 
   return (
     <div className={css(WrapperInfo)}>
-      <h2 className={css(Title)}>Need help with providing feedback?</h2>
-      <h2 className={css(TitleVideo)}>Watch this 2-minute video on how to give great feedback</h2>
+      <h2 className={css(Title)}>
+        <Trans i18nKey='need_help_with_providing_feedback'>Need help with providing feedback?</Trans>
+      </h2>
+      <h2 className={css(TitleVideo)}>
+        <Trans i18nKey='watch_this_video_on_how_to_give_great_feedback'>
+          Watch this 2-minute video on how to give great feedback
+        </Trans>
+      </h2>
       <div className={css(BlockVideoExplanation)}>
         <VideoPlayer videoId={VideoId.GIVE_FEEDBACK} />
       </div>
-      <p className={css(PreTitle)}>Here are some examples of the types of things you could write:</p>
+      <p className={css(PreTitle)}>
+        <Trans i18nKey='here_are_some_examples_you_could_write'>
+          Here are some examples of the types of things you could write:
+        </Trans>
+      </p>
       <ul className={css(ListInfo)}>
-        <li>List out some of the strengths your colleadue has, what makes them good collague to work with?</li>
-        <li>Can you provide further detail on what they should keep doing or what they improve on?</li>
+        <li>
+          <Trans i18nKey='list_out_some_of_the_strengths'>
+            List out some of the strengths your colleadue has, what makes them good collague to work with?
+          </Trans>
+        </li>
+        <li>
+          <Trans i18nKey='can_you_provide_further_detail'>
+            Can you provide further detail on what they should keep doing or what they improve on?
+          </Trans>
+        </li>
       </ul>
 
-      <h3 className={css(RecomendationInfo)}>Face to face meetings are recommended for delivering feedback</h3>
-      <p className={css(PreRecomendationInfo)}>Please try and find time to give your feedback in person.</p>
+      <h3 className={css(RecomendationInfo)}>
+        <Trans i18nKey='face_to_face_meetings_are_recommended'>
+          Face to face meetings are recommended for delivering feedback
+        </Trans>
+      </h3>
+      <p className={css(PreRecomendationInfo)}>
+        <Trans i18nKey='please_try_and_find_time'>Please try and find time to give your feedback in person.</Trans>
+      </p>
       <span
         className={css({
           position: 'fixed',

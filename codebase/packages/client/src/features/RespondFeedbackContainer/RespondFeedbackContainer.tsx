@@ -6,14 +6,14 @@ import { PeopleTypes, TypefeedbackItems } from './type';
 import { ModalRespondFeedback } from './ModalsParts';
 import { DraftItem, RadioBtns } from './components';
 import { FilterModal } from '../Shared/components/FilterModal';
+import { useTranslation } from 'components/Translation';
 
 export const RESPOND_FEEDBACK_CONTAINER = 'respond_feedback_container';
 
 const RespondFeedbackContainer: FC = () => {
   const { css } = useStyle();
-
+  const { t } = useTranslation();
   const [isOpenMainModal, setIsOpen] = useState<boolean>(false);
-  const [title, setTitle] = useState<string>('');
   const [searchValue, setSearchValue] = useState<string>('');
   const [selectedPerson, setSelectedPerson] = useState<PeopleTypes | null>(null);
   const [infoModal, setInfoModal] = useState<boolean>(false);
@@ -47,7 +47,6 @@ const RespondFeedbackContainer: FC = () => {
       () =>
         `${selectedNote.targetColleagueProfile?.colleague?.profile?.firstName} ${selectedNote.targetColleagueProfile?.colleague?.profile?.lastName}`,
     );
-    setTitle(() => 'Respond to feedback requests');
     setSelectedPerson(() => ({
       ...selectedNote.colleagueProfile,
       ...selectedNote.targetColleagueProfile.colleague,
@@ -125,7 +124,7 @@ const RespondFeedbackContainer: FC = () => {
             styles: [modalCloseOptionStyle],
           }}
           title={{
-            content: title,
+            content: t('respond_to_feedback_requests', 'Respond to feedback requests'),
             styles: [modalTitleOptionStyle],
           }}
         >

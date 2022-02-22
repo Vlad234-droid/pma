@@ -103,7 +103,7 @@ const ModalDownloadFeedback: FC<ModalDownloadFeedbackProps> = ({
               })}
             >
               <Button styles={[outlineBtnRule]} onPress={closeHandler}>
-                <Trans>Cancel</Trans>
+                <Trans i18nKey='Cancel'>Cancel</Trans>
               </Button>
 
               <Button
@@ -114,7 +114,7 @@ const ModalDownloadFeedback: FC<ModalDownloadFeedbackProps> = ({
                   setSearchDate('');
                 }}
               >
-                <Trans>Search again</Trans>
+                <Trans i18nKey='search_again'>Search again</Trans>
               </Button>
 
               <IconButton

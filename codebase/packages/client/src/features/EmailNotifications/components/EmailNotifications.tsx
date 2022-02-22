@@ -19,6 +19,7 @@ export const EmailNotifications: FC<Props> = () => {
   const { user } = useAuthContainer();
   const { profileAttributes } = user?.data || [];
   const colleagueUuid = useSelector(colleagueUUIDSelector);
+
   useEffect(() => {
     if (colleagueUuid) dispatch(TimelineActions.getTimeline({ colleagueUuid }));
   }, [colleagueUuid]);

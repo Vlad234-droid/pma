@@ -28,7 +28,7 @@ const RadioBtns: FC<Props> = ({ checkedRadio, onCheck, handleBtnClick }) => {
               onChange={() => onCheck(FeedbackStatus.DRAFT)}
             />
             <span className={css(titleStyle)}>
-              <Trans>Drafts</Trans>
+              <Trans i18nKey='drafts'>Drafts</Trans>
             </span>
           </label>
         </div>
@@ -41,7 +41,7 @@ const RadioBtns: FC<Props> = ({ checkedRadio, onCheck, handleBtnClick }) => {
               onChange={() => onCheck(FeedbackStatus.SUBMITTED)}
             />
             <span className={css(titleStyle)}>
-              <Trans>Shared</Trans>
+              <Trans i18nKey='shared'>Shared</Trans>
             </span>
           </label>
         </div>

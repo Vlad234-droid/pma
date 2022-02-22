@@ -4,15 +4,17 @@ import { Notification } from 'components/Notification';
 import { GenericItemField } from 'components/GenericForm';
 import { Item, Input, Select, Textarea } from 'components/Form';
 import { AddNoteModalProps } from '../../type';
-import { Trans } from 'components/Translation';
+import { Trans , useTranslation } from 'components/Translation';
 import { IconButton, Position } from 'components/IconButton';
 import { Icon as IconComponent } from 'components/Icon';
 import { SuccessModal } from '../Modals';
+import { getNotes, getFolder } from 'utils/note';
 
 export const ADD_NOTE_MODAL_WRAPPER = 'add_note_modal_wrapper';
 
 const AddNoteModal: FC<AddNoteModalProps> = ({ methods, cancelModal, submitForm, createFolder, foldersWithNotes }) => {
   const { css, theme } = useStyle();
+  const { t } = useTranslation();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
   const [successModal, setSuccessModal] = useState<boolean>(false);
@@ -26,50 +28,11 @@ const AddNoteModal: FC<AddNoteModalProps> = ({ methods, cancelModal, submitForm,
 
   const values = getValues();
 
-  const notes: any = {
-    require: [
-      {
-        id: '1',
-        type: 'input',
-        title: 'Title',
-        placeholder: 'Enter a title for your note',
-      },
-      {
-        id: '2',
-        type: 'textarea',
-        title: 'Note',
-        placeholder: 'Write your note here',
-      },
-      {
-        id: '3',
-        type: 'select',
-        title: 'Folder (optional)',
-        placeholder: 'Select a folder',
-
-        field_options: [
-          ...foldersWithNotes?.map((item) => ({ value: `${item.id}`, label: item.title })),
-          { value: 'id_001', label: '+ Add new folder' },
-        ],
-      },
-    ],
-    option: {
-      id: '4',
-      type: 'input',
-      title: 'Folder name',
-      placeholder: 'Enter a name for your new folder',
-    },
-  };
-  const folder = [
-    {
-      id: '1',
-      type: 'input',
-      title: 'Folder name',
-      placeholder: 'Enter a name for your new folder',
-    },
-  ];
   if (successModal) {
     return <SuccessModal values={values} createFolder={createFolder} cancelModal={cancelModal} />;
   }
+
+  const option = createFolder ? 'folder' : 'note';
 
   return (
     <>
@@ -78,9 +41,11 @@ const AddNoteModal: FC<AddNoteModalProps> = ({ methods, cancelModal, submitForm,
           <Notification
             graphic='information'
             iconColor='link'
-            text={`Remember these ${
-              createFolder ? 'folder' : 'note'
-            } are private, but in limited circumstances, they may need to be shared with others so should be kept professional.`}
+            text={t(
+              'private_folder_note',
+              `Remember these ${option} are private, but in limited circumstances, they may need to be shared with others so should be kept professional.`,
+              { option },
+            )}
             closable={false}
             customStyle={{
               background: '#F3F9FC',
@@ -89,7 +54,7 @@ const AddNoteModal: FC<AddNoteModalProps> = ({ methods, cancelModal, submitForm,
           />
           <form className={css({ marginTop: '40px' })}>
             {!createFolder
-              ? notes.require.map((item) => {
+              ? getNotes(foldersWithNotes, t)?.require.map((item) => {
                   if (item.type === 'input') {
                     return (
                       <GenericItemField
@@ -142,7 +107,7 @@ const AddNoteModal: FC<AddNoteModalProps> = ({ methods, cancelModal, submitForm,
                     );
                   }
                 })
-              : folder.map((item) => {
+              : getFolder(t)?.map((item) => {
                   return (
                     <GenericItemField
                       key={item.id}
@@ -162,14 +127,14 @@ const AddNoteModal: FC<AddNoteModalProps> = ({ methods, cancelModal, submitForm,
 
             {!createFolder && values.folder !== '' && values.folder === 'id_001' && (
               <GenericItemField
-                key={notes.option.field_id}
+                key={getNotes(foldersWithNotes, t)?.option.id}
                 name={`folderTitle`}
                 methods={methods}
                 Wrapper={Item}
                 Element={Input}
-                placeholder={notes.option.field_placeholder}
+                placeholder={getNotes(foldersWithNotes, t)?.option.placeholder}
                 value={values.folderTitle}
-                label={notes.option.field_title}
+                label={getNotes(foldersWithNotes, t)?.option.title}
               />
             )}
 
@@ -183,7 +148,7 @@ const AddNoteModal: FC<AddNoteModalProps> = ({ methods, cancelModal, submitForm,
                   })}
                 >
                   <Button styles={[theme.font.fixed.f16, buttonCancelStyle]} onPress={cancelModal}>
-                    <Trans>Cancel</Trans>
+                    <Trans i18nKey='cancel'>Cancel</Trans>
                   </Button>
                   <IconButton
                     onPress={() => {
@@ -199,7 +164,7 @@ const AddNoteModal: FC<AddNoteModalProps> = ({ methods, cancelModal, submitForm,
                     iconPosition={Position.RIGHT}
                     isDisabled={!isValid}
                   >
-                    Save
+                    <Trans i18nKey='save'>Save</Trans>
                   </IconButton>
                 </div>
               </div>

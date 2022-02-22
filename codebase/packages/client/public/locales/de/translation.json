@@ -23,7 +23,7 @@
   "my_reviews": "My reviews de",
   "no_completed_reviews": "You have no completed reviews de",
   "objective_is_approved": "Well done! All {{count}} objective(s) have been approved.",
-  "form_available_in_date": "The form will be available in {{date, d LLL yyyy}}.",
+  "form_available_in_date": "The form will be available on {{date, d LLL yyyy}}.",
   "completed_at_date": "Completed {{date, d LLL yyyy}}",
   "objective_is_draft": "{{count}} objective(s) saved as a draft de",
   "objective_is_pending": "{{count}} objective(s) are waiting for approval de",
@@ -140,8 +140,8 @@
   "reporting": "Reporting",
   "my_view": "My View",
   "my_team": "My Team",
-  "people_team": "People Team",
-  "you_dont_have_access_to_pma": "You don't have access to PMA - TBC with PO",
+  "people_team": "Your Contribution",
+  "you_dont_have_access_to_pma": "You do not have access to this system.",
   "my_alerts": "My alerts",
   "timeline_is_empty": "Timeline is empty",
   "approve_or_decline_review": "Approve or decline colleague’s objectives or reviews",
@@ -163,5 +163,6 @@
   "system_guidance_and_faqs": "System guidance and FAQs",
   "this_page_will_take_you_to_links_on_our_tesco_sites_to_help_you": "This page will take you to links on our Tesco sites to help you answer questions and build knowledge and capability around Your Contribution.",
   "for_colleagues": "For colleagues",
-  "for_managers": "For managers"
+  "for_managers": "For managers",
+  "no_objectives_created": "No objectives created"
 }

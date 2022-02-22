@@ -1,8 +1,9 @@
 import React, { FC } from 'react';
-import { Rule, useStyle, Button, Styles, CreateRule, useBreakpoints } from '@dex-ddl/core';
+import { Rule, useStyle, Button, Styles, CreateRule, useBreakpoints, Theme } from '@dex-ddl/core';
 import { IconButton } from 'components/IconButton';
 import { PersonalFoldersProps } from '../type';
 import { defineNotesHandler, AllNotesFolderId } from '../../../utils';
+import { useTranslation } from 'components/Translation';
 
 export const PERSONAL_FOLDER_WRAPPER = 'personal_folder_wrapper';
 export const CHANGE_USER_MODE = 'change_user_mode';
@@ -24,6 +25,7 @@ const PersonalFolders: FC<PersonalFoldersProps> = ({
   isUserArchived,
 }) => {
   const { css, theme } = useStyle();
+  const { t } = useTranslation();
 
   const selectedDotsActionhandler = (e, noteId) => {
     selectedNoteId.current = null;
@@ -98,7 +100,9 @@ const PersonalFolders: FC<PersonalFoldersProps> = ({
                   setConfirmModal(() => true);
                 }}
               />
-              <span className={css({ whiteSpace: 'nowrap', marginLeft: '8px' })}>Archive folder</span>
+              <span className={css({ whiteSpace: 'nowrap', marginLeft: '8px' })}>
+                {t('archive_folder', 'Archive folder')}
+              </span>
             </div>
           ),
         }),
@@ -126,7 +130,7 @@ const PersonalFolders: FC<PersonalFoldersProps> = ({
               }}
             />
             <span id='backdrop' className={css({ whiteSpace: 'nowrap', marginLeft: '8px' })}>
-              Delete folder
+              {t('delete_folder', 'Delete folder')}
             </span>
           </div>
         ),
@@ -134,31 +138,7 @@ const PersonalFolders: FC<PersonalFoldersProps> = ({
     ];
 
     return (
-      <div
-        id='backdrop'
-        className={css({
-          position: 'absolute',
-          display: 'flex',
-          flexDirection: 'column',
-          right: '28px',
-          bottom: !isUserArchived ? (notesLength ? '-101px' : '-110px') : !notesLength ? '-53px' : '-46px',
-          background: theme.colors.white,
-          zIndex: 2,
-          borderRadius: '8px',
-          boxShadow: 'rgba(100, 100, 111, 0.05) 4px 2px 10px 10px',
-          ':before': {
-            content: "''",
-            width: '18px',
-            height: '18px',
-            position: 'absolute',
-            top: '-9px',
-            right: '34px',
-            background: theme.colors.white,
-            boxShadow: 'rgba(100, 100, 111, 0.08) -1px -1px 3px -1px',
-            transform: 'rotate(45deg)',
-          },
-        })}
-      >
+      <div id='backdrop' className={css(dotsContainerStyle({ isUserArchived, notesLength, theme }))}>
         {btnsActions.map((item) => (
           <div key={item.id} id='backdrop'>
             {item.button}
@@ -171,7 +151,9 @@ const PersonalFolders: FC<PersonalFoldersProps> = ({
   return (
     <div className={css(mainFolderContainerStyle)} data-test-id={PERSONAL_FOLDER_WRAPPER}>
       <div className={css(titleStyle)}>
-        <h2 className={css({ padding: '24px' })}>{!isUserArchived ? 'Personal Folders' : 'Archived Folders'}</h2>
+        <h2 className={css({ padding: '24px' })}>
+          {!isUserArchived ? t('personal_folders', 'Personal Folders') : t('archived_folders', 'Archived Folders')}
+        </h2>
       </div>
       <div className={css({ marginTop: '48px' })}>
         {foldersWithNotes?.map((item) => {
@@ -222,11 +204,39 @@ const PersonalFolders: FC<PersonalFoldersProps> = ({
           setSelectedFolder(() => null);
         }}
       >
-        {!isUserArchived ? 'Archived Folders' : 'Personal Folders'}
+        {!isUserArchived ? t('archived_folders', 'Archived Folders') : t('personal_folders', 'Personal Folders')}
       </Button>
     </div>
   );
 };
+
+const dotsContainerStyle: CreateRule<{ isUserArchived: boolean; notesLength: number; theme: Theme }> = ({
+  isUserArchived,
+  notesLength,
+  theme,
+}) => ({
+  position: 'absolute',
+  display: 'flex',
+  flexDirection: 'column',
+  right: '28px',
+  bottom: !isUserArchived ? (notesLength ? '-101px' : '-110px') : !notesLength ? '-53px' : '-46px',
+  background: theme.colors.white,
+  zIndex: 2,
+  borderRadius: '8px',
+  boxShadow: 'rgba(100, 100, 111, 0.05) 4px 2px 10px 10px',
+  ':before': {
+    content: "''",
+    width: '18px',
+    height: '18px',
+    position: 'absolute',
+    top: '-9px',
+    right: '34px',
+    background: theme.colors.white,
+    boxShadow: 'rgba(100, 100, 111, 0.08) -1px -1px 3px -1px',
+    transform: 'rotate(45deg)',
+  },
+});
+
 const marginFlex: Rule = {
   display: 'flex',
   flexDirection: 'column',

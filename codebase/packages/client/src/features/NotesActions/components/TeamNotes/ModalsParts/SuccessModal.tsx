@@ -54,7 +54,7 @@ export const SuccessModal: FC<SuccessModalProps> = ({ teamMethods, cancelTEAMMod
             <img src={SuccessImg} alt='Success' />
           </span>
           <div className={css(doneStyle)}>
-            <Trans>Done</Trans>!
+            <Trans i18nKey='done'>Done</Trans>!
           </div>
           <div className={css(textStyle)}>
             {!createFolder && (
@@ -73,7 +73,7 @@ export const SuccessModal: FC<SuccessModalProps> = ({ teamMethods, cancelTEAMMod
       <div className={css(containerStyle)}>
         <div className={css(wrapperStyle)}>
           <Button styles={[okBtnStyle]} onPress={cancelTEAMModal}>
-            <Trans>Okay</Trans>
+            <Trans i18nKey='okay'>Okay</Trans>
           </Button>
         </div>
       </div>

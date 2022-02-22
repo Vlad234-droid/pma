@@ -43,7 +43,7 @@ const getContent = (
       'white',
       true,
       false,
-      t('form_available_in_date', `The form will be available in ${startTime}`, { date: new Date(startTime) }),
+      t('form_available_in_date', `The form will be available on ${startTime}`, { date: new Date(startTime) }),
       '',
     ],
     [Status.STARTED]: [

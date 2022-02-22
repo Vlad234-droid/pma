@@ -25,8 +25,8 @@ const SuccessModal: FC<SuccessModalProps> = ({
       </div>
       <h2 className={css(DoneText)}>Done!</h2>
       <p className={css(Description)}>
-        {`${selectedPerson?.profile?.firstName} ${selectedPerson?.profile?.lastName}`} will now be able to see your
-        feedback
+        {`${selectedPerson?.profile?.firstName} ${selectedPerson?.profile?.lastName}`}{' '}
+        <Trans i18nKey='will_now_be_able_to_see_your_feedback'>will now be able to see your feedback</Trans>
       </p>
       <div
         className={css({

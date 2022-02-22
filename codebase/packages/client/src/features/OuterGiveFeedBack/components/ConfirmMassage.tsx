@@ -16,12 +16,16 @@ const ConfirmMassage: FC<ConfirmModalType> = ({ onConfirm, goBack }) => {
     <div>
       <div className={css(ImgContent_style)}>
         <h3 className={css(info_content_style, { marginTop: '0px' })}>
-          Before you send this feedback, please check it is about something you&apos;ve observed during a first-hand
-          interaction with this colleague.
+          <Trans i18nKey='before_you_send_this_feedback'>
+            Before you send this feedback, please check it is about something you&apos;ve observed during a first-hand
+            interaction with this colleague.
+          </Trans>
         </h3>
         <h3 className={css(info_content_style)}>
-          Feedback that&apos;s not related to a specific situation with a colleague should be shared in the Every Voice
-          Matters survey.
+          <Trans i18nKey='not_related_to_a_specific_situation'>
+            Feedback that&apos;s not related to a specific situation with a colleague should be shared in the Every
+            Voice Matters survey.
+          </Trans>
         </h3>
       </div>
 

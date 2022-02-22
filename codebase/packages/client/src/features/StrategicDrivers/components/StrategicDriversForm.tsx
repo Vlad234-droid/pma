@@ -87,7 +87,7 @@ const StrategicDriversForm: FC = () => {
 
   return (
     <GenericForm
-      formFields={orgObjectives.map((item, idx): any => {
+      formFields={orgObjectives?.map((item, idx): any => {
         return {
           Element: Input,
           name: `drivers.${idx}`,
@@ -121,7 +121,7 @@ const StrategicDriversForm: FC = () => {
         </div>
       )}
       defaultValues={{
-        drivers: orgObjectives.map(({ title }) => title),
+        drivers: orgObjectives?.map(({ title }) => title),
       }}
     />
   );

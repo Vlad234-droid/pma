@@ -5,9 +5,10 @@ import { IconButton } from 'components/IconButton';
 type AppliedFiltersProps = {
   clearAppliedFilters: (item: string) => void;
   getAppliedReport: () => any;
+  colleaguesCount?: number;
 };
 
-const AppliedFilters: FC<AppliedFiltersProps> = ({ clearAppliedFilters, getAppliedReport }) => {
+const AppliedFilters: FC<AppliedFiltersProps> = ({ clearAppliedFilters, getAppliedReport, colleaguesCount = 0 }) => {
   const { css } = useStyle();
 
   return (
@@ -29,7 +30,7 @@ const AppliedFilters: FC<AppliedFiltersProps> = ({ clearAppliedFilters, getAppli
           ))}
         </div>
       </div>
-      <span className={css(countStyle)}>Colleagues: 43</span>
+      <span className={css(countStyle)}>Colleagues: {colleaguesCount}</span>
     </div>
   );
 };

@@ -130,15 +130,20 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
                           </>
                         )}
                       />
-                      <Link
-                        to={buildPath(Page.CREATE_STRATEGIC_DRIVERS)}
-                        className={css(itemSettingsStyle, itemSettingsBorderStyle)}
-                      >
-                        <Icon graphic={'strategicDriver'} />
-                        <span className={css(itemSettingsTextStyle)}>
-                          {t('strategic_drivers', 'Strategic drivers')}
-                        </span>
-                      </Link>
+                      <CanPerform
+                        perform={[role.TALENT_ADMIN]}
+                        yes={() => (
+                          <Link
+                            to={buildPath(Page.CREATE_STRATEGIC_DRIVERS)}
+                            className={css(itemSettingsStyle, itemSettingsBorderStyle)}
+                          >
+                            <Icon graphic={'strategicDriver'} />
+                            <span className={css(itemSettingsTextStyle)}>
+                              {t('strategic_drivers', 'Strategic drivers')}
+                            </span>
+                          </Link>
+                        )}
+                      />
                       <CanPerform
                         perform={[role.ADMIN]}
                         yes={() => (

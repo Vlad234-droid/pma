@@ -97,7 +97,9 @@ const FilterModal: FC<FilterModalProps> = ({
           checked={isCheckAll.includes(`${innerTitle}-${checkBoxItem.title}`)}
           indeterminate={isCheckAll.includes(`${innerTitle}-${checkBoxItem.title}`)}
         />
-        <span className={css(checkBoxItemTitle)}>{checkBoxItem.title}</span>
+        <span className={css(checkBoxItemTitle)}>
+          <Trans>{checkBoxItem.title}</Trans>
+        </span>
       </>
     );
   };
@@ -131,7 +133,9 @@ const FilterModal: FC<FilterModalProps> = ({
                         checked={checkedItems.includes(`${title}-${checkBoxItem.title}`)}
                         onChange={(e) => handleClick(e)}
                       />
-                      <span className={css(checkBoxItemTitle)}>{checkBoxItem.title}</span>
+                      <span className={css(checkBoxItemTitle)}>
+                        <Trans>{checkBoxItem.title}</Trans>
+                      </span>
                     </>
                   )}
                 </label>

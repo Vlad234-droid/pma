@@ -77,7 +77,7 @@ const GiveFeedbackForm: FC<Props> = ({ onSubmit, defaultValues, currentColleague
             ...(mobileScreen && { textAlign: 'center' }),
           })}
         >
-          Let a colleague know how they are doing
+          <Trans i18nKey='let_a_colleague_know_how_they_are_doing'>Let a colleague know how they are doing</Trans>
         </div>
         <div
           className={css({
@@ -87,7 +87,7 @@ const GiveFeedbackForm: FC<Props> = ({ onSubmit, defaultValues, currentColleague
             ...(mobileScreen && { textAlign: 'center' }),
           })}
         >
-          Select who you&apos;d like to give feedback to
+          <Trans i18nKey='select_to_give_feedback'>Select who you&apos;d like to give feedback to</Trans>
         </div>
         <ColleaguesFinder
           onSelect={(colleagueUuid) => {
@@ -142,7 +142,7 @@ const GiveFeedbackForm: FC<Props> = ({ onSubmit, defaultValues, currentColleague
                 styles={[theme.font.fixed.f16, buttonStyle]}
                 onPress={handleDraft}
               >
-                <Trans>Save as draft</Trans>
+                <Trans i18nKey='save_as_draft'>Save as draft</Trans>
               </Button>
               <IconButton
                 isDisabled={!isValid}
@@ -152,7 +152,7 @@ const GiveFeedbackForm: FC<Props> = ({ onSubmit, defaultValues, currentColleague
                 iconPosition={Position.RIGHT}
                 onPress={() => handleSubmit(handleSave)()}
               >
-                Submit
+                <Trans i18nKey='Submit'>Submit</Trans>
               </IconButton>
             </div>
           </div>

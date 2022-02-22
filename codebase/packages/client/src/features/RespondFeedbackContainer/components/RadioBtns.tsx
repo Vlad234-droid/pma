@@ -49,7 +49,7 @@ const RadioBtns: FC<RadioBtnsProps> = ({
             }}
           />
           <span className={css(SizeStyle)}>
-            <Trans>Pending</Trans>
+            <Trans i18nKey='pending'>Pending</Trans>
           </span>
         </label>
       </div>
@@ -72,7 +72,7 @@ const RadioBtns: FC<RadioBtnsProps> = ({
             }}
           />
           <span className={css(SizeStyle)}>
-            <Trans>Completed</Trans>
+            <Trans i18nKey='completed'>Completed</Trans>
           </span>
         </label>
       </div>
