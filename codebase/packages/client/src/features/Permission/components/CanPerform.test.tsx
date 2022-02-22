@@ -19,9 +19,9 @@ describe('<CanPerform />', () => {
     expect(no).toBeCalled();
   });
 
-  it('should called yes when not perform', async () => {
+  it('should not called yes when not perform', async () => {
     const yes = jest.fn(() => <div />);
     renderWithTheme(<CanPerform yes={yes} perform={[]} />);
-    expect(yes).toBeCalled();
+    expect(yes).not.toBeCalled();
   });
 });
