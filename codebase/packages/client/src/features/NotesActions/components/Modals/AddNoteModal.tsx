@@ -4,7 +4,7 @@ import { Notification } from 'components/Notification';
 import { GenericItemField } from 'components/GenericForm';
 import { Item, Input, Select, Textarea } from 'components/Form';
 import { AddNoteModalProps } from '../../type';
-import { Trans , useTranslation } from 'components/Translation';
+import { Trans, useTranslation } from 'components/Translation';
 import { IconButton, Position } from 'components/IconButton';
 import { Icon as IconComponent } from 'components/Icon';
 import { SuccessModal } from '../Modals';

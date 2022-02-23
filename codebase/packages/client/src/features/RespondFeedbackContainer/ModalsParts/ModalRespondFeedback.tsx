@@ -19,7 +19,6 @@ const ModalRespondFeedback: FC<ModalGiveFeedbackProps> = ({
   setFeedbackItems,
 }) => {
   const { css, theme } = useStyle();
-
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
 

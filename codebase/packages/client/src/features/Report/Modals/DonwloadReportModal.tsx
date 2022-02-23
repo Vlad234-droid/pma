@@ -1,104 +1,42 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useState } from 'react';
 import { Button, Icon, ModalWithHeader, Rule, theme, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { useForm } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { reportByYearSchema } from '../config';
+import { reportByYearSchema, getYearsFromCurrentYear, checkboxes, getRequestParams } from '../config';
 import { Select, Checkbox, Item } from 'components/Form';
 import { GenericItemField } from 'components/GenericForm';
 import success from 'images/success.jpg';
+import { getCurrentYear } from 'utils/date';
+import { Trans, useTranslation } from 'components/Translation';
+import { downloadReportStatistics } from '../utils';
 
 type ModalProps = {
   onClose: () => void;
 };
 
-const checkboxes = [
-  {
-    id: '0',
-    label: 'Objectives submitted',
-    isChecked: false,
-  },
-  {
-    id: '1',
-    label: 'Objectives approved',
-    isChecked: false,
-  },
-  {
-    id: '2',
-    label: 'Mid-year forms',
-    isChecked: false,
-  },
-  {
-    id: '3',
-    label: 'Breakdown of mid-year ratings',
-    isChecked: false,
-  },
-  {
-    id: '4',
-    label: 'Year-end forms',
-    isChecked: false,
-  },
-  {
-    id: '5',
-    label: 'Breakdown of year-end ratings',
-    isChecked: false,
-  },
-  {
-    id: '6',
-    label: 'In the moment feedback',
-    isChecked: false,
-  },
-  {
-    id: '7',
-    label: 'Colleagues on Supporting Your Performance',
-    isChecked: false,
-  },
-  {
-    id: '8',
-    label: 'New to business',
-    isChecked: false,
-  },
-  {
-    id: '9',
-    label: 'Colleagues absences',
-    isChecked: false,
-  },
-  {
-    id: '10',
-    label: 'Anniversary reviews completed per quarter',
-    isChecked: false,
-  },
-];
-
 const DonwloadReportModal: FC<ModalProps> = ({ onClose }) => {
   const { css } = useStyle();
+  const { t } = useTranslation();
   const methods = useForm({
     mode: 'onChange',
     resolver: yupResolver<Yup.AnyObjectSchema>(reportByYearSchema),
   });
 
-  const [selectedCheckboxes, setSelectedCheckboxes] = useState(checkboxes);
-  const [isDisabledDownloadBtn, setIsDisabledDownloadBtn] = useState(true);
+  const {
+    formState: { isValid },
+    getValues,
+  } = methods;
+
+  const values = getValues();
+
+  const [selectedCheckboxes, setSelectedCheckboxes] = useState(checkboxes(t));
+
   const [showSuccessModal, setShowSuccesModal] = useState(false);
-
-  const years = [
-    { value: 'id_1', label: '2021' },
-    { value: 'id_2', label: '2020' },
-    { value: 'id_3', label: '2019' },
-    { value: 'id_4', label: '2018' },
-  ];
-
-  useEffect(() => {
-    setIsDisabledDownloadBtn(true);
-    for (const key in selectedCheckboxes) {
-      if (selectedCheckboxes[key]['isChecked']) {
-        setIsDisabledDownloadBtn(false);
-      }
-    }
-  }, [selectedCheckboxes]);
 
   const handleDownloadReport = () => {
     setShowSuccesModal(true);
+    downloadReportStatistics({ year: values?.year, topics: getRequestParams(selectedCheckboxes) });
   };
 
   const handleCheck = (checkboxId) => {
@@ -112,17 +50,26 @@ const DonwloadReportModal: FC<ModalProps> = ({ onClose }) => {
     setSelectedCheckboxes(newArray);
   };
 
+  const isDisabledDownloadBtnHandler = () => {
+    if (isValid && selectedCheckboxes.some((item) => item['isChecked'])) return false;
+    return true;
+  };
+
   return (
     <ModalWithHeader
       modalPosition='middle'
-      title='Download and Exctract'
+      title={t('download_and_exctract', 'Download and Exctract')}
       containerRule={modalWrapperStyle}
       closeOptions={{
         closeOptionContent: <Icon graphic='close' />,
         onClose: onClose,
       }}
     >
-      <h3 className={css(modalTitleStyle)}>Choose which topics you’d like to download into an excel report</h3>
+      <h3 className={css(modalTitleStyle)}>
+        <Trans i18nKey='topics_to_download_into_excel_report'>
+          Choose which topics you’d like to download into an excel report
+        </Trans>
+      </h3>
       <div className={css(modalInnerWarp)}>
         <div className={css({ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' })}>
           {selectedCheckboxes.map((item) => (
@@ -134,7 +81,7 @@ const DonwloadReportModal: FC<ModalProps> = ({ onClose }) => {
         </div>
 
         <GenericItemField
-          name={'selectYear'}
+          name={'year'}
           methods={methods}
           Wrapper={({ children }) => (
             <Item label='Select a year' withIcon={false}>
@@ -142,12 +89,8 @@ const DonwloadReportModal: FC<ModalProps> = ({ onClose }) => {
             </Item>
           )}
           Element={Select}
-          options={years}
+          options={getYearsFromCurrentYear(getCurrentYear())}
           placeholder='Please select'
-          onChange={() => {
-            console.log('selected year');
-          }}
-          value={'2021'}
         />
 
         <div className={css(textBlock, { fontWeight: 700 })}>Guidance for colleagues</div>
@@ -164,10 +107,10 @@ const DonwloadReportModal: FC<ModalProps> = ({ onClose }) => {
           mode='inverse'
           styles={[formButton, { border: `1px solid ${theme.colors.tescoBlue}` }]}
         >
-          Cancel
+          <Trans i18nKey='cancel'>Cancel</Trans>
         </Button>
-        <Button isDisabled={isDisabledDownloadBtn} onPress={handleDownloadReport} styles={[formButton]}>
-          Download
+        <Button isDisabled={isDisabledDownloadBtnHandler()} onPress={handleDownloadReport} styles={[formButton]}>
+          <Trans i18nKey='download'>Download</Trans>
         </Button>
       </div>
 

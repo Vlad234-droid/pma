@@ -142,7 +142,7 @@ export enum MetaDataReport {
   MYR_RATING_BREAKDOWN_OUTSTANDING_COUNT = 'myr-rating-breakdown-outstanding-count',
   EYR_RATING_BREAKDOWN_BELOW_EXPECTED_PERCENTAGE = 'eyr-rating-breakdown-below-expected-percentage',
   EYR_RATING_BREAKDOWN_BELOW_EXPECTED_COUNT = 'eyr-rating-breakdown-below-expected-count',
-  EYR_RATING_BREAKDOWN_SATISFACTORY_PERCENTAGE = 'eyr-rating-breakdown-below-expected-count',
+  EYR_RATING_BREAKDOWN_SATISFACTORY_PERCENTAGE = 'eyr-rating-breakdown-satisfactory-percentage',
   EYR_RATING_BREAKDOWN_SATISFACTORY_COUNT = 'eyr-rating-breakdown-satisfactory-count',
   EYR_RATING_BREAKDOWN_GREAT_PERCENTAGE = 'eyr-rating-breakdown-great-percentage',
   EYR_RATING_BREAKDOWN_GREAT_COUNT = 'eyr-rating-breakdown-great-count',
@@ -176,4 +176,30 @@ export enum TitlesReport {
   ANNIVERSARY_REVIEWS = 'anniversary_reviews',
   HOURLY_PAID = 'hourly_paid',
   MOMENT_FEEDBACK = 'moment_feedback',
+}
+
+export enum StatisticsTitlesReportKeys {
+  OBJECTIVES_SUBMITTED = 'objectives_submitted',
+  OBJECTIVES_APPROVED = 'objectives_approved',
+  MID_YEAR_FORMS = 'mid_year_forms',
+  BREAKDOWN_OF_MID_YEAR_RATINGS = 'breakdown_of_mid_year_ratings',
+  YEAR_END_FORMS = 'year_end_forms',
+  BREAKDOWN_OF_YEAR_END_RATINGS = 'breakdown_of_year_end_ratings',
+  IN_THE_MOMENT_FEEDBACK = 'moment_feedback',
+  BUSINESS = 'new_to_business',
+  ANNIVERSARY_REVIEWS = 'anniversary_reviews',
+  COLLEAGUES_COUNT = 'colleagues_count',
+}
+
+export enum StatisticsTitlesReport {
+  COLLEAGUES_COUNT = 'Colleagues count',
+  OBJECTIVES_SUBMITTED = 'Objectives submitted',
+  OBJECTIVES_APPROVED = 'Objectives approved',
+  MID_YEAR_FORMS = 'Mid-year forms',
+  BREAKDOWN_OF_MID_YEAR_RATINGS = 'Breakdown of mid-year ratings',
+  YEAR_END_FORMS = 'Year-end forms',
+  BREAKDOWN_OF_YEAR_END_RATINGS = 'Breakdown of year-end ratings',
+  IN_THE_MOMENT_FEEDBACK = 'In the moment feedback',
+  NEW_TO_BUSINESS = 'New to business',
+  ANNIVERSARY_REVIEWS = 'Anniversary Reviews completed per quarter',
 }
