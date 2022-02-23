@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { Trans } from 'components/Translation';
 import { Button, Rule, useBreakpoints, useStyle, CreateRule } from '@dex-ddl/core';
 
-import { AllNotesFolderId } from '../../../../utils';
+import { AllNotesFolderId, addNewFolderId } from 'utils';
 import { getFoldersSelector } from '@pma/store';
 import { useSelector } from 'react-redux';
 import successImg from 'images/success.jpg';
@@ -27,7 +27,7 @@ const SuccessModal: FC<SuccessModalProps> = ({ values, createFolder, cancelModal
     let str: string;
     if (values.folder === AllNotesFolderId || values.folder === '') {
       str = 'All notes';
-    } else if (values.folder === 'id_001') {
+    } else if (values.folder === addNewFolderId) {
       str = values.folderTitle;
     } else {
       str = folders?.find((item) => item?.id === values?.folder)?.title ?? '';

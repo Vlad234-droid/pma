@@ -30,10 +30,11 @@ export type Option = {
 };
 
 export interface SelectField extends FormField {
+  name: string;
   options: Array<Option>;
-  getSelected?: (option: any) => void;
-  onChange: (e: SyntheticEvent<HTMLInputElement>) => void;
+  placeholder: string;
   value?: string;
+  onChange: (value: string) => void;
 }
 
 export interface TextareaField extends FormField {

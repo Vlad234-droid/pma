@@ -8,7 +8,8 @@ import { Trans, useTranslation } from 'components/Translation';
 import { IconButton, Position } from 'components/IconButton';
 import { Icon as IconComponent } from 'components/Icon';
 import { SuccessModal } from '../Modals';
-import { getNotes, getFolder } from 'utils/note';
+import { getNotes, getFolder, addNewFolderId } from 'utils';
+import get from 'lodash.get';
 
 export const ADD_NOTE_MODAL_WRAPPER = 'add_note_modal_wrapper';
 
@@ -100,6 +101,7 @@ const AddNoteModal: FC<AddNoteModalProps> = ({ methods, cancelModal, submitForm,
                         options={field_options}
                         placeholder={item.placeholder}
                         onChange={(value) => {
+                          if (get(values, 'folderTitle')) setValue('folderTitle', '', { shouldValidate: false });
                           setValue('folder', value);
                           trigger('folder');
                         }}
@@ -125,7 +127,7 @@ const AddNoteModal: FC<AddNoteModalProps> = ({ methods, cancelModal, submitForm,
                   );
                 })}
 
-            {!createFolder && values.folder !== '' && values.folder === 'id_001' && (
+            {get(values, 'folder') === addNewFolderId && (
               <GenericItemField
                 key={getNotes(foldersWithNotes, t)?.option.id}
                 name={`folderTitle`}

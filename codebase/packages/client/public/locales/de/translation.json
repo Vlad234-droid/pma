@@ -91,7 +91,7 @@
   "approve_or_decline": "Approve or decline",
   "time_to_approve_or_decline": "It’s time to review your colleague’s objectives and / or reviews",
   "mid_year_review_help_text": "Use this to capture a summary of the mid-year conversation you’ve had with your line manager. Remember to focus as much on your how as your what.",
-  "end_year_review_help_text": "Use this to capture a summary of the end-year conversation you’ve had with your line manager. Remember to focus as much on your how as your what.",
+  "end_year_review_help_text": "Use this to capture the outcome of the conversation you’ve had with your line manager. Remember to focus as much on your how as your what. Use the look forward section to capture your priorities and development for the year ahead.",
   "myr_review_sent_to_manager": "Your mid-year review has been sent to your line manager.",
   "eyr_review_sent_to_manager": "Your year-end review has been sent to your line manager.",
   "review_widget_saved_as_draft": "Your form is currently saved as a draft",
@@ -159,10 +159,18 @@
   "your_contribution": "Your Contribution",
   "everyday_conversations": "Everyday conversations",
   "feedback_tesco": "Feedback at Tesco",
+  "your_actions": "Your actions",
+  "your_pending_actions": "Your pending actions",
+  "your_colleagues_pending_actions": "Your colleagues pending actions",
+  "my_full_team": "My full team",
+  "my_direct_reports": "My direct reports",
+  "pending_actions": "Pending actions",
+  "you_have_pending_actions": "You have pending actions"
   "learning": "Learning",
   "system_guidance_and_faqs": "System guidance and FAQs",
   "this_page_will_take_you_to_links_on_our_tesco_sites_to_help_you": "This page will take you to links on our Tesco sites to help you answer questions and build knowledge and capability around Your Contribution.",
   "for_colleagues": "For colleagues",
   "for_managers": "For managers",
+  "view_profile": "View profile",
   "no_objectives_created": "No objectives created"
 }

@@ -24,7 +24,7 @@ import {
   teamFolderUuidSelector,
 } from '@pma/store';
 import { role, usePermission } from 'features/Permission';
-import { AllNotesFolderId, AllNotesFolderIdTEAM, filterNotesHandler } from '../../utils';
+import { AllNotesFolderId, AllNotesFolderIdTEAM, filterNotesHandler, addNewFolderId } from 'utils';
 import { PeopleTypes } from './components/TeamNotes/ModalsParts/type';
 import { useNavigate } from 'react-router-dom';
 import { Trans, useTranslation } from 'components/Translation';
@@ -164,7 +164,7 @@ const NotesActions: FC = () => {
     }
 
     if (
-      values.folder !== 'id_001' &&
+      values.folder !== addNewFolderId &&
       values.folder !== AllNotesFolderId &&
       folders.some((item) => item.id === values.folder)
     ) {
@@ -195,7 +195,7 @@ const NotesActions: FC = () => {
       return;
     }
 
-    if (values.folder === 'id_001' && values.folderTitle !== '') {
+    if (values.folder === addNewFolderId && values.folderTitle !== '') {
       const body = {
         folder: {
           ownerColleagueUuid: colleagueUuid,
@@ -240,7 +240,7 @@ const NotesActions: FC = () => {
     }
 
     if (
-      values.folder !== 'id_001' &&
+      values.folder !== addNewFolderId &&
       values.folder !== AllNotesFolderIdTEAM &&
       folders.some((item) => item.id === values.folder)
     ) {
@@ -272,7 +272,7 @@ const NotesActions: FC = () => {
       );
     }
 
-    if (values.folder === 'id_001' && values.folderTitle !== '') {
+    if (values.folder === addNewFolderId && values.folderTitle !== '') {
       const body = {
         folder: {
           ownerColleagueUuid: colleagueUuid,

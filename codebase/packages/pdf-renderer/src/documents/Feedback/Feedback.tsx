@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import { Text, View, StyleSheet } from '@react-pdf/renderer';
 
 import GeneralDocument from '../General';
+import colors from '@pma/client/src/theme/colors';
 
 type QuestionItem = {
   code: string;
@@ -53,10 +54,10 @@ const FeedbackDocument: FC<Props> = ({ items }) => {
               </View>
             </View>
             <View style={styles.body}>
-              {feedback.feedbackItems.map(({ code, question, content }) => (
-                <View key={code} style={styles.questions}>
-                  <Text style={styles.question}>{question}</Text>
-                  <Text style={styles.answer}>{content}</Text>
+              {feedback.feedbackItems.map((val) => (
+                <View key={val.code} style={styles.questions}>
+                  <Text style={styles.question}>{val.question}</Text>
+                  <Text style={styles.answer}>{val.content}</Text>
                 </View>
               ))}
             </View>
@@ -76,7 +77,7 @@ const styles = StyleSheet.create({
   },
   border: {
     borderBottomWidth: 2,
-    borderBottomColor: 'bleck',
+    borderBottomColor: colors.black,
   },
   meta: {
     flexDirection: 'row',
@@ -117,7 +118,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   body: {
-    maxHeight: 220,
+    maxHeight: 600,
   },
   questions: {
     marginTop: 5,
@@ -131,6 +132,7 @@ const styles = StyleSheet.create({
   },
   answer: {
     fontSize: 14,
+    overflowWrap: 'anywhere',
   },
 });
 

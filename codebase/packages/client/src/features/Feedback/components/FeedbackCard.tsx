@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { ConfigProps } from '../type';
+import { ConfigProps } from '../config/types';
 import { Rule, useStyle, useBreakpoints, Styles } from '@dex-ddl/core';
 import { TileWrapper } from 'components/Tile';
 import { Link } from 'react-router-dom';
