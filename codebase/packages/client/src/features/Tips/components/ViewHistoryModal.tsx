@@ -4,6 +4,7 @@ import { tipsActions, getTipHistorySelector } from '@pma/store';
 import { useStyle, Rule, CreateRule, Theme, useBreakpoints, Modal, Button, Icon } from '@dex-ddl/core';
 import { TipsProps } from '../types';
 import { formatDateStringFromISO, DATE_TIME_STRING_FORMAT } from 'utils/date';
+import { Trans } from 'components/Translation';
 
 export type ViewHistoryModal = {
   handleCloseModal: () => void;
@@ -27,12 +28,16 @@ const ViewHistoryModal: FC<ViewHistoryModal> = ({ handleCloseModal, card }) => {
   return (
     <Modal modalPosition='middle' modalContainerRule={[modalWrapper({mobileScreen})]}>
       <div data-test-id={VIEW_HISTORY_MODAL} className={css(modalInner)}>
-        <div className={css(vhTitleStyle({mobileScreen, theme}))}>Activity History</div>
-        <div className={css(vhSubTitleStyle({mobileScreen, theme}))}>For tip: {card.title}</div>
+        <div className={css(vhTitleStyle({mobileScreen, theme}))}>
+          <Trans i18nKey='activity_history'>Activity History</Trans>
+        </div>
+        <div className={css(vhSubTitleStyle({mobileScreen, theme}))}>
+          <Trans i18nKey='for_tip'>For tip</Trans>: {card.title}
+        </div>
         <div className={css(vhItemsWrap)}>
           {tipHistory?.map((item, idx) => {
             const titleDate = formatDateStringFromISO(item.updatedTime, DATE_TIME_STRING_FORMAT);
-            const isLastItem: boolean = idx === tipHistory.length - 1 ? true : false;
+            const isLastItem: boolean = idx === tipHistory.length - 1;
 
             return (
               <div key={item.uuid} className={css(vhItemStyle({isLastItem, theme}))}>
@@ -48,12 +53,20 @@ const ViewHistoryModal: FC<ViewHistoryModal> = ({ handleCloseModal, card }) => {
                     />
                     {titleDate}
                   </div>
-                  <div className={css(vhItemSubtitle)}>Target: {item.targetOrganisation.name}</div>
+                  <div className={css(vhItemSubtitle)}>
+                    <Trans i18nKey='target'>Target</Trans>: {item.targetOrganisation.name}
+                  </div>
                 </div>
                 {item.published ? (
-                  <div className={css(vhItemStatus)}>Pushed</div>
+                  <div className={css(vhItemStatus)}><Trans i18nKey='pushed'>Pushed</Trans></div>
                 ) : (
-                  <div className={css(vhItemStatus)}>{item.createdTime === item.updatedTime ? 'Created' : 'Edited'}</div>
+                  <div className={css(vhItemStatus)}>
+                    {item.createdTime === item.updatedTime ?
+                      <Trans i18nKey='created'>Created</Trans>
+                      :
+                      <Trans i18nKey='edited'>Edited</Trans>
+                    }
+                  </div>
                 )}
               </div>
             );
@@ -64,7 +77,7 @@ const ViewHistoryModal: FC<ViewHistoryModal> = ({ handleCloseModal, card }) => {
           onPress={handleCloseModal}
           styles={[modalBtnStyles]}
         >
-          Okay
+          <Trans i18nKey='okay'>Okay</Trans>
         </Button>
       </div>
     </Modal>

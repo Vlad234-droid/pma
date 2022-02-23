@@ -7,6 +7,7 @@ import { Page } from 'pages';
 import { buildPath } from 'features/Routes/utils';
 import { paramsReplacer } from 'utils';
 import { IconButton } from 'components/IconButton';
+import { Trans } from 'components/Translation';
 import { NoTips, TipsCard } from 'features/Tips';
 
 export const TIPS_ADMINISTRATION = 'tips-administration';
@@ -39,7 +40,7 @@ const TipsAdministration: FC = () => {
           iconProps={{ invertColors: true }}
           iconStyles={iconStyle}
         >
-          <span>Create new tip</span>
+          <span><Trans i18nKey='create_new_tip'>Create new tip</Trans></span>
         </IconButton>
       </div>
 

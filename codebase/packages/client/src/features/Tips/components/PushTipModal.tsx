@@ -2,6 +2,7 @@ import React, { FC, useState } from 'react';
 import { useStyle, Rule, Modal, Button } from '@dex-ddl/core';
 import { TipsProps } from '../types';
 import success from 'images/success.jpg';
+import { Trans } from 'components/Translation';
 
 export type PushTipModalProps = {
   handleCloseModal: () => void;
@@ -28,26 +29,30 @@ const PushTipModal: FC<PushTipModalProps> = ({ card, handleCloseModal, handleCon
       {successText ? (
         <div className={css(modalInner)}>
           <img src={success} alt='success' />
-          <div className={css(modalTitle)}>Done!</div>
-          <div className={css(modalSubTitleStyle)}>Tip pushed successfully.</div>
+          <div className={css(modalTitle)}><Trans i18nKey='done'>Done</Trans>!</div>
+          <div className={css(modalSubTitleStyle)}>
+            <Trans i18nKey='tip_pushed_successfully'>Tip pushed successfully</Trans>.
+          </div>
           <div className={css(modalBtnsWrap)}>
             <Button onPress={handleCloseModal} styles={[modalBtn, { margin: '0 auto' }]}>
-              Close
+              <Trans i18nKey='close'>Close</Trans>
             </Button>
           </div>
         </div>
       ) : (
         <div className={css(modalInner)} data-test-id={PUSH_TIP_MODAL}>
-          <div className={css(modalTitle)}>Push Tip</div>
-          <div className={css(modalSubTitleStyle)}>Do you want to push the below Tip?</div>
-          <div className={css(modalText)}>
-            <span className={css({ fontWeight: 700 })}>Title:</span> {card.title}
+          <div className={css(modalTitle)}><Trans i18nKey='push_tip'>Push Tip</Trans></div>
+          <div className={css(modalSubTitleStyle)}>
+            <Trans i18nKey='do_you_want_to_push_the_below_tip'>Do you want to push the below Tip</Trans>?
           </div>
           <div className={css(modalText)}>
-            <span className={css({ fontWeight: 700 })}>Description:</span> {card.description}
+            <span className={css({ fontWeight: 700 })}><Trans i18nKey='title'>Title</Trans>:</span> {card.title}
           </div>
           <div className={css(modalText)}>
-            <span className={css({ fontWeight: 700 })}>Target:</span> {card.targetOrganisation.name}
+            <span className={css({ fontWeight: 700 })}><Trans i18nKey='description'>Description</Trans>:</span> {card.description}
+          </div>
+          <div className={css(modalText)}>
+            <span className={css({ fontWeight: 700 })}><Trans i18nKey='target'>Target</Trans>:</span> {card.targetOrganisation.name}
           </div>
           <div className={css(modalBtnsWrap)}>
             <Button
@@ -56,10 +61,10 @@ const PushTipModal: FC<PushTipModalProps> = ({ card, handleCloseModal, handleCon
               mode='inverse'
               styles={[modalBtn, { border: `1px solid ${theme.colors.tescoBlue}` }]}
             >
-              Cancel
+              <Trans i18nKey='cancel'>Cancel</Trans>
             </Button>
             <Button data-test-id={CONFIRM_PUSH_BTN} onPress={handlePushTip} styles={[modalBtn]}>
-              Confirm
+              <Trans i18nKey='confirm'>Confirm</Trans>
             </Button>
           </div>
         </div>

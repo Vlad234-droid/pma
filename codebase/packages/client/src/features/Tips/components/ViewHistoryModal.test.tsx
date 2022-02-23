@@ -36,5 +36,6 @@ describe('View history modal', () => {
     fireEvent.click(closeBtn);
 
     expect(handleCloseModal).toHaveBeenCalledTimes(1);
+    // expect(await viewHistoryModal).not.toBeInTheDocument();
   });
 });

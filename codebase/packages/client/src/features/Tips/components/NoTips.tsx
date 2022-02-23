@@ -2,6 +2,7 @@ import React, { FC, Fragment } from 'react';
 import { useStyle, CreateRule, useBreakpoints, Theme } from '@dex-ddl/core';
 import { TileWrapper } from 'components/Tile';
 import { Icon } from 'components/Icon';
+import { Trans } from 'components/Translation';
 
 export const NO_TIPS_TILE = 'no-tips-tile';
 
@@ -20,12 +21,12 @@ const NoTips: FC = () => {
             </div>
             <div className={css({})}>
               <div className={css(cardTitleStyle({mobileScreen, theme}))}>
-                Please create your first tip to be able to push it to colleagues.
+                <Trans i18nKey='please_create_your_first_tip'>Please create your first tip to be able to push it to colleagues</Trans>.
               </div>
               <div className={css(cardTextleStyle({mobileScreen, theme}))}>
-                Tips should be also helpful to transition from the current system to the new one. They should offer
+                <Trans i18nKey='tips_should_be_also_helpful'>Tips should be also helpful to transition from the current system to the new one. They should offer
                 guidance on how the application functionalities can be used or as an alert for upcoming events
-                (reviews).
+                (reviews)</Trans>.
               </div>
             </div>
           </div>

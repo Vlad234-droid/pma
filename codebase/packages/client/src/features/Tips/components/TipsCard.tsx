@@ -10,6 +10,7 @@ import { formatDateStringFromISO } from 'utils/date';
 import { TipsProps } from '../types';
 import { PushTipModal, ViewHistoryModal } from '.';
 import { TileWrapper } from 'components/Tile';
+import { Trans } from 'components/Translation';
 import tipCardImage from 'images/tipCard.png';
 
 export type TipsCardProps = {
@@ -69,27 +70,28 @@ const TipsCard: FC<TipsCardProps> = ({ card }) => {
             <div className={css(tipText({mobileScreen, theme}))}>{card.description}</div>
             <div className={css({ marginTop: '8px', display: 'flex' })}>
               <div className={css(lastPushStyle({mobileScreen, theme}))}>
-                Last push: {card.published ? tipPushedTime : 'was not pushed'}
+                <Trans i18nKey='last_push'>Last push</Trans>: {card.published ? tipPushedTime : <Trans i18nKey='was_not_pushed'>was not pushed</Trans>}
               </div>
               <div
                 data-test-id={VIEW_HISTORY_BTN}
                 className={css(viewHistoryStyle({mobileScreen, theme}))}
                 onClick={handleShowViewHistoryModal}
               >
-                View history
+                <Trans i18nKey='view_history'>View history</Trans>
               </div>
             </div>
           </div>
           <div className={css(cardRightBlock({mobileScreen}))}>
             <div className={css(targetStyle({mobileScreen, theme}))}>
-              <span className={css({ color: theme.colors.tescoBlue })}>Target:</span> {card.targetOrganisation.name}
+              <span className={css({ color: theme.colors.tescoBlue })}>
+                <Trans i18nKey='target'>Target</Trans>:</span> {card.targetOrganisation.name}
             </div>
             <div className={css(cardControls)}>
               <Button mode='inverse' onPress={handleEditTip} styles={[cardButton]}>
-                Edit
+                <Trans i18nKey='edit'>Edit</Trans>
               </Button>
               <Button data-test-id={PUSH_TIP_BTN} onPress={handlePushTip} styles={[cardButton]}>
-                Push
+                <Trans i18nKey='push'>Push</Trans>
               </Button>
             </div>
           </div>
