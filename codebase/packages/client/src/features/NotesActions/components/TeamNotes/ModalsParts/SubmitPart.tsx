@@ -6,8 +6,9 @@ import { FoldersWithNotesTypesTEAM } from 'features/NotesActions/type';
 import { GenericItemField } from 'components/GenericForm';
 import { Input, Item, Select, Textarea } from 'components/Form';
 import defaultImg from 'images/default.png';
-import { getNotes, getFolder } from 'utils/note';
+import { getNotes, getFolder, addNewFolderId } from 'utils';
 import { useTranslation } from 'components/Translation';
+import get from 'lodash.get';
 
 type SubmitPartProps = {
   selectedPerson: PeopleTypes;
@@ -92,6 +93,7 @@ export const SubmitPart: FC<SubmitPartProps> = ({
                     options={field_options}
                     placeholder={item.placeholder}
                     onChange={(value) => {
+                      if (get(values, 'folderTitle')) setValue('folderTitle', '', { shouldValidate: false });
                       setValue('folder', value);
                       trigger('folder');
                     }}
@@ -116,7 +118,7 @@ export const SubmitPart: FC<SubmitPartProps> = ({
                 />
               );
             })}
-        {values.folder !== '' && values.folder === 'id_001' && (
+        {get(values, 'folder') === addNewFolderId && (
           <GenericItemField
             key={getNotes(foldersWithNotesTEAM, t)?.option.id}
             name={`folderTitle`}

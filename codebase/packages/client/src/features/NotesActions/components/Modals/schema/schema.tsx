@@ -1,4 +1,5 @@
 import * as Yup from 'yup';
+import { addNewFolderId } from 'utils';
 
 export const schemaNotes = Yup.object().shape({
   //@ts-ignore
@@ -8,7 +9,7 @@ export const schemaNotes = Yup.object().shape({
   folderTitle: Yup.string()
     .notRequired()
     .when('folder', {
-      is: (val) => val === 'id_001',
+      is: (val) => val === addNewFolderId,
       then: Yup.string().required('Title is a required field'),
     }),
 });
@@ -23,7 +24,7 @@ export const schemaTEAMNotes = Yup.object().shape({
   folderTitle: Yup.string()
     .notRequired()
     .when('folder', {
-      is: (val) => val === 'id_001',
+      is: (val) => val === addNewFolderId,
       then: Yup.string().required('Title is a required field'),
     }),
 });
