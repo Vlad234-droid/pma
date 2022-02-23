@@ -8,6 +8,7 @@ export type Props = {
   iconGraphic: IconProps['graphic'];
   title: string;
   data?: string;
+  type?: string;
   date?: string;
   description?: string;
   customStyle?: React.CSSProperties | {};

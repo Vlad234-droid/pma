@@ -32,22 +32,31 @@ const Widgets: FC<Props> = () => {
   const dates = pdpSelector && pdpSelector.map((el) => el.achievementDate);
   const addedDatePDP = formatDateString(minDate(dates) || '', DATE_STRING_FORMAT);
 
+  enum widgetTypes {
+    PDP = 'pdp',
+    FEEDBACK = 'feedback',
+    NOTES = 'notes',
+  }
+
   const widgets: SecondaryWidgetProps[] = [
     {
       iconGraphic: 'list',
       title: t('personal_development_plan', 'Personal Development Plan'),
+      type: widgetTypes.PDP,
       customStyle: { flex: '2 1 110px' },
       onClick: () => navigate(buildPath(Page.PERSONAL_DEVELOPMENT_PLAN)),
     },
     {
       iconGraphic: 'chatSq',
       title: t('feedback', 'Feedback'),
+      type: widgetTypes.FEEDBACK,
       customStyle: { flex: '2 1 110px' },
       onClick: () => navigate(buildPath(Page.FEEDBACK)),
     },
     {
       iconGraphic: 'edit',
       title: t('My Notes'),
+      type: widgetTypes.NOTES,
       customStyle: { flex: '2 1 110px' },
       onClick: () => navigate(buildPath(Page.NOTES)),
     },
@@ -66,7 +75,7 @@ const Widgets: FC<Props> = () => {
       )}
 
       {widgets.map((props, idx) => {
-        if (props.title === t('personal_development_plan', 'Personal Development Plan')) {
+        if (props.type === widgetTypes.PDP) {
           return <SecondaryWidget key={idx} {...props} date={addedDatePDP} />;
         }
 
