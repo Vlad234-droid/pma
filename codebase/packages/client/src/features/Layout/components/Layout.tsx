@@ -1,16 +1,40 @@
-import React, { FC, useMemo } from 'react';
+import React, { FC, useContext, useMemo } from 'react';
 import { useLocation, useNavigate, matchPath } from 'react-router-dom';
 import { Rule, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { pages } from 'pages';
 import { buildPath } from 'features/Routes/utils';
+import { CanPerform, role } from 'features/Permission';
+import AccessDenied from 'components/AccessDenied';
 import { Header } from 'components/Header';
+import authContext from 'contexts/authContext';
 
 export const TEST_ID = 'layout-wrapper';
+
+const notHaveAccessMessage = `
+  not_have_access_to_this_system
+  
+  not_using_system_at_the_moment
+  
+  raise_a_ticket_to_access
+  
+   [go_to_ourtesco_com](https://ourtesco.com)
+`;
+
+const systemNotAvailableMessage = `
+   not_have_access_to_this_system
+   
+   system_not_available_at_the_moment
+   
+   please_try_again
+   
+   [go_to_ourtesco_com](https://ourtesco.com)
+  `;
 
 const Layout: FC = ({ children }) => {
   const { css } = useStyle();
   const navigate = useNavigate();
   const { pathname } = useLocation();
+  const { error } = useContext(authContext);
 
   const { title, withHeader, backPath, withIcon, iconName } = useMemo(() => {
     const page = Object.keys(pages).find((page) => matchPath(page, pathname)) || '';
@@ -20,18 +44,26 @@ const Layout: FC = ({ children }) => {
   const handleBack = (backPath = '/') => navigate(backPath, { replace: true });
 
   return (
-    <div data-test-id={TEST_ID} className={css(layoutRule)}>
-      {/*TODO: use separate component*/}
-      {withHeader && (
-        <Header
-          title={title}
-          withIcon={withIcon}
-          iconName={iconName}
-          onBack={backPath ? () => handleBack(buildPath(backPath)) : undefined}
-        />
+    <CanPerform
+      perform={[role.COLLEAGUE]}
+      yes={() => (
+        <div data-test-id={TEST_ID} className={css(layoutRule)}>
+          {/*TODO: use separate component*/}
+          {withHeader && (
+            <Header
+              title={title}
+              withIcon={withIcon}
+              iconName={iconName}
+              onBack={backPath ? () => handleBack(buildPath(backPath)) : undefined}
+            />
+          )}
+          {children}
+        </div>
       )}
-      {children}
-    </div>
+      no={() => (
+        <AccessDenied massage={error?.code === 'SERVER_ERROR' ? systemNotAvailableMessage : notHaveAccessMessage} />
+      )}
+    />
   );
 };
 const layoutRule: Rule = () => {

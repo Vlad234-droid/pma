@@ -16,22 +16,14 @@ const Actions: FC<Props> = ({ draftCount, waitingCount }) => {
   return (
     <TileWrapper customStyle={tileWrapperStyles}>
       <div data-test-id='actions' className={css(wrapperStyles)}>
-        <div className={css(titleStyles)}>
-          {t('your_actions', 'Your actions')}
-        </div>
+        <div className={css(titleStyles)}>{t('your_actions', 'Your actions')}</div>
         <div className={css(contentStyles)}>
           <div className={css(blockStyles)}>
-            <div className={css(countStyles, { color: colors.pending })}>
-              {waitingCount}
-            </div>
-            <div className={css(subtitleStyles)}>
-              {t('your_pending_actions', 'Your pending actions')}
-            </div>
+            <div className={css(countStyles, { color: colors.pending })}>{waitingCount}</div>
+            <div className={css(subtitleStyles)}>{t('your_pending_actions', 'Your pending actions')}</div>
           </div>
           <div className={css(blockStyles)}>
-            <div className={css(countStyles, { color: colors.base })}>
-              {draftCount}
-            </div>
+            <div className={css(countStyles, { color: colors.base })}>{draftCount}</div>
             <div className={css(subtitleStyles)}>
               {t('your_colleagues_pending_actions', 'Your colleagues pending actions')}
             </div>

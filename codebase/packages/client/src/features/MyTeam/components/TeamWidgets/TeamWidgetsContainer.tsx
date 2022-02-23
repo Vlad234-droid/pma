@@ -10,7 +10,7 @@ import {
 } from '@pma/store';
 
 import useDispatch from 'hooks/useDispatch';
-import { SortBy} from 'features/Filters';
+import { SortBy } from 'features/Filters';
 
 import TeamWidgets from './TeamWidgets';
 import { View } from '../../config/types';
@@ -27,12 +27,13 @@ const TeamWidgetsContainer: FC<Props> = ({ view, searchValue, sortValue }) => {
   // @ts-ignore
   const colleagues = useSelector((state) => currentSelector(state, searchValue, sortValue), shallowEqual) || [];
   const { employeeWithPendingApprovals, employeePendingApprovals } =
-  useSelector((state) => getPendingEmployees(state), shallowEqual) || {};
+    useSelector((state) => getPendingEmployees(state), shallowEqual) || {};
   // @ts-ignore
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const dispatch = useDispatch();
 
-  const loadManagers = () => dispatch(ManagersActions.getManagers({ colleagueUuid, fullTeam: view === View.FULL_TEAM }));
+  const loadManagers = () =>
+    dispatch(ManagersActions.getManagers({ colleagueUuid, fullTeam: view === View.FULL_TEAM }));
 
   return (
     <TeamWidgets

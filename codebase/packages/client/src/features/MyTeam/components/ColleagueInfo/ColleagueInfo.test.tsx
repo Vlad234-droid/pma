@@ -19,7 +19,7 @@ describe('<ColleagueInfo />', () => {
       lastName: 'mocked_manager_last_name',
       middleName: null,
       businessType: 'mocked_manager_business_type',
-    }
+    },
   };
   describe('#render', () => {
     it('should render wrapper', () => {
