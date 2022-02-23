@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState, useMemo } from 'react';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Input, Item, Textarea } from 'components/Form';
@@ -108,13 +108,22 @@ const Form: FC<Props> = ({
     },
   ];
 
+  const pdpGoal = useMemo(() => {
+    if (currentUUID) return [pdpList?.find((item) => item?.uuid === currentUUID)] || [];
+    return [];
+  }, [currentUUID]);
+
+  const isLessThanMaxGoals = pdpList?.length + 1 >= maxGoals;
+
+  const displaySaveBtn = pdpList?.length + 1 !== maxGoals && pdpList?.length + 1 < maxGoals && !currentUUID;
+
   return (
     <React.Fragment>
       {pdpList && (
         <div className={css(goalListBlock)}>
           {pdpList.length < 1 || !pdpList ? (
             <div className={`${css(goal)} ${css(defaultGoalItem)}`}>Goal 1</div>
-          ) : (
+          ) : !currentUUID ? (
             pdpList.map((el, idx) => {
               return (
                 <React.Fragment key={el.uuid + idx}>
@@ -143,6 +152,18 @@ const Form: FC<Props> = ({
                 </React.Fragment>
               );
             })
+          ) : (
+            pdpGoal?.map((el, idx) => (
+              <React.Fragment key={el.uuid + idx}>
+                <div
+                  key={el?.uuid}
+                  onClick={() => setCurrentGoal(el)}
+                  className={`${css(goal)} ${css(defaultGoalItem)}`}
+                >
+                  Goal {el?.number}
+                </div>
+              </React.Fragment>
+            ))
           )}
         </div>
       )}
@@ -245,21 +266,16 @@ const Form: FC<Props> = ({
           );
         })}
       </form>
-      <div className={css(applyBlock({ mobileScreen }))}>
-        {
-          <Button
-            isDisabled={!formState.isValid}
-            onPress={() => setConfirmModal(!confirmSaveModal)}
-            styles={
-              pdpList?.length + 1 === maxGoals || pdpList?.length + 1 > maxGoals
-                ? [customBtnFullWidth]
-                : [customBtn({ mobileScreen })]
-            }
-          >
-            Save & Exit
-          </Button>
-        }
-        {pdpList?.length + 1 !== maxGoals && pdpList?.length + 1 < maxGoals && (
+      <div className={css(applyBlock({ mobileScreen, currentUUID }))}>
+        <Button
+          isDisabled={!formState.isValid}
+          onPress={() => setConfirmModal(!confirmSaveModal)}
+          styles={isLessThanMaxGoals ? [customBtnFullWidth] : [customBtn({ mobileScreen })]}
+        >
+          Save & Exit
+        </Button>
+
+        {displaySaveBtn && (
           <Button
             data-test-id={SUBMIT_TEST_ID}
             isDisabled={!formState.isValid}
@@ -324,11 +340,13 @@ const customBtn: CreateRule<{ mobileScreen: boolean }> = (props) => {
   };
 };
 
-const applyBlock: CreateRule<{ mobileScreen: boolean }> = (props) => {
-  const { mobileScreen } = props;
+const applyBlock: CreateRule<{ mobileScreen: boolean; currentUUID: string | undefined }> = ({
+  mobileScreen,
+  currentUUID,
+}) => {
   return {
     display: 'flex',
-    justifyContent: 'space-between',
+    justifyContent: currentUUID ? 'center' : 'space-between',
     alignItems: 'center',
     marginTop: '32px',
     flexDirection: mobileScreen ? 'column' : 'row',
