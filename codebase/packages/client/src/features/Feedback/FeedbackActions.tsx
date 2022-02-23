@@ -227,7 +227,7 @@ const FeedbackActions: FC = () => {
             <Select
               options={TREATMENT_FIELD_OPTIONS}
               name={'treatment-options'}
-              placeholder={'Choose tone of voice'}
+              placeholder={t('choose_tone_of_voice', 'Choose tone of voice')}
               value={treatmentValue}
               onChange={createToneOfVoiceHandler}
             />

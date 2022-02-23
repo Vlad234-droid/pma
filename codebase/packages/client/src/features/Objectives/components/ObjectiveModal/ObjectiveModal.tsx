@@ -5,7 +5,7 @@ import { FormType } from '@pma/store';
 import { Button, Icon, useBreakpoints, useStyle } from '@dex-ddl/core';
 
 import { Status } from 'config/enum';
-import { Trans } from 'components/Translation';
+import { Trans, useTranslation } from 'components/Translation';
 import { Icon as IconComponent } from 'components/Icon';
 import { StepIndicatorBasic } from 'components/StepIndicator/StepIndicator';
 import { Input, Item, Select, Textarea } from 'components/Form';
@@ -53,6 +53,7 @@ export const ObjectiveModal: FC<Props> = ({
   const { css, theme } = useStyle();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+  const { t } = useTranslation();
 
   const {
     formState: { isValid },
@@ -175,7 +176,7 @@ export const ObjectiveModal: FC<Props> = ({
                   )}
                   Element={Select}
                   options={values}
-                  placeholder={description}
+                  placeholder={description || t('please_select', 'Please select')}
                   value={value}
                 />
               );

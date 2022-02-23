@@ -38,9 +38,9 @@ const Select: FC<SelectField> = ({
     setOpen((isOpen) => !isOpen);
   };
 
-  const handleSelect = (selected: Option) => {
+  const handleSelect = (event, selected: Option) => {
     setSelected(selected);
-    onChange(selected.value);
+    onChange({...event, target: { ...event.target, value: selected.value }});
     setOpen(false);
   };
 
@@ -77,7 +77,7 @@ const Select: FC<SelectField> = ({
               type='button'
               key={item.value}
               className={css(optionStyles)}
-              onClick={() => handleSelect(item)}
+              onClick={(event) => handleSelect(event, item)}
             >
               {item.label}
             </button>
@@ -110,6 +110,7 @@ const fieldStyles: Rule = ({ theme }) => ({
     border: `1px solid ${theme.colors.tescoBlue}`,
   },
   cursor: 'pointer',
+  minHeight: '42px',
 });
 
 const fieldActiveStyles: Rule = ({ theme }) => ({
