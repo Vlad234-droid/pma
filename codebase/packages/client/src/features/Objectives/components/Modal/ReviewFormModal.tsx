@@ -248,10 +248,11 @@ const ReviewFormModal: FC<ReviewFormModal> = ({ reviewType, onClose }) => {
               const value = formValues[key] ? formValues[key] : '';
 
               // todo temporary solution. Do not have full permission requirements. might be wrapper around field
+              const keyVisibleOnEmptyValue = ExpressionValueType.OVERALL_RATING;
               let componentReadonly = readonly;
-              if (expression?.auth?.permission?.read?.length && !value) {
+              if (expression?.auth?.permission?.read?.length && !value && key !== keyVisibleOnEmptyValue) {
                 return null;
-              } else if (expression?.auth?.permission?.read?.length && value) {
+              } else if (expression?.auth?.permission?.read?.length) {
                 componentReadonly = true;
               }
               // todo end temporary solution
