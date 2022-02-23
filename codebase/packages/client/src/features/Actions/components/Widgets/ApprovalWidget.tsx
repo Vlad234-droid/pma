@@ -8,7 +8,8 @@ import { filterApprovedFn } from 'features/Actions/utils';
 import { useSelector } from 'react-redux';
 import { colleagueUUIDSelector, ReviewsActions } from '@pma/store';
 import useDispatch from 'hooks/useDispatch';
-import { DeclineModal, ApproveModal, SuccessModal } from '../Modal';
+import { DeclineModal, ApproveModal } from '../Modal';
+import { useSuccessModalContext } from '../../context/successModalContext';
 
 type Props = {
   isDisabled: boolean;
@@ -19,6 +20,7 @@ type Props = {
 export const ApprovalWidget: FC<Props> = ({ isDisabled, reviews, onSave }) => {
   const { css } = useStyle();
   const dispatch = useDispatch();
+  const { setOpened: setIsOpenSuccessModal, reviewStatus, setReviewStatus, setReviewType } = useSuccessModalContext();
 
   const [isOpenDeclinePopup, setIsOpenDeclinePopup] = useState(false);
   const [isOpenApprovePopup, setIsOpenApprovePopup] = useState(false);
@@ -26,16 +28,13 @@ export const ApprovalWidget: FC<Props> = ({ isDisabled, reviews, onSave }) => {
   const [currentReview, setCurrentReview] = useState<Employee | null>(null);
   const currentTimeline = currentReview?.timeline?.filter(filterApprovedFn);
   const colleagueUuid = useSelector(colleagueUUIDSelector);
-  const [reviewSubmitted, setReviewSubmitted] = useState<Status | null>(null);
-  const [reviewType, setReviewType] = useState<ReviewType | null>(null);
-  const [isOpenSuccessModal, setIsOpenSuccessModal] = useState<boolean>(false);
   const [allReviewsProcessed, setAllReviewsProcessed] = useState<boolean>(false);
 
   useEffect(() => {
-    if (reviewSubmitted && allReviewsProcessed) {
+    if (reviewStatus && allReviewsProcessed) {
       setIsOpenSuccessModal(true);
     }
-  }, [reviewSubmitted, allReviewsProcessed]);
+  }, [reviewStatus, allReviewsProcessed]);
 
   useEffect(() => {
     if (declines.length && declines.length === reviews.length) {
@@ -122,7 +121,7 @@ export const ApprovalWidget: FC<Props> = ({ isDisabled, reviews, onSave }) => {
         };
 
         dispatch(ReviewsActions.updateReviewStatus(update));
-        setReviewSubmitted(status);
+        setReviewStatus(status);
         setReviewType(currentTimeline![0].reviewType);
 
         onSave();
@@ -138,12 +137,6 @@ export const ApprovalWidget: FC<Props> = ({ isDisabled, reviews, onSave }) => {
 
   const approveColleagues = updateReviewStatus(Status.APPROVED);
   const declineColleagues = updateReviewStatus(Status.DECLINED);
-
-  const handleCloseSuccessModal = () => {
-    setReviewSubmitted(null);
-    setReviewType(null);
-    setIsOpenSuccessModal(false);
-  };
 
   return (
     <>
@@ -187,13 +180,6 @@ export const ApprovalWidget: FC<Props> = ({ isDisabled, reviews, onSave }) => {
           </div>
         </div>
       </TileWrapper>
-      {isOpenSuccessModal && (
-        <SuccessModal
-          status={reviewSubmitted as Status.DECLINED | Status.APPROVED}
-          review={reviewType as ReviewType}
-          onClose={handleCloseSuccessModal}
-        />
-      )}
     </>
   );
 };

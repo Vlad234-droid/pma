@@ -7,7 +7,8 @@ import { Trans, useTranslation } from 'components/Translation/Translation';
 import { getReviewTypeTitle } from 'features/Actions/utils';
 import { ReviewType, Status } from 'config/enum';
 
-import { ApproveModal, DeclineModal, SuccessModal } from '../Modal';
+import { ApproveModal, DeclineModal } from '../Modal';
+import { useSuccessModalContext } from '../../context/successModalContext';
 
 type Props = {
   reviewType: ReviewType;
@@ -21,8 +22,7 @@ export const Buttons: FC<Props> = ({ reviewType, updateReviewStatus, isDisabled 
   const [isOpenDeclinePopup, setIsOpenDeclinePopup] = useState(false);
   const [isOpenApprovePopup, setIsOpenApprovePopup] = useState(false);
   const title = getReviewTypeTitle(t);
-  const [isOpenSuccessModal, setIsOpenSuccessModal] = useState<boolean>(false);
-  const [reviewSubmitted, setReviewSubmitted] = useState<Status | null>(null);
+  const { setOpened: setIsOpenSuccessModal, setReviewStatus, setReviewType } = useSuccessModalContext();
 
   const approveColleagues = updateReviewStatus(Status.APPROVED)(reviewType);
   const declineColleagues = updateReviewStatus(Status.DECLINED)(reviewType);
@@ -34,20 +34,17 @@ export const Buttons: FC<Props> = ({ reviewType, updateReviewStatus, isDisabled 
   const handleApproveSubmit = (event) => {
     approveColleagues(event);
     setIsOpenApprovePopup(false);
-    setReviewSubmitted(Status.APPROVED);
+    setReviewStatus(Status.APPROVED);
+    setReviewType(reviewType);
     setIsOpenSuccessModal(true);
   };
 
   const handleDeclineSubmit = (hasReason = false, reason?: string) => {
     declineColleagues(hasReason ? reason : '');
     setIsOpenDeclinePopup(false);
-    setReviewSubmitted(Status.DECLINED);
+    setReviewStatus(Status.DECLINED);
+    setReviewType(reviewType);
     setIsOpenSuccessModal(true);
-  };
-
-  const handleCloseSuccessModal = () => {
-    setReviewSubmitted(null);
-    setIsOpenSuccessModal(false);
   };
 
   return (
@@ -118,13 +115,6 @@ export const Buttons: FC<Props> = ({ reviewType, updateReviewStatus, isDisabled 
         )}
         {isOpenApprovePopup && (
           <ApproveModal onSave={handleApproveSubmit} onClose={() => setIsOpenApprovePopup(false)} />
-        )}
-        {isOpenSuccessModal && (
-          <SuccessModal
-            status={reviewSubmitted as Status.DECLINED | Status.APPROVED}
-            review={reviewType as ReviewType}
-            onClose={handleCloseSuccessModal}
-          />
         )}
       </div>
     </div>

@@ -20,6 +20,8 @@ import { SelectAll } from './SelectAll';
 import { ApprovalWidget } from './Widgets';
 import { ColleagueList } from './Colleague';
 import { filterApprovedFn } from '../utils';
+import { SuccessModal } from './Modal';
+import SuccessModalProvider, { SuccessModalConsumer } from '../context/successModalContext';
 
 export const Actions = () => {
   const dispatch = useDispatch();
@@ -94,55 +96,75 @@ export const Actions = () => {
 
   return (
     <>
-      <div className={css(headStyle)}>
-        {!mobileScreen && isWaitingForApproval && (
-          <SelectAll
-            disabled={selectAllDisabled}
-            onChange={handleSelectAll}
-            checked={isCheckAll}
-            indeterminate={indeterminate}
-          />
-        )}
-        <RadioGroup status={status} setStatus={setStatus} />
-        <div className={css(filtersStyle)}>
-          <Filters
-            sortValue={sortValue}
-            onSort={setSortValue}
-            searchValue={searchValue}
-            onSearch={setSearchValue}
-            sortingOptions={options}
-          />
-        </div>
-      </div>
-      <div className={css(bodyStyle)}>
-        <div className={css(optionWrapperStyle)}>
-          <ColleagueList
-            status={status}
-            checkedItems={checkedItems}
-            colleagues={colleagues}
-            handleSelectItem={handleSelectItem}
-          />
-        </div>
-        {mobileScreen && isWaitingForApproval && (
-          <div className={css(selectAllMobileStyle)}>
+      <SuccessModalProvider>
+        <div className={css(headStyle)}>
+          {!mobileScreen && isWaitingForApproval && (
             <SelectAll
               disabled={selectAllDisabled}
               onChange={handleSelectAll}
               checked={isCheckAll}
               indeterminate={indeterminate}
             />
-          </div>
-        )}
-        {isWaitingForApproval && (
-          <div className={css(rightColumnStyle)}>
-            <ApprovalWidget
-              isDisabled={!checkedItems.length}
-              reviews={reviewsForApproval}
-              onSave={() => setCheckedItems([])}
+          )}
+          <RadioGroup status={status} setStatus={setStatus} />
+          <div className={css(filtersStyle)}>
+            <Filters
+              sortValue={sortValue}
+              onSort={setSortValue}
+              searchValue={searchValue}
+              onSearch={setSearchValue}
+              sortingOptions={options}
             />
           </div>
-        )}
-      </div>
+        </div>
+        <div className={css(bodyStyle)}>
+          <div className={css(optionWrapperStyle)}>
+            <ColleagueList
+              status={status}
+              checkedItems={checkedItems}
+              colleagues={colleagues}
+              handleSelectItem={handleSelectItem}
+            />
+          </div>
+          {mobileScreen && isWaitingForApproval && (
+            <div className={css(selectAllMobileStyle)}>
+              <SelectAll
+                disabled={selectAllDisabled}
+                onChange={handleSelectAll}
+                checked={isCheckAll}
+                indeterminate={indeterminate}
+              />
+            </div>
+          )}
+          {isWaitingForApproval && (
+            <div className={css(rightColumnStyle)}>
+              <ApprovalWidget
+                isDisabled={!checkedItems.length}
+                reviews={reviewsForApproval}
+                onSave={() => setCheckedItems([])}
+              />
+            </div>
+          )}
+        </div>
+        <SuccessModalConsumer>
+          {({ isOpen, setOpened, reviewStatus, reviewType, setReviewStatus, setReviewType }) => {
+            if (isOpen && reviewStatus && reviewType) {
+              return (
+                <SuccessModal
+                  review={reviewType}
+                  status={reviewStatus as Status.DECLINED | Status.APPROVED}
+                  onClose={() => {
+                    setOpened(false);
+                    setReviewStatus(null);
+                    setReviewType(null);
+                  }}
+                />
+              );
+            }
+            return null;
+          }}
+        </SuccessModalConsumer>
+      </SuccessModalProvider>
     </>
   );
 };
