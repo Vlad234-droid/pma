@@ -74,13 +74,12 @@ describe('<Select />', () => {
         expect(getByText('mocked_label_2')).toBeInTheDocument();
       });
 
-      fit('should call props.onChange on option click', () => {
+      it('should call props.onChange on option click', () => {
         const { getByTestId, getByText, queryByTestId, queryByText } = render(<Select {...props} />);
 
         fireEvent.click(getByTestId('mocked_name'), { target: {}});
         fireEvent.click(getByText('mocked_label_2'), { target: {}});
 
-        // expect(props.onChange).toHaveBeenCalledWith({ target: { value: 'mocked_value_2' }});
         expect(props.onChange).toHaveBeenCalled();
         expect(queryByTestId('mocked_name-list')).not.toBeInTheDocument();
         expect(queryByText('- mocked_placeholder -')).not.toBeInTheDocument();
