@@ -76,7 +76,8 @@ export const Item: FC<Props> = ({
         </div>
         {withIcon && (
           <span
-            className={css(IconStyle)}
+            //TODO: remove this when Accessibility will be integrated
+            className={css(IconStyle, { display: 'none' })}
             onClick={() => {
               setRecordingState(!recordingState);
               setInputFocus();

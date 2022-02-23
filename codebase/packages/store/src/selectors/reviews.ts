@@ -26,7 +26,7 @@ export const getReviewByTypeSelector = (reviewType: ReviewType) =>
   createSelector(
     reviewsSelector,
     (reviews: any) =>
-      reviews?.data?.filter((review) => review.type === reviewType)?.map((review) => review.properties.mapJson) || [],
+      reviews?.data?.filter((review) => review.type === reviewType)?.map((review) => review?.properties?.mapJson) || [],
   );
 
 export const getReviewPropertiesSelector = (reviewType: ReviewType) =>

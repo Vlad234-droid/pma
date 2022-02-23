@@ -1,1 +1,1 @@
-export { default as downloadCsvFile } from './api';
+export { downloadCsvFile, downloadReportStatistics } from './api';
