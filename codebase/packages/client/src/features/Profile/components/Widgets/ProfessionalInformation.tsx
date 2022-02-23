@@ -93,12 +93,6 @@ const ProfessionalInformation: FC<Props> = ({ user }) => {
           </div>
           <div className={css(bodyBlockStyle)}>
             <span className={css(titleStyle)}>
-              <Trans>Employment</Trans>
-            </span>
-            <span className={css(descriptionStyle)}>{employmentType}</span>
-          </div>
-          <div className={css(bodyBlockStyle)}>
-            <span className={css(titleStyle)}>
               <Trans>Hire date</Trans>
             </span>
             <span className={css(descriptionStyle)}>{hireDate}</span>
