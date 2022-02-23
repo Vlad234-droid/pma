@@ -4,6 +4,7 @@ import {
   colleagueUUIDSelector,
   getTimelineByCodeSelector,
   getTimelineSelector,
+  PDPActions,
   TimelineActions,
   timelineTypesAvailabilitySelector,
 } from '@pma/store';
@@ -19,11 +20,11 @@ const CareerPerformanceContainer: FC = () => {
   const midYearReview = useSelector(getTimelineByCodeSelector(ObjectiveType.MYR, 'me'));
   const endYearReview = useSelector(getTimelineByCodeSelector(ObjectiveType.EYR, 'me'));
   const colleagueUuid = useSelector(colleagueUUIDSelector);
-
   const dispatch = useDispatch();
 
   const loadTimeline = (colleagueUuid: string) => {
     dispatch(TimelineActions.getTimeline({ colleagueUuid }));
+    dispatch(PDPActions.getPDPGoal({}));
   };
 
   return (
