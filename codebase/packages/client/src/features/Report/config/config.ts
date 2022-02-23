@@ -1,4 +1,4 @@
-import { Status, MetaDataReport } from 'config/enum';
+import { Status, MetaDataReport, StatisticsTitlesReportKeys, StatisticsTitlesReport } from 'config/enum';
 
 export const getFieldOptions = (currentYear) => {
   return [
@@ -7,6 +7,23 @@ export const getFieldOptions = (currentYear) => {
     { value: (currentYear - 3).toString(), label: (currentYear - 3).toString() },
   ];
 };
+
+export const getYearsFromCurrentYear = (currentYear) => {
+  return [
+    { value: currentYear.toString(), label: currentYear.toString() },
+    { value: (currentYear - 1).toString(), label: (currentYear - 1).toString() },
+    { value: (currentYear - 2).toString(), label: (currentYear - 2).toString() },
+  ];
+};
+
+export const getRequestParams = (selectedCheckboxes) =>
+  selectedCheckboxes.reduce((acc, item) => {
+    if (item.isChecked) {
+      acc.push(...statisticsReport[item.label]);
+      return acc;
+    }
+    return acc;
+  }, []);
 
 export const listOfStatuses = [
   Status.APPROVED,
@@ -55,4 +72,108 @@ export const metaStatuses = [
   MetaDataReport.ANNIVERSARY_REVIEW_PER_QUARTER_4_PERCENTAGE,
   MetaDataReport.ANNIVERSARY_REVIEW_PER_QUARTER_4_COUNT,
   MetaDataReport.COLLEAGUES_COUNT,
+];
+
+export const statisticsReport = {
+  [StatisticsTitlesReport.COLLEAGUES_COUNT]: [MetaDataReport.COLLEAGUES_COUNT],
+  [StatisticsTitlesReport.OBJECTIVES_SUBMITTED]: [MetaDataReport.OBJECTIVES_SUBMITTED_PERCENTAGE],
+  [StatisticsTitlesReport.OBJECTIVES_APPROVED]: [MetaDataReport.OBJECTIVES_APPROVED_PERCENTAGE],
+  [StatisticsTitlesReport.MID_YEAR_FORMS]: [
+    MetaDataReport.MYR_SUBMITTED_PERCENTAGE,
+    MetaDataReport.MYR_APPROVED_PERCENTAGE,
+  ],
+  [StatisticsTitlesReport.BREAKDOWN_OF_MID_YEAR_RATINGS]: [
+    MetaDataReport.MYR_RATING_BREAKDOWN_BELOW_EXPECTED_PERCENTAGE,
+    MetaDataReport.MYR_RATING_BREAKDOWN_BELOW_EXPECTED_COUNT,
+    MetaDataReport.MYR_RATING_BREAKDOWN_SATISFACTORY_PERCENTAGE,
+    MetaDataReport.MYR_RATING_BREAKDOWN_SATISFACTORY_COUNT,
+    MetaDataReport.MYR_RATING_BREAKDOWN_GREAT_PERCENTAGE,
+    MetaDataReport.MYR_RATING_BREAKDOWN_GREAT_COUNT,
+    MetaDataReport.MYR_RATING_BREAKDOWN_OUTSTANDING_PERCENTAGE,
+    MetaDataReport.MYR_RATING_BREAKDOWN_OUTSTANDING_COUNT,
+  ],
+  [StatisticsTitlesReport.YEAR_END_FORMS]: [
+    MetaDataReport.EYR_SUBMITTED_PERCENTAGE,
+    MetaDataReport.EYR_APPROVED_PERCENTAGE,
+  ],
+  [StatisticsTitlesReport.BREAKDOWN_OF_YEAR_END_RATINGS]: [
+    MetaDataReport.EYR_RATING_BREAKDOWN_BELOW_EXPECTED_PERCENTAGE,
+    MetaDataReport.EYR_RATING_BREAKDOWN_BELOW_EXPECTED_COUNT,
+    MetaDataReport.EYR_RATING_BREAKDOWN_SATISFACTORY_PERCENTAGE,
+    MetaDataReport.EYR_RATING_BREAKDOWN_SATISFACTORY_COUNT,
+    MetaDataReport.EYR_RATING_BREAKDOWN_GREAT_PERCENTAGE,
+    MetaDataReport.EYR_RATING_BREAKDOWN_GREAT_COUNT,
+    MetaDataReport.EYR_RATING_BREAKDOWN_OUTSTANDING_PERCENTAGE,
+    MetaDataReport.EYR_RATING_BREAKDOWN_OUTSTANDING_COUNT,
+  ],
+  [StatisticsTitlesReport.IN_THE_MOMENT_FEEDBACK]: [
+    MetaDataReport.FEEDBACK_REQUESTED_PERCENTAGE,
+    MetaDataReport.FEEDBACK_GIVEN_PERCENTAGE,
+  ],
+  [StatisticsTitlesReport.NEW_TO_BUSINESS]: [MetaDataReport.NEW_TO_BUSINESS_COUNT],
+  [StatisticsTitlesReport.ANNIVERSARY_REVIEWS]: [
+    MetaDataReport.ANNIVERSARY_REVIEW_PER_QUARTER_1_PERCENTAGE,
+    MetaDataReport.ANNIVERSARY_REVIEW_PER_QUARTER_1_COUNT,
+    MetaDataReport.ANNIVERSARY_REVIEW_PER_QUARTER_2_PERCENTAGE,
+    MetaDataReport.ANNIVERSARY_REVIEW_PER_QUARTER_2_COUNT,
+    MetaDataReport.ANNIVERSARY_REVIEW_PER_QUARTER_3_PERCENTAGE,
+    MetaDataReport.ANNIVERSARY_REVIEW_PER_QUARTER_3_COUNT,
+    MetaDataReport.ANNIVERSARY_REVIEW_PER_QUARTER_4_PERCENTAGE,
+    MetaDataReport.ANNIVERSARY_REVIEW_PER_QUARTER_4_COUNT,
+  ],
+};
+
+export const checkboxes = (t) => [
+  {
+    id: '0',
+    label: t(StatisticsTitlesReportKeys.COLLEAGUES_COUNT),
+    isChecked: false,
+  },
+  {
+    id: '1',
+    label: t(StatisticsTitlesReportKeys.OBJECTIVES_SUBMITTED),
+    isChecked: false,
+  },
+  {
+    id: '2',
+    label: t(StatisticsTitlesReportKeys.OBJECTIVES_APPROVED),
+    isChecked: false,
+  },
+  {
+    id: '3',
+    label: t(StatisticsTitlesReportKeys.MID_YEAR_FORMS),
+    isChecked: false,
+  },
+  {
+    id: '4',
+    label: t(StatisticsTitlesReportKeys.BREAKDOWN_OF_MID_YEAR_RATINGS),
+    isChecked: false,
+  },
+  {
+    id: '5',
+    label: t(StatisticsTitlesReportKeys.YEAR_END_FORMS),
+    isChecked: false,
+  },
+  {
+    id: '6',
+    label: t(StatisticsTitlesReportKeys.BREAKDOWN_OF_YEAR_END_RATINGS),
+    isChecked: false,
+  },
+  {
+    id: '7',
+    label: t(StatisticsTitlesReportKeys.IN_THE_MOMENT_FEEDBACK),
+    isChecked: false,
+  },
+
+  {
+    id: '8',
+    label: t(StatisticsTitlesReportKeys.BUSINESS),
+    isChecked: false,
+  },
+
+  {
+    id: '9',
+    label: t(StatisticsTitlesReportKeys.ANNIVERSARY_REVIEWS),
+    isChecked: false,
+  },
 ];

@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { useStyle, useBreakpoints } from '@dex-ddl/core';
 
 import { IconButton } from 'components/IconButton';
-import { Trans, useTranslation } from 'components/Translation';
+import { Trans } from 'components/Translation';
 
 import { ModalGiveFeedbackProps } from '../type';
 import { SuccessModal, SubmitPart, InfoModal } from './index';
@@ -19,7 +19,6 @@ const ModalRespondFeedback: FC<ModalGiveFeedbackProps> = ({
   setFeedbackItems,
 }) => {
   const { css, theme } = useStyle();
-  const { t } = useTranslation();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
 

@@ -1,12 +1,12 @@
 import React, { FC } from 'react';
 import { Rule, useStyle } from '@dex-ddl/core';
+import { Link } from 'react-router-dom';
 
 import { BasicTile } from 'components/Tile';
 import { Icon } from 'components/Icon';
 import { useTranslation } from 'components/Translation';
 import { buildPath } from 'features/Routes';
 import { Page } from 'pages';
-import { Link } from 'react-router-dom';
 
 const HelpWidgets: FC = () => {
   const { css } = useStyle();

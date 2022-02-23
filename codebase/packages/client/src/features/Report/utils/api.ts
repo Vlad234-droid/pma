@@ -14,7 +14,7 @@ async function getData(url) {
   return await response;
 }
 
-const downloadCsvFile = async () => {
+export const downloadCsvFile = async () => {
   getData(`${BASE_URL_API}reports/linked-objective-report/formats/excel?`).then((resp) =>
     resp.blob().then((blob) => {
       const a = document.createElement('a');
@@ -27,4 +27,22 @@ const downloadCsvFile = async () => {
   );
 };
 
-export default downloadCsvFile;
+async function getReportStatistics(url, { year, topics }) {
+  const params = new URLSearchParams(topics.map((topic, index) => [`topics_in[${index}]`, topic]));
+  params.append('year', year);
+  const response = await fetch(url + params);
+  return await response;
+}
+
+export const downloadReportStatistics = async (queryParams) => {
+  getReportStatistics(`${BASE_URL_API}reports/statistics-report/formats/excel?`, queryParams).then((resp) =>
+    resp.blob().then((blob) => {
+      const a = document.createElement('a');
+      a.href = window.URL.createObjectURL(blob);
+      a.download = 'Statistics Report.xlsx';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    }),
+  );
+};

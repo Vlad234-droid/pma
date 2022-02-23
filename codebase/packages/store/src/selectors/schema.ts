@@ -102,6 +102,18 @@ export const getExpressionListenersKeys =
         })
         .map(({ key }) => key);
     });
+export const getExpressionRequestKey =
+  (type: ReviewType, withForms = true) =>
+  (expressionValue: string) =>
+    createSelector(getReviewSchema(type, withForms), (schema: any) => {
+      const { components } = schema;
+      return (
+        components?.find((component) => {
+          const listenerValues: string[] = get(component?.expression, `${ExpressionType.REQUEST}.rating`, []);
+          return listenerValues?.length && listenerValues.includes(expressionValue) && component?.key;
+        })?.key || ''
+      );
+    });
 
 export const getPDPSchema = (type: PDPType) =>
   createSelector(schemaPDPSelector, (schema: any) => {

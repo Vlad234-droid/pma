@@ -96,8 +96,10 @@ const OuterGiveFeedBack: FC = () => {
           <FilterModal isOpen={filterModal} filter={filter} setFilter={setFilter} toggleOpen={setFilterModal} />
         </div>
       </div>
-      <div className={css(draftsStyle)}>
-        <FeedbackBlock list={feedbackList} canEdit={status === FeedbackStatus.DRAFT} />
+      <div>
+        <div className={css(draftsStyle)}>
+          <FeedbackBlock list={feedbackList} canEdit={status === FeedbackStatus.DRAFT} />
+        </div>
       </div>
     </div>
   );

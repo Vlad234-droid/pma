@@ -9,8 +9,8 @@ export const transformReviewsToObjectives = (
     const status = reviewItem.status;
     const declineReason = status === Status.DECLINED ? reviewItem?.changeStatusReason : '';
     const objective = reviewItem?.properties?.mapJson;
-    const subTitle = objective['title'] || '';
-    const description = objective['description'] || '';
+    const subTitle = objective?.['title'] || '';
+    const description = objective?.['description'] || '';
     let explanations: T.Explanation[] = [];
 
     if (formElements) {
@@ -19,7 +19,7 @@ export const transformReviewsToObjectives = (
         .map((component) => {
           const { key, label } = component;
 
-          return { title: label, description: objective[key] };
+          return { title: label, description: objective?.[key] || '' };
         });
     }
 

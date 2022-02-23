@@ -10,6 +10,15 @@ import { LINKS } from 'config/constants';
 
 import HelpWidgets from './HelpWidgets';
 
+jest.mock('react-router-dom', () => {
+  return {
+    __esModule: true,
+    Link: ({ children }) => {
+      return <div>{children}</div>;
+    },
+  };
+});
+
 describe('<HelpWidgets />', () => {
   describe('#render', () => {
     it('should render wrapper', () => {
@@ -24,17 +33,6 @@ describe('<HelpWidgets />', () => {
       expect(getByTestId('question-tile')).toBeInTheDocument();
       expect(getByTestId('question')).toBeInTheDocument();
       expect(getByText('Want to learn more about Your Contribution at Tesco?')).toBeInTheDocument();
-    });
-  });
-
-  describe('#handlers', () => {
-    it('should call window.open', () => {
-      window.open = jest.fn();
-      const { getByTestId } = render(<HelpWidgets />);
-
-      fireEvent.click(getByTestId('question-tile'));
-
-      expect(window.open).toHaveBeenCalledWith(LINKS.help, '_blank');
     });
   });
 });

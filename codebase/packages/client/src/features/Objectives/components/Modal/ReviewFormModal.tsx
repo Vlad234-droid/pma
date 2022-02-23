@@ -9,6 +9,7 @@ import {
   ExpressionValueType,
   FormType,
   getExpressionListenersKeys,
+  getExpressionRequestKey,
   getReviewByTypeSelector,
   getReviewSchema,
   getTimelineByReviewTypeSelector,
@@ -71,11 +72,14 @@ const ReviewFormModal: FC<ReviewFormModal> = ({ reviewType, onClose }) => {
   const dispatch = useDispatch();
   const [review] = useSelector(getReviewByTypeSelector(reviewType));
   const formValues = review || {};
-  const { loading: reviewLoading, loaded: reviewLoaded } = useSelector(reviewsMetaSelector);
+  const { loading: reviewLoading, loaded: reviewLoaded, updated: reviewUpdated } = useSelector(reviewsMetaSelector);
   const { loading: schemaLoading, loaded: schemaLoaded } = useSelector(schemaMetaSelector);
   const schema = useSelector(getReviewSchema(reviewType));
   const overallRatingListeners: string[] = useSelector(
     getExpressionListenersKeys(reviewType)(ExpressionValueType.OVERALL_RATING),
+  );
+  const overallRatingRequestKey: string = useSelector(
+    getExpressionRequestKey(reviewType)(ExpressionValueType.OVERALL_RATING),
   );
   const timelineReview = useSelector(getTimelineByReviewTypeSelector(reviewType, 'me'));
   const readonly = [Status.WAITING_FOR_APPROVAL, Status.APPROVED].includes(timelineReview.status);
@@ -97,6 +101,7 @@ const ReviewFormModal: FC<ReviewFormModal> = ({ reviewType, onClose }) => {
     formState: { isValid },
     reset,
     watch,
+    setValue,
   } = methods;
 
   const onSaveDraft = () => {
@@ -134,7 +139,7 @@ const ReviewFormModal: FC<ReviewFormModal> = ({ reviewType, onClose }) => {
     setSuccessModal(true);
   };
 
-  const updateRatingSchemaRequest = useCallback(
+  const updateRatingReviewRequest = useCallback(
     (review) => {
       const permitToOverallRatingRequest = overallRatingListeners?.length
         ? overallRatingListeners?.every((listener) => review[listener])
@@ -143,41 +148,39 @@ const ReviewFormModal: FC<ReviewFormModal> = ({ reviewType, onClose }) => {
         const filteredData = Object.fromEntries(
           Object.entries(review).filter(([key]) => overallRatingListeners?.includes(key)),
         );
-        dispatch(SchemaActions.updateRatingSchema({ type: reviewType, fields: filteredData }));
+        dispatch(ReviewsActions.updateRatingReview({ type: reviewType, number: 1, fields: filteredData }));
       }
     },
     [overallRatingListeners],
   );
 
   useEffect(() => {
-    if (!reviewLoaded) {
-      dispatch(
-        ReviewsActions.getColleagueReviews({ pathParams: { colleagueUuid: info.colleagueUUID, cycleUuid: 'CURRENT' } }),
-      );
-    }
-  }, [reviewLoaded]);
-
-  useEffect(() => {
-    if (!schemaLoaded && reviewLoaded) {
-      dispatch(SchemaActions.getSchema({ colleagueUuid: info.colleagueUUID }));
-    }
-  }, [schemaLoaded, reviewLoaded]);
-
-  useEffect(() => {
-    if (reviewLoaded && schemaLoaded && review && !successModal) {
-      updateRatingSchemaRequest(review);
-      reset(review);
-    }
-  }, [review, reviewLoaded, schemaLoaded, successModal]);
+    dispatch(
+      ReviewsActions.getColleagueReviews({ pathParams: { colleagueUuid: info.colleagueUUID, cycleUuid: 'CURRENT' } }),
+    );
+    dispatch(SchemaActions.getSchema({ colleagueUuid: info.colleagueUUID }));
+  }, []);
 
   useEffect(() => {
     const subscription = watch((review, { name = '' }) => {
-      if (overallRatingListeners.includes(name)) {
-        updateRatingSchemaRequest(review);
+      if (overallRatingListeners?.includes(name)) {
+        updateRatingReviewRequest(review);
       }
     });
     return () => subscription.unsubscribe();
   }, [watch, reviewLoaded, schemaLoaded, overallRatingListeners]);
+
+  useEffect(() => {
+    if (overallRatingRequestKey && review?.[overallRatingRequestKey]) {
+      setValue(overallRatingRequestKey, review[overallRatingRequestKey]);
+    }
+  }, [reviewUpdated, review, overallRatingRequestKey]);
+
+  useEffect(() => {
+    if (reviewLoaded && review) {
+      reset(review);
+    }
+  }, [reviewLoaded]);
 
   if (reviewLoading && schemaLoading) {
     // todo use loading component when we have
@@ -245,10 +248,11 @@ const ReviewFormModal: FC<ReviewFormModal> = ({ reviewType, onClose }) => {
               const value = formValues[key] ? formValues[key] : '';
 
               // todo temporary solution. Do not have full permission requirements. might be wrapper around field
+              const keyVisibleOnEmptyValue = ExpressionValueType.OVERALL_RATING;
               let componentReadonly = readonly;
-              if (expression?.auth?.permission?.read?.length && !value) {
+              if (expression?.auth?.permission?.read?.length && !value && key !== keyVisibleOnEmptyValue) {
                 return null;
-              } else if (expression?.auth?.permission?.read?.length && value) {
+              } else if (expression?.auth?.permission?.read?.length) {
                 componentReadonly = true;
               }
               // todo end temporary solution

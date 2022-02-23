@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux';
 import { schemaMetaSelector } from '@pma/store/src/selectors/schema';
 import {
   currentUserSelector,
+  filterReviewsByTypeSelector,
   getReviewPropertiesSelector,
   getTimelineByReviewTypeSelector,
   ReviewsActions,
@@ -16,7 +17,6 @@ import { createYupSchema } from 'utils/yup';
 import { ReviewType, Status } from 'config/enum';
 import SuccessModal from 'components/SuccessModal';
 import useReviewSchema from '../../hooks/useReviewSchema';
-import useReviews from '../../hooks/useReviews';
 import { ObjectiveModal } from './ObjectiveModal';
 
 type ObjectivesProps = {
@@ -163,15 +163,20 @@ export type CreateUpdateObjectivesModalProps = {
 };
 
 const CreateUpdateObjectives: FC<CreateUpdateObjectivesModalProps> = ({ onClose, editNumber }) => {
+  const dispatch = useDispatch();
   const { loaded: schemaLoaded, loading: schemaLoading } = useSelector(schemaMetaSelector);
   const { loaded: reviewLoaded, loading: reviewLoading } = useSelector(reviewsMetaSelector);
   const { info } = useSelector(currentUserSelector);
   const pathParams = { colleagueUuid: info.colleagueUUID, type: ReviewType.OBJECTIVE, cycleUuid: 'CURRENT' };
 
-  const [origin] = useReviews({ pathParams });
+  const origin = useSelector(filterReviewsByTypeSelector(ReviewType.OBJECTIVE)) || [];
   const objectives = useSelector(getReviewPropertiesSelector(ReviewType.OBJECTIVE));
   const [schema] = useReviewSchema(ReviewType.OBJECTIVE);
   const timelineObjective = useSelector(getTimelineByReviewTypeSelector(ReviewType.OBJECTIVE, 'me'));
+
+  useEffect(() => {
+    dispatch(ReviewsActions.getReviews({ pathParams }));
+  }, []);
 
   if (timelineObjective?.status === Status.WAITING_FOR_APPROVAL && schemaLoaded && reviewLoaded) {
     return (
