@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { IconButton } from '../../../components/IconButton';
 import { useStyle, useBreakpoints, Rule, Styles } from '@dex-ddl/core';
-import { Info360ModalProps } from '../type';
+import { Info360ModalProps } from '../config/types';
 import { VideoPlayer, VideoId } from 'features/VideoPlayer';
 import { Trans } from 'components/Translation';
 

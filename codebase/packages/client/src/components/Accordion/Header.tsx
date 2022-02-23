@@ -162,7 +162,7 @@ export const ExpandButton: FC<ExpandButtonProps> = ({ onClick, extraStyles }) =>
   <>
     <BaseHeader>
       {({ getHeadingProps, getElementToggleProps, expanded }) => (
-        <div style={{ cursor: 'pointer' }} {...getHeadingProps()} onClick={() => onClick && onClick(!expanded)}>
+        <div data-test-id='expand-button' style={{ cursor: 'pointer' }} {...getHeadingProps()} onClick={() => onClick && onClick(!expanded)}>
           <div {...getElementToggleProps()}>
             <Icon
               iconStyles={{ ...accordionIconStyles, ...(expanded ? accordionIconExpandStyles : {}), ...extraStyles }}

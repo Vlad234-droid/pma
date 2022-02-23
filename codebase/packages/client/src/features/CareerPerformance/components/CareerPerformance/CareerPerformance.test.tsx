@@ -17,15 +17,6 @@ jest.mock('features/Objectives', () => {
   };
 });
 
-jest.mock('features/ViewNavigation', () => {
-  return {
-    __esModule: true,
-    default: () => {
-      return <div>mocked_view_navigation</div>;
-    },
-  };
-});
-
 jest.mock('../HelpWidgets', () => {
   return {
     __esModule: true,
@@ -115,7 +106,6 @@ describe('<CareerPerformance />', () => {
     it('should render expected components', () => {
       const { getByText } = render(<CareerPerformance {...props} />);
 
-      expect(getByText('mocked_view_navigation')).toBeInTheDocument();
       expect(getByText('mocked_info_widgets')).toBeInTheDocument();
       expect(getByText('mocked_help_widgets')).toBeInTheDocument();
       expect(getByText('mocked_objective_widgets')).toBeInTheDocument();

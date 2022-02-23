@@ -18,15 +18,15 @@ const ColleagueInfo: FC<Props> = ({ firstName, lastName, jobName, businessType, 
   const { t } = useTranslation();
 
   return (
-    <div data-test-id='colleague-info' className={css(wrapperStyle)}>
-      <div className={css({ display: 'flex', alignItems: 'center' })}>
+    <div data-test-id='colleague-info' className={css(wrapperStyles)}>
+      <div className={css(avatarWrapperStyles)}>
         <Avatar size={40} />
       </div>
-      <div className={css(headerBlockStyle)}>
-        <span className={css(titleStyle)}>{`${firstName} ${lastName}`}</span>
-        <span className={css(descriptionStyle)}>{`${jobName}, ${businessType}`}</span>
+      <div className={css(headerBlockStyles)}>
+        <span className={css(titleStyles)}>{`${firstName} ${lastName}`}</span>
+        <span className={css(descriptionStyles)}>{`${jobName}, ${businessType}`}</span>
         {manager && (
-          <span className={css(managerStyle)}>{`${t('line_manager', 'Line manager')}: ${manager.firstName} ${
+          <span className={css(managerStyles)}>{`${t('line_manager', 'Line manager')}: ${manager.firstName} ${
             manager.lastName
           }`}</span>
         )}
@@ -35,17 +35,22 @@ const ColleagueInfo: FC<Props> = ({ firstName, lastName, jobName, businessType, 
   );
 };
 
-const wrapperStyle: Rule = {
+const wrapperStyles: Rule = {
   display: 'flex',
 };
 
-const headerBlockStyle: Rule = {
+const avatarWrapperStyles: Rule = {
+  display: 'flex',
+  alignItems: 'center',
+};
+
+const headerBlockStyles: Rule = {
   display: 'grid',
   padding: '0 20px',
   alignSelf: 'center',
 };
 
-const titleStyle: Rule = ({ theme }) => ({
+const titleStyles: Rule = ({ theme }) => ({
   fontStyle: 'normal',
   fontWeight: fontWeight.bold,
   fontSize: `${theme.font.fixed.f18.fontSize}`,
@@ -53,7 +58,7 @@ const titleStyle: Rule = ({ theme }) => ({
   color: colors.tescoBlue,
 });
 
-const descriptionStyle: Rule = ({ theme }) => ({
+const descriptionStyles: Rule = ({ theme }) => ({
   fontStyle: 'normal',
   fontWeight: 'normal',
   fontSize: `${theme.font.fixed.f16.fontSize}`,
@@ -61,7 +66,7 @@ const descriptionStyle: Rule = ({ theme }) => ({
   color: colors.base,
 });
 
-const managerStyle: Rule = ({ theme }) => ({
+const managerStyles: Rule = ({ theme }) => ({
   marginTop: '6px',
   fontStyle: 'normal',
   fontWeight: 'normal',

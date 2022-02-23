@@ -71,7 +71,7 @@ const EditRatingsModal: FC<Props> = ({ employee, onClose, onSave }) => {
             <Select
               options={options}
               placeholder={t('please_select', 'Please select')}
-              onChange={(e) => setWhatRating((e.target as HTMLInputElement).value as Rating)}
+              onChange={(value) => setWhatRating(value as Rating)}
               name='declineReasonWhat'
             />
           </Item>
@@ -82,7 +82,7 @@ const EditRatingsModal: FC<Props> = ({ employee, onClose, onSave }) => {
             <Select
               options={options}
               placeholder={t('please_select', 'Please select')}
-              onChange={(e) => setHowRating((e.target as HTMLInputElement).value as Rating)}
+              onChange={(value) => setHowRating(value as Rating)}
               name='declineReasonHow'
             />
           </Item>

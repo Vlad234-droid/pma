@@ -14,6 +14,7 @@ const Template: Story<Props> = (args) => (
     <div style={{ maxWidth: '500px', padding: '10px' }}>
       <Item {...args} withIcon={false}>
         <Select
+          name='Dropdown'
           onChange={() => undefined}
           placeholder='Select'
           options={[

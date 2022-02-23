@@ -42,4 +42,11 @@ export type TimelineTypes = {
   [ReviewType.OBJECTIVE]: boolean;
 };
 
+export type UserprofileAttributes = {
+  colleagueUuid: string;
+  name: string;
+  type: string;
+  value: string;
+};
+
 export { ReviewType, Status, TimelineType };

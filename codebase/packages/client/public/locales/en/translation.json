@@ -172,8 +172,6 @@
   "your_contribution": "Your Contribution",
   "everyday_conversations": "Everyday conversations",
   "feedback_tesco": "Feedback at Tesco",
-  "learning": "Learning",
-  "system_guidance_and_faqs": "System guidance and FAQs",
   "objectives_submitted": "Objectives submitted",
   "WL4_and_5": "Wl4 & 5 Objectives submitted",
   "moment_feedback": "In the moment feedback",
@@ -341,5 +339,15 @@
   "breakdown_of_year_end_ratings": "Breakdown of year-end ratings",
   "breakdown_of_mid_year_ratings": "Breakdown of mid-year ratings",
   "colleagues_count": "Colleagues count",
-  "no_objectives_created": "No objectives created"
+  "no_objectives_created": "No objectives created",
+  "system_guidance_and_faqs": "System guidance and FAQs",
+  "learning": "Learning",
+  "your_actions": "Your actions",
+  "your_pending_actions": "Your pending actions",
+  "your_colleagues_pending_actions": "Your colleagues pending actions",
+  "my_full_team": "My full team",
+  "my_direct_reports": "My direct reports",
+  "pending_actions": "Pending actions",
+  "you_have_pending_actions": "You have pending actions",
+  "view_profile": "View profile"
 }
