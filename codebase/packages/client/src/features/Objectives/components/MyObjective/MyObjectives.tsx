@@ -284,7 +284,7 @@ const MyObjectives: FC = () => {
                       onPress={() => setPreviousReviewFilesModalShow(true)}
                       styles={[linkStyles({ theme })]}
                     >
-                      <Trans i18nKey='view_history'>View history</Trans>
+                      <Trans i18nKey='view_files'>View files</Trans>
                     </Button>
                   </div>
                 ),
