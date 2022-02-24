@@ -2,23 +2,20 @@ import React, { FC, useState, useEffect, useCallback } from 'react';
 import { ReportActions, approvedObjectivesSelector, notApprovedObjectivesSelector } from '@pma/store';
 import { Button, colors, CreateRule, Rule, Styles, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { useDispatch, useSelector } from 'react-redux';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as Yup from 'yup';
-import { useForm } from 'react-hook-form';
 
 import { IconButton } from 'components/IconButton';
 import { FilterOption } from 'features/Shared';
 import { PieChart } from 'components/PieChart';
 import { View } from 'components/PieChart/PieChart';
-import { GenericItemField } from 'components/GenericForm';
-import { Item, Select } from 'components/Form';
+
+import { Select } from 'components/Form';
 import FilterModal from './components/FilterModal';
 import InfoTable from './components/InfoTable';
 import { DonwloadReportModal } from './Modals';
 import { Trans, useTranslation } from 'components/Translation';
 import { Rating, TitlesReport } from 'config/enum';
 import AppliedFilters from './components/AppliedFilters';
-import { createYearSchema, getFieldOptions, listOfStatuses, metaStatuses } from './config';
+import { getFieldOptions, listOfStatuses, metaStatuses } from './config';
 import { downloadCsvFile } from './utils';
 import { getCurrentYear } from 'utils/date';
 
@@ -118,10 +115,6 @@ const Report: FC = () => {
   }, []);
 
   const { css } = useStyle();
-  const methods = useForm({
-    mode: 'onChange',
-    resolver: yupResolver<Yup.AnyObjectSchema>(createYearSchema),
-  });
 
   const changeYearHandler = (value) => {
     if (!value) return;
@@ -259,12 +252,11 @@ const Report: FC = () => {
                 </Button>
                 <form>
                   <h2 className={css(yearLabel)}>View previous years</h2>
-                  <GenericItemField
-                    name={`year_options`}
-                    methods={methods}
-                    Wrapper={({ children }) => <Item withIcon={false}>{children}</Item>}
-                    Element={Select}
+
+                  <Select
                     options={getFieldOptions(getCurrentYear())}
+                    name={'year_options'}
+                    placeholder={t('choose_an_area', 'Choose an area')}
                     onChange={(value) => {
                       changeYearHandler(value);
                     }}

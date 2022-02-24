@@ -9,6 +9,7 @@ import defaultImg from 'images/default.png';
 import { getNotes, getFolder, addNewFolderId } from 'utils';
 import { useTranslation } from 'components/Translation';
 import get from 'lodash.get';
+import { Option } from 'components/Form/types';
 
 type SubmitPartProps = {
   selectedPerson: PeopleTypes;
@@ -79,25 +80,17 @@ export const SubmitPart: FC<SubmitPartProps> = ({
               if (item.type === 'select') {
                 const { field_options } = item;
                 return (
-                  <GenericItemField
-                    key={item.id}
-                    name={`folder`}
-                    methods={teamMethods}
-                    label={item.title}
-                    Wrapper={({ children }) => (
-                      <Item withIcon={false} label={item.title}>
-                        {children}
-                      </Item>
-                    )}
-                    Element={Select}
-                    options={field_options}
-                    placeholder={item.placeholder}
-                    onChange={(value) => {
-                      if (get(values, 'folderTitle')) setValue('folderTitle', '', { shouldValidate: false });
-                      setValue('folder', value);
-                      trigger('folder');
-                    }}
-                  />
+                  <Item withIcon={false} label={item.title} key={item.id}>
+                    <Select
+                      options={field_options as Option[]}
+                      name={'targetType'}
+                      placeholder={item.placeholder}
+                      onChange={(value) => {
+                        if (get(values, 'folderTitle')) setValue('folderTitle', '', { shouldValidate: false });
+                        setValue('folder', value, { shouldValidate: true });
+                      }}
+                    />
+                  </Item>
                 );
               }
             })

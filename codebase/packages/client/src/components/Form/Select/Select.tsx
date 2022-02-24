@@ -77,6 +77,7 @@ export default Select;
 const wrapperStyles: Rule = {
   display: 'table',
   width: '100%',
+  position: 'relative',
 };
 
 const fieldStyles: Rule = ({ theme }) => ({
