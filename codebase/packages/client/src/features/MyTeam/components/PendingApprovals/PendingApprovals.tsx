@@ -24,12 +24,8 @@ const PendingApprovals: FC<Props> = ({ count = 0 }) => {
           <Icon graphic='roundClock' fill={theme.colors.white} iconStyles={iconStyles} />
         </div>
         <div className={css(headerBlockStyles)}>
-          <span className={css(titleStyles)}>
-            {t('pending_actions', 'Pending actions')}
-          </span>
-          <span className={css(descriptionStyle)}>
-            {t('you_have_pending_actions', 'You have pending actions')}
-          </span>
+          <span className={css(titleStyles)}>{t('pending_actions', 'Pending actions')}</span>
+          <span className={css(descriptionStyle)}>{t('you_have_pending_actions', 'You have pending actions')}</span>
         </div>
         <div className={css(countWrapperStyles)}>
           <span className={css(countStyles)}>{count}</span>

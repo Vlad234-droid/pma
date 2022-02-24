@@ -7,12 +7,6 @@ import { concatWithErrorToast, errorPayloadConverter } from '../../utils/toastHe
 
 import { getCurrentUser, updateUserNotification, createProfileAttribute, updateProfileAttribute } from './actions';
 
-const SERVER_ERROR_MASSAGE = `
-You are seeing this message because Your Contribution System is not available at the moment.
-
-Please try again in some time, otherwise if the issue persists raise a ticket via Colleague Help or via your People Team if you do not have Colleague Help.
-`;
-
 export const getCurrentUserEpic: Epic = (action$, _, { openapi }) =>
   action$.pipe(
     filter(isActionOf(getCurrentUser.request)),
@@ -24,7 +18,7 @@ export const getCurrentUserEpic: Epic = (action$, _, { openapi }) =>
           const { status, data } = e || {};
           if (status >= 500) {
             // @ts-ignore
-            return of(getCurrentUser.failure({ message: SERVER_ERROR_MASSAGE, code: 'SERVER_ERROR' }));
+            return of(getCurrentUser.failure({ code: 'SERVER_ERROR' }));
           }
           const errors = data?.errors;
           return concatWithErrorToast(

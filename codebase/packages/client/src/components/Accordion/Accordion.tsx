@@ -146,7 +146,13 @@ const Accordion: FC<Omit<AccordionProps, 'children'>> = ({ children, customStyle
   const { css } = useStyle();
 
   return (
-    <BaseAccordion {...props}>{() => <div data-test-id='accordion' className={css(wrapperStyles, customStyle)}>{children}</div>}</BaseAccordion>
+    <BaseAccordion {...props}>
+      {() => (
+        <div data-test-id='accordion' className={css(wrapperStyles, customStyle)}>
+          {children}
+        </div>
+      )}
+    </BaseAccordion>
   );
 };
 

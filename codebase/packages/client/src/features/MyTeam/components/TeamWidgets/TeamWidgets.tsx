@@ -50,25 +50,21 @@ const TeamWidgets: FC<Props> = ({
             </Link>
           )}
           <div className={css(listStyles)}>
-            {loaded && colleagues.map((employee: Employee) => (
-              <TeamMateProfile
-                fullTeamView={view === View.FULL_TEAM}
-                key={employee.uuid}
-                uuid={employee.uuid}
-                status={getLastTimelineStatus(employee)}
-                employee={employee}
-              />
-            ))}
+            {loaded &&
+              colleagues.map((employee: Employee) => (
+                <TeamMateProfile
+                  fullTeamView={view === View.FULL_TEAM}
+                  key={employee.uuid}
+                  uuid={employee.uuid}
+                  status={getLastTimelineStatus(employee)}
+                  employee={employee}
+                />
+              ))}
           </div>
         </div>
       </div>
       <div data-test-id='more' className={css(actionsStyles)}>
-        {showActions && (
-          <Actions
-            draftCount={draftCount}
-            waitingCount={waitingCount}
-          />
-        )}
+        {showActions && <Actions draftCount={draftCount} waitingCount={waitingCount} />}
       </div>
     </div>
   );

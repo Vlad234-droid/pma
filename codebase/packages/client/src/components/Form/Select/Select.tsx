@@ -1,4 +1,4 @@
-import React, {FC, MouseEvent, useRef, useState} from 'react';
+import React, { FC, MouseEvent, useRef, useState } from 'react';
 import mergeRefs from 'react-merge-refs';
 import { Rule, useStyle } from '@dex-ddl/core';
 
@@ -11,14 +11,7 @@ import { useRefContainer } from '../context/input';
 const getSelectedOption = (options: Option[], value?: string) =>
   value ? options.filter((option) => option.value === value)[0] : undefined;
 
-const Select: FC<SelectField> = ({
-  domRef,
-  name,
-  options,
-  placeholder,
-  value,
-  onChange,
-}) => {
+const Select: FC<SelectField> = ({ domRef, name, options, placeholder, value, onChange }) => {
   const { css } = useStyle();
   const refIcon = useRefContainer();
   const ref = useRef<HTMLDivElement | null>(null);
@@ -67,11 +60,7 @@ const Select: FC<SelectField> = ({
         </div>
       </button>
       {isOpen && (
-        <div
-          role='list'
-          data-test-id={`${name}-list`}
-          className={css(listStyles)}
-        >
+        <div role='list' data-test-id={`${name}-list`} className={css(listStyles)}>
           {options.map((item) => (
             <button
               type='button'
