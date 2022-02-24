@@ -298,7 +298,7 @@ const MyObjectives: FC = () => {
               }}
             >
               <div className={css(emptyBlockStyle)}>
-                <Trans>{files.length > 0 ? `You have ${files.length} files` : 'You have no files'}</Trans>
+                <Trans>{`You have ${files.length || 'no'} files`}</Trans>
               </div>
             </Section>
           </div>
