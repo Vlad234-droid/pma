@@ -60,29 +60,29 @@ const TipsCard: FC<TipsCardProps> = ({ card }) => {
 
   return (
     <Fragment>
-      <div data-test-id={TIPS_CARD} className={css(cardWrapper({mobileScreen}))}>
-        <TileWrapper customStyle={cardStyle({mobileScreen})}>
-          <div className={css(tipImageWrapStyle({mobileScreen}))}>
+      <div data-test-id={TIPS_CARD} className={css(cardWrapper({ mobileScreen }))}>
+        <TileWrapper customStyle={cardStyle({ mobileScreen })}>
+          <div className={css(tipImageWrapStyle({ mobileScreen }))}>
             <div className={css(tipImage, { backgroundImage: `url(${tipCardImage})` })} />
           </div>
-          <div className={css(tipInfoWrap({mobileScreen}))}>
-            <div className={css(tipTitle({mobileScreen, theme}))}>{card.title}</div>
-            <div className={css(tipText({mobileScreen, theme}))}>{card.description}</div>
+          <div className={css(tipInfoWrap({ mobileScreen }))}>
+            <div className={css(tipTitle({ mobileScreen, theme }))}>{card.title}</div>
+            <div className={css(tipText({ mobileScreen, theme }))}>{card.description}</div>
             <div className={css({ marginTop: '8px', display: 'flex' })}>
-              <div className={css(lastPushStyle({mobileScreen, theme}))}>
+              <div className={css(lastPushStyle({ mobileScreen, theme }))}>
                 <Trans i18nKey='last_push'>Last push</Trans>: {card.published ? tipPushedTime : <Trans i18nKey='was_not_pushed'>was not pushed</Trans>}
               </div>
               <div
                 data-test-id={VIEW_HISTORY_BTN}
-                className={css(viewHistoryStyle({mobileScreen, theme}))}
+                className={css(viewHistoryStyle({ mobileScreen, theme }))}
                 onClick={handleShowViewHistoryModal}
               >
                 <Trans i18nKey='view_history'>View history</Trans>
               </div>
             </div>
           </div>
-          <div className={css(cardRightBlock({mobileScreen}))}>
-            <div className={css(targetStyle({mobileScreen, theme}))}>
+          <div className={css(cardRightBlock({ mobileScreen }))}>
+            <div className={css(targetStyle({ mobileScreen, theme }))}>
               <span className={css({ color: theme.colors.tescoBlue })}>
                 <Trans i18nKey='target'>Target</Trans>:</span> {card.targetOrganisation.name}
             </div>
@@ -106,14 +106,14 @@ const TipsCard: FC<TipsCardProps> = ({ card }) => {
   );
 };
 
-const cardWrapper: CreateRule<{mobileScreen: boolean}> = ({mobileScreen}) => {
+const cardWrapper: CreateRule<{mobileScreen: boolean}> = ({ mobileScreen }) => {
   return {
     padding: mobileScreen ? '0 8px' : 0,
     marginBottom: '10px',
   };
 };
 
-const cardStyle: CreateRule<{mobileScreen: boolean}> = ({mobileScreen}) => {
+const cardStyle: CreateRule<{mobileScreen: boolean}> = ({ mobileScreen }) => {
   return {
     padding: mobileScreen ? '16px' : '24px',
     width: mobileScreen ? '100%' : '80%',
@@ -122,13 +122,13 @@ const cardStyle: CreateRule<{mobileScreen: boolean}> = ({mobileScreen}) => {
   };
 };
 
-const tipInfoWrap: CreateRule<{mobileScreen: boolean}> = ({mobileScreen}) => {
+const tipInfoWrap: CreateRule<{mobileScreen: boolean}> = ({ mobileScreen }) => {
   return {
     maxWidth: mobileScreen ? '300px' : 'auto',
   };
 };
 
-const tipImageWrapStyle: CreateRule<{mobileScreen: boolean}> = ({mobileScreen}) => {
+const tipImageWrapStyle: CreateRule<{mobileScreen: boolean}> = ({ mobileScreen }) => {
   return {
     marginRight: mobileScreen ? '15px': '24px',
     marginBottom: '10px',
@@ -145,7 +145,7 @@ const tipImage: Rule = () => {
   };
 };
 
-const tipTitle: CreateRule<{mobileScreen: boolean; theme: Theme}> = ({mobileScreen, theme}) => {
+const tipTitle: CreateRule<{mobileScreen: boolean; theme: Theme}> = ({ mobileScreen, theme }) => {
   return {
     fontWeight: 700,
     color: theme.colors.tescoBlue,
@@ -160,7 +160,7 @@ const tipTitle: CreateRule<{mobileScreen: boolean; theme: Theme}> = ({mobileScre
   };
 };
 
-const tipText: CreateRule<{mobileScreen: boolean; theme: Theme}> = ({mobileScreen, theme}) => {
+const tipText: CreateRule<{mobileScreen: boolean; theme: Theme}> = ({ mobileScreen, theme }) => {
   return {
     marginTop: '5px',
     ...(mobileScreen
@@ -176,7 +176,7 @@ const tipText: CreateRule<{mobileScreen: boolean; theme: Theme}> = ({mobileScree
   };
 };
 
-const lastPushStyle: CreateRule<{mobileScreen: boolean; theme: Theme}> = ({mobileScreen, theme}) => {
+const lastPushStyle: CreateRule<{mobileScreen: boolean; theme: Theme}> = ({ mobileScreen, theme }) => {
   return {
     color: '#666',
     ':after': {
@@ -194,7 +194,7 @@ const lastPushStyle: CreateRule<{mobileScreen: boolean; theme: Theme}> = ({mobil
   };
 };
 
-const targetStyle: CreateRule<{mobileScreen: boolean; theme: Theme}> = ({mobileScreen, theme}) => {
+const targetStyle: CreateRule<{mobileScreen: boolean; theme: Theme}> = ({ mobileScreen, theme }) => {
   return {
     ...(mobileScreen
       ? {
@@ -209,7 +209,7 @@ const targetStyle: CreateRule<{mobileScreen: boolean; theme: Theme}> = ({mobileS
   };
 };
 
-const viewHistoryStyle: CreateRule<{mobileScreen: boolean; theme: Theme}> = ({mobileScreen, theme}) => {
+const viewHistoryStyle: CreateRule<{mobileScreen: boolean; theme: Theme}> = ({ mobileScreen, theme }) => {
   return {
     color: theme.colors.tescoBlue,
     cursor: 'pointer',
@@ -224,7 +224,7 @@ const viewHistoryStyle: CreateRule<{mobileScreen: boolean; theme: Theme}> = ({mo
   };
 };
 
-const cardRightBlock: CreateRule<{mobileScreen: boolean}> = ({mobileScreen}) => {
+const cardRightBlock: CreateRule<{mobileScreen: boolean}> = ({ mobileScreen }) => {
   return {
     display: 'flex',
     marginLeft: 'auto',
@@ -252,7 +252,7 @@ const cardControls: Rule = () => {
   };
 };
 
-const cardButton: Rule = ({theme}) => {
+const cardButton: Rule = ({ theme }) => {
   return {
     fontSize: theme.font.fixed.f14.fontSize,
     lineHeight: theme.font.fixed.f14.lineHeight,

@@ -87,7 +87,7 @@ const modalInner: Rule = {
   textAlign: 'center',
 }
 
-const modalTitle: Rule = ({theme}) => {
+const modalTitle: Rule = ({ theme }) => {
   return {
     fontSize: theme.font.fixed.f20.fontSize,
     lineHeight: theme.font.fixed.f20.lineHeight,
@@ -96,7 +96,7 @@ const modalTitle: Rule = ({theme}) => {
   };
 };
 
-const modalSubTitleStyle: Rule = ({theme}) => {
+const modalSubTitleStyle: Rule = ({ theme }) => {
   return {
     fontSize: theme.font.fixed.f16.fontSize,
     lineHeight: theme.font.fixed.f16.lineHeight,
@@ -104,7 +104,7 @@ const modalSubTitleStyle: Rule = ({theme}) => {
   };
 };
 
-const modalText: Rule = ({theme}) => {
+const modalText: Rule = ({ theme }) => {
   return {
     fontSize: theme.font.fixed.f16.fontSize,
     lineHeight: theme.font.fixed.f16.lineHeight,
@@ -121,7 +121,7 @@ const modalBtnsWrap: Rule = () => {
   };
 };
 
-const modalBtn: Rule = ({theme}) => {
+const modalBtn: Rule = ({ theme }) => {
   return {
     fontWeight: theme.font.weight.bold,
     width: '50%',
