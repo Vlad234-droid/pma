@@ -21,9 +21,8 @@ import { Icon } from 'components/Icon';
 import { FeedbackStatus } from 'config/enum';
 import { useAuthContainer } from 'contexts/authContext';
 import { Page } from 'pages';
-import { UserprofileAttributes } from 'config/types';
 
-import { TREATMENT_FIELD_OPTIONS } from './config';
+import { TREATMENT_FIELD_OPTIONS } from './config/constants';
 import { getSelectedTreatmentValue } from './utils';
 import Info360Modal, { FeedbackCard } from './components';
 import { ConfigProps } from './config/types';
@@ -35,7 +34,7 @@ const FeedbackActions: FC = () => {
   const { user } = useAuthContainer();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
-  const profileAttr: UserprofileAttributes[] = user?.data?.profileAttributes;
+  const profileAttr = user?.data?.profileAttributes;
   const treatmentValue: string = getSelectedTreatmentValue(profileAttr);
 
   const [info360Modal, setInfo360Modal] = useState<boolean>(false);
@@ -121,18 +120,8 @@ const FeedbackActions: FC = () => {
     window.open('https://feedback.etsplc.com/Tesco360/', '_blank')?.focus();
   };
 
-  const field_options = [
-    { value: 'Direct and simple', label: 'Direct and simple' },
-    { value: 'Friendly and constructive', label: 'Friendly and constructive' },
-    { value: 'Informative and detailed', label: 'Informative and detailed' },
-    { value: 'I don`t have a preference', label: 'I don`t have a preference' },
-  ];
-
-  const checkForVoiceValue = () => profileAttr?.find((item) => item?.name === 'voice')?.value ?? 'Direct and simple';
-
-  const createToneOfVoiceHandler = (e) => {
-    if (!e.target) return;
-    const { value } = e.target;
+  const createToneOfVoiceHandler = (value) => {
+    if (!value) return;
 
     const payload = {
       colleagueUuid,
@@ -229,7 +218,9 @@ const FeedbackActions: FC = () => {
               name={'treatment-options'}
               placeholder={t('choose_tone_of_voice', 'Choose tone of voice')}
               value={treatmentValue}
-              onChange={createToneOfVoiceHandler}
+              onChange={(value) => {
+                createToneOfVoiceHandler(value);
+              }}
             />
           </Item>
         </div>

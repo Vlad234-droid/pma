@@ -24,7 +24,7 @@ export const definePropperFieldOptions = (foldersWithNotes, noteFolderUuid) => {
   }
   return [
     ...foldersWithNotes
-      .filter((item) => item.id !== AllNotesFolderId || item.id !== AllNotesFolderIdTEAM)
+      .filter((item) => item.id !== AllNotesFolderId && item.id !== AllNotesFolderIdTEAM)
       .filter((item) => item.id !== noteFolderUuid)
       .map((item) => ({ value: `${item.id}`, label: item.title })),
   ];
@@ -39,7 +39,7 @@ export const definePropperFieldTeamOptions = (foldersWithNotes, noteFolderUuid) 
   }
   return [
     ...foldersWithNotes
-      .filter((item) => item.id !== AllNotesFolderId || item.id !== AllNotesFolderIdTEAM)
+      .filter((item) => item.id !== AllNotesFolderId && item.id !== AllNotesFolderIdTEAM)
       .filter((item) => item.id !== noteFolderUuid)
       .map((item) => ({ value: `${item.id}`, label: item.title })),
   ];

@@ -1,10 +1,12 @@
-import React, { FC, HTMLProps, useState } from 'react';
+import React, { FC, HTMLProps } from 'react';
 import { Trans } from 'components/Translation';
-import { GenericItemField } from 'components/GenericForm';
+
 import { Item, Select } from 'components/Form';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
+import { Option } from 'components/Form/types';
+import get from 'lodash.get';
 
 import { useBreakpoints, useStyle, CreateRule, Modal, Button } from '@dex-ddl/core';
 
@@ -40,28 +42,20 @@ const ConfirmModalWithDropDown: FC<Props> = ({
   const { theme, css } = useStyle();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
-  const [selectedIdFolder, setSelectedIdFolder] = useState<string | null>();
 
   const methods = useForm({
     mode: 'onChange',
     resolver: yupResolver<Yup.AnyObjectSchema>(folderSchema),
   });
   const {
-    trigger,
+    setValue,
     handleSubmit,
+    getValues,
     formState: { isValid },
   } = methods;
-
-  const data = {
-    field_id: '1',
-    field_type: 'select',
-    field_placeholder,
-    field_title,
-    field_options,
-  };
-
-  const submit = (data) => {
-    onSave({ ...data, selectedIdFolder });
+  const values = getValues();
+  const submit = () => {
+    onSave({ selectedIdFolder: get(values, fieldName) });
   };
 
   const submitForm = (e) => {
@@ -95,24 +89,16 @@ const ConfirmModalWithDropDown: FC<Props> = ({
       )}
 
       <div>
-        <GenericItemField
-          key={data.field_id}
-          name={fieldName}
-          methods={methods}
-          label={data.field_title}
-          Wrapper={({ children }) => (
-            <Item withIcon={false} label={data.field_title}>
-              {children}
-            </Item>
-          )}
-          Element={Select}
-          options={data.field_options}
-          placeholder={data.field_placeholder}
-          onChange={(value) => {
-            trigger('folder');
-            setSelectedIdFolder(() => value);
-          }}
-        />
+        <Item withIcon={false} label={field_title}>
+          <Select
+            options={field_options as Option[]}
+            name={'targetType'}
+            placeholder={field_placeholder}
+            onChange={(value) => {
+              setValue(fieldName, value, { shouldValidate: true });
+            }}
+          />
+        </Item>
       </div>
 
       <div

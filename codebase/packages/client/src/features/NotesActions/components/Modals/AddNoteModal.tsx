@@ -10,6 +10,7 @@ import { Icon as IconComponent } from 'components/Icon';
 import { SuccessModal } from '../Modals';
 import { getNotes, getFolder, addNewFolderId } from 'utils';
 import get from 'lodash.get';
+import { Option } from 'components/Form/types';
 
 export const ADD_NOTE_MODAL_WRAPPER = 'add_note_modal_wrapper';
 
@@ -87,25 +88,17 @@ const AddNoteModal: FC<AddNoteModalProps> = ({ methods, cancelModal, submitForm,
                   if (item.type === 'select') {
                     const { field_options } = item;
                     return (
-                      <GenericItemField
-                        key={item.id}
-                        name={`folder`}
-                        methods={methods}
-                        label={item.title}
-                        Wrapper={({ children }) => (
-                          <Item withIcon={false} label={item.title}>
-                            {children}
-                          </Item>
-                        )}
-                        Element={Select}
-                        options={field_options}
-                        placeholder={item.placeholder}
-                        onChange={(value) => {
-                          if (get(values, 'folderTitle')) setValue('folderTitle', '', { shouldValidate: false });
-                          setValue('folder', value);
-                          trigger('folder');
-                        }}
-                      />
+                      <Item withIcon={false} label={item.title} key={item.id}>
+                        <Select
+                          options={field_options as Option[]}
+                          name={'targetType'}
+                          placeholder={item.placeholder}
+                          onChange={(value) => {
+                            if (get(values, 'folderTitle')) setValue('folderTitle', '', { shouldValidate: false });
+                            setValue('folder', value, { shouldValidate: true });
+                          }}
+                        />
+                      </Item>
                     );
                   }
                 })

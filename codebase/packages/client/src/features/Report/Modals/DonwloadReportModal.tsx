@@ -5,7 +5,6 @@ import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { reportByYearSchema, getYearsFromCurrentYear, checkboxes, getRequestParams } from '../config';
 import { Select, Checkbox, Item } from 'components/Form';
-import { GenericItemField } from 'components/GenericForm';
 import success from 'images/success.jpg';
 import { getCurrentYear } from 'utils/date';
 import { Trans, useTranslation } from 'components/Translation';
@@ -26,6 +25,7 @@ const DonwloadReportModal: FC<ModalProps> = ({ onClose }) => {
   const {
     formState: { isValid },
     getValues,
+    setValue,
   } = methods;
 
   const values = getValues();
@@ -80,18 +80,16 @@ const DonwloadReportModal: FC<ModalProps> = ({ onClose }) => {
           ))}
         </div>
 
-        <GenericItemField
-          name={'year'}
-          methods={methods}
-          Wrapper={({ children }) => (
-            <Item label='Select a year' withIcon={false}>
-              {children}
-            </Item>
-          )}
-          Element={Select}
-          options={getYearsFromCurrentYear(getCurrentYear())}
-          placeholder='Please select'
-        />
+        <Item withIcon={false} label={t('select_a_year', 'Select a year')}>
+          <Select
+            options={getYearsFromCurrentYear(getCurrentYear())}
+            name={'year'}
+            placeholder={t('please_select', 'Please select')}
+            onChange={(value) => {
+              setValue('year', value, { shouldValidate: true });
+            }}
+          />
+        </Item>
 
         <div className={css(textBlock, { fontWeight: 700 })}>Guidance for colleagues</div>
         <div className={css(textBlock, { marginBottom: '30px' })}>
