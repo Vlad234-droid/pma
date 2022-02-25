@@ -100,6 +100,7 @@ describe('<CareerPerformance />', () => {
         },
       },
     },
+    displayTimelines: true,
   };
 
   describe('#render', () => {
@@ -113,6 +114,17 @@ describe('<CareerPerformance />', () => {
       expect(getByText('Useful resources')).toBeInTheDocument();
       expect(getByText('mocked_review_widgets')).toBeInTheDocument();
       expect(getByText('mocked_knowledge_library_widget')).toBeInTheDocument();
+    });
+
+    it('should not render objectives and reviews widgets, if !props.displayTimelines', () => {
+      const newProps = {
+        ...props,
+        displayTimelines: false,
+      };
+      const { queryByText } = render(<CareerPerformance {...newProps} />);
+
+      expect(queryByText('mocked_objective_widgets')).not.toBeInTheDocument();
+      expect(queryByText('My reviews')).not.toBeInTheDocument();
     });
   });
   describe('#useEffect', () => {
