@@ -12,7 +12,7 @@ jest.mock('react-router-dom', () => ({
   useNavigate: () => ({
     navigate: jest.fn().mockImplementation(() => ({})),
   }),
-  Link: ({ children }) => <div>{children}</div>
+  Link: ({ children }) => <div>{children}</div>,
 }));
 
 describe('<TeamWidgets />', () => {
@@ -82,7 +82,7 @@ describe('<TeamWidgets />', () => {
     it('should call props.loadManagers, if props.colleagueUuid', () => {
       const newProps = {
         ...props,
-        colleagueUuid: 'mocked_uuid'
+        colleagueUuid: 'mocked_uuid',
       };
 
       render(<TeamWidgets {...newProps} />);

@@ -356,7 +356,7 @@ const MainFolders: FC<MainFolderProps> = ({
       folderUuid: selectedIdFolder === AllNotesFolderId ? null : selectedIdFolder,
     };
     dispatch(NotesActions.updateNote(payload));
-    if (selectedTEAMFolder !== null)
+    if (selectedTEAMFolder !== null) {
       setSelectedTEAMFolder((prev) => {
         const obj = {
           ...prev,
@@ -372,22 +372,31 @@ const MainFolders: FC<MainFolderProps> = ({
         };
         return obj;
       });
-    if (selectedFolder !== null)
+    }
+
+    if (selectedFolder && !foldersWithNotes.find((item) => item.id === AllNotesFolderId).selected) {
       setSelectedFolder((prev) => {
-        const obj = {
+        return {
           ...prev,
-          notes: [
-            ...prev.notes.map((item) => {
-              const note = {
-                ...item,
-                selected: false,
-              };
-              return note;
-            }),
-          ],
+          notes: prev.notes.filter((item) => item.id !== selectedNoteId.current),
         };
-        return obj;
       });
+    }
+    setSelectedFolder((prev) => {
+      const obj = {
+        ...prev,
+        notes: [
+          ...prev.notes.map((item) => {
+            const note = {
+              ...item,
+              selected: false,
+            };
+            return note;
+          }),
+        ],
+      };
+      return obj;
+    });
   };
   const submitMoveNoteToTEAMFolder = ({ selectedIdFolder }) => {
     const payload = {
@@ -395,7 +404,7 @@ const MainFolders: FC<MainFolderProps> = ({
       folderUuid: selectedIdFolder === AllNotesFolderIdTEAM ? null : selectedIdFolder,
     };
     dispatch(NotesActions.updateNote(payload));
-    if (selectedTEAMFolder !== null)
+    if (selectedFolder !== null) {
       setSelectedTEAMFolder((prev) => {
         const obj = {
           ...prev,
@@ -411,22 +420,31 @@ const MainFolders: FC<MainFolderProps> = ({
         };
         return obj;
       });
-    if (selectedFolder !== null)
-      setSelectedFolder((prev) => {
-        const obj = {
+    }
+
+    if (selectedTEAMFolder && !foldersWithNotesTEAM.find((item) => item.id === AllNotesFolderIdTEAM).selected) {
+      setSelectedTEAMFolder((prev) => {
+        return {
           ...prev,
-          notes: [
-            ...prev.notes.map((item) => {
-              const note = {
-                ...item,
-                selected: false,
-              };
-              return note;
-            }),
-          ],
+          notes: prev.notes.filter((item) => item.id !== selectedTEAMNoteId.current),
         };
-        return obj;
       });
+    }
+    setSelectedTEAMFolder((prev) => {
+      const obj = {
+        ...prev,
+        notes: [
+          ...prev.notes.map((item) => {
+            const note = {
+              ...item,
+              selected: false,
+            };
+            return note;
+          }),
+        ],
+      };
+      return obj;
+    });
   };
 
   return (

@@ -2,34 +2,38 @@ import React, { FC } from 'react';
 import { Rule, useStyle } from '@dex-ddl/core';
 import TescoLogo from 'assets/img/TescoLogo.svg';
 import MarkdownRenderer from 'components/MarkdownRenderer';
+import { Trans } from 'components/Translation';
 
 type Props = {
-  massage?: string;
+  massage: string;
 };
 
-const defaultMassage = `
- You are seeing this message because your market is not yet using the Your Contribution System at the moment.
- 
- If you believe you should have access please raise a ticket via Colleague Help or via your People Team if you do not have Colleague Help.
-`;
-
-const CustomPTag = ({ children }) => {
+const P = ({ children }) => {
   const { css } = useStyle();
-  return <p className={css(text)}>{children}</p>;
+  return (
+    <p className={css(text)}>
+      <Trans>{children}</Trans>
+    </p>
+  );
 };
 
-export const AccessDenied: FC<Props> = ({ massage = defaultMassage }) => {
+const A = ({ children }) => {
+  const { css } = useStyle();
+  return (
+    <a className={css(button)}>
+      <Trans>{children}</Trans>
+    </a>
+  );
+};
+
+export const AccessDenied: FC<Props> = ({ massage }) => {
   const { css } = useStyle();
   return (
     <div className={css(wrapper)}>
       <p className={css(textBottom)}>
         <img className={css({ width: '300px' })} src={TescoLogo} alt='Tesco Logo' />
       </p>
-      <p className={css(text)}>You do not have access to this system.</p>
-      <MarkdownRenderer source={massage} components={{ p: CustomPTag }} />
-      <a href='https://ourtesco.com' className={css(button)}>
-        Go to ourtesco.com
-      </a>
+      <MarkdownRenderer source={massage} components={{ p: P, a: A }} />
     </div>
   );
 };
@@ -59,6 +63,7 @@ const button: Rule = ({ theme }) => ({
   color: theme.colors.white,
   borderRadius: '3px',
   marginTop: '32px',
+  display: 'block',
 
   ':hover': {
     color: theme.colors.white,

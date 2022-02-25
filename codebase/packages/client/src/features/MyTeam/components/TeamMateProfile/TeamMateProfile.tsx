@@ -33,10 +33,7 @@ const TeamMateProfile: FC<Props> = ({
   return (
     <div data-test-id='team-mate-profile'>
       <TileWrapper customStyle={customWrapperStyle}>
-        <Accordion
-          id={`team-mate-accordion-${uuid}`}
-          customStyle={accordionCustomStyles}
-        >
+        <Accordion id={`team-mate-accordion-${uuid}`} customStyle={accordionCustomStyles}>
           <BaseAccordion id={`team-mate-base-accordion-${uuid}`}>
             {() => (
               <>

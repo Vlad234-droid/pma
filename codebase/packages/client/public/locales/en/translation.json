@@ -332,6 +332,14 @@
   "can_you_provide_further_detail": "Can you provide further detail on what they should keep doing or what they improve on?",
   "please_try_and_find_time": "Please try and find time to give your feedback in person.",
   "everyday_feedback": "Everyday Feedback",
+  "no_objectives_created": "No objectives created",
+  "not_have_access_to_this_system": "You do not have access to this system.",
+  "not_using_system_at_the_moment": "You are seeing this message because your market is not yet using the Your Contribution System at the moment.",
+  "raise_a_ticket_to_access": "If you believe you should have access please raise a ticket via Colleague Help or via your People Team if you do not have Colleague Help.",
+  "go_to_ourtesco_com": "Go to ourtesco.com",
+  "system_not_available_at_the_moment": "You are seeing this message because Your Contribution System is not available at the moment.",
+  "please_try_again": "Please try again in some time, otherwise if the issue persists raise a ticket via Colleague Help or via your People Team if you do not have Colleague Help.",
+  "not_have_access_to_page": " You do not have access to this page",
   "download_and_exctract": "Download and Exctract",
   "mid_year_forms": "Mid-year forms",
   "year_end_forms": "Year-end forms",
@@ -339,7 +347,6 @@
   "breakdown_of_year_end_ratings": "Breakdown of year-end ratings",
   "breakdown_of_mid_year_ratings": "Breakdown of mid-year ratings",
   "colleagues_count": "Colleagues count",
-  "no_objectives_created": "No objectives created",
   "activity_history": "Activity History",
   "for_tip": "For tip",
   "target": "Target",
@@ -367,5 +374,6 @@
   "my_direct_reports": "My direct reports",
   "pending_actions": "Pending actions",
   "you_have_pending_actions": "You have pending actions",
-  "view_profile": "View profile"
+  "view_profile": "View profile",
+  "select_a_year": "Select a year"
 }

@@ -313,6 +313,7 @@ const NotesActions: FC = () => {
     if (selectedNoteToEdit !== null) setSelectedNoteToEdit(() => null);
     if (selectedTEAMNoteToEdit !== null) setSelectedTEAMNoteToEdit(() => null);
     resetNoteToEdit();
+    setSelectedFolder(() => null);
   };
 
   const onSubmitTEAMSelectedEditedNote = async (data) => {
@@ -334,6 +335,7 @@ const NotesActions: FC = () => {
 
   const cancelTEAMSelectedNoteModal = () => {
     setSelectedTEAMNoteToEdit(() => null);
+    setSelectedFolder(() => null);
   };
 
   const cancelTEAMModal = () => {

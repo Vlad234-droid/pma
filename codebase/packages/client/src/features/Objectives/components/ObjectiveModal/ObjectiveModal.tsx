@@ -1,4 +1,4 @@
-import React, { FC, HTMLProps } from 'react';
+import React, { FC, HTMLProps, useEffect, useRef } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 
 import { FormType } from '@pma/store';
@@ -53,6 +53,11 @@ export const ObjectiveModal: FC<Props> = ({
   const { css, theme } = useStyle();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+  const formRef = useRef<HTMLFormElement | null>(null);
+
+  useEffect(() => {
+    formRef.current?.scrollIntoView();
+  });
 
   const {
     formState: { isValid },
@@ -82,7 +87,7 @@ export const ObjectiveModal: FC<Props> = ({
             <IconComponent graphic='arrowLeft' invertColors={true} />
           </span>
         )}
-        <form data-test-id={'OBJECTIVE_FORM_MODAL'}>
+        <form ref={formRef} data-test-id={'OBJECTIVE_FORM_MODAL'}>
           {!useSingleStep && (
             <div className={css({ padding: `0 0 ${theme.spacing.s5}` })}>
               <StepIndicatorBasic

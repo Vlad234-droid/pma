@@ -38,7 +38,7 @@ export const CONFIG = {
 let baseURL = `${API_URL}/`;
 
 if (API_VERSION) {
-  baseURL += `${API_VERSION}/`;
+  baseURL += `${API_VERSION}`;
 }
 
 export enum ViewportSize {

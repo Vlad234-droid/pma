@@ -3,7 +3,12 @@ import { Navigate, Route as ReactRoute, Routes } from 'react-router-dom';
 import { NotFound } from 'pages/NotFound';
 import { buildPath, RouteWithPath } from 'features/Routes/utils';
 import { Page } from 'pages';
+import AccessDenied from 'components/AccessDenied';
 import { usePermission } from 'features/Permission';
+
+const notHaveAccessMassage = `
+  not_have_access_to_page
+`;
 
 type Props = {
   routes: RouteWithPath[];
@@ -13,8 +18,14 @@ const MainRoutes: FC<Props> = ({ routes }) => {
   return (
     <Routes>
       {routes.map(({ Element, path, perform }, idx) => {
-        if (!usePermission(perform)) return null;
-        return <ReactRoute key={idx} element={<Element />} path={path} />;
+        const hasPermission = usePermission(perform);
+        return (
+          <ReactRoute
+            key={idx}
+            element={hasPermission ? <Element /> : <AccessDenied massage={notHaveAccessMassage} />}
+            path={path}
+          />
+        );
       })}
       <ReactRoute path='/' element={<Navigate to={buildPath(Page.CONTRIBUTION)} />} />
       <ReactRoute path='*' element={<NotFound />} />

@@ -9,7 +9,6 @@ import User from 'config/entities/User';
 // hooks
 import useDispatch from 'hooks/useDispatch';
 import { useSelector } from 'react-redux';
-import { AccessDenied } from 'pages/AccessDenied';
 
 type LoginAction = (payload: { email: string; password: string }) => void;
 type LogoutAction = () => void;
@@ -22,6 +21,7 @@ type AuthData = {
   logout: LogoutAction;
   roles: Array<string>;
   userWorkLevel: Array<string>;
+  error: any;
 };
 
 const defaultData = {
@@ -29,6 +29,7 @@ const defaultData = {
   login: () => undefined, // to start the login process
   logout: () => undefined, // logout the user
   roles: [],
+  error: null,
   userWorkLevel: [],
 };
 
@@ -53,13 +54,11 @@ export const AuthProvider: FC = ({ children }) => {
     return null;
   }
 
-  if (!loaded) return null;
-  if (!authenticated) return <AccessDenied massage={error?.code === 'SERVER_ERROR' ? error?.message : undefined} />;
-
   return (
     <AuthContext.Provider
       value={{
         authenticated,
+        error,
         user: info,
         login: loginAction,
         logout: logoutAction,
@@ -67,7 +66,7 @@ export const AuthProvider: FC = ({ children }) => {
         userWorkLevel: info?.data?.colleague?.workRelationships?.[0]?.workLevel || [],
       }}
     >
-      {children}
+      {loaded ? children : null}
     </AuthContext.Provider>
   );
 };

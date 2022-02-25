@@ -21,13 +21,7 @@ type Props = {
   onClick?: () => void;
 };
 
-const TimelinePreview: FC<Props> = ({
-  status,
-  employee,
-  fullTeamView = false,
-  rating,
-  onClick,
-}) => {
+const TimelinePreview: FC<Props> = ({ status, employee, fullTeamView = false, rating, onClick }) => {
   const { css } = useStyle();
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -52,10 +46,7 @@ const TimelinePreview: FC<Props> = ({
           {rating ? (
             <span className={css(ratingStyles)}>{rating}</span>
           ) : (
-            <button
-              onClick={() => viewUserObjectives(employee.uuid)}
-              className={css(buttonStyles)}
-            >
+            <button onClick={() => viewUserObjectives(employee.uuid)} className={css(buttonStyles)}>
               {t('view_profile', 'View profile')}
             </button>
           )}
