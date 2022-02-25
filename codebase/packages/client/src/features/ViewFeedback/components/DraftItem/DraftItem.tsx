@@ -204,10 +204,11 @@ const iconBtnStyle: Rule = ({ theme }) => ({
   width: '176px',
   border: '1px solid #00539F',
   whiteSpace: 'nowrap',
-  margin: '28px 24px 0 auto',
+  margin: '28px 24px 6px auto',
 });
 
 const iconStyle: Rule = {
-  marginRight: '12px',
+  marginRight: '8px',
+  marginTop: '6px',
 };
 export default DraftItem;

@@ -6,11 +6,17 @@ import {
   updatedFeedback,
   getObjectiveReviews,
   clearFeedback,
+  getGiveFeedback,
+  getRespondFeedback,
 } from './actions';
 
 export const initialState = {
   notes: [],
   reviews: [],
+  feedbacks: {
+    giveFeedback: [],
+    respondFeedback: [],
+  },
   meta: { loading: false, loaded: false, error: null },
 };
 
@@ -75,4 +81,44 @@ export default createReducer(initialState)
       loading: false,
       loaded: true,
     },
+  }))
+  .handleAction(getGiveFeedback.request, (state) => ({
+    ...state,
+    meta: { ...state.meta, loading: true },
+  }))
+  .handleAction(getGiveFeedback.success, (state, { payload }) => ({
+    ...state,
+    feedbacks: {
+      ...state.feedbacks,
+      giveFeedback: payload,
+    },
+    meta: {
+      ...state.meta,
+      loading: false,
+      loaded: true,
+    },
+  }))
+  .handleAction(getGiveFeedback.failure, (state, { payload }) => ({
+    ...state,
+    meta: { ...state.meta, loading: false, loaded: true, error: payload },
+  }))
+  .handleAction(getRespondFeedback.request, (state) => ({
+    ...state,
+    meta: { ...state.meta, loading: true },
+  }))
+  .handleAction(getRespondFeedback.success, (state, { payload }) => ({
+    ...state,
+    feedbacks: {
+      ...state.feedback,
+      respondFeedback: payload,
+    },
+    meta: {
+      ...state.meta,
+      loading: false,
+      loaded: true,
+    },
+  }))
+  .handleAction(getRespondFeedback.failure, (state, { payload }) => ({
+    ...state,
+    meta: { ...state.meta, loading: false, loaded: true, error: payload },
   }));

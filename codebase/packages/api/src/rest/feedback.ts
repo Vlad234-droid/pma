@@ -1,3 +1,4 @@
+import { AxiosResponse } from 'axios';
 import httpClient from '../config/client';
 
 const domain = '/feedbacks';
@@ -18,4 +19,8 @@ export const getAllFeedbacks = (params: any) => {
 export const readFeedback = (params: any) => {
   const { uuid } = params;
   return httpClient.put(`${domain}/${uuid}/read`);
+};
+
+export const getFeedbacks = <T>(params: any): Promise<AxiosResponse<any>> => {
+  return httpClient.get(`${domain}`, { params });
 };

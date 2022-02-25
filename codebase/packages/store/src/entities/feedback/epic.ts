@@ -3,7 +3,16 @@ import { Epic, isActionOf } from 'typesafe-actions';
 import { combineEpics } from 'redux-observable';
 import { from, of } from 'rxjs';
 import { catchError, filter, map, switchMap } from 'rxjs/operators';
-import { createNewFeedback, getAllFeedbacks, readFeedback, updatedFeedback, getObjectiveReviews } from './actions';
+import {
+  createNewFeedback,
+  getAllFeedbacks,
+  readFeedback,
+  updatedFeedback,
+  getObjectiveReviews,
+  getGiveFeedback,
+  getRespondFeedback,
+} from './actions';
+import { FEEDBACK_STATUS_IN } from '../../config/types';
 
 export const getAllFeedbackEpic: Epic = (action$, _, { api }) => {
   return action$.pipe(
@@ -16,6 +25,38 @@ export const getAllFeedbackEpic: Epic = (action$, _, { api }) => {
           return getAllFeedbacks.success(data);
         }),
         catchError(({ errors }) => of(createNewFeedback.failure(errors))),
+      );
+    }),
+  );
+};
+
+export const getGiveFeedbackEpic: Epic = (action$, _, { api }) => {
+  return action$.pipe(
+    filter(isActionOf(getGiveFeedback.request)),
+    switchMap(({ payload }) => {
+      //@ts-ignore
+      return from(api.getFeedbacks(payload)).pipe(
+        //@ts-ignore
+        map(({ data }) => {
+          return getGiveFeedback.success(data);
+        }),
+        catchError(({ errors }) => of(getGiveFeedback.failure(errors))),
+      );
+    }),
+  );
+};
+
+export const getRespondFeedbackEpic: Epic = (action$, _, { api }) => {
+  return action$.pipe(
+    filter(isActionOf(getRespondFeedback.request)),
+    switchMap(({ payload }) => {
+      //@ts-ignore
+      return from(api.getFeedbacks(payload)).pipe(
+        //@ts-ignore
+        map(({ data }) => {
+          return getRespondFeedback.success(data);
+        }),
+        catchError(({ errors }) => of(getRespondFeedback.failure(errors))),
       );
     }),
   );
@@ -40,13 +81,17 @@ export const createNewFeedbackEpic: Epic = (action$, _, { api }) =>
       //@ts-ignore
       return from(api.createNewFeedback(payload)).pipe(
         //@ts-ignore
-        map(({ data }) => {
-          const [obj] = data;
-          return getAllFeedbacks.request({
-            'colleague-uuid': obj.colleagueUuid,
-            _limit: '300',
-          });
-        }),
+        //map(({ data }) => {
+        //  const [obj] = data;
+        //  if (epic === 1) {
+        //    return getGiveFeedback.request({
+        //      'colleague-uuid': obj.colleagueUuid,
+        //      _limit: '300',
+        //      status_in: [FEEDBACK_STATUS_IN.DRAFT, FEEDBACK_STATUS_IN.SUBMITTED],
+        //    });
+        //  }
+        //}),
+        map(createNewFeedback.success),
         catchError(({ errors }) => of(createNewFeedback.failure(errors))),
       );
     }),
@@ -59,12 +104,7 @@ export const updateFeedbackEpic: Epic = (action$, _, { api }) =>
       //@ts-ignore
       return from(api.updateFeedback(payload)).pipe(
         //@ts-ignore
-        map(({ data }) => {
-          return getAllFeedbacks.request({
-            'colleague-uuid': data.colleagueUuid,
-            _limit: '300',
-          });
-        }),
+        map(updatedFeedback.success),
         catchError(({ errors }) => of(createNewFeedback.failure(errors))),
       );
     }),
@@ -89,4 +129,6 @@ export default combineEpics(
   getAllFeedbackEpic,
   updateFeedbackEpic,
   getObjectiveReviewsEpic,
+  getGiveFeedbackEpic,
+  getRespondFeedbackEpic,
 );

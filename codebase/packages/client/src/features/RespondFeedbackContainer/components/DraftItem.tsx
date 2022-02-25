@@ -1,19 +1,27 @@
 import React, { FC, useEffect, useCallback } from 'react';
 import { useStyle, Rule } from '@dex-ddl/core';
 import { useDispatch, useSelector } from 'react-redux';
-import { FeedbackActions, ReviewsActions, colleagueUUIDSelector, getNotesArgsSelector } from '@pma/store';
+import {
+  FeedbackActions,
+  ReviewsActions,
+  colleagueUUIDSelector,
+  getNotesArgsSelector,
+  getRespondedFeedbacksSelector,
+} from '@pma/store';
 import debounce from 'lodash.debounce';
 import { TileWrapper } from 'components/Tile';
 import { Accordion, BaseAccordion, Section, Panel, ExpandButton } from 'components/Accordion';
-import { formatToRelativeDate } from 'utils';
+import { formatToRelativeDate , paramsReplacer } from 'utils';
 import IconButtonDefault from 'components/IconButtonDefault';
-import { FeedbackStatus, Tesco } from 'config/enum';
+import { FeedbackStatus, Tesco, FEEDBACK_STATUS_IN } from 'config/enum';
 import { getSortString } from 'utils/feedback';
 import defaultImg from 'images/default.png';
 import { DraftItemProps } from '../type';
 import { NoFeedback } from '../../Feedback/components';
 import PendingNotes from './PendingNotes';
 import CompletedNotes from './CompletedNotes';
+import { useNavigate } from 'react-router-dom';
+import { Page } from 'pages';
 
 export const TEST_ID = 'test_id';
 
@@ -28,18 +36,21 @@ const DraftItem: FC<DraftItemProps> = ({
   const { css } = useStyle();
   const dispatch = useDispatch();
   const colleagueUuid = useSelector(colleagueUUIDSelector);
+  const navigate = useNavigate();
 
-  const pendingNotes = useSelector(getNotesArgsSelector(FeedbackStatus.PENDING, colleagueUuid)) || [];
-  const completedNotes = useSelector(getNotesArgsSelector(FeedbackStatus.COMPLETED, colleagueUuid)) || [];
+  const pendingNotes = useSelector(getRespondedFeedbacksSelector(FeedbackStatus.PENDING)) || [];
+
+  const completedNotes = useSelector(getRespondedFeedbacksSelector(FeedbackStatus.COMPLETED)) || [];
 
   const getAllFeedback = useCallback(
     debounce((filter) => {
       dispatch(
-        FeedbackActions.getAllFeedbacks({
+        FeedbackActions.getRespondFeedback({
           _limit: '300',
           'colleague-uuid': colleagueUuid,
           ...(filter.search.length > 2 && { _search: filter.search }),
           _sort: getSortString(filter),
+          status_in: [FEEDBACK_STATUS_IN.PENDING, FEEDBACK_STATUS_IN.COMPLETED],
         }),
       );
     }, 300),
@@ -143,14 +154,15 @@ const DraftItem: FC<DraftItemProps> = ({
                           {checkedRadio?.pending && <PendingNotes item={item} />}
                           {checkedRadio?.completed && <CompletedNotes item={item} />}
                         </TileWrapper>
-                        {checkedRadio?.completed ? (
-                          <></>
-                        ) : (
-                          checkedRadio?.pending && (
-                            <div className={css(wrapperBtnStyle)}>
-                              <IconButtonDefault graphic='arrowRight' onClick={() => handleFeedbackBtnClick(item)} />
-                            </div>
-                          )
+                        {checkedRadio?.pending && (
+                          <div className={css(wrapperBtnStyle)}>
+                            <IconButtonDefault
+                              graphic='arrowRight'
+                              onClick={() => {
+                                navigate(paramsReplacer(`/${Page.RESPOND_NEW_FEEDBACK}`, { ':uuid': item.uuid }));
+                              }}
+                            />
+                          </div>
                         )}
                       </Panel>
                     </Section>

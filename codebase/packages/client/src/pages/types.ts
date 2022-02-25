@@ -25,6 +25,7 @@ enum Page {
   GIVE_NEW_FEEDBACK = 'feedback/give/:uuid',
   REQUEST_FEEDBACK = 'feedback/request-feedback',
   RESPOND_FEEDBACK = 'feedback/respond-feedback',
+  RESPOND_NEW_FEEDBACK = 'feedback/respond-feedback/:uuid',
   VIEW_FEEDBACK = 'feedback/view-feedback',
   FEEDBACK = 'feedback',
   TIPS = 'tips',

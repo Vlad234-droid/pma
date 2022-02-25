@@ -121,15 +121,6 @@ const FeedbackActions: FC = () => {
     window.open('https://feedback.etsplc.com/Tesco360/', '_blank')?.focus();
   };
 
-  const field_options = [
-    { value: 'Direct and simple', label: 'Direct and simple' },
-    { value: 'Friendly and constructive', label: 'Friendly and constructive' },
-    { value: 'Informative and detailed', label: 'Informative and detailed' },
-    { value: 'I don`t have a preference', label: 'I don`t have a preference' },
-  ];
-
-  const checkForVoiceValue = () => profileAttr?.find((item) => item?.name === 'voice')?.value ?? 'Direct and simple';
-
   const createToneOfVoiceHandler = (e) => {
     if (!e.target) return;
     const { value } = e.target;

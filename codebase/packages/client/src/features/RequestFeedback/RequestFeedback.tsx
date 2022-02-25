@@ -25,11 +25,11 @@ const RequestFeedback: FC = () => {
     const { colleagues, targetType, targetId, ...feedbackItems } = data;
 
     const formData = colleagues.map(({ value }) => ({
-      targetColleagueUuid: colleagueUuid,
+      targetColleagueUuid: value,
       targetType,
       targetId,
       status: 'PENDING',
-      colleagueUuid: value,
+      colleagueUuid: colleagueUuid,
       feedbackItems: Object.entries(feedbackItems)
         .filter((item) => item[1])
         .map(([key, value]) => ({ code: key, content: value })),

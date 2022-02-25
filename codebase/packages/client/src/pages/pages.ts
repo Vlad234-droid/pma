@@ -10,7 +10,7 @@ import Objectives from './Objectives';
 import Profile from './Profile';
 import Feedback from './Feedback';
 import GiveFeedback from './GiveFeedback';
-import GiveNewFeedBack from './GiveNewFeedBack';
+import GiveNewFeedBack from './GiveNewFeedback';
 import RequestFeedback from './RequestFeedback';
 import RespondFeedback from './RespondFeedback';
 import ViewFeedback from './ViewFeedback';
@@ -26,6 +26,7 @@ import { UserObjectives } from './UserObjectives';
 import PeopleTeam from './PeopleTeam';
 import Calibration from './Calibration';
 import AdministratorPage from './AdministratorPage';
+import RespondNewFeedback from './RespondNewFeedback';
 
 export type PageComponent = {
   Element: PageElement;
@@ -199,6 +200,13 @@ const pages: Record<Page, PageComponent> = {
     title: 'Respond to feedback requests',
     withHeader: true,
     backPath: Page.FEEDBACK,
+    perform: [role.COLLEAGUE],
+  },
+  [Page.RESPOND_NEW_FEEDBACK]: {
+    Element: RespondNewFeedback,
+    title: 'Respond to feedback requests',
+    withHeader: true,
+    backPath: Page.RESPOND_FEEDBACK,
     perform: [role.COLLEAGUE],
   },
   [Page.VIEW_FEEDBACK]: {

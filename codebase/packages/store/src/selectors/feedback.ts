@@ -65,8 +65,15 @@ export const feedbackByStatusSelector = (status) =>
 
 export const feedbackByUuidSelector = (uuid) =>
   createSelector(feedbackSelector, (feedback: any) => {
-    const { notes } = feedback;
-    return notes.find((item) => item.uuid === uuid);
+    const {
+      feedbacks: { giveFeedback, respondFeedback },
+    } = feedback;
+
+    const filtered = [...(giveFeedback || []), ...(respondFeedback || [])]?.find((item) => item.uuid === uuid) ?? [];
+
+    console.log('filtered', filtered);
+
+    return filtered;
   });
 
 export const getPropperNotesByCriteria = ({ status, filterFn, sortFn, serializer }) =>
@@ -79,4 +86,26 @@ export const getPropperNotesByCriteria = ({ status, filterFn, sortFn, serializer
       )
       .map(serializer)
       .sort(sortFn);
+  });
+
+export const getGiveFeedbacksSelector = (status) =>
+  createSelector(feedbackSelector, (feedback: any) => {
+    const {
+      feedbacks: { giveFeedback },
+    } = feedback;
+
+    const filtered = giveFeedback.filter((item) => item.status === status);
+
+    return filtered;
+  });
+
+export const getRespondedFeedbacksSelector = (status) =>
+  createSelector(feedbackSelector, (feedback: any) => {
+    const {
+      feedbacks: { respondFeedback },
+    } = feedback;
+
+    const filtered = respondFeedback.filter((item) => item.status === status);
+
+    return filtered;
   });
