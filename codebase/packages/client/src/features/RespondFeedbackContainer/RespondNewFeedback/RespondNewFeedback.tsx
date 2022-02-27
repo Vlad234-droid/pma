@@ -6,16 +6,20 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { colleagueUUIDSelector, ColleaguesActions, FeedbackActions, feedbackByUuidSelector } from '@pma/store';
 import { Icon } from 'components/Icon';
 import { Page } from 'pages';
+import { buildPath } from 'features/Routes/utils';
+import GiveFeedbackForm from './components/GiveFeedbackForm';
+import InfoMassage from './components/InfoMassage';
+import SuccessMassage from './components/SuccessMassage';
 
 enum Statuses {
   PENDING = 'pending',
-  CONFIRMING = 'confirming',
   SENDING = 'sending',
   INFO = 'info',
 }
 
 const RespondNewFeedback: FC = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   const feedbackFields = [
     {
@@ -58,9 +62,13 @@ const RespondNewFeedback: FC = () => {
   const [status, setStatus] = useState(Statuses.PENDING);
   const { uuid } = useParams<{ uuid: string }>();
 
-  const { feedbackItems, targetColleagueUuid, targetColleagueProfile } = useSelector(feedbackByUuidSelector(uuid)) || {
+  const { feedbackItems, targetColleagueUuid, targetColleagueProfile, targetId, targetType } = useSelector(
+    feedbackByUuidSelector(uuid),
+  ) || {
     targetColleagueUuid: '',
   };
+
+  if (!targetColleagueUuid) navigate(buildPath(Page.RESPOND_FEEDBACK));
 
   const [formData, setFormData] = useState({
     feedbackItems: feedbackItems
@@ -69,34 +77,41 @@ const RespondNewFeedback: FC = () => {
     targetColleagueUuid,
   });
   const colleagueUuid = useSelector(colleagueUUIDSelector);
-  const navigate = useNavigate();
 
   const handleSave = (data) => {
-    if (uuid === 'new') {
-      dispatch(FeedbackActions.createNewFeedback([{ ...data, colleagueUuid }]));
-    } else {
-      dispatch(
-        FeedbackActions.updatedFeedback({
-          ...data,
-          feedbackItems: data.feedbackItems.map((item) => ({
+    dispatch(
+      FeedbackActions.updatedFeedback({
+        ...data,
+        feedbackItems: [
+          ...data.feedbackItems.map((item) => ({
             ...item,
             uuid: feedbackItems.find((feedback) => feedback.code === item.code)?.uuid,
           })),
-          colleagueUuid,
-          uuid,
-        }),
-      );
-    }
+          ...feedbackItems.filter(
+            (item) =>
+              item.code === 'comment_to_day_job' ||
+              item.code === 'comment_to_your_self' ||
+              item.code === 'comment_to_your_impact' ||
+              item.code === 'comment_to_objective',
+          ),
+          ...feedbackItems.filter((item) => item.code === 'comment_to_request'),
+        ],
+        colleagueUuid,
+        uuid,
+        targetId,
+        targetType,
+      }),
+    );
   };
 
   const handleSubmit = (data) => {
-    if (data.status === 'DRAFT') {
+    if (data.status === 'PENDING') {
       handleSave(data);
       handleSuccess();
       return;
     }
-    setFormData(data);
-    setStatus(Statuses.CONFIRMING);
+    handleSave(data);
+    setStatus(Statuses.SENDING);
   };
 
   const handleSuccess = () => {
@@ -120,39 +135,22 @@ const RespondNewFeedback: FC = () => {
       }}
     >
       {status === Statuses.PENDING && (
-        <div></div>
+        <GiveFeedbackForm
+          defaultValues={formData}
+          onSubmit={handleSubmit}
+          currentColleague={targetColleagueProfile}
+          goToInfo={(data) => {
+            setStatus(Statuses.INFO);
+            setFormData(data);
+          }}
+          feedbackFields={feedbackFields}
+        />
+      )}
 
-        // <GiveFeedbackForm
-        //   defaultValues={formData}
-        //   onSubmit={handleSubmit}
-        //   currentColleague={targetColleagueProfile}
-        //   goToInfo={(data) => {
-        //     setStatus(Statuses.INFO);
-        //     setFormData(data);
-        //   }}
-        //   feedbackFields={feedbackFields}
-        // />
-      )}
-      {status === Statuses.CONFIRMING && (
-        <div></div>
-        // <ConfirmMassage
-        //   onConfirm={() => {
-        //     setStatus(Statuses.SENDING);
-        //     handleSave(formData);
-        //   }}
-        //   goBack={() => setStatus(Statuses.PENDING)}
-        // />
-      )}
       {status === Statuses.SENDING && (
-        <div></div>
-
-        // <SuccessMassage
-        //   onSuccess={handleSuccess}
-        //   selectedColleagueUuid={formData.targetColleagueUuid}
-        //   targetColleagueProfile={targetColleagueProfile}
-        // />
+        <SuccessMassage onSuccess={handleSuccess} targetColleagueProfile={targetColleagueProfile} />
       )}
-      {/* {status === Statuses.INFO && <InfoMassage goBack={() => setStatus(Statuses.PENDING)} />} */}
+      {status === Statuses.INFO && <InfoMassage goBack={() => setStatus(Statuses.PENDING)} />}
     </Modal>
   );
 };

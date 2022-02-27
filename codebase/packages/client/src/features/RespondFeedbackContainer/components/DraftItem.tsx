@@ -1,17 +1,11 @@
 import React, { FC, useEffect, useCallback } from 'react';
 import { useStyle, Rule } from '@dex-ddl/core';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  FeedbackActions,
-  ReviewsActions,
-  colleagueUUIDSelector,
-  getNotesArgsSelector,
-  getRespondedFeedbacksSelector,
-} from '@pma/store';
+import { FeedbackActions, ReviewsActions, colleagueUUIDSelector, getRespondedFeedbacksSelector } from '@pma/store';
 import debounce from 'lodash.debounce';
 import { TileWrapper } from 'components/Tile';
 import { Accordion, BaseAccordion, Section, Panel, ExpandButton } from 'components/Accordion';
-import { formatToRelativeDate , paramsReplacer } from 'utils';
+import { formatToRelativeDate, paramsReplacer } from 'utils';
 import IconButtonDefault from 'components/IconButtonDefault';
 import { FeedbackStatus, Tesco, FEEDBACK_STATUS_IN } from 'config/enum';
 import { getSortString } from 'utils/feedback';
@@ -25,14 +19,7 @@ import { Page } from 'pages';
 
 export const TEST_ID = 'test_id';
 
-const DraftItem: FC<DraftItemProps> = ({
-  draftFeedback,
-  checkedRadio,
-  filterModal,
-  setFilterModal,
-  setFilterFeedbacks,
-  filterFeedbacks,
-}) => {
+const DraftItem: FC<DraftItemProps> = ({ checkedRadio, filterFeedbacks }) => {
   const { css } = useStyle();
   const dispatch = useDispatch();
   const colleagueUuid = useSelector(colleagueUUIDSelector);
@@ -81,14 +68,6 @@ const DraftItem: FC<DraftItemProps> = ({
       }
     }
   }, [completedNotes.length]);
-
-  const handleFeedbackBtnClick = (item) => {
-    if (filterModal) setFilterModal(() => false);
-
-    setFilterFeedbacks(() => ({ sort: '', search: '' }));
-
-    draftFeedback(item);
-  };
 
   const getPropperNotes = () => {
     if (checkedRadio.completed) return completedNotes;

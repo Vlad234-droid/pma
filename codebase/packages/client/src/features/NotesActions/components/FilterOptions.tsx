@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { FilterOption as FilterOptionInput } from 'features/Shared';
 import { Rule, Styles, useStyle } from '@dex-ddl/core';
 import { IconButton } from 'components/IconButton';
@@ -16,6 +16,12 @@ const FilterOption: FC<FilterOptionProps> = ({
 }) => {
   const { css } = useStyle();
   const [focus, setFocus] = useState(false);
+
+  useEffect(() => {
+    if (!focus) {
+      setSearchValueFilterOption(() => '');
+    }
+  }, [focus]);
 
   return (
     <div

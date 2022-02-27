@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { useStyle, Rule } from '@dex-ddl/core';
-import { TargetTypeReverse, TargetFeedbackKeys , Tesco } from 'config/enum';
+import { TargetTypeReverse, TargetFeedbackKeys, Tesco } from 'config/enum';
 import { getReviewByUuidS } from '@pma/store';
 import { useSelector } from 'react-redux';
 

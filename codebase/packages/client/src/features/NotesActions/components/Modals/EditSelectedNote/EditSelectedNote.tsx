@@ -11,6 +11,7 @@ import { getEditedNote } from 'utils/note';
 import { ConfirmModal } from 'features/Modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { NotesActions, colleagueUUIDSelector } from '@pma/store';
+import { Option } from 'components/Form/types';
 
 const EditSelectedNote: FC<EditSelectedNoteProps> = ({
   foldersWithNotes,
@@ -36,6 +37,7 @@ const EditSelectedNote: FC<EditSelectedNoteProps> = ({
   const {
     formState: { isValid },
     trigger,
+    setValue,
   } = methods;
 
   const notes = getEditedNote(definePropperEditMode, foldersWithNotes, selectedNoteToEdit.folderUuid, t);
@@ -146,34 +148,16 @@ const EditSelectedNote: FC<EditSelectedNoteProps> = ({
             if (item.type === 'select') {
               const { field_options } = item;
               return (
-                <GenericItemField
-                  key={item.id}
-                  name={`folder`}
-                  methods={methods}
-                  label={item.title}
-                  Wrapper={({ children }) => (
-                    <Item withIcon={false} label={item.title}>
-                      {children}
-                    </Item>
-                  )}
-                  Element={Select}
-                  options={field_options}
-                  placeholder={item.placeholder}
-                  onChange={(value) => {
-                    if (!value) return;
-                    trigger('folder');
-                    // setSelectedNoteToEdit((prev: any) => {
-                    //   return { ...prev, folderUuid: value };
-                    // });
-                  }}
-                  value={
-                    selectedNoteToEdit.folderUuid === null
-                      ? 'All notes'
-                      : foldersWithNotes[
-                          foldersWithNotes.findIndex((item) => item.id === selectedNoteToEdit.folderUuid)
-                        ]?.id ?? ''
-                  }
-                />
+                <Item withIcon={false} label={item.title} key={item.id}>
+                  <Select
+                    options={field_options as Option[]}
+                    name={'targetType'}
+                    placeholder={item.placeholder}
+                    onChange={(value) => {
+                      setValue('folder', value, { shouldValidate: true });
+                    }}
+                  />
+                </Item>
               );
             }
           })}

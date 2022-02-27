@@ -71,8 +71,6 @@ export const feedbackByUuidSelector = (uuid) =>
 
     const filtered = [...(giveFeedback || []), ...(respondFeedback || [])]?.find((item) => item.uuid === uuid) ?? [];
 
-    console.log('filtered', filtered);
-
     return filtered;
   });
 

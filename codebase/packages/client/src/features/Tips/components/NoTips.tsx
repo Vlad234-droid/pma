@@ -1,26 +1,38 @@
 import React, { FC, Fragment } from 'react';
-import { useStyle, Rule, useBreakpoints, Icon as IconCore } from '@dex-ddl/core';
+import { useStyle, CreateRule, useBreakpoints, Theme } from '@dex-ddl/core';
 import { TileWrapper } from 'components/Tile';
+import { Icon } from 'components/Icon';
+import { Trans } from 'components/Translation';
+
+export const NO_TIPS_TILE = 'no-tips-tile';
 
 const NoTips: FC = () => {
-  const { css } = useStyle();
+  const { css, theme } = useStyle();
+  const [, isBreakpoint] = useBreakpoints();
+  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
 
   return (
     <Fragment>
-      <div className={css({ margin: '0 0 15px' })}>
-        <TileWrapper customStyle={cardStyle}>
-          <div className={css(cardInner)}>
+      <div data-test-id={NO_TIPS_TILE} className={css({ margin: '0 0 15px' })}>
+        <TileWrapper customStyle={cardStyle({ mobileScreen })}>
+          <div className={css(cardInner({ mobileScreen }))}>
             <div className={css({ marginRight: '10px' })}>
-              <IconCore size='20px' graphic='information' />
+              <Icon iconStyles={{ width: '20px' }} graphic='information' />
             </div>
             <div className={css({})}>
-              <div className={css(cardTitleStyle)}>
-                Please create your first tip to be able to push it to colleagues.
+              <div className={css(cardTitleStyle({ mobileScreen, theme }))}>
+                <Trans i18nKey='please_create_your_first_tip'>
+                  Please create your first tip to be able to push it to colleagues
+                </Trans>
+                .
               </div>
-              <div className={css(cardTextleStyle)}>
-                Tips should be also helpful to transition from the current system to the new one. They should offer
-                guidance on how the application functionalities can be used or as an alert for upcoming events
-                (reviews).
+              <div className={css(cardTextleStyle({ mobileScreen, theme }))}>
+                <Trans i18nKey='tips_should_be_also_helpful'>
+                  Tips should be also helpful to transition from the current system to the new one. They should offer
+                  guidance on how the application functionalities can be used or as an alert for upcoming events
+                  (reviews)
+                </Trans>
+                .
               </div>
             </div>
           </div>
@@ -30,18 +42,14 @@ const NoTips: FC = () => {
   );
 };
 
-const cardStyle: Rule = () => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+const cardStyle: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => {
   return {
     padding: mobileScreen ? '16px' : '24px',
     width: mobileScreen ? '100%' : '80%',
   };
 };
 
-const cardInner: Rule = () => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+const cardInner: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => {
   return {
     padding: mobileScreen ? '10px' : '15px',
     borderRadius: '10px',
@@ -50,24 +58,34 @@ const cardInner: Rule = () => {
   };
 };
 
-const cardTitleStyle: Rule = ({ theme }) => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+const cardTitleStyle: CreateRule<{ mobileScreen: boolean; theme: Theme }> = ({ mobileScreen, theme }) => {
   return {
     fontWeight: 700,
-    fontSize: mobileScreen ? '12px' : '14px',
-    lineHeight: mobileScreen ? '16px' : '18px',
     color: theme.colors.tescoBlue,
+    ...(mobileScreen
+      ? {
+          fontSize: theme.font.fixed.f12.fontSize,
+          lineHeight: theme.font.fixed.f12.lineHeight,
+        }
+      : {
+          fontSize: theme.font.fixed.f14.fontSize,
+          lineHeight: theme.font.fixed.f14.lineHeight,
+        }),
   };
 };
 
-const cardTextleStyle: Rule = () => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+const cardTextleStyle: CreateRule<{ mobileScreen: boolean; theme: Theme }> = ({ mobileScreen, theme }) => {
   return {
-    fontSize: mobileScreen ? '12px' : '14px',
-    lineHeight: mobileScreen ? '16px' : '18px',
     marginTop: '5px',
+    ...(mobileScreen
+      ? {
+          fontSize: theme.font.fixed.f12.fontSize,
+          lineHeight: theme.font.fixed.f12.lineHeight,
+        }
+      : {
+          fontSize: theme.font.fixed.f14.fontSize,
+          lineHeight: theme.font.fixed.f14.lineHeight,
+        }),
   };
 };
 

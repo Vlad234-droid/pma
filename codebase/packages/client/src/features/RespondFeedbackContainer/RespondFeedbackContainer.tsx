@@ -39,25 +39,6 @@ const RespondFeedbackContainer: FC = () => {
     }
   }, [focus]);
 
-  const draftFeedback = (selectedNote) => {
-    if (selectedNote.feedbackItems) {
-      setFeedbackItems(() => selectedNote.feedbackItems);
-    }
-    setSearchValue(
-      () =>
-        `${selectedNote.targetColleagueProfile?.colleague?.profile?.firstName} ${selectedNote.targetColleagueProfile?.colleague?.profile?.lastName}`,
-    );
-    setSelectedPerson(() => ({
-      ...selectedNote.colleagueProfile,
-      ...selectedNote.targetColleagueProfile.colleague,
-      profileAttributes: selectedNote.targetColleagueProfile.profileAttributes,
-      targetId: selectedNote?.targetId,
-      targetType: selectedNote?.targetType,
-      uuid: selectedNote.uuid,
-    }));
-    setIsOpen(() => true);
-  };
-
   const hasActiveFilter = Object.values(filterFeedbacks).some((f) => f);
 
   return (
@@ -98,14 +79,7 @@ const RespondFeedbackContainer: FC = () => {
           </div>
         </div>
         <div className={css(DraftsStyle)}>
-          <DraftItem
-            draftFeedback={draftFeedback}
-            checkedRadio={checkedRadio}
-            filterModal={filterModal}
-            setFilterModal={setFilterModal}
-            setFilterFeedbacks={setFilterFeedbacks}
-            filterFeedbacks={filterFeedbacks}
-          />
+          <DraftItem checkedRadio={checkedRadio} filterFeedbacks={filterFeedbacks} />
         </div>
       </div>
       {isOpenMainModal && (

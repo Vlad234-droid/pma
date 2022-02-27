@@ -21,9 +21,8 @@ import { Icon } from 'components/Icon';
 import { FeedbackStatus } from 'config/enum';
 import { useAuthContainer } from 'contexts/authContext';
 import { Page } from 'pages';
-import { UserprofileAttributes } from 'config/types';
 
-import { TREATMENT_FIELD_OPTIONS } from './config';
+import { TREATMENT_FIELD_OPTIONS } from './config/constants';
 import { getSelectedTreatmentValue } from './utils';
 import Info360Modal, { FeedbackCard } from './components';
 import { ConfigProps } from './config/types';
@@ -35,7 +34,7 @@ const FeedbackActions: FC = () => {
   const { user } = useAuthContainer();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
-  const profileAttr: UserprofileAttributes[] = user?.data?.profileAttributes;
+  const profileAttr = user?.data?.profileAttributes;
   const treatmentValue: string = getSelectedTreatmentValue(profileAttr);
 
   const [info360Modal, setInfo360Modal] = useState<boolean>(false);
@@ -121,9 +120,8 @@ const FeedbackActions: FC = () => {
     window.open('https://feedback.etsplc.com/Tesco360/', '_blank')?.focus();
   };
 
-  const createToneOfVoiceHandler = (e) => {
-    if (!e.target) return;
-    const { value } = e.target;
+  const createToneOfVoiceHandler = (value) => {
+    if (!value) return;
 
     const payload = {
       colleagueUuid,
@@ -218,9 +216,11 @@ const FeedbackActions: FC = () => {
             <Select
               options={TREATMENT_FIELD_OPTIONS}
               name={'treatment-options'}
-              placeholder={'Choose tone of voice'}
+              placeholder={t('choose_tone_of_voice', 'Choose tone of voice')}
               value={treatmentValue}
-              onChange={createToneOfVoiceHandler}
+              onChange={(value) => {
+                createToneOfVoiceHandler(value);
+              }}
             />
           </Item>
         </div>

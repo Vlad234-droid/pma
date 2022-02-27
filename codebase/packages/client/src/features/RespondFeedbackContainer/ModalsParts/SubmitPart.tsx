@@ -86,9 +86,10 @@ const SubmitPart: FC<SubmitPartProps> = ({
 
   const checkForValidInputsKeys = () => {
     if (
-      (feedbackItems.every((item) => item.uuid) && feedbackItems.some((item) => item.code === 'Question 1')) ||
-      feedbackItems.some((item) => item.code === 'Question 2') ||
-      feedbackItems.some((item) => item.code === 'Anything else?')
+      feedbackItems.every((item) => item.uuid) &&
+      (feedbackItems.some((item) => item.code === 'Question 1') ||
+        feedbackItems.some((item) => item.code === 'Question 2') ||
+        feedbackItems.some((item) => item.code === 'Anything else?'))
     ) {
       return true;
     }

@@ -50,6 +50,7 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel, setIsInfoModalOpen }) 
     setValue,
     handleSubmit,
     register,
+    trigger,
   } = methods;
 
   const formValues = getValues();
@@ -108,22 +109,21 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel, setIsInfoModalOpen }) 
             </IconButton>
           </div>
           <div className={css({ marginTop: '18px' })}>
-            <Field
-              Wrapper={({ children }) => (
-                <Item
-                  label={t('choose_what_you_like_feedback_on', 'Choose what you`d like feedback on')}
-                  withIcon={false}
-                >
-                  {children}
-                </Item>
-              )}
-              Element={Select}
-              options={AREA_OPTIONS}
-              placeholder={t('choose_an_area', 'Choose an area')}
-              value={formValues.targetType}
-              {...register('targetType')}
-              setValue={setValue}
-            />
+            <Item withIcon={false} label={t('choose_what_you_like_feedback_on', 'Choose what you`d like feedback on')}>
+              <Select
+                {...register('targetType')}
+                options={AREA_OPTIONS}
+                name={'targetType'}
+                placeholder={t('choose_an_area', 'Choose an area')}
+                //@ts-ignore
+                onChange={({ target: { value } }) => {
+                  if (get(formValues, 'targetId') && value !== TargetType.OBJECTIVE) {
+                    setValue('targetId', '', { shouldValidate: false });
+                  }
+                  setValue('targetType', value, { shouldValidate: true });
+                }}
+              />
+            </Item>
           </div>
           {formValues.targetType === TargetType.GOAL && (
             <TileWrapper customStyle={{ padding: '24px', border: '1px solid #E5E5E5', marginBottom: '24px' }}>
@@ -141,22 +141,20 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel, setIsInfoModalOpen }) 
           )}
           {formValues.targetType === TargetType.OBJECTIVE && (
             <div className={css({ marginTop: '24px' })}>
-              <Field
-                Wrapper={({ children }) => (
-                  <Item
-                    label={t('choose_an_objective_you_want_feedback_on', 'Choose an objective you want feedback on')}
-                    withIcon={false}
-                  >
-                    {children}
-                  </Item>
-                )}
-                Element={Select}
-                options={[...objectiveOptions, { value: Tesco.TescoBank, label: Tesco.TescoBank }]}
-                placeholder={t('choose_objective', 'Choose objective')}
-                value={formValues.objective}
-                {...register('targetId')}
-                setValue={setValue}
-              />
+              <Item
+                withIcon={false}
+                label={t('choose_an_objective_you_want_feedback_on', 'Choose an objective you want feedback on')}
+              >
+                <Select
+                  options={[...objectiveOptions, { value: Tesco.TescoBank, label: Tesco.TescoBank }]}
+                  name={'targetId'}
+                  placeholder={t('choose_objective', 'Choose objective')}
+                  //@ts-ignore
+                  onChange={({ target: { value } }) => {
+                    setValue('targetId', value, { shouldValidate: true });
+                  }}
+                />
+              </Item>
             </div>
           )}
           {formValues.targetId && (
