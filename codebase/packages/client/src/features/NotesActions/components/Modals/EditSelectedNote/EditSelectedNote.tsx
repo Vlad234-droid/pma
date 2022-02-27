@@ -153,7 +153,9 @@ const EditSelectedNote: FC<EditSelectedNoteProps> = ({
                     options={field_options as Option[]}
                     name={'targetType'}
                     placeholder={item.placeholder}
-                    onChange={(value) => {
+                    //@ts-ignore
+                    onChange={({ target }) => {
+                      const { value } = target;
                       setValue('folder', value, { shouldValidate: true });
                     }}
                   />

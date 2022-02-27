@@ -257,7 +257,8 @@ const Report: FC = () => {
                     options={getFieldOptions(getCurrentYear())}
                     name={'year_options'}
                     placeholder={t('choose_an_area', 'Choose an area')}
-                    onChange={(value) => {
+                    //@ts-ignore
+                    onChange={({ target: { value } }) => {
                       changeYearHandler(value);
                     }}
                   />

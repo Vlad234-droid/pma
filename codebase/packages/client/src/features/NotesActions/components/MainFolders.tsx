@@ -268,11 +268,11 @@ const MainFolders: FC<MainFolderProps> = ({
       dispatch(NotesActions.updateNote(payload));
     }
     if (payload.folderUuid) {
-      const { title: folderTitle } = folders?.find((item) => item.id === payload.folderUuid);
+      const { title } = folders?.find((item) => item.id === payload.folderUuid);
       const body = {
         folder: {
           ownerColleagueUuid: colleagueUuid,
-          title: folderTitle,
+          title,
           parentFolderUuid: teamArchivedFolderUuid,
         },
         note: {
