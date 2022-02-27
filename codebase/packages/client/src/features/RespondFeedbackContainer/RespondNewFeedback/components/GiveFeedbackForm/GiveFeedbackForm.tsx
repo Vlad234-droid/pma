@@ -88,9 +88,7 @@ const GiveFeedbackForm: FC<GiveFeedbackFormProps> = ({
         value={getColleagueName(selectedColleague)}
         error={get(errors, 'targetColleagueUuid.message')}
       />
-      {selectedColleague && (
-        <FeedbackInfo selectedPerson={selectedColleague} onClickMore={() => goToInfo(getValues())} />
-      )}
+      {selectedColleague && <FeedbackInfo onClickMore={() => goToInfo(getValues())} />}
       {selectedColleague && (
         <div>
           {feedbackFields.map((item, index) => {

@@ -8,6 +8,7 @@ import {
   clearFeedback,
   getGiveFeedback,
   getRespondFeedback,
+  getViewFeedback,
 } from './actions';
 
 export const initialState = {
@@ -16,6 +17,7 @@ export const initialState = {
   feedbacks: {
     giveFeedback: [],
     respondFeedback: [],
+    viewFeedback: [],
   },
   meta: { loading: false, loaded: false, error: null },
 };
@@ -119,6 +121,27 @@ export default createReducer(initialState)
     },
   }))
   .handleAction(getRespondFeedback.failure, (state, { payload }) => ({
+    ...state,
+    meta: { ...state.meta, loading: false, loaded: true, error: payload },
+  }))
+
+  .handleAction(getViewFeedback.request, (state) => ({
+    ...state,
+    meta: { ...state.meta, loading: true },
+  }))
+  .handleAction(getViewFeedback.success, (state, { payload }) => ({
+    ...state,
+    feedbacks: {
+      ...state.feedback,
+      viewFeedback: payload,
+    },
+    meta: {
+      ...state.meta,
+      loading: false,
+      loaded: true,
+    },
+  }))
+  .handleAction(getViewFeedback.failure, (state, { payload }) => ({
     ...state,
     meta: { ...state.meta, loading: false, loaded: true, error: payload },
   }));

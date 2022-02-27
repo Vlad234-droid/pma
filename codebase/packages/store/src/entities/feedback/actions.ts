@@ -44,6 +44,12 @@ export const getRespondFeedback = createAsyncAction(
   'feedback/GET_RESPOND_FEEDBACK_FAILURE',
 )<any, any, Error>();
 
+export const getViewFeedback = createAsyncAction(
+  'feedback/GET_VIEW_FEEDBACK_REQUEST',
+  'feedback/GET_VIEW_FEEDBACK_SUCCESS',
+  'feedback/GET_VIEW_FEEDBACK_FAILURE',
+)<any, any, Error>();
+
 export const Actions = {
   createNewFeedback: createNewFeedback.request,
   getAllFeedbacks: getAllFeedbacks.request,
@@ -52,5 +58,6 @@ export const Actions = {
   getObjectiveReviews: getObjectiveReviews.request,
   getGiveFeedback: getGiveFeedback.request,
   getRespondFeedback: getRespondFeedback.request,
+  getViewFeedback: getViewFeedback.request,
   clearFeedback,
 };

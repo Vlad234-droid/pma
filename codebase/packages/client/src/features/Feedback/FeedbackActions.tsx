@@ -41,6 +41,7 @@ const FeedbackActions: FC = () => {
   const dispatch = useDispatch();
   const colleagueUuid = useSelector(colleagueUUIDSelector);
 
+  //TODO: refactor useEffect when endpoints of feedback quantity will be available
   useEffect(() => {
     if (!colleagueUuid) return;
     dispatch(
@@ -50,12 +51,15 @@ const FeedbackActions: FC = () => {
     );
   }, [colleagueUuid]);
   const { css, theme } = useStyle();
+  //TODO: refactor this when endpoints of feedback quantity will be available
   const pendingNotes = useSelector(getNotesArgsSelector(FeedbackStatus.PENDING, colleagueUuid)) || [];
+  //TODO: refactor this when endpoints of feedback quantity will be available
   const unReadSubmittedNotes =
     useSelector(getUnReadSubmittedNotesSelector([FeedbackStatus.SUBMITTED, FeedbackStatus.COMPLETED], colleagueUuid)) ||
     [];
-
+  //TODO: refactor this when endpoints of feedback quantity will be available
   const unReadSubmittedNotesLength = unReadSubmittedNotes?.length || 0;
+  //TODO: refactor this when endpoints of feedback quantity will be available
   const pendingNotesLength = pendingNotes?.length || 0;
 
   const getIconForUnReadNotes = () => {
@@ -121,6 +125,8 @@ const FeedbackActions: FC = () => {
   };
 
   const createToneOfVoiceHandler = (value) => {
+    console.log('value', value);
+
     if (!value) return;
 
     const payload = {
@@ -218,7 +224,8 @@ const FeedbackActions: FC = () => {
               name={'treatment-options'}
               placeholder={t('choose_tone_of_voice', 'Choose tone of voice')}
               value={treatmentValue}
-              onChange={(value) => {
+              //@ts-ignore
+              onChange={({ target: { value } }) => {
                 createToneOfVoiceHandler(value);
               }}
             />

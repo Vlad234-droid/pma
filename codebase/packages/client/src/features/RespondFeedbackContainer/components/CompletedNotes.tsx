@@ -1,8 +1,8 @@
 import React, { FC } from 'react';
 import { useStyle, Rule, Styles } from '@dex-ddl/core';
-import { TargetTypeReverse, TargetFeedbackKeys, Tesco } from 'config/enum';
 import { getReviewByUuidS } from '@pma/store';
 import { useSelector } from 'react-redux';
+import { getPropperTargetType } from '../config';
 
 type CompletedNotesProps = {
   item: any;
@@ -13,38 +13,10 @@ const CompletedNotes: FC<CompletedNotesProps> = ({ item }) => {
 
   const review = useSelector(getReviewByUuidS) || [];
 
-  const getPropperTargetType = (targetType, targetId, item) => {
-    const { feedbackItems } = item;
-
-    const capitalType =
-      TargetTypeReverse[targetType] &&
-      TargetTypeReverse[targetType].charAt(0).toUpperCase() + TargetTypeReverse[targetType].slice(1);
-
-    if (capitalType && targetType && targetId) {
-      let targetTypeStr = targetId === Tesco.TescoBank ? targetId : '';
-      review.forEach((item) => {
-        if (item.uuid === targetId) {
-          targetTypeStr = item.title;
-        }
-      });
-
-      return `“${capitalType}${targetTypeStr !== '' ? ':' : ''}${`${
-        targetTypeStr !== '' ? ` ${targetTypeStr}` : `${targetTypeStr}`
-      }`}”`;
-    }
-    if (feedbackItems.length) {
-      const value =
-        feedbackItems?.[feedbackItems?.findIndex((item) => item?.code === TargetFeedbackKeys[targetType])]?.content ??
-        '';
-      return `“${capitalType}${value !== '' ? ':' : ''}${`${value !== '' ? ` ${value}` : `${value}`}`}”`;
-    }
-    return '';
-  };
-
   return (
     <>
       <h3 className={css(ShareResondStyle, { marginBottom: '8px' })}>
-        {getPropperTargetType(item.targetType, item.targetId, item)}
+        {getPropperTargetType(item.targetType, item.targetId, item.feedbackItems, review)}
       </h3>
       <p className={css(QuestionStyle, { marginTop: '8px', marginBottom: '8px' })}>
         {item?.feedbackItems?.find((feed) => feed?.code === 'comment_to_request')?.content ?? ''}

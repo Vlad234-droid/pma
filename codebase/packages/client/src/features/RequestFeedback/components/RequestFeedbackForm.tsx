@@ -50,7 +50,6 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel, setIsInfoModalOpen }) 
     setValue,
     handleSubmit,
     register,
-    trigger,
   } = methods;
 
   const formValues = getValues();

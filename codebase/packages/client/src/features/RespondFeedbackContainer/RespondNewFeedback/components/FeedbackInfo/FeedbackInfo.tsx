@@ -2,21 +2,20 @@ import React, { useEffect, FC } from 'react';
 import { IconButton } from 'components/IconButton';
 import { Trans } from 'components/Translation';
 import defaultImg from 'images/default.png';
-import { Rule, Styles, useBreakpoints, useStyle } from '@dex-ddl/core';
+import { Rule, Styles, useStyle } from '@dex-ddl/core';
 import { VideoPlayer, VideoId } from 'features/VideoPlayer';
 import { useSelector, useDispatch } from 'react-redux';
 import { feedbackByUuidSelector, getReviewByUuidS, getRespondedFeedbacksSelector, ReviewsActions } from '@pma/store';
 import { useParams } from 'react-router-dom';
-import { getPropperTargetType } from './config';
+import { getPropperTargetType } from '../../../config';
 import { FeedbackStatus, Tesco } from 'config/enum';
 
 type Props = {
-  selectedPerson: any;
   onClickMore: () => void;
 };
 
-const FeedbackInfo: FC<Props> = ({ selectedPerson, onClickMore }) => {
-  const { css, theme } = useStyle();
+const FeedbackInfo: FC<Props> = ({ onClickMore }) => {
+  const { css } = useStyle();
   const { uuid } = useParams<{ uuid: string }>();
   const pendingNotes = useSelector(getRespondedFeedbacksSelector(FeedbackStatus.PENDING)) || [];
   const { feedbackItems, targetColleagueProfile, targetType, targetId } =
@@ -62,8 +61,8 @@ const FeedbackInfo: FC<Props> = ({ selectedPerson, onClickMore }) => {
         <p>{`${targetColleagueProfile?.colleague?.profile?.firstName} has requested feedback on: ${getPropperTargetType(
           targetType,
           targetId,
-          review,
           feedbackItems,
+          review,
         )}`}</p>
         <p>{getPropperCommentRequested()}</p>
       </div>

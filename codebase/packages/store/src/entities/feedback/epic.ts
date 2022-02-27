@@ -11,8 +11,8 @@ import {
   getObjectiveReviews,
   getGiveFeedback,
   getRespondFeedback,
+  getViewFeedback,
 } from './actions';
-import { FEEDBACK_STATUS_IN } from '../../config/types';
 
 export const getAllFeedbackEpic: Epic = (action$, _, { api }) => {
   return action$.pipe(
@@ -41,6 +41,21 @@ export const getGiveFeedbackEpic: Epic = (action$, _, { api }) => {
           return getGiveFeedback.success(data);
         }),
         catchError(({ errors }) => of(getGiveFeedback.failure(errors))),
+      );
+    }),
+  );
+};
+export const getViewFeedbackEpic: Epic = (action$, _, { api }) => {
+  return action$.pipe(
+    filter(isActionOf(getViewFeedback.request)),
+    switchMap(({ payload }) => {
+      //@ts-ignore
+      return from(api.getFeedbacks(payload)).pipe(
+        //@ts-ignore
+        map(({ data }) => {
+          return getViewFeedback.success(data);
+        }),
+        catchError(({ errors }) => of(getViewFeedback.failure(errors))),
       );
     }),
   );
@@ -80,17 +95,6 @@ export const createNewFeedbackEpic: Epic = (action$, _, { api }) =>
     switchMap(({ payload }) => {
       //@ts-ignore
       return from(api.createNewFeedback(payload)).pipe(
-        //@ts-ignore
-        //map(({ data }) => {
-        //  const [obj] = data;
-        //  if (epic === 1) {
-        //    return getGiveFeedback.request({
-        //      'colleague-uuid': obj.colleagueUuid,
-        //      _limit: '300',
-        //      status_in: [FEEDBACK_STATUS_IN.DRAFT, FEEDBACK_STATUS_IN.SUBMITTED],
-        //    });
-        //  }
-        //}),
         map(createNewFeedback.success),
         catchError(({ errors }) => of(createNewFeedback.failure(errors))),
       );
@@ -131,4 +135,5 @@ export default combineEpics(
   getObjectiveReviewsEpic,
   getGiveFeedbackEpic,
   getRespondFeedbackEpic,
+  getViewFeedbackEpic,
 );
