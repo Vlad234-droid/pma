@@ -7,7 +7,7 @@ import { ColleaguesActions, getColleaguesSelector } from '@pma/store';
 import defaultImg from 'images/default.png';
 
 type Props = {
-  onSelect: (person: any) => void;
+  onSelect: (colleagueUUID: string) => void;
   selected?: any;
   value: string;
   error: string;
@@ -80,10 +80,10 @@ const FlexGapStyle: Rule = {
   gap: '8px',
 };
 
-const SelectedItemStyle: Rule = ({ colors }) => ({
-  fontWeight: 'bold',
+const SelectedItemStyle: Rule = ({ theme }) => ({
+  fontWeight: theme.font.weight.bold,
   fontSize: '16px',
-  color: colors.link,
+  color: theme.colors.link,
 });
 
 export default ColleaguesFinder;

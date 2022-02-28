@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { useTranslation } from 'components/Translation';
 import { useDispatch, useSelector } from 'react-redux';
 import { useBreakpoints, Rule, Modal } from '@dex-ddl/core';
@@ -10,52 +10,7 @@ import { buildPath } from 'features/Routes/utils';
 import GiveFeedbackForm from './components/GiveFeedbackForm';
 import InfoMassage from './components/InfoMassage';
 import SuccessMassage from './components/SuccessMassage';
-
-const getFeedbackFields = (t) => {
-  return [
-    {
-      id: '0',
-      code: 'Question 1',
-      title: t(
-        'looking_back_at_what_you_seen_recently',
-        "Looking back at what you've seen recently, in relation to the area I've asked for feedback on, what can you tell me about what I've delivered or how I've gone about it?",
-      ),
-      description: t('share_specific_examples', "Share specific examples of what you've seen."),
-      field: {
-        id: '1',
-        type: 'textarea',
-      },
-    },
-    {
-      id: '1',
-      code: 'Question 2',
-      title: t(
-        'looking_forward_in_relation',
-        "Looking forward, in relation to the area I've asked for feedback on, what should I do more (or less) of in order to be at my best?",
-      ),
-      description: t('share_your_suggestions', 'Share your suggestions'),
-      field: {
-        id: '2',
-        type: 'textarea',
-      },
-    },
-    {
-      id: '2',
-      code: 'Anything else?',
-      title: t('add_any_other_comments', 'Add any other comments you would like to share with your colleague.'),
-      field: {
-        id: '3',
-        type: 'textarea',
-      },
-    },
-  ];
-};
-
-enum Statuses {
-  PENDING = 'pending',
-  SENDING = 'sending',
-  INFO = 'info',
-}
+import { getFeedbackFields, Statuses, HandleSaveType, getPayload } from './config';
 
 const RespondNewFeedback: FC = () => {
   const { t } = useTranslation();
@@ -71,7 +26,9 @@ const RespondNewFeedback: FC = () => {
     targetColleagueUuid: '',
   };
 
-  if (!targetColleagueUuid) navigate(buildPath(Page.RESPOND_FEEDBACK));
+  useEffect(() => {
+    if (!targetColleagueUuid) navigate(buildPath(Page.RESPOND_FEEDBACK));
+  }, [targetColleagueUuid]);
 
   const [formData, setFormData] = useState({
     feedbackItems: feedbackItems
@@ -81,29 +38,9 @@ const RespondNewFeedback: FC = () => {
   });
   const colleagueUuid = useSelector(colleagueUUIDSelector);
 
-  const handleSave = (data) => {
+  const handleSave = (data: HandleSaveType) => {
     dispatch(
-      FeedbackActions.updatedFeedback({
-        ...data,
-        feedbackItems: [
-          ...data.feedbackItems.map((item) => ({
-            ...item,
-            uuid: feedbackItems.find((feedback) => feedback.code === item.code)?.uuid,
-          })),
-          ...feedbackItems.filter(
-            (item) =>
-              item.code === 'comment_to_day_job' ||
-              item.code === 'comment_to_your_self' ||
-              item.code === 'comment_to_your_impact' ||
-              item.code === 'comment_to_objective',
-          ),
-          ...feedbackItems.filter((item) => item.code === 'comment_to_request'),
-        ],
-        colleagueUuid,
-        uuid,
-        targetId,
-        targetType,
-      }),
+      FeedbackActions.updatedFeedback(getPayload(data, feedbackItems, colleagueUuid, uuid, targetId, targetType)),
     );
   };
 
@@ -195,7 +132,7 @@ const modalCloseOptionStyle: Rule = () => {
   };
 };
 
-const modalTitleOptionStyle: Rule = () => {
+const modalTitleOptionStyle: Rule = ({ theme }) => {
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
 
@@ -206,7 +143,7 @@ const modalTitleOptionStyle: Rule = () => {
     left: 0,
     right: 0,
     color: 'white',
-    fontWeight: 'bold',
+    fontWeight: theme.font.weight.bold,
     ...(mobileScreen
       ? {
           fontSize: '20px',
