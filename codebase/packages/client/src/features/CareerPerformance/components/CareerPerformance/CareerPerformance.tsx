@@ -23,6 +23,7 @@ type Props = {
   midYearReview: Review;
   endYearReview: Review;
   colleagueUuid?: string;
+  displayTimelines: boolean;
 };
 
 const CareerPerformance: FC<Props> = ({
@@ -34,6 +35,7 @@ const CareerPerformance: FC<Props> = ({
   midYearReview,
   endYearReview,
   colleagueUuid,
+  displayTimelines,
 }) => {
   const { css } = useStyle();
   const showMyReview = timelineTypes[ReviewType.MYR] && timelineTypes[ReviewType.EYR];
@@ -54,16 +56,20 @@ const CareerPerformance: FC<Props> = ({
         />
         <HelpWidgets />
       </div>
-      <ObjectiveWidgets />
-      <Section title={<Trans i18nKey='my_reviews'>My reviews</Trans>}>
-        <ReviewWidgets
-          showMyReview={showMyReview}
-          showAnnualReview={showAnnualReview}
-          basicTileStyle={basicTileStyle}
-          midYearReview={midYearReview}
-          endYearReview={endYearReview}
-        />
-      </Section>
+      {displayTimelines && (
+        <>
+          <ObjectiveWidgets />
+          <Section title={<Trans i18nKey='my_reviews'>My reviews</Trans>}>
+            <ReviewWidgets
+              showMyReview={showMyReview}
+              showAnnualReview={showAnnualReview}
+              basicTileStyle={basicTileStyle}
+              midYearReview={midYearReview}
+              endYearReview={endYearReview}
+            />
+          </Section>
+          </>
+      )}
       <Section title={<Trans i18nKey='useful_resources'>Useful resources</Trans>}>
         <KnowledgeLibraryWidget />
       </Section>
