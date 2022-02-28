@@ -21,6 +21,6 @@ export const readFeedback = (params: any) => {
   return httpClient.put(`${domain}/${uuid}/read`);
 };
 
-export const getFeedbacks = <T>(params: any): Promise<AxiosResponse<any>> => {
+export const getFeedbacks = (params: any): Promise<AxiosResponse<any>> => {
   return httpClient.get(`${domain}`, { params });
 };

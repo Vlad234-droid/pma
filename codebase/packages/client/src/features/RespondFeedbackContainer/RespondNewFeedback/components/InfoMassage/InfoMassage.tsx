@@ -63,7 +63,7 @@ const InfoMessage: FC<Props> = ({ goBack }) => {
           cursor: 'pointer',
         })}
       >
-        <IconButton graphic='arrowLeft' onPress={() => goBack()} iconProps={{ invertColors: true }} />
+        <IconButton graphic='arrowLeft' onPress={goBack} iconProps={{ invertColors: true }} />
       </span>
     </div>
   );

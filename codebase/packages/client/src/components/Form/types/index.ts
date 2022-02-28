@@ -34,7 +34,8 @@ export interface SelectField extends FormField {
   options: Array<Option>;
   placeholder: string;
   value?: string;
-  onChange: (value: string) => void;
+  //TODO: change any to ChangeEvent when all dropdonwns will be fixed
+  onChange: (value: any) => void;
 }
 
 export interface TextareaField extends FormField {

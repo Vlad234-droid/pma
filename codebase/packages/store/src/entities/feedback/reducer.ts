@@ -15,9 +15,9 @@ export const initialState = {
   notes: [],
   reviews: [],
   feedbacks: {
-    giveFeedback: [],
-    respondFeedback: [],
-    viewFeedback: [],
+    give: [],
+    respond: [],
+    view: [],
   },
   meta: { loading: false, loaded: false, error: null },
 };
@@ -92,7 +92,7 @@ export default createReducer(initialState)
     ...state,
     feedbacks: {
       ...state.feedbacks,
-      giveFeedback: payload,
+      give: payload,
     },
     meta: {
       ...state.meta,
@@ -112,7 +112,7 @@ export default createReducer(initialState)
     ...state,
     feedbacks: {
       ...state.feedback,
-      respondFeedback: payload,
+      respond: payload,
     },
     meta: {
       ...state.meta,
@@ -133,7 +133,7 @@ export default createReducer(initialState)
     ...state,
     feedbacks: {
       ...state.feedback,
-      viewFeedback: payload,
+      view: payload,
     },
     meta: {
       ...state.meta,

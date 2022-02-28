@@ -11,17 +11,8 @@ import GiveFeedbackForm from './components/GiveFeedbackForm';
 import InfoMassage from './components/InfoMassage';
 import SuccessMassage from './components/SuccessMassage';
 
-enum Statuses {
-  PENDING = 'pending',
-  SENDING = 'sending',
-  INFO = 'info',
-}
-
-const RespondNewFeedback: FC = () => {
-  const { t } = useTranslation();
-  const navigate = useNavigate();
-
-  const feedbackFields = [
+const getFeedbackFields = (t) => {
+  return [
     {
       id: '0',
       code: 'Question 1',
@@ -58,6 +49,18 @@ const RespondNewFeedback: FC = () => {
       },
     },
   ];
+};
+
+enum Statuses {
+  PENDING = 'pending',
+  SENDING = 'sending',
+  INFO = 'info',
+}
+
+const RespondNewFeedback: FC = () => {
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+
   const dispatch = useDispatch();
   const [status, setStatus] = useState(Statuses.PENDING);
   const { uuid } = useParams<{ uuid: string }>();
@@ -72,7 +75,7 @@ const RespondNewFeedback: FC = () => {
 
   const [formData, setFormData] = useState({
     feedbackItems: feedbackItems
-      ? feedbackFields.map(({ code }) => feedbackItems.find((item) => item.code === code))
+      ? getFeedbackFields(t).map(({ code }) => feedbackItems.find((item) => item.code === code))
       : [{ content: '' }, { content: '' }, { content: '' }],
     targetColleagueUuid,
   });
@@ -143,7 +146,7 @@ const RespondNewFeedback: FC = () => {
             setStatus(Statuses.INFO);
             setFormData(data);
           }}
-          feedbackFields={feedbackFields}
+          feedbackFields={getFeedbackFields(t)}
         />
       )}
 

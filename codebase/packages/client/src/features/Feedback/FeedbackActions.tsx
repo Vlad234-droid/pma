@@ -125,8 +125,6 @@ const FeedbackActions: FC = () => {
   };
 
   const createToneOfVoiceHandler = (value) => {
-    console.log('value', value);
-
     if (!value) return;
 
     const payload = {

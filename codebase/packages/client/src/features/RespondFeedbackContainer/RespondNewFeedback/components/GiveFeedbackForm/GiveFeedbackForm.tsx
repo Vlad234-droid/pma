@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { useStyle, Rule, useBreakpoints, Button } from '@dex-ddl/core';
+import { useStyle, Rule, useBreakpoints, Button, CreateRule } from '@dex-ddl/core';
 import { useSelector } from 'react-redux';
 import { getColleagueByUuidSelector } from '@pma/store';
 import get from 'lodash.get';
@@ -157,14 +157,14 @@ const WrapperModalGiveFeedbackStyle: Rule = {
   overflow: 'auto',
 };
 
-const absoluteStyle: Rule = {
+const absoluteStyle: Rule = ({ theme }) => ({
   position: 'absolute',
   left: 0,
   bottom: 0,
   width: '100%',
-  background: '#FFFFFF',
+  background: theme.colors.white,
   height: '112px',
-};
+});
 
 const relativeBtnStyled: Rule = ({ theme }) => ({
   position: 'relative',
@@ -235,9 +235,9 @@ const feedbackDescription: Rule = {
   lineHeight: '20px',
 };
 
-const tileCustomStyles: Rule = {
+const tileCustomStyles: Rule = ({ theme }) => ({
   padding: '24px 24px 0px 24px',
-  border: '1px solid #E5E5E5',
-};
+  border: `1px solid ${theme.colors.backgroundDarkest}`,
+});
 
 export default GiveFeedbackForm;

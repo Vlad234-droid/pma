@@ -39,10 +39,10 @@ export const getUnReadSubmittedNotesSelector = (status, colleagueUuid) =>
 export const feedbackByUuidSelector = (uuid) =>
   createSelector(feedbackSelector, (feedback: any) => {
     const {
-      feedbacks: { giveFeedback, respondFeedback },
+      feedbacks: { give, respond, view },
     } = feedback;
 
-    const filtered = [...(giveFeedback || []), ...(respondFeedback || [])]?.find((item) => item.uuid === uuid) ?? [];
+    const filtered = [...(give || []), ...(respond || []), ...(view || [])]?.find((item) => item.uuid === uuid) ?? [];
 
     return filtered;
   });
@@ -50,10 +50,10 @@ export const feedbackByUuidSelector = (uuid) =>
 export const getPropperNotesByCriteria = ({ status, filterFn, sortFn, serializer }) =>
   createSelector(feedbackSelector, (feedback: any) => {
     const {
-      feedbacks: { viewFeedback },
+      feedbacks: { view },
     } = feedback;
 
-    const filtered = viewFeedback
+    const filtered = view
       ?.filter(
         (item) => filterFn(item) && (Array.isArray(status) ? status.includes(item.status) : item.status === status),
       )
@@ -66,10 +66,10 @@ export const getPropperNotesByCriteria = ({ status, filterFn, sortFn, serializer
 export const getGiveFeedbacksSelector = (status) =>
   createSelector(feedbackSelector, (feedback: any) => {
     const {
-      feedbacks: { giveFeedback },
+      feedbacks: { give },
     } = feedback;
 
-    const filtered = giveFeedback?.filter((item) => item.status === status) ?? [];
+    const filtered = give?.filter((item) => item.status === status) ?? [];
 
     return filtered;
   });
@@ -77,10 +77,10 @@ export const getGiveFeedbacksSelector = (status) =>
 export const getRespondedFeedbacksSelector = (status) =>
   createSelector(feedbackSelector, (feedback: any) => {
     const {
-      feedbacks: { respondFeedback },
+      feedbacks: { respond },
     } = feedback;
 
-    const filtered = respondFeedback?.filter((item) => item.status === status) ?? [];
+    const filtered = respond?.filter((item) => item.status === status) ?? [];
 
     return filtered;
   });
