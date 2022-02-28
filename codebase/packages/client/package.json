@@ -6,7 +6,7 @@
   "scripts": {
     "run:dev": "cross-env REACT_APP_INTEGRATION_MODE=standalone PORT=9000 env-cmd --silent --no-override --fallback -f .env react-app-rewired start",
     "build:prod": "cross-env REACT_APP_INTEGRATION_MODE=standalone env-cmd --silent --no-override --fallback -f .env.${BUILD_ENV} react-app-rewired build",
-    "test": "cross-env BABEL_ENV=test jest",
+    "test": "cross-env BABEL_ENV=test jest codebase/packages/client/src/features/Feedback/FeedbackActions.test",
     "test:coverage": "yarn test --coverage --watchAll",
     "eject": "react-scripts eject",
     "clean": "rimraf build",

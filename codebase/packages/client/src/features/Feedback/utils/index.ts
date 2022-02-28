@@ -1,4 +1,4 @@
 import { UserprofileAttributes } from 'config/types';
 
 export const getSelectedTreatmentValue = (profileAttr: UserprofileAttributes[]) =>
-  profileAttr?.find((item) => item?.name === 'voice')?.value || profileAttr[0].value;
+  profileAttr?.find((item) => item?.name === 'voice')?.value || 'Direct and simple';

@@ -27,7 +27,7 @@ import { getSelectedTreatmentValue } from './utils';
 import Info360Modal, { FeedbackCard } from './components';
 import { ConfigProps } from './config/types';
 
-const FEEDBACK_ACTIONS = 'feedback_actions';
+export const FEEDBACK_ACTIONS = 'feedback_actions';
 
 const FeedbackActions: FC = () => {
   const { t } = useTranslation();
