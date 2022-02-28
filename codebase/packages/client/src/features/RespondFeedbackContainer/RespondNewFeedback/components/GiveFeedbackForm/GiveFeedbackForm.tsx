@@ -102,9 +102,10 @@ const GiveFeedbackForm: FC<GiveFeedbackFormProps> = ({
                 })}
               >
                 <TileWrapper
+                  boarder={true}
                   customStyle={{
                     marginBottom: '16px !important',
-                    ...tileCustomStyles,
+                    padding: '24px 24px 0px 24px',
                   }}
                 >
                   <h3 className={css(feedbackTitle)}>{item.title}</h3>
@@ -234,10 +235,5 @@ const feedbackDescription: Rule = {
   fontSize: '16px',
   lineHeight: '20px',
 };
-
-const tileCustomStyles: Rule = ({ theme }) => ({
-  padding: '24px 24px 0px 24px',
-  border: `1px solid ${theme.colors.backgroundDarkest}`,
-});
 
 export default GiveFeedbackForm;
