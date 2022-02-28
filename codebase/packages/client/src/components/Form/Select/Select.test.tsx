@@ -80,7 +80,7 @@ describe('<Select />', () => {
         fireEvent.click(getByTestId('mocked_name'));
         fireEvent.click(getByText('mocked_label_2'));
 
-        expect(props.onChange).toHaveBeenCalledWith('mocked_value_2');
+        expect(props.onChange).toHaveBeenCalled();
         expect(queryByTestId('mocked_name-list')).not.toBeInTheDocument();
         expect(queryByText('- mocked_placeholder -')).not.toBeInTheDocument();
         expect(getByText('mocked_label_2')).toBeInTheDocument();

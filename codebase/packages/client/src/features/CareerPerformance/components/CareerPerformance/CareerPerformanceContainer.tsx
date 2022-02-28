@@ -4,6 +4,7 @@ import {
   colleagueUUIDSelector,
   getTimelineByCodeSelector,
   getTimelineSelector,
+  PDPActions,
   getTimelinesSelector,
   TimelineActions,
   timelineTypesAvailabilitySelector,
@@ -26,6 +27,7 @@ const CareerPerformanceContainer: FC = () => {
 
   const loadTimeline = (colleagueUuid: string) => {
     dispatch(TimelineActions.getTimeline({ colleagueUuid }));
+    dispatch(PDPActions.getPDPGoal({}));
   };
 
   return (

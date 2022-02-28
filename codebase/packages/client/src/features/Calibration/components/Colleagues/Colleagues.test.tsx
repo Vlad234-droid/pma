@@ -18,7 +18,7 @@ jest.mock('../EditRatingsModal', () => {
 jest.mock('features/MyTeam', () => {
   return {
     __esModule: true,
-    WidgetTeamMateProfile: ({ onClick, rating }) => {
+    TeamMateProfile: ({ onClick, rating }) => {
       return <div onClick={onClick}>{rating}</div>;
     },
     ColleagueInfo: () => {

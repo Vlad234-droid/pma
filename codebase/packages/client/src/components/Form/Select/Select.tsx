@@ -31,9 +31,9 @@ const Select: FC<SelectField> = ({ domRef, name, options, placeholder, value, on
     setOpen((isOpen) => !isOpen);
   };
 
-  const handleSelect = (selected: Option) => {
+  const handleSelect = (event, selected: Option) => {
     setSelected(selected);
-    onChange(selected.value);
+    onChange({...event, target: { ...event.target, value: selected.value }});
     setOpen(false);
   };
 
@@ -62,7 +62,12 @@ const Select: FC<SelectField> = ({ domRef, name, options, placeholder, value, on
       {isOpen && (
         <div role='list' data-test-id={`${name}-list`} className={css(listStyles)}>
           {options.map((item) => (
-            <button type='button' key={item.value} className={css(optionStyles)} onClick={() => handleSelect(item)}>
+            <button
+              type='button'
+              key={item.value}
+              className={css(optionStyles)}
+              onClick={(event) => handleSelect(event, item)}
+            >
               {item.label}
             </button>
           ))}
@@ -95,6 +100,7 @@ const fieldStyles: Rule = ({ theme }) => ({
     border: `1px solid ${theme.colors.tescoBlue}`,
   },
   cursor: 'pointer',
+  minHeight: '42px',
 });
 
 const fieldActiveStyles: Rule = ({ theme }) => ({

@@ -11,7 +11,6 @@ import {
   Accordion,
   CreateButton,
   ObjectiveTypes as OT,
-  Reviews,
   ReviewWidget,
   Section,
   ShareWidget,
@@ -26,11 +25,13 @@ import {
   countByStatusReviews,
   countByTypeReviews,
   filterReviewsByTypeSelector,
+  getPreviousReviewFilesSelector,
   getReviewSchema,
   getTimelineByCodeSelector,
   getTimelineSelector,
   isReviewsInStatus,
   isReviewsNumbersInStatus,
+  PreviousReviewFilesActions,
   ReviewsActions,
   reviewsMetaSelector,
   schemaMetaSelector,
@@ -43,6 +44,7 @@ import useReviewSchema from 'features/Objectives/hooks/useReviewSchema';
 import { Page } from 'pages';
 import { buildPath } from 'features/Routes';
 import EditButton from '../Buttons/EditButton';
+import { File } from '../../../ReviewFiles/components/components/File';
 
 const reviews = [];
 
@@ -95,6 +97,7 @@ const MyObjectives: FC = () => {
   const objectiveSchema = useSelector(getReviewSchema(ReviewType.OBJECTIVE));
   const countDraftReviews = useSelector(countByStatusReviews(ReviewType.OBJECTIVE, Status.DRAFT)) || 0;
   const countDeclinedReviews = useSelector(countByStatusReviews(ReviewType.OBJECTIVE, Status.DECLINED)) || 0;
+  const files: File[] = useSelector(getPreviousReviewFilesSelector) || [];
 
   const reviewsMinNumbersInStatusApproved = useSelector(
     isReviewsNumbersInStatus(ReviewType.OBJECTIVE)(Status.APPROVED, markup.min),
@@ -116,6 +119,10 @@ const MyObjectives: FC = () => {
   } else if (canShowAnnualReview) {
     createdReviews.push(...annualReviews);
   }
+
+  useEffect(() => {
+    dispatch(PreviousReviewFilesActions.getPreviousReviewFiles());
+  }, []);
 
   // todo remove block end
   useEffect(() => {
@@ -284,19 +291,15 @@ const MyObjectives: FC = () => {
                       onPress={() => setPreviousReviewFilesModalShow(true)}
                       styles={[linkStyles({ theme })]}
                     >
-                      <Trans i18nKey='view_history'>View history</Trans>
+                      <Trans i18nKey='view_files'>View files</Trans>
                     </Button>
                   </div>
                 ),
               }}
             >
-              {reviews.length > 0 ? (
-                <Reviews reviews={createdReviews} />
-              ) : (
-                <div className={css(emptyBlockStyle)}>
-                  <Trans i18nKey={'no_completed_reviews'}>You have no completed reviews</Trans>
-                </div>
-              )}
+              <div className={css(emptyBlockStyle)}>
+                <Trans>{`You have ${files.length || 'no'} files`}</Trans>
+              </div>
             </Section>
           </div>
         </div>
