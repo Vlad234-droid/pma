@@ -14,6 +14,7 @@ describe('CreateUpdateObjectives', () => {
   // const approvalSubmissionText = /Submit Objectives/i;
   let addMockUpdateReviews, onClose;
   let consoleErrorMock = jest.spyOn(console, 'error').mockImplementation();
+  Element.prototype.scrollIntoView = jest.fn();
 
   describe('CreateUpdateObjectives empty review state', () => {
     let renderer;

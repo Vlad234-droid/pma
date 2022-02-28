@@ -230,7 +230,7 @@ describe('ReviewFormModal', () => {
 
     it('should render ReviewFormModal input values predefined', async () => {
       const textfieldValue = screen.getByDisplayValue('textfield value');
-      const selectValue = screen.getByDisplayValue('Outstanding');
+      const selectValue = screen.getByRole('button', { name: /Outstanding/i });
       const textfieldWrongValue = screen.queryByDisplayValue('textfield wrong value');
 
       expect(textfieldValue).toBeInTheDocument();

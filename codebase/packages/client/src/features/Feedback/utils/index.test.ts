@@ -27,7 +27,7 @@ describe('<Feedback /> utils', () => {
       expect(getSelectedTreatmentValue(profileAttributes)).toBe('mocked_value_2');
     });
 
-    it('should return first items value, if nothing found', () => {
+    it('should return default value value, if nothing found', () => {
       const profileAttributes = [
         {
           colleagueUuid: 'mocked_uuid_1',
@@ -49,7 +49,7 @@ describe('<Feedback /> utils', () => {
         },
       ];
 
-      expect(getSelectedTreatmentValue(profileAttributes)).toBe('mocked_value_1');
+      expect(getSelectedTreatmentValue(profileAttributes)).toBe('Direct and simple');
     });
   });
 });

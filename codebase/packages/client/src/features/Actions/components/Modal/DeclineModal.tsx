@@ -23,6 +23,10 @@ const DeclineModal: FC<Props> = ({ onSave, onClose, review, reviewType }) => {
   const options = getDeclineReasonOptions(t);
   const [reason, setReason] = useState('');
 
+  const handleReasonChange = (event) => {
+    setReason(event.target.value);
+  };
+
   return (
     <ConfirmModal
       title={t('decline_reason', 'Decline reason')}
@@ -44,7 +48,7 @@ const DeclineModal: FC<Props> = ({ onSave, onClose, review, reviewType }) => {
                   name='declineReason'
                   options={options}
                   placeholder={t('please_select', 'Please select')}
-                  onChange={(value) => setReason(value)}
+                  onChange={handleReasonChange}
                 />
               </Item>
             </div>
