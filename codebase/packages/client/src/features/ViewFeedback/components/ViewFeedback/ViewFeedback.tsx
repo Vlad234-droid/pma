@@ -13,7 +13,7 @@ import { ColleaguesActions, colleagueUUIDSelector, FeedbackActions, ReviewsActio
 import { useDispatch, useSelector } from 'react-redux';
 import { FilterModal } from '../../../Shared/components/FilterModal';
 import { useNavigate } from 'react-router-dom';
-import { FeedbackStatus } from 'config/enum';
+import { FeedbackStatus, FEEDBACK_STATUS_IN } from 'config/enum';
 import { Page } from 'pages';
 import useSubmittedCompletedNotes from '../../hooks/useSubmittedCompletedNotes';
 
@@ -122,9 +122,10 @@ const ViewFeedback: FC = () => {
     }
 
     dispatch(
-      FeedbackActions.getAllFeedbacks({
+      FeedbackActions.getViewFeedback({
         'target-colleague-uuid': colleagueUuid,
         _limit: '300',
+        status_in: [FEEDBACK_STATUS_IN.SUBMITTED, FEEDBACK_STATUS_IN.COMPLETED],
       }),
     );
   }, [colleagueUuid]);

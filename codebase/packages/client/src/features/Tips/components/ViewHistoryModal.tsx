@@ -26,12 +26,12 @@ const ViewHistoryModal: FC<ViewHistoryModal> = ({ handleCloseModal, card }) => {
   }, []);
 
   return (
-    <Modal modalPosition='middle' modalContainerRule={[modalWrapper({mobileScreen})]}>
+    <Modal modalPosition='middle' modalContainerRule={[modalWrapper({ mobileScreen })]}>
       <div data-test-id={VIEW_HISTORY_MODAL} className={css(modalInner)}>
-        <div className={css(vhTitleStyle({mobileScreen, theme}))}>
+        <div className={css(vhTitleStyle({ mobileScreen, theme }))}>
           <Trans i18nKey='activity_history'>Activity History</Trans>
         </div>
-        <div className={css(vhSubTitleStyle({mobileScreen, theme}))}>
+        <div className={css(vhSubTitleStyle({ mobileScreen, theme }))}>
           <Trans i18nKey='for_tip'>For tip</Trans>: {card.title}
         </div>
         <div className={css(vhItemsWrap)}>
@@ -40,7 +40,7 @@ const ViewHistoryModal: FC<ViewHistoryModal> = ({ handleCloseModal, card }) => {
             const isLastItem: boolean = idx === tipHistory.length - 1;
 
             return (
-              <div key={item.uuid} className={css(vhItemStyle({isLastItem, theme}))}>
+              <div key={item.uuid} className={css(vhItemStyle({ isLastItem, theme }))}>
                 <div>
                   <div className={css(vhItemTitle)}>
                     <Icon
@@ -58,25 +58,23 @@ const ViewHistoryModal: FC<ViewHistoryModal> = ({ handleCloseModal, card }) => {
                   </div>
                 </div>
                 {item.published ? (
-                  <div className={css(vhItemStatus)}><Trans i18nKey='pushed'>Pushed</Trans></div>
+                  <div className={css(vhItemStatus)}>
+                    <Trans i18nKey='pushed'>Pushed</Trans>
+                  </div>
                 ) : (
                   <div className={css(vhItemStatus)}>
-                    {item.createdTime === item.updatedTime ?
+                    {item.createdTime === item.updatedTime ? (
                       <Trans i18nKey='created'>Created</Trans>
-                      :
+                    ) : (
                       <Trans i18nKey='edited'>Edited</Trans>
-                    }
+                    )}
                   </div>
                 )}
               </div>
             );
           })}
         </div>
-        <Button
-          data-test-id={CLOSE_VIEW_HISTORY_MODAL_BTN}
-          onPress={handleCloseModal}
-          styles={[modalBtnStyles]}
-        >
+        <Button data-test-id={CLOSE_VIEW_HISTORY_MODAL_BTN} onPress={handleCloseModal} styles={[modalBtnStyles]}>
           <Trans i18nKey='okay'>Okay</Trans>
         </Button>
       </div>
@@ -86,7 +84,7 @@ const ViewHistoryModal: FC<ViewHistoryModal> = ({ handleCloseModal, card }) => {
 
 //vh - View History
 
-const modalWrapper: CreateRule<{mobileScreen: boolean}> = ({mobileScreen}) => {
+const modalWrapper: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => {
   return {
     padding: mobileScreen ? '24px 30px' : '24px 38px',
     maxWidth: '500px',
@@ -103,34 +101,36 @@ const modalInner: Rule = {
   justifyContent: 'flex-start',
   height: '100%',
   width: '100%',
-}
+};
 
-const vhTitleStyle: CreateRule<{mobileScreen: boolean; theme: Theme}> = ({mobileScreen, theme}) => {
+const vhTitleStyle: CreateRule<{ mobileScreen: boolean; theme: Theme }> = ({ mobileScreen, theme }) => {
   return {
     fontWeight: theme.font.weight.bold,
     marginBottom: '8px',
-    ...(mobileScreen 
+    ...(mobileScreen
       ? {
           fontSize: theme.font.fixed.f18.fontSize,
           lineHeight: theme.font.fixed.f18.lineHeight,
-        } : {
+        }
+      : {
           fontSize: theme.font.fixed.f20.fontSize,
           lineHeight: theme.font.fixed.f20.lineHeight,
-        })
+        }),
   };
 };
 
-const vhSubTitleStyle: CreateRule<{mobileScreen: boolean; theme: Theme}> = ({mobileScreen, theme}) => {
+const vhSubTitleStyle: CreateRule<{ mobileScreen: boolean; theme: Theme }> = ({ mobileScreen, theme }) => {
   return {
     marginBottom: '20px',
-    ...(mobileScreen 
+    ...(mobileScreen
       ? {
           fontSize: theme.font.fixed.f14.fontSize,
           lineHeight: theme.font.fixed.f14.lineHeight,
-        } : {
+        }
+      : {
           fontSize: theme.font.fixed.f16.fontSize,
           lineHeight: theme.font.fixed.f16.lineHeight,
-        })
+        }),
   };
 };
 
@@ -144,7 +144,7 @@ const vhItemsWrap: Rule = () => {
   };
 };
 
-const vhItemStyle: CreateRule<{isLastItem: boolean; theme: Theme}> = ({isLastItem, theme}) => {
+const vhItemStyle: CreateRule<{ isLastItem: boolean; theme: Theme }> = ({ isLastItem, theme }) => {
   return {
     display: 'flex',
     justifyContent: 'space-between',
@@ -154,7 +154,7 @@ const vhItemStyle: CreateRule<{isLastItem: boolean; theme: Theme}> = ({isLastIte
   };
 };
 
-const vhItemTitle: Rule = ({theme}) => {
+const vhItemTitle: Rule = ({ theme }) => {
   return {
     fontSize: theme.font.fixed.f14.fontSize,
     lineHeight: theme.font.fixed.f14.lineHeight,
@@ -166,14 +166,14 @@ const vhItemTitle: Rule = ({theme}) => {
   };
 };
 
-const vhItemSubtitle: Rule = ({theme}) => {
+const vhItemSubtitle: Rule = ({ theme }) => {
   return {
     fontSize: theme.font.fixed.f14.fontSize,
     lineHeight: theme.font.fixed.f14.lineHeight,
   };
 };
 
-const vhItemStatus: Rule = ({theme}) => {
+const vhItemStatus: Rule = ({ theme }) => {
   return {
     fontSize: theme.font.fixed.f14.fontSize,
     lineHeight: theme.font.fixed.f14.lineHeight,
@@ -186,14 +186,14 @@ const vhItemStatus: Rule = ({theme}) => {
   };
 };
 
-const modalBtnStyles: Rule = ({theme}) => {
+const modalBtnStyles: Rule = ({ theme }) => {
   return {
     width: '145px',
     margin: 'auto auto 0',
     fontSize: theme.font.fixed.f16.fontSize,
     lineHeight: theme.font.fixed.f16.lineHeight,
     fontWeight: theme.font.weight.bold,
-  }
-}
+  };
+};
 
 export default ViewHistoryModal;

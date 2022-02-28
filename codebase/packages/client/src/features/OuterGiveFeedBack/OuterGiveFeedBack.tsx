@@ -2,12 +2,12 @@ import React, { FC, useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { CreateRule, Rule, useBreakpoints, useStyle } from '@dex-ddl/core';
-import { colleagueUUIDSelector, FeedbackActions, feedbackByStatusSelector } from '@pma/store';
+import { colleagueUUIDSelector, FeedbackActions, getGiveFeedbacksSelector } from '@pma/store';
 import debounce from 'lodash.debounce';
 import { paramsReplacer } from 'utils';
 import { Page } from 'pages';
 import { FilterOption } from 'features/Shared';
-import { FeedbackStatus } from 'config/enum';
+import { FeedbackStatus, FEEDBACK_STATUS_IN } from 'config/enum';
 import { FeedbackBlock, RadioBtns } from './components';
 import { FilterModal } from '../Shared/components/FilterModal';
 import { getSortString } from 'utils/feedback';
@@ -41,14 +41,15 @@ const OuterGiveFeedBack: FC = () => {
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const [status, setCheckedStatus] = useState(FeedbackStatus.DRAFT);
 
-  const getAllFeedback = useCallback(
+  const getGiveFeedbacks = useCallback(
     debounce((filter) => {
       dispatch(
-        FeedbackActions.getAllFeedbacks({
+        FeedbackActions.getGiveFeedback({
           _limit: '300',
           'colleague-uuid': colleagueUuid,
           ...(filter.search.length > 2 && { _search: filter.search }),
           _sort: getSortString(filter),
+          status_in: [FEEDBACK_STATUS_IN.DRAFT, FEEDBACK_STATUS_IN.SUBMITTED],
         }),
       );
     }, 300),
@@ -57,7 +58,7 @@ const OuterGiveFeedBack: FC = () => {
 
   useEffect(() => {
     if (!colleagueUuid) return;
-    getAllFeedback(filter);
+    getGiveFeedbacks(filter);
   }, [colleagueUuid, filter]);
 
   useEffect(() => {
@@ -70,7 +71,7 @@ const OuterGiveFeedBack: FC = () => {
     navigate(paramsReplacer(`/${Page.GIVE_NEW_FEEDBACK}`, { ':uuid': 'new' }));
   };
 
-  const feedbackList = useSelector(feedbackByStatusSelector(status)) || [];
+  const feedbackList = useSelector(getGiveFeedbacksSelector(status)) || [];
 
   return (
     <div>

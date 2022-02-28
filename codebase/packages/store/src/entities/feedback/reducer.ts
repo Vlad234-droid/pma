@@ -6,11 +6,19 @@ import {
   updatedFeedback,
   getObjectiveReviews,
   clearFeedback,
+  getGiveFeedback,
+  getRespondFeedback,
+  getViewFeedback,
 } from './actions';
 
 export const initialState = {
   notes: [],
   reviews: [],
+  feedbacks: {
+    give: [],
+    respond: [],
+    view: [],
+  },
   meta: { loading: false, loaded: false, error: null },
 };
 
@@ -75,4 +83,65 @@ export default createReducer(initialState)
       loading: false,
       loaded: true,
     },
+  }))
+  .handleAction(getGiveFeedback.request, (state) => ({
+    ...state,
+    meta: { ...state.meta, loading: true },
+  }))
+  .handleAction(getGiveFeedback.success, (state, { payload }) => ({
+    ...state,
+    feedbacks: {
+      ...state.feedbacks,
+      give: payload,
+    },
+    meta: {
+      ...state.meta,
+      loading: false,
+      loaded: true,
+    },
+  }))
+  .handleAction(getGiveFeedback.failure, (state, { payload }) => ({
+    ...state,
+    meta: { ...state.meta, loading: false, loaded: true, error: payload },
+  }))
+  .handleAction(getRespondFeedback.request, (state) => ({
+    ...state,
+    meta: { ...state.meta, loading: true },
+  }))
+  .handleAction(getRespondFeedback.success, (state, { payload }) => ({
+    ...state,
+    feedbacks: {
+      ...state.feedback,
+      respond: payload,
+    },
+    meta: {
+      ...state.meta,
+      loading: false,
+      loaded: true,
+    },
+  }))
+  .handleAction(getRespondFeedback.failure, (state, { payload }) => ({
+    ...state,
+    meta: { ...state.meta, loading: false, loaded: true, error: payload },
+  }))
+
+  .handleAction(getViewFeedback.request, (state) => ({
+    ...state,
+    meta: { ...state.meta, loading: true },
+  }))
+  .handleAction(getViewFeedback.success, (state, { payload }) => ({
+    ...state,
+    feedbacks: {
+      ...state.feedback,
+      view: payload,
+    },
+    meta: {
+      ...state.meta,
+      loading: false,
+      loaded: true,
+    },
+  }))
+  .handleAction(getViewFeedback.failure, (state, { payload }) => ({
+    ...state,
+    meta: { ...state.meta, loading: false, loaded: true, error: payload },
   }));

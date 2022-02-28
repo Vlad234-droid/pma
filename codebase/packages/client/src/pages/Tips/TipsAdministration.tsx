@@ -21,7 +21,7 @@ const TipsAdministration: FC = () => {
   const tips = useSelector(getTipsSelector) || [];
   const tipsMeta = useSelector(getTipsMetaSelector);
   const isLoaded = tipsMeta?.loaded;
-  
+
   useEffect(() => {
     dispatch(tipsActions.getAllTips({}));
   }, []);
@@ -34,21 +34,24 @@ const TipsAdministration: FC = () => {
     <div data-test-id={TIPS_ADMINISTRATION}>
       <div className={css(btnWrapStyle)}>
         <IconButton
-          customVariantRules={{ default: iconBtnStyle({mobileScreen, theme}) }}
+          customVariantRules={{ default: iconBtnStyle({ mobileScreen, theme }) }}
           onPress={handleCreateTip}
           graphic='add'
           iconProps={{ invertColors: true }}
           iconStyles={iconStyle}
         >
-          <span><Trans i18nKey='create_new_tip'>Create new tip</Trans></span>
+          <span>
+            <Trans i18nKey='create_new_tip'>Create new tip</Trans>
+          </span>
         </IconButton>
       </div>
 
       {isLoaded && tips.length === 0 && <NoTips />}
 
-      {isLoaded && tips.map((item) => {
-        return <TipsCard card={item} key={item.uuid} />;
-      })}
+      {isLoaded &&
+        tips.map((item) => {
+          return <TipsCard card={item} key={item.uuid} />;
+        })}
     </div>
   );
 };
@@ -58,9 +61,9 @@ const btnWrapStyle: Rule = {
   justifyContent: 'space-between',
   alignItems: 'center',
   margin: '20px 0 25px',
-}
+};
 
-const iconBtnStyle: CreateRule<{mobileScreen: boolean; theme: Theme}> = ({mobileScreen, theme}) => {
+const iconBtnStyle: CreateRule<{ mobileScreen: boolean; theme: Theme }> = ({ mobileScreen, theme }) => {
   return {
     padding: '12px 20px 12px 22px',
     display: 'flex',

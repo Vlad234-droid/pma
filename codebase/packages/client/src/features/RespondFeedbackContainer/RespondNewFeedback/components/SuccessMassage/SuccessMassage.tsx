@@ -1,20 +1,17 @@
 import React, { FC } from 'react';
-import { SuccessModalProps } from '../type';
 import { Button, Rule, Styles, useBreakpoints, useStyle } from '@dex-ddl/core';
-import { IconButton } from 'components/IconButton';
 import success from 'images/success.jpg';
 import { Trans } from 'components/Translation';
 
 export const TEST_ID = 'success-modal-wrapper';
 export const OK_BUTTON_TEST_ID = 'ok-button';
 
-const SuccessModal: FC<SuccessModalProps> = ({
-  setModalSuccess,
-  setIsOpen,
-  setSelectedPerson,
-  selectedPerson,
-  setFeedbackItems,
-}) => {
+type Props = {
+  targetColleagueProfile: any;
+  onSuccess: () => void;
+};
+
+const SuccessMassage: FC<Props> = ({ targetColleagueProfile, onSuccess }) => {
   const { css, theme } = useStyle();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
@@ -25,7 +22,7 @@ const SuccessModal: FC<SuccessModalProps> = ({
       </div>
       <h2 className={css(DoneText)}>Done!</h2>
       <p className={css(Description)}>
-        {`${selectedPerson?.profile?.firstName} ${selectedPerson?.profile?.lastName}`}{' '}
+        {`${targetColleagueProfile?.colleague?.profile?.firstName} ${targetColleagueProfile?.colleague?.profile?.lastName}`}{' '}
         <Trans i18nKey='will_now_be_able_to_see_your_feedback'>will now be able to see your feedback</Trans>
       </p>
       <div
@@ -67,10 +64,7 @@ const SuccessModal: FC<SuccessModalProps> = ({
                 },
               ]}
               onPress={() => {
-                setModalSuccess(() => false);
-                setIsOpen(() => false);
-                setSelectedPerson(() => null);
-                setFeedbackItems(() => []);
+                onSuccess();
               }}
             >
               <Trans i18nKey='OK'>Okay</Trans>
@@ -78,22 +72,6 @@ const SuccessModal: FC<SuccessModalProps> = ({
           </div>
         </div>
       </div>
-      <span
-        className={css({
-          position: 'fixed',
-          top: theme.spacing.s5,
-          left: mobileScreen ? theme.spacing.s5 : theme.spacing.s10,
-          textDecoration: 'none',
-          border: 'none',
-          cursor: 'pointer',
-        })}
-      >
-        <IconButton
-          graphic='arrowLeft'
-          onPress={() => setModalSuccess(() => false)}
-          iconProps={{ invertColors: true }}
-        />
-      </span>
     </div>
   );
 };
@@ -130,4 +108,4 @@ const Description: Rule = {
   textAlign: 'center',
 };
 
-export default SuccessModal;
+export default SuccessMassage;

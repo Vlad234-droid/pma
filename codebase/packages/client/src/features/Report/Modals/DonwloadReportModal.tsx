@@ -85,7 +85,8 @@ const DonwloadReportModal: FC<ModalProps> = ({ onClose }) => {
             options={getYearsFromCurrentYear(getCurrentYear())}
             name={'year'}
             placeholder={t('please_select', 'Please select')}
-            onChange={(value) => {
+            //@ts-ignore
+            onChange={({ target: { value } }) => {
               setValue('year', value, { shouldValidate: true });
             }}
           />

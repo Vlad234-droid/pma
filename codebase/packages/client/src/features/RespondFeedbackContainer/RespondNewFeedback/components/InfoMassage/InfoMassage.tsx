@@ -1,11 +1,15 @@
 import React, { FC } from 'react';
 import { IconButton } from 'components/IconButton';
 import { useStyle, useBreakpoints, Rule, Styles } from '@dex-ddl/core';
-import { InfoModalProps } from '../type';
+
 import { VideoPlayer, VideoId } from 'features/VideoPlayer';
 import { Trans } from 'components/Translation';
 
-const InfoModal: FC<InfoModalProps> = ({ setInfoModal }) => {
+type Props = {
+  goBack: () => void;
+};
+
+const InfoMessage: FC<Props> = ({ goBack }) => {
   const { css, theme } = useStyle();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
@@ -59,7 +63,7 @@ const InfoModal: FC<InfoModalProps> = ({ setInfoModal }) => {
           cursor: 'pointer',
         })}
       >
-        <IconButton graphic='arrowLeft' onPress={() => setInfoModal(() => false)} iconProps={{ invertColors: true }} />
+        <IconButton graphic='arrowLeft' onPress={goBack} iconProps={{ invertColors: true }} />
       </span>
     </div>
   );
@@ -124,4 +128,4 @@ const PreRecomendationInfo: Rule = {
   margin: '0px',
 };
 
-export default InfoModal;
+export default InfoMessage;

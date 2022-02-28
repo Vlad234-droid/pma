@@ -94,7 +94,9 @@ const ConfirmModalWithDropDown: FC<Props> = ({
             options={field_options as Option[]}
             name={'targetType'}
             placeholder={field_placeholder}
-            onChange={(value) => {
+            //@ts-ignore
+            onChange={({ target }) => {
+              const { value } = target;
               setValue(fieldName, value, { shouldValidate: true });
             }}
           />

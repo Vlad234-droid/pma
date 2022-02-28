@@ -94,10 +94,6 @@ export type TypecheckedRadio = {
 };
 
 export type DraftItemProps = {
-  draftFeedback: (id: number) => void;
   checkedRadio: TypecheckedRadio;
-  filterModal: boolean;
-  setFilterModal: Dispatch<SetStateAction<boolean>>;
-  setFilterFeedbacks: Dispatch<SetStateAction<filterFeedbacksType>>;
   filterFeedbacks: filterFeedbacksType;
 };

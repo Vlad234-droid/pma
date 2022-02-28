@@ -33,7 +33,7 @@ const Select: FC<SelectField> = ({ domRef, name, options, placeholder, value, on
 
   const handleSelect = (event, selected: Option) => {
     setSelected(selected);
-    onChange({...event, target: { ...event.target, value: selected.value }});
+    onChange({ ...event, target: { ...event.target, value: selected.value } });
     setOpen(false);
   };
 

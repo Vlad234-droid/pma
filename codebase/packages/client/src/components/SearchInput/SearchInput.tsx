@@ -46,7 +46,7 @@ const SearchInput: FC<Props<any>> = ({
 
   const handleSearch = useCallback(debounce(onSearch, 300), []);
 
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setCurrentValue(e.target.value);
     handleSearch(e);
   };
@@ -94,28 +94,30 @@ const SearchInput: FC<Props<any>> = ({
               zIndex: 999,
             }}
           >
-            {options?.map((item, idx) => (
-              <div
-                key={idx}
-                className={css({
-                  display: 'block',
-                  width: '100%',
-                  fontSize: '16px',
-                  lineHeight: '20px',
-                  padding: '10px 30px 10px 16px',
-                  ':hover': {
-                    background: '#F3F9FC',
-                  },
-                })}
-                onMouseDown={(e) => e.preventDefault()}
-                onClick={() => {
-                  onChange(item);
-                  multiple && setCurrentValue('');
-                }}
-              >
-                {renderOption(item)}
-              </div>
-            ))}
+            {options?.map((item, idx) => {
+              return (
+                <div
+                  key={idx}
+                  className={css({
+                    display: 'block',
+                    width: '100%',
+                    fontSize: '16px',
+                    lineHeight: '20px',
+                    padding: '10px 30px 10px 16px',
+                    ':hover': {
+                      background: '#F3F9FC',
+                    },
+                  })}
+                  onMouseDown={(e) => e.preventDefault()}
+                  onClick={() => {
+                    onChange(item);
+                    multiple && setCurrentValue('');
+                  }}
+                >
+                  {renderOption(item)}
+                </div>
+              );
+            })}
           </div>
         )}
         {multiple && (

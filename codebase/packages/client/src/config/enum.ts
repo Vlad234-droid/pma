@@ -79,6 +79,12 @@ export enum FeedbackStatus {
   DRAFT = 'DRAFT',
   COMPLETED = 'COMPLETED',
 }
+export enum FEEDBACK_STATUS_IN {
+  DRAFT = 1,
+  SUBMITTED,
+  PENDING,
+  COMPLETED,
+}
 export enum FeedbackRequestStatus {
   DRAFT = '1',
   SUBMITTED = '2',

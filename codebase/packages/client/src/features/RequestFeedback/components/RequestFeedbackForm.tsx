@@ -114,7 +114,8 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel, setIsInfoModalOpen }) 
                 options={AREA_OPTIONS}
                 name={'targetType'}
                 placeholder={t('choose_an_area', 'Choose an area')}
-                onChange={(value) => {
+                //@ts-ignore
+                onChange={({ target: { value } }) => {
                   if (get(formValues, 'targetId') && value !== TargetType.OBJECTIVE) {
                     setValue('targetId', '', { shouldValidate: false });
                   }
@@ -147,7 +148,8 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel, setIsInfoModalOpen }) 
                   options={[...objectiveOptions, { value: Tesco.TescoBank, label: Tesco.TescoBank }]}
                   name={'targetId'}
                   placeholder={t('choose_objective', 'Choose objective')}
-                  onChange={(value) => {
+                  //@ts-ignore
+                  onChange={({ target: { value } }) => {
                     setValue('targetId', value, { shouldValidate: true });
                   }}
                 />

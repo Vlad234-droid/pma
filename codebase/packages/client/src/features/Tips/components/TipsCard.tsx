@@ -70,7 +70,8 @@ const TipsCard: FC<TipsCardProps> = ({ card }) => {
             <div className={css(tipText({ mobileScreen, theme }))}>{card.description}</div>
             <div className={css({ marginTop: '8px', display: 'flex' })}>
               <div className={css(lastPushStyle({ mobileScreen, theme }))}>
-                <Trans i18nKey='last_push'>Last push</Trans>: {card.published ? tipPushedTime : <Trans i18nKey='was_not_pushed'>was not pushed</Trans>}
+                <Trans i18nKey='last_push'>Last push</Trans>:{' '}
+                {card.published ? tipPushedTime : <Trans i18nKey='was_not_pushed'>was not pushed</Trans>}
               </div>
               <div
                 data-test-id={VIEW_HISTORY_BTN}
@@ -84,7 +85,9 @@ const TipsCard: FC<TipsCardProps> = ({ card }) => {
           <div className={css(cardRightBlock({ mobileScreen }))}>
             <div className={css(targetStyle({ mobileScreen, theme }))}>
               <span className={css({ color: theme.colors.tescoBlue })}>
-                <Trans i18nKey='target'>Target</Trans>:</span> {card.targetOrganisation.name}
+                <Trans i18nKey='target'>Target</Trans>:
+              </span>{' '}
+              {card.targetOrganisation.name}
             </div>
             <div className={css(cardControls)}>
               <Button mode='inverse' onPress={handleEditTip} styles={[cardButton]}>
@@ -106,14 +109,14 @@ const TipsCard: FC<TipsCardProps> = ({ card }) => {
   );
 };
 
-const cardWrapper: CreateRule<{mobileScreen: boolean}> = ({ mobileScreen }) => {
+const cardWrapper: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => {
   return {
     padding: mobileScreen ? '0 8px' : 0,
     marginBottom: '10px',
   };
 };
 
-const cardStyle: CreateRule<{mobileScreen: boolean}> = ({ mobileScreen }) => {
+const cardStyle: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => {
   return {
     padding: mobileScreen ? '16px' : '24px',
     width: mobileScreen ? '100%' : '80%',
@@ -122,18 +125,18 @@ const cardStyle: CreateRule<{mobileScreen: boolean}> = ({ mobileScreen }) => {
   };
 };
 
-const tipInfoWrap: CreateRule<{mobileScreen: boolean}> = ({ mobileScreen }) => {
+const tipInfoWrap: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => {
   return {
     maxWidth: mobileScreen ? '300px' : 'auto',
   };
 };
 
-const tipImageWrapStyle: CreateRule<{mobileScreen: boolean}> = ({ mobileScreen }) => {
+const tipImageWrapStyle: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => {
   return {
-    marginRight: mobileScreen ? '15px': '24px',
+    marginRight: mobileScreen ? '15px' : '24px',
     marginBottom: '10px',
-  }
-}
+  };
+};
 
 const tipImage: Rule = () => {
   return {
@@ -145,22 +148,23 @@ const tipImage: Rule = () => {
   };
 };
 
-const tipTitle: CreateRule<{mobileScreen: boolean; theme: Theme}> = ({ mobileScreen, theme }) => {
+const tipTitle: CreateRule<{ mobileScreen: boolean; theme: Theme }> = ({ mobileScreen, theme }) => {
   return {
     fontWeight: 700,
     color: theme.colors.tescoBlue,
     ...(mobileScreen
       ? {
           fontSize: theme.font.fixed.f16.fontSize,
-          lineHeight: theme.font.fixed.f16.lineHeight
-        } : {
+          lineHeight: theme.font.fixed.f16.lineHeight,
+        }
+      : {
           fontSize: theme.font.fixed.f18.fontSize,
-          lineHeight: theme.font.fixed.f18.lineHeight
-        })
+          lineHeight: theme.font.fixed.f18.lineHeight,
+        }),
   };
 };
 
-const tipText: CreateRule<{mobileScreen: boolean; theme: Theme}> = ({ mobileScreen, theme }) => {
+const tipText: CreateRule<{ mobileScreen: boolean; theme: Theme }> = ({ mobileScreen, theme }) => {
   return {
     marginTop: '5px',
     ...(mobileScreen
@@ -168,15 +172,16 @@ const tipText: CreateRule<{mobileScreen: boolean; theme: Theme}> = ({ mobileScre
           fontSize: theme.font.fixed.f14.fontSize,
           lineHeight: theme.font.fixed.f14.lineHeight,
           maxWidth: 'auto',
-        } : {
+        }
+      : {
           fontSize: theme.font.fixed.f16.fontSize,
           lineHeight: theme.font.fixed.f16.lineHeight,
           maxWidth: '400px',
-        })
+        }),
   };
 };
 
-const lastPushStyle: CreateRule<{mobileScreen: boolean; theme: Theme}> = ({ mobileScreen, theme }) => {
+const lastPushStyle: CreateRule<{ mobileScreen: boolean; theme: Theme }> = ({ mobileScreen, theme }) => {
   return {
     color: '#666',
     ':after': {
@@ -186,45 +191,48 @@ const lastPushStyle: CreateRule<{mobileScreen: boolean; theme: Theme}> = ({ mobi
     ...(mobileScreen
       ? {
           fontSize: theme.font.fixed.f12.fontSize,
-          lineHeight: theme.font.fixed.f12.lineHeight
-        } : {
+          lineHeight: theme.font.fixed.f12.lineHeight,
+        }
+      : {
           fontSize: theme.font.fixed.f14.fontSize,
-          lineHeight: theme.font.fixed.f14.lineHeight
-        })
+          lineHeight: theme.font.fixed.f14.lineHeight,
+        }),
   };
 };
 
-const targetStyle: CreateRule<{mobileScreen: boolean; theme: Theme}> = ({ mobileScreen, theme }) => {
+const targetStyle: CreateRule<{ mobileScreen: boolean; theme: Theme }> = ({ mobileScreen, theme }) => {
   return {
     ...(mobileScreen
       ? {
           fontSize: theme.font.fixed.f14.fontSize,
           lineHeight: theme.font.fixed.f14.lineHeight,
           maxWidth: 'auto',
-        } : {
+        }
+      : {
           fontSize: theme.font.fixed.f16.fontSize,
           lineHeight: theme.font.fixed.f16.lineHeight,
           maxWidth: '400px',
-        })
+        }),
   };
 };
 
-const viewHistoryStyle: CreateRule<{mobileScreen: boolean; theme: Theme}> = ({ mobileScreen, theme }) => {
+const viewHistoryStyle: CreateRule<{ mobileScreen: boolean; theme: Theme }> = ({ mobileScreen, theme }) => {
   return {
     color: theme.colors.tescoBlue,
     cursor: 'pointer',
     ...(mobileScreen
       ? {
           fontSize: theme.font.fixed.f12.fontSize,
-          lineHeight: theme.font.fixed.f12.lineHeight
-        } : {
+          lineHeight: theme.font.fixed.f12.lineHeight,
+        }
+      : {
           fontSize: theme.font.fixed.f14.fontSize,
-          lineHeight: theme.font.fixed.f14.lineHeight
-        })
+          lineHeight: theme.font.fixed.f14.lineHeight,
+        }),
   };
 };
 
-const cardRightBlock: CreateRule<{mobileScreen: boolean}> = ({ mobileScreen }) => {
+const cardRightBlock: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => {
   return {
     display: 'flex',
     marginLeft: 'auto',
@@ -233,15 +241,16 @@ const cardRightBlock: CreateRule<{mobileScreen: boolean}> = ({ mobileScreen }) =
           flexDirection: 'row',
           alignItems: 'center',
           justifyContent: 'space-between',
-          marginTop:'15px',
+          marginTop: '15px',
           width: '100%',
-        } : {
+        }
+      : {
           flexDirection: 'column',
           alignItems: 'flex-end',
           justifyContent: 'unset',
           marginTop: 0,
           width: 'auto',
-        })
+        }),
   };
 };
 

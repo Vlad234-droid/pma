@@ -23,3 +23,10 @@ export enum FormType {
   SELECT = 'select',
   TEXT = 'text',
 }
+
+export enum FEEDBACK_STATUS_IN {
+  DRAFT = 1,
+  SUBMITTED,
+  PENDING,
+  COMPLETED,
+}

@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, ChangeEvent } from 'react';
 import { useStyle, useBreakpoints, Button, Styles, Rule, CreateRule } from '@dex-ddl/core';
 import { Notification } from 'components/Notification';
 import { GenericItemField } from 'components/GenericForm';
@@ -93,7 +93,9 @@ const AddNoteModal: FC<AddNoteModalProps> = ({ methods, cancelModal, submitForm,
                           options={field_options as Option[]}
                           name={'targetType'}
                           placeholder={item.placeholder}
-                          onChange={(value) => {
+                          //@ts-ignore
+                          onChange={({ target }) => {
+                            const { value } = target;
                             if (get(values, 'folderTitle')) setValue('folderTitle', '', { shouldValidate: false });
                             setValue('folder', value, { shouldValidate: true });
                           }}

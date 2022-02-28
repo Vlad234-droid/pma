@@ -85,7 +85,9 @@ export const SubmitPart: FC<SubmitPartProps> = ({
                       options={field_options as Option[]}
                       name={'targetType'}
                       placeholder={item.placeholder}
-                      onChange={(value) => {
+                      //@ts-ignore
+                      onChange={({ target }) => {
+                        const { value } = target;
                         if (get(values, 'folderTitle')) setValue('folderTitle', '', { shouldValidate: false });
                         setValue('folder', value, { shouldValidate: true });
                       }}

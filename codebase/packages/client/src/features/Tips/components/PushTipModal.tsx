@@ -29,7 +29,9 @@ const PushTipModal: FC<PushTipModalProps> = ({ card, handleCloseModal, handleCon
       {successText ? (
         <div className={css(modalInner)}>
           <img src={success} alt='success' />
-          <div className={css(modalTitle)}><Trans i18nKey='done'>Done</Trans>!</div>
+          <div className={css(modalTitle)}>
+            <Trans i18nKey='done'>Done</Trans>!
+          </div>
           <div className={css(modalSubTitleStyle)}>
             <Trans i18nKey='tip_pushed_successfully'>Tip pushed successfully</Trans>.
           </div>
@@ -41,18 +43,29 @@ const PushTipModal: FC<PushTipModalProps> = ({ card, handleCloseModal, handleCon
         </div>
       ) : (
         <div className={css(modalInner)} data-test-id={PUSH_TIP_MODAL}>
-          <div className={css(modalTitle)}><Trans i18nKey='push_tip'>Push Tip</Trans></div>
+          <div className={css(modalTitle)}>
+            <Trans i18nKey='push_tip'>Push Tip</Trans>
+          </div>
           <div className={css(modalSubTitleStyle)}>
             <Trans i18nKey='do_you_want_to_push_the_below_tip'>Do you want to push the below Tip</Trans>?
           </div>
           <div className={css(modalText)}>
-            <span className={css({ fontWeight: 700 })}><Trans i18nKey='title'>Title</Trans>:</span> {card.title}
+            <span className={css({ fontWeight: 700 })}>
+              <Trans i18nKey='title'>Title</Trans>:
+            </span>{' '}
+            {card.title}
           </div>
           <div className={css(modalText)}>
-            <span className={css({ fontWeight: 700 })}><Trans i18nKey='description'>Description</Trans>:</span> {card.description}
+            <span className={css({ fontWeight: 700 })}>
+              <Trans i18nKey='description'>Description</Trans>:
+            </span>{' '}
+            {card.description}
           </div>
           <div className={css(modalText)}>
-            <span className={css({ fontWeight: 700 })}><Trans i18nKey='target'>Target</Trans>:</span> {card.targetOrganisation.name}
+            <span className={css({ fontWeight: 700 })}>
+              <Trans i18nKey='target'>Target</Trans>:
+            </span>{' '}
+            {card.targetOrganisation.name}
           </div>
           <div className={css(modalBtnsWrap)}>
             <Button
@@ -85,7 +98,7 @@ const modalInner: Rule = {
   alignItems: 'center',
   justifyContent: 'flex-start',
   textAlign: 'center',
-}
+};
 
 const modalTitle: Rule = ({ theme }) => {
   return {

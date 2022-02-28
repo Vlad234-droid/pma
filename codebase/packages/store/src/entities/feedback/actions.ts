@@ -32,11 +32,32 @@ export const getObjectiveReviews = createAsyncAction(
 
 export const clearFeedback = createAction('feedback/CLEAR')<undefined>();
 
+export const getGiveFeedback = createAsyncAction(
+  'feedback/GET_GIVE_FEEDBACK_REQUEST',
+  'feedback/GET_GIVE_FEEDBACK_SUCCESS',
+  'feedback/GET_GIVE_FEEDBACK_FAILURE',
+)<any, any, Error>();
+
+export const getRespondFeedback = createAsyncAction(
+  'feedback/GET_RESPOND_FEEDBACK_REQUEST',
+  'feedback/GET_RESPOND_FEEDBACK_SUCCESS',
+  'feedback/GET_RESPOND_FEEDBACK_FAILURE',
+)<any, any, Error>();
+
+export const getViewFeedback = createAsyncAction(
+  'feedback/GET_VIEW_FEEDBACK_REQUEST',
+  'feedback/GET_VIEW_FEEDBACK_SUCCESS',
+  'feedback/GET_VIEW_FEEDBACK_FAILURE',
+)<any, any, Error>();
+
 export const Actions = {
   createNewFeedback: createNewFeedback.request,
   getAllFeedbacks: getAllFeedbacks.request,
   readFeedback: readFeedback.request,
   updatedFeedback: updatedFeedback.request,
   getObjectiveReviews: getObjectiveReviews.request,
+  getGiveFeedback: getGiveFeedback.request,
+  getRespondFeedback: getRespondFeedback.request,
+  getViewFeedback: getViewFeedback.request,
   clearFeedback,
 };
