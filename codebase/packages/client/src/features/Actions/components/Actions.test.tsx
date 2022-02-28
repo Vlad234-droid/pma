@@ -457,11 +457,11 @@ describe('Actions with two colleagues[1-OBJECTIVE;2-OBJECTIVE]', () => {
     fireEvent.click(screen.getByRole('button', { name: /Decline/i }));
 
     fireEvent.click(screen.getByTestId('declineReason'));
-    fireEvent.click(screen.getByTestId('declineReasonOptions-1'));
+    fireEvent.click(screen.getByRole('button', { name: /Ambitious enough/i }));
     fireEvent.click(screen.getByRole('button', { name: /Submit/i }));
 
     fireEvent.click(screen.getByTestId('declineReason'));
-    fireEvent.click(screen.getByTestId('declineReasonOptions-2'));
+    fireEvent.click(screen.getByRole('button', { name: /Easily assessable/i }));
     fireEvent.click(screen.getByRole('button', { name: /Submit/i }));
   });
 
