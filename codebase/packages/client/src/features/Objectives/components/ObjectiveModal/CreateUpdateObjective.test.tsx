@@ -9,6 +9,7 @@ import { CreateUpdateObjective } from './CreateUpdateObjective';
 import { FormType, ReviewsActions } from '@pma/store';
 
 describe('CreateUpdateObjective', () => {
+  Element.prototype.scrollIntoView = jest.fn();
   const approvalSubmissionText = /Submit Objectives/i;
   let addMockUpdateReview, addMockCreateReview, onClose;
   let consoleErrorMock = jest.spyOn(console, 'error').mockImplementation();
