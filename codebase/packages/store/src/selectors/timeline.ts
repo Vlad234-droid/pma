@@ -16,8 +16,8 @@ export const userReviewTypesSelector = createSelector(timelineSelector, ({ data 
   data?.map((item: { code: string }) => item.code),
 );
 
-export const getTimelinesSelector = (colleagueUuid) =>
-  createSelector(timelineSelector, (timelines) => timelines[colleagueUuid]);
+export const timelinesExistSelector = (colleagueUuid) =>
+  createSelector(timelineSelector, (timelines) => !!timelines[colleagueUuid]?.length);
 
 export const getTimelineSelector = (colleagueUuid) =>
   createSelector(usersSelector, timelineSelector, (user, { meta, ...rest }) => {
