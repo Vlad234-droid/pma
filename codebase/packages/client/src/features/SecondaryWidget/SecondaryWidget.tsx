@@ -8,6 +8,8 @@ export type Props = {
   iconGraphic: IconProps['graphic'];
   title: string;
   data?: string;
+  type?: string;
+  date?: string;
   description?: string;
   customStyle?: React.CSSProperties | {};
   onClick: () => void;
@@ -23,6 +25,7 @@ const SecondaryWidget: FC<Props> = ({
   description,
   customStyle,
   onClick,
+  date,
   withButton = true,
 }) => {
   const { css, theme } = useStyle();
@@ -34,7 +37,7 @@ const SecondaryWidget: FC<Props> = ({
           <Icon graphic={iconGraphic} />
           <span className={css(titleStyle)}>{title}</span>
           {data && <span className={css(descriptionStyle)}>{data}</span>}
-          {/* <span className={css(descriptionStyle)}>{date}</span> */}
+          {date && <span className={css(descriptionStyle)}>Added {date}</span>}
           <span className={css(descriptionStyle)}>{description}</span>
         </div>
         {withButton && (

@@ -1,3 +1,4 @@
+import { min } from 'lodash';
 import { DateTime, DurationUnit } from 'luxon';
 
 export { DateTime };
@@ -27,6 +28,8 @@ export type DateFormat = string;
 
 export const getLocalNow = () => DateTime.local();
 export const resolveTimezone = () => Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+export const minDate = (arr: Array<string>) => min(arr);
 
 export const filterByDate = (a: string, b: string) => (DateTime.fromISO(a) > DateTime.fromISO(b) ? 1 : -1);
 

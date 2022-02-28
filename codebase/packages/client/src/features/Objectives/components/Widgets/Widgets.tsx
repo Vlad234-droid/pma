@@ -6,9 +6,10 @@ import { default as MainWidget } from '../MainWidget';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { ReviewType } from 'config/enum';
-import { getTimelineByReviewTypeSelector, timelineTypesAvailabilitySelector } from '@pma/store';
+import { getTimelineByReviewTypeSelector, schemaMetaPDPSelector, timelineTypesAvailabilitySelector } from '@pma/store';
 import { buildPath } from 'features/Routes';
 import { Page } from 'pages';
+import { DATE_STRING_FORMAT, formatDateString, minDate } from 'utils';
 
 export type MainWidgetProps = {};
 
@@ -22,28 +23,40 @@ const Widgets: FC<Props> = () => {
   const timelineObjective = useSelector(getTimelineByReviewTypeSelector(ReviewType.OBJECTIVE, 'me'));
   const timelineMYR = useSelector(getTimelineByReviewTypeSelector(ReviewType.MYR, 'me'));
   const timelineTypes = useSelector(timelineTypesAvailabilitySelector('me'));
+  const pdpSelector = useSelector(schemaMetaPDPSelector)?.goals || [];
 
   const status = timelineObjective?.status;
   const count = timelineObjective?.count || 0;
   const nextReviewDate = timelineMYR?.startTime || null;
   const canShowObjectives = timelineTypes[ReviewType.OBJECTIVE];
+  const dates = pdpSelector && pdpSelector.map((el) => el.achievementDate);
+  const addedDatePDP = formatDateString(minDate(dates) || '', DATE_STRING_FORMAT);
+
+  enum widgetTypes {
+    PDP = 'pdp',
+    FEEDBACK = 'feedback',
+    NOTES = 'notes',
+  }
 
   const widgets: SecondaryWidgetProps[] = [
     {
       iconGraphic: 'list',
       title: t('personal_development_plan', 'Personal Development Plan'),
+      type: widgetTypes.PDP,
       customStyle: { flex: '2 1 110px' },
       onClick: () => navigate(buildPath(Page.PERSONAL_DEVELOPMENT_PLAN)),
     },
     {
       iconGraphic: 'chatSq',
       title: t('feedback', 'Feedback'),
+      type: widgetTypes.FEEDBACK,
       customStyle: { flex: '2 1 110px' },
       onClick: () => navigate(buildPath(Page.FEEDBACK)),
     },
     {
       iconGraphic: 'edit',
       title: t('My Notes'),
+      type: widgetTypes.NOTES,
       customStyle: { flex: '2 1 110px' },
       onClick: () => navigate(buildPath(Page.NOTES)),
     },
@@ -61,9 +74,13 @@ const Widgets: FC<Props> = () => {
         />
       )}
 
-      {widgets.map((props, idx) => (
-        <SecondaryWidget key={idx} {...props} />
-      ))}
+      {widgets.map((props, idx) => {
+        if (props.type === widgetTypes.PDP) {
+          return <SecondaryWidget key={idx} {...props} date={addedDatePDP} />;
+        }
+
+        return <SecondaryWidget key={idx} {...props} />;
+      })}
     </div>
   );
 };
