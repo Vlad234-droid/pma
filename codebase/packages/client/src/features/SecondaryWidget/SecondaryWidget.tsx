@@ -37,7 +37,7 @@ const SecondaryWidget: FC<Props> = ({
           <Icon graphic={iconGraphic} />
           <span className={css(titleStyle)}>{title}</span>
           {data && <span className={css(descriptionStyle)}>{data}</span>}
-          {date && <span className={css(descriptionStyle)}>Added {date}</span>}
+          {date && <span className={css(descriptionStyle)}>{date}</span>}
           <span className={css(descriptionStyle)}>{description}</span>
         </div>
         {withButton && (

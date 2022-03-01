@@ -7,6 +7,7 @@ import {
   timelineTypesAvailabilitySelector,
   PDPActions,
   earlyDataPDPSelector,
+  schemaMetaPDPSelector,
 } from '@pma/store';
 
 import { Page } from 'pages';
@@ -32,11 +33,14 @@ const Widgets: FC<Props> = () => {
   const nextReviewDate = timelineMYR?.startTime || null;
   const canShowObjectives = timelineTypes[ReviewType.OBJECTIVE];
   const dates = useSelector(earlyDataPDPSelector) || '';
-  const addedDatePDP = dates ? formatDateString(dates, DATE_STRING_FORMAT) : '';
+  const pdpSelector = useSelector(schemaMetaPDPSelector)?.goals || [];
+  const addedDatePDP = dates && pdpSelector.length ? formatDateString(dates, DATE_STRING_FORMAT) : '';
 
   useEffect(() => {
-    dispatch(PDPActions.getEarlyAchievementDate({}));
-  }, []);
+    if (pdpSelector.length) {
+      dispatch(PDPActions.getEarlyAchievementDate({}));
+    }
+  }, [pdpSelector]);
 
   const widgets: SecondaryWidgetProps[] = [
     {
