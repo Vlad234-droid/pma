@@ -1,21 +1,25 @@
-import React, { FC, HTMLProps } from 'react';
-import { useTranslation } from 'components/Translation';
+import React, { FC, useEffect } from 'react';
 import { Styles, useStyle } from '@dex-ddl/core';
+import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import {
+  getTimelineByReviewTypeSelector,
+  timelineTypesAvailabilitySelector,
+  PDPActions,
+  earlyDataPDPSelector,
+} from '@pma/store';
+
+import { Page } from 'pages';
+import { useTranslation } from 'components/Translation';
 import SecondaryWidget, { Props as SecondaryWidgetProps } from 'features/SecondaryWidget';
 import { default as MainWidget } from '../MainWidget';
-import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { ReviewType } from 'config/enum';
-import { getTimelineByReviewTypeSelector, schemaMetaPDPSelector, timelineTypesAvailabilitySelector } from '@pma/store';
 import { buildPath } from 'features/Routes';
-import { Page } from 'pages';
-import { DATE_STRING_FORMAT, formatDateString, minDate } from 'utils';
-
-export type MainWidgetProps = {};
-
-type Props = HTMLProps<HTMLInputElement> & MainWidgetProps;
+import { widgetTypes, Props } from './type';
+import { ReviewType } from 'config/enum';
+import { DATE_STRING_FORMAT, formatDateString } from 'utils';
 
 const Widgets: FC<Props> = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const { css } = useStyle();
   const { t } = useTranslation();
@@ -23,20 +27,16 @@ const Widgets: FC<Props> = () => {
   const timelineObjective = useSelector(getTimelineByReviewTypeSelector(ReviewType.OBJECTIVE, 'me'));
   const timelineMYR = useSelector(getTimelineByReviewTypeSelector(ReviewType.MYR, 'me'));
   const timelineTypes = useSelector(timelineTypesAvailabilitySelector('me'));
-  const pdpSelector = useSelector(schemaMetaPDPSelector)?.goals || [];
-
   const status = timelineObjective?.status;
   const count = timelineObjective?.count || 0;
   const nextReviewDate = timelineMYR?.startTime || null;
   const canShowObjectives = timelineTypes[ReviewType.OBJECTIVE];
-  const dates = pdpSelector && pdpSelector.map((el) => el.achievementDate);
-  const addedDatePDP = formatDateString(minDate(dates) || '', DATE_STRING_FORMAT);
+  const dates = useSelector(earlyDataPDPSelector) || '';
+  const addedDatePDP = dates ? formatDateString(dates, DATE_STRING_FORMAT) : '';
 
-  enum widgetTypes {
-    PDP = 'pdp',
-    FEEDBACK = 'feedback',
-    NOTES = 'notes',
-  }
+  useEffect(() => {
+    dispatch(PDPActions.getEarlyAchievementDate({}));
+  }, []);
 
   const widgets: SecondaryWidgetProps[] = [
     {

@@ -58,7 +58,7 @@ const ProfessionalInformation: FC<Props> = ({ user }) => {
   const { t } = useTranslation();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
-  const { hireDate, job, department, businessType, manager, employmentType, countryCode } = user;
+  const { hireDate, job, department, businessType, manager, countryCode } = user;
   return (
     <BasicTile
       title={t('ProfessionalInformation', 'Professional information')}

@@ -6,6 +6,7 @@ import { PDPType } from 'config/enum';
 function usePDPSchema(type: PDPType) {
   const dispatch = useDispatch();
   const schema = useSelector(getPDPSchema(type));
+
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const { components = [] } = schema;
 

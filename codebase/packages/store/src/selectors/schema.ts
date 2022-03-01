@@ -132,3 +132,4 @@ export const getPDPSchema = (type: PDPType) =>
 
 export const schemaMetaPDPSelector = createSelector(schemaPDPSelector, (data) => data?.pdp);
 export const metaPDPSelector = createSelector(schemaPDPSelector, (data) => data?.meta);
+export const earlyDataPDPSelector = createSelector(schemaPDPSelector, (data) => data?.date);

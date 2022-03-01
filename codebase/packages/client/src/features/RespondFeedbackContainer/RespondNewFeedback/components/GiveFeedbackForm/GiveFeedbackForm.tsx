@@ -1,18 +1,20 @@
 import React, { FC } from 'react';
-import { useStyle, Rule, useBreakpoints, Button, CreateRule } from '@dex-ddl/core';
+import { useStyle, Rule, useBreakpoints, Button } from '@dex-ddl/core';
 import { useSelector } from 'react-redux';
 import { getColleagueByUuidSelector } from '@pma/store';
-import get from 'lodash.get';
-import { GiveFeedbackFormProps } from '../../type';
-import { IconButton, Position } from 'components/IconButton';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
+import get from 'lodash.get';
+
 import { Trans } from 'components/Translation';
 import { TileWrapper } from 'components/Tile';
 import { Field, Item, Textarea } from 'components/Form';
-import { createGiveFeedbackSchema } from './config';
 import ColleaguesFinder from '../ColleaguesFinder';
 import FeedbackInfo from '../FeedbackInfo';
+import { IconButton, Position } from 'components/IconButton';
+
+import { createGiveFeedbackSchema } from './config';
+import { GiveFeedbackFormProps } from '../../type';
 
 const prepareFeedbackItems = (fields, feedbackItems) => {
   return feedbackItems.map(({ content }, idx) => ({ content, code: fields[idx].code }));
