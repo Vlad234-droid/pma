@@ -4,7 +4,14 @@ import { combineEpics } from 'redux-observable';
 import { from, of } from 'rxjs';
 import { catchError, filter, map, switchMap, takeUntil } from 'rxjs/operators';
 
-import { getPDPGoal, createPDPGoal, updatePDPGoal, getPDPByUUIDGoal, deletePDPGoal } from './actions';
+import {
+  getPDPGoal,
+  createPDPGoal,
+  updatePDPGoal,
+  getPDPByUUIDGoal,
+  deletePDPGoal,
+  getEarlyAchievementDate,
+} from './actions';
 
 export const getPDPEpic: Epic = (action$, _, { api }) => {
   return action$.pipe(
@@ -114,6 +121,19 @@ export const updadePDPEpic: Epic = (action$, _, { api }) =>
       );
     }),
   );
+export const getEarlyAchievementDatepic: Epic = (action$, _, { api }) =>
+  action$.pipe(
+    filter(isActionOf(getEarlyAchievementDate.request)),
+    switchMap(() => {
+      return from(api.getEarlyAchievementDate()).pipe(
+        // @ts-ignore
+        map(({ data }) => {
+          return getEarlyAchievementDate.success(data);
+        }),
+        catchError(({ errors }) => of(getEarlyAchievementDate.failure(errors))),
+      );
+    }),
+  );
 
 export const updadeAndFetchPDPEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
@@ -138,4 +158,5 @@ export default combineEpics(
   deleteAndFetchPDPEpic,
   createAndFetchPDPEpic,
   updadeAndFetchPDPEpic,
+  getEarlyAchievementDatepic,
 );

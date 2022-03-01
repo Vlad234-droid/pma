@@ -26,3 +26,8 @@ export const getPDPByUUIDGoal = <T>(params: any) => {
   const domain = `/pdp/goals/${uuid}`;
   return httpClient.get(`${domain}`);
 };
+
+export const getEarlyAchievementDate = () => {
+  const domain = '/pdp/goals/early-achievement-date';
+  return httpClient.get(`${domain}`);
+};

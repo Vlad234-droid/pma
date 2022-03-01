@@ -1,4 +1,4 @@
-import React, { FC, useState, ChangeEvent } from 'react';
+import React, { FC, useState } from 'react';
 import { useStyle, useBreakpoints, Button, Styles, Rule, CreateRule } from '@dex-ddl/core';
 import { Notification } from 'components/Notification';
 import { GenericItemField } from 'components/GenericForm';

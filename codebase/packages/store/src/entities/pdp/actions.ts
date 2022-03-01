@@ -32,6 +32,12 @@ export const getPDPByUUIDGoal = createAsyncAction(
   'PDPGoal/FETCH_ALL_BY_UUID_CANCEL',
 )<any, any, Error>();
 
+export const getEarlyAchievementDate = createAsyncAction(
+  'PDP/GET_EARLY_ACHIEVEMENT_DATE_REQUEST',
+  'PDP/GET_EARLY_ACHIEVEMENT_DATE_SUCCESS',
+  'PDP/GET_EARLY_ACHIEVEMENT_DATE_FAILURE',
+)<any, any, Error>();
+
 export const clearPDPData = createAction('orgObjectives/CLEAR')<undefined>();
 
 export const Actions = {
@@ -40,5 +46,6 @@ export const Actions = {
   getPDPByUUIDGoal: getPDPByUUIDGoal.request,
   updatePDPGoal: updatePDPGoal.request,
   deletePDPGoal: deletePDPGoal.request,
+  getEarlyAchievementDate: getEarlyAchievementDate.request,
   clearPDPData,
 };
