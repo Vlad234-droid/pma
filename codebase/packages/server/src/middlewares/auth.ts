@@ -1,13 +1,14 @@
+// @ts-nocheck
 import Express, { Handler } from 'express';
 import {
   identityTokenSwapPlugin,
   getDataFromCookie,
   AuthData,
-  AUTH_DATA_COOKIE_NAME,
   getIdentityData,
   OneloginError,
   Plugin,
-} from '@energon/onelogin';
+} from '@pma-connectors/onelogin';
+import { AUTH_DATA_COOKIE_NAME } from '@energon/onelogin';
 
 import { ProcessConfig, isPROD } from '../config';
 
