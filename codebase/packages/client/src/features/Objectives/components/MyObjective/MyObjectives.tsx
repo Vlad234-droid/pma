@@ -162,7 +162,7 @@ const MyObjectives: FC = () => {
   return (
     <div data-test-id={TEST_ID}>
       {createIsAvailable && (
-        <div className={css({ display: 'flex' })}>
+        <div className={css({ display: 'flex', marginBottom: '20px' })}>
           <CreateButton
             withIcon
             useSingleStep={reviewModificationMode === REVIEW_MODIFICATION_MODE.SINGLE}
@@ -446,8 +446,8 @@ const widgetWrapperStyle: Rule = {
 };
 
 const linkStyles = ({ theme }) => ({
-  fontSize: '14px',
-  lineHeight: '18px',
+  fontSize: theme.font.fixed.f14.fontSize,
+  lineHeight: theme.font.fixed.f14.lineHeight,
   color: theme.colors.tescoBlue,
   background: 'transparent',
 });
