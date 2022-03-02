@@ -69,9 +69,6 @@ const EditButton: FC<Props> = ({
             content: 'Edit objectives',
             styles: [modalTitleOptionStyle],
           }}
-          onOverlayClick={() => {
-            setIsOpen(false);
-          }}
         >
           {isSingleObjectivesEditMode ? (
             <CreateUpdateObjective onClose={() => setIsOpen(false)} editNumber={editNumber} />
