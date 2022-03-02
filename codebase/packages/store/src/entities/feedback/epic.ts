@@ -12,8 +12,40 @@ import {
   getGiveFeedback,
   getRespondFeedback,
   getViewFeedback,
+  getRequestedFeedbacks,
+  getGivenFeedbacks,
 } from './actions';
 
+export const getGivenFeedbacksEpic: Epic = (action$, _, { api }) => {
+  return action$.pipe(
+    filter(isActionOf(getGivenFeedbacks.request)),
+    switchMap(() => {
+      //@ts-ignore
+      return from(api.getGivenFeedbacks()).pipe(
+        //@ts-ignore
+        map(({ data }) => {
+          return getGivenFeedbacks.success(data);
+        }),
+        catchError(({ errors }) => of(getGivenFeedbacks.failure(errors))),
+      );
+    }),
+  );
+};
+export const getRequestedFeedbacksEpic: Epic = (action$, _, { api }) => {
+  return action$.pipe(
+    filter(isActionOf(getRequestedFeedbacks.request)),
+    switchMap(() => {
+      //@ts-ignore
+      return from(api.getRequestedFeedbacks()).pipe(
+        //@ts-ignore
+        map(({ data }) => {
+          return getRequestedFeedbacks.success(data);
+        }),
+        catchError(({ errors }) => of(getRequestedFeedbacks.failure(errors))),
+      );
+    }),
+  );
+};
 export const getAllFeedbackEpic: Epic = (action$, _, { api }) => {
   return action$.pipe(
     filter(isActionOf(getAllFeedbacks.request)),
@@ -136,4 +168,6 @@ export default combineEpics(
   getGiveFeedbackEpic,
   getRespondFeedbackEpic,
   getViewFeedbackEpic,
+  getRequestedFeedbacksEpic,
+  getGivenFeedbacksEpic,
 );

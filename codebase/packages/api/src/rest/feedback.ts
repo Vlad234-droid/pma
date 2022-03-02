@@ -24,3 +24,10 @@ export const readFeedback = (params: any) => {
 export const getFeedbacks = (params: any): Promise<AxiosResponse<any>> => {
   return httpClient.get(`${domain}`, { params });
 };
+
+export const getGivenFeedbacks = () => {
+  return httpClient.get(`${domain}/given`);
+};
+export const getRequestedFeedbacks = () => {
+  return httpClient.get(`${domain}/requested`);
+};
