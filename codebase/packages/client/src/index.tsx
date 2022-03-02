@@ -19,6 +19,7 @@ import { ToastProvider } from 'features/Toast';
 import { AppStateProvider } from 'features/AppState';
 import fontSettings from 'theme/font/fontSettings';
 import { MessagesProvider } from 'features/Messages';
+import { HeaderProvider } from 'contexts/headerContext';
 
 const routes = buildRoutes(pages);
 
@@ -40,13 +41,15 @@ const Root: FC = () => {
             <ToastProvider>
               <MessagesProvider>
                 <AppStateProvider>
-                  <BrowserRouter basename={PUBLIC_URL}>
-                    <React.StrictMode>
-                      <Layout>
-                        <Navigation routes={routes} />
-                      </Layout>
-                    </React.StrictMode>
-                  </BrowserRouter>
+                  <HeaderProvider>
+                    <BrowserRouter basename={PUBLIC_URL}>
+                      <React.StrictMode>
+                        <Layout>
+                          <Navigation routes={routes} />
+                        </Layout>
+                      </React.StrictMode>
+                    </BrowserRouter>
+                  </HeaderProvider>
                 </AppStateProvider>
               </MessagesProvider>
             </ToastProvider>

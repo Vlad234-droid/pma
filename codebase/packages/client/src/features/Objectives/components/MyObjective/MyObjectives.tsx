@@ -6,6 +6,7 @@ import { StepIndicator } from 'components/StepIndicator/StepIndicator';
 import { IconButton } from 'components/IconButton';
 import { downloadPDF, ObjectiveDocument, usePDF } from '@pma/pdf-renderer';
 import { canEditAllObjectiveFn, REVIEW_MODIFICATION_MODE, reviewModificationModeFn } from '../../utils';
+import { useHeaderContainer } from 'contexts/headerContext';
 
 import {
   Accordion,
@@ -60,6 +61,7 @@ export const TEST_ID = 'my-objectives-page';
 
 const MyObjectives: FC = () => {
   const { css, theme } = useStyle();
+  const { setLinkTitle } = useHeaderContainer();
   const navigate = useNavigate();
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -150,6 +152,12 @@ const MyObjectives: FC = () => {
       );
     }
   }, [colleagueUuid, canShowObjectives]);
+
+  useEffect(() => {
+    if (canShowAnnualReview) {
+      setLinkTitle({ [Page.OBJECTIVES_VIEW]: t('reviews', 'Reviews') });
+    }
+  }, [canShowAnnualReview]);
 
   return (
     <div data-test-id={TEST_ID}>
