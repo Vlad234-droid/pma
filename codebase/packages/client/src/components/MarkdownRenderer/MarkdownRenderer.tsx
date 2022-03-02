@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import ReactMarkdown, { Components } from 'react-markdown';
-import { useStyle } from '@dex-ddl/core';
+import { useStyle, Rule } from '@dex-ddl/core';
 
 type Props = {
   source: string;
@@ -9,8 +9,14 @@ type Props = {
 
 const CustomPTag = ({ children }) => {
   const { css } = useStyle();
-  return <p className={css({ margin: '0px' })}>{children}</p>;
+  return <p className={css(defaultTag)}>{children}</p>;
 };
+const defaultTag: Rule = ({ theme }) => ({
+  margin: '0px',
+  color: theme.colors.base,
+  fontSize: '14px',
+  lineHeight: '18px',
+});
 
 const defaultComponents = { p: CustomPTag };
 

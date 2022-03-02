@@ -2,7 +2,7 @@ import React, { FC, useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
 import { useForm } from 'react-hook-form';
-import { Button, Icon, useBreakpoints, useStyle } from '@dex-ddl/core';
+import { Button, Icon, Rule, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
   currentUserSelector,
@@ -22,7 +22,7 @@ import {
 import { ReviewType, Status } from 'config/enum';
 import { createYupSchema } from 'utils/yup';
 import { TFunction, Trans, useTranslation } from 'components/Translation';
-import { Input, Item, Select, Textarea } from 'components/Form';
+import { Input, Item, Select, Textarea, Text } from 'components/Form';
 import { GenericItemField } from 'components/GenericForm';
 import MarkdownRenderer from 'components/MarkdownRenderer';
 import { TriggerModal } from 'features/Modal/components/TriggerModal';
@@ -227,7 +227,7 @@ const ReviewFormModal: FC<ReviewFormModal> = ({ reviewType, onClose }) => {
               <TriggerModal
                 triggerComponent={
                   <div className={css({ display: 'flex', alignItems: 'center' })}>
-                    <Icon graphic='information' />
+                    <Icon graphic='information' iconStyles={{ width: '18px' }} />
                     <span
                       className={css(theme.font.fixed.f14, {
                         color: theme.colors.tescoBlue,
@@ -258,6 +258,18 @@ const ReviewFormModal: FC<ReviewFormModal> = ({ reviewType, onClose }) => {
               // todo end temporary solution
 
               if (type === FormType.TEXT) {
+                const CustomPTag = ({ children }) => {
+                  const { css } = useStyle();
+                  return <p className={css(defaultTag)}>{children}</p>;
+                };
+                const defaultTag: Rule = ({ theme }) => ({
+                  margin: '0px',
+                  color: theme.colors.base,
+                  fontSize: '16px',
+                  lineHeight: '20px',
+                });
+
+                const components = { p: CustomPTag };
                 return (
                   <div style={{ padding: '10px 0' }} key={id}>
                     <div
@@ -266,7 +278,7 @@ const ReviewFormModal: FC<ReviewFormModal> = ({ reviewType, onClose }) => {
                         lineHeight: '20px',
                       })}
                     >
-                      <MarkdownRenderer source={text} />
+                      <MarkdownRenderer components={components} source={text} />
                     </div>
                   </div>
                 );
@@ -279,7 +291,7 @@ const ReviewFormModal: FC<ReviewFormModal> = ({ reviewType, onClose }) => {
                     methods={methods}
                     label={label}
                     Wrapper={Item}
-                    Element={validate?.maxLength > 100 ? Textarea : Input}
+                    Element={readonly ? Text : validate?.maxLength > 100 ? Textarea : Input}
                     placeholder={description}
                     value={value}
                     readonly={componentReadonly}
@@ -298,7 +310,7 @@ const ReviewFormModal: FC<ReviewFormModal> = ({ reviewType, onClose }) => {
                         {children}
                       </Item>
                     )}
-                    Element={Select}
+                    Element={readonly ? Text : Select}
                     options={values}
                     placeholder={description}
                     value={value}
@@ -308,31 +320,31 @@ const ReviewFormModal: FC<ReviewFormModal> = ({ reviewType, onClose }) => {
               }
             })}
           </div>
-          {!readonly && (
+          <div
+            className={css({
+              position: 'absolute',
+              bottom: 0,
+              left: 0,
+              width: '100%',
+            })}
+          >
             <div
               className={css({
-                position: 'absolute',
-                bottom: 0,
-                left: 0,
-                width: '100%',
+                position: 'relative',
+                bottom: theme.spacing.s0,
+                left: theme.spacing.s0,
+                right: theme.spacing.s0,
+                borderTop: `${theme.border.width.b1} solid ${theme.colors.backgroundDarkest}`,
               })}
             >
               <div
                 className={css({
-                  position: 'relative',
-                  bottom: theme.spacing.s0,
-                  left: theme.spacing.s0,
-                  right: theme.spacing.s0,
-                  borderTop: `${theme.border.width.b1} solid ${theme.colors.backgroundDarkest}`,
+                  padding: mobileScreen ? theme.spacing.s7 : theme.spacing.s9,
+                  display: 'flex',
+                  justifyContent: 'center',
                 })}
               >
-                <div
-                  className={css({
-                    padding: mobileScreen ? theme.spacing.s7 : theme.spacing.s9,
-                    display: 'flex',
-                    justifyContent: 'center',
-                  })}
-                >
+                {readonly ? (
                   <Button
                     styles={[
                       theme.font.fixed.f16,
@@ -345,29 +357,48 @@ const ReviewFormModal: FC<ReviewFormModal> = ({ reviewType, onClose }) => {
                         color: `${theme.colors.tescoBlue}`,
                       },
                     ]}
-                    onPress={onSaveDraft}
+                    onPress={onClose}
                   >
-                    <Trans i18nKey='save_as_draft'>Save as draft</Trans>
+                    <Trans i18nKey='close'>Close</Trans>
                   </Button>
-                  <SubmitButton
-                    title={''}
-                    description={'Are you sure you want to submit your review to your line manager for approval?'}
-                    isDisabled={!isValid}
-                    onSave={handleSubmit(onSubmit)}
-                    styles={[
-                      theme.font.fixed.f16,
-                      {
-                        fontWeight: theme.font.weight.bold,
-                        width: '50%',
-                        margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
-                        background: `${theme.colors.tescoBlue}`,
-                      },
-                    ]}
-                  />
-                </div>
+                ) : (
+                  <>
+                    <Button
+                      styles={[
+                        theme.font.fixed.f16,
+                        {
+                          fontWeight: theme.font.weight.bold,
+                          width: '50%',
+                          margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
+                          background: theme.colors.white,
+                          border: `${theme.border.width.b1} solid ${theme.colors.tescoBlue}`,
+                          color: `${theme.colors.tescoBlue}`,
+                        },
+                      ]}
+                      onPress={onSaveDraft}
+                    >
+                      <Trans i18nKey='save_as_draft'>Save as draft</Trans>
+                    </Button>
+                    <SubmitButton
+                      title={''}
+                      description={'Are you sure you want to submit your review to your line manager for approval?'}
+                      isDisabled={!isValid}
+                      onSave={handleSubmit(onSubmit)}
+                      styles={[
+                        theme.font.fixed.f16,
+                        {
+                          fontWeight: theme.font.weight.bold,
+                          width: '50%',
+                          margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
+                          background: `${theme.colors.tescoBlue}`,
+                        },
+                      ]}
+                    />
+                  </>
+                )}
               </div>
             </div>
-          )}
+          </div>
         </form>
       </div>
     </div>

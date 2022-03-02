@@ -40,9 +40,9 @@ const Input: FC<InputField> = ({
         width: '100%',
         border: `1px solid ${isValid ? colors.backgroundDarkest : colors.error}`,
         borderRadius: '5px',
-        fontSize: '16px',
-        lineHeight: '20px',
-        padding: '10px 30px 10px 16px',
+        fontSize: '14px',
+        lineHeight: '18px',
+        padding: '10px 40px 10px 16px',
         ':focus': {
           outline: 'none !important',
           border: `1px solid ${isValid ? colors.tescoBlue : colors.error}`,
