@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux';
 import { getGivenFeedbacksSelector, getRequestedFeedbacksSelector } from '@pma/store';
 import { useTranslation } from 'components/Translation';
 
-const getCards = (): Props[] => {
+export const getCards = (): Props[] => {
   const { t } = useTranslation();
   const givenFeedbacks = useSelector(getGivenFeedbacksSelector);
   const requestedFeedbacks = useSelector(getRequestedFeedbacksSelector);
@@ -62,5 +62,3 @@ const getCards = (): Props[] => {
     },
   ];
 };
-
-export default getCards;

@@ -7,10 +7,9 @@ import { Item, Select } from 'components/Form';
 import { IconButton } from 'components/IconButton';
 import { Icon } from 'components/Icon';
 import { useAuthContainer } from 'contexts/authContext';
-import { TREATMENT_FIELD_OPTIONS } from './config/constants';
+import { TREATMENT_FIELD_OPTIONS, getCards } from './config';
 import { getSelectedTreatmentValue } from './utils';
 import Info360Modal, { FeedbackCard } from './components';
-import getCards from './config/config';
 
 export const FEEDBACK_ACTIONS = 'feedback_actions';
 
