@@ -26,7 +26,7 @@ export const SuccessModal: FC<SuccessModalProps> = ({ teamMethods, cancelTEAMMod
 
   const propperValue = (): string => {
     let str = '';
-    if (values.folder === AllNotesFolderIdTEAM || values.folder === '') {
+    if (values.folder === AllNotesFolderIdTEAM || !values.folder) {
       str = 'All notes';
     } else if (values.folder === addNewFolderId) {
       str = values.folderTitle;
