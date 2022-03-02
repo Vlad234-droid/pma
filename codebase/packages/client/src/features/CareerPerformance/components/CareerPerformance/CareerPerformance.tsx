@@ -3,7 +3,7 @@ import React, { FC, useEffect } from 'react';
 import { Rule, useStyle } from '@dex-ddl/core';
 
 import { Widgets as ObjectiveWidgets } from 'features/Objectives';
-import { Trans } from 'components/Translation';
+import { Trans, useTranslation } from 'components/Translation';
 import { ReviewType, Status } from 'config/enum';
 import { TimelineTypes } from 'config/types';
 import { KnowledgeLibraryWidget } from 'features/KnowledgeLibrary';
@@ -13,6 +13,8 @@ import InfoWidgets from '../InfoWidgets';
 import ReviewWidgets from '../ReviewWidgets';
 import Section from '../Section';
 import { Review } from '../../config/types';
+import { Page } from 'pages';
+import { useHeaderContainer } from 'contexts/headerContext';
 
 type Props = {
   loadTimeline: (uuid: string) => void;
@@ -38,12 +40,20 @@ const CareerPerformance: FC<Props> = ({
   displayTimelines,
 }) => {
   const { css } = useStyle();
+  const { t } = useTranslation();
+  const { setLinkTitle } = useHeaderContainer();
   const showMyReview = timelineTypes[ReviewType.MYR] && timelineTypes[ReviewType.EYR];
   const showAnnualReview = !timelineTypes[ReviewType.MYR] && timelineTypes[ReviewType.EYR];
 
   useEffect(() => {
     if (colleagueUuid) loadTimeline(colleagueUuid);
   }, [colleagueUuid]);
+
+  useEffect(() => {
+    if (showAnnualReview) {
+      setLinkTitle({ [Page.OBJECTIVES_VIEW]: t('reviews', 'Reviews') });
+    }
+  }, [showAnnualReview]);
 
   return (
     <>
@@ -68,7 +78,7 @@ const CareerPerformance: FC<Props> = ({
               endYearReview={endYearReview}
             />
           </Section>
-          </>
+        </>
       )}
       <Section title={<Trans i18nKey='useful_resources'>Useful resources</Trans>}>
         <KnowledgeLibraryWidget />

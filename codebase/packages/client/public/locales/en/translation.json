@@ -22,6 +22,7 @@
   "business_objectives": "Business Objectives",
   "my_completed_reviews": "My completed Reviews",
   "my_reviews": "My reviews",
+  "reviews": "Reviews",
   "no_completed_reviews": "You have no completed reviews",
   "objective_is_approved": "Well done! All {{count}} objective(s) have been approved.",
   "form_available_in_date": "The form will be available on {{date, d LLL yyyy}}.",

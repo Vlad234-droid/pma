@@ -7,6 +7,7 @@ import { CanPerform, role } from 'features/Permission';
 import AccessDenied from 'components/AccessDenied';
 import { Header } from 'components/Header';
 import authContext from 'contexts/authContext';
+import headerContext from 'contexts/headerContext';
 
 export const TEST_ID = 'layout-wrapper';
 
@@ -35,11 +36,12 @@ const Layout: FC = ({ children }) => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const { error } = useContext(authContext);
-
+  const { linkTitle } = useContext(headerContext);
   const { title, withHeader, backPath, withIcon, iconName } = useMemo(() => {
     const page = Object.keys(pages).find((page) => matchPath(page, pathname)) || '';
-    return pages[page] || {};
-  }, [pathname]);
+    const pageData = pages?.[page] || {};
+    return { ...pageData, title: linkTitle?.[page] ? linkTitle[page] : pageData?.title };
+  }, [pathname, linkTitle]);
 
   const handleBack = (backPath = '/') => navigate(backPath, { replace: true });
 

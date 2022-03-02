@@ -7,6 +7,7 @@ import { buildPath } from 'features/Routes';
 import { ConfirmModal } from 'features/Modal';
 import { CanPerform, role } from 'features/Permission';
 import { Trans, useTranslation } from 'components/Translation';
+import { useHeaderContainer } from 'contexts/headerContext';
 import { MenuItem } from 'components/MenuItem';
 import TescoLogo from 'assets/img/TescoLogo.svg';
 import { Icon } from '../Icon';
@@ -14,6 +15,7 @@ import { Icon } from '../Icon';
 export type MenuDrawerProps = { onClose: () => void };
 
 export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
+  const { linkTitle } = useHeaderContainer();
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenDropdown, toggleOpen] = useState(false);
 
@@ -58,7 +60,11 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
             <MenuItem
               iconGraphic={'aim'}
               linkTo={buildPath(Page.OBJECTIVES_VIEW)}
-              title={t('my_objectives_and_reviews', 'My objectives and reviews')}
+              title={
+                linkTitle?.[Page.OBJECTIVES_VIEW]
+                  ? linkTitle[Page.OBJECTIVES_VIEW]
+                  : t('my_objectives_and_reviews', 'My objectives and reviews')
+              }
             />
             <CanPerform
               perform={[role.LINE_MANAGER, role.PEOPLE_TEAM, role.COLLEAGUE]}
