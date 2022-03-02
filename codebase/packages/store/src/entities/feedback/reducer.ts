@@ -9,6 +9,8 @@ import {
   getGiveFeedback,
   getRespondFeedback,
   getViewFeedback,
+  getGivenFeedbacks,
+  getRequestedFeedbacks,
 } from './actions';
 
 export const initialState = {
@@ -18,6 +20,10 @@ export const initialState = {
     give: [],
     respond: [],
     view: [],
+  },
+  feedbacksCount: {
+    given: 0,
+    requested: 0,
   },
   meta: { loading: false, loaded: false, error: null },
 };
@@ -142,6 +148,48 @@ export default createReducer(initialState)
     },
   }))
   .handleAction(getViewFeedback.failure, (state, { payload }) => ({
+    ...state,
+    meta: { ...state.meta, loading: false, loaded: true, error: payload },
+  }))
+
+  .handleAction(getGivenFeedbacks.request, (state) => ({
+    ...state,
+    meta: { ...state.meta, loading: true },
+  }))
+  .handleAction(getGivenFeedbacks.success, (state, { payload }) => ({
+    ...state,
+    feedbacksCount: {
+      ...state.feedbacksCount,
+      given: payload,
+    },
+    meta: {
+      ...state.meta,
+      loading: false,
+      loaded: true,
+    },
+  }))
+  .handleAction(getGivenFeedbacks.failure, (state, { payload }) => ({
+    ...state,
+    meta: { ...state.meta, loading: false, loaded: true, error: payload },
+  }))
+
+  .handleAction(getRequestedFeedbacks.request, (state) => ({
+    ...state,
+    meta: { ...state.meta, loading: true },
+  }))
+  .handleAction(getRequestedFeedbacks.success, (state, { payload }) => ({
+    ...state,
+    feedbacksCount: {
+      ...state.feedbacksCount,
+      requested: payload,
+    },
+    meta: {
+      ...state.meta,
+      loading: false,
+      loaded: true,
+    },
+  }))
+  .handleAction(getRequestedFeedbacks.failure, (state, { payload }) => ({
     ...state,
     meta: { ...state.meta, loading: false, loaded: true, error: payload },
   }));

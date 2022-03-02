@@ -1,10 +1,10 @@
-import { Dispatch, SetStateAction, ReactElement } from 'react';
+import { Dispatch, SetStateAction, ReactNode } from 'react';
 
 export type ConfigProps = {
   id: number;
   action: string;
   text: string;
-  icon: ReactElement;
+  icon: ReactNode;
   iconText: string;
   link: string;
 };

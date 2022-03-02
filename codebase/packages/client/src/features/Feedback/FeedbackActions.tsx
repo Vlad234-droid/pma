@@ -1,35 +1,21 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  colleagueUUIDSelector,
-  FeedbackActions as FeedbackActionsGet,
-  getNotesArgsSelector,
-  getUnReadSubmittedNotesSelector,
-  UserActions,
-} from '@pma/store';
+import { colleagueUUIDSelector, FeedbackActions as FeedbackActionsGet, UserActions } from '@pma/store';
 import { CreateRule, Modal, Rule, Theme, useBreakpoints, useStyle } from '@dex-ddl/core';
-
 import { Trans, useTranslation } from 'components/Translation';
 import { Item, Select } from 'components/Form';
-import { Chat } from 'components/Icon/graphics/chat';
-import { NotiBell } from 'components/Icon/graphics/notiBell';
-import { NotiBellCirlceOut } from 'components/Icon/graphics/notiBellCirlceOut';
-import { People } from 'components/Icon/graphics/people';
 import { IconButton } from 'components/IconButton';
 import { Icon } from 'components/Icon';
-
-import { FeedbackStatus } from 'config/enum';
 import { useAuthContainer } from 'contexts/authContext';
-import { Page } from 'pages';
-
-import { TREATMENT_FIELD_OPTIONS } from './config/constants';
+import { TREATMENT_FIELD_OPTIONS, getCards } from './config';
 import { getSelectedTreatmentValue } from './utils';
 import Info360Modal, { FeedbackCard } from './components';
-import { ConfigProps } from './config/types';
 
 export const FEEDBACK_ACTIONS = 'feedback_actions';
 
 const FeedbackActions: FC = () => {
+  const { css, theme } = useStyle();
+  const dispatch = useDispatch();
   const { t } = useTranslation();
   const { user } = useAuthContainer();
   const [, isBreakpoint] = useBreakpoints();
@@ -38,87 +24,12 @@ const FeedbackActions: FC = () => {
   const treatmentValue: string = getSelectedTreatmentValue(profileAttr);
 
   const [info360Modal, setInfo360Modal] = useState<boolean>(false);
-  const dispatch = useDispatch();
   const colleagueUuid = useSelector(colleagueUUIDSelector);
 
-  //TODO: refactor useEffect when endpoints of feedback quantity will be available
   useEffect(() => {
-    if (!colleagueUuid) return;
-    dispatch(
-      FeedbackActionsGet.getAllFeedbacks({
-        _limit: '300',
-      }),
-    );
-  }, [colleagueUuid]);
-  const { css, theme } = useStyle();
-  //TODO: refactor this when endpoints of feedback quantity will be available
-  const pendingNotes = useSelector(getNotesArgsSelector(FeedbackStatus.PENDING, colleagueUuid)) || [];
-  //TODO: refactor this when endpoints of feedback quantity will be available
-  const unReadSubmittedNotes =
-    useSelector(getUnReadSubmittedNotesSelector([FeedbackStatus.SUBMITTED, FeedbackStatus.COMPLETED], colleagueUuid)) ||
-    [];
-  //TODO: refactor this when endpoints of feedback quantity will be available
-  const unReadSubmittedNotesLength = unReadSubmittedNotes?.length || 0;
-  //TODO: refactor this when endpoints of feedback quantity will be available
-  const pendingNotesLength = pendingNotes?.length || 0;
-
-  const getIconForUnReadNotes = () => {
-    if (unReadSubmittedNotes.length) return <NotiBell />;
-    return <NotiBellCirlceOut />;
-  };
-
-  const getIconForPendingNotes = () => {
-    if (pendingNotes.length) return <NotiBell />;
-    return <NotiBellCirlceOut />;
-  };
-
-  const cards: ConfigProps[] = [
-    {
-      id: 1,
-      action: t('give_feedback', 'Give feedback'),
-      text: t('give_in_the_moment_feedback_to_a_colleague', 'Give in the moment feedback to a colleague'),
-      icon: <Chat />,
-      iconText: t(
-        'your_feedback_will_be_immediately_available_for_your_colleague_to_view',
-        'Your feedback will be immediately available for your colleague to view',
-      ),
-      link: `/${Page.GIVE_FEEDBACK}`,
-    },
-    {
-      id: 2,
-      action: t('view_your_feedback', 'View your feedback'),
-      text: t(
-        'see_the_feedback_your_colleagues_have_shared_with_you',
-        'See the feedback your colleagues have shared with you',
-      ),
-      icon: getIconForUnReadNotes(),
-      iconText: t('you_have_new_feedback_to_view', `You have ${unReadSubmittedNotesLength} new feedback to view`, {
-        unReadSubmittedNotesLength,
-      }),
-      link: `/${Page.VIEW_FEEDBACK}`,
-    },
-    {
-      id: 3,
-      action: t('respond_to_feedback_requests', 'Respond to feedback requests'),
-      text: t(
-        'see_and_respond_to_feedback_requests_from_your_colleagues',
-        'See and respond to feedback requests from your colleagues',
-      ),
-      icon: getIconForPendingNotes(),
-      iconText: t('you_have_new_feedback_requests', `You have ${pendingNotesLength} new feedback requests`, {
-        pendingNotesLength,
-      }),
-      link: `/${Page.RESPOND_FEEDBACK}`,
-    },
-    {
-      id: 4,
-      action: t('request_feedback', 'Request feedback'),
-      text: t('ask_for_feedback_from_your_colleagues', 'Ask for feedback from your colleagues'),
-      icon: <People />,
-      iconText: t('send_new_feedback_requests', 'Send new feedback requests'),
-      link: `/${Page.REQUEST_FEEDBACK}`,
-    },
-  ];
+    dispatch(FeedbackActionsGet.getRequestedFeedbacks({}));
+    dispatch(FeedbackActionsGet.getGivenFeedbacks({}));
+  }, []);
 
   const handleBtnClick360 = () => {
     window.open('https://feedback.etsplc.com/Tesco360/', '_blank')?.focus();
@@ -167,9 +78,9 @@ const FeedbackActions: FC = () => {
   return (
     <>
       <div data-test-id={FEEDBACK_ACTIONS}>
-        <div className={css(InMomentStyle({ mobileScreen }))}>
+        <div className={css(inMomentStyle({ mobileScreen }))}>
           <div className={css(CenterFlexStyle)}>
-            <h2 className={css(InTheMomentStyle)}>
+            <h2 className={css(inTheMomentStyle)}>
               <Trans i18nKey='difference_between_everyday_feedback_and_feedback_360'>
                 What is the difference between ‘Everyday feedback’ and ‘360 feedback’?
               </Trans>
@@ -196,14 +107,14 @@ const FeedbackActions: FC = () => {
             </IconButton>
           </div>
         </div>
-        <div className={css(CardsBlock)}>
-          {cards.map((item) => (
+        <div className={css(сardsBlockStyle)}>
+          {getCards().map((item) => (
             <FeedbackCard card={item} key={item.id} />
           ))}
         </div>
         <div className={css({ marginTop: '32px', maxWidth: '568px' })}>
-          <div className={css(IconTextStyle)}>
-            <div className={css(VoiceStyle)}>
+          <div className={css(iconTextStyle)}>
+            <div className={css(voiceStyle)}>
               Do you have a preference in the way you&apos;d like to receive feedback?
             </div>
             <div className={css({ cursor: 'pointer' })}>
@@ -234,20 +145,20 @@ const FeedbackActions: FC = () => {
   );
 };
 
-const VoiceStyle: Rule = {
+const voiceStyle: Rule = {
   fontWeight: 'bold',
   fontSize: '20px',
   lineHeight: '24px',
   maxWidth: '450px',
 };
 
-const IconTextStyle: Rule = {
+const iconTextStyle: Rule = {
   display: 'flex',
   justifyContent: 'space-between',
   marginBottom: '16px',
 };
 
-const InTheMomentStyle: Rule = {
+const inTheMomentStyle: Rule = {
   fontWeight: 'bold',
   fontSize: '20px',
   lineHeight: '24px',
@@ -259,7 +170,7 @@ const CenterFlexStyle: Rule = {
   alignItems: 'center',
 };
 
-const InMomentStyle: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => {
+const inMomentStyle: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => {
   if (mobileScreen) {
     return {
       display: 'flex',
@@ -271,7 +182,7 @@ const InMomentStyle: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) 
   return { display: 'flex', justifyContent: 'space-between', alignItems: 'center' };
 };
 
-const CardsBlock: Rule = () => {
+const сardsBlockStyle: Rule = () => {
   return {
     display: 'flex',
     justifyContent: 'space-between',

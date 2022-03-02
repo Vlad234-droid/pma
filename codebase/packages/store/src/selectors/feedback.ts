@@ -25,6 +25,19 @@ export const getNotesArgsSelector = (status, colleagueUuid) =>
     return filterByArgs;
   });
 
+export const getGivenFeedbacksSelector = createSelector(feedbackSelector, (feedback: any) => {
+  const {
+    feedbacksCount: { given },
+  } = feedback;
+  return given;
+});
+export const getRequestedFeedbacksSelector = createSelector(feedbackSelector, (feedback: any) => {
+  const {
+    feedbacksCount: { requested },
+  } = feedback;
+  return requested;
+});
+
 export const getUnReadSubmittedNotesSelector = (status, colleagueUuid) =>
   createSelector(feedbackSelector, (feedback: any) => {
     const { notes } = feedback;
