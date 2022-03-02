@@ -26,8 +26,8 @@ export const getFeedbacks = (params: any): Promise<AxiosResponse<any>> => {
 };
 
 export const getGivenFeedbacks = () => {
-  return httpClient.get(`${domain}/given`);
+  return httpClient.get(`${domain}/given-count`);
 };
 export const getRequestedFeedbacks = () => {
-  return httpClient.get(`${domain}/requested`);
+  return httpClient.get(`${domain}/requested-count`);
 };
