@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useState, useEffect, useRef } from 'react';
 import { colors, useStyle } from '@dex-ddl/core';
 import mergeRefs from 'react-merge-refs';
 
@@ -10,7 +10,7 @@ const Textarea: FC<TextareaField> = ({
   placeholder = '',
   rows = 3,
   name,
-  value,
+  value: defaultValue,
   onChange,
   isValid,
   readonly = false,
@@ -18,21 +18,38 @@ const Textarea: FC<TextareaField> = ({
   const { css } = useStyle();
   const refIcon = useRefContainer();
 
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+
+  const [value, setValue] = useState<string>(defaultValue || '');
+
+  const textAreaChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setValue(event.target.value);
+    onChange(event);
+  };
+
+  useEffect(() => {
+    if (textareaRef && textareaRef.current) {
+      textareaRef.current.style.height = '0px';
+      const scrollHeight = textareaRef.current.scrollHeight;
+      textareaRef.current.style.height = scrollHeight + 'px';
+    }
+  }, [value]);
+
   return (
     <textarea
-      ref={mergeRefs([domRef, refIcon])}
+      ref={mergeRefs([domRef, refIcon, textareaRef])}
       name={name}
       data-test-id={name}
       readOnly={readonly}
-      onChange={onChange}
+      onChange={textAreaChange}
       className={css({
         width: '100%',
         minHeight: '40px',
         border: `1px solid ${isValid ? colors.backgroundDarkest : colors.error}`,
         borderRadius: '5px',
-        fontSize: '16px',
-        lineHeight: '20px',
-        padding: '10px 30px 10px 16px',
+        fontSize: '14px',
+        lineHeight: '18px',
+        padding: '10px 40px 10px 16px',
         resize: 'vertical',
 
         ':focus': {

@@ -94,7 +94,7 @@ const fieldStyles: Rule = ({ theme }) => ({
   borderRadius: '5px',
   fontSize: `${theme.font.fixed.f16.fontSize}`,
   lineHeight: `${theme.font.fixed.f16.lineHeight}`,
-  padding: '10px 30px 10px 16px',
+  padding: '10px 40px 10px 16px',
   ':focus': {
     outline: 'none !important',
     border: `1px solid ${theme.colors.tescoBlue}`,
