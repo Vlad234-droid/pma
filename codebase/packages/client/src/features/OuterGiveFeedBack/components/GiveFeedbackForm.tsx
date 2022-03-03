@@ -1,18 +1,18 @@
 import React, { FC } from 'react';
 import { useStyle, Rule, useBreakpoints, Button } from '@dex-ddl/core';
 import { useSelector } from 'react-redux';
+import { useForm } from 'react-hook-form';
 import { getColleagueByUuidSelector } from '@pma/store';
 import get from 'lodash.get';
-import { GiveFeedbackType } from '../type';
-import { FeedbackInfo, ColleaguesFinder } from '../components';
 import { IconButton, Position } from 'components/IconButton';
 
 import { yupResolver } from '@hookform/resolvers/yup';
-import { createGiveFeedbackSchema } from '../config';
-import { useForm } from 'react-hook-form';
 import { Trans } from 'components/Translation';
 import { TileWrapper } from 'components/Tile';
-import { Field, Item, Textarea } from 'components/Form';
+import { Field, Item, Textarea, Attention } from 'components/Form';
+import { createGiveFeedbackSchema } from '../config';
+import { GiveFeedbackType } from '../type';
+import { FeedbackInfo, ColleaguesFinder } from '../components';
 
 const prepareFeedbackItems = (fields, feedbackItems) => {
   return feedbackItems.map(({ content }, idx) => ({ content, code: fields[idx].code }));
@@ -79,6 +79,7 @@ const GiveFeedbackForm: FC<Props> = ({ onSubmit, defaultValues, currentColleague
         >
           <Trans i18nKey='let_a_colleague_know_how_they_are_doing'>Let a colleague know how they are doing</Trans>
         </div>
+        <Attention />
         <div
           className={css({
             marginTop: '8px',

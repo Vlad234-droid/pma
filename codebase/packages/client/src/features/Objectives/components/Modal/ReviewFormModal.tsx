@@ -21,15 +21,15 @@ import {
 
 import { ReviewType, Status } from 'config/enum';
 import { createYupSchema } from 'utils/yup';
+import { TriggerModal } from 'features/Modal/components/TriggerModal';
 import { TFunction, Trans, useTranslation } from 'components/Translation';
-import { Input, Item, Select, Textarea, Text } from 'components/Form';
+import { Input, Item, Select, Textarea, Attention } from 'components/Form';
 import { GenericItemField } from 'components/GenericForm';
 import MarkdownRenderer from 'components/MarkdownRenderer';
-import { TriggerModal } from 'features/Modal/components/TriggerModal';
+import SuccessModal from 'components/SuccessModal';
 
 import { SubmitButton } from './index';
 import ReviewHelpModal from './ReviewHelpModal';
-import SuccessModal from 'components/SuccessModal';
 
 export type ReviewFormModal = {
   reviewType: ReviewType;
@@ -243,6 +243,7 @@ const ReviewFormModal: FC<ReviewFormModal> = ({ reviewType, onClose }) => {
                 <ReviewHelpModal />
               </TriggerModal>
             </div>
+            <Attention />
             {components.map((component) => {
               const { id, key, text, label, description, type, validate, values = [], expression = {} } = component;
               const value = formValues[key] ? formValues[key] : '';
@@ -291,6 +292,7 @@ const ReviewFormModal: FC<ReviewFormModal> = ({ reviewType, onClose }) => {
                     methods={methods}
                     label={label}
                     Wrapper={Item}
+                    //@ts-ignore
                     Element={readonly ? Text : validate?.maxLength > 100 ? Textarea : Input}
                     placeholder={description}
                     value={value}
@@ -310,6 +312,7 @@ const ReviewFormModal: FC<ReviewFormModal> = ({ reviewType, onClose }) => {
                         {children}
                       </Item>
                     )}
+                    //@ts-ignore
                     Element={readonly ? Text : Select}
                     options={values}
                     placeholder={description}

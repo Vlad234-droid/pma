@@ -11,15 +11,15 @@ import {
   timelineTypesAvailabilitySelector,
 } from '@pma/store';
 import { useNavigate } from 'react-router';
-import { ObjectiveType, PDPType, ReviewType } from '../../../../config/enum';
-import DescriptionBlock from '../../../../components/DescriptionBlock';
-import GoalInfo from '../GoalInfo';
-import { Page } from '../../../../pages';
-import usePDPShema from '../../hooks/usePDPShema';
-import { buildPath } from '../../../Routes';
-import { paramsReplacer } from '../../../../utils';
-import { Icon } from '../../../../components/Icon';
+import { ObjectiveType, PDPType, ReviewType } from 'config/enum';
+import DescriptionBlock from 'components/DescriptionBlock';
+import { Page } from 'pages';
+import { buildPath } from 'features/Routes';
+import { paramsReplacer } from 'utils';
+import { Icon } from 'components/Icon';
 import { BASE_URL_API } from 'config/constants';
+import GoalInfo from '../GoalInfo';
+import usePDPSchema from '../../hooks/usePDPSchema';
 
 const reviews = [
   {
@@ -60,7 +60,7 @@ const MyPersonalDevelopmentPlan: FC = () => {
 
   const pdpSelector = useSelector(schemaMetaPDPSelector)?.goals || [];
   const colleagueUuid = useSelector(colleagueUUIDSelector);
-  const [schema] = usePDPShema(PDPType.PDP);
+  const [schema] = usePDPSchema(PDPType.PDP);
   const { components = [] } = schema;
   const timelineTypes = useSelector(timelineTypesAvailabilitySelector('me'));
   const canShowMyReview = timelineTypes[ObjectiveType.MYR] && timelineTypes[ObjectiveType.EYR];

@@ -25,7 +25,7 @@ import useDispatch from 'hooks/useDispatch';
 import { Trans, useTranslation } from 'components/Translation';
 import { TileWrapper } from 'components/Tile';
 import { GenericItemField } from 'components/GenericForm';
-import { Input, Item, Radio, Select } from 'components/Form';
+import { Input, Item, Radio, Select, Attention } from 'components/Form';
 import { DurationPicker } from 'components/Form/DurationPicker';
 import { Page } from 'pages';
 import TemplatesModal from './TemplatesModal';
@@ -234,6 +234,7 @@ export const PerformanceCycleForm: FC = () => {
         >
           1. General settings
         </div>
+        <Attention />
         <GenericItemField
           name={`name`}
           methods={methods}
@@ -290,13 +291,10 @@ export const PerformanceCycleForm: FC = () => {
           onChange={(value) => setEntryConfigKey(value)}
           value={formDataToFillObj['entryConfigKey'] || ''}
         />
-
         <div className={css({ marginBottom: '23px' })}>
           {performanceCycleItem?.template?.fileName || processTemplateName}
         </div>
-
         <Button onPress={() => showTemplatesModal(true)}>Choose Template</Button>
-
         {isTemplatesModalOpen && <TemplatesModal selectTemplate={selectTemplate} closeModal={closeTemplatesModal} />}
       </TileWrapper>
       <TileWrapper

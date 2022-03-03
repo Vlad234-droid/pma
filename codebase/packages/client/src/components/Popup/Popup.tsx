@@ -1,7 +1,8 @@
 import React from 'react';
+import { useNavigate } from 'react-router';
 import { CreateRule, Icon, ModalWithHeader, Rule, Theme, useBreakpoints, useStyle } from '@dex-ddl/core';
 import Details from 'components/Details';
-import { useNavigate } from 'react-router';
+import { Attention } from 'components/Form';
 
 const Popup = (props) => {
   const { css, theme } = useStyle();
@@ -25,6 +26,7 @@ const Popup = (props) => {
     >
       <div className={css(main)}>
         <div className={css(decsriptionHeader({ theme }))}>Your organisation&#39;s strategic drivers</div>
+        <Attention />
         <div className={css(templatesListStyles)}>
           {items.map((obj, idx) => {
             return (

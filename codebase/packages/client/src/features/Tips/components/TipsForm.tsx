@@ -14,7 +14,7 @@ import {
 } from '@pma/store';
 import { buildPath } from 'features/Routes/utils';
 import { Button, Icon, ModalWithHeader, Rule, theme, useBreakpoints, useStyle } from '@dex-ddl/core';
-import { Input, Item, Select, Textarea } from 'components/Form';
+import { Input, Item, Select, Textarea, Attention } from 'components/Form';
 import { GenericItemField } from 'components/GenericForm';
 import { IconButton } from 'components/IconButton';
 import { createTipSchema } from 'pages/Tips/config';
@@ -288,8 +288,9 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
         />
       )}
       <div className={css(modalInner)}>
-        {showEffectsPlaceholder && <div className={css(modalInnerPlaceholder)}></div>}
+        {showEffectsPlaceholder && <div className={css(modalInnerPlaceholder)} />}
         <form className={css({ height: '100%' })}>
+          <Attention />
           <div className={css(formFieldsWrapStyle)}>
             <GenericItemField
               name={'tipTitle'}

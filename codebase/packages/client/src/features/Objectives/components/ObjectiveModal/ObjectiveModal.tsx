@@ -8,7 +8,7 @@ import { Status } from 'config/enum';
 import { Trans, useTranslation } from 'components/Translation';
 import { Icon as IconComponent } from 'components/Icon';
 import { StepIndicatorBasic } from 'components/StepIndicator/StepIndicator';
-import { Input, Item, Select, Textarea } from 'components/Form';
+import { Input, Item, Select, Textarea, Attention } from 'components/Form';
 import { GenericItemField } from 'components/GenericForm';
 import MarkdownRenderer from 'components/MarkdownRenderer';
 
@@ -121,6 +121,7 @@ export const ObjectiveModal: FC<Props> = ({
               </TriggerModal>
             </div>
           )}
+          <Attention />
           {schemaComponents.map((component) => {
             const { id, key, label, text, description, type, validate, values = [] } = component;
             const value = formValues[key] ? formValues[key] : '';
