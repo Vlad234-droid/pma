@@ -1,10 +1,7 @@
 {
   "extends": "../../../tsconfig.json",
   "compilerOptions": {
-    // "target": "es2016",
-    // "module": "commonjs",
     "typeRoots": ["../@types", "./@types", "../../../node_modules/@types"],
-    // "rootDir": "./src",
     "baseUrl": "./src",
     "outDir": "./build",
     "noEmit": false,
@@ -13,7 +10,7 @@
     "declaration": true,
     "declarationMap": true,
     "strictPropertyInitialization": false,
-    "strict": false,
+    "strict": false
   },
   "include": ["./src/**/*"]
 }
