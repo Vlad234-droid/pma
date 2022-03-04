@@ -25,9 +25,12 @@ import {
   TimelineActions,
   timelineTypesAvailabilitySelector,
 } from '@pma/store';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import useReviewSchema from 'features/Objectives/hooks/useReviewSchema';
 import useReviews from 'features/Objectives/hooks/useReviews';
+import OrganizationWidget from 'features/Objectives/components/OrganizationWidget/OrganizationWidget';
+import { buildPath } from 'features/Routes';
+import { Page } from 'pages';
 
 const reviews = [];
 
@@ -45,7 +48,10 @@ export const UserObjectives: FC = () => {
   const { css, theme } = useStyle();
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
+  const [, isBreakpoint] = useBreakpoints();
+  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
   const [previousReviewFilesModalShow, setPreviousReviewFilesModalShow] = useState(false);
   const [objectives, setObjectives] = useState<OT.Objective[]>([]);
   const [schema] = useReviewSchema(ReviewType.OBJECTIVE);
@@ -99,21 +105,18 @@ export const UserObjectives: FC = () => {
   }, [reviewLoaded, schemaLoaded]);
 
   return (
-    <div className={css({ margin: '8px' })}>
-      <div className={css(headWrapperStyles)}>
-        {canShowMyReview && (
-          <div className={css(timelineWrapperStyles)} onClick={handleClick}>
+    <div className={css(bodyBlockStyles)}>
+      <div className={css(bodyWrapperStyles)} data-test-id={TEST_ID}>
+        {!mobileScreen && canShowMyReview && (
+          <div onClick={handleClick} className={css(timelineWrapperStyles)}>
             <StepIndicator
-              mainTitle={'User Contribution timeline'}
+              mainTitle={t('performance_timeline_title', 'Your Contribution timeline')}
               titles={descriptions}
               descriptions={startDates}
               statuses={statuses}
             />
           </div>
         )}
-        <ShareWidget stopShare={true} customStyle={shareWidgetStyles} />
-      </div>
-      <div className={css(bodyWrapperStyles)} data-test-id={TEST_ID}>
         <div className={css(timelineWrapperStyles)}>
           {canShowObjectives && (
             <Section
@@ -160,7 +163,26 @@ export const UserObjectives: FC = () => {
             )}
           </Section>
         </div>
-        <div className={css({ flex: '1 1 30%', display: 'flex', flexDirection: 'column' })} />
+      </div>
+      <div className={css(headWrapperStyles)}>
+        {mobileScreen && canShowMyReview && (
+          <div className={css(timelineWrapperStyles)}>
+            <StepIndicator
+              mainTitle={t('performance_timeline_title', 'Your Contribution timeline')}
+              titles={descriptions}
+              descriptions={startDates}
+              statuses={statuses}
+            />
+          </div>
+        )}
+
+        <div className={css(widgetsBlock)}>
+          <ShareWidget stopShare={true} customStyle={shareWidgetStyles} />
+          <OrganizationWidget
+            customStyle={{ flex: '1 1 30%', display: 'flex', flexDirection: 'column' }}
+            onClick={() => navigate(buildPath(Page.STRATEGIC_DRIVERS))}
+          />
+        </div>
       </div>
       {previousReviewFilesModalShow && (
         <PreviousReviewFilesModal onOverlayClick={() => setPreviousReviewFilesModalShow(false)} />
@@ -169,30 +191,55 @@ export const UserObjectives: FC = () => {
   );
 };
 
-const headWrapperStyles: Rule = () => {
+const bodyBlockStyles: Rule = () => {
   const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
   return {
     display: 'flex',
+    alignItems: 'flex-start',
+    justifyContent: 'center',
+    flexDirection: mobileScreen ? 'column-reverse' : 'row',
+  };
+};
+
+const widgetsBlock: Rule = () => {
+  const [, isBreakpoint] = useBreakpoints();
+  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
+
+  return {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'column',
+    width: '100%',
     gap: '10px',
-    margin: '15px 0',
-    flexDirection: mobileScreen ? 'column' : 'row',
+    paddingBottom: mobileScreen ? '20px' : '0px',
+  };
+};
+
+const headWrapperStyles: Rule = () => {
+  const [, isBreakpoint] = useBreakpoints();
+  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
+  return {
+    flex: '1 1 30%',
+    width: mobileScreen ? '100%' : '30%',
+    display: 'flex',
+    flexDirection: 'column',
+    paddingLeft: mobileScreen ? '0px' : '20px',
   };
 };
 
 const timelineWrapperStyles = {
-  flex: '3 1 70%',
   display: 'flex',
   flexDirection: 'column',
-  '& > div': {
-    height: '100%',
-  },
+  marginBottom: '20px',
 } as Styles;
 
 const shareWidgetStyles = {
-  flex: '1 1 30%',
   display: 'flex',
   flexDirection: 'column',
+  marginBottom: '20px',
+  width: '100%',
 } as Styles;
 
 const bodyWrapperStyles: Rule = () => {
@@ -201,10 +248,8 @@ const bodyWrapperStyles: Rule = () => {
   return {
     display: 'flex',
     flexWrap: 'nowrap',
-    marginTop: '16px',
     alignItems: 'stretch',
-    paddingBottom: '20px',
-    flexDirection: mobileScreen ? 'column' : 'row',
+    flexDirection: mobileScreen ? 'column' : 'column',
   };
 };
 
