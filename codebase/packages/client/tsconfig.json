@@ -2,30 +2,11 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "jsx": "react-jsx",
-    "typeRoots": [
-      "./node_modules/@types",
-      "./src/types",
-      "../../node_modules/@types"
-    ],
+    "typeRoots": ["./node_modules/@types", "./src/types", "../../node_modules/@types"],
     "baseUrl": "./src",
-    "types": [
-      "node",
-      "jest",
-      "@testing-library/jest-dom"
-    ],
-    "target": "es2018",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
-    "module": "esnext"
+    "types": ["node", "jest", "@testing-library/jest-dom"],
+    "target": "es2018"
   },
-  "include": [
-    "./src/**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "./src/setupProxy.js"
-  ]
+  "include": ["./src/**/*"],
+  "exclude": ["node_modules", "./src/setupProxy.js"]
 }
