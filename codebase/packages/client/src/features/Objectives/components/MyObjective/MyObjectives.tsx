@@ -287,7 +287,7 @@ const MyObjectives: FC = () => {
               left={{
                 content: (
                   <div>
-                    <Trans i18nKey='my_completed_reviews'>My completed Reviews</Trans>
+                    <Trans i18nKey='previous_review_files'>Previous Review Files</Trans>
                   </div>
                 ),
               }}
