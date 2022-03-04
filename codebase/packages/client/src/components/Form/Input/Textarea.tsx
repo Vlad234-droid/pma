@@ -20,7 +20,7 @@ const Textarea: FC<TextareaField> = ({
 
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
-  const [value, setValue] = useState<string>(defaultValue || '');
+  const [value, setValue] = useState<string>('');
 
   const textAreaChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setValue(event.target.value);
@@ -34,10 +34,13 @@ const Textarea: FC<TextareaField> = ({
       textareaRef.current.style.height = scrollHeight + 'px';
     }
   }, [value]);
+  useEffect(() => {
+    setValue(defaultValue || '');
+  }, [defaultValue]);
 
   return (
     <textarea
-      ref={mergeRefs([domRef, refIcon, textareaRef])}
+      ref={mergeRefs([domRef, refIcon])}
       name={name}
       data-test-id={name}
       readOnly={readonly}

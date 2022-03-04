@@ -23,7 +23,7 @@ import { ReviewType, Status } from 'config/enum';
 import { createYupSchema } from 'utils/yup';
 import { TriggerModal } from 'features/Modal/components/TriggerModal';
 import { TFunction, Trans, useTranslation } from 'components/Translation';
-import { Input, Item, Select, Textarea, Attention } from 'components/Form';
+import { Input, Item, Select, Textarea, Attention, Text } from 'components/Form';
 import { GenericItemField } from 'components/GenericForm';
 import MarkdownRenderer from 'components/MarkdownRenderer';
 import SuccessModal from 'components/SuccessModal';
