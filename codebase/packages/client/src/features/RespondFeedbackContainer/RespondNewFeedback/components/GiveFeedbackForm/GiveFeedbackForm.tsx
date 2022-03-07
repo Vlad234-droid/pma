@@ -8,7 +8,7 @@ import get from 'lodash.get';
 
 import { Trans } from 'components/Translation';
 import { TileWrapper } from 'components/Tile';
-import { Field, Item, Textarea } from 'components/Form';
+import { Field, Item, Textarea, Attention } from 'components/Form';
 import ColleaguesFinder from '../ColleaguesFinder';
 import FeedbackInfo from '../FeedbackInfo';
 import { IconButton, Position } from 'components/IconButton';
@@ -77,6 +77,7 @@ const GiveFeedbackForm: FC<GiveFeedbackFormProps> = ({
       >
         <Trans i18nKey='how_is_the_colleague_performing'>How is the colleague performing?</Trans>
       </div>
+      <Attention />
       <div className={css({ marginTop: '8px', fontSize: '18px', lineHeight: '22px' })}>
         <Trans i18nKey='colleague_requested_feedback'>
           This colleague has requested feedback from you. Fill out the questions below to share your feedback.
