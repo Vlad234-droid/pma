@@ -93,12 +93,12 @@ export const countByTypeReviews = (reviewType: ReviewType) =>
 
 export const getReviewByUuidS = createSelector(reviewsSelector, (reviews: any) => {
   const { data } = reviews;
-  const arr = data.map((item) => {
+  const reviewList = data?.map((item) => {
     const title = item?.properties?.mapJson?.title;
     return {
       uuid: item.uuid,
       title: title,
     };
   });
-  return arr;
+  return reviewList;
 });

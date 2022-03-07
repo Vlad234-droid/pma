@@ -60,6 +60,7 @@ const Field: FC<FieldProps & FieldValues> = ({
         placeholder={placeholder}
         value={currentValue}
         onChange={handleChange}
+        name={name}
         {...props}
       />
     );
@@ -73,6 +74,7 @@ const Field: FC<FieldProps & FieldValues> = ({
         placeholder={placeholder}
         value={currentValue}
         onChange={handleChange}
+        name={name}
         {...props}
       />
     </Wrapper>

@@ -16,17 +16,15 @@ import { IconButton, Position } from 'components/IconButton';
 import { createGiveFeedbackSchema } from './config';
 import { GiveFeedbackFormProps } from '../../type';
 
+export const FORM_WRAPPER = 'form_wrapper';
+
 const prepareFeedbackItems = (fields, feedbackItems) => {
   return feedbackItems.map(({ content }, idx) => ({ content, code: fields[idx].code }));
 };
 
 const getColleagueName = (data) => {
   if (!data) return '';
-  const {
-    profile: { firstName, lastName },
-  } = data.colleague;
-
-  return `${firstName} ${lastName}`;
+  return `${data?.colleague?.profile?.firstName} ${data?.colleague?.profile?.lastName}`;
 };
 
 const GiveFeedbackForm: FC<GiveFeedbackFormProps> = ({
@@ -66,7 +64,7 @@ const GiveFeedbackForm: FC<GiveFeedbackFormProps> = ({
     onSubmit({ ...data, status: 'COMPLETED', feedbackItems: prepareFeedbackItems(feedbackFields, data.feedbackItems) });
   };
   return (
-    <div className={css(WrapperModalGiveFeedbackStyle)}>
+    <div className={css(WrapperModalGiveFeedbackStyle)} data-test-id={FORM_WRAPPER}>
       <div
         className={css({
           fontWeight: 'bold',
@@ -138,6 +136,7 @@ const GiveFeedbackForm: FC<GiveFeedbackFormProps> = ({
               <Trans i18nKey='save_as_draft'>Save as draft</Trans>
             </Button>
             <IconButton
+              data-test-id={'test'}
               isDisabled={!isValid}
               customVariantRules={{ default: iconBtnStyle, disabled: iconBtnStyleDisabled }}
               graphic='arrowRight'

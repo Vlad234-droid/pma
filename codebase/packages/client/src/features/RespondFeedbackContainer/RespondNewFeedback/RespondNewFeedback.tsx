@@ -13,8 +13,8 @@ import SuccessMassage from './components/SuccessMassage';
 import { getFeedbackFields, Statuses, HandleSaveType, getPayload } from './config';
 
 const RespondNewFeedback: FC = () => {
-  const { t } = useTranslation();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const dispatch = useDispatch();
   const [status, setStatus] = useState(Statuses.PENDING);
