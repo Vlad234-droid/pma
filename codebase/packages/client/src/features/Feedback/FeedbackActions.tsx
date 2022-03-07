@@ -52,31 +52,28 @@ const FeedbackActions: FC = () => {
     dispatch(UserActions.createProfileAttribute([payload]));
   };
 
-  if (info360Modal) {
-    return (
-      <Modal
-        modalPosition={'middle'}
-        overlayColor={'tescoBlue'}
-        modalContainerRule={[containerRule({ theme, mobileScreen })]}
-        closeOptions={{
-          content: <Icon graphic='cancel' invertColors={true} />,
-          onClose: () => {
-            setInfo360Modal(() => false);
-          },
-          styles: [modalCloseOptionStyle({ mobileScreen })],
-        }}
-        title={{
-          content: t('everyday_feedback', 'Everyday Feedback'),
-          styles: [modalTitleOptionStyle({ theme, mobileScreen })],
-        }}
-      >
-        <Info360Modal setInfo360Modal={setInfo360Modal} />
-      </Modal>
-    );
-  }
-
   return (
     <>
+      {info360Modal && (
+        <Modal
+          modalPosition={'middle'}
+          overlayColor={'tescoBlue'}
+          modalContainerRule={[containerRule({ theme, mobileScreen })]}
+          closeOptions={{
+            content: <Icon graphic='cancel' invertColors={true} />,
+            onClose: () => {
+              setInfo360Modal(() => false);
+            },
+            styles: [modalCloseOptionStyle({ mobileScreen })],
+          }}
+          title={{
+            content: t('everyday_feedback', 'Everyday Feedback'),
+            styles: [modalTitleOptionStyle({ theme, mobileScreen })],
+          }}
+        >
+          <Info360Modal setInfo360Modal={setInfo360Modal} />
+        </Modal>
+      )}
       <div data-test-id={FEEDBACK_ACTIONS}>
         <div className={css(inMomentStyle({ mobileScreen }))}>
           <div className={css(CenterFlexStyle)}>
@@ -89,9 +86,7 @@ const FeedbackActions: FC = () => {
               graphic='information'
               iconStyles={{ marginLeft: '8px', marginRight: '20px' }}
               data-test-id='iconButton'
-              onPress={() => {
-                setInfo360Modal(() => true);
-              }}
+              onPress={() => setInfo360Modal(true)}
             />
           </div>
 
