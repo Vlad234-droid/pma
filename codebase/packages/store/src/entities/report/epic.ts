@@ -34,8 +34,10 @@ export const getObjectivesStatisticsEpic: Epic = (action$, _, { api }) =>
         }),
         catchError((e) => {
           const errors = e?.data?.errors;
+
           return concatWithErrorToast(
             of(getObjectivesStatistics.failure(errors?.[0])),
+
             errorPayloadConverter({ ...errors?.[0], title: 'Objectives statistics fetch error' }),
           );
         }),

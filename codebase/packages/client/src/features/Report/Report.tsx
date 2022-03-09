@@ -18,13 +18,14 @@ import AppliedFilters from './components/AppliedFilters';
 import { getFieldOptions, listOfStatuses, metaStatuses } from './config';
 import { downloadCsvFile } from './utils';
 import { getCurrentYear } from 'utils/date';
-
 import useStatisticsReport from './hooks';
+import { useToast } from 'features/Toast';
 
 export const REPORT_WRAPPER = 'REPORT_WRAPPER';
 
 const Report: FC = () => {
   const { t } = useTranslation();
+  const { addToast } = useToast();
 
   const dispatch = useDispatch();
   const [focus, setFocus] = useState(false);
@@ -247,7 +248,12 @@ const Report: FC = () => {
                 />
               </div>
               <div className={css({ display: 'flex', flexDirection: 'column' })}>
-                <Button styles={[buttonCoreStyled]} onPress={downloadCsvFile}>
+                <Button
+                  styles={[buttonCoreStyled]}
+                  onPress={() => {
+                    downloadCsvFile(t, addToast);
+                  }}
+                >
                   <Trans>WL4-5 report</Trans>
                 </Button>
                 <form>
