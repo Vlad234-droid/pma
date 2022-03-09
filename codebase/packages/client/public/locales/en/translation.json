@@ -376,5 +376,8 @@
   "pending_actions": "Pending actions",
   "you_have_pending_actions": "You have pending actions",
   "view_profile": "View profile",
-  "select_a_year": "Select a year"
+  "select_a_year": "Select a year",
+  "profile_data_missing": "Your profile data is missing",
+  "please_refer_to": "Please refer to",
+  "find_how_correct_data": "to find out how to correct this data"
 }
