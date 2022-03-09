@@ -9,7 +9,8 @@ import { Icon } from 'components/Icon';
 import { useAuthContainer } from 'contexts/authContext';
 import { TREATMENT_FIELD_OPTIONS, getCards } from './config';
 import { getSelectedTreatmentValue } from './utils';
-import Info360Modal, { FeedbackCard } from './components';
+import { FeedbackCard } from './components';
+import { Info360Modal } from './Modals';
 
 export const FEEDBACK_ACTIONS = 'feedback_actions';
 

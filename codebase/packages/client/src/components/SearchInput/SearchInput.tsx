@@ -2,7 +2,7 @@ import React, { ChangeEvent, FC, RefObject, useCallback, useEffect, useState } f
 import { useStyle, colors, Styles, Rule } from '@dex-ddl/core';
 import mergeRefs from 'react-merge-refs';
 import debounce from 'lodash.debounce';
-import { useRefContainer } from 'components/Form/context/input';
+import { useFormContainer } from 'components/Form/context/input';
 import { Close } from 'components/Icon/graphics/close';
 
 type Props<T> = {
@@ -42,7 +42,7 @@ const SearchInput: FC<Props<any>> = ({
 }) => {
   const [currentValue, setCurrentValue] = useState(value);
   const { css, theme } = useStyle();
-  const refIcon = useRefContainer();
+  const { inputRef } = useFormContainer();
 
   const handleSearch = useCallback(debounce(onSearch, 300), []);
 
@@ -58,7 +58,7 @@ const SearchInput: FC<Props<any>> = ({
   return (
     <>
       <input
-        ref={mergeRefs([domRef, refIcon])}
+        ref={mergeRefs([domRef, inputRef])}
         name={name}
         data-test-id={name}
         value={currentValue}

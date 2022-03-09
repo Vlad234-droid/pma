@@ -9,6 +9,7 @@ import { PieChart } from '../../components/PieChart';
 import { View } from '../../components/PieChart/PieChart';
 import InfoTable from './components/InfoTable';
 import { Rating } from '../../config/enum';
+import { INFO_TABLE_WRAPPER } from './components/InfoTable/InfoTable';
 
 describe('Report page', () => {
   it('render report wrapper', async () => {
@@ -53,7 +54,7 @@ describe('Report page', () => {
     };
     const { findByTestId } = renderWithTheme(<InfoTable {...props} />);
 
-    const wrapper = await findByTestId('info_table_id');
+    const wrapper = await findByTestId(INFO_TABLE_WRAPPER);
     expect(await wrapper).toBeInTheDocument();
   });
 

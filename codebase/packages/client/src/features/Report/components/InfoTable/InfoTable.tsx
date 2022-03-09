@@ -1,7 +1,9 @@
 import React, { FC } from 'react';
 import { useStyle, Rule, Theme, CreateRule, Styles } from '@dex-ddl/core';
-import { IconButton } from 'components/IconButton';
 import { Trans } from 'components/Translation/Translation';
+import { IconButton } from 'components/IconButton';
+
+export const INFO_TABLE_WRAPPER = 'info_table_wrapper';
 
 type Obj = {
   percent: number;
@@ -19,7 +21,7 @@ const InfoTable: FC<InfoTableProps> = ({ mainTitle, data, preTitle = '' }) => {
   const { css, theme } = useStyle();
 
   return (
-    <div className={css(infoTableWrapper)} data-test-id={'info_table_id'}>
+    <div className={css(infoTableWrapper)} data-test-id={INFO_TABLE_WRAPPER}>
       <h2 className={css(titleStyle({ preTitle, theme }))}>{mainTitle}</h2>
       {preTitle !== '' && (
         <div className={css(flexStyle)}>
@@ -34,7 +36,7 @@ const InfoTable: FC<InfoTableProps> = ({ mainTitle, data, preTitle = '' }) => {
         </div>
       )}
       <div className={css(blockWrapper)}>
-        {data.map((block, i) => {
+        {data?.map((block, i) => {
           const percent = block.percent || 0;
           const quantity = block.quantity || 0;
           return (

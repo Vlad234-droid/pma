@@ -16,7 +16,7 @@ import colors from 'theme/colors';
 import { ConfirmModal } from 'features/Modal';
 import { buildPath } from 'features/Routes';
 import { Page } from 'pages';
-import { Trans } from 'components/Translation';
+import { Trans, useTranslation } from 'components/Translation';
 
 type Props = {
   pdpGoals: any;
@@ -57,6 +57,7 @@ const Form: FC<Props> = ({
   onSubmit,
 }) => {
   const { css } = useStyle();
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
@@ -65,7 +66,7 @@ const Form: FC<Props> = ({
     acc[current.key] = '';
     return acc;
   }, {});
-  const yepSchema = formElements.reduce(createYupSchema, {});
+  const yepSchema = formElements.reduce(createYupSchema(t), {});
   const methods = useForm({
     mode: 'onChange',
     resolver: yupResolver<Yup.AnyObjectSchema>(Yup.object().shape(yepSchema)),

@@ -5,13 +5,13 @@ import { Info360ModalProps } from '../config/types';
 import { VideoPlayer, VideoId } from 'features/VideoPlayer';
 import { Trans } from 'components/Translation';
 
-export const INFO_360_MODAL = 'info_360_modal';
+export const INFO_MODAL = 'info_modal';
 
 const Info360Modal: FC<Info360ModalProps> = ({ setInfo360Modal }) => {
   const { css } = useStyle();
 
   return (
-    <div className={css(WrapperInfo)} data-test-id={INFO_360_MODAL}>
+    <div className={css(WrapperInfo)} data-test-id={INFO_MODAL}>
       <div className={css({ height: '100%' })}>
         <div className={css(title)}>
           <Trans i18nKey='difference_between_everyday_feedback_and_feedback_360'>

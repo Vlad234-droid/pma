@@ -27,6 +27,7 @@ import { Input, Item, Select, Textarea, Attention, Text } from 'components/Form'
 import { GenericItemField } from 'components/GenericForm';
 import MarkdownRenderer from 'components/MarkdownRenderer';
 import SuccessModal from 'components/SuccessModal';
+import { Icon as IconComponent } from 'components/Icon';
 
 import { SubmitButton } from './index';
 import ReviewHelpModal from './ReviewHelpModal';
@@ -88,7 +89,7 @@ const ReviewFormModal: FC<ReviewFormModal> = ({ reviewType, onClose }) => {
 
   const { components = [] } = schema;
 
-  const yepSchema = components.reduce(createYupSchema, {});
+  const yepSchema = components.reduce(createYupSchema(t), {});
   const methods = useForm({
     mode: 'onChange',
     resolver: yupResolver<Yup.AnyObjectSchema>(Yup.object().shape(yepSchema)),
@@ -209,9 +210,31 @@ const ReviewFormModal: FC<ReviewFormModal> = ({ reviewType, onClose }) => {
           padding: mobileScreen ? `0 ${theme.spacing.s4}` : `0 ${theme.spacing.s10}`,
         })}
       >
+        <span
+          className={css({
+            position: 'fixed',
+            top: theme.spacing.s5,
+            left: mobileScreen ? theme.spacing.s5 : theme.spacing.s10,
+            textDecoration: 'none',
+            border: 'none',
+            cursor: 'pointer',
+          })}
+          onClick={onClose}
+        >
+          <IconComponent graphic='arrowLeft' invertColors={true} />
+        </span>
         <form data-test-id={'REVIEW_FORM_MODAL'}>
           <div className={css({ padding: `0 0 ${theme.spacing.s5}` })}>
-            <div className={css({ fontSize: '24px', lineHeight: '28px', color: theme.colors.tescoBlue })}>{title}</div>
+            <div
+              className={css({
+                fontSize: '24px',
+                lineHeight: '28px',
+                color: theme.colors.tescoBlue,
+                fontWeight: theme.font.weight.bold,
+              })}
+            >
+              {title}
+            </div>
             <div
               className={css({
                 fontSize: '18px',

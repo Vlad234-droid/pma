@@ -27,12 +27,24 @@ const ColleaguesFinder: FC<Props> = ({ onSelect, error, value }) => {
       return;
     }
 
-    dispatch(
-      ColleaguesActions.getColleagues({
-        'first-name_like': value,
-        'last-name_like': value,
-      }),
-    );
+    const [firstName, lastName] = value.split(' ');
+
+    const query = {};
+
+    if (lastName) {
+      query['_groups'] = [
+        {
+          'first-name_like': firstName,
+          'last-name_like': lastName,
+          _type: 'AND',
+        },
+      ];
+    } else {
+      query['first-name_like'] = firstName;
+      query['last-name_like'] = firstName;
+    }
+
+    dispatch(ColleaguesActions.getColleagues(query));
   };
 
   const handleChange = (e: any) => {

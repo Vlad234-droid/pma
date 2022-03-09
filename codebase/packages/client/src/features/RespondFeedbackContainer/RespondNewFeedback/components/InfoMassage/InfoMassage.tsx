@@ -5,6 +5,9 @@ import { useStyle, useBreakpoints, Rule, Styles } from '@dex-ddl/core';
 import { VideoPlayer, VideoId } from 'features/VideoPlayer';
 import { Trans } from 'components/Translation';
 
+export const MESSAGE_WRAPPER = 'message_wrapper';
+export const GO_BACK = 'go_back';
+
 type Props = {
   goBack: () => void;
 };
@@ -15,7 +18,7 @@ const InfoMessage: FC<Props> = ({ goBack }) => {
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
 
   return (
-    <div className={css(WrapperInfo)}>
+    <div className={css(WrapperInfo)} data-test-id={MESSAGE_WRAPPER}>
       <h2 className={css(Title)}>
         <Trans i18nKey='need_help_with_providing_feedback'>Need help with providing feedback?</Trans>
       </h2>
@@ -63,7 +66,7 @@ const InfoMessage: FC<Props> = ({ goBack }) => {
           cursor: 'pointer',
         })}
       >
-        <IconButton graphic='arrowLeft' onPress={goBack} iconProps={{ invertColors: true }} />
+        <IconButton graphic='arrowLeft' onPress={goBack} iconProps={{ invertColors: true }} data-test-id={GO_BACK} />
       </span>
     </div>
   );

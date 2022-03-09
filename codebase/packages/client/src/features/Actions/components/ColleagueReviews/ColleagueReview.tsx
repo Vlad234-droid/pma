@@ -31,7 +31,7 @@ export const ColleagueReview: FC<Props> = ({ review, schema, validateReview, upd
   const { components = [] } = schema;
 
   const reviewProperties = review?.properties?.mapJson;
-  const yepSchema = components.reduce(createYupSchema, {});
+  const yepSchema = components.reduce(createYupSchema(t), {});
   const methods = useForm({
     mode: 'onChange',
     resolver: yupResolver<Yup.AnyObjectSchema>(Yup.object().shape(yepSchema)),

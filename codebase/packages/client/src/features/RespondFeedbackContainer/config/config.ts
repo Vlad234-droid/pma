@@ -16,7 +16,7 @@ export const getPropperTargetType = (targetType, targetId, feedbackItems, review
       targetTypeStr !== '' ? ` ${targetTypeStr}` : `${targetTypeStr}`
     }`}”`;
   }
-  if (feedbackItems.length) {
+  if (feedbackItems?.length) {
     const value =
       feedbackItems?.[feedbackItems?.findIndex((item) => item?.code === TargetFeedbackKeys[targetType])]?.content ?? '';
     return `“${capitalType}${value !== '' ? ':' : ''}${`${value !== '' ? ` ${value}` : `${value}`}`}”`;

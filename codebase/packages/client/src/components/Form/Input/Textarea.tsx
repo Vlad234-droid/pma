@@ -3,7 +3,7 @@ import { colors, useStyle } from '@dex-ddl/core';
 import mergeRefs from 'react-merge-refs';
 
 import { TextareaField } from '../types';
-import { useRefContainer } from '../context/input';
+import { useFormContainer } from '../context/input';
 
 const Textarea: FC<TextareaField> = ({
   domRef,
@@ -16,7 +16,7 @@ const Textarea: FC<TextareaField> = ({
   readonly = false,
 }) => {
   const { css } = useStyle();
-  const refIcon = useRefContainer();
+  const { inputRef, setFocus } = useFormContainer();
 
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
@@ -29,7 +29,7 @@ const Textarea: FC<TextareaField> = ({
 
   useEffect(() => {
     if (textareaRef && textareaRef.current) {
-      textareaRef.current.style.height = '0px';
+      textareaRef.current.style.height = '80px';
       const scrollHeight = textareaRef.current.scrollHeight;
       textareaRef.current.style.height = scrollHeight + 'px';
     }
@@ -40,11 +40,13 @@ const Textarea: FC<TextareaField> = ({
 
   return (
     <textarea
-      ref={mergeRefs([domRef, refIcon])}
+      ref={mergeRefs([domRef, inputRef, textareaRef])}
       name={name}
       data-test-id={name}
       readOnly={readonly}
       onChange={textAreaChange}
+      onFocus={() => setFocus(true)}
+      onBlur={() => setFocus(false)}
       className={css({
         width: '100%',
         minHeight: '40px',
@@ -54,10 +56,9 @@ const Textarea: FC<TextareaField> = ({
         lineHeight: '18px',
         padding: '10px 40px 10px 16px',
         resize: 'vertical',
-
         ':focus': {
           outline: 'none !important',
-          border: `1px solid ${isValid ? colors.tescoBlue : colors.error}`,
+          border: `1px solid ${colors.tescoBlue}`,
         },
       })}
       value={value}
