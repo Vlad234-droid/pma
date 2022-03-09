@@ -1,27 +1,37 @@
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
-import '@testing-library/jest-dom/extend-expect';
-import FeedbackActions from './FeedbackActions';
-import { createMemoryHistory } from 'history';
-import { renderWithTheme } from '../../utils/test';
 import '@testing-library/jest-dom';
-import { fireEvent } from '@testing-library/react';
-import { INFO_360_MODAL } from './components/Info360Modal';
+import '@testing-library/jest-dom/extend-expect';
+import { createMemoryHistory } from 'history';
+import { buildPath } from 'features/Routes';
+import { Page } from 'pages';
 import { FEEDBACK_ACTIONS } from './FeedbackActions';
+import FeedbackActions from './FeedbackActions';
+import { renderWithTheme } from 'utils/test';
 
 describe('Feedback actions', () => {
-  it('render main page', async () => {
+  it('it should render feedback action page', async () => {
     const history = createMemoryHistory();
-    history.push('/feedback');
+    history.push(buildPath(Page.FEEDBACK));
+    const { getByTestId } = renderWithTheme(
+      <BrowserRouter>
+        <FeedbackActions />
+      </BrowserRouter>,
+    );
+    const wrapper = getByTestId(FEEDBACK_ACTIONS);
+    expect(wrapper).toBeInTheDocument();
+  });
+
+  it('it should render dropdown', async () => {
+    const history = createMemoryHistory();
+    history.push(buildPath(Page.FEEDBACK));
     const { getByTestId } = renderWithTheme(
       <BrowserRouter>
         <FeedbackActions />
       </BrowserRouter>,
     );
 
-    const wrapper = getByTestId(FEEDBACK_ACTIONS);
     const dropdown = getByTestId('treatment-options-wrapper');
     expect(dropdown).toBeInTheDocument();
-    expect(wrapper).toBeInTheDocument();
   });
 });

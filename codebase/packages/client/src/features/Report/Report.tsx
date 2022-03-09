@@ -141,7 +141,7 @@ const Report: FC = () => {
           {!!getAppliedReport().length && (
             <AppliedFilters
               clearAppliedFilters={clearAppliedFilters}
-              getAppliedReport={getAppliedReport}
+              getAppliedReport={getAppliedReport()}
               colleaguesCount={colleaguesCount}
             />
           )}

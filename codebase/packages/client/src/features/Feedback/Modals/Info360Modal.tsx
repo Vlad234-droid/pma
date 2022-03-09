@@ -5,14 +5,14 @@ import { Info360ModalProps } from '../config/types';
 import { VideoPlayer, VideoId } from 'features/VideoPlayer';
 import { Trans } from 'components/Translation';
 
-export const INFO_360_MODAL = 'info_360_modal';
+export const INFO_MODAL = 'info_modal';
 
 const Info360Modal: FC<Info360ModalProps> = ({ setInfo360Modal }) => {
   const { css, theme } = useStyle();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
   return (
-    <div className={css(WrapperInfo)} data-test-id={INFO_360_MODAL}>
+    <div className={css(WrapperInfo)} data-test-id={INFO_MODAL}>
       <div className={css({ height: '100%' })}>
         <p className={css(PreTitle)}>
           <Trans i18nKey='you_can_give_and_receive_feedback_with_your_colleagues'>
