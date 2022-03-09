@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { useStyle, colors, Rule, Styles } from '@dex-ddl/core';
 import mergeRefs from 'react-merge-refs';
 import { InputProps } from './type';
-import { useRefContainer } from 'components/Form/context/input';
+import { useFormContainer } from 'components/Form/context/input';
 import { ColleaguesActions } from '@pma/store';
 import { useDispatch } from 'react-redux';
 import defaultImg from 'images/default.png';
@@ -23,14 +23,14 @@ const SearchInput: FC<InputProps> = ({
   selectedPerson,
 }) => {
   const { css } = useStyle();
-  const refIcon = useRefContainer();
+  const { inputRef } = useFormContainer();
 
   const dispatch = useDispatch();
 
   return (
     <>
       <input
-        ref={mergeRefs([domRef, refIcon])}
+        ref={mergeRefs([domRef, inputRef])}
         name={name}
         data-test-id={name}
         value={searchValue ? searchValue : value}

@@ -1,29 +1,21 @@
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
-// @ts-ignore
 import { renderWithTheme as render } from 'utils/test';
-import { screen } from '@testing-library/react';
 import DraftItem from './DraftItem';
 
+jest.mock('react-router-dom', () => ({
+  ...(jest.requireActual('react-router-dom') as any),
+  useNavigate: () => ({
+    navigate: jest.fn().mockImplementation(() => ({})),
+  }),
+}));
+
 describe('ReviewDraftItems', () => {
-  const testHandler = jest.fn();
   const props = {
-    draftFeedback: testHandler,
-    checkedRadio: {
-      pending: false,
-      completed: true,
-    },
-    searchValue: 'string',
-    focus: true,
-    setFocus: testHandler,
-    filterModal: true,
-    setFilterModal: testHandler,
-    setFilterFeedbacks: testHandler,
+    checkedRadio: { pending: true, completed: false },
     filterFeedbacks: {
-      AZ: true,
-      ZA: false,
-      newToOld: false,
-      oldToNew: false,
+      sort: '',
+      search: '',
     },
   };
 

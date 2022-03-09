@@ -150,7 +150,7 @@ const NotesActions: FC = () => {
       return;
     }
 
-    if (values.folder === '' && values.noteTitle !== '' && values.noteText !== '') {
+    if (!values.folder && values.noteTitle !== '' && values.noteText !== '') {
       dispatch(
         NotesActionsToDispatch.createNote({
           ownerColleagueUuid: colleagueUuid,
@@ -168,7 +168,8 @@ const NotesActions: FC = () => {
       values.folder !== AllNotesFolderId &&
       folders.some((item) => item.id === values.folder)
     ) {
-      const { ownerColleagueUuid, id } = folders[folders.findIndex((item) => item.id === values.folder)];
+      const { ownerColleagueUuid, id } = folders.find((item) => item.id === values.folder);
+
       dispatch(
         NotesActionsToDispatch.createNote({
           ownerColleagueUuid: ownerColleagueUuid,
@@ -226,7 +227,7 @@ const NotesActions: FC = () => {
       );
       return;
     }
-    if (values.folder === '' && values.noteTitle !== '' && values.noteText !== '') {
+    if (!values.folder && values.noteTitle !== '' && values.noteText !== '') {
       dispatch(
         NotesActionsToDispatch.createNote({
           ownerColleagueUuid: colleagueUuid,

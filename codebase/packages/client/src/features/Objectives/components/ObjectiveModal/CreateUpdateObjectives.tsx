@@ -4,6 +4,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import useDispatch from 'hooks/useDispatch';
 import { useSelector } from 'react-redux';
+import { useTranslation } from 'components/Translation';
 import { schemaMetaSelector } from '@pma/store/src/selectors/schema';
 import {
   currentUserSelector,
@@ -30,6 +31,7 @@ type ObjectivesProps = {
 
 const Objectives: FC<ObjectivesProps> = ({ colleagueUUID, schema, objectives, origin, onClose, editNumber = null }) => {
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   const pathParams = { colleagueUuid: colleagueUUID, type: ReviewType.OBJECTIVE, cycleUuid: 'CURRENT' };
 
   const [currentObjectiveNumber, setObjectiveNumber] = useState(editNumber ? editNumber : 1);
@@ -48,7 +50,7 @@ const Objectives: FC<ObjectivesProps> = ({ colleagueUUID, schema, objectives, or
     ? objectivesHashMap[currentObjectiveNumber]
     : formElementsFilledEmpty;
 
-  const yepSchema = formElements.reduce(createYupSchema, {});
+  const yepSchema = formElements.reduce(createYupSchema(t), {});
   const methods = useForm({
     mode: 'onChange',
     resolver: yupResolver<Yup.AnyObjectSchema>(Yup.object().shape(yepSchema)),

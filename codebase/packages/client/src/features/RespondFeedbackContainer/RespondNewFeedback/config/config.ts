@@ -1,3 +1,25 @@
+export const getPayload = (data, feedbackItems, colleagueUuid, uuid, targetId, targetType) => ({
+  ...data,
+  feedbackItems: [
+    ...data.feedbackItems.map((item) => ({
+      ...item,
+      uuid: feedbackItems.find((feedback) => feedback.code === item.code)?.uuid,
+    })),
+    ...feedbackItems.filter(
+      (item) =>
+        item.code === 'comment_to_day_job' ||
+        item.code === 'comment_to_your_self' ||
+        item.code === 'comment_to_your_impact' ||
+        item.code === 'comment_to_objective' ||
+        item.code === 'comment_to_request',
+    ),
+  ],
+  colleagueUuid,
+  uuid,
+  targetId,
+  targetType,
+});
+
 export const getFeedbackFields = (t) => {
   return [
     {
@@ -37,25 +59,3 @@ export const getFeedbackFields = (t) => {
     },
   ];
 };
-
-export const getPayload = (data, feedbackItems, colleagueUuid, uuid, targetId, targetType) => ({
-  ...data,
-  feedbackItems: [
-    ...data.feedbackItems.map((item) => ({
-      ...item,
-      uuid: feedbackItems.find((feedback) => feedback.code === item.code)?.uuid,
-    })),
-    ...feedbackItems.filter(
-      (item) =>
-        item.code === 'comment_to_day_job' ||
-        item.code === 'comment_to_your_self' ||
-        item.code === 'comment_to_your_impact' ||
-        item.code === 'comment_to_objective' ||
-        item.code === 'comment_to_request',
-    ),
-  ],
-  colleagueUuid,
-  uuid,
-  targetId,
-  targetType,
-});

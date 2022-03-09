@@ -5,26 +5,42 @@ import { from, of } from 'rxjs';
 import { catchError, filter, map, switchMap } from 'rxjs/operators';
 import {
   createNewFeedback,
-  getAllFeedbacks,
   readFeedback,
   updatedFeedback,
   getObjectiveReviews,
   getGiveFeedback,
   getRespondFeedback,
   getViewFeedback,
+  getRequestedFeedbacks,
+  getGivenFeedbacks,
 } from './actions';
 
-export const getAllFeedbackEpic: Epic = (action$, _, { api }) => {
+export const getGivenFeedbacksEpic: Epic = (action$, _, { api }) => {
   return action$.pipe(
-    filter(isActionOf(getAllFeedbacks.request)),
-    switchMap(({ payload }) => {
+    filter(isActionOf(getGivenFeedbacks.request)),
+    switchMap(() => {
       //@ts-ignore
-      return from(api.getAllFeedbacks(payload)).pipe(
+      return from(api.getGivenFeedbacks()).pipe(
         //@ts-ignore
         map(({ data }) => {
-          return getAllFeedbacks.success(data);
+          return getGivenFeedbacks.success(data);
         }),
-        catchError(({ errors }) => of(createNewFeedback.failure(errors))),
+        catchError(({ errors }) => of(getGivenFeedbacks.failure(errors))),
+      );
+    }),
+  );
+};
+export const getRequestedFeedbacksEpic: Epic = (action$, _, { api }) => {
+  return action$.pipe(
+    filter(isActionOf(getRequestedFeedbacks.request)),
+    switchMap(() => {
+      //@ts-ignore
+      return from(api.getRequestedFeedbacks()).pipe(
+        //@ts-ignore
+        map(({ data }) => {
+          return getRequestedFeedbacks.success(data);
+        }),
+        catchError(({ errors }) => of(getRequestedFeedbacks.failure(errors))),
       );
     }),
   );
@@ -130,10 +146,12 @@ export const getObjectiveReviewsEpic: Epic = (action$, _, { api }) =>
 export default combineEpics(
   createNewFeedbackEpic,
   readFeedbackEpic,
-  getAllFeedbackEpic,
+
   updateFeedbackEpic,
   getObjectiveReviewsEpic,
   getGiveFeedbackEpic,
   getRespondFeedbackEpic,
   getViewFeedbackEpic,
+  getRequestedFeedbacksEpic,
+  getGivenFeedbacksEpic,
 );

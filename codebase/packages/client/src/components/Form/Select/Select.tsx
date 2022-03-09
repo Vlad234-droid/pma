@@ -6,14 +6,14 @@ import { Icon } from 'components/Icon';
 import useEventListener from 'hooks/useEventListener';
 
 import { SelectField, Option } from '../types';
-import { useRefContainer } from '../context/input';
+import { useFormContainer } from '../context/input';
 
 const getSelectedOption = (options: Option[], value?: string) =>
   value ? options.filter((option) => option.value === value)[0] : undefined;
 
 const Select: FC<SelectField> = ({ domRef, name, options, placeholder, value, onChange }) => {
   const { css } = useStyle();
-  const refIcon = useRefContainer();
+  const { inputRef } = useFormContainer();
   const ref = useRef<HTMLDivElement | null>(null);
   const [isOpen, setOpen] = useState<boolean>(false);
   const [selected, setSelected] = useState<Option | undefined>(getSelectedOption(options, value));
@@ -44,7 +44,7 @@ const Select: FC<SelectField> = ({ domRef, name, options, placeholder, value, on
         data-test-id={name}
         onClick={toggleList}
         className={css(fieldStyles, isOpen ? fieldActiveStyles : {})}
-        ref={mergeRefs([domRef, refIcon])}
+        ref={mergeRefs([domRef, inputRef])}
       >
         {selected ? (
           <div>{selected.label}</div>
@@ -94,7 +94,7 @@ const fieldStyles: Rule = ({ theme }) => ({
   borderRadius: '5px',
   fontSize: `${theme.font.fixed.f16.fontSize}`,
   lineHeight: `${theme.font.fixed.f16.lineHeight}`,
-  padding: '10px 30px 10px 16px',
+  padding: '10px 40px 10px 16px',
   ':focus': {
     outline: 'none !important',
     border: `1px solid ${theme.colors.tescoBlue}`,

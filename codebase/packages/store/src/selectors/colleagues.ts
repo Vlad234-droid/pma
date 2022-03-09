@@ -11,5 +11,6 @@ export const getColleaguesSelector = createSelector(colleaguesSelector, (colleag
 
 export const getColleagueByUuidSelector = (colleagueUUID) =>
   createSelector(colleaguesSelector, (colleagues: any) => {
-    return colleagues.list.find(({ colleague }) => colleague.colleagueUUID === colleagueUUID) || null;
+    const { list = [] } = colleagues;
+    return list?.find(({ colleague }) => colleague.colleagueUUID === colleagueUUID) || null;
   });

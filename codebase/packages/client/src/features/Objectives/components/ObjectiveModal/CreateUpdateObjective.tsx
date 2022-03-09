@@ -5,6 +5,7 @@ import * as Yup from 'yup';
 import { ObjectiveModal } from './ObjectiveModal';
 import useDispatch from 'hooks/useDispatch';
 import { useSelector } from 'react-redux';
+import { useTranslation } from 'components/Translation';
 import {
   currentUserSelector,
   getNextReviewNumberSelector,
@@ -25,6 +26,7 @@ type Props = HTMLProps<HTMLInputElement> & CreateUpdateObjectiveModalProps;
 
 export const CreateUpdateObjective: FC<Props> = ({ onClose, editNumber = null }) => {
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   const { loaded: reviewLoaded } = useSelector(reviewsMetaSelector);
   const { info } = useSelector(currentUserSelector);
 
@@ -46,7 +48,7 @@ export const CreateUpdateObjective: FC<Props> = ({ onClose, editNumber = null })
     ? objectives[currentObjectiveNumber]
     : formElementsFilledEmpty;
 
-  const yepSchema = formElements.reduce(createYupSchema, {});
+  const yepSchema = formElements.reduce(createYupSchema(t), {});
   const methods = useForm({
     mode: 'onChange',
     resolver: yupResolver<Yup.AnyObjectSchema>(Yup.object().shape(yepSchema)),

@@ -1,11 +1,11 @@
 // @ts-ignore
 import React from 'react';
-import { Link, BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 
 // @ts-ignore
 import { renderWithTheme as render } from 'utils/test';
 // @ts-ignore
-import { ReviewType, Status } from 'config/enum';
+import { Status } from 'config/enum';
 
 import InfoWidgets from './InfoWidgets';
 

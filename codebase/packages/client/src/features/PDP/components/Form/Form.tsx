@@ -1,22 +1,22 @@
 import React, { FC, useEffect, useState, useMemo } from 'react';
 import * as Yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { Input, Item, Textarea } from 'components/Form';
-import { GenericItemField } from 'components/GenericForm';
 import { useForm } from 'react-hook-form';
-import { DATE_FORMAT, formatDate } from 'utils/date';
-import { createYupSchema } from 'utils/yup';
-import { v4 as uuidv4 } from 'uuid';
-import { Button, CreateRule, Rule, theme, useBreakpoints, useStyle } from '@dex-ddl/core';
-import arrLeft from '../../../../assets/img/pdp/arrLeft.png';
-import colors from 'theme/colors';
-import { ConfirmModal } from 'features/Modal';
 import { useNavigate } from 'react-router-dom';
 import { metaPDPSelector } from '@pma/store';
 import { useSelector } from 'react-redux';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { Button, CreateRule, Rule, theme, useBreakpoints, useStyle } from '@dex-ddl/core';
+import { Input, Item, Textarea, Attention } from 'components/Form';
+import { GenericItemField } from 'components/GenericForm';
+import { DATE_FORMAT, formatDate } from 'utils/date';
+import { createYupSchema } from 'utils/yup';
+import { v4 as uuidv4 } from 'uuid';
+import arrLeft from 'assets/img/pdp/arrLeft.png';
+import colors from 'theme/colors';
+import { ConfirmModal } from 'features/Modal';
 import { buildPath } from 'features/Routes';
 import { Page } from 'pages';
-import { Trans } from 'components/Translation';
+import { Trans, useTranslation } from 'components/Translation';
 
 type Props = {
   pdpGoals: any;
@@ -57,6 +57,7 @@ const Form: FC<Props> = ({
   onSubmit,
 }) => {
   const { css } = useStyle();
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
@@ -65,7 +66,7 @@ const Form: FC<Props> = ({
     acc[current.key] = '';
     return acc;
   }, {});
-  const yepSchema = formElements.reduce(createYupSchema, {});
+  const yepSchema = formElements.reduce(createYupSchema(t), {});
   const methods = useForm({
     mode: 'onChange',
     resolver: yupResolver<Yup.AnyObjectSchema>(Yup.object().shape(yepSchema)),
@@ -167,6 +168,7 @@ const Form: FC<Props> = ({
           )}
         </div>
       )}
+      <Attention />
       {confirmSaveModal && (
         <ConfirmModal
           title={'Are you sure you want to save this goal?'}

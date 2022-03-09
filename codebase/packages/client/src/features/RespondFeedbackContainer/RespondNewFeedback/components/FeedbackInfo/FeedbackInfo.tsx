@@ -10,6 +10,9 @@ import { useParams } from 'react-router-dom';
 import { getPropperTargetType } from '../../../config';
 import { FeedbackStatus, Tesco } from 'config/enum';
 
+export const INFO_WRAPPER = 'info_wrapper';
+export const GIVE_FEEDBACK_VIDEO = 'give_feedback_video';
+
 type Props = {
   onClickMore: () => void;
 };
@@ -40,7 +43,7 @@ const FeedbackInfo: FC<Props> = ({ onClickMore }) => {
     feedbackItems?.find((item) => item?.code === 'comment_to_request')?.content ?? '';
 
   return (
-    <div>
+    <div data-test-id={INFO_WRAPPER}>
       <div className={css({ marginTop: '30px' })}>
         <div className={css(BlockInfo)}>
           <div className={css({ alignSelf: 'flex-start' })}>
@@ -80,7 +83,7 @@ const FeedbackInfo: FC<Props> = ({ onClickMore }) => {
           Watch this 2-minute video on how to give great feedback
         </Trans>
       </h2>
-      <div className={css(VideoWrapper)}>
+      <div className={css(VideoWrapper)} data-test-id={GIVE_FEEDBACK_VIDEO}>
         <VideoPlayer videoId={VideoId.GIVE_FEEDBACK} />
       </div>
     </div>

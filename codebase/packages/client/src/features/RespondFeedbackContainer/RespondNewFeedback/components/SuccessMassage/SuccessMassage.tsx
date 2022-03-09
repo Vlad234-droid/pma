@@ -2,9 +2,7 @@ import React, { FC } from 'react';
 import { Button, Rule, Styles, useBreakpoints, useStyle } from '@dex-ddl/core';
 import success from 'images/success.jpg';
 import { Trans } from 'components/Translation';
-
-export const TEST_ID = 'success-modal-wrapper';
-export const OK_BUTTON_TEST_ID = 'ok-button';
+import { SUCCESS_MODAL_WRAPPER, OK_BTN } from 'features/NotesActions/components/Modals/SuccessModal';
 
 type Props = {
   targetColleagueProfile: any;
@@ -16,7 +14,7 @@ const SuccessMassage: FC<Props> = ({ targetColleagueProfile, onSuccess }) => {
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
   return (
-    <div data-test-id={TEST_ID} className={css(WrapperSuccessContainer)}>
+    <div data-test-id={SUCCESS_MODAL_WRAPPER} className={css(WrapperSuccessContainer)}>
       <div className={css(SuccessImg)}>
         <img src={success} alt='success' />
       </div>
@@ -51,7 +49,7 @@ const SuccessMassage: FC<Props> = ({ targetColleagueProfile, onSuccess }) => {
             })}
           >
             <Button
-              data-test-id={OK_BUTTON_TEST_ID}
+              data-test-id={OK_BTN}
               styles={[
                 theme.font.fixed.f16,
                 {

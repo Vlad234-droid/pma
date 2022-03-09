@@ -25,7 +25,7 @@ const SuccessModal: FC<SuccessModalProps> = ({ values, createFolder, cancelModal
 
   const propperValue = (): string => {
     let str: string;
-    if (values.folder === AllNotesFolderId || values.folder === '') {
+    if (values.folder === AllNotesFolderId || !values.folder) {
       str = 'All notes';
     } else if (values.folder === addNewFolderId) {
       str = values.folderTitle;

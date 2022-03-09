@@ -1,7 +1,6 @@
 import { createReducer } from 'typesafe-actions';
 import {
   createNewFeedback,
-  getAllFeedbacks,
   readFeedback,
   updatedFeedback,
   getObjectiveReviews,
@@ -9,15 +8,20 @@ import {
   getGiveFeedback,
   getRespondFeedback,
   getViewFeedback,
+  getGivenFeedbacks,
+  getRequestedFeedbacks,
 } from './actions';
 
 export const initialState = {
-  notes: [],
   reviews: [],
   feedbacks: {
     give: [],
     respond: [],
     view: [],
+  },
+  feedbacksCount: {
+    given: 0,
+    requested: 0,
   },
   meta: { loading: false, loaded: false, error: null },
 };
@@ -36,15 +40,6 @@ export default createReducer(initialState)
     meta: { ...state.meta, loading: false, loaded: true, error: payload },
   }))
 
-  .handleAction(getAllFeedbacks.request, (state) => ({
-    ...state,
-    meta: { loading: true, loaded: false, error: null },
-  }))
-  .handleAction(getAllFeedbacks.success, (state, { payload }) => ({
-    ...state,
-    notes: payload,
-    meta: { ...state.meta, loading: false, loaded: true },
-  }))
   .handleAction(clearFeedback, (state) => ({ ...state, notes: [] }))
   .handleAction(readFeedback.request, (state) => ({
     ...state,
@@ -142,6 +137,48 @@ export default createReducer(initialState)
     },
   }))
   .handleAction(getViewFeedback.failure, (state, { payload }) => ({
+    ...state,
+    meta: { ...state.meta, loading: false, loaded: true, error: payload },
+  }))
+
+  .handleAction(getGivenFeedbacks.request, (state) => ({
+    ...state,
+    meta: { ...state.meta, loading: true },
+  }))
+  .handleAction(getGivenFeedbacks.success, (state, { payload }) => ({
+    ...state,
+    feedbacksCount: {
+      ...state.feedbacksCount,
+      given: payload,
+    },
+    meta: {
+      ...state.meta,
+      loading: false,
+      loaded: true,
+    },
+  }))
+  .handleAction(getGivenFeedbacks.failure, (state, { payload }) => ({
+    ...state,
+    meta: { ...state.meta, loading: false, loaded: true, error: payload },
+  }))
+
+  .handleAction(getRequestedFeedbacks.request, (state) => ({
+    ...state,
+    meta: { ...state.meta, loading: true },
+  }))
+  .handleAction(getRequestedFeedbacks.success, (state, { payload }) => ({
+    ...state,
+    feedbacksCount: {
+      ...state.feedbacksCount,
+      requested: payload,
+    },
+    meta: {
+      ...state.meta,
+      loading: false,
+      loaded: true,
+    },
+  }))
+  .handleAction(getRequestedFeedbacks.failure, (state, { payload }) => ({
     ...state,
     meta: { ...state.meta, loading: false, loaded: true, error: payload },
   }));

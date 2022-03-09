@@ -2,7 +2,7 @@ import React, { FC, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Rule, useStyle } from '@dex-ddl/core';
 import get from 'lodash.get';
-import { Field, Item, Select, Textarea } from 'components/Form';
+import { Field, Item, Select, Textarea, Attention } from 'components/Form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { useForm } from 'react-hook-form';
@@ -85,6 +85,7 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel, setIsInfoModalOpen }) 
         <div className={css({ fontWeight: 'bold', fontSize: '24px', lineHeight: '28px' })}>
           Ask your colleagues for feedback
         </div>
+        <Attention />
         <div className={css({ marginTop: '14px', fontSize: '18px', lineHeight: '22px' })}>
           <Trans i18nKey='select_which_colleague_you_would_like_to_ask_feedback_from'>
             Select which colleague(s) you would like to ask feedback from

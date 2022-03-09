@@ -246,10 +246,10 @@
   "your_feedback_will_be_immediately_available_for_your_colleague_to_view": "Your feedback will be immediately available for your colleague to view",
   "view_your_feedback": "View your feedback",
   "see_the_feedback_your_colleagues_have_shared_with_you": "See the feedback your colleagues have shared with you",
-  "you_have_new_feedback_to_view": "You have {{unReadSubmittedNotesLength}} new feedback to view",
+  "you_have_new_feedback_to_view": "You have {{givenFeedbacks}} new feedback to view",
   "respond_to_feedback_requests": "Respond to feedback requests",
   "see_and_respond_to_feedback_requests_from_your_colleagues": "See and respond to feedback requests from your colleagues",
-  "you_have_new_feedback_requests": "You have {{pendingNotesLength}} new feedback requests",
+  "you_have_new_feedback_requests": "You have {{requestedFeedbacks}} new feedback requests",
   "request_feedback": "Request feedback",
   "ask_for_feedback_from_your_colleagues": "Ask for feedback from your colleagues",
   "send_new_feedback_requests": "Send new feedback requests",
@@ -376,5 +376,9 @@
   "pending_actions": "Pending actions",
   "you_have_pending_actions": "You have pending actions",
   "view_profile": "View profile",
-  "select_a_year": "Select a year"
+  "select_a_year": "Select a year",
+  "objectives_statistics_not_found": "Objectives statistics not found",
+  "field_required": "This field is required",
+  "field_min_length": "Must be at least {{min}} characters",
+  "field_max_length": "Must be at most {{max}} characters"
 }

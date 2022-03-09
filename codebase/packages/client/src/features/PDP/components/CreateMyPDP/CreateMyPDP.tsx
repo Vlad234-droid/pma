@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { CreateRule, ModalWithHeader, Rule, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Icon } from '../../../../components/Icon';
-import usePDPShema from '../../hooks/usePDPShema';
+import { Icon } from 'components/Icon';
 import { useDispatch, useSelector } from 'react-redux';
 import { colleagueUUIDSelector, PDPActions, schemaMetaPDPSelector } from '@pma/store';
-import { buildPath } from '../../../Routes';
-import { Page } from '../../../../pages';
+import { buildPath } from 'features/Routes';
+import { Page } from 'pages';
+import { PDPType } from 'config/enum';
 
+import usePDPSchema from '../../hooks/usePDPSchema';
 import Form from '../Form';
-import { PDPType } from '../../../../config/enum';
 
 export const TEST_ID = 'create-pdp';
 
@@ -22,7 +22,7 @@ const CreateMyPDP = () => {
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const pdpList = useSelector(schemaMetaPDPSelector)?.goals || [];
   const [pdpGoals, setPDPGoals] = useState<any[]>([]);
-  const [schema] = usePDPShema(PDPType.PDP);
+  const [schema] = usePDPSchema(PDPType.PDP);
   const { components = [] } = schema;
   const formElements = components.filter((component) => component.type != 'text');
   const maxGoalCount = 5;
