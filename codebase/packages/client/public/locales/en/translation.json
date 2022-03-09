@@ -376,5 +376,8 @@
   "pending_actions": "Pending actions",
   "you_have_pending_actions": "You have pending actions",
   "view_profile": "View profile",
-  "select_a_year": "Select a year"
+  "select_a_year": "Select a year",
+  "field_required": "This field is required",
+  "field_min_length": "Must be at least {{min}} characters",
+  "field_max_length": "Must be at most {{max}} characters"
 }

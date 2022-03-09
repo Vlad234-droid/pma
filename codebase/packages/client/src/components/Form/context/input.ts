@@ -1,6 +1,18 @@
 import { createContext, useContext } from 'react';
 
-const Context = createContext<any>(null);
+// eslint-disable-next-line @typescript-eslint/no-empty-function
+const defaultEmpty = () => {};
 
-export const useRefContainer = () => useContext(Context);
+type ContextType = {
+  inputRef: any;
+  hasFocus: boolean;
+  setFocus: (T: boolean) => void;
+};
+const Context = createContext<ContextType>({
+  inputRef: null,
+  hasFocus: false,
+  setFocus: defaultEmpty,
+});
+
+export const useFormContainer = () => useContext(Context);
 export default Context.Provider;

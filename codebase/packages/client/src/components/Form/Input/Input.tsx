@@ -3,7 +3,7 @@ import { colors, useStyle } from '@dex-ddl/core';
 import mergeRefs from 'react-merge-refs';
 
 import { InputField } from '../types';
-import { useRefContainer } from '../context/input';
+import { useFormContainer } from '../context/input';
 
 const Input: FC<InputField> = ({
   domRef,
@@ -21,18 +21,28 @@ const Input: FC<InputField> = ({
   defaultValue,
 }) => {
   const { css } = useStyle();
-  const refIcon = useRefContainer();
+  const { inputRef, setFocus } = useFormContainer();
 
   return (
     <input
       type={type}
-      ref={mergeRefs([domRef, refIcon])}
+      ref={mergeRefs([domRef, inputRef])}
       name={name}
       data-test-id={name}
       value={value}
       onChange={onChange}
-      onBlur={onBlur}
-      onFocus={onFocus}
+      onBlur={(e) => {
+        if (onBlur) {
+          onBlur(e);
+        }
+        setFocus(false);
+      }}
+      onFocus={() => {
+        if (onFocus) {
+          onFocus();
+        }
+        setFocus(true);
+      }}
       readOnly={readonly}
       min={min}
       defaultValue={defaultValue}
@@ -45,7 +55,7 @@ const Input: FC<InputField> = ({
         padding: '10px 40px 10px 16px',
         ':focus': {
           outline: 'none !important',
-          border: `1px solid ${isValid ? colors.tescoBlue : colors.error}`,
+          border: `1px solid ${colors.tescoBlue}`,
         },
         ...(customStyles && customStyles),
       })}
