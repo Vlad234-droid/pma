@@ -64,7 +64,7 @@ const ConfirmModal: FC<Props> = ({
           </Button>
         )}
 
-        <Button isDisabled={!canSubmit} styles={[saveBtn, !canSubmit ? { opacity: '0.6' } : {}]} onPress={onSave}>
+        <Button isDisabled={!canSubmit} styles={[saveBtn, !canSubmit ? { opacity: '0.6' } : {}]} onClick={onSave}>
           {submitBtnTitle}
         </Button>
       </div>

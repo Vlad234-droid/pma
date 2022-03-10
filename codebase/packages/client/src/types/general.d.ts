@@ -1,3 +1,4 @@
+import { PressEvents as BasePressEvents } from '@react-types/shared';
 declare type Nullable<T> = T | null;
 
 declare module '*.html' {
@@ -67,5 +68,11 @@ declare namespace NodeJS {
 
   export interface Process {
     env: ProcessEnv;
+  }
+}
+
+declare module '@react-types/shared' {
+  export interface PressEvents extends BasePressEvents {
+    onClick?: any;
   }
 }
