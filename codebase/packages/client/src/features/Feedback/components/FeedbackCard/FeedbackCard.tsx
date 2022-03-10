@@ -16,7 +16,7 @@ const FeedbackCard: FC<FeedbackCardProps> = ({ card }) => {
 
   return (
     <div className={css(cardStyle)} data-test-id={FEEDBACK_CARD_WRAPPER}>
-      <Link to={card.link}>
+      <Link to={buildPath(card.link)}>
         <TileWrapper>
           <div className={css(wrapperBlock)}>
             <div className={css(actionStyle)}>{card.action}</div>
