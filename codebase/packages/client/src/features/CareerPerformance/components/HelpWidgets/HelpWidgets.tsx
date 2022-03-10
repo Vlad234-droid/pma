@@ -53,6 +53,7 @@ const widgetStyles: Rule = {
   justifyContent: 'center',
   height: '100%',
   padding: '24px 27px 24px 10px',
+  border: 'none',
 };
 
 const imageStyles: Rule = {
