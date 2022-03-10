@@ -61,7 +61,6 @@ const styles = StyleSheet.create({
   },
   border: {
     borderBottomWidth: 2,
-    borderBottomColor: 'bleck',
   },
   header: {
     justifyContent: 'space-between',
@@ -83,15 +82,21 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   subTitle: {
-    lineHeight: 22,
-    fontSize: 18,
+    fontSize: 15,
+    fontWeight: 'bold',
+    marginBottom: 5,
   },
   description: {
-    lineHeight: 20,
-    fontSize: 16,
+    fontSize: 14,
+    color: '#808080',
+    marginTop: 20,
+    maxHeight: 600,
   },
   body: {
-    maxHeight: 220,
+    maxHeight: 1500,
+  },
+  longBody: {
+    marginTop: 100,
   },
   explanations: {
     marginTop: 5,
@@ -101,6 +106,7 @@ const styles = StyleSheet.create({
   explanationTitle: {
     fontSize: 14,
     fontWeight: 900,
+    marginTop: 20,
   },
   step: {
     fontSize: 14,
