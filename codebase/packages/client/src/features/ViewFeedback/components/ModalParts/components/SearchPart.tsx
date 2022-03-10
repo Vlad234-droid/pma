@@ -1,12 +1,12 @@
 import React, { FC, useEffect, useState } from 'react';
-import { SearchPartProps } from './type';
-import { useStyle } from '@dex-ddl/core';
-import { Item, Input } from 'components/Form';
-import { SearchInput } from './SearchInput';
-import { ColleaguesActions, getColleaguesSelector } from '@pma/store';
 import { useSelector, useDispatch } from 'react-redux';
+import { useStyle } from '@dex-ddl/core';
+import { ColleaguesActions, getColleaguesSelector } from '@pma/store';
+import { Item, Input } from 'components/Form';
 import { GenericItemField } from 'components/GenericForm';
 import { useTranslation } from 'components/Translation';
+import { SearchPartProps } from './type';
+import { SearchInput } from './SearchInput';
 
 const SearchPart: FC<SearchPartProps> = ({
   setSelectedPerson,
@@ -41,7 +41,7 @@ const SearchPart: FC<SearchPartProps> = ({
   }, [searchDate]);
 
   const { register } = methods;
-  const findedCollegues = useSelector(getColleaguesSelector) || [];
+  const foundColleagues = useSelector(getColleaguesSelector) || [];
 
   return (
     <div className={css({ marginTop: '32px' })}>
@@ -69,7 +69,7 @@ const SearchPart: FC<SearchPartProps> = ({
           setSelectedPerson={setSelectedPerson}
           domRef={register(`search_option`).ref}
           placeholder={t('search', 'Search')}
-          options={findedCollegues}
+          options={foundColleagues}
           setSearchValue={setSearchValue}
           searchValue={searchValue}
           selectedPerson={selectedPerson}

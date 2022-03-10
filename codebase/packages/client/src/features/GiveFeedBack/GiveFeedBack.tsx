@@ -12,17 +12,17 @@ import { FeedbackBlock, RadioBtns } from './components';
 import { FilterModal } from '../Shared/components/FilterModal';
 import { getSortString } from 'utils/feedback';
 
-type TypeinitialFilters = {
+type Filter = {
   sort: string;
   search: string;
 };
 
-const initialFilters: TypeinitialFilters = {
+const initialFilters: Filter = {
   sort: '',
   search: '',
 };
 
-const OuterGiveFeedBack: FC = () => {
+const GiveFeedBack: FC = () => {
   const { css } = useStyle();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -31,7 +31,7 @@ const OuterGiveFeedBack: FC = () => {
   // filter
   const [focus, setFocus] = useState(false);
   const [filterModal, setFilterModal] = useState(false);
-  const [filter, setFilter] = useState<TypeinitialFilters>(initialFilters);
+  const [filter, setFilter] = useState<Filter>(initialFilters);
 
   const hasActiveFilter = Object.values(filter).some((f) => f);
 
@@ -133,4 +133,4 @@ const draftsStyle: Rule = {
   gap: '8px',
 };
 
-export default OuterGiveFeedBack;
+export default GiveFeedBack;

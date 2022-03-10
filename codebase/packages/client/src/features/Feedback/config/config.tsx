@@ -24,7 +24,7 @@ export const getCards = (): Props[] => {
         'your_feedback_will_be_immediately_available_for_your_colleague_to_view',
         'Your feedback will be immediately available for your colleague to view',
       ),
-      link: `/${Page.GIVE_FEEDBACK}`,
+      link: Page.GIVE_FEEDBACK,
     },
     {
       id: 2,
@@ -37,7 +37,7 @@ export const getCards = (): Props[] => {
       iconText: t('you_have_new_feedback_to_view', `You have ${givenFeedbacks} new feedback to view`, {
         givenFeedbacks,
       }),
-      link: `/${Page.VIEW_FEEDBACK}`,
+      link: Page.VIEW_FEEDBACK,
     },
     {
       id: 3,
@@ -50,7 +50,7 @@ export const getCards = (): Props[] => {
       iconText: t('you_have_new_feedback_requests', `You have ${requestedFeedbacks} new feedback requests`, {
         requestedFeedbacks,
       }),
-      link: `/${Page.RESPOND_FEEDBACK}`,
+      link: Page.RESPOND_FEEDBACK,
     },
     {
       id: 4,
@@ -58,7 +58,7 @@ export const getCards = (): Props[] => {
       text: t('ask_for_feedback_from_your_colleagues', 'Ask for feedback from your colleagues'),
       icon: <People />,
       iconText: t('send_new_feedback_requests', 'Send new feedback requests'),
-      link: `/${Page.REQUEST_FEEDBACK}`,
+      link: Page.REQUEST_FEEDBACK,
     },
   ];
 };

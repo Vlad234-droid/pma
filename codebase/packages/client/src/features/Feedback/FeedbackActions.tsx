@@ -103,7 +103,7 @@ const FeedbackActions: FC = () => {
             </IconButton>
           </div>
         </div>
-        <div className={css(сardsBlockStyle)}>
+        <div className={css(cardBlockStyle)}>
           {getCards().map((item) => (
             <FeedbackCard card={item} key={item.id} />
           ))}
@@ -178,7 +178,7 @@ const inMomentStyle: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) 
   return { display: 'flex', justifyContent: 'space-between', alignItems: 'center' };
 };
 
-const сardsBlockStyle: Rule = () => {
+const cardBlockStyle: Rule = () => {
   return {
     display: 'flex',
     justifyContent: 'space-between',

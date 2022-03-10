@@ -1,52 +1,25 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC } from 'react';
 import { Rule, useStyle } from '@dex-ddl/core';
+import useSearchColleagues from 'hooks/useSearchColleagues';
 import { Item } from 'components/Form';
 import SearchInput from 'components/SearchInput';
-import { useDispatch, useSelector } from 'react-redux';
-import { ColleaguesActions, getColleaguesSelector } from '@pma/store';
 import defaultImg from 'images/default.png';
 
 type Props = {
   onSelect: (person: any) => void;
-  selected: Array<string>;
+  selected: Array<{ value: string; label: string }>;
   error: string;
 };
 
 const ColleaguesFinder: FC<Props> = ({ onSelect, error, selected }) => {
-  const dispatch = useDispatch();
-  const [searchValue, setSearchValue] = useState('');
   const { css } = useStyle();
 
-  const colleagues = useSelector(getColleaguesSelector) || [];
-
-  const handleSearchColleagues = (e) => {
-    setSearchValue(e.target.value);
-  };
-
-  useEffect(() => {
-    if (searchValue === '' || searchValue.length <= 1) {
-      dispatch(ColleaguesActions.clearColleagueList());
-      return;
-    }
-
-    dispatch(
-      ColleaguesActions.getColleagues({
-        'first-name_like': searchValue,
-        'last-name_like': searchValue,
-      }),
-    );
-  }, [searchValue]);
-
-  useEffect(() => {
-    return () => {
-      dispatch(ColleaguesActions.clearColleagueList());
-    };
-  }, []);
+  const { colleagues, handleSearchColleagues, clearColleagueList } = useSearchColleagues();
 
   const handleChange = (e: any) => {
     const { colleagueUUID, profile } = e.colleague;
     onSelect([...selected, { value: colleagueUUID, label: `${profile?.firstName} ${profile?.lastName}` }]);
-    dispatch(ColleaguesActions.clearColleagueList());
+    clearColleagueList();
   };
 
   return (
@@ -54,12 +27,11 @@ const ColleaguesFinder: FC<Props> = ({ onSelect, error, selected }) => {
       <div className={css({ marginTop: '32px' })} data-test-id='search-part'>
         <Item errormessage={error}>
           <SearchInput
-            value={searchValue}
-            name={`search_option`}
+            name={'search_option'}
             onChange={handleChange}
-            onSearch={handleSearchColleagues}
+            onSearch={(e) => handleSearchColleagues(e.target.value)}
             onClear={() => onSelect([])}
-            onDelete={(colleagueUuid) => onSelect(selected.filter((value) => value === colleagueUuid))}
+            onDelete={(colleagueUuid) => onSelect(selected.filter(({ value }) => value !== colleagueUuid))}
             placeholder={'Search'}
             options={colleagues || []}
             selected={selected}

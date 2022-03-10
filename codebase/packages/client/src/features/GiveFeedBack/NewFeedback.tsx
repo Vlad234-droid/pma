@@ -48,7 +48,7 @@ enum Statuses {
   INFO = 'info',
 }
 
-const GiveNewFeedback: FC = () => {
+const NewFeedback: FC = () => {
   const dispatch = useDispatch();
   const [status, setStatus] = useState(Statuses.PENDING);
   const { uuid } = useParams<{ uuid: string }>();
@@ -206,4 +206,4 @@ const modalTitleOptionStyle: Rule = () => {
   };
 };
 
-export default GiveNewFeedback;
+export default NewFeedback;
