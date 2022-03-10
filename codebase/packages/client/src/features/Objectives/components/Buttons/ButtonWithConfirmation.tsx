@@ -1,5 +1,5 @@
 import React, { FC, HTMLProps, useState } from 'react';
-import { Rule, useStyle, CreateRule, Theme } from '@dex-ddl/core';
+import { Rule, useStyle, CreateRule, Button } from '@dex-ddl/core';
 import { ConfirmModal } from 'features/Modal';
 import { IconButton } from 'components/IconButton';
 import { Trans } from 'components/Translation';
@@ -30,7 +30,7 @@ const ButtonWithConfirmation: FC<Props> = ({
   withIcon = false,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const { css, theme } = useStyle();
+  const { css } = useStyle();
 
   return (
     <>
@@ -46,21 +46,17 @@ const ButtonWithConfirmation: FC<Props> = ({
           {buttonName}
         </IconButton>
       ) : (
-        // <Button
-        //   styles={[...styles, isDisabled ? { opacity: 0.4 } : {}]}
-        //   onPress={() => setIsOpen(true)}
-        //   isDisabled={isDisabled}
-        // >
-        //   {buttonName}
-        // </Button>
-        <button 
-          className={css(...styles, btnStyles({isDisabled, theme}), isDisabled ? { opacity: 0.4 } : {})}
+        <div
           title={isDisabled ? disabledBtnTooltip : ''}
-          disabled={isDisabled}
-          onClick={() => console.log('as')}
+          className={css(...styles, btnStyles({isDisabled}))}
         >
-          {buttonName}
-        </button>
+          <Button
+            onPress={() => setIsOpen(true)}
+            isDisabled={isDisabled}
+          >
+            {buttonName}
+          </Button>
+        </div>
       )}
       {isOpen && (
         <ConfirmModal
@@ -79,13 +75,11 @@ const ButtonWithConfirmation: FC<Props> = ({
   );
 };
 
-const btnStyles: CreateRule<{isDisabled: boolean, theme: Theme}> = ({ isDisabled, theme }) => {
+const btnStyles: CreateRule<{isDisabled: boolean}> = ({ isDisabled }) => {
   return {
-    borderRadius: '20px',
-    border: 0,
-    color: theme.colors.white,
     cursor: isDisabled ? 'default' : 'pointer',
-    
+    opacity: isDisabled ? 0.4 : 1,
+    borderRadius: '32px',
   }
 }
 

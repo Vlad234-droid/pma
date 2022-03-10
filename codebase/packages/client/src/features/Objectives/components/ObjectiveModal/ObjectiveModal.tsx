@@ -233,7 +233,7 @@ export const ObjectiveModal: FC<Props> = ({
                     <SubmitButton
                       isDisabled={!isValid}
                       onSave={onSubmit}
-                      disabledBtnTooltip={'Action enabled when mandatory fields are completed'}
+                      disabledBtnTooltip={t('action_enabled', 'Action enabled when mandatory fields are completed')}
                       styles={[
                         theme.font.fixed.f16,
                         {
