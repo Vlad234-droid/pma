@@ -8,6 +8,7 @@ import {
   getProcessTemplateMetadata,
   uploadProcessTemplate,
   deleteProcessTemplate,
+  deleteAllProcessTemplate,
 } from './actions';
 import { concatWithErrorToast, errorPayloadConverter } from '../../utils/toastHelper';
 
@@ -104,10 +105,28 @@ export const deleteProcessTemplateEpic: Epic = (action$, _, { openapi }) =>
       );
     }),
   );
+export const deleteAllProcessTemplateEpic: Epic = (action$, _, { api }) =>
+  action$.pipe(
+    filter(isActionOf(deleteAllProcessTemplate.request)),
+    switchMap(({ payload }) => {
+      const { deletePayload, processTemplatePayload } = payload;
+
+      //@ts-ignore
+      return from(api.deleteAllVersionsFile(deletePayload)).pipe(
+        //@ts-ignore
+        mergeMap(() => {
+          //@ts-ignore
+          return from([deleteAllProcessTemplate.success(), getProcessTemplate.request(processTemplatePayload)]);
+        }),
+        catchError(({ errors }) => of(deleteAllProcessTemplate.failure(errors))),
+      );
+    }),
+  );
 
 export default combineEpics(
   getProcessTemplateEpic,
   getProcessTemplateMetadataEpic,
   uploadProcessTemplateEpic,
   deleteProcessTemplateEpic,
+  deleteAllProcessTemplateEpic,
 );

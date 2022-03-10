@@ -18,6 +18,7 @@ export const getProcessTemplateSelector = createSelector(processTemplateSelector
       createdTime: process.createdTime,
       fileName: process.fileName,
       path: process.path,
+      version: process.version,
     })) || []
   );
 });

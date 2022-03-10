@@ -380,5 +380,7 @@
   "objectives_statistics_not_found": "Objectives statistics not found",
   "field_required": "This field is required",
   "field_min_length": "Must be at least {{min}} characters",
-  "field_max_length": "Must be at most {{max}} characters"
+  "field_max_length": "Must be at most {{max}} characters",
+  "file_extension_is_not_allowed": "File extension is not allowed",
+  "please_select_another_file_extension": "Please select another file extension"
 }
