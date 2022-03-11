@@ -1,5 +1,5 @@
 import React, { FC, HTMLProps, useEffect, useState } from 'react';
-import { CreateRule, Modal, Rule, Styles, useBreakpoints, useStyle } from '@dex-ddl/core';
+import { Button, CreateRule, Modal, Rule, Styles, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { DropZone } from 'components/DropZone';
 import Upload from 'images/Upload.svg';
 import { Input } from 'components/Form';
@@ -7,13 +7,15 @@ import { currentUserSelector, getPreviousReviewFilesSelector, PreviousReviewFile
 import useDispatch from 'hooks/useDispatch';
 import { useSelector } from 'react-redux';
 import { File } from './File';
-import { useTranslation } from 'components/Translation';
+import { Trans, useTranslation } from 'components/Translation';
 
 export type PreviousReviewFilesModal = {
   onOverlayClick: () => void;
 };
 
 type Props = HTMLProps<HTMLInputElement> & PreviousReviewFilesModal;
+
+const MAX_FILES_LENGTH = 10;
 
 const PreviousReviewFilesModal: FC<Props> = ({ onOverlayClick }) => {
   const { css } = useStyle();
@@ -25,9 +27,13 @@ const PreviousReviewFilesModal: FC<Props> = ({ onOverlayClick }) => {
   } = useSelector(currentUserSelector);
   const files: File[] = useSelector(getPreviousReviewFilesSelector) || [];
   const [filter, setFilteredValue] = useState('');
+  const [showModalLimitExceeded, setShowModalLimitExceeded] = useState(false);
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
 
-  const onUpload = (file) => dispatch(PreviousReviewFilesActions.uploadFile({ file, colleagueUUID }));
+  const onUpload = (file) => {
+    if (files.length >= MAX_FILES_LENGTH) return setShowModalLimitExceeded(true);
+    dispatch(PreviousReviewFilesActions.uploadFile({ file, colleagueUUID }));
+  };
   const filteredFiles = files?.filter(
     ({ fileName }) => !filter || fileName.toLowerCase().includes(filter.toLowerCase()),
   );
@@ -46,6 +52,19 @@ const PreviousReviewFilesModal: FC<Props> = ({ onOverlayClick }) => {
         title={{ content: '', styles: [modalStyles] }}
         onOverlayClick={onOverlayClick}
       >
+        {showModalLimitExceeded && (
+          <Modal
+            modalPosition={mobileScreen ? 'bottom' : 'middle'}
+            modalContainerRule={[containerRule({ mobileScreen })]}
+          >
+            <div className={css({ marginBottom: '18px', fontSize: '18px' })}>
+              <Trans i18nKey='file_limit_exceeded'>File limit exceeded</Trans>
+            </div>
+            <Button onPress={() => setShowModalLimitExceeded(false)}>
+              <Trans i18nKey='close'>Close</Trans>
+            </Button>
+          </Modal>
+        )}
         <Input onChange={handleChangeFilter} />
         <div className={css({ marginTop: '32px' })}>
           <DropZone onUpload={onUpload}>

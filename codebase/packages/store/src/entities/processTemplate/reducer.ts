@@ -4,6 +4,7 @@ import {
   getProcessTemplateMetadata,
   deleteProcessTemplate,
   uploadProcessTemplate,
+  deleteAllProcessTemplate,
 } from './actions';
 
 export const initialState = {
@@ -60,6 +61,20 @@ export default createReducer(initialState)
     ...state,
     meta: { ...state.meta, loading: false, loaded: true, error: payload },
   }))
+
+  .handleAction(deleteAllProcessTemplate.request, (state) => ({
+    ...state,
+    meta: { ...state.meta, loading: true },
+  }))
+  .handleAction(deleteAllProcessTemplate.success, (state) => ({
+    ...state,
+    meta: { ...state.meta, loading: false, loaded: true },
+  }))
+  .handleAction(deleteAllProcessTemplate.failure, (state, { payload }) => ({
+    ...state,
+    meta: { ...state.meta, loading: false, loaded: true, error: payload },
+  }))
+
   .handleAction(uploadProcessTemplate.request, (state) => ({
     ...state,
     meta: { ...state.meta, loading: true },

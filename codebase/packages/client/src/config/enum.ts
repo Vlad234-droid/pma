@@ -59,6 +59,16 @@ export enum FileId {
   DOC,
 }
 
+export enum FileExtensions {
+  BPMN = 'BPMN',
+  FORM = 'FORM',
+  PDF = 'PDF',
+  PPT = 'PPT',
+  XLS = 'XLS',
+  DMN = 'DMN',
+  DOC = 'DOC',
+}
+
 export enum SortFileValue {
   newToOld = 'created-time:DESC',
   oldToNew = 'created-time:ASC',

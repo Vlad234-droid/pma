@@ -23,35 +23,45 @@ import {
   exceptableFiles,
   filterFileType,
   FilterType,
+  checkForExtenstion,
+  setAdditionalFields,
 } from './config';
 import { getFileType } from 'utils/file';
 import Upload from 'images/Upload.svg';
 import { BASE_URL_API } from 'config/constants';
+import { useToast, Variant } from 'features/Toast';
+
+type File = {
+  createdTime: string;
+  fileName: string;
+  label: string;
+  path: string;
+  value: string;
+  version: number;
+};
 
 const PerformanceCyclesTemplates: FC = () => {
+  const { addToast } = useToast();
   const { t } = useTranslation();
   const { css } = useStyle();
   const dispatch = useDispatch();
   const [, isBreakpoint] = useBreakpoints();
   const templatesList = useSelector(getProcessTemplateSelector) || [];
 
-  const [filterModal, setFilterModal] = useState(false);
-
+  const [sortModal, setSortModal] = useState(false);
+  const [extensionModal, setExtensionModal] = useState(false);
   const small = isBreakpoint.small || isBreakpoint.xSmall;
-
   const [focus, setFocus] = useState(false);
   const [filter, setFilter] = useState<FilterType>(initialFilters);
 
   const [modalStatus, setModalStatus] = useState<DeleteStatuses>(DeleteStatuses.PENDING);
-  const [selectedFile, setSelectedFile] = useState<Record<string, string>>({});
-
-  const hasActiveFilter = Object.values(filter).some((f) => f);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const processTemplatePayload = (filter) => {
     return {
       ...(filter.search.length > 2 && { _search: filter.search }),
-      _sort: getSortString(filter),
-      type: filterFileType(filter.sort)?.toString(),
+      _sort: getSortString(filter.sort),
+      type: filterFileType(filter.extension)?.toString(),
     };
   };
 
@@ -69,16 +79,29 @@ const PerformanceCyclesTemplates: FC = () => {
   const downloadFile = (uuid) => `${BASE_URL_API}/files/${uuid}/download`;
 
   const deleteFileHandler = () => {
+    const toDelete = selectedFile?.version === 1;
     const payload = {
       deletePayload: {
-        fileUuid: selectedFile.value,
+        ...(toDelete
+          ? { fileUuid: selectedFile?.value }
+          : { path: selectedFile?.path, fileName: selectedFile?.fileName }),
       },
       processTemplatePayload: processTemplatePayload(filter),
     };
-    dispatch(ProcessTemplateActions.deleteProcessTemplate(payload));
+    toDelete
+      ? dispatch(ProcessTemplateActions.deleteProcessTemplate(payload))
+      : dispatch(ProcessTemplateActions.deleteAllProcessTemplate(payload));
   };
 
   const onUpload = (file) => {
+    if (!checkForExtenstion(file.name))
+      return addToast({
+        id: Date.now().toString(),
+        title: t('file_extension_is_not_allowed', 'File extension is not allowed'),
+        variant: Variant.ERROR,
+        description: t('please_select_another_file_extension', 'Please select another file extension'),
+      });
+
     setFilter(initialFilters);
     if (focus) setFocus(false);
     dispatch(
@@ -93,20 +116,35 @@ const PerformanceCyclesTemplates: FC = () => {
     <div data-test-id={PERFOMANCE_WRAPPER}>
       <div className={css(filterIconStyled({ small }))}>
         <div className={css(containerWrapper({ small }))}>
-          <DropZone onUpload={onUpload} styles={{ width: '270px' }} accept={exceptableFiles as string}>
+          <DropZone onUpload={onUpload} styles={{ width: '270px' }} accept={exceptableFiles}>
             <img className={css({ maxWidth: 'inherit' })} src={Upload} alt='Upload' />
             <span className={css(labelStyles)}>{t('Drop file here or click to upload')}</span>
             <span className={css(descriptionStyles)}>{t('Maximum upload size 5MB')}</span>
           </DropZone>
         </div>
         <div className={css(containerWrapper({ small }))}>
+          <IconButton
+            //TODO: replace settings to another icon, when it will be available
+            graphic='settings'
+            customVariantRules={{
+              default: iconBtnStyle({ isActive: !!filter.extension }),
+            }}
+            iconStyles={iconStyle}
+            iconProps={{
+              invertColors: !!filter.extension,
+            }}
+            onPress={() => {
+              setExtensionModal((prev) => !prev);
+              setSortModal(false);
+            }}
+          />
           <FilterOption
             focus={focus}
             customIcon={true}
             onFocus={setFocus}
             searchValue={filter.search}
             onChange={(e) => setFilter({ ...filter, search: e.target.value })}
-            hasActiveFilter={hasActiveFilter}
+            hasActiveFilter={!!filter.sort || !!filter.search}
             withIcon={false}
             customStyles={{
               ...(focus
@@ -114,27 +152,49 @@ const PerformanceCyclesTemplates: FC = () => {
                 : { padding: 0, transitionDelay: '.3s' }),
             }}
             onSettingsPress={() => {
-              setFilterModal((prev) => !prev);
+              setSortModal((prev) => !prev);
+              setExtensionModal(false);
             }}
             testSettingsId={SETTINGS_BTN_ID}
             wrapperInputId={WRAPPER_INPUT_ID}
             inputTestId={INPUT_TEST_ID}
           />
+          {Object.values(filter).some((f) => f) && (
+            <IconButton
+              graphic='decline'
+              customVariantRules={{
+                default: iconBtnStyle({ isActive: false }),
+              }}
+              iconStyles={{
+                ...iconStyle,
+                top: '0px',
+                left: '0px',
+              }}
+              iconProps={{
+                invertColors: false,
+              }}
+              onPress={() => {
+                setFilter(initialFilters);
+                setFocus(false);
+              }}
+            />
+          )}
           <FilterModal
-            isOpen={filterModal}
+            isOpen={sortModal}
             filter={filter}
             setFilter={setFilter}
-            toggleOpen={setFilterModal}
+            toggleOpen={setSortModal}
             testId={FILTER_MODAL_ID}
-            additionalFields={[
-              { id: '5', label: 'BPMN', checked: filter.sort.includes('BPMN'), text: 'BPMN' },
-              { id: '6', label: 'FORM', checked: filter.sort.includes('FORM'), text: 'FORM' },
-              { id: '7', label: 'PDF', checked: filter.sort.includes('PDF'), text: 'PDF' },
-              { id: '8', label: 'PPT', checked: filter.sort.includes('PPT'), text: 'PPT' },
-              { id: '9', label: 'XLS', checked: filter.sort.includes('XLS'), text: 'XLS' },
-              { id: '10', label: 'DMN', checked: filter.sort.includes('DMN'), text: 'DMN' },
-              { id: '11', label: 'DOC', checked: filter.sort.includes('DOC'), text: 'DOC' },
-            ]}
+          />
+
+          <FilterModal
+            isOpen={extensionModal}
+            filter={filter}
+            setFilter={setFilter}
+            toggleOpen={setExtensionModal}
+            customFields={true}
+            additionalFields={setAdditionalFields(filter.extension)}
+            title='Filter by file extensions'
           />
         </div>
       </div>
@@ -188,7 +248,7 @@ const PerformanceCyclesTemplates: FC = () => {
               deleteFileHandler();
             } else {
               setModalStatus(() => DeleteStatuses.PENDING);
-              setSelectedFile(() => ({}));
+              setSelectedFile(() => null);
             }
           }}
           submitBtnTitle={
@@ -200,7 +260,7 @@ const PerformanceCyclesTemplates: FC = () => {
           }
           onOverlayClick={() => {
             setModalStatus(() => DeleteStatuses.PENDING);
-            setSelectedFile(() => ({}));
+            setSelectedFile(() => null);
           }}
           visibleCancelBtn={!(modalStatus === DeleteStatuses.SUBMITTED)}
         />
@@ -208,6 +268,37 @@ const PerformanceCyclesTemplates: FC = () => {
     </div>
   );
 };
+
+const iconStyle: Rule = {
+  width: '16px',
+  height: '16px',
+  position: 'relative',
+  top: '2px',
+  left: '2px',
+};
+
+const iconBtnStyle: CreateRule<{ isActive: boolean }> =
+  ({ isActive }) =>
+  ({ theme }) => ({
+    background: isActive ? theme.colors.tescoBlue : theme.colors.white,
+    padding: '0',
+    marginLeft: '5px',
+    display: 'flex',
+    height: '38px',
+    width: '38px',
+    justifyContent: 'center',
+    alignItems: 'center',
+    outline: 0,
+    border: `1px solid ${theme.colors.tescoBlue}`,
+    borderRadius: '20px',
+    cursor: 'pointer',
+    position: 'relative',
+    '& > span': {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+  });
 
 const dateWrapper: Rule = {
   display: 'flex',

@@ -14,3 +14,6 @@ export const deleteFile = (params: any) => {
   const { fileUuid } = params;
   return httpClient.delete(`${domain}/${fileUuid}`);
 };
+export const deleteAllVersionsFile = (params: any) => {
+  return httpClient.delete(`${domain}/versions`, { params });
+};

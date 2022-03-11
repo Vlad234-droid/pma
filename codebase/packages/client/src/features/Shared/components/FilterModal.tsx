@@ -23,6 +23,8 @@ type Props = {
   toggleOpen: Dispatch<SetStateAction<boolean>>;
   testId?: string;
   additionalFields?: Array<AdditionalFieldsType>;
+  customFields?: boolean;
+  title?: string;
 };
 
 export const FilterModal: FC<Props> = ({
@@ -32,15 +34,18 @@ export const FilterModal: FC<Props> = ({
   toggleOpen,
   testId = '',
   additionalFields = [],
+  customFields = false,
+  title = 'Sort',
 }) => {
   const { css, theme } = useStyle();
   const choseHandler = (val: string) => {
-    setFilter((prev) => ({ ...prev, sort: val }));
+    if (!customFields) setFilter((prev) => ({ ...prev, sort: val }));
+    if (customFields) setFilter((prev) => ({ ...prev, extension: val }));
     toggleOpen(false);
   };
   const ref = useRef<HTMLDivElement | null>(null);
 
-  const fields = [
+  const sortableFields = [
     {
       id: '1',
       label: 'AZ',
@@ -65,7 +70,6 @@ export const FilterModal: FC<Props> = ({
       checked: filter.sort.includes('oldToNew'),
       text: 'Oldest to newest',
     },
-    ...additionalFields,
   ];
 
   const handleClickOutside = (event: MouseEvent<HTMLElement>) => {
@@ -77,10 +81,12 @@ export const FilterModal: FC<Props> = ({
 
   useEventListener('mousedown', handleClickOutside);
 
+  const fields = !customFields ? sortableFields : additionalFields;
+
   return (
     <div ref={ref} className={css(wrapperStyle({ theme, isOpen }))} data-test-id={testId}>
       <div className={css(columnStyle)}>
-        <span>Sort :</span>
+        <span>{title} :</span>
         {fields.map((item) => (
           <div className={css({ cursor: 'pointer', marginTop: '10px' })} key={item.id}>
             <label htmlFor={item.label} className={css(labelStyle)}>
@@ -119,7 +125,7 @@ const labelStyle: Rule = {
 const wrapperStyle: CreateRule<{ theme: Theme; isOpen: boolean }> = ({ theme, isOpen }) => {
   return {
     position: 'absolute',
-    width: '200px',
+    width: '208px',
     padding: '10px 16px 16px 16px',
     top: '40px',
     right: 0,

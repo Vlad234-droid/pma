@@ -1,15 +1,15 @@
 import React, { Dispatch, FC, SetStateAction, useState } from 'react';
-import { Notification } from 'components/Notification';
-import { useStyle, Rule, useBreakpoints, Button, CreateRule, Theme } from '@dex-ddl/core';
-import { SearchPart } from './SearchPart';
 import { UseFormReturn } from 'react-hook-form';
-import { PeopleTypes } from './type';
-import { IconButton, Position } from 'components/IconButton';
-import { SubmitPart } from './SubmitPart';
+import { useStyle, Rule, useBreakpoints, Button, CreateRule, Theme } from '@dex-ddl/core';
 import { NotesTypeTEAM, FoldersWithNotesTypesTEAM } from 'features/NotesActions/type';
+import { Notification } from 'components/Notification';
 import { Icon as IconComponent } from 'components/Icon';
-import { SuccessModal } from './SuccessModal';
 import { Trans, useTranslation } from 'components/Translation';
+import { IconButton, Position } from 'components/IconButton';
+import { SearchPart } from './SearchPart';
+import { PeopleTypes } from './type';
+import { SubmitPart } from './SubmitPart';
+import { SuccessModal } from './SuccessModal';
 
 type AddTeamNoteModalProps = {
   teamMethods: UseFormReturn;

@@ -25,7 +25,7 @@ export const SearchPart: FC<SearchPartProps> = ({
   const { css } = useStyle();
   const dispatch = useDispatch();
 
-  const findedCollegues = useSelector(getColleaguesSelector) || [];
+  const foundColleagues = useSelector(getColleaguesSelector) || [];
   const colleagueUuid = useSelector(colleagueUUIDSelector);
 
   const {
@@ -60,7 +60,7 @@ export const SearchPart: FC<SearchPartProps> = ({
           setSelectedPerson={setSelectedPerson}
           domRef={register(`search_option`).ref}
           placeholder={'Search'}
-          options={findedCollegues}
+          options={foundColleagues}
           setSearchValue={setSearchValue}
           searchValue={searchValue}
           selectedPerson={selectedPerson}
