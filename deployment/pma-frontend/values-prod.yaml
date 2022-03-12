@@ -81,24 +81,26 @@ tolerations: []
 
 affinity: {}
 
-NODE_PORT: 9000
-NODE_ENV: production
-NODE_CONFIG_ENV: prod
-BUILD_ENV: production
-PROXY_API_SERVER_URL: http://pma-api-service:8083
-INTEGRATION_MODE: standalone
-INTEGRATION_CORE_MOUNT_PATH: /
-INTEGRATION_CORE_URL: /
-INTEGRATION_MOUNT_PATH: /
-INTEGRATION_NODE_BFF_URL: /
-APPLICATION_PUBLIC_URL: /experience/yourcontribution
-APPLICATION_URL_ROOT: https://www.ourtesco.com
-APPLICATION_USER_DATA_COOKIE_NAME: pma.user.data
-USE_ONELOGIN: true
-ONELOGIN_ISSUER_URL: https://login.ourtesco.com/oidc/2
-ONELOGIN_CALLBACK_PATH: /sso/auth/callback
-ONELOGIN_REDIRECT_AFTER_LOGOUT_URL: https://login.ourtesco.com/oidc/2/logout?logout=true
-OIDC_GROUPS_ADMIN_ROLE: Admin
-OIDC_GROUPS_MANAGER_ROLE: Manager
-OIDC_GROUPS_VIEWER_ROLE: Viewer
-IDENTITY_USER_SCOPED_TOKEN_COOKIE_NAME: pma.identity.ust
+environment:
+  NODE_PORT: 9000
+  NODE_ENV: production
+  NODE_CONFIG_ENV: prod
+  BUILD_ENV: production
+  NODE_OPTIONS: --max-http-header-size=16384
+  PROXY_API_SERVER_URL: http://pma-api-service:8083
+  INTEGRATION_MODE: standalone
+  INTEGRATION_CORE_MOUNT_PATH: /
+  INTEGRATION_CORE_URL: /
+  INTEGRATION_MOUNT_PATH: /
+  INTEGRATION_NODE_BFF_URL: /
+  APPLICATION_PUBLIC_URL: /experience/yourcontribution
+  APPLICATION_URL_ROOT: https://www.ourtesco.com
+  APPLICATION_USER_DATA_COOKIE_NAME: tesco.userinfo
+  USE_ONELOGIN: true
+  ONELOGIN_ISSUER_URL: https://login.ourtesco.com/oidc/2
+  ONELOGIN_CALLBACK_PATH: /sso/auth/callback
+  ONELOGIN_REDIRECT_AFTER_LOGOUT_URL: https://login.ourtesco.com/oidc/2/logout?logout=true
+  OIDC_GROUPS_ADMIN_ROLE: Admin
+  OIDC_GROUPS_MANAGER_ROLE: Manager
+  OIDC_GROUPS_VIEWER_ROLE: Viewer
+  IDENTITY_USER_SCOPED_TOKEN_COOKIE_NAME: identity-user-scoped-token
