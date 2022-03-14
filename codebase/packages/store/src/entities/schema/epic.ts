@@ -46,7 +46,10 @@ export const getSchemaEpic: Epic = (action$, state$, { api }) =>
                 })?.length || 0;
 
               const updatedForms: any[] = addStrategicObjectiveInForms(
-                getPermittedForms(schema.forms, [...userRoles, ...userWorkLevels]),
+                getPermittedForms(
+                  schema.forms.filter((form) => form),
+                  [...userRoles, ...userWorkLevels],
+                ),
                 elementCount,
               );
               return of(getSchema.success({ current: { ...schema, forms: updatedForms } }));
