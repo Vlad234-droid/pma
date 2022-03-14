@@ -8,41 +8,17 @@ import {
   PDPActions,
   schemaMetaPDPSelector,
   TimelineActions,
-  timelineTypesAvailabilitySelector,
 } from '@pma/store';
 import { useNavigate } from 'react-router';
-import { ObjectiveType, PDPType, ReviewType } from 'config/enum';
 import DescriptionBlock from 'components/DescriptionBlock';
 import { Page } from 'pages';
 import { buildPath } from 'features/Routes';
 import { paramsReplacer } from 'utils';
 import { Icon } from 'components/Icon';
-import { BASE_URL_API } from 'config/constants';
+import { PDPType } from 'config/enum';
 import GoalInfo from '../GoalInfo';
+import { BASE_URL_API } from 'config/constants';
 import usePDPSchema from '../../hooks/usePDPSchema';
-
-const reviews = [
-  {
-    id: 'test-1',
-    title: 'Mid-year review',
-    description: 'Pharetra donec enim aenean aliquet consectetur ultrices amet vitae',
-    reviewType: ReviewType.MYR,
-  },
-  {
-    id: 'test-2',
-    title: 'End-year review',
-    description: 'Pharetra donec enim aenean aliquet consectetur ultrices amet vitae',
-    reviewType: ReviewType.EYR,
-  },
-];
-
-const annualReviews = [
-  {
-    id: 'test-3',
-    title: 'Annual performance review',
-    description: 'Pharetra donec enim aenean aliquet consectetur ultrices amet vitae',
-  },
-];
 
 export const TEST_ID = 'pdp-page';
 
@@ -62,9 +38,6 @@ const MyPersonalDevelopmentPlan: FC = () => {
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const [schema] = usePDPSchema(PDPType.PDP);
   const { components = [] } = schema;
-  const timelineTypes = useSelector(timelineTypesAvailabilitySelector('me'));
-  const canShowMyReview = timelineTypes[ObjectiveType.MYR] && timelineTypes[ObjectiveType.EYR];
-  const canShowAnnualReview = !timelineTypes[ObjectiveType.MYR] && timelineTypes[ObjectiveType.EYR];
 
   const formElements = components.filter((component) => component.type != 'text');
 
@@ -84,14 +57,6 @@ const MyPersonalDevelopmentPlan: FC = () => {
   );
 
   const [instance, updateInstance] = usePDF({ document });
-
-  // TODO: this probably should be removed or used somewhere
-  const createdReviews: any = [];
-  if (canShowMyReview) {
-    createdReviews.push(...reviews);
-  } else if (canShowAnnualReview) {
-    createdReviews.push(...annualReviews);
-  }
 
   const navToGoalPage = () => navigate(buildPath(Page.CREATE_PERSONAL_DEVELOPMENT_PLAN));
 

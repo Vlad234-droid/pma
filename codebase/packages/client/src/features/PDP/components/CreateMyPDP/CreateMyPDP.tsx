@@ -7,9 +7,8 @@ import { colleagueUUIDSelector, PDPActions, schemaMetaPDPSelector } from '@pma/s
 import { buildPath } from 'features/Routes';
 import { Page } from 'pages';
 import { PDPType } from 'config/enum';
-
-import usePDPSchema from '../../hooks/usePDPSchema';
 import Form from '../Form';
+import usePDPSchema from '../../hooks/usePDPSchema';
 
 export const TEST_ID = 'create-pdp';
 
