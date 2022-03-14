@@ -54,6 +54,7 @@ const pieChartWrapper: Rule = ({ theme }) => ({
   boxShadow: '3px 3px 1px 1px rgba(0, 0, 0, 0.05)',
   borderRadius: '10px',
   padding: '24px',
+  width: '100%',
 });
 
 const chartContainer: CreateRule<{ display: View.CHART | View.QUANTITY }> = ({ display }) => ({

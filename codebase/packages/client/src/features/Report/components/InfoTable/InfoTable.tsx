@@ -59,6 +59,7 @@ const infoTableWrapper: Rule = ({ theme }) => ({
   background: theme.colors.white,
   boxShadow: '3px 3px 1px 1px rgba(0, 0, 0, 0.05)',
   borderRadius: '10px',
+  width: '100%',
 });
 const titleStyle: CreateRule<{ preTitle: string; theme: Theme }> = ({ preTitle, theme }) => ({
   color: theme.colors.link,

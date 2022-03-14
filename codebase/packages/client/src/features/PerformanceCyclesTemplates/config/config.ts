@@ -1,4 +1,4 @@
-import { FileId, SortFileValue , FileExtensions } from 'config/enum';
+import { FileId, SortFileValue, FileExtensions } from 'config/enum';
 import { getFileExtension } from 'utils/file';
 export const exceptableFiles = '.pdf, .bpmn, .form, .ppt, .xls, .dmn, .doc';
 

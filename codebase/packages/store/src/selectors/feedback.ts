@@ -62,3 +62,5 @@ export const getRespondedFeedbacksSelector = (status) =>
 
     return respond?.filter((item) => item.status === status) ?? [];
   });
+
+export const getLoadedStateSelector = createSelector(feedbackSelector, ({ feedbacks: { meta } }) => meta);

@@ -1,15 +1,17 @@
 import React, { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useStyle, Rule, Styles, colors } from '@dex-ddl/core';
+import { useSelector } from 'react-redux';
+import { getLoadedStateSelector } from '@pma/store';
+import { Page } from 'pages';
 
+import { Accordion, BaseAccordion, Section, Panel, ExpandButton } from 'components/Accordion';
+import IconButtonDefault from 'components/IconButtonDefault';
 import { NoFeedback } from 'features/Feedback/components';
 import { TileWrapper } from 'components/Tile';
-import { Accordion, BaseAccordion, Section, Panel, ExpandButton } from 'components/Accordion';
-import { formatToRelativeDate, paramsReplacer } from 'utils';
-import { Page } from 'pages';
-import IconButtonDefault from 'components/IconButtonDefault';
 
 import defaultImg from 'images/default.png';
+import { formatToRelativeDate, paramsReplacer } from 'utils';
 
 type Props = {
   list: Array<any>;
@@ -17,12 +19,13 @@ type Props = {
 };
 
 const FeedbackBlock: FC<Props> = ({ list, canEdit }) => {
+  const { loaded } = useSelector(getLoadedStateSelector);
+
   const { css } = useStyle();
   const navigate = useNavigate();
 
-  if (!list.length) {
-    return <NoFeedback />;
-  }
+  if (!loaded) return null;
+  if (loaded && !list.length) return <NoFeedback />;
 
   return (
     <>

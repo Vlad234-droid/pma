@@ -1,6 +1,7 @@
 import React, { Dispatch, FC, SetStateAction } from 'react';
 import { useStyle, useBreakpoints, Rule } from '@dex-ddl/core';
 import { Trans } from 'components/Translation';
+import { FeedbackStatus } from 'config/enum';
 
 import { Radio } from 'components/Form';
 
@@ -8,25 +9,15 @@ type filterFeedbacksType = {
   sort: string;
   search: string;
 };
-type TypecheckedRadio = {
-  pending: boolean;
-  completed: boolean;
-};
+
 type RadioBtnsProps = {
-  checkedRadio: TypecheckedRadio;
-  setCheckedRadio: Dispatch<SetStateAction<TypecheckedRadio>>;
+  status: string;
+  setStatus: Dispatch<SetStateAction<FeedbackStatus>>;
   setFilterModal: Dispatch<SetStateAction<boolean>>;
   filterModal: boolean;
-  setFilterFeedbacks: Dispatch<SetStateAction<filterFeedbacksType>>;
 };
 
-const RadioBtns: FC<RadioBtnsProps> = ({
-  checkedRadio,
-  setCheckedRadio,
-  setFilterModal,
-  filterModal,
-  setFilterFeedbacks,
-}) => {
+const RadioBtns: FC<RadioBtnsProps> = ({ status, setStatus, setFilterModal, filterModal }) => {
   const { css } = useStyle();
 
   return (
@@ -35,17 +26,12 @@ const RadioBtns: FC<RadioBtnsProps> = ({
         <label htmlFor='pending' className={css(FlexCenterStyle)}>
           <Radio
             name='status1'
-            checked={checkedRadio.pending}
+            checked={status === FeedbackStatus.PENDING}
             id='pending'
             onChange={() => {
               if (filterModal) setFilterModal(() => false);
-              setFilterFeedbacks(() => ({ sort: '', search: '' }));
-              setCheckedRadio(() => {
-                return {
-                  pending: true,
-                  completed: false,
-                };
-              });
+
+              setStatus(FeedbackStatus.PENDING);
             }}
           />
           <span className={css(SizeStyle)}>
@@ -58,17 +44,11 @@ const RadioBtns: FC<RadioBtnsProps> = ({
           <Radio
             id='completed'
             name='status2'
-            checked={checkedRadio.completed}
+            checked={status === FeedbackStatus.COMPLETED}
             onChange={() => {
               if (filterModal) setFilterModal(() => false);
-              setFilterFeedbacks(() => ({ sort: '', search: '' }));
 
-              setCheckedRadio(() => {
-                return {
-                  pending: false,
-                  completed: true,
-                };
-              });
+              setStatus(FeedbackStatus.COMPLETED);
             }}
           />
           <span className={css(SizeStyle)}>

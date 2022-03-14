@@ -69,7 +69,7 @@ const NewFeedback: FC = () => {
       dispatch(FeedbackActions.createNewFeedback([{ ...data, colleagueUuid }]));
     } else {
       dispatch(
-        FeedbackActions.updatedFeedback({
+        FeedbackActions.updateFeedback({
           ...data,
           feedbackItems: data.feedbackItems.map((item) => ({
             ...item,

@@ -384,5 +384,6 @@
   "action_enabled": "Action enabled when mandatory fields are completed",
   "file_extension_is_not_allowed": "File extension is not allowed",
   "please_select_another_file_extension": "Please select another file extension",
-  "file_limit_exceeded": "File limit exceeded"
+  "file_limit_exceeded": "File limit exceeded",
+  "view_previous_years": "View previous years"
 }

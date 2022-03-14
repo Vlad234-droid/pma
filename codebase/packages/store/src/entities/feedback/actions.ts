@@ -13,7 +13,7 @@ export const readFeedback = createAsyncAction(
   'feedback/READ_FAILURE',
 )<any, any, Error>();
 
-export const updatedFeedback = createAsyncAction(
+export const updateFeedback = createAsyncAction(
   'feedback/updatedFeedback_REQUEST',
   'feedback/updatedFeedback_SUCCESS',
   'feedback/updatedFeedback_FAILURE',
@@ -59,7 +59,7 @@ export const getRequestedFeedbacks = createAsyncAction(
 export const Actions = {
   createNewFeedback: createNewFeedback.request,
   readFeedback: readFeedback.request,
-  updatedFeedback: updatedFeedback.request,
+  updateFeedback: updateFeedback.request,
   getObjectiveReviews: getObjectiveReviews.request,
   getGiveFeedback: getGiveFeedback.request,
   getRespondFeedback: getRespondFeedback.request,
