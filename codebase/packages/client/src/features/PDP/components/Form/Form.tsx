@@ -124,7 +124,9 @@ const Form: FC<Props> = ({
       {pdpList && (
         <div className={css(goalListBlock)}>
           {pdpList.length < 1 || !pdpList ? (
-            <div className={`${css(goal)} ${css(defaultGoalItem)}`}>Goal 1</div>
+            <div className={`${css(goal)} ${css(defaultGoalItem)}`}>
+              <Trans i18nKey='goal'>Goal</Trans> 1
+            </div>
           ) : !currentUUID ? (
             pdpList.map((el, idx) => {
               return (
@@ -136,7 +138,7 @@ const Form: FC<Props> = ({
                       idx <= goalNum && currentGoal?.uuid !== el.uuid ? css(activeGoalItem) : css(defaultGoalItem)
                     }`}
                   >
-                    Goal {idx + 1}
+                    {`${t('goal', 'Goal')} ${idx + 1}`}
                   </div>
                   {idx === goalNum && idx + 1 < maxGoals && (
                     <div
@@ -148,7 +150,7 @@ const Form: FC<Props> = ({
                       }}
                       className={`${css(goal)} ${isCurrentGoal ? css(activeGoalItem) : css(defaultGoalItem)}`}
                     >
-                      Goal {idx + 2}
+                      {`${t('goal', 'Goal')} ${idx + 2}`}
                     </div>
                   )}
                 </React.Fragment>
@@ -162,7 +164,7 @@ const Form: FC<Props> = ({
                   onClick={() => setCurrentGoal(el)}
                   className={`${css(goal)} ${css(defaultGoalItem)}`}
                 >
-                  Goal {el?.number}
+                  {`${t('goal', 'Goal')} ${el?.number}`}
                 </div>
               </React.Fragment>
             ))
@@ -172,7 +174,7 @@ const Form: FC<Props> = ({
       <Attention />
       {confirmSaveModal && (
         <ConfirmModal
-          title={'Are you sure you want to save this goal?'}
+          title={t('are_you_sure_you_want_to_save_this_goal', 'Are you sure you want to save this goal?')}
           description={' '}
           submitBtnTitle={<Trans i18nKey='confirm'>Confirm</Trans>}
           onSave={() => {
@@ -188,7 +190,7 @@ const Form: FC<Props> = ({
 
       {confirmSaveNextModal && (
         <ConfirmModal
-          title={'Are you sure you want to save this goal?'}
+          title={t('are_you_sure_you_want_to_save_this_goal', 'Are you sure you want to save this goal?')}
           description={' '}
           submitBtnTitle={<Trans i18nKey='confirm'>Confirm</Trans>}
           onSave={() => {
@@ -249,7 +251,7 @@ const Form: FC<Props> = ({
           onPress={() => setConfirmModal(!confirmSaveModal)}
           styles={isLessThanMaxGoals ? [customBtnFullWidth] : [customBtn({ mobileScreen })]}
         >
-          Save & Exit
+          <Trans i18nKey='save_and_exit'>Save & Exit</Trans>
         </Button>
 
         {displaySaveBtn && (
@@ -262,7 +264,8 @@ const Form: FC<Props> = ({
             }}
             styles={[customBtn({ mobileScreen }), createBtn]}
           >
-            Save & create a new goal <img className={css(imgArrow)} alt='arrow' src={arrLeft} />
+            <Trans i18nKey='save_and_create_new_goal'>Save & create a new goal</Trans>{' '}
+            <img className={css(imgArrow)} alt='arrow' src={arrLeft} />
           </Button>
         )}
       </div>
