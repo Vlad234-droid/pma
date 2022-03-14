@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     flexShrink: 1,
     flexBasis: 50,
-    marginBottom: 20,
+    paddingBottom: 100,
   },
   titleWrapper: {
     marginBottom: 10,
@@ -80,17 +80,20 @@ const styles = StyleSheet.create({
   },
   subTitleWrapper: {
     marginBottom: 10,
+    maxHeight: 500,
+    marginTop: 10,
   },
   subTitle: {
     fontSize: 15,
     fontWeight: 'bold',
     marginBottom: 5,
+    maxHeight: 500,
   },
   description: {
     fontSize: 14,
     color: '#808080',
     marginTop: 20,
-    maxHeight: 600,
+    maxHeight: 800,
   },
   body: {
     maxHeight: 1500,
