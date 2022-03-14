@@ -2,7 +2,7 @@ import React, { FC, useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
 import { useForm } from 'react-hook-form';
-import { Button, Icon, Rule, useBreakpoints, useStyle } from '@dex-ddl/core';
+import { Button, Icon, Rule, Styles, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
   currentUserSelector,
@@ -289,18 +289,27 @@ const ReviewFormModal: FC<ReviewFormModal> = ({ reviewType, onClose }) => {
                 const defaultTag: Rule = ({ theme }) => ({
                   margin: '0px',
                   color: theme.colors.base,
-                  fontSize: '16px',
-                  lineHeight: '20px',
+                  fontSize: '18px',
+                  lineHeight: '22px',
                 });
 
                 const components = { p: CustomPTag };
                 return (
-                  <div style={{ padding: '10px 0' }} key={id}>
+                  <div style={{ margin: '24px 0' }} key={id}>
                     <div
                       className={css({
-                        fontSize: '16px',
-                        lineHeight: '20px',
-                      })}
+                        padding: 0,
+                        '& > p': {
+                          margin: '0px',
+                          fontSize: '16px',
+                          lineHeight: '20px',
+                        },
+                        '& > h2': {
+                          margin: '0px',
+                          fontSize: '18px',
+                          lineHeight: '22px',
+                        },
+                      } as Styles)}
                     >
                       <MarkdownRenderer components={components} source={text} />
                     </div>

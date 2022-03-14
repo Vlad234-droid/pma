@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { colors, useStyle } from '@dex-ddl/core';
+import { CreateRule, Theme, useStyle } from '@dex-ddl/core';
 import mergeRefs from 'react-merge-refs';
 
 import { InputField } from '../types';
@@ -20,7 +20,7 @@ const Input: FC<InputField> = ({
   min,
   defaultValue,
 }) => {
-  const { css } = useStyle();
+  const { css, theme } = useStyle();
   const { inputRef, setFocus } = useFormContainer();
 
   return (
@@ -46,22 +46,25 @@ const Input: FC<InputField> = ({
       readOnly={readonly}
       min={min}
       defaultValue={defaultValue}
-      className={css({
-        width: '100%',
-        border: `1px solid ${isValid ? colors.backgroundDarkest : colors.error}`,
-        borderRadius: '5px',
-        fontSize: '14px',
-        lineHeight: '18px',
-        padding: '10px 40px 10px 16px',
-        ':focus': {
-          outline: 'none !important',
-          border: `1px solid ${colors.tescoBlue}`,
-        },
+      className={css(inputStyle({ isValid, theme }), {
         ...(customStyles && customStyles),
       })}
       placeholder={placeholder}
     />
   );
 };
+
+const inputStyle: CreateRule<{ isValid?: boolean; theme: Theme }> = ({ isValid, theme }) => ({
+  width: '100%',
+  border: `1px solid ${isValid ? theme.colors.lightGray : theme.colors.error}`,
+  borderRadius: '5px',
+  fontSize: '14px',
+  lineHeight: '18px',
+  padding: '10px 40px 10px 16px',
+  ':focus': {
+    outline: 'none !important',
+    border: `1px solid ${theme.colors.tescoBlue}`,
+  },
+});
 
 export default Input;

@@ -1,5 +1,5 @@
 import React, { FC, useState, useEffect, useRef } from 'react';
-import { colors, useStyle } from '@dex-ddl/core';
+import { useStyle, CreateRule, Theme } from '@dex-ddl/core';
 import mergeRefs from 'react-merge-refs';
 
 import { TextareaField } from '../types';
@@ -15,7 +15,7 @@ const Textarea: FC<TextareaField> = ({
   isValid,
   readonly = false,
 }) => {
-  const { css } = useStyle();
+  const { css, theme } = useStyle();
   const { inputRef, setFocus } = useFormContainer();
 
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
@@ -47,25 +47,27 @@ const Textarea: FC<TextareaField> = ({
       onChange={textAreaChange}
       onFocus={() => setFocus(true)}
       onBlur={() => setFocus(false)}
-      className={css({
-        width: '100%',
-        minHeight: '40px',
-        border: `1px solid ${isValid ? colors.backgroundDarkest : colors.error}`,
-        borderRadius: '5px',
-        fontSize: '14px',
-        lineHeight: '18px',
-        padding: '10px 40px 10px 16px',
-        resize: 'vertical',
-        ':focus': {
-          outline: 'none !important',
-          border: `1px solid ${colors.tescoBlue}`,
-        },
-      })}
+      className={css(textAriaStyle({ theme, isValid }))}
       value={value}
       placeholder={placeholder}
       rows={rows}
     />
   );
 };
+
+const textAriaStyle: CreateRule<{ isValid?: boolean; theme: Theme }> = ({ isValid, theme }) => ({
+  width: '100%',
+  minHeight: '40px',
+  border: `1px solid ${isValid ? theme.colors.lightGray : theme.colors.error}`,
+  borderRadius: '5px',
+  fontSize: '16px',
+  lineHeight: '20px',
+  padding: '10px 40px 10px 16px',
+  resize: 'vertical',
+  ':focus': {
+    outline: 'none !important',
+    border: `1px solid ${theme.colors.tescoBlue}`,
+  },
+});
 
 export default Textarea;

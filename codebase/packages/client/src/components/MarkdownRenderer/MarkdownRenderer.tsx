@@ -14,8 +14,8 @@ const CustomPTag = ({ children }) => {
 const defaultTag: Rule = ({ theme }) => ({
   margin: '0px',
   color: theme.colors.base,
-  fontSize: '14px',
-  lineHeight: '18px',
+  fontSize: '16px',
+  lineHeight: '20px',
 });
 
 const defaultComponents = { p: CustomPTag };
