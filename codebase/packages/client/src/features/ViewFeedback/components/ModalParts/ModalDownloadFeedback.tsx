@@ -8,9 +8,9 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { createDownLoadSchema } from './config/schema';
-import { SuccessModal } from './index';
-import { ColleaguesActions } from '@pma/store';
-import { useDispatch } from 'react-redux';
+import { SuccessModal } from './';
+import { ColleaguesActions, getColleagueByUuidSelector } from '@pma/store';
+import { useDispatch, useSelector } from 'react-redux';
 import { downloadPDF, FeedbackDocument, usePDF } from '@pma/pdf-renderer';
 
 const ModalDownloadFeedback: FC<ModalDownloadFeedbackProps> = ({
@@ -35,10 +35,6 @@ const ModalDownloadFeedback: FC<ModalDownloadFeedbackProps> = ({
     updateInstance();
   }, [selected.length]);
 
-  const [searchValue, setSearchValue] = useState<string>('');
-  const [searchDate, setSearchDate] = useState<string>('');
-  const [selectedPerson, setSelectedPerson] = useState<PeopleTypes | null>(null);
-
   const methods = useForm({
     mode: 'onChange',
     resolver: yupResolver<Yup.AnyObjectSchema>(createDownLoadSchema),
@@ -46,16 +42,36 @@ const ModalDownloadFeedback: FC<ModalDownloadFeedbackProps> = ({
 
   const {
     formState: { isValid },
+    getValues,
+    reset,
   } = methods;
 
+  const formData = getValues();
+
+  const selectedColleague = useSelector(getColleagueByUuidSelector(formData.targetColleagueUuid));
+
+  const clearColleagueList = () => dispatch(ColleaguesActions.clearColleagueList());
+
+  const handleResetForm = () => {
+    clearColleagueList();
+    reset();
+  };
+
+  useEffect(() => {
+    return () => {
+      clearColleagueList();
+    };
+  }, []);
+
+  const handleSuccess = () => {
+    clearColleagueList();
+    reset();
+    setOpenMainModal(false);
+    setModalSuccess(false);
+  };
+
   if (modalSuccess) {
-    return (
-      <SuccessModal
-        setOpenMainModal={setOpenMainModal}
-        setSelectedPerson={setSelectedPerson}
-        setModalSuccess={setModalSuccess}
-      />
-    );
+    return <SuccessModal onSuccess={handleSuccess} />;
   }
 
   return (
@@ -63,17 +79,9 @@ const ModalDownloadFeedback: FC<ModalDownloadFeedbackProps> = ({
       <h2 className={css(downloadTitleStyled)}>{downloadTitle}</h2>
       <p className={css(downloadDescriptionStyled)}>{downloadDescription}</p>
       <form>
-        <SearchPart
-          setSearchDate={setSearchDate}
-          searchDate={searchDate}
-          searchValue={searchValue}
-          setSearchValue={setSearchValue}
-          selectedPerson={selectedPerson}
-          setSelectedPerson={setSelectedPerson}
-          methods={methods}
-        />
-        {selectedPerson && (
-          <SubmitPart selectedPerson={selectedPerson} searchDate={searchDate} onChange={setSelected} />
+        <SearchPart setValue={methods.setValue} selectedColleague={selectedColleague} date={formData.date} />
+        {selectedColleague && (
+          <SubmitPart selectedPerson={selectedColleague.colleague} searchDate={formData.date} onChange={setSelected} />
         )}
         <div
           className={css({
@@ -106,14 +114,7 @@ const ModalDownloadFeedback: FC<ModalDownloadFeedbackProps> = ({
                 <Trans i18nKey='Cancel'>Cancel</Trans>
               </Button>
 
-              <Button
-                styles={[outlineBtnRule]}
-                onPress={() => {
-                  setSelectedPerson(null);
-                  setSearchValue('');
-                  setSearchDate('');
-                }}
-              >
+              <Button styles={[outlineBtnRule]} onPress={handleResetForm}>
                 <Trans i18nKey='search_again'>Search again</Trans>
               </Button>
 
@@ -152,12 +153,6 @@ const ModalDownloadFeedback: FC<ModalDownloadFeedbackProps> = ({
           graphic='arrowLeft'
           onPress={() => {
             dispatch(ColleaguesActions.clearColleagueList());
-
-            if (selectedPerson) {
-              setSelectedPerson(() => null);
-            } else {
-              closeHandler();
-            }
           }}
           iconProps={{ invertColors: true }}
         />

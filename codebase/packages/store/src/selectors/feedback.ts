@@ -28,9 +28,7 @@ export const feedbackByUuidSelector = (uuid) =>
       feedbacks: { give, respond, view },
     } = feedback;
 
-    const filtered = [...(give || []), ...(respond || []), ...(view || [])]?.find((item) => item.uuid === uuid) ?? [];
-
-    return filtered;
+    return [...(give || []), ...(respond || []), ...(view || [])]?.find((item) => item.uuid === uuid) ?? [];
   });
 
 export const getPropperNotesByCriteria = ({ status, filterFn, sortFn, serializer }) =>
@@ -39,14 +37,12 @@ export const getPropperNotesByCriteria = ({ status, filterFn, sortFn, serializer
       feedbacks: { view },
     } = feedback;
 
-    const filtered = view
+    return view
       ?.filter(
         (item) => filterFn(item) && (Array.isArray(status) ? status.includes(item.status) : item.status === status),
       )
       .map(serializer)
       .sort(sortFn);
-
-    return filtered;
   });
 
 export const getGiveFeedbacksSelector = (status) =>
@@ -55,9 +51,7 @@ export const getGiveFeedbacksSelector = (status) =>
       feedbacks: { give },
     } = feedback;
 
-    const filtered = give?.filter((item) => item.status === status) ?? [];
-
-    return filtered;
+    return give?.filter((item) => item.status === status) ?? [];
   });
 
 export const getRespondedFeedbacksSelector = (status) =>
@@ -66,7 +60,5 @@ export const getRespondedFeedbacksSelector = (status) =>
       feedbacks: { respond },
     } = feedback;
 
-    const filtered = respond?.filter((item) => item.status === status) ?? [];
-
-    return filtered;
+    return respond?.filter((item) => item.status === status) ?? [];
   });

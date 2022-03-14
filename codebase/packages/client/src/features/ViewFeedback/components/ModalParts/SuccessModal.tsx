@@ -1,9 +1,12 @@
 import React, { FC } from 'react';
-import { SuccessModalProps } from './type';
 import { Button, Rule, Styles, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { Trans } from 'components/Translation';
 
-const SuccessModal: FC<SuccessModalProps> = ({ setModalSuccess, setOpenMainModal, setSelectedPerson }) => {
+type Props = {
+  onSuccess: () => void;
+};
+
+const SuccessModal: FC<Props> = ({ onSuccess }) => {
   const { css } = useStyle();
 
   return (
@@ -22,14 +25,7 @@ const SuccessModal: FC<SuccessModalProps> = ({ setModalSuccess, setOpenMainModal
       <div className={css(AbsoluteStyle)}>
         <div className={css(ContainerStyled)}>
           <div className={css(AlignButtonsStyle)}>
-            <Button
-              styles={[fontStyle, ButtonOkStyle]}
-              onPress={() => {
-                setModalSuccess(() => false);
-                setOpenMainModal(() => false);
-                setSelectedPerson(() => null);
-              }}
-            >
+            <Button styles={[fontStyle, ButtonOkStyle]} onPress={onSuccess}>
               <Trans>Okay</Trans>
             </Button>
           </div>
