@@ -384,5 +384,22 @@
   "action_enabled": "Action enabled when mandatory fields are completed",
   "file_extension_is_not_allowed": "File extension is not allowed",
   "please_select_another_file_extension": "Please select another file extension",
-  "file_limit_exceeded": "File limit exceeded"
+  "file_limit_exceeded": "File limit exceeded",
+  "are_you_sure_you_want_to_save_this_goal": "Are you sure you want to save this goal?",
+  "goal": "Goal",
+  "save_and_exit": "Save & Exit",
+  "save_and_create_new_goal": "Save & create a new goal",
+  "update": "Update",
+  "create": "Create",
+  "personal_development_goal": "Personal Development Goal",
+  "are_you_sure_you_want_to_delete_this_goal": "Are you sure you want to delete this goal?",
+  "download_template": "Download template",
+  "what_is_personal_development_plan?": "What is Personal Development Plan?",
+  "pdp_is_a_tailored_plan": "Your Personal Development Plan (PDP) is a tailored plan that helps you reflect on the things you are great at and identify areas you want to improve.",
+  "having_a_personal_development_plan_will_help_you": "Having a Personal Development Plan will help you to put some structure to your development and be clear about what you are looking for in your career. How you want your plan to look and what you put in it is up to you, the important thing is that it inspires and motivates you. You can use the system to write and store your PDP, download the template or make a new plan that suits your ways of working.",
+  "remember_a_pdp_is_completely_personal_to_you": "Remember a PDP is completely personal to you",
+  "it_ important_you_review_and_update_your_pdp": "It's important you review and update your PDP regularly to ensure it reflects where you are in your career at that moment in time.",
+  "how_the_performance_development_plan_works": "How The Performance Development Plan works?",
+  "how_you_do_your_job": "At Tesco, “how” you do your job is as important as “what” you deliver. An inspiring PDP will help you focus on what to develop, whether that's being at your best in your current role or moving towards a bigger or broader role. What's important is recording and regularly reviewing your plan to a format that works for you.",
+  "my_development_plan": "My Development Plan"
 }

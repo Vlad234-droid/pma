@@ -10,12 +10,14 @@ import { PDPType } from 'config/enum';
 
 import usePDPSchema from '../../hooks/usePDPSchema';
 import Form from '../Form';
+import { useTranslation } from 'components/Translation';
 
 export const TEST_ID = 'create-pdp';
 
 const CreateMyPDP = () => {
   const { css } = useStyle();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
@@ -89,7 +91,10 @@ const CreateMyPDP = () => {
   return (
     <ModalWithHeader
       containerRule={templatesModalWindowStyles({ mobileScreen })}
-      title={`${currentUUID ? 'Update' : 'Create'} Personal Development Goal`}
+      title={`${currentUUID ? t('update', 'Update') : t('create', 'Create')} ${t(
+        'personal_development_goal',
+        'Personal Development Goal',
+      )}`}
       modalPosition='middle'
       closeOptions={{
         closeOptionContent: <Icon graphic='cancel' invertColors={true} />,

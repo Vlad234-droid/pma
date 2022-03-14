@@ -3,7 +3,7 @@ import { Accordion, BaseAccordion, ExpandButton, Panel, Section } from 'componen
 import { Button, Rule, theme, useStyle } from '@dex-ddl/core';
 import { ConfirmModal } from 'features/Modal';
 import { Icon } from 'components/Icon';
-import { Trans } from 'components/Translation';
+import { Trans, useTranslation } from 'components/Translation';
 import { DATE_STRING_FORMAT, EXPIRATION_DATE, formatDateString } from 'utils';
 
 export const DELETE_TEST_ID = 'goal-delete';
@@ -13,6 +13,7 @@ const GoalInfo = (props) => {
   const { id, title, subtitle, description, data, formElements, deleteGoal, editGoal } = props;
   const modifiedTitleRegex = new RegExp(/\*/, 'g');
   const { css, theme } = useStyle();
+  const { t } = useTranslation();
   const [toogled, setToogled] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
 
@@ -20,8 +21,8 @@ const GoalInfo = (props) => {
     <div className={css(fullGoals)}>
       {confirmDelete && (
         <ConfirmModal
-          title={'Are you sure you want to delete this goal?'}
-          description={'This is permanent and cannot be undone.'}
+          title={t('are_you_sure_you_want_to_delete_this_goal', 'Are you sure you want to delete this goal?')}
+          description={t('this_is_permanent_and_cannot_be_undone', 'This is permanent and cannot be undone.')}
           submitBtnTitle={<Trans i18nKey='delete'>Delete</Trans>}
           onSave={() => {
             deleteGoal(id);
@@ -79,7 +80,7 @@ const GoalInfo = (props) => {
                         <div>
                           <Icon graphic='edit' iconStyles={{ height: '13.33px', width: '13.33px' }} />
                         </div>
-                        <div className={css({ marginLeft: '5px' })}>Edit</div>
+                        <div className={css({ marginLeft: '5px' })}>{t('edit', 'Edit')}</div>
                       </Button>
 
                       <Button
@@ -94,7 +95,7 @@ const GoalInfo = (props) => {
                             iconStyles={{ maxHeight: '16px', maxWidth: '14.84px' }}
                           />
                         </div>
-                        <div className={css({ marginLeft: '5px' })}>Delete</div>
+                        <div className={css({ marginLeft: '5px' })}>{t('delete', 'Delete')}</div>
                       </Button>
                     </div>
                   </div>
