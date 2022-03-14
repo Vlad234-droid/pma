@@ -119,6 +119,10 @@ export default createReducer(initialState)
     data: [...state.data, { ...payload }],
     meta: { ...state.meta, loading: false, loaded: true },
   }))
+  .handleAction(getReviewByUuid.failure, (state, { payload }) => ({
+    ...state,
+    meta: { ...state.meta, loading: false, loaded: false, error: payload },
+  }))
   .handleAction(updateRatingReview.request, (state) => ({
     ...state,
     meta: { ...state.meta, error: null, loading: false, loaded: true, updating: true, updated: false },

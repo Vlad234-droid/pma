@@ -1,5 +1,14 @@
 import { TargetTypeReverse, Tesco, TargetFeedbackKeys } from 'config/enum';
 
+type InitialState = {
+  sort: string;
+  search: string;
+};
+export const initialState: InitialState = {
+  sort: '',
+  search: '',
+};
+
 export const getPropperTargetType = (targetType, targetId, feedbackItems, review) => {
   const capitalType =
     TargetTypeReverse[targetType] &&

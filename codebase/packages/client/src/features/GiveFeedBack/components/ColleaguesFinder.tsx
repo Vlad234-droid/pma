@@ -9,7 +9,7 @@ type Props = {
   onSelect: (person: any) => void;
   selected?: any;
   value: string;
-  error: string;
+  error?: string;
 };
 
 const ColleaguesFinder: FC<Props> = ({ onSelect, error, value }) => {

@@ -22,9 +22,7 @@ const RespondNewFeedback: FC = () => {
 
   const { feedbackItems, targetColleagueUuid, targetColleagueProfile, targetId, targetType } = useSelector(
     feedbackByUuidSelector(uuid),
-  ) || {
-    targetColleagueUuid: '',
-  };
+  );
 
   useEffect(() => {
     if (!targetColleagueUuid) navigate(buildPath(Page.RESPOND_FEEDBACK));
@@ -39,9 +37,8 @@ const RespondNewFeedback: FC = () => {
   const colleagueUuid = useSelector(colleagueUUIDSelector);
 
   const handleSave = (data: HandleSaveType) => {
-    dispatch(
-      FeedbackActions.updatedFeedback(getPayload(data, feedbackItems, colleagueUuid, uuid, targetId, targetType)),
-    );
+    const payload = getPayload(data, feedbackItems, colleagueUuid, uuid, targetId, targetType);
+    dispatch(FeedbackActions.updateFeedback(payload));
   };
 
   const handleSubmit = (data) => {

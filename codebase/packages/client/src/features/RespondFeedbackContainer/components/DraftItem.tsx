@@ -1,14 +1,12 @@
-import React, { FC, useEffect, useCallback } from 'react';
+import React, { FC, useEffect } from 'react';
 import { useStyle, Rule } from '@dex-ddl/core';
-import { useDispatch, useSelector } from 'react-redux';
-import { FeedbackActions, ReviewsActions, colleagueUUIDSelector, getRespondedFeedbacksSelector } from '@pma/store';
-import debounce from 'lodash.debounce';
+import { useSelector, useDispatch } from 'react-redux';
+import { getLoadedStateSelector, ReviewsActions } from '@pma/store';
 import { TileWrapper } from 'components/Tile';
 import { Accordion, BaseAccordion, Section, Panel, ExpandButton } from 'components/Accordion';
 import { formatToRelativeDate, paramsReplacer } from 'utils';
 import IconButtonDefault from 'components/IconButtonDefault';
-import { FeedbackStatus, Tesco, FEEDBACK_STATUS_IN } from 'config/enum';
-import { getSortString } from 'utils/feedback';
+import { FeedbackStatus, Tesco } from 'config/enum';
 import defaultImg from 'images/default.png';
 import { DraftItemProps } from '../type';
 import { NoFeedback } from '../../Feedback/components';
@@ -19,71 +17,31 @@ import { Page } from 'pages';
 
 export const TEST_ID = 'test_id';
 
-const DraftItem: FC<DraftItemProps> = ({ checkedRadio, filterFeedbacks }) => {
+const DraftItem: FC<DraftItemProps> = ({ status, list, canEdit }) => {
   const { css } = useStyle();
-  const dispatch = useDispatch();
-  const colleagueUuid = useSelector(colleagueUUIDSelector);
   const navigate = useNavigate();
 
-  const pendingNotes = useSelector(getRespondedFeedbacksSelector(FeedbackStatus.PENDING)) || [];
-
-  const completedNotes = useSelector(getRespondedFeedbacksSelector(FeedbackStatus.COMPLETED)) || [];
-
-  const getAllFeedback = useCallback(
-    debounce((filter) => {
-      dispatch(
-        FeedbackActions.getRespondFeedback({
-          _limit: '300',
-          'colleague-uuid': colleagueUuid,
-          ...(filter.search.length > 2 && { _search: filter.search }),
-          _sort: getSortString(filter),
-          status_in: [FEEDBACK_STATUS_IN.PENDING, FEEDBACK_STATUS_IN.COMPLETED],
-        }),
-      );
-    }, 300),
-    [],
-  );
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!colleagueUuid) return;
-    getAllFeedback(filterFeedbacks);
-  }, [colleagueUuid, filterFeedbacks]);
-
-  useEffect(() => {
-    if (pendingNotes.length) {
-      for (const item of pendingNotes) {
+    if (list.length) {
+      for (const item of list) {
         if (item.targetId && item.targetId !== Tesco.TescoBank) {
           dispatch(ReviewsActions.getReviewByUuid({ uuid: item.targetId }));
         }
       }
     }
-  }, [pendingNotes.length]);
+  }, [list.length]);
 
-  useEffect(() => {
-    if (completedNotes.length) {
-      for (const item of completedNotes) {
-        if (item.targetId && item.targetId !== Tesco.TescoBank) {
-          dispatch(ReviewsActions.getReviewByUuid({ uuid: item.targetId }));
-        }
-      }
-    }
-  }, [completedNotes.length]);
+  const { loaded } = useSelector(getLoadedStateSelector);
 
-  const getPropperNotes = () => {
-    if (checkedRadio.completed) return completedNotes;
-    return pendingNotes;
-  };
+  if (!loaded) return null;
 
-  if (checkedRadio?.pending && !getPropperNotes().length) {
-    return <NoFeedback />;
-  }
-  if (checkedRadio?.completed && !getPropperNotes().length) {
-    return <NoFeedback />;
-  }
+  if (!list.length) return <NoFeedback />;
 
   return (
     <>
-      {getPropperNotes()?.map((item) => (
+      {list.map((item) => (
         <div key={item.uuid}>
           <TileWrapper customStyle={{ padding: '24px 24px 24px 24px' }}>
             <Accordion
@@ -97,17 +55,17 @@ const DraftItem: FC<DraftItemProps> = ({ checkedRadio, filterFeedbacks }) => {
                 {() => (
                   <>
                     <Section defaultExpanded={false}>
-                      <div className={css(DraftStyles)}>
-                        <div className={css(BlockInfo)}>
+                      <div className={css(draftStyles)}>
+                        <div className={css(blockInfo)}>
                           <div className={css({ alignSelf: 'flex-start' })}>
-                            <img className={css(ImgStyle)} src={defaultImg} alt='photo' />
+                            <img className={css(imgStyle)} src={defaultImg} alt='photo' />
                           </div>
                           <div className={css({ marginLeft: '16px' })}>
                             <h3
-                              className={css(NamesStyle)}
+                              className={css(namesStyle)}
                             >{`${item?.targetColleagueProfile?.colleague?.profile?.firstName} ${item?.targetColleagueProfile?.colleague?.profile?.lastName}`}</h3>
                             <p
-                              className={css(IndustryStyle)}
+                              className={css(industryStyle)}
                             >{`${item?.targetColleagueProfile?.colleague?.workRelationships[0].job.name}, ${item?.targetColleagueProfile?.colleague?.workRelationships[0].department?.name}`}</p>
                           </div>
                         </div>
@@ -130,10 +88,10 @@ const DraftItem: FC<DraftItemProps> = ({ checkedRadio, filterFeedbacks }) => {
                             width: 'auto',
                           }}
                         >
-                          {checkedRadio?.pending && <PendingNotes item={item} />}
-                          {checkedRadio?.completed && <CompletedNotes item={item} />}
+                          {status === FeedbackStatus.PENDING && <PendingNotes item={item} />}
+                          {status === FeedbackStatus.COMPLETED && <CompletedNotes item={item} />}
                         </TileWrapper>
-                        {checkedRadio?.pending && (
+                        {canEdit && (
                           <div className={css(wrapperBtnStyle)}>
                             <IconButtonDefault
                               graphic='arrowRight'
@@ -156,23 +114,23 @@ const DraftItem: FC<DraftItemProps> = ({ checkedRadio, filterFeedbacks }) => {
   );
 };
 
-const DraftStyles: Rule = {
+const draftStyles: Rule = {
   display: 'flex',
   justifyContent: 'space-between',
 };
 
-const BlockInfo: Rule = {
+const blockInfo: Rule = {
   display: 'inline-flex',
   alignItems: 'center',
 };
 
-const ImgStyle: Rule = {
+const imgStyle: Rule = {
   width: '48px',
   height: '48px',
   borderRadius: '50%',
 };
 
-const NamesStyle: Rule = {
+const namesStyle: Rule = {
   fontWeight: 'bold',
   fontSize: '18px',
   lineHeight: '22px',
@@ -180,7 +138,7 @@ const NamesStyle: Rule = {
   color: '#00539F',
 };
 
-const IndustryStyle: Rule = {
+const industryStyle: Rule = {
   fontWeight: 'normal',
   fontSize: '16px',
   lineHeight: '20px',

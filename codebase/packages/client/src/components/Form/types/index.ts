@@ -17,10 +17,12 @@ export interface FormField {
 }
 
 export interface InputField extends FormField {
-  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+  onChangeDate?: (value) => void;
   onBlur?: (e: SyntheticEvent<HTMLInputElement>) => void;
   value?: string;
   min?: number;
+  minDate?: number | string;
   defaultValue?: string;
 }
 

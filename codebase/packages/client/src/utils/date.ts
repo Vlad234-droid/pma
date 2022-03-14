@@ -24,6 +24,7 @@ export const diffSeconds = diffBy('seconds');
 export const DATE_STRING_FORMAT = 'dd LLL yyyy';
 export const DATE_TIME_STRING_FORMAT = 'dd LLL yyyy HH:mm';
 export const DATE_FORMAT = 'yyyy-MM-dd';
+export const DATE_FORMAT_FULL_MONTH = 'yyyy-mmm-dd';
 export type DateFormat = string;
 
 export const getLocalNow = () => DateTime.local();

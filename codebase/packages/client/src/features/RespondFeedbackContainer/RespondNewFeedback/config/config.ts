@@ -3,7 +3,9 @@ export const getPayload = (data, feedbackItems, colleagueUuid, uuid, targetId, t
   feedbackItems: [
     ...data.feedbackItems.map((item) => ({
       ...item,
-      uuid: feedbackItems.find((feedback) => feedback.code === item.code)?.uuid,
+      ...(feedbackItems.find((feedback) => feedback.code === item.code)?.uuid && {
+        uuid: feedbackItems.find((feedback) => feedback.code === item.code)?.uuid,
+      }),
     })),
     ...feedbackItems.filter(
       (item) =>

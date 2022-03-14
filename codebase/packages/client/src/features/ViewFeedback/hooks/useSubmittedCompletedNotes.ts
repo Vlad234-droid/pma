@@ -4,7 +4,7 @@ import { getPropperNotesByCriteria } from '@pma/store';
 const identity = (item) => item;
 
 function useSubmittedCompletedNotes({ status, sortFn, filterFn = identity, serializer = identity }) {
-  const submittedCompletedNotes =
+  return (
     useSelector(
       getPropperNotesByCriteria({
         status,
@@ -12,9 +12,8 @@ function useSubmittedCompletedNotes({ status, sortFn, filterFn = identity, seria
         sortFn,
         serializer,
       }),
-    ) || [];
-
-  return submittedCompletedNotes;
+    ) || []
+  );
 }
 
 export default useSubmittedCompletedNotes;

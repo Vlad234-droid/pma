@@ -259,7 +259,8 @@ const itemSettingsStyle: Rule = {
 };
 
 const itemSettingsBorderStyle: Rule = ({ theme }) => ({
-  borderTop: `1px solid ${theme.colors.backgroundDarkest}`,
+  // @ts-ignore
+  borderTop: `1px solid ${theme.colors.lightGray}`,
 });
 
 const menuDropdownStyle: Rule = ({ theme }) => ({

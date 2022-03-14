@@ -7,8 +7,8 @@ export const Text: FC<{ value: string }> = ({ value }) => {
   return (
     <div
       className={css({
-        fontSize: '14px',
-        lineHeight: '18px',
+        fontSize: '16px',
+        lineHeight: '20px',
         color: theme.colors.base,
       })}
     >

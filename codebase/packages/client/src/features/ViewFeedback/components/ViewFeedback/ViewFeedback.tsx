@@ -16,6 +16,7 @@ import { useNavigate } from 'react-router-dom';
 import { FeedbackStatus, FEEDBACK_STATUS_IN } from 'config/enum';
 import { Page } from 'pages';
 import useSubmittedCompletedNotes from '../../hooks/useSubmittedCompletedNotes';
+import { buildPath } from 'features/Routes';
 
 type filterFeedbacksType = {
   sort: string;
@@ -233,7 +234,7 @@ const ViewFeedback: FC = () => {
               <Button
                 styles={[iconBtnStyle]}
                 onPress={() => {
-                  navigate(`/${Page.GIVE_FEEDBACK}`);
+                  navigate(buildPath(Page.GIVE_FEEDBACK));
                 }}
               >
                 <Trans i18nKey='give_feedback'>Give Feedback</Trans>

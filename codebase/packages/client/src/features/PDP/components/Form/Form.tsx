@@ -6,9 +6,9 @@ import { metaPDPSelector } from '@pma/store';
 import { useSelector } from 'react-redux';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, CreateRule, Rule, theme, useBreakpoints, useStyle } from '@dex-ddl/core';
-import { Input, Item, Textarea, Attention } from 'components/Form';
+import { Item, Textarea, Field, Attention } from 'components/Form';
 import { GenericItemField } from 'components/GenericForm';
-import { DATE_FORMAT, formatDate } from 'utils/date';
+import { formatDate } from 'utils/date';
 import { createYupSchema } from 'utils/yup';
 import { v4 as uuidv4 } from 'uuid';
 import arrLeft from 'assets/img/pdp/arrLeft.png';
@@ -17,6 +17,7 @@ import { ConfirmModal } from 'features/Modal';
 import { buildPath } from 'features/Routes';
 import { Page } from 'pages';
 import { Trans, useTranslation } from 'components/Translation';
+import Datepicker from 'components/Datepicker';
 
 type Props = {
   pdpGoals: any;
@@ -208,40 +209,14 @@ const Form: FC<Props> = ({
             : '';
 
           if (description === '{datepicker}') {
-            const minDate = formatDate(new Date(), DATE_FORMAT);
-
             return (
               <React.Fragment key={`${currentTab}${idx}`}>
-                <GenericItemField
+                <Field
                   name={key}
-                  methods={methods}
-                  label={label}
-                  Wrapper={({ children }) => {
-                    return (
-                      <Item withIcon={false}>
-                        <div className={css(genericLabel)}>{label.replace(/\*/g, '')}</div>
-                        {children}
-                      </Item>
-                    );
-                  }}
-                  Element={(props) => (
-                    <Input
-                      customStyles={!formValues?.expiration_date && dateInputDefault}
-                      min={minDate}
-                      type={'date'}
-                      {...props}
-                    />
-                  )}
-                  styles={{
-                    fontFamily: 'TESCO Modern", Arial, sans-serif',
-                    fontSize: `${theme.font.fixed.f16}`,
-                    fontStyle: 'normal',
-                    lineHeight: '20px',
-                    letterSpacing: '0px',
-                    textAlign: 'left',
-                  }}
-                  placeholder={description}
-                  value={Object.keys(currentGoal)?.length > 0 ? updateGoalValue : ''}
+                  Element={Datepicker}
+                  setValue={methods.setValue}
+                  minDate={new Date()}
+                  value={updateGoalValue}
                 />
               </React.Fragment>
             );
@@ -330,9 +305,9 @@ const imgArrow = {
   marginLeft: '15px',
 } as Rule;
 
-const createBtn = {
+const createBtn: Rule = {
   justifyContent: 'center',
-} as Rule;
+};
 
 const customBtn: CreateRule<{ mobileScreen: boolean }> = (props) => {
   const { mobileScreen } = props;
@@ -362,18 +337,18 @@ const dateInputDefault = {
   color: `${colors.tescoGray}`,
 } as Rule;
 
-const genericLabel = {
+const genericLabel: Rule = {
   fontSize: `${theme.font.fixed.f16}`,
   lineHeight: '20px',
   fontWeight: `${theme.font.weight.bold}`,
   paddingBottom: '8px',
-} as Rule;
+};
 
-const customBtnFullWidth = {
+const customBtnFullWidth: Rule = {
   padding: '10px 20px',
   width: '100%',
   whiteSpace: 'nowrap',
   cursor: 'pointer',
-} as Rule;
+};
 
 export default Form;

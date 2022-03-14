@@ -41,6 +41,10 @@ const GiveFeedBack: FC = () => {
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const [status, setCheckedStatus] = useState(FeedbackStatus.DRAFT);
 
+  useEffect(() => {
+    dispatch(FeedbackActions.clearFeedback());
+  }, []);
+
   const getGiveFeedbacks = useCallback(
     debounce((filter) => {
       dispatch(
