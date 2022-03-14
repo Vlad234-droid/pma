@@ -1,9 +1,8 @@
 export default [
-  'manager',
   'managerUUID',
-  'email',
-  'fullName',
-  'firstName',
-  'dateOfBirth',
-  'gender',
-]; // TODO: fix required fields
+  'profile/firstName',
+  'profile/lastName',
+  'workRelationships/job/name',
+  'workRelationships/department/name',
+  'workRelationships/managerUUID',
+];

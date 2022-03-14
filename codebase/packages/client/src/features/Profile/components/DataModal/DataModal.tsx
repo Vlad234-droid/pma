@@ -1,7 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Rule, useStyle } from '@dex-ddl/core';
 import isEmpty from 'lodash.isempty';
-import startCase from 'lodash.startcase';
 
 import { ConfirmModal as Modal } from 'features/Modal';
 import { Trans, useTranslation } from 'components/Translation';
@@ -43,7 +42,7 @@ const DataModal: FC<Props> = ({ info })  => {
     >
       <div className={css(contentSles)}>
         <ul>
-          {missedFields.map((field) => <li key={field}>{startCase(field)}</li>)}
+          {missedFields.map((field) => <li key={field}>{`${field} is blank`}</li>)}
         </ul>
         {`${t('please_refer_to', 'Please refer to')} ${t('system_guidance_and_faqs', 'System guidance and FAQs')} ${t('find_how_correct_data', 'to find out how to correct this data')}.`}
       </div>
