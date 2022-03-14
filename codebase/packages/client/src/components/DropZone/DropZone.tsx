@@ -16,7 +16,9 @@ export const DropZone: FC<DropZoneProps> = ({ children, onUpload, styles = {}, a
           className={css(buttonStyles)}
           type='file'
           id='DropZone'
-          onChange={({ target }) => onUpload(target.files?.[0])}
+          onChange={({ target }) => {
+            onUpload(target.files?.[0]);
+          }}
           accept={accept}
         />
         {children}

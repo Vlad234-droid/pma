@@ -6,9 +6,9 @@ import { metaPDPSelector } from '@pma/store';
 import { useSelector } from 'react-redux';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, CreateRule, Rule, theme, useBreakpoints, useStyle } from '@dex-ddl/core';
-import { Input, Item, Textarea, Attention } from 'components/Form';
+import { Item, Textarea, Field, Attention } from 'components/Form';
 import { GenericItemField } from 'components/GenericForm';
-import { DATE_FORMAT, formatDate } from 'utils/date';
+import { formatDate } from 'utils/date';
 import { createYupSchema } from 'utils/yup';
 import { v4 as uuidv4 } from 'uuid';
 import arrLeft from 'assets/img/pdp/arrLeft.png';
@@ -16,7 +16,8 @@ import colors from 'theme/colors';
 import { ConfirmModal } from 'features/Modal';
 import { buildPath } from 'features/Routes';
 import { Page } from 'pages';
-import { Trans } from 'components/Translation';
+import { Trans, useTranslation } from 'components/Translation';
+import Datepicker from 'components/Datepicker';
 
 type Props = {
   pdpGoals: any;
@@ -57,6 +58,7 @@ const Form: FC<Props> = ({
   onSubmit,
 }) => {
   const { css } = useStyle();
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
@@ -65,7 +67,7 @@ const Form: FC<Props> = ({
     acc[current.key] = '';
     return acc;
   }, {});
-  const yepSchema = formElements.reduce(createYupSchema, {});
+  const yepSchema = formElements.reduce(createYupSchema(t), {});
   const methods = useForm({
     mode: 'onChange',
     resolver: yupResolver<Yup.AnyObjectSchema>(Yup.object().shape(yepSchema)),
@@ -122,7 +124,9 @@ const Form: FC<Props> = ({
       {pdpList && (
         <div className={css(goalListBlock)}>
           {pdpList.length < 1 || !pdpList ? (
-            <div className={`${css(goal)} ${css(defaultGoalItem)}`}>Goal 1</div>
+            <div className={`${css(goal)} ${css(defaultGoalItem)}`}>
+              <Trans i18nKey='goal'>Goal</Trans> 1
+            </div>
           ) : !currentUUID ? (
             pdpList.map((el, idx) => {
               return (
@@ -134,7 +138,7 @@ const Form: FC<Props> = ({
                       idx <= goalNum && currentGoal?.uuid !== el.uuid ? css(activeGoalItem) : css(defaultGoalItem)
                     }`}
                   >
-                    Goal {idx + 1}
+                    {`${t('goal', 'Goal')} ${idx + 1}`}
                   </div>
                   {idx === goalNum && idx + 1 < maxGoals && (
                     <div
@@ -146,7 +150,7 @@ const Form: FC<Props> = ({
                       }}
                       className={`${css(goal)} ${isCurrentGoal ? css(activeGoalItem) : css(defaultGoalItem)}`}
                     >
-                      Goal {idx + 2}
+                      {`${t('goal', 'Goal')} ${idx + 2}`}
                     </div>
                   )}
                 </React.Fragment>
@@ -160,7 +164,7 @@ const Form: FC<Props> = ({
                   onClick={() => setCurrentGoal(el)}
                   className={`${css(goal)} ${css(defaultGoalItem)}`}
                 >
-                  Goal {el?.number}
+                  {`${t('goal', 'Goal')} ${el?.number}`}
                 </div>
               </React.Fragment>
             ))
@@ -170,7 +174,7 @@ const Form: FC<Props> = ({
       <Attention />
       {confirmSaveModal && (
         <ConfirmModal
-          title={'Are you sure you want to save this goal?'}
+          title={t('are_you_sure_you_want_to_save_this_goal', 'Are you sure you want to save this goal?')}
           description={' '}
           submitBtnTitle={<Trans i18nKey='confirm'>Confirm</Trans>}
           onSave={() => {
@@ -186,7 +190,7 @@ const Form: FC<Props> = ({
 
       {confirmSaveNextModal && (
         <ConfirmModal
-          title={'Are you sure you want to save this goal?'}
+          title={t('are_you_sure_you_want_to_save_this_goal', 'Are you sure you want to save this goal?')}
           description={' '}
           submitBtnTitle={<Trans i18nKey='confirm'>Confirm</Trans>}
           onSave={() => {
@@ -205,40 +209,14 @@ const Form: FC<Props> = ({
             : '';
 
           if (description === '{datepicker}') {
-            const minDate = formatDate(new Date(), DATE_FORMAT);
-
             return (
               <React.Fragment key={`${currentTab}${idx}`}>
-                <GenericItemField
+                <Field
                   name={key}
-                  methods={methods}
-                  label={label}
-                  Wrapper={({ children }) => {
-                    return (
-                      <Item withIcon={false}>
-                        <div className={css(genericLabel)}>{label.replace(/\*/g, '')}</div>
-                        {children}
-                      </Item>
-                    );
-                  }}
-                  Element={(props) => (
-                    <Input
-                      customStyles={!formValues?.expiration_date && dateInputDefault}
-                      min={minDate}
-                      type={'date'}
-                      {...props}
-                    />
-                  )}
-                  styles={{
-                    fontFamily: 'TESCO Modern", Arial, sans-serif',
-                    fontSize: `${theme.font.fixed.f16}`,
-                    fontStyle: 'normal',
-                    lineHeight: '20px',
-                    letterSpacing: '0px',
-                    textAlign: 'left',
-                  }}
-                  placeholder={description}
-                  value={Object.keys(currentGoal)?.length > 0 ? updateGoalValue : ''}
+                  Element={Datepicker}
+                  setValue={methods.setValue}
+                  minDate={new Date()}
+                  value={updateGoalValue}
                 />
               </React.Fragment>
             );
@@ -273,7 +251,7 @@ const Form: FC<Props> = ({
           onPress={() => setConfirmModal(!confirmSaveModal)}
           styles={isLessThanMaxGoals ? [customBtnFullWidth] : [customBtn({ mobileScreen })]}
         >
-          Save & Exit
+          <Trans i18nKey='save_and_exit'>Save & Exit</Trans>
         </Button>
 
         {displaySaveBtn && (
@@ -286,7 +264,8 @@ const Form: FC<Props> = ({
             }}
             styles={[customBtn({ mobileScreen }), createBtn]}
           >
-            Save & create a new goal <img className={css(imgArrow)} alt='arrow' src={arrLeft} />
+            <Trans i18nKey='save_and_create_new_goal'>Save & create a new goal</Trans>{' '}
+            <img className={css(imgArrow)} alt='arrow' src={arrLeft} />
           </Button>
         )}
       </div>
@@ -326,9 +305,9 @@ const imgArrow = {
   marginLeft: '15px',
 } as Rule;
 
-const createBtn = {
+const createBtn: Rule = {
   justifyContent: 'center',
-} as Rule;
+};
 
 const customBtn: CreateRule<{ mobileScreen: boolean }> = (props) => {
   const { mobileScreen } = props;
@@ -358,18 +337,18 @@ const dateInputDefault = {
   color: `${colors.tescoGray}`,
 } as Rule;
 
-const genericLabel = {
+const genericLabel: Rule = {
   fontSize: `${theme.font.fixed.f16}`,
   lineHeight: '20px',
   fontWeight: `${theme.font.weight.bold}`,
   paddingBottom: '8px',
-} as Rule;
+};
 
-const customBtnFullWidth = {
+const customBtnFullWidth: Rule = {
   padding: '10px 20px',
   width: '100%',
   whiteSpace: 'nowrap',
   cursor: 'pointer',
-} as Rule;
+};
 
 export default Form;

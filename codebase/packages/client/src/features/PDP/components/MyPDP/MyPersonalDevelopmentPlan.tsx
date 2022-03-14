@@ -8,41 +8,18 @@ import {
   PDPActions,
   schemaMetaPDPSelector,
   TimelineActions,
-  timelineTypesAvailabilitySelector,
 } from '@pma/store';
 import { useNavigate } from 'react-router';
-import { ObjectiveType, PDPType, ReviewType } from 'config/enum';
 import DescriptionBlock from 'components/DescriptionBlock';
 import { Page } from 'pages';
 import { buildPath } from 'features/Routes';
 import { paramsReplacer } from 'utils';
 import { Icon } from 'components/Icon';
-import { BASE_URL_API } from 'config/constants';
+import { PDPType } from 'config/enum';
 import GoalInfo from '../GoalInfo';
+import { BASE_URL_API } from 'config/constants';
 import usePDPSchema from '../../hooks/usePDPSchema';
-
-const reviews = [
-  {
-    id: 'test-1',
-    title: 'Mid-year review',
-    description: 'Pharetra donec enim aenean aliquet consectetur ultrices amet vitae',
-    reviewType: ReviewType.MYR,
-  },
-  {
-    id: 'test-2',
-    title: 'End-year review',
-    description: 'Pharetra donec enim aenean aliquet consectetur ultrices amet vitae',
-    reviewType: ReviewType.EYR,
-  },
-];
-
-const annualReviews = [
-  {
-    id: 'test-3',
-    title: 'Annual performance review',
-    description: 'Pharetra donec enim aenean aliquet consectetur ultrices amet vitae',
-  },
-];
+import { Trans, useTranslation } from 'components/Translation';
 
 export const TEST_ID = 'pdp-page';
 
@@ -54,6 +31,7 @@ function getEditOrCreatePDP(pdpSelector: any[]) {
 const MyPersonalDevelopmentPlan: FC = () => {
   const { css, theme } = useStyle();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
@@ -62,9 +40,6 @@ const MyPersonalDevelopmentPlan: FC = () => {
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const [schema] = usePDPSchema(PDPType.PDP);
   const { components = [] } = schema;
-  const timelineTypes = useSelector(timelineTypesAvailabilitySelector('me'));
-  const canShowMyReview = timelineTypes[ObjectiveType.MYR] && timelineTypes[ObjectiveType.EYR];
-  const canShowAnnualReview = !timelineTypes[ObjectiveType.MYR] && timelineTypes[ObjectiveType.EYR];
 
   const formElements = components.filter((component) => component.type != 'text');
 
@@ -84,14 +59,6 @@ const MyPersonalDevelopmentPlan: FC = () => {
   );
 
   const [instance, updateInstance] = usePDF({ document });
-
-  // TODO: this probably should be removed or used somewhere
-  const createdReviews: any = [];
-  if (canShowMyReview) {
-    createdReviews.push(...reviews);
-  } else if (canShowAnnualReview) {
-    createdReviews.push(...annualReviews);
-  }
 
   const navToGoalPage = () => navigate(buildPath(Page.CREATE_PERSONAL_DEVELOPMENT_PLAN));
 
@@ -133,7 +100,7 @@ const MyPersonalDevelopmentPlan: FC = () => {
                 <div className={css(btnIcon)}>
                   <Icon graphic='download' />
                 </div>
-                Download template
+                <Trans i18nKey='download_template'>Download template</Trans>
               </a>
 
               <button className={css(buttonIcon)} onClick={navToGoalPage}>
@@ -155,45 +122,63 @@ const MyPersonalDevelopmentPlan: FC = () => {
 
       <div className={css(descriptionMain)}>
         <DescriptionBlock>
-          <div className={css(title)}>What is Personal Development Plan?</div>
+          <div className={css(title)}>
+            <Trans i18nKey='what_is_personal_development_plan'>What is Personal Development Plan?</Trans>
+          </div>
           <div className={css(details, detailsWithMargin)}>
-            Your Personal Development Plan (PDP) is a tailored plan that helps you reflect on the things you are great
-            at and identify areas you want to improve.
+            <Trans i18nKey='pdp_is_a_tailored_plan'>
+              Your Personal Development Plan (PDP) is a tailored plan that helps you reflect on the things you are great
+              at and identify areas you want to improve.
+            </Trans>
             <p>
-              Having a Personal Development Plan will help you to put some structure to your development and be clear
-              about what you are looking for in your career. How you want your plan to look and what you put in it is up
-              to you, the important thing is that it inspires and motivates you. You can use the system to write and
-              store your PDP, download the template or make a new plan that suits your ways of working.
+              <Trans i18nKey='having_a_personal_development_plan_will_help_you'>
+                Having a Personal Development Plan will help you to put some structure to your development and be clear
+                about what you are looking for in your career. How you want your plan to look and what you put in it is
+                up to you, the important thing is that it inspires and motivates you. You can use the system to write
+                and store your PDP, download the template or make a new plan that suits your ways of working.
+              </Trans>
             </p>
             <p>
-              Remember a PDP is completely personal to you, you don&apos;t have to share it but it might be helpful to
-              use it when having development conversations.
+              <Trans i18nKey='remember_a_pdp_is_completely_personal_to_you'>
+                Remember a PDP is completely personal to you, you don&apos;t have to share it but it might be helpful to
+                use it when having development conversations.
+              </Trans>
             </p>
             <p>
-              It&apos;s important you review and update your PDP regularly to ensure it reflects where you are in your
-              career at that moment in time.
+              <Trans i18nKey='important_you_review_and_update_your_pdp'>
+                It&apos;s important you review and update your PDP regularly to ensure it reflects where you are in your
+                career at that moment in time.
+              </Trans>
             </p>
           </div>
 
-          <div className={css(title)}>How The Performance Development Plan works?</div>
+          <div className={css(title)}>
+            <Trans i18nKey='how_the_performance_development_plan_works'>
+              How The Performance Development Plan works?
+            </Trans>
+          </div>
           <div className={css(details)}>
-            At Tesco, “how” you do your job is as important as “what” you deliver. An inspiring PDP will help you focus
-            on what to develop, whether that&apos;s being at your best in your current role or moving towards a bigger
-            or broader role. What&apos;s important is recording and regularly reviewing your plan to a format that works
-            for you.
+            <Trans i18nKey='how_you_do_your_job'>
+              At Tesco, “how” you do your job is as important as “what” you deliver. An inspiring PDP will help you
+              focus on what to develop, whether that&apos;s being at your best in your current role or moving towards a
+              bigger or broader role. What&apos;s important is recording and regularly reviewing your plan to a format
+              that works for you.
+            </Trans>
           </div>
         </DescriptionBlock>
       </div>
 
       {pdpSelector?.length > 0 && (
         <div className={css(subtitleBlock)}>
-          <div className={css(devPlanTitle)}>My Development Plan</div>
+          <div className={css(devPlanTitle)}>
+            <Trans i18nKey='my_development_plan'>My Development Plan</Trans>
+          </div>
           <div>
             <button className={css(buttonDownloadItems)} onClick={() => downloadPDF(instance.url!, 'pdp-goals.pdf')}>
               <div className={css(btnIcon)}>
                 <Icon graphic='download' />
               </div>
-              Download
+              <Trans i18nKey='download'>Download</Trans>
             </button>
           </div>
         </div>
@@ -206,9 +191,9 @@ const MyPersonalDevelopmentPlan: FC = () => {
               return (
                 <GoalInfo
                   id={el.uuid}
-                  key={`Personal Development Goal: ${idx + 1}`}
+                  key={`${t('personal_development_goal', 'Personal Development Goal')}: ${idx + 1}`}
                   data={el.properties.mapJson}
-                  title={`Personal Development Goal: ${idx + 1}`}
+                  title={`${t('personal_development_goal', 'Personal Development Goal')}: ${idx + 1}`}
                   subtitle={formElements[0].label}
                   formElements={formElements}
                   deleteGoal={deleteGoal}

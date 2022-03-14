@@ -1,6 +1,6 @@
 import { BASE_URL_API } from 'config/constants';
-
 import { Status } from 'config/enum';
+import { Variant } from 'features/Toast';
 import { getCurrentYear } from 'utils/date';
 
 async function getData(url) {
@@ -14,17 +14,26 @@ async function getData(url) {
   return await response;
 }
 
-export const downloadCsvFile = async () => {
-  getData(`${BASE_URL_API}reports/linked-objective-report/formats/excel?`).then((resp) =>
-    resp.blob().then((blob) => {
+export const downloadCsvFile = async (t, addToast) => {
+  getData(`${BASE_URL_API}reports/linked-objective-report/formats/excel?`).then((resp) => {
+    if (!resp.ok) {
+      return addToast({
+        id: Date.now().toString(),
+        title: t('objectives_statistics_not_found', 'Objectives statistics not found'),
+        description: 'Try to select another year.',
+        variant: Variant.ERROR,
+      });
+    }
+
+    return resp.blob().then((blob) => {
       const a = document.createElement('a');
       a.href = window.URL.createObjectURL(blob);
       a.download = 'ObjectivesReport.xlsx';
       document.body.appendChild(a);
       a.click();
       a.remove();
-    }),
-  );
+    });
+  });
 };
 
 async function getReportStatistics(url, { year, topics }) {

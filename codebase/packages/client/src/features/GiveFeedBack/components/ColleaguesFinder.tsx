@@ -2,38 +2,20 @@ import React, { FC } from 'react';
 import { Rule, useStyle } from '@dex-ddl/core';
 import { Item } from 'components/Form';
 import SearchInput from 'components/SearchInput';
-import { useDispatch, useSelector } from 'react-redux';
-import { ColleaguesActions, getColleaguesSelector } from '@pma/store';
+import useSearchColleagues from 'hooks/useSearchColleagues';
 import defaultImg from 'images/default.png';
 
 type Props = {
   onSelect: (person: any) => void;
   selected?: any;
   value: string;
-  error: string;
+  error?: string;
 };
 
 const ColleaguesFinder: FC<Props> = ({ onSelect, error, value }) => {
-  const dispatch = useDispatch();
-
   const { css } = useStyle();
 
-  const colleagues = useSelector(getColleaguesSelector) || [];
-
-  const handleSearchColleagues = (e) => {
-    const value = e.target.value;
-    if (value === '' || value.length <= 1) {
-      dispatch(ColleaguesActions.clearColleagueList());
-      return;
-    }
-
-    dispatch(
-      ColleaguesActions.getColleagues({
-        'first-name_like': value,
-        'last-name_like': value,
-      }),
-    );
-  };
+  const { colleagues, handleSearchColleagues } = useSearchColleagues();
 
   const handleChange = (e: any) => {
     const { colleagueUUID } = e.colleague;
@@ -45,9 +27,9 @@ const ColleaguesFinder: FC<Props> = ({ onSelect, error, value }) => {
       <div className={css({ marginTop: '32px' })} data-test-id='search-part'>
         <Item errormessage={error}>
           <SearchInput
-            name={`search_option`}
+            name={'search_option'}
             onChange={handleChange}
-            onSearch={handleSearchColleagues}
+            onSearch={(e) => handleSearchColleagues(e.target.value)}
             placeholder={'Search'}
             options={value ? [] : colleagues}
             selected={null}
@@ -57,7 +39,7 @@ const ColleaguesFinder: FC<Props> = ({ onSelect, error, value }) => {
               <div className={css({ display: 'flex', justifyContent: 'flex-start', alignItems: 'center' })}>
                 <img className={css({ width: '50px', height: '50px', borderRadius: '50%' })} src={defaultImg} />
                 <div className={css({ marginLeft: '16px' })}>
-                  <div className={css(FlexGapStyle, SelectedItemStyle)}>
+                  <div className={css(flexGapStyle, selectedItemStyle)}>
                     <div>{item?.colleague?.profile?.firstName}</div>
                     <div>{item?.colleague?.profile?.lastName}</div>
                   </div>
@@ -75,12 +57,12 @@ const ColleaguesFinder: FC<Props> = ({ onSelect, error, value }) => {
   );
 };
 
-const FlexGapStyle: Rule = {
+const flexGapStyle: Rule = {
   display: 'flex',
   gap: '8px',
 };
 
-const SelectedItemStyle: Rule = ({ colors }) => ({
+const selectedItemStyle: Rule = ({ colors }) => ({
   fontWeight: 'bold',
   fontSize: '16px',
   color: colors.link,

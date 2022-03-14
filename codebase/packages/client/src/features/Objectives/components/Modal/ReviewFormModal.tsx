@@ -2,7 +2,7 @@ import React, { FC, useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
 import { useForm } from 'react-hook-form';
-import { Button, Icon, Rule, useBreakpoints, useStyle } from '@dex-ddl/core';
+import { Button, Icon, Rule, Styles, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
   currentUserSelector,
@@ -27,6 +27,7 @@ import { Input, Item, Select, Textarea, Attention, Text } from 'components/Form'
 import { GenericItemField } from 'components/GenericForm';
 import MarkdownRenderer from 'components/MarkdownRenderer';
 import SuccessModal from 'components/SuccessModal';
+import { Icon as IconComponent } from 'components/Icon';
 
 import { SubmitButton } from './index';
 import ReviewHelpModal from './ReviewHelpModal';
@@ -88,7 +89,7 @@ const ReviewFormModal: FC<ReviewFormModal> = ({ reviewType, onClose }) => {
 
   const { components = [] } = schema;
 
-  const yepSchema = components.reduce(createYupSchema, {});
+  const yepSchema = components.reduce(createYupSchema(t), {});
   const methods = useForm({
     mode: 'onChange',
     resolver: yupResolver<Yup.AnyObjectSchema>(Yup.object().shape(yepSchema)),
@@ -209,9 +210,31 @@ const ReviewFormModal: FC<ReviewFormModal> = ({ reviewType, onClose }) => {
           padding: mobileScreen ? `0 ${theme.spacing.s4}` : `0 ${theme.spacing.s10}`,
         })}
       >
+        <span
+          className={css({
+            position: 'fixed',
+            top: theme.spacing.s5,
+            left: mobileScreen ? theme.spacing.s5 : theme.spacing.s10,
+            textDecoration: 'none',
+            border: 'none',
+            cursor: 'pointer',
+          })}
+          onClick={onClose}
+        >
+          <IconComponent graphic='arrowLeft' invertColors={true} />
+        </span>
         <form data-test-id={'REVIEW_FORM_MODAL'}>
           <div className={css({ padding: `0 0 ${theme.spacing.s5}` })}>
-            <div className={css({ fontSize: '24px', lineHeight: '28px', color: theme.colors.tescoBlue })}>{title}</div>
+            <div
+              className={css({
+                fontSize: '24px',
+                lineHeight: '28px',
+                color: theme.colors.tescoBlue,
+                fontWeight: theme.font.weight.bold,
+              })}
+            >
+              {title}
+            </div>
             <div
               className={css({
                 fontSize: '18px',
@@ -266,18 +289,27 @@ const ReviewFormModal: FC<ReviewFormModal> = ({ reviewType, onClose }) => {
                 const defaultTag: Rule = ({ theme }) => ({
                   margin: '0px',
                   color: theme.colors.base,
-                  fontSize: '16px',
-                  lineHeight: '20px',
+                  fontSize: '18px',
+                  lineHeight: '22px',
                 });
 
                 const components = { p: CustomPTag };
                 return (
-                  <div style={{ padding: '10px 0' }} key={id}>
+                  <div style={{ margin: '24px 0' }} key={id}>
                     <div
                       className={css({
-                        fontSize: '16px',
-                        lineHeight: '20px',
-                      })}
+                        padding: 0,
+                        '& > p': {
+                          margin: '0px',
+                          fontSize: '16px',
+                          lineHeight: '20px',
+                        },
+                        '& > h2': {
+                          margin: '0px',
+                          fontSize: '18px',
+                          lineHeight: '22px',
+                        },
+                      } as Styles)}
                     >
                       <MarkdownRenderer components={components} source={text} />
                     </div>
@@ -360,13 +392,14 @@ const ReviewFormModal: FC<ReviewFormModal> = ({ reviewType, onClose }) => {
                         color: `${theme.colors.tescoBlue}`,
                       },
                     ]}
-                    onPress={onClose}
+                    onClick={onClose}
                   >
                     <Trans i18nKey='close'>Close</Trans>
                   </Button>
                 ) : (
                   <>
                     <Button
+                      onClick={onSaveDraft}
                       styles={[
                         theme.font.fixed.f16,
                         {
@@ -378,7 +411,6 @@ const ReviewFormModal: FC<ReviewFormModal> = ({ reviewType, onClose }) => {
                           color: `${theme.colors.tescoBlue}`,
                         },
                       ]}
-                      onPress={onSaveDraft}
                     >
                       <Trans i18nKey='save_as_draft'>Save as draft</Trans>
                     </Button>

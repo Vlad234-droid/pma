@@ -1,8 +1,11 @@
 import React, { FC } from 'react';
-import { ConfigProps } from '../config/types';
+import { ConfigProps } from '../../config/types';
 import { Rule, useStyle, useBreakpoints, Styles } from '@dex-ddl/core';
 import { TileWrapper } from 'components/Tile';
 import { Link } from 'react-router-dom';
+import { buildPath } from 'features/Routes';
+
+export const FEEDBACK_CARD_WRAPPER = 'feedback_card_wrapper';
 
 type FeedbackCardProps = {
   card: ConfigProps;
@@ -12,8 +15,8 @@ const FeedbackCard: FC<FeedbackCardProps> = ({ card }) => {
   const { css } = useStyle();
 
   return (
-    <div className={css(cardStyle)}>
-      <Link to={card.link}>
+    <div className={css(cardStyle)} data-test-id={FEEDBACK_CARD_WRAPPER}>
+      <Link to={buildPath(card.link)}>
         <TileWrapper>
           <div className={css(wrapperBlock)}>
             <div className={css(actionStyle)}>{card.action}</div>

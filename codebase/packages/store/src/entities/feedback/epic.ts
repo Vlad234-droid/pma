@@ -6,7 +6,7 @@ import { catchError, filter, map, switchMap } from 'rxjs/operators';
 import {
   createNewFeedback,
   readFeedback,
-  updatedFeedback,
+  updateFeedback,
   getObjectiveReviews,
   getGiveFeedback,
   getRespondFeedback,
@@ -119,13 +119,14 @@ export const createNewFeedbackEpic: Epic = (action$, _, { api }) =>
 
 export const updateFeedbackEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
-    filter(isActionOf(updatedFeedback.request)),
+    filter(isActionOf(updateFeedback.request)),
     switchMap(({ payload }) => {
       //@ts-ignore
       return from(api.updateFeedback(payload)).pipe(
         //@ts-ignore
-        map(updatedFeedback.success),
-        catchError(({ errors }) => of(createNewFeedback.failure(errors))),
+        map(updateFeedback.success),
+
+        catchError(({ errors }) => of(updateFeedback.failure(errors))),
       );
     }),
   );
@@ -146,7 +147,6 @@ export const getObjectiveReviewsEpic: Epic = (action$, _, { api }) =>
 export default combineEpics(
   createNewFeedbackEpic,
   readFeedbackEpic,
-
   updateFeedbackEpic,
   getObjectiveReviewsEpic,
   getGiveFeedbackEpic,

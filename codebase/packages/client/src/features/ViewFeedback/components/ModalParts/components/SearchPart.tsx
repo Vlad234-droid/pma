@@ -1,92 +1,44 @@
-import React, { FC, useEffect, useState } from 'react';
-import { SearchPartProps } from './type';
+import React, { FC } from 'react';
+import { UseFormReturn } from 'react-hook-form';
 import { useStyle } from '@dex-ddl/core';
-import { Item, Input } from 'components/Form';
-import { SearchInput } from './SearchInput';
-import { ColleaguesActions, getColleaguesSelector } from '@pma/store';
-import { useSelector, useDispatch } from 'react-redux';
-import { GenericItemField } from 'components/GenericForm';
-import { useTranslation } from 'components/Translation';
+import { Item, Input, Field } from 'components/Form';
+import { ColleaguesFinder } from 'features/GiveFeedBack/components';
 
-const SearchPart: FC<SearchPartProps> = ({
-  setSelectedPerson,
-  setSearchValue,
-  searchValue,
-  selectedPerson,
-  searchDate = '',
-  setSearchDate,
-  methods,
-}) => {
-  const [inputValue, setInputValue] = useState('');
-  const { css } = useStyle();
-  const dispatch = useDispatch();
-  const { t } = useTranslation();
-
+const getColleagueName = (data) => {
+  if (!data) return '';
   const {
-    getValues,
-    setValue,
-    formState: { errors },
-  } = methods;
+    profile: { firstName, lastName },
+  } = data.colleague;
 
-  const { date } = getValues();
+  return `${firstName} ${lastName}`;
+};
 
-  useEffect(() => {
-    if (setSearchDate) {
-      date ? setSearchDate(new Date(date).toISOString()) : setSearchDate('');
-    }
-  }, [date]);
+type Props = Pick<UseFormReturn, 'setValue'> & {
+  selectedColleague: any;
+  date: string;
+};
 
-  useEffect(() => {
-    setValue('date', searchDate);
-  }, [searchDate]);
-
-  const { register } = methods;
-  const findedCollegues = useSelector(getColleaguesSelector) || [];
+const SearchPart: FC<Props> = ({ setValue, selectedColleague, date }) => {
+  const { css } = useStyle();
 
   return (
     <div className={css({ marginTop: '32px' })}>
-      <Item
-        errormessage={
-          errors['search_option'] && errors['search_option'].type === 'required' ? errors['search_option'].message : ''
-        }
-      >
-        <SearchInput
-          isValid={!errors[`search_option`]}
-          name={`search_option`}
-          onChange={(e) => {
-            setInputValue(() => e.target.value);
-            if (e.target.value !== '' && e.target.value.length >= 3) {
-              dispatch(
-                ColleaguesActions.getColleagues({
-                  'first-name_like': e.target.value,
-                  'last-name_like': e.target.value,
-                }),
-              );
-            }
-
-            register(`search_option`).onChange(e);
-          }}
-          setSelectedPerson={setSelectedPerson}
-          domRef={register(`search_option`).ref}
-          placeholder={t('search', 'Search')}
-          options={findedCollegues}
-          setSearchValue={setSearchValue}
-          searchValue={searchValue}
-          selectedPerson={selectedPerson}
-          value={inputValue}
-        />
-      </Item>
-      <GenericItemField
-        name={`date`}
-        methods={methods}
+      <ColleaguesFinder
+        onSelect={(targetColleagueUuid) => {
+          setValue('targetColleagueUuid', targetColleagueUuid, { shouldValidate: true });
+        }}
+        selected={null}
+        value={getColleagueName(selectedColleague)}
+      />
+      <Field
+        name={'date'}
         Wrapper={({ children }) => (
           <Item label='Date' withIcon={false}>
             {children}
           </Item>
         )}
-        Element={(props) => (
-          <Input value={searchDate} customStyles={{ borderRadius: '50px' }} type={'date'} readonly={true} {...props} />
-        )}
+        Element={(props) => <Input customStyles={{ borderRadius: '50px' }} {...props} value={date} type={'date'} />}
+        setValue={setValue}
       />
     </div>
   );

@@ -4,18 +4,27 @@ import { renderWithTheme as render, screen } from 'utils/test';
 
 import { Textarea } from '../Input';
 
-it('render item with placeholder', async () => {
-  render(<Textarea placeholder='this is a placeholder' />);
+describe('', () => {
+  let onChange;
+  beforeEach(() => {
+    onChange = jest.fn();
+  });
+  afterEach(() => {
+    onChange.mockRestore();
+  });
+  it('render item with placeholder', async () => {
+    render(<Textarea placeholder='this is a placeholder' onChange={onChange} />);
 
-  const placeholder = screen.queryByPlaceholderText(/this is a placeholder/i);
+    const placeholder = screen.queryByPlaceholderText(/this is a placeholder/i);
 
-  expect(placeholder).toBeInTheDocument();
-});
+    expect(placeholder).toBeInTheDocument();
+  });
 
-it('render item without placeholder', async () => {
-  render(<Textarea />);
+  it('render item without placeholder', async () => {
+    render(<Textarea onChange={onChange} />);
 
-  const placeholder = screen.queryByPlaceholderText(/[.+]/);
+    const placeholder = screen.queryByPlaceholderText(/[.+]/);
 
-  expect(placeholder).not.toBeInTheDocument();
+    expect(placeholder).not.toBeInTheDocument();
+  });
 });

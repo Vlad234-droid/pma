@@ -5,15 +5,19 @@ import { Info360ModalProps } from '../config/types';
 import { VideoPlayer, VideoId } from 'features/VideoPlayer';
 import { Trans } from 'components/Translation';
 
-export const INFO_360_MODAL = 'info_360_modal';
+export const INFO_MODAL = 'info_modal';
 
 const Info360Modal: FC<Info360ModalProps> = ({ setInfo360Modal }) => {
-  const { css, theme } = useStyle();
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+  const { css } = useStyle();
+
   return (
-    <div className={css(WrapperInfo)} data-test-id={INFO_360_MODAL}>
+    <div className={css(WrapperInfo)} data-test-id={INFO_MODAL}>
       <div className={css({ height: '100%' })}>
+        <div className={css(title)}>
+          <Trans i18nKey='difference_between_everyday_feedback_and_feedback_360'>
+            What is the difference between ‘Everyday feedback’ and ‘360 feedback’?
+          </Trans>
+        </div>
         <p className={css(PreTitle)}>
           <Trans i18nKey='you_can_give_and_receive_feedback_with_your_colleagues'>
             You can give and receive feedback with your colleagues using Everyday feedback or 360 feedback.
@@ -75,16 +79,7 @@ const Info360Modal: FC<Info360ModalProps> = ({ setInfo360Modal }) => {
           </Trans>
         </p>
       </div>
-      <span
-        className={css({
-          position: 'fixed',
-          top: theme.spacing.s5,
-          left: mobileScreen ? theme.spacing.s5 : theme.spacing.s10,
-          textDecoration: 'none',
-          border: 'none',
-          cursor: 'pointer',
-        })}
-      >
+      <span className={css(arrowSpan)}>
         <IconButton
           graphic='arrowLeft'
           onPress={() => setInfo360Modal(() => false)}
@@ -95,25 +90,46 @@ const Info360Modal: FC<Info360ModalProps> = ({ setInfo360Modal }) => {
   );
 };
 
+const arrowSpan: Rule = ({ theme }) => {
+  const [, isBreakpoint] = useBreakpoints();
+  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+
+  return {
+    position: 'fixed',
+    top: theme.spacing.s5,
+    left: mobileScreen ? theme.spacing.s5 : `${theme.spacing.s10}`,
+    textDecoration: 'none',
+    border: 'none',
+    cursor: 'pointer',
+  };
+};
+
+const title: Rule = ({ theme }) => ({
+  fontSize: `${theme.font.fixed.f20.fontSize}`,
+  fontWeight: `${theme.font.weight.bold}`,
+  marginBottom: '20px',
+});
+
 const WrapperInfo: Rule = {
   padding: '0px 36px',
   overflow: 'auto',
   height: '100%',
 };
 
-const PreTitle: Rule = {
+const PreTitle: Rule = ({ theme }) => ({
   margin: '16px 0px 0px 0px',
   fontWeight: 'normal',
-  fontSize: '16px',
+  fontSize: `${theme.font.fixed.f16.fontSize}`,
   lineHeight: '20px',
-};
+});
 
-const TitleVideo: Rule = {
-  fontWeight: 'bold',
-  fontSize: '20px',
-  lineHeight: '24px',
+const TitleVideo: Rule = ({ theme }) => ({
+  fontWeight: `${theme.font.weight.bold}`,
+  fontSize: `${theme.font.fixed.f20.fontSize}`,
+  lineHeight: `${theme.font.fixed.f24.lineHeight}`,
   margin: '32px 0px 16px 0px',
-};
+});
+
 const BlockVideoExplanation: Rule = {
   width: '100%',
   '& > img': {
@@ -124,18 +140,18 @@ const BlockVideoExplanation: Rule = {
   },
 } as Styles;
 
-const RecomendationInfo: Rule = {
-  fontWeight: 'bold',
-  fontSize: '24px',
-  lineHeight: '28px',
+const RecomendationInfo: Rule = ({ theme }) => ({
+  fontWeight: `${theme.font.weight.bold}`,
+  fontSize: `${theme.font.fixed.f20.fontSize}`,
+  lineHeight: `${theme.font.fixed.f20.lineHeight}`,
   marginBottom: '16px',
-};
+});
 
-const PreRecomendationInfo: Rule = {
-  fontWeight: 'normal',
-  fontSize: '16px',
-  lineHeight: '20px',
+const PreRecomendationInfo: Rule = ({ theme }) => ({
+  fontWeight: `${theme.font.weight.light}`,
+  fontSize: `${theme.font.fixed.f16.fontSize}`,
+  lineHeight: `${theme.font.fixed.f20.lineHeight}`,
   margin: '0px',
-};
+});
 
 export default Info360Modal;

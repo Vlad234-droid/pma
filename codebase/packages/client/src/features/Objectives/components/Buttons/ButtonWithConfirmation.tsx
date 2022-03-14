@@ -1,5 +1,5 @@
 import React, { FC, HTMLProps, useState } from 'react';
-import { Rule, Button } from '@dex-ddl/core';
+import { Rule, useStyle, CreateRule, Button } from '@dex-ddl/core';
 import { ConfirmModal } from 'features/Modal';
 import { IconButton } from 'components/IconButton';
 import { Trans } from 'components/Translation';
@@ -13,6 +13,7 @@ export type ButtonWithConfirmation = {
   confirmationTitle?: string;
   confirmationDescription?: string;
   withIcon?: boolean;
+  disabledBtnTooltip?: string;
 };
 
 type Props = HTMLProps<HTMLInputElement> & ButtonWithConfirmation;
@@ -22,12 +23,14 @@ const ButtonWithConfirmation: FC<Props> = ({
   confirmationButtonTitle = <Trans i18nKey='submit'>Submit</Trans>,
   confirmationTitle = 'Submit Objectives',
   confirmationDescription = 'Are you sure you want to submit all of your objectives to your manager?',
+  disabledBtnTooltip = '',
   styles = [],
   onSave,
   isDisabled = false,
   withIcon = false,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const { css } = useStyle();
 
   return (
     <>
@@ -43,13 +46,17 @@ const ButtonWithConfirmation: FC<Props> = ({
           {buttonName}
         </IconButton>
       ) : (
-        <Button
-          styles={[...styles, isDisabled ? { opacity: 0.4 } : {}]}
-          onPress={() => setIsOpen(true)}
-          isDisabled={isDisabled}
+        <div
+          title={isDisabled ? disabledBtnTooltip : ''}
+          className={css(...styles, btnStyles({isDisabled}))}
         >
-          {buttonName}
-        </Button>
+          <Button
+            onPress={() => setIsOpen(true)}
+            isDisabled={isDisabled}
+          >
+            {buttonName}
+          </Button>
+        </div>
       )}
       {isOpen && (
         <ConfirmModal
@@ -67,5 +74,13 @@ const ButtonWithConfirmation: FC<Props> = ({
     </>
   );
 };
+
+const btnStyles: CreateRule<{isDisabled: boolean}> = ({ isDisabled }) => {
+  return {
+    cursor: isDisabled ? 'default' : 'pointer',
+    opacity: isDisabled ? 0.4 : 1,
+    borderRadius: '32px',
+  }
+}
 
 export default ButtonWithConfirmation;

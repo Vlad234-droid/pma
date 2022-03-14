@@ -1,3 +1,8 @@
+import { PressEvents as BasePressEvents } from '@react-types/shared';
+import { theme as baseTheme } from '@dex-ddl/core';
+
+import merge from 'lodash.merge';
+import * as secondaryTheme from 'theme';
 declare type Nullable<T> = T | null;
 
 declare module '*.html' {
@@ -68,4 +73,17 @@ declare namespace NodeJS {
   export interface Process {
     env: ProcessEnv;
   }
+}
+
+// todo remove after merge with new dex version
+declare module '@react-types/shared' {
+  export interface PressEvents extends BasePressEvents {
+    onClick?: any;
+  }
+}
+
+// todo remove after merge with new dex version
+declare module '@dex-ddl/core' {
+  export const theme = merge(baseTheme, secondaryTheme);
+  export type Theme = typeof theme;
 }

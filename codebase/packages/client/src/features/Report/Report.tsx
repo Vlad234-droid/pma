@@ -1,6 +1,6 @@
 import React, { FC, useState, useEffect, useCallback } from 'react';
 import { ReportActions, approvedObjectivesSelector, notApprovedObjectivesSelector } from '@pma/store';
-import { Button, colors, CreateRule, Rule, Styles, useBreakpoints, useStyle } from '@dex-ddl/core';
+import { Button, colors, CreateRule, Rule, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { IconButton } from 'components/IconButton';
@@ -18,13 +18,14 @@ import AppliedFilters from './components/AppliedFilters';
 import { getFieldOptions, listOfStatuses, metaStatuses } from './config';
 import { downloadCsvFile } from './utils';
 import { getCurrentYear } from 'utils/date';
-
 import useStatisticsReport from './hooks';
+import { useToast } from 'features/Toast';
 
 export const REPORT_WRAPPER = 'REPORT_WRAPPER';
 
 const Report: FC = () => {
   const { t } = useTranslation();
+  const { addToast } = useToast();
 
   const dispatch = useDispatch();
   const [focus, setFocus] = useState(false);
@@ -141,7 +142,7 @@ const Report: FC = () => {
           {!!getAppliedReport().length && (
             <AppliedFilters
               clearAppliedFilters={clearAppliedFilters}
-              getAppliedReport={getAppliedReport}
+              getAppliedReport={getAppliedReport()}
               colleaguesCount={colleaguesCount}
             />
           )}
@@ -201,15 +202,43 @@ const Report: FC = () => {
               data={[{ percent: objectivesSubmittedPercentage }]}
               display={View.CHART}
             />
+          </div>
+          <div className={css(rightColumn)}>
             <PieChart
-              title={t(TitlesReport.WL4And5, 'Wl4 & 5 Objectives submitted')}
+              title={t(TitlesReport.OBJECTIVES_APPROVED, 'Objectives approved')}
+              data={[{ percent: objectivesApprovedPercentage }]}
               display={View.CHART}
-              data={[
-                { percent: approvedObjPercent, title: approvedObjTitle },
-                { percent: notApprovedObjPercent, title: notApprovedObjTitle },
-              ]}
             />
+            <div className={css(downloadWrapperStyle)}>
+              <Button
+                styles={[buttonCoreStyled]}
+                onPress={() => {
+                  downloadCsvFile(t, addToast);
+                }}
+              >
+                <Trans>WL4-5 report</Trans>
+              </Button>
+              <form>
+                <h2 className={css(yearLabel)}>
+                  <Trans i18nKey='view_previous_years'>View previous years</Trans>
+                </h2>
 
+                <Select
+                  options={getFieldOptions(getCurrentYear())}
+                  name={'year_options'}
+                  placeholder={t('choose_an_area', 'Choose an area')}
+                  //@ts-ignore
+                  onChange={({ target: { value } }) => {
+                    changeYearHandler(value);
+                  }}
+                />
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <div className={css(pieChartWrapper)}>
+          <div className={css(leftColumn)}>
             <PieChart
               title={t(TitlesReport.MYR, 'Mid-year review')}
               display={View.CHART}
@@ -218,53 +247,8 @@ const Report: FC = () => {
                 { percent: myrApprovedPercentage, title: t(TitlesReport.APPROVED, 'Approved') },
               ]}
             />
-
-            <PieChart
-              title={t(TitlesReport.EYR, 'Year-end review')}
-              display={View.CHART}
-              data={[
-                { percent: eyrSubmittedPercentage, title: t(TitlesReport.SUBMITTED, 'Submitted') },
-                { percent: eyrApprovedPercentage, title: t(TitlesReport.APPROVED, 'Approved') },
-              ]}
-            />
-            <PieChart
-              title={t(TitlesReport.MOMENT_FEEDBACK, 'In the moment feedback')}
-              display={View.CHART}
-              data={[
-                { percent: feedbackRequestedPercentage, title: t(TitlesReport.REQUESTED, 'Requested') },
-                { percent: feedbackGivenPercentage, title: t(TitlesReport.GIVEN, 'Given') },
-              ]}
-            />
           </div>
-
           <div className={css(rightColumn)}>
-            <div className={css({ display: 'flex', gap: '8px' })}>
-              <div className={css({ flex: '1' })}>
-                <PieChart
-                  title={t(TitlesReport.OBJECTIVES_APPROVED, 'Objectives approved')}
-                  data={[{ percent: objectivesApprovedPercentage }]}
-                  display={View.CHART}
-                />
-              </div>
-              <div className={css({ display: 'flex', flexDirection: 'column' })}>
-                <Button styles={[buttonCoreStyled]} onPress={downloadCsvFile}>
-                  <Trans>WL4-5 report</Trans>
-                </Button>
-                <form>
-                  <h2 className={css(yearLabel)}>View previous years</h2>
-
-                  <Select
-                    options={getFieldOptions(getCurrentYear())}
-                    name={'year_options'}
-                    placeholder={t('choose_an_area', 'Choose an area')}
-                    //@ts-ignore
-                    onChange={({ target: { value } }) => {
-                      changeYearHandler(value);
-                    }}
-                  />
-                </form>
-              </div>
-            </div>
             <InfoTable
               mainTitle={t(TitlesReport.MYR_BREAKDOWN, 'Breakdown of Mid-year ratings')}
               data={[
@@ -290,6 +274,20 @@ const Report: FC = () => {
                 },
               ]}
             />
+          </div>
+        </div>
+        <div className={css(pieChartWrapper)}>
+          <div className={css(leftColumn)}>
+            <PieChart
+              title={t(TitlesReport.EYR, 'Year-end review')}
+              display={View.CHART}
+              data={[
+                { percent: eyrSubmittedPercentage, title: t(TitlesReport.SUBMITTED, 'Submitted') },
+                { percent: eyrApprovedPercentage, title: t(TitlesReport.APPROVED, 'Approved') },
+              ]}
+            />
+          </div>
+          <div className={css(rightColumn)}>
             <InfoTable
               mainTitle={t(TitlesReport.EYR_BREAKDOWN, 'Breakdown of End-year ratings')}
               data={[
@@ -315,13 +313,39 @@ const Report: FC = () => {
                 },
               ]}
             />
-            <div className={css(flexContainer)}>
-              <PieChart
-                title={t(TitlesReport.BUSINESS, 'New to business')}
-                data={[{ percent: newToBusinessCount, title: t(Rating.COLLEAGUES, 'Colleagues') }]}
-                display={View.QUANTITY}
-              />
-            </div>
+          </div>
+        </div>
+        <div className={css(pieChartWrapper)}>
+          <div className={css(leftColumn)}>
+            <PieChart
+              title={t(TitlesReport.WL4And5, 'Wl4 & 5 Objectives submitted')}
+              display={View.CHART}
+              data={[
+                { percent: approvedObjPercent, title: approvedObjTitle },
+                { percent: notApprovedObjPercent, title: notApprovedObjTitle },
+              ]}
+            />
+          </div>
+          <div className={css(rightColumn)}>
+            <PieChart
+              title={t(TitlesReport.BUSINESS, 'New to business')}
+              data={[{ percent: newToBusinessCount, title: t(Rating.COLLEAGUES, 'Colleagues') }]}
+              display={View.QUANTITY}
+            />
+          </div>
+        </div>
+        <div className={css(pieChartWrapper)}>
+          <div className={css(leftColumn)}>
+            <PieChart
+              title={t(TitlesReport.MOMENT_FEEDBACK, 'In the moment feedback')}
+              display={View.CHART}
+              data={[
+                { percent: feedbackRequestedPercentage, title: t(TitlesReport.REQUESTED, 'Requested') },
+                { percent: feedbackGivenPercentage, title: t(TitlesReport.GIVEN, 'Given') },
+              ]}
+            />
+          </div>
+          <div className={css(rightColumn)}>
             <InfoTable
               mainTitle={t(TitlesReport.ANNIVERSARY_REVIEWS, 'Anniversary Reviews completed per quarter')}
               preTitle={t(TitlesReport.HOURLY_PAID, 'Hourly paid colleagues only')}
@@ -362,17 +386,8 @@ const buttonCoreStyled: Rule = ({ theme }) => ({
   width: '133px',
   background: theme.colors.tescoBlue,
   color: `${theme.colors.white}`,
-  margin: '0px 42px 20px auto',
+  margin: '0px auto 20px auto',
 });
-
-const flexContainer: Rule = {
-  display: 'flex',
-  justifyContent: 'space-between',
-  gap: '8px',
-  '& > div': {
-    flex: 1,
-  },
-} as Styles;
 
 const iconDownloadStyle: Rule = {
   width: '22px',
@@ -380,6 +395,11 @@ const iconDownloadStyle: Rule = {
   position: 'relative',
   top: '2px',
   left: '2px',
+};
+const downloadWrapperStyle: Rule = {
+  display: 'flex',
+  flexDirection: 'column',
+  width: '40%',
 };
 
 const iconBtnStyle = {
@@ -406,18 +426,18 @@ const pieChartWrapper: Rule = {
   display: 'flex',
   gap: '8px',
   flexWrap: 'wrap',
+  marginTop: '8px',
 };
 const leftColumn: Rule = {
   display: 'flex',
   gap: '8px',
-  flexDirection: 'column',
   flex: 4,
   flexBasis: '400px',
 };
 const rightColumn: Rule = {
   display: 'flex',
   gap: '8px',
-  flexDirection: 'column',
+  flexDirection: 'row',
   flex: 6,
   flexBasis: '550px',
 };

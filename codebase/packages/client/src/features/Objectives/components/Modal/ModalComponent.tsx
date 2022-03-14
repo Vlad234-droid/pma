@@ -73,6 +73,7 @@ const modalTitleOptionStyle: CreateRule<{ mobileScreen }> = (props) => {
     left: 0,
     right: 0,
     color: 'white',
+    fontWeight: theme.font.weight.bold,
     ...(mobileScreen
       ? {
           fontSize: `${theme.font.fixed.f20.fontSize}`,

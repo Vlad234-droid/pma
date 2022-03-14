@@ -48,7 +48,7 @@ enum Statuses {
   INFO = 'info',
 }
 
-const GiveNewFeedback: FC = () => {
+const NewFeedback: FC = () => {
   const dispatch = useDispatch();
   const [status, setStatus] = useState(Statuses.PENDING);
   const { uuid } = useParams<{ uuid: string }>();
@@ -69,7 +69,7 @@ const GiveNewFeedback: FC = () => {
       dispatch(FeedbackActions.createNewFeedback([{ ...data, colleagueUuid }]));
     } else {
       dispatch(
-        FeedbackActions.updatedFeedback({
+        FeedbackActions.updateFeedback({
           ...data,
           feedbackItems: data.feedbackItems.map((item) => ({
             ...item,
@@ -206,4 +206,4 @@ const modalTitleOptionStyle: Rule = () => {
   };
 };
 
-export default GiveNewFeedback;
+export default NewFeedback;

@@ -1,27 +1,53 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useState, useEffect, useCallback } from 'react';
 import { Rule, useBreakpoints, useStyle } from '@dex-ddl/core';
-import { FilterOption } from 'features/Shared';
+import { useDispatch, useSelector } from 'react-redux';
+import { FeedbackActions, colleagueUUIDSelector, getRespondedFeedbacksSelector } from '@pma/store';
 
-import { DraftItem, RadioBtns } from './components';
 import { FilterModal } from '../Shared/components/FilterModal';
+import { DraftItem, RadioBtns } from './components';
+import { FilterOption } from 'features/Shared';
+import debounce from 'lodash.debounce';
+import { FEEDBACK_STATUS_IN, FeedbackStatus } from 'config/enum';
+import { initialState } from './config';
+
+import { getSortString } from 'utils/feedback';
 
 export const RESPOND_FEEDBACK_CONTAINER = 'respond_feedback_container';
 
 const RespondFeedbackContainer: FC = () => {
   const { css } = useStyle();
+  const dispatch = useDispatch();
 
-  const [checkedRadio, setCheckedRadio] = useState({
-    pending: true,
-    completed: false,
-  });
+  const colleagueUuid = useSelector(colleagueUUIDSelector);
 
-  //filter
   const [focus, setFocus] = useState(false);
   const [filterModal, setFilterModal] = useState(false);
-  const [filterFeedbacks, setFilterFeedbacks] = useState({
-    sort: '',
-    search: '',
-  });
+  const [filterFeedbacks, setFilterFeedbacks] = useState(initialState);
+  const [status, setStatus] = useState(FeedbackStatus.PENDING);
+
+  useEffect(() => {
+    dispatch(FeedbackActions.clearFeedback());
+  }, []);
+
+  const getAllFeedback = useCallback(
+    debounce((filter) => {
+      dispatch(
+        FeedbackActions.getRespondFeedback({
+          _limit: '300',
+          'colleague-uuid': colleagueUuid,
+          ...(filter.search.length > 2 && { _search: filter.search }),
+          _sort: getSortString(filter),
+          status_in: [FEEDBACK_STATUS_IN.PENDING, FEEDBACK_STATUS_IN.COMPLETED],
+        }),
+      );
+    }, 300),
+    [],
+  );
+
+  useEffect(() => {
+    if (!colleagueUuid) return;
+    getAllFeedback(filterFeedbacks);
+  }, [colleagueUuid, filterFeedbacks]);
 
   useEffect(() => {
     if (focus) {
@@ -31,17 +57,13 @@ const RespondFeedbackContainer: FC = () => {
 
   const hasActiveFilter = Object.values(filterFeedbacks).some((f) => f);
 
+  const feedbackList = useSelector(getRespondedFeedbacksSelector(status)) || [];
+
   return (
     <>
       <div data-test-id={RESPOND_FEEDBACK_CONTAINER}>
         <div className={css(headerStyled)}>
-          <RadioBtns
-            checkedRadio={checkedRadio}
-            setCheckedRadio={setCheckedRadio}
-            setFilterModal={setFilterModal}
-            filterModal={filterModal}
-            setFilterFeedbacks={setFilterFeedbacks}
-          />
+          <RadioBtns status={status} setStatus={setStatus} setFilterModal={setFilterModal} filterModal={filterModal} />
           <div className={css(FlexStyled)}>
             <FilterOption
               focus={focus}
@@ -69,7 +91,7 @@ const RespondFeedbackContainer: FC = () => {
           </div>
         </div>
         <div className={css(DraftsStyle)}>
-          <DraftItem checkedRadio={checkedRadio} filterFeedbacks={filterFeedbacks} />
+          <DraftItem status={status} list={feedbackList} canEdit={status === FeedbackStatus.PENDING} />
         </div>
       </div>
     </>

@@ -9,7 +9,8 @@ import { Icon } from 'components/Icon';
 import { useAuthContainer } from 'contexts/authContext';
 import { TREATMENT_FIELD_OPTIONS, getCards } from './config';
 import { getSelectedTreatmentValue } from './utils';
-import Info360Modal, { FeedbackCard } from './components';
+import { FeedbackCard } from './components';
+import { Info360Modal } from './Modals';
 
 export const FEEDBACK_ACTIONS = 'feedback_actions';
 
@@ -52,31 +53,28 @@ const FeedbackActions: FC = () => {
     dispatch(UserActions.createProfileAttribute([payload]));
   };
 
-  if (info360Modal) {
-    return (
-      <Modal
-        modalPosition={'middle'}
-        overlayColor={'tescoBlue'}
-        modalContainerRule={[containerRule({ theme, mobileScreen })]}
-        closeOptions={{
-          content: <Icon graphic='cancel' invertColors={true} />,
-          onClose: () => {
-            setInfo360Modal(() => false);
-          },
-          styles: [modalCloseOptionStyle({ mobileScreen })],
-        }}
-        title={{
-          content: t('everyday_feedback', 'Everyday Feedback'),
-          styles: [modalTitleOptionStyle({ theme, mobileScreen })],
-        }}
-      >
-        <Info360Modal setInfo360Modal={setInfo360Modal} />
-      </Modal>
-    );
-  }
-
   return (
     <>
+      {info360Modal && (
+        <Modal
+          modalPosition={'middle'}
+          overlayColor={'tescoBlue'}
+          modalContainerRule={[containerRule({ theme, mobileScreen })]}
+          closeOptions={{
+            content: <Icon graphic='cancel' invertColors={true} />,
+            onClose: () => {
+              setInfo360Modal(() => false);
+            },
+            styles: [modalCloseOptionStyle({ mobileScreen })],
+          }}
+          title={{
+            content: t('everyday_feedback', 'Everyday Feedback'),
+            styles: [modalTitleOptionStyle({ theme, mobileScreen })],
+          }}
+        >
+          <Info360Modal setInfo360Modal={setInfo360Modal} />
+        </Modal>
+      )}
       <div data-test-id={FEEDBACK_ACTIONS}>
         <div className={css(inMomentStyle({ mobileScreen }))}>
           <div className={css(CenterFlexStyle)}>
@@ -89,9 +87,7 @@ const FeedbackActions: FC = () => {
               graphic='information'
               iconStyles={{ marginLeft: '8px', marginRight: '20px' }}
               data-test-id='iconButton'
-              onPress={() => {
-                setInfo360Modal(() => true);
-              }}
+              onPress={() => setInfo360Modal(true)}
             />
           </div>
 
@@ -107,7 +103,7 @@ const FeedbackActions: FC = () => {
             </IconButton>
           </div>
         </div>
-        <div className={css(сardsBlockStyle)}>
+        <div className={css(cardBlockStyle)}>
           {getCards().map((item) => (
             <FeedbackCard card={item} key={item.id} />
           ))}
@@ -182,7 +178,7 @@ const inMomentStyle: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) 
   return { display: 'flex', justifyContent: 'space-between', alignItems: 'center' };
 };
 
-const сardsBlockStyle: Rule = () => {
+const cardBlockStyle: Rule = () => {
   return {
     display: 'flex',
     justifyContent: 'space-between',

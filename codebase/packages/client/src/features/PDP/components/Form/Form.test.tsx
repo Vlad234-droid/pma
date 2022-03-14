@@ -89,9 +89,7 @@ describe('PDP Form', () => {
 
   it('check call empty form onSubmit', async () => {
     const { queryByTestId } = render(<Form {...props} />);
-
     const submitBtn = queryByTestId(SUBMIT_TEST_ID);
-    fireEvent.click(submitBtn);
-    expect(props.onSubmit).not.toHaveBeenCalledTimes(1);
+    expect(submitBtn).toBeNull();
   });
 });

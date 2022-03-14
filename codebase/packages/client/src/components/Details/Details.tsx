@@ -55,7 +55,7 @@ const desc: CreateRule<{ theme: Theme }> = (props) => {
     lineHeight: '20px',
     fontWeight: 'bold',
     paddingBottom: '24px',
-    borderBottom: `1px solid ${theme.colors.backgroundDarkest}`,
+    borderBottom: `1px solid ${theme.colors.lightGray}`,
   };
 };
 

@@ -1,3 +1,4 @@
+import { FeedbackStatus } from 'config/enum';
 import { Dispatch, SetStateAction, ReactElement } from 'react';
 
 export type ConfigProps = {
@@ -15,15 +16,7 @@ export type TypefeedbackItems = {
   content: string;
   feedbackUuid: string;
 };
-// export type PeopleTypes = {
-//   img: string;
-//   f_name: string;
-//   l_name: string;
-//   id: number;
-//   targetId: string;
-//   targetType: string;
-//   targetColleagueUuid?: string;
-// };
+
 export type PeopleTypes = any;
 export type ModalGiveFeedbackProps = {
   feedbackItems: Array<TypefeedbackItems>;
@@ -83,17 +76,13 @@ export type SuccessModalProps = {
   setSelectedPerson: Dispatch<SetStateAction<PeopleTypes | null>>;
 };
 
-export type filterFeedbacksType = {
-  sort: string;
-  search: string;
-};
-
 export type TypecheckedRadio = {
   pending: boolean;
   completed: boolean;
 };
 
 export type DraftItemProps = {
-  checkedRadio: TypecheckedRadio;
-  filterFeedbacks: filterFeedbacksType;
+  status: FeedbackStatus;
+  list: any;
+  canEdit: boolean;
 };

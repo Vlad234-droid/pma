@@ -64,7 +64,7 @@ const borderStyle: CreateRule<{ boarder: boolean; theme: Theme }> = (props) => {
   const { boarder, theme } = props;
   if (boarder) {
     return {
-      border: `1px solid ${theme.colors.backgroundDarkest}`,
+      border: `1px solid ${theme.colors.lightGray}`,
     };
   }
   return {

@@ -55,13 +55,17 @@ const GiveFeedbackForm: FC<GiveFeedbackFormProps> = ({
 
   const handleDraft = () => {
     const data = getValues();
-
-    if (!targetColleagueUuid) return;
-    onSubmit({ ...data, status: 'PENDING', feedbackItems: prepareFeedbackItems(feedbackFields, data.feedbackItems) });
+    const feedbackItems = prepareFeedbackItems(feedbackFields, data.feedbackItems.filter(Boolean));
+    onSubmit({ ...data, status: 'PENDING', feedbackItems });
   };
 
   const handleSave = (data) => {
-    onSubmit({ ...data, status: 'COMPLETED', feedbackItems: prepareFeedbackItems(feedbackFields, data.feedbackItems) });
+    const feedbackItems = prepareFeedbackItems(feedbackFields, data.feedbackItems.filter(Boolean));
+    onSubmit({
+      ...data,
+      status: 'COMPLETED',
+      feedbackItems,
+    });
   };
   return (
     <div className={css(WrapperModalGiveFeedbackStyle)} data-test-id={FORM_WRAPPER}>

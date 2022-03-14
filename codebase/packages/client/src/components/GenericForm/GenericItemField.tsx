@@ -1,5 +1,6 @@
 import { Rule, Styles } from '@dex-ddl/core';
 import React, { FC, RefObject, useEffect, useState } from 'react';
+import { VALIDATION_RULE } from 'utils/yup/types';
 
 import { Ref, UseFormReturn } from 'react-hook-form';
 
@@ -85,7 +86,15 @@ export const GenericItemField: FC<GenericItemFormProps> = ({
   }
 
   return (
-    <Wrapper label={label} errormessage={errors[name] && errors[name].type === 'required' ? errors[name].message : ''}>
+    <Wrapper
+      label={label}
+      errormessage={
+        errors[name] &&
+        [VALIDATION_RULE.MIN_LENGTH, VALIDATION_RULE.MAX_LENGTH, VALIDATION_RULE.REQUIRED].includes(errors[name].type)
+          ? errors[name].message
+          : ''
+      }
+    >
       {element}
     </Wrapper>
   );

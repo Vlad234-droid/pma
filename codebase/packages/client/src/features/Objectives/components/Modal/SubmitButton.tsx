@@ -20,7 +20,7 @@ const SubmitButton: FC<Props> = ({ styles = [], onSave, isDisabled = false, titl
     <>
       <Button
         styles={[...styles, isDisabled ? { opacity: 0.4 } : {}]}
-        onPress={() => setIsOpen(true)}
+        onClick={() => setIsOpen(true)}
         isDisabled={isDisabled}
       >
         <Trans i18nKey='submit'>Submit</Trans>

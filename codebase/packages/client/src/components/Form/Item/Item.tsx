@@ -33,6 +33,7 @@ export const Item: FC<Props> = ({
   const { css } = useStyle();
   const [recordingState, setRecordingState] = useState(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
+  const [hasFocus, setFocus] = useState(false);
 
   const setInputFocus = () => {
     if (focus) {
@@ -58,8 +59,8 @@ export const Item: FC<Props> = ({
       )}
       <div className={css(childrenWrapper)}>
         <div>
-          <Provider value={inputRef}>{children}</Provider>
-          {errormessage && (
+          <Provider value={{ inputRef, hasFocus, setFocus }}>{children}</Provider>
+          {errormessage && !hasFocus && (
             <span
               className={css({
                 position: 'absolute',

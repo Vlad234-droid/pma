@@ -2,35 +2,49 @@ import React, { FC } from 'react';
 import { useStyle, Rule, Styles } from '@dex-ddl/core';
 import { IconButton } from 'components/IconButton';
 
+export const APPLIED_WRAPPER = 'applied_wrapper';
+export const CLEAR_FILTER = 'clear_filter';
+export const COLLEAGUES_COUNT = 'colleagues_count';
+
 type AppliedFiltersProps = {
   clearAppliedFilters: (item: string) => void;
-  getAppliedReport: () => any;
+  getAppliedReport: Array<string>;
   colleaguesCount?: number;
 };
 
-const AppliedFilters: FC<AppliedFiltersProps> = ({ clearAppliedFilters, getAppliedReport, colleaguesCount = 0 }) => {
+const AppliedFilters: FC<AppliedFiltersProps> = ({
+  clearAppliedFilters,
+  getAppliedReport = [],
+  colleaguesCount = 0,
+}) => {
   const { css } = useStyle();
 
+  console.log('getAppliedReport', getAppliedReport);
+
   return (
-    <div className={css({ height: '92px' })}>
+    <div className={css({ height: '92px' })} data-test-id={APPLIED_WRAPPER}>
       <div className={css(appliedWrapperFilters)}>
         <span>Filtered applied:</span>
         <div className={css(flexStyle)}>
-          {getAppliedReport().map((item) => (
-            <div key={item} className={css(filterAppliedStyle)}>
-              <span className={css(filteredTitle)}>{item}</span>
-              <IconButton
-                graphic='decline'
-                iconStyles={iconDeclineStyle}
-                onPress={() => {
-                  clearAppliedFilters(item);
-                }}
-              />
-            </div>
-          ))}
+          {getAppliedReport?.length &&
+            getAppliedReport?.map((item) => (
+              <div key={item} className={css(filterAppliedStyle)}>
+                <span className={css(filteredTitle)}>{item}</span>
+                <IconButton
+                  data-test-id={CLEAR_FILTER}
+                  graphic='decline'
+                  iconStyles={iconDeclineStyle}
+                  onPress={() => {
+                    clearAppliedFilters(item);
+                  }}
+                />
+              </div>
+            ))}
         </div>
       </div>
-      <span className={css(countStyle)}>Colleagues: {colleaguesCount}</span>
+      <span data-test-id={COLLEAGUES_COUNT} className={css(countStyle)}>
+        Colleagues: {colleaguesCount}
+      </span>
     </div>
   );
 };

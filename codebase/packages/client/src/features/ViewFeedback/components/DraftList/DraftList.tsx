@@ -3,6 +3,8 @@ import { Rule, useStyle } from '@dex-ddl/core';
 
 // eslint-disable-next-line import/no-named-as-default
 import DraftItem, { DraftItem as DraftItemType } from '../DraftItem';
+import { useSelector } from 'react-redux';
+import { getLoadedStateSelector } from '@pma/store';
 
 import { Checkbox } from 'components/Form';
 import { NoFeedback } from '../../../Feedback/components';
@@ -26,6 +28,8 @@ const DraftList: FC<Props> = ({
   uncheck = false,
   onChange,
 }) => {
+  const { loaded } = useSelector(getLoadedStateSelector);
+
   const [selected, setSelected] = useState<Selectable>({});
 
   useEffect(() => {
@@ -54,6 +58,8 @@ const DraftList: FC<Props> = ({
       onChange && onChange(uuids);
     }
   }, [uuids.length]);
+
+  if (!loaded) return null;
 
   return (
     <div className={css(wrapperRule)}>

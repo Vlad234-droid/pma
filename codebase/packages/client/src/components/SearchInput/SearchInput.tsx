@@ -1,8 +1,8 @@
 import React, { ChangeEvent, FC, RefObject, useCallback, useEffect, useState } from 'react';
-import { useStyle, colors, Styles, Rule } from '@dex-ddl/core';
+import { useStyle, Styles, Rule } from '@dex-ddl/core';
 import mergeRefs from 'react-merge-refs';
 import debounce from 'lodash.debounce';
-import { useRefContainer } from 'components/Form/context/input';
+import { useFormContainer } from 'components/Form/context/input';
 import { Close } from 'components/Icon/graphics/close';
 
 type Props<T> = {
@@ -42,7 +42,7 @@ const SearchInput: FC<Props<any>> = ({
 }) => {
   const [currentValue, setCurrentValue] = useState(value);
   const { css, theme } = useStyle();
-  const refIcon = useRefContainer();
+  const { inputRef } = useFormContainer();
 
   const handleSearch = useCallback(debounce(onSearch, 300), []);
 
@@ -58,7 +58,7 @@ const SearchInput: FC<Props<any>> = ({
   return (
     <>
       <input
-        ref={mergeRefs([domRef, refIcon])}
+        ref={mergeRefs([domRef, inputRef])}
         name={name}
         data-test-id={name}
         value={currentValue}
@@ -68,14 +68,15 @@ const SearchInput: FC<Props<any>> = ({
         type={'text'}
         className={css({
           width: '100%',
-          border: `1px solid ${isValid ? colors.backgroundDarkest : colors.error}`,
+          // @ts-ignore
+          border: `1px solid ${isValid ? theme.colors.lightGray : theme.colors.error}`,
           borderRadius: '50px',
           fontSize: '16px',
           lineHeight: '20px',
           padding: '10px 30px 10px 16px',
           ':focus': {
             outline: 'none !important',
-            border: `1px solid ${isValid ? colors.tescoBlue : colors.error}`,
+            border: `1px solid ${isValid ? theme.colors.tescoBlue : theme.colors.error}`,
           },
         })}
         placeholder={placeholder}
@@ -88,7 +89,8 @@ const SearchInput: FC<Props<any>> = ({
               position: 'absolute',
               width: '100%',
               top: 0,
-              border: `1px solid ${theme.colors.backgroundDarkest}`,
+              // @ts-ignore
+              border: `1px solid ${theme.colors.lightGray}`,
               borderRadius: theme.border.radius.sm,
               background: theme.colors.white,
               zIndex: 999,

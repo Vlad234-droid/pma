@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { useStyle, colors, Rule } from '@dex-ddl/core';
 import mergeRefs from 'react-merge-refs';
 import { InputProps } from './type';
-import { useRefContainer } from 'components/Form/context/input';
+import { useFormContainer } from 'components/Form/context/input';
 import defaultImg from 'images/default.png';
 import { ColleaguesActions } from '@pma/store';
 import { useDispatch } from 'react-redux';
@@ -24,7 +24,7 @@ export const SearchInput: FC<InputProps> = ({
   multiple,
 }) => {
   const { css, theme } = useStyle();
-  const refIcon = useRefContainer();
+  const { inputRef } = useFormContainer();
   const dispatch = useDispatch();
 
   const getPropperValue = (maches) => {
@@ -42,7 +42,7 @@ export const SearchInput: FC<InputProps> = ({
   return (
     <>
       <input
-        ref={mergeRefs([domRef, refIcon])}
+        ref={mergeRefs([domRef, inputRef])}
         name={name}
         data-test-id={name}
         {...getPropperValue(multiple)}
