@@ -1,6 +1,7 @@
 import React, { FC, useEffect, useMemo } from 'react';
 import { CreateRule, Rule, Styles, theme, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router';
 import { downloadPDF, PDPDocument, usePDF } from '@pma/pdf-renderer';
 import {
   colleagueUUIDSelector,
@@ -9,17 +10,16 @@ import {
   schemaMetaPDPSelector,
   TimelineActions,
 } from '@pma/store';
-import { useNavigate } from 'react-router';
 import DescriptionBlock from 'components/DescriptionBlock';
 import { Page } from 'pages';
 import { buildPath } from 'features/Routes';
 import { paramsReplacer } from 'utils';
 import { Icon } from 'components/Icon';
 import { PDPType } from 'config/enum';
-import GoalInfo from '../GoalInfo';
 import { BASE_URL_API } from 'config/constants';
-import usePDPSchema from '../../hooks/usePDPSchema';
 import { Trans, useTranslation } from 'components/Translation';
+import GoalInfo from './components/GoalInfo';
+import usePDPSchema from './hooks/usePDPSchema';
 
 export const TEST_ID = 'pdp-page';
 
@@ -28,7 +28,7 @@ function getEditOrCreatePDP(pdpSelector: any[]) {
   return 'Create PDP';
 }
 
-const MyPersonalDevelopmentPlan: FC = () => {
+const PersonalDevelopmentPlan: FC = () => {
   const { css, theme } = useStyle();
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -386,4 +386,4 @@ const bodyWrapperStyles: CreateRule<{ mobileScreen: boolean }> = (props) => {
   };
 };
 
-export default MyPersonalDevelopmentPlan;
+export default PersonalDevelopmentPlan;

@@ -1,10 +1,10 @@
 import React, { FC } from 'react';
-import CreateMyPDP from 'features/PDP/components/CreateMyPDP';
+import { CreatePDP } from 'features/PDP';
 
 export const TEST_ID = 'pdp-create-page';
 
 const CreatePersonalDevelopmentPlan: FC = () => {
-  return <CreateMyPDP />;
+  return <CreatePDP />;
 };
 
 export default CreatePersonalDevelopmentPlan;

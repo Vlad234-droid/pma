@@ -1,6 +1,6 @@
-import React, { useState, FC, useEffect, useCallback } from 'react';
+import React, { useState, FC, useEffect, useCallback, ChangeEvent } from 'react';
 import debounce from 'lodash.debounce';
-import { Rule, useStyle } from '@dex-ddl/core';
+import { CreateRule, Rule, useStyle } from '@dex-ddl/core';
 import { formatDateStringFromISO, DATE_FORMAT } from 'utils';
 import Calendar from 'components/Calendar';
 import { Input } from 'components/Form';
@@ -19,6 +19,7 @@ type Props = {
   name: string;
   value?: string;
   minDate?: Date;
+  isValid?: boolean;
 };
 
 const DATE_REGEXP = /\d{1,2}\/\d{1,2}\/\d{4}/;
@@ -31,17 +32,26 @@ const checkIsValidDate = (date) => DATE_REGEXP.test(date);
 const transformDateToString = (date: Date) =>
   date.toLocaleDateString('en-GB', { year: 'numeric', month: '2-digit', day: '2-digit' });
 
-const Datepicker: FC<Props> = ({ onChange, value, name, minDate }) => {
+const Datepicker: FC<Props> = ({ onChange, value, name, minDate, isValid }) => {
   const [isOpen, toggleOpen] = useState(false);
   const [currentValue, setCurrentValue] = useState(value ? transformDateToString(new Date(value)) : '');
   const [date, changeDate] = useState<Date | undefined>();
+  const [error, setError] = useState<boolean>(false);
   const { css } = useStyle();
 
   const dataChange = useCallback(
     debounce((value: string) => {
-      if (!checkIsValidDate(value)) return;
-      const newDate = new Date(value);
-      if (newDate.toString() === INVALID_DATE || (minDate && minDate < newDate)) return;
+      setError(false);
+      if (!checkIsValidDate(value)) {
+        setError(true);
+        return;
+      }
+      const newValue = value.split('/').reverse().join('-');
+      const newDate = new Date(newValue);
+      if (newDate.toString() === INVALID_DATE || (minDate && newDate < minDate)) {
+        setError(true);
+        return;
+      }
       newDate.setHours(0);
       newDate.setMinutes(0);
       newDate.setMilliseconds(0);
@@ -62,7 +72,7 @@ const Datepicker: FC<Props> = ({ onChange, value, name, minDate }) => {
     toggleOpen(false);
   };
 
-  const handleChangeValue = (e) => {
+  const handleChangeValue = (e: ChangeEvent<HTMLInputElement>) => {
     setCurrentValue(e.target.value);
   };
 
@@ -75,13 +85,14 @@ const Datepicker: FC<Props> = ({ onChange, value, name, minDate }) => {
           customStyles={inputRule}
           data-test-id={INPUT_TEST_ID}
           placeholder={'dd/mm/yyyy'}
+          isValid={isValid && !error}
         />
-        <button type={'button'} onClick={() => toggleOpen(!isOpen)} className={css(buttonRule)}>
+        <button type={'button'} onClick={() => toggleOpen(!isOpen)} className={css(buttonRule({ error }))}>
           <Icon graphic={'calender'} />
         </button>
         {isOpen && (
           <div className={css(calendarWrapperRule)}>
-            <Calendar onChange={() => undefined} value={date} onClickDay={handleClickDay} minDate={minDate} />
+            <Calendar value={date} onClickDay={handleClickDay} minDate={minDate} />
           </div>
         )}
       </div>
@@ -97,12 +108,14 @@ const wrapperRule: Rule = {
   position: 'relative',
 };
 
-const buttonRule: Rule = ({ theme }) => ({
-  background: 'transparent',
-  border: `1px solid ${theme.colors.lightGray}`,
-  borderTopRightRadius: '5px',
-  borderBottomRightRadius: '5px',
-});
+const buttonRule: CreateRule<{ error: boolean }> =
+  ({ error }) =>
+  ({ theme }) => ({
+    background: 'transparent',
+    border: `1px solid ${error ? `${theme.colors.error}` : `${theme.colors.backgroundDarkest}`}`,
+    borderTopRightRadius: '5px',
+    borderBottomRightRadius: '5px',
+  });
 
 const inputRule: Rule = {
   borderTopRightRadius: 0,

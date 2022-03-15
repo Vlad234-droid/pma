@@ -10,13 +10,13 @@ import { Item, Textarea, Field, Attention } from 'components/Form';
 import { GenericItemField } from 'components/GenericForm';
 import { createYupSchema } from 'utils/yup';
 import { v4 as uuidv4 } from 'uuid';
-import arrLeft from 'assets/img/pdp/arrLeft.png';
 import colors from 'theme/colors';
 import { ConfirmModal } from 'features/Modal';
 import { buildPath } from 'features/Routes';
 import { Page } from 'pages';
 import { Trans, useTranslation } from 'components/Translation';
-import { Datepicker } from 'components/Datepicker';
+import Datepicker from 'components/Datepicker';
+import arrLeft from 'assets/img/pdp/arrLeft.png';
 
 type Props = {
   pdpGoals: any;
@@ -39,7 +39,7 @@ type Props = {
 export const TEST_ID = 'pdp-form';
 export const SUBMIT_TEST_ID = 'pdp-form-submit';
 
-const Form: FC<Props> = ({
+const CreatePDPForm: FC<Props> = ({
   pdpGoals,
   pdpList,
   currentTab,
@@ -74,8 +74,16 @@ const Form: FC<Props> = ({
   const { getValues, formState, reset } = methods;
   const formValues = getValues();
 
-  const [confirmSaveNextModal, setConfirSaveNextmModal] = useState<boolean>(false);
+  const [isOpenConfirmNext, setConfirmNextOpen] = useState<boolean>(false);
   const isCurrentGoal = Object.keys(currentGoal)?.length > 0;
+
+  const today = useMemo(() => {
+    const now = new Date();
+    now.setHours(0);
+    now.setMinutes(0);
+    now.setMilliseconds(0);
+    return now;
+  }, []);
 
   useEffect(() => {
     pdpList &&
@@ -187,17 +195,17 @@ const Form: FC<Props> = ({
         />
       )}
 
-      {confirmSaveNextModal && (
+      {isOpenConfirmNext && (
         <ConfirmModal
           title={t('are_you_sure_you_want_to_save_this_goal', 'Are you sure you want to save this goal?')}
           description={' '}
           submitBtnTitle={<Trans i18nKey='confirm'>Confirm</Trans>}
           onSave={() => {
             onSubmit(schemaLoaded, requestData, requestMethods.CREATE);
-            setConfirSaveNextmModal(false);
+            setConfirmNextOpen(false);
           }}
-          onCancel={() => setConfirSaveNextmModal(false)}
-          onOverlayClick={() => setConfirSaveNextmModal(false)}
+          onCancel={() => setConfirmNextOpen(false)}
+          onOverlayClick={() => setConfirmNextOpen(false)}
         />
       )}
       <form data-test-id={TEST_ID}>
@@ -214,7 +222,7 @@ const Form: FC<Props> = ({
                   name={key}
                   Element={Datepicker}
                   setValue={methods.setValue}
-                  minDate={new Date()}
+                  minDate={today}
                   value={updateGoalValue}
                 />
               </React.Fragment>
@@ -339,4 +347,4 @@ const customBtnFullWidth: Rule = {
   cursor: 'pointer',
 };
 
-export default Form;
+export default CreatePDPForm;

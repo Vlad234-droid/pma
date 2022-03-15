@@ -1,10 +1,8 @@
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
-import { screen, fireEvent } from '@testing-library/react';
-import '@testing-library/jest-dom/extend-expect';
 // @ts-ignore
 import { renderWithTheme as render } from 'utils/test';
-import Form, { SUBMIT_TEST_ID, TEST_ID } from './Form';
+import Form, { SUBMIT_TEST_ID, TEST_ID } from './CreatePDPForm';
 
 jest.mock('react-router-dom', () => ({
   ...(jest.requireActual('react-router-dom') as any),
