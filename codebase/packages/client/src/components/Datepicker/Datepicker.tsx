@@ -99,7 +99,6 @@ const wrapperRule: Rule = {
 
 const buttonRule: Rule = ({ theme }) => ({
   background: 'transparent',
-  // @ts-ignore
   border: `1px solid ${theme.colors.lightGray}`,
   borderTopRightRadius: '5px',
   borderBottomRightRadius: '5px',

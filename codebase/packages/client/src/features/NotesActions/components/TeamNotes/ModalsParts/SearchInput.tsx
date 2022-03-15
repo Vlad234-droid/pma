@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { useStyle, colors, Rule } from '@dex-ddl/core';
+import { useStyle, Rule } from '@dex-ddl/core';
 import mergeRefs from 'react-merge-refs';
 import { InputProps } from './type';
 import { useFormContainer } from 'components/Form/context/input';
@@ -52,14 +52,15 @@ export const SearchInput: FC<InputProps> = ({
         type={type}
         className={css({
           width: '100%',
-          border: `1px solid ${isValid ? colors.backgroundDarkest : colors.error}`,
+          //@ts-ignore
+          border: `1px solid ${isValid ? theme.colors.lightGray : theme.colors.error}`,
           borderRadius: '50px',
           fontSize: '16px',
           lineHeight: '20px',
           padding: '10px 30px 10px 16px',
           ':focus': {
             outline: 'none !important',
-            border: `1px solid ${isValid ? colors.tescoBlue : colors.error}`,
+            border: `1px solid ${isValid ? theme.colors.tescoBlue : theme.colors.error}`,
           },
         })}
         placeholder={placeholder}
@@ -69,7 +70,8 @@ export const SearchInput: FC<InputProps> = ({
           style={{
             display: 'block',
             position: 'absolute',
-            border: `1px solid ${theme.colors.backgroundDarkest}`,
+            //@ts-ignore
+            border: `1px solid ${theme.colors.lightGray}`,
             borderRadius: theme.border.radius.sm,
             background: theme.colors.white,
             width: '100%',

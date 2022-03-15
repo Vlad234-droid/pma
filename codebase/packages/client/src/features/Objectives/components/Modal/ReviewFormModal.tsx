@@ -266,7 +266,7 @@ const ReviewFormModal: FC<ReviewFormModal> = ({ reviewType, onClose }) => {
                 <ReviewHelpModal />
               </TriggerModal>
             </div>
-            <Attention />
+            {!readonly && <Attention />}
             {components.map((component) => {
               const { id, key, text, label, description, type, validate, values = [], expression = {} } = component;
               const value = formValues[key] ? formValues[key] : '';
@@ -288,6 +288,7 @@ const ReviewFormModal: FC<ReviewFormModal> = ({ reviewType, onClose }) => {
                 };
                 const defaultTag: Rule = ({ theme }) => ({
                   margin: '0px',
+                  padding: '0px',
                   color: theme.colors.base,
                   fontSize: '18px',
                   lineHeight: '22px',
@@ -295,17 +296,19 @@ const ReviewFormModal: FC<ReviewFormModal> = ({ reviewType, onClose }) => {
 
                 const components = { p: CustomPTag };
                 return (
-                  <div style={{ margin: '24px 0' }} key={id}>
+                  <div style={{ padding: 0, margin: 0 }} key={id}>
                     <div
                       className={css({
                         padding: 0,
                         '& > p': {
-                          margin: '0px',
+                          padding: readonly ? '16px 0 8px 0' : '0 0 8px 0',
+                          margin: 0,
                           fontSize: '16px',
                           lineHeight: '20px',
                         },
                         '& > h2': {
-                          margin: '0px',
+                          padding: readonly ? '32px 0 16px 0' : '32px 0 20px 0',
+                          margin: 0,
                           fontSize: '18px',
                           lineHeight: '22px',
                         },
@@ -323,7 +326,16 @@ const ReviewFormModal: FC<ReviewFormModal> = ({ reviewType, onClose }) => {
                     name={key}
                     methods={methods}
                     label={label}
-                    Wrapper={Item}
+                    Wrapper={({ children, label }) => (
+                      <Item
+                        withIcon={false}
+                        label={label}
+                        marginBot={!readonly}
+                        labelCustomStyle={readonly ? { paddingBottom: 0 } : {}}
+                      >
+                        {children}
+                      </Item>
+                    )}
                     //@ts-ignore
                     Element={readonly ? Text : validate?.maxLength > 100 ? Textarea : Input}
                     placeholder={description}
@@ -340,7 +352,12 @@ const ReviewFormModal: FC<ReviewFormModal> = ({ reviewType, onClose }) => {
                     methods={methods}
                     label={label}
                     Wrapper={({ children, label }) => (
-                      <Item withIcon={false} label={label}>
+                      <Item
+                        withIcon={false}
+                        label={label}
+                        marginBot={!readonly}
+                        labelCustomStyle={readonly ? { padding: 0 } : {}}
+                      >
                         {children}
                       </Item>
                     )}
@@ -369,7 +386,8 @@ const ReviewFormModal: FC<ReviewFormModal> = ({ reviewType, onClose }) => {
                 bottom: theme.spacing.s0,
                 left: theme.spacing.s0,
                 right: theme.spacing.s0,
-                borderTop: `${theme.border.width.b1} solid ${theme.colors.backgroundDarkest}`,
+                //@ts-ignore
+                borderTop: `${theme.border.width.b1} solid ${theme.colors.lightGray}`,
               })}
             >
               <div

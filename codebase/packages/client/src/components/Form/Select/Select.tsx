@@ -129,7 +129,6 @@ const iconExpandStyles: Rule = {
 const listStyles: Rule = ({ theme }) => ({
   display: 'block',
   position: 'absolute',
-  // @ts-ignore
   border: `1px solid ${theme.colors.lightGray}`,
   borderRadius: theme.border.radius.sm,
   background: theme.colors.white,

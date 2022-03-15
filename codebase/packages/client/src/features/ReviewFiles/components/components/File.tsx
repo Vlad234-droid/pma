@@ -58,7 +58,7 @@ const fileNameStyles: Rule = ({ theme }) => ({
 const listItemStyles: Rule = ({ theme }) => ({
   display: 'flex',
   justifyContent: 'space-between',
-  borderBottom: `1px solid ${theme.colors.backgroundDarkest}`,
+  borderBottom: `1px solid ${theme.colors.lightGray}`,
 });
 
 const buttonsWrapperStyles = { display: 'flex', alignItems: 'center' };

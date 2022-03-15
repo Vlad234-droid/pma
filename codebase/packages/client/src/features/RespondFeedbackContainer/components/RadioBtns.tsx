@@ -5,11 +5,6 @@ import { FeedbackStatus } from 'config/enum';
 
 import { Radio } from 'components/Form';
 
-type filterFeedbacksType = {
-  sort: string;
-  search: string;
-};
-
 type RadioBtnsProps = {
   status: string;
   setStatus: Dispatch<SetStateAction<FeedbackStatus>>;

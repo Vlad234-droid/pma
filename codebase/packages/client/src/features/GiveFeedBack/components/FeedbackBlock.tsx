@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useStyle, Rule, Styles, colors } from '@dex-ddl/core';
+import { useStyle, Rule, Styles } from '@dex-ddl/core';
 import { useSelector } from 'react-redux';
 import { getLoadedStateSelector } from '@pma/store';
 import { Page } from 'pages';
@@ -64,14 +64,7 @@ const FeedbackBlock: FC<Props> = ({ list, canEdit }) => {
                       </div>
 
                       <Panel>
-                        <TileWrapper
-                          customStyle={{
-                            width: 'auto',
-                            padding: '24px',
-                            margin: '24px 28px 24px 0px',
-                            border: `1px solid ${colors.backgroundDarkest}`,
-                          }}
-                        >
+                        <TileWrapper customStyle={tileWrapperStyle}>
                           <div className={css(infoBlockStyle)}>
                             <h3>
                               Looking back at what you&apos;ve seen recently, what would you like to say to this
@@ -193,5 +186,12 @@ const infoBlockStyle: Rule = {
 const wrapperBtnStyle: Rule = {
   marginLeft: 'auto',
 };
+
+const tileWrapperStyle: Rule = ({ theme }) => ({
+  width: 'auto',
+  padding: '24px',
+  margin: '24px 28px 24px 0px',
+  border: `1px solid ${theme.colors.lightGray}`,
+});
 
 export default FeedbackBlock;

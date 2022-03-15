@@ -215,7 +215,7 @@ const subtitleBlock = {
   alignItems: 'center',
   flexDirection: 'row',
   width: '70%',
-  borderBottom: `1px solid ${theme.colors.backgroundDarkest}`,
+  borderBottom: `1px solid ${theme.colors.lightGray}`,
   paddingTop: '10px',
 } as Rule;
 

@@ -150,7 +150,7 @@ const vhItemStyle: CreateRule<{ isLastItem: boolean; theme: Theme }> = ({ isLast
     justifyContent: 'space-between',
     alignItems: 'flex-start',
     padding: '15px 0',
-    borderBottom: !isLastItem ? `1px solid ${theme.colors.backgroundDarkest}` : '',
+    borderBottom: !isLastItem ? `1px solid ${theme.colors.lightGray}` : '',
   };
 };
 

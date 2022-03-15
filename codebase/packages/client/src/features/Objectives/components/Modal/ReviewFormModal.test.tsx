@@ -219,9 +219,9 @@ describe('ReviewFormModal', () => {
     });
 
     it('should render ReviewFormModal labels', async () => {
-      const text = await screen.findByText(/test text/i);
-      const textfieldLabel = await screen.findByText(/test label textfield/i);
-      const selectLabel = await screen.findByText(/test label select/i);
+      const text = screen.getByText(/test text/i);
+      const textfieldLabel = screen.getByText(/test label textfield/i);
+      const selectLabel = screen.getByText(/test label select/i);
 
       expect(text).toBeInTheDocument();
       expect(textfieldLabel).toBeInTheDocument();

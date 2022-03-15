@@ -8,7 +8,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, CreateRule, Rule, theme, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { Item, Textarea, Field, Attention } from 'components/Form';
 import { GenericItemField } from 'components/GenericForm';
-import { formatDate } from 'utils/date';
 import { createYupSchema } from 'utils/yup';
 import { v4 as uuidv4 } from 'uuid';
 import arrLeft from 'assets/img/pdp/arrLeft.png';
@@ -17,7 +16,7 @@ import { ConfirmModal } from 'features/Modal';
 import { buildPath } from 'features/Routes';
 import { Page } from 'pages';
 import { Trans, useTranslation } from 'components/Translation';
-import Datepicker from 'components/Datepicker';
+import { Datepicker } from 'components/Datepicker';
 
 type Props = {
   pdpGoals: any;
@@ -331,17 +330,6 @@ const applyBlock: CreateRule<{ mobileScreen: boolean; currentUUID: string | unde
     marginTop: '32px',
     flexDirection: mobileScreen ? 'column' : 'row',
   };
-};
-
-const dateInputDefault = {
-  color: `${colors.tescoGray}`,
-} as Rule;
-
-const genericLabel: Rule = {
-  fontSize: `${theme.font.fixed.f16}`,
-  lineHeight: '20px',
-  fontWeight: `${theme.font.weight.bold}`,
-  paddingBottom: '8px',
 };
 
 const customBtnFullWidth: Rule = {
