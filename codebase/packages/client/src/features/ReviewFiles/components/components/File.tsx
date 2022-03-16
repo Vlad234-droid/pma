@@ -14,9 +14,10 @@ export type File = {
 export type Props = {
   file: File;
   onDelete: (uuid: string) => void;
+  readonly?: boolean;
 };
 
-export const File: FC<Props> = ({ file, onDelete }) => {
+export const File: FC<Props> = ({ file, onDelete, readonly }) => {
   const { css } = useStyle();
   const { fileName, fileLength, uuid } = file;
   const getDownloadHref = (uuid) => `${BASE_URL_API}/files/${uuid}/download`;
@@ -30,9 +31,11 @@ export const File: FC<Props> = ({ file, onDelete }) => {
         <a href={getDownloadHref(uuid)} download>
           <img src={Download} alt='Download' />
         </a>
-        <button className={css(buttonStyles)} onClick={() => onDelete(uuid)}>
-          <img src={Trash} alt='Trash' />
-        </button>
+        {!readonly && (
+          <button className={css(buttonStyles)} onClick={() => onDelete(uuid)}>
+            <img src={Trash} alt='Trash' />
+          </button>
+        )}
       </div>
     </div>
   );

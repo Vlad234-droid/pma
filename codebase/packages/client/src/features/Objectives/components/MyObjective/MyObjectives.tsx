@@ -123,7 +123,7 @@ const MyObjectives: FC = () => {
   }
 
   useEffect(() => {
-    dispatch(PreviousReviewFilesActions.getPreviousReviewFiles());
+    dispatch(PreviousReviewFilesActions.getPreviousReviewFiles({ colleagueUUID: colleagueUuid }));
   }, []);
 
   // todo remove block end
@@ -337,7 +337,10 @@ const MyObjectives: FC = () => {
       </div>
 
       {previousReviewFilesModalShow && (
-        <PreviousReviewFilesModal onOverlayClick={() => setPreviousReviewFilesModalShow(false)} />
+        <PreviousReviewFilesModal
+          onOverlayClick={() => setPreviousReviewFilesModalShow(false)}
+          colleagueUUID={colleagueUuid}
+        />
       )}
     </div>
   );

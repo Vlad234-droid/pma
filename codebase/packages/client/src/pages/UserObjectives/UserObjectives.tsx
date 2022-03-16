@@ -9,7 +9,6 @@ import { IconButton } from 'components/IconButton';
 import {
   Accordion,
   ObjectiveTypes as OT,
-  Reviews,
   Section,
   ShareWidget,
   transformReviewsToObjectives,
@@ -19,7 +18,9 @@ import { useToast, Variant } from 'features/Toast';
 import useDispatch from 'hooks/useDispatch';
 import { useSelector } from 'react-redux';
 import {
+  getPreviousReviewFilesSelector,
   getTimelineSelector,
+  PreviousReviewFilesActions,
   reviewsMetaSelector,
   schemaMetaSelector,
   TimelineActions,
@@ -31,6 +32,7 @@ import useReviews from 'features/Objectives/hooks/useReviews';
 import OrganizationWidget from 'features/Objectives/components/OrganizationWidget/OrganizationWidget';
 import { buildPath } from 'features/Routes';
 import { Page } from 'pages';
+import { File } from '../../features/ReviewFiles/components/components/File';
 
 const reviews = [];
 
@@ -65,6 +67,7 @@ export const UserObjectives: FC = () => {
   const canShowObjectives = timelineTypes[ObjectiveType.OBJECTIVE];
   const canShowMyReview = timelineTypes[ObjectiveType.MYR] && timelineTypes[ObjectiveType.EYR];
   const canShowAnnualReview = !timelineTypes[ObjectiveType.MYR] && timelineTypes[ObjectiveType.EYR];
+  const files: File[] = useSelector(getPreviousReviewFilesSelector) || [];
   const params = useMemo(
     () => ({ pathParams: { colleagueUuid: uuid, type: ReviewType.OBJECTIVE, cycleUuid: 'CURRENT' } }),
     [uuid],
@@ -103,6 +106,10 @@ export const UserObjectives: FC = () => {
       setObjectives(transformReviewsToObjectives(origin, formElements));
     }
   }, [reviewLoaded, schemaLoaded]);
+
+  useEffect(() => {
+    dispatch(PreviousReviewFilesActions.getPreviousReviewFiles({ colleagueUUID: uuid }));
+  }, []);
 
   return (
     <div className={css(bodyBlockStyles)}>
@@ -144,23 +151,29 @@ export const UserObjectives: FC = () => {
 
           <Section
             left={{
-              content: <div>User Completed Reviews</div>,
+              content: (
+                <div>
+                  <Trans i18nKey='previous_review_files'>Previous Review Files</Trans>
+                </div>
+              ),
             }}
             right={{
               content: (
                 <div>
-                  <Button mode='inverse' onPress={() => alert('view')} styles={[linkStyles({ theme })]}>
-                    <Trans i18nKey='view_history'>View history</Trans>
+                  <Button
+                    mode='inverse'
+                    onPress={() => setPreviousReviewFilesModalShow(true)}
+                    styles={[linkStyles({ theme })]}
+                  >
+                    <Trans i18nKey='view_files'>View files</Trans>
                   </Button>
                 </div>
               ),
             }}
           >
-            {reviews.length > 0 ? (
-              <Reviews reviews={createdReviews} />
-            ) : (
-              t('no_completed_reviews', 'You have no completed reviews')
-            )}
+            <div className={css(emptyBlockStyle)}>
+              <Trans>{`You have ${files.length || 'no'} files`}</Trans>
+            </div>
           </Section>
         </div>
       </div>
@@ -185,7 +198,11 @@ export const UserObjectives: FC = () => {
         </div>
       </div>
       {previousReviewFilesModalShow && (
-        <PreviousReviewFilesModal onOverlayClick={() => setPreviousReviewFilesModalShow(false)} />
+        <PreviousReviewFilesModal
+          onOverlayClick={() => setPreviousReviewFilesModalShow(false)}
+          colleagueUUID={uuid}
+          readonly={true}
+        />
       )}
     </div>
   );
@@ -274,3 +291,5 @@ const linkStyles = ({ theme }) => ({
   color: theme.colors.tescoBlue,
   background: 'transparent',
 });
+
+const emptyBlockStyle: Rule = { paddingBottom: '20px' };

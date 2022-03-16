@@ -1,17 +1,15 @@
 import httpClient from '../config/client';
 
-const domain = '/files';
-const previousReviewFileType = 3;
+const getDomain = '/colleagues';
+const uploadDomain = '/files';
 
-export const getPreviousReviewFiles = () =>
-  httpClient.get(`${domain}`, {
-    params: { type: previousReviewFileType },
-  });
+export const getPreviousReviewFiles = ({ colleagueUUID }) =>
+  httpClient.get(`${getDomain}/${colleagueUUID}/reviews/files`);
 
 export const uploadFile = ({ file, metadata }: { file: File; metadata: object }) => {
   const uploadMetadata = new Blob([JSON.stringify(metadata)], { type: 'application/json' });
   const formData = new FormData();
   formData.append('files', file);
   formData.append('uploadMetadata', uploadMetadata);
-  return httpClient.post(`${domain}`, formData);
+  return httpClient.post(`${uploadDomain}`, formData);
 };

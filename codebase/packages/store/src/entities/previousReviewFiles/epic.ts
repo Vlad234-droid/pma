@@ -9,8 +9,9 @@ import { concatWithErrorToast, errorPayloadConverter } from '../../utils/toastHe
 export const getPreviousReviewFilesEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
     filter(isActionOf(getPreviousReviewFiles.request)),
-    switchMap(() =>
-      from(api.getPreviousReviewFiles()).pipe(
+    switchMap(({ payload }) => {
+      const { colleagueUUID } = payload;
+      return from(api.getPreviousReviewFiles({ colleagueUUID })).pipe(
         map(getPreviousReviewFiles.success),
         catchError((e) => {
           const errors = e?.data?.errors;
@@ -20,8 +21,8 @@ export const getPreviousReviewFilesEpic: Epic = (action$, _, { api }) =>
           );
         }),
         takeUntil(action$.pipe(filter(isActionOf(getPreviousReviewFiles.cancel)))),
-      ),
-    ),
+      );
+    }),
   );
 
 export const uploadFileEpic: Epic = (action$, _, { api }) =>
@@ -33,7 +34,7 @@ export const uploadFileEpic: Epic = (action$, _, { api }) =>
       const metadata = {
         uploadMetadataList: [
           {
-            path: `/home/${colleagueUUID}/dev`,
+            path: `/home/${colleagueUUID}/reviews`,
             fileName: file.name,
             type: {
               id: previousReviewFileType,
@@ -47,7 +48,7 @@ export const uploadFileEpic: Epic = (action$, _, { api }) =>
         ],
       };
       return from(api.uploadFile({ file, metadata })).pipe(
-        map(getPreviousReviewFiles.request),
+        map(() => getPreviousReviewFiles.request({ colleagueUUID })),
         catchError((e) => {
           const errors = e?.data?.errors;
           return concatWithErrorToast(
@@ -64,9 +65,9 @@ export const deleteFileEpic: Epic = (action$, _, { openapi }) =>
   action$.pipe(
     filter(isActionOf(deleteFile.request)),
     switchMap(({ payload }) => {
-      const { fileUuid } = payload;
+      const { fileUuid, colleagueUUID } = payload;
       return from(openapi.file.delete1({ fileUuid })).pipe(
-        map(getPreviousReviewFiles.request),
+        map(() => getPreviousReviewFiles.request({ colleagueUUID })),
         catchError((e) => {
           const errors = e?.data?.errors;
           return concatWithErrorToast(
