@@ -3,6 +3,7 @@ import { Rule, useStyle, Button, Styles, CreateRule, useBreakpoints } from '@dex
 import { IconButton } from 'components/IconButton';
 import { defineNotesHandler, AllNotesFolderIdTEAM } from '../../../../utils';
 import { NoteData } from '../../type';
+import { Trans, useTranslation } from 'components/Translation';
 
 export const TEAM_FOLDER_WRAPPER = 'team_folder_wrapper';
 export const CHANGE_TEAM_MODE = 'change_team_mode';
@@ -40,6 +41,7 @@ const PersonalsTeamFolders: FC<PersonalsTeamFoldersProps> = ({
   setSelectedTEAMFolder,
 }) => {
   const { css, theme } = useStyle();
+  const { t } = useTranslation();
 
   const selectedDotsActionhandler = (e, noteId) => {
     selectedTEAMNoteId.current = null;
@@ -113,7 +115,9 @@ const PersonalsTeamFolders: FC<PersonalsTeamFoldersProps> = ({
                   setConfirmTEAMModal(() => true);
                 }}
               />
-              <span className={css({ whiteSpace: 'nowrap', marginLeft: '8px' })}>Archive folder</span>
+              <span className={css({ whiteSpace: 'nowrap', marginLeft: '8px' })}>
+                <Trans i18nKey='archive_folder'>Archive folder</Trans>
+              </span>
             </div>
           ),
         }),
@@ -140,7 +144,7 @@ const PersonalsTeamFolders: FC<PersonalsTeamFoldersProps> = ({
               }}
             />
             <span id='backdrop' className={css({ whiteSpace: 'nowrap', marginLeft: '8px' })}>
-              Delete folder
+              <Trans i18nKey='delete_folder'>Delete folder</Trans>
             </span>
           </div>
         ),
@@ -186,7 +190,9 @@ const PersonalsTeamFolders: FC<PersonalsTeamFoldersProps> = ({
     <div className={css(mainFolderContainerStyle)} data-test-id={TEAM_FOLDER_WRAPPER}>
       <div className={css(titleStyle)}>
         <h2 className={css({ padding: '24px' })} data-test-id={FOLDER_TITLE}>
-          {!teamArchivedMode ? 'Folders for Notes on my Team' : 'Archived Folders for Notes on my Team'}
+          {!teamArchivedMode
+            ? t('folders_for_notes_on_my_team', 'Folders for Notes on my Team')
+            : t('archived_folders_for_notes_on_my_team', 'Archived Folders for Notes on my Team')}
         </h2>
       </div>
       <div className={css({ marginTop: '48px' })}>
@@ -238,7 +244,7 @@ const PersonalsTeamFolders: FC<PersonalsTeamFoldersProps> = ({
           setSelectedTEAMFolder(() => null);
         }}
       >
-        {!teamArchivedMode ? 'Archived Folders' : 'Personal Folders'}
+        {!teamArchivedMode ? t('archived_folders', 'Archived Folders') : t('personal_folders', 'Personal Folders')}
       </Button>
     </div>
   );

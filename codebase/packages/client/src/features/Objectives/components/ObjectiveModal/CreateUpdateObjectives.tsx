@@ -4,7 +4,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import useDispatch from 'hooks/useDispatch';
 import { useSelector } from 'react-redux';
-import { useTranslation } from 'components/Translation';
+import { TFunction, useTranslation } from 'components/Translation';
 import { schemaMetaSelector } from '@pma/store/src/selectors/schema';
 import {
   currentUserSelector,
@@ -162,9 +162,10 @@ const Objectives: FC<ObjectivesProps> = ({ colleagueUUID, schema, objectives, or
 export type CreateUpdateObjectivesModalProps = {
   onClose: () => void;
   editNumber?: number;
+  t: TFunction;
 };
 
-const CreateUpdateObjectives: FC<CreateUpdateObjectivesModalProps> = ({ onClose, editNumber }) => {
+const CreateUpdateObjectives: FC<CreateUpdateObjectivesModalProps> = ({ onClose, editNumber, t }) => {
   const dispatch = useDispatch();
   const { loaded: schemaLoaded, loading: schemaLoading } = useSelector(schemaMetaSelector);
   const { loaded: reviewLoaded, loading: reviewLoading } = useSelector(reviewsMetaSelector);
@@ -183,9 +184,12 @@ const CreateUpdateObjectives: FC<CreateUpdateObjectivesModalProps> = ({ onClose,
   if (timelineObjective?.status === Status.WAITING_FOR_APPROVAL && schemaLoaded && reviewLoaded) {
     return (
       <SuccessModal
-        title='Objectives sent'
+        title={t('objectives_sent', 'Objectives sent')}
         onClose={onClose}
-        description={'Your objectives has been sent to your line manager.'}
+        description={t(
+          'your_objectives_has_been_sent_to_your_line_manager',
+          'Your objectives has been sent to your line manager.',
+        )}
       />
     );
   }

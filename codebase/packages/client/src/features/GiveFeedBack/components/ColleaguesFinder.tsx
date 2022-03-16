@@ -4,6 +4,7 @@ import { Item } from 'components/Form';
 import SearchInput from 'components/SearchInput';
 import useSearchColleagues from 'hooks/useSearchColleagues';
 import defaultImg from 'images/default.png';
+import { useTranslation } from 'components/Translation';
 
 type Props = {
   onSelect: (person: any) => void;
@@ -14,6 +15,7 @@ type Props = {
 
 const ColleaguesFinder: FC<Props> = ({ onSelect, error, value }) => {
   const { css } = useStyle();
+  const { t } = useTranslation();
 
   const { colleagues, handleSearchColleagues } = useSearchColleagues();
 
@@ -30,7 +32,7 @@ const ColleaguesFinder: FC<Props> = ({ onSelect, error, value }) => {
             name={'search_option'}
             onChange={handleChange}
             onSearch={(e) => handleSearchColleagues(e.target.value)}
-            placeholder={'Search'}
+            placeholder={t('search', 'Search')}
             options={value ? [] : colleagues}
             selected={null}
             value={value}

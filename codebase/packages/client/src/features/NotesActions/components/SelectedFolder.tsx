@@ -6,7 +6,7 @@ import { formatToRelativeDate } from 'utils/date';
 import { getNotesFolderTitle } from 'utils/note';
 import { SelectedFolderProps } from '../type';
 import { IconButton } from 'components/IconButton';
-import { Trans } from 'components/Translation';
+import { Trans, useTranslation } from 'components/Translation';
 
 const SelectedFolder: FC<SelectedFolderProps> = ({
   selectedFolder,
@@ -28,6 +28,7 @@ const SelectedFolder: FC<SelectedFolderProps> = ({
   testId = '',
 }) => {
   const { css } = useStyle();
+  const { t } = useTranslation();
   const foldersList = useSelector(getFoldersSelector);
 
   const btnsActionsHandle = (itemId: string, itemFolderUuid: string | null, item: any) => {
@@ -52,7 +53,7 @@ const SelectedFolder: FC<SelectedFolderProps> = ({
               }}
             >
               <IconButton
-                iconProps={{ title: 'Archive' }}
+                iconProps={{ title: t('archive', 'Archive') }}
                 id='backdrop'
                 customVariantRules={{ default: notePropertiesIconStyle }}
                 graphic='archive'
@@ -97,7 +98,7 @@ const SelectedFolder: FC<SelectedFolderProps> = ({
               }}
             >
               <IconButton
-                iconProps={{ title: 'Move to folder' }}
+                iconProps={{ title: t('move_to_folder', 'Move to folder') }}
                 graphic='folder'
                 id='backdrop'
                 customVariantRules={{ default: notePropertiesIconStyle }}

@@ -3,6 +3,7 @@ import { useStyle, Rule, Styles } from '@dex-ddl/core';
 import { getReviewByUuidS } from '@pma/store';
 import { useSelector } from 'react-redux';
 import { getPropperTargetType } from '../config';
+import { Trans } from 'components/Translation';
 
 type CompletedNotesProps = {
   item: any;
@@ -23,15 +24,21 @@ const CompletedNotes: FC<CompletedNotesProps> = ({ item }) => {
       </p>
       <div className={css(InfoBlockStyle)}>
         <h3>
-          Looking back at what you&apos;ve seen recently, what would you like to say to this colleague about what
-          they&apos;ve delivered or how they&apos;ve gone about it?
+          <Trans i18nKey='looking_back_at_what_you_seen'>
+            Looking back at what you&apos;ve seen recently, what would you like to say to this colleague about what
+            they&apos;ve delivered or how they&apos;ve gone about it?
+          </Trans>
         </h3>
         {item.feedbackItems.map((question) => {
           return <p key={question.code}>{question.code === 'Question 1' && question.content}</p>;
         })}
       </div>
       <div className={css(InfoBlockStyle)}>
-        <h3>Looking forward, what should this colleague do more (or less) of in order to be at their best?</h3>
+        <h3>
+          <Trans i18nKey='looking_forward_what_should_this_colleague_do_more'>
+            Looking forward, what should this colleague do more (or less) of in order to be at their best?
+          </Trans>
+        </h3>
         {item.feedbackItems.map((question) => {
           return <p key={question.code}>{question.code === 'Question 2' && question.content}</p>;
         })}

@@ -3,6 +3,7 @@ import { Rule, useStyle } from '@dex-ddl/core';
 
 import { Input, Item as FormItem } from 'components/Form';
 import { Icon } from 'components/Icon';
+import { useTranslation } from 'components/Translation';
 
 type Props = {
   focus: boolean;
@@ -14,6 +15,7 @@ type Props = {
 
 const Search: FC<Props> = ({ focus, onFocus, iconStyles, onSearch, value }) => {
   const { css } = useStyle();
+  const { t } = useTranslation();
 
   const handleSearch = (event) => {
     onSearch(event.target.value);
@@ -40,7 +42,7 @@ const Search: FC<Props> = ({ focus, onFocus, iconStyles, onSearch, value }) => {
           name='search-input'
           value={focus ? value : ''}
           onChange={handleSearch}
-          placeholder={focus ? 'Search keyword' : ''}
+          placeholder={focus ? t('search_keyword', 'Search keyword') : ''}
           customStyles={{
             ...(focus ? { padding: '10px 20px 10px 16px' } : { padding: '0px' }),
             ...(focus ? { borderRadius: '50px' } : { transitionDelay: '.3s' }),

@@ -12,6 +12,7 @@ import { TileWrapper } from 'components/Tile';
 
 import defaultImg from 'images/default.png';
 import { formatToRelativeDate, paramsReplacer } from 'utils';
+import { Trans, useTranslation } from 'components/Translation';
 
 type Props = {
   list: Array<any>;
@@ -23,6 +24,7 @@ const FeedbackBlock: FC<Props> = ({ list, canEdit }) => {
 
   const { css } = useStyle();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   if (!loaded) return null;
   if (loaded && !list.length) return <NoFeedback />;
@@ -74,13 +76,15 @@ const FeedbackBlock: FC<Props> = ({ list, canEdit }) => {
                         >
                           <div className={css(infoBlockStyle)}>
                             <h3>
-                              Looking back at what you&apos;ve seen recently, what would you like to say to this
-                              colleague about what they&apos;ve delivered or how they&apos;ve gone about it?
+                              <Trans i18nKey='looking_back_at_what_you_seen'>
+                                Looking back at what you&apos;ve seen recently, what would you like to say to this
+                                colleague about what they&apos;ve delivered or how they&apos;ve gone about it?
+                              </Trans>
                             </h3>
                             {item.feedbackItems.map((question) => {
                               return (
                                 <p className={css(wordBreakStyle)} key={question.code}>
-                                  {question.code === 'Question 1'
+                                  {question.code === `${t('question', 'Question')} 1`
                                     ? question.content !== ''
                                       ? question.content
                                       : '-'
@@ -91,13 +95,15 @@ const FeedbackBlock: FC<Props> = ({ list, canEdit }) => {
                           </div>
                           <div className={css(infoBlockStyle)}>
                             <h3>
-                              Looking forward, what should this colleague do more (or less) of in order to be at their
-                              best?
+                              <Trans i18nKey='looking_forward_what_should_this_colleague_do_more'>
+                                Looking forward, what should this colleague do more (or less) of in order to be at their
+                                best?
+                              </Trans>
                             </h3>
                             {item.feedbackItems.map((question) => {
                               return (
                                 <p className={css(wordBreakStyle)} key={question.code}>
-                                  {question.code === 'Question 2'
+                                  {question.code === `${t('question', 'Question')} 2`
                                     ? question.content !== ''
                                       ? question.content
                                       : '-'
@@ -107,7 +113,11 @@ const FeedbackBlock: FC<Props> = ({ list, canEdit }) => {
                             })}
                           </div>
                           <div className={css(infoBlockStyle)}>
-                            <h3>Add any other comments you would like to share with your colleague.</h3>
+                            <h3>
+                              <Trans i18nKey='add_any_other_comments_you_would_like_to_share_with_your_colleague'>
+                                Add any other comments you would like to share with your colleague.
+                              </Trans>
+                            </h3>
                             {item.feedbackItems.map((question) => {
                               return (
                                 <p className={css(wordBreakStyle)} key={question.code}>

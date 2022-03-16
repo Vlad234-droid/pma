@@ -83,7 +83,7 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel, setIsInfoModalOpen }) 
     <>
       <div className={css({ paddingLeft: '40px', paddingRight: '40px', height: '100%', overflow: 'auto' })}>
         <div className={css({ fontWeight: 'bold', fontSize: '24px', lineHeight: '28px' })}>
-          Ask your colleagues for feedback
+          <Trans i18nKey='ask_your_colleagues_for_feedback'>Ask your colleagues for feedback</Trans>
         </div>
         <Attention />
         <div className={css({ marginTop: '14px', fontSize: '18px', lineHeight: '22px' })}>

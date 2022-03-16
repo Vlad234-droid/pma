@@ -121,7 +121,7 @@ const PersonalFolders: FC<PersonalFoldersProps> = ({
           >
             <IconButton
               iconProps={{ title: 'Delete' }}
-              graphic='delete'
+              graphic={t('delete', 'Delete')}
               customVariantRules={{ default: folderPropertiesIconStyle }}
               onPress={() => {
                 selectedFolderId.current = itemId;

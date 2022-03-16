@@ -19,6 +19,7 @@ import { GenericItemField } from 'components/GenericForm';
 import { IconButton } from 'components/IconButton';
 import { createTipSchema } from 'pages/Tips/config';
 import { TipsFormModal } from '.';
+import { useTranslation } from 'components/Translation';
 
 export type TipsFormProps = {
   mode: string;
@@ -26,6 +27,7 @@ export type TipsFormProps = {
 
 const TipsForm: FC<TipsFormProps> = ({ mode }) => {
   const { css } = useStyle();
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const params = useParams();
@@ -262,7 +264,7 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
 
   return (
     <ModalWithHeader
-      title={mode === 'create' ? 'Create Tip' : 'Edit Tip'}
+      title={mode === 'create' ? t('create_tip', 'Create Tip') : t('edit_tip', 'Edit Tip')}
       containerRule={modalWrapper}
       modalPosition='middle'
       closeOptions={{
@@ -295,17 +297,17 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
             <GenericItemField
               name={'tipTitle'}
               methods={methods}
-              label='Title'
+              label={t('title', 'Title')}
               Wrapper={Item}
               Element={Input}
               onChange={(value) => setValue('tipTitle', value, { shouldDirty: true })}
-              placeholder='Example: Share objectives easily'
+              placeholder={t('share_objectives_easily', 'Example: Share objectives easily')}
               value={formData['tipTitle']}
             />
             <GenericItemField
               name={'tipDescription'}
               methods={methods}
-              label='Description'
+              label={t('description', 'Description')}
               Wrapper={Item}
               Element={Textarea}
               onChange={(value) => setValue('tipDescription', value, { shouldDirty: true })}
@@ -320,7 +322,7 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
               name={'tipTargetLevel1'}
               methods={methods}
               Wrapper={({ children }) => (
-                <Item label='Level 1' withIcon={false}>
+                <Item label={`${t('level', 'Level')} 1`} withIcon={false}>
                   {children}
                 </Item>
               )}
@@ -328,7 +330,7 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
               options={level1Options.map((item) => {
                 return { value: item['uuid'], label: item['name'] };
               })}
-              placeholder='Please select'
+              placeholder={t('please_select', 'Please select')}
               onChange={(value) => {
                 if (value) {
                   setValue('tipTargetLevel1', value, { shouldDirty: true });
@@ -352,7 +354,7 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
               name={'tipTargetLevel2'}
               methods={methods}
               Wrapper={({ children }) => (
-                <Item label='Level 2' withIcon={false}>
+                <Item label={`${t('level', 'Level')} 2`} withIcon={false}>
                   {children}
                 </Item>
               )}
@@ -372,14 +374,14 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
                 });
                 setTargetOrganisation(value);
               }}
-              placeholder='Please select'
+              placeholder={t('please_select', 'Please select')}
               value={formData['tipTargetLevel2']}
             />
             <GenericItemField
               name={'tipTargetLevel3'}
               methods={methods}
               Wrapper={({ children }) => (
-                <Item label='Level 3' withIcon={false}>
+                <Item label={`${t('level', 'Level')} 3`} withIcon={false}>
                   {children}
                 </Item>
               )}
@@ -398,14 +400,14 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
                 });
                 setTargetOrganisation(value);
               }}
-              placeholder='Please select'
+              placeholder={t('please_select', 'Please select')}
               value={formData['tipTargetLevel3']}
             />
             <GenericItemField
               name={'tipTargetLevel4'}
               methods={methods}
               Wrapper={({ children }) => (
-                <Item label='Level 4' withIcon={false}>
+                <Item label={`${t('level', 'Level')} 4`} withIcon={false}>
                   {children}
                 </Item>
               )}
@@ -423,7 +425,7 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
                 });
                 setTargetOrganisation(value);
               }}
-              placeholder='Please select'
+              placeholder={t('please_select', 'Please select')}
               value={formData['tipTargetLevel4']}
             />
             {mode === 'edit' && (
@@ -448,8 +450,8 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
               Discard
             </Button>
             <Button isDisabled={!isDirty || !isValid} onPress={submitForm} styles={[formControlBtn]}>
-              {mode === 'create' && 'Create new tip'}
-              {mode === 'edit' && 'Confirm changes'}
+              {mode === 'create' && t('create_new_tip', 'Create new tip')}
+              {mode === 'edit' && t('confirm_changes', 'Confirm changes')}
             </Button>
           </div>
         </form>

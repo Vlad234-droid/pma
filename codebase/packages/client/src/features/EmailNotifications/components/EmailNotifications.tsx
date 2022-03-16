@@ -42,10 +42,12 @@ export const EmailNotifications: FC<Props> = () => {
     <TileWrapper title={t('Email notifications', 'Email notifications')}>
       <div className={css(listStyles)}>
         <span className={css(titleStyle)}>
-          <Trans>Notifications</Trans>
+          <Trans i18nKey='notifications'>Notifications</Trans>
         </span>
         <div className={css(descriptionStyle)}>
-          <Trans>You will receive notification about marked actions</Trans>
+          <Trans i18nKey='you_will_receive_notification_about_marked_actions'>
+            You will receive notification about marked actions
+          </Trans>
         </div>
         {profileAttributesFiltered
           .filter(

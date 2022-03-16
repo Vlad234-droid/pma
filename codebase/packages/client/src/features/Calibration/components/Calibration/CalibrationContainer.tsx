@@ -16,7 +16,6 @@ const CalibrationContainer: FC = () => {
   const [filterOptions, setFilterOptions] = useState<FilterOption[]>();
 
   const loadData = (filters: FilterValues) => {
-    console.log('filters', filters);
     dispatch(ManagersActions.getManagers({ colleagueUuid }));
   };
 

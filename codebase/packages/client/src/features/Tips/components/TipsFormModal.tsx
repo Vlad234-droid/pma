@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import { useStyle, Rule, Button, theme, useBreakpoints } from '@dex-ddl/core';
 import successIcon from 'images/success.jpg';
 import deleteIcon from 'images/delete.png';
+import { useTranslation } from 'components/Translation';
 
 export type Props = {
   negativeBtnAction: () => void;
@@ -12,48 +13,52 @@ export type Props = {
 
 const TipsFormModal: FC<Props> = ({ action, negativeBtnAction, positiveBtnAction, tipTitle }) => {
   const { css } = useStyle();
+  const { t } = useTranslation();
 
   const options = {
     discard: {
-      title: 'Discard changes',
-      body: 'You have not saved your changes, are you sure you want to leave this page?',
-      negativeBtnText: 'Cancel',
-      positiveBtnText: 'Okay',
+      title: t('discard_changes', 'Discard changes'),
+      body: t(
+        'you_have_not_saved_your_changes',
+        'You have not saved your changes, are you sure you want to leave this page?',
+      ),
+      negativeBtnText: t('cancel', 'Cancel'),
+      positiveBtnText: t('okay', 'Okay'),
       showImage: false,
     },
     create: {
-      title: 'Success',
-      body: 'New Tip successfully created.',
+      title: t('Success', 'Success'),
+      body: t('new_tip_successfully_created', 'New Tip successfully created.'),
       negativeBtnText: '',
-      positiveBtnText: 'Okay',
+      positiveBtnText: t('okay', 'Okay'),
       showImage: true,
     },
     edit: {
-      title: 'Success',
-      body: 'Tip updated successfully.',
+      title: t('Success', 'Success'),
+      body: t('tip_updated_successfully', 'Tip updated successfully.'),
       negativeBtnText: '',
-      positiveBtnText: 'Okay',
+      positiveBtnText: t('okay', 'Okay'),
       showImage: true,
     },
     confirmDelete: {
-      title: 'Delete',
-      body: `Do you want to delete ${tipTitle} tip?`,
-      negativeBtnText: 'Cancel',
-      positiveBtnText: 'Delete',
+      title: t('delete', 'Delete'),
+      body: `${t('do_you_want_to_delete', 'Do you want to delete')} ${tipTitle} ${t('tip', 'Tip')}?`,
+      negativeBtnText: t('cancel', 'Cancel'),
+      positiveBtnText: t('delete', 'Delete'),
       showImage: true,
     },
     successDelete: {
-      title: 'Delete',
+      title: t('delete', 'Delete'),
       body: `The Tip “${tipTitle}” have been permanently deleted.`,
       negativeBtnText: '',
-      positiveBtnText: 'Okay',
+      positiveBtnText: t('okay', 'Okay'),
       showImage: true,
     },
     failure: {
       title: 'Oops',
-      body: 'Something went wrong',
+      body: t('something_went_wrong', 'Something went wrong'),
       negativeBtnText: '',
-      positiveBtnText: 'Okay',
+      positiveBtnText: t('okay', 'Okay'),
       showImage: false,
     },
   };

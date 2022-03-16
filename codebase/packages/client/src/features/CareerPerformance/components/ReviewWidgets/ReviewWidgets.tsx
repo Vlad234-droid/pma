@@ -5,6 +5,7 @@ import { ReviewWidget } from 'features/Objectives';
 import { ReviewType } from 'config/enum';
 
 import { Review } from '../../config/types';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
   showMyReview?: boolean;
@@ -22,6 +23,7 @@ const ReviewWidgets: FC<Props> = ({
   endYearReview,
 }) => {
   const { css } = useStyle();
+  const { t } = useTranslation();
 
   return (
     <>
@@ -36,7 +38,7 @@ const ReviewWidgets: FC<Props> = ({
               lastUpdatedTime={midYearReview?.lastUpdatedTime}
               onClick={() => console.log('ReviewWidget')}
               onClose={() => console.log('ReviewWidget')}
-              title={'Mid-year review'}
+              title={t('review_type_description_myr', 'Mid-year review')}
               customStyle={{ height: '100%' }}
             />
           </div>
@@ -49,7 +51,7 @@ const ReviewWidgets: FC<Props> = ({
               lastUpdatedTime={endYearReview?.lastUpdatedTime}
               onClick={() => console.log('ReviewWidget')}
               onClose={() => console.log('ReviewWidget')}
-              title={'Year-end review'}
+              title={t('review_type_description_eyr', 'Year-end review')}
               customStyle={{ height: '100%' }}
             />
           </div>
@@ -65,7 +67,7 @@ const ReviewWidgets: FC<Props> = ({
             lastUpdatedTime={endYearReview?.lastUpdatedTime}
             onClick={() => console.log('ReviewWidget')}
             onClose={() => console.log('ReviewWidget')}
-            title={'Annual performance review'}
+            title={t('annual_performance_review', 'Annual performance review')}
             customStyle={{ height: '100%' }}
           />
         </div>

@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import { useStyle, Rule, Styles } from '@dex-ddl/core';
 import { IconButton } from 'components/IconButton';
+import { Trans } from 'components/Translation';
 
 export const APPLIED_WRAPPER = 'applied_wrapper';
 export const CLEAR_FILTER = 'clear_filter';
@@ -43,7 +44,7 @@ const AppliedFilters: FC<AppliedFiltersProps> = ({
         </div>
       </div>
       <span data-test-id={COLLEAGUES_COUNT} className={css(countStyle)}>
-        Colleagues: {colleaguesCount}
+        <Trans i18nKey='colleagues'>Colleagues</Trans>: {colleaguesCount}
       </span>
     </div>
   );

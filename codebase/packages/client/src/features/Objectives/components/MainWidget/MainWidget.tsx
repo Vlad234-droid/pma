@@ -56,7 +56,10 @@ const getContent = (
       graphic: 'add',
       backgroundColor: 'tescoBlue',
       subTitle: t('create_my_objectives', 'Create my objectives'),
-      description: 'Remember your objectives should be strategic, relevant and up to date.',
+      description: t(
+        'remember_your_objectives_should_be_strategic',
+        'Remember your objectives should be strategic, relevant and up to date.',
+      ),
       buttonText: t('create_my_objectives', 'Create my objectives'),
       redirectToObjective: false,
       invertColors: true,
@@ -65,7 +68,10 @@ const getContent = (
       graphic: 'roundPencil',
       backgroundColor: 'tescoBlue',
       subTitle: t('objective_is_draft', `${count} objective(s) saved as a draft`, { count }),
-      description: 'Remember if your priorities change, review your objectives',
+      description: t(
+        'remember_if_your_priorities_change',
+        'Remember if your priorities change, review your objectives',
+      ),
       buttonText: t('view_and_edit_objectives', 'View and edit objectives'),
       redirectToObjective: false,
       invertColors: false,
@@ -74,7 +80,10 @@ const getContent = (
       graphic: 'roundClock',
       backgroundColor: 'tescoBlue',
       subTitle: t('objective_is_pending', `${count} objective(s) are waiting for approval`, { count }),
-      description: 'Remember if your priorities change, review your objectives',
+      description: t(
+        'remember_if_your_priorities_change',
+        'Remember if your priorities change, review your objectives',
+      ),
       buttonText: t('view', 'View'),
       redirectToObjective: true,
       invertColors: false,
@@ -86,7 +95,10 @@ const getContent = (
         count,
         date: new Date(date),
       }),
-      description: 'Remember if your priorities change, review your objectives',
+      description: t(
+        'remember_if_your_priorities_change',
+        'Remember if your priorities change, review your objectives',
+      ),
       buttonText: t('view', 'View'),
       redirectToObjective: true,
       invertColors: false,
@@ -94,7 +106,10 @@ const getContent = (
     [Status.DECLINED]: {
       graphic: 'roundAlert',
       backgroundColor: 'tescoBlue',
-      subTitle: 'Your objectives were declined by the Line Manager',
+      subTitle: t(
+        'your_objectives_were_declined_by_the_line_manager',
+        'Your objectives were declined by the Line Manager',
+      ),
       description: '',
       buttonText: t('view', 'View'),
       redirectToObjective: true,
@@ -103,7 +118,7 @@ const getContent = (
     [Status.OVERDUE]: {
       graphic: 'roundAlert',
       backgroundColor: 'tescoBlue',
-      subTitle: 'Objectives are overdue',
+      subTitle: t('objectives_are_overdue', 'Objectives are overdue'),
       description: '',
       buttonText: t('create_my_objectives', 'Create my objectives'),
       redirectToObjective: true,
@@ -112,7 +127,7 @@ const getContent = (
     [Status.PENDING]: {
       graphic: 'roundAlert',
       backgroundColor: 'tescoBlue',
-      subTitle: 'Objectives are pending',
+      subTitle: t('objectives_are_pending', 'Objectives are pending'),
       description: '',
       buttonText: t('create_my_objectives', 'Create my objectives'),
       redirectToObjective: true,
@@ -121,7 +136,7 @@ const getContent = (
     [Status.NOT_STARTED]: {
       graphic: 'roundAlert',
       backgroundColor: 'tescoBlue',
-      subTitle: 'Objectives are not started',
+      subTitle: t('objectives_are_not_started', 'Objectives are not started'),
       description: '',
       buttonText: t('create_my_objectives', 'Create my objectives'),
       redirectToObjective: true,
