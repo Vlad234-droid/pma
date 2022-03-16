@@ -48,6 +48,7 @@ export const renderWithTheme = <TProps extends {} = {}>(
         give: [],
         respond: [],
         view: [],
+        meta: { loading: false, loaded: false, error: null },
       },
       feedbacksCount: {
         given: 0,

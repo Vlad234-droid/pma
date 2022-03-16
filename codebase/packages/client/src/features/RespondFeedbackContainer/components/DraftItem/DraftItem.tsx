@@ -8,14 +8,14 @@ import { formatToRelativeDate, paramsReplacer } from 'utils';
 import IconButtonDefault from 'components/IconButtonDefault';
 import { FeedbackStatus, Tesco } from 'config/enum';
 import defaultImg from 'images/default.png';
-import { DraftItemProps } from '../type';
-import { NoFeedback } from '../../Feedback/components';
-import PendingNotes from './PendingNotes';
-import CompletedNotes from './CompletedNotes';
+import { DraftItemProps } from '../../type';
+import { NoFeedback } from '../../../Feedback/components';
+import PendingNotes from '../PendingNotes';
+import CompletedNotes from '../CompletedNotes';
 import { useNavigate } from 'react-router-dom';
 import { Page } from 'pages';
 
-export const TEST_ID = 'test_id';
+export const TEST_ID = 'expand_button';
 
 const DraftItem: FC<DraftItemProps> = ({ status, list, canEdit }) => {
   const { css } = useStyle();
