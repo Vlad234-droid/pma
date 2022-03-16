@@ -4,10 +4,13 @@ import { Button, CreateRule, Rule, Theme, useStyle } from '@dex-ddl/core';
 import useDispatch from 'hooks/useDispatch';
 import { OrgObjectiveActions, auditLogsSelector } from '@pma/store';
 import HistoryTable from 'components/HistoryTable/HistoryTable';
+import { Trans, useTranslation } from 'components/Translation';
 
 const StrategicDriversLogs: FC = () => {
   const { css, theme } = useStyle();
+  const { t } = useTranslation();
   const dispatch = useDispatch();
+
   const auditLogs = useSelector(auditLogsSelector) || [];
 
   const [isHistoryOpen, setHistoryOpen] = useState<boolean>(false);
@@ -20,10 +23,15 @@ const StrategicDriversLogs: FC = () => {
     <div>
       <div className={css(actions)}>
         <Button onPress={() => setHistoryOpen(!isHistoryOpen)} styles={[historyBtn({ theme })]}>
-          History of changes <span className={`${css(arrow)} ${!isHistoryOpen ? css(arrowRight) : css(arrowDown)}`} />
+          <Trans i18nKey='history_of_changes'>History of changes</Trans>{' '}
+          <span className={`${css(arrow)} ${!isHistoryOpen ? css(arrowRight) : css(arrowDown)}`} />
         </Button>
       </div>
-      <HistoryTable headers={['Name', 'Action Type', 'Time']} items={auditLogs} isVisible={isHistoryOpen} />
+      <HistoryTable
+        headers={[t('name', 'Name'), t('action_type', 'Action Type'), t('time', 'Time')]}
+        items={auditLogs}
+        isVisible={isHistoryOpen}
+      />
     </div>
   );
 };

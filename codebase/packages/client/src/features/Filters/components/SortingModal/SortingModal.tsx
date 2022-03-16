@@ -31,7 +31,9 @@ const SortingModal: FC<Props> = ({ options, onSelect, isOpen, value, onClose }) 
   return (
     <div data-test-id='sorting-modal' ref={ref} className={css(wrapperStyles({ isOpen }))}>
       <div className={css(innerStyles)}>
-        <span>Sort :</span>
+        <span>
+          <Trans i18nKey='sort'>Sort</Trans> :
+        </span>
         {options.map((item) => (
           <div className={css({ cursor: 'pointer', marginTop: '10px' })} key={item.id}>
             <label htmlFor={item.label} className={css(labelStyles)}>

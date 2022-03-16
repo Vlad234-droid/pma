@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import { useStyle, Rule } from '@dex-ddl/core';
 import { getReviewByUuidS } from '@pma/store';
 import { useSelector } from 'react-redux';
+import { Trans } from 'components/Translation';
 import { getPropperTargetType } from '../../config';
 
 type PendingNotesProps = {
@@ -17,7 +18,9 @@ const PendingNotes: FC<PendingNotesProps> = ({ item }) => {
     <>
       <div className={css({ marginBottom: '16px' })}>
         <h3 className={css(TileTitle)}>
-          This colleague has requested feedback from you. Fill out the questions below to share your feedback.
+          <Trans i18nKey='colleague_requested_feedback'>
+            This colleague has requested feedback from you. Fill out the questions below to share your feedback.
+          </Trans>
         </h3>
         <h3 className={css(SphereResondStyle)}>
           {getPropperTargetType(item.targetType, item.targetId, item.feedbackItems, review)}
@@ -27,7 +30,9 @@ const PendingNotes: FC<PendingNotesProps> = ({ item }) => {
         </p>
       </div>
 
-      <p className={css(QuestionStyle)}>Let the colleague know how they&apos;re doing</p>
+      <p className={css(QuestionStyle)}>
+        <Trans i18nKey='let_the_colleague_know_how_the_are_doing'>Let the colleague know how they&apos;re doing</Trans>
+      </p>
     </>
   );
 };

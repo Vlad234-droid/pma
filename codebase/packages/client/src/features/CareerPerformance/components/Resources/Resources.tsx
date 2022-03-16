@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { useStyle, Rule } from '@dex-ddl/core';
 
 import { BasicTile } from 'components/Tile';
-import { useTranslation } from 'components/Translation';
+import { Trans, useTranslation } from 'components/Translation';
 
 import contributionImage from 'images/Contribution.jpg';
 import checkImage from 'images/Check.jpg';
@@ -27,7 +27,9 @@ const Resources: FC<Props> = ({ basicTileStyle }) => {
             height: '100%',
           }}
         >
-          <div className={css(contentStyle)}>Coming soon</div>
+          <div className={css(contentStyle)}>
+            <Trans i18nKey='coming_soon'>Coming soon</Trans>
+          </div>
         </BasicTile>
       </div>
       <div data-test-id='personal-conversation' className={css(basicTileStyle)} onClick={console.log}>
@@ -38,7 +40,9 @@ const Resources: FC<Props> = ({ basicTileStyle }) => {
             height: '100%',
           }}
         >
-          <div className={css(contentStyle)}>Coming soon</div>
+          <div className={css(contentStyle)}>
+            <Trans i18nKey='coming_soon'>Coming soon</Trans>
+          </div>
         </BasicTile>
       </div>
       <div data-test-id='feedback' className={css(basicTileStyle)}>
@@ -49,7 +53,9 @@ const Resources: FC<Props> = ({ basicTileStyle }) => {
             height: '100%',
           }}
         >
-          <div className={css(contentStyle)}>Coming soon</div>
+          <div className={css(contentStyle)}>
+            <Trans i18nKey='coming_soon'>Coming soon</Trans>
+          </div>
         </BasicTile>
       </div>
       <div data-test-id='learning' className={css(basicTileStyle)}>
@@ -60,7 +66,9 @@ const Resources: FC<Props> = ({ basicTileStyle }) => {
             height: '100%',
           }}
         >
-          <div className={css(contentStyle)}>Coming soon</div>
+          <div className={css(contentStyle)}>
+            <Trans i18nKey='coming_soon'>Coming soon</Trans>
+          </div>
         </BasicTile>
       </div>
     </>

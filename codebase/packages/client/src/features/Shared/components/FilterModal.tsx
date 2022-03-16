@@ -1,7 +1,7 @@
 import React, { FC, useRef, MouseEvent, SetStateAction, Dispatch } from 'react';
 import { useStyle, Rule, CreateRule, Theme } from '@dex-ddl/core';
 import { Radio } from 'components/Form';
-import { Trans } from 'components/Translation';
+import { Trans, useTranslation } from 'components/Translation';
 import useEventListener from 'hooks/useEventListener';
 
 type FilterType = {
@@ -38,6 +38,8 @@ export const FilterModal: FC<Props> = ({
   title = 'Sort',
 }) => {
   const { css, theme } = useStyle();
+  const { t } = useTranslation();
+
   const choseHandler = (val: string) => {
     if (!customFields) setFilter((prev) => ({ ...prev, sort: val }));
     if (customFields) setFilter((prev) => ({ ...prev, extension: val }));
@@ -62,13 +64,13 @@ export const FilterModal: FC<Props> = ({
       id: '3',
       label: 'newToOld',
       checked: filter.sort.includes('newToOld'),
-      text: 'Newest to oldest',
+      text: t('newest_to_oldest', 'Newest to oldest'),
     },
     {
       id: '4',
       label: 'oldToNew',
       checked: filter.sort.includes('oldToNew'),
-      text: 'Oldest to newest',
+      text: t('newest', 'Oldest to newest'),
     },
   ];
 

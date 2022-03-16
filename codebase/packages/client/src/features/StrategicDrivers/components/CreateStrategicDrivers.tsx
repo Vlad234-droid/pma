@@ -4,6 +4,7 @@ import DescriptionBlock from 'components/DescriptionBlock';
 import { Attention } from 'components/Form';
 import StrategicDriversForm from './StrategicDriversForm';
 import StrategicDriversLogs from './StrategicDriversLogs';
+import { Trans } from 'components/Translation';
 
 const CreateStrategicDrivers: FC = () => {
   const { css, theme } = useStyle();
@@ -11,11 +12,15 @@ const CreateStrategicDrivers: FC = () => {
   return (
     <div className={css(contentArea)}>
       <DescriptionBlock>
-        <div className={css(descriptionHeader({ theme }))}>Strategic driver</div>
+        <div className={css(descriptionHeader({ theme }))}>
+          <Trans i18nKey='strategic_driver'>Strategic driver</Trans>
+        </div>
         <Attention />
         <div className={css(descriptionText({ theme }))}>
-          Create titles for Strategic drivers. Click “Save” button to keep the changes. Or “Publish” to cascade them on
-          the colleagues.
+          <Trans i18nKey='create_titles_for_strategic_drivers'>
+            Create titles for Strategic drivers. Click “Save” button to keep the changes. Or “Publish” to cascade them
+            on the colleagues.
+          </Trans>
         </div>
         <div>
           <StrategicDriversForm />

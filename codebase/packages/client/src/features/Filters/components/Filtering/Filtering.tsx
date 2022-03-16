@@ -5,7 +5,7 @@ import { IconButton, Position } from 'components/IconButton';
 import SideBar from 'components/Sidebar';
 import LinkButton from 'components/LinkButton';
 import { Checkbox, Radio } from 'components/Form';
-import { Trans } from 'components/Translation';
+import { Trans, useTranslation } from 'components/Translation';
 
 import { getFiltersWithValues, getInitialFilterValues } from '../../utils';
 import { FilterOption, FilterValues } from '../../config/types';
@@ -22,6 +22,8 @@ type Props = {
 
 const Filtering: FC<Props> = ({ iconStyles, isOpen, onClick, onClose, filterOptions, onFilter }) => {
   const { css } = useStyle();
+  const { t } = useTranslation();
+
   const initialFilters = getInitialFilterValues(filterOptions);
   const [filters, setFilters] = useState<FilterValues>(initialFilters);
 
@@ -67,7 +69,7 @@ const Filtering: FC<Props> = ({ iconStyles, isOpen, onClick, onClose, filterOpti
   return (
     <div className={css({ position: 'relative' })} data-test-id='filtering-wrapper'>
       <FilterIcon iconStyles={iconStyles} onClick={onClick} />
-      <SideBar isOpen={isOpen} onClose={onClose} title='Filter'>
+      <SideBar isOpen={isOpen} onClose={onClose} title={t('filter', 'Filter')}>
         <div>
           {filterOptions.map((item) => (
             <div className={css(blockStyle)} key={item.id}>
@@ -99,7 +101,7 @@ const Filtering: FC<Props> = ({ iconStyles, isOpen, onClick, onClose, filterOpti
               ))}
               {item.multi && (
                 <div className={css({ marginTop: '16px' })}>
-                  <LinkButton onClick={() => handleSelectAll(item.id)}>Select all</LinkButton>
+                  <LinkButton onClick={() => handleSelectAll(item.id)}>{t('select_all', 'Select all')}</LinkButton>
                 </div>
               )}
             </div>
@@ -118,7 +120,7 @@ const Filtering: FC<Props> = ({ iconStyles, isOpen, onClick, onClose, filterOpti
                 iconStyles={iconStyle}
                 onPress={HandleFilterApply}
               >
-                Filter
+                {t('filter', 'Filter')}
               </IconButton>
             </div>
           </div>

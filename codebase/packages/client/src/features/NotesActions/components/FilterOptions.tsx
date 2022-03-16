@@ -2,6 +2,7 @@ import React, { FC, useEffect, useState } from 'react';
 import { FilterOption as FilterOptionInput } from 'features/Shared';
 import { Rule, Styles, useStyle } from '@dex-ddl/core';
 import { IconButton } from 'components/IconButton';
+import { useTranslation } from 'components/Translation';
 
 type FilterOptionProps = any;
 
@@ -16,6 +17,7 @@ const FilterOption: FC<FilterOptionProps> = ({
 }) => {
   const { css } = useStyle();
   const [focus, setFocus] = useState(false);
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (!focus) {
@@ -33,8 +35,14 @@ const FilterOption: FC<FilterOptionProps> = ({
       <IconButton
         iconProps={{
           title: TEAM
-            ? 'My Notes can be used to create and store notes about Your Contribution throughout the year. Use this space to record achievements, thoughts on objectives or subjects to raise with your line manager during your 1:1s. Although these notes are private, in limited circumstances, they may need to be shared with others (for example as part of an investigation or Data Protection request) so they should be kept professional.'
-            : 'My Notes can be used to create and store notes about Your Contribution and that of your direct reports throughout the year. Use this space to record achievements, thoughts on objectives or subjects to raise with your line manager or direct reports during your 1:1s. Team notes can be used to help keep track of your direct reports work, achievements or conversations to refer back to at a later date. Although these notes are private, in limited circumstances, they may need to be shared with others (for example as part of an investigation or Data Protection request) so they should be kept professional.',
+            ? t(
+                'my_notes_can_be_used_to_create_and_store_notes',
+                'My Notes can be used to create and store notes about Your Contribution throughout the year. Use this space to record achievements, thoughts on objectives or subjects to raise with your line manager during your 1:1s. Although these notes are private, in limited circumstances, they may need to be shared with others (for example as part of an investigation or Data Protection request) so they should be kept professional.',
+              )
+            : t(
+                'my_notes_can_be_used_to_create_and_store_notes_about_your_contribution',
+                'My Notes can be used to create and store notes about Your Contribution and that of your direct reports throughout the year. Use this space to record achievements, thoughts on objectives or subjects to raise with your line manager or direct reports during your 1:1s. Team notes can be used to help keep track of your direct reports work, achievements or conversations to refer back to at a later date. Although these notes are private, in limited circumstances, they may need to be shared with others (for example as part of an investigation or Data Protection request) so they should be kept professional.',
+              ),
         }}
         graphic='information'
         customVariantRules={{

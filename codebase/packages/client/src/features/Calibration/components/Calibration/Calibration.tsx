@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useStyle, Rule } from '@dex-ddl/core';
 
-import { useTranslation } from 'components/Translation';
+import { Trans, useTranslation } from 'components/Translation';
 import Filters, { useSearch, FilterOption, FilterValues } from 'features/Filters';
 import { TileWrapper } from 'components/Tile';
 import SuccessModal from 'components/SuccessModal';
@@ -102,7 +102,9 @@ const Calibration: FC<Props> = ({ loadData, loadFilterOptions, colleagueUuid, co
                 <Colleagues editMode={isEditMode} colleagues={colleagues} onSave={handleSaveRating} />
               ) : (
                 <TileWrapper>
-                  <div className={css({ padding: '32px' })}>No results</div>
+                  <div className={css({ padding: '32px' })}>
+                    <Trans i18nKey='no_results'>No results</Trans>
+                  </div>
                 </TileWrapper>
               )}
             </div>
@@ -125,7 +127,7 @@ const Calibration: FC<Props> = ({ loadData, loadFilterOptions, colleagueUuid, co
       )}
       {isSuccessModalOpen && (
         <SuccessModal
-          title='Calibration updated'
+          title={t('calibration_updated', 'Calibration updated')}
           mark={<SuccessMark />}
           description={t(
             'saved_changes_to_calibration',
