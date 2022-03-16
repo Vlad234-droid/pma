@@ -211,15 +211,8 @@ const PersonalDevelopmentPlan: FC = () => {
 
 const wrapper: CreateRule<{ mobileScreen: boolean }> = (props) => {
   const { mobileScreen } = props;
-
-  if (mobileScreen) {
-    return {
-      padding: '0 10px',
-    };
-  }
-
   return {
-    padding: '0 40px',
+    padding: mobileScreen ? '0 10px' : '0 40px',
   };
 };
 
