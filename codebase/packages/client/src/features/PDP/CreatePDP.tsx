@@ -7,9 +7,9 @@ import { colleagueUUIDSelector, PDPActions, schemaMetaPDPSelector } from '@pma/s
 import { buildPath } from 'features/Routes';
 import { Page } from 'pages';
 import { PDPType } from 'config/enum';
-import Form from '../Form';
 import { useTranslation } from 'components/Translation';
-import usePDPSchema from '../../hooks/usePDPSchema';
+import CreatePDPForm from './components/CreatePDPForm';
+import usePDPSchema from './hooks/usePDPSchema';
 
 export const TEST_ID = 'create-pdp';
 
@@ -101,7 +101,7 @@ const CreateMyPDP = () => {
       }}
     >
       <div data-test-id={TEST_ID} className={css(mainContainer)}>
-        <Form
+        <CreatePDPForm
           pdpGoals={pdpGoals}
           pdpList={pdpList}
           currentTab={currentTab}

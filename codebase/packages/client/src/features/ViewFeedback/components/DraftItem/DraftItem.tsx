@@ -1,5 +1,5 @@
 import React, { FC, useMemo } from 'react';
-import { Rule, Styles, useStyle, colors } from '@dex-ddl/core';
+import { Rule, Styles, useStyle } from '@dex-ddl/core';
 import { TileWrapper } from 'components/Tile';
 import { Accordion, BaseAccordion, ExpandButton, Panel, Section } from 'components/Accordion';
 import { IconButton } from 'components/IconButton';
@@ -101,14 +101,7 @@ const DraftItem: FC<DraftItemProps> = ({ item, downloadable = true }) => {
                 </div>
               </div>
               <Panel>
-                <TileWrapper
-                  customStyle={{
-                    width: 'auto',
-                    padding: '24px',
-                    margin: '24px 28px 0 0',
-                    border: `1px solid ${colors.backgroundDarkest}`,
-                  }}
-                >
+                <TileWrapper customStyle={tileWrapperStyle}>
                   {item.feedbackItems
                     .filter(({ question }) => question)
                     .map(({ question, content }, idx) => (
@@ -211,4 +204,11 @@ const iconStyle: Rule = {
   marginRight: '8px',
   marginTop: '6px',
 };
+
+const tileWrapperStyle: Rule = ({ theme }) => ({
+  width: 'auto',
+  padding: '24px',
+  margin: '24px 28px 0 0',
+  border: `1px solid ${theme.colors.lightGray}`,
+});
 export default DraftItem;

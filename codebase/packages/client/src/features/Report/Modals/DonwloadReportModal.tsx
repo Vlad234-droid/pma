@@ -205,7 +205,7 @@ const formButtonsWrap: Rule = ({ theme }) => {
     bottom: 0,
     left: 0,
     width: '100%',
-    borderTop: `1px solid ${theme.colors.backgroundDarkest}`,
+    borderTop: `1px solid ${theme.colors.lightGray}`,
     ...(mobileScreen
       ? {
           background: theme.colors.white,

@@ -357,8 +357,8 @@ const row: Rule = ({ theme }) => {
 
 const timeStyles: Rule = ({ theme }) => {
   return {
-    fontSize: `${theme.font.fixed.f14}`,
-    marginRight: `${theme.spacing.s4}`,
+    fontSize: theme.font.fixed.f14,
+    marginRight: theme.spacing.s4,
   };
 };
 

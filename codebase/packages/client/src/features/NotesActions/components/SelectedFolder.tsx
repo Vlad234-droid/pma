@@ -264,7 +264,7 @@ const Align_flex_style: Rule = ({ colors }) => ({
   alignItems: 'center',
   justifyContent: 'flex-start',
   cursor: 'pointer',
-  borderBottom: `1px solid ${colors.backgroundDarkest}`,
+  borderBottom: `1px solid ${colors.lightGray}`,
   padding: '15px 24px',
 });
 const Align_flex_styleLast: Rule = {

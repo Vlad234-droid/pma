@@ -192,10 +192,8 @@ const labelStyle: Rule = {
   alignItems: 'center',
   marginBottom: '20px',
 };
-const wrapperContainer: Rule = () => {
-  const { theme } = useStyle();
-
-  return {
+const wrapperContainer: Rule = ({ theme }) =>
+  ({
     marginTop: '28px',
     position: 'relative',
     paddingBottom: '12px',
@@ -210,8 +208,7 @@ const wrapperContainer: Rule = () => {
         left: '0px',
       },
     },
-  } as Styles;
-};
+  } as Styles);
 const checkBoxItemTitle: Rule = () => {
   const { theme } = useStyle();
 

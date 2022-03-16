@@ -155,9 +155,9 @@
   "my_view": "My View",
   "my_team": "My Team",
   "people_team": "Your Contribution",
-  "you_dont_have_access_to_pma": "You do not have access to this system.",
+  "you_dont_have_access_to_pma": "However, you can approve objectives and reviews for your direct reports (if you are a Manager), give your team feedback and save notes for your team.",
   "my_alerts": "My alerts",
-  "timeline_is_empty": "Timeline is empty",
+  "timeline_is_empty": "You do not have a full access to Your Contribution",
   "approve_or_decline_review": "Approve or decline colleague’s objectives or reviews",
   "hint_review_title": "Here are some hints and tips for writing your review:",
   "hint_review_1": "Keep it short and to the point. It’s just a summary.",
@@ -334,7 +334,7 @@
   "please_try_and_find_time": "Please try and find time to give your feedback in person.",
   "everyday_feedback": "Everyday Feedback",
   "no_objectives_created": "No objectives created",
-  "not_have_access_to_this_system": "You do not have access to this system.",
+  "not_have_access_to_this_system": "However, you can approve objectives and reviews for your direct reports (if you are a Manager), give your team feedback and save notes for your team",
   "not_using_system_at_the_moment": "You are seeing this message because your market is not yet using the Your Contribution System at the moment.",
   "raise_a_ticket_to_access": "If you believe you should have access please raise a ticket via Colleague Help or via your People Team if you do not have Colleague Help.",
   "go_to_ourtesco_com": "Go to ourtesco.com",
@@ -451,5 +451,8 @@
   "tip_updated_successfully": "Tip updated successfully.",
   "do_you_want_to_delete": "Do you want to delete",
   "tip": "Tip",
-  "something_went_wrong": "Something went wrong"
+  "something_went_wrong": "Something went wrong",
+  "profile_data_missing": "Your profile data is missing",
+  "please_refer_to": "Please refer to",
+  "find_how_correct_data": "to find out how to correct this data"
 }

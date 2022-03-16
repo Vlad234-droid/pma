@@ -10,6 +10,7 @@ export const Text: FC<{ value: string }> = ({ value }) => {
         fontSize: '16px',
         lineHeight: '20px',
         color: theme.colors.base,
+        paddingBottom: '8px',
       })}
     >
       {value}

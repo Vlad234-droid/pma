@@ -2,8 +2,8 @@ import React, { FC } from 'react';
 import { useStyle, Rule } from '@dex-ddl/core';
 import { getReviewByUuidS } from '@pma/store';
 import { useSelector } from 'react-redux';
-import { getPropperTargetType } from '../config';
 import { Trans } from 'components/Translation';
+import { getPropperTargetType } from '../../config';
 
 type PendingNotesProps = {
   item: any;

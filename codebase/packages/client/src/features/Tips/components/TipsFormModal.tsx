@@ -148,7 +148,7 @@ const formControlBtnsWrap: Rule = ({ theme }) => {
     left: 0,
     width: '100%',
     background: '#fff',
-    borderTop: `1px solid ${theme.colors.backgroundDarkest}`,
+    borderTop: `1px solid ${theme.colors.lightGray}`,
     ...(mobileScreen
       ? {
           padding: '0 10px',

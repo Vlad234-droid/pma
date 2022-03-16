@@ -8,7 +8,7 @@ import Provider from '../context/input';
 export type Props = {
   label?: string;
   withIcon?: boolean;
-  styles?: Styles | Rule;
+  labelCustomStyle?: Styles | Rule;
   errormessage?: string;
   marginBot?: boolean;
   customIcon?: boolean;
@@ -21,6 +21,7 @@ export type Props = {
 export const Item: FC<Props> = ({
   children,
   label,
+  labelCustomStyle = {},
   withIcon = true,
   errormessage = '',
   marginBot = true,
@@ -51,7 +52,7 @@ export const Item: FC<Props> = ({
       onKeyDown={onKeyDown}
     >
       {label && (
-        <div className={css(labelWrapperStyle)}>
+        <div className={css({ ...labelWrapperStyle, ...labelCustomStyle })}>
           <label className={css(labelStyle)} title={label}>
             <MarkdownRenderer source={label} />
           </label>

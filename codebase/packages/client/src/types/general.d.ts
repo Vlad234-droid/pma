@@ -1,5 +1,6 @@
 import { PressEvents as BasePressEvents } from '@react-types/shared';
-import { theme as baseTheme } from '@dex-ddl/core';
+import { StyleProps } from 'react-fela';
+import { theme as baseTheme, Styles } from '@dex-ddl/core';
 
 import merge from 'lodash.merge';
 import * as secondaryTheme from 'theme';
@@ -86,4 +87,7 @@ declare module '@react-types/shared' {
 declare module '@dex-ddl/core' {
   export const theme = merge(baseTheme, secondaryTheme);
   export type Theme = typeof theme;
+  export type StylesFunction = (stylesProps: Required<StyleProps<Theme, Theme>>) => Styles;
+  export type Rule = StylesFunction | Styles;
+  export type CreateRule<TProps> = (props: TProps) => Rule;
 }

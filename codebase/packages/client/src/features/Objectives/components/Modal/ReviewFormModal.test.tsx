@@ -8,7 +8,7 @@ import userEvent from '@testing-library/user-event';
 
 import { default as ReviewFormModal } from './ReviewFormModal';
 import { ReviewsActions } from '@pma/store';
-import { ReviewType } from '../../../../config/enum';
+import { ReviewType } from 'config/enum';
 
 describe('ReviewFormModal', () => {
   const approvalSubmissionText = /Are you sure you want to submit your review to your line manager for approval?/i;
@@ -219,9 +219,9 @@ describe('ReviewFormModal', () => {
     });
 
     it('should render ReviewFormModal labels', async () => {
-      const text = await screen.findByText(/test text/i);
-      const textfieldLabel = await screen.findByText(/test label textfield/i);
-      const selectLabel = await screen.findByText(/test label select/i);
+      const text = screen.getByText(/test text/i);
+      const textfieldLabel = screen.getByText(/test label textfield/i);
+      const selectLabel = screen.getByText(/test label select/i);
 
       expect(text).toBeInTheDocument();
       expect(textfieldLabel).toBeInTheDocument();

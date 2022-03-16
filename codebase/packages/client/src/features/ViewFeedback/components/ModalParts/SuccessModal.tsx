@@ -71,7 +71,7 @@ const ContainerStyled: Rule = ({ theme }) => ({
   bottom: theme.spacing.s0,
   left: theme.spacing.s0,
   right: theme.spacing.s0,
-  borderTop: `${theme.border.width.b1} solid ${theme.colors.backgroundDarkest}`,
+  borderTop: `${theme.border.width.b1} solid ${theme.colors.lightGray}`,
 });
 
 const WrapperSuccessContainer: Rule = {

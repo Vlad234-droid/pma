@@ -9,12 +9,13 @@ import { DATE_STRING_FORMAT, EXPIRATION_DATE, formatDateString } from 'utils';
 export const DELETE_TEST_ID = 'goal-delete';
 export const EDIT_TEST_ID = 'goal-edit';
 
+const modifiedTitleRegex = new RegExp(/\*/, 'g');
+
 const GoalInfo = (props) => {
   const { id, title, subtitle, description, data, formElements, deleteGoal, editGoal } = props;
-  const modifiedTitleRegex = new RegExp(/\*/, 'g');
   const { css, theme } = useStyle();
   const { t } = useTranslation();
-  const [toogled, setToogled] = useState(false);
+  const [isOpen, toggleOpen] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
 
   return (
@@ -43,7 +44,7 @@ const GoalInfo = (props) => {
           {() => (
             <>
               <Section defaultExpanded={false}>
-                <div className={css(titleBlock)} onClick={() => setToogled(!toogled)}>
+                <div className={css(titleBlock)} onClick={() => toggleOpen(!isOpen)}>
                   {title?.replace(modifiedTitleRegex, '')}
                   <div className={css({ paddingLeft: '12px' })}>
                     <ExpandButton />
@@ -109,13 +110,13 @@ const GoalInfo = (props) => {
   );
 };
 
-const btnBlock = {
+const btnBlock: Rule = {
   margin: '24px 0 32px 0',
   display: 'flex',
   fontWeight: `${theme.font.weight.bold}`,
-} as Rule;
+};
 
-const btns = {
+const btns: Rule = {
   background: 'none',
   color: `${theme.colors.tescoBlue}`,
   display: 'flex',
@@ -126,28 +127,28 @@ const btns = {
   boxSizing: 'border-box',
   padding: '8px 16px',
   marginRight: '21px',
-} as Rule;
+};
 
-const fullGoals = {
+const fullGoals: Rule = {
   borderBottom: `1px solid ${theme.colors.backgroundDarkest}`,
-} as Rule;
+};
 
-const goalBlock = {
+const goalBlock: Rule = {
   paddingBottom: '16px',
   fontSize: `${theme.font.fixed.f14}`,
   lineHeight: '18px',
   userSelect: 'none',
   fontFamily: '"TESCO Modern", Arial, sans-serif',
-} as Rule;
+};
 
-const fullDesc = {
+const fullDesc: Rule = {
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'start',
   flexDirection: 'column',
-} as Rule;
+};
 
-const titleBlock = {
+const titleBlock: Rule = {
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'center',
@@ -159,6 +160,6 @@ const titleBlock = {
   lineHeight: '20px',
   letterSpacing: '0px',
   color: `${theme.colors.link}`,
-} as Rule;
+};
 
 export default GoalInfo;

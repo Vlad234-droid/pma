@@ -14,13 +14,13 @@ export const createYupSchema = (t: TFunction) => (schema: Yup.AnyObjectSchema, c
   }
   if (validate[VALIDATION_RULE_MODELER.MIN_LENGTH]) {
     validator = validator[VALIDATION_RULE.MIN_LENGTH](validate[VALIDATION_RULE_MODELER.MIN_LENGTH]).min(
-      10,
+      validate?.minLength || 10,
       t('field_min_length', `Must be at least ${validate?.minLength} characters`, { min: validate?.minLength }),
     );
   }
   if (validate[VALIDATION_RULE_MODELER.MAX_LENGTH]) {
     validator = validator[VALIDATION_RULE.MAX_LENGTH](validate[VALIDATION_RULE_MODELER.MAX_LENGTH]).max(
-      100,
+      validate?.maxLength || 100,
       t('field_max_length', `Must be at most ${validate?.maxLength} characters`, { max: validate?.maxLength }),
     );
   }

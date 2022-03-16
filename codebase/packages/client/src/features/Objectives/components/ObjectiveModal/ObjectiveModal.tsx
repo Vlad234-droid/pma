@@ -203,7 +203,8 @@ export const ObjectiveModal: FC<Props> = ({
                   bottom: theme.spacing.s0,
                   left: theme.spacing.s0,
                   right: theme.spacing.s0,
-                  borderTop: `${theme.border.width.b1} solid ${theme.colors.backgroundDarkest}`,
+                  //@ts-ignore
+                  borderTop: `${theme.border.width.b1} solid ${theme.colors.lightGray}`,
                 })}
               >
                 <div

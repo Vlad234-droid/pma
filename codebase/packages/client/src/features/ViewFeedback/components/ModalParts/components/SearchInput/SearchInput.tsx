@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { useStyle, colors, Rule, Styles } from '@dex-ddl/core';
+import { useStyle, Rule, CreateRule, Styles } from '@dex-ddl/core';
 import mergeRefs from 'react-merge-refs';
 import { InputProps } from './type';
 import { useFormContainer } from 'components/Form/context/input';
@@ -38,18 +38,7 @@ const SearchInput: FC<InputProps> = ({
         autoComplete={'off'}
         disabled={(selectedPerson && searchValue !== '' && true) || disabled}
         type={type}
-        className={css({
-          width: '100%',
-          border: `1px solid ${isValid ? colors.backgroundDarkest : colors.error}`,
-          borderRadius: '50px',
-          fontSize: '16px',
-          lineHeight: '20px',
-          padding: '10px 30px 10px 16px',
-          ':focus': {
-            outline: 'none !important',
-            border: `1px solid ${isValid ? colors.tescoBlue : colors.error}`,
-          },
-        })}
+        className={css(InputStyle({ isValid }))}
         placeholder={placeholder}
       />
       {!!options.length && (
@@ -112,12 +101,27 @@ const ContainerStyle: Rule = ({ theme }) => {
   return {
     display: 'block',
     position: 'absolute',
-    border: `1px solid ${theme.colors.backgroundDarkest}`,
+    border: `1px solid ${theme.colors.lightGray}`,
     borderRadius: theme.border.radius.sm,
     background: theme.colors.white,
     width: '100%',
     zIndex: 999,
   };
 };
+
+const InputStyle: CreateRule<{ isValid: boolean }> =
+  ({ isValid }) =>
+  ({ theme }) => ({
+    width: '100%',
+    border: `1px solid ${isValid ? theme.colors.lightGray : theme.colors.error}`,
+    borderRadius: '50px',
+    fontSize: '16px',
+    lineHeight: '20px',
+    padding: '10px 30px 10px 16px',
+    ':focus': {
+      outline: 'none !important',
+      border: `1px solid ${isValid ? theme.colors.tescoBlue : theme.colors.error}`,
+    },
+  });
 
 export default SearchInput;

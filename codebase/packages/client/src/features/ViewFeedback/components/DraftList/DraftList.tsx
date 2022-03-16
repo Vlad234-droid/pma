@@ -59,7 +59,7 @@ const DraftList: FC<Props> = ({
     }
   }, [uuids.length]);
 
-  if (!loaded) return null;
+  if (!loaded) return <div className={css(wrapperRule)} />;
 
   return (
     <div className={css(wrapperRule)}>

@@ -1,10 +1,10 @@
 import React, { FC } from 'react';
-import MyPersonalDevelopmentPlan from 'features/PDP/components/MyPDP';
+import { PersonalDevelopmentPlan } from 'features/PDP';
 
 export const TEST_ID = 'pdp-page';
 
-const PersonalDevelopmentPlan: FC = () => {
-  return <MyPersonalDevelopmentPlan />;
+const PersonalDevelopmentPlanPage: FC = () => {
+  return <PersonalDevelopmentPlan />;
 };
 
-export default PersonalDevelopmentPlan;
+export default PersonalDevelopmentPlanPage;

@@ -13,7 +13,7 @@ import { ColleaguesActions, colleagueUUIDSelector, FeedbackActions, ReviewsActio
 import { useDispatch, useSelector } from 'react-redux';
 import { FilterModal } from '../../../Shared/components/FilterModal';
 import { useNavigate } from 'react-router-dom';
-import { FeedbackStatus, FEEDBACK_STATUS_IN } from 'config/enum';
+import { FeedbackStatus, FEEDBACK_STATUS_IN, Tesco } from 'config/enum';
 import { Page } from 'pages';
 import useSubmittedCompletedNotes from '../../hooks/useSubmittedCompletedNotes';
 import { buildPath } from 'features/Routes';
@@ -145,7 +145,10 @@ const ViewFeedback: FC = () => {
 
     if (isReaded) {
       submittedCompletedNotes.forEach(
-        (item) => item.targetId && dispatch(ReviewsActions.getReviewByUuid({ uuid: item.targetId })),
+        (item) =>
+          item.targetId &&
+          item.targetId !== Tesco.TescoBank &&
+          dispatch(ReviewsActions.getReviewByUuid({ uuid: item.targetId })),
       );
     }
   }, [isReaded]);
@@ -378,7 +381,7 @@ const ButtonsActionsStyle: Rule = () => {
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
   return {
-    minWidth: mobileScreen ? '100%' : '400px',
+    width: mobileScreen ? '100%' : '400px',
     flex: '1 0 250px',
     '& > div': {
       '&:nth-child(2)': {

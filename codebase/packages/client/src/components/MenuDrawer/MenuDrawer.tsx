@@ -259,12 +259,10 @@ const itemSettingsStyle: Rule = {
 };
 
 const itemSettingsBorderStyle: Rule = ({ theme }) => ({
-  // @ts-ignore
   borderTop: `1px solid ${theme.colors.lightGray}`,
 });
 
 const menuDropdownStyle: Rule = ({ theme }) => ({
-  // @ts-ignore
   backgroundColor: theme.colors.lightBlue,
   transition: 'all .5s ease-in-out',
 });

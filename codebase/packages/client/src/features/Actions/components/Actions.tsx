@@ -21,7 +21,7 @@ import { ApprovalWidget } from './Widgets';
 import { ColleagueList } from './Colleague';
 import { filterApprovedFn } from '../utils';
 import { SuccessModal } from './Modal';
-import SuccessModalProvider, { SuccessModalConsumer } from '../context/successModalContext';
+import { SuccessModalConsumer, default as SuccessModalProvider } from '../context/successModalContext';
 
 export const Actions = () => {
   const dispatch = useDispatch();

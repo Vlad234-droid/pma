@@ -1,5 +1,5 @@
 import React, { FC, useState, useMemo, useEffect } from 'react';
-import { ModalDownloadFeedbackProps, PeopleTypes } from './type';
+import { ModalDownloadFeedbackProps } from './type';
 import { useStyle, useBreakpoints, Rule, Button } from '@dex-ddl/core';
 import { IconButton, Position } from 'components/IconButton';
 import { SearchPart, SubmitPart } from './components';
@@ -99,7 +99,8 @@ const ModalDownloadFeedback: FC<ModalDownloadFeedbackProps> = ({
               bottom: theme.spacing.s0,
               left: theme.spacing.s0,
               right: theme.spacing.s0,
-              borderTop: `${theme.border.width.b1} solid ${theme.colors.backgroundDarkest}`,
+              //@ts-ignore
+              borderTop: `${theme.border.width.b1} solid ${theme.colors.lightGray}`,
             })}
           >
             <div
