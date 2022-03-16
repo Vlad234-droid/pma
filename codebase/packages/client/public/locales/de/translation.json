@@ -181,6 +181,9 @@
   "not_have_access_to_page": " You do not have access to this page",
   "view_profile": "View profile",
   "no_objectives_created": "No objectives created",
+  "profile_data_missing": "Your profile data is missing",
+  "please_refer_to": "Please refer to",
+  "find_how_correct_data": "to find out how to correct this data"
   "choose_tone_of_voice": "Choose tone of voice",
   "field_required": "This field is required",
   "field_min_length": "Must be at least {{min}} characters",
