@@ -162,11 +162,11 @@ const Objectives: FC<ObjectivesProps> = ({ colleagueUUID, schema, objectives, or
 export type CreateUpdateObjectivesModalProps = {
   onClose: () => void;
   editNumber?: number;
-  t: TFunction;
 };
 
-const CreateUpdateObjectives: FC<CreateUpdateObjectivesModalProps> = ({ onClose, editNumber, t }) => {
+const CreateUpdateObjectives: FC<CreateUpdateObjectivesModalProps> = ({ onClose, editNumber }) => {
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   const { loaded: schemaLoaded, loading: schemaLoading } = useSelector(schemaMetaSelector);
   const { loaded: reviewLoaded, loading: reviewLoading } = useSelector(reviewsMetaSelector);
   const { info } = useSelector(currentUserSelector);
