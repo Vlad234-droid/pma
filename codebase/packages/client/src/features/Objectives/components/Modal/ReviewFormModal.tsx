@@ -326,16 +326,15 @@ const ReviewFormModal: FC<ReviewFormModal> = ({ reviewType, onClose }) => {
                     name={key}
                     methods={methods}
                     label={label}
-                    Wrapper={({ children, label }) => (
-                      <Item
-                        withIcon={false}
-                        label={label}
-                        marginBot={!readonly}
-                        labelCustomStyle={readonly ? { paddingBottom: 0 } : {}}
-                      >
-                        {children}
-                      </Item>
-                    )}
+                    Wrapper={
+                      readonly
+                        ? ({ children, label }) => (
+                            <Item withIcon={false} label={label} marginBot={false} labelCustomStyle={{ padding: 0 }}>
+                              {children}
+                            </Item>
+                          )
+                        : Item
+                    }
                     //@ts-ignore
                     Element={readonly ? Text : validate?.maxLength > 100 ? Textarea : Input}
                     placeholder={description}
@@ -351,16 +350,15 @@ const ReviewFormModal: FC<ReviewFormModal> = ({ reviewType, onClose }) => {
                     name={key}
                     methods={methods}
                     label={label}
-                    Wrapper={({ children, label }) => (
-                      <Item
-                        withIcon={false}
-                        label={label}
-                        marginBot={!readonly}
-                        labelCustomStyle={readonly ? { padding: 0 } : {}}
-                      >
-                        {children}
-                      </Item>
-                    )}
+                    Wrapper={
+                      readonly
+                        ? ({ children, label }) => (
+                            <Item withIcon={false} label={label} marginBot={false} labelCustomStyle={{ padding: 0 }}>
+                              {children}
+                            </Item>
+                          )
+                        : Item
+                    }
                     //@ts-ignore
                     Element={readonly ? Text : Select}
                     options={values}
