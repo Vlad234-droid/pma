@@ -91,7 +91,7 @@ const PersonalDevelopmentPlan: FC = () => {
   const downloadHref = () => `${BASE_URL_API}/pdp/template`;
 
   return (
-    <div className={css({ padding: '0 40px' })}>
+    <div className={css(wrapper({ mobileScreen }))}>
       <div className={css(buttonBlock)}>
         <div className={css(controlButtons({ mobileScreen }))}>
           {pdpSelector?.length !== 5 && (
@@ -209,6 +209,13 @@ const PersonalDevelopmentPlan: FC = () => {
   );
 };
 
+const wrapper: CreateRule<{ mobileScreen: boolean }> = (props) => {
+  const { mobileScreen } = props;
+  return {
+    padding: mobileScreen ? '0 10px' : '0 40px',
+  };
+};
+
 const subtitleBlock = {
   display: 'flex',
   justifyContent: 'space-between',
@@ -247,7 +254,7 @@ const descriptionMain = {
   justifyContent: 'space-between',
   alignItems: 'flex-start',
   flexDirection: 'row',
-  width: '70%',
+  width: '100%',
   '@media (max-width: 900px)': {
     flexDirection: 'column',
   },
