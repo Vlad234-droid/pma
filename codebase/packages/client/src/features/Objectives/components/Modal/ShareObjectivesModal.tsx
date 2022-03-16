@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { Trans } from 'components/Translation';
-import { useBreakpoints, useStyle, Rule } from '@dex-ddl/core';
+import { useBreakpoints, useStyle, Rule, CreateRule } from '@dex-ddl/core';
 import { Icon as IconComponent } from 'components/Icon';
 import { default as Accordion, ObjectiveAccordionProps } from '../Accordion';
 
@@ -18,18 +18,8 @@ export const ShareObjectivesModal: FC<Props> = ({ manager, onClose, objectives =
   const count = objectives.length;
 
   return (
-    <div
-      className={css({
-        height: '100%',
-      })}
-    >
-      <div
-        className={css({
-          height: '100%',
-          overflow: 'auto',
-          padding: mobileScreen ? '0 16px' : '0 40px',
-        })}
-      >
+    <div className={css(containerStyle)}>
+      <div className={css(wrapperStyle({ mobileScreen }))}>
         <span className={css(arrowStyle)} onClick={() => onClose && onClose()}>
           <IconComponent graphic='arrowLeft' invertColors={true} />
         </span>
@@ -52,6 +42,16 @@ export const ShareObjectivesModal: FC<Props> = ({ manager, onClose, objectives =
     </div>
   );
 };
+
+const containerStyle: Rule = {
+  height: '100%',
+};
+
+const wrapperStyle: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => ({
+  height: '100%',
+  overflow: 'auto',
+  padding: mobileScreen ? '0 16px' : '0 40px',
+});
 
 const titleStyle: Rule = ({ theme }) => {
   const [, isBreakpoint] = useBreakpoints();

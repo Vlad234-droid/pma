@@ -179,14 +179,7 @@ const ReviewWidget: FC<Props> = ({
             {hasDescription && (
               <span className={css(descriptionStyle({ color: descriptionColor }))}>{reviewTypeContent}</span>
             )}
-            <span
-              className={css(descriptionStyle({ color: descriptionColor }), {
-                paddingTop: '16px',
-                display: 'flex',
-                alignItems: 'center',
-                lineHeight: '19px',
-              })}
-            >
+            <span className={css(descriptionStyle({ color: descriptionColor }), iconWrapper)}>
               <Icon
                 graphic={graphic}
                 iconStyles={{ verticalAlign: 'middle', margin: '0px 10px 0px 0px' }}
@@ -242,20 +235,31 @@ const bodyBlockStyle: Rule = {
   display: 'grid',
 };
 
-const titleStyle: CreateRule<{ color: string }> = ({ color }) => ({
-  fontStyle: 'normal',
-  fontWeight: 'bold',
-  fontSize: '18px',
-  marginBottom: '12px',
-  color,
-});
+const titleStyle: CreateRule<{ color: string }> =
+  ({ color }) =>
+  ({ theme }) => ({
+    fontStyle: 'normal',
+    fontWeight: theme.font.weight.bold,
+    fontSize: theme.font.fixed.f18.fontSize,
+    marginBottom: '12px',
+    color,
+  });
 
-const descriptionStyle: CreateRule<{ color: string }> = ({ color }) => ({
-  position: 'relative',
-  fontStyle: 'normal',
-  fontWeight: 'normal',
-  fontSize: '16px',
-  color,
+const descriptionStyle: CreateRule<{ color: string }> =
+  ({ color }) =>
+  ({ theme }) => ({
+    position: 'relative',
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    fontSize: theme.font.fixed.f16.fontSize,
+    color,
+  });
+
+const iconWrapper: Rule = ({ theme }) => ({
+  paddingTop: '16px',
+  display: 'flex',
+  alignItems: 'center',
+  lineHeight: theme.font.fixed.f18.lineHeight,
 });
 
 const bodyStyle: Rule = {

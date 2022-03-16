@@ -46,14 +46,8 @@ const ButtonWithConfirmation: FC<Props> = ({
           {buttonName}
         </IconButton>
       ) : (
-        <div
-          title={isDisabled ? disabledBtnTooltip : ''}
-          className={css(...styles, btnStyles({isDisabled}))}
-        >
-          <Button
-            onPress={() => setIsOpen(true)}
-            isDisabled={isDisabled}
-          >
+        <div title={isDisabled ? disabledBtnTooltip : ''} className={css(...styles, btnStyles({ isDisabled }))}>
+          <Button onPress={() => setIsOpen(true)} isDisabled={isDisabled}>
             {buttonName}
           </Button>
         </div>
@@ -75,12 +69,10 @@ const ButtonWithConfirmation: FC<Props> = ({
   );
 };
 
-const btnStyles: CreateRule<{isDisabled: boolean}> = ({ isDisabled }) => {
-  return {
-    cursor: isDisabled ? 'default' : 'pointer',
-    opacity: isDisabled ? 0.4 : 1,
-    borderRadius: '32px',
-  }
-}
+const btnStyles: CreateRule<{ isDisabled: boolean }> = ({ isDisabled }) => ({
+  cursor: isDisabled ? 'default' : 'pointer',
+  opacity: isDisabled ? 0.4 : 1,
+  borderRadius: '32px',
+});
 
 export default ButtonWithConfirmation;

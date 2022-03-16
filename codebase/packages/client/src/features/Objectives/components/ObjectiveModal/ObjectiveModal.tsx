@@ -2,7 +2,7 @@ import React, { FC, HTMLProps, useEffect, useRef } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 
 import { FormType } from '@pma/store';
-import { Button, Icon, useBreakpoints, useStyle } from '@dex-ddl/core';
+import { Button, Icon, useBreakpoints, useStyle, Rule, CreateRule } from '@dex-ddl/core';
 
 import { Status } from 'config/enum';
 import { Trans, useTranslation } from 'components/Translation';
@@ -11,9 +11,9 @@ import { StepIndicatorBasic } from 'components/StepIndicator/StepIndicator';
 import { Input, Item, Select, Textarea, Attention } from 'components/Form';
 import { GenericItemField } from 'components/GenericForm';
 import MarkdownRenderer from 'components/MarkdownRenderer';
+import { TriggerModal } from 'features/Modal/components/TriggerModal';
 
 import { ButtonWithConfirmation as SubmitButton } from '../Buttons';
-import { TriggerModal } from 'features/Modal/components/TriggerModal';
 import ObjectiveHelpModal from '../Modal/ObjectiveHelpModal';
 
 export type ObjectiveModalProps = {
@@ -50,9 +50,10 @@ export const ObjectiveModal: FC<Props> = ({
   skipFooter,
   skipHelp,
 }) => {
-  const { css, theme } = useStyle();
+  const { css } = useStyle();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+
   const formRef = useRef<HTMLFormElement | null>(null);
 
   useEffect(() => {
@@ -65,32 +66,16 @@ export const ObjectiveModal: FC<Props> = ({
   } = methods;
 
   return (
-    <div className={css({ height: '100%', bottom: '80px' })}>
-      <div
-        className={css({
-          height: '100%',
-          overflow: 'auto',
-          padding: mobileScreen ? `0 ${theme.spacing.s4}` : `0 ${theme.spacing.s10}`,
-        })}
-      >
+    <div className={css(containerStyle)}>
+      <div className={css(wrapperStyle({ mobileScreen }))}>
         {currentObjectiveNumber > 1 && setPrevObjectiveNumber && (
-          <span
-            className={css({
-              position: 'fixed',
-              top: theme.spacing.s5,
-              left: mobileScreen ? theme.spacing.s5 : theme.spacing.s10,
-              textDecoration: 'none',
-              border: 'none',
-              cursor: 'pointer',
-            })}
-            onClick={setPrevObjectiveNumber}
-          >
+          <span className={css(iconLeftPositionStyle({ mobileScreen }))} onClick={setPrevObjectiveNumber}>
             <IconComponent graphic='arrowLeft' invertColors={true} />
           </span>
         )}
         <form ref={formRef} data-test-id={'OBJECTIVE_FORM_MODAL'}>
           {!useSingleStep && (
-            <div className={css({ padding: `0 0 ${theme.spacing.s5}` })}>
+            <div className={css(stepIndicatorWrapperStyle)}>
               <StepIndicatorBasic
                 currentStatus={Status.DRAFT}
                 currentStep={currentObjectiveNumber - 1}
@@ -100,19 +85,12 @@ export const ObjectiveModal: FC<Props> = ({
             </div>
           )}
           {!skipHelp && (
-            <div className={css({ padding: `0 0 ${theme.spacing.s5}`, display: 'flex' })}>
+            <div className={css(helpModalWrapperStyle)}>
               <TriggerModal
                 triggerComponent={
                   <div className={css({ display: 'flex', alignItems: 'center' })}>
                     <Icon graphic='information' />
-                    <span
-                      className={css(theme.font.fixed.f14, {
-                        color: theme.colors.tescoBlue,
-                        padding: `${theme.spacing.s0} ${theme.spacing.s2}`,
-                      })}
-                    >
-                      Need help writing your objectives?
-                    </span>
+                    <span className={css(helpTitleStyle)}>Need help writing your objectives?</span>
                   </div>
                 }
                 title={'Writing your objectives'}
@@ -129,12 +107,7 @@ export const ObjectiveModal: FC<Props> = ({
             if (type === FormType.TEXT) {
               return (
                 <div style={{ padding: '10px 0' }} key={id}>
-                  <div
-                    className={css({
-                      fontSize: '16px',
-                      lineHeight: '20px',
-                    })}
-                  >
+                  <div className={css({ fontSize: '16px', lineHeight: '20px' })}>
                     <MarkdownRenderer source={text} />
                   </div>
                 </div>
@@ -189,45 +162,10 @@ export const ObjectiveModal: FC<Props> = ({
             }
           })}
           {!skipFooter && (
-            <div
-              className={css({
-                position: 'absolute',
-                bottom: 0,
-                left: 0,
-                width: '100%',
-              })}
-            >
-              <div
-                className={css({
-                  position: 'relative',
-                  bottom: theme.spacing.s0,
-                  left: theme.spacing.s0,
-                  right: theme.spacing.s0,
-                  //@ts-ignore
-                  borderTop: `${theme.border.width.b1} solid ${theme.colors.lightGray}`,
-                })}
-              >
-                <div
-                  className={css({
-                    padding: mobileScreen ? theme.spacing.s7 : theme.spacing.s9,
-                    display: 'flex',
-                    justifyContent: 'center',
-                  })}
-                >
-                  <Button
-                    styles={[
-                      theme.font.fixed.f16,
-                      {
-                        fontWeight: theme.font.weight.bold,
-                        width: '50%',
-                        margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
-                        background: theme.colors.white,
-                        border: `${theme.border.width.b1} solid ${theme.colors.tescoBlue}`,
-                        color: `${theme.colors.tescoBlue}`,
-                      },
-                    ]}
-                    onPress={onSaveDraft}
-                  >
+            <div className={css(footerContainerStyle)}>
+              <div className={css(footerWrapperStyle)}>
+                <div className={css(buttonWrapperStyle({ mobileScreen }))}>
+                  <Button styles={[buttonWhiteStyle]} onPress={onSaveDraft}>
                     <Trans i18nKey='save_as_draft'>Save as draft</Trans>
                   </Button>
                   {submitForm ? (
@@ -235,28 +173,11 @@ export const ObjectiveModal: FC<Props> = ({
                       isDisabled={!isValid}
                       onSave={onSubmit}
                       disabledBtnTooltip={t('action_enabled', 'Action enabled when mandatory fields are completed')}
-                      styles={[
-                        theme.font.fixed.f16,
-                        {
-                          fontWeight: theme.font.weight.bold,
-                          width: '50%',
-                          margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
-                          background: `${theme.colors.tescoBlue}`,
-                        },
-                      ]}
+                      styles={[buttonBlueStyle]}
                     />
                   ) : (
                     <Button
-                      styles={[
-                        theme.font.fixed.f16,
-                        {
-                          fontWeight: theme.font.weight.bold,
-                          width: '50%',
-                          margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
-                          background: `${theme.colors.tescoBlue}`,
-                        },
-                        isValid ? {} : { opacity: 0.4 },
-                      ]}
+                      styles={[buttonBlueStyle, isValid ? {} : { opacity: 0.4 }]}
                       onPress={setNextObjectiveNumber}
                       isDisabled={!isValid}
                     >
@@ -272,3 +193,75 @@ export const ObjectiveModal: FC<Props> = ({
     </div>
   );
 };
+
+const containerStyle: Rule = { height: '100%', bottom: '80px' };
+
+const wrapperStyle: CreateRule<{ mobileScreen: boolean }> =
+  ({ mobileScreen }) =>
+  ({ theme }) => ({
+    height: '100%',
+    overflow: 'auto',
+    padding: mobileScreen ? `0 ${theme.spacing.s4}` : `0 ${theme.spacing.s10}`,
+  });
+
+const iconLeftPositionStyle: CreateRule<{ mobileScreen: boolean }> =
+  ({ mobileScreen }) =>
+  ({ theme }) => ({
+    position: 'fixed',
+    top: theme.spacing.s5,
+    left: mobileScreen ? theme.spacing.s5 : theme.spacing.s10,
+    textDecoration: 'none',
+    border: 'none',
+    cursor: 'pointer',
+  });
+
+const footerContainerStyle: Rule = {
+  position: 'absolute',
+  bottom: 0,
+  left: 0,
+  width: '100%',
+};
+
+const footerWrapperStyle: Rule = ({ theme }) => ({
+  position: 'relative',
+  bottom: theme.spacing.s0,
+  left: theme.spacing.s0,
+  right: theme.spacing.s0,
+  borderTop: `${theme.border.width.b1} solid ${theme.colors.lightGray}`,
+});
+
+const buttonWrapperStyle: CreateRule<{ mobileScreen: boolean }> =
+  ({ mobileScreen }) =>
+  ({ theme }) => ({
+    padding: mobileScreen ? theme.spacing.s7 : theme.spacing.s9,
+    display: 'flex',
+    justifyContent: 'center',
+  });
+
+const buttonWhiteStyle: Rule = ({ theme }) => ({
+  ...theme.font.fixed.f16,
+  fontWeight: theme.font.weight.bold,
+  width: '50%',
+  margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
+  background: theme.colors.white,
+  border: `${theme.border.width.b1} solid ${theme.colors.tescoBlue}`,
+  color: `${theme.colors.tescoBlue}`,
+});
+
+const buttonBlueStyle: Rule = ({ theme }) => ({
+  ...theme.font.fixed.f16,
+  fontWeight: theme.font.weight.bold,
+  width: '50%',
+  margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
+  background: `${theme.colors.tescoBlue}`,
+});
+
+const stepIndicatorWrapperStyle: Rule = ({ theme }) => ({ padding: `0 0 ${theme.spacing.s5}` });
+
+const helpModalWrapperStyle: Rule = ({ theme }) => ({ padding: `0 0 ${theme.spacing.s5}`, display: 'flex' });
+
+const helpTitleStyle: Rule = ({ theme }) => ({
+  ...theme.font.fixed.f14,
+  color: theme.colors.tescoBlue,
+  padding: `${theme.spacing.s0} ${theme.spacing.s2}`,
+});
