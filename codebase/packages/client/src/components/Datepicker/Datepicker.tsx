@@ -20,6 +20,7 @@ type Props = {
   value?: string;
   minDate?: Date;
   isValid?: boolean;
+  isOnTop?: boolean;
 };
 
 const DATE_REGEXP = /\d{1,2}\/\d{1,2}\/\d{4}/;
@@ -34,7 +35,7 @@ const transformDateToString = (date: Date) =>
 
 const buildTargetObject = (value: string, name: string) => ({ target: { type: 'date', value, name } });
 
-const Datepicker: FC<Props> = ({ onChange, value, name, minDate, isValid }) => {
+const Datepicker: FC<Props> = ({ onChange, value, name, minDate, isValid, isOnTop }) => {
   const [isOpen, toggleOpen] = useState(false);
   const [currentValue, setCurrentValue] = useState<string | undefined>(
     value ? transformDateToString(new Date(value)) : undefined,
@@ -102,7 +103,7 @@ const Datepicker: FC<Props> = ({ onChange, value, name, minDate, isValid }) => {
           <Icon graphic={'calender'} />
         </button>
         {isOpen && (
-          <div className={css(calendarWrapperRule)}>
+          <div className={css(calendarWrapperRule({ isOnTop }))}>
             <Calendar value={date} onClickDay={handleClickDay} minDate={minDate} />
           </div>
         )}
@@ -134,8 +135,18 @@ const inputRule: Rule = {
   borderRightWidth: 0,
 };
 
-const calendarWrapperRule: Rule = ({ zIndex }) => ({
-  position: 'absolute',
-  top: '100%',
-  zIndex: zIndex.i10,
-});
+const calendarWrapperRule: CreateRule<{ zIndex?; isOnTop }> = ({ zIndex, isOnTop }) => {
+  if (isOnTop) {
+    return {
+      position: 'absolute',
+      bottom: '100%',
+      zIndex: zIndex?.i10,
+    };
+  }
+
+  return {
+    position: 'absolute',
+    top: '100%',
+    zIndex: zIndex?.i10,
+  };
+};
