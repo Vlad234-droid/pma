@@ -38,4 +38,18 @@ describe('Datepicker', () => {
       target: { name: 'test', type: 'date', value: value.split('/').reverse().join('-') },
     });
   });
+
+  it('should onChange with empty value', () => {
+    const onChange = jest.fn();
+    const { getByTestId } = render(<Datepicker name='test' onChange={onChange} />);
+    const input = getByTestId(INPUT_TEST_ID).firstChild as HTMLInputElement;
+    const value = '12/12/2022';
+    fireEvent.change(input, { target: { value } });
+    expect(onChange).toBeCalledTimes(1);
+    fireEvent.change(input, { target: { value: '' } });
+    expect(onChange).toBeCalledWith({
+      target: { name: 'test', type: 'date', value: '' },
+    });
+    expect(onChange).toBeCalledTimes(2);
+  });
 });

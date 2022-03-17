@@ -32,9 +32,13 @@ const checkIsValidDate = (date) => DATE_REGEXP.test(date);
 const transformDateToString = (date: Date) =>
   date.toLocaleDateString('en-GB', { year: 'numeric', month: '2-digit', day: '2-digit' });
 
+const buildTargetObject = (value: string, name: string) => ({ target: { type: 'date', value, name } });
+
 const Datepicker: FC<Props> = ({ onChange, value, name, minDate, isValid }) => {
   const [isOpen, toggleOpen] = useState(false);
-  const [currentValue, setCurrentValue] = useState(value ? transformDateToString(new Date(value)) : '');
+  const [currentValue, setCurrentValue] = useState<string | undefined>(
+    value ? transformDateToString(new Date(value)) : undefined,
+  );
   const [date, changeDate] = useState<Date | undefined>();
   const [error, setError] = useState<boolean>(false);
   const { css } = useStyle();
@@ -42,6 +46,9 @@ const Datepicker: FC<Props> = ({ onChange, value, name, minDate, isValid }) => {
   const dataChange = useCallback(
     debounce((value: string) => {
       setError(false);
+      if (!value) {
+        onChange(buildTargetObject('', name));
+      }
       if (!checkIsValidDate(value)) {
         setError(true);
         return;
@@ -56,13 +63,13 @@ const Datepicker: FC<Props> = ({ onChange, value, name, minDate, isValid }) => {
       newDate.setMinutes(0);
       newDate.setMilliseconds(0);
       changeDate(newDate);
-      onChange({ target: { type: 'date', value: formatDateStringFromISO(newDate.toISOString(), DATE_FORMAT), name } });
+      onChange(buildTargetObject(formatDateStringFromISO(newDate.toISOString(), DATE_FORMAT), name));
     }, 500),
     [],
   );
 
   useEffect(() => {
-    if (!currentValue) return;
+    if (currentValue === undefined) return;
     dataChange(currentValue);
   }, [currentValue]);
 
@@ -87,7 +94,11 @@ const Datepicker: FC<Props> = ({ onChange, value, name, minDate, isValid }) => {
           placeholder={'dd/mm/yyyy'}
           isValid={isValid && !error}
         />
-        <button type={'button'} onClick={() => toggleOpen(!isOpen)} className={css(buttonRule({ error }))}>
+        <button
+          type={'button'}
+          onClick={() => toggleOpen(!isOpen)}
+          className={css(buttonRule({ error: error || !isValid }))}
+        >
           <Icon graphic={'calender'} />
         </button>
         {isOpen && (
