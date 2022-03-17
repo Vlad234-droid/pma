@@ -324,10 +324,7 @@ const MyObjectives: FC = () => {
           )}
 
           <div className={css(widgetsBlock)}>
-            <ShareWidget stopShare={true} customStyle={shareWidgetStyles} />
-
             <ShareWidget customStyle={shareWidgetStyles} />
-
             <OrganizationWidget
               customStyle={{ flex: '1 1 30%', display: 'flex', flexDirection: 'column' }}
               onClick={() => navigate(buildPath(Page.STRATEGIC_DRIVERS))}
