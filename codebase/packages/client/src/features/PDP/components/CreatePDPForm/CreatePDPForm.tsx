@@ -220,7 +220,7 @@ const CreatePDPForm: FC<Props> = ({
               <React.Fragment key={`${currentTab}${idx}`}>
                 <Field
                   name={key}
-                  Element={Datepicker}
+                  Element={(props) => <Datepicker {...props} isOnTop={true} />}
                   setValue={methods.setValue}
                   minDate={today}
                   value={updateGoalValue}
