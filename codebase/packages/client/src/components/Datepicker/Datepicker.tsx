@@ -35,7 +35,7 @@ const transformDateToString = (date: Date) =>
 
 const buildTargetObject = (value: string, name: string) => ({ target: { type: 'date', value, name } });
 
-const Datepicker: FC<Props> = ({ onChange, value, name, minDate, isValid, isOnTop }) => {
+const Datepicker: FC<Props> = ({ onChange, value, name, minDate, isValid, isOnTop = false }) => {
   const [isOpen, toggleOpen] = useState(false);
   const [currentValue, setCurrentValue] = useState<string | undefined>(
     value ? transformDateToString(new Date(value)) : undefined,
@@ -135,18 +135,20 @@ const inputRule: Rule = {
   borderRightWidth: 0,
 };
 
-const calendarWrapperRule: CreateRule<{ zIndex?; isOnTop }> = ({ zIndex, isOnTop }) => {
-  if (isOnTop) {
+const calendarWrapperRule: CreateRule<{ isOnTop: boolean }> =
+  ({ isOnTop }) =>
+  ({ zIndex }) => {
+    if (isOnTop) {
+      return {
+        position: 'absolute',
+        bottom: '100%',
+        zIndex: zIndex?.i10,
+      };
+    }
+
     return {
       position: 'absolute',
-      bottom: '100%',
+      top: '100%',
       zIndex: zIndex?.i10,
     };
-  }
-
-  return {
-    position: 'absolute',
-    top: '100%',
-    zIndex: zIndex?.i10,
   };
-};
