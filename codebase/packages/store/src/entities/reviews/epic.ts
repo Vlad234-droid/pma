@@ -175,15 +175,7 @@ export const getReviewByUuidEpic: Epic = (action$, _, { api }) =>
         map(({ data }) => {
           return getReviewByUuid.success(data);
         }),
-
-        catchError((e) => {
-          const errors = e?.data?.errors;
-
-          return concatWithErrorToast(
-            of(getReviewByUuid.failure(errors?.[0] || errors)),
-            errorPayloadConverter({ ...errors?.[0], title: 'Review not found' }),
-          );
-        }),
+        catchError(({ data }) => of(getReviewByUuid.failure(data?.errors || data))),
       );
     }),
   );

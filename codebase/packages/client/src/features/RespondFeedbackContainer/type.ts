@@ -1,6 +1,11 @@
 import { FeedbackStatus } from 'config/enum';
 import { Dispatch, SetStateAction, ReactElement } from 'react';
 
+export type InitialState = {
+  sort: string;
+  search: string;
+};
+
 export type ConfigProps = {
   id: number;
   action: string;

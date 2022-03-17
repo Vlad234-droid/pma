@@ -7,7 +7,7 @@ import { VideoPlayer, VideoId } from 'features/VideoPlayer';
 import { useSelector, useDispatch } from 'react-redux';
 import { feedbackByUuidSelector, getReviewByUuidS, getRespondedFeedbacksSelector, ReviewsActions } from '@pma/store';
 import { useParams } from 'react-router-dom';
-import { getPropperTargetType } from '../../../config';
+import { getPropperTargetType } from '../../../utils';
 import { FeedbackStatus, Tesco } from 'config/enum';
 
 export const INFO_WRAPPER = 'info_wrapper';

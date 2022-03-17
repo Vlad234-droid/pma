@@ -3,7 +3,7 @@ import { useStyle, Rule } from '@dex-ddl/core';
 import { getReviewByUuidS } from '@pma/store';
 import { useSelector } from 'react-redux';
 import { Trans } from 'components/Translation';
-import { getPropperTargetType } from '../../config';
+import { getPropperTargetType } from '../../utils';
 
 type PendingNotesProps = {
   item: any;

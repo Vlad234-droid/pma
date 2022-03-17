@@ -1,4 +1,4 @@
-import { getPropperTargetType } from './config';
+import { getPropperTargetType } from './utils';
 
 it('it should retern modified string', () => {
   const feedbackItems = [
