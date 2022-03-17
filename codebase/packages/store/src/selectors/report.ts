@@ -36,3 +36,16 @@ export const getStatisticReportSelector = createSelector(reportSelector, (report
   }
   return [[], []];
 });
+
+export const getPendingObjectivesSelector = (type: string) =>
+  createSelector(reportSelector, (report: any) => {
+    const { colleagues } = report;
+    return colleagues.filter((colleague) => !+colleague.tags[type]);
+  });
+
+export const getDoneObjectivesSelector = (type: string) =>
+  createSelector(reportSelector, (report: any) => {
+    const { colleagues } = report;
+
+    return colleagues.filter((colleague) => +colleague.tags[type]);
+  });

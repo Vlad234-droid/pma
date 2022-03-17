@@ -27,6 +27,7 @@ import PeopleTeam from './PeopleTeam';
 import Calibration from './Calibration';
 import AdministratorPage from './AdministratorPage';
 import RespondNewFeedback from './RespondNewFeedback';
+import ObjectivesReport from './ObjectivesReport';
 
 export type PageComponent = {
   Element: PageElement;
@@ -243,7 +244,19 @@ const pages: Record<Page, PageComponent> = {
     title: 'Team reporting',
     withHeader: true,
     backPath: Page.CONTRIBUTION,
-    perform: [role.TALENT_ADMIN, role.ADMIN],
+    perform: [role.TALENT_ADMIN, role.ADMIN, role.LINE_MANAGER],
+  },
+  [Page.OBJECTIVES_SUBMITTED_REPORT]: {
+    Element: ObjectivesReport,
+    withHeader: true,
+    backPath: Page.REPORT,
+    perform: [role.TALENT_ADMIN, role.ADMIN, role.LINE_MANAGER],
+  },
+  [Page.OBJECTIVES_APPROVED_REPORT]: {
+    Element: ObjectivesReport,
+    withHeader: true,
+    backPath: Page.REPORT,
+    perform: [role.TALENT_ADMIN, role.ADMIN, role.LINE_MANAGER],
   },
   [Page.ADMINISTRATION]: {
     Element: AdministratorPage,

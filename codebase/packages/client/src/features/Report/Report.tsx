@@ -1,25 +1,26 @@
 import React, { FC, useState, useEffect, useCallback } from 'react';
-import { ReportActions, approvedObjectivesSelector, notApprovedObjectivesSelector } from '@pma/store';
+import { ReportActions } from '@pma/store';
 import { Button, colors, CreateRule, Rule, useBreakpoints, useStyle } from '@dex-ddl/core';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import { IconButton } from 'components/IconButton';
 import { FilterOption } from 'features/Shared';
 import { PieChart } from 'components/PieChart';
-import { View } from 'components/PieChart/PieChart';
-
 import { Select } from 'components/Form';
 import FilterModal from './components/FilterModal';
 import InfoTable from './components/InfoTable';
 import { DonwloadReportModal } from './Modals';
 import { Trans, useTranslation } from 'components/Translation';
-import { Rating, TitlesReport } from 'config/enum';
 import AppliedFilters from './components/AppliedFilters';
-import { getFieldOptions, listOfStatuses, metaStatuses } from './config';
-import { downloadCsvFile } from './utils';
 import { getCurrentYear } from 'utils/date';
-import useStatisticsReport from './hooks';
 import { useToast } from 'features/Toast';
+import { View } from 'components/PieChart/config';
+
+import { getFieldOptions, listOfStatuses, metaStatuses, initialValues } from './config';
+import { Rating, TitlesReport } from 'config/enum';
+import { downloadCsvFile } from './utils';
+import useStatisticsReport from './hooks';
+import { Page } from 'pages';
 
 export const REPORT_WRAPPER = 'REPORT_WRAPPER';
 
@@ -32,37 +33,11 @@ const Report: FC = () => {
   const [showDownloadReportModal, setShowDownloadReportModal] = useState(false);
   const [searchValueFilterOption, setSearchValueFilterOption] = useState('');
   const [filterModal, setFilterModal] = useState(false);
-  const [filterData, setFilterData] = useState<any>([
-    {
-      title: 'Work level',
-      data: [
-        { title: 'Select All' },
-        { title: 'Colleagues' },
-        { title: 'Work level 1' },
-        { title: 'Work level 2' },
-        { title: 'Work level 3' },
-      ],
-    },
-    {
-      title: 'Operational areas',
-      data: [
-        { title: 'Select All' },
-        { title: 'Objectives' },
-        { title: 'PDP' },
-        { title: 'Mid-year Review' },
-        { title: 'End-year Review' },
-      ],
-    },
-    {
-      title: 'Gender',
-      data: [{ title: 'Select All' }, { title: 'Male' }, { title: 'Female' }],
-    },
-  ]);
+  const [year, setYear] = useState<string | null>('');
+
+  const [filterData, setFilterData] = useState<any>(initialValues);
   const [checkedItems, setCheckedItems]: [string[], (T) => void] = useState([]);
   const [isCheckAll, setIsCheckAll]: [string[], (T) => void] = useState([]);
-
-  const [approvedObjPercent, approvedObjTitle] = useSelector(approvedObjectivesSelector);
-  const [notApprovedObjPercent, notApprovedObjTitle] = useSelector(notApprovedObjectivesSelector);
 
   const {
     myrSubmittedPercentage,
@@ -99,10 +74,14 @@ const Report: FC = () => {
     anniversaryReviewPerQuarter4Percentage,
     anniversaryReviewPerQuarter4Count,
     colleaguesCount,
+    approvedObjPercent,
+    approvedObjTitle,
+    notApprovedObjPercent,
+    notApprovedObjTitle,
   } = useStatisticsReport([...metaStatuses]);
 
   const getReportData = useCallback((year = getCurrentYear()) => {
-    dispatch(ReportActions.getObjectivesStatistics({ year }));
+    dispatch(ReportActions.getObjectivesStatistics({ year, topics_in: [...metaStatuses] }));
     dispatch(
       ReportActions.getObjectivesReport({
         year: year,
@@ -119,6 +98,7 @@ const Report: FC = () => {
 
   const changeYearHandler = (value) => {
     if (!value) return;
+    setYear(value);
     getReportData(value);
   };
 
@@ -134,6 +114,10 @@ const Report: FC = () => {
   };
 
   const quantity = getAppliedReport().length;
+
+  const getYear = () => {
+    return { year: !year ? getCurrentYear() : year };
+  };
 
   return (
     <>
@@ -201,6 +185,8 @@ const Report: FC = () => {
               title={t(TitlesReport.OBJECTIVES_SUBMITTED, 'Objectives submitted')}
               data={[{ percent: objectivesSubmittedPercentage }]}
               display={View.CHART}
+              link={Page.OBJECTIVES_SUBMITTED_REPORT}
+              params={getYear()}
             />
           </div>
           <div className={css(rightColumn)}>
@@ -208,6 +194,8 @@ const Report: FC = () => {
               title={t(TitlesReport.OBJECTIVES_APPROVED, 'Objectives approved')}
               data={[{ percent: objectivesApprovedPercentage }]}
               display={View.CHART}
+              link={Page.OBJECTIVES_APPROVED_REPORT}
+              params={getYear()}
             />
             <div className={css(downloadWrapperStyle)}>
               <Button

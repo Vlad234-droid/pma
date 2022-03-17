@@ -77,12 +77,12 @@ const FilterModal: FC<FilterModalProps> = ({
 
     if (!checked) {
       setIsCheckAll((prev) => [...prev.filter((item) => item !== id)]);
-      const filteredCheckedItems = checkedItems.filter((item) => {
-        if (selectedItems.includes(item)) return;
-        return item;
-      });
-
-      setCheckedItems(() => filteredCheckedItems);
+      setCheckedItems(() =>
+        checkedItems.filter((item) => {
+          if (selectedItems.includes(item)) return;
+          return item;
+        }),
+      );
       return;
     }
   };

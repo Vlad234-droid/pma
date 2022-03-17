@@ -1,4 +1,4 @@
-import { createAsyncAction } from 'typesafe-actions';
+import { createAsyncAction, createAction } from 'typesafe-actions';
 
 export const getObjectivesReport = createAsyncAction(
   'report/GET_OBJECTIVES_REPORT_REQUEST',
@@ -12,7 +12,17 @@ export const getObjectivesStatistics = createAsyncAction(
   'report/GET_OBJECTIVES_STATISTICS_FAILURE',
 )<any, any, Error>();
 
+export const getTargetingColleagues = createAsyncAction(
+  'report/GET_TARGETING_COLLEAGUES_REQUEST',
+  'report/GET_TARGETING_COLLEAGUES_SUCCESS',
+  'report/GET_TARGETING_COLLEAGUES_FAILURE',
+)<any, any, Error>();
+
+export const clearStatistics = createAction('report/CLEAR_STATISTICS')();
+
 export const Actions = {
   getObjectivesReport: getObjectivesReport.request,
   getObjectivesStatistics: getObjectivesStatistics.request,
+  getTargetingColleagues: getTargetingColleagues.request,
+  clearStatistics,
 };

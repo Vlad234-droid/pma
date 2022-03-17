@@ -177,3 +177,30 @@ export const checkboxes = (t) => [
     isChecked: false,
   },
 ];
+
+export const initialValues = [
+  {
+    title: 'Work level',
+    data: [
+      { title: 'Select All' },
+      { title: 'Colleagues' },
+      { title: 'Work level 1' },
+      { title: 'Work level 2' },
+      { title: 'Work level 3' },
+    ],
+  },
+  {
+    title: 'Operational areas',
+    data: [
+      { title: 'Select All' },
+      { title: 'Objectives' },
+      { title: 'PDP' },
+      { title: 'Mid-year Review' },
+      { title: 'End-year Review' },
+    ],
+  },
+  {
+    title: 'Gender',
+    data: [{ title: 'Select All' }, { title: 'Male' }, { title: 'Female' }],
+  },
+];

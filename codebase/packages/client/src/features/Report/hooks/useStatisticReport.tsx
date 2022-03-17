@@ -1,9 +1,11 @@
 import { useSelector } from 'react-redux';
-import { getStatisticReportSelector } from '@pma/store';
+import { getStatisticReportSelector, approvedObjectivesSelector, notApprovedObjectivesSelector } from '@pma/store';
 import { upperCaseFirstLetter } from 'utils/helper';
 
 const useStatisticsReport = (args) => {
   const [[data], metadata] = useSelector(getStatisticReportSelector) || [];
+  const [approvedObjPercent, approvedObjTitle] = useSelector(approvedObjectivesSelector);
+  const [notApprovedObjPercent, notApprovedObjTitle] = useSelector(notApprovedObjectivesSelector);
 
   const getKey = (key) => {
     return key
@@ -21,9 +23,9 @@ const useStatisticsReport = (args) => {
       return acc;
     }, {});
 
-    return statisticReport;
+    return { ...statisticReport, approvedObjPercent, approvedObjTitle, notApprovedObjPercent, notApprovedObjTitle };
   }
-  return {};
+  return { approvedObjPercent, approvedObjTitle, notApprovedObjPercent, notApprovedObjTitle };
 };
 
 export default useStatisticsReport;

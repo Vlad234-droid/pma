@@ -1,6 +1,8 @@
 {
   "approved": "Approved",
   "declined": "Declined",
+  "not_submitted": "Not submitted",
+  "not_approved": "Not approved",
   "business_unit_bonus": "Business unit bonus",
   "cancel": "Cancel",
   "check_ins": "Check-ins",

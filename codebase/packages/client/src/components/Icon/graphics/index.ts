@@ -49,6 +49,7 @@ import { Configuration } from './configuration';
 import { Tip } from './tip';
 import { MultiLanguage } from './multiLanguage';
 import { Close } from './close';
+import { Attention } from './attention';
 
 /**
  * Each icon we add needs to have viewbox set to "0 0 24 24".
@@ -105,9 +106,11 @@ export type Graphics =
   | 'support'
   | 'team'
   | 'tip'
-  | 'tool';
+  | 'tool'
+  | 'attention';
 
 export const icons: Record<Graphics, FCGraphicProps> = {
+  attention: Attention,
   add: Add,
   arrowLeft: ArrowLeft,
   arrowRight: ArrowRight,

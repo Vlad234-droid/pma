@@ -3,7 +3,7 @@ import { Epic, isActionOf } from 'typesafe-actions';
 import { combineEpics } from 'redux-observable';
 import { from, of } from 'rxjs';
 import { catchError, filter, map, switchMap } from 'rxjs/operators';
-import { getObjectivesReport, getObjectivesStatistics } from './actions';
+import { getObjectivesReport, getObjectivesStatistics, getTargetingColleagues } from './actions';
 import { concatWithErrorToast, errorPayloadConverter } from '../../utils/toastHelper';
 
 export const getObjectivesReportEpic: Epic = (action$, _, { api }) =>
@@ -18,6 +18,22 @@ export const getObjectivesReportEpic: Epic = (action$, _, { api }) =>
           return getObjectivesReport.success(data.data);
         }),
         catchError(({ errors }) => of(getObjectivesReport.failure(errors))),
+      );
+    }),
+  );
+
+export const getTargetingColleaguesEpic: Epic = (action$, _, { api }) =>
+  action$.pipe(
+    filter(isActionOf(getTargetingColleagues.request)),
+    switchMap(({ payload }) => {
+      //@ts-ignore
+      return from(api.getTargetingColleagues(payload)).pipe(
+        //@ts-ignore
+        map(({ data }) => {
+          //@ts-ignore
+          return getTargetingColleagues.success(data);
+        }),
+        catchError(({ errors }) => of(getTargetingColleagues.failure(errors))),
       );
     }),
   );
@@ -45,4 +61,4 @@ export const getObjectivesStatisticsEpic: Epic = (action$, _, { api }) =>
     }),
   );
 
-export default combineEpics(getObjectivesReportEpic, getObjectivesStatisticsEpic);
+export default combineEpics(getObjectivesReportEpic, getObjectivesStatisticsEpic, getTargetingColleaguesEpic);

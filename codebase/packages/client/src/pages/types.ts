@@ -32,6 +32,8 @@ enum Page {
   EDIT_TIP = 'tips/:tipUuid',
   REPORT = 'report',
   ADMINISTRATION = 'administration',
+  OBJECTIVES_SUBMITTED_REPORT = 'report/submitted-objectives',
+  OBJECTIVES_APPROVED_REPORT = 'report/approved-objectives',
 }
 
 type PageElement =

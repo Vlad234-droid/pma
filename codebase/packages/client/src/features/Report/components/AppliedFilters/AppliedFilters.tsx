@@ -20,8 +20,6 @@ const AppliedFilters: FC<AppliedFiltersProps> = ({
 }) => {
   const { css } = useStyle();
 
-  console.log('getAppliedReport', getAppliedReport);
-
   return (
     <div className={css({ height: '92px' })} data-test-id={APPLIED_WRAPPER}>
       <div className={css(appliedWrapperFilters)}>
