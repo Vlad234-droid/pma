@@ -408,14 +408,14 @@ const ReviewFormModal: FC<ReviewFormModal> = ({ reviewType, onClose }) => {
                         color: `${theme.colors.tescoBlue}`,
                       },
                     ]}
-                    onClick={onClose}
+                    onPress={onClose}
                   >
                     <Trans i18nKey='close'>Close</Trans>
                   </Button>
                 ) : (
                   <>
                     <Button
-                      onClick={onSaveDraft}
+                      onPress={onSaveDraft}
                       styles={[
                         theme.font.fixed.f16,
                         {

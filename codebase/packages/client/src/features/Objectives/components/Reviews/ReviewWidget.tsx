@@ -172,7 +172,7 @@ const ReviewWidget: FC<Props> = ({
 
   return (
     <TileWrapper customStyle={{ ...customStyle }} hover={shadow} boarder={shadow} background={background}>
-      <div className={css(wrapperStyle)} onClick={handleClickOpen} data-test-id={TEST_ID}>
+      <div className={css(wrapperStyle)} onMouseDown={handleClickOpen} data-test-id={TEST_ID}>
         <div className={css(headStyle)}>
           <div className={css(headerBlockStyle)}>
             <span className={css(titleStyle({ color: titleColor }))}>{title}</span>

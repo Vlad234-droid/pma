@@ -171,7 +171,7 @@ const MainWidget: FC<Props> = ({ nextReviewDate = '', count = 0, status, customS
   return (
     <>
       <TileWrapper customStyle={customStyle} hover={true} background={backgroundColor}>
-        <div className={css(wrapperStyle({ clickable: notApproved }))} onClick={handleClick} data-test-id={TEST_ID}>
+        <div className={css(wrapperStyle({ clickable: notApproved }))} onMouseDown={handleClick} data-test-id={TEST_ID}>
           <div className={css(headStyle)}>
             <div>
               <Icon graphic='document' invertColors={notApproved} iconStyles={iconStyles} />

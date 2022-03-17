@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import { Modal, useBreakpoints, theme, CreateRule } from '@dex-ddl/core';
 import { Icon } from 'components/Icon';
+import { ModalWrapper } from 'components/ModalWrapper';
 
 export type ModalComponentProps = {
   onClose: any;
@@ -11,22 +12,24 @@ export const ModalComponent: FC<ModalComponentProps> = ({ onClose, title, childr
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
   return (
-    <Modal
-      modalPosition={'middle'}
-      overlayColor={'tescoBlue'}
-      modalContainerRule={[containerRule({ mobileScreen })]}
-      closeOptions={{
-        content: <Icon graphic='cancel' invertColors={true} />,
-        onClose,
-        styles: [modalCloseOptionStyle({ mobileScreen })],
-      }}
-      title={{
-        content: title,
-        styles: [modalTitleOptionStyle({ mobileScreen })],
-      }}
-    >
-      {children}
-    </Modal>
+    <ModalWrapper isOpen={true}>
+      <Modal
+        modalPosition={'middle'}
+        overlayColor={'tescoBlue'}
+        modalContainerRule={[containerRule({ mobileScreen })]}
+        closeOptions={{
+          content: <Icon graphic='cancel' invertColors={true} />,
+          onClose,
+          styles: [modalCloseOptionStyle({ mobileScreen })],
+        }}
+        title={{
+          content: title,
+          styles: [modalTitleOptionStyle({ mobileScreen })],
+        }}
+      >
+        {children}
+      </Modal>
+    </ModalWrapper>
   );
 };
 

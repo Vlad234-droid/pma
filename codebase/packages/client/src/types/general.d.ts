@@ -77,13 +77,6 @@ declare namespace NodeJS {
 }
 
 // todo remove after merge with new dex version
-declare module '@react-types/shared' {
-  export interface PressEvents extends BasePressEvents {
-    onClick?: any;
-  }
-}
-
-// todo remove after merge with new dex version
 declare module '@dex-ddl/core' {
   export const theme = merge(baseTheme, secondaryTheme);
   export type Theme = typeof theme;
