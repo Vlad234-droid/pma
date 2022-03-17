@@ -19,8 +19,12 @@ declare namespace NodeJS {
     // General
     NODE_PORT: number;
     NODE_ENV: keyof typeof Environment;
+    RUNTIME_ENV: keyof typeof Environment;
     BUILD_ENV: 'development' | 'ppe' | 'production';
     PROXY_API_SERVER_URL: string;
+    LOGGER_ROOT_NAME: string | undefined;
+    LOGGER_LEVEL: string;
+    LOGGER_PRETIFY: boolean | undefined;
 
     // Integration
     INTEGRATION_MODE: keyof typeof AppMode;
@@ -30,10 +34,13 @@ declare namespace NodeJS {
     INTEGRATION_CORE_URL: string;
 
     // Application specific
+    APPLICATION_SERVER_URL_ROOT: string;
     APPLICATION_PUBLIC_URL: string;
     APPLICATION_URL_ROOT: string;
     APPLICATION_USER_DATA_COOKIE_NAME: string;
+    APPLICATION_USER_DATA_COOKIE_SECRET: string;
     APPLICATION_COOKIE_PARSER_SECRET: string;
+    STICK_COOKIES_TO_APPLICATION_PATH: boolean;
 
     // SSO turn on or off
     USE_ONELOGIN: boolean;

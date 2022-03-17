@@ -1,5 +1,7 @@
 // @ts-ignore
 import yn from 'yn';
+import { getAppEnv } from '@pma-common/connector-utils';
+import { ApiEnv } from '@energon-connectors/core';
 
 import { getEnv } from './env-accessor';
 import { defaultConfig } from './default';
@@ -8,8 +10,13 @@ import { isUrlAbsolute } from '../utils';
 export type ProcessConfig = {
   // general
   buildEnvironment: () => string;
+  runtimeEnvironment: () => string;
   environment: () => keyof typeof NodeJS.Environment;
+  apiEnv: () => ApiEnv;
   port: () => number;
+  loggerRootName: () => string;
+  loggerLevel: () => string | undefined;
+  loggerPretify: () => boolean | undefined;
   proxyApiServerUrl: () => string;
   authPath: () => string;
   // integration
@@ -23,13 +30,18 @@ export type ProcessConfig = {
   integrationSSOLogoutPath: () => string;
   integrationUIMountPath: () => string;
   // application specific settings
+  applicationServerUrlRoot: () => string;
   applicationName: () => string;
   applicationPublicUrl: () => string;
   applicationUrlRoot: () => string;
   applicationUrlRootWithApplicationPublicUrl: () => string;
   // cookies settings
+  applicationIdTokenCookieName: () => string | undefined;
+  applicationSessionCookieName: () => string | undefined;
   applicationCookieParserSecret: () => string;
   applicationUserDataCookieName: () => string;
+  applicationUserDataCookieSecret: () => string | undefined;
+  stickCookiesToApplicationPath: () => boolean;
   // onelogin
   useOneLogin: () => boolean;
   oneLoginIssuerUrl: () => string;
@@ -43,7 +55,9 @@ export type ProcessConfig = {
   // roles group assigments
   oidcGroupFiltersRegex: () => RegExp[];
   oidcAdminGroups: () => string[];
+  oidcAuthCallbackPath: () => string;
   oidcManagerGroups: () => string[];
+  oidcRedirectAfterLogoutPath: () => string;
   oidcViewerGroups: () => string[];
   defaultRoles: () => string[];
   // identity
@@ -58,6 +72,7 @@ export class ConfigAccessor {
   private readonly config: ProcessConfig;
 
   private constructor(processEnv: NodeJS.ProcessEnv) {
+    const applicationServerUrlRoot = processEnv.APPLICATION_SERVER_URL_ROOT;
     const port = isNaN(Number(processEnv.NODE_PORT)) ? defaultConfig.port : Number(processEnv.NODE_PORT);
     const coreMountPath = processEnv.INTEGRATION_CORE_MOUNT_PATH;
     const applicationPublicUrl = processEnv.APPLICATION_PUBLIC_URL === '/' ? '' : processEnv.APPLICATION_PUBLIC_URL;
@@ -68,8 +83,13 @@ export class ConfigAccessor {
     this.config = {
       // general
       buildEnvironment: () => processEnv.BUILD_ENV,
+      runtimeEnvironment: () => processEnv.RUNTIME_ENV,
       environment: () => processEnv.NODE_ENV,
+      apiEnv: () => getAppEnv(this.config.runtimeEnvironment(), undefined),
       port: () => port,
+      loggerRootName: () => processEnv.LOGGER_ROOT_NAME || defaultConfig.loggerRootName,
+      loggerLevel: () => processEnv.LOGGER_LEVEL,
+      loggerPretify: () => (processEnv.LOGGER_PRETIFY ? yn(processEnv.LOGGER_PRETIFY, { default: false }) : undefined),
       proxyApiServerUrl: () => processEnv.PROXY_API_SERVER_URL,
       authPath: () => defaultConfig.authPath,
       // integration
@@ -92,15 +112,20 @@ export class ConfigAccessor {
           ? processEnv.INTEGRATION_MOUNT_PATH
           : `${coreMountPath}${processEnv.INTEGRATION_MOUNT_PATH}`,
       // application specific settings
+      applicationServerUrlRoot: () => applicationServerUrlRoot,
       applicationName: () => defaultConfig.applicationName,
       applicationPublicUrl: () => processEnv.APPLICATION_PUBLIC_URL,
       applicationUrlRoot: () => applicationUrlRoot,
       applicationUrlRootWithApplicationPublicUrl: () => `${applicationUrlRoot}${applicationPublicUrl}`,
       // cookies settings
+      applicationIdTokenCookieName: () => processEnv.APPLICATION_AUTH_TOKEN_COOKIE_NAME || undefined,
+      applicationSessionCookieName: () => processEnv.APPLICATION_SESSION_COOKIE_NAME || undefined,
       applicationCookieParserSecret: () =>
         processEnv.APPLICATION_COOKIE_PARSER_SECRET || defaultConfig.applicationCookieParserSecret,
       applicationUserDataCookieName: () =>
         processEnv.APPLICATION_USER_DATA_COOKIE_NAME || defaultConfig.applicationUserDataCookieName,
+      applicationUserDataCookieSecret: () => processEnv.APPLICATION_USER_DATA_COOKIE_SECRET,
+      stickCookiesToApplicationPath: () => yn(processEnv.STICK_COOKIES_TO_APPLICATION_PATH, { default: false }),
       // use sso
       useOneLogin: () => yn(processEnv.USE_ONELOGIN, { default: false }),
       // onelogin
@@ -115,9 +140,12 @@ export class ConfigAccessor {
       oidcClientId: () => processEnv.OIDC_CLIENT_ID,
       oidcClientSecret: () => processEnv.OIDC_CLIENT_SECRET,
       oidcRefreshTokenSecret: () => processEnv.OIDC_REFRESH_TOKEN_SECRET,
+      oidcRedirectAfterLogoutPath: () =>
+        processEnv.OIDC_REDIRECT_AFTER_LOGOUT_CALLBACK_PATH || defaultConfig.oidcRedirectAfterLogoutPath,
       // roles group assigments
       oidcGroupFiltersRegex: () => defaultConfig.oidcGroupFiltersRegex,
       oidcAdminGroups: () => (processEnv.OIDC_GROUPS_ADMIN_ROLE ? processEnv.OIDC_GROUPS_ADMIN_ROLE.split(/[,;]/) : []),
+      oidcAuthCallbackPath: () => processEnv.OIDC_AUTH_CALLBACK_PATH || defaultConfig.oidcAuthCallbackPath,
       oidcManagerGroups: () =>
         processEnv.OIDC_GROUPS_MANAGER_ROLE ? processEnv.OIDC_GROUPS_MANAGER_ROLE.split(/[,;]/) : [],
       oidcViewerGroups: () =>

@@ -2,6 +2,7 @@ export const defaultConfig = {
   applicationName: 'Performance Management Application',
   defaultRole: 'Viewer',
   port: 9000,
+  loggerRootName: 'server',
   oidcGroupFiltersRegex: [/GG-UK-TescoGlobal-(-[\w\d]+)+/],
   applicationCookieParserSecret: 'tesco.pma.session',
   applicationUserDataCookieName: 'tesco.pma.userinfo',
@@ -10,5 +11,6 @@ export const defaultConfig = {
   buildPath: 'build',
   mfModule: 'tesco-pma.js',
   SSOLogoutPath: '/sso/logout',
+  oidcAuthCallbackPath: '/sso/auth/callback',
   oidcRedirectAfterLogoutPath: '/sso/logout/callback',
 };

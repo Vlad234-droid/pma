@@ -14,7 +14,7 @@ import {
   userDataPlugin,
 } from '@energon/onelogin';
 
-import { defaultConfig, isPROD, ProcessConfig } from '../config';
+import { isPROD, ProcessConfig } from '../config';
 
 import { isEmpty } from '../utils';
 
