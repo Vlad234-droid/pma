@@ -238,7 +238,7 @@ const Report: FC = () => {
           </div>
           <div className={css(rightColumn)}>
             <InfoTable
-              mainTitle={t(TitlesReport.MYR_BREAKDOWN, 'Breakdown of Mid-year ratings')}
+              mainTitle={t(TitlesReport.MYR_BREAKDOWN, 'Breakdown of Mid-year review')}
               data={[
                 {
                   percent: myrRatingBreakdownBelowExpectedPercentage,
@@ -277,7 +277,7 @@ const Report: FC = () => {
           </div>
           <div className={css(rightColumn)}>
             <InfoTable
-              mainTitle={t(TitlesReport.EYR_BREAKDOWN, 'Breakdown of End-year ratings')}
+              mainTitle={t(TitlesReport.EYR_BREAKDOWN, 'Breakdown of End-year review')}
               data={[
                 {
                   percent: eyrRatingBreakdownBelowExpectedPercentage,
@@ -306,7 +306,7 @@ const Report: FC = () => {
         <div className={css(pieChartWrapper)}>
           <div className={css(leftColumn)}>
             <PieChart
-              title={t(TitlesReport.WL4And5, 'Wl4 & 5 Objectives submitted')}
+              title={t(TitlesReport.WL4And5, 'WL4 & 5 Objectives submitted')}
               display={View.CHART}
               data={[
                 { percent: approvedObjPercent, title: approvedObjTitle },

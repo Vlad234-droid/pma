@@ -2,19 +2,28 @@ import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
 import { renderWithTheme } from '../../utils/test';
 import '@testing-library/jest-dom';
-import { fireEvent } from '@testing-library/react';
+import { BrowserRouter } from 'react-router-dom';
+import { createMemoryHistory } from 'history';
 import Report from './Report';
 import { REPORT_WRAPPER } from './Report';
 import { PieChart } from '../../components/PieChart';
-import { View } from '../../components/PieChart/PieChart';
+import { View } from 'components/PieChart/config';
 import InfoTable from './components/InfoTable';
 import { Rating } from '../../config/enum';
 import { INFO_TABLE_WRAPPER } from './components/InfoTable/InfoTable';
+import { Page } from 'pages';
 
 describe('Report page', () => {
   it('render report wrapper', async () => {
-    const { getByTestId } = renderWithTheme(<Report />);
+    const history = createMemoryHistory();
+    history.push(Page.REPORT);
+    const { getByTestId } = renderWithTheme(
+      <BrowserRouter>
+        <Report />
+      </BrowserRouter>,
+    );
     const wrapper = getByTestId(REPORT_WRAPPER);
+
     expect(wrapper).toBeInTheDocument();
   });
   it('should render pieChart', async () => {
@@ -32,7 +41,7 @@ describe('Report page', () => {
 
   it('render title of pieChart', async () => {
     const props = {
-      title: 'Wl4 & 5 Objectives submitted',
+      title: 'WL4 & 5 Objectives submitted',
       data: [{ percent: 67 }],
       display: View.CHART,
     };
@@ -56,12 +65,5 @@ describe('Report page', () => {
 
     const wrapper = await findByTestId(INFO_TABLE_WRAPPER);
     expect(await wrapper).toBeInTheDocument();
-  });
-
-  it('it should change value on dropdown', async () => {
-    const { getByTestId } = renderWithTheme(<Report />);
-    const dropDown = getByTestId('year_options');
-    expect(dropDown).toBeInTheDocument();
-    fireEvent.change(dropDown, { target: { value: 'id_1' } });
   });
 });
