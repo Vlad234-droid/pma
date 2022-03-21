@@ -57,8 +57,17 @@ const Datepicker: FC<Props> = ({ onChange, onError, value, name, minDate, isVali
       }
       const newValue = value.split('/').reverse().join('-');
       const newDate = new Date(newValue);
+      const verificationValue = transformDateToString(newDate);
+      if (minDate && newDate < minDate) {
+        onError && onError(t('min_valid_date', { minDate: transformDateToString(minDate) }));
+        return;
+      }
       if (newDate.toString() === INVALID_DATE) {
         onError && onError(t('please_input_valid_date'));
+        return;
+      }
+      if (verificationValue !== value) {
+        setCurrentValue(verificationValue);
         return;
       }
       newDate.setHours(0);
@@ -66,7 +75,7 @@ const Datepicker: FC<Props> = ({ onChange, onError, value, name, minDate, isVali
       newDate.setMilliseconds(0);
       changeDate(newDate);
       onChange(buildTargetObject(formatDateStringFromISO(newDate.toISOString(), DATE_FORMAT), name));
-    }, 500),
+    }, 300),
     [],
   );
 

@@ -189,5 +189,6 @@
   "field_min_length": "Must be at least {{min}} characters",
   "field_max_length": "Must be at most {{max}} characters",
   "review_confirmation_submit": "Are you sure you want to submit your review to your line manager for approval?",
-  "please_input_valid_date": "Please input valid date in DD/MM/YYYY format"
+  "please_input_valid_date": "Please input valid date in DD/MM/YYYY format",
+  "min_valid_date": "Please input date is greater than {{- minDate }}"
 }
