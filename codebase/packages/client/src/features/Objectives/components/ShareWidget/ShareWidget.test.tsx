@@ -62,7 +62,7 @@ describe('ShareWidget', () => {
       },
     };
 
-    renderWithTheme(<ShareWidget />, { reviews, users, objectivesSharing });
+    renderWithTheme(<ShareWidget stopShare />, { reviews, users, objectivesSharing });
     const widget = screen.getByTestId(TEST_ID);
 
     expect(widget).toBeInTheDocument();
