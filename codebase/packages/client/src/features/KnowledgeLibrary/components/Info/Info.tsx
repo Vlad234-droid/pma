@@ -5,11 +5,13 @@ type Props = {
   description: string;
 };
 
+export const TEST_ID = 'info-component';
+
 const Info: FC<Props> = ({ description }) => {
   const { css } = useStyle();
 
   return (
-    <div className={css(wrapperRule)}>
+    <div data-test-id={TEST_ID} className={css(wrapperRule)}>
       <Icon graphic='information' />
       <span className={css(descriptionRule)}>{description}</span>
     </div>
