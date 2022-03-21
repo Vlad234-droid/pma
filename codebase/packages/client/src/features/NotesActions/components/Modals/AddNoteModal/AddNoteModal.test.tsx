@@ -1,12 +1,12 @@
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
-import { renderWithTheme as render } from '../../../../utils/test';
 import '@testing-library/jest-dom';
+import { renderWithTheme as render } from 'utils/test';
 import { fireEvent, waitFor } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import { ADD_NOTE_MODAL_WRAPPER } from './AddNoteModal';
 
-import NotesActions, { ADD_NEW, CONFIRM_MODAL_ID } from '../../NotesActions';
+import NotesActions, { ADD_NEW, CONFIRM_MODAL_ID } from '../../../NotesActions';
 
 jest.mock('react-markdown', () => ({ ReactMarkdown: () => 'mocked ReactMarkdown' }));
 

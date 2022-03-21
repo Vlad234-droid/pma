@@ -1,12 +1,13 @@
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
-import { renderWithTheme } from '../../../utils/test';
+import { renderWithTheme } from 'utils/test';
 import '@testing-library/jest-dom';
 import { fireEvent } from '@testing-library/react';
 import PersonalFolders, { PERSONAL_FOLDER_WRAPPER, CHANGE_USER_MODE } from './PersonalFolders';
 
 describe('it should render folders & archived folders', () => {
   const testHandler = jest.fn();
+  const useRefSpy = jest.spyOn(React, 'useRef').mockReturnValueOnce({ current: null });
 
   const props = {
     handleSelected: testHandler,
@@ -20,7 +21,7 @@ describe('it should render folders & archived folders', () => {
     setFoldersWithNotes: testHandler,
     selectedFolder: {},
     setSelectedFolder: testHandler,
-    selectedNoteId: null,
+    selectedNoteId: useRefSpy,
     setIsUserArchived: testHandler,
     isUserArchived: false,
   };

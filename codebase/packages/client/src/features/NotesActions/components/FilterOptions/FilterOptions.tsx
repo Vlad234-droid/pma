@@ -4,7 +4,12 @@ import { Rule, Styles, useStyle } from '@dex-ddl/core';
 import { IconButton } from 'components/IconButton';
 import { useTranslation } from 'components/Translation';
 
-type FilterOptionProps = any;
+type FilterOptionProps = {
+  searchValueFilterOption: string;
+  setSearchValueFilterOption: React.Dispatch<React.SetStateAction<string>>;
+  TEAM: boolean;
+  openInfoModal: () => void;
+};
 
 export const INFO_ICON = 'info_icon';
 export const FILTER_WRAPPER = 'filter_wrapper';

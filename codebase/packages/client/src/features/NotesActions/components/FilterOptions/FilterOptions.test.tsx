@@ -1,6 +1,6 @@
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
-import { renderWithTheme } from '../../../utils/test';
+import { renderWithTheme } from '../../../../utils/test';
 import '@testing-library/jest-dom';
 import { fireEvent } from '@testing-library/react';
 import FilterOption, { FILTER_WRAPPER } from './FilterOptions';

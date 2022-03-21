@@ -1,10 +1,10 @@
 import React, { FC } from 'react';
-import { Trans } from 'components/Translation';
 import { Button, Rule, useBreakpoints, useStyle, CreateRule } from '@dex-ddl/core';
-
-import { AllNotesFolderId, addNewFolderId } from 'utils';
 import { getFoldersSelector } from '@pma/store';
 import { useSelector } from 'react-redux';
+
+import { Trans } from 'components/Translation';
+import { AllNotesFolderId, addNewFolderId } from 'utils';
 import successImg from 'images/success.jpg';
 
 export const OK_BTN = 'ok_btn';

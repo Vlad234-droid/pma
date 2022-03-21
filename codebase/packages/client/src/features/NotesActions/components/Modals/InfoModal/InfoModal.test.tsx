@@ -1,15 +1,15 @@
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import '@testing-library/jest-dom/extend-expect';
-import { renderWithTheme } from '../../../../utils/test';
+import { renderWithTheme as render } from 'utils/test';
 import '@testing-library/jest-dom';
 import { fireEvent } from '@testing-library/react';
 import { MODAL_WRAPPER } from './InfoModal';
-import NotesActions from '../../NotesActions';
-import { INFO_ICON } from '../FilterOptions';
+import NotesActions from '../../../../NotesActions';
+import { INFO_ICON } from '../../FilterOptions/FilterOptions';
 
 it('render info modal', async () => {
-  const { getByTestId, queryByTestId, findByTestId } = renderWithTheme(
+  const { getByTestId, queryByTestId, findByTestId } = render(
     <BrowserRouter>
       <NotesActions />
     </BrowserRouter>,

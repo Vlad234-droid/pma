@@ -3,7 +3,7 @@ import '@testing-library/jest-dom/extend-expect';
 import { renderWithTheme as render } from 'utils/test';
 import SuccessMassage from './SuccessMassage';
 import { fireEvent, waitFor } from '@testing-library/react';
-import { SUCCESS_MODAL_WRAPPER, OK_BTN } from 'features/NotesActions/components/Modals/SuccessModal';
+import { SUCCESS_MODAL_WRAPPER, OK_BTN } from './SuccessMassage';
 
 describe('Success modal', () => {
   const handler = jest.fn();

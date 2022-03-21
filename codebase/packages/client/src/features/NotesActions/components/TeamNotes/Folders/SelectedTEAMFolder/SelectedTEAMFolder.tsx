@@ -1,10 +1,10 @@
 import React, { FC, Dispatch, SetStateAction, MutableRefObject } from 'react';
 import { Rule, Styles, useStyle, useBreakpoints, colors, CreateRule } from '@dex-ddl/core';
 import { IconButton } from 'components/IconButton';
-import { NoteData, NotesTypeTEAM } from '../../type';
-import { formatToRelativeDate } from '../../../../utils/date';
+import { NoteData, NotesTypeTEAM } from '../../../../type';
+import { formatToRelativeDate } from 'utils/date';
 
-type SelectedFolderProps = {
+type Props = {
   selectedTEAMFolder: NoteData | null;
   setConfirmTEAMModal: Dispatch<SetStateAction<boolean>>;
   selectedTEAMNoteId: MutableRefObject<null | string>;
@@ -17,7 +17,7 @@ type SelectedFolderProps = {
   foldersWithNotesTEAM: any;
   teamArchivedMode: boolean;
 };
-const SelectedFolder: FC<SelectedFolderProps> = ({
+const SelectedFolder: FC<Props> = ({
   selectedTEAMFolder,
   setConfirmTEAMModal,
   selectedTEAMNoteId,
@@ -32,7 +32,7 @@ const SelectedFolder: FC<SelectedFolderProps> = ({
 }) => {
   const { css } = useStyle();
 
-  const btnsActionsHandle = (itemId: string, itemFolderUuid: string | null) => {
+  const btnsActionsHandler = (itemId: string, itemFolderUuid: string | null) => {
     const btnsActions = [
       {
         ...(!teamArchivedMode && {
@@ -188,7 +188,7 @@ const SelectedFolder: FC<SelectedFolderProps> = ({
         <span className={css(Folder_Title_styled)}>{selectedTEAMFolder?.title}</span>
       </div>
       <div className={css({ marginTop: '32px', display: 'flex', flexDirection: 'column' })}>
-        {selectedTEAMFolder?.notes.map((item) => (
+        {selectedTEAMFolder?.notes?.map((item) => (
           <div
             className={css(Flex_beetween_style, Note_container_style, { position: 'relative' })}
             key={item.id}
@@ -203,7 +203,7 @@ const SelectedFolder: FC<SelectedFolderProps> = ({
                 <span></span>
               </div>
             </div>
-            {item.selected && btnsActionsHandle(item.id, item.folderUuid)}
+            {item.selected && btnsActionsHandler(item.id, item.folderUuid)}
           </div>
         ))}
       </div>

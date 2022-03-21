@@ -2,7 +2,9 @@ import React, { FC } from 'react';
 import { Button, Rule, Styles, useBreakpoints, useStyle } from '@dex-ddl/core';
 import success from 'images/success.jpg';
 import { Trans } from 'components/Translation';
-import { SUCCESS_MODAL_WRAPPER, OK_BTN } from 'features/NotesActions/components/Modals/SuccessModal';
+
+export const OK_BTN = 'ok_btn';
+export const SUCCESS_MODAL_WRAPPER = 'success_modal_wrapper';
 
 type Props = {
   targetColleagueProfile: any;

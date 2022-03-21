@@ -1,16 +1,17 @@
 import React, { FC, useState } from 'react';
 import { useStyle, useBreakpoints, Button, Styles, Rule, CreateRule } from '@dex-ddl/core';
+
 import { Notification } from 'components/Notification';
 import { GenericItemField } from 'components/GenericForm';
 import { Item, Input, Select, Textarea } from 'components/Form';
-import { AddNoteModalProps } from '../../type';
 import { Trans, useTranslation } from 'components/Translation';
 import { IconButton, Position } from 'components/IconButton';
 import { Icon as IconComponent } from 'components/Icon';
-import { SuccessModal } from '../Modals';
-import { getNotes, getFolder, addNewFolderId } from 'utils';
+import SuccessModal from '../SuccessModal';
 import get from 'lodash.get';
 import { Option } from 'components/Form/types';
+import { AddNoteModalProps } from '../../../type';
+import { getNotes, getFolder, addNewFolderId } from 'utils';
 
 export const ADD_NOTE_MODAL_WRAPPER = 'add_note_modal_wrapper';
 

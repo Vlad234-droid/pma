@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
-import { IconButton } from 'components/IconButton';
 import { CreateRule, Rule, Theme, useBreakpoints, useStyle } from '@dex-ddl/core';
+
+import { IconButton } from 'components/IconButton';
 import { Trans } from 'components/Translation';
 
 type Props = {
