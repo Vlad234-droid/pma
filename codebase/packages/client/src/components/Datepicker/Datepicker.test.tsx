@@ -41,15 +41,23 @@ describe('Datepicker', () => {
 
   it('should onChange with empty value', () => {
     const onChange = jest.fn();
-    const { getByTestId } = render(<Datepicker name='test' onChange={onChange} />);
-    const input = getByTestId(INPUT_TEST_ID).firstChild as HTMLInputElement;
     const value = '12/12/2022';
-    fireEvent.change(input, { target: { value } });
-    expect(onChange).toBeCalledTimes(1);
+    const { getByTestId } = render(<Datepicker name='test' onChange={onChange} value={value} />);
+    const input = getByTestId(INPUT_TEST_ID).firstChild as HTMLInputElement;
     fireEvent.change(input, { target: { value: '' } });
     expect(onChange).toBeCalledWith({
       target: { name: 'test', type: 'date', value: '' },
     });
-    expect(onChange).toBeCalledTimes(2);
+  });
+
+  it('should onError when user enter invalid date', () => {
+    const onError = jest.fn();
+    const onChange = jest.fn();
+    const { getByTestId } = render(<Datepicker name='test' onError={onError} onChange={onChange} />);
+    const value = '12/12/202';
+    const input = getByTestId(INPUT_TEST_ID).firstChild as HTMLInputElement;
+    fireEvent.change(input, { target: { value } });
+    expect(onError).toBeCalledTimes(1);
+    expect(onChange).not.toBeCalled();
   });
 });

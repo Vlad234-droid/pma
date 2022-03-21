@@ -5,6 +5,7 @@ import { formatDateStringFromISO, DATE_FORMAT } from 'utils';
 import Calendar from 'components/Calendar';
 import { Input } from 'components/Form';
 import { Icon } from 'components/Icon';
+import { useTranslation } from 'components/Translation';
 
 type DateEvent = {
   target: {
@@ -16,6 +17,7 @@ type DateEvent = {
 
 type Props = {
   onChange: ({ target }: DateEvent) => void;
+  onError?: (error: string) => void;
   name: string;
   value?: string;
   minDate?: Date;
@@ -35,29 +37,28 @@ const transformDateToString = (date: Date) =>
 
 const buildTargetObject = (value: string, name: string) => ({ target: { type: 'date', value, name } });
 
-const Datepicker: FC<Props> = ({ onChange, value, name, minDate, isValid, isOnTop = false }) => {
+const Datepicker: FC<Props> = ({ onChange, onError, value, name, minDate, isValid, isOnTop = false }) => {
   const [isOpen, toggleOpen] = useState(false);
   const [currentValue, setCurrentValue] = useState<string | undefined>(
     value ? transformDateToString(new Date(value)) : undefined,
   );
   const [date, changeDate] = useState<Date | undefined>();
-  const [error, setError] = useState<boolean>(false);
   const { css } = useStyle();
+  const { t } = useTranslation();
 
   const dataChange = useCallback(
     debounce((value: string) => {
-      setError(false);
       if (!value) {
         onChange(buildTargetObject('', name));
       }
       if (!checkIsValidDate(value)) {
-        setError(true);
+        onError && onError(t('please_input_valid_date'));
         return;
       }
       const newValue = value.split('/').reverse().join('-');
       const newDate = new Date(newValue);
-      if (newDate.toString() === INVALID_DATE || (minDate && newDate < minDate)) {
-        setError(true);
+      if (newDate.toString() === INVALID_DATE) {
+        onError && onError(t('please_input_valid_date'));
         return;
       }
       newDate.setHours(0);
@@ -93,13 +94,9 @@ const Datepicker: FC<Props> = ({ onChange, value, name, minDate, isValid, isOnTo
           customStyles={inputRule}
           data-test-id={INPUT_TEST_ID}
           placeholder={'dd/mm/yyyy'}
-          isValid={isValid && !error}
+          isValid={isValid}
         />
-        <button
-          type={'button'}
-          onClick={() => toggleOpen(!isOpen)}
-          className={css(buttonRule({ error: error || !isValid }))}
-        >
+        <button type={'button'} onClick={() => toggleOpen(!isOpen)} className={css(buttonRule({ error: !isValid }))}>
           <Icon graphic={'calender'} />
         </button>
         {isOpen && (

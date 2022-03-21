@@ -40,6 +40,7 @@ const Field: FC<FieldProps & FieldValues> = ({
   name,
   onChange,
   setValue,
+  setError,
   ...props
 }) => {
   const [currentValue, setCurrentValue] = useState(value);
@@ -57,6 +58,7 @@ const Field: FC<FieldProps & FieldValues> = ({
       <Element
         options={options}
         isValid={Boolean(!error)}
+        onError={setError ? (message) => setError(name, { type: 'custom', message }) : undefined}
         placeholder={placeholder}
         value={currentValue}
         onChange={handleChange}
@@ -74,6 +76,7 @@ const Field: FC<FieldProps & FieldValues> = ({
         placeholder={placeholder}
         value={currentValue}
         onChange={handleChange}
+        onError={setError ? (message) => setError(name, { type: 'custom', message }) : undefined}
         name={name}
         {...props}
       />
