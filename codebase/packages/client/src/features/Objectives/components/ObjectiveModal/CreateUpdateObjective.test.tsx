@@ -172,5 +172,30 @@ describe('CreateUpdateObjective', () => {
       });
       expect(onClose).toHaveBeenCalled();
     });
+
+    it('should render CreateUpdateObjective check error message absent', async () => {
+      const textfield = screen.getByTestId(FormType.TEXT_FIELD);
+      const errorText = /Must be at least/;
+      textfield.focus();
+      await act(async () => {
+        fireEvent.change(textfield, { target: { value: 'ReviewFormModal' } });
+      });
+      fireEvent.blur(textfield);
+      expect(await screen.queryByText(errorText)).not.toBeInTheDocument();
+    });
+
+    it('should render ReviewFormModal check typing by latter', async () => {
+      const textfield = screen.getByTestId('textfield');
+      const errorText = /Must be at least/;
+      expect(await screen.queryByText(errorText)).not.toBeInTheDocument();
+      textfield.focus();
+      await act(async () => {
+        fireEvent.change(textfield, { target: { value: 't' } });
+      });
+      expect(textfield).toHaveFocus();
+      expect(await screen.queryByText(errorText)).not.toBeInTheDocument();
+      fireEvent.blur(textfield);
+      expect(screen.getByText(errorText)).toBeInTheDocument();
+    });
   });
 });

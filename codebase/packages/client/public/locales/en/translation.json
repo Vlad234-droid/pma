@@ -458,5 +458,6 @@
   "please_refer_to": "Please refer to",
   "find_how_correct_data": "to find out how to correct this data",
   "duplicate_file": "Duplicate file. You have already uploaded a file with same name",
+  "review_confirmation_submit": "Are you sure you want to submit your review to your line manager for approval?",
   "please_input_valid_date": "Please input valid date in DD/MM/YYYY format"
 }

@@ -13,7 +13,7 @@ import { GenericItemField } from 'components/GenericForm';
 import MarkdownRenderer from 'components/MarkdownRenderer';
 import { TriggerModal } from 'features/Modal/components/TriggerModal';
 
-import { ButtonWithConfirmation as SubmitButton } from '../Buttons';
+import { ButtonWithConfirmation } from '../Buttons';
 import ObjectiveHelpModal from '../Modal/ObjectiveHelpModal';
 
 export type ObjectiveModalProps = {
@@ -169,7 +169,7 @@ export const ObjectiveModal: FC<Props> = ({
                     <Trans i18nKey='save_as_draft'>Save as draft</Trans>
                   </Button>
                   {submitForm ? (
-                    <SubmitButton
+                    <ButtonWithConfirmation
                       isDisabled={!isValid}
                       onSave={onSubmit}
                       disabledBtnTooltip={t('action_enabled', 'Action enabled when mandatory fields are completed')}

@@ -4,7 +4,6 @@ import '@testing-library/jest-dom/extend-expect';
 // @ts-ignore
 import { renderWithTheme as render, screen } from 'utils/test';
 import { act, fireEvent } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 
 import { default as ReviewFormModal } from './ReviewFormModal';
 import { ReviewsActions } from '@pma/store';
@@ -489,7 +488,7 @@ describe('ReviewFormModal', () => {
 
       expect(submit).toHaveAttribute('aria-disabled', 'true');
       await act(async () => {
-        await userEvent.paste(textfield, 'textfield value');
+        fireEvent.change(textfield, { target: { value: 'textfield value' } });
       });
       expect(submit).not.toHaveAttribute('aria-disabled', 'true');
       fireEvent.click(submit);
@@ -508,6 +507,37 @@ describe('ReviewFormModal', () => {
         textfield: 'textfield value',
       });
       expect(onClose).not.toHaveBeenCalled();
+    });
+
+    it('should render ReviewFormModal check error message absent', async () => {
+      const textfield = screen.getByTestId('textfield');
+      const errorText = /Must be at least/;
+      const submit = screen.getByRole('button', { name: /Submit/i });
+
+      expect(submit).toHaveAttribute('aria-disabled', 'true');
+      textfield.focus();
+      await act(async () => {
+        fireEvent.change(textfield, { target: { value: 'ReviewFormModal' } });
+      });
+      fireEvent.blur(textfield);
+      expect(await screen.queryByText(errorText)).not.toBeInTheDocument();
+    });
+
+    it('should render ReviewFormModal check typing by latter', async () => {
+      const textfield = screen.getByTestId('textfield');
+      const errorText = /Must be at least/;
+      const submit = screen.getByRole('button', { name: /Submit/i });
+
+      expect(submit).toHaveAttribute('aria-disabled', 'true');
+      expect(await screen.queryByText(errorText)).not.toBeInTheDocument();
+      textfield.focus();
+      await act(async () => {
+        fireEvent.change(textfield, { target: { value: 't' } });
+      });
+      expect(textfield).toHaveFocus();
+      expect(await screen.queryByText(errorText)).not.toBeInTheDocument();
+      fireEvent.blur(textfield);
+      expect(screen.getByText(errorText)).toBeInTheDocument();
     });
   });
 });

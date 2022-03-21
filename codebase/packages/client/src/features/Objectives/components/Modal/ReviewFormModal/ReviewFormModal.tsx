@@ -2,7 +2,7 @@ import React, { FC, useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
 import { useForm } from 'react-hook-form';
-import { Button, Icon, Rule, Styles, useBreakpoints, useStyle } from '@dex-ddl/core';
+import { CreateRule, Rule, Styles, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
   currentUserSelector,
@@ -22,45 +22,21 @@ import {
 import { ReviewType, Status } from 'config/enum';
 import { createYupSchema } from 'utils/yup';
 import { TriggerModal } from 'features/Modal/components/TriggerModal';
-import { TFunction, Trans, useTranslation } from 'components/Translation';
+import { getReviewFormContent } from 'features/Objectives/utils';
+import { useTranslation } from 'components/Translation';
 import { Input, Item, Select, Textarea, Attention, Text } from 'components/Form';
 import { GenericItemField } from 'components/GenericForm';
 import MarkdownRenderer from 'components/MarkdownRenderer';
 import SuccessModal from 'components/SuccessModal';
 import { Icon as IconComponent } from 'components/Icon';
 
-import { SubmitButton } from './index';
 import ReviewHelpModal from './ReviewHelpModal';
+import ReviewHelpTrigger from './ReviewHelpTrigger';
+import ReviewButtons from './ReviewButtons';
 
 export type ReviewFormModal = {
   reviewType: ReviewType;
   onClose: () => void;
-};
-
-const getContent = (reviewType: ReviewType, t: TFunction) => {
-  const contents: {
-    [key: string]: {
-      title: string;
-      helperText: string;
-    };
-  } = {
-    [ReviewType.MYR]: {
-      title: t('mid_year_review_title', 'How is your year going so far?'),
-      helperText: t(
-        'mid_year_review_help_text',
-        'Use this to capture a summary of the mid-year conversation you’ve had with your line manager. Remember to focus as much on your how as your what.',
-      ),
-    },
-    [ReviewType.EYR]: {
-      title: t('end_year_review_title', 'What have you contributed this year and how have you gone about it?'),
-      helperText: t(
-        'end_year_review_help_text',
-        'Use this to capture the outcome of the conversation you’ve had with your line manager. Remember to focus as much on your how as your what. Use the look forward section to capture your priorities and development for the year ahead.',
-      ),
-    },
-  };
-
-  return contents[reviewType];
 };
 
 const ReviewFormModal: FC<ReviewFormModal> = ({ reviewType, onClose }) => {
@@ -85,7 +61,7 @@ const ReviewFormModal: FC<ReviewFormModal> = ({ reviewType, onClose }) => {
   const timelineReview = useSelector(getTimelineByReviewTypeSelector(reviewType, 'me'));
   const readonly = [Status.WAITING_FOR_APPROVAL, Status.APPROVED].includes(timelineReview.status);
 
-  const { helperText, title } = getContent(reviewType, t);
+  const { helperText, title } = getReviewFormContent(reviewType, t);
 
   const { components = [] } = schema;
 
@@ -202,65 +178,18 @@ const ReviewFormModal: FC<ReviewFormModal> = ({ reviewType, onClose }) => {
   }
 
   return (
-    <div className={css({ height: '100%' })}>
-      <div
-        className={css({
-          height: '100%',
-          overflow: 'auto',
-          padding: mobileScreen ? `0 ${theme.spacing.s4}` : `0 ${theme.spacing.s10}`,
-        })}
-      >
-        <span
-          className={css({
-            position: 'fixed',
-            top: theme.spacing.s5,
-            left: mobileScreen ? theme.spacing.s5 : theme.spacing.s10,
-            textDecoration: 'none',
-            border: 'none',
-            cursor: 'pointer',
-          })}
-          onClick={onClose}
-        >
+    <div className={css(containerStyle)}>
+      <div className={css(wrapperStyle({ mobileScreen }))}>
+        <span className={css(iconLeftPositionStyle({ mobileScreen }))} onClick={onClose}>
           <IconComponent graphic='arrowLeft' invertColors={true} />
         </span>
         <form data-test-id={'REVIEW_FORM_MODAL'}>
-          <div className={css({ padding: `0 0 ${theme.spacing.s5}` })}>
-            <div
-              className={css({
-                fontSize: '24px',
-                lineHeight: '28px',
-                color: theme.colors.tescoBlue,
-                fontWeight: theme.font.weight.bold,
-              })}
-            >
-              {title}
-            </div>
-            <div
-              className={css({
-                fontSize: '18px',
-                lineHeight: '24px',
-                color: theme.colors.tescoBlue,
-                paddingTop: theme.spacing.s2,
-                paddingBottom: theme.spacing.s5,
-              })}
-            >
-              {helperText}
-            </div>
+          <div className={css(formFieldsWrapperStyle)}>
+            <div className={css(formTitleStyle)}>{title}</div>
+            <div className={css(helperTextStyle)}>{helperText}</div>
             <div className={css({ padding: `0 0 ${theme.spacing.s5}`, display: 'flex' })}>
               <TriggerModal
-                triggerComponent={
-                  <div className={css({ display: 'flex', alignItems: 'center' })}>
-                    <Icon graphic='information' iconStyles={{ width: '18px' }} />
-                    <span
-                      className={css(theme.font.fixed.f14, {
-                        color: theme.colors.tescoBlue,
-                        padding: `${theme.spacing.s0} ${theme.spacing.s2}`,
-                      })}
-                    >
-                      <Trans i18nKey='need_help_to_write'>Need help with what to write?</Trans>
-                    </span>
-                  </div>
-                }
+                triggerComponent={<ReviewHelpTrigger />}
                 title={t('completing_your_review', 'Completing your review')}
               >
                 <ReviewHelpModal />
@@ -370,90 +299,55 @@ const ReviewFormModal: FC<ReviewFormModal> = ({ reviewType, onClose }) => {
               }
             })}
           </div>
-          <div
-            className={css({
-              position: 'absolute',
-              bottom: 0,
-              left: 0,
-              width: '100%',
-            })}
-          >
-            <div
-              className={css({
-                position: 'relative',
-                bottom: theme.spacing.s0,
-                left: theme.spacing.s0,
-                right: theme.spacing.s0,
-                //@ts-ignore
-                borderTop: `${theme.border.width.b1} solid ${theme.colors.lightGray}`,
-              })}
-            >
-              <div
-                className={css({
-                  padding: mobileScreen ? theme.spacing.s7 : theme.spacing.s9,
-                  display: 'flex',
-                  justifyContent: 'center',
-                })}
-              >
-                {readonly ? (
-                  <Button
-                    styles={[
-                      theme.font.fixed.f16,
-                      {
-                        fontWeight: theme.font.weight.bold,
-                        width: '50%',
-                        margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
-                        background: theme.colors.white,
-                        border: `${theme.border.width.b1} solid ${theme.colors.tescoBlue}`,
-                        color: `${theme.colors.tescoBlue}`,
-                      },
-                    ]}
-                    onPress={onClose}
-                  >
-                    <Trans i18nKey='close'>Close</Trans>
-                  </Button>
-                ) : (
-                  <>
-                    <Button
-                      onPress={onSaveDraft}
-                      styles={[
-                        theme.font.fixed.f16,
-                        {
-                          fontWeight: theme.font.weight.bold,
-                          width: '50%',
-                          margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
-                          background: theme.colors.white,
-                          border: `${theme.border.width.b1} solid ${theme.colors.tescoBlue}`,
-                          color: `${theme.colors.tescoBlue}`,
-                        },
-                      ]}
-                    >
-                      <Trans i18nKey='save_as_draft'>Save as draft</Trans>
-                    </Button>
-                    <SubmitButton
-                      title={''}
-                      description={'Are you sure you want to submit your review to your line manager for approval?'}
-                      isDisabled={!isValid}
-                      onSave={handleSubmit(onSubmit)}
-                      styles={[
-                        theme.font.fixed.f16,
-                        {
-                          fontWeight: theme.font.weight.bold,
-                          width: '50%',
-                          margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
-                          background: `${theme.colors.tescoBlue}`,
-                        },
-                      ]}
-                    />
-                  </>
-                )}
-              </div>
-            </div>
-          </div>
+          <ReviewButtons
+            isValid={isValid}
+            readonly={readonly}
+            onClose={onClose}
+            onSaveDraft={onSaveDraft}
+            onSave={handleSubmit(onSubmit)}
+          />
         </form>
       </div>
     </div>
   );
 };
+
+const containerStyle: Rule = { height: '100%' };
+
+const wrapperStyle: CreateRule<{ mobileScreen: boolean }> =
+  ({ mobileScreen }) =>
+  ({ theme }) => ({
+    height: '100%',
+    overflow: 'auto',
+    padding: mobileScreen ? `0 ${theme.spacing.s4}` : `0 ${theme.spacing.s10}`,
+  });
+
+const iconLeftPositionStyle: CreateRule<{ mobileScreen: boolean }> =
+  ({ mobileScreen }) =>
+  ({ theme }) => ({
+    position: 'fixed',
+    top: theme.spacing.s5,
+    left: mobileScreen ? theme.spacing.s5 : theme.spacing.s10,
+    textDecoration: 'none',
+    border: 'none',
+    cursor: 'pointer',
+  });
+
+const formTitleStyle: Rule = ({ theme }) => ({
+  fontSize: '24px',
+  lineHeight: '28px',
+  color: theme.colors.tescoBlue,
+  fontWeight: theme.font.weight.bold,
+});
+
+const helperTextStyle: Rule = ({ theme }) => ({
+  fontSize: '18px',
+  lineHeight: '24px',
+  color: theme.colors.tescoBlue,
+  paddingTop: theme.spacing.s2,
+  paddingBottom: theme.spacing.s5,
+});
+
+const formFieldsWrapperStyle: Rule = ({ theme }) => ({ padding: `0 0 ${theme.spacing.s5}` });
 
 export default ReviewFormModal;
