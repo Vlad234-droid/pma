@@ -214,6 +214,9 @@ const MainWidget: FC<Props> = ({ nextReviewDate = '', count = 0, status, customS
 const viewButtonStyle: CreateRule<{ inverse: boolean }> =
   ({ inverse }) =>
   ({ theme }) => ({
+    fontSize: '14px',
+    fontWeight: '700',
+    padding: '0 16px',
     border: `1px solid ${inverse ? theme.colors.white : theme.colors.tescoBlue}`,
   });
 
@@ -256,7 +259,7 @@ const bodyBlockStyle: Rule = {
 const titleStyle: Rule = {
   fontStyle: 'normal',
   fontWeight: 'bold',
-  fontSize: '20px',
+  fontSize: '18px',
   marginBottom: '12px',
 };
 

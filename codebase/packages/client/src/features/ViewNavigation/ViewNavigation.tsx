@@ -34,4 +34,5 @@ export default ViewNavigation;
 const wrapperStyles: Rule = {
   display: 'flex',
   justifyContent: 'center',
+  marginBottom: '24px',
 };

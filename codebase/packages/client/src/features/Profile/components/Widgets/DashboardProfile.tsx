@@ -10,7 +10,7 @@ export type DashboardProfileProps = {};
 type Props = HTMLProps<HTMLInputElement> & DashboardProfileProps;
 
 const wrapperStyle = {
-  padding: '20px',
+  padding: '24px',
 } as Styles;
 
 const headStyle = {
@@ -29,7 +29,6 @@ const bodyBlockStyle = {
   minWidth: '200px',
   display: 'grid',
   paddingRight: '20px',
-  paddingTop: '14px',
 } as Styles;
 
 const mainTitleStyle: CreateRule<{ mobileScreen }> = ({ mobileScreen }) => ({

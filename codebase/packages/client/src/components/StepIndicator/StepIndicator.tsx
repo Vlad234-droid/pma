@@ -53,7 +53,7 @@ export const StepIndicatorBasic: FC<StepIndicatorProps> = ({
           flexDirection: 'column',
           position: 'relative',
           zIndex: 1,
-          paddingBottom: '16px',
+          paddingBottom: '12px',
         })}
       >
         <StatusIcon graphics='roundCircle' color='base' />
@@ -125,7 +125,8 @@ export const StepIndicatorBasic: FC<StepIndicatorProps> = ({
   return (
     <div
       className={css({
-        paddingTop: '16px',
+        paddingTop: '12px',
+        marginTop: '16px',
         display: 'grid',
         gridTemplateColumns: ` 1fr repeat(${array.length - 2}, 2fr) 1fr`,
       })}
