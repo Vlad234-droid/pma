@@ -27,11 +27,12 @@ import {
 export type Props = {
   customStyle?: React.CSSProperties | {};
   stopShare?: boolean;
+  sharing?: boolean;
 };
 
 export const TEST_ID = 'share-widget';
 
-const ShareWidget: FC<Props> = ({ customStyle, stopShare }) => {
+const ShareWidget: FC<Props> = ({ customStyle, stopShare, sharing }) => {
   const dispatch = useDispatch();
   const { css, theme } = useStyle();
   const { t } = useTranslation();
@@ -43,7 +44,7 @@ const ShareWidget: FC<Props> = ({ customStyle, stopShare }) => {
   // TODO: add selectors
   const { info } = useSelector(currentUserSelector);
   const isShared = useSelector(isSharedSelector);
-  const hasApprovedObjective: boolean = useSelector(hasStatusInReviews(ReviewType.OBJECTIVE, Status.APPROVED));
+  const hasApprovedObjective = useSelector(hasStatusInReviews(ReviewType.OBJECTIVE, Status.APPROVED));
   const { components = [] } = useSelector(getReviewSchema(ReviewType.OBJECTIVE));
   const sharedObjectives = useSelector(getAllSharedObjectives);
   const formElements = components.filter((component) => component.type != 'text');
@@ -91,8 +92,14 @@ const ShareWidget: FC<Props> = ({ customStyle, stopShare }) => {
     sharedObjectivesCount && setObjectives(transformReviewsToObjectives(sharedObjectives, formElements));
   }, [sharedObjectivesCount, formElementsCount]);
 
+  const [content, setContent] = useState<[string, string, string, () => void]>(['', '', '', Function]);
+
+  useEffect(() => {
+    setContent(getContent());
+  }, [hasApprovedObjective, isManager, sharedObjectivesCount, isShared, isManagerShared]);
+
   const getContent = (): [string, string, string, () => void] => {
-    if (stopShare || (!isManager && sharedObjectivesCount)) {
+    if (stopShare && sharedObjectivesCount) {
       return [
         t('shared_objectives', 'Shared objectives'),
         t(
@@ -116,7 +123,8 @@ const ShareWidget: FC<Props> = ({ customStyle, stopShare }) => {
         },
       ];
     }
-    if (isManager && !isShared) {
+
+    if (sharing && isManager && hasApprovedObjective) {
       return [
         t('share_objectives', 'Share Objectives'),
         t('share_objectives_off_description', 'Make all objectives and measures visible to your team'),
@@ -129,10 +137,13 @@ const ShareWidget: FC<Props> = ({ customStyle, stopShare }) => {
     return ['N/A', 'N/A', 'N/A', () => null];
   };
 
-  const [title, description, actionTitle, handleBtnClick] = getContent();
+  const [title, description, actionTitle, handleBtnClick] = content;
 
   const isDisplayed =
-    (!stopShare && !isManager) || (!isManager && !sharedObjectivesCount) || isViewSharedObjectivesActive;
+    title === 'N/A' ||
+    (!stopShare && !sharedObjectivesCount) ||
+    (isManager && !hasApprovedObjective) ||
+    isViewSharedObjectivesActive;
 
   if (isDisplayed) {
     return null;
