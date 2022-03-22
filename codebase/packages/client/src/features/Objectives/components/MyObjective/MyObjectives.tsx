@@ -324,7 +324,7 @@ const MyObjectives: FC = () => {
           )}
 
           <div className={css(widgetsBlock)}>
-            <ShareWidget stopShare={true} customStyle={shareWidgetStyles} />
+            <ShareWidget stopShare={true} sharing={false} customStyle={shareWidgetStyles} />
 
             <ShareWidget stopShare={false} sharing={true} customStyle={shareWidgetStyles} />
 
