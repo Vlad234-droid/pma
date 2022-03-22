@@ -1,1 +1,2 @@
-export { default } from './useStatisticReport';
+export { useStatisticsReport } from './useStatisticReport';
+export { getReportData, getData } from './getReportData';

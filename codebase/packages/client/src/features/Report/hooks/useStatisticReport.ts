@@ -2,7 +2,7 @@ import { useSelector } from 'react-redux';
 import { getStatisticReportSelector, approvedObjectivesSelector, notApprovedObjectivesSelector } from '@pma/store';
 import { upperCaseFirstLetter } from 'utils/helper';
 
-const useStatisticsReport = (args) => {
+export const useStatisticsReport = (args) => {
   const [[data], metadata] = useSelector(getStatisticReportSelector) || [];
   const [approvedObjPercent, approvedObjTitle] = useSelector(approvedObjectivesSelector);
   const [notApprovedObjPercent, notApprovedObjTitle] = useSelector(notApprovedObjectivesSelector);
@@ -27,5 +27,3 @@ const useStatisticsReport = (args) => {
   }
   return { approvedObjPercent, approvedObjTitle, notApprovedObjPercent, notApprovedObjTitle };
 };
-
-export default useStatisticsReport;

@@ -5,7 +5,7 @@ import { getPendingObjectivesSelector, getDoneObjectivesSelector, ReportActions 
 import useQueryString from 'hooks/useQueryString';
 import { ObjectiveType, ReportType } from '../config';
 import { MetaDataReport } from 'config/enum';
-import useStatisticsReport from 'features/Report/hooks';
+import { useStatisticsReport } from 'features/Report/hooks';
 
 const metaDataReport = [MetaDataReport.OBJECTIVES_SUBMITTED_PERCENTAGE, MetaDataReport.OBJECTIVES_APPROVED_PERCENTAGE];
 
