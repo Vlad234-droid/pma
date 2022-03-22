@@ -15,7 +15,9 @@ const LeftsideMenuItem = (props: MenuItemInterface) => {
       <div className={css(icon)}>
         <img alt={props.imgUrl} src={props.imgUrl} />
         {props.notifyCount && props.notifyCount > 0 ? (
-          <span className={css(redBadge({ theme }))}>{props.notifyCount}</span>
+          <span data-test-id={'NOTIFY_COUNTER'} className={css(redBadge({ theme }))}>
+            {props.notifyCount}
+          </span>
         ) : null}
       </div>
       <div>{props.name}</div>

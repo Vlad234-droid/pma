@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import { useStyle, useBreakpoints, Button, Styles, Rule, CreateRule, Theme } from '@dex-ddl/core';
 import { GenericItemField } from 'components/GenericForm';
 import { Item, Input, Select, Textarea } from 'components/Form';
@@ -36,9 +36,13 @@ const EditSelectedNote: FC<EditSelectedNoteProps> = ({
 
   const {
     formState: { isValid },
-    trigger,
     setValue,
   } = methods;
+
+  useEffect(() => {
+    setValue('noteTitle', selectedNoteToEdit.title, { shouldValidate: true });
+    setValue('noteText', selectedNoteToEdit.content, { shouldValidate: true });
+  }, []);
 
   const notes = getEditedNote(definePropperEditMode, foldersWithNotes, selectedNoteToEdit.folderUuid, t);
 
@@ -122,9 +126,6 @@ const EditSelectedNote: FC<EditSelectedNoteProps> = ({
                   Element={Input}
                   placeholder={item.placeholder}
                   value={selectedNoteToEdit.title}
-                  onChange={() => {
-                    trigger('noteTitle');
-                  }}
                 />
               );
             }
@@ -139,9 +140,6 @@ const EditSelectedNote: FC<EditSelectedNoteProps> = ({
                   Element={Textarea}
                   placeholder={item.placeholder}
                   value={selectedNoteToEdit.content}
-                  onChange={() => {
-                    trigger('noteText');
-                  }}
                 />
               );
             }
@@ -183,8 +181,8 @@ const EditSelectedNote: FC<EditSelectedNoteProps> = ({
                 }}
                 graphic='arrowRight'
                 customVariantRules={{
-                  default: submitButtonStyle({ isValid }),
-                  disabled: submitButtonStyle({ isValid }),
+                  default: submitButtonStyle({ isValid, editMode }),
+                  disabled: submitButtonStyle({ isValid, editMode }),
                 }}
                 iconStyles={iconStyledRule}
                 iconPosition={Position.RIGHT}
@@ -282,8 +280,8 @@ const iconStyledRule: Rule = {
   },
 } as Styles;
 
-const submitButtonStyle: CreateRule<{ isValid: any }> =
-  ({ isValid }) =>
+const submitButtonStyle: CreateRule<{ isValid: boolean; editMode: boolean }> =
+  ({ isValid, editMode }) =>
   ({ theme }) => ({
     fontWeight: theme.font.weight.bold,
     width: '50%',
@@ -294,8 +292,8 @@ const submitButtonStyle: CreateRule<{ isValid: any }> =
     justifyContent: 'space-between',
     padding: '0px 20px',
     borderRadius: `${theme.spacing.s20}`,
-    opacity: isValid ? '1' : '0.4',
-    pointerEvents: isValid ? 'all' : 'none',
+    opacity: editMode && isValid ? '1' : '0.4',
+    pointerEvents: editMode && isValid ? 'all' : 'none',
   });
 
 export default EditSelectedNote;

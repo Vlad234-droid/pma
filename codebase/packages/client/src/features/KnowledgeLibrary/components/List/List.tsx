@@ -11,11 +11,13 @@ type Props = {
   customRule?: Rule;
 };
 
+export const TEST_ID = 'test-list';
+
 const List: FC<Props> = ({ title, data = [], customRule = {} }) => {
   const { css } = useStyle();
 
   return (
-    <div className={css(customRule)}>
+    <div data-test-id={TEST_ID} className={css(customRule)}>
       {title && <div className={css(titleRule)}>{title}</div>}
       <div className={css(wrapperRule)}>
         {data.map(({ id, ...tileProps }) => (

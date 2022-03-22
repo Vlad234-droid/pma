@@ -60,4 +60,17 @@ describe('Datepicker', () => {
     expect(onError).toBeCalledTimes(1);
     expect(onChange).not.toBeCalled();
   });
+
+  it('should onError when user enter date less then minDate', () => {
+    const onError = jest.fn();
+    const onChange = jest.fn();
+
+    const minDate = new Date('12/12/2022');
+    const { getByTestId } = render(<Datepicker name='test' onError={onError} onChange={onChange} minDate={minDate} />);
+    const value = '11/12/2022';
+    const input = getByTestId(INPUT_TEST_ID).firstChild as HTMLInputElement;
+    fireEvent.change(input, { target: { value } });
+    expect(onError).toBeCalledTimes(1);
+    expect(onChange).not.toBeCalled();
+  });
 });

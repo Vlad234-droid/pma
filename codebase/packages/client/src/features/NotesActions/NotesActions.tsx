@@ -1,17 +1,10 @@
 import React, { FC, useEffect, useState } from 'react';
-import { FilterOptions, MainFolders } from './components';
-import AddNoteModal, { AddTeamNoteModal, InfoModal } from './components/Modals';
-import { CreateRule, Modal, Rule, Theme, useBreakpoints, useStyle } from '@dex-ddl/core';
-import { FoldersWithNotesTypes, FoldersWithNotesTypesTEAM, NoteData, NotesType, NotesTypeTEAM } from './type';
+import { CreateRule, Modal, Rule, Theme, useBreakpoints, useStyle, IconButton as BackButton } from '@dex-ddl/core';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
-import { IconButton } from 'components/IconButton';
-import { Icon, Icon as IconComponent } from 'components/Icon';
-import { EditSelectedNote } from './components/Modals/EditSelectedNote';
-import { schemaFolder, schemaNotes, schemaNoteToEdit, schemaTEAMNotes } from './components/Modals/schema/schema';
 import { useDispatch, useSelector } from 'react-redux';
-
 import {
   ColleaguesActions,
   colleagueUUIDSelector,
@@ -23,12 +16,18 @@ import {
   personalFolderUuidSelector,
   teamFolderUuidSelector,
 } from '@pma/store';
+
 import { role, usePermission } from 'features/Permission';
+import { AddTeamNoteModal, InfoModal, AddNoteModal, FilterOptions, MainFolders } from './components';
+import { IconButton } from 'components/IconButton';
+import { Icon } from 'components/Icon';
+import { EditSelectedNote } from './components/Modals/EditSelectedNote';
+import { schemaFolder, schemaNotes, schemaNoteToEdit, schemaTEAMNotes } from './components/Modals/schema/schema';
+import { Trans, useTranslation } from 'components/Translation';
+import { ConfirmModalWithSelectOptions } from 'features/Modal';
+import { FoldersWithNotesTypes, FoldersWithNotesTypesTEAM, NoteData, NotesType, NotesTypeTEAM } from './type';
 import { AllNotesFolderId, AllNotesFolderIdTEAM, filterNotesHandler, addNewFolderId } from 'utils';
 import { PeopleTypes } from './components/TeamNotes/ModalsParts/type';
-import { useNavigate } from 'react-router-dom';
-import { Trans, useTranslation } from 'components/Translation';
-import { ConfirmModalWithSelectOptions } from '../Modal';
 
 export const NOTES_WRAPPER = 'note_wrapper';
 export const ADD_NEW = 'ADD_NEW';
@@ -150,7 +149,7 @@ const NotesActions: FC = () => {
       return;
     }
 
-    if (!values.folder && values.noteTitle !== '' && values.noteText !== '') {
+    if (!values.folder && values.noteTitle && values.noteText) {
       dispatch(
         NotesActionsToDispatch.createNote({
           ownerColleagueUuid: colleagueUuid,
@@ -183,7 +182,7 @@ const NotesActions: FC = () => {
       return;
     }
 
-    if (values.folder === AllNotesFolderId && values.noteTitle !== '' && values.noteText !== '') {
+    if (values.folder === AllNotesFolderId && values.noteTitle && values.noteText) {
       dispatch(
         NotesActionsToDispatch.createNote({
           ownerColleagueUuid: colleagueUuid,
@@ -196,7 +195,7 @@ const NotesActions: FC = () => {
       return;
     }
 
-    if (values.folder === addNewFolderId && values.folderTitle !== '') {
+    if (values.folder === addNewFolderId && values.folderTitle) {
       const body = {
         folder: {
           ownerColleagueUuid: colleagueUuid,
@@ -227,7 +226,7 @@ const NotesActions: FC = () => {
       );
       return;
     }
-    if (!values.folder && values.noteTitle !== '' && values.noteText !== '') {
+    if (!values.folder && values.noteTitle && values.noteText) {
       dispatch(
         NotesActionsToDispatch.createNote({
           ownerColleagueUuid: colleagueUuid,
@@ -260,7 +259,7 @@ const NotesActions: FC = () => {
       );
     }
 
-    if (values.folder === AllNotesFolderIdTEAM && values.noteTitle !== '' && values.noteText !== '') {
+    if (values.folder === AllNotesFolderIdTEAM && values.noteTitle && values.noteText) {
       dispatch(
         NotesActionsToDispatch.createNote({
           ownerColleagueUuid: colleagueUuid,
@@ -273,7 +272,7 @@ const NotesActions: FC = () => {
       );
     }
 
-    if (values.folder === addNewFolderId && values.folderTitle !== '') {
+    if (values.folder === addNewFolderId && values.folderTitle) {
       const body = {
         folder: {
           ownerColleagueUuid: colleagueUuid,
@@ -295,12 +294,13 @@ const NotesActions: FC = () => {
 
   const onSubmitSelectedEditedNote = async (data) => {
     const { noteTitle, noteText, folder } = data;
+
     if (selectedNoteToEdit !== null) {
       const payload = {
         ...selectedNoteToEdit,
         title: noteTitle,
         content: noteText,
-        ...(folder !== '' && {
+        ...(folder && {
           folderUuid: folder === AllNotesFolderId ? null : folder,
         }),
       };
@@ -324,7 +324,7 @@ const NotesActions: FC = () => {
         ...selectedTEAMNoteToEdit,
         title: noteTitle,
         content: noteText,
-        ...(folder !== '' && {
+        ...(folder && {
           folderUuid: folder === AllNotesFolderIdTEAM ? null : folder,
         }),
       };
@@ -583,21 +583,21 @@ const NotesActions: FC = () => {
           setTeamArchivedMode={setTeamArchivedMode}
         />
       </div>
-      <span
-        className={css(arrowLeftStyle({ theme, mobileScreen }))}
-        onClick={() => {
-          if (isUserArchived || teamArchivedMode) {
-            if (isUserArchived) setIsUserArchived(() => false);
-            if (teamArchivedMode) setTeamArchivedMode(() => false);
-            if (!selectedFolder) setSelectedFolder(() => null);
-            if (selectedTEAMFolder) setSelectedTEAMFolder(() => null);
-          } else {
-            navigate(-1);
-          }
-        }}
-      >
-        <IconComponent graphic='arrowLeft' invertColors={false} />
-      </span>
+      <div className={css(arrowLeftStyle)}>
+        <BackButton
+          onPress={() => {
+            if (isUserArchived || teamArchivedMode) {
+              if (isUserArchived) setIsUserArchived(() => false);
+              if (teamArchivedMode) setTeamArchivedMode(() => false);
+              if (!selectedFolder) setSelectedFolder(() => null);
+              if (selectedTEAMFolder) setSelectedTEAMFolder(() => null);
+            } else {
+              navigate(-1);
+            }
+          }}
+          graphic='backwardLink'
+        />
+      </div>
     </div>
   );
 };
@@ -623,14 +623,14 @@ const iconAddStyle: Rule = {
   marginTop: '2px',
 };
 
-const arrowLeftStyle: CreateRule<{ theme: Theme; mobileScreen: boolean }> = ({ theme, mobileScreen }) => {
+const arrowLeftStyle: Rule = () => {
   return {
     position: 'fixed',
-    top: theme.spacing.s5,
+    top: '34px',
     textDecoration: 'none',
     border: 'none',
     cursor: 'pointer',
-    left: mobileScreen ? theme.spacing.s5 : theme.spacing.s10,
+    left: '16px',
   };
 };
 

@@ -1,9 +1,10 @@
 import React, { FC } from 'react';
 import { Rule, useStyle, Button, Styles, CreateRule, useBreakpoints, Theme } from '@dex-ddl/core';
 import { IconButton } from 'components/IconButton';
-import { PersonalFoldersProps } from '../type';
-import { defineNotesHandler, AllNotesFolderId } from '../../../utils';
 import { useTranslation } from 'components/Translation';
+
+import { PersonalFoldersProps } from '../../../type';
+import { defineNotesHandler, AllNotesFolderId } from 'utils/note';
 
 export const PERSONAL_FOLDER_WRAPPER = 'personal_folder_wrapper';
 export const CHANGE_USER_MODE = 'change_user_mode';

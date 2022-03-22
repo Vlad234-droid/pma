@@ -14,7 +14,7 @@ const Details = ({ title, description }) => {
           <img className={isVisibleDescription ? css(arrUp) : css(arrDown)} alt='arrow' src={ArrowUp} />
         </div>
       </div>
-      {isVisibleDescription && <div className={css(desc({ theme }))}>{description}</div>}
+      {isVisibleDescription && <div className={css(desc)}>{description}</div>}
     </div>
   );
 };
@@ -40,24 +40,20 @@ const arrDown = {
   transform: 'rotate(180deg)',
   webkitTransform: 'rotate(180deg)',
 } as Rule;
+
 const arrUp = {
   transform: 'rotate(0deg)',
   webkitTransform: 'rotate(0deg)',
 } as Rule;
 
-const desc: CreateRule<{ theme: Theme }> = (props) => {
-  if (props == null) return {};
-  const { theme } = props;
-  return {
-    width: '100%',
-    color: '#333333',
-    fontSize: `${theme.font.fixed.f16}`,
-    lineHeight: '20px',
-    fontWeight: 'bold',
-    paddingBottom: '24px',
-    borderBottom: `1px solid ${theme.colors.lightGray}`,
-  };
-};
+const desc: Rule = ({ theme }) => ({
+  ...theme.font.fixed.f16,
+  width: '100%',
+  color: theme.colors.base,
+  fontWeight: theme.font.weight.bold,
+  paddingBottom: '24px',
+  borderBottom: `1px solid ${theme.colors.lightGray}`,
+});
 
 const main = {
   display: 'flex',

@@ -1,19 +1,14 @@
 import React, { FC } from 'react';
-import { useStyle } from '@dex-ddl/core';
+import { useStyle, Rule } from '@dex-ddl/core';
 
 export const Text: FC<{ value: string }> = ({ value }) => {
-  const { css, theme } = useStyle();
+  const { css } = useStyle();
 
-  return (
-    <div
-      className={css({
-        fontSize: '16px',
-        lineHeight: '20px',
-        color: theme.colors.base,
-        paddingBottom: '8px',
-      })}
-    >
-      {value}
-    </div>
-  );
+  return <div className={css(containerStyle)}>{value}</div>;
 };
+
+const containerStyle: Rule = ({ theme }) => ({
+  ...theme.font.fixed.f16,
+  color: theme.colors.base,
+  paddingBottom: '8px',
+});

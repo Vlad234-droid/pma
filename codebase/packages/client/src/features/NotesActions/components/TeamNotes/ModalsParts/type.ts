@@ -8,7 +8,9 @@ export interface FormItemProps {
   name?: string;
   placeholder?: string;
   styles?: Styles | Rule;
-  onChange?: (e: any) => any;
+
+  onChange: (item: any) => void;
+
   domRef?: Ref | RefObject<any>;
   isValid?: boolean;
   type?: string;

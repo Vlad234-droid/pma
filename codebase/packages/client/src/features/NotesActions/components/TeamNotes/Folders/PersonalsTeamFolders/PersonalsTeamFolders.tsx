@@ -1,8 +1,8 @@
 import React, { FC, Dispatch, SetStateAction, MutableRefObject } from 'react';
 import { Rule, useStyle, Button, Styles, CreateRule, useBreakpoints } from '@dex-ddl/core';
 import { IconButton } from 'components/IconButton';
-import { defineNotesHandler, AllNotesFolderIdTEAM } from '../../../../utils';
-import { NoteData } from '../../type';
+import { defineNotesHandler, AllNotesFolderIdTEAM } from 'utils/note';
+import { NoteData } from '../../../../type';
 import { Trans, useTranslation } from 'components/Translation';
 
 export const TEAM_FOLDER_WRAPPER = 'team_folder_wrapper';

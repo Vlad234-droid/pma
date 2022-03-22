@@ -2,11 +2,12 @@ import React, { FC } from 'react';
 import { Rule, Styles, useStyle, useBreakpoints, colors, CreateRule } from '@dex-ddl/core';
 import { useSelector } from 'react-redux';
 import { getFoldersSelector } from '@pma/store';
-import { formatToRelativeDate } from 'utils/date';
-import { getNotesFolderTitle } from 'utils/note';
-import { SelectedFolderProps } from '../type';
+
 import { IconButton } from 'components/IconButton';
 import { Trans, useTranslation } from 'components/Translation';
+import { formatToRelativeDate } from 'utils/date';
+import { getNotesFolderTitle } from 'utils/note';
+import { SelectedFolderProps } from '../../../type';
 
 const SelectedFolder: FC<SelectedFolderProps> = ({
   selectedFolder,
@@ -231,7 +232,7 @@ const SelectedFolder: FC<SelectedFolderProps> = ({
         <span className={css(folderTitleStyled)}>{selectedFolder?.title}</span>
       </div>
       <div className={css({ marginTop: '32px', display: 'flex', flexDirection: 'column' })}>
-        {selectedFolder?.notes.map((item) => (
+        {selectedFolder?.notes?.map((item) => (
           <div
             className={css(flexBeetweenStyle, noteContainerStyle, { position: 'relative' })}
             key={item.id}

@@ -81,10 +81,10 @@ const Report: FC = () => {
   } = useStatisticsReport([...metaStatuses]);
 
   const getReportData = useCallback((year = getCurrentYear()) => {
-    dispatch(ReportActions.getObjectivesStatistics({ year, topics_in: [...metaStatuses] }));
+    dispatch(ReportActions.getObjectivesStatistics({ year }));
     dispatch(
       ReportActions.getObjectivesReport({
-        year: year,
+        year,
         statuses_in: [...listOfStatuses],
       }),
     );

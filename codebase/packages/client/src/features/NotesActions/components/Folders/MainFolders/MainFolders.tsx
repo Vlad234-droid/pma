@@ -1,9 +1,7 @@
 import React, { FC, useState, useRef, MutableRefObject } from 'react';
 import { useStyle, useBreakpoints, Rule } from '@dex-ddl/core';
-import { MainFolderProps } from '../type';
-import { ConfirmModal, ConfirmModalWithDropDown } from 'features/Modal';
-import { useTranslation } from 'components/Translation';
-import { PersonalFolders, SelectedFolder, PersonalsTeamFolders, SelectedTEAMFolder } from './index';
+import { useDispatch, useSelector } from 'react-redux';
+
 import {
   NotesActions,
   colleagueUUIDSelector,
@@ -12,8 +10,13 @@ import {
   personalArchivedFolderUuidSelector,
   teamArchivedFolderUuidSelector,
 } from '@pma/store';
-import { useDispatch, useSelector } from 'react-redux';
-import { folderSchema } from '../components/Modals/schema/schema';
+
+import { ConfirmModal, ConfirmModalWithDropDown } from 'features/Modal';
+import { useTranslation } from 'components/Translation';
+import { PersonalFolders, SelectedFolder, PersonalsTeamFolders, SelectedTEAMFolder } from '../../index';
+import { MainFolderProps } from '../../../type';
+import { folderSchema } from '../../../components/Modals/schema/schema';
+
 import {
   definePropperFieldOptions,
   definePropperFieldTeamOptions,
@@ -27,7 +30,8 @@ import {
   AllNotesFolderIdTEAM,
 } from 'utils/note';
 
-export const SELECTED_FOLDER = 'SELECTED_FOLDER';
+export const SELECTED_FOLDER = 'selected-folder';
+export const MAIN_FOLDERS_ID = 'main-folders-id';
 
 const MainFolders: FC<MainFolderProps> = ({
   setSelectedFolder,
@@ -448,7 +452,10 @@ const MainFolders: FC<MainFolderProps> = ({
   };
 
   return (
-    <div className={css({ marginTop: '24px', marginLeft: '40px', marginBottom: '140px' })}>
+    <div
+      className={css({ marginTop: '24px', marginLeft: '40px', marginBottom: '140px' })}
+      data-test-id={MAIN_FOLDERS_ID}
+    >
       <div
         className={css({
           ...(!mediumScreen && {
