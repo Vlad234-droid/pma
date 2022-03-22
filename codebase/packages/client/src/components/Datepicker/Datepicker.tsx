@@ -32,10 +32,10 @@ export const INPUT_TEST_ID = 'DatepickerId';
 
 const checkIsValidDate = (date) => DATE_REGEXP.test(date);
 
-const transformDateToString = (date: Date) =>
+export const transformDateToString = (date: Date) =>
   date.toLocaleDateString('en-GB', { year: 'numeric', month: '2-digit', day: '2-digit' });
 
-const buildTargetObject = (value: string, name: string) => ({ target: { type: 'date', value, name } });
+export const buildTargetObject = (value: string, name: string) => ({ target: { type: 'date', value, name } });
 
 const Datepicker: FC<Props> = ({ onChange, onError, value, name, minDate, isValid, isOnTop = false }) => {
   const [isOpen, toggleOpen] = useState(false);
