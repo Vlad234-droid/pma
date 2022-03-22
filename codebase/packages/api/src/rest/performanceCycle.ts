@@ -1,24 +1,29 @@
 import httpClient from '../config/client';
 
-const performanceCyclesDomain = '/pm-cycles/';
+const domain = '/pm-cycles';
 
 export const getGetAllPerformanceCycles = () => {
-  return httpClient.get(`${performanceCyclesDomain}`);
+  return httpClient.get(`${domain}/`);
 };
 
 export const getPerformanceCycleByUuid = (params: any) => {
   const { performanceCycleUuid, ...restParams } = params;
-  return httpClient.get(`${performanceCyclesDomain}/${performanceCycleUuid}`, { params: restParams });
+  return httpClient.get(`${domain}/${performanceCycleUuid}`, { params: restParams });
 };
 
-export const createPerformanceCycle = <T>(params: any) => {
-  return httpClient.post(`${performanceCyclesDomain}`, params);
+export const createPerformanceCycle = (params: any) => {
+  console.log({ params });
+  return httpClient.post(`${domain}`, params);
 };
 
-export const updatePerformanceCycle = <T>(params: any) => {
-  return httpClient.put(`${performanceCyclesDomain}/${params.uuid}`, params);
+export const updatePerformanceCycle = (params: any) => {
+  return httpClient.put(`${domain}/${params.uuid}`, params);
 };
 
-export const publishPerformanceCycle = <T>(params: any) => {
-  return httpClient.post(`${performanceCyclesDomain}/publish`, params);
+export const publishPerformanceCycle = (params: any) => {
+  return httpClient.post(`${domain}/publish`, params);
+};
+
+export const getPerformanceCycleMappingKeys = () => {
+  return httpClient.get(`${domain}//mappings/keys`);
 };

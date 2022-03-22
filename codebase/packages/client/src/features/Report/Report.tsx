@@ -1,5 +1,4 @@
-import React, { FC, useState, useEffect, useCallback } from 'react';
-import { ReportActions } from '@pma/store';
+import React, { FC, useState } from 'react';
 import { Button, colors, CreateRule, Rule, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { useDispatch } from 'react-redux';
 
@@ -16,10 +15,11 @@ import { getCurrentYear } from 'utils/date';
 import { useToast } from 'features/Toast';
 import { View } from 'components/PieChart/config';
 
-import { getFieldOptions, listOfStatuses, metaStatuses, initialValues } from './config';
+import { getFieldOptions, metaStatuses, initialValues } from './config';
 import { Rating, TitlesReport } from 'config/enum';
 import { downloadCsvFile } from './utils';
-import useStatisticsReport from './hooks';
+import { useStatisticsReport, getReportData, getData } from './hooks';
+
 import { Page } from 'pages';
 
 export const REPORT_WRAPPER = 'REPORT_WRAPPER';
@@ -27,7 +27,7 @@ export const REPORT_WRAPPER = 'REPORT_WRAPPER';
 const Report: FC = () => {
   const { t } = useTranslation();
   const { addToast } = useToast();
-
+  const { css } = useStyle();
   const dispatch = useDispatch();
   const [focus, setFocus] = useState(false);
   const [showDownloadReportModal, setShowDownloadReportModal] = useState(false);
@@ -80,30 +80,12 @@ const Report: FC = () => {
     notApprovedObjTitle,
   } = useStatisticsReport([...metaStatuses]);
 
-  const getReportData = useCallback((year = getCurrentYear()) => {
-    dispatch(ReportActions.getObjectivesStatistics({ year, topics_in: [...metaStatuses] }));
-    dispatch(
-      ReportActions.getObjectivesReport({
-        year: year,
-        statuses_in: [...listOfStatuses],
-      }),
-    );
-  }, []);
-
-  useEffect(() => {
-    getReportData();
-  }, []);
-
-  const { css } = useStyle();
+  getReportData();
 
   const changeYearHandler = (value) => {
     if (!value) return;
     setYear(value);
-    getReportData(value);
-  };
-
-  const handleCloseModal = () => {
-    setShowDownloadReportModal(false);
+    getData(dispatch, value);
   };
 
   const getAppliedReport = () => [...new Set(checkedItems.map((item) => item.split('-')[0]))];
@@ -238,7 +220,7 @@ const Report: FC = () => {
           </div>
           <div className={css(rightColumn)}>
             <InfoTable
-              mainTitle={t(TitlesReport.MYR_BREAKDOWN, 'Breakdown of Mid-year ratings')}
+              mainTitle={t(TitlesReport.MYR_BREAKDOWN, 'Breakdown of Mid-year review')}
               data={[
                 {
                   percent: myrRatingBreakdownBelowExpectedPercentage,
@@ -277,7 +259,7 @@ const Report: FC = () => {
           </div>
           <div className={css(rightColumn)}>
             <InfoTable
-              mainTitle={t(TitlesReport.EYR_BREAKDOWN, 'Breakdown of End-year ratings')}
+              mainTitle={t(TitlesReport.EYR_BREAKDOWN, 'Breakdown of End-year review')}
               data={[
                 {
                   percent: eyrRatingBreakdownBelowExpectedPercentage,
@@ -306,7 +288,7 @@ const Report: FC = () => {
         <div className={css(pieChartWrapper)}>
           <div className={css(leftColumn)}>
             <PieChart
-              title={t(TitlesReport.WL4And5, 'Wl4 & 5 Objectives submitted')}
+              title={t(TitlesReport.WL4And5, 'WL4 & 5 Objectives submitted')}
               display={View.CHART}
               data={[
                 { percent: approvedObjPercent, title: approvedObjTitle },
@@ -364,7 +346,13 @@ const Report: FC = () => {
         </div>
       </div>
 
-      {showDownloadReportModal && <DonwloadReportModal onClose={handleCloseModal} />}
+      {showDownloadReportModal && (
+        <DonwloadReportModal
+          onClose={() => {
+            setShowDownloadReportModal(false);
+          }}
+        />
+      )}
     </>
   );
 };

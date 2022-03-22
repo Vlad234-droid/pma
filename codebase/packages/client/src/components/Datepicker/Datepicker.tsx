@@ -5,6 +5,7 @@ import { formatDateStringFromISO, DATE_FORMAT } from 'utils';
 import Calendar from 'components/Calendar';
 import { Input } from 'components/Form';
 import { Icon } from 'components/Icon';
+import { useTranslation } from 'components/Translation';
 
 type DateEvent = {
   target: {
@@ -16,11 +17,13 @@ type DateEvent = {
 
 type Props = {
   onChange: ({ target }: DateEvent) => void;
+  onError?: (error: string) => void;
   name: string;
   value?: string;
   minDate?: Date;
   isValid?: boolean;
   isOnTop?: boolean;
+  readonly?: boolean;
 };
 
 const DATE_REGEXP = /\d{1,2}\/\d{1,2}\/\d{4}/;
@@ -30,34 +33,40 @@ export const INPUT_TEST_ID = 'DatepickerId';
 
 const checkIsValidDate = (date) => DATE_REGEXP.test(date);
 
-const transformDateToString = (date: Date) =>
+export const transformDateToString = (date: Date) =>
   date.toLocaleDateString('en-GB', { year: 'numeric', month: '2-digit', day: '2-digit' });
 
-const buildTargetObject = (value: string, name: string) => ({ target: { type: 'date', value, name } });
+export const buildTargetObject = (value: string, name: string) => ({ target: { type: 'date', value, name } });
 
-const Datepicker: FC<Props> = ({ onChange, value, name, minDate, isValid, isOnTop = false }) => {
+const Datepicker: FC<Props> = ({ onChange, onError, value, name, minDate, isValid, isOnTop = false, readonly }) => {
   const [isOpen, toggleOpen] = useState(false);
-  const [currentValue, setCurrentValue] = useState<string | undefined>(
-    value ? transformDateToString(new Date(value)) : undefined,
-  );
+  const [currentValue, setCurrentValue] = useState<string | undefined>();
   const [date, changeDate] = useState<Date | undefined>();
-  const [error, setError] = useState<boolean>(false);
   const { css } = useStyle();
+  const { t } = useTranslation();
 
   const dataChange = useCallback(
     debounce((value: string) => {
-      setError(false);
       if (!value) {
         onChange(buildTargetObject('', name));
       }
       if (!checkIsValidDate(value)) {
-        setError(true);
+        onError && onError(t('please_input_valid_date'));
         return;
       }
       const newValue = value.split('/').reverse().join('-');
       const newDate = new Date(newValue);
-      if (newDate.toString() === INVALID_DATE || (minDate && newDate < minDate)) {
-        setError(true);
+      const verificationValue = transformDateToString(newDate);
+      if (minDate && newDate < minDate) {
+        onError && onError(t('min_valid_date', { minDate: transformDateToString(minDate) }));
+        return;
+      }
+      if (newDate.toString() === INVALID_DATE) {
+        onError && onError(t('please_input_valid_date'));
+        return;
+      }
+      if (verificationValue !== value) {
+        setCurrentValue(verificationValue);
         return;
       }
       newDate.setHours(0);
@@ -65,7 +74,7 @@ const Datepicker: FC<Props> = ({ onChange, value, name, minDate, isValid, isOnTo
       newDate.setMilliseconds(0);
       changeDate(newDate);
       onChange(buildTargetObject(formatDateStringFromISO(newDate.toISOString(), DATE_FORMAT), name));
-    }, 500),
+    }, 300),
     [],
   );
 
@@ -73,6 +82,12 @@ const Datepicker: FC<Props> = ({ onChange, value, name, minDate, isValid, isOnTo
     if (currentValue === undefined) return;
     dataChange(currentValue);
   }, [currentValue]);
+
+  useEffect(() => {
+    if (value) {
+      setCurrentValue(transformDateToString(new Date(value)));
+    }
+  }, [value]);
 
   const handleClickDay = (date) => {
     if (!date) return;
@@ -93,12 +108,13 @@ const Datepicker: FC<Props> = ({ onChange, value, name, minDate, isValid, isOnTo
           customStyles={inputRule}
           data-test-id={INPUT_TEST_ID}
           placeholder={'dd/mm/yyyy'}
-          isValid={isValid && !error}
+          isValid={isValid}
         />
         <button
+          disabled={readonly}
           type={'button'}
           onClick={() => toggleOpen(!isOpen)}
-          className={css(buttonRule({ error: error || !isValid }))}
+          className={css(buttonRule({ error: !isValid }))}
         >
           <Icon graphic={'calender'} />
         </button>

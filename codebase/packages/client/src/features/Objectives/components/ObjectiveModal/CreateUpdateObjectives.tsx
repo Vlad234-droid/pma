@@ -4,7 +4,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import useDispatch from 'hooks/useDispatch';
 import { useSelector } from 'react-redux';
-import { TFunction, useTranslation } from 'components/Translation';
+import { useTranslation } from 'components/Translation';
 import { schemaMetaSelector } from '@pma/store/src/selectors/schema';
 import {
   currentUserSelector,

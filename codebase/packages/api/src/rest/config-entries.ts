@@ -1,11 +1,11 @@
 import httpClient from '../config/client';
 
-const configEntriesDomain = '/config-entries';
+const domain = '/config-entries';
 
 export const getConfigEntries = () => {
-  return httpClient.get(`${configEntriesDomain}/roots`);
+  return httpClient.get(`${domain}/roots`);
 };
 
 export const getConfigEntriesByUuid = ({ uuid }) => {
-  return httpClient.get(`${configEntriesDomain}/${uuid}`);
+  return httpClient.get(`${domain}/${uuid}`);
 };

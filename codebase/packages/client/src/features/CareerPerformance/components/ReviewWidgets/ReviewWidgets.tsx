@@ -36,8 +36,6 @@ const ReviewWidgets: FC<Props> = ({
               startTime={midYearReview?.startTime}
               endTime={midYearReview?.endTime || undefined}
               lastUpdatedTime={midYearReview?.lastUpdatedTime}
-              onClick={() => console.log('ReviewWidget')}
-              onClose={() => console.log('ReviewWidget')}
               title={t('review_type_description_myr', 'Mid-year review')}
               customStyle={{ height: '100%' }}
             />
@@ -49,8 +47,6 @@ const ReviewWidgets: FC<Props> = ({
               startTime={endYearReview?.startTime}
               endTime={endYearReview?.endTime || undefined}
               lastUpdatedTime={endYearReview?.lastUpdatedTime}
-              onClick={() => console.log('ReviewWidget')}
-              onClose={() => console.log('ReviewWidget')}
               title={t('review_type_description_eyr', 'Year-end review')}
               customStyle={{ height: '100%' }}
             />
@@ -65,8 +61,6 @@ const ReviewWidgets: FC<Props> = ({
             startTime={endYearReview?.startTime}
             endTime={endYearReview?.endTime || undefined}
             lastUpdatedTime={endYearReview?.lastUpdatedTime}
-            onClick={() => console.log('ReviewWidget')}
-            onClose={() => console.log('ReviewWidget')}
             title={t('annual_performance_review', 'Annual performance review')}
             customStyle={{ height: '100%' }}
           />

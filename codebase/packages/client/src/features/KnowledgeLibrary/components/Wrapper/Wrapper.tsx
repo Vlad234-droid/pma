@@ -8,6 +8,8 @@ import Info from '../Info';
 import { DataType } from '../../types';
 import useData from '../../hooks/useData';
 
+export const TEST_ID = 'test-wrapper';
+
 const Wrapper: FC = () => {
   const { css } = useStyle();
   const { t } = useTranslation();
@@ -16,7 +18,7 @@ const Wrapper: FC = () => {
   const [managersData] = useData({ dataType: DataType.MANAGERS });
 
   return (
-    <div className={css(wrapperRule)}>
+    <div data-test-id={TEST_ID} className={css(wrapperRule)}>
       <CanPerform
         perform={[role.LINE_MANAGER]}
         yes={() => (

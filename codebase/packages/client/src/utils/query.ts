@@ -1,4 +1,6 @@
-export const buildSearchColleaguesQuery = (value) => {
+export type QueryType = Record<string, string | Array<Record<string, string>>>;
+
+export const buildSearchColleaguesQuery = (value: string): QueryType => {
   const query = {};
 
   if (/ /.test(value)) {
@@ -14,5 +16,6 @@ export const buildSearchColleaguesQuery = (value) => {
     query['first-name_like'] = value;
     query['last-name_like'] = value;
   }
+
   return query;
 };

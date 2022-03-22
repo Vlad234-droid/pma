@@ -15,7 +15,7 @@ async function getData(url) {
 }
 
 export const downloadCsvFile = async (t, addToast) => {
-  getData(`${BASE_URL_API}reports/linked-objective-report/formats/excel?`).then((resp) => {
+  getData(`${BASE_URL_API}/reports/linked-objective-report/formats/excel?`).then((resp) => {
     if (!resp.ok) {
       return addToast({
         id: Date.now().toString(),
@@ -44,7 +44,7 @@ async function getReportStatistics(url, { year, topics }) {
 }
 
 export const downloadReportStatistics = async (queryParams) => {
-  getReportStatistics(`${BASE_URL_API}reports/statistics-report/formats/excel?`, queryParams).then((resp) =>
+  getReportStatistics(`${BASE_URL_API}/reports/statistics-report/formats/excel?`, queryParams).then((resp) =>
     resp.blob().then((blob) => {
       const a = document.createElement('a');
       a.href = window.URL.createObjectURL(blob);

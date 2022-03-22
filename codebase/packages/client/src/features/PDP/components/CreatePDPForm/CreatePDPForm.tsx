@@ -71,7 +71,7 @@ const CreatePDPForm: FC<Props> = ({
     mode: 'onChange',
     resolver: yupResolver<Yup.AnyObjectSchema>(Yup.object().shape(yepSchema)),
   });
-  const { getValues, formState, reset } = methods;
+  const { getValues, formState, reset, setError } = methods;
   const formValues = getValues();
 
   const [isOpenConfirmNext, setConfirmNextOpen] = useState<boolean>(false);
@@ -222,9 +222,12 @@ const CreatePDPForm: FC<Props> = ({
                   name={key}
                   isOnTop={true}
                   Element={Datepicker}
+                  Wrapper={Item}
                   setValue={methods.setValue}
+                  setError={setError}
                   minDate={today}
                   value={updateGoalValue}
+                  error={formState.errors[key]?.message}
                 />
               </React.Fragment>
             );

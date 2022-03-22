@@ -61,20 +61,7 @@ export const Item: FC<Props> = ({
       <div className={css(childrenWrapper)}>
         <div>
           <Provider value={{ inputRef, hasFocus, setFocus }}>{children}</Provider>
-          {errormessage && !hasFocus && (
-            <span
-              className={css({
-                position: 'absolute',
-                left: 0,
-                bottom: '-20px',
-                fontSize: '14px',
-                lineHeight: '18px',
-                color: colors.error,
-              })}
-            >
-              {errormessage}
-            </span>
-          )}
+          {errormessage && !hasFocus && <span className={css(errorMessageStyle)}>{errormessage}</span>}
         </div>
         {withIcon && (
           <span
@@ -127,6 +114,14 @@ const childrenWrapper: Rule = {
     fill: colors.tescoBlue,
   },
 } as Styles;
+
+const errorMessageStyle: Rule = ({ theme }) => ({
+  ...theme.font.fixed.f14,
+  position: 'absolute',
+  left: 0,
+  bottom: '-20px',
+  color: theme.colors.error,
+});
 
 const IconStyle: Rule = {
   position: 'absolute',

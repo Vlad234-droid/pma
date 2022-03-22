@@ -3,10 +3,9 @@ import { Button, Rule, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { useNavigate } from 'react-router-dom';
 
 import { TileWrapper } from 'components/Tile';
-import { PerformanceCycleActions } from '@pma/store';
+import { PerformanceCycleActions, getPerformanceCycleSelector } from '@pma/store';
 import useDispatch from 'hooks/useDispatch';
 import { useSelector } from 'react-redux';
-import { getPerformanceCycleSelector } from '@pma/store/src/selectors/performance-cycle';
 
 import { Radio } from 'components/Form';
 import { Trans } from 'components/Translation';
@@ -141,13 +140,15 @@ const PerformanceCycleAdministration: FC = () => {
                       <td className={css(item)}>{entryConfigKey}</td>
                       <td className={css(item)}>{date}</td>
                       <td className={css(item)}>{createdBy}</td>
-                      <Button
-                        mode={'inverse'}
-                        onPress={() => navigate(`/${Page.PERFORMANCE_CYCLE}/${uuid}`)}
-                        styles={[btnStyle]}
-                      >
-                        Edit
-                      </Button>
+                      <td>
+                        <Button
+                          mode={'inverse'}
+                          onPress={() => navigate(`/${Page.PERFORMANCE_CYCLE}/${uuid}`)}
+                          styles={[btnStyle]}
+                        >
+                          Edit
+                        </Button>
+                      </td>
                     </tr>
                   );
                 })}

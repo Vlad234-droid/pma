@@ -43,12 +43,17 @@ export const formatDateString = (date: string, format: DateFormat = DATE_STRING_
 export const formatDate = (date: Date, format: DateFormat = DATE_FORMAT) =>
   DateTime.fromISO(date.toISOString()).toFormat(format);
 
+export const formatDateTime = (date: DateTime, format: DateFormat = DATE_FORMAT) => date.toFormat(format);
+
 export const formatDateStringToIsoDate = (date: string) => DateTime.fromISO(date).setLocale('en').toISODate();
 
 export const formatToRelativeDate = (date: string) => {
   const relativeDate = DateTime.fromISO(date).setLocale('en').toRelative();
   return relativeDate?.includes('second') ? 'just now' : relativeDate;
 };
+
+export const addYearToDateString = (date: string, format = DATE_FORMAT) =>
+  DateTime.fromFormat(date, format).plus({ years: 1 });
 
 export const inDayRange = (date: string, checkDate: string) => {
   const compare = DateTime.fromISO(checkDate);

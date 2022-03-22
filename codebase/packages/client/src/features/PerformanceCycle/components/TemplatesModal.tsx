@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, CreateRule, ModalWithHeader, Rule, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { Icon } from 'components/Icon';
@@ -6,24 +6,32 @@ import { Input } from 'components/Form';
 import { DropZone } from 'components/DropZone';
 import Upload from 'images/Upload.svg';
 import { useTranslation } from 'components/Translation';
-import { getProcessTemplateSelector } from '@pma/store/src/selectors/processTemplate';
-import { ProcessTemplateActions } from '@pma/store';
+import { ProcessTemplateActions, getProcessTemplateSelector } from '@pma/store';
 import { formatDateStringFromISO } from 'utils/date';
 import { getFileType } from 'utils/file';
 
 type TemplateModalProps = {
-  closeModal: () => void;
-  selectTemplate: (value) => void;
+  onSelect: (value) => void;
 };
 
-const TemplatesModal: FC<TemplateModalProps> = ({ closeModal, selectTemplate }) => {
+const TemplatesModal: FC<TemplateModalProps> = ({ onSelect }) => {
   const { css } = useStyle();
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const [isOpen, toggleOpen] = useState(false);
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
   const [filter, setFilteredValue] = useState('');
   const templatesList = useSelector(getProcessTemplateSelector) || [];
+
+  useEffect(() => {
+    dispatch(
+      ProcessTemplateActions.getProcessTemplate({
+        path_eq: 'cycles',
+        type_eq: 1,
+      }),
+    );
+  }, []);
 
   const filteredTemplates = templatesList?.filter((item) => {
     const createdTime = formatDateStringFromISO(item.createdTime, 'MM/dd/yyyy');
@@ -31,7 +39,7 @@ const TemplatesModal: FC<TemplateModalProps> = ({ closeModal, selectTemplate }) 
       return item;
   });
 
-  const onUpload = (file) => {
+  const handleUpload = (file) => {
     dispatch(
       ProcessTemplateActions.uploadProcessTemplate({
         file,
@@ -43,55 +51,65 @@ const TemplatesModal: FC<TemplateModalProps> = ({ closeModal, selectTemplate }) 
   const handleSearchTemplate = ({ target }) => setFilteredValue(target.value);
 
   return (
-    <ModalWithHeader
-      containerRule={templatesModalWindowStyles({ mobileScreen })}
-      title='Choose Template'
-      modalPosition='middle'
-      closeOptions={{
-        closeOptionContent: <Icon graphic='cancel' invertColors={true} />,
-        closeOptionStyles: {},
-        onClose: closeModal,
-      }}
-    >
-      <div className={css(templatesModalContentWrapperStyles({ mobileScreen }))}>
-        <Input placeholder={'Enter template name'} onChange={handleSearchTemplate} />
+    <>
+      <Button onPress={() => toggleOpen(true)}>Choose Template</Button>
+      {isOpen && (
+        <ModalWithHeader
+          containerRule={templatesModalWindowStyles({ mobileScreen })}
+          title={t('choose_template', 'Choose Template')}
+          modalPosition='middle'
+          closeOptions={{
+            closeOptionContent: <Icon graphic='cancel' invertColors={true} />,
+            closeOptionStyles: {},
+            onClose: () => toggleOpen(false),
+          }}
+        >
+          <div className={css(templatesModalContentWrapperStyles({ mobileScreen }))}>
+            <Input placeholder={t('enter_template_name', 'Enter template name')} onChange={handleSearchTemplate} />
 
-        <div className={css({ marginTop: '32px' })}>
-          <DropZone onUpload={onUpload}>
-            <img className={css({ maxWidth: 'inherit' })} src={Upload} alt='Upload' />
-            <span className={css(labelStyles)}>{t('Drop file here or click to upload')}</span>
-            <span className={css(descriptionStyles)}>{t('Maximum upload size 5MB')}</span>
-          </DropZone>
-        </div>
+            <div className={css({ marginTop: '32px' })}>
+              <DropZone onUpload={handleUpload}>
+                <img className={css({ maxWidth: 'inherit' })} src={Upload} alt='Upload' />
+                <span className={css(labelStyles)}>{t('drop_file_here', 'Drop file here or click to upload')}</span>
+                <span className={css(descriptionStyles)}>
+                  {t('maximum_upload_size', 'Maximum upload size 5MB', { maxSize: '5MB' })}
+                </span>
+              </DropZone>
+            </div>
 
-        <div className={css(templatesListStyles)}>
-          {filteredTemplates.map((item) => {
-            const createdTime = formatDateStringFromISO(item.createdTime, 'MM/dd/yyyy');
-            return (
-              <div
-                className={css(templatesListItemStyles)}
-                key={Math.random()}
-                onClick={() => selectTemplate(item.value)}
-              >
-                <div>
-                  {item?.label}
-                  <div className={css(row)}>
-                    {' '}
-                    {item?.fileName} {item?.path}
+            <div className={css(templatesListStyles)}>
+              {filteredTemplates.map((item, idx) => {
+                const createdTime = formatDateStringFromISO(item.createdTime, 'MM/dd/yyyy');
+                return (
+                  <div
+                    key={idx}
+                    className={css(templatesListItemStyles)}
+                    onClick={() => {
+                      onSelect(item);
+                      toggleOpen(false);
+                    }}
+                  >
+                    <div>
+                      {item?.description}
+                      <div className={css(row)}>
+                        {' '}
+                        {item?.fileName} {item?.path}
+                      </div>
+                    </div>
+                    <div className={css(timeStyles)}>{createdTime}</div>
                   </div>
-                </div>
-                <div className={css(timeStyles)}>{createdTime}</div>
-              </div>
-            );
-          })}
-        </div>
-        <div className={css(templatesModalFooter({ mobileScreen }))}>
-          <Button mode='inverse' onPress={closeModal} styles={[btnStyle]}>
-            Close
-          </Button>
-        </div>
-      </div>
-    </ModalWithHeader>
+                );
+              })}
+            </div>
+            <div className={css(templatesModalFooter({ mobileScreen }))}>
+              <Button mode='inverse' onPress={() => toggleOpen(false)} styles={[btnStyle]}>
+                Close
+              </Button>
+            </div>
+          </div>
+        </ModalWithHeader>
+      )}
+    </>
   );
 };
 
@@ -134,7 +152,7 @@ const templatesModalContentWrapperStyles: CreateRule<{ mobileScreen }> = ({ mobi
     flexDirection: 'column',
     height: '100%',
     padding: mobileScreen ? '30px 20px 60px' : '40px 40px 100px',
-    positin: 'relative',
+    position: 'relative',
   };
 };
 

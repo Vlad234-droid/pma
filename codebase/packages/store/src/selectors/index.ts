@@ -24,6 +24,7 @@ export * from './report';
 export * from './previousReviewFiles';
 export * from './appState';
 export * from './messages';
+export * from './orgObjectives';
 export * from './processTemplate';
 export * from './knowledgeLibrary';
-export * from './orgObjectives';
+export * from './performance-cycle';
