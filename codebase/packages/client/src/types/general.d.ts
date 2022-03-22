@@ -1,4 +1,3 @@
-import { PressEvents as BasePressEvents } from '@react-types/shared';
 import { StyleProps } from 'react-fela';
 import { theme as baseTheme, Styles } from '@dex-ddl/core';
 
