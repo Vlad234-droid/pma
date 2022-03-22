@@ -233,71 +233,69 @@ const PerformanceCycleForm: FC<Props> = ({ onSubmit, defaultValues, forms }) => 
           <div className={css(itemStyle, { maxWidth: '100px' })}>
             <Item label={t('max', 'Max')} withIcon={false} marginBot={false} />
           </div>
-          {timelinePoints
-            ?.filter(({ type }) => type !== 'REVIEW')
-            ?.map((point, index) => {
-              return (
-                <Fragment key={index}>
+          {timelinePoints?.map((point, index) => {
+            return (
+              <Fragment key={index}>
+                <div className={css(itemStyle)}>
+                  <Field
+                    name={`metadata.cycle.timelinePoints[${index}].description`}
+                    setValue={setValue}
+                    Element={Input}
+                    value={get(formValues, `metadata.cycle.timelinePoints[${index}].description`)}
+                  />
+                </div>
+                <div className={css({ display: 'flex', gap: '8px' })}>
                   <div className={css(itemStyle)}>
-                    <Field
-                      name={`metadata.cycle.timelinePoints[${index}].description`}
-                      setValue={setValue}
-                      Element={Input}
-                      value={get(formValues, `metadata.cycle.timelinePoints[${index}].description`)}
+                    <DurationPicker
+                      control={control}
+                      name={`metadata.cycle.timelinePoints[${index}].properties.pm_review_duration`}
                     />
                   </div>
-                  <div className={css({ display: 'flex', gap: '8px' })}>
-                    <div className={css(itemStyle)}>
-                      <DurationPicker
-                        control={control}
-                        name={`metadata.cycle.timelinePoints[${index}].properties.pm_review_duration`}
+                </div>
+                <div className={css({ display: 'flex', gap: '8px' })}>
+                  <div className={css(itemStyle)}>
+                    <DurationPicker
+                      control={control}
+                      name={`metadata.cycle.timelinePoints[${index}].properties.pm_review_before_start`}
+                    />
+                  </div>
+                </div>
+                <div className={css({ display: 'flex', gap: '8px' })}>
+                  <div className={css(itemStyle)}>
+                    <DurationPicker
+                      control={control}
+                      name={`metadata.cycle.timelinePoints[${index}].properties.pm_review_before_end`}
+                    />
+                  </div>
+                </div>
+                {point.reviewType === 'OBJECTIVE' ? (
+                  <>
+                    <div className={css(itemStyle, { maxWidth: '100px' })}>
+                      <Field
+                        name={`metadata.cycle.timelinePoints[${index}].properties.pm_review_min`}
+                        setValue={setValue}
+                        Element={Input}
+                        value={get(formValues, `metadata.cycle.timelinePoints[${index}].properties.pm_review_min`)}
                       />
                     </div>
-                  </div>
-                  <div className={css({ display: 'flex', gap: '8px' })}>
-                    <div className={css(itemStyle)}>
-                      <DurationPicker
-                        control={control}
-                        name={`metadata.cycle.timelinePoints[${index}].properties.pm_review_before_start`}
+                    <div className={css(itemStyle, { maxWidth: '100px' })}>
+                      <Field
+                        name={`metadata.cycle.timelinePoints[${index}].properties.pm_review_max`}
+                        setValue={setValue}
+                        Element={Input}
+                        value={get(formValues, `metadata.cycle.timelinePoints[${index}].properties.pm_review_max`)}
                       />
                     </div>
-                  </div>
-                  <div className={css({ display: 'flex', gap: '8px' })}>
-                    <div className={css(itemStyle)}>
-                      <DurationPicker
-                        control={control}
-                        name={`metadata.cycle.timelinePoints[${index}].properties.pm_review_before_end`}
-                      />
-                    </div>
-                  </div>
-                  {point.reviewType === 'OBJECTIVE' ? (
-                    <>
-                      <div className={css(itemStyle, { maxWidth: '100px' })}>
-                        <Field
-                          name={`metadata.cycle.timelinePoints[${index}].properties.pm_review_min`}
-                          setValue={setValue}
-                          Element={Input}
-                          value={get(formValues, `metadata.cycle.timelinePoints[${index}].properties.pm_review_min`)}
-                        />
-                      </div>
-                      <div className={css(itemStyle, { maxWidth: '100px' })}>
-                        <Field
-                          name={`metadata.cycle.timelinePoints[${index}].properties.pm_review_max`}
-                          setValue={setValue}
-                          Element={Input}
-                          value={get(formValues, `metadata.cycle.timelinePoints[${index}].properties.pm_review_max`)}
-                        />
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <div className={css(itemStyle, { maxWidth: '100px' })} />
-                      <div className={css(itemStyle, { maxWidth: '100px' })} />
-                    </>
-                  )}
-                </Fragment>
-              );
-            })}
+                  </>
+                ) : (
+                  <>
+                    <div className={css(itemStyle, { maxWidth: '100px' })} />
+                    <div className={css(itemStyle, { maxWidth: '100px' })} />
+                  </>
+                )}
+              </Fragment>
+            );
+          })}
         </div>
       </TileWrapper>
       <FormsViewer forms={template?.forms || forms || []} isActive={!!(template?.forms || forms)} />
