@@ -138,12 +138,8 @@ const ShareWidget: FC<Props> = ({ customStyle, stopShare, sharing }) => {
   };
 
   const [title, description, actionTitle, handleBtnClick] = content;
-
   const isDisplayed =
-    title === 'N/A' ||
-    (!stopShare && !sharedObjectivesCount) ||
-    (isManager && !hasApprovedObjective) ||
-    isViewSharedObjectivesActive;
+    title === 'N/A' || (!stopShare && !hasApprovedObjective && !sharing && !isManager && !hasApprovedObjective);
 
   if (isDisplayed) {
     return null;
