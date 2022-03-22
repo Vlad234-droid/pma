@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
-import { CreateRule, Modal, Rule, Theme, useBreakpoints, useStyle } from '@dex-ddl/core';
+import { CreateRule, Modal, Rule, Theme, useBreakpoints, useStyle, IconButton as BackButton } from '@dex-ddl/core';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -20,7 +20,7 @@ import {
 import { role, usePermission } from 'features/Permission';
 import { AddTeamNoteModal, InfoModal, AddNoteModal, FilterOptions, MainFolders } from './components';
 import { IconButton } from 'components/IconButton';
-import { Icon, Icon as IconComponent } from 'components/Icon';
+import { Icon } from 'components/Icon';
 import { EditSelectedNote } from './components/Modals/EditSelectedNote';
 import { schemaFolder, schemaNotes, schemaNoteToEdit, schemaTEAMNotes } from './components/Modals/schema/schema';
 import { Trans, useTranslation } from 'components/Translation';
@@ -583,21 +583,21 @@ const NotesActions: FC = () => {
           setTeamArchivedMode={setTeamArchivedMode}
         />
       </div>
-      <span
-        className={css(arrowLeftStyle({ theme, mobileScreen }))}
-        onClick={() => {
-          if (isUserArchived || teamArchivedMode) {
-            if (isUserArchived) setIsUserArchived(() => false);
-            if (teamArchivedMode) setTeamArchivedMode(() => false);
-            if (!selectedFolder) setSelectedFolder(() => null);
-            if (selectedTEAMFolder) setSelectedTEAMFolder(() => null);
-          } else {
-            navigate(-1);
-          }
-        }}
-      >
-        <IconComponent graphic='arrowLeft' invertColors={false} />
-      </span>
+      <div className={css(arrowLeftStyle)}>
+        <BackButton
+          onPress={() => {
+            if (isUserArchived || teamArchivedMode) {
+              if (isUserArchived) setIsUserArchived(() => false);
+              if (teamArchivedMode) setTeamArchivedMode(() => false);
+              if (!selectedFolder) setSelectedFolder(() => null);
+              if (selectedTEAMFolder) setSelectedTEAMFolder(() => null);
+            } else {
+              navigate(-1);
+            }
+          }}
+          graphic='backwardLink'
+        />
+      </div>
     </div>
   );
 };
@@ -623,14 +623,14 @@ const iconAddStyle: Rule = {
   marginTop: '2px',
 };
 
-const arrowLeftStyle: CreateRule<{ theme: Theme; mobileScreen: boolean }> = ({ theme, mobileScreen }) => {
+const arrowLeftStyle: Rule = () => {
   return {
     position: 'fixed',
-    top: theme.spacing.s5,
+    top: '34px',
     textDecoration: 'none',
     border: 'none',
     cursor: 'pointer',
-    left: mobileScreen ? theme.spacing.s5 : theme.spacing.s10,
+    left: '16px',
   };
 };
 

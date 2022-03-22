@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ColleaguesActions, getColleaguesSelector } from '@pma/store';
-import { buildSearchColleaguesQuery } from 'utils';
+import { buildSearchColleaguesQuery, extendQuery } from 'utils';
 
-export default () => {
+const useSearchColleagues = (fields: Record<string, string> = {}) => {
   const dispatch = useDispatch();
   const colleagues = useSelector(getColleaguesSelector) || [];
 
@@ -15,7 +15,7 @@ export default () => {
       return;
     }
 
-    dispatch(ColleaguesActions.getColleagues(buildSearchColleaguesQuery(value)));
+    dispatch(ColleaguesActions.getColleagues(extendQuery(buildSearchColleaguesQuery(value), fields)));
   };
 
   useEffect(() => {
@@ -26,3 +26,5 @@ export default () => {
 
   return { handleSearchColleagues, clearColleagueList, colleagues };
 };
+
+export default useSearchColleagues;

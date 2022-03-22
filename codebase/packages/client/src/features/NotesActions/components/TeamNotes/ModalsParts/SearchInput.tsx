@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useCallback, ChangeEvent } from 'react';
 import { useStyle, Rule } from '@dex-ddl/core';
 import mergeRefs from 'react-merge-refs';
 import { InputProps } from './type';
@@ -6,6 +6,7 @@ import { useFormContainer } from 'components/Form/context/input';
 import defaultImg from 'images/default.png';
 import { ColleaguesActions } from '@pma/store';
 import { useDispatch } from 'react-redux';
+import debounce from 'lodash.debounce';
 
 export const SearchInput: FC<InputProps> = ({
   domRef,
@@ -39,6 +40,12 @@ export const SearchInput: FC<InputProps> = ({
     }
   };
 
+  const handleSearch = useCallback(debounce(onChange, 300), []);
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    handleSearch(e);
+  };
+
   return (
     <>
       <input
@@ -46,9 +53,9 @@ export const SearchInput: FC<InputProps> = ({
         name={name}
         data-test-id={name}
         {...getPropperValue(multiple)}
-        onChange={onChange}
+        onChange={handleChange}
         autoComplete={'off'}
-        disabled={(selectedPerson && searchValue !== '' && true) || disabled}
+        disabled={(selectedPerson && searchValue !== '') || disabled}
         type={type}
         className={css({
           width: '100%',
@@ -67,7 +74,7 @@ export const SearchInput: FC<InputProps> = ({
       />
       {!!options.length && (
         <div
-          style={{
+          className={css({
             display: 'block',
             position: 'absolute',
             //@ts-ignore
@@ -76,7 +83,7 @@ export const SearchInput: FC<InputProps> = ({
             background: theme.colors.white,
             width: '100%',
             zIndex: 999,
-          }}
+          })}
         >
           {options.map((item) => (
             <div

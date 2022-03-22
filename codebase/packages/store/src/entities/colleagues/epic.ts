@@ -2,12 +2,11 @@
 import { Epic, isActionOf } from 'typesafe-actions';
 import { combineEpics } from 'redux-observable';
 import { from, of } from 'rxjs';
-import { catchError, filter, map, switchMap, debounceTime } from 'rxjs/operators';
+import { catchError, filter, map, switchMap } from 'rxjs/operators';
 import { getColleagues, getProfileColleague } from './actions';
 
 export const getColleaguesEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
-    debounceTime(1000),
     filter(isActionOf(getColleagues.request)),
     switchMap(({ payload }) => {
       //@ts-ignore
