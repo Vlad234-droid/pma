@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FC, useState } from 'react';
+import React, { ChangeEvent, FC, useEffect, useState } from 'react';
 import { FieldValues } from 'react-hook-form';
 
 type FieldProps = {
@@ -43,7 +43,11 @@ const Field: FC<FieldProps & FieldValues> = ({
   setError,
   ...props
 }) => {
-  const [currentValue, setCurrentValue] = useState(value);
+  const [currentValue, setCurrentValue] = useState<string | undefined>();
+
+  useEffect(() => {
+    setCurrentValue(value);
+  }, [value]);
 
   const handleChange = (e) => {
     const changeObject = createChangeObject(e);
@@ -56,13 +60,13 @@ const Field: FC<FieldProps & FieldValues> = ({
   if (!Wrapper && !label) {
     return (
       <Element
+        name={name}
         options={options}
         isValid={Boolean(!error)}
         onError={setError ? (message) => setError(name, { type: 'custom', message }) : undefined}
         placeholder={placeholder}
         value={currentValue}
         onChange={handleChange}
-        name={name}
         {...props}
       />
     );

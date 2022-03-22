@@ -23,6 +23,7 @@ type Props = {
   minDate?: Date;
   isValid?: boolean;
   isOnTop?: boolean;
+  readonly?: boolean;
 };
 
 const DATE_REGEXP = /\d{1,2}\/\d{1,2}\/\d{4}/;
@@ -37,11 +38,9 @@ export const transformDateToString = (date: Date) =>
 
 export const buildTargetObject = (value: string, name: string) => ({ target: { type: 'date', value, name } });
 
-const Datepicker: FC<Props> = ({ onChange, onError, value, name, minDate, isValid, isOnTop = false }) => {
+const Datepicker: FC<Props> = ({ onChange, onError, value, name, minDate, isValid, isOnTop = false, readonly }) => {
   const [isOpen, toggleOpen] = useState(false);
-  const [currentValue, setCurrentValue] = useState<string | undefined>(
-    value ? transformDateToString(new Date(value)) : undefined,
-  );
+  const [currentValue, setCurrentValue] = useState<string | undefined>();
   const [date, changeDate] = useState<Date | undefined>();
   const { css } = useStyle();
   const { t } = useTranslation();
@@ -84,6 +83,12 @@ const Datepicker: FC<Props> = ({ onChange, onError, value, name, minDate, isVali
     dataChange(currentValue);
   }, [currentValue]);
 
+  useEffect(() => {
+    if (value) {
+      setCurrentValue(transformDateToString(new Date(value)));
+    }
+  }, [value]);
+
   const handleClickDay = (date) => {
     if (!date) return;
     setCurrentValue(transformDateToString(date));
@@ -105,7 +110,12 @@ const Datepicker: FC<Props> = ({ onChange, onError, value, name, minDate, isVali
           placeholder={'dd/mm/yyyy'}
           isValid={isValid}
         />
-        <button type={'button'} onClick={() => toggleOpen(!isOpen)} className={css(buttonRule({ error: !isValid }))}>
+        <button
+          disabled={readonly}
+          type={'button'}
+          onClick={() => toggleOpen(!isOpen)}
+          className={css(buttonRule({ error: !isValid }))}
+        >
           <Icon graphic={'calender'} />
         </button>
         {isOpen && (

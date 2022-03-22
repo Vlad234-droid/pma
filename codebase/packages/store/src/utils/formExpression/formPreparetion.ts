@@ -9,15 +9,6 @@ const cleanComponentExpression = (component: any) => ({
   ...(component?.description ? { description: replaceExpressionString(component.description) } : {}),
 });
 
-const cleanFormExpression = (form: any) => {
-  const { json } = form;
-  const { components = [] } = json;
-  json.components = components?.map((component) => cleanComponentExpression(component));
-
-  return { ...form, json };
-};
-const cleanFormsExpression = (forms: any[]) => forms.map((form) => cleanFormExpression(form));
-
 export const convertFormJsonToObject = (form: any) => {
   const json = JSON.parse(form?.json);
   const { components = [] } = json;

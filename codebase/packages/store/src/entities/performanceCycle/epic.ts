@@ -11,6 +11,7 @@ import {
   getPerformanceCycleByUuid,
   publishPerformanceCycle,
   updatePerformanceCycle,
+  getPerformanceCycleMappingKeys,
 } from './actions';
 
 export const getGetAllPerformanceCyclesEpic: Epic = (action$, _, { api }) =>
@@ -18,7 +19,8 @@ export const getGetAllPerformanceCyclesEpic: Epic = (action$, _, { api }) =>
     filter(isActionOf(getGetAllPerformanceCycles.request)),
     switchMap(() =>
       from(api.getGetAllPerformanceCycles()).pipe(
-        map(getGetAllPerformanceCycles.success),
+        //@ts-ignore
+        map(({ data }) => getGetAllPerformanceCycles.success(data)),
         catchError((e) => {
           const errors = e?.data?.errors;
           return concatWithErrorToast(
@@ -35,13 +37,11 @@ export const getGetPerformanceCyclesByUuidEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
     filter(isActionOf(getPerformanceCycleByUuid.request)),
     switchMap(({ payload }) =>
-      from(
-        api.getPerformanceCycleByUuid({
-          ...payload,
-          includeForms: payload?.includeForms ? payload?.includeForms : true,
+      from(api.getPerformanceCycleByUuid(payload)).pipe(
+        // @ts-ignore
+        map(({ data }) => {
+          return getPerformanceCycleByUuid.success(data);
         }),
-      ).pipe(
-        map(getPerformanceCycleByUuid.success),
         catchError((e) => {
           const errors = e?.data?.errors;
           return concatWithErrorToast(
@@ -58,11 +58,10 @@ export const createPerformanceCyclesEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
     filter(isActionOf(createPerformanceCycle.request)),
     switchMap(({ payload }) => {
-      const { data } = payload;
-      return from(api.createPerformanceCycle(data)).pipe(
+      return from(api.createPerformanceCycle(payload)).pipe(
         // @ts-ignore
-        map(() => {
-          return getGetAllPerformanceCycles.request();
+        map(({ data }) => {
+          return createPerformanceCycle.success(data);
         }),
         catchError(({ errors }) => of(createPerformanceCycle.failure(errors))),
       );
@@ -73,11 +72,10 @@ export const updatePerformanceCyclesEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
     filter(isActionOf(updatePerformanceCycle.request)),
     switchMap(({ payload }) => {
-      const { data } = payload;
-      return from(api.updatePerformanceCycle(data)).pipe(
+      return from(api.updatePerformanceCycle(payload)).pipe(
         // @ts-ignore
-        map(() => {
-          return getGetAllPerformanceCycles.request();
+        map(({ data }) => {
+          return updatePerformanceCycle.success(data);
         }),
         catchError(({ errors }) => of(updatePerformanceCycle.failure(errors))),
       );
@@ -88,13 +86,26 @@ export const publishPerformanceCyclesEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
     filter(isActionOf(publishPerformanceCycle.request)),
     switchMap(({ payload }) => {
-      const { data } = payload;
-      return from(api.publishPerformanceCycle(data)).pipe(
+      return from(api.publishPerformanceCycle(payload)).pipe(
         // @ts-ignore
         map(() => {
           return getGetAllPerformanceCycles.request();
         }),
         catchError(({ errors }) => of(publishPerformanceCycle.failure(errors))),
+      );
+    }),
+  );
+
+export const getPerformanceCycleMappingKeysEpic: Epic = (action$, _, { api }) =>
+  action$.pipe(
+    filter(isActionOf(getPerformanceCycleMappingKeys.request)),
+    switchMap(() => {
+      return from(api.getPerformanceCycleMappingKeys()).pipe(
+        // @ts-ignore
+        map(({ data }) => {
+          return getPerformanceCycleMappingKeys.success(data);
+        }),
+        catchError(({ errors }) => of(getPerformanceCycleMappingKeys.failure(errors))),
       );
     }),
   );
@@ -105,4 +116,5 @@ export default combineEpics(
   createPerformanceCyclesEpic,
   updatePerformanceCyclesEpic,
   publishPerformanceCyclesEpic,
+  getPerformanceCycleMappingKeysEpic,
 );

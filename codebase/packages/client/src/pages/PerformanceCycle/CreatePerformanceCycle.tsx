@@ -1,8 +1,8 @@
 import React, { FC } from 'react';
-import { PerformanceCycleForm } from 'features/PerformanceCycle/components/PerformanceCycleForm';
+import { CreatePerformanceCycle } from 'features/PerformanceCycle';
 
-const CreatePerformanceCycle: FC = () => {
-  return <PerformanceCycleForm />;
+const CreatePerformanceCyclePage: FC = () => {
+  return <CreatePerformanceCycle />;
 };
 
-export default CreatePerformanceCycle;
+export default CreatePerformanceCyclePage;
