@@ -3,13 +3,15 @@ import { useStyle, useBreakpoints, CreateRule, Rule } from '@dex-ddl/core';
 import { Trans } from 'components/Translation';
 import { VideoPlayer, VideoId } from 'features/VideoPlayer';
 
+export const TEST_ID = 'objective-help-modal';
+
 const ObjectiveHelpModal: FC = () => {
   const { css } = useStyle();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
 
   return (
-    <div className={css(containerStyle)}>
+    <div data-test-id={TEST_ID} className={css(containerStyle)}>
       <div className={css(wrapperStyle({ mobileScreen }))}>
         <div>
           <div className={css(titleStyle)}>
