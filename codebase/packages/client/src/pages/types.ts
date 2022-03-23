@@ -1,8 +1,8 @@
 import { ComponentType, FC, LazyExoticComponent } from 'react';
 
 enum Page {
-  CONTRIBUTION = 'contribution',
-  CREATE_STRATEGIC_DRIVERS = 'strategic-drivers/create',
+  CONTRIBUTION = 'contribution', //
+  CREATE_STRATEGIC_DRIVERS = 'strategic-drivers/create', //
   STRATEGIC_DRIVERS = 'strategic-drivers',
   CREATE_PERFORMANCE_CYCLE = 'performance-cycle/:performanceCycleUuid',
   PERFORMANCE_CYCLE = 'performance-cycle',
@@ -22,16 +22,16 @@ enum Page {
   CALIBRATION = 'calibration',
   NOTES = 'notes',
   GIVE_FEEDBACK = 'feedback/give',
-  GIVE_NEW_FEEDBACK = 'feedback/give/:uuid',
+  GIVE_NEW_FEEDBACK = 'feedback/give/:uuid', //
   REQUEST_FEEDBACK = 'feedback/request-feedback',
   RESPOND_FEEDBACK = 'feedback/respond-feedback',
   RESPOND_NEW_FEEDBACK = 'feedback/respond-feedback/:uuid',
   VIEW_FEEDBACK = 'feedback/view-feedback',
-  FEEDBACK = 'feedback',
+  FEEDBACK = 'feedback', //
   TIPS = 'tips',
   EDIT_TIP = 'tips/:tipUuid',
   REPORT = 'report',
-  ADMINISTRATION = 'administration',
+  ADMINISTRATION = 'administration', //
   OBJECTIVES_SUBMITTED_REPORT = 'report/submitted-objectives',
   OBJECTIVES_APPROVED_REPORT = 'report/approved-objectives',
 }

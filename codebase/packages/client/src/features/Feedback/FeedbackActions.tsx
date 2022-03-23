@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { colleagueUUIDSelector, FeedbackActions as FeedbackActionsGet, UserActions } from '@pma/store';
+import { colleagueUUIDSelector, FeedbackActions as FeedbackActionsGet, UserActions, getFeedbackMetaSelector } from '@pma/store';
 import { CreateRule, Modal, Rule, Theme, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { Trans, useTranslation } from 'components/Translation';
 import { Item, Select } from 'components/Form';
@@ -26,6 +26,8 @@ const FeedbackActions: FC = () => {
 
   const [info360Modal, setInfo360Modal] = useState<boolean>(false);
   const colleagueUuid = useSelector(colleagueUUIDSelector);
+  const { loading } = useSelector(getFeedbackMetaSelector);
+  console.log('loading', loading);
 
   useEffect(() => {
     dispatch(FeedbackActionsGet.getRequestedFeedbacks({}));

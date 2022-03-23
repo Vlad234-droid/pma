@@ -9,6 +9,7 @@ import { Accordion, BaseAccordion, Section, Panel, ExpandButton } from 'componen
 import IconButtonDefault from 'components/IconButtonDefault';
 import { NoFeedback } from 'features/Feedback/components';
 import { TileWrapper } from 'components/Tile';
+import Spinner from 'components/Spinner';
 
 import defaultImg from 'images/default.png';
 import { formatToRelativeDate, paramsReplacer } from 'utils';
@@ -26,7 +27,7 @@ const FeedbackBlock: FC<Props> = ({ list, canEdit }) => {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
-  if (!loaded) return null;
+  if (!loaded) return <Spinner withText />;
   if (loaded && !list.length) return <NoFeedback />;
 
   return (
