@@ -65,7 +65,7 @@ const inputStyle: CreateRule<{ isValid?: boolean }> =
     padding: '10px 40px 10px 16px',
     ':focus': {
       outline: 'none !important',
-      border: `1px solid ${isValid ? theme.colors.tescoBlue : theme.colors.error}`,
+      border: `1px solid ${theme.colors.tescoBlue}`,
     },
   });
 

@@ -15,6 +15,7 @@ import { TriggerModal } from 'features/Modal/components/TriggerModal';
 
 import { ButtonWithConfirmation } from '../Buttons';
 import ObjectiveHelpModal from '../Modal/ObjectiveHelpModal';
+import { IconButton, Position } from 'components/IconButton';
 
 export type ObjectiveModalProps = {
   useSingleStep?: boolean;
@@ -106,7 +107,7 @@ export const ObjectiveModal: FC<Props> = ({
               </TriggerModal>
             </div>
           )}
-          <Attention />
+          <Attention customStyle={{ marginBottom: '20px' }} />
           {schemaComponents.map((component) => {
             const { id, key, label, text, description, type, validate, values = [] } = component;
             const value = formValues[key] ? formValues[key] : '';
@@ -180,16 +181,22 @@ export const ObjectiveModal: FC<Props> = ({
                       isDisabled={!isValid}
                       onSave={onSubmit}
                       disabledBtnTooltip={t('action_enabled', 'Action enabled when mandatory fields are completed')}
-                      styles={[buttonBlueStyle]}
+                      styles={[buttonBlueStyle({ disabled: !isValid })]}
                     />
                   ) : (
-                    <Button
-                      styles={[buttonBlueStyle, isValid ? {} : { opacity: 0.4 }]}
-                      onPress={setNextObjectiveNumber}
+                    <IconButton
                       isDisabled={!isValid}
+                      customVariantRules={{
+                        default: buttonBlueStyle({ disabled: false }),
+                        disabled: buttonBlueStyle({ disabled: true }),
+                      }}
+                      graphic='arrowRight'
+                      iconProps={{ invertColors: true }}
+                      iconPosition={Position.RIGHT}
+                      onPress={setNextObjectiveNumber}
                     >
                       <Trans i18nKey='next'>Next</Trans>
-                    </Button>
+                    </IconButton>
                   )}
                 </div>
               </div>
@@ -255,13 +262,20 @@ const buttonWhiteStyle: Rule = ({ theme }) => ({
   color: `${theme.colors.tescoBlue}`,
 });
 
-const buttonBlueStyle: Rule = ({ theme }) => ({
-  ...theme.font.fixed.f16,
-  fontWeight: theme.font.weight.bold,
-  width: '50%',
-  margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
-  background: `${theme.colors.tescoBlue}`,
-});
+const buttonBlueStyle: CreateRule<{ disabled: boolean }> =
+  ({ disabled = false }) =>
+  ({ theme }) => ({
+    ...theme.font.fixed.f16,
+    fontWeight: theme.font.weight.bold,
+    width: '50%',
+    margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
+    background: `${theme.colors.tescoBlue}`,
+    color: `${theme.colors.white}`,
+    justifyContent: 'space-between',
+    padding: '0px 15px',
+    opacity: disabled ? 0.4 : 1,
+    borderRadius: '20px',
+  });
 
 const stepIndicatorWrapperStyle: Rule = ({ theme }) => ({ padding: `0 0 ${theme.spacing.s5}` });
 
