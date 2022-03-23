@@ -13,6 +13,14 @@ import { paramsReplacer } from 'utils';
 import { buildPath } from 'features/Routes';
 import { Page } from '../types';
 
+const ACTIVE = 'ACTIVE';
+
+enum Status {
+  ACTIVE = 'ACTIVE',
+  INACTIVE = 'INACTIVE',
+  DRAFT = 'DRAFT',
+}
+
 const PerformanceCycleAdministration: FC = () => {
   const { css } = useStyle();
   const navigate = useNavigate();
@@ -39,7 +47,7 @@ const PerformanceCycleAdministration: FC = () => {
                 alignItems: 'center',
               })}
             >
-              <Radio name='status' checked={active === 'ACTIVE'} onChange={() => setActive('ACTIVE')} />
+              <Radio name='status' checked={active === Status.ACTIVE} onChange={() => setActive(Status.ACTIVE)} />
               <span
                 className={css({
                   fontSize: '16px',
@@ -47,7 +55,7 @@ const PerformanceCycleAdministration: FC = () => {
                   padding: '0px 5px',
                 })}
               >
-                <Trans i18nKey='drafts'>Active Cycles</Trans>
+                <Trans i18nKey='active_cycles'>Active cycles</Trans>
               </span>
             </label>
           </div>
@@ -58,7 +66,7 @@ const PerformanceCycleAdministration: FC = () => {
                 alignItems: 'center',
               })}
             >
-              <Radio name='status' checked={active === 'INACTIVE'} onChange={() => setActive('INACTIVE')} />
+              <Radio name='status' checked={active === Status.INACTIVE} onChange={() => setActive(Status.INACTIVE)} />
               <span
                 className={css({
                   fontSize: '16px',
@@ -66,7 +74,7 @@ const PerformanceCycleAdministration: FC = () => {
                   padding: '0px 5px',
                 })}
               >
-                <Trans i18nKey='submitted'>Inactive cycles</Trans>
+                <Trans i18nKey='inactive_cycles'>Inactive cycles</Trans>
               </span>
             </label>
           </div>
@@ -77,7 +85,7 @@ const PerformanceCycleAdministration: FC = () => {
                 alignItems: 'center',
               })}
             >
-              <Radio name='status' checked={active === 'DRAFT'} onChange={() => setActive('DRAFT')} />
+              <Radio name='status' checked={active === Status.DRAFT} onChange={() => setActive(Status.DRAFT)} />
               <span
                 className={css({
                   fontSize: '16px',
@@ -85,7 +93,7 @@ const PerformanceCycleAdministration: FC = () => {
                   padding: '0px 5px',
                 })}
               >
-                <Trans i18nKey='submitted'>Drafts</Trans>
+                <Trans i18nKey='drafts'>Drafts</Trans>
               </span>
             </label>
           </div>
@@ -95,7 +103,7 @@ const PerformanceCycleAdministration: FC = () => {
             navigate(buildPath(paramsReplacer(Page.CREATE_PERFORMANCE_CYCLE, { ':performanceCycleUuid': 'new' })))
           }
         >
-          Create performance cycle
+          <Trans i18nKey={'create_performance_cycle'}>Create performance cycle</Trans>
         </Button>
       </div>
       <div className={css(headWrapperStyles)}>
@@ -121,11 +129,21 @@ const PerformanceCycleAdministration: FC = () => {
           >
             <thead>
               <tr className={css({ background: '#F3F9FC', fontSize: '14px', lineHeight: '18px' })}>
-                <th className={css(item)}>Name</th>
-                <th className={css(item)}>Organization</th>
-                <th className={css(item)}>Start Date-End date</th>
-                <th className={css(item)}>Created by</th>
-                <th className={css(item)}>Action</th>
+                <th className={css(item)}>
+                  <Trans i18nKey={'name'}>Name</Trans>
+                </th>
+                <th className={css(item)}>
+                  <Trans i18nKey={'organization'}>Organization</Trans>
+                </th>
+                <th className={css(item)}>
+                  <Trans i18nKey={'start_date_end_date'}>Start Date-End date</Trans>
+                </th>
+                <th className={css(item)}>
+                  <Trans i18nKey={'created_by'}>Created by</Trans>
+                </th>
+                <th className={css(item)}>
+                  <Trans i18nKey={'action'}>Action</Trans>
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -133,7 +151,7 @@ const PerformanceCycleAdministration: FC = () => {
                 .filter((item) => {
                   return item.status === active;
                 })
-                .map(({ name, entryConfigKey, date, createdBy, uuid }) => {
+                .map(({ name, entryConfigKey, date, createdBy, uuid, status }) => {
                   return (
                     <tr key={uuid}>
                       <td className={css(item)}>{name}</td>
@@ -141,13 +159,15 @@ const PerformanceCycleAdministration: FC = () => {
                       <td className={css(item)}>{date}</td>
                       <td className={css(item)}>{createdBy}</td>
                       <td>
-                        <Button
-                          mode={'inverse'}
-                          onPress={() => navigate(`/${Page.PERFORMANCE_CYCLE}/${uuid}`)}
-                          styles={[btnStyle]}
-                        >
-                          Edit
-                        </Button>
+                        {status !== ACTIVE && (
+                          <Button
+                            mode={'inverse'}
+                            onPress={() => navigate(`/${Page.PERFORMANCE_CYCLE}/${uuid}`)}
+                            styles={[btnStyle]}
+                          >
+                            <Trans i18nKey={'edit'}>Edit</Trans>
+                          </Button>
+                        )}
                       </td>
                     </tr>
                   );

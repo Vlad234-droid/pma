@@ -266,7 +266,6 @@
   "sharing_feedback_face_to_face_gives": "Sharing feedback face to face gives you the space to have a two-way conversation, building trust and working together on what the colleague could do next. Where this isn't possible, you can use the feedback function in the Your Contribution system.",
   "want_to_say_thank_you_to_a_colleague": "Want to say “thank you” to a colleague?",
   "recognition_is_important_as_all_other_feedback": "Recognition is just as important as all other feedback. We need to remember to celebrate our successes, share praise or say 'thank you' to our colleagues when things have gone well. You can share recognition with your colleagues during face to face conversations and using Values Awards. Where this isn't possible, you can use the feedback function in the Your Contribution system.",
-  "drafts": "Drafts",
   "shared": "Shared",
   "let_a_colleague_know_how_they_are_doing": "Let a colleague know how they are doing",
   "select_to_give_feedback": "Select who you'd like to give feedback to",
@@ -478,6 +477,15 @@
   "enter_template_name": "Enter template name",
   "maximum_upload_size": "Maximum upload size {{ maxSize }}",
   "drop_file_here": "Drop file here or click to upload",
-  "forms": "Forms"
-  "min_valid_date": "Please input date is greater than {{- minDate }}"
+  "forms": "Forms",
+  "min_valid_date": "Please input date is greater than {{- minDate }}",
+  "organization": "Organization",
+  "start_date_end_date": "Start Date-End date",
+  "created_by": "Created by",
+  "action": "Action",
+  "status_performance_cycles": "{{ status }} Performance cycles",
+  "drafts": "Drafts",
+  "active_cycles": "Active cycles",
+  "inactive_cycles": "Inactive cycles",
+  "create_performance_cycle": "Create performance cycle"
 }

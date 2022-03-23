@@ -41,7 +41,7 @@ const FormsViewer: FC<Props> = ({ forms, isActive }) => {
       </div>
       <div className={`${isActive ? css(visibleContainerStyle) : css(containerStyle)}`}>
         <div className={css({ display: 'flex', marginTop: '8px' })}>
-          {forms.map((form, idx) => {
+          {forms.filter(Boolean).map((form, idx) => {
             return (
               <div key={idx} className={css({ padding: '0px 10px' })}>
                 <label
