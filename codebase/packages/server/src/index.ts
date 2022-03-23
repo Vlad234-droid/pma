@@ -127,8 +127,6 @@ if (!PROXY_API_SERVER_URL) {
     const myInboxMiddleware = await myInboxConfig(config);
     myInboxMiddleware && appServer.use(myInboxMiddleware);
 
-    console.log('version', process.version);
-
     // static file serving sectionmy
     switch (integrationMode) {
       case 'integrity': {

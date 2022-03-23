@@ -57,7 +57,6 @@ const oidcTokenExtractorPlugin = (config: OidcTokenExtractorConfig) => {
     try {
       if (!isEmpty(res.oneLoginAuthData)) {
         const idToken = getIdentitySwapToken(res, strategy);
-        console.log('idToken', idToken);
         setDataToCookie(res, { idToken }, cookieConfig!);
       }
     } catch (e: any) {
