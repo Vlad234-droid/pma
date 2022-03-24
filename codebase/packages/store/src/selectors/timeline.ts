@@ -19,6 +19,9 @@ export const userReviewTypesSelector = createSelector(timelineSelector, ({ data 
 export const timelinesExistSelector = (colleagueUuid) =>
   createSelector(timelineSelector, (timelines) => !!timelines[colleagueUuid]?.length);
 
+export const timelinesMetaSelector = () =>
+  createSelector(timelineSelector, (timelines) => timelines.meta);
+
 export const getTimelineSelector = (colleagueUuid) =>
   createSelector(usersSelector, timelineSelector, (user, { meta, ...rest }) => {
     // @ts-ignore

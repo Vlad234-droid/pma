@@ -36,7 +36,7 @@ import {
   ReviewsActions,
   reviewsMetaSelector,
   schemaMetaSelector,
-  TimelineActions,
+  TimelineActions, timelinesExistSelector, timelinesMetaSelector,
   timelineTypesAvailabilitySelector,
 } from '@pma/store';
 import OrganizationWidget from 'features/Objectives/components/OrganizationWidget/OrganizationWidget';
@@ -81,6 +81,8 @@ const MyObjectives: FC = () => {
   const { loaded: schemaLoaded } = useSelector(schemaMetaSelector);
   const { loaded: reviewLoaded } = useSelector(reviewsMetaSelector);
   const colleagueUuid = useSelector(colleagueUUIDSelector);
+  const timelinesExist = useSelector(timelinesExistSelector(colleagueUuid));
+  const { loaded: timelinesLoaded } = useSelector(timelinesMetaSelector());
   const [schema] = useReviewSchema(ReviewType.OBJECTIVE) || {};
   const { components = [], markup = { max: 0, min: 0 } } = schema;
   const { descriptions, startDates, statuses } = useSelector(getTimelineSelector(colleagueUuid)) || {};
@@ -123,6 +125,18 @@ const MyObjectives: FC = () => {
   }
 
   useEffect(() => {
+    if (colleagueUuid) {
+      dispatch(TimelineActions.getTimeline({ colleagueUuid }));
+    }
+  }, [colleagueUuid]);
+
+  useEffect(() => {
+    if (timelinesLoaded && !timelinesExist) {
+      navigate(`/${Page.NOT_FOUND}`);
+    }
+  }, [timelinesLoaded, timelinesExist]);
+
+  useEffect(() => {
     dispatch(PreviousReviewFilesActions.getPreviousReviewFiles({ colleagueUUID: colleagueUuid }));
   }, []);
 
@@ -138,12 +152,6 @@ const MyObjectives: FC = () => {
       setObjectives(transformReviewsToObjectives(originObjectives, formElements));
     }
   }, [reviewLoaded, schemaLoaded]);
-
-  useEffect(() => {
-    if (colleagueUuid) {
-      dispatch(TimelineActions.getTimeline({ colleagueUuid }));
-    }
-  }, [colleagueUuid]);
 
   useEffect(() => {
     if (colleagueUuid && canShowObjectives) {
