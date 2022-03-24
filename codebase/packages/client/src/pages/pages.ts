@@ -28,6 +28,7 @@ import Calibration from './Calibration';
 import AdministratorPage from './AdministratorPage';
 import RespondNewFeedback from './RespondNewFeedback';
 import ObjectivesReport from './ObjectivesReport';
+import { NotFound } from './NotFound';
 
 export type PageComponent = {
   Element: PageElement;
@@ -264,6 +265,13 @@ const pages: Record<Page, PageComponent> = {
     withHeader: true,
     backPath: Page.CONTRIBUTION,
     perform: [role.ADMIN],
+  },
+  [Page.NOT_FOUND]: {
+    Element: NotFound,
+    title: 'Not found',
+    withHeader: false,
+    backPath: Page.CONTRIBUTION,
+    perform: [role.COLLEAGUE],
   },
 };
 
