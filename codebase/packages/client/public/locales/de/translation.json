@@ -216,7 +216,9 @@
   "action": "Action",
   "status_performance_cycles": "{{ status }} Performance cycles",
   "drafts": "Drafts",
-  "active_cycles": "Active cycles",
-  "inactive_cycles": "Inactive cycles",
+  "active_cycles": "Active",
+  "inactive_cycles": "Inactive",
+  "registered_cycles": "Registered",
+  "started_cycles": "Started",
   "create_performance_cycle": "Create performance cycle"
 }

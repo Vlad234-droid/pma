@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Button, Rule, useBreakpoints, useStyle } from '@dex-ddl/core';
-import { useNavigate } from 'react-router-dom';
 
 import { TileWrapper } from 'components/Tile';
 import { PerformanceCycleActions, getPerformanceCycleSelector } from '@pma/store';
@@ -13,17 +13,19 @@ import { paramsReplacer } from 'utils';
 import { buildPath } from 'features/Routes';
 import { Page } from '../types';
 
-const ACTIVE = 'ACTIVE';
-
 enum Status {
   ACTIVE = 'ACTIVE',
   INACTIVE = 'INACTIVE',
   DRAFT = 'DRAFT',
+  REGISTERED = 'REGISTERED',
+  STARTED = 'STARTED',
 }
 
 const PerformanceCycleAdministration: FC = () => {
   const { css } = useStyle();
   const navigate = useNavigate();
+  const { pathname, search } = useLocation();
+  const [active, setActive] = useState(Status.ACTIVE);
 
   const data = useSelector(getPerformanceCycleSelector) || {};
 
@@ -33,13 +35,92 @@ const PerformanceCycleAdministration: FC = () => {
     dispatch(PerformanceCycleActions.getGetAllPerformanceCycles());
   }, []);
 
-  const [active, setActive] = useState('ACTIVE');
+  useEffect(() => {
+    const status: Status = (new URLSearchParams(search).get('status') as Status) || Status.ACTIVE;
+    setActive(status);
+  }, [search]);
 
-  const item: Rule = { padding: '14px', textAlign: 'start' };
+  const handleChangeStatus = (status: Status) => {
+    navigate({
+      pathname,
+      search: new URLSearchParams({
+        status,
+      }).toString(),
+    });
+  };
   return (
     <div>
       <div className={css({ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap-reverse' })}>
         <div className={css({ display: 'flex' })}>
+          <div className={css({ padding: '0px 10px' })}>
+            <label
+              className={css({
+                display: 'flex',
+                alignItems: 'center',
+              })}
+            >
+              <Radio
+                name='status'
+                checked={active === Status.DRAFT}
+                onChange={() => handleChangeStatus(Status.DRAFT)}
+              />
+              <span
+                className={css({
+                  fontSize: '16px',
+                  lineHeight: '20px',
+                  padding: '0px 5px',
+                })}
+              >
+                <Trans i18nKey='drafts'>Drafts</Trans>
+              </span>
+            </label>
+          </div>
+          <div className={css({ padding: '0px 10px' })}>
+            <label
+              className={css({
+                display: 'flex',
+                alignItems: 'center',
+              })}
+            >
+              <Radio
+                name='status'
+                checked={active === Status.REGISTERED}
+                onChange={() => handleChangeStatus(Status.REGISTERED)}
+              />
+              <span
+                className={css({
+                  fontSize: '16px',
+                  lineHeight: '20px',
+                  padding: '0px 5px',
+                })}
+              >
+                <Trans i18nKey='registered_cycles'>Registered</Trans>
+              </span>
+            </label>
+          </div>
+          <div className={css({ padding: '0px 10px' })}>
+            <label
+              className={css({
+                display: 'flex',
+                alignItems: 'center',
+              })}
+            >
+              <Radio
+                name='status'
+                checked={active === Status.STARTED}
+                onChange={() => handleChangeStatus(Status.STARTED)}
+              />
+              <span
+                className={css({
+                  fontSize: '16px',
+                  lineHeight: '20px',
+                  padding: '0px 5px',
+                })}
+              >
+                <Trans i18nKey='started_cycles'>Started</Trans>
+              </span>
+            </label>
+          </div>
           <div className={css({ padding: '0px 10px' })}>
             <label
               className={css({
@@ -55,7 +136,7 @@ const PerformanceCycleAdministration: FC = () => {
                   padding: '0px 5px',
                 })}
               >
-                <Trans i18nKey='active_cycles'>Active cycles</Trans>
+                <Trans i18nKey='active_cycles'>Active</Trans>
               </span>
             </label>
           </div>
@@ -66,7 +147,11 @@ const PerformanceCycleAdministration: FC = () => {
                 alignItems: 'center',
               })}
             >
-              <Radio name='status' checked={active === Status.INACTIVE} onChange={() => setActive(Status.INACTIVE)} />
+              <Radio
+                name='status'
+                checked={active === Status.INACTIVE}
+                onChange={() => handleChangeStatus(Status.INACTIVE)}
+              />
               <span
                 className={css({
                   fontSize: '16px',
@@ -74,26 +159,7 @@ const PerformanceCycleAdministration: FC = () => {
                   padding: '0px 5px',
                 })}
               >
-                <Trans i18nKey='inactive_cycles'>Inactive cycles</Trans>
-              </span>
-            </label>
-          </div>
-          <div className={css({ padding: '0px 10px' })}>
-            <label
-              className={css({
-                display: 'flex',
-                alignItems: 'center',
-              })}
-            >
-              <Radio name='status' checked={active === Status.DRAFT} onChange={() => setActive(Status.DRAFT)} />
-              <span
-                className={css({
-                  fontSize: '16px',
-                  lineHeight: '20px',
-                  padding: '0px 5px',
-                })}
-              >
-                <Trans i18nKey='drafts'>Drafts</Trans>
+                <Trans i18nKey='inactive_cycles'>Inactive</Trans>
               </span>
             </label>
           </div>
@@ -159,7 +225,7 @@ const PerformanceCycleAdministration: FC = () => {
                       <td className={css(item)}>{date}</td>
                       <td className={css(item)}>{createdBy}</td>
                       <td>
-                        {status !== ACTIVE && (
+                        {(status === Status.DRAFT || status === Status.REGISTERED) && (
                           <Button
                             mode={'inverse'}
                             onPress={() => navigate(`/${Page.PERFORMANCE_CYCLE}/${uuid}`)}
@@ -196,5 +262,7 @@ const btnStyle = {
   border: '1px solid rgb(0, 83, 159)',
   minWidth: '20px',
 };
+
+const item: Rule = { padding: '14px', textAlign: 'start' };
 
 export default PerformanceCycleAdministration;

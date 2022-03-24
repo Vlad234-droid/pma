@@ -32,7 +32,10 @@ const CreatePerformanceCycle: FC = () => {
 
   useEffect(() => {
     if (status === Status.SUCCEEDED) {
-      navigate(buildPath(Page.PERFORMANCE_CYCLE));
+      navigate({
+        pathname: buildPath(Page.PERFORMANCE_CYCLE),
+        search: new URLSearchParams({ status: cycle.status }).toString(),
+      });
       dispatch(PerformanceCycleActions.resetMetaStatusRequest());
     }
     if (status === Status.FAILED) {
