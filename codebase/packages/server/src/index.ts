@@ -1,27 +1,46 @@
-import express, { Request, Response, Router } from 'express';
+import express, { Response, Router } from 'express';
 import path from 'path';
 import { createProxyMiddleware, Options } from 'http-proxy-middleware';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
-import { getIdentityData, withReturnTo } from '@energon/onelogin';
+import { getIdentityData } from '@energon/onelogin';
 // utils
 import { getPackageDistFolder } from './utils/package';
 import { exit } from 'process';
 // config
-import { getConfig, getEnv, isDEV, isPROD, isLocal, prettify } from './config';
+import { getConfig, getEnv, isDEV, isLocal, prettify, isPROD, isPPE } from './config';
 // middlewares
 import {
   authMiddleware,
   errorHandler,
-  getOidcData,
   mfModuleAssetHandler,
-  openIdConfig,
+  initializeOpenid,
   standaloneIndexAssetHandler,
   myInboxConfig,
 } from './middlewares';
 
+import { initialize as initializeLogger, getHttpLoggerMiddleware } from '@pma-common/logger';
+
 getEnv().validate();
 const config = getConfig();
+
+let logPretify = config.loggerPretify();
+if (logPretify === undefined) {
+  logPretify = !!config.buildEnvironment() && isLocal(config.buildEnvironment());
+}
+
+const logLevel =
+  config.loggerLevel() ||
+  (isPROD(config.runtimeEnvironment()) || isPPE(config.runtimeEnvironment()) ? 'info' : logPretify ? 'trace' : 'debug');
+
+const logger = initializeLogger(config.loggerRootName(), logLevel, logPretify);
+
+logger.info(`Current build environment: ${config.buildEnvironment()}`);
+logger.info(`Current infrastructure environment: ${config.runtimeEnvironment()}`);
+
+if (isLocal(config.buildEnvironment())) {
+  prettify(config);
+}
 
 const NODE_PORT = config.port();
 const PROXY_API_SERVER_URL = config.proxyApiServerUrl();
@@ -68,9 +87,12 @@ if (!PROXY_API_SERVER_URL) {
     appServer.use(
       cors({
         credentials: true,
-        origin: config.applicationUrlRoot(),
+        origin: config.applicationServerUrlRoot(),
       }),
     );
+
+    // setup logger middlewares
+    appServer.use(getHttpLoggerMiddleware('http'));
 
     if (isDEV(config.buildEnvironment()) || !config.useOneLogin()) {
       console.log(`WARNING! Authentication is turned off. Fake Login is used.`);
@@ -84,14 +106,9 @@ if (!PROXY_API_SERVER_URL) {
           break;
         }
         case 'standalone': {
-          const { openId } = openIdConfig(config);
+          const openIdMiddleware = await initializeOpenid(config);
 
-          appServer.use(
-            withReturnTo(await openId, {
-              isViewPath: (path) => !path.match('^(/api|/auth|/sso|/static|/favicon.ico|/locales)'),
-              appPath: config.oneLoginApplicationPath(),
-            }),
-          );
+          appServer.use(openIdMiddleware);
 
           break;
         }
@@ -99,17 +116,14 @@ if (!PROXY_API_SERVER_URL) {
 
       proxyMiddlewareOptions.onProxyReq = function (proxyReq, req, res) {
         const identityData = getIdentityData(res as Response);
-        const oidcData = getOidcData(isPROD(config.buildEnvironment()), req as Request);
 
         console.log('[HPM] Clear all cookies');
         proxyReq.setHeader('Cookie', '');
 
         proxyReq.setHeader('Authorization', `Bearer ${identityData?.access_token}`);
-        proxyReq.setHeader('Authorization-App', oidcData?.idToken || '');
 
         if (isLocal(config.buildEnvironment())) {
           console.log('[HPM] Authorization: bearer-jwt-identity', identityData?.access_token);
-          console.log('[HPM] Authorization-App: additional-auth-jwt', oidcData?.idToken);
         }
       };
     }
