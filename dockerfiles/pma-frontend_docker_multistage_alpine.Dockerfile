@@ -84,6 +84,9 @@ WORKDIR /opt/app
 COPY --from=codebase /opt/bootstrap/ ./
 COPY --from=codebase /opt/src/ ./
 
+ENV HTTP_PROXY=$HTTP_PROXY
+ENV HTTPS_PROXY=$HTTPS_PROXY
+
 ENV PUBLIC_URL=$PUBLIC_URL
 ENV REACT_APP_API_URL=$REACT_APP_API_URL
 ENV REACT_APP_MY_INBOX_API_PATH=$REACT_APP_MY_INBOX_API_PATH
@@ -93,7 +96,8 @@ ENV SKIP_PREFLIGHT_CHECK=true
 RUN --mount=type=cache,id=yarn_cache,target=/usr/local/share/.cache/yarn \
     --mount=type=cache,id=node_modules,target=/opt/app/node_modules \
     yarn bootstrap:dev \ 
-    && yarn build:prod \
+    && yarn build:prod:client \
+    && yarn build:prod:server \
     && find . -type d -name node_modules -prune -o -name 'package.json' -exec bash -c 'mkdir -p ../build/$(dirname {})' \; \
     && find . -type d -name node_modules -prune -o -name 'public' -exec cp -r '{}' '../build/{}' \; \
     && find . -type d -name node_modules -prune -o -name 'build' -exec cp -r '{}' '../build/{}' \;
