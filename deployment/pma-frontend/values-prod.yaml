@@ -86,6 +86,7 @@ environment:
   NODE_ENV: production
   NODE_CONFIG_ENV: prod
   BUILD_ENV: production
+  RUNTIME_ENV: prod
   NODE_OPTIONS: --max-http-header-size=16384
   PROXY_API_SERVER_URL: http://pma-api-service:8083
   INTEGRATION_MODE: standalone

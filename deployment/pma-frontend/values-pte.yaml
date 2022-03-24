@@ -86,6 +86,7 @@ environment:
   NODE_ENV: ppe         # use PPE env, because all thirparty services will be used from PPE env
   NODE_CONFIG_ENV: ppe  # use PPE env, because all thirparty services will be used from PPE env
   BUILD_ENV: ppe        # use PPE env, because all thirparty services will be used from PPE env
+  RUNTIME_ENV: ppe      # use PPE env, because all thirparty services will be used from PPE env
   NODE_OPTIONS: --max-http-header-size=16384
   PROXY_API_SERVER_URL: http://pma-api-service:8083
   INTEGRATION_MODE: standalone

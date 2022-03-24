@@ -86,6 +86,7 @@ environment:
   NODE_ENV: ppe
   NODE_CONFIG_ENV: ppe
   BUILD_ENV: ppe
+  RUNTIME_ENV: ppe
   NODE_OPTIONS: --max-http-header-size=16384
   PROXY_API_SERVER_URL: http://pma-api-service:8083
   INTEGRATION_MODE: standalone
