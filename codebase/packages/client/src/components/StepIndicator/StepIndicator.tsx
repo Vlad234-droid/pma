@@ -23,11 +23,7 @@ const getStatus = (i: number, currentStep?: number, currentStatus?: Status, isVa
   if (currentStep === i && currentStatus) return Status[currentStatus];
 };
 
-function isActive(statuses: Status[] | undefined, i) {
-  if (!statuses?.[i]) return true;
-  const [graphics] = getIcon(statuses?.[i]);
-  return graphics !== 'roundCircle';
-}
+const isActive = (statuses: Status[] | undefined, i) => statuses?.[i] !== Status.NOT_STARTED;
 
 export const StepIndicatorBasic: FC<StepIndicatorProps> = ({
   currentStep,
