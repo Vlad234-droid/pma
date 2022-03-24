@@ -5,7 +5,6 @@ import { ApiEnv } from '@energon-connectors/core';
 
 import { getEnv } from './env-accessor';
 import { defaultConfig } from './default';
-import { isUrlAbsolute } from '../utils';
 
 export type ProcessConfig = {
   // general
@@ -33,8 +32,6 @@ export type ProcessConfig = {
   applicationServerUrlRoot: () => string;
   applicationName: () => string;
   applicationPublicUrl: () => string;
-  applicationUrlRoot: () => string;
-  applicationUrlRootWithApplicationPublicUrl: () => string;
   // cookies settings
   applicationIdTokenCookieName: () => string | undefined;
   applicationSessionCookieName: () => string | undefined;
@@ -44,11 +41,7 @@ export type ProcessConfig = {
   stickCookiesToApplicationPath: () => boolean;
   // onelogin
   useOneLogin: () => boolean;
-  oneLoginIssuerUrl: () => string;
-  oneLoginApplicationPath: () => string;
-  oneLoginCallbackUrlRoot: () => string;
-  oneLoginCallbackPath: () => string;
-  oneLoginRedirectAfterLogoutUrl: () => string;
+  oidcIssuerUrl: () => string;
   oidcClientId: () => string;
   oidcClientSecret: () => string;
   oidcRefreshTokenSecret: () => string;
@@ -75,11 +68,6 @@ export class ConfigAccessor {
     const applicationServerUrlRoot = processEnv.APPLICATION_SERVER_URL_ROOT;
     const port = isNaN(Number(processEnv.NODE_PORT)) ? defaultConfig.port : Number(processEnv.NODE_PORT);
     const coreMountPath = processEnv.INTEGRATION_CORE_MOUNT_PATH;
-    const applicationPublicUrl = processEnv.APPLICATION_PUBLIC_URL === '/' ? '' : processEnv.APPLICATION_PUBLIC_URL;
-    const oneLoginApplicationPath = applicationPublicUrl;
-    const applicationUrlRoot = processEnv.APPLICATION_URL_ROOT;
-    const oneLoginRedirectAfterLogoutUrl =
-      processEnv.ONELOGIN_REDIRECT_AFTER_LOGOUT_URL || defaultConfig.oidcRedirectAfterLogoutPath;
     this.config = {
       // general
       buildEnvironment: () => processEnv.BUILD_ENV,
@@ -115,8 +103,6 @@ export class ConfigAccessor {
       applicationServerUrlRoot: () => applicationServerUrlRoot,
       applicationName: () => defaultConfig.applicationName,
       applicationPublicUrl: () => processEnv.APPLICATION_PUBLIC_URL,
-      applicationUrlRoot: () => applicationUrlRoot,
-      applicationUrlRootWithApplicationPublicUrl: () => `${applicationUrlRoot}${applicationPublicUrl}`,
       // cookies settings
       applicationIdTokenCookieName: () => processEnv.APPLICATION_AUTH_TOKEN_COOKIE_NAME || undefined,
       applicationSessionCookieName: () => processEnv.APPLICATION_SESSION_COOKIE_NAME || undefined,
@@ -129,14 +115,7 @@ export class ConfigAccessor {
       // use sso
       useOneLogin: () => yn(processEnv.USE_ONELOGIN, { default: false }),
       // onelogin
-      oneLoginIssuerUrl: () => processEnv.ONELOGIN_ISSUER_URL,
-      oneLoginApplicationPath: () => oneLoginApplicationPath,
-      oneLoginCallbackUrlRoot: () => processEnv.APPLICATION_URL_ROOT,
-      oneLoginCallbackPath: () => processEnv.ONELOGIN_CALLBACK_PATH,
-      oneLoginRedirectAfterLogoutUrl: () =>
-        isUrlAbsolute(oneLoginRedirectAfterLogoutUrl)
-          ? oneLoginRedirectAfterLogoutUrl
-          : `${oneLoginApplicationPath}${oneLoginRedirectAfterLogoutUrl}`,
+      oidcIssuerUrl: () => processEnv.OIDC_ISSUER_URL,
       oidcClientId: () => processEnv.OIDC_CLIENT_ID,
       oidcClientSecret: () => processEnv.OIDC_CLIENT_SECRET,
       oidcRefreshTokenSecret: () => processEnv.OIDC_REFRESH_TOKEN_SECRET,

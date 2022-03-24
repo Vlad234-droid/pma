@@ -22,7 +22,7 @@ export const initializeOpenid = async ({
   applicationUserDataCookieName,
   applicationUserDataCookieSecret,
   stickCookiesToApplicationPath,
-  oneLoginIssuerUrl,
+  oidcIssuerUrl,
   applicationServerUrlRoot,
   applicationPublicUrl,
   oidcAuthCallbackPath,
@@ -62,7 +62,7 @@ export const initializeOpenid = async ({
     /**
      * issuer url e.g. https://login.ourtesco.com/oidc/2
      */
-    issuerUrl: oneLoginIssuerUrl(),
+    issuerUrl: oidcIssuerUrl(),
 
     /**
      * Client secret used to encrypt refresh token

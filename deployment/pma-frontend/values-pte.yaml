@@ -25,10 +25,12 @@ serviceAccount:
 
 podAnnotations: {}
 
-podSecurityContext: {}
+podSecurityContext:
+  {}
   # fsGroup: 2000
 
-securityContext: {}
+securityContext:
+  {}
   # capabilities:
   #   drop:
   #   - ALL
@@ -43,7 +45,8 @@ service:
 ingress:
   enabled: false
   className: ""
-  annotations: {}
+  annotations:
+    {}
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   hosts:
@@ -56,7 +59,8 @@ ingress:
   #    hosts:
   #      - chart-example.local
 
-resources: {}
+resources:
+  {}
   # We usually recommend not to specify default resources and to leave this as a conscious
   # choice for the user. This also increases chances charts run on environments with little
   # resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -83,9 +87,10 @@ affinity: {}
 
 environment:
   NODE_PORT: 9000
-  NODE_ENV: ppe         # use PPE env, because all thirparty services will be used from PPE env
-  NODE_CONFIG_ENV: ppe  # use PPE env, because all thirparty services will be used from PPE env
-  BUILD_ENV: ppe        # use PPE env, because all thirparty services will be used from PPE env
+  NODE_ENV: ppe # use PPE env, because all thirparty services will be used from PPE env
+  NODE_CONFIG_ENV: ppe # use PPE env, because all thirparty services will be used from PPE env
+  BUILD_ENV: ppe # use PPE env, because all thirparty services will be used from PPE env
+  RUNTIME_ENV: ppe # use PPE env, because all thirparty services will be used from PPE env
   NODE_OPTIONS: --max-http-header-size=16384
   PROXY_API_SERVER_URL: http://pma-api-service:8083
   INTEGRATION_MODE: standalone
@@ -93,13 +98,14 @@ environment:
   INTEGRATION_CORE_URL: /
   INTEGRATION_MOUNT_PATH: /
   INTEGRATION_NODE_BFF_URL: /
+  STICK_COOKIES_TO_APPLICATION_PATH: false
+  APPLICATION_SERVER_URL_ROOT: https://frontend.pte.pma.tescocloud.com
   APPLICATION_PUBLIC_URL: /experience/yourcontribution
-  APPLICATION_URL_ROOT: https://frontend.pte.pma.tescocloud.com
   APPLICATION_USER_DATA_COOKIE_NAME: tesco.userinfo
-  USE_ONELOGIN: false   # turn off SSO for PTE env
-  ONELOGIN_ISSUER_URL: https://loginppe.ourtesco.com/oidc/2
-  ONELOGIN_CALLBACK_PATH: /auth/openid/callback
-  ONELOGIN_REDIRECT_AFTER_LOGOUT_URL: https://loginppe.ourtesco.com/oidc/2/logout?logout=true
+  USE_ONELOGIN: false # turn off SSO for PTE env
+  OIDC_ISSUER_URL: https://loginppe.ourtesco.com/oidc/2
+  OIDC_AUTH_CALLBACK_PATH: /auth/openid/callback
+  OIDC_REDIRECT_AFTER_LOGOUT_CALLBACK_PATH: https://loginppe.ourtesco.com/oidc/2/logout?logout=true
   OIDC_GROUPS_ADMIN_ROLE: Admin
   OIDC_GROUPS_MANAGER_ROLE: Manager
   OIDC_GROUPS_VIEWER_ROLE: Viewer

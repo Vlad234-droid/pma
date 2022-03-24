@@ -3,7 +3,7 @@ import path from 'path';
 import { createProxyMiddleware, Options } from 'http-proxy-middleware';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
-import { getIdentityData, withReturnTo } from '@energon/onelogin';
+import { getIdentityData } from '@energon/onelogin';
 // utils
 import { getPackageDistFolder } from './utils/package';
 import { exit } from 'process';
@@ -87,7 +87,7 @@ if (!PROXY_API_SERVER_URL) {
     appServer.use(
       cors({
         credentials: true,
-        origin: config.applicationUrlRoot(),
+        origin: config.applicationServerUrlRoot(),
       }),
     );
 

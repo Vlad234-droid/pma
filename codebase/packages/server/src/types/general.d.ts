@@ -36,7 +36,6 @@ declare namespace NodeJS {
     // Application specific
     APPLICATION_SERVER_URL_ROOT: string;
     APPLICATION_PUBLIC_URL: string;
-    APPLICATION_URL_ROOT: string;
     APPLICATION_USER_DATA_COOKIE_NAME: string;
     APPLICATION_USER_DATA_COOKIE_SECRET: string;
     APPLICATION_COOKIE_PARSER_SECRET: string;
@@ -46,9 +45,9 @@ declare namespace NodeJS {
     USE_ONELOGIN: boolean;
 
     // One login
-    ONELOGIN_ISSUER_URL: string;
-    ONELOGIN_CALLBACK_PATH: string;
-    ONELOGIN_REDIRECT_AFTER_LOGOUT_URL: string;
+    OIDC_ISSUER_URL: string;
+    OIDC_AUTH_CALLBACK_PATH: string;
+    OIDC_REDIRECT_AFTER_LOGOUT_CALLBACK_PATH: string;
     OIDC_CLIENT_ID: string;
     OIDC_CLIENT_SECRET: string;
     OIDC_REFRESH_TOKEN_SECRET: string;

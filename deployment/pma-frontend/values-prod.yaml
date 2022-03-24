@@ -25,10 +25,12 @@ serviceAccount:
 
 podAnnotations: {}
 
-podSecurityContext: {}
+podSecurityContext:
+  {}
   # fsGroup: 2000
 
-securityContext: {}
+securityContext:
+  {}
   # capabilities:
   #   drop:
   #   - ALL
@@ -43,7 +45,8 @@ service:
 ingress:
   enabled: false
   className: ""
-  annotations: {}
+  annotations:
+    {}
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   hosts:
@@ -56,7 +59,8 @@ ingress:
   #    hosts:
   #      - chart-example.local
 
-resources: {}
+resources:
+  {}
   # We usually recommend not to specify default resources and to leave this as a conscious
   # choice for the user. This also increases chances charts run on environments with little
   # resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -86,6 +90,7 @@ environment:
   NODE_ENV: production
   NODE_CONFIG_ENV: prod
   BUILD_ENV: production
+  RUNTIME_ENV: prod
   NODE_OPTIONS: --max-http-header-size=16384
   PROXY_API_SERVER_URL: http://pma-api-service:8083
   INTEGRATION_MODE: standalone
@@ -93,13 +98,14 @@ environment:
   INTEGRATION_CORE_URL: /
   INTEGRATION_MOUNT_PATH: /
   INTEGRATION_NODE_BFF_URL: /
+  STICK_COOKIES_TO_APPLICATION_PATH: false
+  APPLICATION_SERVER_URL_ROOT: https://www.ourtesco.com
   APPLICATION_PUBLIC_URL: /experience/yourcontribution
-  APPLICATION_URL_ROOT: https://www.ourtesco.com
   APPLICATION_USER_DATA_COOKIE_NAME: tesco.userinfo
   USE_ONELOGIN: true
-  ONELOGIN_ISSUER_URL: https://login.ourtesco.com/oidc/2
-  ONELOGIN_CALLBACK_PATH: /sso/auth/callback
-  ONELOGIN_REDIRECT_AFTER_LOGOUT_URL: https://login.ourtesco.com/oidc/2/logout?logout=true
+  OIDC_ISSUER_URL: https://login.ourtesco.com/oidc/2
+  OIDC_AUTH_CALLBACK_PATH: /sso/auth/callback
+  OIDC_REDIRECT_AFTER_LOGOUT_CALLBACK_PATH: https://login.ourtesco.com/oidc/2/logout?logout=true
   OIDC_GROUPS_ADMIN_ROLE: Admin
   OIDC_GROUPS_MANAGER_ROLE: Manager
   OIDC_GROUPS_VIEWER_ROLE: Viewer

@@ -13,7 +13,6 @@ const environmentParameters: Array<keyof NodeJS.ProcessEnv> = [
   // application specific URLs
   'APPLICATION_SERVER_URL_ROOT',
   'APPLICATION_PUBLIC_URL',
-  'APPLICATION_URL_ROOT',
   'APPLICATION_USER_DATA_COOKIE_SECRET',
   // cookies settings
   'APPLICATION_COOKIE_PARSER_SECRET',
@@ -22,10 +21,9 @@ const environmentParameters: Array<keyof NodeJS.ProcessEnv> = [
   // use sso
   'USE_ONELOGIN',
   // onelogin
-  'ONELOGIN_ISSUER_URL',
-  'ONELOGIN_CALLBACK_PATH',
-  'ONELOGIN_REDIRECT_AFTER_LOGOUT_URL',
+  'OIDC_ISSUER_URL',
   'OIDC_AUTH_CALLBACK_PATH',
+  'OIDC_REDIRECT_AFTER_LOGOUT_CALLBACK_PATH',
   'OIDC_CLIENT_ID',
   'OIDC_CLIENT_SECRET',
   'OIDC_REFRESH_TOKEN_SECRET',
@@ -41,9 +39,9 @@ const environmentParameters: Array<keyof NodeJS.ProcessEnv> = [
 ];
 
 const optionalEnvironmentParameters = [
-  'ONELOGIN_ISSUER_URL',
-  'ONELOGIN_CALLBACK_PATH',
-  'ONELOGIN_REDIRECT_AFTER_LOGOUT_URL',
+  'OIDC_ISSUER_URL',
+  'OIDC_AUTH_CALLBACK_PATH',
+  'OIDC_REDIRECT_AFTER_LOGOUT_CALLBACK_PATH',
   'OIDC_CLIENT_ID',
   'OIDC_CLIENT_SECRET',
   'OIDC_REFRESH_TOKEN_SECRET',
