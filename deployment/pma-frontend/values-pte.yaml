@@ -94,6 +94,8 @@ environment:
   INTEGRATION_CORE_URL: /
   INTEGRATION_MOUNT_PATH: /
   INTEGRATION_NODE_BFF_URL: /
+  STICK_COOKIES_TO_APPLICATION_PATH: false
+  APPLICATION_SERVER_URL_ROOT: https://frontend.pte.pma.tescocloud.com
   APPLICATION_PUBLIC_URL: /experience/yourcontribution
   APPLICATION_URL_ROOT: https://frontend.pte.pma.tescocloud.com
   APPLICATION_USER_DATA_COOKIE_NAME: tesco.userinfo

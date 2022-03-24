@@ -94,9 +94,10 @@ environment:
   INTEGRATION_CORE_URL: /
   INTEGRATION_MOUNT_PATH: /
   INTEGRATION_NODE_BFF_URL: /
+  STICK_COOKIES_TO_APPLICATION_PATH: false
+  APPLICATION_SERVER_URL_ROOT: https://frontend.dev.pma.tescocloud.com
   APPLICATION_PUBLIC_URL: /experience/yourcontribution
   APPLICATION_URL_ROOT: https://frontend.dev.pma.tescocloud.com
-  APPLICATION_USER_DATA_COOKIE_NAME: tesco.userinfo
   USE_ONELOGIN: true
   ONELOGIN_ISSUER_URL: https://loginppe.ourtesco.com/oidc/2
   ONELOGIN_CALLBACK_PATH: /sso/auth/callback
