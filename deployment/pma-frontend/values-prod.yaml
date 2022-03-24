@@ -96,8 +96,8 @@ environment:
   INTEGRATION_NODE_BFF_URL: /
   STICK_COOKIES_TO_APPLICATION_PATH: false
   APPLICATION_SERVER_URL_ROOT: https://www.ourtesco.com
-  APPLICATION_PUBLIC_URL: /experience/yourcontribution
   APPLICATION_URL_ROOT: https://www.ourtesco.com
+  APPLICATION_PUBLIC_URL: /experience/yourcontribution
   APPLICATION_USER_DATA_COOKIE_NAME: tesco.userinfo
   USE_ONELOGIN: true
   ONELOGIN_ISSUER_URL: https://login.ourtesco.com/oidc/2
