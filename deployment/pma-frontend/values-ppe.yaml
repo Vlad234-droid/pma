@@ -103,6 +103,7 @@ environment:
   ONELOGIN_ISSUER_URL: https://loginppe.ourtesco.com/oidc/2
   ONELOGIN_CALLBACK_PATH: /sso/auth/callback
   ONELOGIN_REDIRECT_AFTER_LOGOUT_URL: https://loginppe.ourtesco.com/oidc/2/logout?logout=true
+  OIDC_AUTH_CALLBACK_PATH: /sso/auth/callback
   OIDC_GROUPS_ADMIN_ROLE: Admin
   OIDC_GROUPS_MANAGER_ROLE: Manager
   OIDC_GROUPS_VIEWER_ROLE: Viewer
