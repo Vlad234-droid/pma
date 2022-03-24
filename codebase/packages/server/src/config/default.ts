@@ -1,6 +1,5 @@
 export const defaultConfig = {
   applicationName: 'Performance Management Application',
-  defaultRole: 'Viewer',
   port: 9000,
   loggerRootName: 'server',
   oidcGroupFiltersRegex: [/GG-UK-TescoGlobal-(-[\w\d]+)+/],

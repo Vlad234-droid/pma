@@ -27,10 +27,6 @@ const environmentParameters: Array<keyof NodeJS.ProcessEnv> = [
   'OIDC_CLIENT_ID',
   'OIDC_CLIENT_SECRET',
   'OIDC_REFRESH_TOKEN_SECRET',
-  // AD groups tp roles assigments
-  'OIDC_GROUPS_ADMIN_ROLE',
-  'OIDC_GROUPS_MANAGER_ROLE',
-  'OIDC_GROUPS_VIEWER_ROLE',
   // identity
   'IDENTITY_CLIENT_ID',
   'IDENTITY_CLIENT_SECRET',

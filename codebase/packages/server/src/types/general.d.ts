@@ -52,11 +52,6 @@ declare namespace NodeJS {
     OIDC_CLIENT_SECRET: string;
     OIDC_REFRESH_TOKEN_SECRET: string;
 
-    // Roles groups
-    OIDC_GROUPS_ADMIN_ROLE: string;
-    OIDC_GROUPS_MANAGER_ROLE: string;
-    OIDC_GROUPS_VIEWER_ROLE: string;
-
     // Identity
     IDENTITY_CLIENT_ID: string;
     IDENTITY_CLIENT_SECRET: string;

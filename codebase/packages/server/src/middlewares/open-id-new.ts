@@ -8,7 +8,7 @@ import {
   OpenIdUserInfo,
 } from '@pma-connectors/onelogin';
 
-import { dniUserDataResolver } from '../config/auth-data';
+import { pmaUserDataResolver } from '../config/auth-data';
 import { isPROD, ProcessConfig } from '../config';
 
 import { dniUserRefreshPlugin } from './onelogin-plugins';
@@ -30,14 +30,10 @@ export const initializeOpenid = async ({
   oidcClientId,
   oidcClientSecret,
   oidcRefreshTokenSecret,
-  oidcGroupFiltersRegex,
-  oidcAdminGroups,
-  oidcManagerGroups,
   identityClientId,
   identityClientSecret,
   identityUserScopedTokenCookieSecret,
   identityUserScopedTokenCookieName,
-  defaultRoles,
 }: ProcessConfig): Promise<OpenIdRouter> => {
   const isProduction = isPROD(runtimeEnvironment());
 
@@ -151,8 +147,7 @@ export const initializeOpenid = async ({
           secure: isProduction,
           signed: isProduction,
           cookieShapeResolver: (userInfo: OpenIdUserInfo) =>
-            dniUserDataResolver(
-              { defaultRoles, oidcGroupFiltersRegex, oidcManagerGroups, oidcAdminGroups } as ProcessConfig,
+            pmaUserDataResolver(
               userInfo,
             ),
         },

@@ -1,7 +1,7 @@
 import { Response, Request } from 'express';
 import NodeCache from 'node-cache';
 import { getColleagueData, getColleagueUuid, getUserData, Optional, Plugin } from '@pma-connectors/onelogin';
-import { DniProfile } from '../../config/auth-data';
+import { PmaUserProfile } from '../../config/auth-data';
 import { Colleague } from '@pma-connectors/colleague-api';
 
 type ColleagueType = Pick<Colleague, 'colleagueUUID' | 'externalSystems'> &
@@ -66,7 +66,7 @@ export const dniUserRefreshPlugin = <O>(config: Config<O> & Optional): Plugin =>
       // if for some reason colleague data not found,
       // we are constructing user from data we should have
 
-      const userData = getUserData<DniProfile>(res);
+      const userData = getUserData<PmaUserProfile>(res);
       const employeeNumber = userData?.params?.employeeNumber;
       if (!employeeNumber) {
         throw Error('No Employee Number (IAM ID) found');
@@ -83,7 +83,7 @@ export const dniUserRefreshPlugin = <O>(config: Config<O> & Optional): Plugin =>
     }
   };
 
-  plugin.info = 'DNI User Refresh plugin';
+  plugin.info = 'User Refresh plugin';
   plugin.optional = config.optional || false;
 
   return plugin;

@@ -106,7 +106,4 @@ environment:
   OIDC_ISSUER_URL: https://login.ourtesco.com/oidc/2
   OIDC_AUTH_CALLBACK_PATH: /sso/auth/callback
   OIDC_REDIRECT_AFTER_LOGOUT_CALLBACK_PATH: https://login.ourtesco.com/oidc/2/logout?logout=true
-  OIDC_GROUPS_ADMIN_ROLE: Admin
-  OIDC_GROUPS_MANAGER_ROLE: Manager
-  OIDC_GROUPS_VIEWER_ROLE: Viewer
   IDENTITY_USER_SCOPED_TOKEN_COOKIE_NAME: identity-user-scoped-token

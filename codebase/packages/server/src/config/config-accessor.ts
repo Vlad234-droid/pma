@@ -46,13 +46,8 @@ export type ProcessConfig = {
   oidcClientSecret: () => string;
   oidcRefreshTokenSecret: () => string;
   // roles group assigments
-  oidcGroupFiltersRegex: () => RegExp[];
-  oidcAdminGroups: () => string[];
   oidcAuthCallbackPath: () => string;
-  oidcManagerGroups: () => string[];
   oidcRedirectAfterLogoutPath: () => string;
-  oidcViewerGroups: () => string[];
-  defaultRoles: () => string[];
   // identity
   identityClientId: () => string;
   identityClientSecret: () => string;
@@ -122,14 +117,7 @@ export class ConfigAccessor {
       oidcRedirectAfterLogoutPath: () =>
         processEnv.OIDC_REDIRECT_AFTER_LOGOUT_CALLBACK_PATH || defaultConfig.oidcRedirectAfterLogoutPath,
       // roles group assigments
-      oidcGroupFiltersRegex: () => defaultConfig.oidcGroupFiltersRegex,
-      oidcAdminGroups: () => (processEnv.OIDC_GROUPS_ADMIN_ROLE ? processEnv.OIDC_GROUPS_ADMIN_ROLE.split(/[,;]/) : []),
       oidcAuthCallbackPath: () => processEnv.OIDC_AUTH_CALLBACK_PATH || defaultConfig.oidcAuthCallbackPath,
-      oidcManagerGroups: () =>
-        processEnv.OIDC_GROUPS_MANAGER_ROLE ? processEnv.OIDC_GROUPS_MANAGER_ROLE.split(/[,;]/) : [],
-      oidcViewerGroups: () =>
-        processEnv.OIDC_GROUPS_VIEWER_ROLE ? processEnv.OIDC_GROUPS_VIEWER_ROLE.split(/[,;]/) : [],
-      defaultRoles: () => [defaultConfig.defaultRole],
       // identity
       identityClientId: () => processEnv.IDENTITY_CLIENT_ID,
       identityClientSecret: () => processEnv.IDENTITY_CLIENT_SECRET,

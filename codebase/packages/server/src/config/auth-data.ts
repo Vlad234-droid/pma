@@ -1,12 +1,11 @@
 import { OpenIdUserInfo } from '@pma-connectors/onelogin';
 import { ProcessConfig } from './config-accessor';
 
-export type DniProfile = {
+export type PmaUserProfile = {
   fullName?: string;
   firstName: string;
   lastName: string;
   email?: string;
-  roles: string[];
   params: {
     employeeNumber?: string;
   };
@@ -19,35 +18,13 @@ export type DniProfile = {
  * @param src
  * @returns
  */
-export const dniUserDataResolver = (
-  config: Pick<ProcessConfig, 'defaultRoles' | 'oidcGroupFiltersRegex' | 'oidcManagerGroups' | 'oidcAdminGroups'>,
+export const pmaUserDataResolver = (
   src: OpenIdUserInfo,
-): DniProfile => {
-  const { defaultRoles, oidcGroupFiltersRegex, oidcManagerGroups, oidcAdminGroups } = config;
-  console.log(` --> OpenID <dniUserDataResolver>: [src]: ${JSON.stringify(src)}`);
-
-  const userGroups = (
-    Array.isArray(src.groups) ? src.groups : ((src.groups as unknown as string) || '').split(',') || []
-  )
-    .filter(Boolean)
-    .filter((group: string) => oidcGroupFiltersRegex().some((rr) => rr.test(group)));
+  config: ProcessConfig | undefined = undefined,
+): PmaUserProfile => {
+  console.log(` --> OpenID <pmaUserDataResolver>: [src]: ${JSON.stringify(src)}`);
 
   const employeeNumber = (src.params?.employeeNumber as string) || (src.params?.EmployeeNumber as string) || undefined;
-
-  const userRoles: Set<string> = new Set(defaultRoles());
-
-  if (oidcManagerGroups().some((g) => userGroups.includes(g))) {
-    userRoles.add('Manager');
-  }
-
-  if (
-    oidcAdminGroups().some((g) => userGroups.includes(g)) ||
-    ['UKE12375178', 'UKE12375181'].some((adminEmployeeNumber) => adminEmployeeNumber === employeeNumber)
-  ) {
-    userRoles.add('Admin');
-  }
-
-  //console.log(` --> User roles: [${Array.from(userRoles.values())}]`);
 
   const getProperty = (obj: any, propName: string) => obj && obj[propName];
 
@@ -56,14 +33,13 @@ export const dniUserDataResolver = (
     firstName: src.given_name || getProperty(src.params, 'Firstname') || src.name?.split(/\s+/)[0],
     lastName: src.family_name || getProperty(src.params, 'Lastname') || src.name?.split(/\s+/)[1],
     email: getProperty(src, 'email') || src.preferred_username,
-    roles: Array.from(userRoles.values()),
     params: {
       employeeNumber,
     },
     updatedAt: !isNaN(Number(src.updated_at)) ? Number(src.updated_at) : undefined,
   };
 
-  console.log(` --> OpenID <dniUserDataResolver>: [result]: ${JSON.stringify(userInfo)}`);
+  console.log(` --> OpenID <pmaUserDataResolver>: [result]: ${JSON.stringify(userInfo)}`);
 
   return userInfo;
 };
