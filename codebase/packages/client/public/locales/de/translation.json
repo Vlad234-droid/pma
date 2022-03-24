@@ -208,6 +208,17 @@
   "enter_template_name": "Enter template name",
   "maximum_upload_size": "Maximum upload size {{ maxSize }}",
   "drop_file_here": "Drop file here or click to upload",
-  "forms": "Forms"
-  "min_valid_date": "Please input date is greater than {{- minDate }}"
+  "forms": "Forms",
+  "min_valid_date": "Please input date is greater than {{- minDate }}",
+  "organization": "Organization",
+  "start_date_end_date": "Start Date-End date",
+  "created_by": "Created by",
+  "action": "Action",
+  "status_performance_cycles": "{{ status }} Performance cycles",
+  "drafts": "Drafts",
+  "active_cycles": "Active",
+  "inactive_cycles": "Inactive",
+  "registered_cycles": "Registered",
+  "started_cycles": "Started",
+  "create_performance_cycle": "Create performance cycle"
 }

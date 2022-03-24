@@ -1,6 +1,7 @@
 import React, { FC, useEffect, useMemo } from 'react';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import { useSelector } from 'react-redux';
+import { v4 as uuid } from 'uuid';
 import {
   colleagueUUIDSelector,
   ConfigEntriesActions,
@@ -8,20 +9,48 @@ import {
   performanceCycleByUuidSelector,
   performanceCycleFormsByUuidSelector,
   performanceCycleMetaSelector,
+  Status,
 } from '@pma/store';
 import useDispatch from 'hooks/useDispatch';
+import { Page } from 'pages';
+import { buildPath } from 'features/Routes';
+import { useToast, Variant } from 'features/Toast';
 import PerformanceCycleForm from './components/PerformanceCycleForm';
 
 const CreatePerformanceCycle: FC = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { addToast } = useToast();
   const { performanceCycleUuid } = useParams<{ performanceCycleUuid: string }>();
   const colleagueUuid = useSelector(colleagueUUIDSelector);
 
   const cycle = useSelector(performanceCycleByUuidSelector(performanceCycleUuid as string));
   const cycleForms = useSelector(performanceCycleFormsByUuidSelector(performanceCycleUuid as string));
-  const { loaded: performanceCycleLoaded } = useSelector(performanceCycleMetaSelector);
+  const { loaded: performanceCycleLoaded, status, error } = useSelector(performanceCycleMetaSelector);
 
   const getConfigEntriesByUuid = (uuid: string) => dispatch(ConfigEntriesActions.getConfigEntriesByUuid({ uuid }));
+
+  useEffect(() => {
+    if (status === Status.SUCCEEDED) {
+      navigate({
+        pathname: buildPath(Page.PERFORMANCE_CYCLE),
+        search: new URLSearchParams({ status: cycle.status }).toString(),
+      });
+      dispatch(PerformanceCycleActions.resetMetaStatusRequest());
+    }
+    if (status === Status.FAILED) {
+      error
+        ?.filter(({ message }) => message)
+        ?.forEach(({ message }) => {
+          addToast({
+            id: uuid(),
+            title: 'Error',
+            variant: Variant.ERROR,
+            description: message,
+          });
+        });
+    }
+  }, [status]);
 
   useEffect(() => {
     if (performanceCycleUuid !== 'new')
@@ -101,6 +130,7 @@ const CreatePerformanceCycle: FC = () => {
       name: cycle?.name,
       metadata: cycle?.metadata,
       entryConfigKey: cycle?.entryConfigKey,
+      forms: cycleForms || [],
     };
   }, [performanceCycleUuid, cycle]);
 
@@ -115,7 +145,6 @@ const CreatePerformanceCycle: FC = () => {
       onSubmit={handleSubmit}
       getConfigEntriesByUuid={getConfigEntriesByUuid}
       defaultValues={defaultValues}
-      forms={cycleForms || []}
     />
   );
 };

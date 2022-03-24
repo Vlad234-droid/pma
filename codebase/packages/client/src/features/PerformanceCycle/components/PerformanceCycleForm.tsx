@@ -27,10 +27,9 @@ type Props = {
   onSubmit: (data: any) => void;
   defaultValues?: any;
   getConfigEntriesByUuid: (uuid: string) => void;
-  forms: Array<any>;
 };
 
-const PerformanceCycleForm: FC<Props> = ({ onSubmit, defaultValues, forms }) => {
+const PerformanceCycleForm: FC<Props> = ({ onSubmit, defaultValues }) => {
   const dispatch = useDispatch();
   const { css } = useStyle();
   const { t } = useTranslation();
@@ -52,11 +51,16 @@ const PerformanceCycleForm: FC<Props> = ({ onSubmit, defaultValues, forms }) => 
 
   const formValues = getValues();
 
-  const [properties = {}, timelinePoints = [], template] = watch([
+  const [properties = {}, timelinePoints = [], template, forms = []] = watch([
     'metadata.cycle.properties',
     'metadata.cycle.timelinePoints',
     'template',
+    'forms',
   ]);
+
+  const handleChangeTemplate = (template) => {
+    setValue('template', template, { shouldValidate: true });
+  };
 
   const templateDetails: any | undefined = useSelector(processTemplateByUuidSelector(template?.uuid));
   const mappingKeys = useSelector(performanceCycleMappingKeys);
@@ -72,6 +76,7 @@ const PerformanceCycleForm: FC<Props> = ({ onSubmit, defaultValues, forms }) => 
       setValue('metadata.cycle', rest);
       setValue('metadata.cycle.properties', properties);
       setValue('metadata.cycle.timelinePoints', timelinePoints);
+      setValue('forms', templateDetails.forms);
     }
   }, [templateDetails?.cycle]);
 
@@ -117,7 +122,7 @@ const PerformanceCycleForm: FC<Props> = ({ onSubmit, defaultValues, forms }) => 
           error={get(errors, 'entryConfigKey.message')}
         />
         <div className={css({ marginBottom: '23px' })}>{get(formValues, 'template.fileName', '')}</div>
-        <TemplatesModal onSelect={(template) => setValue('template', template, { shouldValidate: true })} />
+        <TemplatesModal onSelect={handleChangeTemplate} />
       </TileWrapper>
       <TileWrapper
         customStyle={{
@@ -298,7 +303,7 @@ const PerformanceCycleForm: FC<Props> = ({ onSubmit, defaultValues, forms }) => 
           })}
         </div>
       </TileWrapper>
-      <FormsViewer forms={template?.forms || forms || []} isActive={!!(template?.forms || forms)} />
+      <FormsViewer forms={forms} isActive={forms.length} />
       <div className={css({ display: 'flex', justifyContent: 'flex-end', paddingBottom: '100px', maxWidth: '1300px' })}>
         {/*@ts-ignore*/}
         <Button

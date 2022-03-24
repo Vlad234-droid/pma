@@ -23,6 +23,8 @@ const getStatus = (i: number, currentStep?: number, currentStatus?: Status, isVa
   if (currentStep === i && currentStatus) return Status[currentStatus];
 };
 
+const isActive = (statuses: Status[] | undefined, i) => statuses?.[i] !== Status.NOT_STARTED;
+
 export const StepIndicatorBasic: FC<StepIndicatorProps> = ({
   currentStep,
   currentStatus,
@@ -106,8 +108,9 @@ export const StepIndicatorBasic: FC<StepIndicatorProps> = ({
 
   const titlesArray = titles.map((title, i) => {
     const textAlign = getTextAlign(titles?.length, i);
+    const active = isActive(statuses, i);
     return (
-      <span className={css(title2Style({ textAlign }))} key={`title${i}`}>
+      <span className={css(title2Style({ textAlign, active }))} key={`title${i}`}>
         {title}
       </span>
     );
@@ -115,8 +118,9 @@ export const StepIndicatorBasic: FC<StepIndicatorProps> = ({
 
   const descriptionArray = descriptions.map((title, i) => {
     const textAlign = getTextAlign(descriptions?.length, i);
+    const active = isActive(statuses, i);
     return (
-      <span className={css(descriptionStyle({ textAlign }))} key={`desc${i}`}>
+      <span className={css(descriptionStyle({ textAlign, active }))} key={`desc${i}`}>
         {title}
       </span>
     );
@@ -177,8 +181,8 @@ const titleStyle: Rule = ({
   marginBottom: '30px',
 });
 
-const title2Style: CreateRule<{ textAlign: string }> =
-  ({ textAlign }) =>
+const title2Style: CreateRule<{ textAlign: string; active: boolean }> =
+  ({ textAlign, active }) =>
   // @ts-ignore
   ({ theme }) => {
     const {
@@ -196,11 +200,12 @@ const title2Style: CreateRule<{ textAlign: string }> =
       paddingTop: '8px',
       flex: '0 1 0',
       textAlign: textAlign,
+      color: active ? theme.colors.base : theme.colors.backgroundDarkest,
     };
   };
 
-const descriptionStyle: CreateRule<{ textAlign: string }> =
-  ({ textAlign }) =>
+const descriptionStyle: CreateRule<{ textAlign: string; active: boolean }> =
+  ({ textAlign, active }) =>
   // @ts-ignore
   ({ theme }) => {
     const {
@@ -216,6 +221,7 @@ const descriptionStyle: CreateRule<{ textAlign: string }> =
       fontSize,
       flex: '0 1 0',
       textAlign: textAlign,
+      color: active ? theme.colors.base : theme.colors.backgroundDarkest,
     };
   };
 

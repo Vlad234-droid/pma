@@ -48,7 +48,7 @@ const modalCloseOptionStyle: Rule = () => {
   };
 };
 
-const modalTitleOptionStyle: Rule = () => {
+const modalTitleOptionStyle: Rule = ({ theme }) => {
   return {
     position: 'fixed',
     top: '22px',
@@ -58,6 +58,7 @@ const modalTitleOptionStyle: Rule = () => {
     color: 'white',
     fontSize: '20px',
     lineHeight: '24px',
+    fontWeight: theme.font.weight.bold,
   };
 };
 

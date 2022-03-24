@@ -63,7 +63,10 @@ export const createPerformanceCyclesEpic: Epic = (action$, _, { api }) =>
         map(({ data }) => {
           return createPerformanceCycle.success(data);
         }),
-        catchError(({ errors }) => of(createPerformanceCycle.failure(errors))),
+        catchError((error) => {
+          const { errors } = error?.data || {};
+          return of(updatePerformanceCycle.failure(errors));
+        }),
       );
     }),
   );
@@ -77,7 +80,10 @@ export const updatePerformanceCyclesEpic: Epic = (action$, _, { api }) =>
         map(({ data }) => {
           return updatePerformanceCycle.success(data);
         }),
-        catchError(({ errors }) => of(updatePerformanceCycle.failure(errors))),
+        catchError((error) => {
+          const { errors } = error?.data || {};
+          return of(updatePerformanceCycle.failure(errors));
+        }),
       );
     }),
   );
