@@ -19,7 +19,6 @@ export const myInboxConfig = async ({
       configEnvironment,
       appName,
       logoutPath,
-      disableSplunk: true,
     });
 
     return m;

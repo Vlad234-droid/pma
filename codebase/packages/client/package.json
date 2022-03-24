@@ -47,7 +47,7 @@
     "@dex-runtime/root-state": "0.5.1",
     "@energon-components/hooks": "0.9.0",
     "@hookform/resolvers": "^2.8.1",
-    "@my-inbox/client": "^0.3.17",
+    "@my-inbox/client": "0.5.4",
     "@pma/openapi": "1.0.0",
     "@pma/pdf-renderer": "1.0.0",
     "@react-aria/button": "^3.3.3",

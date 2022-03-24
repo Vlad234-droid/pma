@@ -1518,13 +1518,6 @@
     "@dex-ddl/core" "0.1.43"
     rxjs "7.3.0"
 
-"@dex-runtime/routing@0.5.0":
-  version "0.5.0"
-  resolved "https://nexus.ourtesco.com/repository/colleague-ui-private/@dex-runtime/routing/-/routing-0.5.0.tgz#70619fe03c5063922216c27a35e996c2a8c5bbec"
-  integrity sha512-Ap8dpgqUkAs8313gIFI5EiH7AoO9fvbutRXysCIxd/okmecgacEvLkIVmxHuk6AKJ1hgG0IzGWwWNTq6hRk0FA==
-  dependencies:
-    query-string "7.0.0"
-
 "@discoveryjs/json-ext@^0.5.0", "@discoveryjs/json-ext@^0.5.3":
   version "0.5.6"
   resolved "https://registry.yarnpkg.com/@discoveryjs/json-ext/-/json-ext-0.5.6.tgz#d5e0706cf8c6acd8c6032f8d54070af261bbbb2f"
@@ -1743,15 +1736,6 @@
   dependencies:
     "@energon/fetch-client" "0.14.3"
     cross-fetch "3.0.4"
-
-"@energon-connectors/identity-api@0.10.2":
-  version "0.10.2"
-  resolved "https://nexus.ourtesco.com/repository/colleague-ui-private/@energon-connectors/identity-api/-/identity-api-0.10.2.tgz#44e484b4bbe9ff5430e148ca6e21502fcc0acc18"
-  integrity sha512-8f3whQc9JSTxFcWW78xBNBFb7JGg98hzJrwUbJfV4rJip6jf45CD0Pzt+mvgPbQvcmV4MyZex0Tpuil7sb8esg==
-  dependencies:
-    "@energon-connectors/core" "0.11.1"
-    "@energon/rest-api-consumer" "0.8.9"
-    "@energon/rest-api-definition" "0.6.9"
 
 "@energon/app-utils@0.5.4":
   version "0.5.4"
@@ -3486,16 +3470,13 @@
     call-me-maybe "^1.0.1"
     glob-to-regexp "^0.3.0"
 
-"@my-inbox/client@^0.3.17":
-  version "0.3.17"
-  resolved "https://nexus.ourtesco.com/repository/colleague-ui-private/@my-inbox/client/-/client-0.3.17.tgz#4a16c1d16beff61620d6cb95408d934931c453ab"
-  integrity sha512-YtLCuakTWi6wvzIKaIooKu4ddremvNFAwFxErLIGWpZIseXuKLD2/++/GLIkEAg6TaQK4cqn8XpJdRHjKUlo+w==
+"@my-inbox/client@0.5.4":
+  version "0.5.4"
+  resolved "https://nexus.ourtesco.com/repository/colleague-ui-private/@my-inbox/client/-/client-0.5.4.tgz#ab6d6ac1bb8a253df1606daa985edb39c88a1aaa"
+  integrity sha512-5Gp2/1VvI+sg+lbvcHf5gYuBBlziYjsqrBk7Ufa6Sq/rTetyJ+al18gS4a/jxgm25sK5KSLO8wSMU+J3oqhcnQ==
   dependencies:
     "@dex-ddl/core" "0.1.102"
-    "@dex-runtime/routing" "0.5.0"
-    "@energon-connectors/identity-api" "0.10.2"
     "@energon/date-utils" "0.17.0"
-    "@energon/express-middlewares" "0.23.3"
     "@energon/onelogin" "1.35.1"
     "@energon/rest-api-provider" "0.5.2"
     "@energon/splunk-logger" "0.31.1"
@@ -3515,18 +3496,14 @@
     react-virtualized "git+https://git@github.com/remorses/react-virtualized-fixed-import.git#9.22.3"
     redux "4.0.4"
     redux-first-router "2.1.1"
-    single-spa-react "4.1.1"
 
-"@my-inbox/middleware@^0.2.22":
-  version "0.2.22"
-  resolved "https://nexus.ourtesco.com/repository/colleague-ui-private/@my-inbox/middleware/-/middleware-0.2.22.tgz#8319f70373630d73043ec969f45b1863af62a123"
-  integrity sha512-hHltxnr//NukGa72OnhkgFT1CL/Dqu4+zODo8CyjwL3Y9wBXuyBtSaySqFO1WPpIOvWxwhVPbMGe5fBWujZHgA==
+"@my-inbox/middleware@0.3.4":
+  version "0.3.4"
+  resolved "https://nexus.ourtesco.com/repository/colleague-ui-private/@my-inbox/middleware/-/middleware-0.3.4.tgz#dde5b789bb4c2a0e7a948cb0ec017c407c087069"
+  integrity sha512-fu+dbyLrz5wQ0lB+Rfz+zwZ/5jqJdj2wwbaaDxLhhAjU7tI3gFZovoLbq1d6drRC0MB/CrwyifZ9YedTCSBSkg==
   dependencies:
     "@dex-ddl/core" "0.1.102"
-    "@dex-runtime/routing" "0.5.0"
-    "@energon-connectors/identity-api" "0.10.2"
     "@energon/date-utils" "0.17.0"
-    "@energon/express-middlewares" "0.23.3"
     "@energon/onelogin" "1.35.1"
     "@energon/rest-api-provider" "0.5.2"
     "@energon/splunk-logger" "0.31.1"
@@ -3546,7 +3523,6 @@
     react-virtualized "git+https://git@github.com/remorses/react-virtualized-fixed-import.git#9.22.3"
     redux "4.0.4"
     redux-first-router "2.1.1"
-    single-spa-react "4.1.1"
 
 "@nestjs/common@8.2.5":
   version "8.2.5"
@@ -19898,16 +19874,6 @@ query-string@5.1.1:
     object-assign "^4.1.0"
     strict-uri-encode "^1.0.0"
 
-query-string@7.0.0:
-  version "7.0.0"
-  resolved "https://registry.yarnpkg.com/query-string/-/query-string-7.0.0.tgz#aaad2c8d5c6a6d0c6afada877fecbd56af79e609"
-  integrity sha512-Iy7moLybliR5ZgrK/1R3vjrXq03S13Vz4Rbm5Jg3EFq1LUmQppto0qtXz4vqZ386MSRjZgnTSZ9QC+NZOSd/XA==
-  dependencies:
-    decode-uri-component "^0.2.0"
-    filter-obj "^1.1.0"
-    split-on-first "^1.0.0"
-    strict-uri-encode "^2.0.0"
-
 query-string@^4.1.0:
   version "4.3.4"
   resolved "https://registry.yarnpkg.com/query-string/-/query-string-4.3.4.tgz#bbb693b9ca915c232515b228b1a02b609043dbeb"
@@ -21994,11 +21960,6 @@ simplebar@^4.2.3:
     lodash.memoize "^4.1.2"
     lodash.throttle "^4.1.1"
     resize-observer-polyfill "^1.5.1"
-
-single-spa-react@4.1.1:
-  version "4.1.1"
-  resolved "https://registry.yarnpkg.com/single-spa-react/-/single-spa-react-4.1.1.tgz#c8aa84aec8b4bc5d1c1768dc0d4161713a7d6459"
-  integrity sha512-3g/mnPnbxrcVUdupqxhYRnuV25+YC2acrlGTcA/rK6RjNBoMdMvenbN0K2aoypZYtB5dzIFkCUJMx7GUZChPYg==
 
 single-spa-react@^4.2.0:
   version "4.6.0"

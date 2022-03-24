@@ -16,7 +16,7 @@
     "@dex-ddl/core": "0.1.38",
     "@energon-connectors/core": "0.11.2",
     "@energon/onelogin": "^1.35.2",
-    "@my-inbox/middleware": "^0.2.22",
+    "@my-inbox/middleware": "0.3.4",
     "@types/cookie-parser": "^1.4.2",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
