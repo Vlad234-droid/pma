@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react';
 
-import { Button, useStyle } from '@dex-ddl/core';
+import { Button, useStyle, Rule } from '@dex-ddl/core';
 
 import { Icon } from 'components/Icon';
 import { Trans, useTranslation } from 'components/Translation/Translation';
@@ -17,7 +17,7 @@ type Props = {
 };
 
 export const Buttons: FC<Props> = ({ reviewType, updateReviewStatus, isDisabled }) => {
-  const { css, theme } = useStyle();
+  const { css } = useStyle();
   const { t } = useTranslation();
   const [isOpenDeclinePopup, setIsOpenDeclinePopup] = useState(false);
   const [isOpenApprovePopup, setIsOpenApprovePopup] = useState(false);
@@ -48,39 +48,13 @@ export const Buttons: FC<Props> = ({ reviewType, updateReviewStatus, isDisabled 
   };
 
   return (
-    <div
-      className={css({
-        padding: '24px',
-        display: 'flex',
-        justifyContent: 'space-between',
-        flexWrap: 'wrap',
-        alignItems: 'center',
-        gap: '16px',
-      })}
-    >
-      <div
-        className={css({
-          fontSize: '16px',
-          lineHeight: '20px',
-          fontWeight: theme.font.weight.bold,
-        })}
-      >{`${t('approve_or_decline', 'Approve or decline')} ${title[reviewType]}`}</div>
+    <div className={css(containerStyle)}>
+      <div className={css(wrapperStyle)}>{`${t('approve_or_decline', 'Approve or decline')} ${title[reviewType]}`}</div>
       <div>
         <div className={css({ display: 'inline-block' })}>
           <Button
             isDisabled={isDisabled}
-            styles={[
-              {
-                background: theme.colors.white,
-                border: `1px solid ${theme.colors.tescoBlue}`,
-                fontSize: '16px',
-                lineHeight: '20px',
-                fontWeight: theme.font.weight.bold,
-                color: `${theme.colors.tescoBlue}`,
-                margin: '0px 4px',
-              },
-              isDisabled ? { opacity: '0.4' } : {},
-            ]}
+            styles={[defaultButtonStyle, isDisabled ? { opacity: '0.4' } : {}]}
             onPress={handleDeclineBtnClick}
           >
             <Icon graphic='decline' iconStyles={{ paddingRight: '8px' }} />
@@ -90,16 +64,7 @@ export const Buttons: FC<Props> = ({ reviewType, updateReviewStatus, isDisabled 
         <div className={css({ display: 'inline-block' })}>
           <Button
             isDisabled={isDisabled}
-            styles={[
-              {
-                background: `${theme.colors.tescoBlue}`,
-                fontSize: '16px',
-                lineHeight: '20px',
-                fontWeight: theme.font.weight.bold,
-                margin: '0px 4px 1px 4px',
-              },
-              isDisabled ? { opacity: '0.4' } : {},
-            ]}
+            styles={[inverseButtonStyle, isDisabled ? { opacity: '0.4' } : {}]}
             onPress={() => setIsOpenApprovePopup(true)}
           >
             <Icon graphic='check' invertColors={true} iconStyles={{ paddingRight: '8px' }} />
@@ -120,3 +85,33 @@ export const Buttons: FC<Props> = ({ reviewType, updateReviewStatus, isDisabled 
     </div>
   );
 };
+
+const containerStyle: Rule = {
+  padding: '24px',
+  display: 'flex',
+  justifyContent: 'space-between',
+  flexWrap: 'wrap',
+  alignItems: 'center',
+  gap: '16px',
+};
+
+const wrapperStyle: Rule = ({ theme }) => ({
+  ...theme.font.fixed.f16,
+  fontWeight: theme.font.weight.bold,
+});
+
+const defaultButtonStyle: Rule = ({ theme }) => ({
+  background: theme.colors.white,
+  border: `1px solid ${theme.colors.tescoBlue}`,
+  ...theme.font.fixed.f16,
+  fontWeight: theme.font.weight.bold,
+  color: `${theme.colors.tescoBlue}`,
+  margin: '0px 4px',
+});
+
+const inverseButtonStyle: Rule = ({ theme }) => ({
+  background: `${theme.colors.tescoBlue}`,
+  ...theme.font.fixed.f16,
+  fontWeight: theme.font.weight.bold,
+  margin: '0px 4px 1px 4px',
+});
