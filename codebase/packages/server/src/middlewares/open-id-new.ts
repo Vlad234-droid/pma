@@ -1,8 +1,8 @@
 import {
   initializeOpenidMiddleware,
   identityTokenSwapPlugin,
+  identityClientScopedTokenPlugin,
   pinoLogger,
-  colleagueApiPlugin,
   userDataPlugin,
   OpenIdRouter,
   OpenIdUserInfo,
@@ -10,8 +10,6 @@ import {
 
 import { pmaUserDataResolver } from '../config/auth-data';
 import { isPROD, ProcessConfig } from '../config';
-
-import { dniUserRefreshPlugin } from './onelogin-plugins';
 
 export const initializeOpenid = async ({
   runtimeEnvironment,
@@ -36,6 +34,7 @@ export const initializeOpenid = async ({
   identityUserScopedTokenCookieName,
 }: ProcessConfig): Promise<OpenIdRouter> => {
   const isProduction = isPROD(runtimeEnvironment());
+  const identityIdAndSecret = `${identityClientId()}:${identityClientSecret()}`;
 
   const openidMiddleware = initializeOpenidMiddleware({
     runtimeEnvironment: runtimeEnvironment(),
@@ -137,21 +136,6 @@ export const initializeOpenid = async ({
     requireAccessToken: true,
 
     plugins: [
-      userDataPlugin({
-        optional: false,
-        cookieConfig: {
-          cookieName: applicationUserDataCookieName(),
-          secret: applicationUserDataCookieSecret(),
-          path: stickCookiesToApplicationPath() ? applicationPublicUrl() : '/',
-          httpOnly: false,
-          secure: isProduction,
-          signed: isProduction,
-          cookieShapeResolver: (userInfo: OpenIdUserInfo) =>
-            pmaUserDataResolver(
-              userInfo,
-            ),
-        },
-      }),
       identityTokenSwapPlugin({
         identityClientId: identityClientId(),
         identityClientSecret: identityClientSecret(),
@@ -166,24 +150,26 @@ export const initializeOpenid = async ({
           signed: isProduction,
         },
       }),
-      colleagueApiPlugin({
-        optional: true,
-        apiEnv: apiEnv,
-        // ====================================================
-        // Omit cookie config to do not store data into cookies
-        // cookieConfig: {
-        //   cookieName: applicationColleagueCookieName(),
-        //   secret: applicationColleagueCookieSecret(),
-        //   path: stickCookiesToApplicationPath() ? applicationPublicUrl() : '/',
-        //   httpOnly: true,
-        //   secure: isProduction,
-        //   signed: isProduction,
-        //   cookieShapeResolver: (colleague: Colleague) => colleagueInfoResolver({} as ProcessConfig, colleague),
-        // },
-      }),
-      dniUserRefreshPlugin({
-        optional: false,
+      identityClientScopedTokenPlugin({
+        apiEnv,
+        identityClientId: identityClientId(),
+        identityClientSecret: identityClientSecret(),
         cache: true,
+      }),
+      userDataPlugin({
+        optional: false,
+        cookieConfig: {
+          cookieName: applicationUserDataCookieName(),
+          secret: applicationUserDataCookieSecret(),
+          path: stickCookiesToApplicationPath() ? applicationPublicUrl() : '/',
+          httpOnly: false,
+          secure: isProduction,
+          signed: isProduction,
+          cookieShapeResolver: (userInfo: OpenIdUserInfo) =>
+            pmaUserDataResolver(
+              userInfo,
+            ),
+        },
       }),
     ],
   });
