@@ -54,7 +54,6 @@ const ShareWidget: FC<Props> = ({ customStyle, stopShare, sharing }) => {
   const manager = info.manager;
 
   const isManagerShared = isManager && isShared;
-  const isViewSharedObjectivesActive = stopShare && !sharedObjectives.length;
   const sharedObjectivesCount = sharedObjectives.length;
   const formElementsCount = formElements.length;
   const isValidPathParams = pathParams.colleagueUuid;
@@ -113,7 +112,7 @@ const ShareWidget: FC<Props> = ({ customStyle, stopShare, sharing }) => {
         },
       ];
     }
-    if (isManagerShared) {
+    if (!stopShare && isManagerShared) {
       return [
         t('share_objectives', 'Share Objectives'),
         t('share_objectives_on_description', 'You are currently sharing your objectives with your team'),
