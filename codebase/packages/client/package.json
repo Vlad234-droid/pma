@@ -4,7 +4,7 @@
   "license": "MIT",
   "main": "src/index.tsx",
   "scripts": {
-    "run:dev": "cross-env REACT_APP_INTEGRATION_MODE=standalone PORT=9000 env-cmd --silent --no-override --fallback -f .env react-app-rewired start",
+    "run:dev": "cross-env REACT_APP_INTEGRATION_MODE=standalone SKIP_PREFLIGHT_CHECK=true PORT=9000 env-cmd --silent --no-override --fallback -f .env react-app-rewired start",
     "build:prod": "cross-env REACT_APP_INTEGRATION_MODE=standalone env-cmd --silent --no-override --fallback -f .env.${BUILD_ENV} react-app-rewired build",
     "test": "cross-env BABEL_ENV=test jest",
     "test:coverage": "yarn test --coverage --watchAll",

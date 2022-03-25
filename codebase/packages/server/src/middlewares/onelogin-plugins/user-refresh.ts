@@ -31,13 +31,13 @@ type Config<O> = {
 /**
  * Plugin cache instance
  */
-const dniUserRefreshCache = new NodeCache();
+const userRefreshCache = new NodeCache();
 
 /**
  * A plugin middleware to be used in onelogin.
  * It gets the data from the colleauge API relies on identity data in response the object.
  */
-export const dniUserRefreshPlugin = <O>(config: Config<O> & Optional): Plugin => {
+export const userRefreshPlugin = <O>(config: Config<O> & Optional): Plugin => {
   const plugin: Plugin = async (req: Request, res: Response) => {
     const {
       shouldRun = () => true,
@@ -55,7 +55,7 @@ export const dniUserRefreshPlugin = <O>(config: Config<O> & Optional): Plugin =>
     }
 
     if (cache) {
-      const dniUserRefresh = dniUserRefreshCache.get(colleagueUUID);
+      const dniUserRefresh = userRefreshCache.get(colleagueUUID);
       if (typeof dniUserRefresh === 'string' && dniUserRefresh === 'REFRESHED') {
         return;
       }
@@ -79,7 +79,7 @@ export const dniUserRefreshPlugin = <O>(config: Config<O> & Optional): Plugin =>
     }
 
     if (cache) {
-      dniUserRefreshCache.set(colleagueUUID, 'REFRESHED', cacheTtl);
+      userRefreshCache.set(colleagueUUID, 'REFRESHED', cacheTtl);
     }
   };
 
