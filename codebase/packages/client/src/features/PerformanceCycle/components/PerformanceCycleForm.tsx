@@ -154,19 +154,12 @@ const PerformanceCycleForm: FC<Props> = ({ onSubmit, defaultValues }) => {
           </div>
           <div className={css(itemStyle)}>
             <Field
-              readonly
               name={'metadata.cycle.properties.pm_cycle_end_time'}
               label={t('end_day', 'End day')}
               withIcon={false}
               Wrapper={Item}
               Element={Datepicker}
-              value={
-                cycleStartTime
-                  ? formatDateTime(
-                      addYearToDateString(get(formValues, 'metadata.cycle.properties.pm_cycle_start_time')),
-                    )
-                  : undefined
-              }
+              value={get(formValues, 'metadata.cycle.properties.pm_cycle_end_time')}
               setValue={methods.setValue}
             />
           </div>

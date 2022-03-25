@@ -28,7 +28,7 @@ const Select: FC<SelectField> = ({ domRef, name, options, placeholder, value, on
   useEventListener('click', handleClickOutside);
 
   useEffect(() => {
-    setSelected(getSelectedOption(options, value));
+    value !== undefined && setSelected(getSelectedOption(options, value));
   }, [value, options]);
 
   const toggleList = () => {
