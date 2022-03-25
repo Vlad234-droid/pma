@@ -4,7 +4,6 @@ export { default as Widgets } from './components/Widgets';
 export { default as Section } from './components/Section';
 export { default as StatusBadge } from './components/StatusBadge';
 export { default as Accordion, ObjectiveHeader, ObjectivePanel } from './components/Accordion';
-export { default as Reviews } from './components/Reviews';
 export { ReviewWidget } from './components/Reviews';
 export { ShareWidget } from './components/ShareWidget';
 export { CreateButton, EditButton } from './components/Buttons';

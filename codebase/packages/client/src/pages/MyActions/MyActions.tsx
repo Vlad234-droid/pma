@@ -6,7 +6,7 @@ const MyActions: FC = () => {
   const { css } = useStyle();
 
   return (
-    <div className={css({ margin: '8px' })}>
+    <div data-test-id={'MyActions'} className={css({ margin: '8px' })}>
       <Actions />
     </div>
   );
