@@ -22,8 +22,6 @@ const notHaveAccessMessage = `
 `;
 
 const systemNotAvailableMessage = `
-   not_have_access_to_this_system
-   
    system_not_available_at_the_moment
    
    please_try_again

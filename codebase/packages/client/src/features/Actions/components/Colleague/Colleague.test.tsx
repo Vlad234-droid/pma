@@ -2,12 +2,14 @@
 import React from 'react';
 // @ts-ignore
 import { renderWithTheme as render, screen } from 'utils/test';
-import { fireEvent } from '@testing-library/react';
+import { fireEvent, waitFor } from '@testing-library/react';
 
 import { Colleague } from './Colleague';
 // @ts-ignore
 import { Status } from 'config/enum';
-import { ReviewsActions, SchemaActions } from '@pma/store';
+import { FormType, ReviewsActions, SchemaActions } from '@pma/store';
+import { act } from 'react-dom/test-utils';
+import { SchemaFixture } from '../../../../utils/test/fixtures/schema';
 
 describe('<Colleague />', () => {
   const props = {
@@ -23,7 +25,7 @@ describe('<Colleague />', () => {
       reviews: [
         {
           uuid: 'reviews_uuid_mock',
-          type: 'EYR',
+          type: 'MYR',
           status: 'WAITING_FOR_APPROVAL',
           number: 1,
         },
@@ -61,17 +63,109 @@ describe('<Colleague />', () => {
     });
 
     it('should render open panel', async () => {
+      const reviews = {
+        data: [
+          {
+            uuid: 'f5d33310-b91b-4943-acca-00814ce440b4',
+            type: 'OBJECTIVE',
+            status: 'APPROVED',
+            number: 1,
+            tlPointUuid: '3467a739-53f0-4546-b64e-c2e5dfad26c4',
+            properties: {
+              mapJson: {
+                how_over_achieved: 'how_over_achieved',
+              },
+            },
+            lastUpdatedTime: '2022-03-24T07:42:59.800Z',
+            changeStatusReason: null,
+          },
+          {
+            uuid: '0a12aac4-06c4-4304-ba82-8476a64fbb34',
+            type: 'OBJECTIVE',
+            status: 'APPROVED',
+            number: 2,
+            tlPointUuid: '3467a739-53f0-4546-b64e-c2e5dfad26c4',
+            properties: {
+              mapJson: {
+                how_over_achieved: 'how_over_achieved',
+              },
+            },
+            lastUpdatedTime: '2022-03-24T07:42:59.675Z',
+            changeStatusReason: null,
+          },
+          {
+            uuid: 'a8a2870f-fc00-41ca-aa71-73a6022bd7b5',
+            type: 'OBJECTIVE',
+            status: 'APPROVED',
+            number: 3,
+            tlPointUuid: '3467a739-53f0-4546-b64e-c2e5dfad26c4',
+            properties: {
+              mapJson: {
+                how_over_achieved: 'how_over_achieved',
+              },
+            },
+            lastUpdatedTime: '2022-03-24T07:42:59.794Z',
+            changeStatusReason: null,
+          },
+          {
+            uuid: 'reviews_uuid_mock',
+            type: 'MYR',
+            status: 'WAITING_FOR_APPROVAL',
+            number: 1,
+            tlPointUuid: 'e226a9a3-20ee-44e5-8ced-042b7fb12c46',
+            properties: {
+              mapJson: {
+                [FormType.TEXT_FIELD]: 'how_over_achieved',
+              },
+            },
+            lastUpdatedTime: '2022-03-24T09:44:08.223Z',
+            changeStatusReason: null,
+          },
+        ],
+        meta: {
+          loading: false,
+          loaded: true,
+          error: null,
+          status: null,
+          updating: false,
+          updated: false,
+        },
+      };
+      const schema = new SchemaFixture().withMetadata().withForm().state;
+
       const clearSchemaDataMock = jest.spyOn(SchemaActions, 'clearSchemaData');
       const getColleagueReviewsMock = jest.spyOn(ReviewsActions, 'getColleagueReviews');
+      const updateReviewStatusMock = jest.spyOn(ReviewsActions, 'updateReviewStatus');
       const getSchemaMock = jest.spyOn(SchemaActions, 'getSchema');
-      render(<Colleague {...props} />);
-      fireEvent.click(screen.getByRole('heading'));
 
-      expect(props.setColleagueExpanded).toBeCalled();
-      expect(clearSchemaDataMock).toBeCalled();
-      expect(getSchemaMock).toBeCalledWith({ colleagueUuid: '10000000-0000-0000-0000-000000000003' });
-      expect(getColleagueReviewsMock).toBeCalledWith({
-        pathParams: { colleagueUuid: '10000000-0000-0000-0000-000000000003', cycleUuid: 'CURRENT' },
+      render(<Colleague {...props} />, { reviews, schema });
+
+      await act(async () => {
+        fireEvent.click(screen.getByRole('heading'));
+
+        expect(props.setColleagueExpanded).toBeCalled();
+        expect(clearSchemaDataMock).toBeCalled();
+        expect(getSchemaMock).toBeCalledWith({ colleagueUuid: '10000000-0000-0000-0000-000000000003' });
+        expect(getColleagueReviewsMock).toBeCalledWith({
+          pathParams: { colleagueUuid: '10000000-0000-0000-0000-000000000003', cycleUuid: 'CURRENT' },
+        });
+        await waitFor(() => expect(screen.getAllByText(/Approve/)[1]).not.toHaveAttribute('aria-disabled', 'true'));
+        await act(async () => {
+          fireEvent.click(screen.getAllByText(/Approve/)[1]);
+        });
+        const submit = screen.getByRole('button', { name: /Submit/i });
+        expect(submit).toBeInTheDocument();
+        fireEvent.click(submit);
+        expect(updateReviewStatusMock).toBeCalledWith({
+          data: { colleagueUuid: '10000000-0000-0000-0000-000000000003', reviews: [{ number: 1 }], status: 'APPROVED' },
+          pathParams: {
+            approverUuid: 'test-colleagueUuid',
+            colleagueUuid: '10000000-0000-0000-0000-000000000003',
+            cycleUuid: 'CURRENT',
+            status: 'APPROVED',
+            type: 'MYR',
+          },
+        });
       });
     });
   });
