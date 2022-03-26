@@ -49,11 +49,6 @@ export const AuthProvider: FC = ({ children }) => {
 
   const logoutAction: LogoutAction = useCallback(() => dispatch(UserActions.logout()), []);
 
-  if (error?.code === 'UNAUTHENTICATED') {
-    window?.location.replace(LINKS.signOut);
-    return null;
-  }
-
   return (
     <AuthContext.Provider
       value={{
