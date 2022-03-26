@@ -1,11 +1,11 @@
-import React, { FC, Dispatch, SetStateAction } from 'react';
+import React, { FC, Dispatch, SetStateAction, useEffect } from 'react';
 import { Item } from 'components/Form';
 import { useStyle } from '@dex-ddl/core';
 import { UseFormReturn } from 'react-hook-form';
 import { SearchInput } from './SearchInput';
 import { PeopleTypes } from './type';
 import { useSelector } from 'react-redux';
-import { colleagueUUIDSelector } from '@pma/store';
+import { ColleaguesActions, colleagueUUIDSelector } from '@pma/store';
 import useSearchColleagues from 'hooks/useSearchColleagues';
 
 type SearchPartProps = {
@@ -35,6 +35,7 @@ export const SearchPart: FC<SearchPartProps> = ({
     formState: { errors },
     register,
   } = teamMethods;
+
   return (
     <div className={css({ marginTop: '32px' })}>
       <Item

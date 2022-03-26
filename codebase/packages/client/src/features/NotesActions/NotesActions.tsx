@@ -64,8 +64,14 @@ const NotesActions: FC = () => {
   useEffect(() => {
     if (colleagueUuid) dispatch(NotesActionsToDispatch.getFoldersNotes({ ownerId: colleagueUuid }));
   }, [colleagueUuid]);
-  const folders = useSelector(getFoldersSelector) || null;
 
+  useEffect(() => {
+    return () => {
+      dispatch(ColleaguesActions.clearColleagueList());
+    };
+  }, []);
+
+  const folders = useSelector(getFoldersSelector) || null;
   const notesSelect = useSelector(getNotesSelector) || null;
   const personalFolderUuid = useSelector(personalFolderUuidSelector) || null;
   const teamFolderUuid = useSelector(teamFolderUuidSelector) || null;
