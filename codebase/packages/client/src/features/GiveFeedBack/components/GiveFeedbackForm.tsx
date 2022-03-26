@@ -2,11 +2,10 @@ import React, { FC } from 'react';
 import { useStyle, Rule, useBreakpoints, Button } from '@dex-ddl/core';
 import { useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { getColleagueByUuidSelector } from '@pma/store';
 import get from 'lodash.get';
 import { IconButton, Position } from 'components/IconButton';
-
-import { yupResolver } from '@hookform/resolvers/yup';
 import { Trans } from 'components/Translation';
 import { TileWrapper } from 'components/Tile';
 import { Field, Item, Textarea, Attention } from 'components/Form';
@@ -68,7 +67,7 @@ const GiveFeedbackForm: FC<Props> = ({ onSubmit, defaultValues, currentColleague
 
   return (
     <>
-      <div className={css(WrapperModalGiveFeedbackStyle)}>
+      <div className={css(wrapperModalGiveFeedbackStyle)}>
         <div
           className={css({
             fontWeight: 'bold',
@@ -162,7 +161,7 @@ const GiveFeedbackForm: FC<Props> = ({ onSubmit, defaultValues, currentColleague
     </>
   );
 };
-const WrapperModalGiveFeedbackStyle: Rule = {
+const wrapperModalGiveFeedbackStyle: Rule = {
   paddingLeft: '40px',
   paddingRight: '40px',
   height: '100%',
