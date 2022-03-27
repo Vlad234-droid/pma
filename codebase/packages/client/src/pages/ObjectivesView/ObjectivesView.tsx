@@ -20,7 +20,7 @@ const ObjectivesView = () => {
 
   if (loading || !loaded) {
     return (
-      <Spinner withText fullHeight />
+      <Spinner fullHeight />
     )
   }
 

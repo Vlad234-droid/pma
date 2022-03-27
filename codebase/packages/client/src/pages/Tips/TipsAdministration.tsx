@@ -47,7 +47,7 @@ const TipsAdministration: FC = () => {
         </IconButton>
       </div>
 
-      {!isLoaded && <Spinner withText />}
+      {!isLoaded && <Spinner />}
       {isLoaded && tips.length === 0 && <NoTips />}
 
       {isLoaded &&

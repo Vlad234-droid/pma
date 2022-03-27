@@ -1,16 +1,16 @@
 import React, { FC, useEffect, useState } from 'react';
-import {CreateRule, Rule, useStyle} from '@dex-ddl/core';
+import { CreateRule, Rule, useStyle } from '@dex-ddl/core';
 
 type Props = {
   withText?: boolean;
   fullHeight?: boolean;
-  name?: string;
+  id?: string;
 };
 
-const Spinner: FC<Props> = ({ withText = false, fullHeight = false, name = 'single' }) => {
+const Spinner: FC<Props> = ({ withText = true, fullHeight = false, id = '1' }) => {
   const { css } = useStyle();
   const [increment, setIncrement] = useState<number>(0);
-  const elem = document.getElementById(`spinner-${name}`);
+  const elem = document.getElementById(`spinner-${id}`);
 
   const incrementDegree = () => {
     setIncrement((increment) => increment +10);
@@ -37,7 +37,7 @@ const Spinner: FC<Props> = ({ withText = false, fullHeight = false, name = 'sing
 
   return (
     <div className={css(wrapperStyles({ fullHeight }))}>
-      <div className={css(loaderStyles)} id={`spinner-${name}`}/>
+      <div className={css(loaderStyles)} id={`spinner-${id}`}/>
       {withText && <span className={css(textStyles)}>Loading...</span>}
     </div>
   );

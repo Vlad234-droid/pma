@@ -90,7 +90,7 @@ const CreateMyPDP = () => {
   };
 
   if (loading || !loaded || !schema?.meta?.loaded) {
-    return <Spinner withText fullHeight />
+    return <Spinner fullHeight />
   }
 
   return (

@@ -85,7 +85,7 @@ const StrategicDriversForm: FC = () => {
   };
 
   if (!loaded || loading) {
-    return <Spinner withText />;
+    return <Spinner />;
   }
 
   if (!orgObjectives.length) return null;

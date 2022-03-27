@@ -117,7 +117,7 @@ const PerformanceCycleAdministration: FC = () => {
               }).length
             })`}
           </div>
-          {loading || !loaded ? <Spinner withText /> : (
+          {loading || !loaded ? <Spinner /> : (
             <table
               className={css({
                 borderCollapse: 'collapse',

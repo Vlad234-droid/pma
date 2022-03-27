@@ -175,7 +175,7 @@ const MyObjectives: FC = () => {
       )}
       <div className={css(bodyBlockStyles)}>
         <div className={css(bodyWrapperStyles)}>
-          {!timelineLoaded ? <Spinner name='1' withText /> : (
+          {!timelineLoaded ? <Spinner id='1' /> : (
             <>
               {!mobileScreen && canShowMyReview && (
                 <div className={css(timelineWrapperStyles)}>
@@ -321,7 +321,7 @@ const MyObjectives: FC = () => {
         <div className={css(widgetWrapper)}>
           {!timelineLoaded && (
             <div className={css(timelineWrapperWidget)}>
-              <Spinner withText name='2' />
+              <Spinner id='2' />
             </div>
           )}
           {mobileScreen && canShowMyReview && timelineLoaded && (

@@ -94,7 +94,7 @@ const PersonalDevelopmentPlan: FC = () => {
   const downloadHref = () => `${BASE_URL_API}/pdp/template`;
 
   if (loading || !loaded || pdpLoading || !pdpLoaded) {
-    return <Spinner withText fullHeight />;
+    return <Spinner fullHeight />;
   }
 
   return (

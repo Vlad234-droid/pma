@@ -61,7 +61,7 @@ const CareerPerformance: FC<Props> = ({
 
   if (loading) {
     return (
-      <Spinner withText fullHeight />
+      <Spinner fullHeight />
     );
   }
 

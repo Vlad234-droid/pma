@@ -183,7 +183,7 @@ const Report: FC = () => {
             />
           </div>
         </div>
-        {!loaded ? <Spinner withText /> : (
+        {!loaded ? <Spinner /> : (
           <>
             <div className={css(pieChartWrapper)}>
               <div className={css(leftColumn)}>

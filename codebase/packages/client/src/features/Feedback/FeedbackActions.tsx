@@ -53,10 +53,6 @@ const FeedbackActions: FC = () => {
     dispatch(UserActions.createProfileAttribute([payload]));
   };
 
-  // if (!loaded) {
-  //   return <Spinner />;
-  // }
-
   return (
     <>
       {info360Modal && (

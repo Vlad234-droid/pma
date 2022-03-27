@@ -43,7 +43,7 @@ const TeamWidgets: FC<Props> = ({
 
   return (
     <div data-test-id='team-widgets' className={css(wrapperStyles)}>
-      {!loaded ? <Spinner withText /> : (
+      {!loaded ? <Spinner /> : (
         <div className={css(listWrapperStyles)}>
           <div>
             {showActions && (

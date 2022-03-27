@@ -222,7 +222,7 @@ export const PerformanceCycleForm: FC = () => {
 
   if (loading || !loaded) {
     return (
-      <Spinner withText fullHeight />
+      <Spinner fullHeight />
     )
   }
 

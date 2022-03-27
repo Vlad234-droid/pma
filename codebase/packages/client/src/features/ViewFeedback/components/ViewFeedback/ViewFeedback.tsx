@@ -155,12 +155,6 @@ const ViewFeedback: FC = () => {
     }
   }, [isReaded]);
 
-  console.log('loaded', loaded);
-
-  // if (!loaded) {
-  //   return <Spinner withText />
-  // }
-
   return (
     <>
       {helpModalReceiveFeedback && (
@@ -226,7 +220,7 @@ const ViewFeedback: FC = () => {
           </div>
         </div>
         <div className={css(ReverseItemsStyled)}>
-          {!loaded ? <Spinner withText /> : <DraftList items={submittedCompletedNotes} />}
+          {!loaded ? <Spinner /> : <DraftList items={submittedCompletedNotes} />}
           <div className={css(ButtonsActionsStyle)}>
             <div className={css(ButtonContainerStyle)}>
               <div className={css({ display: 'inline-flex' })}>

@@ -120,7 +120,7 @@ const NewFeedback: FC = () => {
         styles: [modalTitleOptionStyle],
       }}
     >
-      {loading ? <Spinner withText /> : (
+      {loading ? <Spinner /> : (
         <>
           {status === Statuses.PENDING && (
             <GiveFeedbackForm

@@ -355,7 +355,7 @@ const NotesActions: FC = () => {
   };
 
   if (!loaded) {
-    return <Spinner withText fullHeight />
+    return <Spinner fullHeight />
   }
 
   if (status === ModalStatuses.INFO) {

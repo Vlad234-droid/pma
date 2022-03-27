@@ -27,7 +27,7 @@ const FeedbackBlock: FC<Props> = ({ list, canEdit }) => {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
-  if (!loaded) return <Spinner withText />;
+  if (!loaded) return <Spinner />;
   if (loaded && !list.length) return <NoFeedback />;
 
   return (

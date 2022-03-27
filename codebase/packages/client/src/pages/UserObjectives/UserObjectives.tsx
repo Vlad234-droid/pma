@@ -117,7 +117,7 @@ export const UserObjectives: FC = () => {
   return (
     <div className={css(bodyBlockStyles)}>
       <div className={css(bodyWrapperStyles)} data-test-id={TEST_ID}>
-        {!timelineLoaded ? <Spinner withText name='1' /> : (
+        {!timelineLoaded ? <Spinner id='1' /> : (
           <>
             {!mobileScreen && canShowMyReview && (
               <div onClick={handleClick} className={css(timelineWrapperStyles)}>
@@ -185,7 +185,7 @@ export const UserObjectives: FC = () => {
         )}
       </div>
       <div className={css(headWrapperStyles)}>
-        {!timelineLoaded && <div className={css(timelineWrapperStyles)}><Spinner withText name='2' /></div>}
+        {!timelineLoaded && <div className={css(timelineWrapperStyles)}><Spinner id='2' /></div>}
         {mobileScreen && timelineLoaded && canShowMyReview && (
           <div className={css(timelineWrapperStyles)}>
             <StepIndicator
