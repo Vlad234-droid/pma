@@ -36,8 +36,8 @@ const Spinner: FC<Props> = ({ withText = true, fullHeight = false, id = '1' }) =
   }, [increment]);
 
   return (
-    <div className={css(wrapperStyles({ fullHeight }))}>
-      <div className={css(loaderStyles)} id={`spinner-${id}`}/>
+    <div data-test-id='spinner-wrapper' className={css(wrapperStyles({ fullHeight }))}>
+      <div data-test-id={`spinner-${id}`} className={css(loaderStyles)} id={`spinner-${id}`}/>
       {withText && <span className={css(textStyles)}>Loading...</span>}
     </div>
   );
@@ -52,6 +52,7 @@ const wrapperStyles: CreateRule<{ fullHeight: boolean }> = ({ fullHeight }) => {
       alignItems: 'center',
       justifyContent: 'center',
       width: '100%',
+      height: 'auto',
     });
   }
 

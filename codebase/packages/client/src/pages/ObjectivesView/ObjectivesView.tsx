@@ -12,13 +12,13 @@ const ObjectivesView = () => {
   const dispatch = useDispatch();
 
   const orgObjectives = useSelector(orgObjectivesSelector) || [];
-  const { loading, loaded } = useSelector(orgObjectivesMetaSelector);
+  const { loaded } = useSelector(orgObjectivesMetaSelector);
 
   useEffect(() => {
     dispatch(OrgObjectiveActions.getOrgObjectives({}));
   }, []);
 
-  if (loading || !loaded) {
+  if (!loaded) {
     return (
       <Spinner fullHeight />
     )
