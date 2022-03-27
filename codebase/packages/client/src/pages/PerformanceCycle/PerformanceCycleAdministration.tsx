@@ -6,12 +6,13 @@ import { TileWrapper } from 'components/Tile';
 import { PerformanceCycleActions } from '@pma/store';
 import useDispatch from 'hooks/useDispatch';
 import { useSelector } from 'react-redux';
-import { getPerformanceCycleSelector } from '@pma/store/src/selectors/performance-cycle';
+import { getPerformanceCycleSelector, getPerformanceCycleMetaSelector } from '@pma/store/src/selectors/performance-cycle';
 
 import { Radio } from 'components/Form';
 import { Trans } from 'components/Translation';
 import { paramsReplacer } from 'utils';
 import { buildPath } from 'features/Routes';
+import Spinner from 'components/Spinner';
 import { Page } from '../types';
 
 const PerformanceCycleAdministration: FC = () => {
@@ -19,6 +20,7 @@ const PerformanceCycleAdministration: FC = () => {
   const navigate = useNavigate();
 
   const data = useSelector(getPerformanceCycleSelector) || {};
+  const { loading, loaded } = useSelector(getPerformanceCycleMetaSelector);
 
   const dispatch = useDispatch();
 
@@ -29,6 +31,7 @@ const PerformanceCycleAdministration: FC = () => {
   const [active, setActive] = useState('ACTIVE');
 
   const item: Rule = { padding: '14px', textAlign: 'start' };
+
   return (
     <div>
       <div className={css({ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap-reverse' })}>
@@ -114,13 +117,14 @@ const PerformanceCycleAdministration: FC = () => {
               }).length
             })`}
           </div>
-          <table
-            className={css({
-              borderCollapse: 'collapse',
-              width: '100%',
-            })}
-          >
-            <thead>
+          {loading || !loaded ? <Spinner withText /> : (
+            <table
+              className={css({
+                borderCollapse: 'collapse',
+                width: '100%',
+              })}
+            >
+              <thead>
               <tr className={css({ background: '#F3F9FC', fontSize: '14px', lineHeight: '18px' })}>
                 <th className={css(item)}>Name</th>
                 <th className={css(item)}>Organization</th>
@@ -128,8 +132,8 @@ const PerformanceCycleAdministration: FC = () => {
                 <th className={css(item)}>Created by</th>
                 <th className={css(item)}>Action</th>
               </tr>
-            </thead>
-            <tbody>
+              </thead>
+              <tbody>
               {data
                 .filter((item) => {
                   return item.status === active;
@@ -151,8 +155,9 @@ const PerformanceCycleAdministration: FC = () => {
                     </tr>
                   );
                 })}
-            </tbody>
-          </table>
+              </tbody>
+            </table>
+          )}
         </TileWrapper>
       </div>
     </div>

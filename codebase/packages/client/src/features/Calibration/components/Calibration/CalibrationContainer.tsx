@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react';
 import { shallowEqual, useSelector } from 'react-redux';
-import { colleagueUUIDSelector, getAllEmployees, ManagersActions } from '@pma/store';
+import { colleagueUUIDSelector, getAllEmployees, ManagersActions, getManagersMetaSelector } from '@pma/store';
 
 import useDispatch from 'hooks/useDispatch';
 import { FilterOption, FilterValues } from 'features/Filters';
@@ -13,6 +13,7 @@ const CalibrationContainer: FC = () => {
   const dispatch = useDispatch();
   // @ts-ignore
   const colleagues = useSelector((state) => getAllEmployees(state), shallowEqual) || [];
+  const { loaded } = useSelector(getManagersMetaSelector);
   const [filterOptions, setFilterOptions] = useState<FilterOption[]>();
 
   const loadData = (filters: FilterValues) => {
@@ -30,6 +31,7 @@ const CalibrationContainer: FC = () => {
       colleagues={colleagues}
       colleagueUuid={colleagueUuid}
       filterOptions={filterOptions}
+      loading={!loaded}
     />
   );
 };

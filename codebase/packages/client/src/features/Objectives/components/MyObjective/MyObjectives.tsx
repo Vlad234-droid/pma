@@ -38,12 +38,14 @@ import {
   schemaMetaSelector,
   TimelineActions,
   timelineTypesAvailabilitySelector,
+  getTimelineMetaSelector,
 } from '@pma/store';
 import OrganizationWidget from 'features/Objectives/components/OrganizationWidget/OrganizationWidget';
 import { useNavigate } from 'react-router-dom';
 import useReviewSchema from 'features/Objectives/hooks/useReviewSchema';
 import { Page } from 'pages';
 import { buildPath } from 'features/Routes';
+import Spinner from 'components/Spinner';
 import EditButton from '../Buttons/EditButton';
 import { File } from '../../../ReviewFiles/components/components/File';
 
@@ -80,6 +82,7 @@ const MyObjectives: FC = () => {
 
   const { loaded: schemaLoaded } = useSelector(schemaMetaSelector);
   const { loaded: reviewLoaded } = useSelector(reviewsMetaSelector);
+  const { loaded: timelineLoaded } = useSelector(getTimelineMetaSelector);
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const [schema] = useReviewSchema(ReviewType.OBJECTIVE) || {};
   const { components = [], markup = { max: 0, min: 0 } } = schema;
@@ -172,147 +175,156 @@ const MyObjectives: FC = () => {
       )}
       <div className={css(bodyBlockStyles)}>
         <div className={css(bodyWrapperStyles)}>
-          {!mobileScreen && canShowMyReview && (
-            <div className={css(timelineWrapperStyles)}>
-              <StepIndicator
-                mainTitle={t('performance_timeline_title', 'Your Contribution timeline')}
-                titles={descriptions}
-                descriptions={startDates}
-                statuses={statuses}
-              />
-            </div>
-          )}
-          <div className={css(timelineWrapperStyles)}>
-            {canShowObjectives && (
-              <Section
-                left={{
-                  content: (
-                    <div className={css(tileStyles)}>
-                      <Trans i18nKey='my_objectives'>My objectives</Trans>
-                      {isAllObjectivesInSameStatus && ![Status.STARTED, Status.NOT_STARTED].includes(status) && (
-                        <StatusBadge status={status} styles={statusBadgeStyle} />
-                      )}
-                    </div>
-                  ),
-                }}
-                right={{
-                  content: (
-                    <div>
-                      <IconButton
-                        onPress={() => downloadPDF(instance.url!, 'objectives.pdf')}
-                        graphic='download'
-                        customVariantRules={{ default: iconButtonStyles }}
-                        iconStyles={iconStyles}
-                      >
-                        <Trans i18nKey='download'>Download</Trans>
-                      </IconButton>
-                      {canEditAllObjective && (
-                        <EditButton
-                          isSingleObjectivesEditMode={false}
-                          buttonText={t('edit_all', 'Edit all')}
-                          icon={'edit'}
-                          styles={borderButtonStyles}
-                        />
-                      )}
-                    </div>
-                  ),
-                }}
-              >
-                {objectives.length ? (
-                  <Accordion objectives={objectives} canShowStatus={!isAllObjectivesInSameStatus} />
-                ) : (
-                  <div className={css(emptyBlockStyle)}>
-                    <Trans i18nKey={'no_objectives_created'}>No objectives created</Trans>
-                  </div>
-                )}
-              </Section>
-            )}
-            <Section
-              contentCustomStyle={widgetWrapperStyle}
-              left={{
-                content: (
-                  <div className={css(tileStyles)}>
-                    <Trans i18nKey='my_reviews'>My Reviews</Trans>
-                  </div>
-                ),
-              }}
-            >
-              {canShowMyReview && (
-                <>
-                  <div data-test-id='personal' className={css(basicTileStyle)}>
-                    <ReviewWidget
-                      reviewType={ReviewType.MYR}
-                      status={midYearReview?.status}
-                      startTime={midYearReview?.startTime}
-                      endTime={midYearReview?.endTime}
-                      lastUpdatedTime={midYearReview?.lastUpdatedTime}
-                      onClick={() => console.log('ReviewWidget')}
-                      onClose={() => console.log('ReviewWidget')}
-                      title={'Mid-year review'}
-                      customStyle={{ height: '100%' }}
-                    />
-                  </div>
-                  <div data-test-id='feedback' className={css(basicTileStyle)}>
-                    <ReviewWidget
-                      reviewType={ReviewType.EYR}
-                      status={endYearReview?.status}
-                      startTime={endYearReview?.startTime}
-                      endTime={endYearReview?.endTime}
-                      lastUpdatedTime={endYearReview?.lastUpdatedTime}
-                      onClick={() => console.log('ReviewWidget')}
-                      onClose={() => console.log('ReviewWidget')}
-                      title={'Year-end review'}
-                      customStyle={{ height: '100%' }}
-                    />
-                  </div>
-                </>
-              )}
-              {canShowAnnualReview && (
-                <div data-test-id='feedback' className={css(basicTileStyle)}>
-                  <ReviewWidget
-                    reviewType={ReviewType.EYR}
-                    status={endYearReview.status}
-                    startTime={endYearReview?.startTime}
-                    endTime={endYearReview?.endTime}
-                    lastUpdatedTime={endYearReview?.lastUpdatedTime}
-                    onClick={() => console.log('ReviewWidget')}
-                    onClose={() => console.log('ReviewWidget')}
-                    title={'Annual performance review'}
-                    customStyle={{ height: '100%' }}
+          {!timelineLoaded ? <Spinner name='1' withText /> : (
+            <>
+              {!mobileScreen && canShowMyReview && (
+                <div className={css(timelineWrapperStyles)}>
+                  <StepIndicator
+                    mainTitle={t('performance_timeline_title', 'Your Contribution timeline')}
+                    titles={descriptions}
+                    descriptions={startDates}
+                    statuses={statuses}
                   />
                 </div>
               )}
-            </Section>
-            <Section
-              left={{
-                content: (
-                  <div>
-                    <Trans i18nKey='previous_review_files'>Previous Review Files</Trans>
+              <div className={css(timelineWrapperStyles)}>
+                {canShowObjectives && (
+                  <Section
+                    left={{
+                      content: (
+                        <div className={css(tileStyles)}>
+                          <Trans i18nKey='my_objectives'>My objectives</Trans>
+                          {isAllObjectivesInSameStatus && ![Status.STARTED, Status.NOT_STARTED].includes(status) && (
+                            <StatusBadge status={status} styles={statusBadgeStyle} />
+                          )}
+                        </div>
+                      ),
+                    }}
+                    right={{
+                      content: (
+                        <div>
+                          <IconButton
+                            onPress={() => downloadPDF(instance.url!, 'objectives.pdf')}
+                            graphic='download'
+                            customVariantRules={{ default: iconButtonStyles }}
+                            iconStyles={iconStyles}
+                          >
+                            <Trans i18nKey='download'>Download</Trans>
+                          </IconButton>
+                          {canEditAllObjective && (
+                            <EditButton
+                              isSingleObjectivesEditMode={false}
+                              buttonText={t('edit_all', 'Edit all')}
+                              icon={'edit'}
+                              styles={borderButtonStyles}
+                            />
+                          )}
+                        </div>
+                      ),
+                    }}
+                  >
+                    {!schemaLoaded ? <Spinner /> : objectives.length ? (
+                      <Accordion objectives={objectives} canShowStatus={!isAllObjectivesInSameStatus} />
+                    ) : (
+                      <div className={css(emptyBlockStyle)}>
+                        <Trans i18nKey={'no_objectives_created'}>No objectives created</Trans>
+                      </div>
+                    )}
+                  </Section>
+                )}
+                <Section
+                  contentCustomStyle={widgetWrapperStyle}
+                  left={{
+                    content: (
+                      <div className={css(tileStyles)}>
+                        <Trans i18nKey='my_reviews'>My Reviews</Trans>
+                      </div>
+                    ),
+                  }}
+                >
+                  {canShowMyReview && (
+                    <>
+                      <div data-test-id='personal' className={css(basicTileStyle)}>
+                        <ReviewWidget
+                          reviewType={ReviewType.MYR}
+                          status={midYearReview?.status}
+                          startTime={midYearReview?.startTime}
+                          endTime={midYearReview?.endTime}
+                          lastUpdatedTime={midYearReview?.lastUpdatedTime}
+                          onClick={() => console.log('ReviewWidget')}
+                          onClose={() => console.log('ReviewWidget')}
+                          title={'Mid-year review'}
+                          customStyle={{ height: '100%' }}
+                        />
+                      </div>
+                      <div data-test-id='feedback' className={css(basicTileStyle)}>
+                        <ReviewWidget
+                          reviewType={ReviewType.EYR}
+                          status={endYearReview?.status}
+                          startTime={endYearReview?.startTime}
+                          endTime={endYearReview?.endTime}
+                          lastUpdatedTime={endYearReview?.lastUpdatedTime}
+                          onClick={() => console.log('ReviewWidget')}
+                          onClose={() => console.log('ReviewWidget')}
+                          title={'Year-end review'}
+                          customStyle={{ height: '100%' }}
+                        />
+                      </div>
+                    </>
+                  )}
+                  {canShowAnnualReview && (
+                    <div data-test-id='feedback' className={css(basicTileStyle)}>
+                      <ReviewWidget
+                        reviewType={ReviewType.EYR}
+                        status={endYearReview.status}
+                        startTime={endYearReview?.startTime}
+                        endTime={endYearReview?.endTime}
+                        lastUpdatedTime={endYearReview?.lastUpdatedTime}
+                        onClick={() => console.log('ReviewWidget')}
+                        onClose={() => console.log('ReviewWidget')}
+                        title={'Annual performance review'}
+                        customStyle={{ height: '100%' }}
+                      />
+                    </div>
+                  )}
+                </Section>
+                <Section
+                  left={{
+                    content: (
+                      <div>
+                        <Trans i18nKey='previous_review_files'>Previous Review Files</Trans>
+                      </div>
+                    ),
+                  }}
+                  right={{
+                    content: (
+                      <div>
+                        <Button
+                          mode='inverse'
+                          onPress={() => setPreviousReviewFilesModalShow(true)}
+                          styles={[linkStyles({ theme })]}
+                        >
+                          <Trans i18nKey='view_files'>View files</Trans>
+                        </Button>
+                      </div>
+                    ),
+                  }}
+                >
+                  <div className={css(emptyBlockStyle)}>
+                    <Trans>{`You have ${files.length || 'no'} files`}</Trans>
                   </div>
-                ),
-              }}
-              right={{
-                content: (
-                  <div>
-                    <Button
-                      mode='inverse'
-                      onPress={() => setPreviousReviewFilesModalShow(true)}
-                      styles={[linkStyles({ theme })]}
-                    >
-                      <Trans i18nKey='view_files'>View files</Trans>
-                    </Button>
-                  </div>
-                ),
-              }}
-            >
-              <div className={css(emptyBlockStyle)}>
-                <Trans>{`You have ${files.length || 'no'} files`}</Trans>
+                </Section>
               </div>
-            </Section>
-          </div>
+            </>
+          )}
         </div>
         <div className={css(widgetWrapper)}>
-          {mobileScreen && canShowMyReview && (
+          {!timelineLoaded && (
+            <div className={css(timelineWrapperWidget)}>
+              <Spinner withText name='2' />
+            </div>
+          )}
+          {mobileScreen && canShowMyReview && timelineLoaded && (
             <div className={css(timelineWrapperWidget)}>
               <StepIndicator
                 mainTitle={t('performance_timeline_title', 'Your Contribution timeline')}
@@ -411,6 +423,7 @@ const bodyWrapperStyles: Rule = () => {
     flexWrap: 'nowrap',
     alignItems: 'stretch',
     flexDirection: mobileScreen ? 'column' : 'column',
+    width: '100%',
   };
 };
 

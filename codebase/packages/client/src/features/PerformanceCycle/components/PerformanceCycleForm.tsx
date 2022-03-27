@@ -28,6 +28,7 @@ import { GenericItemField } from 'components/GenericForm';
 import { Input, Item, Radio, Select, Attention } from 'components/Form';
 import { DurationPicker } from 'components/Form/DurationPicker';
 import { Page } from 'pages';
+import Spinner from 'components/Spinner';
 import TemplatesModal from './TemplatesModal';
 import { createPMCycleSchema } from './schema';
 
@@ -82,7 +83,7 @@ export const PerformanceCycleForm: FC = () => {
   const processTemplate = useSelector(getProcessTemplateByUuidSelector(processSelected));
   const formsByPerformanceCycleUuid = useSelector(getFormsByPerformanceCycleUuidSelector(performanceCycleUuid));
   const formsProcessTemplate = useSelector(getFormsByProcessTemplateUuidSelector(processSelected));
-  const { loaded } = useSelector(configEntriesMetaSelector) || {};
+  const { loaded, loading } = useSelector(configEntriesMetaSelector) || {};
   const { configEntryItem, formDataToFillObj, performanceCycleItem } = useSelector(
     getConfigEntriesByPerformanceCycle(performanceCycleUuid),
   );
@@ -218,6 +219,12 @@ export const PerformanceCycleForm: FC = () => {
   const timelinePointsValues = getValues('cycle.metadata.cycle.timelinePoints');
 
   const onError = (errors, e) => console.error(errors, e);
+
+  if (loading || !loaded) {
+    return (
+      <Spinner withText fullHeight />
+    )
+  }
 
   /*---------Render---------*/
   // @ts-ignore
@@ -618,3 +625,4 @@ const containerVisible: Rule = () => ({
   flexWrap: 'wrap',
   gap: '16px 8px',
 });
+

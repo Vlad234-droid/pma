@@ -15,9 +15,11 @@ import {
   notesFolderTeamDataSelector,
   personalFolderUuidSelector,
   teamFolderUuidSelector,
+  getNotesMetaSelector,
 } from '@pma/store';
 
 import { role, usePermission } from 'features/Permission';
+import Spinner from 'components/Spinner';
 import { AddTeamNoteModal, InfoModal, AddNoteModal, FilterOptions, MainFolders } from './components';
 import { IconButton } from 'components/IconButton';
 import { Icon, Icon as IconComponent } from 'components/Icon';
@@ -58,6 +60,7 @@ const NotesActions: FC = () => {
   const [isUserArchived, setIsUserArchived] = useState<boolean>(false);
   const [teamArchivedMode, setTeamArchivedMode] = useState<boolean>(false);
 
+  const { loaded } = useSelector(getNotesMetaSelector);
   const notesFolderColleagueData = useSelector(notesFolderColleagueDataSelector(colleagueUuid, isUserArchived)) || [];
   const notesFolderTeamData = useSelector(notesFolderTeamDataSelector(colleagueUuid, teamArchivedMode)) || [];
 
@@ -350,6 +353,10 @@ const NotesActions: FC = () => {
     setStatus(() => ModalStatuses.PENDING);
     reset();
   };
+
+  if (!loaded) {
+    return <Spinner withText fullHeight />
+  }
 
   if (status === ModalStatuses.INFO) {
     return (

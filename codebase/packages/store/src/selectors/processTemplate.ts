@@ -9,6 +9,8 @@ export const durationOptions = [
 
 export const processTemplateSelector = (state: RootState) => state.processTemplate || {};
 
+export const getProcessTemplateMetaSelector = createSelector(processTemplateSelector, (template) => template.meta);
+
 // @ts-ignore
 export const getProcessTemplateSelector = createSelector(processTemplateSelector, ({ data }) => {
   return (

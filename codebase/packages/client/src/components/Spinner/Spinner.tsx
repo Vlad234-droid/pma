@@ -1,21 +1,22 @@
 import React, { FC, useEffect, useState } from 'react';
-import { Rule, useStyle } from '@dex-ddl/core';
+import {CreateRule, Rule, useStyle} from '@dex-ddl/core';
 
 type Props = {
   withText?: boolean;
+  fullHeight?: boolean;
+  name?: string;
 };
 
-const Spinner: FC<Props> = ({ withText = false }) => {
+const Spinner: FC<Props> = ({ withText = false, fullHeight = false, name = 'single' }) => {
   const { css } = useStyle();
   const [increment, setIncrement] = useState<number>(0);
-  const elem = document.getElementById('spinner');
+  const elem = document.getElementById(`spinner-${name}`);
 
   const incrementDegree = () => {
     setIncrement((increment) => increment +10);
   };
 
   useEffect(() => {
-    console.log('rendered');
     const rotationInterval = setInterval(incrementDegree, 30);
 
     return () => {
@@ -35,8 +36,8 @@ const Spinner: FC<Props> = ({ withText = false }) => {
   }, [increment]);
 
   return (
-    <div className={css(wrapperStyles)}>
-      <div className={css(loaderStyles)} id='spinner'/>
+    <div className={css(wrapperStyles({ fullHeight }))}>
+      <div className={css(loaderStyles)} id={`spinner-${name}`}/>
       {withText && <span className={css(textStyles)}>Loading...</span>}
     </div>
   );
@@ -44,13 +45,24 @@ const Spinner: FC<Props> = ({ withText = false }) => {
 
 export default Spinner;
 
-const wrapperStyles: Rule = () => ({
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  height: '50px',
-  width: '100%',
-});
+const wrapperStyles: CreateRule<{ fullHeight: boolean }> = ({ fullHeight }) => {
+  if (!fullHeight) {
+    return ({
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      width: '100%',
+    });
+  }
+
+  return ({
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    height: '50vh',
+  })
+};
 
 const loaderStyles: Rule = ({ theme }) => ({
   border: '3px solid #f3f3f3',

@@ -9,7 +9,7 @@ import RadioBtns from '../RadioBtns';
 import { Notification } from 'components/Notification';
 import { Icon } from 'components/Icon';
 import { HelpModalReceiveFeedback, ModalDownloadFeedback } from '../ModalParts';
-import { ColleaguesActions, colleagueUUIDSelector, FeedbackActions, ReviewsActions } from '@pma/store';
+import { ColleaguesActions, colleagueUUIDSelector, FeedbackActions, ReviewsActions, getLoadedStateSelector } from '@pma/store';
 import { useDispatch, useSelector } from 'react-redux';
 import { FilterModal } from '../../../Shared/components/FilterModal';
 import { useNavigate } from 'react-router-dom';
@@ -17,6 +17,7 @@ import { FeedbackStatus, FEEDBACK_STATUS_IN, Tesco } from 'config/enum';
 import { Page } from 'pages';
 import useSubmittedCompletedNotes from '../../hooks/useSubmittedCompletedNotes';
 import { buildPath } from 'features/Routes';
+import Spinner from 'components/Spinner';
 
 type filterFeedbacksType = {
   sort: string;
@@ -37,6 +38,7 @@ const ViewFeedback: FC = () => {
   });
 
   const colleagueUuid = useSelector(colleagueUUIDSelector);
+  const { loaded } = useSelector(getLoadedStateSelector);
 
   // filter
   const [focus, setFocus] = useState(false);
@@ -153,6 +155,12 @@ const ViewFeedback: FC = () => {
     }
   }, [isReaded]);
 
+  console.log('loaded', loaded);
+
+  // if (!loaded) {
+  //   return <Spinner withText />
+  // }
+
   return (
     <>
       {helpModalReceiveFeedback && (
@@ -218,7 +226,7 @@ const ViewFeedback: FC = () => {
           </div>
         </div>
         <div className={css(ReverseItemsStyled)}>
-          <DraftList items={submittedCompletedNotes} />
+          {!loaded ? <Spinner withText /> : <DraftList items={submittedCompletedNotes} />}
           <div className={css(ButtonsActionsStyle)}>
             <div className={css(ButtonContainerStyle)}>
               <div className={css({ display: 'inline-flex' })}>

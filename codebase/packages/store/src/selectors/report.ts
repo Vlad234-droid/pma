@@ -6,6 +6,8 @@ import { Status } from '../../../client/src/config/enum';
 export const reportSelector = (state: RootState) => state.report;
 const statusIndex = 8;
 
+export const getReportMetaSelector = createSelector(reportSelector, (report) => report.meta);
+
 export const approvedObjectivesSelector = createSelector(reportSelector, (report: any) => {
   const { objectiveReports } = report;
   const approvedCount = objectiveReports.filter((item) => item[statusIndex] === Status.APPROVED).length;

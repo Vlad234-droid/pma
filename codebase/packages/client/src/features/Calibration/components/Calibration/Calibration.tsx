@@ -7,6 +7,7 @@ import { TileWrapper } from 'components/Tile';
 import SuccessModal from 'components/SuccessModal';
 import { Employee } from 'config/types';
 import { SuccessMark } from 'components/Icon';
+import Spinner from 'components/Spinner';
 
 import Widgets from '../Widgets';
 import Colleagues from '../Colleagues';
@@ -20,9 +21,10 @@ type Props = {
   colleagues?: Employee[];
   colleagueUuid?: string;
   filterOptions?: FilterOption[];
+  loading: boolean;
 };
 
-const Calibration: FC<Props> = ({ loadData, loadFilterOptions, colleagueUuid, colleagues, filterOptions }) => {
+const Calibration: FC<Props> = ({ loadData, loadFilterOptions, colleagueUuid, colleagues, filterOptions, loading }) => {
   const { css } = useStyle();
   const { t } = useTranslation();
   const [isEditMode, setEditMode] = useState<boolean>(false);
@@ -66,6 +68,10 @@ const Calibration: FC<Props> = ({ loadData, loadFilterOptions, colleagueUuid, co
   const handleFilter = (filters: FilterValues) => {
     loadData(filters);
   };
+
+  if (loading) {
+    return <Spinner withText fullHeight />
+  }
 
   return (
     <div>

@@ -7,6 +7,7 @@ import { OrgObjectiveActions, orgObjectivesSelector, orgObjectivesMetaSelector, 
 import GenericForm from 'components/GenericForm';
 import { Input } from 'components/Form';
 import { InfoModal } from 'features/Modal';
+import Spinner from 'components/Spinner';
 
 enum Mode {
   SAVED = 'saved',
@@ -50,7 +51,7 @@ const StrategicDriversForm: FC = () => {
   const dispatch = useDispatch();
   const orgObjectives = useSelector(orgObjectivesSelector) || [];
 
-  const { status } = useSelector(orgObjectivesMetaSelector);
+  const { status, loading, loaded } = useSelector(orgObjectivesMetaSelector);
 
   const [mode, setMode] = useState<Mode>();
 
@@ -82,6 +83,10 @@ const StrategicDriversForm: FC = () => {
     // @ts-ignore
     dispatch(OrgObjectiveActions.changeOrgObjectiveMetaStatus(Status.IDLE));
   };
+
+  if (!loaded || loading) {
+    return <Spinner withText />;
+  }
 
   if (!orgObjectives.length) return null;
 

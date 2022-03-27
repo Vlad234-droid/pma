@@ -6,6 +6,7 @@ import {
   getTimelineSelector,
   PDPActions,
   timelinesExistSelector,
+  getTimelineMetaSelector,
   TimelineActions,
   timelineTypesAvailabilitySelector,
 } from '@pma/store';
@@ -22,6 +23,7 @@ const CareerPerformanceContainer: FC = () => {
   const endYearReview = useSelector(getTimelineByCodeSelector(ObjectiveType.EYR, 'me'));
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const timelinesExist = useSelector(timelinesExistSelector(colleagueUuid));
+  const { loaded } = useSelector(getTimelineMetaSelector);
 
   const dispatch = useDispatch();
 
@@ -41,6 +43,7 @@ const CareerPerformanceContainer: FC = () => {
       endYearReview={endYearReview}
       colleagueUuid={colleagueUuid}
       displayTimelines={timelinesExist}
+      loading={!loaded}
     />
   );
 };
