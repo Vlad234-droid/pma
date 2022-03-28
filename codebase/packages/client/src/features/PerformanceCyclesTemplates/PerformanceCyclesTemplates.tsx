@@ -48,7 +48,7 @@ const PerformanceCyclesTemplates: FC = () => {
   const dispatch = useDispatch();
   const [, isBreakpoint] = useBreakpoints();
   const templatesList = useSelector(getProcessTemplateSelector) || [];
-  const { loaded } = useSelector(getProcessTemplateMetaSelector);
+  const meta = useSelector(getProcessTemplateMetaSelector);
 
   const [sortModal, setSortModal] = useState(false);
   const [extensionModal, setExtensionModal] = useState(false);
@@ -201,7 +201,7 @@ const PerformanceCyclesTemplates: FC = () => {
         </div>
       </div>
       <div className={css(templatesListStyles)}>
-        {!loaded ? <Spinner /> : (
+        {!meta?.loaded ? <Spinner /> : (
           <>
             {templatesList.map((item) => {
               const { value } = item;

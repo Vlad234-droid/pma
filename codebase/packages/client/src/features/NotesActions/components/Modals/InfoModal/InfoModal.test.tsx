@@ -5,13 +5,13 @@ import { renderWithTheme as render } from 'utils/test';
 import '@testing-library/jest-dom';
 import { fireEvent } from '@testing-library/react';
 import { MODAL_WRAPPER } from './InfoModal';
-import NotesActions from '../../../../NotesActions';
+import NotesActions from '../../../../NotesActions/NotesActions';
 import { INFO_ICON } from '../../FilterOptions/FilterOptions';
 
 it('render info modal', async () => {
   const { getByTestId, queryByTestId, findByTestId } = render(
     <BrowserRouter>
-      <NotesActions />
+      <NotesActions loaded={true}/>
     </BrowserRouter>,
   );
   const infoIcon = getByTestId(INFO_ICON);

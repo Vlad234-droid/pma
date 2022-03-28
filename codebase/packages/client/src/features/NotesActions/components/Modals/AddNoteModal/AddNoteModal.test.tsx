@@ -13,7 +13,7 @@ jest.mock('react-markdown', () => ({ ReactMarkdown: () => 'mocked ReactMarkdown'
 it('render add note modal', async () => {
   const { getByTestId, queryByTestId, findByTestId } = render(
     <BrowserRouter>
-      <NotesActions />
+      <NotesActions loaded={true}/>
     </BrowserRouter>,
   );
 

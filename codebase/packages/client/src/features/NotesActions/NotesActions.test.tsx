@@ -14,7 +14,7 @@ jest.mock('react-router-dom', () => ({
 
 describe('Note page', () => {
   it('render confirm modal', async () => {
-    const { getByTestId, queryByTestId, findByTestId } = renderWithTheme(<NotesActions />);
+    const { getByTestId, queryByTestId, findByTestId } = renderWithTheme(<NotesActions loaded={true} />);
     const wrapper = getByTestId(NOTES_WRAPPER);
     const addButton = getByTestId(ADD_NEW);
     const confirmModal = queryByTestId(CONFIRM_MODAL_ID);

@@ -15,7 +15,6 @@ import {
   notesFolderTeamDataSelector,
   personalFolderUuidSelector,
   teamFolderUuidSelector,
-  getNotesMetaSelector,
 } from '@pma/store';
 
 import { role, usePermission } from 'features/Permission';
@@ -45,7 +44,7 @@ enum ModalStatuses {
   INFO = 'INFO',
 }
 
-const NotesActions: FC = () => {
+const NotesActions: FC<{ loaded: boolean; }> = ({ loaded }) => {
   const { css, theme } = useStyle();
   const navigate = useNavigate();
   const [status, setStatus] = useState(ModalStatuses.PENDING);
@@ -60,7 +59,6 @@ const NotesActions: FC = () => {
   const [isUserArchived, setIsUserArchived] = useState<boolean>(false);
   const [teamArchivedMode, setTeamArchivedMode] = useState<boolean>(false);
 
-  const { loaded } = useSelector(getNotesMetaSelector);
   const notesFolderColleagueData = useSelector(notesFolderColleagueDataSelector(colleagueUuid, isUserArchived)) || [];
   const notesFolderTeamData = useSelector(notesFolderTeamDataSelector(colleagueUuid, teamArchivedMode)) || [];
 

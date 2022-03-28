@@ -1,1 +1,1 @@
-export { default } from './NotesActions';
+export { default } from './NotesActionsContainer';

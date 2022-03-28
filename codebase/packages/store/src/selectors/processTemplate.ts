@@ -14,7 +14,7 @@ export const getProcessTemplateMetaSelector = createSelector(processTemplateSele
 // @ts-ignore
 export const getProcessTemplateSelector = createSelector(processTemplateSelector, ({ data }) => {
   return (
-    data.map((process: any) => ({
+    data?.map((process: any) => ({
       uuid: process.uuid,
       createdBy: process.createdBy,
       description: process.description,

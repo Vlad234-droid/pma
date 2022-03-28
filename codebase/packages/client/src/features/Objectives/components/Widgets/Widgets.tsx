@@ -36,7 +36,7 @@ const Widgets: FC<Props> = () => {
   const canShowObjectives = timelineTypes[ReviewType.OBJECTIVE];
   const dates = useSelector(earlyDataPDPSelector) || '';
   const pdpSelector = useSelector(schemaMetaPDPSelector)?.goals || [];
-  const { loading } = useSelector(metaPDPSelector);
+  const meta = useSelector(metaPDPSelector);
   const addedDatePDP = dates && pdpSelector.length ? formatDateString(dates, DATE_STRING_FORMAT) : '';
 
   useEffect(() => {
@@ -69,13 +69,13 @@ const Widgets: FC<Props> = () => {
     },
   ];
 
-  if (loading) {
+  if (meta?.loading) {
     return <Spinner />;
   }
 
   return (
     <div className={css(wrapperStyle)}>
-      {loading ? <Spinner /> : (
+      {meta?.loading ? <Spinner /> : (
         <>
           {canShowObjectives && (
             <MainWidget
