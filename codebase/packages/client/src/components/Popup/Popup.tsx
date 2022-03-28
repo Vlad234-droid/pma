@@ -1,12 +1,20 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { useNavigate } from 'react-router';
 import { CreateRule, Icon, ModalWithHeader, Rule, Theme, useBreakpoints, useStyle } from '@dex-ddl/core';
 import Details from 'components/Details';
 import { Attention } from 'components/Form';
 
-const Popup = (props) => {
+export const TEST_ID = 'popup-test-id';
+
+export type Props = {
+  items: Array<{
+    title: string;
+    uuid: string;
+  }>;
+};
+
+const Popup: FC<Props> = ({ items }) => {
   const { css, theme } = useStyle();
-  const { items } = props;
   const navigate = useNavigate();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
@@ -24,7 +32,7 @@ const Popup = (props) => {
         onClose: () => navigate(-1),
       }}
     >
-      <div className={css(main)}>
+      <div data-test-id={TEST_ID} className={css(main)}>
         <div className={css(decsriptionHeader({ theme }))}>Your organisation&#39;s strategic drivers</div>
         <Attention />
         <div className={css(templatesListStyles)}>
