@@ -8,6 +8,7 @@ import {
 } from './actions';
 
 export const initialState = {
+  data: [],
   meta: { loading: false, loaded: false, error: null },
 };
 

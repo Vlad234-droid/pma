@@ -22,6 +22,7 @@ export const DurationPicker: FC<DurationField> = ({ control, name }) => {
   const [weeks, setWeeks] = useState('');
   const [days, setDays] = useState('');
   const [showDialog, setShowDialog] = useState(false);
+
   return (
     <Controller
       name={name}

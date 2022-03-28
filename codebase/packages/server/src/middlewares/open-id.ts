@@ -14,7 +14,7 @@ import {
   userDataPlugin,
 } from '@energon/onelogin';
 
-import { defaultConfig, isPROD, ProcessConfig } from '../config';
+import { isPROD, ProcessConfig } from '../config';
 
 import { isEmpty } from '../utils';
 
@@ -57,7 +57,6 @@ const oidcTokenExtractorPlugin = (config: OidcTokenExtractorConfig) => {
     try {
       if (!isEmpty(res.oneLoginAuthData)) {
         const idToken = getIdentitySwapToken(res, strategy);
-        console.log('idToken', idToken);
         setDataToCookie(res, { idToken }, cookieConfig!);
       }
     } catch (e: any) {
@@ -99,11 +98,11 @@ export const openIdConfig = ({
   environment,
   applicationCookieParserSecret,
   applicationUserDataCookieName,
-  oneLoginIssuerUrl,
-  oneLoginApplicationPath,
-  oneLoginCallbackUrlRoot,
-  oneLoginCallbackPath,
-  oneLoginRedirectAfterLogoutUrl,
+  oidcIssuerUrl,
+  applicationPublicUrl,
+  applicationServerUrlRoot,
+  oidcAuthCallbackPath,
+  oidcRedirectAfterLogoutPath,
   oidcClientId,
   oidcClientSecret,
   oidcRefreshTokenSecret,
@@ -149,22 +148,22 @@ export const openIdConfig = ({
     cookieKey: applicationCookieParserSecret(),
 
     /** issuer url e.g. https://login.ourtesco.com/oidc/2 */
-    issuerUrl: oneLoginIssuerUrl(),
+    issuerUrl: oidcIssuerUrl(),
 
     /** Client secret used to encrypt refresh token */
     refreshTokenSecret: oidcRefreshTokenSecret(),
 
     /** A callback root that was registered for the application e.g. https://ourtesco.com (without the applicationPath) */
-    registeredCallbackUrlRoot: oneLoginCallbackUrlRoot(),
+    registeredCallbackUrlRoot: applicationServerUrlRoot(),
 
     /** A callback path that was registered for the application e.g. /auth/openid/callback */
-    registeredCallbackUrlPath: oneLoginCallbackPath(),
+    registeredCallbackUrlPath: oidcAuthCallbackPath(),
 
     /**
      * A path the app is mounted on e.g. for https://ourtesco.com/my-shift the path is /my-shift.
      * If the app is mounted on root path do not provide this option.
      */
-    applicationPath: oneLoginApplicationPath(),
+    applicationPath: applicationPublicUrl(),
 
     /**
      * Paths that won't be part of token validation and refreshing
@@ -190,7 +189,7 @@ export const openIdConfig = ({
      * Absolute url that we will redirect to after logout, that can lead to onelogin session termination ednpoint .
      * Default: `${applicationPath}/sso/auth`
      */
-    redirectAfterLogoutUrl: oneLoginRedirectAfterLogoutUrl(),
+    redirectAfterLogoutUrl: oidcRedirectAfterLogoutPath(),
 
     plugins: [
       identityTokenSwapPlugin({

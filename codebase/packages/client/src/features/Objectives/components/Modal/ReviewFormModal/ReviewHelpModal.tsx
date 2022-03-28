@@ -2,11 +2,13 @@ import React, { FC } from 'react';
 import { useStyle, useBreakpoints, Rule } from '@dex-ddl/core';
 import { Trans } from 'components/Translation';
 
+export const TEST_ID = 'review-help-modal';
+
 const ReviewHelpModal: FC = () => {
   const { css } = useStyle();
 
   return (
-    <div className={css(wrapperStyle)}>
+    <div data-test-id={TEST_ID} className={css(wrapperStyle)}>
       <div className={css(wrapperBlockStyle)}>
         <div>
           <div className={css(titleStyle)}>

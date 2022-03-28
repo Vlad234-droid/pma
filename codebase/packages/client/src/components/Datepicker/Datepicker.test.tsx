@@ -2,8 +2,9 @@
 import React from 'react';
 import { fireEvent } from '@testing-library/react';
 import { renderWithTheme as render } from 'utils/test';
+import { formatDateStringFromISO, DATE_FORMAT } from 'utils';
 
-import Datepicker, { TEST_ID, INPUT_TEST_ID } from './Datepicker';
+import Datepicker, { TEST_ID, INPUT_TEST_ID, buildTargetObject } from './Datepicker';
 
 jest.mock('lodash.debounce', () =>
   jest.fn((fn) => {
@@ -41,8 +42,9 @@ describe('Datepicker', () => {
 
   it('should onChange with empty value', () => {
     const onChange = jest.fn();
+    const name = 'test';
     const value = '12/12/2022';
-    const { getByTestId } = render(<Datepicker name='test' onChange={onChange} value={value} />);
+    const { getByTestId } = render(<Datepicker name={name} onChange={onChange} value={value} />);
     const input = getByTestId(INPUT_TEST_ID).firstChild as HTMLInputElement;
     fireEvent.change(input, { target: { value: '' } });
     expect(onChange).toBeCalledWith({
@@ -72,5 +74,16 @@ describe('Datepicker', () => {
     fireEvent.change(input, { target: { value } });
     expect(onError).toBeCalledTimes(1);
     expect(onChange).not.toBeCalled();
+  });
+
+  it('should change date when user enter day biggest max day', () => {
+    const onChange = jest.fn();
+    const name = 'test';
+    const value = '31/02/2022';
+    const date = new Date('2022-02-31');
+    const { getByTestId } = render(<Datepicker name={name} onChange={onChange} />);
+    const input = getByTestId(INPUT_TEST_ID).firstChild as HTMLInputElement;
+    fireEvent.change(input, { target: { value } });
+    expect(onChange).toBeCalledWith(buildTargetObject(formatDateStringFromISO(date.toISOString(), DATE_FORMAT), name));
   });
 });

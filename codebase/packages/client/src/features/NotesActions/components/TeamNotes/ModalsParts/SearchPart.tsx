@@ -1,11 +1,12 @@
-import React, { FC, Dispatch, SetStateAction } from 'react';
+import React, { FC, Dispatch, SetStateAction, useEffect } from 'react';
 import { Item } from 'components/Form';
 import { useStyle } from '@dex-ddl/core';
 import { UseFormReturn } from 'react-hook-form';
 import { SearchInput } from './SearchInput';
 import { PeopleTypes } from './type';
-import { useDispatch, useSelector } from 'react-redux';
-import { ColleaguesActions, getColleaguesSelector, colleagueUUIDSelector } from '@pma/store';
+import { useSelector } from 'react-redux';
+import { ColleaguesActions, colleagueUUIDSelector } from '@pma/store';
+import useSearchColleagues from 'hooks/useSearchColleagues';
 
 type SearchPartProps = {
   teamMethods: UseFormReturn;
@@ -23,15 +24,18 @@ export const SearchPart: FC<SearchPartProps> = ({
   setSearchValue,
 }) => {
   const { css } = useStyle();
-  const dispatch = useDispatch();
 
-  const foundColleagues = useSelector(getColleaguesSelector) || [];
   const colleagueUuid = useSelector(colleagueUUIDSelector);
+
+  const { colleagues, handleSearchColleagues } = useSearchColleagues({
+    'manager-uuid_eq': colleagueUuid,
+  });
 
   const {
     formState: { errors },
     register,
   } = teamMethods;
+
   return (
     <div className={css({ marginTop: '32px' })}>
       <Item
@@ -43,24 +47,13 @@ export const SearchPart: FC<SearchPartProps> = ({
           isValid={!errors[`search_option`]}
           name={`search_option`}
           onChange={(e) => {
-            if (e.target.value === '' || e.target.value.length <= 1) {
-              dispatch(ColleaguesActions.clearColleagueList());
-            }
-            if (e.target.value !== '' && e.target.value.length > 1) {
-              dispatch(
-                ColleaguesActions.getColleagues({
-                  'first-name_like': e.target.value,
-                  'last-name_like': e.target.value,
-                  'manager-uuid_eq': colleagueUuid,
-                }),
-              );
-            }
+            handleSearchColleagues(e.target.value);
             register(`search_option`).onChange(e);
           }}
           setSelectedPerson={setSelectedPerson}
           domRef={register(`search_option`).ref}
           placeholder={'Search'}
-          options={foundColleagues}
+          options={colleagues}
           setSearchValue={setSearchValue}
           searchValue={searchValue}
           selectedPerson={selectedPerson}

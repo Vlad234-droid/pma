@@ -8,23 +8,11 @@ import { concatWithErrorToast, errorPayloadConverter } from '../../utils/toastHe
 import { getConfigEntries, getConfigEntriesByUuid } from './actions';
 
 export const getConfigEntriesEpic: Epic = (action$, _, { api }) => {
-  const getItems = async (data) => {
-    const result = await data;
-    const results = await Promise.all(
-      result.data.map(({ uuid }) => {
-        //return api.getConfigEntriesByUuid({ uuid });
-        return api.getConfigEntriesByUuid({ uuid });
-      }),
-    );
-    return results;
-  };
   return action$.pipe(
     filter(isActionOf(getConfigEntries.request)),
     switchMap(() =>
       from(api.getConfigEntries()).pipe(
         map((data) => {
-          //getItems(data);
-          //getConfigEntriesByUuid.request({ uuid: 1 });
           return getConfigEntries.success(data);
         }),
         catchError((e) => {

@@ -36,7 +36,7 @@ import {
   ReviewsActions,
   reviewsMetaSelector,
   schemaMetaSelector,
-  TimelineActions,
+  TimelineActions, timelinesExistSelector, timelinesMetaSelector,
   timelineTypesAvailabilitySelector,
   getTimelineMetaSelector,
 } from '@pma/store';
@@ -84,6 +84,8 @@ const MyObjectives: FC = () => {
   const { loaded: reviewLoaded } = useSelector(reviewsMetaSelector);
   const { loaded: timelineLoaded } = useSelector(getTimelineMetaSelector);
   const colleagueUuid = useSelector(colleagueUUIDSelector);
+  const timelinesExist = useSelector(timelinesExistSelector(colleagueUuid));
+  const { loaded: timelinesLoaded } = useSelector(timelinesMetaSelector());
   const [schema] = useReviewSchema(ReviewType.OBJECTIVE) || {};
   const { components = [], markup = { max: 0, min: 0 } } = schema;
   const { descriptions, startDates, statuses } = useSelector(getTimelineSelector(colleagueUuid)) || {};
@@ -126,6 +128,18 @@ const MyObjectives: FC = () => {
   }
 
   useEffect(() => {
+    if (colleagueUuid) {
+      dispatch(TimelineActions.getTimeline({ colleagueUuid }));
+    }
+  }, [colleagueUuid]);
+
+  useEffect(() => {
+    if (timelinesLoaded && !timelinesExist) {
+      navigate(`/${Page.NOT_FOUND}`);
+    }
+  }, [timelinesLoaded, timelinesExist]);
+
+  useEffect(() => {
     dispatch(PreviousReviewFilesActions.getPreviousReviewFiles({ colleagueUUID: colleagueUuid }));
   }, []);
 
@@ -141,12 +155,6 @@ const MyObjectives: FC = () => {
       setObjectives(transformReviewsToObjectives(originObjectives, formElements));
     }
   }, [reviewLoaded, schemaLoaded]);
-
-  useEffect(() => {
-    if (colleagueUuid) {
-      dispatch(TimelineActions.getTimeline({ colleagueUuid }));
-    }
-  }, [colleagueUuid]);
 
   useEffect(() => {
     if (colleagueUuid && canShowObjectives) {
@@ -336,9 +344,9 @@ const MyObjectives: FC = () => {
           )}
 
           <div className={css(widgetsBlock)}>
-            <ShareWidget stopShare={true} customStyle={shareWidgetStyles} />
+            <ShareWidget stopShare={true} sharing={false} customStyle={shareWidgetStyles} />
 
-            <ShareWidget customStyle={shareWidgetStyles} />
+            <ShareWidget stopShare={false} sharing={true} customStyle={shareWidgetStyles} />
 
             <OrganizationWidget
               customStyle={{ flex: '1 1 30%', display: 'flex', flexDirection: 'column' }}

@@ -85,7 +85,7 @@ const titleStyle: Rule = ({ theme }) => {
   return {
     fontStyle: 'normal',
     fontWeight: 'bold',
-    fontSize: mobileScreen ? '16px' : '18px',
+    fontSize: mobileScreen ? '18px' : '20px',
     lineHeight: mobileScreen ? '20px' : '22px',
     marginBottom: '4px',
     textAlign: 'center',

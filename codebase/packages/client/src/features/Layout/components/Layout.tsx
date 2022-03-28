@@ -12,18 +12,14 @@ import headerContext from 'contexts/headerContext';
 export const TEST_ID = 'layout-wrapper';
 
 const notHaveAccessMessage = `
-  not_have_access_to_this_system
-  
   not_using_system_at_the_moment
   
   raise_a_ticket_to_access
   
-   [go_to_ourtesco_com](https://ourtesco.com)
+  [go_to_ourtesco_com](https://ourtesco.com)
 `;
 
 const systemNotAvailableMessage = `
-   not_have_access_to_this_system
-   
    system_not_available_at_the_moment
    
    please_try_again

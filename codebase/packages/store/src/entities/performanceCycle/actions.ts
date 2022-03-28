@@ -1,4 +1,4 @@
-import { createAsyncAction } from 'typesafe-actions';
+import { createAsyncAction, createAction } from 'typesafe-actions';
 
 export const getGetAllPerformanceCycles = createAsyncAction(
   'performance-cycles/REQUEST',
@@ -32,10 +32,20 @@ export const publishPerformanceCycle = createAsyncAction(
   'performance-cycles/PUBLISH_FAILURE',
 )<any, any, Error>();
 
+export const getPerformanceCycleMappingKeys = createAsyncAction(
+  'performance-cycles/mapping-keys/REQUEST',
+  'performance-cycles/mapping-keys/SUCCESS',
+  'performance-cycles/mapping-keys/FAILURE',
+)<undefined, any, Error>();
+
+export const resetMetaStatusRequest = createAction('performance-cycles/status/RESET')();
+
 export const Actions = {
   getGetAllPerformanceCycles: getGetAllPerformanceCycles.request,
   getPerformanceCycleByUuid: getPerformanceCycleByUuid.request,
   createPerformanceCycle: createPerformanceCycle.request,
   updatePerformanceCycle: updatePerformanceCycle.request,
   publishPerformanceCycle: publishPerformanceCycle.request,
+  getPerformanceCycleMappingKeys: getPerformanceCycleMappingKeys.request,
+  resetMetaStatusRequest,
 };

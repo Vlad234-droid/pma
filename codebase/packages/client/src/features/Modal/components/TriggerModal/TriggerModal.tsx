@@ -1,7 +1,7 @@
 import React, { FC, HTMLProps, useState, ReactNode } from 'react';
 import { useBreakpoints, Rule, Modal, useStyle } from '@dex-ddl/core';
 import { Icon } from 'components/Icon';
-import { Provider } from './context';
+import { TriggerModalProvider } from './context';
 
 export type TriggerModalProps = {
   triggerComponent: ReactNode;
@@ -42,7 +42,7 @@ const TriggerModal: FC<Props> = ({ triggerComponent, title, children }) => {
             setIsOpen(false);
           }}
         >
-          <Provider value={{ onClose: () => setIsOpen(false) }}>{children}</Provider>
+          <TriggerModalProvider value={{ onClose: () => setIsOpen(false) }}>{children}</TriggerModalProvider>
         </Modal>
       )}
     </>

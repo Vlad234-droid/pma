@@ -1,13 +1,14 @@
 import { createContext, useContext } from 'react';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-function
-const defaultEmpty = () => {};
+const defaultEmpty = () => ({});
 
 type Context = {
   onClose: () => void;
 };
-const { Provider, Consumer } = createContext<Context>({
+const TriggerModalContext = createContext<Context>({
   onClose: defaultEmpty,
 });
 
-export { Provider, Consumer, useContext };
+export const TriggerModalConsumer = TriggerModalContext.Consumer;
+export const TriggerModalProvider = TriggerModalContext.Provider;
+export const useTriggerModalContext = () => useContext(TriggerModalContext);

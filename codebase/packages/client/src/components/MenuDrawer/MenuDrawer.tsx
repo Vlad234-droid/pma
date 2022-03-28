@@ -1,6 +1,12 @@
 import React, { FC, MouseEvent, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { Rule, useStyle } from '@dex-ddl/core';
+import {
+  colleagueUUIDSelector,
+  timelinesExistSelector,
+} from '@pma/store';
+
 import { Page } from 'pages';
 import { LINKS } from 'config/constants';
 import { buildPath } from 'features/Routes';
@@ -18,6 +24,8 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
   const { linkTitle } = useHeaderContainer();
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenDropdown, toggleOpen] = useState(false);
+  const colleagueUuid = useSelector(colleagueUUIDSelector);
+  const timelinesExist = useSelector(timelinesExistSelector(colleagueUuid));
 
   const { css } = useStyle();
   const { t } = useTranslation();
@@ -57,15 +65,17 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
               linkTo={buildPath(Page.CONTRIBUTION)}
               title={t('your_contribution', 'Your contribution')}
             />
-            <MenuItem
-              iconGraphic={'aim'}
-              linkTo={buildPath(Page.OBJECTIVES_VIEW)}
-              title={
-                linkTitle?.[Page.OBJECTIVES_VIEW]
-                  ? linkTitle[Page.OBJECTIVES_VIEW]
-                  : t('my_objectives_and_reviews', 'My objectives and reviews')
-              }
-            />
+            {timelinesExist && (
+              <MenuItem
+                iconGraphic={'aim'}
+                linkTo={buildPath(Page.OBJECTIVES_VIEW)}
+                title={
+                  linkTitle?.[Page.OBJECTIVES_VIEW]
+                    ? linkTitle[Page.OBJECTIVES_VIEW]
+                    : t('my_objectives_and_reviews', 'My objectives and reviews')
+                }
+              />
+            )}
             <CanPerform
               perform={[role.LINE_MANAGER, role.PEOPLE_TEAM, role.COLLEAGUE]}
               yes={() => (

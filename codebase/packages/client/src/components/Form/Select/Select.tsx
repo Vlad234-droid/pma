@@ -1,4 +1,4 @@
-import React, { FC, MouseEvent, useRef, useState } from 'react';
+import React, { FC, MouseEvent, useEffect, useRef, useState } from 'react';
 import mergeRefs from 'react-merge-refs';
 import { Rule, useStyle } from '@dex-ddl/core';
 
@@ -16,7 +16,7 @@ const Select: FC<SelectField> = ({ domRef, name, options, placeholder, value, on
   const { inputRef } = useFormContainer();
   const ref = useRef<HTMLDivElement | null>(null);
   const [isOpen, setOpen] = useState<boolean>(false);
-  const [selected, setSelected] = useState<Option | undefined>(getSelectedOption(options, value));
+  const [selected, setSelected] = useState<Option | undefined>();
 
   const handleClickOutside = (event: MouseEvent<HTMLElement>) => {
     const element = event?.target as HTMLElement;
@@ -26,6 +26,10 @@ const Select: FC<SelectField> = ({ domRef, name, options, placeholder, value, on
   };
 
   useEventListener('click', handleClickOutside);
+
+  useEffect(() => {
+    value !== undefined && setSelected(getSelectedOption(options, value));
+  }, [value, options]);
 
   const toggleList = () => {
     setOpen((isOpen) => !isOpen);

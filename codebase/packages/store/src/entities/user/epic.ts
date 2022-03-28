@@ -20,6 +20,7 @@ export const getCurrentUserEpic: Epic = (action$, _, { openapi }) =>
             // @ts-ignore
             return of(getCurrentUser.failure({ code: 'SERVER_ERROR' }));
           }
+
           const errors = data?.errors;
           return concatWithErrorToast(
             of(getCurrentUser.failure(errors?.[0])),

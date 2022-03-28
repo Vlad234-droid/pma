@@ -1,9 +1,9 @@
-import { Graphics } from 'components/Icon';
-import { role } from 'features/Permission';
+import {Graphics} from 'components/Icon';
+import {role} from 'features/Permission';
 
-import { Page, PageElement } from './types';
+import {Page, PageElement} from './types';
 import CareerPerformance from './CareerPerformance';
-import { CreatePersonalDevelopmentGoal, PersonalDevelopmentHelp, PersonalDevelopmentPlan } from './PDP';
+import {CreatePersonalDevelopmentGoal, PersonalDevelopmentHelp, PersonalDevelopmentPlan} from './PDP';
 import MyTeam from './MyTeam';
 import MyActions from './MyActions';
 import Objectives from './Objectives';
@@ -20,14 +20,15 @@ import KnowledgeLibrary from './KnowledgeLibrary';
 import CreateOrganizationObjectives from './CreateOrganizationObjectives';
 import ObjectivesView from './ObjectivesView';
 import Report from './Report';
-import { CreatePerformanceCycle, PerformanceCycleAdministration } from './PerformanceCycle';
-import { EditTip, TipsAdministration } from './Tips';
-import { UserObjectives } from './UserObjectives';
+import {CreatePerformanceCycle, PerformanceCycleAdministration} from './PerformanceCycle';
+import {EditTip, TipsAdministration} from './Tips';
+import {UserObjectives} from './UserObjectives';
 import PeopleTeam from './PeopleTeam';
 import Calibration from './Calibration';
 import AdministratorPage from './AdministratorPage';
 import RespondNewFeedback from './RespondNewFeedback';
 import ObjectivesReport from './ObjectivesReport';
+import {NotFound} from './NotFound';
 
 export type PageComponent = {
   Element: PageElement;
@@ -244,7 +245,7 @@ const pages: Record<Page, PageComponent> = {
     title: 'Team reporting',
     withHeader: true,
     backPath: Page.CONTRIBUTION,
-    perform: [role.TALENT_ADMIN, role.ADMIN, role.LINE_MANAGER],
+    perform: [role.TALENT_ADMIN, role.ADMIN, role.LINE_MANAGER, role.COLLEAGUE],
   },
   [Page.OBJECTIVES_SUBMITTED_REPORT]: {
     Element: ObjectivesReport,
@@ -264,6 +265,13 @@ const pages: Record<Page, PageComponent> = {
     withHeader: true,
     backPath: Page.CONTRIBUTION,
     perform: [role.ADMIN],
+  },
+  [Page.NOT_FOUND]: {
+    Element: NotFound,
+    title: 'Not found',
+    withHeader: false,
+    backPath: Page.CONTRIBUTION,
+    perform: [role.COLLEAGUE],
   },
 };
 

@@ -1,12 +1,16 @@
+#!/bin/sh
+
 NPM_CREDENTIALS=$1
 
-if [ "$NPM_CREDENTIALS" = "--token" ]; then
+if [ "$NPM_CREDENTIALS" = "--token" ]
+then
   NPM_ACCESS_TOKEN=$2
 else
   NPM_ACCESS_TOKEN=$(echo -n "$NPM_CREDENTIALS" | base64)
 fi
 
-if [ -f ~/.npmrc ]; then
+if [ -f ~/.npmrc ]
+then
   mv ~/.npmrc ~/copy.npmrc
 fi
 

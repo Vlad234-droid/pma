@@ -34,6 +34,7 @@ enum Page {
   ADMINISTRATION = 'administration',
   OBJECTIVES_SUBMITTED_REPORT = 'report/submitted-objectives',
   OBJECTIVES_APPROVED_REPORT = 'report/approved-objectives',
+  NOT_FOUND = '404',
 }
 
 type PageElement =

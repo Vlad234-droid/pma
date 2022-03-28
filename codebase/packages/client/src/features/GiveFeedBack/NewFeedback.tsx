@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useBreakpoints, Rule, Modal } from '@dex-ddl/core';
@@ -81,7 +81,7 @@ const NewFeedback: FC = () => {
           ...data,
           feedbackItems: data.feedbackItems.map((item) => ({
             ...item,
-            uuid: feedbackItems.find((feedback) => feedback.code === item.code)?.uuid,
+            uuid: feedbackItems?.find((feedback) => feedback.code === item.code)?.uuid,
           })),
           colleagueUuid,
           uuid,
@@ -104,6 +104,12 @@ const NewFeedback: FC = () => {
     navigate(`/${Page.GIVE_FEEDBACK}`);
     dispatch(ColleaguesActions.clearColleagueList());
   };
+
+  useEffect(() => {
+    return () => {
+      dispatch(ColleaguesActions.clearColleagueList());
+    };
+  }, []);
 
   return (
     <Modal
