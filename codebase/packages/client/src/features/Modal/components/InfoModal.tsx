@@ -28,6 +28,7 @@ const InfoModal: FC<Props> = ({ title, description, onCancel, onOverlayClick }) 
     >
       {description && (
         <div
+          data-test-id={'info-modal-description'}
           className={css({
             padding: '16px 0',
           })}

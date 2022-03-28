@@ -10,6 +10,8 @@ type Props = {
 };
 
 export const MODAL_WRAPPER = 'modal_wrapper';
+export const DESCRIPTION_1 = 'DESCRIPTION_1';
+export const DESCRIPTION_2 = 'DESCRIPTION_2';
 
 const InfoModal: FC<Props> = ({ closeInfoModal, TEAM }) => {
   const { css, theme } = useStyle();
@@ -18,7 +20,7 @@ const InfoModal: FC<Props> = ({ closeInfoModal, TEAM }) => {
   return (
     <div className={css(wrapperInfo)} data-test-id={MODAL_WRAPPER}>
       {!TEAM ? (
-        <p className={css(preTitle)}>
+        <p data-test-id={DESCRIPTION_1} className={css(preTitle)}>
           <Trans>
             My Notes can be used to create and store notes about Your Contribution throughout the year. Use this space
             to record achievements, thoughts on objectives or subjects to raise with your line manager during your 1:1s.
@@ -27,7 +29,7 @@ const InfoModal: FC<Props> = ({ closeInfoModal, TEAM }) => {
           </Trans>
         </p>
       ) : (
-        <p className={css(preTitle)}>
+        <p data-test-id={DESCRIPTION_2} className={css(preTitle)}>
           <Trans>
             My Notes can be used to create and store notes about Your Contribution and that of your direct reports
             throughout the year. Use this space to record achievements, thoughts on objectives or subjects to raise with

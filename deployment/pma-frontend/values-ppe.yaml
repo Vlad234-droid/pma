@@ -104,5 +104,5 @@ environment:
   USE_ONELOGIN: true
   OIDC_ISSUER_URL: https://loginppe.ourtesco.com/oidc/2
   OIDC_AUTH_CALLBACK_PATH: /sso/auth/callback
-  OIDC_REDIRECT_AFTER_LOGOUT_CALLBACK_PATH: https://loginppe.ourtesco.com/oidc/2/logout?logout=true
+  OIDC_REDIRECT_AFTER_LOGOUT_CALLBACK_PATH: /sso/logout/callback
   IDENTITY_USER_SCOPED_TOKEN_COOKIE_NAME: identity-user-scoped-token
