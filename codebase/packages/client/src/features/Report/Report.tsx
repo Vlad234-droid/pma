@@ -1,5 +1,5 @@
-import React, { FC, useState, useEffect, useCallback } from 'react';
-import {ReportActions, getReportMetaSelector } from '@pma/store';
+import React, { FC, useState } from 'react';
+import { getReportMetaSelector } from '@pma/store';
 import { Button, colors, CreateRule, Rule, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -165,7 +165,9 @@ const Report: FC = () => {
             />
           </div>
         </div>
-        {!loaded ? <Spinner /> : (
+        {!loaded ? (
+          <Spinner />
+        ) : (
           <>
             <div className={css(pieChartWrapper)}>
               <div className={css(leftColumn)}>

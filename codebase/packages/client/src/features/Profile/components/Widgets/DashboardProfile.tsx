@@ -118,7 +118,7 @@ const DashboardProfile: FC<Props> = () => {
                 </div>
                 <div className={css(bodyBlockStyle)}>
                   <span className={css(titleStyle)}>
-                    <Trans i18nKey='function'>Function</Trans>
+                    <Trans>Department</Trans>
                   </span>
                   <span className={css(descriptionStyle({ mobileScreen }), { fontSize: '16px', lineHeight: '20px' })}>
                     {department}

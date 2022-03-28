@@ -10,7 +10,7 @@ it('Layout', async () => {
       <Layout />
     </BrowserRouter>,
   );
-  const wrapper = getByText(/not_have_access_to_this_system/i);
+  const wrapper = getByText(/raise_a_ticket_to_access/i);
 
   expect(wrapper).toBeInTheDocument();
 });

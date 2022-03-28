@@ -88,15 +88,13 @@ const PerformanceCycleForm: FC<Props> = ({ onSubmit, defaultValues }) => {
     if (template?.uuid) dispatch(ProcessTemplateActions.getProcessTemplateMetadata({ fileUuid: template?.uuid }));
   }, [template?.uuid]);
 
+  if (loading || !loaded) {
+    return <Spinner fullHeight />;
+  }
+
   useEffect(() => {
     dispatch(PerformanceCycleActions.getPerformanceCycleMappingKeys());
   }, []);
-
-  if (loading || !loaded) {
-    return (
-      <Spinner fullHeight />
-    )
-  }
 
   return (
     <form className={css({ marginTop: '32px' })} autoComplete='off'>

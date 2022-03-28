@@ -34,7 +34,6 @@ describe('<ShareObjectivesModal />', () => {
     expect(screen.getByTestId('objective-accordion')).toBeInTheDocument();
     expect(screen.getAllByTestId('objective-accordion').length).toEqual(1);
 
-    // arrowleft
     fireEvent.click(screen.getByTestId('arrowleft'));
     expect(onClose).toBeCalled();
   });
