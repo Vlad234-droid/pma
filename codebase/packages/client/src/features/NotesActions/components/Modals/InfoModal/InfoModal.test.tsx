@@ -1,26 +1,30 @@
 import React from 'react';
-import { BrowserRouter } from 'react-router-dom';
 import '@testing-library/jest-dom/extend-expect';
-import { renderWithTheme as render } from 'utils/test';
+import { renderWithTheme as render, screen } from 'utils/test';
 import '@testing-library/jest-dom';
 import { fireEvent } from '@testing-library/react';
-import { MODAL_WRAPPER } from './InfoModal';
-import NotesActions from '../../../../NotesActions';
-import { INFO_ICON } from '../../FilterOptions/FilterOptions';
+import InfoModal, { MODAL_WRAPPER, DESCRIPTION_1, DESCRIPTION_2 } from './InfoModal';
 
-it('render info modal', async () => {
-  const { getByTestId, queryByTestId, findByTestId } = render(
-    <BrowserRouter>
-      <NotesActions />
-    </BrowserRouter>,
-  );
-  const infoIcon = getByTestId(INFO_ICON);
-  const modalWrapper = queryByTestId(MODAL_WRAPPER);
+describe('<InfoModal />', () => {
+  it('InfoModal NotesActions render DESCRIPTION_1', async () => {
+    const closeInfoModal = jest.fn();
+    render(<InfoModal closeInfoModal={closeInfoModal} TEAM={false} />);
 
-  expect(infoIcon).toBeInTheDocument();
-  expect(modalWrapper).toBeNull();
+    expect(screen.getByTestId(MODAL_WRAPPER)).toBeInTheDocument();
+    expect(screen.getByTestId(DESCRIPTION_1)).toBeInTheDocument();
 
-  fireEvent.click(infoIcon);
+    fireEvent.click(screen.getByRole('button'));
+    expect(closeInfoModal).toBeCalled();
+  });
 
-  expect(await findByTestId(MODAL_WRAPPER)).toBeInTheDocument();
+  it('InfoModal NotesActions render DESCRIPTION_2', async () => {
+    const closeInfoModal = jest.fn();
+    render(<InfoModal closeInfoModal={closeInfoModal} TEAM={true} />);
+
+    expect(screen.getByTestId(MODAL_WRAPPER)).toBeInTheDocument();
+    expect(screen.getByTestId(DESCRIPTION_2)).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button'));
+    expect(closeInfoModal).toBeCalled();
+  });
 });

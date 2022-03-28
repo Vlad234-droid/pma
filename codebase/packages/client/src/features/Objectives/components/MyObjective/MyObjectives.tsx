@@ -36,7 +36,9 @@ import {
   ReviewsActions,
   reviewsMetaSelector,
   schemaMetaSelector,
-  TimelineActions, timelinesExistSelector, timelinesMetaSelector,
+  TimelineActions,
+  timelinesExistSelector,
+  timelinesMetaSelector,
   timelineTypesAvailabilitySelector,
 } from '@pma/store';
 import OrganizationWidget from 'features/Objectives/components/OrganizationWidget/OrganizationWidget';
@@ -254,8 +256,6 @@ const MyObjectives: FC = () => {
                       startTime={midYearReview?.startTime}
                       endTime={midYearReview?.endTime}
                       lastUpdatedTime={midYearReview?.lastUpdatedTime}
-                      onClick={() => console.log('ReviewWidget')}
-                      onClose={() => console.log('ReviewWidget')}
                       title={'Mid-year review'}
                       customStyle={{ height: '100%' }}
                     />
@@ -267,8 +267,6 @@ const MyObjectives: FC = () => {
                       startTime={endYearReview?.startTime}
                       endTime={endYearReview?.endTime}
                       lastUpdatedTime={endYearReview?.lastUpdatedTime}
-                      onClick={() => console.log('ReviewWidget')}
-                      onClose={() => console.log('ReviewWidget')}
                       title={'Year-end review'}
                       customStyle={{ height: '100%' }}
                     />
@@ -283,8 +281,6 @@ const MyObjectives: FC = () => {
                     startTime={endYearReview?.startTime}
                     endTime={endYearReview?.endTime}
                     lastUpdatedTime={endYearReview?.lastUpdatedTime}
-                    onClick={() => console.log('ReviewWidget')}
-                    onClose={() => console.log('ReviewWidget')}
                     title={'Annual performance review'}
                     customStyle={{ height: '100%' }}
                   />
