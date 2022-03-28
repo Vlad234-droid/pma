@@ -11,6 +11,9 @@ metadata:
     nginx.ingress.kubernetes.io/proxy-body-size: "128m"
     nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
     nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
+    nginx.ingress.kubernetes.io/server-snippet: |
+      client_header_buffer_size 32k;
+      large_client_header_buffers 4 32k;
 spec:
   rules:
   - http:
