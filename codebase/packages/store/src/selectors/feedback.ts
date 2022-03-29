@@ -64,3 +64,5 @@ export const getRespondedFeedbacksSelector = (status) =>
   });
 
 export const getLoadedStateSelector = createSelector(feedbackSelector, ({ feedbacks: { meta } }) => meta);
+
+export const getFeedbackMetaSelector = createSelector(feedbackSelector, ({ meta }) => meta);

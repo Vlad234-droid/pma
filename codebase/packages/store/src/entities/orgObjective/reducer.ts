@@ -69,7 +69,7 @@ export default createReducer(initialState)
   .handleAction(getOrgObjectives.failure, (state, { payload }) => ({
     ...state,
     objectives: initialObjectivesData,
-    meta: { ...state.meta, error: payload },
+    meta: { ...state.meta, error: payload, loading: false, loaded: true },
   }))
   .handleAction(getOrgAuditLogs.request, (state) => ({
     ...state,

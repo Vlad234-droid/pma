@@ -5,6 +5,7 @@ import { Rule, useStyle } from '@dex-ddl/core';
 import { buildPath } from 'features/Routes';
 import { Page } from 'pages';
 import { Employee } from 'config/types';
+import Spinner from 'components/Spinner';
 
 import PendingApprovals from '../PendingApprovals';
 import Actions from '../Actions';
@@ -42,15 +43,16 @@ const TeamWidgets: FC<Props> = ({
 
   return (
     <div data-test-id='team-widgets' className={css(wrapperStyles)}>
-      <div className={css(listWrapperStyles)}>
-        <div>
-          {showActions && (
-            <Link to={buildPath(Page.MY_ACTIONS)}>
-              <PendingApprovals count={waitingCount} />
-            </Link>
-          )}
-          <div className={css(listStyles)}>
-            {loaded &&
+      {!loaded ? <Spinner /> : (
+        <div className={css(listWrapperStyles)}>
+          <div>
+            {showActions && (
+              <Link to={buildPath(Page.MY_ACTIONS)}>
+                <PendingApprovals count={waitingCount} />
+              </Link>
+            )}
+            <div className={css(listStyles)}>
+              {loaded &&
               colleagues.map((employee: Employee) => (
                 <TeamMateProfile
                   fullTeamView={view === View.FULL_TEAM}
@@ -60,9 +62,10 @@ const TeamWidgets: FC<Props> = ({
                   employee={employee}
                 />
               ))}
+            </div>
           </div>
         </div>
-      </div>
+      )}
       <div data-test-id='more' className={css(actionsStyles)}>
         {showActions && <Actions draftCount={draftCount} waitingCount={waitingCount} />}
       </div>

@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { Button, Rule, useBreakpoints, useStyle } from '@dex-ddl/core';
 
 import { TileWrapper } from 'components/Tile';
-import { PerformanceCycleActions, getPerformanceCycleSelector } from '@pma/store';
+import { PerformanceCycleActions, getPerformanceCycleSelector, performanceCycleMetaSelector } from '@pma/store';
 import useDispatch from 'hooks/useDispatch';
 import { useSelector } from 'react-redux';
 
@@ -11,6 +11,7 @@ import { Radio } from 'components/Form';
 import { Trans } from 'components/Translation';
 import { paramsReplacer } from 'utils';
 import { buildPath } from 'features/Routes';
+import Spinner from 'components/Spinner';
 import { Page } from '../types';
 
 enum Status {
@@ -28,6 +29,7 @@ const PerformanceCycleAdministration: FC = () => {
   const [active, setActive] = useState(Status.ACTIVE);
 
   const data = useSelector(getPerformanceCycleSelector) || {};
+  const { loading, loaded } = useSelector(performanceCycleMetaSelector);
 
   const dispatch = useDispatch();
 
@@ -187,13 +189,14 @@ const PerformanceCycleAdministration: FC = () => {
               }).length
             })`}
           </div>
-          <table
-            className={css({
-              borderCollapse: 'collapse',
-              width: '100%',
-            })}
-          >
-            <thead>
+          {loading || !loaded ? <Spinner /> : (
+            <table
+              className={css({
+                borderCollapse: 'collapse',
+                width: '100%',
+              })}
+            >
+              <thead>
               <tr className={css({ background: '#F3F9FC', fontSize: '14px', lineHeight: '18px' })}>
                 <th className={css(item)}>
                   <Trans i18nKey={'name'}>Name</Trans>
@@ -211,8 +214,8 @@ const PerformanceCycleAdministration: FC = () => {
                   <Trans i18nKey={'action'}>Action</Trans>
                 </th>
               </tr>
-            </thead>
-            <tbody>
+              </thead>
+              <tbody>
               {data
                 .filter((item) => {
                   return item.status === active;
@@ -238,8 +241,9 @@ const PerformanceCycleAdministration: FC = () => {
                     </tr>
                   );
                 })}
-            </tbody>
-          </table>
+              </tbody>
+            </table>
+          )}
         </TileWrapper>
       </div>
     </div>

@@ -166,10 +166,7 @@ export const initializeOpenid = async ({
           httpOnly: false,
           secure: isProduction,
           signed: isProduction,
-          cookieShapeResolver: (userInfo: OpenIdUserInfo) =>
-            pmaUserDataResolver(
-              userInfo,
-            ),
+          cookieShapeResolver: (userInfo: OpenIdUserInfo) => pmaUserDataResolver(userInfo),
         },
       }),
     ],

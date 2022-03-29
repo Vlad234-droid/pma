@@ -18,6 +18,7 @@ import {
 } from '@pma/store';
 
 import { role, usePermission } from 'features/Permission';
+import Spinner from 'components/Spinner';
 import { AddTeamNoteModal, InfoModal, AddNoteModal, FilterOptions, MainFolders } from './components';
 import { IconButton } from 'components/IconButton';
 import { Icon } from 'components/Icon';
@@ -44,7 +45,7 @@ export enum ModalStatuses {
   INFO = 'INFO',
 }
 
-const NotesActions: FC = () => {
+const NotesActions: FC<{ loaded: boolean; }> = ({ loaded }) => {
   const { css, theme } = useStyle();
   const navigate = useNavigate();
   const [status, setStatus] = useState(ModalStatuses.PENDING);
@@ -357,6 +358,10 @@ const NotesActions: FC = () => {
     setStatus(() => ModalStatuses.PENDING);
     reset();
   };
+
+  if (!loaded) {
+    return <Spinner fullHeight />
+  }
 
   if (status === ModalStatuses.INFO) {
     return (

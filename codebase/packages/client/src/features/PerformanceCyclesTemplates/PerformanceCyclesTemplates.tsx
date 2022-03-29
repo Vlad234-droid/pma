@@ -3,13 +3,14 @@ import { CreateRule, Rule, useStyle, useBreakpoints } from '@dex-ddl/core';
 import { useDispatch, useSelector } from 'react-redux';
 import debounce from 'lodash.debounce';
 
-import { ProcessTemplateActions, getProcessTemplateSelector } from '@pma/store';
+import { ProcessTemplateActions, getProcessTemplateSelector, getProcessTemplateMetaSelector } from '@pma/store';
 import { formatDateStringFromISO } from 'utils/date';
 import { FilterOption } from 'features/Shared';
 import { IconButton } from 'components/IconButton';
 import { ConfirmModal } from 'features/Modal';
 import { Trans, useTranslation } from 'components/Translation';
 import { DropZone } from 'components/DropZone';
+import Spinner from 'components/Spinner';
 import { FilterModal } from '../Shared/components/FilterModal';
 import {
   getSortString,
@@ -47,6 +48,7 @@ const PerformanceCyclesTemplates: FC = () => {
   const dispatch = useDispatch();
   const [, isBreakpoint] = useBreakpoints();
   const templatesList = useSelector(getProcessTemplateSelector) || [];
+  const meta = useSelector(getProcessTemplateMetaSelector);
 
   const [sortModal, setSortModal] = useState(false);
   const [extensionModal, setExtensionModal] = useState(false);
@@ -199,37 +201,41 @@ const PerformanceCyclesTemplates: FC = () => {
         </div>
       </div>
       <div className={css(templatesListStyles)}>
-        {templatesList.map((item) => {
-          const { value } = item;
+        {!meta?.loaded ? <Spinner /> : (
+          <>
+            {templatesList.map((item) => {
+              const { value } = item;
 
-          const createdTime = formatDateStringFromISO(item.createdTime, 'MM/dd/yyyy');
-          return (
-            <div className={css(templatesListItemStyles)} key={value}>
-              <div>
-                {item?.label}
-                <div className={css(row)}>
-                  {item?.fileName} {item?.path}
+              const createdTime = formatDateStringFromISO(item.createdTime, 'MM/dd/yyyy');
+              return (
+                <div className={css(templatesListItemStyles)} key={value}>
+                  <div>
+                    {item?.label}
+                    <div className={css(row)}>
+                      {item?.fileName} {item?.path}
+                    </div>
+                  </div>
+                  <div className={css(dateWrapper)}>
+                    <div className={css(timeStyles)}>{createdTime}</div>
+                    <a href={downloadFile(value)} download>
+                      <IconButton iconProps={{ title: 'Download' }} graphic='download' />
+                    </a>
+
+                    <IconButton
+                      iconStyles={{ marginLeft: '10px' }}
+                      iconProps={{ title: 'Delete' }}
+                      graphic='delete'
+                      onPress={() => {
+                        setModalStatus(() => DeleteStatuses.CONFIRMING);
+                        setSelectedFile(() => item);
+                      }}
+                    />
+                  </div>
                 </div>
-              </div>
-              <div className={css(dateWrapper)}>
-                <div className={css(timeStyles)}>{createdTime}</div>
-                <a href={downloadFile(value)} download>
-                  <IconButton iconProps={{ title: 'Download' }} graphic='download' />
-                </a>
-
-                <IconButton
-                  iconStyles={{ marginLeft: '10px' }}
-                  iconProps={{ title: 'Delete' }}
-                  graphic='delete'
-                  onPress={() => {
-                    setModalStatus(() => DeleteStatuses.CONFIRMING);
-                    setSelectedFile(() => item);
-                  }}
-                />
-              </div>
-            </div>
-          );
-        })}
+              );
+            })}
+          </>
+        )}
       </div>
       {(modalStatus === DeleteStatuses.CONFIRMING || modalStatus === DeleteStatuses.SUBMITTED) && (
         <ConfirmModal

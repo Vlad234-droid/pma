@@ -14,6 +14,7 @@ import {
 
 import { Status } from 'config/enum';
 import { useTranslation } from 'components/Translation';
+import Spinner from 'components/Spinner';
 
 import { RadioGroup } from './RadioGroup';
 import { SelectAll } from './SelectAll';
@@ -93,6 +94,10 @@ export const Actions = () => {
       setIsCheckAll(false);
     }
   }, [checkedItems, colleagues]);
+
+  if (!loaded) {
+    return <Spinner fullHeight />
+  }
 
   return (
     <>

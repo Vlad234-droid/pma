@@ -3,11 +3,12 @@ import { CreateRule, ModalWithHeader, Rule, useBreakpoints, useStyle } from '@de
 import { useNavigate, useParams } from 'react-router-dom';
 import { Icon } from 'components/Icon';
 import { useDispatch, useSelector } from 'react-redux';
-import { colleagueUUIDSelector, PDPActions, schemaMetaPDPSelector } from '@pma/store';
+import { colleagueUUIDSelector, PDPActions, schemaMetaPDPSelector, metaPDPSelector } from '@pma/store';
 import { buildPath } from 'features/Routes';
 import { Page } from 'pages';
 import { PDPType } from 'config/enum';
 import { useTranslation } from 'components/Translation';
+import Spinner from 'components/Spinner';
 import CreatePDPForm from './components/CreatePDPForm';
 import usePDPSchema from './hooks/usePDPSchema';
 
@@ -22,6 +23,7 @@ const CreateMyPDP = () => {
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const pdpList = useSelector(schemaMetaPDPSelector)?.goals || [];
+  const { loaded, loading } = useSelector(metaPDPSelector);
   const [pdpGoals, setPDPGoals] = useState<any[]>([]);
   const [schema] = usePDPSchema(PDPType.PDP);
   const { components = [] } = schema;
@@ -86,6 +88,10 @@ const CreateMyPDP = () => {
       setCurrentGoal({});
     }
   };
+
+  if (loading || !loaded || !schema?.meta?.loaded) {
+    return <Spinner fullHeight />
+  }
 
   return (
     <ModalWithHeader
