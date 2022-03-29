@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from 'react';
-import { useStyle, Rule, useBreakpoints } from '@dex-ddl/core';
+import { useStyle, Rule, useBreakpoints, IconButton as BackButton } from '@dex-ddl/core';
+import { useNavigate } from 'react-router-dom';
 
 import ColleagueProfile from './components/ColleagueProfile';
 import { PieChart } from 'components/PieChart';
@@ -8,14 +9,24 @@ import { View } from 'components/PieChart/config';
 import { IconButton } from 'components/IconButton';
 import { FilterOption } from 'features/Shared';
 import FilterModal from 'features/Report/components/FilterModal';
+import { buildPath } from 'features/Routes';
 
 import { useObjectivesProfile } from './hooks';
 import { ObjectiveType } from './config';
 import { TitlesReport } from 'config/enum';
 import { initialValues } from 'features/Report/config';
+import { getCurrentYear } from 'utils/date';
+
+import { Page } from 'pages';
+
+export const OBJECTIVES_WRAPPER = 'objectives_wrapper';
+export const APPROVED_COLLEAGUES_WRAPPER = 'approved-colleagues_wrapper';
+export const NOT_APPROVED_COLLEAGUES_WRAPPER = 'not-approved-colleagues_wrapper';
 
 const ObjectivesReportStatistics = () => {
   const { css } = useStyle();
+  const navigate = useNavigate();
+
   const { t } = useTranslation();
   const [focus, setFocus] = useState(false);
   const [searchValueFilterOption, setSearchValueFilterOption] = useState<string>('');
@@ -24,7 +35,7 @@ const ObjectivesReportStatistics = () => {
   const [checkedItems, setCheckedItems]: [string[], (T) => void] = useState([]);
   const [isCheckAll, setIsCheckAll]: [string[], (T) => void] = useState([]);
 
-  const [pending, done, objectiveType, objectivesSubmittedPercentage, objectivesApprovedPercentage] =
+  const [pending, done, objectiveType, objectivesSubmittedPercentage, objectivesApprovedPercentage, query] =
     useObjectivesProfile();
 
   const checkObjectiveType = () => objectiveType && objectiveType === ObjectiveType.SUBMITTED;
@@ -41,7 +52,7 @@ const ObjectivesReportStatistics = () => {
             </span>
           )}
           {pending.map((item) => (
-            <div key={item.uuid} className={css({ marginTop: '8px' })}>
+            <div key={item.uuid} className={css({ marginTop: '8px' })} data-test-id={NOT_APPROVED_COLLEAGUES_WRAPPER}>
               <ColleagueProfile colleague={item} />
             </div>
           ))}
@@ -53,7 +64,7 @@ const ObjectivesReportStatistics = () => {
             </span>
           )}
           {done.map((item) => (
-            <div key={item.uuid} className={css({ marginTop: '8px' })}>
+            <div key={item.uuid} className={css({ marginTop: '8px' })} data-test-id={APPROVED_COLLEAGUES_WRAPPER}>
               <ColleagueProfile colleague={item} />
             </div>
           ))}
@@ -65,7 +76,18 @@ const ObjectivesReportStatistics = () => {
   }, [pending, done]);
 
   return (
-    <div>
+    <div data-test-id={OBJECTIVES_WRAPPER}>
+      <div className={css(arrowLeftStyle)}>
+        <BackButton
+          onPress={() => {
+            navigate({
+              pathname: buildPath(Page.REPORT),
+              search: new URLSearchParams({ year: query.year || getCurrentYear() }).toString(),
+            });
+          }}
+          graphic='backwardLink'
+        />
+      </div>
       <div className={css(header)}>
         <div className={css(flexCenterStyled)}>
           <IconButton
@@ -124,6 +146,17 @@ const ObjectivesReportStatistics = () => {
       </div>
     </div>
   );
+};
+
+const arrowLeftStyle: Rule = () => {
+  return {
+    position: 'fixed',
+    top: '34px',
+    textDecoration: 'none',
+    border: 'none',
+    cursor: 'pointer',
+    left: '16px',
+  };
 };
 
 const rightColumn: Rule = {

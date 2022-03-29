@@ -1,5 +1,5 @@
 import React, { FC, useRef, MouseEvent, SetStateAction, Dispatch } from 'react';
-import { useStyle, Rule, CreateRule, Theme } from '@dex-ddl/core';
+import { useStyle, Rule, CreateRule, Theme, useBreakpoints } from '@dex-ddl/core';
 import { Radio } from 'components/Form';
 import { Trans, useTranslation } from 'components/Translation';
 import useEventListener from 'hooks/useEventListener';
@@ -125,12 +125,15 @@ const labelStyle: Rule = {
   cursor: 'pointer',
 };
 const wrapperStyle: CreateRule<{ theme: Theme; isOpen: boolean }> = ({ theme, isOpen }) => {
+  const [, isBreakpoint] = useBreakpoints();
+
+  const medium = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
   return {
     position: 'absolute',
     width: '208px',
     padding: '10px 16px 16px 16px',
     top: '40px',
-    right: 0,
+    right: !medium ? '0px' : '-95px',
     pointerEvents: isOpen ? 'all' : 'none',
     transform: isOpen ? 'scaleY(1)' : 'scaleY(0)',
     transition: 'transform .3s ease',

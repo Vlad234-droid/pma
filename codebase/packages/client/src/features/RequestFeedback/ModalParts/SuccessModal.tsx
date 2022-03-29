@@ -5,13 +5,15 @@ import success from 'images/success.jpg';
 import { Trans } from 'components/Translation';
 import { useNavigate } from 'react-router-dom';
 
+export const WRAPPER = 'wrapper';
+
 const SuccessModal: FC = () => {
   const { css, theme } = useStyle();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
   const navigate = useNavigate();
   return (
-    <div className={css(WrapperSuccessContainer)}>
+    <div className={css(WrapperSuccessContainer)} data-test-id={WRAPPER}>
       <div className={css(SuccessImg)}>
         <img src={success} alt='success' />
       </div>

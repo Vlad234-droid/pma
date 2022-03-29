@@ -12,6 +12,9 @@ import { FeedbackBlock, RadioBtns } from './components';
 import { FilterModal } from '../Shared/components/FilterModal';
 import { getSortString } from 'utils/feedback';
 
+export const FEEDBACK_WRAPPER = 'feedback-wrapper';
+export const LIST_WRAPPER = 'list-wrapper';
+
 type Filter = {
   sort: string;
   search: string;
@@ -79,7 +82,7 @@ const GiveFeedBack: FC = () => {
 
   return (
     <div>
-      <div className={css(headerStyled({ medium }))}>
+      <div className={css(headerStyled({ medium }))} data-test-id={FEEDBACK_WRAPPER}>
         <RadioBtns checkedRadio={status} onCheck={setCheckedStatus} handleBtnClick={handleBtnClick} />
         <div className={css(filterIconStyled({ small }))}>
           <FilterOption
@@ -102,7 +105,7 @@ const GiveFeedBack: FC = () => {
         </div>
       </div>
       <div>
-        <div className={css(draftsStyle)}>
+        <div className={css(draftsStyle)} data-test-id={LIST_WRAPPER}>
           <FeedbackBlock list={feedbackList} canEdit={status === FeedbackStatus.DRAFT} />
         </div>
       </div>

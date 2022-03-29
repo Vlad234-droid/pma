@@ -7,8 +7,8 @@ import { Trans } from 'components/Translation';
 import { AllNotesFolderId, addNewFolderId } from 'utils';
 import successImg from 'images/success.jpg';
 
-export const OK_BTN = 'ok_btn';
-export const SUCCESS_MODAL_WRAPPER = 'success_modal_wrapper';
+export const OK_BTN = 'ok-btn';
+export const SUCCESS_MODAL_WRAPPER = 'success-modal-wrapper';
 
 export type SuccessModalProps = {
   values: any;

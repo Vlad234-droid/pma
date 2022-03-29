@@ -13,7 +13,7 @@ import { Option } from 'components/Form/types';
 import { AddNoteModalProps } from '../../../type';
 import { getNotes, getFolder, addNewFolderId } from 'utils';
 
-export const ADD_NOTE_MODAL_WRAPPER = 'add_note_modal_wrapper';
+export const MODAL_WRAPPER = 'modal-wrapper';
 
 const AddNoteModal: FC<AddNoteModalProps> = ({ methods, cancelModal, submitForm, createFolder, foldersWithNotes }) => {
   const { css, theme } = useStyle();
@@ -39,7 +39,7 @@ const AddNoteModal: FC<AddNoteModalProps> = ({ methods, cancelModal, submitForm,
 
   return (
     <>
-      <div className={css(WrapperModalGiveFeedbackStyle)} data-test-id={ADD_NOTE_MODAL_WRAPPER}>
+      <div className={css(WrapperModalGiveFeedbackStyle)} data-test-id={MODAL_WRAPPER}>
         <div>
           <Notification
             graphic='information'
@@ -68,7 +68,7 @@ const AddNoteModal: FC<AddNoteModalProps> = ({ methods, cancelModal, submitForm,
                         Wrapper={Item}
                         Element={Input}
                         placeholder={item.placeholder}
-                        value={values.noteTitle}
+                        value={values?.noteTitle}
                       />
                     );
                   }
@@ -82,7 +82,7 @@ const AddNoteModal: FC<AddNoteModalProps> = ({ methods, cancelModal, submitForm,
                         Wrapper={Item}
                         Element={Textarea}
                         placeholder={item.placeholder}
-                        value={values.noteText}
+                        value={values?.noteText}
                       />
                     );
                   }
@@ -118,7 +118,7 @@ const AddNoteModal: FC<AddNoteModalProps> = ({ methods, cancelModal, submitForm,
                       onChange={() => {
                         trigger('folderTitle');
                       }}
-                      value={values.folderTitle}
+                      value={values?.folderTitle}
                     />
                   );
                 })}
@@ -131,7 +131,7 @@ const AddNoteModal: FC<AddNoteModalProps> = ({ methods, cancelModal, submitForm,
                 Wrapper={Item}
                 Element={Input}
                 placeholder={getNotes(foldersWithNotes, t)?.option.placeholder}
-                value={values.folderTitle}
+                value={values?.folderTitle}
                 label={getNotes(foldersWithNotes, t)?.option.title}
               />
             )}
@@ -149,6 +149,7 @@ const AddNoteModal: FC<AddNoteModalProps> = ({ methods, cancelModal, submitForm,
                     <Trans i18nKey='cancel'>Cancel</Trans>
                   </Button>
                   <IconButton
+                    data-test-id='arrowRight'
                     onPress={() => {
                       submitForm();
                       setSuccessModal(() => true);

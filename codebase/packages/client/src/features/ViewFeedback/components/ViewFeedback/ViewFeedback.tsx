@@ -5,6 +5,7 @@ import { FilterOption } from 'features/Shared';
 import { IconButton } from 'components/IconButton';
 import { defaultSerializer } from '../DraftItem';
 import DraftList from '../DraftList';
+
 import RadioBtns from '../RadioBtns';
 import { Notification } from 'components/Notification';
 import { Icon } from 'components/Icon';
@@ -18,6 +19,8 @@ import { Page } from 'pages';
 import useSubmittedCompletedNotes from '../../hooks/useSubmittedCompletedNotes';
 import { buildPath } from 'features/Routes';
 import Spinner from 'components/Spinner';
+
+export const WRAPPER = 'wrapper';
 
 type filterFeedbacksType = {
   sort: string;
@@ -177,7 +180,7 @@ const ViewFeedback: FC = () => {
           <HelpModalReceiveFeedback setHelpModalReceiveFeedback={setHelpModalReceiveFeedback} />
         </Modal>
       )}
-      <div>
+      <div data-test-id={WRAPPER}>
         <div className={css(SpaceBeetweenStyled)}>
           <RadioBtns
             checkedRadio={checkedRadio}
@@ -190,6 +193,7 @@ const ViewFeedback: FC = () => {
           />
           <div className={css(FlexCenterStyled)}>
             <IconButton
+              data-test-id={'informationn'}
               graphic='information'
               iconStyles={iconStyle}
               onPress={() => {
@@ -259,7 +263,11 @@ const ViewFeedback: FC = () => {
               <p className={css(SavedStyled)}>
                 <Trans i18nKey='download_feedback_to_your_device'>Download feedback to your device</Trans>
               </p>
-              <Button styles={[iconBtnStyle, { maxWidth: '181px !important' }]} onPress={handleDownloadAllPress}>
+              <Button
+                data-test-id={'download-feedback'}
+                styles={[iconBtnStyle, { maxWidth: '181px !important' }]}
+                onPress={handleDownloadAllPress}
+              >
                 <Trans i18nKey='download_feedbacks'>Download feedback</Trans>
               </Button>
             </div>

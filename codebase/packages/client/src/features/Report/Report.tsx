@@ -21,12 +21,15 @@ import { getFieldOptions, metaStatuses, initialValues } from './config';
 import { Rating, TitlesReport } from 'config/enum';
 import { downloadCsvFile } from './utils';
 import { useStatisticsReport, getReportData, getData } from './hooks';
+import useQueryString from 'hooks/useQueryString';
 
 import { Page } from 'pages';
 
 export const REPORT_WRAPPER = 'REPORT_WRAPPER';
 
 const Report: FC = () => {
+  const query = useQueryString() as Record<string, string>;
+
   const { t } = useTranslation();
   const { addToast } = useToast();
   const { css } = useStyle();
@@ -35,7 +38,7 @@ const Report: FC = () => {
   const [showDownloadReportModal, setShowDownloadReportModal] = useState(false);
   const [searchValueFilterOption, setSearchValueFilterOption] = useState('');
   const [filterModal, setFilterModal] = useState(false);
-  const [year, setYear] = useState<string | null>('');
+  const [year, setYear] = useState<string>('');
   // @ts-ignore
   const { loaded } = useSelector(getReportMetaSelector);
 
@@ -84,12 +87,12 @@ const Report: FC = () => {
     notApprovedObjTitle,
   } = useStatisticsReport([...metaStatuses]);
 
-  getReportData();
+  getReportData(query);
 
   const changeYearHandler = (value) => {
     if (!value) return;
     setYear(value);
-    getData(dispatch, value);
+    getData(dispatch, { year: value });
   };
 
   const getAppliedReport = () => [...new Set(checkedItems.map((item) => item.split('-')[0]))];
@@ -201,19 +204,20 @@ const Report: FC = () => {
                       <Trans i18nKey='view_previous_years'>View previous years</Trans>
                     </h2>
 
-                    <Select
-                      options={getFieldOptions(getCurrentYear())}
-                      name={'year_options'}
-                      placeholder={t('choose_an_area', 'Choose an area')}
-                      //@ts-ignore
-                      onChange={({ target: { value } }) => {
-                        changeYearHandler(value);
-                      }}
-                    />
-                  </form>
-                </div>
-              </div>
+                <Select
+                  options={getFieldOptions(getCurrentYear())}
+                  name={'year_options'}
+                  placeholder={t('choose_an_area', 'Choose an area')}
+                  //@ts-ignore
+                  onChange={({ target: { value } }) => {
+                    changeYearHandler(value);
+                  }}
+                  value={year || query.year}
+                />
+              </form>
             </div>
+          </div>
+        </div>
 
             <div className={css(pieChartWrapper)}>
               <div className={css(leftColumn)}>

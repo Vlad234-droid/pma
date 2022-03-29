@@ -5,6 +5,8 @@ import { FeedbackStatus } from 'config/enum';
 
 import { Radio } from 'components/Form';
 
+export const RADIO_WRAPPER = 'radio-wrapper';
+
 type RadioBtnsProps = {
   status: string;
   setStatus: Dispatch<SetStateAction<FeedbackStatus>>;
@@ -16,11 +18,11 @@ const RadioBtns: FC<RadioBtnsProps> = ({ status, setStatus, setFilterModal, filt
   const { css } = useStyle();
 
   return (
-    <div className={css(FlexMobileStyle)}>
+    <div className={css(FlexMobileStyle)} data-test-id={RADIO_WRAPPER}>
       <div className={css({ padding: '0px 10px 0px 0px', cursor: 'pointer' })}>
         <label htmlFor='pending' className={css(FlexCenterStyle)}>
           <Radio
-            name='status1'
+            name='pending'
             checked={status === FeedbackStatus.PENDING}
             id='pending'
             onChange={() => {
@@ -38,7 +40,7 @@ const RadioBtns: FC<RadioBtnsProps> = ({ status, setStatus, setFilterModal, filt
         <label htmlFor='completed' className={css(FlexCenterStyle)}>
           <Radio
             id='completed'
-            name='status2'
+            name='completed'
             checked={status === FeedbackStatus.COMPLETED}
             onChange={() => {
               if (filterModal) setFilterModal(() => false);

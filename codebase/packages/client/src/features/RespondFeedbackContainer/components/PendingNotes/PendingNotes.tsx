@@ -5,6 +5,8 @@ import { useSelector } from 'react-redux';
 import { Trans } from 'components/Translation';
 import { getPropperTargetType } from '../../utils';
 
+export const NOTES_WRAPPER = 'notes-wrapper';
+
 type PendingNotesProps = {
   item: any;
 };
@@ -15,7 +17,7 @@ const PendingNotes: FC<PendingNotesProps> = ({ item }) => {
   const review = useSelector(getReviewByUuidS) || [];
 
   return (
-    <>
+    <div data-test-id={NOTES_WRAPPER}>
       <div className={css({ marginBottom: '16px' })}>
         <h3 className={css(TileTitle)}>
           <Trans i18nKey='colleague_requested_feedback'>
@@ -33,7 +35,7 @@ const PendingNotes: FC<PendingNotesProps> = ({ item }) => {
       <p className={css(QuestionStyle)}>
         <Trans i18nKey='let_the_colleague_know_how_the_are_doing'>Let the colleague know how they&apos;re doing</Trans>
       </p>
-    </>
+    </div>
   );
 };
 

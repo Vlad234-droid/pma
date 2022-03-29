@@ -3,6 +3,8 @@ import { useStyle, Rule, CreateRule, Theme } from '@dex-ddl/core';
 
 import { PieChartContentProps as Props, View, Obj } from '../../config';
 
+export const TEST_ID = 'pie-chart-content-id';
+
 const PieChartContent: FC<Props> = ({ title, titleId, data, display, percentId }) => {
   const { css, theme } = useStyle();
 
@@ -13,7 +15,7 @@ const PieChartContent: FC<Props> = ({ title, titleId, data, display, percentId }
           {title}
         </h3>
       )}
-      <div className={css(chartContainer({ display }))}>
+      <div data-test-id={TEST_ID} className={css(chartContainer({ display }))}>
         {data.map((item, i) => {
           const percent = item.percent || 0;
           return (

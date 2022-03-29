@@ -6,19 +6,33 @@ import { fireEvent, waitFor } from '@testing-library/react';
 import SuccessModal, { SUCCESS_MODAL_WRAPPER, OK_BTN } from './SuccessModal';
 import { renderWithTheme as render } from 'utils/test';
 
-it('render success modal', async () => {
-  const testHandler = jest.fn();
-  const values = { folder: 'New folder', folderTitle: 'New title for New folder', title: 'Title for note' };
+describe('Success modal', () => {
+  const cancelModal = jest.fn();
+  const props = {
+    createFolder: true,
+    cancelModal,
+    values: { folder: 'New folder', folderTitle: 'New title for New folder', title: 'Title for note' },
+  };
 
-  const { getByTestId, queryByTestId } = render(
-    <SuccessModal values={values} createFolder={false} cancelModal={testHandler} />,
-  );
-
-  const modalWrappper = queryByTestId(SUCCESS_MODAL_WRAPPER);
-  const okBtn = getByTestId(OK_BTN);
-  expect(modalWrappper).toBeInTheDocument();
-
-  fireEvent.click(okBtn);
-
-  await waitFor(() => expect(testHandler).toHaveBeenCalled());
+  it('it should render success wrapper', async () => {
+    const { queryByTestId } = render(<SuccessModal {...props} />);
+    const modalWrappper = queryByTestId(SUCCESS_MODAL_WRAPPER);
+    expect(modalWrappper).toBeInTheDocument();
+  });
+  it('it should call cancelModal', async () => {
+    const { getByTestId } = render(<SuccessModal {...props} />);
+    const okBtn = getByTestId(OK_BTN);
+    fireEvent.click(okBtn);
+    await waitFor(() => expect(cancelModal).toHaveBeenCalled());
+  });
+  it('it should show create folder', async () => {
+    const { getByText } = render(<SuccessModal {...props} />);
+    const text = getByText(/Your folder has been added/i);
+    expect(text).toBeInTheDocument();
+  });
+  it('it should show the created folder', async () => {
+    const { getByText } = render(<SuccessModal {...props} createFolder={false} />);
+    const text = getByText(/Your note has been added into/i);
+    expect(text).toBeInTheDocument();
+  });
 });
