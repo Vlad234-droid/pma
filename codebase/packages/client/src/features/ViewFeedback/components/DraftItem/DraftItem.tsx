@@ -10,6 +10,8 @@ import { FeedbackActions } from '@pma/store';
 import { usePDF, FeedbackDocument, downloadPDF } from '@pma/pdf-renderer';
 import { formatToRelativeDate } from 'utils';
 
+export const DRAFT_WRAPPER = 'tile-wrapper';
+
 type QuestionItem = {
   code: string;
   content: string;

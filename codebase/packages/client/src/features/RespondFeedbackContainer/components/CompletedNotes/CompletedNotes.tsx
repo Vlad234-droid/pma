@@ -5,6 +5,8 @@ import { useSelector } from 'react-redux';
 import { Trans } from 'components/Translation';
 import { getPropperTargetType } from '../../utils';
 
+export const NOTES_WRAPPER = 'notes-wrapper';
+
 type CompletedNotesProps = {
   item: any;
 };
@@ -15,7 +17,7 @@ const CompletedNotes: FC<CompletedNotesProps> = ({ item }) => {
   const review = useSelector(getReviewByUuidS) || [];
 
   return (
-    <>
+    <div data-test-id={NOTES_WRAPPER}>
       <h3 className={css(ShareResondStyle, { marginBottom: '8px' })}>
         {getPropperTargetType(item.targetType, item.targetId, item.feedbackItems, review)}
       </h3>
@@ -29,7 +31,7 @@ const CompletedNotes: FC<CompletedNotesProps> = ({ item }) => {
             they&apos;ve delivered or how they&apos;ve gone about it?
           </Trans>
         </h3>
-        {item.feedbackItems.map((question) => {
+        {item?.feedbackItems?.map((question) => {
           return <p key={question.code}>{question.code === 'Question 1' && question.content}</p>;
         })}
       </div>
@@ -39,17 +41,17 @@ const CompletedNotes: FC<CompletedNotesProps> = ({ item }) => {
             Looking forward, what should this colleague do more (or less) of in order to be at their best?
           </Trans>
         </h3>
-        {item.feedbackItems.map((question) => {
+        {item?.feedbackItems?.map((question) => {
           return <p key={question.code}>{question.code === 'Question 2' && question.content}</p>;
         })}
       </div>
       <div className={css(InfoBlockStyle)}>
         <h3>Add any other comments you would like to share with your colleague.</h3>
-        {item.feedbackItems.map((question) => {
+        {item?.feedbackItems?.map((question) => {
           return <p key={question.code}>{question.code === 'Anything else?' && question.content}</p>;
         })}
       </div>
-    </>
+    </div>
   );
 };
 

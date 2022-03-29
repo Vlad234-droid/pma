@@ -2,34 +2,58 @@ import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
 import '@testing-library/jest-dom';
 import { renderWithTheme as render } from 'utils/test';
-import { fireEvent, waitFor } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
-import { ADD_NOTE_MODAL_WRAPPER } from './AddNoteModal';
+import { fireEvent } from '@testing-library/react';
+import { useForm } from 'react-hook-form';
 
-import NotesActions, { ADD_NEW, CONFIRM_MODAL_ID } from '../../../NotesActions';
+import AddNoteModal, { MODAL_WRAPPER } from './AddNoteModal';
 
-jest.mock('react-markdown', () => ({ ReactMarkdown: () => 'mocked ReactMarkdown' }));
+jest.mock('react-hook-form', () => ({
+  ...jest.requireActual('react-hook-form'),
+  useForm: () => ({
+    handleSubmit: () => jest.fn(),
+    getValues: () => jest.fn(),
+    trigger: () => jest.fn(),
+    register: () => jest.fn(),
+    formState: { isValid: false, errors: {} },
+  }),
+}));
 
-it('render add note modal', async () => {
-  const { getByTestId, queryByTestId, findByTestId } = render(
-    <BrowserRouter>
-      <NotesActions />
-    </BrowserRouter>,
-  );
+describe('AddNoteModal', () => {
+  const cancelModal = jest.fn();
+  const submitForm = jest.fn();
 
-  const addNew = getByTestId(ADD_NEW);
+  const methods = useForm({
+    defaultValues: {
+      noteTitle: 'mocked',
+      noteText: 'mocked',
+    },
+  });
 
-  const addBtn = getByTestId(ADD_NEW);
-  const addUserNoteModal = queryByTestId(ADD_NOTE_MODAL_WRAPPER);
+  const props = {
+    methods,
+    cancelModal,
+    submitForm,
+    createFolder: false,
+    foldersWithNotes: [{}],
+  };
+  it('it should render modal wrapper', async () => {
+    const { getByTestId } = render(<AddNoteModal {...props} />);
+    const form = getByTestId(MODAL_WRAPPER);
+    expect(form).toBeInTheDocument();
+  });
+  it('it should call cancelModal handler', async () => {
+    render(<AddNoteModal {...props} />);
+    props.cancelModal();
+    expect(cancelModal).toHaveBeenCalled();
+  });
+  it('it should submit form', async () => {
+    const { getByTestId, findByTestId } = render(<AddNoteModal {...props} />);
 
-  expect(addUserNoteModal).toBeNull();
+    props.submitForm();
+    expect(submitForm).toHaveBeenCalled();
 
-  fireEvent.click(addBtn);
-
-  const confimModal = await findByTestId(CONFIRM_MODAL_ID);
-
-  await waitFor(() => expect(confimModal).toBeInTheDocument());
-  fireEvent.click(addNew);
-
-  expect(addUserNoteModal).toBeNull();
+    const btn = getByTestId('arrowRight');
+    fireEvent.click(btn);
+    // await waitFor(() => expect(findByTestId('success-modal-wrapper')).toBeInTheDocument());
+  });
 });

@@ -4,20 +4,20 @@ import { ReportActions } from '@pma/store';
 import { getCurrentYear } from 'utils/date';
 import { listOfStatuses } from '../config';
 
-export const getData = (dispatch, year: string): void => {
-  dispatch(ReportActions.getObjectivesStatistics({ year }));
+export const getData = (dispatch, fields: Record<string, string>): void => {
+  dispatch(ReportActions.getObjectivesStatistics({ year: fields.year }));
   dispatch(
     ReportActions.getObjectivesReport({
-      year,
+      year: fields.year,
       statuses_in: [...listOfStatuses],
     }),
   );
 };
 
-export const getReportData = (year: string = getCurrentYear()): void => {
+export const getReportData = (fields: Record<string, string> = {}): void => {
   const dispatch = useDispatch();
   const getStatsReportData = useCallback(() => {
-    getData(dispatch, year);
+    getData(dispatch, { year: fields?.year || getCurrentYear() });
   }, []);
 
   useEffect(() => {

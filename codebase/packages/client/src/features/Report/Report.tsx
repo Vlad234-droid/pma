@@ -19,12 +19,15 @@ import { getFieldOptions, metaStatuses, initialValues } from './config';
 import { Rating, TitlesReport } from 'config/enum';
 import { downloadCsvFile } from './utils';
 import { useStatisticsReport, getReportData, getData } from './hooks';
+import useQueryString from 'hooks/useQueryString';
 
 import { Page } from 'pages';
 
 export const REPORT_WRAPPER = 'REPORT_WRAPPER';
 
 const Report: FC = () => {
+  const query = useQueryString() as Record<string, string>;
+
   const { t } = useTranslation();
   const { addToast } = useToast();
   const { css } = useStyle();
@@ -33,7 +36,7 @@ const Report: FC = () => {
   const [showDownloadReportModal, setShowDownloadReportModal] = useState(false);
   const [searchValueFilterOption, setSearchValueFilterOption] = useState('');
   const [filterModal, setFilterModal] = useState(false);
-  const [year, setYear] = useState<string | null>('');
+  const [year, setYear] = useState<string>('');
 
   const [filterData, setFilterData] = useState<any>(initialValues);
   const [checkedItems, setCheckedItems]: [string[], (T) => void] = useState([]);
@@ -80,12 +83,12 @@ const Report: FC = () => {
     notApprovedObjTitle,
   } = useStatisticsReport([...metaStatuses]);
 
-  getReportData();
+  getReportData(query);
 
   const changeYearHandler = (value) => {
     if (!value) return;
     setYear(value);
-    getData(dispatch, value);
+    getData(dispatch, { year: value });
   };
 
   const getAppliedReport = () => [...new Set(checkedItems.map((item) => item.split('-')[0]))];
@@ -201,6 +204,7 @@ const Report: FC = () => {
                   onChange={({ target: { value } }) => {
                     changeYearHandler(value);
                   }}
+                  value={year || query.year}
                 />
               </form>
             </div>

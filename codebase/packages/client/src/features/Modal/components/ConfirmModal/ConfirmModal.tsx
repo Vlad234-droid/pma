@@ -41,32 +41,34 @@ const ConfirmModal: FC<Props> = ({
       }}
       onOverlayClick={onOverlayClick}
     >
-      {description && (
+      <div data-test-id='confirm-modal'>
+        {description && (
+          <div
+            className={css({
+              padding: '16px 0px 0px 0px',
+            })}
+          >
+            {description}
+          </div>
+        )}
+        {children}
         <div
           className={css({
-            padding: '16px 0px 0px 0px',
+            display: 'flex',
+            justifyContent: 'center',
+            marginTop: '22px',
           })}
         >
-          {description}
-        </div>
-      )}
-      {children}
-      <div
-        className={css({
-          display: 'flex',
-          justifyContent: 'center',
-          marginTop: '22px',
-        })}
-      >
-        {visibleCancelBtn && (
-          <Button styles={[cancelBtn]} onPress={onCancel}>
-            <Trans i18nKey='cancel'>Cancel</Trans>
-          </Button>
-        )}
+          {visibleCancelBtn && (
+            <Button styles={[cancelBtn]} onPress={onCancel}>
+              <Trans i18nKey='cancel'>Cancel</Trans>
+            </Button>
+          )}
 
-        <Button isDisabled={!canSubmit} styles={[saveBtn, !canSubmit ? { opacity: '0.6' } : {}]} onPress={onSave}>
-          {submitBtnTitle}
-        </Button>
+          <Button isDisabled={!canSubmit} styles={[saveBtn, !canSubmit ? { opacity: '0.6' } : {}]} onPress={onSave}>
+            {submitBtnTitle}
+          </Button>
+        </div>
       </div>
     </Modal>
   );

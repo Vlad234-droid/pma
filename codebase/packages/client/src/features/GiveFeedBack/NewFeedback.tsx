@@ -130,6 +130,7 @@ const NewFeedback: FC = () => {
           feedbackFields={feedbackFields}
         />
       )}
+
       {status === Statuses.CONFIRMING && (
         <ConfirmMassage
           onConfirm={() => {

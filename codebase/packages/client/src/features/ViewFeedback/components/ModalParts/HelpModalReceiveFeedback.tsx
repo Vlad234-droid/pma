@@ -4,6 +4,8 @@ import { useStyle, useBreakpoints, Rule, Styles } from '@dex-ddl/core';
 import { VideoPlayer, VideoId } from 'features/VideoPlayer';
 import { Trans } from 'components/Translation';
 
+export const WRAPPER = 'help-wrapper';
+
 type Info360ModalProps = {
   setHelpModalReceiveFeedback: Dispatch<SetStateAction<boolean>>;
 };
@@ -13,7 +15,7 @@ const HelpModalReceiveFeedback: FC<Info360ModalProps> = ({ setHelpModalReceiveFe
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
   return (
-    <div className={css(WrapperInfo)}>
+    <div className={css(WrapperInfo)} data-test-id={WRAPPER}>
       <h2 className={css(Title)}>
         <Trans i18nKey='watch_this_video_on_receiving_your_feedback'>
           Watch this 2-minute video on receiving your feedback.

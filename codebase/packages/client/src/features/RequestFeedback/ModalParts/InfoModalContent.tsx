@@ -4,6 +4,8 @@ import requestInfoModal from 'images/requestInfoModal.png';
 import { IconButton } from 'components/IconButton';
 import { Trans } from 'components/Translation';
 
+export const WRAPPER = 'wrapper';
+
 type InfoModalProps = {
   onClose: () => void;
 };
@@ -11,7 +13,7 @@ type InfoModalProps = {
 const InfoModalContent: FC<InfoModalProps> = ({ onClose }) => {
   const { css } = useStyle();
   return (
-    <div className={css(wrapperStyle)}>
+    <div className={css(wrapperStyle)} data-test-id={WRAPPER}>
       <p className={css(titleStyle)}>
         <Trans i18nKey='when_you_request_feedback_from_you_colleagues'>
           When you request feedback from you colleagues, follow these steps to guide your colleague to give you great

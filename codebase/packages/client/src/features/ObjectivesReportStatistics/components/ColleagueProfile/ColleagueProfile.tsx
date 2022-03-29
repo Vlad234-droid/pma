@@ -12,6 +12,9 @@ import defaultImg from 'images/default.png';
 import { paramsReplacer } from 'utils';
 import { Page } from 'pages';
 
+export const TILE_WRAPPER = 'tile-wrapper';
+export const NAME = 'name';
+
 const ColleagueProfile: FC<Props> = ({ colleague }) => {
   const { css } = useStyle();
   const navigate = useNavigate();
@@ -36,7 +39,10 @@ const ColleagueProfile: FC<Props> = ({ colleague }) => {
                     <img className={css(imgStyle)} src={defaultImg} alt='photo' />
                   </div>
                   <div className={css({ marginLeft: '16px' })}>
-                    <h3 className={css(namesStyle)}>{`${colleague.firstName} ${colleague.lastName}`}</h3>
+                    <h3
+                      className={css(namesStyle)}
+                      data-test-id={NAME}
+                    >{`${colleague.firstName} ${colleague.lastName}`}</h3>
                     <p className={css(industryStyle)}>{`${colleague.jobName || ''}, ${
                       colleague.businessType || ''
                     }`}</p>

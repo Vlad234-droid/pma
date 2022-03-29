@@ -15,15 +15,20 @@ jest.mock('react-router-dom', () => ({
 describe('Note page', () => {
   it('render confirm modal', async () => {
     const { getByTestId, queryByTestId, findByTestId } = renderWithTheme(<NotesActions />);
-    const wrapper = getByTestId(NOTES_WRAPPER);
+
     const addButton = getByTestId(ADD_NEW);
     const confirmModal = queryByTestId(CONFIRM_MODAL_ID);
 
-    expect(wrapper).toBeInTheDocument();
     expect(confirmModal).toBeNull();
 
     fireEvent.click(addButton);
 
     expect(await findByTestId(CONFIRM_MODAL_ID)).toBeInTheDocument();
+  });
+  it('it should render notes wrapper', async () => {
+    const { getByTestId } = renderWithTheme(<NotesActions />);
+
+    const wrapper = getByTestId(NOTES_WRAPPER);
+    expect(wrapper).toBeInTheDocument();
   });
 });

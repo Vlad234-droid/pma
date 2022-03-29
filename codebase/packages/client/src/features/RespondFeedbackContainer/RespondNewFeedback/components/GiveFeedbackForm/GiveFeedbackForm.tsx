@@ -9,7 +9,7 @@ import get from 'lodash.get';
 import { Trans } from 'components/Translation';
 import { TileWrapper } from 'components/Tile';
 import { Field, Item, Textarea, Attention } from 'components/Form';
-import ColleaguesFinder from '../ColleaguesFinder';
+import { ColleaguesFinder } from 'features/GiveFeedBack/components';
 import FeedbackInfo from '../FeedbackInfo';
 import { IconButton, Position } from 'components/IconButton';
 

@@ -13,6 +13,8 @@ import { ColleaguesActions, getColleagueByUuidSelector } from '@pma/store';
 import { useDispatch, useSelector } from 'react-redux';
 import { downloadPDF, FeedbackDocument, usePDF } from '@pma/pdf-renderer';
 
+export const DOWNLOAD_WRAPPER = 'download-wrapper';
+
 const ModalDownloadFeedback: FC<ModalDownloadFeedbackProps> = ({
   setOpenMainModal,
   modalSuccess,
@@ -75,7 +77,7 @@ const ModalDownloadFeedback: FC<ModalDownloadFeedbackProps> = ({
   }
 
   return (
-    <div className={css(wrapperDownloadRule)}>
+    <div className={css(wrapperDownloadRule)} data-test-id={DOWNLOAD_WRAPPER}>
       <h2 className={css(downloadTitleStyled)}>{downloadTitle}</h2>
       <p className={css(downloadDescriptionStyled)}>{downloadDescription}</p>
       <form>

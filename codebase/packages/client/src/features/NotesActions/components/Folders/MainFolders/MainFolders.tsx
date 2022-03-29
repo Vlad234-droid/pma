@@ -31,7 +31,7 @@ import {
 } from 'utils/note';
 
 export const SELECTED_FOLDER = 'selected-folder';
-export const MAIN_FOLDERS_ID = 'main-folders-id';
+export const FOLDER_WRAPPER = 'main-folder-wrapper';
 
 const MainFolders: FC<MainFolderProps> = ({
   setSelectedFolder,
@@ -50,19 +50,19 @@ const MainFolders: FC<MainFolderProps> = ({
   setTeamArchivedMode,
   teamArchivedMode,
 }) => {
-  const colleagueUuid = useSelector(colleagueUUIDSelector);
   const { css } = useStyle();
+  const { t } = useTranslation();
   const [, isBreakpoint] = useBreakpoints();
   const mediumScreen = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
   const dispatch = useDispatch();
+
   const notesSelect = useSelector(getNotesSelector) || null;
   const folders = useSelector(getFoldersSelector) || null;
-
+  const colleagueUuid = useSelector(colleagueUUIDSelector);
   const personalArchivedFolderUuid = useSelector(personalArchivedFolderUuidSelector) || null;
   const teamArchivedFolderUuid = useSelector(teamArchivedFolderUuidSelector) || null;
 
   const [confirmModal, setConfirmModal] = useState(false);
-  const { t } = useTranslation();
   const selectedFolderId: MutableRefObject<null | string> = useRef(null);
   const selectedNoteId: MutableRefObject<null | string> = useRef(null);
   const noteFolderUuid: MutableRefObject<null | string> = useRef(null);
@@ -454,7 +454,7 @@ const MainFolders: FC<MainFolderProps> = ({
   return (
     <div
       className={css({ marginTop: '24px', marginLeft: '40px', marginBottom: '140px' })}
-      data-test-id={MAIN_FOLDERS_ID}
+      data-test-id={FOLDER_WRAPPER}
     >
       <div
         className={css({

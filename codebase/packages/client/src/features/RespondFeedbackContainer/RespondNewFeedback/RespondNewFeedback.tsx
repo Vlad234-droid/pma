@@ -24,10 +24,6 @@ const RespondNewFeedback: FC = () => {
     feedbackByUuidSelector(uuid),
   );
 
-  useEffect(() => {
-    if (!targetColleagueUuid) navigate(buildPath(Page.RESPOND_FEEDBACK));
-  }, [targetColleagueUuid]);
-
   const [formData, setFormData] = useState({
     feedbackItems: feedbackItems
       ? getFeedbackFields(t).map(({ code }) => feedbackItems.find((item) => item.code === code))

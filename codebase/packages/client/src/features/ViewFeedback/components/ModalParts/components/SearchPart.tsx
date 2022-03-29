@@ -4,13 +4,12 @@ import { useStyle } from '@dex-ddl/core';
 import { Item, Input, Field } from 'components/Form';
 import { ColleaguesFinder } from 'features/GiveFeedBack/components';
 
+export const WRAPPER = 'search-wrapper';
+
 const getColleagueName = (data) => {
   if (!data) return '';
-  const {
-    profile: { firstName, lastName },
-  } = data.colleague;
 
-  return `${firstName} ${lastName}`;
+  return `${data?.colleague?.profile?.firstName} ${data?.colleague?.profile?.lastName}`;
 };
 
 type Props = Pick<UseFormReturn, 'setValue'> & {
@@ -22,7 +21,7 @@ const SearchPart: FC<Props> = ({ setValue, selectedColleague, date }) => {
   const { css } = useStyle();
 
   return (
-    <div className={css({ marginTop: '32px' })}>
+    <div className={css({ marginTop: '32px' })} data-test-id={WRAPPER}>
       <ColleaguesFinder
         onSelect={(targetColleagueUuid) => {
           setValue('targetColleagueUuid', targetColleagueUuid, { shouldValidate: true });

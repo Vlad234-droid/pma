@@ -4,6 +4,8 @@ import { Button, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { SuccessModalProps } from './type';
 import successImg from 'images/success.jpg';
 
+export const MODAL_WRAPPER = 'modal-wrapper';
+
 const SuccessModal: FC<SuccessModalProps> = ({
   setSuccessSelectedNoteToEdit,
   setSelectedNoteToEdit,
@@ -20,6 +22,7 @@ const SuccessModal: FC<SuccessModalProps> = ({
       className={css({
         height: '100%',
       })}
+      data-test-id={MODAL_WRAPPER}
     >
       <div
         className={css({

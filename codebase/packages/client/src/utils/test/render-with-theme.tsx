@@ -48,7 +48,7 @@ export const renderWithTheme = <TProps extends {} = {}>(
         give: [],
         respond: [],
         view: [],
-        meta: { loading: false, loaded: false, error: null },
+        meta: { loading: false, loaded: true, error: null },
       },
       feedbacksCount: {
         given: 0,
@@ -57,7 +57,13 @@ export const renderWithTheme = <TProps extends {} = {}>(
       reviews: [],
       meta: { loading: false, loaded: false, error: null },
     },
-    report: { objectiveReports: [], objectiveStatistics: [], meta: { loading: false, loaded: false, error: null } },
+    report: {
+      objectiveReports: [],
+      objectiveStatistics: [],
+      colleagues: [],
+      meta: { loading: false, loaded: false, error: null },
+    },
+    colleagues: { list: [{}] },
     processTemplate: { meta: { loading: false, loaded: false, error: null }, success: true, data: [] },
     timeline: { meta: { loading: false, loaded: false, error: null }, success: true, 'test-colleagueUuid': [] },
     ...initState,
