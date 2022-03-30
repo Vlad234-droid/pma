@@ -2,10 +2,7 @@ import React, { FC, MouseEvent, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { Rule, useStyle } from '@dex-ddl/core';
-import {
-  colleagueUUIDSelector,
-  timelinesExistSelector,
-} from '@pma/store';
+import { colleagueUUIDSelector, timelinesExistSelector } from '@pma/store';
 
 import { Page } from 'pages';
 import { LINKS } from 'config/constants';

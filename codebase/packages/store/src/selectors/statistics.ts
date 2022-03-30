@@ -47,7 +47,6 @@ export const payQuartilesReportDataSelector: SelectorFn = (reportingPeriodUuid, 
 
 export const bonusPayDetailDataSelector = (reportingPeriodUuid: string) =>
   createSelector(statisticsSelector, (statistics) => {
-    console.log(statistics, reportingPeriodUuid);
     return statistics.bonusPayDetail.data?.[reportingPeriodUuid] || {};
   });
 

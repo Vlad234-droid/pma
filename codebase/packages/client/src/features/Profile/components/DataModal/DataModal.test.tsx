@@ -37,7 +37,9 @@ describe('<DataModal />', () => {
       expect(getByText('Your profile data is missing')).toBeInTheDocument();
       expect(getByText('fieldOne is blank')).toBeInTheDocument();
       expect(getByText('fieldTwo is blank')).toBeInTheDocument();
-      expect(getByText('Please refer to System guidance and FAQs to find out how to correct this data.')).toBeInTheDocument();
+      expect(
+        getByText('Please refer to System guidance and FAQs to find out how to correct this data.'),
+      ).toBeInTheDocument();
       expect(getByText('Close')).toBeInTheDocument();
     });
   });

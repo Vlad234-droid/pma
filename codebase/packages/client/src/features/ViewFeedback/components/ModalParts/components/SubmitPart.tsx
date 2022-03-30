@@ -8,7 +8,7 @@ import useSubmittedCompletedNotes from '../../..//hooks/useSubmittedCompletedNot
 import DraftList from '../../DraftList';
 import { defaultSerializer } from '../../DraftItem';
 
-export const WITH_SELECTED_TEST = 'with_selected_test';
+export const WRAPPER = 'part-wrapper';
 
 const SubmitPart: FC<SubmitPartProps> = ({ selectedPerson, searchDate, onChange }) => {
   const { css } = useStyle();
@@ -39,13 +39,13 @@ const SubmitPart: FC<SubmitPartProps> = ({ selectedPerson, searchDate, onChange 
   });
 
   useEffect(() => {
-    if (selected.length >= 0 && submittedCompletedNotes.length >= 0) {
+    if (submittedCompletedNotes.length >= 0) {
       onChange && onChange(submittedCompletedNotes.filter((item) => selected.includes(item.uuid)));
     }
   }, [selected.length, submittedCompletedNotes.length]);
 
   return (
-    <div data-test-id={WITH_SELECTED_TEST}>
+    <div data-test-id={WRAPPER}>
       <div className={css({ height: '1px', background: '#E5E5E5' })} />
       <div className={css({ marginTop: '16px' })}>
         <DraftList items={submittedCompletedNotes} downloadable={false} selectable onChange={setSelected as any} />

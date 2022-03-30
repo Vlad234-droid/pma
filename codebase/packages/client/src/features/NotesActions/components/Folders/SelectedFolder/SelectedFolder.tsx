@@ -1,13 +1,15 @@
 import React, { FC } from 'react';
 import { Rule, Styles, useStyle, useBreakpoints, colors, CreateRule } from '@dex-ddl/core';
-import { useSelector } from 'react-redux';
 import { getFoldersSelector } from '@pma/store';
+import { useSelector } from 'react-redux';
 
 import { IconButton } from 'components/IconButton';
-import { Trans, useTranslation } from 'components/Translation';
+import { Trans } from 'components/Translation';
 import { formatToRelativeDate } from 'utils/date';
 import { getNotesFolderTitle } from 'utils/note';
 import { SelectedFolderProps } from '../../../type';
+
+export const FOLDER_WRAPPER = 'folder-wrapper';
 
 const SelectedFolder: FC<SelectedFolderProps> = ({
   selectedFolder,
@@ -29,8 +31,6 @@ const SelectedFolder: FC<SelectedFolderProps> = ({
   testId = '',
 }) => {
   const { css } = useStyle();
-  const { t } = useTranslation();
-  const foldersList = useSelector(getFoldersSelector);
 
   const btnsActionsHandle = (itemId: string, itemFolderUuid: string | null, item: any) => {
     const btnsActions = [
@@ -41,6 +41,7 @@ const SelectedFolder: FC<SelectedFolderProps> = ({
             <div
               className={css(Align_flex_style)}
               id='backdrop'
+              data-test-id='backdrop-archive'
               onClick={() => {
                 if (!item.referenceColleagueUuid) {
                   selectedNoteId.current = itemId;
@@ -54,10 +55,11 @@ const SelectedFolder: FC<SelectedFolderProps> = ({
               }}
             >
               <IconButton
-                iconProps={{ title: t('archive', 'Archive') }}
+                iconProps={{ title: 'Archive' }}
                 id='backdrop'
                 customVariantRules={{ default: notePropertiesIconStyle }}
                 graphic='archive'
+                data-test-id='backdrop-archive-icon'
                 onPress={() => {
                   if (!item.referenceColleagueUuid) {
                     selectedNoteId.current = itemId;
@@ -83,6 +85,7 @@ const SelectedFolder: FC<SelectedFolderProps> = ({
           button: (
             <div
               id='backdrop'
+              data-test-id='backdrop-folder'
               className={css(Align_flex_style)}
               onClick={() => {
                 if (!item.referenceColleagueUuid) {
@@ -99,9 +102,10 @@ const SelectedFolder: FC<SelectedFolderProps> = ({
               }}
             >
               <IconButton
-                iconProps={{ title: t('move_to_folder', 'Move to folder') }}
+                iconProps={{ title: 'Move to folder' }}
                 graphic='folder'
                 id='backdrop'
+                data-test-id='backdrop-folder-icon'
                 customVariantRules={{ default: notePropertiesIconStyle }}
                 onPress={() => {
                   if (!item.referenceColleagueUuid) {
@@ -130,6 +134,7 @@ const SelectedFolder: FC<SelectedFolderProps> = ({
           <div
             className={css(Align_flex_styleLast)}
             id='backdrop'
+            data-test-id='backdrop-delete'
             onClick={() => {
               if (!item.referenceColleagueUuid) {
                 selectedNoteId.current = itemId;
@@ -146,6 +151,7 @@ const SelectedFolder: FC<SelectedFolderProps> = ({
               iconProps={{ title: 'Delete' }}
               graphic='delete'
               id='backdrop'
+              data-test-id='backdrop-delete-icon'
               customVariantRules={{ default: notePropertiesIconStyle }}
               onPress={() => {
                 if (!item.referenceColleagueUuid) {
@@ -168,7 +174,7 @@ const SelectedFolder: FC<SelectedFolderProps> = ({
     ];
 
     return (
-      <div className={css(modalButtonsStyle({ isUserArchived }))}>
+      <div className={css(modalButtonsStyle({ isUserArchived }))} data-test-id='button-dots'>
         {btnsActions.filter(Boolean).map((item) => (
           <div key={item.id}>{item.button}</div>
         ))}
@@ -226,16 +232,19 @@ const SelectedFolder: FC<SelectedFolderProps> = ({
     }
   };
 
+  const foldersList = useSelector(getFoldersSelector) || [];
+
   return (
-    <div className={css(expandedNoteStyle)} data-test-id={testId}>
+    <div className={css(expandedNoteStyle)} data-test-id={FOLDER_WRAPPER}>
       <div className={css(flexBeetweenStyle)}>
         <span className={css(folderTitleStyled)}>{selectedFolder?.title}</span>
       </div>
-      <div className={css({ marginTop: '32px', display: 'flex', flexDirection: 'column' })}>
+      <div className={css({ marginTop: '32px', display: 'flex', flexDirection: 'column' })} data-test-id={testId}>
         {selectedFolder?.notes?.map((item) => (
           <div
             className={css(flexBeetweenStyle, noteContainerStyle, { position: 'relative' })}
             key={item.id}
+            data-test-id='note'
             onClick={(e) => setSelectedNoteHandler(e, item)}
           >
             <span className={css(noteTitleStyle)}>
@@ -246,7 +255,12 @@ const SelectedFolder: FC<SelectedFolderProps> = ({
             </span>
             <div className={css(FlexStyle)}>
               <span className={css(timeStyled)}>{formatToRelativeDate(item?.updateTime)}</span>
-              <div className={css(dotsStyle)} onClick={() => selectedNoteActionhandler(item.id)} id='backdrop'>
+              <div
+                className={css(dotsStyle)}
+                data-test-id='dots'
+                onClick={() => selectedNoteActionhandler(item.id)}
+                id='backdrop'
+              >
                 <span></span>
                 <span></span>
                 <span></span>

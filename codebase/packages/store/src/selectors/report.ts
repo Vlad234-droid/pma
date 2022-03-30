@@ -6,6 +6,8 @@ import { Status } from '../../../client/src/config/enum';
 export const reportSelector = (state: RootState) => state.report;
 const statusIndex = 8;
 
+export const getReportMetaSelector = createSelector(reportSelector, (report) => report.meta);
+
 export const approvedObjectivesSelector = createSelector(reportSelector, (report: any) => {
   const { objectiveReports } = report;
   const approvedCount = objectiveReports.filter((item) => item[statusIndex] === Status.APPROVED).length;
@@ -40,12 +42,12 @@ export const getStatisticReportSelector = createSelector(reportSelector, (report
 export const getPendingObjectivesSelector = (type: string) =>
   createSelector(reportSelector, (report: any) => {
     const { colleagues } = report;
-    return colleagues.filter((colleague) => !+colleague.tags[type]);
+    return colleagues?.filter((colleague) => !Number(colleague.tags[type]));
   });
 
 export const getDoneObjectivesSelector = (type: string) =>
   createSelector(reportSelector, (report: any) => {
     const { colleagues } = report;
 
-    return colleagues.filter((colleague) => +colleague.tags[type]);
+    return colleagues?.filter((colleague) => Number(colleague.tags[type]));
   });

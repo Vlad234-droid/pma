@@ -7,15 +7,21 @@ export const useStatisticsReport = (args) => {
   const [approvedObjPercent, approvedObjTitle] = useSelector(approvedObjectivesSelector);
   const [notApprovedObjPercent, notApprovedObjTitle] = useSelector(notApprovedObjectivesSelector);
 
-  const getKey = (key) => {
-    return key
+  const objectivesGroup = {
+    approvedObjPercent,
+    approvedObjTitle,
+    notApprovedObjPercent,
+    notApprovedObjTitle,
+  };
+
+  const getKey = (key) =>
+    key
       .split('-')
       .map((item, i) => {
         if (!i) return item;
         return upperCaseFirstLetter(item);
       })
       .join('');
-  };
 
   if (data?.length && metadata?.length) {
     const statisticReport = args.reduce((acc, item, index) => {
@@ -23,7 +29,7 @@ export const useStatisticsReport = (args) => {
       return acc;
     }, {});
 
-    return { ...statisticReport, approvedObjPercent, approvedObjTitle, notApprovedObjPercent, notApprovedObjTitle };
+    return { ...statisticReport, ...objectivesGroup };
   }
-  return { approvedObjPercent, approvedObjTitle, notApprovedObjPercent, notApprovedObjTitle };
+  return { ...objectivesGroup };
 };

@@ -7,5 +7,5 @@ export type RatingChartData = {
     [Rating.GREAT]: number;
     [Rating.SATISFACTORY]: number;
     [Rating.BELOW_EXPECTED]: number;
-  },
+  };
 };

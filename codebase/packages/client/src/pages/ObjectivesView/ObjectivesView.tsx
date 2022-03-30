@@ -1,19 +1,26 @@
 import React, { useEffect } from 'react';
-import Popup from 'components/Popup/Popup';
 import { useStyle, Rule } from '@dex-ddl/core';
-import useDispatch from 'hooks/useDispatch';
 import { useSelector } from 'react-redux';
-import { OrgObjectiveActions, orgObjectivesSelector } from '@pma/store';
+import { OrgObjectiveActions, orgObjectivesSelector, orgObjectivesMetaSelector } from '@pma/store';
+
+import useDispatch from 'hooks/useDispatch';
+import Spinner from 'components/Spinner';
+import Popup from 'components/Popup/Popup';
 
 const ObjectivesView = () => {
   const { css } = useStyle();
   const dispatch = useDispatch();
 
   const orgObjectives = useSelector(orgObjectivesSelector) || [];
+  const { loaded } = useSelector(orgObjectivesMetaSelector);
 
   useEffect(() => {
     dispatch(OrgObjectiveActions.getOrgObjectives({}));
   }, []);
+
+  if (!loaded) {
+    return <Spinner fullHeight />;
+  }
 
   return (
     <div className={css(main)}>

@@ -6,6 +6,8 @@ import useQueryString from 'hooks/useQueryString';
 import { ObjectiveType, ReportType } from '../config';
 import { MetaDataReport } from 'config/enum';
 import { useStatisticsReport } from 'features/Report/hooks';
+import { buildPath } from 'features/Routes';
+import { Page } from 'pages';
 
 const metaDataReport = [MetaDataReport.OBJECTIVES_SUBMITTED_PERCENTAGE, MetaDataReport.OBJECTIVES_APPROVED_PERCENTAGE];
 
@@ -51,14 +53,15 @@ export const useObjectivesProfile = () => {
     };
   }, []);
 
-  const getObjectiveType = () =>
-    objectiveType && objectiveType === ObjectiveType.SUBMITTED
+  const getObjectiveType = () => {
+    return objectiveType && objectiveType === ObjectiveType.SUBMITTED
       ? ReportType.HAS_OBJECTIVE_SUBMITTED
       : ReportType.HAS_OBJECTIVE_APPROVED;
+  };
 
   const pending = useSelector(getPendingObjectivesSelector(getObjectiveType())) || [];
 
   const done = useSelector(getDoneObjectivesSelector(getObjectiveType())) || [];
 
-  return [pending, done, objectiveType, objectivesSubmittedPercentage, objectivesApprovedPercentage];
+  return [pending, done, objectiveType, objectivesSubmittedPercentage, objectivesApprovedPercentage, query];
 };

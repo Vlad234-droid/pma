@@ -7,6 +7,7 @@ import { Trans, useTranslation } from 'components/Translation';
 import { ReviewType, Status } from 'config/enum';
 import { TimelineTypes } from 'config/types';
 import { KnowledgeLibraryWidget } from 'features/KnowledgeLibrary';
+import Spinner from 'components/Spinner';
 
 import HelpWidgets from '../HelpWidgets';
 import InfoWidgets from '../InfoWidgets';
@@ -26,6 +27,7 @@ type Props = {
   endYearReview: Review;
   colleagueUuid?: string;
   displayTimelines: boolean;
+  loading: boolean;
 };
 
 const CareerPerformance: FC<Props> = ({
@@ -38,6 +40,7 @@ const CareerPerformance: FC<Props> = ({
   endYearReview,
   colleagueUuid,
   displayTimelines,
+  loading,
 }) => {
   const { css } = useStyle();
   const { t } = useTranslation();
@@ -54,6 +57,10 @@ const CareerPerformance: FC<Props> = ({
       setLinkTitle({ [Page.OBJECTIVES_VIEW]: t('reviews', 'Reviews') });
     }
   }, [showAnnualReview]);
+
+  if (loading) {
+    return <Spinner fullHeight />;
+  }
 
   return (
     <>

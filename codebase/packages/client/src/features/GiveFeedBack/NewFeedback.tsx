@@ -2,9 +2,16 @@ import React, { FC, useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useBreakpoints, Rule, Modal } from '@dex-ddl/core';
-import { colleagueUUIDSelector, ColleaguesActions, FeedbackActions, feedbackByUuidSelector } from '@pma/store';
+import {
+  colleagueUUIDSelector,
+  ColleaguesActions,
+  FeedbackActions,
+  feedbackByUuidSelector,
+  getLoadedStateSelector,
+} from '@pma/store';
 import { Icon } from 'components/Icon';
 import { Page } from 'pages';
+import Spinner from 'components/Spinner';
 import { GiveFeedbackForm, ConfirmMassage, SuccessMassage, InfoMassage } from './components';
 import { GiveFeedbackType } from './type';
 
@@ -55,6 +62,7 @@ const NewFeedback: FC = () => {
   const { feedbackItems, targetColleagueUuid, targetColleagueProfile } = useSelector(feedbackByUuidSelector(uuid)) || {
     targetColleagueUuid: '',
   };
+  const { loading } = useSelector(getLoadedStateSelector);
   const [formData, setFormData] = useState({
     feedbackItems: feedbackItems
       ? feedbackFields.map(({ code }) => feedbackItems.find((item) => item.code === code))
@@ -118,35 +126,42 @@ const NewFeedback: FC = () => {
         styles: [modalTitleOptionStyle],
       }}
     >
-      {status === Statuses.PENDING && (
-        <GiveFeedbackForm
-          defaultValues={formData}
-          onSubmit={handleSubmit}
-          currentColleague={targetColleagueProfile}
-          goToInfo={(data) => {
-            setStatus(Statuses.INFO);
-            setFormData(data);
-          }}
-          feedbackFields={feedbackFields}
-        />
+      {loading ? (
+        <Spinner />
+      ) : (
+        <>
+          {status === Statuses.PENDING && (
+            <GiveFeedbackForm
+              defaultValues={formData}
+              onSubmit={handleSubmit}
+              currentColleague={targetColleagueProfile}
+              goToInfo={(data) => {
+                setStatus(Statuses.INFO);
+                setFormData(data);
+              }}
+              feedbackFields={feedbackFields}
+            />
+          )}
+
+          {status === Statuses.CONFIRMING && (
+            <ConfirmMassage
+              onConfirm={() => {
+                setStatus(Statuses.SENDING);
+                handleSave(formData);
+              }}
+              goBack={() => setStatus(Statuses.PENDING)}
+            />
+          )}
+          {status === Statuses.SENDING && (
+            <SuccessMassage
+              onSuccess={handleSuccess}
+              selectedColleagueUuid={formData.targetColleagueUuid}
+              targetColleagueProfile={targetColleagueProfile}
+            />
+          )}
+          {status === Statuses.INFO && <InfoMassage goBack={() => setStatus(Statuses.PENDING)} />}
+        </>
       )}
-      {status === Statuses.CONFIRMING && (
-        <ConfirmMassage
-          onConfirm={() => {
-            setStatus(Statuses.SENDING);
-            handleSave(formData);
-          }}
-          goBack={() => setStatus(Statuses.PENDING)}
-        />
-      )}
-      {status === Statuses.SENDING && (
-        <SuccessMassage
-          onSuccess={handleSuccess}
-          selectedColleagueUuid={formData.targetColleagueUuid}
-          targetColleagueProfile={targetColleagueProfile}
-        />
-      )}
-      {status === Statuses.INFO && <InfoMassage goBack={() => setStatus(Statuses.PENDING)} />}
     </Modal>
   );
 };

@@ -18,6 +18,7 @@ import {
 } from '@pma/store';
 
 import { role, usePermission } from 'features/Permission';
+import Spinner from 'components/Spinner';
 import { AddTeamNoteModal, InfoModal, AddNoteModal, FilterOptions, MainFolders } from './components';
 import { IconButton } from 'components/IconButton';
 import { Icon } from 'components/Icon';
@@ -29,11 +30,12 @@ import { FoldersWithNotesTypes, FoldersWithNotesTypesTEAM, NoteData, NotesType, 
 import { AllNotesFolderId, AllNotesFolderIdTEAM, filterNotesHandler, addNewFolderId } from 'utils';
 import { PeopleTypes } from './components/TeamNotes/ModalsParts/type';
 
-export const NOTES_WRAPPER = 'note_wrapper';
-export const ADD_NEW = 'ADD_NEW';
-export const CONFIRM_MODAL_ID = 'CONFIRM_MODAL_ID';
+export const NOTES_WRAPPER = 'note-wrapper';
+export const ADD_NEW = 'add-new';
+export const CONFIRM_MODAL_ID = 'confirm-modal';
+export const WRAPPER = 'wrapper';
 
-enum ModalStatuses {
+export enum ModalStatuses {
   ADD_NEW = 'ADD_NEW',
   PENDING = 'PENDING',
   PERSONAL_NOTE = 'PERSONAL_NOTE',
@@ -43,7 +45,7 @@ enum ModalStatuses {
   INFO = 'INFO',
 }
 
-const NotesActions: FC = () => {
+const NotesActions: FC<{ loaded: boolean }> = ({ loaded }) => {
   const { css, theme } = useStyle();
   const navigate = useNavigate();
   const [status, setStatus] = useState(ModalStatuses.PENDING);
@@ -356,6 +358,10 @@ const NotesActions: FC = () => {
     setStatus(() => ModalStatuses.PENDING);
     reset();
   };
+
+  if (!loaded) {
+    return <Spinner fullHeight />;
+  }
 
   if (status === ModalStatuses.INFO) {
     return (

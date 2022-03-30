@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { Rule, useStyle } from '@dex-ddl/core';
 
 // eslint-disable-next-line import/no-named-as-default
@@ -8,6 +8,8 @@ import { getLoadedStateSelector } from '@pma/store';
 
 import { Checkbox } from 'components/Form';
 import { NoFeedback } from '../../../Feedback/components';
+
+export const WRAPPER = 'list-wrapper';
 
 type Selectable = Record<string, boolean>;
 
@@ -33,9 +35,7 @@ const DraftList: FC<Props> = ({
   const [selected, setSelected] = useState<Selectable>({});
 
   useEffect(() => {
-    if (items.length >= 0) {
-      setSelected(items.reduce((acc, item) => ({ ...acc, [item.uuid]: false }), {}));
-    }
+    setSelected(items.reduce((acc, item) => ({ ...acc, [item.uuid]: false }), {}));
   }, [items.length]);
 
   const canSelect = (uuid: string) =>
@@ -54,20 +54,18 @@ const DraftList: FC<Props> = ({
     .flatMap(([key]) => key);
 
   useEffect(() => {
-    if (uuids.length >= 0) {
-      onChange && onChange(uuids);
-    }
+    onChange && onChange(uuids);
   }, [uuids.length]);
 
-  if (!loaded) return <div className={css(wrapperRule)} />;
+  if (!loaded) return <div className={css(wrapperRule)} data-test-id='empty' />;
 
   return (
-    <div className={css(wrapperRule)}>
+    <div className={css(wrapperRule)} data-test-id={WRAPPER}>
       {items.length && Object.keys(selected).length ? (
         items.map((item) => (
           <div key={item.uuid} className={css(itemsWrapperRule)}>
             {selectable && (
-              <div className={css(checkBoxRule)}>
+              <div className={css(checkBoxRule)} data-test-id='checkboxes'>
                 <Checkbox
                   id='selectAll'
                   name={item.uuid}

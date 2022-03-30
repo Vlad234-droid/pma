@@ -3,7 +3,7 @@ import '@testing-library/jest-dom/extend-expect';
 import '@testing-library/jest-dom';
 import { renderWithTheme as render } from 'utils/test';
 
-import MainFolders, { MAIN_FOLDERS_ID } from './MainFolders';
+import MainFolders, { FOLDER_WRAPPER } from './MainFolders';
 
 describe('Main Folders', () => {
   const testHandler = jest.fn();
@@ -28,7 +28,12 @@ describe('Main Folders', () => {
 
   it('it should render personal folder wrapper', async () => {
     const { getByTestId } = render(<MainFolders {...props} />);
-    const wrapper = getByTestId(MAIN_FOLDERS_ID);
+    const wrapper = getByTestId(FOLDER_WRAPPER);
     expect(wrapper).toBeInTheDocument();
+  });
+  it('it should fire test handler', async () => {
+    render(<MainFolders {...props} />);
+    testHandler();
+    expect(testHandler).toHaveBeenCalled();
   });
 });

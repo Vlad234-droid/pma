@@ -4,6 +4,7 @@ export const makeBinaryFromObject = <T extends unknown>(data: T) =>
   new Blob([JSON.stringify(data)], {
     type: 'application/json',
   });
+// TODO: fix regex
 const fileExtensionPattern = /\.([0-9a-z]+)(?=[?#])|(\.)(?:[\w]+)$/gim;
 const fileExtensionWithoutDot = (name) => name.split('.').pop();
 

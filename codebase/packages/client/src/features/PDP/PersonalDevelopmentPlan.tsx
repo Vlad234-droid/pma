@@ -8,6 +8,7 @@ import {
   getTimelineMetaSelector,
   PDPActions,
   schemaMetaPDPSelector,
+  metaPDPSelector,
   TimelineActions,
 } from '@pma/store';
 import DescriptionBlock from 'components/DescriptionBlock';
@@ -18,6 +19,7 @@ import { Icon } from 'components/Icon';
 import { PDPType } from 'config/enum';
 import { BASE_URL_API } from 'config/constants';
 import { Trans, useTranslation } from 'components/Translation';
+import Spinner from 'components/Spinner';
 import GoalInfo from './components/GoalInfo';
 import usePDPSchema from './hooks/usePDPSchema';
 import colors from 'theme/colors';
@@ -39,6 +41,7 @@ const PersonalDevelopmentPlan: FC = () => {
 
   const pdpSelector = useSelector(schemaMetaPDPSelector)?.goals || [];
   const colleagueUuid = useSelector(colleagueUUIDSelector);
+  const { loaded: pdpLoaded, loading: pdpLoading } = useSelector(metaPDPSelector);
   const [schema] = usePDPSchema(PDPType.PDP);
   const { components = [] } = schema;
 
@@ -63,7 +66,7 @@ const PersonalDevelopmentPlan: FC = () => {
 
   const navToGoalPage = () => navigate(buildPath(Page.CREATE_PERSONAL_DEVELOPMENT_PLAN));
 
-  const { loaded } = useSelector(getTimelineMetaSelector) || {};
+  const { loaded, loading } = useSelector(getTimelineMetaSelector) || {};
 
   const elRef = useRef<HTMLDivElement | null>(null);
 
@@ -93,6 +96,10 @@ const PersonalDevelopmentPlan: FC = () => {
   };
 
   const downloadHref = () => `${BASE_URL_API}/pdp/template`;
+
+  if (loading || !loaded || pdpLoading || !pdpLoaded) {
+    return <Spinner fullHeight />;
+  }
 
   return (
     <div ref={elRef} className={css(wrapper({ mobileScreen }))}>

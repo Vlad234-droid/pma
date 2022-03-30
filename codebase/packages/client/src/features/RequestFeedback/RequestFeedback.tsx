@@ -4,11 +4,12 @@ import { useNavigate } from 'react-router-dom';
 import { Modal, CreateRule, useBreakpoints, useStyle } from '@dex-ddl/core';
 import RequestFeedbackForm from './components/RequestFeedbackForm';
 import SuccessMassage from './components/SuccessMassage';
-import { colleagueUUIDSelector, FeedbackActions } from '@pma/store';
+import { colleagueUUIDSelector, FeedbackActions, getLoadedStateSelector } from '@pma/store';
 import { Icon } from 'components/Icon';
 import { Page } from 'pages';
 import { InfoModalContent } from './ModalParts';
 import { useTranslation } from 'components/Translation';
+import Spinner from 'components/Spinner';
 
 const RequestFeedback: FC = () => {
   const { t } = useTranslation();
@@ -17,6 +18,7 @@ const RequestFeedback: FC = () => {
   const [sent, setSent] = useState(false);
   const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
   const colleagueUuid = useSelector(colleagueUUIDSelector);
+  const { loading } = useSelector(getLoadedStateSelector);
   const [, isBreakpoint] = useBreakpoints();
   const isMobile = isBreakpoint.small || isBreakpoint.xSmall;
   const { theme } = useStyle();
@@ -42,6 +44,7 @@ const RequestFeedback: FC = () => {
     if (isInfoModalOpen) return setIsInfoModalOpen(false);
     navigate(`/${Page.FEEDBACK}`);
   };
+
   return (
     <Modal
       modalPosition={'middle'}
@@ -57,18 +60,24 @@ const RequestFeedback: FC = () => {
         styles: [modalTitleOptionStyle({ isMobile })],
       }}
     >
-      {isInfoModalOpen ? (
-        <InfoModalContent onClose={() => setIsInfoModalOpen(false)} />
-      ) : sent ? (
-        <SuccessMassage />
+      {loading ? (
+        <Spinner />
       ) : (
-        <RequestFeedbackForm
-          onSubmit={handleSubmit}
-          onCancel={handleClose}
-          setIsInfoModalOpen={() => {
-            setIsInfoModalOpen(true);
-          }}
-        />
+        <>
+          {isInfoModalOpen ? (
+            <InfoModalContent onClose={() => setIsInfoModalOpen(false)} />
+          ) : sent ? (
+            <SuccessMassage />
+          ) : (
+            <RequestFeedbackForm
+              onSubmit={handleSubmit}
+              onCancel={handleClose}
+              setIsInfoModalOpen={() => {
+                setIsInfoModalOpen(true);
+              }}
+            />
+          )}
+        </>
       )}
     </Modal>
   );

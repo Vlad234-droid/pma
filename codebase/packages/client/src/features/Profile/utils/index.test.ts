@@ -16,13 +16,13 @@ describe('#getMissedFields', () => {
                 name: 'mocked_job_name',
               },
               department: {
-                name: 'mocked_department_name'
+                name: 'mocked_department_name',
               },
               managerUUID: 'mocked_manager_uuid',
-            }
-          ]
-        }
-      }
+            },
+          ],
+        },
+      },
     };
 
     expect(getMissedFields(info)).toEqual([]);
@@ -38,15 +38,20 @@ describe('#getMissedFields', () => {
           workRelationships: [
             {
               department: {
-                name: 'mocked_department_name'
+                name: 'mocked_department_name',
               },
-            }
-          ]
-        }
-      }
+            },
+          ],
+        },
+      },
     };
 
-    expect(getMissedFields(info)).toEqual(['managerUUID', 'profile/firstName', 'workRelationships/job/name', 'workRelationships/managerUUID']);
+    expect(getMissedFields(info)).toEqual([
+      'managerUUID',
+      'profile/firstName',
+      'workRelationships/job/name',
+      'workRelationships/managerUUID',
+    ]);
   });
 
   it('should return an array with nullable fields', () => {
@@ -62,16 +67,21 @@ describe('#getMissedFields', () => {
             {
               job: null,
               department: {
-                name: 'mocked_department_name'
+                name: 'mocked_department_name',
               },
               managerUUID: null,
-            }
-          ]
-        }
-      }
+            },
+          ],
+        },
+      },
     };
 
-    expect(getMissedFields(info)).toEqual(['managerUUID', 'profile/firstName', 'workRelationships/job/name', 'workRelationships/managerUUID']);
+    expect(getMissedFields(info)).toEqual([
+      'managerUUID',
+      'profile/firstName',
+      'workRelationships/job/name',
+      'workRelationships/managerUUID',
+    ]);
   });
 
   it('should return an array with empty string fields', () => {
@@ -87,16 +97,21 @@ describe('#getMissedFields', () => {
             {
               job: '',
               department: {
-                name: 'mocked_department_name'
+                name: 'mocked_department_name',
               },
               managerUUID: '',
-            }
-          ]
-        }
-      }
+            },
+          ],
+        },
+      },
     };
 
-    expect(getMissedFields(info)).toEqual(['managerUUID', 'profile/firstName', 'workRelationships/job/name', 'workRelationships/managerUUID']);
+    expect(getMissedFields(info)).toEqual([
+      'managerUUID',
+      'profile/firstName',
+      'workRelationships/job/name',
+      'workRelationships/managerUUID',
+    ]);
   });
 
   it('should return an array with false fields', () => {
@@ -112,16 +127,21 @@ describe('#getMissedFields', () => {
             {
               job: false,
               department: {
-                name: 'mocked_department_name'
+                name: 'mocked_department_name',
               },
               managerUUID: false,
-            }
-          ]
-        }
-      }
+            },
+          ],
+        },
+      },
     };
 
-    expect(getMissedFields(info)).toEqual(['managerUUID', 'profile/firstName', 'workRelationships/job/name', 'workRelationships/managerUUID']);
+    expect(getMissedFields(info)).toEqual([
+      'managerUUID',
+      'profile/firstName',
+      'workRelationships/job/name',
+      'workRelationships/managerUUID',
+    ]);
   });
 
   it('should return an array with 0 fields', () => {
@@ -137,16 +157,20 @@ describe('#getMissedFields', () => {
             {
               job: 0,
               department: {
-                name: 'mocked_department_name'
+                name: 'mocked_department_name',
               },
               managerUUID: 0,
-            }
-          ]
-        }
-      }
+            },
+          ],
+        },
+      },
     };
 
-    expect(getMissedFields(info)).toEqual(['managerUUID', 'profile/firstName', 'workRelationships/job/name', 'workRelationships/managerUUID']);
+    expect(getMissedFields(info)).toEqual([
+      'managerUUID',
+      'profile/firstName',
+      'workRelationships/job/name',
+      'workRelationships/managerUUID',
+    ]);
   });
-
 });

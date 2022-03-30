@@ -9,6 +9,7 @@ import { paramsReplacer } from 'utils';
 import { IconButton } from 'components/IconButton';
 import { Trans } from 'components/Translation';
 import { NoTips, TipsCard } from 'features/Tips';
+import Spinner from 'components/Spinner';
 
 export const TIPS_ADMINISTRATION = 'tips-administration';
 
@@ -46,6 +47,7 @@ const TipsAdministration: FC = () => {
         </IconButton>
       </div>
 
+      {!isLoaded && <Spinner />}
       {isLoaded && tips.length === 0 && <NoTips />}
 
       {isLoaded &&

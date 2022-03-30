@@ -78,7 +78,7 @@ export const getCompareOptions = (t) => [
 export const getCurrentData = () => {
   const currentYear = new Date().getFullYear();
 
-  return ({
+  return {
     title: currentYear.toString(),
     ratings: {
       [Rating.OUTSTANDING]: 13,
@@ -86,7 +86,7 @@ export const getCurrentData = () => {
       [Rating.SATISFACTORY]: 46,
       [Rating.BELOW_EXPECTED]: 7,
     },
-  });
+  };
 };
 
 export const getCompareData = (compareMode: string) => {
@@ -108,7 +108,7 @@ export const getCompareData = (compareMode: string) => {
         [Rating.SATISFACTORY]: 48,
         [Rating.BELOW_EXPECTED]: 4,
       },
-    }
+    },
   ];
 
   return data.filter((item) => item.title === compareMode)[0];

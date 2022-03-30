@@ -182,12 +182,10 @@ export const filterNotesHandler = (
   return obj;
 };
 
-export const getNotesFolderTitle = (folderUuid: string, foldersList: Array<any>) => {
-  const folder = foldersList.find((item) => item.id === folderUuid);
-  const folderTitle = folder ? folder.title : 'All notes';
-
-  return folderTitle;
-};
+export const getNotesFolderTitle = (folderUuid: string, foldersList: Array<any>) =>
+  foldersList.find((item) => item.id === folderUuid)
+    ? foldersList.find((item) => item.id === folderUuid).title
+    : 'All notes' ?? '';
 
 export const getNotes = (foldersWithNotes, t) => {
   return {

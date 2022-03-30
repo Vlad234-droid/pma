@@ -7,4 +7,7 @@ export const checkTrailingSlash = (path: String) => {
 export const upperCaseFirstLetter = <T extends string>(string: T): string =>
   string.charAt(0).toUpperCase() + string.slice(1);
 
-export const extendQuery = (query: QueryType, fields: Record<string, string>): QueryType => ({ ...query, ...fields });
+export const extendQuery = <T extends QueryType, U extends Record<string, string>>(query: T, fields: U): T & U => ({
+  ...query,
+  ...fields,
+});

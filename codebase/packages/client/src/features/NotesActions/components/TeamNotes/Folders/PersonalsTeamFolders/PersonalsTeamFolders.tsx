@@ -3,7 +3,7 @@ import { Rule, useStyle, Button, Styles, CreateRule, useBreakpoints } from '@dex
 import { IconButton } from 'components/IconButton';
 import { defineNotesHandler, AllNotesFolderIdTEAM } from 'utils/note';
 import { NoteData } from '../../../../type';
-import { Trans, useTranslation } from 'components/Translation';
+import { Trans } from 'components/Translation';
 
 export const TEAM_FOLDER_WRAPPER = 'team_folder_wrapper';
 export const CHANGE_TEAM_MODE = 'change_team_mode';
@@ -41,7 +41,6 @@ const PersonalsTeamFolders: FC<PersonalsTeamFoldersProps> = ({
   setSelectedTEAMFolder,
 }) => {
   const { css, theme } = useStyle();
-  const { t } = useTranslation();
 
   const selectedDotsActionhandler = (e, noteId) => {
     selectedTEAMNoteId.current = null;
@@ -190,9 +189,7 @@ const PersonalsTeamFolders: FC<PersonalsTeamFoldersProps> = ({
     <div className={css(mainFolderContainerStyle)} data-test-id={TEAM_FOLDER_WRAPPER}>
       <div className={css(titleStyle)}>
         <h2 className={css({ padding: '24px' })} data-test-id={FOLDER_TITLE}>
-          {!teamArchivedMode
-            ? t('folders_for_notes_on_my_team', 'Folders for Notes on my Team')
-            : t('archived_folders_for_notes_on_my_team', 'Archived Folders for Notes on my Team')}
+          {!teamArchivedMode ? 'Folders for Notes on my Team' : 'Archived Folders for Notes on my Team'}
         </h2>
       </div>
       <div className={css({ marginTop: '48px' })}>
@@ -202,6 +199,7 @@ const PersonalsTeamFolders: FC<PersonalsTeamFoldersProps> = ({
             <div
               className={css({ position: 'relative' })}
               key={item.id}
+              data-test-id='folder-item'
               onClick={(e) => handleExpandFolder(e, item.id)}
             >
               <div className={css(itemListStyle({ selected }))}>
@@ -212,7 +210,12 @@ const PersonalsTeamFolders: FC<PersonalsTeamFoldersProps> = ({
                 <div className={css({ display: 'flex', alignItems: 'center' })}>
                   {item.id !== AllNotesFolderIdTEAM && (
                     <div className={css(flexStyle)}>
-                      <div className={css(dotsStyle)} onClick={(e) => selectedDotsActionhandler(e, item.id)} id='dots'>
+                      <div
+                        className={css(dotsStyle)}
+                        data-test-id='dots-items'
+                        onClick={(e) => selectedDotsActionhandler(e, item.id)}
+                        id='dots'
+                      >
                         <span></span>
                         <span></span>
                         <span></span>
@@ -244,7 +247,7 @@ const PersonalsTeamFolders: FC<PersonalsTeamFoldersProps> = ({
           setSelectedTEAMFolder(() => null);
         }}
       >
-        {!teamArchivedMode ? t('archived_folders', 'Archived Folders') : t('personal_folders', 'Personal Folders')}
+        {!teamArchivedMode ? 'Archived Folders' : 'Personal Folders'}
       </Button>
     </div>
   );

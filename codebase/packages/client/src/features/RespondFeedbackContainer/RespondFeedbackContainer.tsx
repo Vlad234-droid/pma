@@ -1,13 +1,19 @@
 import React, { FC, useState, useEffect, useCallback } from 'react';
 import { Rule, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { useDispatch, useSelector } from 'react-redux';
-import { FeedbackActions, colleagueUUIDSelector, getRespondedFeedbacksSelector } from '@pma/store';
+import {
+  FeedbackActions,
+  colleagueUUIDSelector,
+  getRespondedFeedbacksSelector,
+  getLoadedStateSelector,
+} from '@pma/store';
 
 import { FilterModal } from '../Shared/components/FilterModal';
 import { DraftItem, RadioBtns } from './components';
 import { FilterOption } from 'features/Shared';
 import debounce from 'lodash.debounce';
 import { FEEDBACK_STATUS_IN, FeedbackStatus } from 'config/enum';
+import Spinner from 'components/Spinner';
 import { initialState } from './config';
 
 import { getSortString } from 'utils/feedback';
@@ -19,6 +25,7 @@ const RespondFeedbackContainer: FC = () => {
   const dispatch = useDispatch();
 
   const colleagueUuid = useSelector(colleagueUUIDSelector);
+  const { loaded } = useSelector(getLoadedStateSelector);
 
   const [focus, setFocus] = useState(false);
   const [filterModal, setFilterModal] = useState(false);
@@ -91,7 +98,11 @@ const RespondFeedbackContainer: FC = () => {
           </div>
         </div>
         <div className={css(DraftsStyle)}>
-          <DraftItem status={status} list={feedbackList} canEdit={status === FeedbackStatus.PENDING} />
+          {!loaded ? (
+            <Spinner />
+          ) : (
+            <DraftItem status={status} list={feedbackList} canEdit={status === FeedbackStatus.PENDING} />
+          )}
         </div>
       </div>
     </>

@@ -7,7 +7,7 @@ import { PersonalFoldersProps } from '../../../type';
 import { defineNotesHandler, AllNotesFolderId } from 'utils/note';
 
 export const PERSONAL_FOLDER_WRAPPER = 'personal_folder_wrapper';
-export const CHANGE_USER_MODE = 'change_user_mode';
+export const CHANGE_USER_MODE = 'change-user-mode';
 
 const PersonalFolders: FC<PersonalFoldersProps> = ({
   handleSelected,
@@ -77,7 +77,7 @@ const PersonalFolders: FC<PersonalFoldersProps> = ({
     handleSelected(id);
   };
 
-  const btnsActionsHandle = (itemId: string, notesLength: number) => {
+  const btnsActionsHandler = (itemId: string, notesLength: number) => {
     const btnsActions = [
       {
         ...(!isUserArchived && {
@@ -161,6 +161,7 @@ const PersonalFolders: FC<PersonalFoldersProps> = ({
           const { selected } = item;
           return (
             <div
+              data-test-id='folder-item'
               className={css({ position: 'relative' })}
               key={item.id}
               onClick={(e) => handleExpandFolder(e, item.id)}
@@ -173,7 +174,12 @@ const PersonalFolders: FC<PersonalFoldersProps> = ({
                 <div className={css({ display: 'flex', alignItems: 'center' })}>
                   {item.id !== AllNotesFolderId && (
                     <div className={css(flexStyle)}>
-                      <div className={css(dotsStyle)} onClick={(e) => selectedDotsActionhandler(e, item.id)} id='dots'>
+                      <div
+                        className={css(dotsStyle)}
+                        data-test-id='dots-items'
+                        onClick={(e) => selectedDotsActionhandler(e, item.id)}
+                        id='dots'
+                      >
                         <span></span>
                         <span></span>
                         <span></span>
@@ -181,7 +187,7 @@ const PersonalFolders: FC<PersonalFoldersProps> = ({
                     </div>
                   )}
 
-                  {item.selectedDots && btnsActionsHandle(item.id, item.notes.length)}
+                  {item.selectedDots && btnsActionsHandler(item.id, item.notes.length)}
 
                   <div className={css({ display: 'flex', alignItems: 'center' })}>
                     <IconButton

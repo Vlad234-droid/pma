@@ -9,9 +9,11 @@ export const durationOptions = [
 
 export const processTemplateSelector = (state: RootState) => state.processTemplate.data;
 
+export const getProcessTemplateMetaSelector = createSelector(processTemplateSelector, (template) => template.meta);
+
 export const getProcessTemplateSelector = createSelector(processTemplateSelector, (data) => {
   return (
-    data.map((process: any) => ({
+    data?.map((process: any) => ({
       uuid: process.uuid,
       createdBy: process.createdBy,
       description: process.description,

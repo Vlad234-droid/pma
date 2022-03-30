@@ -13,6 +13,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { NotesActions, colleagueUUIDSelector } from '@pma/store';
 import { Option } from 'components/Form/types';
 
+export const MODAL_WRAPPER = 'modal-wrapper';
+
 const EditSelectedNote: FC<EditSelectedNoteProps> = ({
   foldersWithNotes,
   methods,
@@ -78,7 +80,7 @@ const EditSelectedNote: FC<EditSelectedNoteProps> = ({
   }
 
   return (
-    <div className={css(WrapperModalGiveFeedbackStyle)}>
+    <div className={css(WrapperModalGiveFeedbackStyle)} data-test-id={MODAL_WRAPPER}>
       <div>
         <div className={css(headerInfoStyle({ editMode }))}>
           {!editMode && <h2 className={css(noteTitleStyle)}>{selectedNoteToEdit.title}</h2>}

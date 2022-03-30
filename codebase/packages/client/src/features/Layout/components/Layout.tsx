@@ -1,6 +1,6 @@
 import React, { FC, useContext, useMemo } from 'react';
-import { useLocation, useNavigate, matchPath } from 'react-router-dom';
-import { Rule, useBreakpoints, useStyle } from '@dex-ddl/core';
+import { matchPath, useLocation, useNavigate } from 'react-router-dom';
+import { Rule, useStyle } from '@dex-ddl/core';
 import { pages } from 'pages';
 import { buildPath } from 'features/Routes/utils';
 import { CanPerform, role } from 'features/Permission';
@@ -64,19 +64,14 @@ const Layout: FC = ({ children }) => {
     />
   );
 };
-const layoutRule: Rule = () => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
-  return {
-    ...(!mobileScreen ? {} : {}),
-    display: 'flex',
-    flex: 1,
-    flexDirection: 'column',
-    minHeight: '100vh',
-    maxHeight: '100vh',
-    overflowY: 'auto',
-    padding: '8px 16px 80px',
-  };
-};
+const layoutRule: Rule = () => ({
+  display: 'flex',
+  flex: 1,
+  flexDirection: 'column',
+  minHeight: '100vh',
+  maxHeight: '100vh',
+  overflowY: 'auto',
+  padding: '8px 16px 80px',
+});
 
 export default Layout;

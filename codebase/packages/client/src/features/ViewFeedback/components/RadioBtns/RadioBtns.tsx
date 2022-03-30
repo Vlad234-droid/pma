@@ -3,6 +3,8 @@ import { useStyle, useBreakpoints } from '@dex-ddl/core';
 import { Trans } from 'components/Translation';
 import { Radio } from 'components/Form';
 
+export const RADIO_WRAPPER = 'radio-wrapper';
+
 type TypecheckedRadio = {
   unread: boolean;
   read: boolean;
@@ -37,6 +39,7 @@ const RadioBtns: FC<Props> = ({
   const medium = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
   return (
     <div
+      data-test-id={RADIO_WRAPPER}
       className={css({
         display: 'flex',
         gap: '10px',
@@ -53,7 +56,7 @@ const RadioBtns: FC<Props> = ({
           })}
         >
           <Radio
-            name='status'
+            name='unread'
             checked={checkedRadio.unread}
             id='unread'
             onChange={() => {
@@ -80,13 +83,15 @@ const RadioBtns: FC<Props> = ({
       </div>
       <div className={css({ padding: '0px 10px', cursor: 'pointer' })}>
         <label
+          htmlFor='read'
           className={css({
             display: 'flex',
             alignItems: 'center',
           })}
         >
           <Radio
-            name='status'
+            name='read'
+            id='read'
             checked={checkedRadio.read}
             onChange={() => {
               if (filterModal) setFilterModal(() => false);

@@ -28,7 +28,7 @@ describe('RespondFeedbackContainer', () => {
         <RespondFeedbackContainer />
       </BrowserRouter>,
     );
-    const radio = getByTestId('status2');
+    const radio = getByTestId('completed');
     expect(radio).toBeInTheDocument();
     expect(radio).not.toBeChecked();
     fireEvent.click(radio);

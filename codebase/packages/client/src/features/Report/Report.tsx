@@ -1,6 +1,7 @@
 import React, { FC, useState } from 'react';
+import { getReportMetaSelector } from '@pma/store';
 import { Button, colors, CreateRule, Rule, useBreakpoints, useStyle } from '@dex-ddl/core';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { IconButton } from 'components/IconButton';
 import { FilterOption } from 'features/Shared';
@@ -14,17 +15,21 @@ import AppliedFilters from './components/AppliedFilters';
 import { getCurrentYear } from 'utils/date';
 import { useToast } from 'features/Toast';
 import { View } from 'components/PieChart/config';
+import Spinner from 'components/Spinner';
 
 import { getFieldOptions, metaStatuses, initialValues } from './config';
 import { Rating, TitlesReport } from 'config/enum';
 import { downloadCsvFile } from './utils';
 import { useStatisticsReport, getReportData, getData } from './hooks';
+import useQueryString from 'hooks/useQueryString';
 
 import { Page } from 'pages';
 
 export const REPORT_WRAPPER = 'REPORT_WRAPPER';
 
 const Report: FC = () => {
+  const query = useQueryString() as Record<string, string>;
+
   const { t } = useTranslation();
   const { addToast } = useToast();
   const { css } = useStyle();
@@ -33,7 +38,9 @@ const Report: FC = () => {
   const [showDownloadReportModal, setShowDownloadReportModal] = useState(false);
   const [searchValueFilterOption, setSearchValueFilterOption] = useState('');
   const [filterModal, setFilterModal] = useState(false);
-  const [year, setYear] = useState<string | null>('');
+  const [year, setYear] = useState<string>('');
+  // @ts-ignore
+  const { loaded } = useSelector(getReportMetaSelector);
 
   const [filterData, setFilterData] = useState<any>(initialValues);
   const [checkedItems, setCheckedItems]: [string[], (T) => void] = useState([]);
@@ -80,12 +87,12 @@ const Report: FC = () => {
     notApprovedObjTitle,
   } = useStatisticsReport([...metaStatuses]);
 
-  getReportData();
+  getReportData(query);
 
   const changeYearHandler = (value) => {
     if (!value) return;
     setYear(value);
-    getData(dispatch, value);
+    getData(dispatch, { year: value });
   };
 
   const getAppliedReport = () => [...new Set(checkedItems.map((item) => item.split('-')[0]))];
@@ -161,189 +168,196 @@ const Report: FC = () => {
             />
           </div>
         </div>
-        <div className={css(pieChartWrapper)}>
-          <div className={css(leftColumn)}>
-            <PieChart
-              title={t(TitlesReport.OBJECTIVES_SUBMITTED, 'Objectives submitted')}
-              data={[{ percent: objectivesSubmittedPercentage }]}
-              display={View.CHART}
-              link={Page.OBJECTIVES_SUBMITTED_REPORT}
-              params={getYear()}
-            />
-          </div>
-          <div className={css(rightColumn)}>
-            <PieChart
-              title={t(TitlesReport.OBJECTIVES_APPROVED, 'Objectives approved')}
-              data={[{ percent: objectivesApprovedPercentage }]}
-              display={View.CHART}
-              link={Page.OBJECTIVES_APPROVED_REPORT}
-              params={getYear()}
-            />
-            <div className={css(downloadWrapperStyle)}>
-              <Button
-                styles={[buttonCoreStyled]}
-                onPress={() => {
-                  downloadCsvFile(t, addToast);
-                }}
-              >
-                <Trans>WL4-5 report</Trans>
-              </Button>
-              <form>
-                <h2 className={css(yearLabel)}>
-                  <Trans i18nKey='view_previous_years'>View previous years</Trans>
-                </h2>
-
-                <Select
-                  options={getFieldOptions(getCurrentYear())}
-                  name={'year_options'}
-                  placeholder={t('choose_an_area', 'Choose an area')}
-                  //@ts-ignore
-                  onChange={({ target: { value } }) => {
-                    changeYearHandler(value);
-                  }}
+        {!loaded ? (
+          <Spinner />
+        ) : (
+          <>
+            <div className={css(pieChartWrapper)}>
+              <div className={css(leftColumn)}>
+                <PieChart
+                  title={t(TitlesReport.OBJECTIVES_SUBMITTED, 'Objectives submitted')}
+                  data={[{ percent: objectivesSubmittedPercentage }]}
+                  display={View.CHART}
+                  link={Page.OBJECTIVES_SUBMITTED_REPORT}
+                  params={getYear()}
                 />
-              </form>
-            </div>
-          </div>
-        </div>
+              </div>
+              <div className={css(rightColumn)}>
+                <PieChart
+                  title={t(TitlesReport.OBJECTIVES_APPROVED, 'Objectives approved')}
+                  data={[{ percent: objectivesApprovedPercentage }]}
+                  display={View.CHART}
+                  link={Page.OBJECTIVES_APPROVED_REPORT}
+                  params={getYear()}
+                />
+                <div className={css(downloadWrapperStyle)}>
+                  <Button
+                    styles={[buttonCoreStyled]}
+                    onPress={() => {
+                      downloadCsvFile(t, addToast);
+                    }}
+                  >
+                    <Trans>WL4-5 report</Trans>
+                  </Button>
+                  <form>
+                    <h2 className={css(yearLabel)}>
+                      <Trans i18nKey='view_previous_years'>View previous years</Trans>
+                    </h2>
 
-        <div className={css(pieChartWrapper)}>
-          <div className={css(leftColumn)}>
-            <PieChart
-              title={t(TitlesReport.MYR, 'Mid-year review')}
-              display={View.CHART}
-              data={[
-                { percent: myrSubmittedPercentage, title: t(TitlesReport.SUBMITTED, 'Submitted') },
-                { percent: myrApprovedPercentage, title: t(TitlesReport.APPROVED, 'Approved') },
-              ]}
-            />
-          </div>
-          <div className={css(rightColumn)}>
-            <InfoTable
-              mainTitle={t(TitlesReport.MYR_BREAKDOWN, 'Breakdown of Mid-year review')}
-              data={[
-                {
-                  percent: myrRatingBreakdownBelowExpectedPercentage,
-                  quantity: myrRatingBreakdownBelowExpectedCount,
-                  title: t(Rating.BELOW_EXPECTED, 'Below expected'),
-                },
-                {
-                  percent: myrRatingBreakdownSatisfactoryPercentage,
-                  quantity: myrRatingBreakdownSatisfactoryCount,
-                  title: t(Rating.SATISFACTORY, 'Satisfactory'),
-                },
-                {
-                  percent: myrRatingBreakdownGreatPercentage,
-                  quantity: myrRatingBreakdownGreatCount,
-                  title: t(Rating.GREAT, 'Great'),
-                },
-                {
-                  percent: myrRatingBreakdownOutstandingPercentage,
-                  quantity: myrRatingBreakdownOutstandingCount,
-                  title: t(Rating.OUTSTANDING, 'Outstanding'),
-                },
-              ]}
-            />
-          </div>
-        </div>
-        <div className={css(pieChartWrapper)}>
-          <div className={css(leftColumn)}>
-            <PieChart
-              title={t(TitlesReport.EYR, 'Year-end review')}
-              display={View.CHART}
-              data={[
-                { percent: eyrSubmittedPercentage, title: t(TitlesReport.SUBMITTED, 'Submitted') },
-                { percent: eyrApprovedPercentage, title: t(TitlesReport.APPROVED, 'Approved') },
-              ]}
-            />
-          </div>
-          <div className={css(rightColumn)}>
-            <InfoTable
-              mainTitle={t(TitlesReport.EYR_BREAKDOWN, 'Breakdown of End-year review')}
-              data={[
-                {
-                  percent: eyrRatingBreakdownBelowExpectedPercentage,
-                  quantity: eyrRatingBreakdownBelowExpectedCount,
-                  title: t(Rating.BELOW_EXPECTED, 'Below expected'),
-                },
-                {
-                  percent: eyrRatingBreakdownSatisfactoryPercentage,
-                  quantity: eyrRatingBreakdownSatisfactoryCount,
-                  title: t(Rating.SATISFACTORY, 'Satisfactory'),
-                },
-                {
-                  percent: eyrRatingBreakdownGreatPercentage,
-                  quantity: eyrRatingBreakdownGreatCount,
-                  title: t(Rating.GREAT, 'Great'),
-                },
-                {
-                  percent: eyrRatingBreakdownOutstandingPercentage,
-                  quantity: eyrRatingBreakdownOutstandingCount,
-                  title: t(Rating.OUTSTANDING, 'Outstanding'),
-                },
-              ]}
-            />
-          </div>
-        </div>
-        <div className={css(pieChartWrapper)}>
-          <div className={css(leftColumn)}>
-            <PieChart
-              title={t(TitlesReport.WL4And5, 'WL4 & 5 Objectives submitted')}
-              display={View.CHART}
-              data={[
-                { percent: approvedObjPercent, title: approvedObjTitle },
-                { percent: notApprovedObjPercent, title: notApprovedObjTitle },
-              ]}
-            />
-          </div>
-          <div className={css(rightColumn)}>
-            <PieChart
-              title={t(TitlesReport.BUSINESS, 'New to business')}
-              data={[{ percent: newToBusinessCount, title: t(Rating.COLLEAGUES, 'Colleagues') }]}
-              display={View.QUANTITY}
-            />
-          </div>
-        </div>
-        <div className={css(pieChartWrapper)}>
-          <div className={css(leftColumn)}>
-            <PieChart
-              title={t(TitlesReport.MOMENT_FEEDBACK, 'In the moment feedback')}
-              display={View.CHART}
-              data={[
-                { percent: feedbackRequestedPercentage, title: t(TitlesReport.REQUESTED, 'Requested') },
-                { percent: feedbackGivenPercentage, title: t(TitlesReport.GIVEN, 'Given') },
-              ]}
-            />
-          </div>
-          <div className={css(rightColumn)}>
-            <InfoTable
-              mainTitle={t(TitlesReport.ANNIVERSARY_REVIEWS, 'Anniversary Reviews completed per quarter')}
-              preTitle={t(TitlesReport.HOURLY_PAID, 'Hourly paid colleagues only')}
-              data={[
-                {
-                  percent: anniversaryReviewPerQuarter1Percentage,
-                  quantity: anniversaryReviewPerQuarter1Count,
-                  title: t(Rating.QUARTER_1, 'Quarter 1'),
-                },
-                {
-                  percent: anniversaryReviewPerQuarter2Percentage,
-                  quantity: anniversaryReviewPerQuarter2Count,
-                  title: t(Rating.QUARTER_2, 'Quarter 2'),
-                },
-                {
-                  percent: anniversaryReviewPerQuarter3Percentage,
-                  quantity: anniversaryReviewPerQuarter3Count,
-                  title: t(Rating.QUARTER_3, 'Quarter 3'),
-                },
-                {
-                  percent: anniversaryReviewPerQuarter4Percentage,
-                  quantity: anniversaryReviewPerQuarter4Count,
-                  title: t(Rating.QUARTER_4, 'Quarter 4'),
-                },
-              ]}
-            />
-          </div>
-        </div>
+                    <Select
+                      options={getFieldOptions(getCurrentYear())}
+                      name={'year_options'}
+                      placeholder={t('choose_an_area', 'Choose an area')}
+                      //@ts-ignore
+                      onChange={({ target: { value } }) => {
+                        changeYearHandler(value);
+                      }}
+                      value={year || query.year}
+                    />
+                  </form>
+                </div>
+              </div>
+            </div>
+
+            <div className={css(pieChartWrapper)}>
+              <div className={css(leftColumn)}>
+                <PieChart
+                  title={t(TitlesReport.MYR, 'Mid-year review')}
+                  display={View.CHART}
+                  data={[
+                    { percent: myrSubmittedPercentage, title: t(TitlesReport.SUBMITTED, 'Submitted') },
+                    { percent: myrApprovedPercentage, title: t(TitlesReport.APPROVED, 'Approved') },
+                  ]}
+                />
+              </div>
+              <div className={css(rightColumn)}>
+                <InfoTable
+                  mainTitle={t(TitlesReport.MYR_BREAKDOWN, 'Breakdown of Mid-year review')}
+                  data={[
+                    {
+                      percent: myrRatingBreakdownBelowExpectedPercentage,
+                      quantity: myrRatingBreakdownBelowExpectedCount,
+                      title: t(Rating.BELOW_EXPECTED, 'Below expected'),
+                    },
+                    {
+                      percent: myrRatingBreakdownSatisfactoryPercentage,
+                      quantity: myrRatingBreakdownSatisfactoryCount,
+                      title: t(Rating.SATISFACTORY, 'Satisfactory'),
+                    },
+                    {
+                      percent: myrRatingBreakdownGreatPercentage,
+                      quantity: myrRatingBreakdownGreatCount,
+                      title: t(Rating.GREAT, 'Great'),
+                    },
+                    {
+                      percent: myrRatingBreakdownOutstandingPercentage,
+                      quantity: myrRatingBreakdownOutstandingCount,
+                      title: t(Rating.OUTSTANDING, 'Outstanding'),
+                    },
+                  ]}
+                />
+              </div>
+            </div>
+            <div className={css(pieChartWrapper)}>
+              <div className={css(leftColumn)}>
+                <PieChart
+                  title={t(TitlesReport.EYR, 'Year-end review')}
+                  display={View.CHART}
+                  data={[
+                    { percent: eyrSubmittedPercentage, title: t(TitlesReport.SUBMITTED, 'Submitted') },
+                    { percent: eyrApprovedPercentage, title: t(TitlesReport.APPROVED, 'Approved') },
+                  ]}
+                />
+              </div>
+              <div className={css(rightColumn)}>
+                <InfoTable
+                  mainTitle={t(TitlesReport.EYR_BREAKDOWN, 'Breakdown of End-year review')}
+                  data={[
+                    {
+                      percent: eyrRatingBreakdownBelowExpectedPercentage,
+                      quantity: eyrRatingBreakdownBelowExpectedCount,
+                      title: t(Rating.BELOW_EXPECTED, 'Below expected'),
+                    },
+                    {
+                      percent: eyrRatingBreakdownSatisfactoryPercentage,
+                      quantity: eyrRatingBreakdownSatisfactoryCount,
+                      title: t(Rating.SATISFACTORY, 'Satisfactory'),
+                    },
+                    {
+                      percent: eyrRatingBreakdownGreatPercentage,
+                      quantity: eyrRatingBreakdownGreatCount,
+                      title: t(Rating.GREAT, 'Great'),
+                    },
+                    {
+                      percent: eyrRatingBreakdownOutstandingPercentage,
+                      quantity: eyrRatingBreakdownOutstandingCount,
+                      title: t(Rating.OUTSTANDING, 'Outstanding'),
+                    },
+                  ]}
+                />
+              </div>
+            </div>
+            <div className={css(pieChartWrapper)}>
+              <div className={css(leftColumn)}>
+                <PieChart
+                  title={t(TitlesReport.WL4And5, 'WL4 & 5 Objectives submitted')}
+                  display={View.CHART}
+                  data={[
+                    { percent: approvedObjPercent, title: approvedObjTitle },
+                    { percent: notApprovedObjPercent, title: notApprovedObjTitle },
+                  ]}
+                />
+              </div>
+              <div className={css(rightColumn)}>
+                <PieChart
+                  title={t(TitlesReport.BUSINESS, 'New to business')}
+                  data={[{ percent: newToBusinessCount, title: t(Rating.COLLEAGUES, 'Colleagues') }]}
+                  display={View.QUANTITY}
+                />
+              </div>
+            </div>
+            <div className={css(pieChartWrapper)}>
+              <div className={css(leftColumn)}>
+                <PieChart
+                  title={t(TitlesReport.MOMENT_FEEDBACK, 'In the moment feedback')}
+                  display={View.CHART}
+                  data={[
+                    { percent: feedbackRequestedPercentage, title: t(TitlesReport.REQUESTED, 'Requested') },
+                    { percent: feedbackGivenPercentage, title: t(TitlesReport.GIVEN, 'Given') },
+                  ]}
+                />
+              </div>
+              <div className={css(rightColumn)}>
+                <InfoTable
+                  mainTitle={t(TitlesReport.ANNIVERSARY_REVIEWS, 'Anniversary Reviews completed per quarter')}
+                  preTitle={t(TitlesReport.HOURLY_PAID, 'Hourly paid colleagues only')}
+                  data={[
+                    {
+                      percent: anniversaryReviewPerQuarter1Percentage,
+                      quantity: anniversaryReviewPerQuarter1Count,
+                      title: t(Rating.QUARTER_1, 'Quarter 1'),
+                    },
+                    {
+                      percent: anniversaryReviewPerQuarter2Percentage,
+                      quantity: anniversaryReviewPerQuarter2Count,
+                      title: t(Rating.QUARTER_2, 'Quarter 2'),
+                    },
+                    {
+                      percent: anniversaryReviewPerQuarter3Percentage,
+                      quantity: anniversaryReviewPerQuarter3Count,
+                      title: t(Rating.QUARTER_3, 'Quarter 3'),
+                    },
+                    {
+                      percent: anniversaryReviewPerQuarter4Percentage,
+                      quantity: anniversaryReviewPerQuarter4Count,
+                      title: t(Rating.QUARTER_4, 'Quarter 4'),
+                    },
+                  ]}
+                />
+              </div>
+            </div>
+          </>
+        )}
       </div>
 
       {showDownloadReportModal && (

@@ -47,7 +47,7 @@ const Input: FC<InputField> = ({
       min={min}
       defaultValue={defaultValue}
       className={css(inputStyle({ isValid }), {
-        ...(customStyles && customStyles),
+        ...customStyles,
       })}
       placeholder={placeholder}
     />

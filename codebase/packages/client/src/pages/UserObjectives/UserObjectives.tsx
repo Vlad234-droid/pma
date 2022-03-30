@@ -19,6 +19,7 @@ import useDispatch from 'hooks/useDispatch';
 import { useSelector } from 'react-redux';
 import {
   getPreviousReviewFilesSelector,
+  getTimelineMetaSelector,
   getTimelineSelector,
   PreviousReviewFilesActions,
   reviewsMetaSelector,
@@ -32,6 +33,7 @@ import useReviews from 'features/Objectives/hooks/useReviews';
 import OrganizationWidget from 'features/Objectives/components/OrganizationWidget/OrganizationWidget';
 import { buildPath } from 'features/Routes';
 import { Page } from 'pages';
+import Spinner from 'components/Spinner';
 import { File } from '../../features/ReviewFiles/components/components/File';
 
 const reviews = [];
@@ -61,6 +63,7 @@ export const UserObjectives: FC = () => {
 
   const { loaded: schemaLoaded } = useSelector(schemaMetaSelector);
   const { loaded: reviewLoaded } = useSelector(reviewsMetaSelector);
+  const { loaded: timelineLoaded } = useSelector(getTimelineMetaSelector);
   const { uuid } = useParams<{ uuid: string }>();
   const { descriptions, startDates, statuses } = useSelector(getTimelineSelector(uuid)) || {};
   const timelineTypes = useSelector(timelineTypesAvailabilitySelector(uuid));
@@ -114,71 +117,82 @@ export const UserObjectives: FC = () => {
   return (
     <div className={css(bodyBlockStyles)}>
       <div className={css(bodyWrapperStyles)} data-test-id={TEST_ID}>
-        {!mobileScreen && canShowMyReview && (
-          <div onClick={handleClick} className={css(timelineWrapperStyles)}>
-            <StepIndicator
-              mainTitle={t('performance_timeline_title', 'Your Contribution timeline')}
-              titles={descriptions}
-              descriptions={startDates}
-              statuses={statuses}
-            />
-          </div>
-        )}
-        <div className={css(timelineWrapperStyles)}>
-          {canShowObjectives && (
-            <Section
-              left={{
-                content: <div className={css(tileStyles)}>User objectives</div>,
-              }}
-              right={{
-                content: (
-                  <div>
-                    <IconButton
-                      onPress={() => alert('download')}
-                      graphic='download'
-                      customVariantRules={{ default: iconButtonStyles }}
-                      iconStyles={iconStyles}
-                    >
-                      <Trans i18nKey='download'>Download</Trans>
-                    </IconButton>
-                  </div>
-                ),
-              }}
-            >
-              <Accordion objectives={objectives} canShowStatus={true} isButtonsVisible={false} />
-            </Section>
-          )}
+        {!timelineLoaded ? (
+          <Spinner id='1' />
+        ) : (
+          <>
+            {!mobileScreen && canShowMyReview && (
+              <div onClick={handleClick} className={css(timelineWrapperStyles)}>
+                <StepIndicator
+                  mainTitle={t('performance_timeline_title', 'Your Contribution timeline')}
+                  titles={descriptions}
+                  descriptions={startDates}
+                  statuses={statuses}
+                />
+              </div>
+            )}
+            <div className={css(timelineWrapperStyles)}>
+              {canShowObjectives && (
+                <Section
+                  left={{
+                    content: <div className={css(tileStyles)}>User objectives</div>,
+                  }}
+                  right={{
+                    content: (
+                      <div>
+                        <IconButton
+                          onPress={() => alert('download')}
+                          graphic='download'
+                          customVariantRules={{ default: iconButtonStyles }}
+                          iconStyles={iconStyles}
+                        >
+                          <Trans i18nKey='download'>Download</Trans>
+                        </IconButton>
+                      </div>
+                    ),
+                  }}
+                >
+                  <Accordion objectives={objectives} canShowStatus={true} isButtonsVisible={false} />
+                </Section>
+              )}
 
-          <Section
-            left={{
-              content: (
-                <div>
-                  <Trans i18nKey='previous_review_files'>Previous Review Files</Trans>
+              <Section
+                left={{
+                  content: (
+                    <div>
+                      <Trans i18nKey='previous_review_files'>Previous Review Files</Trans>
+                    </div>
+                  ),
+                }}
+                right={{
+                  content: (
+                    <div>
+                      <Button
+                        mode='inverse'
+                        onPress={() => setPreviousReviewFilesModalShow(true)}
+                        styles={[linkStyles({ theme })]}
+                      >
+                        <Trans i18nKey='view_files'>View files</Trans>
+                      </Button>
+                    </div>
+                  ),
+                }}
+              >
+                <div className={css(emptyBlockStyle)}>
+                  <Trans>{`You have ${files.length || 'no'} files`}</Trans>
                 </div>
-              ),
-            }}
-            right={{
-              content: (
-                <div>
-                  <Button
-                    mode='inverse'
-                    onPress={() => setPreviousReviewFilesModalShow(true)}
-                    styles={[linkStyles({ theme })]}
-                  >
-                    <Trans i18nKey='view_files'>View files</Trans>
-                  </Button>
-                </div>
-              ),
-            }}
-          >
-            <div className={css(emptyBlockStyle)}>
-              <Trans>{`You have ${files.length || 'no'} files`}</Trans>
+              </Section>
             </div>
-          </Section>
-        </div>
+          </>
+        )}
       </div>
       <div className={css(headWrapperStyles)}>
-        {mobileScreen && canShowMyReview && (
+        {!timelineLoaded && (
+          <div className={css(timelineWrapperStyles)}>
+            <Spinner id='2' />
+          </div>
+        )}
+        {mobileScreen && timelineLoaded && canShowMyReview && (
           <div className={css(timelineWrapperStyles)}>
             <StepIndicator
               mainTitle={t('performance_timeline_title', 'Your Contribution timeline')}
@@ -259,16 +273,12 @@ const shareWidgetStyles = {
   width: '100%',
 } as Styles;
 
-const bodyWrapperStyles: Rule = () => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
-  return {
-    display: 'flex',
-    flexWrap: 'nowrap',
-    alignItems: 'stretch',
-    flexDirection: mobileScreen ? 'column' : 'column',
-  };
-};
+const bodyWrapperStyles: Rule = () => ({
+  display: 'flex',
+  flexWrap: 'nowrap',
+  alignItems: 'stretch',
+  flexDirection: 'column',
+});
 
 const iconStyles: Rule = {
   marginRight: '10px',

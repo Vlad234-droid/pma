@@ -2,6 +2,8 @@ import React, { FC } from 'react';
 import { Button, Rule, Styles, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { Trans } from 'components/Translation';
 
+export const WRAPPER = 'success-wrapper';
+
 type Props = {
   onSuccess: () => void;
 };
@@ -10,7 +12,7 @@ const SuccessModal: FC<Props> = ({ onSuccess }) => {
   const { css } = useStyle();
 
   return (
-    <div className={css(WrapperSuccessContainer)}>
+    <div className={css(WrapperSuccessContainer)} data-test-id={WRAPPER}>
       <div className={css(SuccessImg)}>
         <svg width='165' height='164' viewBox='0 0 165 164' fill='none' xmlns='http://www.w3.org/2000/svg'>
           <circle opacity='0.1' cx='82.5' cy='82.0002' r='65.2653' fill='#009E47' />

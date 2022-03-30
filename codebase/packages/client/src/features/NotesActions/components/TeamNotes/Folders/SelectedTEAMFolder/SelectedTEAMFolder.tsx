@@ -4,6 +4,8 @@ import { IconButton } from 'components/IconButton';
 import { NoteData, NotesTypeTEAM } from '../../../../type';
 import { formatToRelativeDate } from 'utils/date';
 
+export const TEAM_WRAPPER = 'team-wrapper';
+
 type Props = {
   selectedTEAMFolder: NoteData | null;
   setConfirmTEAMModal: Dispatch<SetStateAction<boolean>>;
@@ -32,7 +34,7 @@ const SelectedFolder: FC<Props> = ({
 }) => {
   const { css } = useStyle();
 
-  const btnsActionsHandler = (itemId: string, itemFolderUuid: string | null) => {
+  const btnsActionsHandler = (itemId: string, itemFolderUuid: string | null): JSX.Element => {
     const btnsActions = [
       {
         ...(!teamArchivedMode && {
@@ -41,6 +43,7 @@ const SelectedFolder: FC<Props> = ({
             <div
               className={css(Align_flex_style)}
               id='backdrop'
+              data-test-id='backdrop-archive'
               onClick={() => {
                 selectedTEAMNoteId.current = itemId;
                 actionTEAMModal.current = 'archive';
@@ -51,6 +54,7 @@ const SelectedFolder: FC<Props> = ({
                 iconProps={{ title: 'Archive' }}
                 id='backdrop'
                 graphic='archive'
+                data-test-id='backdrop-archive-icon'
                 onPress={() => {
                   selectedTEAMNoteId.current = itemId;
                   actionTEAMModal.current = 'archive';
@@ -71,6 +75,7 @@ const SelectedFolder: FC<Props> = ({
             <div
               id='backdrop'
               className={css(Align_flex_style)}
+              data-test-id='backdrop-folder'
               onClick={() => {
                 selectedTEAMNoteId.current = itemId;
                 noteTEAMFolderUuid.current = itemFolderUuid;
@@ -82,6 +87,7 @@ const SelectedFolder: FC<Props> = ({
                 iconProps={{ title: 'Move to folder' }}
                 graphic='folder'
                 id='backdrop'
+                data-test-id='backdrop-folder-icon'
                 onPress={() => {
                   selectedTEAMNoteId.current = itemId;
                   noteTEAMFolderUuid.current = itemFolderUuid;
@@ -102,6 +108,7 @@ const SelectedFolder: FC<Props> = ({
           <div
             className={css(Align_flex_styleLast)}
             id='backdrop'
+            data-test-id='backdrop-delete'
             onClick={() => {
               selectedTEAMNoteId.current = itemId;
               actionTEAMModal.current = 'delete';
@@ -112,6 +119,7 @@ const SelectedFolder: FC<Props> = ({
               iconProps={{ title: 'Delete' }}
               graphic='delete'
               id='backdrop'
+              data-test-id='backdrop-delete-icon'
               onPress={() => {
                 selectedTEAMNoteId.current = itemId;
                 actionTEAMModal.current = 'delete';
@@ -127,7 +135,7 @@ const SelectedFolder: FC<Props> = ({
     ];
 
     return (
-      <div className={css(Modal_buttons_style({ teamArchivedMode }))}>
+      <div className={css(Modal_buttons_style({ teamArchivedMode }))} data-test-id='button-dots'>
         {btnsActions.map((item) => (
           <div key={item.id} className={css({})}>
             {item.button}
@@ -183,7 +191,7 @@ const SelectedFolder: FC<Props> = ({
   };
 
   return (
-    <div className={css(Expanded_Note_Style)}>
+    <div className={css(Expanded_Note_Style)} data-test-id={TEAM_WRAPPER}>
       <div className={css(Flex_beetween_style)}>
         <span className={css(Folder_Title_styled)}>{selectedTEAMFolder?.title}</span>
       </div>
@@ -197,7 +205,12 @@ const SelectedFolder: FC<Props> = ({
             <span className={css(noteTitle_style)}>{item.title}</span>
             <div className={css(Flex_style)}>
               <span className={css(Time_Styled)}>{formatToRelativeDate(item?.updateTime)}</span>
-              <div className={css(dots_style)} onClick={() => selectedNoteActionhandler(item.id)} id='backdrop'>
+              <div
+                className={css(dots_style)}
+                data-test-id='dots'
+                onClick={() => selectedNoteActionhandler(item.id)}
+                id='backdrop'
+              >
                 <span></span>
                 <span></span>
                 <span></span>

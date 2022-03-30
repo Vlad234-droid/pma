@@ -1,4 +1,4 @@
-import React, { FC, ReactNode, useState, useEffect } from 'react';
+import React, { FC, ReactNode, useEffect, useState } from 'react';
 
 import { AccordionConsumer, SectionProvider } from './contexts';
 
@@ -56,6 +56,7 @@ const InternalSection: FC<InternalSectionProps> = ({
   useEffect(() => {
     addSection(id, expandSection, collapseSection);
 
+    // TODO: It is never called. Remove this
     () => {
       removeSection(id);
     };

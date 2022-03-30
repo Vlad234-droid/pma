@@ -1,13 +1,14 @@
 import React, { FC, useEffect } from 'react';
 import { Styles, useStyle } from '@dex-ddl/core';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import {
-  getTimelineByReviewTypeSelector,
-  timelineTypesAvailabilitySelector,
-  PDPActions,
   earlyDataPDPSelector,
+  getTimelineByReviewTypeSelector,
+  metaPDPSelector,
+  PDPActions,
   schemaMetaPDPSelector,
+  timelineTypesAvailabilitySelector,
 } from '@pma/store';
 
 import { Page } from 'pages';
@@ -15,9 +16,10 @@ import { useTranslation } from 'components/Translation';
 import SecondaryWidget, { Props as SecondaryWidgetProps } from 'features/SecondaryWidget';
 import { default as MainWidget } from '../MainWidget';
 import { buildPath } from 'features/Routes';
-import { widgetTypes, Props } from './type';
+import { Props, widgetTypes } from './type';
 import { ReviewType } from 'config/enum';
 import { DATE_STRING_FORMAT, formatDateString } from 'utils';
+import Spinner from 'components/Spinner';
 
 const Widgets: FC<Props> = () => {
   const dispatch = useDispatch();
@@ -34,6 +36,7 @@ const Widgets: FC<Props> = () => {
   const canShowObjectives = timelineTypes[ReviewType.OBJECTIVE];
   const dates = useSelector(earlyDataPDPSelector) || '';
   const pdpSelector = useSelector(schemaMetaPDPSelector)?.goals || [];
+  const meta = useSelector(metaPDPSelector);
   const addedDatePDP = dates && pdpSelector.length ? formatDateString(dates, DATE_STRING_FORMAT) : '';
 
   useEffect(() => {
@@ -66,31 +69,42 @@ const Widgets: FC<Props> = () => {
     },
   ];
 
+  if (meta?.loading) {
+    return <Spinner />;
+  }
+
   return (
     <div className={css(wrapperStyle)}>
-      {canShowObjectives && (
-        <MainWidget
-          status={status}
-          count={count}
-          nextReviewDate={nextReviewDate}
-          customStyle={{ flex: '4 1 500px' }}
-          onClick={() => console.log('View')}
-        />
+      {meta?.loading ? (
+        <Spinner />
+      ) : (
+        <>
+          {canShowObjectives && (
+            <MainWidget
+              status={status}
+              count={count}
+              nextReviewDate={nextReviewDate}
+              customStyle={{ flex: '4 1 500px' }}
+              onClick={() => console.log('View')}
+            />
+          )}
+
+          {widgets.map((props, idx) => {
+            if (props.type === widgetTypes.PDP) {
+              return <SecondaryWidget key={idx} {...props} date={addedDatePDP} />;
+            }
+
+            return <SecondaryWidget key={idx} {...props} />;
+          })}
+        </>
       )}
-
-      {widgets.map((props, idx) => {
-        if (props.type === widgetTypes.PDP) {
-          return <SecondaryWidget key={idx} {...props} date={addedDatePDP} />;
-        }
-
-        return <SecondaryWidget key={idx} {...props} />;
-      })}
     </div>
   );
 };
 
 const wrapperStyle = {
   display: 'flex',
+  justifyContent: 'center',
   flexWrap: 'wrap',
   gridGap: '8px',
   marginTop: '8px',

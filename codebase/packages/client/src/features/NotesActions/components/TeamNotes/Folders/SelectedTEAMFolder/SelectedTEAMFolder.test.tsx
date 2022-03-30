@@ -1,44 +1,73 @@
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
-import { renderWithTheme } from 'utils/test';
+import { renderWithTheme as render } from 'utils/test';
 import '@testing-library/jest-dom';
 import { fireEvent } from '@testing-library/react';
-import PersonalsTeamFolders from '../PersonalsTeamFolders';
+import SelectedTEAMFolder, { TEAM_WRAPPER } from './SelectedTEAMFolder';
 
-describe('it should render selected folder', () => {
-  const testHandler = jest.fn();
+describe('Selected team folder', () => {
+  const setFoldersWithNotesTEAM = jest.fn();
+  const actionTEAMModal = jest.fn();
+  const setSelectedTEAMFolder = jest.fn();
+  const setSelectedNoteToEdit = jest.fn();
+  const setSelectedTEAMNoteToEdit = jest.fn();
+  const setConfirmTEAMModal = jest.fn();
+  const setConfirmModal = jest.fn();
 
-  const personalFolderProps = {
-    handleTEAMSelected: testHandler,
-    setConfirmTEAMModal: testHandler,
-    selectedTEAMFolderId: '',
-    actionTEAMModal: '',
-    setSelectedFolder: testHandler,
-    selectedFolder: {},
-    foldersWithNotesTEAM: [
-      {
-        id: '10000000-0000-0000-0000-10000000000',
-        notes: [],
-        ownerColleagueUuid: '15818570-cd6b-4957-8a82-3d34dcb0b077',
-        quantity: 0,
-        selected: false,
-        selectedDots: false,
-        title: 'All notes',
-      },
-    ],
-    selectedTEAMNoteId: null,
-    setFoldersWithNotesTEAM: testHandler,
-    setFoldersWithNotes: testHandler,
-    setTeamArchivedMode: testHandler,
+  const selectedTEAMNoteId = jest.spyOn(React, 'useRef').mockReturnValueOnce({ current: null });
+  const selectedFolderId = jest.spyOn(React, 'useRef').mockReturnValueOnce({ current: null });
+  const selectedTEAMFolderId = jest.spyOn(React, 'useRef').mockReturnValueOnce({ current: null });
+  const noteTEAMFolderUuid = jest.spyOn(React, 'useRef').mockReturnValueOnce({ current: null });
+
+  const props = {
+    selectedTEAMFolder: { notes: [{ isInSearch: false, id: 1, referenceColleagueUuid: true }] },
+    setConfirmTEAMModal,
+    selectedTEAMNoteId,
+    actionTEAMModal,
+    setSelectedTEAMFolder,
+    foldersWithNotesTEAM: [{ notes: [{}] }],
+    setFoldersWithNotesTEAM,
+    selectedFolderId,
+    noteTEAMFolderUuid,
+    setSelectedNoteToEdit,
+    isUserArchived: false,
+    setSelectedTEAMNoteToEdit,
     teamArchivedMode: false,
-    setSelectedTEAMFolder: testHandler,
+    selectedTEAMFolderId,
   };
 
-  it('render selected folder', async () => {
-    const { getByText, queryByText } = renderWithTheme(<PersonalsTeamFolders {...personalFolderProps} />);
-    const allNotes = getByText('All notes');
-    fireEvent.click(allNotes);
-    expect(queryByText('mocked_ratings_modal')).not.toBeInTheDocument();
-    expect(allNotes).toBeInTheDocument();
+  it('render selected folder wrapper', async () => {
+    const { getByTestId } = render(<SelectedTEAMFolder {...props} />, { notes: { folders: [{}] } });
+
+    expect(getByTestId(TEAM_WRAPPER)).toBeInTheDocument();
+  });
+  it('it should call setSelectedFolder handler', async () => {
+    render(<SelectedTEAMFolder {...props} />, { notes: { folders: [{}] } });
+    props.setSelectedTEAMFolder();
+    expect(setSelectedTEAMFolder).toHaveBeenCalled();
+  });
+  it('it should call dots handler', async () => {
+    const { getByTestId } = render(<SelectedTEAMFolder {...props} />, { notes: { folders: [{}] } });
+    const dots = getByTestId('dots');
+    fireEvent.click(dots);
+    expect(setSelectedTEAMFolder).toHaveBeenCalled();
+    props.setSelectedTEAMNoteToEdit();
+    expect(setSelectedTEAMNoteToEdit).toHaveBeenCalled();
+  });
+
+  it('it should call setConfirmModal', async () => {
+    const { getByTestId } = render(
+      <SelectedTEAMFolder {...props} selectedTEAMFolder={{ notes: [{ isInSearch: false, id: 1, selected: true }] }} />,
+      { notes: { folders: [{}] } },
+    );
+
+    fireEvent.click(getByTestId('backdrop-archive'));
+    fireEvent.click(getByTestId('backdrop-folder'));
+    fireEvent.click(getByTestId('backdrop-delete'));
+    fireEvent.click(getByTestId('backdrop-archive-icon'));
+
+    expect(setConfirmTEAMModal).toHaveBeenCalled();
+
+    expect(getByTestId('button-dots')).toBeInTheDocument();
   });
 });

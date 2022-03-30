@@ -22,4 +22,8 @@ describe('ReviewDraftItems', () => {
     const { queryByTestId } = render(<DraftItem {...props} />);
     expect(queryByTestId(TEST_ID)).toBeNull();
   });
+  it('it should not render accordion wrapper', async () => {
+    const { queryByTestId } = render(<DraftItem {...props} />);
+    expect(queryByTestId('tile-wrapper')).toBeInTheDocument();
+  });
 });
