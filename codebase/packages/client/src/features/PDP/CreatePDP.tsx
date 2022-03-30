@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { CreateRule, ModalWithHeader, Rule, useBreakpoints, useStyle } from '@dex-ddl/core';
+import { CreateRule, Modal, Rule, useBreakpoints, useStyle, theme } from '@dex-ddl/core';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Icon } from 'components/Icon';
 import { useDispatch, useSelector } from 'react-redux';
@@ -10,6 +10,7 @@ import { PDPType } from 'config/enum';
 import { useTranslation } from 'components/Translation';
 import CreatePDPForm from './components/CreatePDPForm';
 import usePDPSchema from './hooks/usePDPSchema';
+import { ModalWrapper } from 'components/ModalWrapper';
 
 export const TEST_ID = 'create-pdp';
 
@@ -87,57 +88,110 @@ const CreateMyPDP = () => {
     }
   };
 
+  const title = `${currentUUID ? t('update', 'Update') : t('create', 'Create')} ${t(
+    'personal_development_goal',
+    'Personal Development Goal',
+  )}`;
+
   return (
-    <ModalWithHeader
-      containerRule={templatesModalWindowStyles({ mobileScreen })}
-      title={`${currentUUID ? t('update', 'Update') : t('create', 'Create')} ${t(
-        'personal_development_goal',
-        'Personal Development Goal',
-      )}`}
-      modalPosition='middle'
-      closeOptions={{
-        closeOptionContent: <Icon graphic='cancel' invertColors={true} />,
-        onClose: () => navigate(buildPath(Page.PERSONAL_DEVELOPMENT_PLAN)),
-      }}
-    >
-      <div data-test-id={TEST_ID} className={css(mainContainer)}>
-        <CreatePDPForm
-          pdpGoals={pdpGoals}
-          pdpList={pdpList}
-          currentTab={currentTab}
-          setCurrentTab={setCurrentTab}
-          currentGoal={currentGoal}
-          formElements={formElements}
-          confirmSaveModal={confirmSaveModal}
-          maxGoals={maxGoalCount}
-          goalNum={pdpList?.length - 1}
-          setConfirmModal={setConfirmModal}
-          currentUUID={currentUUID}
-          colleagueUuid={colleagueUuid}
-          setCurrentGoal={setCurrentGoal}
-          onSubmit={onFormSubmit}
-          requestMethods={METHODS}
-        />
-      </div>
-    </ModalWithHeader>
+    <ModalWrapper isOpen={true}>
+      <Modal
+        modalPosition={'middle'}
+        overlayColor={'tescoBlue'}
+        modalContainerRule={[containerRule({ mobileScreen })]}
+        closeOptions={{
+          content: <Icon graphic='cancel' invertColors={true} />,
+          onClose: () => navigate(buildPath(Page.PERSONAL_DEVELOPMENT_PLAN)),
+          styles: [modalCloseOptionStyle({ mobileScreen })],
+        }}
+        title={{
+          content: title,
+          styles: [modalTitleOptionStyle({ mobileScreen })],
+        }}
+      >
+        <div data-test-id={TEST_ID} className={css(mainContainer)}>
+          <CreatePDPForm
+            pdpGoals={pdpGoals}
+            pdpList={pdpList}
+            currentTab={currentTab}
+            setCurrentTab={setCurrentTab}
+            currentGoal={currentGoal}
+            formElements={formElements}
+            confirmSaveModal={confirmSaveModal}
+            maxGoals={maxGoalCount}
+            setConfirmModal={setConfirmModal}
+            currentUUID={currentUUID}
+            colleagueUuid={colleagueUuid}
+            onSubmit={onFormSubmit}
+            requestMethods={METHODS}
+          />
+        </div>
+      </Modal>
+    </ModalWrapper>
   );
 };
 
-const mainContainer = {
-  padding: '20px',
-  position: 'relative',
-  overflowY: 'scroll',
-  height: '100%',
-} as Rule;
-
-const templatesModalWindowStyles: CreateRule<{ mobileScreen: boolean }> = (props) => {
+const modalTitleOptionStyle: CreateRule<{ mobileScreen }> = (props) => {
   const { mobileScreen } = props;
   return {
-    width: mobileScreen ? '100%' : '60%',
-    padding: '0',
-    marginTop: mobileScreen ? '50px' : 0,
-    overflow: 'hidden',
+    position: 'fixed',
+    top: '22px',
+    textAlign: 'center',
+    left: 0,
+    right: 0,
+    color: 'white',
+    fontWeight: theme.font.weight.bold,
+    ...(mobileScreen
+      ? {
+          fontSize: `${theme.font.fixed.f20.fontSize}`,
+          lineHeight: `${theme.font.fluid.f24.lineHeight}`,
+        }
+      : {
+          fontSize: `${theme.font.fixed.f24.fontSize}`,
+          lineHeight: `${theme.font.fluid.f28.lineHeight}`,
+        }),
   };
 };
+
+const modalCloseOptionStyle: CreateRule<{ mobileScreen }> = (props) => {
+  const { mobileScreen } = props;
+  return {
+    display: 'inline-block',
+    height: '24px',
+    paddingLeft: '0px',
+    paddingRight: '0px',
+    position: 'fixed',
+    top: '22px',
+    right: mobileScreen ? '20px' : '40px',
+    textDecoration: 'none',
+    border: 'none',
+    cursor: 'pointer',
+  };
+};
+
+const containerRule: CreateRule<{ mobileScreen }> = (props) => {
+  const { mobileScreen } = props;
+  return {
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'relative',
+    ...(mobileScreen
+      ? { borderRadius: '24px 24px 0 0 ', padding: '16px 0 155px' }
+      : { borderRadius: '32px', padding: `40px 0 112px` }),
+    width: '640px',
+    height: mobileScreen ? 'calc(100% - 72px)' : 'calc(100% - 102px)',
+    marginTop: '72px',
+    overflow: 'hidden',
+    marginBottom: mobileScreen ? 0 : '30px',
+    background: theme.colors.white,
+    cursor: 'default',
+  };
+};
+
+const mainContainer = {
+  padding: '0 20px',
+  position: 'relative',
+  height: '100%',
+} as Rule;
 
 export default CreateMyPDP;
