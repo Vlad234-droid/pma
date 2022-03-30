@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useMemo } from 'react';
+import React, { FC, useEffect, useMemo, useRef } from 'react';
 import { CreateRule, Rule, Styles, theme, useBreakpoints, useStyle } from '@dex-ddl/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
@@ -22,6 +22,7 @@ import { Trans, useTranslation } from 'components/Translation';
 import Spinner from 'components/Spinner';
 import GoalInfo from './components/GoalInfo';
 import usePDPSchema from './hooks/usePDPSchema';
+import colors from 'theme/colors';
 
 export const TEST_ID = 'pdp-page';
 
@@ -36,7 +37,7 @@ const PersonalDevelopmentPlan: FC = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
 
   const pdpSelector = useSelector(schemaMetaPDPSelector)?.goals || [];
   const colleagueUuid = useSelector(colleagueUUIDSelector);
@@ -67,6 +68,8 @@ const PersonalDevelopmentPlan: FC = () => {
 
   const { loaded, loading } = useSelector(getTimelineMetaSelector) || {};
 
+  const elRef = useRef<HTMLDivElement | null>(null);
+
   useEffect(() => {
     if (pdpSelector?.length) {
       updateInstance();
@@ -85,9 +88,10 @@ const PersonalDevelopmentPlan: FC = () => {
 
   const deleteGoal = (uuid) => {
     dispatch(PDPActions.deletePDPGoal({ uuid }));
+    elRef.current?.scrollTo(0, 0);
   };
 
-  const editGoal = (uuid) => {
+  const editGoal = (uuid, currentId) => {
     navigate(buildPath(paramsReplacer(`${Page.UPDATE_PERSONAL_DEVELOPMENT_PLAN}`, { ':uuid': uuid })));
   };
 
@@ -98,7 +102,7 @@ const PersonalDevelopmentPlan: FC = () => {
   }
 
   return (
-    <div className={css(wrapper({ mobileScreen }))}>
+    <div ref={elRef} className={css(wrapper({ mobileScreen }))}>
       <div className={css(buttonBlock)}>
         <div className={css(controlButtons({ mobileScreen }))}>
           {pdpSelector?.length !== 5 && (
@@ -127,90 +131,92 @@ const PersonalDevelopmentPlan: FC = () => {
         </div>
       </div>
 
-      <div className={css(descriptionMain)}>
-        <DescriptionBlock>
-          <div className={css(title)}>
-            <Trans i18nKey='what_is_personal_development_plan'>What is Personal Development Plan?</Trans>
-          </div>
-          <div className={css(details, detailsWithMargin)}>
-            <Trans i18nKey='pdp_is_a_tailored_plan'>
-              Your Personal Development Plan (PDP) is a tailored plan that helps you reflect on the things you are great
-              at and identify areas you want to improve.
-            </Trans>
-            <p>
-              <Trans i18nKey='having_a_personal_development_plan_will_help_you'>
-                Having a Personal Development Plan will help you to put some structure to your development and be clear
-                about what you are looking for in your career. How you want your plan to look and what you put in it is
-                up to you, the important thing is that it inspires and motivates you. You can use the system to write
-                and store your PDP, download the template or make a new plan that suits your ways of working.
+      <div className={css(mainBlock({ mobileScreen }))}>
+        <div className={css(descriptionMain)}>
+          <DescriptionBlock>
+            <div className={css(title)}>
+              <Trans i18nKey='what_is_personal_development_plan'>What is Personal Development Plan?</Trans>
+            </div>
+            <div className={css(details, detailsWithMargin)}>
+              <Trans i18nKey='pdp_is_a_tailored_plan'>
+                Your Personal Development Plan (PDP) is a tailored plan that helps you reflect on the things you are
+                great at and identify areas you want to improve.
               </Trans>
-            </p>
-            <p>
-              <Trans i18nKey='remember_a_pdp_is_completely_personal_to_you'>
-                Remember a PDP is completely personal to you, you don&apos;t have to share it but it might be helpful to
-                use it when having development conversations.
-              </Trans>
-            </p>
-            <p>
-              <Trans i18nKey='important_you_review_and_update_your_pdp'>
-                It&apos;s important you review and update your PDP regularly to ensure it reflects where you are in your
-                career at that moment in time.
-              </Trans>
-            </p>
-          </div>
+              <p>
+                <Trans i18nKey='having_a_personal_development_plan_will_help_you'>
+                  Having a Personal Development Plan will help you to put some structure to your development and be
+                  clear about what you are looking for in your career. How you want your plan to look and what you put
+                  in it is up to you, the important thing is that it inspires and motivates you. You can use the system
+                  to write and store your PDP, download the template or make a new plan that suits your ways of working.
+                </Trans>
+              </p>
+              <p>
+                <Trans i18nKey='remember_a_pdp_is_completely_personal_to_you'>
+                  Remember a PDP is completely personal to you, you don&apos;t have to share it but it might be helpful
+                  to use it when having development conversations.
+                </Trans>
+              </p>
+              <p>
+                <Trans i18nKey='important_you_review_and_update_your_pdp'>
+                  It&apos;s important you review and update your PDP regularly to ensure it reflects where you are in
+                  your career at that moment in time.
+                </Trans>
+              </p>
+            </div>
 
-          <div className={css(title)}>
-            <Trans i18nKey='how_the_performance_development_plan_works'>
-              How The Performance Development Plan works?
-            </Trans>
-          </div>
-          <div className={css(details)}>
-            <Trans i18nKey='how_you_do_your_job'>
-              At Tesco, “how” you do your job is as important as “what” you deliver. An inspiring PDP will help you
-              focus on what to develop, whether that&apos;s being at your best in your current role or moving towards a
-              bigger or broader role. What&apos;s important is recording and regularly reviewing your plan to a format
-              that works for you.
-            </Trans>
-          </div>
-        </DescriptionBlock>
-      </div>
+            <div className={css(title)}>
+              <Trans i18nKey='how_the_performance_development_plan_works'>
+                How The Performance Development Plan works?
+              </Trans>
+            </div>
+            <div className={css(details)}>
+              <Trans i18nKey='how_you_do_your_job'>
+                At Tesco, “how” you do your job is as important as “what” you deliver. An inspiring PDP will help you
+                focus on what to develop, whether that&apos;s being at your best in your current role or moving towards
+                a bigger or broader role. What&apos;s important is recording and regularly reviewing your plan to a
+                format that works for you.
+              </Trans>
+            </div>
+          </DescriptionBlock>
+        </div>
 
-      {pdpSelector?.length > 0 && (
-        <div className={css(subtitleBlock)}>
-          <div className={css(devPlanTitle)}>
-            <Trans i18nKey='my_development_plan'>My Development Plan</Trans>
+        {pdpSelector?.length > 0 && (
+          <div className={css(subtitleBlock)}>
+            <div className={css(devPlanTitle)}>
+              <Trans i18nKey='my_development_plan'>My Development Plan</Trans>
+            </div>
+            <div>
+              <button className={css(buttonDownloadItems)} onClick={() => downloadPDF(instance.url!, 'pdp-goals.pdf')}>
+                <div className={css(btnIcon)}>
+                  <Icon graphic='download' />
+                </div>
+                <Trans i18nKey='download'>Download</Trans>
+              </button>
+            </div>
           </div>
-          <div>
-            <button className={css(buttonDownloadItems)} onClick={() => downloadPDF(instance.url!, 'pdp-goals.pdf')}>
-              <div className={css(btnIcon)}>
-                <Icon graphic='download' />
-              </div>
-              <Trans i18nKey='download'>Download</Trans>
-            </button>
+        )}
+
+        <div className={css(bodyWrapperStyles({ mobileScreen }))} data-test-id={TEST_ID}>
+          <div className={css(timelineWrapperStyles)}>
+            {pdpSelector &&
+              pdpSelector.map((el, idx) => {
+                return (
+                  <GoalInfo
+                    id={el.uuid}
+                    key={`${t('personal_development_goal', 'Personal Development Goal')}: ${idx + 1}`}
+                    data={el.properties.mapJson}
+                    title={`${t('personal_development_goal', 'Personal Development Goal')}: ${idx + 1}`}
+                    currentGoalId={idx}
+                    subtitle={formElements[0].label}
+                    formElements={formElements}
+                    deleteGoal={deleteGoal}
+                    editGoal={editGoal}
+                    description={Object.values(el.properties.mapJson)[0]}
+                  />
+                );
+              })}
           </div>
         </div>
-      )}
-
-      <div className={css(bodyWrapperStyles({ mobileScreen }))} data-test-id={TEST_ID}>
-        <div className={css(timelineWrapperStyles)}>
-          {pdpSelector &&
-            pdpSelector.map((el, idx) => {
-              return (
-                <GoalInfo
-                  id={el.uuid}
-                  key={`${t('personal_development_goal', 'Personal Development Goal')}: ${idx + 1}`}
-                  data={el.properties.mapJson}
-                  title={`${t('personal_development_goal', 'Personal Development Goal')}: ${idx + 1}`}
-                  subtitle={formElements[0].label}
-                  formElements={formElements}
-                  deleteGoal={deleteGoal}
-                  editGoal={editGoal}
-                  description={Object.values(el.properties.mapJson)[0]}
-                />
-              );
-            })}
-        </div>
-        <div className={css({ flex: '1 1 30%', display: 'flex', flexDirection: 'column' })} />
       </div>
     </div>
   );
@@ -223,14 +229,20 @@ const wrapper: CreateRule<{ mobileScreen: boolean }> = (props) => {
   };
 };
 
+const mainBlock: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => {
+  return {
+    width: mobileScreen ? '100%' : '70%',
+  };
+};
+
 const subtitleBlock = {
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'center',
   flexDirection: 'row',
-  width: '70%',
-  borderBottom: `1px solid ${theme.colors.lightGray}`,
+  width: '100%',
   paddingTop: '10px',
+  borderBottom: `1px solid ${colors.lightGray}`,
 } as Rule;
 
 const devPlanTitle = {

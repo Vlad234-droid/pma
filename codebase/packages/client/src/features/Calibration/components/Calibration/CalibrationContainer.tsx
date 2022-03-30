@@ -3,7 +3,7 @@ import { shallowEqual, useSelector } from 'react-redux';
 import { colleagueUUIDSelector, getAllEmployees, ManagersActions, getManagersMetaSelector } from '@pma/store';
 
 import useDispatch from 'hooks/useDispatch';
-import { FilterOption, FilterValues } from 'features/Filters';
+import { FilterOption } from 'features/Filters';
 
 import Calibration from './Calibration';
 import { getMockFilterOptions } from '../../mock';
@@ -16,7 +16,7 @@ const CalibrationContainer: FC = () => {
   const { loaded } = useSelector(getManagersMetaSelector);
   const [filterOptions, setFilterOptions] = useState<FilterOption[]>();
 
-  const loadData = (filters: FilterValues) => {
+  const loadData = () => {
     dispatch(ManagersActions.getManagers({ colleagueUuid }));
   };
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Accordion, BaseAccordion, ExpandButton, Panel, Section } from 'components/Accordion';
 import { Button, Rule, theme, useStyle } from '@dex-ddl/core';
 import { ConfirmModal } from 'features/Modal';
@@ -12,11 +12,20 @@ export const EDIT_TEST_ID = 'goal-edit';
 const modifiedTitleRegex = new RegExp(/\*/, 'g');
 
 const GoalInfo = (props) => {
-  const { id, title, subtitle, description, data, formElements, deleteGoal, editGoal } = props;
+  const { id, title, subtitle, currentGoalId, description, data, formElements, deleteGoal, editGoal } = props;
   const { css, theme } = useStyle();
   const { t } = useTranslation();
   const [isOpen, toggleOpen] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
+
+  useEffect(() => {
+    setTimeout(() => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      });
+    }, 3000);
+  }, []);
 
   return (
     <div className={css(fullGoals)}>
@@ -28,6 +37,7 @@ const GoalInfo = (props) => {
           onSave={() => {
             deleteGoal(id);
             setConfirmDelete(false);
+            window.scrollTo(0, 0);
           }}
           onCancel={() => setConfirmDelete(false)}
           onOverlayClick={() => setConfirmDelete(false)}
@@ -77,10 +87,8 @@ const GoalInfo = (props) => {
                       })}
 
                     <div className={css(btnBlock)}>
-                      <Button data-test-id={EDIT_TEST_ID} styles={[btns]} onPress={() => editGoal(id)}>
-                        <div>
-                          <Icon graphic='edit' iconStyles={{ height: '13.33px', width: '13.33px' }} />
-                        </div>
+                      <Button data-test-id={EDIT_TEST_ID} styles={[btns]} onPress={() => editGoal(id, currentGoalId)}>
+                        <Icon graphic='edit' iconStyles={{ height: '16px', width: '16px' }} title={t('edit', 'Edit')} />
                         <div className={css({ marginLeft: '5px' })}>{t('edit', 'Edit')}</div>
                       </Button>
 
@@ -89,11 +97,12 @@ const GoalInfo = (props) => {
                         styles={[btns]}
                         onPress={() => setConfirmDelete(!confirmDelete)}
                       >
-                        <div className={css({ height: '16px' })}>
+                        <div className={css({ height: '25px' })}>
                           <Icon
                             graphic='delete'
                             fill={theme.colors.link}
-                            iconStyles={{ maxHeight: '16px', maxWidth: '14.84px' }}
+                            iconStyles={{ width: '19.20px' }}
+                            title={t('delete', 'Delete')}
                           />
                         </div>
                         <div className={css({ marginLeft: '5px' })}>{t('delete', 'Delete')}</div>

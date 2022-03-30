@@ -12,7 +12,6 @@ export const getPerformanceCycleByUuid = (params: any) => {
 };
 
 export const createPerformanceCycle = (params: any) => {
-  console.log({ params });
   return httpClient.post(`${domain}`, params);
 };
 
