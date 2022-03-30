@@ -34,6 +34,10 @@ enum Page {
   ADMINISTRATION = 'administration',
   OBJECTIVES_SUBMITTED_REPORT = 'report/submitted-objectives',
   OBJECTIVES_APPROVED_REPORT = 'report/approved-objectives',
+  MID_YEAR_REVIEW_REPORT = 'report/mid-year-review',
+  END_YEAR_REVIEW_REPORT = 'report/end-year-review',
+  WORK_LEVEL_REPORT = 'report/work-level',
+  FEEDBACK_REPORT = 'report/feedback',
   NOT_FOUND = '404',
 }
 

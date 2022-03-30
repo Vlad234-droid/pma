@@ -4,16 +4,15 @@ import { useNavigate } from 'react-router-dom';
 
 import ColleagueProfile from './components/ColleagueProfile';
 import { PieChart } from 'components/PieChart';
-import { useTranslation } from 'components/Translation';
+import { useTranslation, Trans } from 'components/Translation';
 import { View } from 'components/PieChart/config';
 import { IconButton } from 'components/IconButton';
 import { FilterOption } from 'features/Shared';
 import FilterModal from 'features/Report/components/FilterModal';
 import { buildPath } from 'features/Routes';
 
-import { useObjectivesProfile } from './hooks';
-import { ObjectiveType } from './config';
-import { TitlesReport } from 'config/enum';
+import { useTileStatistics, useChartData } from './hooks';
+import { getReportTitles } from './utils';
 import { initialValues } from 'features/Report/config';
 import { getCurrentYear } from 'utils/date';
 
@@ -22,8 +21,9 @@ import { Page } from 'pages';
 export const OBJECTIVES_WRAPPER = 'objectives_wrapper';
 export const APPROVED_COLLEAGUES_WRAPPER = 'approved-colleagues_wrapper';
 export const NOT_APPROVED_COLLEAGUES_WRAPPER = 'not-approved-colleagues_wrapper';
+export const PROFILES_WRAPPER = 'profiles-wrapper';
 
-const ObjectivesReportStatistics = () => {
+const TileReport = () => {
   const { css } = useStyle();
   const navigate = useNavigate();
 
@@ -35,24 +35,25 @@ const ObjectivesReportStatistics = () => {
   const [checkedItems, setCheckedItems]: [string[], (T) => void] = useState([]);
   const [isCheckAll, setIsCheckAll]: [string[], (T) => void] = useState([]);
 
-  const [pending, done, objectiveType, objectivesSubmittedPercentage, objectivesApprovedPercentage, query] =
-    useObjectivesProfile();
+  const [pending, done, type, query] = useTileStatistics();
 
-  const checkObjectiveType = () => objectiveType && objectiveType === ObjectiveType.SUBMITTED;
+  const chartData = useChartData(t, type) || [];
 
   const getContent = useCallback(() => {
     const content = (
-      <div className={css({ width: '100%' })}>
+      <div className={css({ width: '100%' })} data-test-id={PROFILES_WRAPPER}>
         <div>
           {!!pending.length && (
             <span className={css(objectiveTypeStyle)}>
-              {objectiveType === ObjectiveType.SUBMITTED
-                ? t('not_submitted', 'Not submitted')
-                : t('not_approved', 'Not approved')}
+              <Trans>{getReportTitles(t, type)?.pending}</Trans>
             </span>
           )}
-          {pending.map((item) => (
-            <div key={item.uuid} className={css({ marginTop: '8px' })} data-test-id={NOT_APPROVED_COLLEAGUES_WRAPPER}>
+          {pending.map((item, i) => (
+            <div
+              key={`${item.uuid}${i}`}
+              className={css({ marginTop: '8px' })}
+              data-test-id={NOT_APPROVED_COLLEAGUES_WRAPPER}
+            >
               <ColleagueProfile colleague={item} />
             </div>
           ))}
@@ -60,11 +61,15 @@ const ObjectivesReportStatistics = () => {
         <div>
           {!!done.length && (
             <span className={css(objectiveTypeStyle, { marginTop: '24px' })}>
-              {objectiveType === ObjectiveType.SUBMITTED ? t('submitted', 'Submitted') : t('approved', 'Approved')}
+              <Trans>{getReportTitles(t, type)?.done}</Trans>
             </span>
           )}
-          {done.map((item) => (
-            <div key={item.uuid} className={css({ marginTop: '8px' })} data-test-id={APPROVED_COLLEAGUES_WRAPPER}>
+          {done.map((item, i) => (
+            <div
+              key={`${item.uuid}${i}`}
+              className={css({ marginTop: '8px' })}
+              data-test-id={APPROVED_COLLEAGUES_WRAPPER}
+            >
               <ColleagueProfile colleague={item} />
             </div>
           ))}
@@ -129,19 +134,7 @@ const ObjectivesReportStatistics = () => {
       <div className={css(wrapperStyle)}>
         <div className={css(leftColumn)}>{getContent()}</div>
         <div className={css(rightColumn)}>
-          <PieChart
-            title={
-              checkObjectiveType()
-                ? t(TitlesReport.OBJECTIVES_SUBMITTED, 'Objectives submitted')
-                : t(TitlesReport.OBJECTIVES_APPROVED, 'Objectives approved')
-            }
-            data={[
-              {
-                percent: checkObjectiveType() ? objectivesSubmittedPercentage : objectivesApprovedPercentage,
-              },
-            ]}
-            display={View.CHART}
-          />
+          <PieChart title={getReportTitles(t, type)?.chart} data={chartData.map((item) => item)} display={View.CHART} />
         </div>
       </div>
     </div>
@@ -164,7 +157,6 @@ const rightColumn: Rule = {
   gap: '8px',
   flex: 4,
   flexBasis: '400px',
-  maxHeight: '185px',
   marginTop: '50px',
   alignSelf: 'flex-end',
 };
@@ -218,4 +210,4 @@ const objectiveTypeStyle: Rule = ({ theme }) => ({
   display: 'inline-block',
 });
 
-export default ObjectivesReportStatistics;
+export default TileReport;

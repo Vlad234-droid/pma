@@ -27,7 +27,7 @@ import PeopleTeam from './PeopleTeam';
 import Calibration from './Calibration';
 import AdministratorPage from './AdministratorPage';
 import RespondNewFeedback from './RespondNewFeedback';
-import ObjectivesReport from './ObjectivesReport';
+import TileReportStatistics from './TileReportStatistics';
 import { NotFound } from './NotFound';
 
 export type PageComponent = {
@@ -248,15 +248,39 @@ const pages: Record<Page, PageComponent> = {
     perform: [role.TALENT_ADMIN, role.ADMIN, role.LINE_MANAGER],
   },
   [Page.OBJECTIVES_SUBMITTED_REPORT]: {
-    Element: ObjectivesReport,
+    Element: TileReportStatistics,
+    title: 'Objectives submitted',
     withHeader: true,
-    backPath: Page.REPORT,
     perform: [role.TALENT_ADMIN, role.ADMIN, role.LINE_MANAGER],
   },
   [Page.OBJECTIVES_APPROVED_REPORT]: {
-    Element: ObjectivesReport,
+    Element: TileReportStatistics,
+    title: 'Objectives approved',
     withHeader: true,
-    backPath: Page.REPORT,
+    perform: [role.TALENT_ADMIN, role.ADMIN, role.LINE_MANAGER],
+  },
+  [Page.MID_YEAR_REVIEW_REPORT]: {
+    Element: TileReportStatistics,
+    title: 'Mid-year review',
+    withHeader: true,
+    perform: [role.TALENT_ADMIN, role.ADMIN, role.LINE_MANAGER],
+  },
+  [Page.END_YEAR_REVIEW_REPORT]: {
+    Element: TileReportStatistics,
+    title: 'End-year review',
+    withHeader: true,
+    perform: [role.TALENT_ADMIN, role.ADMIN, role.LINE_MANAGER],
+  },
+  [Page.WORK_LEVEL_REPORT]: {
+    Element: TileReportStatistics,
+    title: 'WL4 & 5 report',
+    withHeader: true,
+    perform: [role.TALENT_ADMIN, role.ADMIN, role.LINE_MANAGER],
+  },
+  [Page.FEEDBACK_REPORT]: {
+    Element: TileReportStatistics,
+    title: 'Feedback report',
+    withHeader: true,
     perform: [role.TALENT_ADMIN, role.ADMIN, role.LINE_MANAGER],
   },
   [Page.ADMINISTRATION]: {

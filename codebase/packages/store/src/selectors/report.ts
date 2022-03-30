@@ -2,6 +2,7 @@ import { createSelector } from 'reselect';
 //@ts-ignore
 import { RootState } from 'typesafe-actions';
 import { Status } from '../../../client/src/config/enum';
+import { ReportPage } from '../../../client/src/features/TileReport/config';
 
 export const reportSelector = (state: RootState) => state.report;
 const statusIndex = 8;
@@ -39,15 +40,46 @@ export const getStatisticReportSelector = createSelector(reportSelector, (report
   return [[], []];
 });
 
-export const getPendingObjectivesSelector = (type: string) =>
+export const getPendingReportSelector = (type: string, reportType: string) =>
   createSelector(reportSelector, (report: any) => {
-    const { colleagues } = report;
-    return colleagues?.filter((colleague) => !Number(colleague.tags[type]));
+    if (!reportType) return;
+    const { colleagues, objectiveReports } = report;
+    if (reportType !== ReportPage.REPORT_WORK_LEVEL) {
+      return colleagues?.filter((colleague) =>
+        reportType.split(' ').length >= 2 ? Number(colleague.tags[type]) : !Number(colleague.tags[type]),
+      );
+    }
+    return objectiveReports.reduce((acc, item) => {
+      if (item[8] === Status.APPROVED) return acc;
+      const colleagues = {
+        uuid: item[1],
+        firstName: item[2],
+        lastName: item[3],
+        jobName: item[5],
+      };
+      acc.push(colleagues);
+      return acc;
+    }, []);
   });
 
-export const getDoneObjectivesSelector = (type: string) =>
+export const getDoneReportSelector = (type: string, reportType: string) =>
   createSelector(reportSelector, (report: any) => {
-    const { colleagues } = report;
+    if (!reportType) return;
+    const { colleagues, objectiveReports } = report;
 
-    return colleagues?.filter((colleague) => Number(colleague.tags[type]));
+    if (reportType !== ReportPage.REPORT_WORK_LEVEL) {
+      return colleagues?.filter((colleague) => Number(colleague.tags[type]));
+    }
+    return objectiveReports.reduce((acc, item) => {
+      if (item[8] !== Status.APPROVED) return acc;
+
+      const colleagues = {
+        uuid: item[1],
+        firstName: item[2],
+        lastName: item[3],
+        jobName: item[5],
+      };
+      acc.push(colleagues);
+      return acc;
+    }, []);
   });

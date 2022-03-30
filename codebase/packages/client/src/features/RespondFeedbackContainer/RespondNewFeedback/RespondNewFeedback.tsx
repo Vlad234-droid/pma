@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useState } from 'react';
 import { useTranslation } from 'components/Translation';
 import { useDispatch, useSelector } from 'react-redux';
 import { useBreakpoints, Rule, Modal } from '@dex-ddl/core';
@@ -6,7 +6,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { colleagueUUIDSelector, ColleaguesActions, FeedbackActions, feedbackByUuidSelector } from '@pma/store';
 import { Icon } from 'components/Icon';
 import { Page } from 'pages';
-import { buildPath } from 'features/Routes/utils';
 import GiveFeedbackForm from './components/GiveFeedbackForm';
 import InfoMassage from './components/InfoMassage';
 import SuccessMassage from './components/SuccessMassage';
