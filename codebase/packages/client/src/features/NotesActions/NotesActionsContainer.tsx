@@ -7,7 +7,7 @@ import NotesActions from './NotesActions';
 const NotesActionsContainer: FC = () => {
   const { loaded } = useSelector(getNotesMetaSelector);
 
-  return <NotesActions loaded={loaded} />
+  return <NotesActions loaded={loaded} />;
 };
 
 export default NotesActionsContainer;

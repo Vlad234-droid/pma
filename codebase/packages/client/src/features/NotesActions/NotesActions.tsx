@@ -45,7 +45,7 @@ export enum ModalStatuses {
   INFO = 'INFO',
 }
 
-const NotesActions: FC<{ loaded: boolean; }> = ({ loaded }) => {
+const NotesActions: FC<{ loaded: boolean }> = ({ loaded }) => {
   const { css, theme } = useStyle();
   const navigate = useNavigate();
   const [status, setStatus] = useState(ModalStatuses.PENDING);
@@ -360,7 +360,7 @@ const NotesActions: FC<{ loaded: boolean; }> = ({ loaded }) => {
   };
 
   if (!loaded) {
-    return <Spinner fullHeight />
+    return <Spinner fullHeight />;
   }
 
   if (status === ModalStatuses.INFO) {

@@ -204,20 +204,20 @@ const Report: FC = () => {
                       <Trans i18nKey='view_previous_years'>View previous years</Trans>
                     </h2>
 
-                <Select
-                  options={getFieldOptions(getCurrentYear())}
-                  name={'year_options'}
-                  placeholder={t('choose_an_area', 'Choose an area')}
-                  //@ts-ignore
-                  onChange={({ target: { value } }) => {
-                    changeYearHandler(value);
-                  }}
-                  value={year || query.year}
-                />
-              </form>
+                    <Select
+                      options={getFieldOptions(getCurrentYear())}
+                      name={'year_options'}
+                      placeholder={t('choose_an_area', 'Choose an area')}
+                      //@ts-ignore
+                      onChange={({ target: { value } }) => {
+                        changeYearHandler(value);
+                      }}
+                      value={year || query.year}
+                    />
+                  </form>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
 
             <div className={css(pieChartWrapper)}>
               <div className={css(leftColumn)}>

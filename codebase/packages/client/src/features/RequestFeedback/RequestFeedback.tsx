@@ -60,7 +60,9 @@ const RequestFeedback: FC = () => {
         styles: [modalTitleOptionStyle({ isMobile })],
       }}
     >
-      {loading ? <Spinner /> : (
+      {loading ? (
+        <Spinner />
+      ) : (
         <>
           {isInfoModalOpen ? (
             <InfoModalContent onClose={() => setIsInfoModalOpen(false)} />

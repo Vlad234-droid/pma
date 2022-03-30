@@ -10,7 +10,7 @@ export const notesSelector = (state: RootState) => state.notes;
 export const getNotesMetaSelector = createSelector(notesSelector, (notes: any) => {
   const { meta } = notes;
   return meta;
-})
+});
 
 export const getFoldersSelector = createSelector(notesSelector, (notes: any) => {
   const { folders } = notes;

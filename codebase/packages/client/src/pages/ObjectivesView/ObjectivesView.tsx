@@ -19,9 +19,7 @@ const ObjectivesView = () => {
   }, []);
 
   if (!loaded) {
-    return (
-      <Spinner fullHeight />
-    )
+    return <Spinner fullHeight />;
   }
 
   return (

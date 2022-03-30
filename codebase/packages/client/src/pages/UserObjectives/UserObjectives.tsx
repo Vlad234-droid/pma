@@ -19,13 +19,13 @@ import useDispatch from 'hooks/useDispatch';
 import { useSelector } from 'react-redux';
 import {
   getPreviousReviewFilesSelector,
+  getTimelineMetaSelector,
   getTimelineSelector,
   PreviousReviewFilesActions,
   reviewsMetaSelector,
   schemaMetaSelector,
   TimelineActions,
   timelineTypesAvailabilitySelector,
-  getTimelineMetaSelector,
 } from '@pma/store';
 import { useNavigate, useParams } from 'react-router';
 import useReviewSchema from 'features/Objectives/hooks/useReviewSchema';
@@ -117,7 +117,9 @@ export const UserObjectives: FC = () => {
   return (
     <div className={css(bodyBlockStyles)}>
       <div className={css(bodyWrapperStyles)} data-test-id={TEST_ID}>
-        {!timelineLoaded ? <Spinner id='1' /> : (
+        {!timelineLoaded ? (
+          <Spinner id='1' />
+        ) : (
           <>
             {!mobileScreen && canShowMyReview && (
               <div onClick={handleClick} className={css(timelineWrapperStyles)}>
@@ -185,7 +187,11 @@ export const UserObjectives: FC = () => {
         )}
       </div>
       <div className={css(headWrapperStyles)}>
-        {!timelineLoaded && <div className={css(timelineWrapperStyles)}><Spinner id='2' /></div>}
+        {!timelineLoaded && (
+          <div className={css(timelineWrapperStyles)}>
+            <Spinner id='2' />
+          </div>
+        )}
         {mobileScreen && timelineLoaded && canShowMyReview && (
           <div className={css(timelineWrapperStyles)}>
             <StepIndicator
@@ -267,16 +273,12 @@ const shareWidgetStyles = {
   width: '100%',
 } as Styles;
 
-const bodyWrapperStyles: Rule = () => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
-  return {
-    display: 'flex',
-    flexWrap: 'nowrap',
-    alignItems: 'stretch',
-    flexDirection: mobileScreen ? 'column' : 'column',
-  };
-};
+const bodyWrapperStyles: Rule = () => ({
+  display: 'flex',
+  flexWrap: 'nowrap',
+  alignItems: 'stretch',
+  flexDirection: 'column',
+});
 
 const iconStyles: Rule = {
   marginRight: '10px',

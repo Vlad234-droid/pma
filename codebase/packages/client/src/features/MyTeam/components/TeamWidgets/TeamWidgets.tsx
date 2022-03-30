@@ -43,7 +43,9 @@ const TeamWidgets: FC<Props> = ({
 
   return (
     <div data-test-id='team-widgets' className={css(wrapperStyles)}>
-      {!loaded ? <Spinner /> : (
+      {!loaded ? (
+        <Spinner />
+      ) : (
         <div className={css(listWrapperStyles)}>
           <div>
             {showActions && (
@@ -53,15 +55,15 @@ const TeamWidgets: FC<Props> = ({
             )}
             <div className={css(listStyles)}>
               {loaded &&
-              colleagues.map((employee: Employee) => (
-                <TeamMateProfile
-                  fullTeamView={view === View.FULL_TEAM}
-                  key={employee.uuid}
-                  uuid={employee.uuid}
-                  status={getLastTimelineStatus(employee)}
-                  employee={employee}
-                />
-              ))}
+                colleagues.map((employee: Employee) => (
+                  <TeamMateProfile
+                    fullTeamView={view === View.FULL_TEAM}
+                    key={employee.uuid}
+                    uuid={employee.uuid}
+                    status={getLastTimelineStatus(employee)}
+                    employee={employee}
+                  />
+                ))}
             </div>
           </div>
         </div>

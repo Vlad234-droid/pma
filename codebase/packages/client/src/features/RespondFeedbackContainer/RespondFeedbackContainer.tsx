@@ -98,7 +98,9 @@ const RespondFeedbackContainer: FC = () => {
           </div>
         </div>
         <div className={css(DraftsStyle)}>
-          {!loaded ? <Spinner /> : (
+          {!loaded ? (
+            <Spinner />
+          ) : (
             <DraftItem status={status} list={feedbackList} canEdit={status === FeedbackStatus.PENDING} />
           )}
         </div>

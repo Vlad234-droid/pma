@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { Rule, useStyle } from '@dex-ddl/core';
 
 // eslint-disable-next-line import/no-named-as-default
@@ -35,9 +35,7 @@ const DraftList: FC<Props> = ({
   const [selected, setSelected] = useState<Selectable>({});
 
   useEffect(() => {
-    if (items.length >= 0) {
-      setSelected(items.reduce((acc, item) => ({ ...acc, [item.uuid]: false }), {}));
-    }
+    setSelected(items.reduce((acc, item) => ({ ...acc, [item.uuid]: false }), {}));
   }, [items.length]);
 
   const canSelect = (uuid: string) =>
@@ -56,9 +54,7 @@ const DraftList: FC<Props> = ({
     .flatMap(([key]) => key);
 
   useEffect(() => {
-    if (uuids.length >= 0) {
-      onChange && onChange(uuids);
-    }
+    onChange && onChange(uuids);
   }, [uuids.length]);
 
   if (!loaded) return <div className={css(wrapperRule)} data-test-id='empty' />;

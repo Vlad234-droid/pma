@@ -13,7 +13,7 @@ const Spinner: FC<Props> = ({ withText = true, fullHeight = false, id = '1' }) =
   const elem = document.getElementById(`spinner-${id}`);
 
   const incrementDegree = () => {
-    setIncrement((increment) => increment +10);
+    setIncrement((increment) => increment + 10);
   };
 
   useEffect(() => {
@@ -32,12 +32,11 @@ const Spinner: FC<Props> = ({ withText = true, fullHeight = false, id = '1' }) =
     if (increment === 360) {
       setIncrement(0);
     }
-
   }, [increment]);
 
   return (
     <div data-test-id='spinner-wrapper' className={css(wrapperStyles({ fullHeight }))}>
-      <div data-test-id={`spinner-${id}`} className={css(loaderStyles)} id={`spinner-${id}`}/>
+      <div data-test-id={`spinner-${id}`} className={css(loaderStyles)} id={`spinner-${id}`} />
       {withText && <span className={css(textStyles)}>Loading...</span>}
     </div>
   );
@@ -47,22 +46,22 @@ export default Spinner;
 
 const wrapperStyles: CreateRule<{ fullHeight: boolean }> = ({ fullHeight }) => {
   if (!fullHeight) {
-    return ({
+    return {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
       width: '100%',
       height: 'auto',
-    });
+    };
   }
 
-  return ({
+  return {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
     height: '50vh',
-  })
+  };
 };
 
 const loaderStyles: Rule = ({ theme }) => ({

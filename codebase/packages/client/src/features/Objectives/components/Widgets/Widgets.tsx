@@ -1,14 +1,14 @@
 import React, { FC, useEffect } from 'react';
 import { Styles, useStyle } from '@dex-ddl/core';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import {
-  getTimelineByReviewTypeSelector,
-  timelineTypesAvailabilitySelector,
-  PDPActions,
   earlyDataPDPSelector,
-  schemaMetaPDPSelector,
+  getTimelineByReviewTypeSelector,
   metaPDPSelector,
+  PDPActions,
+  schemaMetaPDPSelector,
+  timelineTypesAvailabilitySelector,
 } from '@pma/store';
 
 import { Page } from 'pages';
@@ -16,7 +16,7 @@ import { useTranslation } from 'components/Translation';
 import SecondaryWidget, { Props as SecondaryWidgetProps } from 'features/SecondaryWidget';
 import { default as MainWidget } from '../MainWidget';
 import { buildPath } from 'features/Routes';
-import { widgetTypes, Props } from './type';
+import { Props, widgetTypes } from './type';
 import { ReviewType } from 'config/enum';
 import { DATE_STRING_FORMAT, formatDateString } from 'utils';
 import Spinner from 'components/Spinner';
@@ -75,7 +75,9 @@ const Widgets: FC<Props> = () => {
 
   return (
     <div className={css(wrapperStyle)}>
-      {meta?.loading ? <Spinner /> : (
+      {meta?.loading ? (
+        <Spinner />
+      ) : (
         <>
           {canShowObjectives && (
             <MainWidget
@@ -102,7 +104,6 @@ const Widgets: FC<Props> = () => {
 
 const wrapperStyle = {
   display: 'flex',
-  alignItems: 'center',
   justifyContent: 'center',
   flexWrap: 'wrap',
   gridGap: '8px',

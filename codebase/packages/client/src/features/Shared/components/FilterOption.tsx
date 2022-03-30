@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Rule, CreateRule, useStyle, Styles } from '@dex-ddl/core';
+import { CreateRule, Rule, Styles, useStyle } from '@dex-ddl/core';
 import { IconButton } from 'components/IconButton';
 import { Input } from 'components/Form/Input';
 import { Icon } from 'components/Icon';
@@ -96,7 +96,7 @@ export const FilterOption: FC<FilterOptionProps> = ({
               onFocus && !searchValue && onFocus(false);
             }}
             customStyles={{
-              ...(customStyles && customStyles),
+              ...customStyles,
               background: theme.colors.white,
               height: '38px',
               border: '1px solid rgb(0, 83, 159)',

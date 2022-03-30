@@ -46,25 +46,30 @@ describe('<Calibratin /> utils', () => {
           [Rating.GREAT]: 13,
           [Rating.SATISFACTORY]: 11,
           [Rating.BELOW_EXPECTED]: 10,
-        }
+        },
       };
 
       const expected = {
-        data: [{
-          name: Rating.OUTSTANDING,
-          '2022': 12,
-        }, {
-          name: Rating.GREAT,
-          '2022': 13,
-        }, {
-          name: Rating.SATISFACTORY,
-          '2022': 11,
-        }, {
-          name: Rating.BELOW_EXPECTED,
-          '2022': 10,
-        }],
-        total: { '2022': 46 }
-      }
+        data: [
+          {
+            name: Rating.OUTSTANDING,
+            '2022': 12,
+          },
+          {
+            name: Rating.GREAT,
+            '2022': 13,
+          },
+          {
+            name: Rating.SATISFACTORY,
+            '2022': 11,
+          },
+          {
+            name: Rating.BELOW_EXPECTED,
+            '2022': 10,
+          },
+        ],
+        total: { '2022': 46 },
+      };
 
       expect(getComputedData(data)).toEqual(expected);
     });
@@ -77,7 +82,7 @@ describe('<Calibratin /> utils', () => {
           [Rating.GREAT]: 13,
           [Rating.SATISFACTORY]: 11,
           [Rating.BELOW_EXPECTED]: 10,
-        }
+        },
       };
 
       const compareData = {
@@ -87,28 +92,33 @@ describe('<Calibratin /> utils', () => {
           [Rating.GREAT]: 9,
           [Rating.SATISFACTORY]: 11,
           [Rating.BELOW_EXPECTED]: 20,
-        }
+        },
       };
 
       const expected = {
-        data: [{
-          name: Rating.OUTSTANDING,
-          '2022': 12,
-          '2021': 10,
-        }, {
-          name: Rating.GREAT,
-          '2022': 13,
-          '2021': 9,
-        }, {
-          name: Rating.SATISFACTORY,
-          '2022': 11,
-          '2021': 11,
-        }, {
-          name: Rating.BELOW_EXPECTED,
-          '2022': 10,
-          '2021': 20,
-        }],
-        total: { '2022': 46, '2021': 50 }
+        data: [
+          {
+            name: Rating.OUTSTANDING,
+            '2022': 12,
+            '2021': 10,
+          },
+          {
+            name: Rating.GREAT,
+            '2022': 13,
+            '2021': 9,
+          },
+          {
+            name: Rating.SATISFACTORY,
+            '2022': 11,
+            '2021': 11,
+          },
+          {
+            name: Rating.BELOW_EXPECTED,
+            '2022': 10,
+            '2021': 20,
+          },
+        ],
+        total: { '2022': 46, '2021': 50 },
       };
 
       expect(getComputedData(data, compareData)).toEqual(expected);

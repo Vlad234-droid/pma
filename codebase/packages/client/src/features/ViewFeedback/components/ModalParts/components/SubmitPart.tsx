@@ -39,7 +39,7 @@ const SubmitPart: FC<SubmitPartProps> = ({ selectedPerson, searchDate, onChange 
   });
 
   useEffect(() => {
-    if (selected.length >= 0 && submittedCompletedNotes.length >= 0) {
+    if (submittedCompletedNotes.length >= 0) {
       onChange && onChange(submittedCompletedNotes.filter((item) => selected.includes(item.uuid)));
     }
   }, [selected.length, submittedCompletedNotes.length]);

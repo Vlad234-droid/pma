@@ -58,11 +58,8 @@ const CareerPerformance: FC<Props> = ({
     }
   }, [showAnnualReview]);
 
-
   if (loading) {
-    return (
-      <Spinner fullHeight />
-    );
+    return <Spinner fullHeight />;
   }
 
   return (

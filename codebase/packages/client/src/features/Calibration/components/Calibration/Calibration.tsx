@@ -70,7 +70,7 @@ const Calibration: FC<Props> = ({ loadData, loadFilterOptions, colleagueUuid, co
   };
 
   if (loading) {
-    return <Spinner fullHeight />
+    return <Spinner fullHeight />;
   }
 
   return (

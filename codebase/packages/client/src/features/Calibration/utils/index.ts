@@ -14,14 +14,21 @@ export const getGraphBars = (data: Record<string, number | Rating>[]) => {
 };
 
 export const getComputedData = (data: RatingChartData, compareData?: RatingChartData) => {
-  return Object.entries(data.ratings).reduce((res, [key, value]) => {
-    // @ts-ignore
-    res.data.push({ name: key, [data.title]: value, ...(compareData && { [compareData.title]: compareData.ratings[key] }) });
-    res.total[data.title] = res.total[data.title] + value;
+  return Object.entries(data.ratings).reduce(
+    (res, [key, value]) => {
+      res.data.push({
+        // @ts-ignore
+        name: key,
+        [data.title]: value,
+        ...(compareData && { [compareData.title]: compareData.ratings[key] }),
+      });
+      res.total[data.title] = res.total[data.title] + value;
 
       if (compareData) {
         res.total[compareData.title] = res.total[compareData.title] + compareData.ratings[key];
       }
-    return res;
-  }, { data: [], total: { [data.title]: 0, ...(compareData && { [compareData.title]: 0 }) } });
+      return res;
+    },
+    { data: [], total: { [data.title]: 0, ...(compareData && { [compareData.title]: 0 }) } },
+  );
 };

@@ -29,6 +29,7 @@ import {
   getPreviousReviewFilesSelector,
   getReviewSchema,
   getTimelineByCodeSelector,
+  getTimelineMetaSelector,
   getTimelineSelector,
   isReviewsInStatus,
   isReviewsNumbersInStatus,
@@ -40,7 +41,6 @@ import {
   timelinesExistSelector,
   timelinesMetaSelector,
   timelineTypesAvailabilitySelector,
-  getTimelineMetaSelector,
 } from '@pma/store';
 import OrganizationWidget from 'features/Objectives/components/OrganizationWidget/OrganizationWidget';
 import { useNavigate } from 'react-router-dom';
@@ -185,7 +185,9 @@ const MyObjectives: FC = () => {
       )}
       <div className={css(bodyBlockStyles)}>
         <div className={css(bodyWrapperStyles)}>
-          {!timelineLoaded ? <Spinner id='1' /> : (
+          {!timelineLoaded ? (
+            <Spinner id='1' />
+          ) : (
             <>
               {!mobileScreen && canShowMyReview && (
                 <div className={css(timelineWrapperStyles)}>
@@ -319,7 +321,8 @@ const MyObjectives: FC = () => {
                   </div>
                 </Section>
               </div>
-            </>)}
+            </>
+          )}
         </div>
         <div className={css(widgetWrapper)}>
           {!timelineLoaded && (
@@ -418,17 +421,13 @@ const shareWidgetStyles = {
   width: '100%',
 } as Styles;
 
-const bodyWrapperStyles: Rule = () => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
-  return {
-    display: 'flex',
-    flexWrap: 'nowrap',
-    alignItems: 'stretch',
-    flexDirection: mobileScreen ? 'column' : 'column',
-    width: '100%',
-  };
-};
+const bodyWrapperStyles: Rule = () => ({
+  display: 'flex',
+  flexWrap: 'nowrap',
+  alignItems: 'stretch',
+  flexDirection: 'column',
+  width: '100%',
+});
 
 const basicTileStyle: Rule = {
   flex: '1 0 216px',

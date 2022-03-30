@@ -96,7 +96,7 @@ export const Actions = () => {
   }, [checkedItems, colleagues]);
 
   if (!loaded) {
-    return <Spinner fullHeight />
+    return <Spinner fullHeight />;
   }
 
   return (

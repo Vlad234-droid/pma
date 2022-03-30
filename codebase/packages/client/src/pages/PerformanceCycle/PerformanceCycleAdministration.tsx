@@ -189,7 +189,9 @@ const PerformanceCycleAdministration: FC = () => {
               }).length
             })`}
           </div>
-          {loading || !loaded ? <Spinner /> : (
+          {loading || !loaded ? (
+            <Spinner />
+          ) : (
             <table
               className={css({
                 borderCollapse: 'collapse',
@@ -197,50 +199,50 @@ const PerformanceCycleAdministration: FC = () => {
               })}
             >
               <thead>
-              <tr className={css({ background: '#F3F9FC', fontSize: '14px', lineHeight: '18px' })}>
-                <th className={css(item)}>
-                  <Trans i18nKey={'name'}>Name</Trans>
-                </th>
-                <th className={css(item)}>
-                  <Trans i18nKey={'organization'}>Organization</Trans>
-                </th>
-                <th className={css(item)}>
-                  <Trans i18nKey={'start_date_end_date'}>Start Date-End date</Trans>
-                </th>
-                <th className={css(item)}>
-                  <Trans i18nKey={'created_by'}>Created by</Trans>
-                </th>
-                <th className={css(item)}>
-                  <Trans i18nKey={'action'}>Action</Trans>
-                </th>
-              </tr>
+                <tr className={css({ background: '#F3F9FC', fontSize: '14px', lineHeight: '18px' })}>
+                  <th className={css(item)}>
+                    <Trans i18nKey={'name'}>Name</Trans>
+                  </th>
+                  <th className={css(item)}>
+                    <Trans i18nKey={'organization'}>Organization</Trans>
+                  </th>
+                  <th className={css(item)}>
+                    <Trans i18nKey={'start_date_end_date'}>Start Date-End date</Trans>
+                  </th>
+                  <th className={css(item)}>
+                    <Trans i18nKey={'created_by'}>Created by</Trans>
+                  </th>
+                  <th className={css(item)}>
+                    <Trans i18nKey={'action'}>Action</Trans>
+                  </th>
+                </tr>
               </thead>
               <tbody>
-              {data
-                .filter((item) => {
-                  return item.status === active;
-                })
-                .map(({ name, entryConfigKey, date, createdBy, uuid, status }) => {
-                  return (
-                    <tr key={uuid}>
-                      <td className={css(item)}>{name}</td>
-                      <td className={css(item)}>{entryConfigKey}</td>
-                      <td className={css(item)}>{date}</td>
-                      <td className={css(item)}>{createdBy}</td>
-                      <td>
-                        {(status === Status.DRAFT || status === Status.REGISTERED) && (
-                          <Button
-                            mode={'inverse'}
-                            onPress={() => navigate(`/${Page.PERFORMANCE_CYCLE}/${uuid}`)}
-                            styles={[btnStyle]}
-                          >
-                            <Trans i18nKey={'edit'}>Edit</Trans>
-                          </Button>
-                        )}
-                      </td>
-                    </tr>
-                  );
-                })}
+                {data
+                  .filter((item) => {
+                    return item.status === active;
+                  })
+                  .map(({ name, entryConfigKey, date, createdBy, uuid, status }) => {
+                    return (
+                      <tr key={uuid}>
+                        <td className={css(item)}>{name}</td>
+                        <td className={css(item)}>{entryConfigKey}</td>
+                        <td className={css(item)}>{date}</td>
+                        <td className={css(item)}>{createdBy}</td>
+                        <td>
+                          {(status === Status.DRAFT || status === Status.REGISTERED) && (
+                            <Button
+                              mode={'inverse'}
+                              onPress={() => navigate(`/${Page.PERFORMANCE_CYCLE}/${uuid}`)}
+                              styles={[btnStyle]}
+                            >
+                              <Trans i18nKey={'edit'}>Edit</Trans>
+                            </Button>
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  })}
               </tbody>
             </table>
           )}

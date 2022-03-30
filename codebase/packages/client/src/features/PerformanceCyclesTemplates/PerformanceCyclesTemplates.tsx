@@ -201,7 +201,9 @@ const PerformanceCyclesTemplates: FC = () => {
         </div>
       </div>
       <div className={css(templatesListStyles)}>
-        {!meta?.loaded ? <Spinner /> : (
+        {!meta?.loaded ? (
+          <Spinner />
+        ) : (
           <>
             {templatesList.map((item) => {
               const { value } = item;
