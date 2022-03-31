@@ -1,0 +1,17 @@
+{
+  "name": "@pma/dex-wrapper",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@accessibility-toolbar/core": "0.0.20",
+    "@dex-ddl/core": "0.1.38"
+  },
+  "devDependencies": {}
+}
