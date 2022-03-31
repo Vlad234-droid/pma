@@ -68,7 +68,6 @@ const CreatePDPForm: FC<Props> = ({
   const formValues = getValues();
 
   const [isOpenConfirmNext, setConfirmNextOpen] = useState<boolean>(false);
-  const isCurrentGoal = Object.keys(currentGoal)?.length > 0;
 
   const today = useMemo(() => {
     const now = new Date();

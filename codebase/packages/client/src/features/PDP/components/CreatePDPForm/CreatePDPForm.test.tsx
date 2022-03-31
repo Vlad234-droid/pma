@@ -26,15 +26,15 @@ describe('PDP Form', () => {
     formElements: [],
     confirmSaveModal: false,
     maxGoals: 5,
-    goalNum: 5,
     currentUUID: 'currentUUID',
     colleagueUuid: 'colleagueUuid',
     requestMethods: METHODS.SAVE,
     setConfirmModal: jest.fn(),
     setCurrentTab: jest.fn(),
-    setCurrentGoal: jest.fn(),
     onSubmit: jest.fn(),
   };
+
+  window.HTMLElement.prototype.scrollTo = function () {};
 
   it('should render Form', async () => {
     const { queryByTestId } = render(<Form {...props} />);
@@ -50,11 +50,6 @@ describe('PDP Form', () => {
   it('should receive maxGoals', async () => {
     render(<Form {...props} />);
     expect(props.maxGoals).toBe(5);
-  });
-
-  it('should receive goalNum', async () => {
-    render(<Form {...props} />);
-    expect(props.goalNum).toBe(5);
   });
 
   it('should receive currentUUID', async () => {
@@ -77,12 +72,6 @@ describe('PDP Form', () => {
     render(<Form {...props} />);
     props.setConfirmModal(true);
     expect(await props.setConfirmModal).toBeCalled();
-  });
-
-  it('check call setCurrentGoal', async () => {
-    render(<Form {...props} />);
-    props.setCurrentGoal({});
-    expect(await props.setCurrentGoal).toBeCalled();
   });
 
   it('check call empty form onSubmit', async () => {
