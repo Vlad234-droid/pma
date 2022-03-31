@@ -110,8 +110,9 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   department: {
-    lineHeight: 20,
     fontSize: 16,
+    maxHeight: 300,
+    marginTop: 20,
   },
   updatedTime: {
     lineHeight: 20,
@@ -119,6 +120,7 @@ const styles = StyleSheet.create({
   },
   body: {
     maxHeight: 600,
+    paddingTop: 50,
   },
   questions: {
     marginTop: 5,
