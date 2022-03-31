@@ -11,26 +11,29 @@ export const createRequestFeedbackSchema = Yup.object().shape({
     )
     .required(),
   targetType: Yup.string().required(),
-  comment_to_objective: Yup.string()
-    .notRequired()
-    .when('targetId', { is: (val) => val, then: Yup.string().required() }),
   targetId: Yup.string()
     .notRequired()
     .when('targetType', {
       is: (val) => val === TargetType.OBJECTIVE,
       then: Yup.string().required(),
     }),
+  comment_to_objective: Yup.string()
+    .notRequired()
+    .when('targetId', { is: (val) => val, then: (schema) => schema.required().min(10).max(500) }),
   comment_to_request: Yup.string().notRequired(),
   comment_to_day_job: Yup.string()
     .notRequired()
-    .when('targetType', { is: (val) => val === TargetType.GOAL, then: Yup.string().required() }),
+    .when('targetType', { is: (val) => val === TargetType.GOAL, then: (schema) => schema.required().min(10).max(500) }),
   comment_to_your_self: Yup.string()
     .notRequired()
-    .when('targetType', { is: (val) => val === TargetType.VALUE_BEHAVIOR, then: Yup.string().required() }),
+    .when('targetType', {
+      is: (val) => val === TargetType.VALUE_BEHAVIOR,
+      then: (schema) => schema.required().min(10).max(500),
+    }),
   comment_to_your_impact: Yup.string()
     .notRequired()
     .when('targetType', {
       is: (val) => val === TargetType.OTHER,
-      then: Yup.string().typeError('Custom not a number message!').required(),
+      then: (schema) => schema.typeError('Custom not a number message!').required().min(10).max(500),
     }),
 });

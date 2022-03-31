@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useMemo } from 'react';
 import { useStyle, Rule, useBreakpoints, Button } from '@dex-ddl/core';
 import { useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
@@ -16,7 +16,7 @@ import { FeedbackInfo, ColleaguesFinder } from '../../components';
 export const FORM_WRAPPER = 'form-wrapper';
 
 const prepareFeedbackItems = (fields, feedbackItems) => {
-  return feedbackItems.map(({ content }, idx) => ({ content, code: fields[idx].code }));
+  return feedbackItems.map((content, idx) => ({ content, code: fields[idx].code }));
 };
 
 const getColleagueName = (data) => {
@@ -120,12 +120,12 @@ const GiveFeedbackForm: FC<Props> = ({ onSubmit, defaultValues, currentColleague
                     <h3 className={css(feedbackTitle)}>{item.title}</h3>
                     <p className={css(feedbackDescription)}>{item?.description}</p>
                     <Field
-                      name={`feedbackItems.${index}.content`}
+                      name={`feedbackItems.${index}`}
                       Wrapper={Item}
                       Element={Textarea}
-                      value={get(feedbackItems, `[${index}].content`, '')}
+                      value={get(feedbackItems, `[${index}]`, '')}
                       setValue={setValue}
-                      error={get(errors, `feedbackItems[${index}].content.message`)}
+                      error={get(errors, `feedbackItems[${index}].message`)}
                     />
                   </TileWrapper>
                 </div>

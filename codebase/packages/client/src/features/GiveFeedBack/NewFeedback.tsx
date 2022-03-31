@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useState, useEffect, useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useBreakpoints, Rule, Modal } from '@dex-ddl/core';
@@ -69,6 +69,11 @@ const NewFeedback: FC = () => {
       : [{ content: '' }, { content: '' }, { content: '' }],
     targetColleagueUuid,
   });
+
+  const defaultValues = useMemo(() => {
+    return { ...formData, feedbackItems: formData.feedbackItems.map(({ content }) => content) };
+  }, [formData]);
+
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const navigate = useNavigate();
 
@@ -132,7 +137,7 @@ const NewFeedback: FC = () => {
         <>
           {status === Statuses.PENDING && (
             <GiveFeedbackForm
-              defaultValues={formData}
+              defaultValues={defaultValues}
               onSubmit={handleSubmit}
               currentColleague={targetColleagueProfile}
               goToInfo={(data) => {
@@ -142,7 +147,6 @@ const NewFeedback: FC = () => {
               feedbackFields={feedbackFields}
             />
           )}
-
           {status === Statuses.CONFIRMING && (
             <ConfirmMassage
               onConfirm={() => {

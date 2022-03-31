@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useMemo, useState } from 'react';
 import { useTranslation } from 'components/Translation';
 import { useDispatch, useSelector } from 'react-redux';
 import { useBreakpoints, Rule, Modal } from '@dex-ddl/core';
@@ -25,10 +25,15 @@ const RespondNewFeedback: FC = () => {
 
   const [formData, setFormData] = useState({
     feedbackItems: feedbackItems
-      ? getFeedbackFields(t).map(({ code }) => feedbackItems.find((item) => item.code === code))
+      ? getFeedbackFields(t).map(({ code }) => ({ content: '', ...feedbackItems.find((item) => item.code === code) }))
       : [{ content: '' }, { content: '' }, { content: '' }],
     targetColleagueUuid,
   });
+
+  const defaultValues = useMemo(() => {
+    return { ...formData, feedbackItems: formData.feedbackItems.map(({ content }) => content) };
+  }, [formData]);
+
   const colleagueUuid = useSelector(colleagueUUIDSelector);
 
   const handleSave = (data: HandleSaveType) => {
@@ -68,7 +73,7 @@ const RespondNewFeedback: FC = () => {
     >
       {status === Statuses.PENDING && (
         <GiveFeedbackForm
-          defaultValues={formData}
+          defaultValues={defaultValues}
           onSubmit={handleSubmit}
           currentColleague={targetColleagueProfile}
           goToInfo={(data) => {

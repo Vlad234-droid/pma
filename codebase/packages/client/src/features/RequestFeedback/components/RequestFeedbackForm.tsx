@@ -49,7 +49,6 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel, setIsInfoModalOpen }) 
     getValues,
     setValue,
     handleSubmit,
-    register,
   } = methods;
 
   const formValues = getValues();
@@ -92,13 +91,11 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel, setIsInfoModalOpen }) 
           </Trans>
         </div>
         <form className={css({ marginTop: '20px' })}>
-          <Item errormessage={get(errors, 'colleagues', '')}>
-            <ColleaguesFinder
-              onSelect={(colleagues) => setValue('colleagues', colleagues, { shouldDirty: true, shouldValidate: true })}
-              selected={formValues.colleagues || []}
-              error={''}
-            />
-          </Item>
+          <ColleaguesFinder
+            onSelect={(colleagues) => setValue('colleagues', colleagues, { shouldDirty: true, shouldValidate: true })}
+            selected={formValues.colleagues || []}
+            error={errors['colleagues']?.message}
+          />
           <div className={css(withMargin)}>
             <IconButton graphic='information' onPress={setIsInfoModalOpen}>
               <p className={css(infoHelpStyle)}>
@@ -109,11 +106,14 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel, setIsInfoModalOpen }) 
             </IconButton>
           </div>
           <div className={css({ marginTop: '18px' })}>
-            <Item withIcon={false} label={t('choose_what_you_like_feedback_on', 'Choose what you`d like feedback on')}>
+            <Item
+              withIcon={false}
+              label={t('choose_what_you_like_feedback_on', 'Choose what you`d like feedback on')}
+              errormessage={errors['targetType']?.message}
+            >
               <Select
-                {...register('targetType')}
-                options={AREA_OPTIONS}
                 name={'targetType'}
+                options={AREA_OPTIONS}
                 placeholder={t('choose_an_area', 'Choose an area')}
                 //@ts-ignore
                 onChange={({ target: { value } }) => {
@@ -134,7 +134,8 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel, setIsInfoModalOpen }) 
                 Wrapper={Item}
                 Element={Textarea}
                 value={formValues.comment_to_day_job}
-                {...register(`comment_to_day_job`)}
+                name={'comment_to_day_job'}
+                error={errors['comment_to_day_job']?.message}
                 setValue={setValue}
               />
             </TileWrapper>
@@ -144,12 +145,12 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel, setIsInfoModalOpen }) 
               <Item
                 withIcon={false}
                 label={t('choose_an_objective_you_want_feedback_on', 'Choose an objective you want feedback on')}
+                errormessage={errors['targetId']?.message}
               >
                 <Select
                   options={[...objectiveOptions, { value: Tesco.TescoBank, label: Tesco.TescoBank }]}
                   name={'targetId'}
                   placeholder={t('choose_objective', 'Choose objective')}
-                  //@ts-ignore
                   onChange={({ target: { value } }) => {
                     setValue('targetId', value, { shouldValidate: true });
                   }}
@@ -166,7 +167,8 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel, setIsInfoModalOpen }) 
                 Wrapper={Item}
                 Element={Textarea}
                 value={formValues.comment_to_your_self}
-                {...register('comment_to_objective')}
+                name={'comment_to_objective'}
+                error={errors['comment_to_objective']?.message}
                 setValue={setValue}
               />
             </TileWrapper>
@@ -180,7 +182,8 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel, setIsInfoModalOpen }) 
                 Wrapper={Item}
                 Element={Textarea}
                 value={formValues.comment_to_your_self}
-                {...register('comment_to_your_self')}
+                name={'comment_to_your_self'}
+                error={errors['comment_to_your_self']?.message}
                 setValue={setValue}
               />
             </TileWrapper>
@@ -195,7 +198,8 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel, setIsInfoModalOpen }) 
                 Wrapper={Item}
                 Element={Textarea}
                 value={formValues.comment_to_your_impact}
-                {...register('comment_to_your_impact')}
+                name={'comment_to_your_impact'}
+                error={errors['comment_to_your_impact']?.message}
                 setValue={setValue}
               />
             </TileWrapper>
@@ -211,7 +215,8 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel, setIsInfoModalOpen }) 
               Wrapper={Item}
               Element={Textarea}
               value={formValues.comment_to_request}
-              {...register('comment_to_request')}
+              name={'comment_to_request'}
+              error={errors['comment_to_request']?.message}
               setValue={setValue}
             />
           </TileWrapper>

@@ -10,16 +10,15 @@ import { Trans } from 'components/Translation';
 import { TileWrapper } from 'components/Tile';
 import { Field, Item, Textarea, Attention } from 'components/Form';
 import { ColleaguesFinder } from 'features/GiveFeedBack/components';
-import FeedbackInfo from '../FeedbackInfo';
+import { createGiveFeedbackSchema } from 'features/GiveFeedBack/config';
 import { IconButton, Position } from 'components/IconButton';
-
-import { createGiveFeedbackSchema } from './config';
+import FeedbackInfo from '../FeedbackInfo';
 import { GiveFeedbackFormProps } from '../../type';
 
 export const FORM_WRAPPER = 'form_wrapper';
 
 const prepareFeedbackItems = (fields, feedbackItems) => {
-  return feedbackItems.map(({ content }, idx) => ({ content, code: fields[idx].code }));
+  return feedbackItems.map((content, idx) => ({ content, code: fields[idx].code }));
 };
 
 const getColleagueName = (data) => {
@@ -116,12 +115,12 @@ const GiveFeedbackForm: FC<GiveFeedbackFormProps> = ({
                   <h3 className={css(feedbackTitle)}>{item.title}</h3>
                   <p className={css(feedbackDescription)}>{item?.description}</p>
                   <Field
-                    name={`feedbackItems.${index}.content`}
+                    name={`feedbackItems.${index}`}
                     Wrapper={Item}
                     Element={Textarea}
-                    value={get(feedbackItems, `[${index}].content`, '')}
+                    value={get(feedbackItems, `[${index}]`, '')}
                     setValue={setValue}
-                    error={get(errors, `feedbackItems[${index}].content.message`)}
+                    error={get(errors, `feedbackItems[${index}].message`)}
                   />
                 </TileWrapper>
               </div>
