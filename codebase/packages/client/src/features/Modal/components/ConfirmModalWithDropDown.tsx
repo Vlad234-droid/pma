@@ -8,7 +8,7 @@ import * as Yup from 'yup';
 import { Option } from 'components/Form/types';
 import get from 'lodash.get';
 
-import { useBreakpoints, useStyle, CreateRule, Modal, Button } from '@dex-ddl/core';
+import { useBreakpoints, useStyle, CreateRule, Modal, Button } from '@pma/dex-wrapper';
 
 export type ConfirmModal = {
   title: string;

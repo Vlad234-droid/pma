@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Rule, useStyle } from '@dex-ddl/core';
+import { Rule, useStyle } from '@pma/dex-wrapper';
 import get from 'lodash.get';
 import { Field, Item, Select, Textarea, Attention } from 'components/Form';
 import { yupResolver } from '@hookform/resolvers/yup';

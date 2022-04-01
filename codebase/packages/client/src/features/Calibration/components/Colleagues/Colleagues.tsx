@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { useStyle, Rule, colors } from '@dex-ddl/core';
+import { useStyle, Rule, colors } from '@pma/dex-wrapper';
 
 import { TeamMateProfile } from 'features/MyTeam';
 import { Rating, Status } from 'config/enum';

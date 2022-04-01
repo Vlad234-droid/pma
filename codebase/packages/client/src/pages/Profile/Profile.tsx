@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { CreateRule, useBreakpoints, useStyle } from '@dex-ddl/core';
+import { CreateRule, useBreakpoints, useStyle } from '@pma/dex-wrapper';
 import { Contacts, PersonalInformation, ProfessionalInformation } from '../../features/Profile';
 import { AuthConsumer } from 'contexts/authContext';
 import { AvatarName } from 'features/Profile/components/Widgets/DashboardProfile';

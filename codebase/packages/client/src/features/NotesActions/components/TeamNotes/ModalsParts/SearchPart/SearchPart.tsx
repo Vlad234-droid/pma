@@ -1,6 +1,6 @@
 import React, { FC, Dispatch, SetStateAction } from 'react';
 import { Item } from 'components/Form';
-import { useStyle } from '@dex-ddl/core';
+import { useStyle } from '@pma/dex-wrapper';
 import { UseFormReturn } from 'react-hook-form';
 import { SearchInput } from '../index';
 import { PeopleTypes } from '../type';

@@ -1,5 +1,5 @@
 import React, { FC, useRef, useState } from 'react';
-import { colors, CreateRule, Rule, Styles, useStyle } from '@dex-ddl/core';
+import { colors, CreateRule, Rule, Styles, useStyle } from '@pma/dex-wrapper';
 
 import { Icon } from 'components/Icon';
 import MarkdownRenderer from 'components/MarkdownRenderer';

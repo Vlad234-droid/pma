@@ -1,5 +1,5 @@
 import React, { FC, useRef, MouseEvent } from 'react';
-import { useStyle, Rule, CreateRule } from '@dex-ddl/core';
+import { useStyle, Rule, CreateRule } from '@pma/dex-wrapper';
 
 import { Radio } from 'components/Form';
 import { Trans } from 'components/Translation';

@@ -1,7 +1,7 @@
 import React, { FC, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { useStyle, Rule } from '@dex-ddl/core';
+import { useStyle, Rule } from '@pma/dex-wrapper';
 import { getLoadedStateSelector, ReviewsActions } from '@pma/store';
 import { TileWrapper } from 'components/Tile';
 import { Accordion, BaseAccordion, Section, Panel, ExpandButton } from 'components/Accordion';

@@ -1,5 +1,5 @@
 import React, { FC, useEffect } from 'react';
-import { Styles, useStyle } from '@dex-ddl/core';
+import { Styles, useStyle } from '@pma/dex-wrapper';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import {

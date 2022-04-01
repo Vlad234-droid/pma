@@ -1,7 +1,3 @@
-import { theme as baseTheme, Styles, StylesFunction } from '@dex-ddl/core';
-
-import merge from 'lodash.merge';
-import * as secondaryTheme from 'theme';
 declare type Nullable<T> = T | null;
 
 declare module '*.html' {
@@ -72,12 +68,4 @@ declare namespace NodeJS {
   export interface Process {
     env: ProcessEnv;
   }
-}
-
-// todo remove after merge with new dex version
-declare module '@dex-ddl/core' {
-  export const theme = merge(baseTheme, secondaryTheme);
-  export type Theme = typeof theme;
-  export type Rule = StylesFunction | Styles;
-  export type CreateRule<TProps> = (props: TProps) => Rule;
 }

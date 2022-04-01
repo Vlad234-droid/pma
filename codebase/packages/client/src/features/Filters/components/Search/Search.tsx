@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Rule, useStyle } from '@dex-ddl/core';
+import { Rule, useStyle } from '@pma/dex-wrapper';
 
 import { Input, Item as FormItem } from 'components/Form';
 import { Icon } from 'components/Icon';

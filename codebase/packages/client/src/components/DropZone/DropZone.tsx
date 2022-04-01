@@ -1,5 +1,5 @@
 import React, { FC, InputHTMLAttributes } from 'react';
-import { Rule, Styles, useStyle } from '@dex-ddl/core';
+import { Rule, Styles, useStyle } from '@pma/dex-wrapper';
 
 export interface DropZoneProps extends InputHTMLAttributes<HTMLInputElement> {
   styles?: Styles | Rule;

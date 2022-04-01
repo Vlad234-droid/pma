@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { CreateRule, Rule, Styles, useStyle } from '@dex-ddl/core';
+import { CreateRule, Rule, Styles, useStyle } from '@pma/dex-wrapper';
 import MarkdownRenderer from 'components/MarkdownRenderer';
 import { Textarea } from 'components/Form';
 

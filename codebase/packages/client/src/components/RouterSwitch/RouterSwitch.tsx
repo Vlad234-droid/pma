@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { NavLink } from 'react-router-dom';
-import { colors, useStyle } from '@dex-ddl/core';
+import { colors, useStyle } from '@pma/dex-wrapper';
 
 export const TEST_ID = 'objectives-pave';
 

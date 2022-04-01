@@ -1,5 +1,5 @@
 import React, { FC, HTMLProps, useState } from 'react';
-import { useBreakpoints, useStyle, CreateRule, Modal, Button, Rule } from '@dex-ddl/core';
+import { useBreakpoints, useStyle, CreateRule, Modal, Button, Rule } from '@pma/dex-wrapper';
 import { Trans } from 'components/Translation';
 import { Radio } from 'components/Form';
 

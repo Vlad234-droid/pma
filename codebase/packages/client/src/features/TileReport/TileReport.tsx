@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { useStyle, Rule, useBreakpoints, IconButton as BackButton } from '@dex-ddl/core';
+import { useStyle, Rule, useBreakpoints, IconButton as BackButton } from '@pma/dex-wrapper';
 import { useNavigate } from 'react-router-dom';
 
 import ColleagueProfile from './components/ColleagueProfile';

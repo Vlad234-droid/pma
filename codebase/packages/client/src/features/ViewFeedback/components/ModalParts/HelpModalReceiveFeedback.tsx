@@ -1,6 +1,6 @@
 import React, { Dispatch, FC, SetStateAction } from 'react';
 import { IconButton } from 'components/IconButton';
-import { useStyle, useBreakpoints, Rule, Styles } from '@dex-ddl/core';
+import { useStyle, useBreakpoints, Rule, Styles } from '@pma/dex-wrapper';
 import { VideoPlayer, VideoId } from 'features/VideoPlayer';
 import { Trans } from 'components/Translation';
 

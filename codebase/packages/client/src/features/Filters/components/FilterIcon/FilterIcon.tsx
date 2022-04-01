@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Rule, colors } from '@dex-ddl/core';
+import { Rule, colors } from '@pma/dex-wrapper';
 
 import { IconButton } from 'components/IconButton';
 

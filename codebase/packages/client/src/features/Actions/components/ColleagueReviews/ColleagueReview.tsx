@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { createYupSchema } from 'utils/yup';
 
-import { Rule, useStyle } from '@dex-ddl/core';
+import { Rule, useStyle } from '@pma/dex-wrapper';
 import { FormType } from '@pma/store';
 
 import { Input, Item, Select, Textarea } from 'components/Form';

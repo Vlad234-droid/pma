@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Button, Rule, useBreakpoints, useStyle } from '@dex-ddl/core';
+import { Button, Rule, useBreakpoints, useStyle } from '@pma/dex-wrapper';
 
 import { TileWrapper } from 'components/Tile';
 import { PerformanceCycleActions, getPerformanceCycleSelector, performanceCycleMetaSelector } from '@pma/store';

@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { useStyle } from '@dex-ddl/core';
+import { useStyle } from '@pma/dex-wrapper';
 import { Radio } from 'components/Form';
 import { Trans } from 'components/Translation/Translation';
 import { Status } from 'config/enum';

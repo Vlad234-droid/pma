@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
-import { Button, Modal, Rule, useBreakpoints, useStyle } from '@dex-ddl/core';
+import { Button, Modal, Rule, useBreakpoints, useStyle } from '@pma/dex-wrapper';
 import { Trans, useTranslation } from 'components/Translation';
 import { FilterOption } from 'features/Shared';
 import { IconButton } from 'components/IconButton';

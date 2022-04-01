@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { CreateRule, Modal, Rule, useBreakpoints, useStyle, theme } from '@dex-ddl/core';
+import { CreateRule, Modal, Rule, useBreakpoints, useStyle, theme } from '@pma/dex-wrapper';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Icon } from 'components/Icon';
 import { useDispatch, useSelector } from 'react-redux';

@@ -14,7 +14,7 @@ import {
   tipsActions,
 } from '@pma/store';
 import { buildPath } from 'features/Routes/utils';
-import { Button, Icon, ModalWithHeader, Rule, theme, useBreakpoints, useStyle } from '@dex-ddl/core';
+import { Button, Icon, ModalWithHeader, Rule, theme, useBreakpoints, useStyle } from '@pma/dex-wrapper';
 import { Input, Item, Select, Textarea, Attention } from 'components/Form';
 import { GenericItemField } from 'components/GenericForm';
 import { IconButton } from 'components/IconButton';
@@ -523,6 +523,7 @@ const formControlBtnsWrap: Rule = ({ theme }) => {
     left: 0,
     width: '100%',
     background: '#fff',
+    // @ts-ignore
     borderTop: `1px solid ${theme.colors.lightGray}`,
     ...(mobileScreen
       ? {

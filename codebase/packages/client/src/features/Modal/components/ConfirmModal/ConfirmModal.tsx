@@ -1,7 +1,7 @@
 import React, { FC, HTMLProps } from 'react';
 import { Trans } from 'components/Translation';
 
-import { useBreakpoints, useStyle, CreateRule, Modal, Button, Rule } from '@dex-ddl/core';
+import { useBreakpoints, useStyle, CreateRule, Modal, Button, Rule } from '@pma/dex-wrapper';
 
 export type ConfirmModal = {
   title: string;

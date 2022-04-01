@@ -1,5 +1,5 @@
 import React, { FC, HTMLProps } from 'react';
-import { useStyle } from '@dex-ddl/core';
+import { useStyle } from '@pma/dex-wrapper';
 
 import { ColleagueInfo } from 'features/MyTeam';
 import { Employee } from 'config/types';

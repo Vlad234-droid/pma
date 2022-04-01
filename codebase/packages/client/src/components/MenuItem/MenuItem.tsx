@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { TileWrapper } from 'components/Tile';
 import { Icon, IconProps } from 'components/Icon';
-import { Rule } from '@dex-ddl/core';
+import { Rule } from '@pma/dex-wrapper';
 import { Link } from 'react-router-dom';
 
 export type Props = {

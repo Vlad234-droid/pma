@@ -1,5 +1,5 @@
 import React, { FC, KeyboardEvent, ReactNode } from 'react';
-import { Rule, useStyle } from '@dex-ddl/core';
+import { Rule, useStyle } from '@pma/dex-wrapper';
 
 import { AccordionConsumer, SectionConsumer } from './contexts';
 import { EventListener, KeyboardEventListener } from './types';

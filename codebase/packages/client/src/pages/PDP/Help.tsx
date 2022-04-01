@@ -1,5 +1,5 @@
 import React from 'react';
-import { CreateRule, Icon, Modal, Rule, useBreakpoints, useStyle, theme } from '@dex-ddl/core';
+import { CreateRule, Icon, Modal, Rule, useBreakpoints, useStyle, theme } from '@pma/dex-wrapper';
 import { useNavigate } from 'react-router';
 import { buildPath } from 'features/Routes';
 import { Page } from 'pages';

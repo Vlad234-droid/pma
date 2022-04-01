@@ -1,6 +1,6 @@
 import React, { FC, MouseEvent, useEffect, useRef, useState } from 'react';
 import mergeRefs from 'react-merge-refs';
-import { Rule, useStyle } from '@dex-ddl/core';
+import { Rule, useStyle } from '@pma/dex-wrapper';
 
 import { Icon } from 'components/Icon';
 import useEventListener from 'hooks/useEventListener';
@@ -133,6 +133,7 @@ const iconExpandStyles: Rule = {
 const listStyles: Rule = ({ theme }) => ({
   display: 'block',
   position: 'absolute',
+  // @ts-ignore
   border: `1px solid ${theme.colors.lightGray}`,
   borderRadius: theme.border.radius.sm,
   background: theme.colors.white,

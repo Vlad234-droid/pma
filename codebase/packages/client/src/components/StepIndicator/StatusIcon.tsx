@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { useStyle } from '@dex-ddl/core';
+import { useStyle } from '@pma/dex-wrapper';
 import { Graphics, Icon } from '../Icon';
 
 export const StatusIcon: FC<{

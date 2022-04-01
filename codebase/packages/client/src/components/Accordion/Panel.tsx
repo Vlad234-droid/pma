@@ -1,5 +1,5 @@
 import React, { ReactNode, useRef, RefObject, CSSProperties, FC, useState, useEffect } from 'react';
-import { useStyle, Rule } from '@dex-ddl/core';
+import { useStyle, Rule } from '@pma/dex-wrapper';
 
 import useEventListener from 'hooks/useEventListener';
 

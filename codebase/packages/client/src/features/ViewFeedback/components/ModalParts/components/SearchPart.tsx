@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { UseFormReturn } from 'react-hook-form';
-import { useStyle } from '@dex-ddl/core';
+import { useStyle } from '@pma/dex-wrapper';
 import { Item, Input, Field } from 'components/Form';
 import { ColleaguesFinder } from 'features/GiveFeedBack/components';
 

@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { Trans, useTranslation } from 'components/Translation';
-import { useStyle, Rule, Button, Styles, colors } from '@dex-ddl/core';
+import { useStyle, Rule, Button, Styles, colors } from '@pma/dex-wrapper';
 
 import { TileWrapper } from 'components/Tile';
 import { Icon, Graphics } from 'components/Icon';

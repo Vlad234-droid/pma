@@ -1,5 +1,5 @@
 import React, { FC, HTMLProps, useState } from 'react';
-import { Button, Modal, Rule, useBreakpoints, useStyle } from '@dex-ddl/core';
+import { Button, Modal, Rule, useBreakpoints, useStyle } from '@pma/dex-wrapper';
 import { Graphics, Icon } from 'components/Icon';
 import { CreateUpdateObjective, CreateUpdateObjectives } from '../ObjectiveModal';
 import { IconButton } from 'components/IconButton';

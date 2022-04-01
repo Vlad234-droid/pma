@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Button, Rule, Styles, useBreakpoints, useStyle } from '@dex-ddl/core';
+import { Button, Rule, Styles, useBreakpoints, useStyle } from '@pma/dex-wrapper';
 import { Trans } from 'components/Translation';
 
 import success from 'images/success.jpg';

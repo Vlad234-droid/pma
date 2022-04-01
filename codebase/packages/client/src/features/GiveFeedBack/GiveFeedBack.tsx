@@ -1,7 +1,7 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { CreateRule, Rule, useBreakpoints, useStyle } from '@dex-ddl/core';
+import { CreateRule, Rule, useBreakpoints, useStyle } from '@pma/dex-wrapper';
 import { colleagueUUIDSelector, FeedbackActions, getGiveFeedbacksSelector } from '@pma/store';
 import debounce from 'lodash.debounce';
 import { paramsReplacer } from 'utils';

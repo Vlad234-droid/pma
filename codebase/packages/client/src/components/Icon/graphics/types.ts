@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import { Theme } from '@dex-ddl/core';
+import { Theme } from '@pma/dex-wrapper';
 
 type GraphicProps = {
   invertColors: boolean;
@@ -8,4 +8,8 @@ type GraphicProps = {
 
 export type FCGraphicProps = FC<GraphicProps>;
 
-export type IconColors = Theme['colors']['link'] | Theme['colors']['white'] | 'currentColor';
+export type IconColors =
+  | Theme['colors']['link']
+  | Theme['colors']['pending']
+  | Theme['colors']['white']
+  | 'currentColor';

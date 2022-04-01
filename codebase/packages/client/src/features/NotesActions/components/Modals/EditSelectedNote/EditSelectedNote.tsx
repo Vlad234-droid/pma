@@ -1,5 +1,5 @@
 import React, { FC, useState, useEffect } from 'react';
-import { useStyle, useBreakpoints, Button, Styles, Rule, CreateRule, Theme } from '@dex-ddl/core';
+import { useStyle, useBreakpoints, Button, Styles, Rule, CreateRule, Theme } from '@pma/dex-wrapper';
 import { GenericItemField } from 'components/GenericForm';
 import { Item, Input, Select, Textarea } from 'components/Form';
 import { EditSelectedNoteProps } from './type';
@@ -220,6 +220,7 @@ const blockContainer: CreateRule<{ theme: Theme }> = ({ theme }) => ({
   bottom: theme.spacing.s0,
   left: theme.spacing.s0,
   right: theme.spacing.s0,
+  // @ts-ignore
   borderTop: `${theme.border.width.b1} solid ${theme.colors.lightGray}`,
 });
 const cancelBtnStyle: CreateRule<{ theme: Theme }> = ({ theme }) => ({

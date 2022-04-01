@@ -1,5 +1,5 @@
 import React from 'react';
-import { CreateRule, Rule, Theme, useStyle } from '@dex-ddl/core';
+import { CreateRule, Rule, Theme, useStyle } from '@pma/dex-wrapper';
 import LeftsideMenuItem from './LeftsideMenuItem';
 import unionImg from '../../assets/img/pdp/Union.png';
 import { Dashboard, Pma, Settings, Alerts, Help, Chat } from 'assets/img/objectives';

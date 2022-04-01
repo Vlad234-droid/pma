@@ -1,5 +1,5 @@
 import React from 'react';
-import { CreateRule, Rule, Theme, useStyle } from '@dex-ddl/core';
+import { CreateRule, Rule, Theme, useStyle } from '@pma/dex-wrapper';
 
 interface MenuItemInterface {
   name: string;

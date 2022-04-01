@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react';
 import { Controller } from 'react-hook-form';
-import { Button, useStyle } from '@dex-ddl/core';
+import { Button, useStyle } from '@pma/dex-wrapper';
 import { Input } from '../Input';
 import { TileWrapper } from '../../Tile';
 

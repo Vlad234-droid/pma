@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Rule, useBreakpoints, useStyle } from '@dex-ddl/core';
+import { Rule, useBreakpoints, useStyle } from '@pma/dex-wrapper';
 import useDispatch from 'hooks/useDispatch';
 import Filters, { getEmployeesSortingOptions, useSearch, useSorting } from 'features/Filters';
 import { useSelector } from 'react-redux';

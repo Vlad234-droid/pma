@@ -1,7 +1,7 @@
 import React, { FC, useMemo, useState } from 'react';
 import { useTranslation } from 'components/Translation';
 import { useDispatch, useSelector } from 'react-redux';
-import { useBreakpoints, Rule, Modal } from '@dex-ddl/core';
+import { useBreakpoints, Rule, Modal } from '@pma/dex-wrapper';
 import { useNavigate, useParams } from 'react-router-dom';
 import { colleagueUUIDSelector, ColleaguesActions, FeedbackActions, feedbackByUuidSelector } from '@pma/store';
 import { Icon } from 'components/Icon';

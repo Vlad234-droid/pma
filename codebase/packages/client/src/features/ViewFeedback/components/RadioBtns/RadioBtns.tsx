@@ -1,5 +1,5 @@
 import React, { Dispatch, FC, SetStateAction } from 'react';
-import { useStyle, useBreakpoints } from '@dex-ddl/core';
+import { useStyle, useBreakpoints } from '@pma/dex-wrapper';
 import { Trans } from 'components/Translation';
 import { Radio } from 'components/Form';
 

@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { CreateRule, Rule, useBreakpoints, useStyle } from '@dex-ddl/core';
+import { CreateRule, Rule, useBreakpoints, useStyle } from '@pma/dex-wrapper';
 import { Trans } from 'components/Translation';
 import { Radio } from 'components/Form';
 import { FeedbackStatus } from 'config/enum';

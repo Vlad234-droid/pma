@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Rule, useStyle } from '@dex-ddl/core';
+import { Rule, useStyle } from '@pma/dex-wrapper';
 import useSearchColleagues from 'hooks/useSearchColleagues';
 import { Item } from 'components/Form';
 import SearchInput from 'components/SearchInput';

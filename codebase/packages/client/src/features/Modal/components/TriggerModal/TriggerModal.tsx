@@ -1,5 +1,5 @@
 import React, { FC, HTMLProps, useState, ReactNode } from 'react';
-import { useBreakpoints, Rule, Modal, useStyle } from '@dex-ddl/core';
+import { useBreakpoints, Rule, Modal, useStyle } from '@pma/dex-wrapper';
 import { Icon } from 'components/Icon';
 import { TriggerModalProvider } from './context';
 

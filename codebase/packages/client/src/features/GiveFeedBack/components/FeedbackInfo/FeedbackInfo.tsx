@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { useStyle, Rule, Styles } from '@dex-ddl/core';
+import { useStyle, Rule, Styles } from '@pma/dex-wrapper';
 import { IconButton } from 'components/IconButton';
 import defaultImg from 'images/default.png';
 import { VideoPlayer, VideoId } from 'features/VideoPlayer';

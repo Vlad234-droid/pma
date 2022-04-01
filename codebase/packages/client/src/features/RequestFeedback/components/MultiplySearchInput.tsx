@@ -1,5 +1,5 @@
 import React, { ChangeEvent, FC, RefObject } from 'react';
-import { useStyle, Rule, Styles } from '@dex-ddl/core';
+import { useStyle, Rule, Styles } from '@pma/dex-wrapper';
 import mergeRefs from 'react-merge-refs';
 import { useFormContainer } from 'components/Form/context/input';
 import defaultImg from 'images/default.png';

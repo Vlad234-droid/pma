@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { IconButton } from 'components/IconButton';
-import { Rule, Styles, useBreakpoints, useStyle } from '@dex-ddl/core';
+import { Rule, Styles, useBreakpoints, useStyle } from '@pma/dex-wrapper';
 import { InfoModalProps } from '../../type';
 import { Trans } from 'components/Translation';
 

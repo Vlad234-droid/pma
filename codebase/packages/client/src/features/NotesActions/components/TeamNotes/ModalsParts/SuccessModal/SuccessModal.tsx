@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { Trans } from 'components/Translation';
-import { Button, useBreakpoints, useStyle, Rule } from '@dex-ddl/core';
+import { Button, useBreakpoints, useStyle, Rule } from '@pma/dex-wrapper';
 import { UseFormReturn } from 'react-hook-form';
 import { AllNotesFolderIdTEAM, addNewFolderId } from 'utils';
 import { getFoldersSelector } from '@pma/store';

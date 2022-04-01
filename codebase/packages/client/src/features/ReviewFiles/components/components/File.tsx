@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import filesize from 'filesize';
-import { Rule, useStyle } from '@dex-ddl/core';
+import { Rule, useStyle } from '@pma/dex-wrapper';
 import Download from 'components/DropZone/Download.svg';
 import Trash from 'components/DropZone/Trash.svg';
 import { BASE_URL_API } from 'config/constants';
@@ -61,6 +61,7 @@ const fileNameStyles: Rule = ({ theme }) => ({
 const listItemStyles: Rule = ({ theme }) => ({
   display: 'flex',
   justifyContent: 'space-between',
+  // @ts-ignore
   borderBottom: `1px solid ${theme.colors.lightGray}`,
 });
 

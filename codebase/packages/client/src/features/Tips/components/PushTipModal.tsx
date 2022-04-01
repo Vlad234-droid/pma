@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { useStyle, Rule, Modal, Button } from '@dex-ddl/core';
+import { useStyle, Rule, Modal, Button } from '@pma/dex-wrapper';
 import { TipsProps } from '../types';
 import success from 'images/success.jpg';
 import { Trans } from 'components/Translation';

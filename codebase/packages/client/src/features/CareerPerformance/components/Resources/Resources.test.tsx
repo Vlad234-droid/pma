@@ -1,6 +1,6 @@
 // @ts-ignore
 import React from 'react';
-import { Rule } from '@dex-ddl/core';
+import { Rule } from '@pma/dex-wrapper';
 
 // @ts-ignore
 import { renderWithTheme as render } from 'utils/test';

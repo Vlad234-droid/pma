@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { colleagueUUIDSelector, FeedbackActions as FeedbackActionsGet, UserActions } from '@pma/store';
-import { CreateRule, Modal, Rule, Theme, useBreakpoints, useStyle } from '@dex-ddl/core';
+import { CreateRule, Modal, Rule, Theme, useBreakpoints, useStyle } from '@pma/dex-wrapper';
 import { Trans, useTranslation } from 'components/Translation';
 import { Item, Select } from 'components/Form';
 import { IconButton } from 'components/IconButton';

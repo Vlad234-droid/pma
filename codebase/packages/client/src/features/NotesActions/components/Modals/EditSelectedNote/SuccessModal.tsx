@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { Trans } from 'components/Translation';
-import { Button, useBreakpoints, useStyle } from '@dex-ddl/core';
+import { Button, useBreakpoints, useStyle } from '@pma/dex-wrapper';
 import { SuccessModalProps } from './type';
 import successImg from 'images/success.jpg';
 

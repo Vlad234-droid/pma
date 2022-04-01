@@ -1,6 +1,6 @@
 import React, { FC, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { IconButton, Rule, Styles, useBreakpoints, useStyle, CreateRule, Theme } from '@dex-ddl/core';
+import { IconButton, Rule, Styles, useBreakpoints, useStyle, CreateRule, Theme } from '@pma/dex-wrapper';
 
 import { Graphics, RoundIcon, Icon } from 'components/Icon';
 import { AlertDrawer, AlertBadge, useMessagesContext } from 'features/Messages';

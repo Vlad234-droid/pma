@@ -1,7 +1,7 @@
 import React, { FC, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { tipsActions, getTipHistorySelector } from '@pma/store';
-import { useStyle, Rule, CreateRule, Theme, useBreakpoints, Modal, Button, Icon } from '@dex-ddl/core';
+import { useStyle, Rule, CreateRule, Theme, useBreakpoints, Modal, Button, Icon } from '@pma/dex-wrapper';
 import { TipsProps } from '../types';
 import { formatDateStringFromISO, DATE_TIME_STRING_FORMAT } from 'utils/date';
 import { Trans } from 'components/Translation';
@@ -150,6 +150,7 @@ const vhItemStyle: CreateRule<{ isLastItem: boolean; theme: Theme }> = ({ isLast
     justifyContent: 'space-between',
     alignItems: 'flex-start',
     padding: '15px 0',
+    // @ts-ignore
     borderBottom: !isLastItem ? `1px solid ${theme.colors.lightGray}` : '',
   };
 };

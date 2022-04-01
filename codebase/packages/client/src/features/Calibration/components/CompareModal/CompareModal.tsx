@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { Styles, useStyle } from '@dex-ddl/core';
+import { Styles, useStyle } from '@pma/dex-wrapper';
 
 import { ConfirmModal } from 'features/Actions';
 import { Trans, useTranslation } from 'components/Translation';

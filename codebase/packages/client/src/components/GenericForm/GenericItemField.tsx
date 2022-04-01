@@ -1,4 +1,4 @@
-import { Rule, Styles } from '@dex-ddl/core';
+import { Rule, Styles } from '@pma/dex-wrapper';
 import React, { FC, RefObject, useEffect, useState } from 'react';
 import { VALIDATION_RULE } from 'utils/yup/types';
 

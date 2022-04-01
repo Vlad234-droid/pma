@@ -1,6 +1,6 @@
 import React, { FC, HTMLProps } from 'react';
 import { Trans, useTranslation } from 'components/Translation';
-import { CreateRule, Rule, Styles, useBreakpoints, useStyle } from '@dex-ddl/core';
+import { CreateRule, Rule, Styles, useBreakpoints, useStyle } from '@pma/dex-wrapper';
 import { BasicTile } from 'components/Tile';
 
 export type DashboardProfileProps = {

@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { useStyle, colors, Colors, Rule } from '@dex-ddl/core';
+import { useStyle, colors, Colors, Rule } from '@pma/dex-wrapper';
 import { IconButton } from '../IconButton';
 import { Graphics, Icon } from '../Icon';
 

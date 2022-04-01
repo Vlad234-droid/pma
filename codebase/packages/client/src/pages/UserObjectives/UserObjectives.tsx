@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'components/Translation';
-import { Button, Rule, Styles, useBreakpoints, useStyle } from '@dex-ddl/core';
+import { Button, Rule, Styles, useBreakpoints, useStyle } from '@pma/dex-wrapper';
 import { ObjectiveType, ReviewType } from 'config/enum';
 
 import { StepIndicator } from 'components/StepIndicator/StepIndicator';

@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useMemo, useRef } from 'react';
-import { CreateRule, Rule, Styles, theme, useBreakpoints, useStyle } from '@dex-ddl/core';
+import { CreateRule, Rule, Styles, theme, useBreakpoints, useStyle } from '@pma/dex-wrapper';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { downloadPDF, PDPDocument, usePDF } from '@pma/pdf-renderer';

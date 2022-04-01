@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Button, CreateRule, Rule, Theme, useStyle } from '@dex-ddl/core';
+import { Button, CreateRule, Rule, Theme, useStyle } from '@pma/dex-wrapper';
 import useDispatch from 'hooks/useDispatch';
 import { OrgObjectiveActions, auditLogsSelector } from '@pma/store';
 import HistoryTable from 'components/HistoryTable/HistoryTable';

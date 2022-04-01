@@ -1,5 +1,5 @@
 import { ChangeEvent, RefObject, SyntheticEvent } from 'react';
-import { Rule, Styles } from '@dex-ddl/core';
+import { Rule, Styles } from '@pma/dex-wrapper';
 
 export interface FormField {
   styles?: Styles | Rule;

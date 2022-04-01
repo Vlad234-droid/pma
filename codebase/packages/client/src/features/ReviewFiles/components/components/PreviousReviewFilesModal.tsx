@@ -1,5 +1,5 @@
 import React, { FC, HTMLProps, useEffect, useState } from 'react';
-import { Button, CreateRule, Modal, Rule, Styles, theme, useBreakpoints, useStyle } from '@dex-ddl/core';
+import { Button, CreateRule, Modal, Rule, Styles, theme, useBreakpoints, useStyle } from '@pma/dex-wrapper';
 import { DropZone } from 'components/DropZone';
 import Upload from 'images/Upload.svg';
 import { Input, Item as FormItem } from 'components/Form';

@@ -1,5 +1,5 @@
 import React, { FC, useMemo } from 'react';
-import { useStyle, Rule, useBreakpoints, Button } from '@dex-ddl/core';
+import { useStyle, Rule, useBreakpoints, Button } from '@pma/dex-wrapper';
 import { useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -181,6 +181,7 @@ const relativeBtnStyled: Rule = ({ theme }) => ({
   bottom: theme.spacing.s0,
   left: theme.spacing.s0,
   right: theme.spacing.s0,
+  // @ts-ignore
   borderTop: `${theme.border.width.b1} solid ${theme.colors.lightGray}`,
 });
 

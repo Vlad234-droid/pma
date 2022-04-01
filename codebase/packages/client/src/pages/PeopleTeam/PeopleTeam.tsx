@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useStyle, Styles } from '@dex-ddl/core';
+import { useStyle, Styles } from '@pma/dex-wrapper';
 
 import { buildPath } from 'features/Routes';
 import { Page } from 'pages';

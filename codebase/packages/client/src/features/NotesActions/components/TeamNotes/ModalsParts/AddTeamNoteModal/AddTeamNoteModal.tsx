@@ -1,6 +1,6 @@
 import React, { Dispatch, FC, SetStateAction, useState } from 'react';
 import { UseFormReturn } from 'react-hook-form';
-import { useStyle, Rule, useBreakpoints, Button, CreateRule, Theme } from '@dex-ddl/core';
+import { useStyle, Rule, useBreakpoints, Button, CreateRule, Theme } from '@pma/dex-wrapper';
 import { NotesTypeTEAM, FoldersWithNotesTypesTEAM } from 'features/NotesActions/type';
 import { Notification } from 'components/Notification';
 import { Icon as IconComponent } from 'components/Icon';
@@ -170,6 +170,7 @@ const selectedRelativeStyle: Rule = ({ theme }) => ({
   bottom: theme.spacing.s0,
   left: theme.spacing.s0,
   right: theme.spacing.s0,
+  // @ts-ignore
   borderTop: `${theme.border.width.b1} solid ${theme.colors.lightGray}`,
   cursor: 'pointer',
   marginRight: '3px',

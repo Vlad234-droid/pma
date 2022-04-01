@@ -1,5 +1,5 @@
 import React, { FC, HTMLProps, useState } from 'react';
-import { Button, Rule, useStyle } from '@dex-ddl/core';
+import { Button, Rule, useStyle } from '@pma/dex-wrapper';
 import { IconButton } from 'components/IconButton';
 import { ModalComponent } from 'features/Objectives/components/Modal';
 import { useTranslation } from 'components/Translation';

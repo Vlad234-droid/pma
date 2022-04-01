@@ -1,4 +1,4 @@
-import { Colors, Theme } from '@dex-ddl/core';
+import { Colors, Theme } from '@pma/dex-wrapper';
 
 import { IconColors } from './graphics/types';
 import { Graphics } from './graphics';

@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { Icon, Rule, Styles, useBreakpoints, useStyle } from '@dex-ddl/core';
+import { Icon, Rule, Styles, useBreakpoints, useStyle } from '@pma/dex-wrapper';
 import { TileWrapper } from 'components/Tile';
 
 import { ToastPayload, Variant } from '../../config/types';

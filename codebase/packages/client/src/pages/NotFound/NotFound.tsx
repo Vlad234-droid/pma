@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Rule, useStyle } from '@dex-ddl/core';
+import { Button, Rule, useStyle } from '@pma/dex-wrapper';
 
 export const NotFound: FC = () => {
   const navigate = useNavigate();

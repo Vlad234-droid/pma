@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Accordion, BaseAccordion, ExpandButton, Panel, Section } from 'components/Accordion';
-import { Button, Rule, theme, useStyle } from '@dex-ddl/core';
+import { Button, Rule, theme, useStyle } from '@pma/dex-wrapper';
 import { ConfirmModal } from 'features/Modal';
 import { Icon } from 'components/Icon';
 import { Trans, useTranslation } from 'components/Translation';

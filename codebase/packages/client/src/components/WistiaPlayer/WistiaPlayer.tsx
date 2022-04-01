@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useStyle, CreateRule, Rule } from '@dex-ddl/core';
+import { useStyle, CreateRule, Rule } from '@pma/dex-wrapper';
 
 type Props = {
   videoId: string;

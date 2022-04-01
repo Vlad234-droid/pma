@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { Trans } from 'components/Translation';
-import { useStyle, Rule } from '@dex-ddl/core';
+import { useStyle, Rule } from '@pma/dex-wrapper';
 
 export type AttentionProps = {
   customStyle?: Rule;

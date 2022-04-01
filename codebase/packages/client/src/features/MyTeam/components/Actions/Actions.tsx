@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { colors, fontWeight, Rule, useStyle } from '@dex-ddl/core';
+import { colors, fontWeight, Rule, useStyle } from '@pma/dex-wrapper';
 
 import { TileWrapper } from 'components/Tile';
 import { useTranslation } from 'components/Translation';

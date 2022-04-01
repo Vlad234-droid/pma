@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Rule, Styles, useStyle, useBreakpoints, colors, CreateRule } from '@dex-ddl/core';
+import { Rule, Styles, useStyle, useBreakpoints, colors, CreateRule } from '@pma/dex-wrapper';
 import { getFoldersSelector } from '@pma/store';
 import { useSelector } from 'react-redux';
 
@@ -279,6 +279,7 @@ const Align_flex_style: Rule = ({ colors }) => ({
   alignItems: 'center',
   justifyContent: 'flex-start',
   cursor: 'pointer',
+  // @ts-ignore
   borderBottom: `1px solid ${colors.lightGray}`,
   padding: '15px 24px',
 });

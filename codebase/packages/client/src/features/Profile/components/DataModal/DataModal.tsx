@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
-import { Rule, useStyle } from '@dex-ddl/core';
+import { Rule, useStyle } from '@pma/dex-wrapper';
 import isEmpty from 'lodash.isempty';
 
 import { ConfirmModal as Modal } from 'features/Modal';

@@ -1,5 +1,5 @@
 import React, { FC, Fragment } from 'react';
-import { useStyle, CreateRule, useBreakpoints, Theme } from '@dex-ddl/core';
+import { useStyle, CreateRule, useBreakpoints, Theme } from '@pma/dex-wrapper';
 import { TileWrapper } from 'components/Tile';
 import { Icon } from 'components/Icon';
 import { Trans } from 'components/Translation';

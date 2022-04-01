@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { colors, Rule, useStyle } from '@dex-ddl/core';
+import { colors, Rule, useStyle } from '@pma/dex-wrapper';
 import { useNavigate } from 'react-router-dom';
 
 import { Icon, getIcon } from 'components/Icon';

@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { CreateRule, Rule, Theme, useStyle } from '@dex-ddl/core';
+import { CreateRule, Rule, Theme, useStyle } from '@pma/dex-wrapper';
 import DescriptionBlock from 'components/DescriptionBlock';
 import { Attention } from 'components/Form';
 import StrategicDriversForm from './StrategicDriversForm';

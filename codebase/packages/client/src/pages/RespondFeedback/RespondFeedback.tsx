@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { useStyle } from '@dex-ddl/core';
+import { useStyle } from '@pma/dex-wrapper';
 import { RespondFeedbackContainer } from '../../features/RespondFeedbackContainer';
 
 export const RESPOND_FEEDBACK = 'respond_feedback';

@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Rule, useStyle, Button, Styles, CreateRule, useBreakpoints, Theme } from '@dex-ddl/core';
+import { Rule, useStyle, Button, Styles, CreateRule, useBreakpoints, Theme } from '@pma/dex-wrapper';
 import { IconButton } from 'components/IconButton';
 import { useTranslation } from 'components/Translation';
 
@@ -344,6 +344,7 @@ const alignFlexStyle: Rule = ({ colors }) => ({
   alignItems: 'center',
   justifyContent: 'flex-start',
   cursor: 'pointer',
+  // @ts-ignore
   borderBottom: `1px solid ${colors.lightGray}`,
   padding: '15px 24px',
 });

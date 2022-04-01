@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { useStyle } from '@dex-ddl/core';
+import { useStyle } from '@pma/dex-wrapper';
 import { FeedbackActions } from '../../features/Feedback';
 
 export const FEED_BACK_PAGE = 'feed_back_page';

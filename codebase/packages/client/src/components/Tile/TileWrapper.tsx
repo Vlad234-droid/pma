@@ -1,5 +1,5 @@
 import React, { FC, HTMLProps } from 'react';
-import { Colors, colors, CreateRule, Theme, useStyle } from '@dex-ddl/core';
+import { Colors, colors, CreateRule, Theme, useStyle } from '@pma/dex-wrapper';
 
 export type TileWrapperProps = {
   boarder?: boolean;
@@ -64,6 +64,7 @@ const borderStyle: CreateRule<{ boarder: boolean; theme: Theme }> = (props) => {
   const { boarder, theme } = props;
   if (boarder) {
     return {
+      // @ts-ignore
       border: `1px solid ${theme.colors.lightGray}`,
     };
   }

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useStyle, Rule } from '@dex-ddl/core';
+import { useStyle, Rule } from '@pma/dex-wrapper';
 import { useSelector } from 'react-redux';
 import { OrgObjectiveActions, orgObjectivesSelector, orgObjectivesMetaSelector } from '@pma/store';
 

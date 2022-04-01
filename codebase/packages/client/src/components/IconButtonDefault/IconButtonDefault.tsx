@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Rule } from '@dex-ddl/core';
+import { Rule } from '@pma/dex-wrapper';
 
 import { IconButton, Position } from 'components/IconButton';
 

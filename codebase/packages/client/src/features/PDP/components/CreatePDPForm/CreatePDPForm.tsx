@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { metaPDPSelector } from '@pma/store';
 import { useSelector } from 'react-redux';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Button, CreateRule, Rule, theme, useBreakpoints, useStyle } from '@dex-ddl/core';
+import { Button, CreateRule, Rule, theme, useBreakpoints, useStyle } from '@pma/dex-wrapper';
 import { Item, Textarea, Field, Attention } from 'components/Form';
 import { GenericItemField } from 'components/GenericForm';
 import { createYupSchema } from 'utils/yup';
@@ -293,6 +293,7 @@ const footerWrapperStyle: Rule = ({ theme }) => ({
   bottom: theme.spacing.s0,
   left: theme.spacing.s0,
   right: theme.spacing.s0,
+  // @ts-ignore
   borderTop: `${theme.border.width.b1} solid ${theme.colors.lightGray}`,
 });
 

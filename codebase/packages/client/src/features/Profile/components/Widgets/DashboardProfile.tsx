@@ -1,6 +1,6 @@
 import React, { FC, HTMLProps } from 'react';
 import { Trans } from 'components/Translation';
-import { CreateRule, Rule, Styles, useBreakpoints, useStyle } from '@dex-ddl/core';
+import { CreateRule, Rule, Styles, useBreakpoints, useStyle } from '@pma/dex-wrapper';
 import { TileWrapper } from 'components/Tile';
 import { Avatar } from 'components/Avatar';
 import { AuthConsumer } from '../../../../contexts/authContext';

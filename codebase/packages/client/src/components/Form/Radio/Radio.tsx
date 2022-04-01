@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { useStyle, colors } from '@dex-ddl/core';
+import { useStyle, colors } from '@pma/dex-wrapper';
 import { RadioField } from '../types';
 
 const Radio: FC<RadioField> = ({ id, name, onChange, readonly, checked }) => {

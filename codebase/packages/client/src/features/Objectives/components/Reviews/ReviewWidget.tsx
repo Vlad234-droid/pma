@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react';
 import { TFunction, useTranslation } from 'components/Translation';
 import { ReviewType, Status } from 'config/enum';
-import { Button, colors, Colors, CreateRule, Rule, useStyle } from '@dex-ddl/core';
+import { Button, colors, Colors, CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
 
 import { ModalComponent, ReviewFormModal } from '../Modal';
 import { TileWrapper } from 'components/Tile';

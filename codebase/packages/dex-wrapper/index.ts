@@ -10,6 +10,7 @@ import {
   useStyle,
   useBreakpoints,
   colors,
+  fontWeight,
   Styles,
 } from '@dex-ddl/core';
 
@@ -18,4 +19,16 @@ import { Modal } from './src/components/Modal';
 import { ModalWithHeader } from './src/components/ModalWithHeader';
 
 export type { Rule, CreateRule, Theme, Styles, Colors };
-export { theme, DDLProvider, useStyle, useBreakpoints, colors, Icon, Button, IconButton, ModalWithHeader, Modal };
+export {
+  theme,
+  DDLProvider,
+  useStyle,
+  useBreakpoints,
+  colors,
+  fontWeight,
+  Icon,
+  Button,
+  IconButton,
+  ModalWithHeader,
+  Modal,
+};

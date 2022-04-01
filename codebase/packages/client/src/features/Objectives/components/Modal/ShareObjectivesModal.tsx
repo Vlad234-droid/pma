@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { Trans } from 'components/Translation';
-import { useBreakpoints, useStyle, Rule, CreateRule } from '@dex-ddl/core';
+import { useBreakpoints, useStyle, Rule, CreateRule } from '@pma/dex-wrapper';
 import { Icon as IconComponent } from 'components/Icon';
 import { default as Accordion, ObjectiveAccordionProps } from '../Accordion';
 

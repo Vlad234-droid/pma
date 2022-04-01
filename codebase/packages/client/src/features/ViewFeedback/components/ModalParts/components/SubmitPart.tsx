@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
-import { useStyle } from '@dex-ddl/core';
+import { useStyle } from '@pma/dex-wrapper';
 import { SubmitPartProps } from './type';
 import { FeedbackStatus } from 'config/enum';
 import { inDayRange } from 'utils/date';

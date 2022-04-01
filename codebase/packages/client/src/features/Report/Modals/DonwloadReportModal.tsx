@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { Button, Icon, ModalWithHeader, Rule, theme, useBreakpoints, useStyle } from '@dex-ddl/core';
+import { Button, Icon, ModalWithHeader, Rule, theme, useBreakpoints, useStyle } from '@pma/dex-wrapper';
 import { useForm } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -205,6 +205,7 @@ const formButtonsWrap: Rule = ({ theme }) => {
     bottom: 0,
     left: 0,
     width: '100%',
+    // @ts-ignore
     borderTop: `1px solid ${theme.colors.lightGray}`,
     ...(mobileScreen
       ? {

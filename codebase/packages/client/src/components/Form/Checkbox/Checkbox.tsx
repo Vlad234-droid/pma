@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { useStyle, colors } from '@dex-ddl/core';
+import { useStyle, colors } from '@pma/dex-wrapper';
 import { CheckboxField } from '../types';
 
 const Checkbox: FC<CheckboxField> = ({ id, name, onChange, checked, disabled = false, indeterminate = false }) => {

@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Button, Rule, useStyle, useBreakpoints } from '@dex-ddl/core';
+import { Button, Rule, useStyle, useBreakpoints } from '@pma/dex-wrapper';
 import { Trans } from 'components/Translation';
 import { IconButton } from 'components/IconButton';
 
@@ -74,6 +74,7 @@ const Relative_btn_styled: Rule = ({ theme }) => ({
   bottom: theme.spacing.s0,
   left: theme.spacing.s0,
   right: theme.spacing.s0,
+  // @ts-ignore
   borderTop: `${theme.border.width.b1} solid ${theme.colors.lightGray}`,
 });
 

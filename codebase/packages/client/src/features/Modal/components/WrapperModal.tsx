@@ -1,6 +1,6 @@
 import React, { FC, cloneElement, Children, ReactElement } from 'react';
 
-import { useBreakpoints, Rule, Modal } from '@dex-ddl/core';
+import { useBreakpoints, Rule, Modal } from '@pma/dex-wrapper';
 import { Icon } from 'components/Icon';
 
 export type Props = {

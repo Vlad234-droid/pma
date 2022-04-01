@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useStyle, Rule } from '@dex-ddl/core';
+import { useStyle, Rule } from '@pma/dex-wrapper';
 import { TileWrapper } from 'components/Tile';
 import { Radio } from 'components/Form';
 import { ObjectiveModal } from 'features/Objectives/components/ObjectiveModal';

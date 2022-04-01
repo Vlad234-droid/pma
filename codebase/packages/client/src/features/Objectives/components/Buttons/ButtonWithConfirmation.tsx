@@ -1,5 +1,5 @@
 import React, { FC, HTMLProps, useState } from 'react';
-import { Rule, useStyle, CreateRule, Button } from '@dex-ddl/core';
+import { Rule, useStyle, CreateRule, Button } from '@pma/dex-wrapper';
 import { ConfirmModal } from 'features/Modal';
 import { IconButton } from 'components/IconButton';
 import { Trans } from 'components/Translation';

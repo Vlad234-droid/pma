@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { useStyle } from '@dex-ddl/core';
+import { useStyle } from '@pma/dex-wrapper';
 
 import { Employee } from 'config/types';
 import { ReviewType } from 'config/enum';

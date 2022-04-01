@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { useStyle, useBreakpoints, CreateRule, Rule } from '@dex-ddl/core';
+import { useStyle, useBreakpoints, CreateRule, Rule } from '@pma/dex-wrapper';
 import { Trans } from 'components/Translation';
 import { VideoPlayer, VideoId } from 'features/VideoPlayer';
 

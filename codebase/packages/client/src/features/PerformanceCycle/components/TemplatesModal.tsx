@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, CreateRule, ModalWithHeader, Rule, useBreakpoints, useStyle } from '@dex-ddl/core';
+import { Button, CreateRule, ModalWithHeader, Rule, useBreakpoints, useStyle } from '@pma/dex-wrapper';
 import { Icon } from 'components/Icon';
 import { Input } from 'components/Form';
 import { DropZone } from 'components/DropZone';

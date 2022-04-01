@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
-import { CreateRule, Rule, useStyle } from '@dex-ddl/core';
+import { CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
 
 type Props = {
   withText?: boolean;

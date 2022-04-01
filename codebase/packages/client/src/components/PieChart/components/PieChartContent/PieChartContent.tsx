@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { useStyle, Rule, CreateRule, Theme } from '@dex-ddl/core';
+import { useStyle, Rule, CreateRule, Theme } from '@pma/dex-wrapper';
 
 import { PieChartContentProps as Props, View, Obj } from '../../config';
 

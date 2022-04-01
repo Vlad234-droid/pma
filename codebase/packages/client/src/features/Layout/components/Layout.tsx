@@ -1,6 +1,6 @@
 import React, { FC, useContext, useMemo } from 'react';
 import { matchPath, useLocation, useNavigate } from 'react-router-dom';
-import { Rule, useStyle } from '@dex-ddl/core';
+import { Rule, useStyle } from '@pma/dex-wrapper';
 import { pages } from 'pages';
 import { buildPath } from 'features/Routes/utils';
 import { CanPerform, role } from 'features/Permission';

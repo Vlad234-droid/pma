@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Rule, useStyle } from '@dex-ddl/core';
+import { Rule, useStyle } from '@pma/dex-wrapper';
 import { Link } from 'react-router-dom';
 import { buildPath, buildPathWithParams } from 'features/Routes';
 import { PieChartContent as Content } from './components/PieChartContent';

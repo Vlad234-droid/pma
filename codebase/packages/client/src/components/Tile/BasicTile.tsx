@@ -1,6 +1,6 @@
 import React, { FC, HTMLProps, ReactElement } from 'react';
 
-import { CreateRule, Rule, useBreakpoints, useStyle } from '@dex-ddl/core';
+import { CreateRule, Rule, useBreakpoints, useStyle } from '@pma/dex-wrapper';
 import { TileWrapper } from './TileWrapper';
 import { Icon } from '../Icon';
 

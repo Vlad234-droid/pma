@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { useTranslation } from 'components/Translation';
 import { Status } from 'config/enum';
-import { Rule, useStyle, colors, CreateRule, Theme } from '@dex-ddl/core';
+import { Rule, useStyle, colors, CreateRule, Theme } from '@pma/dex-wrapper';
 
 import { Icon, Graphics } from 'components/Icon';
 

@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Modal, useBreakpoints, theme, CreateRule } from '@dex-ddl/core';
+import { Modal, useBreakpoints, theme, CreateRule } from '@pma/dex-wrapper';
 import { Icon } from 'components/Icon';
 import { ModalWrapper } from 'components/ModalWrapper';
 

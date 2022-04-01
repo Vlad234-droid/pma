@@ -1,5 +1,5 @@
 import React, { FC, Dispatch, SetStateAction, MutableRefObject } from 'react';
-import { Rule, Styles, useStyle, useBreakpoints, colors, CreateRule } from '@dex-ddl/core';
+import { Rule, Styles, useStyle, useBreakpoints, colors, CreateRule } from '@pma/dex-wrapper';
 import { IconButton } from 'components/IconButton';
 import { NoteData, NotesTypeTEAM } from '../../../../type';
 import { formatToRelativeDate } from 'utils/date';
@@ -229,6 +229,7 @@ const Align_flex_style: Rule = ({ colors }) => ({
   alignItems: 'center',
   justifyContent: 'flex-start',
   cursor: 'pointer',
+  // @ts-ignore
   borderBottom: `1px solid ${colors.lightGray}`,
   padding: '15px 24px',
 });

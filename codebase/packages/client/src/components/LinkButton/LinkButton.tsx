@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { colors, useStyle } from '@dex-ddl/core';
+import { colors, useStyle } from '@pma/dex-wrapper';
 
 export type LinkButtonProps = {
   onClick: () => void;

@@ -1,5 +1,5 @@
 import React, { FC, useState, useRef, MutableRefObject } from 'react';
-import { useStyle, useBreakpoints, Rule } from '@dex-ddl/core';
+import { useStyle, useBreakpoints, Rule } from '@pma/dex-wrapper';
 import { useDispatch, useSelector } from 'react-redux';
 
 import {

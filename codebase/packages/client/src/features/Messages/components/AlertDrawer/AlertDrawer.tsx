@@ -1,6 +1,6 @@
 import React, { FC, useRef, useState, MouseEvent, useEffect } from 'react';
 
-import { Rule, useStyle, CreateRule, IconButton } from '@dex-ddl/core';
+import { Rule, useStyle, CreateRule, IconButton } from '@pma/dex-wrapper';
 import { MyInbox } from '@my-inbox/client';
 import { useTranslation } from 'components/Translation';
 import { CONFIG } from 'config/constants';

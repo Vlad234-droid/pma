@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { useStyle, useBreakpoints, Button, Styles, Rule, CreateRule } from '@dex-ddl/core';
+import { useStyle, useBreakpoints, Button, Styles, Rule, CreateRule } from '@pma/dex-wrapper';
 
 import { Notification } from 'components/Notification';
 import { GenericItemField } from 'components/GenericForm';
@@ -193,6 +193,7 @@ const wrapperStyle: Rule = ({ theme }) => ({
   bottom: theme.spacing.s0,
   left: theme.spacing.s0,
   right: theme.spacing.s0,
+  // @ts-ignore
   borderTop: `${theme.border.width.b1} solid ${theme.colors.lightGray}`,
 });
 

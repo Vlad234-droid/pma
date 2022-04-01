@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Rule, useStyle } from '@dex-ddl/core';
+import { Rule, useStyle } from '@pma/dex-wrapper';
 import { Accordion, Header, HeaderProps, Panel, Section } from 'components/Accordion';
 import { Trans } from 'components/Translation';
 import { ObjectiveButtons } from '../Buttons';

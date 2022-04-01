@@ -5,7 +5,7 @@ import i18n from './mocks/i18';
 
 import { render, RenderResult, screen as screenTestingLibrary, Screen } from '@testing-library/react';
 
-import { DDLProvider } from '@dex-ddl/core';
+import { DDLProvider } from '@pma/dex-wrapper';
 import { Provider } from 'react-redux';
 
 const App: FC = (props) => <DDLProvider {...props} />;

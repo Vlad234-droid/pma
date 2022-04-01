@@ -2,7 +2,7 @@ import React, { useEffect, FC } from 'react';
 import { IconButton } from 'components/IconButton';
 import { Trans } from 'components/Translation';
 import defaultImg from 'images/default.png';
-import { Rule, Styles, useStyle } from '@dex-ddl/core';
+import { Rule, Styles, useStyle } from '@pma/dex-wrapper';
 import { VideoPlayer, VideoId } from 'features/VideoPlayer';
 import { useSelector, useDispatch } from 'react-redux';
 import { feedbackByUuidSelector, getReviewByUuidS, getRespondedFeedbacksSelector, ReviewsActions } from '@pma/store';

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Rule, useStyle } from '@dex-ddl/core';
+import { Rule, useStyle } from '@pma/dex-wrapper';
 
 const DescriptionBlock = (props) => {
   const { css } = useStyle();

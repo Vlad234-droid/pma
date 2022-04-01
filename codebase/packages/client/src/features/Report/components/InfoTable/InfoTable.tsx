@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { useStyle, Rule, Theme, CreateRule, Styles } from '@dex-ddl/core';
+import { useStyle, Rule, Theme, CreateRule, Styles } from '@pma/dex-wrapper';
 import { Trans } from 'components/Translation/Translation';
 import { IconButton } from 'components/IconButton';
 

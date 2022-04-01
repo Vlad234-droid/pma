@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
-import { Rule, useStyle } from '@dex-ddl/core';
+import { Rule, useStyle } from '@pma/dex-wrapper';
 
 // eslint-disable-next-line import/no-named-as-default
 import DraftItem, { DraftItem as DraftItemType } from '../DraftItem';

@@ -1,5 +1,5 @@
 import React, { FC, Dispatch, SetStateAction, MutableRefObject } from 'react';
-import { Rule, useStyle, Button, Styles, CreateRule, useBreakpoints } from '@dex-ddl/core';
+import { Rule, useStyle, Button, Styles, CreateRule, useBreakpoints } from '@pma/dex-wrapper';
 import { IconButton } from 'components/IconButton';
 import { defineNotesHandler, AllNotesFolderIdTEAM } from 'utils/note';
 import { NoteData } from '../../../../type';
@@ -354,6 +354,7 @@ const alignFlexStyle: Rule = ({ colors }) => ({
   alignItems: 'center',
   justifyContent: 'flex-start',
   cursor: 'pointer',
+  // @ts-ignore
   borderBottom: `1px solid ${colors.lightGray}`,
   padding: '15px 24px',
 });

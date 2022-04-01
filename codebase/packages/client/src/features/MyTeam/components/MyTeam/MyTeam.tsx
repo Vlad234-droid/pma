@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { Rule, useStyle } from '@dex-ddl/core';
+import { Rule, useStyle } from '@pma/dex-wrapper';
 
 import Filters, { getEmployeesSortingOptions, useSearch, useSorting } from 'features/Filters';
 import { useTranslation } from 'components/Translation';

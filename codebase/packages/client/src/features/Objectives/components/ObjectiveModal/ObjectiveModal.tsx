@@ -2,7 +2,7 @@ import React, { FC, HTMLProps, useEffect, useRef } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 
 import { FormType } from '@pma/store';
-import { Button, Icon, useBreakpoints, useStyle, Rule, CreateRule } from '@dex-ddl/core';
+import { Button, Icon, useBreakpoints, useStyle, Rule, CreateRule } from '@pma/dex-wrapper';
 
 import { Status } from 'config/enum';
 import { Trans, useTranslation } from 'components/Translation';
@@ -239,6 +239,7 @@ const footerWrapperStyle: Rule = ({ theme }) => ({
   bottom: theme.spacing.s0,
   left: theme.spacing.s0,
   right: theme.spacing.s0,
+  // @ts-ignore
   borderTop: `${theme.border.width.b1} solid ${theme.colors.lightGray}`,
 });
 

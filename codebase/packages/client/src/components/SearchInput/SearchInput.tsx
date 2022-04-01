@@ -1,5 +1,5 @@
 import React, { ChangeEvent, FC, RefObject, useCallback, useEffect, useState } from 'react';
-import { useStyle, Styles, Rule } from '@dex-ddl/core';
+import { useStyle, Styles, Rule } from '@pma/dex-wrapper';
 import mergeRefs from 'react-merge-refs';
 import debounce from 'lodash.debounce';
 import { useFormContainer } from 'components/Form/context/input';

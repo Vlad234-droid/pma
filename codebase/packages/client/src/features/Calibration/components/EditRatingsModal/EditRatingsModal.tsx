@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
-import { Styles, useStyle } from '@dex-ddl/core';
+import { Styles, useStyle } from '@pma/dex-wrapper';
 
 import { Employee } from 'config/types';
 import { ConfirmModal } from 'features/Modal';

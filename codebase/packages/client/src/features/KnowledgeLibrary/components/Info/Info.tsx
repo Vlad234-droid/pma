@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { useStyle, Rule, Icon } from '@dex-ddl/core';
+import { useStyle, Rule, Icon } from '@pma/dex-wrapper';
 
 type Props = {
   description: string;

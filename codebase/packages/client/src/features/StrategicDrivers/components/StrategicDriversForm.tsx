@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Button, Rule, useStyle } from '@dex-ddl/core';
+import { Button, Rule, useStyle } from '@pma/dex-wrapper';
 import * as Yup from 'yup';
 import useDispatch from 'hooks/useDispatch';
 import { OrgObjectiveActions, orgObjectivesSelector, orgObjectivesMetaSelector, Status } from '@pma/store';

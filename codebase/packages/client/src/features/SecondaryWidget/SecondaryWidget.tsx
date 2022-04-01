@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { Trans } from 'components/Translation';
 import { TileWrapper } from 'components/Tile';
 import { Icon, IconProps } from 'components/Icon';
-import { Button, Rule, Styles, useStyle } from '@dex-ddl/core';
+import { Button, Rule, Styles, useStyle } from '@pma/dex-wrapper';
 
 export type Props = {
   iconGraphic: IconProps['graphic'];

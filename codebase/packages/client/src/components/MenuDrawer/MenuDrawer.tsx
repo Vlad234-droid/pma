@@ -1,7 +1,7 @@
 import React, { FC, MouseEvent, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { Rule, useStyle } from '@dex-ddl/core';
+import { Rule, useStyle } from '@pma/dex-wrapper';
 import { colleagueUUIDSelector, timelinesExistSelector } from '@pma/store';
 
 import { Page } from 'pages';
@@ -266,10 +266,12 @@ const itemSettingsStyle: Rule = {
 };
 
 const itemSettingsBorderStyle: Rule = ({ theme }) => ({
+  // @ts-ignore
   borderTop: `1px solid ${theme.colors.lightGray}`,
 });
 
 const menuDropdownStyle: Rule = ({ theme }) => ({
+  // @ts-ignore
   backgroundColor: theme.colors.lightBlue,
   transition: 'all .5s ease-in-out',
 });

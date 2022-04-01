@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { useStyle } from '@dex-ddl/core';
+import { useStyle } from '@pma/dex-wrapper';
 import NewFeedback from 'features/GiveFeedBack/NewFeedback';
 
 const GIVE_FEEDBACK = 'give-feedback';

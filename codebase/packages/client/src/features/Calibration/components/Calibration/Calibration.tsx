@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
-import { useStyle, Rule } from '@dex-ddl/core';
+import { useStyle, Rule } from '@pma/dex-wrapper';
 
 import { Trans, useTranslation } from 'components/Translation';
 import Filters, { useSearch, FilterOption, FilterValues } from 'features/Filters';

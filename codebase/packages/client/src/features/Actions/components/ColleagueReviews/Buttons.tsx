@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react';
 
-import { Button, useStyle, Rule } from '@dex-ddl/core';
+import { Button, useStyle, Rule } from '@pma/dex-wrapper';
 
 import { Icon } from 'components/Icon';
 import { Trans, useTranslation } from 'components/Translation/Translation';

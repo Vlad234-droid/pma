@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { useStyle, Rule } from '@dex-ddl/core';
+import { useStyle, Rule } from '@pma/dex-wrapper';
 
 export const Text: FC<{ value: string }> = ({ value }) => {
   const { css } = useStyle();

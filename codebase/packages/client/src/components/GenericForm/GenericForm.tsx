@@ -2,7 +2,7 @@ import React, { Fragment, RefObject, useRef } from 'react';
 import { useForm, UseFormHandleSubmit } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { AnyObjectSchema } from 'yup';
-import { Button, Rule, useStyle } from '@dex-ddl/core';
+import { Button, Rule, useStyle } from '@pma/dex-wrapper';
 import get from 'lodash.get';
 import { Field, Item } from 'components/Form';
 import type { FormField, Handler } from './types';

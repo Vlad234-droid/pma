@@ -1,6 +1,6 @@
 import React, { useState, FC, useEffect, useCallback, ChangeEvent } from 'react';
 import debounce from 'lodash.debounce';
-import { CreateRule, Rule, useStyle } from '@dex-ddl/core';
+import { CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
 import { formatDateStringFromISO, DATE_FORMAT } from 'utils';
 import Calendar from 'components/Calendar';
 import { Input } from 'components/Form';

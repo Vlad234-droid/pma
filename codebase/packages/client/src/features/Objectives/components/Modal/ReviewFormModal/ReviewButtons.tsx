@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { useStyle, Button, useBreakpoints, Rule, CreateRule } from '@dex-ddl/core';
+import { useStyle, Button, useBreakpoints, Rule, CreateRule } from '@pma/dex-wrapper';
 import { Trans, useTranslation } from 'components/Translation';
 import { ButtonWithConfirmation } from '../../Buttons';
 
@@ -60,6 +60,7 @@ const wrapperStyle: Rule = ({ theme }) => ({
   bottom: theme.spacing.s0,
   left: theme.spacing.s0,
   right: theme.spacing.s0,
+  // @ts-ignore
   borderTop: `${theme.border.width.b1} solid ${theme.colors.lightGray}`,
 });
 

@@ -1,6 +1,6 @@
 import React, { FC, HTMLProps } from 'react';
 
-import { Button, CreateRule, Modal, Rule, useBreakpoints, useStyle } from '@dex-ddl/core';
+import { Button, CreateRule, Modal, Rule, useBreakpoints, useStyle } from '@pma/dex-wrapper';
 
 export type ConfirmModal = {
   title: string;

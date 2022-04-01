@@ -1,5 +1,5 @@
 import React, { FC, useCallback, ChangeEvent } from 'react';
-import { useStyle, Rule } from '@dex-ddl/core';
+import { useStyle, Rule } from '@pma/dex-wrapper';
 import mergeRefs from 'react-merge-refs';
 import { InputProps } from '../type';
 import { useFormContainer } from 'components/Form/context/input';

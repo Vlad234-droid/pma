@@ -1,7 +1,7 @@
 import React, { FC, useState, useCallback } from 'react';
 
 import { getReportMetaSelector } from '@pma/store';
-import { Button, colors, CreateRule, Rule, useBreakpoints, useStyle } from '@dex-ddl/core';
+import { Button, colors, CreateRule, Rule, useBreakpoints, useStyle } from '@pma/dex-wrapper';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { IconButton } from 'components/IconButton';

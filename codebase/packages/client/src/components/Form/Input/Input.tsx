@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { CreateRule, useStyle } from '@dex-ddl/core';
+import { CreateRule, useStyle } from '@pma/dex-wrapper';
 import mergeRefs from 'react-merge-refs';
 
 import { InputField } from '../types';
@@ -58,6 +58,7 @@ const inputStyle: CreateRule<{ isValid?: boolean }> =
   ({ isValid }) =>
   ({ theme }) => ({
     width: '100%',
+    // @ts-ignore
     border: `1px solid ${isValid ? theme.colors.lightGray : theme.colors.error}`,
     borderRadius: '5px',
     fontSize: '16px',

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from '@dex-ddl/core';
+import { Button } from '@pma/dex-wrapper';
 import * as yup from 'yup';
 
 import { Meta, Story } from '@storybook/react';

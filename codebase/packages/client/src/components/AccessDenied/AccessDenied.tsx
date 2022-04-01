@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Rule, useStyle } from '@dex-ddl/core';
+import { Rule, useStyle } from '@pma/dex-wrapper';
 import TescoLogo from 'assets/img/TescoLogo.svg';
 import MarkdownRenderer from 'components/MarkdownRenderer';
 import { Trans } from 'components/Translation';

@@ -1,7 +1,7 @@
 import React, { FC, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
-import { Rule, useBreakpoints, useStyle, CreateRule, Theme } from '@dex-ddl/core';
+import { Rule, useBreakpoints, useStyle, CreateRule, Theme } from '@pma/dex-wrapper';
 import { getTipsSelector, tipsActions, getTipsMetaSelector } from '@pma/store';
 import { Page } from 'pages';
 import { buildPath } from 'features/Routes/utils';

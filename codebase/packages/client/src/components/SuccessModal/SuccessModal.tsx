@@ -1,5 +1,5 @@
 import React, { FC, HTMLProps } from 'react';
-import { Button, useBreakpoints, useStyle } from '@dex-ddl/core';
+import { Button, useBreakpoints, useStyle } from '@pma/dex-wrapper';
 
 import { WrapperModal } from 'features/Modal';
 import { Trans } from 'components/Translation';

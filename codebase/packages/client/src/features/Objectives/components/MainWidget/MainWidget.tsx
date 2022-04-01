@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react';
 import { TFunction, Trans, useTranslation } from 'components/Translation';
 import { Status } from 'config/enum';
-import { Button, Colors, CreateRule, Rule, useStyle } from '@dex-ddl/core';
+import { Button, Colors, CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
 import { TileWrapper } from 'components/Tile';
 import { Graphics, Icon } from 'components/Icon';
 import { useNavigate } from 'react-router-dom';

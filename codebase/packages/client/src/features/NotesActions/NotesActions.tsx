@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
-import { CreateRule, Modal, Rule, Theme, useBreakpoints, useStyle, IconButton as BackButton } from '@dex-ddl/core';
+import { CreateRule, Modal, Rule, Theme, useBreakpoints, useStyle, IconButton as BackButton } from '@pma/dex-wrapper';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';

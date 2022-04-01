@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { Button, colors, Rule, useStyle } from '@dex-ddl/core';
+import { Button, colors, Rule, useStyle } from '@pma/dex-wrapper';
 
 import { IconButton, Position } from 'components/IconButton';
 import SideBar from 'components/Sidebar';

@@ -1,5 +1,5 @@
 import React, { FC, useMemo } from 'react';
-import { Rule, Styles, useStyle, colors } from '@dex-ddl/core';
+import { Rule, Styles, useStyle, colors } from '@pma/dex-wrapper';
 import { TileWrapper } from 'components/Tile';
 import { Accordion, BaseAccordion, ExpandButton, Panel, Section } from 'components/Accordion';
 import { IconButton } from 'components/IconButton';

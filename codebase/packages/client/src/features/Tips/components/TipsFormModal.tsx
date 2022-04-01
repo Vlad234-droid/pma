@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { useStyle, Rule, Button, theme, useBreakpoints } from '@dex-ddl/core';
+import { useStyle, Rule, Button, theme, useBreakpoints } from '@pma/dex-wrapper';
 import successIcon from 'images/success.jpg';
 import deleteIcon from 'images/delete.png';
 import { useTranslation } from 'components/Translation';
@@ -148,6 +148,7 @@ const formControlBtnsWrap: Rule = ({ theme }) => {
     left: 0,
     width: '100%',
     background: '#fff',
+    // @ts-ignore
     borderTop: `1px solid ${theme.colors.lightGray}`,
     ...(mobileScreen
       ? {

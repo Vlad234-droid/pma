@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState, useCallback } from 'react';
-import { CreateRule, Rule, useStyle, useBreakpoints } from '@dex-ddl/core';
+import { CreateRule, Rule, useStyle, useBreakpoints } from '@pma/dex-wrapper';
 import { useDispatch, useSelector } from 'react-redux';
 import debounce from 'lodash.debounce';
 
@@ -365,7 +365,7 @@ const row: Rule = ({ theme }) => {
 
 const timeStyles: Rule = ({ theme }) => {
   return {
-    fontSize: theme.font.fixed.f14,
+    fontSize: theme.font.fixed.f14.fontSize,
     marginRight: theme.spacing.s4,
   };
 };

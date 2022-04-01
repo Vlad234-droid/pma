@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useStyle, Rule, Styles } from '@dex-ddl/core';
+import { useStyle, Rule, Styles } from '@pma/dex-wrapper';
 import { useSelector } from 'react-redux';
 import { getLoadedStateSelector } from '@pma/store';
 import { Page } from 'pages';
@@ -202,6 +202,7 @@ const tileWrapperStyle: Rule = ({ theme }) => ({
   width: 'auto',
   padding: '24px',
   margin: '24px 28px 24px 0px',
+  // @ts-ignore
   border: `1px solid ${theme.colors.lightGray}`,
 });
 

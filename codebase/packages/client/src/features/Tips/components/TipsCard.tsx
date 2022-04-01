@@ -1,7 +1,7 @@
 import React, { FC, Fragment, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { Button, Rule, CreateRule, Theme, useBreakpoints, useStyle } from '@dex-ddl/core';
+import { Button, Rule, CreateRule, Theme, useBreakpoints, useStyle } from '@pma/dex-wrapper';
 import { tipsActions } from '@pma/store';
 import { Page } from 'pages';
 import { buildPath } from 'features/Routes/utils';

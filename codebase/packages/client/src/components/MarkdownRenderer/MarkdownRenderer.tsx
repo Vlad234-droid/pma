@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import ReactMarkdown, { Components } from 'react-markdown';
-import { useStyle, Rule } from '@dex-ddl/core';
+import { useStyle, Rule } from '@pma/dex-wrapper';
 
 type Props = {
   source: string;

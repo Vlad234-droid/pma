@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useStyle, Rule, CreateRule, Theme } from '@dex-ddl/core';
+import { useStyle, Rule, CreateRule, Theme } from '@pma/dex-wrapper';
 import { ArrowUp } from '../../assets/img/objectives';
 
 const Details = ({ title, description }) => {
@@ -52,6 +52,7 @@ const desc: Rule = ({ theme }) => ({
   color: theme.colors.base,
   fontWeight: theme.font.weight.bold,
   paddingBottom: '24px',
+  // @ts-ignore
   borderBottom: `1px solid ${theme.colors.lightGray}`,
 });
 

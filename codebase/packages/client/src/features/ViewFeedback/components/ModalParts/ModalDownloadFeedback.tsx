@@ -1,6 +1,6 @@
 import React, { FC, useState, useMemo, useEffect } from 'react';
 import { ModalDownloadFeedbackProps } from './type';
-import { useStyle, useBreakpoints, Rule, Button } from '@dex-ddl/core';
+import { useStyle, useBreakpoints, Rule, Button } from '@pma/dex-wrapper';
 import { IconButton, Position } from 'components/IconButton';
 import { SearchPart, SubmitPart } from './components';
 import { Trans } from 'components/Translation';

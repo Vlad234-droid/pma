@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Modal, CreateRule, useBreakpoints, useStyle } from '@dex-ddl/core';
+import { Modal, CreateRule, useBreakpoints, useStyle } from '@pma/dex-wrapper';
 import RequestFeedbackForm from './components/RequestFeedbackForm';
 import SuccessMassage from './components/SuccessMassage';
 import { colleagueUUIDSelector, FeedbackActions, getLoadedStateSelector } from '@pma/store';

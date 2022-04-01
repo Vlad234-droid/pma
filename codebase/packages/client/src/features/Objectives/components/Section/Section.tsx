@@ -1,6 +1,6 @@
 import React, { FC, ReactNode } from 'react';
 
-import { Rule, useStyle } from '@dex-ddl/core';
+import { Rule, useStyle } from '@pma/dex-wrapper';
 
 type NodeOptions = {
   content: ReactNode;

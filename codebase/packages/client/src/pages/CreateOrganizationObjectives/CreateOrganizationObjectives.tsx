@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Rule, useStyle } from '@dex-ddl/core';
+import { Rule, useStyle } from '@pma/dex-wrapper';
 import StrategicDrivers from 'features/StrategicDrivers';
 
 export type CreateUpdateObjectiveModalProps = {

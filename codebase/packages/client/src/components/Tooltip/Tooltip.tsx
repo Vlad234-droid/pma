@@ -6,7 +6,7 @@ import { useTooltipTriggerState } from '@react-stately/tooltip';
 import { mergeProps } from '@react-aria/utils';
 import { useInteractionModality } from '@react-aria/interactions';
 
-import { useStyle } from '@dex-ddl/core';
+import { useStyle } from '@pma/dex-wrapper';
 
 type TooltipProps = {
   width?: number;

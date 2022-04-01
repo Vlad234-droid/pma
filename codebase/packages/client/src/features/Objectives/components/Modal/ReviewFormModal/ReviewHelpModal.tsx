@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { useStyle, useBreakpoints, Rule } from '@dex-ddl/core';
+import { useStyle, useBreakpoints, Rule } from '@pma/dex-wrapper';
 import { Trans } from 'components/Translation';
 
 export const TEST_ID = 'review-help-modal';

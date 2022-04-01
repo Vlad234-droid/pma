@@ -1,5 +1,5 @@
 import React, { FC, HTMLProps } from 'react';
-import { useStyle, CreateRule, Theme, Icon } from '@dex-ddl/core';
+import { useStyle, CreateRule, Theme, Icon } from '@pma/dex-wrapper';
 
 export type AvatarProps = {
   img?: string;

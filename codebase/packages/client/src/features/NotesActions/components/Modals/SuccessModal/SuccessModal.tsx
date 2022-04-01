@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Button, Rule, useBreakpoints, useStyle, CreateRule } from '@dex-ddl/core';
+import { Button, Rule, useBreakpoints, useStyle, CreateRule } from '@pma/dex-wrapper';
 import { getFoldersSelector } from '@pma/store';
 import { useSelector } from 'react-redux';
 
