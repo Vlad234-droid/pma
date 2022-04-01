@@ -11,6 +11,7 @@ export type Props = {
 };
 
 export const TEST_ID = 'organization-widget';
+export const CLICK_BUTTON_TEST_ID = 'click-button-test-id';
 
 const OrganizationWidget: FC<Props> = ({ onClick, customStyle }) => {
   const { css, theme } = useStyle();
@@ -46,7 +47,12 @@ const OrganizationWidget: FC<Props> = ({ onClick, customStyle }) => {
         </div>
         <div className={css(bodyStyle)}>
           <div className={css(bodyBlockStyle)}>
-            <Button mode='inverse' styles={[btnStyle({ theme }) as Styles]} onPress={onClick}>
+            <Button
+              data-test-id={CLICK_BUTTON_TEST_ID}
+              mode='inverse'
+              styles={[btnStyle({ theme }) as Styles]}
+              onPress={onClick}
+            >
               {actionTitle}
             </Button>
           </div>
