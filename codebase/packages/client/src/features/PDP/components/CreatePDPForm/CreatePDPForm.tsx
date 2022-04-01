@@ -129,7 +129,7 @@ const CreatePDPForm: FC<Props> = ({
           </div>
         )}
 
-        <Attention />
+        <Attention customStyle={{ paddingBottom: '14px' }} />
         {confirmSaveModal && (
           <ConfirmModal
             title={t('are_you_sure_you_want_to_save_this_goal', 'Are you sure you want to save this goal?')}
