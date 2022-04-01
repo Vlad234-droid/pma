@@ -11,8 +11,9 @@ This application requires `yarn v.1.22.x` and `node v.14.4.x`.
 - Workspaces - https://classic.yarnpkg.com/en/docs/workspaces
 
 ## Prerequisites
+
     -  Need to create .npmrc file on your PC and add needed configuration.
-        For MAC: nano ~./.npmrc
+        For MAC: nano ~/.npmrc
         For Windows - navigate to C:\Users\<username> and create here .npmrc file.
     Fill this file with next data:
         //nexus.ourtesco.com/repository/colleague-ui/:_auth=<TOKEN>
@@ -43,8 +44,9 @@ If some other version installed use NVM to install needed node version
 
 Check that NodeJS is installed by running: `node --version` or 'nvm ls'
 To install and use 14.17.x version of node - use commands:
-    - nvm install 14.17.0
-    - nvm use 14.17.0
+
+- nvm install 14.17.0
+- nvm use 14.17.0
 
 ### 2. Install dependencies
 
@@ -57,7 +59,48 @@ dependencies are satisfied.
 
 ## Configuration
 
-1. Client. [Check out](packages/client/README.md#L5) for details
+1. Client. [Check out](codebase/packages/client/README.md#L9) for details
+2. Server. [Check out](codebase/packages/server/README.md#L3) for details
+
+## Checklist for running the app locally
+
+1. Set HTTP_PROXY and HTTPS_PROXY env vars to be able to bootstrap project
+
+```
+export HTTP_PROXY=http://10.251.0.42:80
+export HTTPS_PROXY=http://10.251.0.42:80
+```
+
+2. Bootstrap project (download deps.)
+
+```
+   cd ./codebase
+   yarn config set "strict-ssl" false -g
+   yarn bootstrap
+   yarn build:prod
+```
+
+3. Prepare configuration files
+
+```
+cd packages/server/
+cp .env.example .env
+```
+
+open .env ## <- edit according to local env. [Check out](codebase/packages/client/README.md#L23) for details
+
+```
+cd packages/client/
+cp .env.example .env
+```
+
+open .env ## <- edit according to local env. [Check out](codebase/packages/server/README.md#L25) for details
+
+4. Start Application
+
+```
+yarn run:dev
+```
 
 ## Available Scripts
 
@@ -66,11 +109,14 @@ Ensure you are in the top level root directory.
 ### Running project in development mode
 
 - Run `yarn run:dev` to start development.
-- Run `yarn run:dev:server` to start server in development mode.
+
+### Running project in production mode
+
+- Run `yarn start:prod` to start development.
 
 ### Building project in production mode
 
-- Run `yarn build` to build.
+- Run `yarn build:prod` to build.
 
 ### Bootstrap the packages in the repo. Installs all of their dependencies and links any cross-dependencies.
 
@@ -91,13 +137,9 @@ The `server` is for production.
 
 The `client` is for UI part
 
-### mock-server
-
-The `mock-server` is only for development to enable developing against a
-mocked data store.
-
 ## Work with packages
 
 ### Add dependency to package
 
 - Run `yarn workspace @pma/server add [PACKAGE]` to add dependency to package `@pma/server`
+- Run `yarn workspace @pma/client add [PACKAGE]` to add dependency to package `@pma/client`
