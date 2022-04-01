@@ -51,7 +51,7 @@ const TimelinePreview: FC<Props> = ({ status, employee, fullTeamView = false, ra
             </button>
           )}
         </div>
-        {!fullTeamView && !rating && (
+        {!rating && (
           <div className={css(iconWrapperStyles)}>
             <Icon graphic={graphics} fill={color} testId='timeline-icon' />
           </div>

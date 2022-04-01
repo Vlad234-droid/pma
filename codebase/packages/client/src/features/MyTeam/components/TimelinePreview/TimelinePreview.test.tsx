@@ -16,8 +16,6 @@ jest.mock('react-router-dom', () => ({
   }),
 }));
 
-import { useNavigate } from 'react-router-dom';
-
 describe('<TimelinePreview />', () => {
   const props = {
     employee: generateEmployeeReview(),
@@ -50,24 +48,13 @@ describe('<TimelinePreview />', () => {
       expect(getByTestId('expand-button')).toBeInTheDocument();
     });
 
-    it('should render <ExpandButton />, if !props.rating and !props.fullTeamView', () => {
+    it('should render icon, if !props.rating', () => {
       const { getByTestId } = render(<TimelinePreview {...props} />);
 
       expect(getByTestId('timeline-icon')).toBeInTheDocument();
     });
 
-    it('should not render icon, if !props.rating and props.fullTeamView', () => {
-      const newProps = {
-        ...props,
-        fullTeamView: true,
-      };
-
-      const { queryByTestId } = render(<TimelinePreview {...newProps} />);
-
-      expect(queryByTestId('timeline-icon')).not.toBeInTheDocument();
-    });
-
-    it('should not render icon, if props.rating and !props.fullTeamView', () => {
+    it('should not render icon, if props.rating', () => {
       const newProps = {
         ...props,
         rating: Rating.BELOW_EXPECTED,
