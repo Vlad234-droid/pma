@@ -34,6 +34,11 @@ export type ObjectiveModalProps = {
   skipHelp?: boolean;
 };
 
+export const TEST_ID = 'objective-modal-test';
+export const STEP_TEST_ID = 'steps-test-id';
+export const HELP_TEST_ID = 'help-test-id';
+export const FOOTER_TEST_ID = 'footer-test-id';
+
 type Props = HTMLProps<HTMLInputElement> & ObjectiveModalProps;
 
 export const ObjectiveModal: FC<Props> = ({
@@ -67,7 +72,7 @@ export const ObjectiveModal: FC<Props> = ({
   } = methods;
 
   return (
-    <div className={css(containerStyle)}>
+    <div data-test-id={TEST_ID} className={css(containerStyle)}>
       <div className={css(wrapperStyle({ mobileScreen }))}>
         {currentObjectiveNumber > 1 && setPrevObjectiveNumber && (
           <span className={css(iconLeftPositionStyle({ mobileScreen }))} onClick={setPrevObjectiveNumber}>
@@ -76,7 +81,7 @@ export const ObjectiveModal: FC<Props> = ({
         )}
         <form ref={formRef} data-test-id={'OBJECTIVE_FORM_MODAL'}>
           {!useSingleStep && (
-            <div className={css(stepIndicatorWrapperStyle)}>
+            <div data-test-id={STEP_TEST_ID} className={css(stepIndicatorWrapperStyle)}>
               <StepIndicatorBasic
                 currentStatus={Status.DRAFT}
                 currentStep={currentObjectiveNumber - 1}
@@ -86,7 +91,7 @@ export const ObjectiveModal: FC<Props> = ({
             </div>
           )}
           {!skipHelp && (
-            <div className={css(helpModalWrapperStyle)}>
+            <div data-test-id={HELP_TEST_ID} className={css(helpModalWrapperStyle)}>
               <TriggerModal
                 triggerComponent={
                   <div className={css({ display: 'flex', alignItems: 'center' })}>
@@ -163,7 +168,7 @@ export const ObjectiveModal: FC<Props> = ({
             }
           })}
           {!skipFooter && (
-            <div className={css(footerContainerStyle)}>
+            <div data-test-id={FOOTER_TEST_ID} className={css(footerContainerStyle)}>
               <div className={css(footerWrapperStyle)}>
                 <div className={css(buttonWrapperStyle({ mobileScreen }))}>
                   <Button styles={[buttonWhiteStyle]} onPress={onSaveDraft}>
