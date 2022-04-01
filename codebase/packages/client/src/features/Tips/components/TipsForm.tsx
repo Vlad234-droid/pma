@@ -8,6 +8,7 @@ import { Page } from 'pages';
 import {
   ConfigEntriesActions,
   configEntriesSelector,
+  configEntriesMetaSelector,
   getCurrentTipSelector,
   getTipsMetaSelector,
   tipsActions,
@@ -43,6 +44,7 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
   const { tipUuid } = params;
 
   const configEntries = useSelector(configEntriesSelector);
+  const configEntriesMeta = useSelector(configEntriesMetaSelector);
   const currentTip = useSelector(getCurrentTipSelector);
   const tipsMeta = useSelector(getTipsMetaSelector);
 
@@ -83,11 +85,11 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
   }, [formData]);
 
   useEffect(() => {
-    if (configEntries.meta.loaded) {
+    if (configEntriesMeta.loaded) {
       if (Object.keys(currentTip).length > 0) {
         const temp = currentTip.targetOrganisation.compositeKey.split('/');
         const level1TargetCompositeKey = `${temp[0]}/${temp[1]}/${temp[temp.length - 1]}`;
-        const configEntry = configEntries.data.filter((item) => item.compositeKey === level1TargetCompositeKey)[0];
+        const configEntry = configEntries.filter((item) => item.compositeKey === level1TargetCompositeKey)[0];
         dispatch(ConfigEntriesActions.getConfigEntriesByUuid({ uuid: configEntry.uuid }));
         setTargetOrganisation(currentTip.targetOrganisation.uuid);
       }
@@ -100,11 +102,11 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
       tipTargetLevel3: '',
       tipTargetLevel4: '',
     });
-  }, [configEntries.meta.loaded, tipsMeta.loading]);
+  }, [configEntriesMeta.loaded, tipsMeta.loading]);
 
   useEffect(() => {
-    if (configEntries.data) {
-      setLevel1Options(configEntries.data);
+    if (configEntries) {
+      setLevel1Options(configEntries);
       if (Object.keys(currentTip).length > 0 && mode === 'edit') {
         const targetCompositeKey = currentTip.targetOrganisation.compositeKey;
         const compositeKeyLevels = {
@@ -127,7 +129,7 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
           count++;
         }
 
-        const configEntry = configEntries.data.filter(
+        const configEntry = configEntries.filter(
           (item) => item.compositeKey === compositeKeyLevels.level1 + `/${temp[temp?.length - 1]}`,
         )[0];
         if (configEntry?.children?.length > 0) {
@@ -153,19 +155,19 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
             }
             setLevel2Options(configEntry.children);
           } else {
-            const configEntry2 = configEntries.data.filter((item) => item.uuid === formData['tipTargetLevel1'])[0];
+            const configEntry2 = configEntries.filter((item) => item.uuid === formData['tipTargetLevel1'])[0];
             setLevel2Options(configEntry2.children);
           }
         }
       }
       if (mode === 'create') {
-        const configEntry = configEntries.data.filter((item) => item.uuid === formData['tipTargetLevel1'])[0];
+        const configEntry = configEntries.filter((item) => item.uuid === formData['tipTargetLevel1'])[0];
         if (configEntry) {
           setLevel2Options(configEntry.children);
         }
       }
     }
-  }, [configEntries.data, tipsMeta.loaded]);
+  }, [configEntries, tipsMeta.loaded]);
 
   useEffect(() => {
     const temp = level2Options.filter((item) => item['uuid'] === formData['tipTargetLevel2'])[0];
@@ -292,8 +294,8 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
       <div className={css(modalInner)}>
         {showEffectsPlaceholder && <div className={css(modalInnerPlaceholder)} />}
         <form className={css({ height: '100%' })}>
-          <Attention />
           <div className={css(formFieldsWrapStyle)}>
+            <Attention />
             <GenericItemField
               name={'tipTitle'}
               methods={methods}
