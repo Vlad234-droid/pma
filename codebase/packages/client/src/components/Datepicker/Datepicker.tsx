@@ -1,4 +1,4 @@
-import React, { useState, FC, useEffect, useCallback, ChangeEvent } from 'react';
+import React, { useState, FC, useEffect, useCallback, ChangeEvent, MouseEvent, useRef } from 'react';
 import debounce from 'lodash.debounce';
 import { CreateRule, Rule, useStyle } from '@dex-ddl/core';
 import { formatDateStringFromISO, DATE_FORMAT } from 'utils';
@@ -6,6 +6,7 @@ import Calendar from 'components/Calendar';
 import { Input } from 'components/Form';
 import { Icon } from 'components/Icon';
 import { useTranslation } from 'components/Translation';
+import useEventListener from 'hooks/useEventListener';
 
 type DateEvent = {
   target: {
@@ -44,6 +45,7 @@ const Datepicker: FC<Props> = ({ onChange, onError, value, name, minDate, isVali
   const [date, changeDate] = useState<Date | undefined>();
   const { css } = useStyle();
   const { t } = useTranslation();
+  const ref = useRef<HTMLDivElement | null>(null);
 
   const dataChange = useCallback(
     debounce((value: string) => {
@@ -99,9 +101,18 @@ const Datepicker: FC<Props> = ({ onChange, onError, value, name, minDate, isVali
     setCurrentValue(e.target.value);
   };
 
+  const handleClickOutside = (event: MouseEvent<HTMLElement>) => {
+    const element = event?.target as HTMLElement;
+    if (ref.current && !ref.current.contains(element)) {
+      toggleOpen(false);
+    }
+  };
+
+  useEventListener('click', handleClickOutside);
+
   return (
     <>
-      <div className={css(wrapperRule)} data-test-id={TEST_ID}>
+      <div ref={ref} className={css(wrapperRule)} data-test-id={TEST_ID}>
         <Input
           value={currentValue}
           onChange={handleChangeValue}
@@ -109,6 +120,7 @@ const Datepicker: FC<Props> = ({ onChange, onError, value, name, minDate, isVali
           data-test-id={INPUT_TEST_ID}
           placeholder={'dd/mm/yyyy'}
           isValid={isValid}
+          readonly
         />
         <button
           disabled={readonly}
@@ -141,14 +153,18 @@ const buttonRule: CreateRule<{ error: boolean }> =
   ({ theme }) => ({
     background: 'transparent',
     border: `1px solid ${error ? `${theme.colors.error}` : `${theme.colors.backgroundDarkest}`}`,
-    borderTopRightRadius: '5px',
-    borderBottomRightRadius: '5px',
+    borderTopLeftRadius: '5px',
+    borderBottomLeftRadius: '5px',
+    left: 0,
+    position: 'absolute',
+    height: '100%',
   });
 
 const inputRule: Rule = {
-  borderTopRightRadius: 0,
-  borderBottomRightRadius: 0,
-  borderRightWidth: 0,
+  borderTopLeftRadius: 'none',
+  borderBottomLeftRadius: 'none',
+  borderLeft: 0,
+  paddingLeft: '57px',
 };
 
 const calendarWrapperRule: CreateRule<{ isOnTop: boolean }> =
