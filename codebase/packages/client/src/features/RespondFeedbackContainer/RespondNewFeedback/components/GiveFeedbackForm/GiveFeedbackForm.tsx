@@ -6,7 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import get from 'lodash.get';
 
-import { Trans } from 'components/Translation';
+import { Trans, useTranslation } from 'components/Translation';
 import { TileWrapper } from 'components/Tile';
 import { Attention, Field, Item, Textarea } from 'components/Form';
 import { ColleaguesFinder } from 'features/GiveFeedBack/components';
@@ -37,6 +37,7 @@ const GiveFeedbackForm: FC<GiveFeedbackFormProps> = ({
   const { css, theme } = useStyle();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+  const { t } = useTranslation();
 
   const {
     handleSubmit,
@@ -45,7 +46,7 @@ const GiveFeedbackForm: FC<GiveFeedbackFormProps> = ({
     formState: { isValid, errors },
   } = useForm({
     mode: 'onChange',
-    resolver: yupResolver(createGiveFeedbackSchema),
+    resolver: yupResolver(createGiveFeedbackSchema(t)),
     defaultValues,
   });
 

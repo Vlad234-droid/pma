@@ -29,21 +29,22 @@ export const validateMin = (value) => {
   return true;
 };
 
-export const createGiveFeedbackSchema = Yup.object().shape({
-  feedbackItems: Yup.array().of(
-    Yup.string()
-      .test({
-        message: 'Field is required',
-        test: validateRequired,
-      })
-      .test({
-        message: 'Field must be at least 10 characters',
-        test: validateMin,
-      })
-      .test({
-        message: 'Field must be less than 500 characters',
-        test: validateMax,
-      }),
-  ),
-  targetColleagueUuid: Yup.string().min(36).required(),
-});
+export const createGiveFeedbackSchema = (t) =>
+  Yup.object().shape({
+    feedbackItems: Yup.array().of(
+      Yup.string()
+        .test({
+          message: `${t('field_is_required')}`,
+          test: validateRequired,
+        })
+        .test({
+          message: `${t('field_must_be_at_least_10_characters')}`,
+          test: validateMin,
+        })
+        .test({
+          message: `${t('field_must_be_less_than_500_characters')}`,
+          test: validateMax,
+        }),
+    ),
+    targetColleagueUuid: Yup.string().min(36).required(),
+  });

@@ -489,5 +489,8 @@
   "inactive_cycles": "Inactive",
   "registered_cycles": "Registered",
   "started_cycles": "Started",
-  "create_performance_cycle": "Create performance cycle"
+  "create_performance_cycle": "Create performance cycle",
+  "field_is_required": "Field is required",
+  "field_must_be_at_least_10_characters": "Field must be at least 10 characters",
+  "field_must_be_less_than_500_characters": "Field must be less than 500 characters"
 }
