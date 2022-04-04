@@ -161,8 +161,8 @@ const buttonRule: CreateRule<{ error: boolean }> =
   });
 
 const inputRule: Rule = {
-  borderTopLeftRadius: 'none',
-  borderBottomLeftRadius: 'none',
+  borderTopLeftRadius: '0px',
+  borderBottomLeftRadius: '0px',
   borderLeft: 0,
   paddingLeft: '57px',
 };

@@ -122,7 +122,7 @@ const PersonalFolders: FC<PersonalFoldersProps> = ({
           >
             <IconButton
               iconProps={{ title: 'Delete' }}
-              graphic={t('delete', 'Delete')}
+              graphic='delete'
               customVariantRules={{ default: folderPropertiesIconStyle }}
               onPress={() => {
                 selectedFolderId.current = itemId;
@@ -159,6 +159,7 @@ const PersonalFolders: FC<PersonalFoldersProps> = ({
       <div className={css({ marginTop: '48px' })}>
         {foldersWithNotes?.map((item) => {
           const { selected } = item;
+
           return (
             <div
               data-test-id='folder-item'
