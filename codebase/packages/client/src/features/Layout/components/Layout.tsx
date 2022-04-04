@@ -43,8 +43,7 @@ const Layout: FC = ({ children }) => {
 
   useEffect(() => {
     const script = document.createElement('script');
-    script.src = './ga.js';
-    script.async = true;
+    script.innerText = `window["adrum-start-time"] = new Date().getTime(); (function(config){ config.appKey = "AD-AAB-ABN-WNX"; config.adrumExtUrlHttp = "http://cdn.appdynamics.com"; config.adrumExtUrlHttps = "https://cdn.appdynamics.com"; config.beaconUrlHttp = "http://pdx-col.eum-appdynamics.com"; config.beaconUrlHttps = "https://pdx-col.eum-appdynamics.com"; config.resTiming = {"bufSize":200,"clearResTimingOnBeaconSend":true}; config.maxUrlLength = 512; })(window["adrum-config"] || (window["adrum-config"] = {}));`;
     document.body.appendChild(script);
     return () => {
       document.body.removeChild(script);
@@ -54,7 +53,6 @@ const Layout: FC = ({ children }) => {
   useEffect(() => {
     const script = document.createElement('script');
     script.src = '//cdn.appdynamics.com/adrum/adrum-20.12.0.3360.js';
-    script.async = true;
     document.body.appendChild(script);
     return () => {
       document.body.removeChild(script);
