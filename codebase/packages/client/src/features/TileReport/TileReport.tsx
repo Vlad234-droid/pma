@@ -11,10 +11,11 @@ import { FilterOption } from 'features/Shared';
 import FilterModal from 'features/Report/components/FilterModal';
 import { buildPath } from 'features/Routes';
 
-import { useTileStatistics, useChartData } from './hooks';
+import { useTileStatistics } from './hooks';
 import { getReportTitles } from './utils';
 import { initialValues } from 'features/Report/config';
 import { getCurrentYear } from 'utils/date';
+import { ReportPage } from 'config/enum';
 
 import { Page } from 'pages';
 
@@ -37,27 +38,30 @@ const TileReport = () => {
 
   const [pending, done, type, query] = useTileStatistics();
 
-  const chartData = useChartData(t, type) || [];
+  const checkBusinessType = type && type !== ReportPage.REPORT_NEW_TO_BUSINESS;
 
   const getContent = useCallback(() => {
     const content = (
       <div className={css({ width: '100%' })} data-test-id={PROFILES_WRAPPER}>
-        <div>
-          {!!pending.length && (
-            <span className={css(objectiveTypeStyle)}>
-              <Trans>{getReportTitles(t, type)?.pending}</Trans>
-            </span>
-          )}
-          {pending.map((item, i) => (
-            <div
-              key={`${item.uuid}${i}`}
-              className={css({ marginTop: '8px' })}
-              data-test-id={NOT_APPROVED_COLLEAGUES_WRAPPER}
-            >
-              <ColleagueProfile colleague={item} />
-            </div>
-          ))}
-        </div>
+        {checkBusinessType && (
+          <div>
+            {!!pending.length && (
+              <span className={css(objectiveTypeStyle)}>
+                <Trans>{getReportTitles(t, type)?.pending}</Trans>
+              </span>
+            )}
+            {pending.map((item, i) => (
+              <div
+                key={`${item.uuid}${i}`}
+                className={css({ marginTop: '8px' })}
+                data-test-id={NOT_APPROVED_COLLEAGUES_WRAPPER}
+              >
+                <ColleagueProfile colleague={item} />
+              </div>
+            ))}
+          </div>
+        )}
+
         <div>
           {!!done.length && (
             <span className={css(objectiveTypeStyle, { marginTop: '24px' })}>
@@ -134,7 +138,7 @@ const TileReport = () => {
       <div className={css(wrapperStyle)}>
         <div className={css(leftColumn)}>{getContent()}</div>
         <div className={css(rightColumn)}>
-          <PieChart title={getReportTitles(t, type)?.chart} data={chartData.map((item) => item)} display={View.CHART} />
+          <PieChart title={getReportTitles(t, type)?.chart} data={type} display={View.CHART} />
         </div>
       </div>
     </div>

@@ -29,6 +29,7 @@ const Calibration: FC<Props> = ({ loadData, loadFilterOptions, colleagueUuid, co
   const { t } = useTranslation();
   const [isEditMode, setEditMode] = useState<boolean>(false);
   const [compareMode, setCompareMode] = useState<string>('None');
+
   const isCompareMode = compareMode !== 'None';
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState<boolean>(false);
   const [isCompareModalOpen, setCompareModalOpen] = useState<boolean>(false);

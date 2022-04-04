@@ -72,7 +72,7 @@ const pages: Record<Page, PageComponent> = {
     Element: Calibration,
     title: 'Calibration',
     withHeader: true,
-    backPath: Page.PEOPLE_TEAM,
+    backPath: Page.REPORT,
     perform: [role.LINE_MANAGER],
   },
   [Page.NOTES]: {
@@ -274,6 +274,12 @@ const pages: Record<Page, PageComponent> = {
   [Page.WORK_LEVEL_REPORT]: {
     Element: TileReportStatistics,
     title: 'WL4 & 5 report',
+    withHeader: true,
+    perform: [role.TALENT_ADMIN, role.ADMIN, role.LINE_MANAGER],
+  },
+  [Page.NEW_TO_BUSINESS]: {
+    Element: TileReportStatistics,
+    title: 'New to business',
     withHeader: true,
     perform: [role.TALENT_ADMIN, role.ADMIN, role.LINE_MANAGER],
   },

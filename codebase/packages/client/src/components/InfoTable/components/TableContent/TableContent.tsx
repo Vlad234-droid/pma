@@ -1,33 +1,27 @@
 import React, { FC } from 'react';
-import { useStyle, Rule, Theme, CreateRule, Styles } from '@pma/dex-wrapper';
-import { Trans } from 'components/Translation/Translation';
+import { useStyle, Rule, Theme, CreateRule, Styles } from '@dex-ddl/core';
+import { useChartDataStatistics } from 'features/useChartDataStatistics';
 import { IconButton } from 'components/IconButton';
+import { Trans, useTranslation } from 'components/Translation/Translation';
 
-export const INFO_TABLE_WRAPPER = 'info_table_wrapper';
+import { TableContent as Props } from '../../type';
 
-type Obj = {
-  percent: number;
-  quantity: number;
-  title: string;
-};
-
-type InfoTableProps = {
-  mainTitle: string;
-  data: Array<Obj>;
-  preTitle?: string;
-};
-
-const InfoTable: FC<InfoTableProps> = ({ mainTitle, data, preTitle = '' }) => {
+const TableContent: FC<Props> = ({ mainTitle, data, preTitle }) => {
+  const { t } = useTranslation();
   const { css, theme } = useStyle();
 
+  const chartData = Array.isArray(data) ? data : useChartDataStatistics(t, data) || [];
+
   return (
-    <div className={css(infoTableWrapper)} data-test-id={INFO_TABLE_WRAPPER}>
+    <>
       <h2 className={css(titleStyle({ preTitle, theme }))}>{mainTitle}</h2>
       {preTitle !== '' && (
         <div className={css(flexStyle)}>
           <IconButton
             graphic='information'
-            iconStyles={iconStyle}
+            iconStyles={{
+              marginRight: '10px',
+            }}
             onPress={() => {
               console.log();
             }}
@@ -36,7 +30,7 @@ const InfoTable: FC<InfoTableProps> = ({ mainTitle, data, preTitle = '' }) => {
         </div>
       )}
       <div className={css(blockWrapper)}>
-        {data?.map((block, i) => {
+        {chartData?.map((block, i) => {
           const percent = block.percent || 0;
           const quantity = block.quantity || 0;
           return (
@@ -50,18 +44,11 @@ const InfoTable: FC<InfoTableProps> = ({ mainTitle, data, preTitle = '' }) => {
           );
         })}
       </div>
-    </div>
+    </>
   );
 };
 
-const infoTableWrapper: Rule = ({ theme }) => ({
-  padding: '24px',
-  background: theme.colors.white,
-  boxShadow: '3px 3px 1px 1px rgba(0, 0, 0, 0.05)',
-  borderRadius: '10px',
-  width: '100%',
-});
-const titleStyle: CreateRule<{ preTitle: string; theme: Theme }> = ({ preTitle, theme }) => ({
+const titleStyle: CreateRule<{ preTitle: string | undefined; theme: Theme }> = ({ preTitle, theme }) => ({
   color: theme.colors.link,
   fontWeight: 'bold',
   fontSize: '20px',
@@ -104,9 +91,6 @@ const quantityStyle: Rule = ({ theme }) =>
     },
   } as Styles);
 
-const iconStyle: Rule = {
-  marginRight: '10px',
-};
 const blockWrapper: Rule = {
   display: 'flex',
   justifyContent: 'space-between',
@@ -128,4 +112,4 @@ const preTitleStyle: Rule = ({ theme }) => ({
   lineHeight: '22px',
 });
 
-export default InfoTable;
+export default TableContent;

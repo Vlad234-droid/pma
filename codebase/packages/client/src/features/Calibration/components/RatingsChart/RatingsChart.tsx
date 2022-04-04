@@ -1,10 +1,12 @@
 import React, { FC } from 'react';
-import { useStyle, Rule } from '@pma/dex-wrapper';
+import { useStyle, Rule } from '@dex-ddl/core';
 import { BarChart, Legend, XAxis, YAxis, Bar, ResponsiveContainer, Cell } from 'recharts';
 
 import { getComputedData, getGraphBars } from '../../utils';
 import { RatingChartData } from '../../config/types';
 import { Trans, useTranslation } from 'components/Translation';
+
+import { useCurrentData, useChartTitle } from '../../hooks';
 
 type Props = {
   compareData?: RatingChartData;
@@ -16,16 +18,19 @@ const colors = ['#82ca9d', '#8884d8'];
 const RatingsChart: FC<Props> = ({ currentData, compareData }) => {
   const { css } = useStyle();
   const { t } = useTranslation();
-  const { data, total } = getComputedData(currentData, compareData);
+  //const { data } = getComputedData(currentData, compareData);
+
+  const chartTile = useChartTitle();
+
+  const [data] = useCurrentData() || [];
+
   const bars = getGraphBars(data);
+
   const height = compareData ? '594px' : '347px';
 
   return (
     <div className={css({ height: height })} data-test-id='ratings-chart'>
-      <div className={css(Title)}>{`${t(
-        'calibration_submission',
-        'Calibration submission',
-      )} ${new Date().getFullYear()}`}</div>
+      <div className={css(Title)}>{`${chartTile.title} ${chartTile.year}`}</div>
       <ResponsiveContainer width='100%' height={'100%'}>
         <BarChart
           width={730}
@@ -40,23 +45,59 @@ const RatingsChart: FC<Props> = ({ currentData, compareData }) => {
           <XAxis type='number' tickCount={11} />
           <YAxis dataKey='name' type='category' />
           <Legend content={renderLegend} />
-          {bars.map((bar, index) => (
-            <Bar
-              isAnimationActive={false}
-              key={bar}
-              dataKey={bar}
-              fill={colors[index]}
-              barSize={50}
-              label={<CustomizedLabel key={total[bar]} />}
-            >
-              {data.map((item, index) => (
-                <Cell key={`cell-${index}`} opacity={(-index + 4) / 4} />
-              ))}
-            </Bar>
-          ))}
+          {bars.map((bar, index) => {
+            return (
+              <Bar
+                isAnimationActive={false}
+                key={bar}
+                dataKey={bar}
+                fill={colors[index]}
+                barSize={50}
+                label={<CustomizedLabel />}
+              >
+                {data.map((_, index) => (
+                  <Cell key={`cell-${index}`} opacity={(-index + 4) / 4} />
+                ))}
+              </Bar>
+            );
+          })}
         </BarChart>
       </ResponsiveContainer>
     </div>
+  );
+};
+
+const CustomizedLabel = (props) => {
+  const { x, y, value, fill, height, width, index } = props;
+  const [_, chartData] = useCurrentData([]) || [];
+  return (
+    <>
+      <g>
+        <text
+          x={x + width + 4}
+          y={y + height / 2.5}
+          dy={0}
+          fontSize='20'
+          fill={fill}
+          fontWeight='Bold'
+          textAnchor='start'
+        >
+          {`${value}%`}
+        </text>
+        <text
+          x={x + width + 4}
+          y={y + height / 1.2}
+          dy={0}
+          fontSize='16'
+          fill={fill}
+          fontWeight='Bold'
+          textAnchor='start'
+          opacity={0.5}
+        >
+          {chartData[index]?.quantity || 0}
+        </text>
+      </g>
+    </>
   );
 };
 
@@ -72,48 +113,6 @@ const renderLegend = () => {
         % of <Trans i18nKey='colleagues'>Colleagues</Trans>
       </div>
     </>
-  );
-};
-
-const CustomizedLabel = (props) => {
-  const {
-    x,
-    y,
-    value,
-    fill,
-    height,
-    width,
-    content: { key },
-  } = props;
-
-  const percent = ((value * 100) / key).toFixed();
-
-  return (
-    <g>
-      <text
-        x={x + width + 4}
-        y={y + height / 2.5}
-        dy={0}
-        fontSize='20'
-        fill={fill}
-        fontWeight='Bold'
-        textAnchor='start'
-      >
-        {`${percent}%`}
-      </text>
-      <text
-        x={x + width + 4}
-        y={y + height / 1.2}
-        dy={0}
-        fontSize='16'
-        fill={fill}
-        fontWeight='Bold'
-        textAnchor='start'
-        opacity={0.5}
-      >
-        {value}
-      </text>
-    </g>
   );
 };
 

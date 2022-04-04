@@ -25,11 +25,16 @@ const PieChart: FC<PieChartProps> = ({
     titleId,
   };
 
-  if (!link) return <Wrapper className={css(pieChartWrapper)}>{<Content {...props} />}</Wrapper>;
+  if (!link)
+    return (
+      <Wrapper className={css(pieChartWrapper)}>
+        <Content {...props} />
+      </Wrapper>
+    );
 
   return (
     <Link to={buildPathWithParams(buildPath(link), { ...params })} className={css(pieChartWrapper)}>
-      {<Content {...props} />}
+      <Content {...props} />
     </Link>
   );
 };

@@ -19,7 +19,7 @@ enum Page {
   KNOWLEDGE_LIBRARY_BY_ID = ':countryCode/knowledge-library/:id',
   MY_ACTIONS = 'my-team/actions',
   PEOPLE_TEAM = 'people-team',
-  CALIBRATION = 'calibration',
+  CALIBRATION = 'calibration/:type',
   NOTES = 'notes',
   GIVE_FEEDBACK = 'feedback/give',
   GIVE_NEW_FEEDBACK = 'feedback/give/:uuid',
@@ -38,6 +38,7 @@ enum Page {
   END_YEAR_REVIEW_REPORT = 'report/end-year-review',
   WORK_LEVEL_REPORT = 'report/work-level',
   FEEDBACK_REPORT = 'report/feedback',
+  NEW_TO_BUSINESS = 'report/new-to-business',
   NOT_FOUND = '404',
 }
 

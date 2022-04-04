@@ -1,8 +1,7 @@
 import { createSelector } from 'reselect';
 //@ts-ignore
 import { RootState } from 'typesafe-actions';
-import { Status } from '../../../client/src/config/enum';
-import { ReportPage } from '../../../client/src/features/TileReport/config';
+import { Status, ReportPage } from '../../../client/src/config/enum';
 
 export const reportSelector = (state: RootState) => state.report;
 const statusIndex = 8;

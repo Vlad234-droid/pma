@@ -9,7 +9,7 @@ import { FilterOption } from 'features/Shared';
 import { PieChart } from 'components/PieChart';
 import { Select } from 'components/Form';
 import FilterModal from './components/FilterModal';
-import InfoTable from './components/InfoTable';
+import InfoTable from 'components/InfoTable';
 import { DonwloadReportModal } from './Modals';
 import { Trans, useTranslation } from 'components/Translation';
 import AppliedFilters from './components/AppliedFilters';
@@ -19,10 +19,10 @@ import { View } from 'components/PieChart/config';
 import Spinner from 'components/Spinner';
 
 import { getFieldOptions, metaStatuses, initialValues } from './config';
-import { Rating, TitlesReport } from 'config/enum';
 import { downloadCsvFile } from './utils';
 import { useStatisticsReport, getReportData, getData } from './hooks';
 import useQueryString from 'hooks/useQueryString';
+import { ReportPage, TitlesReport } from 'config/enum';
 
 import { Page } from 'pages';
 
@@ -47,46 +47,7 @@ const Report: FC = () => {
   const [checkedItems, setCheckedItems]: [string[], (T) => void] = useState([]);
   const [isCheckAll, setIsCheckAll]: [string[], (T) => void] = useState([]);
 
-  const {
-    myrSubmittedPercentage,
-    myrApprovedPercentage,
-    eyrSubmittedPercentage,
-    eyrApprovedPercentage,
-    feedbackRequestedPercentage,
-    feedbackGivenPercentage,
-    objectivesSubmittedPercentage,
-    objectivesApprovedPercentage,
-    myrRatingBreakdownBelowExpectedPercentage,
-    myrRatingBreakdownBelowExpectedCount,
-    myrRatingBreakdownSatisfactoryPercentage,
-    myrRatingBreakdownSatisfactoryCount,
-    myrRatingBreakdownGreatPercentage,
-    myrRatingBreakdownGreatCount,
-    myrRatingBreakdownOutstandingPercentage,
-    myrRatingBreakdownOutstandingCount,
-    eyrRatingBreakdownBelowExpectedPercentage,
-    eyrRatingBreakdownBelowExpectedCount,
-    eyrRatingBreakdownSatisfactoryPercentage,
-    eyrRatingBreakdownSatisfactoryCount,
-    eyrRatingBreakdownGreatPercentage,
-    eyrRatingBreakdownGreatCount,
-    eyrRatingBreakdownOutstandingPercentage,
-    eyrRatingBreakdownOutstandingCount,
-    newToBusinessCount,
-    anniversaryReviewPerQuarter1Percentage,
-    anniversaryReviewPerQuarter1Count,
-    anniversaryReviewPerQuarter2Percentage,
-    anniversaryReviewPerQuarter2Count,
-    anniversaryReviewPerQuarter3Percentage,
-    anniversaryReviewPerQuarter3Count,
-    anniversaryReviewPerQuarter4Percentage,
-    anniversaryReviewPerQuarter4Count,
-    colleaguesCount,
-    approvedObjPercent,
-    approvedObjTitle,
-    notApprovedObjPercent,
-    notApprovedObjTitle,
-  } = useStatisticsReport([...metaStatuses]);
+  const { colleaguesCount } = useStatisticsReport([...metaStatuses]);
 
   getReportData(query);
 
@@ -179,7 +140,7 @@ const Report: FC = () => {
             <div className={css(leftColumn)}>
               <PieChart
                 title={t(TitlesReport.OBJECTIVES_SUBMITTED, 'Objectives submitted')}
-                data={[{ percent: objectivesSubmittedPercentage }]}
+                data={ReportPage.REPORT_SUBMITTED_OBJECTIVES}
                 display={View.CHART}
                 link={Page.OBJECTIVES_SUBMITTED_REPORT}
                 params={getYear()}
@@ -188,7 +149,7 @@ const Report: FC = () => {
             <div className={css(rightColumn)}>
               <PieChart
                 title={t(TitlesReport.OBJECTIVES_APPROVED, 'Objectives approved')}
-                data={[{ percent: objectivesApprovedPercentage }]}
+                data={ReportPage.REPORT_APPROVED_OBJECTIVES}
                 display={View.CHART}
                 link={Page.OBJECTIVES_APPROVED_REPORT}
                 params={getYear()}
@@ -227,10 +188,7 @@ const Report: FC = () => {
               <PieChart
                 title={t(TitlesReport.MYR, 'Mid-year review')}
                 display={View.CHART}
-                data={[
-                  { percent: myrSubmittedPercentage, title: t(TitlesReport.SUBMITTED, 'Submitted') },
-                  { percent: myrApprovedPercentage, title: t(TitlesReport.APPROVED, 'Approved') },
-                ]}
+                data={ReportPage.REPORT_MID_YEAR_REVIEW}
                 link={Page.MID_YEAR_REVIEW_REPORT}
                 params={getYear()}
               />
@@ -238,28 +196,10 @@ const Report: FC = () => {
             <div className={css(rightColumn)}>
               <InfoTable
                 mainTitle={t(TitlesReport.MYR_BREAKDOWN, 'Breakdown of Mid-year review')}
-                data={[
-                  {
-                    percent: myrRatingBreakdownBelowExpectedPercentage,
-                    quantity: myrRatingBreakdownBelowExpectedCount,
-                    title: t(Rating.BELOW_EXPECTED, 'Below expected'),
-                  },
-                  {
-                    percent: myrRatingBreakdownSatisfactoryPercentage,
-                    quantity: myrRatingBreakdownSatisfactoryCount,
-                    title: t(Rating.SATISFACTORY, 'Satisfactory'),
-                  },
-                  {
-                    percent: myrRatingBreakdownGreatPercentage,
-                    quantity: myrRatingBreakdownGreatCount,
-                    title: t(Rating.GREAT, 'Great'),
-                  },
-                  {
-                    percent: myrRatingBreakdownOutstandingPercentage,
-                    quantity: myrRatingBreakdownOutstandingCount,
-                    title: t(Rating.OUTSTANDING, 'Outstanding'),
-                  },
-                ]}
+                data={ReportPage.CALIBRATION_MYR_BREAKDOWN}
+                type='myr-breakdown'
+                link={Page.CALIBRATION}
+                params={getYear()}
               />
             </div>
           </div>
@@ -268,10 +208,7 @@ const Report: FC = () => {
               <PieChart
                 title={t(TitlesReport.EYR, 'Year-end review')}
                 display={View.CHART}
-                data={[
-                  { percent: eyrSubmittedPercentage, title: t(TitlesReport.SUBMITTED, 'Submitted') },
-                  { percent: eyrApprovedPercentage, title: t(TitlesReport.APPROVED, 'Approved') },
-                ]}
+                data={ReportPage.REPORT_END_YEAR_REVIEW}
                 link={Page.END_YEAR_REVIEW_REPORT}
                 params={getYear()}
               />
@@ -279,28 +216,10 @@ const Report: FC = () => {
             <div className={css(rightColumn)}>
               <InfoTable
                 mainTitle={t(TitlesReport.EYR_BREAKDOWN, 'Breakdown of End-year review')}
-                data={[
-                  {
-                    percent: eyrRatingBreakdownBelowExpectedPercentage,
-                    quantity: eyrRatingBreakdownBelowExpectedCount,
-                    title: t(Rating.BELOW_EXPECTED, 'Below expected'),
-                  },
-                  {
-                    percent: eyrRatingBreakdownSatisfactoryPercentage,
-                    quantity: eyrRatingBreakdownSatisfactoryCount,
-                    title: t(Rating.SATISFACTORY, 'Satisfactory'),
-                  },
-                  {
-                    percent: eyrRatingBreakdownGreatPercentage,
-                    quantity: eyrRatingBreakdownGreatCount,
-                    title: t(Rating.GREAT, 'Great'),
-                  },
-                  {
-                    percent: eyrRatingBreakdownOutstandingPercentage,
-                    quantity: eyrRatingBreakdownOutstandingCount,
-                    title: t(Rating.OUTSTANDING, 'Outstanding'),
-                  },
-                ]}
+                data={ReportPage.REPORT_BREAKDOWN_EYR}
+                type='eyr-breakdown'
+                link={Page.CALIBRATION}
+                params={getYear()}
               />
             </div>
           </div>
@@ -309,10 +228,7 @@ const Report: FC = () => {
               <PieChart
                 title={t(TitlesReport.WL4And5, 'WL4 & 5 Objectives submitted')}
                 display={View.CHART}
-                data={[
-                  { percent: approvedObjPercent, title: approvedObjTitle },
-                  { percent: notApprovedObjPercent, title: notApprovedObjTitle },
-                ]}
+                data={ReportPage.REPORT_WORK_LEVEL}
                 link={Page.WORK_LEVEL_REPORT}
                 params={getYear()}
               />
@@ -320,8 +236,10 @@ const Report: FC = () => {
             <div className={css(rightColumn)}>
               <PieChart
                 title={t(TitlesReport.BUSINESS, 'New to business')}
-                data={[{ percent: newToBusinessCount, title: t(Rating.COLLEAGUES, 'Colleagues') }]}
+                data={ReportPage.REPORT_NEW_TO_BUSINESS}
                 display={View.QUANTITY}
+                link={Page.NEW_TO_BUSINESS}
+                params={getYear()}
               />
             </div>
           </div>
@@ -330,10 +248,7 @@ const Report: FC = () => {
               <PieChart
                 title={t(TitlesReport.MOMENT_FEEDBACK, 'In the moment feedback')}
                 display={View.CHART}
-                data={[
-                  { percent: feedbackRequestedPercentage, title: t(TitlesReport.REQUESTED, 'Requested') },
-                  { percent: feedbackGivenPercentage, title: t(TitlesReport.GIVEN, 'Given') },
-                ]}
+                data={ReportPage.REPORT_FEEDBACK}
                 link={Page.FEEDBACK_REPORT}
                 params={getYear()}
               />
@@ -342,28 +257,10 @@ const Report: FC = () => {
               <InfoTable
                 mainTitle={t(TitlesReport.ANNIVERSARY_REVIEWS, 'Anniversary Reviews completed per quarter')}
                 preTitle={t(TitlesReport.HOURLY_PAID, 'Hourly paid colleagues only')}
-                data={[
-                  {
-                    percent: anniversaryReviewPerQuarter1Percentage,
-                    quantity: anniversaryReviewPerQuarter1Count,
-                    title: t(Rating.QUARTER_1, 'Quarter 1'),
-                  },
-                  {
-                    percent: anniversaryReviewPerQuarter2Percentage,
-                    quantity: anniversaryReviewPerQuarter2Count,
-                    title: t(Rating.QUARTER_2, 'Quarter 2'),
-                  },
-                  {
-                    percent: anniversaryReviewPerQuarter3Percentage,
-                    quantity: anniversaryReviewPerQuarter3Count,
-                    title: t(Rating.QUARTER_3, 'Quarter 3'),
-                  },
-                  {
-                    percent: anniversaryReviewPerQuarter4Percentage,
-                    quantity: anniversaryReviewPerQuarter4Count,
-                    title: t(Rating.QUARTER_4, 'Quarter 4'),
-                  },
-                ]}
+                data={ReportPage.REPORT_ANNIVERSARY_REVIEWS}
+                type='anniversary-reviews'
+                link={Page.CALIBRATION}
+                params={getYear()}
               />
             </div>
           </div>

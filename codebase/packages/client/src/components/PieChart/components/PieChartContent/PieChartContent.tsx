@@ -1,26 +1,31 @@
 import React, { FC } from 'react';
-import { useStyle, Rule, CreateRule, Theme } from '@pma/dex-wrapper';
+import { useStyle, Rule, CreateRule, Theme } from '@dex-ddl/core';
+import { useTranslation } from 'components/Translation';
 
 import { PieChartContentProps as Props, View, Obj } from '../../config';
+import { useChartDataStatistics } from 'features/useChartDataStatistics';
 
 export const TEST_ID = 'pie-chart-content-id';
 
 const PieChartContent: FC<Props> = ({ title, titleId, data, display, percentId }) => {
   const { css, theme } = useStyle();
+  const { t } = useTranslation();
+
+  const chartData = Array.isArray(data) ? data : useChartDataStatistics(t, data) || [];
 
   return (
     <>
       {title && (
-        <h3 data-test-id={titleId} className={css(titleStyled({ data, theme }))}>
+        <h3 data-test-id={titleId} className={css(titleStyled({ chartData, theme }))}>
           {title}
         </h3>
       )}
       <div data-test-id={TEST_ID} className={css(chartContainer({ display }))}>
-        {data.map((item, i) => {
+        {chartData.map((item, i) => {
           const percent = item.percent || 0;
           return (
             <div className={css({ display: 'flex', flexDirection: 'column' })} key={i}>
-              <div className={css(progress({ percent, theme, data, display }))}>
+              <div className={css(progress({ percent, theme, chartData, display }))}>
                 <div className={css(progressValue)} data-test-id={percentId}>
                   {percent}
                   {`${display === View.CHART ? `%` : ''}`}
@@ -48,7 +53,7 @@ const chartContainer: CreateRule<{ display: View.CHART | View.QUANTITY }> = ({ d
       }),
 });
 
-const titleStyled: CreateRule<{ data: Array<Obj>; theme: Theme }> = ({ data, theme }) => ({
+const titleStyled: CreateRule<{ chartData: Array<Obj>; theme: Theme }> = ({ chartData, theme }) => ({
   fontStyle: 'normal',
   fontWeight: 'bold',
   fontSize: '20px',
@@ -56,18 +61,18 @@ const titleStyled: CreateRule<{ data: Array<Obj>; theme: Theme }> = ({ data, the
   color: theme.colors.link,
   marginTop: '0px',
   textAlign: 'center',
-  marginBottom: data.length === 1 ? '16px' : data.length >= 2 ? '32px' : '16px',
+  marginBottom: chartData.length === 1 ? '16px' : chartData.length >= 2 ? '32px' : '16px',
 });
 
 const progress: CreateRule<{
   percent: number;
   theme: Theme;
-  data: Array<Obj>;
+  chartData: Array<Obj>;
   display: View.CHART | View.QUANTITY;
-}> = ({ percent, theme, data, display }) => ({
+}> = ({ percent, theme, chartData, display }) => ({
   ...(display === View.CHART && {
-    height: data.length >= 2 ? '80px' : '98px',
-    width: data.length >= 2 ? '80px' : '98px',
+    height: chartData.length >= 2 ? '80px' : '98px',
+    width: chartData.length >= 2 ? '80px' : '98px',
   }),
   borderRadius: '50%',
   display: 'grid',

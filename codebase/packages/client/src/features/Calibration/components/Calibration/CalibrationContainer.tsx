@@ -13,6 +13,7 @@ const CalibrationContainer: FC = () => {
   const dispatch = useDispatch();
   // @ts-ignore
   const colleagues = useSelector((state) => getAllEmployees(state), shallowEqual) || [];
+
   const { loaded } = useSelector(getManagersMetaSelector);
   const [filterOptions, setFilterOptions] = useState<FilterOption[]>();
 

@@ -13,14 +13,6 @@ export type ColleagueProfileProps = {
   };
 };
 
-export enum ReportPage {
-  REPORT_SUBMITTED_OBJECTIVES = 'REPORT_SUBMITTED_OBJECTIVES',
-  REPORT_APPROVED_OBJECTIVES = 'REPORT_APPROVED_OBJECTIVES',
-  REPORT_MID_YEAR_REVIEW = 'REPORT_MID_YEAR_REVIEW',
-  REPORT_END_YEAR_REVIEW = 'REPORT_END_YEAR_REVIEW',
-  REPORT_WORK_LEVEL = 'REPORT_WORK_LEVEL',
-  REPORT_FEEDBACK = 'REPORT_FEEDBACK',
-}
 export enum ReportTags {
   REPORT_SUBMITTED_OBJECTIVES = 'has_objective_submitted',
   REPORT_APPROVED_OBJECTIVES = 'has_objective_approved',
@@ -28,4 +20,5 @@ export enum ReportTags {
   REPORT_END_YEAR_REVIEW = 'has_eyr_submitted has_eyr_approved',
   REPORT_WORK_LEVEL = 'REPORT_WORK_LEVEL',
   REPORT_FEEDBACK = 'has_feedback_requested has_feedback_given',
+  REPORT_NEW_TO_BUSINESS = 'is_new_to_business',
 }

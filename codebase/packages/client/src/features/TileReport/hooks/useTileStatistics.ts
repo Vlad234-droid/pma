@@ -4,7 +4,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { getPendingReportSelector, getDoneReportSelector, ReportActions } from '@pma/store';
 
 import useQueryString from 'hooks/useQueryString';
-import { ReportPage, ReportTags } from '../config';
+import { ReportTags } from '../config';
+import { ReportPage } from 'config/enum';
 import { convertToReportEnum, checkForPendingChartView, checkForDoneChartView, getData } from '../utils';
 
 export const useTileStatistics = () => {

@@ -1,9 +1,13 @@
-import { TitlesReport } from 'config/enum';
-import { ReportPage } from '../config';
+import { TitlesReport, ReportPage } from 'config/enum';
 
-export const convertToReportEnum = (pathname) => {
-  return pathname.split('/').slice(1).join('_').split('-').join('_').toUpperCase();
-};
+export const convertToReportEnum = (pathname) =>
+  pathname
+    .split('/')
+    .filter((item) => item)
+    .join('_')
+    .split('-')
+    .join('_')
+    .toUpperCase();
 
 export const getReportTitles = (t, type) => {
   const report = {
@@ -33,9 +37,13 @@ export const getReportTitles = (t, type) => {
       chart: t(TitlesReport.MOMENT_FEEDBACK, 'In the moment feedback'),
     },
     [ReportPage.REPORT_WORK_LEVEL]: {
-      pending: t('approved', 'Approved'),
-      done: t('not_approved', 'Not Approved'),
+      pending: t('not_approved', 'Not Approved'),
+      done: t('approved', 'Approved'),
       chart: t(TitlesReport.WL4And5, 'WL4 & 5 Objectives submitted'),
+    },
+    [ReportPage.REPORT_NEW_TO_BUSINESS]: {
+      done: t('TitlesReport.BUSINESS', 'New to business'),
+      chart: t('TitlesReport.BUSINESS', 'New to business'),
     },
   };
 
