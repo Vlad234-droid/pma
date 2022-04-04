@@ -2,13 +2,13 @@ import React, { FC, useEffect, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { Rule, Styles, useStyle } from '@pma/dex-wrapper';
 import { colleagueUUIDSelector, TimelineActions, UserActions } from '@pma/store';
-import { usePermission, usePermissionByWorkLevel, usePermissionByReviewType } from 'features/Permission';
+import { usePermission, usePermissionByReviewType, usePermissionByWorkLevel } from 'features/Permission';
 import { Trans, useTranslation } from 'components/Translation';
 import { TileWrapper } from 'components/Tile';
 import { Checkbox } from 'components/Form';
 import useDispatch from 'hooks/useDispatch';
 import { useAuthContainer } from 'contexts/authContext';
-import { accessByRole, accessByWorkLevel, accessByTimelinePoints } from '../config';
+import { accessByRole, accessByTimelinePoints, accessByWorkLevel } from '../config';
 
 export type Props = {};
 
@@ -83,6 +83,7 @@ const titleStyle: Rule = ({ theme }) =>
     lineHeight: '24px',
   } as Styles);
 
+// TODO: Extract duplicate 9
 const descriptionStyle = {
   fontStyle: 'normal',
   fontWeight: 'normal',

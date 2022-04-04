@@ -1,8 +1,8 @@
 import React, { FC } from 'react';
-import { useStyle, Rule, Styles } from '@pma/dex-wrapper';
+import { Rule, Styles, useStyle } from '@pma/dex-wrapper';
 import { IconButton } from 'components/IconButton';
 import defaultImg from 'images/default.png';
-import { VideoPlayer, VideoId } from 'features/VideoPlayer';
+import { VideoId, VideoPlayer } from 'features/VideoPlayer';
 import { Trans, useTranslation } from 'components/Translation';
 
 export const INFO_WRAPPER = 'info-wrapper';
@@ -76,6 +76,7 @@ const ImgStyle: Rule = {
   height: '72px',
   borderRadius: '50%',
 };
+// TODO: Extract duplicate 15
 const Names_Style: Rule = {
   fontWeight: 'bold',
   fontSize: '20px',
@@ -83,13 +84,14 @@ const Names_Style: Rule = {
   margin: '0px',
 };
 
+// TODO: Extract duplicate 16
 const IndustryStyle: Rule = {
   fontWeight: 'normal',
   fontSize: '16px',
   lineHeight: '20px',
   margin: '0px 0px 4px 0px',
 };
-
+// TODO: Extract duplicate 17
 const TreatmentStyle: Rule = {
   fontWeight: 'normal',
   fontSize: '16px',
@@ -97,6 +99,7 @@ const TreatmentStyle: Rule = {
   color: '#00539F',
 };
 
+// TODO: Extract duplicate 18
 const NotificationBlockStyle: Rule = {
   marginTop: '16px',
   padding: '16px 40px 16px 16px',

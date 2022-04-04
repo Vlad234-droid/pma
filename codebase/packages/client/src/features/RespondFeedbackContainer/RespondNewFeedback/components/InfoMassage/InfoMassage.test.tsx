@@ -1,9 +1,8 @@
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
 import { renderWithTheme as render } from 'utils/test';
-import InfoMassage from './InfoMassage';
+import InfoMassage, { GO_BACK, MESSAGE_WRAPPER } from './InfoMassage';
 import { fireEvent, waitFor } from '@testing-library/react';
-import { MESSAGE_WRAPPER, GO_BACK } from './InfoMassage';
 
 describe('Info message container', () => {
   const handler = jest.fn();

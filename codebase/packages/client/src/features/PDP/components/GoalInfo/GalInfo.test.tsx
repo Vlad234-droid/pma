@@ -1,8 +1,7 @@
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
-import { screen, fireEvent } from '@testing-library/react';
+import { fireEvent, screen } from '@testing-library/react';
 import GoalInfo, { DELETE_TEST_ID, EDIT_TEST_ID } from './GoalInfo';
-import '@testing-library/jest-dom/extend-expect';
 // @ts-ignore
 import { renderWithTheme as render } from 'utils/test';
 

@@ -1,8 +1,7 @@
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
 import { renderWithTheme as render } from 'utils/test';
-import FeedbackInfo from './FeedbackInfo';
-import { INFO_WRAPPER, GIVE_FEEDBACK_VIDEO } from './FeedbackInfo';
+import FeedbackInfo, { GIVE_FEEDBACK_VIDEO, INFO_WRAPPER } from './FeedbackInfo';
 
 describe('Feedback info container', () => {
   const props = {

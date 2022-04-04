@@ -1,8 +1,7 @@
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
 import { renderWithTheme as render } from 'utils/test';
-import GiveFeedbackForm from './GiveFeedbackForm';
-import { FORM_WRAPPER } from './GiveFeedbackForm';
+import GiveFeedbackForm, { FORM_WRAPPER } from './GiveFeedbackForm';
 import { waitFor } from '@testing-library/react';
 
 describe('GiveFeedbackForm container', () => {

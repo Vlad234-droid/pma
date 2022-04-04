@@ -8,6 +8,7 @@ type Props = {
   onSuccess: () => void;
 };
 
+// TODO: Extract duplicate 1
 const SuccessModal: FC<Props> = ({ onSuccess }) => {
   const { css } = useStyle();
 

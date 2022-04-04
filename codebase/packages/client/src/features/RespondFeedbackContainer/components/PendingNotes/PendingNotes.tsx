@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { useStyle, Rule } from '@pma/dex-wrapper';
+import { Rule, useStyle } from '@pma/dex-wrapper';
 import { getReviewByUuidS } from '@pma/store';
 import { useSelector } from 'react-redux';
 import { Trans } from 'components/Translation';
@@ -39,6 +39,7 @@ const PendingNotes: FC<PendingNotesProps> = ({ item }) => {
   );
 };
 
+// TODO: Extract duplicate 16
 const TileTitle: Rule = {
   fontWeight: 'normal',
   fontSize: '16px',

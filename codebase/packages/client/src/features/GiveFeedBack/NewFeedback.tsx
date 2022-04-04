@@ -1,10 +1,10 @@
-import React, { FC, useState, useEffect, useMemo } from 'react';
+import React, { FC, useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { useBreakpoints, Rule, Modal } from '@pma/dex-wrapper';
+import { Modal, Rule, useBreakpoints } from '@pma/dex-wrapper';
 import {
-  colleagueUUIDSelector,
   ColleaguesActions,
+  colleagueUUIDSelector,
   FeedbackActions,
   feedbackByUuidSelector,
   getLoadedStateSelector,
@@ -12,7 +12,7 @@ import {
 import { Icon } from 'components/Icon';
 import { Page } from 'pages';
 import Spinner from 'components/Spinner';
-import { GiveFeedbackForm, ConfirmMassage, SuccessMassage, InfoMassage } from './components';
+import { ConfirmMassage, GiveFeedbackForm, InfoMassage, SuccessMassage } from './components';
 import { GiveFeedbackType } from './type';
 
 const feedbackFields: GiveFeedbackType[] = [
@@ -170,6 +170,7 @@ const NewFeedback: FC = () => {
   );
 };
 
+// TODO: Extract duplicate 21
 const containerRule: Rule = ({ colors }) => {
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
@@ -190,6 +191,7 @@ const containerRule: Rule = ({ colors }) => {
   };
 };
 
+// TODO: Extract duplicate 13
 const modalCloseOptionStyle: Rule = () => {
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
@@ -207,6 +209,7 @@ const modalCloseOptionStyle: Rule = () => {
   };
 };
 
+// TODO: Extract duplicate 14
 const modalTitleOptionStyle: Rule = () => {
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;

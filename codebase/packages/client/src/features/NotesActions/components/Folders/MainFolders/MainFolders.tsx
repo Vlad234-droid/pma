@@ -1,33 +1,33 @@
-import React, { FC, useState, useRef, MutableRefObject } from 'react';
-import { useStyle, useBreakpoints, Rule } from '@pma/dex-wrapper';
+import React, { FC, MutableRefObject, useRef, useState } from 'react';
+import { Rule, useBreakpoints, useStyle } from '@pma/dex-wrapper';
 import { useDispatch, useSelector } from 'react-redux';
 
 import {
-  NotesActions,
   colleagueUUIDSelector,
-  getNotesSelector,
   getFoldersSelector,
+  getNotesSelector,
+  NotesActions,
   personalArchivedFolderUuidSelector,
   teamArchivedFolderUuidSelector,
 } from '@pma/store';
 
 import { ConfirmModal, ConfirmModalWithDropDown } from 'features/Modal';
 import { useTranslation } from 'components/Translation';
-import { PersonalFolders, SelectedFolder, PersonalsTeamFolders, SelectedTEAMFolder } from '../../index';
+import { PersonalFolders, PersonalsTeamFolders, SelectedFolder, SelectedTEAMFolder } from '../../index';
 import { MainFolderProps } from '../../../type';
 import { folderSchema } from '../../../components/Modals/schema/schema';
 
 import {
+  AllNotesFolderId,
+  AllNotesFolderIdTEAM,
+  clearRefsMoveHandler,
+  clearRefsTEAMMoveHandler,
+  confirmClearRefsHandler,
+  confirmClearTEAMRefsHandler,
+  defineBtnTitle,
   definePropperFieldOptions,
   definePropperFieldTeamOptions,
-  AllNotesFolderId,
   getPropperInfoData,
-  confirmClearRefsHandler,
-  clearRefsMoveHandler,
-  confirmClearTEAMRefsHandler,
-  clearRefsTEAMMoveHandler,
-  defineBtnTitle,
-  AllNotesFolderIdTEAM,
 } from 'utils/note';
 
 export const SELECTED_FOLDER = 'selected-folder';
@@ -252,6 +252,7 @@ const MainFolders: FC<MainFolderProps> = ({
       status: 'ARCHIVED',
     };
 
+    // TODO: Extract duplicate 19
     if (!payload.folderUuid) {
       if (selectedTEAMFolder)
         setSelectedTEAMFolder((prev) => {
@@ -295,6 +296,7 @@ const MainFolders: FC<MainFolderProps> = ({
         }),
       );
       dispatch(NotesActions.createFolderAndNote(body));
+      // TODO: Extract duplicate 19
       if (selectedTEAMFolder)
         setSelectedTEAMFolder((prev) => {
           const arr = { ...prev };

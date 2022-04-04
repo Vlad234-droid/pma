@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Button, Rule, useStyle, useBreakpoints } from '@pma/dex-wrapper';
+import { Button, Rule, useBreakpoints, useStyle } from '@pma/dex-wrapper';
 import { Trans } from 'components/Translation';
 import { IconButton } from 'components/IconButton';
 
@@ -88,6 +88,7 @@ const Spacing_style: Rule = ({ theme }) => {
   };
 };
 
+// TODO: Extract duplicate 7
 const backButton: Rule = ({ theme }) => ({
   fontWeight: theme.font.weight.bold,
   width: '49%',

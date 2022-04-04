@@ -11,6 +11,7 @@ type Props = {
   onSuccess: () => void;
 };
 
+// TODO: Extract duplicate 1
 const SuccessMassage: FC<Props> = ({ targetColleagueProfile, onSuccess }) => {
   const { css, theme } = useStyle();
   const [, isBreakpoint] = useBreakpoints();

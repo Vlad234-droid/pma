@@ -81,6 +81,7 @@ const EditButton: FC<Props> = ({
   );
 };
 
+// TODO: Extract duplicate 2
 const containerRule: Rule = ({ colors }) => {
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
@@ -100,6 +101,7 @@ const containerRule: Rule = ({ colors }) => {
   };
 };
 
+// TODO: Extract duplicate 13
 const modalCloseOptionStyle: Rule = () => {
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
@@ -117,6 +119,7 @@ const modalCloseOptionStyle: Rule = () => {
   };
 };
 
+// TODO: Extract duplicate 14
 const modalTitleOptionStyle: Rule = () => {
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;

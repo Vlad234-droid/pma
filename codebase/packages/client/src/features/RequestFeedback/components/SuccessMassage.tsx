@@ -5,6 +5,7 @@ import success from 'images/success.jpg';
 import { Trans } from 'components/Translation';
 import { useNavigate } from 'react-router-dom';
 
+// TODO: Extract duplicate 1
 const SuccessMassage: FC = () => {
   const { css, theme } = useStyle();
   const [, isBreakpoint] = useBreakpoints();

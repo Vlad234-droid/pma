@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { ConfigProps } from '../../config/types';
-import { Rule, useStyle, useBreakpoints, Styles } from '@pma/dex-wrapper';
+import { Rule, Styles, useBreakpoints, useStyle } from '@pma/dex-wrapper';
 import { TileWrapper } from 'components/Tile';
 import { Link } from 'react-router-dom';
 import { buildPath } from 'features/Routes';
@@ -32,6 +32,7 @@ const FeedbackCard: FC<FeedbackCardProps> = ({ card }) => {
   );
 };
 
+// TODO: Extract duplicate 9
 const IconText: Rule = {
   marginLeft: '10px',
   fontStyle: 'normal',

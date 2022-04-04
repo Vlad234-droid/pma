@@ -165,6 +165,7 @@ const descriptionStyles: Rule = ({ theme }) => ({
   color: theme.colors.tescoBlue,
 });
 
+// TODO: Extract duplicate 13
 const modalCloseOptionStyle: CreateRule<{ mobileScreen }> = (props) => {
   const { mobileScreen } = props;
   return {
@@ -181,6 +182,7 @@ const modalCloseOptionStyle: CreateRule<{ mobileScreen }> = (props) => {
   };
 };
 
+// TODO: Extract duplicate 14
 const modalTitleOptionStyle: CreateRule<{ mobileScreen }> = (props) => {
   const { mobileScreen } = props;
   return {

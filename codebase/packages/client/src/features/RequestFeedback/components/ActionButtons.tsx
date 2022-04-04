@@ -94,7 +94,7 @@ const ActionButtons: FC<Props> = ({ onSubmit, isValid }) => {
     </>
   );
 };
-
+// TODO: Extract duplicate 4
 const iconBtnStyle: Rule = ({ theme }) => ({
   padding: '0px 6px 0px 20px',
   display: 'flex',
@@ -109,6 +109,7 @@ const iconBtnStyle: Rule = ({ theme }) => ({
   cursor: 'pointer',
 });
 
+// TODO: Extract duplicate 5
 const iconBtnStyleDisabled: Rule = ({ theme }) => ({
   padding: '0px 6px 0px 20px',
   display: 'flex',

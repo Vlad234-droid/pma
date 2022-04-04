@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
-import { CreateRule, Modal, Rule, Theme, useBreakpoints, useStyle, IconButton as BackButton } from '@pma/dex-wrapper';
+import { CreateRule, IconButton as BackButton, Modal, Rule, Theme, useBreakpoints, useStyle } from '@pma/dex-wrapper';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -19,7 +19,7 @@ import {
 
 import { role, usePermission } from 'features/Permission';
 import Spinner from 'components/Spinner';
-import { AddTeamNoteModal, InfoModal, AddNoteModal, FilterOptions, MainFolders } from './components';
+import { AddNoteModal, AddTeamNoteModal, FilterOptions, InfoModal, MainFolders } from './components';
 import { IconButton } from 'components/IconButton';
 import { Icon } from 'components/Icon';
 import { EditSelectedNote } from './components/Modals/EditSelectedNote';
@@ -27,7 +27,7 @@ import { schemaFolder, schemaNotes, schemaNoteToEdit, schemaTEAMNotes } from './
 import { Trans, useTranslation } from 'components/Translation';
 import { ConfirmModalWithSelectOptions } from 'features/Modal';
 import { FoldersWithNotesTypes, FoldersWithNotesTypesTEAM, NoteData, NotesType, NotesTypeTEAM } from './type';
-import { AllNotesFolderId, AllNotesFolderIdTEAM, filterNotesHandler, addNewFolderId } from 'utils';
+import { addNewFolderId, AllNotesFolderId, AllNotesFolderIdTEAM, filterNotesHandler } from 'utils';
 import { PeopleTypes } from './components/TeamNotes/ModalsParts/type';
 
 export const NOTES_WRAPPER = 'note-wrapper';
@@ -664,6 +664,7 @@ const containerRule: CreateRule<{ theme: Theme; mobileScreen: boolean }> = ({ mo
   };
 };
 
+// TODO: Extract duplicate 13
 const modalCloseOptionStyle: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => {
   return {
     display: 'inline-block',
@@ -679,6 +680,7 @@ const modalCloseOptionStyle: CreateRule<{ mobileScreen: boolean }> = ({ mobileSc
   };
 };
 
+// TODO: Extract duplicate 14
 const modalTitleOptionStyle: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => {
   return {
     position: 'fixed',

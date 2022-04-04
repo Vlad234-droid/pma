@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { CreateRule, Modal, Rule, useBreakpoints, useStyle, theme } from '@pma/dex-wrapper';
+import { CreateRule, Modal, Rule, theme, useBreakpoints, useStyle } from '@pma/dex-wrapper';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Icon } from 'components/Icon';
 import { useDispatch, useSelector } from 'react-redux';
-import { colleagueUUIDSelector, PDPActions, schemaMetaPDPSelector, metaPDPSelector } from '@pma/store';
+import { colleagueUUIDSelector, metaPDPSelector, PDPActions, schemaMetaPDPSelector } from '@pma/store';
 import { buildPath } from 'features/Routes';
 import { Page } from 'pages';
 import { PDPType } from 'config/enum';
@@ -136,6 +136,7 @@ const CreateMyPDP = () => {
   );
 };
 
+// TODO: Extract duplicate 14
 const modalTitleOptionStyle: CreateRule<{ mobileScreen }> = (props) => {
   const { mobileScreen } = props;
   return {
@@ -158,6 +159,7 @@ const modalTitleOptionStyle: CreateRule<{ mobileScreen }> = (props) => {
   };
 };
 
+// TODO: Extract duplicate 13
 const modalCloseOptionStyle: CreateRule<{ mobileScreen }> = (props) => {
   const { mobileScreen } = props;
   return {

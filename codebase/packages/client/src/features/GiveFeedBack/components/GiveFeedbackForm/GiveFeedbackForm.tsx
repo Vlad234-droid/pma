@@ -1,5 +1,5 @@
-import React, { FC, useMemo } from 'react';
-import { useStyle, Rule, useBreakpoints, Button } from '@pma/dex-wrapper';
+import React, { FC } from 'react';
+import { Button, Rule, useBreakpoints, useStyle } from '@pma/dex-wrapper';
 import { useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -8,10 +8,10 @@ import get from 'lodash.get';
 import { IconButton, Position } from 'components/IconButton';
 import { Trans } from 'components/Translation';
 import { TileWrapper } from 'components/Tile';
-import { Field, Item, Textarea, Attention } from 'components/Form';
+import { Attention, Field, Item, Textarea } from 'components/Form';
 import { createGiveFeedbackSchema } from '../../config';
 import { GiveFeedbackType } from '../../type';
-import { FeedbackInfo, ColleaguesFinder } from '../../components';
+import { ColleaguesFinder, FeedbackInfo } from '../../components';
 
 export const FORM_WRAPPER = 'form-wrapper';
 
@@ -33,6 +33,7 @@ type Props = {
   feedbackFields: Array<GiveFeedbackType>;
 };
 
+// TODO: Extract duplicate 3
 const GiveFeedbackForm: FC<Props> = ({ onSubmit, defaultValues, currentColleague, goToInfo, feedbackFields }) => {
   const { css, theme } = useStyle();
   const [, isBreakpoint] = useBreakpoints();
@@ -195,6 +196,7 @@ const spacingStyle: Rule = ({ theme }) => {
   };
 };
 
+// TODO: Extract duplicate 7
 const buttonStyle: Rule = ({ theme }) => ({
   fontWeight: theme.font.weight.bold,
   width: '49%',
@@ -204,6 +206,7 @@ const buttonStyle: Rule = ({ theme }) => ({
   color: `${theme.colors.tescoBlue}`,
 });
 
+// TODO: Extract duplicate 4
 const iconBtnStyle: Rule = ({ theme }) => ({
   padding: '0px 6px 0px 20px',
   display: 'flex',
@@ -218,6 +221,7 @@ const iconBtnStyle: Rule = ({ theme }) => ({
   cursor: 'pointer',
 });
 
+// TODO: Extract duplicate 5
 const iconBtnStyleDisabled: Rule = ({ theme }) => ({
   padding: '0px 6px 0px 20px',
   display: 'flex',

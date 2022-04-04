@@ -14,6 +14,7 @@ export type Props = {
   targetColleagueProfile?: any;
 };
 
+// TODO: Extract duplicate 1
 const SuccessMassage: FC<Props> = ({ selectedColleagueUuid, targetColleagueProfile, onSuccess }) => {
   const { css, theme } = useStyle();
   const [, isBreakpoint] = useBreakpoints();

@@ -1,7 +1,7 @@
 import React, { Dispatch, FC, SetStateAction, useState } from 'react';
 import { UseFormReturn } from 'react-hook-form';
-import { useStyle, Rule, useBreakpoints, Button, CreateRule, Theme } from '@pma/dex-wrapper';
-import { NotesTypeTEAM, FoldersWithNotesTypesTEAM } from 'features/NotesActions/type';
+import { Button, CreateRule, Rule, Theme, useBreakpoints, useStyle } from '@pma/dex-wrapper';
+import { FoldersWithNotesTypesTEAM, NotesTypeTEAM } from 'features/NotesActions/type';
 import { Notification } from 'components/Notification';
 import { Icon as IconComponent } from 'components/Icon';
 import { Trans, useTranslation } from 'components/Translation';
@@ -176,6 +176,7 @@ const selectedRelativeStyle: Rule = ({ theme }) => ({
   marginRight: '3px',
 });
 
+// TODO: Extract duplicate 7
 const buttonCoreStyled: Rule = ({ theme }) => ({
   fontWeight: theme.font.weight.bold,
   width: '49%',

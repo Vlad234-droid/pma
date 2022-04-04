@@ -1,11 +1,11 @@
-import React, { useEffect, FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import { IconButton } from 'components/IconButton';
 import { Trans } from 'components/Translation';
 import defaultImg from 'images/default.png';
 import { Rule, Styles, useStyle } from '@pma/dex-wrapper';
-import { VideoPlayer, VideoId } from 'features/VideoPlayer';
-import { useSelector, useDispatch } from 'react-redux';
-import { feedbackByUuidSelector, getReviewByUuidS, getRespondedFeedbacksSelector, ReviewsActions } from '@pma/store';
+import { VideoId, VideoPlayer } from 'features/VideoPlayer';
+import { useDispatch, useSelector } from 'react-redux';
+import { feedbackByUuidSelector, getRespondedFeedbacksSelector, getReviewByUuidS, ReviewsActions } from '@pma/store';
 import { useParams } from 'react-router-dom';
 import { getPropperTargetType } from '../../../utils';
 import { FeedbackStatus, Tesco } from 'config/enum';
@@ -100,6 +100,7 @@ const ImgStyle: Rule = {
   height: '72px',
   borderRadius: '50%',
 };
+// TODO: Extract duplicate 15
 const NamesStyle: Rule = {
   fontWeight: 'bold',
   fontSize: '20px',
@@ -107,6 +108,7 @@ const NamesStyle: Rule = {
   margin: '0px',
 };
 
+// TODO: Extract duplicate 16
 const IndustryStyle: Rule = {
   fontWeight: 'normal',
   fontSize: '16px',
@@ -114,6 +116,7 @@ const IndustryStyle: Rule = {
   margin: '0px 0px 4px 0px',
 };
 
+// TODO: Extract duplicate 17
 const TreatmentStyle: Rule = {
   fontWeight: 'normal',
   fontSize: '16px',
@@ -121,6 +124,7 @@ const TreatmentStyle: Rule = {
   color: '#00539F',
 };
 
+// TODO: Extract duplicate 18
 const NotificationBlockStyle: Rule = {
   marginTop: '16px',
   padding: '16px 40px 16px 16px',
