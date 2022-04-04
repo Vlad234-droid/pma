@@ -1,4 +1,4 @@
-import React, { FC, useContext, useMemo } from 'react';
+import React, { FC, useContext, useEffect, useMemo } from 'react';
 import { matchPath, useLocation, useNavigate } from 'react-router-dom';
 import { Rule, useStyle } from '@pma/dex-wrapper';
 import { pages } from 'pages';
@@ -40,6 +40,26 @@ const Layout: FC = ({ children }) => {
   }, [pathname, linkTitle]);
 
   const handleBack = (backPath = '/') => navigate(backPath, { replace: true });
+
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = './ga.js';
+    script.async = true;
+    document.body.appendChild(script);
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
+
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = '//cdn.appdynamics.com/adrum/adrum-20.12.0.3360.js';
+    script.async = true;
+    document.body.appendChild(script);
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
 
   return (
     <CanPerform
