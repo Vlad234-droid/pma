@@ -7,7 +7,7 @@ import { Item, Select } from 'components/Form';
 import { IconButton } from 'components/IconButton';
 import { Icon } from 'components/Icon';
 import { useAuthContainer } from 'contexts/authContext';
-import { TREATMENT_FIELD_OPTIONS, getCards } from './config';
+import { getCards, TREATMENT_FIELD_OPTIONS } from './config';
 import { getSelectedTreatmentValue } from './utils';
 import { FeedbackCard } from './components';
 import { Info360Modal } from './Modals';
@@ -225,6 +225,7 @@ const containerRule: CreateRule<{ theme: Theme; mobileScreen }> = ({ theme, mobi
   };
 };
 
+// TODO: Extract duplicate 13
 const modalCloseOptionStyle: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => {
   return {
     display: 'inline-block',
@@ -240,6 +241,7 @@ const modalCloseOptionStyle: CreateRule<{ mobileScreen: boolean }> = ({ mobileSc
   };
 };
 
+// TODO: Extract duplicate 14
 const modalTitleOptionStyle: CreateRule<{ theme: Theme; mobileScreen: boolean }> = ({ theme, mobileScreen }) => {
   return {
     position: 'fixed',

@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Modal, CreateRule, useBreakpoints, useStyle } from '@pma/dex-wrapper';
+import { CreateRule, Modal, useBreakpoints, useStyle } from '@pma/dex-wrapper';
 import RequestFeedbackForm from './components/RequestFeedbackForm';
 import SuccessMassage from './components/SuccessMassage';
 import { colleagueUUIDSelector, FeedbackActions, getLoadedStateSelector } from '@pma/store';
@@ -115,6 +115,7 @@ const modalCloseOptionStyle: CreateRule<{ isMobile: boolean }> = ({ isMobile }) 
     cursor: 'pointer',
   };
 };
+// TODO: Extract duplicate 14
 const modalTitleOptionStyle: CreateRule<{ isMobile: boolean }> = ({ isMobile }) => {
   return {
     position: 'fixed',

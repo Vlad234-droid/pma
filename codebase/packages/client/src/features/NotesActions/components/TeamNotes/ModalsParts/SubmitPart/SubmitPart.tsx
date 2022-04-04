@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { useStyle, Rule } from '@pma/dex-wrapper';
+import { Rule, useStyle } from '@pma/dex-wrapper';
 import { UseFormReturn } from 'react-hook-form';
 import get from 'lodash.get';
 
@@ -10,7 +10,7 @@ import { useTranslation } from 'components/Translation';
 import { PeopleTypes } from '../type';
 import { FoldersWithNotesTypesTEAM } from 'features/NotesActions/type';
 import { Option } from 'components/Form/types';
-import { getNotes, getFolder, addNewFolderId } from 'utils';
+import { addNewFolderId, getFolder, getNotes } from 'utils';
 import defaultImg from 'images/default.png';
 
 type SubmitPartProps = {
@@ -74,6 +74,7 @@ const SubmitPart: FC<SubmitPartProps> = ({ selectedPerson, teamMethods, foldersW
                   />
                 );
               }
+              // TODO: Extract duplicate 6
               if (item.type === 'select') {
                 const { field_options } = item;
                 return (
@@ -143,6 +144,7 @@ const imgStyle: Rule = {
   height: '72px',
   borderRadius: '50%',
 };
+// TODO: Extract duplicate 15
 const namesStyle: Rule = {
   fontWeight: 'bold',
   fontSize: '20px',
@@ -150,6 +152,7 @@ const namesStyle: Rule = {
   margin: '0px',
 };
 
+// TODO: Extract duplicate 16
 const industryStyle: Rule = {
   fontWeight: 'normal',
   fontSize: '16px',

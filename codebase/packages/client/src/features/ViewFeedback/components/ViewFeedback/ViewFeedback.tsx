@@ -14,13 +14,13 @@ import {
   ColleaguesActions,
   colleagueUUIDSelector,
   FeedbackActions,
-  ReviewsActions,
   getLoadedStateSelector,
+  ReviewsActions,
 } from '@pma/store';
 import { useDispatch, useSelector } from 'react-redux';
 import { FilterModal } from '../../../Shared/components/FilterModal';
 import { useNavigate } from 'react-router-dom';
-import { FeedbackStatus, FEEDBACK_STATUS_IN, Tesco } from 'config/enum';
+import { FEEDBACK_STATUS_IN, FeedbackStatus, Tesco } from 'config/enum';
 import { Page } from 'pages';
 import useSubmittedCompletedNotes from '../../hooks/useSubmittedCompletedNotes';
 import { buildPath } from 'features/Routes';
@@ -434,7 +434,7 @@ const iconBtnStyle: Rule = ({ theme }) => ({
   fontWeight: 'bold',
 });
 
-//
+// TODO: Extract duplicate 21
 const containerRule: Rule = ({ colors }) => {
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
@@ -455,6 +455,7 @@ const containerRule: Rule = ({ colors }) => {
   };
 };
 
+// TODO: Extract duplicate 13
 const modalCloseOptionStyle: Rule = () => {
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
@@ -472,6 +473,7 @@ const modalCloseOptionStyle: Rule = () => {
   };
 };
 
+// TODO: Extract duplicate 14
 const modalTitleOptionStyle: Rule = () => {
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;

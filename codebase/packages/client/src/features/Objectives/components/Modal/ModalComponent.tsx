@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Modal, useBreakpoints, theme, CreateRule } from '@pma/dex-wrapper';
+import { CreateRule, Modal, theme, useBreakpoints } from '@pma/dex-wrapper';
 import { Icon } from 'components/Icon';
 import { ModalWrapper } from 'components/ModalWrapper';
 
@@ -51,6 +51,7 @@ const containerRule: CreateRule<{ mobileScreen }> = (props) => {
   };
 };
 
+// TODO: Extract duplicate 13
 const modalCloseOptionStyle: CreateRule<{ mobileScreen }> = (props) => {
   const { mobileScreen } = props;
   return {
@@ -67,6 +68,7 @@ const modalCloseOptionStyle: CreateRule<{ mobileScreen }> = (props) => {
   };
 };
 
+// TODO: Extract duplicate 14
 const modalTitleOptionStyle: CreateRule<{ mobileScreen }> = (props) => {
   const { mobileScreen } = props;
   return {

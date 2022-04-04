@@ -1,6 +1,6 @@
-import React, { FC, cloneElement, Children, ReactElement } from 'react';
+import React, { Children, cloneElement, FC, ReactElement } from 'react';
 
-import { useBreakpoints, Rule, Modal } from '@pma/dex-wrapper';
+import { Modal, Rule, useBreakpoints } from '@pma/dex-wrapper';
 import { Icon } from 'components/Icon';
 
 export type Props = {
@@ -31,6 +31,7 @@ const WrapperModal: FC<Props> = ({ title, onClose, onOverlayClick, children }) =
   );
 };
 
+// TODO: Extract duplicate 13
 const modalCloseOptionStyle: Rule = () => {
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
@@ -48,6 +49,7 @@ const modalCloseOptionStyle: Rule = () => {
   };
 };
 
+// TODO: Extract duplicate 14
 const modalTitleOptionStyle: Rule = ({ theme }) => {
   return {
     position: 'fixed',
@@ -62,6 +64,7 @@ const modalTitleOptionStyle: Rule = ({ theme }) => {
   };
 };
 
+// TODO: Extract duplicate 2
 const containerRule: Rule = ({ colors }) => {
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;

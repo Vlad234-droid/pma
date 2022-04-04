@@ -45,6 +45,7 @@ const mainTitleStyle: CreateRule<{ mobileScreen }> = ({ mobileScreen }) => ({
       }),
 });
 
+// TODO: Extract duplicate 8
 const titleStyle: Rule = ({ theme }) =>
   ({
     fontStyle: 'normal',
@@ -67,6 +68,7 @@ const descriptionStyle: CreateRule<{ mobileScreen }> = ({ mobileScreen }) => ({
       }),
 });
 
+// TODO: Extract duplicate 10
 const bodyStyle = {
   flexWrap: 'wrap',
   gap: '16px 8px',

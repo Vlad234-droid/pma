@@ -1,11 +1,11 @@
 import React, { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useStyle, Rule, Styles } from '@pma/dex-wrapper';
+import { Rule, Styles, useStyle } from '@pma/dex-wrapper';
 import { useSelector } from 'react-redux';
 import { getLoadedStateSelector } from '@pma/store';
 import { Page } from 'pages';
 
-import { Accordion, BaseAccordion, Section, Panel, ExpandButton } from 'components/Accordion';
+import { Accordion, BaseAccordion, ExpandButton, Panel, Section } from 'components/Accordion';
 import IconButtonDefault from 'components/IconButtonDefault';
 import { NoFeedback } from 'features/Feedback/components';
 import { TileWrapper } from 'components/Tile';
@@ -20,6 +20,7 @@ type Props = {
   canEdit: boolean;
 };
 
+// TODO: Extract duplicate 12
 const FeedbackBlock: FC<Props> = ({ list, canEdit }) => {
   const { loaded } = useSelector(getLoadedStateSelector);
 

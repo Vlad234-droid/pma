@@ -1,5 +1,5 @@
-import React, { FC, HTMLProps, useState, ReactNode } from 'react';
-import { useBreakpoints, Rule, Modal, useStyle } from '@pma/dex-wrapper';
+import React, { FC, HTMLProps, ReactNode, useState } from 'react';
+import { Modal, Rule, useBreakpoints, useStyle } from '@pma/dex-wrapper';
 import { Icon } from 'components/Icon';
 import { TriggerModalProvider } from './context';
 
@@ -68,6 +68,7 @@ const containerRule: Rule = ({ colors }) => {
   };
 };
 
+// TODO: Extract duplicate 13
 const modalCloseOptionStyle: Rule = () => {
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
@@ -85,6 +86,7 @@ const modalCloseOptionStyle: Rule = () => {
   };
 };
 
+// TODO: Extract duplicate 14
 const modalTitleOptionStyle: Rule = () => {
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;

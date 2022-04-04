@@ -1,9 +1,9 @@
 import React, { FC, useState } from 'react';
-import { useStyle, useBreakpoints, Button, Styles, Rule, CreateRule } from '@pma/dex-wrapper';
+import { Button, CreateRule, Rule, Styles, useBreakpoints, useStyle } from '@pma/dex-wrapper';
 
 import { Notification } from 'components/Notification';
 import { GenericItemField } from 'components/GenericForm';
-import { Item, Input, Select, Textarea } from 'components/Form';
+import { Input, Item, Select, Textarea } from 'components/Form';
 import { Trans, useTranslation } from 'components/Translation';
 import { IconButton, Position } from 'components/IconButton';
 import { Icon as IconComponent } from 'components/Icon';
@@ -11,7 +11,7 @@ import SuccessModal from '../SuccessModal';
 import get from 'lodash.get';
 import { Option } from 'components/Form/types';
 import { AddNoteModalProps } from '../../../type';
-import { getNotes, getFolder, addNewFolderId } from 'utils';
+import { addNewFolderId, getFolder, getNotes } from 'utils';
 
 export const MODAL_WRAPPER = 'modal-wrapper';
 
@@ -86,6 +86,7 @@ const AddNoteModal: FC<AddNoteModalProps> = ({ methods, cancelModal, submitForm,
                       />
                     );
                   }
+                  // TODO: Extract duplicate 6
                   if (item.type === 'select') {
                     const { field_options } = item;
                     return (
@@ -197,6 +198,7 @@ const wrapperStyle: Rule = ({ theme }) => ({
   borderTop: `${theme.border.width.b1} solid ${theme.colors.lightGray}`,
 });
 
+// TODO: Extract duplicate 7
 const buttonCancelStyle: Rule = ({ theme }) => ({
   fontWeight: theme.font.weight.bold,
   width: '49%',

@@ -1,7 +1,7 @@
-import React, { FC, useState, useEffect } from 'react';
-import { useStyle, useBreakpoints, Button, Styles, Rule, CreateRule, Theme } from '@pma/dex-wrapper';
+import React, { FC, useEffect, useState } from 'react';
+import { Button, CreateRule, Rule, Styles, Theme, useBreakpoints, useStyle } from '@pma/dex-wrapper';
 import { GenericItemField } from 'components/GenericForm';
-import { Item, Input, Select, Textarea } from 'components/Form';
+import { Input, Item, Select, Textarea } from 'components/Form';
 import { EditSelectedNoteProps } from './type';
 import { Trans, useTranslation } from 'components/Translation';
 import { IconButton, Position } from 'components/IconButton';
@@ -10,7 +10,7 @@ import { SuccessModal } from './index';
 import { getEditedNote } from 'utils/note';
 import { ConfirmModal } from 'features/Modal';
 import { useDispatch, useSelector } from 'react-redux';
-import { NotesActions, colleagueUUIDSelector } from '@pma/store';
+import { colleagueUUIDSelector, NotesActions } from '@pma/store';
 import { Option } from 'components/Form/types';
 
 export const MODAL_WRAPPER = 'modal-wrapper';
@@ -145,6 +145,7 @@ const EditSelectedNote: FC<EditSelectedNoteProps> = ({
                 />
               );
             }
+            // TODO: Extract duplicate 6
             if (item.type === 'select') {
               const { field_options } = item;
               return (

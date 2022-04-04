@@ -1,6 +1,6 @@
-import React, { FC, useState, useMemo, useEffect } from 'react';
+import React, { FC, useEffect, useMemo, useState } from 'react';
 import { ModalDownloadFeedbackProps } from './type';
-import { useStyle, useBreakpoints, Rule, Button } from '@pma/dex-wrapper';
+import { Button, Rule, useBreakpoints, useStyle } from '@pma/dex-wrapper';
 import { IconButton, Position } from 'components/IconButton';
 import { SearchPart, SubmitPart } from './components';
 import { Trans } from 'components/Translation';
@@ -184,6 +184,7 @@ const downloadDescriptionStyled: Rule = {
   lineHeight: '22px',
 };
 
+// TODO: Extract duplicate 7
 const outlineBtnRule: Rule = (theme) => ({
   ...theme.font.fixed.f16,
   fontWeight: theme.font.weight.bold,
@@ -194,6 +195,7 @@ const outlineBtnRule: Rule = (theme) => ({
   color: `${theme.colors.tescoBlue}`,
 });
 
+// TODO: Extract duplicate 4
 const iconBtnStyle: Rule = ({ theme }) => ({
   padding: '0px 6px 0px 20px',
   display: 'flex',
@@ -208,6 +210,7 @@ const iconBtnStyle: Rule = ({ theme }) => ({
   cursor: 'pointer',
 });
 
+// TODO: Extract duplicate 5
 const iconBtnStyleDisabled: Rule = ({ theme }) => ({
   padding: '0px 6px 0px 20px',
   display: 'flex',

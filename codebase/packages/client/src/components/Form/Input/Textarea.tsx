@@ -48,11 +48,10 @@ const Textarea: FC<TextareaField> = ({
       onChange={textAreaChange}
       onFocus={() => setFocus(true)}
       onBlur={() => setFocus(false)}
-      className={css(textAriaStyle({ theme, isValid }))}
+      className={css(textAriaStyle({ theme, isValid }), { ...styles })}
       value={value}
       placeholder={placeholder}
       rows={rows}
-      style={styles}
     />
   );
 };

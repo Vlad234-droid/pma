@@ -5,8 +5,7 @@ import '@testing-library/jest-dom/extend-expect';
 import { createMemoryHistory } from 'history';
 import { buildPath } from 'features/Routes';
 import { Page } from 'pages';
-import { FEEDBACK_ACTIONS } from './FeedbackActions';
-import FeedbackActions from './FeedbackActions';
+import FeedbackActions, { FEEDBACK_ACTIONS } from './FeedbackActions';
 import { renderWithTheme } from 'utils/test';
 
 describe('Feedback actions', () => {

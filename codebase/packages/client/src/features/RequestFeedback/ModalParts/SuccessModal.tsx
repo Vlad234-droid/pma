@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 
 export const WRAPPER = 'wrapper';
 
+// TODO: Extract duplicate 1
 const SuccessModal: FC = () => {
   const { css, theme } = useStyle();
   const [, isBreakpoint] = useBreakpoints();

@@ -21,6 +21,7 @@ const bodyBlockStyle = {
   flex: '1 1 0',
 } as Styles;
 
+// TODO: Extract duplicate 8
 const titleStyle: Rule = ({ theme }) =>
   ({
     fontStyle: 'normal',
@@ -29,6 +30,7 @@ const titleStyle: Rule = ({ theme }) =>
     lineHeight: '20px',
   } as Styles);
 
+// TODO: Extract duplicate 9
 const descriptionStyle = {
   fontStyle: 'normal',
   fontWeight: 'normal',
@@ -36,6 +38,7 @@ const descriptionStyle = {
   lineHeight: '20px',
 } as Styles;
 
+// TODO: Extract duplicate 10
 const bodyStyle = {
   flexWrap: 'wrap',
   gap: '16px 8px',
@@ -43,6 +46,7 @@ const bodyStyle = {
   display: 'inline-flex',
 } as Styles;
 
+// TODO: Extract duplicate 11
 const tileStyle: CreateRule<{ mobileScreen }> = ({ mobileScreen }) => ({
   ...(mobileScreen
     ? {

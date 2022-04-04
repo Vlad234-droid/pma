@@ -1,5 +1,5 @@
 import React from 'react';
-import { CreateRule, Icon, Modal, Rule, useBreakpoints, useStyle, theme } from '@pma/dex-wrapper';
+import { CreateRule, Icon, Modal, Rule, theme, useBreakpoints, useStyle } from '@pma/dex-wrapper';
 import { useNavigate } from 'react-router';
 import { buildPath } from 'features/Routes';
 import { Page } from 'pages';
@@ -91,7 +91,7 @@ const PersonalDevelopmentHelp = () => {
                 any newly recognised strengths or development areas I would like to add to my PDP?
               </li>
               <li>Do I need to do more of the same, or something different?</li>
-              <li>Do I need to take more time, or find some additional resources or support? </li>
+              <li>Do I need to take more time, or find some additional resources or support?</li>
             </ul>
           </div>
         </div>
@@ -119,6 +119,7 @@ const containerRule: CreateRule<{ mobileScreen }> = (props) => {
   };
 };
 
+// TODO: Extract duplicate 13
 const modalCloseOptionStyle: CreateRule<{ mobileScreen }> = (props) => {
   const { mobileScreen } = props;
   return {
@@ -135,6 +136,7 @@ const modalCloseOptionStyle: CreateRule<{ mobileScreen }> = (props) => {
   };
 };
 
+// TODO: Extract duplicate 14
 const modalTitleOptionStyle: CreateRule<{ mobileScreen }> = (props) => {
   const { mobileScreen } = props;
   return {

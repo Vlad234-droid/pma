@@ -1,10 +1,10 @@
 import React, { FC, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { useStyle, Rule } from '@pma/dex-wrapper';
+import { Rule, useStyle } from '@pma/dex-wrapper';
 import { getLoadedStateSelector, ReviewsActions } from '@pma/store';
 import { TileWrapper } from 'components/Tile';
-import { Accordion, BaseAccordion, Section, Panel, ExpandButton } from 'components/Accordion';
+import { Accordion, BaseAccordion, ExpandButton, Panel, Section } from 'components/Accordion';
 import { formatToRelativeDate, paramsReplacer } from 'utils';
 import IconButtonDefault from 'components/IconButtonDefault';
 import { FeedbackStatus, Tesco } from 'config/enum';
@@ -17,6 +17,7 @@ import defaultImg from 'images/default.png';
 
 export const TEST_ID = 'expand_button';
 
+// TODO: Extract duplicate 12
 const DraftItem: FC<DraftItemProps> = ({ status, list, canEdit }) => {
   const { css } = useStyle();
   const navigate = useNavigate();
