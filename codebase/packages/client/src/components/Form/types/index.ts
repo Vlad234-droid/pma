@@ -2,7 +2,7 @@ import { ChangeEvent, RefObject, SyntheticEvent } from 'react';
 import { Rule, Styles } from '@pma/dex-wrapper';
 
 export interface FormField {
-  styles?: Styles | Rule;
+  styles?: Styles;
   domRef?: RefObject<any>;
   isValid?: boolean;
   customStyles?: Rule | Styles;

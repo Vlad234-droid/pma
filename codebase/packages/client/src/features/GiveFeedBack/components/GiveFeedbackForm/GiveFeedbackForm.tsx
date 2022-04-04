@@ -1,4 +1,4 @@
-import React, { FC, useMemo } from 'react';
+import React, { FC } from 'react';
 import { useStyle, Rule, useBreakpoints, Button } from '@pma/dex-wrapper';
 import { useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
@@ -6,7 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { getColleagueByUuidSelector } from '@pma/store';
 import get from 'lodash.get';
 import { IconButton, Position } from 'components/IconButton';
-import { Trans } from 'components/Translation';
+import { Trans, useTranslation } from 'components/Translation';
 import { TileWrapper } from 'components/Tile';
 import { Field, Item, Textarea, Attention } from 'components/Form';
 import { createGiveFeedbackSchema } from '../../config';
@@ -37,6 +37,7 @@ const GiveFeedbackForm: FC<Props> = ({ onSubmit, defaultValues, currentColleague
   const { css, theme } = useStyle();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+  const { t } = useTranslation();
 
   const {
     handleSubmit,
@@ -45,7 +46,7 @@ const GiveFeedbackForm: FC<Props> = ({ onSubmit, defaultValues, currentColleague
     formState: { isValid, errors },
   } = useForm({
     mode: 'onChange',
-    resolver: yupResolver(createGiveFeedbackSchema),
+    resolver: yupResolver(createGiveFeedbackSchema(t)),
     defaultValues,
   });
 

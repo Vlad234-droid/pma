@@ -14,7 +14,7 @@ const Textarea: FC<TextareaField> = ({
   onChange,
   isValid,
   readonly = false,
-  styles = {},
+  styles,
 }) => {
   const { css, theme } = useStyle();
   const { inputRef, setFocus } = useFormContainer();
