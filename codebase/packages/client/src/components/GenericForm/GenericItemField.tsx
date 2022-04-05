@@ -1,4 +1,4 @@
-import { Rule, Styles } from '@pma/dex-wrapper';
+import { Rule, Styles, colors } from '@pma/dex-wrapper';
 import React, { FC, RefObject, useEffect, useState } from 'react';
 import { VALIDATION_RULE } from 'utils/yup/types';
 
@@ -56,7 +56,7 @@ export const GenericItemField: FC<GenericItemFormProps> = ({
         options={options}
         getSelected={getSelected}
         isValid={!errors[name]}
-        styles={styles}
+        styles={{ ...customElement, ...styles }}
         name={name}
         value={state}
         readonly={readonly}
@@ -98,4 +98,11 @@ export const GenericItemField: FC<GenericItemFormProps> = ({
       {element}
     </Wrapper>
   );
+};
+
+const customElement: Rule = {
+  '::placeholder': {
+    color: `${colors.tescoGray}`,
+  },
+  color: `${colors.lightBlack}`,
 };
