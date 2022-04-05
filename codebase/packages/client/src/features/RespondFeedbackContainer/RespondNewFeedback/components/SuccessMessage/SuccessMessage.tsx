@@ -1,26 +1,30 @@
 import React, { FC } from 'react';
 import { Button, Rule, Styles, useBreakpoints, useStyle } from '@pma/dex-wrapper';
-import { IconButton } from 'components/IconButton';
 import success from 'images/success.jpg';
 import { Trans } from 'components/Translation';
-import { useNavigate } from 'react-router-dom';
+
+export const OK_BTN = 'ok_btn';
+export const SUCCESS_MODAL_WRAPPER = 'success_modal_wrapper';
+
+type Props = {
+  targetColleagueProfile: any;
+  onSuccess: () => void;
+};
 
 // TODO: Extract duplicate 1
-const SuccessMassage: FC = () => {
+const SuccessMessage: FC<Props> = ({ targetColleagueProfile, onSuccess }) => {
   const { css, theme } = useStyle();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
-  const navigate = useNavigate();
   return (
-    <div className={css(WrapperSuccessContainer)}>
+    <div data-test-id={SUCCESS_MODAL_WRAPPER} className={css(WrapperSuccessContainer)}>
       <div className={css(SuccessImg)}>
         <img src={success} alt='success' />
       </div>
-      <h2 className={css(DoneText)}>
-        <Trans i18nKey='done'>Done</Trans>!
-      </h2>
+      <h2 className={css(DoneText)}>Done!</h2>
       <p className={css(Description)}>
-        <Trans i18nKey='your_feedback_request_has_been_shared'>Your feedback request has been shared.</Trans>
+        {`${targetColleagueProfile?.colleague?.profile?.firstName} ${targetColleagueProfile?.colleague?.profile?.lastName}`}{' '}
+        <Trans i18nKey='will_now_be_able_to_see_your_feedback'>will now be able to see your feedback</Trans>
       </p>
       <div
         className={css({
@@ -49,6 +53,7 @@ const SuccessMassage: FC = () => {
             })}
           >
             <Button
+              data-test-id={OK_BTN}
               styles={[
                 theme.font.fixed.f16,
                 {
@@ -61,7 +66,7 @@ const SuccessMassage: FC = () => {
                 },
               ]}
               onPress={() => {
-                navigate(-1);
+                onSuccess();
               }}
             >
               <Trans i18nKey='OK'>Okay</Trans>
@@ -69,18 +74,6 @@ const SuccessMassage: FC = () => {
           </div>
         </div>
       </div>
-      <span
-        className={css({
-          position: 'fixed',
-          top: theme.spacing.s5,
-          left: mobileScreen ? theme.spacing.s5 : theme.spacing.s10,
-          textDecoration: 'none',
-          border: 'none',
-          cursor: 'pointer',
-        })}
-      >
-        <IconButton graphic='arrowLeft' onPress={() => navigate(-1)} iconProps={{ invertColors: true }} />
-      </span>
     </div>
   );
 };
@@ -117,4 +110,4 @@ const Description: Rule = {
   textAlign: 'center',
 };
 
-export default SuccessMassage;
+export default SuccessMessage;

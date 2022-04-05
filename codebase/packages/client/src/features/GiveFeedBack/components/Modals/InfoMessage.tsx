@@ -6,7 +6,7 @@ import { Trans } from 'components/Translation';
 
 export const MESSAGE_WRAPPER = 'message-wrapper';
 
-const InfoMassage: FC<InfoModalProps> = ({ goBack }) => {
+const InfoMessage: FC<InfoModalProps> = ({ goBack }) => {
   const { css, theme } = useStyle();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
@@ -110,4 +110,4 @@ const preTitle: Rule = {
   lineHeight: '20px',
 };
 
-export default InfoMassage;
+export default InfoMessage;

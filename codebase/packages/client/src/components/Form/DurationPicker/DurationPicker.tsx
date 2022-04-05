@@ -17,6 +17,8 @@ const mappedValues = {
 
 type DurationReplacer = (matched: 'P' | 'W' | 'D') => string;
 
+export const TEST_ID = 'duration-test-id';
+
 export const DurationPicker: FC<DurationField> = ({ control, name }) => {
   const { css } = useStyle();
   const [weeks, setWeeks] = useState('');
@@ -41,7 +43,7 @@ export const DurationPicker: FC<DurationField> = ({ control, name }) => {
         };
         const replacer: DurationReplacer = (matched) => mappedValues[matched];
         return (
-          <div className='dropdown-container' style={{ width: '200px', position: 'relative' }}>
+          <div data-test-id={TEST_ID} className='dropdown-container' style={{ width: '200px', position: 'relative' }}>
             <Input
               onChange={() => ({})}
               onFocus={() => setShowDialog(!showDialog)}

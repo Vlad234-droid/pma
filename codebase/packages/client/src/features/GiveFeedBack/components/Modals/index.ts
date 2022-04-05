@@ -1,3 +1,3 @@
-export { default as ConfirmMassage } from './ConfirmMassage';
-export { default as InfoMassage } from './InfoMassage';
-export { default as SuccessMassage } from './SuccessMassage';
+export { default as ConfirmMessage } from './ConfirmMessage';
+export { default as InfoMessage } from './InfoMessage';
+export { default as SuccessMessage } from './SuccessMessage';

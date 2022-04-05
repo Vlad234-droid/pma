@@ -12,7 +12,7 @@ import {
 import { Icon } from 'components/Icon';
 import { Page } from 'pages';
 import Spinner from 'components/Spinner';
-import { ConfirmMassage, GiveFeedbackForm, InfoMassage, SuccessMassage } from './components';
+import { ConfirmMessage, GiveFeedbackForm, InfoMessage, SuccessMessage } from './components';
 import { GiveFeedbackType } from './type';
 
 const feedbackFields: GiveFeedbackType[] = [
@@ -148,7 +148,7 @@ const NewFeedback: FC = () => {
             />
           )}
           {status === Statuses.CONFIRMING && (
-            <ConfirmMassage
+            <ConfirmMessage
               onConfirm={() => {
                 setStatus(Statuses.SENDING);
                 handleSave(formData);
@@ -157,13 +157,13 @@ const NewFeedback: FC = () => {
             />
           )}
           {status === Statuses.SENDING && (
-            <SuccessMassage
+            <SuccessMessage
               onSuccess={handleSuccess}
               selectedColleagueUuid={formData.targetColleagueUuid}
               targetColleagueProfile={targetColleagueProfile}
             />
           )}
-          {status === Statuses.INFO && <InfoMassage goBack={() => setStatus(Statuses.PENDING)} />}
+          {status === Statuses.INFO && <InfoMessage goBack={() => setStatus(Statuses.PENDING)} />}
         </>
       )}
     </Modal>

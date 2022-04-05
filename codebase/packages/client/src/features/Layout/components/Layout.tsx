@@ -77,7 +77,7 @@ const Layout: FC = ({ children }) => {
         </div>
       )}
       no={() => (
-        <AccessDenied massage={error?.code === 'SERVER_ERROR' ? systemNotAvailableMessage : notHaveAccessMessage} />
+        <AccessDenied message={error?.code === 'SERVER_ERROR' ? systemNotAvailableMessage : notHaveAccessMessage} />
       )}
     />
   );

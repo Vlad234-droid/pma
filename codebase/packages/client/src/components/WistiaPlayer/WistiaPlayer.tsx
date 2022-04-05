@@ -7,13 +7,15 @@ type Props = {
   aspectRatio?: number;
 };
 
+export const TEST_ID = 'test-id-iframe';
+
 const WistiaPlayer: React.FC<Props> = ({ videoId, aspectRatio = 16 / 9 }) => {
   const { css } = useStyle();
 
   const sourceUrl = `https://fast.wistia.net/embed/iframe/${videoId}?videoFoam=true`;
 
   return (
-    <div className={css(containerRule({ aspectRatio }))}>
+    <div data-test-id={TEST_ID} className={css(containerRule({ aspectRatio }))}>
       <iframe
         src={sourceUrl}
         frameBorder='0'

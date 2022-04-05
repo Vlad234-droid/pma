@@ -8,6 +8,9 @@ import { useTranslation } from 'components/Translation';
 import SecondaryWidget, { Props as SecondaryWidgetProps } from 'features/SecondaryWidget';
 import ViewNavigation from 'features/ViewNavigation';
 
+export const TEST_ID = 'test-people-team-id';
+export const SECONDARY_WIDGET_ID = 'secondary-widget-id';
+
 const PeopleTeam: FC = () => {
   const { css } = useStyle();
   const navigate = useNavigate();
@@ -33,9 +36,9 @@ const PeopleTeam: FC = () => {
   ];
 
   return (
-    <div>
+    <div data-test-id={TEST_ID}>
       <ViewNavigation />
-      <div className={css(wrapperStyle)}>
+      <div data-test-id={SECONDARY_WIDGET_ID} className={css(wrapperStyle)}>
         {widgets.map((props, idx) => (
           <SecondaryWidget key={idx} {...props} />
         ))}

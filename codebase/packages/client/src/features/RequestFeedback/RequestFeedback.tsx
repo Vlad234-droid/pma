@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { CreateRule, Modal, useBreakpoints, useStyle } from '@pma/dex-wrapper';
 import RequestFeedbackForm from './components/RequestFeedbackForm';
-import SuccessMassage from './components/SuccessMassage';
+import SuccessMessage from './components/SuccessMessage';
 import { colleagueUUIDSelector, FeedbackActions, getLoadedStateSelector } from '@pma/store';
 import { Icon } from 'components/Icon';
 import { Page } from 'pages';
@@ -67,7 +67,7 @@ const RequestFeedback: FC = () => {
           {isInfoModalOpen ? (
             <InfoModalContent onClose={() => setIsInfoModalOpen(false)} />
           ) : sent ? (
-            <SuccessMassage />
+            <SuccessMessage />
           ) : (
             <RequestFeedbackForm
               onSubmit={handleSubmit}
