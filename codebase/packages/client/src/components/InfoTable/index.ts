@@ -1,1 +1,1 @@
-export { default } from './InfoTable';
+export { default, INFO_TABLE_WRAPPER } from './InfoTable';

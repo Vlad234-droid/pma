@@ -7,9 +7,9 @@ import { createMemoryHistory } from 'history';
 import Report, { REPORT_WRAPPER } from './Report';
 import { PieChart } from '../../components/PieChart';
 import { View } from 'components/PieChart/config';
-import InfoTable from './components/InfoTable';
+import InfoTable, { INFO_TABLE_WRAPPER } from 'components/InfoTable';
 import { Rating } from '../../config/enum';
-import { INFO_TABLE_WRAPPER } from './components/InfoTable/InfoTable';
+
 import { Page } from 'pages';
 
 describe('Report page', () => {

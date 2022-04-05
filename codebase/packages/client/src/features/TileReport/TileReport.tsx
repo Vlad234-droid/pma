@@ -1,18 +1,20 @@
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import { useStyle, Rule, useBreakpoints, IconButton as BackButton } from '@pma/dex-wrapper';
 import { useNavigate } from 'react-router-dom';
 
-import ColleagueProfile from './components/ColleagueProfile';
 import { PieChart } from 'components/PieChart';
-import { useTranslation, Trans } from 'components/Translation';
+import InfoTable from 'components/InfoTable';
+import { useTranslation } from 'components/Translation';
 import { View } from 'components/PieChart/config';
 import { IconButton } from 'components/IconButton';
 import { FilterOption } from 'features/Shared';
 import FilterModal from 'features/Report/components/FilterModal';
 import { buildPath } from 'features/Routes';
+import { ChartContent } from './components/ChartContent';
+import { TableContent } from './components/TableContent';
 
 import { useTileStatistics } from './hooks';
-import { getReportTitles } from './utils';
+import { getReportTitles, checkTableChart, getTableChartTitle } from './utils';
 import { initialValues } from 'features/Report/config';
 import { getCurrentYear } from 'utils/date';
 import { ReportPage } from 'config/enum';
@@ -20,9 +22,6 @@ import { ReportPage } from 'config/enum';
 import { Page } from 'pages';
 
 export const OBJECTIVES_WRAPPER = 'objectives_wrapper';
-export const APPROVED_COLLEAGUES_WRAPPER = 'approved-colleagues_wrapper';
-export const NOT_APPROVED_COLLEAGUES_WRAPPER = 'not-approved-colleagues_wrapper';
-export const PROFILES_WRAPPER = 'profiles-wrapper';
 
 const TileReport = () => {
   const { css } = useStyle();
@@ -36,53 +35,16 @@ const TileReport = () => {
   const [checkedItems, setCheckedItems]: [string[], (T) => void] = useState([]);
   const [isCheckAll, setIsCheckAll]: [string[], (T) => void] = useState([]);
 
-  const [pending, done, type, query] = useTileStatistics();
+  const { type, query } = useTileStatistics();
 
-  const checkBusinessType = type && type !== ReportPage.REPORT_NEW_TO_BUSINESS;
+  const checkBusinessType = !!type && type !== ReportPage.REPORT_NEW_TO_BUSINESS;
 
-  const getContent = useCallback(() => {
-    const content = (
-      <div className={css({ width: '100%' })} data-test-id={PROFILES_WRAPPER}>
-        {checkBusinessType && (
-          <div>
-            {!!pending.length && (
-              <span className={css(objectiveTypeStyle)}>
-                <Trans>{getReportTitles(t, type)?.pending}</Trans>
-              </span>
-            )}
-            {pending.map((item, i) => (
-              <div
-                key={`${item.uuid}${i}`}
-                className={css({ marginTop: '8px' })}
-                data-test-id={NOT_APPROVED_COLLEAGUES_WRAPPER}
-              >
-                <ColleagueProfile colleague={item} />
-              </div>
-            ))}
-          </div>
-        )}
+  const isTableChart = checkTableChart(type);
 
-        <div>
-          {!!done.length && (
-            <span className={css(objectiveTypeStyle, { marginTop: '24px' })}>
-              <Trans>{getReportTitles(t, type)?.done}</Trans>
-            </span>
-          )}
-          {done.map((item, i) => (
-            <div
-              key={`${item.uuid}${i}`}
-              className={css({ marginTop: '8px' })}
-              data-test-id={APPROVED_COLLEAGUES_WRAPPER}
-            >
-              <ColleagueProfile colleague={item} />
-            </div>
-          ))}
-        </div>
-      </div>
-    );
-
-    return content;
-  }, [pending, done]);
+  const getContent = () => {
+    if (isTableChart) return <TableContent type={type} />;
+    return <ChartContent checkBusinessType={checkBusinessType} type={type} />;
+  };
 
   return (
     <div data-test-id={OBJECTIVES_WRAPPER}>
@@ -91,6 +53,7 @@ const TileReport = () => {
           onPress={() => {
             navigate({
               pathname: buildPath(Page.REPORT),
+              //@ts-ignore
               search: new URLSearchParams({ year: query.year || getCurrentYear() }).toString(),
             });
           }}
@@ -138,7 +101,11 @@ const TileReport = () => {
       <div className={css(wrapperStyle)}>
         <div className={css(leftColumn)}>{getContent()}</div>
         <div className={css(rightColumn)}>
-          <PieChart title={getReportTitles(t, type)?.chart} data={type} display={View.CHART} />
+          {isTableChart ? (
+            <InfoTable mainTitle={getTableChartTitle(t, type)} data={type} />
+          ) : (
+            <PieChart title={getReportTitles(t, type)?.chart} data={type} display={View.CHART} />
+          )}
         </div>
       </div>
     </div>
@@ -205,13 +172,5 @@ const wrapperStyle: Rule = () => {
 const iconStyle: Rule = {
   marginRight: '10px',
 };
-
-const objectiveTypeStyle: Rule = ({ theme }) => ({
-  fontStyle: 'normal',
-  fontWeight: '700',
-  fontSize: `${theme.font.fixed.f18.fontSize}`,
-  marginBottom: '22px',
-  display: 'inline-block',
-});
 
 export default TileReport;

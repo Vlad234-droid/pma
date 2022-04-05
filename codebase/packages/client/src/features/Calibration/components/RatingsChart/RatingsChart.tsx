@@ -8,6 +8,8 @@ import { Trans, useTranslation } from 'components/Translation';
 
 import { useCurrentData, useChartTitle } from '../../hooks';
 
+export const BAR_WRAPPER = 'bar-wrapper';
+
 type Props = {
   compareData?: RatingChartData;
   currentData: RatingChartData;
@@ -18,18 +20,18 @@ const colors = ['#82ca9d', '#8884d8'];
 const RatingsChart: FC<Props> = ({ currentData, compareData }) => {
   const { css } = useStyle();
   const { t } = useTranslation();
-  //const { data } = getComputedData(currentData, compareData);
+  const { data } = getComputedData(currentData, compareData);
 
   const chartTile = useChartTitle();
 
-  const [data] = useCurrentData() || [];
+  //const [data] = useCurrentData() || [];
 
   const bars = getGraphBars(data);
 
   const height = compareData ? '594px' : '347px';
 
   return (
-    <div className={css({ height: height })} data-test-id='ratings-chart'>
+    <div className={css({ height: height })} data-test-id={BAR_WRAPPER}>
       <div className={css(Title)}>{`${chartTile.title} ${chartTile.year}`}</div>
       <ResponsiveContainer width='100%' height={'100%'}>
         <BarChart

@@ -3,6 +3,7 @@ import React from 'react';
 import { fireEvent } from '@testing-library/react';
 // @ts-ignore
 import { renderWithTheme as render, generateEmployeeReview } from 'utils/test';
+import { BrowserRouter } from 'react-router-dom';
 
 import Calibration from './Calibration';
 
@@ -36,11 +37,16 @@ describe('<Calibration />', () => {
     loadFilterOptions: jest.fn(),
     colleagues: [],
     filterOptions: filterOptions,
+    loading: false,
   };
 
   describe('#render', () => {
     it('should render filters', () => {
-      const { getByTestId, getByText } = render(<Calibration {...props} />);
+      const { getByTestId, getByText } = render(
+        <BrowserRouter>
+          <Calibration {...props} />
+        </BrowserRouter>,
+      );
 
       expect(getByTestId('filters')).toBeInTheDocument();
       expect(getByTestId('filtering-wrapper')).toBeInTheDocument();
@@ -54,13 +60,21 @@ describe('<Calibration />', () => {
     });
 
     it('should render graph', () => {
-      const { getByTestId } = render(<Calibration {...props} />);
+      const { getByTestId } = render(
+        <BrowserRouter>
+          <Calibration {...props} />
+        </BrowserRouter>,
+      );
 
-      expect(getByTestId('ratings-chart')).toBeInTheDocument();
+      expect(getByTestId('bar-wrapper')).toBeInTheDocument();
     });
 
     it('should render no results, if no items in props.colleagues', () => {
-      const { getByText } = render(<Calibration {...props} />);
+      const { getByText } = render(
+        <BrowserRouter>
+          <Calibration {...props} />
+        </BrowserRouter>,
+      );
 
       expect(getByText('No results')).toBeInTheDocument();
     });
@@ -71,12 +85,20 @@ describe('<Calibration />', () => {
         colleagues: [generateEmployeeReview()],
       };
 
-      const { getByText } = render(<Calibration {...newProps} />);
+      const { getByText } = render(
+        <BrowserRouter>
+          <Calibration {...newProps} />
+        </BrowserRouter>,
+      );
       expect(getByText('mocked_colleagues')).toBeInTheDocument();
     });
 
     it('should render widgets', () => {
-      const { getByText } = render(<Calibration {...props} />);
+      const { getByText } = render(
+        <BrowserRouter>
+          <Calibration {...props} />
+        </BrowserRouter>,
+      );
 
       expect(getByText('Edit calibration ratings')).toBeInTheDocument();
       expect(getByText('Enter your team`s ratings to see live updates')).toBeInTheDocument();
@@ -87,7 +109,11 @@ describe('<Calibration />', () => {
 
   describe('#handlers', () => {
     it('should call props.loadData, if props.colleagueUuid', () => {
-      render(<Calibration {...props} />);
+      render(
+        <BrowserRouter>
+          <Calibration {...props} />
+        </BrowserRouter>,
+      );
 
       expect(props.loadData).toHaveBeenCalled();
     });
@@ -99,20 +125,32 @@ describe('<Calibration />', () => {
       };
       props.loadData = jest.fn();
 
-      render(<Calibration {...newProps} />);
+      render(
+        <BrowserRouter>
+          <Calibration {...newProps} />
+        </BrowserRouter>,
+      );
 
       expect(props.loadData).not.toHaveBeenCalled();
       props.loadData.mockRestore();
     });
 
     it('should call loadFilterOptions', () => {
-      render(<Calibration {...props} />);
+      render(
+        <BrowserRouter>
+          <Calibration {...props} />
+        </BrowserRouter>,
+      );
 
       expect(props.loadFilterOptions).toHaveBeenCalled();
     });
 
     it('call props.loadData with applied filters on filter changes', () => {
-      const { getByTestId, getByText } = render(<Calibration {...props} />);
+      const { getByTestId, getByText } = render(
+        <BrowserRouter>
+          <Calibration {...props} />
+        </BrowserRouter>,
+      );
 
       fireEvent.click(getByText('11'));
       fireEvent.click(getByText('12'));
@@ -128,7 +166,11 @@ describe('<Calibration />', () => {
         colleagues: [generateEmployeeReview()],
       };
 
-      const { getByText, getByTestId } = render(<Calibration {...newProps} />);
+      const { getByText, getByTestId } = render(
+        <BrowserRouter>
+          <Calibration {...newProps} />
+        </BrowserRouter>,
+      );
 
       fireEvent.click(getByText('Edit calibration ratings'));
 
@@ -144,7 +186,11 @@ describe('<Calibration />', () => {
         ...props,
         colleagues: [generateEmployeeReview()],
       };
-      const { getByText, getByTestId, queryByTestId, queryByText } = render(<Calibration {...newProps} />);
+      const { getByText, getByTestId, queryByTestId, queryByText } = render(
+        <BrowserRouter>
+          <Calibration {...newProps} />
+        </BrowserRouter>,
+      );
 
       fireEvent.click(getByText('Compare to expected distribution or previous years'));
 

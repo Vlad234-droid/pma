@@ -1,16 +1,26 @@
 type colleagueValue = string | null;
 
+export type ColleagueProfile = {
+  businessType: colleagueValue;
+  firstName: colleagueValue;
+  jobName: colleagueValue;
+  lastName: colleagueValue;
+  lineManager: colleagueValue;
+  middleName: colleagueValue;
+  uuid: string;
+  tags: Record<string, string>;
+};
+
 export type ColleagueProfileProps = {
-  colleague: {
-    businessType: colleagueValue;
-    firstName: colleagueValue;
-    jobName: colleagueValue;
-    lastName: colleagueValue;
-    lineManager: colleagueValue;
-    middleName: colleagueValue;
-    uuid: string;
-    tags: Record<string, '1' | '0'>;
-  };
+  colleague: ColleagueProfile;
+};
+type ChartDataType = Array<ColleagueProfileProps>;
+
+export type TableChartData = {
+  'Below expected': ChartDataType;
+  Great: ChartDataType;
+  Outstanding: ChartDataType;
+  Satisfactory: ChartDataType;
 };
 
 export enum ReportTags {
@@ -21,4 +31,6 @@ export enum ReportTags {
   REPORT_WORK_LEVEL = 'REPORT_WORK_LEVEL',
   REPORT_FEEDBACK = 'has_feedback_requested has_feedback_given',
   REPORT_NEW_TO_BUSINESS = 'is_new_to_business',
+  REPORT_MYR_BREAKDOWN = 'myr_overall_rating',
+  REPORT_EYR_BREAKDOWN = 'eyr_overall_rating',
 }

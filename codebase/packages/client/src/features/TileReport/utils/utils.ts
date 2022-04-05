@@ -60,3 +60,20 @@ export const checkForDoneChartView = (type) => {
   if (type.split(' ').length >= 2) return type.split(' ')[1];
   return type;
 };
+
+export const checkTableChart = (type) =>
+  type === ReportPage.REPORT_EYR_BREAKDOWN ||
+  type === ReportPage.REPORT_MYR_BREAKDOWN ||
+  type === ReportPage.REPORT_ANNIVERSARY_REVIEWS;
+
+export const getTableChartTitle = (t, type) => {
+  const titles = {
+    [ReportPage.REPORT_MYR_BREAKDOWN]: t(TitlesReport.MYR_BREAKDOWN, 'Breakdown of Mid-year review'),
+    [ReportPage.REPORT_EYR_BREAKDOWN]: t(TitlesReport.EYR_BREAKDOWN, 'Breakdown of End-year review'),
+    [ReportPage.REPORT_ANNIVERSARY_REVIEWS]: t(
+      TitlesReport.ANNIVERSARY_REVIEWS,
+      'Anniversary Reviews completed per quarter',
+    ),
+  };
+  return titles[type];
+};

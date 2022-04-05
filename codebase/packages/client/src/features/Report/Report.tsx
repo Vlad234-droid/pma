@@ -18,7 +18,7 @@ import { useToast } from 'features/Toast';
 import { View } from 'components/PieChart/config';
 import Spinner from 'components/Spinner';
 
-import { getFieldOptions, metaStatuses, initialValues } from './config';
+import { getFieldOptions, metaStatuses, initialValues, convertToLink } from './config';
 import { downloadCsvFile } from './utils';
 import { useStatisticsReport, getReportData, getData } from './hooks';
 import useQueryString from 'hooks/useQueryString';
@@ -142,8 +142,9 @@ const Report: FC = () => {
                 title={t(TitlesReport.OBJECTIVES_SUBMITTED, 'Objectives submitted')}
                 data={ReportPage.REPORT_SUBMITTED_OBJECTIVES}
                 display={View.CHART}
-                link={Page.OBJECTIVES_SUBMITTED_REPORT}
+                link={Page.TILE_REPORT_STATISTICS}
                 params={getYear()}
+                type={convertToLink(ReportPage.REPORT_SUBMITTED_OBJECTIVES)}
               />
             </div>
             <div className={css(rightColumn)}>
@@ -151,8 +152,9 @@ const Report: FC = () => {
                 title={t(TitlesReport.OBJECTIVES_APPROVED, 'Objectives approved')}
                 data={ReportPage.REPORT_APPROVED_OBJECTIVES}
                 display={View.CHART}
-                link={Page.OBJECTIVES_APPROVED_REPORT}
+                link={Page.TILE_REPORT_STATISTICS}
                 params={getYear()}
+                type={convertToLink(ReportPage.REPORT_APPROVED_OBJECTIVES)}
               />
               <div className={css(downloadWrapperStyle)}>
                 <Button
@@ -189,16 +191,17 @@ const Report: FC = () => {
                 title={t(TitlesReport.MYR, 'Mid-year review')}
                 display={View.CHART}
                 data={ReportPage.REPORT_MID_YEAR_REVIEW}
-                link={Page.MID_YEAR_REVIEW_REPORT}
+                link={Page.TILE_REPORT_STATISTICS}
                 params={getYear()}
+                type={convertToLink(ReportPage.REPORT_MID_YEAR_REVIEW)}
               />
             </div>
             <div className={css(rightColumn)}>
               <InfoTable
                 mainTitle={t(TitlesReport.MYR_BREAKDOWN, 'Breakdown of Mid-year review')}
-                data={ReportPage.CALIBRATION_MYR_BREAKDOWN}
-                type='myr-breakdown'
-                link={Page.CALIBRATION}
+                data={ReportPage.REPORT_MYR_BREAKDOWN}
+                type={convertToLink(ReportPage.REPORT_MYR_BREAKDOWN)}
+                link={Page.TILE_REPORT_STATISTICS}
                 params={getYear()}
               />
             </div>
@@ -209,16 +212,17 @@ const Report: FC = () => {
                 title={t(TitlesReport.EYR, 'Year-end review')}
                 display={View.CHART}
                 data={ReportPage.REPORT_END_YEAR_REVIEW}
-                link={Page.END_YEAR_REVIEW_REPORT}
+                link={Page.TILE_REPORT_STATISTICS}
                 params={getYear()}
+                type={convertToLink(ReportPage.REPORT_END_YEAR_REVIEW)}
               />
             </div>
             <div className={css(rightColumn)}>
               <InfoTable
                 mainTitle={t(TitlesReport.EYR_BREAKDOWN, 'Breakdown of End-year review')}
-                data={ReportPage.REPORT_BREAKDOWN_EYR}
-                type='eyr-breakdown'
-                link={Page.CALIBRATION}
+                data={ReportPage.REPORT_EYR_BREAKDOWN}
+                type={convertToLink(ReportPage.REPORT_EYR_BREAKDOWN)}
+                link={Page.TILE_REPORT_STATISTICS}
                 params={getYear()}
               />
             </div>
@@ -229,8 +233,9 @@ const Report: FC = () => {
                 title={t(TitlesReport.WL4And5, 'WL4 & 5 Objectives submitted')}
                 display={View.CHART}
                 data={ReportPage.REPORT_WORK_LEVEL}
-                link={Page.WORK_LEVEL_REPORT}
+                link={Page.TILE_REPORT_STATISTICS}
                 params={getYear()}
+                type={convertToLink(ReportPage.REPORT_WORK_LEVEL)}
               />
             </div>
             <div className={css(rightColumn)}>
@@ -238,8 +243,9 @@ const Report: FC = () => {
                 title={t(TitlesReport.BUSINESS, 'New to business')}
                 data={ReportPage.REPORT_NEW_TO_BUSINESS}
                 display={View.QUANTITY}
-                link={Page.NEW_TO_BUSINESS}
+                link={Page.TILE_REPORT_STATISTICS}
                 params={getYear()}
+                type={convertToLink(ReportPage.REPORT_NEW_TO_BUSINESS)}
               />
             </div>
           </div>
@@ -249,8 +255,9 @@ const Report: FC = () => {
                 title={t(TitlesReport.MOMENT_FEEDBACK, 'In the moment feedback')}
                 display={View.CHART}
                 data={ReportPage.REPORT_FEEDBACK}
-                link={Page.FEEDBACK_REPORT}
+                link={Page.TILE_REPORT_STATISTICS}
                 params={getYear()}
+                type={convertToLink(ReportPage.REPORT_FEEDBACK)}
               />
             </div>
             <div className={css(rightColumn)}>
@@ -258,8 +265,8 @@ const Report: FC = () => {
                 mainTitle={t(TitlesReport.ANNIVERSARY_REVIEWS, 'Anniversary Reviews completed per quarter')}
                 preTitle={t(TitlesReport.HOURLY_PAID, 'Hourly paid colleagues only')}
                 data={ReportPage.REPORT_ANNIVERSARY_REVIEWS}
-                type='anniversary-reviews'
-                link={Page.CALIBRATION}
+                type={convertToLink(ReportPage.REPORT_ANNIVERSARY_REVIEWS)}
+                link={Page.TILE_REPORT_STATISTICS}
                 params={getYear()}
               />
             </div>

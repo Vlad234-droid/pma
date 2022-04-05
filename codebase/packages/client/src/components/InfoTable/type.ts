@@ -8,8 +8,8 @@ export type Obj = {
 
 export type InfoTableProps = {
   mainTitle: string;
-  data: ReportPage | Array<Obj>;
-  type: string;
+  data: ReportPage | Array<Obj> | '';
+  type?: string;
   preTitle?: string;
   params?: Record<string, string>;
   link?: string;

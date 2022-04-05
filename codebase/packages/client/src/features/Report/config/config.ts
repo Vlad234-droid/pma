@@ -37,6 +37,8 @@ export const listOfStatuses = [
   Status.NOT_CREATED,
 ];
 
+export const convertToLink = (str) => str.split('_').slice(1).join('-').toLowerCase();
+
 export const metaStatuses = [
   MetaDataReport.MYR_SUBMITTED_PERCENTAGE,
   MetaDataReport.MYR_APPROVED_PERCENTAGE,

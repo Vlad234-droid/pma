@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { buildPath, buildPathWithParams } from 'features/Routes';
 import { PieChartContent as Content } from './components/PieChartContent';
 import { PieChartProps } from './config';
+import { paramsReplacer } from 'utils';
 
 const PieChart: FC<PieChartProps> = ({
   title,
@@ -14,6 +15,7 @@ const PieChart: FC<PieChartProps> = ({
   link = '',
   Wrapper = 'div',
   params = {},
+  type = '',
 }) => {
   const { css } = useStyle();
 
@@ -33,7 +35,12 @@ const PieChart: FC<PieChartProps> = ({
     );
 
   return (
-    <Link to={buildPathWithParams(buildPath(link), { ...params })} className={css(pieChartWrapper)}>
+    <Link
+      to={buildPathWithParams(buildPath(paramsReplacer(link, { ':type': type })), {
+        ...params,
+      })}
+      className={css(pieChartWrapper)}
+    >
       <Content {...props} />
     </Link>
   );

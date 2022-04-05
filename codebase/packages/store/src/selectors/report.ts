@@ -2,6 +2,7 @@ import { createSelector } from 'reselect';
 //@ts-ignore
 import { RootState } from 'typesafe-actions';
 import { Status, ReportPage } from '../../../client/src/config/enum';
+import { ReportTags } from '../../../client/src/features/TileReport/config';
 
 export const reportSelector = (state: RootState) => state.report;
 const statusIndex = 8;
@@ -82,3 +83,42 @@ export const getDoneReportSelector = (type: string, reportType: string) =>
       return acc;
     }, []);
   });
+export const getTableChartData = (type: string) =>
+  createSelector(reportSelector, (report: any) => {
+    const { colleagues } = report;
+
+    if (type !== ReportTags.REPORT_MYR_BREAKDOWN && type !== ReportTags.REPORT_EYR_BREAKDOWN) return {};
+
+    return colleagues.reduce(
+      (acc, colleague) => {
+        if (colleague.tags[type] !== '') acc[colleague.tags[type]].push(colleague);
+        return acc;
+      },
+      {
+        'Below expected': [],
+        Satisfactory: [],
+        Great: [],
+        Outstanding: [],
+      },
+    );
+  });
+export const getAnniversaryData = createSelector(reportSelector, (report: any) => {
+  const { colleagues } = report;
+
+  return colleagues.reduce(
+    (acc, colleague) => {
+      Object.keys(acc).forEach((type) => {
+        if (Number(colleague.tags[type])) acc[type].push(colleague);
+        return acc;
+      });
+
+      return acc;
+    },
+    {
+      has_eyr_approved_1_quarter: [],
+      has_eyr_approved_2_quarter: [],
+      has_eyr_approved_3_quarter: [],
+      has_eyr_approved_4_quarter: [],
+    },
+  );
+});

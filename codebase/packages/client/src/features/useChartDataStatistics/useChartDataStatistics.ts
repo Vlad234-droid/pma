@@ -1,4 +1,4 @@
-import { TitlesReport, Rating } from 'config/enum';
+import { TitlesReport, Rating, ReportPage } from 'config/enum';
 import { useStatisticsReport } from 'features/Report/hooks';
 import { metaStatuses } from 'features/Report/config';
 
@@ -45,26 +45,30 @@ export const useChartDataStatistics = (t, type) => {
   } = useStatisticsReport([...metaStatuses]);
 
   const report = {
-    REPORT_MID_YEAR_REVIEW: [
+    [ReportPage.REPORT_MID_YEAR_REVIEW]: [
       { percent: myrSubmittedPercentage, title: t(TitlesReport.SUBMITTED, 'Submitted') },
       { percent: myrApprovedPercentage, title: t(TitlesReport.APPROVED, 'Approved') },
     ],
-    REPORT_END_YEAR_REVIEW: [
+    [ReportPage.REPORT_END_YEAR_REVIEW]: [
       { pecent: eyrSubmittedPercentage, title: t(TitlesReport.SUBMITTED, 'Submitted') },
       { percent: eyrApprovedPercentage, title: t(TitlesReport.APPROVED, 'Approved') },
     ],
-    REPORT_FEEDBACK: [
+    [ReportPage.REPORT_FEEDBACK]: [
       { percent: feedbackRequestedPercentage, title: t(TitlesReport.REQUESTED, 'Requested') },
       { percent: feedbackGivenPercentage, title: t(TitlesReport.GIVEN, 'Given') },
     ],
-    REPORT_SUBMITTED_OBJECTIVES: [{ percent: objectivesSubmittedPercentage }],
-    REPORT_APPROVED_OBJECTIVES: [{ percent: objectivesApprovedPercentage }],
-    REPORT_WORK_LEVEL: [
+
+    [ReportPage.REPORT_SUBMITTED_OBJECTIVES]: [{ percent: objectivesSubmittedPercentage }],
+
+    [ReportPage.REPORT_APPROVED_OBJECTIVES]: [{ percent: objectivesApprovedPercentage }],
+    [ReportPage.REPORT_WORK_LEVEL]: [
       { percent: notApprovedObjPercent, title: notApprovedObjTitle },
       { percent: approvedObjPercent, title: approvedObjTitle },
     ],
-    REPORT_NEW_TO_BUSINESS: [{ percent: newToBusinessCount, title: t(Rating.COLLEAGUES, 'Colleagues') }],
-    CALIBRATION_MYR_BREAKDOWN: [
+
+    [ReportPage.REPORT_NEW_TO_BUSINESS]: [{ percent: newToBusinessCount, title: t(Rating.COLLEAGUES, 'Colleagues') }],
+
+    [ReportPage.REPORT_MYR_BREAKDOWN]: [
       {
         percent: myrRatingBreakdownBelowExpectedPercentage || 0,
         quantity: myrRatingBreakdownBelowExpectedCount || 0,
@@ -86,7 +90,7 @@ export const useChartDataStatistics = (t, type) => {
         title: t(Rating.OUTSTANDING, 'Outstanding'),
       },
     ],
-    REPORT_BREAKDOWN_EYR: [
+    [ReportPage.REPORT_EYR_BREAKDOWN]: [
       {
         percent: eyrRatingBreakdownBelowExpectedPercentage,
         quantity: eyrRatingBreakdownBelowExpectedCount,
@@ -108,7 +112,8 @@ export const useChartDataStatistics = (t, type) => {
         title: t(Rating.OUTSTANDING, 'Outstanding'),
       },
     ],
-    REPORT_ANNIVERSARY_REVIEWS: [
+
+    [ReportPage.REPORT_ANNIVERSARY_REVIEWS]: [
       {
         percent: anniversaryReviewPerQuarter1Percentage,
         quantity: anniversaryReviewPerQuarter1Count,

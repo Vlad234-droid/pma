@@ -4,8 +4,9 @@ import React from 'react';
 import { renderWithTheme as render } from 'utils/test';
 // @ts-ignore
 import { Rating } from 'config/enum';
+import { BrowserRouter } from 'react-router-dom';
 
-import RatingsChart from './RatingsChart';
+import RatingsChart, { BAR_WRAPPER } from './RatingsChart';
 
 describe('<RatingsChart />', () => {
   const props = {
@@ -22,15 +23,13 @@ describe('<RatingsChart />', () => {
 
   describe('#render', () => {
     it('should render chart', () => {
-      const { getByTestId } = render(<RatingsChart {...props} />);
+      const { getByTestId } = render(
+        <BrowserRouter>
+          <RatingsChart {...props} />
+        </BrowserRouter>,
+      );
 
-      expect(getByTestId('ratings-chart')).toBeInTheDocument();
-    });
-
-    it('should render title', () => {
-      const { getByText } = render(<RatingsChart {...props} />);
-
-      expect(getByText(`Calibration submission ${new Date().getFullYear()}`)).toBeInTheDocument();
+      expect(getByTestId(BAR_WRAPPER)).toBeInTheDocument();
     });
   });
 });

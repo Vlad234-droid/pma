@@ -4,7 +4,8 @@ import '@testing-library/jest-dom';
 import { renderWithTheme as render } from 'utils/test';
 import { BrowserRouter } from 'react-router-dom';
 
-import TileReport, { APPROVED_COLLEAGUES_WRAPPER, OBJECTIVES_WRAPPER, PROFILES_WRAPPER } from './TileReport';
+import TileReport, { OBJECTIVES_WRAPPER } from './TileReport';
+import { PROFILES_WRAPPER } from './components/ChartContent';
 
 describe('TileReport', () => {
   beforeEach(() => {

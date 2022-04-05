@@ -133,10 +133,10 @@ export enum Rating {
   GREAT = 'great',
   OUTSTANDING = 'outstanding',
   COLLEAGUES = 'colleagues',
-  QUARTER_1 = 'quarter_1',
-  QUARTER_2 = 'quarter_2',
-  QUARTER_3 = 'quarter_3',
-  QUARTER_4 = 'quarter_4',
+  QUARTER_1 = 'has_eyr_approved_1_quarter',
+  QUARTER_2 = 'has_eyr_approved_2_quarter',
+  QUARTER_3 = 'has_eyr_approved_3_quarter',
+  QUARTER_4 = 'has_eyr_approved_4_quarter',
 }
 
 export enum MetaDataReport {
@@ -227,8 +227,8 @@ export enum ReportPage {
   REPORT_END_YEAR_REVIEW = 'REPORT_END_YEAR_REVIEW',
   REPORT_WORK_LEVEL = 'REPORT_WORK_LEVEL',
   REPORT_FEEDBACK = 'REPORT_FEEDBACK',
-  CALIBRATION_MYR_BREAKDOWN = 'CALIBRATION_MYR_BREAKDOWN',
-  REPORT_BREAKDOWN_EYR = 'REPORT_BREAKDOWN_EYR',
+  REPORT_EYR_BREAKDOWN = 'REPORT_EYR_BREAKDOWN',
+  REPORT_MYR_BREAKDOWN = 'REPORT_MYR_BREAKDOWN',
   REPORT_ANNIVERSARY_REVIEWS = 'REPORT_ANNIVERSARY_REVIEWS',
   REPORT_NEW_TO_BUSINESS = 'REPORT_NEW_TO_BUSINESS',
 }

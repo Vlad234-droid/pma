@@ -247,43 +247,43 @@ const pages: Record<Page, PageComponent> = {
     backPath: Page.CONTRIBUTION,
     perform: [role.TALENT_ADMIN, role.ADMIN, role.LINE_MANAGER],
   },
-  [Page.OBJECTIVES_SUBMITTED_REPORT]: {
+  [Page.TILE_REPORT_STATISTICS]: {
     Element: TileReportStatistics,
     title: 'Objectives submitted',
     withHeader: true,
     perform: [role.TALENT_ADMIN, role.ADMIN, role.LINE_MANAGER],
   },
-  [Page.OBJECTIVES_APPROVED_REPORT]: {
+  [Page.TILE_REPORT_STATISTICS]: {
     Element: TileReportStatistics,
     title: 'Objectives approved',
     withHeader: true,
     perform: [role.TALENT_ADMIN, role.ADMIN, role.LINE_MANAGER],
   },
-  [Page.MID_YEAR_REVIEW_REPORT]: {
+  [Page.TILE_REPORT_STATISTICS]: {
     Element: TileReportStatistics,
     title: 'Mid-year review',
     withHeader: true,
     perform: [role.TALENT_ADMIN, role.ADMIN, role.LINE_MANAGER],
   },
-  [Page.END_YEAR_REVIEW_REPORT]: {
+  [Page.TILE_REPORT_STATISTICS]: {
     Element: TileReportStatistics,
     title: 'End-year review',
     withHeader: true,
     perform: [role.TALENT_ADMIN, role.ADMIN, role.LINE_MANAGER],
   },
-  [Page.WORK_LEVEL_REPORT]: {
+  [Page.TILE_REPORT_STATISTICS]: {
     Element: TileReportStatistics,
     title: 'WL4 & 5 report',
     withHeader: true,
     perform: [role.TALENT_ADMIN, role.ADMIN, role.LINE_MANAGER],
   },
-  [Page.NEW_TO_BUSINESS]: {
+  [Page.TILE_REPORT_STATISTICS]: {
     Element: TileReportStatistics,
     title: 'New to business',
     withHeader: true,
     perform: [role.TALENT_ADMIN, role.ADMIN, role.LINE_MANAGER],
   },
-  [Page.FEEDBACK_REPORT]: {
+  [Page.TILE_REPORT_STATISTICS]: {
     Element: TileReportStatistics,
     title: 'Feedback report',
     withHeader: true,

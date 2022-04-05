@@ -12,13 +12,14 @@ export type Obj = {
 
 export type PieChartProps = {
   title?: string;
-  data: ReportPage | Array<Obj>;
+  data: ReportPage | Array<Obj> | '';
   display: View;
   percentId?: string;
   titleId?: string;
   link?: string;
   readonly Wrapper?: keyof JSX.IntrinsicElements;
   params?: Record<string, string>;
+  type?: string;
 };
 
-export type PieChartContentProps = Omit<PieChartProps, 'link' | 'Wrapper' | 'params'>;
+export type PieChartContentProps = Omit<PieChartProps, 'link' | 'Wrapper' | 'params' | 'type'>;

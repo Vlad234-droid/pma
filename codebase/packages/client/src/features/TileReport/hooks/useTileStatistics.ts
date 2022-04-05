@@ -1,26 +1,19 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { getPendingReportSelector, getDoneReportSelector, ReportActions } from '@pma/store';
+import { useLocation } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { ReportActions } from '@pma/store';
 
 import useQueryString from 'hooks/useQueryString';
-import { ReportTags } from '../config';
 import { ReportPage } from 'config/enum';
-import { convertToReportEnum, checkForPendingChartView, checkForDoneChartView, getData } from '../utils';
+import { convertToReportEnum, getData } from '../utils';
 
 export const useTileStatistics = () => {
   const dispatch = useDispatch();
   const { pathname } = useLocation();
 
-  const [type, setType] = useState<string>('');
+  const [type, setType] = useState<ReportPage | ''>('');
 
-  const query = useQueryString() as Record<string, string>;
-
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!Object.entries(query).length || !query.year) navigate(-1);
-  }, [query]);
+  const query = useQueryString();
 
   const getReport = useCallback(() => {
     getData(dispatch, query);
@@ -35,10 +28,5 @@ export const useTileStatistics = () => {
     };
   }, []);
 
-  const pending =
-    useSelector(getPendingReportSelector(checkForPendingChartView(ReportTags[type]), ReportTags[type])) || [];
-
-  const done = useSelector(getDoneReportSelector(checkForDoneChartView(ReportTags[type]), ReportTags[type])) || [];
-
-  return [pending, done, type, query];
+  return { type, query };
 };
