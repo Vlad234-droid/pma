@@ -5,7 +5,7 @@ import MarkdownRenderer from 'components/MarkdownRenderer';
 import { Trans } from 'components/Translation';
 
 type Props = {
-  massage: string;
+  message: string;
 };
 
 const P = ({ children }) => {
@@ -26,14 +26,14 @@ const A = ({ children }) => {
   );
 };
 
-export const AccessDenied: FC<Props> = ({ massage }) => {
+export const AccessDenied: FC<Props> = ({ message }) => {
   const { css } = useStyle();
   return (
     <div className={css(wrapper)}>
       <p className={css(textBottom)}>
         <img className={css({ width: '300px' })} src={TescoLogo} alt='Tesco Logo' />
       </p>
-      <MarkdownRenderer source={massage} components={{ p: P, a: A }} />
+      <MarkdownRenderer source={message} components={{ p: P, a: A }} />
     </div>
   );
 };

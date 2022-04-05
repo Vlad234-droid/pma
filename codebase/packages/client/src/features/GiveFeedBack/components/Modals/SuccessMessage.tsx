@@ -15,7 +15,7 @@ export type Props = {
 };
 
 // TODO: Extract duplicate 1
-const SuccessMassage: FC<Props> = ({ selectedColleagueUuid, targetColleagueProfile, onSuccess }) => {
+const SuccessMessage: FC<Props> = ({ selectedColleagueUuid, targetColleagueProfile, onSuccess }) => {
   const { css, theme } = useStyle();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
@@ -112,4 +112,4 @@ const Description: Rule = {
   textAlign: 'center',
 };
 
-export default SuccessMassage;
+export default SuccessMessage;

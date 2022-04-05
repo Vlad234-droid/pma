@@ -2,9 +2,9 @@ import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
 import { fireEvent } from '@testing-library/react';
 import { renderWithTheme as render } from 'utils/test';
-import SuccessMassage, { SUCCESS_WRAPPER } from './SuccessMassage';
+import SuccessMessage, { SUCCESS_WRAPPER } from './SuccessMessage';
 
-describe('SuccessMassage', () => {
+describe('SuccessMessage', () => {
   const onSuccess = jest.fn();
   const props = {
     selectedColleagueUuid: '',
@@ -12,12 +12,12 @@ describe('SuccessMassage', () => {
   };
 
   it('it should render success wrapper', () => {
-    const { getByTestId } = render(<SuccessMassage {...props} />);
+    const { getByTestId } = render(<SuccessMessage {...props} />);
     const wrapper = getByTestId(SUCCESS_WRAPPER);
     expect(wrapper).toBeInTheDocument();
   });
   it('it should call onSuccess handler', () => {
-    const { getByRole } = render(<SuccessMassage {...props} />);
+    const { getByRole } = render(<SuccessMessage {...props} />);
     const button = getByRole('button');
     fireEvent.click(button);
     expect(onSuccess).toHaveBeenCalledTimes(1);

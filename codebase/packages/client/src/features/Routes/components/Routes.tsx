@@ -6,7 +6,7 @@ import { Page } from 'pages';
 import AccessDenied from 'components/AccessDenied';
 import { usePermission } from 'features/Permission';
 
-const notHaveAccessMassage = `
+const notHaveAccessMessage = `
   not_have_access_to_page
 `;
 
@@ -22,7 +22,7 @@ const MainRoutes: FC<Props> = ({ routes }) => {
         return (
           <ReactRoute
             key={idx}
-            element={hasPermission ? <Element /> : <AccessDenied massage={notHaveAccessMassage} />}
+            element={hasPermission ? <Element /> : <AccessDenied message={notHaveAccessMessage} />}
             path={path}
           />
         );

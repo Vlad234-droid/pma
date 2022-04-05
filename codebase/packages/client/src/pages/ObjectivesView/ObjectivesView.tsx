@@ -7,6 +7,9 @@ import useDispatch from 'hooks/useDispatch';
 import Spinner from 'components/Spinner';
 import Popup from 'components/Popup/Popup';
 
+export const TEST_ID = 'objectives-view-test-id';
+export const SPINNER_ID = 'spinner-id';
+
 const ObjectivesView = () => {
   const { css } = useStyle();
   const dispatch = useDispatch();
@@ -19,11 +22,11 @@ const ObjectivesView = () => {
   }, []);
 
   if (!loaded) {
-    return <Spinner fullHeight />;
+    return <Spinner data-test-id={SPINNER_ID} fullHeight />;
   }
 
   return (
-    <div className={css(main)}>
+    <div data-test-id={TEST_ID} className={css(main)}>
       <Popup items={orgObjectives} />
     </div>
   );

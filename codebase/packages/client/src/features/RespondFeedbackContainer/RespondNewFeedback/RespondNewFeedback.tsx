@@ -7,8 +7,8 @@ import { ColleaguesActions, colleagueUUIDSelector, FeedbackActions, feedbackByUu
 import { Icon } from 'components/Icon';
 import { Page } from 'pages';
 import GiveFeedbackForm from './components/GiveFeedbackForm';
-import InfoMassage from './components/InfoMassage';
-import SuccessMassage from './components/SuccessMassage';
+import InfoMessage from './components/InfoMessage';
+import SuccessMessage from './components/SuccessMessage';
 import { getFeedbackFields, getPayload, HandleSaveType, Statuses } from './config';
 
 const RespondNewFeedback: FC = () => {
@@ -85,9 +85,9 @@ const RespondNewFeedback: FC = () => {
       )}
 
       {status === Statuses.SENDING && (
-        <SuccessMassage onSuccess={handleSuccess} targetColleagueProfile={targetColleagueProfile} />
+        <SuccessMessage onSuccess={handleSuccess} targetColleagueProfile={targetColleagueProfile} />
       )}
-      {status === Statuses.INFO && <InfoMassage goBack={() => setStatus(Statuses.PENDING)} />}
+      {status === Statuses.INFO && <InfoMessage goBack={() => setStatus(Statuses.PENDING)} />}
     </Modal>
   );
 };

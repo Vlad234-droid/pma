@@ -10,7 +10,7 @@ type ConfirmModalType = {
   goBack: () => void;
 };
 
-const ConfirmMassage: FC<ConfirmModalType> = ({ onConfirm, goBack }) => {
+const ConfirmMessage: FC<ConfirmModalType> = ({ onConfirm, goBack }) => {
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
   const { css, theme } = useStyle();
@@ -121,4 +121,4 @@ const info_content_style: Rule = {
   fontWeight: 'normal',
 };
 
-export default ConfirmMassage;
+export default ConfirmMessage;

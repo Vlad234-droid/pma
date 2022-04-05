@@ -1,7 +1,7 @@
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
 import { renderWithTheme as render } from 'utils/test';
-import SuccessMassage, { OK_BTN, SUCCESS_MODAL_WRAPPER } from './SuccessMassage';
+import SuccessMessage, { OK_BTN, SUCCESS_MODAL_WRAPPER } from './SuccessMessage';
 import { fireEvent, waitFor } from '@testing-library/react';
 
 describe('Success modal', () => {
@@ -12,12 +12,12 @@ describe('Success modal', () => {
   };
 
   it('it should render success modal', () => {
-    const { getByTestId } = render(<SuccessMassage {...props} />);
+    const { getByTestId } = render(<SuccessMessage {...props} />);
     const wrapper = getByTestId(SUCCESS_MODAL_WRAPPER);
     expect(wrapper).toBeInTheDocument();
   });
   it('it should close message modal', async () => {
-    const { getByTestId, queryByTestId } = render(<SuccessMassage {...props} />);
+    const { getByTestId, queryByTestId } = render(<SuccessMessage {...props} />);
     const okBtn = getByTestId(OK_BTN);
     fireEvent.click(okBtn);
     const wrapper = queryByTestId(SUCCESS_MODAL_WRAPPER);
