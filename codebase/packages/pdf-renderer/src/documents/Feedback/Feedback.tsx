@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { Text, View, StyleSheet } from '@react-pdf/renderer';
 
 import GeneralDocument from '../General';
-import colors from '@pma/client/src/theme/colors';
+import { colors } from '@pma/dex-wrapper';
 
 type QuestionItem = {
   code: string;

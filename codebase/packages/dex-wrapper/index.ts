@@ -6,13 +6,18 @@ import {
   CreateRule,
   Colors,
   Theme,
-  theme,
-  useStyle,
+  theme as baseTheme,
   useBreakpoints,
-  colors,
   fontWeight,
   Styles,
 } from '@dex-ddl/core';
+import { AccessibilityProvider, useAccessibleStyle } from '@accessibility-toolbar/core';
+import merge from 'lodash.merge';
+import secondaryTheme from './src/theme';
+
+const theme = merge(baseTheme, secondaryTheme);
+const colors = theme.colors;
+const fontSettings = secondaryTheme.fontSettings;
 
 import { Button } from './src/components/Button';
 import { Modal } from './src/components/Modal';
@@ -22,10 +27,12 @@ export type { Rule, CreateRule, Theme, Styles, Colors };
 export {
   theme,
   DDLProvider,
-  useStyle,
+  AccessibilityProvider,
+  useAccessibleStyle as useStyle,
   useBreakpoints,
   colors,
   fontWeight,
+  fontSettings,
   Icon,
   Button,
   IconButton,

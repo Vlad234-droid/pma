@@ -26,6 +26,7 @@
     "ws:client": "yarn workspace @pma/client",
     "ws:store": "yarn workspace @pma/store",
     "ws:pdf": "yarn workspace @pma/pdf-renderer",
+    "ws:dex": "yarn workspace @pma/dex-wrapper",
     "ws:openapi": "yarn workspace @pma/openapi"
   },
   "devDependencies": {

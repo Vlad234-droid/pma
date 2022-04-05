@@ -4,9 +4,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { I18nextProvider } from 'react-i18next';
 import i18n from 'config/i18next';
-import { DDLProvider, theme as baseTheme } from '@pma/dex-wrapper';
-import merge from 'lodash.merge';
-import theme from 'theme';
+import { AccessibilityProvider, theme, fontSettings } from '@pma/dex-wrapper';
 import { INTEGRATION_MODE, PUBLIC_URL } from 'config/constants';
 import store from 'config/store';
 import { AuthProvider } from 'contexts/authContext';
@@ -16,7 +14,6 @@ import { buildRoutes } from 'features/Routes';
 import { pages } from 'pages';
 import { ToastProvider } from 'features/Toast';
 import { AppStateProvider } from 'features/AppState';
-import fontSettings from 'theme/font/fontSettings';
 import { MessagesProvider } from 'features/Messages';
 import { HeaderProvider } from 'contexts/headerContext';
 
@@ -32,7 +29,11 @@ const rendererOptions = {
 const Root: FC = () => {
   return (
     <I18nextProvider i18n={i18n}>
-      <DDLProvider rendererOptions={rendererOptions} theme={merge(baseTheme, theme)}>
+      <AccessibilityProvider
+        rendererOptions={rendererOptions}
+        // @ts-ignore
+        theme={theme}
+      >
         <Provider store={store}>
           <AuthProvider>
             <ToastProvider>
@@ -52,7 +53,7 @@ const Root: FC = () => {
             </ToastProvider>
           </AuthProvider>
         </Provider>
-      </DDLProvider>
+      </AccessibilityProvider>
     </I18nextProvider>
   );
 };

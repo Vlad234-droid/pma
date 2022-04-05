@@ -1,5 +1,5 @@
 import React, { FC, useState, useEffect, useRef } from 'react';
-import { useStyle, CreateRule, Theme } from '@pma/dex-wrapper';
+import { useStyle, CreateRule, colors } from '@pma/dex-wrapper';
 import mergeRefs from 'react-merge-refs';
 
 import { TextareaField } from '../types';
@@ -16,7 +16,7 @@ const Textarea: FC<TextareaField> = ({
   readonly = false,
   styles,
 }) => {
-  const { css, theme } = useStyle();
+  const { css } = useStyle();
   const { inputRef, setFocus } = useFormContainer();
 
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
@@ -48,7 +48,7 @@ const Textarea: FC<TextareaField> = ({
       onChange={textAreaChange}
       onFocus={() => setFocus(true)}
       onBlur={() => setFocus(false)}
-      className={css(textAriaStyle({ theme, isValid }), { ...styles })}
+      className={css(textAriaStyle({ isValid }), { ...styles })}
       value={value}
       placeholder={placeholder}
       rows={rows}
@@ -56,20 +56,24 @@ const Textarea: FC<TextareaField> = ({
   );
 };
 
-const textAriaStyle: CreateRule<{ isValid?: boolean; theme: Theme }> = ({ isValid, theme }) => ({
-  width: '100%',
-  minHeight: '40px',
-  // @ts-ignore
-  border: `1px solid ${isValid ? theme.colors.lightGray : theme.colors.error}`,
-  borderRadius: '5px',
-  fontSize: '16px',
-  lineHeight: '20px',
-  padding: '10px 40px 10px 16px',
-  resize: 'vertical',
-  ':focus': {
-    outline: 'none !important',
-    border: `1px solid ${theme.colors.tescoBlue}`,
-  },
-});
+const textAriaStyle: CreateRule<{ isValid?: boolean }> =
+  ({ isValid }) =>
+  ({ theme }) => {
+    return {
+      width: '100%',
+      minHeight: '40px',
+      // @ts-ignore
+      border: `1px solid ${isValid ? theme.colors.lightGray : theme.colors.error}`,
+      borderRadius: '5px',
+      fontSize: '16px',
+      lineHeight: '20px',
+      padding: '10px 40px 10px 16px',
+      resize: 'vertical',
+      ':focus': {
+        outline: 'none !important',
+        border: `1px solid ${theme.colors.tescoBlue}`,
+      },
+    };
+  };
 
 export default Textarea;

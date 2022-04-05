@@ -38,9 +38,6 @@ const TriggerModal: FC<Props> = ({ triggerComponent, title, children }) => {
             content: title,
             styles: [modalTitleOptionStyle],
           }}
-          onOverlayClick={() => {
-            setIsOpen(false);
-          }}
         >
           <TriggerModalProvider value={{ onClose: () => setIsOpen(false) }}>{children}</TriggerModalProvider>
         </Modal>
