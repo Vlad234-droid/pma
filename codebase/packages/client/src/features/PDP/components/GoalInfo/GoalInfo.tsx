@@ -87,7 +87,11 @@ const GoalInfo = (props) => {
                       })}
 
                     <div className={css(btnBlock)}>
-                      <Button data-test-id={EDIT_TEST_ID} styles={[btns]} onPress={() => editGoal(id, currentGoalId)}>
+                      <Button
+                        data-test-id={EDIT_TEST_ID}
+                        styles={[editBtn]}
+                        onPress={() => editGoal(id, currentGoalId)}
+                      >
                         <Icon graphic='edit' iconStyles={{ height: '16px', width: '16px' }} title={t('edit', 'Edit')} />
                         <div className={css({ marginLeft: '5px' })}>{t('edit', 'Edit')}</div>
                       </Button>
@@ -125,6 +129,19 @@ const btnBlock: Rule = {
   fontWeight: `${theme.font.weight.bold}`,
 };
 
+const editBtn: Rule = {
+  padding: '8px 0',
+  marginRight: '36.67px',
+  background: 'none',
+  color: `${theme.colors.tescoBlue}`,
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  flexDirection: 'row',
+  height: '34px',
+  boxSizing: 'border-box',
+};
+
 const btns: Rule = {
   background: 'none',
   color: `${theme.colors.tescoBlue}`,
@@ -134,8 +151,7 @@ const btns: Rule = {
   flexDirection: 'row',
   height: '34px',
   boxSizing: 'border-box',
-  padding: '8px 16px',
-  marginRight: '21px',
+  padding: '8px 0px',
 };
 
 const fullGoals: Rule = {
@@ -143,7 +159,7 @@ const fullGoals: Rule = {
 };
 
 const goalBlock: Rule = {
-  paddingBottom: '16px',
+  paddingBottom: '24px',
   fontSize: `${theme.font.fixed.f14}`,
   lineHeight: '18px',
   userSelect: 'none',

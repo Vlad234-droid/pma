@@ -12,9 +12,9 @@ import { v4 as uuidv4 } from 'uuid';
 import { ConfirmModal } from 'features/Modal';
 import { Trans, useTranslation } from 'components/Translation';
 import Datepicker from 'components/Datepicker';
-import arrLeft from 'assets/img/pdp/arrLeft.png';
 import { StepIndicatorBasic } from 'components/StepIndicator/StepIndicator';
 import { Status } from 'config/enum';
+import { Icon } from 'components/Icon';
 
 type Props = {
   pdpGoals: any;
@@ -216,7 +216,7 @@ const CreatePDPForm: FC<Props> = ({
             <Button
               isDisabled={!formState.isValid}
               onPress={() => setConfirmModal(!confirmSaveModal)}
-              styles={[buttonWhiteStyle({ theme, mobileScreen, formState })]}
+              styles={[buttonWhiteStyle({ theme, mobileScreen, formState, displaySaveBtn })]}
             >
               <Trans i18nKey='save_and_exit'>Save & Exit</Trans>
             </Button>
@@ -231,8 +231,10 @@ const CreatePDPForm: FC<Props> = ({
                 }}
                 styles={[customBtn({ mobileScreen }), createBtn]}
               >
-                <Trans i18nKey='save_and_create_new_goal'>Save & create a new goal</Trans>{' '}
-                <img className={css(imgArrow)} alt='arrow' src={arrLeft} />
+                <div className={css(spacedText)}>
+                  <Trans i18nKey='save_and_create_new_goal'>Save & create a new goal</Trans>{' '}
+                  <Icon fill={`${theme.colors.white}`} graphic='arrowRight' iconStyles={{ height: '17.3px' }} />
+                </div>
               </Button>
             )}
           </div>
@@ -255,9 +257,18 @@ const wrapperStyle: CreateRule<{ mobileScreen: boolean; currentUUID: string | un
     marginTop: currentUUID ? '20px' : '0px',
   });
 
+const spacedText: Rule = {
+  height: '18px',
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'space-between',
+  width: '100%',
+};
+
 const customBtn: CreateRule<{ mobileScreen: boolean }> = (props) => {
   const { mobileScreen } = props;
   return {
+    fontWeight: theme.font.weight.bold,
     padding: '10px 20px',
     width: mobileScreen ? '100%' : '49%',
     whiteSpace: 'nowrap',
@@ -266,14 +277,19 @@ const customBtn: CreateRule<{ mobileScreen: boolean }> = (props) => {
   };
 };
 
-const buttonWhiteStyle: CreateRule<{ theme; mobileScreen; formState }> = ({ theme, mobileScreen, formState }) => ({
+const buttonWhiteStyle: CreateRule<{ theme; mobileScreen; formState; displaySaveBtn }> = ({
+  theme,
+  mobileScreen,
+  formState,
+  displaySaveBtn,
+}) => ({
   ...theme.font.fixed.f16,
   fontWeight: theme.font.weight.bold,
   margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
-  background: theme.colors.white,
+  background: !displaySaveBtn ? theme.colors.tescoBlue : theme.colors.white,
   border: `${theme.border.width.b1} solid ${theme.colors.tescoBlue}`,
-  color: `${theme.colors.tescoBlue}`,
-  width: mobileScreen ? '100%' : '50%',
+  color: !displaySaveBtn ? `${theme.colors.white}` : `${theme.colors.tescoBlue}`,
+  width: mobileScreen || !displaySaveBtn ? '100%' : '50%',
   whiteSpace: 'nowrap',
   opacity: !formState.isValid ? '0.5' : '1',
 });

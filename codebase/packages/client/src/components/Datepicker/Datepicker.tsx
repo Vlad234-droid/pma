@@ -112,7 +112,7 @@ const Datepicker: FC<Props> = ({ onChange, onError, value, name, minDate, isVali
 
   return (
     <>
-      <div ref={ref} className={css(wrapperRule)} data-test-id={TEST_ID}>
+      <div onClick={() => toggleOpen(!isOpen)} ref={ref} className={css(wrapperRule)} data-test-id={TEST_ID}>
         <Input
           value={currentValue}
           onChange={handleChangeValue}
@@ -122,12 +122,7 @@ const Datepicker: FC<Props> = ({ onChange, onError, value, name, minDate, isVali
           isValid={isValid}
           readonly
         />
-        <button
-          disabled={readonly}
-          type={'button'}
-          onClick={() => toggleOpen(!isOpen)}
-          className={css(buttonRule({ error: !isValid }))}
-        >
+        <button disabled={readonly} type={'button'} className={css(buttonRule({ error: !isValid }))}>
           <Icon graphic={'calender'} />
         </button>
         {isOpen && (
