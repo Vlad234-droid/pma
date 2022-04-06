@@ -94,6 +94,14 @@ if (!PROXY_API_SERVER_URL) {
     // setup logger middlewares
     appServer.use(getHttpLoggerMiddleware('http'));
 
+    appServer.use(
+      errorHandler({
+        appName: config.applicationName(),
+        logoutPath: config.integrationSSOLogoutPath(),
+        tryAgainPath: config.integrationCoreMountUrl(),
+      }),
+    );
+
     if (isDEV(config.buildEnvironment()) || !config.useOneLogin()) {
       console.log(`WARNING! Authentication is turned off. Fake Login is used.`);
       // fake login behavior
@@ -173,14 +181,6 @@ if (!PROXY_API_SERVER_URL) {
         break;
       }
     }
-
-    appServer.use(
-      errorHandler({
-        appName: config.applicationName(),
-        logoutPath: config.integrationSSOLogoutPath(),
-        tryAgainPath: config.integrationCoreMountUrl(),
-      }),
-    );
 
     server.disable('x-powered-by');
 
