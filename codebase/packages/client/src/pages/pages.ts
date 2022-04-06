@@ -159,7 +159,7 @@ const pages: Record<Page, PageComponent> = {
   },
   [Page.USER_OBJECTIVES]: {
     Element: UserObjectives,
-    title: 'User Objectives',
+    title: 'Colleague overview',
     withHeader: true,
     backPath: Page.MY_TEAM,
     perform: [role.COLLEAGUE],
