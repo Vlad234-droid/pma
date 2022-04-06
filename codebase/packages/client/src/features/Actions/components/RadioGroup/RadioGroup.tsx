@@ -31,6 +31,7 @@ export const RadioGroup: FC<Props> = ({ status, setStatus }) => {
             className={css({
               fontSize: '16px',
               lineHeight: '20px',
+              letterSpacing: '0px',
               padding: '0px 5px',
             })}
           >

@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { NavLink } from 'react-router-dom';
-import { colors, useStyle } from '@pma/dex-wrapper';
+import { useStyle, Rule, CreateRule } from '@pma/dex-wrapper';
 
 export const TEST_ID = 'objectives-pave';
 
@@ -15,39 +15,10 @@ const RouterSwitch: FC<RouterSwitchProps> = ({ links }) => {
   const { css } = useStyle();
 
   return (
-    <div
-      className={css({
-        background: colors.white,
-        padding: '10px 0px 10px 0px',
-        borderRadius: '50px',
-        cursor: 'pointer',
-      })}
-    >
+    <div className={css(wrapperStyle)}>
       {links.map(({ link, name }) => {
         return (
-          <NavLink
-            key={link}
-            // @ts-ignore
-            style={({ isActive }) =>
-              isActive
-                ? {
-                    background: colors.tescoBlue,
-                    color: colors.white,
-                    borderRadius: '50px',
-                    padding: '10px 20px',
-                  }
-                : {}
-            }
-            className={css({
-              fontSize: '16px',
-              lineHeight: '20px',
-              fontWeight: 700,
-              padding: '10px 20px',
-              color: colors.tescoBlue,
-              textDecoration: 'none',
-            })}
-            to={link}
-          >
+          <NavLink key={link} className={({ isActive }) => css(linkStyle({ isActive }))} to={link}>
             {name}
           </NavLink>
         );
@@ -56,4 +27,37 @@ const RouterSwitch: FC<RouterSwitchProps> = ({ links }) => {
   );
 };
 
+const wrapperStyle: Rule = ({ theme }) => ({
+  background: theme.colors.white,
+  padding: '10px 0px 10px 0px',
+  borderRadius: '50px',
+  cursor: 'pointer',
+});
+
+const linkStyle: CreateRule<{ isActive: boolean }> =
+  ({ isActive }) =>
+  ({ theme }) => ({
+    fontSize: theme.font.fixed.f16.fontSize,
+    lineHeight: theme.font.fixed.f16.lineHeight,
+    fontWeight: theme.font.weight.bold,
+    letterSpacing: '0px',
+    padding: '10px 20px',
+    ...(isActive
+      ? {
+          background: theme.colors.tescoBlue,
+          color: theme.colors.white,
+          borderRadius: '50px',
+          ':hover': {
+            color: theme.colors.white,
+          },
+        }
+      : {
+          padding: '10px 20px',
+          color: theme.colors.tescoBlue,
+          textDecoration: 'none',
+          ':hover': {
+            color: theme.colors.tescoBlue,
+          },
+        }),
+  });
 export default RouterSwitch;

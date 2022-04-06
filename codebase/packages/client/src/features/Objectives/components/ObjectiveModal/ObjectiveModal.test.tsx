@@ -20,6 +20,7 @@ jest.mock('react-hook-form', () => ({
     trigger: () => jest.fn(),
     register: () => jest.fn(),
     formState: { isValid: false, errors: {} },
+    watch: () => ({ unsubscribe: () => jest.fn() }),
   }),
 }));
 

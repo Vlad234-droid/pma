@@ -22,13 +22,7 @@ it('render RouterSwitch', async () => {
     </Router>,
   );
   expect(screen.getByText('View')).toBeInTheDocument();
-  expect(screen.getByText('View').closest('a')).toHaveClass('active');
+  expect(screen.getByText('View').closest('a')).toHaveStyle('background: rgb(0, 83, 159)');
   expect(screen.getByText('Team')).toBeInTheDocument();
-  expect(screen.getByText('Team').closest('a')).not.toHaveClass('active');
-
-  // todo did not find quick solution to test switch to diff location. commented for now
-  // fireEvent.click(getByText('Team'));
-  //
-  // expect(screen.getByText('View').closest('a')).not.toHaveClass('active');
-  // expect(screen.getByText('Team').closest('a')).toHaveClass('active');
+  expect(screen.getByText('Team').closest('a')).not.toHaveStyle('background: rgb(0, 83, 159)');
 });

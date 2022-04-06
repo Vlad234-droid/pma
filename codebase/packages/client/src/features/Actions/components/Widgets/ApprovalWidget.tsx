@@ -194,6 +194,7 @@ const titleStyle: Rule = ({ theme }) => ({
   display: 'block',
   fontSize: '20px',
   lineHeight: '24px',
+  letterSpacing: '0px',
   paddingBottom: '10px',
   fontWeight: theme.font.weight.bold,
 });

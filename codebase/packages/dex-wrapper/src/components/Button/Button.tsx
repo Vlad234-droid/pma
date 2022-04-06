@@ -2,8 +2,7 @@ import React, { FC, memo, useMemo, useRef } from 'react';
 
 import { useButton } from '@react-aria/button';
 
-import { Rule } from '@dex-ddl/core';
-import { useAccessibleStyle } from '@accessibility-toolbar/core';
+import { Rule, useStyle } from '@pma/dex-wrapper';
 
 import type { AriaButtonProps } from '@react-types/button';
 
@@ -26,7 +25,7 @@ export const Button: FC<ButtonProps> = memo((props) => {
 
   const { children, isDisabled, mode = 'default', styles = [] } = props;
 
-  const { css } = useAccessibleStyle();
+  const { css } = useStyle();
 
   const variant = useMemo(() => (isDisabled ? 'disabled' : mode), [isDisabled, mode]);
 

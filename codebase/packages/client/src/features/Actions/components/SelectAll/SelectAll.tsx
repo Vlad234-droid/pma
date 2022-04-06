@@ -31,9 +31,10 @@ export const SelectAll: FC<Props> = ({ onChange, checked, indeterminate, disable
 };
 
 const spanStyle: Rule = ({ theme }) => ({
+  fontSize: theme.font.fixed.f18.fontSize,
+  lineHeight: theme.font.fixed.f18.lineHeight,
+  letterSpacing: '0px',
   paddingLeft: '16px',
-  fontSize: '18px',
-  lineHeight: '22px',
   color: theme.colors.tescoBlue,
   fontWeight: theme.font.weight.bold,
   cursor: 'pointer',

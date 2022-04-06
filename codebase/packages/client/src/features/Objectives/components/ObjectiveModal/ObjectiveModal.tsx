@@ -59,12 +59,18 @@ export const ObjectiveModal: FC<Props> = ({
   const { css } = useStyle();
   const [, isBreakpoint] = useBreakpoints();
   const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+  const { watch } = methods;
 
   const formRef = useRef<HTMLFormElement | null>(null);
 
   useEffect(() => {
-    formRef.current?.scrollIntoView();
-  });
+    const subscription = watch((value, { name }) => {
+      if (!name) {
+        formRef.current?.scrollIntoView();
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [watch]);
   const { t } = useTranslation();
 
   const {

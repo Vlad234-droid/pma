@@ -1,6 +1,6 @@
 import React, { FC, ReactNode, useMemo } from 'react';
 
-import { CreateRule, Rule, useStyle, Colors } from '@dex-ddl/core';
+import { CreateRule, Rule, useStyle, Colors } from '@pma/dex-wrapper';
 
 import { Modal } from '../Modal';
 

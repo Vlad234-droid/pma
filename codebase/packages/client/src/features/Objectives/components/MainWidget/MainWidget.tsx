@@ -193,7 +193,7 @@ const MainWidget: FC<Props> = ({ nextReviewDate = '', count = 0, status, customS
             </div>
           </div>
           <div className={css(bodyStyle)}>
-            <div className={css({ marginTop: '14px', marginLeft: '9px' })}>{description}</div>
+            <div className={css(subDescription)}>{description}</div>
             <div className={css(bodyBlockStyle)}>
               <Button mode={mode} styles={[viewButtonStyle({ inverse: notApproved })]} onPress={handleClick}>
                 {buttonText}
@@ -214,8 +214,9 @@ const MainWidget: FC<Props> = ({ nextReviewDate = '', count = 0, status, customS
 const viewButtonStyle: CreateRule<{ inverse: boolean }> =
   ({ inverse }) =>
   ({ theme }) => ({
-    fontSize: '14px',
-    fontWeight: '700',
+    ...theme.font.fixed.f14,
+    letterSpacing: '0px',
+    fontWeight: theme.font.weight.bold,
     padding: '0 16px',
     border: `1px solid ${inverse ? theme.colors.white : theme.colors.tescoBlue}`,
   });
@@ -232,14 +233,14 @@ const wrapperStyle: CreateRule<{ clickable: boolean }> =
     display: 'flex',
   });
 
-const iconStyles: Rule = () => ({
+const iconStyles: Rule = {
   width: '52px',
   height: '70px',
   fontStyle: 'normal',
   lineHeight: 0,
   textAlign: 'center',
   textTransform: 'none',
-});
+};
 
 const headStyle: Rule = {
   display: 'flex',
@@ -256,20 +257,22 @@ const bodyBlockStyle: Rule = {
   paddingTop: '14px',
 };
 
-const titleStyle: Rule = {
+const titleStyle: Rule = ({ theme }) => ({
+  ...theme.font.fixed.f18,
+  letterSpacing: '0px',
   fontStyle: 'normal',
   fontWeight: 'bold',
-  fontSize: '18px',
   marginBottom: '12px',
-};
+});
 
-const descriptionStyle: Rule = {
+const descriptionStyle: Rule = ({ theme }) => ({
+  ...theme.font.fixed.f16,
+  letterSpacing: '0px',
   position: 'relative',
   fontStyle: 'normal',
   fontWeight: 'normal',
-  fontSize: '16px',
   paddingLeft: '33px',
-};
+});
 
 const iconStyle: Rule = () => ({
   display: 'flex',
@@ -284,5 +287,11 @@ const bodyStyle: Rule = {
   display: 'flex',
   justifyContent: 'flex-end',
 };
+const subDescription: Rule = ({ theme }) => ({
+  ...theme.font.fixed.f16,
+  letterSpacing: '0px',
+  marginTop: '14px',
+  marginLeft: '9px',
+});
 
 export default MainWidget;

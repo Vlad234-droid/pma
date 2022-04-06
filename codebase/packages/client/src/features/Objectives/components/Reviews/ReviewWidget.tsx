@@ -238,9 +238,10 @@ const bodyBlockStyle: Rule = {
 const titleStyle: CreateRule<{ color: string }> =
   ({ color }) =>
   ({ theme }) => ({
+    ...theme.font.fixed.f18,
+    letterSpacing: '0px',
     fontStyle: 'normal',
     fontWeight: theme.font.weight.bold,
-    fontSize: theme.font.fixed.f18.fontSize,
     marginBottom: '12px',
     color,
   });
@@ -248,10 +249,11 @@ const titleStyle: CreateRule<{ color: string }> =
 const descriptionStyle: CreateRule<{ color: string }> =
   ({ color }) =>
   ({ theme }) => ({
+    ...theme.font.fixed.f16,
+    letterSpacing: '0px',
     position: 'relative',
     fontStyle: 'normal',
     fontWeight: 'normal',
-    fontSize: theme.font.fixed.f16.fontSize,
     color,
   });
 
@@ -275,6 +277,7 @@ const buttonStyle: CreateRule<{ inverse: boolean }> =
   ({ theme }) => ({
     border: `1px solid ${inverse ? theme.colors.white : theme.colors.tescoBlue}`,
     ...theme.font.fixed.f14,
+    letterSpacing: '0px',
   });
 
 export default ReviewWidget;

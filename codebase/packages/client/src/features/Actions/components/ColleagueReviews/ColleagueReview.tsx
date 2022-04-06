@@ -80,6 +80,7 @@ export const ColleagueReview: FC<Props> = ({ review, schema, validateReview, upd
                   className={css({
                     fontSize: '16px',
                     lineHeight: '20px',
+                    letterSpacing: '0px',
                   })}
                 >
                   <MarkdownRenderer source={text} />
@@ -141,6 +142,7 @@ const titleStyles: Rule = ({ theme }) => ({
   margin: 0,
   fontSize: '18px',
   lineHeight: '22px',
+  letterSpacing: '0px',
   color: theme.colors.tescoBlue,
   fontWeight: theme.font.weight.bold,
   paddingBottom: '20px',

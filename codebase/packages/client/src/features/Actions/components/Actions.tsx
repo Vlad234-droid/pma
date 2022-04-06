@@ -22,7 +22,7 @@ import { ApprovalWidget } from './Widgets';
 import { ColleagueList } from './Colleague';
 import { filterApprovedFn } from '../utils';
 import { SuccessModal } from './Modal';
-import { SuccessModalConsumer, default as SuccessModalProvider } from '../context/successModalContext';
+import { SuccessModalConsumer, SuccessModalProvider } from '../context/successModalContext';
 
 export const Actions = () => {
   const dispatch = useDispatch();
@@ -95,62 +95,64 @@ export const Actions = () => {
     }
   }, [checkedItems, colleagues]);
 
-  if (!loaded) {
-    return <Spinner fullHeight />;
-  }
-
   return (
     <>
       <SuccessModalProvider>
-        <div className={css(headStyle)}>
-          {!mobileScreen && isWaitingForApproval && (
-            <SelectAll
-              disabled={selectAllDisabled}
-              onChange={handleSelectAll}
-              checked={isCheckAll}
-              indeterminate={indeterminate}
-            />
-          )}
-          <RadioGroup status={status} setStatus={setStatus} />
-          <div className={css(filtersStyle)}>
-            <Filters
-              sortValue={sortValue}
-              onSort={setSortValue}
-              searchValue={searchValue}
-              onSearch={setSearchValue}
-              sortingOptions={options}
-            />
-          </div>
-        </div>
-        <div className={css(bodyStyle)}>
-          <div className={css(optionWrapperStyle)}>
-            <ColleagueList
-              status={status}
-              checkedItems={checkedItems}
-              colleagues={colleagues}
-              handleSelectItem={handleSelectItem}
-            />
-          </div>
-          {mobileScreen && isWaitingForApproval && (
-            <div className={css(selectAllMobileStyle)}>
-              <SelectAll
-                disabled={selectAllDisabled}
-                onChange={handleSelectAll}
-                checked={isCheckAll}
-                indeterminate={indeterminate}
-              />
+        {loaded ? (
+          <>
+            <div className={css(headStyle)}>
+              {!mobileScreen && isWaitingForApproval && (
+                <SelectAll
+                  disabled={selectAllDisabled}
+                  onChange={handleSelectAll}
+                  checked={isCheckAll}
+                  indeterminate={indeterminate}
+                />
+              )}
+              <RadioGroup status={status} setStatus={setStatus} />
+              <div className={css(filtersStyle)}>
+                <Filters
+                  sortValue={sortValue}
+                  onSort={setSortValue}
+                  searchValue={searchValue}
+                  onSearch={setSearchValue}
+                  sortingOptions={options}
+                />
+              </div>
             </div>
-          )}
-          {isWaitingForApproval && (
-            <div className={css(rightColumnStyle)}>
-              <ApprovalWidget
-                isDisabled={!checkedItems.length}
-                reviews={reviewsForApproval}
-                onSave={() => setCheckedItems([])}
-              />
+            <div className={css(bodyStyle)}>
+              <div className={css(optionWrapperStyle)}>
+                <ColleagueList
+                  status={status}
+                  checkedItems={checkedItems}
+                  colleagues={colleagues}
+                  handleSelectItem={handleSelectItem}
+                />
+              </div>
+              {mobileScreen && isWaitingForApproval && (
+                <div className={css(selectAllMobileStyle)}>
+                  <SelectAll
+                    disabled={selectAllDisabled}
+                    onChange={handleSelectAll}
+                    checked={isCheckAll}
+                    indeterminate={indeterminate}
+                  />
+                </div>
+              )}
+              {isWaitingForApproval && (
+                <div className={css(rightColumnStyle)}>
+                  <ApprovalWidget
+                    isDisabled={!checkedItems.length}
+                    reviews={reviewsForApproval}
+                    onSave={() => setCheckedItems([])}
+                  />
+                </div>
+              )}
             </div>
-          )}
-        </div>
+          </>
+        ) : (
+          <Spinner fullHeight />
+        )}
         <SuccessModalConsumer>
           {({ isOpen, setOpened, reviewStatus, reviewType, setReviewStatus, setReviewType }) => {
             if (isOpen && reviewStatus && reviewType) {

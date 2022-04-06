@@ -22,7 +22,7 @@ const defaultData = {
 
 const SuccessModalContext = createContext<Data>(defaultData);
 
-const SuccessModalProvider: FC = ({ children }) => {
+export const SuccessModalProvider: FC = ({ children }) => {
   const [isOpen, setOpened] = useState<boolean>(false);
   const [reviewStatus, setReviewStatus] = useState<Status | null>(null);
   const [reviewType, setReviewType] = useState<ReviewType | null>(null);
@@ -45,5 +45,3 @@ const SuccessModalProvider: FC = ({ children }) => {
 
 export const SuccessModalConsumer = SuccessModalContext.Consumer;
 export const useSuccessModalContext = () => useContext(SuccessModalContext);
-
-export default SuccessModalProvider;

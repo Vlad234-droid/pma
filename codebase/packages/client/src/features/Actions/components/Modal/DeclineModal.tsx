@@ -39,7 +39,7 @@ const DeclineModal: FC<Props> = ({ onSave, onClose, review, reviewType }) => {
       <div className={css({ padding: '16px 0' })}>
         {isObjective ? (
           <>
-            <div className={css({ fontSize: '16px', lineHeight: '20px', marginBottom: '8px' })}>
+            <div className={css({ fontSize: '16px', lineHeight: '20px', letterSpacing: '0px', marginBottom: '8px' })}>
               {t('decline_objective_agreement', `You’ve rejected your colleague’s objectives because they were not:`)}
             </div>
             <div className={css({ padding: '0 40px' })}>

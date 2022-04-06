@@ -87,6 +87,7 @@ const titleStyle: Rule = ({ theme }) => {
     fontWeight: 'bold',
     fontSize: mobileScreen ? '18px' : '20px',
     lineHeight: mobileScreen ? '20px' : '22px',
+    letterSpacing: '0px',
     marginBottom: '4px',
     textAlign: 'center',
   };
@@ -99,6 +100,7 @@ const descriptionStyle: Rule = ({ theme }) => {
     fontWeight: 'normal',
     fontSize: mobileScreen ? '12px' : '14px',
     lineHeight: mobileScreen ? '16px' : '20px',
+    letterSpacing: '0px',
     color: theme.colors.base,
     textAlign: 'center',
   };
@@ -114,7 +116,8 @@ const bodyStyle = {
 } as Styles;
 
 const btnStyle = ({ theme }) => ({
-  fontSize: '14px',
+  ...theme.font.fixed.f14,
+  letterSpacing: '0px',
   color: theme.colors.tescoBlue,
   fontWeight: 'bold',
   height: '30px',
