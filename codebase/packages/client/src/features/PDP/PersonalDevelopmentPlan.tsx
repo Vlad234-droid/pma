@@ -404,7 +404,6 @@ const bodyWrapperStyles: CreateRule<{ mobileScreen: boolean }> = (props) => {
   return {
     display: 'flex',
     flexWrap: 'nowrap',
-    marginTop: '16px',
     alignItems: 'stretch',
     paddingBottom: '20px',
     flexDirection: mobileScreen ? 'column' : 'row',
