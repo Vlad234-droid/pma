@@ -12,6 +12,7 @@ export const PROFILES_WRAPPER = 'profiles-wrapper';
 export const NOT_APPROVED_COLLEAGUES_WRAPPER = 'not-approved-colleagues_wrapper';
 
 export const TableContent: FC<{ type: string }> = ({ type }) => {
+  if (!type) return null;
   const { css } = useStyle();
   const { t } = useTranslation();
 

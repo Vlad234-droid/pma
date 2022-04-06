@@ -14,10 +14,9 @@ import { ChartContent } from './components/ChartContent';
 import { TableContent } from './components/TableContent';
 
 import { useTileStatistics } from './hooks';
-import { getReportTitles, checkTableChart, getTableChartTitle } from './utils';
+import { getReportTitles, checkTableChart, getTableChartTitle, checkBusinessType } from './utils';
 import { initialValues } from 'features/Report/config';
 import { getCurrentYear } from 'utils/date';
-import { ReportPage } from 'config/enum';
 
 import { Page } from 'pages';
 
@@ -37,13 +36,13 @@ const TileReport = () => {
 
   const { type, query } = useTileStatistics();
 
-  const checkBusinessType = !!type && type !== ReportPage.REPORT_NEW_TO_BUSINESS;
+  const isBusinessType = checkBusinessType(type);
 
   const isTableChart = checkTableChart(type);
 
   const getContent = () => {
     if (isTableChart) return <TableContent type={type} />;
-    return <ChartContent checkBusinessType={checkBusinessType} type={type} />;
+    return <ChartContent isBusinessType={isBusinessType} type={type} />;
   };
 
   return (

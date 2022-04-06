@@ -77,3 +77,6 @@ export const getTableChartTitle = (t, type) => {
   };
   return titles[type];
 };
+
+export const checkBusinessType = (type) =>
+  !!type && type !== ReportPage.REPORT_NEW_TO_BUSINESS && type !== ReportPage.REPORT_APPROVED_OBJECTIVES;
