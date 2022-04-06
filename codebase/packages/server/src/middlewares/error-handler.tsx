@@ -8,9 +8,9 @@ import { SorryPage, SorryPageProps, ssr } from '@dex-ddl/core';
 
 type ErrorHandlerParams = Omit<SorryPageProps, 'type'>;
 
-export const errorHandler =
-  ({ appName, logoutPath, tryAgainPath, username }: ErrorHandlerParams) =>
-  (error: Error, req: Request, res: Response, next: NextFunction) => {
+export const errorHandler = ({ appName, logoutPath, tryAgainPath, username }: ErrorHandlerParams) => {
+  console.log('step 2');
+  return (error: Error, req: Request, res: Response, next: NextFunction) => {
     console.log('ERROR HANDLER: ', error);
     if (OneloginError.is(error) && error.status === 403) {
       ssr({
@@ -42,3 +42,4 @@ export const errorHandler =
       })(req, res, next);
     }
   };
+};

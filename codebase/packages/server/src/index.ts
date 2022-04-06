@@ -91,16 +91,20 @@ if (!PROXY_API_SERVER_URL) {
       }),
     );
 
-    // setup logger middlewares
-    appServer.use(getHttpLoggerMiddleware('http'));
+    console.log('step 1');
 
-    appServer.use(
+    server.use(
       errorHandler({
         appName: config.applicationName(),
         logoutPath: config.integrationSSOLogoutPath(),
         tryAgainPath: config.integrationCoreMountUrl(),
       }),
     );
+
+    console.log('step 3');
+
+    // setup logger middlewares
+    appServer.use(getHttpLoggerMiddleware('http'));
 
     if (isDEV(config.buildEnvironment()) || !config.useOneLogin()) {
       console.log(`WARNING! Authentication is turned off. Fake Login is used.`);
