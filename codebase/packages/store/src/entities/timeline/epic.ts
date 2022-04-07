@@ -15,14 +15,13 @@ export const getTimelineEpic: Epic = (action$, _, { api }) =>
         map((response) => {
           // @ts-ignore
           if (!response.data.length) {
-            return addModalError({
+            addModalError({
               title: 'timeline_is_empty',
               description: 'you_dont_have_access_to_pma',
             });
-          } else {
-            // @ts-ignore
-            return getTimeline.success({ success: response?.success, [payload.colleagueUuid]: response?.data });
           }
+          // @ts-ignore
+          return getTimeline.success({ success: response?.success, [payload.colleagueUuid]: response?.data });
         }),
         catchError((e) => {
           const errors = e?.data?.errors;
