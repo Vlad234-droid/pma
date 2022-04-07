@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, CreateRule, ModalWithHeader, Rule, useBreakpoints, useStyle } from '@pma/dex-wrapper';
+import { Button, CreateRule, ModalWithHeader, Rule, useStyle } from '@pma/dex-wrapper';
 import { Icon } from 'components/Icon';
 import { Input } from 'components/Form';
 import { DropZone } from 'components/DropZone';
@@ -15,12 +15,11 @@ type TemplateModalProps = {
 };
 
 const TemplatesModal: FC<TemplateModalProps> = ({ onSelect }) => {
-  const { css } = useStyle();
+  const { css, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const [isOpen, toggleOpen] = useState(false);
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
   const [filter, setFilteredValue] = useState('');
   const templatesList = useSelector(getProcessTemplateSelector) || [];
 

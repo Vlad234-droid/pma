@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { metaPDPSelector } from '@pma/store';
 import { useSelector } from 'react-redux';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Button, CreateRule, Rule, theme, useBreakpoints, useStyle } from '@pma/dex-wrapper';
+import { Button, CreateRule, Rule, theme, useStyle } from '@pma/dex-wrapper';
 import { Item, Textarea, Field, Attention } from 'components/Form';
 import { GenericItemField } from 'components/GenericForm';
 import { createYupSchema } from 'utils/yup';
@@ -50,10 +50,9 @@ const CreatePDPForm: FC<Props> = ({
   setCurrentTab,
   onSubmit,
 }) => {
-  const { css } = useStyle();
+  const { css, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
   const { t } = useTranslation();
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
   const { loaded: schemaLoaded = false } = useSelector(metaPDPSelector) || false;
   const formElementsFilledEmpty = formElements.reduce((acc, current) => {
     acc[current.key] = '';
@@ -322,10 +321,6 @@ const footerContainerStyle: Rule = ({ theme }) => ({
   width: '100%',
   background: `${theme.colors.white}`,
 });
-
-const imgArrow = {
-  marginLeft: '15px',
-} as Rule;
 
 const createBtn: Rule = {
   justifyContent: 'center',

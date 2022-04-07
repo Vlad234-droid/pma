@@ -1,5 +1,5 @@
 import React, { FC, useState, useEffect, useRef } from 'react';
-import { useStyle, CreateRule, colors } from '@pma/dex-wrapper';
+import { useStyle, CreateRule } from '@pma/dex-wrapper';
 import mergeRefs from 'react-merge-refs';
 
 import { TextareaField } from '../types';

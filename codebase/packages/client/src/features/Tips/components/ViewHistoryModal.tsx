@@ -1,7 +1,7 @@
 import React, { FC, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { tipsActions, getTipHistorySelector } from '@pma/store';
-import { useStyle, Rule, CreateRule, Theme, useBreakpoints, Modal, Button, Icon } from '@pma/dex-wrapper';
+import { useStyle, Rule, CreateRule, Theme, Modal, Button, Icon } from '@pma/dex-wrapper';
 import { TipsProps } from '../types';
 import { formatDateStringFromISO, DATE_TIME_STRING_FORMAT } from 'utils/date';
 import { Trans } from 'components/Translation';
@@ -15,10 +15,9 @@ export const VIEW_HISTORY_MODAL = 'view-history-modal';
 export const CLOSE_VIEW_HISTORY_MODAL_BTN = 'close-view-history-modal-btn';
 
 const ViewHistoryModal: FC<ViewHistoryModal> = ({ handleCloseModal, card }) => {
-  const { css, theme } = useStyle();
+  const { css, theme, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const dispatch = useDispatch();
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
   const tipHistory = useSelector(getTipHistorySelector);
 
   useEffect(() => {

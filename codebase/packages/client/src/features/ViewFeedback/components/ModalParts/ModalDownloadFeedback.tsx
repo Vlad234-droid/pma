@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useMemo, useState } from 'react';
 import { ModalDownloadFeedbackProps } from './type';
-import { Button, Rule, useBreakpoints, useStyle } from '@pma/dex-wrapper';
+import { Button, Rule, useStyle } from '@pma/dex-wrapper';
 import { IconButton, Position } from 'components/IconButton';
 import { SearchPart, SubmitPart } from './components';
 import { Trans } from 'components/Translation';
@@ -23,9 +23,8 @@ const ModalDownloadFeedback: FC<ModalDownloadFeedbackProps> = ({
   downloadTitle,
   downloadDescription,
 }) => {
-  const { css, theme } = useStyle();
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+  const { css, theme, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const dispatch = useDispatch();
   const [selected, setSelected] = useState([]);
 

@@ -1,5 +1,5 @@
 import React, { FC, Fragment } from 'react';
-import { useStyle, CreateRule, useBreakpoints, Theme } from '@pma/dex-wrapper';
+import { useStyle, CreateRule, Theme } from '@pma/dex-wrapper';
 import { TileWrapper } from 'components/Tile';
 import { Icon } from 'components/Icon';
 import { Trans } from 'components/Translation';
@@ -7,9 +7,8 @@ import { Trans } from 'components/Translation';
 export const NO_TIPS_TILE = 'no-tips-tile';
 
 const NoTips: FC = () => {
-  const { css, theme } = useStyle();
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+  const { css, theme, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
 
   return (
     <Fragment>

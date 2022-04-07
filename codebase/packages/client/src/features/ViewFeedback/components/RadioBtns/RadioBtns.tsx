@@ -1,5 +1,5 @@
 import React, { Dispatch, FC, SetStateAction } from 'react';
-import { useStyle, useBreakpoints } from '@pma/dex-wrapper';
+import { useStyle } from '@pma/dex-wrapper';
 import { Trans } from 'components/Translation';
 import { Radio } from 'components/Form';
 
@@ -34,9 +34,8 @@ const RadioBtns: FC<Props> = ({
   filterModal,
   setFilterFeedbacks,
 }) => {
-  const { css } = useStyle();
-  const [, isBreakpoint] = useBreakpoints();
-  const medium = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
+  const { css, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
   return (
     <div
       data-test-id={RADIO_WRAPPER}
@@ -44,7 +43,7 @@ const RadioBtns: FC<Props> = ({
         display: 'flex',
         gap: '10px',
 
-        ...(medium && { flexBasis: '816px', marginTop: '24px', marginBottom: '24px' }),
+        ...(mobileScreen && { flexBasis: '816px', marginTop: '24px', marginBottom: '24px' }),
       })}
     >
       <div className={css({ padding: '0px', cursor: 'pointer' })}>

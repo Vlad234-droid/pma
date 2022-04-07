@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Rule, useStyle, Button, Styles, CreateRule, useBreakpoints, Theme } from '@pma/dex-wrapper';
+import { Rule, useStyle, Button, Styles, CreateRule, Theme } from '@pma/dex-wrapper';
 import { IconButton } from 'components/IconButton';
 import { useTranslation } from 'components/Translation';
 
@@ -25,7 +25,8 @@ const PersonalFolders: FC<PersonalFoldersProps> = ({
   setIsUserArchived,
   isUserArchived,
 }) => {
-  const { css, theme } = useStyle();
+  const { css, theme, matchMedia } = useStyle();
+  const mediumScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
   const { t } = useTranslation();
 
   const selectedDotsActionhandler = (e, noteId) => {
@@ -150,7 +151,7 @@ const PersonalFolders: FC<PersonalFoldersProps> = ({
   };
 
   return (
-    <div className={css(mainFolderContainerStyle)} data-test-id={PERSONAL_FOLDER_WRAPPER}>
+    <div className={css(mainFolderContainerStyle({ mediumScreen }))} data-test-id={PERSONAL_FOLDER_WRAPPER}>
       <div className={css(titleStyle)}>
         <h2 className={css({ padding: '24px' })}>
           {!isUserArchived ? t('personal_folders', 'Personal Folders') : t('archived_folders', 'Archived Folders')}
@@ -264,17 +265,15 @@ const dotsStyle: Rule = ({ colors }) =>
     },
   } as Styles);
 
-const mainFolderContainerStyle: Rule = () => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mediumScreen = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
-  return {
+const mainFolderContainerStyle: CreateRule<{ mediumScreen: boolean }> =
+  ({ mediumScreen }) =>
+  ({ theme }) => ({
     width: '100%',
-    background: '#FFFFFF',
+    background: theme.colors.white,
     boxShadow: '3px 3px 1px 1px rgba(0, 0, 0, 0.05)',
     borderRadius: '10px',
     ...(mediumScreen && { flexGrow: 1 }),
-  };
-};
+  });
 
 const flexStyle: Rule = {
   display: 'flex',

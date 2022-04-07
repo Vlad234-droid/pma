@@ -1,5 +1,4 @@
 import React, { createContext, FC, useCallback, useContext, useEffect } from 'react';
-import { LINKS } from 'config/constants';
 // store
 import { currentUserMetaSelector, currentUserSelector, UserActions } from '@pma/store';
 

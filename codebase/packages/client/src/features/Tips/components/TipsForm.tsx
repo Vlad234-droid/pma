@@ -14,7 +14,7 @@ import {
   tipsActions,
 } from '@pma/store';
 import { buildPath } from 'features/Routes/utils';
-import { Button, Icon, ModalWithHeader, Rule, theme, useBreakpoints, useStyle } from '@pma/dex-wrapper';
+import { Button, Icon, ModalWithHeader, Rule, CreateRule, theme, useStyle } from '@pma/dex-wrapper';
 import { Input, Item, Select, Textarea, Attention } from 'components/Form';
 import { GenericItemField } from 'components/GenericForm';
 import { IconButton } from 'components/IconButton';
@@ -27,7 +27,8 @@ export type TipsFormProps = {
 };
 
 const TipsForm: FC<TipsFormProps> = ({ mode }) => {
-  const { css } = useStyle();
+  const { css, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -267,7 +268,7 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
   return (
     <ModalWithHeader
       title={mode === 'create' ? t('create_tip', 'Create Tip') : t('edit_tip', 'Edit Tip')}
-      containerRule={modalWrapper}
+      containerRule={modalWrapper({ mobileScreen })}
       modalPosition='middle'
       closeOptions={{
         closeOptionContent: <Icon graphic='close' />,
@@ -291,7 +292,7 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
           tipTitle={currentTip.title}
         />
       )}
-      <div className={css(modalInner)}>
+      <div className={css(modalInner({ mobileScreen }))}>
         {showEffectsPlaceholder && <div className={css(modalInnerPlaceholder)} />}
         <form className={css({ height: '100%' })}>
           <div className={css(formFieldsWrapStyle)}>
@@ -443,7 +444,7 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
               </IconButton>
             )}
           </div>
-          <div className={css(formControlBtnsWrap)}>
+          <div className={css(formControlBtnsWrap({ mobileScreen }))}>
             <Button
               onPress={handleDiscard}
               mode='inverse'
@@ -470,31 +471,23 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
   );
 };
 
-const modalWrapper: Rule = () => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.medium || isBreakpoint.small || isBreakpoint.xSmall;
-  return {
-    padding: 0,
-    maxWidth: '640px',
-    ...(mobileScreen
-      ? {
-          width: '100%',
-          height: 'calc(100% - 50px)',
-          marginTop: '50px',
-          borderRadius: '24px 24px 0 0',
-        }
-      : { width: '60%' }),
-  };
-};
+const modalWrapper: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => ({
+  padding: 0,
+  maxWidth: '640px',
+  ...(mobileScreen
+    ? {
+        width: '100%',
+        height: 'calc(100% - 50px)',
+        marginTop: '50px',
+        borderRadius: '24px 24px 0 0',
+      }
+    : { width: '60%' }),
+});
 
-const modalInner: Rule = () => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.medium || isBreakpoint.small || isBreakpoint.xSmall;
-  return {
-    padding: mobileScreen ? '30px 15px 100px' : '40px 40px 100px',
-    height: '100%',
-  };
-};
+const modalInner: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => ({
+  padding: mobileScreen ? '30px 15px 100px' : '40px 40px 100px',
+  height: '100%',
+});
 
 const formFieldsWrapStyle: Rule = () => {
   return {
@@ -511,30 +504,26 @@ const hrSeparatorLine: Rule = ({ theme }) => {
   };
 };
 
-const formControlBtnsWrap: Rule = ({ theme }) => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.medium || isBreakpoint.small || isBreakpoint.xSmall;
-  return {
-    display: 'flex',
-    alignItems: 'center',
-    height: '100px',
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    width: '100%',
-    background: '#fff',
-    // @ts-ignore
-    borderTop: `2px solid ${theme.colors.lightGray}`,
-    ...(mobileScreen
-      ? {
-          padding: '0 10px',
-        }
-      : {
-          padding: '0 40px',
-          borderRadius: '0 0 32px 32px',
-        }),
-  };
-};
+const formControlBtnsWrap: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  height: '100px',
+  position: 'absolute',
+  bottom: 0,
+  left: 0,
+  width: '100%',
+  background: '#fff',
+  // @ts-ignore
+  borderTop: `2px solid ${theme.colors.lightGray}`,
+  ...(mobileScreen
+    ? {
+        padding: '0 10px',
+      }
+    : {
+        padding: '0 40px',
+        borderRadius: '0 0 32px 32px',
+      }),
+});
 
 const formControlBtn: Rule = () => {
   return {

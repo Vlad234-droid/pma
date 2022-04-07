@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { Button, CreateRule, Rule, Styles, useBreakpoints, useStyle } from '@pma/dex-wrapper';
+import { Button, CreateRule, Rule, Styles, useStyle } from '@pma/dex-wrapper';
 
 import { Notification } from 'components/Notification';
 import { GenericItemField } from 'components/GenericForm';
@@ -16,10 +16,9 @@ import { addNewFolderId, getFolder, getNotes } from 'utils';
 export const MODAL_WRAPPER = 'modal-wrapper';
 
 const AddNoteModal: FC<AddNoteModalProps> = ({ methods, cancelModal, submitForm, createFolder, foldersWithNotes }) => {
-  const { css, theme } = useStyle();
+  const { css, theme, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const { t } = useTranslation();
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
   const [successModal, setSuccessModal] = useState<boolean>(false);
 
   const {

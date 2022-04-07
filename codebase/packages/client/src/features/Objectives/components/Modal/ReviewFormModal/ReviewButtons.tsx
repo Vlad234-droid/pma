@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { useStyle, Button, useBreakpoints, Rule, CreateRule } from '@pma/dex-wrapper';
+import { useStyle, Button, Rule, CreateRule } from '@pma/dex-wrapper';
 import { Trans, useTranslation } from 'components/Translation';
 import { ButtonWithConfirmation } from '../../Buttons';
 

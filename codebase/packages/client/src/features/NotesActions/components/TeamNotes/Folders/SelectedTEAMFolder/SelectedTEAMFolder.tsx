@@ -1,5 +1,5 @@
 import React, { FC, Dispatch, SetStateAction, MutableRefObject } from 'react';
-import { Rule, Styles, useStyle, useBreakpoints, colors, CreateRule } from '@pma/dex-wrapper';
+import { Rule, Styles, useStyle, colors, CreateRule } from '@pma/dex-wrapper';
 import { IconButton } from 'components/IconButton';
 import { NoteData, NotesTypeTEAM } from '../../../../type';
 import { formatToRelativeDate } from 'utils/date';
@@ -32,7 +32,8 @@ const SelectedFolder: FC<Props> = ({
   setFoldersWithNotesTEAM,
   teamArchivedMode = false,
 }) => {
-  const { css } = useStyle();
+  const { css, matchMedia } = useStyle();
+  const mediumScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
 
   const btnsActionsHandler = (itemId: string, itemFolderUuid: string | null): JSX.Element => {
     const btnsActions = [
@@ -191,7 +192,7 @@ const SelectedFolder: FC<Props> = ({
   };
 
   return (
-    <div className={css(Expanded_Note_Style)} data-test-id={TEAM_WRAPPER}>
+    <div className={css(Expanded_Note_Style({ mediumScreen }))} data-test-id={TEAM_WRAPPER}>
       <div className={css(Flex_beetween_style)}>
         <span className={css(Folder_Title_styled)}>{selectedTEAMFolder?.title}</span>
       </div>
@@ -287,11 +288,10 @@ const Flex_style: Rule = {
   alignItems: 'center',
 };
 
-const Expanded_Note_Style: Rule = () => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mediumScreen = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
-  return {
-    background: '#FFFFFF',
+const Expanded_Note_Style: CreateRule<{ mediumScreen: boolean }> =
+  ({ mediumScreen }) =>
+  ({ theme }) => ({
+    background: theme.colors.white,
     boxShadow: '3px 3px 1px 1px rgba(0, 0, 0, 0.05)',
     borderRadius: '10px',
     width: '100%',
@@ -299,8 +299,7 @@ const Expanded_Note_Style: Rule = () => {
     padding: '24px',
     alignSelf: 'flex-start',
     ...(mediumScreen && { flexGrow: 1 }),
-  };
-};
+  });
 
 const Folder_Title_styled: Rule = {
   fontStyle: 'normal',

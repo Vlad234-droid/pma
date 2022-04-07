@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useMemo, useRef } from 'react';
-import { CreateRule, Rule, Styles, theme, useBreakpoints, useStyle, colors } from '@pma/dex-wrapper';
+import { CreateRule, Rule, Styles, theme, useStyle, colors } from '@pma/dex-wrapper';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { downloadPDF, PDPDocument, usePDF } from '@pma/pdf-renderer';
@@ -31,12 +31,11 @@ function getEditOrCreatePDP(pdpSelector: any[]) {
 }
 
 const PersonalDevelopmentPlan: FC = () => {
-  const { css, theme } = useStyle();
+  const { css, theme, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
   const navigate = useNavigate();
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
 
   const pdpSelector = useSelector(schemaMetaPDPSelector)?.goals || [];
   const colleagueUuid = useSelector(colleagueUUIDSelector);
@@ -90,7 +89,7 @@ const PersonalDevelopmentPlan: FC = () => {
     elRef.current?.scrollTo(0, 0);
   };
 
-  const editGoal = (uuid, currentId) => {
+  const editGoal = (uuid) => {
     navigate(buildPath(paramsReplacer(`${Page.UPDATE_PERSONAL_DEVELOPMENT_PLAN}`, { ':uuid': uuid })));
   };
 
