@@ -71,7 +71,7 @@ const ToastItem: FC<Props> = ({ id, title, description, timeout, onClose, varian
 
 const wrapperStyles: Rule = ({ theme }) => ({
   position: 'relative',
-  border: `1px solid ${theme.colors.tescoBlue}`,
+  border: `2px solid ${theme.colors.tescoBlue}`,
   boxShadow: '0px 0px 1px rgba(0, 0, 0, 0.1), 0px 2px 10px rgba(0, 0, 0, 0.3)',
 });
 

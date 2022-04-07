@@ -171,7 +171,7 @@ const selectedRelativeStyle: Rule = ({ theme }) => ({
   left: theme.spacing.s0,
   right: theme.spacing.s0,
   // @ts-ignore
-  borderTop: `${theme.border.width.b1} solid ${theme.colors.lightGray}`,
+  borderTop: `${theme.border.width.b2} solid ${theme.colors.lightGray}`,
   cursor: 'pointer',
   marginRight: '3px',
 });
@@ -182,7 +182,7 @@ const buttonCoreStyled: Rule = ({ theme }) => ({
   width: '49%',
   margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
   background: theme.colors.white,
-  border: `${theme.border.width.b1} solid ${theme.colors.tescoBlue}`,
+  border: `${theme.border.width.b2} solid ${theme.colors.tescoBlue}`,
   color: `${theme.colors.tescoBlue}`,
 });
 

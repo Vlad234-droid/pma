@@ -280,7 +280,7 @@ const Align_flex_style: Rule = ({ colors }) => ({
   justifyContent: 'flex-start',
   cursor: 'pointer',
   // @ts-ignore
-  borderBottom: `1px solid ${colors.lightGray}`,
+  borderBottom: `2px solid ${colors.lightGray}`,
   padding: '15px 24px',
 });
 const Align_flex_styleLast: Rule = {

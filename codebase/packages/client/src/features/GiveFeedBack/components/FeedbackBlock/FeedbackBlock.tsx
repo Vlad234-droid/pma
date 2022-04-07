@@ -204,7 +204,7 @@ const tileWrapperStyle: Rule = ({ theme }) => ({
   padding: '24px',
   margin: '24px 28px 24px 0px',
   // @ts-ignore
-  border: `1px solid ${theme.colors.lightGray}`,
+  border: `2px solid ${theme.colors.lightGray}`,
 });
 
 export default FeedbackBlock;

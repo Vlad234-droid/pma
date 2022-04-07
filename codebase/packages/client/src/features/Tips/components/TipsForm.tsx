@@ -447,7 +447,7 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
             <Button
               onPress={handleDiscard}
               mode='inverse'
-              styles={[formControlBtn, { border: `1px solid ${theme.colors.tescoBlue}` }]}
+              styles={[formControlBtn, { border: `2px solid ${theme.colors.tescoBlue}` }]}
             >
               Discard
             </Button>
@@ -505,7 +505,7 @@ const formFieldsWrapStyle: Rule = () => {
 
 const hrSeparatorLine: Rule = ({ theme }) => {
   return {
-    height: '1px',
+    height: '2px',
     background: theme.colors.backgroundDarkest,
     marginBottom: '25px',
   };
@@ -524,7 +524,7 @@ const formControlBtnsWrap: Rule = ({ theme }) => {
     width: '100%',
     background: '#fff',
     // @ts-ignore
-    borderTop: `1px solid ${theme.colors.lightGray}`,
+    borderTop: `2px solid ${theme.colors.lightGray}`,
     ...(mobileScreen
       ? {
           padding: '0 10px',

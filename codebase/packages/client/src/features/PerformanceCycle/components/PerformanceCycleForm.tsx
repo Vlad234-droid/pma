@@ -326,7 +326,7 @@ const PerformanceCycleForm: FC<Props> = ({ onSubmit, defaultValues }) => {
 // @ts-ignore
 const btnStyle: Rule = {
   fontSize: '16px',
-  border: '1px solid rgb(0, 83, 159)',
+  border: '2px solid rgb(0, 83, 159)',
   minWidth: '200px',
   marginLeft: '8px',
 };

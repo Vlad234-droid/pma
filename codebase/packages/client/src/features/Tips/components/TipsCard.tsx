@@ -267,7 +267,7 @@ const cardButton: Rule = ({ theme }) => {
     lineHeight: theme.font.fixed.f14.lineHeight,
     padding: '7px 16px',
     height: 'auto',
-    border: `1px solid ${theme.colors.tescoBlue}`,
+    border: `2px solid ${theme.colors.tescoBlue}`,
     marginLeft: '10px',
     fontWeight: theme.font.weight.bold,
   };

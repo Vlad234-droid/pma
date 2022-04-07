@@ -69,14 +69,14 @@ const SearchInput: FC<Props<any>> = ({
         className={css({
           width: '100%',
           // @ts-ignore
-          border: `1px solid ${isValid ? theme.colors.lightGray : theme.colors.error}`,
+          border: `2px solid ${isValid ? theme.colors.lightGray : theme.colors.error}`,
           borderRadius: '50px',
           fontSize: '16px',
           lineHeight: '20px',
           padding: '10px 30px 10px 16px',
           ':focus': {
             outline: 'none !important',
-            border: `1px solid ${isValid ? theme.colors.tescoBlue : theme.colors.error}`,
+            border: `2px solid ${isValid ? theme.colors.tescoBlue : theme.colors.error}`,
           },
         })}
         placeholder={placeholder}
@@ -90,7 +90,7 @@ const SearchInput: FC<Props<any>> = ({
               width: '100%',
               top: 0,
               // @ts-ignore
-              border: `1px solid ${theme.colors.lightGray}`,
+              border: `2px solid ${theme.colors.lightGray}`,
               borderRadius: theme.border.radius.sm,
               background: theme.colors.white,
               zIndex: 999,
@@ -155,7 +155,7 @@ const relativeStyles: Rule = {
 
 const selectedStyle = {
   borderRadius: '10px',
-  border: '1px solid  #00539F',
+  border: '2px solid  #00539F',
   height: '32px',
   display: 'inline-flex',
   justifyContent: 'center',

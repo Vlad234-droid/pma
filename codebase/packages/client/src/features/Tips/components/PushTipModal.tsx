@@ -72,7 +72,7 @@ const PushTipModal: FC<PushTipModalProps> = ({ card, handleCloseModal, handleCon
               data-test-id={CLOSE_PUSH_TIP_MODAL_BTN}
               onPress={handleCloseModal}
               mode='inverse'
-              styles={[modalBtn, { border: `1px solid ${theme.colors.tescoBlue}` }]}
+              styles={[modalBtn, { border: `2px solid ${theme.colors.tescoBlue}` }]}
             >
               <Trans i18nKey='cancel'>Cancel</Trans>
             </Button>

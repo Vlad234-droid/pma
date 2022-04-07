@@ -87,7 +87,7 @@ const wrapperStyles: CreateRule<{ isOpen: boolean }> = ({ isOpen }) => {
     transform: isOpen ? 'scaleY(1)' : 'scaleY(0)',
     transition: 'transform .3s ease',
     transformOrigin: '50% 0%',
-    border: `1px solid ${theme.colors.tescoBlue}`,
+    border: `2px solid ${theme.colors.tescoBlue}`,
     boxShadow: '3px 3px 1px 1px rgba(0, 0, 0, 0.05)',
     background: '#F6F6F6',
     borderRadius: '10px',

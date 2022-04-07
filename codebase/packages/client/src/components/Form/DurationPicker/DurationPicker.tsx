@@ -56,7 +56,7 @@ export const DurationPicker: FC<DurationField> = ({ control, name }) => {
                   padding: '25px',
                   maxWidth: '1300px',
                   overflowY: 'visible',
-                  border: '1px solid gray',
+                  border: '2px solid gray',
                   position: 'absolute',
                   left: 0,
                   top: 0,

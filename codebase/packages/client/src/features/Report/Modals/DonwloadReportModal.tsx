@@ -104,7 +104,7 @@ const DonwloadReportModal: FC<ModalProps> = ({ onClose }) => {
         <Button
           onPress={onClose}
           mode='inverse'
-          styles={[formButton, { border: `1px solid ${theme.colors.tescoBlue}` }]}
+          styles={[formButton, { border: `2px solid ${theme.colors.tescoBlue}` }]}
         >
           <Trans i18nKey='cancel'>Cancel</Trans>
         </Button>
@@ -206,7 +206,7 @@ const formButtonsWrap: Rule = ({ theme }) => {
     left: 0,
     width: '100%',
     // @ts-ignore
-    borderTop: `1px solid ${theme.colors.lightGray}`,
+    borderTop: `2px solid ${theme.colors.lightGray}`,
     ...(mobileScreen
       ? {
           background: theme.colors.white,

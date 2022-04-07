@@ -52,7 +52,7 @@ const Colleagues: FC<Props> = ({ colleagues, editMode, onSave }) => {
             employee={employee}
             rating={currentRating}
             onClick={() => handleEditRating(employee)}
-            customWrapperStyle={{ border: `1px solid ${editMode ? theme.colors.tescoBlue : 'transparent'}` }}
+            customWrapperStyle={{ border: `2px solid ${editMode ? theme.colors.tescoBlue : 'transparent'}` }}
           />
         ))}
       </div>

@@ -78,7 +78,7 @@ const TipsFormModal: FC<Props> = ({ action, negativeBtnAction, positiveBtnAction
           <Button
             onPress={negativeBtnAction}
             mode='inverse'
-            styles={[formControlBtn, { border: `1px solid ${theme.colors.tescoBlue}` }]}
+            styles={[formControlBtn, { border: `2px solid ${theme.colors.tescoBlue}` }]}
           >
             {options[action]['negativeBtnText']}
           </Button>
@@ -149,7 +149,7 @@ const formControlBtnsWrap: Rule = ({ theme }) => {
     width: '100%',
     background: '#fff',
     // @ts-ignore
-    borderTop: `1px solid ${theme.colors.lightGray}`,
+    borderTop: `2px solid ${theme.colors.lightGray}`,
     ...(mobileScreen
       ? {
           padding: '0 10px',

@@ -296,7 +296,7 @@ const titleStyle: Rule = {
   },
 } as Styles;
 const archiveStyle: Rule = ({ theme }) => ({
-  border: `1px solid ${theme.colors.tescoBlue}`,
+  border: `2px solid ${theme.colors.tescoBlue}`,
   fontSize: '14px',
   height: '34px',
   fontWeight: 'bold',
@@ -346,7 +346,7 @@ const alignFlexStyle: Rule = ({ colors }) => ({
   justifyContent: 'flex-start',
   cursor: 'pointer',
   // @ts-ignore
-  borderBottom: `1px solid ${colors.lightGray}`,
+  borderBottom: `2px solid ${colors.lightGray}`,
   padding: '15px 24px',
 });
 const alignFlexStyleLast: Rule = {

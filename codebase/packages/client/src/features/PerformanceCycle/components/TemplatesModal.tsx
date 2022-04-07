@@ -115,7 +115,7 @@ const TemplatesModal: FC<TemplateModalProps> = ({ onSelect }) => {
 
 const btnStyle: Rule = ({ theme }) => ({
   fontSize: '16px',
-  border: `1px solid ${theme.colors.tescoBlue}`,
+  border: `2px solid ${theme.colors.tescoBlue}`,
   minWidth: '200px',
 });
 
@@ -165,7 +165,7 @@ const templatesListStyles: Rule = () => ({
 const templatesListItemStyles: Rule = () => {
   return {
     padding: '15px 0',
-    borderBottom: '1px solid #ddd',
+    borderBottom: '2px solid #ddd',
     cursor: 'pointer',
     display: 'flex',
     justifyContent: 'space-between',

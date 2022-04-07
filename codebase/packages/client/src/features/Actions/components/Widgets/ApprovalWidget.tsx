@@ -215,7 +215,7 @@ const buttonStyle: CreateRule<{ inverse: boolean }> =
       ? {
           background: theme.colors.white,
           color: `${theme.colors.tescoBlue}`,
-          border: `1px solid ${theme.colors.tescoBlue}`,
+          border: `2px solid ${theme.colors.tescoBlue}`,
         }
       : {}),
   });

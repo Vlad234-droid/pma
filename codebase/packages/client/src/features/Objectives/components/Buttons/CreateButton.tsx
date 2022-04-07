@@ -37,7 +37,7 @@ const CreateButton: FC<Props> = ({ withIcon = false, buttonText = 'Create object
         <Button
           styles={[
             {
-              border: `1px solid ${theme.colors.white}`,
+              border: `${theme.border.width.b2} solid ${theme.colors.white}`,
               fontSize: '14px',
             },
           ]}

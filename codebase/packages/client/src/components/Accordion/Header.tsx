@@ -185,7 +185,7 @@ const accordionHeaderWrapperStyles: Rule = {
 };
 
 const accordionHeaderStyles: Rule = ({ theme }) => ({
-  borderTop: `1px solid ${theme.colors.disabled}`,
+  borderTop: `2px solid ${theme.colors.disabled}`,
   paddingTop: '10px',
   display: 'flex',
   justifyContent: 'space-between',

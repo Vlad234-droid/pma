@@ -99,7 +99,7 @@ export const FilterOption: FC<FilterOptionProps> = ({
               ...customStyles,
               background: theme.colors.white,
               height: '38px',
-              border: '1px solid rgb(0, 83, 159)',
+              border: '2px solid rgb(0, 83, 159)',
               ...(!focus && { borderRadius: '50%', padding: '0px' }),
             }}
             name={inputTestId}
@@ -120,7 +120,7 @@ const iconBtnStyle: CreateRule<{ isActive: boolean; colors: any }> = ({ colors, 
   justifyContent: 'center',
   alignItems: 'center',
   outline: 0,
-  border: `1px solid ${colors.tescoBlue}`,
+  border: `2px solid ${colors.tescoBlue}`,
   borderRadius: '20px',
   cursor: 'pointer',
   position: 'relative',

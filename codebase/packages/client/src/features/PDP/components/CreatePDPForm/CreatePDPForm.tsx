@@ -289,7 +289,7 @@ const buttonWhiteStyle: CreateRule<{ theme; mobileScreen; formState; displaySave
   fontWeight: theme.font.weight.bold,
   margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
   background: !displaySaveBtn ? theme.colors.tescoBlue : theme.colors.white,
-  border: `${theme.border.width.b1} solid ${theme.colors.tescoBlue}`,
+  border: `${theme.border.width.b2} solid ${theme.colors.tescoBlue}`,
   color: !displaySaveBtn ? `${theme.colors.white}` : `${theme.colors.tescoBlue}`,
   width: mobileScreen || !displaySaveBtn ? '100%' : '50%',
   whiteSpace: 'nowrap',
@@ -312,7 +312,7 @@ const footerWrapperStyle: Rule = ({ theme }) => ({
   left: theme.spacing.s0,
   right: theme.spacing.s0,
   // @ts-ignore
-  borderTop: `${theme.border.width.b1} solid ${theme.colors.lightGray}`,
+  borderTop: `${theme.border.width.b2} solid ${theme.colors.lightGray}`,
 });
 
 const footerContainerStyle: Rule = ({ theme }) => ({

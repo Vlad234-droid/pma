@@ -108,7 +108,7 @@ const DraftItem: FC<DraftItemProps> = ({ item, downloadable = true }) => {
                     width: 'auto',
                     padding: '24px',
                     margin: '24px 28px 0 0',
-                    border: `1px solid ${colors.backgroundDarkest}`,
+                    border: `2px solid ${colors.backgroundDarkest}`,
                   }}
                 >
                   {item.feedbackItems
@@ -204,7 +204,7 @@ const iconBtnStyle: Rule = ({ theme }) => ({
   color: theme.colors.tescoBlue,
   cursor: 'pointer',
   width: '176px',
-  border: '1px solid #00539F',
+  border: '2px solid #00539F',
   whiteSpace: 'nowrap',
   margin: '28px 24px 6px auto',
 });

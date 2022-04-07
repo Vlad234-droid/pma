@@ -314,7 +314,7 @@ const iconBtnStyle = {
   justifyContent: 'center',
   alignItems: 'center',
   outline: 0,
-  border: `1px solid ${colors.tescoBlue}`,
+  border: `2px solid ${colors.tescoBlue}`,
   borderRadius: '20px',
   cursor: 'pointer',
   position: 'relative',

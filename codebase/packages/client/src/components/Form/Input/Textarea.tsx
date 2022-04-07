@@ -63,7 +63,7 @@ const textAriaStyle: CreateRule<{ isValid?: boolean }> =
       width: '100%',
       minHeight: '40px',
       // @ts-ignore
-      border: `1px solid ${isValid ? theme.colors.lightGray : theme.colors.error}`,
+      border: `2px solid ${isValid ? theme.colors.lightGray : theme.colors.error}`,
       borderRadius: '5px',
       fontSize: '16px',
       lineHeight: '20px',
@@ -71,7 +71,7 @@ const textAriaStyle: CreateRule<{ isValid?: boolean }> =
       resize: 'vertical',
       ':focus': {
         outline: 'none !important',
-        border: `1px solid ${theme.colors.tescoBlue}`,
+        border: `2px solid ${theme.colors.tescoBlue}`,
       },
     };
   };

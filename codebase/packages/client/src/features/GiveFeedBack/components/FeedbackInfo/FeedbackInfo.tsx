@@ -23,7 +23,7 @@ const FeedbackInfo: FC<Props> = ({ selectedPerson, onClickMore }) => {
 
   return (
     <div data-test-id={INFO_WRAPPER}>
-      <div className={css({ height: '1px', background: '#E5E5E5' })} />
+      <div className={css({ height: '2px', background: '#E5E5E5' })} />
       <div className={css({ marginTop: '16px' })}>
         <div className={css(VideoWrapper)}>
           <h2 className={css(VideoExplanationTitle)}>

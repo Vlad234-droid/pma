@@ -93,7 +93,7 @@ const fieldStyles: Rule = ({ theme }) => ({
   display: 'flex',
   justifyContent: 'space-between',
   width: '100%',
-  border: `1px solid ${theme.colors.backgroundDarkest}`,
+  border: `2px solid ${theme.colors.backgroundDarkest}`,
   background: `${theme.colors.white}`,
   borderRadius: '5px',
   fontSize: `${theme.font.fixed.f16.fontSize}`,
@@ -101,7 +101,7 @@ const fieldStyles: Rule = ({ theme }) => ({
   padding: '10px 40px 10px 16px',
   ':focus': {
     outline: 'none !important',
-    border: `1px solid ${theme.colors.tescoBlue}`,
+    border: `2px solid ${theme.colors.tescoBlue}`,
   },
   cursor: 'pointer',
   minHeight: '42px',
@@ -109,7 +109,7 @@ const fieldStyles: Rule = ({ theme }) => ({
 
 const fieldActiveStyles: Rule = ({ theme }) => ({
   outline: 'none !important',
-  border: `1px solid ${theme.colors.tescoBlue}`,
+  border: `2px solid ${theme.colors.tescoBlue}`,
 });
 
 const placeholderStyles: Rule = ({ theme }) => ({
@@ -134,7 +134,7 @@ const listStyles: Rule = ({ theme }) => ({
   display: 'block',
   position: 'absolute',
   // @ts-ignore
-  border: `1px solid ${theme.colors.lightGray}`,
+  border: `2px solid ${theme.colors.lightGray}`,
   borderRadius: theme.border.radius.sm,
   background: theme.colors.white,
   width: '100%',

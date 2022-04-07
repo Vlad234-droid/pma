@@ -62,7 +62,7 @@ const listItemStyles: Rule = ({ theme }) => ({
   display: 'flex',
   justifyContent: 'space-between',
   // @ts-ignore
-  borderBottom: `1px solid ${theme.colors.lightGray}`,
+  borderBottom: `2px solid ${theme.colors.lightGray}`,
 });
 
 const buttonsWrapperStyles = { display: 'flex', alignItems: 'center' };
