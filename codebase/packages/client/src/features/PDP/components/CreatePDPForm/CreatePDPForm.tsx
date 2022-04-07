@@ -83,21 +83,23 @@ const CreatePDPForm: FC<Props> = ({
   }, []);
 
   useEffect(() => {
-    pdpList.some((el, idx) => {
-      if (el.uuid == currentGoal.uuid || '') {
-        setCurrentTab(idx);
-        return true;
-      } else {
-        setCurrentTab(pdpList?.length - 1);
-      }
-    });
+    setCurrentTab(pdpList?.length - 1);
+
+    if (pdpList.length) {
+      pdpList.some((el, idx) => {
+        if (el.uuid == currentGoal.uuid || '') {
+          setCurrentTab(idx);
+          return true;
+        }
+      });
+    }
 
     if (Object.keys(currentGoal).length > 0) {
       reset(currentGoal?.properties?.mapJson);
     } else {
       reset(formElementsFilledEmpty);
     }
-  }, [currentGoal]);
+  }, [pdpList.length, currentGoal, currentTab]);
 
   const requestData = [
     {
