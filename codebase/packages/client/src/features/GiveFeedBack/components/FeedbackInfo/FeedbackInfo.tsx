@@ -38,7 +38,9 @@ const FeedbackInfo: FC<Props> = ({ selectedPerson, onClickMore }) => {
           <div className={css({ marginLeft: '16px' })}>
             <h3 className={css(Names_Style)}>{`${colleague?.profile?.firstName} ${colleague?.profile?.lastName}`}</h3>
             <p className={css(IndustryStyle)}>
-              {`${colleague?.workRelationships?.[0].job?.name}, ${colleague?.workRelationships?.[0].department?.name}`}
+              {`${colleague?.workRelationships?.[0]?.job?.name ?? ''}, ${
+                colleague?.workRelationships?.[0]?.department?.name ?? ''
+              }`}
             </p>
             <span className={css(TreatmentStyle)} data-test-id={TONE_VOICE}>
               {t('i_prefer_feedback_that_is', `I prefer feedback that is: ${toneOfVoice}`, { toneOfVoice })}

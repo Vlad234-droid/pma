@@ -20,7 +20,7 @@ import { getCurrentYear } from 'utils/date';
 
 import { Page } from 'pages';
 
-export const OBJECTIVES_WRAPPER = 'objectives_wrapper';
+export const OBJECTIVES_WRAPPER = 'objectives-wrapper';
 
 const TileReport = () => {
   const { css, matchMedia } = useStyle();

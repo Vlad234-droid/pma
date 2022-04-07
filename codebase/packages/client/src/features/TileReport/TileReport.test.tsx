@@ -5,7 +5,6 @@ import { renderWithTheme as render } from 'utils/test';
 import { BrowserRouter } from 'react-router-dom';
 
 import TileReport, { OBJECTIVES_WRAPPER } from './TileReport';
-import { PROFILES_WRAPPER } from './components/ChartContent';
 
 describe('TileReport', () => {
   beforeEach(() => {
@@ -74,31 +73,4 @@ describe('TileReport', () => {
     const wrapper = getByTestId(OBJECTIVES_WRAPPER);
     expect(wrapper).toBeInTheDocument();
   });
-
-  it('it should render profiles wrapper', async () => {
-    const { getAllByTestId } = render(
-      <BrowserRouter>
-        <TileReport />
-      </BrowserRouter>,
-      {
-        report,
-      },
-    );
-    const profile = getAllByTestId(PROFILES_WRAPPER);
-
-    expect(profile[0]).toBeInTheDocument();
-  });
-  //it('it should render list of not approved objective', async () => {
-  //  const { getAllByTestId } = render(
-  //    <BrowserRouter>
-  //      <TileReport />
-  //    </BrowserRouter>,
-  //    {
-  //      report,
-  //    },
-  //  );
-  //  const colleague = getAllByTestId(NOT_APPROVED_COLLEAGUES_WRAPPER);
-  //
-  //  expect(colleague.length).toEqual(1);
-  //});
 });

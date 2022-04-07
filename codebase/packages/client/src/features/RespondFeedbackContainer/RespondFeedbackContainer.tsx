@@ -17,6 +17,7 @@ import Spinner from 'components/Spinner';
 import { initialState } from './config';
 
 import { getSortString } from 'utils/feedback';
+import { buildSearchFeedbacksQuery } from '../../utils';
 
 export const RESPOND_FEEDBACK_CONTAINER = 'respond_feedback_container';
 
@@ -43,7 +44,7 @@ const RespondFeedbackContainer: FC = () => {
         FeedbackActions.getRespondFeedback({
           _limit: '300',
           'colleague-uuid': colleagueUuid,
-          ...(filter.search.length > 2 && { _search: filter.search }),
+          ...(filter.search.length > 2 && buildSearchFeedbacksQuery(filter.search)),
           _sort: getSortString(filter),
           status_in: [FEEDBACK_STATUS_IN.PENDING, FEEDBACK_STATUS_IN.COMPLETED],
         }),

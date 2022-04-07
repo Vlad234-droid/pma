@@ -95,9 +95,8 @@ const DonwloadReportModal: FC<ModalProps> = ({ onClose }) => {
 
         <div className={css(textBlock, { fontWeight: 700 })}>Guidance for colleagues</div>
         <div className={css(textBlock, { marginBottom: '30px' })}>
-          Vitae morbi ullamcorper venenatis ut. Mi auctor bibendum sed ut tempus senectus. Ullamcorper cursus purus
-          lacus elementum nulla in lacus nunc. Ultrices urna magna viverra a, amet eget lorem quam. Id leo vel arcu
-          nullam proin.
+          This data is confidential. If you need to download this data, you must ensure you do not share with anyone
+          else and that you store the data securely with a password.
         </div>
       </div>
 
@@ -200,14 +199,13 @@ const formButtonsWrap: CreateRule<{ mobileScreen: boolean }> =
     left: 0,
     width: '100%',
     // @ts-ignore
-    borderTop: `2px solid ${theme.colors.lightGray}`,
+    background: theme.colors.white,
+    borderTop: `1px solid #dedede`,
     ...(mobileScreen
       ? {
-          background: theme.colors.white,
           padding: '20px 10px',
         }
       : {
-          background: 'none',
           padding: '40px 30px',
         }),
   });

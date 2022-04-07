@@ -1,4 +1,5 @@
 import { TitlesReport, ReportPage } from 'config/enum';
+import { Page } from 'pages';
 
 export const convertToReportEnum = (pathname) =>
   pathname
@@ -80,3 +81,43 @@ export const getTableChartTitle = (t, type) => {
 
 export const checkBusinessType = (type) =>
   !!type && type !== ReportPage.REPORT_NEW_TO_BUSINESS && type !== ReportPage.REPORT_APPROVED_OBJECTIVES;
+
+export const defineHeaderTitle = (type, t) => {
+  const tilePage = Page.TILE_REPORT_STATISTICS;
+  const titles = {
+    [ReportPage.REPORT_APPROVED_OBJECTIVES]: {
+      [tilePage]: t('objectives_approved'),
+    },
+    [ReportPage.REPORT_SUBMITTED_OBJECTIVES]: {
+      [tilePage]: t('objectives_submitted'),
+    },
+    [ReportPage.REPORT_MID_YEAR_REVIEW]: {
+      [tilePage]: t('mid_year_review'),
+    },
+    [ReportPage.REPORT_END_YEAR_REVIEW]: {
+      [tilePage]: t('end_year_review'),
+    },
+    [ReportPage.REPORT_END_YEAR_REVIEW]: {
+      [tilePage]: t('end_year_review'),
+    },
+    [ReportPage.REPORT_WORK_LEVEL]: {
+      [tilePage]: t('wL4_5_report'),
+    },
+    [ReportPage.REPORT_NEW_TO_BUSINESS]: {
+      [tilePage]: t('new_to_business'),
+    },
+    [ReportPage.REPORT_FEEDBACK]: {
+      [tilePage]: t('feedback_report'),
+    },
+    [ReportPage.REPORT_EYR_BREAKDOWN]: {
+      [tilePage]: t('eyr_breakdown'),
+    },
+    [ReportPage.REPORT_MYR_BREAKDOWN]: {
+      [tilePage]: t('myr_breakdown'),
+    },
+    [ReportPage.REPORT_ANNIVERSARY_REVIEWS]: {
+      [tilePage]: t('anniversary_reviews'),
+    },
+  };
+  return titles[type];
+};

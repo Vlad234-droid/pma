@@ -8,7 +8,8 @@ import { TableContent as Props } from '../../type';
 
 const TableContent: FC<Props> = ({ mainTitle, data, preTitle }) => {
   const { t } = useTranslation();
-  const { css, theme } = useStyle();
+  const { css, theme, matchMedia } = useStyle();
+  const small = matchMedia({ xSmall: true, small: true }) || false;
 
   const chartData = Array.isArray(data) ? data : useChartDataStatistics(t, data) || [];
 
@@ -29,7 +30,7 @@ const TableContent: FC<Props> = ({ mainTitle, data, preTitle }) => {
           <p className={css(preTitleStyle)}>{preTitle}</p>
         </div>
       )}
-      <div className={css(blockWrapper)}>
+      <div className={css(blockWrapper({ small }))}>
         {chartData?.map((block, i) => {
           const percent = block.percent || 0;
           const quantity = block.quantity || 0;
@@ -91,12 +92,13 @@ const quantityStyle: Rule = ({ theme }) =>
     },
   } as Styles);
 
-const blockWrapper: Rule = {
+const blockWrapper: CreateRule<{ small: boolean }> = ({ small }) => ({
   display: 'flex',
   justifyContent: 'space-between',
+  flexDirection: !small ? 'row' : 'column',
   alignItems: 'center',
   marginTop: '32px',
-};
+});
 
 const flexStyle: Rule = {
   display: 'flex',

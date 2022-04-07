@@ -56,9 +56,11 @@ const FeedbackBlock: FC<Props> = ({ list, canEdit }) => {
                             <h3
                               className={css(namesStyle)}
                             >{`${item?.targetColleagueProfile?.colleague?.profile?.firstName} ${item?.targetColleagueProfile?.colleague?.profile?.lastName}`}</h3>
-                            <p
-                              className={css(industryStyle)}
-                            >{`${item?.targetColleagueProfile?.colleague?.workRelationships[0].job.name}, ${item?.targetColleagueProfile?.colleague?.workRelationships[0].department?.name}`}</p>
+                            <p className={css(industryStyle)}>{`${
+                              item?.targetColleagueProfile?.colleague?.workRelationships[0]?.job.name ?? ''
+                            }, ${
+                              item?.targetColleagueProfile?.colleague?.workRelationships[0]?.department?.name ?? ''
+                            }`}</p>
                           </div>
                         </div>
                         <div className={css({ display: 'flex', justifyContent: 'center', alignItems: 'center' })}>

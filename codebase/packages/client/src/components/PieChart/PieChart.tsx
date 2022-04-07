@@ -16,6 +16,8 @@ const PieChart: FC<PieChartProps> = ({
   Wrapper = 'div',
   params = {},
   type = '',
+  hoverMessage = [],
+  hoverVisibility = true,
 }) => {
   const { css } = useStyle();
 
@@ -25,6 +27,8 @@ const PieChart: FC<PieChartProps> = ({
     display,
     percentId,
     titleId,
+    hoverMessage,
+    hoverVisibility,
   };
 
   if (!link)

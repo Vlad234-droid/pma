@@ -20,6 +20,8 @@ export type PieChartProps = {
   readonly Wrapper?: keyof JSX.IntrinsicElements;
   params?: Record<string, string>;
   type?: string;
+  hoverMessage?: Array<string>;
+  hoverVisibility?: boolean;
 };
 
 export type PieChartContentProps = Omit<PieChartProps, 'link' | 'Wrapper' | 'params' | 'type'>;
