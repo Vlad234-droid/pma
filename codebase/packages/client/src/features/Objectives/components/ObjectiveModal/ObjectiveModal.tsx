@@ -2,7 +2,7 @@ import React, { FC, HTMLProps, useEffect, useRef } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 
 import { FormType } from '@pma/store';
-import { Button, Icon, useBreakpoints, useStyle, Rule, CreateRule } from '@pma/dex-wrapper';
+import { Button, Icon, useStyle, Rule, CreateRule } from '@pma/dex-wrapper';
 
 import { Status } from 'config/enum';
 import { Trans, useTranslation } from 'components/Translation';
@@ -56,9 +56,8 @@ export const ObjectiveModal: FC<Props> = ({
   skipFooter,
   skipHelp,
 }) => {
-  const { css } = useStyle();
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+  const { css, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const { watch } = methods;
 
   const formRef = useRef<HTMLFormElement | null>(null);

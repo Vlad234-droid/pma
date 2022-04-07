@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'components/Translation';
-import { Button, Rule, Styles, useBreakpoints, useStyle } from '@pma/dex-wrapper';
+import { Button, Rule, CreateRule, Styles, useStyle } from '@pma/dex-wrapper';
 import { ObjectiveType, ReviewType, Status } from 'config/enum';
 import { StepIndicator } from 'components/StepIndicator/StepIndicator';
 import { IconButton } from 'components/IconButton';
@@ -64,13 +64,12 @@ const annualReviews = [
 export const TEST_ID = 'my-objectives-page';
 
 const MyObjectives: FC = () => {
-  const { css, theme } = useStyle();
+  const { css, theme, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
   const { setLinkTitle } = useHeaderContainer();
   const navigate = useNavigate();
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
 
   const originObjectives = useSelector(filterReviewsByTypeSelector(ReviewType.OBJECTIVE));
   const midYearReview = useSelector(getTimelineByCodeSelector(ObjectiveType.MYR, 'me'));
@@ -183,7 +182,7 @@ const MyObjectives: FC = () => {
           />
         </div>
       )}
-      <div className={css(bodyBlockStyles)}>
+      <div className={css(bodyBlockStyles({ mobileScreen }))}>
         <div className={css(bodyWrapperStyles)}>
           {!timelineLoaded ? (
             <Spinner id='1' />
@@ -324,7 +323,7 @@ const MyObjectives: FC = () => {
             </>
           )}
         </div>
-        <div className={css(widgetWrapper)}>
+        <div className={css(widgetWrapper({ mobileScreen }))}>
           {!timelineLoaded && (
             <div className={css(timelineWrapperWidget)}>
               <Spinner id='2' />
@@ -341,7 +340,7 @@ const MyObjectives: FC = () => {
             </div>
           )}
 
-          <div className={css(widgetsBlock)}>
+          <div className={css(widgetsBlock({ mobileScreen }))}>
             <ShareWidget stopShare={true} sharing={false} customStyle={shareWidgetStyles} />
 
             <ShareWidget stopShare={false} sharing={true} customStyle={shareWidgetStyles} />
@@ -364,43 +363,29 @@ const MyObjectives: FC = () => {
   );
 };
 
-const widgetWrapper: Rule = () => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
+const widgetWrapper: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => ({
+  flex: '1 1 30%',
+  width: mobileScreen ? '100%' : '30%',
+  display: 'flex',
+  flexDirection: 'column',
+  paddingLeft: mobileScreen ? '0px' : '20px',
+});
 
-  return {
-    flex: '1 1 30%',
-    width: mobileScreen ? '100%' : '30%',
-    display: 'flex',
-    flexDirection: 'column',
-    paddingLeft: mobileScreen ? '0px' : '20px',
-  };
-};
+const bodyBlockStyles: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => ({
+  display: 'flex',
+  alignItems: 'flex-start',
+  justifyContent: 'center',
+  flexDirection: mobileScreen ? 'column-reverse' : 'row',
+});
 
-const bodyBlockStyles: Rule = () => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
-  return {
-    display: 'flex',
-    alignItems: 'flex-start',
-    justifyContent: 'center',
-    flexDirection: mobileScreen ? 'column-reverse' : 'row',
-  };
-};
-
-const widgetsBlock: Rule = () => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
-
-  return {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection: 'column',
-    width: '100%',
-    paddingBottom: mobileScreen ? '20px' : '0px',
-  };
-};
+const widgetsBlock: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => ({
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  flexDirection: 'column',
+  width: '100%',
+  paddingBottom: mobileScreen ? '20px' : '0px',
+});
 
 const timelineWrapperStyles = {
   flex: '3 1 70%',

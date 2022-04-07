@@ -1,14 +1,13 @@
 import React, { FC } from 'react';
-import { useStyle, useBreakpoints, CreateRule, Rule } from '@pma/dex-wrapper';
+import { useStyle, CreateRule, Rule } from '@pma/dex-wrapper';
 import { Trans } from 'components/Translation';
 import { VideoPlayer, VideoId } from 'features/VideoPlayer';
 
 export const TEST_ID = 'objective-help-modal';
 
 const ObjectiveHelpModal: FC = () => {
-  const { css } = useStyle();
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+  const { css, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
 
   return (
     <div data-test-id={TEST_ID} className={css(containerStyle)}>

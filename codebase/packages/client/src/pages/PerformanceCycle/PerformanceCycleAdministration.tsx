@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Button, Rule, useBreakpoints, useStyle } from '@pma/dex-wrapper';
+import { Button, Rule, CreateRule, useStyle } from '@pma/dex-wrapper';
 
 import { TileWrapper } from 'components/Tile';
 import { PerformanceCycleActions, getPerformanceCycleSelector, performanceCycleMetaSelector } from '@pma/store';
@@ -23,7 +23,8 @@ enum Status {
 }
 
 const PerformanceCycleAdministration: FC = () => {
-  const { css } = useStyle();
+  const { css, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const navigate = useNavigate();
   const { pathname, search } = useLocation();
   const [active, setActive] = useState(Status.ACTIVE);
@@ -174,7 +175,7 @@ const PerformanceCycleAdministration: FC = () => {
           <Trans i18nKey={'create_performance_cycle'}>Create performance cycle</Trans>
         </Button>
       </div>
-      <div className={css(headWrapperStyles)}>
+      <div className={css(headWrapperStyles({ mobileScreen }))}>
         <TileWrapper customStyle={{ padding: '24px' }}>
           <div
             className={css({
@@ -252,16 +253,12 @@ const PerformanceCycleAdministration: FC = () => {
   );
 };
 
-const headWrapperStyles: Rule = () => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
-  return {
-    display: 'flex',
-    gap: '10px',
-    margin: '15px 0',
-    flexDirection: mobileScreen ? 'column' : 'row',
-  };
-};
+const headWrapperStyles: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => ({
+  display: 'flex',
+  gap: '10px',
+  margin: '15px 0',
+  flexDirection: mobileScreen ? 'column' : 'row',
+});
 
 const btnStyle = {
   fontSize: '14px',

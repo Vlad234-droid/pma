@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { ConfigProps } from '../../config/types';
-import { Rule, Styles, useBreakpoints, useStyle } from '@pma/dex-wrapper';
+import { Rule, CreateRule, Styles, useStyle } from '@pma/dex-wrapper';
 import { TileWrapper } from 'components/Tile';
 import { Link } from 'react-router-dom';
 import { buildPath } from 'features/Routes';
@@ -12,13 +12,14 @@ type FeedbackCardProps = {
 };
 
 const FeedbackCard: FC<FeedbackCardProps> = ({ card }) => {
-  const { css } = useStyle();
+  const { css, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
 
   return (
-    <div className={css(cardStyle)} data-test-id={FEEDBACK_CARD_WRAPPER}>
+    <div className={css(cardStyle({ mobileScreen }))} data-test-id={FEEDBACK_CARD_WRAPPER}>
       <Link to={buildPath(card.link)}>
         <TileWrapper>
-          <div className={css(wrapperBlock)}>
+          <div className={css(wrapperBlock({ mobileScreen }))}>
             <div className={css(actionStyle)}>{card.action}</div>
             <div className={css(textStyle)}>{card.text}</div>
             <div className={css(flexStyle)}>
@@ -50,14 +51,11 @@ const flexStyle: Rule = {
   alignItems: 'center',
   marginTop: '21px',
 };
-const wrapperBlock: Rule = () => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.medium || isBreakpoint.small || isBreakpoint.xSmall;
-  return {
-    padding: !mobileScreen ? '24px 24px 34px 24px' : '20px',
-    height: !mobileScreen ? '146px' : 'auto',
-  };
-};
+const wrapperBlock: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => ({
+  padding: !mobileScreen ? '24px 24px 34px 24px' : '20px',
+  height: !mobileScreen ? '146px' : 'auto',
+});
+
 const actionStyle: Rule = ({ theme }) => {
   return {
     fontWeight: 'bold',
@@ -67,14 +65,10 @@ const actionStyle: Rule = ({ theme }) => {
   };
 };
 
-const cardStyle: Rule = () => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.medium || isBreakpoint.small || isBreakpoint.xSmall;
-  return {
-    flexGrow: 1,
-    flexBasis: mobileScreen ? '100%' : '45%',
-  };
-};
+const cardStyle: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => ({
+  flexGrow: 1,
+  flexBasis: mobileScreen ? '100%' : '45%',
+});
 
 const IconStyle: Rule = {
   position: 'relative',

@@ -1,15 +1,14 @@
 import React, { FC } from 'react';
 import { IconButton } from 'components/IconButton';
-import { Rule, Styles, useBreakpoints, useStyle } from '@pma/dex-wrapper';
+import { Rule, Styles, useStyle } from '@pma/dex-wrapper';
 import { InfoModalProps } from '../../type';
 import { Trans } from 'components/Translation';
 
 export const MESSAGE_WRAPPER = 'message-wrapper';
 
 const InfoMessage: FC<InfoModalProps> = ({ goBack }) => {
-  const { css, theme } = useStyle();
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+  const { css, theme, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
 
   return (
     <div className={css(wrapperInfo)} data-test-id={MESSAGE_WRAPPER}>

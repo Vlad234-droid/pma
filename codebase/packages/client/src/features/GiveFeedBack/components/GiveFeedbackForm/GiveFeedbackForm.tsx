@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { useStyle, Rule, useBreakpoints, Button } from '@pma/dex-wrapper';
+import { useStyle, Rule, Button, CreateRule } from '@pma/dex-wrapper';
 import { useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -35,9 +35,8 @@ type Props = {
 
 // TODO: Extract duplicate 3
 const GiveFeedbackForm: FC<Props> = ({ onSubmit, defaultValues, currentColleague, goToInfo, feedbackFields }) => {
-  const { css, theme } = useStyle();
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+  const { css, theme, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const { t } = useTranslation();
 
   const {
@@ -137,7 +136,7 @@ const GiveFeedbackForm: FC<Props> = ({ onSubmit, defaultValues, currentColleague
         )}
         <div className={css(absoluteStyle)}>
           <div className={css(relativeBtnStyled)}>
-            <div className={css(spacingStyle)}>
+            <div className={css(spacingStyle({ mobileScreen }))}>
               <Button
                 isDisabled={!targetColleagueUuid}
                 styles={[theme.font.fixed.f16, buttonStyle]}
@@ -187,15 +186,13 @@ const relativeBtnStyled: Rule = ({ theme }) => ({
   borderTop: `${theme.border.width.b1} solid ${theme.colors.lightGray}`,
 });
 
-const spacingStyle: Rule = ({ theme }) => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
-  return {
+const spacingStyle: CreateRule<{ mobileScreen: boolean }> =
+  ({ mobileScreen }) =>
+  ({ theme }) => ({
     padding: mobileScreen ? theme.spacing.s6 : theme.spacing.s8,
     display: 'flex',
     justifyContent: 'space-between',
-  };
-};
+  });
 
 // TODO: Extract duplicate 7
 const buttonStyle: Rule = ({ theme }) => ({

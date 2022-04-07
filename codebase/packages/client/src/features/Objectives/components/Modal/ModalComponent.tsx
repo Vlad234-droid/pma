@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { CreateRule, Modal, useBreakpoints } from '@pma/dex-wrapper';
+import { CreateRule, Modal, useMedia } from '@pma/dex-wrapper';
 import { Icon } from 'components/Icon';
 import { ModalWrapper } from 'components/ModalWrapper';
 
@@ -9,8 +9,8 @@ export type ModalComponentProps = {
   children: any;
 };
 export const ModalComponent: FC<ModalComponentProps> = ({ onClose, title, children }) => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+  const { matchMedia } = useMedia();
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   return (
     <ModalWrapper isOpen={true}>
       <Modal

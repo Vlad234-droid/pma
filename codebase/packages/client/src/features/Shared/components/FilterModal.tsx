@@ -37,7 +37,8 @@ export const FilterModal: FC<Props> = ({
   customFields = false,
   title = 'Sort',
 }) => {
-  const { css, theme } = useStyle();
+  const { css, matchMedia } = useStyle();
+  const medium = matchMedia({ xSmall: true, small: true, medium: true }) || false;
   const { t } = useTranslation();
 
   const choseHandler = (val: string) => {
@@ -86,7 +87,7 @@ export const FilterModal: FC<Props> = ({
   const fields = !customFields ? sortableFields : additionalFields;
 
   return (
-    <div ref={ref} className={css(wrapperStyle({ theme, isOpen }))} data-test-id={testId}>
+    <div ref={ref} className={css(wrapperStyle({ medium, isOpen }))} data-test-id={testId}>
       <div className={css(columnStyle)}>
         <span>{title} :</span>
         {fields.map((item) => (
@@ -124,11 +125,9 @@ const labelStyle: Rule = {
   alignItems: 'center',
   cursor: 'pointer',
 };
-const wrapperStyle: CreateRule<{ theme: Theme; isOpen: boolean }> = ({ theme, isOpen }) => {
-  const [, isBreakpoint] = useBreakpoints();
-
-  const medium = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
-  return {
+const wrapperStyle: CreateRule<{ medium: boolean; isOpen: boolean }> =
+  ({ medium, isOpen }) =>
+  ({ theme }) => ({
     position: 'absolute',
     width: '208px',
     padding: '10px 16px 16px 16px',
@@ -143,5 +142,4 @@ const wrapperStyle: CreateRule<{ theme: Theme; isOpen: boolean }> = ({ theme, is
     background: theme.colors.white,
     borderRadius: '10px',
     zIndex: 2,
-  };
-};
+  });

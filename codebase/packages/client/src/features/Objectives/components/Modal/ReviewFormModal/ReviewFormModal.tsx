@@ -2,7 +2,7 @@ import React, { FC, useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
 import { useForm } from 'react-hook-form';
-import { CreateRule, Rule, Styles, useBreakpoints, useStyle } from '@pma/dex-wrapper';
+import { CreateRule, Rule, Styles, useMedia, useStyle } from '@pma/dex-wrapper';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
   currentUserSelector,
@@ -40,10 +40,10 @@ export type ReviewFormModal = {
 };
 
 const ReviewFormModal: FC<ReviewFormModal> = ({ reviewType, onClose }) => {
-  const { css, theme } = useStyle();
+  const { css, theme, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const { t } = useTranslation();
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+
   const [successModal, setSuccessModal] = useState(false);
   const { info } = useSelector(currentUserSelector);
   const dispatch = useDispatch();

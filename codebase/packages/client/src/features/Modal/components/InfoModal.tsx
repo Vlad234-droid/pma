@@ -1,6 +1,6 @@
 import React, { FC, HTMLProps } from 'react';
 
-import { Button, CreateRule, Modal, Rule, useBreakpoints, useStyle } from '@pma/dex-wrapper';
+import { Button, CreateRule, Modal, Rule, useStyle } from '@pma/dex-wrapper';
 
 export type ConfirmModal = {
   title: string;
@@ -12,9 +12,8 @@ export type ConfirmModal = {
 type Props = HTMLProps<HTMLInputElement> & ConfirmModal;
 
 const InfoModal: FC<Props> = ({ title, description, onCancel, onOverlayClick }) => {
-  const { css } = useStyle();
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+  const { css, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
 
   return (
     <Modal

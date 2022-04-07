@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { useNavigate } from 'react-router';
-import { CreateRule, Icon, ModalWithHeader, Rule, Theme, useBreakpoints, useStyle } from '@pma/dex-wrapper';
+import { CreateRule, Icon, ModalWithHeader, Rule, Theme, useStyle } from '@pma/dex-wrapper';
 import Details from 'components/Details';
 import { Attention } from 'components/Form';
 
@@ -14,10 +14,9 @@ export type Props = {
 };
 
 const Popup: FC<Props> = ({ items }) => {
-  const { css, theme } = useStyle();
+  const { css, theme, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const navigate = useNavigate();
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
 
   if (items.length < 1) return null;
 

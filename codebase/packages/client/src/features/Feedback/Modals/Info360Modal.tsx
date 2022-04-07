@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { IconButton } from '../../../components/IconButton';
-import { useStyle, useBreakpoints, Rule, Styles } from '@pma/dex-wrapper';
+import { useStyle, Rule, Styles, CreateRule } from '@pma/dex-wrapper';
 import { Info360ModalProps } from '../config/types';
 import { VideoPlayer, VideoId } from 'features/VideoPlayer';
 import { Trans } from 'components/Translation';
@@ -8,7 +8,8 @@ import { Trans } from 'components/Translation';
 export const INFO_MODAL = 'info_modal';
 
 const Info360Modal: FC<Info360ModalProps> = ({ setInfo360Modal }) => {
-  const { css } = useStyle();
+  const { css, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
 
   return (
     <div className={css(WrapperInfo)} data-test-id={INFO_MODAL}>
@@ -79,7 +80,7 @@ const Info360Modal: FC<Info360ModalProps> = ({ setInfo360Modal }) => {
           </Trans>
         </p>
       </div>
-      <span className={css(arrowSpan)}>
+      <span className={css(arrowSpan({ mobileScreen }))}>
         <IconButton
           graphic='arrowLeft'
           onPress={() => setInfo360Modal(() => false)}
@@ -90,19 +91,16 @@ const Info360Modal: FC<Info360ModalProps> = ({ setInfo360Modal }) => {
   );
 };
 
-const arrowSpan: Rule = ({ theme }) => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
-
-  return {
+const arrowSpan: CreateRule<{ mobileScreen: boolean }> =
+  ({ mobileScreen }) =>
+  ({ theme }) => ({
     position: 'fixed',
     top: theme.spacing.s5,
     left: mobileScreen ? theme.spacing.s5 : `${theme.spacing.s10}`,
     textDecoration: 'none',
     border: 'none',
     cursor: 'pointer',
-  };
-};
+  });
 
 const title: Rule = ({ theme }) => ({
   fontSize: `${theme.font.fixed.f20.fontSize}`,

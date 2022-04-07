@@ -1,5 +1,5 @@
 import React, { FC, HTMLProps } from 'react';
-import { Button, useBreakpoints, useStyle } from '@pma/dex-wrapper';
+import { Button, useStyle } from '@pma/dex-wrapper';
 
 import { WrapperModal } from 'features/Modal';
 import { Trans } from 'components/Translation';
@@ -25,9 +25,8 @@ const DefaultMark = (
 );
 
 const SuccessModal: FC<Props> = ({ onClose, description, mark = DefaultMark, title }) => {
-  const { css, theme } = useStyle();
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+  const { css, theme, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
 
   return (
     <WrapperModal title={title} onClose={onClose} onOverlayClick={onClose}>

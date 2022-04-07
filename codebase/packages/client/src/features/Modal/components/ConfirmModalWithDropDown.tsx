@@ -8,7 +8,7 @@ import * as Yup from 'yup';
 import { Option } from 'components/Form/types';
 import get from 'lodash.get';
 
-import { useBreakpoints, useStyle, CreateRule, Modal, Button } from '@pma/dex-wrapper';
+import { useStyle, CreateRule, Modal, Button } from '@pma/dex-wrapper';
 
 export type ConfirmModal = {
   title: string;
@@ -39,9 +39,8 @@ const ConfirmModalWithDropDown: FC<Props> = ({
   field_options,
   field_placeholder,
 }) => {
-  const { theme, css } = useStyle();
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+  const { theme, css, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
 
   const methods = useForm({
     mode: 'onChange',

@@ -1,5 +1,5 @@
 import React, { FC, HTMLProps, useState } from 'react';
-import { Button, Modal, Rule, useBreakpoints, useStyle } from '@pma/dex-wrapper';
+import { Button, Modal, Rule, CreateRule, useStyle } from '@pma/dex-wrapper';
 import { Graphics, Icon } from 'components/Icon';
 import { CreateUpdateObjective, CreateUpdateObjectives } from '../ObjectiveModal';
 import { IconButton } from 'components/IconButton';
@@ -21,7 +21,8 @@ const EditButton: FC<Props> = ({
   buttonText = 'Edit all',
   editNumber,
 }) => {
-  const { theme } = useStyle();
+  const { theme, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -57,17 +58,17 @@ const EditButton: FC<Props> = ({
         <Modal
           modalPosition={'middle'}
           overlayColor={'tescoBlue'}
-          modalContainerRule={[containerRule]}
+          modalContainerRule={[containerRule({ mobileScreen })]}
           closeOptions={{
             content: <Icon graphic='cancel' invertColors={true} />,
             onClose: () => {
               setIsOpen(false);
             },
-            styles: [modalCloseOptionStyle],
+            styles: [modalCloseOptionStyle({ mobileScreen })],
           }}
           title={{
             content: 'Edit objectives',
-            styles: [modalTitleOptionStyle],
+            styles: [modalTitleOptionStyle({ mobileScreen })],
           }}
         >
           {isSingleObjectivesEditMode ? (
@@ -82,10 +83,9 @@ const EditButton: FC<Props> = ({
 };
 
 // TODO: Extract duplicate 2
-const containerRule: Rule = ({ colors }) => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
-  return {
+const containerRule: CreateRule<{ mobileScreen: boolean }> =
+  ({ mobileScreen }) =>
+  ({ colors }) => ({
     alignItems: 'center',
     justifyContent: 'center',
     position: 'relative',
@@ -98,50 +98,40 @@ const containerRule: Rule = ({ colors }) => {
     marginBottom: mobileScreen ? 0 : '30px',
     background: colors.white,
     cursor: 'default',
-  };
-};
+  });
 
 // TODO: Extract duplicate 13
-const modalCloseOptionStyle: Rule = () => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
-  return {
-    display: 'inline-block',
-    height: '24px',
-    paddingLeft: '0px',
-    paddingRight: '0px',
-    position: 'fixed',
-    top: '22px',
-    right: mobileScreen ? '20px' : '40px',
-    textDecoration: 'none',
-    border: 'none',
-    cursor: 'pointer',
-  };
-};
+const modalCloseOptionStyle: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => ({
+  display: 'inline-block',
+  height: '24px',
+  paddingLeft: '0px',
+  paddingRight: '0px',
+  position: 'fixed',
+  top: '22px',
+  right: mobileScreen ? '20px' : '40px',
+  textDecoration: 'none',
+  border: 'none',
+  cursor: 'pointer',
+});
 
 // TODO: Extract duplicate 14
-const modalTitleOptionStyle: Rule = () => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
-
-  return {
-    position: 'fixed',
-    top: '22px',
-    textAlign: 'center',
-    left: 0,
-    right: 0,
-    color: 'white',
-    ...(mobileScreen
-      ? {
-          fontSize: '20px',
-          lineHeight: '24px',
-        }
-      : {
-          fontSize: '24px',
-          lineHeight: '28px',
-        }),
-  };
-};
+const modalTitleOptionStyle: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => ({
+  position: 'fixed',
+  top: '22px',
+  textAlign: 'center',
+  left: 0,
+  right: 0,
+  color: 'white',
+  ...(mobileScreen
+    ? {
+        fontSize: '20px',
+        lineHeight: '24px',
+      }
+    : {
+        fontSize: '24px',
+        lineHeight: '28px',
+      }),
+});
 
 const iconStyle: Rule = {
   marginRight: '10px',

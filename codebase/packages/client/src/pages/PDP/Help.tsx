@@ -1,15 +1,14 @@
 import React from 'react';
-import { CreateRule, Icon, Modal, Rule, theme, useBreakpoints, useStyle } from '@pma/dex-wrapper';
+import { CreateRule, Icon, Modal, Rule, theme, useStyle } from '@pma/dex-wrapper';
 import { useNavigate } from 'react-router';
 import { buildPath } from 'features/Routes';
 import { Page } from 'pages';
 import { ModalWrapper } from 'components/ModalWrapper';
 
 const PersonalDevelopmentHelp = () => {
-  const { css } = useStyle();
+  const { css, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const navigate = useNavigate();
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
 
   return (
     <ModalWrapper isOpen={true}>
@@ -185,18 +184,6 @@ const largeSubtitle = {
   lineHeight: '24px',
   paddingTop: '24px',
 } as Rule;
-
-const templatesModalWindowStyles: CreateRule<{ mobileScreen }> = (props) => {
-  const { mobileScreen } = props;
-
-  return {
-    width: mobileScreen ? '100%' : '60%',
-    padding: '0',
-    marginTop: mobileScreen ? '50px' : 0,
-    overflow: 'hidden',
-    fontFamily: '"TESCO Modern", Arial, sans-serif',
-  };
-};
 
 const main = {
   padding: '0px 40px',

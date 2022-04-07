@@ -1,15 +1,16 @@
 import React, { FC } from 'react';
-import { useStyle, useBreakpoints, Rule } from '@pma/dex-wrapper';
+import { useStyle, Rule, CreateRule } from '@pma/dex-wrapper';
 import { Trans } from 'components/Translation';
 
 export const TEST_ID = 'review-help-modal';
 
 const ReviewHelpModal: FC = () => {
-  const { css } = useStyle();
+  const { css, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
 
   return (
     <div data-test-id={TEST_ID} className={css(wrapperStyle)}>
-      <div className={css(wrapperBlockStyle)}>
+      <div className={css(wrapperBlockStyle({ mobileScreen }))}>
         <div>
           <div className={css(titleStyle)}>
             <Trans i18nKey={'hint_review_title'}>Here are some hints and tips for writing your review:</Trans>
@@ -65,15 +66,11 @@ const wrapperStyle: Rule = {
   height: '100%',
 };
 
-const wrapperBlockStyle: Rule = () => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
-  return {
-    height: '100%',
-    overflow: 'auto',
-    padding: mobileScreen ? '0 16px' : '0 40px',
-  };
-};
+const wrapperBlockStyle: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => ({
+  height: '100%',
+  overflow: 'auto',
+  padding: mobileScreen ? '0 16px' : '0 40px',
+});
 
 const titleStyle: Rule = ({ theme }) => ({
   fontSize: '24px',

@@ -8,6 +8,7 @@ import {
   Theme,
   theme as baseTheme,
   useBreakpoints,
+  useMedia,
   fontWeight,
   Styles,
 } from '@dex-ddl/core';
@@ -30,6 +31,7 @@ export {
   AccessibilityProvider,
   useAccessibleStyle as useStyle,
   useBreakpoints,
+  useMedia,
   colors,
   fontWeight,
   fontSettings,

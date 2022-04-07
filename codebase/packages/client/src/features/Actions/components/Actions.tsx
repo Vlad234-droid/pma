@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Rule, useBreakpoints, useStyle } from '@pma/dex-wrapper';
+import { Rule, useStyle } from '@pma/dex-wrapper';
 import useDispatch from 'hooks/useDispatch';
 import Filters, { getEmployeesSortingOptions, useSearch, useSorting } from 'features/Filters';
 import { useSelector } from 'react-redux';
@@ -26,10 +26,9 @@ import { SuccessModalConsumer, SuccessModalProvider } from '../context/successMo
 
 export const Actions = () => {
   const dispatch = useDispatch();
-  const { css } = useStyle();
+  const { css, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
   const { t } = useTranslation();
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.medium || isBreakpoint.small || isBreakpoint.xSmall;
 
   const options = getEmployeesSortingOptions(t);
   const [sortValue, setSortValue] = useSorting();
