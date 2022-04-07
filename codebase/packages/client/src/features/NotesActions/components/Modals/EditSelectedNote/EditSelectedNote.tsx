@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
-import { Button, CreateRule, Rule, Styles, Theme, useBreakpoints, useStyle } from '@pma/dex-wrapper';
+import { Button, CreateRule, Rule, Styles, Theme, useStyle } from '@pma/dex-wrapper';
 import { GenericItemField } from 'components/GenericForm';
 import { Input, Item, Select, Textarea } from 'components/Form';
 import { EditSelectedNoteProps } from './type';
@@ -26,11 +26,10 @@ const EditSelectedNote: FC<EditSelectedNoteProps> = ({
   definePropperEditMode,
   setSelectedFolderDynamic,
 }) => {
-  const { css, theme } = useStyle();
+  const { css, theme, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const dispatch = useDispatch();
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
   const [editMode, setEditMode] = useState<boolean>(false);
   const [confirmModal, setConfirmModal] = useState(false);
   const [successSelectedNoteToEdit, setSuccessSelectedNoteToEdit] = useState(false);

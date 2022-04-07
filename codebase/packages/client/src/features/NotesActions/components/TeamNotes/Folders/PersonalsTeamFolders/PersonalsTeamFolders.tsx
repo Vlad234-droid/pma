@@ -1,5 +1,5 @@
 import React, { FC, Dispatch, SetStateAction, MutableRefObject } from 'react';
-import { Rule, useStyle, Button, Styles, CreateRule, useBreakpoints } from '@pma/dex-wrapper';
+import { Rule, useStyle, Button, Styles, CreateRule } from '@pma/dex-wrapper';
 import { IconButton } from 'components/IconButton';
 import { defineNotesHandler, AllNotesFolderIdTEAM } from 'utils/note';
 import { NoteData } from '../../../../type';
@@ -40,7 +40,8 @@ const PersonalsTeamFolders: FC<PersonalsTeamFoldersProps> = ({
   setTeamArchivedMode,
   setSelectedTEAMFolder,
 }) => {
-  const { css, theme } = useStyle();
+  const { css, theme, matchMedia } = useStyle();
+  const mediumScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
 
   const selectedDotsActionhandler = (e, noteId) => {
     selectedTEAMNoteId.current = null;
@@ -186,7 +187,7 @@ const PersonalsTeamFolders: FC<PersonalsTeamFoldersProps> = ({
   };
 
   return (
-    <div className={css(mainFolderContainerStyle)} data-test-id={TEAM_FOLDER_WRAPPER}>
+    <div className={css(mainFolderContainerStyle({ mediumScreen }))} data-test-id={TEAM_FOLDER_WRAPPER}>
       <div className={css(titleStyle)}>
         <h2 className={css({ padding: '24px' })} data-test-id={FOLDER_TITLE}>
           {!teamArchivedMode ? 'Folders for Notes on my Team' : 'Archived Folders for Notes on my Team'}
@@ -272,18 +273,16 @@ const dotsStyle: Rule = ({ colors }) =>
     },
   } as Styles);
 
-const mainFolderContainerStyle: Rule = () => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mediumScreen = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
-  return {
+const mainFolderContainerStyle: CreateRule<{ mediumScreen: boolean }> =
+  ({ mediumScreen }) =>
+  ({ theme }) => ({
     width: '100%',
-    background: '#FFFFFF',
+    background: theme.colors.white,
     boxShadow: '3px 3px 1px 1px rgba(0, 0, 0, 0.05)',
     borderRadius: '10px',
     ...(mediumScreen && { flexGrow: 1 }),
     marginTop: '8px',
-  };
-};
+  });
 
 const flexStyle: Rule = {
   display: 'flex',

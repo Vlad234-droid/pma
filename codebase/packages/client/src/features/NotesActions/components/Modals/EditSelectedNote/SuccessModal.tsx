@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { Trans } from 'components/Translation';
-import { Button, useBreakpoints, useStyle } from '@pma/dex-wrapper';
+import { Button, useStyle } from '@pma/dex-wrapper';
 import { SuccessModalProps } from './type';
 import successImg from 'images/success.jpg';
 
@@ -12,9 +12,8 @@ const SuccessModal: FC<SuccessModalProps> = ({
   setSelectedFolder,
   methods,
 }) => {
-  const { css, theme } = useStyle();
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+  const { css, theme, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
 
   const { reset } = methods;
   return (

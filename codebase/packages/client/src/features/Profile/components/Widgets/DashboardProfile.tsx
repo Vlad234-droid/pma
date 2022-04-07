@@ -1,6 +1,6 @@
 import React, { FC, HTMLProps } from 'react';
 import { Trans } from 'components/Translation';
-import { CreateRule, Rule, Styles, useBreakpoints, useStyle } from '@pma/dex-wrapper';
+import { CreateRule, Rule, Styles, useStyle } from '@pma/dex-wrapper';
 import { TileWrapper } from 'components/Tile';
 import { Avatar } from 'components/Avatar';
 import { AuthConsumer } from '../../../../contexts/authContext';
@@ -81,9 +81,8 @@ export type AvatarNameProps = {
 };
 
 export const AvatarName: FC<AvatarNameProps> = ({ user = {} }) => {
-  const { css } = useStyle();
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+  const { css, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const { fullName, job } = user || {};
   return (
     <div className={css(headStyle)}>
@@ -97,9 +96,8 @@ export const AvatarName: FC<AvatarNameProps> = ({ user = {} }) => {
 };
 
 const DashboardProfile: FC<Props> = () => {
-  const { css } = useStyle();
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+  const { css, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   return (
     <AuthConsumer>
       {({ user = {} }) => {

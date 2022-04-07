@@ -1,6 +1,6 @@
 import React, { Dispatch, FC, SetStateAction, useState } from 'react';
 import { UseFormReturn } from 'react-hook-form';
-import { Button, CreateRule, Rule, Theme, useBreakpoints, useStyle } from '@pma/dex-wrapper';
+import { Button, CreateRule, Rule, Theme, useStyle } from '@pma/dex-wrapper';
 import { FoldersWithNotesTypesTEAM, NotesTypeTEAM } from 'features/NotesActions/type';
 import { Notification } from 'components/Notification';
 import { Icon as IconComponent } from 'components/Icon';
@@ -36,9 +36,8 @@ const AddTeamNoteModal: FC<AddTeamNoteModalProps> = ({
 }) => {
   const [successTEAMModal, setSuccessTEAMModal] = useState<boolean>(false);
   const { t } = useTranslation();
-  const { css, theme } = useStyle();
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+  const { css, theme, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
 
   const {
     formState: { isValid },

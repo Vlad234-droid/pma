@@ -105,6 +105,7 @@ const fieldStyles: Rule = ({ theme }) => ({
   },
   cursor: 'pointer',
   minHeight: '42px',
+  color: theme.colors.base,
 });
 
 const fieldActiveStyles: Rule = ({ theme }) => ({
@@ -151,6 +152,7 @@ const optionStyles: Rule = ({ theme }) => ({
   background: `${theme.colors.white}`,
   cursor: 'pointer',
   textAlign: 'left',
+  color: theme.colors.base,
   ':hover': {
     // @ts-ignore
     background: `${theme.colors.lightBlue}`,

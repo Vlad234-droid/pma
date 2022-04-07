@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
-import { CreateRule, IconButton as BackButton, Modal, Rule, Theme, useBreakpoints, useStyle } from '@pma/dex-wrapper';
+import { CreateRule, IconButton as BackButton, Modal, Rule, Theme, useStyle } from '@pma/dex-wrapper';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -46,15 +46,14 @@ export enum ModalStatuses {
 }
 
 const NotesActions: FC<{ loaded: boolean }> = ({ loaded }) => {
-  const { css, theme } = useStyle();
+  const { css, theme, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const navigate = useNavigate();
   const [status, setStatus] = useState(ModalStatuses.PENDING);
   const { t } = useTranslation();
 
   const isLineManager = usePermission([role.LINE_MANAGER]);
 
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
   const dispatch = useDispatch();
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const [isUserArchived, setIsUserArchived] = useState<boolean>(false);
