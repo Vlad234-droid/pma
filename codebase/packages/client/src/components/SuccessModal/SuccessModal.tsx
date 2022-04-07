@@ -82,7 +82,7 @@ const SuccessModal: FC<Props> = ({ onClose, description, mark = DefaultMark, tit
             bottom: 0,
             left: 0,
             right: 0,
-            borderTop: '1px solid #E5E5E5',
+            borderTop: '2px solid #E5E5E5',
           })}
         >
           <div
@@ -96,7 +96,7 @@ const SuccessModal: FC<Props> = ({ onClose, description, mark = DefaultMark, tit
               styles={[
                 {
                   background: 'white',
-                  border: `1px solid ${theme.colors.tescoBlue}`,
+                  border: `2px solid ${theme.colors.tescoBlue}`,
                   fontSize: '16px',
                   lineHeight: '20px',
                   fontWeight: 'bold',

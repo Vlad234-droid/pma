@@ -102,7 +102,7 @@ const wrapperStyle: Rule = ({ theme }) => ({
 
 const defaultButtonStyle: Rule = ({ theme }) => ({
   background: theme.colors.white,
-  border: `1px solid ${theme.colors.tescoBlue}`,
+  border: `2px solid ${theme.colors.tescoBlue}`,
   ...theme.font.fixed.f16,
   fontWeight: theme.font.weight.bold,
   color: `${theme.colors.tescoBlue}`,

@@ -67,7 +67,7 @@ const containerRule: CreateRule<{
 
 const btnOkStyle: Rule = (theme) => ({
   background: 'white',
-  border: `1px solid ${theme.colors.tescoBlue}`,
+  border: `2px solid ${theme.colors.tescoBlue}`,
   fontSize: '16px',
   lineHeight: '20px',
   fontWeight: 'bold',

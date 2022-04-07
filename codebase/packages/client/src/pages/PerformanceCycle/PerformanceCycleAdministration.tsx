@@ -262,7 +262,7 @@ const headWrapperStyles: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen
 
 const btnStyle = {
   fontSize: '14px',
-  border: '1px solid rgb(0, 83, 159)',
+  border: '2px solid rgb(0, 83, 159)',
   minWidth: '20px',
 };
 

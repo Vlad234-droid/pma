@@ -53,7 +53,7 @@ const desc: Rule = ({ theme }) => ({
   fontWeight: theme.font.weight.bold,
   paddingBottom: '24px',
   // @ts-ignore
-  borderBottom: `1px solid ${theme.colors.lightGray}`,
+  borderBottom: `2px solid ${theme.colors.lightGray}`,
 });
 
 const main = {

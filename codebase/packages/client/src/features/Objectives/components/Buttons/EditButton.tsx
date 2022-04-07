@@ -44,7 +44,7 @@ const EditButton: FC<Props> = ({
           styles={[
             styles,
             {
-              border: `1px solid ${theme.colors.white}`,
+              border: `${theme.border.width.b2} solid ${theme.colors.white}`,
               fontSize: '14px',
             },
           ]}

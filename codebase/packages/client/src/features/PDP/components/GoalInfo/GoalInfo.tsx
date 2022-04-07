@@ -155,7 +155,7 @@ const btns: Rule = {
 };
 
 const fullGoals: Rule = {
-  borderBottom: `1px solid ${theme.colors.backgroundDarkest}`,
+  borderBottom: `2px solid ${theme.colors.backgroundDarkest}`,
 };
 
 const goalBlock: Rule = {

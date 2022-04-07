@@ -43,7 +43,7 @@ const HistoryTable = ({ headers, items, isVisible }) => {
 };
 
 const separator = {
-  borderBottom: '1px solid gray',
+  borderBottom: '2px solid gray',
   width: '100%',
   height: '1px',
   padding: '33px',

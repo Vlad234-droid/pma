@@ -59,14 +59,14 @@ const inputStyle: CreateRule<{ isValid?: boolean }> =
   ({ theme }) => ({
     width: '100%',
     // @ts-ignore
-    border: `1px solid ${isValid ? theme.colors.lightGray : theme.colors.error}`,
+    border: `2px solid ${isValid ? theme.colors.lightGray : theme.colors.error}`,
     borderRadius: '5px',
     fontSize: '16px',
     lineHeight: '20px',
     padding: '10px 40px 10px 16px',
     ':focus': {
       outline: 'none !important',
-      border: `1px solid ${theme.colors.tescoBlue}`,
+      border: `2px solid ${theme.colors.tescoBlue}`,
     },
   });
 

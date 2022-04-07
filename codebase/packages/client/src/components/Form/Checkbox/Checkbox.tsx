@@ -14,7 +14,7 @@ const Checkbox: FC<CheckboxField> = ({ id, name, onChange, checked, disabled = f
             height: '20px',
             appearance: 'none',
             backgroundColor: colors.white,
-            border: `1px solid ${colors.tescoBlue}`,
+            border: `2px solid ${colors.tescoBlue}`,
             padding: '9px',
             borderRadius: '0px',
             display: 'inline-block',

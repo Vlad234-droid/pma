@@ -275,7 +275,7 @@ const bodyStyle: Rule = {
 const buttonStyle: CreateRule<{ inverse: boolean }> =
   ({ inverse }) =>
   ({ theme }) => ({
-    border: `1px solid ${inverse ? theme.colors.white : theme.colors.tescoBlue}`,
+    border: `2px solid ${inverse ? theme.colors.white : theme.colors.tescoBlue}`,
     ...theme.font.fixed.f14,
     letterSpacing: '0px',
   });

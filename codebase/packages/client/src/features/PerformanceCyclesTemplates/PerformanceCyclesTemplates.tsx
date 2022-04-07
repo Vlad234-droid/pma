@@ -296,7 +296,7 @@ const iconBtnStyle: CreateRule<{ isActive: boolean }> =
     justifyContent: 'center',
     alignItems: 'center',
     outline: 0,
-    border: `1px solid ${theme.colors.tescoBlue}`,
+    border: `2px solid ${theme.colors.tescoBlue}`,
     borderRadius: '20px',
     cursor: 'pointer',
     position: 'relative',
@@ -338,7 +338,7 @@ const templatesListStyles: Rule = () => ({
 const templatesListItemStyles: Rule = () => {
   return {
     padding: '15px 0',
-    borderBottom: '1px solid #ddd',
+    borderBottom: '2px solid #ddd',
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',

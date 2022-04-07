@@ -126,7 +126,7 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel, setIsInfoModalOpen }) 
             </Item>
           </div>
           {formValues.targetType === TargetType.GOAL && (
-            <TileWrapper customStyle={{ padding: '24px', border: '1px solid #E5E5E5', marginBottom: '24px' }}>
+            <TileWrapper customStyle={{ padding: '24px', border: '2px solid #E5E5E5', marginBottom: '24px' }}>
               <h3 className={css(commentStyle)}>
                 {t('add_comment_to', `Add comment to ${labelValue}`, { labelValue })}
               </h3>
@@ -159,7 +159,7 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel, setIsInfoModalOpen }) 
             </div>
           )}
           {formValues.targetId && (
-            <TileWrapper customStyle={{ padding: '24px', border: '1px solid #E5E5E5', marginBottom: '24px' }}>
+            <TileWrapper customStyle={{ padding: '24px', border: '2px solid #E5E5E5', marginBottom: '24px' }}>
               <h3 className={css(commentStyle)}>
                 {t('add_comment_to_objectiveValue', `Add comment to ${objectiveValue}`, { objectiveValue })}
               </h3>
@@ -174,7 +174,7 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel, setIsInfoModalOpen }) 
             </TileWrapper>
           )}
           {formValues.targetType === TargetType.VALUE_BEHAVIOR && (
-            <TileWrapper customStyle={{ padding: '24px', border: '1px solid #E5E5E5', marginBottom: '24px' }}>
+            <TileWrapper customStyle={{ padding: '24px', border: '2px solid #E5E5E5', marginBottom: '24px' }}>
               <h3 className={css(commentStyle)}>
                 {t('add_comment_to', `Add comment to ${labelValue}`, { labelValue })}
               </h3>
@@ -189,7 +189,7 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel, setIsInfoModalOpen }) 
             </TileWrapper>
           )}
           {formValues.targetType === TargetType.OTHER && (
-            <TileWrapper customStyle={{ padding: '24px', border: '1px solid #E5E5E5', marginBottom: '24px' }}>
+            <TileWrapper customStyle={{ padding: '24px', border: '2px solid #E5E5E5', marginBottom: '24px' }}>
               <h3 className={css(commentStyle)}>
                 {t('add_comment_to', `Add comment to ${labelValue}`, { labelValue })}
               </h3>
@@ -204,7 +204,7 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel, setIsInfoModalOpen }) 
               />
             </TileWrapper>
           )}
-          <TileWrapper customStyle={{ padding: '24px', border: '1px solid #E5E5E5', marginBottom: '50px' }}>
+          <TileWrapper customStyle={{ padding: '24px', border: '2px solid #E5E5E5', marginBottom: '50px' }}>
             <h3 className={css(commentStyle)}>
               <Trans i18nKey='add_any_other_comments_you_would_like_to_share_with_your_colleague'>
                 Add any other comments you would like to share with your colleague

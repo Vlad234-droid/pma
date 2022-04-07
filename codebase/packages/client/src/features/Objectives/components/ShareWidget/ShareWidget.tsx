@@ -268,7 +268,7 @@ const btnStyle = ({ theme, isManagerShared }) => ({
   color: isManagerShared ? theme.colors.tescoRed : theme.colors.tescoBlue,
   height: '30px',
   background: 'transparent',
-  border: `1px solid ${isManagerShared ? theme.colors.tescoRed : theme.colors.tescoBlue}`,
+  border: `2px solid ${isManagerShared ? theme.colors.tescoRed : theme.colors.tescoBlue}`,
 });
 
 const btnViewStyle = ({ theme }) => ({
@@ -276,7 +276,7 @@ const btnViewStyle = ({ theme }) => ({
   height: '30px',
   background: 'transparent',
   color: theme.colors.tescoBlue,
-  border: `1px solid ${theme.colors.tescoBlue}`,
+  border: `2px solid ${theme.colors.tescoBlue}`,
 });
 
 export default ShareWidget;

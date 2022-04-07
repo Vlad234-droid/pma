@@ -83,7 +83,7 @@ const quantityStyle: Rule = ({ theme }) =>
     ':after': {
       content: "''",
       width: '100%',
-      height: '1px',
+      height: '2px',
       position: 'absolute',
       bottom: '-8px',
       left: '0px',

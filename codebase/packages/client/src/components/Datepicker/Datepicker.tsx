@@ -147,7 +147,7 @@ const buttonRule: CreateRule<{ error: boolean }> =
   ({ error }) =>
   ({ theme }) => ({
     background: 'transparent',
-    border: `1px solid ${error ? `${theme.colors.error}` : `${theme.colors.backgroundDarkest}`}`,
+    border: `2px solid ${error ? `${theme.colors.error}` : `${theme.colors.backgroundDarkest}`}`,
     borderTopLeftRadius: '5px',
     borderBottomLeftRadius: '5px',
     left: 0,

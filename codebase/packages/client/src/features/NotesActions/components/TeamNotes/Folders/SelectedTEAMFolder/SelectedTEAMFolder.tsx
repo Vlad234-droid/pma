@@ -231,7 +231,7 @@ const Align_flex_style: Rule = ({ colors }) => ({
   justifyContent: 'flex-start',
   cursor: 'pointer',
   // @ts-ignore
-  borderBottom: `1px solid ${colors.lightGray}`,
+  borderBottom: `2px solid ${colors.lightGray}`,
   padding: '15px 24px',
 });
 const Align_flex_styleLast: Rule = {
@@ -329,7 +329,7 @@ const Note_container_style: Rule = {
   '&:before': {
     content: '""',
     position: 'absolute',
-    height: '1px',
+    height: '2px',
     width: '100%',
     background: '#E5E5E5',
     left: '0px',

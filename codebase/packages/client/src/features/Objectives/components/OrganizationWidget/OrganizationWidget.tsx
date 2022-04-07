@@ -115,7 +115,7 @@ const btnStyle = ({ theme }) => ({
   color: theme.colors.tescoBlue,
   height: '30px',
   background: 'transparent',
-  border: `1px solid ${theme.colors.tescoBlue}`,
+  border: `2px solid ${theme.colors.tescoBlue}`,
 });
 
 export default OrganizationWidget;

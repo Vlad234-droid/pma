@@ -304,7 +304,7 @@ const titleStyle: Rule = {
   },
 } as Styles;
 const archiveStyle: Rule = ({ theme }) => ({
-  border: `1px solid ${theme.colors.tescoBlue}`,
+  border: `2px solid ${theme.colors.tescoBlue}`,
   fontSize: '14px',
   height: '34px',
   fontWeight: 'bold',
@@ -327,7 +327,7 @@ const itemListStyle: CreateRule<{ selected: boolean }> = ({ selected }) =>
       position: 'absolute',
       bottom: '0px',
       width: '100%',
-      height: '1px',
+      height: '2px',
       background: '#E5E5E5',
       marginTop: '16px',
     },
@@ -354,7 +354,7 @@ const alignFlexStyle: Rule = ({ colors }) => ({
   justifyContent: 'flex-start',
   cursor: 'pointer',
   // @ts-ignore
-  borderBottom: `1px solid ${colors.lightGray}`,
+  borderBottom: `2px solid ${colors.lightGray}`,
   padding: '15px 24px',
 });
 const alignFlexStyleLast: Rule = {

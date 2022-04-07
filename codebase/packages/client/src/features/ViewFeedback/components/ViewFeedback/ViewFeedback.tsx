@@ -418,7 +418,7 @@ const iconBtnStyle: Rule = ({ theme }) => ({
   background: theme.colors.white,
   color: '#00539F',
   cursor: 'pointer',
-  border: '1px solid #00539F',
+  border: '2px solid #00539F',
   maxWidth: '134px',
   marginLeft: 'auto',
   marginTop: '16px',

@@ -240,7 +240,7 @@ const subtitleBlock = {
   flexDirection: 'row',
   width: '100%',
   paddingTop: '10px',
-  borderBottom: `1px solid ${colors.lightGray}`,
+  borderBottom: `2px solid ${colors.lightGray}`,
 } as Rule;
 
 const devPlanTitle = {
