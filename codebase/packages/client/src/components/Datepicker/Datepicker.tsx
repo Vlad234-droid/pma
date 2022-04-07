@@ -103,8 +103,11 @@ const Datepicker: FC<Props> = ({ onChange, onError, value, name, minDate, isVali
 
   const handleClickOutside = (event: MouseEvent<HTMLElement>) => {
     const element = event?.target as HTMLElement;
+
     if (ref.current && !ref.current.contains(element)) {
       toggleOpen(false);
+    } else {
+      toggleOpen(true);
     }
   };
 
@@ -112,7 +115,7 @@ const Datepicker: FC<Props> = ({ onChange, onError, value, name, minDate, isVali
 
   return (
     <>
-      <div onClick={() => toggleOpen(!isOpen)} ref={ref} className={css(wrapperRule)} data-test-id={TEST_ID}>
+      <div onClick={() => handleClickOutside} ref={ref} className={css(wrapperRule)} data-test-id={TEST_ID}>
         <Input
           value={currentValue}
           onChange={handleChangeValue}
