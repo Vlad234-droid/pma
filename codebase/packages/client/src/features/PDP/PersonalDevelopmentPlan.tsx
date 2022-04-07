@@ -90,7 +90,7 @@ const PersonalDevelopmentPlan: FC = () => {
     elRef.current?.scrollTo(0, 0);
   };
 
-  const editGoal = (uuid, currentId) => {
+  const editGoal = (uuid) => {
     navigate(buildPath(paramsReplacer(`${Page.UPDATE_PERSONAL_DEVELOPMENT_PLAN}`, { ':uuid': uuid })));
   };
 

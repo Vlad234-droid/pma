@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { Button, Icon, ModalWithHeader, Rule, theme, useBreakpoints, useStyle } from '@pma/dex-wrapper';
+import { Button, Icon, ModalWithHeader, CreateRule, Rule, theme, useStyle } from '@pma/dex-wrapper';
 import { useForm } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -15,7 +15,8 @@ type ModalProps = {
 };
 
 const DonwloadReportModal: FC<ModalProps> = ({ onClose }) => {
-  const { css } = useStyle();
+  const { css, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
   const { t } = useTranslation();
   const methods = useForm({
     mode: 'onChange',
@@ -65,7 +66,7 @@ const DonwloadReportModal: FC<ModalProps> = ({ onClose }) => {
         onClose: onClose,
       }}
     >
-      <h3 className={css(modalTitleStyle)}>
+      <h3 className={css(modalTitleStyle({ mobileScreen }))}>
         <Trans i18nKey='topics_to_download_into_excel_report'>
           Choose which topics you’d like to download into an excel report
         </Trans>
@@ -100,7 +101,7 @@ const DonwloadReportModal: FC<ModalProps> = ({ onClose }) => {
         </div>
       </div>
 
-      <div className={css(formButtonsWrap)}>
+      <div className={css(formButtonsWrap({ mobileScreen }))}>
         <Button
           onPress={onClose}
           mode='inverse'
@@ -127,9 +128,7 @@ const DonwloadReportModal: FC<ModalProps> = ({ onClose }) => {
   );
 };
 
-const modalWrapperStyle: Rule = () => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
+const modalWrapperStyle: Rule = (mobileScreen) => {
   return {
     ...(mobileScreen
       ? {
@@ -146,9 +145,7 @@ const modalWrapperStyle: Rule = () => {
   };
 };
 
-const modalInnerWarp: Rule = () => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
+const modalInnerWarp: Rule = (mobileScreen) => {
   return {
     width: '100%',
     overflowY: 'scroll',
@@ -175,10 +172,9 @@ const checkboxItemStyle: Rule = () => {
   };
 };
 
-const modalTitleStyle: Rule = ({ theme }) => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
-  return {
+const modalTitleStyle: CreateRule<{ mobileScreen: boolean }> =
+  ({ mobileScreen }) =>
+  ({ theme }) => ({
     color: theme.colors.tescoBlue,
     ...(mobileScreen
       ? {
@@ -193,13 +189,11 @@ const modalTitleStyle: Rule = ({ theme }) => {
           padding: '40px',
           margin: 0,
         }),
-  };
-};
+  });
 
-const formButtonsWrap: Rule = ({ theme }) => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
-  return {
+const formButtonsWrap: CreateRule<{ mobileScreen: boolean }> =
+  ({ mobileScreen }) =>
+  ({ theme }) => ({
     display: 'flex',
     position: 'absolute',
     bottom: 0,
@@ -216,8 +210,7 @@ const formButtonsWrap: Rule = ({ theme }) => {
           background: 'none',
           padding: '40px 30px',
         }),
-  };
-};
+  });
 
 const formButton: Rule = () => {
   return {

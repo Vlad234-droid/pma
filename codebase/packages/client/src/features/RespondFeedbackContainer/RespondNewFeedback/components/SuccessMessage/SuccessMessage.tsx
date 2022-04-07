@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Button, Rule, Styles, useBreakpoints, useStyle } from '@pma/dex-wrapper';
+import { Button, Rule, Styles, useStyle } from '@pma/dex-wrapper';
 import success from 'images/success.jpg';
 import { Trans } from 'components/Translation';
 
@@ -13,9 +13,9 @@ type Props = {
 
 // TODO: Extract duplicate 1
 const SuccessMessage: FC<Props> = ({ targetColleagueProfile, onSuccess }) => {
-  const { css, theme } = useStyle();
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+  const { css, theme, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
+
   return (
     <div data-test-id={SUCCESS_MODAL_WRAPPER} className={css(WrapperSuccessContainer)}>
       <div className={css(SuccessImg)}>

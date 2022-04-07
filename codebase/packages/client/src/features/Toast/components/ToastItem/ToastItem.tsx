@@ -1,15 +1,11 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-
-import { Icon, Rule, Styles, useBreakpoints, useStyle } from '@pma/dex-wrapper';
+import { Icon, Rule, CreateRule, Styles, useStyle } from '@pma/dex-wrapper';
 import { TileWrapper } from 'components/Tile';
-
 import { ToastPayload, Variant } from '../../config/types';
-
 import tip from 'images/tip.png';
 import error from 'images/error.png';
 import info from 'images/info.png';
-
 import { ToastActions } from '@pma/store';
 
 type Props = ToastPayload;
@@ -17,7 +13,8 @@ type Props = ToastPayload;
 export const TEST_ID = 'toast-item-test-id';
 
 const ToastItem: FC<Props> = ({ id, title, description, timeout, onClose, variant, autoClose = true }) => {
-  const { css } = useStyle();
+  const { css, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const dispatch = useDispatch();
 
   const [destroyTime, setDestroyTime] = useState(timeout || Infinity);
@@ -55,7 +52,7 @@ const ToastItem: FC<Props> = ({ id, title, description, timeout, onClose, varian
 
   return (
     <TileWrapper customStyle={wrapperStyles}>
-      <div className={css(notificationStyles)} data-test-id={TEST_ID}>
+      <div className={css(notificationStyles({ mobileScreen }))} data-test-id={TEST_ID}>
         <img className={css(imageStyles)} src={getImageOf(variant)}></img>
         <div className={css(contentStyles)}>
           <div className={css(titleStyles)}>{title}</div>
@@ -80,15 +77,11 @@ const imageStyles: Rule = {
   height: '40px',
 };
 
-const notificationStyles: Rule = () => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
-  return {
-    display: 'flex',
-    padding: '16px 34px 16px 16px',
-    maxWidth: mobileScreen ? '290px' : '375px',
-  };
-};
+const notificationStyles: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => ({
+  display: 'flex',
+  padding: '16px 34px 16px 16px',
+  maxWidth: mobileScreen ? '290px' : '375px',
+});
 
 const contentStyles: Rule = {
   marginLeft: '16px',

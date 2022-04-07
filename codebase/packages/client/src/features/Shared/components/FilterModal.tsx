@@ -1,5 +1,5 @@
 import React, { FC, useRef, MouseEvent, SetStateAction, Dispatch } from 'react';
-import { useStyle, Rule, CreateRule, Theme, useBreakpoints } from '@pma/dex-wrapper';
+import { useStyle, Rule, CreateRule } from '@pma/dex-wrapper';
 import { Radio } from 'components/Form';
 import { Trans, useTranslation } from 'components/Translation';
 import useEventListener from 'hooks/useEventListener';

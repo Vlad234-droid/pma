@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { IconButton } from 'components/IconButton';
-import { useStyle, useBreakpoints, Rule, Styles } from '@pma/dex-wrapper';
+import { useStyle, Rule, Styles } from '@pma/dex-wrapper';
 
 import { VideoPlayer, VideoId } from 'features/VideoPlayer';
 import { Trans } from 'components/Translation';
@@ -13,9 +13,8 @@ type Props = {
 };
 
 const InfoMessage: FC<Props> = ({ goBack }) => {
-  const { css, theme } = useStyle();
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+  const { css, theme, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
 
   return (
     <div className={css(WrapperInfo)} data-test-id={MESSAGE_WRAPPER}>

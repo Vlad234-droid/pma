@@ -1,7 +1,7 @@
 import React, { FC, useState, useCallback } from 'react';
 
 import { getReportMetaSelector } from '@pma/store';
-import { Button, colors, CreateRule, Rule, useBreakpoints, useStyle } from '@pma/dex-wrapper';
+import { Button, colors, CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { IconButton } from 'components/IconButton';
@@ -33,7 +33,8 @@ const Report: FC = () => {
 
   const { t } = useTranslation();
   const { addToast } = useToast();
-  const { css } = useStyle();
+  const { css, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
   const dispatch = useDispatch();
   const [focus, setFocus] = useState(false);
   const [showDownloadReportModal, setShowDownloadReportModal] = useState(false);
@@ -46,7 +47,6 @@ const Report: FC = () => {
   const [filterData, setFilterData] = useState<any>(initialValues);
   const [checkedItems, setCheckedItems]: [string[], (T) => void] = useState([]);
   const [isCheckAll, setIsCheckAll]: [string[], (T) => void] = useState([]);
-
   const { colleaguesCount } = useStatisticsReport([...metaStatuses]);
 
   getReportData(query);
@@ -75,7 +75,7 @@ const Report: FC = () => {
 
   return (
     <div className={css({ margin: '22px 42px 0px 40px' })} data-test-id={REPORT_WRAPPER}>
-      <div className={css(spaceBetween({ quantity }))}>
+      <div className={css(spaceBetween({ quantity, mobileScreen }))}>
         {!!getAppliedReport().length && (
           <AppliedFilters
             clearAppliedFilters={clearAppliedFilters}
@@ -353,13 +353,11 @@ const flexCenterStyled: Rule = {
   height: '116px',
 };
 
-const spaceBetween: CreateRule<{ quantity: number }> = ({ quantity }) => {
-  const [, isBreakpoint] = useBreakpoints();
-  const medium = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
+const spaceBetween: CreateRule<{ quantity: number; mobileScreen: boolean }> = ({ quantity, mobileScreen }) => {
   return {
     display: 'flex',
-    flexWrap: medium ? 'wrap' : 'nowrap',
-    ...(medium && { flexBasis: '250px' }),
+    flexWrap: mobileScreen ? 'wrap' : 'nowrap',
+    ...(mobileScreen && { flexBasis: '250px' }),
     justifyContent: quantity ? 'space-between' : 'flex-end',
     alignItems: 'center',
   };

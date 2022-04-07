@@ -1,6 +1,6 @@
 import React, { Dispatch, FC, SetStateAction } from 'react';
 import { IconButton } from 'components/IconButton';
-import { useStyle, useBreakpoints, Rule, Styles } from '@pma/dex-wrapper';
+import { useStyle, Rule, Styles } from '@pma/dex-wrapper';
 import { VideoPlayer, VideoId } from 'features/VideoPlayer';
 import { Trans } from 'components/Translation';
 
@@ -11,9 +11,9 @@ type Info360ModalProps = {
 };
 
 const HelpModalReceiveFeedback: FC<Info360ModalProps> = ({ setHelpModalReceiveFeedback }) => {
-  const { css, theme } = useStyle();
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+  const { css, theme, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
+
   return (
     <div className={css(WrapperInfo)} data-test-id={WRAPPER}>
       <h2 className={css(Title)}>
