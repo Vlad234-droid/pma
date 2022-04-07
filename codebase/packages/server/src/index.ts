@@ -91,18 +91,6 @@ if (!PROXY_API_SERVER_URL) {
       }),
     );
 
-    console.log('step 1');
-
-    server.use(
-      errorHandler({
-        appName: config.applicationName(),
-        logoutPath: config.integrationSSOLogoutPath(),
-        tryAgainPath: config.integrationCoreMountUrl(),
-      }),
-    );
-
-    console.log('step 3');
-
     // setup logger middlewares
     appServer.use(getHttpLoggerMiddleware('http'));
 
@@ -149,6 +137,14 @@ if (!PROXY_API_SERVER_URL) {
     );
     appServer.use('/api', proxyMiddleware);
     appServer.use('/_status', (_, res) => res.sendStatus(200));
+
+    server.use(
+      errorHandler({
+        appName: config.applicationName(),
+        logoutPath: config.integrationSSOLogoutPath(),
+        tryAgainPath: config.integrationCoreMountUrl(),
+      }),
+    );
 
     const myInboxMiddleware = await myInboxConfig(config);
     myInboxMiddleware && appServer.use(myInboxMiddleware);
