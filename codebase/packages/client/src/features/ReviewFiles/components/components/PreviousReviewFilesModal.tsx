@@ -1,5 +1,5 @@
 import React, { FC, HTMLProps, useEffect, useState } from 'react';
-import { Button, CreateRule, Modal, Rule, Styles, theme, useBreakpoints, useStyle } from '@pma/dex-wrapper';
+import { Button, CreateRule, Modal, Rule, Styles, theme, useStyle } from '@pma/dex-wrapper';
 import { DropZone } from 'components/DropZone';
 import Upload from 'images/Upload.svg';
 import { Input, Item as FormItem } from 'components/Form';
@@ -21,16 +21,15 @@ type Props = HTMLProps<HTMLInputElement> & PreviousReviewFilesModal;
 const MAX_FILES_LENGTH = 10;
 
 const PreviousReviewFilesModal: FC<Props> = ({ onOverlayClick, colleagueUUID, readonly }) => {
-  const { css } = useStyle();
+  const { css, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const { t } = useTranslation();
-  const [, isBreakpoint] = useBreakpoints();
   const dispatch = useDispatch();
   const files: File[] = useSelector(getPreviousReviewFilesSelector) || [];
   const [filter, setFilteredValue] = useState('');
   const [showModalLimitExceeded, setShowModalLimitExceeded] = useState(false);
   const [showModalDuplicateFile, setShowModalDuplicateFile] = useState(false);
   const [fileUuidToRemove, setFileUuidToRemove] = useState('');
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
 
   const onUpload = (file) => {
     if (files.length >= MAX_FILES_LENGTH) return setShowModalLimitExceeded(true);

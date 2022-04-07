@@ -1,5 +1,5 @@
 import React, { FC, useState, useEffect, useCallback } from 'react';
-import { Rule, useBreakpoints, useStyle } from '@pma/dex-wrapper';
+import { Rule, CreateRule, useStyle } from '@pma/dex-wrapper';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   FeedbackActions,
@@ -21,7 +21,8 @@ import { getSortString } from 'utils/feedback';
 export const RESPOND_FEEDBACK_CONTAINER = 'respond_feedback_container';
 
 const RespondFeedbackContainer: FC = () => {
-  const { css } = useStyle();
+  const { css, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
   const dispatch = useDispatch();
 
   const colleagueUuid = useSelector(colleagueUUIDSelector);
@@ -69,9 +70,9 @@ const RespondFeedbackContainer: FC = () => {
   return (
     <>
       <div data-test-id={RESPOND_FEEDBACK_CONTAINER}>
-        <div className={css(headerStyled)}>
+        <div className={css(headerStyled({ mobileScreen }))}>
           <RadioBtns status={status} setStatus={setStatus} setFilterModal={setFilterModal} filterModal={filterModal} />
-          <div className={css(FlexStyled)}>
+          <div className={css(FlexStyled({ mobileScreen }))}>
             <FilterOption
               focus={focus}
               customIcon={true}
@@ -109,29 +110,21 @@ const RespondFeedbackContainer: FC = () => {
   );
 };
 
-const FlexStyled: Rule = () => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
-  return {
-    display: 'flex',
-    alignItems: 'center',
-    ...(mobileScreen && { flexBasis: '250px' }),
-    position: 'relative',
-  };
-};
+const FlexStyled: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  ...(mobileScreen && { flexBasis: '250px' }),
+  position: 'relative',
+});
 
-const headerStyled: Rule = () => {
-  const [, isBreakpoint] = useBreakpoints();
-  const medium = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
-  return {
-    display: 'flex',
-    flexWrap: medium ? 'wrap' : 'nowrap',
-    ...(medium && { flexBasis: '250px' }),
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingTop: '24px',
-  };
-};
+const headerStyled: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => ({
+  display: 'flex',
+  flexWrap: mobileScreen ? 'wrap' : 'nowrap',
+  ...(mobileScreen && { flexBasis: '250px' }),
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  paddingTop: '24px',
+});
 
 const DraftsStyle: Rule = {
   display: 'flex',

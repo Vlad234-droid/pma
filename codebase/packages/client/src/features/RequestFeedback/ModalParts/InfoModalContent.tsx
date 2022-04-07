@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { useStyle, Rule, useBreakpoints } from '@pma/dex-wrapper';
+import { useStyle, Rule, CreateRule } from '@pma/dex-wrapper';
 import requestInfoModal from 'images/requestInfoModal.png';
 import { IconButton } from 'components/IconButton';
 import { Trans } from 'components/Translation';
@@ -11,7 +11,8 @@ type InfoModalProps = {
 };
 
 const InfoModalContent: FC<InfoModalProps> = ({ onClose }) => {
-  const { css } = useStyle();
+  const { css, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   return (
     <div className={css(wrapperStyle)} data-test-id={WRAPPER}>
       <p className={css(titleStyle)}>
@@ -67,7 +68,7 @@ const InfoModalContent: FC<InfoModalProps> = ({ onClose }) => {
           alt='Learn more about how to request great feedback'
         />
       </div>
-      <span className={css(iconStyle)}>
+      <span className={css(iconStyle({ mobileScreen }))}>
         <IconButton graphic='arrowLeft' onPress={onClose} iconProps={{ invertColors: true }} />
       </span>
     </div>
@@ -79,18 +80,16 @@ const wrapperStyle: Rule = {
   height: '100%',
 };
 
-const iconStyle: Rule = (theme) => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
-  return {
+const iconStyle: CreateRule<{ mobileScreen: boolean }> =
+  ({ mobileScreen }) =>
+  ({ theme }) => ({
     position: 'fixed',
     top: theme.spacing.s5,
     left: mobileScreen ? theme.spacing.s5 : theme.spacing.s10,
     textDecoration: 'none',
     border: 'none',
     cursor: 'pointer',
-  };
-};
+  });
 
 const titleStyle: Rule = {
   margin: '0px 0px 0px 0px',

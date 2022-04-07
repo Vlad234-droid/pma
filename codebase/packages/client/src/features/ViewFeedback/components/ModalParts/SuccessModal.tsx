@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Button, Rule, Styles, useBreakpoints, useStyle } from '@pma/dex-wrapper';
+import { Button, Rule, CreateRule, Styles, useStyle } from '@pma/dex-wrapper';
 import { Trans } from 'components/Translation';
 
 export const WRAPPER = 'success-wrapper';
@@ -10,7 +10,8 @@ type Props = {
 
 // TODO: Extract duplicate 1
 const SuccessModal: FC<Props> = ({ onSuccess }) => {
-  const { css } = useStyle();
+  const { css, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
 
   return (
     <div className={css(WrapperSuccessContainer)} data-test-id={WRAPPER}>
@@ -27,7 +28,7 @@ const SuccessModal: FC<Props> = ({ onSuccess }) => {
       </p>
       <div className={css(AbsoluteStyle)}>
         <div className={css(ContainerStyled)}>
-          <div className={css(AlignButtonsStyle)}>
+          <div className={css(AlignButtonsStyle({ mobileScreen }))}>
             <Button styles={[fontStyle, ButtonOkStyle]} onPress={onSuccess}>
               <Trans>Okay</Trans>
             </Button>
@@ -52,16 +53,14 @@ const ButtonOkStyle: Rule = ({ theme }) => {
   };
 };
 
-const AlignButtonsStyle: Rule = ({ theme }) => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
-  return {
+const AlignButtonsStyle: CreateRule<{ mobileScreen: boolean }> =
+  ({ mobileScreen }) =>
+  ({ theme }) => ({
     padding: mobileScreen ? theme.spacing.s6 : theme.spacing.s8,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-  };
-};
+  });
 
 const AbsoluteStyle: Rule = {
   position: 'absolute',

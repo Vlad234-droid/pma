@@ -1,7 +1,7 @@
 import React, { FC, useMemo, useState } from 'react';
 import { useTranslation } from 'components/Translation';
 import { useDispatch, useSelector } from 'react-redux';
-import { Modal, Rule, useBreakpoints } from '@pma/dex-wrapper';
+import { Modal, CreateRule, useStyle } from '@pma/dex-wrapper';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ColleaguesActions, colleagueUUIDSelector, FeedbackActions, feedbackByUuidSelector } from '@pma/store';
 import { Icon } from 'components/Icon';
@@ -14,6 +14,8 @@ import { getFeedbackFields, getPayload, HandleSaveType, Statuses } from './confi
 const RespondNewFeedback: FC = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
 
   const dispatch = useDispatch();
   const [status, setStatus] = useState(Statuses.PENDING);
@@ -60,15 +62,15 @@ const RespondNewFeedback: FC = () => {
     <Modal
       modalPosition={'middle'}
       overlayColor={'tescoBlue'}
-      modalContainerRule={[containerRule]}
+      modalContainerRule={[containerRule({ mobileScreen })]}
       closeOptions={{
         content: <Icon graphic='cancel' invertColors={true} />,
         onClose: handleSuccess,
-        styles: [modalCloseOptionStyle],
+        styles: [modalCloseOptionStyle({ mobileScreen })],
       }}
       title={{
         content: 'Give feedback',
-        styles: [modalTitleOptionStyle],
+        styles: [modalTitleOptionStyle({ mobileScreen })],
       }}
     >
       {status === Statuses.PENDING && (
@@ -93,10 +95,9 @@ const RespondNewFeedback: FC = () => {
 };
 
 // TODO: Extract duplicate 21
-const containerRule: Rule = ({ colors }) => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
-  return {
+const containerRule: CreateRule<{ mobileScreen: boolean }> =
+  ({ mobileScreen }) =>
+  ({ theme }) => ({
     alignItems: 'center',
     justifyContent: 'center',
     position: 'relative',
@@ -107,36 +108,29 @@ const containerRule: Rule = ({ colors }) => {
     height: mobileScreen ? 'calc(100% - 72px)' : 'calc(100% - 102px)',
     marginTop: '72px',
     marginBottom: mobileScreen ? 0 : '30px',
-    background: colors.white,
+    background: theme.colors.white,
     cursor: 'default',
     overflow: 'auto',
-  };
-};
+  });
 
 // TODO: Extract duplicate 13
-const modalCloseOptionStyle: Rule = () => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
-  return {
-    display: 'inline-block',
-    height: '24px',
-    paddingLeft: '0px',
-    paddingRight: '0px',
-    position: 'fixed',
-    top: '22px',
-    right: mobileScreen ? '20px' : '40px',
-    textDecoration: 'none',
-    border: 'none',
-    cursor: 'pointer',
-  };
-};
+const modalCloseOptionStyle: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => ({
+  display: 'inline-block',
+  height: '24px',
+  paddingLeft: '0px',
+  paddingRight: '0px',
+  position: 'fixed',
+  top: '22px',
+  right: mobileScreen ? '20px' : '40px',
+  textDecoration: 'none',
+  border: 'none',
+  cursor: 'pointer',
+});
 
 // TODO: Extract duplicate 14
-const modalTitleOptionStyle: Rule = ({ theme }) => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
-
-  return {
+const modalTitleOptionStyle: CreateRule<{ mobileScreen: boolean }> =
+  ({ mobileScreen }) =>
+  ({ theme }) => ({
     position: 'fixed',
     top: '22px',
     textAlign: 'center',
@@ -153,7 +147,6 @@ const modalTitleOptionStyle: Rule = ({ theme }) => {
           fontSize: '24px',
           lineHeight: '28px',
         }),
-  };
-};
+  });
 
 export default RespondNewFeedback;

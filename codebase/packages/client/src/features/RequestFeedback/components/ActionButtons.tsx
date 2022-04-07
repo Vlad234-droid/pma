@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Button, Rule, useBreakpoints, useStyle } from '@pma/dex-wrapper';
+import { Button, Rule, useStyle } from '@pma/dex-wrapper';
 import { IconButton, Position } from 'components/IconButton';
 import { useNavigate } from 'react-router-dom';
 import { Trans } from 'components/Translation';
@@ -11,9 +11,8 @@ type Props = {
 };
 
 const ActionButtons: FC<Props> = ({ onSubmit, isValid }) => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
-  const { css, theme } = useStyle();
+  const { css, theme, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const navigate = useNavigate();
   return (
     <>

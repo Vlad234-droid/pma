@@ -323,10 +323,6 @@ const footerContainerStyle: Rule = ({ theme }) => ({
   background: `${theme.colors.white}`,
 });
 
-const imgArrow = {
-  marginLeft: '15px',
-} as Rule;
-
 const createBtn: Rule = {
   justifyContent: 'center',
 };
