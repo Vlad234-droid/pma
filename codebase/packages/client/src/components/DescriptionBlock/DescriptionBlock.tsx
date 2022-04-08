@@ -4,7 +4,11 @@ import { Rule, useStyle } from '@pma/dex-wrapper';
 const DescriptionBlock = (props) => {
   const { css } = useStyle();
 
-  return <div className={css(description, props.style ? props.style : null)}>{props.children}</div>;
+  return (
+    <div data-test-id='description-block' className={css(description, props.style ? props.style : null)}>
+      {props.children}
+    </div>
+  );
 };
 
 const description = {

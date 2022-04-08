@@ -29,7 +29,7 @@ const A = ({ children }) => {
 export const AccessDenied: FC<Props> = ({ message }) => {
   const { css } = useStyle();
   return (
-    <div className={css(wrapper)}>
+    <div data-test-id='access-denied' className={css(wrapper)}>
       <p className={css(textBottom)}>
         <img className={css({ width: '300px' })} src={TescoLogo} alt='Tesco Logo' />
       </p>

@@ -127,13 +127,13 @@ const SearchInput: FC<Props<any>> = ({
             {selected.map((item): any => (
               <div key={item.value} className={css(selectedStyle)}>
                 <span className={css({ marginRight: '10px' })}>{`${item.label}`}</span>
-                <div className={css({ cursor: 'pointer' })} onClick={() => onDelete && onDelete(item.value)}>
+                <div data-test-id={`remove-selected-${item.label}`} className={css({ cursor: 'pointer' })} onClick={() => onDelete && onDelete(item.value)}>
                   <Close />
                 </div>
               </div>
             ))}
             {!!selected.length && (
-              <span className={css(cleanAllStyle)} onClick={onClear}>
+              <span data-test-id='clear-button' className={css(cleanAllStyle)} onClick={onClear}>
                 Clear all
               </span>
             )}

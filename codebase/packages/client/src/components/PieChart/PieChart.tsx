@@ -29,7 +29,7 @@ const PieChart: FC<PieChartProps> = ({
 
   if (!link)
     return (
-      <Wrapper className={css(pieChartWrapper)}>
+      <Wrapper data-test-id='pie-chart-wrapper' className={css(pieChartWrapper)}>
         <Content {...props} />
       </Wrapper>
     );

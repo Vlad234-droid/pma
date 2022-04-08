@@ -4,6 +4,9 @@ import { VALIDATION_RULE } from 'utils/yup/types';
 
 import { Ref, UseFormReturn } from 'react-hook-form';
 
+const WRAPPER_TEST_ID = 'generic-item-wrapper';
+const ELEMENT_TEST_ID = 'generic-item-element';
+
 type GenericItemFormProps = {
   name: string;
   id?: number | string;
@@ -50,7 +53,7 @@ export const GenericItemField: FC<GenericItemFormProps> = ({
   register(name);
 
   const element = (
-    <div>
+    <div data-test-id={ELEMENT_TEST_ID}>
       <Element
         {...props}
         options={options}
@@ -75,7 +78,7 @@ export const GenericItemField: FC<GenericItemFormProps> = ({
       <datalist id={`datalist-${name}`}>
         {options?.map((option) => (
           /*@ts-ignore*/
-          <option key={`option-${name}-${option.value}`} value={option.value} label={option.label} />
+          <option data-test-id={option.label} key={`option-${name}-${option.value}`} value={option.value} label={option.label} />
         ))}
       </datalist>
     </div>
@@ -87,6 +90,8 @@ export const GenericItemField: FC<GenericItemFormProps> = ({
 
   return (
     <Wrapper
+      testId={WRAPPER_TEST_ID}
+      data-test-id={WRAPPER_TEST_ID}
       label={label}
       errormessage={
         errors[name] &&

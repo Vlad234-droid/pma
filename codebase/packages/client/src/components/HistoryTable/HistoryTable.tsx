@@ -16,7 +16,7 @@ const HistoryTable = ({ headers, items, isVisible }) => {
   };
 
   return (
-    <div key={items.id} className={`${!isVisible && css(unvisible)}`}>
+    <div data-test-id='history-table' key={items.id} className={`${!isVisible && css(unvisible)}`}>
       <div className={`${css(row)} ${css(header)}`}>
         {headers.map((el) => {
           return (
