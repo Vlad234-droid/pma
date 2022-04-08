@@ -35,9 +35,9 @@ const ObjectiveDocument: FC<Props> = ({ items }) => {
               <View style={styles.subTitleWrapper}>
                 <Text style={styles.subTitle}>{subTitle}</Text>
               </View>
-              <Text style={styles.description}>{description}</Text>
             </View>
             <View style={styles.body}>
+              <Text style={styles.description}>{description}</Text>
               {explanations.map(({ description, title }, idx) => (
                 <View key={idx} style={styles.explanations}>
                   <Text style={styles.explanationTitle}>{removeMD(title)}</Text>
@@ -68,7 +68,8 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     flexShrink: 1,
     flexBasis: 50,
-    paddingBottom: 100,
+    marginBottom: 50,
+    maxHeight: 1000,
   },
   titleWrapper: {
     marginBottom: 10,
@@ -80,14 +81,14 @@ const styles = StyleSheet.create({
   },
   subTitleWrapper: {
     marginBottom: 10,
-    maxHeight: 500,
+    maxHeight: 1000,
     marginTop: 10,
   },
   subTitle: {
     fontSize: 15,
     fontWeight: 'bold',
     marginBottom: 5,
-    maxHeight: 500,
+    maxHeight: 1000,
   },
   description: {
     fontSize: 14,
