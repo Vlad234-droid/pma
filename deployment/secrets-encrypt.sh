@@ -12,7 +12,7 @@ then
 fi
 
 env_name=`echo "$1" | tr '[:upper:]' '[:lower:]'`
-env_dir="`pwd`/pma-frontend"
+env_dir="`dirname "$0"`/pma-frontend"
 env_file_part="secrets-$env_name"
 
 case $env_name in
