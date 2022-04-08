@@ -4,7 +4,7 @@ import { BarChart, Legend, XAxis, YAxis, Bar, ResponsiveContainer, Cell } from '
 
 import { getComputedData, getGraphBars } from '../../utils';
 import { RatingChartData } from '../../config/types';
-import { Trans, useTranslation } from 'components/Translation';
+import { Trans } from 'components/Translation';
 
 import { useCurrentData, useChartTitle } from '../../hooks';
 
@@ -19,7 +19,6 @@ const colors = ['#82ca9d', '#8884d8'];
 
 const RatingsChart: FC<Props> = ({ currentData, compareData }) => {
   const { css } = useStyle();
-  const { t } = useTranslation();
   const { data } = getComputedData(currentData, compareData);
 
   const chartTile = useChartTitle();
@@ -71,7 +70,7 @@ const RatingsChart: FC<Props> = ({ currentData, compareData }) => {
 
 const CustomizedLabel = (props) => {
   const { x, y, value, fill, height, width, index } = props;
-  const [_, chartData] = useCurrentData([]) || [];
+  const [, chartData] = useCurrentData([]) || [];
   return (
     <>
       <g>
@@ -122,6 +121,7 @@ const Title: Rule = ({ theme }) => ({
   marginTop: '24px',
   fontSize: `${theme.font.fixed.f20.fontSize}`,
   lineHeight: `${theme.font.fixed.f20.lineHeight}`,
+  letterSpacing: '0px',
   textAlign: 'center',
   color: `${theme.colors.tescoBlue}`,
   fontWeight: '600',
@@ -134,6 +134,7 @@ const LabelVertical: Rule = ({ theme }) => ({
   transform: 'rotate(-90deg)',
   fontSize: `${theme.font.fixed.f14.fontSize}`,
   lineHeight: `${theme.font.fixed.f14.lineHeight}`,
+  letterSpacing: '0px',
   fontWeight: '600',
 });
 
@@ -142,6 +143,7 @@ const LabelHorizontal: Rule = ({ theme }) => ({
   textAlign: 'center',
   fontSize: `${theme.font.fixed.f14.fontSize}`,
   lineHeight: `${theme.font.fixed.f14.lineHeight}`,
+  letterSpacing: '0px',
   fontWeight: '600',
   marginTop: '16px',
 });

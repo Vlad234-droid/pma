@@ -62,6 +62,7 @@ const labelStyles: CreateRule<{ color: string; theme: Theme }> =
   () => ({
     fontSize: `${theme.font.fixed.f14.fontSize}`,
     lineHeight: `${theme.font.fixed.f14.lineHeight}`,
+    letterSpacing: '0px',
     fontWeight: `${theme.font.weight.bold}`,
     display: 'block',
     color,

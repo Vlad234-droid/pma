@@ -9,6 +9,7 @@ export const Text: FC<{ value: string }> = ({ value }) => {
 
 const containerStyle: Rule = ({ theme }) => ({
   ...theme.font.fixed.f16,
+  letterSpacing: '0px',
   color: theme.colors.base,
   paddingBottom: '8px',
 });

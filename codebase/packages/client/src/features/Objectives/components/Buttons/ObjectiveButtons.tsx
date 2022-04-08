@@ -77,6 +77,7 @@ const WrapperStyle: Rule = ({ theme }) => ({ paddingBottom: theme.spacing.s5 });
 
 const buttonStyle: Rule = ({ theme }) => ({
   ...theme.font.fixed.f14,
+  letterSpacing: '0px',
   color: theme.colors.tescoBlue,
   fontWeight: theme.font.weight.bold,
   paddingRight: theme.spacing.s5,

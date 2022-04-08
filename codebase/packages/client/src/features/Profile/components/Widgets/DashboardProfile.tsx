@@ -3,7 +3,7 @@ import { Trans } from 'components/Translation';
 import { CreateRule, Rule, Styles, useStyle } from '@pma/dex-wrapper';
 import { TileWrapper } from 'components/Tile';
 import { Avatar } from 'components/Avatar';
-import { AuthConsumer } from '../../../../contexts/authContext';
+import { AuthConsumer } from 'contexts/authContext';
 
 export type DashboardProfileProps = {};
 
@@ -31,42 +31,31 @@ const bodyBlockStyle = {
   paddingRight: '20px',
 } as Styles;
 
-const mainTitleStyle: CreateRule<{ mobileScreen }> = ({ mobileScreen }) => ({
-  fontStyle: 'normal',
-  fontWeight: 700,
-  ...(mobileScreen
-    ? {
-        fontSize: '18px',
-        lineHeight: '22px',
-      }
-    : {
-        fontSize: '20px',
-        lineHeight: '24px',
-      }),
-});
+const mainTitleStyle: CreateRule<{ mobileScreen }> =
+  ({ mobileScreen }) =>
+  ({ theme }) => ({
+    fontStyle: 'normal',
+    fontWeight: theme.font.weight.bold,
+    letterSpacing: '0px',
+    ...(mobileScreen ? { ...theme.font.fixed.f18 } : { ...theme.font.fixed.f20 }),
+  });
 
 // TODO: Extract duplicate 8
-const titleStyle: Rule = ({ theme }) =>
-  ({
-    fontStyle: 'normal',
-    fontWeight: `${theme.font.weight.bold}`,
-    fontSize: '16px',
-    lineHeight: '20px',
-  } as Styles);
-
-const descriptionStyle: CreateRule<{ mobileScreen }> = ({ mobileScreen }) => ({
+const titleStyle: Rule = ({ theme }) => ({
   fontStyle: 'normal',
-  fontWeight: 'normal',
-  ...(mobileScreen
-    ? {
-        fontSize: '18px',
-        lineHeight: '22px',
-      }
-    : {
-        fontSize: '20px',
-        lineHeight: '24px',
-      }),
+  fontWeight: theme.font.weight.bold,
+  ...theme.font.fixed.f16,
+  letterSpacing: '0px',
 });
+
+const descriptionStyle: CreateRule<{ mobileScreen }> =
+  ({ mobileScreen }) =>
+  ({ theme }) => ({
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    letterSpacing: '0px',
+    ...(mobileScreen ? { ...theme.font.fixed.f18 } : { ...theme.font.fixed.f20 }),
+  });
 
 // TODO: Extract duplicate 10
 const bodyStyle = {

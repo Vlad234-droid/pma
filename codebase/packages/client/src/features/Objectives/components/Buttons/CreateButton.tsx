@@ -61,6 +61,8 @@ const CreateButton: FC<Props> = ({ withIcon = false, buttonText = 'Create object
 };
 
 const iconBtnStyle: Rule = ({ theme }) => ({
+  ...theme.font.fixed.f16,
+  letterSpacing: '0px',
   padding: '0 16px',
   display: 'flex',
   height: '40px',

@@ -103,6 +103,7 @@ const labelStyle: Rule = {
   display: 'inline-flex',
   fontSize: '16px',
   lineHeight: '20px',
+  letterSpacing: '0px',
 };
 const labelWrapperStyle: Rule = {
   maxWidth: '100%',
@@ -117,6 +118,7 @@ const childrenWrapper: Rule = {
 
 const errorMessageStyle: Rule = ({ theme }) => ({
   ...theme.font.fixed.f14,
+  letterSpacing: '0px',
   position: 'absolute',
   left: 0,
   bottom: '-20px',

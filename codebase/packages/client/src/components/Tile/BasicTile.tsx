@@ -131,6 +131,7 @@ const titleStyle: CreateRule<{ mobileScreen: boolean }> =
     color: theme.colors.link,
     fontSize: mobileScreen ? '16px' : '18px',
     lineHeight: mobileScreen ? '20px' : '22px',
+    letterSpacing: '0px',
     fontWeight: theme.font.weight.bold,
     paddingBottom: '10px',
   });
@@ -138,6 +139,7 @@ const titleStyle: CreateRule<{ mobileScreen: boolean }> =
 const descriptionStyle = {
   fontSize: '14px',
   lineHeight: '18px',
+  letterSpacing: '0px',
   ':not(:last-child)': {
     paddingBottom: '20px',
   },

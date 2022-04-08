@@ -67,6 +67,7 @@ const textAriaStyle: CreateRule<{ isValid?: boolean }> =
       borderRadius: '5px',
       fontSize: '16px',
       lineHeight: '20px',
+      letterSpacing: '0px',
       padding: '10px 40px 10px 16px',
       resize: 'vertical',
       ':focus': {

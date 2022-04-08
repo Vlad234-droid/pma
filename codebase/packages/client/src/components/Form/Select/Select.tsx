@@ -98,6 +98,7 @@ const fieldStyles: Rule = ({ theme }) => ({
   borderRadius: '5px',
   fontSize: `${theme.font.fixed.f16.fontSize}`,
   lineHeight: `${theme.font.fixed.f16.lineHeight}`,
+  letterSpacing: '0px',
   padding: '10px 40px 10px 16px',
   ':focus': {
     outline: 'none !important',
@@ -147,6 +148,7 @@ const optionStyles: Rule = ({ theme }) => ({
   width: '100%',
   fontSize: `${theme.font.fixed.f16.fontSize}`,
   lineHeight: `${theme.font.fixed.f16.lineHeight}`,
+  letterSpacing: '0px',
   padding: '10px 30px 10px 16px',
   border: 'none',
   background: `${theme.colors.white}`,

@@ -45,7 +45,8 @@ const EditButton: FC<Props> = ({
             styles,
             {
               border: `${theme.border.width.b2} solid ${theme.colors.white}`,
-              fontSize: '14px',
+              ...theme.font.fixed.f14,
+              letterSpacing: '0px',
             },
           ]}
           onPress={handleBtnClick}
@@ -122,6 +123,7 @@ const modalTitleOptionStyle: CreateRule<{ mobileScreen: boolean }> = ({ mobileSc
   left: 0,
   right: 0,
   color: 'white',
+  letterSpacing: '0px',
   ...(mobileScreen
     ? {
         fontSize: '20px',

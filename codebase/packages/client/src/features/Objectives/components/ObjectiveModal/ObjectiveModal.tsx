@@ -258,6 +258,7 @@ const buttonWrapperStyle: CreateRule<{ mobileScreen: boolean }> =
 
 const buttonWhiteStyle: Rule = ({ theme }) => ({
   ...theme.font.fixed.f16,
+  letterSpacing: '0px',
   fontWeight: theme.font.weight.bold,
   width: '50%',
   margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
@@ -270,6 +271,7 @@ const buttonBlueStyle: CreateRule<{ disabled: boolean }> =
   ({ disabled = false }) =>
   ({ theme }) => ({
     ...theme.font.fixed.f16,
+    letterSpacing: '0px',
     fontWeight: theme.font.weight.bold,
     width: '50%',
     margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
@@ -287,6 +289,7 @@ const helpModalWrapperStyle: Rule = ({ theme }) => ({ padding: `0 0 ${theme.spac
 
 const helpTitleStyle: Rule = ({ theme }) => ({
   ...theme.font.fixed.f14,
+  letterSpacing: '0px',
   color: theme.colors.tescoBlue,
   padding: `${theme.spacing.s0} ${theme.spacing.s2}`,
 });

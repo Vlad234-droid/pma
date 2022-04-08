@@ -70,12 +70,14 @@ const wrapperStyle: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) =
 const titleStyle: Rule = ({ theme }) => ({
   fontSize: '24px',
   lineHeight: '28px',
+  letterSpacing: '0px',
   fontWeight: theme.font.weight.bold,
   paddingBottom: '32px',
 });
 
 const subTitleStyle: Rule = ({ theme }) => ({
   ...theme.font.fixed.f20,
+  letterSpacing: '0px',
   fontWeight: theme.font.weight.bold,
   paddingTop: '32px',
   paddingBottom: '16px',
@@ -83,6 +85,7 @@ const subTitleStyle: Rule = ({ theme }) => ({
 
 const descriptionStyle: Rule = ({ theme }) => ({
   ...theme.font.fixed.f16,
+  letterSpacing: '0px',
 });
 
 const videoPlayerWrapperStyle: Rule = {

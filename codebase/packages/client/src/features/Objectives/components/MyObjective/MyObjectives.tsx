@@ -426,9 +426,13 @@ const iconButtonStyles: Rule = ({ theme }) => ({
   padding: '10px 10px',
   color: theme.colors.tescoBlue,
   fontWeight: theme.font.weight.bold,
+  ...theme.font.fixed.f16,
+  letterSpacing: '0px',
 });
 
 const borderButtonStyles: Rule = ({ theme }) => ({
+  ...theme.font.fixed.f16,
+  letterSpacing: '0px',
   border: `2px solid ${theme.colors.tescoBlue}`,
   borderRadius: '30px',
   color: theme.colors.tescoBlue,
@@ -436,10 +440,12 @@ const borderButtonStyles: Rule = ({ theme }) => ({
   padding: '10px 20px 10px 20px',
 });
 
-const tileStyles: Rule = {
+const tileStyles: Rule = ({ theme }) => ({
+  ...theme.font.fixed.f18,
+  letterSpacing: '0px',
   display: 'flex',
   alignItems: 'center',
-};
+});
 
 const widgetWrapperStyle: Rule = {
   display: 'flex',
