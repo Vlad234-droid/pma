@@ -73,9 +73,9 @@ const CareerPerformance: FC<Props> = ({
         />
         <HelpWidgets />
       </div>
+      <ObjectiveWidgets />
       {displayTimelines && (
         <>
-          <ObjectiveWidgets />
           <Section title={<Trans i18nKey='my_reviews'>My reviews</Trans>}>
             <ReviewWidgets
               showMyReview={showMyReview}
