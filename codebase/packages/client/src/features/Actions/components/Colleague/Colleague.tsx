@@ -87,7 +87,7 @@ export const Colleague: FC<Props> = ({ status, colleague, colleagueExpanded, set
   }, [reviewLoaded, status]);
 
   return (
-    <>
+    <div data-test-id={`colleague-${colleague.uuid}`}>
       <TileWrapper>
         <Accordion id={`team-mate-accordion-${colleague.uuid}`} customStyle={accordionStyle}>
           <BaseAccordion id={`team-mate-base-accordion-${colleague.uuid}`}>
@@ -129,7 +129,7 @@ export const Colleague: FC<Props> = ({ status, colleague, colleagueExpanded, set
           </BaseAccordion>
         </Accordion>
       </TileWrapper>
-    </>
+    </div>
   );
 };
 

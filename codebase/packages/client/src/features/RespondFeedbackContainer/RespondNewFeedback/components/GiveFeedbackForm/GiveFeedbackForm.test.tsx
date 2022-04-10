@@ -67,7 +67,7 @@ describe('GiveFeedbackForm container', () => {
   });
   it('should display textarea', async () => {
     const { getByTestId } = render(<GiveFeedbackForm {...props} />, { colleagues });
-    const textarea = getByTestId('feedbackItems.0');
+    const textarea = getByTestId('textarea-feedbackItems.0');
     expect(textarea).toBeInTheDocument();
   });
 });

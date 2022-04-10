@@ -82,7 +82,7 @@ describe('CreateUpdateObjectives', () => {
     it('should render CreateUpdateObjective fill 1st form and fireEvent save as draft', async () => {
       const saveAsDraft = screen.getByRole('button', { name: /Save as draft/i });
       const next = screen.getByRole('button', { name: /Next/i });
-      const textfield = screen.getByTestId(FormType.TEXT_FIELD);
+      const textfield = screen.getByTestId(`textarea-${FormType.TEXT_FIELD}`);
 
       expect(saveAsDraft).not.toHaveAttribute('aria-disabled', 'true');
       expect(next).toHaveAttribute('aria-disabled', 'true');
@@ -107,7 +107,7 @@ describe('CreateUpdateObjectives', () => {
     it('should render CreateUpdateObjective fill 1st form and fireEvent next', async () => {
       const saveAsDraft = screen.getByRole('button', { name: /Save as draft/i });
       const next = screen.getByRole('button', { name: /Next/i });
-      const textfield = screen.getByTestId(FormType.TEXT_FIELD);
+      const textfield = screen.getByTestId(`textarea-${FormType.TEXT_FIELD}`);
 
       expect(saveAsDraft).not.toHaveAttribute('aria-disabled', 'true');
       expect(next).toHaveAttribute('aria-disabled', 'true');
@@ -223,7 +223,7 @@ describe('CreateUpdateObjectives', () => {
     it('should render CreateUpdateObjective fill 1st form and fireEvent next and submit', async () => {
       const saveAsDraft = screen.getByRole('button', { name: /Save as draft/i });
       const next = screen.getByRole('button', { name: /Next/i });
-      const textfield = screen.getByTestId(FormType.TEXT_FIELD);
+      const textfield = screen.getByTestId(`textarea-${FormType.TEXT_FIELD}`);
 
       expect(saveAsDraft).not.toHaveAttribute('aria-disabled', 'true');
       expect(next).not.toHaveAttribute('aria-disabled', 'true');

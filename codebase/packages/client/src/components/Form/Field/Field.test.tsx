@@ -22,7 +22,7 @@ describe('<Field />', () => {
     const onChange = jest.fn();
     const setValue = jest.fn();
     render(<Field Element={Input} name={'TEST_ID'} onChange={onChange} setValue={setValue} />);
-    const input = screen.getByTestId('TEST_ID');
+    const input = screen.getByTestId('input-TEST_ID');
     expect(input).toBeInTheDocument();
     input.focus();
     await act(async () => {
@@ -46,7 +46,7 @@ describe('<Field />', () => {
       />,
     );
     const label = screen.getByText('test_label');
-    const input = screen.getByTestId('TEST_ID');
+    const input = screen.getByTestId('input-TEST_ID');
 
     expect(label).toBeInTheDocument();
     expect(input).toBeInTheDocument();

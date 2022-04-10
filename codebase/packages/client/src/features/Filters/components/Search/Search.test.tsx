@@ -20,7 +20,7 @@ describe('<Search />', () => {
 
       expect(getByTestId('search-wrapper')).toBeInTheDocument();
       expect(getByTestId('search')).toBeInTheDocument();
-      expect(getByTestId('search-input')).toBeInTheDocument();
+      expect(getByTestId('input-search')).toBeInTheDocument();
     });
 
     it('should render wide wrapper, if focus is true', () => {
@@ -43,7 +43,7 @@ describe('<Search />', () => {
     it('should render provided value, if focus is true', () => {
       const { getByTestId } = render(<Search {...props} />);
 
-      expect(getByTestId('search-input').value).toBe('mocked_value');
+      expect(getByTestId('input-search').value).toBe('mocked_value');
     });
 
     it('should not render value, if !focus', () => {
@@ -54,7 +54,7 @@ describe('<Search />', () => {
 
       const { getByTestId } = render(<Search {...newProps} />);
 
-      expect(getByTestId('search-input').value).toBe('');
+      expect(getByTestId('input-search').value).toBe('');
     });
   });
 
@@ -62,15 +62,15 @@ describe('<Search />', () => {
     it('should call props.onFocus on item focus', () => {
       const { getByTestId } = render(<Search {...props} />);
 
-      fireEvent.focus(getByTestId('search-input'));
+      fireEvent.focus(getByTestId('input-search'));
       expect(props.onFocus).toHaveBeenCalled();
     });
 
     it('should call props.onSearch on input change', () => {
       const { getByTestId } = render(<Search {...props} />);
 
-      fireEvent.focus(getByTestId('search-input'));
-      fireEvent.change(screen.getByTestId('search-input'), { target: { value: 'new_mocked_value' } });
+      fireEvent.focus(getByTestId('input-search'));
+      fireEvent.change(screen.getByTestId('input-search'), { target: { value: 'new_mocked_value' } });
       expect(props.onSearch).toHaveBeenCalled();
     });
   });

@@ -40,7 +40,7 @@ describe('<Filters />', () => {
     it('should open sorting and close search on sort icon click', () => {
       const { getByTestId } = render(<Filters {...props} />);
 
-      fireEvent.focus(getByTestId('search-input')); // open search
+      fireEvent.focus(getByTestId('input-search')); // open search
       fireEvent.click(getByTestId('settings')); // open sort
 
       // check search is closed
@@ -55,7 +55,7 @@ describe('<Filters />', () => {
       const { getByTestId } = render(<Filters {...props} />);
 
       fireEvent.click(getByTestId('settings')); // open sort
-      fireEvent.focus(getByTestId('search-input')); // open search
+      fireEvent.focus(getByTestId('input-search')); // open search
 
       // check sort is closed
       expect(getByTestId('sorting-modal')).toHaveStyle('transform: scaleY(0)');
@@ -69,8 +69,8 @@ describe('<Filters />', () => {
     it('should call props.onSearch with searched value', () => {
       const { getByTestId } = render(<Filters {...props} />);
 
-      fireEvent.focus(getByTestId('search-input'));
-      fireEvent.change(screen.getByTestId('search-input'), { target: { value: 'new_mocked_value' } });
+      fireEvent.focus(getByTestId('input-search'));
+      fireEvent.change(screen.getByTestId('input-search'), { target: { value: 'new_mocked_value' } });
 
       expect(props.onSearch).toHaveBeenCalledWith('new_mocked_value');
     });

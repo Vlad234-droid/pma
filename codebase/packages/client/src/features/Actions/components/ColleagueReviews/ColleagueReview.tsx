@@ -63,7 +63,7 @@ export const ColleagueReview: FC<Props> = ({ review, schema, validateReview, upd
 
   return (
     <TileWrapper boarder={true} customStyle={{ marginTop: '20px' }}>
-      <div className={css({ padding: '24px 35px 24px 24px' })}>
+      <div data-test-id='colleague-review' className={css({ padding: '24px 35px 24px 24px' })}>
         <div className={css(titleStyles)}>
           {t(`review_type_description_${review.type?.toLowerCase()}`, ReviewType[review.type], {
             num: review.number,
@@ -77,6 +77,7 @@ export const ColleagueReview: FC<Props> = ({ review, schema, validateReview, upd
             return (
               <div style={{ padding: '10px 0' }} key={id}>
                 <div
+                  data-test-id='markdown-renderer'
                   className={css({
                     fontSize: '16px',
                     lineHeight: '20px',
@@ -88,6 +89,7 @@ export const ColleagueReview: FC<Props> = ({ review, schema, validateReview, upd
               </div>
             );
           }
+
           if (expression?.auth?.permission?.write?.length && review.status === Status.WAITING_FOR_APPROVAL) {
             if (type === FormType.TEXT_FIELD) {
               return (
@@ -127,9 +129,9 @@ export const ColleagueReview: FC<Props> = ({ review, schema, validateReview, upd
           }
 
           return (
-            <div key={id} className={css({ padding: '10px 0' })}>
+            <div data-test-id='colleague-review-default' key={id} className={css({ padding: '10px 0' })}>
               <MarkdownRenderer source={label} />
-              <div>{value}</div>
+              <div data-test-id='colleague-review-value'>{value}</div>
             </div>
           );
         })}

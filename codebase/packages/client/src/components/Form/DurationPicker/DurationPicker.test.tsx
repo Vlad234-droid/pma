@@ -56,8 +56,8 @@ describe('<DurationPicker />', () => {
       fireEvent.focus(getByDisplayValue('2'));
 
       expect(getByTestId('duration-dialog')).toBeInTheDocument();
-      expect(getByTestId('weeks')).toBeInTheDocument();
-      expect(getByTestId('days')).toBeInTheDocument();
+      expect(getByTestId('input-weeks')).toBeInTheDocument();
+      expect(getByTestId('input-days')).toBeInTheDocument();
       expect(getByText('days')).toBeInTheDocument();
       expect(getByText('weeks')).toBeInTheDocument();
       expect(getByText('Done')).toBeInTheDocument();
@@ -92,8 +92,8 @@ describe('<DurationPicker />', () => {
 
       fireEvent.focus(getByDisplayValue('2'));
 
-      fireEvent.change(getByTestId('weeks'), { target: { value: '3' } });
-      fireEvent.change(getByTestId('days'), { target: { value: '4' } });
+      fireEvent.change(getByTestId('input-weeks'), { target: { value: '3' } });
+      fireEvent.change(getByTestId('input-days'), { target: { value: '4' } });
 
       expect(getByDisplayValue('3 weeks 4 days')).toBeInTheDocument();
     });

@@ -66,8 +66,8 @@ describe('<GenericItemField />', () => {
 
     const { getByTestId } = render(<Component />);
 
-    expect(getByTestId('mocked_name')).toBeInTheDocument();
-    expect(getByTestId('mocked_name')).toHaveValue('mocked_value');
+    expect(getByTestId('input-mocked_name')).toBeInTheDocument();
+    expect(getByTestId('input-mocked_name')).toHaveValue('mocked_value');
   });
 
   it('should render options, if passed', () => {
@@ -101,9 +101,9 @@ describe('<GenericItemField />', () => {
 
     const { getByTestId } = render(<Component />);
 
-    fireEvent.change(getByTestId('mocked_name'), { target: { value: 'new_mocked_value' } });
+    fireEvent.change(getByTestId('input-mocked_name'), { target: { value: 'new_mocked_value' } });
 
-    expect(getByTestId('mocked_name')).toHaveValue('new_mocked_value');
+    expect(getByTestId('input-mocked_name')).toHaveValue('new_mocked_value');
     expect(baseProps.onChange).toHaveBeenCalledWith('new_mocked_value');
   });
 });

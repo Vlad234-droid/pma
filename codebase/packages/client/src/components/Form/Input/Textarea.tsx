@@ -43,7 +43,7 @@ const Textarea: FC<TextareaField> = ({
     <textarea
       ref={mergeRefs([domRef, inputRef, textareaRef])}
       name={name}
-      data-test-id={name}
+      data-test-id={`textarea-${name}`}
       readOnly={readonly}
       onChange={textAreaChange}
       onFocus={() => setFocus(true)}

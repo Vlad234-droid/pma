@@ -17,15 +17,16 @@ export const ColleagueList: FC<Props> = ({ status, checkedItems, colleagues, han
   const [colleagueExpanded, setColleagueExpanded] = useState<string>();
 
   return (
-    <>
+    <div data-test-id='colleague-list'>
       {colleagues?.map((colleague) => (
-        <div key={colleague.uuid} className={css(wrapperStyle)}>
+        <div data-test-id={`colleague-wrapper-${colleague.uuid}`} key={colleague.uuid} className={css(wrapperStyle)}>
           <div className={css(checkboxWrapperStyle)}>
             {status === Status.WAITING_FOR_APPROVAL && (
               <span className={css(checkboxPositionStyle)}>
                 <Checkbox
                   disabled={colleague?.timeline?.length > 1}
                   id={colleague.uuid}
+                  name={colleague.uuid}
                   checked={checkedItems.includes(colleague.uuid)}
                   onChange={handleSelectItem}
                 />
@@ -42,7 +43,7 @@ export const ColleagueList: FC<Props> = ({ status, checkedItems, colleagues, han
           </div>
         </div>
       ))}
-    </>
+    </div>
   );
 };
 

@@ -29,7 +29,7 @@ it('check onChange event', async () => {
   };
   const { getByTestId } = render(<Input {...props} />);
 
-  const inputEl = getByTestId(props.name);
+  const inputEl = getByTestId(`input-${props.name}`);
 
   fireEvent.change(inputEl, { target: { value: 'Some test data' } });
 

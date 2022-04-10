@@ -42,7 +42,7 @@ const Select: FC<SelectField> = ({ domRef, name, options, placeholder, value, on
   };
 
   return (
-    <div className={css(wrapperStyles)} data-test-id={`${name}-wrapper`} ref={ref}>
+    <div className={css(wrapperStyles)} data-test-id={`select-${name}-wrapper`} ref={ref}>
       <button
         type='button'
         data-test-id={name}
