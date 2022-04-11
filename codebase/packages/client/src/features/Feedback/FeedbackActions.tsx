@@ -140,12 +140,13 @@ const FeedbackActions: FC = () => {
   );
 };
 
-const voiceStyle: Rule = {
-  fontWeight: 'bold',
-  fontSize: '20px',
-  lineHeight: '24px',
+const voiceStyle: Rule = ({ theme }) => ({
+  fontWeight: theme.font.weight.bold,
+  fontSize: theme.font.fixed.f20.fontSize,
+  lineHeight: theme.font.fixed.f24.lineHeight,
+  letterSpacing: '0px',
   maxWidth: '450px',
-};
+});
 
 const iconTextStyle: Rule = {
   display: 'flex',
@@ -153,11 +154,12 @@ const iconTextStyle: Rule = {
   marginBottom: '16px',
 };
 
-const inTheMomentStyle: Rule = {
-  fontWeight: 'bold',
-  fontSize: '20px',
-  lineHeight: '24px',
-};
+const inTheMomentStyle: Rule = ({ theme }) => ({
+  fontWeight: theme.font.weight.bold,
+  fontSize: theme.font.fixed.f20.fontSize,
+  lineHeight: theme.font.fixed.f24.lineHeight,
+  letterSpacing: '0px',
+});
 
 const CenterFlexStyle: Rule = {
   display: 'flex',
@@ -174,7 +176,7 @@ const inMomentStyle: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) 
       alignItems: 'center',
     };
   }
-  return { display: 'flex', justifyContent: 'space-between', alignItems: 'center' };
+  return { letterSpacing: '0px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' };
 };
 
 const cardBlockStyle: Rule = () => {
@@ -248,16 +250,17 @@ const modalTitleOptionStyle: CreateRule<{ theme: Theme; mobileScreen: boolean }>
     textAlign: 'center',
     left: 0,
     right: 0,
-    color: 'white',
+    color: theme.colors.white,
+    letterSpacing: '0px',
     fontWeight: theme.font.weight.bold,
     ...(mobileScreen
       ? {
-          fontSize: '20px',
-          lineHeight: '24px',
+          fontSize: theme.font.fixed.f20.fontSize,
+          lineHeight: theme.font.fixed.f24.lineHeight,
         }
       : {
-          fontSize: '24px',
-          lineHeight: '28px',
+          fontSize: theme.font.fixed.f20.fontSize,
+          lineHeight: theme.font.fixed.f28.lineHeight,
         }),
   };
 };

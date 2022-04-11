@@ -34,17 +34,23 @@ const FeedbackCard: FC<FeedbackCardProps> = ({ card }) => {
 };
 
 // TODO: Extract duplicate 9
-const IconText: Rule = {
-  marginLeft: '10px',
-  fontStyle: 'normal',
-  fontWeight: 'normal',
-  fontSize: '16px',
-  lineHeight: '20px',
+const IconText: Rule = ({ theme }) => {
+  return {
+    marginLeft: '10px',
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    fontSize: theme.font.fixed.f16.fontSize,
+    lineHeight: theme.font.fixed.f20.lineHeight,
+    letterSpacing: '0px',
+  };
 };
-const textStyle: Rule = {
-  fontWeight: 'normal',
-  fontSize: '14px',
-  lineHeight: '18px',
+const textStyle: Rule = ({ theme }) => {
+  return {
+    fontWeight: 'normal',
+    fontSize: theme.font.fixed.f14.fontSize,
+    lineHeight: theme.font.fixed.f18.lineHeight,
+    letterSpacing: '0px',
+  };
 };
 const flexStyle: Rule = {
   display: 'flex',
@@ -58,9 +64,9 @@ const wrapperBlock: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) =
 
 const actionStyle: Rule = ({ theme }) => {
   return {
-    fontWeight: 'bold',
-    fontSize: '18px',
-    lineHeight: '22px',
+    fontWeight: theme.font.weight.bold,
+    fontSize: theme.font.fixed.f18.fontSize,
+    lineHeight: theme.font.fixed.f20.lineHeight,
     color: theme.colors.link,
   };
 };
