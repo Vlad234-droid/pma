@@ -143,7 +143,7 @@ const FeedbackActions: FC = () => {
 const voiceStyle: Rule = ({ theme }) => ({
   fontWeight: theme.font.weight.bold,
   fontSize: theme.font.fixed.f20.fontSize,
-  lineHeight: theme.font.fixed.f24.lineHeight,
+  lineHeight: theme.font.fixed.f20.lineHeight,
   letterSpacing: '0px',
   maxWidth: '450px',
 });
@@ -157,7 +157,7 @@ const iconTextStyle: Rule = {
 const inTheMomentStyle: Rule = ({ theme }) => ({
   fontWeight: theme.font.weight.bold,
   fontSize: theme.font.fixed.f20.fontSize,
-  lineHeight: theme.font.fixed.f24.lineHeight,
+  lineHeight: theme.font.fixed.f20.lineHeight,
   letterSpacing: '0px',
 });
 
@@ -256,11 +256,11 @@ const modalTitleOptionStyle: CreateRule<{ theme: Theme; mobileScreen: boolean }>
     ...(mobileScreen
       ? {
           fontSize: theme.font.fixed.f20.fontSize,
-          lineHeight: theme.font.fixed.f24.lineHeight,
+          lineHeight: theme.font.fixed.f20.lineHeight,
         }
       : {
           fontSize: theme.font.fixed.f20.fontSize,
-          lineHeight: theme.font.fixed.f28.lineHeight,
+          lineHeight: theme.font.fixed.f24.lineHeight,
         }),
   };
 };

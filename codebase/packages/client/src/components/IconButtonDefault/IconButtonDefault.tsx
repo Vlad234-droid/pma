@@ -36,7 +36,7 @@ export default IconButtonDefault;
 const btnStyle: Rule = ({ theme }) => {
   return {
     fontSize: theme.font.fixed.f16.fontSize,
-    lineHeight: theme.font.fixed.f20.lineHeight,
+    lineHeight: theme.font.fixed.f16.lineHeight,
     letterSpacing: '0px',
   };
 };

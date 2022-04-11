@@ -161,7 +161,7 @@ const fullGoals: Rule = {
 const goalBlock: Rule = {
   paddingBottom: '24px',
   fontSize: theme.font.fixed.f14.fontSize,
-  lineHeight: theme.font.fixed.f18.lineHeight,
+  lineHeight: theme.font.fixed.f14.lineHeight,
   letterSpacing: '0px',
   userSelect: 'none',
   fontFamily: '"TESCO Modern", Arial, sans-serif',
@@ -183,7 +183,7 @@ const titleBlock: Rule = {
   fontSize: `${theme.font.fixed.f16.fontSize}`,
   fontStyle: 'normal',
   fontWeight: `${theme.font.weight.bold}`,
-  lineHeight: theme.font.fixed.f20.lineHeight,
+  lineHeight: theme.font.fixed.f16.lineHeight,
   letterSpacing: '0px',
   color: `${theme.colors.link}`,
 };

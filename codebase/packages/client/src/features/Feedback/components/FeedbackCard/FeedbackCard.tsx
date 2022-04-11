@@ -40,7 +40,7 @@ const IconText: Rule = ({ theme }) => {
     fontStyle: 'normal',
     fontWeight: 'normal',
     fontSize: theme.font.fixed.f16.fontSize,
-    lineHeight: theme.font.fixed.f20.lineHeight,
+    lineHeight: theme.font.fixed.f16.lineHeight,
     letterSpacing: '0px',
   };
 };
@@ -48,7 +48,7 @@ const textStyle: Rule = ({ theme }) => {
   return {
     fontWeight: 'normal',
     fontSize: theme.font.fixed.f14.fontSize,
-    lineHeight: theme.font.fixed.f18.lineHeight,
+    lineHeight: theme.font.fixed.f14.lineHeight,
     letterSpacing: '0px',
   };
 };
@@ -66,7 +66,7 @@ const actionStyle: Rule = ({ theme }) => {
   return {
     fontWeight: theme.font.weight.bold,
     fontSize: theme.font.fixed.f18.fontSize,
-    lineHeight: theme.font.fixed.f20.lineHeight,
+    lineHeight: theme.font.fixed.f18.lineHeight,
     color: theme.colors.link,
   };
 };

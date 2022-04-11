@@ -221,7 +221,7 @@ const PersonalDevelopmentPlan: FC = () => {
 
 const paragraph: Rule = {
   fontSize: theme.font.fixed.f14.fontSize,
-  lineHeight: theme.font.fixed.f18.lineHeight,
+  lineHeight: theme.font.fixed.f14.lineHeight,
 };
 
 const wrapper: CreateRule<{ mobileScreen: boolean }> = (props) => {
@@ -253,7 +253,7 @@ const devPlanTitle = {
   fontStyle: 'normal',
   fontWeight: `${theme.font.weight.bold}`,
   fontSize: theme.font.fixed.f18.fontSize,
-  lineHeight: theme.font.fixed.f20.lineHeight,
+  lineHeight: theme.font.fixed.f16.lineHeight,
   letterSpacing: '0px',
 } as Rule;
 
@@ -268,7 +268,7 @@ const title = {
   fontWeight: `${theme.font.weight.bold}`,
   fontSize: `${theme.font.fixed.f18.fontSize}`,
   letterSpacing: '0px',
-  lineHeight: '22px',
+  lineHeight: theme.font.fixed.f18.lineHeight,
   marginBottom: '8px',
 } as Rule;
 
@@ -285,7 +285,7 @@ const descriptionMain = {
   fontSize: `${theme.font.fixed.f14.fontSize}`,
   letterSpacing: '0px',
   fontStyle: 'normal',
-  lineHeight: '18px',
+  lineHeight: theme.font.fixed.f14.lineHeight,
   textAlign: 'left',
 } as Rule;
 
@@ -294,7 +294,7 @@ const details = {
   color: `${theme.colors.base}`,
   fontSize: `${theme.font.fixed.f14.fontSize}`,
   letterSpacing: '0px',
-  lineHeight: '18px',
+  lineHeight: theme.font.fixed.f14.lineHeight,
 } as Rule;
 
 const infoBtn = {
@@ -312,7 +312,7 @@ const buttonDownload = {
   padding: '10px 20px',
   fontSize: theme.font.fixed.f16.fontSize,
   letterSpacing: '0px',
-  lineHeight: theme.font.fixed.f20.lineHeight,
+  lineHeight: theme.font.fixed.f16.lineHeight,
   borderRadius: '32px',
   cursor: 'pointer',
   marginTop: '16px',
@@ -339,7 +339,7 @@ const buttonDownloadItems = {
   padding: '10px 0',
   fontSize: `${theme.font.fixed.f16.fontSize}`,
   letterSpacing: '0px',
-  lineHeight: theme.font.fixed.f20.lineHeight,
+  lineHeight: theme.font.fixed.f16.lineHeight,
   border: 'none',
   cursor: 'pointer',
   marginTop: '16px',
@@ -365,7 +365,7 @@ const buttonIcon = {
   backgroundColor: `${theme.colors.tescoBlue}`,
   fontSize: `${theme.font.fixed.f16.fontSize}`,
   fontWeight: `${theme.font.weight.bold}`,
-  lineHeight: theme.font.fixed.f20.lineHeight,
+  lineHeight: theme.font.fixed.f16.lineHeight,
   letterSpacing: '0px',
   borderRadius: '32px',
   border: 'none',
