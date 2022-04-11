@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { Rule, useStyle } from '@pma/dex-wrapper';
 import { Link } from 'react-router-dom';
 import { buildPath, buildPathWithParams } from 'features/Routes';
@@ -16,10 +16,12 @@ const PieChart: FC<PieChartProps> = ({
   Wrapper = 'div',
   params = {},
   type = '',
-  hoverMessage = [],
+  hoverMessage = '',
   hoverVisibility = true,
 }) => {
   const { css } = useStyle();
+
+  const [isHovering, setIsHovering] = useState<boolean>(false);
 
   const props = {
     title,
@@ -31,10 +33,18 @@ const PieChart: FC<PieChartProps> = ({
     hoverVisibility,
   };
 
+  const HoverMessage = () =>
+    hoverVisibility && !!hoverMessage && isHovering && <div className={css(hoverContainer)}>{hoverMessage}</div>;
+
   if (!link)
     return (
-      <Wrapper className={css(pieChartWrapper)}>
+      <Wrapper
+        className={css(pieChartWrapper)}
+        onMouseEnter={() => setIsHovering(true)}
+        onMouseLeave={() => setIsHovering(false)}
+      >
         <Content {...props} />
+        {HoverMessage()}
       </Wrapper>
     );
 
@@ -44,8 +54,11 @@ const PieChart: FC<PieChartProps> = ({
         ...params,
       })}
       className={css(pieChartWrapper)}
+      onMouseEnter={() => setIsHovering(true)}
+      onMouseLeave={() => setIsHovering(false)}
     >
       <Content {...props} />
+      {HoverMessage()}
     </Link>
   );
 };
@@ -56,6 +69,21 @@ const pieChartWrapper: Rule = ({ theme }) => ({
   borderRadius: '10px',
   padding: '24px',
   width: '100%',
+  position: 'relative',
+});
+
+const hoverContainer: Rule = ({ theme }) => ({
+  position: 'absolute',
+  bottom: '-8px',
+  left: '50%',
+  transform: 'translate(-50%, 100%)',
+  zIndex: '2',
+  background: theme.colors.link,
+  padding: '16px',
+  width: '294px',
+  maxWidth: '294px',
+  color: theme.colors.white,
+  borderRadius: theme.spacing.s2_5,
 });
 
 export default PieChart;

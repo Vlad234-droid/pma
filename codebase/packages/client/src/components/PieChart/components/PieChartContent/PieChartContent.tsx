@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
 import { useStyle, Rule, CreateRule, Theme } from '@dex-ddl/core';
 import { useTranslation } from 'components/Translation';
 
@@ -7,15 +7,11 @@ import { useChartDataStatistics } from 'features/useChartDataStatistics';
 
 export const TEST_ID = 'pie-chart-content-id';
 
-const PieChartContent: FC<Props> = ({ title, titleId, data, display, percentId, hoverMessage, hoverVisibility }) => {
+const PieChartContent: FC<Props> = ({ title, titleId, data, display, percentId }) => {
   const { css, theme } = useStyle();
   const { t } = useTranslation();
 
   const chartData = Array.isArray(data) ? data : useChartDataStatistics(t, data) || [];
-
-  const [isHovering, setIsHovering] = useState<Record<number, boolean>>(
-    chartData.map((_, i) => i).reduce((acc, item) => ({ ...acc, [item]: false }), {}),
-  );
 
   return (
     <>
@@ -28,16 +24,7 @@ const PieChartContent: FC<Props> = ({ title, titleId, data, display, percentId, 
         {chartData.map((item, i: number) => {
           const percent = item?.['percent'] || 0;
           return (
-            <div
-              className={css(chartWrapper)}
-              key={i}
-              onMouseEnter={() => {
-                setIsHovering((prev) => ({ ...prev, [i]: true }));
-              }}
-              onMouseLeave={() => {
-                setIsHovering((prev) => ({ ...prev, [i]: false }));
-              }}
-            >
+            <div className={css(chartWrapper)} key={i}>
               <div className={css(progress({ percent, theme, chartData, display }))}>
                 <div className={css(progressValue)} data-test-id={percentId}>
                   {percent}
@@ -45,9 +32,6 @@ const PieChartContent: FC<Props> = ({ title, titleId, data, display, percentId, 
                 </div>
               </div>
               {item['title'] && <h3 className={css(chartTitle)}>{item['title']}</h3>}
-              {hoverVisibility && !!hoverMessage && !!hoverMessage.length && isHovering[i] && (
-                <div className={css(hoverContainer)}>{t(hoverMessage[i])}</div>
-              )}
             </div>
           );
         })}
@@ -55,18 +39,6 @@ const PieChartContent: FC<Props> = ({ title, titleId, data, display, percentId, 
     </>
   );
 };
-
-const hoverContainer: Rule = ({ theme }) => ({
-  position: 'absolute',
-  bottom: '78px',
-  background: theme.colors.link,
-  padding: '16px',
-  width: '294px',
-  maxWidth: '294px',
-  transform: 'translateX(-30%)',
-  color: theme.colors.white,
-  borderRadius: theme.spacing.s2_5,
-});
 
 const chartWrapper: Rule = {
   display: 'flex',

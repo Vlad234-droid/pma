@@ -73,7 +73,7 @@ const Report: FC = () => {
   );
 
   return (
-    <div className={css({ margin: '22px 42px 0px 40px' })} data-test-id={REPORT_WRAPPER}>
+    <div className={css({ margin: '22px 42px 30px 40px' })} data-test-id={REPORT_WRAPPER}>
       <div className={css(spaceBetween({ quantity, mobileScreen }))}>
         {!!getAppliedReport().length && (
           <AppliedFilters
@@ -145,12 +145,10 @@ const Report: FC = () => {
                 params={getYear()}
                 type={convertToLink(ReportPage.REPORT_SUBMITTED_OBJECTIVES)}
                 hoverVisibility={!small}
-                hoverMessage={[
-                  t(
-                    'percentage_of_objectives_submitted_by_colleagues',
-                    'Percentage of objectives submitted by colleagues, prior to being reviewed and approved by their line manager.',
-                  ),
-                ]}
+                hoverMessage={t(
+                  'percentage_of_objectives_submitted_by_colleagues',
+                  'Percentage of objectives submitted by colleagues, prior to being reviewed and approved by their line manager.',
+                )}
               />
             </div>
             <div className={css(rightColumn)}>
@@ -161,12 +159,10 @@ const Report: FC = () => {
                 link={Page.TILE_REPORT_STATISTICS}
                 params={getYear()}
                 type={convertToLink(ReportPage.REPORT_APPROVED_OBJECTIVES)}
-                hoverMessage={[
-                  t(
-                    'percentage_of_objectives_approved_by_colleagues',
-                    'Percentage of objectives approved by colleagues, prior to being reviewed of all individuals with the objective to submit',
-                  ),
-                ]}
+                hoverMessage={t(
+                  'percentage_of_objectives_approved_by_colleagues',
+                  'Percentage of objectives submitted by colleagues that have been approved by their line managers.',
+                )}
                 hoverVisibility={!small}
               />
               <div className={css(downloadWrapperStyle)}>
@@ -207,13 +203,10 @@ const Report: FC = () => {
                 link={Page.TILE_REPORT_STATISTICS}
                 params={getYear()}
                 type={convertToLink(ReportPage.REPORT_MID_YEAR_REVIEW)}
-                hoverMessage={[
-                  t(
-                    'when_a_colleague_completes_their_review',
-                    'When a colleague completes their mid-year review submission prior to approval by a line manager.',
-                  ),
-                  t('after_approval_by_a_line_manager', 'After approval by a line manager.'),
-                ]}
+                hoverMessage={t(
+                  'when_a_colleague_has_completed_their_mid_year_review',
+                  'Submitted: When a colleague completes their mid-year review submission prior to approval by a line manager. Approval: After approval by a line manager.',
+                )}
                 hoverVisibility={!small}
               />
             </div>
@@ -236,13 +229,10 @@ const Report: FC = () => {
                 link={Page.TILE_REPORT_STATISTICS}
                 params={getYear()}
                 type={convertToLink(ReportPage.REPORT_END_YEAR_REVIEW)}
-                hoverMessage={[
-                  t(
-                    'when_a_colleague_has_completed_their_year_end_review',
-                    'When a colleague has completed their year-end review submission prior to approval by a line manager.',
-                  ),
-                  t('after_approval_by_a_line_manager', 'After approval by a line manager.'),
-                ]}
+                hoverMessage={t(
+                  'when_a_colleague_has_completed_their_year_end_review',
+                  'Submitted: When a colleague has completed their year-end review submission prior to approval by a line manager. Approved: After approval by a line manager.',
+                )}
                 hoverVisibility={!small}
               />
             </div>
@@ -276,12 +266,10 @@ const Report: FC = () => {
                 link={Page.TILE_REPORT_STATISTICS}
                 params={getYear()}
                 type={convertToLink(ReportPage.REPORT_NEW_TO_BUSINESS)}
-                hoverMessage={[
-                  t(
-                    'colleagues_who_have_joined_the_business',
-                    'Colleagues who have joined the business in the last 90 days.',
-                  ),
-                ]}
+                hoverMessage={t(
+                  'colleagues_who_have_joined_the_business',
+                  'Colleagues who have joined the business in the last 90 days.',
+                )}
                 hoverVisibility={!small}
               />
             </div>
@@ -295,12 +283,10 @@ const Report: FC = () => {
                 link={Page.TILE_REPORT_STATISTICS}
                 params={getYear()}
                 type={convertToLink(ReportPage.REPORT_FEEDBACK)}
-                hoverMessage={[
-                  t(
-                    'percentage_of_colleagues_who_have_requested_or_given_feedback_this_year',
-                    'Percentage of colleagues who have requested or given feedback this year.',
-                  ),
-                ]}
+                hoverMessage={t(
+                  'percentage_of_colleagues_who_have_requested_or_given_feedback_this_year',
+                  'Percentage of colleagues who have requested or given feedback this year.  ',
+                )}
                 hoverVisibility={!small}
               />
             </div>

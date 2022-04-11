@@ -498,5 +498,11 @@
   "field_must_be_at_least_10_characters": "Field must be at least 10 characters",
   "field_must_be_less_than_500_characters": "Field must be less than 500 characters",
   "wL4_5_report": "WL4 & 5 report",
-  "feedback_report": "Feedback report"
+  "feedback_report": "Feedback report",
+  "percentage_of_objectives_submitted_by_colleagues": "Percentage of objectives submitted by colleagues, prior to being reviewed and approved by their line manager.",
+  "percentage_of_objectives_approved_by_colleagues": "Percentage of objectives submitted by colleagues that have been approved by their line managers.",
+  "when_a_colleague_has_completed_their_mid_year_review": "Submitted: When a colleague completes their mid-year review submission prior to approval by a line manager. Approval: After approval by a line manager.",
+  "when_a_colleague_has_completed_their_year_end_review": "Submitted: When a colleague has completed their year-end review submission prior to approval by a line manager. Approved: After approval by a line manager.",
+  "colleagues_who_have_joined_the_business": "Colleagues who have joined the business in the last 90 days.",
+  "percentage_of_colleagues_who_have_requested_or_given_feedback_this_year": "Percentage of colleagues who have requested or given feedback this year.  "
 }
