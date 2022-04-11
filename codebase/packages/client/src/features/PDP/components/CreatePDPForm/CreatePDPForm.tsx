@@ -100,12 +100,15 @@ const CreatePDPForm: FC<Props> = ({
     }
   }, [pdpList.length, currentGoal, currentTab]);
 
+  const modifiedNumber = pdpList.reduce((prev, current) =>
+    prev.number > current.number ? prev.number + 1 : current.number + 1,
+  );
+
   const requestData = [
     {
       uuid: currentUUID || Object.keys(currentGoal).length > 0 ? currentGoal?.uuid : uuidv4(),
       colleagueUuid: colleagueUuid,
-      number:
-        pdpList && (currentUUID || Object.keys(currentGoal).length > 0) ? currentGoal?.number : pdpList?.length + 1,
+      number: pdpList && (currentUUID || Object.keys(currentGoal).length > 0) ? currentGoal?.number : modifiedNumber,
       properties: {
         mapJson: formValues,
       },
