@@ -116,14 +116,14 @@ describe('<CareerPerformance />', () => {
       expect(getByText('mocked_knowledge_library_widget')).toBeInTheDocument();
     });
 
-    it('should not render objectives and reviews widgets, if !props.displayTimelines', () => {
+    it('should render objectives and reviews widgets, if !props.displayTimelines', () => {
       const newProps = {
         ...props,
         displayTimelines: false,
       };
       const { queryByText } = render(<CareerPerformance {...newProps} />);
 
-      expect(queryByText('mocked_objective_widgets')).not.toBeInTheDocument();
+      expect(queryByText('mocked_objective_widgets')).toBeInTheDocument();
       expect(queryByText('My reviews')).not.toBeInTheDocument();
     });
   });
