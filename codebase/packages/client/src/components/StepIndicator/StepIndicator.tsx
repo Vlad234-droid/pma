@@ -169,7 +169,6 @@ export const StepIndicator: FC<StepIndicatorProps> = ({
 };
 
 const titleStyle: Rule = ({ theme }) => {
-  console.log('theme.font.fluid.f16', theme.font);
   return {
     ...theme.font.fixed.f16,
     letterSpacing: '0px',

@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Rule } from '@pma/dex-wrapper';
+import { Rule, useStyle } from '@pma/dex-wrapper';
 
 import { IconButton, Position } from 'components/IconButton';
 
@@ -12,20 +12,34 @@ type Props = {
   graphic: Graphics;
 };
 
-const IconButtonDefault: FC<Props> = ({ onClick, iconPosition = Position.RIGHT, graphic }) => (
-  <IconButton
-    customVariantRules={{ default: iconBtnStyle }}
-    iconPosition={iconPosition}
-    onPress={onClick}
-    graphic={graphic}
-    iconProps={{ invertColors: true }}
-    iconStyles={iconArrowRightStyle}
-  >
-    <Trans i18nKey='give_feedback'>Give feedback</Trans>
-  </IconButton>
-);
+const IconButtonDefault: FC<Props> = ({ onClick, iconPosition = Position.RIGHT, graphic }) => {
+  const { css } = useStyle();
+
+  return (
+    <IconButton
+      customVariantRules={{ default: iconBtnStyle }}
+      iconPosition={iconPosition}
+      onPress={onClick}
+      graphic={graphic}
+      iconProps={{ invertColors: true }}
+      iconStyles={iconArrowRightStyle}
+    >
+      <Trans className={css(btnStyle)} i18nKey='give_feedback'>
+        Give feedback
+      </Trans>
+    </IconButton>
+  );
+};
 
 export default IconButtonDefault;
+
+const btnStyle: Rule = ({ theme }) => {
+  return {
+    fontSize: theme.font.fixed.f16.fontSize,
+    lineHeight: theme.font.fixed.f16.lineHeight,
+    letterSpacing: '0px',
+  };
+};
 
 const iconArrowRightStyle: Rule = {
   height: '17px',
