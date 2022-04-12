@@ -82,7 +82,7 @@ function GenericForm<T>({
 const formStyles: Rule = ({ theme }) => {
   return {
     flexGrow: 1,
-    fontStyle: theme.font.fixed.f16.fontSize,
+    fontSize: theme.font.fixed.f16.fontSize,
   };
 };
 
