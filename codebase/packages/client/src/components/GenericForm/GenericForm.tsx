@@ -83,6 +83,8 @@ const formStyles: Rule = ({ theme }) => {
   return {
     flexGrow: 1,
     fontSize: theme.font.fixed.f16.fontSize,
+    lineHeight: theme.font.fixed.f16.lineHeight,
+    letterSpacing: '0px',
   };
 };
 
