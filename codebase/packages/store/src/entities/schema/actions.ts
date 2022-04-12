@@ -7,9 +7,17 @@ export const getSchema = createAsyncAction(
   'schema/CANCEL',
 )<{ colleagueUuid: string }, { current: any; colleagueSchema?: any }, Error, undefined>();
 
+export const getSchemaWithColleaguePermission = createAsyncAction(
+  'schema/permission/FETCH_REQUEST',
+  'schema/permission/FETCH_SUCCESS',
+  'schema/permission/FETCH_FAILURE',
+  'schema/permission/CANCEL',
+)<{ colleagueUuid: string }, { current: any; colleagueSchema?: any }, Error, undefined>();
+
 export const clearSchemaData = createAction('schema/CLEAR')<undefined>();
 
 export const Actions = {
   getSchema: getSchema.request,
+  getSchemaWithColleaguePermission: getSchemaWithColleaguePermission.request,
   clearSchemaData,
 };
