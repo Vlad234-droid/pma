@@ -45,7 +45,7 @@ const DataModal: FC<Props> = ({ info }) => {
         <div className={css(contentSles)}>
           <ul>
             {missedFields.map((field) => (
-              <li key={field}>{`${field} is blank`}</li>
+              <li key={field}>{t(`missed_fields/${field}`, `${field} is blank`)}</li>
             ))}
           </ul>
           {`${t('please_refer_to', 'Please refer to')} ${t('system_guidance_and_faqs', 'System guidance and FAQs')} ${t(
