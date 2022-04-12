@@ -9,6 +9,7 @@ import { useSelector } from 'react-redux';
 import { File } from './File';
 import { Trans, useTranslation } from 'components/Translation';
 import { Icon } from 'components/Icon';
+import { RemoveFileModal } from './RemoveFileModal';
 
 export type PreviousReviewFilesModal = {
   onOverlayClick: () => void;
@@ -42,10 +43,6 @@ const PreviousReviewFilesModal: FC<Props> = ({ onOverlayClick, colleagueUUID, re
   );
   const handleChangeFilter = ({ target }) => setFilteredValue(target.value);
   const openRemoveModal = (fileUuid) => setFileUuidToRemove(fileUuid);
-  const removeFile = () => {
-    dispatch(PreviousReviewFilesActions.deleteFile({ fileUuid: fileUuidToRemove, colleagueUUID }));
-    setFileUuidToRemove('');
-  };
 
   useEffect(() => {
     dispatch(PreviousReviewFilesActions.getPreviousReviewFiles({ colleagueUUID }));
@@ -97,22 +94,12 @@ const PreviousReviewFilesModal: FC<Props> = ({ onOverlayClick, colleagueUUID, re
           </Modal>
         )}
         {fileUuidToRemove && (
-          <Modal
-            modalPosition={mobileScreen ? 'bottom' : 'middle'}
-            modalContainerRule={[containerRule({ mobileScreen }), { height: 'auto' }]}
-          >
-            <div className={css({ marginBottom: '18px', fontSize: '18px' })}>
-              <Trans>Do you want to remove the file?</Trans>
-            </div>
-            <div className={css({ display: 'flex', gap: '10px', marginLeft: 'auto' })}>
-              <Button onPress={() => setFileUuidToRemove('')}>
-                <Trans>Close</Trans>
-              </Button>
-              <Button onPress={removeFile}>
-                <Trans>Remove</Trans>
-              </Button>
-            </div>
-          </Modal>
+          <RemoveFileModal
+            fileUuid={fileUuidToRemove}
+            colleagueUUID={colleagueUUID}
+            fileName={files.find(({ uuid }) => uuid === fileUuidToRemove)?.fileName || 'Unknown'}
+            onClose={() => setFileUuidToRemove('')}
+          />
         )}
         <FormItem
           withIcon={false}

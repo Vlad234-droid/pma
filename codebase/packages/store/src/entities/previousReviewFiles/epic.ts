@@ -67,11 +67,11 @@ export const deleteFileEpic: Epic = (action$, _, { openapi }) =>
     switchMap(({ payload }) => {
       const { fileUuid, colleagueUUID } = payload;
       return from(openapi.file.delete1({ fileUuid })).pipe(
-        map(() => getPreviousReviewFiles.request({ colleagueUUID })),
+        map(() => of(deleteFile.success(), getPreviousReviewFiles.request({ colleagueUUID }))),
         catchError((e) => {
           const errors = e?.data?.errors;
           return concatWithErrorToast(
-            of(uploadFile.failure(errors?.[0])),
+            of(deleteFile.failure(errors?.[0]), uploadFile.failure(errors?.[0])),
             errorPayloadConverter({ ...errors?.[0], title: 'Delete file error' }),
           );
         }),
