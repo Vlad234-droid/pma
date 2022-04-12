@@ -47,4 +47,5 @@ const reviewItemStyles: Rule = ({ theme }) => ({
   textAlign: 'center',
   fontSize: `${theme.font.fixed.f14.fontSize}`,
   lineHeight: `${theme.font.fixed.f14.lineHeight}`,
+  letterSpacing: '0px',
 });

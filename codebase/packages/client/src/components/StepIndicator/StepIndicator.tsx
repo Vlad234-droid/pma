@@ -168,15 +168,13 @@ export const StepIndicator: FC<StepIndicatorProps> = ({
   );
 };
 
-const titleStyle: Rule = ({ theme }) => {
-  return {
-    ...theme.font.fixed.f16,
-    letterSpacing: '0px',
-    fontStyle: 'normal',
-    fontWeight: 'bold',
-    marginBottom: '30px',
-  };
-};
+const titleStyle: Rule = ({ theme }) => ({
+  ...theme.font.fixed.f16,
+  letterSpacing: '0px',
+  fontStyle: 'normal',
+  fontWeight: 'bold',
+  marginBottom: '30px',
+});
 
 const title2Style: CreateRule<{ textAlign: any; active: boolean }> =
   ({ textAlign, active }) =>

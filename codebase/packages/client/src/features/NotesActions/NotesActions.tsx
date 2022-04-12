@@ -622,6 +622,8 @@ const wrapperHeaderStyle: Rule = {
 };
 
 const iconBtnAddStyle: Rule = ({ theme }) => ({
+  ...theme.font.fixed.f16,
+  letterSpacing: '0px',
   background: theme.colors.tescoBlue,
   color: theme.colors.white,
   padding: `${theme.spacing.s1_5} ${theme.spacing.s6}`,

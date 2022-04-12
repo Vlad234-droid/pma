@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 
 function useLayoutEffect(isOpen = false, isAvailable = true) {
+  // menu-container
   useEffect(() => {
     if (isAvailable) {
       const root: HTMLElement | null = document.querySelector('#root');

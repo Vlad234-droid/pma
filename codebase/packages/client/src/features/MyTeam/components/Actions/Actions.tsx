@@ -47,6 +47,7 @@ const titleStyles: Rule = ({ theme }) => ({
   display: 'block',
   fontSize: `${theme.font.fixed.f20.fontSize}`,
   lineHeight: `${theme.font.fixed.f20.lineHeight}`,
+  letterSpacing: '0px',
   paddingBottom: '10px',
   fontWeight: fontWeight.bold,
 });
@@ -62,11 +63,13 @@ const subtitleStyles: Rule = ({ theme }) => ({
   maxWidth: '128px',
   fontSize: `${theme.font.fixed.f16.fontSize}`,
   lineHeight: `${theme.font.fixed.f16.lineHeight}`,
+  letterSpacing: '0px',
   color: colors.base,
 });
 
 const countStyles: Rule = ({ theme }) => ({
   fontSize: `${theme.font.fixed.f28.fontSize}`,
   lineHeight: `${theme.font.fixed.f28.lineHeight}`,
+  letterSpacing: '0px',
   fontWeight: fontWeight.bold,
 });

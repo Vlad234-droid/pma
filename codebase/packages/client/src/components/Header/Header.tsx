@@ -68,7 +68,7 @@ const Header: FC<HeaderProps> = ({ title, onBack, withIcon, iconName = 'home', s
       {onBack ? <IconButton onPress={onBack} graphic='backwardLink' data-test-id={BACK_BTN_TEST_ID} /> : <div />}
       <h3 className={css(headerStyles({ mobileScreen, onBack, theme }))}>
         {withIcon && (
-          <div className={css({ height: '24px', marginRight: '10px' })}>
+          <div className={css(iconWrapperStyle)}>
             <Icon graphic={iconName} />
           </div>
         )}
@@ -109,7 +109,6 @@ const wrapperStyles: Rule = {
 };
 
 const headerStyles: CreateRule<{ mobileScreen; onBack; theme: Theme }> = ({ mobileScreen, onBack, theme }) => ({
-  lineHeight: '1.2',
   fontSize: '24px',
   display: 'flex',
   alignItems: 'center',
@@ -125,5 +124,7 @@ const headerStyles: CreateRule<{ mobileScreen; onBack; theme: Theme }> = ({ mobi
         paddingLeft: onBack ? '66px' : '91px',
       }),
 });
+
+const iconWrapperStyle: Rule = { height: '24px', marginRight: '10px', '& > span': { display: 'flex' } } as Styles;
 
 export default Header;

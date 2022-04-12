@@ -231,6 +231,8 @@ const iconStyledRule: Rule = {
 const submitButtonStyle: CreateRule<{ isValid: any }> =
   ({ isValid }) =>
   ({ theme }) => ({
+    ...theme.font.fixed.f16,
+    letterSpacing: '0px',
     fontWeight: theme.font.weight.bold,
     width: '50%',
     margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,

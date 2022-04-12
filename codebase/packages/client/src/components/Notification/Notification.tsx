@@ -67,6 +67,7 @@ const textStyle: Rule = {
   color: colors.base,
   fontSize: '14px',
   lineHeight: '18px',
+  letterSpacing: '0px',
   paddingLeft: '5px',
 };
 

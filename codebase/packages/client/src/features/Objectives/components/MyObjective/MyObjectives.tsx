@@ -457,6 +457,7 @@ const widgetWrapperStyle: Rule = {
 const linkStyles = ({ theme }) => ({
   fontSize: theme.font.fixed.f14.fontSize,
   lineHeight: theme.font.fixed.f14.lineHeight,
+  letterSpacing: '0px',
   color: theme.colors.tescoBlue,
   background: 'transparent',
 });

@@ -63,6 +63,7 @@ const titleStyles: Rule = ({ theme }) => ({
   fontWeight: fontWeight.bold,
   fontSize: `${theme.font.fixed.f18.fontSize}`,
   lineHeight: `${theme.font.fixed.f18.lineHeight}`,
+  letterSpacing: '0px',
   color: colors.white,
 });
 
@@ -71,6 +72,7 @@ const descriptionStyle: Rule = ({ theme }) => ({
   fontWeight: 'normal',
   fontSize: `${theme.font.fixed.f14.fontSize}`,
   lineHeight: `${theme.font.fixed.f14.lineHeight}`,
+  letterSpacing: '0px',
   color: colors.white,
 });
 
@@ -89,5 +91,6 @@ const countStyles: Rule = ({ theme }) => ({
   textAlign: 'center',
   fontSize: `${theme.font.fixed.f20.fontSize}`,
   lineHeight: `${theme.font.fixed.f20.lineHeight}`,
+  letterSpacing: '0px',
   fontWeight: fontWeight.medium,
 });

@@ -29,7 +29,7 @@ const RouterSwitch: FC<RouterSwitchProps> = ({ links }) => {
 
 const wrapperStyle: Rule = ({ theme }) => ({
   background: theme.colors.white,
-  padding: '10px 0px 10px 0px',
+  display: 'flex',
   borderRadius: '50px',
   cursor: 'pointer',
 });

@@ -278,6 +278,7 @@ const iconStyle: Rule = () => ({
   display: 'flex',
   position: 'absolute',
   left: 0,
+  '& > span': { display: 'flex' },
 });
 
 const bodyStyle: Rule = {

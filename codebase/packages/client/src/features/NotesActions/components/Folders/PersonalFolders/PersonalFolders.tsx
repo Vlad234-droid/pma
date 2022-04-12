@@ -152,8 +152,8 @@ const PersonalFolders: FC<PersonalFoldersProps> = ({
 
   return (
     <div className={css(mainFolderContainerStyle({ mediumScreen }))} data-test-id={PERSONAL_FOLDER_WRAPPER}>
-      <div className={css(titleStyle)}>
-        <h2 className={css({ padding: '24px' })}>
+      <div className={css({ display: 'flex', justifyContent: 'space-between', height: '24px' })}>
+        <h2 className={css(titleStyle)}>
           {!isUserArchived ? t('personal_folders', 'Personal Folders') : t('archived_folders', 'Archived Folders')}
         </h2>
       </div>
@@ -204,17 +204,19 @@ const PersonalFolders: FC<PersonalFoldersProps> = ({
           );
         })}
       </div>
-      <Button
-        styles={[archiveStyle]}
-        mode='inverse'
-        data-test-id={CHANGE_USER_MODE}
-        onPress={() => {
-          setIsUserArchived((prev) => !prev);
-          setSelectedFolder(() => null);
-        }}
-      >
-        {!isUserArchived ? t('archived_folders', 'Archived Folders') : t('personal_folders', 'Personal Folders')}
-      </Button>
+      <div className={css({ justifyContent: 'flex-start', display: 'flex' })}>
+        <Button
+          styles={[archiveStyle]}
+          mode='inverse'
+          data-test-id={CHANGE_USER_MODE}
+          onPress={() => {
+            setIsUserArchived((prev) => !prev);
+            setSelectedFolder(() => null);
+          }}
+        >
+          {!isUserArchived ? t('archived_folders', 'Archived Folders') : t('personal_folders', 'Personal Folders')}
+        </Button>
+      </div>
     </div>
   );
 };
@@ -282,24 +284,21 @@ const flexStyle: Rule = {
   cursor: 'pointer',
 };
 
-const titleStyle: Rule = {
-  display: 'flex',
-  justifyContent: 'space-between',
-  height: '24px',
-  '& > h2': {
-    margin: '0px',
-    fontWeight: 'bold',
-    fontSize: '20px',
-    lineHeight: '24px',
-    color: '#333333',
-  },
-} as Styles;
+const titleStyle: Rule = ({ theme }) => ({
+  fontWeight: theme.font.weight.bold,
+  ...theme.font.fixed.f20,
+  letterSpacing: '0px',
+  margin: '0px',
+  color: theme.colors.base,
+  padding: '24px',
+});
+
 const archiveStyle: Rule = ({ theme }) => ({
   border: `2px solid ${theme.colors.tescoBlue}`,
-  fontSize: '14px',
+  ...theme.font.fixed.f14,
+  letterSpacing: '0px',
   height: '34px',
   fontWeight: 'bold',
-  width: '136px',
   margin: '24px',
   whiteSpace: 'nowrap',
 });
@@ -325,6 +324,7 @@ const itemListStyle: CreateRule<{ selected: boolean }> = ({ selected }) =>
   } as Styles);
 
 const folterStyle: Rule = {
+  letterSpacing: '0px',
   fontWeight: 'bold',
   fontSize: '18px',
   lineHeight: '22px',
@@ -332,6 +332,7 @@ const folterStyle: Rule = {
 };
 
 const quantityStyle: Rule = ({ theme }) => ({
+  letterSpacing: '0px',
   fontSize: '18px',
   lineHeight: '22px',
   color: theme.colors.base,

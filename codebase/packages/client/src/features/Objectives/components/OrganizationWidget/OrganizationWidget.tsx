@@ -87,20 +87,22 @@ const bodyBlockStyle: Rule = {
   paddingTop: '14px',
 };
 
-const titleStyle: Rule = {
+const titleStyle: Rule = ({ theme }) => ({
   fontStyle: 'normal',
   fontWeight: 'bold',
-  fontSize: '16px',
-};
+  ...theme.font.fixed.f16,
+  letterSpacing: '0px',
+});
 
-const descriptionStyle: Rule = {
+const descriptionStyle: Rule = ({ theme }) => ({
   marginTop: '15px',
   position: 'relative',
   fontStyle: 'normal',
   fontWeight: 'normal',
-  fontSize: '14px',
+  ...theme.font.fixed.f14,
+  letterSpacing: '0px',
   color: colors.base,
-};
+});
 
 const bodyStyle: Rule = {
   flexWrap: 'wrap',
@@ -111,7 +113,8 @@ const bodyStyle: Rule = {
 };
 
 const btnStyle = ({ theme }) => ({
-  fontSize: `${theme.font.fixed.f14.fontSize}`,
+  ...theme.font.fixed.f14,
+  letterSpacing: '0px',
   color: theme.colors.tescoBlue,
   height: '30px',
   background: 'transparent',

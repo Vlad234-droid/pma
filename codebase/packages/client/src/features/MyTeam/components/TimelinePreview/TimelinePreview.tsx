@@ -84,6 +84,7 @@ const buttonWrapperStyles: Rule = { padding: '12px 12px' };
 const buttonStyles: Rule = ({ theme }) => ({
   fontSize: `${theme.font.fixed.f16.fontSize}`,
   lineHeight: `${theme.font.fixed.f16.lineHeight}`,
+  letterSpacing: '0px',
   color: colors.tescoBlue,
   cursor: 'pointer',
   border: 'none',
@@ -97,5 +98,6 @@ const expandButtonStyles: Rule = { paddingLeft: '12px' };
 const ratingStyles: Rule = ({ theme }) => ({
   fontSize: theme.spacing.s4,
   lineHeight: `${theme.font.fixed.f16.lineHeight}`,
+  letterSpacing: '0px',
   color: theme.colors.tescoBlue,
 });

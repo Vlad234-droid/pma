@@ -15,7 +15,7 @@ import { ConfirmModal, ConfirmModalWithDropDown } from 'features/Modal';
 import { useTranslation } from 'components/Translation';
 import { PersonalFolders, PersonalsTeamFolders, SelectedFolder, SelectedTEAMFolder } from '../../index';
 import { MainFolderProps } from '../../../type';
-import { folderSchema } from '../../../components/Modals/schema/schema';
+import { folderSchema } from '../../Modals/schema/schema';
 
 import {
   AllNotesFolderId,

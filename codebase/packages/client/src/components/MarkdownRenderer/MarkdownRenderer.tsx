@@ -16,6 +16,7 @@ const defaultTag: Rule = ({ theme }) => ({
   color: theme.colors.base,
   fontSize: '16px',
   lineHeight: '20px',
+  letterSpacing: '0px',
 });
 
 const defaultComponents = { p: CustomPTag };
