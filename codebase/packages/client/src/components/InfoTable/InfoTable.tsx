@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { useStyle, Rule } from '@dex-ddl/core';
+import { useStyle, Rule } from '@pma/dex-wrapper';
 import { Link } from 'react-router-dom';
 import TableContent from './components/TableContent';
 import { InfoTableProps as Props } from './type';
@@ -51,6 +51,9 @@ const infoTableWrapper: Rule = ({ theme }) => ({
   boxShadow: '3px 3px 1px 1px rgba(0, 0, 0, 0.05)',
   borderRadius: '10px',
   width: '100%',
+  fontSize: theme.font.fixed.f16.fontSize,
+  lineHeight: theme.font.fixed.f16.lineHeight,
+  letterSpacing: '0px',
 });
 
 export default InfoTable;

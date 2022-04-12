@@ -361,11 +361,15 @@ const pieChartWrapper: Rule = {
   flexWrap: 'wrap',
   marginTop: '8px',
 };
-const leftColumn: Rule = {
-  display: 'flex',
-  gap: '8px',
-  flex: 4,
-  flexBasis: '400px',
+const leftColumn: Rule = ({ theme }) => {
+  return {
+    display: 'flex',
+    gap: '8px',
+    flex: 4,
+    flexBasis: '400px',
+    fontSize: theme.font.fixed.f16.fontSize,
+    lineHeight: theme.font.fixed.f16.lineHeight,
+  };
 };
 const rightColumn: Rule = {
   display: 'flex',
