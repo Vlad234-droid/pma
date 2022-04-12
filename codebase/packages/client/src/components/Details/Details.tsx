@@ -56,12 +56,17 @@ const desc: Rule = ({ theme }) => ({
   borderBottom: `2px solid ${theme.colors.lightGray}`,
 });
 
-const main = {
-  display: 'flex',
-  justifyContent: 'flex-start',
-  alignItems: 'center',
-  flexDirection: 'column',
-  overflow: 'auto',
-} as Rule;
+const main: Rule = ({ theme }) => {
+  return {
+    display: 'flex',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    flexDirection: 'column',
+    overflow: 'auto',
+    fontSize: theme.font.fixed.f16.fontSize,
+    lineHeight: theme.font.fixed.f16.lineHeight,
+    letterSpacing: '0px',
+  };
+};
 
 export default Details;

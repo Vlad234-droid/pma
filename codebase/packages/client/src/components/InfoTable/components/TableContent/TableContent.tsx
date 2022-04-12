@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { useStyle, Rule, Theme, CreateRule, Styles } from '@dex-ddl/core';
+import { useStyle, Rule, Theme, CreateRule, Styles } from '@pma/dex-wrapper';
 import { useChartDataStatistics } from 'features/useChartDataStatistics';
 import { IconButton } from 'components/IconButton';
 import { Trans, useTranslation } from 'components/Translation/Translation';
@@ -51,9 +51,10 @@ const TableContent: FC<Props> = ({ mainTitle, data, preTitle }) => {
 
 const titleStyle: CreateRule<{ preTitle: string | undefined; theme: Theme }> = ({ preTitle, theme }) => ({
   color: theme.colors.link,
-  fontWeight: 'bold',
-  fontSize: '20px',
-  lineHeight: '24px',
+  fontWeight: theme.font.weight.bold,
+  fontSize: theme.font.fixed.f20.fontSize,
+  lineHeight: theme.font.fixed.f20.lineHeight,
+  letterSpacing: '0px',
   textAlign: 'center',
   margin: !preTitle ? '0px 0px 32px 0px' : '0px 0px 12px 0px',
 });

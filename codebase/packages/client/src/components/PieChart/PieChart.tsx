@@ -38,14 +38,16 @@ const PieChart: FC<PieChartProps> = ({
 
   if (!link)
     return (
-      <Wrapper
-        className={css(pieChartWrapper)}
-        onMouseEnter={() => setIsHovering(true)}
-        onMouseLeave={() => setIsHovering(false)}
-      >
-        <Content {...props} />
-        {HoverMessage()}
-      </Wrapper>
+      <div className={css(wrapper)}>
+        <Wrapper
+          className={css(pieChartWrapper)}
+          onMouseEnter={() => setIsHovering(true)}
+          onMouseLeave={() => setIsHovering(false)}
+        >
+          <Content {...props} />
+          {HoverMessage()}
+        </Wrapper>
+      </div>
     );
 
   return (
@@ -85,5 +87,13 @@ const hoverContainer: Rule = ({ theme }) => ({
   color: theme.colors.white,
   borderRadius: theme.spacing.s2_5,
 });
+
+const wrapper: Rule = ({ theme }) => {
+  return {
+    fontSize: theme.font.fixed.f16.fontSize,
+    lineHeight: theme.font.fixed.f16.lineHeight,
+    letterSpacing: '0px',
+  };
+};
 
 export default PieChart;

@@ -155,9 +155,14 @@ const wordBreakStyle: Rule = {
   wordBreak: 'break-all',
 };
 
-const draftStyles: Rule = {
-  display: 'flex',
-  justifyContent: 'space-between',
+const draftStyles: Rule = ({ theme }) => {
+  return {
+    display: 'flex',
+    justifyContent: 'space-between',
+    fontSize: theme.font.fixed.f16.fontSize,
+    lineHeight: theme.font.fixed.f16.lineHeight,
+    letterSpacing: '0px',
+  };
 };
 
 const blockInfo: Rule = {

@@ -79,8 +79,13 @@ function GenericForm<T>({
   );
 }
 
-const formStyles: Rule = {
-  flexGrow: 1,
+const formStyles: Rule = ({ theme }) => {
+  return {
+    flexGrow: 1,
+    fontSize: theme.font.fixed.f16.fontSize,
+    lineHeight: theme.font.fixed.f16.lineHeight,
+    letterSpacing: '0px',
+  };
 };
 
 export default GenericForm;

@@ -272,7 +272,7 @@ const ViewFeedback: FC = () => {
               </p>
               <Button
                 data-test-id={'download-feedback'}
-                styles={[iconBtnStyle, { maxWidth: '181px !important' }]}
+                styles={[iconBtnStyle, { maxWidth: 'fit-content !important' }]}
                 onPress={handleDownloadAllPress}
               >
                 <Trans i18nKey='download_feedbacks'>Download feedback</Trans>
@@ -286,11 +286,7 @@ const ViewFeedback: FC = () => {
                 'worried_the_content_of_any_feedback',
                 "If you're worried the content of any feedback you`ve received is inappropriate, please contact your line manager or People team as soon as possible.",
               )}
-              customStyle={{
-                background: '#FFDBC2',
-                marginBottom: '20px',
-                marginTop: '16px',
-              }}
+              customStyle={css(notificationStyles)}
             />
           </div>
         </div>
@@ -334,18 +330,35 @@ const ViewFeedback: FC = () => {
   );
 };
 
-const SavedStyled: Rule = {
-  fontWeight: 'normal',
-  fontSize: '16px',
-  lineHeight: '20px',
-  margin: '4px 0px 0px 0px',
+const notificationStyles: Rule = ({ theme }) => {
+  return {
+    background: '#FFDBC2',
+    marginBottom: '20px',
+    marginTop: '16px',
+    fontSize: theme.font.fixed.f16.fontSize,
+    lineHeight: theme.font.fixed.f16.lineHeight,
+    letterSpacing: '0px',
+  };
 };
 
-const SizeStyle: Rule = {
-  fontWeight: 'bold',
-  fontSize: '18px',
-  lineHeight: '22px',
-  color: '#00539F',
+const SavedStyled: Rule = ({ theme }) => {
+  return {
+    fontWeight: 'normal',
+    fontSize: theme.font.fixed.f16.fontSize,
+    lineHeight: theme.font.fixed.f16.lineHeight,
+    letterSpacing: '0px',
+    margin: '4px 0px 0px 0px',
+  };
+};
+
+const SizeStyle: Rule = ({ theme }) => {
+  return {
+    fontWeight: theme.font.weight.bold,
+    fontSize: theme.font.fixed.f18.fontSize,
+    lineHeight: theme.font.fixed.f18.lineHeight,
+    letterSpacing: '0px',
+    color: '#00539F',
+  };
 };
 
 const FlexCenterStyled: Rule = {
@@ -370,11 +383,14 @@ const QuestionStyled: Rule = {
   margin: '4px 0px 0px 0px',
 };
 
-const ShareFeedbackStyled: Rule = {
-  fontWeight: 'bold',
-  fontSize: '18px',
-  lineHeight: '22px',
-  color: '#00539F',
+const ShareFeedbackStyled: Rule = ({ theme }) => {
+  return {
+    fontWeight: theme.font.weight.bold,
+    fontSize: theme.font.fixed.f18.fontSize,
+    lineHeight: theme.font.fixed.f18.lineHeight,
+    letterSpacing: '0px',
+    color: '#00539F',
+  };
 };
 
 const ReverseItemsStyled: Rule = {
@@ -419,12 +435,14 @@ const iconBtnStyle: Rule = ({ theme }) => ({
   color: '#00539F',
   cursor: 'pointer',
   border: '2px solid #00539F',
-  maxWidth: '134px',
+  maxWidth: 'fit-content',
   marginLeft: 'auto',
   marginTop: '16px',
   whiteSpace: 'nowrap',
-  fontSize: '14px',
-  fontWeight: 'bold',
+  fontSize: theme.font.fixed.f14.fontSize,
+  lineHeight: theme.font.fixed.f14.lineHeight,
+  letterSpacing: '0px',
+  fontWeight: theme.font.weight.bold,
 });
 
 // TODO: Extract duplicate 21
