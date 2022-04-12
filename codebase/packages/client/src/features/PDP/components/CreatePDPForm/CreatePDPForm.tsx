@@ -100,9 +100,7 @@ const CreatePDPForm: FC<Props> = ({
     }
   }, [pdpList.length, currentGoal, currentTab]);
 
-  const modifiedNumber = pdpList.reduce((prev, current) =>
-    prev.number > current.number ? prev.number + 1 : current.number + 1,
-  );
+  const modifiedNumber = Math.max(...pdpList.map((el) => el.number)) + 1;
 
   const requestData = [
     {
