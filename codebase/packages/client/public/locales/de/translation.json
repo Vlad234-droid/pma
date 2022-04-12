@@ -220,5 +220,11 @@
   "inactive_cycles": "Inactive",
   "registered_cycles": "Registered",
   "started_cycles": "Started",
-  "create_performance_cycle": "Create performance cycle"
+  "create_performance_cycle": "Create performance cycle",
+  "missed_fields/managerUUID": "Line Manager name",
+  "missed_fields/profile/firstName": "First name",
+  "missed_fields/profile/lastName": "Last name",
+  "missed_fields/workRelationships/job/name": "Job name",
+  "missed_fields/workRelationships/department/name": "Department name",
+  "missed_fields/workRelationships/managerUUID": "Line Manager name"
 }

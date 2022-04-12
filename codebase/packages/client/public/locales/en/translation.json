@@ -504,5 +504,11 @@
   "when_a_colleague_has_completed_their_mid_year_review": "Submitted: When a colleague completes their mid-year review submission prior to approval by a line manager. Approval: After approval by a line manager.",
   "when_a_colleague_has_completed_their_year_end_review": "Submitted: When a colleague has completed their year-end review submission prior to approval by a line manager. Approved: After approval by a line manager.",
   "colleagues_who_have_joined_the_business": "Colleagues who have joined the business in the last 90 days.",
-  "percentage_of_colleagues_who_have_requested_or_given_feedback_this_year": "Percentage of colleagues who have requested or given feedback this year.  "
+  "percentage_of_colleagues_who_have_requested_or_given_feedback_this_year": "Percentage of colleagues who have requested or given feedback this year.  ",
+  "missed_fields/managerUUID": "Line Manager name",
+  "missed_fields/profile/firstName": "First name",
+  "missed_fields/profile/lastName": "Last name",
+  "missed_fields/workRelationships/job/name": "Job name",
+  "missed_fields/workRelationships/department/name": "Department name",
+  "missed_fields/workRelationships/managerUUID": "Line Manager name"
 }
