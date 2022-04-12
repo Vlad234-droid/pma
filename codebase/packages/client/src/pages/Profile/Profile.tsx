@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { CreateRule, useBreakpoints, useStyle } from '@pma/dex-wrapper';
+import { CreateRule, useStyle } from '@pma/dex-wrapper';
 import { Contacts, PersonalInformation, ProfessionalInformation } from '../../features/Profile';
 import { AuthConsumer } from 'contexts/authContext';
 import { AvatarName } from 'features/Profile/components/Widgets/DashboardProfile';
@@ -8,9 +8,8 @@ import { TileWrapper } from 'components/Tile';
 export const TEST_ID = 'profile-test-page';
 
 const Profile: FC = () => {
-  const { css } = useStyle();
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+  const { css, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
 
   return (
     <div data-test-id={TEST_ID} className={css({ margin: '8px' })}>

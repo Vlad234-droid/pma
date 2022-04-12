@@ -52,3 +52,5 @@ export enum ViewportSize {
 }
 
 export const BASE_URL_API = baseURL;
+
+export const APP_DYNAMICS_APP_KEY = process.env.REACT_APP_DYNAMICS_APP_KEY;

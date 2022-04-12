@@ -53,15 +53,20 @@ const desc: Rule = ({ theme }) => ({
   fontWeight: theme.font.weight.bold,
   paddingBottom: '24px',
   // @ts-ignore
-  borderBottom: `1px solid ${theme.colors.lightGray}`,
+  borderBottom: `2px solid ${theme.colors.lightGray}`,
 });
 
-const main = {
-  display: 'flex',
-  justifyContent: 'flex-start',
-  alignItems: 'center',
-  flexDirection: 'column',
-  overflow: 'auto',
-} as Rule;
+const main: Rule = ({ theme }) => {
+  return {
+    display: 'flex',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    flexDirection: 'column',
+    overflow: 'auto',
+    fontSize: theme.font.fixed.f16.fontSize,
+    lineHeight: theme.font.fixed.f16.lineHeight,
+    letterSpacing: '0px',
+  };
+};
 
 export default Details;

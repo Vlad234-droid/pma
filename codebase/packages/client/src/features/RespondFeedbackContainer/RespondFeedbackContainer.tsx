@@ -1,5 +1,5 @@
 import React, { FC, useState, useEffect, useCallback } from 'react';
-import { Rule, useBreakpoints, useStyle } from '@pma/dex-wrapper';
+import { Rule, CreateRule, useStyle } from '@pma/dex-wrapper';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   FeedbackActions,
@@ -17,11 +17,13 @@ import Spinner from 'components/Spinner';
 import { initialState } from './config';
 
 import { getSortString } from 'utils/feedback';
+import { buildSearchFeedbacksQuery } from '../../utils';
 
 export const RESPOND_FEEDBACK_CONTAINER = 'respond_feedback_container';
 
 const RespondFeedbackContainer: FC = () => {
-  const { css } = useStyle();
+  const { css, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
   const dispatch = useDispatch();
 
   const colleagueUuid = useSelector(colleagueUUIDSelector);
@@ -42,7 +44,7 @@ const RespondFeedbackContainer: FC = () => {
         FeedbackActions.getRespondFeedback({
           _limit: '300',
           'colleague-uuid': colleagueUuid,
-          ...(filter.search.length > 2 && { _search: filter.search }),
+          ...(filter.search.length > 2 && buildSearchFeedbacksQuery(filter.search)),
           _sort: getSortString(filter),
           status_in: [FEEDBACK_STATUS_IN.PENDING, FEEDBACK_STATUS_IN.COMPLETED],
         }),
@@ -69,9 +71,9 @@ const RespondFeedbackContainer: FC = () => {
   return (
     <>
       <div data-test-id={RESPOND_FEEDBACK_CONTAINER}>
-        <div className={css(headerStyled)}>
+        <div className={css(headerStyled({ mobileScreen }))}>
           <RadioBtns status={status} setStatus={setStatus} setFilterModal={setFilterModal} filterModal={filterModal} />
-          <div className={css(FlexStyled)}>
+          <div className={css(FlexStyled({ mobileScreen }))}>
             <FilterOption
               focus={focus}
               customIcon={true}
@@ -109,29 +111,21 @@ const RespondFeedbackContainer: FC = () => {
   );
 };
 
-const FlexStyled: Rule = () => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
-  return {
-    display: 'flex',
-    alignItems: 'center',
-    ...(mobileScreen && { flexBasis: '250px' }),
-    position: 'relative',
-  };
-};
+const FlexStyled: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  ...(mobileScreen && { flexBasis: '250px' }),
+  position: 'relative',
+});
 
-const headerStyled: Rule = () => {
-  const [, isBreakpoint] = useBreakpoints();
-  const medium = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
-  return {
-    display: 'flex',
-    flexWrap: medium ? 'wrap' : 'nowrap',
-    ...(medium && { flexBasis: '250px' }),
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingTop: '24px',
-  };
-};
+const headerStyled: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => ({
+  display: 'flex',
+  flexWrap: mobileScreen ? 'wrap' : 'nowrap',
+  ...(mobileScreen && { flexBasis: '250px' }),
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  paddingTop: '24px',
+});
 
 const DraftsStyle: Rule = {
   display: 'flex',

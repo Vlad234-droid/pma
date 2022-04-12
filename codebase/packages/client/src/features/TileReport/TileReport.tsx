@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useStyle, Rule, useBreakpoints, IconButton as BackButton } from '@pma/dex-wrapper';
+import { useStyle, Rule, CreateRule, IconButton as BackButton } from '@pma/dex-wrapper';
 import { useNavigate } from 'react-router-dom';
 
 import { PieChart } from 'components/PieChart';
@@ -20,10 +20,11 @@ import { getCurrentYear } from 'utils/date';
 
 import { Page } from 'pages';
 
-export const OBJECTIVES_WRAPPER = 'objectives_wrapper';
+export const OBJECTIVES_WRAPPER = 'objectives-wrapper';
 
 const TileReport = () => {
-  const { css } = useStyle();
+  const { css, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const navigate = useNavigate();
 
   const { t } = useTranslation();
@@ -59,7 +60,7 @@ const TileReport = () => {
           graphic='backwardLink'
         />
       </div>
-      <div className={css(header)}>
+      <div className={css(header({ mobileScreen }))}>
         <div className={css(flexCenterStyled)}>
           <IconButton
             graphic='information'
@@ -139,18 +140,14 @@ const leftColumn: Rule = {
   flexBasis: '550px',
 };
 
-const header: Rule = () => {
-  const [, isBreakpoint] = useBreakpoints();
-  const medium = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
-  return {
-    display: 'flex',
-    flexWrap: medium ? 'wrap' : 'nowrap',
-    ...(medium && { flexBasis: '250px' }),
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-    marginTop: '10px',
-  };
-};
+const header: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => ({
+  display: 'flex',
+  flexWrap: mobileScreen ? 'wrap' : 'nowrap',
+  ...(mobileScreen && { flexBasis: '250px' }),
+  justifyContent: 'flex-end',
+  alignItems: 'center',
+  marginTop: '10px',
+});
 
 const flexCenterStyled: Rule = {
   display: 'flex',

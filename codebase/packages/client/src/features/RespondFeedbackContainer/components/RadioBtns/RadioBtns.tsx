@@ -1,5 +1,5 @@
 import React, { Dispatch, FC, SetStateAction } from 'react';
-import { useStyle, useBreakpoints, Rule } from '@pma/dex-wrapper';
+import { useStyle, Rule, CreateRule } from '@pma/dex-wrapper';
 import { Trans } from 'components/Translation';
 import { FeedbackStatus } from 'config/enum';
 
@@ -15,10 +15,11 @@ type RadioBtnsProps = {
 };
 
 const RadioBtns: FC<RadioBtnsProps> = ({ status, setStatus, setFilterModal, filterModal }) => {
-  const { css } = useStyle();
+  const { css, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
 
   return (
-    <div className={css(FlexMobileStyle)} data-test-id={RADIO_WRAPPER}>
+    <div className={css(FlexMobileStyle({ mobileScreen }))} data-test-id={RADIO_WRAPPER}>
       <div className={css({ padding: '0px 10px 0px 0px', cursor: 'pointer' })}>
         <label htmlFor='pending' className={css(FlexCenterStyle)}>
           <Radio
@@ -69,15 +70,11 @@ const FlexCenterStyle: Rule = {
   cursor: 'pointer',
 };
 
-const FlexMobileStyle: Rule = () => {
-  const [, isBreakpoint] = useBreakpoints();
-  const medium = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
-  return {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '10px',
-    ...(medium && { flexBasis: '816px', marginTop: '24px', marginBottom: '24px' }),
-  };
-};
+const FlexMobileStyle: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  gap: '10px',
+  ...(mobileScreen && { flexBasis: '816px', marginTop: '24px', marginBottom: '24px' }),
+});
 
 export default RadioBtns;

@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState, useCallback } from 'react';
-import { CreateRule, Rule, useStyle, useBreakpoints } from '@pma/dex-wrapper';
+import { CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
 import { useDispatch, useSelector } from 'react-redux';
 import debounce from 'lodash.debounce';
 
@@ -44,15 +44,14 @@ type File = {
 const PerformanceCyclesTemplates: FC = () => {
   const { addToast } = useToast();
   const { t } = useTranslation();
-  const { css } = useStyle();
+  const { css, matchMedia } = useStyle();
+  const small = matchMedia({ xSmall: true, small: true }) || false;
   const dispatch = useDispatch();
-  const [, isBreakpoint] = useBreakpoints();
   const templatesList = useSelector(getProcessTemplateSelector) || [];
   const meta = useSelector(getProcessTemplateMetaSelector);
 
   const [sortModal, setSortModal] = useState(false);
   const [extensionModal, setExtensionModal] = useState(false);
-  const small = isBreakpoint.small || isBreakpoint.xSmall;
   const [focus, setFocus] = useState(false);
   const [filter, setFilter] = useState<FilterType>(initialFilters);
 
@@ -297,7 +296,7 @@ const iconBtnStyle: CreateRule<{ isActive: boolean }> =
     justifyContent: 'center',
     alignItems: 'center',
     outline: 0,
-    border: `1px solid ${theme.colors.tescoBlue}`,
+    border: `2px solid ${theme.colors.tescoBlue}`,
     borderRadius: '20px',
     cursor: 'pointer',
     position: 'relative',
@@ -339,7 +338,7 @@ const templatesListStyles: Rule = () => ({
 const templatesListItemStyles: Rule = () => {
   return {
     padding: '15px 0',
-    borderBottom: '1px solid #ddd',
+    borderBottom: '2px solid #ddd',
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',

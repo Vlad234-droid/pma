@@ -1,15 +1,14 @@
 import React from 'react';
-import { CreateRule, Icon, Modal, Rule, theme, useBreakpoints, useStyle } from '@pma/dex-wrapper';
+import { CreateRule, Icon, Modal, Rule, theme, useStyle } from '@pma/dex-wrapper';
 import { useNavigate } from 'react-router';
 import { buildPath } from 'features/Routes';
 import { Page } from 'pages';
 import { ModalWrapper } from 'components/ModalWrapper';
 
 const PersonalDevelopmentHelp = () => {
-  const { css } = useStyle();
+  const { css, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const navigate = useNavigate();
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
 
   return (
     <ModalWrapper isOpen={true}>
@@ -120,44 +119,38 @@ const containerRule: CreateRule<{ mobileScreen }> = (props) => {
 };
 
 // TODO: Extract duplicate 13
-const modalCloseOptionStyle: CreateRule<{ mobileScreen }> = (props) => {
-  const { mobileScreen } = props;
-  return {
-    display: 'inline-block',
-    height: '24px',
-    paddingLeft: '0px',
-    paddingRight: '0px',
-    position: 'fixed',
-    top: '22px',
-    right: mobileScreen ? '20px' : '40px',
-    textDecoration: 'none',
-    border: 'none',
-    cursor: 'pointer',
-  };
-};
+const modalCloseOptionStyle: CreateRule<{ mobileScreen }> = ({ mobileScreen }) => ({
+  display: 'inline-block',
+  height: '24px',
+  paddingLeft: '0px',
+  paddingRight: '0px',
+  position: 'fixed',
+  top: '22px',
+  right: mobileScreen ? '20px' : '40px',
+  textDecoration: 'none',
+  border: 'none',
+  cursor: 'pointer',
+});
 
 // TODO: Extract duplicate 14
-const modalTitleOptionStyle: CreateRule<{ mobileScreen }> = (props) => {
-  const { mobileScreen } = props;
-  return {
-    position: 'fixed',
-    top: '22px',
-    textAlign: 'center',
-    left: 0,
-    right: 0,
-    color: 'white',
-    fontWeight: theme.font.weight.bold,
-    ...(mobileScreen
-      ? {
-          fontSize: `${theme.font.fixed.f20.fontSize}`,
-          lineHeight: `${theme.font.fluid.f24.lineHeight}`,
-        }
-      : {
-          fontSize: `${theme.font.fixed.f24.fontSize}`,
-          lineHeight: `${theme.font.fluid.f28.lineHeight}`,
-        }),
-  };
-};
+const modalTitleOptionStyle: CreateRule<{ mobileScreen }> = ({ mobileScreen }) => ({
+  position: 'fixed',
+  top: '22px',
+  textAlign: 'center',
+  left: 0,
+  right: 0,
+  color: 'white',
+  fontWeight: theme.font.weight.bold,
+  ...(mobileScreen
+    ? {
+        fontSize: `${theme.font.fixed.f20.fontSize}`,
+        lineHeight: `${theme.font.fluid.f24.lineHeight}`,
+      }
+    : {
+        fontSize: `${theme.font.fixed.f24.fontSize}`,
+        lineHeight: `${theme.font.fluid.f28.lineHeight}`,
+      }),
+});
 
 const title = {
   fontSize: '24px',
@@ -185,18 +178,6 @@ const largeSubtitle = {
   lineHeight: '24px',
   paddingTop: '24px',
 } as Rule;
-
-const templatesModalWindowStyles: CreateRule<{ mobileScreen }> = (props) => {
-  const { mobileScreen } = props;
-
-  return {
-    width: mobileScreen ? '100%' : '60%',
-    padding: '0',
-    marginTop: mobileScreen ? '50px' : 0,
-    overflow: 'hidden',
-    fontFamily: '"TESCO Modern", Arial, sans-serif',
-  };
-};
 
 const main = {
   padding: '0px 40px',

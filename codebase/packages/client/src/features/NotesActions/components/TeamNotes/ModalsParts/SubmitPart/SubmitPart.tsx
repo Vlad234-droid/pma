@@ -130,7 +130,7 @@ const SubmitPart: FC<SubmitPartProps> = ({ selectedPerson, teamMethods, foldersW
 
 const lineStyle: Rule = {
   background: '#E5E5E5',
-  height: '1px',
+  height: '2px',
   marginBottom: '16px',
 };
 

@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
-import { Button, Modal, Rule, useBreakpoints, useStyle } from '@pma/dex-wrapper';
+import { Button, Modal, Rule, CreateRule, useStyle } from '@pma/dex-wrapper';
 import { Trans, useTranslation } from 'components/Translation';
 import { FilterOption } from 'features/Shared';
 import { IconButton } from 'components/IconButton';
@@ -36,7 +36,8 @@ type filterFeedbacksType = {
 const ViewFeedback: FC = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const { css } = useStyle();
+  const { css, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const dispatch = useDispatch();
   const [helpModalReceiveFeedback, setHelpModalReceiveFeedback] = useState<boolean>(false);
   const [openMainModal, setOpenMainModal] = useState<boolean>(false);
@@ -170,24 +171,24 @@ const ViewFeedback: FC = () => {
         <Modal
           modalPosition={'middle'}
           overlayColor={'tescoBlue'}
-          modalContainerRule={[containerRule]}
+          modalContainerRule={[containerRule({ mobileScreen })]}
           closeOptions={{
             content: <Icon graphic='cancel' invertColors={true} />,
             onClose: () => {
               setHelpModalReceiveFeedback(() => false);
             },
-            styles: [modalCloseOptionStyle],
+            styles: [modalCloseOptionStyle({ mobileScreen })],
           }}
           title={{
             content: 'Feedback',
-            styles: [modalTitleOptionStyle],
+            styles: [modalTitleOptionStyle({ mobileScreen })],
           }}
         >
           <HelpModalReceiveFeedback setHelpModalReceiveFeedback={setHelpModalReceiveFeedback} />
         </Modal>
       )}
       <div data-test-id={WRAPPER}>
-        <div className={css(SpaceBeetweenStyled)}>
+        <div className={css(SpaceBeetweenStyled({ mobileScreen }))}>
           <RadioBtns
             checkedRadio={checkedRadio}
             setCheckedRadio={setCheckedRadio}
@@ -231,7 +232,7 @@ const ViewFeedback: FC = () => {
         </div>
         <div className={css(ReverseItemsStyled)}>
           {!loaded ? <Spinner /> : <DraftList items={submittedCompletedNotes} />}
-          <div className={css(ButtonsActionsStyle)}>
+          <div className={css(ButtonsActionsStyle({ mobileScreen }))}>
             <div className={css(ButtonContainerStyle)}>
               <div className={css({ display: 'inline-flex' })}>
                 <Icon
@@ -271,7 +272,7 @@ const ViewFeedback: FC = () => {
               </p>
               <Button
                 data-test-id={'download-feedback'}
-                styles={[iconBtnStyle, { maxWidth: '181px !important' }]}
+                styles={[iconBtnStyle, { maxWidth: 'fit-content !important' }]}
                 onPress={handleDownloadAllPress}
               >
                 <Trans i18nKey='download_feedbacks'>Download feedback</Trans>
@@ -285,11 +286,7 @@ const ViewFeedback: FC = () => {
                 'worried_the_content_of_any_feedback',
                 "If you're worried the content of any feedback you`ve received is inappropriate, please contact your line manager or People team as soon as possible.",
               )}
-              customStyle={{
-                background: '#FFDBC2',
-                marginBottom: '20px',
-                marginTop: '16px',
-              }}
+              customStyle={css(notificationStyles)}
             />
           </div>
         </div>
@@ -298,7 +295,7 @@ const ViewFeedback: FC = () => {
         <Modal
           modalPosition={'middle'}
           overlayColor={'tescoBlue'}
-          modalContainerRule={[containerRule]}
+          modalContainerRule={[containerRule({ mobileScreen })]}
           closeOptions={{
             content: <Icon graphic='cancel' invertColors={true} />,
             onClose: () => {
@@ -306,11 +303,11 @@ const ViewFeedback: FC = () => {
               setModalSuccess(() => false);
               setOpenMainModal(() => false);
             },
-            styles: [modalCloseOptionStyle],
+            styles: [modalCloseOptionStyle({ mobileScreen })],
           }}
           title={{
             content: t('download_your_feedback', 'Download your feedback'),
-            styles: [modalTitleOptionStyle],
+            styles: [modalTitleOptionStyle({ mobileScreen })],
           }}
         >
           <ModalDownloadFeedback
@@ -320,7 +317,7 @@ const ViewFeedback: FC = () => {
             closeHandler={closeHandler}
             downloadTitle={t(
               'which_feedback_would_you_like_to_download',
-              'Which feedback would you like to download? ',
+              'Which feedback would you like to download? ',
             )}
             downloadDescription={t(
               'use_the_search_bar_to_look_for_colleagues',
@@ -333,18 +330,35 @@ const ViewFeedback: FC = () => {
   );
 };
 
-const SavedStyled: Rule = {
-  fontWeight: 'normal',
-  fontSize: '16px',
-  lineHeight: '20px',
-  margin: '4px 0px 0px 0px',
+const notificationStyles: Rule = ({ theme }) => {
+  return {
+    background: '#FFDBC2',
+    marginBottom: '20px',
+    marginTop: '16px',
+    fontSize: theme.font.fixed.f16.fontSize,
+    lineHeight: theme.font.fixed.f16.lineHeight,
+    letterSpacing: '0px',
+  };
 };
 
-const SizeStyle: Rule = {
-  fontWeight: 'bold',
-  fontSize: '18px',
-  lineHeight: '22px',
-  color: '#00539F',
+const SavedStyled: Rule = ({ theme }) => {
+  return {
+    fontWeight: 'normal',
+    fontSize: theme.font.fixed.f16.fontSize,
+    lineHeight: theme.font.fixed.f16.lineHeight,
+    letterSpacing: '0px',
+    margin: '4px 0px 0px 0px',
+  };
+};
+
+const SizeStyle: Rule = ({ theme }) => {
+  return {
+    fontWeight: theme.font.weight.bold,
+    fontSize: theme.font.fixed.f18.fontSize,
+    lineHeight: theme.font.fixed.f18.lineHeight,
+    letterSpacing: '0px',
+    color: '#00539F',
+  };
 };
 
 const FlexCenterStyled: Rule = {
@@ -353,18 +367,14 @@ const FlexCenterStyled: Rule = {
   position: 'relative',
 };
 
-const SpaceBeetweenStyled: Rule = () => {
-  const [, isBreakpoint] = useBreakpoints();
-  const medium = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
-  return {
-    display: 'flex',
-    flexWrap: medium ? 'wrap' : 'nowrap',
-    ...(medium && { flexBasis: '250px' }),
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingTop: '24px',
-  };
-};
+const SpaceBeetweenStyled: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => ({
+  display: 'flex',
+  flexWrap: mobileScreen ? 'wrap' : 'nowrap',
+  ...(mobileScreen && { flexBasis: '250px' }),
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  paddingTop: '24px',
+});
 
 const QuestionStyled: Rule = {
   fontWeight: 'normal',
@@ -373,11 +383,14 @@ const QuestionStyled: Rule = {
   margin: '4px 0px 0px 0px',
 };
 
-const ShareFeedbackStyled: Rule = {
-  fontWeight: 'bold',
-  fontSize: '18px',
-  lineHeight: '22px',
-  color: '#00539F',
+const ShareFeedbackStyled: Rule = ({ theme }) => {
+  return {
+    fontWeight: theme.font.weight.bold,
+    fontSize: theme.font.fixed.f18.fontSize,
+    lineHeight: theme.font.fixed.f18.lineHeight,
+    letterSpacing: '0px',
+    color: '#00539F',
+  };
 };
 
 const ReverseItemsStyled: Rule = {
@@ -393,19 +406,15 @@ const iconStyle: Rule = {
   marginTop: '3px',
 };
 
-const ButtonsActionsStyle: Rule = () => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
-  return {
-    width: mobileScreen ? '100%' : '400px',
-    flex: '1 0 250px',
-    '& > div': {
-      '&:nth-child(2)': {
-        marginTop: '8px',
-      },
+const ButtonsActionsStyle: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => ({
+  width: mobileScreen ? '100%' : '400px',
+  flex: '1 0 250px',
+  '& > div': {
+    '&:nth-child(2)': {
+      marginTop: '8px',
     },
-  };
-};
+  },
+});
 
 const ButtonContainerStyle: Rule = {
   background: '#FFFFFF',
@@ -425,20 +434,21 @@ const iconBtnStyle: Rule = ({ theme }) => ({
   background: theme.colors.white,
   color: '#00539F',
   cursor: 'pointer',
-  border: '1px solid #00539F',
-  maxWidth: '134px',
+  border: '2px solid #00539F',
+  maxWidth: 'fit-content',
   marginLeft: 'auto',
   marginTop: '16px',
   whiteSpace: 'nowrap',
-  fontSize: '14px',
-  fontWeight: 'bold',
+  fontSize: theme.font.fixed.f14.fontSize,
+  lineHeight: theme.font.fixed.f14.lineHeight,
+  letterSpacing: '0px',
+  fontWeight: theme.font.weight.bold,
 });
 
 // TODO: Extract duplicate 21
-const containerRule: Rule = ({ colors }) => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
-  return {
+const containerRule: CreateRule<{ mobileScreen: boolean }> =
+  ({ mobileScreen }) =>
+  ({ theme }) => ({
     alignItems: 'center',
     justifyContent: 'center',
     position: 'relative',
@@ -449,53 +459,43 @@ const containerRule: Rule = ({ colors }) => {
     height: mobileScreen ? 'calc(100% - 72px)' : 'calc(100% - 102px)',
     marginTop: '72px',
     marginBottom: mobileScreen ? 0 : '30px',
-    background: colors.white,
+    background: theme.colors.white,
     cursor: 'default',
     overflow: 'auto',
-  };
-};
+  });
 
 // TODO: Extract duplicate 13
-const modalCloseOptionStyle: Rule = () => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
-  return {
-    display: 'inline-block',
-    height: '24px',
-    paddingLeft: '0px',
-    paddingRight: '0px',
-    position: 'fixed',
-    top: '22px',
-    right: mobileScreen ? '20px' : '40px',
-    textDecoration: 'none',
-    border: 'none',
-    cursor: 'pointer',
-  };
-};
+const modalCloseOptionStyle: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => ({
+  display: 'inline-block',
+  height: '24px',
+  paddingLeft: '0px',
+  paddingRight: '0px',
+  position: 'fixed',
+  top: '22px',
+  right: mobileScreen ? '20px' : '40px',
+  textDecoration: 'none',
+  border: 'none',
+  cursor: 'pointer',
+});
 
 // TODO: Extract duplicate 14
-const modalTitleOptionStyle: Rule = () => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
-
-  return {
-    position: 'fixed',
-    top: '22px',
-    textAlign: 'center',
-    left: 0,
-    right: 0,
-    color: 'white',
-    fontWeight: 'bold',
-    ...(mobileScreen
-      ? {
-          fontSize: '20px',
-          lineHeight: '24px',
-        }
-      : {
-          fontSize: '24px',
-          lineHeight: '28px',
-        }),
-  };
-};
+const modalTitleOptionStyle: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => ({
+  position: 'fixed',
+  top: '22px',
+  textAlign: 'center',
+  left: 0,
+  right: 0,
+  color: 'white',
+  fontWeight: 'bold',
+  ...(mobileScreen
+    ? {
+        fontSize: '20px',
+        lineHeight: '24px',
+      }
+    : {
+        fontSize: '24px',
+        lineHeight: '28px',
+      }),
+});
 
 export default ViewFeedback;

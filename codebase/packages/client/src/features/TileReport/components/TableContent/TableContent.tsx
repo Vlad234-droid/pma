@@ -16,9 +16,9 @@ export const TableContent: FC<{ type: string }> = ({ type }) => {
   const { css } = useStyle();
   const { t } = useTranslation();
 
-  const isAnniversarty = type === ReportPage.REPORT_ANNIVERSARY_REVIEWS;
+  const isAnniversary = type === ReportPage.REPORT_ANNIVERSARY_REVIEWS;
 
-  const tableChartData = !isAnniversarty
+  const tableChartData = !isAnniversary
     ? useSelector(getTableChartData(ReportTags[type])) || {}
     : useSelector(getAnniversaryData) || {};
 

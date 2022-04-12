@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { CreateRule, Modal, Rule, theme, useBreakpoints, useStyle } from '@pma/dex-wrapper';
+import { CreateRule, Modal, Rule, theme, useStyle } from '@pma/dex-wrapper';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Icon } from 'components/Icon';
 import { useDispatch, useSelector } from 'react-redux';
@@ -16,12 +16,11 @@ import { ModalWrapper } from 'components/ModalWrapper';
 export const TEST_ID = 'create-pdp';
 
 const CreateMyPDP = () => {
-  const { css } = useStyle();
+  const { css, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
   const navigate = useNavigate();
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const pdpList = useSelector(schemaMetaPDPSelector)?.goals || [];
   const { loaded, loading } = useSelector(metaPDPSelector);

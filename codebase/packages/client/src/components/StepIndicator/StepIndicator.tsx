@@ -168,62 +168,37 @@ export const StepIndicator: FC<StepIndicatorProps> = ({
   );
 };
 
-const titleStyle: Rule = ({
-  font: {
-    fluid: {
-      f16: { fontSize },
-    },
-  },
-}) => ({
+const titleStyle: Rule = ({ theme }) => ({
+  ...theme.font.fixed.f16,
+  letterSpacing: '0px',
   fontStyle: 'normal',
   fontWeight: 'bold',
-  fontSize,
   marginBottom: '30px',
 });
 
-const title2Style: CreateRule<{ textAlign: string; active: boolean }> =
+const title2Style: CreateRule<{ textAlign: any; active: boolean }> =
   ({ textAlign, active }) =>
-  // @ts-ignore
-  ({ theme }) => {
-    const {
-      font: {
-        fluid: {
-          f14: { fontSize },
-        },
-      },
-    } = theme;
+  ({ theme }) => ({
+    fontStyle: 'normal',
+    fontWeight: 'bold',
+    ...theme.font.fixed.f14,
+    letterSpacing: '0px',
+    paddingTop: '8px',
+    flex: '0 1 0',
+    textAlign: textAlign,
+    color: active ? theme.colors.base : theme.colors.backgroundDarkest,
+  });
 
-    return {
-      fontStyle: 'normal',
-      fontWeight: 'bold',
-      fontSize,
-      paddingTop: '8px',
-      flex: '0 1 0',
-      textAlign: textAlign,
-      color: active ? theme.colors.base : theme.colors.backgroundDarkest,
-    };
-  };
-
-const descriptionStyle: CreateRule<{ textAlign: string; active: boolean }> =
+const descriptionStyle: CreateRule<{ textAlign: any; active: boolean }> =
   ({ textAlign, active }) =>
-  // @ts-ignore
-  ({ theme }) => {
-    const {
-      font: {
-        fluid: {
-          f14: { fontSize },
-        },
-      },
-    } = theme;
-
-    return {
-      fontStyle: 'normal',
-      fontSize,
-      flex: '0 1 0',
-      textAlign: textAlign,
-      color: active ? theme.colors.base : theme.colors.backgroundDarkest,
-    };
-  };
+  ({ theme }) => ({
+    fontStyle: 'normal',
+    ...theme.font.fixed.f14,
+    letterSpacing: '0px',
+    flex: '0 1 0',
+    textAlign: textAlign,
+    color: active ? theme.colors.base : theme.colors.backgroundDarkest,
+  });
 
 const wrapperStyle = {
   padding: '20px',

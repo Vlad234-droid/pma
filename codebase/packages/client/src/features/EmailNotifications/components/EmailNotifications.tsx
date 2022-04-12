@@ -81,6 +81,7 @@ const titleStyle: Rule = ({ theme }) =>
     fontWeight: `${theme.font.weight.bold}`,
     fontSize: '20px',
     lineHeight: '24px',
+    letterSpacing: '0px',
   } as Styles);
 
 // TODO: Extract duplicate 9
@@ -89,6 +90,7 @@ const descriptionStyle = {
   fontWeight: 'normal',
   fontSize: '16px',
   lineHeight: '20px',
+  letterSpacing: '0px',
   marginBottom: '8px',
 } as Styles;
 

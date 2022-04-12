@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'components/Translation';
-import { Button, Rule, Styles, useBreakpoints, useStyle } from '@pma/dex-wrapper';
+import { Button, CreateRule, Rule, Styles, useStyle } from '@pma/dex-wrapper';
 import { ObjectiveType, ReviewType } from 'config/enum';
 
 import { StepIndicator } from 'components/StepIndicator/StepIndicator';
@@ -49,13 +49,12 @@ const annualReviews = [
 export const TEST_ID = 'user-objectives-page';
 
 export const UserObjectives: FC = () => {
-  const { css, theme } = useStyle();
+  const { css, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
   const [previousReviewFilesModalShow, setPreviousReviewFilesModalShow] = useState(false);
   const [objectives, setObjectives] = useState<OT.Objective[]>([]);
   const [schema] = useReviewSchema(ReviewType.OBJECTIVE);
@@ -115,7 +114,7 @@ export const UserObjectives: FC = () => {
   }, []);
 
   return (
-    <div className={css(bodyBlockStyles)}>
+    <div className={css(bodyBlockStyles({ mobileScreen }))}>
       <div className={css(bodyWrapperStyles)} data-test-id={TEST_ID}>
         {!timelineLoaded ? (
           <Spinner id='1' />
@@ -170,7 +169,7 @@ export const UserObjectives: FC = () => {
                       <Button
                         mode='inverse'
                         onPress={() => setPreviousReviewFilesModalShow(true)}
-                        styles={[linkStyles({ theme })]}
+                        styles={[linkStyles]}
                       >
                         <Trans i18nKey='view_files'>View files</Trans>
                       </Button>
@@ -186,7 +185,7 @@ export const UserObjectives: FC = () => {
           </>
         )}
       </div>
-      <div className={css(headWrapperStyles)}>
+      <div className={css(headWrapperStyles({ mobileScreen }))}>
         {!timelineLoaded && (
           <div className={css(timelineWrapperStyles)}>
             <Spinner id='2' />
@@ -203,7 +202,7 @@ export const UserObjectives: FC = () => {
           </div>
         )}
 
-        <div className={css(widgetsBlock)}>
+        <div className={css(widgetsBlock({ mobileScreen }))}>
           <ShareWidget stopShare={true} customStyle={shareWidgetStyles} />
           <OrganizationWidget
             customStyle={{ flex: '1 1 30%', display: 'flex', flexDirection: 'column' }}
@@ -222,43 +221,30 @@ export const UserObjectives: FC = () => {
   );
 };
 
-const bodyBlockStyles: Rule = () => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
-  return {
-    display: 'flex',
-    alignItems: 'flex-start',
-    justifyContent: 'center',
-    flexDirection: mobileScreen ? 'column-reverse' : 'row',
-  };
-};
+const bodyBlockStyles: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => ({
+  display: 'flex',
+  alignItems: 'flex-start',
+  justifyContent: 'center',
+  flexDirection: mobileScreen ? 'column-reverse' : 'row',
+});
 
-const widgetsBlock: Rule = () => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
+const widgetsBlock: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => ({
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  flexDirection: 'column',
+  width: '100%',
+  gap: '10px',
+  paddingBottom: mobileScreen ? '20px' : '0px',
+});
 
-  return {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection: 'column',
-    width: '100%',
-    gap: '10px',
-    paddingBottom: mobileScreen ? '20px' : '0px',
-  };
-};
-
-const headWrapperStyles: Rule = () => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
-  return {
-    flex: '1 1 30%',
-    width: mobileScreen ? '100%' : '30%',
-    display: 'flex',
-    flexDirection: 'column',
-    paddingLeft: mobileScreen ? '0px' : '20px',
-  };
-};
+const headWrapperStyles: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => ({
+  flex: '1 1 30%',
+  width: mobileScreen ? '100%' : '30%',
+  display: 'flex',
+  flexDirection: 'column',
+  paddingLeft: mobileScreen ? '0px' : '20px',
+});
 
 const timelineWrapperStyles = {
   display: 'flex',

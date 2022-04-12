@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Button, Rule, useBreakpoints, useStyle } from '@pma/dex-wrapper';
+import { Button, Rule, CreateRule, useStyle } from '@pma/dex-wrapper';
 import { useSelector } from 'react-redux';
 import { getColleagueByUuidSelector } from '@pma/store';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -34,9 +34,8 @@ const GiveFeedbackForm: FC<GiveFeedbackFormProps> = ({
   goToInfo,
   feedbackFields,
 }) => {
-  const { css, theme } = useStyle();
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+  const { css, theme, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const { t } = useTranslation();
 
   const {
@@ -132,7 +131,7 @@ const GiveFeedbackForm: FC<GiveFeedbackFormProps> = ({
       )}
       <div className={css(absoluteStyle)}>
         <div className={css(relativeBtnStyled)}>
-          <div className={css(spacingStyle)}>
+          <div className={css(spacingStyle({ mobileScreen }))}>
             <Button
               isDisabled={!targetColleagueUuid}
               styles={[theme.font.fixed.f16, buttonStyle]}
@@ -180,18 +179,16 @@ const relativeBtnStyled: Rule = ({ theme }) => ({
   left: theme.spacing.s0,
   right: theme.spacing.s0,
   // @ts-ignore
-  borderTop: `${theme.border.width.b1} solid ${theme.colors.lightGray}`,
+  borderTop: `${theme.border.width.b2} solid ${theme.colors.lightGray}`,
 });
 
-const spacingStyle: Rule = ({ theme }) => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
-  return {
+const spacingStyle: CreateRule<{ mobileScreen: boolean }> =
+  ({ mobileScreen }) =>
+  ({ theme }) => ({
     padding: mobileScreen ? theme.spacing.s6 : theme.spacing.s8,
     display: 'flex',
     justifyContent: 'space-between',
-  };
-};
+  });
 
 // TODO: Extract duplicate 7
 const buttonStyle: Rule = ({ theme }) => ({
@@ -199,7 +196,7 @@ const buttonStyle: Rule = ({ theme }) => ({
   width: '49%',
   margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
   background: theme.colors.white,
-  border: `${theme.border.width.b1} solid ${theme.colors.tescoBlue}`,
+  border: `${theme.border.width.b2} solid ${theme.colors.tescoBlue}`,
   color: `${theme.colors.tescoBlue}`,
 });
 

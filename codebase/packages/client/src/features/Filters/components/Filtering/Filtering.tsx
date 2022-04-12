@@ -139,13 +139,13 @@ const blockStyle: Rule = () => {
   const { theme } = useStyle();
 
   return {
-    borderBottom: `1px solid ${theme.colors.disabled}`,
+    borderBottom: `2px solid ${theme.colors.disabled}`,
     padding: '24px 0',
   };
 };
 
 const buttonStyle: Rule = ({ theme }) => ({
-  border: `1px solid ${theme.colors.tescoBlue}`,
+  border: `2px solid ${theme.colors.tescoBlue}`,
   width: '50%',
   marginRight: '8px',
 });

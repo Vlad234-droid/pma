@@ -16,6 +16,7 @@ import { Page } from 'pages';
 import { buildPath } from 'features/Routes';
 import { useToast, Variant } from 'features/Toast';
 import PerformanceCycleForm from './components/PerformanceCycleForm';
+import Spinner from 'components/Spinner';
 
 const CreatePerformanceCycle: FC = () => {
   const dispatch = useDispatch();
@@ -138,7 +139,7 @@ const CreatePerformanceCycle: FC = () => {
     performanceCycleUuid !== 'new' &&
     (!performanceCycleLoaded || Object.values(defaultValues).some((value) => !value))
   )
-    return null;
+    return <Spinner fullHeight />;
 
   return (
     <PerformanceCycleForm

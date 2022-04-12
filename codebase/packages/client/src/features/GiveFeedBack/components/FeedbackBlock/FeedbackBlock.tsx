@@ -56,9 +56,11 @@ const FeedbackBlock: FC<Props> = ({ list, canEdit }) => {
                             <h3
                               className={css(namesStyle)}
                             >{`${item?.targetColleagueProfile?.colleague?.profile?.firstName} ${item?.targetColleagueProfile?.colleague?.profile?.lastName}`}</h3>
-                            <p
-                              className={css(industryStyle)}
-                            >{`${item?.targetColleagueProfile?.colleague?.workRelationships[0].job.name}, ${item?.targetColleagueProfile?.colleague?.workRelationships[0].department?.name}`}</p>
+                            <p className={css(industryStyle)}>{`${
+                              item?.targetColleagueProfile?.colleague?.workRelationships[0]?.job.name ?? ''
+                            }, ${
+                              item?.targetColleagueProfile?.colleague?.workRelationships[0]?.department?.name ?? ''
+                            }`}</p>
                           </div>
                         </div>
                         <div className={css({ display: 'flex', justifyContent: 'center', alignItems: 'center' })}>
@@ -153,9 +155,14 @@ const wordBreakStyle: Rule = {
   wordBreak: 'break-all',
 };
 
-const draftStyles: Rule = {
-  display: 'flex',
-  justifyContent: 'space-between',
+const draftStyles: Rule = ({ theme }) => {
+  return {
+    display: 'flex',
+    justifyContent: 'space-between',
+    fontSize: theme.font.fixed.f16.fontSize,
+    lineHeight: theme.font.fixed.f16.lineHeight,
+    letterSpacing: '0px',
+  };
 };
 
 const blockInfo: Rule = {
@@ -204,7 +211,7 @@ const tileWrapperStyle: Rule = ({ theme }) => ({
   padding: '24px',
   margin: '24px 28px 24px 0px',
   // @ts-ignore
-  border: `1px solid ${theme.colors.lightGray}`,
+  border: `2px solid ${theme.colors.lightGray}`,
 });
 
 export default FeedbackBlock;

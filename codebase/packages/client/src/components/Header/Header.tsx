@@ -1,6 +1,6 @@
 import React, { FC, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { IconButton, Rule, Styles, useBreakpoints, useStyle, CreateRule, Theme } from '@pma/dex-wrapper';
+import { IconButton, Rule, Styles, useStyle, CreateRule, Theme } from '@pma/dex-wrapper';
 
 import { Graphics, RoundIcon, Icon } from 'components/Icon';
 import { AlertDrawer, AlertBadge, useMessagesContext } from 'features/Messages';
@@ -21,11 +21,10 @@ export const TEST_ID = 'header';
 export const BACK_BTN_TEST_ID = 'header-back';
 
 const Header: FC<HeaderProps> = ({ title, onBack, withIcon, iconName = 'home', styles = {} }) => {
-  const { css, theme } = useStyle();
+  const { css, theme, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const navigate = useNavigate();
   const { pathname, state }: any = useLocation();
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
 
   const { fetchMessagesCount } = useMessagesContext();
 
@@ -69,7 +68,7 @@ const Header: FC<HeaderProps> = ({ title, onBack, withIcon, iconName = 'home', s
       {onBack ? <IconButton onPress={onBack} graphic='backwardLink' data-test-id={BACK_BTN_TEST_ID} /> : <div />}
       <h3 className={css(headerStyles({ mobileScreen, onBack, theme }))}>
         {withIcon && (
-          <div className={css({ height: '24px', marginRight: '10px' })}>
+          <div className={css(iconWrapperStyle)}>
             <Icon graphic={iconName} />
           </div>
         )}
@@ -110,7 +109,6 @@ const wrapperStyles: Rule = {
 };
 
 const headerStyles: CreateRule<{ mobileScreen; onBack; theme: Theme }> = ({ mobileScreen, onBack, theme }) => ({
-  lineHeight: '1.2',
   fontSize: '24px',
   display: 'flex',
   alignItems: 'center',
@@ -126,5 +124,7 @@ const headerStyles: CreateRule<{ mobileScreen; onBack; theme: Theme }> = ({ mobi
         paddingLeft: onBack ? '66px' : '91px',
       }),
 });
+
+const iconWrapperStyle: Rule = { height: '24px', marginRight: '10px', '& > span': { display: 'flex' } } as Styles;
 
 export default Header;

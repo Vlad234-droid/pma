@@ -46,7 +46,7 @@ const SubmitPart: FC<SubmitPartProps> = ({ selectedPerson, searchDate, onChange 
 
   return (
     <div data-test-id={WRAPPER}>
-      <div className={css({ height: '1px', background: '#E5E5E5' })} />
+      <div className={css({ height: '2px', background: '#E5E5E5' })} />
       <div className={css({ marginTop: '16px' })}>
         <DraftList items={submittedCompletedNotes} downloadable={false} selectable onChange={setSelected as any} />
       </div>

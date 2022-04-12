@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Button, Rule, useBreakpoints, useStyle } from '@pma/dex-wrapper';
+import { Button, CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
 import { Trans } from 'components/Translation';
 import { IconButton } from 'components/IconButton';
 
@@ -11,9 +11,8 @@ type ConfirmModalType = {
 };
 
 const ConfirmMessage: FC<ConfirmModalType> = ({ onConfirm, goBack }) => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
-  const { css, theme } = useStyle();
+  const { css, theme, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   return (
     <div data-test-id={CONFIRM_WRAPPER}>
       <div className={css(ImgContent_style)}>
@@ -33,7 +32,7 @@ const ConfirmMessage: FC<ConfirmModalType> = ({ onConfirm, goBack }) => {
 
       <div className={css(Absolute_style)}>
         <div className={css(Relative_btn_styled)}>
-          <div className={css(Spacing_style)}>
+          <div className={css(SpacingStyle({ mobileScreen }))}>
             <Button styles={[theme.font.fixed.f16, backButton]} onPress={goBack}>
               <Trans>Go back</Trans>
             </Button>
@@ -75,18 +74,16 @@ const Relative_btn_styled: Rule = ({ theme }) => ({
   left: theme.spacing.s0,
   right: theme.spacing.s0,
   // @ts-ignore
-  borderTop: `${theme.border.width.b1} solid ${theme.colors.lightGray}`,
+  borderTop: `${theme.border.width.b2} solid ${theme.colors.lightGray}`,
 });
 
-const Spacing_style: Rule = ({ theme }) => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
-  return {
+const SpacingStyle: CreateRule<{ mobileScreen: boolean }> =
+  ({ mobileScreen }) =>
+  ({ theme }) => ({
     padding: mobileScreen ? theme.spacing.s6 : theme.spacing.s8,
     display: 'flex',
     justifyContent: 'space-between',
-  };
-};
+  });
 
 // TODO: Extract duplicate 7
 const backButton: Rule = ({ theme }) => ({
@@ -94,7 +91,7 @@ const backButton: Rule = ({ theme }) => ({
   width: '49%',
   margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
   background: theme.colors.white,
-  border: `${theme.border.width.b1} solid ${theme.colors.tescoBlue}`,
+  border: `${theme.border.width.b2} solid ${theme.colors.tescoBlue}`,
   color: `${theme.colors.tescoBlue}`,
 });
 
@@ -103,7 +100,7 @@ const submitButton: Rule = ({ theme }) => ({
   width: '49%',
   margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
   background: theme.colors.tescoBlue,
-  border: `${theme.border.width.b1} solid ${theme.colors.tescoBlue}`,
+  border: `${theme.border.width.b2} solid ${theme.colors.tescoBlue}`,
   color: `${theme.colors.white}`,
 });
 

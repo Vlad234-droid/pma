@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { Button, CreateRule, Rule, Styles, useBreakpoints, useStyle } from '@pma/dex-wrapper';
+import { Button, CreateRule, Rule, Styles, useStyle } from '@pma/dex-wrapper';
 
 import { Notification } from 'components/Notification';
 import { GenericItemField } from 'components/GenericForm';
@@ -16,10 +16,9 @@ import { addNewFolderId, getFolder, getNotes } from 'utils';
 export const MODAL_WRAPPER = 'modal-wrapper';
 
 const AddNoteModal: FC<AddNoteModalProps> = ({ methods, cancelModal, submitForm, createFolder, foldersWithNotes }) => {
-  const { css, theme } = useStyle();
+  const { css, theme, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const { t } = useTranslation();
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
   const [successModal, setSuccessModal] = useState<boolean>(false);
 
   const {
@@ -195,7 +194,7 @@ const wrapperStyle: Rule = ({ theme }) => ({
   left: theme.spacing.s0,
   right: theme.spacing.s0,
   // @ts-ignore
-  borderTop: `${theme.border.width.b1} solid ${theme.colors.lightGray}`,
+  borderTop: `${theme.border.width.b2} solid ${theme.colors.lightGray}`,
 });
 
 // TODO: Extract duplicate 7
@@ -204,7 +203,7 @@ const buttonCancelStyle: Rule = ({ theme }) => ({
   width: '49%',
   margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
   background: theme.colors.white,
-  border: `${theme.border.width.b1} solid ${theme.colors.tescoBlue}`,
+  border: `${theme.border.width.b2} solid ${theme.colors.tescoBlue}`,
   color: `${theme.colors.tescoBlue}`,
 });
 
@@ -232,6 +231,8 @@ const iconStyledRule: Rule = {
 const submitButtonStyle: CreateRule<{ isValid: any }> =
   ({ isValid }) =>
   ({ theme }) => ({
+    ...theme.font.fixed.f16,
+    letterSpacing: '0px',
     fontWeight: theme.font.weight.bold,
     width: '50%',
     margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,

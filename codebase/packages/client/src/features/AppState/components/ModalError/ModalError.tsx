@@ -1,7 +1,7 @@
 import React, { FC, HTMLProps } from 'react';
 import { Trans } from 'components/Translation';
 
-import { useBreakpoints, useStyle, CreateRule, Modal, Button } from '@pma/dex-wrapper';
+import { useStyle, CreateRule, Modal, Button } from '@pma/dex-wrapper';
 
 export type ModalErrorProps = {
   title: string;
@@ -13,9 +13,8 @@ export type ModalErrorProps = {
 type Props = HTMLProps<HTMLInputElement> & ModalErrorProps;
 
 const ModalError: FC<Props> = ({ title, description, onClose, onOverlayClick, children }) => {
-  const { theme, css } = useStyle();
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+  const { css, theme, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
 
   return (
     <Modal
@@ -53,7 +52,7 @@ const ModalError: FC<Props> = ({ title, description, onClose, onOverlayClick, ch
           styles={[
             {
               background: 'white',
-              border: `1px solid ${theme.colors.tescoBlue}`,
+              border: `2px solid ${theme.colors.tescoBlue}`,
               fontSize: '16px',
               lineHeight: '20px',
               fontWeight: 'bold',

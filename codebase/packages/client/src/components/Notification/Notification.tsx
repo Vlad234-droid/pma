@@ -61,12 +61,14 @@ const wrapperStyle: Rule = {
   padding: '12px',
   borderRadius: '10px',
   alignItems: 'center',
+  letterSpacing: '0px',
 };
 
 const textStyle: Rule = {
   color: colors.base,
   fontSize: '14px',
   lineHeight: '18px',
+  letterSpacing: '0px',
   paddingLeft: '5px',
 };
 

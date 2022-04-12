@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { useStyle, Button, useBreakpoints, Rule, CreateRule } from '@pma/dex-wrapper';
+import { useStyle, Button, Rule, CreateRule } from '@pma/dex-wrapper';
 import { Trans, useTranslation } from 'components/Translation';
 import { ButtonWithConfirmation } from '../../Buttons';
 
@@ -12,10 +12,9 @@ type ReviewButtonsProps = {
 };
 
 const ReviewButtons: FC<ReviewButtonsProps> = ({ readonly, isValid, onClose, onSaveDraft, onSave }) => {
-  const { css } = useStyle();
+  const { css, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const { t } = useTranslation();
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
 
   return (
     <div className={css(containerStyle)}>
@@ -61,7 +60,7 @@ const wrapperStyle: Rule = ({ theme }) => ({
   left: theme.spacing.s0,
   right: theme.spacing.s0,
   // @ts-ignore
-  borderTop: `${theme.border.width.b1} solid ${theme.colors.lightGray}`,
+  borderTop: `${theme.border.width.b2} solid ${theme.colors.lightGray}`,
 });
 
 const buttonWrapperStyle: CreateRule<{ mobileScreen: boolean }> =
@@ -78,7 +77,7 @@ const buttonWhiteStyle: Rule = ({ theme }) => ({
   width: '50%',
   margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
   background: theme.colors.white,
-  border: `${theme.border.width.b1} solid ${theme.colors.tescoBlue}`,
+  border: `${theme.border.width.b2} solid ${theme.colors.tescoBlue}`,
   color: `${theme.colors.tescoBlue}`,
 });
 

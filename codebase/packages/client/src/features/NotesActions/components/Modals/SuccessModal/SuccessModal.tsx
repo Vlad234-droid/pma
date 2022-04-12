@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Button, Rule, useBreakpoints, useStyle, CreateRule } from '@pma/dex-wrapper';
+import { Button, Rule, useStyle, CreateRule } from '@pma/dex-wrapper';
 import { getFoldersSelector } from '@pma/store';
 import { useSelector } from 'react-redux';
 
@@ -17,10 +17,9 @@ export type SuccessModalProps = {
 };
 
 const SuccessModal: FC<SuccessModalProps> = ({ values, createFolder, cancelModal }) => {
-  const { css } = useStyle();
+  const { css, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
 
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
   const folders = useSelector(getFoldersSelector) || null;
 
   const propperValue = (): string => {
@@ -107,12 +106,12 @@ const btnWrapperStyle: Rule = {
   bottom: 0,
   left: 0,
   right: 0,
-  borderTop: '1px solid #E5E5E5',
+  borderTop: '2px solid #E5E5E5',
 };
 
 const buttonStyle: Rule = ({ theme }) => {
   return {
-    border: `1px solid ${theme.colors.tescoBlue}`,
+    border: `2px solid ${theme.colors.tescoBlue}`,
     fontSize: '16px',
     lineHeight: '20px',
     fontWeight: 'bold',

@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { useStyle, Rule, Theme, CreateRule, Styles } from '@dex-ddl/core';
+import { useStyle, Rule, Theme, CreateRule, Styles } from '@pma/dex-wrapper';
 import { useChartDataStatistics } from 'features/useChartDataStatistics';
 import { IconButton } from 'components/IconButton';
 import { Trans, useTranslation } from 'components/Translation/Translation';
@@ -8,7 +8,8 @@ import { TableContent as Props } from '../../type';
 
 const TableContent: FC<Props> = ({ mainTitle, data, preTitle }) => {
   const { t } = useTranslation();
-  const { css, theme } = useStyle();
+  const { css, theme, matchMedia } = useStyle();
+  const small = matchMedia({ xSmall: true, small: true }) || false;
 
   const chartData = Array.isArray(data) ? data : useChartDataStatistics(t, data) || [];
 
@@ -29,7 +30,7 @@ const TableContent: FC<Props> = ({ mainTitle, data, preTitle }) => {
           <p className={css(preTitleStyle)}>{preTitle}</p>
         </div>
       )}
-      <div className={css(blockWrapper)}>
+      <div className={css(blockWrapper({ small }))}>
         {chartData?.map((block, i) => {
           const percent = block.percent || 0;
           const quantity = block.quantity || 0;
@@ -50,9 +51,10 @@ const TableContent: FC<Props> = ({ mainTitle, data, preTitle }) => {
 
 const titleStyle: CreateRule<{ preTitle: string | undefined; theme: Theme }> = ({ preTitle, theme }) => ({
   color: theme.colors.link,
-  fontWeight: 'bold',
-  fontSize: '20px',
-  lineHeight: '24px',
+  fontWeight: theme.font.weight.bold,
+  fontSize: theme.font.fixed.f20.fontSize,
+  lineHeight: theme.font.fixed.f20.lineHeight,
+  letterSpacing: '0px',
   textAlign: 'center',
   margin: !preTitle ? '0px 0px 32px 0px' : '0px 0px 12px 0px',
 });
@@ -83,7 +85,7 @@ const quantityStyle: Rule = ({ theme }) =>
     ':after': {
       content: "''",
       width: '100%',
-      height: '1px',
+      height: '2px',
       position: 'absolute',
       bottom: '-8px',
       left: '0px',
@@ -91,12 +93,13 @@ const quantityStyle: Rule = ({ theme }) =>
     },
   } as Styles);
 
-const blockWrapper: Rule = {
+const blockWrapper: CreateRule<{ small: boolean }> = ({ small }) => ({
   display: 'flex',
   justifyContent: 'space-between',
+  flexDirection: !small ? 'row' : 'column',
   alignItems: 'center',
   marginTop: '32px',
-};
+});
 
 const flexStyle: Rule = {
   display: 'flex',

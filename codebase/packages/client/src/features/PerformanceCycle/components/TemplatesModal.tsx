@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, CreateRule, ModalWithHeader, Rule, useBreakpoints, useStyle } from '@pma/dex-wrapper';
+import { Button, CreateRule, ModalWithHeader, Rule, useStyle } from '@pma/dex-wrapper';
 import { Icon } from 'components/Icon';
 import { Input } from 'components/Form';
 import { DropZone } from 'components/DropZone';
@@ -15,12 +15,11 @@ type TemplateModalProps = {
 };
 
 const TemplatesModal: FC<TemplateModalProps> = ({ onSelect }) => {
-  const { css } = useStyle();
+  const { css, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const [isOpen, toggleOpen] = useState(false);
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
   const [filter, setFilteredValue] = useState('');
   const templatesList = useSelector(getProcessTemplateSelector) || [];
 
@@ -115,7 +114,7 @@ const TemplatesModal: FC<TemplateModalProps> = ({ onSelect }) => {
 
 const btnStyle: Rule = ({ theme }) => ({
   fontSize: '16px',
-  border: `1px solid ${theme.colors.tescoBlue}`,
+  border: `2px solid ${theme.colors.tescoBlue}`,
   minWidth: '200px',
 });
 
@@ -165,7 +164,7 @@ const templatesListStyles: Rule = () => ({
 const templatesListItemStyles: Rule = () => {
   return {
     padding: '15px 0',
-    borderBottom: '1px solid #ddd',
+    borderBottom: '2px solid #ddd',
     cursor: 'pointer',
     display: 'flex',
     justifyContent: 'space-between',

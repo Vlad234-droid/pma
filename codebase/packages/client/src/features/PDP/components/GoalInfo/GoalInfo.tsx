@@ -155,13 +155,14 @@ const btns: Rule = {
 };
 
 const fullGoals: Rule = {
-  borderBottom: `1px solid ${theme.colors.backgroundDarkest}`,
+  borderBottom: `2px solid ${theme.colors.backgroundDarkest}`,
 };
 
 const goalBlock: Rule = {
   paddingBottom: '24px',
-  fontSize: `${theme.font.fixed.f14}`,
-  lineHeight: '18px',
+  fontSize: theme.font.fixed.f14.fontSize,
+  lineHeight: theme.font.fixed.f14.lineHeight,
+  letterSpacing: '0px',
   userSelect: 'none',
   fontFamily: '"TESCO Modern", Arial, sans-serif',
 };
@@ -179,10 +180,10 @@ const titleBlock: Rule = {
   alignItems: 'center',
   padding: '24px 0 16px 0',
   fontFamily: '"TESCO Modern", Arial, sans-serif',
-  fontSize: '16px',
+  fontSize: `${theme.font.fixed.f16.fontSize}`,
   fontStyle: 'normal',
   fontWeight: `${theme.font.weight.bold}`,
-  lineHeight: '20px',
+  lineHeight: theme.font.fixed.f16.lineHeight,
   letterSpacing: '0px',
   color: `${theme.colors.link}`,
 };

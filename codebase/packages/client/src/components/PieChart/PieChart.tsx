@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { Rule, useStyle } from '@pma/dex-wrapper';
 import { Link } from 'react-router-dom';
 import { buildPath, buildPathWithParams } from 'features/Routes';
@@ -16,8 +16,12 @@ const PieChart: FC<PieChartProps> = ({
   Wrapper = 'div',
   params = {},
   type = '',
+  hoverMessage = '',
+  hoverVisibility = true,
 }) => {
   const { css } = useStyle();
+
+  const [isHovering, setIsHovering] = useState<boolean>(false);
 
   const props = {
     title,
@@ -25,13 +29,25 @@ const PieChart: FC<PieChartProps> = ({
     display,
     percentId,
     titleId,
+    hoverMessage,
+    hoverVisibility,
   };
+
+  const HoverMessage = () =>
+    hoverVisibility && !!hoverMessage && isHovering && <div className={css(hoverContainer)}>{hoverMessage}</div>;
 
   if (!link)
     return (
-      <Wrapper data-test-id='pie-chart-wrapper' className={css(pieChartWrapper)}>
-        <Content {...props} />
-      </Wrapper>
+      <div data-test-id='pie-chart-wrapper' className={css(wrapper)}>
+        <Wrapper
+          className={css(pieChartWrapper)}
+          onMouseEnter={() => setIsHovering(true)}
+          onMouseLeave={() => setIsHovering(false)}
+        >
+          <Content {...props} />
+          {HoverMessage()}
+        </Wrapper>
+      </div>
     );
 
   return (
@@ -40,8 +56,11 @@ const PieChart: FC<PieChartProps> = ({
         ...params,
       })}
       className={css(pieChartWrapper)}
+      onMouseEnter={() => setIsHovering(true)}
+      onMouseLeave={() => setIsHovering(false)}
     >
       <Content {...props} />
+      {HoverMessage()}
     </Link>
   );
 };
@@ -52,6 +71,29 @@ const pieChartWrapper: Rule = ({ theme }) => ({
   borderRadius: '10px',
   padding: '24px',
   width: '100%',
+  position: 'relative',
 });
+
+const hoverContainer: Rule = ({ theme }) => ({
+  position: 'absolute',
+  bottom: '-8px',
+  left: '50%',
+  transform: 'translate(-50%, 100%)',
+  zIndex: '2',
+  background: theme.colors.link,
+  padding: '16px',
+  width: '294px',
+  maxWidth: '294px',
+  color: theme.colors.white,
+  borderRadius: theme.spacing.s2_5,
+});
+
+const wrapper: Rule = ({ theme }) => {
+  return {
+    fontSize: theme.font.fixed.f16.fontSize,
+    lineHeight: theme.font.fixed.f16.lineHeight,
+    letterSpacing: '0px',
+  };
+};
 
 export default PieChart;

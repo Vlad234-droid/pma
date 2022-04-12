@@ -1,5 +1,5 @@
 import React, { FC, useState, useEffect, useRef } from 'react';
-import { useStyle, CreateRule, colors } from '@pma/dex-wrapper';
+import { useStyle, CreateRule } from '@pma/dex-wrapper';
 import mergeRefs from 'react-merge-refs';
 
 import { TextareaField } from '../types';
@@ -63,15 +63,16 @@ const textAriaStyle: CreateRule<{ isValid?: boolean }> =
       width: '100%',
       minHeight: '40px',
       // @ts-ignore
-      border: `1px solid ${isValid ? theme.colors.lightGray : theme.colors.error}`,
+      border: `2px solid ${isValid ? theme.colors.lightGray : theme.colors.error}`,
       borderRadius: '5px',
       fontSize: '16px',
       lineHeight: '20px',
+      letterSpacing: '0px',
       padding: '10px 40px 10px 16px',
       resize: 'vertical',
       ':focus': {
         outline: 'none !important',
-        border: `1px solid ${theme.colors.tescoBlue}`,
+        border: `2px solid ${theme.colors.tescoBlue}`,
       },
     };
   };

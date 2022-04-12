@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { CreateRule, Rule, useBreakpoints, useStyle } from '@pma/dex-wrapper';
+import { CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
 import { Trans } from 'components/Translation';
 import { Radio } from 'components/Form';
 import { FeedbackStatus } from 'config/enum';
@@ -14,9 +14,9 @@ type Props = {
 };
 
 const RadioBtns: FC<Props> = ({ checkedRadio, onCheck, handleBtnClick }) => {
-  const { css } = useStyle();
-  const [, isBreakpoint] = useBreakpoints();
-  const medium = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
+  const { css, matchMedia } = useStyle();
+  const medium = matchMedia({ xSmall: true, small: true, medium: true }) || false;
+
   return (
     <>
       <IconButtonDefault graphic='arrowRight' onClick={handleBtnClick} />

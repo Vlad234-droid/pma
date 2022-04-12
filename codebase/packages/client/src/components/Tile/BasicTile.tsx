@@ -1,6 +1,6 @@
 import React, { FC, HTMLProps, ReactElement } from 'react';
 
-import { CreateRule, Rule, useBreakpoints, useStyle } from '@pma/dex-wrapper';
+import { CreateRule, Rule, useMedia, useStyle } from '@pma/dex-wrapper';
 import { TileWrapper } from './TileWrapper';
 import { Icon } from '../Icon';
 
@@ -35,6 +35,8 @@ export const BasicTile: FC<Props> = ({
   target = '_self',
 }) => {
   const { css } = useStyle();
+  const { matchMedia } = useMedia();
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
 
   const handleLinkClick = () => {
     if (!link) {
@@ -58,15 +60,15 @@ export const BasicTile: FC<Props> = ({
         {img && (
           <div className={css(imgCustomStyle)}>
             {typeof img === 'string' && (
-              <div className={css(imageWrapperRule, loadingRule)}>
-                <img className={css(imageStyle)} src={img} />
+              <div className={css(imageWrapperRule({ mobileScreen }), loadingRule)}>
+                <img className={css(imageStyle({ mobileScreen }))} src={img} />
               </div>
             )}
             {typeof img === 'object' && img}
           </div>
         )}
         <div className={css(bodyStyle)}>
-          <div className={css(titleStyle)}>{title}</div>
+          <div className={css(titleStyle({ mobileScreen }))}>{title}</div>
           {description && <div className={css(descriptionStyle)}>{description}</div>}
           {children}
           {event && (
@@ -87,8 +89,9 @@ const bodyStyle = {
 };
 
 const wrapperStyle: CreateRule<{ icon: boolean; isLink: boolean }> = ({ icon, isLink }) => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+  const { matchMedia } = useMedia();
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
+
   return {
     ...(mobileScreen
       ? {
@@ -102,50 +105,41 @@ const wrapperStyle: CreateRule<{ icon: boolean; isLink: boolean }> = ({ icon, is
   };
 };
 
-const imageWrapperRule: Rule = () => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
-
-  return {
-    height: '100%',
-    position: 'relative',
-    minWidth: mobileScreen ? '100px' : 'auto',
-    paddingTop: mobileScreen ? 'auto' : '66%', // 6:4
-  };
-};
+const imageWrapperRule: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => ({
+  height: '100%',
+  position: 'relative',
+  minWidth: mobileScreen ? '100px' : 'auto',
+  paddingTop: mobileScreen ? 'auto' : '66%', // 6:4
+});
 
 const loadingRule: Rule = {
   animation: 'skeleton-loading 1s linear infinite alternate',
 };
 
-const imageStyle: Rule = () => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
-  return {
-    objectFit: 'cover',
-    width: '100%',
-    minWidth: mobileScreen ? '100px' : 'auto',
-    height: mobileScreen ? '100%' : 'auto',
-    position: 'absolute',
-    top: 0,
-  };
-};
+const imageStyle: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => ({
+  objectFit: 'cover',
+  width: '100%',
+  minWidth: mobileScreen ? '100px' : 'auto',
+  height: mobileScreen ? '100%' : 'auto',
+  position: 'absolute',
+  top: 0,
+});
 
-const titleStyle: Rule = ({ theme }) => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
-  return {
+const titleStyle: CreateRule<{ mobileScreen: boolean }> =
+  ({ mobileScreen }) =>
+  ({ theme }) => ({
     color: theme.colors.link,
     fontSize: mobileScreen ? '16px' : '18px',
     lineHeight: mobileScreen ? '20px' : '22px',
+    letterSpacing: '0px',
     fontWeight: theme.font.weight.bold,
     paddingBottom: '10px',
-  };
-};
+  });
 
 const descriptionStyle = {
   fontSize: '14px',
   lineHeight: '18px',
+  letterSpacing: '0px',
   ':not(:last-child)': {
     paddingBottom: '20px',
   },

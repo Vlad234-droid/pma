@@ -55,6 +55,7 @@ const filterLabelStyles: Rule = ({ theme }) => ({
   marginLeft: '11px',
   fontSize: `${theme.font.fixed.f16.fontSize}`,
   lineHeight: `${theme.font.fixed.f16.lineHeight}`,
+  letterSpacing: '0px',
 });
 
 export default ViewFilters;

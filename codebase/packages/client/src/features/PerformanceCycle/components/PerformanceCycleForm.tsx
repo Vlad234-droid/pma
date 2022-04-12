@@ -10,17 +10,14 @@ import {
   PerformanceCycleActions,
   processTemplateByUuidSelector,
   performanceCycleMappingKeys,
-  configEntriesMetaSelector,
 } from '@pma/store';
 import useDispatch from 'hooks/useDispatch';
-import { addYearToDateString, formatDateTime } from 'utils';
 import { TileWrapper } from 'components/Tile';
 import { Input, Item, Field } from 'components/Form';
 import { DurationPicker } from 'components/Form/DurationPicker';
 import Select from 'components/Form/Select';
 import Datepicker from 'components/Datepicker';
 import { useTranslation } from 'components/Translation';
-import Spinner from 'components/Spinner';
 import TemplatesModal from './TemplatesModal';
 import FormsViewer from './FormsViwer';
 import { createPMCycleSchema } from './schema';
@@ -41,8 +38,6 @@ const PerformanceCycleForm: FC<Props> = ({ onSubmit, defaultValues }) => {
     resolver: yupResolver<Yup.AnyObjectSchema>(createPMCycleSchema),
     defaultValues,
   });
-
-  const { loaded, loading } = useSelector(configEntriesMetaSelector) || {};
 
   const {
     getValues,
@@ -87,10 +82,6 @@ const PerformanceCycleForm: FC<Props> = ({ onSubmit, defaultValues }) => {
   useEffect(() => {
     if (template?.uuid) dispatch(ProcessTemplateActions.getProcessTemplateMetadata({ fileUuid: template?.uuid }));
   }, [template?.uuid]);
-
-  if (loading || !loaded) {
-    return <Spinner fullHeight />;
-  }
 
   useEffect(() => {
     dispatch(PerformanceCycleActions.getPerformanceCycleMappingKeys());
@@ -326,7 +317,7 @@ const PerformanceCycleForm: FC<Props> = ({ onSubmit, defaultValues }) => {
 // @ts-ignore
 const btnStyle: Rule = {
   fontSize: '16px',
-  border: '1px solid rgb(0, 83, 159)',
+  border: '2px solid rgb(0, 83, 159)',
   minWidth: '200px',
   marginLeft: '8px',
 };

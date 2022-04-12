@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { colleagueUUIDSelector, FeedbackActions as FeedbackActionsGet, UserActions } from '@pma/store';
-import { CreateRule, Modal, Rule, Theme, useBreakpoints, useStyle } from '@pma/dex-wrapper';
+import { CreateRule, Modal, Rule, Theme, useStyle } from '@pma/dex-wrapper';
 import { Trans, useTranslation } from 'components/Translation';
 import { Item, Select } from 'components/Form';
 import { IconButton } from 'components/IconButton';
@@ -15,12 +15,11 @@ import { Info360Modal } from './Modals';
 export const FEEDBACK_ACTIONS = 'feedback_actions';
 
 const FeedbackActions: FC = () => {
-  const { css, theme } = useStyle();
+  const { css, theme, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const { user } = useAuthContainer();
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
   const profileAttr = user?.data?.profileAttributes;
   const treatmentValue: string = getSelectedTreatmentValue(profileAttr);
 
@@ -141,12 +140,13 @@ const FeedbackActions: FC = () => {
   );
 };
 
-const voiceStyle: Rule = {
-  fontWeight: 'bold',
-  fontSize: '20px',
-  lineHeight: '24px',
+const voiceStyle: Rule = ({ theme }) => ({
+  fontWeight: theme.font.weight.bold,
+  fontSize: theme.font.fixed.f20.fontSize,
+  lineHeight: theme.font.fixed.f20.lineHeight,
+  letterSpacing: '0px',
   maxWidth: '450px',
-};
+});
 
 const iconTextStyle: Rule = {
   display: 'flex',
@@ -154,11 +154,12 @@ const iconTextStyle: Rule = {
   marginBottom: '16px',
 };
 
-const inTheMomentStyle: Rule = {
-  fontWeight: 'bold',
-  fontSize: '20px',
-  lineHeight: '24px',
-};
+const inTheMomentStyle: Rule = ({ theme }) => ({
+  fontWeight: theme.font.weight.bold,
+  fontSize: theme.font.fixed.f20.fontSize,
+  lineHeight: theme.font.fixed.f20.lineHeight,
+  letterSpacing: '0px',
+});
 
 const CenterFlexStyle: Rule = {
   display: 'flex',
@@ -175,7 +176,7 @@ const inMomentStyle: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) 
       alignItems: 'center',
     };
   }
-  return { display: 'flex', justifyContent: 'space-between', alignItems: 'center' };
+  return { letterSpacing: '0px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' };
 };
 
 const cardBlockStyle: Rule = () => {
@@ -249,16 +250,17 @@ const modalTitleOptionStyle: CreateRule<{ theme: Theme; mobileScreen: boolean }>
     textAlign: 'center',
     left: 0,
     right: 0,
-    color: 'white',
+    color: theme.colors.white,
+    letterSpacing: '0px',
     fontWeight: theme.font.weight.bold,
     ...(mobileScreen
       ? {
-          fontSize: '20px',
-          lineHeight: '24px',
+          fontSize: theme.font.fixed.f20.fontSize,
+          lineHeight: theme.font.fixed.f20.lineHeight,
         }
       : {
-          fontSize: '24px',
-          lineHeight: '28px',
+          fontSize: theme.font.fixed.f20.fontSize,
+          lineHeight: theme.font.fixed.f24.lineHeight,
         }),
   };
 };

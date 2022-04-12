@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { useStyle, Rule, Button, theme, useBreakpoints } from '@pma/dex-wrapper';
+import { useStyle, Rule, CreateRule, Button, theme } from '@pma/dex-wrapper';
 import successIcon from 'images/success.jpg';
 import deleteIcon from 'images/delete.png';
 import { useTranslation } from 'components/Translation';
@@ -12,7 +12,8 @@ export type Props = {
 };
 
 const TipsFormModal: FC<Props> = ({ action, negativeBtnAction, positiveBtnAction, tipTitle }) => {
-  const { css } = useStyle();
+  const { css, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
   const { t } = useTranslation();
 
   const options = {
@@ -64,7 +65,7 @@ const TipsFormModal: FC<Props> = ({ action, negativeBtnAction, positiveBtnAction
   };
 
   return (
-    <div className={css(TipsFormModalStyle)}>
+    <div className={css(TipsFormModalStyle({ mobileScreen }))}>
       {options[action]['showImage'] &&
         (action === 'successDelete' || action === 'confirmDelete' ? (
           <img src={deleteIcon} alt='delete' />
@@ -73,12 +74,12 @@ const TipsFormModal: FC<Props> = ({ action, negativeBtnAction, positiveBtnAction
         ))}
       <div className={css(modalTitle)}>{options[action]['title']}</div>
       <div className={css(modalBody)}>{options[action]['body']}</div>
-      <div className={css(formControlBtnsWrap)}>
+      <div className={css(formControlBtnsWrap({ mobileScreen }))}>
         {options[action]['negativeBtnText'] && (
           <Button
             onPress={negativeBtnAction}
             mode='inverse'
-            styles={[formControlBtn, { border: `1px solid ${theme.colors.tescoBlue}` }]}
+            styles={[formControlBtn, { border: `2px solid ${theme.colors.tescoBlue}` }]}
           >
             {options[action]['negativeBtnText']}
           </Button>
@@ -91,32 +92,28 @@ const TipsFormModal: FC<Props> = ({ action, negativeBtnAction, positiveBtnAction
   );
 };
 
-const TipsFormModalStyle: Rule = () => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.medium || isBreakpoint.small || isBreakpoint.xSmall;
-  return {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    background: '#fff',
-    width: '100%',
-    height: '100%',
-    zIndex: 2,
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    textAlign: 'center',
-    ...(mobileScreen
-      ? {
-          padding: '60px 15px 100px',
-          borderRadius: '24px',
-        }
-      : {
-          padding: '90px 40px 100px',
-          borderRadius: '32px',
-        }),
-  };
-};
+const TipsFormModalStyle: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => ({
+  position: 'absolute',
+  top: 0,
+  left: 0,
+  background: '#fff',
+  width: '100%',
+  height: '100%',
+  zIndex: 2,
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  textAlign: 'center',
+  ...(mobileScreen
+    ? {
+        padding: '60px 15px 100px',
+        borderRadius: '24px',
+      }
+    : {
+        padding: '90px 40px 100px',
+        borderRadius: '32px',
+      }),
+});
 
 const modalTitle: Rule = () => {
   return {
@@ -135,31 +132,27 @@ const modalBody: Rule = () => {
   };
 };
 
-const formControlBtnsWrap: Rule = ({ theme }) => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.medium || isBreakpoint.small || isBreakpoint.xSmall;
-  return {
-    display: 'flex',
-    alignItems: 'center',
-    height: '100px',
-    position: 'absolute',
-    justifyContent: 'center',
-    bottom: 0,
-    left: 0,
-    width: '100%',
-    background: '#fff',
-    // @ts-ignore
-    borderTop: `1px solid ${theme.colors.lightGray}`,
-    ...(mobileScreen
-      ? {
-          padding: '0 10px',
-        }
-      : {
-          padding: '0 40px',
-          borderRadius: '0 0 32px 32px',
-        }),
-  };
-};
+const formControlBtnsWrap: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  height: '100px',
+  position: 'absolute',
+  justifyContent: 'center',
+  bottom: 0,
+  left: 0,
+  width: '100%',
+  background: '#fff',
+  // @ts-ignore
+  borderTop: `2px solid ${theme.colors.lightGray}`,
+  ...(mobileScreen
+    ? {
+        padding: '0 10px',
+      }
+    : {
+        padding: '0 40px',
+        borderRadius: '0 0 32px 32px',
+      }),
+});
 
 const formControlBtn: Rule = () => {
   return {

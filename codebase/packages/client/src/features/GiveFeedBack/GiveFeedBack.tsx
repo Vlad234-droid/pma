@@ -1,10 +1,10 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { CreateRule, Rule, useBreakpoints, useStyle } from '@pma/dex-wrapper';
+import { CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
 import { colleagueUUIDSelector, FeedbackActions, getGiveFeedbacksSelector } from '@pma/store';
 import debounce from 'lodash.debounce';
-import { paramsReplacer } from 'utils';
+import { buildSearchFeedbacksQuery, paramsReplacer } from 'utils';
 import { Page } from 'pages';
 import { FilterOption } from 'features/Shared';
 import { FeedbackStatus, FEEDBACK_STATUS_IN } from 'config/enum';
@@ -26,10 +26,9 @@ const initialFilters: Filter = {
 };
 
 const GiveFeedBack: FC = () => {
-  const { css } = useStyle();
+  const { css, matchMedia } = useStyle();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [, isBreakpoint] = useBreakpoints();
 
   // filter
   const [focus, setFocus] = useState(false);
@@ -38,8 +37,8 @@ const GiveFeedBack: FC = () => {
 
   const hasActiveFilter = Object.values(filter).some((f) => f);
 
-  const medium = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
-  const small = isBreakpoint.small || isBreakpoint.xSmall;
+  const medium = matchMedia({ xSmall: true, small: true, medium: true }) || false;
+  const small = matchMedia({ xSmall: true, small: true }) || false;
 
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const [status, setCheckedStatus] = useState(FeedbackStatus.DRAFT);
@@ -54,7 +53,7 @@ const GiveFeedBack: FC = () => {
         FeedbackActions.getGiveFeedback({
           _limit: '300',
           'colleague-uuid': colleagueUuid,
-          ...(filter.search.length > 2 && { _search: filter.search }),
+          ...(filter.search.length > 2 && buildSearchFeedbacksQuery(filter.search)),
           _sort: getSortString(filter),
           status_in: [FEEDBACK_STATUS_IN.DRAFT, FEEDBACK_STATUS_IN.SUBMITTED],
         }),

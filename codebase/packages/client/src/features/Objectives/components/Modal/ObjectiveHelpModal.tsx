@@ -1,14 +1,13 @@
 import React, { FC } from 'react';
-import { useStyle, useBreakpoints, CreateRule, Rule } from '@pma/dex-wrapper';
+import { useStyle, CreateRule, Rule } from '@pma/dex-wrapper';
 import { Trans } from 'components/Translation';
 import { VideoPlayer, VideoId } from 'features/VideoPlayer';
 
 export const TEST_ID = 'objective-help-modal';
 
 const ObjectiveHelpModal: FC = () => {
-  const { css } = useStyle();
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+  const { css, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
 
   return (
     <div data-test-id={TEST_ID} className={css(containerStyle)}>
@@ -71,12 +70,14 @@ const wrapperStyle: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) =
 const titleStyle: Rule = ({ theme }) => ({
   fontSize: '24px',
   lineHeight: '28px',
+  letterSpacing: '0px',
   fontWeight: theme.font.weight.bold,
   paddingBottom: '32px',
 });
 
 const subTitleStyle: Rule = ({ theme }) => ({
   ...theme.font.fixed.f20,
+  letterSpacing: '0px',
   fontWeight: theme.font.weight.bold,
   paddingTop: '32px',
   paddingBottom: '16px',
@@ -84,6 +85,7 @@ const subTitleStyle: Rule = ({ theme }) => ({
 
 const descriptionStyle: Rule = ({ theme }) => ({
   ...theme.font.fixed.f16,
+  letterSpacing: '0px',
 });
 
 const videoPlayerWrapperStyle: Rule = {

@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { Button, Icon, ModalWithHeader, Rule, theme, useBreakpoints, useStyle } from '@pma/dex-wrapper';
+import { Button, Icon, ModalWithHeader, CreateRule, Rule, theme, useStyle } from '@pma/dex-wrapper';
 import { useForm } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -10,12 +10,15 @@ import { getCurrentYear } from 'utils/date';
 import { Trans, useTranslation } from 'components/Translation';
 import { downloadReportStatistics } from '../utils';
 
+export const DOWNLOAD_WRAPPER = 'download-wrapper';
+
 type ModalProps = {
   onClose: () => void;
 };
 
-const DonwloadReportModal: FC<ModalProps> = ({ onClose }) => {
-  const { css } = useStyle();
+const DownloadReportModal: FC<ModalProps> = ({ onClose }) => {
+  const { css, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
   const { t } = useTranslation();
   const methods = useForm({
     mode: 'onChange',
@@ -32,10 +35,10 @@ const DonwloadReportModal: FC<ModalProps> = ({ onClose }) => {
 
   const [selectedCheckboxes, setSelectedCheckboxes] = useState(checkboxes(t));
 
-  const [showSuccessModal, setShowSuccesModal] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const handleDownloadReport = () => {
-    setShowSuccesModal(true);
+    setShowSuccessModal(true);
     downloadReportStatistics({ year: values?.year, topics: getRequestParams(selectedCheckboxes) });
   };
 
@@ -54,7 +57,6 @@ const DonwloadReportModal: FC<ModalProps> = ({ onClose }) => {
     if (isValid && selectedCheckboxes.some((item) => item['isChecked'])) return false;
     return true;
   };
-
   return (
     <ModalWithHeader
       modalPosition='middle'
@@ -65,7 +67,7 @@ const DonwloadReportModal: FC<ModalProps> = ({ onClose }) => {
         onClose: onClose,
       }}
     >
-      <h3 className={css(modalTitleStyle)}>
+      <h3 className={css(modalTitleStyle({ mobileScreen }))} data-test-id={DOWNLOAD_WRAPPER}>
         <Trans i18nKey='topics_to_download_into_excel_report'>
           Choose which topics you’d like to download into an excel report
         </Trans>
@@ -73,7 +75,7 @@ const DonwloadReportModal: FC<ModalProps> = ({ onClose }) => {
       <div className={css(modalInnerWarp)}>
         <div className={css({ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' })}>
           {selectedCheckboxes.map((item) => (
-            <label key={item.id} className={css(checkboxItemStyle)}>
+            <label key={item.id} className={css(checkboxItemStyle)} data-test-id={item.id}>
               <Checkbox checked={item.isChecked} onChange={() => handleCheck(item.id)} />
               <span className={css({ marginLeft: '15px' })}>{item.label}</span>
             </label>
@@ -94,17 +96,16 @@ const DonwloadReportModal: FC<ModalProps> = ({ onClose }) => {
 
         <div className={css(textBlock, { fontWeight: 700 })}>Guidance for colleagues</div>
         <div className={css(textBlock, { marginBottom: '30px' })}>
-          Vitae morbi ullamcorper venenatis ut. Mi auctor bibendum sed ut tempus senectus. Ullamcorper cursus purus
-          lacus elementum nulla in lacus nunc. Ultrices urna magna viverra a, amet eget lorem quam. Id leo vel arcu
-          nullam proin.
+          This data is confidential. If you need to download this data, you must ensure you do not share with anyone
+          else and that you store the data securely with a password.
         </div>
       </div>
 
-      <div className={css(formButtonsWrap)}>
+      <div className={css(formButtonsWrap({ mobileScreen }))}>
         <Button
           onPress={onClose}
           mode='inverse'
-          styles={[formButton, { border: `1px solid ${theme.colors.tescoBlue}` }]}
+          styles={[formButton, { border: `2px solid ${theme.colors.tescoBlue}` }]}
         >
           <Trans i18nKey='cancel'>Cancel</Trans>
         </Button>
@@ -114,7 +115,7 @@ const DonwloadReportModal: FC<ModalProps> = ({ onClose }) => {
       </div>
 
       {showSuccessModal && (
-        <div className={css(successModalWrap)}>
+        <div className={css(successModalWrap)} data-test-id='success-wrapper'>
           <img src={success} alt='success' />
           <div className={css(successModalTitle)}>Done!</div>
           <div className={css(successModalText)}>You have downloaded the report onto your device.</div>
@@ -127,9 +128,7 @@ const DonwloadReportModal: FC<ModalProps> = ({ onClose }) => {
   );
 };
 
-const modalWrapperStyle: Rule = () => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
+const modalWrapperStyle: Rule = (mobileScreen) => {
   return {
     ...(mobileScreen
       ? {
@@ -146,9 +145,7 @@ const modalWrapperStyle: Rule = () => {
   };
 };
 
-const modalInnerWarp: Rule = () => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
+const modalInnerWarp: Rule = (mobileScreen) => {
   return {
     width: '100%',
     overflowY: 'scroll',
@@ -175,10 +172,9 @@ const checkboxItemStyle: Rule = () => {
   };
 };
 
-const modalTitleStyle: Rule = ({ theme }) => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
-  return {
+const modalTitleStyle: CreateRule<{ mobileScreen: boolean }> =
+  ({ mobileScreen }) =>
+  ({ theme }) => ({
     color: theme.colors.tescoBlue,
     ...(mobileScreen
       ? {
@@ -193,31 +189,27 @@ const modalTitleStyle: Rule = ({ theme }) => {
           padding: '40px',
           margin: 0,
         }),
-  };
-};
+  });
 
-const formButtonsWrap: Rule = ({ theme }) => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
-  return {
+const formButtonsWrap: CreateRule<{ mobileScreen: boolean }> =
+  ({ mobileScreen }) =>
+  ({ theme }) => ({
     display: 'flex',
     position: 'absolute',
     bottom: 0,
     left: 0,
     width: '100%',
     // @ts-ignore
-    borderTop: `1px solid ${theme.colors.lightGray}`,
+    background: theme.colors.white,
+    borderTop: `1px solid #dedede`,
     ...(mobileScreen
       ? {
-          background: theme.colors.white,
           padding: '20px 10px',
         }
       : {
-          background: 'none',
           padding: '40px 30px',
         }),
-  };
-};
+  });
 
 const formButton: Rule = () => {
   return {
@@ -279,4 +271,4 @@ const successModalBtn: Rule = () => {
   };
 };
 
-export default DonwloadReportModal;
+export default DownloadReportModal;

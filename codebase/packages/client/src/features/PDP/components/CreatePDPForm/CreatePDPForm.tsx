@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { metaPDPSelector } from '@pma/store';
 import { useSelector } from 'react-redux';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Button, CreateRule, Rule, theme, useBreakpoints, useStyle } from '@pma/dex-wrapper';
+import { Button, CreateRule, Rule, theme, useStyle } from '@pma/dex-wrapper';
 import { Item, Textarea, Field, Attention } from 'components/Form';
 import { GenericItemField } from 'components/GenericForm';
 import { createYupSchema } from 'utils/yup';
@@ -50,10 +50,9 @@ const CreatePDPForm: FC<Props> = ({
   setCurrentTab,
   onSubmit,
 }) => {
-  const { css } = useStyle();
+  const { css, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
   const { t } = useTranslation();
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
   const { loaded: schemaLoaded = false } = useSelector(metaPDPSelector) || false;
   const formElementsFilledEmpty = formElements.reduce((acc, current) => {
     acc[current.key] = '';
@@ -83,28 +82,31 @@ const CreatePDPForm: FC<Props> = ({
   }, []);
 
   useEffect(() => {
-    pdpList.some((el, idx) => {
-      if (el.uuid == currentGoal.uuid || '') {
-        setCurrentTab(idx);
-        return true;
-      } else {
-        setCurrentTab(pdpList?.length - 1);
-      }
-    });
+    setCurrentTab(pdpList?.length - 1);
+
+    if (pdpList.length) {
+      pdpList.some((el, idx) => {
+        if (el.uuid == currentGoal.uuid || '') {
+          setCurrentTab(idx);
+          return true;
+        }
+      });
+    }
 
     if (Object.keys(currentGoal).length > 0) {
       reset(currentGoal?.properties?.mapJson);
     } else {
       reset(formElementsFilledEmpty);
     }
-  }, [currentGoal]);
+  }, [pdpList.length, currentGoal, currentTab]);
+
+  const modifiedNumber = Math.max(...pdpList.map((el) => el.number)) + 1;
 
   const requestData = [
     {
       uuid: currentUUID || Object.keys(currentGoal).length > 0 ? currentGoal?.uuid : uuidv4(),
       colleagueUuid: colleagueUuid,
-      number:
-        pdpList && (currentUUID || Object.keys(currentGoal).length > 0) ? currentGoal?.number : pdpList?.length + 1,
+      number: pdpList && (currentUUID || Object.keys(currentGoal).length > 0) ? currentGoal?.number : modifiedNumber,
       properties: {
         mapJson: formValues,
       },
@@ -287,7 +289,7 @@ const buttonWhiteStyle: CreateRule<{ theme; mobileScreen; formState; displaySave
   fontWeight: theme.font.weight.bold,
   margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
   background: !displaySaveBtn ? theme.colors.tescoBlue : theme.colors.white,
-  border: `${theme.border.width.b1} solid ${theme.colors.tescoBlue}`,
+  border: `${theme.border.width.b2} solid ${theme.colors.tescoBlue}`,
   color: !displaySaveBtn ? `${theme.colors.white}` : `${theme.colors.tescoBlue}`,
   width: mobileScreen || !displaySaveBtn ? '100%' : '50%',
   whiteSpace: 'nowrap',
@@ -310,7 +312,7 @@ const footerWrapperStyle: Rule = ({ theme }) => ({
   left: theme.spacing.s0,
   right: theme.spacing.s0,
   // @ts-ignore
-  borderTop: `${theme.border.width.b1} solid ${theme.colors.lightGray}`,
+  borderTop: `${theme.border.width.b2} solid ${theme.colors.lightGray}`,
 });
 
 const footerContainerStyle: Rule = ({ theme }) => ({
@@ -320,10 +322,6 @@ const footerContainerStyle: Rule = ({ theme }) => ({
   width: '100%',
   background: `${theme.colors.white}`,
 });
-
-const imgArrow = {
-  marginLeft: '15px',
-} as Rule;
 
 const createBtn: Rule = {
   justifyContent: 'center',

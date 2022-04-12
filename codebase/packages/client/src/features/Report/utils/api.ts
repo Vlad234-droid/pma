@@ -1,7 +1,7 @@
 import { BASE_URL_API } from 'config/constants';
 import { Status } from 'config/enum';
 import { Variant } from 'features/Toast';
-import { getCurrentYear } from 'utils/date';
+import { getCurrentYear, formatDateStringFromISO } from 'utils/date';
 
 async function getData(url) {
   const response = await fetch(
@@ -28,7 +28,10 @@ export const downloadCsvFile = async (t, addToast) => {
     return resp.blob().then((blob) => {
       const a = document.createElement('a');
       a.href = window.URL.createObjectURL(blob);
-      a.download = 'ObjectivesReport.xlsx';
+      a.download = `ObjectivesReport.xlsx (${formatDateStringFromISO(
+        new Date().toISOString(),
+        'dd LLL yyyy HH:mm:ms',
+      )})`;
       document.body.appendChild(a);
       a.click();
       a.remove();
@@ -48,7 +51,10 @@ export const downloadReportStatistics = async (queryParams) => {
     resp.blob().then((blob) => {
       const a = document.createElement('a');
       a.href = window.URL.createObjectURL(blob);
-      a.download = 'Statistics Report.xlsx';
+      a.download = `Statistics Report.xlsx (${formatDateStringFromISO(
+        new Date().toISOString(),
+        'dd LLL yyyy HH:mm:ms',
+      )})`;
       document.body.appendChild(a);
       a.click();
       a.remove();

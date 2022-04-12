@@ -48,7 +48,7 @@ const Search: FC<Props> = ({ focus, onFocus, iconStyles, onSearch, value }) => {
             ...(focus ? { borderRadius: '50px' } : { transitionDelay: '.3s' }),
             background: '#F6F6F6',
             height: '38px',
-            border: '1px solid rgb(0, 83, 159)',
+            border: '2px solid rgb(0, 83, 159)',
             cursor: 'pointer',
             ...(!focus && { borderRadius: '50%', padding: '0px' }),
           }}

@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Button, Rule, useBreakpoints, useStyle } from '@pma/dex-wrapper';
+import { Button, Rule, useStyle } from '@pma/dex-wrapper';
 import { IconButton, Position } from 'components/IconButton';
 import { useNavigate } from 'react-router-dom';
 import { Trans } from 'components/Translation';
@@ -11,9 +11,8 @@ type Props = {
 };
 
 const ActionButtons: FC<Props> = ({ onSubmit, isValid }) => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
-  const { css, theme } = useStyle();
+  const { css, theme, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const navigate = useNavigate();
   return (
     <>
@@ -51,7 +50,7 @@ const ActionButtons: FC<Props> = ({ onSubmit, isValid }) => {
             left: theme.spacing.s0,
             right: theme.spacing.s0,
             //@ts-ignore
-            borderTop: `${theme.border.width.b1} solid ${theme.colors.lightGray}`,
+            borderTop: `${theme.border.width.b2} solid ${theme.colors.lightGray}`,
           })}
         >
           <div
@@ -69,7 +68,7 @@ const ActionButtons: FC<Props> = ({ onSubmit, isValid }) => {
                   width: '49%',
                   margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
                   background: theme.colors.white,
-                  border: `${theme.border.width.b1} solid ${theme.colors.tescoBlue}`,
+                  border: `${theme.border.width.b2} solid ${theme.colors.tescoBlue}`,
                   color: `${theme.colors.tescoBlue}`,
                 },
               ]}

@@ -1,7 +1,7 @@
 import React, { FC, Fragment, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { Button, Rule, CreateRule, Theme, useBreakpoints, useStyle } from '@pma/dex-wrapper';
+import { Button, Rule, CreateRule, Theme, useStyle } from '@pma/dex-wrapper';
 import { tipsActions } from '@pma/store';
 import { Page } from 'pages';
 import { buildPath } from 'features/Routes/utils';
@@ -22,11 +22,10 @@ export const VIEW_HISTORY_BTN = 'view-history-btn';
 export const PUSH_TIP_BTN = 'push-tip-btn';
 
 const TipsCard: FC<TipsCardProps> = ({ card }) => {
-  const { css, theme } = useStyle();
+  const { css, theme, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
 
   const handleEditTip = () => {
     const pathname = paramsReplacer(buildPath(`${Page.EDIT_TIP}`), { ':tipUuid': card.uuid });
@@ -267,7 +266,7 @@ const cardButton: Rule = ({ theme }) => {
     lineHeight: theme.font.fixed.f14.lineHeight,
     padding: '7px 16px',
     height: 'auto',
-    border: `1px solid ${theme.colors.tescoBlue}`,
+    border: `2px solid ${theme.colors.tescoBlue}`,
     marginLeft: '10px',
     fontWeight: theme.font.weight.bold,
   };

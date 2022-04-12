@@ -1,7 +1,7 @@
 import React, { FC, HTMLProps } from 'react';
 import { Trans } from 'components/Translation';
 
-import { useBreakpoints, useStyle, CreateRule, Modal, Button, Rule } from '@pma/dex-wrapper';
+import { useStyle, CreateRule, Modal, Button, Rule } from '@pma/dex-wrapper';
 
 export type ConfirmModal = {
   title: string;
@@ -27,9 +27,8 @@ const ConfirmModal: FC<Props> = ({
   children,
   visibleCancelBtn = true,
 }) => {
-  const { css } = useStyle();
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+  const { css, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
 
   return (
     <Modal
@@ -76,7 +75,7 @@ const ConfirmModal: FC<Props> = ({
 
 const cancelBtn: Rule = ({ theme }) => ({
   background: 'white',
-  border: `1px solid ${theme.colors.tescoBlue}`,
+  border: `2px solid ${theme.colors.tescoBlue}`,
   fontSize: '16px',
   lineHeight: '20px',
   fontWeight: 'bold',

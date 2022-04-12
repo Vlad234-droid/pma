@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { useStyle, Rule, CreateRule, Theme } from '@dex-ddl/core';
+import { useStyle, Rule, CreateRule, Theme } from '@pma/dex-wrapper';
 import { useTranslation } from 'components/Translation';
 
 import { PieChartContentProps as Props, View, Obj } from '../../config';
@@ -21,23 +21,29 @@ const PieChartContent: FC<Props> = ({ title, titleId, data, display, percentId }
         </h3>
       )}
       <div data-test-id={TEST_ID} className={css(chartContainer({ display }))}>
-        {chartData.map((item, i) => {
-          const percent = item.percent || 0;
+        {chartData.map((item, i: number) => {
+          const percent = item?.['percent'] || 0;
           return (
-            <div className={css({ display: 'flex', flexDirection: 'column' })} key={i}>
+            <div className={css(chartWrapper)} key={i}>
               <div className={css(progress({ percent, theme, chartData, display }))}>
                 <div className={css(progressValue)} data-test-id={percentId}>
                   {percent}
                   {`${display === View.CHART ? `%` : ''}`}
                 </div>
               </div>
-              {item.title && <h3 className={css(chartTitle)}>{item.title}</h3>}
+              {item['title'] && <h3 className={css(chartTitle)}>{item['title']}</h3>}
             </div>
           );
         })}
       </div>
     </>
   );
+};
+
+const chartWrapper: Rule = {
+  display: 'flex',
+  flexDirection: 'column',
+  position: 'relative',
 };
 
 const chartContainer: CreateRule<{ display: View.CHART | View.QUANTITY }> = ({ display }) => ({
@@ -55,9 +61,10 @@ const chartContainer: CreateRule<{ display: View.CHART | View.QUANTITY }> = ({ d
 
 const titleStyled: CreateRule<{ chartData: Array<Obj>; theme: Theme }> = ({ chartData, theme }) => ({
   fontStyle: 'normal',
-  fontWeight: 'bold',
-  fontSize: '20px',
-  lineHeight: '24px',
+  fontWeight: theme.font.weight.bold,
+  fontSize: theme.font.fixed.f20.fontSize,
+  lineHeight: theme.font.fixed.f20.lineHeight,
+  letterSpacing: '0px',
   color: theme.colors.link,
   marginTop: '0px',
   textAlign: 'center',
@@ -90,18 +97,19 @@ const progressValue: Rule = ({ theme }) => ({
   alignItems: 'center',
   justifyContent: 'center',
   color: theme.colors.link,
-  fontWeight: 'bold',
-  fontSize: '20px',
-  lineHeight: '34px',
+  fontWeight: theme.font.weight.bold,
+  fontSize: theme.font.fixed.f20.fontSize,
+  lineHeight: theme.font.fixed.f28.lineHeight,
+  letterSpacing: '0px',
 });
 
 const chartTitle: Rule = ({ theme }) => ({
   color: theme.colors.base,
-  fontWeight: 'bold',
-  fontSize: '16px',
-  lineHeight: '20px',
   margin: '8px 0px 0px 0px',
   textAlign: 'center',
+  fontWeight: theme.font.weight.bold,
+  fontSize: theme.font.fixed.f16.fontSize,
+  lineHeight: theme.font.fixed.f16.lineHeight,
 });
 
 export default PieChartContent;

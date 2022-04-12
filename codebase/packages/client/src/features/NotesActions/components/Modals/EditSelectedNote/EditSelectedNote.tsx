@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
-import { Button, CreateRule, Rule, Styles, Theme, useBreakpoints, useStyle } from '@pma/dex-wrapper';
+import { Button, CreateRule, Rule, Styles, Theme, useStyle } from '@pma/dex-wrapper';
 import { GenericItemField } from 'components/GenericForm';
 import { Input, Item, Select, Textarea } from 'components/Form';
 import { EditSelectedNoteProps } from './type';
@@ -26,11 +26,10 @@ const EditSelectedNote: FC<EditSelectedNoteProps> = ({
   definePropperEditMode,
   setSelectedFolderDynamic,
 }) => {
-  const { css, theme } = useStyle();
+  const { css, theme, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const dispatch = useDispatch();
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
   const [editMode, setEditMode] = useState<boolean>(false);
   const [confirmModal, setConfirmModal] = useState(false);
   const [successSelectedNoteToEdit, setSuccessSelectedNoteToEdit] = useState(false);
@@ -222,14 +221,14 @@ const blockContainer: CreateRule<{ theme: Theme }> = ({ theme }) => ({
   left: theme.spacing.s0,
   right: theme.spacing.s0,
   // @ts-ignore
-  borderTop: `${theme.border.width.b1} solid ${theme.colors.lightGray}`,
+  borderTop: `${theme.border.width.b2} solid ${theme.colors.lightGray}`,
 });
 const cancelBtnStyle: CreateRule<{ theme: Theme }> = ({ theme }) => ({
   fontWeight: theme.font.weight.bold,
   width: '50%',
   margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
   background: theme.colors.white,
-  border: `${theme.border.width.b1} solid ${theme.colors.tescoBlue}`,
+  border: `${theme.border.width.b2} solid ${theme.colors.tescoBlue}`,
   color: `${theme.colors.tescoBlue}`,
 });
 

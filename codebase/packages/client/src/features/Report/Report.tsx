@@ -1,7 +1,7 @@
 import React, { FC, useState, useCallback } from 'react';
 
 import { getReportMetaSelector } from '@pma/store';
-import { Button, colors, CreateRule, Rule, useBreakpoints, useStyle } from '@pma/dex-wrapper';
+import { Button, colors, CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { IconButton } from 'components/IconButton';
@@ -10,7 +10,7 @@ import { PieChart } from 'components/PieChart';
 import { Select } from 'components/Form';
 import FilterModal from './components/FilterModal';
 import InfoTable from 'components/InfoTable';
-import { DonwloadReportModal } from './Modals';
+import { DownloadReportModal } from './Modals';
 import { Trans, useTranslation } from 'components/Translation';
 import AppliedFilters from './components/AppliedFilters';
 import { getCurrentYear } from 'utils/date';
@@ -30,23 +30,22 @@ export const REPORT_WRAPPER = 'REPORT_WRAPPER';
 
 const Report: FC = () => {
   const query = useQueryString() as Record<string, string>;
-
   const { t } = useTranslation();
   const { addToast } = useToast();
-  const { css } = useStyle();
+  const { css, matchMedia } = useStyle();
+  const small = matchMedia({ xSmall: true, small: true }) || false;
+  const mobileScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
   const dispatch = useDispatch();
   const [focus, setFocus] = useState(false);
   const [showDownloadReportModal, setShowDownloadReportModal] = useState(false);
   const [searchValueFilterOption, setSearchValueFilterOption] = useState('');
   const [filterModal, setFilterModal] = useState(false);
   const [year, setYear] = useState<string>('');
-  // @ts-ignore
   const { loaded } = useSelector(getReportMetaSelector);
 
   const [filterData, setFilterData] = useState<any>(initialValues);
   const [checkedItems, setCheckedItems]: [string[], (T) => void] = useState([]);
   const [isCheckAll, setIsCheckAll]: [string[], (T) => void] = useState([]);
-
   const { colleaguesCount } = useStatisticsReport([...metaStatuses]);
 
   getReportData(query);
@@ -74,8 +73,8 @@ const Report: FC = () => {
   );
 
   return (
-    <div className={css({ margin: '22px 42px 0px 40px' })} data-test-id={REPORT_WRAPPER}>
-      <div className={css(spaceBetween({ quantity }))}>
+    <div className={css({ margin: '22px 42px 30px 40px' })} data-test-id={REPORT_WRAPPER}>
+      <div className={css(spaceBetween({ quantity, mobileScreen }))}>
         {!!getAppliedReport().length && (
           <AppliedFilters
             clearAppliedFilters={clearAppliedFilters}
@@ -145,6 +144,11 @@ const Report: FC = () => {
                 link={Page.TILE_REPORT_STATISTICS}
                 params={getYear()}
                 type={convertToLink(ReportPage.REPORT_SUBMITTED_OBJECTIVES)}
+                hoverVisibility={!small}
+                hoverMessage={t(
+                  'percentage_of_objectives_submitted_by_colleagues',
+                  'Percentage of objectives submitted by colleagues, prior to being reviewed and approved by their line manager.',
+                )}
               />
             </div>
             <div className={css(rightColumn)}>
@@ -155,6 +159,11 @@ const Report: FC = () => {
                 link={Page.TILE_REPORT_STATISTICS}
                 params={getYear()}
                 type={convertToLink(ReportPage.REPORT_APPROVED_OBJECTIVES)}
+                hoverMessage={t(
+                  'percentage_of_objectives_approved_by_colleagues',
+                  'Percentage of objectives submitted by colleagues that have been approved by their line managers.',
+                )}
+                hoverVisibility={!small}
               />
               <div className={css(downloadWrapperStyle)}>
                 <Button
@@ -194,6 +203,11 @@ const Report: FC = () => {
                 link={Page.TILE_REPORT_STATISTICS}
                 params={getYear()}
                 type={convertToLink(ReportPage.REPORT_MID_YEAR_REVIEW)}
+                hoverMessage={t(
+                  'when_a_colleague_has_completed_their_mid_year_review',
+                  'Submitted: When a colleague completes their mid-year review submission prior to approval by a line manager. Approval: After approval by a line manager.',
+                )}
+                hoverVisibility={!small}
               />
             </div>
             <div className={css(rightColumn)}>
@@ -215,6 +229,11 @@ const Report: FC = () => {
                 link={Page.TILE_REPORT_STATISTICS}
                 params={getYear()}
                 type={convertToLink(ReportPage.REPORT_END_YEAR_REVIEW)}
+                hoverMessage={t(
+                  'when_a_colleague_has_completed_their_year_end_review',
+                  'Submitted: When a colleague has completed their year-end review submission prior to approval by a line manager. Approved: After approval by a line manager.',
+                )}
+                hoverVisibility={!small}
               />
             </div>
             <div className={css(rightColumn)}>
@@ -236,6 +255,7 @@ const Report: FC = () => {
                 link={Page.TILE_REPORT_STATISTICS}
                 params={getYear()}
                 type={convertToLink(ReportPage.REPORT_WORK_LEVEL)}
+                hoverVisibility={false}
               />
             </div>
             <div className={css(rightColumn)}>
@@ -246,6 +266,11 @@ const Report: FC = () => {
                 link={Page.TILE_REPORT_STATISTICS}
                 params={getYear()}
                 type={convertToLink(ReportPage.REPORT_NEW_TO_BUSINESS)}
+                hoverMessage={t(
+                  'colleagues_who_have_joined_the_business',
+                  'Colleagues who have joined the business in the last 90 days.',
+                )}
+                hoverVisibility={!small}
               />
             </div>
           </div>
@@ -258,6 +283,11 @@ const Report: FC = () => {
                 link={Page.TILE_REPORT_STATISTICS}
                 params={getYear()}
                 type={convertToLink(ReportPage.REPORT_FEEDBACK)}
+                hoverMessage={t(
+                  'percentage_of_colleagues_who_have_requested_or_given_feedback_this_year',
+                  'Percentage of colleagues who have requested or given feedback this year.  ',
+                )}
+                hoverVisibility={!small}
               />
             </div>
             <div className={css(rightColumn)}>
@@ -274,7 +304,7 @@ const Report: FC = () => {
         </>
       )}
       {showDownloadReportModal && (
-        <DonwloadReportModal
+        <DownloadReportModal
           onClose={() => {
             setShowDownloadReportModal(false);
           }}
@@ -314,7 +344,7 @@ const iconBtnStyle = {
   justifyContent: 'center',
   alignItems: 'center',
   outline: 0,
-  border: `1px solid ${colors.tescoBlue}`,
+  border: `2px solid ${colors.tescoBlue}`,
   borderRadius: '20px',
   cursor: 'pointer',
   position: 'relative',
@@ -331,11 +361,15 @@ const pieChartWrapper: Rule = {
   flexWrap: 'wrap',
   marginTop: '8px',
 };
-const leftColumn: Rule = {
-  display: 'flex',
-  gap: '8px',
-  flex: 4,
-  flexBasis: '400px',
+const leftColumn: Rule = ({ theme }) => {
+  return {
+    display: 'flex',
+    gap: '8px',
+    flex: 4,
+    flexBasis: '400px',
+    fontSize: theme.font.fixed.f16.fontSize,
+    lineHeight: theme.font.fixed.f16.lineHeight,
+  };
 };
 const rightColumn: Rule = {
   display: 'flex',
@@ -353,13 +387,11 @@ const flexCenterStyled: Rule = {
   height: '116px',
 };
 
-const spaceBetween: CreateRule<{ quantity: number }> = ({ quantity }) => {
-  const [, isBreakpoint] = useBreakpoints();
-  const medium = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
+const spaceBetween: CreateRule<{ quantity: number; mobileScreen: boolean }> = ({ quantity, mobileScreen }) => {
   return {
     display: 'flex',
-    flexWrap: medium ? 'wrap' : 'nowrap',
-    ...(medium && { flexBasis: '250px' }),
+    flexWrap: mobileScreen ? 'wrap' : 'nowrap',
+    ...(mobileScreen && { flexBasis: '250px' }),
     justifyContent: quantity ? 'space-between' : 'flex-end',
     alignItems: 'center',
   };

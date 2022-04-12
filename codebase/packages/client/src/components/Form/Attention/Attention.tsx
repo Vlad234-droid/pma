@@ -17,9 +17,11 @@ const Attention: FC<AttentionProps> = ({ customStyle = {} }) => {
   );
 };
 
-const containerStyle: Rule = {
+const containerStyle: Rule = ({ theme }) => ({
   fontStyle: 'italic',
   marginBottom: '10px',
-};
+  ...theme.font.fixed.f16,
+  letterSpacing: '0px',
+});
 
 export default Attention;

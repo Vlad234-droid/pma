@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { CreateRule, Rule, Theme, useBreakpoints, useStyle } from '@pma/dex-wrapper';
+import { CreateRule, Rule, Theme, useStyle } from '@pma/dex-wrapper';
 
 import { IconButton } from 'components/IconButton';
 import { Trans } from 'components/Translation';
@@ -14,9 +14,8 @@ export const DESCRIPTION_1 = 'DESCRIPTION_1';
 export const DESCRIPTION_2 = 'DESCRIPTION_2';
 
 const InfoModal: FC<Props> = ({ closeInfoModal, TEAM }) => {
-  const { css, theme } = useStyle();
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+  const { css, theme, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   return (
     <div className={css(wrapperInfo)} data-test-id={MODAL_WRAPPER}>
       {!TEAM ? (

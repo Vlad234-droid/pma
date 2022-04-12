@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useMemo, useRef } from 'react';
-import { CreateRule, Rule, Styles, theme, useBreakpoints, useStyle, colors } from '@pma/dex-wrapper';
+import { CreateRule, Rule, Styles, theme, useStyle, colors } from '@pma/dex-wrapper';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { downloadPDF, PDPDocument, usePDF } from '@pma/pdf-renderer';
@@ -31,12 +31,11 @@ function getEditOrCreatePDP(pdpSelector: any[]) {
 }
 
 const PersonalDevelopmentPlan: FC = () => {
-  const { css, theme } = useStyle();
+  const { css, theme, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
   const navigate = useNavigate();
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
 
   const pdpSelector = useSelector(schemaMetaPDPSelector)?.goals || [];
   const colleagueUuid = useSelector(colleagueUUIDSelector);
@@ -90,7 +89,7 @@ const PersonalDevelopmentPlan: FC = () => {
     elRef.current?.scrollTo(0, 0);
   };
 
-  const editGoal = (uuid, currentId) => {
+  const editGoal = (uuid) => {
     navigate(buildPath(paramsReplacer(`${Page.UPDATE_PERSONAL_DEVELOPMENT_PLAN}`, { ':uuid': uuid })));
   };
 
@@ -137,11 +136,11 @@ const PersonalDevelopmentPlan: FC = () => {
               <Trans i18nKey='what_is_personal_development_plan'>What is Personal Development Plan?</Trans>
             </div>
             <div className={css(details, detailsWithMargin)}>
-              <Trans i18nKey='pdp_is_a_tailored_plan'>
+              <Trans className={css(paragraph)} i18nKey='pdp_is_a_tailored_plan'>
                 Your Personal Development Plan (PDP) is a tailored plan that helps you reflect on the things you are
                 great at and identify areas you want to improve.
               </Trans>
-              <p>
+              <p className={css(paragraph)}>
                 <Trans i18nKey='having_a_personal_development_plan_will_help_you'>
                   Having a Personal Development Plan will help you to put some structure to your development and be
                   clear about what you are looking for in your career. How you want your plan to look and what you put
@@ -149,13 +148,12 @@ const PersonalDevelopmentPlan: FC = () => {
                   to write and store your PDP, download the template or make a new plan that suits your ways of working.
                 </Trans>
               </p>
-              <p>
+              <p className={css(paragraph)}>
                 <Trans i18nKey='remember_a_pdp_is_completely_personal_to_you'>
-                  Remember a PDP is completely personal to you, you don&apos;t have to share it but it might be helpful
-                  to use it when having development conversations.
+                  Remember a PDP is completely personal to you.
                 </Trans>
               </p>
-              <p>
+              <p className={css(paragraph)}>
                 <Trans i18nKey='important_you_review_and_update_your_pdp'>
                   It&apos;s important you review and update your PDP regularly to ensure it reflects where you are in
                   your career at that moment in time.
@@ -221,6 +219,11 @@ const PersonalDevelopmentPlan: FC = () => {
   );
 };
 
+const paragraph: Rule = {
+  fontSize: theme.font.fixed.f14.fontSize,
+  lineHeight: theme.font.fixed.f14.lineHeight,
+};
+
 const wrapper: CreateRule<{ mobileScreen: boolean }> = (props) => {
   const { mobileScreen } = props;
   return {
@@ -241,7 +244,7 @@ const subtitleBlock = {
   flexDirection: 'row',
   width: '100%',
   paddingTop: '10px',
-  borderBottom: `1px solid ${colors.lightGray}`,
+  borderBottom: `2px solid ${colors.lightGray}`,
 } as Rule;
 
 const devPlanTitle = {
@@ -249,8 +252,9 @@ const devPlanTitle = {
   fontFamily: '"TESCO Modern", Arial, sans-serif',
   fontStyle: 'normal',
   fontWeight: `${theme.font.weight.bold}`,
-  fontSize: `${theme.font.fixed.f18}`,
-  lineHeight: '22px',
+  fontSize: theme.font.fixed.f18.fontSize,
+  lineHeight: theme.font.fixed.f16.lineHeight,
+  letterSpacing: '0px',
 } as Rule;
 
 const detailsWithMargin = {
@@ -262,8 +266,9 @@ const title = {
   fontFamily: '"TESCO Modern", Arial, sans-serif',
   fontStyle: 'normal',
   fontWeight: `${theme.font.weight.bold}`,
-  fontSize: `${theme.font.fixed.f18}`,
-  lineHeight: '22px',
+  fontSize: `${theme.font.fixed.f18.fontSize}`,
+  letterSpacing: '0px',
+  lineHeight: theme.font.fixed.f18.lineHeight,
   marginBottom: '8px',
 } as Rule;
 
@@ -277,18 +282,19 @@ const descriptionMain = {
     flexDirection: 'column',
   },
   fontFamily: '"TESCO Modern", Arial, sans-serif',
-  fontSize: `${theme.font.fixed.f14}`,
-  fontStyle: 'normal',
-  lineHeight: '18px',
+  fontSize: `${theme.font.fixed.f14.fontSize}`,
   letterSpacing: '0px',
+  fontStyle: 'normal',
+  lineHeight: theme.font.fixed.f14.lineHeight,
   textAlign: 'left',
 } as Rule;
 
 const details = {
   fontWeight: 'normal',
   color: `${theme.colors.base}`,
-  fontSize: `${theme.font.fixed.f14}`,
-  lineHeight: '18px',
+  fontSize: `${theme.font.fixed.f14.fontSize}`,
+  letterSpacing: '0px',
+  lineHeight: theme.font.fixed.f14.lineHeight,
 } as Rule;
 
 const infoBtn = {
@@ -304,8 +310,9 @@ const buttonDownload = {
   width: 'auto',
   height: '40px',
   padding: '10px 20px',
-  fontSize: `${theme.font.fixed.f16}`,
-  lineHeight: '20px',
+  fontSize: theme.font.fixed.f16.fontSize,
+  letterSpacing: '0px',
+  lineHeight: theme.font.fixed.f16.lineHeight,
   borderRadius: '32px',
   cursor: 'pointer',
   marginTop: '16px',
@@ -330,8 +337,9 @@ const buttonDownloadItems = {
   width: 'auto',
   height: '40px',
   padding: '10px 0',
-  fontSize: `${theme.font.fixed.f16}`,
-  lineHeight: '20px',
+  fontSize: `${theme.font.fixed.f16.fontSize}`,
+  letterSpacing: '0px',
+  lineHeight: theme.font.fixed.f16.lineHeight,
   border: 'none',
   cursor: 'pointer',
   marginTop: '16px',
@@ -355,9 +363,10 @@ const buttonIcon = {
   padding: '10px 20px',
   color: `${theme.colors.white}`,
   backgroundColor: `${theme.colors.tescoBlue}`,
-  fontSize: `${theme.font.fixed.f16}`,
+  fontSize: `${theme.font.fixed.f16.fontSize}`,
   fontWeight: `${theme.font.weight.bold}`,
-  lineHeight: '20px',
+  lineHeight: theme.font.fixed.f16.lineHeight,
+  letterSpacing: '0px',
   borderRadius: '32px',
   border: 'none',
   cursor: 'pointer',

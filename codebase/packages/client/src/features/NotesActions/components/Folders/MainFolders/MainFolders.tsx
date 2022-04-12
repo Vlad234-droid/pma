@@ -1,5 +1,5 @@
 import React, { FC, MutableRefObject, useRef, useState } from 'react';
-import { Rule, useBreakpoints, useStyle } from '@pma/dex-wrapper';
+import { Rule, useStyle } from '@pma/dex-wrapper';
 import { useDispatch, useSelector } from 'react-redux';
 
 import {
@@ -15,7 +15,7 @@ import { ConfirmModal, ConfirmModalWithDropDown } from 'features/Modal';
 import { useTranslation } from 'components/Translation';
 import { PersonalFolders, PersonalsTeamFolders, SelectedFolder, SelectedTEAMFolder } from '../../index';
 import { MainFolderProps } from '../../../type';
-import { folderSchema } from '../../../components/Modals/schema/schema';
+import { folderSchema } from '../../Modals/schema/schema';
 
 import {
   AllNotesFolderId,
@@ -50,10 +50,9 @@ const MainFolders: FC<MainFolderProps> = ({
   setTeamArchivedMode,
   teamArchivedMode,
 }) => {
-  const { css } = useStyle();
+  const { css, matchMedia } = useStyle();
+  const mediumScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
   const { t } = useTranslation();
-  const [, isBreakpoint] = useBreakpoints();
-  const mediumScreen = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
   const dispatch = useDispatch();
 
   const notesSelect = useSelector(getNotesSelector) || null;

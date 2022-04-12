@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { Trans } from 'components/Translation';
-import { useBreakpoints, useStyle, Rule, CreateRule } from '@pma/dex-wrapper';
+import { useStyle, Rule, CreateRule } from '@pma/dex-wrapper';
 import { Icon as IconComponent } from 'components/Icon';
 import { default as Accordion, ObjectiveAccordionProps } from '../Accordion';
 
@@ -11,20 +11,19 @@ export type Props = {
 };
 
 export const ShareObjectivesModal: FC<Props> = ({ manager, onClose, objectives = [] }) => {
-  const { css } = useStyle();
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+  const { css, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
 
   const count = objectives.length;
 
   return (
     <div className={css(containerStyle)}>
       <div className={css(wrapperStyle({ mobileScreen }))}>
-        <span className={css(arrowStyle)} onClick={() => onClose && onClose()}>
+        <span className={css(arrowStyle({ mobileScreen }))} onClick={() => onClose && onClose()}>
           <IconComponent graphic='arrowLeft' invertColors={true} />
         </span>
         <div>
-          <div className={css(titleStyle)}>
+          <div className={css(titleStyle({ mobileScreen }))}>
             <Trans i18nKey='you_have_shared_objectives' count={count}>
               You have {{ count }} shared objectives
             </Trans>
@@ -53,17 +52,15 @@ const wrapperStyle: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) =
   padding: mobileScreen ? '0 16px' : '0 40px',
 });
 
-const titleStyle: Rule = ({ theme }) => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
-  return {
+const titleStyle: CreateRule<{ mobileScreen: boolean }> =
+  ({ mobileScreen }) =>
+  ({ theme }) => ({
     fontSize: '24px',
     lineHeight: '28px',
     padding: '10px',
     fontWeight: 'bold',
     color: mobileScreen ? theme.colors.tescoBlue : theme.colors.base,
-  };
-};
+  });
 
 const managerNameStyle: Rule = ({ theme }) => ({
   fontSize: '20px',
@@ -72,18 +69,13 @@ const managerNameStyle: Rule = ({ theme }) => ({
   color: theme.colors.tescoBlue,
 });
 
-const arrowStyle: Rule = () => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
-
-  return {
-    position: 'fixed',
-    top: '22px',
-    left: mobileScreen ? '20px' : '40px',
-    textDecoration: 'none',
-    border: 'none',
-    cursor: 'pointer',
-  };
-};
+const arrowStyle: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => ({
+  position: 'fixed',
+  top: '22px',
+  left: mobileScreen ? '20px' : '40px',
+  textDecoration: 'none',
+  border: 'none',
+  cursor: 'pointer',
+});
 
 export default ShareObjectivesModal;

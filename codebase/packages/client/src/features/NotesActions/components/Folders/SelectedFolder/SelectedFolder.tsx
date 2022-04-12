@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Rule, Styles, useStyle, useBreakpoints, colors, CreateRule } from '@pma/dex-wrapper';
+import { Rule, Styles, useStyle, colors, CreateRule } from '@pma/dex-wrapper';
 import { getFoldersSelector } from '@pma/store';
 import { useSelector } from 'react-redux';
 
@@ -30,7 +30,8 @@ const SelectedFolder: FC<SelectedFolderProps> = ({
   noteTEAMFolderUuid,
   testId = '',
 }) => {
-  const { css } = useStyle();
+  const { css, matchMedia } = useStyle();
+  const mediumScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
 
   const btnsActionsHandle = (itemId: string, itemFolderUuid: string | null, item: any) => {
     const btnsActions = [
@@ -235,7 +236,7 @@ const SelectedFolder: FC<SelectedFolderProps> = ({
   const foldersList = useSelector(getFoldersSelector) || [];
 
   return (
-    <div className={css(expandedNoteStyle)} data-test-id={FOLDER_WRAPPER}>
+    <div className={css(expandedNoteStyle({ mediumScreen }))} data-test-id={FOLDER_WRAPPER}>
       <div className={css(flexBeetweenStyle)}>
         <span className={css(folderTitleStyled)}>{selectedFolder?.title}</span>
       </div>
@@ -280,7 +281,7 @@ const Align_flex_style: Rule = ({ colors }) => ({
   justifyContent: 'flex-start',
   cursor: 'pointer',
   // @ts-ignore
-  borderBottom: `1px solid ${colors.lightGray}`,
+  borderBottom: `2px solid ${colors.lightGray}`,
   padding: '15px 24px',
 });
 const Align_flex_styleLast: Rule = {
@@ -336,11 +337,10 @@ const FlexStyle: Rule = {
   alignItems: 'center',
 };
 
-const expandedNoteStyle: Rule = () => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mediumScreen = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
-  return {
-    background: '#FFFFFF',
+const expandedNoteStyle: CreateRule<{ mediumScreen: boolean }> =
+  ({ mediumScreen }) =>
+  ({ theme }) => ({
+    background: theme.colors.white,
     boxShadow: '3px 3px 1px 1px rgba(0, 0, 0, 0.05)',
     borderRadius: '10px',
     width: '100%',
@@ -348,8 +348,7 @@ const expandedNoteStyle: Rule = () => {
     padding: '24px',
     alignSelf: 'flex-start',
     ...(mediumScreen && { flexGrow: 1 }),
-  };
-};
+  });
 
 const folderTitleStyled: Rule = {
   fontStyle: 'normal',

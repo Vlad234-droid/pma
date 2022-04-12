@@ -23,7 +23,7 @@ const roundIconStyle: CreateRule<Required<RoundIconProps>> =
     width: `${ICON_WIDTH + strokeWidth}px`,
     height: `${ICON_WIDTH + strokeWidth}px`,
     borderRadius: `${ICON_WIDTH + strokeWidth}px`,
-    borderWidth: '1px',
+    borderWidth: '2px',
     borderStyle: 'solid',
     borderColor: strokeColor,
     justifyContent: 'center',

@@ -1,5 +1,5 @@
 import React, { Dispatch, FC, MouseEvent, SetStateAction, useRef } from 'react';
-import { Button, CreateRule, Rule, Styles, useBreakpoints, useStyle } from '@pma/dex-wrapper';
+import { Button, CreateRule, Rule, Styles, useStyle } from '@pma/dex-wrapper';
 import useEventListener from 'hooks/useEventListener';
 import { IconButton } from 'components/IconButton';
 import { Checkbox } from 'components/Form';
@@ -35,7 +35,8 @@ const FilterModal: FC<FilterModalProps> = ({
   isCheckAll,
   setIsCheckAll,
 }) => {
-  const { css, theme } = useStyle();
+  const { css, theme, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const ref = useRef<HTMLDivElement | null>(null);
 
   const handleClickOutside = (event: MouseEvent<HTMLElement>) => {
@@ -147,7 +148,7 @@ const FilterModal: FC<FilterModalProps> = ({
       </div>
       <div className={css(absoluteStyle)}>
         <div className={css(relativeBtnStyled)}>
-          <div className={css(spacingStyle)}>
+          <div className={css(spacingStyle({ mobileScreen }))}>
             <Button styles={[theme.font.fixed.f16, buttonStyle]} onPress={() => setFilterModal(() => false)}>
               <Trans>Cancel</Trans>
             </Button>
@@ -203,7 +204,7 @@ const wrapperContainer: Rule = ({ theme }) =>
         content: "''",
         position: 'absolute',
         width: '100%',
-        height: '1px',
+        height: '2px',
         background: theme.colors.backgroundDarkest,
         bottom: '0px',
         left: '0px',
@@ -270,21 +271,19 @@ const relativeBtnStyled: Rule = ({ theme }) => ({
   left: theme.spacing.s0,
   right: theme.spacing.s0,
 });
-const spacingStyle: Rule = () => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
-  return {
-    padding: mobileScreen ? '18px' : '24px',
-    display: 'flex',
-    justifyContent: 'space-between',
-  };
-};
+
+const spacingStyle: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => ({
+  padding: mobileScreen ? '18px' : '24px',
+  display: 'flex',
+  justifyContent: 'space-between',
+});
+
 const buttonStyle: Rule = ({ theme }) => ({
   fontWeight: theme.font.weight.bold,
   width: '49%',
   margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
   background: theme.colors.white,
-  border: `${theme.border.width.b1} solid ${theme.colors.tescoBlue}`,
+  border: `${theme.border.width.b2} solid ${theme.colors.tescoBlue}`,
   color: `${theme.colors.tescoBlue}`,
   fontSize: '16px',
   lineHeight: '20px',
@@ -294,7 +293,7 @@ const filterButtonStyle: Rule = ({ theme }) => ({
   width: '49%',
   margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
   background: theme.colors.tescoBlue,
-  border: `${theme.border.width.b1} solid ${theme.colors.tescoBlue}`,
+  border: `${theme.border.width.b2} solid ${theme.colors.tescoBlue}`,
   color: `${theme.colors.white}`,
   fontSize: '16px',
   lineHeight: '20px',

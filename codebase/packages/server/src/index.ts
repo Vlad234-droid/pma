@@ -1,9 +1,7 @@
-import express, { Response, Router } from 'express';
+import express, { Router } from 'express';
 import path from 'path';
-import { createProxyMiddleware, Options } from 'http-proxy-middleware';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
-import { getIdentityData } from '@energon/onelogin';
 // utils
 import { getPackageDistFolder } from './utils/package';
 import { exit } from 'process';
@@ -17,6 +15,8 @@ import {
   initializeOpenid,
   standaloneIndexAssetHandler,
   myInboxConfig,
+  apiProxyMiddleware,
+  camundaProxyMiddleware,
 } from './middlewares';
 
 import { initialize as initializeLogger, getHttpLoggerMiddleware } from '@pma-common/logger';
@@ -46,7 +46,7 @@ const NODE_PORT = config.port();
 const PROXY_API_SERVER_URL = config.proxyApiServerUrl();
 
 if (!PROXY_API_SERVER_URL) {
-  console.error(`Required property is not set: API_SERVER_URL. Server halted.`);
+  console.error(`Required property is not set: PROXY_API_SERVER_URL. Server halted.`);
   exit(-1);
 }
 
@@ -67,22 +67,6 @@ if (!PROXY_API_SERVER_URL) {
     const nodeBFFUrl = config.integrationNodeBFFUrl();
     const mountPath = config.integrationMountPath();
     const uiMountPath = config.integrationUIMountPath();
-
-    if (!PROXY_API_SERVER_URL) {
-      console.error(`Required property is not set: PROXY_API_SERVER_URL. Server halted.`);
-      exit(-1);
-    }
-
-    const proxyMiddlewareOptions: Options = {
-      target: PROXY_API_SERVER_URL,
-      changeOrigin: true,
-      autoRewrite: true,
-      pathRewrite: { ['^/api']: '' },
-      logLevel: 'debug',
-    };
-    proxyMiddlewareOptions.onError = function (e) {
-      console.log('e', e);
-    };
 
     appServer.use(
       cors({
@@ -107,36 +91,27 @@ if (!PROXY_API_SERVER_URL) {
         }
         case 'standalone': {
           const openIdMiddleware = await initializeOpenid(config);
-
           appServer.use(openIdMiddleware);
-
           break;
         }
       }
-
-      proxyMiddlewareOptions.onProxyReq = function (proxyReq, req, res) {
-        const identityData = getIdentityData(res as Response);
-
-        console.log('[HPM] Clear all cookies');
-        proxyReq.setHeader('Cookie', '');
-
-        proxyReq.setHeader('Authorization', `Bearer ${identityData?.access_token}`);
-
-        if (isLocal(config.buildEnvironment())) {
-          console.log('[HPM] Authorization: bearer-jwt-identity', identityData?.access_token);
-        }
-      };
     }
 
     appServer.use(express.static(clientDistFolder, { index: false }));
     appServer.use(express.static('public'));
 
-    const proxyMiddleware = createProxyMiddleware(
-      ['/api/**', '!/api/colleague-inbox/**', '!/api/manager-bff/**'],
-      proxyMiddlewareOptions,
-    );
-    appServer.use('/api', proxyMiddleware);
+    appServer.use('/api', apiProxyMiddleware(config));
+    appServer.use('/camunda', camundaProxyMiddleware(config));
+
     appServer.use('/_status', (_, res) => res.sendStatus(200));
+
+    server.use(
+      errorHandler({
+        appName: config.applicationName(),
+        logoutPath: config.integrationSSOLogoutPath(),
+        tryAgainPath: config.integrationCoreMountUrl(),
+      }),
+    );
 
     const myInboxMiddleware = await myInboxConfig(config);
     myInboxMiddleware && appServer.use(myInboxMiddleware);
@@ -173,14 +148,6 @@ if (!PROXY_API_SERVER_URL) {
         break;
       }
     }
-
-    appServer.use(
-      errorHandler({
-        appName: config.applicationName(),
-        logoutPath: config.integrationSSOLogoutPath(),
-        tryAgainPath: config.integrationCoreMountUrl(),
-      }),
-    );
 
     server.disable('x-powered-by');
 

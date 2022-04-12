@@ -1,4 +1,4 @@
-import React, { FC, useContext, useEffect, useMemo } from 'react';
+import React, { FC, useContext, useMemo } from 'react';
 import { matchPath, useLocation, useNavigate } from 'react-router-dom';
 import { Rule, useStyle } from '@pma/dex-wrapper';
 import { pages } from 'pages';
@@ -40,24 +40,6 @@ const Layout: FC = ({ children }) => {
   }, [pathname, linkTitle]);
 
   const handleBack = (backPath = '/') => navigate(backPath, { replace: true });
-
-  useEffect(() => {
-    const script = document.createElement('script');
-    script.innerText = `window["adrum-start-time"] = new Date().getTime(); (function(config){ config.appKey = "AD-AAB-ABN-WNX"; config.adrumExtUrlHttp = "http://cdn.appdynamics.com"; config.adrumExtUrlHttps = "https://cdn.appdynamics.com"; config.beaconUrlHttp = "http://pdx-col.eum-appdynamics.com"; config.beaconUrlHttps = "https://pdx-col.eum-appdynamics.com"; config.resTiming = {"bufSize":200,"clearResTimingOnBeaconSend":true}; config.maxUrlLength = 512; })(window["adrum-config"] || (window["adrum-config"] = {}));`;
-    document.body.appendChild(script);
-    return () => {
-      document.body.removeChild(script);
-    };
-  }, []);
-
-  useEffect(() => {
-    const script = document.createElement('script');
-    script.src = '//cdn.appdynamics.com/adrum/adrum-20.12.0.3360.js';
-    document.body.appendChild(script);
-    return () => {
-      document.body.removeChild(script);
-    };
-  }, []);
 
   return (
     <CanPerform

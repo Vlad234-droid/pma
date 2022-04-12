@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { Trans } from 'components/Translation';
-import { Button, useBreakpoints, useStyle, Rule } from '@pma/dex-wrapper';
+import { Button, useStyle, Rule } from '@pma/dex-wrapper';
 import { UseFormReturn } from 'react-hook-form';
 import { AllNotesFolderIdTEAM, addNewFolderId } from 'utils';
 import { getFoldersSelector } from '@pma/store';
@@ -18,9 +18,8 @@ export type SuccessModalProps = {
 const SuccessModal: FC<SuccessModalProps> = ({ teamMethods, cancelTEAMModal, createFolder }) => {
   const folders = useSelector(getFoldersSelector) || null;
 
-  const { css } = useStyle();
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+  const { css, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
 
   const { getValues } = teamMethods;
 
@@ -98,7 +97,7 @@ const containerStyle: Rule = {
   bottom: 0,
   left: 0,
   right: 0,
-  borderTop: '1px solid #E5E5E5',
+  borderTop: '2px solid #E5E5E5',
 };
 
 const textStyle: Rule = {
@@ -107,7 +106,7 @@ const textStyle: Rule = {
   padding: '10px',
 };
 const okBtnStyle: Rule = ({ theme }) => ({
-  border: `1px solid ${theme.colors.tescoBlue}`,
+  border: `2px solid ${theme.colors.tescoBlue}`,
   fontSize: '16px',
   lineHeight: '20px',
   fontWeight: 'bold',

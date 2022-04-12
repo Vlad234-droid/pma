@@ -131,7 +131,9 @@ export const ColleagueReview: FC<Props> = ({ review, schema, validateReview, upd
           return (
             <div data-test-id='colleague-review-default' key={id} className={css({ padding: '10px 0' })}>
               <MarkdownRenderer source={label} />
-              <div data-test-id='colleague-review-value'>{value}</div>
+              <div data-test-id='colleague-review-value' className={css(valueStyle)}>
+                {value}
+              </div>
             </div>
           );
         })}
@@ -149,3 +151,5 @@ const titleStyles: Rule = ({ theme }) => ({
   fontWeight: theme.font.weight.bold,
   paddingBottom: '20px',
 });
+
+const valueStyle: Rule = ({ theme }) => ({ ...theme.font.fixed.f16, letterSpacing: '0px' });

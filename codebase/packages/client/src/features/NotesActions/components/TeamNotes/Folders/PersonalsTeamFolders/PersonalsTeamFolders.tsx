@@ -1,5 +1,5 @@
 import React, { FC, Dispatch, SetStateAction, MutableRefObject } from 'react';
-import { Rule, useStyle, Button, Styles, CreateRule, useBreakpoints } from '@pma/dex-wrapper';
+import { Rule, useStyle, Button, Styles, CreateRule } from '@pma/dex-wrapper';
 import { IconButton } from 'components/IconButton';
 import { defineNotesHandler, AllNotesFolderIdTEAM } from 'utils/note';
 import { NoteData } from '../../../../type';
@@ -40,7 +40,8 @@ const PersonalsTeamFolders: FC<PersonalsTeamFoldersProps> = ({
   setTeamArchivedMode,
   setSelectedTEAMFolder,
 }) => {
-  const { css, theme } = useStyle();
+  const { css, theme, matchMedia } = useStyle();
+  const mediumScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
 
   const selectedDotsActionhandler = (e, noteId) => {
     selectedTEAMNoteId.current = null;
@@ -186,9 +187,9 @@ const PersonalsTeamFolders: FC<PersonalsTeamFoldersProps> = ({
   };
 
   return (
-    <div className={css(mainFolderContainerStyle)} data-test-id={TEAM_FOLDER_WRAPPER}>
-      <div className={css(titleStyle)}>
-        <h2 className={css({ padding: '24px' })} data-test-id={FOLDER_TITLE}>
+    <div className={css(mainFolderContainerStyle({ mediumScreen }))} data-test-id={TEAM_FOLDER_WRAPPER}>
+      <div className={css({ display: 'flex', justifyContent: 'space-between', height: '24px' })}>
+        <h2 className={css(titleStyle)} data-test-id={FOLDER_TITLE}>
           {!teamArchivedMode ? 'Folders for Notes on my Team' : 'Archived Folders for Notes on my Team'}
         </h2>
       </div>
@@ -238,17 +239,19 @@ const PersonalsTeamFolders: FC<PersonalsTeamFoldersProps> = ({
           );
         })}
       </div>
-      <Button
-        styles={[archiveStyle]}
-        mode='inverse'
-        data-test-id={CHANGE_TEAM_MODE}
-        onPress={() => {
-          setTeamArchivedMode((prev) => !prev);
-          setSelectedTEAMFolder(() => null);
-        }}
-      >
-        {!teamArchivedMode ? 'Archived Folders' : 'Personal Folders'}
-      </Button>
+      <div className={css({ justifyContent: 'flex-start', display: 'flex' })}>
+        <Button
+          styles={[archiveStyle]}
+          mode='inverse'
+          data-test-id={CHANGE_TEAM_MODE}
+          onPress={() => {
+            setTeamArchivedMode((prev) => !prev);
+            setSelectedTEAMFolder(() => null);
+          }}
+        >
+          {!teamArchivedMode ? 'Archived Folders' : 'Personal Folders'}
+        </Button>
+      </div>
     </div>
   );
 };
@@ -272,18 +275,16 @@ const dotsStyle: Rule = ({ colors }) =>
     },
   } as Styles);
 
-const mainFolderContainerStyle: Rule = () => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mediumScreen = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
-  return {
+const mainFolderContainerStyle: CreateRule<{ mediumScreen: boolean }> =
+  ({ mediumScreen }) =>
+  ({ theme }) => ({
     width: '100%',
-    background: '#FFFFFF',
+    background: theme.colors.white,
     boxShadow: '3px 3px 1px 1px rgba(0, 0, 0, 0.05)',
     borderRadius: '10px',
     ...(mediumScreen && { flexGrow: 1 }),
     marginTop: '8px',
-  };
-};
+  });
 
 const flexStyle: Rule = {
   display: 'flex',
@@ -292,24 +293,21 @@ const flexStyle: Rule = {
   cursor: 'pointer',
 };
 
-const titleStyle: Rule = {
-  display: 'flex',
-  justifyContent: 'space-between',
-  height: '24px',
-  '& > h2': {
-    margin: '0px',
-    fontWeight: 'bold',
-    fontSize: '20px',
-    lineHeight: '24px',
-    color: '#333333',
-  },
-} as Styles;
+const titleStyle: Rule = ({ theme }) => ({
+  fontWeight: theme.font.weight.bold,
+  ...theme.font.fixed.f20,
+  letterSpacing: '0px',
+  margin: '0px',
+  color: theme.colors.base,
+  padding: '24px',
+});
+
 const archiveStyle: Rule = ({ theme }) => ({
-  border: `1px solid ${theme.colors.tescoBlue}`,
-  fontSize: '14px',
+  border: `2px solid ${theme.colors.tescoBlue}`,
+  ...theme.font.fixed.f14,
+  letterSpacing: '0px',
   height: '34px',
   fontWeight: 'bold',
-  width: '136px',
   margin: '24px',
   whiteSpace: 'nowrap',
 });
@@ -328,13 +326,14 @@ const itemListStyle: CreateRule<{ selected: boolean }> = ({ selected }) =>
       position: 'absolute',
       bottom: '0px',
       width: '100%',
-      height: '1px',
+      height: '2px',
       background: '#E5E5E5',
       marginTop: '16px',
     },
   } as Styles);
 
 const folterStyle: Rule = {
+  letterSpacing: '0px',
   fontWeight: 'bold',
   fontSize: '18px',
   lineHeight: '22px',
@@ -342,6 +341,7 @@ const folterStyle: Rule = {
 };
 
 const quantityStyle: Rule = ({ theme }) => ({
+  letterSpacing: '0px',
   fontSize: '18px',
   lineHeight: '22px',
   color: theme.colors.base,
@@ -355,7 +355,7 @@ const alignFlexStyle: Rule = ({ colors }) => ({
   justifyContent: 'flex-start',
   cursor: 'pointer',
   // @ts-ignore
-  borderBottom: `1px solid ${colors.lightGray}`,
+  borderBottom: `2px solid ${colors.lightGray}`,
   padding: '15px 24px',
 });
 const alignFlexStyleLast: Rule = {

@@ -1,6 +1,6 @@
 import React, { FC, HTMLProps } from 'react';
 import { Trans, useTranslation } from 'components/Translation';
-import { CreateRule, Rule, Styles, useBreakpoints, useStyle } from '@pma/dex-wrapper';
+import { CreateRule, Rule, Styles, useStyle } from '@pma/dex-wrapper';
 import { BasicTile } from 'components/Tile';
 
 export type DashboardProfileProps = {
@@ -57,10 +57,9 @@ const tileStyle: CreateRule<{ mobileScreen }> = ({ mobileScreen }) => ({
 });
 
 const Contacts: FC<Props> = ({ user }) => {
-  const { css } = useStyle();
+  const { css, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const { t } = useTranslation();
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
   const { email } = user;
   return (
     <BasicTile title={t('Contacts', 'Contacts')} description={''} customStyle={tileStyle({ mobileScreen })}>

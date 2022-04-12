@@ -218,7 +218,7 @@ const viewButtonStyle: CreateRule<{ inverse: boolean }> =
     letterSpacing: '0px',
     fontWeight: theme.font.weight.bold,
     padding: '0 16px',
-    border: `1px solid ${inverse ? theme.colors.white : theme.colors.tescoBlue}`,
+    border: `2px solid ${inverse ? theme.colors.white : theme.colors.tescoBlue}`,
   });
 
 const wrapperStyle: CreateRule<{ clickable: boolean }> =
@@ -278,6 +278,7 @@ const iconStyle: Rule = () => ({
   display: 'flex',
   position: 'absolute',
   left: 0,
+  '& > span': { display: 'flex' },
 });
 
 const bodyStyle: Rule = {

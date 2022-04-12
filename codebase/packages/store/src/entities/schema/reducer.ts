@@ -1,5 +1,5 @@
 import { createReducer } from 'typesafe-actions';
-import { clearSchemaData, getSchema } from './actions';
+import { clearSchemaData, getSchema, getSchemaWithColleaguePermission } from './actions';
 
 export type InitialStateType = {
   meta: { loading: boolean; loaded: boolean; updating: boolean; updated: boolean; error: any };
@@ -19,6 +19,17 @@ export default createReducer(initialState)
     meta: { ...state.meta, loading: true, error: null, loaded: false, updating: false, updated: false },
   }))
   .handleAction(getSchema.success, (state, { payload }) => {
+    return {
+      ...state,
+      ...payload,
+      meta: { ...state.meta, loading: false, loaded: true, updating: false, updated: false },
+    };
+  })
+  .handleAction(getSchemaWithColleaguePermission.request, (state) => ({
+    ...state,
+    meta: { ...state.meta, loading: true, error: null, loaded: false, updating: false, updated: false },
+  }))
+  .handleAction(getSchemaWithColleaguePermission.success, (state, { payload }) => {
     return {
       ...state,
       ...payload,

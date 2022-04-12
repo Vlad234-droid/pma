@@ -1,6 +1,6 @@
 import React, { Children, cloneElement, FC, ReactElement } from 'react';
 
-import { Modal, Rule, useBreakpoints } from '@pma/dex-wrapper';
+import { CreateRule, Modal, Rule, useMedia } from '@pma/dex-wrapper';
 import { Icon } from 'components/Icon';
 
 export type Props = {
@@ -10,15 +10,17 @@ export type Props = {
 };
 
 const WrapperModal: FC<Props> = ({ title, onClose, onOverlayClick, children }) => {
+  const { matchMedia } = useMedia();
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   return (
     <Modal
       modalPosition={'middle'}
       overlayColor={'tescoBlue'}
-      modalContainerRule={[containerRule]}
+      modalContainerRule={[containerRule({ mobileScreen })]}
       closeOptions={{
         content: <Icon graphic='cancel' invertColors={true} />,
         onClose,
-        styles: [modalCloseOptionStyle],
+        styles: [modalCloseOptionStyle({ mobileScreen })],
       }}
       title={{
         content: title,
@@ -32,22 +34,18 @@ const WrapperModal: FC<Props> = ({ title, onClose, onOverlayClick, children }) =
 };
 
 // TODO: Extract duplicate 13
-const modalCloseOptionStyle: Rule = () => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
-  return {
-    display: 'inline-block',
-    height: '24px',
-    paddingLeft: '0px',
-    paddingRight: '0px',
-    position: 'fixed',
-    top: '22px',
-    right: mobileScreen ? '20px' : '40px',
-    textDecoration: 'none',
-    border: 'none',
-    cursor: 'pointer',
-  };
-};
+const modalCloseOptionStyle: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => ({
+  display: 'inline-block',
+  height: '24px',
+  paddingLeft: '0px',
+  paddingRight: '0px',
+  position: 'fixed',
+  top: '22px',
+  right: mobileScreen ? '20px' : '40px',
+  textDecoration: 'none',
+  border: 'none',
+  cursor: 'pointer',
+});
 
 // TODO: Extract duplicate 14
 const modalTitleOptionStyle: Rule = ({ theme }) => {
@@ -65,10 +63,9 @@ const modalTitleOptionStyle: Rule = ({ theme }) => {
 };
 
 // TODO: Extract duplicate 2
-const containerRule: Rule = ({ colors }) => {
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
-  return {
+const containerRule: CreateRule<{ mobileScreen: boolean }> =
+  ({ mobileScreen }) =>
+  ({ colors }) => ({
     alignItems: 'center',
     justifyContent: 'center',
     position: 'relative',
@@ -81,7 +78,6 @@ const containerRule: Rule = ({ colors }) => {
     marginBottom: mobileScreen ? 0 : '30px',
     background: colors.white,
     cursor: 'default',
-  };
-};
+  });
 
 export default WrapperModal;

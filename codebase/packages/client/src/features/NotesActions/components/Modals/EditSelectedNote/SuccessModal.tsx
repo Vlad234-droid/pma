@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { Trans } from 'components/Translation';
-import { Button, useBreakpoints, useStyle } from '@pma/dex-wrapper';
+import { Button, useStyle } from '@pma/dex-wrapper';
 import { SuccessModalProps } from './type';
 import successImg from 'images/success.jpg';
 
@@ -12,9 +12,8 @@ const SuccessModal: FC<SuccessModalProps> = ({
   setSelectedFolder,
   methods,
 }) => {
-  const { css, theme } = useStyle();
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+  const { css, theme, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
 
   const { reset } = methods;
   return (
@@ -67,7 +66,7 @@ const SuccessModal: FC<SuccessModalProps> = ({
           bottom: 0,
           left: 0,
           right: 0,
-          borderTop: '1px solid #E5E5E5',
+          borderTop: '2px solid #E5E5E5',
         })}
       >
         <div
@@ -80,7 +79,7 @@ const SuccessModal: FC<SuccessModalProps> = ({
           <Button
             styles={[
               {
-                border: `1px solid ${theme.colors.tescoBlue}`,
+                border: `2px solid ${theme.colors.tescoBlue}`,
                 fontSize: '16px',
                 lineHeight: '20px',
                 fontWeight: 'bold',

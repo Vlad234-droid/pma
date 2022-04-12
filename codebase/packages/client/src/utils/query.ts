@@ -19,3 +19,17 @@ export const buildSearchColleaguesQuery = (value: string): QueryType => {
 
   return query;
 };
+
+export const buildSearchFeedbacksQuery = (value: string): any => {
+  const query = {};
+  if (/ /.test(value)) {
+    const [firstName, lastName] = value.split(' ');
+
+    query['target-colleague-first-name_contains'] = firstName;
+    query['target-colleague-last-name_contains'] = lastName;
+  } else {
+    query['_search'] = value;
+  }
+
+  return query;
+};

@@ -1,5 +1,5 @@
 import React, { FC, useRef, MouseEvent, SetStateAction, Dispatch } from 'react';
-import { useStyle, Rule, CreateRule, Theme, useBreakpoints } from '@pma/dex-wrapper';
+import { useStyle, Rule, CreateRule } from '@pma/dex-wrapper';
 import { Radio } from 'components/Form';
 import { Trans, useTranslation } from 'components/Translation';
 import useEventListener from 'hooks/useEventListener';
@@ -37,7 +37,8 @@ export const FilterModal: FC<Props> = ({
   customFields = false,
   title = 'Sort',
 }) => {
-  const { css, theme } = useStyle();
+  const { css, matchMedia } = useStyle();
+  const medium = matchMedia({ xSmall: true, small: true, medium: true }) || false;
   const { t } = useTranslation();
 
   const choseHandler = (val: string) => {
@@ -86,7 +87,7 @@ export const FilterModal: FC<Props> = ({
   const fields = !customFields ? sortableFields : additionalFields;
 
   return (
-    <div ref={ref} className={css(wrapperStyle({ theme, isOpen }))} data-test-id={testId}>
+    <div ref={ref} className={css(wrapperStyle({ medium, isOpen }))} data-test-id={testId}>
       <div className={css(columnStyle)}>
         <span>{title} :</span>
         {fields.map((item) => (
@@ -124,11 +125,9 @@ const labelStyle: Rule = {
   alignItems: 'center',
   cursor: 'pointer',
 };
-const wrapperStyle: CreateRule<{ theme: Theme; isOpen: boolean }> = ({ theme, isOpen }) => {
-  const [, isBreakpoint] = useBreakpoints();
-
-  const medium = isBreakpoint.small || isBreakpoint.xSmall || isBreakpoint.medium;
-  return {
+const wrapperStyle: CreateRule<{ medium: boolean; isOpen: boolean }> =
+  ({ medium, isOpen }) =>
+  ({ theme }) => ({
     position: 'absolute',
     width: '208px',
     padding: '10px 16px 16px 16px',
@@ -138,10 +137,9 @@ const wrapperStyle: CreateRule<{ theme: Theme; isOpen: boolean }> = ({ theme, is
     transform: isOpen ? 'scaleY(1)' : 'scaleY(0)',
     transition: 'transform .3s ease',
     transformOrigin: '50% 0%',
-    border: `1px solid ${theme.colors.tescoBlue}`,
+    border: `2px solid ${theme.colors.tescoBlue}`,
     boxShadow: '3px 3px 1px 1px rgba(0, 0, 0, 0.05)',
     background: theme.colors.white,
     borderRadius: '10px',
     zIndex: 2,
-  };
-};
+  });

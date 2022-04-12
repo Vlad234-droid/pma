@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Button, Rule, Styles, useBreakpoints, useStyle } from '@pma/dex-wrapper';
+import { Button, Rule, Styles, useStyle } from '@pma/dex-wrapper';
 import { Trans } from 'components/Translation';
 
 import success from 'images/success.jpg';
@@ -16,9 +16,8 @@ export type Props = {
 
 // TODO: Extract duplicate 1
 const SuccessMessage: FC<Props> = ({ selectedColleagueUuid, targetColleagueProfile, onSuccess }) => {
-  const { css, theme } = useStyle();
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+  const { css, theme, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
 
   const selectedColleague = useSelector(getColleagueByUuidSelector(selectedColleagueUuid)) || targetColleagueProfile;
 
@@ -46,7 +45,7 @@ const SuccessMessage: FC<Props> = ({ selectedColleagueUuid, targetColleagueProfi
             bottom: theme.spacing.s0,
             left: theme.spacing.s0,
             right: theme.spacing.s0,
-            borderTop: `${theme.border.width.b1} solid ${theme.colors.backgroundDarkest}`,
+            borderTop: `${theme.border.width.b2} solid ${theme.colors.backgroundDarkest}`,
           })}
         >
           <div
@@ -65,7 +64,7 @@ const SuccessMessage: FC<Props> = ({ selectedColleagueUuid, targetColleagueProfi
                   width: '49%',
                   margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
                   background: theme.colors.tescoBlue,
-                  border: `${theme.border.width.b1} solid ${theme.colors.tescoBlue}`,
+                  border: `${theme.border.width.b2} solid ${theme.colors.tescoBlue}`,
                   color: `${theme.colors.white}`,
                 },
               ]}

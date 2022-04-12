@@ -55,6 +55,7 @@ const titleStyles: Rule = ({ theme }) => ({
   fontWeight: fontWeight.bold,
   fontSize: `${theme.font.fixed.f18.fontSize}`,
   lineHeight: `${theme.font.fixed.f18.lineHeight}`,
+  letterSpacing: '0px',
   color: colors.tescoBlue,
 });
 
@@ -63,6 +64,7 @@ const descriptionStyles: Rule = ({ theme }) => ({
   fontWeight: 'normal',
   fontSize: `${theme.font.fixed.f16.fontSize}`,
   lineHeight: `${theme.font.fixed.f16.lineHeight}`,
+  letterSpacing: '0px',
   color: colors.base,
 });
 
@@ -72,6 +74,7 @@ const managerStyles: Rule = ({ theme }) => ({
   fontWeight: 'normal',
   fontSize: `${theme.font.fixed.f12.fontSize}`,
   lineHeight: `${theme.font.fixed.f12.lineHeight}`,
+  letterSpacing: '0px',
   color: colors.base,
 });
 

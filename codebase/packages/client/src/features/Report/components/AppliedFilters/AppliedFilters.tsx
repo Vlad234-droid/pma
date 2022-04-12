@@ -63,7 +63,7 @@ const appliedWrapperFilters: Rule = ({ theme }) => {
 
 const filterAppliedStyle: Rule = ({ theme }) => {
   return {
-    border: `1px solid ${theme.colors.link}`,
+    border: `2px solid ${theme.colors.link}`,
     borderRadius: '10px',
     padding: '6px 12px',
   };

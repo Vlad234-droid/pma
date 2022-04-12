@@ -1,5 +1,5 @@
 import React, { FC, HTMLProps, useState } from 'react';
-import { useBreakpoints, useStyle, CreateRule, Modal, Button, Rule } from '@pma/dex-wrapper';
+import { useStyle, CreateRule, Modal, Button, Rule } from '@pma/dex-wrapper';
 import { Trans } from 'components/Translation';
 import { Radio } from 'components/Form';
 
@@ -31,9 +31,8 @@ export const ConfirmModalWithSelectOptions: FC<Props> = ({
   options,
   testId = '',
 }) => {
-  const { css } = useStyle();
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+  const { css, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const [checkedItems, setCheckedItems] = useState<Array<string>>([]);
 
   const submitForm = () => {
@@ -120,7 +119,7 @@ const modalTitleStyle: Rule = {
 
 const cancelBtnStyle: Rule = ({ theme }) => ({
   background: 'white',
-  border: `1px solid ${theme.colors.tescoBlue}`,
+  border: `2px solid ${theme.colors.tescoBlue}`,
   fontSize: '16px',
   lineHeight: '20px',
   fontWeight: 'bold',

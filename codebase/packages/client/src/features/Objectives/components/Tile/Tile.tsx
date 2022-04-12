@@ -99,6 +99,7 @@ const titleStyles: Rule = ({ theme }) => ({
   margin: 0,
   fontSize: '18px',
   lineHeight: '22px',
+  letterSpacing: '0px',
   color: theme.colors.tescoBlue,
   fontWeight: theme.font.weight.bold,
 });
@@ -109,6 +110,7 @@ const subTitleStyles: CreateRule<Pick<Props, 'withSpacing'>> =
     margin: 0,
     fontSize: '16px',
     lineHeight: '20px',
+    letterSpacing: '0px',
     fontWeight: theme.font.weight.bold,
     paddingTop: withSpacing ? theme.spacing.s5 : 0,
   });
@@ -119,6 +121,7 @@ const explanationSubTitleStyles: CreateRule<Pick<Props, 'withSpacing'>> =
     margin: 0,
     fontSize: '14px',
     lineHeight: '18px',
+    letterSpacing: '0px',
     fontWeight: withSpacing ? theme.font.weight.bold : 0,
   });
 
@@ -127,6 +130,7 @@ const descriptionStyles: CreateRule<Pick<Props, 'withSpacing'>> =
   ({ theme }) => ({
     fontSize: '16px',
     lineHeight: '20px',
+    letterSpacing: '0px',
     paddingBottom: withSpacing ? theme.spacing.s5 : 0,
     margin: 0,
   });

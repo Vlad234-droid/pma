@@ -2,7 +2,7 @@ import React, { FC, HTMLProps, useEffect, useRef } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 
 import { FormType } from '@pma/store';
-import { Button, Icon, useBreakpoints, useStyle, Rule, CreateRule } from '@pma/dex-wrapper';
+import { Button, Icon, useStyle, Rule, CreateRule } from '@pma/dex-wrapper';
 
 import { Status } from 'config/enum';
 import { Trans, useTranslation } from 'components/Translation';
@@ -56,9 +56,8 @@ export const ObjectiveModal: FC<Props> = ({
   skipFooter,
   skipHelp,
 }) => {
-  const { css } = useStyle();
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+  const { css, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const { watch } = methods;
 
   const formRef = useRef<HTMLFormElement | null>(null);
@@ -246,7 +245,7 @@ const footerWrapperStyle: Rule = ({ theme }) => ({
   left: theme.spacing.s0,
   right: theme.spacing.s0,
   // @ts-ignore
-  borderTop: `${theme.border.width.b1} solid ${theme.colors.lightGray}`,
+  borderTop: `${theme.border.width.b2} solid ${theme.colors.lightGray}`,
 });
 
 const buttonWrapperStyle: CreateRule<{ mobileScreen: boolean }> =
@@ -259,11 +258,12 @@ const buttonWrapperStyle: CreateRule<{ mobileScreen: boolean }> =
 
 const buttonWhiteStyle: Rule = ({ theme }) => ({
   ...theme.font.fixed.f16,
+  letterSpacing: '0px',
   fontWeight: theme.font.weight.bold,
   width: '50%',
   margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
   background: theme.colors.white,
-  border: `${theme.border.width.b1} solid ${theme.colors.tescoBlue}`,
+  border: `${theme.border.width.b2} solid ${theme.colors.tescoBlue}`,
   color: `${theme.colors.tescoBlue}`,
 });
 
@@ -271,6 +271,7 @@ const buttonBlueStyle: CreateRule<{ disabled: boolean }> =
   ({ disabled = false }) =>
   ({ theme }) => ({
     ...theme.font.fixed.f16,
+    letterSpacing: '0px',
     fontWeight: theme.font.weight.bold,
     width: '50%',
     margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
@@ -288,6 +289,7 @@ const helpModalWrapperStyle: Rule = ({ theme }) => ({ padding: `0 0 ${theme.spac
 
 const helpTitleStyle: Rule = ({ theme }) => ({
   ...theme.font.fixed.f14,
+  letterSpacing: '0px',
   color: theme.colors.tescoBlue,
   padding: `${theme.spacing.s0} ${theme.spacing.s2}`,
 });

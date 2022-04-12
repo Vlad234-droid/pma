@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Button, Rule, Styles, useBreakpoints, useStyle } from '@pma/dex-wrapper';
+import { Button, Rule, Styles, useStyle } from '@pma/dex-wrapper';
 import success from 'images/success.jpg';
 import { Trans } from 'components/Translation';
 
@@ -13,9 +13,9 @@ type Props = {
 
 // TODO: Extract duplicate 1
 const SuccessMessage: FC<Props> = ({ targetColleagueProfile, onSuccess }) => {
-  const { css, theme } = useStyle();
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+  const { css, theme, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
+
   return (
     <div data-test-id={SUCCESS_MODAL_WRAPPER} className={css(WrapperSuccessContainer)}>
       <div className={css(SuccessImg)}>
@@ -41,7 +41,7 @@ const SuccessMessage: FC<Props> = ({ targetColleagueProfile, onSuccess }) => {
             left: theme.spacing.s0,
             right: theme.spacing.s0,
             //@ts-ignore
-            borderTop: `${theme.border.width.b1} solid ${theme.colors.lightGray}`,
+            borderTop: `${theme.border.width.b2} solid ${theme.colors.lightGray}`,
           })}
         >
           <div
@@ -61,7 +61,7 @@ const SuccessMessage: FC<Props> = ({ targetColleagueProfile, onSuccess }) => {
                   width: '49%',
                   margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
                   background: theme.colors.tescoBlue,
-                  border: `${theme.border.width.b1} solid ${theme.colors.tescoBlue}`,
+                  border: `${theme.border.width.b2} solid ${theme.colors.tescoBlue}`,
                   color: `${theme.colors.white}`,
                 },
               ]}

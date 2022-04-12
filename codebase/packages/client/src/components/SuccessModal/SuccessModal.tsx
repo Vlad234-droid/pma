@@ -1,5 +1,5 @@
 import React, { FC, HTMLProps } from 'react';
-import { Button, useBreakpoints, useStyle } from '@pma/dex-wrapper';
+import { Button, useStyle } from '@pma/dex-wrapper';
 
 import { WrapperModal } from 'features/Modal';
 import { Trans } from 'components/Translation';
@@ -25,9 +25,8 @@ const DefaultMark = (
 );
 
 const SuccessModal: FC<Props> = ({ onClose, description, mark = DefaultMark, title }) => {
-  const { css, theme } = useStyle();
-  const [, isBreakpoint] = useBreakpoints();
-  const mobileScreen = isBreakpoint.small || isBreakpoint.xSmall;
+  const { css, theme, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
 
   return (
     <WrapperModal title={title} onClose={onClose} onOverlayClick={onClose}>
@@ -83,7 +82,7 @@ const SuccessModal: FC<Props> = ({ onClose, description, mark = DefaultMark, tit
             bottom: 0,
             left: 0,
             right: 0,
-            borderTop: '1px solid #E5E5E5',
+            borderTop: '2px solid #E5E5E5',
           })}
         >
           <div
@@ -97,7 +96,7 @@ const SuccessModal: FC<Props> = ({ onClose, description, mark = DefaultMark, tit
               styles={[
                 {
                   background: 'white',
-                  border: `1px solid ${theme.colors.tescoBlue}`,
+                  border: `2px solid ${theme.colors.tescoBlue}`,
                   fontSize: '16px',
                   lineHeight: '20px',
                   fontWeight: 'bold',
