@@ -10,11 +10,13 @@ import { getCurrentYear } from 'utils/date';
 import { Trans, useTranslation } from 'components/Translation';
 import { downloadReportStatistics } from '../utils';
 
+export const DOWNLOAD_WRAPPER = 'download-wrapper';
+
 type ModalProps = {
   onClose: () => void;
 };
 
-const DonwloadReportModal: FC<ModalProps> = ({ onClose }) => {
+const DownloadReportModal: FC<ModalProps> = ({ onClose }) => {
   const { css, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
   const { t } = useTranslation();
@@ -33,10 +35,10 @@ const DonwloadReportModal: FC<ModalProps> = ({ onClose }) => {
 
   const [selectedCheckboxes, setSelectedCheckboxes] = useState(checkboxes(t));
 
-  const [showSuccessModal, setShowSuccesModal] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const handleDownloadReport = () => {
-    setShowSuccesModal(true);
+    setShowSuccessModal(true);
     downloadReportStatistics({ year: values?.year, topics: getRequestParams(selectedCheckboxes) });
   };
 
@@ -55,7 +57,6 @@ const DonwloadReportModal: FC<ModalProps> = ({ onClose }) => {
     if (isValid && selectedCheckboxes.some((item) => item['isChecked'])) return false;
     return true;
   };
-
   return (
     <ModalWithHeader
       modalPosition='middle'
@@ -66,7 +67,7 @@ const DonwloadReportModal: FC<ModalProps> = ({ onClose }) => {
         onClose: onClose,
       }}
     >
-      <h3 className={css(modalTitleStyle({ mobileScreen }))}>
+      <h3 className={css(modalTitleStyle({ mobileScreen }))} data-test-id={DOWNLOAD_WRAPPER}>
         <Trans i18nKey='topics_to_download_into_excel_report'>
           Choose which topics you’d like to download into an excel report
         </Trans>
@@ -74,7 +75,7 @@ const DonwloadReportModal: FC<ModalProps> = ({ onClose }) => {
       <div className={css(modalInnerWarp)}>
         <div className={css({ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' })}>
           {selectedCheckboxes.map((item) => (
-            <label key={item.id} className={css(checkboxItemStyle)}>
+            <label key={item.id} className={css(checkboxItemStyle)} data-test-id={item.id}>
               <Checkbox checked={item.isChecked} onChange={() => handleCheck(item.id)} />
               <span className={css({ marginLeft: '15px' })}>{item.label}</span>
             </label>
@@ -114,7 +115,7 @@ const DonwloadReportModal: FC<ModalProps> = ({ onClose }) => {
       </div>
 
       {showSuccessModal && (
-        <div className={css(successModalWrap)}>
+        <div className={css(successModalWrap)} data-test-id='success-wrapper'>
           <img src={success} alt='success' />
           <div className={css(successModalTitle)}>Done!</div>
           <div className={css(successModalText)}>You have downloaded the report onto your device.</div>
@@ -270,4 +271,4 @@ const successModalBtn: Rule = () => {
   };
 };
 
-export default DonwloadReportModal;
+export default DownloadReportModal;

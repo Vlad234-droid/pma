@@ -10,7 +10,7 @@ import { PieChart } from 'components/PieChart';
 import { Select } from 'components/Form';
 import FilterModal from './components/FilterModal';
 import InfoTable from 'components/InfoTable';
-import { DonwloadReportModal } from './Modals';
+import { DownloadReportModal } from './Modals';
 import { Trans, useTranslation } from 'components/Translation';
 import AppliedFilters from './components/AppliedFilters';
 import { getCurrentYear } from 'utils/date';
@@ -304,7 +304,7 @@ const Report: FC = () => {
         </>
       )}
       {showDownloadReportModal && (
-        <DonwloadReportModal
+        <DownloadReportModal
           onClose={() => {
             setShowDownloadReportModal(false);
           }}
