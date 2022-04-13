@@ -1,5 +1,5 @@
 import React, { FC, useEffect } from 'react';
-import { Styles, useStyle } from '@pma/dex-wrapper';
+import { Styles, theme, useStyle } from '@pma/dex-wrapper';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -84,17 +84,43 @@ const Widgets: FC<Props> = () => {
               status={status}
               count={count}
               nextReviewDate={nextReviewDate}
-              customStyle={{ flex: '4 1 500px' }}
+              customStyle={{
+                flex: '4 1 500px',
+                fontSize: theme.font.fixed.f16.fontSize,
+                lineHeight: theme.font.fixed.f16.lineHeight,
+                letterSpacing: '0px',
+              }}
               onClick={() => console.log('View')}
             />
           )}
 
           {widgets.map((props, idx) => {
             if (props.type === widgetTypes.PDP) {
-              return <SecondaryWidget key={idx} {...props} date={addedDatePDP} />;
+              return (
+                <SecondaryWidget
+                  customStyle={{
+                    fontSize: theme.font.fixed.f16.fontSize,
+                    lineHeight: theme.font.fixed.f16.lineHeight,
+                    letterSpacing: '0px',
+                  }}
+                  key={idx}
+                  {...props}
+                  date={addedDatePDP}
+                />
+              );
             }
 
-            return <SecondaryWidget key={idx} {...props} />;
+            return (
+              <SecondaryWidget
+                customStyle={{
+                  fontSize: theme.font.fixed.f16.fontSize,
+                  lineHeight: theme.font.fixed.f16.lineHeight,
+                  letterSpacing: '0px',
+                }}
+                key={idx}
+                {...props}
+              />
+            );
           })}
         </>
       )}

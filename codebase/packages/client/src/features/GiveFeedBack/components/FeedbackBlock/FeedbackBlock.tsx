@@ -165,9 +165,14 @@ const draftStyles: Rule = ({ theme }) => {
   };
 };
 
-const blockInfo: Rule = {
-  display: 'inline-flex',
-  alignItems: 'center',
+const blockInfo: Rule = ({ theme }) => {
+  return {
+    display: 'inline-flex',
+    alignItems: 'center',
+    fontSize: theme.font.fixed.f16.fontSize,
+    lineHeight: theme.font.fixed.f16.lineHeight,
+    letterSpacing: '0px',
+  };
 };
 
 const imgStyle: Rule = {
@@ -175,32 +180,44 @@ const imgStyle: Rule = {
   height: '48px',
   borderRadius: '50%',
 };
-const namesStyle: Rule = {
-  fontWeight: 'bold',
-  fontSize: '18px',
-  lineHeight: '22px',
-  margin: '0px',
-  color: '#00539F',
+const namesStyle: Rule = ({ theme }) => {
+  return {
+    fontWeight: theme.font.weight.bold,
+    fontSize: theme.font.fixed.f18.fontSize,
+    lineHeight: theme.font.fixed.f18.lineHeight,
+    letterSpacing: '0px',
+    margin: '0px',
+    color: '#00539F',
+  };
 };
-const industryStyle: Rule = {
-  fontWeight: 'normal',
-  fontSize: '16px',
-  lineHeight: '20px',
-  margin: '4px 0px 0px 0px',
+const industryStyle: Rule = ({ theme }) => {
+  return {
+    fontWeight: 'normal',
+    fontSize: theme.font.fixed.f16.fontSize,
+    lineHeight: theme.font.fixed.f16.lineHeight,
+    letterSpacing: '0px',
+    margin: '4px 0px 0px 0px',
+  };
 };
 
-const infoBlockStyle: Rule = {
-  marginBottom: '16px',
-  '& > h3': {
-    margin: '0px',
-    fontWeight: 'bold',
-    fontSize: '14px',
-  },
-  '& > p': {
-    margin: '0px',
-    fontSize: '14px',
-  },
-} as Styles;
+const infoBlockStyle: Rule = ({ theme }) => {
+  return {
+    marginBottom: '16px',
+    '& > h3': {
+      margin: '0px',
+      fontWeight: theme.font.weight.bold,
+      fontSize: theme.font.fixed.f14.fontSize,
+      lineHeight: theme.font.fixed.f14.lineHeight,
+      letterSpacing: '0px',
+    },
+    '& > p': {
+      margin: '0px',
+      fontSize: theme.font.fixed.f14.fontSize,
+      lineHeight: theme.font.fixed.f14.lineHeight,
+      letterSpacing: '0px',
+    },
+  };
+};
 
 const wrapperBtnStyle: Rule = {
   marginLeft: 'auto',

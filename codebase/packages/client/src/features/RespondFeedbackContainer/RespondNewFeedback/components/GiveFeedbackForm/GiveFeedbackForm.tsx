@@ -80,7 +80,7 @@ const GiveFeedbackForm: FC<GiveFeedbackFormProps> = ({
         <Trans i18nKey='how_is_the_colleague_performing'>How is the colleague performing?</Trans>
       </div>
       <Attention />
-      <div className={css({ marginTop: '8px', fontSize: '18px', lineHeight: '22px' })}>
+      <div className={css(questionWrapper)}>
         <Trans i18nKey='colleague_requested_feedback'>
           This colleague has requested feedback from you. Fill out the questions below to share your feedback.
         </Trans>
@@ -155,6 +155,15 @@ const GiveFeedbackForm: FC<GiveFeedbackFormProps> = ({
       </div>
     </div>
   );
+};
+
+const questionWrapper: Rule = ({ theme }) => {
+  return {
+    fontSize: theme.font.fixed.f18.fontSize,
+    lineHeight: theme.font.fixed.f18.lineHeight,
+    letterSpacing: '0px',
+    marginTop: '8px',
+  };
 };
 
 const WrapperModalGiveFeedbackStyle: Rule = {

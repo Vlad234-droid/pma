@@ -22,21 +22,26 @@ const bodyBlockStyle = {
 } as Styles;
 
 // TODO: Extract duplicate 8
-const titleStyle: Rule = ({ theme }) =>
-  ({
+const titleStyle: Rule = ({ theme }) => {
+  return {
     fontStyle: 'normal',
-    fontWeight: `${theme.font.weight.bold}`,
-    fontSize: '16px',
-    lineHeight: '20px',
-  } as Styles);
+    fontWeight: theme.font.weight.bold,
+    fontSize: theme.font.fixed.f16.fontSize,
+    lineHeight: theme.font.fixed.f16.lineHeight,
+    letterSpacing: '0px',
+  };
+};
 
 // TODO: Extract duplicate 9
-const descriptionStyle = {
-  fontStyle: 'normal',
-  fontWeight: 'normal',
-  fontSize: '16px',
-  lineHeight: '20px',
-} as Styles;
+const descriptionStyle: Rule = ({ theme }) => {
+  return {
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    fontSize: theme.font.fixed.f16.fontSize,
+    lineHeight: theme.font.fixed.f16.lineHeight,
+    letterSpacing: '0px',
+  };
+};
 
 // TODO: Extract duplicate 10
 const bodyStyle = {
