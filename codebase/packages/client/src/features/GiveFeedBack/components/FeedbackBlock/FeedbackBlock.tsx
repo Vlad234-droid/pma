@@ -5,14 +5,13 @@ import { useSelector } from 'react-redux';
 import { getLoadedStateSelector } from '@pma/store';
 import { Page } from 'pages';
 
-import { Accordion, BaseAccordion, ExpandButton, Panel, Section } from 'components/Accordion';
+import { Accordion, BaseAccordion, Panel, Section } from 'components/Accordion';
 import IconButtonDefault from 'components/IconButtonDefault';
-import { NoFeedback } from 'features/Feedback/components';
+import { NoFeedback, FeedbackProfileInfo } from 'features/Feedback/components';
 import { TileWrapper } from 'components/Tile';
 import Spinner from 'components/Spinner';
 
-import defaultImg from 'images/default.png';
-import { formatToRelativeDate, paramsReplacer } from 'utils';
+import { paramsReplacer } from 'utils';
 import { Trans, useTranslation } from 'components/Translation';
 
 type Props = {
@@ -47,27 +46,13 @@ const FeedbackBlock: FC<Props> = ({ list, canEdit }) => {
                 {() => (
                   <>
                     <Section defaultExpanded={false}>
-                      <div className={css(draftStyles)}>
-                        <div className={css(blockInfo)}>
-                          <div className={css({ alignSelf: 'flex-start' })}>
-                            <img className={css(imgStyle)} alt='photo' src={defaultImg} />
-                          </div>
-                          <div className={css({ marginLeft: '16px' })}>
-                            <h3
-                              className={css(namesStyle)}
-                            >{`${item?.targetColleagueProfile?.colleague?.profile?.firstName} ${item?.targetColleagueProfile?.colleague?.profile?.lastName}`}</h3>
-                            <p className={css(industryStyle)}>{`${
-                              item?.targetColleagueProfile?.colleague?.workRelationships[0]?.job.name ?? ''
-                            }, ${
-                              item?.targetColleagueProfile?.colleague?.workRelationships[0]?.department?.name ?? ''
-                            }`}</p>
-                          </div>
-                        </div>
-                        <div className={css({ display: 'flex', justifyContent: 'center', alignItems: 'center' })}>
-                          <div className={css({ marginRight: '26px' })}>{formatToRelativeDate(item.updatedTime)}</div>
-                          <ExpandButton />
-                        </div>
-                      </div>
+                      <FeedbackProfileInfo
+                        firstName={item?.targetColleagueProfile?.colleague?.profile?.firstName}
+                        lastName={item?.targetColleagueProfile?.colleague?.profile?.lastName}
+                        job={item?.targetColleagueProfile?.colleague?.workRelationships[0]?.job.name}
+                        department={item?.targetColleagueProfile?.colleague?.workRelationships[0]?.department?.name}
+                        updatedTime={item.updatedTime}
+                      />
 
                       <Panel>
                         <TileWrapper customStyle={tileWrapperStyle}>
@@ -155,69 +140,19 @@ const wordBreakStyle: Rule = {
   wordBreak: 'break-all',
 };
 
-const draftStyles: Rule = ({ theme }) => {
-  return {
-    display: 'flex',
-    justifyContent: 'space-between',
-    fontSize: theme.font.fixed.f16.fontSize,
-    lineHeight: theme.font.fixed.f16.lineHeight,
-    letterSpacing: '0px',
-  };
-};
-
-const blockInfo: Rule = ({ theme }) => {
-  return {
-    display: 'inline-flex',
-    alignItems: 'center',
-    fontSize: theme.font.fixed.f16.fontSize,
-    lineHeight: theme.font.fixed.f16.lineHeight,
-    letterSpacing: '0px',
-  };
-};
-
-const imgStyle: Rule = {
-  width: '48px',
-  height: '48px',
-  borderRadius: '50%',
-};
-const namesStyle: Rule = ({ theme }) => {
-  return {
-    fontWeight: theme.font.weight.bold,
-    fontSize: theme.font.fixed.f18.fontSize,
-    lineHeight: theme.font.fixed.f18.lineHeight,
-    letterSpacing: '0px',
-    margin: '0px',
-    color: '#00539F',
-  };
-};
-const industryStyle: Rule = ({ theme }) => {
-  return {
-    fontWeight: 'normal',
-    fontSize: theme.font.fixed.f16.fontSize,
-    lineHeight: theme.font.fixed.f16.lineHeight,
-    letterSpacing: '0px',
-    margin: '4px 0px 0px 0px',
-  };
-};
-
-const infoBlockStyle: Rule = ({ theme }) => {
-  return {
-    marginBottom: '16px',
+const infoBlockStyle: Rule = ({ theme }) =>
+  ({
+    marginBottom: theme.spacing.s4,
     '& > h3': {
-      margin: '0px',
+      margin: theme.spacing.s0,
       fontWeight: theme.font.weight.bold,
-      fontSize: theme.font.fixed.f14.fontSize,
-      lineHeight: theme.font.fixed.f14.lineHeight,
-      letterSpacing: '0px',
+      fontSize: theme.spacing.s3_5,
     },
     '& > p': {
-      margin: '0px',
-      fontSize: theme.font.fixed.f14.fontSize,
-      lineHeight: theme.font.fixed.f14.lineHeight,
-      letterSpacing: '0px',
+      margin: theme.spacing.s0,
+      fontSize: theme.spacing.s3_5,
     },
-  };
-};
+  } as Styles);
 
 const wrapperBtnStyle: Rule = {
   marginLeft: 'auto',
@@ -225,8 +160,8 @@ const wrapperBtnStyle: Rule = {
 
 const tileWrapperStyle: Rule = ({ theme }) => ({
   width: 'auto',
-  padding: '24px',
-  margin: '24px 28px 24px 0px',
+  padding: theme.spacing.s6,
+  margin: `${theme.spacing.s6} 28px ${theme.spacing.s6} ${theme.spacing.s0}`,
   // @ts-ignore
   border: `2px solid ${theme.colors.lightGray}`,
 });

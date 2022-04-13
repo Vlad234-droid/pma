@@ -1,17 +1,18 @@
 import React, { FC } from 'react';
-import { useStyle, Rule, Button, CreateRule } from '@pma/dex-wrapper';
+import { useStyle, Rule } from '@pma/dex-wrapper';
 import { useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { getColleagueByUuidSelector } from '@pma/store';
 import get from 'lodash.get';
-import { IconButton, Position } from 'components/IconButton';
 import { Trans, useTranslation } from 'components/Translation';
 import { TileWrapper } from 'components/Tile';
 import { Attention, Field, Item, Textarea } from 'components/Form';
-import { createGiveFeedbackSchema } from '../../config';
-import { GiveFeedbackType } from '../../type';
 import { ColleaguesFinder, FeedbackInfo } from '../../components';
+import { ButtonsWrapper } from 'components/ButtonsWrapper';
+
+import { GiveFeedbackType } from '../../type';
+import { createGiveFeedbackSchema } from '../../config';
 
 export const FORM_WRAPPER = 'form-wrapper';
 
@@ -33,9 +34,8 @@ type Props = {
   feedbackFields: Array<GiveFeedbackType>;
 };
 
-// TODO: Extract duplicate 3
 const GiveFeedbackForm: FC<Props> = ({ onSubmit, defaultValues, currentColleague, goToInfo, feedbackFields }) => {
-  const { css, theme, matchMedia } = useStyle();
+  const { css, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const { t } = useTranslation();
 
@@ -134,29 +134,15 @@ const GiveFeedbackForm: FC<Props> = ({ onSubmit, defaultValues, currentColleague
             })}
           </div>
         )}
-        <div className={css(absoluteStyle)}>
-          <div className={css(relativeBtnStyled)}>
-            <div className={css(spacingStyle({ mobileScreen }))}>
-              <Button
-                isDisabled={!targetColleagueUuid}
-                styles={[theme.font.fixed.f16, buttonStyle]}
-                onPress={handleDraft}
-              >
-                <Trans i18nKey='save_as_draft'>Save as draft</Trans>
-              </Button>
-              <IconButton
-                isDisabled={!isValid}
-                customVariantRules={{ default: iconBtnStyle, disabled: iconBtnStyleDisabled }}
-                graphic='arrowRight'
-                iconProps={{ invertColors: true }}
-                iconPosition={Position.RIGHT}
-                onPress={() => handleSubmit(handleSave)()}
-              >
-                <Trans i18nKey='Submit'>Submit</Trans>
-              </IconButton>
-            </div>
-          </div>
-        </div>
+        <ButtonsWrapper
+          isValid={isValid}
+          onLeftPress={handleDraft}
+          onRightPress={() => {
+            handleSubmit(handleSave)();
+          }}
+          leftText='save_as_draft'
+          rightTextWithIcon='submit'
+        />
       </div>
     </>
   );
@@ -167,76 +153,6 @@ const wrapperModalGiveFeedbackStyle: Rule = {
   height: '100%',
   overflow: 'auto',
 };
-
-const absoluteStyle: Rule = {
-  position: 'absolute',
-  left: 0,
-  bottom: 0,
-  width: '100%',
-  background: '#FFFFFF',
-  height: '112px',
-};
-
-const relativeBtnStyled: Rule = ({ theme }) => ({
-  position: 'relative',
-  bottom: theme.spacing.s0,
-  left: theme.spacing.s0,
-  right: theme.spacing.s0,
-  // @ts-ignore
-  borderTop: `${theme.border.width.b2} solid ${theme.colors.lightGray}`,
-  fontSize: theme.font.fixed.f16.fontSize,
-  lineHeight: theme.font.fixed.f16.lineHeight,
-  letterSpacing: '0px',
-});
-
-const spacingStyle: CreateRule<{ mobileScreen: boolean }> =
-  ({ mobileScreen }) =>
-  ({ theme }) => ({
-    padding: mobileScreen ? theme.spacing.s6 : theme.spacing.s8,
-    display: 'flex',
-    justifyContent: 'space-between',
-  });
-
-// TODO: Extract duplicate 7
-const buttonStyle: Rule = ({ theme }) => ({
-  fontWeight: theme.font.weight.bold,
-  width: '49%',
-  margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
-  background: theme.colors.white,
-  border: `${theme.border.width.b2} solid ${theme.colors.tescoBlue}`,
-  color: `${theme.colors.tescoBlue}`,
-});
-
-// TODO: Extract duplicate 4
-const iconBtnStyle: Rule = ({ theme }) => ({
-  padding: '0px 6px 0px 20px',
-  display: 'flex',
-  width: '49%',
-  height: '40px',
-  borderRadius: '20px',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  outline: 0,
-  background: theme.colors.tescoBlue,
-  color: theme.colors.white,
-  cursor: 'pointer',
-});
-
-// TODO: Extract duplicate 5
-const iconBtnStyleDisabled: Rule = ({ theme }) => ({
-  padding: '0px 6px 0px 20px',
-  display: 'flex',
-  width: '49%',
-  height: '40px',
-  borderRadius: '20px',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  outline: 0,
-  background: theme.colors.tescoBlue,
-  color: theme.colors.white,
-  pointerEvents: 'none',
-  opacity: '0.4',
-});
 
 const feedbackTitle: Rule = {
   fontWeight: 'bold',

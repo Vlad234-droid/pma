@@ -33,7 +33,6 @@ const WrapperModal: FC<Props> = ({ title, onClose, onOverlayClick, children }) =
   );
 };
 
-// TODO: Extract duplicate 13
 const modalCloseOptionStyle: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => ({
   display: 'inline-block',
   height: '24px',
@@ -47,7 +46,6 @@ const modalCloseOptionStyle: CreateRule<{ mobileScreen: boolean }> = ({ mobileSc
   cursor: 'pointer',
 });
 
-// TODO: Extract duplicate 14
 const modalTitleOptionStyle: Rule = ({ theme }) => {
   return {
     position: 'fixed',
@@ -62,7 +60,6 @@ const modalTitleOptionStyle: Rule = ({ theme }) => {
   };
 };
 
-// TODO: Extract duplicate 2
 const containerRule: CreateRule<{ mobileScreen: boolean }> =
   ({ mobileScreen }) =>
   ({ colors }) => ({

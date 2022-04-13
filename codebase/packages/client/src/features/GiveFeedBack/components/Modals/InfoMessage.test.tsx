@@ -16,8 +16,8 @@ describe('Info message', () => {
     expect(wrapper).toBeInTheDocument();
   });
   it('it should call goBack handler', () => {
-    const { getByRole } = render(<InfoMessage {...props} />);
-    const wrapper = getByRole('button');
+    const { getByTestId } = render(<InfoMessage {...props} />);
+    const wrapper = getByTestId('testId');
     fireEvent.click(wrapper);
     expect(goBack).toHaveBeenCalledTimes(1);
   });

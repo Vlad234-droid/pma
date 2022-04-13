@@ -1,11 +1,12 @@
 import React, { Dispatch, FC, SetStateAction, useState } from 'react';
 import { UseFormReturn } from 'react-hook-form';
-import { Button, CreateRule, Rule, Theme, useStyle } from '@pma/dex-wrapper';
+import { Rule, useStyle } from '@pma/dex-wrapper';
 import { FoldersWithNotesTypesTEAM, NotesTypeTEAM } from 'features/NotesActions/type';
 import { Notification } from 'components/Notification';
-import { Icon as IconComponent } from 'components/Icon';
 import { Trans, useTranslation } from 'components/Translation';
-import { IconButton, Position } from 'components/IconButton';
+import { ArrowLeftIcon } from 'components/ArrowLeftIcon';
+import { ButtonsWrapper } from 'components/ButtonsWrapper';
+
 import { SearchPart, SubmitPart, SuccessModal } from '../index';
 import { PeopleTypes } from '../type';
 
@@ -36,8 +37,7 @@ const AddTeamNoteModal: FC<AddTeamNoteModalProps> = ({
 }) => {
   const [successTEAMModal, setSuccessTEAMModal] = useState<boolean>(false);
   const { t } = useTranslation();
-  const { css, theme, matchMedia } = useStyle();
-  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
+  const { css } = useStyle();
 
   const {
     formState: { isValid },
@@ -50,9 +50,8 @@ const AddTeamNoteModal: FC<AddTeamNoteModalProps> = ({
 
   return (
     <div className={css(WrapperModalGiveFeedbackStyle)} data-test-id={MODAL_WRAPPER}>
-      <span
-        className={css(arrowLeftStyle({ theme, mobileScreen }))}
-        data-test-id='go-back'
+      <ArrowLeftIcon
+        testId={'go-back'}
         onClick={() => {
           if (selectedPerson !== null) {
             setSearchValue(() => '');
@@ -62,9 +61,9 @@ const AddTeamNoteModal: FC<AddTeamNoteModalProps> = ({
             cancelTEAMModal();
           }
         }}
-      >
-        <IconComponent graphic='arrowLeft' invertColors={true} />
-      </span>
+        data-test-id='go-back'
+      />
+
       <Notification
         graphic='information'
         iconColor='link'
@@ -78,7 +77,7 @@ const AddTeamNoteModal: FC<AddTeamNoteModalProps> = ({
           marginBottom: '20px',
         }}
       />
-      <h2 className={css(collegueStyled)}>
+      <h2 className={css(colleagueStyled)}>
         <Trans i18nKey='select_a_colleague'>Select a colleague</Trans>
       </h2>
       <span className={css(discStyle)}>
@@ -102,39 +101,17 @@ const AddTeamNoteModal: FC<AddTeamNoteModalProps> = ({
           />
         )}
       </form>
-      <div className={css(absolueStyle)}>
-        <div className={css(selectedRelativeStyle)}>
-          <div className={css(btnsStyle({ mobileScreen, theme }))}>
-            <Button styles={[theme.font.fixed.f16, buttonCoreStyled]} onPress={cancelTEAMModal}>
-              <Trans i18nKey='cancel'>Cancel</Trans>
-            </Button>
-
-            <IconButton
-              isDisabled={!isValid}
-              customVariantRules={{ default: iconBtnStyle, disabled: iconBtnStyleDisabled }}
-              graphic='arrowRight'
-              data-test-id='arrowRight'
-              iconProps={{ invertColors: true }}
-              iconPosition={Position.RIGHT}
-              onPress={() => {
-                setSuccessTEAMModal(() => true);
-                handleTEAMSubmit();
-              }}
-            >
-              <Trans i18nKey='submit'>Submit</Trans>
-            </IconButton>
-          </div>
-        </div>
-      </div>
+      <ButtonsWrapper
+        isValid={isValid}
+        onLeftPress={cancelTEAMModal}
+        onRightPress={() => {
+          setSuccessTEAMModal(() => true);
+          handleTEAMSubmit();
+        }}
+      />
     </div>
   );
 };
-
-const btnsStyle: CreateRule<{ mobileScreen: boolean; theme: Theme }> = ({ mobileScreen, theme }) => ({
-  padding: mobileScreen ? theme.spacing.s6 : theme.spacing.s8,
-  display: 'flex',
-  justifyContent: 'space-between',
-});
 
 const WrapperModalGiveFeedbackStyle: Rule = {
   paddingLeft: '40px',
@@ -143,7 +120,7 @@ const WrapperModalGiveFeedbackStyle: Rule = {
   overflow: 'auto',
 };
 
-const collegueStyled: Rule = {
+const colleagueStyled: Rule = {
   margin: '40px 0px 8px 0px',
   fontWeight: 'bold',
   fontSize: '24px',
@@ -153,76 +130,6 @@ const collegueStyled: Rule = {
 const discStyle: Rule = {
   fontSize: '18px',
   lineHeight: '22px',
-};
-const absolueStyle: Rule = {
-  position: 'absolute',
-  left: 0,
-  bottom: 0,
-  width: '100%',
-  background: '#FFFFFF',
-  height: '112px',
-  borderRadius: '32px',
-};
-
-const selectedRelativeStyle: Rule = ({ theme }) => ({
-  position: 'relative',
-  bottom: theme.spacing.s0,
-  left: theme.spacing.s0,
-  right: theme.spacing.s0,
-  // @ts-ignore
-  borderTop: `${theme.border.width.b2} solid ${theme.colors.lightGray}`,
-  cursor: 'pointer',
-  marginRight: '3px',
-});
-
-// TODO: Extract duplicate 7
-const buttonCoreStyled: Rule = ({ theme }) => ({
-  fontWeight: theme.font.weight.bold,
-  width: '49%',
-  margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
-  background: theme.colors.white,
-  border: `${theme.border.width.b2} solid ${theme.colors.tescoBlue}`,
-  color: `${theme.colors.tescoBlue}`,
-});
-
-const iconBtnStyle: Rule = ({ theme }) => ({
-  padding: '0px 12px 0px 20px',
-  display: 'flex',
-  width: '49%',
-  height: '40px',
-  borderRadius: '20px',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  outline: 0,
-  background: theme.colors.tescoBlue,
-  color: theme.colors.white,
-  cursor: 'pointer',
-});
-
-const iconBtnStyleDisabled: Rule = ({ theme }) => ({
-  padding: '0px 12px 0px 20px',
-  display: 'flex',
-  width: '49%',
-  height: '40px',
-  borderRadius: '20px',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  outline: 0,
-  background: theme.colors.tescoBlue,
-  color: theme.colors.white,
-  pointerEvents: 'none',
-  opacity: '0.4',
-});
-
-const arrowLeftStyle: CreateRule<{ theme: Theme; mobileScreen: boolean }> = ({ theme, mobileScreen }) => {
-  return {
-    position: 'fixed',
-    top: theme.spacing.s5,
-    left: mobileScreen ? theme.spacing.s5 : theme.spacing.s10,
-    textDecoration: 'none',
-    border: 'none',
-    cursor: 'pointer',
-  };
 };
 
 export default AddTeamNoteModal;

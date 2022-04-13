@@ -1,13 +1,14 @@
 import React, { FC, useState } from 'react';
-import { Button, CreateRule, Rule, Styles, useStyle } from '@pma/dex-wrapper';
+import { Rule, useStyle } from '@pma/dex-wrapper';
 
 import { Notification } from 'components/Notification';
 import { GenericItemField } from 'components/GenericForm';
 import { Input, Item, Select, Textarea } from 'components/Form';
-import { Trans, useTranslation } from 'components/Translation';
-import { IconButton, Position } from 'components/IconButton';
-import { Icon as IconComponent } from 'components/Icon';
+import { useTranslation } from 'components/Translation';
 import SuccessModal from '../SuccessModal';
+import { ButtonsWrapper } from 'components/ButtonsWrapper';
+import { ArrowLeftIcon } from 'components/ArrowLeftIcon';
+
 import get from 'lodash.get';
 import { Option } from 'components/Form/types';
 import { AddNoteModalProps } from '../../../type';
@@ -16,8 +17,7 @@ import { addNewFolderId, getFolder, getNotes } from 'utils';
 export const MODAL_WRAPPER = 'modal-wrapper';
 
 const AddNoteModal: FC<AddNoteModalProps> = ({ methods, cancelModal, submitForm, createFolder, foldersWithNotes }) => {
-  const { css, theme, matchMedia } = useStyle();
-  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
+  const { css } = useStyle();
   const { t } = useTranslation();
   const [successModal, setSuccessModal] = useState<boolean>(false);
 
@@ -135,77 +135,21 @@ const AddNoteModal: FC<AddNoteModalProps> = ({ methods, cancelModal, submitForm,
                 label={getNotes(foldersWithNotes, t)?.option.title}
               />
             )}
-
-            <div className={css(blockStyle)}>
-              <div className={css(wrapperStyle)}>
-                <div
-                  className={css({
-                    padding: mobileScreen ? theme.spacing.s7 : theme.spacing.s9,
-                    display: 'flex',
-                    justifyContent: 'center',
-                  })}
-                >
-                  <Button styles={[theme.font.fixed.f16, buttonCancelStyle]} onPress={cancelModal}>
-                    <Trans i18nKey='cancel'>Cancel</Trans>
-                  </Button>
-                  <IconButton
-                    data-test-id='arrowRight'
-                    onPress={() => {
-                      submitForm();
-                      setSuccessModal(() => true);
-                    }}
-                    graphic='arrowRight'
-                    customVariantRules={{
-                      default: submitButtonStyle({ isValid }),
-                      disabled: submitButtonStyle({ isValid }),
-                    }}
-                    iconStyles={iconStyledRule}
-                    iconPosition={Position.RIGHT}
-                    isDisabled={!isValid}
-                  >
-                    <Trans i18nKey='save'>Save</Trans>
-                  </IconButton>
-                </div>
-              </div>
-            </div>
+            <ButtonsWrapper
+              isValid={isValid}
+              onLeftPress={cancelModal}
+              onRightPress={() => {
+                submitForm();
+                setSuccessModal(() => true);
+              }}
+            />
           </form>
-          <span
-            className={css({
-              position: 'fixed',
-              top: theme.spacing.s5,
-              left: mobileScreen ? theme.spacing.s5 : theme.spacing.s10,
-              textDecoration: 'none',
-              border: 'none',
-              cursor: 'pointer',
-            })}
-            onClick={cancelModal}
-          >
-            <IconComponent graphic='arrowLeft' invertColors={true} />
-          </span>
+          <ArrowLeftIcon onClick={cancelModal} data-test-id='arrowRight' />
         </div>
       </div>
     </>
   );
 };
-
-const wrapperStyle: Rule = ({ theme }) => ({
-  position: 'relative',
-  bottom: theme.spacing.s0,
-  left: theme.spacing.s0,
-  right: theme.spacing.s0,
-  // @ts-ignore
-  borderTop: `${theme.border.width.b2} solid ${theme.colors.lightGray}`,
-});
-
-// TODO: Extract duplicate 7
-const buttonCancelStyle: Rule = ({ theme }) => ({
-  fontWeight: theme.font.weight.bold,
-  width: '49%',
-  margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
-  background: theme.colors.white,
-  border: `${theme.border.width.b2} solid ${theme.colors.tescoBlue}`,
-  color: `${theme.colors.tescoBlue}`,
-});
 
 const WrapperModalGiveFeedbackStyle: Rule = {
   paddingLeft: '40px',
@@ -213,37 +157,5 @@ const WrapperModalGiveFeedbackStyle: Rule = {
   height: '100%',
   overflow: 'auto',
 };
-const blockStyle: Rule = () => {
-  return {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    width: '100%',
-  };
-};
-
-const iconStyledRule: Rule = {
-  '& > path': {
-    fill: 'white',
-  },
-} as Styles;
-
-const submitButtonStyle: CreateRule<{ isValid: any }> =
-  ({ isValid }) =>
-  ({ theme }) => ({
-    ...theme.font.fixed.f16,
-    letterSpacing: '0px',
-    fontWeight: theme.font.weight.bold,
-    width: '50%',
-    margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
-    background: `${theme.colors.tescoBlue}`,
-    color: `${theme.colors.white}`,
-    display: 'flex',
-    justifyContent: 'space-between',
-    padding: '0px 20px',
-    borderRadius: `${theme.spacing.s20}`,
-    opacity: isValid ? '1' : '0.4',
-    pointerEvents: isValid ? 'all' : 'none',
-  });
 
 export default AddNoteModal;

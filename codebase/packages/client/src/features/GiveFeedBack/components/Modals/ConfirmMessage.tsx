@@ -1,7 +1,8 @@
 import React, { FC } from 'react';
-import { Button, CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
+import { Rule, useStyle } from '@pma/dex-wrapper';
 import { Trans } from 'components/Translation';
-import { IconButton } from 'components/IconButton';
+import { ArrowLeftIcon } from 'components/ArrowLeftIcon';
+import { ButtonsWrapper } from 'components/ButtonsWrapper';
 
 export const CONFIRM_WRAPPER = 'confirm-message';
 
@@ -11,8 +12,7 @@ type ConfirmModalType = {
 };
 
 const ConfirmMessage: FC<ConfirmModalType> = ({ onConfirm, goBack }) => {
-  const { css, theme, matchMedia } = useStyle();
-  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
+  const { css } = useStyle();
   return (
     <div data-test-id={CONFIRM_WRAPPER}>
       <div className={css(ImgContent_style)}>
@@ -30,79 +30,19 @@ const ConfirmMessage: FC<ConfirmModalType> = ({ onConfirm, goBack }) => {
         </h3>
       </div>
 
-      <div className={css(Absolute_style)}>
-        <div className={css(Relative_btn_styled)}>
-          <div className={css(SpacingStyle({ mobileScreen }))}>
-            <Button styles={[theme.font.fixed.f16, backButton]} onPress={goBack}>
-              <Trans>Go back</Trans>
-            </Button>
-            <Button styles={[theme.font.fixed.f16, submitButton]} onPress={onConfirm}>
-              <Trans>Confirm</Trans>
-            </Button>
-          </div>
-        </div>
-      </div>
+      <ButtonsWrapper
+        isValid={true}
+        onLeftPress={goBack}
+        onRightPress={onConfirm}
+        leftText='go_back'
+        rightIcon={false}
+        rightTextNotIcon='confirm'
+      />
 
-      <span
-        className={css({
-          position: 'fixed',
-          top: theme.spacing.s5,
-          left: mobileScreen ? theme.spacing.s5 : theme.spacing.s10,
-          textDecoration: 'none',
-          border: 'none',
-          cursor: 'pointer',
-        })}
-      >
-        <IconButton graphic='arrowLeft' onPress={goBack} iconProps={{ invertColors: true }} />
-      </span>
+      <ArrowLeftIcon onClick={goBack} />
     </div>
   );
 };
-
-const Absolute_style: Rule = {
-  position: 'absolute',
-  left: 0,
-  bottom: 0,
-  width: '100%',
-  background: '#FFFFFF',
-  height: '112px',
-};
-
-const Relative_btn_styled: Rule = ({ theme }) => ({
-  position: 'relative',
-  bottom: theme.spacing.s0,
-  left: theme.spacing.s0,
-  right: theme.spacing.s0,
-  // @ts-ignore
-  borderTop: `${theme.border.width.b2} solid ${theme.colors.lightGray}`,
-});
-
-const SpacingStyle: CreateRule<{ mobileScreen: boolean }> =
-  ({ mobileScreen }) =>
-  ({ theme }) => ({
-    padding: mobileScreen ? theme.spacing.s6 : theme.spacing.s8,
-    display: 'flex',
-    justifyContent: 'space-between',
-  });
-
-// TODO: Extract duplicate 7
-const backButton: Rule = ({ theme }) => ({
-  fontWeight: theme.font.weight.bold,
-  width: '49%',
-  margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
-  background: theme.colors.white,
-  border: `${theme.border.width.b2} solid ${theme.colors.tescoBlue}`,
-  color: `${theme.colors.tescoBlue}`,
-});
-
-const submitButton: Rule = ({ theme }) => ({
-  fontWeight: theme.font.weight.bold,
-  width: '49%',
-  margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
-  background: theme.colors.tescoBlue,
-  border: `${theme.border.width.b2} solid ${theme.colors.tescoBlue}`,
-  color: `${theme.colors.white}`,
-});
 
 const ImgContent_style: Rule = {
   display: 'flex',

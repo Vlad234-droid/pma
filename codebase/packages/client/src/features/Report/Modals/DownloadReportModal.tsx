@@ -1,14 +1,18 @@
 import React, { FC, useState } from 'react';
-import { Button, Icon, ModalWithHeader, CreateRule, Rule, theme, useStyle } from '@pma/dex-wrapper';
+import { Button, CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
 import { useForm } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { reportByYearSchema, getYearsFromCurrentYear, checkboxes, getRequestParams } from '../config';
+
 import { Select, Checkbox, Item } from 'components/Form';
-import success from 'images/success.jpg';
-import { getCurrentYear } from 'utils/date';
 import { Trans, useTranslation } from 'components/Translation';
+import { WrapperModal } from 'features/Modal';
+import { ButtonsWrapper } from 'components/ButtonsWrapper';
+
 import { downloadReportStatistics } from '../utils';
+import { getCurrentYear } from 'utils/date';
+import success from 'images/success.jpg';
+import { reportByYearSchema, getYearsFromCurrentYear, checkboxes, getRequestParams } from '../config';
 
 export const DOWNLOAD_WRAPPER = 'download-wrapper';
 
@@ -54,111 +58,72 @@ const DownloadReportModal: FC<ModalProps> = ({ onClose }) => {
   };
 
   const isDisabledDownloadBtnHandler = () => {
-    if (isValid && selectedCheckboxes.some((item) => item['isChecked'])) return false;
-    return true;
+    if (isValid && selectedCheckboxes.some((item) => item['isChecked'])) return true;
+    return false;
   };
   return (
-    <ModalWithHeader
-      modalPosition='middle'
-      title={t('download_and_exctract', 'Download and Exctract')}
-      containerRule={modalWrapperStyle}
-      closeOptions={{
-        closeOptionContent: <Icon graphic='close' />,
-        onClose: onClose,
-      }}
-    >
-      <h3 className={css(modalTitleStyle({ mobileScreen }))} data-test-id={DOWNLOAD_WRAPPER}>
-        <Trans i18nKey='topics_to_download_into_excel_report'>
-          Choose which topics you’d like to download into an excel report
-        </Trans>
-      </h3>
-      <div className={css(modalInnerWarp)}>
-        <div className={css({ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' })}>
-          {selectedCheckboxes.map((item) => (
-            <label key={item.id} className={css(checkboxItemStyle)} data-test-id={item.id}>
-              <Checkbox checked={item.isChecked} onChange={() => handleCheck(item.id)} />
-              <span className={css({ marginLeft: '15px' })}>{item.label}</span>
-            </label>
-          ))}
+    <WrapperModal onClose={onClose} title={t('download_and_extract', 'Download and Extract')}>
+      <div className={css(wrapperModalGiveFeedbackStyle)}>
+        <h3 className={css(modalTitleStyle({ mobileScreen }))} data-test-id={DOWNLOAD_WRAPPER}>
+          <Trans i18nKey='topics_to_download_into_excel_report'>
+            Choose which topics you’d like to download into an excel report
+          </Trans>
+        </h3>
+        <div>
+          <div className={css({ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' })}>
+            {selectedCheckboxes.map((item) => (
+              <label key={item.id} className={css(checkboxItemStyle)} data-test-id={item.id}>
+                <Checkbox checked={item.isChecked} onChange={() => handleCheck(item.id)} />
+                <span className={css({ marginLeft: '15px' })}>{item.label}</span>
+              </label>
+            ))}
+          </div>
+          <Item withIcon={false} label={t('select_a_year', 'Select a year')}>
+            <Select
+              options={getYearsFromCurrentYear(getCurrentYear())}
+              name={'year'}
+              placeholder={t('please_select', 'Please select')}
+              //@ts-ignore
+              onChange={({ target: { value } }) => {
+                setValue('year', value, { shouldValidate: true });
+              }}
+            />
+          </Item>
+          <div className={css(textBlock, { fontWeight: 700 })}>Guidance for colleagues</div>
+          <div className={css(textBlock, { marginBottom: '30px' })}>
+            <Trans i18nKey='data_is_confidential'>
+              This data is confidential. If you need to download this data, you must ensure you do not share with anyone
+              else and that you store the data securely with a password.
+            </Trans>
+          </div>
         </div>
+        <ButtonsWrapper
+          isValid={isDisabledDownloadBtnHandler()}
+          onLeftPress={onClose}
+          onRightPress={handleDownloadReport}
+          rightIcon={false}
+        />
 
-        <Item withIcon={false} label={t('select_a_year', 'Select a year')}>
-          <Select
-            options={getYearsFromCurrentYear(getCurrentYear())}
-            name={'year'}
-            placeholder={t('please_select', 'Please select')}
-            //@ts-ignore
-            onChange={({ target: { value } }) => {
-              setValue('year', value, { shouldValidate: true });
-            }}
-          />
-        </Item>
-
-        <div className={css(textBlock, { fontWeight: 700 })}>Guidance for colleagues</div>
-        <div className={css(textBlock, { marginBottom: '30px' })}>
-          This data is confidential. If you need to download this data, you must ensure you do not share with anyone
-          else and that you store the data securely with a password.
-        </div>
+        {showSuccessModal && (
+          <div className={css(successModalWrap)} data-test-id='success-wrapper'>
+            <img src={success} alt='success' />
+            <div className={css(successModalTitle)}>Done!</div>
+            <div className={css(successModalText)}>You have downloaded the report onto your device.</div>
+            <Button styles={[successModalBtn]} onPress={onClose}>
+              <Trans i18nKey='okay'>Okay</Trans>
+            </Button>
+          </div>
+        )}
       </div>
-
-      <div className={css(formButtonsWrap({ mobileScreen }))}>
-        <Button
-          onPress={onClose}
-          mode='inverse'
-          styles={[formButton, { border: `2px solid ${theme.colors.tescoBlue}` }]}
-        >
-          <Trans i18nKey='cancel'>Cancel</Trans>
-        </Button>
-        <Button isDisabled={isDisabledDownloadBtnHandler()} onPress={handleDownloadReport} styles={[formButton]}>
-          <Trans i18nKey='download'>Download</Trans>
-        </Button>
-      </div>
-
-      {showSuccessModal && (
-        <div className={css(successModalWrap)} data-test-id='success-wrapper'>
-          <img src={success} alt='success' />
-          <div className={css(successModalTitle)}>Done!</div>
-          <div className={css(successModalText)}>You have downloaded the report onto your device.</div>
-          <Button styles={[successModalBtn]} onPress={onClose}>
-            Okay
-          </Button>
-        </div>
-      )}
-    </ModalWithHeader>
+    </WrapperModal>
   );
 };
 
-const modalWrapperStyle: Rule = (mobileScreen) => {
-  return {
-    ...(mobileScreen
-      ? {
-          width: '100%',
-          height: 'calc(100% - 50px)',
-          marginTop: '50px',
-          padding: 0,
-        }
-      : {
-          width: '60%',
-          height: 'calc(100% - 100px)',
-          padding: 0,
-        }),
-  };
-};
-
-const modalInnerWarp: Rule = (mobileScreen) => {
-  return {
-    width: '100%',
-    overflowY: 'scroll',
-    ...(mobileScreen
-      ? {
-          padding: '5px 15px',
-          height: 'calc(100% - 170px)',
-        }
-      : {
-          height: 'calc(100% - 257px)',
-          padding: '5px 40px',
-        }),
-  };
+const wrapperModalGiveFeedbackStyle: Rule = {
+  paddingLeft: '40px',
+  paddingRight: '40px',
+  height: '100%',
+  overflow: 'auto',
 };
 
 const checkboxItemStyle: Rule = () => {
@@ -176,50 +141,17 @@ const modalTitleStyle: CreateRule<{ mobileScreen: boolean }> =
   ({ mobileScreen }) =>
   ({ theme }) => ({
     color: theme.colors.tescoBlue,
+    margin: '0px 0px 10px 0px',
     ...(mobileScreen
       ? {
           fontSize: '20px',
           lineHeight: '24px',
-          padding: '20px',
-          margin: 0,
         }
       : {
-          fontSize: '24px',
+          fontSize: '22px',
           lineHeight: '28px',
-          padding: '40px',
-          margin: 0,
         }),
   });
-
-const formButtonsWrap: CreateRule<{ mobileScreen: boolean }> =
-  ({ mobileScreen }) =>
-  ({ theme }) => ({
-    display: 'flex',
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    width: '100%',
-    // @ts-ignore
-    background: theme.colors.white,
-    borderTop: `1px solid #dedede`,
-    ...(mobileScreen
-      ? {
-          padding: '20px 10px',
-        }
-      : {
-          padding: '40px 30px',
-        }),
-  });
-
-const formButton: Rule = () => {
-  return {
-    width: '50%',
-    margin: '0 5px',
-    fontSize: '16px',
-    lineHeight: '20px',
-    fontWeight: 700,
-  };
-};
 
 const textBlock: Rule = () => {
   return {

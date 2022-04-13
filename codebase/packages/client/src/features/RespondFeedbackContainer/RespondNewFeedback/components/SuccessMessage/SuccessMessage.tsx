@@ -1,7 +1,8 @@
 import React, { FC } from 'react';
-import { Button, Rule, Styles, useStyle } from '@pma/dex-wrapper';
+import { Rule, Styles, useStyle } from '@pma/dex-wrapper';
 import success from 'images/success.jpg';
 import { Trans } from 'components/Translation';
+import { ButtonsWrapper } from 'components/ButtonsWrapper';
 
 export const OK_BTN = 'ok_btn';
 export const SUCCESS_MODAL_WRAPPER = 'success_modal_wrapper';
@@ -11,81 +12,34 @@ type Props = {
   onSuccess: () => void;
 };
 
-// TODO: Extract duplicate 1
 const SuccessMessage: FC<Props> = ({ targetColleagueProfile, onSuccess }) => {
-  const { css, theme, matchMedia } = useStyle();
-  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
+  const { css } = useStyle();
 
   return (
-    <div data-test-id={SUCCESS_MODAL_WRAPPER} className={css(WrapperSuccessContainer)}>
-      <div className={css(SuccessImg)}>
+    <div data-test-id={SUCCESS_MODAL_WRAPPER} className={css(wrapperSuccessContainer)}>
+      <div className={css(successImg)}>
         <img src={success} alt='success' />
       </div>
-      <h2 className={css(DoneText)}>Done!</h2>
-      <p className={css(Description)}>
+      <h2 className={css(doneText)}>
+        <Trans i18nKey='done'>Done</Trans>!
+      </h2>
+      <p className={css(description)}>
         {`${targetColleagueProfile?.colleague?.profile?.firstName} ${targetColleagueProfile?.colleague?.profile?.lastName}`}{' '}
         <Trans i18nKey='will_now_be_able_to_see_your_feedback'>will now be able to see your feedback</Trans>
       </p>
-      <div
-        className={css({
-          position: 'absolute',
-          left: 0,
-          bottom: 0,
-          width: '100%',
-        })}
-      >
-        <div
-          className={css({
-            position: 'relative',
-            bottom: theme.spacing.s0,
-            left: theme.spacing.s0,
-            right: theme.spacing.s0,
-            //@ts-ignore
-            borderTop: `${theme.border.width.b2} solid ${theme.colors.lightGray}`,
-          })}
-        >
-          <div
-            className={css({
-              padding: mobileScreen ? theme.spacing.s6 : theme.spacing.s8,
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-            })}
-          >
-            <Button
-              data-test-id={OK_BTN}
-              styles={[
-                theme.font.fixed.f16,
-                {
-                  fontWeight: theme.font.weight.bold,
-                  width: '49%',
-                  margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
-                  background: theme.colors.tescoBlue,
-                  border: `${theme.border.width.b2} solid ${theme.colors.tescoBlue}`,
-                  color: `${theme.colors.white}`,
-                },
-              ]}
-              onPress={() => {
-                onSuccess();
-              }}
-            >
-              <Trans i18nKey='OK'>Okay</Trans>
-            </Button>
-          </div>
-        </div>
-      </div>
+      <ButtonsWrapper single={true} rightIcon={false} rightTextNotIcon='okay' isValid={true} onRightPress={onSuccess} />
     </div>
   );
 };
 
-const WrapperSuccessContainer: Rule = {
+const wrapperSuccessContainer: Rule = {
   paddingTop: '40px',
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
   flexDirection: 'column',
 };
-const SuccessImg: Rule = {
+const successImg: Rule = {
   width: '164px',
   height: '164px',
   '& > img': {
@@ -94,14 +48,14 @@ const SuccessImg: Rule = {
   },
 } as Styles;
 
-const DoneText: Rule = {
+const doneText: Rule = {
   fontWeight: 'bold',
   fontSize: '28px',
   lineHeight: '32px',
   margin: '20px 0px 16px 0px',
 };
 
-const Description: Rule = {
+const description: Rule = {
   maxWidth: '357px',
   margin: '0px',
   fontWeight: 'normal',

@@ -39,7 +39,11 @@ const ColleaguesFinder: FC<Props> = ({ onSelect, error, value }) => {
             disabled={Boolean(value)}
             renderOption={(item) => (
               <div className={css({ display: 'flex', justifyContent: 'flex-start', alignItems: 'center' })}>
-                <img className={css({ width: '50px', height: '50px', borderRadius: '50%' })} src={defaultImg} />
+                <img
+                  className={css({ width: '50px', height: '50px', borderRadius: '50%' })}
+                  src={defaultImg}
+                  alt={'User image'}
+                />
                 <div className={css({ marginLeft: '16px' })}>
                   <div className={css(flexGapStyle, selectedItemStyle)}>
                     <div>{item?.colleague?.profile?.firstName}</div>

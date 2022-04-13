@@ -4,16 +4,23 @@ import { Rule, useStyle } from '@pma/dex-wrapper';
 import get from 'lodash.get';
 import { Field, Item, Select, Textarea, Attention } from 'components/Form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { colleagueUUIDSelector, FeedbackActions, getReviews } from '@pma/store';
 import * as Yup from 'yup';
 import { useForm } from 'react-hook-form';
-import { ActionButtons, ColleaguesFinder } from './';
-import { createRequestFeedbackSchema } from '../config';
-import { TileWrapper } from 'components/Tile';
-import { colleagueUUIDSelector, FeedbackActions, getReviews } from '@pma/store';
-import { IconButton } from 'components/IconButton';
-import { TargetType } from '../type';
-import { Tesco } from 'config/enum';
+import { useNavigate } from 'react-router';
+
+import { ColleaguesFinder } from './';
 import { useTranslation, Trans } from 'components/Translation';
+import { TileWrapper } from 'components/Tile';
+import { IconButton } from 'components/IconButton';
+import { ButtonsWrapper } from 'components/ButtonsWrapper';
+import { ArrowLeftIcon } from 'components/ArrowLeftIcon';
+
+import { createRequestFeedbackSchema } from '../config';
+import { Tesco } from 'config/enum';
+import { TargetType } from '../type';
+import { Page } from '../../../pages';
+import { buildPath } from '../../Routes';
 
 type Props = {
   onSubmit: (data: any) => void;
@@ -28,6 +35,7 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel, setIsInfoModalOpen }) 
   const dispatch = useDispatch();
   const reviews = useSelector(getReviews) || [];
   const currentColleagueUuid = useSelector(colleagueUUIDSelector);
+  const navigate = useNavigate();
 
   const AREA_OPTIONS = [
     { value: TargetType.GOAL, label: t('day_job', 'Day Job') },
@@ -221,7 +229,17 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel, setIsInfoModalOpen }) 
             />
           </TileWrapper>
         </form>
-        <ActionButtons isValid={isValid} onCancel={onCancel} onSubmit={handleSubmit(onSubmit)} />
+        <ButtonsWrapper
+          isValid={isValid}
+          onLeftPress={onCancel}
+          onRightPress={handleSubmit(onSubmit)}
+          rightTextWithIcon='submit'
+        />
+        <ArrowLeftIcon
+          onClick={() => {
+            navigate(buildPath(Page.FEEDBACK));
+          }}
+        />
       </div>
     </>
   );

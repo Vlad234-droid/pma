@@ -1,8 +1,8 @@
 import React, { FC } from 'react';
-import { CreateRule, Rule, Theme, useStyle } from '@pma/dex-wrapper';
+import { Rule, useStyle } from '@pma/dex-wrapper';
 
-import { IconButton } from 'components/IconButton';
 import { Trans } from 'components/Translation';
+import { ArrowLeftIcon } from 'components/ArrowLeftIcon';
 
 type Props = {
   closeInfoModal: () => void;
@@ -14,8 +14,7 @@ export const DESCRIPTION_1 = 'DESCRIPTION_1';
 export const DESCRIPTION_2 = 'DESCRIPTION_2';
 
 const InfoModal: FC<Props> = ({ closeInfoModal, TEAM }) => {
-  const { css, theme, matchMedia } = useStyle();
-  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
+  const { css } = useStyle();
   return (
     <div className={css(wrapperInfo)} data-test-id={MODAL_WRAPPER}>
       {!TEAM ? (
@@ -39,21 +38,10 @@ const InfoModal: FC<Props> = ({ closeInfoModal, TEAM }) => {
           </Trans>
         </p>
       )}
-      <span className={css(iconLeftStyle({ mobileScreen, theme }))}>
-        <IconButton graphic='arrowLeft' onPress={closeInfoModal} iconProps={{ invertColors: true }} />
-      </span>
+      <ArrowLeftIcon onClick={closeInfoModal} testId={'go-back'} />
     </div>
   );
 };
-
-const iconLeftStyle: CreateRule<{ mobileScreen: boolean; theme: Theme }> = ({ mobileScreen, theme }) => ({
-  position: 'fixed',
-  top: theme.spacing.s5,
-  left: mobileScreen ? theme.spacing.s5 : theme.spacing.s10,
-  textDecoration: 'none',
-  border: 'none',
-  cursor: 'pointer',
-});
 
 const wrapperInfo: Rule = {
   padding: '0px 36px',

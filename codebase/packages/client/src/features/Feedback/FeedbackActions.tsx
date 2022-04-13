@@ -1,11 +1,12 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { colleagueUUIDSelector, FeedbackActions as FeedbackActionsGet, UserActions } from '@pma/store';
-import { CreateRule, Modal, Rule, Theme, useStyle } from '@pma/dex-wrapper';
+import { CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
 import { Trans, useTranslation } from 'components/Translation';
 import { Item, Select } from 'components/Form';
 import { IconButton } from 'components/IconButton';
 import { Icon } from 'components/Icon';
+import WrapperModal from 'features/Modal/components/WrapperModal';
 import { useAuthContainer } from 'contexts/authContext';
 import { getCards, TREATMENT_FIELD_OPTIONS } from './config';
 import { getSelectedTreatmentValue } from './utils';
@@ -15,7 +16,7 @@ import { Info360Modal } from './Modals';
 export const FEEDBACK_ACTIONS = 'feedback_actions';
 
 const FeedbackActions: FC = () => {
-  const { css, theme, matchMedia } = useStyle();
+  const { css, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const dispatch = useDispatch();
   const { t } = useTranslation();
@@ -55,24 +56,9 @@ const FeedbackActions: FC = () => {
   return (
     <>
       {info360Modal && (
-        <Modal
-          modalPosition={'middle'}
-          overlayColor={'tescoBlue'}
-          modalContainerRule={[containerRule({ theme, mobileScreen })]}
-          closeOptions={{
-            content: <Icon graphic='cancel' invertColors={true} />,
-            onClose: () => {
-              setInfo360Modal(() => false);
-            },
-            styles: [modalCloseOptionStyle({ mobileScreen })],
-          }}
-          title={{
-            content: t('everyday_feedback', 'Everyday Feedback'),
-            styles: [modalTitleOptionStyle({ theme, mobileScreen })],
-          }}
-        >
+        <WrapperModal title={t('everyday_feedback', 'Everyday Feedback')} onClose={() => setInfo360Modal(false)}>
           <Info360Modal setInfo360Modal={setInfo360Modal} />
-        </Modal>
+        </WrapperModal>
       )}
       <div data-test-id={FEEDBACK_ACTIONS}>
         <div className={css(inMomentStyle({ mobileScreen }))}>
@@ -208,60 +194,5 @@ const iconBtnStyle: Rule = ({ theme }) => ({
 const iconStyle: Rule = {
   marginRight: '10px',
 };
-const containerRule: CreateRule<{ theme: Theme; mobileScreen }> = ({ theme, mobileScreen }) => {
-  return {
-    alignItems: 'center',
-    justifyContent: 'center',
-    position: 'relative',
-    ...(mobileScreen
-      ? { borderRadius: '24px 24px 0 0 ', padding: '16px 0 54px' }
-      : { borderRadius: '32px', padding: `40px 0 72px` }),
-    width: '640px',
-    height: mobileScreen ? 'calc(100% - 72px)' : 'calc(100% - 102px)',
-    marginTop: '72px',
-    marginBottom: mobileScreen ? 0 : '30px',
-    background: theme.colors.white,
-    cursor: 'default',
-    overflow: 'auto',
-  };
-};
 
-// TODO: Extract duplicate 13
-const modalCloseOptionStyle: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => {
-  return {
-    display: 'inline-block',
-    height: '24px',
-    paddingLeft: '0px',
-    paddingRight: '0px',
-    position: 'fixed',
-    top: '22px',
-    right: mobileScreen ? '20px' : '40px',
-    textDecoration: 'none',
-    border: 'none',
-    cursor: 'pointer',
-  };
-};
-
-// TODO: Extract duplicate 14
-const modalTitleOptionStyle: CreateRule<{ theme: Theme; mobileScreen: boolean }> = ({ theme, mobileScreen }) => {
-  return {
-    position: 'fixed',
-    top: '22px',
-    textAlign: 'center',
-    left: 0,
-    right: 0,
-    color: theme.colors.white,
-    letterSpacing: '0px',
-    fontWeight: theme.font.weight.bold,
-    ...(mobileScreen
-      ? {
-          fontSize: theme.font.fixed.f20.fontSize,
-          lineHeight: theme.font.fixed.f20.lineHeight,
-        }
-      : {
-          fontSize: theme.font.fixed.f20.fontSize,
-          lineHeight: theme.font.fixed.f24.lineHeight,
-        }),
-  };
-};
 export default FeedbackActions;

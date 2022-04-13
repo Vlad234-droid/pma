@@ -39,7 +39,6 @@ const PendingNotes: FC<PendingNotesProps> = ({ item }) => {
   );
 };
 
-// TODO: Extract duplicate 16
 const TileTitle: Rule = ({ theme }) => {
   return {
     fontWeight: 'normal',

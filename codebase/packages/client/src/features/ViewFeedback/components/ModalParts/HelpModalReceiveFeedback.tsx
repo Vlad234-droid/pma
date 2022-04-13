@@ -1,8 +1,8 @@
 import React, { Dispatch, FC, SetStateAction } from 'react';
-import { IconButton } from 'components/IconButton';
 import { useStyle, Rule, Styles } from '@pma/dex-wrapper';
 import { VideoPlayer, VideoId } from 'features/VideoPlayer';
 import { Trans } from 'components/Translation';
+import { ArrowLeftIcon } from 'components/ArrowLeftIcon';
 
 export const WRAPPER = 'help-wrapper';
 
@@ -11,21 +11,20 @@ type Info360ModalProps = {
 };
 
 const HelpModalReceiveFeedback: FC<Info360ModalProps> = ({ setHelpModalReceiveFeedback }) => {
-  const { css, theme, matchMedia } = useStyle();
-  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
+  const { css } = useStyle();
 
   return (
-    <div className={css(WrapperInfo)} data-test-id={WRAPPER}>
-      <h2 className={css(Title)}>
+    <div className={css(wrapperInfo)} data-test-id={WRAPPER}>
+      <h2 className={css(title)}>
         <Trans i18nKey='watch_this_video_on_receiving_your_feedback'>
           Watch this 2-minute video on receiving your feedback.
         </Trans>
       </h2>
 
-      <div className={css(BlockVideoExplanation)}>
+      <div className={css(blockVideoExplanation)}>
         <VideoPlayer videoId={VideoId.RECEIVE_FEEDBACK} />
       </div>
-      <p className={css(PreRecomendationInfo, { marginTop: '8px' })}>
+      <p className={css(preRecommendationInfo, { marginTop: '8px' })}>
         <Trans i18nKey='we_all_have_strengths_and_development_areas'>
           We all have strengths and development areas. Feedback is all about helping you be the best you can be. When
           receiving feedback, think about these four elements:
@@ -77,7 +76,7 @@ const HelpModalReceiveFeedback: FC<Info360ModalProps> = ({ setHelpModalReceiveFe
           </Trans>
         </li>
       </ol>
-      <p className={css(PreRecomendationInfo, { marginTop: '8px' })}>
+      <p className={css(preRecommendationInfo, { marginTop: '8px' })}>
         <Trans i18nKey='learn_more_zabout_your_feedback'>
           If you want to learn more about your feedback, speak to the colleague who shared the feedback. This is a great
           way to understand more about the feedback they shared and when they observed it. Remember to take time to
@@ -85,22 +84,11 @@ const HelpModalReceiveFeedback: FC<Info360ModalProps> = ({ setHelpModalReceiveFe
           conversations helps you to build great relationships with your colleagues.
         </Trans>
       </p>
-      <span
-        className={css({
-          position: 'fixed',
-          top: theme.spacing.s5,
-          left: mobileScreen ? theme.spacing.s5 : theme.spacing.s10,
-          textDecoration: 'none',
-          border: 'none',
-          cursor: 'pointer',
-        })}
-      >
-        <IconButton
-          graphic='arrowLeft'
-          onPress={() => setHelpModalReceiveFeedback(() => false)}
-          iconProps={{ invertColors: true }}
-        />
-      </span>
+      <ArrowLeftIcon
+        onClick={() => {
+          setHelpModalReceiveFeedback(() => false);
+        }}
+      />
     </div>
   );
 };
@@ -113,13 +101,13 @@ const orderedList: Rule = {
     lineHeight: '20px',
   },
 } as Styles;
-const WrapperInfo: Rule = {
+const wrapperInfo: Rule = {
   padding: '0px 36px',
   overflow: 'auto',
   height: '100%',
 };
 
-const Title: Rule = {
+const title: Rule = {
   margin: '0px',
   fontWeight: 'normal',
   fontSize: '16px',
@@ -127,7 +115,7 @@ const Title: Rule = {
   marginBottom: '12px',
 };
 
-const BlockVideoExplanation: Rule = {
+const blockVideoExplanation: Rule = {
   width: '100%',
   '& > img': {
     maxWidth: '100%',
@@ -137,7 +125,7 @@ const BlockVideoExplanation: Rule = {
   },
 } as Styles;
 
-const PreRecomendationInfo: Rule = {
+const preRecommendationInfo: Rule = {
   fontWeight: 'normal',
   fontSize: '16px',
   lineHeight: '20px',
