@@ -286,7 +286,7 @@ const ViewFeedback: FC = () => {
                 'worried_the_content_of_any_feedback',
                 "If you're worried the content of any feedback you`ve received is inappropriate, please contact your line manager or People team as soon as possible.",
               )}
-              customStyle={css(notificationStyles)}
+              customStyle={notificationStyles}
             />
           </div>
         </div>
@@ -411,7 +411,7 @@ const ButtonsActionsStyle: CreateRule<{ mobileScreen: boolean }> = ({ mobileScre
   flex: '1 0 250px',
   '& > div': {
     '&:nth-child(2)': {
-      marginTop: '8px',
+      marginTop: '16px',
     },
   },
 });
