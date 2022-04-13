@@ -40,11 +40,14 @@ const PendingNotes: FC<PendingNotesProps> = ({ item }) => {
 };
 
 // TODO: Extract duplicate 16
-const TileTitle: Rule = {
-  fontWeight: 'normal',
-  fontSize: '16px',
-  lineHeight: '20px',
-  margin: '0px 0px 4px 0px',
+const TileTitle: Rule = ({ theme }) => {
+  return {
+    fontWeight: 'normal',
+    margin: '0px 0px 4px 0px',
+    fontSize: theme.font.fixed.f16.fontSize,
+    lineHeight: theme.font.fixed.f16.lineHeight,
+    letterSpacing: '0px',
+  };
 };
 
 const SphereResondStyle: Rule = {

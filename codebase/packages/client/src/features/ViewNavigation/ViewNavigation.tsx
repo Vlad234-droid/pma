@@ -31,8 +31,13 @@ const ViewNavigation: FC = () => {
 
 export default ViewNavigation;
 
-const wrapperStyles: Rule = {
-  display: 'flex',
-  justifyContent: 'center',
-  marginBottom: '24px',
+const wrapperStyles: Rule = ({ theme }) => {
+  return {
+    display: 'flex',
+    justifyContent: 'center',
+    marginBottom: '24px',
+    fontSize: theme.font.fixed.f16.fontSize,
+    lineHeight: theme.font.fixed.f16.lineHeight,
+    letterSpacing: '0px',
+  };
 };

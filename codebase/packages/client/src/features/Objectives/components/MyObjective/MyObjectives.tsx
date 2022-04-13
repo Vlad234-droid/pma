@@ -346,7 +346,7 @@ const MyObjectives: FC = () => {
             <ShareWidget stopShare={false} sharing={true} customStyle={shareWidgetStyles} />
 
             <OrganizationWidget
-              customStyle={{ flex: '1 1 30%', display: 'flex', flexDirection: 'column' }}
+              customStyle={organizationWidgetStyles}
               onClick={() => navigate(buildPath(Page.STRATEGIC_DRIVERS))}
             />
           </div>
@@ -399,11 +399,28 @@ const timelineWrapperWidget = {
   marginBottom: '20px',
 } as Rule;
 
-const shareWidgetStyles = {
-  display: 'flex',
-  flexDirection: 'column',
-  width: '100%',
-} as Styles;
+const organizationWidgetStyles: Rule = ({ theme }) => {
+  return {
+    fontSize: theme.font.fixed.f16.fontSize,
+    lineHeight: theme.font.fixed.f16.lineHeight,
+    letterSpacing: '0px',
+    flex: '1 1 30%',
+    display: 'flex',
+    flexDirection: 'column',
+  };
+};
+
+const shareWidgetStyles: Rule = ({ theme }) => {
+  return {
+    fontSize: theme.font.fixed.f16.fontSize,
+    lineHeight: theme.font.fixed.f16.lineHeight,
+    letterSpacing: '0px',
+    display: 'flex',
+    flexDirection: 'column',
+    marginBottom: '20px',
+    width: '100%',
+  };
+};
 
 const bodyWrapperStyles: Rule = () => ({
   display: 'flex',

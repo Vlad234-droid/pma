@@ -80,8 +80,13 @@ const slideInModalRule: Rule = ({ zIndex }) => ({
   height: '100%',
 });
 
-const titleRule: Rule = {
-  width: '100%',
+const titleRule: Rule = ({ theme }) => {
+  return {
+    width: '100%',
+    fontSize: theme.font.fixed.f20.fontSize,
+    lineHeight: theme.font.fixed.f20.lineHeight,
+    letterSpacing: '0px',
+  };
 };
 
 const underlayRule: Rule = ({ colors }) => ({
@@ -93,7 +98,10 @@ const underlayRule: Rule = ({ colors }) => ({
 
 const containerRule: CreateRule<Record<'width', Spacing> & { isDesktop: boolean }> =
   ({ width, isDesktop }) =>
-  ({ zIndex }) => ({
+  ({ zIndex, theme }) => ({
+    fontSize: theme.font.fixed.f16.fontSize,
+    lineHeight: theme.font.fixed.f16.lineHeight,
+    letterSpacing: '0px',
     position: 'fixed',
     top: 0,
     right: 0,
@@ -128,9 +136,12 @@ const iconRule: Rule = {
 
 const pointerRule: Rule = { cursor: 'default' };
 
-const parcelRule: Rule = ({ colors }) => ({
+const parcelRule: Rule = ({ colors, theme }) => ({
   background: colors.backgroundDark,
   flexGrow: 1,
+  fontSize: theme.font.fixed.f16.fontSize,
+  lineHeight: theme.font.fixed.f16.lineHeight,
+  letterSpacing: '0px',
   '& > div': {
     height: '100%',
   },

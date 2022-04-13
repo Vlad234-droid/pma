@@ -59,14 +59,21 @@ const ColleaguesFinder: FC<Props> = ({ onSelect, error, value }) => {
   );
 };
 
-const flexGapStyle: Rule = {
-  display: 'flex',
-  gap: '8px',
+const flexGapStyle: Rule = ({ theme }) => {
+  return {
+    display: 'flex',
+    gap: '8px',
+    fontSize: theme.font.fixed.f16.fontSize,
+    lineHeight: theme.font.fixed.f16.lineHeight,
+    letterSpacing: '0px',
+  };
 };
 
-const selectedItemStyle: Rule = ({ colors }) => ({
-  fontWeight: 'bold',
-  fontSize: '16px',
+const selectedItemStyle: Rule = ({ colors, theme }) => ({
+  fontWeight: theme.font.weight.bold,
+  fontSize: theme.font.fixed.f16.fontSize,
+  lineHeight: theme.font.fixed.f16.lineHeight,
+  letterSpacing: '0px',
   color: colors.link,
 });
 

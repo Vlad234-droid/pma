@@ -254,8 +254,13 @@ const menuDrawerSettingsStyle: Rule = ({ theme }) => ({
   padding: '6px 0 0 0',
 });
 
-const itemSettingsTextStyle: Rule = {
-  paddingLeft: '16px',
+const itemSettingsTextStyle: Rule = ({ theme }) => {
+  return {
+    paddingLeft: '16px',
+    fontSize: theme.font.fixed.f16.fontSize,
+    lineHeight: theme.font.fixed.f16.lineHeight,
+    letterSpacing: '0px',
+  };
 };
 
 const itemSettingsStyle: Rule = {

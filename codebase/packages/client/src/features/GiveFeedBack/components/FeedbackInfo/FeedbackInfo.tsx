@@ -49,7 +49,7 @@ const FeedbackInfo: FC<Props> = ({ selectedPerson, onClickMore }) => {
         </div>
       </div>
       <div className={css(NotificationBlockStyle)}>
-        <p>
+        <p className={css(notificationParagraph)}>
           <Trans i18nKey='fill_out_the_questions_below_to_share_your_feedback'>
             Fill out the questions below to share your feedback
           </Trans>
@@ -102,22 +102,35 @@ const TreatmentStyle: Rule = {
 };
 
 // TODO: Extract duplicate 18
-const NotificationBlockStyle: Rule = {
-  marginTop: '16px',
-  padding: '16px 40px 16px 16px',
-  background: '#F3F9FC',
-  borderRadius: '10px',
-  '& > p': {
-    fontSize: '14px',
-    lineHeight: '18px',
-    margin: '0px',
-  },
-} as Styles;
+const NotificationBlockStyle: Rule = ({ theme }) => {
+  return {
+    marginTop: '16px',
+    padding: '16px 40px 16px 16px',
+    background: '#F3F9FC',
+    borderRadius: '10px',
+    fontSize: theme.font.fixed.f14.fontSize,
+    lineHeight: theme.font.fixed.f14.lineHeight,
+    letterSpacing: '0px',
+  };
+};
 
-const InfohelpStyle: Rule = {
-  color: '#00539F',
-  fontSize: '14px',
-  margin: '0px 0px 5px 8px',
+const notificationParagraph: Rule = ({ theme }) => {
+  return {
+    fontSize: theme.font.fixed.f14.fontSize,
+    lineHeight: theme.font.fixed.f14.lineHeight,
+    letterSpacing: '0px',
+    margin: '0px',
+  };
+};
+
+const InfohelpStyle: Rule = ({ theme }) => {
+  return {
+    color: '#00539F',
+    fontSize: theme.font.fixed.f14.fontSize,
+    lineHeight: theme.font.fixed.f14.lineHeight,
+    letterSpacing: '0px',
+    margin: '0px 0px 5px 8px',
+  };
 };
 
 const VideoExplanationTitle: Rule = {
