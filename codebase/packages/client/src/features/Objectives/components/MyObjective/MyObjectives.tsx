@@ -385,6 +385,7 @@ const widgetsBlock: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) =
   flexDirection: 'column',
   width: '100%',
   paddingBottom: mobileScreen ? '20px' : '0px',
+  gap: '15px',
 });
 
 const timelineWrapperStyles = {
