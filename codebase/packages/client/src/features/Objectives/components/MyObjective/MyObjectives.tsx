@@ -384,8 +384,7 @@ const widgetsBlock: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) =
   alignItems: 'center',
   flexDirection: 'column',
   width: '100%',
-  paddingBottom: mobileScreen ? '20px' : '0px',
-  gap: '15px',
+  gap: '20px',
 });
 
 const timelineWrapperStyles = {
@@ -403,7 +402,6 @@ const timelineWrapperWidget = {
 const shareWidgetStyles = {
   display: 'flex',
   flexDirection: 'column',
-  marginBottom: '20px',
   width: '100%',
 } as Styles;
 
