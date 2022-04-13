@@ -49,7 +49,7 @@ const FeedbackInfo: FC<Props> = ({ selectedPerson, onClickMore }) => {
         </div>
       </div>
       <div className={css(NotificationBlockStyle)}>
-        <p>
+        <p className={css(notificationParagraph)}>
           <Trans i18nKey='fill_out_the_questions_below_to_share_your_feedback'>
             Fill out the questions below to share your feedback
           </Trans>
@@ -111,12 +111,15 @@ const NotificationBlockStyle: Rule = ({ theme }) => {
     fontSize: theme.font.fixed.f14.fontSize,
     lineHeight: theme.font.fixed.f14.lineHeight,
     letterSpacing: '0px',
-    ', > p': {
-      fontSize: theme.font.fixed.f14.fontSize,
-      lineHeight: theme.font.fixed.f14.lineHeight,
-      letterSpacing: '0px',
-      margin: '0px',
-    },
+  };
+};
+
+const notificationParagraph: Rule = ({ theme }) => {
+  return {
+    fontSize: theme.font.fixed.f14.fontSize,
+    lineHeight: theme.font.fixed.f14.lineHeight,
+    letterSpacing: '0px',
+    margin: '0px',
   };
 };
 

@@ -186,6 +186,7 @@ const relativeBtnStyled: Rule = ({ theme }) => ({
   borderTop: `${theme.border.width.b2} solid ${theme.colors.lightGray}`,
   fontSize: theme.font.fixed.f16.fontSize,
   lineHeight: theme.font.fixed.f16.lineHeight,
+  letterSpacing: '0px',
 });
 
 const spacingStyle: CreateRule<{ mobileScreen: boolean }> =
