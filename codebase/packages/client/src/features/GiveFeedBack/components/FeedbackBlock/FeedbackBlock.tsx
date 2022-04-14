@@ -49,7 +49,7 @@ const FeedbackBlock: FC<Props> = ({ list, canEdit }) => {
                       <FeedbackProfileInfo
                         firstName={item?.targetColleagueProfile?.colleague?.profile?.firstName}
                         lastName={item?.targetColleagueProfile?.colleague?.profile?.lastName}
-                        job={item?.targetColleagueProfile?.colleague?.workRelationships[0]?.job.name}
+                        job={item?.targetColleagueProfile?.colleague?.workRelationships[0]?.job?.name}
                         department={item?.targetColleagueProfile?.colleague?.workRelationships[0]?.department?.name}
                         updatedTime={item.updatedTime}
                       />

@@ -48,7 +48,7 @@ export const defaultSerializer = (item) => ({
   ...item,
   firstName: item?.colleagueProfile?.colleague?.profile?.firstName || '',
   lastName: item?.colleagueProfile?.colleague?.profile?.lastName || '',
-  jobName: item?.colleagueProfile?.colleague?.workRelationships[0].job.name || '',
+  jobName: item?.colleagueProfile?.colleague?.workRelationships[0].job?.name || '',
   departmentName: item?.colleagueProfile?.colleague?.workRelationships[0].department?.name || '',
   feedbackItems: item?.feedbackItems
     .sort((i1, i2) => QUESTION_ORDER.indexOf(i1.code) - QUESTION_ORDER.indexOf(i2.code))
@@ -86,11 +86,11 @@ const DraftItem: FC<DraftItemProps> = ({ item, downloadable = true }) => {
           {() => (
             <Section>
               <FeedbackProfileInfo
-                firstName={item.firstName}
-                lastName={item.lastName}
-                job={item.jobName}
-                department={item.departmentName}
-                updatedTime={item.updatedTime}
+                firstName={item?.firstName}
+                lastName={item?.lastName}
+                job={item?.jobName}
+                department={item?.departmentName}
+                updatedTime={item?.updatedTime}
                 onExpandPress={(expanded) => expanded && !item.read && markAsReadFeedback(item.uuid)}
               />
 
