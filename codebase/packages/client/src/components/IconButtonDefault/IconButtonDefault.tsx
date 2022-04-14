@@ -41,9 +41,14 @@ const btnStyle: Rule = ({ theme }) => {
   };
 };
 
-const iconArrowRightStyle: Rule = {
-  height: '17px',
-  margin: '3px 9px 0px 3px',
+const iconArrowRightStyle: Rule = ({ theme }) => {
+  return {
+    fontSize: theme.font.fixed.f16.fontSize,
+    lineHeight: theme.font.fixed.f16.lineHeight,
+    letterSpacing: '0px',
+    height: '17px',
+    margin: '3px 9px 0px 3px',
+  };
 };
 
 const iconBtnStyle: Rule = ({ theme }) => ({
