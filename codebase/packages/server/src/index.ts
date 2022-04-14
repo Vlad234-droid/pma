@@ -1,4 +1,4 @@
-import express, {  Router } from 'express';
+import express, { Router } from 'express';
 import path from 'path';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
@@ -102,7 +102,7 @@ if (!PROXY_API_SERVER_URL) {
 
     appServer.use('/api', apiProxyMiddleware(config));
     appServer.use('/camunda', camundaProxyMiddleware(config));
-    
+
     appServer.use('/_status', (_, res) => res.sendStatus(200));
 
     server.use(

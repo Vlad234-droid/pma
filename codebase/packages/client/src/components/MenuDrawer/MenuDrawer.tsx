@@ -11,7 +11,8 @@ import { ConfirmModal } from 'features/Modal';
 import { CanPerform, role } from 'features/Permission';
 import { Trans, useTranslation } from 'components/Translation';
 import { useHeaderContainer } from 'contexts/headerContext';
-import { MenuItem } from 'components/MenuItem';
+import { MenuItem, wrapperStyles, iconStyles as menuIconStyles } from 'components/MenuItem';
+import { TileWrapper } from 'components/Tile';
 import TescoLogo from 'assets/img/TescoLogo.svg';
 import { Icon } from '../Icon';
 
@@ -94,6 +95,17 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
                   linkTo={buildPath(Page.REPORT)}
                   title={t('team_reporting', 'Team reporting')}
                 />
+              )}
+            />
+            <CanPerform
+              perform={[role.PROCESS_MANAGER, role.ADMIN]}
+              yes={() => (
+                <a href={'/camunda/app'} target={'_blank'} rel='noreferrer'>
+                  <TileWrapper title={t('camunda_admin', 'Camunda Admin')} hover={true} customStyle={wrapperStyles}>
+                    <Icon graphic={'document'} iconStyles={menuIconStyles} />
+                    <div style={{ paddingTop: '8px' }}>{t('camunda_admin', 'Camunda Admin')}</div>
+                  </TileWrapper>
+                </a>
               )}
             />
           </div>

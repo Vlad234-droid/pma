@@ -21,7 +21,7 @@ export const MenuItem: FC<Props> = ({ iconGraphic, title, linkTo = '' }) => (
   </div>
 );
 
-const wrapperStyles: Rule = {
+export const wrapperStyles: Rule = {
   width: '98px',
   height: '94px',
   padding: '18px 8px 16px',
@@ -32,7 +32,7 @@ const wrapperStyles: Rule = {
   textAlign: 'center',
 };
 
-const iconStyles: Rule = {
+export const iconStyles: Rule = {
   minWidth: '20px',
   minHeight: '20px',
 };
