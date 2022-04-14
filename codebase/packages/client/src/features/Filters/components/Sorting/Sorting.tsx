@@ -26,8 +26,13 @@ const Sorting: FC<Props> = ({ sortingOptions, iconStyles, isOpen, onClick, value
   );
 };
 
-const wrapperStyle: Rule = {
-  position: 'relative',
+const wrapperStyle: Rule = ({ theme }) => {
+  return {
+    position: 'relative',
+    fontSize: theme.font.fixed.f16.fontSize,
+    lineHeight: theme.font.fixed.f16.lineHeight,
+    letterSpacing: '0px',
+  };
 };
 
 export default Sorting;

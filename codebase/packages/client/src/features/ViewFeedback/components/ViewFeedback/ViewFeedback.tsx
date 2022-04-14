@@ -395,7 +395,7 @@ const buttonsActionsStyle: CreateRule<{ mobileScreen: boolean }> =
     flex: '1 0 250px',
     '& > div': {
       '&:nth-child(2)': {
-        marginTop: theme.spacing.s2,
+        marginTop: theme.spacing.s4,
       },
     },
   });
