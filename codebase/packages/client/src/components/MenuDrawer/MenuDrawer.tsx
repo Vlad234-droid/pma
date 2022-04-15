@@ -5,6 +5,7 @@ import { Rule, useStyle } from '@pma/dex-wrapper';
 import { colleagueUUIDSelector, timelinesExistSelector } from '@pma/store';
 
 import { Page } from 'pages';
+import { buildAbsolutePath } from 'utils';
 import { LINKS } from 'config/constants';
 import { buildPath } from 'features/Routes';
 import { ConfirmModal } from 'features/Modal';
@@ -100,7 +101,7 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
             <CanPerform
               perform={[role.PROCESS_MANAGER, role.ADMIN]}
               yes={() => (
-                <a href={'/camunda/app'} target={'_blank'} rel='noreferrer'>
+                <a href={buildAbsolutePath('camunda/app')} target={'_blank'} rel='noreferrer'>
                   <TileWrapper title={t('camunda_admin', 'Camunda Admin')} hover={true} customStyle={wrapperStyles}>
                     <Icon graphic={'document'} iconStyles={menuIconStyles} />
                     <div style={{ paddingTop: '8px' }}>{t('camunda_admin', 'Camunda Admin')}</div>
