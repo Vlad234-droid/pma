@@ -109,7 +109,9 @@ const wrapperStyles: Rule = {
 };
 
 const headerStyles: CreateRule<{ mobileScreen; onBack; theme: Theme }> = ({ mobileScreen, onBack, theme }) => ({
-  fontSize: '24px',
+  fontSize: theme.font.fixed.f24.fontSize,
+  lineHeight: theme.font.fixed.f24.lineHeight,
+  letterSpacing: '0px',
   display: 'flex',
   alignItems: 'center',
   color: theme.colors.tescoBlue,

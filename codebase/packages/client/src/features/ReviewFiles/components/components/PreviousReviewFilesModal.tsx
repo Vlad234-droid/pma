@@ -141,13 +141,17 @@ const containerRule: CreateRule<{
 });
 
 const labelStyles: Rule = ({ theme }) => ({
-  fontSize: '16px',
+  fontSize: theme.font.fixed.f16.fontSize,
+  lineHeight: theme.font.fixed.f16.lineHeight,
+  letterSpacing: '0px',
   color: theme.colors.tescoBlue,
   margin: '8px 0',
 });
 
 const descriptionStyles: Rule = ({ theme }) => ({
-  fontSize: '12px',
+  fontSize: theme.font.fixed.f12.fontSize,
+  lineHeight: theme.font.fixed.f12.lineHeight,
+  letterSpacing: '0px',
   color: theme.colors.tescoBlue,
 });
 

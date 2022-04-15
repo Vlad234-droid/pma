@@ -296,7 +296,7 @@ const MyObjectives: FC = () => {
                 <Section
                   left={{
                     content: (
-                      <div>
+                      <div className={css(title)}>
                         <Trans i18nKey='previous_review_files'>Previous Review Files</Trans>
                       </div>
                     ),
@@ -309,7 +309,9 @@ const MyObjectives: FC = () => {
                           onPress={() => setPreviousReviewFilesModalShow(true)}
                           styles={[linkStyles({ theme })]}
                         >
-                          <Trans i18nKey='view_files'>View files</Trans>
+                          <Trans className={css(title)} i18nKey='view_files'>
+                            View files
+                          </Trans>
                         </Button>
                       </div>
                     ),
@@ -361,6 +363,14 @@ const MyObjectives: FC = () => {
       )}
     </div>
   );
+};
+
+const title: Rule = ({ theme }) => {
+  return {
+    fontSize: theme.font.fixed.f16.fontSize,
+    lineHeight: theme.font.fixed.f16.lineHeight,
+    letterSpacing: '0px',
+  };
 };
 
 const widgetWrapper: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => ({
@@ -479,6 +489,14 @@ const linkStyles = ({ theme }) => ({
 });
 
 const statusBadgeStyle: Rule = { marginLeft: '10px' };
-const emptyBlockStyle: Rule = { paddingBottom: '20px' };
+
+const emptyBlockStyle: Rule = ({ theme }) => {
+  return {
+    paddingBottom: '20px',
+    fontSize: theme.font.fixed.f16.fontSize,
+    lineHeight: theme.font.fixed.f16.lineHeight,
+    letterSpacing: '0px',
+  };
+};
 
 export default MyObjectives;

@@ -61,16 +61,18 @@ const titleStyle: CreateRule<{ preTitle: string | undefined; theme: Theme }> = (
 
 const percentStyle: Rule = ({ theme }) => ({
   color: theme.colors.link,
-  fontWeight: 'bold',
-  fontSize: '28px',
-  lineHeight: '32px',
+  fontWeight: theme.font.weight.bold,
+  fontSize: theme.font.fixed.f28.fontSize,
+  lineHeight: theme.font.fixed.f28.lineHeight,
+  letterSpacing: '0px',
   marginBottom: '4px',
 });
 const blockTitleStyle: Rule = ({ theme }) => ({
   color: theme.colors.base,
-  fontWeight: 'bold',
-  fontSize: '16px',
-  lineHeight: '20px',
+  fontWeight: theme.font.weight.bold,
+  fontSize: theme.font.fixed.f16.fontSize,
+  lineHeight: theme.font.fixed.f16.lineHeight,
+  letterSpacing: '0px',
   marginTop: '18.5px',
 });
 
@@ -78,8 +80,9 @@ const quantityStyle: Rule = ({ theme }) =>
   ({
     color: theme.colors.link,
     fontWeight: 'normal',
-    fontSize: '16px',
-    lineHeight: '20px',
+    fontSize: theme.font.fixed.f16.fontSize,
+    lineHeight: theme.font.fixed.f16.lineHeight,
+    letterSpacing: '0px',
     position: 'relative',
     alignSelf: 'flex-start',
     ':after': {
@@ -111,8 +114,9 @@ const preTitleStyle: Rule = ({ theme }) => ({
   color: theme.colors.link,
   fontStyle: 'normal',
   fontWeight: 'normal',
-  fontSize: '18px',
-  lineHeight: '22px',
+  fontSize: theme.font.fixed.f18.fontSize,
+  lineHeight: theme.font.fixed.f18.lineHeight,
+  letterSpacing: '0px',
 });
 
 export default TableContent;

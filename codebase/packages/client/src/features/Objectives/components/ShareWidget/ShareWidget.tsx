@@ -224,6 +224,9 @@ const wrapperStyle: Rule = ({ theme }) => ({
   justifyContent: 'space-between',
   flexDirection: 'column',
   display: 'flex',
+  fontSize: theme.font.fixed.f16.fontSize,
+  lineHeight: theme.font.fixed.f16.lineHeight,
+  letterSpacing: '0px',
 });
 
 const headStyle: Rule = {
@@ -240,19 +243,27 @@ const bodyBlockStyle: Rule = {
   paddingTop: '14px',
 };
 
-const titleStyle: Rule = {
-  fontStyle: 'normal',
-  fontWeight: 'bold',
-  fontSize: '16px',
+const titleStyle: Rule = ({ theme }) => {
+  return {
+    fontStyle: 'normal',
+    fontWeight: theme.font.weight.bold,
+    fontSize: theme.font.fixed.f16.fontSize,
+    lineHeight: theme.font.fixed.f16.lineHeight,
+    letterSpacing: '0px',
+  };
 };
 
-const descriptionStyle: Rule = {
-  marginTop: '15px',
-  position: 'relative',
-  fontStyle: 'normal',
-  fontWeight: 'normal',
-  fontSize: '14px',
-  color: colors.base,
+const descriptionStyle: Rule = ({ theme }) => {
+  return {
+    marginTop: '15px',
+    position: 'relative',
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    fontSize: theme.font.fixed.f16.fontSize,
+    lineHeight: theme.font.fixed.f16.lineHeight,
+    letterSpacing: '0px',
+    color: colors.base,
+  };
 };
 
 const bodyStyle: Rule = {
@@ -264,7 +275,9 @@ const bodyStyle: Rule = {
 };
 
 const btnStyle = ({ theme, isManagerShared }) => ({
-  fontSize: '14px',
+  fontSize: theme.font.fixed.f14.fontSize,
+  lineHeight: theme.font.fixed.f14.lineHeight,
+  letterSpacing: '0px',
   color: isManagerShared ? theme.colors.tescoRed : theme.colors.tescoBlue,
   height: '30px',
   background: 'transparent',
@@ -272,7 +285,9 @@ const btnStyle = ({ theme, isManagerShared }) => ({
 });
 
 const btnViewStyle = ({ theme }) => ({
-  fontSize: '14px',
+  fontSize: theme.font.fixed.f14.fontSize,
+  lineHeight: theme.font.fixed.f14.lineHeight,
+  letterSpacing: '0px',
   height: '30px',
   background: 'transparent',
   color: theme.colors.tescoBlue,
