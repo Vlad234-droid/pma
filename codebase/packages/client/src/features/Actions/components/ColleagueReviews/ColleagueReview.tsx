@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { createYupSchema } from 'utils/yup';
 
-import { Rule, useStyle } from '@pma/dex-wrapper';
+import { Rule, useStyle, Styles } from '@pma/dex-wrapper';
 import { FormType } from '@pma/store';
 
 import { Input, Item, Select, Textarea } from 'components/Form';
@@ -16,6 +16,8 @@ import { TileWrapper } from 'components/Tile';
 import MarkdownRenderer from 'components/MarkdownRenderer';
 import { GenericItemField } from 'components/GenericForm';
 import { ReviewType, Status } from 'config/enum';
+import { formTagComponents } from '../../../Objectives';
+import { Style } from 'util';
 
 type Props = {
   review: any;
@@ -25,13 +27,14 @@ type Props = {
 };
 
 export const ColleagueReview: FC<Props> = ({ review, schema, validateReview, updateColleagueReviews }) => {
-  const { css } = useStyle();
+  const { css, theme } = useStyle();
   const { t } = useTranslation();
 
   const { components = [] } = schema;
+  const styledComponents = formTagComponents(components, theme);
 
   const reviewProperties = review?.properties?.mapJson;
-  const yepSchema = components.reduce(createYupSchema(t), {});
+  const yepSchema = styledComponents.reduce(createYupSchema(t), {});
   const methods = useForm({
     mode: 'onChange',
     resolver: yupResolver<Yup.AnyObjectSchema>(Yup.object().shape(yepSchema)),
@@ -69,19 +72,32 @@ export const ColleagueReview: FC<Props> = ({ review, schema, validateReview, upd
             num: review.number,
           })}
         </div>
-        {components.map((component) => {
-          const { id, key, text, label, description, type, validate, values = [], expression = {} } = component;
+        {styledComponents.map((component) => {
+          const {
+            id,
+            key,
+            text,
+            label,
+            description,
+            type,
+            validate,
+            values = [],
+            expression = {},
+            style = {},
+          } = component;
           const value = reviewProperties[key] ? reviewProperties[key] : '';
 
           if (type === FormType.TEXT) {
             return (
-              <div style={{ padding: '10px 0' }} key={id}>
+              <div className={css({ padding: 0, margin: 0 }, style)} key={id}>
                 <div
                   className={css({
                     fontSize: '16px',
                     lineHeight: '20px',
                     letterSpacing: '0px',
-                  })}
+                    '& > p': { margin: 0, padding: '20px 0' },
+                    '& > h2': { margin: 0, padding: '20px 0' },
+                  } as Styles)}
                 >
                   <MarkdownRenderer source={text} />
                 </div>
@@ -91,45 +107,49 @@ export const ColleagueReview: FC<Props> = ({ review, schema, validateReview, upd
           if (expression?.auth?.permission?.write?.length && review.status === Status.WAITING_FOR_APPROVAL) {
             if (type === FormType.TEXT_FIELD) {
               return (
-                <GenericItemField
-                  key={id}
-                  name={key}
-                  methods={methods}
-                  label={label}
-                  Wrapper={Item}
-                  Element={validate?.maxLength > 100 ? Textarea : Input}
-                  placeholder={description}
-                  value={value}
-                  readonly={false}
-                />
+                <div className={css(style)}>
+                  <GenericItemField
+                    key={id}
+                    name={key}
+                    methods={methods}
+                    label={label}
+                    Wrapper={Item}
+                    wrapperProps={{ marginBot: false, labelCustomStyle: { padding: '0px 0px 8px' } }}
+                    Element={validate?.maxLength > 100 ? Textarea : Input}
+                    placeholder={description}
+                    value={value}
+                    readonly={false}
+                  />
+                </div>
               );
             }
             if (type === FormType.SELECT) {
               return (
-                <GenericItemField
-                  key={id}
-                  name={key}
-                  methods={methods}
-                  label={label}
-                  Wrapper={({ children, label }) => (
-                    <Item withIcon={false} label={label}>
-                      {children}
-                    </Item>
-                  )}
-                  Element={Select}
-                  options={values}
-                  placeholder={description}
-                  value={value}
-                  readonly={false}
-                />
+                <div className={css(style)}>
+                  <GenericItemField
+                    key={id}
+                    name={key}
+                    methods={methods}
+                    label={label}
+                    Wrapper={Item}
+                    wrapperProps={{ marginBot: false, labelCustomStyle: { padding: '0px 0px 8px' } }}
+                    Element={Select}
+                    options={values}
+                    placeholder={description}
+                    value={value}
+                    readonly={false}
+                  />
+                </div>
               );
             }
           }
 
           return (
-            <div key={id} className={css({ padding: '10px 0' })}>
-              <MarkdownRenderer source={label} />
-              <div className={css(valueStyle)}>{value}</div>
+            <div key={id} className={css(style)}>
+              <div className={css({ padding: '10px 0' })}>
+                <MarkdownRenderer source={label} />
+                <div className={css(valueStyle)}>{value}</div>
+              </div>
             </div>
           );
         })}

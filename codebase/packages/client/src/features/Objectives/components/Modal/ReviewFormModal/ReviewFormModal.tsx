@@ -22,9 +22,9 @@ import {
 import { ReviewType, Status } from 'config/enum';
 import { createYupSchema } from 'utils/yup';
 import { TriggerModal } from 'features/Modal/components/TriggerModal';
-import { getReviewFormContent } from 'features/Objectives/utils';
+import { getReviewFormContent, formTagComponents } from 'features/Objectives/utils';
 import { useTranslation } from 'components/Translation';
-import { Input, Item, Select, Textarea, Attention, Text } from 'components/Form';
+import { Input, Item, ItemProps, Select, Textarea, Attention, Text } from 'components/Form';
 import { GenericItemField } from 'components/GenericForm';
 import MarkdownRenderer from 'components/MarkdownRenderer';
 import SuccessModal from 'components/SuccessModal';
@@ -64,8 +64,9 @@ const ReviewFormModal: FC<ReviewFormModal> = ({ reviewType, onClose }) => {
   const { helperText, title } = getReviewFormContent(reviewType, t);
 
   const { components = [] } = schema;
+  const styledComponents = formTagComponents(components, theme);
 
-  const yepSchema = components.reduce(createYupSchema(t), {});
+  const yepSchema = styledComponents.reduce(createYupSchema(t), {});
   const methods = useForm({
     mode: 'onChange',
     resolver: yupResolver<Yup.AnyObjectSchema>(Yup.object().shape(yepSchema)),
@@ -196,8 +197,19 @@ const ReviewFormModal: FC<ReviewFormModal> = ({ reviewType, onClose }) => {
               </TriggerModal>
             </div>
             {!readonly && <Attention />}
-            {components.map((component) => {
-              const { id, key, text, label, description, type, validate, values = [], expression = {} } = component;
+            {styledComponents.map((component) => {
+              const {
+                id,
+                key,
+                text,
+                label,
+                description,
+                type,
+                validate,
+                values = [],
+                expression = {},
+                style = {},
+              } = component;
               const value = formValues[key] ? formValues[key] : '';
 
               // todo temporary solution. Do not have full permission requirements. might be wrapper around field
@@ -212,7 +224,6 @@ const ReviewFormModal: FC<ReviewFormModal> = ({ reviewType, onClose }) => {
 
               if (type === FormType.TEXT) {
                 const CustomPTag = ({ children }) => {
-                  const { css } = useStyle();
                   return <p className={css(defaultTag)}>{children}</p>;
                 };
                 const defaultTag: Rule = ({ theme }) => ({
@@ -223,78 +234,75 @@ const ReviewFormModal: FC<ReviewFormModal> = ({ reviewType, onClose }) => {
                   lineHeight: '22px',
                 });
 
-                const components = { p: CustomPTag };
                 return (
-                  <div style={{ padding: 0, margin: 0 }} key={id}>
+                  <div className={css({ padding: 0, margin: 0 }, style)} key={id}>
                     <div
                       className={css({
                         padding: 0,
                         '& > p': {
-                          padding: readonly ? '16px 0 8px 0' : '0 0 8px 0',
+                          padding: '16px 0 8px 0',
                           margin: 0,
                           fontSize: '16px',
                           lineHeight: '20px',
                         },
                         '& > h2': {
-                          padding: readonly ? '32px 0 16px 0' : '32px 0 20px 0',
+                          padding: readonly ? '14px 0 8px 0' : '14px 0px 8px',
                           margin: 0,
                           fontSize: '18px',
                           lineHeight: '22px',
                         },
                       } as Styles)}
                     >
-                      <MarkdownRenderer components={components} source={text} />
+                      <MarkdownRenderer components={{ p: CustomPTag }} source={text} />
                     </div>
                   </div>
                 );
               }
               if (type === FormType.TEXT_FIELD) {
                 return (
-                  <GenericItemField
-                    key={id}
-                    name={key}
-                    methods={methods}
-                    label={label}
-                    Wrapper={
-                      readonly
-                        ? ({ children, label }) => (
-                            <Item withIcon={false} label={label} marginBot={false} labelCustomStyle={{ padding: 0 }}>
-                              {children}
-                            </Item>
-                          )
-                        : Item
-                    }
-                    //@ts-ignore
-                    Element={readonly ? Text : validate?.maxLength > 100 ? Textarea : Input}
-                    placeholder={description}
-                    value={value}
-                    readonly={componentReadonly}
-                  />
+                  <div className={css(style)}>
+                    <GenericItemField
+                      key={id}
+                      name={key}
+                      methods={methods}
+                      label={label}
+                      Wrapper={Item}
+                      wrapperProps={
+                        (readonly
+                          ? { marginBot: false, labelCustomStyle: { padding: 0 } }
+                          : { marginBot: false, labelCustomStyle: { padding: '10px 0px 8px' } }) as ItemProps
+                      }
+                      //@ts-ignore
+                      Element={readonly ? Text : validate?.maxLength > 100 ? Textarea : Input}
+                      placeholder={description}
+                      value={value}
+                      readonly={componentReadonly}
+                    />
+                  </div>
                 );
               }
               if (type === FormType.SELECT) {
                 return (
-                  <GenericItemField
-                    key={id}
-                    name={key}
-                    methods={methods}
-                    label={label}
-                    Wrapper={
-                      readonly
-                        ? ({ children, label }) => (
-                            <Item withIcon={false} label={label} marginBot={false} labelCustomStyle={{ padding: 0 }}>
-                              {children}
-                            </Item>
-                          )
-                        : Item
-                    }
-                    //@ts-ignore
-                    Element={readonly ? Text : Select}
-                    options={values}
-                    placeholder={description}
-                    value={value}
-                    readonly={componentReadonly}
-                  />
+                  <div className={css(style)}>
+                    <GenericItemField
+                      key={id}
+                      name={key}
+                      methods={methods}
+                      label={label}
+                      Wrapper={Item}
+                      wrapperProps={
+                        (readonly
+                          ? { marginBot: false, labelCustomStyle: { padding: 0 } }
+                          : { marginBot: false, labelCustomStyle: { padding: '10px 0px 8px' } }) as ItemProps
+                      }
+                      //@ts-ignore
+                      Element={readonly ? Text : Select}
+                      options={values}
+                      placeholder={description}
+                      value={value}
+                      readonly={componentReadonly}
+                    />
+                  </div>
                 );
               }
             })}

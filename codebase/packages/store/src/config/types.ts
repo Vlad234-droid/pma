@@ -11,10 +11,14 @@ export enum ExpressionType {
   WORK_LEVEL = 'work_level',
   REQUEST = 'request',
   LISTENER = 'listener',
+  BLOCK = 'block',
+  TAG = 'tag',
 }
 
 export enum ExpressionValueType {
   OBJECTIVE = 'OBJECTIVE',
+  OPEN = 'open',
+  CLOSE = 'close',
   OVERALL_RATING = 'overall_rating',
 }
 

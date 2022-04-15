@@ -2,14 +2,14 @@ import React from 'react';
 
 import { Meta, Story } from '@storybook/react';
 
-import { Input, Radio, Checkbox, Textarea, Select, Item, Props } from '../index';
+import { Input, Radio, Checkbox, Textarea, Select, Item, ItemProps } from '../index';
 
 export default {
   title: 'components/Form',
   component: Item,
 } as Meta;
 
-const Template: Story<Props> = (args) => (
+const Template: Story<ItemProps> = (args) => (
   <div style={{ background: '#fff', maxWidth: '600px' }}>
     <div style={{ maxWidth: '500px', padding: '10px' }}>
       <Item {...args} withIcon={false}>

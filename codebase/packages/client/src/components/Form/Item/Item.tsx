@@ -5,7 +5,7 @@ import { Icon } from 'components/Icon';
 import MarkdownRenderer from 'components/MarkdownRenderer';
 import Provider from '../context/input';
 
-export type Props = {
+export type ItemProps = {
   label?: string;
   withIcon?: boolean;
   labelCustomStyle?: Styles | Rule;
@@ -18,7 +18,7 @@ export type Props = {
   onKeyDown?: (e: KeyboardEvent) => void;
 };
 
-export const Item: FC<Props> = ({
+export const Item: FC<ItemProps> = ({
   children,
   label,
   labelCustomStyle = {},
