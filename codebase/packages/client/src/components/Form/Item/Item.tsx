@@ -99,11 +99,13 @@ const wrapperItem: CreateRule<{ marginBot: boolean }> = ({ marginBot }) => ({
   width: '100%',
 });
 
-const labelStyle: Rule = {
-  display: 'inline-flex',
-  fontSize: '16px',
-  lineHeight: '20px',
-  letterSpacing: '0px',
+const labelStyle: Rule = ({ theme }) => {
+  return {
+    display: 'inline-flex',
+    fontSize: theme.font.fixed.f16.fontSize,
+    lineHeight: theme.font.fixed.f16.lineHeight,
+    letterSpacing: '0px',
+  };
 };
 const labelWrapperStyle: Rule = {
   maxWidth: '100%',

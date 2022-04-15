@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { CreateRule, Rule, Theme, useStyle } from '@pma/dex-wrapper';
+import { Rule, useStyle } from '@pma/dex-wrapper';
 import DescriptionBlock from 'components/DescriptionBlock';
 import { Attention } from 'components/Form';
 import StrategicDriversForm from './StrategicDriversForm';
@@ -7,16 +7,16 @@ import StrategicDriversLogs from './StrategicDriversLogs';
 import { Trans } from 'components/Translation';
 
 const CreateStrategicDrivers: FC = () => {
-  const { css, theme } = useStyle();
+  const { css } = useStyle();
 
   return (
     <div className={css(contentArea)}>
       <DescriptionBlock>
-        <div className={css(descriptionHeader({ theme }))}>
+        <div className={css(descriptionHeader)}>
           <Trans i18nKey='strategic_driver'>Strategic driver</Trans>
         </div>
         <Attention />
-        <div className={css(descriptionText({ theme }))}>
+        <div className={css(descriptionText)}>
           <Trans i18nKey='create_titles_for_strategic_drivers'>
             Create titles for Strategic drivers. Click “Save” button to keep the changes. Or “Publish” to cascade them
             on the colleagues.
@@ -37,23 +37,21 @@ const contentArea: Rule = {
   alignItems: 'center',
 };
 
-const descriptionText: CreateRule<{ theme: Theme }> = (props) => {
-  if (props == null) return {};
-  const { theme } = props;
+const descriptionText: Rule = ({ theme }) => {
   return {
-    fontSize: `${theme.font.fixed.f16}`,
-    lineHeight: '20px',
+    fontSize: theme.font.fixed.f16.fontSize,
+    lineHeight: theme.font.fixed.f16.lineHeight,
+    letterSpacing: '0px',
     paddingBottom: '32px',
   };
 };
 
-const descriptionHeader: CreateRule<{ theme: Theme }> = (props) => {
-  if (props == null) return {};
-  const { theme } = props;
+const descriptionHeader: Rule = ({ theme }) => {
   return {
-    fontSize: `${theme.font.fixed.f20}`,
-    lineHeight: '24px',
-    fontWeight: 'bold',
+    fontSize: theme.font.fixed.f20.fontSize,
+    lineHeight: theme.font.fixed.f20.lineHeight,
+    letterSpacing: '0px',
+    fontWeight: theme.font.weight.bold,
     paddingBottom: '8px',
   };
 };

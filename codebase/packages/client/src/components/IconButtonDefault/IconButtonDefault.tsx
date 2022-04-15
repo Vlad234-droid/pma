@@ -24,9 +24,9 @@ const IconButtonDefault: FC<Props> = ({ onClick, iconPosition = Position.RIGHT, 
       iconProps={{ invertColors: true }}
       iconStyles={iconArrowRightStyle}
     >
-      <Trans className={css(btnStyle)} i18nKey='give_feedback'>
-        Give feedback
-      </Trans>
+      <div className={css(btnStyle)}>
+        <Trans i18nKey='give_feedback'>Give feedback</Trans>
+      </div>
     </IconButton>
   );
 };
@@ -63,7 +63,8 @@ const iconBtnStyle: Rule = ({ theme }) => ({
   color: theme.colors.white,
   cursor: 'pointer',
   width: '176px',
+  maxWidth: 'fit-content',
   border: `2px solid ${theme.colors.link}`,
   whiteSpace: 'nowrap',
-  fontWeight: 'bold',
+  fontWeight: theme.font.weight.bold,
 });

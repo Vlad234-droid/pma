@@ -252,6 +252,9 @@ const menuDrawerTopStyle: Rule = {
 const menuDrawerTitleStyle: Rule = ({ theme }) => ({
   color: theme.colors.tescoBlue,
   padding: '8px 0 24px',
+  fontSize: theme.font.fixed.f16.fontSize,
+  lineHeight: theme.font.fixed.f16.lineHeight,
+  letterSpacing: '0px',
 });
 
 const menuDrawerButtonsStyle: Rule = {
