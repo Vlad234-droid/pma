@@ -6,7 +6,7 @@ import { colleagueUUIDSelector, timelinesExistSelector } from '@pma/store';
 
 import { Page } from 'pages';
 import { buildAbsolutePath } from 'utils';
-import { LINKS } from 'config/constants';
+import { LINKS, CAMUNDA_APP_PATH } from 'config/constants';
 import { buildPath } from 'features/Routes';
 import { ConfirmModal } from 'features/Modal';
 import { CanPerform, role } from 'features/Permission';
@@ -98,22 +98,11 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
                 />
               )}
             />
-            <CanPerform
-              perform={[role.PROCESS_MANAGER, role.ADMIN]}
-              yes={() => (
-                <a href={buildAbsolutePath('camunda/app')} target={'_blank'} rel='noreferrer'>
-                  <TileWrapper title={t('camunda_admin', 'Camunda Admin')} hover={true} customStyle={wrapperStyles}>
-                    <Icon graphic={'document'} iconStyles={menuIconStyles} />
-                    <div style={{ paddingTop: '8px' }}>{t('camunda_admin', 'Camunda Admin')}</div>
-                  </TileWrapper>
-                </a>
-              )}
-            />
           </div>
         </div>
         <div className={css(menuDrawerSettingsStyle)}>
           <CanPerform
-            perform={[role.TALENT_ADMIN, role.ADMIN]}
+            perform={[role.TALENT_ADMIN, role.ADMIN, role.PROCESS_MANAGER]}
             yes={() => {
               return (
                 <>
@@ -177,6 +166,20 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
                             <Icon graphic={'tip'} />
                             <span className={css(itemSettingsTextStyle)}>{t('tips', 'Tips')}</span>
                           </Link>
+                        )}
+                      />
+                      <CanPerform
+                        perform={[role.PROCESS_MANAGER, role.ADMIN]}
+                        yes={() => (
+                          <a
+                            href={buildAbsolutePath(CAMUNDA_APP_PATH)}
+                            target={'_blank'}
+                            rel='noreferrer'
+                            className={css(itemSettingsStyle, itemSettingsBorderStyle)}
+                          >
+                            <Icon graphic={'document'} />
+                            <span className={css(itemSettingsTextStyle)}>{t('camunda_admin', 'Camunda Admin')}</span>
+                          </a>
                         )}
                       />
                     </div>

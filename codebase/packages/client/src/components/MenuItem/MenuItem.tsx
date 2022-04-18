@@ -27,7 +27,7 @@ export const MenuItem: FC<Props> = ({ iconGraphic, title, linkTo = '' }) => {
 
 export const styledTitle: Rule = ({ theme }) => {
   return {
-    paddingTop: '8px',
+    paddingTop: '3px',
     fontSize: theme.font.fixed.f12.fontSize,
     lineHeight: theme.font.fixed.f12.lineHeight,
     letterSpacing: '0px',
@@ -36,7 +36,7 @@ export const styledTitle: Rule = ({ theme }) => {
 
 export const wrapperStyles: Rule = {
   width: '98px',
-  height: '94px',
+  height: '98px',
   padding: '18px 8px 16px',
   fontSize: '12px',
   display: 'flex',
