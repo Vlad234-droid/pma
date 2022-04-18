@@ -1,6 +1,6 @@
 import { Response } from 'express';
 import { createProxyMiddleware, Options } from 'http-proxy-middleware';
-import { getIdentityData } from '@pma-connectors/onelogin';
+import { getIdentityData, emptyIfRoot } from '@pma-connectors/onelogin';
 
 import { isDEV, isLocal, ProcessConfig } from "../config";
 
@@ -10,7 +10,7 @@ export const camundaProxyMiddleware = (config: ProcessConfig) => {
     target: config.proxyApiServerUrl(),
     changeOrigin: true,
     autoRewrite: true,
-    pathRewrite: { ['^/camunda']: '/v1/camunda' },
+    pathRewrite: { ['^/camunda']: `${emptyIfRoot(config.applicationPublicUrl())}/camunda` },
     logLevel: 'debug',
   };
 
@@ -36,5 +36,4 @@ export const camundaProxyMiddleware = (config: ProcessConfig) => {
   return createProxyMiddleware(
     proxyMiddlewareOptions,
   );
-
 }
