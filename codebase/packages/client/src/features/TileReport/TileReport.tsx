@@ -12,9 +12,10 @@ import FilterModal from 'features/Report/components/FilterModal';
 import { buildPath } from 'features/Routes';
 import { ChartContent } from './components/ChartContent';
 import { TableContent } from './components/TableContent';
+import { WorkLevelContent } from './components/WorkLevelContent';
 
 import { useTileStatistics } from './hooks';
-import { getReportTitles, checkTableChart, getTableChartTitle, checkBusinessType } from './utils';
+import { getReportTitles, checkTableChart, getTableChartTitle, checkBusinessType, checkWorkLevel } from './utils';
 import { initialValues } from 'features/Report/config';
 import { getCurrentYear } from 'utils/date';
 
@@ -41,7 +42,10 @@ const TileReport = () => {
 
   const isTableChart = checkTableChart(type);
 
+  const isWorkLevel = checkWorkLevel(type);
+
   const getContent = () => {
+    if (isWorkLevel) return <WorkLevelContent />;
     if (isTableChart) return <TableContent type={type} />;
     return <ChartContent isBusinessType={isBusinessType} type={type} />;
   };
@@ -99,7 +103,7 @@ const TileReport = () => {
         </div>
       </div>
       <div className={css(wrapperStyle)}>
-        <div className={css(leftColumn)}>{getContent()}</div>
+        <div className={css(leftColumn({ isWorkLevel }))}>{getContent()}</div>
         <div className={css(rightColumn)}>
           {isTableChart ? (
             <InfoTable mainTitle={getTableChartTitle(t, type)} data={type} />
@@ -112,33 +116,35 @@ const TileReport = () => {
   );
 };
 
-const arrowLeftStyle: Rule = () => {
+const arrowLeftStyle: Rule = ({ theme }) => {
   return {
     position: 'fixed',
     top: '34px',
     textDecoration: 'none',
     border: 'none',
     cursor: 'pointer',
-    left: '16px',
+    left: theme.spacing.s4,
   };
 };
 
-const rightColumn: Rule = {
+const rightColumn: Rule = ({ theme }) => ({
   display: 'flex',
-  gap: '8px',
+  gap: theme.spacing.s2,
   flex: 4,
   flexBasis: '400px',
-  marginTop: '50px',
+  marginTop: '72px',
   alignSelf: 'flex-end',
-};
+});
 
-const leftColumn: Rule = {
-  display: 'flex',
-  gap: '8px',
-  flexDirection: 'row',
-  flex: 6,
-  flexBasis: '550px',
-};
+const leftColumn: CreateRule<{ isWorkLevel: boolean }> =
+  ({ isWorkLevel }) =>
+  ({ theme }) => ({
+    display: 'flex',
+    gap: theme.spacing.s2,
+    flexDirection: 'row',
+    flex: 6,
+    flexBasis: !isWorkLevel ? '550px' : '1550px',
+  });
 
 const header: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => ({
   display: 'flex',
@@ -156,17 +162,17 @@ const flexCenterStyled: Rule = {
   justifyContent: 'space-between',
 };
 
-const wrapperStyle: Rule = () => {
+const wrapperStyle: Rule = ({ theme }) => {
   return {
     display: 'flex',
-    gap: '8px',
+    gap: theme.spacing.s2,
     flexWrap: 'wrap-reverse',
-    marginTop: '8px',
+    marginTop: theme.spacing.s2,
   };
 };
 
-const iconStyle: Rule = {
-  marginRight: '10px',
-};
+const iconStyle: Rule = ({ theme }) => ({
+  marginRight: theme.spacing.s2_5,
+});
 
 export default TileReport;

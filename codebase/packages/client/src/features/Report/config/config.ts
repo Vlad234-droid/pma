@@ -127,11 +127,6 @@ export const statisticsReport = {
 
 export const checkboxes = (t) => [
   {
-    id: '0',
-    label: t(StatisticsTitlesReportKeys.COLLEAGUES_COUNT),
-    isChecked: false,
-  },
-  {
     id: '1',
     label: t(StatisticsTitlesReportKeys.OBJECTIVES_SUBMITTED),
     isChecked: false,

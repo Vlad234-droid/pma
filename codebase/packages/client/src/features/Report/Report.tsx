@@ -1,7 +1,6 @@
 import React, { FC, useState, useCallback } from 'react';
-
-import { getReportMetaSelector } from '@pma/store';
 import { Button, colors, CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
+import { getReportMetaSelector } from '@pma/store';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { IconButton } from 'components/IconButton';
@@ -17,6 +16,8 @@ import { getCurrentYear } from 'utils/date';
 import { useToast } from 'features/Toast';
 import { View } from 'components/PieChart/config';
 import Spinner from 'components/Spinner';
+import { HoverContainer } from 'components/HoverContainer';
+import { HoverMessage } from 'components/HoverMessage';
 
 import { getFieldOptions, metaStatuses, initialValues, convertToLink } from './config';
 import { downloadCsvFile } from './utils';
@@ -84,13 +85,21 @@ const Report: FC = () => {
         )}
 
         <div className={css(flexCenterStyled)}>
-          <IconButton
-            graphic='information'
-            iconStyles={iconStyle}
-            onPress={() => {
-              console.log();
-            }}
-          />
+          <HoverContainer
+            isActive={!small}
+            message={
+              <HoverMessage
+                text={t(
+                  'this_report_will_show_you_high_level_information',
+                  'This report will show you high level information for your population regarding their performance cycle. Please filter and edit the page to show the most relevant information for your population',
+                )}
+                customStyles={hoverContainer}
+              />
+            }
+          >
+            <IconButton graphic='information' iconStyles={iconStyle} />
+          </HoverContainer>
+
           <FilterOption
             focus={focus}
             customIcon={true}
@@ -107,6 +116,8 @@ const Report: FC = () => {
               setFocus(false);
             }}
             setSearchValueFilterOption={setSearchValueFilterOption}
+            isDisabledSearch={false}
+            isVisibleEdit={true}
           />
           <FilterModal
             filterModal={filterModal}
@@ -319,7 +330,7 @@ const buttonCoreStyled: Rule = ({ theme }) => ({
   width: '133px',
   background: theme.colors.tescoBlue,
   color: `${theme.colors.white}`,
-  margin: '0px auto 20px auto',
+  margin: `${theme.spacing.s0} auto 20px auto`,
 });
 
 const iconDownloadStyle: Rule = {
@@ -355,29 +366,29 @@ const iconBtnStyle = {
   },
 };
 
-const pieChartWrapper: Rule = {
+const pieChartWrapper: Rule = ({ theme }) => ({
   display: 'flex',
-  gap: '8px',
+  gap: theme.spacing.s2,
   flexWrap: 'wrap',
-  marginTop: '8px',
-};
+  marginTop: theme.spacing.s2,
+});
 const leftColumn: Rule = ({ theme }) => {
   return {
     display: 'flex',
-    gap: '8px',
+    gap: theme.spacing.s2,
     flex: 4,
     flexBasis: '400px',
     fontSize: theme.font.fixed.f16.fontSize,
     lineHeight: theme.font.fixed.f16.lineHeight,
   };
 };
-const rightColumn: Rule = {
+const rightColumn: Rule = ({ theme }) => ({
   display: 'flex',
-  gap: '8px',
+  gap: theme.spacing.s2,
   flexDirection: 'row',
   flex: 6,
   flexBasis: '550px',
-};
+});
 
 const flexCenterStyled: Rule = {
   display: 'flex',
@@ -397,9 +408,10 @@ const spaceBetween: CreateRule<{ quantity: number; mobileScreen: boolean }> = ({
   };
 };
 
-const iconStyle: Rule = {
-  marginRight: '10px',
-};
+const iconStyle: Rule = ({ theme }) => ({
+  marginRight: theme.spacing.s2_5,
+  marginTop: '5px',
+});
 
 const yearLabel: Rule = ({ theme }) => ({
   margin: '0px 0px 8px 0px',
@@ -407,6 +419,13 @@ const yearLabel: Rule = ({ theme }) => ({
   fontSize: '16px',
   lineHeight: '20px',
   color: theme.colors.link,
+});
+
+const hoverContainer: Rule = () => ({
+  position: 'absolute',
+  bottom: '-8px',
+  left: '50%',
+  transform: 'translate(-95%, 100%)',
 });
 
 export default Report;

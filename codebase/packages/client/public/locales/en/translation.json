@@ -513,6 +513,7 @@
   "missed_fields/workRelationships/managerUUID": "Line Manager name",
   "go_back": "Go back",
   "data_is_confidential": "This data is confidential. If you need to download this data, you must ensure you do not share with anyone else and that you store the data securely with a password.",
+  "this_report_will_show_you_high_level_information": "This report will show you high level information for your population regarding their performance cycle. Please filter and edit the page to show the most relevant information for your population",
   "need_help_with_your_personal_development_plan": "Need help with your Personal Development Plan?",
   "below_we_have_listed_some_points": "Below we have listed some points to help you write your personal plan and achieve your goals.",
   "reflect": "Reflect",
@@ -542,5 +543,16 @@
   "what_do_i_need_to_do_next": "What do I need to do next?",
   "what_else_have_i_learned_about_myself": "What else have I learned about myself while going through my learning and development journey? Are there any newly recognised strengths or development areas I would like to add to my PDP?",
   "do_i_need_to_do_more_of_the_same": "Do I need to do more of the same, or something different?",
-  "do_i_need_to_take_more_time": "Do I need to take more time, or find some additional resources or support?"
+  "do_i_need_to_take_more_time": "Do I need to take more time, or find some additional resources or support?",
+  "employee_no": "Employee No",
+  "employee_uuid": "Employee UUID",
+  "first_name": "First Name",
+  "surname": "Surname",
+  "working_level": "Working level",
+  "job_title": "Job title",
+  "objective_number_count": "Objective number",
+  "link_to_strategic_priorities": "Link to Strategic priorities",
+  "objective": "Objective",
+  "achieved_objective": "How do I know I`ve ACHIEVED this objective?",
+  "over_achieved_objective": "How do I know I`ve OVER-ACHIEVED this objective?"
 }

@@ -2,8 +2,9 @@ import React, { FC } from 'react';
 import { CreateRule, Rule, Styles, useStyle } from '@pma/dex-wrapper';
 import { IconButton } from 'components/IconButton';
 import { Input } from 'components/Form/Input';
-import { Icon } from 'components/Icon';
+import { Icon, RoundIcon } from 'components/Icon';
 import { Item } from 'components/Form';
+import { AlertBadge } from '../../Messages';
 
 type FilterOptionProps = {
   onSettingsPress?: () => void;
@@ -22,6 +23,8 @@ type FilterOptionProps = {
   testSettingsId?: string;
   wrapperInputId?: string;
   inputTestId?: string;
+  isDisabledSearch?: boolean;
+  isVisibleEdit?: boolean;
 };
 
 export const FilterOption: FC<FilterOptionProps> = ({
@@ -40,6 +43,8 @@ export const FilterOption: FC<FilterOptionProps> = ({
   testSettingsId = '',
   wrapperInputId = '',
   inputTestId = '',
+  isDisabledSearch = true,
+  isVisibleEdit = false,
 }) => {
   const { css, theme } = useStyle();
 
@@ -61,51 +66,68 @@ export const FilterOption: FC<FilterOptionProps> = ({
           data-test-id={testSettingsId}
         />
       )}
-      <div
-        data-test-id={wrapperInputId}
-        className={css({
-          width: focus ? '240px' : '38px',
-          transition: '.3s all ease',
-          marginLeft: !marginLeftAuto ? '5px' : 'auto',
-        })}
-      >
-        <Item
-          withIcon={withIcon}
-          marginBot={marginBot}
-          customIcon={customIcon}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') {
-              onFocus && onFocus(false);
-            }
-          }}
-          onFocus={() => {
-            onFocus && onFocus(true);
-          }}
-          customIconInserted={customIcon && <Icon graphic='search' iconStyles={iconStyle} />}
-          focus={focus}
+      {isVisibleEdit && (
+        <div className={css({ marginLeft: '5px' })}>
+          <RoundIcon>
+            <IconButton
+              iconStyles={{ marginTop: '5px' }}
+              onPress={() => {
+                console.log('');
+              }}
+              graphic='edit'
+            />
+            <AlertBadge />
+          </RoundIcon>
+        </div>
+      )}
+
+      {isDisabledSearch && (
+        <div
+          data-test-id={wrapperInputId}
+          className={css({
+            width: focus ? '240px' : '38px',
+            transition: '.3s all ease',
+            marginLeft: !marginLeftAuto ? '5px' : 'auto',
+          })}
         >
-          <Input
-            value={searchValue}
-            onChange={(e) => {
-              onChange && onChange(e);
+          <Item
+            withIcon={withIcon}
+            marginBot={marginBot}
+            customIcon={customIcon}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                onFocus && onFocus(false);
+              }
             }}
             onFocus={() => {
               onFocus && onFocus(true);
             }}
-            onBlur={() => {
-              onFocus && !searchValue && onFocus(false);
-            }}
-            customStyles={{
-              ...customStyles,
-              background: theme.colors.white,
-              height: '38px',
-              border: '2px solid rgb(0, 83, 159)',
-              ...(!focus && { borderRadius: '50%', padding: '0px' }),
-            }}
-            name={inputTestId}
-          />
-        </Item>
-      </div>
+            customIconInserted={customIcon && <Icon graphic='search' iconStyles={iconStyle} />}
+            focus={focus}
+          >
+            <Input
+              value={searchValue}
+              onChange={(e) => {
+                onChange && onChange(e);
+              }}
+              onFocus={() => {
+                onFocus && onFocus(true);
+              }}
+              onBlur={() => {
+                onFocus && !searchValue && onFocus(false);
+              }}
+              customStyles={{
+                ...customStyles,
+                background: theme.colors.white,
+                height: '38px',
+                border: '2px solid rgb(0, 83, 159)',
+                ...(!focus && { borderRadius: '50%', padding: '0px' }),
+              }}
+              name={inputTestId}
+            />
+          </Item>
+        </div>
+      )}
     </>
   );
 };

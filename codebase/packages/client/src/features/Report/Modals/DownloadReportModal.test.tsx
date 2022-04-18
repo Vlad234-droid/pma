@@ -25,7 +25,7 @@ describe('Download report modal', () => {
   });
   it('it should render success part', async () => {
     const { getByTestId, getByText } = render(<DownloadReportModal {...props} />);
-    const option = getByTestId('0');
+    const option = getByTestId('1');
     const year = getByTestId('year');
 
     await act(async () => {

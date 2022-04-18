@@ -34,3 +34,8 @@ export enum FEEDBACK_STATUS_IN {
   PENDING,
   COMPLETED,
 }
+
+export enum WorkLevel {
+  WL4 = 'WL4',
+  WL5 = 'WL5',
+}

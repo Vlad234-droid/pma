@@ -1,8 +1,9 @@
 import { createSelector } from 'reselect';
 //@ts-ignore
 import { RootState } from 'typesafe-actions';
-import { Status, ReportPage } from '../../../client/src/config/enum';
-import { ReportTags } from '../../../client/src/features/TileReport/config';
+import { Status, ReportPage } from '@pma/client/src/config/enum';
+import { ReportTags } from '@pma/client/src/features/TileReport/config';
+import { WorkLevel } from '../config/types';
 
 export const reportSelector = (state: RootState) => state.report;
 const statusIndex = 8;
@@ -121,4 +122,30 @@ export const getAnniversaryData = createSelector(reportSelector, (report: any) =
       has_eyr_approved_4_quarter: [],
     },
   );
+});
+
+export const getWorkLevelProfilesSelector = createSelector(reportSelector, (report: any) => {
+  const { objectiveReports } = report;
+
+  return objectiveReports.reduce((acc, item) => {
+    if (item[4] === WorkLevel.WL4 || item[4] === WorkLevel.WL5) {
+      acc.push({
+        employeeNo: item[0],
+        colleagueUuid: item[1],
+        firstName: item[2],
+        lastName: item[3],
+        workingLevel: item[4],
+        jobTitle: item[5],
+        lineManager: item[6],
+        objectiveNumber: item[7],
+        objectiveStatus: item[8],
+        // strategicDriver: item[9], // TODO attach this with Marius
+        title: item[10],
+        howAchieved: item[11],
+        howOverAchieved: item[12],
+      });
+      return acc;
+    }
+    return acc;
+  }, []);
 });

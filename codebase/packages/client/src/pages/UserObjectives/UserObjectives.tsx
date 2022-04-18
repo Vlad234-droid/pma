@@ -1,10 +1,11 @@
 import React, { FC, useEffect, useMemo, useState } from 'react';
-import { Trans, useTranslation } from 'components/Translation';
-import { Button, CreateRule, Rule, Styles, useStyle } from '@pma/dex-wrapper';
-import { ObjectiveType, ReviewType } from 'config/enum';
+import { Button, CreateRule, Rule, Styles, useStyle, IconButton as BackButton } from '@pma/dex-wrapper';
 
+import { Trans, useTranslation } from 'components/Translation';
 import { StepIndicator } from 'components/StepIndicator/StepIndicator';
 import { IconButton } from 'components/IconButton';
+
+import { ObjectiveType, ReviewType } from 'config/enum';
 
 import {
   Accordion,
@@ -115,6 +116,14 @@ export const UserObjectives: FC = () => {
 
   return (
     <div className={css(bodyBlockStyles({ mobileScreen }))}>
+      <div className={css(arrowLeftStyle)}>
+        <BackButton
+          onPress={() => {
+            navigate(-1);
+          }}
+          graphic='backwardLink'
+        />
+      </div>
       <div className={css(bodyWrapperStyles)} data-test-id={TEST_ID}>
         {!timelineLoaded ? (
           <Spinner id='1' />
@@ -287,5 +296,16 @@ const linkStyles = ({ theme }) => ({
   color: theme.colors.tescoBlue,
   background: 'transparent',
 });
+
+const arrowLeftStyle: Rule = () => {
+  return {
+    position: 'fixed',
+    top: '34px',
+    textDecoration: 'none',
+    border: 'none',
+    cursor: 'pointer',
+    left: '16px',
+  };
+};
 
 const emptyBlockStyle: Rule = { paddingBottom: '20px' };

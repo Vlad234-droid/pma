@@ -70,23 +70,16 @@ const pieChartWrapper: Rule = ({ theme }) => ({
   background: theme.colors.white,
   boxShadow: '3px 3px 1px 1px rgba(0, 0, 0, 0.05)',
   borderRadius: '10px',
-  padding: '24px',
+  padding: theme.font.fixed.f24.fontSize,
   width: '100%',
   position: 'relative',
 });
 
-const hoverContainer: Rule = ({ theme }) => ({
+const hoverContainer: Rule = () => ({
   position: 'absolute',
   bottom: '-8px',
   left: '50%',
   transform: 'translate(-50%, 100%)',
-  zIndex: '2',
-  background: theme.colors.link,
-  padding: '16px',
-  width: '294px',
-  maxWidth: '294px',
-  color: theme.colors.white,
-  borderRadius: theme.spacing.s2_5,
 });
 
 export default PieChart;
