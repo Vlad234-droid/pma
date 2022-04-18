@@ -26,6 +26,10 @@ export const camundaProxyMiddleware = (config: ProcessConfig) => {
       console.log('[HPM] Clear all cookies');
       proxyReq.setHeader('Cookie', '');
 
+      console.log(` => LOGGER_LOG_AUTH_TOKEN = ${process.env.LOGGER_LOG_AUTH_TOKEN}`);
+      console.log(` => BUILD_ENV = ${config.buildEnvironment()}`);
+      console.log(identityData);
+
       proxyReq.setHeader('Authorization', `Bearer ${identityData?.access_token}`);
 
       if (isLocal(config.buildEnvironment()) || yn(process.env.LOGGER_LOG_AUTH_TOKEN, { default: false })) {
