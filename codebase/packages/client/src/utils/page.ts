@@ -1,8 +1,8 @@
 import { PUBLIC_URL } from 'config/constants';
 
-const URL_REGEXP = /\/$/;
+const SLASH_REGEXP = /\/$/;
 
-const addIfNeededSlash = (path: string) => (URL_REGEXP.test(path) ? `${path}/` : path);
+const addIfNeededSlash = (path: string) => (SLASH_REGEXP.test(path) ? path : `${path}/`);
 
 const paramsReplacer = (template: string, replace: Record<string, string>): string =>
   template
