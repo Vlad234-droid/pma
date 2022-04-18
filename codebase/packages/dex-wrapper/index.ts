@@ -6,7 +6,6 @@ import {
   CreateRule,
   Colors,
   Theme,
-  useStyle, // todo remove when use acc tool
   theme as baseTheme,
   useMedia,
   fontWeight,
@@ -29,8 +28,7 @@ export {
   theme,
   DDLProvider,
   AccessibilityProvider,
-  // useAccessibleStyle as useStyle, // todo uncomment when use acc tool
-  useStyle, // todo remove when use acc tool
+  useAccessibleStyle as useStyle,
   useMedia,
   colors,
   fontWeight,
