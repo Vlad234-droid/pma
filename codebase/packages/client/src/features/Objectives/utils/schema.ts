@@ -62,7 +62,7 @@ export const formTagComponents = (components: any, theme: Theme, type = Expressi
             // @ts-ignore
             borderRight: `2px solid ${theme.colors.lightGray}`,
             padding: '0px 20px 20px',
-            boxShadow: '3px 3px 1px 1px rgba(0, 0, 0, 0.05)',
+            boxShadow: '2px 1px 1px 1px rgba(0, 0, 0, 0.05)',
           },
           level,
         });

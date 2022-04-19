@@ -62,7 +62,6 @@ const iconBtnStyle: Rule = ({ theme }) => ({
   background: theme.colors.tescoBlue,
   color: theme.colors.white,
   cursor: 'pointer',
-  width: '176px',
   maxWidth: 'fit-content',
   border: `2px solid ${theme.colors.link}`,
   whiteSpace: 'nowrap',

@@ -245,21 +245,22 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel, setIsInfoModalOpen }) 
   );
 };
 
-const infoHelpStyle: Rule = {
-  color: '#00539F',
-  fontSize: '14px',
+const infoHelpStyle: Rule = ({ theme }) => ({
+  color: theme.colors.tescoBlue,
+  ...theme.font.fixed.f14,
+  letterSpacing: '0px',
   margin: '0px 0px 0px 8px',
-};
+});
 
 const withMargin: Rule = {
   marginTop: '32px',
 };
 
-const commentStyle: Rule = {
-  fontWeight: 'bold',
-  fontSize: '16px',
-  lineHeight: '20px',
+const commentStyle: Rule = ({ theme }) => ({
+  fontWeight: theme.font.weight.bold,
+  ...theme.font.fixed.f16,
+  letterSpacing: '0px',
   marginTop: '0px',
-};
+});
 
 export default RequestFeedback;

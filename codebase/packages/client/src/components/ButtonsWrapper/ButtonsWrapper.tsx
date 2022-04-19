@@ -119,6 +119,7 @@ const submitButtonStyle: CreateRule<{ isValid: any; rightIcon: boolean }> =
   ({ isValid, rightIcon }) =>
   ({ theme }) => ({
     height: '40px',
+    ...theme.font.fixed.f16,
     fontWeight: theme.font.weight.bold,
     width: '50%',
     margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,

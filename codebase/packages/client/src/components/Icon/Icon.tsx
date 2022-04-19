@@ -43,7 +43,7 @@ export const Icon: FC<IconProps> = ({
   const customTitle = title ?? getTitle(CustomIcon.name);
 
   return (
-    <span onClick={onClick}>
+    <div onClick={onClick} className={css({ display: 'flex' })}>
       <svg
         data-test-id={testId}
         fill='none'
@@ -59,7 +59,7 @@ export const Icon: FC<IconProps> = ({
         {backgroundRadius && <circle cx={backgroundRadius} cy={backgroundRadius} r={backgroundRadius} fill='white' />}
         <CustomIcon invertColors={invertColors} />
       </svg>
-    </span>
+    </div>
   );
 };
 

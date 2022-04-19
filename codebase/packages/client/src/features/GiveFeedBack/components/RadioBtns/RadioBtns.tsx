@@ -60,11 +60,11 @@ const wrapperBlock: CreateRule<{ medium: boolean }> = ({ medium }) => ({
   ...(medium && { flexBasis: '816px', marginTop: '24px' }),
 });
 
-const titleStyle: Rule = {
-  fontSize: '16px',
-  lineHeight: '20px',
+const titleStyle: Rule = ({ theme }) => ({
+  ...theme.font.fixed.f16,
+  letterSpacing: '0px',
   padding: '0px 10px',
-};
+});
 const flexStyle: Rule = {
   display: 'flex',
   alignItems: 'center',

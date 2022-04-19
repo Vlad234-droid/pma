@@ -76,7 +76,7 @@ const FeedbackActions: FC = () => {
             />
           </div>
 
-          <div className={css({ maxWidth: '174px' })}>
+          <div>
             <IconButton
               customVariantRules={{ default: iconBtnStyle }}
               onPress={handleBtnClick360}
