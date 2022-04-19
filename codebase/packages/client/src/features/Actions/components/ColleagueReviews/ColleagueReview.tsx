@@ -26,6 +26,8 @@ type Props = {
   updateColleagueReviews: (T) => void;
 };
 
+export const TEST_WRAPPER_ID = 'test-wrapper-id';
+
 export const ColleagueReview: FC<Props> = ({ review, schema, validateReview, updateColleagueReviews }) => {
   const { css, theme } = useStyle();
   const { t } = useTranslation();
@@ -66,7 +68,7 @@ export const ColleagueReview: FC<Props> = ({ review, schema, validateReview, upd
 
   return (
     <TileWrapper boarder={true} customStyle={{ marginTop: '20px' }}>
-      <div className={css({ padding: '24px 35px 24px 24px' })}>
+      <div data-test-id={TEST_WRAPPER_ID} className={css({ padding: '24px 35px 24px 24px' })}>
         <div className={css(titleStyles)}>
           {t(`review_type_description_${review.type?.toLowerCase()}`, ReviewType[review.type], {
             num: review.number,
@@ -90,15 +92,7 @@ export const ColleagueReview: FC<Props> = ({ review, schema, validateReview, upd
           if (type === FormType.TEXT) {
             return (
               <div className={css({ padding: 0, margin: 0 }, style)} key={id}>
-                <div
-                  className={css({
-                    fontSize: '16px',
-                    lineHeight: '20px',
-                    letterSpacing: '0px',
-                    '& > p': { margin: 0, padding: '20px 0' },
-                    '& > h2': { margin: 0, padding: '20px 0' },
-                  } as Styles)}
-                >
+                <div className={css(styledMarkdown)}>
                   <MarkdownRenderer source={text} />
                 </div>
               </div>
@@ -158,10 +152,20 @@ export const ColleagueReview: FC<Props> = ({ review, schema, validateReview, upd
   );
 };
 
+const styledMarkdown: Rule = ({ theme }) => {
+  return {
+    fontSize: theme.font.fixed.f16.fontSize,
+    lineHeight: theme.font.fixed.f16.lineHeight,
+    letterSpacing: '0px',
+    '& > p': { margin: 0, padding: '20px 0' },
+    '& > h2': { margin: 0, padding: '20px 0' },
+  };
+};
+
 const titleStyles: Rule = ({ theme }) => ({
   margin: 0,
-  fontSize: '18px',
-  lineHeight: '22px',
+  fontSize: theme.font.fixed.f18.fontSize,
+  lineHeight: theme.font.fixed.f18.lineHeight,
   letterSpacing: '0px',
   color: theme.colors.tescoBlue,
   fontWeight: theme.font.weight.bold,

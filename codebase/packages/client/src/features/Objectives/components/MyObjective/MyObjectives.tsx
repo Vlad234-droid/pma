@@ -342,7 +342,7 @@ const MyObjectives: FC = () => {
             </div>
           )}
 
-          <div className={css(widgetsBlock({ mobileScreen }))}>
+          <div className={css(widgetsBlock)}>
             <ShareWidget stopShare={true} sharing={false} customStyle={shareWidgetStyles} />
 
             <ShareWidget stopShare={false} sharing={true} customStyle={shareWidgetStyles} />
@@ -388,14 +388,16 @@ const bodyBlockStyles: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }
   flexDirection: mobileScreen ? 'column-reverse' : 'row',
 });
 
-const widgetsBlock: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => ({
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  flexDirection: 'column',
-  width: '100%',
-  gap: '20px',
-});
+const widgetsBlock: Rule = () => {
+  return {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'column',
+    width: '100%',
+    gap: '20px',
+  };
+};
 
 const timelineWrapperStyles = {
   flex: '3 1 70%',
