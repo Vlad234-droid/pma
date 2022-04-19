@@ -26,6 +26,11 @@ export type TipsFormProps = {
   mode: string;
 };
 
+export const TIPS_FORM = 'tips-form';
+export const TIPS_FORM_SUBMIT_BTN = 'tips-form-submit-btn';
+export const TIPS_FORM_DISCARD_BTN = 'tips-form-discard-btn';
+export const TIPS_FORM_MODAL_PLACEHOLDER = 'tips-form-modal-placeholder';
+
 const TipsForm: FC<TipsFormProps> = ({ mode }) => {
   const { css, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
@@ -161,7 +166,7 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
           }
         }
       }
-      if (mode === 'create') {
+      if (configEntries.length > 0 && mode === 'create') {
         const configEntry = configEntries.filter((item) => item.uuid === formData['tipTargetLevel1'])[0];
         if (configEntry) {
           setLevel2Options(configEntry.children);
@@ -292,8 +297,10 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
           tipTitle={currentTip.title}
         />
       )}
-      <div className={css(modalInner({ mobileScreen }))}>
-        {showEffectsPlaceholder && <div className={css(modalInnerPlaceholder)} />}
+      <div className={css(modalInner({ mobileScreen }))} data-test-id={TIPS_FORM}>
+        {showEffectsPlaceholder && (
+          <div data-test-id={TIPS_FORM_MODAL_PLACEHOLDER} className={css(modalInnerPlaceholder)} />
+        )}
         <form className={css({ height: '100%' })}>
           <div className={css(formFieldsWrapStyle)}>
             <Attention />
@@ -449,10 +456,16 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
               onPress={handleDiscard}
               mode='inverse'
               styles={[formControlBtn, { border: `2px solid ${theme.colors.tescoBlue}` }]}
+              data-test-id={TIPS_FORM_DISCARD_BTN}
             >
               Discard
             </Button>
-            <Button isDisabled={!isDirty || !isValid} onPress={submitForm} styles={[formControlBtn]}>
+            <Button
+              isDisabled={!isDirty || !isValid}
+              onPress={submitForm}
+              styles={[formControlBtn]}
+              data-test-id={TIPS_FORM_SUBMIT_BTN}
+            >
               {mode === 'create' && t('create_new_tip', 'Create new tip')}
               {mode === 'edit' && t('confirm_changes', 'Confirm changes')}
             </Button>

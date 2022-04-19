@@ -1,22 +1,15 @@
 import React from 'react';
 import '@testing-library/jest-dom';
 import '@testing-library/jest-dom/extend-expect';
-import { fireEvent } from '@testing-library/react';
 import { renderWithTheme } from 'utils/test';
-import TipsCard, { TIPS_CARD, VIEW_HISTORY_BTN, PUSH_TIP_BTN } from './TipsCard';
-import { VIEW_HISTORY_MODAL } from './ViewHistoryModal';
-import { PUSH_TIP_MODAL } from './PushTipModal';
+import TipsCard, { TIPS_CARD } from './TipsCard';
 
 jest.mock('react-router-dom', () => ({
   ...(jest.requireActual('react-router-dom') as any),
-  useNavigate: () => ({
-    navigate: jest.fn().mockImplementation(() => ({})),
-  }),
+  useNavigate: () => jest.fn(),
 }));
 
-//TODO: add test for "Edit tip" button
-
-describe('Tips page', () => {
+describe('Tip card', () => {
   const props = {
     card: {
       uuid: 'mocked_uuid',
@@ -36,29 +29,5 @@ describe('Tips page', () => {
     const tipCard = getByTestId(TIPS_CARD);
 
     expect(tipCard).toBeInTheDocument();
-  });
-
-  it('should render view history modal', async () => {
-    const { getByTestId } = renderWithTheme(<TipsCard {...props} />);
-    const viewHistoryBtn = getByTestId(VIEW_HISTORY_BTN);
-
-    expect(viewHistoryBtn).toBeInTheDocument();
-
-    fireEvent.click(viewHistoryBtn);
-
-    const viewHistoryModal = getByTestId(VIEW_HISTORY_MODAL);
-    expect(viewHistoryModal).toBeInTheDocument();
-  });
-
-  it('should render push tip modal', async () => {
-    const { getByTestId } = renderWithTheme(<TipsCard {...props} />);
-    const pushTipBtn = getByTestId(PUSH_TIP_BTN);
-
-    expect(pushTipBtn).toBeInTheDocument();
-
-    fireEvent.click(pushTipBtn);
-
-    const pushTipModal = getByTestId(PUSH_TIP_MODAL);
-    expect(pushTipModal).toBeInTheDocument();
   });
 });
