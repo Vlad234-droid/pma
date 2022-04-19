@@ -10,6 +10,9 @@ export type ModalErrorProps = {
   onOverlayClick?: () => void;
 };
 
+export const TEST_DESCRIPTION_ID = 'test-description';
+export const TEST_CLOSE = 'test-close';
+
 type Props = HTMLProps<HTMLInputElement> & ModalErrorProps;
 
 const ModalError: FC<Props> = ({ title, description, onClose, onOverlayClick, children }) => {
@@ -34,6 +37,7 @@ const ModalError: FC<Props> = ({ title, description, onClose, onOverlayClick, ch
     >
       {description && (
         <div
+          data-test-id={TEST_DESCRIPTION_ID}
           className={css({
             padding: '16px 0',
           })}
@@ -51,16 +55,17 @@ const ModalError: FC<Props> = ({ title, description, onClose, onOverlayClick, ch
         <Button
           styles={[
             {
-              background: 'white',
+              background: theme.colors.white,
               border: `2px solid ${theme.colors.tescoBlue}`,
-              fontSize: '16px',
-              lineHeight: '20px',
-              fontWeight: 'bold',
+              fontSize: theme.font.fixed.f16.fontSize,
+              lineHeight: theme.font.fixed.f16.lineHeight,
+              fontWeight: theme.font.weight.bold,
               color: `${theme.colors.tescoBlue}`,
               width: '50%',
               margin: '0px 4px',
             },
           ]}
+          data-test-id={TEST_CLOSE}
           onPress={onClose}
         >
           <Trans i18nKey='close'>Close</Trans>

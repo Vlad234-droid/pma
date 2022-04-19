@@ -14,6 +14,7 @@ import usePDPSchema from './hooks/usePDPSchema';
 import { ModalWrapper } from 'components/ModalWrapper';
 
 export const TEST_ID = 'create-pdp';
+export const TEST_SPINNER_ID = 'spinner-test-id';
 
 const CreateMyPDP = () => {
   const { css, matchMedia } = useStyle();
@@ -23,7 +24,7 @@ const CreateMyPDP = () => {
   const dispatch = useDispatch();
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const pdpList = useSelector(schemaMetaPDPSelector)?.goals || [];
-  const { loaded, loading } = useSelector(metaPDPSelector);
+  const { loaded, loading } = useSelector(metaPDPSelector) || {};
   const [pdpGoals, setPDPGoals] = useState<any[]>([]);
   const [schema] = usePDPSchema(PDPType.PDP);
   const { components = [] } = schema;
@@ -93,12 +94,13 @@ const CreateMyPDP = () => {
     'personal_development_goal',
     'Personal Development Goal',
   )}`;
+
   if (loading || !loaded || !schema?.meta?.loaded) {
-    return <Spinner fullHeight />;
+    return <Spinner data-test-id={TEST_SPINNER_ID} fullHeight />;
   }
 
   return (
-    <ModalWrapper isOpen={true}>
+    <ModalWrapper data-test-id={TEST_ID} isOpen={true}>
       <Modal
         modalPosition={'middle'}
         overlayColor={'tescoBlue'}
@@ -113,7 +115,7 @@ const CreateMyPDP = () => {
           styles: [modalTitleOptionStyle({ mobileScreen })],
         }}
       >
-        <div data-test-id={TEST_ID} className={css(mainContainer)}>
+        <div className={css(mainContainer)}>
           <CreatePDPForm
             pdpGoals={pdpGoals}
             pdpList={pdpList}
@@ -146,6 +148,7 @@ const modalTitleOptionStyle: CreateRule<{ mobileScreen }> = (props) => {
     right: 0,
     color: 'white',
     fontWeight: theme.font.weight.bold,
+    letterSpacing: '0px',
     ...(mobileScreen
       ? {
           fontSize: `${theme.font.fixed.f20.fontSize}`,
