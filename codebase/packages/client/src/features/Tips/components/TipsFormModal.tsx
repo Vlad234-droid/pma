@@ -11,6 +11,9 @@ export type Props = {
   tipTitle?: string;
 };
 
+export const TIPS_FORM_MODAL = 'tips-form-modal';
+export const TIPS_FORM_MODAL_SUBMIT_BTN = 'tips-form-modal-submit-btn';
+
 const TipsFormModal: FC<Props> = ({ action, negativeBtnAction, positiveBtnAction, tipTitle }) => {
   const { css, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
@@ -65,7 +68,7 @@ const TipsFormModal: FC<Props> = ({ action, negativeBtnAction, positiveBtnAction
   };
 
   return (
-    <div className={css(TipsFormModalStyle({ mobileScreen }))}>
+    <div className={css(TipsFormModalStyle({ mobileScreen }))} data-test-id={TIPS_FORM_MODAL}>
       {options[action]['showImage'] &&
         (action === 'successDelete' || action === 'confirmDelete' ? (
           <img src={deleteIcon} alt='delete' />
@@ -84,7 +87,7 @@ const TipsFormModal: FC<Props> = ({ action, negativeBtnAction, positiveBtnAction
             {options[action]['negativeBtnText']}
           </Button>
         )}
-        <Button onPress={positiveBtnAction} styles={[formControlBtn]}>
+        <Button onPress={positiveBtnAction} styles={[formControlBtn]} data-test-id={TIPS_FORM_MODAL_SUBMIT_BTN}>
           {options[action]['positiveBtnText']}
         </Button>
       </div>

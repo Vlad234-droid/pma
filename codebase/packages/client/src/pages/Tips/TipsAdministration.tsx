@@ -12,6 +12,7 @@ import { NoTips, TipsCard } from 'features/Tips';
 import Spinner from 'components/Spinner';
 
 export const TIPS_ADMINISTRATION = 'tips-administration';
+export const CREATE_TIP_BTN = 'create-tip-btn';
 
 const TipsAdministration: FC = () => {
   const { css, matchMedia } = useStyle();
@@ -39,6 +40,7 @@ const TipsAdministration: FC = () => {
           graphic='add'
           iconProps={{ invertColors: true }}
           iconStyles={iconStyle}
+          data-test-id={CREATE_TIP_BTN}
         >
           <span>
             <Trans i18nKey='create_new_tip'>Create new tip</Trans>
