@@ -190,7 +190,7 @@ describe('features/Objectives/utils/schema', () => {
             borderLeft: '2px solid test',
             borderRadius: '0 0 10px 10px',
             borderRight: '2px solid test',
-            boxShadow: '3px 3px 1px 1px rgba(0, 0, 0, 0.05)',
+            boxShadow: '2px 1px 1px 1px rgba(0, 0, 0, 0.05)',
             padding: '0px 20px 20px',
           },
           text: '',

@@ -14,7 +14,7 @@ export const MenuItem: FC<Props> = ({ iconGraphic, title, linkTo = '' }) => {
   const { css } = useStyle();
 
   return (
-    <div>
+    <div className={css(wrapperStyle)}>
       <Link to={linkTo} replace>
         <TileWrapper title={title} hover={true} customStyle={wrapperStyles}>
           <Icon graphic={iconGraphic} iconStyles={iconStyles} />
@@ -23,6 +23,11 @@ export const MenuItem: FC<Props> = ({ iconGraphic, title, linkTo = '' }) => {
       </Link>
     </div>
   );
+};
+
+const wrapperStyle: Rule = {
+  flex: '1 0 30%',
+  minHeight: '100px',
 };
 
 export const styledTitle: Rule = ({ theme }) => {
@@ -35,9 +40,8 @@ export const styledTitle: Rule = ({ theme }) => {
 };
 
 export const wrapperStyles: Rule = {
-  width: '98px',
-  height: '98px',
-  padding: '18px 8px 16px',
+  height: '100%',
+  padding: '18px 8px 8px',
   fontSize: '12px',
   display: 'flex',
   flexDirection: 'column',
