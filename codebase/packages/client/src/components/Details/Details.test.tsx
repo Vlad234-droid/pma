@@ -27,4 +27,28 @@ describe('<Details />', () => {
     fireEvent.click(title);
     expect(image).toHaveStyle('transform: rotate(180deg)');
   });
+
+  it('title in Details should be rendered', async () => {
+    const props = {
+      title: 'Title test',
+      description: 'Description test',
+    };
+
+    render(<Details {...props} />);
+
+    const title = screen.getByText(props.title);
+    expect(title).toBeInTheDocument();
+  });
+
+  it('description in Details should be rendered', async () => {
+    const props = {
+      title: 'Title test',
+      description: 'Description test',
+    };
+
+    render(<Details {...props} />);
+
+    const description = screen.getByText(props.description);
+    expect(description).toBeInTheDocument();
+  });
 });
