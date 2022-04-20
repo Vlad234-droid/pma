@@ -7,6 +7,8 @@ import { getTableTitles } from '../../utils';
 
 import { Table } from 'components/Table';
 
+export const WORK_LEVEL_CONTENT_WRAPPER = 'work-level-content-wraper';
+
 const WorkLevelContent = () => {
   const { t } = useTranslation();
   const { css } = useStyle();
@@ -15,7 +17,7 @@ const WorkLevelContent = () => {
   const tableTitles = getTableTitles(t);
 
   return (
-    <div className={css({ display: 'flex', flexDirection: 'column' })}>
+    <div data-test-id={WORK_LEVEL_CONTENT_WRAPPER} className={css({ display: 'flex', flexDirection: 'column' })}>
       {tableData.map((item, i) => (
         <Table key={`${item}${i}`} titles={tableTitles} description={Object.values(item)} />
       ))}

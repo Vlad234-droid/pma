@@ -10,6 +10,9 @@ import { DEFAULT_SENDER_NAME } from '../../config';
 
 export type AlertDrawerProps = { onClose: () => void };
 
+export const ALERT_DRAWER_WRAPPER = 'alert-drawer-wrapper';
+export const ALERT_DRAWER_CLOSE_BTN = 'alert-drawer-close-btn';
+
 type Spacing = '100%' | 0;
 
 export const AlertDrawer: FC<AlertDrawerProps> = ({ onClose }) => {
@@ -48,11 +51,20 @@ export const AlertDrawer: FC<AlertDrawerProps> = ({ onClose }) => {
   return (
     <div className={css(slideInModalRule)}>
       {isDesktop && <div className={css(underlayRule)} onClick={underlayClick} ref={underlayRef} />}
-      <div className={css(containerRule({ isDesktop, width }))} onTransitionEnd={onTransitionEnd}>
+      <div
+        data-test-id={ALERT_DRAWER_WRAPPER}
+        className={css(containerRule({ isDesktop, width }))}
+        onTransitionEnd={onTransitionEnd}
+      >
         <div className={css(headerRule, pointerRule)}>
           <div className={css(titleRule)}>{t('my_alerts', 'My Alerts')}</div>
           <div className={css(iconRule)}>
-            <IconButton graphic='close' onPress={onClosePress} iconProps={{ size: '14px' }} />
+            <IconButton
+              graphic='close'
+              onPress={onClosePress}
+              iconProps={{ size: '14px' }}
+              data-test-id={ALERT_DRAWER_CLOSE_BTN}
+            />
           </div>
         </div>
         <div className={css(parcelRule, pointerRule)}>

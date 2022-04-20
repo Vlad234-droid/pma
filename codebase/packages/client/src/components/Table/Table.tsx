@@ -1,10 +1,12 @@
 import React, { FC } from 'react';
 import { useStyle, Rule } from '@pma/dex-wrapper';
 
+export const TABLE_WRAPPER = 'table-wrapper';
+
 const Table: FC<{ titles: Array<string>; description: Array<string> }> = ({ titles, description }) => {
   const { css } = useStyle();
   return (
-    <div className={css(tableContainer)}>
+    <div data-test-id={TABLE_WRAPPER} className={css(tableContainer)}>
       <div className={css(wrapper)}>
         <div className={css(innerWrapper)}>
           <table className={css(tableStyle)}>
