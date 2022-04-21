@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     flexShrink: 1,
     flexBasis: 50,
-    marginBottom: 50,
+    marginBottom: 20,
     maxHeight: 1000,
   },
   titleWrapper: {
@@ -97,23 +97,23 @@ const styles = StyleSheet.create({
     maxHeight: 800,
   },
   body: {
-    maxHeight: 1500,
+    maxHeight: 1000,
   },
   longBody: {
     marginTop: 100,
   },
   explanations: {
-    marginTop: 5,
     marginBottom: 5,
     paddingLeft: 20,
   },
   explanationTitle: {
     fontSize: 14,
     fontWeight: 900,
-    marginTop: 20,
+    marginTop: 10,
   },
   step: {
-    fontSize: 14,
+    fontSize: 12,
+    color: '#808080',
   },
 });
 
