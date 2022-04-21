@@ -12,6 +12,7 @@ export const camundaProxyMiddleware = (config: ProcessConfig) => {
     changeOrigin: true,
     autoRewrite: true,
     pathRewrite: { ['^/camunda']: `${emptyIfRoot(config.applicationPublicUrl())}/camunda` },
+    cookieDomainRewrite: "", // remove domain from cookies, if any
     logLevel: 'debug',
   };
 
