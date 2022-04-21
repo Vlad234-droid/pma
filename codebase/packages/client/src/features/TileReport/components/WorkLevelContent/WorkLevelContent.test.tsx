@@ -32,6 +32,11 @@ describe('Work level content', () => {
           'asdad asdadsasdad asdads',
         ],
       ],
+      meta: {
+        loading: false,
+        loaded: true,
+        error: null,
+      },
     },
   };
 
