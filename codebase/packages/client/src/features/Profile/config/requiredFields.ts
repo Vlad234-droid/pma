@@ -4,5 +4,4 @@ export default [
   'profile/lastName',
   'workRelationships/job/name',
   'workRelationships/department/name',
-  'workRelationships/managerUUID',
 ];

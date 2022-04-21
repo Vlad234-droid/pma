@@ -510,7 +510,6 @@
   "missed_fields/profile/lastName": "Last name",
   "missed_fields/workRelationships/job/name": "Job name",
   "missed_fields/workRelationships/department/name": "Department name",
-  "missed_fields/workRelationships/managerUUID": "Line Manager name",
   "go_back": "Go back",
   "data_is_confidential": "This data is confidential. If you need to download this data, you must ensure you do not share with anyone else and that you store the data securely with a password.",
   "this_report_will_show_you_high_level_information": "This report will show you high level information for your population regarding their performance cycle. Please filter and edit the page to show the most relevant information for your population",
