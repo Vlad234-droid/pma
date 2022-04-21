@@ -24,7 +24,7 @@ const GiveFeedbackProfileInfo: FC<ProfileInfoProps> = ({ firstName, lastName, jo
       </div>
       <div className={css({ marginLeft: '16px' })}>
         <h3 className={css(names_Style)}>{`${firstName ?? ''} ${lastName ?? ''}`}</h3>
-        <p className={css(industryStyle)}>{`${job ?? ''}, ${department ?? ''}`}</p>
+        <p className={css(industryStyle)}>{`${job ?? ''}${department && job ? ',' : ''} ${department ?? ''}`}</p>
         <span className={css(treatmentStyle)} data-test-id={TONE_VOICE}>
           {t('i_prefer_feedback_that_is', `I prefer feedback that is: ${toneOfVoice}`, { toneOfVoice })}
         </span>

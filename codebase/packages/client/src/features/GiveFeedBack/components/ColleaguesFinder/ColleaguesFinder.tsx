@@ -50,8 +50,8 @@ const ColleaguesFinder: FC<Props> = ({ onSelect, error, value }) => {
                     <div>{item?.colleague?.profile?.lastName}</div>
                   </div>
                   <div className={css({ marginTop: '4px' })}>
-                    <div>{item?.colleague?.workRelationships[0].job?.name}</div>
-                    <div>{item?.colleague?.workRelationships[0].department?.name}</div>
+                    <div>{item?.colleague?.workRelationships[0]?.job?.name}</div>
+                    <div>{item?.colleague?.workRelationships[0]?.department?.name}</div>
                   </div>
                 </div>
               </div>

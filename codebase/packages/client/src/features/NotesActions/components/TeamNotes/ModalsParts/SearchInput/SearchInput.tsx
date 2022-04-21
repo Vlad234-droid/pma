@@ -113,8 +113,8 @@ const SearchInput: FC<InputProps> = ({
                     <div>{item?.colleague?.profile?.lastName}</div>
                   </div>
                   <div className={css(flexGapStyle, { marginTop: '4px' })}>
-                    <div>{item?.colleague?.workRelationships?.[0].job?.name}</div>
-                    <div>{item?.colleague?.workRelationships?.[0].department?.name}</div>
+                    <div>{item?.colleague?.workRelationships?.[0]?.job?.name}</div>
+                    <div>{item?.colleague?.workRelationships?.[0]?.department?.name}</div>
                   </div>
                 </div>
               </div>

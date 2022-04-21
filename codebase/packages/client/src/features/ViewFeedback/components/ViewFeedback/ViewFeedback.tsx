@@ -36,7 +36,7 @@ type filterFeedbacksType = {
   search: string;
 };
 
-const ViewFeedback: FC = () => {
+const ViewFeedback: FC<{}> = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const { css, matchMedia } = useStyle();
