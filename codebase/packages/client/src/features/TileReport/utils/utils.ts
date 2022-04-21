@@ -132,7 +132,9 @@ export const getTableTitles = (t) => [
   t('working_level'),
   t('job_title'),
   t('line_manager'),
+
   t('objective_number_count'),
+
   t('link_to_strategic_priorities'),
   t('objective'),
   t('achieved_objective'),

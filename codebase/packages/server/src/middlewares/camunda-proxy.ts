@@ -3,10 +3,9 @@ import { createProxyMiddleware, Options } from 'http-proxy-middleware';
 import { getIdentityData, emptyIfRoot } from '@pma-connectors/onelogin';
 import yn from 'yn';
 
-import { isDEV, isLocal, ProcessConfig } from "../config";
+import { isDEV, isLocal, ProcessConfig } from '../config';
 
 export const camundaProxyMiddleware = (config: ProcessConfig) => {
-
   const proxyMiddlewareOptions: Options = {
     target: config.proxyApiServerUrl(),
     changeOrigin: true,
@@ -18,13 +17,13 @@ export const camundaProxyMiddleware = (config: ProcessConfig) => {
   proxyMiddlewareOptions.onError = (e) => {
     console.log('e', e);
   };
-  
+
   if (!isDEV(config.buildEnvironment()) && config.useOneLogin()) {
     proxyMiddlewareOptions.onProxyReq = function (proxyReq, req, res) {
       const identityData = getIdentityData(res as Response);
 
       console.log('[HPM] Clear all cookies');
-      proxyReq.setHeader('Cookie', '');
+      //proxyReq.setHeader('Cookie', '');
 
       console.log(` => LOGGER_LOG_AUTH_TOKEN = ${process.env.LOGGER_LOG_AUTH_TOKEN}`);
       console.log(` => BUILD_ENV = ${config.buildEnvironment()}`);
@@ -38,7 +37,5 @@ export const camundaProxyMiddleware = (config: ProcessConfig) => {
     };
   }
 
-  return createProxyMiddleware(
-    proxyMiddlewareOptions,
-  );
-}
+  return createProxyMiddleware(proxyMiddlewareOptions);
+};

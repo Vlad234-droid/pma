@@ -12,8 +12,7 @@ import { ConfirmModal } from 'features/Modal';
 import { CanPerform, role } from 'features/Permission';
 import { Trans, useTranslation } from 'components/Translation';
 import { useHeaderContainer } from 'contexts/headerContext';
-import { MenuItem, wrapperStyles, iconStyles as menuIconStyles } from 'components/MenuItem';
-import { TileWrapper } from 'components/Tile';
+import { MenuItem, iconStyles as menuIconStyles } from 'components/MenuItem';
 import TescoLogo from 'assets/img/TescoLogo.svg';
 import { Icon } from '../Icon';
 

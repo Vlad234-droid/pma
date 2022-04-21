@@ -20,6 +20,7 @@ export default createReducer(initialState)
   }))
   .handleAction(getObjectivesReport.failure, (state, { payload }) => ({
     ...state,
+    objectiveReports: [],
     meta: { ...state.meta, loading: false, loaded: true, error: payload },
   }))
   .handleAction(getObjectivesStatistics.request, (state) => ({

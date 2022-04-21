@@ -1,46 +1,83 @@
 import React, { FC } from 'react';
-import { useStyle, Rule } from '@pma/dex-wrapper';
+import { useStyle, Rule, Styles } from '@pma/dex-wrapper';
+import { useTranslation } from 'components/Translation';
 
 export const TABLE_WRAPPER = 'table-wrapper';
 
-const Table: FC<{ titles: Array<string>; description: Array<string> }> = ({ titles, description }) => {
+const Table: FC<{ currentItems: Array<Record<string, string | number | null>>; tableTitles: Array<string> }> = ({
+  currentItems,
+  tableTitles,
+}) => {
   const { css } = useStyle();
+  const { t } = useTranslation();
   return (
-    <div data-test-id={TABLE_WRAPPER} className={css(tableContainer)}>
-      <div className={css(wrapper)}>
-        <div className={css(innerWrapper)}>
-          <table className={css(tableStyle)}>
-            <thead>
-              <tr>
-                {titles.map((item) => (
-                  <th className={css(contentStyle)} key={item}>
-                    {item}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                {description.map((item, i) => (
-                  <td key={`${item}${i}`} className={css(contentStyle)}>
-                    {item}
-                  </td>
-                ))}
-              </tr>
-            </tbody>
-          </table>
+    <>
+      <div data-test-id={TABLE_WRAPPER} className={css(tableContainer)}>
+        <div className={css(wrapper)}>
+          <div className={css(innerWrapper)}>
+            <table className={css(tableStyle)}>
+              <thead>
+                <tr className={css(tableTitlesStyle)}>
+                  {tableTitles?.map((item) => (
+                    <th className={css(contentStyle)} key={item}>
+                      {t(item)}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              {currentItems?.map((item, i) => (
+                <tbody key={i}>
+                  <tr className={css(descriptionStyle)}>
+                    {Object.values(item)?.map((desc, i) => (
+                      <td key={`${desc}${i}`} className={css(contentStyle)}>
+                        {desc as string}
+                      </td>
+                    ))}
+                  </tr>
+                </tbody>
+              ))}
+            </table>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
 const contentStyle: Rule = ({ theme }) => ({
-  border: `1px solid ${theme.colors.tescoBlue}`,
-  padding: '10px',
+  // @ts-ignore
+  border: `1px solid ${theme.colors.lightGray}`,
+  padding: '8px 10px',
   whiteSpace: 'nowrap',
   textAlign: 'center',
   verticalAlign: 'middle',
+});
+const tableTitlesStyle: Rule = ({ theme }) =>
+  ({
+    background: theme.colors.tescoBlue,
+    color: theme.colors.white,
+    '& > th': {
+      fontWeight: '700',
+      fontSize: theme.font.fixed.f16.fontSize,
+      lineHeight: theme.font.fixed.f20.fontSize,
+    },
+  } as Styles);
+
+const descriptionStyle: Rule = ({ theme }) =>
+  ({
+    '& > th': {
+      color: theme.colors.base,
+      fontWeight: '400',
+      fontSize: theme.font.fixed.f16.fontSize,
+      lineHeight: '22px',
+    },
+  } as Styles);
+
+const tableStyle: Rule = ({ theme }) => ({
+  borderCollapse: 'collapse',
+  marginTop: theme.spacing.s0,
+  marginBottom: theme.spacing.s0,
+  width: '100%',
 });
 
 const tableContainer: Rule = {
@@ -58,11 +95,5 @@ const innerWrapper: Rule = {
   overflowX: 'auto',
   width: '100%',
 };
-const tableStyle: Rule = ({ theme }) => ({
-  borderCollapse: 'collapse',
-  marginTop: theme.spacing.s4,
-  marginBottom: theme.spacing.s4,
-  width: '100%',
-});
 
 export default Table;

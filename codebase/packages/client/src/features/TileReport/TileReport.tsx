@@ -2,17 +2,17 @@ import React, { useState } from 'react';
 import { useStyle, Rule, CreateRule, IconButton as BackButton } from '@pma/dex-wrapper';
 import { useNavigate } from 'react-router-dom';
 
-import { PieChart } from 'components/PieChart';
 import InfoTable from 'components/InfoTable';
+import FilterModal from 'features/Report/components/FilterModal';
+import { PieChart } from 'components/PieChart';
 import { useTranslation } from 'components/Translation';
-import { View } from 'components/PieChart/config';
 import { IconButton } from 'components/IconButton';
 import { FilterOption } from 'features/Shared';
-import FilterModal from 'features/Report/components/FilterModal';
 import { buildPath } from 'features/Routes';
 import { ChartContent } from './components/ChartContent';
 import { TableContent } from './components/TableContent';
 import { WorkLevelContent } from './components/WorkLevelContent';
+import { View } from 'components/PieChart/config';
 
 import { useTileStatistics } from './hooks';
 import { getReportTitles, checkTableChart, getTableChartTitle, checkBusinessType, checkWorkLevel } from './utils';
@@ -103,7 +103,7 @@ const TileReport = () => {
         </div>
       </div>
       <div className={css(wrapperStyle)}>
-        <div className={css(leftColumn({ isWorkLevel }))}>{getContent()}</div>
+        <div className={css(leftColumn)}>{getContent()}</div>
         <div className={css(rightColumn)}>
           {isTableChart ? (
             <InfoTable mainTitle={getTableChartTitle(t, type)} data={type} />
@@ -136,15 +136,13 @@ const rightColumn: Rule = ({ theme }) => ({
   alignSelf: 'flex-end',
 });
 
-const leftColumn: CreateRule<{ isWorkLevel: boolean }> =
-  ({ isWorkLevel }) =>
-  ({ theme }) => ({
-    display: 'flex',
-    gap: theme.spacing.s2,
-    flexDirection: 'row',
-    flex: 6,
-    flexBasis: !isWorkLevel ? '550px' : '1550px',
-  });
+const leftColumn: Rule = ({ theme }) => ({
+  display: 'flex',
+  gap: theme.spacing.s2,
+  flexDirection: 'row',
+  flex: 6,
+  flexBasis: '550px',
+});
 
 const header: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => ({
   display: 'flex',

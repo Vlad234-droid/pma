@@ -3,26 +3,26 @@ import { Button, colors, CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
 import { getReportMetaSelector } from '@pma/store';
 import { useDispatch, useSelector } from 'react-redux';
 
+import FilterModal from './components/FilterModal';
+import InfoTable from 'components/InfoTable';
+import useQueryString from 'hooks/useQueryString';
+import AppliedFilters from './components/AppliedFilters';
+import Spinner from 'components/Spinner';
 import { IconButton } from 'components/IconButton';
 import { FilterOption } from 'features/Shared';
 import { PieChart } from 'components/PieChart';
 import { Select } from 'components/Form';
-import FilterModal from './components/FilterModal';
-import InfoTable from 'components/InfoTable';
 import { DownloadReportModal } from './Modals';
 import { Trans, useTranslation } from 'components/Translation';
-import AppliedFilters from './components/AppliedFilters';
 import { getCurrentYear } from 'utils/date';
 import { useToast } from 'features/Toast';
 import { View } from 'components/PieChart/config';
-import Spinner from 'components/Spinner';
 import { HoverContainer } from 'components/HoverContainer';
 import { HoverMessage } from 'components/HoverMessage';
 
 import { getFieldOptions, metaStatuses, initialValues, convertToLink } from './config';
 import { downloadCsvFile } from './utils';
 import { useStatisticsReport, getReportData, getData } from './hooks';
-import useQueryString from 'hooks/useQueryString';
 import { ReportPage, TitlesReport } from 'config/enum';
 
 import { Page } from 'pages';

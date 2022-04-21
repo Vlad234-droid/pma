@@ -128,7 +128,7 @@ export const getWorkLevelProfilesSelector = createSelector(reportSelector, (repo
   const { objectiveReports } = report;
 
   return objectiveReports.reduce((acc, item) => {
-    if (item[4] === WorkLevel.WL4 || item[4] === WorkLevel.WL5) {
+    if ((item[4] === WorkLevel.WL4 || item[4] === WorkLevel.WL5) && item[8] === Status.APPROVED) {
       acc.push({
         employeeNo: item[0],
         colleagueUuid: item[1],
@@ -138,8 +138,7 @@ export const getWorkLevelProfilesSelector = createSelector(reportSelector, (repo
         jobTitle: item[5],
         lineManager: item[6],
         objectiveNumber: item[7],
-        objectiveStatus: item[8],
-        // strategicDriver: item[9], // TODO attach this with Marius
+        strategicDriver: item[9],
         title: item[10],
         howAchieved: item[11],
         howOverAchieved: item[12],
