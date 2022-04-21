@@ -19,7 +19,6 @@ type Props = {
 
 const HistoryTable: FC<Props> = ({ headers, items, isVisible }) => {
   const { css } = useStyle();
-
   const modifyTime = (time) => {
     const newDate = new Date(time);
     const year = newDate.getFullYear();
@@ -31,7 +30,6 @@ const HistoryTable: FC<Props> = ({ headers, items, isVisible }) => {
   };
 
   if (items.length < 1) return null;
-  console.log('items', items);
 
   return (
     <div data-test-id={TEST_ID} className={`${!isVisible && css(unvisible)}`}>

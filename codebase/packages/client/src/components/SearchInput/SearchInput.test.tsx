@@ -10,11 +10,12 @@ describe('SearchInput', () => {
     onChange: jest.fn(),
     renderOption: jest.fn(),
     options: ['Option 1', 'Option 2'],
+    name: 'name',
   };
 
   it('should render SearchInput', async () => {
-    const { getByText } = render(<SearchInput {...props} />);
-    const option = getByText(props.options[0]);
+    const { getByTestId } = render(<SearchInput {...props} />);
+    const option = getByTestId(props.name);
     expect(option).toBeInTheDocument();
   });
 });
