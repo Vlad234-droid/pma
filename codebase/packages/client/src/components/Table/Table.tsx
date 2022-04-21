@@ -2,6 +2,8 @@ import React, { FC } from 'react';
 import { useStyle, Rule, Styles } from '@pma/dex-wrapper';
 import { useTranslation } from 'components/Translation';
 
+export const TABLE_WRAPPER = 'table-wrapper';
+
 const Table: FC<{ currentItems: Array<Record<string, string | number | null>>; tableTitles: Array<string> }> = ({
   currentItems,
   tableTitles,
@@ -10,7 +12,7 @@ const Table: FC<{ currentItems: Array<Record<string, string | number | null>>; t
   const { t } = useTranslation();
   return (
     <>
-      <div className={css(tableContainer)}>
+      <div data-test-id={TABLE_WRAPPER} className={css(tableContainer)}>
         <div className={css(wrapper)}>
           <div className={css(innerWrapper)}>
             <table className={css(tableStyle)}>

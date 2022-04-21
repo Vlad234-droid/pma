@@ -13,6 +13,8 @@ import { IconButton } from 'components/IconButton';
 import { getTableTitles } from '../../utils';
 import { downloadCsvFile } from './utils';
 
+export const WORK_LEVEL_CONTENT_WRAPPER = 'work-level-content-wraper';
+
 const WorkLevelContent = () => {
   const { t } = useTranslation();
   const { css } = useStyle();
@@ -22,7 +24,10 @@ const WorkLevelContent = () => {
   const itemsPerPage = 10;
 
   return (
-    <div className={css({ display: 'flex', flexDirection: 'column', marginTop: '24px', width: '100%' })}>
+    <div
+      data-test-id={WORK_LEVEL_CONTENT_WRAPPER}
+      className={css({ display: 'flex', flexDirection: 'column', marginTop: '24px', width: '100%' })}
+    >
       {loading && !loaded ? (
         <div className={css({ display: 'flex', justifyContent: 'center', alignItems: 'center' })}>
           <Spinner />
