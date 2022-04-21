@@ -10,11 +10,13 @@ export type Props = {
   title: string;
 };
 
+export const TEST_ID = 'test-id';
+
 export const MenuItem: FC<Props> = ({ iconGraphic, title, linkTo = '' }) => {
   const { css } = useStyle();
 
   return (
-    <div className={css(wrapperStyle)}>
+    <div data-test-id={TEST_ID} className={css(wrapperStyle)}>
       <Link to={linkTo} replace>
         <TileWrapper title={title} hover={true} customStyle={wrapperStyles}>
           <Icon graphic={iconGraphic} iconStyles={iconStyles} />

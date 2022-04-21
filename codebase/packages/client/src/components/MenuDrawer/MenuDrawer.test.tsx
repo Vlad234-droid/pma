@@ -19,6 +19,5 @@ describe('<MenuDrawer />', () => {
     expect(screen.getByTestId('cancel')).toBeInTheDocument();
     fireEvent.click(screen.getByTestId('cancel'));
     expect(onClose).toBeCalled();
-    // cancel
   });
 });

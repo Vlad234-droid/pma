@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { colors, useStyle } from '@pma/dex-wrapper';
+import { colors, Rule, useStyle } from '@pma/dex-wrapper';
 
 export type LinkButtonProps = {
   onClick: () => void;
@@ -10,20 +10,22 @@ const LinkButton: FC<LinkButtonProps> = ({ onClick, children }) => {
   const { css } = useStyle();
 
   return (
-    <button
-      onClick={onClick}
-      className={css({
-        fontSize: '16px',
-        lineHeight: '20px',
-        color: colors.tescoBlue,
-        cursor: 'pointer',
-        border: 'none',
-        backgroundColor: 'transparent',
-      })}
-    >
+    <button onClick={onClick} className={css(btnStyle)}>
       {children}
     </button>
   );
+};
+
+const btnStyle: Rule = ({ theme }) => {
+  return {
+    fontSize: theme.font.fixed.f16.fontSize,
+    lineHeight: theme.font.fixed.f16.lineHeight,
+    letterSpacing: '0px',
+    color: colors.tescoBlue,
+    cursor: 'pointer',
+    border: 'none',
+    backgroundColor: 'transparent',
+  };
 };
 
 export default LinkButton;
