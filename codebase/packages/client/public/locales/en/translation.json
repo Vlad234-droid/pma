@@ -182,7 +182,7 @@
   "given": "Given",
   "objectives_approved": "Objectives approved",
   "myr_breakdown": "Breakdown of Mid-year review",
-  "eyr_breakdown": "Breakdown of End-year review",
+  "eyr_breakdown": "Breakdown of Year-end review",
   "new_to_business": "New to business",
   "anniversary_reviews": "Anniversary Reviews completed per quarter",
   "hourly_paid": "Hourly paid colleagues only",
@@ -554,5 +554,6 @@
   "link_to_strategic_priorities": "Link to Strategic priorities",
   "objective": "Objective",
   "achieved_objective": "How do I know I`ve ACHIEVED this objective?",
-  "over_achieved_objective": "How do I know I`ve OVER-ACHIEVED this objective?"
+  "over_achieved_objective": "How do I know I`ve OVER-ACHIEVED this objective?",
+  "try_to_select_another_year": "Try to select another year."
 }

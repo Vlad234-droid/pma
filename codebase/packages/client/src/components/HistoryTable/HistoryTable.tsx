@@ -31,9 +31,10 @@ const HistoryTable: FC<Props> = ({ headers, items, isVisible }) => {
   };
 
   if (items.length < 1) return null;
+  console.log('items', items);
 
   return (
-    <div data-test-id={TEST_ID} key={items.id} className={`${!isVisible && css(unvisible)}`}>
+    <div data-test-id={TEST_ID} className={`${!isVisible && css(unvisible)}`}>
       <div className={`${css(row)} ${css(header)}`}>
         {headers.map((el) => {
           return (

@@ -50,7 +50,8 @@ import { Tip } from './tip';
 import { MultiLanguage } from './multiLanguage';
 import { Close } from './close';
 import { Attention } from './attention';
-
+import { ArrowRightPaginator } from './arrowRightPaginator';
+import { ArrowLeftPaginator } from './arrowLeftPaginator';
 /**
  * Each icon we add needs to have viewbox set to "0 0 24 24".
  * Sometimes icons exported from Figma could have a different viewbox than "0 0 24 24".
@@ -107,7 +108,9 @@ export type Graphics =
   | 'team'
   | 'tip'
   | 'tool'
-  | 'attention';
+  | 'attention'
+  | 'arrowRightPaginator'
+  | 'arrowLeftPaginator';
 
 export const icons: Record<Graphics, FCGraphicProps> = {
   attention: Attention,
@@ -161,6 +164,8 @@ export const icons: Record<Graphics, FCGraphicProps> = {
   configuration: Configuration,
   tip: Tip,
   multiLanguage: MultiLanguage,
+  arrowRightPaginator: ArrowRightPaginator,
+  arrowLeftPaginator: ArrowLeftPaginator,
 };
 
 export { Chat } from './chat';
