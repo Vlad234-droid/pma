@@ -15,11 +15,11 @@ export const APPROVED_COLLEAGUES_WRAPPER = 'approved-colleagues_wrapper';
 export const NOT_APPROVED_COLLEAGUES_WRAPPER = 'not-approved-colleagues_wrapper';
 
 type Props = {
-  isBusinessType: boolean;
+  isException: boolean;
   type: string;
 };
 
-export const ChartContent: FC<Props> = ({ isBusinessType, type }) => {
+export const ChartContent: FC<Props> = ({ isException, type }) => {
   if (!type) return null;
   const { css } = useStyle();
   const { t } = useTranslation();
@@ -61,7 +61,7 @@ export const ChartContent: FC<Props> = ({ isBusinessType, type }) => {
         </div>
       )}
 
-      {isBusinessType && (
+      {isException && (
         <div>
           {!!pending.length && (
             <span className={css(objectiveTypeStyle)}>

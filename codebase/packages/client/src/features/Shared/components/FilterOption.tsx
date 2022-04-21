@@ -25,6 +25,7 @@ type FilterOptionProps = {
   inputTestId?: string;
   isDisabledSearch?: boolean;
   isVisibleEdit?: boolean;
+  onEditPress?: () => void;
 };
 
 export const FilterOption: FC<FilterOptionProps> = ({
@@ -45,6 +46,7 @@ export const FilterOption: FC<FilterOptionProps> = ({
   inputTestId = '',
   isDisabledSearch = true,
   isVisibleEdit = false,
+  onEditPress,
 }) => {
   const { css, theme } = useStyle();
 
@@ -69,13 +71,7 @@ export const FilterOption: FC<FilterOptionProps> = ({
       {isVisibleEdit && (
         <div className={css({ marginLeft: '5px' })}>
           <RoundIcon>
-            <IconButton
-              iconStyles={{ marginTop: '5px' }}
-              onPress={() => {
-                console.log('');
-              }}
-              graphic='edit'
-            />
+            <IconButton onPress={onEditPress} graphic='edit' />
             <AlertBadge />
           </RoundIcon>
         </div>

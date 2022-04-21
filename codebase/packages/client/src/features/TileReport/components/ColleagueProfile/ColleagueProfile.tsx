@@ -4,11 +4,11 @@ import { useNavigate } from 'react-router-dom';
 
 import { Accordion, BaseAccordion, Section } from 'components/Accordion';
 import { TileWrapper } from 'components/Tile';
-import { IconButton } from 'components/IconButton';
 import { buildPath } from 'features/Routes';
+import { Trans } from 'components/Translation';
 
-import { ColleagueProfileProps as Props } from '../../config/type';
 import defaultImg from 'images/default.png';
+import { ColleagueProfileProps as Props } from '../../config/type';
 import { paramsReplacer } from 'utils';
 import { Page } from 'pages';
 
@@ -52,16 +52,8 @@ const ColleagueProfile: FC<Props> = ({ colleague }) => {
                 <div className={css({ display: 'flex', justifyContent: 'center', alignItems: 'center' })}>
                   <div className={css({ display: 'flex', alignItems: 'center', marginRight: '26px' })}>
                     <span className={css(viewStyle)} onClick={() => viewProfile(colleague.uuid)}>
-                      View profile
+                      <Trans i18nKey='view_profile'>View profile</Trans>
                     </span>
-                    <IconButton
-                      graphic='attention'
-                      customVariantRules={{
-                        default: { marginTop: '2px' },
-                      }}
-                      iconStyles={{ width: '24px', height: '24px' }}
-                      onPress={() => console.log('')}
-                    />
                   </div>
                 </div>
               </div>

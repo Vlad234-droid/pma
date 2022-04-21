@@ -1,5 +1,16 @@
 import { Status, MetaDataReport, StatisticsTitlesReportKeys, StatisticsTitlesReport } from 'config/enum';
 
+export enum IsReportTiles {
+  OBJECTIVES_SUBMITTED = 'Objectives submitted',
+  OBJECTIVES_APPROVED = 'Objectives approved',
+  MID_YEAR_FORMS = 'Mid-year forms',
+  BREAKDOWN_MID_YEAR_REVIEW = 'Breakdown of mid-year review',
+  YEAR_END_FORMS = 'Year-end forms',
+  BREAKDOWN_YEAR_END_REVIEW = 'Breakdown of year-end review',
+  MOMENT_FEEDBACK = 'In the moment feedback',
+  NEW_TO_BUSINESS = 'New to business',
+  ANNIVERSARY_REVIEWS = 'Anniversary Reviews completed per quarter',
+}
 export const getFieldOptions = (currentYear) => {
   return [
     { value: (currentYear - 1).toString(), label: (currentYear - 1).toString() },

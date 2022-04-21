@@ -346,8 +346,8 @@
   "mid_year_forms": "Mid-year forms",
   "year_end_forms": "Year-end forms",
   "topics_to_download_into_excel_report": "Choose which topics you’d like to download into an excel report",
-  "breakdown_of_year_end_ratings": "Breakdown of year-end ratings",
-  "breakdown_of_mid_year_ratings": "Breakdown of mid-year ratings",
+  "breakdown_of_year_end_ratings": "Breakdown of year-end review",
+  "breakdown_of_mid_year_ratings": "Breakdown of mid-year review",
   "colleagues_count": "Colleagues count",
   "activity_history": "Activity History",
   "for_tip": "For tip",
@@ -555,5 +555,7 @@
   "objective": "Objective",
   "achieved_objective": "How do I know I`ve ACHIEVED this objective?",
   "over_achieved_objective": "How do I know I`ve OVER-ACHIEVED this objective?",
-  "try_to_select_another_year": "Try to select another year."
+  "try_to_select_another_year": "Try to select another year.",
+  "choose_which_data_you_want_to_see_in_your_dashboard": "Choose which data you want to see in your dashboard",
+  "save_changes": "Save changes"
 }

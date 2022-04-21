@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import { useStyle, Rule, CreateRule, IconButton as BackButton } from '@pma/dex-wrapper';
+import { CreateRule, IconButton as BackButton, Rule, useStyle } from '@pma/dex-wrapper';
 import { useNavigate } from 'react-router-dom';
 
 import InfoTable from 'components/InfoTable';
 import FilterModal from 'features/Report/components/FilterModal';
 import { PieChart } from 'components/PieChart';
 import { useTranslation } from 'components/Translation';
-import { IconButton } from 'components/IconButton';
 import { FilterOption } from 'features/Shared';
 import { buildPath } from 'features/Routes';
 import { ChartContent } from './components/ChartContent';
@@ -15,7 +14,14 @@ import { WorkLevelContent } from './components/WorkLevelContent';
 import { View } from 'components/PieChart/config';
 
 import { useTileStatistics } from './hooks';
-import { getReportTitles, checkTableChart, getTableChartTitle, checkBusinessType, checkWorkLevel } from './utils';
+import {
+  checkBusinessType,
+  checkExceptionType,
+  checkTableChart,
+  checkWorkLevel,
+  getReportTitles,
+  getTableChartTitle,
+} from './utils';
 import { initialValues } from 'features/Report/config';
 import { getCurrentYear } from 'utils/date';
 
@@ -32,7 +38,6 @@ const TileReport = () => {
   const [focus, setFocus] = useState(false);
   const [searchValueFilterOption, setSearchValueFilterOption] = useState<string>('');
   const [filterModal, setFilterModal] = useState(false);
-  const [filterData, setFilterData] = useState<any>(initialValues);
   const [checkedItems, setCheckedItems]: [string[], (T) => void] = useState([]);
   const [isCheckAll, setIsCheckAll]: [string[], (T) => void] = useState([]);
 
@@ -44,10 +49,12 @@ const TileReport = () => {
 
   const isWorkLevel = checkWorkLevel(type);
 
+  const isException = checkExceptionType(type);
+
   const getContent = () => {
     if (isWorkLevel) return <WorkLevelContent />;
     if (isTableChart) return <TableContent type={type} />;
-    return <ChartContent isBusinessType={isBusinessType} type={type} />;
+    return <ChartContent isException={isException} type={type} />;
   };
 
   return (
@@ -66,13 +73,6 @@ const TileReport = () => {
       </div>
       <div className={css(header({ mobileScreen }))}>
         <div className={css(flexCenterStyled)}>
-          <IconButton
-            graphic='information'
-            iconStyles={iconStyle}
-            onPress={() => {
-              console.log();
-            }}
-          />
           <FilterOption
             focus={focus}
             customIcon={true}
@@ -93,8 +93,7 @@ const TileReport = () => {
           <FilterModal
             filterModal={filterModal}
             setFilterModal={setFilterModal}
-            filterData={filterData}
-            setFilterData={setFilterData}
+            initialValues={initialValues}
             checkedItems={checkedItems}
             setCheckedItems={setCheckedItems}
             isCheckAll={isCheckAll}
@@ -108,7 +107,11 @@ const TileReport = () => {
           {isTableChart ? (
             <InfoTable mainTitle={getTableChartTitle(t, type)} data={type} />
           ) : (
-            <PieChart title={getReportTitles(t, type)?.chart} data={type} display={View.CHART} />
+            <PieChart
+              title={getReportTitles(t, type)?.chart}
+              data={type}
+              display={!isBusinessType ? View.CHART : View.QUANTITY}
+            />
           )}
         </div>
       </div>
@@ -168,9 +171,5 @@ const wrapperStyle: Rule = ({ theme }) => {
     marginTop: theme.spacing.s2,
   };
 };
-
-const iconStyle: Rule = ({ theme }) => ({
-  marginRight: theme.spacing.s2_5,
-});
 
 export default TileReport;

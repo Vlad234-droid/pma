@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { Select, Checkbox, Item } from 'components/Form';
+import { Checkbox, Item, Select } from 'components/Form';
 import { Trans, useTranslation } from 'components/Translation';
 import { WrapperModal } from 'features/Modal';
 import { ButtonsWrapper } from 'components/ButtonsWrapper';
@@ -12,15 +12,17 @@ import { ButtonsWrapper } from 'components/ButtonsWrapper';
 import { downloadReportStatistics } from '../utils';
 import { getCurrentYear } from 'utils/date';
 import success from 'images/success.jpg';
-import { reportByYearSchema, getYearsFromCurrentYear, checkboxes, getRequestParams } from '../config';
+import { checkboxes, getRequestParams, getYearsFromCurrentYear, reportByYearSchema } from '../config';
+import { ModalStatus } from '../Report';
 
 export const DOWNLOAD_WRAPPER = 'download-wrapper';
 
 type ModalProps = {
-  onClose: () => void;
+  onClose: (selectedCheckboxes?: any) => void;
+  modalStatus: null | ModalStatus;
 };
 
-const DownloadReportModal: FC<ModalProps> = ({ onClose }) => {
+const ReportModal: FC<ModalProps> = ({ onClose, modalStatus }) => {
   const { css, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
   const { t } = useTranslation();
@@ -41,9 +43,13 @@ const DownloadReportModal: FC<ModalProps> = ({ onClose }) => {
 
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
-  const handleDownloadReport = () => {
-    setShowSuccessModal(true);
-    downloadReportStatistics({ year: values?.year, topics: getRequestParams(selectedCheckboxes) });
+  const submitReportModal = () => {
+    if (modalStatus === ModalStatus.DOWNLOAD) {
+      setShowSuccessModal(true);
+      downloadReportStatistics({ year: values?.year, topics: getRequestParams(selectedCheckboxes) });
+      return;
+    }
+    onClose(selectedCheckboxes.filter((item) => item.isChecked));
   };
 
   const handleCheck = (checkboxId) => {
@@ -57,17 +63,24 @@ const DownloadReportModal: FC<ModalProps> = ({ onClose }) => {
     setSelectedCheckboxes(newArray);
   };
 
-  const isDisabledDownloadBtnHandler = () => {
-    if (isValid && selectedCheckboxes.some((item) => item['isChecked'])) return true;
-    return false;
+  const isDisabledSubmit = () => {
+    if (modalStatus === ModalStatus.DOWNLOAD && isValid && selectedCheckboxes.some((item) => item['isChecked']))
+      return true;
+    return modalStatus === ModalStatus.EDIT && selectedCheckboxes.some((item) => item['isChecked']);
   };
   return (
     <WrapperModal onClose={onClose} title={t('download_and_extract', 'Download and Extract')}>
       <div className={css(wrapperModalGiveFeedbackStyle)}>
         <h3 className={css(modalTitleStyle({ mobileScreen }))} data-test-id={DOWNLOAD_WRAPPER}>
-          <Trans i18nKey='topics_to_download_into_excel_report'>
-            Choose which topics you’d like to download into an excel report
-          </Trans>
+          {modalStatus === ModalStatus.DOWNLOAD ? (
+            <Trans i18nKey='topics_to_download_into_excel_report'>
+              Choose which topics you’d like to download into an excel report
+            </Trans>
+          ) : (
+            <Trans i18nKey='choose_which_data_you_want_to_see_in_your_dashboard'>
+              Choose which data you want to see in your dashboard
+            </Trans>
+          )}
         </h3>
         <div>
           <div className={css({ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' })}>
@@ -78,30 +91,37 @@ const DownloadReportModal: FC<ModalProps> = ({ onClose }) => {
               </label>
             ))}
           </div>
-          <Item withIcon={false} label={t('select_a_year', 'Select a year')}>
-            <Select
-              options={getYearsFromCurrentYear(getCurrentYear())}
-              name={'year'}
-              placeholder={t('please_select', 'Please select')}
-              //@ts-ignore
-              onChange={({ target: { value } }) => {
-                setValue('year', value, { shouldValidate: true });
-              }}
-            />
-          </Item>
-          <div className={css(textBlock, { fontWeight: 700 })}>Guidance for colleagues</div>
-          <div className={css(textBlock, { marginBottom: '30px' })}>
-            <Trans i18nKey='data_is_confidential'>
-              This data is confidential. If you need to download this data, you must ensure you do not share with anyone
-              else and that you store the data securely with a password.
-            </Trans>
-          </div>
+          {modalStatus === ModalStatus.DOWNLOAD && (
+            <Item withIcon={false} label={t('select_a_year', 'Select a year')}>
+              <Select
+                options={getYearsFromCurrentYear(getCurrentYear())}
+                name={'year'}
+                placeholder={t('please_select', 'Please select')}
+                //@ts-ignore
+                onChange={({ target: { value } }) => {
+                  setValue('year', value, { shouldValidate: true });
+                }}
+              />
+            </Item>
+          )}
+          {modalStatus === ModalStatus.DOWNLOAD && (
+            <>
+              <div className={css(textBlock, { fontWeight: 700 })}>Guidance for colleagues</div>
+              <div className={css(textBlock, { marginBottom: '30px' })}>
+                <Trans i18nKey='data_is_confidential'>
+                  This data is confidential. If you need to download this data, you must ensure you do not share with
+                  anyone else and that you store the data securely with a password.
+                </Trans>
+              </div>
+            </>
+          )}
         </div>
         <ButtonsWrapper
-          isValid={isDisabledDownloadBtnHandler()}
+          isValid={isDisabledSubmit()}
           onLeftPress={onClose}
-          onRightPress={handleDownloadReport}
+          onRightPress={submitReportModal}
           rightIcon={false}
+          rightTextNotIcon={modalStatus === ModalStatus.DOWNLOAD ? 'download' : 'save_changes'}
         />
 
         {showSuccessModal && (
@@ -126,12 +146,12 @@ const wrapperModalGiveFeedbackStyle: Rule = {
   overflow: 'auto',
 };
 
-const checkboxItemStyle: Rule = () => {
+const checkboxItemStyle: Rule = ({ theme }) => {
   return {
     display: 'flex',
     alignItems: 'center',
     cursor: 'pointer',
-    fontSize: '16px',
+    fontSize: theme.font.fixed.f16.fontSize,
     outline: 'none',
     marginBottom: '15px',
   };
@@ -141,22 +161,22 @@ const modalTitleStyle: CreateRule<{ mobileScreen: boolean }> =
   ({ mobileScreen }) =>
   ({ theme }) => ({
     color: theme.colors.tescoBlue,
-    margin: '0px 0px 10px 0px',
+    margin: `${theme.spacing.s0} ${theme.spacing.s0} 30px ${theme.spacing.s0}`,
     ...(mobileScreen
       ? {
-          fontSize: '20px',
-          lineHeight: '24px',
+          fontSize: theme.font.fixed.f20.fontSize,
+          lineHeight: theme.font.fixed.f20.lineHeight,
         }
       : {
           fontSize: '22px',
-          lineHeight: '28px',
+          lineHeight: theme.font.fixed.f24.lineHeight,
         }),
   });
 
-const textBlock: Rule = () => {
+const textBlock: Rule = ({ theme }) => {
   return {
-    fontSize: '16px',
-    lineHeight: '20px',
+    fontSize: theme.font.fixed.f16.fontSize,
+    lineHeight: theme.font.fixed.f16.lineHeight,
     marginBottom: '5px',
   };
 };
@@ -166,8 +186,8 @@ const successModalWrap: Rule = ({ theme }) => {
     position: 'absolute',
     width: '100%',
     height: '100%',
-    top: 0,
-    left: 0,
+    top: theme.spacing.s0,
+    left: theme.spacing.s0,
     borderRadius: '32px',
     padding: '120px 40px 40px',
     background: theme.colors.white,
@@ -178,18 +198,18 @@ const successModalWrap: Rule = ({ theme }) => {
   };
 };
 
-const successModalTitle: Rule = () => {
+const successModalTitle: Rule = ({ theme }) => {
   return {
-    fontSize: '28px',
+    fontSize: theme.font.fixed.f32.fontSize,
     fontWeight: 700,
     margin: '40px 0 15px',
   };
 };
 
-const successModalText: Rule = () => {
+const successModalText: Rule = ({ theme }) => {
   return {
-    fontSize: '24px',
-    lineHeight: '28px',
+    fontSize: theme.font.fixed.f24.fontSize,
+    lineHeight: theme.font.fixed.f24.lineHeight,
     maxWidth: '370px',
   };
 };
@@ -203,4 +223,4 @@ const successModalBtn: Rule = () => {
   };
 };
 
-export default DownloadReportModal;
+export default ReportModal;

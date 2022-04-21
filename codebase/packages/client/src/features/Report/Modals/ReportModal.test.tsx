@@ -2,10 +2,7 @@ import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
 import '@testing-library/jest-dom';
 import { renderWithTheme as render } from 'utils/test';
-import DownloadReportModal, { DOWNLOAD_WRAPPER } from './DownloadReportModal';
-import { fireEvent } from '@testing-library/react';
-import { getCurrentYear } from 'utils/date';
-import { act } from 'react-dom/test-utils';
+import DownloadReportModal, { DOWNLOAD_WRAPPER } from './ReportModal';
 
 describe('Download report modal', () => {
   const onClose = jest.fn();
@@ -22,19 +19,5 @@ describe('Download report modal', () => {
     const { getByText } = render(<DownloadReportModal {...props} />);
     const cancel = getByText('Cancel');
     expect(cancel).toBeInTheDocument();
-  });
-  it('it should render success part', async () => {
-    const { getByTestId, getByText } = render(<DownloadReportModal {...props} />);
-    const option = getByTestId('1');
-    const year = getByTestId('year');
-
-    await act(async () => {
-      fireEvent.click(option);
-      fireEvent.click(year);
-    });
-
-    const currYear = getByText(getCurrentYear());
-    expect(currYear).toBeInTheDocument();
-    expect(getByTestId('year-list')).toBeInTheDocument();
   });
 });
