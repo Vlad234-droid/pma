@@ -14,7 +14,7 @@ const TableContent: FC<Props> = ({ mainTitle, data, preTitle }) => {
   const chartData = Array.isArray(data) ? data : useChartDataStatistics(t, data) || [];
 
   return (
-    <>
+    <React.Fragment>
       <h2 className={css(titleStyle({ preTitle, theme }))}>{mainTitle}</h2>
       {preTitle !== '' && (
         <div className={css(flexStyle)}>
@@ -45,7 +45,7 @@ const TableContent: FC<Props> = ({ mainTitle, data, preTitle }) => {
           );
         })}
       </div>
-    </>
+    </React.Fragment>
   );
 };
 
