@@ -48,8 +48,8 @@ export const defaultSerializer = (item) => ({
   ...item,
   firstName: item?.colleagueProfile?.colleague?.profile?.firstName || '',
   lastName: item?.colleagueProfile?.colleague?.profile?.lastName || '',
-  jobName: item?.colleagueProfile?.colleague?.workRelationships[0].job?.name || '',
-  departmentName: item?.colleagueProfile?.colleague?.workRelationships[0].department?.name || '',
+  jobName: item?.colleagueProfile?.colleague?.workRelationships[0]?.job?.name || '',
+  departmentName: item?.colleagueProfile?.colleague?.workRelationships[0]?.department?.name || '',
   feedbackItems: item?.feedbackItems
     .sort((i1, i2) => QUESTION_ORDER.indexOf(i1.code) - QUESTION_ORDER.indexOf(i2.code))
     .map(({ code, content, ...rest }) => ({

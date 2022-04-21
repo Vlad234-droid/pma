@@ -44,7 +44,7 @@ const FeedbackDocument: FC<Props> = ({ items }) => {
                   {feedback.firstName} {feedback.lastName}
                 </Text>
                 <Text style={styles.department}>
-                  {feedback.jobName}, {feedback.departmentName}
+                  {feedback?.jobName}, {feedback?.departmentName}
                 </Text>
               </View>
               <View style={styles.rightContent}>

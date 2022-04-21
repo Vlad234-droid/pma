@@ -40,7 +40,7 @@ const SubmitPart: FC<SubmitPartProps> = ({ selectedPerson, teamMethods, foldersW
             className={css(namesStyle)}
           >{`${selectedPerson?.profile?.firstName} ${selectedPerson?.profile?.lastName}`}</h3>
           <p className={css(industryStyle)}>
-            {`${selectedPerson?.workRelationships?.[0].job?.name}, ${selectedPerson?.workRelationships?.[0].department?.name}`}
+            {`${selectedPerson?.workRelationships?.[0]?.job?.name}, ${selectedPerson?.workRelationships?.[0]?.department?.name}`}
           </p>
         </div>
       </div>

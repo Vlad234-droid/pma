@@ -32,7 +32,7 @@ const FeedbackProfileInfo: FC<ProfileProps> = ({
         </div>
         <div className={css({ marginLeft: '16px' })}>
           <h3 className={css(namesStyle)}>{`${firstName ?? ''} ${lastName ?? ''}`}</h3>
-          <p className={css(industryStyle)}>{`${job ?? ''}, ${department ?? ''}`}</p>
+          <p className={css(industryStyle)}>{`${job ?? ''}${department && job ? ',' : ''} ${department ?? ''}`}</p>
         </div>
       </div>
       <div className={css({ display: 'flex', justifyContent: 'center', alignItems: 'center' })}>

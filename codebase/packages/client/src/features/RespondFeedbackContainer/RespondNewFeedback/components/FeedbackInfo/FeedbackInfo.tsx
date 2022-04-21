@@ -49,8 +49,8 @@ const FeedbackInfo: FC<Props> = ({ onClickMore }) => {
         <GiveFeedbackProfileInfo
           firstName={targetColleagueProfile?.colleague?.profile?.firstName}
           lastName={targetColleagueProfile?.colleague?.profile?.lastName}
-          job={targetColleagueProfile?.colleague?.workRelationships[0].job?.name}
-          department={targetColleagueProfile?.colleague?.workRelationships[0].department?.name}
+          job={targetColleagueProfile?.colleague?.workRelationships[0]?.job?.name}
+          department={targetColleagueProfile?.colleague?.workRelationships[0]?.department?.name}
           toneOfVoice={toneOfVoice}
         />
       </div>
