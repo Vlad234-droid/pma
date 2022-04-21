@@ -46,12 +46,7 @@ describe('#getMissedFields', () => {
       },
     };
 
-    expect(getMissedFields(info)).toEqual([
-      'managerUUID',
-      'profile/firstName',
-      'workRelationships/job/name',
-      'workRelationships/managerUUID',
-    ]);
+    expect(getMissedFields(info)).toEqual(['managerUUID', 'profile/firstName', 'workRelationships/job/name']);
   });
 
   it('should return an array with nullable fields', () => {
@@ -76,12 +71,7 @@ describe('#getMissedFields', () => {
       },
     };
 
-    expect(getMissedFields(info)).toEqual([
-      'managerUUID',
-      'profile/firstName',
-      'workRelationships/job/name',
-      'workRelationships/managerUUID',
-    ]);
+    expect(getMissedFields(info)).toEqual(['managerUUID', 'profile/firstName', 'workRelationships/job/name']);
   });
 
   it('should return an array with empty string fields', () => {
@@ -106,12 +96,7 @@ describe('#getMissedFields', () => {
       },
     };
 
-    expect(getMissedFields(info)).toEqual([
-      'managerUUID',
-      'profile/firstName',
-      'workRelationships/job/name',
-      'workRelationships/managerUUID',
-    ]);
+    expect(getMissedFields(info)).toEqual(['managerUUID', 'profile/firstName', 'workRelationships/job/name']);
   });
 
   it('should return an array with false fields', () => {
@@ -136,12 +121,7 @@ describe('#getMissedFields', () => {
       },
     };
 
-    expect(getMissedFields(info)).toEqual([
-      'managerUUID',
-      'profile/firstName',
-      'workRelationships/job/name',
-      'workRelationships/managerUUID',
-    ]);
+    expect(getMissedFields(info)).toEqual(['managerUUID', 'profile/firstName', 'workRelationships/job/name']);
   });
 
   it('should return an array with 0 fields', () => {
@@ -166,11 +146,6 @@ describe('#getMissedFields', () => {
       },
     };
 
-    expect(getMissedFields(info)).toEqual([
-      'managerUUID',
-      'profile/firstName',
-      'workRelationships/job/name',
-      'workRelationships/managerUUID',
-    ]);
+    expect(getMissedFields(info)).toEqual(['managerUUID', 'profile/firstName', 'workRelationships/job/name']);
   });
 });
