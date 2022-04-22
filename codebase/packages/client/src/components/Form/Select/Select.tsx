@@ -11,7 +11,7 @@ import { useFormContainer } from '../context/input';
 const getSelectedOption = (options: Option[], value?: string) =>
   value ? options.filter((option) => option.value === value)[0] : undefined;
 
-const Select: FC<SelectField> = ({ domRef, name, options, placeholder, value, error, onChange, onBlur }) => {
+const Select: FC<SelectField> = ({ domRef, name, options, placeholder, value, error, onChange, onBlur, readonly }) => {
   const { css } = useStyle();
   const { inputRef } = useFormContainer();
   const ref = useRef<HTMLDivElement | null>(null);
