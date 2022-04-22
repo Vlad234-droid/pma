@@ -1,12 +1,11 @@
-import React, { FC } from 'react';
+import React, { FC, PropsWithChildren } from 'react';
 import { colors, Rule, useStyle } from '@pma/dex-wrapper';
 
 export type LinkButtonProps = {
   onClick: () => void;
-  children: string;
 };
 
-const LinkButton: FC<LinkButtonProps> = ({ onClick, children }) => {
+const LinkButton: FC<PropsWithChildren<LinkButtonProps>> = ({ onClick, children }) => {
   const { css } = useStyle();
 
   return (

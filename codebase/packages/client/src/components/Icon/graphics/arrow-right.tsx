@@ -1,7 +1,7 @@
 import React from 'react';
+import { useStyle } from '@pma/dex-wrapper';
 
 import { FCGraphicProps } from './types';
-import { useStyle } from '@pma/dex-wrapper';
 import { invertColor } from '../utils';
 
 export const ArrowRight: FCGraphicProps = ({ invertColors }) => {

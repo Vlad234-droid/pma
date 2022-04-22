@@ -1,9 +1,9 @@
 import React, { FC } from 'react';
-import { IconButton } from '../../../components/IconButton';
 import { useStyle, Rule, Styles, CreateRule } from '@pma/dex-wrapper';
-import { Info360ModalProps } from '../config/types';
+import { IconButton } from 'components/IconButton';
 import { VideoPlayer, VideoId } from 'features/VideoPlayer';
 import { Trans } from 'components/Translation';
+import { Info360ModalProps } from '../config/types';
 
 export const INFO_MODAL = 'info_modal';
 

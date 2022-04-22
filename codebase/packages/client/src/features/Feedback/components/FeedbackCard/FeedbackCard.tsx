@@ -1,9 +1,9 @@
 import React, { FC } from 'react';
-import { ConfigProps } from '../../config/types';
+import { Link } from 'react-router-dom';
 import { Rule, CreateRule, Styles, useStyle } from '@pma/dex-wrapper';
 import { TileWrapper } from 'components/Tile';
-import { Link } from 'react-router-dom';
 import { buildPath } from 'features/Routes';
+import { ConfigProps } from '../../config/types';
 
 export const FEEDBACK_CARD_WRAPPER = 'feedback_card_wrapper';
 

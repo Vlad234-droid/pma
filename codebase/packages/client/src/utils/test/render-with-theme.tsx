@@ -1,12 +1,10 @@
 import React, { cloneElement, FC, ReactElement } from 'react';
 import configureStore from 'redux-mock-store';
-import { I18nextProvider } from './mocks/react-i18next';
-import i18n from './mocks/i18';
-
 import { render, RenderResult, screen as screenTestingLibrary, Screen } from '@testing-library/react';
-
 import { DDLProvider } from '@pma/dex-wrapper';
 import { Provider } from 'react-redux';
+import { I18nextProvider } from './mocks/react-i18next';
+import i18n from './mocks/i18';
 
 const App: FC = (props) => <DDLProvider {...props} />;
 

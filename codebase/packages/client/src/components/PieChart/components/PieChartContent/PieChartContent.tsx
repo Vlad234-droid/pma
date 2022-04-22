@@ -2,8 +2,8 @@ import React, { FC } from 'react';
 import { useStyle, Rule, CreateRule, Theme } from '@pma/dex-wrapper';
 import { useTranslation } from 'components/Translation';
 
-import { PieChartContentProps as Props, View, Obj } from '../../config';
 import { useChartDataStatistics } from 'features/useChartDataStatistics';
+import { PieChartContentProps as Props, View, Obj } from '../../config';
 
 export const TEST_ID = 'pie-chart-content-id';
 

@@ -102,6 +102,7 @@ const Datepicker: FC<Props> = ({ onChange, onError, value, name, minDate, isVali
   };
 
   const handleClickOutside = (event: MouseEvent<HTMLElement>) => {
+    if (readonly) return;
     const element = event?.target as HTMLElement;
 
     if (ref.current && !ref.current.contains(element)) {

@@ -1,8 +1,7 @@
 import { Colors, Theme } from '@pma/dex-wrapper';
-
+import { Status } from 'config/enum';
 import { IconColors } from './graphics/types';
 import { Graphics } from './graphics';
-import { Status } from 'config/enum';
 
 export const invertColor = (color: IconColors, shouldInvert: boolean, { colors: { white, link } }: Theme) => {
   if (!shouldInvert) return color;

@@ -1,7 +1,7 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Rule, useStyle } from '@pma/dex-wrapper';
 import useDispatch from 'hooks/useDispatch';
-import { useSelector } from 'react-redux';
 
 import { groupArrayOfObjects } from '../../utils';
 import { ColleagueInfo } from 'features/MyTeam';

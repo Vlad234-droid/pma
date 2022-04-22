@@ -3,8 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Button, CreateRule, ModalWithHeader, Rule, useStyle } from '@pma/dex-wrapper';
 import { Icon } from 'components/Icon';
 import { Input } from 'components/Form';
-import { DropZone } from 'components/DropZone';
-import Upload from 'images/Upload.svg';
 import { useTranslation } from 'components/Translation';
 import { ProcessTemplateActions, getProcessTemplateSelector } from '@pma/store';
 import { formatDateStringFromISO } from 'utils/date';
@@ -65,17 +63,6 @@ const TemplatesModal: FC<TemplateModalProps> = ({ onSelect }) => {
         >
           <div className={css(templatesModalContentWrapperStyles({ mobileScreen }))}>
             <Input placeholder={t('enter_template_name', 'Enter template name')} onChange={handleSearchTemplate} />
-
-            <div className={css({ marginTop: '32px' })}>
-              <DropZone onUpload={handleUpload}>
-                <img className={css({ maxWidth: 'inherit' })} src={Upload} alt='Upload' />
-                <span className={css(labelStyles)}>{t('drop_file_here', 'Drop file here or click to upload')}</span>
-                <span className={css(descriptionStyles)}>
-                  {t('maximum_upload_size', 'Maximum upload size 5MB', { maxSize: '5MB' })}
-                </span>
-              </DropZone>
-            </div>
-
             <div className={css(templatesListStyles)}>
               {filteredTemplates.map((item, idx) => {
                 const createdTime = formatDateStringFromISO(item.createdTime, 'MM/dd/yyyy');

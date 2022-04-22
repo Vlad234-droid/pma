@@ -3,7 +3,6 @@ import { useStyle } from '@pma/dex-wrapper';
 
 import { ReviewType, Status } from 'config/enum';
 import { useTranslation } from 'components/Translation';
-
 import { ColleagueReview } from './ColleagueReview';
 import { Buttons } from './Buttons';
 import { Notification } from 'components/Notification';

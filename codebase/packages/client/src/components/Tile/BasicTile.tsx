@@ -1,5 +1,4 @@
 import React, { FC, HTMLProps, ReactElement } from 'react';
-
 import { CreateRule, Rule, useMedia, useStyle } from '@pma/dex-wrapper';
 import { TileWrapper } from './TileWrapper';
 import { Icon } from '../Icon';
@@ -15,7 +14,6 @@ export type TileProps = {
   icon?: boolean;
   customStyle?: React.CSSProperties | {};
   imgCustomStyle?: React.CSSProperties | {};
-  tearget?: HTMLAnchorElement['target'];
 };
 
 type Props = HTMLProps<HTMLInputElement> & TileProps;

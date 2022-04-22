@@ -3,10 +3,9 @@ import { createProxyMiddleware, Options } from 'http-proxy-middleware';
 import { getIdentityData } from '@pma-connectors/onelogin';
 import yn from 'yn';
 
-import { isDEV, isLocal, ProcessConfig } from "../config";
+import { isDEV, isLocal, ProcessConfig } from '../config';
 
 export const apiProxyMiddleware = (config: ProcessConfig) => {
-
   const proxyMiddlewareOptions: Options = {
     target: config.proxyApiServerUrl(),
     changeOrigin: true,
@@ -18,7 +17,7 @@ export const apiProxyMiddleware = (config: ProcessConfig) => {
   proxyMiddlewareOptions.onError = (e) => {
     console.log('e', e);
   };
-  
+
   if (!isDEV(config.buildEnvironment()) && config.useOneLogin()) {
     proxyMiddlewareOptions.onProxyReq = function (proxyReq, req, res) {
       const identityData = getIdentityData(res as Response);
@@ -38,5 +37,4 @@ export const apiProxyMiddleware = (config: ProcessConfig) => {
     ['/api/**', '!/api/v1/camunda/**', '!/api/colleague-inbox/**', '!/api/manager-bff/**'],
     proxyMiddlewareOptions,
   );
-
-}
+};
