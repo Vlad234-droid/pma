@@ -7,11 +7,12 @@ import defaultImg from 'images/default.png';
 
 type Props = {
   onSelect: (person: any) => void;
+  onBlur: () => void;
   selected: Array<{ value: string; label: string }>;
   error: string;
 };
 
-const ColleaguesFinder: FC<Props> = ({ onSelect, error, selected }) => {
+const ColleaguesFinder: FC<Props> = ({ onSelect, onBlur, error, selected }) => {
   const { css } = useStyle();
 
   const { colleagues, handleSearchColleagues, clearColleagueList } = useSearchColleagues();
@@ -29,10 +30,12 @@ const ColleaguesFinder: FC<Props> = ({ onSelect, error, selected }) => {
           <SearchInput
             name={'search_option'}
             onChange={handleChange}
+            onBlur={onBlur}
             onSearch={(e) => handleSearchColleagues(e.target.value)}
             onClear={() => onSelect([])}
             onDelete={(colleagueUuid) => onSelect(selected.filter(({ value }) => value !== colleagueUuid))}
             placeholder={'Search'}
+            isValid={!error}
             options={colleagues || []}
             selected={selected}
             multiple

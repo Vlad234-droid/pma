@@ -86,6 +86,14 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel, setIsInfoModalOpen }) 
   const objectiveValue =
     reviews.find((item) => item.uuid === formValues?.targetId)?.properties?.mapJson?.title ?? Tesco.TescoBank;
 
+  const handleSelect = (colleagues) => {
+    setValue('colleagues', colleagues, { shouldDirty: true, shouldValidate: true });
+  };
+
+  const handleBlur = (fieldName: string) => {
+    setValue(fieldName, getValues(fieldName), { shouldValidate: true, shouldTouch: true });
+  };
+
   return (
     <>
       <div className={css({ paddingLeft: '40px', paddingRight: '40px', height: '100%', overflow: 'auto' })}>
@@ -100,7 +108,8 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel, setIsInfoModalOpen }) 
         </div>
         <form className={css({ marginTop: '20px' })}>
           <ColleaguesFinder
-            onSelect={(colleagues) => setValue('colleagues', colleagues, { shouldDirty: true, shouldValidate: true })}
+            onSelect={handleSelect}
+            onBlur={() => handleBlur('colleagues')}
             selected={formValues.colleagues || []}
             error={errors['colleagues']?.message}
           />
@@ -123,6 +132,8 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel, setIsInfoModalOpen }) 
                 name={'targetType'}
                 options={AREA_OPTIONS}
                 placeholder={t('choose_an_area', 'Choose an area')}
+                onBlur={() => handleBlur('targetType')}
+                error={errors['targetType']?.message}
                 //@ts-ignore
                 onChange={({ target: { value } }) => {
                   if (get(formValues, 'targetId') && value !== TargetType.OBJECTIVE) {
@@ -158,6 +169,8 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel, setIsInfoModalOpen }) 
                 <Select
                   options={[...objectiveOptions, { value: Tesco.TescoBank, label: Tesco.TescoBank }]}
                   name={'targetId'}
+                  onBlur={() => handleBlur('targetId')}
+                  error={errors['targetId']?.message}
                   placeholder={t('choose_objective', 'Choose objective')}
                   onChange={({ target: { value } }) => {
                     setValue('targetId', value, { shouldValidate: true });

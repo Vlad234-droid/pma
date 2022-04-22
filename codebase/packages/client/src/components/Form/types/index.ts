@@ -36,6 +36,8 @@ export interface SelectField extends FormField {
   options: Array<Option>;
   placeholder: string;
   value?: string;
+  error?: string;
+  onBlur?: () => void;
   //TODO: change any to ChangeEvent when all dropdonwns will be fixed
   onChange: (value: any) => void;
 }

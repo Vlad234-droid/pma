@@ -9,6 +9,7 @@ export const createRequestFeedbackSchema = Yup.object().shape({
         label: Yup.string(),
       }),
     )
+    .min(1)
     .required(),
   targetType: Yup.string().required(),
   targetId: Yup.string()
