@@ -5,6 +5,11 @@ import SuccessModal from 'components/SuccessModal';
 import { SuccessMark, ExclamationMark } from 'components/Icon';
 
 import { ReviewType, Status } from 'config/enum';
+import { useSelector } from 'react-redux';
+import { getEmployeesWithReviewStatus } from '@pma/store';
+import { useNavigate } from 'react-router-dom';
+import { buildPath } from 'features/Routes';
+import { Page } from 'pages';
 
 type Props = {
   review: ReviewType;
@@ -14,6 +19,9 @@ type Props = {
 
 const Modal: FC<Props> = ({ review, status, onClose }) => {
   const { t } = useTranslation();
+  const colleaguesWaitingForApproval = useSelector(getEmployeesWithReviewStatus(Status.WAITING_FOR_APPROVAL)());
+  const navigate = useNavigate();
+
   const title = `${status === Status.DECLINED ? t('declined', 'Declined') : t('approved', 'Approved')} ${t(
     'objectives_and_or_reviews',
     'objectives and / or reviews',
@@ -32,10 +40,17 @@ const Modal: FC<Props> = ({ review, status, onClose }) => {
     review === ReviewType.OBJECTIVE ? t('objectives', 'Objectives').toLowerCase() : reviewDescription;
   const approveDescription = `${t('you_have_approved', "You have approved your colleague's")} ${typeDescription}.`;
 
+  const handleClose = () => {
+    onClose();
+    if (!colleaguesWaitingForApproval.length) {
+      navigate(buildPath(Page.MY_TEAM));
+    }
+  };
+
   return (
     <SuccessModal
       title={title}
-      onClose={onClose}
+      onClose={handleClose}
       mark={status === Status.DECLINED ? <ExclamationMark /> : <SuccessMark />}
       description={status === Status.DECLINED ? declineDescription : approveDescription}
     />
