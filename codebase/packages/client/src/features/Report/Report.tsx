@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import FilterModal from './components/FilterModal';
 import InfoTable from 'components/InfoTable';
 import useQueryString from 'hooks/useQueryString';
-import AppliedFilters from './components/AppliedFilters';
 import Spinner from 'components/Spinner';
 import { IconButton } from 'components/IconButton';
 import { FilterOption } from 'features/Shared';
@@ -84,37 +83,35 @@ const Report: FC = () => {
     [tiles],
   );
 
-  const getDropDown = () => (
-    <div className={css(downloadWrapperStyle)}>
-      <form>
-        <h2 className={css(yearLabel)}>
-          <Trans i18nKey='view_previous_years'>View previous years</Trans>
-        </h2>
-
-        <Select
-          options={getFieldOptions(getCurrentYear())}
-          name={'year_options'}
-          placeholder={t('choose_an_area', 'Choose an area')}
-          //@ts-ignore
-          onChange={({ target: { value } }) => {
-            changeYearHandler(value);
-          }}
-          value={year || query.year}
-        />
-      </form>
-    </div>
-  );
-
   return (
     <div className={css({ margin: '22px 42px 30px 40px' })} data-test-id={REPORT_WRAPPER}>
       <div className={css(spaceBetween({ quantity, mobileScreen }))}>
-        {!!getAppliedReport().length && (
-          <AppliedFilters
-            clearAppliedFilters={clearAppliedFilters}
-            getAppliedReport={getAppliedReport()}
-            colleaguesCount={colleaguesCount}
-          />
-        )}
+        {/*//Todo in future move active filters to another place */}
+        {/*{!!getAppliedReport().length && (*/}
+        {/*  <AppliedFilters*/}
+        {/*    clearAppliedFilters={clearAppliedFilters}*/}
+        {/*    getAppliedReport={getAppliedReport()}*/}
+        {/*    colleaguesCount={colleaguesCount}*/}
+        {/*  />*/}
+        {/*)}*/}
+        <div className={css(downloadWrapperStyle)}>
+          <form>
+            <h2 className={css(yearLabel)}>
+              <Trans i18nKey='view_previous_years'>View previous years</Trans>
+            </h2>
+
+            <Select
+              options={getFieldOptions(getCurrentYear())}
+              name={'year_options'}
+              placeholder={t('choose_an_area', 'Choose an area')}
+              //@ts-ignore
+              onChange={({ target: { value } }) => {
+                changeYearHandler(value);
+              }}
+              value={year || query.year}
+            />
+          </form>
+        </div>
 
         <div className={css(flexCenterStyled)}>
           <HoverContainer
@@ -183,9 +180,6 @@ const Report: FC = () => {
       ) : (
         <>
           <div className={css(pieChartWrapper, { flexWrap: 'wrap-reverse' })}>
-            {!isDisplayTile(IsReportTiles.OBJECTIVES_APPROVED) &&
-              !isDisplayTile(IsReportTiles.OBJECTIVES_SUBMITTED) &&
-              getDropDown()}
             {isDisplayTile(IsReportTiles.OBJECTIVES_SUBMITTED) && (
               <div className={css(leftColumn)}>
                 <PieChart
@@ -201,7 +195,6 @@ const Report: FC = () => {
                     'Percentage of objectives submitted by colleagues, prior to being reviewed and approved by their line manager.',
                   )}
                 />
-                {!isDisplayTile(IsReportTiles.OBJECTIVES_APPROVED) && getDropDown()}
               </div>
             )}
             {isDisplayTile(IsReportTiles.OBJECTIVES_APPROVED) && (
@@ -219,7 +212,6 @@ const Report: FC = () => {
                   )}
                   hoverVisibility={!small}
                 />
-                {getDropDown()}
               </div>
             )}
           </div>
@@ -285,17 +277,19 @@ const Report: FC = () => {
             )}
           </div>
           <div className={css(pieChartWrapper)}>
-            <div className={css(leftColumn)}>
-              <PieChart
-                title={t(TitlesReport.WL4And5, 'WL4 & 5 Objectives submitted')}
-                display={View.CHART}
-                data={ReportPage.REPORT_WORK_LEVEL}
-                link={Page.TILE_REPORT_STATISTICS}
-                params={getYear()}
-                type={convertToLink(ReportPage.REPORT_WORK_LEVEL)}
-                hoverVisibility={false}
-              />
-            </div>
+            {isDisplayTile(IsReportTiles.WL4And5) && (
+              <div className={css(leftColumn)}>
+                <PieChart
+                  title={t(TitlesReport.WL4And5, 'WL4 & 5 Objectives submitted')}
+                  display={View.CHART}
+                  data={ReportPage.REPORT_WORK_LEVEL}
+                  link={Page.TILE_REPORT_STATISTICS}
+                  params={getYear()}
+                  type={convertToLink(ReportPage.REPORT_WORK_LEVEL)}
+                  hoverVisibility={false}
+                />
+              </div>
+            )}
             {isDisplayTile(IsReportTiles.NEW_TO_BUSINESS) && (
               <div className={css(rightColumn)}>
                 <PieChart
@@ -373,6 +367,7 @@ const downloadWrapperStyle: Rule = {
   display: 'flex',
   flexDirection: 'column',
   width: '40%',
+  marginBottom: '29px',
 };
 
 const iconBtnStyle = {
@@ -432,8 +427,10 @@ const spaceBetween: CreateRule<{ quantity: number; mobileScreen: boolean }> = ({
     display: 'flex',
     flexWrap: mobileScreen ? 'wrap' : 'nowrap',
     ...(mobileScreen && { flexBasis: '250px' }),
-    justifyContent: quantity ? 'space-between' : 'flex-end',
+    // Todo replace it in future due to appliued filters
+    // justifyContent: quantity ? 'space-between' : 'flex-end',
     alignItems: 'center',
+    justifyContent: 'space-between',
   };
 };
 

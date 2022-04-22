@@ -14,6 +14,7 @@ import { getCurrentYear } from 'utils/date';
 import success from 'images/success.jpg';
 import { checkboxes, getRequestParams, getYearsFromCurrentYear, reportByYearSchema } from '../config';
 import { ModalStatus } from '../Report';
+import { StatisticsTitlesReportKeys } from 'config/enum';
 
 export const DOWNLOAD_WRAPPER = 'download-wrapper';
 
@@ -39,7 +40,14 @@ const ReportModal: FC<ModalProps> = ({ onClose, modalStatus }) => {
 
   const values = getValues();
 
-  const [selectedCheckboxes, setSelectedCheckboxes] = useState(checkboxes(t));
+  const [selectedCheckboxes, setSelectedCheckboxes] = useState(
+    checkboxes(
+      t,
+      modalStatus === ModalStatus.EDIT
+        ? [{ id: '10', label: t(StatisticsTitlesReportKeys.WL4And5), isChecked: false }]
+        : [],
+    ),
+  );
 
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 

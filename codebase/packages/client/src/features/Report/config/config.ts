@@ -10,6 +10,7 @@ export enum IsReportTiles {
   MOMENT_FEEDBACK = 'In the moment feedback',
   NEW_TO_BUSINESS = 'New to business',
   ANNIVERSARY_REVIEWS = 'Anniversary Reviews completed per quarter',
+  WL4And5 = 'WL4 & 5 Objectives submitted',
 }
 export const getFieldOptions = (currentYear) => {
   return [
@@ -136,7 +137,7 @@ export const statisticsReport = {
   ],
 };
 
-export const checkboxes = (t) => [
+export const checkboxes = (t, fields) => [
   {
     id: '1',
     label: t(StatisticsTitlesReportKeys.OBJECTIVES_SUBMITTED),
@@ -184,6 +185,7 @@ export const checkboxes = (t) => [
     label: t(StatisticsTitlesReportKeys.ANNIVERSARY_REVIEWS),
     isChecked: false,
   },
+  ...fields,
 ];
 
 export const initialValues = [
