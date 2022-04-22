@@ -32,6 +32,9 @@ const wrapperStyle: Rule = ({ theme }) => ({
   display: 'flex',
   borderRadius: '50px',
   cursor: 'pointer',
+  fontSize: theme.font.fixed.f16.fontSize,
+  lineHeight: theme.font.fixed.f16.lineHeight,
+  letterSpacing: '0px',
 });
 
 const linkStyle: CreateRule<{ isActive: boolean }> =

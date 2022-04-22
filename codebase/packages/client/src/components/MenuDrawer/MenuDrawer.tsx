@@ -5,13 +5,14 @@ import { Rule, useStyle } from '@pma/dex-wrapper';
 import { colleagueUUIDSelector, timelinesExistSelector } from '@pma/store';
 
 import { Page } from 'pages';
-import { LINKS } from 'config/constants';
+import { buildAbsolutePath } from 'utils';
+import { LINKS, CAMUNDA_APP_PATH } from 'config/constants';
 import { buildPath } from 'features/Routes';
 import { ConfirmModal } from 'features/Modal';
 import { CanPerform, role } from 'features/Permission';
 import { Trans, useTranslation } from 'components/Translation';
 import { useHeaderContainer } from 'contexts/headerContext';
-import { MenuItem } from 'components/MenuItem';
+import { MenuItem, iconStyles as menuIconStyles } from 'components/MenuItem';
 import TescoLogo from 'assets/img/TescoLogo.svg';
 import { Icon } from '../Icon';
 
@@ -100,7 +101,7 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
         </div>
         <div className={css(menuDrawerSettingsStyle)}>
           <CanPerform
-            perform={[role.TALENT_ADMIN, role.ADMIN]}
+            perform={[role.TALENT_ADMIN, role.ADMIN, role.PROCESS_MANAGER]}
             yes={() => {
               return (
                 <>
@@ -164,6 +165,20 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
                             <Icon graphic={'tip'} />
                             <span className={css(itemSettingsTextStyle)}>{t('tips', 'Tips')}</span>
                           </Link>
+                        )}
+                      />
+                      <CanPerform
+                        perform={[role.PROCESS_MANAGER, role.ADMIN]}
+                        yes={() => (
+                          <a
+                            href={buildAbsolutePath(CAMUNDA_APP_PATH)}
+                            target={'_blank'}
+                            rel='noreferrer'
+                            className={css(itemSettingsStyle, itemSettingsBorderStyle)}
+                          >
+                            <Icon graphic={'document'} />
+                            <span className={css(itemSettingsTextStyle)}>{t('camunda_admin', 'Camunda Admin')}</span>
+                          </a>
                         )}
                       />
                     </div>
@@ -240,6 +255,9 @@ const menuDrawerTopStyle: Rule = {
 const menuDrawerTitleStyle: Rule = ({ theme }) => ({
   color: theme.colors.tescoBlue,
   padding: '8px 0 24px',
+  fontSize: theme.font.fixed.f16.fontSize,
+  lineHeight: theme.font.fixed.f16.lineHeight,
+  letterSpacing: '0px',
 });
 
 const menuDrawerButtonsStyle: Rule = {
@@ -254,8 +272,13 @@ const menuDrawerSettingsStyle: Rule = ({ theme }) => ({
   padding: '6px 0 0 0',
 });
 
-const itemSettingsTextStyle: Rule = {
-  paddingLeft: '16px',
+const itemSettingsTextStyle: Rule = ({ theme }) => {
+  return {
+    paddingLeft: '16px',
+    fontSize: theme.font.fixed.f16.fontSize,
+    lineHeight: theme.font.fixed.f16.lineHeight,
+    letterSpacing: '0px',
+  };
 };
 
 const itemSettingsStyle: Rule = {

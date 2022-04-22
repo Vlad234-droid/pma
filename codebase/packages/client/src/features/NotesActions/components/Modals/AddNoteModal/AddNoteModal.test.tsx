@@ -47,7 +47,7 @@ describe('AddNoteModal', () => {
     expect(cancelModal).toHaveBeenCalled();
   });
   it('it should submit form', async () => {
-    const { getByTestId, findByTestId } = render(<AddNoteModal {...props} />);
+    const { getByTestId } = render(<AddNoteModal {...props} />);
 
     props.submitForm();
     expect(submitForm).toHaveBeenCalled();

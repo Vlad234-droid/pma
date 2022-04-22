@@ -1,17 +1,21 @@
 import React, { FC, useEffect, useMemo, useState } from 'react';
-import { ModalDownloadFeedbackProps } from './type';
 import { Button, Rule, useStyle } from '@pma/dex-wrapper';
-import { IconButton, Position } from 'components/IconButton';
-import { SearchPart, SubmitPart } from './components';
-import { Trans } from 'components/Translation';
+import { ColleaguesActions, getColleagueByUuidSelector } from '@pma/store';
+import { downloadPDF, FeedbackDocument, usePDF } from '@pma/pdf-renderer';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
-import { createDownLoadSchema } from './config/schema';
-import { SuccessModal } from './';
-import { ColleaguesActions, getColleagueByUuidSelector } from '@pma/store';
 import { useDispatch, useSelector } from 'react-redux';
-import { downloadPDF, FeedbackDocument, usePDF } from '@pma/pdf-renderer';
+
+import { IconButton, Position } from 'components/IconButton';
+import { SearchPart, SubmitPart } from './components';
+import { Trans } from 'components/Translation';
+import { SuccessModal } from './';
+import { ButtonsWrapper } from 'components/ButtonsWrapper';
+import { ArrowLeftIcon } from 'components/ArrowLeftIcon';
+
+import { ModalDownloadFeedbackProps } from './type';
+import { createDownLoadSchema } from './config/schema';
 
 export const DOWNLOAD_WRAPPER = 'download-wrapper';
 
@@ -23,8 +27,7 @@ const ModalDownloadFeedback: FC<ModalDownloadFeedbackProps> = ({
   downloadTitle,
   downloadDescription,
 }) => {
-  const { css, theme, matchMedia } = useStyle();
-  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
+  const { css } = useStyle();
   const dispatch = useDispatch();
   const [selected, setSelected] = useState([]);
 
@@ -84,34 +87,9 @@ const ModalDownloadFeedback: FC<ModalDownloadFeedbackProps> = ({
         {selectedColleague && (
           <SubmitPart selectedPerson={selectedColleague.colleague} searchDate={formData.date} onChange={setSelected} />
         )}
-        <div
-          className={css({
-            position: 'absolute',
-            left: 0,
-            bottom: 0,
-            width: '100%',
-            background: '#FFFFFF',
-            height: '112px',
-          })}
-        >
-          <div
-            className={css({
-              position: 'relative',
-              bottom: theme.spacing.s0,
-              left: theme.spacing.s0,
-              right: theme.spacing.s0,
-              //@ts-ignore
-              borderTop: `${theme.border.width.b2} solid ${theme.colors.lightGray}`,
-            })}
-          >
-            <div
-              className={css({
-                padding: mobileScreen ? theme.spacing.s6 : theme.spacing.s8,
-                display: 'flex',
-                justifyContent: 'space-between',
-                gap: '20px',
-              })}
-            >
+        <ButtonsWrapper
+          customButtons={
+            <>
               <Button styles={[outlineBtnRule]} onPress={closeHandler}>
                 <Trans i18nKey='Cancel'>Cancel</Trans>
               </Button>
@@ -137,28 +115,15 @@ const ModalDownloadFeedback: FC<ModalDownloadFeedbackProps> = ({
                   <Trans i18nKey='download'>Download</Trans>
                 )}
               </IconButton>
-            </div>
-          </div>
-        </div>
-      </form>
-      <span
-        className={css({
-          position: 'fixed',
-          top: theme.spacing.s5,
-          left: mobileScreen ? theme.spacing.s5 : theme.spacing.s10,
-          textDecoration: 'none',
-          border: 'none',
-          cursor: 'pointer',
-        })}
-      >
-        <IconButton
-          graphic='arrowLeft'
-          onPress={() => {
-            dispatch(ColleaguesActions.clearColleagueList());
-          }}
-          iconProps={{ invertColors: true }}
+            </>
+          }
         />
-      </span>
+      </form>
+      <ArrowLeftIcon
+        onClick={() => {
+          dispatch(ColleaguesActions.clearColleagueList());
+        }}
+      />
     </div>
   );
 };
@@ -183,7 +148,6 @@ const downloadDescriptionStyled: Rule = {
   lineHeight: '22px',
 };
 
-// TODO: Extract duplicate 7
 const outlineBtnRule: Rule = (theme) => ({
   ...theme.font.fixed.f16,
   fontWeight: theme.font.weight.bold,
@@ -194,7 +158,6 @@ const outlineBtnRule: Rule = (theme) => ({
   color: `${theme.colors.tescoBlue}`,
 });
 
-// TODO: Extract duplicate 4
 const iconBtnStyle: Rule = ({ theme }) => ({
   padding: '0px 6px 0px 20px',
   display: 'flex',
@@ -209,7 +172,6 @@ const iconBtnStyle: Rule = ({ theme }) => ({
   cursor: 'pointer',
 });
 
-// TODO: Extract duplicate 5
 const iconBtnStyleDisabled: Rule = ({ theme }) => ({
   padding: '0px 6px 0px 20px',
   display: 'flex',

@@ -24,6 +24,14 @@ describe('Push tip modal', () => {
   const handleConfirm = jest.fn();
   const handleCloseModal = jest.fn();
 
+  it('should render push tip modal', async () => {
+    const { getByTestId } = renderWithTheme(
+      <PushTipModal handleConfirm={handleConfirm} handleCloseModal={handleCloseModal} {...props} />,
+    );
+    const pushTipModal = getByTestId(PUSH_TIP_MODAL);
+    expect(pushTipModal).toBeInTheDocument();
+  });
+
   it('push tip confirmation', async () => {
     const { getByTestId } = renderWithTheme(
       <PushTipModal handleConfirm={handleConfirm} handleCloseModal={handleCloseModal} {...props} />,

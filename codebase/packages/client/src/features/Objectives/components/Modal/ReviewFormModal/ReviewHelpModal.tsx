@@ -73,16 +73,20 @@ const wrapperBlockStyle: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen
 });
 
 const titleStyle: Rule = ({ theme }) => ({
-  fontSize: '24px',
-  lineHeight: '28px',
+  fontSize: theme.font.fixed.f24.fontSize,
+  lineHeight: theme.font.fixed.f24.lineHeight,
+  letterSpacing: '0px',
   fontWeight: theme.font.weight.bold,
 });
 
-const tipsStyle: Rule = {
-  fontSize: '16px',
-  lineHeight: '20px',
-  paddingTop: '20px',
-  display: 'flex',
+const tipsStyle: Rule = ({ theme }) => {
+  return {
+    fontSize: theme.font.fixed.f16.fontSize,
+    lineHeight: theme.font.fixed.f16.lineHeight,
+    letterSpacing: '0px',
+    paddingTop: '20px',
+    display: 'flex',
+  };
 };
 
 const dotStyle: Rule = ({ theme }) => ({

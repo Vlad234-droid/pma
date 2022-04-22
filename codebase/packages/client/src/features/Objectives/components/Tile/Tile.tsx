@@ -128,21 +128,31 @@ const explanationSubTitleStyles: CreateRule<Pick<Props, 'withSpacing'>> =
 const descriptionStyles: CreateRule<Pick<Props, 'withSpacing'>> =
   ({ withSpacing }) =>
   ({ theme }) => ({
-    fontSize: '16px',
-    lineHeight: '20px',
+    fontSize: theme.font.fixed.f16.fontSize,
+    lineHeight: theme.font.fixed.f16.lineHeight,
     letterSpacing: '0px',
     paddingBottom: withSpacing ? theme.spacing.s5 : 0,
     margin: 0,
   });
 
-const explanationDescriptionStyles: Rule = () => ({
+const explanationDescriptionStyles: Rule = ({ theme }) => ({
   padding: '10px 0',
+  fontSize: theme.font.fixed.f16.fontSize,
+  lineHeight: theme.font.fixed.f16.lineHeight,
+  letterSpacing: '0px',
 });
 
 const explanationStyles: Rule = {
   marginBottom: '15px',
 };
-const inputsStyles: Rule = { paddingTop: '10px' };
+const inputsStyles: Rule = ({ theme }) => {
+  return {
+    paddingTop: '10px',
+    fontSize: theme.font.fixed.f16.fontSize,
+    lineHeight: theme.font.fixed.f16.lineHeight,
+    letterSpacing: '0px',
+  };
+};
 
 const listStyles = {
   padding: '0 17px',

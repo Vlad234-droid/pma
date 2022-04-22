@@ -1,5 +1,17 @@
 import { Status, MetaDataReport, StatisticsTitlesReportKeys, StatisticsTitlesReport } from 'config/enum';
 
+export enum IsReportTiles {
+  OBJECTIVES_SUBMITTED = 'Objectives submitted',
+  OBJECTIVES_APPROVED = 'Objectives approved',
+  MID_YEAR_FORMS = 'Mid-year forms',
+  BREAKDOWN_MID_YEAR_REVIEW = 'Breakdown of mid-year review',
+  YEAR_END_FORMS = 'Year-end forms',
+  BREAKDOWN_YEAR_END_REVIEW = 'Breakdown of year-end review',
+  MOMENT_FEEDBACK = 'In the moment feedback',
+  NEW_TO_BUSINESS = 'New to business',
+  ANNIVERSARY_REVIEWS = 'Anniversary Reviews completed per quarter',
+  WL4And5 = 'WL4 & 5 Objectives submitted',
+}
 export const getFieldOptions = (currentYear) => {
   return [
     { value: (currentYear - 1).toString(), label: (currentYear - 1).toString() },
@@ -125,12 +137,7 @@ export const statisticsReport = {
   ],
 };
 
-export const checkboxes = (t) => [
-  {
-    id: '0',
-    label: t(StatisticsTitlesReportKeys.COLLEAGUES_COUNT),
-    isChecked: false,
-  },
+export const checkboxes = (t, fields) => [
   {
     id: '1',
     label: t(StatisticsTitlesReportKeys.OBJECTIVES_SUBMITTED),
@@ -178,6 +185,7 @@ export const checkboxes = (t) => [
     label: t(StatisticsTitlesReportKeys.ANNIVERSARY_REVIEWS),
     isChecked: false,
   },
+  ...fields,
 ];
 
 export const initialValues = [

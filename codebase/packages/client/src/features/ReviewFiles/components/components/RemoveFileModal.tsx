@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Button, CreateRule, Modal, Rule, useStyle } from '@pma/dex-wrapper';
-import { isDeleteFileSuccess, PreviousReviewFilesActions } from '@pma/store';
+import { isDeleteFileLoaded, isDeleteFileSuccess, PreviousReviewFilesActions } from '@pma/store';
 import useDispatch from 'hooks/useDispatch';
 import { Trans } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -14,7 +14,9 @@ type Props = {
 
 export const RemoveFileModal: React.FC<Props> = ({ colleagueUUID, fileUuid, onClose, fileName }) => {
   const [deleting, setDeleting] = useState(false);
+  const [savedFileName] = useState(fileName);
   const isSuccess = useSelector(isDeleteFileSuccess);
+  const isLoaded = useSelector(isDeleteFileLoaded);
   const { css, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const dispatch = useDispatch();
@@ -25,8 +27,8 @@ export const RemoveFileModal: React.FC<Props> = ({ colleagueUUID, fileUuid, onCl
   };
 
   useEffect(() => {
-    !isSuccess && deleting && onClose();
-  }, [deleting, isSuccess]);
+    isLoaded && !isSuccess && deleting && onClose();
+  }, [deleting, isSuccess, isLoaded]);
 
   return !(deleting && isSuccess) ? (
     <Modal
@@ -37,7 +39,7 @@ export const RemoveFileModal: React.FC<Props> = ({ colleagueUUID, fileUuid, onCl
         <Trans>Remove the file</Trans>
       </div>
       <div className={css({ marginBottom: '24px', fontSize: '16px' })}>
-        <Trans>Are you sure you want to remove {fileName}?</Trans>
+        <Trans>Are you sure you want to remove {savedFileName}?</Trans>
       </div>
       <div className={css({ display: 'flex', gap: '8px', width: '100%' })}>
         <Button styles={[buttonStyles]} onPress={onClose} mode='inverse'>
@@ -57,7 +59,7 @@ export const RemoveFileModal: React.FC<Props> = ({ colleagueUUID, fileUuid, onCl
         <Trans>The file is removed</Trans>
       </div>
       <div className={css({ marginBottom: '24px', fontSize: '16px' })}>
-        <Trans>{fileName} was removed successfully!</Trans>
+        <Trans>{savedFileName} was removed successfully!</Trans>
       </div>
       <div className={css({ width: '100%', maxWidth: '204px', margin: 'auto' })}>
         <Button styles={[buttonStyles]} onPress={onClose}>

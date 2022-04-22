@@ -1,6 +1,7 @@
 import { Response } from 'express';
 import { createProxyMiddleware, Options } from 'http-proxy-middleware';
 import { getIdentityData } from '@pma-connectors/onelogin';
+import yn from 'yn';
 
 import { isDEV, isLocal, ProcessConfig } from '../config';
 
@@ -26,7 +27,7 @@ export const apiProxyMiddleware = (config: ProcessConfig) => {
 
       proxyReq.setHeader('Authorization', `Bearer ${identityData?.access_token}`);
 
-      if (isLocal(config.buildEnvironment())) {
+      if (isLocal(config.buildEnvironment()) || yn(process.env.LOGGER_LOG_AUTH_TOKEN, { default: false })) {
         console.log('[HPM] Authorization: bearer-jwt-identity', identityData?.access_token);
       }
     };

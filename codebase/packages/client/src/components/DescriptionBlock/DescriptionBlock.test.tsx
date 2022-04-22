@@ -1,26 +1,13 @@
 import React from 'react';
+import '@testing-library/jest-dom/extend-expect';
+// @ts-ignore
 import { renderWithTheme as render } from 'utils/test';
+import DescriptionBlock, { TEST_ID } from './DescriptionBlock';
 
-import DescriptionBlock from './DescriptionBlock';
-
-describe('<DescriptionBlock />', () => {
-  describe('#render', () => {
-    it('should render wrapper', () => {
-      const { getByTestId } = render(<DescriptionBlock />);
-
-      expect(getByTestId('description-block')).toBeInTheDocument();
-    });
-
-    it('should render children', () => {
-      const { getByText } = render(<DescriptionBlock>mocked_children</DescriptionBlock>);
-
-      expect(getByText('mocked_children')).toBeInTheDocument();
-    });
-
-    it('should apply styles, if they are passed', () => {
-      const { getByTestId } = render(<DescriptionBlock style={{ background: 'red' }} />);
-
-      expect(getByTestId('description-block')).toHaveStyle('background: red');
-    });
+describe('DescriptionBlock', () => {
+  it('#render', async () => {
+    const { queryByTestId } = render(<DescriptionBlock />);
+    const wrapper = queryByTestId(TEST_ID);
+    expect(wrapper).toBeInTheDocument();
   });
 });

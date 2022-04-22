@@ -17,9 +17,9 @@ describe('Confirm message', () => {
     const wrapper = getByTestId(CONFIRM_WRAPPER);
     expect(wrapper).toBeInTheDocument();
   });
-  it('it should call goBack handler', () => {
-    const { getByText } = render(<ConfirmMessage {...props} />);
-    const button = getByText(/Go back/i);
+  it('it should call goBack handler', async () => {
+    const { getByTestId } = render(<ConfirmMessage {...props} />);
+    const button = await getByTestId('left-side-button');
     fireEvent.click(button);
     expect(goBack).toHaveBeenCalledTimes(1);
   });

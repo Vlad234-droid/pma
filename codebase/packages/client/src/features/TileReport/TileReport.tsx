@@ -1,20 +1,27 @@
 import React, { useState } from 'react';
-import { useStyle, Rule, CreateRule, IconButton as BackButton } from '@pma/dex-wrapper';
+import { CreateRule, IconButton as BackButton, Rule, useStyle } from '@pma/dex-wrapper';
 import { useNavigate } from 'react-router-dom';
 
-import { PieChart } from 'components/PieChart';
 import InfoTable from 'components/InfoTable';
-import { useTranslation } from 'components/Translation';
-import { View } from 'components/PieChart/config';
-import { IconButton } from 'components/IconButton';
-import { FilterOption } from 'features/Shared';
 import FilterModal from 'features/Report/components/FilterModal';
+import { PieChart } from 'components/PieChart';
+import { useTranslation } from 'components/Translation';
+import { FilterOption } from 'features/Shared';
 import { buildPath } from 'features/Routes';
 import { ChartContent } from './components/ChartContent';
 import { TableContent } from './components/TableContent';
+import { WorkLevelContent } from './components/WorkLevelContent';
+import { View } from 'components/PieChart/config';
 
 import { useTileStatistics } from './hooks';
-import { getReportTitles, checkTableChart, getTableChartTitle, checkBusinessType } from './utils';
+import {
+  checkBusinessType,
+  checkExceptionType,
+  checkTableChart,
+  checkWorkLevel,
+  getReportTitles,
+  getTableChartTitle,
+} from './utils';
 import { initialValues } from 'features/Report/config';
 import { getCurrentYear } from 'utils/date';
 
@@ -31,7 +38,6 @@ const TileReport = () => {
   const [focus, setFocus] = useState(false);
   const [searchValueFilterOption, setSearchValueFilterOption] = useState<string>('');
   const [filterModal, setFilterModal] = useState(false);
-  const [filterData, setFilterData] = useState<any>(initialValues);
   const [checkedItems, setCheckedItems]: [string[], (T) => void] = useState([]);
   const [isCheckAll, setIsCheckAll]: [string[], (T) => void] = useState([]);
 
@@ -41,9 +47,14 @@ const TileReport = () => {
 
   const isTableChart = checkTableChart(type);
 
+  const isWorkLevel = checkWorkLevel(type);
+
+  const isException = checkExceptionType(type);
+
   const getContent = () => {
+    if (isWorkLevel) return <WorkLevelContent />;
     if (isTableChart) return <TableContent type={type} />;
-    return <ChartContent isBusinessType={isBusinessType} type={type} />;
+    return <ChartContent isException={isException} type={type} />;
   };
 
   return (
@@ -62,13 +73,6 @@ const TileReport = () => {
       </div>
       <div className={css(header({ mobileScreen }))}>
         <div className={css(flexCenterStyled)}>
-          <IconButton
-            graphic='information'
-            iconStyles={iconStyle}
-            onPress={() => {
-              console.log();
-            }}
-          />
           <FilterOption
             focus={focus}
             customIcon={true}
@@ -89,8 +93,7 @@ const TileReport = () => {
           <FilterModal
             filterModal={filterModal}
             setFilterModal={setFilterModal}
-            filterData={filterData}
-            setFilterData={setFilterData}
+            initialValues={initialValues}
             checkedItems={checkedItems}
             setCheckedItems={setCheckedItems}
             isCheckAll={isCheckAll}
@@ -104,7 +107,11 @@ const TileReport = () => {
           {isTableChart ? (
             <InfoTable mainTitle={getTableChartTitle(t, type)} data={type} />
           ) : (
-            <PieChart title={getReportTitles(t, type)?.chart} data={type} display={View.CHART} />
+            <PieChart
+              title={getReportTitles(t, type)?.chart}
+              data={type}
+              display={!isBusinessType ? View.CHART : View.QUANTITY}
+            />
           )}
         </div>
       </div>
@@ -112,33 +119,33 @@ const TileReport = () => {
   );
 };
 
-const arrowLeftStyle: Rule = () => {
+const arrowLeftStyle: Rule = ({ theme }) => {
   return {
     position: 'fixed',
     top: '34px',
     textDecoration: 'none',
     border: 'none',
     cursor: 'pointer',
-    left: '16px',
+    left: theme.spacing.s4,
   };
 };
 
-const rightColumn: Rule = {
+const rightColumn: Rule = ({ theme }) => ({
   display: 'flex',
-  gap: '8px',
+  gap: theme.spacing.s2,
   flex: 4,
   flexBasis: '400px',
-  marginTop: '50px',
+  marginTop: '72px',
   alignSelf: 'flex-end',
-};
+});
 
-const leftColumn: Rule = {
+const leftColumn: Rule = ({ theme }) => ({
   display: 'flex',
-  gap: '8px',
+  gap: theme.spacing.s2,
   flexDirection: 'row',
   flex: 6,
   flexBasis: '550px',
-};
+});
 
 const header: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => ({
   display: 'flex',
@@ -156,17 +163,13 @@ const flexCenterStyled: Rule = {
   justifyContent: 'space-between',
 };
 
-const wrapperStyle: Rule = () => {
+const wrapperStyle: Rule = ({ theme }) => {
   return {
     display: 'flex',
-    gap: '8px',
+    gap: theme.spacing.s2,
     flexWrap: 'wrap-reverse',
-    marginTop: '8px',
+    marginTop: theme.spacing.s2,
   };
-};
-
-const iconStyle: Rule = {
-  marginRight: '10px',
 };
 
 export default TileReport;

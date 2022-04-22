@@ -20,6 +20,7 @@ export type TipsCardProps = {
 export const TIPS_CARD = 'tips-card';
 export const VIEW_HISTORY_BTN = 'view-history-btn';
 export const PUSH_TIP_BTN = 'push-tip-btn';
+export const EDIT_TIP_BTN = 'edit-tip-btn';
 
 const TipsCard: FC<TipsCardProps> = ({ card }) => {
   const { css, theme, matchMedia } = useStyle();
@@ -89,7 +90,7 @@ const TipsCard: FC<TipsCardProps> = ({ card }) => {
               {card.targetOrganisation.name}
             </div>
             <div className={css(cardControls)}>
-              <Button mode='inverse' onPress={handleEditTip} styles={[cardButton]}>
+              <Button data-test-id={EDIT_TIP_BTN} mode='inverse' onPress={handleEditTip} styles={[cardButton]}>
                 <Trans i18nKey='edit'>Edit</Trans>
               </Button>
               <Button data-test-id={PUSH_TIP_BTN} onPress={handlePushTip} styles={[cardButton]}>

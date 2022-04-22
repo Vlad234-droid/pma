@@ -23,8 +23,8 @@ const FeedbackCard: FC<FeedbackCardProps> = ({ card }) => {
             <div className={css(actionStyle)}>{card.action}</div>
             <div className={css(textStyle)}>{card.text}</div>
             <div className={css(flexStyle)}>
-              <div className={css(IconStyle)}>{card.icon}</div>
-              <div className={css(IconText)}>{card.iconText}</div>
+              <div className={css(iconStyle)}>{card.icon}</div>
+              <div className={css(iconText)}>{card.iconText}</div>
             </div>
           </div>
         </TileWrapper>
@@ -33,8 +33,7 @@ const FeedbackCard: FC<FeedbackCardProps> = ({ card }) => {
   );
 };
 
-// TODO: Extract duplicate 9
-const IconText: Rule = ({ theme }) => {
+const iconText: Rule = ({ theme }) => {
   return {
     marginLeft: '10px',
     fontStyle: 'normal',
@@ -76,7 +75,7 @@ const cardStyle: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => (
   flexBasis: mobileScreen ? '100%' : '45%',
 });
 
-const IconStyle: Rule = {
+const iconStyle: Rule = {
   position: 'relative',
   '> svg': {
     display: 'block',

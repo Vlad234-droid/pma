@@ -17,6 +17,7 @@ type GenericItemFormProps = {
   methods: UseFormReturn;
   Element: FC<any>;
   Wrapper?: FC<any>;
+  wrapperProps?: any;
   rows?: number;
   options?: Array<Record<string, number | string | boolean>>;
   domRef?: Ref | RefObject<any> | null;
@@ -32,6 +33,7 @@ export const GenericItemField: FC<GenericItemFormProps> = ({
   styles,
   Element,
   Wrapper = 'div',
+  wrapperProps = {},
   placeholder,
   label,
   readonly,
@@ -78,7 +80,12 @@ export const GenericItemField: FC<GenericItemFormProps> = ({
       <datalist id={`datalist-${name}`}>
         {options?.map((option) => (
           /*@ts-ignore*/
-          <option data-test-id={option.label} key={`option-${name}-${option.value}`} value={option.value} label={option.label} />
+          <option
+            data-test-id={option.label}
+            key={`option-${name}-${option.value}`}
+            value={option.value}
+            label={option.label}
+          />
         ))}
       </datalist>
     </div>
@@ -99,6 +106,7 @@ export const GenericItemField: FC<GenericItemFormProps> = ({
           ? errors[name].message
           : ''
       }
+      {...wrapperProps}
     >
       {element}
     </Wrapper>

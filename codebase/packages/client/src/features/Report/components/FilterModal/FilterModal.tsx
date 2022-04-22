@@ -1,4 +1,4 @@
-import React, { Dispatch, FC, MouseEvent, SetStateAction, useRef } from 'react';
+import React, { Dispatch, FC, MouseEvent, SetStateAction, useRef, useState } from 'react';
 import { Button, CreateRule, Rule, Styles, useStyle } from '@pma/dex-wrapper';
 import useEventListener from 'hooks/useEventListener';
 import { IconButton } from 'components/IconButton';
@@ -12,12 +12,11 @@ enum FilterType {
 type FilterModalProps = {
   filterModal: boolean;
   setFilterModal: Dispatch<SetStateAction<boolean>>;
-  filterData: any;
-  setFilterData: (T: any) => void;
   checkedItems: string[];
   setCheckedItems: (T: any) => void;
   isCheckAll: string[];
   setIsCheckAll: (T: any) => void;
+  initialValues: Array<any>;
 };
 type SelectAllProps = {
   onChange: (e: any, value?: string) => any;
@@ -29,12 +28,13 @@ type SelectAllProps = {
 const FilterModal: FC<FilterModalProps> = ({
   filterModal,
   setFilterModal,
-  filterData,
   checkedItems,
   setCheckedItems,
   isCheckAll,
   setIsCheckAll,
+  initialValues,
 }) => {
+  const [filterData] = useState<any>(initialValues);
   const { css, theme, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const ref = useRef<HTMLDivElement | null>(null);

@@ -39,15 +39,19 @@ const ColleaguesFinder: FC<Props> = ({ onSelect, error, value }) => {
             disabled={Boolean(value)}
             renderOption={(item) => (
               <div className={css({ display: 'flex', justifyContent: 'flex-start', alignItems: 'center' })}>
-                <img className={css({ width: '50px', height: '50px', borderRadius: '50%' })} src={defaultImg} />
+                <img
+                  className={css({ width: '50px', height: '50px', borderRadius: '50%' })}
+                  src={defaultImg}
+                  alt={'User image'}
+                />
                 <div className={css({ marginLeft: '16px' })}>
                   <div className={css(flexGapStyle, selectedItemStyle)}>
                     <div>{item?.colleague?.profile?.firstName}</div>
                     <div>{item?.colleague?.profile?.lastName}</div>
                   </div>
                   <div className={css({ marginTop: '4px' })}>
-                    <div>{item?.colleague?.workRelationships[0].job?.name}</div>
-                    <div>{item?.colleague?.workRelationships[0].department?.name}</div>
+                    <div>{item?.colleague?.workRelationships[0]?.job?.name}</div>
+                    <div>{item?.colleague?.workRelationships[0]?.department?.name}</div>
                   </div>
                 </div>
               </div>
@@ -59,14 +63,21 @@ const ColleaguesFinder: FC<Props> = ({ onSelect, error, value }) => {
   );
 };
 
-const flexGapStyle: Rule = {
-  display: 'flex',
-  gap: '8px',
+const flexGapStyle: Rule = ({ theme }) => {
+  return {
+    display: 'flex',
+    gap: '8px',
+    fontSize: theme.font.fixed.f16.fontSize,
+    lineHeight: theme.font.fixed.f16.lineHeight,
+    letterSpacing: '0px',
+  };
 };
 
-const selectedItemStyle: Rule = ({ colors }) => ({
-  fontWeight: 'bold',
-  fontSize: '16px',
+const selectedItemStyle: Rule = ({ colors, theme }) => ({
+  fontWeight: theme.font.weight.bold,
+  fontSize: theme.font.fixed.f16.fontSize,
+  lineHeight: theme.font.fixed.f16.lineHeight,
+  letterSpacing: '0px',
   color: colors.link,
 });
 

@@ -57,32 +57,25 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   wrapper: {
-    marginBottom: 10,
+    marginBottom: 5,
   },
   border: {
     borderBottomWidth: 2,
   },
   header: {
+    display: 'flex',
     justifyContent: 'space-between',
     flexDirection: 'column',
-    flexGrow: 1,
-    flexShrink: 1,
-    flexBasis: 50,
-    marginBottom: 50,
-    maxHeight: 1000,
   },
   titleWrapper: {
-    marginBottom: 10,
+    marginBottom: 5,
   },
   title: {
     color: '#00539f',
-    lineHeight: 22,
     fontSize: 18,
   },
   subTitleWrapper: {
-    marginBottom: 10,
     maxHeight: 1000,
-    marginTop: 10,
   },
   subTitle: {
     fontSize: 15,
@@ -93,27 +86,23 @@ const styles = StyleSheet.create({
   description: {
     fontSize: 14,
     color: '#808080',
-    marginTop: 20,
     maxHeight: 800,
   },
   body: {
-    maxHeight: 1500,
-  },
-  longBody: {
-    marginTop: 100,
+    maxHeight: 1000,
   },
   explanations: {
-    marginTop: 5,
     marginBottom: 5,
     paddingLeft: 20,
   },
   explanationTitle: {
     fontSize: 14,
     fontWeight: 900,
-    marginTop: 20,
+    marginTop: 10,
   },
   step: {
-    fontSize: 14,
+    fontSize: 12,
+    color: '#808080',
   },
 });
 

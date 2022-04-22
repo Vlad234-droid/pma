@@ -61,8 +61,8 @@ const inputStyle: CreateRule<{ isValid?: boolean }> =
     // @ts-ignore
     border: `2px solid ${isValid ? theme.colors.lightGray : theme.colors.error}`,
     borderRadius: '5px',
-    fontSize: '16px',
-    lineHeight: '20px',
+    fontSize: theme.font.fixed.f16.fontSize,
+    lineHeight: theme.font.fixed.f16.lineHeight,
     letterSpacing: '0px',
     padding: '10px 40px 10px 16px',
     ':focus': {

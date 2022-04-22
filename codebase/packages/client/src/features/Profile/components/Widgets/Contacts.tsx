@@ -38,23 +38,33 @@ const descriptionStyle = {
 } as Styles;
 
 // TODO: Extract duplicate 10
-const bodyStyle = {
-  flexWrap: 'wrap',
-  gap: '16px 8px',
-  alignItems: 'center',
-  display: 'inline-flex',
-} as Styles;
+const bodyStyle: Rule = ({ theme }) => {
+  return {
+    fontSize: theme.font.fixed.f16.fontSize,
+    lineHeight: theme.font.fixed.f16.lineHeight,
+    letterSpacing: '0px',
+    flexWrap: 'wrap',
+    gap: '16px 8px',
+    alignItems: 'center',
+    display: 'inline-flex',
+  };
+};
 
 // TODO: Extract duplicate 11
-const tileStyle: CreateRule<{ mobileScreen }> = ({ mobileScreen }) => ({
-  ...(mobileScreen
-    ? {
-        padding: '6px 0 0',
-      }
-    : {
-        padding: '14px 10px 10px',
-      }),
-});
+const tileStyle: CreateRule<{ mobileScreen }> =
+  ({ mobileScreen }) =>
+  ({ theme }) => ({
+    fontSize: theme.font.fixed.f16.fontSize,
+    lineHeight: theme.font.fixed.f16.lineHeight,
+    letterSpacing: '0px',
+    ...(mobileScreen
+      ? {
+          padding: '6px 0 0',
+        }
+      : {
+          padding: '14px 10px 10px',
+        }),
+  });
 
 const Contacts: FC<Props> = ({ user }) => {
   const { css, matchMedia } = useStyle();

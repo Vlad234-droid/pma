@@ -296,7 +296,7 @@ const MyObjectives: FC = () => {
                 <Section
                   left={{
                     content: (
-                      <div>
+                      <div className={css(title)}>
                         <Trans i18nKey='previous_review_files'>Previous Review Files</Trans>
                       </div>
                     ),
@@ -309,7 +309,9 @@ const MyObjectives: FC = () => {
                           onPress={() => setPreviousReviewFilesModalShow(true)}
                           styles={[linkStyles({ theme })]}
                         >
-                          <Trans i18nKey='view_files'>View files</Trans>
+                          <Trans className={css(title)} i18nKey='view_files'>
+                            View files
+                          </Trans>
                         </Button>
                       </div>
                     ),
@@ -340,13 +342,13 @@ const MyObjectives: FC = () => {
             </div>
           )}
 
-          <div className={css(widgetsBlock({ mobileScreen }))}>
+          <div className={css(widgetsBlock)}>
             <ShareWidget stopShare={true} sharing={false} customStyle={shareWidgetStyles} />
 
             <ShareWidget stopShare={false} sharing={true} customStyle={shareWidgetStyles} />
 
             <OrganizationWidget
-              customStyle={{ flex: '1 1 30%', display: 'flex', flexDirection: 'column' }}
+              customStyle={organizationWidgetStyles}
               onClick={() => navigate(buildPath(Page.STRATEGIC_DRIVERS))}
             />
           </div>
@@ -361,6 +363,14 @@ const MyObjectives: FC = () => {
       )}
     </div>
   );
+};
+
+const title: Rule = ({ theme }) => {
+  return {
+    fontSize: theme.font.fixed.f16.fontSize,
+    lineHeight: theme.font.fixed.f16.lineHeight,
+    letterSpacing: '0px',
+  };
 };
 
 const widgetWrapper: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => ({
@@ -378,14 +388,16 @@ const bodyBlockStyles: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }
   flexDirection: mobileScreen ? 'column-reverse' : 'row',
 });
 
-const widgetsBlock: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => ({
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  flexDirection: 'column',
-  width: '100%',
-  paddingBottom: mobileScreen ? '20px' : '0px',
-});
+const widgetsBlock: Rule = () => {
+  return {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'column',
+    width: '100%',
+    gap: '20px',
+  };
+};
 
 const timelineWrapperStyles = {
   flex: '3 1 70%',
@@ -399,12 +411,28 @@ const timelineWrapperWidget = {
   marginBottom: '20px',
 } as Rule;
 
-const shareWidgetStyles = {
-  display: 'flex',
-  flexDirection: 'column',
-  marginBottom: '20px',
-  width: '100%',
-} as Styles;
+const organizationWidgetStyles: Rule = ({ theme }) => {
+  return {
+    fontSize: theme.font.fixed.f16.fontSize,
+    lineHeight: theme.font.fixed.f16.lineHeight,
+    letterSpacing: '0px',
+    flex: '1 1 30%',
+    display: 'flex',
+    flexDirection: 'column',
+  };
+};
+
+const shareWidgetStyles: Rule = ({ theme }) => {
+  return {
+    fontSize: theme.font.fixed.f16.fontSize,
+    lineHeight: theme.font.fixed.f16.lineHeight,
+    letterSpacing: '0px',
+    display: 'flex',
+    flexDirection: 'column',
+    marginBottom: '20px',
+    width: '100%',
+  };
+};
 
 const bodyWrapperStyles: Rule = () => ({
   display: 'flex',
@@ -463,6 +491,14 @@ const linkStyles = ({ theme }) => ({
 });
 
 const statusBadgeStyle: Rule = { marginLeft: '10px' };
-const emptyBlockStyle: Rule = { paddingBottom: '20px' };
+
+const emptyBlockStyle: Rule = ({ theme }) => {
+  return {
+    paddingBottom: '20px',
+    fontSize: theme.font.fixed.f16.fontSize,
+    lineHeight: theme.font.fixed.f16.lineHeight,
+    letterSpacing: '0px',
+  };
+};
 
 export default MyObjectives;

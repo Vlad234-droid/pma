@@ -24,9 +24,9 @@ const IconButtonDefault: FC<Props> = ({ onClick, iconPosition = Position.RIGHT, 
       iconProps={{ invertColors: true }}
       iconStyles={iconArrowRightStyle}
     >
-      <Trans className={css(btnStyle)} i18nKey='give_feedback'>
-        Give feedback
-      </Trans>
+      <div className={css(btnStyle)}>
+        <Trans i18nKey='give_feedback'>Give feedback</Trans>
+      </div>
     </IconButton>
   );
 };
@@ -41,9 +41,14 @@ const btnStyle: Rule = ({ theme }) => {
   };
 };
 
-const iconArrowRightStyle: Rule = {
-  height: '17px',
-  margin: '3px 9px 0px 3px',
+const iconArrowRightStyle: Rule = ({ theme }) => {
+  return {
+    fontSize: theme.font.fixed.f16.fontSize,
+    lineHeight: theme.font.fixed.f16.lineHeight,
+    letterSpacing: '0px',
+    height: '17px',
+    margin: '3px 9px 0px 3px',
+  };
 };
 
 const iconBtnStyle: Rule = ({ theme }) => ({
@@ -57,8 +62,8 @@ const iconBtnStyle: Rule = ({ theme }) => ({
   background: theme.colors.tescoBlue,
   color: theme.colors.white,
   cursor: 'pointer',
-  width: '176px',
+  maxWidth: 'fit-content',
   border: `2px solid ${theme.colors.link}`,
   whiteSpace: 'nowrap',
-  fontWeight: 'bold',
+  fontWeight: theme.font.weight.bold,
 });

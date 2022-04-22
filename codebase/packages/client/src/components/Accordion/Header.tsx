@@ -193,8 +193,8 @@ const accordionHeaderStyles: Rule = ({ theme }) => ({
 });
 
 const accordionHeaderTitleStyles: Rule = ({ theme }) => ({
-  fontSize: '16px',
-  lineHeight: '20px',
+  fontSize: theme.font.fixed.f16.fontSize,
+  lineHeight: theme.font.fixed.f16.lineHeight,
   letterSpacing: '0px',
   color: theme.colors.tescoBlue,
 });

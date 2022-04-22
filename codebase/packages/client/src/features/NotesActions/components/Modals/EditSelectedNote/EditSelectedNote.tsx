@@ -1,17 +1,20 @@
 import React, { FC, useEffect, useState } from 'react';
-import { Button, CreateRule, Rule, Styles, Theme, useStyle } from '@pma/dex-wrapper';
+import { CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
 import { GenericItemField } from 'components/GenericForm';
 import { Input, Item, Select, Textarea } from 'components/Form';
-import { EditSelectedNoteProps } from './type';
-import { Trans, useTranslation } from 'components/Translation';
-import { IconButton, Position } from 'components/IconButton';
-import { Icon as IconComponent } from 'components/Icon';
-import { SuccessModal } from './index';
-import { getEditedNote } from 'utils/note';
-import { ConfirmModal } from 'features/Modal';
-import { useDispatch, useSelector } from 'react-redux';
 import { colleagueUUIDSelector, NotesActions } from '@pma/store';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { useTranslation } from 'components/Translation';
+import { IconButton } from 'components/IconButton';
+import { ArrowLeftIcon } from 'components/ArrowLeftIcon';
+import { SuccessModal } from './index';
+import { ConfirmModal } from 'features/Modal';
+import { ButtonsWrapper } from 'components/ButtonsWrapper';
+
 import { Option } from 'components/Form/types';
+import { EditSelectedNoteProps } from './type';
+import { getEditedNote } from 'utils/note';
 
 export const MODAL_WRAPPER = 'modal-wrapper';
 
@@ -26,8 +29,7 @@ const EditSelectedNote: FC<EditSelectedNoteProps> = ({
   definePropperEditMode,
   setSelectedFolderDynamic,
 }) => {
-  const { css, theme, matchMedia } = useStyle();
-  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
+  const { css } = useStyle();
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const dispatch = useDispatch();
   const [editMode, setEditMode] = useState<boolean>(false);
@@ -163,83 +165,24 @@ const EditSelectedNote: FC<EditSelectedNoteProps> = ({
               );
             }
           })}
-
-        <div className={css(btnPositionContainer)}>
-          <div className={css(blockContainer({ theme }))}>
-            <div
-              className={css({
-                padding: mobileScreen ? theme.spacing.s7 : theme.spacing.s9,
-                display: 'flex',
-                justifyContent: 'center',
-              })}
-            >
-              <Button styles={[theme.font.fixed.f16, cancelBtnStyle({ theme })]} onPress={cancelSelectedNoteModal}>
-                <Trans i18nKe='cancel'>Cancel</Trans>
-              </Button>
-              <IconButton
-                onPress={() => {
-                  submitForm();
-                  setSuccessSelectedNoteToEdit(() => true);
-                }}
-                graphic='arrowRight'
-                customVariantRules={{
-                  default: submitButtonStyle({ isValid, editMode }),
-                  disabled: submitButtonStyle({ isValid, editMode }),
-                }}
-                iconStyles={iconStyledRule}
-                iconPosition={Position.RIGHT}
-                isDisabled={!isValid}
-              >
-                <Trans i18nKe='save'>Save</Trans>
-              </IconButton>
-            </div>
-          </div>
-        </div>
+        <ButtonsWrapper
+          isValid={isValid}
+          onLeftPress={cancelSelectedNoteModal}
+          onRightPress={() => {
+            submitForm();
+            setSuccessSelectedNoteToEdit(() => true);
+          }}
+        />
       </form>
-      <span
-        className={css(backIconStyle({ theme, mobileScreen }))}
+      <ArrowLeftIcon
         onClick={() => {
           setSuccessSelectedNoteToEdit(() => false);
           setSelectedNoteToEdit(() => null);
         }}
-      >
-        <IconComponent graphic='arrowLeft' invertColors={true} />
-      </span>
+      />
     </div>
   );
 };
-
-const btnPositionContainer: Rule = {
-  position: 'absolute',
-  bottom: 0,
-  left: 0,
-  width: '100%',
-};
-const blockContainer: CreateRule<{ theme: Theme }> = ({ theme }) => ({
-  position: 'relative',
-  bottom: theme.spacing.s0,
-  left: theme.spacing.s0,
-  right: theme.spacing.s0,
-  // @ts-ignore
-  borderTop: `${theme.border.width.b2} solid ${theme.colors.lightGray}`,
-});
-const cancelBtnStyle: CreateRule<{ theme: Theme }> = ({ theme }) => ({
-  fontWeight: theme.font.weight.bold,
-  width: '50%',
-  margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
-  background: theme.colors.white,
-  border: `${theme.border.width.b2} solid ${theme.colors.tescoBlue}`,
-  color: `${theme.colors.tescoBlue}`,
-});
-
-const backIconStyle: CreateRule<{ theme: Theme; mobileScreen: boolean }> = ({ theme, mobileScreen }) => ({
-  position: 'fixed',
-  top: theme.spacing.s5,
-  left: mobileScreen ? theme.spacing.s5 : theme.spacing.s10,
-  textDecoration: 'none',
-  border: 'none',
-  cursor: 'pointer',
-});
 
 const WrapperModalGiveFeedbackStyle: Rule = {
   paddingLeft: '40px',
@@ -276,27 +219,5 @@ const headerInfoStyle: CreateRule<{ editMode: boolean }> = ({ editMode }) => ({
   justifyContent: !editMode ? 'space-between' : 'flex-end',
   alignItems: 'center',
 });
-
-const iconStyledRule: Rule = {
-  '& > path': {
-    fill: 'white',
-  },
-} as Styles;
-
-const submitButtonStyle: CreateRule<{ isValid: boolean; editMode: boolean }> =
-  ({ isValid, editMode }) =>
-  ({ theme }) => ({
-    fontWeight: theme.font.weight.bold,
-    width: '50%',
-    margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
-    background: `${theme.colors.tescoBlue}`,
-    color: `${theme.colors.white}`,
-    display: 'flex',
-    justifyContent: 'space-between',
-    padding: '0px 20px',
-    borderRadius: `${theme.spacing.s20}`,
-    opacity: editMode && isValid ? '1' : '0.4',
-    pointerEvents: editMode && isValid ? 'all' : 'none',
-  });
 
 export default EditSelectedNote;

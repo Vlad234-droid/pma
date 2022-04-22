@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
-import { CreateRule, IconButton as BackButton, Modal, Rule, Theme, useStyle } from '@pma/dex-wrapper';
+import { IconButton as BackButton, Rule, useStyle } from '@pma/dex-wrapper';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -21,11 +21,13 @@ import { role, usePermission } from 'features/Permission';
 import Spinner from 'components/Spinner';
 import { AddNoteModal, AddTeamNoteModal, FilterOptions, InfoModal, MainFolders } from './components';
 import { IconButton } from 'components/IconButton';
-import { Icon } from 'components/Icon';
 import { EditSelectedNote } from './components/Modals/EditSelectedNote';
 import { schemaFolder, schemaNotes, schemaNoteToEdit, schemaTEAMNotes } from './components/Modals/schema/schema';
 import { Trans, useTranslation } from 'components/Translation';
 import { ConfirmModalWithSelectOptions } from 'features/Modal';
+import WrapperModal from 'features/Modal/components/WrapperModal';
+import { ModalWrapper } from 'components/ModalWrapper';
+
 import { FoldersWithNotesTypes, FoldersWithNotesTypesTEAM, NoteData, NotesType, NotesTypeTEAM } from './type';
 import { addNewFolderId, AllNotesFolderId, AllNotesFolderIdTEAM, filterNotesHandler } from 'utils';
 import { PeopleTypes } from './components/TeamNotes/ModalsParts/type';
@@ -46,8 +48,7 @@ export enum ModalStatuses {
 }
 
 const NotesActions: FC<{ loaded: boolean }> = ({ loaded }) => {
-  const { css, theme, matchMedia } = useStyle();
-  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
+  const { css } = useStyle();
   const navigate = useNavigate();
   const [status, setStatus] = useState(ModalStatuses.PENDING);
   const { t } = useTranslation();
@@ -364,52 +365,26 @@ const NotesActions: FC<{ loaded: boolean }> = ({ loaded }) => {
 
   if (status === ModalStatuses.INFO) {
     return (
-      <Modal
-        modalPosition={'middle'}
-        overlayColor={'tescoBlue'}
-        modalContainerRule={[containerRule({ theme, mobileScreen })]}
-        closeOptions={{
-          content: <Icon graphic='cancel' invertColors={true} />,
-          onClose: () => {
-            setStatus(() => ModalStatuses.PENDING);
-          },
-          styles: [modalCloseOptionStyle({ mobileScreen })],
-        }}
-        title={{
-          content: t('notes', 'Notes'),
-          styles: [modalTitleOptionStyle({ mobileScreen })],
-        }}
-      >
-        <InfoModal
-          closeInfoModal={() => {
-            setStatus(() => ModalStatuses.PENDING);
-          }}
-          TEAM={isLineManager}
-        />
-      </Modal>
+      <ModalWrapper isOpen={status === ModalStatuses.INFO}>
+        <WrapperModal title={t('notes', 'Notes')} onClose={() => setStatus(() => ModalStatuses.PENDING)}>
+          <InfoModal
+            closeInfoModal={() => {
+              setStatus(() => ModalStatuses.PENDING);
+            }}
+            TEAM={isLineManager}
+          />
+        </WrapperModal>
+      </ModalWrapper>
     );
   }
 
   if (status === ModalStatuses.PERSONAL_NOTE || status === ModalStatuses.PERSONAL_FOLDER) {
     return (
-      <Modal
-        modalPosition={'middle'}
-        overlayColor={'tescoBlue'}
-        modalContainerRule={[containerRule({ theme, mobileScreen })]}
-        closeOptions={{
-          content: <Icon graphic='cancel' invertColors={true} />,
-          onClose: () => {
-            cancelModal();
-          },
-          styles: [modalCloseOptionStyle({ mobileScreen })],
-        }}
-        title={{
-          content:
-            status === ModalStatuses.PERSONAL_FOLDER
-              ? t('add_a_folder', 'Add a folder')
-              : t('add_a_note', 'Add a note'),
-          styles: [modalTitleOptionStyle({ mobileScreen })],
-        }}
+      <WrapperModal
+        onClose={cancelModal}
+        title={
+          status === ModalStatuses.PERSONAL_FOLDER ? t('add_a_folder', 'Add a folder') : t('add_a_note', 'Add a note')
+        }
       >
         <AddNoteModal
           methods={methods}
@@ -418,62 +393,18 @@ const NotesActions: FC<{ loaded: boolean }> = ({ loaded }) => {
           createFolder={status === ModalStatuses.PERSONAL_FOLDER}
           foldersWithNotes={foldersWithNotes}
         />
-      </Modal>
+      </WrapperModal>
     );
   }
-  if (selectedTEAMNoteToEdit) {
-    return (
-      <Modal
-        modalPosition={'middle'}
-        overlayColor={'tescoBlue'}
-        modalContainerRule={[containerRule({ theme, mobileScreen })]}
-        closeOptions={{
-          content: <Icon graphic='cancel' invertColors={true} />,
-          onClose: () => {
-            cancelSelectedNoteModal();
-          },
-          styles: [modalCloseOptionStyle({ mobileScreen })],
-        }}
-        title={{
-          content: t('my_notes', 'My notes'),
-          styles: [modalTitleOptionStyle({ mobileScreen })],
-        }}
-      >
-        <EditSelectedNote
-          methods={noteToEditMethods}
-          cancelSelectedNoteModal={cancelTEAMSelectedNoteModal}
-          submitForm={handleSubmitSelectedEditedNote(onSubmitTEAMSelectedEditedNote)}
-          setSelectedNoteToEdit={setSelectedTEAMNoteToEdit}
-          foldersWithNotes={foldersWithNotesTEAM}
-          selectedNoteToEdit={selectedTEAMNoteToEdit}
-          setSelectedFolder={setSelectedTEAMFolder}
-          definePropperEditMode={selectedNoteToEdit}
-          setSelectedFolderDynamic={setSelectedFolder}
-        />
-      </Modal>
-    );
-  }
-
   if (status === ModalStatuses.TEAM_NOTE || status === ModalStatuses.TEAM_FOLDER) {
     return (
-      <Modal
-        modalPosition={'middle'}
-        overlayColor={'tescoBlue'}
-        modalContainerRule={[containerRule({ theme, mobileScreen })]}
-        closeOptions={{
-          content: <Icon graphic='cancel' invertColors={true} />,
-          onClose: () => {
-            cancelTEAMModal();
-          },
-          styles: [modalCloseOptionStyle({ mobileScreen })],
-        }}
-        title={{
-          content:
-            status === ModalStatuses.TEAM_FOLDER
-              ? t('add_team_folder', 'Add team folder')
-              : t('add_a_team_note', 'Add a team note'),
-          styles: [modalTitleOptionStyle({ mobileScreen })],
-        }}
+      <WrapperModal
+        onClose={cancelTEAMModal}
+        title={
+          status === ModalStatuses.TEAM_FOLDER
+            ? t('add_team_folder', 'Add team folder')
+            : t('add_a_team_note', 'Add a team note')
+        }
       >
         <AddTeamNoteModal
           teamMethods={teamMethods}
@@ -486,28 +417,31 @@ const NotesActions: FC<{ loaded: boolean }> = ({ loaded }) => {
           handleTEAMSubmit={handleTEAMSubmit(onTEAMSubmit)}
           createFolder={status === ModalStatuses.TEAM_FOLDER}
         />
-      </Modal>
+      </WrapperModal>
+    );
+  }
+
+  if (selectedTEAMNoteToEdit) {
+    return (
+      <WrapperModal title={t('my_notes', 'My notes')} onClose={cancelSelectedNoteModal}>
+        <EditSelectedNote
+          methods={noteToEditMethods}
+          cancelSelectedNoteModal={cancelTEAMSelectedNoteModal}
+          submitForm={handleSubmitSelectedEditedNote(onSubmitTEAMSelectedEditedNote)}
+          setSelectedNoteToEdit={setSelectedTEAMNoteToEdit}
+          foldersWithNotes={foldersWithNotesTEAM}
+          selectedNoteToEdit={selectedTEAMNoteToEdit}
+          setSelectedFolder={setSelectedTEAMFolder}
+          definePropperEditMode={selectedNoteToEdit}
+          setSelectedFolderDynamic={setSelectedFolder}
+        />
+      </WrapperModal>
     );
   }
 
   if (selectedNoteToEdit) {
     return (
-      <Modal
-        modalPosition={'middle'}
-        overlayColor={'tescoBlue'}
-        modalContainerRule={[containerRule({ theme, mobileScreen })]}
-        closeOptions={{
-          content: <Icon graphic='cancel' invertColors={true} />,
-          onClose: () => {
-            cancelSelectedNoteModal();
-          },
-          styles: [modalCloseOptionStyle({ mobileScreen })],
-        }}
-        title={{
-          content: t('edit_note', 'Edit note'),
-          styles: [modalTitleOptionStyle({ mobileScreen })],
-        }}
-      >
+      <WrapperModal title={t('edit_note', 'Edit note')} onClose={cancelSelectedNoteModal}>
         <EditSelectedNote
           methods={noteToEditMethods}
           cancelSelectedNoteModal={cancelSelectedNoteModal}
@@ -519,7 +453,7 @@ const NotesActions: FC<{ loaded: boolean }> = ({ loaded }) => {
           definePropperEditMode={selectedNoteToEdit}
           setSelectedFolderDynamic={setSelectedFolder}
         />
-      </Modal>
+      </WrapperModal>
     );
   }
 
@@ -644,62 +578,6 @@ const arrowLeftStyle: Rule = () => {
     border: 'none',
     cursor: 'pointer',
     left: '16px',
-  };
-};
-
-const containerRule: CreateRule<{ theme: Theme; mobileScreen: boolean }> = ({ mobileScreen }) => {
-  return {
-    alignItems: 'center',
-    justifyContent: 'center',
-    position: 'relative',
-    ...(mobileScreen
-      ? { borderRadius: '24px 24px 0 0 ', padding: '16px 0px 97px' }
-      : { borderRadius: '32px', padding: `40px 0px 112px` }),
-    height: mobileScreen ? 'calc(100% - 72px)' : 'calc(100% - 102px)',
-    marginBottom: mobileScreen ? 0 : '30px',
-    width: '640px',
-    marginTop: '72px',
-    cursor: 'default',
-    overflow: 'auto',
-    background: 'white',
-  };
-};
-
-// TODO: Extract duplicate 13
-const modalCloseOptionStyle: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => {
-  return {
-    display: 'inline-block',
-    height: '24px',
-    paddingLeft: '0px',
-    paddingRight: '0px',
-    position: 'fixed',
-    top: '22px',
-    right: mobileScreen ? '20px' : '40px',
-    textDecoration: 'none',
-    border: 'none',
-    cursor: 'pointer',
-  };
-};
-
-// TODO: Extract duplicate 14
-const modalTitleOptionStyle: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => {
-  return {
-    position: 'fixed',
-    top: '22px',
-    textAlign: 'center',
-    left: 0,
-    right: 0,
-    color: 'white',
-    fontWeight: 'bold',
-    ...(mobileScreen
-      ? {
-          fontSize: '20px',
-          lineHeight: '24px',
-        }
-      : {
-          fontSize: '24px',
-          lineHeight: '28px',
-        }),
   };
 };
 

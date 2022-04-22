@@ -23,6 +23,13 @@ describe('View history modal', () => {
 
   const handleCloseModal = jest.fn();
 
+  it('should render view history modal', async () => {
+    const { getByTestId } = renderWithTheme(<ViewHistoryModal handleCloseModal={handleCloseModal} {...props} />);
+
+    const viewHistoryModal = getByTestId(VIEW_HISTORY_MODAL);
+    expect(viewHistoryModal).toBeInTheDocument();
+  });
+
   it('should close view history modal', async () => {
     const { getByTestId } = renderWithTheme(<ViewHistoryModal handleCloseModal={handleCloseModal} {...props} />);
 
@@ -34,6 +41,5 @@ describe('View history modal', () => {
     fireEvent.click(closeBtn);
 
     expect(handleCloseModal).toHaveBeenCalledTimes(1);
-    // expect(await viewHistoryModal).not.toBeInTheDocument();
   });
 });

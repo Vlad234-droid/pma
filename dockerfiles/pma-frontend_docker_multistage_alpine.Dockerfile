@@ -99,6 +99,7 @@ RUN --mount=type=cache,id=yarn_cache,target=/usr/local/share/.cache/yarn \
     --mount=type=cache,id=node_modules,target=/opt/app/node_modules \
     yarn bootstrap:dev \ 
     && yarn build:prod:client \
+    && yarn ws:client test:ci \
     && yarn build:prod:server \
     && find . -type d -name node_modules -prune -o -name 'package.json' -exec bash -c 'mkdir -p ../build/$(dirname {})' \; \
     && find . -type d -name node_modules -prune -o -name 'public' -exec cp -r '{}' '../build/{}' \; \

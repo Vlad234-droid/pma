@@ -1,1 +1,1 @@
-export { default as DownloadReportModal } from './DownloadReportModal';
+export { default as ReportModal } from './ReportModal';

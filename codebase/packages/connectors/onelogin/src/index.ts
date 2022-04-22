@@ -9,4 +9,6 @@ export { getPersistentTraceId, getRequestTraceId } from './tracing';
 
 export { errorHandler } from './error-handler';
 
+export { addTrailngSlash, emptyIfRoot } from './utils';
+
 export type { AuthData, OpenIdUserInfo } from './oidc-data-extractor';

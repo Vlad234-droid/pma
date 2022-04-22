@@ -1,10 +1,24 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { Rule, useStyle } from '@pma/dex-wrapper';
 
-const HistoryTable = ({ headers, items, isVisible }) => {
-  const { css } = useStyle();
-  if (items.length < 1) return null;
+export const TEST_ID = 'history-table-test-id';
 
+type Props = {
+  headers: Array<string>;
+  items: Array<{
+    id: string;
+    updatedTime: string;
+    updatedBy: {
+      firstName: string;
+      lastName: string;
+    };
+    action: string;
+  }>;
+  isVisible: boolean;
+};
+
+const HistoryTable: FC<Props> = ({ headers, items, isVisible }) => {
+  const { css } = useStyle();
   const modifyTime = (time) => {
     const newDate = new Date(time);
     const year = newDate.getFullYear();
@@ -15,8 +29,10 @@ const HistoryTable = ({ headers, items, isVisible }) => {
     return `${day}/${month}/${year} at ${hour}:${minutes}`;
   };
 
+  if (items.length < 1) return null;
+
   return (
-    <div data-test-id='history-table' key={items.id} className={`${!isVisible && css(unvisible)}`}>
+    <div data-test-id={TEST_ID} className={`${!isVisible && css(unvisible)}`}>
       <div className={`${css(row)} ${css(header)}`}>
         {headers.map((el) => {
           return (

@@ -8,6 +8,13 @@ import { ReviewType, Status } from 'config/enum';
 
 import SuccessModal from './SuccessModal';
 
+const mockedUsedNavigate = jest.fn();
+
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: () => mockedUsedNavigate,
+}));
+
 describe('<SuccessModal />', () => {
   describe('#render', () => {
     const props = {

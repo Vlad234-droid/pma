@@ -7,5 +7,7 @@ export const previousReviewFilesSelector = (state: RootState) => state.previousR
 export const isDeleteFileSuccess = (state: RootState) =>
   state.previousReviewFiles.deleteFileMeta.loaded && !state.previousReviewFiles.deleteFileMeta.error;
 
+export const isDeleteFileLoaded = (state: RootState) => state.previousReviewFiles.deleteFileMeta.loaded;
+
 // @ts-ignore
 export const getPreviousReviewFilesSelector = createSelector(previousReviewFilesSelector, ({ data }) => data);

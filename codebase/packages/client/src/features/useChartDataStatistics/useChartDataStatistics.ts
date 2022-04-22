@@ -50,7 +50,7 @@ export const useChartDataStatistics = (t, type) => {
       { percent: myrApprovedPercentage, title: t(TitlesReport.APPROVED, 'Approved') },
     ],
     [ReportPage.REPORT_END_YEAR_REVIEW]: [
-      { pecent: eyrSubmittedPercentage, title: t(TitlesReport.SUBMITTED, 'Submitted') },
+      { percent: eyrSubmittedPercentage, title: t(TitlesReport.SUBMITTED, 'Submitted') },
       { percent: eyrApprovedPercentage, title: t(TitlesReport.APPROVED, 'Approved') },
     ],
     [ReportPage.REPORT_FEEDBACK]: [

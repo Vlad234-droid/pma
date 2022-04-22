@@ -111,9 +111,14 @@ export const FilterModal: FC<Props> = ({
     </div>
   );
 };
-const columnStyle: Rule = {
-  display: 'flex',
-  flexDirection: 'column',
+const columnStyle: Rule = ({ theme }) => {
+  return {
+    display: 'flex',
+    flexDirection: 'column',
+    fontSize: theme.font.fixed.f16.fontSize,
+    lineHeight: theme.font.fixed.f16.lineHeight,
+    letterSpacing: '0px',
+  };
 };
 const textStyle: Rule = {
   fontSize: '16px',

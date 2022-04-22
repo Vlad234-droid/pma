@@ -1,97 +1,54 @@
 import React, { FC } from 'react';
-import { Button, Rule, Styles, useStyle } from '@pma/dex-wrapper';
-import { IconButton } from 'components/IconButton';
+import { Rule, Styles, useStyle } from '@pma/dex-wrapper';
 import success from 'images/success.jpg';
 import { Trans } from 'components/Translation';
 import { useNavigate } from 'react-router-dom';
+import { ButtonsWrapper } from 'components/ButtonsWrapper';
+import { ArrowLeftIcon } from 'components/ArrowLeftIcon';
+import { buildPath } from 'features/Routes';
+import { Page } from 'pages';
 
-// TODO: Extract duplicate 1
 const SuccessMessage: FC = () => {
-  const { css, theme, matchMedia } = useStyle();
-  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
+  const { css } = useStyle();
   const navigate = useNavigate();
   return (
-    <div className={css(WrapperSuccessContainer)}>
-      <div className={css(SuccessImg)}>
+    <div className={css(wrapperSuccessContainer)}>
+      <div className={css(successImg)}>
         <img src={success} alt='success' />
       </div>
-      <h2 className={css(DoneText)}>
+      <h2 className={css(doneText)}>
         <Trans i18nKey='done'>Done</Trans>!
       </h2>
-      <p className={css(Description)}>
+      <p className={css(description)}>
         <Trans i18nKey='your_feedback_request_has_been_shared'>Your feedback request has been shared.</Trans>
       </p>
-      <div
-        className={css({
-          position: 'absolute',
-          left: 0,
-          bottom: 0,
-          width: '100%',
-        })}
-      >
-        <div
-          className={css({
-            position: 'relative',
-            bottom: theme.spacing.s0,
-            left: theme.spacing.s0,
-            right: theme.spacing.s0,
-            //@ts-ignore
-            borderTop: `${theme.border.width.b2} solid ${theme.colors.lightGray}`,
-          })}
-        >
-          <div
-            className={css({
-              padding: mobileScreen ? theme.spacing.s6 : theme.spacing.s8,
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-            })}
-          >
-            <Button
-              styles={[
-                theme.font.fixed.f16,
-                {
-                  fontWeight: theme.font.weight.bold,
-                  width: '49%',
-                  margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
-                  background: theme.colors.tescoBlue,
-                  border: `${theme.border.width.b2} solid ${theme.colors.tescoBlue}`,
-                  color: `${theme.colors.white}`,
-                },
-              ]}
-              onPress={() => {
-                navigate(-1);
-              }}
-            >
-              <Trans i18nKey='OK'>Okay</Trans>
-            </Button>
-          </div>
-        </div>
-      </div>
-      <span
-        className={css({
-          position: 'fixed',
-          top: theme.spacing.s5,
-          left: mobileScreen ? theme.spacing.s5 : theme.spacing.s10,
-          textDecoration: 'none',
-          border: 'none',
-          cursor: 'pointer',
-        })}
-      >
-        <IconButton graphic='arrowLeft' onPress={() => navigate(-1)} iconProps={{ invertColors: true }} />
-      </span>
+
+      <ButtonsWrapper
+        isValid={true}
+        single={true}
+        rightIcon={false}
+        rightTextNotIcon='okay'
+        onRightPress={() => {
+          navigate(buildPath(Page.FEEDBACK));
+        }}
+      />
+      <ArrowLeftIcon
+        onClick={() => {
+          navigate(buildPath(Page.FEEDBACK));
+        }}
+      />
     </div>
   );
 };
 
-const WrapperSuccessContainer: Rule = {
+const wrapperSuccessContainer: Rule = {
   paddingTop: '40px',
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
   flexDirection: 'column',
 };
-const SuccessImg: Rule = {
+const successImg: Rule = {
   width: '164px',
   height: '164px',
   '& > img': {
@@ -100,14 +57,14 @@ const SuccessImg: Rule = {
   },
 } as Styles;
 
-const DoneText: Rule = {
+const doneText: Rule = {
   fontWeight: 'bold',
   fontSize: '28px',
   lineHeight: '32px',
   margin: '20px 0px 16px 0px',
 };
 
-const Description: Rule = {
+const description: Rule = {
   maxWidth: '357px',
   margin: '0px',
   fontWeight: 'normal',

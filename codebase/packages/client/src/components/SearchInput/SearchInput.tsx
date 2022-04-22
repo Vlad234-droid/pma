@@ -16,6 +16,7 @@ type Props<T> = {
   onDelete?: (item: any) => void;
   onClear?: () => void;
   renderOption: (item: any) => JSX.Element;
+  onBlur?: () => void;
   domRef?: RefObject<any>;
   isValid?: boolean;
   id?: string;
@@ -31,6 +32,7 @@ const SearchInput: FC<Props<any>> = ({
   onSearch,
   onDelete,
   onClear,
+  onBlur,
   name,
   value,
   isValid = true,
@@ -64,6 +66,7 @@ const SearchInput: FC<Props<any>> = ({
         value={currentValue}
         onChange={handleChange}
         autoComplete={'off'}
+        onBlur={onBlur}
         disabled={disabled}
         type={'text'}
         className={css({

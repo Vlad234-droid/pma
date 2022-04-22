@@ -13,7 +13,7 @@ describe('<InfoModal />', () => {
     expect(screen.getByTestId(MODAL_WRAPPER)).toBeInTheDocument();
     expect(screen.getByTestId(DESCRIPTION_1)).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole('button'));
+    fireEvent.click(screen.getByTestId('go-back'));
     expect(closeInfoModal).toBeCalled();
   });
 
@@ -24,7 +24,7 @@ describe('<InfoModal />', () => {
     expect(screen.getByTestId(MODAL_WRAPPER)).toBeInTheDocument();
     expect(screen.getByTestId(DESCRIPTION_2)).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole('button'));
+    fireEvent.click(screen.getByTestId('go-back'));
     expect(closeInfoModal).toBeCalled();
   });
 });

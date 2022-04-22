@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { TileWrapper } from 'components/Tile';
 import { Icon, IconProps } from 'components/Icon';
-import { Rule } from '@pma/dex-wrapper';
+import { Rule, useStyle } from '@pma/dex-wrapper';
 import { Link } from 'react-router-dom';
 
 export type Props = {
@@ -10,21 +10,40 @@ export type Props = {
   title: string;
 };
 
-export const MenuItem: FC<Props> = ({ iconGraphic, title, linkTo = '' }) => (
-  <div>
-    <Link to={linkTo} replace>
-      <TileWrapper title={title} hover={true} customStyle={wrapperStyles}>
-        <Icon graphic={iconGraphic} iconStyles={iconStyles} />
-        <div style={{ paddingTop: '8px' }}>{title}</div>
-      </TileWrapper>
-    </Link>
-  </div>
-);
+export const TEST_ID = 'test-id';
 
-const wrapperStyles: Rule = {
-  width: '98px',
-  height: '94px',
-  padding: '18px 8px 16px',
+export const MenuItem: FC<Props> = ({ iconGraphic, title, linkTo = '' }) => {
+  const { css } = useStyle();
+
+  return (
+    <div data-test-id={TEST_ID} className={css(wrapperStyle)}>
+      <Link to={linkTo} replace>
+        <TileWrapper title={title} hover={true} customStyle={wrapperStyles}>
+          <Icon graphic={iconGraphic} iconStyles={iconStyles} />
+          <div className={css(styledTitle)}>{title}</div>
+        </TileWrapper>
+      </Link>
+    </div>
+  );
+};
+
+const wrapperStyle: Rule = {
+  flex: '1 0 30%',
+  minHeight: '100px',
+};
+
+export const styledTitle: Rule = ({ theme }) => {
+  return {
+    paddingTop: '3px',
+    fontSize: theme.font.fixed.f12.fontSize,
+    lineHeight: theme.font.fixed.f12.lineHeight,
+    letterSpacing: '0px',
+  };
+};
+
+export const wrapperStyles: Rule = {
+  height: '100%',
+  padding: '18px 8px 8px',
   fontSize: '12px',
   display: 'flex',
   flexDirection: 'column',
@@ -32,7 +51,7 @@ const wrapperStyles: Rule = {
   textAlign: 'center',
 };
 
-const iconStyles: Rule = {
+export const iconStyles: Rule = {
   minWidth: '20px',
   minHeight: '20px',
 };

@@ -101,8 +101,8 @@ export const Colleague: FC<Props> = ({ status, colleague, colleagueExpanded, set
                     <ColleagueInfo
                       firstName={colleague.firstName}
                       lastName={colleague.lastName}
-                      jobName={colleague.jobName}
-                      businessType={colleague.businessType}
+                      jobName={colleague?.jobName}
+                      businessType={colleague?.businessType}
                     />
                     <div className={css(expandButtonStyle)}>
                       <div data-test-id={`expand-button-${colleague.uuid}`} className={css({ paddingLeft: '12px' })}>

@@ -1,13 +1,25 @@
-import React, { FC, InputHTMLAttributes } from 'react';
+import React, { FC, InputHTMLAttributes, useRef } from 'react';
 import { Rule, Styles, useStyle } from '@pma/dex-wrapper';
 
 export interface DropZoneProps extends InputHTMLAttributes<HTMLInputElement> {
   styles?: Styles | Rule;
-  onUpload: (file?: File) => void;
+  onUpload: (file: File) => void;
 }
 
 export const DropZone: FC<DropZoneProps> = ({ children, onUpload, styles = {}, accept }) => {
   const { css } = useStyle();
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const handleChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
+    const file = target?.files?.[0];
+    const current = inputRef.current;
+    if (file) {
+      onUpload(file);
+    }
+    if (current) {
+      current.value = '';
+    }
+  };
 
   return (
     <div className={css({ ...styles })}>
@@ -16,9 +28,8 @@ export const DropZone: FC<DropZoneProps> = ({ children, onUpload, styles = {}, a
           className={css(buttonStyles)}
           type='file'
           id='DropZone'
-          onChange={({ target }) => {
-            onUpload(target.files?.[0]);
-          }}
+          ref={inputRef}
+          onChange={handleChange}
           accept={accept}
         />
         {children}

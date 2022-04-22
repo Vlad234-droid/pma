@@ -1,6 +1,6 @@
 import React, { FC, MouseEvent, useEffect, useRef, useState } from 'react';
 import mergeRefs from 'react-merge-refs';
-import { Rule, useStyle } from '@pma/dex-wrapper';
+import { CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
 
 import { Icon } from 'components/Icon';
 import useEventListener from 'hooks/useEventListener';
@@ -11,11 +11,12 @@ import { useFormContainer } from '../context/input';
 const getSelectedOption = (options: Option[], value?: string) =>
   value ? options.filter((option) => option.value === value)[0] : undefined;
 
-const Select: FC<SelectField> = ({ domRef, name, options, placeholder, value, onChange }) => {
+const Select: FC<SelectField> = ({ domRef, name, options, placeholder, value, error, onChange, onBlur }) => {
   const { css } = useStyle();
   const { inputRef } = useFormContainer();
   const ref = useRef<HTMLDivElement | null>(null);
   const [isOpen, setOpen] = useState<boolean>(false);
+  const [isDirty, setIsDirty] = useState<boolean>(false);
   const [selected, setSelected] = useState<Option | undefined>();
 
   const handleClickOutside = (event: MouseEvent<HTMLElement>) => {
@@ -31,8 +32,15 @@ const Select: FC<SelectField> = ({ domRef, name, options, placeholder, value, on
     value !== undefined && setSelected(getSelectedOption(options, value));
   }, [value, options]);
 
+  useEffect(() => {
+    if (isDirty && !isOpen && onBlur) {
+      onBlur();
+    }
+  }, [isOpen, isDirty]);
+
   const toggleList = () => {
     setOpen((isOpen) => !isOpen);
+    setIsDirty(true);
   };
 
   const handleSelect = (event, selected: Option) => {
@@ -47,7 +55,7 @@ const Select: FC<SelectField> = ({ domRef, name, options, placeholder, value, on
         type='button'
         data-test-id={name}
         onClick={toggleList}
-        className={css(fieldStyles, isOpen ? fieldActiveStyles : {})}
+        className={css(fieldStyles({ isValid: !error, isOpen }))}
         ref={mergeRefs([domRef, inputRef])}
       >
         {selected ? (
@@ -89,30 +97,31 @@ const wrapperStyles: Rule = {
   position: 'relative',
 };
 
-const fieldStyles: Rule = ({ theme }) => ({
-  display: 'flex',
-  justifyContent: 'space-between',
-  width: '100%',
-  border: `2px solid ${theme.colors.backgroundDarkest}`,
-  background: `${theme.colors.white}`,
-  borderRadius: '5px',
-  fontSize: `${theme.font.fixed.f16.fontSize}`,
-  lineHeight: `${theme.font.fixed.f16.lineHeight}`,
-  letterSpacing: '0px',
-  padding: '10px 40px 10px 16px',
-  ':focus': {
-    outline: 'none !important',
-    border: `2px solid ${theme.colors.tescoBlue}`,
-  },
-  cursor: 'pointer',
-  minHeight: '42px',
-  color: theme.colors.base,
-});
-
-const fieldActiveStyles: Rule = ({ theme }) => ({
-  outline: 'none !important',
-  border: `2px solid ${theme.colors.tescoBlue}`,
-});
+const fieldStyles: CreateRule<{ isValid: boolean; isOpen: boolean }> =
+  ({ isValid, isOpen }) =>
+  ({ theme }) => {
+    return {
+      display: 'flex',
+      justifyContent: 'space-between',
+      width: '100%',
+      border: `2px solid ${
+        isValid ? (isOpen ? theme.colors.tescoBlue : theme.colors.backgroundDarkest) : theme.colors.error
+      }`,
+      background: `${theme.colors.white}`,
+      borderRadius: '5px',
+      fontSize: `${theme.font.fixed.f16.fontSize}`,
+      lineHeight: `${theme.font.fixed.f16.lineHeight}`,
+      letterSpacing: '0px',
+      padding: '10px 40px 10px 16px',
+      ':focus': {
+        outline: 'none !important',
+        border: `2px solid ${isValid ? theme.colors.tescoBlue : theme.colors.error}`,
+      },
+      cursor: 'pointer',
+      minHeight: '42px',
+      color: theme.colors.base,
+    };
+  };
 
 const placeholderStyles: Rule = ({ theme }) => ({
   color: `${theme.colors.grayscale}`,

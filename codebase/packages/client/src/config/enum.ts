@@ -204,7 +204,7 @@ export enum StatisticsTitlesReportKeys {
   IN_THE_MOMENT_FEEDBACK = 'moment_feedback',
   BUSINESS = 'new_to_business',
   ANNIVERSARY_REVIEWS = 'anniversary_reviews',
-  COLLEAGUES_COUNT = 'colleagues_count',
+  WL4And5 = 'WL4_and_5',
 }
 
 export enum StatisticsTitlesReport {

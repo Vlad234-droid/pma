@@ -100,7 +100,7 @@ const wrapperStyles: Rule = {
   alignItems: 'center',
 };
 
-const iconWrapperStyles: Rule = { height: '24px' };
+const iconWrapperStyles: Rule = { height: '24px', display: 'flex' };
 
 const iconStyles: Rule = {
   width: '16px',

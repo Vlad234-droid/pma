@@ -1,16 +1,14 @@
 import React, { FC, useMemo } from 'react';
 import { Rule, Styles, useStyle, colors } from '@pma/dex-wrapper';
 import { TileWrapper } from 'components/Tile';
-import { Accordion, BaseAccordion, ExpandButton, Panel, Section } from 'components/Accordion';
+import { Accordion, BaseAccordion, Panel, Section } from 'components/Accordion';
 import { IconButton } from 'components/IconButton';
 import { Trans } from 'components/Translation';
+import { FeedbackProfileInfo } from 'features/Feedback/components';
 import { useDispatch } from 'react-redux';
-import defaultImg from 'images/default.png';
 import { FeedbackActions } from '@pma/store';
 import { usePDF, FeedbackDocument, downloadPDF } from '@pma/pdf-renderer';
 import { formatToRelativeDate } from 'utils';
-
-export const DRAFT_WRAPPER = 'tile-wrapper';
 
 type QuestionItem = {
   code: string;
@@ -50,8 +48,8 @@ export const defaultSerializer = (item) => ({
   ...item,
   firstName: item?.colleagueProfile?.colleague?.profile?.firstName || '',
   lastName: item?.colleagueProfile?.colleague?.profile?.lastName || '',
-  jobName: item?.colleagueProfile?.colleague?.workRelationships[0].job.name || '',
-  departmentName: item?.colleagueProfile?.colleague?.workRelationships[0].department?.name || '',
+  jobName: item?.colleagueProfile?.colleague?.workRelationships[0]?.job?.name || '',
+  departmentName: item?.colleagueProfile?.colleague?.workRelationships[0]?.department?.name || '',
   feedbackItems: item?.feedbackItems
     .sort((i1, i2) => QUESTION_ORDER.indexOf(i1.code) - QUESTION_ORDER.indexOf(i2.code))
     .map(({ code, content, ...rest }) => ({
@@ -87,21 +85,15 @@ const DraftItem: FC<DraftItemProps> = ({ item, downloadable = true }) => {
         <BaseAccordion id={`draft-base-accordion-${item.uuid}`}>
           {() => (
             <Section>
-              <div className={css(DraftStyles)}>
-                <div className={css(BlockInfo)}>
-                  <div className={css({ alignSelf: 'flex-start' })}>
-                    <img className={css(ImgStyle)} src={defaultImg} alt='photo' />
-                  </div>
-                  <div className={css({ marginLeft: '16px' })}>
-                    <h3 className={css(NamesStyle)}>{`${item.firstName} ${item.lastName}`}</h3>
-                    <p className={css(IndustryStyle)}>{`${item.jobName}, ${item.departmentName}`}</p>
-                  </div>
-                </div>
-                <div className={css({ display: 'flex', justifyContent: 'center', alignItems: 'center' })}>
-                  <div className={css({ marginRight: '26px' })}>{item.updatedTime}</div>
-                  <ExpandButton onClick={(expanded) => expanded && !item.read && markAsReadFeedback(item.uuid)} />
-                </div>
-              </div>
+              <FeedbackProfileInfo
+                firstName={item?.firstName}
+                lastName={item?.lastName}
+                job={item?.jobName}
+                department={item?.departmentName}
+                updatedTime={item?.updatedTime}
+                onExpandPress={(expanded) => expanded && !item.read && markAsReadFeedback(item.uuid)}
+              />
+
               <Panel>
                 <TileWrapper
                   customStyle={{
@@ -159,35 +151,6 @@ const infoBlockStyle: Rule = {
 
 const wrapperStyles: Rule = {
   padding: '24px 24px 24px 24px',
-};
-
-const DraftStyles: Rule = {
-  display: 'flex',
-  justifyContent: 'space-between',
-};
-
-const BlockInfo: Rule = {
-  display: 'inline-flex',
-  alignItems: 'center',
-};
-
-const ImgStyle: Rule = {
-  width: '48px',
-  height: '48px',
-  borderRadius: '50%',
-};
-const NamesStyle: Rule = {
-  fontWeight: 'bold',
-  fontSize: '18px',
-  lineHeight: '22px',
-  margin: '0px',
-  color: '#00539F',
-};
-const IndustryStyle: Rule = {
-  fontWeight: 'normal',
-  fontSize: '16px',
-  lineHeight: '20px',
-  margin: '4px 0px 0px 0px',
 };
 
 const iconBtnStyle: Rule = ({ theme }) => ({

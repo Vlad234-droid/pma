@@ -1,15 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
-import { Button, Modal, Rule, CreateRule, useStyle } from '@pma/dex-wrapper';
-import { Trans, useTranslation } from 'components/Translation';
-import { FilterOption } from 'features/Shared';
-import { IconButton } from 'components/IconButton';
-import { defaultSerializer } from '../DraftItem';
-import DraftList from '../DraftList';
-
-import RadioBtns from '../RadioBtns';
-import { Notification } from 'components/Notification';
-import { Icon } from 'components/Icon';
-import { HelpModalReceiveFeedback, ModalDownloadFeedback } from '../ModalParts';
+import { Button, Rule, CreateRule, useStyle } from '@pma/dex-wrapper';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   ColleaguesActions,
   colleagueUUIDSelector,
@@ -17,9 +9,20 @@ import {
   getLoadedStateSelector,
   ReviewsActions,
 } from '@pma/store';
-import { useDispatch, useSelector } from 'react-redux';
+
+import { Trans, useTranslation } from 'components/Translation';
+import { FilterOption } from 'features/Shared';
+import { IconButton } from 'components/IconButton';
+import { defaultSerializer } from '../DraftItem';
+import DraftList from '../DraftList';
+import { WrapperModal } from 'features/Modal';
+
+import RadioBtns from '../RadioBtns';
+import { Notification } from 'components/Notification';
+import { Icon } from 'components/Icon';
+import { HelpModalReceiveFeedback, ModalDownloadFeedback } from '../ModalParts';
+
 import { FilterModal } from '../../../Shared/components/FilterModal';
-import { useNavigate } from 'react-router-dom';
 import { FEEDBACK_STATUS_IN, FeedbackStatus, Tesco } from 'config/enum';
 import { Page } from 'pages';
 import useSubmittedCompletedNotes from '../../hooks/useSubmittedCompletedNotes';
@@ -33,7 +36,7 @@ type filterFeedbacksType = {
   search: string;
 };
 
-const ViewFeedback: FC = () => {
+const ViewFeedback: FC<{}> = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const { css, matchMedia } = useStyle();
@@ -168,27 +171,17 @@ const ViewFeedback: FC = () => {
   return (
     <>
       {helpModalReceiveFeedback && (
-        <Modal
-          modalPosition={'middle'}
-          overlayColor={'tescoBlue'}
-          modalContainerRule={[containerRule({ mobileScreen })]}
-          closeOptions={{
-            content: <Icon graphic='cancel' invertColors={true} />,
-            onClose: () => {
-              setHelpModalReceiveFeedback(() => false);
-            },
-            styles: [modalCloseOptionStyle({ mobileScreen })],
-          }}
-          title={{
-            content: 'Feedback',
-            styles: [modalTitleOptionStyle({ mobileScreen })],
+        <WrapperModal
+          title={t('feedback', 'Feedback')}
+          onClose={() => {
+            setHelpModalReceiveFeedback(() => false);
           }}
         >
           <HelpModalReceiveFeedback setHelpModalReceiveFeedback={setHelpModalReceiveFeedback} />
-        </Modal>
+        </WrapperModal>
       )}
       <div data-test-id={WRAPPER}>
-        <div className={css(SpaceBeetweenStyled({ mobileScreen }))}>
+        <div className={css(spaceBetweenStyled({ mobileScreen }))}>
           <RadioBtns
             checkedRadio={checkedRadio}
             setCheckedRadio={setCheckedRadio}
@@ -198,7 +191,7 @@ const ViewFeedback: FC = () => {
             filterModal={filterModal}
             setFilterFeedbacks={setFilterFeedbacks}
           />
-          <div className={css(FlexCenterStyled)}>
+          <div className={css(flexCenterStyled)}>
             <IconButton
               data-test-id={'informationn'}
               graphic='information'
@@ -230,21 +223,21 @@ const ViewFeedback: FC = () => {
             />
           </div>
         </div>
-        <div className={css(ReverseItemsStyled)}>
+        <div className={css(reverseItemsStyled)}>
           {!loaded ? <Spinner /> : <DraftList items={submittedCompletedNotes} />}
-          <div className={css(ButtonsActionsStyle({ mobileScreen }))}>
-            <div className={css(ButtonContainerStyle)}>
+          <div className={css(buttonsActionsStyle({ mobileScreen }))}>
+            <div className={css(buttonContainerStyle)}>
               <div className={css({ display: 'inline-flex' })}>
                 <Icon
                   graphic='chatSq'
                   iconStyles={{ verticalAlign: 'middle', margin: '2px 10px 0px 0px' }}
                   backgroundRadius={10}
                 />
-                <span className={css(ShareFeedbackStyled)}>
+                <span className={css(shareFeedbackStyled)}>
                   <Trans i18nKey='give_feedback'>Give Feedback</Trans>
                 </span>
               </div>
-              <p className={css(QuestionStyled)}>
+              <p className={css(questionStyled)}>
                 <Trans i18nKey='give_feedback_to_a_colleague'>Give feedback to a colleague</Trans>
               </p>
               <Button
@@ -256,18 +249,18 @@ const ViewFeedback: FC = () => {
                 <Trans i18nKey='give_feedback'>Give Feedback</Trans>
               </Button>
             </div>
-            <div className={css(ButtonContainerStyle)}>
+            <div className={css(buttonContainerStyle)}>
               <div className={css({ display: 'inline-flex' })}>
                 <Icon
                   graphic='download'
                   iconStyles={{ verticalAlign: 'middle', margin: '2px 10px 0px 0px' }}
                   backgroundRadius={10}
                 />
-                <span className={css(SizeStyle)}>
+                <span className={css(sizeStyle)}>
                   <Trans i18nKey='download_feedback'>Download feedback</Trans>
                 </span>
               </div>
-              <p className={css(SavedStyled)}>
+              <p className={css(savedStyled)}>
                 <Trans i18nKey='download_feedback_to_your_device'>Download feedback to your device</Trans>
               </p>
               <Button
@@ -286,28 +279,18 @@ const ViewFeedback: FC = () => {
                 'worried_the_content_of_any_feedback',
                 "If you're worried the content of any feedback you`ve received is inappropriate, please contact your line manager or People team as soon as possible.",
               )}
-              customStyle={css(notificationStyles)}
+              customStyle={notificationStyles}
             />
           </div>
         </div>
       </div>
       {openMainModal && (
-        <Modal
-          modalPosition={'middle'}
-          overlayColor={'tescoBlue'}
-          modalContainerRule={[containerRule({ mobileScreen })]}
-          closeOptions={{
-            content: <Icon graphic='cancel' invertColors={true} />,
-            onClose: () => {
-              dispatch(ColleaguesActions.clearColleagueList());
-              setModalSuccess(() => false);
-              setOpenMainModal(() => false);
-            },
-            styles: [modalCloseOptionStyle({ mobileScreen })],
-          }}
-          title={{
-            content: t('download_your_feedback', 'Download your feedback'),
-            styles: [modalTitleOptionStyle({ mobileScreen })],
+        <WrapperModal
+          title={t('download_your_feedback', 'Download your feedback')}
+          onClose={() => {
+            dispatch(ColleaguesActions.clearColleagueList());
+            setModalSuccess(() => false);
+            setOpenMainModal(() => false);
           }}
         >
           <ModalDownloadFeedback
@@ -324,7 +307,7 @@ const ViewFeedback: FC = () => {
               'Use the search bar to look for colleagues who have given you feedback.',
             )}
           />
-        </Modal>
+        </WrapperModal>
       )}
     </>
   );
@@ -333,98 +316,99 @@ const ViewFeedback: FC = () => {
 const notificationStyles: Rule = ({ theme }) => {
   return {
     background: '#FFDBC2',
-    marginBottom: '20px',
-    marginTop: '16px',
+    marginBottom: theme.spacing.s5,
+    marginTop: theme.spacing.s4,
     fontSize: theme.font.fixed.f16.fontSize,
     lineHeight: theme.font.fixed.f16.lineHeight,
-    letterSpacing: '0px',
+    letterSpacing: theme.spacing.s0,
   };
 };
 
-const SavedStyled: Rule = ({ theme }) => {
+const savedStyled: Rule = ({ theme }) => {
   return {
     fontWeight: 'normal',
     fontSize: theme.font.fixed.f16.fontSize,
     lineHeight: theme.font.fixed.f16.lineHeight,
-    letterSpacing: '0px',
-    margin: '4px 0px 0px 0px',
+    letterSpacing: theme.spacing.s0,
+    margin: `4px ${theme.spacing.s0} ${theme.spacing.s0} ${theme.spacing.s0}`,
   };
 };
 
-const SizeStyle: Rule = ({ theme }) => {
+const sizeStyle: Rule = ({ theme }) => {
   return {
     fontWeight: theme.font.weight.bold,
     fontSize: theme.font.fixed.f18.fontSize,
     lineHeight: theme.font.fixed.f18.lineHeight,
-    letterSpacing: '0px',
-    color: '#00539F',
+    letterSpacing: theme.spacing.s0,
+    color: theme.colors.tescoBlue,
   };
 };
 
-const FlexCenterStyled: Rule = {
+const flexCenterStyled: Rule = {
   display: 'flex',
   alignItems: 'center',
   position: 'relative',
 };
 
-const SpaceBeetweenStyled: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => ({
-  display: 'flex',
-  flexWrap: mobileScreen ? 'wrap' : 'nowrap',
-  ...(mobileScreen && { flexBasis: '250px' }),
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  paddingTop: '24px',
+const spaceBetweenStyled: CreateRule<{ mobileScreen: boolean }> =
+  ({ mobileScreen }) =>
+  ({ theme }) => ({
+    display: 'flex',
+    flexWrap: mobileScreen ? 'wrap' : 'nowrap',
+    ...(mobileScreen && { flexBasis: '250px' }),
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingTop: theme.spacing.s6,
+  });
+
+const questionStyled: Rule = ({ theme }) => ({
+  fontWeight: 'normal',
+  fontSize: theme.spacing.s4,
+  lineHeight: theme.spacing.s5,
+  margin: `4px ${theme.spacing.s0} ${theme.spacing.s0} ${theme.spacing.s0}`,
 });
 
-const QuestionStyled: Rule = {
-  fontWeight: 'normal',
-  fontSize: '16px',
-  lineHeight: '20px',
-  margin: '4px 0px 0px 0px',
-};
+const shareFeedbackStyled: Rule = ({ theme }) => ({
+  fontWeight: theme.font.weight.bold,
+  fontSize: '18px',
+  lineHeight: '22px',
+  color: theme.colors.tescoBlue,
+});
 
-const ShareFeedbackStyled: Rule = ({ theme }) => {
-  return {
-    fontWeight: theme.font.weight.bold,
-    fontSize: theme.font.fixed.f18.fontSize,
-    lineHeight: theme.font.fixed.f18.lineHeight,
-    letterSpacing: '0px',
-    color: '#00539F',
-  };
-};
-
-const ReverseItemsStyled: Rule = {
+const reverseItemsStyled: Rule = ({ theme }) => ({
   display: 'flex',
   flexWrap: 'wrap-reverse',
-  gridGap: '8px',
+  gridGap: theme.spacing.s2,
   marginTop: '34px',
   alignItems: 'stretch',
-};
+});
 
 const iconStyle: Rule = {
   marginRight: '2px',
   marginTop: '3px',
 };
 
-const ButtonsActionsStyle: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => ({
-  width: mobileScreen ? '100%' : '400px',
-  flex: '1 0 250px',
-  '& > div': {
-    '&:nth-child(2)': {
-      marginTop: '8px',
+const buttonsActionsStyle: CreateRule<{ mobileScreen: boolean }> =
+  ({ mobileScreen }) =>
+  ({ theme }) => ({
+    width: mobileScreen ? '100%' : '400px',
+    flex: '1 0 250px',
+    '& > div': {
+      '&:nth-child(2)': {
+        marginTop: theme.spacing.s4,
+      },
     },
-  },
+  });
+
+const buttonContainerStyle: Rule = ({ theme }) => ({
+  background: theme.colors.white,
+  boxShadow: '3px 3px 1px 1px rgba(0, 0, 0, 0.05)',
+  borderRadius: theme.spacing.s2_5,
+  padding: '26px',
 });
 
-const ButtonContainerStyle: Rule = {
-  background: '#FFFFFF',
-  boxShadow: '3px 3px 1px 1px rgba(0, 0, 0, 0.05)',
-  borderRadius: '10px',
-  padding: '26px',
-};
-
 const iconBtnStyle: Rule = ({ theme }) => ({
-  padding: '8px 16px',
+  padding: `${theme.spacing.s2} ${theme.spacing.s4}`,
   display: 'flex',
   height: '34px',
   borderRadius: '32px',
@@ -437,65 +421,12 @@ const iconBtnStyle: Rule = ({ theme }) => ({
   border: '2px solid #00539F',
   maxWidth: 'fit-content',
   marginLeft: 'auto',
-  marginTop: '16px',
+  marginTop: theme.spacing.s4,
   whiteSpace: 'nowrap',
   fontSize: theme.font.fixed.f14.fontSize,
   lineHeight: theme.font.fixed.f14.lineHeight,
-  letterSpacing: '0px',
+  letterSpacing: theme.spacing.s0,
   fontWeight: theme.font.weight.bold,
-});
-
-// TODO: Extract duplicate 21
-const containerRule: CreateRule<{ mobileScreen: boolean }> =
-  ({ mobileScreen }) =>
-  ({ theme }) => ({
-    alignItems: 'center',
-    justifyContent: 'center',
-    position: 'relative',
-    ...(mobileScreen
-      ? { borderRadius: '24px 24px 0 0 ', padding: '16px 0 84px' }
-      : { borderRadius: '32px', padding: `40px 0 102px` }),
-    width: '640px',
-    height: mobileScreen ? 'calc(100% - 72px)' : 'calc(100% - 102px)',
-    marginTop: '72px',
-    marginBottom: mobileScreen ? 0 : '30px',
-    background: theme.colors.white,
-    cursor: 'default',
-    overflow: 'auto',
-  });
-
-// TODO: Extract duplicate 13
-const modalCloseOptionStyle: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => ({
-  display: 'inline-block',
-  height: '24px',
-  paddingLeft: '0px',
-  paddingRight: '0px',
-  position: 'fixed',
-  top: '22px',
-  right: mobileScreen ? '20px' : '40px',
-  textDecoration: 'none',
-  border: 'none',
-  cursor: 'pointer',
-});
-
-// TODO: Extract duplicate 14
-const modalTitleOptionStyle: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => ({
-  position: 'fixed',
-  top: '22px',
-  textAlign: 'center',
-  left: 0,
-  right: 0,
-  color: 'white',
-  fontWeight: 'bold',
-  ...(mobileScreen
-    ? {
-        fontSize: '20px',
-        lineHeight: '24px',
-      }
-    : {
-        fontSize: '24px',
-        lineHeight: '28px',
-      }),
 });
 
 export default ViewFeedback;

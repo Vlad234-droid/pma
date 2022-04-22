@@ -10,6 +10,9 @@ import { DEFAULT_SENDER_NAME } from '../../config';
 
 export type AlertDrawerProps = { onClose: () => void };
 
+export const ALERT_DRAWER_WRAPPER = 'alert-drawer-wrapper';
+export const ALERT_DRAWER_CLOSE_BTN = 'alert-drawer-close-btn';
+
 type Spacing = '100%' | 0;
 
 export const AlertDrawer: FC<AlertDrawerProps> = ({ onClose }) => {
@@ -48,11 +51,20 @@ export const AlertDrawer: FC<AlertDrawerProps> = ({ onClose }) => {
   return (
     <div className={css(slideInModalRule)}>
       {isDesktop && <div className={css(underlayRule)} onClick={underlayClick} ref={underlayRef} />}
-      <div className={css(containerRule({ isDesktop, width }))} onTransitionEnd={onTransitionEnd}>
+      <div
+        data-test-id={ALERT_DRAWER_WRAPPER}
+        className={css(containerRule({ isDesktop, width }))}
+        onTransitionEnd={onTransitionEnd}
+      >
         <div className={css(headerRule, pointerRule)}>
           <div className={css(titleRule)}>{t('my_alerts', 'My Alerts')}</div>
           <div className={css(iconRule)}>
-            <IconButton graphic='close' onPress={onClosePress} iconProps={{ size: '14px' }} />
+            <IconButton
+              graphic='close'
+              onPress={onClosePress}
+              iconProps={{ size: '14px' }}
+              data-test-id={ALERT_DRAWER_CLOSE_BTN}
+            />
           </div>
         </div>
         <div className={css(parcelRule, pointerRule)}>
@@ -80,8 +92,13 @@ const slideInModalRule: Rule = ({ zIndex }) => ({
   height: '100%',
 });
 
-const titleRule: Rule = {
-  width: '100%',
+const titleRule: Rule = ({ theme }) => {
+  return {
+    width: '100%',
+    fontSize: theme.font.fixed.f20.fontSize,
+    lineHeight: theme.font.fixed.f20.lineHeight,
+    letterSpacing: '0px',
+  };
 };
 
 const underlayRule: Rule = ({ colors }) => ({
@@ -93,7 +110,10 @@ const underlayRule: Rule = ({ colors }) => ({
 
 const containerRule: CreateRule<Record<'width', Spacing> & { isDesktop: boolean }> =
   ({ width, isDesktop }) =>
-  ({ zIndex }) => ({
+  ({ zIndex, theme }) => ({
+    fontSize: theme.font.fixed.f16.fontSize,
+    lineHeight: theme.font.fixed.f16.lineHeight,
+    letterSpacing: '0px',
     position: 'fixed',
     top: 0,
     right: 0,
@@ -128,9 +148,12 @@ const iconRule: Rule = {
 
 const pointerRule: Rule = { cursor: 'default' };
 
-const parcelRule: Rule = ({ colors }) => ({
+const parcelRule: Rule = ({ colors, theme }) => ({
   background: colors.backgroundDark,
   flexGrow: 1,
+  fontSize: theme.font.fixed.f16.fontSize,
+  lineHeight: theme.font.fixed.f16.lineHeight,
+  letterSpacing: '0px',
   '& > div': {
     height: '100%',
   },

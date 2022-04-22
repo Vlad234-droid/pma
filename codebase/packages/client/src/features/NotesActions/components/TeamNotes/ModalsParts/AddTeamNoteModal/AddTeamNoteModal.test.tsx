@@ -48,7 +48,7 @@ describe('AddTeamNoteModal', () => {
     const form = getByTestId(MODAL_WRAPPER);
     expect(form).toBeInTheDocument();
   });
-  it('it should submit from', async () => {
+  it('it call handleTEAMSubmit handler', async () => {
     const { getByTestId } = render(<AddTeamNoteModal {...props} />);
     const arrow = getByTestId('arrowRight');
     fireEvent.click(arrow);

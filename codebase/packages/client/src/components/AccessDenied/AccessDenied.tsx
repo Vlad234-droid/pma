@@ -8,19 +8,19 @@ type Props = {
   message: string;
 };
 
-const P = ({ children }) => {
+const P = ({ children, ...props }) => {
   const { css } = useStyle();
   return (
-    <p className={css(text)}>
+    <p className={css(text)} {...props}>
       <Trans>{children}</Trans>
     </p>
   );
 };
 
-const A = ({ children }) => {
+const A = ({ children, ...props }) => {
   const { css } = useStyle();
   return (
-    <a className={css(button)}>
+    <a className={css(button)} {...props}>
       <Trans>{children}</Trans>
     </a>
   );
@@ -58,7 +58,9 @@ const textBottom: Rule = {
 const button: Rule = ({ theme }) => ({
   textAlign: 'center',
   backgroundColor: theme.colors.tescoBlue,
-  fontSize: '18px',
+  fontSize: theme.font.fixed.f18.fontSize,
+  lineHeight: theme.font.fixed.f18.lineHeight,
+  letterSpacing: '0px',
   padding: '20px 48px',
   color: theme.colors.white,
   borderRadius: '3px',

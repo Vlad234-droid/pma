@@ -3,8 +3,11 @@ import { Rule, useStyle } from '@pma/dex-wrapper';
 import { Link } from 'react-router-dom';
 import { buildPath, buildPathWithParams } from 'features/Routes';
 import { PieChartContent as Content } from './components/PieChartContent';
+import { HoverMessage } from 'components/HoverMessage';
 import { PieChartProps } from './config';
 import { paramsReplacer } from 'utils';
+
+export const PIE_CHART_WRAPPER = 'pie-chart-wrapper';
 
 const PieChart: FC<PieChartProps> = ({
   title,
@@ -33,21 +36,22 @@ const PieChart: FC<PieChartProps> = ({
     hoverVisibility,
   };
 
-  const HoverMessage = () =>
-    hoverVisibility && !!hoverMessage && isHovering && <div className={css(hoverContainer)}>{hoverMessage}</div>;
+  const isVisibleMessage = () =>
+    hoverVisibility &&
+    !!hoverMessage &&
+    isHovering && <HoverMessage text={hoverMessage} customStyles={hoverContainer} />;
 
   if (!link)
     return (
-      <div data-test-id='pie-chart-wrapper' className={css(wrapper)}>
-        <Wrapper
-          className={css(pieChartWrapper)}
-          onMouseEnter={() => setIsHovering(true)}
-          onMouseLeave={() => setIsHovering(false)}
-        >
-          <Content {...props} />
-          {HoverMessage()}
-        </Wrapper>
-      </div>
+      <Wrapper
+        className={css(pieChartWrapper)}
+        onMouseEnter={() => setIsHovering(true)}
+        onMouseLeave={() => setIsHovering(false)}
+        data-test-id={PIE_CHART_WRAPPER}
+      >
+        <Content {...props} />
+        {isVisibleMessage()}
+      </Wrapper>
     );
 
   return (
@@ -60,7 +64,7 @@ const PieChart: FC<PieChartProps> = ({
       onMouseLeave={() => setIsHovering(false)}
     >
       <Content {...props} />
-      {HoverMessage()}
+      {isVisibleMessage()}
     </Link>
   );
 };
@@ -69,31 +73,16 @@ const pieChartWrapper: Rule = ({ theme }) => ({
   background: theme.colors.white,
   boxShadow: '3px 3px 1px 1px rgba(0, 0, 0, 0.05)',
   borderRadius: '10px',
-  padding: '24px',
+  padding: theme.font.fixed.f24.fontSize,
   width: '100%',
   position: 'relative',
 });
 
-const hoverContainer: Rule = ({ theme }) => ({
+const hoverContainer: Rule = () => ({
   position: 'absolute',
   bottom: '-8px',
   left: '50%',
   transform: 'translate(-50%, 100%)',
-  zIndex: '2',
-  background: theme.colors.link,
-  padding: '16px',
-  width: '294px',
-  maxWidth: '294px',
-  color: theme.colors.white,
-  borderRadius: theme.spacing.s2_5,
 });
-
-const wrapper: Rule = ({ theme }) => {
-  return {
-    fontSize: theme.font.fixed.f16.fontSize,
-    lineHeight: theme.font.fixed.f16.lineHeight,
-    letterSpacing: '0px',
-  };
-};
 
 export default PieChart;

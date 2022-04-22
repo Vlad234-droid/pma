@@ -1,14 +1,12 @@
 import React, { FC } from 'react';
-import { IconButton } from 'components/IconButton';
 import { Rule, Styles, useStyle } from '@pma/dex-wrapper';
 import { InfoModalProps } from '../../type';
 import { Trans } from 'components/Translation';
-
+import { ArrowLeftIcon } from 'components/ArrowLeftIcon';
 export const MESSAGE_WRAPPER = 'message-wrapper';
 
 const InfoMessage: FC<InfoModalProps> = ({ goBack }) => {
-  const { css, theme, matchMedia } = useStyle();
-  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
+  const { css } = useStyle();
 
   return (
     <div className={css(wrapperInfo)} data-test-id={MESSAGE_WRAPPER}>
@@ -66,18 +64,7 @@ const InfoMessage: FC<InfoModalProps> = ({ goBack }) => {
           speak.
         </Trans>
       </h3>
-      <span
-        className={css({
-          position: 'fixed',
-          top: theme.spacing.s5,
-          left: mobileScreen ? theme.spacing.s5 : theme.spacing.s10,
-          textDecoration: 'none',
-          border: 'none',
-          cursor: 'pointer',
-        })}
-      >
-        <IconButton graphic='arrowLeft' onPress={goBack} iconProps={{ invertColors: true }} />
-      </span>
+      <ArrowLeftIcon onClick={goBack} testId={'testId'} />
     </div>
   );
 };

@@ -4,16 +4,23 @@ import { Rule, useStyle } from '@pma/dex-wrapper';
 import get from 'lodash.get';
 import { Field, Item, Select, Textarea, Attention } from 'components/Form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { colleagueUUIDSelector, FeedbackActions, getReviews } from '@pma/store';
 import * as Yup from 'yup';
 import { useForm } from 'react-hook-form';
-import { ActionButtons, ColleaguesFinder } from './';
-import { createRequestFeedbackSchema } from '../config';
-import { TileWrapper } from 'components/Tile';
-import { colleagueUUIDSelector, FeedbackActions, getReviews } from '@pma/store';
-import { IconButton } from 'components/IconButton';
-import { TargetType } from '../type';
-import { Tesco } from 'config/enum';
+import { useNavigate } from 'react-router';
+
+import { ColleaguesFinder } from './';
 import { useTranslation, Trans } from 'components/Translation';
+import { TileWrapper } from 'components/Tile';
+import { IconButton } from 'components/IconButton';
+import { ButtonsWrapper } from 'components/ButtonsWrapper';
+import { ArrowLeftIcon } from 'components/ArrowLeftIcon';
+
+import { createRequestFeedbackSchema } from '../config';
+import { Tesco } from 'config/enum';
+import { TargetType } from '../type';
+import { Page } from '../../../pages';
+import { buildPath } from '../../Routes';
 
 type Props = {
   onSubmit: (data: any) => void;
@@ -28,6 +35,7 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel, setIsInfoModalOpen }) 
   const dispatch = useDispatch();
   const reviews = useSelector(getReviews) || [];
   const currentColleagueUuid = useSelector(colleagueUUIDSelector);
+  const navigate = useNavigate();
 
   const AREA_OPTIONS = [
     { value: TargetType.GOAL, label: t('day_job', 'Day Job') },
@@ -78,6 +86,14 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel, setIsInfoModalOpen }) 
   const objectiveValue =
     reviews.find((item) => item.uuid === formValues?.targetId)?.properties?.mapJson?.title ?? Tesco.TescoBank;
 
+  const handleSelect = (colleagues) => {
+    setValue('colleagues', colleagues, { shouldDirty: true, shouldValidate: true });
+  };
+
+  const handleBlur = (fieldName: string) => {
+    setValue(fieldName, getValues(fieldName), { shouldValidate: true, shouldTouch: true });
+  };
+
   return (
     <>
       <div className={css({ paddingLeft: '40px', paddingRight: '40px', height: '100%', overflow: 'auto' })}>
@@ -92,7 +108,8 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel, setIsInfoModalOpen }) 
         </div>
         <form className={css({ marginTop: '20px' })}>
           <ColleaguesFinder
-            onSelect={(colleagues) => setValue('colleagues', colleagues, { shouldDirty: true, shouldValidate: true })}
+            onSelect={handleSelect}
+            onBlur={() => handleBlur('colleagues')}
             selected={formValues.colleagues || []}
             error={errors['colleagues']?.message}
           />
@@ -115,6 +132,8 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel, setIsInfoModalOpen }) 
                 name={'targetType'}
                 options={AREA_OPTIONS}
                 placeholder={t('choose_an_area', 'Choose an area')}
+                onBlur={() => handleBlur('targetType')}
+                error={errors['targetType']?.message}
                 //@ts-ignore
                 onChange={({ target: { value } }) => {
                   if (get(formValues, 'targetId') && value !== TargetType.OBJECTIVE) {
@@ -150,6 +169,8 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel, setIsInfoModalOpen }) 
                 <Select
                   options={[...objectiveOptions, { value: Tesco.TescoBank, label: Tesco.TescoBank }]}
                   name={'targetId'}
+                  onBlur={() => handleBlur('targetId')}
+                  error={errors['targetId']?.message}
                   placeholder={t('choose_objective', 'Choose objective')}
                   onChange={({ target: { value } }) => {
                     setValue('targetId', value, { shouldValidate: true });
@@ -221,27 +242,38 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel, setIsInfoModalOpen }) 
             />
           </TileWrapper>
         </form>
-        <ActionButtons isValid={isValid} onCancel={onCancel} onSubmit={handleSubmit(onSubmit)} />
+        <ButtonsWrapper
+          isValid={isValid}
+          onLeftPress={onCancel}
+          onRightPress={handleSubmit(onSubmit)}
+          rightTextWithIcon='submit'
+        />
+        <ArrowLeftIcon
+          onClick={() => {
+            navigate(buildPath(Page.FEEDBACK));
+          }}
+        />
       </div>
     </>
   );
 };
 
-const infoHelpStyle: Rule = {
-  color: '#00539F',
-  fontSize: '14px',
+const infoHelpStyle: Rule = ({ theme }) => ({
+  color: theme.colors.tescoBlue,
+  ...theme.font.fixed.f14,
+  letterSpacing: '0px',
   margin: '0px 0px 0px 8px',
-};
+});
 
 const withMargin: Rule = {
   marginTop: '32px',
 };
 
-const commentStyle: Rule = {
-  fontWeight: 'bold',
-  fontSize: '16px',
-  lineHeight: '20px',
+const commentStyle: Rule = ({ theme }) => ({
+  fontWeight: theme.font.weight.bold,
+  ...theme.font.fixed.f16,
+  letterSpacing: '0px',
   marginTop: '0px',
-};
+});
 
 export default RequestFeedback;
