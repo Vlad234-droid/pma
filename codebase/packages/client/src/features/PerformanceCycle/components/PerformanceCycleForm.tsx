@@ -26,9 +26,10 @@ type Props = {
   onSubmit: (data: any) => void;
   defaultValues?: any;
   getConfigEntriesByUuid: (uuid: string) => void;
+  canEdit?: boolean;
 };
 
-const PerformanceCycleForm: FC<Props> = ({ onSubmit, defaultValues }) => {
+const PerformanceCycleForm: FC<Props> = ({ onSubmit, defaultValues, canEdit = true }) => {
   const dispatch = useDispatch();
   const { css } = useStyle();
   const { t } = useTranslation();
@@ -108,20 +109,22 @@ const PerformanceCycleForm: FC<Props> = ({ onSubmit, defaultValues }) => {
           value={formValues.name}
           setValue={setValue}
           error={get(errors, 'name.message')}
+          readonly={!canEdit}
         />
         <Field
           name={'entryConfigKey'}
           Wrapper={Item}
-          label={t('entry_config_key', 'Entry config key')}
+          label={t('cycle_group', 'Cycle group')}
           Element={Select}
           options={mappingKeyOptions}
           placeholder={'Select entry config key'}
           value={formValues.entryConfigKey}
           setValue={setValue}
           error={get(errors, 'entryConfigKey.message')}
+          readonly={!canEdit}
         />
         <div className={css({ marginBottom: '23px' })}>{get(formValues, 'template.fileName', '')}</div>
-        <TemplatesModal onSelect={handleChangeTemplate} />
+        {canEdit && <TemplatesModal onSelect={handleChangeTemplate} />}
       </TileWrapper>
       <TileWrapper
         customStyle={{
@@ -149,6 +152,7 @@ const PerformanceCycleForm: FC<Props> = ({ onSubmit, defaultValues }) => {
               Wrapper={Item}
               Element={Datepicker}
               value={cycleStartTime}
+              readonly={!canEdit}
             />
           </div>
           <div className={css(itemStyle)}>
@@ -160,6 +164,7 @@ const PerformanceCycleForm: FC<Props> = ({ onSubmit, defaultValues }) => {
               Element={Datepicker}
               value={get(formValues, 'metadata.cycle.properties.pm_cycle_end_time')}
               setValue={methods.setValue}
+              readonly={!canEdit}
             />
           </div>
           <div className={css(itemStyle)}>
@@ -173,6 +178,7 @@ const PerformanceCycleForm: FC<Props> = ({ onSubmit, defaultValues }) => {
               )}
               Element={Input}
               value={get(formValues, 'metadata.cycle.properties.pm_cycle_max')}
+              readonly={!canEdit}
             />
           </div>
 
@@ -180,12 +186,20 @@ const PerformanceCycleForm: FC<Props> = ({ onSubmit, defaultValues }) => {
             <Item label={t('notifications', 'Notifications')} withIcon={false} />
             <div>
               <Item label={t('before_start', 'Before start')} withIcon={false}>
-                <DurationPicker control={control} name={`metadata.cycle.properties.pm_cycle_before_start`} />
+                <DurationPicker
+                  control={control}
+                  name={`metadata.cycle.properties.pm_cycle_before_start`}
+                  readonly={!canEdit}
+                />
               </Item>
             </div>
             <div className={css(itemStyle)}>
               <Item label={t('before_end', 'Before end')} withIcon={false}>
-                <DurationPicker control={control} name={`metadata.cycle.properties.pm_cycle_before_end`} />
+                <DurationPicker
+                  control={control}
+                  name={`metadata.cycle.properties.pm_cycle_before_end`}
+                  readonly={!canEdit}
+                />
               </Item>
             </div>
           </div>
@@ -213,9 +227,8 @@ const PerformanceCycleForm: FC<Props> = ({ onSubmit, defaultValues }) => {
             isTimelinePointsShow
               ? {
                   display: 'grid',
-                  gridTemplateColumns: 'repeat(4, minmax(180px, 1fr)) repeat(2, 100px)',
+                  gridTemplateColumns: 'repeat(4, minmax(150px, 1fr)) repeat(2, minmax(80px, 100px))',
                   gap: '8px',
-                  overflowY: 'scroll',
                 }
               : containerStyle,
           )}
@@ -233,35 +246,39 @@ const PerformanceCycleForm: FC<Props> = ({ onSubmit, defaultValues }) => {
           {timelinePoints?.map((point, index) => {
             return (
               <Fragment key={index}>
-                <div className={css(itemStyle)}>
+                <div className={css(itemStyle, { width: '100%' })}>
                   <Field
                     name={`metadata.cycle.timelinePoints[${index}].description`}
                     setValue={setValue}
                     Element={Input}
                     value={get(formValues, `metadata.cycle.timelinePoints[${index}].description`)}
+                    readonly
                   />
                 </div>
                 <div className={css({ display: 'flex', gap: '8px' })}>
-                  <div className={css(itemStyle)}>
+                  <div className={css(itemStyle, { width: '100%' })}>
                     <DurationPicker
                       control={control}
                       name={`metadata.cycle.timelinePoints[${index}].properties.pm_review_duration`}
+                      readonly={!canEdit}
                     />
                   </div>
                 </div>
                 <div className={css({ display: 'flex', gap: '8px' })}>
-                  <div className={css(itemStyle)}>
+                  <div className={css(itemStyle, { width: '100%' })}>
                     <DurationPicker
                       control={control}
                       name={`metadata.cycle.timelinePoints[${index}].properties.pm_review_before_start`}
+                      readonly={!canEdit}
                     />
                   </div>
                 </div>
                 <div className={css({ display: 'flex', gap: '8px' })}>
-                  <div className={css(itemStyle)}>
+                  <div className={css(itemStyle, { width: '100%' })}>
                     <DurationPicker
                       control={control}
                       name={`metadata.cycle.timelinePoints[${index}].properties.pm_review_before_end`}
+                      readonly={!canEdit}
                     />
                   </div>
                 </div>
@@ -273,6 +290,7 @@ const PerformanceCycleForm: FC<Props> = ({ onSubmit, defaultValues }) => {
                         setValue={setValue}
                         Element={Input}
                         value={get(formValues, `metadata.cycle.timelinePoints[${index}].properties.pm_review_min`)}
+                        readonly={!canEdit}
                       />
                     </div>
                     <div className={css(itemStyle, { maxWidth: '100px' })}>
@@ -281,6 +299,7 @@ const PerformanceCycleForm: FC<Props> = ({ onSubmit, defaultValues }) => {
                         setValue={setValue}
                         Element={Input}
                         value={get(formValues, `metadata.cycle.timelinePoints[${index}].properties.pm_review_max`)}
+                        readonly={!canEdit}
                       />
                     </div>
                   </>
@@ -296,20 +315,24 @@ const PerformanceCycleForm: FC<Props> = ({ onSubmit, defaultValues }) => {
         </div>
       </TileWrapper>
       <FormsViewer forms={forms} isActive={forms.length} />
-      <div className={css({ display: 'flex', justifyContent: 'flex-end', paddingBottom: '100px', maxWidth: '1300px' })}>
-        {/*@ts-ignore*/}
-        <Button
-          mode='inverse'
-          styles={[btnStyle]}
-          onPress={() => handleSubmit((data) => onSubmit({ ...data, mode: 'SAVE' }))()}
+      {canEdit && (
+        <div
+          className={css({ display: 'flex', justifyContent: 'flex-end', paddingBottom: '100px', maxWidth: '1300px' })}
         >
-          {t('save_as_draft', 'Save as draft')}
-        </Button>
-        {/*@ts-ignore*/}
-        <Button styles={[btnStyle]} onPress={() => handleSubmit((data) => onSubmit({ ...data, mode: 'PUBLISH' }))()}>
-          {t('save', 'Save')}
-        </Button>
-      </div>
+          {/*@ts-ignore*/}
+          <Button
+            mode='inverse'
+            styles={[btnStyle]}
+            onPress={() => handleSubmit((data) => onSubmit({ ...data, mode: 'SAVE' }))()}
+          >
+            {t('save_as_draft', 'Save as draft')}
+          </Button>
+          {/*@ts-ignore*/}
+          <Button styles={[btnStyle]} onPress={() => handleSubmit((data) => onSubmit({ ...data, mode: 'PUBLISH' }))()}>
+            {t('save', 'Save')}
+          </Button>
+        </div>
+      )}
     </form>
   );
 };

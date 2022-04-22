@@ -46,7 +46,6 @@ const containerStyle: CreateRule<{ hover: boolean; background: Colors; theme: Th
     background: colors[background],
     color: background === 'tescoBlue' ? colors.white : colors.base,
     borderRadius: theme.border.radius.md,
-    overflow: 'hidden',
   };
   if (hover) {
     return {

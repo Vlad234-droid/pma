@@ -1,9 +1,9 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import debounce from 'lodash.debounce';
 import { CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
 import { colleagueUUIDSelector, FeedbackActions, getGiveFeedbacksSelector } from '@pma/store';
-import debounce from 'lodash.debounce';
 import { buildSearchFeedbacksQuery, paramsReplacer } from 'utils';
 import { Page } from 'pages';
 import { FilterOption } from 'features/Shared';

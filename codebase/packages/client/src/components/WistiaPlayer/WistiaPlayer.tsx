@@ -1,5 +1,4 @@
 import React from 'react';
-
 import { useStyle, CreateRule, Rule } from '@pma/dex-wrapper';
 
 type Props = {

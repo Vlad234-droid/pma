@@ -1,12 +1,12 @@
 import React, { FC, Dispatch, SetStateAction } from 'react';
-import { Item } from 'components/Form';
-import { useStyle } from '@pma/dex-wrapper';
 import { UseFormReturn } from 'react-hook-form';
-import { SearchInput } from '../index';
-import { PeopleTypes } from '../type';
 import { useSelector } from 'react-redux';
 import { colleagueUUIDSelector } from '@pma/store';
+import { useStyle } from '@pma/dex-wrapper';
+import { Item } from 'components/Form';
 import useSearchColleagues from 'hooks/useSearchColleagues';
+import { PeopleTypes } from '../type';
+import { SearchInput } from '../index';
 
 type SearchPartProps = {
   teamMethods: UseFormReturn;

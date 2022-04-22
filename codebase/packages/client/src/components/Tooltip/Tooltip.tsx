@@ -5,7 +5,6 @@ import { useButton } from '@react-aria/button';
 import { useTooltipTriggerState } from '@react-stately/tooltip';
 import { mergeProps } from '@react-aria/utils';
 import { useInteractionModality } from '@react-aria/interactions';
-
 import { useStyle } from '@pma/dex-wrapper';
 
 type TooltipProps = {

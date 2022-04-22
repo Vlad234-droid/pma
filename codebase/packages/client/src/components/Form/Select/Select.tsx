@@ -39,6 +39,7 @@ const Select: FC<SelectField> = ({ domRef, name, options, placeholder, value, er
   }, [isOpen, isDirty]);
 
   const toggleList = () => {
+    if (readonly) return;
     setOpen((isOpen) => !isOpen);
     setIsDirty(true);
   };

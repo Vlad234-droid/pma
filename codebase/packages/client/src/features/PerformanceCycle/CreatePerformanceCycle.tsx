@@ -15,8 +15,9 @@ import useDispatch from 'hooks/useDispatch';
 import { Page } from 'pages';
 import { buildPath } from 'features/Routes';
 import { useToast, Variant } from 'features/Toast';
-import PerformanceCycleForm from './components/PerformanceCycleForm';
 import Spinner from 'components/Spinner';
+import PerformanceCycleForm from './components/PerformanceCycleForm';
+import { Status as PerformanceCycleStatus } from './type';
 
 const CreatePerformanceCycle: FC = () => {
   const dispatch = useDispatch();
@@ -30,6 +31,10 @@ const CreatePerformanceCycle: FC = () => {
   const { loaded: performanceCycleLoaded, status, error } = useSelector(performanceCycleMetaSelector);
 
   const getConfigEntriesByUuid = (uuid: string) => dispatch(ConfigEntriesActions.getConfigEntriesByUuid({ uuid }));
+
+  const canEdit = useMemo(() => {
+    return cycle?.status === PerformanceCycleStatus.DRAFT || cycle?.status === PerformanceCycleStatus.REGISTERED;
+  }, [cycle]);
 
   useEffect(() => {
     if (status === Status.SUCCEEDED) {
@@ -146,6 +151,7 @@ const CreatePerformanceCycle: FC = () => {
       onSubmit={handleSubmit}
       getConfigEntriesByUuid={getConfigEntriesByUuid}
       defaultValues={defaultValues}
+      canEdit={canEdit}
     />
   );
 };

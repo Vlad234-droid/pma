@@ -1,5 +1,4 @@
 import React, { FC, memo } from 'react';
-
 import { useStyle, CreateRule, colors } from '@pma/dex-wrapper';
 
 export type RoundIconProps = {

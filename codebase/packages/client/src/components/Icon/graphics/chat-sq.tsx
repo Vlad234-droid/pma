@@ -1,5 +1,4 @@
 import React from 'react';
-
 import { useStyle } from '@pma/dex-wrapper';
 
 import { invertColor } from '../utils';

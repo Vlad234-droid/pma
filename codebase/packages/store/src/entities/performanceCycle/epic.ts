@@ -11,6 +11,7 @@ import {
   getPerformanceCycleByUuid,
   publishPerformanceCycle,
   updatePerformanceCycle,
+  updatePerformanceCycleStatus,
   getPerformanceCycleMappingKeys,
 } from './actions';
 
@@ -88,6 +89,23 @@ export const updatePerformanceCyclesEpic: Epic = (action$, _, { api }) =>
     }),
   );
 
+export const updatePerformanceCycleStatusEpic: Epic = (action$, _, { api }) =>
+  action$.pipe(
+    filter(isActionOf(updatePerformanceCycleStatus.request)),
+    switchMap(({ payload }) => {
+      return from(api.updatePerformanceCycleStatus(payload)).pipe(
+        // @ts-ignore
+        map(({ data }) => {
+          return updatePerformanceCycle.success(data);
+        }),
+        catchError((error) => {
+          const { errors } = error?.data || {};
+          return of(updatePerformanceCycleStatus.failure(errors));
+        }),
+      );
+    }),
+  );
+
 export const publishPerformanceCyclesEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
     filter(isActionOf(publishPerformanceCycle.request)),
@@ -121,6 +139,7 @@ export default combineEpics(
   getGetPerformanceCyclesByUuidEpic,
   createPerformanceCyclesEpic,
   updatePerformanceCyclesEpic,
+  updatePerformanceCycleStatusEpic,
   publishPerformanceCyclesEpic,
   getPerformanceCycleMappingKeysEpic,
 );

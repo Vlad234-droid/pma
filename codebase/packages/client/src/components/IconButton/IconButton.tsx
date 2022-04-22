@@ -1,7 +1,5 @@
 import React, { FC, memo } from 'react';
-
 import { AriaButtonProps } from '@react-types/button';
-
 import { Rule, Button } from '@pma/dex-wrapper';
 
 import { Icon, IconProps, Graphics } from '../Icon';

@@ -1,5 +1,4 @@
 import React, { FC } from 'react';
-
 import { CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
 
 import { TileWrapper as Tile } from '../Tile/TileWrapper';

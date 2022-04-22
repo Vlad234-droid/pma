@@ -1,12 +1,12 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
 import { useStyle, Rule, CreateRule, Button } from '@pma/dex-wrapper';
+import { colleagueUUIDSelector, ReviewsActions } from '@pma/store';
 import { Trans } from 'components/Translation/Translation';
 import { TileWrapper } from 'components/Tile';
 import { Icon } from 'components/Icon';
 import { Employee, ReviewType, Status } from 'config/types';
 import { filterApprovedFn } from 'features/Actions/utils';
 import { useSelector } from 'react-redux';
-import { colleagueUUIDSelector, ReviewsActions } from '@pma/store';
 import useDispatch from 'hooks/useDispatch';
 import { DeclineModal, ApproveModal } from '../Modal';
 import { useSuccessModalContext } from '../../context/successModalContext';

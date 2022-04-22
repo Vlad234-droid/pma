@@ -1,10 +1,8 @@
 import React, { FC, useEffect } from 'react';
-
 import * as Yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { createYupSchema } from 'utils/yup';
-
 import { Rule, useStyle, Styles } from '@pma/dex-wrapper';
 import { FormType } from '@pma/store';
 
@@ -17,7 +15,6 @@ import MarkdownRenderer from 'components/MarkdownRenderer';
 import { GenericItemField } from 'components/GenericForm';
 import { ReviewType, Status } from 'config/enum';
 import { formTagComponents } from '../../../Objectives';
-// import { Style } from 'util';
 
 type Props = {
   review: any;

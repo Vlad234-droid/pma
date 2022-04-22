@@ -50,6 +50,7 @@ import { Tip } from './tip';
 import { MultiLanguage } from './multiLanguage';
 import { Close } from './close';
 import { Attention } from './attention';
+import { More } from './more';
 import { ArrowRightPaginator } from './arrowRightPaginator';
 import { ArrowLeftPaginator } from './arrowLeftPaginator';
 /**
@@ -109,6 +110,7 @@ export type Graphics =
   | 'tip'
   | 'tool'
   | 'attention'
+  | 'more'
   | 'arrowRightPaginator'
   | 'arrowLeftPaginator';
 
@@ -164,6 +166,7 @@ export const icons: Record<Graphics, FCGraphicProps> = {
   configuration: Configuration,
   tip: Tip,
   multiLanguage: MultiLanguage,
+  more: More,
   arrowRightPaginator: ArrowRightPaginator,
   arrowLeftPaginator: ArrowLeftPaginator,
 };

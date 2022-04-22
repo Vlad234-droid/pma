@@ -19,6 +19,10 @@ export const updatePerformanceCycle = (params: any) => {
   return httpClient.put(`${domain}/${params.uuid}`, params);
 };
 
+export const updatePerformanceCycleStatus = ({ uuid, status }: { uuid: string; status: string }) => {
+  return httpClient.patch(`${domain}/${uuid}/statuses/${status}`);
+};
+
 export const publishPerformanceCycle = (params: any) => {
   return httpClient.post(`${domain}/publish`, params);
 };

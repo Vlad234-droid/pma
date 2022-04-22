@@ -1,12 +1,12 @@
 import React, { FC, useCallback, ChangeEvent } from 'react';
-import { useStyle, Rule } from '@pma/dex-wrapper';
 import mergeRefs from 'react-merge-refs';
-import { InputProps } from '../type';
+import debounce from 'lodash.debounce';
+import { useStyle, Rule } from '@pma/dex-wrapper';
 import { useFormContainer } from 'components/Form/context/input';
 import defaultImg from 'images/default.png';
 import { ColleaguesActions } from '@pma/store';
 import { useDispatch } from 'react-redux';
-import debounce from 'lodash.debounce';
+import { InputProps } from '../type';
 
 const SearchInput: FC<InputProps> = ({
   domRef,

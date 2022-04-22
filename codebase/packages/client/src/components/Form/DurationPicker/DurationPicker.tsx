@@ -1,12 +1,14 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useRef } from 'react';
 import { Controller } from 'react-hook-form';
 import { Button, useStyle } from '@pma/dex-wrapper';
+import useClickOutside from 'hooks/useClickOutside';
 import { Input } from '../Input';
 import { TileWrapper } from '../../Tile';
 
 export interface DurationField {
   name: string;
   control?: any;
+  readonly?: boolean;
 }
 
 const mappedValues = {
@@ -19,11 +21,14 @@ type DurationReplacer = (matched: 'P' | 'W' | 'D') => string;
 
 export const TEST_ID = 'duration-test-id';
 
-export const DurationPicker: FC<DurationField> = ({ control, name }) => {
+export const DurationPicker: FC<DurationField> = ({ control, name, readonly = false }) => {
   const { css } = useStyle();
+  const containerRef = useRef<HTMLDivElement>(null);
   const [weeks, setWeeks] = useState('');
   const [days, setDays] = useState('');
-  const [showDialog, setShowDialog] = useState(false);
+  const [isOpen, toggleOpen] = useState(false);
+
+  useClickOutside(containerRef, () => toggleOpen(false));
 
   return (
     <Controller
@@ -45,13 +50,19 @@ export const DurationPicker: FC<DurationField> = ({ control, name }) => {
         //
         const replacer: DurationReplacer = (matched) => mappedValues[matched];
         return (
-          <div data-test-id={TEST_ID} className='dropdown-container' style={{ width: '200px', position: 'relative' }}>
+          <div
+            data-test-id={TEST_ID}
+            className='dropdown-container'
+            style={{ position: 'relative' }}
+            ref={containerRef}
+          >
             <Input
               onChange={() => ({})}
-              onFocus={() => setShowDialog(!showDialog)}
+              onFocus={() => toggleOpen(!isOpen)}
               value={field?.value?.replace(/[PWD]/gi, replacer)}
+              readonly={readonly}
             />
-            {showDialog && (
+            {isOpen && (
               <TileWrapper
                 customStyle={{
                   margin: '8px',
@@ -98,7 +109,7 @@ export const DurationPicker: FC<DurationField> = ({ control, name }) => {
                       setDays(target.value);
                     }}
                   />
-                  <Button onPress={() => setShowDialog(!showDialog)}>Done</Button>
+                  <Button onPress={() => toggleOpen(!isOpen)}>Done</Button>
                 </div>
               </TileWrapper>
             )}
