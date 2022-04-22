@@ -50,6 +50,7 @@ import { buildPath } from 'features/Routes';
 import Spinner from 'components/Spinner';
 import EditButton from '../Buttons/EditButton';
 import { File } from '../../../ReviewFiles/components/components/File';
+import { CompletedReviewsModal } from 'features/CompletedReviews';
 
 const reviews = [];
 
@@ -75,6 +76,7 @@ const MyObjectives: FC = () => {
   const midYearReview = useSelector(getTimelineByCodeSelector(ObjectiveType.MYR, 'me'));
   const endYearReview = useSelector(getTimelineByCodeSelector(ObjectiveType.EYR, 'me'));
   const [previousReviewFilesModalShow, setPreviousReviewFilesModalShow] = useState(false);
+  const [isCompletedReviewsModalOpen, setCompletedReviewsModalOpen] = useState(false);
   const [objectives, setObjectives] = useState<OT.Objective[]>([]);
 
   const document = useMemo(() => <ObjectiveDocument items={objectives} />, [JSON.stringify(objectives)]);
@@ -297,6 +299,32 @@ const MyObjectives: FC = () => {
                   left={{
                     content: (
                       <div className={css(title)}>
+                        <Trans i18nKey='completed_reviews'>Completed Reviews</Trans>
+                      </div>
+                    ),
+                  }}
+                  right={{
+                    content: (
+                      <div>
+                        <Button
+                          mode='inverse'
+                          onPress={() => setCompletedReviewsModalOpen(true)}
+                          styles={[linkStyles({ theme })]}
+                        >
+                          <Trans className={css(title)} i18nKey='view_history'>
+                            View history
+                          </Trans>
+                        </Button>
+                      </div>
+                    ),
+                  }}
+                >
+                  <div className={css(emptyBlockStyle)}>You have no completed reviews</div>
+                </Section>
+                <Section
+                  left={{
+                    content: (
+                      <div className={css(title)}>
                         <Trans i18nKey='previous_review_files'>Previous Review Files</Trans>
                       </div>
                     ),
@@ -361,6 +389,7 @@ const MyObjectives: FC = () => {
           colleagueUUID={colleagueUuid}
         />
       )}
+      {isCompletedReviewsModalOpen && <CompletedReviewsModal onClose={() => setCompletedReviewsModalOpen(false)} />}
     </div>
   );
 };

@@ -225,5 +225,6 @@
   "missed_fields/profile/firstName": "First name",
   "missed_fields/profile/lastName": "Last name",
   "missed_fields/workRelationships/job/name": "Job name",
-  "missed_fields/workRelationships/department/name": "Department name"
+  "missed_fields/workRelationships/department/name": "Department name",
+  "full_date": "{{date, d LLL yyyy}}"
 }
