@@ -36,7 +36,7 @@ const FeedbackProfileInfo: FC<ProfileProps> = ({
         </div>
       </div>
       <div className={css({ display: 'flex', justifyContent: 'center', alignItems: 'center' })}>
-        <div className={css({ marginRight: '26px' })}>{formatToRelativeDate(updatedTime)}</div>
+        <div className={css({ marginRight: '26px' })}>{updatedTime}</div>
         <div data-test-id={TEST_ID}>
           {onExpandPress ? (
             <ExpandButton
