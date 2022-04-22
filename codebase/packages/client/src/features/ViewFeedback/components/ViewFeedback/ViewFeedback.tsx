@@ -376,6 +376,7 @@ const shareFeedbackStyled: Rule = ({ theme }) => ({
 });
 
 const reverseItemsStyled: Rule = ({ theme }) => ({
+  width: '100%',
   display: 'flex',
   flexWrap: 'wrap-reverse',
   gridGap: theme.spacing.s2,
@@ -392,7 +393,6 @@ const buttonsActionsStyle: CreateRule<{ mobileScreen: boolean }> =
   ({ mobileScreen }) =>
   ({ theme }) => ({
     width: mobileScreen ? '100%' : '400px',
-    flex: '1 0 250px',
     '& > div': {
       '&:nth-child(2)': {
         marginTop: theme.spacing.s4,
