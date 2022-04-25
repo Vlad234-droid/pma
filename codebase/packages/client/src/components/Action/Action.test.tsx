@@ -12,11 +12,13 @@ describe('Action', () => {
     expect(action).toBeInTheDocument();
   });
 
-  it('Action items render correctly', () => {
+  it('Action items render correctly', async () => {
     const { getByTestId } = render(<Action items={[]} />);
     const icon = getByTestId(ICON_TEST_ID);
     fireEvent.click(icon);
-    const items = getByTestId(ITEMS_TEST_ID);
-    waitFor(() => expect(items).toBeInTheDocument());
+    await waitFor(() => {
+      const items = getByTestId(ITEMS_TEST_ID);
+      expect(items).toBeInTheDocument();
+    });
   });
 });

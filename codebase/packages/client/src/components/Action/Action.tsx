@@ -22,7 +22,7 @@ const Action: FC<Props> = ({ items }) => {
 
   return (
     <div className={css({ position: 'relative' })} ref={ref} data-test-id={TEST_ID}>
-      <Icon graphic={'more'} onClick={handleOpen} data-test-id={ICON_TEST_ID} />
+      <Icon graphic={'more'} onClick={handleOpen} containerTestId={ICON_TEST_ID} />
       {isOpen && (
         <div className={css(modalStyle)} data-test-id={ITEMS_TEST_ID}>
           {items.map(({ icon, text, action }, idx) => (

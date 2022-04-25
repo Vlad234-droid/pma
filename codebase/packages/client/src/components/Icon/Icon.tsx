@@ -12,6 +12,7 @@ export type IconBaseProps = {
   iconStyles?: Rule;
   invertColors?: boolean;
   testId?: string;
+  containerTestId?: string;
   onClick?: () => void;
 };
 
@@ -31,6 +32,7 @@ export const Icon: FC<IconProps> = ({
   iconStyles = {},
   invertColors = false,
   testId,
+  containerTestId,
   backgroundRadius,
   onClick,
   ...styles
@@ -43,7 +45,7 @@ export const Icon: FC<IconProps> = ({
   const customTitle = title ?? getTitle(CustomIcon.name);
 
   return (
-    <div onClick={onClick} className={css({ display: 'flex' })}>
+    <div onClick={onClick} className={css({ display: 'flex' })} data-test-id={containerTestId}>
       <svg
         data-test-id={testId}
         fill='none'
