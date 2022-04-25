@@ -20,7 +20,6 @@ type Props = {
   canEdit: boolean;
 };
 
-// TODO: Extract duplicate 12
 const FeedbackBlock: FC<Props> = ({ list, canEdit }) => {
   const { loaded } = useSelector(getLoadedStateSelector);
 
