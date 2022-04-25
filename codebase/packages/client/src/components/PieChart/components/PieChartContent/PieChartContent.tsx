@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { useStyle, Rule, CreateRule, Theme } from '@pma/dex-wrapper';
+import { useStyle, Rule, CreateRule } from '@pma/dex-wrapper';
 import { useTranslation } from 'components/Translation';
 
 import { useChartDataStatistics } from 'features/useChartDataStatistics';
@@ -8,7 +8,7 @@ import { PieChartContentProps as Props, View, Obj } from '../../config';
 export const TEST_ID = 'pie-chart-content-id';
 
 const PieChartContent: FC<Props> = ({ title, titleId, data, display, percentId }) => {
-  const { css, theme } = useStyle();
+  const { css } = useStyle();
   const { t } = useTranslation();
 
   const chartData = Array.isArray(data) ? data : useChartDataStatistics(t, data) || [];
@@ -16,7 +16,7 @@ const PieChartContent: FC<Props> = ({ title, titleId, data, display, percentId }
   return (
     <>
       {title && (
-        <h3 data-test-id={titleId} className={css(titleStyled({ chartData, theme }))}>
+        <h3 data-test-id={titleId} className={css(titleStyled({ chartData }))}>
           {title}
         </h3>
       )}
@@ -25,7 +25,7 @@ const PieChartContent: FC<Props> = ({ title, titleId, data, display, percentId }
           const percent = item?.['percent'] || 0;
           return (
             <div className={css(chartWrapper)} key={i}>
-              <div className={css(progress({ percent, theme, chartData, display }))}>
+              <div className={css(progress({ percent, chartData, display }))}>
                 <div className={css(progressValue)} data-test-id={percentId}>
                   {percent}
                   {`${display === View.CHART ? `%` : ''}`}
@@ -59,39 +59,42 @@ const chartContainer: CreateRule<{ display: View.CHART | View.QUANTITY }> = ({ d
       }),
 });
 
-const titleStyled: CreateRule<{ chartData: Array<Obj>; theme: Theme }> = ({ chartData, theme }) => ({
-  fontStyle: 'normal',
-  fontWeight: theme.font.weight.bold,
-  fontSize: theme.font.fixed.f20.fontSize,
-  lineHeight: theme.font.fixed.f20.lineHeight,
-  letterSpacing: '0px',
-  color: theme.colors.link,
-  marginTop: '0px',
-  textAlign: 'center',
-  marginBottom: chartData.length === 1 ? '16px' : chartData.length >= 2 ? '32px' : '16px',
-});
+const titleStyled: CreateRule<{ chartData: Array<Obj> }> =
+  ({ chartData }) =>
+  ({ theme }) => ({
+    fontStyle: 'normal',
+    fontWeight: theme.font.weight.bold,
+    fontSize: theme.font.fixed.f20.fontSize,
+    lineHeight: theme.font.fixed.f20.lineHeight,
+    letterSpacing: '0px',
+    color: theme.colors.link,
+    marginTop: '0px',
+    textAlign: 'center',
+    marginBottom: chartData.length === 1 ? '16px' : chartData.length >= 2 ? '32px' : '16px',
+  });
 
 const progress: CreateRule<{
   percent: number;
-  theme: Theme;
   chartData: Array<Obj>;
   display: View.CHART | View.QUANTITY;
-}> = ({ percent, theme, chartData, display }) => ({
-  ...(display === View.CHART && {
-    height: chartData.length >= 2 ? '80px' : '98px',
-    width: chartData.length >= 2 ? '80px' : '98px',
-  }),
-  borderRadius: '50%',
-  display: 'grid',
-  placeItems: 'center',
-  ...(display === View.CHART && {
-    background: `conic-gradient(${theme.colors.link} ${percent}%, #CFD8DC ${percent}%)`,
-  }),
-});
+}> =
+  ({ percent, chartData, display }) =>
+  ({ theme }) => ({
+    ...(display === View.CHART && {
+      height: chartData.length >= 2 ? '80px' : '98px',
+      width: chartData.length >= 2 ? '80px' : '98px',
+    }),
+    borderRadius: '50%',
+    display: 'grid',
+    placeItems: 'center',
+    ...(display === View.CHART && {
+      background: `conic-gradient(${theme.colors.link} ${percent}%, #CFD8DC ${percent}%)`,
+    }),
+  });
 const progressValue: Rule = ({ theme }) => ({
   height: 'calc(100% - 18px)',
   width: 'calc(100% - 18px)',
-  background: '#ffff',
+  background: theme.colors.white,
   borderRadius: '50%',
   display: 'flex',
   alignItems: 'center',

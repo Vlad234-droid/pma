@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { useStyle, colors } from '@pma/dex-wrapper';
+import { useStyle, CreateRule, Rule } from '@pma/dex-wrapper';
 import { CheckboxField } from '../types';
 
 const Checkbox: FC<CheckboxField> = ({ id, name, onChange, checked, disabled = false, indeterminate = false }) => {
@@ -8,60 +8,7 @@ const Checkbox: FC<CheckboxField> = ({ id, name, onChange, checked, disabled = f
     <span>
       <input
         disabled={disabled}
-        className={css(
-          {
-            width: '20px',
-            height: '20px',
-            appearance: 'none',
-            backgroundColor: colors.white,
-            border: `2px solid ${colors.tescoBlue}`,
-            padding: '9px',
-            borderRadius: '0px',
-            display: 'inline-block',
-            position: 'relative',
-            cursor: 'pointer',
-            ...(indeterminate
-              ? {
-                  backgroundColor: colors.tescoBlue,
-                  ':before': {
-                    content: '"I"',
-                    position: 'absolute',
-                    display: 'inline-block',
-                    color: colors.white,
-                    fontSize: '18px',
-                    lineHeight: '22px',
-                    letterSpacing: '0px',
-                    fontWeight: 'bold',
-                    transform: 'rotate(90deg)',
-                    bottom: '-2px',
-                    right: '7px',
-                  },
-                }
-              : checked && {
-                  backgroundColor: colors.tescoBlue,
-                  ':before': {
-                    content: '"L"',
-                    position: 'absolute',
-                    display: 'inline-block',
-                    bottom: '2px',
-                    color: colors.white,
-                    transform: 'rotate(45deg) scale(-1,1)',
-                    left: '5px',
-                    fontSize: '18px',
-                    lineHeight: '22px',
-                    letterSpacing: '0px',
-                    fontWeight: 'bold',
-                    height: '100%',
-                  },
-                }),
-          },
-          disabled
-            ? {
-                backgroundColor: colors.disabled,
-                opacity: 0.2,
-              }
-            : {},
-        )}
+        className={css(inputStyle({ indeterminate, checked }), disabled ? inputDisabledStyle : {})}
         id={id}
         name={name}
         data-test-id={name}
@@ -77,5 +24,59 @@ const Checkbox: FC<CheckboxField> = ({ id, name, onChange, checked, disabled = f
     </span>
   );
 };
+
+const inputStyle: CreateRule<{ indeterminate: boolean; checked?: boolean }> =
+  ({ indeterminate, checked }) =>
+  ({ theme }) => ({
+    width: '20px',
+    height: '20px',
+    appearance: 'none',
+    backgroundColor: theme.colors.white,
+    border: `2px solid ${theme.colors.tescoBlue}`,
+    padding: '9px',
+    borderRadius: '0px',
+    display: 'inline-block',
+    position: 'relative',
+    cursor: 'pointer',
+    ...(indeterminate
+      ? {
+          backgroundColor: theme.colors.tescoBlue,
+          ':before': {
+            content: '"I"',
+            position: 'absolute',
+            display: 'inline-block',
+            color: theme.colors.white,
+            fontSize: theme.font.fixed.f18.fontSize,
+            lineHeight: theme.font.fixed.f18.lineHeight,
+            letterSpacing: '0px',
+            fontWeight: theme.font.weight.bold,
+            transform: 'rotate(90deg)',
+            bottom: '-2px',
+            right: '7px',
+          },
+        }
+      : checked && {
+          backgroundColor: theme.colors.tescoBlue,
+          ':before': {
+            content: '"L"',
+            position: 'absolute',
+            display: 'inline-block',
+            bottom: '2px',
+            color: theme.colors.white,
+            transform: 'rotate(45deg) scale(-1,1)',
+            left: '5px',
+            fontSize: theme.font.fixed.f18.fontSize,
+            lineHeight: theme.font.fixed.f18.lineHeight,
+            letterSpacing: '0px',
+            fontWeight: theme.font.weight.bold,
+            height: '100%',
+          },
+        }),
+  });
+
+const inputDisabledStyle: Rule = ({ theme }) => ({
+  backgroundColor: theme.colors.disabled,
+  opacity: 0.2,
+});
 
 export default Checkbox;

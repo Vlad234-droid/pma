@@ -46,9 +46,10 @@ const Tooltip: FC<AriaTooltipProps & TooltipProps> = (props) => {
         className={css({
           display: 'inline-block',
           color: theme.colors.white,
-          fontSize: '12px',
+          fontSize: theme.font.fixed.f12.fontSize,
+          lineHeight: theme.font.fixed.f12.lineHeight,
+          letterSpacing: '0px',
           fontWeight: 'normal',
-          lineHeight: '16px',
           padding: '4px',
         })}
       >

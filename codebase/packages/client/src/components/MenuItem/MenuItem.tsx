@@ -41,15 +41,17 @@ export const styledTitle: Rule = ({ theme }) => {
   };
 };
 
-export const wrapperStyles: Rule = {
+export const wrapperStyles: Rule = ({ theme }) => ({
   height: '100%',
   padding: '18px 8px 8px',
-  fontSize: '12px',
+  fontSize: theme.font.fixed.f12.fontSize,
+  lineHeight: theme.font.fixed.f12.lineHeight,
+  letterSpacing: '0px',
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
   textAlign: 'center',
-};
+});
 
 export const iconStyles: Rule = {
   minWidth: '20px',

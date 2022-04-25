@@ -1,5 +1,5 @@
 import React, { FC, HTMLProps } from 'react';
-import { Button, useStyle } from '@pma/dex-wrapper';
+import { Button, useStyle, Rule, CreateRule } from '@pma/dex-wrapper';
 
 import { WrapperModal } from 'features/Modal';
 import { Trans } from 'components/Translation';
@@ -25,24 +25,13 @@ const DefaultMark = (
 );
 
 const SuccessModal: FC<Props> = ({ onClose, description, mark = DefaultMark, title }) => {
-  const { css, theme, matchMedia } = useStyle();
+  const { css, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
 
   return (
     <WrapperModal title={title} onClose={onClose} onOverlayClick={onClose}>
-      <div
-        data-test-id='success-modal'
-        className={css({
-          height: '100%',
-        })}
-      >
-        <div
-          className={css({
-            height: '100%',
-            overflow: 'auto',
-            padding: mobileScreen ? '0 16px' : '0 40px',
-          })}
-        >
+      <div data-test-id='success-modal' className={css(wrapperStyle)}>
+        <div className={css(containerStyle({ mobileScreen }))}>
           <div style={{ textAlign: 'center' }}>
             <span
               style={{
@@ -55,36 +44,13 @@ const SuccessModal: FC<Props> = ({ onClose, description, mark = DefaultMark, tit
                 {mark}
               </svg>
             </span>
-            <div
-              className={css({
-                fontSize: '28px',
-                lineHeight: '32px',
-                fontWeight: 'bold',
-                padding: '10px',
-              })}
-            >
+            <div className={css(titleStyle)}>
               <Trans i18nKey='done'>Done</Trans>!
             </div>
-            <div
-              className={css({
-                fontSize: '24px',
-                lineHeight: '28px',
-                padding: '10px',
-              })}
-            >
-              {description}
-            </div>
+            <div className={css(descriptionStyle)}>{description}</div>
           </div>
         </div>
-        <div
-          className={css({
-            position: 'relative',
-            bottom: 0,
-            left: 0,
-            right: 0,
-            borderTop: '2px solid #E5E5E5',
-          })}
-        >
+        <div className={css(buttonWrapperStyle)}>
           <div
             className={css({
               padding: '36px 36px',
@@ -92,21 +58,7 @@ const SuccessModal: FC<Props> = ({ onClose, description, mark = DefaultMark, tit
               justifyContent: 'center',
             })}
           >
-            <Button
-              styles={[
-                {
-                  background: 'white',
-                  border: `2px solid ${theme.colors.tescoBlue}`,
-                  fontSize: '16px',
-                  lineHeight: '20px',
-                  fontWeight: 'bold',
-                  color: `${theme.colors.tescoBlue}`,
-                  width: '50%',
-                  margin: '0px 4px',
-                },
-              ]}
-              onPress={onClose}
-            >
+            <Button styles={[buttonStyle]} onPress={onClose}>
               <Trans i18nKey='okay'>Okay</Trans>
             </Button>
           </div>
@@ -115,5 +67,50 @@ const SuccessModal: FC<Props> = ({ onClose, description, mark = DefaultMark, tit
     </WrapperModal>
   );
 };
+
+const wrapperStyle: Rule = { height: '100%' };
+
+const containerStyle: CreateRule<{
+  mobileScreen: boolean;
+}> = ({ mobileScreen }) => ({
+  height: '100%',
+  overflow: 'auto',
+  padding: mobileScreen ? '0 16px' : '0 40px',
+});
+
+const titleStyle: Rule = ({ theme }) => ({
+  fontSize: theme.font.fixed.f28.fontSize,
+  lineHeight: theme.font.fixed.f28.lineHeight,
+  letterSpacing: '0px',
+  fontWeight: theme.font.weight.bold,
+  padding: '10px',
+});
+const descriptionStyle: Rule = ({ theme }) => ({
+  fontSize: theme.font.fixed.f24.fontSize,
+  lineHeight: theme.font.fixed.f24.lineHeight,
+  letterSpacing: '0px',
+  padding: '10px',
+});
+
+const buttonWrapperStyle: Rule = ({ theme }) => ({
+  position: 'relative',
+  bottom: 0,
+  left: 0,
+  right: 0,
+  // @ts-ignore
+  borderTop: `${theme.border.width.b2} solid ${theme.colors.lightGray}`,
+});
+
+const buttonStyle: Rule = ({ theme }) => ({
+  background: 'white',
+  border: `2px solid ${theme.colors.tescoBlue}`,
+  fontSize: theme.font.fixed.f16.fontSize,
+  lineHeight: theme.font.fixed.f16.lineHeight,
+  letterSpacing: '0px',
+  fontWeight: theme.font.weight.bold,
+  color: `${theme.colors.tescoBlue}`,
+  width: '50%',
+  margin: '0px 4px',
+});
 
 export default SuccessModal;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { CreateRule, Rule, Theme, useStyle } from '@pma/dex-wrapper';
+import { Rule, useStyle } from '@pma/dex-wrapper';
 
 interface MenuItemInterface {
   name: string;
@@ -8,14 +8,14 @@ interface MenuItemInterface {
 }
 
 const LeftsideMenuItem = (props: MenuItemInterface) => {
-  const { css, theme } = useStyle();
+  const { css } = useStyle();
 
   return (
-    <div className={css(menuItem({ theme }))}>
+    <div className={css(menuItem)}>
       <div className={css(icon)}>
         <img alt={props.imgUrl} src={props.imgUrl} />
         {props.notifyCount && props.notifyCount > 0 ? (
-          <span data-test-id={'NOTIFY_COUNTER'} className={css(redBadge({ theme }))}>
+          <span data-test-id={'NOTIFY_COUNTER'} className={css(redBadge)}>
             {props.notifyCount}
           </span>
         ) : null}
@@ -25,46 +25,39 @@ const LeftsideMenuItem = (props: MenuItemInterface) => {
   );
 };
 
-const redBadge: CreateRule<{ theme: Theme }> = (props) => {
-  if (props == null) return {};
-  const { theme } = props;
-  return {
-    position: 'absolute',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'red',
-    minWidth: '16px',
-    minHeight: '16px',
-    boxSizing: 'border-box',
-    color: `${theme.colors.white}`,
-    fontWeight: 'bold',
-    fontSize: `${theme.font.fixed.f12}`,
-    borderRadius: '30px',
-    top: '0px',
-    right: '0px',
-  };
-};
+const redBadge: Rule = ({ theme }) => ({
+  position: 'absolute',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  backgroundColor: theme.colors.tescoRed,
+  minWidth: '16px',
+  minHeight: '16px',
+  boxSizing: 'border-box',
+  color: `${theme.colors.white}`,
+  fontSize: theme.font.fixed.f12.fontSize,
+  lineHeight: theme.font.fixed.f12.lineHeight,
+  fontWeight: theme.font.weight.bold,
+  borderRadius: '30px',
+  top: '0px',
+  right: '0px',
+});
 
-const menuItem: CreateRule<{ theme: Theme }> = (props) => {
-  if (props == null) return {};
-  const { theme } = props;
-  return {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection: 'column',
-    fontSize: '12px',
-    fontWeight: 'normal',
-    lineHeight: '16px',
-    color: `${theme.colors.white}`,
-    boxSizing: 'border-box',
-    marginTop: '40px',
-    cursor: 'pointer',
-  };
-};
+const menuItem: Rule = ({ theme }) => ({
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  flexDirection: 'column',
+  fontSize: theme.font.fixed.f12.fontSize,
+  lineHeight: theme.font.fixed.f12.lineHeight,
+  fontWeight: 'normal',
+  color: `${theme.colors.white}`,
+  boxSizing: 'border-box',
+  marginTop: '40px',
+  cursor: 'pointer',
+});
 
-const icon = {
+const icon: Rule = {
   position: 'relative',
   display: 'flex',
   justifyContent: 'center',
@@ -72,6 +65,6 @@ const icon = {
   width: '40px',
   height: '40px',
   marginBottom: '7px',
-} as Rule;
+};
 
 export default LeftsideMenuItem;

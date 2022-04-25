@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { useNavigate } from 'react-router';
-import { CreateRule, Icon, ModalWithHeader, Rule, Theme, useStyle } from '@pma/dex-wrapper';
+import { CreateRule, Icon, ModalWithHeader, Rule, useStyle } from '@pma/dex-wrapper';
 import Details from 'components/Details';
 import { Attention } from 'components/Form';
 
@@ -14,7 +14,7 @@ export type Props = {
 };
 
 const Popup: FC<Props> = ({ items }) => {
-  const { css, theme, matchMedia } = useStyle();
+  const { css, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const navigate = useNavigate();
 
@@ -32,7 +32,7 @@ const Popup: FC<Props> = ({ items }) => {
       }}
     >
       <div data-test-id={TEST_ID} className={css(main)}>
-        <div className={css(decsriptionHeader({ theme }))}>Your organisation&#39;s strategic drivers</div>
+        <div className={css(descriptionHeader)}>Your organisation&#39;s strategic drivers</div>
         <Attention />
         <div className={css(templatesListStyles)}>
           {items.map((obj, idx) => {
@@ -68,14 +68,12 @@ const templatesModalWindowStyles: CreateRule<{ mobileScreen }> = ({ mobileScreen
   };
 };
 
-const decsriptionHeader: CreateRule<{ theme: Theme }> = (props) => {
-  if (props == null) return {};
-  return {
-    fontSize: '24px',
-    lineHeight: '28px',
-    fontWeight: 'bold',
-    paddingBottom: '8px',
-  };
-};
+const descriptionHeader: Rule = ({ theme }) => ({
+  fontSize: theme.font.fixed.f24.fontSize,
+  lineHeight: theme.font.fixed.f24.lineHeight,
+  letterSpacing: '0px',
+  fontWeight: theme.font.weight.bold,
+  paddingBottom: '8px',
+});
 
 export default Popup;

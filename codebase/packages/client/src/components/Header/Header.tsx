@@ -1,6 +1,6 @@
 import React, { FC, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { IconButton, Rule, Styles, useStyle, CreateRule, Theme } from '@pma/dex-wrapper';
+import { IconButton, Rule, Styles, useStyle, CreateRule } from '@pma/dex-wrapper';
 
 import { Graphics, RoundIcon, Icon } from 'components/Icon';
 import { AlertDrawer, AlertBadge, useMessagesContext } from 'features/Messages';
@@ -21,7 +21,7 @@ export const TEST_ID = 'header';
 export const BACK_BTN_TEST_ID = 'header-back';
 
 const Header: FC<HeaderProps> = ({ title, onBack, withIcon, iconName = 'home', styles = {} }) => {
-  const { css, theme, matchMedia } = useStyle();
+  const { css, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const navigate = useNavigate();
   const { pathname, state }: any = useLocation();
@@ -66,7 +66,7 @@ const Header: FC<HeaderProps> = ({ title, onBack, withIcon, iconName = 'home', s
     <div className={css(wrapperStyles, styles)} data-test-id={TEST_ID}>
       <DataModal />
       {onBack ? <IconButton onPress={onBack} graphic='backwardLink' data-test-id={BACK_BTN_TEST_ID} /> : <div />}
-      <h3 className={css(headerStyles({ mobileScreen, onBack, theme }))}>
+      <h3 className={css(headerStyles({ mobileScreen, onBack }))}>
         {withIcon && (
           <div className={css(iconWrapperStyle)}>
             <Icon graphic={iconName} />
@@ -108,24 +108,26 @@ const wrapperStyles: Rule = {
   justifyContent: 'space-between',
 };
 
-const headerStyles: CreateRule<{ mobileScreen; onBack; theme: Theme }> = ({ mobileScreen, onBack, theme }) => ({
-  fontSize: theme.font.fixed.f24.fontSize,
-  lineHeight: theme.font.fixed.f24.lineHeight,
-  letterSpacing: '0px',
-  display: 'flex',
-  alignItems: 'center',
-  color: theme.colors.tescoBlue,
-  marginRight: 'auto',
-  ...(mobileScreen
-    ? {
-        marginLeft: '25px',
-        paddingLeft: 0,
-      }
-    : {
-        marginLeft: 'auto',
-        paddingLeft: onBack ? '66px' : '91px',
-      }),
-});
+const headerStyles: CreateRule<{ mobileScreen; onBack }> =
+  ({ mobileScreen, onBack }) =>
+  ({ theme }) => ({
+    fontSize: theme.font.fixed.f24.fontSize,
+    lineHeight: theme.font.fixed.f24.lineHeight,
+    letterSpacing: '0px',
+    display: 'flex',
+    alignItems: 'center',
+    color: theme.colors.tescoBlue,
+    marginRight: 'auto',
+    ...(mobileScreen
+      ? {
+          marginLeft: '25px',
+          paddingLeft: 0,
+        }
+      : {
+          marginLeft: 'auto',
+          paddingLeft: onBack ? '66px' : '91px',
+        }),
+  });
 
 const iconWrapperStyle: Rule = { height: '24px', marginRight: '10px', '& > span': { display: 'flex' } } as Styles;
 

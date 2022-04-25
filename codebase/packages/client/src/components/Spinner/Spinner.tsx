@@ -77,6 +77,7 @@ const loaderStyles: Rule = ({ theme }) => ({
 
 const textStyles: Rule = ({ theme }) => ({
   marginLeft: '16px',
-  fontSize: `${theme.font.fixed.f20.fontSize}`,
-  lineHeight: `${theme.font.fixed.f20.lineHeight}`,
+  fontSize: theme.font.fixed.f20.fontSize,
+  lineHeight: theme.font.fixed.f20.lineHeight,
+  letterSpacing: '0px',
 });

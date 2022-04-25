@@ -64,13 +64,13 @@ const wrapperStyle: Rule = {
   letterSpacing: '0px',
 };
 
-const textStyle: Rule = {
-  color: colors.base,
-  fontSize: '14px',
-  lineHeight: '18px',
+const textStyle: Rule = ({ theme }) => ({
+  color: theme.colors.base,
+  fontSize: theme.font.fixed.f14.fontSize,
+  lineHeight: theme.font.fixed.f14.lineHeight,
   letterSpacing: '0px',
   paddingLeft: '5px',
-};
+});
 
 const buttonDefaultStyle: Rule = {
   marginLeft: 'auto',

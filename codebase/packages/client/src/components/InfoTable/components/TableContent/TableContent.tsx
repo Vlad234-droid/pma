@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { useStyle, Rule, Theme, CreateRule, Styles } from '@pma/dex-wrapper';
+import { useStyle, Rule, CreateRule, Styles } from '@pma/dex-wrapper';
 import { useChartDataStatistics } from 'features/useChartDataStatistics';
 import { IconButton } from 'components/IconButton';
 import { Trans, useTranslation } from 'components/Translation/Translation';
@@ -8,14 +8,14 @@ import { TableContent as Props } from '../../type';
 
 const TableContent: FC<Props> = ({ mainTitle, data, preTitle }) => {
   const { t } = useTranslation();
-  const { css, theme, matchMedia } = useStyle();
+  const { css, matchMedia } = useStyle();
   const small = matchMedia({ xSmall: true, small: true }) || false;
 
   const chartData = Array.isArray(data) ? data : useChartDataStatistics(t, data) || [];
 
   return (
     <React.Fragment>
-      <h2 className={css(titleStyle({ preTitle, theme }))}>{mainTitle}</h2>
+      <h2 className={css(titleStyle({ preTitle }))}>{mainTitle}</h2>
       {preTitle !== '' && (
         <div className={css(flexStyle)}>
           <IconButton
@@ -49,15 +49,17 @@ const TableContent: FC<Props> = ({ mainTitle, data, preTitle }) => {
   );
 };
 
-const titleStyle: CreateRule<{ preTitle: string | undefined; theme: Theme }> = ({ preTitle, theme }) => ({
-  color: theme.colors.link,
-  fontWeight: theme.font.weight.bold,
-  fontSize: theme.font.fixed.f20.fontSize,
-  lineHeight: theme.font.fixed.f20.lineHeight,
-  letterSpacing: '0px',
-  textAlign: 'center',
-  margin: !preTitle ? '0px 0px 32px 0px' : '0px 0px 12px 0px',
-});
+const titleStyle: CreateRule<{ preTitle: string | undefined }> =
+  ({ preTitle }) =>
+  ({ theme }) => ({
+    color: theme.colors.link,
+    fontWeight: theme.font.weight.bold,
+    fontSize: theme.font.fixed.f20.fontSize,
+    lineHeight: theme.font.fixed.f20.lineHeight,
+    letterSpacing: '0px',
+    textAlign: 'center',
+    margin: !preTitle ? '0px 0px 32px 0px' : '0px 0px 12px 0px',
+  });
 
 const percentStyle: Rule = ({ theme }) => ({
   color: theme.colors.link,

@@ -74,8 +74,9 @@ const SearchInput: FC<Props<any>> = ({
           // @ts-ignore
           border: `2px solid ${isValid ? theme.colors.lightGray : theme.colors.error}`,
           borderRadius: '50px',
-          fontSize: '16px',
-          lineHeight: '20px',
+          fontSize: theme.font.fixed.f16.fontSize,
+          lineHeight: theme.font.fixed.f16.lineHeight,
+          letterSpacing: '0px',
           padding: '10px 30px 10px 16px',
           ':focus': {
             outline: 'none !important',
@@ -106,8 +107,9 @@ const SearchInput: FC<Props<any>> = ({
                   className={css({
                     display: 'block',
                     width: '100%',
-                    fontSize: '16px',
-                    lineHeight: '20px',
+                    fontSize: theme.font.fixed.f16.fontSize,
+                    lineHeight: theme.font.fixed.f16.lineHeight,
+                    letterSpacing: '0px',
                     padding: '10px 30px 10px 16px',
                     ':hover': {
                       background: '#F3F9FC',
@@ -156,33 +158,36 @@ const relativeStyles: Rule = {
   width: '100%',
 };
 
-const selectedStyle = {
-  borderRadius: '10px',
-  border: '2px solid  #00539F',
-  height: '32px',
-  display: 'inline-flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  padding: '6px 12px',
-  marginRight: '16px',
-  marginTop: '15px',
+const selectedStyle = ({ theme }) =>
+  ({
+    borderRadius: '10px',
+    border: `2px solid ${theme.colors.tescoBlue}`,
+    height: '32px',
+    display: 'inline-flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: '6px 12px',
+    marginRight: '16px',
+    marginTop: '15px',
 
-  '& > span': {
-    whiteSpace: 'nowrap',
-    fontSize: '16px',
-    lineHeight: '20px',
-    color: '#00539F',
-  },
-} as Styles;
+    '& > span': {
+      whiteSpace: 'nowrap',
+      fontSize: theme.font.fixed.f16.fontSize,
+      lineHeight: theme.font.fixed.f16.lineHeight,
+      letterSpacing: '0px',
+      color: theme.colors.tescoBlue,
+    },
+  } as Styles);
 
-const cleanAllStyle: Rule = {
+const cleanAllStyle: Rule = ({ theme }) => ({
   position: 'absolute',
   top: '11px',
   right: 0,
-  fontSize: '16px',
-  lineHeight: '20px',
-  color: '#00539F',
+  fontSize: theme.font.fixed.f16.fontSize,
+  lineHeight: theme.font.fixed.f16.lineHeight,
+  letterSpacing: '0px',
+  color: theme.colors.tescoBlue,
   cursor: 'pointer',
-};
+});
 
 export default SearchInput;

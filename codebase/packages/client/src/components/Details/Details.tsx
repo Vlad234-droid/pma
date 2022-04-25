@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
-import { useStyle, Rule, CreateRule, Theme } from '@pma/dex-wrapper';
+import { useStyle, Rule } from '@pma/dex-wrapper';
 import { ArrowUp } from '../../assets/img/objectives';
 
 const Details = ({ title, description }) => {
-  const { css, theme } = useStyle();
+  const { css } = useStyle();
   const [isVisibleDescription, setDescriptionVisibility] = useState(true);
 
   return (
     <div className={css(main)}>
-      <div className={css(header({ theme }))} onClick={() => setDescriptionVisibility(!isVisibleDescription)}>
+      <div className={css(header)} onClick={() => setDescriptionVisibility(!isVisibleDescription)}>
         <div>{title}</div>
         <div>
           <img className={isVisibleDescription ? css(arrUp) : css(arrDown)} alt='arrow' src={ArrowUp} />
@@ -19,22 +19,19 @@ const Details = ({ title, description }) => {
   );
 };
 
-const header: CreateRule<{ theme: Theme }> = (props) => {
-  if (props == null) return {};
-  const { theme } = props;
-  return {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    color: `${theme.colors.tescoBlue}`,
-    fontSize: `${theme.font.fixed.f16}`,
-    lineHeight: '20px',
-    fontWeight: 'bold',
-    padding: '20px 0 16px 0',
-    width: '100%',
-    userSelect: 'none',
-  };
-};
+const header: Rule = ({ theme }) => ({
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  color: `${theme.colors.tescoBlue}`,
+  fontSize: theme.font.fixed.f16.fontSize,
+  lineHeight: theme.font.fixed.f16.lineHeight,
+  letterSpacing: '0px',
+  fontWeight: theme.font.weight.bold,
+  padding: '20px 0 16px 0',
+  width: '100%',
+  userSelect: 'none',
+});
 
 const arrDown = {
   transform: 'rotate(180deg)',

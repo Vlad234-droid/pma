@@ -81,10 +81,10 @@ export const BasicTile: FC<Props> = ({
   );
 };
 
-const bodyStyle = {
+const bodyStyle: Rule = ({ theme }) => ({
   padding: '10px 14px 14px 14px',
-  color: '#333333',
-};
+  color: theme.colors.base,
+});
 
 const wrapperStyle: CreateRule<{ icon: boolean; isLink: boolean }> = ({ icon, isLink }) => {
   const { matchMedia } = useMedia();
@@ -127,18 +127,18 @@ const titleStyle: CreateRule<{ mobileScreen: boolean }> =
   ({ mobileScreen }) =>
   ({ theme }) => ({
     color: theme.colors.link,
-    fontSize: mobileScreen ? '16px' : '18px',
-    lineHeight: mobileScreen ? '20px' : '22px',
+    fontSize: mobileScreen ? theme.font.fixed.f16.fontSize : theme.font.fixed.f18.fontSize,
+    lineHeight: mobileScreen ? theme.font.fixed.f16.lineHeight : theme.font.fixed.f18.lineHeight,
     letterSpacing: '0px',
     fontWeight: theme.font.weight.bold,
     paddingBottom: '10px',
   });
 
-const descriptionStyle = {
-  fontSize: '14px',
-  lineHeight: '18px',
+const descriptionStyle = ({ theme }) => ({
+  fontSize: theme.font.fixed.f14.fontSize,
+  lineHeight: theme.font.fixed.f14.lineHeight,
   letterSpacing: '0px',
   ':not(:last-child)': {
     paddingBottom: '20px',
   },
-};
+});

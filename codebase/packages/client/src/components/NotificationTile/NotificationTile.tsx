@@ -14,8 +14,9 @@ const notificationBlockStyle: Rule = ({ theme }) => {
     background: theme.colors.lightBlue,
     borderRadius: theme.spacing.s2_5,
     '& > p': {
-      fontSize: theme.spacing.s3_5,
-      lineHeight: theme.spacing.s5,
+      fontSize: theme.font.fixed.f14.fontSize,
+      lineHeight: theme.font.fixed.f14.lineHeight,
+      letterSpacing: '0px',
       margin: theme.spacing.s0,
     },
   } as Styles;

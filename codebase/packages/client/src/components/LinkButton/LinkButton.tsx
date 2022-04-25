@@ -1,5 +1,5 @@
 import React, { FC, PropsWithChildren } from 'react';
-import { colors, Rule, useStyle } from '@pma/dex-wrapper';
+import { Rule, useStyle } from '@pma/dex-wrapper';
 
 export type LinkButtonProps = {
   onClick: () => void;
@@ -20,7 +20,7 @@ const btnStyle: Rule = ({ theme }) => {
     fontSize: theme.font.fixed.f16.fontSize,
     lineHeight: theme.font.fixed.f16.lineHeight,
     letterSpacing: '0px',
-    color: colors.tescoBlue,
+    color: theme.colors.tescoBlue,
     cursor: 'pointer',
     border: 'none',
     backgroundColor: 'transparent',

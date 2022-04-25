@@ -1,5 +1,5 @@
 import React, { FC, HTMLProps } from 'react';
-import { useStyle, CreateRule, Theme, Icon } from '@pma/dex-wrapper';
+import { useStyle, CreateRule, Icon } from '@pma/dex-wrapper';
 
 export type AvatarProps = {
   img?: string;
@@ -8,10 +8,9 @@ export type AvatarProps = {
 
 type Props = HTMLProps<HTMLInputElement> & AvatarProps;
 
-const contentStyle: CreateRule<{ theme: Theme; size?: number }> = (props) => {
-  if (props == null) return {};
-  const { theme, size = 56 } = props;
-  return {
+const contentStyle: CreateRule<{ size?: number }> =
+  ({ size = 56 }) =>
+  ({ theme }) => ({
     display: 'inline-block',
     minWidth: `${size}px`,
     width: `${size}px`,
@@ -36,8 +35,7 @@ const contentStyle: CreateRule<{ theme: Theme; size?: number }> = (props) => {
         stroke: theme.colors.white,
       },
     },
-  };
-};
+  });
 
 const imageStyle = {
   display: 'block',
@@ -46,9 +44,9 @@ const imageStyle = {
 };
 
 export const Avatar: FC<Props> = ({ img, size = 56 }) => {
-  const { css, theme } = useStyle();
+  const { css } = useStyle();
   return (
-    <span data-test-id='avatar' className={css(contentStyle({ theme, size }))}>
+    <span data-test-id='avatar' className={css(contentStyle({ size }))}>
       {img ? <img style={imageStyle} src={img} /> : <Icon graphic='account' testId={'test-id-account-icon'} />}
     </span>
   );
