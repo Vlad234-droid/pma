@@ -1,13 +1,13 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Button, CreateRule, Rule, Theme, useStyle } from '@pma/dex-wrapper';
+import { Button, Rule, useStyle } from '@pma/dex-wrapper';
 import useDispatch from 'hooks/useDispatch';
 import { OrgObjectiveActions, auditLogsSelector } from '@pma/store';
 import HistoryTable from 'components/HistoryTable/HistoryTable';
 import { Trans, useTranslation } from 'components/Translation';
 
 const StrategicDriversLogs: FC = () => {
-  const { css, theme } = useStyle();
+  const { css } = useStyle();
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
@@ -22,7 +22,7 @@ const StrategicDriversLogs: FC = () => {
   return (
     <div>
       <div className={css(actions)}>
-        <Button onPress={() => setHistoryOpen(!isHistoryOpen)} styles={[historyBtn({ theme })]}>
+        <Button onPress={() => setHistoryOpen(!isHistoryOpen)} styles={[historyBtn]}>
           <Trans i18nKey='history_of_changes'>History of changes</Trans>{' '}
           <span className={`${css(arrow)} ${!isHistoryOpen ? css(arrowRight) : css(arrowDown)}`} />
         </Button>
@@ -36,15 +36,11 @@ const StrategicDriversLogs: FC = () => {
   );
 };
 
-const historyBtn: CreateRule<{ theme: Theme }> = (props) => {
-  if (props == null) return {};
-  const { theme } = props;
-  return {
-    backgroundColor: 'transparent',
-    color: `${theme.colors.tescoBlue}`,
-    fontWeight: 'bold',
-  };
-};
+const historyBtn: Rule = ({ theme }) => ({
+  backgroundColor: 'transparent',
+  color: theme.colors.tescoBlue,
+  fontWeight: theme.font.weight.bold,
+});
 
 const arrow: Rule = {
   marginLeft: '13.75px',

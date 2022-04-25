@@ -1,7 +1,7 @@
 import React, { FC, Fragment, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { Button, Rule, CreateRule, Theme, useStyle } from '@pma/dex-wrapper';
+import { Button, Rule, CreateRule, useStyle } from '@pma/dex-wrapper';
 import { tipsActions } from '@pma/store';
 import { Page } from 'pages';
 import { buildPath } from 'features/Routes/utils';
@@ -66,16 +66,16 @@ const TipsCard: FC<TipsCardProps> = ({ card }) => {
             <div className={css(tipImage, { backgroundImage: `url(${tipCardImage})` })} />
           </div>
           <div className={css(tipInfoWrap({ mobileScreen }))}>
-            <div className={css(tipTitle({ mobileScreen, theme }))}>{card.title}</div>
-            <div className={css(tipText({ mobileScreen, theme }))}>{card.description}</div>
+            <div className={css(tipTitle({ mobileScreen }))}>{card.title}</div>
+            <div className={css(tipText({ mobileScreen }))}>{card.description}</div>
             <div className={css({ marginTop: '8px', display: 'flex' })}>
-              <div className={css(lastPushStyle({ mobileScreen, theme }))}>
+              <div className={css(lastPushStyle({ mobileScreen }))}>
                 <Trans i18nKey='last_push'>Last push</Trans>:{' '}
                 {card.published ? tipPushedTime : <Trans i18nKey='was_not_pushed'>was not pushed</Trans>}
               </div>
               <div
                 data-test-id={VIEW_HISTORY_BTN}
-                className={css(viewHistoryStyle({ mobileScreen, theme }))}
+                className={css(viewHistoryStyle({ mobileScreen }))}
                 onClick={handleShowViewHistoryModal}
               >
                 <Trans i18nKey='view_history'>View history</Trans>
@@ -83,7 +83,7 @@ const TipsCard: FC<TipsCardProps> = ({ card }) => {
             </div>
           </div>
           <div className={css(cardRightBlock({ mobileScreen }))}>
-            <div className={css(targetStyle({ mobileScreen, theme }))}>
+            <div className={css(targetStyle({ mobileScreen }))}>
               <span className={css({ color: theme.colors.tescoBlue })}>
                 <Trans i18nKey='target'>Target</Trans>:
               </span>{' '}
@@ -138,20 +138,20 @@ const tipImageWrapStyle: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen
   };
 };
 
-const tipImage: Rule = () => {
-  return {
-    width: '48px',
-    height: '48px',
-    backgroundPosition: 'center center',
-    backgroundSize: '48px auto',
-    backgroundRepeat: 'no-repeat',
-  };
+const tipImage: Rule = {
+  width: '48px',
+  height: '48px',
+  backgroundPosition: 'center center',
+  backgroundSize: '48px auto',
+  backgroundRepeat: 'no-repeat',
 };
 
-const tipTitle: CreateRule<{ mobileScreen: boolean; theme: Theme }> = ({ mobileScreen, theme }) => {
-  return {
-    fontWeight: 700,
+const tipTitle: CreateRule<{ mobileScreen: boolean }> =
+  ({ mobileScreen }) =>
+  ({ theme }) => ({
+    fontWeight: theme.font.weight.bold,
     color: theme.colors.tescoBlue,
+    letterSpacing: '0px',
     ...(mobileScreen
       ? {
           fontSize: theme.font.fixed.f16.fontSize,
@@ -161,12 +161,13 @@ const tipTitle: CreateRule<{ mobileScreen: boolean; theme: Theme }> = ({ mobileS
           fontSize: theme.font.fixed.f18.fontSize,
           lineHeight: theme.font.fixed.f18.lineHeight,
         }),
-  };
-};
+  });
 
-const tipText: CreateRule<{ mobileScreen: boolean; theme: Theme }> = ({ mobileScreen, theme }) => {
-  return {
+const tipText: CreateRule<{ mobileScreen: boolean }> =
+  ({ mobileScreen }) =>
+  ({ theme }) => ({
     marginTop: '5px',
+    letterSpacing: '0px',
     ...(mobileScreen
       ? {
           fontSize: theme.font.fixed.f14.fontSize,
@@ -178,12 +179,13 @@ const tipText: CreateRule<{ mobileScreen: boolean; theme: Theme }> = ({ mobileSc
           lineHeight: theme.font.fixed.f16.lineHeight,
           maxWidth: '400px',
         }),
-  };
-};
+  });
 
-const lastPushStyle: CreateRule<{ mobileScreen: boolean; theme: Theme }> = ({ mobileScreen, theme }) => {
-  return {
-    color: '#666',
+const lastPushStyle: CreateRule<{ mobileScreen: boolean }> =
+  ({ mobileScreen }) =>
+  ({ theme }) => ({
+    color: theme.colors.grayscale,
+    letterSpacing: '0px',
     ':after': {
       content: '"•"',
       margin: '0 7px 0',
@@ -197,11 +199,12 @@ const lastPushStyle: CreateRule<{ mobileScreen: boolean; theme: Theme }> = ({ mo
           fontSize: theme.font.fixed.f14.fontSize,
           lineHeight: theme.font.fixed.f14.lineHeight,
         }),
-  };
-};
+  });
 
-const targetStyle: CreateRule<{ mobileScreen: boolean; theme: Theme }> = ({ mobileScreen, theme }) => {
-  return {
+const targetStyle: CreateRule<{ mobileScreen: boolean }> =
+  ({ mobileScreen }) =>
+  ({ theme }) => ({
+    letterSpacing: '0px',
     ...(mobileScreen
       ? {
           fontSize: theme.font.fixed.f14.fontSize,
@@ -213,13 +216,14 @@ const targetStyle: CreateRule<{ mobileScreen: boolean; theme: Theme }> = ({ mobi
           lineHeight: theme.font.fixed.f16.lineHeight,
           maxWidth: '400px',
         }),
-  };
-};
+  });
 
-const viewHistoryStyle: CreateRule<{ mobileScreen: boolean; theme: Theme }> = ({ mobileScreen, theme }) => {
-  return {
+const viewHistoryStyle: CreateRule<{ mobileScreen: boolean }> =
+  ({ mobileScreen }) =>
+  ({ theme }) => ({
     color: theme.colors.tescoBlue,
     cursor: 'pointer',
+    letterSpacing: '0px',
     ...(mobileScreen
       ? {
           fontSize: theme.font.fixed.f12.fontSize,
@@ -229,8 +233,7 @@ const viewHistoryStyle: CreateRule<{ mobileScreen: boolean; theme: Theme }> = ({
           fontSize: theme.font.fixed.f14.fontSize,
           lineHeight: theme.font.fixed.f14.lineHeight,
         }),
-  };
-};
+  });
 
 const cardRightBlock: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => {
   return {
@@ -261,16 +264,15 @@ const cardControls: Rule = () => {
   };
 };
 
-const cardButton: Rule = ({ theme }) => {
-  return {
-    fontSize: theme.font.fixed.f14.fontSize,
-    lineHeight: theme.font.fixed.f14.lineHeight,
-    padding: '7px 16px',
-    height: 'auto',
-    border: `2px solid ${theme.colors.tescoBlue}`,
-    marginLeft: '10px',
-    fontWeight: theme.font.weight.bold,
-  };
-};
+const cardButton: Rule = ({ theme }) => ({
+  fontSize: theme.font.fixed.f14.fontSize,
+  lineHeight: theme.font.fixed.f14.lineHeight,
+  letterSpacing: '0px',
+  padding: '7px 16px',
+  height: 'auto',
+  border: `2px solid ${theme.colors.tescoBlue}`,
+  marginLeft: '10px',
+  fontWeight: theme.font.weight.bold,
+});
 
 export default TipsCard;

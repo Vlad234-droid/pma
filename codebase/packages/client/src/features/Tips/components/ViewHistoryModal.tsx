@@ -1,7 +1,7 @@
 import React, { FC, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { tipsActions, getTipHistorySelector } from '@pma/store';
-import { useStyle, Rule, CreateRule, Theme, Modal, Button, Icon } from '@pma/dex-wrapper';
+import { useStyle, Rule, CreateRule, Modal, Button, Icon } from '@pma/dex-wrapper';
 import { TipsProps } from '../types';
 import { formatDateStringFromISO, DATE_TIME_STRING_FORMAT } from 'utils/date';
 import { Trans } from 'components/Translation';
@@ -27,10 +27,10 @@ const ViewHistoryModal: FC<ViewHistoryModal> = ({ handleCloseModal, card }) => {
   return (
     <Modal modalPosition='middle' modalContainerRule={[modalWrapper({ mobileScreen })]}>
       <div data-test-id={VIEW_HISTORY_MODAL} className={css(modalInner)}>
-        <div className={css(vhTitleStyle({ mobileScreen, theme }))}>
+        <div className={css(vhTitleStyle({ mobileScreen }))}>
           <Trans i18nKey='activity_history'>Activity History</Trans>
         </div>
-        <div className={css(vhSubTitleStyle({ mobileScreen, theme }))}>
+        <div className={css(vhSubTitleStyle({ mobileScreen }))}>
           <Trans i18nKey='for_tip'>For tip</Trans>: {card.title}
         </div>
         <div className={css(vhItemsWrap)}>
@@ -39,7 +39,7 @@ const ViewHistoryModal: FC<ViewHistoryModal> = ({ handleCloseModal, card }) => {
             const isLastItem: boolean = idx === tipHistory.length - 1;
 
             return (
-              <div key={item.uuid} className={css(vhItemStyle({ isLastItem, theme }))}>
+              <div key={item.uuid} className={css(vhItemStyle({ isLastItem }))}>
                 <div>
                   <div className={css(vhItemTitle)}>
                     <Icon
@@ -83,15 +83,13 @@ const ViewHistoryModal: FC<ViewHistoryModal> = ({ handleCloseModal, card }) => {
 
 //vh - View History
 
-const modalWrapper: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => {
-  return {
-    padding: mobileScreen ? '24px 30px' : '24px 38px',
-    maxWidth: '500px',
-    width: mobileScreen ? 'calc(100% - 50px)' : '100%',
-    maxHeight: '404px',
-    height: '100%',
-  };
-};
+const modalWrapper: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => ({
+  padding: mobileScreen ? '24px 30px' : '24px 38px',
+  maxWidth: '500px',
+  width: mobileScreen ? 'calc(100% - 50px)' : '100%',
+  maxHeight: '404px',
+  height: '100%',
+});
 
 const modalInner: Rule = {
   display: 'flex',
@@ -102,10 +100,12 @@ const modalInner: Rule = {
   width: '100%',
 };
 
-const vhTitleStyle: CreateRule<{ mobileScreen: boolean; theme: Theme }> = ({ mobileScreen, theme }) => {
-  return {
+const vhTitleStyle: CreateRule<{ mobileScreen: boolean }> =
+  ({ mobileScreen }) =>
+  ({ theme }) => ({
     fontWeight: theme.font.weight.bold,
     marginBottom: '8px',
+    letterSpacing: '0px',
     ...(mobileScreen
       ? {
           fontSize: theme.font.fixed.f18.fontSize,
@@ -115,12 +115,13 @@ const vhTitleStyle: CreateRule<{ mobileScreen: boolean; theme: Theme }> = ({ mob
           fontSize: theme.font.fixed.f20.fontSize,
           lineHeight: theme.font.fixed.f20.lineHeight,
         }),
-  };
-};
+  });
 
-const vhSubTitleStyle: CreateRule<{ mobileScreen: boolean; theme: Theme }> = ({ mobileScreen, theme }) => {
-  return {
+const vhSubTitleStyle: CreateRule<{ mobileScreen: boolean }> =
+  ({ mobileScreen }) =>
+  ({ theme }) => ({
     marginBottom: '20px',
+    letterSpacing: '0px',
     ...(mobileScreen
       ? {
           fontSize: theme.font.fixed.f14.fontSize,
@@ -130,53 +131,48 @@ const vhSubTitleStyle: CreateRule<{ mobileScreen: boolean; theme: Theme }> = ({ 
           fontSize: theme.font.fixed.f16.fontSize,
           lineHeight: theme.font.fixed.f16.lineHeight,
         }),
-  };
+  });
+
+const vhItemsWrap: Rule = {
+  marginBottom: '10px',
+  width: '100%',
+  maxHeight: '230px',
+  height: '100%',
+  overflowY: 'auto',
 };
 
-const vhItemsWrap: Rule = () => {
-  return {
-    marginBottom: '10px',
-    width: '100%',
-    maxHeight: '230px',
-    height: '100%',
-    overflowY: 'auto',
-  };
-};
-
-const vhItemStyle: CreateRule<{ isLastItem: boolean; theme: Theme }> = ({ isLastItem, theme }) => {
-  return {
+const vhItemStyle: CreateRule<{ isLastItem: boolean }> =
+  ({ isLastItem }) =>
+  ({ theme }) => ({
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
     padding: '15px 0',
     // @ts-ignore
     borderBottom: !isLastItem ? `2px solid ${theme.colors.lightGray}` : '',
-  };
-};
+  });
 
-const vhItemTitle: Rule = ({ theme }) => {
-  return {
-    fontSize: theme.font.fixed.f14.fontSize,
-    lineHeight: theme.font.fixed.f14.lineHeight,
-    fontWeight: theme.font.weight.bold,
-    color: theme.colors.tescoBlue,
-    marginBottom: '8px',
-    display: 'flex',
-    alignItems: 'center',
-  };
-};
+const vhItemTitle: Rule = ({ theme }) => ({
+  fontSize: theme.font.fixed.f14.fontSize,
+  lineHeight: theme.font.fixed.f14.lineHeight,
+  fontWeight: theme.font.weight.bold,
+  letterSpacing: '0px',
+  color: theme.colors.tescoBlue,
+  marginBottom: '8px',
+  display: 'flex',
+  alignItems: 'center',
+});
 
-const vhItemSubtitle: Rule = ({ theme }) => {
-  return {
-    fontSize: theme.font.fixed.f14.fontSize,
-    lineHeight: theme.font.fixed.f14.lineHeight,
-  };
-};
+const vhItemSubtitle: Rule = ({ theme }) => ({
+  fontSize: theme.font.fixed.f14.fontSize,
+  lineHeight: theme.font.fixed.f14.lineHeight,
+});
 
 const vhItemStatus: Rule = ({ theme }) => {
   return {
     fontSize: theme.font.fixed.f14.fontSize,
     lineHeight: theme.font.fixed.f14.lineHeight,
+    letterSpacing: '0px',
     padding: '6px 12px',
     borderRadius: '50px',
     backgroundColor: theme.colors.backgroundDark,
@@ -186,14 +182,13 @@ const vhItemStatus: Rule = ({ theme }) => {
   };
 };
 
-const modalBtnStyles: Rule = ({ theme }) => {
-  return {
-    width: '145px',
-    margin: 'auto auto 0',
-    fontSize: theme.font.fixed.f16.fontSize,
-    lineHeight: theme.font.fixed.f16.lineHeight,
-    fontWeight: theme.font.weight.bold,
-  };
-};
+const modalBtnStyles: Rule = ({ theme }) => ({
+  width: '145px',
+  margin: 'auto auto 0',
+  fontSize: theme.font.fixed.f16.fontSize,
+  lineHeight: theme.font.fixed.f16.lineHeight,
+  letterSpacing: '0px',
+  fontWeight: theme.font.weight.bold,
+});
 
 export default ViewHistoryModal;

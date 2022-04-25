@@ -1,5 +1,5 @@
 import React, { FC, Fragment } from 'react';
-import { useStyle, CreateRule, Theme } from '@pma/dex-wrapper';
+import { useStyle, CreateRule } from '@pma/dex-wrapper';
 import { TileWrapper } from 'components/Tile';
 import { Icon } from 'components/Icon';
 import { Trans } from 'components/Translation';
@@ -7,7 +7,7 @@ import { Trans } from 'components/Translation';
 export const NO_TIPS_TILE = 'no-tips-tile';
 
 const NoTips: FC = () => {
-  const { css, theme, matchMedia } = useStyle();
+  const { css, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
 
   return (
@@ -19,13 +19,13 @@ const NoTips: FC = () => {
               <Icon iconStyles={{ width: '20px' }} graphic='information' />
             </div>
             <div className={css({})}>
-              <div className={css(cardTitleStyle({ mobileScreen, theme }))}>
+              <div className={css(cardTitleStyle({ mobileScreen }))}>
                 <Trans i18nKey='please_create_your_first_tip'>
                   Please create your first tip to be able to push it to colleagues
                 </Trans>
                 .
               </div>
-              <div className={css(cardTextleStyle({ mobileScreen, theme }))}>
+              <div className={css(cardTextStyle({ mobileScreen }))}>
                 <Trans i18nKey='tips_should_be_also_helpful'>
                   Tips should be also helpful to transition from the current system to the new one. They should offer
                   guidance on how the application functionalities can be used or as an alert for upcoming events
@@ -57,9 +57,10 @@ const cardInner: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => {
   };
 };
 
-const cardTitleStyle: CreateRule<{ mobileScreen: boolean; theme: Theme }> = ({ mobileScreen, theme }) => {
-  return {
-    fontWeight: 700,
+const cardTitleStyle: CreateRule<{ mobileScreen: boolean }> =
+  ({ mobileScreen }) =>
+  ({ theme }) => ({
+    fontWeight: theme.font.weight.bold,
     color: theme.colors.tescoBlue,
     ...(mobileScreen
       ? {
@@ -70,11 +71,11 @@ const cardTitleStyle: CreateRule<{ mobileScreen: boolean; theme: Theme }> = ({ m
           fontSize: theme.font.fixed.f14.fontSize,
           lineHeight: theme.font.fixed.f14.lineHeight,
         }),
-  };
-};
+  });
 
-const cardTextleStyle: CreateRule<{ mobileScreen: boolean; theme: Theme }> = ({ mobileScreen, theme }) => {
-  return {
+const cardTextStyle: CreateRule<{ mobileScreen: boolean }> =
+  ({ mobileScreen }) =>
+  ({ theme }) => ({
     marginTop: '5px',
     ...(mobileScreen
       ? {
@@ -85,7 +86,6 @@ const cardTextleStyle: CreateRule<{ mobileScreen: boolean; theme: Theme }> = ({ 
           fontSize: theme.font.fixed.f14.fontSize,
           lineHeight: theme.font.fixed.f14.lineHeight,
         }),
-  };
-};
+  });
 
 export default NoTips;
