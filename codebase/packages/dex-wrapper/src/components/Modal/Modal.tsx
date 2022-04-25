@@ -64,7 +64,7 @@ export const Modal: FC<ModalProps> = ({
   return (
     <OverlayContainer id='portal-modal'>
       <div {...underlayProps} aria-label='overlay' className={css(underlayRule({ isBottomPosition, overlayColor }))}>
-        <FocusScope>
+        <FocusScope restoreFocus autoFocus>
           <div
             {...overlayProps}
             {...dialogProps}
