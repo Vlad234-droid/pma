@@ -13,6 +13,7 @@ import Spinner from 'components/Spinner';
 
 import { paramsReplacer } from 'utils';
 import { Trans, useTranslation } from 'components/Translation';
+import FeedbackItem from './FeedbackItem';
 
 type Props = {
   list: Array<any>;
@@ -30,10 +31,9 @@ const FeedbackBlock: FC<Props> = ({ list, canEdit }) => {
   if (!loaded) return <Spinner />;
   if (loaded && !list.length) return <NoFeedback />;
 
-  //TODO: this is hard to read. Extract pieces to separate components
   return (
     <>
-      {list.map((item) => (
+      {list?.map((item) => (
         <div key={item.uuid}>
           <TileWrapper customStyle={{ padding: '24px' }}>
             <Accordion
@@ -57,62 +57,32 @@ const FeedbackBlock: FC<Props> = ({ list, canEdit }) => {
 
                       <Panel>
                         <TileWrapper customStyle={tileWrapperStyle}>
-                          <div className={css(infoBlockStyle)}>
-                            <h3>
-                              <Trans i18nKey='looking_back_at_what_you_seen'>
-                                Looking back at what you&apos;ve seen recently, what would you like to say to this
-                                colleague about what they&apos;ve delivered or how they&apos;ve gone about it?
-                              </Trans>
-                            </h3>
-                            {item.feedbackItems.map((question) => {
-                              return (
-                                <p className={css(wordBreakStyle)} key={question.code}>
-                                  {question.code === `${t('question', 'Question')} 1`
-                                    ? question.content !== ''
-                                      ? question.content
-                                      : '-'
-                                    : ''}
-                                </p>
-                              );
-                            })}
-                          </div>
-                          <div className={css(infoBlockStyle)}>
-                            <h3>
-                              <Trans i18nKey='looking_forward_what_should_this_colleague_do_more'>
-                                Looking forward, what should this colleague do more (or less) of in order to be at their
-                                best?
-                              </Trans>
-                            </h3>
-                            {item.feedbackItems.map((question) => {
-                              return (
-                                <p className={css(wordBreakStyle)} key={question.code}>
-                                  {question.code === `${t('question', 'Question')} 2`
-                                    ? question.content !== ''
-                                      ? question.content
-                                      : '-'
-                                    : ''}
-                                </p>
-                              );
-                            })}
-                          </div>
-                          <div className={css(infoBlockStyle)}>
-                            <h3>
-                              <Trans i18nKey='add_any_other_comments_you_would_like_to_share_with_your_colleague'>
-                                Add any other comments you would like to share with your colleague.
-                              </Trans>
-                            </h3>
-                            {item.feedbackItems.map((question) => {
-                              return (
-                                <p className={css(wordBreakStyle)} key={question.code}>
-                                  {question.code === 'Anything else?'
-                                    ? question.content !== ''
-                                      ? question.content
-                                      : '-'
-                                    : ''}
-                                </p>
-                              );
-                            })}
-                          </div>
+                          <FeedbackItem
+                            item={item}
+                            title={t(
+                              'looking_back_at_what_you_seen',
+                              'Looking back at what you&apos;ve seen recently, what would you like to say to this colleague about what they&apos;ve delivered or how they&apos;ve gone about it?',
+                            )}
+                            itemCodeText={`${t('question', 'Question')} 1`}
+                          />
+
+                          <FeedbackItem
+                            item={item}
+                            title={t(
+                              'looking_forward_what_should_this_colleague_do_more',
+                              'Looking forward, what should this colleague do more (or less) of in order to be at their best?',
+                            )}
+                            itemCodeText={`${t('question', 'Question')} 2`}
+                          />
+
+                          <FeedbackItem
+                            item={item}
+                            title={t(
+                              'add_any_other_comments_you_would_like_to_share_with_your_colleague',
+                              'Add any other comments you would like to share with your colleague.',
+                            )}
+                            itemCodeText={t('anything_else', 'Anything else?')}
+                          />
                         </TileWrapper>
                         {canEdit && (
                           <div className={css(wrapperBtnStyle)}>
@@ -136,24 +106,6 @@ const FeedbackBlock: FC<Props> = ({ list, canEdit }) => {
     </>
   );
 };
-
-const wordBreakStyle: Rule = {
-  wordBreak: 'break-all',
-};
-
-const infoBlockStyle: Rule = ({ theme }) =>
-  ({
-    marginBottom: theme.spacing.s4,
-    '& > h3': {
-      margin: theme.spacing.s0,
-      fontWeight: theme.font.weight.bold,
-      fontSize: theme.spacing.s3_5,
-    },
-    '& > p': {
-      margin: theme.spacing.s0,
-      fontSize: theme.spacing.s3_5,
-    },
-  } as Styles);
 
 const wrapperBtnStyle: Rule = {
   marginLeft: 'auto',

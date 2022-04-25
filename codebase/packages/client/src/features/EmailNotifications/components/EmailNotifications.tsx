@@ -12,6 +12,8 @@ import { accessByRole, accessByTimelinePoints, accessByWorkLevel } from '../conf
 
 export type Props = {};
 
+export const TEST_ID = 'email-notification-id';
+
 export const EmailNotifications: FC<Props> = () => {
   const { css } = useStyle();
   const { t } = useTranslation();
@@ -40,7 +42,7 @@ export const EmailNotifications: FC<Props> = () => {
 
   return (
     <TileWrapper title={t('Email notifications', 'Email notifications')}>
-      <div className={css(listStyles)}>
+      <div data-test-id={TEST_ID} className={css(listStyles)}>
         <span className={css(titleStyle)}>
           <Trans i18nKey='notifications'>Notifications</Trans>
         </span>
@@ -75,24 +77,27 @@ export const EmailNotifications: FC<Props> = () => {
   );
 };
 
-const titleStyle: Rule = ({ theme }) =>
-  ({
+const titleStyle: Rule = ({ theme }) => {
+  return {
     fontStyle: 'normal',
-    fontWeight: `${theme.font.weight.bold}`,
-    fontSize: '20px',
-    lineHeight: '24px',
+    fontWeight: theme.font.weight.bold,
+    fontSize: theme.font.fixed.f20.fontSize,
+    lineHeight: theme.font.fixed.f20.lineHeight,
     letterSpacing: '0px',
-  } as Styles);
+  };
+};
 
 // TODO: Extract duplicate 9
-const descriptionStyle = {
-  fontStyle: 'normal',
-  fontWeight: 'normal',
-  fontSize: '16px',
-  lineHeight: '20px',
-  letterSpacing: '0px',
-  marginBottom: '8px',
-} as Styles;
+const descriptionStyle: Rule = ({ theme }) => {
+  return {
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    fontSize: theme.font.fixed.f16.fontSize,
+    lineHeight: theme.font.fixed.f16.lineHeight,
+    letterSpacing: '0px',
+    marginBottom: '8px',
+  };
+};
 
 const listStyles: Rule = {
   display: 'flex',
