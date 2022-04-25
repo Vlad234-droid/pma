@@ -62,7 +62,7 @@ export const BasicTile: FC<Props> = ({
                 <img className={css(imageStyle({ mobileScreen }))} src={img} />
               </div>
             )}
-            {typeof img === 'object' && img}
+            {typeof img === 'object' && Object.keys(img).length > 0 && img}
           </div>
         )}
         <div className={css(bodyStyle)}>
