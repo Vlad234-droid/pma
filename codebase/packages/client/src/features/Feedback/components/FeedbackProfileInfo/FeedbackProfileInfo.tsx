@@ -1,7 +1,6 @@
 import React, { FC } from 'react';
 import { Rule, useStyle } from '@pma/dex-wrapper';
 import { ExpandButton } from 'components/Accordion';
-import { formatToRelativeDate } from 'utils';
 import defaultImg from 'images/default.png';
 
 export const TEST_ID = 'expand_button';
@@ -25,7 +24,7 @@ const FeedbackProfileInfo: FC<ProfileProps> = ({
 }) => {
   const { css } = useStyle();
   return (
-    <div className={css(draftStyles)}>
+    <div data-test-id={TEST_ID} className={css(draftStyles)}>
       <div className={css(blockInfo)}>
         <div className={css({ alignSelf: 'flex-start' })}>
           <img className={css(imgStyle)} src={defaultImg} alt='photo' />
@@ -37,7 +36,7 @@ const FeedbackProfileInfo: FC<ProfileProps> = ({
       </div>
       <div className={css({ display: 'flex', justifyContent: 'center', alignItems: 'center' })}>
         <div className={css({ marginRight: '26px' })}>{updatedTime}</div>
-        <div data-test-id={TEST_ID}>
+        <div>
           {onExpandPress ? (
             <ExpandButton
               onClick={(expanded) => {

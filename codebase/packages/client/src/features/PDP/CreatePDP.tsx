@@ -43,15 +43,17 @@ const CreateMyPDP = () => {
     CREATE = 'create',
   }
 
+  const methodsMap = new Set([METHODS.SAVE, METHODS.UPDATE, METHODS.CREATE]);
+
+  useEffect(() => {
+    dispatch(PDPActions.getPDPGoal({}));
+  }, []);
+
   useEffect(() => {
     if (schema?.meta?.loaded) {
       setPDPGoals(formElements);
     }
   }, [schema?.meta?.loaded]);
-
-  useEffect(() => {
-    dispatch(PDPActions.getPDPGoal({}));
-  }, []);
 
   useEffect(() => {
     setUUID(uuid);
@@ -66,27 +68,27 @@ const CreateMyPDP = () => {
     }
   }, [pdpList.length]);
 
-  // TODO: simplify nested conditions
   const onFormSubmit = (schemaLoaded, requestData, method) => {
-    if (method === METHODS.SAVE) {
-      dispatch(PDPActions.createPDPGoal({ data: requestData }));
-      if (schemaLoaded) navigate(buildPath(Page.PERSONAL_DEVELOPMENT_PLAN));
-    }
-
-    if (method === METHODS.UPDATE) {
-      dispatch(PDPActions.updatePDPGoal({ data: requestData }));
-      if (schemaLoaded) navigate(buildPath(Page.PERSONAL_DEVELOPMENT_PLAN));
-    }
-
-    if (method === METHODS.CREATE) {
-      if (currentUUID && currentGoal.uuid === currentUUID) {
-        dispatch(PDPActions.updatePDPGoal({ data: requestData }));
-        if (schemaLoaded) navigate(buildPath(Page.CREATE_PERSONAL_DEVELOPMENT_PLAN));
-      } else {
+    switch (method) {
+      case METHODS.SAVE:
         dispatch(PDPActions.createPDPGoal({ data: requestData }));
-      }
-
-      setCurrentGoal({});
+        if (schemaLoaded) navigate(buildPath(Page.PERSONAL_DEVELOPMENT_PLAN));
+        break;
+      case METHODS.UPDATE:
+        dispatch(PDPActions.updatePDPGoal({ data: requestData }));
+        if (schemaLoaded) navigate(buildPath(Page.PERSONAL_DEVELOPMENT_PLAN));
+        break;
+      case METHODS.CREATE:
+        if (currentUUID && currentGoal.uuid === currentUUID) {
+          dispatch(PDPActions.updatePDPGoal({ data: requestData }));
+          if (schemaLoaded) navigate(buildPath(Page.CREATE_PERSONAL_DEVELOPMENT_PLAN));
+        } else {
+          dispatch(PDPActions.createPDPGoal({ data: requestData }));
+        }
+        setCurrentGoal({});
+        break;
+      default:
+        break;
     }
   };
 
