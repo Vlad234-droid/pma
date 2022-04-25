@@ -7,7 +7,7 @@ import { Page } from 'pages';
 
 import { Accordion, BaseAccordion, Panel, Section } from 'components/Accordion';
 import IconButtonDefault from 'components/IconButtonDefault';
-import { NoFeedback, FeedbackProfileInfo } from 'features/Feedback/components';
+import { FeedbackProfileInfo, NoFeedback } from 'features/Feedback/components';
 import { TileWrapper } from 'components/Tile';
 import Spinner from 'components/Spinner';
 
@@ -30,6 +30,7 @@ const FeedbackBlock: FC<Props> = ({ list, canEdit }) => {
   if (!loaded) return <Spinner />;
   if (loaded && !list.length) return <NoFeedback />;
 
+  //TODO: this is hard to read. Extract pieces to separate components
   return (
     <>
       {list.map((item) => (

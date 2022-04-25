@@ -1,4 +1,4 @@
-import { Status, MetaDataReport, StatisticsTitlesReportKeys, StatisticsTitlesReport } from 'config/enum';
+import { MetaDataReport, StatisticsTitlesReport, StatisticsTitlesReportKeys, Status } from 'config/enum';
 
 export enum IsReportTiles {
   OBJECTIVES_SUBMITTED = 'Objectives submitted',
@@ -32,7 +32,6 @@ export const getRequestParams = (selectedCheckboxes) =>
   selectedCheckboxes.reduce((acc, item) => {
     if (item.isChecked) {
       acc.push(...statisticsReport[item.label]);
-      return acc;
     }
     return acc;
   }, []);

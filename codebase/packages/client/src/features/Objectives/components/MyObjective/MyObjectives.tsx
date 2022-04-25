@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'components/Translation';
-import { Button, Rule, CreateRule, Styles, useStyle } from '@pma/dex-wrapper';
+import { Button, CreateRule, Rule, Styles, useStyle } from '@pma/dex-wrapper';
 import { ObjectiveType, ReviewType, Status } from 'config/enum';
 import { StepIndicator } from 'components/StepIndicator/StepIndicator';
 import { IconButton } from 'components/IconButton';
@@ -64,6 +64,7 @@ const annualReviews = [
 
 export const TEST_ID = 'my-objectives-page';
 
+// TODO: this is hard to read. Refactor this
 const MyObjectives: FC = () => {
   const { css, theme, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;

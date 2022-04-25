@@ -1,7 +1,8 @@
 import { createContext, useContext } from 'react';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-function
-const defaultEmpty = () => {};
+const defaultEmpty = () => {
+  // This is intentional
+};
 
 type ContextType = {
   inputRef: any;

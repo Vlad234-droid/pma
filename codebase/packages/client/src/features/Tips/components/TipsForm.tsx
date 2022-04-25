@@ -7,15 +7,15 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Page } from 'pages';
 import {
   ConfigEntriesActions,
-  configEntriesSelector,
   configEntriesMetaSelector,
+  configEntriesSelector,
   getCurrentTipSelector,
   getTipsMetaSelector,
   tipsActions,
 } from '@pma/store';
 import { buildPath } from 'features/Routes/utils';
-import { Button, Icon, ModalWithHeader, Rule, CreateRule, theme, useStyle } from '@pma/dex-wrapper';
-import { Input, Item, Select, Textarea, Attention } from 'components/Form';
+import { Button, CreateRule, Icon, ModalWithHeader, Rule, theme, useStyle } from '@pma/dex-wrapper';
+import { Attention, Input, Item, Select, Textarea } from 'components/Form';
 import { GenericItemField } from 'components/GenericForm';
 import { IconButton } from 'components/IconButton';
 import { createTipSchema } from 'pages/Tips/config';
@@ -110,6 +110,7 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
     });
   }, [configEntriesMeta.loaded, tipsMeta.loading]);
 
+  // TODO: this is hard to read. Refactor this
   useEffect(() => {
     if (configEntries) {
       setLevel1Options(configEntries);

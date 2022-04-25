@@ -22,9 +22,9 @@ import {
 import { ReviewType, Status } from 'config/enum';
 import { createYupSchema } from 'utils/yup';
 import { TriggerModal } from 'features/Modal/components/TriggerModal';
-import { getReviewFormContent, formTagComponents } from 'features/Objectives/utils';
+import { formTagComponents, getReviewFormContent } from 'features/Objectives/utils';
 import { useTranslation } from 'components/Translation';
-import { Input, Item, ItemProps, Select, Textarea, Attention, Text } from 'components/Form';
+import { Attention, Input, Item, ItemProps, Select, Text, Textarea } from 'components/Form';
 import { GenericItemField } from 'components/GenericForm';
 import MarkdownRenderer from 'components/MarkdownRenderer';
 import SuccessModal from 'components/SuccessModal';
@@ -197,6 +197,7 @@ const ReviewFormModal: FC<ReviewFormModal> = ({ reviewType, onClose }) => {
               </TriggerModal>
             </div>
             {!readonly && <Attention />}
+            {/*TODO: this is hard to read. Refactor this*/}
             {styledComponents.map((component) => {
               const {
                 id,

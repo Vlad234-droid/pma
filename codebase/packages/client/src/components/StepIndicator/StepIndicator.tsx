@@ -109,19 +109,12 @@ export const StepIndicatorBasic: FC<StepIndicatorProps> = ({
     const textAlign = getTextAlign(titles?.length, i);
     const active = isActive(statuses, i);
     return (
-      <span className={css(title2Style({ textAlign, active }))} key={`title${i}`}>
-        {title}
-      </span>
-    );
-  });
-
-  const descriptionArray = descriptions.map((title, i) => {
-    const textAlign = getTextAlign(descriptions?.length, i);
-    const active = isActive(statuses, i);
-    return (
-      <span className={css(descriptionStyle({ textAlign, active }))} key={`desc${i}`}>
-        {title}
-      </span>
+      <div key={`title${i}`}>
+        <div className={css(title2Style({ textAlign, active }))} key={`title${i}`}>
+          {title}
+        </div>
+        <div className={css(descriptionStyle({ textAlign, active }))}>{descriptions[i]}</div>
+      </div>
     );
   });
 
@@ -136,7 +129,6 @@ export const StepIndicatorBasic: FC<StepIndicatorProps> = ({
     >
       {array}
       {titlesArray}
-      {descriptionArray}
     </div>
   );
 };

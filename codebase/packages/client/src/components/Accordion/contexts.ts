@@ -10,9 +10,9 @@ type AccordionContext = {
   removeSection: (sectionId: string) => void;
   getNextSectionId: () => number;
 };
-
-// eslint-disable-next-line @typescript-eslint/no-empty-function
-const defaultEmpty = () => {};
+const defaultEmpty = () => {
+  // This is intentional
+};
 
 const { Provider: AccordionProvider, Consumer: AccordionConsumer } = createContext<AccordionContext>({
   accordionId: '',

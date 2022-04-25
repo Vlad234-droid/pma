@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Rule, Styles, useStyle, colors, CreateRule } from '@pma/dex-wrapper';
+import { colors, CreateRule, Rule, Styles, useStyle } from '@pma/dex-wrapper';
 import { getFoldersSelector } from '@pma/store';
 import { useSelector } from 'react-redux';
 
@@ -33,6 +33,7 @@ const SelectedFolder: FC<SelectedFolderProps> = ({
   const { css, matchMedia } = useStyle();
   const mediumScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
 
+  //TODO: this is hard to read. Refactor this
   const btnsActionsHandle = (itemId: string, itemFolderUuid: string | null, item: any) => {
     const btnsActions = [
       {

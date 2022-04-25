@@ -1,11 +1,11 @@
-import React, { FC, useEffect, useState, useMemo, useRef } from 'react';
+import React, { FC, useEffect, useMemo, useRef, useState } from 'react';
 import * as Yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { metaPDPSelector } from '@pma/store';
 import { useSelector } from 'react-redux';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, CreateRule, Rule, theme, useStyle } from '@pma/dex-wrapper';
-import { Item, Textarea, Field, Attention } from 'components/Form';
+import { Attention, Field, Item, Textarea } from 'components/Form';
 import { GenericItemField } from 'components/GenericForm';
 import { createYupSchema } from 'utils/yup';
 import { v4 as uuidv4 } from 'uuid';
@@ -299,7 +299,7 @@ const buttonWhiteStyle: CreateRule<{ theme; mobileScreen; formState; displaySave
 const buttonWrapperStyle: CreateRule<{ mobileScreen: boolean }> =
   ({ mobileScreen }) =>
   ({ theme }) => ({
-    padding: mobileScreen ? theme.spacing.s7 : theme.spacing.s7,
+    padding: theme.spacing.s7,
     display: 'flex',
     justifyContent: 'center',
     flexDirection: mobileScreen ? 'column' : 'row',

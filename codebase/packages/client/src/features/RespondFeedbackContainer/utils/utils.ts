@@ -1,5 +1,6 @@
-import { TargetTypeReverse, Tesco, TargetFeedbackKeys } from 'config/enum';
+import { TargetFeedbackKeys, TargetTypeReverse, Tesco } from 'config/enum';
 
+// TODO: Refactor this
 export const getPropperTargetType = (targetType, targetId, feedbackItems, review) => {
   const capitalType =
     TargetTypeReverse[targetType] &&

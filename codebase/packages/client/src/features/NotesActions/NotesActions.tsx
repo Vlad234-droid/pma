@@ -47,6 +47,7 @@ export enum ModalStatuses {
   INFO = 'INFO',
 }
 
+//TODO: this is hard to read. Refactor this
 const NotesActions: FC<{ loaded: boolean }> = ({ loaded }) => {
   const { css } = useStyle();
   const navigate = useNavigate();
