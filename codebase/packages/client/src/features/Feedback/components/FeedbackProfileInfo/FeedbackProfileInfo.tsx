@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import { Rule, useStyle } from '@pma/dex-wrapper';
 import { ExpandButton } from 'components/Accordion';
 import defaultImg from 'images/default.png';
+import { formatToRelativeDate } from 'utils/date';
 
 export const TEST_ID = 'expand_button';
 
@@ -11,6 +12,7 @@ type ProfileProps = {
   job: string;
   department: string;
   updatedTime: string;
+  isFormattedDate?: boolean;
   onExpandPress?: (expanded: boolean) => void;
 };
 
@@ -20,9 +22,11 @@ const FeedbackProfileInfo: FC<ProfileProps> = ({
   job,
   department,
   updatedTime,
+  isFormattedDate,
   onExpandPress,
 }) => {
   const { css } = useStyle();
+
   return (
     <div data-test-id={TEST_ID} className={css(draftStyles)}>
       <div className={css(blockInfo)}>
@@ -35,7 +39,9 @@ const FeedbackProfileInfo: FC<ProfileProps> = ({
         </div>
       </div>
       <div className={css({ display: 'flex', justifyContent: 'center', alignItems: 'center' })}>
-        <div className={css({ marginRight: '26px' })}>{updatedTime}</div>
+        <div className={css({ marginRight: '26px' })}>
+          {isFormattedDate ? updatedTime : formatToRelativeDate(updatedTime)}
+        </div>
         <div>
           {onExpandPress ? (
             <ExpandButton

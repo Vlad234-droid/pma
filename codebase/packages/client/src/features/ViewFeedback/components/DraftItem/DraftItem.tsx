@@ -91,6 +91,7 @@ const DraftItem: FC<DraftItemProps> = ({ item, downloadable = true }) => {
                 job={item?.jobName}
                 department={item?.departmentName}
                 updatedTime={item?.updatedTime}
+                isFormattedDate={true}
                 onExpandPress={(expanded) => expanded && !item.read && markAsReadFeedback(item.uuid)}
               />
 

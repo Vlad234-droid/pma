@@ -102,6 +102,11 @@ export enum FeedbackRequestStatus {
   COMPLETED = '4',
 }
 
+export enum FeedbackShema {
+  MAX_LENGTH = 10000,
+  MIN_LENGTH = 10,
+}
+
 export enum TargetType {
   'id_1' = 'GOAL',
   'id_2' = 'OBJECTIVE',

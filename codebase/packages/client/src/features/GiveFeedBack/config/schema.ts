@@ -1,3 +1,4 @@
+import { FeedbackShema } from 'config/enum';
 import * as Yup from 'yup';
 
 export const createObjectivesSchema = Yup.object().shape({
@@ -17,14 +18,14 @@ export const validateRequired = (value, { options, parent }) => {
 
 export const validateMax = (value) => {
   if (value) {
-    return Yup.string().max(500).isValidSync(value);
+    return Yup.string().max(FeedbackShema.MAX_LENGTH).isValidSync(value);
   }
   return true;
 };
 
 export const validateMin = (value) => {
   if (value) {
-    return Yup.string().min(10).isValidSync(value);
+    return Yup.string().min(FeedbackShema.MIN_LENGTH).isValidSync(value);
   }
   return true;
 };
@@ -38,11 +39,19 @@ export const createGiveFeedbackSchema = (t) =>
           test: validateRequired,
         })
         .test({
-          message: `${t('field_must_be_at_least_10_characters')}`,
+          message: t(
+            'field_must_be_at_least_number_characters',
+            `Field must be at least ${FeedbackShema.MIN_LENGTH} characters`,
+            { value: FeedbackShema.MIN_LENGTH },
+          ),
           test: validateMin,
         })
         .test({
-          message: `${t('field_must_be_less_than_500_characters')}`,
+          message: t(
+            'field_must_be_less_than_number_characters',
+            `Field must be less than ${FeedbackShema.MAX_LENGTH} characters`,
+            { value: FeedbackShema.MAX_LENGTH },
+          ),
           test: validateMax,
         }),
     ),
