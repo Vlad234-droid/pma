@@ -17,7 +17,7 @@ export const validateRequired = (value, { options, parent }) => {
 
 export const validateMax = (value) => {
   if (value) {
-    return Yup.string().max(500).isValidSync(value);
+    return Yup.string().max(10000).isValidSync(value);
   }
   return true;
 };
@@ -42,7 +42,7 @@ export const createGiveFeedbackSchema = (t) =>
           test: validateMin,
         })
         .test({
-          message: `${t('field_must_be_less_than_500_characters')}`,
+          message: `${t('field_must_be_less_than_10000_characters')}`,
           test: validateMax,
         }),
     ),

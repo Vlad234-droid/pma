@@ -496,7 +496,7 @@
   "Outstanding": "Outstanding",
   "field_is_required": "Field is required",
   "field_must_be_at_least_10_characters": "Field must be at least 10 characters",
-  "field_must_be_less_than_500_characters": "Field must be less than 500 characters",
+  "field_must_be_less_than_10000_characters": "Field must be less than 10000 characters",
   "wL4_5_report": "WL4 & 5 report",
   "feedback_report": "Feedback report",
   "percentage_of_objectives_submitted_by_colleagues": "Percentage of objectives submitted by colleagues, prior to being reviewed and approved by their line manager.",
