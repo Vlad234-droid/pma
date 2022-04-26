@@ -22,15 +22,13 @@ export const downloadCsvFile = (t, addToast) => {
         variant: Variant.ERROR,
       });
     }
-    console.log('resp', resp);
     return resp.blob().then((blob) => {
-      console.log('blob', blob);
       const a = document.createElement('a');
       a.href = window.URL.createObjectURL(blob);
-      a.download = `ObjectivesReport.xlsx (${formatDateStringFromISO(
+      a.download = `ObjectivesReport (${formatDateStringFromISO(
         new Date().toISOString(),
         'dd LLL yyyy HH:mm:ms',
-      )})`;
+      )}).xlsx`;
       document.body.appendChild(a);
       a.click();
       a.remove();

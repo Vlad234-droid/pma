@@ -6,7 +6,7 @@ import { ReportTags } from '@pma/client/src/features/TileReport/config';
 import { WorkLevel } from '../config/types';
 
 export const reportSelector = (state: RootState) => state.report;
-const statusIndex = 8;
+const statusIndex = 9;
 
 export const getReportMetaSelector = createSelector(reportSelector, (report) => report.meta);
 
@@ -124,27 +124,50 @@ export const getAnniversaryData = createSelector(reportSelector, (report: any) =
   );
 });
 
-export const getWorkLevelProfilesSelector = createSelector(reportSelector, (report: any) => {
-  const { objectiveReports } = report;
+export const getLimitedWLProfilesSelector = createSelector(reportSelector, (report: any) => {
+  const { limitedObjectiveReports } = report;
 
-  return objectiveReports.reduce((acc, item) => {
-    if ((item[4] === WorkLevel.WL4 || item[4] === WorkLevel.WL5) && item[8] === Status.APPROVED) {
+  return limitedObjectiveReports.reduce((acc, item) => {
+    if (item.includes(WorkLevel.WL4) || item.includes(WorkLevel.WL5)) {
+      const [
+        _,
+        employeeNo,
+        colleagueUuid,
+        firstName,
+        lastName,
+        workingLevel,
+        jobTitle,
+        lineManager,
+        objectiveNumber,
+        __,
+        strategicDriver,
+        title,
+        howAchieved,
+        howOverAchieved,
+      ] = item;
+
       acc.push({
-        employeeNo: item[0],
-        colleagueUuid: item[1],
-        firstName: item[2],
-        lastName: item[3],
-        workingLevel: item[4],
-        jobTitle: item[5],
-        lineManager: item[6],
-        objectiveNumber: item[7],
-        strategicDriver: item[9],
-        title: item[10],
-        howAchieved: item[11],
-        howOverAchieved: item[12],
+        employeeNo,
+        colleagueUuid,
+        firstName,
+        lastName,
+        workingLevel,
+        jobTitle,
+        lineManager,
+        objectiveNumber,
+        strategicDriver,
+        title,
+        howAchieved,
+        howOverAchieved,
       });
       return acc;
     }
     return acc;
   }, []);
+});
+
+export const getTotalWlSelector = createSelector(reportSelector, (report: any) => {
+  const { limitedObjectiveReports } = report;
+
+  return limitedObjectiveReports?.[0]?.[0];
 });

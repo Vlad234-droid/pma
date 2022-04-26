@@ -1,10 +1,11 @@
 import React, { FC } from 'react';
 import { useStyle, Rule, Styles } from '@pma/dex-wrapper';
 import { useTranslation } from 'components/Translation';
+import { CurrentItemsType } from './types';
 
 export const TABLE_WRAPPER = 'table-wrapper';
 
-const Table: FC<{ currentItems: Array<Record<string, string | number | null>>; tableTitles: Array<string> }> = ({
+const Table: FC<{ currentItems: Array<CurrentItemsType>; tableTitles: Array<string> }> = ({
   currentItems,
   tableTitles,
 }) => {

@@ -12,6 +12,7 @@ import { ChartContent } from './components/ChartContent';
 import { TableContent } from './components/TableContent';
 import { WorkLevelContent } from './components/WorkLevelContent';
 import { View } from 'components/PieChart/config';
+import { useStatisticsReport } from 'features/Report/hooks';
 
 import { useTileStatistics } from './hooks';
 import {
@@ -22,7 +23,7 @@ import {
   getReportTitles,
   getTableChartTitle,
 } from './utils';
-import { initialValues } from 'features/Report/config';
+import { initialValues, metaStatuses } from 'features/Report/config';
 import { getCurrentYear } from 'utils/date';
 
 import { Page } from 'pages';
@@ -40,19 +41,19 @@ const TileReport = () => {
   const [filterModal, setFilterModal] = useState(false);
   const [checkedItems, setCheckedItems]: [string[], (T) => void] = useState([]);
   const [isCheckAll, setIsCheckAll]: [string[], (T) => void] = useState([]);
+  const [isFullView, toggleFullView] = useState<boolean>(false);
+
+  const { approvedObjPercent, approvedObjTitle } = useStatisticsReport([...metaStatuses]);
 
   const { type, query } = useTileStatistics();
 
   const isBusinessType = checkBusinessType(type);
-
   const isTableChart = checkTableChart(type);
-
   const isWorkLevel = checkWorkLevel(type);
-
   const isException = checkExceptionType(type);
 
   const getContent = () => {
-    if (isWorkLevel) return <WorkLevelContent />;
+    if (isWorkLevel) return <WorkLevelContent toggleFullView={toggleFullView} isFullView={isFullView} />;
     if (isTableChart) return <TableContent type={type} />;
     return <ChartContent isException={isException} type={type} />;
   };
@@ -103,17 +104,25 @@ const TileReport = () => {
       </div>
       <div className={css(wrapperStyle)}>
         <div className={css(leftColumn)}>{getContent()}</div>
-        <div className={css(rightColumn)}>
-          {isTableChart ? (
-            <InfoTable mainTitle={getTableChartTitle(t, type)} data={type} />
-          ) : (
-            <PieChart
-              title={getReportTitles(t, type)?.chart}
-              data={type}
-              display={!isBusinessType ? View.CHART : View.QUANTITY}
-            />
-          )}
-        </div>
+        {!isFullView && (
+          <div className={css(rightColumn({ isWorkLevel }))}>
+            {isWorkLevel ? (
+              <PieChart
+                title={getReportTitles(t, type)?.chart}
+                data={[{ percent: approvedObjPercent, title: approvedObjTitle }]}
+                display={View.CHART}
+              />
+            ) : isTableChart ? (
+              <InfoTable mainTitle={getTableChartTitle(t, type)} data={type} />
+            ) : (
+              <PieChart
+                title={getReportTitles(t, type)?.chart}
+                data={type}
+                display={!isBusinessType ? View.CHART : View.QUANTITY}
+              />
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
@@ -130,14 +139,16 @@ const arrowLeftStyle: Rule = ({ theme }) => {
   };
 };
 
-const rightColumn: Rule = ({ theme }) => ({
-  display: 'flex',
-  gap: theme.spacing.s2,
-  flex: 4,
-  flexBasis: '400px',
-  marginTop: '72px',
-  alignSelf: 'flex-end',
-});
+const rightColumn: CreateRule<{ isWorkLevel: boolean }> =
+  ({ isWorkLevel }) =>
+  ({ theme }) => ({
+    display: 'flex',
+    gap: theme.spacing.s2,
+    flex: 4,
+    flexBasis: '400px',
+    marginTop: isWorkLevel ? '79px' : '73px',
+    alignSelf: 'flex-end',
+  });
 
 const leftColumn: Rule = ({ theme }) => ({
   display: 'flex',

@@ -11,7 +11,8 @@ const PieChartContent: FC<Props> = ({ title, titleId, data, display, percentId }
   const { css } = useStyle();
   const { t } = useTranslation();
 
-  const chartData = Array.isArray(data) ? data : useChartDataStatistics(t, data) || [];
+  const useChartData = useChartDataStatistics(t, data) ?? [];
+  const chartData = Array.isArray(data) ? data : useChartData;
 
   return (
     <>

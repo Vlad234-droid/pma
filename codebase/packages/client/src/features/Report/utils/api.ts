@@ -51,10 +51,10 @@ export const downloadReportStatistics = async (queryParams) => {
     resp.blob().then((blob) => {
       const a = document.createElement('a');
       a.href = window.URL.createObjectURL(blob);
-      a.download = `Statistics Report.xlsx (${formatDateStringFromISO(
+      a.download = `Statistics Report (${formatDateStringFromISO(
         new Date().toISOString(),
         'dd LLL yyyy HH:mm:ms',
-      )})`;
+      )}).xlsx`;
       document.body.appendChild(a);
       a.click();
       a.remove();

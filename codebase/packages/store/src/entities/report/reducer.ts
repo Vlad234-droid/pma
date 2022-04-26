@@ -1,8 +1,15 @@
 import { createReducer } from 'typesafe-actions';
-import { getObjectivesReport, getObjectivesStatistics, getTargetingColleagues, clearStatistics } from './actions';
+import {
+  getObjectivesReport,
+  getObjectivesStatistics,
+  getTargetingColleagues,
+  clearStatistics,
+  getLimitedObjectivesReport,
+} from './actions';
 
 export const initialState = {
   objectiveReports: [],
+  limitedObjectiveReports: [],
   objectiveStatistics: [],
   colleagues: [],
   meta: { loading: false, loaded: false, error: null },
@@ -23,6 +30,7 @@ export default createReducer(initialState)
     objectiveReports: [],
     meta: { ...state.meta, loading: false, loaded: true, error: payload },
   }))
+
   .handleAction(getObjectivesStatistics.request, (state) => ({
     ...state,
     meta: { ...state.meta, loading: true },
@@ -33,6 +41,20 @@ export default createReducer(initialState)
     meta: { ...state.meta, loading: false, loaded: true },
   }))
   .handleAction(getObjectivesStatistics.failure, (state, { payload }) => ({
+    ...state,
+    meta: { ...state.meta, loading: false, loaded: true, error: payload },
+  }))
+
+  .handleAction(getLimitedObjectivesReport.request, (state) => ({
+    ...state,
+    meta: { ...state.meta, loading: true },
+  }))
+  .handleAction(getLimitedObjectivesReport.success, (state, { payload }) => ({
+    ...state,
+    limitedObjectiveReports: [...state.limitedObjectiveReports, ...payload],
+    meta: { ...state.meta, loading: false, loaded: true },
+  }))
+  .handleAction(getLimitedObjectivesReport.failure, (state, { payload }) => ({
     ...state,
     meta: { ...state.meta, loading: false, loaded: true, error: payload },
   }))
