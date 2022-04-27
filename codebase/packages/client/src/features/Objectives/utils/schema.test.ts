@@ -18,7 +18,7 @@ describe('features/Objectives/utils/schema', () => {
           text: '## Look back',
           type: 'text',
           id: 'Field_0hu83pj',
-          text_origin: '## Look back',
+          key: 'Field_0hu83pj',
           expression: {},
         },
       ]);
@@ -154,7 +154,7 @@ describe('features/Objectives/utils/schema', () => {
           expression: { tag: { block: ['open'] } },
           id: 'Field_1gbty45',
           level: 1,
-          style: {
+          borderStyle: {
             borderLeft: '2px solid test',
             borderRadius: '10px 10px 0 0',
             borderRight: '2px solid test',
@@ -171,7 +171,7 @@ describe('features/Objectives/utils/schema', () => {
           expression: {},
           id: 'Field_0hu83pj',
           level: 1,
-          style: {
+          borderStyle: {
             borderLeft: '2px solid test',
             borderRight: '2px solid test',
             boxShadow: '3px 0px 0px 0px rgba(0, 0, 0, 0.05)',
@@ -185,7 +185,7 @@ describe('features/Objectives/utils/schema', () => {
           expression: { tag: { block: ['close'] } },
           id: 'Field_1gbty45',
           level: 1,
-          style: {
+          borderStyle: {
             borderBottom: '2px solid test',
             borderLeft: '2px solid test',
             borderRadius: '0 0 10px 10px',

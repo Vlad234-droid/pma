@@ -1,4 +1,5 @@
 import { Status, ReviewType } from 'config/enum';
+import { Component } from '@pma/store';
 
 type Explanation = {
   title: string;
@@ -28,4 +29,9 @@ type Review = {
   uuid: string;
 };
 
-export type { Review, Objective, Explanation };
+interface BorderedComponent extends Component {
+  borderStyle?: Record<string, string>;
+  level?: number;
+}
+
+export type { Review, Objective, Explanation, BorderedComponent };

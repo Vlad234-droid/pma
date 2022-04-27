@@ -1,7 +1,8 @@
-import { ExpressionValueType, ExpressionType } from '@pma/store';
+import { ExpressionValueType, ExpressionType, Component } from '@pma/store';
 import { Theme } from '@pma/dex-wrapper';
+import { BorderedComponent } from '../types';
 
-export const formTagCheck = (components: any, type = ExpressionType.BLOCK): boolean => {
+export const formTagCheck = (components: Component[], type = ExpressionType.BLOCK): boolean => {
   const holder: string[] = [];
   const openBrackets = [ExpressionValueType.OPEN];
   const closedBrackets = [ExpressionValueType.CLOSE];
@@ -23,7 +24,11 @@ export const formTagCheck = (components: any, type = ExpressionType.BLOCK): bool
   return holder.length === 0;
 };
 
-export const formTagComponents = (components: any, theme: Theme, type = ExpressionType.BLOCK): any => {
+export const formTagComponents = (
+  components: Component[],
+  theme: Theme,
+  type = ExpressionType.BLOCK,
+): BorderedComponent[] => {
   if (formTagCheck(components, type)) {
     const blockComponents: any = [];
     const openBrackets = [ExpressionValueType.OPEN];
@@ -36,7 +41,7 @@ export const formTagComponents = (components: any, theme: Theme, type = Expressi
         level++;
         blockComponents.push({
           ...component,
-          style: {
+          borderStyle: {
             marginTop: '12px',
             borderRadius: '10px 10px 0 0',
             // @ts-ignore
@@ -53,7 +58,7 @@ export const formTagComponents = (components: any, theme: Theme, type = Expressi
       } else if (closedBrackets.includes(tag)) {
         blockComponents.push({
           ...component,
-          style: {
+          borderStyle: {
             borderRadius: '0 0 10px 10px',
             // @ts-ignore
             borderBottom: `2px solid ${theme.colors.lightGray}`,
@@ -70,7 +75,7 @@ export const formTagComponents = (components: any, theme: Theme, type = Expressi
       } else {
         blockComponents.push({
           ...component,
-          style:
+          borderStyle:
             level > 0
               ? {
                   // @ts-ignore

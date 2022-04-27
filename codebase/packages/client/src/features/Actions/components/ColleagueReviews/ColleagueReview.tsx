@@ -34,7 +34,7 @@ export const ColleagueReview: FC<Props> = ({ review, schema, validateReview, upd
   const styledComponents = formTagComponents(components, theme);
 
   const reviewProperties = review?.properties?.mapJson;
-  const yepSchema = styledComponents.reduce(createYupSchema(t), {});
+  const yepSchema = components.reduce(createYupSchema(t), {});
   const methods = useForm({
     mode: 'onChange',
     resolver: yupResolver<Yup.AnyObjectSchema>(Yup.object().shape(yepSchema)),
@@ -75,21 +75,21 @@ export const ColleagueReview: FC<Props> = ({ review, schema, validateReview, upd
         {styledComponents.map((component) => {
           const {
             id,
-            key,
-            text,
-            label,
-            description,
+            key = '',
+            text = '',
+            label = '',
+            description = '',
             type,
-            validate,
+            validate = {},
             values = [],
             expression = {},
-            style = {},
+            borderStyle = {},
           } = component;
-          const value = reviewProperties[key] ? reviewProperties[key] : '';
+          const value = key && reviewProperties[key] ? reviewProperties[key] : '';
 
           if (type === FormType.TEXT) {
             return (
-              <div className={css({ padding: 0, margin: 0 }, style)} key={id}>
+              <div className={css({ padding: 0, margin: 0 }, borderStyle)} key={id}>
                 <div className={css(styledMarkdown)}>
                   <MarkdownRenderer source={text} />
                 </div>
@@ -99,7 +99,7 @@ export const ColleagueReview: FC<Props> = ({ review, schema, validateReview, upd
           if (expression?.auth?.permission?.write?.length && review.status === Status.WAITING_FOR_APPROVAL) {
             if (type === FormType.TEXT_FIELD) {
               return (
-                <div className={css(style)}>
+                <div className={css(borderStyle)}>
                   <GenericItemField
                     key={id}
                     name={key}
@@ -117,7 +117,7 @@ export const ColleagueReview: FC<Props> = ({ review, schema, validateReview, upd
             }
             if (type === FormType.SELECT) {
               return (
-                <div className={css(style)}>
+                <div className={css(borderStyle)}>
                   <GenericItemField
                     key={id}
                     name={key}
@@ -137,7 +137,7 @@ export const ColleagueReview: FC<Props> = ({ review, schema, validateReview, upd
           }
 
           return (
-            <div key={id} className={css(style)}>
+            <div key={id} className={css(borderStyle)}>
               <div className={css({ padding: '10px 0' })}>
                 <MarkdownRenderer source={label} />
                 <div className={css(valueStyle)}>{value}</div>

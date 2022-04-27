@@ -39,3 +39,15 @@ export enum WorkLevel {
   WL4 = 'WL4',
   WL5 = 'WL5',
 }
+
+export interface Component {
+  id: string;
+  key?: string;
+  text?: string;
+  label?: string;
+  description?: string;
+  type?: FormType | string;
+  validate?: any;
+  values?: { label?: string; value?: string }[];
+  expression?: any;
+}

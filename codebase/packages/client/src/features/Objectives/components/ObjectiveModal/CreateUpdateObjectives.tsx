@@ -17,6 +17,7 @@ import {
 import { createYupSchema } from 'utils/yup';
 import { ReviewType, Status } from 'config/enum';
 import SuccessModal from 'components/SuccessModal';
+import Spinner from 'components/Spinner';
 import useReviewSchema from '../../hooks/useReviewSchema';
 import { ObjectiveModal } from './ObjectiveModal';
 
@@ -195,7 +196,7 @@ const CreateUpdateObjectives: FC<CreateUpdateObjectivesModalProps> = ({ onClose,
   }
 
   if ((!schemaLoaded && !reviewLoaded) || (reviewLoading && schemaLoading)) {
-    return null;
+    return <Spinner fullHeight />;
   }
 
   return (

@@ -2,12 +2,11 @@ import React, { FC, useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
 import { useForm } from 'react-hook-form';
-import { CreateRule, Rule, Styles, useStyle } from '@pma/dex-wrapper';
+import { CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
   currentUserSelector,
   ExpressionValueType,
-  FormType,
   getExpressionListenersKeys,
   getExpressionRequestKey,
   getReviewByTypeSelector,
@@ -17,22 +16,23 @@ import {
   reviewsMetaSelector,
   SchemaActions,
   schemaMetaSelector,
+  Component,
 } from '@pma/store';
 
 import { ReviewType, Status } from 'config/enum';
 import { createYupSchema } from 'utils/yup';
 import { TriggerModal } from 'features/Modal/components/TriggerModal';
-import { formTagComponents, getReviewFormContent } from 'features/Objectives/utils';
+import { getReviewFormContent } from 'features/Objectives/utils';
 import { useTranslation } from 'components/Translation';
-import { Attention, Input, Item, ItemProps, Select, Text, Textarea } from 'components/Form';
-import { GenericItemField } from 'components/GenericForm';
-import MarkdownRenderer from 'components/MarkdownRenderer';
+import { Attention } from 'components/Form';
 import SuccessModal from 'components/SuccessModal';
 import { Icon as IconComponent } from 'components/Icon';
+import Spinner from 'components/Spinner';
 
 import ReviewHelpModal from './ReviewHelpModal';
 import ReviewHelpTrigger from './ReviewHelpTrigger';
 import ReviewButtons from './ReviewButtons';
+import ReviewComponents from './ReviewComponents';
 
 export type ReviewFormModal = {
   reviewType: ReviewType;
@@ -63,10 +63,9 @@ const ReviewFormModal: FC<ReviewFormModal> = ({ reviewType, onClose }) => {
 
   const { helperText, title } = getReviewFormContent(reviewType, t);
 
-  const { components = [] } = schema;
-  const styledComponents = formTagComponents(components, theme);
+  const { components = [] as Component[] } = schema;
 
-  const yepSchema = styledComponents.reduce(createYupSchema(t), {});
+  const yepSchema = components.reduce(createYupSchema(t), {});
   const methods = useForm({
     mode: 'onChange',
     resolver: yupResolver<Yup.AnyObjectSchema>(Yup.object().shape(yepSchema)),
@@ -161,8 +160,7 @@ const ReviewFormModal: FC<ReviewFormModal> = ({ reviewType, onClose }) => {
   }, [reviewLoaded]);
 
   if (reviewLoading && schemaLoading) {
-    // todo use loading component when we have
-    return null;
+    return <Spinner fullHeight />;
   }
 
   if (successModal) {
@@ -197,116 +195,7 @@ const ReviewFormModal: FC<ReviewFormModal> = ({ reviewType, onClose }) => {
               </TriggerModal>
             </div>
             {!readonly && <Attention />}
-            {/*TODO: this is hard to read. Refactor this*/}
-            {styledComponents.map((component) => {
-              const {
-                id,
-                key,
-                text,
-                label,
-                description,
-                type,
-                validate,
-                values = [],
-                expression = {},
-                style = {},
-              } = component;
-              const value = formValues[key] ? formValues[key] : '';
-
-              // todo temporary solution. Do not have full permission requirements. might be wrapper around field
-              const keyVisibleOnEmptyValue = ExpressionValueType.OVERALL_RATING;
-              let componentReadonly = readonly;
-              if (expression?.auth?.permission?.read?.length && !value && key !== keyVisibleOnEmptyValue) {
-                return null;
-              } else if (expression?.auth?.permission?.read?.length) {
-                componentReadonly = true;
-              }
-              // todo end temporary solution
-
-              if (type === FormType.TEXT) {
-                const CustomPTag = ({ children }) => {
-                  return <p className={css(defaultTag)}>{children}</p>;
-                };
-                const defaultTag: Rule = ({ theme }) => ({
-                  margin: '0px',
-                  padding: '0px',
-                  color: theme.colors.base,
-                  fontSize: '18px',
-                  lineHeight: '22px',
-                });
-
-                return (
-                  <div className={css({ padding: 0, margin: 0 }, style)} key={id}>
-                    <div
-                      className={css({
-                        padding: 0,
-                        '& > p': {
-                          padding: '16px 0 8px 0',
-                          margin: 0,
-                          fontSize: '16px',
-                          lineHeight: '20px',
-                        },
-                        '& > h2': {
-                          padding: readonly ? '14px 0 8px 0' : '14px 0px 8px',
-                          margin: 0,
-                          fontSize: '18px',
-                          lineHeight: '22px',
-                        },
-                      } as Styles)}
-                    >
-                      <MarkdownRenderer components={{ p: CustomPTag }} source={text} />
-                    </div>
-                  </div>
-                );
-              }
-              if (type === FormType.TEXT_FIELD) {
-                return (
-                  <div className={css(style)}>
-                    <GenericItemField
-                      key={id}
-                      name={key}
-                      methods={methods}
-                      label={label}
-                      Wrapper={Item}
-                      wrapperProps={
-                        (readonly
-                          ? { marginBot: false, labelCustomStyle: { padding: 0 } }
-                          : { marginBot: false, labelCustomStyle: { padding: '10px 0px 8px' } }) as ItemProps
-                      }
-                      //@ts-ignore
-                      Element={readonly ? Text : validate?.maxLength > 100 ? Textarea : Input}
-                      placeholder={description}
-                      value={value}
-                      readonly={componentReadonly}
-                    />
-                  </div>
-                );
-              }
-              if (type === FormType.SELECT) {
-                return (
-                  <div className={css(style)}>
-                    <GenericItemField
-                      key={id}
-                      name={key}
-                      methods={methods}
-                      label={label}
-                      Wrapper={Item}
-                      wrapperProps={
-                        (readonly
-                          ? { marginBot: false, labelCustomStyle: { padding: 0 } }
-                          : { marginBot: false, labelCustomStyle: { padding: '10px 0px 8px' } }) as ItemProps
-                      }
-                      //@ts-ignore
-                      Element={readonly ? Text : Select}
-                      options={values}
-                      placeholder={description}
-                      value={value}
-                      readonly={componentReadonly}
-                    />
-                  </div>
-                );
-              }
-            })}
+            <ReviewComponents components={components} review={formValues} methods={methods} readonly={readonly} />
           </div>
           <ReviewButtons
             isValid={isValid}
