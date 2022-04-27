@@ -151,7 +151,7 @@ const CreatePerformanceCycle: FC = () => {
       onSubmit={handleSubmit}
       getConfigEntriesByUuid={getConfigEntriesByUuid}
       defaultValues={defaultValues}
-      canEdit={canEdit}
+      canEdit={performanceCycleUuid === 'new' || canEdit}
     />
   );
 };
