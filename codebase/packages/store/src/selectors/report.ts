@@ -127,7 +127,7 @@ export const getAnniversaryData = createSelector(reportSelector, (report: any) =
 export const getLimitedWLProfilesSelector = createSelector(reportSelector, (report: any) => {
   const { limitedObjectiveReports } = report;
 
-  return limitedObjectiveReports.reduce((acc, item) => {
+  return limitedObjectiveReports?.reduce((acc, item) => {
     if (item.includes(WorkLevel.WL4) || item.includes(WorkLevel.WL5)) {
       const [
         _,

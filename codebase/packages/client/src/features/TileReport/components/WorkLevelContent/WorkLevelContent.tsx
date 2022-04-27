@@ -17,7 +17,7 @@ import { getTableTitles } from '../../utils';
 import { downloadCsvFile } from './utils';
 import { getAdditionalFields } from './config';
 
-export const WORK_LEVEL_CONTENT_WRAPPER = 'work-level-content-wrapper';
+export const WORK_LEVEL_CONTENT_WRAPPER = 'work-level-content-wraper';
 
 const WorkLevelContent: FC<{ toggleFullView: Dispatch<SetStateAction<boolean>>; isFullView: boolean }> = ({
   toggleFullView,
@@ -66,6 +66,7 @@ const WorkLevelContent: FC<{ toggleFullView: Dispatch<SetStateAction<boolean>>; 
                     graphic='full'
                     customVariantRules={{ default: iconButtonStyles }}
                     iconStyles={iconStyles}
+                    data-test-id={'full-button'}
                   >
                     {!isFullView ? (
                       <Trans i18nKey='full_view'>Full view</Trans>

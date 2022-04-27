@@ -3,7 +3,8 @@ import '@testing-library/jest-dom/extend-expect';
 import '@testing-library/jest-dom';
 import { renderWithTheme as render } from 'utils/test';
 import WorkLevelContent, { WORK_LEVEL_CONTENT_WRAPPER } from './WorkLevelContent';
-import { TABLE_WRAPPER } from 'components/Table/Table';
+import { BrowserRouter } from 'react-router-dom';
+import { fireEvent } from '@testing-library/react';
 
 jest.mock('react-router-dom', () => ({
   ...(jest.requireActual('react-router-dom') as any),
@@ -32,6 +33,23 @@ describe('Work level content', () => {
           'asdad asdadsasdad asdads',
         ],
       ],
+      limitedObjectiveReports: [
+        [
+          'UKE12380626',
+          'eecebff8-a0e1-4e2f-a703-6fcbb0e6f6fb',
+          'Vitalii',
+          'Kolodribskyi',
+          'WL5',
+          'Colleague',
+          'Vitalii Kolodribskyi',
+          1,
+          'APPROVED',
+          'Magnetic Value',
+          'asdad asdads',
+          'asdad asdadsasdad asdads',
+          'asdad asdadsasdad asdads',
+        ],
+      ],
       meta: {
         loading: false,
         loaded: true,
@@ -40,11 +58,34 @@ describe('Work level content', () => {
     },
   };
 
+  const toggleFullView = jest.fn();
+
+  const props = {
+    toggleFullView,
+    isFullView: false,
+  };
+
   it('should render work level content', async () => {
-    const { getByTestId } = render(<WorkLevelContent />, { ...state });
+    const { getByTestId } = render(
+      <BrowserRouter>
+        <WorkLevelContent {...props} />
+      </BrowserRouter>,
+      { ...state },
+    );
     const wrapper = getByTestId(WORK_LEVEL_CONTENT_WRAPPER);
-    const table_wrapper = getByTestId(TABLE_WRAPPER);
     expect(wrapper).toBeInTheDocument();
-    expect(table_wrapper).toBeInTheDocument();
+  });
+  it('should call toggleFullView handler', async () => {
+    const { getByTestId, queryByTestId } = render(
+      <BrowserRouter>
+        <WorkLevelContent {...props} />
+      </BrowserRouter>,
+      { ...state },
+    );
+    const full = getByTestId('full-button');
+    fireEvent.click(full);
+    expect(toggleFullView).toHaveBeenCalled();
+    const pieChart = queryByTestId('pie-chart-content-id');
+    expect(pieChart).toBeNull();
   });
 });
