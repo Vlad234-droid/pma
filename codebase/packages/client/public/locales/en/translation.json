@@ -560,5 +560,6 @@
   "full_view": "Full view",
   "show_less": "Show less",
   "save_changes": "Save changes",
-  "anything_else": "Anything else?"
+  "anything_else": "Anything else?",
+  "select_financial_year":  "Select financial year"
 }

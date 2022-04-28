@@ -24,12 +24,12 @@ const Header: FC<HeaderProps> = ({ title, onBack, withIcon, iconName = 'home', s
   const { css, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const navigate = useNavigate();
-  const { pathname, state }: any = useLocation();
+  const { pathname, state, search }: any = useLocation();
 
   const { fetchMessagesCount } = useMessagesContext();
 
   const handleMenuOpen = () => {
-    navigate(pathname, {
+    navigate(`${pathname}${search}`, {
       state: {
         isMenuOpen: true,
       },
@@ -37,7 +37,7 @@ const Header: FC<HeaderProps> = ({ title, onBack, withIcon, iconName = 'home', s
   };
 
   const handleClose = () => {
-    navigate(pathname, { replace: true });
+    navigate(`${pathname}${search}`, { replace: true });
   };
 
   const handleAlertClose = async () => {

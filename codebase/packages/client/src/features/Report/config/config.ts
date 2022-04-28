@@ -1,4 +1,5 @@
 import { MetaDataReport, StatisticsTitlesReport, StatisticsTitlesReportKeys, Status } from 'config/enum';
+import { getCurrentYear } from 'utils/date';
 
 export enum IsReportTiles {
   OBJECTIVES_SUBMITTED = 'Objectives submitted',
@@ -213,3 +214,6 @@ export const initialValues = [
     data: [{ title: 'Select All' }, { title: 'Male' }, { title: 'Female' }],
   },
 ];
+
+export const getCurrentValue = (query, year) =>
+  query.year ? year || query.year || getCurrentYear() : year || getCurrentYear();

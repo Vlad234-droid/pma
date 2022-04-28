@@ -18,7 +18,7 @@ import { View } from 'components/PieChart/config';
 import { HoverContainer } from 'components/HoverContainer';
 import { HoverMessage } from 'components/HoverMessage';
 
-import { getFieldOptions, metaStatuses, initialValues, convertToLink, IsReportTiles } from './config';
+import { getFieldOptions, metaStatuses, initialValues, convertToLink, IsReportTiles, getCurrentValue } from './config';
 import { useStatisticsReport, getReportData, getData } from './hooks';
 import { ReportPage, TitlesReport } from 'config/enum';
 
@@ -97,18 +97,18 @@ const Report: FC = () => {
         <div className={css(downloadWrapperStyle)}>
           <form>
             <h2 className={css(yearLabel)}>
-              <Trans i18nKey='view_previous_years'>View previous years</Trans>
+              <Trans i18nKey='select_financial_year'>Select financial year</Trans>
             </h2>
 
             <Select
-              options={getFieldOptions(getCurrentYear())}
+              options={[{ value: getCurrentYear(), label: getCurrentYear() }, ...getFieldOptions(getCurrentYear())]}
               name={'year_options'}
               placeholder={t('choose_an_area', 'Choose an area')}
               //@ts-ignore
               onChange={({ target: { value } }) => {
                 changeYearHandler(value);
               }}
-              value={year || query.year}
+              value={getCurrentValue(query, year)}
             />
           </form>
         </div>
@@ -427,7 +427,7 @@ const spaceBetween: CreateRule<{ quantity: number; mobileScreen: boolean }> = ({
     display: 'flex',
     flexWrap: mobileScreen ? 'wrap' : 'nowrap',
     ...(mobileScreen && { flexBasis: '250px' }),
-    // Todo replace it in future due to appliued filters
+    // Todo replace it in future due to applied filters
     // justifyContent: quantity ? 'space-between' : 'flex-end',
     alignItems: 'center',
     justifyContent: 'space-between',
