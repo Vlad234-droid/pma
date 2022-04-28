@@ -17,7 +17,7 @@ export const StatusIcon: FC<{
         zIndex: 1,
       })}
     >
-      <Icon graphic={graphics} fill={color} />
+      <Icon graphic={graphics} fill={color} size={'20px'} />
     </div>
   );
 };
