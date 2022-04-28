@@ -123,7 +123,7 @@ const errorMessageStyle: Rule = ({ theme }) => ({
   letterSpacing: '0px',
   position: 'absolute',
   left: 0,
-  bottom: '-20px',
+  top: '100%',
   color: theme.colors.error,
 });
 

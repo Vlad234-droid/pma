@@ -561,5 +561,6 @@
   "show_less": "Show less",
   "save_changes": "Save changes",
   "anything_else": "Anything else?",
-  "select_financial_year":  "Select financial year"
+  "select_financial_year": "Select financial year",
+  "end_day_mast_be_after": "End day mast be after {{ min }}"
 }
