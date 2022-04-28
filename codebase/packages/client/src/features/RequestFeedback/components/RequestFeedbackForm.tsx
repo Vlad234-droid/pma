@@ -111,7 +111,7 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel, setIsInfoModalOpen }) 
             onSelect={handleSelect}
             onBlur={() => handleBlur('colleagues')}
             selected={formValues.colleagues || []}
-            error={errors['colleagues']?.message}
+            error={errors['colleagues']?.message?.replace('colleagues', t('colleagues', 'Colleagues'))}
           />
           <div className={css(withMargin)}>
             <IconButton graphic='information' onPress={setIsInfoModalOpen}>
@@ -154,7 +154,10 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel, setIsInfoModalOpen }) 
                 Element={Textarea}
                 value={formValues.comment_to_day_job}
                 name={'comment_to_day_job'}
-                error={errors['comment_to_day_job']?.message}
+                error={errors['comment_to_day_job']?.message?.replace(
+                  'comment_to_day_job',
+                  t('comment_to_day_job', 'Comment to day job'),
+                )}
                 setValue={setValue}
               />
             </TileWrapper>
@@ -189,7 +192,10 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel, setIsInfoModalOpen }) 
                 Element={Textarea}
                 value={formValues.comment_to_your_self}
                 name={'comment_to_objective'}
-                error={errors['comment_to_objective']?.message}
+                error={errors['comment_to_objective']?.message?.replace(
+                  'comment_to_objective',
+                  t('comment_to_objective', 'Comment to day objective'),
+                )}
                 setValue={setValue}
               />
             </TileWrapper>
@@ -204,7 +210,10 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel, setIsInfoModalOpen }) 
                 Element={Textarea}
                 value={formValues.comment_to_your_self}
                 name={'comment_to_your_self'}
-                error={errors['comment_to_your_self']?.message}
+                error={errors['comment_to_your_self']?.message?.replace(
+                  'comment_to_your_self',
+                  t('comment_to_your_self', 'Comment to your self'),
+                )}
                 setValue={setValue}
               />
             </TileWrapper>
@@ -220,7 +229,10 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel, setIsInfoModalOpen }) 
                 Element={Textarea}
                 value={formValues.comment_to_your_impact}
                 name={'comment_to_your_impact'}
-                error={errors['comment_to_your_impact']?.message}
+                error={errors['comment_to_your_impact']?.message?.replace(
+                  'comment_to_your_impact',
+                  t('comment_to_your_impact', 'Comment to your impact'),
+                )}
                 setValue={setValue}
               />
             </TileWrapper>
@@ -237,7 +249,10 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel, setIsInfoModalOpen }) 
               Element={Textarea}
               value={formValues.comment_to_request}
               name={'comment_to_request'}
-              error={errors['comment_to_request']?.message}
+              error={errors['comment_to_request']?.message?.replace(
+                'comment_to_request',
+                t('comment_to_request', 'Comment to request'),
+              )}
               setValue={setValue}
             />
           </TileWrapper>
