@@ -62,15 +62,17 @@ const baseTitleStyles: Rule = ({ theme }) => ({
 });
 
 const baseLeftStyles: Rule = ({ theme }) => ({
-  fontSize: '18px',
-  lineHeight: '22px',
-  fontWeight: 700,
+  fontSize: theme.font.fixed.f18.fontSize,
+  lineHeight: theme.font.fluid.f18.lineHeight,
+  letterSpacing: '0px',
+  fontWeight: theme.font.weight.bold,
   color: theme.colors.base,
 });
 
 const descriptionStyles: Rule = ({ theme }) => ({
-  fontSize: '14px',
-  lineHeight: '18px',
+  fontSize: theme.font.fixed.f14.fontSize,
+  lineHeight: theme.font.fixed.f14.lineHeight,
+  letterSpacing: '0px',
   color: theme.colors.base,
 });
 

@@ -82,15 +82,16 @@ const modalTitleOptionStyle: CreateRule<{ mobileScreen }> =
       left: 0,
       right: 0,
       color: theme.colors.white,
+      letterSpacing: '0px',
       fontWeight: theme.font.weight.bold,
       ...(mobileScreen
         ? {
-            fontSize: `${theme.font.fixed.f20.fontSize}`,
-            lineHeight: `${theme.font.fluid.f24.lineHeight}`,
+            fontSize: theme.font.fixed.f20.fontSize,
+            lineHeight: theme.font.fluid.f20.lineHeight,
           }
         : {
-            fontSize: `${theme.font.fixed.f24.fontSize}`,
-            lineHeight: `${theme.font.fluid.f28.lineHeight}`,
+            fontSize: theme.font.fixed.f24.fontSize,
+            lineHeight: theme.font.fluid.f24.lineHeight,
           }),
     };
   };

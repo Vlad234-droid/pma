@@ -34,15 +34,7 @@ const CreateButton: FC<Props> = ({ withIcon = false, buttonText = 'Create object
           {buttonText}
         </IconButton>
       ) : (
-        <Button
-          styles={[
-            {
-              border: `${theme.border.width.b2} solid ${theme.colors.white}`,
-              fontSize: '14px',
-            },
-          ]}
-          onPress={handleBtnClick}
-        >
+        <Button styles={[buttonStyle]} onPress={handleBtnClick}>
           {buttonText}
         </Button>
       )}
@@ -80,5 +72,11 @@ const iconBtnStyle: Rule = ({ theme }) => ({
 const iconStyle: Rule = {
   marginRight: '10px',
 };
+
+const buttonStyle: Rule = ({ theme }) => ({
+  border: `${theme.border.width.b2} solid ${theme.colors.white}`,
+  ...theme.font.fixed.f14,
+  letterSpacing: '0px',
+});
 
 export default CreateButton;

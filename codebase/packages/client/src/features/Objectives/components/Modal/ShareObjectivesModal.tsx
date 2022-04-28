@@ -55,16 +55,17 @@ const wrapperStyle: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) =
 const titleStyle: CreateRule<{ mobileScreen: boolean }> =
   ({ mobileScreen }) =>
   ({ theme }) => ({
-    fontSize: '24px',
-    lineHeight: '28px',
+    fontSize: theme.font.fixed.f24.fontSize,
+    lineHeight: theme.font.fluid.f24.lineHeight,
+    letterSpacing: '0px',
+    fontWeight: theme.font.weight.bold,
     padding: '10px',
-    fontWeight: 'bold',
     color: mobileScreen ? theme.colors.tescoBlue : theme.colors.base,
   });
 
 const managerNameStyle: Rule = ({ theme }) => ({
-  fontSize: '20px',
-  lineHeight: '24px',
+  fontSize: theme.font.fixed.f20.fontSize,
+  lineHeight: theme.font.fluid.f20.lineHeight,
   padding: '10px',
   color: theme.colors.tescoBlue,
 });

@@ -16,6 +16,7 @@ import { TriggerModal } from 'features/Modal/components/TriggerModal';
 import { ButtonWithConfirmation } from '../Buttons';
 import ObjectiveHelpModal from '../Modal/ObjectiveHelpModal';
 import { IconButton, Position } from 'components/IconButton';
+import ObjectiveComponents from './ObjectiveComponents';
 
 export type ObjectiveModalProps = {
   useSingleStep?: boolean;
@@ -111,67 +112,7 @@ export const ObjectiveModal: FC<Props> = ({
             </div>
           )}
           <Attention customStyle={{ marginBottom: '20px' }} />
-          {schemaComponents.map((component) => {
-            const { id, key, label, text, description, type, validate, values = [] } = component;
-            const value = formValues[key] ? formValues[key] : '';
-
-            if (type === FormType.TEXT) {
-              return (
-                <div style={{ padding: '10px 0' }} key={id}>
-                  <div className={css({ fontSize: '16px', lineHeight: '20px' })}>
-                    <MarkdownRenderer source={text} />
-                  </div>
-                </div>
-              );
-            }
-            if (type === 'textfield' && validate?.maxLength <= 100) {
-              return (
-                <GenericItemField
-                  key={id}
-                  name={key}
-                  methods={methods}
-                  label={label}
-                  Wrapper={Item}
-                  Element={Input}
-                  placeholder={description}
-                  value={value}
-                />
-              );
-            }
-            if (type === 'textfield' && validate?.maxLength > 100) {
-              return (
-                <GenericItemField
-                  key={id}
-                  name={key}
-                  methods={methods}
-                  label={label}
-                  Wrapper={Item}
-                  Element={Textarea}
-                  placeholder={description}
-                  value={value}
-                />
-              );
-            }
-            if (type === 'select') {
-              return (
-                <GenericItemField
-                  key={id}
-                  name={key}
-                  methods={methods}
-                  label={label}
-                  Wrapper={({ children, label }) => (
-                    <Item withIcon={false} label={label}>
-                      {children}
-                    </Item>
-                  )}
-                  Element={Select}
-                  options={values}
-                  placeholder={description || t('please_select', 'Please select')}
-                  value={value}
-                />
-              );
-            }
-          })}
+          <ObjectiveComponents components={schemaComponents} review={formValues} methods={methods} />
           {!skipFooter && (
             <div data-test-id={FOOTER_TEST_ID} className={css(footerContainerStyle)}>
               <div className={css(footerWrapperStyle)}>

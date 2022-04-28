@@ -113,24 +113,28 @@ const defaultTagStyle: Rule = ({ theme }) => ({
   margin: '0px',
   padding: '0px',
   color: theme.colors.base,
-  fontSize: '18px',
-  lineHeight: '22px',
+  fontSize: theme.font.fixed.f18.fontSize,
+  lineHeight: theme.font.fluid.f18.lineHeight,
+  letterSpacing: '0px',
 });
 
-const markdownCustomStyle: Rule = {
-  padding: 0,
-  '& > p': {
-    padding: '16px 0 8px 0',
-    margin: 0,
-    fontSize: '16px',
-    lineHeight: '20px',
-  },
-  '& > h2': {
-    padding: '14px 0 8px 0',
-    margin: 0,
-    fontSize: '18px',
-    lineHeight: '22px',
-  },
-} as Styles;
+const markdownCustomStyle: Rule = ({ theme }) =>
+  ({
+    padding: 0,
+    '& > p': {
+      padding: '16px 0 8px 0',
+      margin: 0,
+      fontSize: theme.font.fixed.f16.fontSize,
+      lineHeight: theme.font.fluid.f16.lineHeight,
+      letterSpacing: '0px',
+    },
+    '& > h2': {
+      padding: '14px 0 8px 0',
+      margin: 0,
+      fontSize: theme.font.fixed.f18.fontSize,
+      lineHeight: theme.font.fluid.f18.lineHeight,
+      letterSpacing: '0px',
+    },
+  } as Styles);
 
 export default ReviewComponents;

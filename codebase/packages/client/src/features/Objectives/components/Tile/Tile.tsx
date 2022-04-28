@@ -97,8 +97,8 @@ const tileWrapperStyles: Rule = () => ({ marginBottom: '10px' });
 
 const titleStyles: Rule = ({ theme }) => ({
   margin: 0,
-  fontSize: '18px',
-  lineHeight: '22px',
+  fontSize: theme.font.fixed.f18.fontSize,
+  lineHeight: theme.font.fluid.f18.lineHeight,
   letterSpacing: '0px',
   color: theme.colors.tescoBlue,
   fontWeight: theme.font.weight.bold,
@@ -108,8 +108,8 @@ const subTitleStyles: CreateRule<Pick<Props, 'withSpacing'>> =
   ({ withSpacing }) =>
   ({ theme }) => ({
     margin: 0,
-    fontSize: '16px',
-    lineHeight: '20px',
+    fontSize: theme.font.fixed.f16.fontSize,
+    lineHeight: theme.font.fluid.f16.lineHeight,
     letterSpacing: '0px',
     fontWeight: theme.font.weight.bold,
     paddingTop: withSpacing ? theme.spacing.s5 : 0,
@@ -119,8 +119,8 @@ const explanationSubTitleStyles: CreateRule<Pick<Props, 'withSpacing'>> =
   ({ withSpacing }) =>
   ({ theme }) => ({
     margin: 0,
-    fontSize: '14px',
-    lineHeight: '18px',
+    fontSize: theme.font.fixed.f14.fontSize,
+    lineHeight: theme.font.fluid.f14.lineHeight,
     letterSpacing: '0px',
     fontWeight: withSpacing ? theme.font.weight.bold : 0,
   });

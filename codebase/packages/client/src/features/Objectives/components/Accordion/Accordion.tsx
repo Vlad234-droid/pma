@@ -66,7 +66,8 @@ export const ObjectivePanel: FC<{ explanations: T.Explanation[] }> = ({ explanat
 const declineReasonStyles: Rule = ({ theme }) => ({
   padding: '10px 0',
   fontSize: `${theme.font.fixed.f14.fontSize}`,
-  lineHeight: `${theme.font.fixed.f18.lineHeight}`,
+  lineHeight: `${theme.font.fixed.f14.lineHeight}`,
+  letterSpacing: '0px',
   fontWeight: theme.font.weight.bold,
 });
 

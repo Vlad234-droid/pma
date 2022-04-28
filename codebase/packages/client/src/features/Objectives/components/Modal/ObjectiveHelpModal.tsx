@@ -68,8 +68,8 @@ const wrapperStyle: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) =
 });
 
 const titleStyle: Rule = ({ theme }) => ({
-  fontSize: '24px',
-  lineHeight: '28px',
+  fontSize: theme.font.fixed.f24.fontSize,
+  lineHeight: theme.font.fluid.f24.lineHeight,
   letterSpacing: '0px',
   fontWeight: theme.font.weight.bold,
   paddingBottom: '32px',

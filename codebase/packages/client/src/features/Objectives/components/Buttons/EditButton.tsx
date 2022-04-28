@@ -116,24 +116,26 @@ const modalCloseOptionStyle: CreateRule<{ mobileScreen: boolean }> = ({ mobileSc
 });
 
 // TODO: Extract duplicate 14
-const modalTitleOptionStyle: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => ({
-  position: 'fixed',
-  top: '22px',
-  textAlign: 'center',
-  left: 0,
-  right: 0,
-  color: 'white',
-  letterSpacing: '0px',
-  ...(mobileScreen
-    ? {
-        fontSize: '20px',
-        lineHeight: '24px',
-      }
-    : {
-        fontSize: '24px',
-        lineHeight: '28px',
-      }),
-});
+const modalTitleOptionStyle: CreateRule<{ mobileScreen: boolean }> =
+  ({ mobileScreen }) =>
+  ({ theme }) => ({
+    position: 'fixed',
+    top: '22px',
+    textAlign: 'center',
+    left: 0,
+    right: 0,
+    color: 'white',
+    letterSpacing: '0px',
+    ...(mobileScreen
+      ? {
+          fontSize: theme.font.fixed.f20.fontSize,
+          lineHeight: theme.font.fixed.f20.lineHeight,
+        }
+      : {
+          fontSize: theme.font.fixed.f24.fontSize,
+          lineHeight: theme.font.fixed.f24.lineHeight,
+        }),
+  });
 
 const iconStyle: Rule = {
   marginRight: '10px',

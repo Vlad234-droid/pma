@@ -232,16 +232,16 @@ const iconLeftPositionStyle: CreateRule<{ mobileScreen: boolean }> =
   });
 
 const formTitleStyle: Rule = ({ theme }) => ({
-  fontSize: '24px',
-  lineHeight: '28px',
+  fontSize: theme.font.fixed.f24.fontSize,
+  lineHeight: theme.font.fluid.f24.lineHeight,
   letterSpacing: '0px',
   color: theme.colors.tescoBlue,
   fontWeight: theme.font.weight.bold,
 });
 
 const helperTextStyle: Rule = ({ theme }) => ({
-  fontSize: '18px',
-  lineHeight: '24px',
+  fontSize: theme.font.fixed.f18.fontSize,
+  lineHeight: theme.font.fluid.f18.lineHeight,
   letterSpacing: '0px',
   color: theme.colors.tescoBlue,
   paddingTop: theme.spacing.s2,
