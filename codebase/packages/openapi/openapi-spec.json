@@ -3126,10 +3126,6 @@
           "lineManager": { "$ref": "#/components/schemas/ColleagueSimple" }
         }
       },
-      "MapJson": {
-        "type": "object",
-        "properties": { "mapJson": { "type": "object", "additionalProperties": { "type": "string" } } }
-      },
       "PMCycle": {
         "type": "object",
         "properties": {
@@ -3155,7 +3151,7 @@
           "type": { "type": "string", "enum": ["FISCAL", "HIRING"] },
           "startTime": { "type": "string", "format": "date-time" },
           "endTime": { "type": "string", "format": "date-time" },
-          "properties": { "$ref": "#/components/schemas/MapJson" },
+          "properties": { "type": "object", "additionalProperties": { "type": "string" } },
           "metadata": { "$ref": "#/components/schemas/PMCycleMetadata" }
         }
       },
@@ -3284,7 +3280,7 @@
           },
           "number": { "type": "integer", "format": "int32" },
           "tlPointUuid": { "type": "string", "format": "uuid" },
-          "properties": { "$ref": "#/components/schemas/MapJson" },
+          "properties": { "type": "object", "additionalProperties": { "type": "string" } },
           "lastUpdatedTime": { "type": "string", "format": "date-time" },
           "changeStatusReason": { "type": "string" }
         }
@@ -3847,7 +3843,7 @@
           "type": { "type": "string", "enum": ["ELEMENT", "TIMELINE_POINT", "REVIEW", "FORM", "CYCLE"] },
           "startTime": { "type": "string", "format": "date-time" },
           "endTime": { "type": "string", "format": "date-time" },
-          "properties": { "$ref": "#/components/schemas/MapJson" },
+          "properties": { "type": "object", "additionalProperties": { "type": "string" } },
           "status": {
             "type": "string",
             "enum": [
@@ -3940,7 +3936,7 @@
           "uuid": { "type": "string", "format": "uuid" },
           "colleagueUuid": { "type": "string", "format": "uuid" },
           "number": { "type": "integer", "format": "int32" },
-          "properties": { "$ref": "#/components/schemas/MapJson" },
+          "properties": { "type": "object", "additionalProperties": { "type": "string" } },
           "achievementDate": { "type": "string", "format": "date" },
           "status": { "type": "string", "enum": ["DRAFT", "PUBLISHED", "UNPUBLISHED"] }
         }

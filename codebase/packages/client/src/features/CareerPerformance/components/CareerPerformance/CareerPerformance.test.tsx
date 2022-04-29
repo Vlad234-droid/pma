@@ -55,6 +55,7 @@ jest.mock('features/KnowledgeLibrary', () => {
 
 describe('<CareerPerformance />', () => {
   const props = {
+    loading: false,
     loadTimeline: jest.fn(),
     descriptions: ['mocked_desc_1', 'mocked_desc_2'],
     startDates: ['mocked_start_date_1', 'mocked_start_date_2'],
@@ -77,9 +78,7 @@ describe('<CareerPerformance />', () => {
       type: TimelineType.REVIEW,
       uuid: 'mocked_uuid',
       properties: {
-        mapJson: {
-          mocked: 'mocked',
-        },
+        mocked: 'mocked',
       },
     },
     endYearReview: {
@@ -95,9 +94,7 @@ describe('<CareerPerformance />', () => {
       type: TimelineType.REVIEW,
       uuid: 'mocked_uuid',
       properties: {
-        mapJson: {
-          mocked: 'mocked',
-        },
+        mocked: 'mocked',
       },
     },
     displayTimelines: true,

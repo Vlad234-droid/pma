@@ -94,7 +94,7 @@ const CreatePDPForm: FC<Props> = ({
     }
 
     if (Object.keys(currentGoal).length > 0) {
-      reset(currentGoal?.properties?.mapJson);
+      reset(currentGoal?.properties);
     } else {
       reset(formElementsFilledEmpty);
     }
@@ -107,9 +107,7 @@ const CreatePDPForm: FC<Props> = ({
       uuid: currentUUID || Object.keys(currentGoal).length > 0 ? currentGoal?.uuid : uuidv4(),
       colleagueUuid: colleagueUuid,
       number: pdpList && (currentUUID || Object.keys(currentGoal).length > 0) ? currentGoal?.number : modifiedNumber,
-      properties: {
-        mapJson: formValues,
-      },
+      properties: { ...formValues },
       achievementDate: formValues['expiration_date'],
       status: 'DRAFT',
     },
@@ -165,9 +163,7 @@ const CreatePDPForm: FC<Props> = ({
           {pdpGoals.map((component, idx) => {
             const { key, label, description } = component;
 
-            const updateGoalValue = pdpList
-              ? pdpList[currentUUID ? currentTab : currentTab + 2]?.properties?.mapJson[key]
-              : '';
+            const updateGoalValue = pdpList ? pdpList[currentUUID ? currentTab : currentTab + 2]?.properties[key] : '';
 
             if (description === '{datepicker}') {
               return (

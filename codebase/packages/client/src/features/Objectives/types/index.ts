@@ -21,9 +21,7 @@ type Review = {
   colleagueUuid: string;
   number: 1;
   performanceCycleUuid: string;
-  properties: {
-    mapJson: Record<string, string>;
-  };
+  properties: Record<string, string>;
   status: Status;
   type: ReviewType;
   uuid: string;

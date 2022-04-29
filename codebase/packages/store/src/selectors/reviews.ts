@@ -26,7 +26,7 @@ export const getReviewByTypeSelector = (reviewType: ReviewType) =>
   createSelector(
     reviewsSelector,
     (reviews: any) =>
-      reviews?.data?.filter((review) => review.type === reviewType)?.map((review) => review?.properties?.mapJson) || [],
+      reviews?.data?.filter((review) => review.type === reviewType)?.map((review) => review?.properties) || [],
   );
 
 export const getReviewPropertiesSelector = (reviewType: ReviewType) =>
@@ -34,8 +34,8 @@ export const getReviewPropertiesSelector = (reviewType: ReviewType) =>
     const mapReviews = {};
     if (reviews?.length) {
       reviews?.forEach((review) => {
-        if (review?.properties?.mapJson) {
-          mapReviews[review.number] = review.properties.mapJson;
+        if (review?.properties) {
+          mapReviews[review.number] = review.properties;
         }
       });
     }
@@ -94,7 +94,7 @@ export const countByTypeReviews = (reviewType: ReviewType) =>
 export const getReviewByUuidS = createSelector(reviewsSelector, (reviews: any) => {
   const { data } = reviews;
   const reviewList = data?.map((item) => {
-    const title = item?.properties?.mapJson?.title;
+    const title = item?.properties?.title;
     return {
       uuid: item.uuid,
       title: title,

@@ -33,7 +33,7 @@ export const ColleagueReview: FC<Props> = ({ review, schema, validateReview, upd
   const { components = [] } = schema;
   const styledComponents = formTagComponents(components, theme);
 
-  const reviewProperties = review?.properties?.mapJson;
+  const reviewProperties = review?.properties;
   const yepSchema = components.reduce(createYupSchema(t), {});
   const methods = useForm({
     mode: 'onChange',
@@ -55,10 +55,7 @@ export const ColleagueReview: FC<Props> = ({ review, schema, validateReview, upd
       updateColleagueReviews((stateReviews) => {
         const reviews = stateReviews?.filter(({ uuid }) => uuid !== review.uuid) || {};
         const currentReview = stateReviews?.find(({ uuid }) => uuid === review.uuid) || {};
-        return [
-          ...reviews,
-          { ...currentReview, properties: { mapJson: { ...currentReview?.properties?.mapJson, ...data } } },
-        ];
+        return [...reviews, { ...currentReview, properties: { ...data } }];
       });
     });
     return () => subscription.unsubscribe();

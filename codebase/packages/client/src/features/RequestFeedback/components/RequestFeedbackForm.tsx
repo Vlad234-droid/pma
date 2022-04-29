@@ -70,7 +70,7 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel, setIsInfoModalOpen }) 
   const objectiveOptions = useMemo(() => {
     return reviews
       .map((item) => {
-        const { title } = item.properties.mapJson;
+        const { title } = item.properties;
         if (title) {
           return {
             value: item.uuid,
@@ -84,7 +84,7 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel, setIsInfoModalOpen }) 
   const labelValue = AREA_OPTIONS.find((item) => item.value === formValues.targetType)?.label;
 
   const objectiveValue =
-    reviews.find((item) => item.uuid === formValues?.targetId)?.properties?.mapJson?.title ?? Tesco.TescoBank;
+    reviews.find((item) => item.uuid === formValues?.targetId)?.properties?.title ?? Tesco.TescoBank;
 
   const handleSelect = (colleagues) => {
     setValue('colleagues', colleagues, { shouldDirty: true, shouldValidate: true });

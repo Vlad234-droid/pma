@@ -68,9 +68,7 @@ const Objectives: FC<ObjectivesProps> = ({ colleagueUUID, schema, objectives, or
         return {
           ...objective,
           status: Status.WAITING_FOR_APPROVAL,
-          properties: {
-            mapJson: data,
-          },
+          properties: { ...data },
         };
       }
       return { ...objective, status: Status.WAITING_FOR_APPROVAL };
@@ -88,9 +86,7 @@ const Objectives: FC<ObjectivesProps> = ({ colleagueUUID, schema, objectives, or
         return {
           ...objective,
           status: Status.DRAFT,
-          properties: {
-            mapJson: data,
-          },
+          properties: { ...data },
         };
       }
       return { ...objective, status: Status.DRAFT };
@@ -108,9 +104,7 @@ const Objectives: FC<ObjectivesProps> = ({ colleagueUUID, schema, objectives, or
           ...objective,
           number: currentObjectiveNumber,
           status: Status.DRAFT,
-          properties: {
-            mapJson: data,
-          },
+          properties: { ...data },
         };
       }
       return { ...objective, status: Status.DRAFT };

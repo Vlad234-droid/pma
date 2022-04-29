@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useMemo } from 'react';
 import { useSelector } from 'react-redux';
-import { Rule, Styles, useStyle } from '@pma/dex-wrapper';
+import { Rule, useStyle } from '@pma/dex-wrapper';
 import { colleagueUUIDSelector, TimelineActions, UserActions } from '@pma/store';
 import { usePermission, usePermissionByReviewType, usePermissionByWorkLevel } from 'features/Permission';
 import { Trans, useTranslation } from 'components/Translation';

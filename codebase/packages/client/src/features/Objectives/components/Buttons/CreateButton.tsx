@@ -1,5 +1,5 @@
 import React, { FC, HTMLProps, useState } from 'react';
-import { Button, Rule, useStyle } from '@pma/dex-wrapper';
+import { Button, Rule } from '@pma/dex-wrapper';
 import { IconButton } from 'components/IconButton';
 import { ModalComponent } from 'features/Objectives/components/Modal';
 import { useTranslation } from 'components/Translation';
@@ -14,7 +14,6 @@ export type CreateModalProps = {
 type Props = HTMLProps<HTMLInputElement> & CreateModalProps;
 
 const CreateButton: FC<Props> = ({ withIcon = false, buttonText = 'Create objectives', useSingleStep = true }) => {
-  const { theme } = useStyle();
   const { t } = useTranslation();
 
   const [isOpen, setIsOpen] = useState(false);

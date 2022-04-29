@@ -19,9 +19,7 @@ describe('<ColleagueGroupReviews />', () => {
         status: 'WAITING_FOR_APPROVAL',
         type: 'OBJECTIVE',
         properties: {
-          mapJson: {
-            textfield: 'textfield_textfield',
-          },
+          textfield: 'textfield_textfield',
         },
         uuid: '181673cb-7a1f-492e-b7b2-f80f9686b49c',
       },

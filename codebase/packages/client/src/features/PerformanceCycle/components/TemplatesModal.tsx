@@ -6,7 +6,6 @@ import { Input } from 'components/Form';
 import { useTranslation } from 'components/Translation';
 import { ProcessTemplateActions, getProcessTemplateSelector } from '@pma/store';
 import { formatDateStringFromISO } from 'utils/date';
-import { getFileType } from 'utils/file';
 
 type TemplateModalProps = {
   onSelect: (value) => void;
@@ -35,15 +34,6 @@ const TemplatesModal: FC<TemplateModalProps> = ({ onSelect }) => {
     if (!filter || item.fileName.toLowerCase().includes(filter.toLowerCase()) || createdTime.includes(filter))
       return item;
   });
-
-  const handleUpload = (file) => {
-    dispatch(
-      ProcessTemplateActions.uploadProcessTemplate({
-        file,
-        type: getFileType(file.name),
-      }),
-    );
-  };
 
   const handleSearchTemplate = ({ target }) => setFilteredValue(target.value);
 
@@ -103,16 +93,6 @@ const btnStyle: Rule = ({ theme }) => ({
   fontSize: '16px',
   border: `2px solid ${theme.colors.tescoBlue}`,
   minWidth: '200px',
-});
-
-const labelStyles: Rule = ({ theme }) => ({
-  fontSize: '16px',
-  color: theme.colors.tescoBlue,
-  margin: '8px 0',
-});
-const descriptionStyles: Rule = ({ theme }) => ({
-  fontSize: '12px',
-  color: theme.colors.tescoBlue,
 });
 
 const templatesModalWindowStyles: CreateRule<{ mobileScreen }> = ({ mobileScreen }) => {

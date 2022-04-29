@@ -51,18 +51,16 @@ describe('CreateUpdateObjectives', () => {
             startTime: '2022-03-15T00:00:00.000Z',
             endTime: null,
             properties: {
-              mapJson: {
-                pm_review_start_delay: 'P1Y',
-                pm_review_type: 'eyr',
-                pm_review_before_start: 'P2W',
-                pm_type: 'review',
-                pm_review_start_time: '2022-03-15',
-                pm_review_min: '1',
-                pm_review_before_end: 'P1W',
-                pm_review_max: '1',
-                pm_review_duration: 'P2W',
-                pm_form_key: 'forms/type_1_eyr.form',
-              },
+              pm_review_start_delay: 'P1Y',
+              pm_review_type: 'eyr',
+              pm_review_before_start: 'P2W',
+              pm_type: 'review',
+              pm_review_start_time: '2022-03-15',
+              pm_review_min: '1',
+              pm_review_before_end: 'P1W',
+              pm_review_max: '1',
+              pm_review_duration: 'P2W',
+              pm_form_key: 'forms/type_1_eyr.form',
             },
             status: 'DRAFT',
             reviewType: 'EYR',
@@ -98,7 +96,7 @@ describe('CreateUpdateObjectives', () => {
       const requestParamFirstCall = addMockUpdateReviews.mock.calls[0][0];
       expect(requestParamFirstCall.pathParams.type).toEqual('OBJECTIVE');
       expect(requestParamFirstCall.data[0].status).toEqual('DRAFT');
-      expect(requestParamFirstCall.data[0].properties.mapJson).toMatchObject({
+      expect(requestParamFirstCall.data[0].properties).toMatchObject({
         textfield: `textfield value`,
       });
       expect(onClose).toHaveBeenCalled();
@@ -124,7 +122,7 @@ describe('CreateUpdateObjectives', () => {
       const requestParamFirstCall = addMockUpdateReviews.mock.calls[0][0];
       expect(requestParamFirstCall.pathParams.type).toEqual('OBJECTIVE');
       expect(requestParamFirstCall.data[0].status).toEqual('DRAFT');
-      expect(requestParamFirstCall.data[0].properties.mapJson).toMatchObject({
+      expect(requestParamFirstCall.data[0].properties).toMatchObject({
         textfield: `textfield value`,
       });
       expect(onClose).not.toHaveBeenCalled();
@@ -147,9 +145,7 @@ describe('CreateUpdateObjectives', () => {
             status: 'DRAFT',
             type: 'OBJECTIVE',
             properties: {
-              mapJson: {
-                textfield: 'textfield_textfield',
-              },
+              textfield: 'textfield_textfield',
             },
           },
         ],
@@ -178,18 +174,16 @@ describe('CreateUpdateObjectives', () => {
             startTime: '2022-03-15T00:00:00.000Z',
             endTime: null,
             properties: {
-              mapJson: {
-                pm_review_start_delay: 'P1Y',
-                pm_review_type: 'eyr',
-                pm_review_before_start: 'P2W',
-                pm_type: 'review',
-                pm_review_start_time: '2022-03-15',
-                pm_review_min: '1',
-                pm_review_before_end: 'P1W',
-                pm_review_max: '1',
-                pm_review_duration: 'P2W',
-                pm_form_key: 'forms/type_1_eyr.form',
-              },
+              pm_review_start_delay: 'P1Y',
+              pm_review_type: 'eyr',
+              pm_review_before_start: 'P2W',
+              pm_type: 'review',
+              pm_review_start_time: '2022-03-15',
+              pm_review_min: '1',
+              pm_review_before_end: 'P1W',
+              pm_review_max: '1',
+              pm_review_duration: 'P2W',
+              pm_form_key: 'forms/type_1_eyr.form',
             },
             status: 'DRAFT',
             reviewType: 'EYR',
@@ -204,9 +198,7 @@ describe('CreateUpdateObjectives', () => {
             number: 1,
             status: 'DRAFT',
             properties: {
-              mapJson: {
-                textfield: 'textfield_textfield',
-              },
+              textfield: 'textfield_textfield',
             },
           },
         ],
@@ -252,10 +244,10 @@ describe('CreateUpdateObjectives', () => {
       expect(requestParamSecondCall.pathParams.type).toEqual('OBJECTIVE');
       expect(requestParamSecondCall.data[0].status).toEqual('WAITING_FOR_APPROVAL');
       expect(requestParamSecondCall.data[1].status).toEqual('WAITING_FOR_APPROVAL');
-      expect(requestParamSecondCall.data[0].properties.mapJson).toMatchObject({
+      expect(requestParamSecondCall.data[0].properties).toMatchObject({
         textfield: 'textfield_textfield',
       });
-      expect(requestParamSecondCall.data[1].properties.mapJson).toMatchObject({
+      expect(requestParamSecondCall.data[1].properties).toMatchObject({
         textfield: 'textfield value',
       });
     });
