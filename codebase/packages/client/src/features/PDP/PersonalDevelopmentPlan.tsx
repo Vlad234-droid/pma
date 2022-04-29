@@ -51,7 +51,7 @@ const PersonalDevelopmentPlan: FC = () => {
     return {
       uuid: el.uuid,
       number: pdpSelector[idx]?.number,
-      items: Object.values(el?.properties?.mapJson).map((value) => value),
+      items: Object.values(el?.properties).map((value) => value),
     };
   });
 
@@ -201,14 +201,14 @@ const PersonalDevelopmentPlan: FC = () => {
                   <GoalInfo
                     id={el.uuid}
                     key={`${t('personal_development_goal', 'Personal Development Goal')}: ${idx + 1}`}
-                    data={el.properties.mapJson}
+                    data={el.properties}
                     title={`${t('personal_development_goal', 'Personal Development Goal')}: ${idx + 1}`}
                     currentGoalId={idx}
                     subtitle={formElements[0].label}
                     formElements={formElements}
                     deleteGoal={deleteGoal}
                     editGoal={editGoal}
-                    description={Object.values(el.properties.mapJson)[0]}
+                    description={Object.values(el.properties)[0]}
                   />
                 );
               })}

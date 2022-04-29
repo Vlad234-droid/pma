@@ -44,11 +44,7 @@ const ModalDownloadFeedback: FC<ModalDownloadFeedbackProps> = ({
     resolver: yupResolver<Yup.AnyObjectSchema>(createDownLoadSchema),
   });
 
-  const {
-    formState: { isValid },
-    getValues,
-    reset,
-  } = methods;
+  const { formState, getValues, reset } = methods;
 
   const formData = getValues();
 
@@ -83,7 +79,13 @@ const ModalDownloadFeedback: FC<ModalDownloadFeedbackProps> = ({
       <h2 className={css(downloadTitleStyled)}>{downloadTitle}</h2>
       <p className={css(downloadDescriptionStyled)}>{downloadDescription}</p>
       <form>
-        <SearchPart setValue={methods.setValue} selectedColleague={selectedColleague} date={formData.date} />
+        <SearchPart
+          setValue={methods.setValue}
+          selectedColleague={selectedColleague}
+          date={formData.date}
+          setError={methods.setError}
+          formState={formState}
+        />
         {selectedColleague && (
           <SubmitPart selectedPerson={selectedColleague.colleague} searchDate={formData.date} onChange={setSelected} />
         )}
@@ -99,7 +101,7 @@ const ModalDownloadFeedback: FC<ModalDownloadFeedbackProps> = ({
               </Button>
 
               <IconButton
-                isDisabled={!isValid || selected.length <= 0}
+                isDisabled={!formState.isValid || selected.length <= 0}
                 customVariantRules={{ default: iconBtnStyle, disabled: iconBtnStyleDisabled }}
                 graphic='arrowRight'
                 iconProps={{ invertColors: true }}

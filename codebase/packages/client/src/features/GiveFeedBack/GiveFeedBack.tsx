@@ -4,13 +4,13 @@ import { useNavigate } from 'react-router-dom';
 import debounce from 'lodash.debounce';
 import { CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
 import { colleagueUUIDSelector, FeedbackActions, getGiveFeedbacksSelector } from '@pma/store';
-import { buildSearchFeedbacksQuery, paramsReplacer } from 'utils';
+import { paramsReplacer } from 'utils';
 import { Page } from 'pages';
 import { FilterOption } from 'features/Shared';
-import { FeedbackStatus, FEEDBACK_STATUS_IN } from 'config/enum';
+import { FeedbackStatus } from 'config/enum';
 import { FeedbackBlock, RadioBtns } from './components';
 import { FilterModal } from '../Shared/components/FilterModal';
-import { getSortString } from 'utils/feedback';
+import { prepareData } from './config';
 
 export const FEEDBACK_WRAPPER = 'feedback-wrapper';
 export const LIST_WRAPPER = 'list-wrapper';
@@ -30,7 +30,6 @@ const GiveFeedBack: FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // filter
   const [focus, setFocus] = useState(false);
   const [filterModal, setFilterModal] = useState(false);
   const [filter, setFilter] = useState<Filter>(initialFilters);
@@ -49,15 +48,7 @@ const GiveFeedBack: FC = () => {
 
   const getGiveFeedbacks = useCallback(
     debounce((filter) => {
-      dispatch(
-        FeedbackActions.getGiveFeedback({
-          _limit: '300',
-          'colleague-uuid': colleagueUuid,
-          ...(filter.search.length > 2 && buildSearchFeedbacksQuery(filter.search)),
-          _sort: getSortString(filter),
-          status_in: [FEEDBACK_STATUS_IN.DRAFT, FEEDBACK_STATUS_IN.SUBMITTED],
-        }),
-      );
+      dispatch(FeedbackActions.getGiveFeedback(prepareData(colleagueUuid, filter)));
     }, 300),
     [],
   );
@@ -100,7 +91,13 @@ const GiveFeedBack: FC = () => {
               setFilterModal((prev) => !prev);
             }}
           />
-          <FilterModal isOpen={filterModal} filter={filter} setFilter={setFilter} toggleOpen={setFilterModal} />
+          <FilterModal
+            isOpen={filterModal}
+            filter={filter}
+            setFilter={setFilter}
+            toggleOpen={setFilterModal}
+            styles={{ ...(medium && { right: '0px' }), ...(small && { left: '0px' }) }}
+          />
         </div>
       </div>
       <div>

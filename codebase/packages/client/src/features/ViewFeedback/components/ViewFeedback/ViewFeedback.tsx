@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useCallback, useEffect, useState } from 'react';
 import { Button, Rule, CreateRule, useStyle } from '@pma/dex-wrapper';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -6,8 +6,8 @@ import {
   ColleaguesActions,
   colleagueUUIDSelector,
   FeedbackActions,
-  getLoadedStateSelector,
   ReviewsActions,
+  getViewFeedbacksSelector,
 } from '@pma/store';
 
 import { Trans, useTranslation } from 'components/Translation';
@@ -23,40 +23,36 @@ import { Icon } from 'components/Icon';
 import { HelpModalReceiveFeedback, ModalDownloadFeedback } from '../ModalParts';
 
 import { FilterModal } from '../../../Shared/components/FilterModal';
-import { FEEDBACK_STATUS_IN, FeedbackStatus, Tesco } from 'config/enum';
+import { FEEDBACK_STATUS_IN, Tesco } from 'config/enum';
 import { Page } from 'pages';
-import useSubmittedCompletedNotes from '../../hooks/useSubmittedCompletedNotes';
 import { buildPath } from 'features/Routes';
-import Spinner from 'components/Spinner';
+import debounce from 'lodash.debounce';
+import { buildSearchFeedbacksQuery, getSortString } from 'utils';
 
 export const WRAPPER = 'wrapper';
 
-type filterFeedbacksType = {
-  sort: string;
-  search: string;
-};
+export enum RadioStatus {
+  UNREAD = 'UNREAD',
+  READ = 'READ',
+}
 
-const ViewFeedback: FC<{}> = () => {
+const ViewFeedback: FC = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const { css, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
+  const medium = matchMedia({ xSmall: true, small: true, medium: true }) || false;
   const dispatch = useDispatch();
   const [helpModalReceiveFeedback, setHelpModalReceiveFeedback] = useState<boolean>(false);
   const [openMainModal, setOpenMainModal] = useState<boolean>(false);
   const [modalSuccess, setModalSuccess] = useState<boolean>(false);
-  const [checkedRadio, setCheckedRadio] = useState({
-    unread: true,
-    read: false,
-  });
+  const [checkedRadio, setCheckedRadio] = useState<RadioStatus>(RadioStatus.UNREAD);
 
   const colleagueUuid = useSelector(colleagueUUIDSelector);
-  const { loaded } = useSelector(getLoadedStateSelector);
 
-  // filter
   const [focus, setFocus] = useState(false);
   const [filterModal, setFilterModal] = useState(false);
-  const [filterFeedbacks, setFilterFeedbacks] = useState<filterFeedbacksType>({
+  const [filterFeedbacks, setFilterFeedbacks] = useState<{ sort: string; search: string }>({
     sort: '',
     search: '',
   });
@@ -71,58 +67,7 @@ const ViewFeedback: FC<{}> = () => {
     setOpenMainModal(() => false);
   };
 
-  // store
-  const isReaded = checkedRadio.read && !checkedRadio.unread;
-  const searchValue = filterFeedbacks.search.replace(/\s+/g, '').toLowerCase();
-
-  const filterFn = (item) => {
-    const fullName =
-      `${item?.colleagueProfile?.colleague?.profile?.firstName}${item?.colleagueProfile?.colleague?.profile?.lastName}`.toLowerCase();
-
-    return fullName.includes(searchValue) && isReaded === item.read;
-  };
-
-  const sortFn = (i1, i2) => {
-    let val1 = '';
-    let val2 = '';
-
-    const swapVariables = (a, b) => {
-      b = [a, (a = b)][0];
-      return [a, b];
-    };
-
-    function sortAZ() {
-      const firstNameGetter = (item) => item.firstName || '';
-
-      val1 = firstNameGetter(i1);
-      val2 = firstNameGetter(i2);
-
-      if (filterFeedbacks.sort === 'ZA') {
-        [val1, val2] = swapVariables(val1, val2);
-      }
-    }
-
-    function sortByTime() {
-      const createdTimeGetter = (item) => String(item.createdTime || '');
-
-      val1 = createdTimeGetter(i1);
-      val2 = createdTimeGetter(i2);
-
-      if (filterFeedbacks.sort === 'newToOld') {
-        [val1, val2] = swapVariables(val1, val2);
-      }
-    }
-
-    if (filterFeedbacks.sort === 'AZ' || filterFeedbacks.sort === 'ZA') {
-      sortAZ();
-    }
-
-    if (filterFeedbacks.sort === 'newToOld' || filterFeedbacks.sort === 'oldToNew') {
-      sortByTime();
-    }
-
-    return val1.localeCompare(val2);
-  };
+  const isRead = checkedRadio === RadioStatus.READ;
 
   const handleDownloadAllPress = () => {
     setOpenMainModal(true);
@@ -132,33 +77,34 @@ const ViewFeedback: FC<{}> = () => {
     dispatch(FeedbackActions.clearFeedback());
   }, []);
 
+  const getViewFeedbacks = useCallback(
+    debounce((filter) => {
+      dispatch(
+        FeedbackActions.getViewFeedback({
+          _limit: '300',
+          'target-colleague-uuid': colleagueUuid,
+          ...(filter.search.length > 2 && buildSearchFeedbacksQuery(filter.search)),
+          _sort: getSortString(filter),
+          status_in: [FEEDBACK_STATUS_IN.SUBMITTED, FEEDBACK_STATUS_IN.COMPLETED],
+        }),
+      );
+    }, 300),
+    [],
+  );
+
   useEffect(() => {
-    if (!colleagueUuid) {
-      return;
-    }
+    if (!colleagueUuid) return;
+    getViewFeedbacks(filterFeedbacks);
+  }, [colleagueUuid, filterFeedbacks]);
 
-    dispatch(
-      FeedbackActions.getViewFeedback({
-        'target-colleague-uuid': colleagueUuid,
-        _limit: '300',
-        status_in: [FEEDBACK_STATUS_IN.SUBMITTED, FEEDBACK_STATUS_IN.COMPLETED],
-      }),
-    );
-  }, [colleagueUuid]);
-
-  const submittedCompletedNotes = useSubmittedCompletedNotes({
-    status: [FeedbackStatus.SUBMITTED, FeedbackStatus.COMPLETED],
-    sortFn,
-    filterFn,
-    serializer: defaultSerializer,
-  });
+  const submittedCompletedNotes = useSelector(getViewFeedbacksSelector(isRead, defaultSerializer)) || [];
 
   useEffect(() => {
     if (!submittedCompletedNotes.length) {
       return;
     }
 
-    if (isReaded) {
+    if (isRead) {
       submittedCompletedNotes.forEach(
         (item) =>
           item.targetId &&
@@ -166,7 +112,7 @@ const ViewFeedback: FC<{}> = () => {
           dispatch(ReviewsActions.getReviewByUuid({ uuid: item.targetId })),
       );
     }
-  }, [isReaded]);
+  }, [isRead]);
 
   return (
     <>
@@ -189,7 +135,6 @@ const ViewFeedback: FC<{}> = () => {
             setFocus={setFocus}
             setFilterModal={setFilterModal}
             filterModal={filterModal}
-            setFilterFeedbacks={setFilterFeedbacks}
           />
           <div className={css(flexCenterStyled)}>
             <IconButton
@@ -220,11 +165,12 @@ const ViewFeedback: FC<{}> = () => {
               filter={filterFeedbacks}
               setFilter={setFilterFeedbacks}
               toggleOpen={setFilterModal}
+              styles={{ ...(medium && { right: '0px' }), ...(mobileScreen && { left: '0px' }) }}
             />
           </div>
         </div>
         <div className={css(reverseItemsStyled)}>
-          {!loaded ? <Spinner /> : <DraftList items={submittedCompletedNotes} />}
+          <DraftList items={submittedCompletedNotes} />
           <div className={css(buttonsActionsStyle({ mobileScreen }))}>
             <div className={css(buttonContainerStyle)}>
               <div className={css({ display: 'inline-flex' })}>
@@ -385,8 +331,7 @@ const reverseItemsStyled: Rule = ({ theme }) => ({
 });
 
 const iconStyle: Rule = {
-  marginRight: '2px',
-  marginTop: '3px',
+  marginRight: '6px',
 };
 
 const buttonsActionsStyle: CreateRule<{ mobileScreen: boolean }> =
