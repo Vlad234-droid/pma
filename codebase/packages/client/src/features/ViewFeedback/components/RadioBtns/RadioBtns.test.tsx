@@ -2,8 +2,9 @@ import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
 import { renderWithTheme } from 'utils/test';
 import '@testing-library/jest-dom';
-import { fireEvent } from '@testing-library/react';
+import { fireEvent, waitFor } from '@testing-library/react';
 import RadioBtns, { RADIO_WRAPPER } from './RadioBtns';
+import { RadioStatus } from '../ViewFeedback/ViewFeedback';
 
 describe('Radio buttons', () => {
   const setCheckedRadio = jest.fn();
@@ -11,10 +12,7 @@ describe('Radio buttons', () => {
   const setFilterModal = jest.fn();
   const setFilterFeedbacks = jest.fn();
   const props = {
-    checkedRadio: {
-      unread: true,
-      read: false,
-    },
+    checkedRadio: RadioStatus.READ,
     setCheckedRadio,
     focus: true,
     setFocus,
@@ -31,23 +29,23 @@ describe('Radio buttons', () => {
     const { getByTestId } = renderWithTheme(<RadioBtns {...props} />);
     const unreadRadio = getByTestId('unread');
     expect(unreadRadio).toBeInTheDocument();
-    fireEvent.click(getByTestId('unread'));
-    expect(unreadRadio.checked).toEqual(true);
-    expect(setCheckedRadio).not.toHaveBeenCalled();
+    fireEvent.click(unreadRadio);
+    await waitFor(() => {
+      expect(setCheckedRadio).toHaveBeenCalled();
+    });
   });
   it('it should fire setCheckedRadio handler', async () => {
-    const { getByTestId } = renderWithTheme(<RadioBtns {...props} />);
+    const { getByTestId } = renderWithTheme(<RadioBtns {...props} checkedRadio={RadioStatus.UNREAD} />);
     const readRadio = getByTestId('read');
     expect(readRadio).toBeInTheDocument();
     fireEvent.click(getByTestId('read'));
 
-    expect(setCheckedRadio).toHaveBeenCalledTimes(1);
+    expect(setCheckedRadio).toHaveBeenCalledTimes(2);
   });
   it('it should fire setFocus, setFilterModal, setFilterFeedbacks handlers', async () => {
-    const { getByTestId } = renderWithTheme(<RadioBtns {...props} />);
+    const { getByTestId } = renderWithTheme(<RadioBtns {...props} checkedRadio={RadioStatus.UNREAD} />);
     fireEvent.click(getByTestId('read'));
-    expect(setFocus).toHaveBeenCalledTimes(2);
-    expect(setFilterModal).toHaveBeenCalledTimes(2);
-    expect(setFilterFeedbacks).toHaveBeenCalledTimes(2);
+    expect(setFocus).toHaveBeenCalled();
+    expect(setFilterModal).toHaveBeenCalled();
   });
 });

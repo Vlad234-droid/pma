@@ -1,6 +1,5 @@
 import React, { FC } from 'react';
 import { Rule, useStyle } from '@pma/dex-wrapper';
-import { useTranslation } from 'components/Translation';
 
 type ItemProps = {
   item: any;
@@ -12,7 +11,6 @@ export const TEST_ID = 'feedback-item-test-id';
 
 const FeedbackItem: FC<ItemProps> = ({ item, title, itemCodeText }) => {
   const { css } = useStyle();
-  const { t } = useTranslation();
 
   return (
     <>

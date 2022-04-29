@@ -91,7 +91,7 @@ const Datepicker: FC<Props> = ({ onChange, onError, value, name, minDate, isVali
     }
   }, [value]);
 
-  const handleClickDay = (date) => {
+  const handleClick = (date) => {
     if (!date) return;
     setCurrentValue(transformDateToString(date));
     toggleOpen(false);
@@ -131,7 +131,13 @@ const Datepicker: FC<Props> = ({ onChange, onError, value, name, minDate, isVali
         </button>
         {isOpen && (
           <div className={css(calendarWrapperRule({ isOnTop }))}>
-            <Calendar value={date} onClickDay={handleClickDay} minDate={minDate} />
+            <Calendar
+              value={date}
+              onClickDay={handleClick}
+              onClickMonth={handleClick}
+              onClickYear={handleClick}
+              minDate={minDate}
+            />
           </div>
         )}
       </div>

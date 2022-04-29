@@ -36,7 +36,7 @@ const PerformanceCycleForm: FC<Props> = ({ onSubmit, defaultValues, canEdit = tr
 
   const methods = useForm({
     mode: 'onChange',
-    resolver: yupResolver<Yup.AnyObjectSchema>(createPMCycleSchema),
+    resolver: yupResolver<Yup.AnyObjectSchema>(createPMCycleSchema(t)),
     defaultValues,
   });
 
@@ -162,6 +162,7 @@ const PerformanceCycleForm: FC<Props> = ({ onSubmit, defaultValues, canEdit = tr
               withIcon={false}
               Wrapper={Item}
               Element={Datepicker}
+              error={errors?.metadata?.cycle?.properties?.pm_cycle_end_time?.message}
               value={get(formValues, 'metadata.cycle.properties.pm_cycle_end_time')}
               setValue={methods.setValue}
               readonly={!canEdit}

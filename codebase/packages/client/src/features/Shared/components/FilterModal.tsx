@@ -1,5 +1,5 @@
-import React, { FC, useRef, MouseEvent, SetStateAction, Dispatch } from 'react';
-import { useStyle, Rule, CreateRule } from '@pma/dex-wrapper';
+import React, { FC, useRef, MouseEvent, SetStateAction, Dispatch, CSSProperties } from 'react';
+import { useStyle, Rule, CreateRule, Styles } from '@pma/dex-wrapper';
 import { Radio } from 'components/Form';
 import { Trans, useTranslation } from 'components/Translation';
 import useEventListener from 'hooks/useEventListener';
@@ -25,6 +25,7 @@ type Props = {
   additionalFields?: Array<AdditionalFieldsType>;
   customFields?: boolean;
   title?: string;
+  styles?: Rule | Styles | CSSProperties | {};
 };
 
 export const FilterModal: FC<Props> = ({
@@ -36,6 +37,7 @@ export const FilterModal: FC<Props> = ({
   additionalFields = [],
   customFields = false,
   title = 'Sort',
+  styles = {},
 }) => {
   const { css, matchMedia } = useStyle();
   const medium = matchMedia({ xSmall: true, small: true, medium: true }) || false;
@@ -87,7 +89,7 @@ export const FilterModal: FC<Props> = ({
   const fields = !customFields ? sortableFields : additionalFields;
 
   return (
-    <div ref={ref} className={css(wrapperStyle({ medium, isOpen }))} data-test-id={testId}>
+    <div ref={ref} className={css(wrapperStyle({ medium, isOpen }), styles)} data-test-id={testId}>
       <div className={css(columnStyle)}>
         <span>{title} :</span>
         {fields.map((item) => (

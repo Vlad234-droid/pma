@@ -22,7 +22,11 @@ const getStatus = (i: number, currentStep?: number, currentStatus?: Status, isVa
   if (currentStep === i && currentStatus) return Status[currentStatus];
 };
 
-const isActive = (statuses: Status[] | undefined, i) => statuses?.[i] !== Status.NOT_STARTED;
+const isActive = (statuses: Status[] | undefined, i) => {
+  const currentStatus = statuses?.[i];
+  if (!currentStatus) return false;
+  return currentStatus !== Status.NOT_STARTED;
+};
 
 export const StepIndicatorBasic: FC<StepIndicatorProps> = ({
   currentStep,

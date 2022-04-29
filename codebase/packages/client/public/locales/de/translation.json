@@ -226,5 +226,6 @@
   "missed_fields/profile/lastName": "Last name",
   "missed_fields/workRelationships/job/name": "Job name",
   "missed_fields/workRelationships/department/name": "Department name",
-  "full_date": "{{date, d LLL yyyy}}"
+  "full_date": "{{date, d LLL yyyy}}",
+  "end_day_mast_be_after": "End day mast be after {{ min }}"
 }

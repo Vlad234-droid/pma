@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Rule, Styles, useStyle } from '@pma/dex-wrapper';
+import { Rule, useStyle } from '@pma/dex-wrapper';
 import { useSelector } from 'react-redux';
 import { getLoadedStateSelector } from '@pma/store';
 import { Page } from 'pages';
@@ -12,7 +12,7 @@ import { TileWrapper } from 'components/Tile';
 import Spinner from 'components/Spinner';
 
 import { paramsReplacer } from 'utils';
-import { Trans, useTranslation } from 'components/Translation';
+import { useTranslation } from 'components/Translation';
 import FeedbackItem from './FeedbackItem';
 
 type Props = {

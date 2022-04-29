@@ -75,9 +75,6 @@ const CreatePerformanceCycle: FC = () => {
       createdBy: {
         uuid: colleagueUuid,
       },
-      properties: {
-        mapJson: {},
-      },
       type: 'FISCAL',
       metadata: {
         ...metadata,

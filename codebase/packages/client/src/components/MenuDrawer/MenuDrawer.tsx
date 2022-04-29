@@ -6,7 +6,7 @@ import { colleagueUUIDSelector, timelinesExistSelector } from '@pma/store';
 
 import { Page } from 'pages';
 import { buildAbsolutePath } from 'utils';
-import { LINKS, CAMUNDA_APP_PATH } from 'config/constants';
+import { CAMUNDA_APP_PATH, LINKS } from 'config/constants';
 import { buildPath } from 'features/Routes';
 import { ConfirmModal } from 'features/Modal';
 import { CanPerform, role } from 'features/Permission';
@@ -243,7 +243,7 @@ const menuDrawerContentStyle: Rule = ({ theme }) => ({
   position: 'absolute',
   right: 0,
   top: 0,
-  maxWidth: '360px',
+  minWidth: '360px',
   background: theme.colors.backgroundDark,
   minHeight: '100vh',
 });
@@ -261,8 +261,8 @@ const menuDrawerTitleStyle: Rule = ({ theme }) => ({
 });
 
 const menuDrawerButtonsStyle: Rule = {
-  display: 'flex',
-  flexWrap: 'wrap',
+  display: 'grid',
+  gridTemplateColumns: 'repeat(auto-fill, minmax(98px, 1fr))',
   gap: '8px',
 };
 

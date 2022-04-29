@@ -128,26 +128,31 @@ export const FilterOption: FC<FilterOptionProps> = ({
   );
 };
 
-const iconBtnStyle: CreateRule<{ isActive: boolean; colors: any }> = ({ colors, isActive }) => ({
-  background: isActive ? colors.tescoBlue : colors.white,
-  padding: '0',
-  marginLeft: '5px',
-  display: 'flex',
-  height: '38px',
-  width: '38px',
-  justifyContent: 'center',
-  alignItems: 'center',
-  outline: 0,
-  border: `2px solid ${colors.tescoBlue}`,
-  borderRadius: '20px',
-  cursor: 'pointer',
-  position: 'relative',
-  '& > span': {
+const iconBtnStyle: CreateRule<{ isActive: boolean; colors: any }> = ({ colors, isActive }) => {
+  const { matchMedia } = useStyle();
+  const medium = matchMedia({ xSmall: true, small: true, medium: true }) || false;
+
+  return {
+    background: isActive ? colors.tescoBlue : colors.white,
+    padding: '0',
+    marginLeft: medium ? '0px' : '5px',
     display: 'flex',
+    height: '38px',
+    width: '38px',
     justifyContent: 'center',
     alignItems: 'center',
-  },
-});
+    outline: 0,
+    border: `2px solid ${colors.tescoBlue}`,
+    borderRadius: '20px',
+    cursor: 'pointer',
+    position: 'relative',
+    '& > span': {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+  };
+};
 
 const iconStyle: Rule = {
   width: '16px',

@@ -54,6 +54,15 @@ export const getGiveFeedbacksSelector = (status) =>
     return give?.filter((item) => item.status === status) ?? [];
   });
 
+export const getViewFeedbacksSelector = (read, defaultSerializer) =>
+  createSelector(feedbackSelector, (feedback: any) => {
+    const {
+      feedbacks: { view },
+    } = feedback;
+
+    return view?.filter((item) => item.read === read).map(defaultSerializer) ?? [];
+  });
+
 export const getRespondedFeedbacksSelector = (status) =>
   createSelector(feedbackSelector, (feedback: any) => {
     const {

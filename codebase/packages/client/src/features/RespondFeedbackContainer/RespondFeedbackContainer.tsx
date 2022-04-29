@@ -23,7 +23,7 @@ export const RESPOND_FEEDBACK_CONTAINER = 'respond_feedback_container';
 
 const RespondFeedbackContainer: FC = () => {
   const { css, matchMedia } = useStyle();
-  const mobileScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
+  const medium = matchMedia({ xSmall: true, small: true, medium: true }) || false;
   const dispatch = useDispatch();
 
   const colleagueUuid = useSelector(colleagueUUIDSelector);
@@ -71,9 +71,9 @@ const RespondFeedbackContainer: FC = () => {
   return (
     <>
       <div data-test-id={RESPOND_FEEDBACK_CONTAINER}>
-        <div className={css(headerStyled({ mobileScreen }))}>
+        <div className={css(headerStyled({ medium }))}>
           <RadioBtns status={status} setStatus={setStatus} setFilterModal={setFilterModal} filterModal={filterModal} />
-          <div className={css(FlexStyled({ mobileScreen }))}>
+          <div className={css(FlexStyled({ medium }))}>
             <FilterOption
               focus={focus}
               customIcon={true}
@@ -96,6 +96,7 @@ const RespondFeedbackContainer: FC = () => {
               filter={filterFeedbacks}
               setFilter={setFilterFeedbacks}
               toggleOpen={setFilterModal}
+              styles={{ ...(medium && { right: '42px' }) }}
             />
           </div>
         </div>
@@ -111,17 +112,17 @@ const RespondFeedbackContainer: FC = () => {
   );
 };
 
-const FlexStyled: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => ({
+const FlexStyled: CreateRule<{ medium: boolean }> = ({ medium }) => ({
   display: 'flex',
   alignItems: 'center',
-  ...(mobileScreen && { flexBasis: '250px' }),
+  ...(medium && { flexBasis: '250px' }),
   position: 'relative',
 });
 
-const headerStyled: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => ({
+const headerStyled: CreateRule<{ medium: boolean }> = ({ medium }) => ({
   display: 'flex',
-  flexWrap: mobileScreen ? 'wrap' : 'nowrap',
-  ...(mobileScreen && { flexBasis: '250px' }),
+  flexWrap: medium ? 'wrap' : 'nowrap',
+  ...(medium && { flexBasis: '250px' }),
   justifyContent: 'space-between',
   alignItems: 'center',
   paddingTop: '24px',

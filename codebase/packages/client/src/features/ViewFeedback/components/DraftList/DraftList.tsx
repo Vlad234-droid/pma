@@ -1,10 +1,11 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Rule, useStyle } from '@pma/dex-wrapper';
-
-// eslint-disable-next-line import/no-named-as-default
-import DraftItem, { DraftItem as DraftItemType } from '../DraftItem';
 import { useSelector } from 'react-redux';
 import { getLoadedStateSelector } from '@pma/store';
+
+import Spinner from 'components/Spinner';
+// eslint-disable-next-line import/no-named-as-default
+import DraftItem, { DraftItem as DraftItemType } from '../DraftItem';
 
 import { Checkbox } from 'components/Form';
 import { NoFeedback } from '../../../Feedback/components';
@@ -57,11 +58,16 @@ const DraftList: FC<Props> = ({
     onChange && onChange(uuids);
   }, [uuids.length]);
 
-  if (!loaded) return <div className={css(wrapperRule)} data-test-id='empty' />;
+  if (!loaded)
+    return (
+      <div className={css(wrapperRule)} data-test-id='empty'>
+        <Spinner />
+      </div>
+    );
 
   return (
     <div className={css(wrapperRule)} data-test-id={WRAPPER}>
-      {items.length && Object.keys(selected).length ? (
+      {loaded && items.length && Object.keys(selected).length ? (
         items.map((item) => (
           <div key={item.uuid} className={css(itemsWrapperRule)}>
             {selectable && (

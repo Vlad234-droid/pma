@@ -566,5 +566,6 @@
   "comment_to_objective": "Comment to day objective",
   "comment_to_your_self": "Comment to your self",
   "comment_to_your_impact": "Comment to your impact",
-  "comment_to_request": "Comment to request"
+  "comment_to_request": "Comment to request",
+  "end_day_mast_be_after": "End day mast be after {{ min }}"
 }
