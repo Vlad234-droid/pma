@@ -43,8 +43,6 @@ const CreateMyPDP = () => {
     CREATE = 'create',
   }
 
-  const methodsMap = new Set([METHODS.SAVE, METHODS.UPDATE, METHODS.CREATE]);
-
   useEffect(() => {
     dispatch(PDPActions.getPDPGoal({}));
   }, []);

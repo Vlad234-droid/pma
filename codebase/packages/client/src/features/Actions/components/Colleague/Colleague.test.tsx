@@ -40,9 +40,7 @@ describe('<Colleague />', () => {
           startTime: '2021-04-01T00:00:00.000Z',
           endTime: null,
           properties: {
-            mapJson: {
-              pm_review_type: 'objective',
-            },
+            pm_review_type: 'objective',
           },
           status: 'WAITING_FOR_APPROVAL',
           reviewType: 'EYR',
@@ -72,9 +70,7 @@ describe('<Colleague />', () => {
             number: 1,
             tlPointUuid: '3467a739-53f0-4546-b64e-c2e5dfad26c4',
             properties: {
-              mapJson: {
-                how_over_achieved: 'how_over_achieved',
-              },
+              how_over_achieved: 'how_over_achieved',
             },
             lastUpdatedTime: '2022-03-24T07:42:59.800Z',
             changeStatusReason: null,
@@ -86,9 +82,7 @@ describe('<Colleague />', () => {
             number: 2,
             tlPointUuid: '3467a739-53f0-4546-b64e-c2e5dfad26c4',
             properties: {
-              mapJson: {
-                how_over_achieved: 'how_over_achieved',
-              },
+              how_over_achieved: 'how_over_achieved',
             },
             lastUpdatedTime: '2022-03-24T07:42:59.675Z',
             changeStatusReason: null,
@@ -100,9 +94,7 @@ describe('<Colleague />', () => {
             number: 3,
             tlPointUuid: '3467a739-53f0-4546-b64e-c2e5dfad26c4',
             properties: {
-              mapJson: {
-                how_over_achieved: 'how_over_achieved',
-              },
+              how_over_achieved: 'how_over_achieved',
             },
             lastUpdatedTime: '2022-03-24T07:42:59.794Z',
             changeStatusReason: null,
@@ -114,9 +106,7 @@ describe('<Colleague />', () => {
             number: 1,
             tlPointUuid: 'e226a9a3-20ee-44e5-8ced-042b7fb12c46',
             properties: {
-              mapJson: {
-                [FormType.TEXT_FIELD]: 'how_over_achieved',
-              },
+              [FormType.TEXT_FIELD]: 'how_over_achieved',
             },
             lastUpdatedTime: '2022-03-24T09:44:08.223Z',
             changeStatusReason: null,

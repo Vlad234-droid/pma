@@ -60,9 +60,7 @@ export const CreateUpdateObjective: FC<Props> = ({ onClose, editNumber = null })
     const currentObjective = {
       number: currentObjectiveNumber,
       status: Status.WAITING_FOR_APPROVAL,
-      properties: {
-        mapJson: data,
-      },
+      properties: { ...data },
     };
     if (objectives[currentObjectiveNumber]) {
       dispatch(
@@ -86,9 +84,7 @@ export const CreateUpdateObjective: FC<Props> = ({ onClose, editNumber = null })
     const currentObjective = {
       number: currentObjectiveNumber,
       status: Status.DRAFT,
-      properties: {
-        mapJson: data,
-      },
+      properties: { ...data },
     };
     if (objectives[currentObjectiveNumber]) {
       dispatch(

@@ -25,9 +25,7 @@ describe('<ReviewWidgets />', () => {
         type: TimelineType.REVIEW,
         uuid: 'mocked_uuid',
         properties: {
-          mapJson: {
-            mocked: 'mocked',
-          },
+          mocked: 'mocked',
         },
       },
       endYearReview: {
@@ -43,9 +41,7 @@ describe('<ReviewWidgets />', () => {
         type: TimelineType.REVIEW,
         uuid: 'mocked_uuid',
         properties: {
-          mapJson: {
-            mocked: 'mocked',
-          },
+          mocked: 'mocked',
         },
       },
     };

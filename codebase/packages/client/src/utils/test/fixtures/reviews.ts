@@ -7,7 +7,7 @@ export const reviews = {
       number: 1,
       tlPointUuid: '278e6e31-5555-53bf-450e-780edbcf21f9',
       properties: {
-        mapJson: { textfield: 'textfield_textfield' },
+        textfield: 'textfield_textfield',
       },
       lastUpdatedTime: '2022-01-21T17:06:16.785Z',
       changeStatusReason: null,

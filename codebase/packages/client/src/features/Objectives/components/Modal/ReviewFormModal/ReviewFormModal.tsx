@@ -89,9 +89,7 @@ const ReviewFormModal: FC<ReviewFormModal> = ({ reviewType, onClose }) => {
         data: [
           {
             status: Status.DRAFT,
-            properties: {
-              mapJson: data,
-            },
+            properties: { ...data },
           },
         ],
       }),
@@ -105,9 +103,7 @@ const ReviewFormModal: FC<ReviewFormModal> = ({ reviewType, onClose }) => {
         data: [
           {
             status: Status.WAITING_FOR_APPROVAL,
-            properties: {
-              mapJson: data,
-            },
+            properties: { ...data },
           },
         ],
       }),

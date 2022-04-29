@@ -1639,19 +1639,6 @@ export interface LegalEmployer {
 /**
  * 
  * @export
- * @interface MapJson
- */
-export interface MapJson {
-    /**
-     * 
-     * @type {{ [key: string]: string; }}
-     * @memberof MapJson
-     */
-    'mapJson'?: { [key: string]: string; };
-}
-/**
- * 
- * @export
  * @interface ModelFile
  */
 export interface ModelFile {
@@ -1939,10 +1926,10 @@ export interface PDPGoal {
     'number'?: number;
     /**
      * 
-     * @type {MapJson}
+     * @type {object}
      * @memberof PDPGoal
      */
-    'properties'?: MapJson;
+    'properties'?: {[key: string]: string};
     /**
      * 
      * @type {string}
@@ -2048,10 +2035,10 @@ export interface PMCycle {
     'endTime'?: string;
     /**
      * 
-     * @type {MapJson}
+     * @type {object}
      * @memberof PMCycle
      */
-    'properties'?: MapJson;
+    'properties'?: {[key: string]: string};
     /**
      * 
      * @type {PMCycleMetadata}
@@ -3835,10 +3822,10 @@ export interface Review {
     'tlPointUuid'?: string;
     /**
      * 
-     * @type {MapJson}
+     * @type {object}
      * @memberof Review
      */
-    'properties'?: MapJson;
+    'properties'?: {[key: string]: string};
     /**
      * 
      * @type {string}
@@ -4077,10 +4064,10 @@ export interface TimelinePoint {
     'endTime'?: string;
     /**
      * 
-     * @type {MapJson}
+     * @type {object}
      * @memberof TimelinePoint
      */
-    'properties'?: MapJson;
+    'properties'?: {[key: string]: string};
     /**
      * 
      * @type {string}

@@ -18,8 +18,8 @@ import { View } from 'components/PieChart/config';
 import { HoverContainer } from 'components/HoverContainer';
 import { HoverMessage } from 'components/HoverMessage';
 
-import { getFieldOptions, metaStatuses, initialValues, convertToLink, IsReportTiles, getCurrentValue } from './config';
-import { useStatisticsReport, getReportData, getData } from './hooks';
+import { getFieldOptions, initialValues, convertToLink, IsReportTiles, getCurrentValue } from './config';
+import { getReportData, getData } from './hooks';
 import { ReportPage, TitlesReport } from 'config/enum';
 
 import { Page } from 'pages';
@@ -48,7 +48,7 @@ const Report: FC = () => {
 
   const [checkedItems, setCheckedItems]: [string[], (T) => void] = useState([]);
   const [isCheckAll, setIsCheckAll]: [string[], (T) => void] = useState([]);
-  const { colleaguesCount } = useStatisticsReport([...metaStatuses]);
+  // const { colleaguesCount } = useStatisticsReport([...metaStatuses]);
   const { loaded } = useSelector(getReportMetaSelector);
 
   getReportData(query);
@@ -59,14 +59,14 @@ const Report: FC = () => {
     getData(dispatch, { year: value });
   };
 
-  const getAppliedReport = () => [...new Set(checkedItems.map((item) => item.split('-')[0]))];
+  // const getAppliedReport = () => [...new Set(checkedItems.map((item) => item.split('-')[0]))];
 
-  const clearAppliedFilters = (filterTitle) => {
-    if (isCheckAll.length) setIsCheckAll((prev) => [...prev.filter((item) => item.split('-')[0] !== filterTitle)]);
-    setCheckedItems((prev) => [...prev.filter((item) => item.split('-')[0] !== filterTitle)]);
-  };
+  // const clearAppliedFilters = (filterTitle) => {
+  //   if (isCheckAll.length) setIsCheckAll((prev) => [...prev.filter((item) => item.split('-')[0] !== filterTitle)]);
+  //   setCheckedItems((prev) => [...prev.filter((item) => item.split('-')[0] !== filterTitle)]);
+  // };
 
-  const quantity = getAppliedReport().length;
+  // const quantity = getAppliedReport().length;
 
   const getYear = useCallback(
     () => ({
@@ -85,7 +85,7 @@ const Report: FC = () => {
 
   return (
     <div className={css({ margin: '22px 42px 30px 40px' })} data-test-id={REPORT_WRAPPER}>
-      <div className={css(spaceBetween({ quantity, mobileScreen }))}>
+      <div className={css(spaceBetween({ mobileScreen }))}>
         {/*//Todo in future move active filters to another place */}
         {/*{!!getAppliedReport().length && (*/}
         {/*  <AppliedFilters*/}
@@ -422,7 +422,7 @@ const flexCenterStyled: Rule = {
   height: '116px',
 };
 
-const spaceBetween: CreateRule<{ quantity: number; mobileScreen: boolean }> = ({ quantity, mobileScreen }) => {
+const spaceBetween: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => {
   return {
     display: 'flex',
     flexWrap: mobileScreen ? 'wrap' : 'nowrap',

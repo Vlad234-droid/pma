@@ -193,13 +193,13 @@ export const updateRatingReviewEpic: Epic = (action$, state$, { api }) =>
           const reviewType = payload?.type;
           const reviewNumber = payload?.number;
           const reviewsUpdated = reviewsData.map((review) => {
-            if (reviewType === review.type && reviewNumber === review.number && review?.properties?.mapJson) {
-              review.properties.mapJson = { ...review.properties.mapJson, ...data };
+            if (reviewType === review.type && reviewNumber === review.number && review?.properties) {
+              review.properties = { ...review.properties, ...data };
             }
             return review;
           });
           if (!reviewsUpdated?.filter((review) => reviewType === review.type)?.length) {
-            reviewsUpdated.push({ type: reviewType, number: reviewNumber, properties: { mapJson: data } });
+            reviewsUpdated.push({ type: reviewType, number: reviewNumber, properties: { ...data } });
           }
           return updateRatingReview.success({ data: reviewsUpdated });
         }),

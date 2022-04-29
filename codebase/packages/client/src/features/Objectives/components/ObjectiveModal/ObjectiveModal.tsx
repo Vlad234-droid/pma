@@ -1,16 +1,13 @@
 import React, { FC, HTMLProps, useEffect, useRef } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 
-import { FormType } from '@pma/store';
 import { Button, Icon, useStyle, Rule, CreateRule } from '@pma/dex-wrapper';
 
 import { Status } from 'config/enum';
 import { Trans, useTranslation } from 'components/Translation';
 import { Icon as IconComponent } from 'components/Icon';
 import { StepIndicatorBasic } from 'components/StepIndicator/StepIndicator';
-import { Input, Item, Select, Textarea, Attention } from 'components/Form';
-import { GenericItemField } from 'components/GenericForm';
-import MarkdownRenderer from 'components/MarkdownRenderer';
+import { Attention } from 'components/Form';
 import { TriggerModal } from 'features/Modal/components/TriggerModal';
 
 import { ButtonWithConfirmation } from '../Buttons';

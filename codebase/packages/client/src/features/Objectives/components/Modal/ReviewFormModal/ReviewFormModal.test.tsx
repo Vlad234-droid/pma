@@ -149,10 +149,8 @@ describe('ReviewFormModal', () => {
           number: 1,
           tlPointUuid: 'bbc85acd-5fcf-af8b-cacc-7fda95743505',
           properties: {
-            mapJson: {
-              select: 'Outstanding',
-              textfield: 'textfield value',
-            },
+            select: 'Outstanding',
+            textfield: 'textfield value',
           },
           lastUpdatedTime: '2022-01-24T08:31:22.583Z',
           changeStatusReason: null,
@@ -176,18 +174,16 @@ describe('ReviewFormModal', () => {
           startTime: '2022-03-15T00:00:00.000Z',
           endTime: null,
           properties: {
-            mapJson: {
-              pm_review_start_delay: 'P1Y',
-              pm_review_type: 'eyr',
-              pm_review_before_start: 'P2W',
-              pm_type: 'review',
-              pm_review_start_time: '2022-03-15',
-              pm_review_min: '1',
-              pm_review_before_end: 'P1W',
-              pm_review_max: '1',
-              pm_review_duration: 'P2W',
-              pm_form_key: 'forms/type_1_eyr.form',
-            },
+            pm_review_start_delay: 'P1Y',
+            pm_review_type: 'eyr',
+            pm_review_before_start: 'P2W',
+            pm_type: 'review',
+            pm_review_start_time: '2022-03-15',
+            pm_review_min: '1',
+            pm_review_before_end: 'P1W',
+            pm_review_max: '1',
+            pm_review_duration: 'P2W',
+            pm_form_key: 'forms/type_1_eyr.form',
           },
           status: 'DRAFT',
           reviewType: 'EYR',
@@ -259,7 +255,7 @@ describe('ReviewFormModal', () => {
       expect(addMockUpdateReviews).toHaveBeenCalledTimes(1);
       expect(requestParamFirstCall.pathParams.type).toEqual('EYR');
       expect(requestParamFirstCall.data[0].status).toEqual('DRAFT');
-      expect(requestParamFirstCall.data[0].properties.mapJson).toMatchObject({
+      expect(requestParamFirstCall.data[0].properties).toMatchObject({
         select: 'Outstanding',
         textfield: 'textfield value',
       });
@@ -280,7 +276,7 @@ describe('ReviewFormModal', () => {
 
       expect(requestParamFirstCall.pathParams.type).toEqual('EYR');
       expect(requestParamFirstCall.data[0].status).toEqual('WAITING_FOR_APPROVAL');
-      expect(requestParamFirstCall.data[0].properties.mapJson).toMatchObject({
+      expect(requestParamFirstCall.data[0].properties).toMatchObject({
         select: 'Outstanding',
         textfield: 'textfield value',
       });
@@ -401,7 +397,7 @@ describe('ReviewFormModal', () => {
           status: 'DRAFT',
           number: 1,
           tlPointUuid: 'bbc85acd-5fcf-af8b-cacc-7fda95743505',
-          properties: { mapJson: {} },
+          properties: {},
           lastUpdatedTime: '2022-01-24T08:31:22.583Z',
           changeStatusReason: null,
         },
@@ -424,18 +420,16 @@ describe('ReviewFormModal', () => {
           startTime: '2022-03-15T00:00:00.000Z',
           endTime: null,
           properties: {
-            mapJson: {
-              pm_review_start_delay: 'P1Y',
-              pm_review_type: 'eyr',
-              pm_review_before_start: 'P2W',
-              pm_type: 'review',
-              pm_review_start_time: '2022-03-15',
-              pm_review_min: '1',
-              pm_review_before_end: 'P1W',
-              pm_review_max: '1',
-              pm_review_duration: 'P2W',
-              pm_form_key: 'forms/type_1_eyr.form',
-            },
+            pm_review_start_delay: 'P1Y',
+            pm_review_type: 'eyr',
+            pm_review_before_start: 'P2W',
+            pm_type: 'review',
+            pm_review_start_time: '2022-03-15',
+            pm_review_min: '1',
+            pm_review_before_end: 'P1W',
+            pm_review_max: '1',
+            pm_review_duration: 'P2W',
+            pm_form_key: 'forms/type_1_eyr.form',
           },
           status: 'DRAFT',
           reviewType: 'EYR',
@@ -503,7 +497,7 @@ describe('ReviewFormModal', () => {
 
       expect(requestParamFirstCall.pathParams.type).toEqual('EYR');
       expect(requestParamFirstCall.data[0].status).toEqual('WAITING_FOR_APPROVAL');
-      expect(requestParamFirstCall.data[0].properties.mapJson).toMatchObject({
+      expect(requestParamFirstCall.data[0].properties).toMatchObject({
         textfield: 'textfield value',
       });
       expect(onClose).not.toHaveBeenCalled();

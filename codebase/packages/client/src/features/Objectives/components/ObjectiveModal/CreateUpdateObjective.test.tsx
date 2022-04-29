@@ -81,7 +81,7 @@ describe('CreateUpdateObjective', () => {
 
       expect(requestParamFirstCall.pathParams.type).toEqual('OBJECTIVE');
       expect(requestParamFirstCall.data[0].status).toEqual('WAITING_FOR_APPROVAL');
-      expect(requestParamFirstCall.data[0].properties.mapJson).toMatchObject({
+      expect(requestParamFirstCall.data[0].properties).toMatchObject({
         textfield: 'textfield value',
       });
       expect(onClose).toHaveBeenCalled();
@@ -104,7 +104,7 @@ describe('CreateUpdateObjective', () => {
             number: 1,
             tlPointUuid: '278e6e31-5555-53bf-450e-780edbcf21f9',
             properties: {
-              mapJson: { textfield: 'textfield prev ' },
+              textfield: 'textfield prev ',
             },
           },
         ],
@@ -140,7 +140,7 @@ describe('CreateUpdateObjective', () => {
 
       expect(requestParamFirstCall.pathParams.type).toEqual('OBJECTIVE');
       expect(requestParamFirstCall.data[0].status).toEqual('DRAFT');
-      expect(requestParamFirstCall.data[0].properties.mapJson).toMatchObject({
+      expect(requestParamFirstCall.data[0].properties).toMatchObject({
         textfield: 'textfield prev textfield value',
       });
       expect(onClose).toHaveBeenCalled();
@@ -167,7 +167,7 @@ describe('CreateUpdateObjective', () => {
 
       expect(requestParamFirstCall.pathParams.type).toEqual('OBJECTIVE');
       expect(requestParamFirstCall.data[0].status).toEqual('WAITING_FOR_APPROVAL');
-      expect(requestParamFirstCall.data[0].properties.mapJson).toMatchObject({
+      expect(requestParamFirstCall.data[0].properties).toMatchObject({
         textfield: 'textfield prev textfield value',
       });
       expect(onClose).toHaveBeenCalled();

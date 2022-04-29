@@ -31,7 +31,7 @@ describe('ShareWidget', () => {
           status: 'DRAFT',
           number: 1,
           properties: {
-            mapJson: { textfield: 'textfield_textfield' },
+            textfield: 'textfield_textfield',
           },
         },
       ],
@@ -49,7 +49,7 @@ describe('ShareWidget', () => {
           status: 'DRAFT',
           number: 1,
           properties: {
-            mapJson: { textfield: 'textfield_textfield' },
+            textfield: 'textfield_textfield',
           },
         },
       ],

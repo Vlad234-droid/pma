@@ -8,7 +8,7 @@ export const transformReviewsToObjectives = (
   return reviews?.map((reviewItem) => {
     const status = reviewItem.status;
     const declineReason = status === Status.DECLINED ? reviewItem?.changeStatusReason : '';
-    const objective = reviewItem?.properties?.mapJson;
+    const objective = reviewItem?.properties;
     const subTitle = objective?.['title'] || '';
     const description = objective?.['description'] || '';
     let explanations: T.Explanation[] = [];
