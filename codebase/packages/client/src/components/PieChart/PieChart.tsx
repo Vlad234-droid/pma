@@ -7,6 +7,8 @@ import { HoverMessage } from 'components/HoverMessage';
 import { PieChartProps } from './config';
 import { paramsReplacer } from 'utils';
 
+export const PIE_CHART_WRAPPER = 'pie-chart-wrapper';
+
 const PieChart: FC<PieChartProps> = ({
   title,
   data,
@@ -45,6 +47,7 @@ const PieChart: FC<PieChartProps> = ({
         className={css(pieChartWrapper)}
         onMouseEnter={() => setIsHovering(true)}
         onMouseLeave={() => setIsHovering(false)}
+        data-test-id={PIE_CHART_WRAPPER}
       >
         <Content {...props} />
         {isVisibleMessage()}

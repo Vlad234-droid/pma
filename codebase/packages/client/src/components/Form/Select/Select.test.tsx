@@ -29,7 +29,7 @@ describe('<Select />', () => {
     it('should render dropdown and wrapper', () => {
       const { getByTestId } = render(<Select {...props} />);
 
-      expect(getByTestId('mocked_name-wrapper')).toBeInTheDocument();
+      expect(getByTestId('select-mocked_name-wrapper')).toBeInTheDocument();
       expect(getByTestId('mocked_name')).toBeInTheDocument();
     });
 

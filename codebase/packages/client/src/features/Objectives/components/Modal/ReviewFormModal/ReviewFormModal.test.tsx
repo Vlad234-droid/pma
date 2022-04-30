@@ -460,7 +460,7 @@ describe('ReviewFormModal', () => {
     });
 
     it('should render ReviewFormModal input values empty', async () => {
-      const textfield = screen.getByTestId('textfield');
+      const textfield = screen.getByTestId('textarea-textfield');
 
       expect(textfield).toBeEmptyDOMElement();
     });
@@ -477,7 +477,7 @@ describe('ReviewFormModal', () => {
     });
 
     it('should render ReviewFormModal fill form and fireEvent submit', async () => {
-      const textfield = screen.getByTestId('textfield');
+      const textfield = screen.getByTestId('textarea-textfield');
       const submit = screen.getByRole('button', { name: /Submit/i });
 
       expect(submit).toHaveAttribute('aria-disabled', 'true');
@@ -504,7 +504,7 @@ describe('ReviewFormModal', () => {
     });
 
     it('should render ReviewFormModal check error message absent', async () => {
-      const textfield = screen.getByTestId('textfield');
+      const textfield = screen.getByTestId('textarea-textfield');
       const errorText = /Must be at least/;
       const submit = screen.getByRole('button', { name: /Submit/i });
 
@@ -518,7 +518,7 @@ describe('ReviewFormModal', () => {
     });
 
     it('should render ReviewFormModal check typing by latter', async () => {
-      const textfield = screen.getByTestId('textfield');
+      const textfield = screen.getByTestId('textarea-textfield');
       const errorText = /Must be at least/;
       const submit = screen.getByRole('button', { name: /Submit/i });
 

@@ -5,7 +5,7 @@ import { CheckboxField } from '../types';
 const Checkbox: FC<CheckboxField> = ({ id, name, onChange, checked, disabled = false, indeterminate = false }) => {
   const { css } = useStyle();
   return (
-    <span>
+    <span data-test-id={`checkbox-${name}`}>
       <input
         disabled={disabled}
         className={css(inputStyle({ indeterminate, checked }), disabled ? inputDisabledStyle : {})}

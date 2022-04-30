@@ -155,7 +155,7 @@ describe('Tips form', () => {
   it('should render discard modal', async () => {
     const { getByTestId, queryByTestId } = renderWithTheme(<TipsForm mode={'create'} />, { ...props });
     const tipsForm = getByTestId(TIPS_FORM);
-    const input = getByTestId('tipTitle');
+    const input = getByTestId('input-tipTitle');
     const tipsFormModal = queryByTestId(TIPS_FORM_MODAL);
 
     expect(tipsForm).toBeInTheDocument();
@@ -188,24 +188,24 @@ describe('Tips form', () => {
     expect(tipsForm).toBeInTheDocument();
     expect(submitBtn).toHaveAttribute('aria-disabled', 'true');
     expect(queryByTestId(TIPS_FORM_MODAL_PLACEHOLDER)).toBeNull();
-    expect(getByTestId('tipTitle')).toBeInTheDocument();
-    expect(getByTestId('tipDescription')).toBeInTheDocument();
+    expect(getByTestId('input-tipTitle')).toBeInTheDocument();
+    expect(getByTestId('textarea-tipDescription')).toBeInTheDocument();
     expect(getByTestId('tipTargetLevel1')).toBeInTheDocument();
-    expect(getByTestId('tipTitle')['value']).toBe('');
-    expect(getByTestId('tipDescription')['value']).toBe('');
+    expect(getByTestId('input-tipTitle')['value']).toBe('');
+    expect(getByTestId('textarea-tipDescription')['value']).toBe('');
     expect(getByTestId('tipTargetLevel1')['value']).toBe('');
 
     await act(async () => {
-      fireEvent.change(getByTestId('tipTitle'), { target: { value: 'Tips test title' } });
-      fireEvent.change(getByTestId('tipDescription'), { target: { value: 'Test tip description' } });
+      fireEvent.change(getByTestId('input-tipTitle'), { target: { value: 'Tips test title' } });
+      fireEvent.change(getByTestId('textarea-tipDescription'), { target: { value: 'Test tip description' } });
     });
 
     fireEvent.click(getByTestId('tipTargetLevel1'));
     expect(await findByTestId('tipTargetLevel1-list')).not.toBeNull();
     fireEvent.click(await findByText('UK'));
 
-    expect(getByTestId('tipTitle')['value']).toBe('Tips test title');
-    expect(getByTestId('tipDescription')['value']).toBe('Test tip description');
+    expect(getByTestId('input-tipTitle')['value']).toBe('Tips test title');
+    expect(getByTestId('textarea-tipDescription')['value']).toBe('Test tip description');
     expect(await findByTestId(TIPS_FORM_SUBMIT_BTN)).not.toHaveAttribute('aria-disabled', 'true');
 
     fireEvent.click(await findByTestId(TIPS_FORM_SUBMIT_BTN));
@@ -244,8 +244,8 @@ describe('Tips form', () => {
     });
     const tipsForm = getByTestId(TIPS_FORM);
     const submitBtn = getByTestId(TIPS_FORM_SUBMIT_BTN);
-    const tipTitle = getByTestId('tipTitle');
-    const tipDescription = getByTestId('tipDescription');
+    const tipTitle = getByTestId('input-tipTitle');
+    const tipDescription = getByTestId('textarea-tipDescription');
     const tipTargetLevel1 = getByTestId('tipTargetLevel1');
 
     expect(tipsForm).toBeInTheDocument();
@@ -255,12 +255,12 @@ describe('Tips form', () => {
     expect(tipDescription).toBeInTheDocument();
     expect(tipTargetLevel1).toBeInTheDocument();
 
-    expect(await findByTestId('tipTitle')).toHaveDisplayValue('Do you know?');
-    expect(await findByTestId('tipDescription')).toHaveDisplayValue('Some description 2');
+    expect(await findByTestId('input-tipTitle')).toHaveDisplayValue('Do you know?');
+    expect(await findByTestId('textarea-tipDescription')).toHaveDisplayValue('Some description 2');
     expect(await findByText('UK')).toBeInTheDocument();
 
-    fireEvent.change(getByTestId('tipTitle'), { target: { value: 'Tips test title' } });
-    expect(await findByTestId('tipTitle')).toHaveDisplayValue('Tips test title');
+    fireEvent.change(getByTestId('input-tipTitle'), { target: { value: 'Tips test title' } });
+    expect(await findByTestId('input-tipTitle')).toHaveDisplayValue('Tips test title');
 
     expect(await findByTestId(TIPS_FORM_SUBMIT_BTN)).not.toHaveAttribute('aria-disabled', 'true');
 

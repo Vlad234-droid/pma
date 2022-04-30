@@ -35,6 +35,7 @@ export const DurationPicker: FC<DurationField> = ({ control, name, readonly = fa
       name={name}
       control={control}
       render={({ field }) => {
+        // move to utilities and test separately
         const initWeeks = field?.value?.match(/(\d+)(?=\s*W)/)?.[0] || '';
         const initDays = field?.value?.match(/(\d+)(?=\s*D)/)?.[0] || '';
         setWeeks(initWeeks);
@@ -46,6 +47,7 @@ export const DurationPicker: FC<DurationField> = ({ control, name, readonly = fa
           if (result) result = `P${result}`;
           field.onChange(result);
         };
+        //
         const replacer: DurationReplacer = (matched) => mappedValues[matched];
         return (
           <div
@@ -76,6 +78,7 @@ export const DurationPicker: FC<DurationField> = ({ control, name, readonly = fa
                 }}
               >
                 <div
+                  data-test-id='duration-dialog'
                   className={css({
                     display: 'flex',
                     flexDirection: 'column',
@@ -84,6 +87,7 @@ export const DurationPicker: FC<DurationField> = ({ control, name, readonly = fa
                 >
                   <label htmlFor='weeks'>weeks</label>
                   <Input
+                    name='weeks'
                     type='number'
                     min={0}
                     id={'weeks'}
@@ -95,6 +99,7 @@ export const DurationPicker: FC<DurationField> = ({ control, name, readonly = fa
                   />
                   <label htmlFor='days'>days</label>
                   <Input
+                    name='days'
                     type='number'
                     min={0}
                     id={'days'}

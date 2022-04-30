@@ -28,7 +28,7 @@ const Input: FC<InputField> = ({
       type={type}
       ref={mergeRefs([domRef, inputRef])}
       name={name}
-      data-test-id={name}
+      data-test-id={`input-${name}`}
       value={value}
       onChange={onChange}
       onBlur={(e) => {

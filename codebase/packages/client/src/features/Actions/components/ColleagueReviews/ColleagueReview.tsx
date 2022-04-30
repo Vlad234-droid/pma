@@ -93,6 +93,7 @@ export const ColleagueReview: FC<Props> = ({ review, schema, validateReview, upd
               </div>
             );
           }
+
           if (expression?.auth?.permission?.write?.length && review.status === Status.WAITING_FOR_APPROVAL) {
             if (type === FormType.TEXT_FIELD) {
               return (

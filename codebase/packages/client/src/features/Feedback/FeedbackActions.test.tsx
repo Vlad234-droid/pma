@@ -30,7 +30,7 @@ describe('Feedback actions', () => {
       </BrowserRouter>,
     );
 
-    const dropdown = getByTestId('treatment-options-wrapper');
+    const dropdown = getByTestId('select-treatment-options-wrapper');
     expect(dropdown).toBeInTheDocument();
   });
 });

@@ -16,6 +16,7 @@ export type ItemProps = {
   onFocus?: () => void;
   focus?: boolean;
   onKeyDown?: (e: KeyboardEvent) => void;
+  testId?: string;
 };
 
 export const Item: FC<ItemProps> = ({
@@ -30,6 +31,7 @@ export const Item: FC<ItemProps> = ({
   focus,
   onFocus,
   onKeyDown,
+  testId = 'item',
 }) => {
   const { css } = useStyle();
   const [recordingState, setRecordingState] = useState(false);
@@ -47,6 +49,7 @@ export const Item: FC<ItemProps> = ({
 
   return (
     <div
+      data-test-id={testId}
       className={css(wrapperItem({ marginBot }))}
       // @ts-ignore
       onKeyDown={onKeyDown}

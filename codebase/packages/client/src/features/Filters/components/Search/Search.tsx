@@ -39,7 +39,7 @@ const Search: FC<Props> = ({ focus, onFocus, iconStyles, onSearch, value }) => {
         onFocus={onFocus}
       >
         <Input
-          name='search-input'
+          name='search'
           value={focus ? value : ''}
           onChange={handleSearch}
           placeholder={focus ? t('search_keyword', 'Search keyword') : ''}

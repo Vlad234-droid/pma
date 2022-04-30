@@ -55,8 +55,8 @@ describe('EditSelectedNote', () => {
     const { getByTestId } = render(<EditSelectedNote {...props} />);
     const button = getByTestId('edit');
     fireEvent.click(button);
-    const title = getByTestId('noteTitle');
-    const text = getByTestId('noteText');
+    const title = getByTestId('input-noteTitle');
+    const text = getByTestId('textarea-noteText');
     expect(title).toBeInTheDocument();
     expect(text).toBeInTheDocument();
   });
