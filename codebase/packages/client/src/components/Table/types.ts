@@ -1,4 +1,4 @@
-export type CurrentItemsType = {
+type CurrentItemsType = {
   colleagueUuid: string;
   employeeNo: string;
   firstName: string;
@@ -11,4 +11,9 @@ export type CurrentItemsType = {
   strategicDriver: string;
   title: string;
   workingLevel: string;
+};
+
+export type TableProps = {
+  currentItems: Array<CurrentItemsType>;
+  tableTitles: Array<string>;
 };

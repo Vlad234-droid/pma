@@ -1,16 +1,14 @@
 import React, { FC } from 'react';
 import { useStyle, Rule, Styles } from '@pma/dex-wrapper';
 import { useTranslation } from 'components/Translation';
-import { CurrentItemsType } from './types';
+import { TableProps as Props } from './types';
 
 export const TABLE_WRAPPER = 'table-wrapper';
 
-const Table: FC<{ currentItems: Array<CurrentItemsType>; tableTitles: Array<string> }> = ({
-  currentItems,
-  tableTitles,
-}) => {
+const Table: FC<Props> = ({ currentItems, tableTitles }) => {
   const { css } = useStyle();
   const { t } = useTranslation();
+
   return (
     <>
       <div data-test-id={TABLE_WRAPPER} className={css(tableContainer)}>
@@ -48,7 +46,7 @@ const Table: FC<{ currentItems: Array<CurrentItemsType>; tableTitles: Array<stri
 const contentStyle: Rule = ({ theme }) => ({
   // @ts-ignore
   border: `1px solid ${theme.colors.lightGray}`,
-  padding: '8px 10px',
+  padding: '7px 10px',
   whiteSpace: 'nowrap',
   textAlign: 'center',
   verticalAlign: 'middle',
@@ -93,7 +91,6 @@ const wrapper: Rule = {
 
 const innerWrapper: Rule = {
   display: 'table-cell',
-  overflowX: 'auto',
   width: '100%',
 };
 

@@ -37,10 +37,7 @@ const InfinityScrollLoad: FC<Props> = ({
 
 const scrollWrapper: Rule = {
   overflow: 'auto',
-  //TODO check with big list of data
-  // height: '580px',
-  // maxHeight: '580px',
-  height: '530px',
+  maxHeight: '604px',
 };
 
 export default InfinityScrollLoad;

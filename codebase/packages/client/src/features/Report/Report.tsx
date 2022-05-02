@@ -48,7 +48,6 @@ const Report: FC = () => {
 
   const [checkedItems, setCheckedItems]: [string[], (T) => void] = useState([]);
   const [isCheckAll, setIsCheckAll]: [string[], (T) => void] = useState([]);
-  // const { colleaguesCount } = useStatisticsReport([...metaStatuses]);
   const { loaded } = useSelector(getReportMetaSelector);
 
   getReportData(query);
@@ -59,13 +58,12 @@ const Report: FC = () => {
     getData(dispatch, { year: value });
   };
 
+  //TODO attach this with Marius
   // const getAppliedReport = () => [...new Set(checkedItems.map((item) => item.split('-')[0]))];
-
   // const clearAppliedFilters = (filterTitle) => {
   //   if (isCheckAll.length) setIsCheckAll((prev) => [...prev.filter((item) => item.split('-')[0] !== filterTitle)]);
   //   setCheckedItems((prev) => [...prev.filter((item) => item.split('-')[0] !== filterTitle)]);
   // };
-
   // const quantity = getAppliedReport().length;
 
   const getYear = useCallback(
@@ -343,6 +341,7 @@ const Report: FC = () => {
       )}
       {showModal && (
         <ReportModal
+          tiles={tiles}
           modalStatus={modalStatus}
           onClose={(selectedCheckboxes = []) => {
             if (modalStatus === ModalStatus.EDIT && selectedCheckboxes.length) {

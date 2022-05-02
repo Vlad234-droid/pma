@@ -188,6 +188,13 @@ export const checkboxes = (t, fields) => [
   ...fields,
 ];
 
+export const getWLFields = (t) => [
+  { id: '10', label: t(StatisticsTitlesReportKeys.WL4And5), isChecked: false },
+  getSelectAllField(t),
+];
+
+export const getSelectAllField = (t) => ({ id: '11', label: t('select_all', 'Select All'), isChecked: false });
+
 export const initialValues = [
   {
     title: 'Work level',
@@ -214,6 +221,19 @@ export const initialValues = [
     data: [{ title: 'Select All' }, { title: 'Male' }, { title: 'Female' }],
   },
 ];
+
+export const prepareData = (selectedCheckboxes, isCheckAll, t) => {
+  return [
+    ...selectedCheckboxes.filter((item) => item.isChecked),
+    {
+      ...(isCheckAll &&
+        !selectedCheckboxes[selectedCheckboxes.length - 1].isChecked && {
+          ...getSelectAllField(t),
+          isChecked: true,
+        }),
+    },
+  ].filter((item) => Object.keys(item).length);
+};
 
 export const getCurrentValue = (query, year) =>
   query.year ? year || query.year || getCurrentYear() : year || getCurrentYear();

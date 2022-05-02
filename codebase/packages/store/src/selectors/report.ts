@@ -13,14 +13,14 @@ export const getReportMetaSelector = createSelector(reportSelector, (report) => 
 export const approvedObjectivesSelector = createSelector(reportSelector, (report: any) => {
   const { objectiveReports } = report;
   const approvedCount = objectiveReports.filter((item) => item[statusIndex] === Status.APPROVED).length;
-  const approvedPercent = Math.floor((100 * approvedCount) / objectiveReports.length) || 0;
+  const approvedPercent = Math.round((100 * approvedCount) / objectiveReports.length) || 0;
   return [approvedPercent, 'Approved'];
 });
 
 export const notApprovedObjectivesSelector = createSelector(reportSelector, (report: any) => {
   const { objectiveReports } = report;
   const notApprovedCount = objectiveReports.filter((item) => item[statusIndex] !== Status.APPROVED).length;
-  const notApprovedPercent = Math.floor((100 * notApprovedCount) / objectiveReports.length) || 0;
+  const notApprovedPercent = Math.round((100 * notApprovedCount) / objectiveReports.length) || 0;
   return [notApprovedPercent, 'Not approved'];
 });
 

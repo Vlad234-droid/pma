@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { Button, CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
 import { useForm } from 'react-hook-form';
 import * as Yup from 'yup';
@@ -12,18 +12,25 @@ import { ButtonsWrapper } from 'components/ButtonsWrapper';
 import { downloadReportStatistics } from '../utils';
 import { getCurrentYear } from 'utils/date';
 import success from 'images/success.jpg';
-import { checkboxes, getRequestParams, getYearsFromCurrentYear, reportByYearSchema } from '../config';
+import {
+  checkboxes,
+  getRequestParams,
+  getWLFields,
+  getYearsFromCurrentYear,
+  prepareData,
+  reportByYearSchema,
+} from '../config';
 import { ModalStatus } from '../Report';
-import { StatisticsTitlesReportKeys } from 'config/enum';
 
 export const DOWNLOAD_WRAPPER = 'download-wrapper';
 
 type ModalProps = {
   onClose: (selectedCheckboxes?: any) => void;
   modalStatus: null | ModalStatus;
+  tiles: Array<string>;
 };
 
-const ReportModal: FC<ModalProps> = ({ onClose, modalStatus }) => {
+const ReportModal: FC<ModalProps> = ({ onClose, modalStatus, tiles }) => {
   const { css, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
   const { t } = useTranslation();
@@ -31,7 +38,6 @@ const ReportModal: FC<ModalProps> = ({ onClose, modalStatus }) => {
     mode: 'onChange',
     resolver: yupResolver<Yup.AnyObjectSchema>(reportByYearSchema),
   });
-
   const {
     formState: { isValid },
     getValues,
@@ -41,13 +47,30 @@ const ReportModal: FC<ModalProps> = ({ onClose, modalStatus }) => {
   const values = getValues();
 
   const [selectedCheckboxes, setSelectedCheckboxes] = useState(
-    checkboxes(
-      t,
-      modalStatus === ModalStatus.EDIT
-        ? [{ id: '10', label: t(StatisticsTitlesReportKeys.WL4And5), isChecked: false }]
-        : [],
-    ),
+    checkboxes(t, modalStatus === ModalStatus.EDIT ? [...getWLFields(t)] : []),
   );
+
+  useEffect(() => {
+    const isEditedCheckboxes = modalStatus === ModalStatus.EDIT && tiles.length;
+    isEditedCheckboxes &&
+      setSelectedCheckboxes((prev) => {
+        return prev.map((checkbox, i) => {
+          if (i === prev.length - 1)
+            return {
+              ...checkbox,
+              ...(tiles.length === selectedCheckboxes.length && {
+                isChecked: true,
+              }),
+            };
+          return {
+            ...checkbox,
+            ...(tiles.some((item) => item === checkbox.label) && {
+              isChecked: true,
+            }),
+          };
+        });
+      });
+  }, []);
 
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
@@ -57,11 +80,24 @@ const ReportModal: FC<ModalProps> = ({ onClose, modalStatus }) => {
       downloadReportStatistics({ year: values?.year, topics: getRequestParams(selectedCheckboxes) });
       return;
     }
-    onClose(selectedCheckboxes.filter((item) => item.isChecked));
+    const isCheckAll = selectedCheckboxes.slice(0, -1).every((item) => item.isChecked);
+
+    onClose(prepareData(selectedCheckboxes, isCheckAll, t));
   };
 
   const handleCheck = (checkboxId) => {
     const itemIndex = selectedCheckboxes.findIndex((item) => item.id === checkboxId);
+    const isSelectAll = itemIndex === selectedCheckboxes.length - 1;
+    if (isSelectAll) {
+      return setSelectedCheckboxes((prev) => {
+        return prev.map((checkbox) => {
+          return {
+            ...checkbox,
+            isChecked: !prev[itemIndex].isChecked,
+          };
+        });
+      });
+    }
     const item = {
       ...selectedCheckboxes[itemIndex],
       isChecked: !selectedCheckboxes[itemIndex]['isChecked'],

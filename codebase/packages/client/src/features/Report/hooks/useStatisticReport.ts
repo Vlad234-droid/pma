@@ -24,10 +24,13 @@ export const useStatisticsReport = (args) => {
       .join('');
 
   if (data?.length && metadata?.length) {
-    const statisticReport = args.reduce((acc, item, index) => {
-      acc[getKey(item)] = data?.[metadata?.findIndex((item) => item.id === args[index])];
-      return acc;
-    }, {});
+    const statisticReport = args.reduce(
+      (acc, item, index) => ({
+        ...acc,
+        [acc[getKey(item)]]: data?.[metadata?.findIndex((item) => item.id === args[index])],
+      }),
+      {},
+    );
 
     return { ...statisticReport, ...objectivesGroup };
   }
