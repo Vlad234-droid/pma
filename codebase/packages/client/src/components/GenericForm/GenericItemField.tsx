@@ -1,4 +1,4 @@
-import { Rule, Styles, colors } from '@pma/dex-wrapper';
+import { colors, Rule, Styles } from '@pma/dex-wrapper';
 import React, { FC, RefObject, useEffect, useState } from 'react';
 import { VALIDATION_RULE } from 'utils/yup/types';
 
@@ -83,7 +83,9 @@ export const GenericItemField: FC<GenericItemFormProps> = ({
           <option
             data-test-id={option.label}
             key={`option-${name}-${option.value}`}
+            /*@ts-ignore*/
             value={option.value}
+            /*@ts-ignore*/
             label={option.label}
           />
         ))}
