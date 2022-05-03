@@ -210,7 +210,7 @@ const PersonalFolders: FC<PersonalFoldersProps> = ({
           mode='inverse'
           data-test-id={CHANGE_USER_MODE}
           onPress={() => {
-            setIsUserArchived((prev) => !prev);
+            setIsUserArchived();
             setSelectedFolder(() => null);
           }}
         >

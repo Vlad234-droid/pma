@@ -16,6 +16,7 @@ import { useTranslation } from 'components/Translation';
 import { PersonalFolders, PersonalsTeamFolders, SelectedFolder, SelectedTEAMFolder } from '../../index';
 import { MainFolderProps } from '../../../type';
 import { folderSchema } from '../../Modals/schema/schema';
+import { useNotesContainer } from '../../../contexts';
 
 import {
   AllNotesFolderId,
@@ -34,17 +35,7 @@ export const SELECTED_FOLDER = 'selected-folder';
 export const FOLDER_WRAPPER = 'main-folder-wrapper';
 
 const MainFolders: FC<MainFolderProps> = ({
-  setSelectedFolder,
-  selectedFolder,
   TEAM,
-  selectedTEAMFolder,
-  setSelectedTEAMFolder,
-  foldersWithNotes,
-  setFoldersWithNotes,
-  setSelectedNoteToEdit,
-  foldersWithNotesTEAM,
-  setFoldersWithNotesTEAM,
-  setSelectedTEAMNoteToEdit,
   setIsUserArchived,
   isUserArchived,
   setTeamArchivedMode,
@@ -54,6 +45,19 @@ const MainFolders: FC<MainFolderProps> = ({
   const mediumScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
   const { t } = useTranslation();
   const dispatch = useDispatch();
+
+  const {
+    selectedFolder,
+    setSelectedFolder,
+    selectedTEAMFolder,
+    setSelectedTEAMFolder,
+    foldersWithNotes,
+    setFoldersWithNotes,
+    setSelectedNoteToEdit,
+    foldersWithNotesTEAM,
+    setFoldersWithNotesTEAM,
+    setSelectedTEAMNoteToEdit,
+  } = useNotesContainer();
 
   const notesSelect = useSelector(getNotesSelector) || null;
   const folders = useSelector(getFoldersSelector) || null;
@@ -379,7 +383,7 @@ const MainFolders: FC<MainFolderProps> = ({
       });
     }
 
-    if (selectedFolder && !foldersWithNotes.find((item) => item.id === AllNotesFolderId).selected) {
+    if (selectedFolder && !foldersWithNotes.find((item) => item?.id === AllNotesFolderId)?.selected) {
       setSelectedFolder((prev) => {
         return {
           ...prev,
@@ -427,7 +431,7 @@ const MainFolders: FC<MainFolderProps> = ({
       });
     }
 
-    if (selectedTEAMFolder && !foldersWithNotesTEAM.find((item) => item.id === AllNotesFolderIdTEAM).selected) {
+    if (selectedTEAMFolder && !foldersWithNotesTEAM?.find((item) => item?.id === AllNotesFolderIdTEAM)?.selected) {
       setSelectedTEAMFolder((prev) => {
         return {
           ...prev,
@@ -483,7 +487,7 @@ const MainFolders: FC<MainFolderProps> = ({
             isUserArchived={isUserArchived}
           />
 
-          {mediumScreen && selectedFolder !== null && (
+          {mediumScreen && selectedFolder && (
             <SelectedFolder
               selectedFolder={selectedFolder}
               setConfirmModal={setConfirmModal}
@@ -521,7 +525,7 @@ const MainFolders: FC<MainFolderProps> = ({
               setSelectedTEAMFolder={setSelectedTEAMFolder}
             />
           )}
-          {mediumScreen && selectedTEAMFolder !== null && (
+          {mediumScreen && selectedTEAMFolder && (
             <SelectedTEAMFolder
               selectedTEAMFolder={selectedTEAMFolder}
               setConfirmTEAMModal={setConfirmTEAMModal}
@@ -538,7 +542,7 @@ const MainFolders: FC<MainFolderProps> = ({
           )}
         </div>
         <div className={css(wrapperFolder, { height: '100%' })}>
-          {!mediumScreen && selectedFolder !== null && (
+          {!mediumScreen && selectedFolder && (
             <SelectedFolder
               selectedFolder={selectedFolder}
               setConfirmModal={setConfirmModal}
@@ -560,7 +564,7 @@ const MainFolders: FC<MainFolderProps> = ({
             />
           )}
 
-          {!mediumScreen && selectedTEAMFolder !== null && (
+          {!mediumScreen && selectedTEAMFolder && (
             <SelectedTEAMFolder
               selectedTEAMFolder={selectedTEAMFolder}
               setConfirmTEAMModal={setConfirmTEAMModal}
@@ -696,7 +700,7 @@ const MainFolders: FC<MainFolderProps> = ({
 const wrapperFolder: Rule = () => {
   return {
     display: 'flex',
-    justifyContent: 'space-beetween',
+    justifyContent: 'space-between',
     flexDirection: 'column',
     gap: '8px',
     width: '100%',

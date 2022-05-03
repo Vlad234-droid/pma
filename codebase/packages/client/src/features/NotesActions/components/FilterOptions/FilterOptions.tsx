@@ -96,6 +96,7 @@ const iconStyle: Rule = {
   position: 'relative',
   top: '2px',
   left: '2px',
+  marginBottom: '4px',
 };
 
 export default FilterOption;

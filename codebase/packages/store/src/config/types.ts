@@ -51,3 +51,14 @@ export interface Component {
   values?: { label?: string; value?: string }[];
   expression?: any;
 }
+
+export enum Folders {
+  PERSONAL_FOLDER = 'PERSONAL_FOLDER',
+  ARCHIVED_FOLDER = 'ARCHIVED_FOLDER',
+  TEAM_ARCHIVED_FOLDER = 'TEAM_ARCHIVED_FOLDER',
+  TEAM_FOLDER = 'TEAM_FOLDER',
+}
+export enum NoteStatus {
+  CREATED = 'CREATED',
+  ARCHIVED = 'ARCHIVED',
+}

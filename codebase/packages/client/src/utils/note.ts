@@ -148,6 +148,7 @@ export const filterNotesHandler = (
 ) => {
   setSelectedTEAMFolder(() => null);
   setSelectedFolder(() => null);
+
   if (foldersWithNotes !== null) {
     setFoldersWithNotes((prev) => {
       const arr = [...prev];
@@ -170,7 +171,7 @@ export const filterNotesHandler = (
   }
   const filteredNotes = filterNotesByTitle(notesSelect, searchValueFilterOption);
 
-  const obj = {
+  return {
     isInSearch: true,
     notes: filteredNotes,
     title: `${
@@ -179,7 +180,6 @@ export const filterNotesHandler = (
         : `No results`
     }`,
   };
-  return obj;
 };
 
 export const getNotesFolderTitle = (folderUuid: string, foldersList: Array<any>) =>

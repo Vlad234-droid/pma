@@ -1,7 +1,8 @@
 import { createSelector } from 'reselect';
 //@ts-ignore
 import { RootState } from 'typesafe-actions';
-import { AllNotesFolderId, AllNotesFolderIdTEAM } from '../../../client/src/utils/note';
+import { AllNotesFolderId, AllNotesFolderIdTEAM } from '@pma/client/src/utils';
+import { Folders, NoteStatus } from '../config/types';
 
 //@ts-ignore
 
@@ -17,37 +18,34 @@ export const getFoldersSelector = createSelector(notesSelector, (notes: any) => 
   return folders;
 });
 
-export const getNotesSelector = createSelector(notesSelector, (notes: any) => {
-  const notesData = notes.notes.filter((item) => item.status === 'CREATED');
-  return notesData;
-});
-export const archivedNotesSelector = createSelector(notesSelector, (notes: any) => {
-  const notesData = notes.notes.filter((item) => item.status === 'ARCHIVED');
-  return notesData;
-});
-
+export const getNotesSelector = createSelector(notesSelector, (notes: any) =>
+  notes.notes.filter((item) => item.status === NoteStatus.CREATED),
+);
+export const archivedNotesSelector = createSelector(notesSelector, (notes: any) =>
+  notes.notes.filter((item) => item.status === NoteStatus.ARCHIVED),
+);
 export const personalFolderUuidSelector = createSelector(notesSelector, (notes: any) => {
   const { folders } = notes;
   if (!folders.length) return;
-  return folders?.[folders.findIndex((item) => item.parentFolderUuid === null && item.title === 'PERSONAL_FOLDER')]?.id;
+  return folders?.find((item) => !item.parentFolderUuid && item.title === Folders.PERSONAL_FOLDER)?.id;
 });
 
 export const personalArchivedFolderUuidSelector = createSelector(notesSelector, (notes: any) => {
   const { folders } = notes;
   if (!folders.length) return;
-  return folders?.find((item) => !item.parentFolderUuid && item.title === 'ARCHIVED_FOLDER')?.id;
+  return folders?.find((item) => !item.parentFolderUuid && item.title === Folders.ARCHIVED_FOLDER)?.id;
 });
 
 export const teamArchivedFolderUuidSelector = createSelector(notesSelector, (notes: any) => {
   const { folders } = notes;
   if (!folders.length) return;
-  return folders?.find((item) => !item.parentFolderUuid && item.title === 'TEAM_ARCHIVED_FOLDER')?.id;
+  return folders?.find((item) => !item.parentFolderUuid && item.title === Folders.TEAM_ARCHIVED_FOLDER)?.id;
 });
 
 export const teamFolderUuidSelector = createSelector(notesSelector, (notes: any) => {
   const { folders } = notes;
   if (!folders.length) return;
-  return folders?.[folders.findIndex((item) => item.parentFolderUuid === null && item.title === 'TEAM_FOLDER')]?.id;
+  return folders?.find((item) => !item.parentFolderUuid && item.title === Folders.TEAM_FOLDER)?.id;
 });
 
 export const notesFolderColleagueDataSelector = (colleagueUuid, isUserArchived) =>
@@ -55,17 +53,14 @@ export const notesFolderColleagueDataSelector = (colleagueUuid, isUserArchived) 
     const { folders } = notes;
 
     const notesData = notes.notes.filter((item) =>
-      !isUserArchived ? item.status === 'CREATED' : item.status === 'ARCHIVED',
+      !isUserArchived ? item.status === NoteStatus.CREATED : item.status === NoteStatus.ARCHIVED,
     );
 
-    const personalFolderUuid =
-      folders?.[
-        folders.findIndex((item) =>
-          item.parentFolderUuid === null && !isUserArchived
-            ? item.title === 'PERSONAL_FOLDER'
-            : item.title === 'ARCHIVED_FOLDER',
-        )
-      ]?.id;
+    const personalFolderUuid = folders?.find((item) =>
+      !item.parentFolderUuid && !isUserArchived
+        ? item.title === Folders.PERSONAL_FOLDER
+        : item.title === Folders.ARCHIVED_FOLDER,
+    )?.id;
 
     const filteredFolders = [...folders.filter((item) => item.parentFolderUuid === personalFolderUuid)];
     const filteredNotes = [...notesData.filter((item) => !item.referenceColleagueUuid)];
@@ -87,8 +82,7 @@ export const notesFolderColleagueDataSelector = (colleagueUuid, isUserArchived) 
       function caller(this: any) {
         return this.notes.length;
       }
-      const lengthNotes = caller.call(obj);
-      obj.quantity = lengthNotes;
+      obj.quantity = caller.bind(obj);
       return obj;
     });
 
@@ -110,18 +104,15 @@ export const notesFolderTeamDataSelector = (colleagueUuid, teamArchivedMode) =>
 
     const notesData = notes.notes.filter((item) =>
       !teamArchivedMode
-        ? item.status === 'CREATED' && item.referenceColleagueUuid
-        : item.status === 'ARCHIVED' && item.referenceColleagueUuid,
+        ? item.status === NoteStatus.CREATED && item.referenceColleagueUuid
+        : item.status === NoteStatus.ARCHIVED && item.referenceColleagueUuid,
     );
 
-    const teamFolderUuid =
-      folders?.[
-        folders.findIndex((item) =>
-          item.parentFolderUuid === null && !teamArchivedMode
-            ? item.title === 'TEAM_FOLDER'
-            : item.title === 'TEAM_ARCHIVED_FOLDER',
-        )
-      ]?.id;
+    const teamFolderUuid = folders?.find((item) =>
+      !item.parentFolderUuid && !teamArchivedMode
+        ? item.title === Folders.TEAM_FOLDER
+        : item.title === Folders.TEAM_ARCHIVED_FOLDER,
+    )?.id;
 
     const filteredFolders = [...folders.filter((item) => item.parentFolderUuid === teamFolderUuid)];
     const filteredNotes = [...notesData];
@@ -143,8 +134,7 @@ export const notesFolderTeamDataSelector = (colleagueUuid, teamArchivedMode) =>
       function caller(this: any) {
         return this.notes.length;
       }
-      const lengthNotes = caller.call(obj);
-      obj.quantity = lengthNotes;
+      obj.quantity = caller.bind(obj);
       return obj;
     });
 

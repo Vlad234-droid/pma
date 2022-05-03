@@ -20,7 +20,7 @@ type PersonalsTeamFoldersProps = {
   selectedTEAMNoteId: MutableRefObject<null | string>;
   setFoldersWithNotesTEAM: Dispatch<SetStateAction<Array<NoteData>>>;
   setFoldersWithNotes: Dispatch<SetStateAction<Array<NoteData>>>;
-  setTeamArchivedMode: Dispatch<SetStateAction<boolean>>;
+  setTeamArchivedMode: () => void;
   teamArchivedMode: boolean;
   setSelectedTEAMFolder: Dispatch<SetStateAction<NoteData | null>>;
 };
@@ -245,7 +245,7 @@ const PersonalsTeamFolders: FC<PersonalsTeamFoldersProps> = ({
           mode='inverse'
           data-test-id={CHANGE_TEAM_MODE}
           onPress={() => {
-            setTeamArchivedMode((prev) => !prev);
+            setTeamArchivedMode();
             setSelectedTEAMFolder(() => null);
           }}
         >

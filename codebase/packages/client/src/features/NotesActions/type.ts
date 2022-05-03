@@ -1,4 +1,4 @@
-import React, { ReactElement, Dispatch, SetStateAction, MutableRefObject } from 'react';
+import { ReactElement, Dispatch, SetStateAction, MutableRefObject } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 
 export type NoteData = any;
@@ -63,19 +63,9 @@ export type ChosesButtonType = {
 };
 
 export type MainFolderProps = {
-  setSelectedFolder: Dispatch<SetStateAction<NoteData | null>>;
-  setSelectedNoteToEdit: Dispatch<SetStateAction<NotesType | null>>;
-  setSelectedTEAMNoteToEdit: Dispatch<SetStateAction<NotesTypeTEAM | null>>;
-  selectedFolder: NoteData | null;
-  foldersWithNotes: any;
-  setFoldersWithNotes: Dispatch<SetStateAction<Array<FoldersWithNotesTypes>>>;
   TEAM: boolean;
-  selectedTEAMFolder: NoteData | null;
-  setSelectedTEAMFolder: Dispatch<SetStateAction<NoteData | null>>;
-  setFoldersWithNotesTEAM: Dispatch<SetStateAction<Array<NoteData>>>;
-  setIsUserArchived: Dispatch<SetStateAction<boolean>>;
-  setTeamArchivedMode: Dispatch<SetStateAction<boolean>>;
-  foldersWithNotesTEAM: any;
+  setIsUserArchived: () => void;
+  setTeamArchivedMode: () => void;
   isUserArchived: boolean;
   teamArchivedMode: boolean;
 };
@@ -113,6 +103,10 @@ export type PersonalFoldersProps = {
   setFoldersWithNotes: Dispatch<SetStateAction<Array<FoldersWithNotesTypes>>>;
   selectedFolder: NoteData | null;
   setSelectedFolder: Dispatch<SetStateAction<NoteData | null>>;
-  setIsUserArchived: Dispatch<SetStateAction<boolean>>;
+  setIsUserArchived: () => void;
   isUserArchived: boolean;
 };
+
+export enum NotesStatus {
+  CREATED = 'CREATED',
+}
