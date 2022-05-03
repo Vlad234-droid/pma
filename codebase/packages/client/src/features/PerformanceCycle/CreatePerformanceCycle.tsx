@@ -40,7 +40,7 @@ const CreatePerformanceCycle: FC = () => {
     if (status === Status.SUCCEEDED) {
       navigate({
         pathname: buildPath(Page.PERFORMANCE_CYCLE),
-        search: new URLSearchParams({ status: cycle.status }).toString(),
+        search: new URLSearchParams({ status: cycle?.status || PerformanceCycleStatus.DRAFT }).toString(),
       });
       dispatch(PerformanceCycleActions.resetMetaStatusRequest());
     }
