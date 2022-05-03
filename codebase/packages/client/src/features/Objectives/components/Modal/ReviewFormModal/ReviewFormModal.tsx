@@ -33,6 +33,7 @@ import ReviewHelpModal from './ReviewHelpModal';
 import ReviewHelpTrigger from './ReviewHelpTrigger';
 import ReviewButtons from './ReviewButtons';
 import ReviewComponents from './ReviewComponents';
+import { USER } from 'config/constants';
 
 export type ReviewFormModal = {
   reviewType: ReviewType;
@@ -58,7 +59,7 @@ const ReviewFormModal: FC<ReviewFormModal> = ({ reviewType, onClose }) => {
   const overallRatingRequestKey: string = useSelector(
     getExpressionRequestKey(reviewType)(ExpressionValueType.OVERALL_RATING),
   );
-  const timelineReview = useSelector(getTimelineByReviewTypeSelector(reviewType, 'me'));
+  const timelineReview = useSelector(getTimelineByReviewTypeSelector(reviewType, USER.current));
   const readonly = [Status.WAITING_FOR_APPROVAL, Status.APPROVED].includes(timelineReview.status);
 
   const { helperText, title } = getReviewFormContent(reviewType, t);

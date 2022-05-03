@@ -20,6 +20,7 @@ import { Props, widgetTypes } from './type';
 import { ReviewType } from 'config/enum';
 import { DATE_STRING_FORMAT, formatDateString } from 'utils';
 import Spinner from 'components/Spinner';
+import { USER } from 'config/constants';
 
 const Widgets: FC<Props> = () => {
   const dispatch = useDispatch();
@@ -27,9 +28,9 @@ const Widgets: FC<Props> = () => {
   const { css } = useStyle();
   const { t } = useTranslation();
 
-  const timelineObjective = useSelector(getTimelineByReviewTypeSelector(ReviewType.OBJECTIVE, 'me'));
-  const timelineMYR = useSelector(getTimelineByReviewTypeSelector(ReviewType.MYR, 'me'));
-  const timelineTypes = useSelector(timelineTypesAvailabilitySelector('me'));
+  const timelineObjective = useSelector(getTimelineByReviewTypeSelector(ReviewType.OBJECTIVE, USER.current));
+  const timelineMYR = useSelector(getTimelineByReviewTypeSelector(ReviewType.MYR, USER.current));
+  const timelineTypes = useSelector(timelineTypesAvailabilitySelector(USER.current));
   const status = timelineObjective?.status;
   const count = timelineObjective?.count || 0;
   const nextReviewDate = timelineMYR?.startTime || null;

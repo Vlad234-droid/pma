@@ -20,6 +20,7 @@ import SuccessModal from 'components/SuccessModal';
 import Spinner from 'components/Spinner';
 import useReviewSchema from '../../hooks/useReviewSchema';
 import { ObjectiveModal } from './ObjectiveModal';
+import { USER } from 'config/constants';
 
 type ObjectivesProps = {
   onClose: () => void;
@@ -170,7 +171,7 @@ const CreateUpdateObjectives: FC<CreateUpdateObjectivesModalProps> = ({ onClose,
   const origin = useSelector(filterReviewsByTypeSelector(ReviewType.OBJECTIVE)) || [];
   const objectives = useSelector(getReviewPropertiesSelector(ReviewType.OBJECTIVE));
   const [schema] = useReviewSchema(ReviewType.OBJECTIVE);
-  const timelineObjective = useSelector(getTimelineByReviewTypeSelector(ReviewType.OBJECTIVE, 'me'));
+  const timelineObjective = useSelector(getTimelineByReviewTypeSelector(ReviewType.OBJECTIVE, USER.current));
 
   useEffect(() => {
     dispatch(ReviewsActions.getReviews({ pathParams }));
