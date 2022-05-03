@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { colors, CreateRule, Rule, Styles, useStyle } from '@pma/dex-wrapper';
+import { colors, CreateRule, Rule, Styles, theme, useStyle } from '@pma/dex-wrapper';
 import { getFoldersSelector } from '@pma/store';
 import { useSelector } from 'react-redux';
 
@@ -33,151 +33,107 @@ const SelectedFolder: FC<SelectedFolderProps> = ({
   const { css, matchMedia } = useStyle();
   const mediumScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
 
-  //TODO: this is hard to read. Refactor this
+  const btnActionsData = [
+    {
+      buttonID: '1',
+      elID: 'backdrop',
+      testID: 'backdrop-archive',
+      currentAction: 'archive',
+      button: {
+        graphic: 'archive',
+        title: 'Archive',
+        testID: 'backdrop-archive-icon',
+        translateID: 'archive_note',
+        text: 'Archive note',
+      },
+    },
+    {
+      buttonID: '2',
+      elID: 'backdrop',
+      testID: 'backdrop-folder',
+      currentAction: 'move',
+      button: {
+        graphic: 'folder',
+        title: 'Move to folder',
+        testID: 'backdrop-folder-icon',
+        translateID: 'move_to_folder',
+        text: 'Move to folder',
+      },
+    },
+    {
+      buttonID: '3',
+      elID: 'backdrop',
+      testID: 'backdrop-delete',
+      currentAction: 'delete',
+      button: {
+        graphic: 'delete',
+        title: 'Delete',
+        testID: 'backdrop-delete-icon',
+        translateID: 'delete_note',
+        text: 'Delete note',
+      },
+    },
+  ];
+
   const btnsActionsHandle = (itemId: string, itemFolderUuid: string | null, item: any) => {
-    const btnsActions = [
-      {
-        ...(!isUserArchived && {
-          id: '1',
-          button: (
-            <div
-              className={css(Align_flex_style)}
-              id='backdrop'
-              data-test-id='backdrop-archive'
-              onClick={() => {
-                if (!item.referenceColleagueUuid) {
-                  selectedNoteId.current = itemId;
-                  actionModal.current = 'archive';
-                  setConfirmModal(() => true);
-                } else {
-                  selectedTEAMNoteId.current = itemId;
-                  actionTEAMModal.current = 'archive';
-                  setConfirmTEAMModal(() => true);
-                }
-              }}
-            >
-              <IconButton
-                iconProps={{ title: 'Archive' }}
-                id='backdrop'
-                customVariantRules={{ default: notePropertiesIconStyle }}
-                graphic='archive'
-                data-test-id='backdrop-archive-icon'
-                onPress={() => {
-                  if (!item.referenceColleagueUuid) {
-                    selectedNoteId.current = itemId;
-                    actionModal.current = 'archive';
-                    setConfirmModal(() => true);
-                  } else {
-                    selectedTEAMNoteId.current = itemId;
-                    actionTEAMModal.current = 'archive';
-                    setConfirmTEAMModal(() => true);
-                  }
-                }}
-              />
-              <span className={css({ whiteSpace: 'nowrap', marginLeft: '8px' })} id='backdrop'>
-                <Trans i18nKey='archive_note'>Archive note</Trans>
-              </span>
-            </div>
-          ),
-        }),
-      },
-      {
-        ...(!isUserArchived && {
-          id: '2',
-          button: (
-            <div
-              id='backdrop'
-              data-test-id='backdrop-folder'
-              className={css(Align_flex_style)}
-              onClick={() => {
-                if (!item.referenceColleagueUuid) {
-                  selectedNoteId.current = itemId;
-                  noteFolderUuid.current = itemFolderUuid;
-                  actionModal.current = 'move';
-                  setConfirmModal(() => true);
-                } else {
-                  selectedTEAMNoteId.current = itemId;
-                  noteTEAMFolderUuid.current = itemFolderUuid;
-                  actionTEAMModal.current = 'move';
-                  setConfirmTEAMModal(() => true);
-                }
-              }}
-            >
-              <IconButton
-                iconProps={{ title: 'Move to folder' }}
-                graphic='folder'
-                id='backdrop'
-                data-test-id='backdrop-folder-icon'
-                customVariantRules={{ default: notePropertiesIconStyle }}
-                onPress={() => {
-                  if (!item.referenceColleagueUuid) {
-                    selectedNoteId.current = itemId;
-                    noteFolderUuid.current = itemFolderUuid;
-                    actionModal.current = 'move';
-                    setConfirmModal(() => true);
-                  } else {
-                    selectedTEAMNoteId.current = itemId;
-                    noteTEAMFolderUuid.current = itemFolderUuid;
-                    actionTEAMModal.current = 'move';
-                    setConfirmTEAMModal(() => true);
-                  }
-                }}
-              />
-              <span className={css({ whiteSpace: 'nowrap', marginLeft: '8px' })} id='backdrop'>
-                <Trans i18nKey='move_to_folder'>Move to folder</Trans>
-              </span>
-            </div>
-          ),
-        }),
-      },
-      {
-        id: '3',
+    const btnsActions = btnActionsData.map((el, idx) => {
+      return {
+        id: el.buttonID,
         button: (
           <div
-            className={css(Align_flex_styleLast)}
-            id='backdrop'
-            data-test-id='backdrop-delete'
+            className={css(idx === btnActionsData.length - 1 ? Align_flex_styleLast : Align_flex_style)}
+            id={el.elID}
+            data-test-id={el.testID}
             onClick={() => {
               if (!item.referenceColleagueUuid) {
                 selectedNoteId.current = itemId;
-                actionModal.current = 'delete';
+                actionModal.current = el.currentAction;
                 setConfirmModal(() => true);
               } else {
                 selectedTEAMNoteId.current = itemId;
-                actionTEAMModal.current = 'delete';
+                actionTEAMModal.current = el.currentAction;
                 setConfirmTEAMModal(() => true);
+                if (idx === 1) {
+                  noteTEAMFolderUuid.current = itemFolderUuid;
+                  noteFolderUuid.current = itemFolderUuid;
+                }
               }
             }}
           >
             <IconButton
-              iconProps={{ title: 'Delete' }}
-              graphic='delete'
-              id='backdrop'
-              data-test-id='backdrop-delete-icon'
+              iconProps={{ title: el.button.title }}
+              id={el.button.testID}
               customVariantRules={{ default: notePropertiesIconStyle }}
+              // @ts-ignore
+              graphic={el.button.graphic}
+              data-test-id={el.button.testID}
               onPress={() => {
                 if (!item.referenceColleagueUuid) {
                   selectedNoteId.current = itemId;
-                  actionModal.current = 'delete';
+                  actionModal.current = el.currentAction;
                   setConfirmModal(() => true);
                 } else {
                   selectedTEAMNoteId.current = itemId;
-                  actionTEAMModal.current = 'delete';
+                  actionTEAMModal.current = el.currentAction;
                   setConfirmTEAMModal(() => true);
+                  if (idx === 1) {
+                    noteTEAMFolderUuid.current = itemFolderUuid;
+                    noteFolderUuid.current = itemFolderUuid;
+                  }
                 }
               }}
             />
-            <span className={css({ whiteSpace: 'nowrap', marginLeft: '8px' })} id='backdrop'>
-              <Trans i18nKey='delete_note'>Delete note</Trans>
+            <span className={css({ whiteSpace: 'nowrap', marginLeft: '8px' })} id={el.elID}>
+              <Trans i18nKey={el.button.translateID}>{el.button.text}</Trans>
             </span>
           </div>
         ),
-      },
-    ];
+      };
+    });
 
     return (
       <div className={css(modalButtonsStyle({ isUserArchived }))} data-test-id='button-dots'>
-        {btnsActions.filter(Boolean).map((item) => (
+        {btnsActions.map((item) => (
           <div key={item.id}>{item.button}</div>
         ))}
       </div>
@@ -186,6 +142,7 @@ const SelectedFolder: FC<SelectedFolderProps> = ({
 
   const selectedNoteActionhandler = (noteId) => {
     selectedFolderId.current = null;
+
     if (foldersWithNotes.length) {
       setFoldersWithNotes((prev) => {
         const arr = [...prev];
@@ -218,8 +175,7 @@ const SelectedFolder: FC<SelectedFolderProps> = ({
   };
 
   const setSelectedNoteHandler = (e, item) => {
-    if (isUserArchived) return;
-    if (e.target.parentElement.id === 'backdrop' || e.target.id === 'backdrop') return;
+    if (isUserArchived || e.target.parentElement.id === 'backdrop' || e.target.id === 'backdrop') return;
     if (selectedFolder.notes[selectedFolder?.notes?.findIndex((item) => item.selected === true)]) {
       setSelectedFolder((prev) => {
         const arr = { ...prev };
@@ -317,20 +273,19 @@ const modalButtonsStyle: CreateRule<{ isUserArchived: boolean }> = ({ isUserArch
       transform: 'rotate(45deg)',
     },
   } as Styles);
-const dotsStyle: Rule = ({ colors }) =>
-  ({
-    display: 'flex',
-    marginLeft: '30px',
-    padding: '10px 0px 10px 10px',
-    cursor: 'pointer',
-    '& span': {
-      height: '6px',
-      width: '6px',
-      background: colors.link,
-      marginLeft: '4px',
-      borderRadius: '50%',
-    },
-  } as Styles);
+const dotsStyle: Rule = {
+  display: 'flex',
+  marginLeft: '30px',
+  padding: '10px 0px 10px 10px',
+  cursor: 'pointer',
+  '& span': {
+    height: '6px',
+    width: '6px',
+    background: theme.colors.link,
+    marginLeft: '4px',
+    borderRadius: '50%',
+  },
+} as Styles;
 
 const FlexStyle: Rule = {
   display: 'flex',
@@ -353,10 +308,10 @@ const expandedNoteStyle: CreateRule<{ mediumScreen: boolean }> =
 
 const folderTitleStyled: Rule = {
   fontStyle: 'normal',
-  fontWeight: 'bold',
-  fontSize: '20px',
-  lineHeight: '24px',
-  color: '#333333',
+  fontWeight: theme.font.weight.bold,
+  fontSize: theme.font.fixed.f20.fontSize,
+  lineHeight: theme.font.fixed.f20.lineHeight,
+  color: theme.colors.base,
 };
 
 const flexBeetweenStyle: Rule = {
@@ -366,20 +321,18 @@ const flexBeetweenStyle: Rule = {
 };
 
 const noteTitleStyle: Rule = {
-  fontWeight: 'bold',
-  fontSize: '18px',
-  lineHeight: '22px',
-  color: '#00539F',
+  fontWeight: theme.font.weight.bold,
+  fontSize: theme.font.fixed.f18.fontSize,
+  lineHeight: theme.font.fixed.f18.lineHeight,
+  color: theme.colors.link,
 };
 
-const noteFolderTitleStyle: Rule = ({ theme }) => {
-  return {
-    fontSize: `${theme.font.fixed.f16.fontSize}`,
-    lineHeight: `${theme.font.fixed.f16.lineHeight}`,
-    color: theme.colors.base,
-    fontWeight: `${theme.font.weight.regular}`,
-    marginTop: '5px',
-  };
+const noteFolderTitleStyle: Rule = {
+  fontSize: theme.font.fixed.f16.fontSize,
+  lineHeight: theme.font.fixed.f16.lineHeight,
+  color: theme.colors.base,
+  fontWeight: `${theme.font.weight.regular}`,
+  marginTop: '5px',
 };
 
 const noteContainerStyle: Rule = {
@@ -391,7 +344,7 @@ const noteContainerStyle: Rule = {
     position: 'absolute',
     height: '1px',
     width: '100%',
-    background: '#E5E5E5',
+    background: theme.colors.backgroundDarkest,
     left: '0px',
     bottom: '0px',
   },
@@ -399,10 +352,10 @@ const noteContainerStyle: Rule = {
 
 const timeStyled: Rule = {
   fontWeight: 'normal',
-  fontSize: '18px',
-  lineHeight: '22px',
+  fontSize: theme.font.fixed.f18.fontSize,
+  lineHeight: theme.font.fixed.f18.lineHeight,
   textAlign: 'right',
-  color: '#333333',
+  color: theme.colors.base,
 };
 
 const notePropertiesIconStyle: Rule = {
