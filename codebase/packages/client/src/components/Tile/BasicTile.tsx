@@ -11,6 +11,7 @@ export type TileProps = {
   hover?: boolean;
   link?: string;
   img?: string | ReactElement;
+  imgDescription?: string;
   icon?: boolean;
   customStyle?: React.CSSProperties | {};
   imgCustomStyle?: React.CSSProperties | {};
@@ -26,6 +27,7 @@ export const BasicTile: FC<Props> = ({
   event,
   link,
   img,
+  imgDescription,
   customStyle = {},
   imgCustomStyle = {},
   icon = false,
@@ -59,7 +61,7 @@ export const BasicTile: FC<Props> = ({
           <div className={css(imgCustomStyle)}>
             {typeof img === 'string' && (
               <div className={css(imageWrapperRule({ mobileScreen }), loadingRule)}>
-                <img className={css(imageStyle({ mobileScreen }))} src={img} />
+                <img className={css(imageStyle({ mobileScreen }))} src={img} alt={imgDescription} />
               </div>
             )}
             {typeof img === 'object' && Object.keys(img).length > 0 && img}
