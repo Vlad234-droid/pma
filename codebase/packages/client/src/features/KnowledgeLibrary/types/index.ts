@@ -3,6 +3,7 @@ export type Item = {
   img: string;
   title: string;
   description: string;
+  imgDescription: string;
   link?: string;
 };
 

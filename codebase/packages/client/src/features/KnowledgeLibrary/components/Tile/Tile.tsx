@@ -8,7 +8,7 @@ type Props = Omit<Item, 'id'>;
 
 export const TEST_ID = 'test-tile';
 
-const Tile: FC<Props> = ({ img, title, description, link = '' }) => {
+const Tile: FC<Props> = ({ img, title, description, imgDescription, link = '' }) => {
   const { css } = useStyle();
 
   return (
@@ -16,7 +16,7 @@ const Tile: FC<Props> = ({ img, title, description, link = '' }) => {
       <BasicTile
         target='_blank'
         hover={!!link}
-        {...{ img, title, description, link }}
+        {...{ img, title, description, link, imgDescription }}
         customStyle={{
           height: '100%',
         }}
