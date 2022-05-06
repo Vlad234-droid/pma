@@ -16,6 +16,7 @@ import { Page } from 'pages';
 import { buildPath } from 'features/Routes';
 import { useToast, Variant } from 'features/Toast';
 import Spinner from 'components/Spinner';
+import { formatDate, getUTCDateFromString, DATE_FORMAT } from 'utils';
 import PerformanceCycleForm from './components/PerformanceCycleForm';
 import { Status as PerformanceCycleStatus } from './type';
 
@@ -65,8 +66,9 @@ const CreatePerformanceCycle: FC = () => {
 
   function buildData(data) {
     const { metadata, name, template, entryConfigKey } = data;
-    const startTime = new Date(metadata.cycle.properties.pm_cycle_start_time);
-    const endTime = new Date(metadata.cycle.properties.pm_cycle_end_time);
+    const startTime = getUTCDateFromString(formatDate(metadata.cycle.properties.pm_cycle_start_time, DATE_FORMAT));
+    const endTime = getUTCDateFromString(formatDate(metadata.cycle.properties.pm_cycle_end_time, DATE_FORMAT));
+
     return {
       uuid: performanceCycleUuid !== 'new' ? performanceCycleUuid : undefined,
       template,

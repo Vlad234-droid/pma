@@ -1,7 +1,7 @@
 import React, { useState, FC, useEffect, useCallback, ChangeEvent, MouseEvent, useRef } from 'react';
 import debounce from 'lodash.debounce';
 import { CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
-import { formatDateStringFromISO, DATE_FORMAT } from 'utils';
+import { formatDate, DATE_FORMAT } from 'utils';
 import Calendar from 'components/Calendar';
 import { Input } from 'components/Form';
 import { Icon } from 'components/Icon';
@@ -71,11 +71,17 @@ const Datepicker: FC<Props> = ({ onChange, onError, value, name, minDate, isVali
         setCurrentValue(verificationValue);
         return;
       }
-      newDate.setHours(0);
-      newDate.setMinutes(0);
-      newDate.setMilliseconds(0);
       changeDate(newDate);
-      onChange(buildTargetObject(formatDateStringFromISO(newDate.toISOString(), DATE_FORMAT), name));
+
+      onChange(
+        buildTargetObject(
+          formatDate(
+            new Date(Date.UTC(newDate.getFullYear(), newDate.getMonth(), newDate.getDate(), 0, 0, 0)),
+            DATE_FORMAT,
+          ),
+          name,
+        ),
+      );
     }, 300),
     [],
   );
