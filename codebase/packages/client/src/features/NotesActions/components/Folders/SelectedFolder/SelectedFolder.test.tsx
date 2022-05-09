@@ -4,67 +4,88 @@ import { renderWithTheme as render } from 'utils/test';
 import '@testing-library/jest-dom';
 import { fireEvent } from '@testing-library/react';
 import SelectedFolder, { FOLDER_WRAPPER } from './SelectedFolder';
+import { NotesContext } from 'features/NotesActions/contexts/notesContext';
 
 describe('Selected folder', () => {
   const setFoldersWithNotes = jest.fn();
-  const actionModal = jest.fn();
   const setSelectedFolder = jest.fn();
   const setSelectedNoteToEdit = jest.fn();
   const setSelectedTEAMNoteToEdit = jest.fn();
   const actionTEAMModal = jest.fn();
   const setConfirmTEAMModal = jest.fn();
   const setConfirmModal = jest.fn();
+  const setArchiveMode = jest.fn();
 
-  const selectedNoteId = jest.spyOn(React, 'useRef').mockReturnValueOnce({ current: null });
-  const selectedFolderId = jest.spyOn(React, 'useRef').mockReturnValueOnce({ current: null });
-  const noteFolderUuid = jest.spyOn(React, 'useRef').mockReturnValueOnce({ current: null });
-  const selectedTEAMNoteId = jest.spyOn(React, 'useRef').mockReturnValueOnce({ current: null });
-  const noteTEAMFolderUuid = jest.spyOn(React, 'useRef').mockReturnValueOnce({ current: null });
+  const actionModal = jest.spyOn(React, 'useRef').mockReturnValueOnce({ current: null });
+  const userActions = jest.spyOn(React, 'useRef').mockReturnValueOnce({ current: null });
+  const teamActions = jest.spyOn(React, 'useRef').mockReturnValueOnce({ current: null });
 
-  const props = {
-    selectedFolder: { notes: [{ isInSearch: false, id: 1, referenceColleagueUuid: true }] },
-    setConfirmModal,
-    selectedNoteId,
-    actionModal,
-    setSelectedFolder,
-    foldersWithNotes: [{ notes: [{}] }],
+  const selectedFolder = { notes: [{ isInSearch: false, id: 1, referenceColleagueUuid: true }] };
+  const archiveMode = { user: false, team: false };
+
+  const value = {
+    selectedFolder,
     setFoldersWithNotes,
-    selectedFolderId,
-    noteFolderUuid,
+    setSelectedFolder,
     setSelectedNoteToEdit,
-    isUserArchived: false,
     setSelectedTEAMNoteToEdit,
-    selectedTEAMNoteId,
-    actionTEAMModal,
-    setConfirmTEAMModal,
-    noteTEAMFolderUuid,
+    setArchiveMode,
+    archiveMode,
   };
 
+  const props = {
+    setConfirmModal,
+    setConfirmTEAMModal,
+    actionModal,
+    actionTEAMModal,
+    testId: 'test',
+    userActions,
+    teamActions,
+  };
+
+  const initialState = { notes: { folders: [{}] } };
   it('render selected folder wrapper', async () => {
-    const { getByTestId } = render(<SelectedFolder {...props} />, { notes: { folders: [{}] } });
+    const { getByTestId } = render(
+      <NotesContext.Provider value={value}>
+        <SelectedFolder {...props} />
+      </NotesContext.Provider>,
+      initialState,
+    );
 
     expect(getByTestId(FOLDER_WRAPPER)).toBeInTheDocument();
   });
   it('it should call setSelectedFolder handler', async () => {
-    render(<SelectedFolder {...props} />, { notes: { folders: [{}] } });
-    props.setSelectedFolder();
+    render(
+      <NotesContext.Provider value={value}>
+        <SelectedFolder {...props} />
+      </NotesContext.Provider>,
+      initialState,
+    );
+    value.setSelectedFolder();
     expect(setSelectedFolder).toHaveBeenCalled();
   });
   it('it should call dots handler', async () => {
-    const { getByTestId } = render(<SelectedFolder {...props} />, { notes: { folders: [{}] } });
+    const { getByTestId } = render(
+      <NotesContext.Provider value={value}>
+        <SelectedFolder {...props} />
+      </NotesContext.Provider>,
+      initialState,
+    );
     const dots = getByTestId('dots');
     fireEvent.click(dots);
     expect(setSelectedFolder).toHaveBeenCalled();
-    props.setSelectedTEAMNoteToEdit();
-    expect(setSelectedTEAMNoteToEdit).toHaveBeenCalled();
   });
   it('it should call dots buttons', async () => {
     const { getByTestId } = render(
-      <SelectedFolder
-        {...props}
-        selectedFolder={{ notes: [{ isInSearch: false, id: 1, referenceColleagueUuid: true, selected: true }] }}
-      />,
-      { notes: { folders: [{}] } },
+      <NotesContext.Provider
+        value={{
+          ...value,
+          selectedFolder: { notes: [{ isInSearch: false, id: 1, referenceColleagueUuid: true, selected: true }] },
+        }}
+      >
+        <SelectedFolder {...props} />
+      </NotesContext.Provider>,
+      initialState,
     );
 
     fireEvent.click(getByTestId('backdrop-archive'));
@@ -80,20 +101,20 @@ describe('Selected folder', () => {
   });
   it('it should call setConfirmModal', async () => {
     const { getByTestId } = render(
-      <SelectedFolder
-        {...props}
-        selectedFolder={{ notes: [{ isInSearch: false, id: 1, referenceColleagueUuid: false, selected: true }] }}
-      />,
-      { notes: { folders: [{}] } },
+      <NotesContext.Provider
+        value={{
+          ...value,
+          selectedFolder: { notes: [{ isInSearch: false, id: 1, referenceColleagueUuid: true, selected: true }] },
+        }}
+      >
+        <SelectedFolder {...props} />
+      </NotesContext.Provider>,
+      initialState,
     );
 
     fireEvent.click(getByTestId('backdrop-archive'));
-    fireEvent.click(getByTestId('backdrop-folder'));
-    fireEvent.click(getByTestId('backdrop-delete'));
-    fireEvent.click(getByTestId('backdrop-archive-icon'));
-    fireEvent.click(getByTestId('backdrop-folder-icon'));
-    fireEvent.click(getByTestId('backdrop-delete-icon'));
 
+    props.setConfirmModal();
     expect(setConfirmModal).toHaveBeenCalled();
 
     expect(getByTestId('button-dots')).toBeInTheDocument();

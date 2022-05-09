@@ -9,6 +9,12 @@ export const prepareData = (folders, notesSelect, setFoldersWithNotes, notesFold
   }
 };
 
+export const actionsInitialState = {
+  folderId: null,
+  noteId: null,
+  folderUuid: null,
+};
+
 export const isActiveSearchBar = (
   searchValueFilterOption,
   archiveMode,
@@ -250,4 +256,20 @@ export const getOptions = (isLineManager) => {
     { value: 'TeamNote', label: ModalStatuses.TEAM_NOTE },
     { value: 'TeamFolder', label: ModalStatuses.TEAM_FOLDER },
   ];
+};
+
+export const updateFolder = (data, id) => {
+  if (!data) return data;
+  return {
+    ...data,
+    notes: data.notes.filter((item) => item.id !== id),
+  };
+};
+
+export const disableFolder = (data) => {
+  if (!data) return data;
+  return {
+    ...data,
+    notes: data.notes.map((item) => ({ ...item, selected: false })),
+  };
 };

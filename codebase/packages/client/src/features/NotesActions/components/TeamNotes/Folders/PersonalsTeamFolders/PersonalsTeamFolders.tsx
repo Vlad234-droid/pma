@@ -1,9 +1,11 @@
-import React, { FC, Dispatch, SetStateAction, MutableRefObject } from 'react';
+import React, { FC, Dispatch, SetStateAction, MutableRefObject, MouseEvent, useRef } from 'react';
 import { Rule, useStyle, Button, Styles, CreateRule } from '@pma/dex-wrapper';
 import { IconButton } from 'components/IconButton';
 import { defineNotesHandler, AllNotesFolderIdTEAM } from 'utils/note';
-import { NoteData } from '../../../../type';
 import { Trans } from 'components/Translation';
+
+import { useNotesContainer } from '../../../../contexts';
+import useEventListener from 'hooks/useEventListener';
 
 export const TEAM_FOLDER_WRAPPER = 'team_folder_wrapper';
 export const CHANGE_TEAM_MODE = 'change_team_mode';
@@ -12,80 +14,60 @@ export const FOLDER_TITLE = 'folder_title';
 type PersonalsTeamFoldersProps = {
   handleTEAMSelected: (itemID: string) => any;
   setConfirmTEAMModal: Dispatch<SetStateAction<boolean>>;
-  selectedTEAMFolderId: MutableRefObject<null | string>;
   actionTEAMModal: MutableRefObject<null | string>;
-  setSelectedFolder: Dispatch<SetStateAction<NoteData | null>>;
-  selectedFolder: NoteData | null;
-  foldersWithNotesTEAM: any;
-  selectedTEAMNoteId: MutableRefObject<null | string>;
-  setFoldersWithNotesTEAM: Dispatch<SetStateAction<Array<NoteData>>>;
-  setFoldersWithNotes: Dispatch<SetStateAction<Array<NoteData>>>;
-  setTeamArchivedMode: () => void;
-  teamArchivedMode: boolean;
-  setSelectedTEAMFolder: Dispatch<SetStateAction<NoteData | null>>;
+  teamsActions: Record<string, string | null>;
 };
 
 const PersonalsTeamFolders: FC<PersonalsTeamFoldersProps> = ({
   handleTEAMSelected,
   setConfirmTEAMModal,
-  selectedTEAMFolderId,
-  setSelectedFolder,
-  selectedFolder,
-  foldersWithNotesTEAM,
-  selectedTEAMNoteId,
-  setFoldersWithNotesTEAM,
-  setFoldersWithNotes,
   actionTEAMModal,
-  teamArchivedMode,
-  setTeamArchivedMode,
-  setSelectedTEAMFolder,
+  teamsActions,
 }) => {
-  const { css, theme, matchMedia } = useStyle();
+  const { css, matchMedia } = useStyle();
   const mediumScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
+  const ref = useRef<HTMLDivElement | null>();
+
+  const {
+    setArchiveMode,
+    archiveMode,
+    setSelectedFolder,
+    selectedFolder,
+    foldersWithNotesTEAM,
+    setFoldersWithNotesTEAM,
+    setSelectedTEAMFolder,
+  } = useNotesContainer();
+
+  const teamArchivedMode = archiveMode.team;
+
+  const handleClickOutside = (event: MouseEvent<HTMLElement>) => {
+    const element = event?.target as HTMLElement;
+    if (ref.current && !ref.current.contains(element)) {
+      setFoldersWithNotesTEAM((prev) => [...prev.map((item) => ({ ...item, selectedDots: false }))]);
+    }
+  };
+
+  useEventListener('mousedown', handleClickOutside);
 
   const selectedDotsActionhandler = (e, noteId) => {
-    selectedTEAMNoteId.current = null;
     if (e.target.id === 'dots' || e.target.parentElement.id === 'dots') {
-      if (selectedFolder !== null) {
-        setSelectedFolder((prev) => {
-          const arr = { ...prev };
-          arr.notes.forEach((item) => {
-            item.selected = false;
-          });
-          return arr;
-        });
-      }
-      if (foldersWithNotesTEAM[foldersWithNotesTEAM.findIndex((item) => item.selectedDots === true)]) {
-        setFoldersWithNotesTEAM((prev) => {
-          const arr = [...prev];
-          arr[arr.findIndex((item) => item.id === noteId)].selectedDots = false;
-          return arr;
-        });
-        return;
-      }
-
       setFoldersWithNotesTEAM((prev) => {
         const arr = [...prev];
-        arr[arr.findIndex((item) => item.id === noteId)].selectedDots = true;
+        arr.find((item) => item.id === noteId).selectedDots = true;
         return arr;
       });
     }
   };
 
   const handleExpandFolder = (e, id: string): void => {
-    if (e.target.id === 'dots' || e.target.parentElement.id === 'dots' || e.target.id === 'backdrop') {
+    if (
+      e.target.id === 'dots' ||
+      e.target.parentElement.id === 'dots' ||
+      e.target.parentElement.id === 'backdrop' ||
+      e.target.id === 'backdrop'
+    ) {
       return;
     }
-    setFoldersWithNotes((prev) => {
-      return [
-        ...prev.map((item) => {
-          return {
-            ...item,
-            selected: false,
-          };
-        }),
-      ];
-    });
     if (selectedFolder !== null) {
       setSelectedFolder(() => null);
     }
@@ -102,7 +84,7 @@ const PersonalsTeamFolders: FC<PersonalsTeamFoldersProps> = ({
               className={css(alignFlexStyle)}
               id='backdrop'
               onClick={() => {
-                selectedTEAMFolderId.current = itemId;
+                teamsActions.folderId = itemId;
                 actionTEAMModal.current = 'archive';
                 setConfirmTEAMModal(() => true);
               }}
@@ -110,7 +92,7 @@ const PersonalsTeamFolders: FC<PersonalsTeamFoldersProps> = ({
               <IconButton
                 graphic='archive'
                 onPress={() => {
-                  selectedTEAMFolderId.current = itemId;
+                  teamsActions.folderId = itemId;
                   actionTEAMModal.current = 'archive';
                   setConfirmTEAMModal(() => true);
                 }}
@@ -129,7 +111,7 @@ const PersonalsTeamFolders: FC<PersonalsTeamFoldersProps> = ({
             id='backdrop'
             className={css(alignFlexStyleLast)}
             onClick={() => {
-              selectedTEAMFolderId.current = itemId;
+              teamsActions.folderId = itemId;
               actionTEAMModal.current = 'delete';
               setConfirmTEAMModal(() => true);
             }}
@@ -138,7 +120,7 @@ const PersonalsTeamFolders: FC<PersonalsTeamFoldersProps> = ({
               iconProps={{ title: 'Delete' }}
               graphic='delete'
               onPress={() => {
-                selectedTEAMFolderId.current = itemId;
+                teamsActions.folderId = itemId;
                 actionTEAMModal.current = 'delete';
                 setConfirmTEAMModal(() => true);
               }}
@@ -153,29 +135,10 @@ const PersonalsTeamFolders: FC<PersonalsTeamFoldersProps> = ({
 
     return (
       <div
+        //@ts-ignore
+        ref={ref}
         id='backdrop'
-        className={css({
-          position: 'absolute',
-          display: 'flex',
-          flexDirection: 'column',
-          right: '28px',
-          bottom: !teamArchivedMode ? (notesLength ? '-101px' : '-110px') : !notesLength ? '-53px' : '-46px',
-          background: theme.colors.white,
-          zIndex: 2,
-          borderRadius: '8px',
-          boxShadow: 'rgba(100, 100, 111, 0.05) 4px 2px 10px 10px',
-          ':before': {
-            content: "''",
-            width: '18px',
-            height: '18px',
-            position: 'absolute',
-            top: '-9px',
-            right: '34px',
-            background: theme.colors.white,
-            boxShadow: 'rgba(100, 100, 111, 0.08) -1px -1px 3px -1px',
-            transform: 'rotate(45deg)',
-          },
-        })}
+        className={css(dotsContainerStyle({ teamArchivedMode, notesLength }))}
       >
         {btnsActions.map((item) => (
           <div key={item.id} id='backdrop'>
@@ -205,7 +168,7 @@ const PersonalsTeamFolders: FC<PersonalsTeamFoldersProps> = ({
             >
               <div className={css(itemListStyle({ selected }))}>
                 <div className={css(marginFlex)}>
-                  <span className={css(folterStyle)}>{item.title}</span>
+                  <span className={css(folderTitle)}>{item.title}</span>
                   <span className={css(quantityStyle)}>{defineNotesHandler(item.notes.length)}</span>
                 </div>
                 <div className={css({ display: 'flex', alignItems: 'center' })}>
@@ -217,9 +180,9 @@ const PersonalsTeamFolders: FC<PersonalsTeamFoldersProps> = ({
                         onClick={(e) => selectedDotsActionhandler(e, item.id)}
                         id='dots'
                       >
-                        <span></span>
-                        <span></span>
-                        <span></span>
+                        <span />
+                        <span />
+                        <span />
                       </div>
                     </div>
                   )}
@@ -245,7 +208,7 @@ const PersonalsTeamFolders: FC<PersonalsTeamFoldersProps> = ({
           mode='inverse'
           data-test-id={CHANGE_TEAM_MODE}
           onPress={() => {
-            setTeamArchivedMode();
+            setArchiveMode((prev) => ({ ...prev, team: !prev.team }));
             setSelectedTEAMFolder(() => null);
           }}
         >
@@ -255,6 +218,31 @@ const PersonalsTeamFolders: FC<PersonalsTeamFoldersProps> = ({
     </div>
   );
 };
+
+const dotsContainerStyle: CreateRule<{ teamArchivedMode: boolean; notesLength: number }> =
+  ({ teamArchivedMode, notesLength }) =>
+  ({ theme }) => ({
+    position: 'absolute',
+    display: 'flex',
+    flexDirection: 'column',
+    right: '28px',
+    bottom: !teamArchivedMode ? (notesLength ? '-101px' : '-110px') : !notesLength ? '-53px' : '-46px',
+    background: theme.colors.white,
+    zIndex: 2,
+    borderRadius: '8px',
+    boxShadow: 'rgba(100, 100, 111, 0.05) 4px 2px 10px 10px',
+    ':before': {
+      content: "''",
+      width: '18px',
+      height: '18px',
+      position: 'absolute',
+      top: '-9px',
+      right: '34px',
+      background: theme.colors.white,
+      boxShadow: 'rgba(100, 100, 111, 0.08) -1px -1px 3px -1px',
+      transform: 'rotate(45deg)',
+    },
+  });
 
 const marginFlex: Rule = {
   display: 'flex',
@@ -332,13 +320,13 @@ const itemListStyle: CreateRule<{ selected: boolean }> = ({ selected }) =>
     },
   } as Styles);
 
-const folterStyle: Rule = {
+const folderTitle: Rule = ({ theme }) => ({
   letterSpacing: '0px',
-  fontWeight: 'bold',
-  fontSize: '18px',
-  lineHeight: '22px',
-  color: '#00539F',
-};
+  fontWeight: theme.font.weight.bold,
+  fontSize: theme.font.fixed.f18.fontSize,
+  lineHeight: theme.font.fixed.f18.lineHeight,
+  color: theme.colors.tescoBlue,
+});
 
 const quantityStyle: Rule = ({ theme }) => ({
   letterSpacing: '0px',

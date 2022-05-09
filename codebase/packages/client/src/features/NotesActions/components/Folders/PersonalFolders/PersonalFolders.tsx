@@ -1,80 +1,63 @@
-import React, { FC } from 'react';
+import React, { FC, MouseEvent, useRef } from 'react';
 import { Rule, useStyle, Button, Styles, CreateRule, Theme } from '@pma/dex-wrapper';
 import { IconButton } from 'components/IconButton';
 import { useTranslation } from 'components/Translation';
 
 import { PersonalFoldersProps } from '../../../type';
 import { defineNotesHandler, AllNotesFolderId } from 'utils/note';
+import { useNotesContainer } from '../../../contexts';
+import useEventListener from 'hooks/useEventListener';
 
 export const PERSONAL_FOLDER_WRAPPER = 'personal_folder_wrapper';
 export const CHANGE_USER_MODE = 'change-user-mode';
 
-const PersonalFolders: FC<PersonalFoldersProps> = ({
-  handleSelected,
-  setConfirmModal,
-  setSelectedTEAMFolder,
-  selectedTEAMFolder,
-  setFoldersWithNotesTEAM,
-  actionModal,
-  selectedFolderId,
-  foldersWithNotes,
-  setFoldersWithNotes,
-  selectedFolder,
-  setSelectedFolder,
-  selectedNoteId,
-  setIsUserArchived,
-  isUserArchived,
-}) => {
+const PersonalFolders: FC<PersonalFoldersProps> = ({ handleSelected, setConfirmModal, actionModal, userActions }) => {
   const { css, theme, matchMedia } = useStyle();
   const mediumScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
   const { t } = useTranslation();
 
-  const selectedDotsActionhandler = (e, noteId) => {
-    selectedNoteId.current = null;
-    if (e.target.id === 'dots' || e.target.parentElement.id === 'dots') {
-      if (selectedFolder !== null) {
-        setSelectedFolder((prev) => {
-          const arr = { ...prev };
-          arr.notes.forEach((item) => {
-            item.selected = false;
-          });
-          return arr;
-        });
-      }
-      if (foldersWithNotes?.find((item) => item?.selectedDots === true)) {
-        setFoldersWithNotes((prev) => {
-          const arr = [...prev];
-          arr[arr.findIndex((item) => item.id === noteId)].selectedDots = false;
-          return arr;
-        });
-        return;
-      }
+  const ref = useRef<HTMLDivElement | null>();
 
+  const {
+    archiveMode,
+    setSelectedTEAMFolder,
+    selectedTEAMFolder,
+    foldersWithNotes,
+    setFoldersWithNotes,
+    setSelectedFolder,
+    setArchiveMode,
+  } = useNotesContainer();
+
+  const isUserArchived = archiveMode.user;
+
+  const handleClickOutside = (event: MouseEvent<HTMLElement>) => {
+    const element = event?.target as HTMLElement;
+    if (ref.current && !ref.current.contains(element)) {
+      setFoldersWithNotes((prev) => [...prev.map((item) => ({ ...item, selectedDots: false }))]);
+    }
+  };
+
+  useEventListener('mousedown', handleClickOutside);
+
+  const selectedDotsActionhandler = (e, noteId) => {
+    if (e.target.id === 'dots' || e.target.parentElement.id === 'dots') {
       setFoldersWithNotes((prev) => {
         const arr = [...prev];
-        arr[arr.findIndex((item) => item.id === noteId)].selectedDots = true;
+        arr.find((item) => item.id === noteId).selectedDots = true;
         return arr;
       });
     }
   };
 
   const handleExpandFolder = (e, id: string): void => {
-    if (e.target.id === 'dots' || e.target.parentElement.id === 'dots' || e.target.id === 'backdrop') {
+    if (
+      e.target.id === 'dots' ||
+      e.target.parentElement.id === 'dots' ||
+      e.target.parentElement.id === 'backdrop' ||
+      e.target.id === 'backdrop'
+    )
       return;
-    }
-    setFoldersWithNotesTEAM((prev) => {
-      return [
-        ...prev.map((item) => {
-          return {
-            ...item,
-            selected: false,
-          };
-        }),
-      ];
-    });
-    if (selectedTEAMFolder !== null) {
-      setSelectedTEAMFolder(() => null);
-    }
+    if (selectedTEAMFolder !== null) setSelectedTEAMFolder(() => null);
     handleSelected(id);
   };
 
@@ -88,7 +71,7 @@ const PersonalFolders: FC<PersonalFoldersProps> = ({
               className={css(alignFlexStyle)}
               id='backdrop'
               onClick={() => {
-                selectedFolderId.current = itemId;
+                userActions.folderId = itemId;
                 actionModal.current = 'archive';
                 setConfirmModal(() => true);
               }}
@@ -97,7 +80,7 @@ const PersonalFolders: FC<PersonalFoldersProps> = ({
                 graphic='archive'
                 customVariantRules={{ default: folderPropertiesIconStyle }}
                 onPress={() => {
-                  selectedFolderId.current = itemId;
+                  userActions.folderId = itemId;
                   actionModal.current = 'archive';
                   setConfirmModal(() => true);
                 }}
@@ -116,7 +99,7 @@ const PersonalFolders: FC<PersonalFoldersProps> = ({
             id='backdrop'
             className={css(alignFlexStyleLast)}
             onClick={() => {
-              selectedFolderId.current = itemId;
+              userActions.folderId = itemId;
               actionModal.current = 'delete';
               setConfirmModal(() => true);
             }}
@@ -126,7 +109,7 @@ const PersonalFolders: FC<PersonalFoldersProps> = ({
               graphic='delete'
               customVariantRules={{ default: folderPropertiesIconStyle }}
               onPress={() => {
-                selectedFolderId.current = itemId;
+                userActions.folderId = itemId;
                 actionModal.current = 'delete';
                 setConfirmModal(() => true);
               }}
@@ -140,7 +123,8 @@ const PersonalFolders: FC<PersonalFoldersProps> = ({
     ];
 
     return (
-      <div id='backdrop' className={css(dotsContainerStyle({ isUserArchived, notesLength, theme }))}>
+      //@ts-ignore
+      <div ref={ref} id='backdrop' className={css(dotsContainerStyle({ isUserArchived, notesLength, theme }))}>
         {btnsActions.map((item) => (
           <div key={item.id} id='backdrop'>
             {item.button}
@@ -170,7 +154,7 @@ const PersonalFolders: FC<PersonalFoldersProps> = ({
             >
               <div className={css(itemListStyle({ selected }))}>
                 <div className={css(marginFlex)}>
-                  <span className={css(folterStyle)}>{item.title}</span>
+                  <span className={css(folderTitle)}>{item.title}</span>
                   <span className={css(quantityStyle)}>{defineNotesHandler(item.notes.length)}</span>
                 </div>
                 <div className={css({ display: 'flex', alignItems: 'center' })}>
@@ -182,9 +166,9 @@ const PersonalFolders: FC<PersonalFoldersProps> = ({
                         onClick={(e) => selectedDotsActionhandler(e, item.id)}
                         id='dots'
                       >
-                        <span></span>
-                        <span></span>
-                        <span></span>
+                        <span />
+                        <span />
+                        <span />
                       </div>
                     </div>
                   )}
@@ -210,7 +194,7 @@ const PersonalFolders: FC<PersonalFoldersProps> = ({
           mode='inverse'
           data-test-id={CHANGE_USER_MODE}
           onPress={() => {
-            setIsUserArchived();
+            setArchiveMode((prev) => ({ ...prev, user: !prev.user }));
             setSelectedFolder(() => null);
           }}
         >
@@ -323,13 +307,13 @@ const itemListStyle: CreateRule<{ selected: boolean }> = ({ selected }) =>
     },
   } as Styles);
 
-const folterStyle: Rule = {
+const folderTitle: Rule = ({ theme }) => ({
   letterSpacing: '0px',
-  fontWeight: 'bold',
-  fontSize: '18px',
-  lineHeight: '22px',
-  color: '#00539F',
-};
+  fontWeight: theme.font.weight.bold,
+  fontSize: theme.font.fixed.f18.fontSize,
+  lineHeight: theme.font.fixed.f18.lineHeight,
+  color: theme.colors.tescoBlue,
+});
 
 const quantityStyle: Rule = ({ theme }) => ({
   letterSpacing: '0px',

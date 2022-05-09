@@ -10,11 +10,11 @@ import {
 
 import { role, usePermission } from 'features/Permission';
 import Spinner from 'components/Spinner';
+import { NotesComposition } from './components';
 
 import { useNotesContainer } from './contexts';
 import { prepareData, isActiveSearchBar } from './utils';
 import { useUploadData } from './hooks/useUploadData';
-import { NotesComposition } from './components';
 
 export enum ModalStatuses {
   ADD_NEW = 'ADD_NEW',

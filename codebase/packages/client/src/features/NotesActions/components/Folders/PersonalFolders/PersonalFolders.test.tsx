@@ -4,33 +4,40 @@ import { renderWithTheme } from 'utils/test';
 import '@testing-library/jest-dom';
 import { fireEvent } from '@testing-library/react';
 import PersonalFolders, { PERSONAL_FOLDER_WRAPPER, CHANGE_USER_MODE } from './PersonalFolders';
+import { NotesContext } from 'features/NotesActions/contexts/notesContext';
 
 describe('it should render folders & archived folders', () => {
   const handleSelected = jest.fn();
   const setConfirmModal = jest.fn();
+
+  const foldersWithNotes = [
+    {
+      id: '1ad116f4-1c42-4e61-bbf0-b371e6223cf0',
+      notes: [],
+      ownerColleagueUuid: '15818570-cd6b-4957-8a82-3d34dcb0b077',
+      parentFolderUuid: '4eb0c40f-8e7a-43e3-8096-2a431b5c9ba1',
+      quantity: 0,
+      selected: false,
+      selectedDots: false,
+      title: 'mocked_title',
+    },
+  ];
+  const archiveMode = {
+    user: false,
+    team: false,
+  };
+
+  const setArchiveMode = jest.fn();
   const setSelectedTEAMFolder = jest.fn();
-  const setFoldersWithNotesTEAM = jest.fn();
-  const setFoldersWithNotes = jest.fn();
   const setSelectedFolder = jest.fn();
-  const setIsUserArchived = jest.fn();
 
   const useRefSpy = jest.spyOn(React, 'useRef').mockReturnValueOnce({ current: null });
 
   const props = {
     handleSelected,
     setConfirmModal,
-    setSelectedTEAMFolder,
-    selectedTEAMFolder: {},
-    setFoldersWithNotesTEAM,
-    actionModal: null,
-    selectedFolderId: null,
-    foldersWithNotes: [{ id: 1, notes: [] }],
-    setFoldersWithNotes,
-    selectedFolder: {},
-    setSelectedFolder,
-    selectedNoteId: useRefSpy,
-    setIsUserArchived,
-    isUserArchived: false,
+    actionModal: useRefSpy,
+    userActions: useRefSpy,
   };
 
   it('it should render personal folder', async () => {
@@ -52,21 +59,44 @@ describe('it should render folders & archived folders', () => {
     const archivedTitle = getByText('Archived Folders');
     expect(archivedTitle).toBeInTheDocument();
   });
-  it('it should call handleSelected handler', async () => {
-    const { getByTestId } = renderWithTheme(<PersonalFolders {...props} />);
+  it('it should call handleSelected', async () => {
+    const { getByTestId } = renderWithTheme(
+      <NotesContext.Provider value={{ foldersWithNotes, setArchiveMode, archiveMode, setSelectedTEAMFolder }}>
+        <PersonalFolders {...props} />
+      </NotesContext.Provider>,
+    );
     const folderItem = getByTestId('folder-item');
     fireEvent.click(folderItem);
     expect(handleSelected).toHaveBeenCalled();
   });
-  it('it should call setIsUserArchived, setSelectedFolder handlers', async () => {
-    const { getByTestId } = renderWithTheme(<PersonalFolders {...props} />);
+  it('it should call setSelectedFolder handler', async () => {
+    const { getByTestId } = renderWithTheme(
+      <NotesContext.Provider
+        value={{ foldersWithNotes, setArchiveMode, archiveMode, setSelectedTEAMFolder, setSelectedFolder }}
+      >
+        <PersonalFolders {...props} />
+      </NotesContext.Provider>,
+    );
     const mode = getByTestId(CHANGE_USER_MODE);
     fireEvent.click(mode);
-    expect(setIsUserArchived).toHaveBeenCalled();
     expect(setSelectedFolder).toHaveBeenCalled();
   });
   it('it should call setSelectedFolder, setFoldersWithNotes handlers', async () => {
-    const { getByTestId } = renderWithTheme(<PersonalFolders {...props} />);
+    const setFoldersWithNotes = jest.fn();
+    const { getByTestId } = renderWithTheme(
+      <NotesContext.Provider
+        value={{
+          foldersWithNotes,
+          setArchiveMode,
+          archiveMode,
+          setSelectedTEAMFolder,
+          setSelectedFolder,
+          setFoldersWithNotes,
+        }}
+      >
+        <PersonalFolders {...props} />
+      </NotesContext.Provider>,
+    );
     const dots = getByTestId('dots-items');
     fireEvent.click(dots);
     expect(setSelectedFolder).toHaveBeenCalled();

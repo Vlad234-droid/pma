@@ -19,12 +19,12 @@ import { InfoModal as InfoMessage, TeamWrapper, UserWrapper, TeamEditWrapper, Us
 import { FilterOptions, MainFolders } from '../../components';
 import { IconButton } from 'components/IconButton';
 import { ConfirmModalWithSelectOptions } from 'features/Modal';
+import { buildPath } from 'features/Routes';
+import { Page } from 'pages';
 
 import { useNotesContainer } from '../../contexts';
 import { baseSubmit, getOptions, submitSelectedNote, submitTeamSelectedNote, teamSubmit } from '../../utils';
 import { ModalStatuses } from '../../NotesActions';
-import { buildPath } from 'features/Routes';
-import { Page } from 'pages';
 import { schemaFolder, schemaNotes, schemaNoteToEdit, schemaTEAMNotes } from '../Modals/schema/schema';
 
 export const NOTES_WRAPPER = 'note-wrapper';
@@ -137,7 +137,25 @@ const NotesComposition: FC<{
         foldersWithNotes={foldersWithNotes}
       />
     ),
+    [ModalStatuses.PERSONAL_FOLDER]: (
+      <UserWrapper
+        cancelModal={cancelModal}
+        status={status}
+        methods={methods}
+        submitForm={handleSubmit(onSubmit)}
+        createFolder={status === ModalStatuses.PERSONAL_FOLDER}
+        foldersWithNotes={foldersWithNotes}
+      />
+    ),
     [ModalStatuses.TEAM_NOTE]: (
+      <TeamWrapper
+        cancelTEAMModal={cancelTEAMModal}
+        status={status}
+        teamMethods={teamMethods}
+        handleTEAMSubmit={handleTEAMSubmit(onTEAMSubmit)}
+      />
+    ),
+    [ModalStatuses.TEAM_FOLDER]: (
       <TeamWrapper
         cancelTEAMModal={cancelTEAMModal}
         status={status}
@@ -215,13 +233,7 @@ const NotesComposition: FC<{
               />
             </div>
 
-            <MainFolders
-              TEAM={isLineManager}
-              setIsUserArchived={() => setArchiveMode((prev) => ({ ...prev, user: !prev.user }))}
-              isUserArchived={archiveMode.user}
-              teamArchivedMode={archiveMode.team}
-              setTeamArchivedMode={() => setArchiveMode((prev) => ({ ...prev, team: !prev.team }))}
-            />
+            <MainFolders isLineManager={isLineManager} />
           </div>
           <div className={css(arrowLeftStyle)}>
             <BackButton
