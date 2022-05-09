@@ -69,11 +69,21 @@ export const isReviewsNumbersInStatus = (reviewType: ReviewType) => (status: Sta
       return false;
     }
     const statuses = reviews?.filter((reviews) => reviews.number <= num)?.map((review) => review.status);
-    statuses.every((elem) => {
-      return elem === status;
-    });
 
     return statuses.every((elem) => elem === status);
+  });
+
+export const isReviewsNumberInStatuses = (reviewType: ReviewType) => (statuses: Status[], num: number) =>
+  createSelector(filterReviewsByTypeSelector(reviewType), (reviews: any) => {
+    if (reviews?.length < num) {
+      return false;
+    }
+    const review = reviews?.find((reviews) => reviews.number === num);
+    if (!review && review?.status) {
+      return false;
+    }
+
+    return statuses.includes(review?.status);
   });
 
 export const hasStatusInReviews = (reviewType: ReviewType, status: Status) =>

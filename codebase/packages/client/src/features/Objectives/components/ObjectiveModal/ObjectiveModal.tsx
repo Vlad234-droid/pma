@@ -1,9 +1,9 @@
 import React, { FC, HTMLProps, useEffect, useRef } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 
-import { Button, Icon, useStyle, Rule, CreateRule } from '@pma/dex-wrapper';
+import { Button, CreateRule, Icon, Rule, useStyle } from '@pma/dex-wrapper';
 
-import { Status } from 'config/enum';
+import { ReviewType, Status } from 'config/enum';
 import { Trans, useTranslation } from 'components/Translation';
 import { Icon as IconComponent } from 'components/Icon';
 import { StepIndicatorBasic } from 'components/StepIndicator/StepIndicator';
@@ -14,6 +14,8 @@ import { ButtonWithConfirmation } from '../Buttons';
 import ObjectiveHelpModal from '../Modal/ObjectiveHelpModal';
 import { IconButton, Position } from 'components/IconButton';
 import ObjectiveComponents from './ObjectiveComponents';
+import { isReviewsNumberInStatuses } from '@pma/store';
+import { useSelector } from 'react-redux';
 
 export type ObjectiveModalProps = {
   useSingleStep?: boolean;
@@ -53,7 +55,11 @@ export const ObjectiveModal: FC<Props> = ({
   setNextObjectiveNumber,
   skipFooter,
   skipHelp,
+  onClose,
 }) => {
+  const canNotSaveAsDraft = useSelector(
+    isReviewsNumberInStatuses(ReviewType.OBJECTIVE)([Status.APPROVED, Status.DECLINED], currentObjectiveNumber),
+  );
   const { css, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const { watch } = methods;
@@ -114,9 +120,15 @@ export const ObjectiveModal: FC<Props> = ({
             <div data-test-id={FOOTER_TEST_ID} className={css(footerContainerStyle)}>
               <div className={css(footerWrapperStyle)}>
                 <div className={css(buttonWrapperStyle({ mobileScreen }))}>
-                  <Button styles={[buttonWhiteStyle]} onPress={onSaveDraft}>
-                    <Trans i18nKey='save_as_draft'>Save as draft</Trans>
-                  </Button>
+                  {!canNotSaveAsDraft ? (
+                    <Button styles={[buttonWhiteStyle]} onPress={onSaveDraft}>
+                      <Trans i18nKey='save_as_draft'>Save as draft</Trans>
+                    </Button>
+                  ) : (
+                    <Button styles={[buttonWhiteStyle]} onPress={onClose}>
+                      <Trans i18nKey='cancel'>Cancel</Trans>
+                    </Button>
+                  )}
                   {submitForm ? (
                     <ButtonWithConfirmation
                       isDisabled={!isValid}

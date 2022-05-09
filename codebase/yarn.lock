@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@accessibility-toolbar/core@0.0.20":
-  version "0.0.20"
-  resolved "https://nexus.ourtesco.com/repository/colleague-ui-private/@accessibility-toolbar/core/-/core-0.0.20.tgz#af26c27d8750159158b2c04ec6e170e053c1acaa"
-  integrity sha512-MsLyMxnSL1phzHScipedu06HP+b/D+KSCjXuCRDl4hvdmKu6it6xtY8o8b/OpXiFCIRxP/oZ35HljXssgTPulw==
+"@accessibility-toolbar/core@0.0.24":
+  version "0.0.24"
+  resolved "https://nexus.ourtesco.com/repository/colleague-ui-private/@accessibility-toolbar/core/-/core-0.0.24.tgz#fb401dab2efcc20107d708a43ad9362095f095b9"
+  integrity sha512-Lz/p4wTANWQYEd4pmde+TeOaCu7D8iSX28a37Q/BQmRjm2+XKa3yjhcGUrIgSbijOP6+7qTz02nQ9+65hFMlQg==
   dependencies:
     "@dex-ddl/core" "0.1.153"
     "@energon/splunk-logger-ui" "^0.7.2"

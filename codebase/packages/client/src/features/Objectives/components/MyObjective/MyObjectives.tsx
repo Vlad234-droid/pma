@@ -50,6 +50,58 @@ import { Objectives } from './Objectives';
 
 export const TEST_ID = 'my-objectives-page';
 
+const WidgetBlock = () => {
+  const navigate = useNavigate();
+  const { css } = useStyle();
+  return (
+    <div className={css(widgetsBlock)}>
+      <ShareWidget stopShare={true} sharing={false} customStyle={shareWidgetStyles} />
+
+      <ShareWidget stopShare={false} sharing={true} customStyle={shareWidgetStyles} />
+
+      <OrganizationWidget
+        customStyle={organizationWidgetStyles}
+        onClick={() => navigate(buildPath(Page.STRATEGIC_DRIVERS))}
+      />
+    </div>
+  );
+};
+
+const ReviewBlock: FC<{ canShow: Boolean }> = ({ canShow }) => {
+  const midYearReview = useSelector(getTimelineByCodeSelector(ObjectiveType.MYR, USER.current));
+  const endYearReview = useSelector(getTimelineByCodeSelector(ObjectiveType.EYR, USER.current));
+  const { t } = useTranslation();
+  const { css } = useStyle();
+  if (!canShow) return null;
+
+  return (
+    <>
+      <div data-test-id='personal' className={css(basicTileStyle)}>
+        <ReviewWidget
+          reviewType={ReviewType.MYR}
+          status={midYearReview?.status}
+          startTime={midYearReview?.startTime}
+          endTime={midYearReview?.endTime}
+          lastUpdatedTime={midYearReview?.lastUpdatedTime}
+          title={t('mid_year_review', 'Mid-year review')}
+          customStyle={{ height: '100%' }}
+        />
+      </div>
+      <div data-test-id='feedback' className={css(basicTileStyle)}>
+        <ReviewWidget
+          reviewType={ReviewType.EYR}
+          status={endYearReview?.status}
+          startTime={endYearReview?.startTime}
+          endTime={endYearReview?.endTime}
+          lastUpdatedTime={endYearReview?.lastUpdatedTime}
+          title={t('review_type_description_eyr', 'Year-end review')}
+          customStyle={{ height: '100%' }}
+        />
+      </div>
+    </>
+  );
+};
+
 const MyObjectives: FC = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -60,7 +112,6 @@ const MyObjectives: FC = () => {
   const mobileScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
 
   const originObjectives = useSelector(filterReviewsByTypeSelector(ReviewType.OBJECTIVE));
-  const midYearReview = useSelector(getTimelineByCodeSelector(ObjectiveType.MYR, USER.current));
   const endYearReview = useSelector(getTimelineByCodeSelector(ObjectiveType.EYR, USER.current));
 
   const [previousReviewFilesModalShow, setPreviousReviewFilesModalShow] = useState(false);
@@ -139,52 +190,6 @@ const MyObjectives: FC = () => {
       setLinkTitle({ [Page.OBJECTIVES_VIEW]: t('reviews', 'Reviews') });
     }
   }, [canShowAnnualReview]);
-
-  const WidgetBlock = () => {
-    return (
-      <div className={css(widgetsBlock)}>
-        <ShareWidget stopShare={true} sharing={false} customStyle={shareWidgetStyles} />
-
-        <ShareWidget stopShare={false} sharing={true} customStyle={shareWidgetStyles} />
-
-        <OrganizationWidget
-          customStyle={organizationWidgetStyles}
-          onClick={() => navigate(buildPath(Page.STRATEGIC_DRIVERS))}
-        />
-      </div>
-    );
-  };
-
-  const ReviewBlock: FC<{ canShow: Boolean }> = ({ canShow }) => {
-    if (!canShow) return null;
-
-    return (
-      <>
-        <div data-test-id='personal' className={css(basicTileStyle)}>
-          <ReviewWidget
-            reviewType={ReviewType.MYR}
-            status={midYearReview?.status}
-            startTime={midYearReview?.startTime}
-            endTime={midYearReview?.endTime}
-            lastUpdatedTime={midYearReview?.lastUpdatedTime}
-            title={t('mid_year_review', 'Mid-year review')}
-            customStyle={{ height: '100%' }}
-          />
-        </div>
-        <div data-test-id='feedback' className={css(basicTileStyle)}>
-          <ReviewWidget
-            reviewType={ReviewType.EYR}
-            status={endYearReview?.status}
-            startTime={endYearReview?.startTime}
-            endTime={endYearReview?.endTime}
-            lastUpdatedTime={endYearReview?.lastUpdatedTime}
-            title={t('review_type_description_eyr', 'Year-end review')}
-            customStyle={{ height: '100%' }}
-          />
-        </div>
-      </>
-    );
-  };
 
   return (
     <div data-test-id={TEST_ID}>
