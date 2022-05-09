@@ -60,7 +60,7 @@ const wrapperStyle: Rule = {
   display: 'flex',
   padding: '12px',
   borderRadius: '10px',
-  alignItems: 'center',
+  alignItems: 'flex-start',
   letterSpacing: '0px',
 };
 
