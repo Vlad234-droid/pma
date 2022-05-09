@@ -27,7 +27,7 @@ export const useStatisticsReport = (args) => {
     const statisticReport = args.reduce(
       (acc, item, index) => ({
         ...acc,
-        [acc[getKey(item)]]: data?.[metadata?.findIndex((item) => item.id === args[index])],
+        [getKey(item)]: data?.[metadata?.findIndex((item) => item.id === args[index])],
       }),
       {},
     );
