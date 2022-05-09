@@ -9,6 +9,8 @@ import { USER } from 'config/constants';
 import { IconButton } from 'components/IconButton';
 import { downloadPDF, ObjectiveDocument, usePDF } from '@pma/pdf-renderer';
 
+export const TEST_ID = 'objectives-test-id';
+
 type Props = {
   objectives: ObjectiveTypes.Objective[];
   canEditAllObjective: Boolean;
@@ -48,7 +50,7 @@ const Objectives: FC<Props> = ({ objectives = [], canEditAllObjective = false, c
       }}
       right={{
         content: (
-          <div>
+          <div data-test-id={TEST_ID}>
             <IconButton
               onPress={() => downloadPDF(instance.url!, 'objectives.pdf')}
               graphic='download'

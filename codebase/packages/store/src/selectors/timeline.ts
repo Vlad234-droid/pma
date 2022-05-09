@@ -1,4 +1,3 @@
-import { USER } from './../../../client/src/config/constants';
 //@ts-ignore
 import { createSelector } from 'reselect'; //@ts-ignore
 import { RootState } from 'typesafe-actions';
@@ -10,6 +9,10 @@ export enum Type {
   MYR = 'MYR',
   EYR = 'EYR',
 }
+
+export const USER = {
+  current: 'me',
+};
 
 export const timelineSelector = (state: RootState) => state.timeline;
 

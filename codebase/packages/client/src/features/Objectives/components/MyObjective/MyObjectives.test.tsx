@@ -18,6 +18,7 @@ jest.mock('@pma/pdf-renderer', () => {
     usePDF: () => {
       return ['mock', () => true];
     },
+    canShowMyReview: false,
   };
 });
 
@@ -26,6 +27,13 @@ describe('MyObjectives', () => {
     jest.spyOn(console, 'error').mockImplementation();
   });
   it('should render MyObjectives', async () => {
+    renderWithTheme(<MyObjectives />);
+    const widget = screen.queryByTestId(TEST_ID);
+
+    expect(widget).toBeInTheDocument();
+  });
+
+  it('should render ReviewWidget', async () => {
     renderWithTheme(<MyObjectives />);
     const widget = screen.queryByTestId(TEST_ID);
 
