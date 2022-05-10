@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { Rule, useStyle } from '@pma/dex-wrapper';
+import { Rule, theme, useStyle } from '@pma/dex-wrapper';
 
 import { Notification } from 'components/Notification';
 import { GenericItemField } from 'components/GenericForm';
@@ -54,7 +54,7 @@ const AddNoteModal: FC<AddNoteModalProps> = ({ methods, cancelModal, submitForm,
               marginBottom: '20px',
             }}
           />
-          <form className={css({ marginTop: '40px' })}>
+          <form className={css({ marginTop: '40px', fontWeight: theme.font.weight.bold })}>
             {!createFolder
               ? getNotes(foldersWithNotes, t)?.require.map((item) => {
                   if (item.type === 'input') {
