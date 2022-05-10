@@ -1,5 +1,5 @@
 import React, { FC, HTMLProps, useState } from 'react';
-import { useStyle, CreateRule, Modal, Button, Rule } from '@pma/dex-wrapper';
+import { useStyle, CreateRule, Modal, Button, Rule, theme } from '@pma/dex-wrapper';
 import { Trans } from 'components/Translation';
 import { Radio } from 'components/Form';
 
@@ -41,6 +41,7 @@ export const ConfirmModalWithSelectOptions: FC<Props> = ({
 
   return (
     <Modal
+      overlayStyles={{ background: 'rgba(0, 83, 159, 0.7)' }}
       modalPosition={'middle'}
       modalContainerRule={[containerRule({ mobileScreen })]}
       title={{

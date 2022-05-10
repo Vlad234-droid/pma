@@ -301,7 +301,7 @@ const itemListStyle: CreateRule<{ selected: boolean }> = ({ selected }) =>
       position: 'absolute',
       bottom: '0px',
       width: '100%',
-      height: '1px',
+      height: '2px',
       background: '#E5E5E5',
       marginTop: '16px',
     },
