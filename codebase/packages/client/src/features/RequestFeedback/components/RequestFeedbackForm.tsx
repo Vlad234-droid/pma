@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Rule, useStyle } from '@pma/dex-wrapper';
+import { Rule, theme, useStyle } from '@pma/dex-wrapper';
 import get from 'lodash.get';
 import { Field, Item, Select, Textarea, Attention } from 'components/Form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -145,7 +145,7 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel, setIsInfoModalOpen }) 
             </Item>
           </div>
           {formValues.targetType === TargetType.GOAL && (
-            <TileWrapper customStyle={{ padding: '24px', border: '2px solid #E5E5E5', marginBottom: '24px' }}>
+            <TileWrapper customStyle={tyleCustomStyle}>
               <h3 className={css(commentStyle)}>
                 {t('add_comment_to', `Add comment to ${labelValue}`, { labelValue })}
               </h3>
@@ -183,7 +183,7 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel, setIsInfoModalOpen }) 
             </div>
           )}
           {formValues.targetId && (
-            <TileWrapper customStyle={{ padding: '24px', border: '2px solid #E5E5E5', marginBottom: '24px' }}>
+            <TileWrapper customStyle={tyleCustomStyle}>
               <h3 className={css(commentStyle)}>
                 {t('add_comment_to_objectiveValue', `Add comment to ${objectiveValue}`, { objectiveValue })}
               </h3>
@@ -201,7 +201,7 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel, setIsInfoModalOpen }) 
             </TileWrapper>
           )}
           {formValues.targetType === TargetType.VALUE_BEHAVIOR && (
-            <TileWrapper customStyle={{ padding: '24px', border: '2px solid #E5E5E5', marginBottom: '24px' }}>
+            <TileWrapper customStyle={tyleCustomStyle}>
               <h3 className={css(commentStyle)}>
                 {t('add_comment_to', `Add comment to ${labelValue}`, { labelValue })}
               </h3>
@@ -219,7 +219,7 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel, setIsInfoModalOpen }) 
             </TileWrapper>
           )}
           {formValues.targetType === TargetType.OTHER && (
-            <TileWrapper customStyle={{ padding: '24px', border: '2px solid #E5E5E5', marginBottom: '24px' }}>
+            <TileWrapper customStyle={tyleCustomStyle}>
               <h3 className={css(commentStyle)}>
                 {t('add_comment_to', `Add comment to ${labelValue}`, { labelValue })}
               </h3>
@@ -237,7 +237,14 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel, setIsInfoModalOpen }) 
               />
             </TileWrapper>
           )}
-          <TileWrapper customStyle={{ padding: '24px', border: '2px solid #E5E5E5', marginBottom: '50px' }}>
+          <TileWrapper
+            customStyle={{
+              padding: '24px',
+              border: `2px solid ${theme.colors.backgroundDarkest}`,
+              marginTop: '16px',
+              marginBottom: '50px',
+            }}
+          >
             <h3 className={css(commentStyle)}>
               <Trans i18nKey='add_any_other_comments_you_would_like_to_share_with_your_colleague'>
                 Add any other comments you would like to share with your colleague
@@ -271,6 +278,14 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel, setIsInfoModalOpen }) 
       </div>
     </>
   );
+};
+
+const tyleCustomStyle: Rule = ({ theme }) => {
+  return {
+    padding: '24px',
+    border: `2px solid ${theme.colors.backgroundDarkest}`,
+    marginBottom: '24px',
+  };
 };
 
 const infoHelpStyle: Rule = ({ theme }) => ({
