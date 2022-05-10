@@ -15,6 +15,10 @@ export const LINKS = {
   help: HELP,
 };
 
+export const USER = {
+  current: 'me',
+};
+
 const { protocol, hostname, port } = location;
 
 const portValue = port ? `:${port}` : '';

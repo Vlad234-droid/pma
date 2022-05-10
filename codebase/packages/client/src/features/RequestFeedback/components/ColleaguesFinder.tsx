@@ -1,7 +1,8 @@
 import React, { FC } from 'react';
 import { Rule, useStyle } from '@pma/dex-wrapper';
+import { Icon } from 'components/Icon';
 import useSearchColleagues from 'hooks/useSearchColleagues';
-import { Item } from 'components/Form';
+import { Item as FormItem } from 'components/Form';
 import SearchInput from 'components/SearchInput';
 import defaultImg from 'images/default.png';
 
@@ -26,7 +27,15 @@ const ColleaguesFinder: FC<Props> = ({ onSelect, onBlur, error, selected }) => {
   return (
     <>
       <div className={css({ marginTop: '32px' })} data-test-id='search-part'>
-        <Item errormessage={error}>
+        <FormItem
+          withIcon={false}
+          marginBot={false}
+          customIcon
+          searchIcon
+          // @ts-ignore
+          customIconInserted={<Icon graphic='search' iconStyles={iconStyles} />}
+          errormessage={error}
+        >
           <SearchInput
             name={'search_option'}
             onChange={handleChange}
@@ -38,6 +47,7 @@ const ColleaguesFinder: FC<Props> = ({ onSelect, onBlur, error, selected }) => {
             isValid={!error}
             options={colleagues || []}
             selected={selected}
+            styles={{ paddingLeft: '36.7px' }}
             multiple
             renderOption={(item) => (
               <div className={css({ display: 'flex', justifyContent: 'flex-start', alignItems: 'center' })}>
@@ -55,10 +65,14 @@ const ColleaguesFinder: FC<Props> = ({ onSelect, onBlur, error, selected }) => {
               </div>
             )}
           />
-        </Item>
+        </FormItem>
       </div>
     </>
   );
+};
+
+const iconStyles: Rule = {
+  width: '16.67px',
 };
 
 const FlexGapStyle: Rule = {

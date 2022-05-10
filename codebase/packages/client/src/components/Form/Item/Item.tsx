@@ -12,6 +12,7 @@ export type ItemProps = {
   errormessage?: string;
   marginBot?: boolean;
   customIcon?: boolean;
+  searchIcon?: boolean;
   customIconInserted?: any;
   onFocus?: () => void;
   focus?: boolean;
@@ -26,7 +27,8 @@ export const Item: FC<ItemProps> = ({
   withIcon = true,
   errormessage = '',
   marginBot = true,
-  customIcon = false,
+  customIcon = true,
+  searchIcon = false,
   customIconInserted,
   focus,
   onFocus,
@@ -80,7 +82,7 @@ export const Item: FC<ItemProps> = ({
         )}
         {customIcon && (
           <span
-            className={css(IconStyle)}
+            className={css(!searchIcon ? IconStyle : SearchIconStyle)}
             onClick={() => {
               setInputFocus();
               onFocus && onFocus();
@@ -134,5 +136,12 @@ const IconStyle: Rule = {
   position: 'absolute',
   top: '10px',
   right: '12px',
+  cursor: 'pointer',
+};
+
+const SearchIconStyle: Rule = {
+  position: 'absolute',
+  top: '10px',
+  left: '17.67px',
   cursor: 'pointer',
 };

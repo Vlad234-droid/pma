@@ -1,21 +1,17 @@
-import React, { FC, useEffect, useMemo, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'components/Translation';
 import { Button, CreateRule, Rule, Styles, useStyle } from '@pma/dex-wrapper';
 import { ObjectiveType, ReviewType, Status } from 'config/enum';
 import { StepIndicator } from 'components/StepIndicator/StepIndicator';
-import { IconButton } from 'components/IconButton';
-import { downloadPDF, ObjectiveDocument, usePDF } from '@pma/pdf-renderer';
 import { canEditAllObjectiveFn, REVIEW_MODIFICATION_MODE, reviewModificationModeFn } from '../../utils';
 import { useHeaderContainer } from 'contexts/headerContext';
 
 import {
-  Accordion,
   CreateButton,
   ObjectiveTypes as OT,
   ReviewWidget,
   Section,
   ShareWidget,
-  StatusBadge,
   transformReviewsToObjectives,
 } from 'features/Objectives';
 import { PreviousReviewFilesModal } from 'features/ReviewFiles/components';
@@ -31,7 +27,6 @@ import {
   getTimelineByCodeSelector,
   getTimelineMetaSelector,
   getTimelineSelector,
-  isReviewsInStatus,
   isReviewsNumbersInStatus,
   PreviousReviewFilesActions,
   ReviewsActions,
@@ -48,41 +43,29 @@ import useReviewSchema from 'features/Objectives/hooks/useReviewSchema';
 import { Page } from 'pages';
 import { buildPath } from 'features/Routes';
 import Spinner from 'components/Spinner';
-import EditButton from '../Buttons/EditButton';
 import { File } from '../../../ReviewFiles/components/components/File';
 import { CompletedReviewsModal } from 'features/CompletedReviews';
-
-const reviews = [];
-
-const annualReviews = [
-  {
-    id: 'test-3',
-    title: 'Annual performance review',
-    description: 'Pharetra donec enim aenean aliquet consectetur ultrices amet vitae',
-  },
-];
+import { USER } from 'config/constants';
+import { Objectives } from './Objectives';
 
 export const TEST_ID = 'my-objectives-page';
 
-// TODO: this is hard to read. Refactor this
 const MyObjectives: FC = () => {
-  const { css, theme, matchMedia } = useStyle();
-  const mobileScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
-  const { setLinkTitle } = useHeaderContainer();
   const navigate = useNavigate();
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const { css, theme, matchMedia } = useStyle();
+  const { setLinkTitle } = useHeaderContainer();
+
+  const mobileScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
 
   const originObjectives = useSelector(filterReviewsByTypeSelector(ReviewType.OBJECTIVE));
-  const midYearReview = useSelector(getTimelineByCodeSelector(ObjectiveType.MYR, 'me'));
-  const endYearReview = useSelector(getTimelineByCodeSelector(ObjectiveType.EYR, 'me'));
+  const midYearReview = useSelector(getTimelineByCodeSelector(ObjectiveType.MYR, USER.current));
+  const endYearReview = useSelector(getTimelineByCodeSelector(ObjectiveType.EYR, USER.current));
+
   const [previousReviewFilesModalShow, setPreviousReviewFilesModalShow] = useState(false);
   const [isCompletedReviewsModalOpen, setCompletedReviewsModalOpen] = useState(false);
   const [objectives, setObjectives] = useState<OT.Objective[]>([]);
-
-  const document = useMemo(() => <ObjectiveDocument items={objectives} />, [JSON.stringify(objectives)]);
-
-  const [instance, updateInstance] = usePDF({ document });
 
   const { loaded: schemaLoaded } = useSelector(schemaMetaSelector);
   const { loaded: reviewLoaded } = useSelector(reviewsMetaSelector);
@@ -94,9 +77,7 @@ const MyObjectives: FC = () => {
   const { components = [], markup = { max: 0, min: 0 } } = schema;
   const { descriptions, startDates, statuses } = useSelector(getTimelineSelector(colleagueUuid)) || {};
   const timelineTypes = useSelector(timelineTypesAvailabilitySelector(colleagueUuid)) || {};
-  const timelineObjective = useSelector(getTimelineByCodeSelector(ReviewType.OBJECTIVE, 'me')) || {};
-  const status = timelineObjective?.status || undefined;
-  const isAllObjectivesInSameStatus = useSelector(isReviewsInStatus(ReviewType.OBJECTIVE)(status));
+  const timelineObjective = useSelector(getTimelineByCodeSelector(ReviewType.OBJECTIVE, USER.current)) || {};
 
   const canShowObjectives = timelineTypes[ObjectiveType.OBJECTIVE];
   const canShowMyReview = timelineTypes[ObjectiveType.MYR] && timelineTypes[ObjectiveType.EYR];
@@ -123,19 +104,23 @@ const MyObjectives: FC = () => {
     countReviews < markup.max &&
     reviewModificationMode !== REVIEW_MODIFICATION_MODE.NONE;
 
-  // todo not clear where reviews might come from. remove this block when its clear
-  const createdReviews: any = [];
-  if (canShowMyReview) {
-    createdReviews.push(...reviews);
-  } else if (canShowAnnualReview) {
-    createdReviews.push(...annualReviews);
-  }
+  const renderStepIndicator: Boolean = (mobileScreen && canShowMyReview && timelineLoaded) || false;
+
+  useEffect(() => {
+    dispatch(PreviousReviewFilesActions.getPreviousReviewFiles({ colleagueUUID: colleagueUuid }));
+  }, []);
 
   useEffect(() => {
     if (colleagueUuid) {
       dispatch(TimelineActions.getTimeline({ colleagueUuid }));
+
+      if (canShowObjectives) {
+        dispatch(
+          ReviewsActions.getColleagueReviews({ pathParams: { colleagueUuid: colleagueUuid, cycleUuid: 'CURRENT' } }),
+        );
+      }
     }
-  }, [colleagueUuid]);
+  }, [colleagueUuid, canShowObjectives]);
 
   useEffect(() => {
     if (timelinesLoaded && !timelinesExist) {
@@ -144,35 +129,62 @@ const MyObjectives: FC = () => {
   }, [timelinesLoaded, timelinesExist]);
 
   useEffect(() => {
-    dispatch(PreviousReviewFilesActions.getPreviousReviewFiles({ colleagueUUID: colleagueUuid }));
-  }, []);
-
-  // todo remove block end
-  useEffect(() => {
-    if (objectives.length) {
-      updateInstance();
-    }
-  }, [JSON.stringify(objectives)]);
-
-  useEffect(() => {
     if (reviewLoaded && schemaLoaded) {
       setObjectives(transformReviewsToObjectives(originObjectives, formElements));
     }
   }, [reviewLoaded, schemaLoaded]);
 
   useEffect(() => {
-    if (colleagueUuid && canShowObjectives) {
-      dispatch(
-        ReviewsActions.getColleagueReviews({ pathParams: { colleagueUuid: colleagueUuid, cycleUuid: 'CURRENT' } }),
-      );
-    }
-  }, [colleagueUuid, canShowObjectives]);
-
-  useEffect(() => {
     if (canShowAnnualReview) {
       setLinkTitle({ [Page.OBJECTIVES_VIEW]: t('reviews', 'Reviews') });
     }
   }, [canShowAnnualReview]);
+
+  const WidgetBlock = () => {
+    return (
+      <div className={css(widgetsBlock)}>
+        <ShareWidget stopShare={true} sharing={false} customStyle={shareWidgetStyles} />
+
+        <ShareWidget stopShare={false} sharing={true} customStyle={shareWidgetStyles} />
+
+        <OrganizationWidget
+          customStyle={organizationWidgetStyles}
+          onClick={() => navigate(buildPath(Page.STRATEGIC_DRIVERS))}
+        />
+      </div>
+    );
+  };
+
+  const ReviewBlock: FC<{ canShow: Boolean }> = ({ canShow }) => {
+    if (!canShow) return null;
+
+    return (
+      <>
+        <div data-test-id='personal' className={css(basicTileStyle)}>
+          <ReviewWidget
+            reviewType={ReviewType.MYR}
+            status={midYearReview?.status}
+            startTime={midYearReview?.startTime}
+            endTime={midYearReview?.endTime}
+            lastUpdatedTime={midYearReview?.lastUpdatedTime}
+            title={t('mid_year_review', 'Mid-year review')}
+            customStyle={{ height: '100%' }}
+          />
+        </div>
+        <div data-test-id='feedback' className={css(basicTileStyle)}>
+          <ReviewWidget
+            reviewType={ReviewType.EYR}
+            status={endYearReview?.status}
+            startTime={endYearReview?.startTime}
+            endTime={endYearReview?.endTime}
+            lastUpdatedTime={endYearReview?.lastUpdatedTime}
+            title={t('review_type_description_eyr', 'Year-end review')}
+            customStyle={{ height: '100%' }}
+          />
+        </div>
+      </>
+    );
+  };
 
   return (
     <div data-test-id={TEST_ID}>
@@ -202,50 +214,12 @@ const MyObjectives: FC = () => {
                 </div>
               )}
               <div className={css(timelineWrapperStyles)}>
-                {canShowObjectives && (
-                  <Section
-                    left={{
-                      content: (
-                        <div className={css(tileStyles)}>
-                          <Trans i18nKey='my_objectives'>My objectives</Trans>
-                          {isAllObjectivesInSameStatus && ![Status.STARTED, Status.NOT_STARTED].includes(status) && (
-                            <StatusBadge status={status} styles={statusBadgeStyle} />
-                          )}
-                        </div>
-                      ),
-                    }}
-                    right={{
-                      content: (
-                        <div>
-                          <IconButton
-                            onPress={() => downloadPDF(instance.url!, 'objectives.pdf')}
-                            graphic='download'
-                            customVariantRules={{ default: iconButtonStyles }}
-                            iconStyles={iconStyles}
-                          >
-                            <Trans i18nKey='download'>Download</Trans>
-                          </IconButton>
-                          {canEditAllObjective && (
-                            <EditButton
-                              isSingleObjectivesEditMode={false}
-                              buttonText={t('edit_all', 'Edit all')}
-                              icon={'edit'}
-                              styles={borderButtonStyles}
-                            />
-                          )}
-                        </div>
-                      ),
-                    }}
-                  >
-                    {objectives.length ? (
-                      <Accordion objectives={objectives} canShowStatus={!isAllObjectivesInSameStatus} />
-                    ) : (
-                      <div className={css(emptyBlockStyle)}>
-                        <Trans i18nKey={'no_objectives_created'}>No objectives created</Trans>
-                      </div>
-                    )}
-                  </Section>
-                )}
+                <Objectives
+                  canShowObjectives={canShowObjectives}
+                  objectives={objectives}
+                  canEditAllObjective={canEditAllObjective}
+                />
+
                 <Section
                   contentCustomStyle={widgetWrapperStyle}
                   left={{
@@ -256,32 +230,8 @@ const MyObjectives: FC = () => {
                     ),
                   }}
                 >
-                  {canShowMyReview && (
-                    <>
-                      <div data-test-id='personal' className={css(basicTileStyle)}>
-                        <ReviewWidget
-                          reviewType={ReviewType.MYR}
-                          status={midYearReview?.status}
-                          startTime={midYearReview?.startTime}
-                          endTime={midYearReview?.endTime}
-                          lastUpdatedTime={midYearReview?.lastUpdatedTime}
-                          title={'Mid-year review'}
-                          customStyle={{ height: '100%' }}
-                        />
-                      </div>
-                      <div data-test-id='feedback' className={css(basicTileStyle)}>
-                        <ReviewWidget
-                          reviewType={ReviewType.EYR}
-                          status={endYearReview?.status}
-                          startTime={endYearReview?.startTime}
-                          endTime={endYearReview?.endTime}
-                          lastUpdatedTime={endYearReview?.lastUpdatedTime}
-                          title={'Year-end review'}
-                          customStyle={{ height: '100%' }}
-                        />
-                      </div>
-                    </>
-                  )}
+                  <ReviewBlock canShow={canShowMyReview} />
+
                   {canShowAnnualReview && (
                     <div data-test-id='feedback' className={css(basicTileStyle)}>
                       <ReviewWidget
@@ -290,7 +240,7 @@ const MyObjectives: FC = () => {
                         startTime={endYearReview?.startTime}
                         endTime={endYearReview?.endTime}
                         lastUpdatedTime={endYearReview?.lastUpdatedTime}
-                        title={'Annual performance review'}
+                        title={t('annual_performance_review', 'Annual performance review')}
                         customStyle={{ height: '100%' }}
                       />
                     </div>
@@ -320,7 +270,9 @@ const MyObjectives: FC = () => {
                     ),
                   }}
                 >
-                  <div className={css(emptyBlockStyle)}>You have no completed reviews</div>
+                  <div className={css(emptyBlockStyle)}>
+                    <Trans i18nKey='no_completed_reviews'>You have no completed reviews</Trans>
+                  </div>
                 </Section>
                 <Section
                   left={{
@@ -360,7 +312,7 @@ const MyObjectives: FC = () => {
               <Spinner id='2' />
             </div>
           )}
-          {mobileScreen && canShowMyReview && timelineLoaded && (
+          {renderStepIndicator && (
             <div className={css(timelineWrapperWidget)}>
               <StepIndicator
                 mainTitle={t('performance_timeline_title', 'Your Contribution timeline')}
@@ -371,16 +323,7 @@ const MyObjectives: FC = () => {
             </div>
           )}
 
-          <div className={css(widgetsBlock)}>
-            <ShareWidget stopShare={true} sharing={false} customStyle={shareWidgetStyles} />
-
-            <ShareWidget stopShare={false} sharing={true} customStyle={shareWidgetStyles} />
-
-            <OrganizationWidget
-              customStyle={organizationWidgetStyles}
-              onClick={() => navigate(buildPath(Page.STRATEGIC_DRIVERS))}
-            />
-          </div>
+          <WidgetBlock />
         </div>
       </div>
 
@@ -476,28 +419,6 @@ const basicTileStyle: Rule = {
   flex: '1 0 216px',
 };
 
-const iconStyles: Rule = {
-  marginRight: '10px',
-};
-
-const iconButtonStyles: Rule = ({ theme }) => ({
-  padding: '10px 10px',
-  color: theme.colors.tescoBlue,
-  fontWeight: theme.font.weight.bold,
-  ...theme.font.fixed.f16,
-  letterSpacing: '0px',
-});
-
-const borderButtonStyles: Rule = ({ theme }) => ({
-  ...theme.font.fixed.f16,
-  letterSpacing: '0px',
-  border: `2px solid ${theme.colors.tescoBlue}`,
-  borderRadius: '30px',
-  color: theme.colors.tescoBlue,
-  fontWeight: theme.font.weight.bold,
-  padding: '10px 20px 10px 20px',
-});
-
 const tileStyles: Rule = ({ theme }) => ({
   ...theme.font.fixed.f18,
   letterSpacing: '0px',
@@ -519,8 +440,6 @@ const linkStyles = ({ theme }) => ({
   color: theme.colors.tescoBlue,
   background: 'transparent',
 });
-
-const statusBadgeStyle: Rule = { marginLeft: '10px' };
 
 const emptyBlockStyle: Rule = ({ theme }) => {
   return {
