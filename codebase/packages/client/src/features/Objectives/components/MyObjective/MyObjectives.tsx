@@ -140,6 +140,8 @@ const MyObjectives: FC = () => {
   const objectiveSchema = useSelector(getReviewSchema(ReviewType.OBJECTIVE));
   const countDraftReviews = useSelector(countByStatusReviews(ReviewType.OBJECTIVE, Status.DRAFT)) || 0;
   const countDeclinedReviews = useSelector(countByStatusReviews(ReviewType.OBJECTIVE, Status.DECLINED)) || 0;
+  const countWaitingForApprovalReviews =
+    useSelector(countByStatusReviews(ReviewType.OBJECTIVE, Status.WAITING_FOR_APPROVAL)) || 0;
   const files: File[] = useSelector(getPreviousReviewFilesSelector) || [];
 
   const reviewsMinNumbersInStatusApproved = useSelector(
@@ -147,7 +149,12 @@ const MyObjectives: FC = () => {
   );
 
   const reviewModificationMode = reviewModificationModeFn(countReviews, objectiveSchema);
-  const canEditAllObjective = canEditAllObjectiveFn({ objectiveSchema, countDraftReviews, countDeclinedReviews });
+  const canEditAllObjective = canEditAllObjectiveFn({
+    objectiveSchema,
+    countDraftReviews,
+    countDeclinedReviews,
+    countWaitingForApprovalReviews,
+  });
   const createIsAvailable =
     (reviewsMinNumbersInStatusApproved ||
       timelineObjective.status === Status.DRAFT ||

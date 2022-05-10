@@ -8,12 +8,18 @@ export const canEditAllObjectiveFn = ({
   objectiveSchema,
   countDraftReviews,
   countDeclinedReviews,
+  countWaitingForApprovalReviews,
 }: {
   objectiveSchema: any;
   countDraftReviews: number;
   countDeclinedReviews: number;
+  countWaitingForApprovalReviews: number;
 }) => {
   const { markup = { max: 0, min: 0 } } = objectiveSchema;
+
+  if (countWaitingForApprovalReviews > 0) {
+    return false;
+  }
 
   return (
     (countDraftReviews <= markup.min && countDraftReviews > 0) ||
