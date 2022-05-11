@@ -21,10 +21,7 @@ export const canEditAllObjectiveFn = ({
     return false;
   }
 
-  return (
-    (countDraftReviews <= markup.min && countDraftReviews > 0) ||
-    (countDeclinedReviews <= markup.min && countDeclinedReviews > 0)
-  );
+  return countDraftReviews > 0 || countDeclinedReviews === markup.min;
 };
 
 /**
