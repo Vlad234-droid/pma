@@ -47,8 +47,8 @@ const wrapperStyles: Rule = ({ theme }) => ({
 
 const iconStyles: Rule = {
   marginRight: '10px',
-  width: '24px',
-  height: '24px',
+  width: '16px',
+  height: '16px',
   display: 'block',
 };
 

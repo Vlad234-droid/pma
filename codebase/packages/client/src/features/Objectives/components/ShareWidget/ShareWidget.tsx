@@ -217,7 +217,6 @@ const ShareWidget: FC<Props> = ({ customStyle, stopShare, sharing }) => {
 
 const wrapperStyle: Rule = ({ theme }) => ({
   padding: '16px',
-  backgroundColor: theme.colors.white,
   color: theme.colors.tescoBlue,
   width: '100%',
   height: '100%',
