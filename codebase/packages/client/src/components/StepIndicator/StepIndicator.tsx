@@ -111,7 +111,18 @@ export const StepIndicatorBasic: FC<StepIndicatorProps> = ({
 
   const titlesArray = titles.map((title, i) => {
     const textAlign = getTextAlign(titles?.length, i);
-    const active = isActive(statuses, i);
+    let active;
+    /**
+     * For timeline we show black style if status !== Status.NOT_STARTED
+     * For Step indicator we show black if status === Status.APPROVED || status === Status.DRAFT
+     * for current and all previous steps
+     */
+    if (statuses && statuses.length > 0) {
+      active = isActive(statuses, i);
+    } else {
+      const status = getStatus(i, currentStep, currentStatus, isValid);
+      active = status === Status.APPROVED || status === Status.DRAFT;
+    }
     return (
       <div key={`title${i}`}>
         <div className={css(title2Style({ textAlign, active }))} key={`title${i}`}>

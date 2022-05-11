@@ -10,7 +10,7 @@ describe('<DurationPicker />', () => {
   describe('#render', () => {
     it('should render input correctly', () => {
       const Component = () => {
-        const { control } = useForm({ defaultValues: { mocked_name: '2' }});
+        const { control } = useForm({ defaultValues: { mocked_name: '2' } });
 
         return <DurationPicker control={control} name='mocked_name' />;
       };
@@ -22,7 +22,7 @@ describe('<DurationPicker />', () => {
 
     it('should render value', () => {
       const Component = () => {
-        const { control } = useForm({ defaultValues: { mocked_name: '2' }});
+        const { control } = useForm({ defaultValues: { mocked_name: '2' } });
 
         return <DurationPicker control={control} name='mocked_name' />;
       };
@@ -34,7 +34,7 @@ describe('<DurationPicker />', () => {
 
     it('should not render dialog by default', () => {
       const Component = () => {
-        const { control } = useForm({ defaultValues: { mocked_name: '2' }});
+        const { control } = useForm({ defaultValues: { mocked_name: '2' } });
 
         return <DurationPicker control={control} name='mocked_name' />;
       };
@@ -46,12 +46,12 @@ describe('<DurationPicker />', () => {
 
     it('should display dialog on input focus', () => {
       const Component = () => {
-        const { control } = useForm({ defaultValues: { mocked_name: '2' }});
+        const { control } = useForm({ defaultValues: { mocked_name: '2' } });
 
         return <DurationPicker control={control} name='mocked_name' />;
       };
 
-      const { getByTestId , getByText, getByDisplayValue } = render(<Component />);
+      const { getByTestId, getByText, getByDisplayValue } = render(<Component />);
 
       fireEvent.focus(getByDisplayValue('2'));
 
@@ -65,7 +65,7 @@ describe('<DurationPicker />', () => {
 
     it('should hide dialog on Done press', () => {
       const Component = () => {
-        const { control } = useForm({ defaultValues: { mocked_name: '2' }});
+        const { control } = useForm({ defaultValues: { mocked_name: '2' } });
 
         return <DurationPicker control={control} name='mocked_name' />;
       };
@@ -83,7 +83,7 @@ describe('<DurationPicker />', () => {
 
     it('should update weeks on change', () => {
       const Component = () => {
-        const { control } = useForm({ defaultValues: { mocked_name: '2' }});
+        const { control } = useForm({ defaultValues: { mocked_name: '2' } });
 
         return <DurationPicker control={control} name='mocked_name' />;
       };
@@ -99,4 +99,3 @@ describe('<DurationPicker />', () => {
     });
   });
 });
-

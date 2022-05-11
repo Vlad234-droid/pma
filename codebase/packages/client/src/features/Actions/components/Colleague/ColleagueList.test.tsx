@@ -13,7 +13,8 @@ describe('<ColleagueList />', () => {
       {
         uuid: '1111',
         timeline: ['11', '12'],
-      },    {
+      },
+      {
         uuid: '2222',
         timeline: [],
       },
