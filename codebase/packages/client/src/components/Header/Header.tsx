@@ -19,6 +19,7 @@ export type HeaderProps = {
 
 export const TEST_ID = 'header';
 export const BACK_BTN_TEST_ID = 'header-back';
+export const MENU_BTN = 'menu-btn';
 
 const Header: FC<HeaderProps> = ({ title, onBack, withIcon, iconName = 'home', styles = {} }) => {
   const { css, matchMedia } = useStyle();
@@ -79,7 +80,7 @@ const Header: FC<HeaderProps> = ({ title, onBack, withIcon, iconName = 'home', s
           <IconButton onPress={handleAlertOpen} graphic='alert' />
           <AlertBadge />
         </RoundIcon>
-        <Icon onClick={handleMenuOpen} graphic='hamburger' iconStyles={iconStyles} />
+        <Icon onClick={handleMenuOpen} graphic='hamburger' iconStyles={iconStyles} containerTestId={MENU_BTN} />
       </div>
       {state?.isMenuOpen && <MenuDrawer onClose={handleClose} />}
       {state?.isAlertOpen && <AlertDrawer onClose={handleAlertClose} />}

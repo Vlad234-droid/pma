@@ -4,7 +4,8 @@ import { fireEvent } from '@testing-library/react';
 import { renderWithTheme as render } from 'utils/test';
 import { BrowserRouter } from 'react-router-dom';
 
-import Header, { TEST_ID, BACK_BTN_TEST_ID } from './Header';
+import Header, { TEST_ID, BACK_BTN_TEST_ID, MENU_BTN } from './Header';
+import { MENU_DRAWER_WRAPPER } from 'components/MenuDrawer/MenuDrawer';
 
 describe('Header', () => {
   const testHandler = jest.fn();
@@ -42,5 +43,23 @@ describe('Header', () => {
     fireEvent.click(backBtn);
 
     expect(testHandler).toHaveBeenCalledTimes(1);
+  });
+
+  it('should open menu', async () => {
+    const { queryByTestId, getByTestId, findByTestId } = render(
+      <BrowserRouter>
+        <Header title={testTitle} />
+      </BrowserRouter>,
+    );
+
+    const header = queryByTestId(TEST_ID);
+    expect(header).toBeInTheDocument();
+
+    const menuBtn = getByTestId(MENU_BTN);
+    expect(menuBtn).toBeInTheDocument();
+
+    fireEvent.click(menuBtn);
+
+    expect(await findByTestId(MENU_DRAWER_WRAPPER)).toBeInTheDocument();
   });
 });
