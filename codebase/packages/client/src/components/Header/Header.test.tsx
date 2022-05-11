@@ -34,12 +34,12 @@ describe('Header', () => {
   });
 
   it('while click on back btn with custom handler', async () => {
-    const { queryByTestId } = render(
+    const { getByTestId } = render(
       <BrowserRouter>
         <Header title={testTitle} onBack={testHandler} />
       </BrowserRouter>,
     );
-    const backBtn = queryByTestId(BACK_BTN_TEST_ID);
+    const backBtn = getByTestId(BACK_BTN_TEST_ID);
     fireEvent.click(backBtn);
 
     expect(testHandler).toHaveBeenCalledTimes(1);
