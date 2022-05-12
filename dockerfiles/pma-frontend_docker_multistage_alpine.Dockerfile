@@ -4,7 +4,7 @@ ARG NODE_PORT=9000
 # =========
 # node-base
 # =========
-FROM node:14.17-alpine AS node-base
+FROM node:17.8-alpine AS node-base
 
 ARG NODE_ENV
 ARG NODE_PORT
@@ -136,7 +136,7 @@ RUN --mount=type=cache,id=yarn_cache,target=/usr/local/share/.cache/yarn \
 # ==========
 # main stage
 # ==========
-FROM node:14.17-alpine
+FROM node:17.8-alpine
 
 ARG NODE_ENV
 ARG NODE_PORT
