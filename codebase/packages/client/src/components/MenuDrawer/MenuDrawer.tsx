@@ -18,6 +18,8 @@ import { Icon } from '../Icon';
 
 export type MenuDrawerProps = { onClose: () => void };
 
+export const MENU_DRAWER_WRAPPER = 'menu-drawer-wrapper';
+
 export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
   const { linkTitle } = useHeaderContainer();
   const [isOpen, setIsOpen] = useState(false);
@@ -47,7 +49,12 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
   };
 
   return (
-    <div className={css(menuDrawerWrapperStyle)} onClick={underlayClick} ref={underlayRef}>
+    <div
+      className={css(menuDrawerWrapperStyle)}
+      onClick={underlayClick}
+      ref={underlayRef}
+      data-test-id={MENU_DRAWER_WRAPPER}
+    >
       <div className={css(menuDrawerContentStyle)}>
         <div className={css(menuDrawerTopStyle)}>
           <div className={css({ display: 'flex', justifyContent: 'space-between' })}>
