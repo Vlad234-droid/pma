@@ -1,5 +1,5 @@
 import React, { FC, useState, useCallback } from 'react';
-import { colors, CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
+import { colors, CreateRule, Rule, useStyle, Styles } from '@pma/dex-wrapper';
 import { getReportMetaSelector } from '@pma/store';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -17,10 +17,11 @@ import { getCurrentYear } from 'utils/date';
 import { View } from 'components/PieChart/config';
 import { HoverContainer } from 'components/HoverContainer';
 import { HoverMessage } from 'components/HoverMessage';
+import { ColleaguesCount } from './components/ColleaguesCount';
 
 import { getFieldOptions, initialValues, convertToLink, IsReportTiles, getCurrentValue } from './config';
-import { getReportData, getData } from './hooks';
-import { ReportPage, TitlesReport } from 'config/enum';
+import { getReportData, getData, useStatisticsReport } from './hooks';
+import { MetaDataReport, ReportPage, TitlesReport } from 'config/enum';
 
 import { Page } from 'pages';
 
@@ -51,6 +52,8 @@ const Report: FC = () => {
   const { loaded } = useSelector(getReportMetaSelector);
 
   getReportData(query);
+
+  const { colleaguesCount } = useStatisticsReport([MetaDataReport.COLLEAGUES_COUNT]);
 
   const changeYearHandler = (value) => {
     if (!value) return;
@@ -109,6 +112,7 @@ const Report: FC = () => {
               value={getCurrentValue(query, year)}
             />
           </form>
+          <ColleaguesCount colleaguesCount={colleaguesCount} countStyles={countStyles} />
         </div>
 
         <div className={css(flexCenterStyled)}>
@@ -362,12 +366,23 @@ const iconDownloadStyle: Rule = () => ({
   top: '2px',
   left: '2px',
 });
+
+const countStyles: Rule = ({ theme }) => ({
+  position: 'absolute',
+  bottom: '-30px',
+  left: 0,
+  fontWeight: theme.font.weight.regular,
+  fontSize: theme.font.fixed.f16.fontSize,
+  lineHeight: theme.font.fixed.f16.lineHeight,
+  color: theme.colors.base,
+});
 const downloadWrapperStyle: Rule = {
   display: 'flex',
   flexDirection: 'column',
   width: '40%',
   marginBottom: '29px',
-};
+  position: 'relative',
+} as Styles;
 
 const iconBtnStyle = {
   padding: '0',

@@ -196,7 +196,7 @@ export enum TitlesReport {
   BUSINESS = 'new_to_business',
   ANNIVERSARY_REVIEWS = 'anniversary_reviews',
   HOURLY_PAID = 'hourly_paid',
-  MOMENT_FEEDBACK = 'moment_feedback',
+  MOMENT_FEEDBACK = 'everyday_feedback',
 }
 
 export enum StatisticsTitlesReportKeys {
