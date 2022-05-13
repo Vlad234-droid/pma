@@ -10,7 +10,6 @@ import {
   useMedia,
   fontWeight,
   Styles,
-  useStyle, // todo remove when use acc tool
 } from '@dex-ddl/core';
 import { AccessibilityProvider, useAccessibleStyle } from '@accessibility-toolbar/core';
 import merge from 'lodash.merge';
@@ -29,8 +28,7 @@ export {
   theme,
   DDLProvider,
   AccessibilityProvider,
-  // useAccessibleStyle as useStyle, // todo uncomment when use acc tool
-  useStyle, // todo remove when use acc tool
+  useAccessibleStyle as useStyle, // todo uncomment when use acc tool
   useMedia,
   colors,
   fontWeight,
