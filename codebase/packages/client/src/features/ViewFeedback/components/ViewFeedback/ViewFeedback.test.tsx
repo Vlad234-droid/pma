@@ -1,6 +1,6 @@
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
-import { renderWithTheme } from 'utils/test';
+import { renderWithTheme, screen } from 'utils/test';
 import '@testing-library/jest-dom';
 import { fireEvent } from '@testing-library/react';
 import ViewFeedback, { WRAPPER } from './ViewFeedback';
@@ -33,5 +33,13 @@ describe('ViewFeedback page', () => {
 
     const modal = queryByTestId('download-wrapper');
     expect(modal).toBeNull();
+  });
+
+  it('it should render buttons', async () => {
+    renderWithTheme(<ViewFeedback />);
+
+    expect(screen.getByText('Settings')).toBeInTheDocument();
+    expect(screen.getByTestId('download-feedback')).toBeInTheDocument();
+    expect(screen.getByTestId('give-feedback')).toBeInTheDocument();
   });
 });

@@ -187,6 +187,7 @@ const ViewFeedback: FC = () => {
                 <Trans i18nKey='give_feedback_to_a_colleague'>Give feedback to a colleague</Trans>
               </p>
               <Button
+                data-test-id='give-feedback'
                 styles={[iconBtnStyle]}
                 onPress={() => {
                   navigate(buildPath(Page.GIVE_FEEDBACK));
@@ -240,6 +241,7 @@ const ViewFeedback: FC = () => {
           }}
         >
           <ModalDownloadFeedback
+            data-test-id={'test-modal-download-feedback'}
             setOpenMainModal={setOpenMainModal}
             modalSuccess={modalSuccess}
             setModalSuccess={setModalSuccess}

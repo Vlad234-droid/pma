@@ -14,9 +14,11 @@ export type RouterSwitchProps = {
 const RouterSwitch: FC<RouterSwitchProps> = ({ links }) => {
   const { css } = useStyle();
 
+  if (!links.length) return <div data-test-id='test-no-router-links' />;
+
   return (
     <div className={css(wrapperStyle)}>
-      {links.map(({ link, name }) => {
+      {links?.map(({ link, name }) => {
         return (
           <NavLink key={link} className={({ isActive }) => css(linkStyle({ isActive }))} to={link}>
             {name}
