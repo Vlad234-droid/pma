@@ -1,9 +1,7 @@
 import { Handler, Response } from 'express';
 import { getDataFromCookie } from '../plugins/utils';
 import { AUTH_TOKEN_COOKIE_NAME } from '../onelogin-middleware';
-import { Client, IntrospectionResponse } from 'openid-client';
-import jwt from 'jsonwebtoken';
-import { extractOpenIdUserInfo } from 'oidc-data-extractor';
+import { Client } from 'openid-client';
 
 export type AuthData = {
   accessToken?: string;

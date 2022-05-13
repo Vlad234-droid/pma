@@ -2,7 +2,7 @@ import React from 'react';
 
 import { NextFunction, Request, Response } from 'express';
 
-import { OneloginError } from '@energon/onelogin';
+import { OneloginError } from '@pma-connectors/onelogin';
 
 import { SorryPage, SorryPageProps, ssr } from '@dex-ddl/core';
 
