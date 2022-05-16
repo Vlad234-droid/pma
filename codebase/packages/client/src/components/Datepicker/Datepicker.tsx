@@ -30,7 +30,7 @@ type Props = {
 const DATE_REGEXP = /\d{1,2}\/\d{1,2}\/\d{4}/;
 const INVALID_DATE = 'Invalid Date';
 export const TEST_ID = 'DatepickerId';
-export const INPUT_TEST_ID = 'DatepickerId';
+export const INPUT_TEST_ID = 'DatepickerInputId';
 
 const checkIsValidDate = (date) => DATE_REGEXP.test(date);
 
