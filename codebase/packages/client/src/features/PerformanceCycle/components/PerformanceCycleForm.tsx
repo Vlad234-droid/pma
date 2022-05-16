@@ -45,7 +45,6 @@ const PerformanceCycleForm: FC<Props> = ({ onSubmit, defaultValues, canEdit = tr
     setValue,
     watch,
     handleSubmit,
-    control,
     formState: { errors },
   } = methods;
 
@@ -186,22 +185,32 @@ const PerformanceCycleForm: FC<Props> = ({ onSubmit, defaultValues, canEdit = tr
           <div className={css(itemStyle)}>
             <Item label={t('notifications', 'Notifications')} withIcon={false} />
             <div>
-              <Item label={t('before_start', 'Before start')} withIcon={false}>
-                <DurationPicker
-                  control={control}
-                  name={`metadata.cycle.properties.pm_cycle_before_start`}
-                  readonly={!canEdit}
-                />
-              </Item>
+              <Field
+                name={'metadata.cycle.properties.pm_cycle_before_start'}
+                setValue={setValue}
+                Wrapper={({ children }) => (
+                  <Item label={t('before_start', 'Before start')} withIcon={false}>
+                    {children}
+                  </Item>
+                )}
+                Element={DurationPicker}
+                value={get(formValues, 'metadata.cycle.properties.pm_cycle_before_start')}
+                readonly={!canEdit}
+              />
             </div>
             <div className={css(itemStyle)}>
-              <Item label={t('before_end', 'Before end')} withIcon={false}>
-                <DurationPicker
-                  control={control}
-                  name={`metadata.cycle.properties.pm_cycle_before_end`}
-                  readonly={!canEdit}
-                />
-              </Item>
+              <Field
+                name={'metadata.cycle.properties.pm_cycle_before_end'}
+                setValue={setValue}
+                Wrapper={({ children }) => (
+                  <Item label={t('before_end', 'Before end')} withIcon={false}>
+                    {children}
+                  </Item>
+                )}
+                Element={DurationPicker}
+                value={get(formValues, 'metadata.cycle.properties.pm_cycle_before_end')}
+                readonly={!canEdit}
+              />
             </div>
           </div>
         </div>
@@ -258,27 +267,36 @@ const PerformanceCycleForm: FC<Props> = ({ onSubmit, defaultValues, canEdit = tr
                 </div>
                 <div className={css({ display: 'flex', gap: '8px' })}>
                   <div className={css(itemStyle, { width: '100%' })}>
-                    <DurationPicker
-                      control={control}
+                    <Field
                       name={`metadata.cycle.timelinePoints[${index}].properties.pm_review_duration`}
+                      setValue={setValue}
+                      Element={DurationPicker}
+                      value={get(formValues, `metadata.cycle.timelinePoints[${index}].properties.pm_review_duration`)}
                       readonly={!canEdit}
                     />
                   </div>
                 </div>
                 <div className={css({ display: 'flex', gap: '8px' })}>
                   <div className={css(itemStyle, { width: '100%' })}>
-                    <DurationPicker
-                      control={control}
+                    <Field
                       name={`metadata.cycle.timelinePoints[${index}].properties.pm_review_before_start`}
+                      setValue={setValue}
+                      Element={DurationPicker}
+                      value={get(
+                        formValues,
+                        `metadata.cycle.timelinePoints[${index}].properties.pm_review_before_start`,
+                      )}
                       readonly={!canEdit}
                     />
                   </div>
                 </div>
                 <div className={css({ display: 'flex', gap: '8px' })}>
                   <div className={css(itemStyle, { width: '100%' })}>
-                    <DurationPicker
-                      control={control}
+                    <Field
                       name={`metadata.cycle.timelinePoints[${index}].properties.pm_review_before_end`}
+                      setValue={setValue}
+                      Element={DurationPicker}
+                      value={get(formValues, `metadata.cycle.timelinePoints[${index}].properties.pm_review_before_end`)}
                       readonly={!canEdit}
                     />
                   </div>

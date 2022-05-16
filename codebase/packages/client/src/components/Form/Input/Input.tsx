@@ -19,6 +19,7 @@ const Input: FC<InputField> = ({
   type = 'text',
   min,
   defaultValue,
+  ...rest
 }) => {
   const { css } = useStyle();
   const { inputRef, setFocus } = useFormContainer();
@@ -50,6 +51,7 @@ const Input: FC<InputField> = ({
         ...customStyles,
       })}
       placeholder={placeholder}
+      {...rest}
     />
   );
 };
