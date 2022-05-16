@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'components/Translation';
 import { Button, CreateRule, Rule, Styles, useStyle } from '@pma/dex-wrapper';
 import { ObjectiveType, ReviewType, Status } from 'config/enum';
@@ -21,6 +21,7 @@ import {
   colleagueUUIDSelector,
   countByStatusReviews,
   countByTypeReviews,
+  currentUserSelector,
   filterReviewsByTypeSelector,
   getPreviousReviewFilesSelector,
   getReviewSchema,
@@ -28,6 +29,7 @@ import {
   getTimelineMetaSelector,
   getTimelineSelector,
   isReviewsNumbersInStatus,
+  ObjectiveSharingActions,
   PreviousReviewFilesActions,
   ReviewsActions,
   reviewsMetaSelector,
@@ -136,6 +138,7 @@ const MyObjectives: FC = () => {
 
   const formElements = components.filter((component) => component.type != 'text');
 
+  const { info } = useSelector(currentUserSelector);
   const countReviews = useSelector(countByTypeReviews(ReviewType.OBJECTIVE)) || 0;
   const objectiveSchema = useSelector(getReviewSchema(ReviewType.OBJECTIVE));
   const countDraftReviews = useSelector(countByStatusReviews(ReviewType.OBJECTIVE, Status.DRAFT)) || 0;
@@ -164,9 +167,17 @@ const MyObjectives: FC = () => {
 
   const renderStepIndicator: Boolean = (mobileScreen && canShowMyReview && timelineLoaded) || false;
 
+  const pathParams = useMemo(() => ({ colleagueUuid: info.colleagueUUID, cycleUuid: 'CURRENT' }), [info.colleagueUUID]);
+  const isValidPathParams = pathParams.colleagueUuid;
+
   useEffect(() => {
     dispatch(PreviousReviewFilesActions.getPreviousReviewFiles({ colleagueUUID: colleagueUuid }));
   }, []);
+
+  useEffect(() => {
+    isValidPathParams && dispatch(ObjectiveSharingActions.checkSharing(pathParams));
+    isValidPathParams && dispatch(ObjectiveSharingActions.getSharings(pathParams));
+  }, [isValidPathParams]);
 
   useEffect(() => {
     if (colleagueUuid) {
