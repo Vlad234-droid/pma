@@ -6,7 +6,7 @@ import { Graphics, RoundIcon, Icon } from 'components/Icon';
 import { AlertDrawer, AlertBadge, useMessagesContext } from 'features/Messages';
 import { DataModal } from 'features/Profile';
 
-import { MenuDrawer } from '../MenuDrawer/MenuDrawer';
+import { MenuDrawer } from 'features/MenuDrawer/MenuDrawer';
 
 export type HeaderProps = {
   title: string;
