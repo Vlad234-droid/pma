@@ -20,6 +20,7 @@ export type PreviousReviewFilesModal = {
 type Props = HTMLProps<HTMLInputElement> & PreviousReviewFilesModal;
 
 const MAX_FILES_LENGTH = 10;
+const MAX_FILE_SIZE = 10 * 1024 * 1024;
 
 const PreviousReviewFilesModal: FC<Props> = ({ onOverlayClick, colleagueUUID, readonly }) => {
   const { css, matchMedia } = useStyle();
@@ -30,11 +31,13 @@ const PreviousReviewFilesModal: FC<Props> = ({ onOverlayClick, colleagueUUID, re
   const [filter, setFilteredValue] = useState('');
   const [showModalLimitExceeded, setShowModalLimitExceeded] = useState(false);
   const [showModalDuplicateFile, setShowModalDuplicateFile] = useState(false);
+  const [showModalSizeExceeded, setShowModalSizeExceeded] = useState('');
   const [fileUuidToRemove, setFileUuidToRemove] = useState('');
 
   const onUpload = (file) => {
     if (files.length >= MAX_FILES_LENGTH) return setShowModalLimitExceeded(true);
     if (files.some((existingFile) => existingFile.fileName === file.name)) return setShowModalDuplicateFile(true);
+    if (file.size > MAX_FILE_SIZE) return setShowModalSizeExceeded(file.name);
     dispatch(PreviousReviewFilesActions.uploadFile({ file, colleagueUUID }));
   };
 
@@ -89,6 +92,19 @@ const PreviousReviewFilesModal: FC<Props> = ({ onOverlayClick, colleagueUUID, re
               <Trans i18nKey='duplicate_file'>Duplicate file. You have already uploaded a file with same name</Trans>
             </div>
             <Button onPress={() => setShowModalDuplicateFile(false)}>
+              <Trans i18nKey='close'>Close</Trans>
+            </Button>
+          </Modal>
+        )}
+        {showModalSizeExceeded && (
+          <Modal
+            modalPosition={mobileScreen ? 'bottom' : 'middle'}
+            modalContainerRule={[containerRule({ mobileScreen }), { height: 'auto' }]}
+          >
+            <div className={css({ marginBottom: '18px', fontSize: '18px' })}>
+              {t('size_limit_exceeded', { fileName: showModalSizeExceeded, size: '10MB' })}
+            </div>
+            <Button onPress={() => setShowModalSizeExceeded('')}>
               <Trans i18nKey='close'>Close</Trans>
             </Button>
           </Modal>
