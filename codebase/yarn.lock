@@ -1632,37 +1632,6 @@
     react-fela "11.6.1"
     react-select "5.1.0"
 
-"@dex-ddl/core@0.1.38":
-  version "0.1.38"
-  resolved "https://nexus.ourtesco.com/repository/colleague-ui-private/@dex-ddl/core/-/core-0.1.38.tgz#2409879ce0dddfa0a17ecd772014c03fe5ef4aed"
-  integrity sha512-0o1C0g1jXijDXG9aq7lXyetPVaHrywC2omh0tg64lmrv8bgvPqLEBeHSiivTGUpVIDFxDivIgWzDVu8lAwWj9A==
-  dependencies:
-    "@energon-components/hooks" "0.9.0"
-    "@energon/array-utils" "0.19.4"
-    "@energon/date-utils" "0.17.0"
-    "@energon/function-utils" "0.2.0"
-    "@energon/number-utils" "0.3.7"
-    "@react-aria/button" "3.3.2"
-    "@react-aria/dialog" "3.1.3"
-    "@react-aria/focus" "3.4.0"
-    "@react-aria/overlays" "3.7.1"
-    "@react-aria/radio" "3.1.4"
-    "@react-aria/visually-hidden" "3.2.2"
-    "@react-stately/overlays" "3.1.2"
-    "@react-stately/radio" "3.3.1"
-    "@react-types/button" "3.4.0"
-    "@react-types/dialog" "3.3.0"
-    "@react-types/overlays" "3.5.0"
-    "@react-types/radio" "3.1.1"
-    caniuse-api "3.0.0"
-    fela "11.6.1"
-    fela-plugin-fallback-value "11.6.1"
-    fela-plugin-prefixer "11.6.1"
-    inline-style-prefixer "6.0.0"
-    patch-package "6.4.7"
-    postinstall-postinstall "2.1.0"
-    react-fela "11.6.1"
-
 "@dex-ddl/core@0.1.43":
   version "0.1.43"
   resolved "https://nexus.ourtesco.com/repository/colleague-ui-private/@dex-ddl/core/-/core-0.1.43.tgz#7605e62e7f87f3dc8da0839eaec2a22a962100f3"

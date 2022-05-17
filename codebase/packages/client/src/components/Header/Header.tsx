@@ -66,7 +66,7 @@ const Header: FC<HeaderProps> = ({ title, onBack, withIcon, iconName = 'home', s
   return (
     <div className={css(wrapperStyles, styles)} data-test-id={TEST_ID}>
       <DataModal />
-      {onBack ? <IconButton onPress={onBack} graphic='backwardLink' data-test-id={BACK_BTN_TEST_ID} /> : <div />}
+      {onBack ? <IconButton onPress={onBack} graphic='backwardLink' testId={BACK_BTN_TEST_ID} /> : <div />}
       <h3 className={css(headerStyles({ mobileScreen, onBack }))}>
         {withIcon && (
           <div className={css(iconWrapperStyle)}>
