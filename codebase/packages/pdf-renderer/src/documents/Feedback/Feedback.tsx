@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { Text, View, StyleSheet } from '@react-pdf/renderer';
 
 import GeneralDocument from '../General';
-import { colors } from '@pma/dex-wrapper';
+import { colors, theme } from '@pma/dex-wrapper';
 
 type QuestionItem = {
   code: string;
@@ -32,7 +32,7 @@ const FeedbackDocument: FC<Props> = ({ items }) => {
     <GeneralDocument>
       <View style={styles.section}>
         {items.map((feedback, idx) => (
-          <View key={feedback.uuid} style={[styles.wrapper, moreThanOne ? styles.border : {}]} wrap={false}>
+          <View key={feedback.uuid} style={[styles.wrapper, moreThanOne ? styles.border : {}]}>
             {moreThanOne && (
               <View style={styles.meta}>
                 <Text style={styles.title}>Feedback #{idx + 1}</Text>
@@ -86,14 +86,12 @@ const styles = StyleSheet.create({
     flexBasis: 22,
   },
   header: {
-    justifyContent: 'space-between',
     flexDirection: 'row',
     flexGrow: 1,
     flexShrink: 1,
     flexBasis: 40,
   },
   title: {
-    lineHeight: 22,
     fontSize: 18,
   },
   leftContent: {
@@ -106,35 +104,31 @@ const styles = StyleSheet.create({
   },
   username: {
     color: '#00539f',
-    lineHeight: 22,
     fontSize: 18,
   },
   department: {
     fontSize: 16,
-    maxHeight: 300,
     marginTop: 20,
   },
   updatedTime: {
-    lineHeight: 20,
     fontSize: 16,
   },
   body: {
-    maxHeight: 600,
-    paddingTop: 50,
+    marginTop: 10,
   },
   questions: {
-    marginTop: 5,
-    marginBottom: 5,
+    marginTop: 20,
     paddingLeft: 20,
   },
   question: {
     fontSize: 14,
-    fontWeight: 'bold',
-    marginBottom: 5,
+    fontWeight: 900,
+    color: theme.colors.active,
+    maxHeight: 100,
   },
   answer: {
     fontSize: 14,
-    overflowWrap: 'anywhere',
+    marginTop: 20,
   },
 });
 
