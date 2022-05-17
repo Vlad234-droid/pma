@@ -156,10 +156,11 @@ const Accordion: FC<Omit<AccordionProps, 'children'>> = ({ children, customStyle
   );
 };
 
-const wrapperStyles: Rule = {
+const wrapperStyles: Rule = ({ theme }) => ({
   position: 'relative',
   marginTop: '25px',
-  borderBottom: `2px solid ${colors.disabled}`,
-};
+  // @ts-ignore
+  borderBottom: `2px solid ${theme.colors.lightGray}`,
+});
 
 export default Accordion;
