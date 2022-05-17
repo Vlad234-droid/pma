@@ -124,6 +124,8 @@ const ModalDownloadFeedback: FC<ModalDownloadFeedbackProps> = ({
       <ArrowLeftIcon
         onClick={() => {
           dispatch(ColleaguesActions.clearColleagueList());
+          setModalSuccess(() => false);
+          setOpenMainModal(() => false);
         }}
       />
     </div>
