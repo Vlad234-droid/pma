@@ -5,8 +5,7 @@ import { Rule, useStyle } from '@pma/dex-wrapper';
 import { colleagueUUIDSelector, timelinesExistSelector } from '@pma/store';
 
 import { Page } from 'pages';
-import { buildAbsolutePath } from 'utils';
-import { CAMUNDA_APP_PATH, LINKS } from 'config/constants';
+import { LINKS } from 'config/constants';
 import { buildPath } from 'features/Routes';
 import { ConfirmModal } from 'features/Modal';
 import { CanPerform, role } from 'features/Permission';
@@ -14,7 +13,8 @@ import { Trans, useTranslation } from 'components/Translation';
 import { useHeaderContainer } from 'contexts/headerContext';
 import { MenuItem } from 'components/MenuItem';
 import TescoLogo from 'assets/img/TescoLogo.svg';
-import { Icon } from '../Icon';
+import { Icon } from 'components/Icon';
+import { MenuDropdown } from './MenuDropdown';
 
 export type MenuDrawerProps = { onClose: () => void };
 
@@ -23,16 +23,11 @@ export const MENU_DRAWER_WRAPPER = 'menu-drawer-wrapper';
 export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
   const { linkTitle } = useHeaderContainer();
   const [isOpen, setIsOpen] = useState(false);
-  const [isOpenDropdown, toggleOpen] = useState(false);
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const timelinesExist = useSelector(timelinesExistSelector(colleagueUuid));
 
   const { css } = useStyle();
   const { t } = useTranslation();
-
-  const handleToggleDropdown = () => {
-    toggleOpen((isOpen) => !isOpen);
-  };
 
   const underlayRef = useRef(null);
 
@@ -107,93 +102,7 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
           </div>
         </div>
         <div className={css(menuDrawerSettingsStyle)}>
-          <CanPerform
-            perform={[role.TALENT_ADMIN, role.ADMIN, role.PROCESS_MANAGER]}
-            yes={() => {
-              return (
-                <>
-                  <div className={css(itemSettingsStyle, adminToolsStyle)} onClick={handleToggleDropdown}>
-                    <Icon graphic={'tool'} />
-                    <span className={css(itemSettingsTextStyle)}>Administrator tools</span>
-                    <Icon
-                      graphic={'arrowDown'}
-                      iconStyles={{
-                        marginLeft: '15px',
-                        transform: isOpenDropdown ? 'rotate(-0deg)' : 'rotate(-90deg)',
-                        transition: 'all .2s ease-in-out',
-                      }}
-                    />
-                  </div>
-                  {isOpenDropdown && (
-                    <div className={css(menuDropdownStyle)}>
-                      <CanPerform
-                        perform={[role.ADMIN]}
-                        yes={() => (
-                          <>
-                            <Link
-                              to={buildPath(Page.PERFORMANCE_CYCLE)}
-                              className={css(itemSettingsStyle, itemSettingsBorderStyle)}
-                            >
-                              <Icon graphic={'createCycle'} />
-                              <span className={css(itemSettingsTextStyle)}>
-                                {t('create_performance_cycle', 'Create performance cycle')}
-                              </span>
-                            </Link>
-                            <Link
-                              to={buildPath(Page.ADMINISTRATION)}
-                              className={css(itemSettingsStyle, itemSettingsBorderStyle)}
-                            >
-                              <Icon graphic={'configuration'} />
-                              <span className={css(itemSettingsTextStyle)}>
-                                {t('configurations', 'Configurations')}
-                              </span>
-                            </Link>
-                          </>
-                        )}
-                      />
-                      <CanPerform
-                        perform={[role.TALENT_ADMIN]}
-                        yes={() => (
-                          <Link
-                            to={buildPath(Page.CREATE_STRATEGIC_DRIVERS)}
-                            className={css(itemSettingsStyle, itemSettingsBorderStyle)}
-                          >
-                            <Icon graphic={'strategicDriver'} />
-                            <span className={css(itemSettingsTextStyle)}>
-                              {t('strategic_drivers', 'Strategic drivers')}
-                            </span>
-                          </Link>
-                        )}
-                      />
-                      <CanPerform
-                        perform={[role.ADMIN]}
-                        yes={() => (
-                          <Link to={buildPath(Page.TIPS)} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
-                            <Icon graphic={'tip'} />
-                            <span className={css(itemSettingsTextStyle)}>{t('tips', 'Tips')}</span>
-                          </Link>
-                        )}
-                      />
-                      <CanPerform
-                        perform={[role.PROCESS_MANAGER, role.ADMIN]}
-                        yes={() => (
-                          <a
-                            href={buildAbsolutePath(CAMUNDA_APP_PATH)}
-                            target={'_blank'}
-                            rel='noreferrer'
-                            className={css(itemSettingsStyle, itemSettingsBorderStyle)}
-                          >
-                            <Icon graphic={'document'} />
-                            <span className={css(itemSettingsTextStyle)}>{t('camunda_admin', 'Camunda Admin')}</span>
-                          </a>
-                        )}
-                      />
-                    </div>
-                  )}
-                </>
-              );
-            }}
-          />
+          <CanPerform perform={[role.TALENT_ADMIN, role.ADMIN, role.PROCESS_MANAGER]} yes={() => <MenuDropdown />} />
           <div className={css(itemSettingsBorderStyle, { marginLeft: '20px' })} />
           <Link to={buildPath(Page.SETTINGS)} className={css(itemSettingsStyle)}>
             <Icon graphic={'settingsGear'} />
@@ -299,14 +208,3 @@ const itemSettingsBorderStyle: Rule = ({ theme }) => ({
   // @ts-ignore
   borderTop: `2px solid ${theme.colors.lightGray}`,
 });
-
-const menuDropdownStyle: Rule = ({ theme }) => ({
-  // @ts-ignore
-  backgroundColor: theme.colors.lightBlue,
-  transition: 'all .5s ease-in-out',
-});
-
-const adminToolsStyle: Rule = {
-  cursor: 'pointer',
-  userSelect: 'none',
-};
