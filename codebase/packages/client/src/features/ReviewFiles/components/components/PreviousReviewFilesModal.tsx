@@ -20,7 +20,7 @@ export type PreviousReviewFilesModal = {
 type Props = HTMLProps<HTMLInputElement> & PreviousReviewFilesModal;
 
 const MAX_FILES_LENGTH = 10;
-const MAX_FILE_SIZE = 10 * 1024 * 1024;
+const MAX_FILE_SIZE_MB = 10;
 
 const PreviousReviewFilesModal: FC<Props> = ({ onOverlayClick, colleagueUUID, readonly }) => {
   const { css, matchMedia } = useStyle();
@@ -37,7 +37,7 @@ const PreviousReviewFilesModal: FC<Props> = ({ onOverlayClick, colleagueUUID, re
   const onUpload = (file) => {
     if (files.length >= MAX_FILES_LENGTH) return setShowModalLimitExceeded(true);
     if (files.some((existingFile) => existingFile.fileName === file.name)) return setShowModalDuplicateFile(true);
-    if (file.size > MAX_FILE_SIZE) return setShowModalSizeExceeded(file.name);
+    if (file.size > MAX_FILE_SIZE_MB * 1024 * 1024) return setShowModalSizeExceeded(file.name);
     dispatch(PreviousReviewFilesActions.uploadFile({ file, colleagueUUID }));
   };
 
@@ -102,7 +102,7 @@ const PreviousReviewFilesModal: FC<Props> = ({ onOverlayClick, colleagueUUID, re
             modalContainerRule={[containerRule({ mobileScreen }), { height: 'auto' }]}
           >
             <div className={css({ marginBottom: '18px', fontSize: '18px' })}>
-              {t('size_limit_exceeded', { fileName: showModalSizeExceeded, size: '10MB' })}
+              {t('size_limit_exceeded', { fileName: showModalSizeExceeded, size: `${MAX_FILE_SIZE_MB}MB` })}
             </div>
             <Button onPress={() => setShowModalSizeExceeded('')}>
               <Trans i18nKey='close'>Close</Trans>
@@ -130,7 +130,7 @@ const PreviousReviewFilesModal: FC<Props> = ({ onOverlayClick, colleagueUUID, re
             <DropZone onUpload={onUpload}>
               <img className={css({ maxWidth: 'inherit' })} src={Upload} alt='Upload' />
               <span className={css(labelStyles)}>{t('Drop file here or click to upload')}</span>
-              <span className={css(descriptionStyles)}>{t('Maximum upload size 5MB')}</span>
+              <span className={css(descriptionStyles)}>{t(`Maximum upload size ${MAX_FILE_SIZE_MB}MB`)}</span>
             </DropZone>
           </div>
         )}
