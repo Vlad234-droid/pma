@@ -33,6 +33,7 @@ import {
   PreviousReviewFilesActions,
   ReviewsActions,
   reviewsMetaSelector,
+  SchemaActions,
   schemaMetaSelector,
   TimelineActions,
   timelinesExistSelector,
@@ -41,7 +42,6 @@ import {
 } from '@pma/store';
 import OrganizationWidget from 'features/Objectives/components/OrganizationWidget/OrganizationWidget';
 import { useNavigate } from 'react-router-dom';
-import useReviewSchema from 'features/Objectives/hooks/useReviewSchema';
 import { Page } from 'pages';
 import { buildPath } from 'features/Routes';
 import Spinner from 'components/Spinner';
@@ -121,16 +121,20 @@ const MyObjectives: FC = () => {
   const [objectives, setObjectives] = useState<OT.Objective[]>([]);
 
   const { loaded: schemaLoaded } = useSelector(schemaMetaSelector);
-  const { loaded: reviewLoaded } = useSelector(reviewsMetaSelector);
+  const { loaded: reviewLoaded, loading: reviewLoading } = useSelector(reviewsMetaSelector);
   const { loaded: timelineLoaded } = useSelector(getTimelineMetaSelector);
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const timelinesExist = useSelector(timelinesExistSelector(colleagueUuid));
   const { loaded: timelinesLoaded } = useSelector(timelinesMetaSelector());
-  const [schema] = useReviewSchema(ReviewType.OBJECTIVE) || {};
+  const schema = useSelector(getReviewSchema(ReviewType.OBJECTIVE));
   const { components = [], markup = { max: 0, min: 0 } } = schema;
   const { descriptions, startDates, statuses } = useSelector(getTimelineSelector(colleagueUuid)) || {};
   const timelineTypes = useSelector(timelineTypesAvailabilitySelector(colleagueUuid)) || {};
   const timelineObjective = useSelector(getTimelineByCodeSelector(ReviewType.OBJECTIVE, USER.current)) || {};
+  const params = useMemo(
+    () => ({ pathParams: { colleagueUuid, type: ReviewType.OBJECTIVE, cycleUuid: 'CURRENT' } }),
+    [colleagueUuid],
+  );
 
   const canShowObjectives = timelineTypes[ObjectiveType.OBJECTIVE];
   const canShowMyReview = timelineTypes[ObjectiveType.MYR] && timelineTypes[ObjectiveType.EYR];
@@ -182,14 +186,8 @@ const MyObjectives: FC = () => {
   useEffect(() => {
     if (colleagueUuid) {
       dispatch(TimelineActions.getTimeline({ colleagueUuid }));
-
-      if (canShowObjectives) {
-        dispatch(
-          ReviewsActions.getColleagueReviews({ pathParams: { colleagueUuid: colleagueUuid, cycleUuid: 'CURRENT' } }),
-        );
-      }
     }
-  }, [colleagueUuid, canShowObjectives]);
+  }, [colleagueUuid]);
 
   useEffect(() => {
     if (timelinesLoaded && !timelinesExist) {
@@ -208,6 +206,18 @@ const MyObjectives: FC = () => {
       setLinkTitle({ [Page.OBJECTIVES_VIEW]: t('reviews', 'Reviews') });
     }
   }, [canShowAnnualReview]);
+
+  useEffect(() => {
+    if (canShowObjectives) {
+      dispatch(ReviewsActions.getReviews(params));
+    }
+    dispatch(SchemaActions.getSchema({ colleagueUuid }));
+
+    return () => {
+      dispatch(ReviewsActions.clearReviewData());
+      dispatch(SchemaActions.clearSchemaData());
+    };
+  }, [colleagueUuid, canShowObjectives]);
 
   return (
     <div data-test-id={TEST_ID}>
@@ -237,12 +247,15 @@ const MyObjectives: FC = () => {
                 </div>
               )}
               <div className={css(timelineWrapperStyles)}>
-                <Objectives
-                  canShowObjectives={canShowObjectives}
-                  objectives={objectives}
-                  canEditAllObjective={canEditAllObjective}
-                />
-
+                {reviewLoading ? (
+                  <Spinner fullHeight />
+                ) : (
+                  <Objectives
+                    canShowObjectives={canShowObjectives}
+                    objectives={objectives}
+                    canEditAllObjective={canEditAllObjective}
+                  />
+                )}
                 <Section
                   contentCustomStyle={widgetWrapperStyle}
                   left={{

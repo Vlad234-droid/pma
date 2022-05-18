@@ -20,17 +20,19 @@ import useDispatch from 'hooks/useDispatch';
 import { useSelector } from 'react-redux';
 import {
   getPreviousReviewFilesSelector,
+  getReviewSchema,
   getTimelineMetaSelector,
   getTimelineSelector,
   PreviousReviewFilesActions,
+  ReviewsActions,
   reviewsMetaSelector,
+  reviewsSelector,
+  SchemaActions,
   schemaMetaSelector,
   TimelineActions,
   timelineTypesAvailabilitySelector,
 } from '@pma/store';
 import { useNavigate, useParams } from 'react-router';
-import useReviewSchema from 'features/Objectives/hooks/useReviewSchema';
-import useReviews from 'features/Objectives/hooks/useReviews';
 import OrganizationWidget from 'features/Objectives/components/OrganizationWidget/OrganizationWidget';
 import { buildPath } from 'features/Routes';
 import { Page } from 'pages';
@@ -58,11 +60,11 @@ export const UserObjectives: FC = () => {
 
   const [previousReviewFilesModalShow, setPreviousReviewFilesModalShow] = useState(false);
   const [objectives, setObjectives] = useState<OT.Objective[]>([]);
-  const [schema] = useReviewSchema(ReviewType.OBJECTIVE);
+  const schema = useSelector(getReviewSchema(ReviewType.OBJECTIVE));
   const { components = [] } = schema;
 
   const { loaded: schemaLoaded } = useSelector(schemaMetaSelector);
-  const { loaded: reviewLoaded } = useSelector(reviewsMetaSelector);
+  const { loaded: reviewLoaded, loading: reviewLoading } = useSelector(reviewsMetaSelector);
   const { loaded: timelineLoaded } = useSelector(getTimelineMetaSelector);
   const { uuid } = useParams<{ uuid: string }>();
   const { descriptions, startDates, statuses } = useSelector(getTimelineSelector(uuid)) || {};
@@ -75,7 +77,7 @@ export const UserObjectives: FC = () => {
     () => ({ pathParams: { colleagueUuid: uuid, type: ReviewType.OBJECTIVE, cycleUuid: 'CURRENT' } }),
     [uuid],
   );
-  const [origin] = useReviews(params);
+  const { data } = useSelector(reviewsSelector);
   const formElements = components.filter((component) => component.type != 'text');
 
   // todo not clear where reviews might come from. remove this block when its clear
@@ -106,13 +108,25 @@ export const UserObjectives: FC = () => {
 
   useEffect(() => {
     if (reviewLoaded && schemaLoaded) {
-      setObjectives(transformReviewsToObjectives(origin, formElements));
+      setObjectives(transformReviewsToObjectives(data, formElements));
     }
   }, [reviewLoaded, schemaLoaded]);
 
   useEffect(() => {
     dispatch(PreviousReviewFilesActions.getPreviousReviewFiles({ colleagueUUID: uuid }));
   }, []);
+
+  useEffect(() => {
+    dispatch(ReviewsActions.getReviews(params));
+    if (uuid) {
+      dispatch(SchemaActions.getSchema({ colleagueUuid: uuid }));
+    }
+
+    return () => {
+      dispatch(ReviewsActions.clearReviewData());
+      dispatch(SchemaActions.clearSchemaData());
+    };
+  }, [uuid]);
 
   return (
     <div data-test-id={TEST_ID} className={css(bodyBlockStyles({ mobileScreen }))}>
@@ -162,7 +176,11 @@ export const UserObjectives: FC = () => {
                     ),
                   }}
                 >
-                  <Accordion objectives={objectives} canShowStatus={true} isButtonsVisible={false} />
+                  {reviewLoading ? (
+                    <Spinner fullHeight />
+                  ) : (
+                    <Accordion objectives={objectives} canShowStatus={true} isButtonsVisible={false} />
+                  )}
                 </Section>
               )}
 
