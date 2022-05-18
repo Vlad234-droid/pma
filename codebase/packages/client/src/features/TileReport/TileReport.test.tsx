@@ -74,16 +74,6 @@ describe('TileReport', () => {
     expect(wrapper).toBeInTheDocument();
   });
 
-  it('should render back button', async () => {
-    const { getByTestId } = render(
-      <BrowserRouter>
-        <TileReport />
-      </BrowserRouter>,
-    );
-
-    expect(getByTestId('test-back-button')).toBeInTheDocument();
-  });
-
   it('should render PieChart', async () => {
     const { getByTestId } = render(
       <BrowserRouter>
