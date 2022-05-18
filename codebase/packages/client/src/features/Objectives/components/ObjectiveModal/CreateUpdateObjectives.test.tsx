@@ -4,10 +4,7 @@ import { renderWithTheme as render, screen } from 'utils/test';
 import { SchemaFixture } from 'utils/test/fixtures/schema';
 import { act, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-
 import { CreateUpdateObjectives } from './CreateUpdateObjectives';
-
-import * as ReviewQuery from 'features/Objectives/hooks/useReviews';
 import { FormType, ReviewsActions } from '@pma/store';
 
 describe('CreateUpdateObjectives', () => {
@@ -130,7 +127,7 @@ describe('CreateUpdateObjectives', () => {
   });
 
   describe('CreateUpdateObjectives one review in draft', () => {
-    let renderer, addMockReviewsQuery, onClose;
+    let renderer, onClose;
     const approvalSubmissionText = /Submit Objectives/i;
     beforeEach(() => {
       onClose = jest.fn();
@@ -192,18 +189,6 @@ describe('CreateUpdateObjectives', () => {
           },
         ],
       };
-      addMockReviewsQuery = jest.spyOn(ReviewQuery, 'default').mockReturnValue([
-        [
-          {
-            number: 1,
-            status: 'DRAFT',
-            properties: {
-              textfield: 'textfield_textfield',
-            },
-          },
-        ],
-        () => true,
-      ]);
       renderer = render(<CreateUpdateObjectives onClose={onClose} />, { schema, reviews, timeline });
     });
     afterEach(() => {
