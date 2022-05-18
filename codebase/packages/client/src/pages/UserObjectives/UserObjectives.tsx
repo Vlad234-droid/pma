@@ -115,8 +115,8 @@ export const UserObjectives: FC = () => {
   }, []);
 
   return (
-    <div className={css(bodyBlockStyles({ mobileScreen }))}>
-      <div className={css(arrowLeftStyle)}>
+    <div data-test-id={TEST_ID} className={css(bodyBlockStyles({ mobileScreen }))}>
+      <div data-test-id={'test-back-btn'} className={css(arrowLeftStyle)}>
         <BackButton
           onPress={() => {
             navigate(-1);
@@ -124,13 +124,13 @@ export const UserObjectives: FC = () => {
           graphic='backwardLink'
         />
       </div>
-      <div className={css(bodyWrapperStyles)} data-test-id={TEST_ID}>
+      <div className={css(bodyWrapperStyles)}>
         {!timelineLoaded ? (
           <Spinner id='1' />
         ) : (
           <>
             {!mobileScreen && canShowMyReview && (
-              <div onClick={handleClick} className={css(timelineWrapperStyles)}>
+              <div data-test-id={'test-step-indicator'} onClick={handleClick} className={css(timelineWrapperStyles)}>
                 <StepIndicator
                   mainTitle={t('performance_timeline_title', 'Your Contribution timeline')}
                   titles={descriptions}
@@ -154,7 +154,9 @@ export const UserObjectives: FC = () => {
                           customVariantRules={{ default: iconButtonStyles }}
                           iconStyles={iconStyles}
                         >
-                          <Trans i18nKey='download'>Download</Trans>
+                          <Trans data-test-id={'test-download-btn'} i18nKey='download'>
+                            Download
+                          </Trans>
                         </IconButton>
                       </div>
                     ),
@@ -196,7 +198,7 @@ export const UserObjectives: FC = () => {
       </div>
       <div className={css(headWrapperStyles({ mobileScreen }))}>
         {!timelineLoaded && (
-          <div className={css(timelineWrapperStyles)}>
+          <div data-test-id={'test-timeline-spinner'} className={css(timelineWrapperStyles)}>
             <Spinner id='2' />
           </div>
         )}

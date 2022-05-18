@@ -187,11 +187,12 @@ const accordionHeaderWrapperStyles: Rule = {
 };
 
 const accordionHeaderStyles: Rule = ({ theme }) => ({
-  borderTop: `2px solid ${theme.colors.disabled}`,
   paddingTop: '10px',
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'center',
+  // @ts-ignore
+  borderTop: `2px solid ${theme.colors.lightGray}`,
 });
 
 const accordionHeaderTitleStyles: Rule = ({ theme }) => ({

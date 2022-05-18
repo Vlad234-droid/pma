@@ -14,5 +14,5 @@ it('render Avatar with image', async () => {
 
 it('render Avatar without image', async () => {
   wrapper = renderWithTheme(<Avatar />);
-  expect(wrapper.getByText('account')).toBeInTheDocument();
+  expect(wrapper.getByTestId('test-id-account-icon')).toBeInTheDocument();
 });

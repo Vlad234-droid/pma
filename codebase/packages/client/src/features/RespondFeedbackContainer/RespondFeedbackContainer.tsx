@@ -47,6 +47,7 @@ const RespondFeedbackContainer: FC = () => {
           ...(filter.search.length > 2 && buildSearchFeedbacksQuery(filter.search)),
           _sort: getSortString(filter),
           status_in: [FEEDBACK_STATUS_IN.PENDING, FEEDBACK_STATUS_IN.COMPLETED],
+          statuses_in: [FeedbackStatus.SUBMITTED, FeedbackStatus.COMPLETED],
         }),
       );
     }, 300),

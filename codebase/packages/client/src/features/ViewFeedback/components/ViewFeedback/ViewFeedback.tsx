@@ -23,7 +23,7 @@ import { Icon } from 'components/Icon';
 import { HelpModalReceiveFeedback, ModalDownloadFeedback } from '../ModalParts';
 
 import { FilterModal } from '../../../Shared/components/FilterModal';
-import { FEEDBACK_STATUS_IN, Tesco } from 'config/enum';
+import { FEEDBACK_STATUS_IN, FeedbackStatus, Tesco } from 'config/enum';
 import { Page } from 'pages';
 import { buildPath } from 'features/Routes';
 import debounce from 'lodash.debounce';
@@ -86,6 +86,7 @@ const ViewFeedback: FC = () => {
           ...(filter.search.length > 2 && buildSearchFeedbacksQuery(filter.search)),
           _sort: getSortString(filter),
           status_in: [FEEDBACK_STATUS_IN.SUBMITTED, FEEDBACK_STATUS_IN.COMPLETED],
+          statuses_in: [FeedbackStatus.SUBMITTED, FeedbackStatus.COMPLETED],
         }),
       );
     }, 300),
@@ -187,6 +188,7 @@ const ViewFeedback: FC = () => {
                 <Trans i18nKey='give_feedback_to_a_colleague'>Give feedback to a colleague</Trans>
               </p>
               <Button
+                data-test-id='give-feedback'
                 styles={[iconBtnStyle]}
                 onPress={() => {
                   navigate(buildPath(Page.GIVE_FEEDBACK));
@@ -240,6 +242,7 @@ const ViewFeedback: FC = () => {
           }}
         >
           <ModalDownloadFeedback
+            data-test-id={'test-modal-download-feedback'}
             setOpenMainModal={setOpenMainModal}
             modalSuccess={modalSuccess}
             setModalSuccess={setModalSuccess}
