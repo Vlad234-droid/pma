@@ -19,7 +19,6 @@ import { MenuDropdown } from './MenuDropdown';
 export type MenuDrawerProps = { onClose: () => void };
 
 export const MENU_DRAWER_WRAPPER = 'menu-drawer-wrapper';
-// export const DROPDOWN_BTN = 'dropdown-btn';
 
 export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
   const { linkTitle } = useHeaderContainer();
