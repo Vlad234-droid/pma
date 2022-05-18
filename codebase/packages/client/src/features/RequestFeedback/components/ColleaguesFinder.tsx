@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Rule, useStyle } from '@pma/dex-wrapper';
+import { Rule, Styles, useStyle } from '@pma/dex-wrapper';
 import { Icon } from 'components/Icon';
 import useSearchColleagues from 'hooks/useSearchColleagues';
 import { Item as FormItem } from 'components/Form';
@@ -11,9 +11,10 @@ type Props = {
   onBlur: () => void;
   selected: Array<{ value: string; label: string }>;
   error: string;
+  customStyles?: Rule | Styles;
 };
 
-const ColleaguesFinder: FC<Props> = ({ onSelect, onBlur, error, selected }) => {
+const ColleaguesFinder: FC<Props> = ({ onSelect, onBlur, error, selected, customStyles }) => {
   const { css } = useStyle();
 
   const { colleagues, handleSearchColleagues, clearColleagueList } = useSearchColleagues();
@@ -26,14 +27,14 @@ const ColleaguesFinder: FC<Props> = ({ onSelect, onBlur, error, selected }) => {
 
   return (
     <>
-      <div className={css({ marginTop: '32px' })} data-test-id='search-part'>
+      <div className={css({ marginTop: '32px' }, { ...customStyles })} data-test-id='search-part'>
         <FormItem
           withIcon={false}
           marginBot={false}
           customIcon
           searchIcon
           // @ts-ignore
-          customIconInserted={<Icon graphic='search' iconStyles={iconStyles} />}
+          customIconInserted={<Icon size={'20px'} graphic='search' iconStyles={iconStyles} />}
           errormessage={error}
         >
           <SearchInput
@@ -72,7 +73,7 @@ const ColleaguesFinder: FC<Props> = ({ onSelect, onBlur, error, selected }) => {
 };
 
 const iconStyles: Rule = {
-  width: '16.67px',
+  marginTop: '4px',
 };
 
 const FlexGapStyle: Rule = {
