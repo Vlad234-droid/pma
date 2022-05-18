@@ -2,11 +2,7 @@ import React, { FC } from 'react';
 import NotesActions from 'features/NotesActions';
 
 const Notes: FC = () => {
-  return (
-    <div>
-      <NotesActions />
-    </div>
-  );
+  return <NotesActions />;
 };
 
 export default Notes;

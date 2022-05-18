@@ -4,7 +4,6 @@ import { IconButton } from 'components/IconButton';
 import { Input } from 'components/Form/Input';
 import { Icon, RoundIcon } from 'components/Icon';
 import { Item } from 'components/Form';
-import { AlertBadge } from '../../Messages';
 
 type FilterOptionProps = {
   onSettingsPress?: () => void;
@@ -72,7 +71,6 @@ export const FilterOption: FC<FilterOptionProps> = ({
         <div className={css({ marginLeft: '5px' })}>
           <RoundIcon>
             <IconButton onPress={onEditPress} graphic='edit' />
-            <AlertBadge />
           </RoundIcon>
         </div>
       )}

@@ -1,45 +1,63 @@
 import React, { FC } from 'react';
-import { useStyle, Rule, Styles } from '@pma/dex-wrapper';
+import { useStyle, Rule, Styles, CreateRule } from '@pma/dex-wrapper';
 import { useTranslation } from 'components/Translation';
 import { TableProps as Props } from './types';
 
 export const TABLE_WRAPPER = 'table-wrapper';
 
-const Table: FC<Props> = ({ currentItems, tableTitles }) => {
+const Table: FC<Props> = ({
+  currentItems,
+  tableTitles,
+  tableStyles = {},
+  titleCustomStyles = {},
+  descriptionCustomStyle = {},
+  trCustomStyle = {},
+  breakTd = false,
+}) => {
   const { css } = useStyle();
   const { t } = useTranslation();
 
+  const breakWord = (text) => {
+    return (
+      <>
+        {text.reduce((acc, item, i) => {
+          if (!i) return [...acc, item];
+          return [...acc, <br key={i} />, item];
+        }, [])}
+      </>
+    );
+  };
+
   return (
-    <>
-      <div data-test-id={TABLE_WRAPPER} className={css(tableContainer)}>
-        <div className={css(wrapper)}>
-          <div className={css(innerWrapper)}>
-            <table className={css(tableStyle)}>
-              <thead>
-                <tr className={css(tableTitlesStyle)}>
-                  {tableTitles?.map((item) => (
-                    <th className={css(contentStyle)} key={item}>
-                      {t(item)}
-                    </th>
+    <div data-test-id={TABLE_WRAPPER} className={css(tableContainer, tableStyles)}>
+      <div className={css(wrapper)}>
+        <div className={css(innerWrapper)}>
+          <table className={css(tableStyle)}>
+            <thead>
+              <tr className={css(tableTitlesStyle)}>
+                {tableTitles?.map((item) => (
+                  <th className={css(contentStyle, titleRow({ item }), titleCustomStyles)} key={item}>
+                    {t(item)}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {currentItems?.map((item, i) => (
+                <tr key={i} className={css(trCustomStyle)}>
+                  {Object.values(item)?.map((desc, i) => (
+                    <td key={`${desc}${i}`} className={css(contentStyle, descriptionStyle, descriptionCustomStyle)}>
+                      {/*@ts-ignore*/}
+                      {!i ? desc : !breakTd ? desc : breakWord(desc ? desc?.split(' ') ?? desc : desc)}
+                    </td>
                   ))}
                 </tr>
-              </thead>
-              {currentItems?.map((item, i) => (
-                <tbody key={i}>
-                  <tr className={css(descriptionStyle)}>
-                    {Object.values(item)?.map((desc, i) => (
-                      <td key={`${desc}${i}`} className={css(contentStyle)}>
-                        {desc as string}
-                      </td>
-                    ))}
-                  </tr>
-                </tbody>
               ))}
-            </table>
-          </div>
+            </tbody>
+          </table>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
@@ -51,9 +69,13 @@ const contentStyle: Rule = ({ theme }) => ({
   textAlign: 'center',
   verticalAlign: 'middle',
 });
+const titleRow: CreateRule<{ item: string }> =
+  ({ item }) =>
+  ({ theme }) => ({
+    background: item ? theme.colors.tescoBlue : theme.colors.white,
+  });
 const tableTitlesStyle: Rule = ({ theme }) =>
   ({
-    background: theme.colors.tescoBlue,
     color: theme.colors.white,
     '& > th': {
       fontWeight: '700',

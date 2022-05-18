@@ -38,6 +38,9 @@ import { buildPath } from 'features/Routes';
 import { Page } from 'pages';
 import Spinner from 'components/Spinner';
 import { File } from '../../features/ReviewFiles/components/components/File';
+import SecondaryWidget, { Props as SecondaryWidgetProps } from 'features/SecondaryWidget';
+import { CanPerform, role } from 'features/Permission';
+import { paramsReplacer } from 'utils';
 
 const reviews = [];
 
@@ -72,6 +75,8 @@ export const UserObjectives: FC = () => {
   const canShowObjectives = timelineTypes[ObjectiveType.OBJECTIVE];
   const canShowMyReview = timelineTypes[ObjectiveType.MYR] && timelineTypes[ObjectiveType.EYR];
   const canShowAnnualReview = !timelineTypes[ObjectiveType.MYR] && timelineTypes[ObjectiveType.EYR];
+  //TODO: temporary solution, in future replace to selector
+  const isSubmittingSecondaryWidget = false;
   const files: File[] = useSelector(getPreviousReviewFilesSelector) || [];
   const params = useMemo(
     () => ({ pathParams: { colleagueUuid: uuid, type: ReviewType.OBJECTIVE, cycleUuid: 'CURRENT' } }),
@@ -128,6 +133,39 @@ export const UserObjectives: FC = () => {
     };
   }, [uuid]);
 
+  const widgets: Array<SecondaryWidgetProps> = [
+    {
+      iconGraphic: 'list',
+      title: t('view_previous_ratings', 'View previous ratings'),
+      customStyle: { flex: '2 1 150px' },
+      //@ts-ignore
+      onClick: () => navigate(paramsReplacer(`/${Page.PREVIOUS_RATINGS_TILES}`, { ':uuid': uuid })),
+    },
+    {
+      iconGraphic: 'chatSq',
+      title: isSubmittingSecondaryWidget
+        ? t('submit_calibration_ratings', 'Submit calibration ratings')
+        : t('edit_calibration_ratings', 'Edit calibration ratings'),
+      data: isSubmittingSecondaryWidget
+        ? t('Submit calibration ratings', 'Submit calibration ratings')
+        : t('ratings_are_submitted', 'Ratings are submitted'),
+      customStyle: { flex: '2 1 150px' },
+      background: isSubmittingSecondaryWidget ? 'tescoBlue' : 'white',
+      hover: false,
+      onClick: () =>
+        navigate(
+          paramsReplacer(`/${Page.CALIBRATION_RATINGS}`, { ':type': isSubmittingSecondaryWidget ? 'submit' : 'edit' }),
+        ),
+    },
+    {
+      iconGraphic: 'edit',
+      title: t('managing_performance', 'Managing performance'),
+      data: t('start_syp', 'Start SYP'),
+      customStyle: { flex: '2 1 150px' },
+      onClick: () => console.log(''),
+    },
+  ];
+
   return (
     <div data-test-id={TEST_ID} className={css(bodyBlockStyles({ mobileScreen }))}>
       <div data-test-id={'test-back-btn'} className={css(arrowLeftStyle)}>
@@ -183,6 +221,16 @@ export const UserObjectives: FC = () => {
                   )}
                 </Section>
               )}
+              <CanPerform
+                perform={[role.LINE_MANAGER]}
+                yes={() => (
+                  <div className={css(secondaryWidgetStyles)}>
+                    {widgets.map((props, i) => (
+                      <SecondaryWidget customStyle={widgetStyle} key={i} {...props} />
+                    ))}
+                  </div>
+                )}
+              />
 
               <Section
                 left={{
@@ -249,6 +297,19 @@ export const UserObjectives: FC = () => {
     </div>
   );
 };
+
+const widgetStyle: Rule = ({ theme }) => ({
+  fontSize: theme.font.fixed.f16.fontSize,
+  lineHeight: theme.font.fixed.f16.lineHeight,
+  letterSpacing: '0px',
+});
+const secondaryWidgetStyles: Rule = () => ({
+  margin: '48px 0px',
+  display: 'flex',
+  flexWrap: 'wrap',
+  height: '176px',
+  gap: '8px',
+});
 
 const bodyBlockStyles: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => ({
   display: 'flex',

@@ -26,6 +26,7 @@ export enum FormType {
   TEXT_FIELD = 'textfield',
   SELECT = 'select',
   TEXT = 'text',
+  RADIO = 'radio',
 }
 
 export enum FEEDBACK_STATUS_IN {

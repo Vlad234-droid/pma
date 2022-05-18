@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { FC, CSSProperties } from 'react';
 import { Rule, Styles, useStyle } from '@pma/dex-wrapper';
 
-const NotificationTile = ({ children }) => {
+const NotificationTile: FC<{ styles?: Rule | Styles | CSSProperties | {} }> = ({ children, styles = {} }) => {
   const { css } = useStyle();
-  return <div className={css(notificationBlockStyle)}>{children}</div>;
+  return <div className={css(notificationBlockStyle, styles)}>{children}</div>;
 };
 
 const notificationBlockStyle: Rule = ({ theme }) => {
@@ -14,8 +14,8 @@ const notificationBlockStyle: Rule = ({ theme }) => {
     background: theme.colors.lightBlue,
     borderRadius: theme.spacing.s2_5,
     '& > p': {
-      fontSize: theme.font.fixed.f14.fontSize,
-      lineHeight: theme.font.fixed.f14.lineHeight,
+      fontSize: theme.font.fixed.f16.fontSize,
+      lineHeight: theme.font.fixed.f16.lineHeight,
       letterSpacing: '0px',
       margin: theme.spacing.s0,
     },

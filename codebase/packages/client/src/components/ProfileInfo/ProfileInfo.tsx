@@ -12,9 +12,10 @@ type ProfileInfoProps = {
   job: string;
   department: string;
   toneOfVoice: string;
+  single?: boolean;
 };
 
-const GiveFeedbackProfileInfo: FC<ProfileInfoProps> = ({ firstName, lastName, job, department, toneOfVoice }) => {
+const ProfileInfo: FC<ProfileInfoProps> = ({ firstName, lastName, job, department, toneOfVoice, single = false }) => {
   const { css } = useStyle();
   const { t } = useTranslation();
   return (
@@ -26,13 +27,14 @@ const GiveFeedbackProfileInfo: FC<ProfileInfoProps> = ({ firstName, lastName, jo
         <h3 className={css(names_Style)}>{`${firstName ?? ''} ${lastName ?? ''}`}</h3>
         <p className={css(industryStyle)}>{`${job ?? ''}${department && job ? ',' : ''} ${department ?? ''}`}</p>
         <span className={css(treatmentStyle)} data-test-id={TONE_VOICE}>
-          {t('i_prefer_feedback_that_is', `I prefer feedback that is: ${toneOfVoice}`, { toneOfVoice })}
+          {single
+            ? toneOfVoice
+            : t('i_prefer_feedback_that_is', `I prefer feedback that is: ${toneOfVoice}`, { toneOfVoice })}
         </span>
       </div>
     </div>
   );
 };
-
 const blockInfo: Rule = {
   display: 'inline-flex',
   alignItems: 'center',
@@ -63,4 +65,4 @@ const treatmentStyle: Rule = ({ theme }) => ({
   color: theme.colors.link,
 });
 
-export default GiveFeedbackProfileInfo;
+export default ProfileInfo;

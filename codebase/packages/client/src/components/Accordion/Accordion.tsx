@@ -1,5 +1,5 @@
 import React, { FC, KeyboardEvent, ReactNode, useState, useEffect } from 'react';
-import { useStyle, Rule, colors } from '@pma/dex-wrapper';
+import { useStyle, Rule } from '@pma/dex-wrapper';
 
 import { ARROW_DOWN, ARROW_UP, HOME, END } from './constans';
 import { AccordionProvider } from './contexts';

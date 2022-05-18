@@ -28,6 +28,12 @@ import Calibration from './Calibration';
 import AdministratorPage from './AdministratorPage';
 import RespondNewFeedback from './RespondNewFeedback';
 import TileReportStatistics from './TileReportStatistics';
+import CalibrationRatings from './CalibrationRatings';
+import PreviousRatingsTiles from './PreviousRatingsTiles';
+import PreviousCalibrationRatings from './PreviousCalibrationRatings';
+import PreviousObjectiveRatings from './PreviousObjectiveRatings';
+import PreviousReviewForms from './PreviousReviewForms';
+import SupportingYourPerformance from './SupportingYourPerformance';
 import { NotFound } from './NotFound';
 
 export type PageComponent = {
@@ -257,6 +263,41 @@ const pages: Record<Page, PageComponent> = {
     withHeader: true,
     backPath: Page.CONTRIBUTION,
     perform: [role.ADMIN],
+  },
+  [Page.CALIBRATION_RATINGS]: {
+    Element: CalibrationRatings,
+    withHeader: false,
+    perform: [role.LINE_MANAGER],
+  },
+  [Page.PREVIOUS_RATINGS_TILES]: {
+    Element: PreviousRatingsTiles,
+    title: 'Previous Ratings',
+    withHeader: true,
+    perform: [role.LINE_MANAGER],
+  },
+  [Page.PREVIOUS_CALIBRATION_RATINGS]: {
+    Element: PreviousCalibrationRatings,
+    title: 'Previous Ratings',
+    withHeader: true,
+    perform: [role.LINE_MANAGER],
+  },
+  [Page.PREVIOUS_OBJECTIVES_RATINGS]: {
+    Element: PreviousObjectiveRatings,
+    title: 'Objectives',
+    withHeader: true,
+    perform: [role.LINE_MANAGER],
+  },
+  [Page.PREVIOUS_REVIEW_FORMS]: {
+    Element: PreviousReviewForms,
+    title: 'Review forms',
+    withHeader: true,
+    perform: [role.LINE_MANAGER],
+  },
+  [Page.SUPPORTING_YOUR_PERFORMANCE]: {
+    Element: SupportingYourPerformance,
+    title: 'Supporting Your Performance',
+    withHeader: true,
+    perform: [role.LINE_MANAGER],
   },
   [Page.NOT_FOUND]: {
     Element: NotFound,
