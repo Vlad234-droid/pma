@@ -1,64 +1,68 @@
-import React, { FC } from 'react';
+import React, { FC, MouseEvent, useRef } from 'react';
 import { colors, CreateRule, Rule, Styles, theme, useStyle } from '@pma/dex-wrapper';
 import { getFoldersSelector } from '@pma/store';
 import { useSelector } from 'react-redux';
 
 import { IconButton } from 'components/IconButton';
 import { Trans } from 'components/Translation';
+
 import { formatToRelativeDate } from 'utils/date';
 import { getNotesFolderTitle } from 'utils/note';
 import { SelectedFolderProps } from '../../../type';
+import { useNotesContainer } from '../../../contexts';
+import useEventListener from 'hooks/useEventListener';
 
 export const FOLDER_WRAPPER = 'folder-wrapper';
 
 const SelectedFolder: FC<SelectedFolderProps> = ({
-  selectedFolder,
   setConfirmModal,
-  selectedNoteId,
   actionModal,
-  setSelectedFolder,
-  foldersWithNotes,
-  setFoldersWithNotes,
-  selectedFolderId,
-  noteFolderUuid,
-  setSelectedNoteToEdit,
-  isUserArchived = false,
-  setSelectedTEAMNoteToEdit,
-  selectedTEAMNoteId,
   actionTEAMModal,
   setConfirmTEAMModal,
-  noteTEAMFolderUuid,
   testId = '',
+  userActions,
+  teamActions,
 }) => {
   const { css, matchMedia } = useStyle();
   const mediumScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
 
+  const ref = useRef<HTMLDivElement | null>();
+
+  const { archiveMode, selectedFolder, setSelectedFolder, setSelectedNoteToEdit, setSelectedTEAMNoteToEdit } =
+    useNotesContainer();
+
+  const isUserArchived = archiveMode.user;
+
   const btnActionsData = [
     {
-      buttonID: '1',
-      elID: 'backdrop',
-      testID: 'backdrop-archive',
-      currentAction: 'archive',
-      button: {
-        graphic: 'archive',
-        title: 'Archive',
-        testID: 'backdrop-archive-icon',
-        translateID: 'archive_note',
-        text: 'Archive note',
-      },
+      ...(!archiveMode.user && {
+        buttonID: '1',
+        elID: 'backdrop',
+        testID: 'backdrop-archive',
+        currentAction: 'archive',
+        button: {
+          graphic: 'archive',
+          title: 'Archive',
+          testID: 'backdrop-archive-icon',
+          translateID: 'archive_note',
+          text: 'Archive note',
+        },
+      }),
     },
     {
-      buttonID: '2',
-      elID: 'backdrop',
-      testID: 'backdrop-folder',
-      currentAction: 'move',
-      button: {
-        graphic: 'folder',
-        title: 'Move to folder',
-        testID: 'backdrop-folder-icon',
-        translateID: 'move_to_folder',
-        text: 'Move to folder',
-      },
+      ...(!archiveMode.user && {
+        buttonID: '2',
+        elID: 'backdrop',
+        testID: 'backdrop-folder',
+        currentAction: 'move',
+        button: {
+          graphic: 'folder',
+          title: 'Move to folder',
+          testID: 'backdrop-folder-icon',
+          translateID: 'move_to_folder',
+          text: 'Move to folder',
+        },
+      }),
     },
     {
       buttonID: '3',
@@ -75,8 +79,18 @@ const SelectedFolder: FC<SelectedFolderProps> = ({
     },
   ];
 
-  const btnsActionsHandle = (itemId: string, itemFolderUuid: string | null, item: any) => {
+  const handleClickOutside = (event: MouseEvent<HTMLElement>) => {
+    const element = event?.target as HTMLElement;
+    if (ref.current && !ref.current.contains(element)) {
+      setSelectedFolder((prev) => ({ ...prev, notes: prev.notes.map((item) => ({ ...item, selected: false })) }));
+    }
+  };
+
+  useEventListener('mousedown', handleClickOutside);
+
+  const buttonsHandler = (itemId: string, itemFolderUuid: string | null, item: any) => {
     const btnsActions = btnActionsData.map((el, idx) => {
+      if (!Object.keys(el).length) return;
       return {
         id: el.buttonID,
         button: (
@@ -86,45 +100,57 @@ const SelectedFolder: FC<SelectedFolderProps> = ({
             data-test-id={el.testID}
             onClick={() => {
               if (!item.referenceColleagueUuid) {
-                selectedNoteId.current = itemId;
+                userActions.noteId = itemId;
+                // @ts-ignore
                 actionModal.current = el.currentAction;
                 setConfirmModal(() => true);
+                if (idx === 1) {
+                  teamActions.folderUuid = itemFolderUuid;
+                  userActions.folderUuid = itemFolderUuid;
+                }
               } else {
-                selectedTEAMNoteId.current = itemId;
+                teamActions.noteId = itemId;
+                // @ts-ignore
                 actionTEAMModal.current = el.currentAction;
                 setConfirmTEAMModal(() => true);
                 if (idx === 1) {
-                  noteTEAMFolderUuid.current = itemFolderUuid;
-                  noteFolderUuid.current = itemFolderUuid;
+                  teamActions.folderUuid = itemFolderUuid;
+                  userActions.folderUuid = itemFolderUuid;
                 }
               }
             }}
           >
             <IconButton
-              iconProps={{ title: el.button.title }}
-              id={el.button.testID}
+              iconProps={{ title: el?.button?.title }}
+              id={el?.button?.testID}
               customVariantRules={{ default: notePropertiesIconStyle }}
               // @ts-ignore
               graphic={el.button.graphic}
-              data-test-id={el.button.testID}
+              data-test-id={el?.button?.testID}
               onPress={() => {
                 if (!item.referenceColleagueUuid) {
-                  selectedNoteId.current = itemId;
+                  userActions.noteId = itemId;
+                  // @ts-ignore
                   actionModal.current = el.currentAction;
                   setConfirmModal(() => true);
+                  if (idx === 1) {
+                    teamActions.folderUuid = itemFolderUuid;
+                    userActions.folderUuid = itemFolderUuid;
+                  }
                 } else {
-                  selectedTEAMNoteId.current = itemId;
+                  teamActions.noteId = itemId;
+                  // @ts-ignore
                   actionTEAMModal.current = el.currentAction;
                   setConfirmTEAMModal(() => true);
                   if (idx === 1) {
-                    noteTEAMFolderUuid.current = itemFolderUuid;
-                    noteFolderUuid.current = itemFolderUuid;
+                    teamActions.folderUuid = itemFolderUuid;
+                    userActions.folderUuid = itemFolderUuid;
                   }
                 }
               }}
             />
             <span className={css({ whiteSpace: 'nowrap', marginLeft: '8px' })} id={el.elID}>
-              <Trans i18nKey={el.button.translateID}>{el.button.text}</Trans>
+              <Trans i18nKey={el?.button?.translateID}>{el?.button?.text}</Trans>
             </span>
           </div>
         ),
@@ -132,41 +158,16 @@ const SelectedFolder: FC<SelectedFolderProps> = ({
     });
 
     return (
-      <div className={css(modalButtonsStyle({ isUserArchived }))} data-test-id='button-dots'>
+      //@ts-ignore
+      <div ref={ref} className={css(modalButtonsStyle({ isUserArchived }))} data-test-id='button-dots'>
         {btnsActions.map((item) => (
-          <div key={item.id}>{item.button}</div>
+          <div key={item?.id}>{item?.button}</div>
         ))}
       </div>
     );
   };
 
-  const selectedNoteActionhandler = (noteId) => {
-    selectedFolderId.current = null;
-
-    if (foldersWithNotes.length) {
-      setFoldersWithNotes((prev) => {
-        const arr = [...prev];
-        arr.forEach((item) => {
-          item.selectedDots = false;
-        });
-        return arr;
-      });
-    }
-
-    if (selectedFolder.notes[selectedFolder?.notes?.findIndex((item) => item.selected === true)]) {
-      setSelectedFolder((prev) => {
-        const arr = { ...prev };
-        arr.notes[arr.notes.findIndex((item) => item.id === noteId)].selected = false;
-        return arr;
-      });
-      return;
-    }
-    setSelectedFolder((prev) => {
-      const arr = { ...prev };
-      arr.notes.forEach((item) => (item.selected = false));
-      return arr;
-    });
-
+  const selectedNoteHandler = (noteId) => {
     setSelectedFolder((prev) => {
       const arr = { ...prev };
       arr.notes[arr.notes.findIndex((item) => item.id === noteId)].selected = true;
@@ -176,13 +177,6 @@ const SelectedFolder: FC<SelectedFolderProps> = ({
 
   const setSelectedNoteHandler = (e, item) => {
     if (isUserArchived || e.target.parentElement.id === 'backdrop' || e.target.id === 'backdrop') return;
-    if (selectedFolder.notes[selectedFolder?.notes?.findIndex((item) => item.selected === true)]) {
-      setSelectedFolder((prev) => {
-        const arr = { ...prev };
-        arr.notes[arr.notes.findIndex((note) => note.id === item.id)].selected = false;
-        return arr;
-      });
-    }
     if (item.referenceColleagueUuid) {
       setSelectedTEAMNoteToEdit(() => item);
     } else {
@@ -194,13 +188,13 @@ const SelectedFolder: FC<SelectedFolderProps> = ({
 
   return (
     <div className={css(expandedNoteStyle({ mediumScreen }))} data-test-id={FOLDER_WRAPPER}>
-      <div className={css(flexBeetweenStyle)}>
+      <div className={css(flexBetweenStyle)}>
         <span className={css(folderTitleStyled)}>{selectedFolder?.title}</span>
       </div>
       <div className={css({ marginTop: '32px', display: 'flex', flexDirection: 'column' })} data-test-id={testId}>
         {selectedFolder?.notes?.map((item) => (
           <div
-            className={css(flexBeetweenStyle, noteContainerStyle, { position: 'relative' })}
+            className={css(flexBetweenStyle, noteContainerStyle, { position: 'relative' })}
             key={item.id}
             data-test-id='note'
             onClick={(e) => setSelectedNoteHandler(e, item)}
@@ -216,15 +210,15 @@ const SelectedFolder: FC<SelectedFolderProps> = ({
               <div
                 className={css(dotsStyle)}
                 data-test-id='dots'
-                onClick={() => selectedNoteActionhandler(item.id)}
+                onClick={() => selectedNoteHandler(item.id)}
                 id='backdrop'
               >
-                <span></span>
-                <span></span>
-                <span></span>
+                <span />
+                <span />
+                <span />
               </div>
             </div>
-            {item.selected && btnsActionsHandle(item.id, item.folderUuid, item)}
+            {item.selected && buttonsHandler(item.id, item.folderUuid, item)}
           </div>
         ))}
       </div>
@@ -314,7 +308,7 @@ const folderTitleStyled: Rule = {
   color: theme.colors.base,
 };
 
-const flexBeetweenStyle: Rule = {
+const flexBetweenStyle: Rule = {
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'center',

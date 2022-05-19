@@ -1,19 +1,12 @@
-type CurrentItemsType = {
-  colleagueUuid: string;
-  employeeNo: string;
-  firstName: string;
-  howAchieved: string;
-  howOverAchieved: string;
-  jobTitle: string;
-  lastName: string;
-  lineManager: string;
-  objectiveNumber: number;
-  strategicDriver: string;
-  title: string;
-  workingLevel: string;
-};
+import { CSSProperties } from 'react';
+import { Rule, Styles } from '@pma/dex-wrapper';
 
 export type TableProps = {
-  currentItems: Array<CurrentItemsType>;
+  currentItems: Array<Record<string, string | number | null>>;
   tableTitles: Array<string>;
+  tableStyles?: Styles | Rule | CSSProperties | {};
+  titleCustomStyles?: Styles | Rule | CSSProperties | {};
+  descriptionCustomStyle?: Styles | Rule | CSSProperties | {};
+  trCustomStyle?: Styles | Rule | CSSProperties | {};
+  breakTd?: boolean;
 };

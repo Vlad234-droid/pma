@@ -12,6 +12,7 @@ import { ChartContent } from './components/ChartContent';
 import { TableContent } from './components/TableContent';
 import { WorkLevelContent } from './components/WorkLevelContent';
 import { View } from 'components/PieChart/config';
+import { ColleaguesCount } from 'features/Report/components/ColleaguesCount';
 import { useStatisticsReport } from 'features/Report/hooks';
 
 import { useTileStatistics } from './hooks';
@@ -21,6 +22,7 @@ import {
   checkTableChart,
   checkWorkLevel,
   getReportTitles,
+  checkColleaguesCount,
   getTableChartTitle,
 } from './utils';
 import { initialValues, metaStatuses } from 'features/Report/config';
@@ -43,7 +45,7 @@ const TileReport = () => {
   const [isCheckAll, setIsCheckAll]: [string[], (T) => void] = useState([]);
   const [isFullView, toggleFullView] = useState<boolean>(false);
 
-  const { approvedObjPercent, approvedObjTitle } = useStatisticsReport([...metaStatuses]);
+  const { approvedObjPercent, approvedObjTitle, colleaguesCount } = useStatisticsReport([...metaStatuses]);
 
   const { type, query } = useTileStatistics();
 
@@ -51,6 +53,7 @@ const TileReport = () => {
   const isTableChart = checkTableChart(type);
   const isWorkLevel = checkWorkLevel(type);
   const isException = checkExceptionType(type);
+  const isShowCount = checkColleaguesCount(type);
 
   const getContent = () => {
     if (isWorkLevel) return <WorkLevelContent toggleFullView={toggleFullView} isFullView={isFullView} />;
@@ -62,6 +65,7 @@ const TileReport = () => {
     <div data-test-id={OBJECTIVES_WRAPPER}>
       <div className={css(arrowLeftStyle)}>
         <BackButton
+          data-test-id={'test-back-button'}
           onPress={() => {
             navigate({
               pathname: buildPath(Page.REPORT),
@@ -73,6 +77,7 @@ const TileReport = () => {
         />
       </div>
       <div className={css(header({ mobileScreen }))}>
+        {isShowCount && <ColleaguesCount countStyles={countStyles} colleaguesCount={colleaguesCount} />}
         <div className={css(flexCenterStyled)}>
           <FilterOption
             focus={focus}
@@ -102,7 +107,7 @@ const TileReport = () => {
           />
         </div>
       </div>
-      <div className={css(wrapperStyle)}>
+      <div data-test-id={'test-pie-chart'} className={css(wrapperStyle)}>
         <div className={css(leftColumn)}>{getContent()}</div>
         {!isFullView && (
           <div className={css(rightColumn({ isWorkLevel }))}>
@@ -127,6 +132,17 @@ const TileReport = () => {
     </div>
   );
 };
+
+const countStyles: Rule = ({ theme }) => ({
+  position: 'absolute',
+  top: '50%',
+  left: 0,
+  transform: 'translateY(-50%)',
+  fontWeight: theme.font.weight.regular,
+  fontSize: theme.font.fixed.f16.fontSize,
+  lineHeight: theme.font.fixed.f16.lineHeight,
+  color: theme.colors.base,
+});
 
 const arrowLeftStyle: Rule = ({ theme }) => {
   return {
@@ -159,6 +175,7 @@ const leftColumn: Rule = ({ theme }) => ({
 });
 
 const header: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => ({
+  position: 'relative',
   display: 'flex',
   flexWrap: mobileScreen ? 'wrap' : 'nowrap',
   ...(mobileScreen && { flexBasis: '250px' }),

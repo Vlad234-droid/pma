@@ -14,7 +14,7 @@ import {
 import { ConfirmModal, ConfirmModalWithDropDown } from 'features/Modal';
 import { useTranslation } from 'components/Translation';
 import { PersonalFolders, PersonalsTeamFolders, SelectedFolder, SelectedTEAMFolder } from '../../index';
-import { MainFolderProps } from '../../../type';
+import { MainFolderProps, NotesStatus } from '../../../type';
 import { folderSchema } from '../../Modals/schema/schema';
 import { useNotesContainer } from '../../../contexts';
 
@@ -30,17 +30,12 @@ import {
   definePropperFieldTeamOptions,
   getPropperInfoData,
 } from 'utils/note';
+import { actionsInitialState, updateFolder, disableFolder } from '../../../utils';
 
 export const SELECTED_FOLDER = 'selected-folder';
 export const FOLDER_WRAPPER = 'main-folder-wrapper';
 
-const MainFolders: FC<MainFolderProps> = ({
-  TEAM,
-  setIsUserArchived,
-  isUserArchived,
-  setTeamArchivedMode,
-  teamArchivedMode,
-}) => {
+const MainFolders: FC<MainFolderProps> = ({ isLineManager }) => {
   const { css, matchMedia } = useStyle();
   const mediumScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
   const { t } = useTranslation();
@@ -53,10 +48,8 @@ const MainFolders: FC<MainFolderProps> = ({
     setSelectedTEAMFolder,
     foldersWithNotes,
     setFoldersWithNotes,
-    setSelectedNoteToEdit,
     foldersWithNotesTEAM,
     setFoldersWithNotesTEAM,
-    setSelectedTEAMNoteToEdit,
   } = useNotesContainer();
 
   const notesSelect = useSelector(getNotesSelector) || null;
@@ -66,91 +59,77 @@ const MainFolders: FC<MainFolderProps> = ({
   const teamArchivedFolderUuid = useSelector(teamArchivedFolderUuidSelector) || null;
 
   const [confirmModal, setConfirmModal] = useState(false);
-  const selectedFolderId: MutableRefObject<null | string> = useRef(null);
-  const selectedNoteId: MutableRefObject<null | string> = useRef(null);
-  const noteFolderUuid: MutableRefObject<null | string> = useRef(null);
   const actionModal: MutableRefObject<null | 'delete' | 'archive' | 'move'> = useRef(null);
 
-  //TEAM
+  const userActions = useRef(actionsInitialState);
+
   const [confirmTEAMModal, setConfirmTEAMModal] = useState(false);
-  const selectedTEAMFolderId: MutableRefObject<null | string> = useRef(null);
-  const selectedTEAMNoteId: MutableRefObject<null | string> = useRef(null);
-  const noteTEAMFolderUuid: MutableRefObject<null | string> = useRef(null);
   const actionTEAMModal: MutableRefObject<null | 'delete' | 'archive' | 'move'> = useRef(null);
 
-  const handleSelected = (itemID: string): any => {
-    setSelectedFolder(() => {
-      const [first] = foldersWithNotes.filter((note) => note.id === itemID);
-      first.notes.forEach((item) => {
-        item.selected = false;
-      });
-      return first;
+  const teamActions = useRef(actionsInitialState);
+
+  const handleSelected = (itemID: string): void => {
+    setFoldersWithNotesTEAM((prev) => {
+      const arr = [...prev];
+      arr.forEach((item) => (item.selected = false));
+      return [...arr];
     });
+    setSelectedFolder(() => foldersWithNotes.filter((note) => note.id === itemID)[0]);
     setFoldersWithNotes((prev) => {
       const arr = [...prev];
       arr.forEach((item) => (item.selected = false));
       return [...arr];
     });
-
     setFoldersWithNotes((prev) => {
       const arr = [...prev];
-      arr[arr.findIndex((folder) => folder.id === itemID)].selected = true;
+      arr.find((folder) => folder.id === itemID).selected = true;
       return [...arr];
     });
   };
-  const handleTEAMSelected = (itemID: string): any => {
-    setSelectedTEAMFolder(() => {
-      const [first] = foldersWithNotesTEAM.filter((note) => note.id === itemID);
-
-      first.notes.length &&
-        first.notes.forEach((item) => {
-          item.selected = false;
-        });
-      return first;
+  const handleTEAMSelected = (itemID: string): void => {
+    setFoldersWithNotes((prev) => {
+      const arr = [...prev];
+      arr.forEach((item) => (item.selected = false));
+      return [...arr];
     });
+    setSelectedTEAMFolder(() => foldersWithNotesTEAM.filter((note) => note.id === itemID)[0]);
     setFoldersWithNotesTEAM((prev) => {
       const arr = [...prev];
       arr.forEach((item) => (item.selected = false));
       return [...arr];
     });
-
     setFoldersWithNotesTEAM((prev) => {
       const arr = [...prev];
-      arr[arr.findIndex((folder) => folder.id === itemID)].selected = true;
+      arr.find((folder) => folder.id === itemID).selected = true;
       return [...arr];
     });
   };
 
   const handleDelete = () => {
-    if (selectedNoteId.current && !selectedFolderId.current && actionModal.current !== 'move') {
+    if (userActions.current.noteId && !userActions.current.folderId && actionModal.current !== 'move') {
       dispatch(
         NotesActions.deleteNote({
           ownerColleagueUuid: colleagueUuid,
-          noteId: selectedNoteId.current,
+          noteId: userActions.current.noteId,
         }),
       );
-      setSelectedFolder((prev) => {
-        return {
-          ...prev,
-          notes: prev.notes.filter((item) => item.id !== selectedNoteId.current),
-        };
-      });
+      setSelectedFolder((prev) => updateFolder(prev, userActions.current.noteId));
     }
 
-    if (selectedFolderId.current && !selectedNoteId.current && actionModal.current !== 'move') {
+    if (userActions.current.folderId && !userActions.current.noteId && actionModal.current !== 'move') {
       if (selectedFolder !== null) setSelectedFolder(() => null);
       dispatch(
         NotesActions.deleteFolder({
           ownerColleagueUuid: colleagueUuid,
-          folderId: selectedFolderId.current,
+          folderId: userActions.current.folderId,
         }),
       );
     }
   };
 
   const handleUpdateNote = () => {
-    if (selectedFolderId.current && !selectedNoteId.current) {
-      const findedFolder = folders?.find((item) => item.id === selectedFolderId.current);
+    if (userActions.current.folderId && !userActions.current.noteId) {
+      const findedFolder = folders?.find((item) => item.id === userActions.current.folderId);
       const findedNotes = notesSelect.filter((item) => item.folderUuid === findedFolder.id);
       const payload = {
         folder: {
@@ -159,11 +138,10 @@ const MainFolders: FC<MainFolderProps> = ({
         },
         notes: [
           ...findedNotes.map((note) => {
-            const itemNote = {
+            return {
               ...note,
-              status: 'ARCHIVED',
+              status: NotesStatus.ARCHIVED,
             };
-            return itemNote;
           }),
         ],
       };
@@ -174,18 +152,12 @@ const MainFolders: FC<MainFolderProps> = ({
     }
 
     const payload = {
-      ...notesSelect?.find((item) => item?.id === selectedNoteId?.current),
-      status: 'ARCHIVED',
+      ...notesSelect?.find((item) => item?.id === userActions.current.noteId),
+      status: NotesStatus.ARCHIVED,
     };
 
     if (!payload.folderUuid) {
-      setSelectedFolder((prev) => {
-        const arr = { ...prev };
-        return {
-          ...arr,
-          notes: arr.notes.filter((item) => item.id !== selectedNoteId.current),
-        };
-      });
+      setSelectedFolder((prev) => updateFolder(prev, userActions.current.noteId));
       dispatch(NotesActions.updateNote(payload));
     }
     if (payload.folderUuid) {
@@ -203,30 +175,24 @@ const MainFolders: FC<MainFolderProps> = ({
           ownerColleagueUuid: colleagueUuid,
           title: payload.title,
           content: payload.content,
-          status: 'ARCHIVED',
+          status: NotesStatus.ARCHIVED,
           updateTime: new Date(),
         },
       };
       dispatch(
         NotesActions.deleteNote({
           ownerColleagueUuid: colleagueUuid,
-          noteId: selectedNoteId.current,
+          noteId: userActions.current.noteId,
         }),
       );
       dispatch(NotesActions.createFolderAndNote(body));
-      setSelectedFolder((prev) => {
-        const arr = { ...prev };
-        return {
-          ...arr,
-          notes: arr.notes.filter((item) => item.id !== selectedNoteId.current),
-        };
-      });
+      setSelectedFolder((prev) => updateFolder(prev, userActions.current.noteId));
     }
   };
 
   const handleUpdateTEAMNote = () => {
-    if (selectedTEAMFolderId.current && !selectedTEAMNoteId.current) {
-      const findedFolder = folders?.find((item) => item.id === selectedTEAMFolderId.current);
+    if (teamActions.current.folderId && !teamActions.current.noteId) {
+      const findedFolder = folders?.find((item) => item.id === teamActions.current.folderId);
       const findedNotes = notesSelect.filter((item) => item.folderUuid === findedFolder.id);
       const payload = {
         folder: {
@@ -235,11 +201,10 @@ const MainFolders: FC<MainFolderProps> = ({
         },
         notes: [
           ...findedNotes.map((note) => {
-            const itemNote = {
+            return {
               ...note,
-              status: 'ARCHIVED',
+              status: NotesStatus.ARCHIVED,
             };
-            return itemNote;
           }),
         ],
       };
@@ -251,28 +216,13 @@ const MainFolders: FC<MainFolderProps> = ({
     }
 
     const payload = {
-      ...notesSelect.find((item) => item.id === selectedTEAMNoteId.current),
-      status: 'ARCHIVED',
+      ...notesSelect.find((item) => item.id === teamActions.current.noteId),
+      status: NotesStatus.ARCHIVED,
     };
 
-    // TODO: Extract duplicate 19
     if (!payload.folderUuid) {
-      if (selectedTEAMFolder)
-        setSelectedTEAMFolder((prev) => {
-          const arr = { ...prev };
-          return {
-            ...arr,
-            notes: arr.notes.filter((item) => item.id !== selectedTEAMNoteId.current),
-          };
-        });
-      if (selectedFolder)
-        setSelectedFolder((prev) => {
-          const arr = { ...prev };
-          return {
-            ...arr,
-            notes: arr.notes.filter((item) => item.id !== selectedTEAMNoteId.current),
-          };
-        });
+      if (selectedTEAMFolder) setSelectedTEAMFolder((prev) => updateFolder(prev, teamActions.current.noteId));
+      if (selectedFolder) setSelectedFolder((prev) => updateFolder(prev, teamActions.current.noteId));
       dispatch(NotesActions.updateNote(payload));
     }
     if (payload.folderUuid) {
@@ -288,72 +238,47 @@ const MainFolders: FC<MainFolderProps> = ({
           ownerColleagueUuid: colleagueUuid,
           title: payload.title,
           content: payload.content,
-          status: 'ARCHIVED',
+          status: NotesStatus.ARCHIVED,
           updateTime: new Date(),
         },
       };
       dispatch(
         NotesActions.deleteNote({
           ownerColleagueUuid: colleagueUuid,
-          noteId: selectedTEAMNoteId.current,
+          noteId: teamActions.current.noteId,
         }),
       );
       dispatch(NotesActions.createFolderAndNote(body));
-      // TODO: Extract duplicate 19
-      if (selectedTEAMFolder)
-        setSelectedTEAMFolder((prev) => {
-          const arr = { ...prev };
-          return {
-            ...arr,
-            notes: arr.notes.filter((item) => item.id !== selectedTEAMNoteId.current),
-          };
-        });
-      if (selectedFolder)
-        setSelectedFolder((prev) => {
-          const arr = { ...prev };
-          return {
-            ...arr,
-            notes: arr.notes.filter((item) => item.id !== selectedTEAMNoteId.current),
-          };
-        });
+      if (selectedTEAMFolder) setSelectedTEAMFolder((prev) => updateFolder(prev, teamActions.current.noteId));
+      if (selectedFolder) setSelectedFolder((prev) => updateFolder(prev, teamActions.current.noteId));
     }
   };
 
   const handleTEAMDelete = () => {
-    if (selectedTEAMNoteId.current && !selectedTEAMFolderId.current && actionTEAMModal.current !== 'move') {
+    if (teamActions.current.noteId && !teamActions.current.folderId && actionTEAMModal.current !== 'move') {
       dispatch(
         NotesActions.deleteNote({
           ownerColleagueUuid: colleagueUuid,
-          noteId: selectedTEAMNoteId.current,
+          noteId: teamActions.current.noteId,
         }),
       );
       if (selectedTEAMFolder !== null) {
-        setSelectedTEAMFolder((prev) => {
-          return {
-            ...prev,
-            notes: prev.notes.filter((item) => item.id !== selectedTEAMNoteId.current),
-          };
-        });
+        setSelectedTEAMFolder((prev) => updateFolder(prev, teamActions.current.noteId));
       }
 
       if (selectedFolder !== null) {
-        setSelectedFolder((prev) => {
-          return {
-            ...prev,
-            notes: prev.notes.filter((item) => item.id !== selectedTEAMNoteId.current),
-          };
-        });
+        setSelectedFolder((prev) => updateFolder(prev, teamActions.current.noteId));
       }
 
       return;
     }
 
-    if (selectedTEAMFolderId.current && !selectedTEAMNoteId.current && actionTEAMModal.current !== 'move') {
+    if (teamActions.current.folderId && !teamActions.current.noteId && actionTEAMModal.current !== 'move') {
       if (selectedTEAMFolder !== null) setSelectedTEAMFolder(() => null);
       dispatch(
         NotesActions.deleteFolder({
           ownerColleagueUuid: colleagueUuid,
-          folderId: selectedTEAMFolderId.current,
+          folderId: teamActions.current.folderId,
         }),
       );
     }
@@ -361,99 +286,37 @@ const MainFolders: FC<MainFolderProps> = ({
 
   const submitMoveNoteToFolder = ({ selectedIdFolder }) => {
     const payload = {
-      ...notesSelect.find((item) => item.id === selectedNoteId.current),
+      ...notesSelect.find((item) => item.id === userActions.current.noteId),
       folderUuid: selectedIdFolder === AllNotesFolderId ? null : selectedIdFolder,
     };
+
     dispatch(NotesActions.updateNote(payload));
     if (selectedTEAMFolder !== null) {
-      setSelectedTEAMFolder((prev) => {
-        const obj = {
-          ...prev,
-          notes: [
-            ...prev.notes.map((item) => {
-              const note = {
-                ...item,
-                selected: false,
-              };
-              return note;
-            }),
-          ],
-        };
-        return obj;
-      });
+      setSelectedTEAMFolder((prev) => disableFolder(prev));
     }
 
     if (selectedFolder && !foldersWithNotes.find((item) => item?.id === AllNotesFolderId)?.selected) {
-      setSelectedFolder((prev) => {
-        return {
-          ...prev,
-          notes: prev.notes.filter((item) => item.id !== selectedNoteId.current),
-        };
-      });
+      setSelectedFolder((prev) => updateFolder(prev, userActions.current.noteId));
     }
-    setSelectedFolder((prev) => {
-      const obj = {
-        ...prev,
-        notes: [
-          ...prev.notes.map((item) => {
-            const note = {
-              ...item,
-              selected: false,
-            };
-            return note;
-          }),
-        ],
-      };
-      return obj;
-    });
+    setSelectedFolder((prev) => disableFolder(prev));
   };
   const submitMoveNoteToTEAMFolder = ({ selectedIdFolder }) => {
     const payload = {
-      ...notesSelect.find((item) => item.id === selectedTEAMNoteId.current),
+      ...notesSelect.find((item) => item.id === teamActions.current.noteId),
       folderUuid: selectedIdFolder === AllNotesFolderIdTEAM ? null : selectedIdFolder,
     };
     dispatch(NotesActions.updateNote(payload));
+
     if (selectedFolder !== null) {
-      setSelectedTEAMFolder((prev) => {
-        const obj = {
-          ...prev,
-          notes: [
-            ...prev.notes.map((item) => {
-              const note = {
-                ...item,
-                selected: false,
-              };
-              return note;
-            }),
-          ],
-        };
-        return obj;
-      });
+      setSelectedTEAMFolder((prev) => disableFolder(prev));
+      setSelectedFolder((prev) => disableFolder(prev));
     }
 
     if (selectedTEAMFolder && !foldersWithNotesTEAM?.find((item) => item?.id === AllNotesFolderIdTEAM)?.selected) {
-      setSelectedTEAMFolder((prev) => {
-        return {
-          ...prev,
-          notes: prev.notes.filter((item) => item.id !== selectedTEAMNoteId.current),
-        };
-      });
+      setSelectedTEAMFolder((prev) => updateFolder(prev, teamActions.current.noteId));
     }
-    setSelectedTEAMFolder((prev) => {
-      const obj = {
-        ...prev,
-        notes: [
-          ...prev.notes.map((item) => {
-            const note = {
-              ...item,
-              selected: false,
-            };
-            return note;
-          }),
-        ],
-      };
-      return obj;
-    });
+
+    setSelectedTEAMFolder((prev) => disableFolder(prev));
   };
 
   return (
@@ -473,110 +336,54 @@ const MainFolders: FC<MainFolderProps> = ({
           <PersonalFolders
             handleSelected={handleSelected}
             setConfirmModal={setConfirmModal}
-            setSelectedTEAMFolder={setSelectedTEAMFolder}
-            selectedTEAMFolder={selectedTEAMFolder}
-            setFoldersWithNotesTEAM={setFoldersWithNotesTEAM}
             actionModal={actionModal}
-            selectedFolderId={selectedFolderId}
-            foldersWithNotes={foldersWithNotes}
-            setFoldersWithNotes={setFoldersWithNotes}
-            selectedFolder={selectedFolder}
-            setSelectedFolder={setSelectedFolder}
-            selectedNoteId={selectedNoteId}
-            setIsUserArchived={setIsUserArchived}
-            isUserArchived={isUserArchived}
+            userActions={userActions.current}
           />
-
           {mediumScreen && selectedFolder && (
             <SelectedFolder
-              selectedFolder={selectedFolder}
               setConfirmModal={setConfirmModal}
-              selectedNoteId={selectedNoteId}
               actionModal={actionModal}
-              setSelectedFolder={setSelectedFolder}
-              foldersWithNotes={foldersWithNotes}
-              setFoldersWithNotes={setFoldersWithNotes}
-              selectedFolderId={selectedFolderId}
-              noteFolderUuid={noteFolderUuid}
-              setSelectedNoteToEdit={setSelectedNoteToEdit}
-              setSelectedTEAMNoteToEdit={setSelectedTEAMNoteToEdit}
-              selectedTEAMNoteId={selectedTEAMNoteId}
               actionTEAMModal={actionTEAMModal}
               setConfirmTEAMModal={setConfirmTEAMModal}
-              noteTEAMFolderUuid={noteTEAMFolderUuid}
               testId={SELECTED_FOLDER}
+              userActions={userActions.current}
+              teamActions={teamActions.current}
             />
           )}
-
-          {TEAM && (
+          {isLineManager && (
             <PersonalsTeamFolders
               handleTEAMSelected={handleTEAMSelected}
               setConfirmTEAMModal={setConfirmTEAMModal}
-              selectedTEAMFolderId={selectedTEAMFolderId}
-              setSelectedFolder={setSelectedFolder}
-              selectedFolder={selectedFolder}
-              foldersWithNotesTEAM={foldersWithNotesTEAM}
-              selectedTEAMNoteId={selectedTEAMNoteId}
-              setFoldersWithNotesTEAM={setFoldersWithNotesTEAM}
-              setFoldersWithNotes={setFoldersWithNotes}
               actionTEAMModal={actionTEAMModal}
-              setTeamArchivedMode={setTeamArchivedMode}
-              teamArchivedMode={teamArchivedMode}
-              setSelectedTEAMFolder={setSelectedTEAMFolder}
+              teamsActions={teamActions.current}
             />
           )}
           {mediumScreen && selectedTEAMFolder && (
             <SelectedTEAMFolder
-              selectedTEAMFolder={selectedTEAMFolder}
               setConfirmTEAMModal={setConfirmTEAMModal}
-              selectedTEAMNoteId={selectedTEAMNoteId}
               actionTEAMModal={actionTEAMModal}
-              setSelectedTEAMFolder={setSelectedTEAMFolder}
-              setSelectedTEAMNoteToEdit={setSelectedTEAMNoteToEdit}
-              noteTEAMFolderUuid={noteTEAMFolderUuid}
-              selectedTEAMFolderId={selectedTEAMFolderId}
-              foldersWithNotesTEAM={foldersWithNotesTEAM}
-              setFoldersWithNotesTEAM={setFoldersWithNotesTEAM}
-              teamArchivedMode={teamArchivedMode}
+              teamActions={teamActions.current}
             />
           )}
         </div>
         <div className={css(wrapperFolder, { height: '100%' })}>
           {!mediumScreen && selectedFolder && (
             <SelectedFolder
-              selectedFolder={selectedFolder}
               setConfirmModal={setConfirmModal}
-              selectedNoteId={selectedNoteId}
               actionModal={actionModal}
-              setSelectedFolder={setSelectedFolder}
-              foldersWithNotes={foldersWithNotes}
-              setFoldersWithNotes={setFoldersWithNotes}
-              selectedFolderId={selectedFolderId}
-              noteFolderUuid={noteFolderUuid}
-              setSelectedNoteToEdit={setSelectedNoteToEdit}
-              setSelectedTEAMNoteToEdit={setSelectedTEAMNoteToEdit}
-              selectedTEAMNoteId={selectedTEAMNoteId}
               actionTEAMModal={actionTEAMModal}
               setConfirmTEAMModal={setConfirmTEAMModal}
-              noteTEAMFolderUuid={noteTEAMFolderUuid}
-              isUserArchived={isUserArchived}
               testId={SELECTED_FOLDER}
+              userActions={userActions.current}
+              teamActions={teamActions.current}
             />
           )}
 
           {!mediumScreen && selectedTEAMFolder && (
             <SelectedTEAMFolder
-              selectedTEAMFolder={selectedTEAMFolder}
               setConfirmTEAMModal={setConfirmTEAMModal}
-              selectedTEAMNoteId={selectedTEAMNoteId}
               actionTEAMModal={actionTEAMModal}
-              setSelectedTEAMFolder={setSelectedTEAMFolder}
-              setSelectedTEAMNoteToEdit={setSelectedTEAMNoteToEdit}
-              noteTEAMFolderUuid={noteTEAMFolderUuid}
-              selectedTEAMFolderId={selectedTEAMFolderId}
-              foldersWithNotesTEAM={foldersWithNotesTEAM}
-              setFoldersWithNotesTEAM={setFoldersWithNotesTEAM}
-              teamArchivedMode={teamArchivedMode}
+              teamActions={teamActions.current}
             />
           )}
         </div>
@@ -585,37 +392,37 @@ const MainFolders: FC<MainFolderProps> = ({
         (actionModal.current !== 'move' ? (
           <ConfirmModal
             submitBtnTitle={defineBtnTitle(actionModal.current, t)}
-            title={getPropperInfoData(actionModal, selectedNoteId, selectedFolderId, t)!.title}
-            description={getPropperInfoData(actionModal, selectedNoteId, selectedFolderId, t)!.description}
+            title={getPropperInfoData(actionModal, userActions.current, t)!.title}
+            description={getPropperInfoData(actionModal, userActions.current, t)!.description}
             onSave={() => {
               actionModal.current === 'delete' ? handleDelete() : handleUpdateNote();
-              confirmClearRefsHandler(selectedNoteId, actionModal, selectedFolderId, setConfirmModal);
+              confirmClearRefsHandler(actionModal, userActions, setConfirmModal);
             }}
             onCancel={() => {
-              confirmClearRefsHandler(selectedNoteId, actionModal, selectedFolderId, setConfirmModal);
+              confirmClearRefsHandler(actionModal, userActions, setConfirmModal);
             }}
             onOverlayClick={() => {
-              confirmClearRefsHandler(selectedNoteId, actionModal, selectedFolderId, setConfirmModal);
+              confirmClearRefsHandler(actionModal, userActions, setConfirmModal);
             }}
           />
         ) : (
           <ConfirmModalWithDropDown
             submitBtnTitle={defineBtnTitle(actionModal.current, t)}
-            title={getPropperInfoData(actionModal, selectedNoteId, selectedFolderId, t)!.title}
-            description={getPropperInfoData(actionModal, selectedNoteId, selectedFolderId, t)!.description}
+            title={getPropperInfoData(actionModal, userActions.current, t)!.title}
+            description={getPropperInfoData(actionModal, userActions.current, t)!.description}
             onSave={(data) => {
               submitMoveNoteToFolder(data);
-              clearRefsMoveHandler(noteFolderUuid, selectedNoteId, actionModal, selectedFolderId, setConfirmModal);
+              clearRefsMoveHandler(actionModal, userActions, setConfirmModal);
             }}
             onCancel={() => {
-              clearRefsMoveHandler(noteFolderUuid, selectedNoteId, actionModal, selectedFolderId, setConfirmModal);
+              clearRefsMoveHandler(actionModal, userActions, setConfirmModal);
             }}
             onOverlayClick={() => {
-              clearRefsMoveHandler(noteFolderUuid, selectedNoteId, actionModal, selectedFolderId, setConfirmModal);
+              clearRefsMoveHandler(actionModal, userActions, setConfirmModal);
             }}
             folderSchema={folderSchema}
             fieldName='folder'
-            field_options={definePropperFieldOptions(foldersWithNotes, noteFolderUuid.current)}
+            field_options={definePropperFieldOptions(foldersWithNotes, userActions.current.folderUuid)}
             field_placeholder='Select a folder'
           />
         ))}
@@ -623,73 +430,37 @@ const MainFolders: FC<MainFolderProps> = ({
         (actionTEAMModal.current !== 'move' ? (
           <ConfirmModal
             submitBtnTitle={defineBtnTitle(actionTEAMModal.current, t)}
-            title={getPropperInfoData(actionTEAMModal, selectedTEAMNoteId, selectedTEAMFolderId, t)!.title}
-            description={getPropperInfoData(actionTEAMModal, selectedTEAMNoteId, selectedTEAMFolderId, t)!.description}
+            title={getPropperInfoData(actionTEAMModal, teamActions.current, t)!.title}
+            description={getPropperInfoData(actionTEAMModal, teamActions.current, t)!.description}
             onSave={() => {
               actionTEAMModal.current === 'delete' ? handleTEAMDelete() : handleUpdateTEAMNote();
-              confirmClearTEAMRefsHandler(
-                selectedTEAMNoteId,
-                actionTEAMModal,
-                selectedTEAMFolderId,
-                setConfirmTEAMModal,
-                noteTEAMFolderUuid,
-              );
+              confirmClearTEAMRefsHandler(actionTEAMModal, teamActions, setConfirmTEAMModal);
             }}
             onCancel={() => {
-              confirmClearTEAMRefsHandler(
-                selectedTEAMNoteId,
-                actionTEAMModal,
-                selectedTEAMFolderId,
-                setConfirmTEAMModal,
-                noteTEAMFolderUuid,
-              );
+              confirmClearTEAMRefsHandler(actionTEAMModal, teamActions, setConfirmTEAMModal);
             }}
             onOverlayClick={() => {
-              confirmClearTEAMRefsHandler(
-                selectedTEAMNoteId,
-                actionTEAMModal,
-                selectedTEAMFolderId,
-                setConfirmTEAMModal,
-                noteTEAMFolderUuid,
-              );
+              confirmClearTEAMRefsHandler(actionTEAMModal, teamActions, setConfirmTEAMModal);
             }}
           />
         ) : (
           <ConfirmModalWithDropDown
             submitBtnTitle={defineBtnTitle(actionTEAMModal.current, t)}
-            title={getPropperInfoData(actionTEAMModal, selectedTEAMNoteId, selectedTEAMFolderId, t)!.title}
-            description={getPropperInfoData(actionTEAMModal, selectedTEAMNoteId, selectedTEAMFolderId, t)!.description}
+            title={getPropperInfoData(actionTEAMModal, teamActions.current, t)!.title}
+            description={getPropperInfoData(actionTEAMModal, teamActions.current, t)!.description}
             onSave={(data) => {
               submitMoveNoteToTEAMFolder(data);
-              clearRefsTEAMMoveHandler(
-                noteTEAMFolderUuid,
-                selectedTEAMNoteId,
-                actionTEAMModal,
-                selectedTEAMFolderId,
-                setConfirmTEAMModal,
-              );
+              clearRefsTEAMMoveHandler(actionTEAMModal, teamActions, setConfirmTEAMModal);
             }}
             onCancel={() => {
-              clearRefsTEAMMoveHandler(
-                noteTEAMFolderUuid,
-                selectedTEAMNoteId,
-                actionTEAMModal,
-                selectedTEAMFolderId,
-                setConfirmTEAMModal,
-              );
+              clearRefsTEAMMoveHandler(actionTEAMModal, teamActions, setConfirmTEAMModal);
             }}
             onOverlayClick={() => {
-              clearRefsTEAMMoveHandler(
-                noteTEAMFolderUuid,
-                selectedTEAMNoteId,
-                actionTEAMModal,
-                selectedTEAMFolderId,
-                setConfirmTEAMModal,
-              );
+              clearRefsTEAMMoveHandler(actionTEAMModal, teamActions, setConfirmTEAMModal);
             }}
             folderSchema={folderSchema}
             fieldName='folder'
-            field_options={definePropperFieldTeamOptions(foldersWithNotesTEAM, noteTEAMFolderUuid.current)}
+            field_options={definePropperFieldTeamOptions(foldersWithNotesTEAM, teamActions.current.folderUuid)}
             field_placeholder='Select a folder'
           />
         ))}

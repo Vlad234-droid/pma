@@ -139,10 +139,12 @@ const Header: FC<Omit<HeaderProps, 'children'> & { title: string; status?: Statu
               className={css({
                 display: 'flex',
                 alignItems: 'center',
+                justifyContent: 'space-between',
+                width: '100%',
               })}
             >
               <h3 className={css(accordionHeaderTitleStyles)}>{title}</h3>
-              {status && <StatusBadge status={status} styles={{ marginLeft: '10px' }} />}
+              {status && <StatusBadge status={status} styles={{ marginRight: '20px' }} />}
             </div>
             <ExpandButton extraStyles={marginRightStyles} />
           </div>
@@ -185,11 +187,12 @@ const accordionHeaderWrapperStyles: Rule = {
 };
 
 const accordionHeaderStyles: Rule = ({ theme }) => ({
-  borderTop: `2px solid ${theme.colors.disabled}`,
   paddingTop: '10px',
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'center',
+  // @ts-ignore
+  borderTop: `2px solid ${theme.colors.lightGray}`,
 });
 
 const accordionHeaderTitleStyles: Rule = ({ theme }) => ({

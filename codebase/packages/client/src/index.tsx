@@ -32,6 +32,7 @@ const Root: FC = () => {
   return (
     <I18nextProvider i18n={i18n}>
       <AccessibilityProvider
+        containFocus={false}
         rendererOptions={rendererOptions}
         // @ts-ignore
         theme={theme}

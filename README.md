@@ -37,16 +37,16 @@ This application requires `yarn v.1.22.x` and `node v.14.4.x`.
 
 Check that Yarn is installed by running: `yarn --version`
 
-- NodeJS - https://nodejs.org (version 14.17.x)
+- NodeJS - https://nodejs.org (version 14.18.3)
 
 If some other version installed use NVM to install needed node version
 -NVM - https://github.com/nvm-sh/nvm#installing-and-updating and for Windows https://github.com/coreybutler/nvm-windows/releases/tag/1.1.8
 
 Check that NodeJS is installed by running: `node --version` or 'nvm ls'
-To install and use 14.17.x version of node - use commands:
+To install and use 14.18.3 version of node - use commands:
 
-- nvm install 14.17.0
-- nvm use 14.17.0
+- nvm install 14.18.3
+- nvm use 14.18.3
 
 ### 2. Install dependencies
 

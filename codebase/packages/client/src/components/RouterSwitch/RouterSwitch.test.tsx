@@ -26,3 +26,13 @@ it('render RouterSwitch', async () => {
   expect(screen.getByText('Team')).toBeInTheDocument();
   expect(screen.getByText('Team').closest('a')).not.toHaveStyle('background: rgb(0, 83, 159)');
 });
+
+it('should NOT render RouterSwitch', async () => {
+  const history = createMemoryHistory();
+  render(
+    <Router location={buildPath(Page.CONTRIBUTION)} navigator={history}>
+      <RouterSwitch links={[]} />
+    </Router>,
+  );
+  expect(screen.getByTestId('test-no-router-links')).toBeInTheDocument();
+});

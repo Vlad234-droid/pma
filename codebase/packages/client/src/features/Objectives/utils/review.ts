@@ -8,43 +8,30 @@ export const canEditAllObjectiveFn = ({
   objectiveSchema,
   countDraftReviews,
   countDeclinedReviews,
+  countWaitingForApprovalReviews,
 }: {
   objectiveSchema: any;
   countDraftReviews: number;
   countDeclinedReviews: number;
+  countWaitingForApprovalReviews: number;
 }) => {
   const { markup = { max: 0, min: 0 } } = objectiveSchema;
 
-  return (
-    (countDraftReviews <= markup.min && countDraftReviews > 0) ||
-    (countDeclinedReviews <= markup.min && countDeclinedReviews > 0)
-  );
+  if (countWaitingForApprovalReviews > 0) {
+    return false;
+  }
+
+  return countDraftReviews > 0 || countDeclinedReviews === markup.min;
 };
 
 /**
  * Available for max review count and status in [ DRAFT, DECLINED, APPROVED ]
  * Available for min review count and status in [ APPROVED ]
  */
-export const canEditSingleObjectiveFn = ({
-  status,
-  objectiveSchema,
-  countDraftReviews,
-  countDeclinedReviews,
-  countApprovedReviews,
-}: {
-  status: Status;
-  objectiveSchema: any;
-  countDraftReviews: number;
-  countDeclinedReviews: number;
-  countApprovedReviews: number;
-}) => {
-  const { markup = { max: 0, min: 0 } } = objectiveSchema;
+export const canEditSingleObjectiveFn = ({ status }: { status: Status }) => {
   const allowedStatus = [Status.APPROVED, Status.DECLINED, Status.DRAFT].includes(status);
 
-  return (
-    (countDraftReviews > markup.min || countDeclinedReviews > markup.min || countApprovedReviews >= markup.min) &&
-    allowedStatus
-  );
+  return allowedStatus;
 };
 
 /**

@@ -12,7 +12,7 @@ describe('<AccessDenied />', () => {
     });
 
     it('should render message', () => {
-      const { getByText} = render(<AccessDenied message='mocked_message' />);
+      const { getByText } = render(<AccessDenied message='mocked_message' />);
 
       expect(getByText('mocked_message')).toBeInTheDocument();
     });

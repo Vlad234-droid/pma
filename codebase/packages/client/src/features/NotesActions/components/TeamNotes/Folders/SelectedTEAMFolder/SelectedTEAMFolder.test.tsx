@@ -4,6 +4,7 @@ import { renderWithTheme as render } from 'utils/test';
 import '@testing-library/jest-dom';
 import { fireEvent } from '@testing-library/react';
 import SelectedTEAMFolder, { TEAM_WRAPPER } from './SelectedTEAMFolder';
+import { NotesContext } from 'features/NotesActions/contexts/notesContext';
 
 describe('Selected team folder', () => {
   const setFoldersWithNotesTEAM = jest.fn();
@@ -12,53 +13,73 @@ describe('Selected team folder', () => {
   const setSelectedNoteToEdit = jest.fn();
   const setSelectedTEAMNoteToEdit = jest.fn();
   const setConfirmTEAMModal = jest.fn();
-  const setConfirmModal = jest.fn();
+  const setArchiveMode = jest.fn();
 
-  const selectedTEAMNoteId = jest.spyOn(React, 'useRef').mockReturnValueOnce({ current: null });
-  const selectedFolderId = jest.spyOn(React, 'useRef').mockReturnValueOnce({ current: null });
-  const selectedTEAMFolderId = jest.spyOn(React, 'useRef').mockReturnValueOnce({ current: null });
-  const noteTEAMFolderUuid = jest.spyOn(React, 'useRef').mockReturnValueOnce({ current: null });
+  const teamActions = jest.spyOn(React, 'useRef').mockReturnValueOnce({ current: null });
+
+  const selectedTEAMFolder = { notes: [{ isInSearch: false, id: 1, referenceColleagueUuid: true }] };
+  const foldersWithNotesTEAM = [{ notes: [{}] }];
+
+  const initialState = { notes: { folders: [{}] } };
+  const archiveMode = { user: false, team: false };
 
   const props = {
-    selectedTEAMFolder: { notes: [{ isInSearch: false, id: 1, referenceColleagueUuid: true }] },
     setConfirmTEAMModal,
-    selectedTEAMNoteId,
     actionTEAMModal,
+    teamActions,
+  };
+
+  const value = {
+    selectedTEAMFolder,
     setSelectedTEAMFolder,
-    foldersWithNotesTEAM: [{ notes: [{}] }],
     setFoldersWithNotesTEAM,
-    selectedFolderId,
-    noteTEAMFolderUuid,
     setSelectedNoteToEdit,
-    isUserArchived: false,
     setSelectedTEAMNoteToEdit,
-    teamArchivedMode: false,
-    selectedTEAMFolderId,
+    archiveMode,
+    setArchiveMode,
+    foldersWithNotesTEAM,
   };
 
   it('render selected folder wrapper', async () => {
-    const { getByTestId } = render(<SelectedTEAMFolder {...props} />, { notes: { folders: [{}] } });
+    const { getByTestId } = render(
+      <NotesContext.Provider value={value}>
+        <SelectedTEAMFolder {...props} />
+      </NotesContext.Provider>,
+      initialState,
+    );
 
     expect(getByTestId(TEAM_WRAPPER)).toBeInTheDocument();
   });
   it('it should call setSelectedFolder handler', async () => {
-    render(<SelectedTEAMFolder {...props} />, { notes: { folders: [{}] } });
-    props.setSelectedTEAMFolder();
+    render(
+      <NotesContext.Provider value={value}>
+        <SelectedTEAMFolder {...props} />
+      </NotesContext.Provider>,
+      initialState,
+    );
+    value.setSelectedTEAMFolder();
     expect(setSelectedTEAMFolder).toHaveBeenCalled();
   });
   it('it should call dots handler', async () => {
-    const { getByTestId } = render(<SelectedTEAMFolder {...props} />, { notes: { folders: [{}] } });
+    const { getByTestId } = render(
+      <NotesContext.Provider value={value}>
+        <SelectedTEAMFolder {...props} />
+      </NotesContext.Provider>,
+      initialState,
+    );
     const dots = getByTestId('dots');
     fireEvent.click(dots);
     expect(setSelectedTEAMFolder).toHaveBeenCalled();
-    props.setSelectedTEAMNoteToEdit();
-    expect(setSelectedTEAMNoteToEdit).toHaveBeenCalled();
   });
 
   it('it should call setConfirmModal', async () => {
     const { getByTestId } = render(
-      <SelectedTEAMFolder {...props} selectedTEAMFolder={{ notes: [{ isInSearch: false, id: 1, selected: true }] }} />,
-      { notes: { folders: [{}] } },
+      <NotesContext.Provider
+        value={{ ...value, selectedTEAMFolder: { notes: [{ isInSearch: false, id: 1, selected: true }] } }}
+      >
+        <SelectedTEAMFolder {...props} />
+      </NotesContext.Provider>,
+      initialState,
     );
 
     fireEvent.click(getByTestId('backdrop-archive'));

@@ -1,39 +1,35 @@
-import React, { FC, Dispatch, SetStateAction, MutableRefObject } from 'react';
+import React, { FC, Dispatch, SetStateAction, MutableRefObject, MouseEvent, useRef } from 'react';
 import { Rule, Styles, useStyle, colors, CreateRule } from '@pma/dex-wrapper';
 import { IconButton } from 'components/IconButton';
-import { NoteData, NotesTypeTEAM } from '../../../../type';
+
 import { formatToRelativeDate } from 'utils/date';
+import { useNotesContainer } from '../../../../contexts';
+import useEventListener from 'hooks/useEventListener';
 
 export const TEAM_WRAPPER = 'team-wrapper';
 
 type Props = {
-  selectedTEAMFolder: NoteData | null;
   setConfirmTEAMModal: Dispatch<SetStateAction<boolean>>;
-  selectedTEAMNoteId: MutableRefObject<null | string>;
-  selectedTEAMFolderId: MutableRefObject<null | string>;
-  noteTEAMFolderUuid: MutableRefObject<null | string>;
   actionTEAMModal: MutableRefObject<null | string>;
-  setSelectedTEAMFolder: Dispatch<SetStateAction<NoteData | null>>;
-  setSelectedTEAMNoteToEdit: Dispatch<SetStateAction<NotesTypeTEAM | null>>;
-  setFoldersWithNotesTEAM: Dispatch<SetStateAction<Array<NoteData>>>;
-  foldersWithNotesTEAM: any;
-  teamArchivedMode: boolean;
+  teamActions: Record<string, string | null>;
 };
-const SelectedFolder: FC<Props> = ({
-  selectedTEAMFolder,
-  setConfirmTEAMModal,
-  selectedTEAMNoteId,
-  actionTEAMModal,
-  setSelectedTEAMFolder,
-  setSelectedTEAMNoteToEdit,
-  noteTEAMFolderUuid,
-  selectedTEAMFolderId,
-  foldersWithNotesTEAM,
-  setFoldersWithNotesTEAM,
-  teamArchivedMode = false,
-}) => {
+const SelectedFolder: FC<Props> = ({ setConfirmTEAMModal, actionTEAMModal, teamActions }) => {
   const { css, matchMedia } = useStyle();
   const mediumScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
+  const ref = useRef<HTMLDivElement | null>();
+
+  const { selectedTEAMFolder, setSelectedTEAMFolder, setSelectedTEAMNoteToEdit, archiveMode } = useNotesContainer();
+
+  const teamArchivedMode = archiveMode.team;
+
+  const handleClickOutside = (event: MouseEvent<HTMLElement>) => {
+    const element = event?.target as HTMLElement;
+    if (ref.current && !ref.current.contains(element)) {
+      setSelectedTEAMFolder((prev) => ({ ...prev, notes: prev.notes.map((item) => ({ ...item, selected: false })) }));
+    }
+  };
+
+  useEventListener('mousedown', handleClickOutside);
 
   const btnsActionsHandler = (itemId: string, itemFolderUuid: string | null): JSX.Element => {
     const btnsActions = [
@@ -46,7 +42,7 @@ const SelectedFolder: FC<Props> = ({
               id='backdrop'
               data-test-id='backdrop-archive'
               onClick={() => {
-                selectedTEAMNoteId.current = itemId;
+                teamActions.noteId = itemId;
                 actionTEAMModal.current = 'archive';
                 setConfirmTEAMModal(() => true);
               }}
@@ -57,7 +53,7 @@ const SelectedFolder: FC<Props> = ({
                 graphic='archive'
                 data-test-id='backdrop-archive-icon'
                 onPress={() => {
-                  selectedTEAMNoteId.current = itemId;
+                  teamActions.noteId = itemId;
                   actionTEAMModal.current = 'archive';
                   setConfirmTEAMModal(() => true);
                 }}
@@ -78,8 +74,8 @@ const SelectedFolder: FC<Props> = ({
               className={css(Align_flex_style)}
               data-test-id='backdrop-folder'
               onClick={() => {
-                selectedTEAMNoteId.current = itemId;
-                noteTEAMFolderUuid.current = itemFolderUuid;
+                teamActions.noteId = itemId;
+                teamActions.folderUuid = itemFolderUuid;
                 actionTEAMModal.current = 'move';
                 setConfirmTEAMModal(() => true);
               }}
@@ -90,8 +86,8 @@ const SelectedFolder: FC<Props> = ({
                 id='backdrop'
                 data-test-id='backdrop-folder-icon'
                 onPress={() => {
-                  selectedTEAMNoteId.current = itemId;
-                  noteTEAMFolderUuid.current = itemFolderUuid;
+                  teamActions.noteId = itemId;
+                  teamActions.folderUuid = itemFolderUuid;
                   actionTEAMModal.current = 'move';
                   setConfirmTEAMModal(() => true);
                 }}
@@ -111,7 +107,7 @@ const SelectedFolder: FC<Props> = ({
             id='backdrop'
             data-test-id='backdrop-delete'
             onClick={() => {
-              selectedTEAMNoteId.current = itemId;
+              teamActions.noteId = itemId;
               actionTEAMModal.current = 'delete';
               setConfirmTEAMModal(() => true);
             }}
@@ -122,7 +118,7 @@ const SelectedFolder: FC<Props> = ({
               id='backdrop'
               data-test-id='backdrop-delete-icon'
               onPress={() => {
-                selectedTEAMNoteId.current = itemId;
+                teamActions.noteId = itemId;
                 actionTEAMModal.current = 'delete';
                 setConfirmTEAMModal(() => true);
               }}
@@ -136,7 +132,8 @@ const SelectedFolder: FC<Props> = ({
     ];
 
     return (
-      <div className={css(Modal_buttons_style({ teamArchivedMode }))} data-test-id='button-dots'>
+      //@ts-ignore
+      <div ref={ref} className={css(Modal_buttons_style({ teamArchivedMode }))} data-test-id='button-dots'>
         {btnsActions.map((item) => (
           <div key={item.id} className={css({})}>
             {item.button}
@@ -147,59 +144,27 @@ const SelectedFolder: FC<Props> = ({
   };
 
   const selectedNoteActionhandler = (noteId) => {
-    selectedTEAMFolderId.current = null;
-    if (foldersWithNotesTEAM.length) {
-      setFoldersWithNotesTEAM((prev) => {
-        const arr = [...prev];
-        arr.forEach((item) => {
-          item.selectedDots = false;
-        });
-        return arr;
-      });
-    }
-
-    if (selectedTEAMFolder.notes[selectedTEAMFolder?.notes?.findIndex((item) => item.selected === true)]) {
-      setSelectedTEAMFolder((prev) => {
-        const arr = { ...prev };
-        arr.notes[arr.notes.findIndex((item) => item.id === noteId)].selected = false;
-        return arr;
-      });
-      return;
-    }
     setSelectedTEAMFolder((prev) => {
       const arr = { ...prev };
-      arr.notes.forEach((item) => (item.selected = false));
-      return arr;
-    });
-
-    setSelectedTEAMFolder((prev) => {
-      const arr = { ...prev };
-      arr.notes[arr.notes.findIndex((item) => item.id === noteId)].selected = true;
+      arr.notes.find((item) => item.id === noteId).selected = true;
       return arr;
     });
   };
 
   const setSelectedNoteHandler = (e, item) => {
     if (e.target.parentElement.id === 'backdrop' || e.target.id === 'backdrop') return;
-    if (selectedTEAMFolder.notes[selectedTEAMFolder?.notes?.findIndex((item) => item.selected === true)]) {
-      setSelectedTEAMFolder((prev) => {
-        const arr = { ...prev };
-        arr.notes[arr.notes.findIndex((note) => note.id === item.id)].selected = false;
-        return arr;
-      });
-    }
     setSelectedTEAMNoteToEdit(() => item);
   };
 
   return (
     <div className={css(Expanded_Note_Style({ mediumScreen }))} data-test-id={TEAM_WRAPPER}>
-      <div className={css(Flex_beetween_style)}>
+      <div className={css(flex_between_style)}>
         <span className={css(Folder_Title_styled)}>{selectedTEAMFolder?.title}</span>
       </div>
       <div className={css({ marginTop: '32px', display: 'flex', flexDirection: 'column' })}>
         {selectedTEAMFolder?.notes?.map((item) => (
           <div
-            className={css(Flex_beetween_style, Note_container_style, { position: 'relative' })}
+            className={css(flex_between_style, Note_container_style, { position: 'relative' })}
             key={item.id}
             onClick={(e) => setSelectedNoteHandler(e, item)}
           >
@@ -212,9 +177,9 @@ const SelectedFolder: FC<Props> = ({
                 onClick={() => selectedNoteActionhandler(item.id)}
                 id='backdrop'
               >
-                <span></span>
-                <span></span>
-                <span></span>
+                <span />
+                <span />
+                <span />
               </div>
             </div>
             {item.selected && btnsActionsHandler(item.id, item.folderUuid)}
@@ -301,26 +266,26 @@ const Expanded_Note_Style: CreateRule<{ mediumScreen: boolean }> =
     ...(mediumScreen && { flexGrow: 1 }),
   });
 
-const Folder_Title_styled: Rule = {
+const Folder_Title_styled: Rule = ({ theme }) => ({
   fontStyle: 'normal',
-  fontWeight: 'bold',
-  fontSize: '20px',
-  lineHeight: '24px',
-  color: '#333333',
-};
+  fontWeight: theme.font.weight.bold,
+  fontSize: theme.font.fixed.f20.fontSize,
+  lineHeight: theme.font.fixed.f20.lineHeight,
+  color: theme.colors.base,
+});
 
-const Flex_beetween_style: Rule = {
+const flex_between_style: Rule = {
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'center',
 };
 
-const noteTitle_style: Rule = {
-  fontWeight: 'bold',
-  fontSize: '18px',
-  lineHeight: '22px',
-  color: '#00539F',
-};
+const noteTitle_style: Rule = ({ theme }) => ({
+  fontWeight: theme.font.weight.bold,
+  fontSize: theme.font.fixed.f18.fontSize,
+  lineHeight: theme.font.fixed.f18.lineHeight,
+  color: theme.colors.tescoBlue,
+});
 
 const Note_container_style: Rule = {
   height: '46px',

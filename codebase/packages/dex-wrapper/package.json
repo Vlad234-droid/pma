@@ -10,8 +10,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@accessibility-toolbar/core": "0.0.20",
-    "@dex-ddl/core": "0.1.38"
+    "@accessibility-toolbar/core": "0.0.24",
+    "@dex-ddl/core": "0.1.153"
   },
   "devDependencies": {}
 }

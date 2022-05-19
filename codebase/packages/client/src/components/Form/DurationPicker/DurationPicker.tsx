@@ -1,121 +1,116 @@
-import React, { FC, useState, useRef } from 'react';
-import { Controller } from 'react-hook-form';
+import React, { FC, useState, useRef, useEffect, useMemo } from 'react';
 import { Button, useStyle } from '@pma/dex-wrapper';
 import useClickOutside from 'hooks/useClickOutside';
+import { Trans } from 'components/Translation';
+import { TileWrapper } from 'components/Tile';
 import { Input } from '../Input';
-import { TileWrapper } from '../../Tile';
+
+type Event = { target: { value: string; name: string } };
 
 export interface DurationField {
   name: string;
-  control?: any;
+  value: string;
+  onChange: (e: Event) => void;
   readonly?: boolean;
 }
 
-const mappedValues = {
-  P: '',
-  W: ' weeks ',
-  D: ' days',
-};
-
-type DurationReplacer = (matched: 'P' | 'W' | 'D') => string;
-
 export const TEST_ID = 'duration-test-id';
 
-export const DurationPicker: FC<DurationField> = ({ control, name, readonly = false }) => {
+export const DurationPicker: FC<DurationField> = ({ value, name, onChange, readonly = false }) => {
   const { css } = useStyle();
   const containerRef = useRef<HTMLDivElement>(null);
   const [weeks, setWeeks] = useState('');
   const [days, setDays] = useState('');
   const [isOpen, toggleOpen] = useState(false);
 
-  useClickOutside(containerRef, () => toggleOpen(false));
+  const setWeeksDays = (newValue) => {
+    const initWeeks = newValue?.match(/(\d+)(?=\s*W)/)?.[0] || '';
+    const initDays = newValue?.match(/(\d+)(?=\s*D)/)?.[0] || '';
+    if (initWeeks !== weeks) setWeeks(initWeeks);
+    if (initDays !== days) setDays(initDays);
+  };
+
+  useEffect(() => {
+    setWeeksDays(value);
+  }, [value]);
+
+  const handleChange = () => {
+    let result = '';
+    if (weeks && weeks !== '0') result = `${result}${weeks}W`;
+    if (days && days !== '0') result = `${result}${days}D`;
+    if (result) result = `P${result}`;
+    onChange({ target: { value: result, name } });
+  };
+
+  useClickOutside(containerRef, () => {
+    setWeeksDays(value);
+    toggleOpen(false);
+  });
+
+  const displayValue = useMemo(
+    () => `${weeks ? `${weeks} weeks` : ''} ${days ? `${days} days` : ''}`.trim(),
+    [weeks, days],
+  );
 
   return (
-    <Controller
-      name={name}
-      control={control}
-      render={({ field }) => {
-        // move to utilities and test separately
-        const initWeeks = field?.value?.match(/(\d+)(?=\s*W)/)?.[0] || '';
-        const initDays = field?.value?.match(/(\d+)(?=\s*D)/)?.[0] || '';
-        setWeeks(initWeeks);
-        setDays(initDays);
-        const setDuration = ({ weeksVal = weeks, daysVal = days }) => {
-          let result = '';
-          if (weeksVal && weeksVal !== '0') result = `${result}${weeksVal}W`;
-          if (daysVal && daysVal !== '0') result = `${result}${daysVal}D`;
-          if (result) result = `P${result}`;
-          field.onChange(result);
-        };
-        //
-        const replacer: DurationReplacer = (matched) => mappedValues[matched];
-        return (
+    <div data-test-id={TEST_ID} className='dropdown-container' style={{ position: 'relative' }} ref={containerRef}>
+      <Input onFocus={() => toggleOpen(!isOpen)} value={displayValue} readonly={readonly} />
+      {isOpen && (
+        <TileWrapper
+          customStyle={{
+            margin: '8px',
+            padding: '25px',
+            overflowY: 'visible',
+            border: '2px solid gray',
+            position: 'absolute',
+            left: 0,
+            top: 0,
+            overflow: 'visible',
+            zIndex: '10',
+          }}
+        >
           <div
-            data-test-id={TEST_ID}
-            className='dropdown-container'
-            style={{ position: 'relative' }}
-            ref={containerRef}
+            data-test-id='duration-dialog'
+            className={css({
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '8px',
+            })}
           >
+            <label htmlFor='weeks'>weeks</label>
             <Input
-              onChange={() => ({})}
-              onFocus={() => toggleOpen(!isOpen)}
-              value={field?.value?.replace(/[PWD]/gi, replacer)}
-              readonly={readonly}
+              name='weeks'
+              type='number'
+              min={0}
+              value={weeks}
+              id={'weeks'}
+              onChange={({ target }) => {
+                setWeeks(target.value);
+              }}
             />
-            {isOpen && (
-              <TileWrapper
-                customStyle={{
-                  margin: '8px',
-                  padding: '25px',
-                  maxWidth: '1300px',
-                  overflowY: 'visible',
-                  border: '2px solid gray',
-                  position: 'absolute',
-                  left: 0,
-                  top: 0,
-                  overflow: 'visible',
-                  zIndex: '10',
-                }}
-              >
-                <div
-                  data-test-id='duration-dialog'
-                  className={css({
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '8px',
-                  })}
-                >
-                  <label htmlFor='weeks'>weeks</label>
-                  <Input
-                    name='weeks'
-                    type='number'
-                    min={0}
-                    id={'weeks'}
-                    defaultValue={initWeeks}
-                    onChange={({ target }) => {
-                      setDuration({ weeksVal: target.value });
-                      setWeeks(target.value);
-                    }}
-                  />
-                  <label htmlFor='days'>days</label>
-                  <Input
-                    name='days'
-                    type='number'
-                    min={0}
-                    id={'days'}
-                    defaultValue={initDays}
-                    onChange={({ target }) => {
-                      setDuration({ daysVal: target.value });
-                      setDays(target.value);
-                    }}
-                  />
-                  <Button onPress={() => toggleOpen(!isOpen)}>Done</Button>
-                </div>
-              </TileWrapper>
-            )}
+            <label htmlFor='days'>days</label>
+            <Input
+              name='days'
+              type='number'
+              min={0}
+              id={'days'}
+              value={days}
+              onChange={({ target }) => {
+                setDays(target.value);
+              }}
+            />
+            <Button
+              data-test-id={'button'}
+              onPress={() => {
+                toggleOpen(!isOpen);
+                handleChange();
+              }}
+            >
+              <Trans i18nKey={'done'} />
+            </Button>
           </div>
-        );
-      }}
-    />
+        </TileWrapper>
+      )}
+    </div>
   );
 };

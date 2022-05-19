@@ -33,6 +33,12 @@ enum Page {
   REPORT = 'report',
   ADMINISTRATION = 'administration',
   TILE_REPORT_STATISTICS = 'report/:type',
+  CALIBRATION_RATINGS = 'calibration-ratings/:type',
+  PREVIOUS_RATINGS_TILES = 'previous-ratings-tiles/:uuid',
+  PREVIOUS_CALIBRATION_RATINGS = 'previous-calibration-ratings/:uuid',
+  PREVIOUS_OBJECTIVES_RATINGS = 'previous-objective-ratings/:uuid',
+  PREVIOUS_REVIEW_FORMS = 'previous-review-forms/:uuid',
+  SUPPORTING_YOUR_PERFORMANCE = 'syp/:uuid',
   NOT_FOUND = '404',
 }
 

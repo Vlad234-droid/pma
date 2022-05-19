@@ -1,7 +1,8 @@
 import React, { FC } from 'react';
-import { Rule, useStyle } from '@pma/dex-wrapper';
+import { Rule, Styles, useStyle } from '@pma/dex-wrapper';
+import { Icon } from 'components/Icon';
 import useSearchColleagues from 'hooks/useSearchColleagues';
-import { Item } from 'components/Form';
+import { Item as FormItem } from 'components/Form';
 import SearchInput from 'components/SearchInput';
 import defaultImg from 'images/default.png';
 
@@ -10,9 +11,10 @@ type Props = {
   onBlur: () => void;
   selected: Array<{ value: string; label: string }>;
   error: string;
+  customStyles?: Rule | Styles;
 };
 
-const ColleaguesFinder: FC<Props> = ({ onSelect, onBlur, error, selected }) => {
+const ColleaguesFinder: FC<Props> = ({ onSelect, onBlur, error, selected, customStyles }) => {
   const { css } = useStyle();
 
   const { colleagues, handleSearchColleagues, clearColleagueList } = useSearchColleagues();
@@ -25,8 +27,16 @@ const ColleaguesFinder: FC<Props> = ({ onSelect, onBlur, error, selected }) => {
 
   return (
     <>
-      <div className={css({ marginTop: '32px' })} data-test-id='search-part'>
-        <Item errormessage={error}>
+      <div className={css({ marginTop: '32px' }, { ...customStyles })} data-test-id='search-part'>
+        <FormItem
+          withIcon={false}
+          marginBot={false}
+          customIcon
+          searchIcon
+          // @ts-ignore
+          customIconInserted={<Icon size={'20px'} graphic='search' iconStyles={iconStyles} />}
+          errormessage={error}
+        >
           <SearchInput
             name={'search_option'}
             onChange={handleChange}
@@ -38,6 +48,7 @@ const ColleaguesFinder: FC<Props> = ({ onSelect, onBlur, error, selected }) => {
             isValid={!error}
             options={colleagues || []}
             selected={selected}
+            styles={{ paddingLeft: '36.7px' }}
             multiple
             renderOption={(item) => (
               <div className={css({ display: 'flex', justifyContent: 'flex-start', alignItems: 'center' })}>
@@ -55,10 +66,14 @@ const ColleaguesFinder: FC<Props> = ({ onSelect, onBlur, error, selected }) => {
               </div>
             )}
           />
-        </Item>
+        </FormItem>
       </div>
     </>
   );
+};
+
+const iconStyles: Rule = {
+  marginTop: '4px',
 };
 
 const FlexGapStyle: Rule = {

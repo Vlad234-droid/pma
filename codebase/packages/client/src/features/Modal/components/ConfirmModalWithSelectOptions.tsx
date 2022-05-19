@@ -41,6 +41,7 @@ export const ConfirmModalWithSelectOptions: FC<Props> = ({
 
   return (
     <Modal
+      overlayStyles={{ background: 'rgba(0, 83, 159, 0.7)' }}
       modalPosition={'middle'}
       modalContainerRule={[containerRule({ mobileScreen })]}
       title={{

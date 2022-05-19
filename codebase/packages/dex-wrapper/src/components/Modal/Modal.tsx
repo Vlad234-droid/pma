@@ -4,7 +4,7 @@ import { useDialog } from '@react-aria/dialog';
 import { FocusScope } from '@react-aria/focus';
 import { OverlayContainer, useModal, useOverlay, usePreventScroll } from '@react-aria/overlays';
 
-import { CreateRule, Rule, useStyle, Colors } from '@pma/dex-wrapper';
+import { CreateRule, Rule, useStyle, Colors, Styles } from '@pma/dex-wrapper';
 
 import { Button } from '../Button';
 
@@ -16,6 +16,7 @@ type NodeOptions = {
 export type ModalProps = {
   modalPosition?: 'middle' | 'bottom';
   onOverlayClick?: () => void;
+  overlayStyles?: Styles | Rule;
   overlayColor?: Colors;
   modalContainerRule?: Rule[];
   title?: NodeOptions;
@@ -26,6 +27,7 @@ export type ModalProps = {
 
 export const Modal: FC<ModalProps> = ({
   modalPosition = 'bottom',
+  overlayStyles = {},
   overlayColor,
   modalContainerRule = [],
   children,
@@ -63,7 +65,11 @@ export const Modal: FC<ModalProps> = ({
 
   return (
     <OverlayContainer id='portal-modal'>
-      <div {...underlayProps} aria-label='overlay' className={css(underlayRule({ isBottomPosition, overlayColor }))}>
+      <div
+        {...underlayProps}
+        aria-label='overlay'
+        className={css(underlayRule({ isBottomPosition, overlayColor }), overlayStyles)}
+      >
         <FocusScope restoreFocus autoFocus>
           <div
             {...overlayProps}

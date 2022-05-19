@@ -28,6 +28,7 @@ type Props<T> = {
 const SearchInput: FC<Props<any>> = ({
   domRef,
   placeholder = '',
+  styles = {},
   onChange,
   onSearch,
   onDelete,
@@ -82,6 +83,7 @@ const SearchInput: FC<Props<any>> = ({
             outline: 'none !important',
             border: `2px solid ${isValid ? theme.colors.tescoBlue : theme.colors.error}`,
           },
+          ...styles,
         })}
         placeholder={placeholder}
       />

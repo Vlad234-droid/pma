@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'components/Translation';
 import { Button, CreateRule, Rule, Styles, useStyle } from '@pma/dex-wrapper';
 import { ObjectiveType, ReviewType, Status } from 'config/enum';
@@ -21,6 +21,7 @@ import {
   colleagueUUIDSelector,
   countByStatusReviews,
   countByTypeReviews,
+  currentUserSelector,
   filterReviewsByTypeSelector,
   getPreviousReviewFilesSelector,
   getReviewSchema,
@@ -28,9 +29,11 @@ import {
   getTimelineMetaSelector,
   getTimelineSelector,
   isReviewsNumbersInStatus,
+  ObjectiveSharingActions,
   PreviousReviewFilesActions,
   ReviewsActions,
   reviewsMetaSelector,
+  SchemaActions,
   schemaMetaSelector,
   TimelineActions,
   timelinesExistSelector,
@@ -39,7 +42,6 @@ import {
 } from '@pma/store';
 import OrganizationWidget from 'features/Objectives/components/OrganizationWidget/OrganizationWidget';
 import { useNavigate } from 'react-router-dom';
-import useReviewSchema from 'features/Objectives/hooks/useReviewSchema';
 import { Page } from 'pages';
 import { buildPath } from 'features/Routes';
 import Spinner from 'components/Spinner';
@@ -49,6 +51,58 @@ import { USER } from 'config/constants';
 import { Objectives } from './Objectives';
 
 export const TEST_ID = 'my-objectives-page';
+
+const WidgetBlock = () => {
+  const navigate = useNavigate();
+  const { css } = useStyle();
+  return (
+    <div className={css(widgetsBlock)}>
+      <ShareWidget stopShare={true} sharing={false} customStyle={shareWidgetStyles} />
+
+      <ShareWidget stopShare={false} sharing={true} customStyle={shareWidgetStyles} />
+
+      <OrganizationWidget
+        customStyle={organizationWidgetStyles}
+        onClick={() => navigate(buildPath(Page.STRATEGIC_DRIVERS))}
+      />
+    </div>
+  );
+};
+
+const ReviewBlock: FC<{ canShow: Boolean }> = ({ canShow }) => {
+  const midYearReview = useSelector(getTimelineByCodeSelector(ObjectiveType.MYR, USER.current));
+  const endYearReview = useSelector(getTimelineByCodeSelector(ObjectiveType.EYR, USER.current));
+  const { t } = useTranslation();
+  const { css } = useStyle();
+  if (!canShow) return null;
+
+  return (
+    <>
+      <div data-test-id='personal' className={css(basicTileStyle)}>
+        <ReviewWidget
+          reviewType={ReviewType.MYR}
+          status={midYearReview?.status}
+          startTime={midYearReview?.startTime}
+          endTime={midYearReview?.endTime}
+          lastUpdatedTime={midYearReview?.lastUpdatedTime}
+          title={t('mid_year_review', 'Mid-year review')}
+          customStyle={{ height: '100%' }}
+        />
+      </div>
+      <div data-test-id='feedback' className={css(basicTileStyle)}>
+        <ReviewWidget
+          reviewType={ReviewType.EYR}
+          status={endYearReview?.status}
+          startTime={endYearReview?.startTime}
+          endTime={endYearReview?.endTime}
+          lastUpdatedTime={endYearReview?.lastUpdatedTime}
+          title={t('review_type_description_eyr', 'Year-end review')}
+          customStyle={{ height: '100%' }}
+        />
+      </div>
+    </>
+  );
+};
 
 const MyObjectives: FC = () => {
   const navigate = useNavigate();
@@ -60,7 +114,6 @@ const MyObjectives: FC = () => {
   const mobileScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
 
   const originObjectives = useSelector(filterReviewsByTypeSelector(ReviewType.OBJECTIVE));
-  const midYearReview = useSelector(getTimelineByCodeSelector(ObjectiveType.MYR, USER.current));
   const endYearReview = useSelector(getTimelineByCodeSelector(ObjectiveType.EYR, USER.current));
 
   const [previousReviewFilesModalShow, setPreviousReviewFilesModalShow] = useState(false);
@@ -68,16 +121,20 @@ const MyObjectives: FC = () => {
   const [objectives, setObjectives] = useState<OT.Objective[]>([]);
 
   const { loaded: schemaLoaded } = useSelector(schemaMetaSelector);
-  const { loaded: reviewLoaded } = useSelector(reviewsMetaSelector);
+  const { loaded: reviewLoaded, loading: reviewLoading } = useSelector(reviewsMetaSelector);
   const { loaded: timelineLoaded } = useSelector(getTimelineMetaSelector);
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const timelinesExist = useSelector(timelinesExistSelector(colleagueUuid));
   const { loaded: timelinesLoaded } = useSelector(timelinesMetaSelector());
-  const [schema] = useReviewSchema(ReviewType.OBJECTIVE) || {};
+  const schema = useSelector(getReviewSchema(ReviewType.OBJECTIVE));
   const { components = [], markup = { max: 0, min: 0 } } = schema;
   const { descriptions, startDates, statuses } = useSelector(getTimelineSelector(colleagueUuid)) || {};
   const timelineTypes = useSelector(timelineTypesAvailabilitySelector(colleagueUuid)) || {};
   const timelineObjective = useSelector(getTimelineByCodeSelector(ReviewType.OBJECTIVE, USER.current)) || {};
+  const params = useMemo(
+    () => ({ pathParams: { colleagueUuid, type: ReviewType.OBJECTIVE, cycleUuid: 'CURRENT' } }),
+    [colleagueUuid],
+  );
 
   const canShowObjectives = timelineTypes[ObjectiveType.OBJECTIVE];
   const canShowMyReview = timelineTypes[ObjectiveType.MYR] && timelineTypes[ObjectiveType.EYR];
@@ -85,10 +142,13 @@ const MyObjectives: FC = () => {
 
   const formElements = components.filter((component) => component.type != 'text');
 
+  const { info } = useSelector(currentUserSelector);
   const countReviews = useSelector(countByTypeReviews(ReviewType.OBJECTIVE)) || 0;
   const objectiveSchema = useSelector(getReviewSchema(ReviewType.OBJECTIVE));
   const countDraftReviews = useSelector(countByStatusReviews(ReviewType.OBJECTIVE, Status.DRAFT)) || 0;
   const countDeclinedReviews = useSelector(countByStatusReviews(ReviewType.OBJECTIVE, Status.DECLINED)) || 0;
+  const countWaitingForApprovalReviews =
+    useSelector(countByStatusReviews(ReviewType.OBJECTIVE, Status.WAITING_FOR_APPROVAL)) || 0;
   const files: File[] = useSelector(getPreviousReviewFilesSelector) || [];
 
   const reviewsMinNumbersInStatusApproved = useSelector(
@@ -96,7 +156,12 @@ const MyObjectives: FC = () => {
   );
 
   const reviewModificationMode = reviewModificationModeFn(countReviews, objectiveSchema);
-  const canEditAllObjective = canEditAllObjectiveFn({ objectiveSchema, countDraftReviews, countDeclinedReviews });
+  const canEditAllObjective = canEditAllObjectiveFn({
+    objectiveSchema,
+    countDraftReviews,
+    countDeclinedReviews,
+    countWaitingForApprovalReviews,
+  });
   const createIsAvailable =
     (reviewsMinNumbersInStatusApproved ||
       timelineObjective.status === Status.DRAFT ||
@@ -106,21 +171,23 @@ const MyObjectives: FC = () => {
 
   const renderStepIndicator: Boolean = (mobileScreen && canShowMyReview && timelineLoaded) || false;
 
+  const pathParams = useMemo(() => ({ colleagueUuid: info.colleagueUUID, cycleUuid: 'CURRENT' }), [info.colleagueUUID]);
+  const isValidPathParams = pathParams.colleagueUuid;
+
   useEffect(() => {
     dispatch(PreviousReviewFilesActions.getPreviousReviewFiles({ colleagueUUID: colleagueUuid }));
   }, []);
 
   useEffect(() => {
+    isValidPathParams && dispatch(ObjectiveSharingActions.checkSharing(pathParams));
+    isValidPathParams && dispatch(ObjectiveSharingActions.getSharings(pathParams));
+  }, [isValidPathParams]);
+
+  useEffect(() => {
     if (colleagueUuid) {
       dispatch(TimelineActions.getTimeline({ colleagueUuid }));
-
-      if (canShowObjectives) {
-        dispatch(
-          ReviewsActions.getColleagueReviews({ pathParams: { colleagueUuid: colleagueUuid, cycleUuid: 'CURRENT' } }),
-        );
-      }
     }
-  }, [colleagueUuid, canShowObjectives]);
+  }, [colleagueUuid]);
 
   useEffect(() => {
     if (timelinesLoaded && !timelinesExist) {
@@ -140,51 +207,17 @@ const MyObjectives: FC = () => {
     }
   }, [canShowAnnualReview]);
 
-  const WidgetBlock = () => {
-    return (
-      <div className={css(widgetsBlock)}>
-        <ShareWidget stopShare={true} sharing={false} customStyle={shareWidgetStyles} />
+  useEffect(() => {
+    if (canShowObjectives) {
+      dispatch(ReviewsActions.getReviews(params));
+    }
+    dispatch(SchemaActions.getSchema({ colleagueUuid }));
 
-        <ShareWidget stopShare={false} sharing={true} customStyle={shareWidgetStyles} />
-
-        <OrganizationWidget
-          customStyle={organizationWidgetStyles}
-          onClick={() => navigate(buildPath(Page.STRATEGIC_DRIVERS))}
-        />
-      </div>
-    );
-  };
-
-  const ReviewBlock: FC<{ canShow: Boolean }> = ({ canShow }) => {
-    if (!canShow) return null;
-
-    return (
-      <>
-        <div data-test-id='personal' className={css(basicTileStyle)}>
-          <ReviewWidget
-            reviewType={ReviewType.MYR}
-            status={midYearReview?.status}
-            startTime={midYearReview?.startTime}
-            endTime={midYearReview?.endTime}
-            lastUpdatedTime={midYearReview?.lastUpdatedTime}
-            title={t('mid_year_review', 'Mid-year review')}
-            customStyle={{ height: '100%' }}
-          />
-        </div>
-        <div data-test-id='feedback' className={css(basicTileStyle)}>
-          <ReviewWidget
-            reviewType={ReviewType.EYR}
-            status={endYearReview?.status}
-            startTime={endYearReview?.startTime}
-            endTime={endYearReview?.endTime}
-            lastUpdatedTime={endYearReview?.lastUpdatedTime}
-            title={t('review_type_description_eyr', 'Year-end review')}
-            customStyle={{ height: '100%' }}
-          />
-        </div>
-      </>
-    );
-  };
+    return () => {
+      dispatch(ReviewsActions.clearReviewData());
+      dispatch(SchemaActions.clearSchemaData());
+    };
+  }, [colleagueUuid, canShowObjectives]);
 
   return (
     <div data-test-id={TEST_ID}>
@@ -214,12 +247,15 @@ const MyObjectives: FC = () => {
                 </div>
               )}
               <div className={css(timelineWrapperStyles)}>
-                <Objectives
-                  canShowObjectives={canShowObjectives}
-                  objectives={objectives}
-                  canEditAllObjective={canEditAllObjective}
-                />
-
+                {reviewLoading ? (
+                  <Spinner fullHeight />
+                ) : (
+                  <Objectives
+                    canShowObjectives={canShowObjectives}
+                    objectives={objectives}
+                    canEditAllObjective={canEditAllObjective}
+                  />
+                )}
                 <Section
                   contentCustomStyle={widgetWrapperStyle}
                   left={{

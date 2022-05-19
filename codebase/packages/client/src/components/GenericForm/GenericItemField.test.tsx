@@ -76,7 +76,10 @@ describe('<GenericItemField />', () => {
       const props = {
         ...baseProps,
         methods,
-        options: [{ value: 'mocked_option_1', label: 'mocked_option_1' }, { value: 'mocked_option_2', label: 'mocked_option_2' }],
+        options: [
+          { value: 'mocked_option_1', label: 'mocked_option_1' },
+          { value: 'mocked_option_2', label: 'mocked_option_2' },
+        ],
       };
 
       return <GenericItemField {...props} />;

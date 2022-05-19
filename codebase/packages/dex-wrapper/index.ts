@@ -28,7 +28,7 @@ export {
   theme,
   DDLProvider,
   AccessibilityProvider,
-  useAccessibleStyle as useStyle,
+  useAccessibleStyle as useStyle, // todo uncomment when use acc tool
   useMedia,
   colors,
   fontWeight,

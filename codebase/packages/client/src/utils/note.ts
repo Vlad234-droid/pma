@@ -45,16 +45,16 @@ export const definePropperFieldTeamOptions = (foldersWithNotes, noteFolderUuid) 
   ];
 };
 
-export const getPropperInfoData = (actionModal, selectedNoteId, selectedFolderId, t) => {
+export const getPropperInfoData = (actionModal, actionItems, t) => {
   if (actionModal.current === 'delete') {
-    const option = selectedNoteId.current ? 'note' : 'folder';
+    const option = actionItems.notedId ? 'note' : 'folder';
     return {
       title: t('delete_folder_note', `Are you sure you want to delete this ${option}?`, { option }),
       description: t('this_is_permanent_and_cannot_be_undone', 'This is permanent and cannot be undone.'),
     };
   }
   if (actionModal.current === 'archive') {
-    const option = !selectedFolderId.current ? 'note' : 'folder';
+    const option = !actionItems.folderId ? 'note' : 'folder';
     return {
       title: t('archive_folder_note', `Are you sure you want to archive this ${option} ?`, { option }),
       description: t('moved_to_archive_section', `The ${option} will be moved to “Archive” section`, { option }),
@@ -71,52 +71,33 @@ export const getPropperInfoData = (actionModal, selectedNoteId, selectedFolderId
   }
 };
 
-export const confirmClearRefsHandler = (selectedNoteId, actionModal, selectedFolderId, setConfirmModal) => {
-  selectedNoteId.current = null;
+export const updateRef = (ref) => {
+  ref.folderId = null;
+  ref.noteId = null;
+  ref.folderUuid = null;
+};
+
+export const confirmClearRefsHandler = (actionModal, actionItems, setConfirmModal) => {
+  updateRef(actionItems.current);
   actionModal.current = null;
-  selectedFolderId.current = null;
   setConfirmModal(() => false);
 };
 
-export const clearRefsMoveHandler = (
-  noteFolderUuid,
-  selectedNoteId,
-  actionModal,
-  selectedFolderId,
-  setConfirmModal,
-) => {
-  noteFolderUuid.current = null;
-  selectedNoteId.current = null;
+export const clearRefsMoveHandler = (actionModal, actionItems, setConfirmModal) => {
+  updateRef(actionItems.current);
   actionModal.current = null;
-  selectedFolderId.current = null;
   setConfirmModal(() => false);
 };
 
-export const confirmClearTEAMRefsHandler = (
-  selectedTEAMNoteId,
-  actionTEAMModal,
-  selectedTEAMFolderId,
-  setConfirmTEAMModal,
-  noteTEAMFolderUuid,
-) => {
-  selectedTEAMNoteId.current = null;
+export const confirmClearTEAMRefsHandler = (actionTEAMModal, actionItems, setConfirmTEAMModal) => {
+  updateRef(actionItems.current);
   actionTEAMModal.current = null;
-  selectedTEAMFolderId.current = null;
-  noteTEAMFolderUuid.current = null;
   setConfirmTEAMModal(() => false);
 };
 
-export const clearRefsTEAMMoveHandler = (
-  noteTEAMFolderUuid,
-  selectedTEAMNoteId,
-  actionTEAMModal,
-  selectedTEAMFolderId,
-  setConfirmTEAMModal,
-) => {
-  noteTEAMFolderUuid.current = null;
-  selectedTEAMNoteId.current = null;
+export const clearRefsTEAMMoveHandler = (actionTEAMModal, actionItems, setConfirmTEAMModal) => {
+  updateRef(actionItems.current);
   actionTEAMModal.current = null;
-  selectedTEAMFolderId.current = null;
   setConfirmTEAMModal(() => false);
 };
 

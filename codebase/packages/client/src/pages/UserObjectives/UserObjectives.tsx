@@ -20,22 +20,27 @@ import useDispatch from 'hooks/useDispatch';
 import { useSelector } from 'react-redux';
 import {
   getPreviousReviewFilesSelector,
+  getReviewSchema,
   getTimelineMetaSelector,
   getTimelineSelector,
   PreviousReviewFilesActions,
+  ReviewsActions,
   reviewsMetaSelector,
+  reviewsSelector,
+  SchemaActions,
   schemaMetaSelector,
   TimelineActions,
   timelineTypesAvailabilitySelector,
 } from '@pma/store';
 import { useNavigate, useParams } from 'react-router';
-import useReviewSchema from 'features/Objectives/hooks/useReviewSchema';
-import useReviews from 'features/Objectives/hooks/useReviews';
 import OrganizationWidget from 'features/Objectives/components/OrganizationWidget/OrganizationWidget';
 import { buildPath } from 'features/Routes';
 import { Page } from 'pages';
 import Spinner from 'components/Spinner';
 import { File } from '../../features/ReviewFiles/components/components/File';
+import SecondaryWidget, { Props as SecondaryWidgetProps } from 'features/SecondaryWidget';
+import { CanPerform, role } from 'features/Permission';
+import { paramsReplacer } from 'utils';
 
 const reviews = [];
 
@@ -58,11 +63,11 @@ export const UserObjectives: FC = () => {
 
   const [previousReviewFilesModalShow, setPreviousReviewFilesModalShow] = useState(false);
   const [objectives, setObjectives] = useState<OT.Objective[]>([]);
-  const [schema] = useReviewSchema(ReviewType.OBJECTIVE);
+  const schema = useSelector(getReviewSchema(ReviewType.OBJECTIVE));
   const { components = [] } = schema;
 
   const { loaded: schemaLoaded } = useSelector(schemaMetaSelector);
-  const { loaded: reviewLoaded } = useSelector(reviewsMetaSelector);
+  const { loaded: reviewLoaded, loading: reviewLoading } = useSelector(reviewsMetaSelector);
   const { loaded: timelineLoaded } = useSelector(getTimelineMetaSelector);
   const { uuid } = useParams<{ uuid: string }>();
   const { descriptions, startDates, statuses } = useSelector(getTimelineSelector(uuid)) || {};
@@ -70,12 +75,14 @@ export const UserObjectives: FC = () => {
   const canShowObjectives = timelineTypes[ObjectiveType.OBJECTIVE];
   const canShowMyReview = timelineTypes[ObjectiveType.MYR] && timelineTypes[ObjectiveType.EYR];
   const canShowAnnualReview = !timelineTypes[ObjectiveType.MYR] && timelineTypes[ObjectiveType.EYR];
+  //TODO: temporary solution, in future replace to selector
+  const isSubmittingSecondaryWidget = false;
   const files: File[] = useSelector(getPreviousReviewFilesSelector) || [];
   const params = useMemo(
     () => ({ pathParams: { colleagueUuid: uuid, type: ReviewType.OBJECTIVE, cycleUuid: 'CURRENT' } }),
     [uuid],
   );
-  const [origin] = useReviews(params);
+  const { data } = useSelector(reviewsSelector);
   const formElements = components.filter((component) => component.type != 'text');
 
   // todo not clear where reviews might come from. remove this block when its clear
@@ -106,7 +113,7 @@ export const UserObjectives: FC = () => {
 
   useEffect(() => {
     if (reviewLoaded && schemaLoaded) {
-      setObjectives(transformReviewsToObjectives(origin, formElements));
+      setObjectives(transformReviewsToObjectives(data, formElements));
     }
   }, [reviewLoaded, schemaLoaded]);
 
@@ -114,9 +121,54 @@ export const UserObjectives: FC = () => {
     dispatch(PreviousReviewFilesActions.getPreviousReviewFiles({ colleagueUUID: uuid }));
   }, []);
 
+  useEffect(() => {
+    dispatch(ReviewsActions.getReviews(params));
+    if (uuid) {
+      dispatch(SchemaActions.getSchema({ colleagueUuid: uuid }));
+    }
+
+    return () => {
+      dispatch(ReviewsActions.clearReviewData());
+      dispatch(SchemaActions.clearSchemaData());
+    };
+  }, [uuid]);
+
+  const widgets: Array<SecondaryWidgetProps> = [
+    {
+      iconGraphic: 'list',
+      title: t('view_previous_ratings', 'View previous ratings'),
+      customStyle: { flex: '2 1 150px' },
+      //@ts-ignore
+      onClick: () => navigate(paramsReplacer(`/${Page.PREVIOUS_RATINGS_TILES}`, { ':uuid': uuid })),
+    },
+    {
+      iconGraphic: 'chatSq',
+      title: isSubmittingSecondaryWidget
+        ? t('submit_calibration_ratings', 'Submit calibration ratings')
+        : t('edit_calibration_ratings', 'Edit calibration ratings'),
+      data: isSubmittingSecondaryWidget
+        ? t('Submit calibration ratings', 'Submit calibration ratings')
+        : t('ratings_are_submitted', 'Ratings are submitted'),
+      customStyle: { flex: '2 1 150px' },
+      background: isSubmittingSecondaryWidget ? 'tescoBlue' : 'white',
+      hover: false,
+      onClick: () =>
+        navigate(
+          paramsReplacer(`/${Page.CALIBRATION_RATINGS}`, { ':type': isSubmittingSecondaryWidget ? 'submit' : 'edit' }),
+        ),
+    },
+    {
+      iconGraphic: 'edit',
+      title: t('managing_performance', 'Managing performance'),
+      data: t('start_syp', 'Start SYP'),
+      customStyle: { flex: '2 1 150px' },
+      onClick: () => console.log(''),
+    },
+  ];
+
   return (
-    <div className={css(bodyBlockStyles({ mobileScreen }))}>
-      <div className={css(arrowLeftStyle)}>
+    <div data-test-id={TEST_ID} className={css(bodyBlockStyles({ mobileScreen }))}>
+      <div data-test-id={'test-back-btn'} className={css(arrowLeftStyle)}>
         <BackButton
           onPress={() => {
             navigate(-1);
@@ -124,13 +176,13 @@ export const UserObjectives: FC = () => {
           graphic='backwardLink'
         />
       </div>
-      <div className={css(bodyWrapperStyles)} data-test-id={TEST_ID}>
+      <div className={css(bodyWrapperStyles)}>
         {!timelineLoaded ? (
           <Spinner id='1' />
         ) : (
           <>
             {!mobileScreen && canShowMyReview && (
-              <div onClick={handleClick} className={css(timelineWrapperStyles)}>
+              <div data-test-id={'test-step-indicator'} onClick={handleClick} className={css(timelineWrapperStyles)}>
                 <StepIndicator
                   mainTitle={t('performance_timeline_title', 'Your Contribution timeline')}
                   titles={descriptions}
@@ -154,15 +206,31 @@ export const UserObjectives: FC = () => {
                           customVariantRules={{ default: iconButtonStyles }}
                           iconStyles={iconStyles}
                         >
-                          <Trans i18nKey='download'>Download</Trans>
+                          <Trans data-test-id={'test-download-btn'} i18nKey='download'>
+                            Download
+                          </Trans>
                         </IconButton>
                       </div>
                     ),
                   }}
                 >
-                  <Accordion objectives={objectives} canShowStatus={true} isButtonsVisible={false} />
+                  {reviewLoading ? (
+                    <Spinner fullHeight />
+                  ) : (
+                    <Accordion objectives={objectives} canShowStatus={true} isButtonsVisible={false} />
+                  )}
                 </Section>
               )}
+              <CanPerform
+                perform={[role.LINE_MANAGER]}
+                yes={() => (
+                  <div className={css(secondaryWidgetStyles)}>
+                    {widgets.map((props, i) => (
+                      <SecondaryWidget customStyle={widgetStyle} key={i} {...props} />
+                    ))}
+                  </div>
+                )}
+              />
 
               <Section
                 left={{
@@ -196,7 +264,7 @@ export const UserObjectives: FC = () => {
       </div>
       <div className={css(headWrapperStyles({ mobileScreen }))}>
         {!timelineLoaded && (
-          <div className={css(timelineWrapperStyles)}>
+          <div data-test-id={'test-timeline-spinner'} className={css(timelineWrapperStyles)}>
             <Spinner id='2' />
           </div>
         )}
@@ -229,6 +297,19 @@ export const UserObjectives: FC = () => {
     </div>
   );
 };
+
+const widgetStyle: Rule = ({ theme }) => ({
+  fontSize: theme.font.fixed.f16.fontSize,
+  lineHeight: theme.font.fixed.f16.lineHeight,
+  letterSpacing: '0px',
+});
+const secondaryWidgetStyles: Rule = () => ({
+  margin: '48px 0px',
+  display: 'flex',
+  flexWrap: 'wrap',
+  height: '176px',
+  gap: '8px',
+});
 
 const bodyBlockStyles: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => ({
   display: 'flex',

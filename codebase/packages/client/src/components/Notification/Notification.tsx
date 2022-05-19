@@ -35,7 +35,7 @@ const Notification: FC<NotificationProps> = ({
 
   return (
     <div className={css(wrapperStyle, customStyle)}>
-      <div className={css({ paddingLeft: '5px', alignItems: 'center', display: 'flex' })}>
+      <div className={css({ paddingLeft: '5px', paddingTop: '1px', alignItems: 'center', display: 'flex' })}>
         <Icon graphic={graphic} fill={colors[iconColor]} iconStyles={{ width: '16px', height: '16px' }} />
       </div>
       <div className={css(textStyle)}>{text}</div>
@@ -60,7 +60,7 @@ const wrapperStyle: Rule = {
   display: 'flex',
   padding: '12px',
   borderRadius: '10px',
-  alignItems: 'center',
+  alignItems: 'flex-start',
   letterSpacing: '0px',
 };
 

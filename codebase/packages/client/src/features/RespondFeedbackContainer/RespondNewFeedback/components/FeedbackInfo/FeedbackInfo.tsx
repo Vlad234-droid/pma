@@ -9,7 +9,7 @@ import { useParams } from 'react-router-dom';
 import { getPropperTargetType } from '../../../utils';
 import { FeedbackStatus, Tesco } from 'config/enum';
 import { NotificationTile } from 'components/NotificationTile';
-import { GiveFeedbackProfileInfo } from 'features/Feedback/components';
+import { ProfileInfo } from 'components/ProfileInfo';
 
 export const INFO_WRAPPER = 'info_wrapper';
 export const GIVE_FEEDBACK_VIDEO = 'give_feedback_video';
@@ -46,7 +46,7 @@ const FeedbackInfo: FC<Props> = ({ onClickMore }) => {
   return (
     <div data-test-id={INFO_WRAPPER}>
       <div className={css({ marginTop: '30px' })}>
-        <GiveFeedbackProfileInfo
+        <ProfileInfo
           firstName={targetColleagueProfile?.colleague?.profile?.firstName}
           lastName={targetColleagueProfile?.colleague?.profile?.lastName}
           job={targetColleagueProfile?.colleague?.workRelationships[0]?.job?.name}

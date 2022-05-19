@@ -88,15 +88,13 @@ const ReportModal: FC<ModalProps> = ({ onClose, modalStatus, tiles }) => {
   const handleCheck = (checkboxId) => {
     const itemIndex = selectedCheckboxes.findIndex((item) => item.id === checkboxId);
     const isSelectAll = itemIndex === selectedCheckboxes.length - 1;
-    if (isSelectAll) {
-      return setSelectedCheckboxes((prev) => {
-        return prev.map((checkbox) => {
-          return {
-            ...checkbox,
-            isChecked: !prev[itemIndex].isChecked,
-          };
-        });
-      });
+    if (isSelectAll && modalStatus === ModalStatus.EDIT) {
+      return setSelectedCheckboxes((prev) =>
+        prev.map((checkbox) => ({
+          ...checkbox,
+          isChecked: !prev[itemIndex].isChecked,
+        })),
+      );
     }
     const item = {
       ...selectedCheckboxes[itemIndex],

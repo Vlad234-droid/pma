@@ -63,50 +63,27 @@ export type ChosesButtonType = {
 };
 
 export type MainFolderProps = {
-  TEAM: boolean;
-  setIsUserArchived: () => void;
-  setTeamArchivedMode: () => void;
-  isUserArchived: boolean;
-  teamArchivedMode: boolean;
+  isLineManager: boolean;
 };
 
 export type SelectedFolderProps = {
-  selectedFolder: NoteData | null;
   setConfirmModal: Dispatch<SetStateAction<boolean>>;
   setConfirmTEAMModal: Dispatch<SetStateAction<boolean>>;
-  selectedNoteId: MutableRefObject<null | string>;
-  selectedTEAMNoteId: MutableRefObject<null | string>;
   actionModal: MutableRefObject<null | string>;
   actionTEAMModal: MutableRefObject<null | string>;
-  setSelectedFolder: Dispatch<SetStateAction<NoteData | null>>;
-  foldersWithNotes: Array<FoldersWithNotesTypes> | [];
-  setFoldersWithNotes: Dispatch<SetStateAction<Array<FoldersWithNotesTypes>>>;
-  selectedFolderId: MutableRefObject<null | string>;
-  noteFolderUuid: MutableRefObject<null | string>;
-  noteTEAMFolderUuid: MutableRefObject<null | string>;
-  setSelectedNoteToEdit: Dispatch<SetStateAction<NotesType | null>>;
-  isUserArchived?: boolean;
-  setSelectedTEAMNoteToEdit: Dispatch<SetStateAction<NotesTypeTEAM | null>>;
   testId?: string;
+  userActions: Record<string, string | null>;
+  teamActions: Record<string, string | null>;
 };
 
 export type PersonalFoldersProps = {
-  selectedNoteId: MutableRefObject<null | string>;
   handleSelected: (itemID: string) => any;
   setConfirmModal: Dispatch<SetStateAction<boolean>>;
-  setSelectedTEAMFolder: Dispatch<SetStateAction<NoteData | null>>;
-  selectedTEAMFolder: NoteData | null;
-  setFoldersWithNotesTEAM: Dispatch<SetStateAction<Array<NoteData>>>;
   actionModal: MutableRefObject<null | string>;
-  selectedFolderId: MutableRefObject<null | string>;
-  foldersWithNotes: Array<FoldersWithNotesTypes> | [];
-  setFoldersWithNotes: Dispatch<SetStateAction<Array<FoldersWithNotesTypes>>>;
-  selectedFolder: NoteData | null;
-  setSelectedFolder: Dispatch<SetStateAction<NoteData | null>>;
-  setIsUserArchived: () => void;
-  isUserArchived: boolean;
+  userActions: Record<string, string | null>;
 };
 
 export enum NotesStatus {
   CREATED = 'CREATED',
+  ARCHIVED = 'ARCHIVED',
 }

@@ -51,7 +51,7 @@ type Data = {
   setArchiveMode: (T) => void;
 };
 
-const NotesContext = createContext<Data>(defaultData);
+export const NotesContext = createContext<Data>(defaultData);
 
 export const NotesProvider: FC = ({ children }) => {
   const [selectedFolder, setSelectedFolder] = useState<NoteData | null>(null);
