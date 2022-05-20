@@ -12,6 +12,8 @@ import {
   publishPerformanceCycle,
   updatePerformanceCycle,
   updatePerformanceCycleStatus,
+  deployPerformanceCycle,
+  startPerformanceCycle,
   getPerformanceCycleMappingKeys,
 } from './actions';
 
@@ -115,7 +117,53 @@ export const publishPerformanceCyclesEpic: Epic = (action$, _, { api }) =>
         map(() => {
           return getGetAllPerformanceCycles.request();
         }),
-        catchError(({ errors }) => of(publishPerformanceCycle.failure(errors))),
+        catchError((error) => {
+          const { errors } = error?.data || {};
+          return concatWithErrorToast(
+            of(publishPerformanceCycle.failure(errors)),
+            errorPayloadConverter({ ...errors?.[0], title: 'Performance cycle error' }),
+          );
+        }),
+      );
+    }),
+  );
+
+export const deployPerformanceCyclesEpic: Epic = (action$, _, { api }) =>
+  action$.pipe(
+    filter(isActionOf(deployPerformanceCycle.request)),
+    switchMap(({ payload }) => {
+      return from(api.deployPerformanceCycle(payload)).pipe(
+        // @ts-ignore
+        map(() => {
+          return getGetAllPerformanceCycles.request();
+        }),
+        catchError((error) => {
+          const { errors } = error?.data || {};
+          return concatWithErrorToast(
+            of(deployPerformanceCycle.failure(errors)),
+            errorPayloadConverter({ ...errors?.[0], title: 'Performance cycle error' }),
+          );
+        }),
+      );
+    }),
+  );
+
+export const startPerformanceCyclesEpic: Epic = (action$, _, { api }) =>
+  action$.pipe(
+    filter(isActionOf(startPerformanceCycle.request)),
+    switchMap(({ payload }) => {
+      return from(api.startPerformanceCycle(payload)).pipe(
+        // @ts-ignore
+        map(() => {
+          return getGetAllPerformanceCycles.request();
+        }),
+        catchError((error) => {
+          const { errors } = error?.data || {};
+          return concatWithErrorToast(
+            of(startPerformanceCycle.failure(errors)),
+            errorPayloadConverter({ ...errors?.[0], title: 'Performance cycle error' }),
+          );
+        }),
       );
     }),
   );
@@ -141,5 +189,7 @@ export default combineEpics(
   updatePerformanceCyclesEpic,
   updatePerformanceCycleStatusEpic,
   publishPerformanceCyclesEpic,
+  deployPerformanceCyclesEpic,
+  startPerformanceCyclesEpic,
   getPerformanceCycleMappingKeysEpic,
 );

@@ -1,6 +1,7 @@
 import * as Yup from 'yup';
 import { TFunction } from 'components/Translation';
 import { formatDate } from 'utils';
+import { OBJECTIVE } from './constants';
 
 export const createPMCycleSchema = (t: TFunction) =>
   Yup.object().shape({
@@ -21,7 +22,20 @@ export const createPMCycleSchema = (t: TFunction) =>
                 pm_cycle_before_end: Yup.string(),
               })
               .required('Cycle details is a required'),
-            timelinePoints: Yup.array().of(Yup.object()).required('Cycle reviews is a required'),
+            timelinePoints: Yup.array()
+              .of(
+                Yup.object().shape({
+                  properties: Yup.object().shape({
+                    pm_review_min: Yup.number().when(['pm_timeline_point_code'], (code, schema) =>
+                      code === OBJECTIVE ? schema.min(1) : schema.notRequired(),
+                    ),
+                    pm_review_max: Yup.number().when(['pm_timeline_point_code'], (code, schema) =>
+                      code === OBJECTIVE ? schema.min(1) : schema.notRequired(),
+                    ),
+                  }),
+                }),
+              )
+              .required('Cycle reviews is a required'),
           })
           .required(),
       })

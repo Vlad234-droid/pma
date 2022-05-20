@@ -32,6 +32,18 @@ export const updatePerformanceCycleStatus = createAsyncAction(
   'performance-cycles/status/UPDATE_FAILURE',
 )<{ uuid: string; status: string }, any, Error>();
 
+export const deployPerformanceCycle = createAsyncAction(
+  'performance-cycles/deploy/REQUEST',
+  'performance-cycles/deploy/SUCCESS',
+  'performance-cycles/deploy/FAILURE',
+)<string, any, Error>();
+
+export const startPerformanceCycle = createAsyncAction(
+  'performance-cycles/start/REQUEST',
+  'performance-cycles/start/SUCCESS',
+  'performance-cycles/start/FAILURE',
+)<string, any, Error>();
+
 export const publishPerformanceCycle = createAsyncAction(
   'performance-cycles/PUBLISH_REQUEST',
   'performance-cycles/PUBLISH_SUCCESS',
@@ -53,6 +65,8 @@ export const Actions = {
   updatePerformanceCycle: updatePerformanceCycle.request,
   updatePerformanceCycleStatus: updatePerformanceCycleStatus.request,
   publishPerformanceCycle: publishPerformanceCycle.request,
+  deployPerformanceCycle: deployPerformanceCycle.request,
+  startPerformanceCycle: startPerformanceCycle.request,
   getPerformanceCycleMappingKeys: getPerformanceCycleMappingKeys.request,
   resetMetaStatusRequest,
 };

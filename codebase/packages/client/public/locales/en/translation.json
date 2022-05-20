@@ -466,6 +466,8 @@
   "entry_config_key": "Entry config key",
   "start_day": "Start day",
   "end_day": "End day",
+  "weeks": "weeks",
+  "days": "days",
   "recurrence": "Recurrence",
   "before_start": "Before start",
   "before_end": "Before end",
