@@ -5,7 +5,8 @@ import { Graphics, Icon } from '../Icon';
 export const StatusIcon: FC<{
   color: string;
   graphics: Graphics;
-}> = ({ color, graphics }) => {
+  title?: string;
+}> = ({ color, graphics, title }) => {
   const { css } = useStyle();
   const transform = `translateY(-50%)`;
   return (
@@ -17,7 +18,7 @@ export const StatusIcon: FC<{
         zIndex: 1,
       })}
     >
-      <Icon graphic={graphics} fill={color} size={'20px'} />
+      <Icon graphic={graphics} fill={color} size={'20px'} title={title} />
     </div>
   );
 };
