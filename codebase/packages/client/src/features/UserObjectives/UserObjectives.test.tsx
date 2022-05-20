@@ -1,7 +1,7 @@
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
 import { renderWithTheme as render } from 'utils/test';
-import { UserObjectives, TEST_ID } from './UserObjectives';
+import UserObjectives, { TEST_ID } from './UserObjectives';
 import { BrowserRouter } from 'react-router-dom';
 
 jest.mock('react-router-dom', () => ({

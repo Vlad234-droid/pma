@@ -10,7 +10,7 @@ export const getCards = (t): Array<Record<'title' | 'description' | 'page', stri
     title: t('objectives', 'Objectives'),
     description: t('archive_of_previous_objectives', 'Archive of previous objectives'),
     // TODO: in future replace to Page.PREVIOUS_OBJECTIVES_RATINGS
-    page: '',
+    page: Page.PREVIOUS_OBJECTIVES_RATINGS,
   },
   {
     title: t('review_forms', 'Review forms'),

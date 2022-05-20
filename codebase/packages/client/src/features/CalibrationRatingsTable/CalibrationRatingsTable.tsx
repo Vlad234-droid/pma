@@ -6,7 +6,7 @@ import { useTranslation } from 'components/Translation';
 
 import { getContent, getTitles } from './utils';
 
-export const PreviousCalibrationRatingsTable = () => {
+export const CalibrationRatingsTable = () => {
   const { t } = useTranslation();
   return (
     <Table

@@ -10,7 +10,7 @@ import { getCards } from './utils';
 import { paramsReplacer } from '../../utils';
 import { buildPath } from 'features/Routes';
 
-const PreviousRatingsTiles = () => {
+const RatingsTiles = () => {
   const { css, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const { t } = useTranslation();
@@ -93,4 +93,4 @@ const cardStyle: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => (
   flexGrow: 1,
   flexBasis: mobileScreen ? '100%' : '45%',
 });
-export default PreviousRatingsTiles;
+export default RatingsTiles;
