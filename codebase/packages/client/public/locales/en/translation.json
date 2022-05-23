@@ -606,5 +606,6 @@
   "overall_rating": "Overall Rating",
   "what_rating": "What rating",
   "how_rating": "How rating",
-  "below_expected_contribution": "Fill out the questions below to share your feedback"
+  "below_expected_contribution": "Fill out the questions below to share your feedback",
+  "edit_dashboard": "Edit dashboard"
 }

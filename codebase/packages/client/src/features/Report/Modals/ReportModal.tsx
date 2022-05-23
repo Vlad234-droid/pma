@@ -111,7 +111,14 @@ const ReportModal: FC<ModalProps> = ({ onClose, modalStatus, tiles }) => {
     return modalStatus === ModalStatus.EDIT && selectedCheckboxes.some((item) => item['isChecked']);
   };
   return (
-    <WrapperModal onClose={onClose} title={t('download_and_extract', 'Download and Extract')}>
+    <WrapperModal
+      onClose={onClose}
+      title={
+        modalStatus === ModalStatus.DOWNLOAD
+          ? t('download_and_extract', 'Download and Extract')
+          : t('edit_dashboard', 'Edit dashboard')
+      }
+    >
       <div className={css(wrapperModalGiveFeedbackStyle)}>
         <h3 className={css(modalTitleStyle({ mobileScreen }))} data-test-id={DOWNLOAD_WRAPPER}>
           {modalStatus === ModalStatus.DOWNLOAD ? (
