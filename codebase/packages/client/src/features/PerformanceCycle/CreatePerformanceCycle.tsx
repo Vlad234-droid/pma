@@ -105,22 +105,15 @@ const CreatePerformanceCycle: FC = () => {
   };
 
   const handlePublish = (data) => {
+    const newData = {
+      ...data,
+      status: 'REGISTERED',
+      uuid: performanceCycleUuid === 'new' ? undefined : performanceCycleUuid,
+    };
     if (performanceCycleUuid === 'new') {
-      dispatch(
-        PerformanceCycleActions.createPerformanceCycle({
-          ...data,
-          status: 'REGISTERED',
-          uuid: performanceCycleUuid === 'new' ? undefined : performanceCycleUuid,
-        }),
-      );
+      dispatch(PerformanceCycleActions.createPerformanceCycle(newData));
     } else {
-      dispatch(
-        PerformanceCycleActions.updatePerformanceCycle({
-          ...data,
-          status: data.status || 'REGISTERED',
-          uuid: performanceCycleUuid === 'new' ? undefined : performanceCycleUuid,
-        }),
-      );
+      dispatch(PerformanceCycleActions.updatePerformanceCycle(newData));
     }
   };
 

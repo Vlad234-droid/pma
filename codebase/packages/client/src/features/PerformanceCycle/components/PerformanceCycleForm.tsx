@@ -60,6 +60,7 @@ const PerformanceCycleForm: FC<Props> = ({ onSubmit, defaultValues, canEdit = tr
 
   const handleChangeTemplate = <T extends { uuid: string }>(template: T) => {
     setValue('template', template, { shouldValidate: true });
+    dispatch(ProcessTemplateActions.getProcessTemplateMetadata({ fileUuid: template?.uuid }));
   };
 
   const templateDetails: any | undefined = useSelector(processTemplateByUuidSelector(template?.uuid));
@@ -79,10 +80,6 @@ const PerformanceCycleForm: FC<Props> = ({ onSubmit, defaultValues, canEdit = tr
       setValue('forms', templateDetails.forms);
     }
   }, [templateDetails?.cycle]);
-
-  useEffect(() => {
-    if (template?.uuid) dispatch(ProcessTemplateActions.getProcessTemplateMetadata({ fileUuid: template?.uuid }));
-  }, [template?.uuid]);
 
   useEffect(() => {
     dispatch(PerformanceCycleActions.getPerformanceCycleMappingKeys());
@@ -342,7 +339,7 @@ const PerformanceCycleForm: FC<Props> = ({ onSubmit, defaultValues, canEdit = tr
           className={css({ display: 'flex', justifyContent: 'flex-end', paddingBottom: '100px', maxWidth: '1300px' })}
         >
           {/*@ts-ignore*/}
-          {!defaultValues?.status && (
+          {defaultValues?.status !== 'REGISTERED' && (
             <Button
               isDisabled={!isValid}
               mode='inverse'
