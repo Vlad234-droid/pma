@@ -1,5 +1,5 @@
-import React, { FC, HTMLProps, useState } from 'react';
-import { Button, Rule } from '@pma/dex-wrapper';
+import React, { FC, HTMLProps, useState, memo } from 'react';
+import { Button, Rule, useStyle } from '@pma/dex-wrapper';
 import { IconButton } from 'components/IconButton';
 import { ModalComponent } from 'features/Objectives/components/Modal';
 import { useTranslation } from 'components/Translation';
@@ -9,47 +9,54 @@ export type CreateModalProps = {
   withIcon?: boolean;
   buttonText?: string;
   useSingleStep?: boolean;
+  isAvailable?: boolean;
 };
 
 type Props = HTMLProps<HTMLInputElement> & CreateModalProps;
 
-const CreateButton: FC<Props> = ({ withIcon = false, buttonText = 'Create objectives', useSingleStep = true }) => {
-  const { t } = useTranslation();
+const CreateButton: FC<Props> = memo(
+  ({ withIcon = false, buttonText = 'Create objectives', useSingleStep = true, isAvailable = true }) => {
+    const { t } = useTranslation();
+    const { css } = useStyle();
 
-  const [isOpen, setIsOpen] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
 
-  const handleBtnClick = () => setIsOpen(true);
+    const handleBtnClick = () => setIsOpen(true);
 
-  return (
-    <>
-      {withIcon ? (
-        <IconButton
-          customVariantRules={{ default: iconBtnStyle }}
-          onPress={handleBtnClick}
-          graphic='add'
-          iconProps={{ invertColors: true }}
-          iconStyles={iconStyle}
-        >
-          {buttonText}
-        </IconButton>
-      ) : (
-        <Button styles={[buttonStyle]} onPress={handleBtnClick}>
-          {buttonText}
-        </Button>
-      )}
-
-      {isOpen && (
-        <ModalComponent onClose={() => setIsOpen(false)} title={t('create_objectives', 'Create objectives')}>
-          {useSingleStep ? (
-            <CreateUpdateObjective onClose={() => setIsOpen(false)} />
-          ) : (
-            <CreateUpdateObjectives onClose={() => setIsOpen(false)} />
-          )}
-        </ModalComponent>
-      )}
-    </>
-  );
-};
+    return (
+      <>
+        {isAvailable && (
+          <div className={css({ display: 'flex', marginBottom: '20px' })}>
+            {withIcon ? (
+              <IconButton
+                customVariantRules={{ default: iconBtnStyle }}
+                onPress={handleBtnClick}
+                graphic='add'
+                iconProps={{ invertColors: true }}
+                iconStyles={iconStyle}
+              >
+                {buttonText}
+              </IconButton>
+            ) : (
+              <Button styles={[buttonStyle]} onPress={handleBtnClick}>
+                {buttonText}
+              </Button>
+            )}
+          </div>
+        )}
+        {isOpen && (
+          <ModalComponent onClose={() => setIsOpen(false)} title={t('create_objectives', 'Create objectives')}>
+            {useSingleStep ? (
+              <CreateUpdateObjective onClose={() => setIsOpen(false)} />
+            ) : (
+              <CreateUpdateObjectives onClose={() => setIsOpen(false)} />
+            )}
+          </ModalComponent>
+        )}
+      </>
+    );
+  },
+);
 
 const iconBtnStyle: Rule = ({ theme }) => ({
   ...theme.font.fixed.f16,
