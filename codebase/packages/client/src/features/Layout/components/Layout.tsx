@@ -10,6 +10,7 @@ import authContext from 'contexts/authContext';
 import headerContext from 'contexts/headerContext';
 import { useTranslation, Trans } from 'components/Translation';
 import MarkdownRenderer from 'components/MarkdownRenderer';
+import { useFetchCommonData } from './useFetchCommonData';
 
 export const TEST_ID = 'layout-wrapper';
 
@@ -22,7 +23,6 @@ please_try_again
 `;
 
 const A = ({ children, ...props }) => {
-  console.log(props);
   const { css } = useStyle();
   return (
     <a className={css(link)} {...props} target='_blank'>
@@ -31,13 +31,12 @@ const A = ({ children, ...props }) => {
   );
 };
 
-const Layout: FC = ({ children }) => {
+const Yes: FC = ({children}) => {
   const { css } = useStyle();
   const navigate = useNavigate();
-  const { t } = useTranslation();
   const { pathname } = useLocation();
-  const { error } = useContext(authContext);
   const { linkTitle } = useContext(headerContext);
+
   const { title, withHeader, backPath, withIcon, iconName } = useMemo(() => {
     const page = Object.keys(pages).find((page) => matchPath(page, pathname)) || '';
     const pageData = pages?.[page] || {};
@@ -45,6 +44,26 @@ const Layout: FC = ({ children }) => {
   }, [pathname, linkTitle]);
 
   const handleBack = (backPath = '/') => navigate(backPath, { replace: true });
+
+  useFetchCommonData()
+
+  return <div data-test-id={TEST_ID} className={css(layoutRule)}>
+  {withHeader && (
+    <Header
+      title={title}
+      withIcon={withIcon}
+      iconName={iconName}
+      onBack={backPath ? () => handleBack(buildPath(backPath)) : undefined}
+    />
+  )}
+  {children}
+</div>
+}
+
+const Layout: FC = ({ children }) => {
+  const { css } = useStyle();
+  const { t } = useTranslation();
+  const { error } = useContext(authContext);
 
   const preHandleTrans = (str: string, replace: Record<string, string>) => {
     let res = t(str);
@@ -68,20 +87,7 @@ const Layout: FC = ({ children }) => {
   return (
     <CanPerform
       perform={[role.COLLEAGUE]}
-      yes={() => (
-        <div data-test-id={TEST_ID} className={css(layoutRule)}>
-          {/*TODO: use separate component*/}
-          {withHeader && (
-            <Header
-              title={title}
-              withIcon={withIcon}
-              iconName={iconName}
-              onBack={backPath ? () => handleBack(buildPath(backPath)) : undefined}
-            />
-          )}
-          {children}
-        </div>
-      )}
+      yes={() => <Yes>{children}</Yes>}
       no={() =>
         error?.code === 'SERVER_ERROR' ? (
           <AccessDenied message={systemNotAvailableMessage} />
@@ -109,6 +115,7 @@ const Layout: FC = ({ children }) => {
     />
   );
 };
+
 const layoutRule: Rule = () => ({
   display: 'flex',
   flex: 1,

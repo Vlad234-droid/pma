@@ -4,14 +4,11 @@ import {
   colleagueUUIDSelector,
   getTimelineByCodeSelector,
   getTimelineSelector,
-  PDPActions,
   timelinesExistSelector,
   getTimelineMetaSelector,
-  TimelineActions,
   timelineTypesAvailabilitySelector,
 } from '@pma/store';
 
-import useDispatch from 'hooks/useDispatch';
 import { ObjectiveType } from 'config/enum';
 
 import CareerPerformance from './CareerPerformance';
@@ -26,23 +23,14 @@ const CareerPerformanceContainer: FC = () => {
   const timelinesExist = useSelector(timelinesExistSelector(colleagueUuid));
   const { loaded } = useSelector(getTimelineMetaSelector);
 
-  const dispatch = useDispatch();
-
-  const loadTimeline = (colleagueUuid: string) => {
-    dispatch(TimelineActions.getTimeline({ colleagueUuid }));
-    dispatch(PDPActions.getPDPGoal({}));
-  };
-
   return (
     <CareerPerformance
-      loadTimeline={loadTimeline}
       descriptions={descriptions}
       startDates={startDates}
       statuses={statuses}
       timelineTypes={timelineTypes}
       midYearReview={midYearReview}
       endYearReview={endYearReview}
-      colleagueUuid={colleagueUuid}
       displayTimelines={timelinesExist}
       loading={!loaded}
     />
