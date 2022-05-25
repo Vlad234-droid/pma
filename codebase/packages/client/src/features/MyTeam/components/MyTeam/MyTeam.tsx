@@ -7,9 +7,7 @@ import { useTranslation } from 'components/Translation';
 import ViewFilters from '../ViewFilters';
 import { View } from '../../config/types';
 import TeamWidgets from '../TeamWidgets';
-import { getUserRoles } from '@pma/store';
-import { useSelector } from 'react-redux';
-import { role } from 'features/Permission';
+import { CanPerform, role } from 'features/Permission';
 
 const MyTeam: FC = () => {
   const { css } = useStyle();
@@ -23,16 +21,14 @@ const MyTeam: FC = () => {
     setView(view);
   };
 
-  const hasExecutiveRole = useSelector(getUserRoles)?.includes(role.EXECUTIVE);
-
   return (
     <div data-test-id='my-team'>
       <div className={css(filtersWrapperStyles)}>
-        {hasExecutiveRole ? (
-          <ViewFilters view={view} onChange={handleViewChange} />
-        ) : (
-          <div className={css(emptyBlock)} />
-        )}
+        <CanPerform
+          perform={[role.EXECUTIVE]}
+          yes={() => <ViewFilters view={view} onChange={handleViewChange} />}
+          no={() => <div className={css(emptyBlock)} />}
+        />
         <div className={css(filtersStyles)}>
           <Filters
             sortValue={sortValue}
