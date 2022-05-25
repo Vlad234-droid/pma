@@ -18,7 +18,7 @@ export type HeaderProps = {
 };
 
 export const TEST_ID = 'header';
-export const BACK_BTN_TEST_ID = 'header-back';
+export const BACK_BTN_TEST_ID = 'header-back-test-id';
 export const MENU_BTN = 'menu-btn';
 
 const Header: FC<HeaderProps> = ({ title, onBack, withIcon, iconName = 'home', styles = {} }) => {

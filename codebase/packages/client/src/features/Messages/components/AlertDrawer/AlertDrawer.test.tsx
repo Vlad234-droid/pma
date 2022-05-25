@@ -2,7 +2,8 @@ import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
 import '@testing-library/jest-dom';
 import { renderWithTheme as render } from 'utils/test';
-import AlertDrawer, { ALERT_DRAWER_WRAPPER } from './AlertDrawer';
+import AlertDrawer, { ALERT_DRAWER_WRAPPER, ALERT_DRAWER_CLOSE_BTN } from './AlertDrawer';
+import { fireEvent } from '@testing-library/react';
 
 jest.mock('react-router-dom', () => ({
   ...(jest.requireActual('react-router-dom') as any),
@@ -24,14 +25,9 @@ describe('Alert drawer', () => {
     expect(wrapper).toBeInTheDocument();
   });
 
-  // it('should close alert drawer', async () => {
-  //   const { getByTestId } = render(<AlertDrawer {...props} />, { ...state });
-  //   const wrapper = getByTestId(ALERT_DRAWER_WRAPPER);
-  //   expect(wrapper).toBeInTheDocument();
-  //   expect(getByTestId(ALERT_DRAWER_CLOSE_BTN)).toBeInTheDocument();
-
-  //   fireEvent.click(getByTestId(ALERT_DRAWER_CLOSE_BTN));
-
-  //   await waitFor(() => expect(props.onClose).toHaveBeenCalled());
-  // });
+  it('should close alert drawer', async () => {
+    const { getByTestId } = render(<AlertDrawer {...props} />, { ...state });
+    fireEvent.click(getByTestId(ALERT_DRAWER_CLOSE_BTN));
+    setTimeout((_) => expect(props.onClose).toBeCalledTimes(1), 500);
+  });
 });
