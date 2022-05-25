@@ -23,7 +23,7 @@ const MyTeam: FC = () => {
     setView(view);
   };
 
-  const hasExecutiveRole = useSelector(getUserRoles).includes(role.EXECUTIVE);
+  const hasExecutiveRole = useSelector(getUserRoles)?.includes(role.EXECUTIVE);
 
   return (
     <div data-test-id='my-team'>
