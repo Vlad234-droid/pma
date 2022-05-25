@@ -58,13 +58,8 @@ export const AlertDrawer: FC<AlertDrawerProps> = ({ onClose }) => {
       >
         <div className={css(headerRule, pointerRule)}>
           <div className={css(titleRule)}>{t('my_alerts', 'My Alerts')}</div>
-          <div className={css(iconRule)}>
-            <IconButton
-              graphic='close'
-              onPress={onClosePress}
-              iconProps={{ size: '14px' }}
-              data-test-id={ALERT_DRAWER_CLOSE_BTN}
-            />
+          <div className={css(iconRule)} data-test-id={ALERT_DRAWER_CLOSE_BTN}>
+            <IconButton graphic='close' onPress={onClosePress} iconProps={{ size: '14px' }} />
           </div>
         </div>
         <div className={css(parcelRule, pointerRule)}>
