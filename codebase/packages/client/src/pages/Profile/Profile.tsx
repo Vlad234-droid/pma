@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { CreateRule, useStyle } from '@pma/dex-wrapper';
 import { Contacts, PersonalInformation, ProfessionalInformation } from '../../features/Profile';
 import { AuthConsumer } from 'contexts/authContext';
-import { AvatarName } from 'features/Profile/components/Widgets/DashboardProfile';
+import { AvatarName } from 'features/Profile/components/Widgets/Profile';
 import { TileWrapper } from 'components/Tile';
 
 export const TEST_ID = 'profile-test-page';

@@ -19,6 +19,9 @@ import { useToast, Variant } from 'features/Toast';
 import useDispatch from 'hooks/useDispatch';
 import { useSelector } from 'react-redux';
 import {
+  ColleagueActions,
+  getColleagueSelector,
+  getColleagueMetaSelector,
   getPreviousReviewFilesSelector,
   getTimelineMetaSelector,
   getTimelineSelector,
@@ -36,6 +39,7 @@ import { buildPath } from 'features/Routes';
 import { Page } from 'pages';
 import Spinner from 'components/Spinner';
 import { File } from '../../features/ReviewFiles/components/components/File';
+import { Profile } from 'features/Profile';
 
 const reviews = [];
 
@@ -64,8 +68,10 @@ export const UserObjectives: FC = () => {
   const { loaded: schemaLoaded } = useSelector(schemaMetaSelector);
   const { loaded: reviewLoaded } = useSelector(reviewsMetaSelector);
   const { loaded: timelineLoaded } = useSelector(getTimelineMetaSelector);
+  const { loaded: colleagueLoaded } = useSelector(getColleagueMetaSelector);
   const { uuid } = useParams<{ uuid: string }>();
   const { descriptions, startDates, statuses } = useSelector(getTimelineSelector(uuid)) || {};
+  const colleague = useSelector(getColleagueSelector);
   const timelineTypes = useSelector(timelineTypesAvailabilitySelector(uuid));
   const canShowObjectives = timelineTypes[ObjectiveType.OBJECTIVE];
   const canShowMyReview = timelineTypes[ObjectiveType.MYR] && timelineTypes[ObjectiveType.EYR];
@@ -101,7 +107,10 @@ export const UserObjectives: FC = () => {
   };
 
   useEffect(() => {
-    if (uuid) dispatch(TimelineActions.getTimeline({ colleagueUuid: uuid }));
+    if (uuid) {
+      dispatch(TimelineActions.getTimeline({ colleagueUuid: uuid }));
+      dispatch(ColleagueActions.getColleagueByUuid({ colleagueUuid: uuid }));
+    }
   }, [uuid]);
 
   useEffect(() => {
@@ -129,14 +138,22 @@ export const UserObjectives: FC = () => {
           <Spinner id='1' />
         ) : (
           <>
-            {!mobileScreen && canShowMyReview && (
-              <div onClick={handleClick} className={css(timelineWrapperStyles)}>
-                <StepIndicator
-                  mainTitle={t('performance_timeline_title', 'Your Contribution timeline')}
-                  titles={descriptions}
-                  descriptions={startDates}
-                  statuses={statuses}
+            {!mobileScreen && canShowMyReview && colleagueLoaded && (
+              <div className={css(headerWrapperStyles)}>
+                <Profile
+                  fullName={colleague?.profile?.fullName}
+                  department={colleague?.profile?.department}
+                  job={colleague?.profile?.job}
+                  manager={colleague?.profile?.managerName}
                 />
+                <div onClick={handleClick} className={css(timelineWrapperStyles)}>
+                  <StepIndicator
+                    mainTitle={t('performance_timeline_title', 'Your Contribution timeline')}
+                    titles={descriptions}
+                    descriptions={startDates}
+                    statuses={statuses}
+                  />
+                </div>
               </div>
             )}
             <div className={css(timelineWrapperStyles)}>
@@ -200,14 +217,22 @@ export const UserObjectives: FC = () => {
             <Spinner id='2' />
           </div>
         )}
-        {mobileScreen && timelineLoaded && canShowMyReview && (
-          <div className={css(timelineWrapperStyles)}>
-            <StepIndicator
-              mainTitle={t('performance_timeline_title', 'Your Contribution timeline')}
-              titles={descriptions}
-              descriptions={startDates}
-              statuses={statuses}
+        {mobileScreen && timelineLoaded && canShowMyReview && colleagueLoaded && (
+          <div className={css(headerWrapperStyles, { marginBottom: '20px' })}>
+            <Profile
+              fullName={colleague?.profile?.fullName}
+              department={colleague?.profile?.department}
+              job={colleague?.profile?.job}
+              manager={colleague?.profile?.managerName}
             />
+            <div className={css(timelineWrapperStyles)}>
+              <StepIndicator
+                mainTitle={t('performance_timeline_title', 'Your Contribution timeline')}
+                titles={descriptions}
+                descriptions={startDates}
+                statuses={statuses}
+              />
+            </div>
           </div>
         )}
 
@@ -254,6 +279,14 @@ const headWrapperStyles: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen
   flexDirection: 'column',
   paddingLeft: mobileScreen ? '0px' : '20px',
 });
+
+const headerWrapperStyles: Rule = () => {
+  return {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '8px',
+  };
+};
 
 const timelineWrapperStyles = {
   display: 'flex',

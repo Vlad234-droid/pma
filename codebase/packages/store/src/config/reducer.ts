@@ -7,6 +7,7 @@ import schemaReducer from '../entities/schema/reducer';
 import timelineReducer from '../entities/timeline/reducer';
 import managersReducer from '../entities/managers/reducer';
 import feedbackReducer from '../entities/feedback/reducer';
+import colleagueReducer from '../entities/colleague/reducer';
 import colleaguesReducer from '../entities/colleagues/reducer';
 import reviewsReducer from '../entities/reviews/reducer';
 import objectiveSharingReducer from '../entities/objectiveSharing/reducer';
@@ -31,6 +32,7 @@ export const rootReducer = combineReducers({
   timeline: timelineReducer,
   managers: managersReducer,
   feedback: feedbackReducer,
+  colleague: colleagueReducer,
   colleagues: colleaguesReducer,
   reviews: reviewsReducer,
   objectivesSharing: objectiveSharingReducer,

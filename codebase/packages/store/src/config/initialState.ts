@@ -6,6 +6,7 @@ import { initialState as schemaInitialState } from '../entities/schema/reducer';
 import { initialState as timelineInitialState } from '../entities/timeline/reducer';
 import { initialState as managersInitialState } from '../entities/managers/reducer';
 import { initialState as feedbackInitialState } from '../entities/feedback/reducer';
+import { initialState as colleagueInitialState } from '../entities/colleague/reducer';
 import { initialState as colleaguessState } from '../entities/colleagues/reducer';
 import { initialState as reviewsInitialState } from '../entities/reviews/reducer';
 import { initialState as objectiveSharingState } from '../entities/objectiveSharing/reducer';
@@ -31,6 +32,7 @@ export const initialState = {
   timeline: timelineInitialState,
   managers: managersInitialState,
   feedback: feedbackInitialState,
+  colleague: colleagueInitialState,
   colleagues: colleaguessState,
   reviewsInitialState: reviewsInitialState,
   objectivesSharing: objectiveSharingState,
