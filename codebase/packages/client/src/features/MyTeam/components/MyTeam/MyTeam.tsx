@@ -9,6 +9,8 @@ import { View } from '../../config/types';
 import TeamWidgets from '../TeamWidgets';
 import { CanPerform, role } from 'features/Permission';
 
+export const TEST_NO_FILTERS = 'test-no-filters';
+
 const MyTeam: FC = () => {
   const { css } = useStyle();
   const { t } = useTranslation();
@@ -27,7 +29,7 @@ const MyTeam: FC = () => {
         <CanPerform
           perform={[role.EXECUTIVE]}
           yes={() => <ViewFilters view={view} onChange={handleViewChange} />}
-          no={() => <div className={css(emptyBlock)} />}
+          no={() => <div data-test-id={TEST_NO_FILTERS} className={css(emptyBlock)} />}
         />
         <div className={css(filtersStyles)}>
           <Filters
