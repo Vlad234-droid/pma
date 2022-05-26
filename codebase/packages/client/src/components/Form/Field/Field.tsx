@@ -57,21 +57,6 @@ const Field: FC<FieldProps & FieldValues> = ({
     setValue(name, changeObject.target.value, { shouldValidate: true, shouldDirty: true });
   };
 
-  if (!Wrapper && !label) {
-    return (
-      <Element
-        name={name}
-        options={options}
-        isValid={Boolean(!error)}
-        onError={setError ? (message) => setError(name, { type: 'custom', message }) : undefined}
-        placeholder={placeholder}
-        value={currentValue}
-        onChange={handleChange}
-        {...props}
-      />
-    );
-  }
-
   return (
     <Wrapper label={label} errormessage={error}>
       <Element

@@ -1,4 +1,4 @@
-import { createAsyncAction } from 'typesafe-actions';
+import { createAction, createAsyncAction } from 'typesafe-actions';
 
 export const getColleagueByUuid = createAsyncAction(
   'colleague/GET_COLLEAGUE_REQUEST',
@@ -6,6 +6,9 @@ export const getColleagueByUuid = createAsyncAction(
   'colleague/GET_COLLEAGUE_FAILURE',
 )<any, any, Error>();
 
+export const clearColleagueData = createAction('colleague/CLEAR')<undefined>();
+
 export const Actions = {
   getColleagueByUuid: getColleagueByUuid.request,
+  clearColleagueData,
 };

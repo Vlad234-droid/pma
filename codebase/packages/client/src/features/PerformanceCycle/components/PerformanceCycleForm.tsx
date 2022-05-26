@@ -20,7 +20,8 @@ import Datepicker from 'components/Datepicker';
 import { useTranslation } from 'components/Translation';
 import TemplatesModal from './TemplatesModal';
 import FormsViewer from './FormsViwer';
-import { createPMCycleSchema } from './schema';
+import { createPMCycleSchema } from '../schema';
+import { OBJECTIVE } from '../constants';
 
 type Props = {
   onSubmit: (data: any) => void;
@@ -45,8 +46,7 @@ const PerformanceCycleForm: FC<Props> = ({ onSubmit, defaultValues, canEdit = tr
     setValue,
     watch,
     handleSubmit,
-    control,
-    formState: { errors },
+    formState: { errors, isValid },
   } = methods;
 
   const formValues = getValues();
@@ -58,8 +58,9 @@ const PerformanceCycleForm: FC<Props> = ({ onSubmit, defaultValues, canEdit = tr
     'forms',
   ]);
 
-  const handleChangeTemplate = (template) => {
+  const handleChangeTemplate = <T extends { uuid: string }>(template: T) => {
     setValue('template', template, { shouldValidate: true });
+    dispatch(ProcessTemplateActions.getProcessTemplateMetadata({ fileUuid: template?.uuid }));
   };
 
   const templateDetails: any | undefined = useSelector(processTemplateByUuidSelector(template?.uuid));
@@ -79,10 +80,6 @@ const PerformanceCycleForm: FC<Props> = ({ onSubmit, defaultValues, canEdit = tr
       setValue('forms', templateDetails.forms);
     }
   }, [templateDetails?.cycle]);
-
-  useEffect(() => {
-    if (template?.uuid) dispatch(ProcessTemplateActions.getProcessTemplateMetadata({ fileUuid: template?.uuid }));
-  }, [template?.uuid]);
 
   useEffect(() => {
     dispatch(PerformanceCycleActions.getPerformanceCycleMappingKeys());
@@ -117,7 +114,7 @@ const PerformanceCycleForm: FC<Props> = ({ onSubmit, defaultValues, canEdit = tr
           label={t('cycle_group', 'Cycle group')}
           Element={Select}
           options={mappingKeyOptions}
-          placeholder={'Select entry config key'}
+          placeholder={'Select cycle group'}
           value={formValues.entryConfigKey}
           setValue={setValue}
           error={get(errors, 'entryConfigKey.message')}
@@ -186,22 +183,32 @@ const PerformanceCycleForm: FC<Props> = ({ onSubmit, defaultValues, canEdit = tr
           <div className={css(itemStyle)}>
             <Item label={t('notifications', 'Notifications')} withIcon={false} />
             <div>
-              <Item label={t('before_start', 'Before start')} withIcon={false}>
-                <DurationPicker
-                  control={control}
-                  name={`metadata.cycle.properties.pm_cycle_before_start`}
-                  readonly={!canEdit}
-                />
-              </Item>
+              <Field
+                name={'metadata.cycle.properties.pm_cycle_before_start'}
+                setValue={setValue}
+                Wrapper={({ children }) => (
+                  <Item label={t('before_start', 'Before start')} withIcon={false}>
+                    {children}
+                  </Item>
+                )}
+                Element={DurationPicker}
+                value={get(formValues, 'metadata.cycle.properties.pm_cycle_before_start')}
+                readonly={!canEdit}
+              />
             </div>
             <div className={css(itemStyle)}>
-              <Item label={t('before_end', 'Before end')} withIcon={false}>
-                <DurationPicker
-                  control={control}
-                  name={`metadata.cycle.properties.pm_cycle_before_end`}
-                  readonly={!canEdit}
-                />
-              </Item>
+              <Field
+                name={'metadata.cycle.properties.pm_cycle_before_end'}
+                setValue={setValue}
+                Wrapper={({ children }) => (
+                  <Item label={t('before_end', 'Before end')} withIcon={false}>
+                    {children}
+                  </Item>
+                )}
+                Element={DurationPicker}
+                value={get(formValues, 'metadata.cycle.properties.pm_cycle_before_end')}
+                readonly={!canEdit}
+              />
             </div>
           </div>
         </div>
@@ -244,7 +251,7 @@ const PerformanceCycleForm: FC<Props> = ({ onSubmit, defaultValues, canEdit = tr
           <div className={css(itemStyle, { maxWidth: '100px' })}>
             <Item label={t('max', 'Max')} withIcon={false} marginBot={false} />
           </div>
-          {timelinePoints?.map((point, index) => {
+          {timelinePoints?.map((point: { reviewType: string }, index) => {
             return (
               <Fragment key={index}>
                 <div className={css(itemStyle, { width: '100%' })}>
@@ -258,38 +265,48 @@ const PerformanceCycleForm: FC<Props> = ({ onSubmit, defaultValues, canEdit = tr
                 </div>
                 <div className={css({ display: 'flex', gap: '8px' })}>
                   <div className={css(itemStyle, { width: '100%' })}>
-                    <DurationPicker
-                      control={control}
+                    <Field
                       name={`metadata.cycle.timelinePoints[${index}].properties.pm_review_duration`}
+                      setValue={setValue}
+                      Element={DurationPicker}
+                      value={get(formValues, `metadata.cycle.timelinePoints[${index}].properties.pm_review_duration`)}
                       readonly={!canEdit}
                     />
                   </div>
                 </div>
                 <div className={css({ display: 'flex', gap: '8px' })}>
                   <div className={css(itemStyle, { width: '100%' })}>
-                    <DurationPicker
-                      control={control}
+                    <Field
                       name={`metadata.cycle.timelinePoints[${index}].properties.pm_review_before_start`}
+                      setValue={setValue}
+                      Element={DurationPicker}
+                      value={get(
+                        formValues,
+                        `metadata.cycle.timelinePoints[${index}].properties.pm_review_before_start`,
+                      )}
                       readonly={!canEdit}
                     />
                   </div>
                 </div>
                 <div className={css({ display: 'flex', gap: '8px' })}>
                   <div className={css(itemStyle, { width: '100%' })}>
-                    <DurationPicker
-                      control={control}
+                    <Field
                       name={`metadata.cycle.timelinePoints[${index}].properties.pm_review_before_end`}
+                      setValue={setValue}
+                      Element={DurationPicker}
+                      value={get(formValues, `metadata.cycle.timelinePoints[${index}].properties.pm_review_before_end`)}
                       readonly={!canEdit}
                     />
                   </div>
                 </div>
-                {point.reviewType === 'OBJECTIVE' ? (
+                {point.reviewType === OBJECTIVE ? (
                   <>
                     <div className={css(itemStyle, { maxWidth: '100px' })}>
                       <Field
                         name={`metadata.cycle.timelinePoints[${index}].properties.pm_review_min`}
                         setValue={setValue}
                         Element={Input}
+                        error={get(errors, `metadata.cycle.timelinePoints[${index}].properties.pm_review_min.message`)}
                         value={get(formValues, `metadata.cycle.timelinePoints[${index}].properties.pm_review_min`)}
                         readonly={!canEdit}
                       />
@@ -299,6 +316,7 @@ const PerformanceCycleForm: FC<Props> = ({ onSubmit, defaultValues, canEdit = tr
                         name={`metadata.cycle.timelinePoints[${index}].properties.pm_review_max`}
                         setValue={setValue}
                         Element={Input}
+                        error={get(errors, `metadata.cycle.timelinePoints[${index}].properties.pm_review_max.message`)}
                         value={get(formValues, `metadata.cycle.timelinePoints[${index}].properties.pm_review_max`)}
                         readonly={!canEdit}
                       />
@@ -321,15 +339,22 @@ const PerformanceCycleForm: FC<Props> = ({ onSubmit, defaultValues, canEdit = tr
           className={css({ display: 'flex', justifyContent: 'flex-end', paddingBottom: '100px', maxWidth: '1300px' })}
         >
           {/*@ts-ignore*/}
-          <Button
-            mode='inverse'
-            styles={[btnStyle]}
-            onPress={() => handleSubmit((data) => onSubmit({ ...data, mode: 'SAVE' }))()}
-          >
-            {t('save_as_draft', 'Save as draft')}
-          </Button>
+          {defaultValues?.status !== 'REGISTERED' && (
+            <Button
+              isDisabled={!isValid}
+              mode='inverse'
+              styles={[btnStyle]}
+              onPress={() => handleSubmit((data) => onSubmit({ ...data, mode: 'SAVE' }))()}
+            >
+              {t('save_as_draft', 'Save as draft')}
+            </Button>
+          )}
           {/*@ts-ignore*/}
-          <Button styles={[btnStyle]} onPress={() => handleSubmit((data) => onSubmit({ ...data, mode: 'PUBLISH' }))()}>
+          <Button
+            isDisabled={!isValid}
+            styles={[btnStyle]}
+            onPress={() => handleSubmit((data) => onSubmit({ ...data, mode: 'PUBLISH' }))()}
+          >
             {t('save', 'Save')}
           </Button>
         </div>

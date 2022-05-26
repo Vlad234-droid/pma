@@ -24,7 +24,7 @@ describe('Datepicker', () => {
     const onChange = jest.fn();
     const { getByTestId } = render(<Datepicker name='test' onChange={onChange} />);
     const value = '12/12/2022';
-    const input = getByTestId(INPUT_TEST_ID).firstChild as HTMLInputElement;
+    const input = getByTestId(INPUT_TEST_ID);
     fireEvent.change(input, { target: { value } });
     expect(onChange).toBeCalledTimes(1);
   });
@@ -33,7 +33,7 @@ describe('Datepicker', () => {
     const onChange = jest.fn();
     const { getByTestId } = render(<Datepicker name='test' onChange={onChange} />);
     const value = '12/12/2022';
-    const input = getByTestId(INPUT_TEST_ID).firstChild as HTMLInputElement;
+    const input = getByTestId(INPUT_TEST_ID);
     fireEvent.change(input, { target: { value } });
     expect(onChange).toBeCalledWith({
       target: { name: 'test', type: 'date', value: value.split('/').reverse().join('-') },
@@ -45,7 +45,7 @@ describe('Datepicker', () => {
     const name = 'test';
     const value = '12/12/2022';
     const { getByTestId } = render(<Datepicker name={name} onChange={onChange} value={value} />);
-    const input = getByTestId(INPUT_TEST_ID).firstChild as HTMLInputElement;
+    const input = getByTestId(INPUT_TEST_ID);
     fireEvent.change(input, { target: { value: '' } });
     expect(onChange).toBeCalledWith({
       target: { name: 'test', type: 'date', value: '' },
@@ -57,7 +57,7 @@ describe('Datepicker', () => {
     const onChange = jest.fn();
     const { getByTestId } = render(<Datepicker name='test' onError={onError} onChange={onChange} />);
     const value = '12/12/202';
-    const input = getByTestId(INPUT_TEST_ID).firstChild as HTMLInputElement;
+    const input = getByTestId(INPUT_TEST_ID);
     fireEvent.change(input, { target: { value } });
     expect(onError).toBeCalledTimes(1);
     expect(onChange).not.toBeCalled();
@@ -70,7 +70,7 @@ describe('Datepicker', () => {
     const minDate = new Date('12/12/2022');
     const { getByTestId } = render(<Datepicker name='test' onError={onError} onChange={onChange} minDate={minDate} />);
     const value = '11/12/2022';
-    const input = getByTestId(INPUT_TEST_ID).firstChild as HTMLInputElement;
+    const input = getByTestId(INPUT_TEST_ID);
     fireEvent.change(input, { target: { value } });
     expect(onError).toBeCalledTimes(1);
     expect(onChange).not.toBeCalled();
@@ -82,7 +82,7 @@ describe('Datepicker', () => {
     const value = '31/02/2022';
     const date = new Date('2022-02-31');
     const { getByTestId } = render(<Datepicker name={name} onChange={onChange} />);
-    const input = getByTestId(INPUT_TEST_ID).firstChild as HTMLInputElement;
+    const input = getByTestId(INPUT_TEST_ID);
     fireEvent.change(input, { target: { value } });
     expect(onChange).toBeCalledWith(buildTargetObject(formatDateStringFromISO(date.toISOString(), DATE_FORMAT), name));
   });

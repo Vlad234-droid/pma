@@ -1,5 +1,5 @@
-import React, { FC, HTMLProps } from 'react';
-import { Button, useStyle, Rule, CreateRule } from '@pma/dex-wrapper';
+import React, { CSSProperties, FC, HTMLProps } from 'react';
+import { Button, useStyle, Rule, CreateRule, Styles } from '@pma/dex-wrapper';
 
 import { WrapperModal } from 'features/Modal';
 import { Trans } from 'components/Translation';
@@ -8,7 +8,9 @@ export type SuccessModal = {
   onClose: () => void;
   description?: string;
   title: string;
+  additionalText?: string;
   mark?: JSX.Element;
+  customButtonStyles?: Rule | Styles | CSSProperties | {};
 };
 
 type Props = HTMLProps<HTMLInputElement> & SuccessModal;
@@ -24,7 +26,14 @@ const DefaultMark = (
   </>
 );
 
-const SuccessModal: FC<Props> = ({ onClose, description, mark = DefaultMark, title }) => {
+const SuccessModal: FC<Props> = ({
+  onClose,
+  description,
+  mark = DefaultMark,
+  title,
+  customButtonStyles = {},
+  additionalText = '',
+}) => {
   const { css, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
 
@@ -48,6 +57,7 @@ const SuccessModal: FC<Props> = ({ onClose, description, mark = DefaultMark, tit
               <Trans i18nKey='done'>Done</Trans>!
             </div>
             <div className={css(descriptionStyle)}>{description}</div>
+            {additionalText && <div className={css(descriptionStyle, { marginTop: '30px' })}>{additionalText}</div>}
           </div>
         </div>
         <div className={css(buttonWrapperStyle)}>
@@ -58,7 +68,7 @@ const SuccessModal: FC<Props> = ({ onClose, description, mark = DefaultMark, tit
               justifyContent: 'center',
             })}
           >
-            <Button styles={[buttonStyle]} onPress={onClose}>
+            <Button styles={[buttonStyle, customButtonStyles]} onPress={onClose}>
               <Trans i18nKey='okay'>Okay</Trans>
             </Button>
           </div>
@@ -102,7 +112,7 @@ const buttonWrapperStyle: Rule = ({ theme }) => ({
 });
 
 const buttonStyle: Rule = ({ theme }) => ({
-  background: 'white',
+  background: theme.colors.white,
   border: `2px solid ${theme.colors.tescoBlue}`,
   fontSize: theme.font.fixed.f16.fontSize,
   lineHeight: theme.font.fixed.f16.lineHeight,

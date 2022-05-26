@@ -1,5 +1,5 @@
 import React, { FC, Dispatch, SetStateAction } from 'react';
-import { IconButton as BackButton, Rule, useStyle } from '@pma/dex-wrapper';
+import { Rule, useStyle } from '@pma/dex-wrapper';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -26,6 +26,7 @@ import { useNotesContainer } from '../../contexts';
 import { baseSubmit, getOptions, submitSelectedNote, submitTeamSelectedNote, teamSubmit } from '../../utils';
 import { ModalStatuses } from '../../NotesActions';
 import { schemaFolder, schemaNotes, schemaNoteToEdit, schemaTEAMNotes } from '../Modals/schema/schema';
+import { Backward } from 'components/Backward';
 
 export const NOTES_WRAPPER = 'note-wrapper';
 export const ADD_NEW = 'add-new';
@@ -125,6 +126,17 @@ const NotesComposition: FC<{
     reset();
   };
 
+  const handleClose = () => {
+    if (archiveMode.user || archiveMode.team) {
+      if (archiveMode.user) setArchiveMode((prev) => ({ ...prev, user: false }));
+      if (archiveMode.team) setArchiveMode((prev) => ({ ...prev, team: false }));
+      if (!selectedFolder) setSelectedFolder(() => null);
+      if (selectedTEAMFolder) setSelectedTEAMFolder(() => null);
+    } else {
+      navigate(buildPath(Page.CONTRIBUTION));
+    }
+  };
+
   const modalByStatus = {
     [ModalStatuses.INFO]: <InfoMessage status={status} isLineManager={isLineManager} setStatus={setStatus} />,
     [ModalStatuses.PERSONAL_NOTE]: (
@@ -197,6 +209,26 @@ const NotesComposition: FC<{
         currentModal
       ) : (
         <div data-test-id={NOTES_WRAPPER}>
+          <div className={css(wrapperHeaderStyle)}>
+            <IconButton
+              customVariantRules={{ default: iconBtnAddStyle }}
+              onPress={() => setStatus(() => ModalStatuses.ADD_NEW)}
+              graphic='add'
+              iconProps={{ invertColors: true }}
+              iconStyles={iconAddStyle}
+              data-test-id={ADD_NEW}
+            >
+              <Trans i18nKey='add'>Add</Trans>
+            </IconButton>
+            <FilterOptions
+              TEAM={isLineManager}
+              searchValueFilterOption={searchValueFilterOption}
+              setSearchValueFilterOption={setSearchValueFilterOption}
+              openInfoModal={() => {
+                setStatus(() => ModalStatuses.INFO);
+              }}
+            />
+          </div>
           {status === ModalStatuses.ADD_NEW && (
             <ConfirmModalWithSelectOptions
               options={getOptions(isLineManager)}
@@ -212,44 +244,9 @@ const NotesComposition: FC<{
             />
           )}
           <div className={css({ paddingRight: '40px', position: 'relative' })}>
-            <div className={css(wrapperHeaderStyle)}>
-              <IconButton
-                customVariantRules={{ default: iconBtnAddStyle }}
-                onPress={() => setStatus(() => ModalStatuses.ADD_NEW)}
-                graphic='add'
-                iconProps={{ invertColors: true }}
-                iconStyles={iconAddStyle}
-                data-test-id={ADD_NEW}
-              >
-                <Trans i18nKey='add'>Add</Trans>
-              </IconButton>
-              <FilterOptions
-                TEAM={isLineManager}
-                searchValueFilterOption={searchValueFilterOption}
-                setSearchValueFilterOption={setSearchValueFilterOption}
-                openInfoModal={() => {
-                  setStatus(() => ModalStatuses.INFO);
-                }}
-              />
-            </div>
-
             <MainFolders isLineManager={isLineManager} />
           </div>
-          <div className={css(arrowLeftStyle)}>
-            <BackButton
-              onPress={() => {
-                if (archiveMode.user || archiveMode.team) {
-                  if (archiveMode.user) setArchiveMode((prev) => ({ ...prev, user: false }));
-                  if (archiveMode.team) setArchiveMode((prev) => ({ ...prev, team: false }));
-                  if (!selectedFolder) setSelectedFolder(() => null);
-                  if (selectedTEAMFolder) setSelectedTEAMFolder(() => null);
-                } else {
-                  navigate(buildPath(Page.CONTRIBUTION));
-                }
-              }}
-              graphic='backwardLink'
-            />
-          </div>
+          <Backward onPress={handleClose} />
         </div>
       )}
     </>
@@ -279,15 +276,4 @@ const iconBtnAddStyle: Rule = ({ theme }) => ({
 const iconAddStyle: Rule = {
   marginRight: '10px',
   marginTop: '2px',
-};
-
-const arrowLeftStyle: Rule = () => {
-  return {
-    position: 'fixed',
-    top: '34px',
-    textDecoration: 'none',
-    border: 'none',
-    cursor: 'pointer',
-    left: '16px',
-  };
 };

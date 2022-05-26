@@ -18,7 +18,6 @@ import { Page } from 'pages';
 import { useHeaderContainer } from 'contexts/headerContext';
 
 type Props = {
-  loadTimeline: (uuid: string) => void;
   descriptions: string[];
   startDates: string[];
   statuses: Status[];
@@ -31,14 +30,12 @@ type Props = {
 };
 
 const CareerPerformance: FC<Props> = ({
-  loadTimeline,
   descriptions,
   startDates,
   statuses,
   timelineTypes,
   midYearReview,
   endYearReview,
-  colleagueUuid,
   displayTimelines,
   loading,
 }) => {
@@ -47,10 +44,6 @@ const CareerPerformance: FC<Props> = ({
   const { setLinkTitle } = useHeaderContainer();
   const showMyReview = timelineTypes[ReviewType.MYR] && timelineTypes[ReviewType.EYR];
   const showAnnualReview = !timelineTypes[ReviewType.MYR] && timelineTypes[ReviewType.EYR];
-
-  useEffect(() => {
-    if (colleagueUuid) loadTimeline(colleagueUuid);
-  }, [colleagueUuid]);
 
   useEffect(() => {
     if (showAnnualReview) {

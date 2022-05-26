@@ -33,6 +33,10 @@ import { Delete } from './delete';
 import { Folder } from './folder';
 import { Archive } from './archive';
 import { Full } from './full';
+import { Ratings } from './ratings';
+import { Goal } from './goal';
+import { Syp } from './syp';
+import { Doc } from './doc';
 
 // import { ArrowRight } from './arrowRight';
 import { NotiBellCirlceOut } from './notiBellCirlceOut';
@@ -115,7 +119,11 @@ export type Graphics =
   | 'more'
   | 'arrowRightPaginator'
   | 'arrowLeftPaginator'
-  | 'full';
+  | 'full'
+  | 'goal'
+  | 'syp'
+  | 'doc'
+  | 'ratings';
 
 export const icons: Record<Graphics, FCGraphicProps> = {
   attention: Attention,
@@ -173,6 +181,10 @@ export const icons: Record<Graphics, FCGraphicProps> = {
   arrowRightPaginator: ArrowRightPaginator,
   arrowLeftPaginator: ArrowLeftPaginator,
   full: Full,
+  ratings: Ratings,
+  goal: Goal,
+  syp: Syp,
+  doc: Doc,
 };
 
 export { Chat } from './chat';

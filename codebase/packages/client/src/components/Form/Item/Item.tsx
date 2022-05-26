@@ -27,7 +27,7 @@ export const Item: FC<ItemProps> = ({
   withIcon = true,
   errormessage = '',
   marginBot = true,
-  customIcon = true,
+  customIcon = false,
   searchIcon = false,
   customIconInserted,
   focus,

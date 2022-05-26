@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'components/Translation';
 import { Button, CreateRule, Rule, Styles, useStyle } from '@pma/dex-wrapper';
 import { ObjectiveType, ReviewType, Status } from 'config/enum';
@@ -21,6 +21,7 @@ import {
   colleagueUUIDSelector,
   countByStatusReviews,
   countByTypeReviews,
+  currentUserSelector,
   filterReviewsByTypeSelector,
   getPreviousReviewFilesSelector,
   getReviewSchema,
@@ -28,9 +29,11 @@ import {
   getTimelineMetaSelector,
   getTimelineSelector,
   isReviewsNumbersInStatus,
+  ObjectiveSharingActions,
   PreviousReviewFilesActions,
   ReviewsActions,
   reviewsMetaSelector,
+  SchemaActions,
   schemaMetaSelector,
   TimelineActions,
   timelinesExistSelector,
@@ -39,7 +42,6 @@ import {
 } from '@pma/store';
 import OrganizationWidget from 'features/Objectives/components/OrganizationWidget/OrganizationWidget';
 import { useNavigate } from 'react-router-dom';
-import useReviewSchema from 'features/Objectives/hooks/useReviewSchema';
 import { Page } from 'pages';
 import { buildPath } from 'features/Routes';
 import Spinner from 'components/Spinner';
@@ -50,6 +52,7 @@ import { Objectives } from './Objectives';
 
 export const TEST_ID = 'my-objectives-page';
 
+// TODO: move to separate component
 const WidgetBlock = () => {
   const navigate = useNavigate();
   const { css } = useStyle();
@@ -67,6 +70,7 @@ const WidgetBlock = () => {
   );
 };
 
+// TODO: move to separate component
 const ReviewBlock: FC<{ canShow: Boolean }> = ({ canShow }) => {
   const midYearReview = useSelector(getTimelineByCodeSelector(ObjectiveType.MYR, USER.current));
   const endYearReview = useSelector(getTimelineByCodeSelector(ObjectiveType.EYR, USER.current));
@@ -102,6 +106,7 @@ const ReviewBlock: FC<{ canShow: Boolean }> = ({ canShow }) => {
   );
 };
 
+// TODO: move part of codebase to page
 const MyObjectives: FC = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -124,7 +129,7 @@ const MyObjectives: FC = () => {
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const timelinesExist = useSelector(timelinesExistSelector(colleagueUuid));
   const { loaded: timelinesLoaded } = useSelector(timelinesMetaSelector());
-  const [schema] = useReviewSchema(ReviewType.OBJECTIVE) || {};
+  const schema = useSelector(getReviewSchema(ReviewType.OBJECTIVE));
   const { components = [], markup = { max: 0, min: 0 } } = schema;
   const { descriptions, startDates, statuses } = useSelector(getTimelineSelector(colleagueUuid)) || {};
   const timelineTypes = useSelector(timelineTypesAvailabilitySelector(colleagueUuid)) || {};
@@ -136,6 +141,7 @@ const MyObjectives: FC = () => {
 
   const formElements = components.filter((component) => component.type != 'text');
 
+  const { info } = useSelector(currentUserSelector);
   const countReviews = useSelector(countByTypeReviews(ReviewType.OBJECTIVE)) || 0;
   const objectiveSchema = useSelector(getReviewSchema(ReviewType.OBJECTIVE));
   const countDraftReviews = useSelector(countByStatusReviews(ReviewType.OBJECTIVE, Status.DRAFT)) || 0;
@@ -164,21 +170,23 @@ const MyObjectives: FC = () => {
 
   const renderStepIndicator: Boolean = (mobileScreen && canShowMyReview && timelineLoaded) || false;
 
+  const pathParams = useMemo(() => ({ colleagueUuid: info.colleagueUUID, cycleUuid: 'CURRENT' }), [info.colleagueUUID]);
+  const isValidPathParams = pathParams.colleagueUuid;
+
   useEffect(() => {
     dispatch(PreviousReviewFilesActions.getPreviousReviewFiles({ colleagueUUID: colleagueUuid }));
   }, []);
 
   useEffect(() => {
+    isValidPathParams && dispatch(ObjectiveSharingActions.checkSharing(pathParams));
+    isValidPathParams && dispatch(ObjectiveSharingActions.getSharings(pathParams));
+  }, [isValidPathParams]);
+
+  useEffect(() => {
     if (colleagueUuid) {
       dispatch(TimelineActions.getTimeline({ colleagueUuid }));
-
-      if (canShowObjectives) {
-        dispatch(
-          ReviewsActions.getColleagueReviews({ pathParams: { colleagueUuid: colleagueUuid, cycleUuid: 'CURRENT' } }),
-        );
-      }
     }
-  }, [colleagueUuid, canShowObjectives]);
+  }, [colleagueUuid]);
 
   useEffect(() => {
     if (timelinesLoaded && !timelinesExist) {
@@ -198,17 +206,32 @@ const MyObjectives: FC = () => {
     }
   }, [canShowAnnualReview]);
 
+  useEffect(() => {
+    if (canShowObjectives) {
+      dispatch(ReviewsActions.getReviews({ pathParams }));
+    }
+
+    return () => {
+      dispatch(ReviewsActions.clearReviewData());
+    };
+  }, [canShowObjectives]);
+
+  useEffect(() => {
+    dispatch(SchemaActions.getSchema({ colleagueUuid }));
+
+    return () => {
+      dispatch(SchemaActions.clearSchemaData());
+    };
+  }, [colleagueUuid]);
+
   return (
     <div data-test-id={TEST_ID}>
-      {createIsAvailable && (
-        <div className={css({ display: 'flex', marginBottom: '20px' })}>
-          <CreateButton
-            withIcon
-            useSingleStep={reviewModificationMode === REVIEW_MODIFICATION_MODE.SINGLE}
-            buttonText='Create objective'
-          />
-        </div>
-      )}
+      <CreateButton
+        withIcon
+        useSingleStep={reviewModificationMode === REVIEW_MODIFICATION_MODE.SINGLE}
+        buttonText='Create objective'
+        isAvailable={createIsAvailable}
+      />
       <div className={css(bodyBlockStyles({ mobileScreen }))}>
         <div className={css(bodyWrapperStyles)}>
           {!timelineLoaded ? (
@@ -231,7 +254,6 @@ const MyObjectives: FC = () => {
                   objectives={objectives}
                   canEditAllObjective={canEditAllObjective}
                 />
-
                 <Section
                   contentCustomStyle={widgetWrapperStyle}
                   left={{
@@ -334,7 +356,6 @@ const MyObjectives: FC = () => {
               />
             </div>
           )}
-
           <WidgetBlock />
         </div>
       </div>

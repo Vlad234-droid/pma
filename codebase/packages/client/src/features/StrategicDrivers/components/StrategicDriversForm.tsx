@@ -8,6 +8,7 @@ import GenericForm from 'components/GenericForm';
 import { Input } from 'components/Form';
 import { InfoModal } from 'features/Modal';
 import Spinner from 'components/Spinner';
+import { RICH_TEXT_CHARACTERS_LIMIT } from 'config/constants';
 
 enum Mode {
   SAVED = 'saved',
@@ -16,6 +17,7 @@ enum Mode {
 
 const strLength = Yup.string().min(10);
 
+// TODO: move schema to separate file
 const schema = Yup.object().shape({
   drivers: Yup.array().of(
     //@ts-ignore
@@ -38,7 +40,8 @@ const schema = Yup.object().shape({
           return strLength.isValidSync(options.originalValue);
         }
         return true;
-      }),
+      })
+      .max(RICH_TEXT_CHARACTERS_LIMIT),
   ),
 });
 

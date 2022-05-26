@@ -24,6 +24,9 @@ export type ConfirmModal = {
   field_placeholder: string;
 };
 
+export const TEST_DESCRIPTION = 'TEST_DESCRIPTION';
+export const TEST_SELECT_ID = 'select-test-id';
+
 type Props = HTMLProps<HTMLInputElement> & ConfirmModal;
 
 const ConfirmModalWithDropDown: FC<Props> = ({
@@ -79,6 +82,7 @@ const ConfirmModalWithDropDown: FC<Props> = ({
     >
       {description && (
         <div
+          data-test-id={TEST_DESCRIPTION}
           className={css({
             padding: '16px 0',
           })}
@@ -87,7 +91,7 @@ const ConfirmModalWithDropDown: FC<Props> = ({
         </div>
       )}
 
-      <div>
+      <div data-test-id={TEST_SELECT_ID}>
         <Item withIcon={false} label={field_title}>
           <Select
             options={field_options as Option[]}

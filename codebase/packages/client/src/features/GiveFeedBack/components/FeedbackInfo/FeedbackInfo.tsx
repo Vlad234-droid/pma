@@ -4,7 +4,7 @@ import { IconButton } from 'components/IconButton';
 import { VideoId, VideoPlayer } from 'features/VideoPlayer';
 import { Trans } from 'components/Translation';
 import { NotificationTile } from 'components/NotificationTile';
-import { GiveFeedbackProfileInfo } from 'features/Feedback/components';
+import { ProfileInfo } from 'components/ProfileInfo';
 
 export const INFO_WRAPPER = 'info-wrapper';
 export const TONE_VOICE = 'tone-voice';
@@ -31,7 +31,7 @@ const FeedbackInfo: FC<Props> = ({ selectedPerson, onClickMore }) => {
           </h2>
           <VideoPlayer videoId={VideoId.GIVE_FEEDBACK} />
         </div>
-        <GiveFeedbackProfileInfo
+        <ProfileInfo
           firstName={colleague?.profile?.firstName}
           lastName={colleague?.profile?.lastName}
           job={colleague?.workRelationships?.[0]?.job?.name}

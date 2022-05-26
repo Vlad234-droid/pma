@@ -6,7 +6,7 @@ import { Graphics, RoundIcon, Icon } from 'components/Icon';
 import { AlertDrawer, AlertBadge, useMessagesContext } from 'features/Messages';
 import { DataModal } from 'features/Profile';
 
-import { MenuDrawer } from '../MenuDrawer/MenuDrawer';
+import { MenuDrawer } from 'features/MenuDrawer/MenuDrawer';
 
 export type HeaderProps = {
   title: string;
@@ -18,7 +18,8 @@ export type HeaderProps = {
 };
 
 export const TEST_ID = 'header';
-export const BACK_BTN_TEST_ID = 'header-back';
+export const BACK_BTN_TEST_ID = 'header-back-test-id';
+export const MENU_BTN = 'menu-btn';
 
 const Header: FC<HeaderProps> = ({ title, onBack, withIcon, iconName = 'home', styles = {} }) => {
   const { css, matchMedia } = useStyle();
@@ -65,7 +66,7 @@ const Header: FC<HeaderProps> = ({ title, onBack, withIcon, iconName = 'home', s
   return (
     <div className={css(wrapperStyles, styles)} data-test-id={TEST_ID}>
       <DataModal />
-      {onBack ? <IconButton onPress={onBack} graphic='backwardLink' data-test-id={BACK_BTN_TEST_ID} /> : <div />}
+      {onBack ? <IconButton onPress={onBack} graphic='backwardLink' testId={BACK_BTN_TEST_ID} /> : <div />}
       <h3 className={css(headerStyles({ mobileScreen, onBack }))}>
         {withIcon && (
           <div className={css(iconWrapperStyle)}>
@@ -79,7 +80,7 @@ const Header: FC<HeaderProps> = ({ title, onBack, withIcon, iconName = 'home', s
           <IconButton onPress={handleAlertOpen} graphic='alert' />
           <AlertBadge />
         </RoundIcon>
-        <Icon onClick={handleMenuOpen} graphic='hamburger' iconStyles={iconStyles} />
+        <Icon onClick={handleMenuOpen} graphic='hamburger' iconStyles={iconStyles} containerTestId={MENU_BTN} />
       </div>
       {state?.isMenuOpen && <MenuDrawer onClose={handleClose} />}
       {state?.isAlertOpen && <AlertDrawer onClose={handleAlertClose} />}

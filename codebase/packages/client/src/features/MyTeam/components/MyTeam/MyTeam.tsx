@@ -7,6 +7,9 @@ import { useTranslation } from 'components/Translation';
 import ViewFilters from '../ViewFilters';
 import { View } from '../../config/types';
 import TeamWidgets from '../TeamWidgets';
+import { CanPerform, role } from 'features/Permission';
+
+export const TEST_NO_FILTERS = 'test-no-filters';
 
 const MyTeam: FC = () => {
   const { css } = useStyle();
@@ -23,7 +26,11 @@ const MyTeam: FC = () => {
   return (
     <div data-test-id='my-team'>
       <div className={css(filtersWrapperStyles)}>
-        <ViewFilters view={view} onChange={handleViewChange} />
+        <CanPerform
+          perform={[role.EXECUTIVE]}
+          yes={() => <ViewFilters view={view} onChange={handleViewChange} />}
+          no={() => <div data-test-id={TEST_NO_FILTERS} className={css(emptyBlock)} />}
+        />
         <div className={css(filtersStyles)}>
           <Filters
             sortValue={sortValue}
@@ -37,6 +44,11 @@ const MyTeam: FC = () => {
       <TeamWidgets view={view} searchValue={searchValue} sortValue={sortValue} />
     </div>
   );
+};
+
+const emptyBlock: Rule = {
+  display: 'flex',
+  flexDirection: 'row',
 };
 
 const filtersWrapperStyles: Rule = {

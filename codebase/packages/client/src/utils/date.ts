@@ -64,5 +64,8 @@ export const dateToIso = (date: Date) => DateTime.fromJSDate(date).toISO();
 
 export const getCurrentYear = () => DateTime.local().year.toString();
 
-export const getUTCDateFromString = (dateString) =>
-  new Date(Date.UTC(...(dateString.split('-') as [number, number, number]), 0, 0, 0));
+export const getISODateStringWithTimeFromDateString = (dateString: string): string => {
+  const date = DateTime.fromFormat(dateString, DATE_FORMAT);
+
+  return date.toISO().replace(/\+.+$/, 'Z');
+};

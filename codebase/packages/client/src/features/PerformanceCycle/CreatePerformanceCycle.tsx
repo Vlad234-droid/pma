@@ -16,7 +16,7 @@ import { Page } from 'pages';
 import { buildPath } from 'features/Routes';
 import { useToast, Variant } from 'features/Toast';
 import Spinner from 'components/Spinner';
-import { formatDate, getUTCDateFromString, DATE_FORMAT } from 'utils';
+import { formatDate, DATE_FORMAT, getISODateStringWithTimeFromDateString } from 'utils';
 import PerformanceCycleForm from './components/PerformanceCycleForm';
 import { Status as PerformanceCycleStatus } from './type';
 
@@ -41,7 +41,7 @@ const CreatePerformanceCycle: FC = () => {
     if (status === Status.SUCCEEDED) {
       navigate({
         pathname: buildPath(Page.PERFORMANCE_CYCLE),
-        search: new URLSearchParams({ status: cycle?.status || PerformanceCycleStatus.DRAFT }).toString(),
+        search: new URLSearchParams({ status: cycle?.status || PerformanceCycleStatus.STARTED }).toString(),
       });
       dispatch(PerformanceCycleActions.resetMetaStatusRequest());
     }
@@ -65,19 +65,24 @@ const CreatePerformanceCycle: FC = () => {
   }, [performanceCycleUuid]);
 
   function buildData(data) {
-    const { metadata, name, template, entryConfigKey } = data;
-    const startTime = getUTCDateFromString(formatDate(metadata.cycle.properties.pm_cycle_start_time, DATE_FORMAT));
-    const endTime = getUTCDateFromString(formatDate(metadata.cycle.properties.pm_cycle_end_time, DATE_FORMAT));
+    const { metadata, name, template, entryConfigKey, status, type } = data;
+    const startTime = getISODateStringWithTimeFromDateString(
+      formatDate(metadata.cycle.properties.pm_cycle_start_time, DATE_FORMAT),
+    );
+    const endTime = getISODateStringWithTimeFromDateString(
+      formatDate(metadata.cycle.properties.pm_cycle_end_time, DATE_FORMAT),
+    );
 
     return {
       uuid: performanceCycleUuid !== 'new' ? performanceCycleUuid : undefined,
       template,
       name,
+      status,
       entryConfigKey,
       createdBy: {
         uuid: colleagueUuid,
       },
-      type: 'FISCAL',
+      type: type || 'FISCAL',
       metadata: {
         ...metadata,
         cycle: {
@@ -90,7 +95,8 @@ const CreatePerformanceCycle: FC = () => {
     };
   }
 
-  const handleSaveDraft = (data) => {
+  const handleSave = (data) => {
+    debugger;
     if (performanceCycleUuid === 'new') {
       dispatch(PerformanceCycleActions.createPerformanceCycle({ ...data, status: 'DRAFT' }));
       return;
@@ -99,22 +105,15 @@ const CreatePerformanceCycle: FC = () => {
   };
 
   const handlePublish = (data) => {
+    const newData = {
+      ...data,
+      status: 'REGISTERED',
+      uuid: performanceCycleUuid === 'new' ? undefined : performanceCycleUuid,
+    };
     if (performanceCycleUuid === 'new') {
-      dispatch(
-        PerformanceCycleActions.createPerformanceCycle({
-          ...data,
-          status: 'REGISTERED',
-          uuid: performanceCycleUuid === 'new' ? undefined : performanceCycleUuid,
-        }),
-      );
+      dispatch(PerformanceCycleActions.createPerformanceCycle(newData));
     } else {
-      dispatch(
-        PerformanceCycleActions.updatePerformanceCycle({
-          ...data,
-          status: 'REGISTERED',
-          uuid: performanceCycleUuid === 'new' ? undefined : performanceCycleUuid,
-        }),
-      );
+      dispatch(PerformanceCycleActions.updatePerformanceCycle(newData));
     }
   };
 
@@ -123,7 +122,7 @@ const CreatePerformanceCycle: FC = () => {
       handlePublish(buildData(data));
       return;
     }
-    handleSaveDraft(buildData(data));
+    handleSave(buildData(data));
   };
 
   const defaultValues = useMemo(() => {
@@ -135,6 +134,8 @@ const CreatePerformanceCycle: FC = () => {
       name: cycle?.name,
       metadata: cycle?.metadata,
       entryConfigKey: cycle?.entryConfigKey,
+      status: cycle?.status,
+      template: cycle?.template,
       forms: cycleForms || [],
     };
   }, [performanceCycleUuid, cycle]);

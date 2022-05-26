@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { Trans } from 'components/Translation';
 import { TileWrapper } from 'components/Tile';
 import { Icon, IconProps } from 'components/Icon';
-import { Button, Rule, Styles, useStyle } from '@pma/dex-wrapper';
+import { Button, Rule, Styles, useStyle, Colors, CreateRule } from '@pma/dex-wrapper';
 
 export type Props = {
   iconGraphic: IconProps['graphic'];
@@ -14,6 +14,8 @@ export type Props = {
   customStyle?: React.CSSProperties | {};
   onClick: () => void;
   withButton?: boolean;
+  background?: Colors;
+  hover?: boolean;
 };
 
 export const TEST_ID = 'secondary-widget';
@@ -27,23 +29,25 @@ const SecondaryWidget: FC<Props> = ({
   onClick,
   date,
   withButton = true,
+  background = 'white',
+  hover = true,
 }) => {
-  const { css, theme } = useStyle();
+  const { css } = useStyle();
 
   return (
-    <TileWrapper customStyle={customStyle} hover={true} background={'white'}>
-      <div className={css(wrapperStyle)} onClick={onClick} data-test-id={TEST_ID}>
+    <TileWrapper customStyle={customStyle} hover={hover} background={background}>
+      <div className={css(wrapperStyle({ background }))} onClick={onClick} data-test-id={TEST_ID}>
         <div className={css(headStyle)}>
-          <Icon graphic={iconGraphic} />
+          <Icon graphic={iconGraphic} invertColors={background === 'tescoBlue'} />
           <span className={css(titleStyle)}>{title}</span>
-          {data && <span className={css(descriptionStyle)}>{data}</span>}
-          {date && <span className={css(descriptionStyle)}>{date}</span>}
-          <span className={css(descriptionStyle)}>{description}</span>
+          {data && <span className={css(descriptionStyle({ background }))}>{data}</span>}
+          {date && <span className={css(descriptionStyle({ background }))}>{date}</span>}
+          <span className={css(descriptionStyle({ background }))}>{description}</span>
         </div>
         {withButton && (
           <div className={css(bodyStyle)}>
             <div>
-              <Button mode='inverse' styles={[btnStyle({ theme }) as Styles]} onPress={onClick}>
+              <Button mode='inverse' styles={[btnStyle({ background })]} onPress={onClick}>
                 <Trans i18nKey='view'>View</Trans>
               </Button>
             </div>
@@ -54,20 +58,22 @@ const SecondaryWidget: FC<Props> = ({
   );
 };
 
-const wrapperStyle: Rule = ({ theme }) => {
-  const mobileScreen = theme.breakpoints.small || theme.breakpoints.xSmall;
-  return {
-    padding: mobileScreen ? '16px 8px' : '24px 27px',
-    height: '100%',
-    color: theme.colors.tescoBlue,
-    width: '100%',
-    cursor: 'pointer',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    flexDirection: 'column',
-    display: 'flex',
+const wrapperStyle: CreateRule<{ background: Colors }> =
+  ({ background }) =>
+  ({ theme }) => {
+    const mobileScreen = theme.breakpoints.small || theme.breakpoints.xSmall;
+    return {
+      padding: mobileScreen ? '16px 8px' : '24px 27px',
+      height: '100%',
+      color: `${background === 'tescoBlue' ? theme.colors.white : theme.colors.tescoBlue}`,
+      width: '100%',
+      cursor: 'pointer',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      flexDirection: 'column',
+      display: 'flex',
+    };
   };
-};
 
 const headStyle = {
   display: 'flex',
@@ -93,18 +99,20 @@ const titleStyle: Rule = ({ theme }) => {
   };
 };
 
-const descriptionStyle: Rule = ({ theme }) => {
-  const mobileScreen = theme.breakpoints.small || theme.breakpoints.xSmall;
-  return {
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-    fontSize: mobileScreen ? '12px' : '14px',
-    lineHeight: mobileScreen ? '16px' : '20px',
-    letterSpacing: '0px',
-    color: theme.colors.base,
-    textAlign: 'center',
+const descriptionStyle: CreateRule<{ background: Colors }> =
+  ({ background }) =>
+  ({ theme }) => {
+    const mobileScreen = theme.breakpoints.small || theme.breakpoints.xSmall;
+    return {
+      fontStyle: 'normal',
+      fontWeight: 'normal',
+      fontSize: mobileScreen ? '12px' : '14px',
+      lineHeight: mobileScreen ? '16px' : '20px',
+      letterSpacing: '0px',
+      color: background === 'tescoBlue' ? theme.colors.white : theme.colors.base,
+      textAlign: 'center',
+    };
   };
-};
 
 const bodyStyle = {
   flexWrap: 'wrap',
@@ -115,13 +123,15 @@ const bodyStyle = {
   flexDirection: 'column',
 } as Styles;
 
-const btnStyle = ({ theme }) => ({
-  ...theme.font.fixed.f14,
-  letterSpacing: '0px',
-  color: theme.colors.tescoBlue,
-  fontWeight: 'bold',
-  height: '30px',
-  background: 'transparent',
-});
+const btnStyle: CreateRule<{ background: Colors }> =
+  ({ background }) =>
+  ({ theme }) => ({
+    ...theme.font.fixed.f14,
+    letterSpacing: '0px',
+    color: background === 'tescoBlue' ? theme.colors.white : theme.colors.tescoBlue,
+    fontWeight: 'bold',
+    height: '30px',
+    background: 'transparent',
+  });
 
 export default SecondaryWidget;

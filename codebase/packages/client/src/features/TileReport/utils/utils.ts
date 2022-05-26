@@ -35,7 +35,7 @@ export const getReportTitles = (t, type) => {
     [ReportPage.REPORT_FEEDBACK]: {
       pending: t('requested', 'Requested'),
       done: t('given', 'Given'),
-      chart: t(TitlesReport.MOMENT_FEEDBACK, 'In the moment feedback'),
+      chart: t(TitlesReport.MOMENT_FEEDBACK, 'Everyday Feedback'),
     },
     [ReportPage.REPORT_WORK_LEVEL]: {
       pending: t('not_approved', 'Not Approved'),
@@ -83,43 +83,46 @@ export const checkExceptionType = (type) =>
   !!type && type !== ReportPage.REPORT_NEW_TO_BUSINESS && type !== ReportPage.REPORT_APPROVED_OBJECTIVES;
 export const checkBusinessType = (type) => !!type && type === ReportPage.REPORT_NEW_TO_BUSINESS;
 
+export const checkColleaguesCount = (type) =>
+  (!!type && type === ReportPage.REPORT_APPROVED_OBJECTIVES) ||
+  type === ReportPage.REPORT_SUBMITTED_OBJECTIVES ||
+  type === ReportPage.REPORT_MID_YEAR_REVIEW ||
+  type === ReportPage.REPORT_END_YEAR_REVIEW;
+
 export const checkWorkLevel = (type) => !!type && type === ReportPage.REPORT_WORK_LEVEL;
 
 export const defineHeaderTitle = (type, t) => {
   const tilePage = Page.TILE_REPORT_STATISTICS;
   const titles = {
     [ReportPage.REPORT_APPROVED_OBJECTIVES]: {
-      [tilePage]: t('objectives_approved'),
+      [tilePage]: t('objectives_approved', 'Objectives approved'),
     },
     [ReportPage.REPORT_SUBMITTED_OBJECTIVES]: {
-      [tilePage]: t('objectives_submitted'),
+      [tilePage]: t('objectives_submitted', 'Objectives submitted'),
     },
     [ReportPage.REPORT_MID_YEAR_REVIEW]: {
-      [tilePage]: t('mid_year_review'),
+      [tilePage]: t('mid_year_review', 'Mid-year review'),
     },
     [ReportPage.REPORT_END_YEAR_REVIEW]: {
-      [tilePage]: t('end_year_review'),
-    },
-    [ReportPage.REPORT_END_YEAR_REVIEW]: {
-      [tilePage]: t('end_year_review'),
+      [tilePage]: t('end_year_review', 'End year review'),
     },
     [ReportPage.REPORT_WORK_LEVEL]: {
-      [tilePage]: t('wL4_5_report'),
+      [tilePage]: t('WL4_and_5', 'WL4 & 5 Objectives submitted'),
     },
     [ReportPage.REPORT_NEW_TO_BUSINESS]: {
-      [tilePage]: t('new_to_business'),
+      [tilePage]: t('new_to_business', 'New to business'),
     },
     [ReportPage.REPORT_FEEDBACK]: {
-      [tilePage]: t('feedback_report'),
+      [tilePage]: t('everyday_feedback', 'Everyday Feedback'),
     },
     [ReportPage.REPORT_EYR_BREAKDOWN]: {
-      [tilePage]: t('eyr_breakdown'),
+      [tilePage]: t('eyr_breakdown', 'Breakdown of Year-end review'),
     },
     [ReportPage.REPORT_MYR_BREAKDOWN]: {
-      [tilePage]: t('myr_breakdown'),
+      [tilePage]: t('myr_breakdown', 'Breakdown of Mid-year review'),
     },
     [ReportPage.REPORT_ANNIVERSARY_REVIEWS]: {
-      [tilePage]: t('anniversary_reviews'),
+      [tilePage]: t('anniversary_reviews', 'Anniversary Reviews completed per quarterTileRport'),
     },
   };
   return titles[type];

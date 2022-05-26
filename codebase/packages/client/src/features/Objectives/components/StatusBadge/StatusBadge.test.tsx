@@ -8,22 +8,18 @@ import { Status } from 'config/enum';
 describe('<StatusBadge/>', () => {
   it('render DRAFT', async () => {
     render(<StatusBadge status={Status.DRAFT} styles={{}} />);
-    expect(screen.getByText('Draft')).toBeInTheDocument();
-    expect(screen.getByText('Round Pencil')).toBeInTheDocument();
+    expect(screen.getAllByText('Draft')).toHaveLength(2);
   });
   it('render WAITING_FOR_APPROVAL', async () => {
     render(<StatusBadge status={Status.WAITING_FOR_APPROVAL} styles={{}} />);
-    expect(screen.getByText('Waiting for approval')).toBeInTheDocument();
-    expect(screen.getByText('Round Clock')).toBeInTheDocument();
+    expect(screen.getAllByText('Waiting for approval')).toHaveLength(2);
   });
   it('render APPROVED', async () => {
     render(<StatusBadge status={Status.APPROVED} styles={{}} />);
-    expect(screen.getByText('Approved')).toBeInTheDocument();
-    expect(screen.getByText('Round Tick')).toBeInTheDocument();
+    expect(screen.getAllByText('Approved')).toHaveLength(2);
   });
   it('render DECLINED', async () => {
     render(<StatusBadge status={Status.DECLINED} styles={{}} />);
-    expect(screen.getByText('Declined')).toBeInTheDocument();
-    expect(screen.getByText('Round Alert')).toBeInTheDocument();
+    expect(screen.getAllByText('Declined')).toHaveLength(2);
   });
 });

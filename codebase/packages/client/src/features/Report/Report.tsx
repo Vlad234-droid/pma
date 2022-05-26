@@ -1,5 +1,5 @@
 import React, { FC, useState, useCallback } from 'react';
-import { colors, CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
+import { colors, CreateRule, Rule, useStyle, Styles } from '@pma/dex-wrapper';
 import { getReportMetaSelector } from '@pma/store';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -17,10 +17,11 @@ import { getCurrentYear } from 'utils/date';
 import { View } from 'components/PieChart/config';
 import { HoverContainer } from 'components/HoverContainer';
 import { HoverMessage } from 'components/HoverMessage';
+import { ColleaguesCount } from './components/ColleaguesCount';
 
 import { getFieldOptions, initialValues, convertToLink, IsReportTiles, getCurrentValue } from './config';
-import { getReportData, getData } from './hooks';
-import { ReportPage, TitlesReport } from 'config/enum';
+import { getReportData, getData, useStatisticsReport } from './hooks';
+import { MetaDataReport, ReportPage, TitlesReport } from 'config/enum';
 
 import { Page } from 'pages';
 
@@ -52,13 +53,15 @@ const Report: FC = () => {
 
   getReportData(query);
 
+  const { colleaguesCount } = useStatisticsReport([MetaDataReport.COLLEAGUES_COUNT]);
+
   const changeYearHandler = (value) => {
     if (!value) return;
     setYear(value);
     getData(dispatch, { year: value });
   };
 
-  //TODO attach this with Marius
+  //TODO: attach this with Marius
   // const getAppliedReport = () => [...new Set(checkedItems.map((item) => item.split('-')[0]))];
   // const clearAppliedFilters = (filterTitle) => {
   //   if (isCheckAll.length) setIsCheckAll((prev) => [...prev.filter((item) => item.split('-')[0] !== filterTitle)]);
@@ -82,7 +85,7 @@ const Report: FC = () => {
   );
 
   return (
-    <div className={css({ margin: '22px 42px 30px 40px' })} data-test-id={REPORT_WRAPPER}>
+    <div className={css({ margin: '22px 42px 110px 40px' })} data-test-id={REPORT_WRAPPER}>
       <div className={css(spaceBetween({ mobileScreen }))}>
         {/*//Todo in future move active filters to another place */}
         {/*{!!getAppliedReport().length && (*/}
@@ -109,6 +112,7 @@ const Report: FC = () => {
               value={getCurrentValue(query, year)}
             />
           </form>
+          <ColleaguesCount colleaguesCount={colleaguesCount} countStyles={countStyles} />
         </div>
 
         <div className={css(flexCenterStyled)}>
@@ -333,6 +337,11 @@ const Report: FC = () => {
                   type={convertToLink(ReportPage.REPORT_ANNIVERSARY_REVIEWS)}
                   link={Page.TILE_REPORT_STATISTICS}
                   params={getYear()}
+                  hoverMessage={t(
+                    'the_number_of_annual_reviews_a_line_manager_has_undertaken',
+                    'The number of annual reviews a line manager has undertaken per quarter based on the number of direct reports they have. This is just indicative assuming a line manager will space reviews out equally during the year.',
+                  )}
+                  hoverVisibility={!small}
                 />
               </div>
             )}
@@ -362,12 +371,23 @@ const iconDownloadStyle: Rule = () => ({
   top: '2px',
   left: '2px',
 });
+
+const countStyles: Rule = ({ theme }) => ({
+  position: 'absolute',
+  bottom: '-30px',
+  left: 0,
+  fontWeight: theme.font.weight.regular,
+  fontSize: theme.font.fixed.f16.fontSize,
+  lineHeight: theme.font.fixed.f16.lineHeight,
+  color: theme.colors.base,
+});
 const downloadWrapperStyle: Rule = {
   display: 'flex',
   flexDirection: 'column',
   width: '40%',
   marginBottom: '29px',
-};
+  position: 'relative',
+} as Styles;
 
 const iconBtnStyle = {
   padding: '0',

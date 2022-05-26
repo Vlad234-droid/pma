@@ -4,8 +4,11 @@ import { HoverMessage as Props } from './types';
 
 export const MESSAGE_WRAPPER = 'message-wrapper';
 
-const HoverMessage: FC<Props> = ({ text = '', customStyles = {} }) => {
+const HoverMessage: FC<Props> = ({ text = '', customStyles = {}, isVisible = true }) => {
   const { css } = useStyle();
+
+  if (!isVisible) return null;
+
   return (
     <div className={css(hoverMessage, customStyles)} data-test-id={MESSAGE_WRAPPER}>
       {text}

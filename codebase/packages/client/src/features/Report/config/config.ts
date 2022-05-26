@@ -8,10 +8,10 @@ export enum IsReportTiles {
   BREAKDOWN_MID_YEAR_REVIEW = 'Breakdown of mid-year review',
   YEAR_END_FORMS = 'Year-end forms',
   BREAKDOWN_YEAR_END_REVIEW = 'Breakdown of year-end review',
-  MOMENT_FEEDBACK = 'In the moment feedback',
+  MOMENT_FEEDBACK = 'Everyday Feedback',
   NEW_TO_BUSINESS = 'New to business',
   ANNIVERSARY_REVIEWS = 'Anniversary Reviews completed per quarter',
-  WL4And5 = 'WL4 & 5 Objectives submitted',
+  WL4And5 = 'WL4 & 5 Objectives approved',
 }
 export const getFieldOptions = (currentYear) => {
   return [
@@ -96,7 +96,7 @@ export const statisticsReport = {
     MetaDataReport.MYR_SUBMITTED_PERCENTAGE,
     MetaDataReport.MYR_APPROVED_PERCENTAGE,
   ],
-  [StatisticsTitlesReport.BREAKDOWN_OF_MID_YEAR_RATINGS]: [
+  [StatisticsTitlesReport.BREAKDOWN_OF_MID_YEAR_REVIEW]: [
     MetaDataReport.MYR_RATING_BREAKDOWN_BELOW_EXPECTED_PERCENTAGE,
     MetaDataReport.MYR_RATING_BREAKDOWN_BELOW_EXPECTED_COUNT,
     MetaDataReport.MYR_RATING_BREAKDOWN_SATISFACTORY_PERCENTAGE,
@@ -110,7 +110,7 @@ export const statisticsReport = {
     MetaDataReport.EYR_SUBMITTED_PERCENTAGE,
     MetaDataReport.EYR_APPROVED_PERCENTAGE,
   ],
-  [StatisticsTitlesReport.BREAKDOWN_OF_YEAR_END_RATINGS]: [
+  [StatisticsTitlesReport.BREAKDOWN_OF_YEAR_END_REVIEW]: [
     MetaDataReport.EYR_RATING_BREAKDOWN_BELOW_EXPECTED_PERCENTAGE,
     MetaDataReport.EYR_RATING_BREAKDOWN_BELOW_EXPECTED_COUNT,
     MetaDataReport.EYR_RATING_BREAKDOWN_SATISFACTORY_PERCENTAGE,

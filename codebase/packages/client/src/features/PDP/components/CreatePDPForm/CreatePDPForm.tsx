@@ -69,6 +69,7 @@ const CreatePDPForm: FC<Props> = ({
   const [isOpenConfirmNext, setConfirmNextOpen] = useState<boolean>(false);
 
   const today = useMemo(() => {
+    // TODO: move to date utils
     const now = new Date();
     now.setHours(0);
     now.setMinutes(0);

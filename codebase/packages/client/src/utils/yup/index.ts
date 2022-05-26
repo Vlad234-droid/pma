@@ -2,6 +2,7 @@ import * as Yup from 'yup';
 import { TFunction } from 'components/Translation';
 
 import { VALIDATION_RULE, VALIDATION_RULE_MODELER } from './types';
+import { RICH_TEXT_CHARACTERS_LIMIT } from 'config/constants';
 
 export const createYupSchema = (t: TFunction) => (schema: Yup.AnyObjectSchema, config: any) => {
   const { key, validationType = 'string', validate = {} } = config;
@@ -20,8 +21,10 @@ export const createYupSchema = (t: TFunction) => (schema: Yup.AnyObjectSchema, c
   }
   if (validate[VALIDATION_RULE_MODELER.MAX_LENGTH]) {
     validator = validator[VALIDATION_RULE.MAX_LENGTH](validate[VALIDATION_RULE_MODELER.MAX_LENGTH]).max(
-      validate?.maxLength || 100,
-      t('field_max_length', `Must be at most ${validate?.maxLength} characters`, { max: validate?.maxLength }),
+      validate?.maxLength || RICH_TEXT_CHARACTERS_LIMIT,
+      t('field_max_length', `Must be at most ${validate?.maxLength || RICH_TEXT_CHARACTERS_LIMIT} characters`, {
+        max: validate?.maxLength || RICH_TEXT_CHARACTERS_LIMIT,
+      }),
     );
   }
 

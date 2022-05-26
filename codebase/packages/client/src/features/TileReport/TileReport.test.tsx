@@ -73,4 +73,14 @@ describe('TileReport', () => {
     const wrapper = getByTestId(OBJECTIVES_WRAPPER);
     expect(wrapper).toBeInTheDocument();
   });
+
+  it('should render PieChart', async () => {
+    const { getByTestId } = render(
+      <BrowserRouter>
+        <TileReport />
+      </BrowserRouter>,
+    );
+
+    expect(getByTestId('test-pie-chart')).toBeInTheDocument();
+  });
 });

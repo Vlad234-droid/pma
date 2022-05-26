@@ -56,7 +56,6 @@ const ShareWidget: FC<Props> = ({ customStyle, stopShare, sharing }) => {
   const isManagerShared = isManager && isShared;
   const sharedObjectivesCount = sharedObjectives.length;
   const formElementsCount = formElements.length;
-  const isValidPathParams = pathParams.colleagueUuid;
 
   const handleShareSaveBtnClick = async () => {
     setIsConfirmDeclineModalOpen(false);
@@ -74,18 +73,6 @@ const ShareWidget: FC<Props> = ({ customStyle, stopShare, sharing }) => {
   const handleViewObjectivesBtnClick = () => {
     setIsViewObjectivesModalOpen(true);
   };
-
-  useEffect(() => {
-    dispatch(ObjectiveSharingActions.getSharings(pathParams));
-  }, []);
-
-  useEffect(() => {
-    isValidPathParams && isManager && dispatch(ObjectiveSharingActions.checkSharing(pathParams));
-  }, [isManager, isValidPathParams]);
-
-  useEffect(() => {
-    isValidPathParams && !isManager && dispatch(ObjectiveSharingActions.getSharings(pathParams));
-  }, [isManager, isValidPathParams]);
 
   useEffect(() => {
     sharedObjectivesCount && setObjectives(transformReviewsToObjectives(sharedObjectives, formElements));
@@ -217,7 +204,6 @@ const ShareWidget: FC<Props> = ({ customStyle, stopShare, sharing }) => {
 
 const wrapperStyle: Rule = ({ theme }) => ({
   padding: '16px',
-  backgroundColor: theme.colors.white,
   color: theme.colors.tescoBlue,
   width: '100%',
   height: '100%',

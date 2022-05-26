@@ -1,5 +1,5 @@
 import React, { FC, KeyboardEvent, ReactNode, useState, useEffect } from 'react';
-import { useStyle, Rule, colors } from '@pma/dex-wrapper';
+import { useStyle, Rule } from '@pma/dex-wrapper';
 
 import { ARROW_DOWN, ARROW_UP, HOME, END } from './constans';
 import { AccordionProvider } from './contexts';
@@ -156,10 +156,11 @@ const Accordion: FC<Omit<AccordionProps, 'children'>> = ({ children, customStyle
   );
 };
 
-const wrapperStyles: Rule = {
+const wrapperStyles: Rule = ({ theme }) => ({
   position: 'relative',
   marginTop: '25px',
-  borderBottom: `2px solid ${colors.disabled}`,
-};
+  // @ts-ignore
+  borderBottom: `2px solid ${theme.colors.lightGray}`,
+});
 
 export default Accordion;

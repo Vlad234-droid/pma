@@ -88,15 +88,13 @@ const ReportModal: FC<ModalProps> = ({ onClose, modalStatus, tiles }) => {
   const handleCheck = (checkboxId) => {
     const itemIndex = selectedCheckboxes.findIndex((item) => item.id === checkboxId);
     const isSelectAll = itemIndex === selectedCheckboxes.length - 1;
-    if (isSelectAll) {
-      return setSelectedCheckboxes((prev) => {
-        return prev.map((checkbox) => {
-          return {
-            ...checkbox,
-            isChecked: !prev[itemIndex].isChecked,
-          };
-        });
-      });
+    if (isSelectAll && modalStatus === ModalStatus.EDIT) {
+      return setSelectedCheckboxes((prev) =>
+        prev.map((checkbox) => ({
+          ...checkbox,
+          isChecked: !prev[itemIndex].isChecked,
+        })),
+      );
     }
     const item = {
       ...selectedCheckboxes[itemIndex],
@@ -113,7 +111,14 @@ const ReportModal: FC<ModalProps> = ({ onClose, modalStatus, tiles }) => {
     return modalStatus === ModalStatus.EDIT && selectedCheckboxes.some((item) => item['isChecked']);
   };
   return (
-    <WrapperModal onClose={onClose} title={t('download_and_extract', 'Download and Extract')}>
+    <WrapperModal
+      onClose={onClose}
+      title={
+        modalStatus === ModalStatus.DOWNLOAD
+          ? t('download_and_extract', 'Download and Extract')
+          : t('edit_dashboard', 'Edit dashboard')
+      }
+    >
       <div className={css(wrapperModalGiveFeedbackStyle)}>
         <h3 className={css(modalTitleStyle({ mobileScreen }))} data-test-id={DOWNLOAD_WRAPPER}>
           {modalStatus === ModalStatus.DOWNLOAD ? (

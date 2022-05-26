@@ -21,4 +21,9 @@ describe('Tile/BasicTile', () => {
     expect(wrapper.getByText('test')).toBeInTheDocument();
     expect(wrapper.getByText('desc')).toBeInTheDocument();
   });
+
+  it('Tile should render event text', async () => {
+    wrapper = renderWithTheme(<BasicTile title='test' description='desc' event='test event' />);
+    expect(wrapper.getByText('test event')).toBeInTheDocument();
+  });
 });

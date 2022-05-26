@@ -47,8 +47,16 @@ const PerformanceCycleAdministration: FC = () => {
     });
   };
 
-  const handleChangeStatus = (uuid: string, status: Status) => {
+  const handleChangePerformanceCycleStatus = (uuid: string, status: string) => {
     dispatch(PerformanceCycleActions.updatePerformanceCycleStatus({ uuid, status }));
+  };
+
+  const handleStartPerformanceCycle = (uuid: string) => {
+    dispatch(PerformanceCycleActions.startPerformanceCycle(uuid));
+  };
+
+  const handleDeployPerformanceCycle = (uuid: string) => {
+    dispatch(PerformanceCycleActions.deployPerformanceCycle(uuid));
   };
 
   return (
@@ -236,16 +244,24 @@ const PerformanceCycleAdministration: FC = () => {
                         icon: 'edit',
                       },
                     ];
+
+                    if (status === Status.ACTIVE) {
+                      items.push({
+                        text: 'Start',
+                        action: () => handleStartPerformanceCycle(uuid),
+                        icon: 'calender',
+                      });
+                    }
                     if (status === Status.REGISTERED) {
                       items.push(
                         {
-                          text: 'Start',
-                          action: () => handleChangeStatus(uuid, Status.STARTED),
+                          text: 'Deploy',
+                          action: () => handleDeployPerformanceCycle(uuid),
                           icon: 'calender',
                         },
                         {
-                          text: 'InActivate',
-                          action: () => handleChangeStatus(uuid, Status.INACTIVE),
+                          text: 'Inactivate',
+                          action: () => handleChangePerformanceCycleStatus(uuid, Status.INACTIVE),
                           icon: 'roundStop',
                         },
                       );

@@ -61,6 +61,17 @@ export const renderWithTheme = <TProps extends {} = {}>(
       colleagues: [],
       meta: { loading: false, loaded: false, error: null },
     },
+    colleague: {
+      meta: { loading: false, loaded: true },
+      colleague: {
+        profile: {
+          fullName: 'test-name',
+          managerName: 'test-manager',
+          department: 'test-department',
+          job: 'test-job',
+        },
+      },
+    },
     colleagues: { list: [{}] },
     processTemplate: { meta: { loading: false, loaded: false, error: null }, success: true, data: [] },
     timeline: { meta: { loading: false, loaded: false, error: null }, success: true, 'test-colleagueUuid': [] },

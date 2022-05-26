@@ -97,36 +97,41 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel, setIsInfoModalOpen }) 
   return (
     <>
       <div className={css({ paddingLeft: '40px', paddingRight: '40px', height: '100%', overflow: 'auto' })}>
-        <div className={css({ fontWeight: 'bold', fontSize: '24px', lineHeight: '28px' })}>
+        <div className={css({ fontWeight: 'bold', fontSize: '24px', lineHeight: '28px', paddingBottom: '8px' })}>
           <Trans i18nKey='ask_your_colleagues_for_feedback'>Ask your colleagues for feedback</Trans>
         </div>
         <Attention />
-        <div className={css({ marginTop: '14px', fontSize: '18px', lineHeight: '22px' })}>
+
+        <div className={css(withMargin)}>
+          <IconButton graphic='information' onPress={setIsInfoModalOpen}>
+            <p className={css(infoHelpStyle)}>
+              <Trans i18nKey='learn_more_about_how_to_request_great_feedback'>
+                Learn more about how to request great feedback
+              </Trans>
+            </p>
+          </IconButton>
+        </div>
+
+        <div className={css(selectColleagueStyles)}>
           <Trans i18nKey='select_which_colleague_you_would_like_to_ask_feedback_from'>
             Select which colleague(s) you would like to ask feedback from
           </Trans>
         </div>
-        <form className={css({ marginTop: '20px' })}>
+
+        <form className={css({ marginTop: '8px' })}>
           <ColleaguesFinder
+            customStyles={{ marginTop: '0px' }}
             onSelect={handleSelect}
             onBlur={() => handleBlur('colleagues')}
             selected={formValues.colleagues || []}
             error={errors['colleagues']?.message?.replace('colleagues', t('colleagues', 'Colleagues'))}
           />
-          <div className={css(withMargin)}>
-            <IconButton graphic='information' onPress={setIsInfoModalOpen}>
-              <p className={css(infoHelpStyle)}>
-                <Trans i18nKey='learn_more_about_how_to_request_great_feedback'>
-                  Learn more about how to request great feedback
-                </Trans>
-              </p>
-            </IconButton>
-          </div>
           <div className={css({ marginTop: '18px' })}>
             <Item
               withIcon={false}
               label={t('choose_what_you_like_feedback_on', 'Choose what you`d like feedback on')}
               errormessage={errors['targetType']?.message}
+              labelCustomStyle={{ fontWeight: theme.font.weight.bold }}
             >
               <Select
                 name={'targetType'}
@@ -280,6 +285,14 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel, setIsInfoModalOpen }) 
   );
 };
 
+const selectColleagueStyles: Rule = {
+  ...theme.font.fixed.f16,
+  letterSpacing: '0px',
+  fontWeight: '700',
+  fontStyle: 'normal',
+  marginTop: '32px',
+};
+
 const tyleCustomStyle: Rule = ({ theme }) => {
   return {
     padding: '24px',
@@ -296,7 +309,8 @@ const infoHelpStyle: Rule = ({ theme }) => ({
 });
 
 const withMargin: Rule = {
-  marginTop: '32px',
+  marginTop: '24px',
+  marginBottom: '32px',
 };
 
 const commentStyle: Rule = ({ theme }) => ({

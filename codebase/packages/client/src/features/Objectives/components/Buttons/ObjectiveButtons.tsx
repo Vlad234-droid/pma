@@ -25,7 +25,7 @@ const ObjectiveButtons: FC<ObjectiveButtonsProps> = ({ id, status }) => {
   const countDeclinedReviews = useSelector(countByStatusReviews(ReviewType.OBJECTIVE, Status.DECLINED)) || 0;
   const countApprovedReviews = useSelector(countByStatusReviews(ReviewType.OBJECTIVE, Status.APPROVED)) || 0;
 
-  const canEditSingleObjective = canEditSingleObjectiveFn({ status });
+  const canEditSingleObjective = canEditSingleObjectiveFn({ status, objectiveSchema, number: id });
   const canDeleteSingleObjective = canDeleteSingleObjectiveFn({
     status,
     objectiveSchema,
