@@ -12,7 +12,7 @@ export type CompletedReviewsModalProps = {
   onClose: () => void;
 };
 
-// todo wait for backend
+// TODO: wait for backend
 const reviews: any[] = [];
 
 const PreviousReviewFilesModal: FC<CompletedReviewsModalProps> = ({ onClose }) => {

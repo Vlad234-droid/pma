@@ -3,6 +3,6 @@ export type GiveFeedbackFormProps = {
   defaultValues: any;
   currentColleague?: any;
   goToInfo: (data: any) => void;
-  //TODO remove in the future
+  //TODO: remove in the future
   feedbackFields: Array<any>;
 };

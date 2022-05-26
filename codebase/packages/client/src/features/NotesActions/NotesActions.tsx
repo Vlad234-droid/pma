@@ -77,6 +77,7 @@ const NotesActions: FC<{ loaded: boolean }> = ({ loaded }) => {
     }
   }, [folders, notesSelect, archiveMode.team]);
 
+  // TODO: change !loaded to loading
   if (!loaded) {
     return <Spinner fullHeight />;
   }

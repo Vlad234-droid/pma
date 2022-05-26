@@ -52,6 +52,7 @@ import { Objectives } from './Objectives';
 
 export const TEST_ID = 'my-objectives-page';
 
+// TODO: move to separate component
 const WidgetBlock = () => {
   const navigate = useNavigate();
   const { css } = useStyle();
@@ -69,6 +70,7 @@ const WidgetBlock = () => {
   );
 };
 
+// TODO: move to separate component
 const ReviewBlock: FC<{ canShow: Boolean }> = ({ canShow }) => {
   const midYearReview = useSelector(getTimelineByCodeSelector(ObjectiveType.MYR, USER.current));
   const endYearReview = useSelector(getTimelineByCodeSelector(ObjectiveType.EYR, USER.current));
@@ -104,6 +106,7 @@ const ReviewBlock: FC<{ canShow: Boolean }> = ({ canShow }) => {
   );
 };
 
+// TODO: move part of codebase to page
 const MyObjectives: FC = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -353,7 +356,6 @@ const MyObjectives: FC = () => {
               />
             </div>
           )}
-
           <WidgetBlock />
         </div>
       </div>

@@ -61,7 +61,7 @@ const Report: FC = () => {
     getData(dispatch, { year: value });
   };
 
-  //TODO attach this with Marius
+  //TODO: attach this with Marius
   // const getAppliedReport = () => [...new Set(checkedItems.map((item) => item.split('-')[0]))];
   // const clearAppliedFilters = (filterTitle) => {
   //   if (isCheckAll.length) setIsCheckAll((prev) => [...prev.filter((item) => item.split('-')[0] !== filterTitle)]);
