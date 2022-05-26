@@ -609,5 +609,6 @@
   "what_rating": "What rating",
   "how_rating": "How rating",
   "below_expected_contribution": "Fill out the questions below to share your feedback",
-  "edit_dashboard": "Edit dashboard"
+  "edit_dashboard": "Edit dashboard",
+  "the_number_of_annual_reviews_a_line_manager_has_undertaken": "The number of annual reviews a line manager has undertaken per quarter based on the number of direct reports they have. This is just indicative assuming a line manager will space reviews out equally during the year."
 }

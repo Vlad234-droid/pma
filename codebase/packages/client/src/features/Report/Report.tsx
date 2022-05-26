@@ -85,7 +85,7 @@ const Report: FC = () => {
   );
 
   return (
-    <div className={css({ margin: '22px 42px 30px 40px' })} data-test-id={REPORT_WRAPPER}>
+    <div className={css({ margin: '22px 42px 110px 40px' })} data-test-id={REPORT_WRAPPER}>
       <div className={css(spaceBetween({ mobileScreen }))}>
         {/*//Todo in future move active filters to another place */}
         {/*{!!getAppliedReport().length && (*/}
@@ -337,6 +337,11 @@ const Report: FC = () => {
                   type={convertToLink(ReportPage.REPORT_ANNIVERSARY_REVIEWS)}
                   link={Page.TILE_REPORT_STATISTICS}
                   params={getYear()}
+                  hoverMessage={t(
+                    'the_number_of_annual_reviews_a_line_manager_has_undertaken',
+                    'The number of annual reviews a line manager has undertaken per quarter based on the number of direct reports they have. This is just indicative assuming a line manager will space reviews out equally during the year.',
+                  )}
+                  hoverVisibility={!small}
                 />
               </div>
             )}

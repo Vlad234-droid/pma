@@ -36,10 +36,13 @@ const PieChart: FC<PieChartProps> = ({
     hoverVisibility,
   };
 
-  const isVisibleMessage = () =>
-    hoverVisibility &&
-    !!hoverMessage &&
-    isHovering && <HoverMessage text={hoverMessage} customStyles={hoverContainer} />;
+  const HoverMessageWrapper = () => (
+    <HoverMessage
+      isVisible={hoverVisibility && !!hoverMessage && isHovering}
+      text={hoverMessage}
+      customStyles={hoverContainer}
+    />
+  );
 
   if (!link)
     return (
@@ -50,7 +53,7 @@ const PieChart: FC<PieChartProps> = ({
         data-test-id={PIE_CHART_WRAPPER}
       >
         <Content {...props} />
-        {isVisibleMessage()}
+        <HoverMessageWrapper />
       </Wrapper>
     );
 
@@ -64,7 +67,7 @@ const PieChart: FC<PieChartProps> = ({
       onMouseLeave={() => setIsHovering(false)}
     >
       <Content {...props} />
-      {isVisibleMessage()}
+      <HoverMessageWrapper />
     </Link>
   );
 };
