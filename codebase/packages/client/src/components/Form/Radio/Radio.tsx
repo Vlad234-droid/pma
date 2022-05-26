@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { useStyle, colors } from '@pma/dex-wrapper';
 import { RadioField } from '../types';
 
-const Radio: FC<RadioField> = ({ id, name, onChange, readonly, checked }) => {
+const Radio: FC<RadioField> = ({ id, name, onChange, readonly, checked, value }) => {
   const { css } = useStyle();
   return (
     <input
@@ -27,6 +27,7 @@ const Radio: FC<RadioField> = ({ id, name, onChange, readonly, checked }) => {
       name={name}
       readOnly={readonly}
       data-test-id={name}
+      value={value}
     />
   );
 };

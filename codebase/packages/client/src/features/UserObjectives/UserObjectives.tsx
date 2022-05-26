@@ -104,6 +104,7 @@ const UserObjectives: FC = () => {
                 canShowObjectives={canShowObjectives}
                 reviewLoading={reviewLoading}
                 objectives={objectives}
+                reviewLoaded={true}
               >
                 <CanPerform
                   perform={[role.LINE_MANAGER]}
@@ -239,6 +240,7 @@ const bodyWrapperStyles: Rule = () => ({
   flexWrap: 'nowrap',
   alignItems: 'stretch',
   flexDirection: 'column',
+  width: '100%',
 });
 
 const linkStyles = ({ theme }) => ({

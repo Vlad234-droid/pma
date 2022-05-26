@@ -6,9 +6,9 @@ import { getLoadedStateSelector } from '@pma/store';
 import Spinner from 'components/Spinner';
 // eslint-disable-next-line import/no-named-as-default
 import DraftItem, { DraftItem as DraftItemType } from '../DraftItem';
-
 import { Checkbox } from 'components/Form';
-import { NoFeedback } from '../../../Feedback/components';
+import { Plug } from 'components/Plug';
+import { useTranslation } from 'components/Translation';
 
 export const WRAPPER = 'list-wrapper';
 
@@ -31,6 +31,7 @@ const DraftList: FC<Props> = ({
   uncheck = false,
   onChange,
 }) => {
+  const { t } = useTranslation();
   const { loaded } = useSelector(getLoadedStateSelector);
 
   const [selected, setSelected] = useState<Selectable>({});
@@ -86,7 +87,7 @@ const DraftList: FC<Props> = ({
           </div>
         ))
       ) : (
-        <NoFeedback />
+        <Plug text={t('no_feedback_records_to_be_displayed', 'No feedback records to be displayed.')} />
       )}
     </div>
   );

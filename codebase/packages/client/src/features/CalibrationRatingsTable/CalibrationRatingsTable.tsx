@@ -16,7 +16,6 @@ export const CalibrationRatingsTable = () => {
       descriptionCustomStyle={descriptionCustomStyle}
       trCustomStyle={trCustomStyle}
       currentItems={getContent()}
-      breakTd={true}
     />
   );
 };
@@ -26,24 +25,26 @@ const titleCustomStyles: Rule = ({ theme }) => ({
   //@ts-ignore
   borderBottom: `1px solid ${theme.colors.lightGray}`,
   background: theme.colors.white,
-  color: theme.colors.base,
+  color: theme.colors.tescoBlue,
   textAlign: 'left',
   height: '40px',
+  fontWeight: theme.font.weight.bold,
 });
 const descriptionCustomStyle: Rule = () => ({
   textAlign: 'left',
   border: 'none',
-  height: '70px',
+  height: '53px',
 });
 const trCustomStyle: Rule = ({ theme }) =>
   ({
-    ':nth-child(odd)': {
+    ':not(:last-child)': {
       //@ts-ignore
-      background: theme.colors.backgroundDarkest,
+      borderBottom: `1px solid ${theme.colors.lightGray}`,
     },
     '& > td': {
+      fontSize: theme.font.fixed.f16.fontSize,
       ':first-child': {
-        color: theme.colors.tescoBlue,
+        color: theme.colors.base,
         fontWeight: theme.font.weight.bold,
       },
       ':nth-child(2)': {

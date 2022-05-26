@@ -605,10 +605,14 @@
   "archive_of_previous_objectives": "Archive of previous objectives",
   "mid_end_review_archive": "Mid-year and Year-end review archive",
   "review_your_colleagues_performance": "Review your colleague`s performance",
-  "overall_rating": "Overall Rating",
-  "what_rating": "What rating",
-  "how_rating": "How rating",
+  "overall_rating": "”Overall” Rating",
+  "what_rating": "”What” rating",
+  "how_rating": "”How” rating",
+  "year": "Year",
   "below_expected_contribution": "Fill out the questions below to share your feedback",
   "edit_dashboard": "Edit dashboard",
-  "the_number_of_annual_reviews_a_line_manager_has_undertaken": "The number of annual reviews a line manager has undertaken per quarter based on the number of direct reports they have. This is just indicative assuming a line manager will space reviews out equally during the year."
+  "the_number_of_annual_reviews_a_line_manager_has_undertaken": "The number of annual reviews a line manager has undertaken per quarter based on the number of direct reports they have. This is just indicative assuming a line manager will space reviews out equally during the year.",
+  "review_not_completed": "Review not completed",
+  "display_objectives_for": "Display objectives for:",
+  "review_forms_for": "Review forms for {{year}}"
 }

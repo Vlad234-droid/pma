@@ -17,6 +17,10 @@ export const filterReviewsByTypeSelector = (reviewType: ReviewType) =>
     return reviews?.data?.filter((review) => review.type === reviewType) || [];
   });
 
+export const getReviewsWithStatuses = createSelector(reviewsSelector, (reviews: any) =>
+  reviews?.data?.map(({ status, type }) => ({ status, reviewType: type })),
+);
+
 export const filterPDPByTypeSelector = (pdpType: PDPType) =>
   createSelector(pdpSelector, (pdps: any) => {
     return pdps?.data?.filter((pdp) => pdp.type === pdpType) || [];
@@ -103,12 +107,11 @@ export const countByTypeReviews = (reviewType: ReviewType) =>
 
 export const getReviewByUuidS = createSelector(reviewsSelector, (reviews: any) => {
   const { data } = reviews;
-  const reviewList = data?.map((item) => {
+  return data?.map((item) => {
     const title = item?.properties?.title;
     return {
       uuid: item.uuid,
       title: title,
     };
   });
-  return reviewList;
 });

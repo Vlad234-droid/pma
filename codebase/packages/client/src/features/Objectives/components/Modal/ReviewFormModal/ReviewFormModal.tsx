@@ -1,9 +1,9 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
-import { yupResolver } from '@hookform/resolvers/yup';
 import {
   currentUserSelector,
   ExpressionValueType,
@@ -59,6 +59,7 @@ const ReviewFormModal: FC<ReviewFormModal> = ({ reviewType, onClose }) => {
   const overallRatingRequestKey: string = useSelector(
     getExpressionRequestKey(reviewType)(ExpressionValueType.OVERALL_RATING),
   );
+
   const timelineReview = useSelector(getTimelineByReviewTypeSelector(reviewType, USER.current));
   const readonly = [Status.WAITING_FOR_APPROVAL, Status.APPROVED].includes(timelineReview.status);
 

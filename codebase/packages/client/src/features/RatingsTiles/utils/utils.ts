@@ -1,27 +1,39 @@
 import { Page } from 'pages';
+import { Graphics } from 'components/Icon';
+import { TFunction } from 'components/Translation';
 
-export const getCards = (t): Array<Record<'title' | 'description' | 'page', string>> => [
+type CardsTypes = {
+  title: string;
+  description: string;
+  //TODO: in future remove ''
+  page: Page | '';
+  graphic: Graphics;
+};
+
+export const getCards = (t: TFunction): Array<CardsTypes> => [
   {
     title: t('calibration_ratings', 'Calibration ratings'),
     description: t('what_how_and_overall_ratings', 'What, how and overall ratings'),
     page: Page.PREVIOUS_CALIBRATION_RATINGS,
+    graphic: 'ratings',
   },
   {
     title: t('objectives', 'Objectives'),
     description: t('archive_of_previous_objectives', 'Archive of previous objectives'),
-    // TODO: in future replace to Page.PREVIOUS_OBJECTIVES_RATINGS
     page: Page.PREVIOUS_OBJECTIVES_RATINGS,
+    graphic: 'goal',
   },
   {
     title: t('review_forms', 'Review forms'),
     description: t('mid_end_review_archive', 'Mid-year and Year-end review archive'),
-    // TODO: in future replace to Page.PREVIOUS_REVIEW_FORMS
-    page: '',
+    page: Page.PREVIOUS_REVIEW_FORMS,
+    graphic: 'doc',
   },
   {
     title: t('supporting_your_performance', 'Supporting Your Performance (SYP)'),
     description: t('review_your_colleagues_performance', 'Review your colleague`s performance'),
     // TODO: in future replace to Page.PREVIOUS_REVIEW_FORMS
     page: '',
+    graphic: 'syp',
   },
 ];

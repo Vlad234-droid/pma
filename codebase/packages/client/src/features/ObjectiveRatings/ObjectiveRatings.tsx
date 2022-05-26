@@ -44,24 +44,19 @@ const ObjectiveRatings = () => {
 
   return (
     <>
-      <YearSwitch
-        currentYear={getCurrentYear()}
-        onChange={(year) => {
-          handleChange(year);
-        }}
-      />
-
       <Backward onPress={() => navigate(-1)} />
       <div className={css({ margin: '8px' })}>
         <ProfileTileWrapper user={user} customStyle={widthStyles({ mobileScreen })}>
           <AdditionalInfo manager={user.manager} />
         </ProfileTileWrapper>
       </div>
+      <YearSwitch currentYear={getCurrentYear()} onChange={handleChange} />
       <div className={css(widthStyles({ mobileScreen }))}>
         <UserObjectivesSections
           canShowObjectives={canShowObjectives}
           reviewLoading={reviewLoading}
           objectives={objectives}
+          reviewLoaded={reviewLoaded}
         />
       </div>
     </>

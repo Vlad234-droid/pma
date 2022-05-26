@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router';
 
 import { useTranslation } from 'components/Translation';
 import { TileWrapper } from 'components/Tile';
+import { Icon } from 'components/Icon';
 
 import { getCards } from './utils';
 import { paramsReplacer } from '../../utils';
@@ -28,10 +29,11 @@ const RatingsTiles = () => {
             <Link
               to={buildPath(paramsReplacer(item.page, { ':uuid': uuid as string }))}
               //TODO: temporary solution in future remove this until 4 tiles be ready
-              className={css(linkStyle({ page: item.page }))}
+              className={css(linkStyle({ active: !!item.page }))}
             >
               <TileWrapper>
                 <div className={css(wrapperBlock({ mobileScreen }))}>
+                  <Icon graphic={item.graphic} viewBox={'0 0 32 32'} size={'32px'} />
                   <h2>{item.title}</h2>
                   <p>{item.description}</p>
                 </div>
@@ -54,9 +56,9 @@ const backStyle: Rule = () => {
     left: '16px',
   };
 };
-const linkStyle: CreateRule<{ page: string }> = ({ page }) => {
+const linkStyle: CreateRule<{ active: boolean }> = ({ active }) => {
   return {
-    pointerEvents: page ? 'all' : 'none',
+    pointerEvents: active ? 'all' : 'none',
   };
 };
 
@@ -73,19 +75,25 @@ const wrapperBlock: CreateRule<{ mobileScreen: boolean }> =
   ({ mobileScreen }) =>
   ({ theme }) =>
     ({
-      padding: !mobileScreen ? '24px 24px 34px 24px' : '20px',
-      height: '166px',
+      padding: !mobileScreen ? '20px 4px 34px' : '16px',
+      height: '146px',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'space-between',
+      alignItems: 'center',
       '& > h2': {
         margin: 0,
         color: theme.colors.tescoBlue,
         fontWeight: theme.font.weight.bold,
-        fontSize: theme.font.fixed.f24.fontSize,
-        marginBottom: '8px',
+        fontSize: theme.font.fixed.f20.fontSize,
+        textAlign: 'center',
+        marginTop: '4px',
       },
       '& > p': {
         margin: 0,
-        fontSize: theme.font.fixed.f18.fontSize,
+        fontSize: theme.font.fixed.f16.fontSize,
         color: theme.colors.base,
+        textAlign: 'center',
       },
     } as Styles);
 

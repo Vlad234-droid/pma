@@ -1,52 +1,64 @@
-import React, { FC, useEffect, useState } from 'react';
-import { CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
+import React, { FC, useState } from 'react';
+import { Rule, Styles, useStyle } from '@pma/dex-wrapper';
+
+import { Trans } from 'components/Translation';
+import { Radio } from 'components/Form';
+
 import { getCurrentYear } from 'utils';
 
 const YearSwitch: FC<{ currentYear: string; onChange: (year: string) => void }> = ({ currentYear, onChange }) => {
   const { css } = useStyle();
-  const [years, setYears] = useState<Array<number> | []>([]);
+  const [years] = useState<Array<number> | []>([Number(currentYear), Number(currentYear) - 1, Number(currentYear) - 2]);
   const [active, setActive] = useState<number>(Number(getCurrentYear()));
-
-  useEffect(() => {
-    setYears(() => [Number(currentYear), Number(currentYear) - 1, Number(currentYear) - 2]);
-  }, []);
 
   return (
     <div className={css(yearWrapper)}>
+      <p className={css(textStyle)}>
+        <Trans i18nKey={'display_objectives_for'}>Display objectives for:</Trans>
+      </p>
       {years.map((year, index) => (
-        <span
-          data-year={year}
-          className={css(yearStyles({ active: index === years?.findIndex((item) => item === active) }))}
-          onClick={(e) => {
-            //@ts-ignore
-            onChange(e.target.dataset.year);
-            //@ts-ignore
-            setActive(Number(e.target.dataset.year));
-          }}
-          key={year}
-        >
-          {year}
-        </span>
+        <label key={year} htmlFor={year} className={css(labelStyle)}>
+          <Radio
+            name={year}
+            checked={index === years?.findIndex((item) => item === active)}
+            id={year}
+            onChange={(e) => {
+              onChange(e.target.value);
+              setActive(Number(e.target.value));
+            }}
+            value={year}
+          />
+          <span className={css(titleStyle)}>{year}</span>
+        </label>
       ))}
     </div>
   );
 };
 
-const yearStyles: CreateRule<{ active: boolean }> =
-  ({ active }) =>
-  ({ theme }) => ({
-    display: 'inline-block',
-    padding: '6px 8px',
-    background: active ? theme.colors.tescoBlue : 'transparent',
-    color: !active ? theme.colors.tescoBlue : theme.colors.white,
-    borderRadius: '4px',
-    cursor: 'pointer',
-  });
+const titleStyle: Rule = {
+  marginLeft: '9px',
+};
+
+const labelStyle: Rule = {
+  display: 'inline-flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  maxWidth: '64px',
+  cursor: 'pointer',
+  ':nth-child(2)': {
+    marginLeft: '12px',
+  },
+} as Styles;
+
 const yearWrapper: Rule = () => ({
   display: 'inline-flex',
   gap: '12px',
-  marginBottom: '16px',
   marginLeft: '8px',
+  marginTop: '20px',
+});
+const textStyle: Rule = ({ theme }) => ({
+  color: theme.colors.base,
+  fontSize: theme.font.fixed.f16.fontSize,
 });
 
 export default YearSwitch;

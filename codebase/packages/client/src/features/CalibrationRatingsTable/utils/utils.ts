@@ -1,5 +1,5 @@
 export const getTitles = (t) => [
-  '',
+  t('year', 'Year'),
   t('overall_rating', 'Overall Rating'),
   t('what_rating', 'What rating'),
   t('how_rating', 'How rating'),
