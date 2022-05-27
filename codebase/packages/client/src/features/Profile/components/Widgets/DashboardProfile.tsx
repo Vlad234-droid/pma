@@ -1,15 +1,13 @@
-import React, { FC } from 'react';
-import { AuthConsumer } from 'contexts/authContext';
+import React, { FC, useContext } from 'react';
+import AuthContext from 'contexts/authContext';
 import { Profile } from 'features/Profile';
 
-const DashboardProfile: FC = () => (
-  <AuthConsumer>
-    {({ user = {} }) => {
-      // @ts-ignore
-      const { fullName, job, department, manager } = user;
-      return <Profile fullName={fullName} job={job} department={department} manager={manager} />;
-    }}
-  </AuthConsumer>
-);
+const DashboardProfile: FC = () => {
+  const {
+    user: { fullName, job, department, manager },
+  } = useContext<any>(AuthContext);
+
+  return <Profile fullName={fullName} job={job} department={department} manager={manager} />;
+};
 
 export default DashboardProfile;
