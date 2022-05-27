@@ -1,5 +1,6 @@
 import { useEffect, useMemo } from 'react';
 import {
+  ColleagueActions,
   getReviewSchema,
   PreviousReviewFilesActions,
   ReviewsActions,
@@ -41,11 +42,13 @@ export const useUserObjectivesData = (uuid, reviewLoaded, schemaLoaded, setObjec
     if (uuid) {
       dispatch(TimelineActions.getTimeline({ colleagueUuid: uuid }));
       dispatch(SchemaActions.getSchema({ colleagueUuid: uuid }));
+      dispatch(ColleagueActions.getColleagueByUuid({ colleagueUuid: uuid }));
     }
 
     return () => {
       dispatch(ReviewsActions.clearReviewData());
       dispatch(SchemaActions.clearSchemaData());
+      dispatch(ColleagueActions.clearColleagueData());
     };
   }, [uuid]);
 };

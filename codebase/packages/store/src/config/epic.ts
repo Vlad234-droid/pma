@@ -5,6 +5,7 @@ import schemaEpic from '../entities/schema/epic';
 import timelineEpic from '../entities/timeline/epic';
 import managersEpic from '../entities/managers/epic';
 import feedBackEpic from '../entities/feedback/epic';
+import colleagueEpic from '../entities/colleague/epic';
 import colleaguesEpic from '../entities/colleagues/epic';
 import reviewsEpic from '../entities/reviews/epic';
 import objectiveSharingEpic from '../entities/objectiveSharing/epic';
@@ -26,6 +27,7 @@ export const rootEpic = combineEpics(
   timelineEpic,
   managersEpic,
   feedBackEpic,
+  colleagueEpic,
   colleaguesEpic,
   reviewsEpic,
   objectiveSharingEpic,

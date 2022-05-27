@@ -3,6 +3,8 @@ import { Button, CreateRule, Rule, Styles, useStyle, IconButton as BackButton } 
 
 import { useSelector } from 'react-redux';
 import {
+  getColleagueMetaSelector,
+  getColleagueSelector,
   getPreviousReviewFilesSelector,
   getTimelineMetaSelector,
   getTimelineSelector,
@@ -31,6 +33,7 @@ import { useUserObjectivesData } from './hooks';
 
 import { ObjectiveType } from 'config/enum';
 import { getWidgets } from './utils';
+import { Profile } from 'features/Profile';
 
 export const TEST_ID = 'user-objectives-page';
 
@@ -48,10 +51,12 @@ const UserObjectives: FC = () => {
   const { loaded: schemaLoaded } = useSelector(schemaMetaSelector);
   const { loaded: reviewLoaded, loading: reviewLoading } = useSelector(reviewsMetaSelector);
   const { loaded: timelineLoaded } = useSelector(getTimelineMetaSelector);
+  const { loaded: colleagueLoaded } = useSelector(getColleagueMetaSelector);
   const { uuid } = useParams<{ uuid: string }>();
 
   const { descriptions, startDates, statuses } = useSelector(getTimelineSelector(uuid)) || {};
   const timelineTypes = useSelector(timelineTypesAvailabilitySelector(uuid));
+  const colleague = useSelector(getColleagueSelector);
   const canShowObjectives = timelineTypes[ObjectiveType.OBJECTIVE];
 
   const files: File[] = useSelector(getPreviousReviewFilesSelector) || [];
@@ -89,14 +94,22 @@ const UserObjectives: FC = () => {
           <Spinner id='1' />
         ) : (
           <>
-            {!mobileScreen && canShowMyReview && (
-              <div data-test-id={'test-step-indicator'} onClick={handleClick} className={css(timelineWrapperStyles)}>
-                <StepIndicator
-                  mainTitle={t('performance_timeline_title', 'Your Contribution timeline')}
-                  titles={descriptions}
-                  descriptions={startDates}
-                  statuses={statuses}
+            {!mobileScreen && canShowMyReview && colleagueLoaded && (
+              <div className={css(headerWrapperStyles)}>
+                <Profile
+                  fullName={colleague?.profile?.fullName}
+                  department={colleague?.profile?.department}
+                  job={colleague?.profile?.job}
+                  manager={colleague?.profile?.managerName}
                 />
+                <div data-test-id={'test-step-indicator'} onClick={handleClick} className={css(timelineWrapperStyles)}>
+                  <StepIndicator
+                    mainTitle={t('performance_timeline_title', 'Your Contribution timeline')}
+                    titles={descriptions}
+                    descriptions={startDates}
+                    statuses={statuses}
+                  />
+                </div>
               </div>
             )}
             <div className={css(timelineWrapperStyles)}>
@@ -154,14 +167,22 @@ const UserObjectives: FC = () => {
             <Spinner id='2' />
           </div>
         )}
-        {mobileScreen && timelineLoaded && canShowMyReview && (
-          <div className={css(timelineWrapperStyles)}>
-            <StepIndicator
-              mainTitle={t('performance_timeline_title', 'Your Contribution timeline')}
-              titles={descriptions}
-              descriptions={startDates}
-              statuses={statuses}
+        {mobileScreen && timelineLoaded && canShowMyReview && colleagueLoaded && (
+          <div className={css(headerWrapperStyles, { marginBottom: '20px' })}>
+            <Profile
+              fullName={colleague?.profile?.fullName}
+              department={colleague?.profile?.department}
+              job={colleague?.profile?.job}
+              manager={colleague?.profile?.managerName}
             />
+            <div className={css(timelineWrapperStyles)}>
+              <StepIndicator
+                mainTitle={t('performance_timeline_title', 'Your Contribution timeline')}
+                titles={descriptions}
+                descriptions={startDates}
+                statuses={statuses}
+              />
+            </div>
           </div>
         )}
 
@@ -220,6 +241,12 @@ const headWrapperStyles: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen
   display: 'flex',
   flexDirection: 'column',
   paddingLeft: mobileScreen ? '0px' : '20px',
+});
+
+const headerWrapperStyles: Rule = () => ({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '8px',
 });
 
 const timelineWrapperStyles = {
