@@ -21,8 +21,8 @@ export const initializeOpenid = async ({
   applicationUserDataCookieSecret,
   stickCookiesToApplicationPath,
   oidcIssuerUrl,
-  applicationServerUrlRoot,
-  applicationPublicUrl,
+  applicationRoot,
+  applicationContextPath,
   oidcAuthCallbackPath,
   oidcRedirectAfterLogoutPath,
   oidcClientId,
@@ -67,13 +67,13 @@ export const initializeOpenid = async ({
     /**
      * A callback root that was registered for the application e.g. https://www.ourtesco.com (without the applicationPath)
      */
-    applicationServerUrlRoot: applicationServerUrlRoot(),
+    applicationServerUrlRoot: applicationRoot(),
 
     /**
      * A path the app is mounted on e.g. for https://www.ourtesco.com/my-shift the path is /my-shift.
      * If the app is mounted on root path do not provide this option.
      */
-    applicationPath: applicationPublicUrl(),
+    applicationPath: applicationContextPath(),
 
     /**
      * A callback path that was registered for the application e.g. /sso/auth/callback
@@ -96,7 +96,7 @@ export const initializeOpenid = async ({
     /**
      * Paths that won't be part of token validation and refreshing
      */
-    ignoredPathsFragments: ['/api/cms-events'],
+    ignoredPathsFragments: [],
 
     /**
      * In case of error, calls containg that path framgents won't result in redirect.
@@ -109,7 +109,7 @@ export const initializeOpenid = async ({
      */
     authTokenCookie: {
       name: applicationIdTokenCookieName(),
-      path: stickCookiesToApplicationPath() ? applicationPublicUrl() : '/',
+      path: stickCookiesToApplicationPath() ? applicationContextPath() : '/',
     },
 
     /**
@@ -117,7 +117,7 @@ export const initializeOpenid = async ({
      */
     sessionCookie: {
       name: applicationSessionCookieName(),
-      path: stickCookiesToApplicationPath() ? applicationPublicUrl() : '/',
+      path: stickCookiesToApplicationPath() ? applicationContextPath() : '/',
     },
 
     /**
@@ -145,7 +145,7 @@ export const initializeOpenid = async ({
         cookieConfig: {
           cookieName: identityUserScopedTokenCookieName(),
           secret: identityUserScopedTokenCookieSecret(),
-          path: stickCookiesToApplicationPath() ? applicationPublicUrl() : '/',
+          path: stickCookiesToApplicationPath() ? applicationContextPath() : '/',
           httpOnly: true,
           secure: isProduction,
           signed: isProduction,
@@ -162,7 +162,7 @@ export const initializeOpenid = async ({
         cookieConfig: {
           cookieName: applicationUserDataCookieName(),
           secret: applicationUserDataCookieSecret(),
-          path: stickCookiesToApplicationPath() ? applicationPublicUrl() : '/',
+          path: stickCookiesToApplicationPath() ? applicationContextPath() : '/',
           httpOnly: false,
           secure: isProduction,
           signed: isProduction,

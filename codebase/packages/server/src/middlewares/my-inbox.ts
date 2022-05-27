@@ -1,29 +1,31 @@
-import { myInboxMiddleware } from '@my-inbox/middleware';
+//import { myInboxMiddleware } from '@my-inbox/middleware';
+import { myInboxMiddleware } from './my-inbox/my-inbox-middleware';
 import { ProcessConfig, isPROD } from '../config';
 
 export const myInboxConfig = async ({
-  applicationServerUrlRoot,
+  applicationRoot,
   environment,
-  applicationName,
-  integrationSSOLogoutPath,
+  // applicationName,
+  // integrationSSOLogoutPath,
 }: ProcessConfig) => {
-  const origin = applicationServerUrlRoot();
+  const origin = applicationRoot();
   const configEnvironment = isPROD(environment()) ? 'prod' : environment();
-  const appName = applicationName();
-  const logoutPath = integrationSSOLogoutPath();
+  // const appName = applicationName();
+  // const logoutPath = integrationSSOLogoutPath();
 
-  try {
-    const m = await myInboxMiddleware({
-      mountPath: '', // ingress overwrites the paths and discards the mountPath part
-      origin,
-      configEnvironment,
-      appName,
-      logoutPath,
-    });
+  // const m = await myInboxMiddleware({
+  //   mountPath: '', // ingress overwrites the paths and discards the mountPath part
+  //   origin,
+  //   configEnvironment,
+  //   appName,
+  //   logoutPath,
+  // });
 
-    return m;
-  } catch (e) {
-    console.error(`Error while initializing MyInbox middleware`, e);
-    return null;
-  }
+  const m = await myInboxMiddleware({
+    contextPath: '/', // ingress overwrites the paths and discards the mountPath part
+    origin,
+    configEnvironment,
+  });
+
+  return m;
 };

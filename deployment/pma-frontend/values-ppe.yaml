@@ -91,15 +91,17 @@ environment:
   BUILD_ENV: ppe
   RUNTIME_ENV: ppe
   NODE_OPTIONS: --max-http-header-size=16384
-  PROXY_API_SERVER_URL: http://pma-api-service:8083
+  API_SERVER_URL: http://pma-api-service:8083
+  CAMUNDA_SERVER_URL: http://pma-api-service:8083/camunda
   INTEGRATION_MODE: standalone
   INTEGRATION_CORE_MOUNT_PATH: /
   INTEGRATION_CORE_URL: /
   INTEGRATION_MOUNT_PATH: /
   INTEGRATION_NODE_BFF_URL: /
   STICK_COOKIES_TO_APPLICATION_PATH: true
-  APPLICATION_SERVER_URL_ROOT: https://ppe.ourtesco.com
-  APPLICATION_PUBLIC_URL: /experience/yourcontribution
+  APPLICATION_URL: https://ppe.ourtesco.com/experience/yourcontribution
+  # APPLICATION_SERVER_URL_ROOT: https://ppe.ourtesco.com
+  # APPLICATION_PUBLIC_URL: /experience/yourcontribution
   APPLICATION_USER_DATA_COOKIE_NAME: tesco.userinfo
   USE_ONELOGIN: true
   OIDC_ISSUER_URL: https://loginppe.ourtesco.com/oidc/2

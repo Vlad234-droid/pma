@@ -13,6 +13,9 @@ type ErrorHandlerConfig = {
 export const errorHandler =
   ({ applicationPath, noRedirectPathFragments, clearCookies, logger }: ErrorHandlerConfig) =>
   (error: OneloginError | Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
+
+    console.log(` ==>  OneLogin errorHandler (headersSent: ${res.headersSent})`);
+
     // preliminary check if headers already sent
     if (res.headersSent) {
       next(error);
@@ -35,16 +38,15 @@ export const errorHandler =
 
       if (status === 401) {
         logger(LoggerEvent.info(flow, message, { req, res }));
-        res.redirect(`${redirectAuthenticationPath}?${ONELOGIN_RETURN_URI_PARAM}=${encodeURI(redirectTo)}`);
-        next();
+        // redirect to login page
+        return res.redirect(`${redirectAuthenticationPath}?${ONELOGIN_RETURN_URI_PARAM}=${encodeURI(redirectTo)}`);
       } else {
         logger(LoggerEvent.error(flow, Error(message), { req, res }));
-        next(error);
+        next(error); // advance to error handler
       }
     } else {
       const message = `${status}, ${error.message}`;
       logger(LoggerEvent.error(flow, Error(message), { req, res }));
-      res.status(status).json(error.message);
-      next(error);
+      next(error); // advance to error handler
     }
   };

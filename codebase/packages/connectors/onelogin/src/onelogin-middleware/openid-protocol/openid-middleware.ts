@@ -124,13 +124,11 @@ export const initializeOpenidMiddleware = async (configuration: OpenidConfig): P
   const authHandler: Handler = (req, res, next) => {
     const returnUri = req.query[ONELOGIN_RETURN_URI_PARAM] || addTrailngSlash(applicationPath);
 
-    logger(
-      LoggerEvent.info(
-        'login',
-        `Authentication path handler was called with return URI: ${returnUri} - clearing cookies and authenticating`,
-        { req, res },
-      ),
-    );
+    logger(LoggerEvent.debug(
+      'login',
+      `Authentication path handler was called with return URI: ${returnUri} - clearing cookies and authenticating`,
+      { req, res },
+    ));
 
     clearCookies(res);
 
@@ -147,11 +145,11 @@ export const initializeOpenidMiddleware = async (configuration: OpenidConfig): P
     const nextWrapper: NextFunction = (error?: any | 'router' | 'route') => {
       if (error && typeof error === 'object') {
         logger(LoggerEvent.error('login', error, { req, res }));
+        next(error);
       } else {
         logger(LoggerEvent.debug('login', 'OpenId authentication complete. Invoking next handler.', { req, res }));
+        next();
       }
-
-      next(error);
     };
 
     OpenId.authenticationHandler(req, res, nextWrapper);
@@ -194,7 +192,7 @@ export const initializeOpenidMiddleware = async (configuration: OpenidConfig): P
   router.get(AUTHENTICATION_PATH, authHandler);
 
   const authCallbackHandlerStep1 = asyncHandler(async (req, res, next) => {
-    logger(LoggerEvent.info('login', 'Redirect URI handler was called', { req, res }));
+    logger(LoggerEvent.debug('login', 'Redirect URI handler was called', { req, res }));
 
     if (req.query && req.query.error != null) {
       let errorMsg = req.query.error;
@@ -243,9 +241,7 @@ export const initializeOpenidMiddleware = async (configuration: OpenidConfig): P
     };
 
     setOpenIdAuthData(res, authData);
-
-    logger(LoggerEvent.info('login', 'User was correctly authenticated', { req, res }));
-
+    logger(LoggerEvent.info('login', 'User was succesfully authenticated', { req, res }));
     next();
   });
 
@@ -309,26 +305,26 @@ export const initializeOpenidMiddleware = async (configuration: OpenidConfig): P
     });
 
     if (validationStatus.valid) {
-      logger(
-        LoggerEvent.debug(
-          'login',
-          `Following cookies have been created: - ${printCookieInfo(
-            `authdata${requireAccessToken ? '' : ' (empty)'}`,
-            authTokenCookie,
-          )}`,
-          { req, res },
-        ),
-      );
+      logger(LoggerEvent.trace(
+        'login',
+        `Following cookies have been created: - ${printCookieInfo(
+          `authdata${requireAccessToken ? '' : ' (empty)'}`,
+          authTokenCookie,
+        )}`,
+        { req, res },
+      ));
 
-      logger(LoggerEvent.info('verification', 'Auth cookie set have beed created', { req, res }));
+      logger(LoggerEvent.debug(
+        'login', 
+        'Auth cookies have beed created', 
+        { req, res },
+      ));
     } else {
-      logger(
-        LoggerEvent.warn(
-          'login',
-          `Auth cookie set may not be refreshed. Cookie validation response: ${validationStatus.message}`,
-          { req, res },
-        ),
-      );
+      logger(LoggerEvent.warn(
+        'login',
+        `Auth cookies may not be refreshed. Cookie validation response: ${validationStatus.message}`,
+        { req, res },
+      ));
     }
 
     let returnUriFromCookie: string | undefined = req.cookies[ONELOGIN_RETURN_URI_COOKIE_NAME];
@@ -350,9 +346,13 @@ export const initializeOpenidMiddleware = async (configuration: OpenidConfig): P
 
     const afterLoginRedirect = addTrailngSlash(`${applicationServerUrlRoot}${returnUriFromCookie || applicationPath}`);
 
-    logger(LoggerEvent.debug('login', `User will be redirected to ${afterLoginRedirect}`, { req, res }));
+    logger(LoggerEvent.debug(
+      'login', 
+      `User will be redirected to ${afterLoginRedirect}`, 
+      { req, res })
+    );
 
-    res.redirect(afterLoginRedirect);
+    return res.redirect(afterLoginRedirect);
   });
 
   router.get(registeredAuthCallbackUrlPath, [
@@ -364,7 +364,11 @@ export const initializeOpenidMiddleware = async (configuration: OpenidConfig): P
   router.get(
     LOGOUT_PATH,
     asyncHandler(async (req, res) => {
-      logger(LoggerEvent.info('logout', 'Logout handler was called', { req, res }));
+      logger(LoggerEvent.debug(
+        'logout', 
+        'Logout handler was called', 
+        { req, res },
+      ));
 
       const authData = getDataFromCookie<AuthData>(req, {
         cookieName: authTokenCookie.name,
@@ -375,13 +379,23 @@ export const initializeOpenidMiddleware = async (configuration: OpenidConfig): P
         throw new OneloginError('logout', `Cookie not found: ${authTokenCookie.name} cookie`, 503);
       }
 
-      logger(LoggerEvent.debug('logout', 'Clearing cookies...', { req, res }));
+      logger(LoggerEvent.debug(
+        'logout', 
+        'Clearing cookies...', 
+        { req, res })
+      );
+
       clearCookies(res);
 
       const { accessToken, encRefreshToken } = authData;
 
       if (accessToken && encRefreshToken) {
-        logger(LoggerEvent.debug('logout', 'Revoking tokens...', { req, res }));
+        logger(LoggerEvent.debug(
+          'logout', 
+          'Revoking tokens...', 
+          { req, res })
+        );
+        
         const refreshToken = cryptoJS.AES.decrypt(encRefreshToken, refreshTokenSecret).toString(cryptoJS.enc.Utf8);
         await client.revoke(refreshToken, 'refresh_token');
 
@@ -392,6 +406,7 @@ export const initializeOpenidMiddleware = async (configuration: OpenidConfig): P
             { req, res },
           ),
         );
+
         const afterLogoutRedirectCallbackUrl = client.endSessionUrl({ id_token_hint: accessToken });
         return res.redirect(afterLogoutRedirectCallbackUrl);
       } else {
@@ -401,15 +416,29 @@ export const initializeOpenidMiddleware = async (configuration: OpenidConfig): P
   );
 
   router.get(registeredRedirectAfterLogoutPath, (req, res) => {
-    logger(LoggerEvent.info('post-logout', 'Post logout redirect URI handler was called', { req, res }));
+    logger(LoggerEvent.debug(
+      'post-logout', 
+      'Post logout redirect URI handler was called', 
+      { req, res })
+    );
 
     const afterLogoutRedirect = addTrailngSlash(`${applicationServerUrlRoot}${applicationPath}`);
 
-    logger(LoggerEvent.debug('post-logout', `User will be redirected to: ${afterLogoutRedirect}`, { req, res }));
-    res.redirect(afterLogoutRedirect);
+    logger(LoggerEvent.debug(
+      'post-logout', 
+      `User will be redirected to: ${afterLogoutRedirect}`, 
+      { req, res })
+    );
+
+    return res.redirect(afterLogoutRedirect);
   });
 
-  const allIgnoredPaths = [...ignoredPathsFragments, AUTHENTICATION_PATH, LOGOUT_PATH, registeredAuthCallbackUrlPath];
+  const allIgnoredPaths = [
+    ...ignoredPathsFragments, 
+    AUTHENTICATION_PATH, 
+    LOGOUT_PATH, 
+    registeredAuthCallbackUrlPath,
+  ];
 
   router.use(
     unless(
@@ -429,7 +458,12 @@ export const initializeOpenidMiddleware = async (configuration: OpenidConfig): P
     router.use(unless([...allIgnoredPaths], plugin));
   }
 
-  router.use(errorHandler({ applicationPath, noRedirectPathFragments, clearCookies, logger }));
+  router.use(errorHandler({ 
+    applicationPath, 
+    noRedirectPathFragments, 
+    clearCookies, 
+    logger,
+  }));
 
   const oneloginRouter: OpenIdRouter = Object.assign(router, {
     oneloginRoutes: {

@@ -25,10 +25,10 @@ This application requires `yarn v.1.22.x` and `node v.14.4.x`.
     Your personal token you can found here - https://nexus.ourtesco.com/
     -  SET Proxy
         For MAC:
-            export HTTP_PROXY= http://uk2.proxy.tesco.org:80
+            export HTTP_PROXY=http://uk2.proxy.tesco.org:80
             export HTTPS_PROXY=http://uk2.proxy.tesco.org:80
         For Windows
-            set HTTP_PROXY= http://uk2.proxy.tesco.org:80
+            set HTTP_PROXY=http://uk2.proxy.tesco.org:80
             set HTTPS_PROXY=http://uk2.proxy.tesco.org:80
 
 ### 1. Install tools

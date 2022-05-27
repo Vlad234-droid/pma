@@ -56,6 +56,10 @@
     "rimraf": "^3.0.2",
     "ts-jest": "^26.4.4"
   },
+  "resolutions": {
+    "express": "^4.17.3",
+    "http-proxy-middleware": "^2.0.6"
+  },
   "husky": {
     "hooks": {
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",

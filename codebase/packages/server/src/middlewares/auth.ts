@@ -12,7 +12,7 @@ import {
 import { ProcessConfig, isPROD } from '../config';
 
 export const authMiddleware = ({
-  applicationPublicUrl,
+  applicationContextPath,
   apiEnv,
   authPath,
   environment,
@@ -20,7 +20,6 @@ export const authMiddleware = ({
   identityClientSecret,
   identityUserScopedTokenCookieSecret,
   identityUserScopedTokenCookieName,
-  integrationNodeBFFUrl,
   stickCookiesToApplicationPath,
 }: ProcessConfig): Handler => {
   const isProduction = isPROD(environment());
@@ -39,7 +38,7 @@ export const authMiddleware = ({
         cookieConfig: {
           cookieName: identityUserScopedTokenCookieName(),
           secret: identityUserScopedTokenCookieSecret(),
-          path: stickCookiesToApplicationPath() ? applicationPublicUrl() : '/',
+          path: stickCookiesToApplicationPath() ? applicationContextPath() : '/',
           httpOnly: true,
           secure: isProduction,
           signed: isProduction,
@@ -61,16 +60,14 @@ const authDataPlugin: Express.Handler = (req: Express.Request, res: Express.Resp
     compressed: true,
   });
   res.oneLoginAuthData = authData;
-  return next();
+  next();
 };
 
-const pluginWrapper =
-  (plugin: Plugin): Handler =>
-  async (req, res, next): Promise<void | OneloginError> => {
-    try {
-      await plugin(req, res);
-    } catch (error) {
-      const { message, status } = error as Error & { status };
-      return next(new OneloginError('plugin', message, status));
-    }
-  };
+const pluginWrapper = (plugin: Plugin): Handler => async (req, res, next): Promise<void | OneloginError> => {
+  try {
+    await plugin(req, res);
+  } catch (error) {
+    const { message, status } = error as Error & { status };
+    next(new OneloginError('plugin', message, status));
+  }
+};

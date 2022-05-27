@@ -15,16 +15,27 @@ declare namespace NodeJS {
     prod = 'prod',
   }
 
+  enum LogLevel {
+    debug = 'debug',
+    info = 'info',
+    warn = 'warn',
+    error = 'error'
+  }
+
   interface ProcessEnv {
     // General
     NODE_PORT: number;
     NODE_ENV: keyof typeof Environment;
     RUNTIME_ENV: keyof typeof Environment;
-    BUILD_ENV: 'development' | 'ppe' | 'production';
-    PROXY_API_SERVER_URL: string;
-    LOGGER_ROOT_NAME: string | undefined;
-    LOGGER_LEVEL: string;
-    LOGGER_PRETIFY: boolean | undefined;
+    BUILD_ENV: keyof typeof Environment;
+    
+    API_SERVER_URL: string;
+    CAMUNDA_SERVER_URL: string;
+
+    LOGGER_ROOT_NAME: string;
+    LOGGER_LEVEL?: keyof typeof LogLevel;
+    LOGGER_PRETIFY: string | undefined;
+    LOGGER_LOG_AUTH_TOKEN: string | undefined;
 
     // Integration
     INTEGRATION_MODE: keyof typeof AppMode;
@@ -34,8 +45,14 @@ declare namespace NodeJS {
     INTEGRATION_CORE_URL: string;
 
     // Application specific
+    APPLICATION_NAME: string | undefined;
+    APPLICATION_URL: string;
     APPLICATION_SERVER_URL_ROOT: string;
     APPLICATION_PUBLIC_URL: string;
+
+    // cookie settings
+    APPLICATION_AUTH_TOKEN_COOKIE_NAME: string | undefined;
+    APPLICATION_SESSION_COOKIE_NAME: string | undefined;
     APPLICATION_USER_DATA_COOKIE_NAME: string;
     APPLICATION_USER_DATA_COOKIE_SECRET: string;
     APPLICATION_COOKIE_PARSER_SECRET: string;
