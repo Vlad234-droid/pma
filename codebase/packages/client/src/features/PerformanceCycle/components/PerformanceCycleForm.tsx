@@ -1,6 +1,5 @@
 import React, { FC, useEffect, Fragment, useMemo } from 'react';
 import { useSelector } from 'react-redux';
-import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import get from 'lodash.get';
@@ -22,6 +21,7 @@ import TemplatesModal from './TemplatesModal';
 import FormsViewer from './FormsViwer';
 import { createPMCycleSchema } from '../schema';
 import { OBJECTIVE } from '../constants';
+import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
 
 type Props = {
   onSubmit: (data: any) => void;
@@ -35,7 +35,7 @@ const PerformanceCycleForm: FC<Props> = ({ onSubmit, defaultValues, canEdit = tr
   const { css } = useStyle();
   const { t } = useTranslation();
 
-  const methods = useForm({
+  const methods = useFormWithCloseProtection({
     mode: 'onChange',
     resolver: yupResolver<Yup.AnyObjectSchema>(createPMCycleSchema(t)),
     defaultValues,

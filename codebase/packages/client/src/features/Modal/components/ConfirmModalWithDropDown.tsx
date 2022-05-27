@@ -2,13 +2,13 @@ import React, { FC, HTMLProps } from 'react';
 import { Trans } from 'components/Translation';
 
 import { Item, Select } from 'components/Form';
-import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { Option } from 'components/Form/types';
 import get from 'lodash.get';
 
 import { useStyle, CreateRule, Modal, Button } from '@pma/dex-wrapper';
+import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
 
 export type ConfirmModal = {
   title: string;
@@ -45,7 +45,7 @@ const ConfirmModalWithDropDown: FC<Props> = ({
   const { theme, css, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
 
-  const methods = useForm({
+  const methods = useFormWithCloseProtection({
     mode: 'onChange',
     resolver: yupResolver<Yup.AnyObjectSchema>(folderSchema),
   });

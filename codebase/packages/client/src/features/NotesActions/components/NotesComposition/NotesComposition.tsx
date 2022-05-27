@@ -9,7 +9,6 @@ import {
   personalFolderUuidSelector,
   teamFolderUuidSelector,
 } from '@pma/store';
-import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 
@@ -27,6 +26,7 @@ import { baseSubmit, getOptions, submitSelectedNote, submitTeamSelectedNote, tea
 import { ModalStatuses } from '../../NotesActions';
 import { schemaFolder, schemaNotes, schemaNoteToEdit, schemaTEAMNotes } from '../Modals/schema/schema';
 import { Backward } from 'components/Backward';
+import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
 
 export const NOTES_WRAPPER = 'note-wrapper';
 export const ADD_NEW = 'add-new';
@@ -67,17 +67,17 @@ const NotesComposition: FC<{
     setSelectedNoteToEdit,
   } = useNotesContainer();
 
-  const methods = useForm({
+  const methods = useFormWithCloseProtection({
     mode: 'onChange',
     resolver: yupResolver<Yup.AnyObjectSchema>(status !== ModalStatuses.PERSONAL_FOLDER ? schemaNotes : schemaFolder),
   });
 
-  const teamMethods = useForm({
+  const teamMethods = useFormWithCloseProtection({
     mode: 'onChange',
     resolver: yupResolver<Yup.AnyObjectSchema>(status !== ModalStatuses.TEAM_FOLDER ? schemaTEAMNotes : schemaFolder),
   });
 
-  const noteToEditMethods = useForm({
+  const noteToEditMethods = useFormWithCloseProtection({
     mode: 'onChange',
     resolver: yupResolver<Yup.AnyObjectSchema>(schemaNoteToEdit),
   });

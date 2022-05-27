@@ -34,6 +34,7 @@ import ReviewHelpTrigger from './ReviewHelpTrigger';
 import ReviewButtons from './ReviewButtons';
 import ReviewComponents from './ReviewComponents';
 import { USER } from 'config/constants';
+import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
 
 export type ReviewFormModal = {
   reviewType: ReviewType;
@@ -68,7 +69,7 @@ const ReviewFormModal: FC<ReviewFormModal> = ({ reviewType, onClose }) => {
   const { components = [] as Component[] } = schema;
 
   const yepSchema = components.reduce(createYupSchema(t), {});
-  const methods = useForm({
+  const methods = useFormWithCloseProtection({
     mode: 'onChange',
     resolver: yupResolver<Yup.AnyObjectSchema>(Yup.object().shape(yepSchema)),
     defaultValues: formValues,

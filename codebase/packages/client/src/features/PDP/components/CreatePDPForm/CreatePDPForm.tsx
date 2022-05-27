@@ -1,6 +1,5 @@
 import React, { FC, useEffect, useMemo, useRef, useState } from 'react';
 import * as Yup from 'yup';
-import { useForm } from 'react-hook-form';
 import { metaPDPSelector } from '@pma/store';
 import { useSelector } from 'react-redux';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -15,6 +14,7 @@ import Datepicker from 'components/Datepicker';
 import { StepIndicatorBasic } from 'components/StepIndicator/StepIndicator';
 import { Status } from 'config/enum';
 import { Icon } from 'components/Icon';
+import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
 
 type Props = {
   pdpGoals: any;
@@ -59,7 +59,7 @@ const CreatePDPForm: FC<Props> = ({
     return acc;
   }, {});
   const yepSchema = formElements.reduce(createYupSchema(t), {});
-  const methods = useForm({
+  const methods = useFormWithCloseProtection({
     mode: 'onChange',
     resolver: yupResolver<Yup.AnyObjectSchema>(Yup.object().shape(yepSchema)),
   });

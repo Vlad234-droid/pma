@@ -1,6 +1,5 @@
 import React, { FC, useEffect } from 'react';
 import * as Yup from 'yup';
-import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { createYupSchema } from 'utils/yup';
 
@@ -16,6 +15,7 @@ import MarkdownRenderer from 'components/MarkdownRenderer';
 import { GenericItemField } from 'components/GenericForm';
 import { ReviewType, Status } from 'config/enum';
 import { formTagComponents } from '../../../Objectives';
+import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
 
 type Props = {
   review: any;
@@ -35,7 +35,7 @@ export const ColleagueReview: FC<Props> = ({ review, schema, validateReview, upd
 
   const reviewProperties = review?.properties;
   const yepSchema = components.reduce(createYupSchema(t), {});
-  const methods = useForm({
+  const methods = useFormWithCloseProtection({
     mode: 'onChange',
     resolver: yupResolver<Yup.AnyObjectSchema>(Yup.object().shape(yepSchema)),
     defaultValues: reviewProperties,

@@ -6,7 +6,6 @@ import { Field, Item, Select, Textarea, Attention } from 'components/Form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { colleagueUUIDSelector, FeedbackActions, getReviews } from '@pma/store';
 import * as Yup from 'yup';
-import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 
 import { ColleaguesFinder } from './';
@@ -21,6 +20,7 @@ import { Tesco } from 'config/enum';
 import { TargetType } from '../type';
 import { Page } from '../../../pages';
 import { buildPath } from '../../Routes';
+import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
 
 type Props = {
   onSubmit: (data: any) => void;
@@ -47,7 +47,7 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel, setIsInfoModalOpen }) 
     { value: TargetType.OTHER, label: t('your_impact_on_others', 'Your impact on others') },
   ];
 
-  const methods = useForm({
+  const methods = useFormWithCloseProtection({
     mode: 'onChange',
     resolver: yupResolver<Yup.AnyObjectSchema>(createRequestFeedbackSchema),
   });

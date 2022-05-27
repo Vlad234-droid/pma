@@ -1,6 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Button, CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
-import { useForm } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -21,6 +20,7 @@ import {
   reportByYearSchema,
 } from '../config';
 import { ModalStatus } from '../Report';
+import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
 
 export const DOWNLOAD_WRAPPER = 'download-wrapper';
 
@@ -34,7 +34,7 @@ const ReportModal: FC<ModalProps> = ({ onClose, modalStatus, tiles }) => {
   const { css, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
   const { t } = useTranslation();
-  const methods = useForm({
+  const methods = useFormWithCloseProtection({
     mode: 'onChange',
     resolver: yupResolver<Yup.AnyObjectSchema>(reportByYearSchema),
   });
