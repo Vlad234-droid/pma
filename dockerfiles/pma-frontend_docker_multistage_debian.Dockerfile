@@ -136,7 +136,7 @@ RUN --mount=type=cache,id=yarn_cache,target=/usr/local/share/.cache/yarn \
 # ==========
 # main stage
 # ==========
-FROM node:14.17-alpine
+FROM node:14.17-slim
 
 ARG NODE_ENV
 ARG NODE_PORT
