@@ -83,4 +83,54 @@ describe('TileReport', () => {
 
     expect(getByTestId('test-pie-chart')).toBeInTheDocument();
   });
+
+  it('render Back button', async () => {
+    const { getByTestId } = render(
+      <BrowserRouter>
+        <TileReport />
+      </BrowserRouter>,
+    );
+
+    expect(getByTestId('test-back-button')).toBeInTheDocument();
+  });
+
+  it('render FilterOptions', async () => {
+    const { getByTestId } = render(
+      <BrowserRouter>
+        <TileReport />
+      </BrowserRouter>,
+    );
+
+    expect(getByTestId('filter-options-id')).toBeInTheDocument();
+  });
+
+  it('render content from getContent function', async () => {
+    const { getByTestId } = render(
+      <BrowserRouter>
+        <TileReport />
+      </BrowserRouter>,
+    );
+
+    expect(getByTestId('content-id')).toBeInTheDocument();
+  });
+
+  it('should render full-view', async () => {
+    const { getByTestId } = render(
+      <BrowserRouter>
+        <TileReport />
+      </BrowserRouter>,
+    );
+
+    expect(getByTestId('full-view')).toBeInTheDocument();
+  });
+
+  it('should not give an error in component', async () => {
+    render(
+      <BrowserRouter>
+        <TileReport />
+      </BrowserRouter>,
+    );
+    const consoleError = jest.spyOn(global.console, 'error');
+    expect(consoleError).not.toHaveBeenCalled();
+  });
 });

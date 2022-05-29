@@ -1,5 +1,5 @@
 import React, { FC, useMemo } from 'react';
-import { Rule, Styles, useStyle, colors } from '@pma/dex-wrapper';
+import { Rule, Styles, useStyle, colors, theme } from '@pma/dex-wrapper';
 import { TileWrapper } from 'components/Tile';
 import { Accordion, BaseAccordion, Panel, Section } from 'components/Accordion';
 import { IconButton } from 'components/IconButton';
@@ -43,6 +43,8 @@ const HARDCODED_QUESTION = {
   'Question 2': 'Looking forward, what should this colleague do more (or less) of in order to be at their best?',
   'Anything else?': 'Add any other comments you would like to share with your colleague.',
 };
+
+export const TEST_QUESTION_ITEM = 'TEST_QUESTION_ITEM';
 
 export const defaultSerializer = (item) => ({
   ...item,
@@ -104,10 +106,10 @@ const DraftItem: FC<DraftItemProps> = ({ item, downloadable = true }) => {
                     border: `2px solid ${colors.backgroundDarkest}`,
                   }}
                 >
-                  {item.feedbackItems
-                    .filter(({ question }) => question)
-                    .map(({ question, content }, idx) => (
-                      <div key={idx} className={css(infoBlockStyle)}>
+                  {item?.feedbackItems
+                    ?.filter(({ question }) => question)
+                    ?.map(({ question, content }, idx) => (
+                      <div data-test-id={TEST_QUESTION_ITEM} key={idx} className={css(infoBlockStyle)}>
                         <h3>{`${question}`}</h3>
                         <p>{content}</p>
                       </div>
@@ -141,12 +143,12 @@ const infoBlockStyle: Rule = {
   marginBottom: '16px',
   '& > h3': {
     margin: '0px',
-    fontWeight: 'bold',
-    fontSize: '14px',
+    fontWeight: theme.font.weight.bold,
+    ...theme.font.fixed.f14,
   },
   '& > p': {
     margin: '0px',
-    fontSize: '14px',
+    ...theme.font.fixed.f14,
   },
 } as Styles;
 
@@ -162,7 +164,7 @@ const iconBtnStyle: Rule = ({ theme }) => ({
   justifyContent: 'center',
   alignItems: 'center',
   maxWidth: '140px',
-  fontWeight: 'bold',
+  fontWeight: theme.font.weight.bold,
   outline: 0,
   background: theme.colors.white,
   color: theme.colors.tescoBlue,
