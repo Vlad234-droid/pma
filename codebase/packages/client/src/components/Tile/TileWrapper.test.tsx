@@ -13,7 +13,11 @@ describe('Tile/TileWrapper', () => {
     );
   });
 
-  it('Tile has border', async () => {
+  it('Render wrapper', async () => {
+    expect(wrapper.getByTestId('tile-wrapper')).toBeInTheDocument();
+  });
+
+  it('Tile render children', async () => {
     const tail = wrapper.queryByText('test');
     expect(tail).toBeInTheDocument();
   });

@@ -6,18 +6,21 @@ import { Radio } from 'components/Form';
 
 import { getCurrentYear } from 'utils';
 
+export const TEST_ID = 'wrapper-id';
+export const TEST_LABEL = 'label-id';
+
 const YearSwitch: FC<{ currentYear: string; onChange: (year: string) => void }> = ({ currentYear, onChange }) => {
   const { css } = useStyle();
   const [years] = useState<Array<number> | []>([Number(currentYear), Number(currentYear) - 1, Number(currentYear) - 2]);
   const [active, setActive] = useState<number>(Number(getCurrentYear()));
 
   return (
-    <div className={css(yearWrapper)}>
+    <div data-test-id={TEST_ID} className={css(yearWrapper)}>
       <p className={css(textStyle)}>
         <Trans i18nKey={'display_objectives_for'}>Display objectives for:</Trans>
       </p>
       {years.map((year, index) => (
-        <label key={year} htmlFor={year} className={css(labelStyle)}>
+        <label data-test-id={TEST_LABEL} key={year} htmlFor={year} className={css(labelStyle)}>
           <Radio
             name={year}
             checked={index === years?.findIndex((item) => item === active)}

@@ -4,7 +4,9 @@ import { useTranslation } from 'components/Translation';
 
 import defaultImg from 'images/default.png';
 
-const TONE_VOICE = 'tone-voice';
+export const TONE_VOICE = 'tone-voice';
+export const TEST_WRAPPER = 'TEST_WRAPPER';
+export const TEST_PHOTO = 'TEST_PHOTO';
 
 type ProfileInfoProps = {
   firstName: string;
@@ -19,9 +21,9 @@ const ProfileInfo: FC<ProfileInfoProps> = ({ firstName, lastName, job, departmen
   const { css } = useStyle();
   const { t } = useTranslation();
   return (
-    <div className={css(blockInfo)}>
+    <div data-test-id={TEST_WRAPPER} className={css(blockInfo)}>
       <div className={css({ alignSelf: 'flex-start' })}>
-        <img className={css(imgStyle)} src={defaultImg} alt='photo' />
+        <img data-test-id={TEST_PHOTO} className={css(imgStyle)} src={defaultImg} alt='photo' />
       </div>
       <div className={css({ marginLeft: '16px' })}>
         <h3 className={css(names_Style)}>{`${firstName ?? ''} ${lastName ?? ''}`}</h3>
