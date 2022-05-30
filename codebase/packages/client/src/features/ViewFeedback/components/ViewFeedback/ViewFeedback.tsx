@@ -176,6 +176,7 @@ const ViewFeedback: FC = () => {
             <div className={css(buttonContainerStyle)}>
               <div className={css({ display: 'inline-flex' })}>
                 <Icon
+                  testId='give-feedback-button'
                   graphic='chatSq'
                   iconStyles={{ verticalAlign: 'middle', margin: '2px 10px 0px 0px' }}
                   backgroundRadius={10}
@@ -200,6 +201,7 @@ const ViewFeedback: FC = () => {
             <div className={css(buttonContainerStyle)}>
               <div className={css({ display: 'inline-flex' })}>
                 <Icon
+                  testId='download-feedback-button'
                   graphic='download'
                   iconStyles={{ verticalAlign: 'middle', margin: '2px 10px 0px 0px' }}
                   backgroundRadius={10}

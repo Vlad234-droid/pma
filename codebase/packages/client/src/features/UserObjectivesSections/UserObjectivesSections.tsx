@@ -7,6 +7,8 @@ import { Accordion, Section, ObjectiveTypes as OT } from 'features/Objectives';
 import Spinner from 'components/Spinner';
 import { Plug } from 'components/Plug';
 
+export const TEST_WRAPPER_ID = 'TEST_WRAPPER_ID';
+
 export const UserObjectivesSections: FC<{
   canShowObjectives: boolean;
   reviewLoading: boolean;
@@ -28,6 +30,7 @@ export const UserObjectivesSections: FC<{
             <Plug text={t('no_objectives_created', 'No objectives created')} customStyle={{}} />
           ) : (
             <Section
+              testId={TEST_WRAPPER_ID}
               left={{
                 content: <div className={css(tileStyles)}>User objectives</div>,
               }}

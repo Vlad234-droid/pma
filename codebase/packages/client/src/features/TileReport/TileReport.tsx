@@ -65,7 +65,7 @@ const TileReport = () => {
     <div data-test-id={OBJECTIVES_WRAPPER}>
       <div className={css(arrowLeftStyle)}>
         <BackButton
-          data-test-id={'test-back-button'}
+          testId={'test-back-button'}
           onPress={() => {
             navigate({
               pathname: buildPath(Page.REPORT),
@@ -80,6 +80,7 @@ const TileReport = () => {
         {isShowCount && <ColleaguesCount countStyles={countStyles} colleaguesCount={colleaguesCount} />}
         <div className={css(flexCenterStyled)}>
           <FilterOption
+            testSettingsId='filter-options-id'
             focus={focus}
             customIcon={true}
             searchValue={searchValueFilterOption}
@@ -108,9 +109,11 @@ const TileReport = () => {
         </div>
       </div>
       <div data-test-id={'test-pie-chart'} className={css(wrapperStyle)}>
-        <div className={css(leftColumn)}>{getContent()}</div>
+        <div data-test-id={'content-id'} className={css(leftColumn)}>
+          {getContent()}
+        </div>
         {!isFullView && (
-          <div className={css(rightColumn({ isWorkLevel }))}>
+          <div data-test-id={'full-view'} className={css(rightColumn({ isWorkLevel }))}>
             {isWorkLevel ? (
               <PieChart
                 title={getReportTitles(t, type)?.chart}
