@@ -33,10 +33,7 @@ export const getCurrentUserEpic: Epic = (action$, _, { openapi }) =>
           }
 
           const errors = data?.errors;
-          return concatWithErrorToast(
-            of(getCurrentUser.failure(errors?.[0])),
-            errorPayloadConverter({ ...errors?.[0], title: 'User fetch error' }),
-          );
+          return of(getCurrentUser.failure(errors?.[0]));
         }),
         takeUntil(action$.pipe(filter(isActionOf(getCurrentUser.cancel)))),
       ),
