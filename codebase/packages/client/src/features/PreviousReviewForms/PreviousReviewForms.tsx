@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
 import { useNavigate } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
-import { getReviewsWithStatuses, ReviewsActions, reviewsMetaSelector, SchemaActions } from '@pma/store';
+import { getReviewsWithStatuses, ReviewsActions, reviewsMetaSelector, SchemaActions, colleagueInfo } from '@pma/store';
 import { useParams } from 'react-router-dom';
 
 import Spinner from 'components/Spinner';
@@ -16,6 +16,7 @@ import { Trans, useTranslation } from 'components/Translation';
 import { Accordion } from './components';
 import { getCurrentYear } from 'utils';
 import { Plug } from 'components/Plug';
+import { useFetchColleague } from 'features/RatingsTiles/hooks/useFetchColleague';
 
 const PreviousReviewForms = () => {
   const { css, matchMedia } = useStyle();
@@ -23,11 +24,16 @@ const PreviousReviewForms = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { t } = useTranslation();
+
   const { uuid } = useParams<{ uuid: string }>();
   const { loading, loaded } = useSelector(reviewsMetaSelector);
   const reviews = useSelector(getReviewsWithStatuses);
+  const { firstName, lastName, businessType, managerSirName, managerName, job, department } =
+    useSelector(colleagueInfo);
 
   const [year, setYear] = useState<number>(Number(getCurrentYear()));
+
+  useFetchColleague(uuid);
 
   useEffect(() => {
     if (uuid) {
@@ -41,18 +47,15 @@ const PreviousReviewForms = () => {
     // TODO: dispatch(...)
   };
 
-  const user = {
-    fullName: 'Ron Rogers',
-    job: 'Grocery',
-    manager: 'Justin Thomas',
-  };
-
   return (
     <>
       <Backward onPress={() => navigate(-1)} />
       <div className={css({ margin: '8px' })}>
-        <ProfileTileWrapper user={user} customStyle={widthStyles({ mobileScreen })}>
-          <AdditionalInfo manager={user.manager} />
+        <ProfileTileWrapper
+          user={{ fullName: `${firstName} ${lastName}`, job: `${job} ${department}` }}
+          customStyle={widthStyles({ mobileScreen })}
+        >
+          <AdditionalInfo manager={`${managerName} ${managerSirName}`} businessType={businessType} />
         </ProfileTileWrapper>
       </div>
       <YearSwitch

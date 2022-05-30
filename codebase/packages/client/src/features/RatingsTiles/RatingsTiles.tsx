@@ -2,14 +2,17 @@ import React from 'react';
 import { CreateRule, Rule, useStyle, Styles, IconButton } from '@pma/dex-wrapper';
 import { Link, useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router';
+import { useSelector } from 'react-redux';
+import { colleagueInfo } from '@pma/store';
 
 import { useTranslation } from 'components/Translation';
 import { TileWrapper } from 'components/Tile';
 import { Icon } from 'components/Icon';
+import { buildPath } from 'features/Routes';
 
 import { getCards } from './utils';
-import { paramsReplacer } from '../../utils';
-import { buildPath } from 'features/Routes';
+import { paramsReplacer } from 'utils';
+import { useFetchColleague } from './hooks/useFetchColleague';
 
 const RatingsTiles = () => {
   const { css, matchMedia } = useStyle();
@@ -18,19 +21,20 @@ const RatingsTiles = () => {
   const navigate = useNavigate();
   const { uuid } = useParams<{ uuid: string }>();
 
+  useFetchColleague(uuid);
+
+  const { firstName, lastName, job, department } = useSelector(colleagueInfo);
+
   return (
     <>
       <div className={css(backStyle)}>
         <IconButton onPress={() => navigate(-1)} graphic='backwardLink' />
       </div>
+      <p className={css(titleStyle)}>{firstName && lastName && `${firstName} ${lastName} | ${job} ${department}`}</p>
       <div className={css(ratingWrapper)}>
         {getCards(t).map((item, i) => (
           <div key={i} className={css(cardStyle({ mobileScreen }))}>
-            <Link
-              to={buildPath(paramsReplacer(item.page, { ':uuid': uuid as string }))}
-              //TODO: temporary solution in future remove this until 4 tiles be ready
-              className={css(linkStyle({ active: !!item.page }))}
-            >
+            <Link to={buildPath(paramsReplacer(item.page, { ':uuid': uuid as string }))}>
               <TileWrapper>
                 <div className={css(wrapperBlock({ mobileScreen }))}>
                   <Icon graphic={item.graphic} viewBox={'0 0 32 32'} size={'32px'} />
@@ -46,6 +50,13 @@ const RatingsTiles = () => {
   );
 };
 
+const titleStyle: Rule = ({ theme }) => ({
+  marginBottom: 0,
+  fontWeight: theme.font.weight.bold,
+  fontSize: theme.font.fixed.f18.fontSize,
+  height: '22px',
+});
+
 const backStyle: Rule = () => {
   return {
     position: 'fixed',
@@ -54,11 +65,6 @@ const backStyle: Rule = () => {
     border: 'none',
     cursor: 'pointer',
     left: '16px',
-  };
-};
-const linkStyle: CreateRule<{ active: boolean }> = ({ active }) => {
-  return {
-    pointerEvents: active ? 'all' : 'none',
   };
 };
 
