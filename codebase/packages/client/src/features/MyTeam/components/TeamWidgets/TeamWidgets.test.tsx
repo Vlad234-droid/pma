@@ -2,6 +2,8 @@
 import React from 'react';
 
 // @ts-ignore
+import { BrowserRouter } from 'react-router-dom';
+
 import { renderWithTheme as render, generateEmployeeReview } from 'utils/test';
 
 import TeamWidgets from './TeamWidgets';
@@ -65,7 +67,11 @@ describe('<TeamWidgets />', () => {
         view: View.DIRECT_REPORTS,
       };
 
-      const { getByTestId } = render(<TeamWidgets {...newProps} />);
+      const { getByTestId } = render(
+        <BrowserRouter>
+          <TeamWidgets {...newProps} />
+        </BrowserRouter>,
+      );
 
       expect(getByTestId('actions')).toBeInTheDocument();
       expect(getByTestId('pending-approvals')).toBeInTheDocument();

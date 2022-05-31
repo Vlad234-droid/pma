@@ -614,5 +614,7 @@
   "the_number_of_annual_reviews_a_line_manager_has_undertaken": "The number of annual reviews a line manager has undertaken per quarter based on the number of direct reports they have. This is just indicative assuming a line manager will space reviews out equally during the year.",
   "review_not_completed": "Review not completed",
   "display_objectives_for": "Display objectives for:",
-  "review_forms_for": "Review forms for {{year}}"
+  "review_forms_for": "Review forms for {{year}}",
+  "see_how_your_team_are_progressing_throughout_the_year": "See how your team are progressing throughout the year",
+  "team_reporting": "Team reporting"
 }

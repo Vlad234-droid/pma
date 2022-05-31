@@ -37,6 +37,7 @@ import { Ratings } from './ratings';
 import { Goal } from './goal';
 import { Syp } from './syp';
 import { Doc } from './doc';
+import { Person } from './person';
 
 // import { ArrowRight } from './arrowRight';
 import { NotiBellCirlceOut } from './notiBellCirlceOut';
@@ -123,6 +124,7 @@ export type Graphics =
   | 'goal'
   | 'syp'
   | 'doc'
+  | 'person'
   | 'ratings';
 
 export const icons: Record<Graphics, FCGraphicProps> = {
@@ -185,6 +187,7 @@ export const icons: Record<Graphics, FCGraphicProps> = {
   goal: Goal,
   syp: Syp,
   doc: Doc,
+  person: Person,
 };
 
 export { Chat } from './chat';

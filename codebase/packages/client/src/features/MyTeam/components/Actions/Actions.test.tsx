@@ -1,10 +1,18 @@
 // @ts-ignore
 import React from 'react';
+import { BrowserRouter } from 'react-router-dom';
 
 // @ts-ignore
 import { renderWithTheme as render } from 'utils/test';
 
 import Actions from './Actions';
+
+jest.mock('react-router-dom', () => ({
+  ...(jest.requireActual('react-router-dom') as any),
+  useNavigate: () => ({
+    navigate: jest.fn().mockImplementation(() => ({})),
+  }),
+}));
 
 describe('<Actions />', () => {
   const props = {
@@ -13,13 +21,21 @@ describe('<Actions />', () => {
   };
   describe('#render', () => {
     it('should render <TileWrapper />', () => {
-      const { getByTestId } = render(<Actions {...props} />);
+      const { getAllByTestId } = render(
+        <BrowserRouter>
+          <Actions {...props} />
+        </BrowserRouter>,
+      );
 
-      expect(getByTestId('tile-wrapper')).toBeInTheDocument();
+      expect(getAllByTestId('tile-wrapper')[0]).toBeInTheDocument();
     });
 
     it('should render expected content', () => {
-      const { getByText } = render(<Actions {...props} />);
+      const { getByText } = render(
+        <BrowserRouter>
+          <Actions {...props} />
+        </BrowserRouter>,
+      );
 
       expect(getByText('Your actions')).toBeInTheDocument();
       expect(getByText(props.waitingCount)).toBeInTheDocument();
