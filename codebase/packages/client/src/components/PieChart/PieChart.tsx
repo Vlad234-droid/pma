@@ -65,6 +65,7 @@ const PieChart: FC<PieChartProps> = ({
       className={css(pieChartWrapper)}
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
+      data-test-id={PIE_CHART_WRAPPER}
     >
       <Content {...props} />
       <HoverMessageWrapper />

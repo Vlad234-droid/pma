@@ -1,8 +1,7 @@
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
 import { RenderResultWithProps, renderWithTheme } from 'utils/test';
-import { BasicTile, TEST_ICON, TEST_ID, TileProps } from './BasicTile';
-import { fireEvent } from '@testing-library/react';
+import { BasicTile, TEST_ICON, TileProps } from './BasicTile';
 
 describe('Tile/BasicTile', () => {
   let wrapper: RenderResultWithProps<TileProps>;

@@ -14,8 +14,8 @@ import * as Yup from 'yup';
 
 import { role, usePermission } from 'features/Permission';
 import { Trans, useTranslation } from 'components/Translation';
-import { InfoModal as InfoMessage, TeamWrapper, UserWrapper, TeamEditWrapper, UserEditWrapper } from '../../wrappers';
-import { FilterOptions, MainFolders } from '../../components';
+import { InfoModal as InfoMessage } from '../../wrappers';
+import { AddNoteModal, AddTeamNoteModal, FilterOptions, MainFolders } from '../../components';
 import { IconButton } from 'components/IconButton';
 import { ConfirmModalWithSelectOptions } from 'features/Modal';
 import { buildPath } from 'features/Routes';
@@ -27,6 +27,8 @@ import { ModalStatuses } from '../../NotesActions';
 import { schemaFolder, schemaNotes, schemaNoteToEdit, schemaTEAMNotes } from '../Modals/schema/schema';
 import { Backward } from 'components/Backward';
 import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
+import WrapperModal from '../../../Modal/components/WrapperModal';
+import { EditSelectedNote } from '../Modals/EditSelectedNote';
 
 export const NOTES_WRAPPER = 'note-wrapper';
 export const ADD_NEW = 'add-new';
@@ -41,7 +43,6 @@ const NotesComposition: FC<{
   const { t } = useTranslation();
   const { css } = useStyle();
   const navigate = useNavigate();
-  console.log(navigate);
   const colleagueUuid = useSelector(colleagueUUIDSelector);
 
   const dispatch = useDispatch();
@@ -66,6 +67,9 @@ const NotesComposition: FC<{
     selectedPerson,
     setSelectedPerson,
     setSelectedNoteToEdit,
+    searchValue,
+    setSearchValue,
+    foldersWithNotesTEAM,
   } = useNotesContainer();
 
   const methods = useFormWithCloseProtection({
@@ -141,65 +145,116 @@ const NotesComposition: FC<{
   const modalByStatus = {
     [ModalStatuses.INFO]: <InfoMessage status={status} isLineManager={isLineManager} setStatus={setStatus} />,
     [ModalStatuses.PERSONAL_NOTE]: (
-      <UserWrapper
-        cancelModal={cancelModal}
-        status={status}
-        methods={methods}
-        submitForm={handleSubmit(onSubmit)}
-        createFolder={status === ModalStatuses.PERSONAL_FOLDER}
-        foldersWithNotes={foldersWithNotes}
-      />
+      <WrapperModal
+        onClose={cancelModal}
+        title={
+          status === ModalStatuses.PERSONAL_FOLDER ? t('add_a_folder', 'Add a folder') : t('add_a_note', 'Add a note')
+        }
+      >
+        <AddNoteModal
+          methods={methods}
+          cancelModal={cancelModal}
+          submitForm={handleSubmit(onSubmit)}
+          createFolder={status === ModalStatuses.PERSONAL_FOLDER}
+          foldersWithNotes={foldersWithNotes}
+        />
+      </WrapperModal>
     ),
     [ModalStatuses.PERSONAL_FOLDER]: (
-      <UserWrapper
-        cancelModal={cancelModal}
-        status={status}
-        methods={methods}
-        submitForm={handleSubmit(onSubmit)}
-        createFolder={status === ModalStatuses.PERSONAL_FOLDER}
-        foldersWithNotes={foldersWithNotes}
-      />
+      <WrapperModal
+        onClose={cancelModal}
+        title={
+          status === ModalStatuses.PERSONAL_FOLDER ? t('add_a_folder', 'Add a folder') : t('add_a_note', 'Add a note')
+        }
+      >
+        <AddNoteModal
+          methods={methods}
+          cancelModal={cancelModal}
+          submitForm={handleSubmit(onSubmit)}
+          createFolder={status === ModalStatuses.PERSONAL_FOLDER}
+          foldersWithNotes={foldersWithNotes}
+        />
+      </WrapperModal>
     ),
     [ModalStatuses.TEAM_NOTE]: (
-      <TeamWrapper
-        cancelTEAMModal={cancelTEAMModal}
-        status={status}
-        teamMethods={teamMethods}
-        handleTEAMSubmit={handleTEAMSubmit(onTEAMSubmit)}
-      />
+      <WrapperModal
+        onClose={cancelTEAMModal}
+        title={
+          status === ModalStatuses.TEAM_FOLDER
+            ? t('add_team_folder', 'Add team folder')
+            : t('add_a_team_note', 'Add a team note')
+        }
+      >
+        <AddTeamNoteModal
+          teamMethods={teamMethods}
+          searchValue={searchValue}
+          setSearchValue={setSearchValue}
+          selectedPerson={selectedPerson}
+          setSelectedPerson={setSelectedPerson}
+          foldersWithNotesTEAM={foldersWithNotesTEAM}
+          cancelTEAMModal={cancelTEAMModal}
+          handleTEAMSubmit={handleTEAMSubmit(onTEAMSubmit)}
+          createFolder={status === ModalStatuses.TEAM_FOLDER}
+        />
+      </WrapperModal>
     ),
     [ModalStatuses.TEAM_FOLDER]: (
-      <TeamWrapper
-        cancelTEAMModal={cancelTEAMModal}
-        status={status}
-        teamMethods={teamMethods}
-        handleTEAMSubmit={handleTEAMSubmit(onTEAMSubmit)}
-      />
+      <WrapperModal
+        onClose={cancelTEAMModal}
+        title={
+          status === ModalStatuses.TEAM_FOLDER
+            ? t('add_team_folder', 'Add team folder')
+            : t('add_a_team_note', 'Add a team note')
+        }
+      >
+        <AddTeamNoteModal
+          teamMethods={teamMethods}
+          searchValue={searchValue}
+          setSearchValue={setSearchValue}
+          selectedPerson={selectedPerson}
+          setSelectedPerson={setSelectedPerson}
+          foldersWithNotesTEAM={foldersWithNotesTEAM}
+          cancelTEAMModal={cancelTEAMModal}
+          handleTEAMSubmit={handleTEAMSubmit(onTEAMSubmit)}
+          createFolder={status === ModalStatuses.TEAM_FOLDER}
+        />
+      </WrapperModal>
     ),
   };
 
   if (selectedTEAMNoteToEdit) {
     return (
-      <TeamEditWrapper
-        cancelSelectedNoteModal={cancelSelectedNoteModal}
-        methods={noteToEditMethods}
-        cancelTEAMSelectedNoteModal={cancelTEAMSelectedNoteModal}
-        submitForm={handleSubmitSelectedEditedNote(onSubmitTEAMSelectedEditedNote)}
-        definePropperEditMode={selectedNoteToEdit}
-        setSelectedFolderDynamic={setSelectedFolder}
-      />
+      <WrapperModal title={t('my_notes', 'My notes')} onClose={cancelSelectedNoteModal}>
+        <EditSelectedNote
+          methods={noteToEditMethods}
+          cancelSelectedNoteModal={cancelTEAMSelectedNoteModal}
+          submitForm={handleSubmitSelectedEditedNote(onSubmitTEAMSelectedEditedNote)}
+          setSelectedNoteToEdit={setSelectedTEAMNoteToEdit}
+          foldersWithNotes={foldersWithNotesTEAM}
+          selectedNoteToEdit={selectedTEAMNoteToEdit}
+          setSelectedFolder={setSelectedTEAMFolder}
+          definePropperEditMode={selectedNoteToEdit}
+          setSelectedFolderDynamic={setSelectedFolder}
+        />
+      </WrapperModal>
     );
   }
 
   if (selectedNoteToEdit) {
     return (
-      <UserEditWrapper
-        cancelSelectedNoteModal={cancelSelectedNoteModal}
-        methods={noteToEditMethods}
-        submitForm={handleSubmitSelectedEditedNote(onSubmitSelectedEditedNote)}
-        definePropperEditMode={selectedNoteToEdit}
-        setSelectedFolderDynamic={setSelectedFolder}
-      />
+      <WrapperModal title={t('edit_note', 'Edit note')} onClose={cancelSelectedNoteModal}>
+        <EditSelectedNote
+          methods={noteToEditMethods}
+          cancelSelectedNoteModal={cancelSelectedNoteModal}
+          submitForm={handleSubmitSelectedEditedNote(onSubmitSelectedEditedNote)}
+          setSelectedNoteToEdit={setSelectedNoteToEdit}
+          foldersWithNotes={foldersWithNotes}
+          selectedNoteToEdit={selectedNoteToEdit}
+          setSelectedFolder={setSelectedFolder}
+          definePropperEditMode={selectedNoteToEdit}
+          setSelectedFolderDynamic={setSelectedFolder}
+        />
+      </WrapperModal>
     );
   }
 

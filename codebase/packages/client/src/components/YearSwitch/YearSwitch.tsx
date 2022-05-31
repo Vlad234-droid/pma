@@ -15,7 +15,7 @@ const YearSwitch: FC<{ currentYear: string; onChange: (year: string) => void }> 
   const [active, setActive] = useState<number>(Number(getCurrentYear()));
 
   return (
-    <div data-test-id={TEST_ID} className={css(yearWrapper)}>
+    <div className={css(yearWrapper)} data-test-id={TEST_ID}>
       <p className={css(textStyle)}>
         <Trans i18nKey={'display_objectives_for'}>Display objectives for:</Trans>
       </p>
