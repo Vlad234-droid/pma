@@ -16,7 +16,7 @@ const NoTips: FC = () => {
         <TileWrapper customStyle={cardStyle({ mobileScreen })}>
           <div className={css(cardInner({ mobileScreen }))}>
             <div className={css({ marginRight: '10px' })}>
-              <Icon iconStyles={{ width: '20px' }} graphic='information' />
+              <Icon graphic='information' />
             </div>
             <div className={css({})}>
               <div className={css(cardTitleStyle({ mobileScreen }))}>
