@@ -5,6 +5,8 @@ import { TileWrapper } from 'components/Tile';
 import { Notification } from 'components/Notification';
 import { Graphics } from '../Icon';
 
+export const TEST_NOTIFICATION = 'TEST_NOTIFICATION';
+
 type PlugProps = {
   text: string;
   closable?: boolean;
@@ -22,6 +24,7 @@ export const Plug: FC<PlugProps> = ({ text, customStyle = {}, closable = false, 
       }}
     >
       <Notification
+        testId={TEST_NOTIFICATION}
         closable={closable}
         graphic={graphic}
         iconColor='link'
