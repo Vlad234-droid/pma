@@ -1,7 +1,8 @@
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
 import { RenderResultWithProps, renderWithTheme } from 'utils/test';
-import { BasicTile, TileProps } from './BasicTile';
+import { BasicTile, TEST_ICON, TEST_ID, TileProps } from './BasicTile';
+import { fireEvent } from '@testing-library/react';
 
 describe('Tile/BasicTile', () => {
   let wrapper: RenderResultWithProps<TileProps>;
@@ -25,5 +26,19 @@ describe('Tile/BasicTile', () => {
   it('Tile should render event text', async () => {
     wrapper = renderWithTheme(<BasicTile title='test' description='desc' event='test event' />);
     expect(wrapper.getByText('test event')).toBeInTheDocument();
+  });
+
+  it('Render wrapper', async () => {
+    wrapper = renderWithTheme(<BasicTile title='test' description='desc' event='test event' />);
+    expect(wrapper.getByTestId('tile-wrapper')).toBeInTheDocument();
+  });
+
+  it('Render event Icon', async () => {
+    wrapper = renderWithTheme(
+      <BasicTile title='test' description='desc' event='test event'>
+        <div>Test</div>
+      </BasicTile>,
+    );
+    expect(wrapper.getByTestId(TEST_ICON)).toBeInTheDocument();
   });
 });
