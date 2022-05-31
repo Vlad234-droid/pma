@@ -41,6 +41,7 @@ const NotesComposition: FC<{
   const { t } = useTranslation();
   const { css } = useStyle();
   const navigate = useNavigate();
+  console.log(navigate);
   const colleagueUuid = useSelector(colleagueUUIDSelector);
 
   const dispatch = useDispatch();

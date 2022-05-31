@@ -29,11 +29,4 @@ export const getCards = (t: TFunction): Array<CardsTypes> => [
     page: Page.PREVIOUS_REVIEW_FORMS,
     graphic: 'doc',
   },
-  {
-    title: t('supporting_your_performance', 'Supporting Your Performance (SYP)'),
-    description: t('review_your_colleagues_performance', 'Review your colleague`s performance'),
-    // TODO: in future replace to Page.PREVIOUS_REVIEW_FORMS
-    page: '',
-    graphic: 'syp',
-  },
 ];

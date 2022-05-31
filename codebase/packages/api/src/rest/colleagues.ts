@@ -16,3 +16,8 @@ export const getProfileColleague = (params: any) => {
   const { colleagueUuid } = params;
   return httpClient.get(`${domain}/${colleagueUuid}`);
 };
+
+export const getColleague = (params: { colleagueUuid: string }) => {
+  const { colleagueUuid } = params;
+  return httpClient.get(`${colleagues}/${colleagueUuid}`);
+};

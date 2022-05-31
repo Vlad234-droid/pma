@@ -33,6 +33,13 @@ export default createReducer(initialState)
       meta: { ...state.meta, loading: false, loaded: true },
     };
   })
+  .handleAction(getReviews.failure, (state, { payload }) => {
+    return {
+      ...state,
+      ...payload,
+      meta: { ...state.meta, loading: false, loaded: true, error: payload },
+    };
+  })
   .handleAction(getColleagueReviews.request, (state) => {
     return {
       ...state,

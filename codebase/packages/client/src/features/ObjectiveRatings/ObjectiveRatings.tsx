@@ -2,7 +2,7 @@ import React, { FC, useState } from 'react';
 import { Rule, Styles, useStyle, CreateRule } from '@pma/dex-wrapper';
 import { useNavigate } from 'react-router';
 import { useParams } from 'react-router-dom';
-import { reviewsMetaSelector, schemaMetaSelector, timelineTypesAvailabilitySelector } from '@pma/store';
+import { reviewsMetaSelector, schemaMetaSelector, timelineTypesAvailabilitySelector, colleagueInfo } from '@pma/store';
 import { useSelector } from 'react-redux';
 
 import { YearSwitch } from 'components/YearSwitch';
@@ -12,6 +12,7 @@ import { Trans } from 'components/Translation';
 import { Backward } from 'components/Backward';
 import { useUserObjectivesData } from 'features/UserObjectives/hooks';
 import { UserObjectivesSections } from 'features/UserObjectivesSections';
+import { useFetchColleague } from 'features/RatingsTiles/hooks/useFetchColleague';
 
 import { ObjectiveType } from 'config/enum';
 import { getCurrentYear } from 'utils/date';
@@ -19,23 +20,19 @@ import { getCurrentYear } from 'utils/date';
 const ObjectiveRatings = () => {
   const { css, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
+  const navigate = useNavigate();
 
   const [objectives, setObjectives] = useState<OT.Objective[]>([]);
 
-  const { loaded: reviewLoaded, loading: reviewLoading } = useSelector(reviewsMetaSelector);
   const { uuid } = useParams<{ uuid: string }>();
   const { loaded: schemaLoaded } = useSelector(schemaMetaSelector);
+  const { loaded: reviewLoaded, loading: reviewLoading } = useSelector(reviewsMetaSelector);
+  const { firstName, lastName, businessType, managerSirName, managerName, job, department } =
+    useSelector(colleagueInfo);
   const timelineTypes = useSelector(timelineTypesAvailabilitySelector(uuid));
   const canShowObjectives = timelineTypes[ObjectiveType.OBJECTIVE];
 
-  const navigate = useNavigate();
-
-  const user = {
-    fullName: 'Ron Rogers',
-    job: 'Grocery',
-    manager: 'Justin Thomas',
-  };
-
+  useFetchColleague(uuid);
   useUserObjectivesData(uuid, reviewLoaded, schemaLoaded, setObjectives);
 
   const handleChange = (year) => {
@@ -46,8 +43,11 @@ const ObjectiveRatings = () => {
     <>
       <Backward onPress={() => navigate(-1)} />
       <div className={css({ margin: '8px' })}>
-        <ProfileTileWrapper user={user} customStyle={widthStyles({ mobileScreen })}>
-          <AdditionalInfo manager={user.manager} />
+        <ProfileTileWrapper
+          user={{ fullName: `${firstName} ${lastName}`, job: `${job} ${department}` }}
+          customStyle={widthStyles({ mobileScreen })}
+        >
+          <AdditionalInfo manager={`${managerName} ${managerSirName}`} businessType={businessType} />
         </ProfileTileWrapper>
       </div>
       <YearSwitch currentYear={getCurrentYear()} onChange={handleChange} />
@@ -63,15 +63,25 @@ const ObjectiveRatings = () => {
   );
 };
 
-export const AdditionalInfo: FC<{ manager: string }> = ({ manager }) => {
+export const AdditionalInfo: FC<{ manager: string; businessType?: string }> = ({ manager, businessType = '' }) => {
   const { css } = useStyle();
 
   return (
-    <div className={css(additionalInfo)}>
-      <h2>
-        <Trans i18nKey={'line_manager'}>Line manager</Trans>
-      </h2>
-      <p>{manager}</p>
+    <div className={css(wrapperStyle)}>
+      <div className={css(additionalInfo)}>
+        <h2>
+          <Trans i18nKey={'line_manager'}>Line manager</Trans>
+        </h2>
+        <p>{manager}</p>
+      </div>
+      {businessType && (
+        <div className={css(additionalInfo, { marginLeft: '30px' })}>
+          <h2>
+            <Trans i18nKey={'function'}>Function</Trans>
+          </h2>
+          <p>{businessType}</p>
+        </div>
+      )}
     </div>
   );
 };
@@ -79,6 +89,10 @@ export const AdditionalInfo: FC<{ manager: string }> = ({ manager }) => {
 const widthStyles: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => ({
   maxWidth: !mobileScreen ? '80%' : '100%',
 });
+
+const wrapperStyle: Rule = {
+  display: 'inline-flex',
+};
 
 const additionalInfo: Rule = ({ theme }) =>
   ({

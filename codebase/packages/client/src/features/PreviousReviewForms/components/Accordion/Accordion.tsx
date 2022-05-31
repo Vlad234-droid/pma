@@ -6,6 +6,7 @@ import { Accordion as AccordionSection, Panel, Section } from 'components/Accord
 import { ObjectiveHeader } from 'features/Objectives/components/Accordion/Accordion';
 import { useTranslation } from 'components/Translation';
 import { ReviewForm } from '../ReviewForm';
+import { ReviewType } from 'config/enum';
 
 export const Accordion = () => {
   const reviews = useSelector(getReviewsWithStatuses);
@@ -20,6 +21,7 @@ export const Accordion = () => {
     <AccordionSection id='objective-accordion'>
       <div>
         {reviews
+          ?.filter(({ reviewType }) => reviewType === ReviewType.MYR || reviewType === ReviewType.EYR)
           ?.map((item, i) => ({ ...item, ...accordionInfo[i] }))
           ?.map(({ title, canShowStatus, status, reviewType, id }) => (
             <Section key={id}>

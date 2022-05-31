@@ -7,7 +7,7 @@ const ReviewHelpTrigger: FC = () => {
 
   return (
     <div className={css(wrapperStyle)}>
-      <Icon graphic='information' iconStyles={{ width: '18px' }} />
+      <Icon graphic='information' />
       <span className={css(textStyle)}>
         <Trans i18nKey='need_help_to_write'>Need help with what to write?</Trans>
       </span>

@@ -26,7 +26,7 @@ export enum ModalStatuses {
   INFO = 'INFO',
 }
 
-const NotesActions: FC<{ loaded: boolean }> = ({ loaded }) => {
+const NotesActions: FC<{ loading: boolean }> = ({ loading }) => {
   const [status, setStatus] = useState(ModalStatuses.PENDING);
 
   const isLineManager = usePermission([role.LINE_MANAGER]);
@@ -77,8 +77,7 @@ const NotesActions: FC<{ loaded: boolean }> = ({ loaded }) => {
     }
   }, [folders, notesSelect, archiveMode.team]);
 
-  // TODO: change !loaded to loading
-  if (!loaded) {
+  if (loading) {
     return <Spinner fullHeight />;
   }
 

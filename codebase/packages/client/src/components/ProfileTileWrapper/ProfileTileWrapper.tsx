@@ -5,7 +5,7 @@ import { TileWrapper } from 'components/Tile';
 import { AvatarName } from 'features/Profile/components/Widgets/Profile';
 
 const ProfileTileWrapper: FC<{
-  user: Record<'fullName' | 'job' | 'manager', string>;
+  user: Record<'fullName' | 'job', string>;
   customStyle?: Rule | Styles | CSSProperties | {};
   children?: ReactNode;
 }> = ({ user, customStyle = {}, children }) => {
@@ -15,7 +15,6 @@ const ProfileTileWrapper: FC<{
     <TileWrapper customStyle={customStyle}>
       <div className={css(cardWrapper({ mobileScreen }))}>
         <AvatarName user={user} />
-
         {children}
       </div>
     </TileWrapper>
