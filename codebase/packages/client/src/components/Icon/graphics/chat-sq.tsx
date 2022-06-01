@@ -2,23 +2,22 @@ import React from 'react';
 import { useStyle } from '@pma/dex-wrapper';
 
 import { invertColor } from '../utils';
-
 import { FCGraphicProps } from './types';
 
 export const ChatSq: FCGraphicProps = ({ invertColors }) => {
   const { theme } = useStyle();
 
-  const stroke = invertColor(theme.colors.link, invertColors, theme);
+  const color = invertColor(theme.colors.link, invertColors, theme);
 
   return (
     <>
-      <path d='M14.9505 6.1171H5.04951V4.93314H14.9505V6.1171Z' fill={stroke} />
-      <path d='M14.9505 11.0502H5.04951V9.86629H14.9505V11.0502Z' fill={stroke} />
+      <path d='M16.9505 8.1171H7.04951V6.93314H16.9505V8.1171Z' fill={color} />
+      <path d='M16.9505 13.0502H7.04951V11.8663H16.9505V13.0502Z' fill={color} />
       <path
         fillRule='evenodd'
         clipRule='evenodd'
-        d='M0 0V15.9834H4.9505V20L5.61076 19.9262C7.86292 19.6745 9.74759 18.043 10.0551 15.9834H20V0H0ZM1.18812 14.7994V1.18395H18.8119V14.7994H8.91089V15.3914C8.91089 16.8205 7.77657 18.1775 6.13861 18.6239V14.7994H1.18812Z'
-        fill={stroke}
+        d='M2 2V17.9834H6.9505V22L7.61076 21.9262C9.86292 21.6745 11.7476 20.043 12.0551 17.9834H22V2H2ZM3.18812 16.7994V3.18395H20.8119V16.7994H10.9109V17.3914C10.9109 18.8205 9.77657 20.1775 8.13861 20.6239V16.7994H3.18812Z'
+        fill={color}
       />
     </>
   );

@@ -37,7 +37,7 @@ const RatingsTiles = () => {
             <Link to={buildPath(paramsReplacer(item.page, { ':uuid': uuid as string }))}>
               <TileWrapper>
                 <div className={css(wrapperBlock({ mobileScreen }))}>
-                  <Icon graphic={item.graphic} viewBox={'0 0 32 32'} size={'32px'} />
+                  <Icon graphic={item.graphic} />
                   <h2>{item.title}</h2>
                   <p>{item.description}</p>
                 </div>

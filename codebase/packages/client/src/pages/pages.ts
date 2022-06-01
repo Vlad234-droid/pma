@@ -94,6 +94,13 @@ const pages: Record<Page, PageComponent> = {
     backPath: Page.MY_TEAM,
     perform: [role.COLLEAGUE],
   },
+  [Page.PERFORMANCE_CYCLE_POPULATION_MATRIX]: {
+    Element: () => null,
+    title: 'Population matrix',
+    withHeader: true,
+    backPath: Page.PERFORMANCE_CYCLE,
+    perform: [role.TALENT_ADMIN, role.PROCESS_MANAGER, role.ADMIN],
+  },
   [Page.CREATE_PERFORMANCE_CYCLE]: {
     Element: CreatePerformanceCycle,
     title: 'Create Performance Cycle',

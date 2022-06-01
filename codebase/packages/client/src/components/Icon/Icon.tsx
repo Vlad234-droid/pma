@@ -39,7 +39,6 @@ export const Icon: FC<IconProps> = ({
   containerTestId,
   backgroundRadius,
   onClick,
-  viewBox = '0 0 24 24',
   ...styles
 }) => {
   const { css } = useStyle();
@@ -55,7 +54,7 @@ export const Icon: FC<IconProps> = ({
         data-test-id={testId}
         fill='none'
         className={css(customStylesRule(styles), iconStyles)}
-        viewBox={viewBox}
+        viewBox={'0 0 24 24'}
         xmlns='http://www.w3.org/2000/svg'
         xmlnsXlink='http://www.w3.org/1999/xlink'
         aria-labelledby={titleId}

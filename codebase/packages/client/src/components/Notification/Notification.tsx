@@ -43,7 +43,7 @@ const Notification: FC<NotificationProps> = ({
       <div className={css(textStyle)}>{text}</div>
       {closable && (
         <IconButton
-          graphic='decline'
+          graphic='cancel'
           customVariantRules={{
             default: buttonDefaultStyle,
           }}

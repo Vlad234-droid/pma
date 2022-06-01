@@ -56,7 +56,7 @@ export const Buttons: FC<Props> = ({ reviewType, updateReviewStatus, isDisabled 
             styles={[defaultButtonStyle, isDisabled ? { opacity: '0.4' } : {}]}
             onPress={handleDeclineBtnClick}
           >
-            <Icon graphic='decline' iconStyles={{ paddingRight: '8px' }} />
+            <Icon graphic='cancel' iconStyles={{ paddingRight: '8px' }} />
             <Trans i18nKey='decline'>Decline</Trans>
           </Button>
         </div>

@@ -112,7 +112,7 @@ const FilterModal: FC<FilterModalProps> = ({
         <div className={css(flexStyle)}>
           <span className={css(filterStyle)}>Filter</span>
           <IconButton
-            graphic='decline'
+            graphic='cancel'
             iconStyles={iconStyle}
             onPress={() => {
               setFilterModal(() => false);

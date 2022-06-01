@@ -2,7 +2,7 @@ import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
 import { renderWithTheme as render } from 'utils/test';
 import FeedbackCard, { FEEDBACK_CARD_WRAPPER } from './FeedbackCard';
-import { Chat } from 'components/Icon/graphics/chat';
+import { Icon } from 'components/Icon';
 import { BrowserRouter } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
 import { Page } from 'pages';
@@ -14,7 +14,7 @@ describe('Feedback card', () => {
       id: 1,
       action: 'Give feedback',
       text: 'Your feedback will be immediately available for your colleague to view',
-      icon: <Chat />,
+      icon: <Icon graphic={'chat'} />,
       iconText: 'Give in the moment feedback to a colleague',
       link: Page.GIVE_FEEDBACK,
     },

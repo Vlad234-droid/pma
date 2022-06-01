@@ -1,16 +1,19 @@
 import React from 'react';
 
 import { FCGraphicProps } from './types';
+import { useStyle } from '@pma/dex-wrapper';
+import { invertColor } from 'components/Icon/utils';
 
-export const List: FCGraphicProps = () => {
+export const List: FCGraphicProps = ({ invertColors }) => {
+  const { theme } = useStyle();
+
+  const color = invertColor(theme.colors.link, invertColors, theme);
   return (
-    <>
-      <path
-        fillRule='evenodd'
-        clipRule='evenodd'
-        d='M0 0H4.1791V4.15385H0V0ZM1.19403 1.18681V2.96703H2.98507V1.18681H1.19403ZM20 2.67033H7.06468V1.48352H20V2.67033ZM0 6.92308H4.1791V11.0769H0V6.92308ZM1.19403 8.10989V9.89011H2.98507V8.10989H1.19403ZM20 9.59341H7.06468V8.40659H20V9.59341ZM0 13.8462H4.1791V18H0V13.8462ZM1.19403 15.033V16.8132H2.98507V15.033H1.19403ZM20 16.5165H7.06468V15.3297H20V16.5165Z'
-        fill='#00539F'
-      />
-    </>
+    <path
+      fillRule='evenodd'
+      clipRule='evenodd'
+      d='M2 3H6.1791V7.15385H2V3ZM3.19403 4.18681V5.96703H4.98507V4.18681H3.19403ZM22 5.67033H9.06468V4.48352H22V5.67033ZM2 9.92308H6.1791V14.0769H2V9.92308ZM3.19403 11.1099V12.8901H4.98507V11.1099H3.19403ZM22 12.5934H9.06468V11.4066H22V12.5934ZM2 16.8462H6.1791V21H2V16.8462ZM3.19403 18.033V19.8132H4.98507V18.033H3.19403ZM22 19.5165H9.06468V18.3297H22V19.5165Z'
+      fill={color}
+    />
   );
 };

@@ -465,6 +465,9 @@
   "cycle_details": "Cycle details",
   "cycle_name": "Cycle name",
   "cycle_reviews": "Cycle reviews",
+  "cycle_group": "Cycle group",
+  "cycle_period": "Cycle period",
+  "actions": "Actions",
   "entry_config_key": "Entry config key",
   "start_day": "Start day",
   "end_day": "End day",
@@ -616,5 +619,6 @@
   "display_objectives_for": "Display objectives for:",
   "review_forms_for": "Review forms for {{year}}",
   "see_how_your_team_are_progressing_throughout_the_year": "See how your team are progressing throughout the year",
-  "team_reporting": "Team reporting"
+  "team_reporting": "Team reporting",
+  "population_matrix": "Population matrix"
 }

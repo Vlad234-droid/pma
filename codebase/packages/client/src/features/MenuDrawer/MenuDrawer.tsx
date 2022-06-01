@@ -67,7 +67,7 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
             />
             {timelinesExist && (
               <MenuItem
-                iconGraphic={'aim'}
+                iconGraphic={'goal'}
                 linkTo={buildPath(Page.OBJECTIVES_VIEW)}
                 title={
                   linkTitle?.[Page.OBJECTIVES_VIEW]
@@ -88,7 +88,7 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
             />
             <MenuItem iconGraphic={'edit'} linkTo={buildPath(Page.NOTES)} title={t('my_notes', 'My notes')} />
             <MenuItem iconGraphic={'account'} linkTo={buildPath(Page.PROFILE)} title={t('my_profile', 'My profile')} />
-            <MenuItem iconGraphic={'chatSq'} linkTo={buildPath(Page.FEEDBACK)} title={t('feedback', 'Feedback')} />
+            <MenuItem iconGraphic={'chat'} linkTo={buildPath(Page.FEEDBACK)} title={t('feedback', 'Feedback')} />
             <CanPerform
               perform={[role.TALENT_ADMIN, role.ADMIN]}
               yes={() => (

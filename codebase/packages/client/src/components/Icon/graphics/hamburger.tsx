@@ -8,17 +8,14 @@ import { FCGraphicProps } from './types';
 export const Hamburger: FCGraphicProps = ({ invertColors }) => {
   const { theme } = useStyle();
 
-  const stroke = invertColor(theme.colors.link, invertColors, theme);
+  const color = invertColor(theme.colors.link, invertColors, theme);
 
   return (
-    <>
-      <path
-        id='hamburger'
-        fillRule='evenodd'
-        clipRule='evenodd'
-        d='M20 1.5H0V0H20V1.5ZM20 16.5H0V15H20V16.5ZM0 9H20V7.5H0V9Z'
-        fill={stroke}
-      />
-    </>
+    <path
+      fillRule='evenodd'
+      clipRule='evenodd'
+      d='M22 5.5H2V4H22V5.5ZM22 20.5H2V19H22V20.5ZM2 13H22V11.5H2V13Z'
+      fill={color}
+    />
   );
 };

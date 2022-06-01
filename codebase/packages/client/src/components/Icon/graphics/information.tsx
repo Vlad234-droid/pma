@@ -1,30 +1,17 @@
 import React from 'react';
-import { useStyle } from '@pma/dex-wrapper';
-
-import { invertColor } from '../utils';
 
 import { FCGraphicProps } from './types';
 
-export const Information: FCGraphicProps = ({ invertColors }) => {
-  const { theme } = useStyle();
-
+export const Information: FCGraphicProps = () => {
   return (
     <>
+      <circle cx='12' cy='12' r='12' fill='white' />
       <path
         fillRule='evenodd'
         clipRule='evenodd'
-        d='M24 12C24 5.37258 18.6274 0 12 0C5.37258 0 0 5.37258 0 12C0 18.6274 5.37258 24 12 24C18.6274 24 24 18.6274 24 12Z'
-        fill={invertColor(theme.colors.link, invertColors, theme)}
+        d='M12 0C18.6289 0 24 5.37258 24 12C24 18.6289 18.6274 24 12 24C5.37113 24 0 18.6274 0 12C0 5.37113 5.37258 0 12 0ZM11.8579 6.6C11.8579 6.5215 11.9215 6.45789 12 6.45789C12.0786 6.45789 12.1421 6.5215 12.1421 6.6C12.1421 6.67849 12.0786 6.7421 12 6.7421C11.9215 6.7421 11.8579 6.67849 11.8579 6.6ZM12 4.9421C11.085 4.9421 10.3421 5.68369 10.3421 6.6C10.3421 7.5163 11.085 8.25789 12 8.25789C12.9151 8.25789 13.6579 7.5163 13.6579 6.6C13.6579 5.68369 12.9151 4.9421 12 4.9421ZM11.2421 10.6579H10.2V9.14211H12H12.7579V9.9V16.9421H14.4V18.4579H9.60001V16.9421H11.2421V10.6579Z'
+        fill='#00539F'
       />
-      <path
-        fillRule='evenodd'
-        clipRule='evenodd'
-        d='M12.9 6.6C12.9 7.0974 12.4968 7.5 12 7.5C11.5032 7.5 11.1 7.0974 11.1 6.6C11.1 6.1026 11.5032 5.7 12 5.7C12.4968 5.7 12.9 6.1026 12.9 6.6Z'
-        stroke={invertColor(theme.colors.white, invertColors, theme)}
-        strokeWidth='1.2'
-      />
-      <path d='M10.2 9.9H12V17.4' stroke={invertColor(theme.colors.white, invertColors, theme)} strokeWidth='1.2' />
-      <path d='M9.60001 17.7H14.4' stroke={invertColor(theme.colors.white, invertColors, theme)} strokeWidth='1.2' />
     </>
   );
 };

@@ -15,7 +15,7 @@ export const getCards = (t: TFunction): Array<CardsTypes> => [
     title: t('calibration_ratings', 'Calibration ratings'),
     description: t('what_how_and_overall_ratings', 'What, how and overall ratings'),
     page: Page.PREVIOUS_CALIBRATION_RATINGS,
-    graphic: 'ratings',
+    graphic: 'rating',
   },
   {
     title: t('objectives', 'Objectives'),
@@ -27,6 +27,6 @@ export const getCards = (t: TFunction): Array<CardsTypes> => [
     title: t('review_forms', 'Review forms'),
     description: t('mid_end_review_archive', 'Mid-year and Year-end review archive'),
     page: Page.PREVIOUS_REVIEW_FORMS,
-    graphic: 'doc',
+    graphic: 'document',
   },
 ];

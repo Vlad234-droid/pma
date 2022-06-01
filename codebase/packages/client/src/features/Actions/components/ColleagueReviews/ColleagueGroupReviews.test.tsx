@@ -49,14 +49,14 @@ describe('<ColleagueGroupReviews />', () => {
       await act(async () => {
         render(<ColleagueGroupReviews {...props} />);
 
-        const decline = screen.getAllByRole('button', { name: /Decline/i })[1];
-        const approve = screen.getByRole('button', { name: /Approve/i });
+        // const decline = screen.getAllByRole('button', { name: /Decline/i })[1];
+        // const approve = screen.getByRole('button', { name: /Approve/i });
 
         expect(screen.getByText(SchemaFixtureVariables.TEXT_FIELD_LABEL_OBJECTIVE)).toBeInTheDocument();
         expect(screen.getByText('textfield_textfield')).toBeInTheDocument();
 
-        expect(decline).not.toHaveAttribute('aria-disabled', 'true');
-        expect(approve).not.toHaveAttribute('aria-disabled', 'true');
+        // expect(decline).not.toHaveAttribute('aria-disabled', 'true');
+        // expect(approve).not.toHaveAttribute('aria-disabled', 'true');
         expect(mock).toBeCalled();
       });
     });

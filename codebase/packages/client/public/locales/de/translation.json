@@ -196,6 +196,9 @@
   "cycle_details": "Cycle details",
   "cycle_name": "Cycle name",
   "cycle_reviews": "Cycle reviews",
+  "cycle_group": "Cycle group",
+  "cycle_period": "Cycle period",
+  "actions": "Actions",
   "entry_config_key": "Entry config key",
   "start_day": "Start day",
   "end_day": "End day",
@@ -231,5 +234,6 @@
   "missed_fields/workRelationships/job/name": "Job name",
   "missed_fields/workRelationships/department/name": "Department name",
   "full_date": "{{date, d LLL yyyy}}",
-  "end_day_mast_be_after": "End day mast be after {{ min }}"
+  "end_day_mast_be_after": "End day mast be after {{ min }}",
+  "population_matrix": "Population matrix"
 }

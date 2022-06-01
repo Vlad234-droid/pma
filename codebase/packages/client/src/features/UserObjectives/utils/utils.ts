@@ -11,7 +11,7 @@ export const getWidgets = (t, isSubmittingSecondaryWidget, navigate, uuid): Arra
     onClick: () => navigate(paramsReplacer(`/${Page.PREVIOUS_RATINGS_TILES}`, { ':uuid': uuid })),
   },
   {
-    iconGraphic: 'chatSq',
+    iconGraphic: 'chat',
     title: isSubmittingSecondaryWidget
       ? t('submit_calibration_ratings', 'Submit calibration ratings')
       : t('edit_calibration_ratings', 'Edit calibration ratings'),

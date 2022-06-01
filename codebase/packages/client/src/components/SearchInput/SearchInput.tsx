@@ -3,7 +3,7 @@ import { useStyle, Styles, Rule } from '@pma/dex-wrapper';
 import mergeRefs from 'react-merge-refs';
 import debounce from 'lodash.debounce';
 import { useFormContainer } from 'components/Form/context/input';
-import { Close } from 'components/Icon/graphics/close';
+import { Icon } from 'components/Icon';
 
 type Props<T> = {
   disabled?: boolean;
@@ -139,7 +139,7 @@ const SearchInput: FC<Props<any>> = ({
                   className={css({ cursor: 'pointer' })}
                   onClick={() => onDelete && onDelete(item.value)}
                 >
-                  <Close />
+                  <Icon graphic={'cancel'} />
                 </div>
               </div>
             ))}

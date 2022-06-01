@@ -177,7 +177,7 @@ const ViewFeedback: FC = () => {
               <div className={css({ display: 'inline-flex' })}>
                 <Icon
                   testId='give-feedback-button'
-                  graphic='chatSq'
+                  graphic='chat'
                   iconStyles={{ verticalAlign: 'middle', margin: '2px 10px 0px 0px' }}
                   backgroundRadius={10}
                 />
