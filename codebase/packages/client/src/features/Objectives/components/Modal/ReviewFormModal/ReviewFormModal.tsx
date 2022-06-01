@@ -6,9 +6,6 @@ import { useForm } from 'react-hook-form';
 import { CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
 import {
   currentUserSelector,
-  ExpressionValueType,
-  getExpressionListenersKeys,
-  getExpressionRequestKey,
   getReviewByTypeSelector,
   getReviewSchema,
   getTimelineByReviewTypeSelector,
@@ -33,6 +30,7 @@ import ReviewHelpModal from './ReviewHelpModal';
 import ReviewHelpTrigger from './ReviewHelpTrigger';
 import ReviewButtons from './ReviewButtons';
 import ReviewComponents from './ReviewComponents';
+import ReviewComponentsNew from './ReviewComponentsNew';
 import { USER } from 'config/constants';
 import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
 
@@ -54,21 +52,26 @@ const ReviewFormModal: FC<ReviewFormModal> = ({ reviewType, onClose }) => {
   const { loading: reviewLoading, loaded: reviewLoaded, updated: reviewUpdated } = useSelector(reviewsMetaSelector);
   const { loading: schemaLoading, loaded: schemaLoaded } = useSelector(schemaMetaSelector);
   const schema = useSelector(getReviewSchema(reviewType));
-  const overallRatingListeners: string[] = useSelector(
-    getExpressionListenersKeys(reviewType)(ExpressionValueType.OVERALL_RATING),
-  );
-  const overallRatingRequestKey: string = useSelector(
-    getExpressionRequestKey(reviewType)(ExpressionValueType.OVERALL_RATING),
-  );
+  // todo hardcoded. rewrite overallRatingRequestKey after merge
+  const overallRatingListeners: string[] = ['what_rating', 'how_rating'];
+  // todo hardcoded. rewrite getExpressionRequestKey after merge
+  const overallRatingRequestKey = 'overall_rating';
 
   const timelineReview = useSelector(getTimelineByReviewTypeSelector(reviewType, USER.current));
   const readonly = [Status.WAITING_FOR_APPROVAL, Status.APPROVED].includes(timelineReview.status);
 
   const { helperText, title } = getReviewFormContent(reviewType, t);
 
-  const { components = [] as Component[] } = schema;
+  const { components = [] as Component[], display: newSchemaVersion } = schema;
 
-  const yepSchema = components.reduce(createYupSchema(t), {});
+  const componentV2 = newSchemaVersion
+    ? components
+        .flatMap((e) => e?.components || e)
+        .filter((e) => e?.type === 'textarea' || e?.type === 'textfield' || e?.type === 'select')
+    : [];
+  const yepSchema = newSchemaVersion
+    ? componentV2.reduce(createYupSchema(t), {})
+    : components.reduce(createYupSchema(t), {});
   const methods = useFormWithCloseProtection({
     mode: 'onChange',
     resolver: yupResolver<Yup.AnyObjectSchema>(Yup.object().shape(yepSchema)),
@@ -194,7 +197,17 @@ const ReviewFormModal: FC<ReviewFormModal> = ({ reviewType, onClose }) => {
               </TriggerModal>
             </div>
             {!readonly && <Attention />}
-            <ReviewComponents components={components} review={formValues} methods={methods} readonly={readonly} />
+            {newSchemaVersion ? (
+              <ReviewComponentsNew
+                components={components}
+                review={formValues}
+                methods={methods}
+                readonly={readonly}
+                status={timelineReview.status}
+              />
+            ) : (
+              <ReviewComponents components={components} review={formValues} methods={methods} readonly={readonly} />
+            )}
           </div>
           <ReviewButtons
             isValid={isValid}

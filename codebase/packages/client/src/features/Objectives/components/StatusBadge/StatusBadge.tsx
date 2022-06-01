@@ -31,7 +31,7 @@ const StatusBadge: FC<StatusBadgeProps> = ({ status, styles }) => {
   const [graphic, label, color] = getContent(theme, t, status);
   return (
     <div className={css(wrapperStyles, styles)}>
-      <Icon graphic={graphic} invertColors iconStyles={iconStyles} title={label}/>
+      <Icon graphic={graphic} invertColors iconStyles={iconStyles} title={label} />
       <span className={css(labelStyles({ color }))}>{label}</span>
     </div>
   );

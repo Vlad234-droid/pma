@@ -31,7 +31,56 @@ export const getPermittedForm = (form: any, access: string[]) =>
 
 export const addStrategicObjectiveInForm = (form: any, count: number) => {
   const { json } = form;
-  const { components = [] } = json;
+  const { components = [], display: newSchemaVersion } = json;
+
+  // toto use as main after migration
+  if (newSchemaVersion) {
+    const jsonComponents: any[] = [];
+    const recursion = (components, parent) => {
+      const newComponents: any[] = [];
+      for (const componentV2 of components) {
+        if (componentV2?.type === 'well') {
+          recursion(componentV2?.components, componentV2);
+        } else {
+          const reviewValues: string = componentV2?.properties?.[`${ExpressionType.REQUEST}.review`] || undefined;
+
+          if (reviewValues === ExpressionValueType.OBJECTIVE) {
+            if (count > 0) {
+              [...Array(count)].forEach((_, index) =>
+                newComponents.push({
+                  ...componentV2,
+                  ...(componentV2?.id
+                    ? { id: componentV2?.id?.replace(componentV2?.id, `${componentV2?.id}_${index + 1}`) }
+                    : {}),
+                  ...(componentV2?.key
+                    ? { key: componentV2?.key?.replace(componentV2?.key, `${componentV2?.key}_${index + 1}`) }
+                    : {}),
+                  // todo ask backend about rules for replace.
+                  ...(componentV2?.label
+                    ? { label: componentV2?.label?.replace('Objective', `Objective ${index + 1}`) }
+                    : {}),
+                }),
+              );
+            }
+          } else {
+            newComponents.push(componentV2);
+          }
+        }
+      }
+
+      if (newComponents?.length) {
+        if (parent?.type === 'well') {
+          parent.components = newComponents;
+          jsonComponents.push(parent);
+        } else {
+          jsonComponents.push(...newComponents);
+        }
+      }
+    };
+    recursion(components, []);
+    json.components = jsonComponents;
+    return { ...form, json };
+  }
 
   const newComponents: any[] = [];
   components?.forEach((component) => {

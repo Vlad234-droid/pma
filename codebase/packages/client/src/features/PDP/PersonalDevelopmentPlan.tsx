@@ -41,9 +41,15 @@ const PersonalDevelopmentPlan: FC = () => {
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const { loaded: pdpLoaded, loading: pdpLoading } = useSelector(metaPDPSelector);
   const [schema] = usePDPSchema(PDPType.PDP);
-  const { components = [] } = schema;
+  const { components = [], display: newSchemaVersion } = schema;
 
-  const formElements = components.filter((component) => component.type != 'text');
+  const formElements = newSchemaVersion
+    ? components
+        .flatMap((e) => e?.components || e)
+        .filter(
+          (e) => e?.type === 'textarea' || e?.type === 'textfield' || e?.type === 'select' || e?.type === 'datetime',
+        )
+    : components.filter((component) => component.type != 'text');
 
   const documentFormElements = formElements.map((el) => ({ label: el['label'].replace(/\*./g, '') }));
 

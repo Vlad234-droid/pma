@@ -11,7 +11,7 @@ type Props = {
 
 const TimeLines: FC<Props> = ({ timelines }) => {
   const { css } = useStyle();
-  const { t } = useTranslation()
+  const { t } = useTranslation();
 
   return (
     <div data-test-id='timelines' className={css(wrapperStyles)}>

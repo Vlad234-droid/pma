@@ -38,8 +38,12 @@ export const CreateUpdateObjective: FC<Props> = ({ onClose, editNumber = null })
   const nextNumber = useSelector(getNextReviewNumberSelector(ReviewType.OBJECTIVE));
   const currentObjectiveNumber = editNumber ? editNumber : nextNumber;
 
-  const { components = [] } = schema;
-  const formElements = components.filter((component) => component.type != 'text');
+  const { components = [], display: newSchemaVersion } = schema;
+  const formElements = newSchemaVersion
+    ? components
+        .flatMap((e) => e?.components || e)
+        .filter((e) => e?.type === 'textarea' || e?.type === 'textfield' || e?.type === 'select')
+    : components.filter((component) => component.type != 'text');
   const formElementsFilledEmpty = formElements.reduce((acc, current) => {
     acc[current.key] = '';
     return acc;

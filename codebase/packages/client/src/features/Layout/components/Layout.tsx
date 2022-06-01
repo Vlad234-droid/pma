@@ -31,7 +31,7 @@ const A = ({ children, ...props }) => {
   );
 };
 
-const Yes: FC = ({children}) => {
+const Yes: FC = ({ children }) => {
   const { css } = useStyle();
   const navigate = useNavigate();
   const { pathname } = useLocation();
@@ -45,20 +45,22 @@ const Yes: FC = ({children}) => {
 
   const handleBack = (backPath = '/') => navigate(backPath, { replace: true });
 
-  useFetchCommonData()
+  useFetchCommonData();
 
-  return <div data-test-id={TEST_ID} className={css(layoutRule)}>
-  {withHeader && (
-    <Header
-      title={title}
-      withIcon={withIcon}
-      iconName={iconName}
-      onBack={backPath ? () => handleBack(buildPath(backPath)) : undefined}
-    />
-  )}
-  {children}
-</div>
-}
+  return (
+    <div data-test-id={TEST_ID} className={css(layoutRule)}>
+      {withHeader && (
+        <Header
+          title={title}
+          withIcon={withIcon}
+          iconName={iconName}
+          onBack={backPath ? () => handleBack(buildPath(backPath)) : undefined}
+        />
+      )}
+      {children}
+    </div>
+  );
+};
 
 const Layout: FC = ({ children }) => {
   const { css } = useStyle();

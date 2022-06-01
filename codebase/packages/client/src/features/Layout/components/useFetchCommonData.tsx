@@ -1,15 +1,15 @@
-import { colleagueUUIDSelector, PDPActions, TimelineActions } from "@pma/store";
-import { useEffect } from "react"
-import { useDispatch, useSelector } from "react-redux";
+import { colleagueUUIDSelector, PDPActions, TimelineActions } from '@pma/store';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 export const useFetchCommonData = () => {
-    const dispatch = useDispatch();
-    const colleagueUuid = useSelector(colleagueUUIDSelector);
+  const dispatch = useDispatch();
+  const colleagueUuid = useSelector(colleagueUUIDSelector);
 
-    useEffect(() => {
-        if(colleagueUuid) {
-            dispatch(TimelineActions.getTimeline({ colleagueUuid }));
-            dispatch(PDPActions.getPDPGoal({}));
-        }
-    }, [colleagueUuid])
-}
+  useEffect(() => {
+    if (colleagueUuid) {
+      dispatch(TimelineActions.getTimeline({ colleagueUuid }));
+      dispatch(PDPActions.getPDPGoal({}));
+    }
+  }, [colleagueUuid]);
+};

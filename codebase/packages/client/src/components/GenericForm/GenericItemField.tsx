@@ -52,7 +52,6 @@ export const GenericItemField: FC<GenericItemFormProps> = ({
     formState: { errors },
     setValue,
   } = methods;
-  register(name);
 
   const element = (
     <div data-test-id={ELEMENT_TEST_ID}>

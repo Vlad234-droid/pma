@@ -14,7 +14,8 @@ import { ButtonWithConfirmation } from '../Buttons';
 import ObjectiveHelpModal from '../Modal/ObjectiveHelpModal';
 import { IconButton, Position } from 'components/IconButton';
 import ObjectiveComponents from './ObjectiveComponents';
-import { isReviewsNumberInStatuses } from '@pma/store';
+import ObjectiveComponentsNew from './ObjectiveComponentsNew';
+import { isReviewsNumberInStatuses, getReviewSchema } from '@pma/store';
 import { useSelector } from 'react-redux';
 
 export type ObjectiveModalProps = {
@@ -57,6 +58,9 @@ export const ObjectiveModal: FC<Props> = ({
   skipHelp,
   onClose,
 }) => {
+  // todo temporary
+  const { display: newSchemaVersion } = useSelector(getReviewSchema(ReviewType.OBJECTIVE));
+
   const canNotSaveAsDraft = useSelector(
     isReviewsNumberInStatuses(ReviewType.OBJECTIVE)([Status.APPROVED, Status.DECLINED], currentObjectiveNumber),
   );
@@ -115,7 +119,11 @@ export const ObjectiveModal: FC<Props> = ({
             </div>
           )}
           <Attention customStyle={{ marginBottom: '20px' }} />
-          <ObjectiveComponents components={schemaComponents} review={formValues} methods={methods} />
+          {newSchemaVersion ? (
+            <ObjectiveComponentsNew components={schemaComponents} review={formValues} methods={methods} />
+          ) : (
+            <ObjectiveComponents components={schemaComponents} review={formValues} methods={methods} />
+          )}
           {!skipFooter && (
             <div data-test-id={FOOTER_TEST_ID} className={css(footerContainerStyle)}>
               <div className={css(footerWrapperStyle)}>

@@ -53,6 +53,21 @@ export interface Component {
   expression?: any;
 }
 
+// to rename after use new scheme
+export interface ComponentV2 {
+  id: string;
+  key?: string;
+  content?: string;
+  label?: string;
+  description?: string;
+  type?: string;
+  placeholder?: string;
+  validate?: any;
+  properties?: any;
+  conditional?: any;
+  data: { values?: { label?: string; value?: string }[] };
+}
+
 export enum Folders {
   PERSONAL_FOLDER = 'PERSONAL_FOLDER',
   ARCHIVED_FOLDER = 'ARCHIVED_FOLDER',

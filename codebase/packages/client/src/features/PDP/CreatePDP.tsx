@@ -9,7 +9,7 @@ import { Page } from 'pages';
 import { PDPType } from 'config/enum';
 import { useTranslation } from 'components/Translation';
 import Spinner from 'components/Spinner';
-import CreatePDPForm from './components/CreatePDPForm';
+import { CreatePDPForm, CreatePDPFormNew } from './components/CreatePDPForm';
 import usePDPSchema from './hooks/usePDPSchema';
 import { ModalWrapper } from 'components/ModalWrapper';
 
@@ -27,7 +27,7 @@ const CreateMyPDP = () => {
   const { loaded, loading } = useSelector(metaPDPSelector) || {};
   const [pdpGoals, setPDPGoals] = useState<any[]>([]);
   const [schema] = usePDPSchema(PDPType.PDP);
-  const { components = [] } = schema;
+  const { components = [], display: newSchemaVersion } = schema;
   const formElements = components.filter((component) => component.type != 'text');
   const maxGoalCount = 5;
   const { uuid } = useParams<{ uuid: string }>();
@@ -49,7 +49,7 @@ const CreateMyPDP = () => {
 
   useEffect(() => {
     if (schema?.meta?.loaded) {
-      setPDPGoals(formElements);
+      setPDPGoals(components);
     }
   }, [schema?.meta?.loaded]);
 
@@ -116,21 +116,39 @@ const CreateMyPDP = () => {
         }}
       >
         <div className={css(mainContainer)}>
-          <CreatePDPForm
-            pdpGoals={pdpGoals}
-            pdpList={pdpList}
-            currentTab={currentTab}
-            setCurrentTab={setCurrentTab}
-            currentGoal={currentGoal}
-            formElements={formElements}
-            confirmSaveModal={confirmSaveModal}
-            maxGoals={maxGoalCount}
-            setConfirmModal={setConfirmModal}
-            currentUUID={currentUUID}
-            colleagueUuid={colleagueUuid}
-            onSubmit={onFormSubmit}
-            requestMethods={METHODS}
-          />
+          {newSchemaVersion ? (
+            <CreatePDPFormNew
+              pdpGoals={pdpGoals}
+              pdpList={pdpList}
+              currentTab={currentTab}
+              setCurrentTab={setCurrentTab}
+              currentGoal={currentGoal}
+              components={components}
+              confirmSaveModal={confirmSaveModal}
+              maxGoals={maxGoalCount}
+              setConfirmModal={setConfirmModal}
+              currentUUID={currentUUID}
+              colleagueUuid={colleagueUuid}
+              onSubmit={onFormSubmit}
+              requestMethods={METHODS}
+            />
+          ) : (
+            <CreatePDPForm
+              pdpGoals={pdpGoals}
+              pdpList={pdpList}
+              currentTab={currentTab}
+              setCurrentTab={setCurrentTab}
+              currentGoal={currentGoal}
+              formElements={formElements}
+              confirmSaveModal={confirmSaveModal}
+              maxGoals={maxGoalCount}
+              setConfirmModal={setConfirmModal}
+              currentUUID={currentUUID}
+              colleagueUuid={colleagueUuid}
+              onSubmit={onFormSubmit}
+              requestMethods={METHODS}
+            />
+          )}
         </div>
       </Modal>
     </ModalWrapper>

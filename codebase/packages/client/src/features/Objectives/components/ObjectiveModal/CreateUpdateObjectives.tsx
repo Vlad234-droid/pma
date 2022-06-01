@@ -39,10 +39,14 @@ const Objectives: FC<ObjectivesProps> = ({ colleagueUUID, schema, objectives, or
   const [currentObjectiveNumber, setObjectiveNumber] = useState(editNumber ? editNumber : 1);
   const [objectivesHashMap, setObjectiveHashMap] = useState(objectives);
 
-  const { components = [], markup = { max: 0, min: 0 } } = schema;
+  const { components = [], markup = { max: 0, min: 0 }, display: newSchemaVersion } = schema;
   const markupMin = markup.min;
   const titles = [...Array(markupMin).keys()].map((key) => `Objective ${key + 1}`);
-  const formElements = components.filter((component) => component.type != 'text');
+  const formElements = newSchemaVersion
+    ? components
+        .flatMap((e) => e?.components || e)
+        .filter((e) => e?.type === 'textarea' || e?.type === 'textfield' || e?.type === 'select')
+    : components.filter((component) => component.type != 'text');
   const formElementsFilledEmpty = formElements.reduce((acc, current) => {
     acc[current.key] = '';
     return acc;
