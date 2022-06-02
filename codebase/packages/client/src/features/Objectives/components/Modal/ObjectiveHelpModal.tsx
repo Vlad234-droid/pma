@@ -4,6 +4,8 @@ import { Trans } from 'components/Translation';
 import { VideoPlayer, VideoId } from 'features/VideoPlayer';
 
 export const TEST_ID = 'objective-help-modal';
+const OBJECTIVES_HELP =
+  'https://colleague-help.ourtesco.com/hc/en-us/articles/4417164321428-Your-Contribution-Strategic-objectives';
 
 const ObjectiveHelpModal: FC = () => {
   const { css, matchMedia } = useStyle();
@@ -27,10 +29,15 @@ const ObjectiveHelpModal: FC = () => {
           <Trans i18nKey={'learn'}>Learn</Trans>
         </div>
         <div className={css(descriptionStyle)}>
-          <Trans i18nKey={'learn_objectives'}>
-            This self-led eLearning will help you set objectives that are aligned, ambitious and assessable. Visit Click
-            and Learn HERE or Learning at Tesco HERE (15 mins)
-          </Trans>
+          <Trans
+            i18nKey={'learn_objectives'}
+            components={{
+              linkHref: <a href={OBJECTIVES_HELP} />,
+            }}
+            defaults={
+              'This self-led eLearning will help you set objectives that are aligned, ambitious and assessable. Visit Colleague Help <linkHref>here</linkHref>, to find the correct learning pathway for you.'
+            }
+          ></Trans>
         </div>
         <div className={css(subTitleStyle)}>
           <Trans i18nKey={'read'}>Read</Trans>
