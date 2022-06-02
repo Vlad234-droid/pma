@@ -1,17 +1,19 @@
 import { AxiosResponse } from 'axios';
-import { Configuration, ConfigurationParameters, FileApi, UserApi, CMSApi } from './src/openapi';
+import { Configuration, ConfigurationParameters, FileApi, UserApi, CMSApi, ConfigApi } from './src/openapi';
 import client from './src/config/client';
 
 const apis = {
   user: UserApi,
   file: FileApi,
   cms: CMSApi,
+  config: ConfigApi,
 };
 
 type Api = {
   user: UserApi;
   file: FileApi;
   cms: CMSApi;
+  config: ConfigApi;
 };
 
 const createApiClient = (configuration: ConfigurationParameters = {}): Api =>

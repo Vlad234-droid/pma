@@ -72,7 +72,8 @@ const GoalInfo = (props) => {
                       Object.keys(data).map((key, index) => {
                         const isExpDate = key === EXPIRATION_DATE;
 
-                        if (index !== 0)
+                        if (index !== 0) {
+                          /* Math.random should replace to index to prevent extra rerender */
                           return (
                             <div
                               key={formElements[index].label + Math.random()}
@@ -84,6 +85,7 @@ const GoalInfo = (props) => {
                               <div>{isExpDate ? formatDateString(data[key], DATE_STRING_FORMAT) : data[key]}</div>
                             </div>
                           );
+                        }
                       })}
 
                     <div className={css(btnBlock)}>

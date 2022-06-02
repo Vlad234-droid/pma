@@ -37,7 +37,7 @@ const ButtonWithConfirmation: FC<Props> = ({
       {withIcon ? (
         <IconButton
           onPress={() => setIsOpen(true)}
-          graphic='decline'
+          graphic='cancel'
           customVariantRules={{
             //todo currently we using different styling approach. need refactor and use same approach for all components
             default: styles?.length ? styles[0] : {},

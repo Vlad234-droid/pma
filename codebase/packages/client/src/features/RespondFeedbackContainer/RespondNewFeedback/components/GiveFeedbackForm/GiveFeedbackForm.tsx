@@ -3,7 +3,6 @@ import { Rule, useStyle } from '@pma/dex-wrapper';
 import { useSelector } from 'react-redux';
 import { getColleagueByUuidSelector } from '@pma/store';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useForm } from 'react-hook-form';
 import get from 'lodash.get';
 
 import { Trans, useTranslation } from 'components/Translation';
@@ -14,6 +13,7 @@ import { createGiveFeedbackSchema } from 'features/GiveFeedBack/config';
 import FeedbackInfo from '../FeedbackInfo';
 import { GiveFeedbackFormProps } from '../../type';
 import { ButtonsWrapper } from 'components/ButtonsWrapper';
+import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
 
 export const FORM_WRAPPER = 'form_wrapper';
 
@@ -42,7 +42,7 @@ const GiveFeedbackForm: FC<GiveFeedbackFormProps> = ({
     getValues,
     setValue,
     formState: { isValid, errors },
-  } = useForm({
+  } = useFormWithCloseProtection({
     mode: 'onChange',
     resolver: yupResolver(createGiveFeedbackSchema(t)),
     defaultValues,

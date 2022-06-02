@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
-import PreviousObjectiveRatingsContainer from 'features/PreviousObjectiveRatings';
+import ObjectiveRatings from 'features/ObjectiveRatings';
 
-const PreviousObjectiveRatings: FC = () => <PreviousObjectiveRatingsContainer />;
+const PreviousObjectiveRatings: FC = () => <ObjectiveRatings />;
 
 export default PreviousObjectiveRatings;

@@ -5,6 +5,7 @@ import { TileWrapper as Tile } from '../Tile/TileWrapper';
 import { StatusIcon } from './StatusIcon';
 import { getIcon } from 'components/Icon';
 import { Status } from 'config/enum';
+import { useTranslation } from 'components/Translation';
 
 export type StepIndicatorProps = {
   mainTitle?: string;
@@ -37,6 +38,7 @@ export const StepIndicatorBasic: FC<StepIndicatorProps> = ({
   isValid,
 }) => {
   const { css, theme } = useStyle();
+  const { t } = useTranslation();
 
   const Line: FC<{ active?: boolean }> = ({ active }) => (
     <div
@@ -70,7 +72,7 @@ export const StepIndicatorBasic: FC<StepIndicatorProps> = ({
   let array: JSX.Element[];
   if (statuses && statuses.length > 0) {
     array = statuses.reduce((arr: JSX.Element[], status, i) => {
-      const [graphics, color] = getIcon(status);
+      const [graphics, color, title] = getIcon(status, t);
       const alignItems = getTextAlign(statuses?.length, i);
       arr.push(
         <div key={`wrapper${i}`}>
@@ -78,7 +80,7 @@ export const StepIndicatorBasic: FC<StepIndicatorProps> = ({
           <Step
             key={`step${i}`}
             alignItems={alignItems}
-            CurrentStep={<StatusIcon graphics={graphics} color={color} />}
+            CurrentStep={<StatusIcon graphics={graphics} color={color} title={title} />}
           />
         </div>,
       );
@@ -87,7 +89,7 @@ export const StepIndicatorBasic: FC<StepIndicatorProps> = ({
   } else {
     array = titles.reduce((arr: JSX.Element[], _, i) => {
       const status = getStatus(i, currentStep, currentStatus, isValid);
-      const [graphics, color] = getIcon(status);
+      const [graphics, color, title] = getIcon(status, t);
       const alignItems = getTextAlign(titles?.length, i);
       arr.push(
         <div key={`wrapper${i}`}>
@@ -95,7 +97,7 @@ export const StepIndicatorBasic: FC<StepIndicatorProps> = ({
           <Step
             key={`step${i}`}
             alignItems={alignItems}
-            CurrentStep={graphics && <StatusIcon graphics={graphics} color={color} />}
+            CurrentStep={graphics && <StatusIcon graphics={graphics} color={color} title={title} />}
           />
         </div>,
       );

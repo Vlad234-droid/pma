@@ -1,11 +1,12 @@
-import React, { FC } from 'react';
+import React, { FC, ReactElement } from 'react';
 import { Rule, useStyle } from '@pma/dex-wrapper';
 import TescoLogo from 'assets/img/TescoLogo.svg';
 import MarkdownRenderer from 'components/MarkdownRenderer';
 import { Trans } from 'components/Translation';
 
 type Props = {
-  message: string;
+  message?: string;
+  customElement?: ReactElement;
 };
 
 const P = ({ children, ...props }) => {
@@ -26,14 +27,14 @@ const A = ({ children, ...props }) => {
   );
 };
 
-export const AccessDenied: FC<Props> = ({ message }) => {
+export const AccessDenied: FC<Props> = ({ message, customElement }) => {
   const { css } = useStyle();
   return (
     <div data-test-id='access-denied' className={css(wrapper)}>
       <p className={css(textBottom)}>
         <img className={css({ width: '300px' })} src={TescoLogo} alt='Tesco Logo' />
       </p>
-      <MarkdownRenderer source={message} components={{ p: P, a: A }} />
+      {message ? <MarkdownRenderer source={message} components={{ p: P, a: A }} /> : customElement}
     </div>
   );
 };

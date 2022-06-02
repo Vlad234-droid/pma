@@ -2,7 +2,6 @@ import React, { FC, useEffect, useMemo, useState } from 'react';
 import { Button, Rule, useStyle } from '@pma/dex-wrapper';
 import { ColleaguesActions, getColleagueByUuidSelector } from '@pma/store';
 import { downloadPDF, FeedbackDocument, usePDF } from '@pma/pdf-renderer';
-import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
@@ -16,6 +15,7 @@ import { ArrowLeftIcon } from 'components/ArrowLeftIcon';
 
 import { ModalDownloadFeedbackProps } from './type';
 import { createDownLoadSchema } from './config/schema';
+import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
 
 export const DOWNLOAD_WRAPPER = 'download-wrapper';
 
@@ -39,7 +39,7 @@ const ModalDownloadFeedback: FC<ModalDownloadFeedbackProps> = ({
     updateInstance();
   }, [selected.length]);
 
-  const methods = useForm({
+  const methods = useFormWithCloseProtection({
     mode: 'onChange',
     resolver: yupResolver<Yup.AnyObjectSchema>(createDownLoadSchema),
   });

@@ -10,6 +10,7 @@ export type NotificationProps = {
   customStyle?: React.CSSProperties | {};
   onClick?: () => void;
   closable?: boolean;
+  testId?: string;
 };
 
 const Notification: FC<NotificationProps> = ({
@@ -19,6 +20,7 @@ const Notification: FC<NotificationProps> = ({
   customStyle = {},
   onClick,
   closable = true,
+  testId = '',
 }) => {
   const { css } = useStyle();
   const [show, setStatus] = useState(true);
@@ -34,14 +36,14 @@ const Notification: FC<NotificationProps> = ({
   }
 
   return (
-    <div className={css(wrapperStyle, customStyle)}>
+    <div data-test-id={testId} className={css(wrapperStyle, customStyle)}>
       <div className={css({ paddingLeft: '5px', paddingTop: '1px', alignItems: 'center', display: 'flex' })}>
-        <Icon graphic={graphic} fill={colors[iconColor]} iconStyles={{ width: '16px', height: '16px' }} />
+        <Icon graphic={graphic} fill={colors[iconColor]} />
       </div>
       <div className={css(textStyle)}>{text}</div>
       {closable && (
         <IconButton
-          graphic='decline'
+          graphic='cancel'
           customVariantRules={{
             default: buttonDefaultStyle,
           }}
@@ -69,7 +71,7 @@ const textStyle: Rule = ({ theme }) => ({
   fontSize: theme.font.fixed.f14.fontSize,
   lineHeight: theme.font.fixed.f14.lineHeight,
   letterSpacing: '0px',
-  paddingLeft: '5px',
+  paddingLeft: '8px',
 });
 
 const buttonDefaultStyle: Rule = {

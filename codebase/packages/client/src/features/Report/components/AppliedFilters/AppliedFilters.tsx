@@ -31,7 +31,7 @@ const AppliedFilters: FC<AppliedFiltersProps> = ({
                 <span className={css(filteredTitle)}>{item}</span>
                 <IconButton
                   data-test-id={CLEAR_FILTER}
-                  graphic='decline'
+                  graphic='cancel'
                   iconStyles={iconDeclineStyle}
                   onPress={() => {
                     clearAppliedFilters(item);

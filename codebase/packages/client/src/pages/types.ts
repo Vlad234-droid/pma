@@ -4,6 +4,7 @@ enum Page {
   CONTRIBUTION = 'contribution',
   CREATE_STRATEGIC_DRIVERS = 'strategic-drivers/create',
   STRATEGIC_DRIVERS = 'strategic-drivers',
+  PERFORMANCE_CYCLE_POPULATION_MATRIX = 'performance-cycle/population-matrix',
   CREATE_PERFORMANCE_CYCLE = 'performance-cycle/:performanceCycleUuid',
   PERFORMANCE_CYCLE = 'performance-cycle',
   PERSONAL_DEVELOPMENT_PLAN = 'personal-development-plan',

@@ -1,6 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Button, CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
-import { useForm } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -21,6 +20,7 @@ import {
   reportByYearSchema,
 } from '../config';
 import { ModalStatus } from '../Report';
+import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
 
 export const DOWNLOAD_WRAPPER = 'download-wrapper';
 
@@ -34,7 +34,7 @@ const ReportModal: FC<ModalProps> = ({ onClose, modalStatus, tiles }) => {
   const { css, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
   const { t } = useTranslation();
-  const methods = useForm({
+  const methods = useFormWithCloseProtection({
     mode: 'onChange',
     resolver: yupResolver<Yup.AnyObjectSchema>(reportByYearSchema),
   });
@@ -111,7 +111,14 @@ const ReportModal: FC<ModalProps> = ({ onClose, modalStatus, tiles }) => {
     return modalStatus === ModalStatus.EDIT && selectedCheckboxes.some((item) => item['isChecked']);
   };
   return (
-    <WrapperModal onClose={onClose} title={t('download_and_extract', 'Download and Extract')}>
+    <WrapperModal
+      onClose={onClose}
+      title={
+        modalStatus === ModalStatus.DOWNLOAD
+          ? t('download_and_extract', 'Download and Extract')
+          : t('edit_dashboard', 'Edit dashboard')
+      }
+    >
       <div className={css(wrapperModalGiveFeedbackStyle)}>
         <h3 className={css(modalTitleStyle({ mobileScreen }))} data-test-id={DOWNLOAD_WRAPPER}>
           {modalStatus === ModalStatus.DOWNLOAD ? (

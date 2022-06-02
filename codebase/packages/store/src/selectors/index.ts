@@ -14,6 +14,7 @@ export * from './timeline';
 export * from './managers';
 export * from './schema';
 export * from './feedback';
+export * from './colleague';
 export * from './colleagues';
 export * from './reviews';
 export * from './objectivesSharing';

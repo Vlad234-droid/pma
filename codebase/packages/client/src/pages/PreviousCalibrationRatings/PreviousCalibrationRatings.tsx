@@ -1,65 +1,40 @@
 import React, { FC } from 'react';
-import { Rule, Styles, useStyle } from '@pma/dex-wrapper';
+import { useStyle } from '@pma/dex-wrapper';
 import { useNavigate } from 'react-router';
+import { useParams } from 'react-router-dom';
+import { colleagueInfo } from '@pma/store';
+import { useSelector } from 'react-redux';
 
 import { ProfileTileWrapper } from 'components/ProfileTileWrapper';
-import { Trans } from 'components/Translation';
 import { Backward } from 'components/Backward';
-import { PreviousCalibrationRatingsTable } from 'features/PreviousCalibrationRatingsTable';
-
-export const AdditionalInfo: FC<{ manager: string }> = ({ manager }) => {
-  const { css } = useStyle();
-
-  return (
-    <div className={css(additionalInfo)}>
-      <h2>
-        <Trans i18nKey={'line_manager'}>Line manager</Trans>
-      </h2>
-      <p>{manager}</p>
-    </div>
-  );
-};
+import { CalibrationRatingsTable } from 'features/CalibrationRatingsTable';
+import { useFetchColleague } from 'features/RatingsTiles/hooks/useFetchColleague';
+import { AdditionalInfo } from 'features/ObjectiveRatings';
 
 const PreviousCalibrationRatings: FC = () => {
   const { css } = useStyle();
-
   const navigate = useNavigate();
+  const { uuid } = useParams<{ uuid: string }>();
 
-  const user = {
-    fullName: 'Ron Rogers',
-    job: 'Grocery',
-    manager: 'Justin Thomas',
-  };
+  useFetchColleague(uuid);
+
+  const { firstName, lastName, managerName, managerSirName, businessType, job, department } =
+    useSelector(colleagueInfo);
 
   return (
     <>
       <Backward onPress={() => navigate(-1)} />
       <div className={css({ margin: '8px' })}>
         <ProfileTileWrapper
-          user={user}
+          user={{ fullName: `${firstName} ${lastName}`, job: `${job} ${department}` }}
           customStyle={{ maxWidth: '80%' }}
-          render={() => <PreviousCalibrationRatingsTable />}
-        />
+        >
+          <AdditionalInfo manager={`${managerName} ${managerSirName}`} businessType={businessType} />
+          <CalibrationRatingsTable />
+        </ProfileTileWrapper>
       </div>
     </>
   );
 };
-
-const additionalInfo: Rule = ({ theme }) =>
-  ({
-    '& > h2': {
-      marginTop: 0,
-      marginBottom: '8px',
-      fontSize: theme.font.fixed.f20.fontSize,
-      fontWeight: theme.font.weight.bold,
-      color: theme.colors.base,
-    },
-    '& > p': {
-      marginTop: 0,
-      fontSize: theme.font.fixed.f16.fontSize,
-      fontWeight: theme.font.weight.regular,
-      color: theme.colors.base,
-    },
-  } as Styles);
 
 export default PreviousCalibrationRatings;

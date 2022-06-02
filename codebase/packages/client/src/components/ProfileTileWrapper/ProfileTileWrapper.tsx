@@ -1,21 +1,21 @@
-import React, { FC, CSSProperties } from 'react';
+import React, { FC, CSSProperties, ReactNode } from 'react';
 import { CreateRule, Rule, Styles, useStyle } from '@pma/dex-wrapper';
 
 import { TileWrapper } from 'components/Tile';
-import { AvatarName } from 'features/Profile/components/Widgets/DashboardProfile';
+import { AvatarName } from 'features/Profile/components/Widgets/Profile';
 
 const ProfileTileWrapper: FC<{
-  user: Record<'fullName' | 'job' | 'manager', string>;
-  render?: () => JSX.Element;
+  user: Record<'fullName' | 'job', string>;
   customStyle?: Rule | Styles | CSSProperties | {};
-}> = ({ user, render = null, customStyle = {} }) => {
+  children?: ReactNode;
+}> = ({ user, customStyle = {}, children }) => {
   const { css, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   return (
     <TileWrapper customStyle={customStyle}>
       <div className={css(cardWrapper({ mobileScreen }))}>
         <AvatarName user={user} />
-        {render && render()}
+        {children}
       </div>
     </TileWrapper>
   );

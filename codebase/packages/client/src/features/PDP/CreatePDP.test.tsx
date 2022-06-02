@@ -2,9 +2,7 @@ import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
 // @ts-ignore
 import { renderWithTheme as render } from 'utils/test';
-import CreatePDP, { TEST_ID, TEST_SPINNER_ID } from './CreatePDP';
-import { useSelector } from 'react-redux';
-import { metaPDPSelector } from '@pma/store';
+import CreatePDP, { TEST_ID } from './CreatePDP';
 
 jest.mock('react-router-dom', () => ({
   ...(jest.requireActual('react-router-dom') as any),

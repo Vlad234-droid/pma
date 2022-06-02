@@ -22,7 +22,7 @@ import ObjectivesView from './ObjectivesView';
 import Report from './Report';
 import { CreatePerformanceCycle, PerformanceCycleAdministration } from './PerformanceCycle';
 import { EditTip, TipsAdministration } from './Tips';
-import { UserObjectives } from './UserObjectives';
+import UserObjectives from './UserObjectives';
 import PeopleTeam from './PeopleTeam';
 import Calibration from './Calibration';
 import AdministratorPage from './AdministratorPage';
@@ -93,6 +93,13 @@ const pages: Record<Page, PageComponent> = {
     withHeader: true,
     backPath: Page.MY_TEAM,
     perform: [role.COLLEAGUE],
+  },
+  [Page.PERFORMANCE_CYCLE_POPULATION_MATRIX]: {
+    Element: () => null,
+    title: 'Population matrix',
+    withHeader: true,
+    backPath: Page.PERFORMANCE_CYCLE,
+    perform: [role.TALENT_ADMIN, role.PROCESS_MANAGER, role.ADMIN],
   },
   [Page.CREATE_PERFORMANCE_CYCLE]: {
     Element: CreatePerformanceCycle,

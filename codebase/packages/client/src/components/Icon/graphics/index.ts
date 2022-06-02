@@ -6,7 +6,6 @@ import { Cancel } from './cancel';
 import { Check } from './check';
 import { ChatSq } from './chat-sq';
 import { Document } from './document';
-import { Decline } from './decline';
 import { Account } from './account';
 import { Microphone } from './microphone';
 import { RoundStop } from './round-stop';
@@ -30,41 +29,44 @@ import { Download } from './download';
 import { Alert } from './alert';
 import { Information } from './information';
 import { Delete } from './delete';
+import { Trash } from './trash';
 import { Folder } from './folder';
 import { Archive } from './archive';
 import { Full } from './full';
-
-// import { ArrowRight } from './arrowRight';
-import { NotiBellCirlceOut } from './notiBellCirlceOut';
+import { Rating } from './rating';
+import { Goal } from './goal';
+import { View } from './view';
+import { Play } from './play';
+import { Bell } from './bell';
+import { NotificationBell } from './notificationBell';
 import { Support } from './support';
 import { Home } from './home';
 import { Hamburger } from './hamburger';
-import { Aim } from './aim';
 import { List } from './list';
-import { Performance } from './performance';
 import { Team } from './team';
-import { Calibration } from './calibration';
 import { Tool } from './tool';
 import { CreateCycle } from './createCycle';
-import { StrategicDriver } from './strategicDriver';
+import { Bank } from './bank';
 import { Configuration } from './configuration';
-import { Tip } from './tip';
-import { MultiLanguage } from './multiLanguage';
-import { Close } from './close';
+import { Lamp } from './lamp';
+import { Globe } from './globe';
 import { Attention } from './attention';
 import { More } from './more';
 import { ArrowRightPaginator } from './arrowRightPaginator';
 import { ArrowLeftPaginator } from './arrowLeftPaginator';
+import { Performance } from './performance';
+import { People } from './people';
+import { Person } from './person';
+import { Link } from './link';
 /**
  * Each icon we add needs to have viewbox set to "0 0 24 24".
  * Sometimes icons exported from Figma could have a different viewbox than "0 0 24 24".
- * In this situation we need to resize our icon to the proper size (24px/24px),
- * for that we can use https://products.aspose.app/imaging/image-resize/svg or https://editor.method.ac/.
+ * In this situation we should get icon on design system page,
  */
+
 export type Graphics =
   | 'account'
   | 'add'
-  | 'aim'
   | 'alert'
   | 'archive'
   | 'arrowDown'
@@ -72,15 +74,13 @@ export type Graphics =
   | 'arrowRight'
   | 'arrowUp'
   | 'calender'
-  | 'calibration'
   | 'cancel'
-  | 'chatSq'
+  | 'chat'
   | 'check'
-  | 'close'
   | 'configuration'
   | 'createCycle'
-  | 'decline'
   | 'delete'
+  | 'trash'
   | 'document'
   | 'download'
   | 'edit'
@@ -88,10 +88,12 @@ export type Graphics =
   | 'home'
   | 'hamburger'
   | 'information'
-  | 'multiLanguage'
+  | 'globe'
   | 'list'
   | 'microphone'
-  | 'notiBellCircleOut'
+  | 'bell'
+  | 'notificationBell'
+  | 'people'
   | 'performance'
   | 'print'
   | 'question'
@@ -106,29 +108,33 @@ export type Graphics =
   | 'settingsGear'
   | 'share'
   | 'signOut'
-  | 'strategicDriver'
+  | 'bank'
   | 'support'
   | 'team'
-  | 'tip'
+  | 'lamp'
   | 'tool'
   | 'attention'
   | 'more'
   | 'arrowRightPaginator'
   | 'arrowLeftPaginator'
-  | 'full';
+  | 'full'
+  | 'goal'
+  | 'rating'
+  | 'view'
+  | 'play'
+  | 'person'
+  | 'link';
 
 export const icons: Record<Graphics, FCGraphicProps> = {
   attention: Attention,
   add: Add,
   arrowLeft: ArrowLeft,
   arrowRight: ArrowRight,
-  chatSq: ChatSq,
+  chat: ChatSq,
   document: Document,
   account: Account,
   calender: Calender,
   cancel: Cancel,
-  close: Close,
-  decline: Decline,
   check: Check,
   microphone: Microphone,
   roundStop: RoundStop,
@@ -151,28 +157,33 @@ export const icons: Record<Graphics, FCGraphicProps> = {
   alert: Alert,
   information: Information,
   delete: Delete,
+  trash: Trash,
   folder: Folder,
   archive: Archive,
   // arrowRight: ArrowRight,
-  notiBellCircleOut: NotiBellCirlceOut,
+  bell: Bell,
+  notificationBell: NotificationBell,
+  people: People,
   support: Support,
   home: Home,
   hamburger: Hamburger,
-  aim: Aim,
   list: List,
   performance: Performance,
   team: Team,
-  calibration: Calibration,
   tool: Tool,
   createCycle: CreateCycle,
-  strategicDriver: StrategicDriver,
+  bank: Bank,
   configuration: Configuration,
-  tip: Tip,
-  multiLanguage: MultiLanguage,
+  lamp: Lamp,
+  globe: Globe,
   more: More,
   arrowRightPaginator: ArrowRightPaginator,
   arrowLeftPaginator: ArrowLeftPaginator,
   full: Full,
+  rating: Rating,
+  goal: Goal,
+  view: View,
+  play: Play,
+  person: Person,
+  link: Link,
 };
-
-export { Chat } from './chat';

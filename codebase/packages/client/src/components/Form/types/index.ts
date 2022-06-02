@@ -22,6 +22,7 @@ export interface InputField extends FormField {
   onBlur?: (e: SyntheticEvent<HTMLInputElement>) => void;
   value?: string;
   min?: number;
+  max?: number;
   minDate?: number | string;
   defaultValue?: string;
 }

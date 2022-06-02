@@ -2,13 +2,13 @@ import React, { FC, HTMLProps } from 'react';
 import { Trans } from 'components/Translation';
 
 import { Item, Select } from 'components/Form';
-import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { Option } from 'components/Form/types';
 import get from 'lodash.get';
 
 import { useStyle, CreateRule, Modal, Button } from '@pma/dex-wrapper';
+import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
 
 export type ConfirmModal = {
   title: string;
@@ -23,6 +23,9 @@ export type ConfirmModal = {
   field_options: Array<Record<string, number | string | boolean>>;
   field_placeholder: string;
 };
+
+export const TEST_DESCRIPTION = 'TEST_DESCRIPTION';
+export const TEST_SELECT_ID = 'select-test-id';
 
 type Props = HTMLProps<HTMLInputElement> & ConfirmModal;
 
@@ -42,7 +45,7 @@ const ConfirmModalWithDropDown: FC<Props> = ({
   const { theme, css, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
 
-  const methods = useForm({
+  const methods = useFormWithCloseProtection({
     mode: 'onChange',
     resolver: yupResolver<Yup.AnyObjectSchema>(folderSchema),
   });
@@ -79,6 +82,7 @@ const ConfirmModalWithDropDown: FC<Props> = ({
     >
       {description && (
         <div
+          data-test-id={TEST_DESCRIPTION}
           className={css({
             padding: '16px 0',
           })}
@@ -87,7 +91,7 @@ const ConfirmModalWithDropDown: FC<Props> = ({
         </div>
       )}
 
-      <div>
+      <div data-test-id={TEST_SELECT_ID}>
         <Item withIcon={false} label={field_title}>
           <Select
             options={field_options as Option[]}

@@ -422,7 +422,7 @@ describe('Actions with two colleagues[1-OBJECTIVE;2-OBJECTIVE]', () => {
     });
   });
 
-  it('Actions fireEvent decline all and cancel decline', async () => {
+  it.skip('Actions fireEvent decline all and cancel decline', async () => {
     expect(screen.queryByText('Decline reason')).not.toBeInTheDocument();
 
     fireEvent.click(screen.getByTestId('selectAll'));

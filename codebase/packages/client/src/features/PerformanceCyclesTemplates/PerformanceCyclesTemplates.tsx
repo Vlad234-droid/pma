@@ -162,7 +162,7 @@ const PerformanceCyclesTemplates: FC = () => {
           />
           {Object.values(filter).some((f) => f) && (
             <IconButton
-              graphic='decline'
+              graphic='cancel'
               customVariantRules={{
                 default: iconBtnStyle({ isActive: false }),
               }}

@@ -16,10 +16,6 @@ describe('Selected folder', () => {
   const setConfirmModal = jest.fn();
   const setArchiveMode = jest.fn();
 
-  const actionModal = jest.spyOn(React, 'useRef').mockReturnValueOnce({ current: null });
-  const userActions = jest.spyOn(React, 'useRef').mockReturnValueOnce({ current: null });
-  const teamActions = jest.spyOn(React, 'useRef').mockReturnValueOnce({ current: null });
-
   const selectedFolder = { notes: [{ isInSearch: false, id: 1, referenceColleagueUuid: true }] };
   const archiveMode = { user: false, team: false };
 
@@ -36,11 +32,11 @@ describe('Selected folder', () => {
   const props = {
     setConfirmModal,
     setConfirmTEAMModal,
-    actionModal,
-    actionTEAMModal,
+    actionModal: { current: 'archive' },
+    userActions: { folderId: 'id' },
+    actionTEAMModal: { current: 'archive' },
     testId: 'test',
-    userActions,
-    teamActions,
+    teamActions: { folderUuid: 'uuid', noteId: 'id' },
   };
 
   const initialState = { notes: { folders: [{}] } };

@@ -5,6 +5,7 @@ import { renderWithTheme as render } from 'utils/test';
 
 import { View } from './config';
 import PieChart, { PIE_CHART_WRAPPER } from './PieChart';
+import { fireEvent } from '@testing-library/react';
 
 describe('<PieChart />', () => {
   it('should render link and content, if link is passed', () => {
@@ -12,6 +13,7 @@ describe('<PieChart />', () => {
       data: [],
       display: View.CHART,
       link: 'mocked_link',
+      hoverMessage: '',
     };
 
     const { getByTestId } = render(
@@ -34,5 +36,23 @@ describe('<PieChart />', () => {
 
     expect(getByTestId(PIE_CHART_WRAPPER)).toBeInTheDocument();
     expect(getByTestId('pie-chart-content-id')).toBeInTheDocument();
+  });
+  it('it should display hover message', async () => {
+    const props = {
+      data: [],
+      display: View.CHART,
+      link: 'mocked_link',
+      hoverMessage: 'mocked_message',
+    };
+
+    const { getByText, getByTestId } = render(
+      <BrowserRouter>
+        <PieChart {...props} />
+      </BrowserRouter>,
+    );
+
+    const wrapper = getByTestId(PIE_CHART_WRAPPER);
+    fireEvent.mouseOver(wrapper);
+    expect(getByText(props.hoverMessage)).toBeInTheDocument();
   });
 });

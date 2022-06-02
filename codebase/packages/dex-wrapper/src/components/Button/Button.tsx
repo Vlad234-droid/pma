@@ -1,4 +1,4 @@
-import React, { FC, memo, useMemo, useRef } from 'react';
+import React, { FC, PropsWithChildren, memo, useMemo, useRef } from 'react';
 
 import { useButton } from '@react-aria/button';
 
@@ -13,7 +13,7 @@ export type ButtonProps = {
   styles?: Rule[];
 } & AriaButtonProps<'div'>;
 
-export const Button: FC<ButtonProps> = memo((props) => {
+export const Button: FC<PropsWithChildren<ButtonProps>> = memo((props) => {
   const ref = useRef(null);
   const { buttonProps } = useButton(
     {
@@ -23,6 +23,7 @@ export const Button: FC<ButtonProps> = memo((props) => {
     ref,
   );
 
+  // eslint-disable-next-line react/prop-types
   const { children, isDisabled, mode = 'default', styles = [] } = props;
 
   const { css } = useStyle();

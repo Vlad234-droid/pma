@@ -3,6 +3,9 @@ import { CreateRule, Rule, useMedia, useStyle } from '@pma/dex-wrapper';
 import { TileWrapper } from './TileWrapper';
 import { Icon } from '../Icon';
 
+export const TEST_ID = 'TEST_ID';
+export const TEST_ICON = 'TEST_ICON';
+
 export type TileProps = {
   title: string;
   description?: string;
@@ -56,7 +59,7 @@ export const BasicTile: FC<Props> = ({
         ...customStyle,
       }}
     >
-      <div className={css(wrapperStyle({ icon, isLink: !!link }))} onClick={handleLinkClick}>
+      <div data-test-id={TEST_ID} className={css(wrapperStyle({ icon, isLink: !!link }))} onClick={handleLinkClick}>
         {img && (
           <div className={css(imgCustomStyle)}>
             {typeof img === 'string' && (
@@ -73,7 +76,7 @@ export const BasicTile: FC<Props> = ({
           {children}
           {event && (
             <div className={css(descriptionStyle)}>
-              <Icon graphic='calender' iconStyles={{ verticalAlign: 'middle' }} />
+              <Icon testId={TEST_ICON} graphic='calender' iconStyles={{ verticalAlign: 'middle' }} />
               {event}
             </div>
           )}

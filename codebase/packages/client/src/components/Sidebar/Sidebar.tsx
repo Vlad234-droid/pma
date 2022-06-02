@@ -17,7 +17,7 @@ const SideBar: FC<Props> = ({ isOpen, onClose, children, title }) => {
       <div className={css(headerStyle)}>
         <h3 className={css(titleStyle)}>{title}</h3>
         <IconButton
-          graphic='close'
+          graphic='cancel'
           customVariantRules={{
             default: iconBtnStyle as Rule,
           }}

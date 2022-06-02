@@ -75,8 +75,7 @@ describe('<DurationPicker />', () => {
       fireEvent.change(getByTestId('input-weeks'), { target: { value: '3' } });
       fireEvent.change(getByTestId('input-days'), { target: { value: '4' } });
       fireEvent.click(getByTestId('button'));
-      expect(handleChange).toBeCalled();
-      await waitFor(() => expect(getByDisplayValue('3 weeks 4 days')).toBeInTheDocument());
+      expect(handleChange).toBeCalledWith({ target: { value: 'P3W4D', name: 'mocked_name' } });
     });
   });
 });

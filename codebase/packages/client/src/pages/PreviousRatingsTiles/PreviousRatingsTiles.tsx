@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 
-import PreviousRatingsTilesContainer from 'features/PreviousRatingsTiles';
+import RatingsTiles from 'features/RatingsTiles';
 
-const PreviousRatingsTiles: FC = () => <PreviousRatingsTilesContainer />;
+const PreviousRatingsTiles: FC = () => <RatingsTiles />;
 
 export default PreviousRatingsTiles;

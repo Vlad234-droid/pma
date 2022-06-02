@@ -1,9 +1,12 @@
 import React, { FC, CSSProperties } from 'react';
 import { Rule, Styles, useStyle } from '@pma/dex-wrapper';
 
-export const Line: FC<{ styles?: Rule | Styles | CSSProperties | {} }> = ({ styles = {} }) => {
+export const Line: FC<{ styles?: Rule | Styles | CSSProperties | {}; testId?: string }> = ({
+  styles = {},
+  testId = '',
+}) => {
   const { css } = useStyle();
-  return <div className={css(defaultStyles, styles)} />;
+  return <div className={css(defaultStyles, styles)} data-test-id={testId} />;
 };
 
 const defaultStyles: Rule = ({ theme }) => ({

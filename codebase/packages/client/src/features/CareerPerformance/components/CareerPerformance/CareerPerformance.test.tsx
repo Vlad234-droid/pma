@@ -124,21 +124,4 @@ describe('<CareerPerformance />', () => {
       expect(queryByText('My reviews')).not.toBeInTheDocument();
     });
   });
-  describe('#useEffect', () => {
-    it('should not call loadTimeline, if !props.colleagueUuid', () => {
-      render(<CareerPerformance {...props} />);
-
-      expect(props.loadTimeline).not.toHaveBeenCalled();
-    });
-
-    it('should call loadTimeline with colleagueUuid, if props.colleagueUuid', () => {
-      const newProps = {
-        ...props,
-        colleagueUuid: 'mocked_uuid',
-      };
-      render(<CareerPerformance {...newProps} />);
-
-      expect(props.loadTimeline).toHaveBeenCalledWith(newProps.colleagueUuid);
-    });
-  });
 });

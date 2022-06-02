@@ -16,7 +16,7 @@ import { ToastProvider } from 'features/Toast';
 import { AppStateProvider } from 'features/AppState';
 import { MessagesProvider } from 'features/Messages';
 import { HeaderProvider } from 'contexts/headerContext';
-import { useMonitoring } from './hooks/useMonitoring';
+import { useMonitoring } from 'hooks/useMonitoring';
 
 const routes = buildRoutes(pages);
 

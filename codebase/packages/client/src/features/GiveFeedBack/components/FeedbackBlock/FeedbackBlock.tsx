@@ -7,9 +7,10 @@ import { Page } from 'pages';
 
 import { Accordion, BaseAccordion, Panel, Section } from 'components/Accordion';
 import IconButtonDefault from 'components/IconButtonDefault';
-import { FeedbackProfileInfo, NoFeedback } from 'features/Feedback/components';
+import { FeedbackProfileInfo } from 'features/Feedback/components';
 import { TileWrapper } from 'components/Tile';
 import Spinner from 'components/Spinner';
+import { Plug } from 'components/Plug';
 
 import { paramsReplacer } from 'utils';
 import { useTranslation } from 'components/Translation';
@@ -28,7 +29,8 @@ const FeedbackBlock: FC<Props> = ({ list, canEdit }) => {
   const { t } = useTranslation();
 
   if (!loaded) return <Spinner />;
-  if (loaded && !list.length) return <NoFeedback />;
+  if (loaded && !list.length)
+    return <Plug text={t('no_feedback_records_to_be_displayed', 'No feedback records to be displayed.')} />;
 
   return (
     <>

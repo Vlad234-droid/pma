@@ -25,87 +25,83 @@ const getContent = (
   { status, startTime = '', lastUpdatedTime = '' },
   t: TFunction,
 ): [Graphics, Colors, Colors, boolean, boolean, string, string] => {
-  if (!status) {
-    return [
-      'roundAlert',
-      'pending',
-      'tescoBlue',
-      true,
-      true,
-      t('Your form is now available'),
-      t('view_review_form', 'View review form'),
-    ];
+  switch (status) {
+    case Status.NOT_STARTED:
+      return [
+        'calender',
+        'tescoBlue',
+        'white',
+        true,
+        false,
+        t('form_available_in_date', `The form will be available on ${startTime}`, { date: new Date(startTime) }),
+        '',
+      ];
+    case Status.STARTED:
+      return [
+        'roundAlert',
+        'pending',
+        'tescoBlue',
+        true,
+        true,
+        t('your_form_is_now_available', 'Your form is now available'),
+        t('view', 'View'),
+      ];
+    case Status.DECLINED:
+      return [
+        'roundAlert',
+        'error',
+        'white',
+        true,
+        true,
+        t('review_form_declined', 'Declined'),
+        t('view_and_edit', 'View and edit'),
+      ];
+    case Status.DRAFT:
+      return [
+        'roundPencil',
+        'base',
+        'tescoBlue',
+        true,
+        true,
+        t('review_widget_saved_as_draft', 'Your form is currently saved as a draft'),
+        t('view_and_edit', 'View and edit'),
+      ];
+    case Status.APPROVED:
+      return [
+        'roundTick',
+        'green',
+        'white',
+        true,
+        true,
+        t(
+          'review_form_approved',
+          t('completed_at_date', `Completed ${lastUpdatedTime}`, { date: new Date(lastUpdatedTime) }),
+        ),
+        t('view', 'View'),
+      ];
+    case Status.WAITING_FOR_APPROVAL:
+      return [
+        'roundClock',
+        'pending',
+        'tescoBlue',
+        true,
+        true,
+        t('review_form_waiting_for_approval', 'Waiting for approval'),
+        t('view', 'View'),
+      ];
+    case Status.COMPLETED:
+      return ['roundTick', 'green', 'white', true, false, t('review_form_completed', 'Completed'), t('view', 'View')];
+    default:
+      return [
+        'roundAlert',
+        'pending',
+        'tescoBlue',
+        true,
+        true,
+        t('Your form is now available'),
+        t('view_review_form', 'View review form'),
+      ];
   }
-  const contents: { [key: string]: [Graphics, Colors, Colors, boolean, boolean, string, string] } = {
-    [Status.NOT_STARTED]: [
-      'calender',
-      'tescoBlue',
-      'white',
-      true,
-      false,
-      t('form_available_in_date', `The form will be available on ${startTime}`, { date: new Date(startTime) }),
-      '',
-    ],
-    [Status.STARTED]: [
-      'roundAlert',
-      'pending',
-      'tescoBlue',
-      true,
-      true,
-      t('your_form_is_now_available', 'Your form is now available'),
-      t('view', 'View'),
-    ],
-    [Status.DECLINED]: [
-      'roundAlert',
-      'error',
-      'white',
-      true,
-      true,
-      t('review_form_declined', 'Declined'),
-      t('view_and_edit', 'View and edit'),
-    ],
-    [Status.DRAFT]: [
-      'roundPencil',
-      'base',
-      'tescoBlue',
-      true,
-      true,
-      t('review_widget_saved_as_draft', 'Your form is currently saved as a draft'),
-      t('view_and_edit', 'View and edit'),
-    ],
-    [Status.APPROVED]: [
-      'roundTick',
-      'green',
-      'white',
-      true,
-      true,
-      t(
-        'review_form_approved',
-        t('completed_at_date', `Completed ${lastUpdatedTime}`, { date: new Date(lastUpdatedTime) }),
-      ),
-      t('view', 'View'),
-    ],
-    [Status.WAITING_FOR_APPROVAL]: [
-      'roundClock',
-      'pending',
-      'tescoBlue',
-      true,
-      true,
-      t('review_form_waiting_for_approval', 'Waiting for approval'),
-      t('view', 'View'),
-    ],
-    [Status.COMPLETED]: [
-      'roundTick',
-      'green',
-      'white',
-      true,
-      false,
-      t('review_form_completed', 'Completed'),
-      t('view', 'View'),
-    ],
-  };
-
-  return contents[status];
 };
 
 const getReviewTypeContent = (reviewType: ReviewType, status: Status, t: TFunction) => {

@@ -55,7 +55,7 @@ const Widgets: FC<Props> = () => {
       onClick: () => navigate(buildPath(Page.PERSONAL_DEVELOPMENT_PLAN)),
     },
     {
-      iconGraphic: 'chatSq',
+      iconGraphic: 'chat',
       title: t('feedback', 'Feedback'),
       type: widgetTypes.FEEDBACK,
       customStyle: { flex: '2 1 110px' },

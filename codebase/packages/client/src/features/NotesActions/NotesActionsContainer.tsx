@@ -6,11 +6,11 @@ import NotesActions from './NotesActions';
 import { NotesProvider } from './contexts/notesContext';
 
 const NotesActionsContainer: FC = () => {
-  const { loaded } = useSelector(getNotesMetaSelector);
+  const { loading } = useSelector(getNotesMetaSelector);
 
   return (
     <NotesProvider>
-      <NotesActions loaded={loaded} />
+      <NotesActions loading={loading} />
     </NotesProvider>
   );
 };

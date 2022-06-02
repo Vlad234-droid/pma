@@ -52,6 +52,7 @@ import { Objectives } from './Objectives';
 
 export const TEST_ID = 'my-objectives-page';
 
+// TODO: move to separate component
 const WidgetBlock = () => {
   const navigate = useNavigate();
   const { css } = useStyle();
@@ -69,6 +70,7 @@ const WidgetBlock = () => {
   );
 };
 
+// TODO: move to separate component
 const ReviewBlock: FC<{ canShow: Boolean }> = ({ canShow }) => {
   const midYearReview = useSelector(getTimelineByCodeSelector(ObjectiveType.MYR, USER.current));
   const endYearReview = useSelector(getTimelineByCodeSelector(ObjectiveType.EYR, USER.current));
@@ -104,6 +106,7 @@ const ReviewBlock: FC<{ canShow: Boolean }> = ({ canShow }) => {
   );
 };
 
+// TODO: move part of codebase to page
 const MyObjectives: FC = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -121,7 +124,7 @@ const MyObjectives: FC = () => {
   const [objectives, setObjectives] = useState<OT.Objective[]>([]);
 
   const { loaded: schemaLoaded } = useSelector(schemaMetaSelector);
-  const { loaded: reviewLoaded, loading: reviewLoading } = useSelector(reviewsMetaSelector);
+  const { loaded: reviewLoaded } = useSelector(reviewsMetaSelector);
   const { loaded: timelineLoaded } = useSelector(getTimelineMetaSelector);
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const timelinesExist = useSelector(timelinesExistSelector(colleagueUuid));
@@ -131,10 +134,6 @@ const MyObjectives: FC = () => {
   const { descriptions, startDates, statuses } = useSelector(getTimelineSelector(colleagueUuid)) || {};
   const timelineTypes = useSelector(timelineTypesAvailabilitySelector(colleagueUuid)) || {};
   const timelineObjective = useSelector(getTimelineByCodeSelector(ReviewType.OBJECTIVE, USER.current)) || {};
-  const params = useMemo(
-    () => ({ pathParams: { colleagueUuid, type: ReviewType.OBJECTIVE, cycleUuid: 'CURRENT' } }),
-    [colleagueUuid],
-  );
 
   const canShowObjectives = timelineTypes[ObjectiveType.OBJECTIVE];
   const canShowMyReview = timelineTypes[ObjectiveType.MYR] && timelineTypes[ObjectiveType.EYR];
@@ -209,27 +208,30 @@ const MyObjectives: FC = () => {
 
   useEffect(() => {
     if (canShowObjectives) {
-      dispatch(ReviewsActions.getReviews(params));
+      dispatch(ReviewsActions.getReviews({ pathParams }));
     }
-    dispatch(SchemaActions.getSchema({ colleagueUuid }));
 
     return () => {
       dispatch(ReviewsActions.clearReviewData());
+    };
+  }, [canShowObjectives]);
+
+  useEffect(() => {
+    dispatch(SchemaActions.getSchema({ colleagueUuid }));
+
+    return () => {
       dispatch(SchemaActions.clearSchemaData());
     };
-  }, [colleagueUuid, canShowObjectives]);
+  }, [colleagueUuid]);
 
   return (
     <div data-test-id={TEST_ID}>
-      {createIsAvailable && (
-        <div className={css({ display: 'flex', marginBottom: '20px' })}>
-          <CreateButton
-            withIcon
-            useSingleStep={reviewModificationMode === REVIEW_MODIFICATION_MODE.SINGLE}
-            buttonText='Create objective'
-          />
-        </div>
-      )}
+      <CreateButton
+        withIcon
+        useSingleStep={reviewModificationMode === REVIEW_MODIFICATION_MODE.SINGLE}
+        buttonText='Create objective'
+        isAvailable={createIsAvailable}
+      />
       <div className={css(bodyBlockStyles({ mobileScreen }))}>
         <div className={css(bodyWrapperStyles)}>
           {!timelineLoaded ? (
@@ -247,15 +249,11 @@ const MyObjectives: FC = () => {
                 </div>
               )}
               <div className={css(timelineWrapperStyles)}>
-                {reviewLoading ? (
-                  <Spinner fullHeight />
-                ) : (
-                  <Objectives
-                    canShowObjectives={canShowObjectives}
-                    objectives={objectives}
-                    canEditAllObjective={canEditAllObjective}
-                  />
-                )}
+                <Objectives
+                  canShowObjectives={canShowObjectives}
+                  objectives={objectives}
+                  canEditAllObjective={canEditAllObjective}
+                />
                 <Section
                   contentCustomStyle={widgetWrapperStyle}
                   left={{
@@ -358,7 +356,6 @@ const MyObjectives: FC = () => {
               />
             </div>
           )}
-
           <WidgetBlock />
         </div>
       </div>

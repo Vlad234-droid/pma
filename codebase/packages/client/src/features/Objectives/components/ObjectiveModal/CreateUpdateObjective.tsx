@@ -1,5 +1,4 @@
 import React, { FC, HTMLProps, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { ObjectiveModal } from './ObjectiveModal';
@@ -16,6 +15,7 @@ import {
 import { createYupSchema } from 'utils/yup';
 import { ReviewType, Status } from 'config/enum';
 import useReviewSchema from '../../hooks/useReviewSchema';
+import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
 
 export type CreateUpdateObjectiveModalProps = {
   onClose: () => void;
@@ -38,8 +38,12 @@ export const CreateUpdateObjective: FC<Props> = ({ onClose, editNumber = null })
   const nextNumber = useSelector(getNextReviewNumberSelector(ReviewType.OBJECTIVE));
   const currentObjectiveNumber = editNumber ? editNumber : nextNumber;
 
-  const { components = [] } = schema;
-  const formElements = components.filter((component) => component.type != 'text');
+  const { components = [], display: newSchemaVersion } = schema;
+  const formElements = newSchemaVersion
+    ? components
+        .flatMap((e) => e?.components || e)
+        .filter((e) => e?.type === 'textarea' || e?.type === 'textfield' || e?.type === 'select')
+    : components.filter((component) => component.type != 'text');
   const formElementsFilledEmpty = formElements.reduce((acc, current) => {
     acc[current.key] = '';
     return acc;
@@ -49,7 +53,7 @@ export const CreateUpdateObjective: FC<Props> = ({ onClose, editNumber = null })
     : formElementsFilledEmpty;
 
   const yepSchema = formElements.reduce(createYupSchema(t), {});
-  const methods = useForm({
+  const methods = useFormWithCloseProtection({
     mode: 'onChange',
     resolver: yupResolver<Yup.AnyObjectSchema>(Yup.object().shape(yepSchema)),
   });

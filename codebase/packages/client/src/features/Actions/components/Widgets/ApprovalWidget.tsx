@@ -152,7 +152,7 @@ export const ApprovalWidget: FC<Props> = ({ isDisabled, reviews, onSave }) => {
                 styles={[buttonStyle({ inverse: true }), isDisabled ? { opacity: '0.6' } : {}]}
                 onPress={handleDeclineBtnClick}
               >
-                <Icon graphic='decline' iconStyles={{ paddingRight: '8px' }} />
+                <Icon graphic='cancel' iconStyles={{ paddingRight: '8px' }} />
                 <Trans i18nKey='decline'>Decline</Trans>
               </Button>
             </div>

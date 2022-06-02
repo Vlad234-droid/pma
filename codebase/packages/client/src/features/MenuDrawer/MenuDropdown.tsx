@@ -68,7 +68,7 @@ export const MenuDropdown: FC = () => {
                 to={buildPath(Page.CREATE_STRATEGIC_DRIVERS)}
                 className={css(itemSettingsStyle, itemSettingsBorderStyle)}
               >
-                <Icon graphic={'strategicDriver'} />
+                <Icon graphic={'bank'} />
                 <span className={css(itemSettingsTextStyle)}>{t('strategic_drivers', 'Strategic drivers')}</span>
               </Link>
             )}
@@ -77,7 +77,7 @@ export const MenuDropdown: FC = () => {
             perform={[role.ADMIN]}
             yes={() => (
               <Link to={buildPath(Page.TIPS)} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
-                <Icon graphic={'tip'} />
+                <Icon graphic={'lamp'} />
                 <span className={css(itemSettingsTextStyle)}>{t('tips', 'Tips')}</span>
               </Link>
             )}

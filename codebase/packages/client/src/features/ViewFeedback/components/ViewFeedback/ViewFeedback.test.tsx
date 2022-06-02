@@ -41,5 +41,7 @@ describe('ViewFeedback page', () => {
     expect(screen.getByText('Settings')).toBeInTheDocument();
     expect(screen.getByTestId('download-feedback')).toBeInTheDocument();
     expect(screen.getByTestId('give-feedback')).toBeInTheDocument();
+    expect(screen.getByTestId('give-feedback-button')).toBeInTheDocument();
+    expect(screen.getByTestId('download-feedback-button')).toBeInTheDocument();
   });
 });

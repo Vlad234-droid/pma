@@ -7,18 +7,14 @@ import { FCGraphicProps } from './types';
 export const Folder: FCGraphicProps = ({ invertColors }) => {
   const { theme } = useStyle();
 
-  const stroke = invertColor(theme.colors.link, invertColors, theme);
+  const color = invertColor(theme.colors.link, invertColors, theme);
 
   return (
-    <>
-      <path
-        stroke='null'
-        id='folder'
-        fillRule='evenodd'
-        clipRule='evenodd'
-        d='M8.16334 1.6665H0.833984V17.9628L19.1673 17.9123V5.40304L10.0902 5.40245L8.16334 1.6665ZM2.11307 2.95291H7.38497L8.65725 5.41854H2.11307V2.95291ZM2.11307 6.70495V16.6725L17.8883 16.6296V6.70495H2.11307Z'
-        fill={stroke}
-      />
-    </>
+    <path
+      fillRule='evenodd'
+      clipRule='evenodd'
+      d='M9.79522 2H1V21.5556L23 21.495V6.48384L12.1074 6.48314L9.79522 2ZM2.5349 3.54369H8.86118L10.3879 6.50244H2.5349V3.54369ZM2.5349 8.04613V20.0072L21.4651 19.9557V8.04613H2.5349Z'
+      fill={color}
+    />
   );
 };

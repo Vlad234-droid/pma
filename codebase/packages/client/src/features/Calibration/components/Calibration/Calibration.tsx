@@ -15,6 +15,8 @@ import RatingsChart from '../RatingsChart';
 import CompareModal from '../CompareModal';
 import { getCompareOptions, getCompareData, getCurrentData } from '../../mock';
 
+export const CALIBRATION_TEST_ID = 'CALIBRATION_TEST_ID';
+
 type Props = {
   loadData: (filters: FilterValues) => void;
   loadFilterOptions: () => void;
@@ -75,7 +77,7 @@ const Calibration: FC<Props> = ({ loadData, loadFilterOptions, colleagueUuid, co
   }
 
   return (
-    <div>
+    <div data-test-id={CALIBRATION_TEST_ID}>
       <div
         className={css({
           display: 'flex',

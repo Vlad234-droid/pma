@@ -28,8 +28,7 @@ const ModalError: FC<Props> = ({ title, description, onClose, onOverlayClick, ch
         styles: [
           {
             fontWeight: 700,
-            fontSize: '20px',
-            lineHeight: '24px',
+            ...theme.font.fixed.f20,
           },
         ],
       }}

@@ -7,6 +7,7 @@ type Props = {
 };
 
 export const TEST_ID = 'test-id-iframe';
+export const IFRAME_ID = 'IFRAME_ID';
 
 const WistiaPlayer: React.FC<Props> = ({ videoId, aspectRatio = 16 / 9 }) => {
   const { css } = useStyle();
@@ -16,6 +17,7 @@ const WistiaPlayer: React.FC<Props> = ({ videoId, aspectRatio = 16 / 9 }) => {
   return (
     <div data-test-id={TEST_ID} className={css(containerRule({ aspectRatio }))}>
       <iframe
+        data-test-id={IFRAME_ID}
         src={sourceUrl}
         frameBorder='0'
         allow='accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture'

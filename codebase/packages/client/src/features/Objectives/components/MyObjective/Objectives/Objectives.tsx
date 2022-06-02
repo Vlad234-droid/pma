@@ -1,13 +1,14 @@
 import React, { FC, useEffect, useMemo } from 'react';
 import { Rule, useStyle } from '@pma/dex-wrapper';
 import { ReviewType, Status } from 'config/enum';
-import { getTimelineByCodeSelector, isReviewsInStatus } from '@pma/store';
+import { getTimelineByCodeSelector, isReviewsInStatus, reviewsMetaSelector } from '@pma/store';
 import { Trans, useTranslation } from 'components/Translation';
 import { Accordion, EditButton, ObjectiveTypes, Section, StatusBadge } from 'features/Objectives';
 import { useSelector } from 'react-redux';
 import { USER } from 'config/constants';
 import { IconButton } from 'components/IconButton';
 import { downloadPDF, ObjectiveDocument, usePDF } from '@pma/pdf-renderer';
+import Spinner from 'components/Spinner';
 
 export const TEST_ID = 'objectives-test-id';
 
@@ -21,6 +22,7 @@ const Objectives: FC<Props> = ({ objectives = [], canEditAllObjective = false, c
   const { css } = useStyle();
   const { t } = useTranslation();
 
+  const { loading: reviewLoading } = useSelector(reviewsMetaSelector);
   const timelineObjective = useSelector(getTimelineByCodeSelector(ReviewType.OBJECTIVE, USER.current)) || {};
   const status = timelineObjective?.status || undefined;
   const isAllObjectivesInSameStatus = useSelector(isReviewsInStatus(ReviewType.OBJECTIVE)(status));
@@ -71,7 +73,9 @@ const Objectives: FC<Props> = ({ objectives = [], canEditAllObjective = false, c
         ),
       }}
     >
-      {objectives.length ? (
+      {reviewLoading ? (
+        <Spinner fullHeight />
+      ) : objectives.length ? (
         <Accordion objectives={objectives} canShowStatus={!isAllObjectivesInSameStatus} />
       ) : (
         <div className={css(emptyBlockStyle)}>

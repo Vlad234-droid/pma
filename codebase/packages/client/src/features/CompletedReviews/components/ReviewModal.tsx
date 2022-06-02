@@ -2,8 +2,7 @@ import React, { FC } from 'react';
 import { CreateRule, Modal, Rule, theme, useStyle } from '@pma/dex-wrapper';
 import { Icon } from 'components/Icon';
 import { useTranslation } from 'components/Translation';
-
-import { ReviewType } from '../../../config/enum';
+import { ReviewType } from 'config/enum';
 
 export type CompletedReviewsModalProps = {
   onClose: () => void;
@@ -11,11 +10,10 @@ export type CompletedReviewsModalProps = {
   scheme: any;
 };
 
-const ReviewModal: FC<CompletedReviewsModalProps> = ({ onClose, review, scheme }) => {
+const ReviewModal: FC<CompletedReviewsModalProps> = ({ onClose, review, scheme: _scheme }) => {
   const { css, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const { t } = useTranslation();
-  console.log('scheme', scheme);
 
   return (
     <Modal

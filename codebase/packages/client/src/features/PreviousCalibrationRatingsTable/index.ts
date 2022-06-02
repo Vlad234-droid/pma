@@ -1,1 +1,0 @@
-export { PreviousCalibrationRatingsTable } from './PreviousCalibrationRatingsTable';

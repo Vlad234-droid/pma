@@ -1,7 +1,6 @@
 import React, { FC, useCallback } from 'react';
 import { useStyle, Rule, Styles } from '@pma/dex-wrapper';
 import * as Yup from 'yup';
-import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useNavigate } from 'react-router';
 import { FormType } from '@pma/store';
@@ -17,12 +16,13 @@ import { Line } from 'components/Line';
 import { defaultValues, getFields, fieldsSpecifity } from '../../utils';
 import { Statuses } from '../../CalibrationRatingsModal';
 import { Notification, yupRatingSchema } from '../../config';
+import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
 
 export const RatingForm: FC<{ setStatus: (S) => void }> = ({ setStatus }) => {
   const { t } = useTranslation();
   const { css, theme } = useStyle();
   const navigate = useNavigate();
-  const methods = useForm({
+  const methods = useFormWithCloseProtection({
     mode: 'onChange',
     resolver: yupResolver<Yup.AnyObjectSchema>(yupRatingSchema),
     defaultValues: { ...defaultValues },

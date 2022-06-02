@@ -12,7 +12,7 @@ const Info: FC<Props> = ({ description }) => {
 
   return (
     <div data-test-id={TEST_ID} className={css(wrapperRule)}>
-      <Icon graphic='information' />
+      <Icon graphic='information' iconStyles={{ minWidth: '24px' }} />
       <span className={css(descriptionRule)}>{description}</span>
     </div>
   );

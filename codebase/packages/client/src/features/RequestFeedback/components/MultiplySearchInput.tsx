@@ -2,8 +2,8 @@ import React, { ChangeEvent, FC, RefObject } from 'react';
 import { useStyle, Rule, Styles } from '@pma/dex-wrapper';
 import mergeRefs from 'react-merge-refs';
 import { useFormContainer } from 'components/Form/context/input';
+import { Icon } from 'components/Icon';
 import defaultImg from 'images/default.png';
-import { Close } from 'components/Icon/graphics/close';
 
 export interface FormItemProps {
   disabled?: boolean;
@@ -82,7 +82,7 @@ const MultiplySearchInput: FC<FormItemProps> = ({
                 <div key={item.value} className={css(selectedStyle)}>
                   <span className={css({ marginRight: '10px' })}>{`${item.label}`}</span>
                   <div className={css({ cursor: 'pointer' })} onClick={onDelete}>
-                    <Close />
+                    <Icon graphic={'cancel'} />
                   </div>
                 </div>
               ))}

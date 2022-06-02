@@ -28,10 +28,19 @@ export const canEditAllObjectiveFn = ({
  * Available for max review count and status in [ DRAFT, DECLINED, APPROVED ]
  * Available for min review count and status in [ APPROVED ]
  */
-export const canEditSingleObjectiveFn = ({ status }: { status: Status }) => {
-  const allowedStatus = [Status.APPROVED, Status.DECLINED, Status.DRAFT].includes(status);
+export const canEditSingleObjectiveFn = ({
+  status,
+  objectiveSchema,
+  number,
+}: {
+  status: Status;
+  objectiveSchema: any;
+  number: number;
+}) => {
+  const allowedStatus = [Status.APPROVED, Status.DECLINED].includes(status);
+  const { markup = { max: 0, min: 0 } } = objectiveSchema;
 
-  return allowedStatus;
+  return allowedStatus || (status === Status.DRAFT && number > markup.min);
 };
 
 /**

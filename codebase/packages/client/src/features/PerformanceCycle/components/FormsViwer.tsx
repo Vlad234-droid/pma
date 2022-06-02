@@ -1,10 +1,10 @@
 import React, { FC, useState } from 'react';
-import { useForm } from 'react-hook-form';
 import { useStyle, Rule } from '@pma/dex-wrapper';
 import { TileWrapper } from 'components/Tile';
 import { Radio } from 'components/Form';
 import { ObjectiveModal } from 'features/Objectives/components/ObjectiveModal';
 import { useTranslation } from 'components/Translation';
+import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
 
 type Props = {
   forms: Array<any>;
@@ -16,7 +16,7 @@ const FormsViewer: FC<Props> = ({ forms, isActive }) => {
   const { t } = useTranslation();
   const [activeFormIndex, setActiveFormIndex] = useState<number | undefined>();
 
-  const methods = useForm({
+  const methods = useFormWithCloseProtection({
     mode: 'onChange',
   });
 

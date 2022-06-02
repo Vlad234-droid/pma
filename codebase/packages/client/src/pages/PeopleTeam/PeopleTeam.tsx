@@ -18,7 +18,7 @@ const PeopleTeam: FC = () => {
 
   const widgets: SecondaryWidgetProps[] = [
     {
-      iconGraphic: 'calibration',
+      iconGraphic: 'rating',
       title: t('calibration', 'Calibration'),
       data: t('click_here_to_access_calibration', 'Click here to access the calibration area'),
       customStyle: { flex: '2 1 110px' },

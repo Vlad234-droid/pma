@@ -1,5 +1,4 @@
 import React, { FC, useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import useDispatch from 'hooks/useDispatch';
@@ -21,6 +20,7 @@ import Spinner from 'components/Spinner';
 import useReviewSchema from '../../hooks/useReviewSchema';
 import { ObjectiveModal } from './ObjectiveModal';
 import { USER } from 'config/constants';
+import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
 
 type ObjectivesProps = {
   onClose: () => void;
@@ -39,10 +39,14 @@ const Objectives: FC<ObjectivesProps> = ({ colleagueUUID, schema, objectives, or
   const [currentObjectiveNumber, setObjectiveNumber] = useState(editNumber ? editNumber : 1);
   const [objectivesHashMap, setObjectiveHashMap] = useState(objectives);
 
-  const { components = [], markup = { max: 0, min: 0 } } = schema;
+  const { components = [], markup = { max: 0, min: 0 }, display: newSchemaVersion } = schema;
   const markupMin = markup.min;
   const titles = [...Array(markupMin).keys()].map((key) => `Objective ${key + 1}`);
-  const formElements = components.filter((component) => component.type != 'text');
+  const formElements = newSchemaVersion
+    ? components
+        .flatMap((e) => e?.components || e)
+        .filter((e) => e?.type === 'textarea' || e?.type === 'textfield' || e?.type === 'select')
+    : components.filter((component) => component.type != 'text');
   const formElementsFilledEmpty = formElements.reduce((acc, current) => {
     acc[current.key] = '';
     return acc;
@@ -53,7 +57,7 @@ const Objectives: FC<ObjectivesProps> = ({ colleagueUUID, schema, objectives, or
     : formElementsFilledEmpty;
 
   const yepSchema = formElements.reduce(createYupSchema(t), {});
-  const methods = useForm({
+  const methods = useFormWithCloseProtection({
     mode: 'onChange',
     resolver: yupResolver<Yup.AnyObjectSchema>(Yup.object().shape(yepSchema)),
   });

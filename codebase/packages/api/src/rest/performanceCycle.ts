@@ -23,6 +23,14 @@ export const updatePerformanceCycleStatus = ({ uuid, status }: { uuid: string; s
   return httpClient.patch(`${domain}/${uuid}/statuses/${status}`);
 };
 
+export const deployPerformanceCycle = (uuid: string) => {
+  return httpClient.post(`${domain}/${uuid}/deploy`);
+};
+
+export const startPerformanceCycle = (uuid: string) => {
+  return httpClient.put(`${domain}/${uuid}/start-scheduled`);
+};
+
 export const publishPerformanceCycle = (params: any) => {
   return httpClient.post(`${domain}/publish`, params);
 };

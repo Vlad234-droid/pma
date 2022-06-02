@@ -12,6 +12,7 @@ export type SectionProps = {
   left?: NodeOptions;
   right?: NodeOptions;
   contentCustomStyle?: React.CSSProperties | {};
+  testId?: string;
 };
 
 const Section: FC<SectionProps> = ({
@@ -20,11 +21,12 @@ const Section: FC<SectionProps> = ({
   right: { content: rightContent, styles: rightStyles = {} } = {},
   left: { content: leftContent, styles: leftStyles = {} } = {},
   contentCustomStyle = {},
+  testId = '',
 }) => {
   const { css } = useStyle();
 
   return (
-    <section className={css(sectionStyles)}>
+    <section data-test-id={testId} className={css(sectionStyles)}>
       {title && <div className={css(titleStyles, baseTitleStyles)}>{title}</div>}
       <div className={css(headerStyles)}>
         {leftContent && <div className={css(leftStyles, baseLeftStyles)}>{leftContent}</div>}

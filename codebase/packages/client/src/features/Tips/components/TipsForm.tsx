@@ -1,7 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Page } from 'pages';
@@ -21,6 +20,7 @@ import { IconButton } from 'components/IconButton';
 import { createTipSchema } from 'pages/Tips/config';
 import { TipsFormModal } from '.';
 import { useTranslation } from 'components/Translation';
+import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
 
 export type TipsFormProps = {
   mode: string;
@@ -38,7 +38,7 @@ const TipsForm: FC<TipsFormProps> = ({ mode }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const params = useParams();
-  const methods = useForm({
+  const methods = useFormWithCloseProtection({
     mode: 'onChange',
     resolver: yupResolver<Yup.AnyObjectSchema>(createTipSchema),
   });

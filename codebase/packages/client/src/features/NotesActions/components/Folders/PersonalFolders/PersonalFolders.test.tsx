@@ -31,13 +31,11 @@ describe('it should render folders & archived folders', () => {
   const setSelectedTEAMFolder = jest.fn();
   const setSelectedFolder = jest.fn();
 
-  const useRefSpy = jest.spyOn(React, 'useRef').mockReturnValueOnce({ current: null });
-
   const props = {
     handleSelected,
     setConfirmModal,
-    actionModal: useRefSpy,
-    userActions: useRefSpy,
+    actionModal: { current: 'archive' },
+    userActions: { folderId: 'id' },
   };
 
   it('it should render personal folder', async () => {
@@ -98,6 +96,7 @@ describe('it should render folders & archived folders', () => {
       </NotesContext.Provider>,
     );
     const dots = getByTestId('dots-items');
+    expect(dots).toBeInTheDocument();
     fireEvent.click(dots);
     expect(setSelectedFolder).toHaveBeenCalled();
     expect(setFoldersWithNotes).toHaveBeenCalled();

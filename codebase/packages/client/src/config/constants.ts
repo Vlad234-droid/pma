@@ -56,6 +56,8 @@ export enum ViewportSize {
   LARGE_DESKTOP = 1920,
 }
 
+export const RICH_TEXT_CHARACTERS_LIMIT = 10000;
+
 export const BASE_URL_API = baseURL;
 
 export const APP_DYNAMICS_APP_KEY = process.env.REACT_APP_DYNAMICS_APP_KEY;

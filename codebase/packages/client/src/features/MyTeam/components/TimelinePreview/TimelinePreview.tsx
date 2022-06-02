@@ -25,7 +25,7 @@ const TimelinePreview: FC<Props> = ({ status, employee, fullTeamView = false, ra
   const { css } = useStyle();
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const [graphics, color] = getIcon(status);
+  const [graphics, color, title] = getIcon(status, t);
 
   const viewUserObjectives = (uuid: string) => {
     onClick && onClick();
@@ -53,7 +53,7 @@ const TimelinePreview: FC<Props> = ({ status, employee, fullTeamView = false, ra
         </div>
         {!rating && (
           <div className={css(iconWrapperStyles)}>
-            <Icon graphic={graphics} fill={color} testId='timeline-icon' />
+            <Icon graphic={graphics} fill={color} title={title} testId='timeline-icon' />
           </div>
         )}
         {!rating && (

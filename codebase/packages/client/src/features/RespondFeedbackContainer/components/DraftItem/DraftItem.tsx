@@ -9,8 +9,10 @@ import { Accordion, BaseAccordion, Panel, Section } from 'components/Accordion';
 import IconButtonDefault from 'components/IconButtonDefault';
 import CompletedNotes from '../CompletedNotes';
 import { Page } from 'pages';
-import { NoFeedback, FeedbackProfileInfo } from 'features/Feedback/components';
+import { FeedbackProfileInfo } from 'features/Feedback/components';
 import PendingNotes from '../PendingNotes';
+import { Plug } from 'components/Plug';
+import { useTranslation } from 'components/Translation';
 
 import { paramsReplacer } from 'utils';
 import { FeedbackStatus, Tesco } from 'config/enum';
@@ -21,6 +23,7 @@ export const TEST_ID = 'expand_button';
 const DraftItem: FC<DraftItemProps> = ({ status, list, canEdit }) => {
   const { css } = useStyle();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const dispatch = useDispatch();
 
@@ -38,7 +41,8 @@ const DraftItem: FC<DraftItemProps> = ({ status, list, canEdit }) => {
 
   if (!loaded) return null;
 
-  if (!list.length) return <NoFeedback />;
+  if (!list.length)
+    return <Plug text={t('no_feedback_records_to_be_displayed', 'No feedback records to be displayed.')} />;
 
   return (
     <>

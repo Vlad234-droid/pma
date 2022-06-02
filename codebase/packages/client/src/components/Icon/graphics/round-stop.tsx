@@ -7,17 +7,19 @@ import { FCGraphicProps } from './types';
 export const RoundStop: FCGraphicProps = ({ invertColors }) => {
   const { theme } = useStyle();
 
-  const stroke = invertColor(theme.colors.link, invertColors, theme);
+  const color = invertColor(theme.colors.link, invertColors, theme);
 
   return (
     <>
       <path
-        stroke='null'
-        id='roundStop'
-        fill={stroke}
-        d='M10 20C15.5228 20 20 15.5228 20 10C20 4.47715 15.5228 0 10 0C4.47715 0 0 4.47715 0 10C0 15.5228 4.47715 20 10 20ZM14.1667 5.83333H5.83333V14.1667H14.1667V5.83333Z'
-        clipRule='evenodd'
+        d='M24 12C24 18.6274 18.6274 24 12 24C5.37258 24 0 18.6274 0 12C0 5.37258 5.37258 0 12 0C18.6274 0 24 5.37258 24 12Z'
+        fill='white'
+      />
+      <path
         fillRule='evenodd'
+        clipRule='evenodd'
+        d='M12 24C18.6274 24 24 18.6274 24 12C24 5.37258 18.6274 0 12 0C5.37258 0 0 5.37258 0 12C0 18.6274 5.37258 24 12 24ZM17 7H7V17H17V7Z'
+        fill={color}
       />
     </>
   );

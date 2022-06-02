@@ -14,6 +14,11 @@ export type InfoTableProps = {
   params?: Record<string, string>;
   link?: string;
   readonly Wrapper?: keyof JSX.IntrinsicElements;
+  hoverMessage?: string;
+  hoverVisibility?: boolean;
 };
 
-export type TableContent = Omit<InfoTableProps, 'link' | 'Wrapper' | 'type' | 'params'>;
+export type TableContent = Omit<
+  InfoTableProps,
+  'link' | 'Wrapper' | 'type' | 'params' | 'hoverMessage' | 'hoverVisibility'
+>;
