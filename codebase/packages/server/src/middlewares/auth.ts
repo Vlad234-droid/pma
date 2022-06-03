@@ -3,39 +3,42 @@ import {
   identityTokenSwapPlugin,
   getDataFromCookie,
   AuthData,
-  AUTH_DATA_COOKIE_NAME,
+  AUTH_TOKEN_COOKIE_NAME,
   getIdentityData,
   OneloginError,
   Plugin,
-} from '@energon/onelogin';
+} from '@pma-connectors/onelogin';
 
 import { ProcessConfig, isPROD } from '../config';
 
 export const authMiddleware = ({
+  applicationContextPath,
+  apiEnv,
   authPath,
   environment,
   identityClientId,
   identityClientSecret,
   identityUserScopedTokenCookieSecret,
   identityUserScopedTokenCookieName,
-  integrationNodeBFFUrl,
+  stickCookiesToApplicationPath,
 }: ProcessConfig): Handler => {
   const isProduction = isPROD(environment());
-  const identityIdAndSecret = `${identityClientId()}:${identityClientSecret()}`;
+  // const identityIdAndSecret = `${identityClientId()}:${identityClientSecret()}`;
   const router = Express.Router();
-  const serverMountPath = new URL(integrationNodeBFFUrl()).pathname;
+  // const serverMountPath = new URL(integrationNodeBFFUrl()).pathname;
 
-  router.use(authPath(), pluginWrapper(authDataPlugin));
+  router.use(authPath(), authDataPlugin);
   router.use(
     pluginWrapper(
       identityTokenSwapPlugin({
-        identityIdAndSecret,
+        identityClientId: identityClientId(),
+        identityClientSecret: identityClientSecret(),
         strategy: 'oidc',
+        apiEnv: apiEnv,
         cookieConfig: {
-          cookieShapeResolver: ({ access_token }) => ({ access_token }),
           cookieName: identityUserScopedTokenCookieName(),
           secret: identityUserScopedTokenCookieSecret(),
-          path: serverMountPath,
+          path: stickCookiesToApplicationPath() ? applicationContextPath() : '/',
           httpOnly: true,
           secure: isProduction,
           signed: isProduction,
@@ -45,27 +48,26 @@ export const authMiddleware = ({
   );
   /** dex-core consumes this endpoint for token exchange purpose (onelogin -> identity) */
   /** identity token swap (oidc -> cst) is done in previous onelogin middlewares */
-  router.use(authPath(), (_res, res) => (console.log('getIdentityData', getIdentityData(res)), res.sendStatus(200)));
+  router.use(
+    authPath(), (_res, res) => (console.log('getIdentityData', getIdentityData(res)), res.sendStatus(200)));
 
   return router;
 };
 
 const authDataPlugin: Express.Handler = (req: Express.Request, res: Express.Response, next: Express.NextFunction) => {
   const authData = getDataFromCookie<AuthData>(req, {
-    cookieName: AUTH_DATA_COOKIE_NAME,
+    cookieName: AUTH_TOKEN_COOKIE_NAME,
     compressed: true,
   });
   res.oneLoginAuthData = authData;
-  return next();
+  next();
 };
 
-const pluginWrapper =
-  (plugin: Plugin): Handler =>
-  async (req, res, next): Promise<void | OneloginError> => {
-    try {
-      await plugin(req, res, next);
-    } catch (error) {
-      const { message, status } = error as Error & { status };
-      return next(new OneloginError('plugin', message, status));
-    }
-  };
+const pluginWrapper = (plugin: Plugin): Handler => async (req, res, next): Promise<void | OneloginError> => {
+  try {
+    await plugin(req, res);
+  } catch (error) {
+    const { message, status } = error as Error & { status };
+    next(new OneloginError('plugin', message, status));
+  }
+};

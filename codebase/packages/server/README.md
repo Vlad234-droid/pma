@@ -28,7 +28,7 @@ where `[ENV] = production | dev | stage` and if missing it defaults to ''.
 | NODE_ENV                                 | Env where the app is running                    | local, dev, ppe, prod,       | N        | ppe                                    |
 | BUILD_ENV                                | Env on which the app is built                   | development, ppe, production | N        | ppe                                    |
 | RUNTIME_ENV                              | Env where the app is running                    | local, dev, ppe, prod,       | N        | ppe                                    |
-| PROXY_API_SERVER_URL                     | URL for proxy server                            | [Local or remote URL]        | N        | -                                      |
+| API_SERVER_URL                     | URL for proxy server                            | [Local or remote URL]        | N        | -                                      |
 | INTEGRATION_MODE                         | Integration Mode                                | standalone, integrity        | N        | standalone                             |
 | INTEGRATION_CORE_MOUNT_PATH              | Path to integrate with a third party app        | /                            | N        | /                                      |
 | INTEGRATION_CORE_URL                     | URL to integrate with a third party app         | /                            | N        | /                                      |

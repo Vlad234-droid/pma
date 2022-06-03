@@ -4,6 +4,7 @@
     "jsx": "react-jsx",
     "typeRoots": ["./node_modules/@types", "./src/types", "../../node_modules/@types"],
     "baseUrl": "./src",
+    "noEmit": true,
     "types": ["node", "jest", "@testing-library/jest-dom"],
     "target": "es2018"
   },

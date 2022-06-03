@@ -57,13 +57,11 @@ export const getRefreshTokenMiddleware = <TClient extends Client>({
   });
 
   return asyncHandler(async (req, res, next) => {
-    logger(
-      LoggerEvent.info(
-        'verification',
-        `Refresh token middleware: path: ${req.path}, validating auth cookie (${authTokenCookie.name})`,
-        { req, res },
-      ),
-    );
+    logger(LoggerEvent.debug(
+      'verification',
+      `Refresh token middleware: path: ${req.path}, validating auth cookie (${authTokenCookie.name})`,
+      { req, res },
+    ));
 
     const authData = getDataFromCookie<AuthData>(req, {
       cookieName: authTokenCookie.name,
@@ -71,19 +69,27 @@ export const getRefreshTokenMiddleware = <TClient extends Client>({
     });
 
     if (!authData) {
-      throw new OneloginError('verification', `Cookie not set: ${printCookieInfo('authdata', authTokenCookie)}`, 401);
+      throw new OneloginError(
+        'verification', 
+        `Cookie not set: ${printCookieInfo('authdata', authTokenCookie)}`, 401);
     }
 
     if (!requireAccessToken) {
-      logger(LoggerEvent.debug('verification', 'accessToken is not required', { req, res }));
-      next();
-      return;
+      logger(LoggerEvent.debug(
+        'verification', 
+        'accessToken is not required', 
+        { req, res },
+      ));
+
+      return next();
     }
 
     const { accessToken, encRefreshToken } = authData;
 
     if (accessToken == null || encRefreshToken == null) {
-      throw new OneloginError('verification', 'Missing accessToken or encRefreshToken', 401);
+      throw new OneloginError(
+        'verification', 
+        'Missing accessToken or encRefreshToken', 401);
     }
 
     const handleTokenValid = () => {
@@ -141,18 +147,20 @@ export const getRefreshTokenMiddleware = <TClient extends Client>({
       });
 
       if (newValidationStatus.valid) {
-        logger(
-          LoggerEvent.debug(
-            'login',
-            `Following cookies have been refreshed: - ${printCookieInfo(
-              `authdata${requireAccessToken ? '' : ' (empty)'}`,
-              authTokenCookie,
-            )}`,
-            { req, res },
-          ),
-        );
+        logger(LoggerEvent.trace(
+          'login',
+          `Following cookies have been refreshed: - ${printCookieInfo(
+            `authdata${requireAccessToken ? '' : ' (empty)'}`,
+            authTokenCookie,
+          )}`,
+          { req, res },
+        ));
 
-        logger(LoggerEvent.info('verification', 'Refreshed auth cookie set', { req, res }));
+        logger(LoggerEvent.debug(
+          'login', 
+          'Refreshed auth cookies', 
+          { req, res },
+        ));
       } else {
         logger(
           LoggerEvent.warn(

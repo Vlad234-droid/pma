@@ -5,6 +5,7 @@ import { ApiEnv } from '@energon-connectors/core';
 
 import { getEnv } from './env-accessor';
 import { defaultConfig } from './default';
+import path from 'path';
 
 export type ProcessConfig = {
   // general
@@ -13,10 +14,14 @@ export type ProcessConfig = {
   environment: () => keyof typeof NodeJS.Environment;
   apiEnv: () => ApiEnv;
   port: () => number;
+  //
   loggerRootName: () => string;
-  loggerLevel: () => string | undefined;
-  loggerPretify: () => boolean | undefined;
-  proxyApiServerUrl: () => string;
+  loggerLevel: () => keyof typeof NodeJS.LogLevel;
+  loggerPretify: () => boolean;
+  loggerLogAuthToken: () => boolean;
+  //
+  apiServerUrl: () => URL;
+  camundaServerUrl: () => URL;
   authPath: () => string;
   // integration
   integrationMode: () => keyof typeof NodeJS.AppMode;
@@ -29,9 +34,12 @@ export type ProcessConfig = {
   integrationSSOLogoutPath: () => string;
   integrationUIMountPath: () => string;
   // application specific settings
-  applicationServerUrlRoot: () => string;
   applicationName: () => string;
-  applicationPublicUrl: () => string;
+  applicationUrl: () => URL;
+  applicationRoot: () => string;
+  applicationContextPath: () => string;
+  // applicationServerUrlRoot: () => string;
+  // applicationPublicUrl: () => string;
   // cookies settings
   applicationIdTokenCookieName: () => string | undefined;
   applicationSessionCookieName: () => string | undefined;
@@ -60,9 +68,9 @@ export class ConfigAccessor {
   private readonly config: ProcessConfig;
 
   private constructor(processEnv: NodeJS.ProcessEnv) {
-    const applicationServerUrlRoot = processEnv.APPLICATION_SERVER_URL_ROOT;
+    // const applicationServerUrlRoot = processEnv.APPLICATION_SERVER_URL_ROOT;
     const port = isNaN(Number(processEnv.NODE_PORT)) ? defaultConfig.port : Number(processEnv.NODE_PORT);
-    const coreMountPath = processEnv.INTEGRATION_CORE_MOUNT_PATH;
+
     this.config = {
       // general
       buildEnvironment: () => processEnv.BUILD_ENV,
@@ -70,34 +78,45 @@ export class ConfigAccessor {
       environment: () => processEnv.NODE_ENV,
       apiEnv: () => getAppEnv(this.config.runtimeEnvironment(), undefined),
       port: () => port,
+      //
       loggerRootName: () => processEnv.LOGGER_ROOT_NAME || defaultConfig.loggerRootName,
-      loggerLevel: () => processEnv.LOGGER_LEVEL,
-      loggerPretify: () => (processEnv.LOGGER_PRETIFY ? yn(processEnv.LOGGER_PRETIFY, { default: false }) : undefined),
-      proxyApiServerUrl: () => processEnv.PROXY_API_SERVER_URL,
+      loggerLevel: () => processEnv.LOGGER_LEVEL || defaultConfig.loggerDefaultLevel,
+      loggerPretify: () => yn(processEnv.LOGGER_PRETIFY, { default: false }),
+      loggerLogAuthToken: () => yn(processEnv.LOGGER_LOG_AUTHTOKEN, { default: false }),
+      //
+      apiServerUrl: () => createUrlOrFail(
+        processEnv.API_SERVER_URL,
+        `API_SERVER_URL must be a well-formed URL pointing to API server, e.g.: http://tesco.com/pma/api`,
+        { removeTrailingSlash: true }),
+      camundaServerUrl: () => createUrlOrFail(
+        processEnv.CAMUNDA_SERVER_URL,
+        `CAMUNDA_SERVER_URL must be a well-formed URL pointing to API server, e.g.: http://tesco.com/pma/camunda`,
+        { removeTrailingSlash: true }),
       authPath: () => defaultConfig.authPath,
       // integration
       integrationMode: () => processEnv.INTEGRATION_MODE,
-      integrationCoreMountPath: () => coreMountPath,
+      integrationCoreMountPath: () => processEnv.INTEGRATION_CORE_MOUNT_PATH,
       integrationCoreMountUrl: () =>
-        coreMountPath === '/'
-          ? `${processEnv.INTEGRATION_CORE_URL}${processEnv.INTEGRATION_MOUNT_PATH}`
-          : `${processEnv.INTEGRATION_CORE_URL}${coreMountPath}${processEnv.INTEGRATION_MOUNT_PATH}`,
+        path.join(processEnv.INTEGRATION_CORE_URL, processEnv.INTEGRATION_CORE_MOUNT_PATH, processEnv.INTEGRATION_MOUNT_PATH),
       integrationMountPath: () => processEnv.INTEGRATION_MOUNT_PATH,
       integrationNodeBFFUrl: () => `${processEnv.INTEGRATION_NODE_BFF_URL}:${port}${processEnv.INTEGRATION_MOUNT_PATH}`,
       integrationBuildPath: () => defaultConfig.buildPath,
       integrationMFModule: () => defaultConfig.mfModule,
       integrationSSOLogoutPath: () =>
-        coreMountPath === '/'
-          ? `${processEnv.INTEGRATION_CORE_URL}${defaultConfig.SSOLogoutPath}`
-          : `${processEnv.INTEGRATION_CORE_URL}${coreMountPath}${defaultConfig.SSOLogoutPath}`,
+        path.join(processEnv.INTEGRATION_CORE_URL, processEnv.INTEGRATION_CORE_MOUNT_PATH, defaultConfig.SSOLogoutPath),
       integrationUIMountPath: () =>
-        coreMountPath === '/'
-          ? processEnv.INTEGRATION_MOUNT_PATH
-          : `${coreMountPath}${processEnv.INTEGRATION_MOUNT_PATH}`,
+        path.join(processEnv.INTEGRATION_CORE_MOUNT_PATH, processEnv.INTEGRATION_MOUNT_PATH),
       // application specific settings
-      applicationServerUrlRoot: () => applicationServerUrlRoot,
-      applicationName: () => defaultConfig.applicationName,
-      applicationPublicUrl: () => processEnv.APPLICATION_PUBLIC_URL,
+      applicationName: () => processEnv.APPLICATION_NAME || defaultConfig.applicationName,
+      applicationUrl: () => createUrlOrFail(
+        processEnv.APPLICATION_URL,
+        `APPLICATION_URL must be a well-formed URL pointing to the root of application, e.g.: http://tesco.com/pma`,
+        { removeTrailingSlash: true }),
+      applicationRoot: () => {
+        const applicationUrl = this.config.applicationUrl();
+        return `${applicationUrl.protocol}//${applicationUrl.host}`
+      },
+      applicationContextPath: () => this.config.applicationUrl().pathname,
       // cookies settings
       applicationIdTokenCookieName: () => processEnv.APPLICATION_AUTH_TOKEN_COOKIE_NAME || undefined,
       applicationSessionCookieName: () => processEnv.APPLICATION_SESSION_COOKIE_NAME || undefined,
@@ -139,11 +158,27 @@ export class ConfigAccessor {
   }
 }
 
+const createUrlOrFail = (
+      urlString: string, errorMessage: string, 
+      options: { removeTrailingSlash?: boolean, addTrailngSlash?: boolean } = { removeTrailingSlash: true }) => {
+  try {
+    if (options?.removeTrailingSlash === true && urlString.endsWith('/') === true) {
+      urlString = urlString.slice(0, -1);
+    }
+    if (options?.addTrailngSlash === true && urlString.endsWith('/') === false) {
+      urlString = urlString + '/';
+    }
+    return new URL(urlString);
+  } catch {
+    throw new Error(errorMessage);
+  }
+}
+
 export const prettify = (config: ProcessConfig): void => {
   console.table(
     Object.keys(config).reduce((acc, key) => {
       const value = config[key]();
-      return { ...acc, [key]: Array.isArray(value) ? value.join(', ') : value };
+      return { ...acc, [key]: Array.isArray(value) ? value.join(', ') : (value ? value.toString() : '-- not set --') };
     }, {}),
   );
 };

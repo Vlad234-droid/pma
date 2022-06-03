@@ -1,52 +1,38 @@
 import pino from 'pino';
-import { createLogger } from '@pma-common/logger';
+import { createLogger, 
+  defaultRequestSerializer, 
+  defaultResponseSerializer, 
+  defaultErrorSerializer,
+  filterSensitiveData,
+} from '@pma-common/logger'; 
 
 import { LoggerEvent } from './';
 
-// eslint-disable-next-line  @typescript-eslint/no-explicit-any
-const requestSerializer = (req: any) => {
-  const result = {
-    id: req.id,
-    method: req.method,
-    url: req.url,
-    originalUrl: req.originalUrl,
-    remoteAddress: req.remoteAddress,
-    remotePort: req.remotePort,
-  };
+const oneloginRequestSerializer = (req: any) => {
+  let result = defaultRequestSerializer(req);
+  return result;
+}
 
-  if (req.url?.startsWith('/api')) {
-    const headers = { ...req.headers };
-    if (!!headers.authorization) {
-      headers.authorization = '<REDUCTED>';
-    }
-    if (!!headers.cookie) {
-      headers.cookie = '<REDUCTED>';
-    }
+const oneloginResponseSerializer = (res: any) => {
+  let result = defaultResponseSerializer(res);
 
-    return { ...result, headers: headers };
-  } else {
-    return result;
+  if (Object.prototype.hasOwnProperty.call(res, 'openIdAuthData')) {
+    result = { 
+      ...result, 
+      openIdAuthData: filterSensitiveData(res['openIdAuthData']) 
+    };
   }
-};
 
-// eslint-disable-next-line  @typescript-eslint/no-explicit-any
-const responseSerializer = (res: any) => {
-  return {
-    statusCode: res.statusCode,
-    location: res.statusCode === 302 ? res.headers?.location : undefined,
-    contentType: res.statusCode === 200 || res.statusCode === 201 ? res.headers?.contentType : undefined,
-    contentLength: res.statusCode === 200 || res.statusCode === 201 ? res.headers?.contentLength : undefined,
-    //headers: res.headers,
-  };
-};
+  return result;
+}
 
 export const pinoLogger = (options?: pino.Bindings) => {
   const logger = createLogger({
     ...options,
     serializers: {
-      req: requestSerializer,
-      res: responseSerializer,
-      err: pino.stdSerializers.err,
+      res: oneloginResponseSerializer,
+      req: oneloginRequestSerializer,
+      err: defaultErrorSerializer,
     },
   });
 
@@ -55,7 +41,7 @@ export const pinoLogger = (options?: pino.Bindings) => {
     switch (severity) {
       case 'error': {
         logger.error(
-          { flow, req: context.req, res: context.res, error: payload?.error || error || undefined },
+          { flow, res: context.res, req: context.req, error: payload?.error || error || undefined },
           `Onelogin plugin error`,
         );
         break;
@@ -63,7 +49,7 @@ export const pinoLogger = (options?: pino.Bindings) => {
       case 'warning': {
         if (payload?.error || error) {
           logger.warn(
-            { flow, req: context.req, res: context.res, error: payload?.error || error },
+            { flow, res: context.res, req: context.req, error: payload?.error || error },
             payload?.message ? `${payload?.message}` : `Onelogin plugin warning`,
           );
         } else {
@@ -75,15 +61,15 @@ export const pinoLogger = (options?: pino.Bindings) => {
         break;
       }
       case 'info': {
-        logger.info({ flow, req: context.req, res: context.res }, `${payload?.message}`);
+        logger.info({ flow, res: context.res, req: context.req }, `${payload?.message}`);
         break;
       }
       case 'debug': {
-        logger.debug({ flow, req: context.req, res: context.res }, `${payload?.message}`);
+        logger.debug({ flow, res: context.res, req: context.req }, `${payload?.message}`);
         break;
       }
       case 'trace': {
-        logger.trace({ flow, req: context.req, res: context.res }, `${payload?.message}`);
+        logger.trace({ flow, res: context.res, req: context.req }, `${payload?.message}`);
         break;
       }
     }

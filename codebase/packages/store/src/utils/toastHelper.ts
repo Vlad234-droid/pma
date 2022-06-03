@@ -7,7 +7,7 @@ type ErrorPayload = {
 };
 
 const concatWithErrorToast = <T>(action: Observable<T>, payload: ToastFabricPayload) => {
-  console.log('payload', payload);
+  //console.log('payload', payload);
   return concat(action, of(addToastFabric(payload).error));
 };
 

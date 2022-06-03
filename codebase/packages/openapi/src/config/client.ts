@@ -32,7 +32,7 @@ httpClient.interceptors.response.use(
     const status = response.status;
 
     if (ResponseStatus.UNAUTHORIZED === status) {
-      console.log(`Got 401 Unauthorized response from API. Enforcing authentication.`);
+      // console.log(`Got 401 Unauthorized response from API. Enforcing authentication.`);
       redirectToAuth(window.location.pathname);
     } else {
       return Promise.reject({ data, message, status });

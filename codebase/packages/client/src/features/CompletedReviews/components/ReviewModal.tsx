@@ -10,7 +10,7 @@ export type CompletedReviewsModalProps = {
   scheme: any;
 };
 
-const ReviewModal: FC<CompletedReviewsModalProps> = ({ onClose, review, scheme: _scheme }) => {
+const ReviewModal: FC<CompletedReviewsModalProps> = ({ onClose, review }) => {
   const { css, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const { t } = useTranslation();

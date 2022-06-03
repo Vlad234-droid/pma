@@ -1,7 +1,6 @@
 export const PUBLIC_URL = process?.env?.PUBLIC_URL ?? '/';
-export const API_URL = process.env.REACT_APP_API_URL ?? '/api';
+export const API_URL = process.env.REACT_APP_API_URL ?? '/api/v1';
 export const CAMUNDA_APP_PATH = process.env.REACT_APP_CAMUNDA_APP_PATH ?? 'camunda/app/';
-const API_VERSION = process.env.REACT_APP_API_VERSION;
 
 export const INTEGRATION_MODE = process.env.REACT_APP_INTEGRATION_MODE ?? 'integrity';
 
@@ -40,12 +39,6 @@ export const CONFIG = {
   myInboxPath: `${mountPath}/my-inbox/api/colleague-inbox`,
 };
 
-let baseURL = `${API_URL}/`;
-
-if (API_VERSION) {
-  baseURL += `${API_VERSION}`;
-}
-
 export enum ViewportSize {
   PHONE = 320,
   LARGE_PHONE = 504,
@@ -58,6 +51,6 @@ export enum ViewportSize {
 
 export const RICH_TEXT_CHARACTERS_LIMIT = 10000;
 
-export const BASE_URL_API = baseURL;
+export const BASE_URL_API = API_URL;
 
 export const APP_DYNAMICS_APP_KEY = process.env.REACT_APP_DYNAMICS_APP_KEY;

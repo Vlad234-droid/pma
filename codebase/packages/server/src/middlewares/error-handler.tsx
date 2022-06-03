@@ -2,20 +2,20 @@ import React from 'react';
 
 import { NextFunction, Request, Response } from 'express';
 
-import { OneloginError } from '@energon/onelogin';
+import { OneloginError } from '@pma-connectors/onelogin';
 
-import { SorryPage, SorryPageProps, ssr } from '@dex-ddl/core';
-
-type ErrorHandlerParams = Omit<SorryPageProps, 'type'>;
+import { ssr, SorryPageProps } from '@dex-ddl/core';
+import { SorryPageWrapper } from './error-page';
 
 export const errorHandler =
-  ({ appName, logoutPath, tryAgainPath, username }: ErrorHandlerParams) =>
+  ({ appName, logoutPath, tryAgainPath, username }: Omit<SorryPageProps, "type">) =>
   (error: Error, req: Request, res: Response, next: NextFunction) => {
-    console.log('ERROR HANDLER: ', error);
+    // console.log(` ==>  APP ERROR HANDLER (headersSent: ${res.headersSent}): `, error);
+
     if (OneloginError.is(error) && error.status === 403) {
       ssr({
         render: () => (
-          <SorryPage
+          <SorryPageWrapper
             type='forbidden'
             appName={appName}
             logoutPath={logoutPath}
@@ -29,7 +29,7 @@ export const errorHandler =
     } else {
       ssr({
         render: () => (
-          <SorryPage
+          <SorryPageWrapper
             type='sorry'
             appName={appName}
             logoutPath={logoutPath}

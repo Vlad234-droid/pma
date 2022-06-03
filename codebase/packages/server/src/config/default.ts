@@ -2,6 +2,7 @@ export const defaultConfig = {
   applicationName: 'Performance Management Application',
   port: 9000,
   loggerRootName: 'server',
+  loggerDefaultLevel: 'info' as keyof typeof NodeJS.LogLevel,
   oidcGroupFiltersRegex: [/GG-UK-TescoGlobal-(-[\w\d]+)+/],
   applicationCookieParserSecret: 'tesco.pma.session',
   applicationUserDataCookieName: 'tesco.pma.userinfo',
