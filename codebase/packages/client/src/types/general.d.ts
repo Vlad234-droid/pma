@@ -62,7 +62,6 @@ declare namespace NodeJS {
     // Integration
     REACT_APP_INTEGRATION_MODE: keyof typeof AppMode;
     REACT_APP_API_URL: string;
-    REACT_APP_API_VERSION: vstring;
   }
 
   export interface Process {
