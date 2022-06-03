@@ -11,7 +11,7 @@ export const apiProxyMiddleware = ({
 
   const apiProxy = initializeProxyMiddleware({ 
     filter: [ '/api/**', '!/api/colleague-inbox/**' ],
-    mountPath: `${emptyIfRoot(applicationContextPath())}/api`,
+    mountPath: `/api`,
     pathRewrite: { '^/api': '' },
     targetUrl: apiServerUrl(),
     logLevel: loggerLevel(), 
