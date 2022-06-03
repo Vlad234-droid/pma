@@ -35,7 +35,7 @@ const ObjectiveRatings = () => {
   useFetchColleague(uuid);
   useUserObjectivesData(uuid, reviewLoaded, schemaLoaded, setObjectives);
 
-  const handleChange = (year) => {
+  const handleChange = (/*year*/) => {
     //TODO: dispatch(...)
   };
 
