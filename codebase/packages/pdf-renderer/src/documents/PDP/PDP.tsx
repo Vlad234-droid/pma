@@ -20,7 +20,7 @@ const PDPDocument: FC<Props> = ({ formItems, items }) => {
     <GeneralDocument>
       <View style={styles.section}>
         {items.map((value, idx) => (
-          <View key={value.uuid} style={[styles.wrapper, moreThanOne ? styles.border : {}]} wrap={false}>
+          <View key={value.uuid} style={[styles.wrapper, moreThanOne ? styles.border : {}]}>
             {moreThanOne && (
               <View style={styles.meta}>
                 <Text style={styles.title}>Goal #{idx + 1}</Text>
@@ -60,11 +60,10 @@ const styles = StyleSheet.create({
     flexBasis: 22,
   },
   title: {
-    lineHeight: 22,
     fontSize: 18,
   },
   body: {
-    maxHeight: 600,
+    marginTop: 10,
   },
   block: {
     marginTop: 5,
