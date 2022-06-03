@@ -38,6 +38,7 @@ export const addStrategicObjectiveInForm = (form: any, count: number) => {
     const jsonComponents: any[] = [];
     const recursion = (components, parent) => {
       const newComponents: any[] = [];
+      const dependentKeys: any[] = [];
       for (const componentV2 of components) {
         if (componentV2?.type === 'well') {
           recursion(componentV2?.components, componentV2);
@@ -61,6 +62,8 @@ export const addStrategicObjectiveInForm = (form: any, count: number) => {
                     : {}),
                 }),
               );
+            } else {
+              dependentKeys.push(componentV2?.key);
             }
           } else {
             newComponents.push(componentV2);
@@ -68,12 +71,15 @@ export const addStrategicObjectiveInForm = (form: any, count: number) => {
         }
       }
 
-      if (newComponents?.length) {
+      const filteredComponents = dependentKeys.length
+        ? newComponents.filter((component) => !dependentKeys.includes(component.conditional?.when))
+        : newComponents;
+      if (filteredComponents?.length) {
         if (parent?.type === 'well') {
-          parent.components = newComponents;
+          parent.components = filteredComponents;
           jsonComponents.push(parent);
         } else {
-          jsonComponents.push(...newComponents);
+          jsonComponents.push(...filteredComponents);
         }
       }
     };
