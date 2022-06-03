@@ -4,12 +4,12 @@ const domain = '/messages';
 
 export const getMessages = (params?: any) => {
   console.log(`==> MY-INBOX: getMessages`);
-  httpClient.get(domain, { params });
+  return httpClient.get(domain, { params });
 }
 
 export const getMessagesCount = (params?: any) => {
   console.log(`==> MY-INBOX: getMessagesCount`);
-  httpClient.get(`${domain}/count`, { params });
+  return httpClient.get(`${domain}/count`, { params });
 }
 
 export const updateMessage = (params?: any) => {
