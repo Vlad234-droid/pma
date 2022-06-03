@@ -1,11 +1,8 @@
-import { emptyIfRoot } from '@pma-connectors/onelogin';
-
 import { ProcessConfig } from '../config';
 import { initializeProxyMiddleware } from './proxy';
 
 export const apiProxyMiddleware = ({ 
   apiServerUrl,
-  applicationContextPath,
   loggerLevel,
 }: ProcessConfig) => {
 
