@@ -62,7 +62,7 @@ export const myInboxMiddleware = async ({
 
   try {
     const appRouter = Router();
-    appRouter.use(cookieParser());
+    // appRouter.use(cookieParser());
 
     // wildcard origin is not allowed when sending cookies cross origins
     // should be set to core address
