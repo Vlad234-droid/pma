@@ -3,7 +3,7 @@
 This [monorepo](https://danluu.com/monorepo/) contains the menagerie of
 applications
 
-This application requires `yarn v.1.22.x` and `node v.14.4.x`.
+This application requires `yarn v.1.22.x` and `node v.14.17.x`.
 
 ## Monorepo based on Lerna & Yarn Workspaces
 
@@ -20,7 +20,6 @@ This application requires `yarn v.1.22.x` and `node v.14.4.x`.
         //nexus.ourtesco.com/repository/colleague-ui-private/:_auth=<TOKEN>
         //nexus.ourtesco.com/repository/online-web-group/:_auth=<TOKEN>
         always-auth=true
-        https-proxy=http://10.251.0.42:80
 
     Your personal token you can found here - https://nexus.ourtesco.com/
     -  SET Proxy
@@ -37,7 +36,7 @@ This application requires `yarn v.1.22.x` and `node v.14.4.x`.
 
 Check that Yarn is installed by running: `yarn --version`
 
-- NodeJS - https://nodejs.org (version 14.18.3)
+- NodeJS - https://nodejs.org (version 14.17.x)
 
 If some other version installed use NVM to install needed node version
 -NVM - https://github.com/nvm-sh/nvm#installing-and-updating and for Windows https://github.com/coreybutler/nvm-windows/releases/tag/1.1.8
@@ -45,8 +44,8 @@ If some other version installed use NVM to install needed node version
 Check that NodeJS is installed by running: `node --version` or 'nvm ls'
 To install and use 14.18.3 version of node - use commands:
 
-- nvm install 14.18.3
-- nvm use 14.18.3
+- nvm install 14.17.0
+- nvm use 14.17.0
 
 ### 2. Install dependencies
 
@@ -67,8 +66,8 @@ dependencies are satisfied.
 1. Set HTTP_PROXY and HTTPS_PROXY env vars to be able to bootstrap project
 
 ```
-export HTTP_PROXY=http://10.251.0.42:80
-export HTTPS_PROXY=http://10.251.0.42:80
+    export HTTP_PROXY=http://10.251.0.42:80
+    export HTTPS_PROXY=http://10.251.0.42:80
 ```
 
 2. Bootstrap project (download deps.)
@@ -83,15 +82,15 @@ export HTTPS_PROXY=http://10.251.0.42:80
 3. Prepare configuration files
 
 ```
-cd packages/server/
-cp .env.example .env
+    cd packages/server/
+    cp .env.example .env
 ```
 
 open .env ## <- edit according to local env. [Check out](codebase/packages/client/README.md#L23) for details
 
 ```
-cd packages/client/
-cp .env.example .env
+    cd packages/client/
+    cp .env.example .env
 ```
 
 open .env ## <- edit according to local env. [Check out](codebase/packages/server/README.md#L25) for details
@@ -99,7 +98,7 @@ open .env ## <- edit according to local env. [Check out](codebase/packages/serve
 4. Start Application
 
 ```
-yarn run:dev
+    yarn run:dev
 ```
 
 ## Available Scripts
