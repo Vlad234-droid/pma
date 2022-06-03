@@ -14,14 +14,6 @@ export const errorHandler =
   ({ applicationPath, noRedirectPathFragments, clearCookies, logger }: ErrorHandlerConfig) =>
   (error: OneloginError | Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
 
-    console.log(` ==>  OneLogin errorHandler (headersSent: ${res.headersSent})`);
-
-    // preliminary check if headers already sent
-    if (res.headersSent) {
-      next(error);
-      return;
-    }
-
     clearCookies(res);
 
     const status = OneloginError.is(error) ? error.status : 500;

@@ -22,7 +22,7 @@ export const pmaUserDataResolver = (
   src: OpenIdUserInfo,
   config: ProcessConfig | undefined = undefined,
 ): PmaUserProfile => {
-  console.log(` --> OpenID <pmaUserDataResolver>: [src]: ${JSON.stringify(src)}`);
+  //console.log(` --> OpenID <pmaUserDataResolver>: [src]: ${JSON.stringify(src)}`);
 
   const employeeNumber = (src.params?.employeeNumber as string) || (src.params?.EmployeeNumber as string) || undefined;
 
@@ -39,7 +39,7 @@ export const pmaUserDataResolver = (
     updatedAt: !isNaN(Number(src.updated_at)) ? Number(src.updated_at) : undefined,
   };
 
-  console.log(` --> OpenID <pmaUserDataResolver>: [result]: ${JSON.stringify(userInfo)}`);
+  //console.log(` --> OpenID <pmaUserDataResolver>: [result]: ${JSON.stringify(userInfo)}`);
 
   return userInfo;
 };
