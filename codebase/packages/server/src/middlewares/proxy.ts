@@ -48,7 +48,6 @@ export const initializeProxyMiddleware = ({
 
   const timeout = 15 * 60 * 1000; // 15 mins
   const proxyTimeout = 30 * 1000; // 30 sec
-  
   const proxyMiddlewareOptions: Options = {
     target: target,
     changeOrigin: true,
@@ -58,8 +57,8 @@ export const initializeProxyMiddleware = ({
     proxyTimeout: proxyTimeout,
     timeout: timeout,
     logProvider: pinoLogProvider(apiLogger),
-    // onError: onProxyError(apiLogger),
-    // onProxyRes: onProxyRes(apiLogger),
+    onError: onProxyError(apiLogger),
+    onProxyRes: onProxyRes(apiLogger),
     ...overridenOptions,
   };
 
@@ -69,20 +68,36 @@ export const initializeProxyMiddleware = ({
       req: express.Request,
       res: ServerResponse) => {
 
-    const identityTokens = getIdentityData(res as express.Response);
-    const authToken = identityTokens?.access_token;
-
-    if (requireIdentityToken) {
-      if (authToken === null || authToken === undefined) {
-        proxyReq.destroy(new Error("apiProxy: Missing access_token"));
+    let authToken: string;
+    if (proxyReq.hasHeader('Authorization')) {
+      const authHeader = proxyReq.getHeader('Authorization');
+      const bearerPrefix = 'BEARER ';
+      if (typeof authHeader === 'string' && authHeader.slice(0, bearerPrefix.length).toUpperCase() === bearerPrefix) {
+        authToken = authHeader.slice(7);
+      } else {
+        proxyReq.destroy(new Error("apiProxy: Invalid Authorization method"));
         return;
       }
+    } else {
+      const identityTokens = getIdentityData(res as express.Response);
+      authToken = identityTokens?.access_token;
+  
+      if (requireIdentityToken) {
+        if (authToken === null || authToken === undefined) {
+          proxyReq.destroy(new Error("apiProxy: Missing access_token"));
+          return;
+        }
+      }
+  
+      authToken && proxyReq.setHeader('Authorization', `Bearer ${authToken}`);
     }
 
     clearCookies && proxyReq.removeHeader('Cookie');
-    authToken && proxyReq.setHeader('Authorization', `Bearer ${authToken}`);
 
-    fixBody(proxyReq, req);
+    // tries to re-send request body, or return, if not success
+    if (!resendBody(proxyReq, req)) { 
+      return; 
+    }
 
     const originalUrl = req['originalUrl'];
     if (logAuthToken) {
@@ -90,18 +105,18 @@ export const initializeProxyMiddleware = ({
         req: defaultRequestSerializer(req),
         // proxyReq: defaultRequestSerializer(proxyReq),
         identityToken: authToken, 
-      }, `Proxying API request ${originalUrl} to ${target}`);
+      }, `Proxying API request ${originalUrl} to ${proxyReq.protocol}//${proxyReq.host}${proxyReq.path}`);
     } else {
-      apiLogger.trace({ 
+      apiLogger.info({ 
         req: defaultRequestSerializer(req),
         // proxyReq: defaultRequestSerializer(proxyReq),
-      }, `Proxying API request ${originalUrl} to ${target}`);
+      }, `Proxying API request ${originalUrl} to ${proxyReq.protocol}//${proxyReq.host}${proxyReq.path}`);
     };
   }
 
   return filter 
     ? createProxyMiddleware(filter, proxyMiddlewareOptions) 
-    : createProxyMiddleware(mountPath, proxyMiddlewareOptions);
+    : createProxyMiddleware(proxyMiddlewareOptions);
 }
 
 /**
@@ -110,24 +125,28 @@ export const initializeProxyMiddleware = ({
  * @param proxyReq
  * @param req
  */
- function fixBody(proxyReq: ClientRequest, req: express.Request): void {
+ const resendBody = (proxyReq: ClientRequest, req: express.Request): boolean => {
   if (!req.body || !Object.keys(req.body).length) {
-    return;
+    return true;
   }
-  const contentType = proxyReq.getHeader('Content-Type') as string;
-  if (contentType.includes('application/json')) {
-    const body = JSON.stringify(req.body);
-    writeBody(proxyReq, body);
-  }
-  if (contentType === 'application/x-www-form-urlencoded') {
-    const body = new URLSearchParams(req.body as any).toString();
-    writeBody(proxyReq, body);
-  }
-}
 
-function writeBody(proxyReq: ClientRequest, bodyData: string) {
-  proxyReq.setHeader('Content-Length', Buffer.byteLength(bodyData));
-  proxyReq.write(bodyData);
+  const writeBody = (bodyData: string) => {
+    proxyReq.setHeader('Content-Length', Buffer.byteLength(bodyData));
+    proxyReq.write(bodyData);
+  }
+    
+  const contentType = proxyReq.getHeader('Content-Type') as string;
+  switch (contentType) {
+    case 'application/json':
+      writeBody(JSON.stringify(req.body));
+      return true;
+    case 'application/x-www-form-urlencoded':
+      writeBody(new URLSearchParams(req.body as any).toString());
+      return true;
+    default:
+      proxyReq.destroy(new Error(`apiProxy: Unsupported content-type: ${contentType}`));
+      return false;
+  }
 }
 
 const onProxyRes = (logger: Logger) => (proxyRes: IncomingMessage, req: IncomingMessage, res: ServerResponse) => {
@@ -148,8 +167,6 @@ const onProxyError = (logger: Logger) => (err: Error, req: IncomingMessage, res:
     res: defaultResponseSerializer(res), 
     err: defaultErrorSerializer(err),
   }, `Error proxying request from ${originalUrl} to ${targetUrl}`);
-
-  throw err;
 };
 
 const pinoLogProvider = (pinoLogger: Logger) => () => {

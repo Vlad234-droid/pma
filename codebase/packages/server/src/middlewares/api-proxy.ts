@@ -7,8 +7,7 @@ export const apiProxyMiddleware = ({
 }: ProcessConfig) => {
 
   const apiProxy = initializeProxyMiddleware({ 
-    filter: [ '/api/**', '!/api/colleague-inbox/**' ],
-    mountPath: `/api`,
+    mountPath: `/api/v1`,
     pathRewrite: { '^/api': '' },
     targetUrl: apiServerUrl(),
     logLevel: loggerLevel(), 

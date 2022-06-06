@@ -91,18 +91,23 @@ export const initializeOpenid = async ({
      * @param path
      * @returns
      */
-    isViewPath: (path: string) => !path.match('^(/api|/auth|/sso|/static|/favicon.ico)'),
+    isViewPath: (path: string) => !path.match('^(/api|/auth|/sso|/static|/favicon.ico|/manifest.json)'),
 
     /**
      * Paths that won't be part of token validation and refreshing
      */
-    ignoredPathsFragments: [],
+    ignoredPathsFragments: [
+      '/favicon.ico', 
+      '/manifest.json',
+    ],
 
     /**
      * In case of error, calls containg that path framgents won't result in redirect.
      * Instead middleware will return an error with correct status. Could be used for AJAX calls.
      */
-    noRedirectPathFragments: ['/api'],
+    noRedirectPathFragments: [
+      '/api',
+    ],
 
     /**
      * Optional, auth data cookie configuration

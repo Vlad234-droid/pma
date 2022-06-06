@@ -63,8 +63,9 @@ if (!API_SERVER_URL) {
   const integrationMode = config.integrationMode();
   const mfModule = config.integrationMFModule();
 
+  const htmlFileName = 'index.html';
   const clientDistFolder = getPackageDistFolder('@pma/client', buildPath);
-  const htmlFilePath = path.join(clientDistFolder, 'index.html');
+  const htmlFilePath = path.join(clientDistFolder, htmlFileName);
   const mfModulePath = path.join(clientDistFolder, mfModule);
 
   const nodeBFFUrl = config.integrationNodeBFFUrl();
@@ -100,10 +101,7 @@ if (!API_SERVER_URL) {
     }
   }
 
-  router.use(express.static(clientDistFolder, { index: false }));
-  router.use(express.static('public'));
-
-  router.use('/api', apiProxyMiddleware(config));
+  router.use('/api/v1', apiProxyMiddleware(config));
   router.use('/camunda', camundaProxyMiddleware(config));
 
   router.use('/_status', (_, res) => res.sendStatus(200));
@@ -111,7 +109,10 @@ if (!API_SERVER_URL) {
   const myInboxMiddleware = await myInboxConfig(config);
   myInboxMiddleware && router.use(myInboxMiddleware);
 
-  // static file serving sectionmy
+  router.use(express.static(clientDistFolder, { index: false }));
+  router.use(express.static('public'));
+
+  // static file serving section
   switch (integrationMode) {
     case 'integrity': {
       router.use(
@@ -130,7 +131,7 @@ if (!API_SERVER_URL) {
     }
     case 'standalone': {
       router.use(
-        standaloneIndexAssetHandler({
+        standaloneIndexAssetHandler(config, {
           pathToFile: htmlFilePath,
           config: {
             nodeBFFUrl,

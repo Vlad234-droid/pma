@@ -92,7 +92,7 @@ environment:
   RUNTIME_ENV: ppe
   NODE_OPTIONS: --max-http-header-size=16384
   API_SERVER_URL: http://pma-api-service:8083
-  CAMUNDA_SERVER_URL: http://pma-api-service:8083/camunda
+  CAMUNDA_SERVER_URL: http://pma-api-service:8083/experience/yourcontribution/camunda
   INTEGRATION_MODE: standalone
   INTEGRATION_CORE_MOUNT_PATH: /
   INTEGRATION_CORE_URL: /
