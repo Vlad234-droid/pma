@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux';
 import { useTranslation } from 'components/Translation';
 import {
   currentUserSelector,
+  FormType,
   getNextReviewNumberSelector,
   getReviewPropertiesSelector,
   ReviewsActions,
@@ -42,7 +43,7 @@ export const CreateUpdateObjective: FC<Props> = ({ onClose, editNumber = null })
   const formElements = newSchemaVersion
     ? components
         .flatMap((e) => e?.components || e)
-        .filter((e) => e?.type === 'textarea' || e?.type === 'textfield' || e?.type === 'select')
+        .filter((e) => [FormType.TEXT_FIELD, FormType.TEXT_AREA, FormType.SELECT].includes(e?.type))
     : components.filter((component) => component.type != 'text');
   const formElementsFilledEmpty = formElements.reduce((acc, current) => {
     acc[current.key] = '';

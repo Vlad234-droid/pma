@@ -1,14 +1,15 @@
 import React, { FC, useEffect, useMemo, useRef } from 'react';
-import { CreateRule, Rule, Styles, theme, useStyle, colors } from '@pma/dex-wrapper';
+import { colors, CreateRule, Rule, Styles, theme, useStyle } from '@pma/dex-wrapper';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { downloadPDF, PDPDocument, usePDF } from '@pma/pdf-renderer';
 import {
   colleagueUUIDSelector,
+  FormType,
   getTimelineMetaSelector,
+  metaPDPSelector,
   PDPActions,
   schemaMetaPDPSelector,
-  metaPDPSelector,
   TimelineActions,
 } from '@pma/store';
 import DescriptionBlock from 'components/DescriptionBlock';
@@ -46,9 +47,7 @@ const PersonalDevelopmentPlan: FC = () => {
   const formElements = newSchemaVersion
     ? components
         .flatMap((e) => e?.components || e)
-        .filter(
-          (e) => e?.type === 'textarea' || e?.type === 'textfield' || e?.type === 'select' || e?.type === 'datetime',
-        )
+        .filter((e) => [FormType.TEXT_FIELD, FormType.TEXT_AREA, FormType.SELECT, FormType.DATETIME].includes(e?.type))
     : components.filter((component) => component.type != 'text');
 
   const documentFormElements = formElements.map((el) => ({ label: el['label'].replace(/\*./g, '') }));

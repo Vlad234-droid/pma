@@ -4,7 +4,9 @@ import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
 import {
+  Component,
   currentUserSelector,
+  FormType,
   getReviewByTypeSelector,
   getReviewSchema,
   getTimelineByReviewTypeSelector,
@@ -12,7 +14,6 @@ import {
   reviewsMetaSelector,
   SchemaActions,
   schemaMetaSelector,
-  Component,
 } from '@pma/store';
 
 import { ReviewType, Status } from 'config/enum';
@@ -66,7 +67,7 @@ const ReviewFormModal: FC<ReviewFormModal> = ({ reviewType, onClose }) => {
   const componentV2 = newSchemaVersion
     ? components
         .flatMap((e) => e?.components || e)
-        .filter((e) => e?.type === 'textarea' || e?.type === 'textfield' || e?.type === 'select')
+        .filter((e) => [FormType.TEXT_FIELD, FormType.TEXT_AREA, FormType.SELECT].includes(e?.type))
     : [];
   const yepSchema = newSchemaVersion
     ? componentV2.reduce(createYupSchema(t), {})

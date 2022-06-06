@@ -8,6 +8,7 @@
     "generate": "openapi-generator-cli generate -g typescript-axios -i ./openapi-spec.json -o ./src/openapi --additional-properties=supportsES6=true,useSingleRequestParameter=true",
     "validate": "openapi-generator-cli validate -i ./openapi-spec.json",
     "clean": "rimraf ./src/openapi",
+    "clean:all": "rimraf node_modules",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
