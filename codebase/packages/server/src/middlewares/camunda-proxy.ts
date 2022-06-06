@@ -1,5 +1,4 @@
 import { Router } from "express"
-import path from "path";
 
 import { emptyIfRoot } from '@pma-connectors/onelogin';
 
@@ -22,7 +21,8 @@ export const camundaProxyMiddleware = ({
 
   appRouter.use(initializeProxyMiddleware({ 
     // filter: [ '/api/**', '!/api/colleague-inbox/**' ],
-    mountPath: path.join(applicationContextPath(), 'camunda'),
+    mountPath: '/camunda',
+    pathRewrite: { '^/camunda': `${emptyIfRoot(applicationContextPath())}/camunda` },
     targetUrl: camundaServerUrl(),
     clearCookies: false,
     logLevel: loggerLevel(), 
