@@ -19,11 +19,11 @@ export const colleagueInfo = createSelector(colleaguesSelector, (colleagues: any
   const { colleague } = colleagues;
   const firstName = colleague?.profile?.firstName || '';
   const lastName = colleague?.profile?.lastName || '';
-  const job = colleague.workRelationships?.[0]?.job?.name || '';
-  const department = colleague.workRelationships?.[0]?.department?.name || '';
-  const managerName = colleague.workRelationships?.[0]?.manager?.profile?.firstName || '';
-  const managerSirName = colleague.workRelationships?.[0]?.manager?.profile?.lastName || '';
-  const businessType = colleague.workRelationships?.[0]?.department?.businessType || '';
+  const job = colleague?.workRelationships?.[0]?.job?.name || '';
+  const department = colleague?.workRelationships?.[0]?.department?.name || '';
+  const managerName = colleague?.workRelationships?.[0]?.manager?.profile?.firstName || '';
+  const managerSirName = colleague?.workRelationships?.[0]?.manager?.profile?.lastName || '';
+  const businessType = colleague?.workRelationships?.[0]?.department?.businessType || '';
 
   return { firstName, lastName, job, department, managerName, managerSirName, businessType };
 });

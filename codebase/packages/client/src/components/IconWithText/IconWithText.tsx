@@ -3,15 +3,17 @@ import { useStyle, Styles, CreateRule } from '@pma/dex-wrapper';
 
 import { Graphics, Icon } from 'components/Icon';
 
+export const WRAPPER_ID = 'wrapper-id';
+
 export const IconWithText: FC<{ text: string; graphic: Graphics; onClick?: () => void | undefined }> = ({
   text,
   graphic,
   onClick,
 }) => {
   const { css } = useStyle();
+
   return (
-    //@ts-ignore
-    <div className={css(wrapper({ active: !!onClick }))} onClick={onClick}>
+    <div className={css(wrapper({ active: !!onClick }))} onClick={onClick} data-test-id={WRAPPER_ID}>
       <Icon graphic={graphic} iconStyles={{ width: '18px', height: '18px' }} />
       <p>{text}</p>
     </div>

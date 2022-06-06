@@ -1,22 +1,22 @@
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
-import { renderWithTheme } from '../../utils/test';
+import { renderWithTheme as render } from 'utils/test';
 import '@testing-library/jest-dom';
+import { fireEvent } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
-import { createMemoryHistory } from 'history';
+
 import Report, { REPORT_WRAPPER } from './Report';
 import { PieChart } from '../../components/PieChart';
-import { View } from 'components/PieChart/config';
 import InfoTable, { INFO_TABLE_WRAPPER } from 'components/InfoTable';
-import { Rating } from '../../config/enum';
 
-import { Page } from 'pages';
+import { View } from 'components/PieChart/config';
+import { Rating } from '../../config/enum';
+import { getCurrentYear } from '../../utils';
+import { FILTER_WRAPPER } from './components/FilterModal/FilterModal';
 
 describe('Report page', () => {
   it('render report wrapper', async () => {
-    const history = createMemoryHistory();
-    history.push(Page.REPORT);
-    const { getByTestId } = renderWithTheme(
+    const { getByTestId } = render(
       <BrowserRouter>
         <Report />
       </BrowserRouter>,
@@ -31,7 +31,7 @@ describe('Report page', () => {
       data: [{ percent: 67 }],
       display: View.CHART,
     };
-    const { findByTestId } = renderWithTheme(<PieChart {...props} />);
+    const { findByTestId } = render(<PieChart {...props} />);
 
     const percent = await findByTestId('percent_id');
 
@@ -44,7 +44,7 @@ describe('Report page', () => {
       data: [{ percent: 67 }],
       display: View.CHART,
     };
-    const { findByTestId } = renderWithTheme(<PieChart {...props} />);
+    const { findByTestId } = render(<PieChart {...props} />);
 
     const titlePercent = await findByTestId('titleId');
     expect(await titlePercent).toBeInTheDocument();
@@ -60,9 +60,50 @@ describe('Report page', () => {
       ],
       mainTitle: 'Breakdown of Mid-year ratings',
     };
-    const { findByTestId } = renderWithTheme(<InfoTable {...props} />);
+    const { findByTestId } = render(<InfoTable {...props} />);
 
     const wrapper = await findByTestId(INFO_TABLE_WRAPPER);
     expect(await wrapper).toBeInTheDocument();
+  });
+  it('it should change select value ', () => {
+    const prevYear = (Number(getCurrentYear()) - 1).toString();
+
+    const { getByTestId, queryByText, getByText } = render(
+      <BrowserRouter>
+        <Report />
+      </BrowserRouter>,
+    );
+    fireEvent.click(getByTestId('year_options'));
+    fireEvent.click(getByText(prevYear));
+
+    expect(queryByText('Choose an area')).not.toBeInTheDocument();
+    expect(getByText(prevYear)).toBeInTheDocument();
+  });
+  it('it should open report modal', async () => {
+    const { getByTestId } = render(
+      <BrowserRouter>
+        <Report />
+      </BrowserRouter>,
+    );
+    fireEvent.click(getByTestId('edit'));
+    expect(getByTestId('modal-wrapper')).toBeInTheDocument();
+  });
+  it('it should open filter modal', async () => {
+    const { getByTestId } = render(
+      <BrowserRouter>
+        <Report />
+      </BrowserRouter>,
+    );
+    fireEvent.click(getByTestId('settings'));
+    expect(getByTestId(FILTER_WRAPPER)).toBeInTheDocument();
+  });
+  it('it should open edit dashboard', async () => {
+    const { getByTestId } = render(
+      <BrowserRouter>
+        <Report />
+      </BrowserRouter>,
+    );
+    fireEvent.click(getByTestId('download'));
+    expect(getByTestId('modal-wrapper')).toBeInTheDocument();
   });
 });

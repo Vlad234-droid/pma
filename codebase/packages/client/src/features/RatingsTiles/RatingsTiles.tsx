@@ -14,6 +14,8 @@ import { getCards } from './utils';
 import { paramsReplacer } from 'utils';
 import { useFetchColleague } from './hooks/useFetchColleague';
 
+export const TILES_WRAPPER = 'tiles-wrapper';
+
 const RatingsTiles = () => {
   const { css, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
@@ -26,14 +28,14 @@ const RatingsTiles = () => {
   const { firstName, lastName, job, department } = useSelector(colleagueInfo);
 
   return (
-    <>
-      <div className={css(backStyle)}>
+    <div data-test-id={TILES_WRAPPER}>
+      <div className={css(backStyle)} data-test-id={'backwardLink'}>
         <IconButton onPress={() => navigate(-1)} graphic='backwardLink' />
       </div>
       <p className={css(titleStyle)}>{firstName && lastName && `${firstName} ${lastName} | ${job} ${department}`}</p>
       <div className={css(ratingWrapper)}>
         {getCards(t).map((item, i) => (
-          <div key={i} className={css(cardStyle({ mobileScreen }))}>
+          <div key={i} className={css(cardStyle({ mobileScreen }))} data-test-id={'tile-link'}>
             <Link to={buildPath(paramsReplacer(item.page, { ':uuid': uuid as string }))}>
               <TileWrapper>
                 <div className={css(wrapperBlock({ mobileScreen }))}>
@@ -46,7 +48,7 @@ const RatingsTiles = () => {
           </div>
         ))}
       </div>
-    </>
+    </div>
   );
 };
 
