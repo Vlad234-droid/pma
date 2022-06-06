@@ -1,10 +1,10 @@
 import { Router } from "express"
+import path from "path";
 
 import { emptyIfRoot } from '@pma-connectors/onelogin';
 
 import { ProcessConfig } from '../config';
 import { initializeProxyMiddleware } from './proxy';
-import path from "path";
 
 export const camundaProxyMiddleware = ({
   camundaServerUrl,
@@ -16,7 +16,7 @@ export const camundaProxyMiddleware = ({
 
   appRouter.get('/', (req, res) => {
     if (req.originalUrl === '/camunda') {
-      res.redirect('/camunda/app/');
+      res.redirect(`${emptyIfRoot(applicationContextPath())}/camunda/app/`);
     }
   });
 
