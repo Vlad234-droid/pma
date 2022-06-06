@@ -15,7 +15,7 @@ i18n
     saveMissing: false,
     updateMissing: false,
     backend: {
-      loadPath: `${checkTrailingSlash(PUBLIC_URL)}locales/{{lng}}/{{ns}}.json`,
+      loadPath: `${PUBLIC_URL}/locales/{{lng}}/{{ns}}.json`,
       queryStringParams: { v: '0.0.1' },
     },
     interpolation: {

@@ -2,8 +2,7 @@ import React, { FC, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Rule, useStyle } from '@pma/dex-wrapper';
 import { Page } from 'pages';
-import { buildAbsolutePath } from 'utils';
-import { CAMUNDA_APP_PATH } from 'config/constants';
+import { CAMUNDA_APP_PATH, PUBLIC_URL } from 'config/constants';
 import { CanPerform, role } from 'features/Permission';
 import { buildPath } from 'features/Routes';
 import { useTranslation } from 'components/Translation';
@@ -86,7 +85,7 @@ export const MenuDropdown: FC = () => {
             perform={[role.PROCESS_MANAGER, role.ADMIN]}
             yes={() => (
               <a
-                href={buildAbsolutePath(CAMUNDA_APP_PATH)}
+                href={`${PUBLIC_URL}${CAMUNDA_APP_PATH}`}
                 target={'_blank'}
                 rel='noreferrer'
                 className={css(itemSettingsStyle, itemSettingsBorderStyle)}
