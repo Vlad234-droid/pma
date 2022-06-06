@@ -4,12 +4,12 @@ import {
   identityClientScopedTokenPlugin,
   pinoLogger,
   userDataPlugin,
-  OpenIdRouter,
   OpenIdUserInfo,
 } from '@pma-connectors/onelogin';
 
 import { pmaUserDataResolver } from '../config/auth-data';
 import { isPROD, ProcessConfig } from '../config';
+import { Router } from 'express';
 
 export const initializeOpenid = async ({
   runtimeEnvironment,
@@ -32,11 +32,24 @@ export const initializeOpenid = async ({
   identityClientSecret,
   identityUserScopedTokenCookieSecret,
   identityUserScopedTokenCookieName,
-}: ProcessConfig): Promise<OpenIdRouter> => {
-  const isProduction = isPROD(runtimeEnvironment());
-  const identityIdAndSecret = `${identityClientId()}:${identityClientSecret()}`;
+}: ProcessConfig): Promise<Router> => {
 
-  const openidMiddleware = initializeOpenidMiddleware({
+  const openIdRouter = Router();
+
+  // add simple handler to check, if request has Bearer auth and by-pass OneLogin
+  openIdRouter.use((req, _, next) => {
+    const authHeader = req.headers.authorization;
+    const bearerPrefix = 'BEARER ';
+    if (typeof authHeader === 'string' && authHeader.slice(0, bearerPrefix.length).toUpperCase() === bearerPrefix) {
+      next('router');
+    } else {
+      next();
+    }
+  });
+
+  const isProduction = isPROD(runtimeEnvironment());
+
+  const openidMiddleware = await initializeOpenidMiddleware({
     runtimeEnvironment: runtimeEnvironment(),
 
     /**
@@ -177,5 +190,7 @@ export const initializeOpenid = async ({
     ],
   });
 
-  return openidMiddleware;
+  openIdRouter.use(openidMiddleware);
+
+  return openIdRouter;
 };
