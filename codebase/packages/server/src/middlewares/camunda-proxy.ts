@@ -22,7 +22,10 @@ export const camundaProxyMiddleware = ({
   appRouter.use(initializeProxyMiddleware({ 
     // filter: [ '/api/**', '!/api/colleague-inbox/**' ],
     mountPath: '/camunda',
-    pathRewrite: { '^/camunda': `${emptyIfRoot(applicationContextPath())}/camunda` },
+    pathRewrite: { 
+      [`^/camunda`]: `${emptyIfRoot(applicationContextPath())}/camunda`,
+      [`^${emptyIfRoot(applicationContextPath())}/camunda`]: `${emptyIfRoot(applicationContextPath())}/camunda`,
+    },
     targetUrl: camundaServerUrl(),
     clearCookies: false,
     logLevel: loggerLevel(), 
