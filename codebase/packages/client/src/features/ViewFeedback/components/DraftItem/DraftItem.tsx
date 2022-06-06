@@ -1,4 +1,4 @@
-import React, { FC, useMemo } from 'react';
+import React, { FC, useMemo, useState } from 'react';
 import { Rule, Styles, useStyle, colors, theme } from '@pma/dex-wrapper';
 import { TileWrapper } from 'components/Tile';
 import { Accordion, BaseAccordion, Panel, Section } from 'components/Accordion';
@@ -63,17 +63,31 @@ export const defaultSerializer = (item) => ({
   updatedTime: formatToRelativeDate(item.updatedTime),
 });
 
+const DraftItemDocument: FC<{ item: DraftItem }> = ({ item }) => {
+  const document = useMemo(() => <FeedbackDocument items={[item as any]} />, [item.uuid]);
+  const [instance] = usePDF({ document });
+
+  return (
+    <IconButton
+      customVariantRules={{ default: iconBtnStyle }}
+      onPress={() => downloadPDF(instance.url!, 'feedback.pdf')}
+      graphic='download'
+      iconProps={{ invertColors: false }}
+      iconStyles={iconStyle}
+    >
+      {instance.loading ? <Trans i18nKey='loading'>Loading...</Trans> : <Trans i18nKey='download'>Download</Trans>}
+    </IconButton>
+  );
+};
+
 const DraftItem: FC<DraftItemProps> = ({ item, downloadable = true }) => {
   const { css } = useStyle();
   const dispatch = useDispatch();
+  const [show, setShow] = useState<boolean>(false);
 
   const markAsReadFeedback = (uuid) => {
     dispatch(FeedbackActions.readFeedback({ uuid }));
   };
-
-  const document = useMemo(() => <FeedbackDocument items={[item as any]} />, [item.uuid]);
-
-  const [instance] = usePDF({ document });
 
   return (
     <TileWrapper customStyle={wrapperStyles}>
@@ -94,7 +108,12 @@ const DraftItem: FC<DraftItemProps> = ({ item, downloadable = true }) => {
                 department={item?.departmentName}
                 updatedTime={item?.updatedTime}
                 isFormattedDate={true}
-                onExpandPress={(expanded) => expanded && !item.read && markAsReadFeedback(item.uuid)}
+                onExpandPress={(expanded) => {
+                  setShow(expanded);
+                  if (expanded) {
+                    !item.read && markAsReadFeedback(item.uuid);
+                  }
+                }}
               />
 
               <Panel>
@@ -115,21 +134,7 @@ const DraftItem: FC<DraftItemProps> = ({ item, downloadable = true }) => {
                       </div>
                     ))}
                 </TileWrapper>
-                {downloadable && (
-                  <IconButton
-                    customVariantRules={{ default: iconBtnStyle }}
-                    onPress={() => downloadPDF(instance.url!, 'feedback.pdf')}
-                    graphic='download'
-                    iconProps={{ invertColors: false }}
-                    iconStyles={iconStyle}
-                  >
-                    {instance.loading ? (
-                      <Trans i18nKey='loading'>Loading...</Trans>
-                    ) : (
-                      <Trans i18nKey='download'>Download</Trans>
-                    )}
-                  </IconButton>
-                )}
+                {downloadable && show && <DraftItemDocument item={item} />}
               </Panel>
             </Section>
           )}

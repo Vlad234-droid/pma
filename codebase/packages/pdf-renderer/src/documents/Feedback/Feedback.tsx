@@ -71,6 +71,7 @@ const FeedbackDocument: FC<Props> = ({ items }) => {
 const styles = StyleSheet.create({
   section: {
     padding: 10,
+    marginBottom: 30,
   },
   wrapper: {
     marginBottom: 10,

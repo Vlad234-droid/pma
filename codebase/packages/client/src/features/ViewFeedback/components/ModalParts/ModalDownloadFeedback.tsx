@@ -16,6 +16,7 @@ import { ArrowLeftIcon } from 'components/ArrowLeftIcon';
 import { ModalDownloadFeedbackProps } from './type';
 import { createDownLoadSchema } from './config/schema';
 import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
+import debounce from 'lodash.debounce';
 
 export const DOWNLOAD_WRAPPER = 'download-wrapper';
 
@@ -36,7 +37,11 @@ const ModalDownloadFeedback: FC<ModalDownloadFeedbackProps> = ({
   const [instance, updateInstance] = usePDF({ document });
 
   useEffect(() => {
-    updateInstance();
+    const update = async () => {
+      await updateInstance();
+    };
+
+    update();
   }, [selected.length]);
 
   const methods = useFormWithCloseProtection({
@@ -87,7 +92,11 @@ const ModalDownloadFeedback: FC<ModalDownloadFeedbackProps> = ({
           formState={formState}
         />
         {selectedColleague && (
-          <SubmitPart selectedPerson={selectedColleague.colleague} searchDate={formData.date} onChange={setSelected} />
+          <SubmitPart
+            selectedPerson={selectedColleague.colleague}
+            searchDate={formData.date}
+            onChange={debounce(setSelected, 1500)}
+          />
         )}
         <ButtonsWrapper
           customButtons={
