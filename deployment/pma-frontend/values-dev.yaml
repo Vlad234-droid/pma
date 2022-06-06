@@ -91,7 +91,11 @@ environment:
   BUILD_ENV: ppe
   RUNTIME_ENV: ppe
   NODE_OPTIONS: --max-http-header-size=16384
-  API_SERVER_URL: http://pma-api-service:8083
+  API_PROXY_MOUNT_PATH: /api/v1
+  API_SERVER_URL: http://pma-api-service:8083/v1
+  SWAGGER_PROXY_MOUNT_PATH: /api-docs
+  SWAGGER_SERVER_URL: http://pma-api-service:8083/api-docs
+  CAMUNDA_PROXY_MOUNT_PATH: /camunda
   CAMUNDA_SERVER_URL: http://pma-api-service:8083/experience/yourcontribution/camunda
   INTEGRATION_MODE: standalone
   INTEGRATION_CORE_MOUNT_PATH: /
@@ -100,16 +104,14 @@ environment:
   INTEGRATION_NODE_BFF_URL: /
   STICK_COOKIES_TO_APPLICATION_PATH: true
   APPLICATION_URL: https://frontend.dev.pma.tescocloud.com/experience/yourcontribution
-  # APPLICATION_SERVER_URL_ROOT: https://frontend.dev.pma.tescocloud.com
-  # APPLICATION_PUBLIC_URL: /experience/yourcontribution
   APPLICATION_USER_DATA_COOKIE_NAME: tesco.userinfo
   USE_ONELOGIN: true
   OIDC_ISSUER_URL: https://loginppe.ourtesco.com/oidc/2
   OIDC_AUTH_CALLBACK_PATH: /sso/auth/callback
   OIDC_REDIRECT_AFTER_LOGOUT_CALLBACK_PATH: /sso/logout/callback
   IDENTITY_USER_SCOPED_TOKEN_COOKIE_NAME: identity-user-scoped-token
-  REACT_APP_DYNAMICS_APP_KEY: AD-AAB-ABN-WNX
-  REACT_APP_CAMUNDA_APP_PATH: camunda/app/
+  # REACT_APP_DYNAMICS_APP_KEY: AD-AAB-ABN-WNX
+  # REACT_APP_CAMUNDA_APP_PATH: camunda/app/
   LOGGER_ROOT_NAME: server
   LOGGER_LEVEL: debug
   LOGGER_PRETIFY: true

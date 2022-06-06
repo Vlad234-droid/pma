@@ -42,7 +42,7 @@ export const initializeProxyMiddleware = ({
   overridenOptions = undefined,
 }: ProxyMiddlewareOptions): RequestHandler => {
 
-  const apiLogger = typeof logger === 'string' ? createLogger({ name: logger }) : logger;
+  const proxyLogger = typeof logger === 'string' ? createLogger({ name: logger }) : logger;
 
   const target = `${targetUrl.protocol}//${targetUrl.host}`;
 
@@ -52,17 +52,17 @@ export const initializeProxyMiddleware = ({
     target: target,
     changeOrigin: true,
     autoRewrite: true,
-    pathRewrite: pathRewrite || { [`^${mountPath}`]: emptyIfRoot(targetUrl.pathname) },
+    pathRewrite: pathRewrite || (mountPath ? { [`^${mountPath}`]: emptyIfRoot(targetUrl.pathname) } : undefined),
     logLevel: logLevel,
     proxyTimeout: proxyTimeout,
     timeout: timeout,
-    logProvider: pinoLogProvider(apiLogger),
-    onError: onProxyError(apiLogger),
-    onProxyRes: onProxyRes(apiLogger),
+    logProvider: pinoLogProvider(proxyLogger),
+    onError: onProxyError(proxyLogger),
+    onProxyRes: onProxyRes(proxyLogger),
     ...overridenOptions,
   };
 
-  proxyMiddlewareOptions.onProxyReq = onProxyReq(apiLogger, { requireIdentityToken, clearCookies, logAuthToken });
+  proxyMiddlewareOptions.onProxyReq = onProxyReq(proxyLogger, { requireIdentityToken, clearCookies, logAuthToken });
   return filter 
     ? createProxyMiddleware(filter, proxyMiddlewareOptions) 
     : createProxyMiddleware(proxyMiddlewareOptions);

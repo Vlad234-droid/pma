@@ -5,8 +5,6 @@ import { PUBLIC_URL } from 'config/constants';
 import backend from 'i18next-http-backend';
 import { initReactI18next } from 'react-i18next';
 
-import { checkTrailingSlash } from 'utils/helper';
-
 i18n
   .use(backend)
   .use(initReactI18next)

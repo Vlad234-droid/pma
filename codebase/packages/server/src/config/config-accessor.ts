@@ -83,11 +83,12 @@ export class ConfigAccessor {
       loggerLevel: () => processEnv.LOGGER_LEVEL || defaultConfig.loggerDefaultLevel,
       loggerPretify: () => yn(processEnv.LOGGER_PRETIFY, { default: false }),
       loggerLogAuthToken: () => yn(processEnv.LOGGER_LOG_AUTHTOKEN, { default: false }),
-      //
+      // 
       apiServerUrl: () => createUrlOrFail(
         processEnv.API_SERVER_URL,
         `API_SERVER_URL must be a well-formed URL pointing to API server, e.g.: http://tesco.com/pma/api`,
         { removeTrailingSlash: true }),
+      // 
       camundaServerUrl: () => createUrlOrFail(
         processEnv.CAMUNDA_SERVER_URL,
         `CAMUNDA_SERVER_URL must be a well-formed URL pointing to API server, e.g.: http://tesco.com/pma/camunda`,

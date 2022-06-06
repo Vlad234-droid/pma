@@ -3,8 +3,8 @@ const { createProxyMiddleware } = require('http-proxy-middleware');
 
 module.exports = function (app) {
   app.use(
-    createProxyMiddleware(['/api', '/auth', '/sso', '/my-inbox'], {
-      target: 'http://localhost:4000',
+    createProxyMiddleware(['/sso', '/api', '/api-docs', '/camunda'], {
+      target: `http://localhost:${process.env.NODE_PORT}`,
       changeOrigin: true,
     }),
   );
