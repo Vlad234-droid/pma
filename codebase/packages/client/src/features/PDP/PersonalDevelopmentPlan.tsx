@@ -1,14 +1,15 @@
 import React, { FC, useEffect, useMemo, useRef } from 'react';
-import { CreateRule, Rule, Styles, theme, useStyle, colors } from '@pma/dex-wrapper';
+import { colors, CreateRule, Rule, Styles, theme, useStyle } from '@pma/dex-wrapper';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { downloadPDF, PDPDocument, usePDF } from '@pma/pdf-renderer';
 import {
   colleagueUUIDSelector,
+  FormType,
   getTimelineMetaSelector,
+  metaPDPSelector,
   PDPActions,
   schemaMetaPDPSelector,
-  metaPDPSelector,
   TimelineActions,
 } from '@pma/store';
 import DescriptionBlock from 'components/DescriptionBlock';
@@ -18,17 +19,17 @@ import { paramsReplacer } from 'utils';
 import { Icon } from 'components/Icon';
 import { PDPType } from 'config/enum';
 import { BASE_URL_API } from 'config/constants';
-import { Trans, useTranslation } from 'components/Translation';
+import { TFunction, Trans, useTranslation } from 'components/Translation';
 import Spinner from 'components/Spinner';
 import GoalInfo from './components/GoalInfo';
 import usePDPSchema from './hooks/usePDPSchema';
 
 export const TEST_ID = 'pdp-page';
 
-function getEditOrCreatePDP(pdpSelector: any[]) {
-  if (pdpSelector?.length >= 1 && pdpSelector?.length < 5) return 'Edit PDP';
-  return 'Create PDP';
-}
+const getEditOrCreatePDP = (pdpSelector: any[], t: TFunction) =>
+  pdpSelector?.length >= 1 && pdpSelector?.length < 5
+    ? t('add_pdp_goal', 'Add PDP goal')
+    : t('create_pdp', 'Create PDP');
 
 const PersonalDevelopmentPlan: FC = () => {
   const { css, theme, matchMedia } = useStyle();
@@ -46,9 +47,7 @@ const PersonalDevelopmentPlan: FC = () => {
   const formElements = newSchemaVersion
     ? components
         .flatMap((e) => e?.components || e)
-        .filter(
-          (e) => e?.type === 'textarea' || e?.type === 'textfield' || e?.type === 'select' || e?.type === 'datetime',
-        )
+        .filter((e) => [FormType.TEXT_FIELD, FormType.TEXT_AREA, FormType.SELECT, FormType.DATETIME].includes(e?.type))
     : components.filter((component) => component.type != 'text');
 
   const documentFormElements = formElements.map((el) => ({ label: el['label'].replace(/\*./g, '') }));
@@ -122,7 +121,7 @@ const PersonalDevelopmentPlan: FC = () => {
                 <div className={css(btnIcon)}>
                   <Icon graphic='add' fill={theme.colors.white} iconStyles={{ height: '16.67px', width: '16.67px' }} />
                 </div>
-                {getEditOrCreatePDP(pdpSelector)}
+                {getEditOrCreatePDP(pdpSelector, t)}
               </button>
             </>
           )}

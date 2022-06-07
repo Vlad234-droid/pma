@@ -159,7 +159,7 @@ if (!API_SERVER_URL) {
     logger.info(`Server is running at http://${os.hostname().toLowerCase()}:${NODE_PORT}`);
   });
 
-  process.on('SIGHUP', () => server.close());
-  process.on('SIGINT', () => server.close());
-  process.on('SIGTERM', () => server.close());
+  // process.on('SIGHUP', () => server.close());
+  // process.on('SIGINT', () => server.close());
+  // process.on('SIGTERM', () => server.close());
 })();

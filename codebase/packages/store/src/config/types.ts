@@ -23,6 +23,9 @@ export enum ExpressionValueType {
 }
 
 export enum FormType {
+  HTML_ELEMENT = 'htmlelement',
+  DATETIME = 'datetime',
+  TEXT_AREA = 'textarea',
   TEXT_FIELD = 'textfield',
   SELECT = 'select',
   TEXT = 'text',

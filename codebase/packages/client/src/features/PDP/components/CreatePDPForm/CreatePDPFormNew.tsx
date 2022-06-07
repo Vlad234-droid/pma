@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useMemo, useRef, useState } from 'react';
 import * as Yup from 'yup';
-import { metaPDPSelector } from '@pma/store';
+import { FormType, metaPDPSelector } from '@pma/store';
 import { useSelector } from 'react-redux';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, CreateRule, Rule, theme, useStyle } from '@pma/dex-wrapper';
@@ -57,7 +57,7 @@ const CreatePDPForm: FC<Props> = ({
   const { loaded: schemaLoaded = false } = useSelector(metaPDPSelector) || false;
   const formElements = components
     .flatMap((e) => e?.components || e)
-    .filter((e) => e?.type === 'textarea' || e?.type === 'textfield' || e?.type === 'select' || e?.type === 'datetime');
+    .filter((e) => [FormType.TEXT_FIELD, FormType.TEXT_AREA, FormType.SELECT, FormType.DATETIME].includes(e?.type));
   const formElementsFilledEmpty = formElements.reduce((acc, current) => {
     acc[current.key] = '';
     return acc;
@@ -169,7 +169,7 @@ const CreatePDPForm: FC<Props> = ({
 
             const updateGoalValue = pdpList ? pdpList[currentUUID ? currentTab : currentTab + 2]?.properties[key] : '';
 
-            if (type === 'htmlelement') {
+            if (type === FormType.HTML_ELEMENT) {
               const { tag: CustomTag = 'p' } = component;
               const Tag = ({ children }) => {
                 return <CustomTag className={css({ margin: '16px 0px 8px' })}>{children}</CustomTag>;
@@ -178,7 +178,7 @@ const CreatePDPForm: FC<Props> = ({
               return <MarkdownRenderer key={component.id} components={{ p: Tag }} source={component?.content} />;
             }
 
-            if (type === 'datetime') {
+            if (type === FormType.DATETIME) {
               return (
                 <React.Fragment key={`${currentTab - 1}${idx}`}>
                   <Field

@@ -1,10 +1,12 @@
 import React, { FC } from 'react';
 import { Rule, useStyle, IconButton } from '@pma/dex-wrapper';
 
+export const TEST_ID = 'backwardLink';
+
 export const Backward: FC<{ onPress: () => void }> = ({ onPress }) => {
   const { css } = useStyle();
   return (
-    <div className={css(arrowLeftStyle)}>
+    <div className={css(arrowLeftStyle)} data-test-id={TEST_ID}>
       <IconButton onPress={onPress} graphic='backwardLink' />
     </div>
   );

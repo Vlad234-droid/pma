@@ -2,6 +2,7 @@ import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
 import { RenderResultWithProps, renderWithTheme } from 'utils/test';
 import { BasicTile, TEST_ICON, TileProps } from './BasicTile';
+import { TILE_WRAPPER } from 'components/Tile';
 
 describe('Tile/BasicTile', () => {
   let wrapper: RenderResultWithProps<TileProps>;
@@ -29,7 +30,7 @@ describe('Tile/BasicTile', () => {
 
   it('Render wrapper', async () => {
     wrapper = renderWithTheme(<BasicTile title='test' description='desc' event='test event' />);
-    expect(wrapper.getByTestId('tile-wrapper')).toBeInTheDocument();
+    expect(wrapper.getByTestId(TILE_WRAPPER)).toBeInTheDocument();
   });
 
   it('Render event Icon', async () => {

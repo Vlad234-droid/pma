@@ -1,6 +1,8 @@
 import React, { FC, HTMLProps } from 'react';
 import { Colors, colors, CreateRule, useStyle } from '@pma/dex-wrapper';
 
+export const TILE_WRAPPER = 'tile-wrapper';
+
 export type TileWrapperProps = {
   boarder?: boolean;
   boxShadow?: boolean;
@@ -24,7 +26,7 @@ export const TileWrapper: FC<Props> = ({
 
   return (
     <div
-      data-test-id='tile-wrapper'
+      data-test-id={TILE_WRAPPER}
       className={css(
         containerStyle({ hover, background }),
         borderStyle({ boarder }),

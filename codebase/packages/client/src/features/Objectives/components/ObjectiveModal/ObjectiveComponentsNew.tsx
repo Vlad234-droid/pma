@@ -7,6 +7,7 @@ import MarkdownRenderer from 'components/MarkdownRenderer';
 import { GenericItemField } from 'components/GenericForm';
 import { Input, Item, Select, Textarea } from 'components/Form';
 import { useTranslation } from 'components/Translation';
+import { FormType } from '@pma/store';
 
 type Props = {
   methods: UseFormReturn;
@@ -32,7 +33,7 @@ const ObjectiveComponents: FC<Props> = ({ components, review, methods }) => {
 
           return <MarkdownRenderer key={component.id} components={{ p: Tag }} source={component?.content} />;
         }
-        if (type === 'textfield' && component.key) {
+        if (type === FormType.TEXT_FIELD && component.key) {
           return (
             <GenericItemField
               key={component.id}
@@ -46,7 +47,7 @@ const ObjectiveComponents: FC<Props> = ({ components, review, methods }) => {
             />
           );
         }
-        if (type === 'textarea' && component.key) {
+        if (type === FormType.TEXT_AREA && component.key) {
           return (
             <GenericItemField
               key={component.id}
@@ -60,7 +61,7 @@ const ObjectiveComponents: FC<Props> = ({ components, review, methods }) => {
             />
           );
         }
-        if (type === 'select' && component.key) {
+        if (type === FormType.SELECT && component.key) {
           return (
             <GenericItemField
               key={component.id}

@@ -7,6 +7,7 @@ import { renderWithTheme as render, generateEmployeeReview } from 'utils/test';
 import { Status } from 'config/enum';
 
 import TeamMateProfile from './TeamMateProfile';
+import { TILE_WRAPPER } from 'components/Tile';
 
 jest.mock('react-router-dom', () => ({
   ...(jest.requireActual('react-router-dom') as any),
@@ -27,7 +28,7 @@ describe('<TeamMateProfile />', () => {
     it('should render <TileWrapper />', () => {
       const { getByTestId } = render(<TeamMateProfile {...props} />);
 
-      expect(getByTestId('tile-wrapper')).toBeInTheDocument();
+      expect(getByTestId(TILE_WRAPPER)).toBeInTheDocument();
     });
 
     it('should render <Accordion />', () => {

@@ -4,12 +4,12 @@ import {
   identityClientScopedTokenPlugin,
   pinoLogger,
   userDataPlugin,
-  OpenIdRouter,
   OpenIdUserInfo,
 } from '@pma-connectors/onelogin';
 
 import { pmaUserDataResolver } from '../config/auth-data';
 import { isPROD, ProcessConfig } from '../config';
+import { Router } from 'express';
 
 export const initializeOpenid = async ({
   runtimeEnvironment,
@@ -32,11 +32,23 @@ export const initializeOpenid = async ({
   identityClientSecret,
   identityUserScopedTokenCookieSecret,
   identityUserScopedTokenCookieName,
-}: ProcessConfig): Promise<OpenIdRouter> => {
-  const isProduction = isPROD(runtimeEnvironment());
-  const identityIdAndSecret = `${identityClientId()}:${identityClientSecret()}`;
+}: ProcessConfig): Promise<Router> => {
+  const openIdRouter = Router();
 
-  const openidMiddleware = initializeOpenidMiddleware({
+  // add simple handler to check, if request has Bearer auth and by-pass OneLogin
+  openIdRouter.use((req, _, next) => {
+    const authHeader = req.headers.authorization;
+    const bearerPrefix = 'BEARER ';
+    if (typeof authHeader === 'string' && authHeader.slice(0, bearerPrefix.length).toUpperCase() === bearerPrefix) {
+      next('router');
+    } else {
+      next();
+    }
+  });
+
+  const isProduction = isPROD(runtimeEnvironment());
+
+  const openidMiddleware = await initializeOpenidMiddleware({
     runtimeEnvironment: runtimeEnvironment(),
 
     /**
@@ -96,18 +108,13 @@ export const initializeOpenid = async ({
     /**
      * Paths that won't be part of token validation and refreshing
      */
-    ignoredPathsFragments: [
-      '/favicon.ico', 
-      '/manifest.json',
-    ],
+    ignoredPathsFragments: ['/favicon.ico', '/manifest.json'],
 
     /**
      * In case of error, calls containg that path framgents won't result in redirect.
      * Instead middleware will return an error with correct status. Could be used for AJAX calls.
      */
-    noRedirectPathFragments: [
-      '/api',
-    ],
+    noRedirectPathFragments: ['/api'],
 
     /**
      * Optional, auth data cookie configuration
@@ -177,5 +184,7 @@ export const initializeOpenid = async ({
     ],
   });
 
-  return openidMiddleware;
+  openIdRouter.use(openidMiddleware);
+
+  return openIdRouter;
 };

@@ -22,7 +22,7 @@ import {
 import { ModalStatus } from '../Report';
 import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
 
-export const DOWNLOAD_WRAPPER = 'download-wrapper';
+export const DOWNLOAD_WRAPPER = 'modal-wrapper';
 
 type ModalProps = {
   onClose: (selectedCheckboxes?: any) => void;

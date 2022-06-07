@@ -1,7 +1,7 @@
 import httpClient from '../config/client';
 
 const getDomain = '/colleagues';
-const uploadDomain = '/files';
+const uploadDomain = '/reviews/files';
 
 export const getPreviousReviewFiles = ({ colleagueUUID }) =>
   httpClient.get(`${getDomain}/${colleagueUUID}/reviews/files`);

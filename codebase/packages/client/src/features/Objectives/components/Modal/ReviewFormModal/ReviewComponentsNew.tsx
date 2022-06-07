@@ -6,6 +6,7 @@ import MarkdownRenderer from 'components/MarkdownRenderer';
 import { GenericItemField } from 'components/GenericForm';
 import { Input, Item, ItemProps, Select, Text, Textarea } from 'components/Form';
 import { Status } from 'config/enum';
+import { FormType } from '@pma/store';
 
 type ReviewComponentsProps = {
   components: any[];
@@ -79,14 +80,14 @@ const ComponentsTree = ({ components, methods, review, readonly, status, comment
               </div>
             </TileWrapper>
           );
-        } else if (type === 'htmlelement') {
+        } else if (type === FormType.HTML_ELEMENT) {
           const { tag: CustomTag = 'p' } = component;
           const Tag = ({ children }) => {
             return <CustomTag className={css(markdownCustomStyle({ tag: CustomTag }))}>{children}</CustomTag>;
           };
 
           return <MarkdownRenderer key={component.id} components={{ p: Tag }} source={component?.content} />;
-        } else if (type === 'textfield' && component.key) {
+        } else if (type === FormType.TEXT_FIELD && component.key) {
           return (
             <GenericItemField
               key={component.id}
@@ -106,7 +107,7 @@ const ComponentsTree = ({ components, methods, review, readonly, status, comment
               readonly={isDisabled || isReadonly}
             />
           );
-        } else if (type === 'textarea' && component.key) {
+        } else if (type === FormType.TEXT_AREA && component.key) {
           return (
             <GenericItemField
               key={component.id}
@@ -126,7 +127,7 @@ const ComponentsTree = ({ components, methods, review, readonly, status, comment
               readonly={isDisabled || isReadonly}
             />
           );
-        } else if (type === 'select' && component.key) {
+        } else if (type === FormType.SELECT && component.key) {
           return (
             <GenericItemField
               key={component.id}

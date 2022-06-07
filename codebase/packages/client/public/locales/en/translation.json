@@ -620,5 +620,7 @@
   "review_forms_for": "Review forms for {{year}}",
   "see_how_your_team_are_progressing_throughout_the_year": "See how your team are progressing throughout the year",
   "team_reporting": "Team reporting",
-  "population_matrix": "Population matrix"
+  "population_matrix": "Population matrix",
+  "add_pdp_goal": "Add PDP goal",
+  "create_pdp": "Create PDP"
 }

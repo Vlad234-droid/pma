@@ -8,6 +8,7 @@ import { schemaMetaSelector } from '@pma/store/src/selectors/schema';
 import {
   currentUserSelector,
   filterReviewsByTypeSelector,
+  FormType,
   getReviewPropertiesSelector,
   getTimelineByReviewTypeSelector,
   ReviewsActions,
@@ -45,7 +46,7 @@ const Objectives: FC<ObjectivesProps> = ({ colleagueUUID, schema, objectives, or
   const formElements = newSchemaVersion
     ? components
         .flatMap((e) => e?.components || e)
-        .filter((e) => e?.type === 'textarea' || e?.type === 'textfield' || e?.type === 'select')
+        .filter((e) => [FormType.TEXT_FIELD, FormType.TEXT_AREA, FormType.SELECT].includes(e?.type))
     : components.filter((component) => component.type != 'text');
   const formElementsFilledEmpty = formElements.reduce((acc, current) => {
     acc[current.key] = '';

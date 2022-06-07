@@ -43,9 +43,25 @@ spec:
             port:
               number: 8090
       {{- end }}
+      # to camunda
+      - path: /()(camunda/.*)
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: pma-api-service
+            port:
+              number: 8083
+      # to api-docs
+      - path: /(pma-api/)(api-docs/.*)
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: pma-api-service
+            port:
+              number: 8083
       # to all other backend APIs
       # !!! souldn't be exposed in PROD
-      - path: /()(v1/.*)
+      - path: /(pma-api/)(v1/.*)
         pathType: ImplementationSpecific
         backend:
           service:
