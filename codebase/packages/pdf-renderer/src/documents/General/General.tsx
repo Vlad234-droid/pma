@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
   page: {
     flexDirection: 'column',
     backgroundColor: 'white',
-    paddingBottom: 20,
+    paddingBottom: 40,
     paddingTop: 15,
     paddingHorizontal: 35,
     position: 'relative',
