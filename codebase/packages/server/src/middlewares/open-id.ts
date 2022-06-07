@@ -33,7 +33,6 @@ export const initializeOpenid = async ({
   identityUserScopedTokenCookieSecret,
   identityUserScopedTokenCookieName,
 }: ProcessConfig): Promise<Router> => {
-
   const openIdRouter = Router();
 
   // add simple handler to check, if request has Bearer auth and by-pass OneLogin
@@ -109,18 +108,13 @@ export const initializeOpenid = async ({
     /**
      * Paths that won't be part of token validation and refreshing
      */
-    ignoredPathsFragments: [
-      '/favicon.ico', 
-      '/manifest.json',
-    ],
+    ignoredPathsFragments: ['/favicon.ico', '/manifest.json'],
 
     /**
      * In case of error, calls containg that path framgents won't result in redirect.
      * Instead middleware will return an error with correct status. Could be used for AJAX calls.
      */
-    noRedirectPathFragments: [
-      '/api',
-    ],
+    noRedirectPathFragments: ['/api'],
 
     /**
      * Optional, auth data cookie configuration

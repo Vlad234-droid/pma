@@ -1,7 +1,12 @@
 import express from 'express';
 import { createProxyMiddleware, Filter, Options, RequestHandler } from 'http-proxy-middleware';
 import { Logger } from 'pino';
-import { createLogger, defaultRequestSerializer, defaultResponseSerializer, defaultErrorSerializer } from '@pma-common/logger';
+import {
+  createLogger,
+  defaultRequestSerializer,
+  defaultResponseSerializer,
+  defaultErrorSerializer,
+} from '@pma-common/logger';
 import { emptyIfRoot, getIdentityData } from '@pma-connectors/onelogin';
 
 import { Url } from 'url';
@@ -18,30 +23,30 @@ export type ProxyMiddlewareOptions = {
   logLevel?: keyof typeof NodeJS.LogLevel;
   logAuthToken?: boolean;
   overridenOptions?: Options;
-}
+};
 
-export type PathRewriteRules = { [regexp: string]: string; } 
-  | ((path: string, req: express.Request) => string) 
+export type PathRewriteRules =
+  | { [regexp: string]: string }
+  | ((path: string, req: express.Request) => string)
   | ((path: string, req: express.Request) => Promise<string>);
 
 /**
- * 
- * @param options 
- * @returns 
+ *
+ * @param options
+ * @returns
  */
-export const initializeProxyMiddleware = ({ 
+export const initializeProxyMiddleware = ({
   filter,
-  mountPath, 
-  targetUrl, 
+  mountPath,
+  targetUrl,
   pathRewrite,
   requireIdentityToken = true,
   clearCookies = true,
-  logger = createLogger({ name: 'proxy' }), 
-  logLevel = 'info', 
+  logger = createLogger({ name: 'proxy' }),
+  logLevel = 'info',
   logAuthToken = false,
   overridenOptions = undefined,
 }: ProxyMiddlewareOptions): RequestHandler => {
-
   const proxyLogger = typeof logger === 'string' ? createLogger({ name: logger }) : logger;
 
   const target = `${targetUrl.protocol}//${targetUrl.host}`;
@@ -63,10 +68,8 @@ export const initializeProxyMiddleware = ({
   };
 
   proxyMiddlewareOptions.onProxyReq = onProxyReq(proxyLogger, { requireIdentityToken, clearCookies, logAuthToken });
-  return filter 
-    ? createProxyMiddleware(filter, proxyMiddlewareOptions) 
-    : createProxyMiddleware(proxyMiddlewareOptions);
-}
+  return filter ? createProxyMiddleware(filter, proxyMiddlewareOptions) : createProxyMiddleware(proxyMiddlewareOptions);
+};
 
 /**
  * http-proxy-middleware is not compatible with bodyparser and must appear before it without this fix.
@@ -74,7 +77,7 @@ export const initializeProxyMiddleware = ({
  * @param proxyReq
  * @param req
  */
- const fixRequestBody = (proxyReq: ClientRequest, req: express.Request): boolean => {
+const fixRequestBody = (proxyReq: ClientRequest, req: express.Request): boolean => {
   if (!req.body || !Object.keys(req.body).length) {
     return true;
   }
@@ -82,8 +85,8 @@ export const initializeProxyMiddleware = ({
   const writeBody = (bodyData: string) => {
     proxyReq.setHeader('Content-Length', Buffer.byteLength(bodyData));
     proxyReq.write(bodyData);
-  }
-    
+  };
+
   const contentType = proxyReq.getHeader('Content-Type') as string;
   switch (contentType) {
     case 'application/json':
@@ -96,81 +99,94 @@ export const initializeProxyMiddleware = ({
       proxyReq.destroy(new Error(`apiProxy: Unsupported content-type: ${contentType}`));
       return false;
   }
-}
+};
 
-const onProxyReq = (logger: Logger, options: Pick<ProxyMiddlewareOptions, 'requireIdentityToken' | 'clearCookies' | 'logAuthToken'>) => 
-    async (proxyReq: ClientRequest, req: express.Request, res: ServerResponse) => {
+const onProxyReq =
+  (logger: Logger, options: Pick<ProxyMiddlewareOptions, 'requireIdentityToken' | 'clearCookies' | 'logAuthToken'>) =>
+  async (proxyReq: ClientRequest, req: express.Request, res: ServerResponse) => {
+    const { requireIdentityToken, clearCookies, logAuthToken } = options;
 
-  const { requireIdentityToken, clearCookies, logAuthToken } = options;
-
-  let authToken: string;
-  if (proxyReq.hasHeader('Authorization')) {
-    const authHeader = proxyReq.getHeader('Authorization');
-    const bearerPrefix = 'BEARER ';
-    if (typeof authHeader === 'string' && authHeader.slice(0, bearerPrefix.length).toUpperCase() === bearerPrefix) {
-      authToken = authHeader.slice(7);
-    } else {
-      proxyReq.destroy(new Error("apiProxy: Invalid Authorization method"));
-      return;
-    }
-  } else {
-    const identityTokens = getIdentityData(res as express.Response);
-    authToken = identityTokens?.access_token;
-
-    if (requireIdentityToken) {
-      if (authToken === null || authToken === undefined) {
-        proxyReq.destroy(new Error("apiProxy: Missing access_token"));
+    let authToken: string;
+    if (proxyReq.hasHeader('Authorization')) {
+      const authHeader = proxyReq.getHeader('Authorization');
+      const bearerPrefix = 'BEARER ';
+      if (typeof authHeader === 'string' && authHeader.slice(0, bearerPrefix.length).toUpperCase() === bearerPrefix) {
+        authToken = authHeader.slice(7);
+      } else {
+        proxyReq.destroy(new Error('apiProxy: Invalid Authorization method'));
         return;
       }
+    } else {
+      const identityTokens = getIdentityData(res as express.Response);
+      authToken = identityTokens?.access_token;
+
+      if (requireIdentityToken) {
+        if (authToken === null || authToken === undefined) {
+          proxyReq.destroy(new Error('apiProxy: Missing access_token'));
+          return;
+        }
+      }
+
+      authToken && proxyReq.setHeader('Authorization', `Bearer ${authToken}`);
     }
 
-    authToken && proxyReq.setHeader('Authorization', `Bearer ${authToken}`);
-  }
+    clearCookies && proxyReq.removeHeader('Cookie');
 
-  clearCookies && proxyReq.removeHeader('Cookie');
+    // fix request body, if body-parser involved
+    fixRequestBody(proxyReq, req);
 
-  // fix request body, if body-parser involved
-  fixRequestBody(proxyReq, req);
+    const originalUrl = req['originalUrl'];
 
-  const originalUrl = req['originalUrl'];
-
-  if (logAuthToken) {
-    logger.info({ 
-      req: defaultRequestSerializer(req),
-      proxyReq: defaultRequestSerializer(proxyReq),
-      identityToken: authToken, 
-    }, `Proxying API request ${originalUrl} to ${proxyReq.protocol}//${proxyReq.host}${proxyReq.path}`);
-  } else {
-    logger.info({ 
-      req: defaultRequestSerializer(req),
-      proxyReq: defaultRequestSerializer(proxyReq),
-    }, `Proxying API request ${originalUrl} to ${proxyReq.protocol}//${proxyReq.host}${proxyReq.path}`);
+    if (logAuthToken) {
+      logger.info(
+        {
+          req: defaultRequestSerializer(req),
+          proxyReq: defaultRequestSerializer(proxyReq),
+          identityToken: authToken,
+        },
+        `Proxying API request ${originalUrl} to ${proxyReq.protocol}//${proxyReq.host}${proxyReq.path}`,
+      );
+    } else {
+      logger.info(
+        {
+          req: defaultRequestSerializer(req),
+          proxyReq: defaultRequestSerializer(proxyReq),
+        },
+        `Proxying API request ${originalUrl} to ${proxyReq.protocol}//${proxyReq.host}${proxyReq.path}`,
+      );
+    }
   };
-}
 
 const onProxyRes = (logger: Logger) => (proxyRes: IncomingMessage, req: IncomingMessage, res: ServerResponse) => {
-  logger.debug({ 
-    req: defaultRequestSerializer(req),
-    res: defaultResponseSerializer(res), 
-    proxyRes: defaultResponseSerializer(proxyRes), 
-  }, `Proxy request completed. Got response for ${req.url}, status: ${proxyRes.statusCode}`);
+  logger.debug(
+    {
+      req: defaultRequestSerializer(req),
+      res: defaultResponseSerializer(res),
+      proxyRes: defaultResponseSerializer(proxyRes),
+    },
+    `Proxy request completed. Got response for ${req.url}, status: ${proxyRes.statusCode}`,
+  );
 };
 
-const onProxyError = (logger: Logger) => (err: Error, req: IncomingMessage, res: ServerResponse, target?: string | Partial<Url>) => {
-  const originalUrl = req['originalUrl'];
-  const targetUrl = target && typeof target['format'] === 'function' ? target['format']() : target;
+const onProxyError =
+  (logger: Logger) => (err: Error, req: IncomingMessage, res: ServerResponse, target?: string | Partial<Url>) => {
+    const originalUrl = req['originalUrl'];
+    const targetUrl = target && typeof target['format'] === 'function' ? target['format']() : target;
 
-  logger.error({ 
-    target, 
-    req: defaultRequestSerializer(req), 
-    res: defaultResponseSerializer(res), 
-    err: defaultErrorSerializer(err),
-  }, `Error proxying request from ${originalUrl} to ${targetUrl}`);
-};
+    logger.error(
+      {
+        target,
+        req: defaultRequestSerializer(req),
+        res: defaultResponseSerializer(res),
+        err: defaultErrorSerializer(err),
+      },
+      `Error proxying request from ${originalUrl} to ${targetUrl}`,
+    );
+  };
 
 const pinoLogProvider = (pinoLogger: Logger) => () => {
   const prexifToRemove = '[HPM] ';
-  const adjustMsg = (m: string) => m.startsWith(prexifToRemove) ? m.slice(prexifToRemove.length) : m;
+  const adjustMsg = (m: string) => (m.startsWith(prexifToRemove) ? m.slice(prexifToRemove.length) : m);
 
   const pinoProvider = {
     log: (...args: any[]) => pinoLogger.info(args[0]),

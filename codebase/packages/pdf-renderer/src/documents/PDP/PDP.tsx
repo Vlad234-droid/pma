@@ -45,9 +45,10 @@ const PDPDocument: FC<Props> = ({ formItems, items }) => {
 const styles = StyleSheet.create({
   section: {
     padding: 10,
+    paddingBottom: 25,
   },
   wrapper: {
-    marginBottom: 10,
+    marginBottom: 20,
   },
   border: {
     borderBottomWidth: 2,

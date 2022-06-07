@@ -27,9 +27,9 @@ import usePDPSchema from './hooks/usePDPSchema';
 export const TEST_ID = 'pdp-page';
 
 const getEditOrCreatePDP = (pdpSelector: any[], t: TFunction) =>
-  (pdpSelector?.length >= 1 && pdpSelector?.length < 5)
+  pdpSelector?.length >= 1 && pdpSelector?.length < 5
     ? t('add_pdp_goal', 'Add PDP goal')
-    : t('create_pdp', 'Create PDP')
+    : t('create_pdp', 'Create PDP');
 
 const PersonalDevelopmentPlan: FC = () => {
   const { css, theme, matchMedia } = useStyle();
