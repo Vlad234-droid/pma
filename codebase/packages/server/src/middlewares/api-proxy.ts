@@ -8,7 +8,7 @@ export const apiProxyMiddleware = ({
 
   const apiProxy = initializeProxyMiddleware({ 
     mountPath: `/api/v1`,
-    pathRewrite: { '^/api': '' },
+    //pathRewrite: { '^/api': '' },
     targetUrl: apiServerUrl(),
     logLevel: loggerLevel(), 
     logger: 'api',

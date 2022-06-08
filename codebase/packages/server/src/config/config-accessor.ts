@@ -21,6 +21,7 @@ export type ProcessConfig = {
   loggerLogAuthToken: () => boolean;
   //
   apiServerUrl: () => URL;
+  swaggerServerUrl: () => URL;
   camundaServerUrl: () => URL;
   authPath: () => string;
   // integration
@@ -87,6 +88,11 @@ export class ConfigAccessor {
       apiServerUrl: () => createUrlOrFail(
         processEnv.API_SERVER_URL,
         `API_SERVER_URL must be a well-formed URL pointing to API server, e.g.: http://tesco.com/pma/api`,
+        { removeTrailingSlash: true }),
+      // 
+      swaggerServerUrl: () => createUrlOrFail(
+        processEnv.SWAGGER_SERVER_URL,
+        `SWAGGER_SERVER_URL must be a well-formed URL pointing to API server, e.g.: http://tesco.com/pma/api-docs`,
         { removeTrailingSlash: true }),
       // 
       camundaServerUrl: () => createUrlOrFail(

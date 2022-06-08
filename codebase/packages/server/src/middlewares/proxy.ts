@@ -1,11 +1,15 @@
-import express from 'express';
+import { ClientRequest, IncomingMessage, ServerResponse } from 'http';
+import { Url } from 'url';
+
+import express, { Request, Response } from 'express';
 import { createProxyMiddleware, Filter, Options, RequestHandler } from 'http-proxy-middleware';
 import { Logger } from 'pino';
+import { is as mimeTypeIs } from 'type-is';
+
 import { createLogger, defaultRequestSerializer, defaultResponseSerializer, defaultErrorSerializer } from '@pma-common/logger';
 import { emptyIfRoot, getIdentityData } from '@pma-connectors/onelogin';
+import { OnErrorCallback, OnProxyReqCallback, OnProxyResCallback } from 'http-proxy-middleware/dist/types';
 
-import { Url } from 'url';
-import { ClientRequest, IncomingMessage, ServerResponse } from 'http';
 
 export type ProxyMiddlewareOptions = {
   filter?: Filter;
@@ -17,7 +21,7 @@ export type ProxyMiddlewareOptions = {
   logger?: Logger | string;
   logLevel?: keyof typeof NodeJS.LogLevel;
   logAuthToken?: boolean;
-  overridenOptions?: Options;
+  httpProxyOptions?: Options;
 }
 
 export type PathRewriteRules = { [regexp: string]: string; } 
@@ -39,12 +43,21 @@ export const initializeProxyMiddleware = ({
   logger = createLogger({ name: 'proxy' }), 
   logLevel = 'info', 
   logAuthToken = false,
-  overridenOptions = undefined,
+  httpProxyOptions = undefined,
 }: ProxyMiddlewareOptions): RequestHandler => {
 
   const proxyLogger = typeof logger === 'string' ? createLogger({ name: logger }) : logger;
 
   const target = `${targetUrl.protocol}//${targetUrl.host}`;
+
+  const httpProxyErrorHandler = httpProxyOptions && httpProxyOptions.onError;
+  const httpProxyReqHandler = httpProxyOptions && httpProxyOptions.onProxyReq;
+  const httpProxyResHandler = httpProxyOptions && httpProxyOptions.onProxyRes;
+
+  const allignedProxyOptions = { ...httpProxyOptions };
+  httpProxyReqHandler && delete allignedProxyOptions.onProxyReq;
+  httpProxyResHandler && delete allignedProxyOptions.onProxyRes;
+  httpProxyErrorHandler && delete allignedProxyOptions.onError;
 
   const timeout = 15 * 60 * 1000; // 15 mins
   const proxyTimeout = 30 * 1000; // 30 sec
@@ -57,16 +70,107 @@ export const initializeProxyMiddleware = ({
     proxyTimeout: proxyTimeout,
     timeout: timeout,
     logProvider: pinoLogProvider(proxyLogger),
-    onError: onProxyError(proxyLogger),
-    onProxyRes: onProxyRes(proxyLogger),
-    ...overridenOptions,
+    onProxyReq: proxyReqHandler(proxyLogger, httpProxyReqHandler, { requireIdentityToken, clearCookies, logAuthToken }),
+    onProxyRes: proxyResHandler(proxyLogger, httpProxyResHandler),
+    onError: proxyErrorHandler(proxyLogger, httpProxyErrorHandler),
+    ...allignedProxyOptions,
   };
 
-  proxyMiddlewareOptions.onProxyReq = onProxyReq(proxyLogger, { requireIdentityToken, clearCookies, logAuthToken });
   return filter 
     ? createProxyMiddleware(filter, proxyMiddlewareOptions) 
     : createProxyMiddleware(proxyMiddlewareOptions);
 }
+
+const proxyReqHandler = (logger: Logger, customHandler: OnProxyReqCallback | undefined, 
+      options: Pick<ProxyMiddlewareOptions, 'requireIdentityToken' | 'clearCookies' | 'logAuthToken'>) => 
+    async (proxyReq: ClientRequest, req: Request, res: Response) => {
+
+  const { requireIdentityToken, clearCookies, logAuthToken } = options;
+
+  let authToken: string;
+  if (proxyReq.hasHeader('Authorization')) {
+    const authHeader = proxyReq.getHeader('Authorization');
+    const bearerPrefix = 'BEARER ';
+    if (typeof authHeader === 'string' && authHeader.slice(0, bearerPrefix.length).toUpperCase() === bearerPrefix) {
+      authToken = authHeader.slice(7);
+    } else {
+      proxyReq.destroy(new Error("proxy: Invalid Authorization method"));
+      return;
+    }
+  } else {
+    const identityTokens = getIdentityData(res as express.Response);
+    authToken = identityTokens?.access_token;
+
+    if (requireIdentityToken) {
+      if (authToken === null || authToken === undefined) {
+        proxyReq.destroy(new Error("proxy: Missing access_token"));
+        return;
+      }
+    }
+
+    authToken && proxyReq.setHeader('Authorization', `Bearer ${authToken}`);
+  }
+
+  clearCookies && proxyReq.removeHeader('Cookie');
+
+  // fix request body, if body-parser involved
+  fixRequestBody(proxyReq, req);
+
+  try {
+    if (typeof customHandler === 'function') {
+      customHandler(proxyReq, req, res, {});
+    }
+  
+    const originalUrl = req['originalUrl'];
+  
+    if (logAuthToken) {
+      logger.info({ 
+        req: defaultRequestSerializer(req),
+        proxyReq: defaultRequestSerializer(proxyReq),
+        identityToken: authToken, 
+      }, `Proxying API request ${originalUrl} to ${proxyReq.protocol}//${proxyReq.host}${proxyReq.path}`);
+    } else {
+      logger.info({ 
+        req: defaultRequestSerializer(req),
+        proxyReq: defaultRequestSerializer(proxyReq),
+      }, `Proxying API request ${originalUrl} to ${proxyReq.protocol}//${proxyReq.host}${proxyReq.path}`);
+    };
+  } catch (err) {
+    proxyReq.destroy(err as Error);
+  }
+}
+
+const proxyResHandler = (logger: Logger, customHandler: OnProxyResCallback | undefined) => 
+    (proxyRes: IncomingMessage, req: Request, res: Response) => {
+
+  logger.debug({ 
+    req: defaultRequestSerializer(req),
+    res: defaultResponseSerializer(res), 
+    proxyRes: defaultResponseSerializer(proxyRes), 
+  }, `Proxy request completed. Got response for ${req.url}, status: ${proxyRes.statusCode}`);
+
+  if (typeof customHandler === 'function') {
+    customHandler(proxyRes, req, res);
+  }
+};
+
+const proxyErrorHandler = (logger: Logger, customHandler: OnErrorCallback | undefined) => 
+    (err: Error, req: Request, res: Response, target?: string | Partial<Url>) => {
+
+  if (typeof customHandler === 'function') {
+    customHandler(err, req, res, target);
+  } else {
+    const originalUrl = req['originalUrl'];
+    const targetUrl = target && typeof target['format'] === 'function' ? target['format']() : target;
+  
+    logger.error({ 
+      target, 
+      req: defaultRequestSerializer(req), 
+      res: defaultResponseSerializer(res), 
+      err: defaultErrorSerializer(err),
+    }, `Error proxying request from ${originalUrl} to ${targetUrl}`);
+  }
+};
 
 /**
  * http-proxy-middleware is not compatible with bodyparser and must appear before it without this fix.
@@ -85,11 +189,11 @@ export const initializeProxyMiddleware = ({
   }
     
   const contentType = proxyReq.getHeader('Content-Type') as string;
-  switch (contentType) {
-    case 'application/json':
+  switch (mimeTypeIs(contentType, ['json', 'urlencoded'])) {
+    case 'json':
       writeBody(JSON.stringify(req.body));
       return true;
-    case 'application/x-www-form-urlencoded':
+    case 'urlencoded':
       writeBody(new URLSearchParams(req.body as any).toString());
       return true;
     default:
@@ -97,76 +201,6 @@ export const initializeProxyMiddleware = ({
       return false;
   }
 }
-
-const onProxyReq = (logger: Logger, options: Pick<ProxyMiddlewareOptions, 'requireIdentityToken' | 'clearCookies' | 'logAuthToken'>) => 
-    async (proxyReq: ClientRequest, req: express.Request, res: ServerResponse) => {
-
-  const { requireIdentityToken, clearCookies, logAuthToken } = options;
-
-  let authToken: string;
-  if (proxyReq.hasHeader('Authorization')) {
-    const authHeader = proxyReq.getHeader('Authorization');
-    const bearerPrefix = 'BEARER ';
-    if (typeof authHeader === 'string' && authHeader.slice(0, bearerPrefix.length).toUpperCase() === bearerPrefix) {
-      authToken = authHeader.slice(7);
-    } else {
-      proxyReq.destroy(new Error("apiProxy: Invalid Authorization method"));
-      return;
-    }
-  } else {
-    const identityTokens = getIdentityData(res as express.Response);
-    authToken = identityTokens?.access_token;
-
-    if (requireIdentityToken) {
-      if (authToken === null || authToken === undefined) {
-        proxyReq.destroy(new Error("apiProxy: Missing access_token"));
-        return;
-      }
-    }
-
-    authToken && proxyReq.setHeader('Authorization', `Bearer ${authToken}`);
-  }
-
-  clearCookies && proxyReq.removeHeader('Cookie');
-
-  // fix request body, if body-parser involved
-  fixRequestBody(proxyReq, req);
-
-  const originalUrl = req['originalUrl'];
-
-  if (logAuthToken) {
-    logger.info({ 
-      req: defaultRequestSerializer(req),
-      proxyReq: defaultRequestSerializer(proxyReq),
-      identityToken: authToken, 
-    }, `Proxying API request ${originalUrl} to ${proxyReq.protocol}//${proxyReq.host}${proxyReq.path}`);
-  } else {
-    logger.info({ 
-      req: defaultRequestSerializer(req),
-      proxyReq: defaultRequestSerializer(proxyReq),
-    }, `Proxying API request ${originalUrl} to ${proxyReq.protocol}//${proxyReq.host}${proxyReq.path}`);
-  };
-}
-
-const onProxyRes = (logger: Logger) => (proxyRes: IncomingMessage, req: IncomingMessage, res: ServerResponse) => {
-  logger.debug({ 
-    req: defaultRequestSerializer(req),
-    res: defaultResponseSerializer(res), 
-    proxyRes: defaultResponseSerializer(proxyRes), 
-  }, `Proxy request completed. Got response for ${req.url}, status: ${proxyRes.statusCode}`);
-};
-
-const onProxyError = (logger: Logger) => (err: Error, req: IncomingMessage, res: ServerResponse, target?: string | Partial<Url>) => {
-  const originalUrl = req['originalUrl'];
-  const targetUrl = target && typeof target['format'] === 'function' ? target['format']() : target;
-
-  logger.error({ 
-    target, 
-    req: defaultRequestSerializer(req), 
-    res: defaultResponseSerializer(res), 
-    err: defaultErrorSerializer(err),
-  }, `Error proxying request from ${originalUrl} to ${targetUrl}`);
-};
 
 const pinoLogProvider = (pinoLogger: Logger) => () => {
   const prexifToRemove = '[HPM] ';

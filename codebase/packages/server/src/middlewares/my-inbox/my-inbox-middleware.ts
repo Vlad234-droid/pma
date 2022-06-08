@@ -67,7 +67,7 @@ export const myInboxMiddleware = async ({
     // should be set to core address
     appRouter.use(cors({ origin, credentials: true }));
     appRouter.use(bodyParser.urlencoded({ extended: true }));
-    appRouter.use(bodyParser.json());
+    appRouter.use(bodyParser.json({ limit: '16kb' }));
 
     // appRouter.use(
     //   errorHandler({

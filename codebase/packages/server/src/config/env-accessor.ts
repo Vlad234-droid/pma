@@ -1,3 +1,6 @@
+/**
+ * 
+ */
 const environmentParameters: Array<keyof NodeJS.ProcessEnv> = [
   'BUILD_ENV',
   'NODE_ENV',
@@ -5,6 +8,7 @@ const environmentParameters: Array<keyof NodeJS.ProcessEnv> = [
   'RUNTIME_ENV',
   //
   'API_SERVER_URL',
+  'SWAGGER_SERVER_URL',
   'CAMUNDA_SERVER_URL',
   // integration
   'INTEGRATION_MODE',
@@ -43,6 +47,9 @@ const environmentParameters: Array<keyof NodeJS.ProcessEnv> = [
   'LOGGER_LOG_AUTHTOKEN',
 ];
 
+/**
+ * 
+ */
 const optionalEnvironmentParameters = [
   'APPLICATION_NAME',
   'APPLICATION_AUTH_TOKEN_COOKIE_NAME',

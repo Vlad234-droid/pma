@@ -30,6 +30,7 @@ declare namespace NodeJS {
     BUILD_ENV: keyof typeof Environment;
     
     API_SERVER_URL: string;
+    SWAGGER_SERVER_URL: string;
     CAMUNDA_SERVER_URL: string;
 
     LOGGER_ROOT_NAME: string;
