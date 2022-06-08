@@ -33,17 +33,6 @@ spec:
             name: pma-api-service
             port:
               number: 8084
-      # to backend Management services
-      {{- if .Values.serviceManagement.enabled }}
-      - path: /(management/)(actuator/.*)
-        pathType: ImplementationSpecific
-        backend:
-          service:
-            name: pma-api-service
-            port:
-              number: 8090
-      {{- end }}
-      # to camunda
       - path: /()(camunda/.*)
         pathType: ImplementationSpecific
         backend:
@@ -59,6 +48,25 @@ spec:
             name: pma-api-service
             port:
               number: 8083
+      # to swagger-ui
+      - path: /(pma-api/)(swagger-ui/.*)
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: pma-api-service
+            port:
+              number: 8083
+      # to backend Management services
+      {{- if .Values.serviceManagement.enabled }}
+      - path: /(pma-api/)(actuator/.*)
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: pma-api-service
+            port:
+              number: 8090
+      {{- end }}
+      # to camunda
       # to all other backend APIs
       # !!! souldn't be exposed in PROD
       - path: /(pma-api/)(v1/.*)
