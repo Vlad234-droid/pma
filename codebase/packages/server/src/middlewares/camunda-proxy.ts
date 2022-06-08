@@ -23,24 +23,24 @@ export const camundaProxyMiddleware = (processConfig: ProcessConfig) => {
     }
   });
 
-  appRouter.use(initializeProxyMiddleware({ 
+  appRouter.use(initializeProxyMiddleware({
     // filter: [ '/api/**', '!/api/colleague-inbox/**' ],
     mountPath: '/camunda',
-    // pathRewrite: { 
+    // pathRewrite: {
     //   [`^/camunda`]: `${emptyIfRoot(applicationContextPath())}/camunda`,
     //   [`^${emptyIfRoot(applicationContextPath())}/camunda`]: `${emptyIfRoot(applicationContextPath())}/camunda`,
     // },
-    // pathRewrite: (p) => { 
+    // pathRewrite: (p) => {
     //   let rewritten = p;
     //   if (p.startsWith('/camunda')) {
     //     rewritten = `${emptyIfRoot(applicationContextPath())}${p}`;
-    //   } 
+    //   }
     //   console.log(` !!! CAMUNDA PROXY :: ${p} >>> ${rewritten} `);
     //   return rewritten;
     // },
     targetUrl: camundaServerUrl(),
     clearCookies: false,
-    logLevel: loggerLevel(), 
+    logLevel: loggerLevel(),
     logger: camundaProxyLogger,
     httpProxyOptions: {
       cookieDomainRewrite: '',
@@ -56,7 +56,7 @@ export const camundaProxyMiddleware = (processConfig: ProcessConfig) => {
   return appRouter;
 };
 
-const camundaProxyResHandler = (logger: Logger, { applicationContextPath }: ProcessConfig) => 
+const camundaProxyResHandler = (logger: Logger, { applicationContextPath }: ProcessConfig) =>
     (proxyRes: IncomingMessage, req: IncomingMessage, res: ServerResponse) => {
 
   if (proxyRes.statusCode && [301, 302, 307, 308].includes(proxyRes.statusCode)) {
@@ -66,7 +66,7 @@ const camundaProxyResHandler = (logger: Logger, { applicationContextPath }: Proc
       redirectLocation = redirectLocation.slice(applicationContextPath().length);
 
     }
-    
+
     proxyRes.headers.location = redirectLocation;
 
     // application/javascript
@@ -81,4 +81,3 @@ const camundaProxyResHandler = (logger: Logger, { applicationContextPath }: Proc
     // just copy proxy response to res
   }
 };
-

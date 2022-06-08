@@ -11,6 +11,8 @@ import { CalibrationRatingsTable } from 'features/CalibrationRatingsTable';
 import { useFetchColleague } from 'features/RatingsTiles/hooks/useFetchColleague';
 import { AdditionalInfo } from 'features/ObjectiveRatings';
 
+export const PROFILE_WRAPPER = 'profile-wrapper';
+
 const PreviousCalibrationRatings: FC = () => {
   const { css } = useStyle();
   const navigate = useNavigate();
@@ -24,7 +26,7 @@ const PreviousCalibrationRatings: FC = () => {
   return (
     <>
       <Backward onPress={() => navigate(-1)} />
-      <div className={css({ margin: '8px' })}>
+      <div className={css({ margin: '8px' })} data-test-id={PROFILE_WRAPPER}>
         <ProfileTileWrapper
           user={{ fullName: `${firstName} ${lastName}`, job: `${job} ${department}` }}
           customStyle={{ maxWidth: '80%' }}

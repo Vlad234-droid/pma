@@ -90,7 +90,7 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
             <MenuItem iconGraphic={'account'} linkTo={buildPath(Page.PROFILE)} title={t('my_profile', 'My profile')} />
             <MenuItem iconGraphic={'chat'} linkTo={buildPath(Page.FEEDBACK)} title={t('feedback', 'Feedback')} />
             <CanPerform
-              perform={[role.TALENT_ADMIN, role.ADMIN]}
+              perform={[role.TALENT_ADMIN, role.ADMIN, role.EXECUTIVE, role.LINE_MANAGER]}
               yes={() => (
                 <MenuItem
                   iconGraphic={'team'}

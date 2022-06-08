@@ -5,6 +5,7 @@ import React from 'react';
 import { renderWithTheme as render } from 'utils/test';
 
 import PendingApprovals from './PendingApprovals';
+import { TILE_WRAPPER } from 'components/Tile';
 
 describe('<PendingApprovals />', () => {
   const props = {
@@ -19,13 +20,13 @@ describe('<PendingApprovals />', () => {
 
       const { queryByTestId } = render(<PendingApprovals {...props} />);
 
-      expect(queryByTestId('tile-wrapper')).not.toBeInTheDocument();
+      expect(queryByTestId(TILE_WRAPPER)).not.toBeInTheDocument();
     });
 
     it('should render <TileWrapper />, if count', () => {
       const { getByTestId } = render(<PendingApprovals {...props} />);
 
-      expect(getByTestId('tile-wrapper')).toBeInTheDocument();
+      expect(getByTestId(TILE_WRAPPER)).toBeInTheDocument();
     });
 
     it('should render expected content, if count', () => {

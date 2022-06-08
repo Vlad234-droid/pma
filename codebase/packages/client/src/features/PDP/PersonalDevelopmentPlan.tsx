@@ -19,17 +19,17 @@ import { paramsReplacer } from 'utils';
 import { Icon } from 'components/Icon';
 import { PDPType } from 'config/enum';
 import { BASE_URL_API } from 'config/constants';
-import { Trans, useTranslation } from 'components/Translation';
+import { TFunction, Trans, useTranslation } from 'components/Translation';
 import Spinner from 'components/Spinner';
 import GoalInfo from './components/GoalInfo';
 import usePDPSchema from './hooks/usePDPSchema';
 
 export const TEST_ID = 'pdp-page';
 
-function getEditOrCreatePDP(pdpSelector: any[]) {
-  if (pdpSelector?.length >= 1 && pdpSelector?.length < 5) return 'Edit PDP';
-  return 'Create PDP';
-}
+const getEditOrCreatePDP = (pdpSelector: any[], t: TFunction) =>
+  pdpSelector?.length >= 1 && pdpSelector?.length < 5
+    ? t('add_pdp_goal', 'Add PDP goal')
+    : t('create_pdp', 'Create PDP');
 
 const PersonalDevelopmentPlan: FC = () => {
   const { css, theme, matchMedia } = useStyle();
@@ -121,7 +121,7 @@ const PersonalDevelopmentPlan: FC = () => {
                 <div className={css(btnIcon)}>
                   <Icon graphic='add' fill={theme.colors.white} iconStyles={{ height: '16.67px', width: '16.67px' }} />
                 </div>
-                {getEditOrCreatePDP(pdpSelector)}
+                {getEditOrCreatePDP(pdpSelector, t)}
               </button>
             </>
           )}

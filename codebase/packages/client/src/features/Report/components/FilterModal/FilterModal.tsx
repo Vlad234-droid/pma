@@ -24,6 +24,8 @@ type SelectAllProps = {
   innerTitle: string;
 };
 
+export const FILTER_WRAPPER = 'filter-wrapper';
+
 // TODO: Extract duplicate 3
 const FilterModal: FC<FilterModalProps> = ({
   filterModal,
@@ -107,7 +109,7 @@ const FilterModal: FC<FilterModalProps> = ({
   };
 
   return (
-    <div ref={ref} className={css(wrapperStyle({ filterModal }))}>
+    <div ref={ref} className={css(wrapperStyle({ filterModal }))} data-test-id={FILTER_WRAPPER}>
       <div className={css(flexColumnStyle)}>
         <div className={css(flexStyle)}>
           <span className={css(filterStyle)}>Filter</span>

@@ -84,17 +84,17 @@ export class ConfigAccessor {
       loggerLevel: () => processEnv.LOGGER_LEVEL || defaultConfig.loggerDefaultLevel,
       loggerPretify: () => yn(processEnv.LOGGER_PRETIFY, { default: false }),
       loggerLogAuthToken: () => yn(processEnv.LOGGER_LOG_AUTHTOKEN, { default: false }),
-      // 
+      //
       apiServerUrl: () => createUrlOrFail(
         processEnv.API_SERVER_URL,
         `API_SERVER_URL must be a well-formed URL pointing to API server, e.g.: http://tesco.com/pma/api`,
         { removeTrailingSlash: true }),
-      // 
+      //
       swaggerServerUrl: () => createUrlOrFail(
         processEnv.SWAGGER_SERVER_URL,
         `SWAGGER_SERVER_URL must be a well-formed URL pointing to API server, e.g.: http://tesco.com/pma/api-docs`,
         { removeTrailingSlash: true }),
-      // 
+      //
       camundaServerUrl: () => createUrlOrFail(
         processEnv.CAMUNDA_SERVER_URL,
         `CAMUNDA_SERVER_URL must be a well-formed URL pointing to API server, e.g.: http://tesco.com/pma/camunda`,
@@ -104,7 +104,11 @@ export class ConfigAccessor {
       integrationMode: () => processEnv.INTEGRATION_MODE,
       integrationCoreMountPath: () => processEnv.INTEGRATION_CORE_MOUNT_PATH,
       integrationCoreMountUrl: () =>
-        path.join(processEnv.INTEGRATION_CORE_URL, processEnv.INTEGRATION_CORE_MOUNT_PATH, processEnv.INTEGRATION_MOUNT_PATH),
+        path.join(
+          processEnv.INTEGRATION_CORE_URL,
+          processEnv.INTEGRATION_CORE_MOUNT_PATH,
+          processEnv.INTEGRATION_MOUNT_PATH,
+        ),
       integrationMountPath: () => processEnv.INTEGRATION_MOUNT_PATH,
       integrationNodeBFFUrl: () => `${processEnv.INTEGRATION_NODE_BFF_URL}:${port}${processEnv.INTEGRATION_MOUNT_PATH}`,
       integrationBuildPath: () => defaultConfig.buildPath,
@@ -115,13 +119,15 @@ export class ConfigAccessor {
         path.join(processEnv.INTEGRATION_CORE_MOUNT_PATH, processEnv.INTEGRATION_MOUNT_PATH),
       // application specific settings
       applicationName: () => processEnv.APPLICATION_NAME || defaultConfig.applicationName,
-      applicationUrl: () => createUrlOrFail(
-        processEnv.APPLICATION_URL,
-        `APPLICATION_URL must be a well-formed URL pointing to the root of application, e.g.: http://tesco.com/pma`,
-        { removeTrailingSlash: true }),
+      applicationUrl: () =>
+        createUrlOrFail(
+          processEnv.APPLICATION_URL,
+          `APPLICATION_URL must be a well-formed URL pointing to the root of application, e.g.: http://tesco.com/pma`,
+          { removeTrailingSlash: true },
+        ),
       applicationRoot: () => {
         const applicationUrl = this.config.applicationUrl();
-        return `${applicationUrl.protocol}//${applicationUrl.host}`
+        return `${applicationUrl.protocol}//${applicationUrl.host}`;
       },
       applicationContextPath: () => this.config.applicationUrl().pathname,
       // cookies settings
@@ -166,8 +172,10 @@ export class ConfigAccessor {
 }
 
 const createUrlOrFail = (
-      urlString: string, errorMessage: string, 
-      options: { removeTrailingSlash?: boolean, addTrailngSlash?: boolean } = { removeTrailingSlash: true }) => {
+  urlString: string,
+  errorMessage: string,
+  options: { removeTrailingSlash?: boolean; addTrailngSlash?: boolean } = { removeTrailingSlash: true },
+) => {
   try {
     if (options?.removeTrailingSlash === true && urlString.endsWith('/') === true) {
       urlString = urlString.slice(0, -1);
@@ -179,13 +187,13 @@ const createUrlOrFail = (
   } catch {
     throw new Error(errorMessage);
   }
-}
+};
 
 export const prettify = (config: ProcessConfig): void => {
   console.table(
     Object.keys(config).reduce((acc, key) => {
       const value = config[key]();
-      return { ...acc, [key]: Array.isArray(value) ? value.join(', ') : (value ? value.toString() : '-- not set --') };
+      return { ...acc, [key]: Array.isArray(value) ? value.join(', ') : value ? value.toString() : '-- not set --' };
     }, {}),
   );
 };

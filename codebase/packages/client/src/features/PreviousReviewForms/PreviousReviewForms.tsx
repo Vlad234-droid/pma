@@ -18,6 +18,8 @@ import { getCurrentYear } from 'utils';
 import { Plug } from 'components/Plug';
 import { useFetchColleague } from 'features/RatingsTiles/hooks/useFetchColleague';
 
+export const PLUG_ID = 'plug';
+
 const PreviousReviewForms = () => {
   const { css, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
@@ -67,9 +69,14 @@ const PreviousReviewForms = () => {
       {loading ? (
         <Spinner fullHeight />
       ) : loaded && !reviews.length ? (
-        <Plug text={t('review_not_completed', 'Review not completed')} customStyle={widthStyles({ mobileScreen })} />
+        <Plug
+          testId={PLUG_ID}
+          text={t('review_not_completed', 'Review not completed')}
+          customStyle={widthStyles({ mobileScreen })}
+        />
       ) : (
         <Section
+          testId={'section'}
           left={{
             content: <div className={css(tileStyles)}>{t('review_forms_for', 'Review forms for', { year })}</div>,
           }}

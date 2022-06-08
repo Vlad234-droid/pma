@@ -12,6 +12,7 @@ type PlugProps = {
   closable?: boolean;
   graphic?: Graphics;
   customStyle?: Styles | CSSProperties | Rule | {};
+  testId?: string;
 };
 
 export const Plug: FC<PlugProps> = ({ text, customStyle = {}, closable = false, graphic = 'information' }) => {

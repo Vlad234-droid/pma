@@ -24,28 +24,27 @@ export type ProxyMiddlewareOptions = {
   httpProxyOptions?: Options;
 }
 
-export type PathRewriteRules = { [regexp: string]: string; } 
-  | ((path: string, req: express.Request) => string) 
+export type PathRewriteRules = { [regexp: string]: string; }
+  | ((path: string, req: express.Request) => string)
   | ((path: string, req: express.Request) => Promise<string>);
 
 /**
- * 
- * @param options 
- * @returns 
+ *
+ * @param options
+ * @returns
  */
-export const initializeProxyMiddleware = ({ 
+export const initializeProxyMiddleware = ({
   filter,
-  mountPath, 
-  targetUrl, 
+  mountPath,
+  targetUrl,
   pathRewrite,
   requireIdentityToken = true,
   clearCookies = true,
-  logger = createLogger({ name: 'proxy' }), 
-  logLevel = 'info', 
+  logger = createLogger({ name: 'proxy' }),
+  logLevel = 'info',
   logAuthToken = false,
   httpProxyOptions = undefined,
 }: ProxyMiddlewareOptions): RequestHandler => {
-
   const proxyLogger = typeof logger === 'string' ? createLogger({ name: logger }) : logger;
 
   const target = `${targetUrl.protocol}//${targetUrl.host}`;
@@ -76,13 +75,13 @@ export const initializeProxyMiddleware = ({
     ...allignedProxyOptions,
   };
 
-  return filter 
-    ? createProxyMiddleware(filter, proxyMiddlewareOptions) 
+  return filter
+    ? createProxyMiddleware(filter, proxyMiddlewareOptions)
     : createProxyMiddleware(proxyMiddlewareOptions);
 }
 
-const proxyReqHandler = (logger: Logger, customHandler: OnProxyReqCallback | undefined, 
-      options: Pick<ProxyMiddlewareOptions, 'requireIdentityToken' | 'clearCookies' | 'logAuthToken'>) => 
+const proxyReqHandler = (logger: Logger, customHandler: OnProxyReqCallback | undefined,
+      options: Pick<ProxyMiddlewareOptions, 'requireIdentityToken' | 'clearCookies' | 'logAuthToken'>) =>
     async (proxyReq: ClientRequest, req: Request, res: Response) => {
 
   const { requireIdentityToken, clearCookies, logAuthToken } = options;
@@ -106,10 +105,10 @@ const proxyReqHandler = (logger: Logger, customHandler: OnProxyReqCallback | und
         proxyReq.destroy(new Error("proxy: Missing access_token"));
         return;
       }
-    }
-
-    authToken && proxyReq.setHeader('Authorization', `Bearer ${authToken}`);
+    } 
   }
+
+  authToken && proxyReq.setHeader('Authorization', `Bearer ${authToken}`);
 
   clearCookies && proxyReq.removeHeader('Cookie');
 
@@ -120,17 +119,17 @@ const proxyReqHandler = (logger: Logger, customHandler: OnProxyReqCallback | und
     if (typeof customHandler === 'function') {
       customHandler(proxyReq, req, res, {});
     }
-  
+
     const originalUrl = req['originalUrl'];
-  
+
     if (logAuthToken) {
-      logger.info({ 
+      logger.info({
         req: defaultRequestSerializer(req),
         proxyReq: defaultRequestSerializer(proxyReq),
-        identityToken: authToken, 
+        identityToken: authToken,
       }, `Proxying API request ${originalUrl} to ${proxyReq.protocol}//${proxyReq.host}${proxyReq.path}`);
     } else {
-      logger.info({ 
+      logger.info({
         req: defaultRequestSerializer(req),
         proxyReq: defaultRequestSerializer(proxyReq),
       }, `Proxying API request ${originalUrl} to ${proxyReq.protocol}//${proxyReq.host}${proxyReq.path}`);
@@ -140,13 +139,13 @@ const proxyReqHandler = (logger: Logger, customHandler: OnProxyReqCallback | und
   }
 }
 
-const proxyResHandler = (logger: Logger, customHandler: OnProxyResCallback | undefined) => 
+const proxyResHandler = (logger: Logger, customHandler: OnProxyResCallback | undefined) =>
     (proxyRes: IncomingMessage, req: Request, res: Response) => {
 
-  logger.debug({ 
+  logger.debug({
     req: defaultRequestSerializer(req),
-    res: defaultResponseSerializer(res), 
-    proxyRes: defaultResponseSerializer(proxyRes), 
+    res: defaultResponseSerializer(res),
+    proxyRes: defaultResponseSerializer(proxyRes),
   }, `Proxy request completed. Got response for ${req.url}, status: ${proxyRes.statusCode}`);
 
   if (typeof customHandler === 'function') {
@@ -154,7 +153,7 @@ const proxyResHandler = (logger: Logger, customHandler: OnProxyResCallback | und
   }
 };
 
-const proxyErrorHandler = (logger: Logger, customHandler: OnErrorCallback | undefined) => 
+const proxyErrorHandler = (logger: Logger, customHandler: OnErrorCallback | undefined) =>
     (err: Error, req: Request, res: Response, target?: string | Partial<Url>) => {
 
   if (typeof customHandler === 'function') {
@@ -162,11 +161,11 @@ const proxyErrorHandler = (logger: Logger, customHandler: OnErrorCallback | unde
   } else {
     const originalUrl = req['originalUrl'];
     const targetUrl = target && typeof target['format'] === 'function' ? target['format']() : target;
-  
-    logger.error({ 
-      target, 
-      req: defaultRequestSerializer(req), 
-      res: defaultResponseSerializer(res), 
+
+    logger.error({
+      target,
+      req: defaultRequestSerializer(req),
+      res: defaultResponseSerializer(res),
       err: defaultErrorSerializer(err),
     }, `Error proxying request from ${originalUrl} to ${targetUrl}`);
   }
@@ -187,7 +186,7 @@ const proxyErrorHandler = (logger: Logger, customHandler: OnErrorCallback | unde
     proxyReq.setHeader('Content-Length', Buffer.byteLength(bodyData));
     proxyReq.write(bodyData);
   }
-    
+
   const contentType = proxyReq.getHeader('Content-Type') as string;
   switch (mimeTypeIs(contentType, ['json', 'urlencoded'])) {
     case 'json':
@@ -204,7 +203,7 @@ const proxyErrorHandler = (logger: Logger, customHandler: OnErrorCallback | unde
 
 const pinoLogProvider = (pinoLogger: Logger) => () => {
   const prexifToRemove = '[HPM] ';
-  const adjustMsg = (m: string) => m.startsWith(prexifToRemove) ? m.slice(prexifToRemove.length) : m;
+  const adjustMsg = (m: string) => (m.startsWith(prexifToRemove) ? m.slice(prexifToRemove.length) : m);
 
   const pinoProvider = {
     log: (...args: any[]) => pinoLogger.info(args[0]),

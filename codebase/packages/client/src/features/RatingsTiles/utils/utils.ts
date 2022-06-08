@@ -5,8 +5,7 @@ import { TFunction } from 'components/Translation';
 type CardsTypes = {
   title: string;
   description: string;
-  //TODO: in future remove ''
-  page: Page | '';
+  page: Page;
   graphic: Graphics;
 };
 
