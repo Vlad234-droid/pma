@@ -6,10 +6,14 @@ export const actuatorProxyMiddleware = ({
   loggerLevel,
 }: ProcessConfig) => {
 
+  if (actuatorServerUrl() === undefined) {
+    return [];
+  }
+
   const apiProxy = initializeProxyMiddleware({ 
     mountPath: `/api/actuator`,
     //pathRewrite: { '^/api': '' },
-    targetUrl: actuatorServerUrl(),
+    targetUrl: actuatorServerUrl()!,
     logLevel: loggerLevel(), 
     logger: 'api',
   });

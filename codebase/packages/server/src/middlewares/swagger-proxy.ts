@@ -17,6 +17,10 @@ export const swaggerProxyMiddleware = (processConfig: ProcessConfig) => {
   
   const { applicationContextPath, applicationUrl, swaggerServerUrl, loggerLevel }= processConfig;
 
+  if (swaggerServerUrl() === undefined) {
+    return [];
+  }
+ 
   const swaggerProxyLogger = createLogger({ name: 'swagger' });
   const appRouter = Router();
 
@@ -94,7 +98,7 @@ export const swaggerProxyMiddleware = (processConfig: ProcessConfig) => {
     
     const fetchApiDoc = async (url: string) => {
       const authToken = extractAuthToken(req, res);
-      const response = await fetch(`${swaggerServerUrl().host}${url}`, {
+      const response = await fetch(`${swaggerServerUrl()!.host}${url}`, {
         method: 'get',
         headers: {
           'content-type': 'application/json',
@@ -136,14 +140,14 @@ export const swaggerProxyMiddleware = (processConfig: ProcessConfig) => {
   //
   //
   appRouter.use(['/api-docs', '/swagger-ui'], initializeProxyMiddleware({
-    //filter: [ '/swagger-ui.html', '/swagger-ui', '/api-docs' ], 
-    filter: (pathname: string, req: Request) => {
-      console.log(` !!! SWAGGER_PROXY :: pathname: '${pathname}'`);
-      if (pathname == '/swagger-ui.html') return true;
-      if (pathname.startsWith('/swagger-ui/')) return true;
-      if (pathname.startsWith('/api-docs/')) return true;
-      return false;
-    },
+    filter: [ '/swagger-ui', '/api-docs' ], 
+    // filter: (pathname: string, req: Request) => {
+    //   console.log(` !!! SWAGGER_PROXY :: pathname: '${pathname}'`);
+    //   if (pathname == '/swagger-ui.html') return true;
+    //   if (pathname.startsWith('/swagger-ui/')) return true;
+    //   if (pathname.startsWith('/api-docs/')) return true;
+    //   return false;
+    // },
     mountPath: `/`,
     // pathRewrite: { '^/swagger-ui': '/swagger-ui' },
     pathRewrite: (p) => {
@@ -154,7 +158,7 @@ export const swaggerProxyMiddleware = (processConfig: ProcessConfig) => {
       // console.log(` !!! SWAGGER PROXY :: ${p} >>> ${rewritten} `);
       return rewritten;
     },
-    targetUrl: swaggerServerUrl(),
+    targetUrl: swaggerServerUrl()!,
     logLevel: loggerLevel(), 
     logger: swaggerProxyLogger,
     httpProxyOptions: {

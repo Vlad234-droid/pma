@@ -80,11 +80,10 @@ export const initializeProxyMiddleware = ({
     : createProxyMiddleware(proxyMiddlewareOptions);
 }
 
-export const extractAuthToken = (req: ClientRequest | Request, res: Response) => {
+export const extractAuthToken = (req: Request, res: Response) => {
   let authToken: string | undefined;
 
-  const authHeader = ((typeof req['hasHeader'] === 'function') && req['hasHeader']('Authorization')
-    || req['headers'].authorization);
+  const authHeader = req.header('authorization');
 
   if (authHeader && typeof authHeader === 'string') {
     const bearerPrefix = 'BEARER ';
@@ -105,7 +104,7 @@ const proxyReqHandler = (logger: Logger, customHandler: OnProxyReqCallback | und
 
   const { requireIdentityToken, clearCookies, logAuthToken } = options;
 
-  const authToken = extractAuthToken(proxyReq, res);
+  const authToken = extractAuthToken(req, res);
 
   if (authToken) {
     proxyReq.setHeader('Authorization', `Bearer ${authToken}`);

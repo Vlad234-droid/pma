@@ -14,6 +14,11 @@ import { initializeProxyMiddleware } from './proxy';
 export const camundaProxyMiddleware = (processConfig: ProcessConfig) => {
 
   const { camundaServerUrl, applicationContextPath, loggerLevel } = processConfig;
+
+  if (camundaServerUrl() === undefined) {
+    return [];
+  }
+ 
   const camundaProxyLogger = createLogger({ name: 'camunda' });
   const appRouter = Router();
 
@@ -38,7 +43,7 @@ export const camundaProxyMiddleware = (processConfig: ProcessConfig) => {
     //   console.log(` !!! CAMUNDA PROXY :: ${p} >>> ${rewritten} `);
     //   return rewritten;
     // },
-    targetUrl: camundaServerUrl(),
+    targetUrl: camundaServerUrl()!,
     clearCookies: false,
     logLevel: loggerLevel(),
     logger: camundaProxyLogger,

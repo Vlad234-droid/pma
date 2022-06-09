@@ -21,9 +21,9 @@ export type ProcessConfig = {
   loggerLogAuthToken: () => boolean;
   //
   apiServerUrl: () => URL;
-  actuatorServerUrl: () => URL;
-  swaggerServerUrl: () => URL;
-  camundaServerUrl: () => URL;
+  actuatorServerUrl: () => URL | undefined;
+  swaggerServerUrl: () => URL | undefined;
+  camundaServerUrl: () => URL | undefined;
   authPath: () => string;
   // integration
   integrationMode: () => keyof typeof NodeJS.AppMode;
@@ -91,17 +91,17 @@ export class ConfigAccessor {
         `API_SERVER_URL must be a well-formed URL pointing to API server, e.g.: http://tesco.com/pma/api`,
         { removeTrailingSlash: true }),
       //
-      actuatorServerUrl: () => createUrlOrFail(
+      actuatorServerUrl: () => createUrlOrUndefined(
         processEnv.ACTUATOR_SERVER_URL,
         `ACTUATOR_SERVER_URL must be a well-formed URL pointing to actuator server, e.g.: http://tesco.com:8080/pma/actuator`,
         { removeTrailingSlash: true }),
       //
-      swaggerServerUrl: () => createUrlOrFail(
+      swaggerServerUrl: () => createUrlOrUndefined(
         processEnv.SWAGGER_SERVER_URL,
         `SWAGGER_SERVER_URL must be a well-formed URL pointing to API server, e.g.: http://tesco.com/pma/api-docs`,
         { removeTrailingSlash: true }),
       //
-      camundaServerUrl: () => createUrlOrFail(
+      camundaServerUrl: () => createUrlOrUndefined(
         processEnv.CAMUNDA_SERVER_URL,
         `CAMUNDA_SERVER_URL must be a well-formed URL pointing to API server, e.g.: http://tesco.com/pma/camunda`,
         { removeTrailingSlash: true }),
@@ -193,6 +193,15 @@ const createUrlOrFail = (
   } catch {
     throw new Error(errorMessage);
   }
+};
+
+const createUrlOrUndefined = (
+  urlString: string,
+  errorMessage: string,
+  options: { removeTrailingSlash?: boolean; addTrailngSlash?: boolean } = { removeTrailingSlash: true },
+) => {
+  if (urlString === undefined) return undefined;
+  return createUrlOrFail(urlString, errorMessage, options);
 };
 
 export const prettify = (config: ProcessConfig): void => {
