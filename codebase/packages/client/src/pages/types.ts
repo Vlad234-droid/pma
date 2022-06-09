@@ -39,7 +39,6 @@ enum Page {
   PREVIOUS_CALIBRATION_RATINGS = 'previous-calibration-ratings/:uuid',
   PREVIOUS_OBJECTIVES_RATINGS = 'previous-objective-ratings/:uuid',
   PREVIOUS_REVIEW_FORMS = 'previous-review-forms/:uuid',
-  SUPPORTING_YOUR_PERFORMANCE = 'syp/:uuid',
   NOT_FOUND = '404',
 }
 

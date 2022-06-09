@@ -3,6 +3,8 @@ import { Button, CreateRule, Rule, Styles, useStyle } from '@pma/dex-wrapper';
 import { Trans } from 'components/Translation';
 import { IconButton, Position } from '../IconButton';
 
+export const LEFT_SIDE_BUTTON = 'left-side-button';
+
 type ButtonsProps = {
   isValid?: boolean;
   onLeftPress?: () => void;
@@ -39,7 +41,7 @@ const ButtonsWrapper: FC<ButtonsProps> = ({
                 <Button
                   styles={[theme.font.fixed.f16, buttonCancelStyle]}
                   onPress={onLeftPress}
-                  data-test-id={'left-side-button'}
+                  data-test-id={LEFT_SIDE_BUTTON}
                 >
                   <Trans i18nKey={leftText} />
                 </Button>

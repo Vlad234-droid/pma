@@ -195,7 +195,7 @@ export const getWLFields = (t) => [
 
 export const getSelectAllField = (t) => ({ id: '11', label: t('select_all', 'Select All'), isChecked: false });
 
-export const initialValues = [
+export const initialValues: Array<{ title: string; data: Array<{ title: string }> }> = [
   {
     title: 'Work level',
     data: [
