@@ -19,7 +19,7 @@ export const swaggerProxyMiddleware = (processConfig: ProcessConfig) => {
   const swaggerProxyLogger = createLogger({ name: 'swagger' });
 
   const swaggerProxy = initializeProxyMiddleware({
-    filter: [ '/swagger-ui.html', '/swagger-ui/**', '/api-docs/**' ], 
+    filter: [ '/swagger-ui.html', '/swagger-ui', '/api-docs' ], 
     mountPath: `/`,
     // pathRewrite: { '^/swagger-ui': '/swagger-ui' },
     pathRewrite: (p) => {
