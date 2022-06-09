@@ -1,7 +1,6 @@
 export * from './auth';
 // export * from './open-id';
 export * from './api-proxy';
-export * from './actuator-proxy';
 export * from './swagger-proxy';
 export * from './camunda-proxy';
 export * from './open-id';

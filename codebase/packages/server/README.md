@@ -29,7 +29,7 @@ where `[ENV] = production | dev | stage` and if missing it defaults to ''.
 | BUILD_ENV | Env on which the app is built | development, ppe, production | N | ppe |
 | RUNTIME_ENV | Env where the app is running | local, dev, ppe, prod, | N | ppe |
 | API_SERVER_URL | URL of ACTUATOR server | [remote URL] | N | - |
-| ACTUATOR_SERVER_URL | URL of API server | [remote URL] | N | - |
+| API_MANAGEMENT_SERVER_URL | URL of API server | [remote URL] | N | - |
 | SWAGGER_SERVER_URL | URL of Swagger server | [remote URL] | N | - |
 | CAMUNDA_SERVER_URL | URL of Camunda server | [remote URL] | N | - |
 | INTEGRATION_MODE | Integration Mode | standalone, integrity | N | standalone |

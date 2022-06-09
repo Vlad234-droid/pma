@@ -163,6 +163,9 @@ const proxyErrorHandler = (logger: Logger, customHandler: OnErrorCallback | unde
 
   if (typeof customHandler === 'function') {
     customHandler(err, req, res, target);
+  } else if (err.message === 'proxy: Missing access_token') {
+    res.status(401);
+    res.send('proxy: Missing access_token');
   } else {
     const originalUrl = req['originalUrl'];
     const targetUrl = target && typeof target['format'] === 'function' ? target['format']() : target;

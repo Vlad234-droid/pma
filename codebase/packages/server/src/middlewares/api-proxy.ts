@@ -8,7 +8,6 @@ export const apiProxyMiddleware = ({
 
   const apiProxy = initializeProxyMiddleware({ 
     mountPath: `/api/v1`,
-    //pathRewrite: { '^/api': '' },
     targetUrl: apiServerUrl(),
     logLevel: loggerLevel(), 
     logger: 'api',
@@ -16,3 +15,23 @@ export const apiProxyMiddleware = ({
 
   return apiProxy;
 };
+
+export const apiManagementProxyMiddleware = ({ 
+  apiManagementServerUrl,
+  loggerLevel,
+}: ProcessConfig) => {
+
+  if (apiManagementServerUrl() === undefined) {
+    return [];
+  }
+
+  const apiManagementProxy = initializeProxyMiddleware({ 
+    mountPath: `/api/actuator`,
+    targetUrl: apiManagementServerUrl()!,
+    logLevel: loggerLevel(), 
+    logger: 'api',
+  });
+
+  return apiManagementProxy;
+};
+

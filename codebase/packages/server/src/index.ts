@@ -20,7 +20,7 @@ import {
   standaloneIndexAssetHandler,
   myInboxConfig,
   apiProxyMiddleware,
-  actuatorProxyMiddleware,
+  apiManagementProxyMiddleware,
   swaggerProxyMiddleware,
   camundaProxyMiddleware,
 } from './middlewares';
@@ -105,7 +105,7 @@ if (!API_SERVER_URL) {
 
   router.use('/api/v1', apiProxyMiddleware(config));
 
-  config.actuatorServerUrl() && router.use('/api/actuator', actuatorProxyMiddleware(config));
+  config.apiManagementServerUrl() && router.use('/api/actuator', apiManagementProxyMiddleware(config));
   config.swaggerServerUrl() && router.use(swaggerProxyMiddleware(config));
   config.camundaServerUrl() && router.use('/camunda', camundaProxyMiddleware(config));
 
