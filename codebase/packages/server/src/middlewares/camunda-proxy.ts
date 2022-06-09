@@ -1,6 +1,6 @@
 import { IncomingMessage, ServerResponse } from 'http';
 
-import { Router } from 'express';
+import { Request, Response, Router } from 'express';
 import { Logger } from 'pino';
 import { is as mimeTypeIs } from 'type-is';
 
@@ -44,7 +44,7 @@ export const camundaProxyMiddleware = (processConfig: ProcessConfig) => {
     logger: camundaProxyLogger,
     httpProxyOptions: {
       cookieDomainRewrite: '',
-      onProxyRes: camundaProxyResHandler(camundaProxyLogger, processConfig),
+      // onProxyRes: camundaProxyResHandler(camundaProxyLogger, processConfig),
     }
   }));
 
@@ -56,6 +56,7 @@ export const camundaProxyMiddleware = (processConfig: ProcessConfig) => {
   return appRouter;
 };
 
+/*
 const camundaProxyResHandler = (logger: Logger, { applicationContextPath }: ProcessConfig) =>
     (proxyRes: IncomingMessage, req: IncomingMessage, res: ServerResponse) => {
 
@@ -81,3 +82,4 @@ const camundaProxyResHandler = (logger: Logger, { applicationContextPath }: Proc
     // just copy proxy response to res
   }
 };
+*/

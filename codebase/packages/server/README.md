@@ -23,7 +23,7 @@ where `[ENV] = production | dev | stage` and if missing it defaults to ''.
 ## Environment Table
 
 | Column | Description | Value (one of) | Optional | Suggestion |
-| ---------------------------------------- | ----------------------------------------------- | ---------------------------- | -------- | ------------------------------------------------- |
+| ------ | ----------- | -------------- | -------- | ---------- |
 | NODE_PORT | Port on which the server app is running | 9000 | Y | 9000 |
 | NODE_ENV | Env where the app is running | local, dev, ppe, prod, | N | ppe |
 | BUILD_ENV | Env on which the app is built | development, ppe, production | N | ppe |

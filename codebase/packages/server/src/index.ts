@@ -103,7 +103,7 @@ if (!API_SERVER_URL) {
   }
 
   router.use('/api/v1', apiProxyMiddleware(config));
-  router.use('/api-docs', swaggerProxyMiddleware(config));
+  router.use('/swagger-ui', swaggerProxyMiddleware(config));
   router.use('/camunda', camundaProxyMiddleware(config));
 
   router.use('/_status', (_, res) => res.sendStatus(200));
