@@ -84,7 +84,7 @@ if (!API_SERVER_URL) {
   // setup logger middlewares
   router.use(getHttpLoggerMiddleware('http'));
 
-  if (isDEV(config.buildEnvironment()) || !config.useOneLogin()) {
+  if (config.useOneLogin() === false) {
     logger.info(`WARNING! Authentication is turned off. Fake Login is used.`);
     // fake login behavior
     router.use(cookieParser(config.applicationCookieParserSecret()));
