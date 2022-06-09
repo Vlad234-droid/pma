@@ -8,6 +8,7 @@ const environmentParameters: Array<keyof NodeJS.ProcessEnv> = [
   'RUNTIME_ENV',
   //
   'API_SERVER_URL',
+  'ACTUATOR_SERVER_URL',
   'SWAGGER_SERVER_URL',
   'CAMUNDA_SERVER_URL',
   // integration
@@ -51,6 +52,9 @@ const environmentParameters: Array<keyof NodeJS.ProcessEnv> = [
  * 
  */
 const optionalEnvironmentParameters = [
+  'ACTUATOR_SERVER_URL',
+  'SWAGGER_SERVER_URL',
+  'CAMUNDA_SERVER_URL',
   'APPLICATION_NAME',
   'APPLICATION_AUTH_TOKEN_COOKIE_NAME',
   'APPLICATION_SESSION_COOKIE_NAME',
