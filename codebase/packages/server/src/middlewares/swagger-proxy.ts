@@ -14,32 +14,36 @@ import { initializeProxyMiddleware } from './proxy';
 
 export const swaggerProxyMiddleware = (processConfig: ProcessConfig) => { 
   
-  const { applicationContextPath, swaggerServerUrl, loggerLevel }= processConfig;
+  const { swaggerServerUrl, loggerLevel }= processConfig;
 
   const swaggerProxyLogger = createLogger({ name: 'swagger' });
 
-  const swaggerProxy = initializeProxyMiddleware({ 
-    mountPath: `/swagger-ui`,
+  const swaggerProxy = initializeProxyMiddleware({
+    filter: [ '/swagger-ui.html', '/swagger-ui/**', '/api-docs/**' ], 
+    mountPath: `/`,
     // pathRewrite: { '^/swagger-ui': '/swagger-ui' },
     pathRewrite: (p) => {
       let rewritten = p;
-      if (p.startsWith('/swagger-ui')) {
-        rewritten = `${p}`;
-      }
-      console.log(` !!! SWAGGER PROXY :: ${p} >>> ${rewritten} `);
+      // if (p.startsWith('/swagger-ui')) {
+      //   rewritten = `${p}`;
+      // }
+      // console.log(` !!! SWAGGER PROXY :: ${p} >>> ${rewritten} `);
       return rewritten;
     },
     targetUrl: swaggerServerUrl(),
     logLevel: loggerLevel(), 
     logger: swaggerProxyLogger,
     httpProxyOptions: {
-      onProxyReq: swaggerProxyReqHandler(swaggerProxyLogger)
+      onProxyReq: swaggerProxyReqHandler(swaggerProxyLogger, processConfig)
     }
   });
 
   return swaggerProxy;
 };
 
-const swaggerProxyReqHandler = (logger: Logger) => (proxyReq: ClientRequest, req: Request, res: Response, options: ServerOptions) => {
+const swaggerProxyReqHandler = (logger: Logger, { applicationContextPath }: ProcessConfig) => (proxyReq: ClientRequest, req: Request, res: Response, options: ServerOptions) => {
   logger.info('swaggerProxyReqHandler');
+  if (applicationContextPath() !== '/' && applicationContextPath().startsWith('/')) {
+    proxyReq.setHeader('x-forwarded-prefix', applicationContextPath());
+  }
 }

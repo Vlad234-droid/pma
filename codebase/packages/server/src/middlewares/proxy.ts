@@ -13,7 +13,7 @@ import { OnErrorCallback, OnProxyReqCallback, OnProxyResCallback } from 'http-pr
 
 export type ProxyMiddlewareOptions = {
   filter?: Filter;
-  mountPath: string;
+  mountPath?: string;
   targetUrl: URL;
   pathRewrite?: PathRewriteRules;
   requireIdentityToken?: boolean;
