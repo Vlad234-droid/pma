@@ -15,7 +15,7 @@ import { extractAuthToken, initializeProxyMiddleware } from './proxy';
 
 export const swaggerProxyMiddleware = (processConfig: ProcessConfig) => { 
   
-  const { applicationContextPath, applicationUrl, swaggerServerUrl, loggerLevel }= processConfig;
+  const { buildEnvironment, applicationContextPath, applicationOrigin, swaggerServerUrl, loggerLevel }= processConfig;
 
   if (swaggerServerUrl() === undefined) {
     return [];
@@ -27,10 +27,8 @@ export const swaggerProxyMiddleware = (processConfig: ProcessConfig) => {
   //
   //
   //
-  appRouter.get('/swagger-ui', (req, res) => {
-    if (req.originalUrl === '/swagger-ui' || req.originalUrl === '/swagger-ui.html') {
-      res.redirect(`${emptyIfRoot(applicationContextPath())}/swagger-ui/index.html`);
-    }
+  appRouter.get([ '/swagger-ui', '/swagger-ui.html' ], (req, res) => {
+    res.redirect(`${emptyIfRoot(applicationContextPath())}/swagger-ui/index.html`);
   });
 
   //
@@ -73,7 +71,7 @@ export const swaggerProxyMiddleware = (processConfig: ProcessConfig) => {
     const swaggerConfig = {
       configUrl:`${emptyIfRoot(applicationContextPath())}/api-docs/swagger-config`,
       displayRequestDuration:true,
-      oauth2RedirectUrl: `${applicationUrl().toString()}/swagger-ui/oauth2-redirect.html`,
+      oauth2RedirectUrl: `${applicationOrigin()}${emptyIfRoot(applicationContextPath())}/swagger-ui/oauth2-redirect.html`,
       operationsSorter: 'alpha',
       tagsSorter: 'alpha',
       urls:[
@@ -94,11 +92,11 @@ export const swaggerProxyMiddleware = (processConfig: ProcessConfig) => {
   //
   //
   //
-  appRouter.get('/api-docs', async (req, res) => {
+  appRouter.get('/api-docs/*', async (req, res) => {
     
     const fetchApiDoc = async (url: string) => {
       const authToken = extractAuthToken(req, res);
-      const response = await fetch(`${swaggerServerUrl()!.host}${url}`, {
+      const response = await fetch(`${swaggerServerUrl()!.origin}${emptyIfRoot(swaggerServerUrl()!.pathname)}${url}`, {
         method: 'get',
         headers: {
           'content-type': 'application/json',
@@ -123,9 +121,13 @@ export const swaggerProxyMiddleware = (processConfig: ProcessConfig) => {
     if (apiDoc) {
       const ajustedApiDoc = {
         ...apiDoc,
+        components: {
+          ...apiDoc.components,
+          securitySchemes: undefined,
+        },
         security: undefined,
         servers: [
-          { description: '', url: `${applicationUrl().toString()}/api`}
+          { description: `${buildEnvironment().toUpperCase()} server`, url: `${applicationOrigin()}${emptyIfRoot(applicationContextPath())}/api`},
         ],
       };
 
@@ -148,16 +150,19 @@ export const swaggerProxyMiddleware = (processConfig: ProcessConfig) => {
     //   if (pathname.startsWith('/api-docs/')) return true;
     //   return false;
     // },
-    mountPath: `/`,
-    // pathRewrite: { '^/swagger-ui': '/swagger-ui' },
-    pathRewrite: (p) => {
-      let rewritten = p;
-      // if (p.startsWith('/swagger-ui')) {
-      //   rewritten = `${p}`;
-      // }
-      // console.log(` !!! SWAGGER PROXY :: ${p} >>> ${rewritten} `);
-      return rewritten;
+    // mountPath: `/`,
+    pathRewrite: { 
+      '^/swagger-ui': `${emptyIfRoot(swaggerServerUrl()!.pathname)}/swagger-ui`,
+      '^/api-docs': `${emptyIfRoot(swaggerServerUrl()!.pathname)}/api-docs`, 
     },
+    // pathRewrite: (p) => {
+    //   let rewritten = p;
+    //   // if (p.startsWith('/swagger-ui')) {
+    //   //   rewritten = `${p}`;
+    //   // }
+    //   // console.log(` !!! SWAGGER PROXY :: ${p} >>> ${rewritten} `);
+    //   return rewritten;
+    // },
     targetUrl: swaggerServerUrl()!,
     logLevel: loggerLevel(), 
     logger: swaggerProxyLogger,

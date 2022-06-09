@@ -1,8 +1,9 @@
-import { ClientRequest, IncomingMessage, ServerResponse } from 'http';
+import { ClientRequest, IncomingMessage } from 'http';
 import { Url } from 'url';
 
 import express, { Request, Response } from 'express';
 import { createProxyMiddleware, Filter, Options, RequestHandler } from 'http-proxy-middleware';
+import { ServerOptions } from 'http-proxy';
 import { Logger } from 'pino';
 import { is as mimeTypeIs } from 'type-is';
 
@@ -100,7 +101,7 @@ export const extractAuthToken = (req: Request, res: Response) => {
 
 const proxyReqHandler = (logger: Logger, customHandler: OnProxyReqCallback | undefined,
       options: Pick<ProxyMiddlewareOptions, 'requireIdentityToken' | 'clearCookies' | 'logAuthToken'>) =>
-    async (proxyReq: ClientRequest, req: Request, res: Response) => {
+    async (proxyReq: ClientRequest, req: Request, res: Response, serverOptions: ServerOptions) => {
 
   const { requireIdentityToken, clearCookies, logAuthToken } = options;
 
@@ -120,7 +121,7 @@ const proxyReqHandler = (logger: Logger, customHandler: OnProxyReqCallback | und
 
   try {
     if (typeof customHandler === 'function') {
-      customHandler(proxyReq, req, res, {});
+      customHandler(proxyReq, req, res, serverOptions);
     }
   } catch (err) {
     proxyReq.destroy(err as Error);

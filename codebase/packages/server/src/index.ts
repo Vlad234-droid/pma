@@ -77,7 +77,7 @@ if (!API_SERVER_URL) {
   router.use(
     cors({
       credentials: true,
-      origin: config.applicationRoot(),
+      origin: config.applicationOrigin(),
     }),
   );
 

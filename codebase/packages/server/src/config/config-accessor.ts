@@ -38,7 +38,7 @@ export type ProcessConfig = {
   // application specific settings
   applicationName: () => string;
   applicationUrl: () => URL;
-  applicationRoot: () => string;
+  applicationOrigin: () => string;
   applicationContextPath: () => string;
   // applicationServerUrlRoot: () => string;
   // applicationPublicUrl: () => string;
@@ -75,7 +75,7 @@ export class ConfigAccessor {
 
     this.config = {
       // general
-      buildEnvironment: () => processEnv.BUILD_ENV,
+      buildEnvironment: () => processEnv.BUILD_ENV || defaultConfig.defaultEnvironment,
       runtimeEnvironment: () => processEnv.RUNTIME_ENV,
       environment: () => processEnv.NODE_ENV,
       apiEnv: () => getAppEnv(this.config.runtimeEnvironment(), undefined),
@@ -131,9 +131,9 @@ export class ConfigAccessor {
           `APPLICATION_URL must be a well-formed URL pointing to the root of application, e.g.: http://tesco.com/pma`,
           { removeTrailingSlash: true },
         ),
-      applicationRoot: () => {
+      applicationOrigin: () => {
         const applicationUrl = this.config.applicationUrl();
-        return `${applicationUrl.protocol}//${applicationUrl.host}`;
+        return `${applicationUrl.origin}`;
       },
       applicationContextPath: () => this.config.applicationUrl().pathname,
       // cookies settings
@@ -216,6 +216,5 @@ export const prettify = (config: ProcessConfig): void => {
 export const getConfig = () => {
   // validate if all required process env variables exist
   getEnv().validate();
-
   return ConfigAccessor.getInstance(getEnv().getVariables()).getConfig();
 };

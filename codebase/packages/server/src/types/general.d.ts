@@ -27,7 +27,7 @@ declare namespace NodeJS {
     NODE_PORT: number;
     NODE_ENV: keyof typeof Environment;
     RUNTIME_ENV: keyof typeof Environment;
-    BUILD_ENV: keyof typeof Environment;
+    BUILD_ENV: keyof typeof Environment | undefined;
     
     API_SERVER_URL: string;
     ACTUATOR_SERVER_URL: string;

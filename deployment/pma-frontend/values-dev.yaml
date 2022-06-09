@@ -88,7 +88,7 @@ environment:
   NODE_PORT: 9000
   NODE_ENV: ppe
   NODE_CONFIG_ENV: ppe
-  BUILD_ENV: ppe
+  BUILD_ENV: dev
   RUNTIME_ENV: ppe
   NODE_OPTIONS: --max-http-header-size=16384
   API_PROXY_MOUNT_PATH: /api/v1

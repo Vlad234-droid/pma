@@ -21,7 +21,7 @@ export const initializeOpenid = async ({
   applicationUserDataCookieSecret,
   stickCookiesToApplicationPath,
   oidcIssuerUrl,
-  applicationRoot,
+  applicationOrigin,
   applicationContextPath,
   oidcAuthCallbackPath,
   oidcRedirectAfterLogoutPath,
@@ -79,7 +79,7 @@ export const initializeOpenid = async ({
     /**
      * A callback root that was registered for the application e.g. https://www.ourtesco.com (without the applicationPath)
      */
-    applicationServerUrlRoot: applicationRoot(),
+    applicationServerUrlRoot: applicationOrigin(),
 
     /**
      * A path the app is mounted on e.g. for https://www.ourtesco.com/my-shift the path is /my-shift.

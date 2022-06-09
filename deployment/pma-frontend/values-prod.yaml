@@ -89,7 +89,7 @@ environment:
   NODE_PORT: 9000
   NODE_ENV: production
   NODE_CONFIG_ENV: prod
-  BUILD_ENV: production
+  BUILD_ENV: prod
   RUNTIME_ENV: prod
   NODE_OPTIONS: --max-http-header-size=16384
   API_PROXY_MOUNT_PATH: /api/v1

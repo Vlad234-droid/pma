@@ -3,12 +3,12 @@ import { myInboxMiddleware } from './my-inbox/my-inbox-middleware';
 import { ProcessConfig, isPROD } from '../config';
 
 export const myInboxConfig = async ({
-  applicationRoot,
+  applicationOrigin,
   environment,
   // applicationName,
   // integrationSSOLogoutPath,
 }: ProcessConfig) => {
-  const origin = applicationRoot();
+  const origin = applicationOrigin();
   const configEnvironment = isPROD(environment()) ? 'prod' : environment();
   // const appName = applicationName();
   // const logoutPath = integrationSSOLogoutPath();

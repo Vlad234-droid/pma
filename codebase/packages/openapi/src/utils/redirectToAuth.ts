@@ -1,6 +1,6 @@
 export const redirectToAuth = (returnUri?: string) => {
-  const applicationRootPrefix = process.env.PUBLIC_URL ?? '';
-  const redirectToAuthKey = `${applicationRootPrefix}/redirectToAuth`;
+  const applicationPrefix = process.env.PUBLIC_URL ?? '';
+  const redirectToAuthKey = `${applicationPrefix}/redirectToAuth`;
   const redirectToAuth = window.localStorage.getItem(redirectToAuthKey);
 
   if (redirectToAuth === null) {
@@ -9,9 +9,9 @@ export const redirectToAuth = (returnUri?: string) => {
     setTimeout(() => {
       window.localStorage.removeItem(redirectToAuthKey);
       if (returnUri) {
-        window.location.assign(`${applicationRootPrefix}/sso/auth?onelogin_return_uri=${encodeURI(returnUri)}`);
+        window.location.assign(`${applicationPrefix}/sso/auth?onelogin_return_uri=${encodeURI(returnUri)}`);
       } else {
-        window.location.assign(`${applicationRootPrefix}/sso/auth`);
+        window.location.assign(`${applicationPrefix}/sso/auth`);
       }
     }, 100);
   }

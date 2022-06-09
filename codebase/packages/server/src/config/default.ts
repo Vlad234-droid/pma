@@ -1,4 +1,5 @@
 export const defaultConfig = {
+  defaultEnvironment: 'local',
   applicationName: 'Performance Management Application',
   port: 9000,
   loggerRootName: 'server',

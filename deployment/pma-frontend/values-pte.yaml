@@ -89,7 +89,7 @@ environment:
   NODE_PORT: 9000
   NODE_ENV: ppe # use PPE env, because all thirparty services will be used from PPE env
   NODE_CONFIG_ENV: ppe # use PPE env, because all thirparty services will be used from PPE env
-  BUILD_ENV: ppe # use PPE env, because all thirparty services will be used from PPE env
+  BUILD_ENV: pte # use PPE env, because all thirparty services will be used from PPE env
   RUNTIME_ENV: ppe # use PPE env, because all thirparty services will be used from PPE env
   NODE_OPTIONS: --max-http-header-size=16384
   API_PROXY_MOUNT_PATH: /api/v1
