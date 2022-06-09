@@ -13,7 +13,7 @@ export const getMessagesEpic: Epic = (action$, _, { api }) =>
       return from(api.getMessages(payload)).pipe(
         // @ts-ignore
         map((data) => {
-          return getMessages.success(data);
+          return getMessages.success(data || {});
         }),
         catchError(({ errors }) => of(getMessages.failure(errors))),
         takeUntil(action$.pipe(filter(isActionOf(getMessages.cancel)))),
@@ -29,7 +29,7 @@ export const getMessagesCountEpic: Epic = (action$, _, { api }) =>
       return from(api.getMessagesCount(payload)).pipe(
         // @ts-ignore
         map((data) => {
-          return getMessagesCount.success(data);
+          return getMessagesCount.success(data || 0);
         }),
         catchError(({ errors }) => of(getMessagesCount.failure(errors))),
         takeUntil(action$.pipe(filter(isActionOf(getMessagesCount.cancel)))),
