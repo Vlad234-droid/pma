@@ -2,7 +2,7 @@ import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
 import { renderWithTheme as render } from 'utils/test';
 import '@testing-library/jest-dom';
-import { fireEvent } from '@testing-library/react';
+import { fireEvent, waitFor } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 
 import Report, { REPORT_WRAPPER } from './Report';
@@ -13,6 +13,7 @@ import { View } from 'components/PieChart/config';
 import { Rating } from '../../config/enum';
 import { getCurrentYear } from '../../utils';
 import { FILTER_WRAPPER } from './components/FilterModal/FilterModal';
+import { LEFT_SIDE_BUTTON } from 'components/ButtonsWrapper/ButtonsWrapper';
 
 describe('Report page', () => {
   it('render report wrapper', async () => {
@@ -87,6 +88,23 @@ describe('Report page', () => {
     );
     fireEvent.click(getByTestId('edit'));
     expect(getByTestId('modal-wrapper')).toBeInTheDocument();
+  });
+  it('it should close report modal', async () => {
+    const { getByTestId, queryByTestId } = render(
+      <BrowserRouter>
+        <Report />
+      </BrowserRouter>,
+    );
+
+    fireEvent.click(getByTestId('edit'));
+    expect(getByTestId('modal-wrapper')).toBeInTheDocument();
+    const cancel = getByTestId(LEFT_SIDE_BUTTON);
+    expect(cancel).toBeInTheDocument();
+
+    fireEvent.click(cancel);
+    await waitFor(() => {
+      expect(queryByTestId('modal-wrapper')).not.toBeInTheDocument();
+    });
   });
   it('it should open filter modal', async () => {
     const { getByTestId } = render(

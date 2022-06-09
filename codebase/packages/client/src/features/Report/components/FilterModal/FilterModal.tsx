@@ -40,7 +40,6 @@ const FilterModal: FC<FilterModalProps> = ({
   const { css, theme, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const ref = useRef<HTMLDivElement | null>(null);
-
   const handleClickOutside = (event: MouseEvent<HTMLElement>) => {
     const element = event?.target as HTMLElement;
     if (ref.current && !ref.current.contains(element)) {
@@ -112,7 +111,9 @@ const FilterModal: FC<FilterModalProps> = ({
     <div ref={ref} className={css(wrapperStyle({ filterModal }))} data-test-id={FILTER_WRAPPER}>
       <div className={css(flexColumnStyle)}>
         <div className={css(flexStyle)}>
-          <span className={css(filterStyle)}>Filter</span>
+          <span className={css(filterStyle)}>
+            <Trans i18nKey={'filter'}>Filter</Trans>
+          </span>
           <IconButton
             graphic='cancel'
             iconStyles={iconStyle}
@@ -129,11 +130,12 @@ const FilterModal: FC<FilterModalProps> = ({
               {data.map((checkBoxItem) => (
                 <label className={css(labelStyle)} key={`${title}-${checkBoxItem.title}`}>
                   {checkBoxItem.title === FilterType.SELECT_ALL ? (
-                    <SelectAll onChange={(e) => handleSelectAll(e)} checkBoxItem={checkBoxItem} innerTitle={title} />
+                    <SelectAll onChange={handleSelectAll} checkBoxItem={checkBoxItem} innerTitle={title} />
                   ) : (
                     <>
                       <Checkbox
                         id={`${title}-${checkBoxItem.title}`}
+                        name={`${title}-${checkBoxItem.title}`}
                         checked={checkedItems.includes(`${title}-${checkBoxItem.title}`)}
                         onChange={(e) => handleClick(e)}
                       />
@@ -152,15 +154,10 @@ const FilterModal: FC<FilterModalProps> = ({
         <div className={css(relativeBtnStyled)}>
           <div className={css(spacingStyle({ mobileScreen }))}>
             <Button styles={[theme.font.fixed.f16, buttonStyle]} onPress={() => setFilterModal(() => false)}>
-              <Trans>Cancel</Trans>
+              <Trans i18nKey={'cancel'}>Cancel</Trans>
             </Button>
-            <Button
-              styles={[theme.font.fixed.f16, filterButtonStyle]}
-              onPress={() => {
-                setFilterModal(() => false);
-              }}
-            >
-              <Trans>Filter</Trans>
+            <Button styles={[theme.font.fixed.f16, filterButtonStyle]} onPress={() => setFilterModal(() => false)}>
+              <Trans i18nKey={'filter'}>Filter</Trans>
             </Button>
           </div>
         </div>

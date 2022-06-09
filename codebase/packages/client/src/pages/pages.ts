@@ -33,7 +33,6 @@ import PreviousRatingsTiles from './PreviousRatingsTiles';
 import PreviousCalibrationRatings from './PreviousCalibrationRatings';
 import PreviousObjectiveRatings from './PreviousObjectiveRatings';
 import PreviousReviewForms from './PreviousReviewForms';
-import SupportingYourPerformance from './SupportingYourPerformance';
 import { NotFound } from './NotFound';
 
 export type PageComponent = {
@@ -297,12 +296,6 @@ const pages: Record<Page, PageComponent> = {
   [Page.PREVIOUS_REVIEW_FORMS]: {
     Element: PreviousReviewForms,
     title: 'Review forms',
-    withHeader: true,
-    perform: [role.LINE_MANAGER],
-  },
-  [Page.SUPPORTING_YOUR_PERFORMANCE]: {
-    Element: SupportingYourPerformance,
-    title: 'Supporting Your Performance',
     withHeader: true,
     perform: [role.LINE_MANAGER],
   },
