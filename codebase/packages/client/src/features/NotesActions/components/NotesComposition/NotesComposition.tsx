@@ -12,13 +12,13 @@ import {
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 
-import { role, usePermission } from 'features/Permission';
+import { role, usePermission } from 'features/general/Permission';
 import { Trans, useTranslation } from 'components/Translation';
 import { InfoModal as InfoMessage } from '../../wrappers';
 import { AddNoteModal, AddTeamNoteModal, FilterOptions, MainFolders } from '../../components';
 import { IconButton } from 'components/IconButton';
-import { ConfirmModalWithSelectOptions } from 'features/Modal';
-import { buildPath } from 'features/Routes';
+import { ConfirmModalWithSelectOptions } from 'features/general/Modal';
+import { buildPath } from 'features/general/Routes';
 import { Page } from 'pages';
 
 import { useNotesContainer } from '../../contexts';
@@ -27,7 +27,7 @@ import { ModalStatuses } from '../../NotesActions';
 import { schemaFolder, schemaNotes, schemaNoteToEdit, schemaTEAMNotes } from '../Modals/schema/schema';
 import { Backward } from 'components/Backward';
 import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
-import WrapperModal from '../../../Modal/components/WrapperModal';
+import WrapperModal from '../../../general/Modal/components/WrapperModal';
 import { EditSelectedNote } from '../Modals/EditSelectedNote';
 
 export const NOTES_WRAPPER = 'note-wrapper';

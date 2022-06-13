@@ -3,10 +3,10 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { IconButton, Rule, Styles, useStyle, CreateRule } from '@pma/dex-wrapper';
 
 import { Graphics, RoundIcon, Icon } from 'components/Icon';
-import { AlertDrawer, AlertBadge, useMessagesContext } from 'features/Messages';
-import { DataModal } from 'features/Profile';
+import { AlertDrawer, AlertBadge, useMessagesContext } from 'features/general/Messages';
+import { DataModal } from 'features/general/Profile';
 
-import { MenuDrawer } from 'features/MenuDrawer/MenuDrawer';
+import { MenuDrawer } from 'features/general/MenuDrawer/MenuDrawer';
 
 export type HeaderProps = {
   title: string;

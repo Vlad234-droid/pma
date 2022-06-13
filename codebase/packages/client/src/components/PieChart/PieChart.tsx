@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Rule, useStyle } from '@pma/dex-wrapper';
-import { buildPath, buildPathWithParams } from 'features/Routes';
+import { buildPath, buildPathWithParams } from 'features/general/Routes';
 import { PieChartContent as Content } from './components/PieChartContent';
 import { HoverMessage } from 'components/HoverMessage';
 import { PieChartProps } from './config';

@@ -7,7 +7,7 @@ import {
   searchEmployeesFn,
   sortEmployeesFn,
   searchEmployeesAndManagersFn,
-} from '@pma/client/src/features/Filters';
+} from '@pma/client/src/features/general/Filters';
 import { Employee } from '@pma/client/src/config/types';
 
 export const managersSelector = (state: RootState) => state.managers || {};

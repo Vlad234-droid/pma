@@ -5,3 +5,4 @@ export * from './feedback';
 export * from './note';
 export * from './query';
 export * from './helper';
+export * from './tenant';

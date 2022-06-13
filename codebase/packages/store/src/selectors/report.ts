@@ -2,7 +2,7 @@ import { createSelector } from 'reselect';
 //@ts-ignore
 import { RootState } from 'typesafe-actions';
 import { Status, ReportPage } from '@pma/client/src/config/enum';
-import { ReportTags } from '@pma/client/src/features/TileReport/config';
+import { ReportTags } from '@pma/client/src/features/general/TileReport/config';
 import { WorkLevel } from '../config/types';
 
 export const reportSelector = (state: RootState) => state.report;

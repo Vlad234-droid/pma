@@ -11,7 +11,7 @@ import {
   teamArchivedFolderUuidSelector,
 } from '@pma/store';
 
-import { ConfirmModal, ConfirmModalWithDropDown } from 'features/Modal';
+import { ConfirmModal, ConfirmModalWithDropDown } from 'features/general/Modal';
 import { useTranslation } from 'components/Translation';
 import { PersonalFolders, PersonalsTeamFolders, SelectedFolder, SelectedTEAMFolder } from '../../index';
 import { MainFolderProps, NotesStatus } from '../../../type';

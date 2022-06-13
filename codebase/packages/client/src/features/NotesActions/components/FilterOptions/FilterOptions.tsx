@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
-import { FilterOption as FilterOptionInput } from 'features/Shared';
+import { FilterOption as FilterOptionInput } from 'features/general/Shared';
 import { Rule, Styles, useStyle } from '@pma/dex-wrapper';
 import { IconButton } from 'components/IconButton';
 import { useTranslation } from 'components/Translation';

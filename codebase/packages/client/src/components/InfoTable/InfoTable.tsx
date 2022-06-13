@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import TableContent from './components/TableContent';
 import { InfoTableProps as Props } from './type';
 import { paramsReplacer } from 'utils';
-import { buildPath, buildPathWithParams } from 'features/Routes';
+import { buildPath, buildPathWithParams } from 'features/general/Routes';
 import { HoverMessage } from '../HoverMessage';
 
 export const INFO_TABLE_WRAPPER = 'info_table_wrapper';

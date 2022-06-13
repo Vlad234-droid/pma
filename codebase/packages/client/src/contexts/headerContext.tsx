@@ -1,5 +1,5 @@
 import React, { createContext, FC, useContext, useState } from 'react';
-import { Page } from 'pages/types';
+import { Page } from 'pages/general/types';
 
 const defaultData = {
   linkTitle: {},

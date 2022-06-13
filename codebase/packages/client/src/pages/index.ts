@@ -1,2 +1,2 @@
-export { default as pages } from './pages';
-export * from './types';
+export { default as pages } from './general/pages';
+export * from './general/types';

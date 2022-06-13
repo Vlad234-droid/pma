@@ -2,7 +2,7 @@ import React, { FC, CSSProperties, ReactNode } from 'react';
 import { CreateRule, Rule, Styles, useStyle } from '@pma/dex-wrapper';
 
 import { TileWrapper } from 'components/Tile';
-import { AvatarName } from 'features/Profile/components/Widgets/Profile';
+import { AvatarName } from 'features/general/Profile/components/Widgets/Profile';
 
 const ProfileTileWrapper: FC<{
   user: Record<'fullName' | 'job', string>;

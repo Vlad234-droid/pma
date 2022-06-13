@@ -3,7 +3,7 @@ import { BrowserRouter } from 'react-router-dom';
 import '@testing-library/jest-dom';
 import '@testing-library/jest-dom/extend-expect';
 import { createMemoryHistory } from 'history';
-import { buildPath } from 'features/Routes';
+import { buildPath } from 'features/general/Routes';
 import { Page } from 'pages';
 import InfoTable, { INFO_TABLE_WRAPPER } from './InfoTable';
 import { renderWithTheme as render } from 'utils/test';

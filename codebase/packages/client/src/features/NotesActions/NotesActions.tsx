@@ -8,7 +8,7 @@ import {
   notesFolderTeamDataSelector,
 } from '@pma/store';
 
-import { role, usePermission } from 'features/Permission';
+import { role, usePermission } from 'features/general/Permission';
 import Spinner from 'components/Spinner';
 import { NotesComposition } from './components';
 

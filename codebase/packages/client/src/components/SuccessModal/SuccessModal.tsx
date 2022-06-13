@@ -1,7 +1,7 @@
 import React, { CSSProperties, FC, HTMLProps } from 'react';
 import { Button, useStyle, Rule, CreateRule, Styles } from '@pma/dex-wrapper';
 
-import { WrapperModal } from 'features/Modal';
+import { WrapperModal } from 'features/general/Modal';
 import { Trans } from 'components/Translation';
 
 export type SuccessModal = {

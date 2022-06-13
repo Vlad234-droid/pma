@@ -9,7 +9,7 @@ import { useTranslation } from 'components/Translation';
 import { IconButton } from 'components/IconButton';
 import { ArrowLeftIcon } from 'components/ArrowLeftIcon';
 import { SuccessModal } from './index';
-import { ConfirmModal } from 'features/Modal';
+import { ConfirmModal } from 'features/general/Modal';
 import { ButtonsWrapper } from 'components/ButtonsWrapper';
 
 import { Option } from 'components/Form/types';

@@ -5,7 +5,7 @@ import { renderWithTheme as render } from 'utils/test';
 import { BrowserRouter } from 'react-router-dom';
 
 import Header, { TEST_ID, BACK_BTN_TEST_ID, MENU_BTN } from './Header';
-import { MENU_DRAWER_WRAPPER } from 'features/MenuDrawer/MenuDrawer';
+import { MENU_DRAWER_WRAPPER } from 'features/general/MenuDrawer/MenuDrawer';
 
 describe('Header', () => {
   const testHandler = jest.fn();

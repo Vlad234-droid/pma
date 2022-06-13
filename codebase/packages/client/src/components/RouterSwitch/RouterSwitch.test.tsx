@@ -4,7 +4,7 @@ import React from 'react';
 import { Router } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
 import { renderWithTheme as render, screen } from '../../utils/test';
-import { buildPath } from '../../features/Routes';
+import { buildPath } from '../../features/general/Routes';
 import { Page } from '../../pages';
 import { RouterSwitch } from '../RouterSwitch';
 

@@ -1,5 +1,5 @@
 import React, { FC, Dispatch, SetStateAction } from 'react';
-import WrapperModal from 'features/Modal/components/WrapperModal';
+import WrapperModal from 'features/general/Modal/components/WrapperModal';
 import { ModalStatuses } from '../../NotesActions';
 import { ModalWrapper } from 'components/ModalWrapper';
 import { InfoModal as InfoPart } from '../../components';
