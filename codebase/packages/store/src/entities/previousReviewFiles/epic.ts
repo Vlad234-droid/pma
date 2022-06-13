@@ -61,12 +61,12 @@ export const uploadFileEpic: Epic = (action$, _, { api }) =>
     }),
   );
 
-export const deleteFileEpic: Epic = (action$, _, { openapi }) =>
+export const deleteFileEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
     filter(isActionOf(deleteFile.request)),
     switchMap(({ payload }) => {
       const { fileUuid, colleagueUUID } = payload;
-      return from(openapi.file.delete1({ fileUuid })).pipe(
+      return from(api.deleteFile({ fileUuid })).pipe(
         mergeMap(() => of(deleteFile.success(), getPreviousReviewFiles.request({ colleagueUUID }))),
         catchError((e) => {
           const errors = e?.data?.errors;

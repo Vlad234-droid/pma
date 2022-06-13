@@ -4,6 +4,8 @@ import { Rule, useStyle } from '@pma/dex-wrapper';
 import Download from 'components/DropZone/Download.svg';
 import Trash from 'components/DropZone/Trash.svg';
 import { BASE_URL_API } from 'config/constants';
+import { useSelector } from 'react-redux';
+import { colleagueUUIDSelector } from '@pma/store';
 
 export type File = {
   fileName: string;
@@ -20,7 +22,11 @@ export type Props = {
 export const File: FC<Props> = ({ file, onDelete, readonly }) => {
   const { css } = useStyle();
   const { fileName, fileLength, uuid } = file;
-  const getDownloadHref = (uuid) => `${BASE_URL_API}/files/${uuid}/download`;
+  const colleagueUuid = useSelector(colleagueUUIDSelector);
+
+  const getDownloadHref = (fileUuid) =>
+    `${BASE_URL_API}/colleagues/${colleagueUuid}/reviews/files/${fileUuid}/download`;
+
   return (
     <div className={css(listItemStyles)}>
       <div className={css({ margin: '24px 0' })}>

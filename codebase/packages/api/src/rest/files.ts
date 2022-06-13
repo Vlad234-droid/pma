@@ -11,7 +11,7 @@ export const getProcessTemplateMetadata = ({ fileUuid, ...params }: any) => {
 
 export const deleteFile = (params: any) => {
   const { fileUuid } = params;
-  return httpClient.delete(`${domain}/${fileUuid}`);
+  return httpClient.delete(`/reviews/${domain}/${fileUuid}`);
 };
 export const deleteAllVersionsFile = (params: any) => {
   return httpClient.delete(`${domain}/versions`, { params });
