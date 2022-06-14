@@ -11,6 +11,8 @@ export const EDIT_TEST_ID = 'goal-edit';
 
 const modifiedTitleRegex = new RegExp(/\*/, 'g');
 
+const label_order = ['wiil_be_able_to', 'how_will_i_go', 'succeeded_when', EXPIRATION_DATE];
+
 const GoalInfo = (props) => {
   const { id, title, subtitle, currentGoalId, description, data, formElements, deleteGoal, editGoal } = props;
   const { css, theme } = useStyle();
@@ -64,29 +66,31 @@ const GoalInfo = (props) => {
                   <div className={css({ fontWeight: `${theme.font.weight.bold}` })}>
                     {subtitle.replace(modifiedTitleRegex, '')}
                   </div>
-                  <div>{description}</div>
+                  <div className={css(descriptionStyle)}>{description}</div>
                 </div>
                 <Panel>
                   <div>
                     {data &&
-                      Object.keys(data).map((key, index) => {
-                        const isExpDate = key === EXPIRATION_DATE;
+                      Object.keys(data)
+                        .sort((a, b) => label_order.indexOf(a) - label_order.indexOf(b))
+                        .map((key, index) => {
+                          const isExpDate = key === EXPIRATION_DATE;
 
-                        if (index !== 0) {
-                          /* Math.random should replace to index to prevent extra rerender */
-                          return (
-                            <div
-                              key={formElements[index].label + Math.random()}
-                              className={`${css(fullDesc)} ${css(goalBlock)}`}
-                            >
-                              <div className={css({ fontWeight: `${theme.font.weight.bold}` })}>
-                                {formElements[index].label.replace(modifiedTitleRegex, '')}
+                          if (index !== 0) {
+                            /* Math.random should replace to index to prevent extra rerender */
+                            return (
+                              <div
+                                key={formElements[index].label + Math.random()}
+                                className={`${css(fullDesc)} ${css(goalBlock)}`}
+                              >
+                                <div className={css({ fontWeight: `${theme.font.weight.bold}` })}>
+                                  {formElements[index].label.replace(modifiedTitleRegex, '')}
+                                </div>
+                                <div>{isExpDate ? formatDateString(data[key], DATE_STRING_FORMAT) : data[key]}</div>
                               </div>
-                              <div>{isExpDate ? formatDateString(data[key], DATE_STRING_FORMAT) : data[key]}</div>
-                            </div>
-                          );
-                        }
-                      })}
+                            );
+                          }
+                        })}
 
                     <div className={css(btnBlock)}>
                       <Button
@@ -129,6 +133,9 @@ const btnBlock: Rule = {
   margin: '24px 0 32px 0',
   display: 'flex',
   fontWeight: `${theme.font.weight.bold}`,
+};
+const descriptionStyle: Rule = {
+  wordBreak: 'break-all',
 };
 
 const editBtn: Rule = {
