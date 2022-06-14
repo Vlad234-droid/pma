@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { Rule, useStyle } from '@pma/dex-wrapper';
 
-import { ReviewWidget } from 'features/general/Objectives';
+import { ReviewWidget } from 'features/general/ReviewWidget';
 import { ReviewType } from 'config/enum';
 
 import { Review } from '../../config/types';

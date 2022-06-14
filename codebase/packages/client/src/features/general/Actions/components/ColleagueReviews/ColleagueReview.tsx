@@ -15,7 +15,7 @@ import MarkdownRenderer from 'components/MarkdownRenderer';
 import { GenericItemField } from 'components/GenericForm';
 import { ReviewType, Status } from 'config/enum';
 import { formTagComponents } from '../../../Objectives';
-import ReviewComponentsNew from '../../../Objectives/components/Modal/ReviewFormModal/ReviewComponentsNew';
+import ReviewComponentsNew from 'features/general/ReviewForm/components/ReviewComponentsNew';
 import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
 
 type Props = {

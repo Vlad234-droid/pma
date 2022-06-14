@@ -2,7 +2,7 @@ import React, { FC, useState } from 'react';
 import { useStyle, Rule } from '@pma/dex-wrapper';
 import { TileWrapper } from 'components/Tile';
 import { Radio } from 'components/Form';
-import { ObjectiveModal } from 'features/general/Objectives/components/ObjectiveModal';
+import { ObjectiveModal } from 'features/general/ObjectivesForm/components/ObjectiveModal';
 import { useTranslation } from 'components/Translation';
 import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
 

@@ -5,7 +5,7 @@ import useDispatch from 'hooks/useDispatch';
 import { useSelector } from 'react-redux';
 import { countByStatusReviews, getReviewSchema, currentUserSelector, ReviewsActions } from '@pma/store';
 import { ReviewType, Status } from 'config/enum';
-import { ButtonWithConfirmation } from './index';
+import { ButtonWithConfirmation } from 'features/general/Modal';
 import { canEditSingleObjectiveFn, canDeleteSingleObjectiveFn } from '../../utils';
 import EditButton from './EditButton';
 

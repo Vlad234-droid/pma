@@ -17,11 +17,12 @@ import { useNavigate, useParams } from 'react-router';
 import { Trans, useTranslation } from 'components/Translation';
 import { StepIndicator } from 'components/StepIndicator/StepIndicator';
 
-import { ObjectiveTypes as OT, Section, ShareWidget } from 'features/general/Objectives';
+import { ObjectiveTypes as OT, Section } from 'features/general/Objectives';
+import { ShareWidget } from 'features/general/ShareWidget';
 import { PreviousReviewFilesModal } from 'features/general/ReviewFiles/components';
 import { useToast, Variant } from 'features/general/Toast';
 import { UserObjectivesSections } from 'features/general/UserObjectivesSections';
-import OrganizationWidget from 'features/general/Objectives/components/OrganizationWidget/OrganizationWidget';
+import { OrganizationWidget } from 'features/general/OrganizationWidget';
 import { buildPath } from 'features/general/Routes';
 import { Page } from 'pages';
 import Spinner from 'components/Spinner';

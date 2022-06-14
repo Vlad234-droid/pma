@@ -8,10 +8,10 @@ import { ReviewType, Status, TimelineType } from 'config/enum';
 
 import CareerPerformance from './CareerPerformance';
 
-jest.mock('features/general/Objectives', () => {
+jest.mock('features/general/ObjectiveWidgets', () => {
   return {
     __esModule: true,
-    Widgets: () => {
+    ObjectiveWidgets: () => {
       return <div>mocked_objective_widgets</div>;
     },
   };

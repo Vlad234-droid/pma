@@ -2,7 +2,7 @@ import React, { FC, useEffect } from 'react';
 
 import { Rule, useStyle } from '@pma/dex-wrapper';
 
-import { Widgets as ObjectiveWidgets } from 'features/general/Objectives';
+import { ObjectiveWidgets } from 'features/general/ObjectiveWidgets';
 import { Trans, useTranslation } from 'components/Translation';
 import { ReviewType, Status } from 'config/enum';
 import { TimelineTypes } from 'config/types';

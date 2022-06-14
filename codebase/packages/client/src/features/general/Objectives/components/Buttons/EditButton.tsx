@@ -1,7 +1,7 @@
 import React, { FC, HTMLProps, useState } from 'react';
 import { Button, Modal, Rule, CreateRule, useStyle } from '@pma/dex-wrapper';
 import { Graphics, Icon } from 'components/Icon';
-import { CreateUpdateObjective, CreateUpdateObjectives } from '../ObjectiveModal';
+import { ObjectiveForm, ObjectivesForm } from 'features/general/ObjectivesForm';
 import { IconButton } from 'components/IconButton';
 
 export type EditAllModalProps = {
@@ -73,9 +73,9 @@ const EditButton: FC<Props> = ({
           }}
         >
           {isSingleObjectivesEditMode ? (
-            <CreateUpdateObjective onClose={() => setIsOpen(false)} editNumber={editNumber} />
+            <ObjectiveForm onClose={() => setIsOpen(false)} editNumber={editNumber} />
           ) : (
-            <CreateUpdateObjectives onClose={() => setIsOpen(false)} editNumber={editNumber} />
+            <ObjectivesForm onClose={() => setIsOpen(false)} editNumber={editNumber} />
           )}
         </Modal>
       )}

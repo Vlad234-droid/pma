@@ -6,15 +6,10 @@ import { StepIndicator } from 'components/StepIndicator/StepIndicator';
 import { canEditAllObjectiveFn, REVIEW_MODIFICATION_MODE, reviewModificationModeFn } from '../../utils';
 import { useHeaderContainer } from 'contexts/headerContext';
 
-import {
-  CreateButton,
-  ObjectiveTypes as OT,
-  ReviewWidget,
-  Section,
-  ShareWidget,
-  transformReviewsToObjectives,
-} from 'features/general/Objectives';
+import { CreateButton, ObjectiveTypes as OT, Section, transformReviewsToObjectives } from 'features/general/Objectives';
+import { ReviewWidget } from 'features/general/ReviewWidget';
 import { PreviousReviewFilesModal } from 'features/general/ReviewFiles/components';
+import { ShareWidget } from 'features/general/ShareWidget';
 import useDispatch from 'hooks/useDispatch';
 import { useSelector } from 'react-redux';
 import {
@@ -40,7 +35,7 @@ import {
   timelinesMetaSelector,
   timelineTypesAvailabilitySelector,
 } from '@pma/store';
-import OrganizationWidget from 'features/general/Objectives/components/OrganizationWidget/OrganizationWidget';
+import { OrganizationWidget } from 'features/general/OrganizationWidget';
 import { useNavigate } from 'react-router-dom';
 import { Page } from 'pages';
 import { buildPath } from 'features/general/Routes';

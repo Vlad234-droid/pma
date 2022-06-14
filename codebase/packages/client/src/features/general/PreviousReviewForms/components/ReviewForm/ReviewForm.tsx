@@ -12,7 +12,7 @@ import {
   reviewsMetaSelector,
 } from '@pma/store';
 
-import ReviewComponents from 'features/general/Objectives/components/Modal/ReviewFormModal/ReviewComponents';
+import ReviewComponents from 'features/general/ReviewForm/components/ReviewComponents';
 import { useTranslation } from 'components/Translation';
 import { TileWrapper } from 'components/Tile';
 

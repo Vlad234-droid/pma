@@ -5,7 +5,7 @@ import { AccordionConsumer, SectionConsumer } from './contexts';
 import { EventListener, KeyboardEventListener } from './types';
 import { ENTER, SPACE } from './constans';
 import { Icon } from '../Icon';
-import { StatusBadge } from 'features/general/Objectives';
+import StatusBadge from 'components/StatusBadge';
 import { Status } from 'config/enum';
 
 type HeadingProps = {

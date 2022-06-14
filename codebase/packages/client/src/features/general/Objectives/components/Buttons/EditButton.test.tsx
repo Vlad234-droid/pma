@@ -4,13 +4,13 @@ import { fireEvent } from '@testing-library/react';
 import EditButton from './EditButton';
 import { renderWithTheme as render, screen } from 'utils/test';
 
-jest.mock('../ObjectiveModal', () => {
+jest.mock('features/general/ObjectivesForm', () => {
   return {
     __esModule: true,
-    CreateUpdateObjective: ({ onSave }) => {
+    ObjectiveForm: ({ onSave }) => {
       return <div onClick={onSave}>mocked_CreateUpdateObjective</div>;
     },
-    CreateUpdateObjectives: ({ onSave }) => {
+    ObjectivesForm: ({ onSave }) => {
       return <div onClick={onSave}>mocked_CreateUpdateObjectives</div>;
     },
   };

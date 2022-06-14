@@ -1,9 +1,9 @@
 import React, { FC, HTMLProps, useState, memo } from 'react';
 import { Button, Rule, useStyle } from '@pma/dex-wrapper';
 import { IconButton } from 'components/IconButton';
-import { ModalComponent } from 'features/general/Objectives/components/Modal';
+import { ModalComponent } from 'features/general/ObjectivesForm/components/ModalComponent';
 import { useTranslation } from 'components/Translation';
-import { CreateUpdateObjective, CreateUpdateObjectives } from 'features/general/Objectives/components/ObjectiveModal';
+import { ObjectiveForm, ObjectivesForm } from 'features/general/ObjectivesForm';
 
 export type CreateModalProps = {
   withIcon?: boolean;
@@ -47,9 +47,9 @@ const CreateButton: FC<Props> = memo(
         {isOpen && (
           <ModalComponent onClose={() => setIsOpen(false)} title={t('create_objectives', 'Create objectives')}>
             {useSingleStep ? (
-              <CreateUpdateObjective onClose={() => setIsOpen(false)} />
+              <ObjectiveForm onClose={() => setIsOpen(false)} />
             ) : (
-              <CreateUpdateObjectives onClose={() => setIsOpen(false)} />
+              <ObjectivesForm onClose={() => setIsOpen(false)} />
             )}
           </ModalComponent>
         )}
