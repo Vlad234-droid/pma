@@ -59,7 +59,7 @@ export const EmailNotifications: FC<Props> = () => {
               usePermissionByReviewType(accessByTimelinePoints[name]),
           )
           .map(({ name, value, type }) => (
-            <div key={name} className={css({ display: 'flex' })}>
+            <div key={name} className={css(checkBoxStyle)}>
               <Checkbox
                 id={name}
                 onChange={({ target: { checked: value } }) =>
@@ -67,7 +67,7 @@ export const EmailNotifications: FC<Props> = () => {
                 }
                 checked={value === 'true'}
               />
-              <label className={css({ marginLeft: '8px' })} htmlFor={name}>
+              <label className={css(labelStyle)} htmlFor={name}>
                 <Trans i18nKey={name} />
               </label>
             </div>
@@ -75,6 +75,12 @@ export const EmailNotifications: FC<Props> = () => {
       </div>
     </TileWrapper>
   );
+};
+
+const checkBoxStyle: Rule = {
+  display: 'flex',
+  cursor: 'pointer',
+  alignItems: 'center',
 };
 
 const titleStyle: Rule = ({ theme }) => {
@@ -104,4 +110,9 @@ const listStyles: Rule = {
   flexDirection: 'column',
   gap: '24px',
   padding: '24px',
+};
+const labelStyle: Rule = {
+  marginLeft: '8px',
+  marginBottom: '2px',
+  cursor: 'pointer',
 };

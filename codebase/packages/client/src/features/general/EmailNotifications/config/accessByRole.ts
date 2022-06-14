@@ -19,6 +19,8 @@ export const accessByRole = {
   [setting.BEFORE_CYCLE_START_COLLEAGUE]: [role.COLLEAGUE],
   [setting.BEFORE_CYCLE_START_LM]: [role.LINE_MANAGER],
   [setting.BEFORE_CYCLE_END_COLLEAGUE]: [role.COLLEAGUE],
+  [setting.OBJECTIVE_APPROVED]: [role.COLLEAGUE],
+  [setting.OBJECTIVE_DECLINED]: [role.COLLEAGUE],
   [setting.BEFORE_CYCLE_END_LM]: [role.LINE_MANAGER],
   [setting.OBJECTIVE_SUBMITTED]: [role.LINE_MANAGER],
 };
