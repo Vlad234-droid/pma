@@ -93,6 +93,9 @@ const subTitleStyle: Rule = ({ theme }) => ({
 const descriptionStyle: Rule = ({ theme }) => ({
   ...theme.font.fixed.f16,
   letterSpacing: '0px',
+  '& > a': {
+    color: theme.colors.tescoBlue,
+  },
 });
 
 const videoPlayerWrapperStyle: Rule = {
