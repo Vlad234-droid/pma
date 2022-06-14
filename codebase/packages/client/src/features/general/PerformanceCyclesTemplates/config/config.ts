@@ -2,7 +2,7 @@ import { FileId, SortFileValue, FileExtensions } from 'config/enum';
 import { getFileExtension } from 'utils/file';
 export const exceptableFiles = '.pdf, .bpmn, .form, .ppt, .xls, .dmn, .doc';
 
-export const PERFOMANCE_WRAPPER = 'PERFOMANCE_WRAPPER';
+export const PERFORMANCE_WRAPPER = 'PERFORMANCE_WRAPPER';
 export const FILTER_MODAL_ID = 'FILTER_MODAL_ID';
 export const SETTINGS_BTN_ID = 'SETTINGS_BTN_ID';
 export const WRAPPER_INPUT_ID = 'WRAPPER_INPUT_ID';

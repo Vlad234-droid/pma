@@ -14,7 +14,7 @@ import Spinner from 'components/Spinner';
 import { FilterModal } from '../Shared/components/FilterModal';
 import {
   getSortString,
-  PERFOMANCE_WRAPPER,
+  PERFORMANCE_WRAPPER,
   FILTER_MODAL_ID,
   SETTINGS_BTN_ID,
   WRAPPER_INPUT_ID,
@@ -114,7 +114,7 @@ const PerformanceCyclesTemplates: FC = () => {
   };
 
   return (
-    <div data-test-id={PERFOMANCE_WRAPPER}>
+    <div data-test-id={PERFORMANCE_WRAPPER}>
       <div className={css(filterIconStyled({ small }))}>
         <div className={css(containerWrapper({ small }))}>
           <DropZone onUpload={onUpload} styles={{ width: '270px' }} accept={exceptableFiles}>

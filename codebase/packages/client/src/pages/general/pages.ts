@@ -15,7 +15,7 @@ import RequestFeedback from './RequestFeedback';
 import RespondFeedback from './RespondFeedback';
 import ViewFeedback from './ViewFeedback';
 import Settings from './Settings';
-import Notes from './Notes';
+import Notes, { NotesInfo, PersonalNote, PersonalNoteFolder, TeamNote, TeamNoteFolder } from './Notes';
 import KnowledgeLibrary from './KnowledgeLibrary';
 import CreateOrganizationObjectives from './CreateOrganizationObjectives';
 import ObjectivesView from './ObjectivesView';
@@ -84,6 +84,37 @@ const pages: Record<Page, PageComponent> = {
     Element: Notes,
     title: 'My Notes',
     withHeader: true,
+    backPath: Page.CONTRIBUTION,
+    perform: [role.COLLEAGUE],
+  },
+  [Page.NOTES_INFO]: {
+    Element: NotesInfo,
+    title: 'Notes',
+    withHeader: true,
+    perform: [role.COLLEAGUE],
+  },
+  [Page.PERSONAL_NOTE]: {
+    Element: PersonalNote,
+    title: 'Notes',
+    withHeader: false,
+    perform: [role.COLLEAGUE],
+  },
+  [Page.PERSONAL_NOTE_FOLDER]: {
+    Element: PersonalNoteFolder,
+    title: 'Notes',
+    withHeader: false,
+    perform: [role.COLLEAGUE],
+  },
+  [Page.TEAM_NOTE]: {
+    Element: TeamNote,
+    title: 'Notes',
+    withHeader: false,
+    perform: [role.COLLEAGUE],
+  },
+  [Page.TEAM_NOTE_FOLDER]: {
+    Element: TeamNoteFolder,
+    title: 'Notes',
+    withHeader: false,
     perform: [role.COLLEAGUE],
   },
   [Page.MY_ACTIONS]: {

@@ -1,8 +1,8 @@
 import React, { FC } from 'react';
-import NotesActions from 'features/NotesActions';
+import Notes from 'features/general/Notes';
 
-const Notes: FC = () => {
-  return <NotesActions />;
+const NotesPage: FC = () => {
+  return <Notes />;
 };
 
-export default Notes;
+export default NotesPage;

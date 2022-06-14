@@ -9,12 +9,13 @@ import {
   deleteFolder,
   updateNote,
   updateFolder,
+  changeCreatedMeta,
 } from './actions';
 
 export const initialState = {
   notes: [],
   folders: [],
-  meta: { loading: false, loaded: false, error: null },
+  meta: { loading: false, loaded: false, error: null, created: false },
 };
 
 export default createReducer(initialState)
@@ -24,11 +25,16 @@ export default createReducer(initialState)
   }))
   .handleAction(createFolderNotes.success, (state) => ({
     ...state,
-    meta: { ...state.meta, loading: false, loaded: true },
+    meta: { ...state.meta, loading: false, loaded: true, created: true },
   }))
   .handleAction(createFolderNotes.failure, (state, { payload }) => ({
     ...state,
     meta: { ...state.meta, loading: false, loaded: true, error: payload },
+  }))
+  .handleAction(createFolderNotes.success, (state, { payload }) => ({
+    ...state,
+    notes: [...state.notes, payload],
+    meta: { ...state.meta, loading: false, loaded: true, created: true },
   }))
   .handleAction(getFoldersNotes.request, (state) => ({
     ...state,
@@ -39,7 +45,6 @@ export default createReducer(initialState)
     folders: payload,
     meta: { ...state.meta, loading: false, loaded: true },
   }))
-
   .handleAction(getNotes.request, (state) => ({
     ...state,
     meta: { ...state.meta, loading: true },
@@ -49,7 +54,6 @@ export default createReducer(initialState)
     notes: payload,
     meta: { ...state.meta, loading: false, loaded: true },
   }))
-
   .handleAction(createNote.request, (state) => ({
     ...state,
     meta: { ...state.meta, loading: true },
@@ -66,7 +70,6 @@ export default createReducer(initialState)
     ...state,
     meta: { ...state.meta, loading: false, loaded: true },
   }))
-
   .handleAction(deleteNote.request, (state) => ({
     ...state,
     meta: { ...state.meta, loading: true },
@@ -75,12 +78,10 @@ export default createReducer(initialState)
     ...state,
     meta: { ...state.meta, loading: false, loaded: true },
   }))
-
   .handleAction(deleteNote.failure, (state, { payload }) => ({
     ...state,
     meta: { ...state.meta, loading: false, loaded: true, error: payload },
   }))
-
   .handleAction(deleteFolder.request, (state) => ({
     ...state,
     meta: { ...state.meta, loading: true },
@@ -89,12 +90,10 @@ export default createReducer(initialState)
     ...state,
     meta: { ...state.meta, loading: false, loaded: true },
   }))
-
   .handleAction(deleteFolder.failure, (state, { payload }) => ({
     ...state,
     meta: { ...state.meta, loading: false, loaded: true, error: payload },
   }))
-
   .handleAction(updateNote.request, (state) => ({
     ...state,
     meta: { ...state.meta, loading: true },
@@ -103,12 +102,10 @@ export default createReducer(initialState)
     ...state,
     meta: { ...state.meta, loading: false, loaded: true },
   }))
-
   .handleAction(updateNote.failure, (state, { payload }) => ({
     ...state,
     meta: { ...state.meta, loading: false, loaded: true, error: payload },
   }))
-
   .handleAction(updateFolder.request, (state) => ({
     ...state,
     meta: { ...state.meta, loading: true },
@@ -117,8 +114,11 @@ export default createReducer(initialState)
     ...state,
     meta: { ...state.meta, loading: false, loaded: true },
   }))
-
   .handleAction(updateFolder.failure, (state, { payload }) => ({
     ...state,
     meta: { ...state.meta, loading: false, loaded: true, error: payload },
+  }))
+  .handleAction(changeCreatedMeta, (state, { payload }) => ({
+    ...state,
+    meta: { ...state.meta, created: payload },
   }));

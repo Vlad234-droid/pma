@@ -3,13 +3,13 @@ import '@testing-library/jest-dom/extend-expect';
 import { renderWithTheme } from 'utils/test';
 import { fireEvent } from '@testing-library/react';
 import PerformanceCyclesTemplates from './PerformanceCyclesTemplates';
-import { PERFOMANCE_WRAPPER, FILTER_MODAL_ID, SETTINGS_BTN_ID, WRAPPER_INPUT_ID, INPUT_TEST_ID } from './config';
+import { PERFORMANCE_WRAPPER, FILTER_MODAL_ID, SETTINGS_BTN_ID, WRAPPER_INPUT_ID, INPUT_TEST_ID } from './config';
 
 describe('Performance page', () => {
   it('Performance page wrapper', async () => {
     const { getByTestId, queryByTestId } = renderWithTheme(<PerformanceCyclesTemplates />);
 
-    const wrapper = getByTestId(PERFOMANCE_WRAPPER);
+    const wrapper = getByTestId(PERFORMANCE_WRAPPER);
     const filterModal = queryByTestId(FILTER_MODAL_ID);
 
     expect(filterModal).toBeInTheDocument();

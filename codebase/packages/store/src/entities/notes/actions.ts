@@ -1,4 +1,4 @@
-import { createAsyncAction } from 'typesafe-actions';
+import { createAsyncAction, createAction } from 'typesafe-actions';
 
 export const createFolderNotes = createAsyncAction(
   'notes/CREATE_FOLDER_REQUEST',
@@ -54,6 +54,8 @@ export const updateFolder = createAsyncAction(
   'notes/UPDATE_FOLDER_FAILURE',
 )<any, any, Error>();
 
+export const changeCreatedMeta = createAction('notes/meta/created')<boolean>();
+
 export const Actions = {
   createFolderNotes: createFolderNotes.request,
   getFoldersNotes: getFoldersNotes.request,
@@ -64,4 +66,5 @@ export const Actions = {
   deleteFolder: deleteFolder.request,
   updateNote: updateNote.request,
   updateFolder: updateFolder.request,
+  changeCreatedMeta,
 };

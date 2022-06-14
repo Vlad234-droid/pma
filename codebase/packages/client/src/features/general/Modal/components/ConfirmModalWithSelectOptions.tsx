@@ -33,10 +33,10 @@ export const ConfirmModalWithSelectOptions: FC<Props> = ({
 }) => {
   const { css, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
-  const [checkedItems, setCheckedItems] = useState<Array<string>>([]);
+  const [checked, setChecked] = useState<string>('');
 
   const submitForm = () => {
-    onSave(checkedItems);
+    onSave(checked);
   };
 
   return (
@@ -61,32 +61,29 @@ export const ConfirmModalWithSelectOptions: FC<Props> = ({
           </div>
         )}
 
-        {options?.map((item) => {
-          const { label } = item;
-
-          return (
-            <label key={label} htmlFor={`${label}-status`} className={css(labelStyle)}>
-              <Radio
-                name={`${label}-status`}
-                checked={checkedItems.includes(label)}
-                id={`${label}-status`}
-                onChange={() => setCheckedItems(() => [label])}
-              />
-              <span className={css(textLabel)}>
-                <Trans>{label}</Trans>
-              </span>
-            </label>
-          );
-        })}
+        {options?.map(({ label, value }) => (
+          <label key={label} htmlFor={`${label}-status`} className={css(labelStyle)}>
+            <Radio
+              name={`${label}-status`}
+              checked={checked === value}
+              value={value}
+              id={`${label}-status`}
+              onChange={(e) => setChecked(e.target.value)}
+            />
+            <span className={css(textLabel)}>
+              <Trans>{label}</Trans>
+            </span>
+          </label>
+        ))}
 
         <div className={css(flexStyle)}>
           <Button styles={[cancelBtnStyle]} onPress={onCancel}>
             <Trans>Cancel</Trans>
           </Button>
           <Button
-            styles={[submitBtnStyle, !checkedItems.length ? { opacity: '0.6' } : {}]}
+            styles={[submitBtnStyle, !checked ? { opacity: '0.6' } : {}]}
             onPress={submitForm}
-            isDisabled={!checkedItems.length}
+            isDisabled={!checked}
           >
             {submitBtnTitle || <Trans>Submit</Trans>}
           </Button>

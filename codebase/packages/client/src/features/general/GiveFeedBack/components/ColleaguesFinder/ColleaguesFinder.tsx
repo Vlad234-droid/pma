@@ -11,13 +11,14 @@ type Props = {
   selected?: any;
   value: string;
   error?: string;
+  options?: Record<string, string>;
 };
 
-const ColleaguesFinder: FC<Props> = ({ onSelect, error, value }) => {
+const ColleaguesFinder: FC<Props> = ({ onSelect, error, value, options = {} }) => {
   const { css } = useStyle();
   const { t } = useTranslation();
 
-  const { colleagues, handleSearchColleagues } = useSearchColleagues({}, false);
+  const { colleagues, handleSearchColleagues } = useSearchColleagues(options, false);
 
   const handleChange = (e: any) => {
     const { colleagueUUID } = e.colleague;

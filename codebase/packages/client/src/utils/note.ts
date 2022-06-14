@@ -1,6 +1,6 @@
 export const AllNotesFolderId = '10000000-0000-0000-0000-10000000000';
 export const AllNotesFolderIdTEAM = '10000000-0000-0000-0000-20000000000';
-export const addNewFolderId = 'id_001';
+export const NEW_FOLDER_ID = 'id_001';
 
 export const defineNotesHandler = (notesLength) => {
   if (!notesLength) {
@@ -191,7 +191,7 @@ export const getNotes = (foldersWithNotes, t) => {
 
         field_options: [
           ...foldersWithNotes?.map((item) => ({ value: `${item.id}`, label: item.title })),
-          { value: addNewFolderId, label: t('add_new_folder', '+ Add new folder') },
+          { value: NEW_FOLDER_ID, label: t('add_new_folder', '+ Add new folder') },
         ],
       },
     ],

@@ -21,6 +21,10 @@ export const getFoldersSelector = createSelector(notesSelector, (notes: any) => 
 export const getNotesSelector = createSelector(notesSelector, (notes: any) =>
   notes.notes.filter((item) => item.status === NoteStatus.CREATED),
 );
+
+export const personalNoteByUUIDSelector = (uuid: string) =>
+  createSelector(notesSelector, (notes) => notes.notes.find(({ id }) => id === uuid));
+
 export const archivedNotesSelector = createSelector(notesSelector, (notes: any) =>
   notes.notes.filter((item) => item.status === NoteStatus.ARCHIVED),
 );
