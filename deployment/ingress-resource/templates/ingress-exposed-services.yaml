@@ -25,8 +25,8 @@ spec:
             name: pma-frontend-service
             port:
               number: 9000
-{{- if .Values.pma-api.enabled }}
-      {{- if .Values.pma-api.camunda.enabled }}
+{{- if .Values.api.enabled }}
+      {{- if .Values.api.camunda.enabled }}
       # to camunda
       - path: /()(camunda/.*)
         pathType: ImplementationSpecific
@@ -36,7 +36,7 @@ spec:
             port:
               number: 8083
       {{- end }}
-      {{- if .Values.pma-api.swagger.enabled }}
+      {{- if .Values.api.swagger.enabled }}
       # to api-docs
       - path: /(pma-api/)(api-docs/.*)
         pathType: ImplementationSpecific
@@ -54,7 +54,7 @@ spec:
             port:
               number: 8083
       {{- end }}
-      {{- if .Values.pma-api.actuator.enabled }}
+      {{- if .Values.api.actuator.enabled }}
       # to backend Management services
       - path: /(pma-api/)(actuator/.*)
         pathType: ImplementationSpecific

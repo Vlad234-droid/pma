@@ -1,4 +1,4 @@
-pma-api:
+api:
   enabled: true
 
   swagger:
