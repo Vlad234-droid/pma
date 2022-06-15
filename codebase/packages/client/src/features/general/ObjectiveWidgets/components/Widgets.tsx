@@ -14,7 +14,7 @@ import {
 import { Page } from 'pages';
 import { useTranslation } from 'components/Translation';
 import SecondaryWidget, { Props as SecondaryWidgetProps } from 'features/general/SecondaryWidget';
-import { MainWidget } from 'features/general/MainWidget';
+import { TescoMainWidget } from 'features/general/MainWidget';
 import { buildPath } from 'features/general/Routes';
 import { Props, widgetTypes } from './type';
 import { ReviewType } from 'config/enum';
@@ -81,7 +81,7 @@ const Widgets: FC<Props> = () => {
       ) : (
         <>
           {canShowObjectives && (
-            <MainWidget
+            <TescoMainWidget
               status={status}
               count={count}
               nextReviewDate={nextReviewDate}
@@ -91,7 +91,6 @@ const Widgets: FC<Props> = () => {
                 lineHeight: theme.font.fixed.f16.lineHeight,
                 letterSpacing: '0px',
               }}
-              onClick={() => console.log('View')}
             />
           )}
 

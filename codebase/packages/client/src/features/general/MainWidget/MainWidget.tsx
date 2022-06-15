@@ -1,5 +1,4 @@
 import React, { FC, useState } from 'react';
-import { TFunction, Trans, useTranslation } from 'components/Translation';
 import { Status } from 'config/enum';
 import { Button, Colors, CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
 import { TileWrapper } from 'components/Tile';
@@ -8,165 +7,63 @@ import { useNavigate } from 'react-router-dom';
 import { Page } from 'pages';
 import { buildPath } from 'features/general/Routes/utils';
 import { ModalComponent } from 'features/general/ObjectivesForm/components/ModalComponent';
-// import { ObjectivesForm } from 'features/bank/ObjectivesForm';
-import { ObjectivesForm } from 'features/general/ObjectivesForm';
 
-export type Props = {
-  onClick: () => void;
+export const TEST_ID = 'main-widget';
+
+export type ContentProps = {
   status?: Status;
-  customStyle?: React.CSSProperties | {};
   count?: number;
   nextReviewDate?: string;
 };
 
-export const TEST_ID = 'main-widget';
-
-type ContentGraphics = {
+export type ContentGraphics = {
   graphic: Graphics;
   backgroundColor: Colors;
   subTitle: string;
   description: string;
   buttonText: string;
-  redirectToObjective: boolean;
+  redirectToViewPage: boolean;
   invertColors: boolean;
 };
 
-const getContent = (
-  props: {
-    status?: string;
-    count?: number;
-    date?: string;
-  },
-  t: TFunction,
-): ContentGraphics => {
-  const { status, count, date = '' } = props;
-  const defaultGraphics = {
-    graphic: 'add',
-    backgroundColor: 'tescoBlue',
-    subTitle: t('create_my_objectives', 'Create my objectives'),
-    description: 'Remember your objectives should be strategic, relevant and up to date.',
-    buttonText: t('create_my_objectives', 'Create my objectives'),
-    redirectToObjective: false,
-    invertColors: true,
-  };
-  if (!status) return defaultGraphics as ContentGraphics;
-  const contents: {
-    [key: string]: ContentGraphics;
-  } = {
-    [Status.STARTED]: {
-      graphic: 'add',
-      backgroundColor: 'tescoBlue',
-      subTitle: t('create_my_objectives', 'Create my objectives'),
-      description: t(
-        'remember_your_objectives_should_be_strategic',
-        'Remember your objectives should be strategic, relevant and up to date.',
-      ),
-      buttonText: t('create_my_objectives', 'Create my objectives'),
-      redirectToObjective: false,
-      invertColors: true,
-    },
-    [Status.DRAFT]: {
-      graphic: 'roundPencil',
-      backgroundColor: 'tescoBlue',
-      subTitle: t('objective_is_draft', `${count} objective(s) saved as a draft`, { count }),
-      description: t(
-        'remember_if_your_priorities_change',
-        'Remember if your priorities change, review your objectives',
-      ),
-      buttonText: t('view_and_edit_objectives', 'View and edit objectives'),
-      redirectToObjective: false,
-      invertColors: false,
-    },
-    [Status.WAITING_FOR_APPROVAL]: {
-      graphic: 'roundClock',
-      backgroundColor: 'tescoBlue',
-      subTitle: t('objective_is_pending', `${count} objective(s) are waiting for approval`, { count }),
-      description: t(
-        'remember_if_your_priorities_change',
-        'Remember if your priorities change, review your objectives',
-      ),
-      buttonText: t('view', 'View'),
-      redirectToObjective: true,
-      invertColors: false,
-    },
-    [Status.APPROVED]: {
-      graphic: 'roundTick',
-      backgroundColor: 'white',
-      subTitle: t('objective_is_approved', `Well done! All ${count} objective(s) have been approved.`, {
-        count,
-        date: new Date(date),
-      }),
-      description: t(
-        'remember_if_your_priorities_change',
-        'Remember if your priorities change, review your objectives',
-      ),
-      buttonText: t('view', 'View'),
-      redirectToObjective: true,
-      invertColors: false,
-    },
-    [Status.DECLINED]: {
-      graphic: 'roundAlert',
-      backgroundColor: 'tescoBlue',
-      subTitle: t(
-        'your_objectives_were_declined_by_the_line_manager',
-        'Your objectives were declined by the Line Manager',
-      ),
-      description: '',
-      buttonText: t('view', 'View'),
-      redirectToObjective: true,
-      invertColors: false,
-    },
-    [Status.OVERDUE]: {
-      graphic: 'roundAlert',
-      backgroundColor: 'tescoBlue',
-      subTitle: t('objectives_are_overdue', 'Objectives are overdue'),
-      description: '',
-      buttonText: t('create_my_objectives', 'Create my objectives'),
-      redirectToObjective: true,
-      invertColors: false,
-    },
-    [Status.PENDING]: {
-      graphic: 'roundAlert',
-      backgroundColor: 'tescoBlue',
-      subTitle: t('objectives_are_pending', 'Objectives are pending'),
-      description: '',
-      buttonText: t('create_my_objectives', 'Create my objectives'),
-      redirectToObjective: true,
-      invertColors: false,
-    },
-    [Status.NOT_STARTED]: {
-      graphic: 'roundAlert',
-      backgroundColor: 'tescoBlue',
-      subTitle: t('objectives_are_not_started', 'Objectives are not started'),
-      description: '',
-      buttonText: t('create_my_objectives', 'Create my objectives'),
-      redirectToObjective: true,
-      invertColors: false,
-    },
-  };
-  return contents[status] || defaultGraphics;
+export type ContentConfig = {
+  viewPage: Page;
+  widgetTitle: string;
+  modalTitle: string;
+  formComponent: React.FC<{ onClose: () => void }>;
 };
 
-const MainWidget: FC<Props> = ({ nextReviewDate = '', count = 0, status, customStyle }) => {
+export type Props = ContentGraphics &
+  ContentConfig & {
+    status?: Status;
+    customStyle?: React.CSSProperties | {};
+  };
+
+export const MainWidget: FC<Props> = ({ customStyle, ...props }) => {
   const { css } = useStyle();
   const navigate = useNavigate();
-  const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
+
+  const {
+    graphic,
+    backgroundColor,
+    subTitle,
+    description,
+    buttonText,
+    redirectToViewPage,
+    invertColors,
+    modalTitle,
+    viewPage,
+    widgetTitle,
+    formComponent: FormComponent,
+    status,
+  } = props;
 
   const notApproved = status !== Status.APPROVED;
   const mode = notApproved ? 'default' : 'inverse';
 
-  const { graphic, backgroundColor, subTitle, description, buttonText, redirectToObjective, invertColors } = getContent(
-    {
-      status,
-      count,
-      date: nextReviewDate,
-    },
-    t,
-  );
-
   const handleClick = () => {
-    redirectToObjective ? navigate(buildPath(Page.OBJECTIVES_VIEW)) : setIsOpen(true);
+    redirectToViewPage ? navigate(buildPath(viewPage)) : setIsOpen(true);
   };
 
   return (
@@ -178,9 +75,7 @@ const MainWidget: FC<Props> = ({ nextReviewDate = '', count = 0, status, customS
               <Icon graphic='document' invertColors={notApproved} iconStyles={iconStyles} />
             </div>
             <div className={css(headerBlockStyle)}>
-              <span className={css(titleStyle)}>
-                <Trans i18nKey='my_business_objectives'>My objectives</Trans>
-              </span>
+              <span className={css(titleStyle)}>{widgetTitle}</span>
               <span className={css(descriptionStyle)}>
                 <span className={css(iconStyle)}>
                   {invertColors ? (
@@ -204,8 +99,8 @@ const MainWidget: FC<Props> = ({ nextReviewDate = '', count = 0, status, customS
         </div>
       </TileWrapper>
       {isOpen && (
-        <ModalComponent onClose={() => setIsOpen(false)} title={t('create_objectives', 'Create objectives')}>
-          <ObjectivesForm onClose={() => setIsOpen(false)} />
+        <ModalComponent onClose={() => setIsOpen(false)} title={modalTitle}>
+          <FormComponent onClose={() => setIsOpen(false)} />
         </ModalComponent>
       )}
     </>
@@ -295,5 +190,3 @@ const subDescription: Rule = ({ theme }) => ({
   marginTop: '14px',
   marginLeft: '9px',
 });
-
-export default MainWidget;
