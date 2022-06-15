@@ -1,26 +1,27 @@
 import React, { FC, useEffect, useMemo } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { Rule, theme, useStyle } from '@pma/dex-wrapper';
 import get from 'lodash.get';
-import { Field, Item, Select, Textarea, Attention } from 'components/Form';
-import { yupResolver } from '@hookform/resolvers/yup';
 import { colleagueUUIDSelector, FeedbackActions, getReviews } from '@pma/store';
+import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { useNavigate } from 'react-router';
+import { useDispatch, useSelector } from 'react-redux';
 
+import { Field, Item, Select, Textarea, Attention } from 'components/Form';
 import { ColleaguesFinder } from './';
 import { useTranslation, Trans } from 'components/Translation';
 import { TileWrapper } from 'components/Tile';
 import { IconButton } from 'components/IconButton';
 import { ButtonsWrapper } from 'components/ButtonsWrapper';
 import { ArrowLeftIcon } from 'components/ArrowLeftIcon';
-
-import { createRequestFeedbackSchema } from '../config';
-import { Tesco } from 'config/enum';
-import { TargetType } from '../type';
 import { Page } from 'pages';
 import { buildPath } from '../../Routes';
 import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
+import { InputWithDropdown } from 'components/InputWithDropdown';
+
+import { TargetType } from '../type';
+import { createRequestFeedbackSchema } from '../config';
+import { SearchOption, Tesco } from 'config/enum';
 
 type Props = {
   onSubmit: (data: any) => void;
@@ -119,13 +120,30 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel, setIsInfoModalOpen }) 
         </div>
 
         <form className={css({ marginTop: '8px' })}>
-          <ColleaguesFinder
-            customStyles={{ marginTop: '0px' }}
-            onSelect={handleSelect}
-            onBlur={() => handleBlur('colleagues')}
-            selected={formValues.colleagues || []}
-            error={errors['colleagues']?.message?.replace('colleagues', t('colleagues', 'Colleagues'))}
-          />
+          <InputWithDropdown
+            visible={true}
+            options={[
+              { value: SearchOption.NAME, label: t('by_name', 'By name') },
+              { value: SearchOption.EMAIL, label: t('by_email_address', 'By email address') },
+            ]}
+            dropDownStyles={{
+              borderRadius: '0px 25px 25px 0px',
+            }}
+          >
+            {({ active }) => (
+              <ColleaguesFinder
+                searchOption={active}
+                onSelect={handleSelect}
+                onBlur={() => handleBlur('colleagues')}
+                selected={formValues.colleagues || []}
+                error={errors['colleagues']?.message?.replace('colleagues', t('colleagues', 'Colleagues'))}
+                customStyles={{ marginTop: '0px', width: '100%' }}
+                inputStyles={{
+                  borderRadius: '25px 0px 0px 25px !important',
+                }}
+              />
+            )}
+          </InputWithDropdown>
           <div className={css({ marginTop: '18px' })}>
             <Item
               withIcon={false}

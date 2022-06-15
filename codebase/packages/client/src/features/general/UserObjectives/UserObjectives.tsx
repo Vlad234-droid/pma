@@ -116,18 +116,7 @@ const UserObjectives: FC = () => {
                 reviewLoading={reviewLoading}
                 objectives={objectives}
                 reviewLoaded={true}
-              >
-                {/*<CanPerform*/}
-                {/*  perform={[role.LINE_MANAGER]}*/}
-                {/*  yes={() => (*/}
-                {/*    <div className={css(secondaryWidgetStyles)}>*/}
-                {/*      {getWidgets(t, isSubmittingSecondaryWidget, navigate, uuid).map((props, i) => (*/}
-                {/*        <SecondaryWidget customStyle={widgetStyle} key={i} {...props} />*/}
-                {/*      ))}*/}
-                {/*    </div>*/}
-                {/*  )}*/}
-                {/*/>*/}
-              </UserObjectivesSections>
+              />
 
               <Section
                 left={{
@@ -202,19 +191,6 @@ const UserObjectives: FC = () => {
     </div>
   );
 };
-//TODO: uncomment when backend will be integrated
-// const widgetStyle: Rule = ({ theme }) => ({
-//   fontSize: theme.font.fixed.f16.fontSize,
-//   lineHeight: theme.font.fixed.f16.lineHeight,
-//   letterSpacing: '0px',
-// });
-// const secondaryWidgetStyles: Rule = () => ({
-//   margin: '48px 0px',
-//   display: 'flex',
-//   flexWrap: 'wrap',
-//   height: '176px',
-//   gap: '8px',
-// });
 
 const bodyBlockStyles: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => ({
   display: 'flex',

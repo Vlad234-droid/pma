@@ -1,5 +1,5 @@
 import React, { ChangeEvent, FC, RefObject, useCallback, useEffect, useState } from 'react';
-import { useStyle, Styles, Rule } from '@pma/dex-wrapper';
+import { useStyle, Styles, Rule, CreateRule } from '@pma/dex-wrapper';
 import mergeRefs from 'react-merge-refs';
 import debounce from 'lodash.debounce';
 import { useFormContainer } from 'components/Form/context/input';
@@ -23,6 +23,7 @@ type Props<T> = {
   options?: Array<T>;
   selected?: Array<{ label: string; value: string }> | T;
   multiple?: boolean;
+  searchOption?: any;
 };
 
 const SearchInput: FC<Props<any>> = ({
@@ -42,12 +43,12 @@ const SearchInput: FC<Props<any>> = ({
   disabled = false,
   renderOption,
   multiple,
+  searchOption,
 }) => {
   const [currentValue, setCurrentValue] = useState(value);
-  const { css, theme } = useStyle();
+  const { css } = useStyle();
   const { inputRef } = useFormContainer();
-
-  const handleSearch = useCallback(debounce(onSearch, 300), []);
+  const handleSearch = useCallback(debounce(onSearch, 300), [searchOption]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setCurrentValue(e.target.value);
@@ -70,63 +71,25 @@ const SearchInput: FC<Props<any>> = ({
         onBlur={onBlur}
         disabled={disabled}
         type={'text'}
-        className={css({
-          width: '100%',
-          // @ts-ignore
-          border: `2px solid ${isValid ? theme.colors.lightGray : theme.colors.error}`,
-          borderRadius: '50px',
-          fontSize: theme.font.fixed.f16.fontSize,
-          lineHeight: theme.font.fixed.f16.lineHeight,
-          letterSpacing: '0px',
-          padding: '10px 30px 10px 16px',
-          ':focus': {
-            outline: 'none !important',
-            border: `2px solid ${isValid ? theme.colors.tescoBlue : theme.colors.error}`,
-          },
-          ...styles,
-        })}
+        className={css(inputStyles({ isValid }), styles)}
         placeholder={placeholder}
       />
       <div className={css(relativeStyles)}>
         {!!options.length && (
-          <div
-            style={{
-              display: 'block',
-              position: 'absolute',
-              width: '100%',
-              top: 0,
-              // @ts-ignore
-              border: `2px solid ${theme.colors.lightGray}`,
-              borderRadius: theme.border.radius.sm,
-              background: theme.colors.white,
-              zIndex: 999,
-            }}
-          >
-            {options?.map((item, idx) => {
-              return (
-                <div
-                  key={idx}
-                  className={css({
-                    display: 'block',
-                    width: '100%',
-                    fontSize: theme.font.fixed.f16.fontSize,
-                    lineHeight: theme.font.fixed.f16.lineHeight,
-                    letterSpacing: '0px',
-                    padding: '10px 30px 10px 16px',
-                    ':hover': {
-                      background: '#F3F9FC',
-                    },
-                  })}
-                  onMouseDown={(e) => e.preventDefault()}
-                  onClick={() => {
-                    onChange(item);
-                    multiple && setCurrentValue('');
-                  }}
-                >
-                  {renderOption(item)}
-                </div>
-              );
-            })}
+          <div className={css(optionsWrapperStyles)}>
+            {options?.map((item, idx) => (
+              <div
+                key={idx}
+                className={css(optionStyle)}
+                onMouseDown={(e) => e.preventDefault()}
+                onClick={() => {
+                  onChange(item);
+                  multiple && setCurrentValue('');
+                }}
+              >
+                {renderOption(item)}
+              </div>
+            ))}
           </div>
         )}
         {multiple && (
@@ -155,13 +118,57 @@ const SearchInput: FC<Props<any>> = ({
   );
 };
 
+const optionStyle: Rule = ({ theme }) => ({
+  display: 'block',
+  width: '100%',
+  fontSize: theme.font.fixed.f16.fontSize,
+  lineHeight: theme.font.fixed.f16.lineHeight,
+  letterSpacing: '0px',
+  padding: '10px 30px 10px 16px',
+  ':hover': {
+    background: '#F3F9FC',
+  },
+});
+
+//@ts-ignore
+const optionsWrapperStyles: Rule = ({ theme }) => ({
+  display: 'block',
+  position: 'absolute',
+  width: 'clamp(100%, calc(100vw - 10vh), 560px)',
+  top: 0,
+  // @ts-ignore
+  border: `2px solid ${theme.colors.lightGray}`,
+  borderRadius: theme.border.radius.sm,
+  background: theme.colors.white,
+  zIndex: 999,
+});
+
+const inputStyles: CreateRule<{ isValid: boolean }> =
+  ({ isValid }) =>
+  ({ theme }) =>
+    ({
+      width: '100%',
+      // @ts-ignore
+      border: `2px solid ${isValid ? theme.colors.lightGray : theme.colors.error}`,
+      borderRadius: '50px',
+      fontSize: theme.font.fixed.f16.fontSize,
+      lineHeight: theme.font.fixed.f16.lineHeight,
+      letterSpacing: '0px',
+      padding: '10px 30px 10px 16px',
+      ':focus': {
+        outline: 'none !important',
+        border: `2px solid ${isValid ? theme.colors.tescoBlue : theme.colors.error}`,
+      },
+    } as Styles);
+
 const relativeStyles: Rule = {
+  //@ts-ignore
+  width: 'clamp(100%, calc(100vw - 10vh), 560px)',
   position: 'relative',
   display: 'flex',
   justifyContent: 'flex-start',
   alignItems: 'center',
   flexWrap: 'wrap',
-  width: '100%',
 };
 
 const selectedStyle = ({ theme }) =>

@@ -1,7 +1,15 @@
+import { SearchOption } from 'config/enum';
+
 export type QueryType = Record<string, string | Array<Record<string, string>>>;
 
-export const buildSearchColleaguesQuery = (value: string): QueryType => {
-  const query = {};
+export const buildSearchColleaguesQuery = (value: string, searchOption: SearchOption): QueryType => {
+  let query = {};
+
+  if (searchOption === SearchOption.EMAIL) {
+    query = {};
+    query['email_like'] = value;
+    return query;
+  }
 
   if (/ /.test(value)) {
     const [firstName, lastName] = value.split(' ');

@@ -622,5 +622,7 @@
   "team_reporting": "Team reporting",
   "population_matrix": "Population matrix",
   "add_pdp_goal": "Add PDP goal",
+  "by_name": "By name",
+  "by_email_address": "By email address",
   "create_pdp": "Create PDP"
 }

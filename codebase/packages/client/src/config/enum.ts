@@ -237,3 +237,8 @@ export enum ReportPage {
   REPORT_ANNIVERSARY_REVIEWS = 'REPORT_ANNIVERSARY_REVIEWS',
   REPORT_NEW_TO_BUSINESS = 'REPORT_NEW_TO_BUSINESS',
 }
+
+export enum SearchOption {
+  NAME = 'NAME',
+  EMAIL = 'EMAIL',
+}

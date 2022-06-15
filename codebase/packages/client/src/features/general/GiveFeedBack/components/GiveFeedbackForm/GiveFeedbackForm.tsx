@@ -1,18 +1,23 @@
 import React, { FC } from 'react';
-import { useStyle, Rule } from '@pma/dex-wrapper';
-import { useSelector } from 'react-redux';
+import { getColleagueByUuidSelector, ColleaguesActions } from '@pma/store';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { getColleagueByUuidSelector } from '@pma/store';
 import get from 'lodash.get';
+import { useStyle, Rule } from '@pma/dex-wrapper';
+import { useParams } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+
 import { Trans, useTranslation } from 'components/Translation';
 import { TileWrapper } from 'components/Tile';
 import { Attention, Field, Item, Textarea } from 'components/Form';
 import { ColleaguesFinder, FeedbackInfo } from '../../components';
 import { ButtonsWrapper } from 'components/ButtonsWrapper';
+import { InputWithDropdown } from 'components/InputWithDropdown';
 
 import { GiveFeedbackType } from '../../type';
 import { createGiveFeedbackSchema } from '../../config';
 import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
+
+import { SearchOption } from 'config/enum';
 
 export const FORM_WRAPPER = 'form-wrapper';
 
@@ -38,6 +43,9 @@ const GiveFeedbackForm: FC<Props> = ({ onSubmit, defaultValues, currentColleague
   const { css, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const { t } = useTranslation();
+  const { uuid } = useParams<{ uuid: string }>();
+
+  const dispatch = useDispatch();
 
   const {
     handleSubmit,
@@ -89,14 +97,35 @@ const GiveFeedbackForm: FC<Props> = ({ onSubmit, defaultValues, currentColleague
         >
           <Trans i18nKey='select_to_give_feedback'>Select who you&apos;d like to give feedback to</Trans>
         </div>
-        <ColleaguesFinder
-          onSelect={(colleagueUuid) => {
-            setValue('targetColleagueUuid', colleagueUuid, { shouldValidate: true });
+
+        <InputWithDropdown
+          onChange={() => dispatch(ColleaguesActions.clearColleagueList())}
+          visible={uuid === 'new' && !targetColleagueUuid}
+          options={[
+            { value: SearchOption.NAME, label: t('by_name', 'By name') },
+            { value: SearchOption.EMAIL, label: t('by_email_address', 'By email address') },
+          ]}
+          dropDownStyles={{
+            borderRadius: '0px 25px 25px 0px',
           }}
-          selected={null}
-          value={getColleagueName(selectedColleague)}
-          error={get(errors, 'targetColleagueUuid.message')}
-        />
+        >
+          {({ active }) => (
+            <ColleaguesFinder
+              onSelect={(colleagueUuid) => {
+                setValue('targetColleagueUuid', colleagueUuid, { shouldValidate: true });
+              }}
+              selected={[]}
+              value={getColleagueName(selectedColleague)}
+              error={get(errors, 'targetColleagueUuid.message')}
+              searchOption={active}
+              customStyle={{ marginTop: '0px', width: '100%' }}
+              inputStyles={{
+                borderRadius: uuid === 'new' && !targetColleagueUuid ? '25px 0px 0px 25px !important' : '50px',
+              }}
+            />
+          )}
+        </InputWithDropdown>
+
         {selectedColleague && (
           <FeedbackInfo selectedPerson={selectedColleague} onClickMore={() => goToInfo(getValues())} />
         )}

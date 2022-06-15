@@ -1,6 +1,6 @@
-import React, { FC, MouseEvent, useEffect, useRef, useState } from 'react';
+import React, { FC, MouseEvent, useEffect, useRef, useState, CSSProperties } from 'react';
 import mergeRefs from 'react-merge-refs';
-import { CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
+import { CreateRule, Rule, useStyle, Styles } from '@pma/dex-wrapper';
 
 import { Icon } from 'components/Icon';
 import useEventListener from 'hooks/useEventListener';
@@ -11,7 +11,25 @@ import { useFormContainer } from '../context/input';
 const getSelectedOption = (options: Option[], value?: string) =>
   value ? options.filter((option) => option.value === value)[0] : undefined;
 
-const Select: FC<SelectField> = ({ domRef, name, options, placeholder, value, error, onChange, onBlur, readonly }) => {
+type CustomProps = {
+  wrapperStyles?: Styles | Rule | CSSProperties | {};
+};
+
+type SelectProps = SelectField & CustomProps;
+
+const Select: FC<SelectProps> = ({
+  domRef,
+  name,
+  options,
+  placeholder,
+  value,
+  error,
+  onChange,
+  onBlur,
+  readonly,
+  customStyles,
+  wrapperStyles = {},
+}) => {
   const { css } = useStyle();
   const { inputRef } = useFormContainer();
   const ref = useRef<HTMLDivElement | null>(null);
@@ -51,16 +69,16 @@ const Select: FC<SelectField> = ({ domRef, name, options, placeholder, value, er
   };
 
   return (
-    <div className={css(wrapperStyles)} data-test-id={`select-${name}-wrapper`} ref={ref}>
+    <div className={css(containerStyles, { ...wrapperStyles })} data-test-id={`select-${name}-wrapper`} ref={ref}>
       <button
         type='button'
         data-test-id={name}
         onClick={toggleList}
-        className={css(fieldStyles({ isValid: !error, isOpen }))}
+        className={css(fieldStyles({ isValid: !error, isOpen }), { ...customStyles })}
         ref={mergeRefs([domRef, inputRef])}
       >
         {selected ? (
-          <div>{selected.label}</div>
+          <div className={css({ whiteSpace: 'nowrap' })}>{selected.label}</div>
         ) : (
           <div className={css(placeholderStyles)}>{placeholder ? `- ${placeholder} -` : ''}</div>
         )}
@@ -92,7 +110,7 @@ const Select: FC<SelectField> = ({ domRef, name, options, placeholder, value, er
 
 export default Select;
 
-const wrapperStyles: Rule = {
+const containerStyles: Rule = {
   display: 'table',
   width: '100%',
   position: 'relative',

@@ -89,7 +89,7 @@ const GiveFeedbackForm: FC<GiveFeedbackFormProps> = ({
         onSelect={(colleagueUuid) => {
           setValue('targetColleagueUuid', colleagueUuid, { shouldValidate: true });
         }}
-        selected={null}
+        selected={[]}
         value={getColleagueName(selectedColleague)}
         error={get(errors, 'targetColleagueUuid.message')}
       />
