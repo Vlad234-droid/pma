@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { Text, View, StyleSheet } from '@react-pdf/renderer';
-
 import GeneralDocument from '../General';
+import { theme } from '@pma/dex-wrapper';
 
 type PDPGoal = {
   uuid: string;
@@ -17,68 +17,73 @@ type Props = {
 const PDPDocument: FC<Props> = ({ formItems, items }) => {
   const moreThanOne = items && items?.length > 1;
   return (
-    <GeneralDocument>
+    <GeneralDocument title={'Personal Development Goals'}>
       <View style={styles.section}>
-        {items.map((value, idx) => (
-          <View key={value.uuid} style={[styles.wrapper, moreThanOne ? styles.border : {}]}>
-            {moreThanOne && (
-              <View style={styles.meta}>
-                <Text style={styles.title}>Goal #{idx + 1}</Text>
-              </View>
-            )}
-
-            <View style={styles.body}>
-              {value.items.map((val, idx) => (
-                <View key={idx} style={styles.block}>
-                  <Text style={styles.subtitle}>{formItems[idx].label}:</Text>
-                  <Text style={styles.description}>{val}</Text>
+        <View style={styles.main}>
+          {items.map((value, idx) => (
+            <View key={value.uuid}>
+              {moreThanOne && (
+                <View style={styles.subtitleWrapper}>
+                  <Text style={styles.subtitle}>Goal {idx + 1}</Text>
                 </View>
-              ))}
+              )}
+
+              <View>
+                {value.items.map((val, idx) => (
+                  <View key={idx}>
+                    <Text style={styles.question}>
+                      <b>{formItems[idx].label}</b>
+                    </Text>
+                    <Text style={styles.answer}>{val}</Text>
+                  </View>
+                ))}
+              </View>
             </View>
-          </View>
-        ))}
+          ))}
+        </View>
       </View>
     </GeneralDocument>
   );
 };
 
 const styles = StyleSheet.create({
+  question: {
+    fontSize: theme.font.fixed.f14.fontSize,
+    color: theme.colors.black,
+    fontFamily: 'Helvetica-Bold',
+    fontWeight: theme.font.weight.bold,
+    padding: '10px 0',
+  },
+  answer: {
+    fontSize: theme.font.fixed.f12.fontSize,
+    color: theme.colors.black,
+    fontFamily: 'Helvetica',
+    fontWeight: theme.font.weight.light,
+    fontStyle: 'regular',
+  },
+  subtitleWrapper: {
+    paddingBottom: 10,
+    boxSizing: 'border-box',
+  },
+  subtitle: {
+    fontFamily: 'Helvetica-Bold',
+    fontSize: theme.font.fixed.f16.fontSize,
+    color: theme.colors.tescoBlue,
+    fontWeight: theme.font.weight.bold,
+    padding: '30px 0 0',
+  },
+  main: {
+    width: '80%',
+    boxSizing: 'border-box',
+  },
   section: {
-    padding: 10,
-    paddingBottom: 25,
+    display: 'flex',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    flexDirection: 'row',
   },
   wrapper: {
     marginBottom: 20,
-  },
-  border: {
-    borderBottomWidth: 2,
-    borderBottomColor: '#000',
-  },
-  meta: {
-    flexDirection: 'row',
-    flexGrow: 1,
-    flexShrink: 1,
-    flexBasis: 22,
-  },
-  title: {
-    fontSize: 18,
-  },
-  body: {
-    marginTop: 10,
-  },
-  block: {
-    marginTop: 5,
-    marginBottom: 5,
-    paddingLeft: 20,
-  },
-  subtitle: {
-    fontSize: 15,
-    fontWeight: 'bold',
-    marginBottom: 5,
-  },
-  description: {
-    fontSize: 14,
-    color: '#808080',
   },
 });
 

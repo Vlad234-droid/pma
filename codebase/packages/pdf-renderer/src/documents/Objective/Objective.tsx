@@ -3,6 +3,7 @@ import { Text, View, StyleSheet } from '@react-pdf/renderer';
 import removeMD from 'remove-markdown';
 
 import GeneralDocument from '../General';
+import { theme } from '@pma/dex-wrapper';
 
 type Explanation = {
   title: string;
@@ -22,26 +23,25 @@ type Props = {
 };
 
 const ObjectiveDocument: FC<Props> = ({ items }) => {
-  const moreThanOne = items.length > 1;
   return (
-    <GeneralDocument>
-      <View style={styles.section}>
+    <GeneralDocument title={'Objectives'}>
+      <View>
         {items.map(({ id, title, subTitle, description, explanations }) => (
-          <View key={id} style={[styles.wrapper, moreThanOne ? styles.border : {}]} wrap={false}>
-            <View style={styles.header}>
-              <View style={styles.titleWrapper}>
-                <Text style={styles.title}>{title}</Text>
+          <View key={id}>
+            <View>
+              <View style={styles.subtitleWrapper}>
+                <Text style={styles.subtitle}>{title}</Text>
               </View>
-              <View style={styles.subTitleWrapper}>
-                <Text style={styles.subTitle}>{subTitle}</Text>
+              <View>
+                <Text style={styles.question}>{subTitle}</Text>
               </View>
             </View>
-            <View style={styles.body}>
-              <Text style={styles.description}>{description}</Text>
+            <View>
+              <Text style={styles.answer}>{description}</Text>
               {explanations.map(({ description, title }, idx) => (
-                <View key={idx} style={styles.explanations}>
-                  <Text style={styles.explanationTitle}>{removeMD(title)}</Text>
-                  <Text style={styles.step}>{description}</Text>
+                <View key={idx}>
+                  <Text style={styles.question}>{removeMD(title)}</Text>
+                  <Text style={styles.answer}>{description}</Text>
                 </View>
               ))}
             </View>
@@ -53,56 +53,43 @@ const ObjectiveDocument: FC<Props> = ({ items }) => {
 };
 
 const styles = StyleSheet.create({
+  question: {
+    fontSize: theme.font.fixed.f14.fontSize,
+    color: theme.colors.black,
+    fontFamily: 'Helvetica-Bold',
+    fontWeight: theme.font.weight.bold,
+    padding: '10px 0',
+  },
+  answer: {
+    fontSize: theme.font.fixed.f12.fontSize,
+    color: theme.colors.black,
+    fontFamily: 'Helvetica',
+    fontWeight: theme.font.weight.light,
+    fontStyle: 'regular',
+  },
+  subtitleWrapper: {
+    paddingBottom: 10,
+    boxSizing: 'border-box',
+  },
+  subtitle: {
+    fontFamily: 'Helvetica-Bold',
+    fontSize: theme.font.fixed.f16.fontSize,
+    color: theme.colors.tescoBlue,
+    fontWeight: theme.font.weight.bold,
+    padding: '30px 0 0',
+  },
+  main: {
+    width: '80%',
+    boxSizing: 'border-box',
+  },
   section: {
-    padding: 10,
+    display: 'flex',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    flexDirection: 'row',
   },
   wrapper: {
-    marginBottom: 5,
-  },
-  border: {
-    borderBottomWidth: 2,
-  },
-  header: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    flexDirection: 'column',
-  },
-  titleWrapper: {
-    marginBottom: 5,
-  },
-  title: {
-    color: '#00539f',
-    fontSize: 18,
-  },
-  subTitleWrapper: {
-    maxHeight: 1000,
-  },
-  subTitle: {
-    fontSize: 15,
-    fontWeight: 'bold',
-    marginBottom: 5,
-    maxHeight: 1000,
-  },
-  description: {
-    fontSize: 14,
-    color: '#808080',
-    maxHeight: 800,
-  },
-  body: {
-    maxHeight: 1000,
-  },
-  explanations: {
-    marginBottom: 5,
-    paddingLeft: 20,
-  },
-  explanationTitle: {
-    fontSize: 14,
-    fontWeight: 900,
-    marginTop: 10,
-  },
-  step: {
-    fontSize: 12,
-    color: '#808080',
+    marginBottom: 20,
   },
 });
 
