@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { Text, View, StyleSheet } from '@react-pdf/renderer';
 
 import GeneralDocument from '../General';
-import { colors, theme } from '@pma/dex-wrapper';
+import { theme } from '@pma/dex-wrapper';
 
 type QuestionItem = {
   code: string;
@@ -29,33 +29,26 @@ type Props = {
 const FeedbackDocument: FC<Props> = ({ items }) => {
   const moreThanOne = items.length > 1;
   return (
-    <GeneralDocument>
+    <GeneralDocument
+      title={`Feedback from ${items[0]?.firstName} ${items[0]?.lastName}`}
+      jobTitle={`${items[0]?.jobName}, ${items[0]?.departmentName}`}
+    >
       <View style={styles.section}>
         {items.map((feedback, idx) => (
-          <View key={feedback.uuid} style={[styles.wrapper, moreThanOne ? styles.border : {}]}>
+          <View key={feedback.uuid}>
             {moreThanOne && (
-              <View style={styles.meta}>
-                <Text style={styles.title}>Feedback #{idx + 1}</Text>
+              <View>
+                <Text style={styles.subtitle}>Feedback {idx + 1}</Text>
               </View>
             )}
-            <View style={styles.header}>
-              <View style={styles.leftContent}>
-                <Text style={styles.username}>
-                  {feedback.firstName} {feedback.lastName}
-                </Text>
-                <Text style={styles.department}>
-                  {feedback?.jobName}, {feedback?.departmentName}
-                </Text>
-              </View>
-              <View style={styles.rightContent}>
-                <View>
-                  <Text style={styles.updatedTime}>{feedback.updatedTime}</Text>
-                </View>
+            <View>
+              <View>
+                <Text style={styles.updatePeriod}>{feedback.updatedTime}</Text>
               </View>
             </View>
-            <View style={styles.body}>
+            <View>
               {feedback.feedbackItems.map((val) => (
-                <View key={val.code} style={styles.questions}>
+                <View key={val.code}>
                   <Text style={styles.question}>{val.question}</Text>
                   <Text style={styles.answer}>{val.content}</Text>
                 </View>
@@ -69,67 +62,48 @@ const FeedbackDocument: FC<Props> = ({ items }) => {
 };
 
 const styles = StyleSheet.create({
-  section: {
-    padding: 10,
-    marginBottom: 30,
-  },
-  wrapper: {
-    marginBottom: 10,
-  },
-  border: {
-    borderBottomWidth: 2,
-    borderBottomColor: colors.black,
-  },
-  meta: {
-    flexDirection: 'row',
-    flexGrow: 1,
-    flexShrink: 1,
-    flexBasis: 22,
-  },
-  header: {
-    flexDirection: 'row',
-    flexGrow: 1,
-    flexShrink: 1,
-    flexBasis: 40,
-  },
-  title: {
-    fontSize: 18,
-  },
-  leftContent: {
-    justifyContent: 'center',
-    flexDirection: 'column',
-  },
-  rightContent: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  username: {
-    color: '#00539f',
-    fontSize: 18,
-  },
-  department: {
-    fontSize: 16,
-    marginTop: 20,
-  },
-  updatedTime: {
-    fontSize: 16,
-  },
-  body: {
-    marginTop: 10,
-  },
-  questions: {
-    marginTop: 20,
-    paddingLeft: 20,
+  updatePeriod: {
+    fontSize: theme.font.fixed.f14.fontSize,
+    color: theme.colors.black,
+    fontWeight: theme.font.weight.bold,
+    padding: '10px 0',
   },
   question: {
-    fontSize: 14,
-    fontWeight: 900,
-    color: theme.colors.active,
-    maxHeight: 100,
+    fontSize: theme.font.fixed.f14.fontSize,
+    color: theme.colors.black,
+    fontFamily: 'Helvetica-Bold',
+    fontWeight: theme.font.weight.bold,
+    padding: '10px 0',
   },
   answer: {
-    fontSize: 14,
-    marginTop: 20,
+    fontSize: theme.font.fixed.f12.fontSize,
+    color: theme.colors.black,
+    fontFamily: 'Helvetica',
+    fontWeight: theme.font.weight.light,
+    fontStyle: 'normal',
+  },
+  subtitleWrapper: {
+    paddingBottom: 10,
+    boxSizing: 'border-box',
+  },
+  subtitle: {
+    fontSize: theme.font.fixed.f16.fontSize,
+    color: theme.colors.tescoBlue,
+    fontWeight: theme.font.weight.bold,
+    padding: '30px 0 0',
+  },
+  main: {
+    width: '80%',
+    boxSizing: 'border-box',
+  },
+  section: {
+    display: 'flex',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    flexDirection: 'column',
+  },
+  wrapper: {
+    marginBottom: 20,
   },
 });
 

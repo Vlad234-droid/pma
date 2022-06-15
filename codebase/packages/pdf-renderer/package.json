@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@react-pdf/renderer": "^2.0.21",
+    "@react-pdf/renderer": "2.2.0",
     "remove-markdown": "^0.3.0"
   },
   "devDependencies": {}
