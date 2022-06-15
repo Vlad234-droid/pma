@@ -27,13 +27,10 @@ import { buildPath } from 'features/general/Routes';
 import { Page } from 'pages';
 import Spinner from 'components/Spinner';
 import { File } from 'features/general/ReviewFiles/components/components/File';
-import SecondaryWidget from 'features/general/SecondaryWidget';
-import { CanPerform, role } from 'features/general/Permission';
 
 import { useUserObjectivesData } from './hooks';
 
 import { ObjectiveType } from 'config/enum';
-import { getWidgets } from './utils';
 import { Profile } from 'features/general/Profile';
 
 export const TEST_ID = 'user-objectives-page';
@@ -64,7 +61,7 @@ const UserObjectives: FC = () => {
   const canShowMyReview = timelineTypes[ObjectiveType.MYR] && timelineTypes[ObjectiveType.EYR];
 
   //TODO: temporary solution, in future replace to selector
-  const isSubmittingSecondaryWidget = false;
+  // const isSubmittingSecondaryWidget = false;
 
   useUserObjectivesData(uuid, reviewLoaded, schemaLoaded, setObjectives);
 
@@ -120,16 +117,16 @@ const UserObjectives: FC = () => {
                 objectives={objectives}
                 reviewLoaded={true}
               >
-                <CanPerform
-                  perform={[role.LINE_MANAGER]}
-                  yes={() => (
-                    <div className={css(secondaryWidgetStyles)}>
-                      {getWidgets(t, isSubmittingSecondaryWidget, navigate, uuid).map((props, i) => (
-                        <SecondaryWidget customStyle={widgetStyle} key={i} {...props} />
-                      ))}
-                    </div>
-                  )}
-                />
+                {/*<CanPerform*/}
+                {/*  perform={[role.LINE_MANAGER]}*/}
+                {/*  yes={() => (*/}
+                {/*    <div className={css(secondaryWidgetStyles)}>*/}
+                {/*      {getWidgets(t, isSubmittingSecondaryWidget, navigate, uuid).map((props, i) => (*/}
+                {/*        <SecondaryWidget customStyle={widgetStyle} key={i} {...props} />*/}
+                {/*      ))}*/}
+                {/*    </div>*/}
+                {/*  )}*/}
+                {/*/>*/}
               </UserObjectivesSections>
 
               <Section
@@ -205,19 +202,19 @@ const UserObjectives: FC = () => {
     </div>
   );
 };
-
-const widgetStyle: Rule = ({ theme }) => ({
-  fontSize: theme.font.fixed.f16.fontSize,
-  lineHeight: theme.font.fixed.f16.lineHeight,
-  letterSpacing: '0px',
-});
-const secondaryWidgetStyles: Rule = () => ({
-  margin: '48px 0px',
-  display: 'flex',
-  flexWrap: 'wrap',
-  height: '176px',
-  gap: '8px',
-});
+//TODO: uncomment when backend will be integrated
+// const widgetStyle: Rule = ({ theme }) => ({
+//   fontSize: theme.font.fixed.f16.fontSize,
+//   lineHeight: theme.font.fixed.f16.lineHeight,
+//   letterSpacing: '0px',
+// });
+// const secondaryWidgetStyles: Rule = () => ({
+//   margin: '48px 0px',
+//   display: 'flex',
+//   flexWrap: 'wrap',
+//   height: '176px',
+//   gap: '8px',
+// });
 
 const bodyBlockStyles: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => ({
   display: 'flex',
