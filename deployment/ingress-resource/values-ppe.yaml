@@ -1,2 +1,11 @@
-serviceManagement:
-  enabled: false
+pma-api:
+  enabled: true
+
+  swagger:
+    enabled: false
+  
+  camunda:
+    enabled: false
+  
+  actuator:
+    enabled: true

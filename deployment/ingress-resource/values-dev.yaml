@@ -1,3 +1,12 @@
-serviceManagement:
+pma-api:
   enabled: true
+
+  swagger:
+    enabled: true
+  
+  camunda:
+    enabled: true
+  
+  actuator:
+    enabled: true
   
