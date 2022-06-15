@@ -115,4 +115,4 @@ environment:
   # REACT_APP_CAMUNDA_APP_PATH: camunda/app/
   LOGGER_ROOT_NAME: server
   LOGGER_LEVEL: info
-  LOGGER_PRETIFY: false
+  LOGGER_PRETIFY: true
