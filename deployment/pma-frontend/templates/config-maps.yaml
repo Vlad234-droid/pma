@@ -12,7 +12,7 @@ data:
   RELEASE_RELEASEID: {{ .Values.azdevops.release.releaseId | quote }}
   RELEASE_RELEASENAME: {{ .Values.azdevops.release.releaseName | quote }}
   RELEASE_DEFINITIONNAME: {{ .Values.azdevops.release.releaseDefinitionName | quote }}
-  RELEASE_ENVIRONMENTNAME: {{ .Values.azdevops.release.environmentName | quote }}
+  RELEASE_ENVIRONMENTNAME: {{ .Values.azdevops.release.environmentName | upper | quote }}
 ---
 apiVersion: v1
 kind: ConfigMap
