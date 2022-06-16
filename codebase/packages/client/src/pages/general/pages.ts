@@ -1,5 +1,5 @@
 import { Graphics } from 'components/Icon';
-import { role } from 'features/general/Permission';
+import { role, tenant, workLevel } from 'features/general/Permission';
 
 import { Page, PageElement } from './types';
 import CareerPerformance from './CareerPerformance';
@@ -38,7 +38,8 @@ import { NotFound } from './NotFound';
 export type PageComponent = {
   Element: PageElement;
   withHeader: boolean;
-  perform: Array<role>;
+  perform: Array<role | workLevel>;
+  tenant: Array<tenant>;
   title?: string;
   backPath?: string;
   withIcon?: boolean;
@@ -51,6 +52,7 @@ const pages: Record<Page, PageComponent> = {
     withHeader: true,
     backPath: Page.CONTRIBUTION,
     perform: [role.COLLEAGUE],
+    tenant: [tenant.BANK, tenant.GENERAL],
   },
   [Page.KNOWLEDGE_LIBRARY_BY_ID]: {
     Element: KnowledgeLibrary,
@@ -58,6 +60,7 @@ const pages: Record<Page, PageComponent> = {
     withHeader: true,
     backPath: Page.KNOWLEDGE_LIBRARY,
     perform: [role.COLLEAGUE],
+    tenant: [tenant.BANK, tenant.GENERAL],
   },
   [Page.MY_TEAM]: {
     Element: MyTeam,
@@ -65,6 +68,7 @@ const pages: Record<Page, PageComponent> = {
     withHeader: true,
     backPath: Page.CONTRIBUTION,
     perform: [role.LINE_MANAGER],
+    tenant: [tenant.BANK, tenant.GENERAL],
   },
   [Page.PEOPLE_TEAM]: {
     Element: PeopleTeam,
@@ -72,6 +76,7 @@ const pages: Record<Page, PageComponent> = {
     withHeader: true,
     backPath: Page.CONTRIBUTION,
     perform: [role.LINE_MANAGER],
+    tenant: [tenant.BANK, tenant.GENERAL],
   },
   [Page.CALIBRATION]: {
     Element: Calibration,
@@ -79,6 +84,7 @@ const pages: Record<Page, PageComponent> = {
     withHeader: true,
     backPath: Page.REPORT,
     perform: [role.LINE_MANAGER],
+    tenant: [tenant.BANK, tenant.GENERAL],
   },
   [Page.NOTES]: {
     Element: Notes,
@@ -86,36 +92,42 @@ const pages: Record<Page, PageComponent> = {
     withHeader: true,
     backPath: Page.CONTRIBUTION,
     perform: [role.COLLEAGUE],
+    tenant: [tenant.BANK, tenant.GENERAL],
   },
   [Page.NOTES_INFO]: {
     Element: NotesInfo,
     title: 'Notes',
     withHeader: true,
     perform: [role.COLLEAGUE],
+    tenant: [tenant.BANK, tenant.GENERAL],
   },
   [Page.PERSONAL_NOTE]: {
     Element: PersonalNote,
     title: 'Notes',
     withHeader: false,
     perform: [role.COLLEAGUE],
+    tenant: [tenant.BANK, tenant.GENERAL],
   },
   [Page.PERSONAL_NOTE_FOLDER]: {
     Element: PersonalNoteFolder,
     title: 'Notes',
     withHeader: false,
     perform: [role.COLLEAGUE],
+    tenant: [tenant.BANK, tenant.GENERAL],
   },
   [Page.TEAM_NOTE]: {
     Element: TeamNote,
     title: 'Notes',
     withHeader: false,
     perform: [role.COLLEAGUE],
+    tenant: [tenant.BANK, tenant.GENERAL],
   },
   [Page.TEAM_NOTE_FOLDER]: {
     Element: TeamNoteFolder,
     title: 'Notes',
     withHeader: false,
     perform: [role.COLLEAGUE],
+    tenant: [tenant.BANK, tenant.GENERAL],
   },
   [Page.MY_ACTIONS]: {
     Element: MyActions,
@@ -123,6 +135,7 @@ const pages: Record<Page, PageComponent> = {
     withHeader: true,
     backPath: Page.MY_TEAM,
     perform: [role.COLLEAGUE],
+    tenant: [tenant.BANK, tenant.GENERAL],
   },
   [Page.PERFORMANCE_CYCLE_POPULATION_MATRIX]: {
     Element: () => null,
@@ -130,6 +143,7 @@ const pages: Record<Page, PageComponent> = {
     withHeader: true,
     backPath: Page.PERFORMANCE_CYCLE,
     perform: [role.TALENT_ADMIN, role.PROCESS_MANAGER, role.ADMIN],
+    tenant: [tenant.BANK, tenant.GENERAL],
   },
   [Page.CREATE_PERFORMANCE_CYCLE]: {
     Element: CreatePerformanceCycle,
@@ -137,6 +151,7 @@ const pages: Record<Page, PageComponent> = {
     withHeader: true,
     backPath: Page.PERFORMANCE_CYCLE,
     perform: [role.TALENT_ADMIN, role.PROCESS_MANAGER, role.ADMIN],
+    tenant: [tenant.BANK, tenant.GENERAL],
   },
   [Page.PERFORMANCE_CYCLE]: {
     Element: PerformanceCycleAdministration,
@@ -144,6 +159,7 @@ const pages: Record<Page, PageComponent> = {
     withHeader: true,
     backPath: Page.CONTRIBUTION,
     perform: [role.PEOPLE_TEAM, role.TALENT_ADMIN, role.PROCESS_MANAGER, role.ADMIN],
+    tenant: [tenant.BANK, tenant.GENERAL],
   },
   [Page.CONTRIBUTION]: {
     Element: CareerPerformance,
@@ -152,6 +168,7 @@ const pages: Record<Page, PageComponent> = {
     withIcon: true,
     iconName: 'home',
     perform: [role.COLLEAGUE],
+    tenant: [tenant.BANK, tenant.GENERAL],
   },
   [Page.CREATE_STRATEGIC_DRIVERS]: {
     Element: CreateOrganizationObjectives,
@@ -159,11 +176,13 @@ const pages: Record<Page, PageComponent> = {
     withHeader: true,
     backPath: Page.OBJECTIVES_VIEW,
     perform: [role.TALENT_ADMIN],
+    tenant: [tenant.BANK, tenant.GENERAL],
   },
   [Page.STRATEGIC_DRIVERS]: {
     Element: ObjectivesView,
     withHeader: false,
-    perform: [role.LINE_MANAGER, role.TALENT_ADMIN],
+    perform: [role.COLLEAGUE],
+    tenant: [tenant.GENERAL],
   },
   [Page.PERSONAL_DEVELOPMENT_PLAN]: {
     Element: PersonalDevelopmentPlan,
@@ -171,6 +190,7 @@ const pages: Record<Page, PageComponent> = {
     withHeader: true,
     backPath: Page.CONTRIBUTION,
     perform: [role.COLLEAGUE],
+    tenant: [tenant.BANK, tenant.GENERAL],
   },
   [Page.CREATE_PERSONAL_DEVELOPMENT_PLAN]: {
     Element: CreatePersonalDevelopmentGoal,
@@ -178,6 +198,7 @@ const pages: Record<Page, PageComponent> = {
     withHeader: false,
     backPath: Page.PERSONAL_DEVELOPMENT_PLAN,
     perform: [role.COLLEAGUE],
+    tenant: [tenant.BANK, tenant.GENERAL],
   },
   [Page.UPDATE_PERSONAL_DEVELOPMENT_PLAN]: {
     Element: CreatePersonalDevelopmentGoal,
@@ -185,6 +206,7 @@ const pages: Record<Page, PageComponent> = {
     withHeader: false,
     backPath: Page.PERSONAL_DEVELOPMENT_PLAN,
     perform: [role.COLLEAGUE],
+    tenant: [tenant.BANK, tenant.GENERAL],
   },
   [Page.PERSONAL_DEVELOPMENT_HELP]: {
     Element: PersonalDevelopmentHelp,
@@ -192,6 +214,7 @@ const pages: Record<Page, PageComponent> = {
     withHeader: false,
     backPath: Page.PERSONAL_DEVELOPMENT_PLAN,
     perform: [role.COLLEAGUE],
+    tenant: [tenant.BANK, tenant.GENERAL],
   },
   [Page.OBJECTIVES_VIEW]: {
     Element: Objectives,
@@ -199,12 +222,14 @@ const pages: Record<Page, PageComponent> = {
     withHeader: true,
     backPath: Page.CONTRIBUTION,
     perform: [role.COLLEAGUE],
+    tenant: [tenant.BANK, tenant.GENERAL],
   },
   [Page.USER_OBJECTIVES]: {
     Element: UserObjectives,
     title: 'Colleague overview',
     withHeader: true,
     perform: [role.COLLEAGUE],
+    tenant: [tenant.BANK, tenant.GENERAL],
   },
   [Page.PROFILE]: {
     Element: Profile,
@@ -212,6 +237,7 @@ const pages: Record<Page, PageComponent> = {
     withHeader: true,
     backPath: Page.CONTRIBUTION,
     perform: [role.COLLEAGUE],
+    tenant: [tenant.BANK, tenant.GENERAL],
   },
   [Page.SETTINGS]: {
     Element: Settings,
@@ -219,6 +245,7 @@ const pages: Record<Page, PageComponent> = {
     withHeader: true,
     backPath: Page.CONTRIBUTION,
     perform: [role.COLLEAGUE],
+    tenant: [tenant.BANK, tenant.GENERAL],
   },
   [Page.GIVE_FEEDBACK]: {
     Element: GiveFeedback,
@@ -226,6 +253,7 @@ const pages: Record<Page, PageComponent> = {
     withHeader: true,
     backPath: Page.FEEDBACK,
     perform: [role.COLLEAGUE],
+    tenant: [tenant.BANK, tenant.GENERAL],
   },
   [Page.GIVE_NEW_FEEDBACK]: {
     Element: GiveNewFeedBack,
@@ -233,11 +261,13 @@ const pages: Record<Page, PageComponent> = {
     withHeader: true,
     backPath: Page.GIVE_FEEDBACK,
     perform: [role.COLLEAGUE],
+    tenant: [tenant.BANK, tenant.GENERAL],
   },
   [Page.REQUEST_FEEDBACK]: {
     Element: RequestFeedback,
     withHeader: false,
     perform: [role.COLLEAGUE],
+    tenant: [tenant.BANK, tenant.GENERAL],
   },
   [Page.RESPOND_FEEDBACK]: {
     Element: RespondFeedback,
@@ -245,6 +275,7 @@ const pages: Record<Page, PageComponent> = {
     withHeader: true,
     backPath: Page.FEEDBACK,
     perform: [role.COLLEAGUE],
+    tenant: [tenant.BANK, tenant.GENERAL],
   },
   [Page.RESPOND_NEW_FEEDBACK]: {
     Element: RespondNewFeedback,
@@ -252,6 +283,7 @@ const pages: Record<Page, PageComponent> = {
     withHeader: true,
     backPath: Page.RESPOND_FEEDBACK,
     perform: [role.COLLEAGUE],
+    tenant: [tenant.BANK, tenant.GENERAL],
   },
   [Page.VIEW_FEEDBACK]: {
     Element: ViewFeedback,
@@ -259,6 +291,7 @@ const pages: Record<Page, PageComponent> = {
     withHeader: true,
     backPath: Page.FEEDBACK,
     perform: [role.COLLEAGUE],
+    tenant: [tenant.BANK, tenant.GENERAL],
   },
 
   [Page.FEEDBACK]: {
@@ -267,6 +300,7 @@ const pages: Record<Page, PageComponent> = {
     withHeader: true,
     backPath: Page.CONTRIBUTION,
     perform: [role.COLLEAGUE],
+    tenant: [tenant.BANK, tenant.GENERAL],
   },
   [Page.TIPS]: {
     Element: TipsAdministration,
@@ -274,6 +308,7 @@ const pages: Record<Page, PageComponent> = {
     withHeader: true,
     backPath: Page.CONTRIBUTION,
     perform: [role.ADMIN],
+    tenant: [tenant.BANK, tenant.GENERAL],
   },
   [Page.EDIT_TIP]: {
     Element: EditTip,
@@ -281,6 +316,7 @@ const pages: Record<Page, PageComponent> = {
     withHeader: false,
     backPath: Page.TIPS,
     perform: [role.ADMIN],
+    tenant: [tenant.BANK, tenant.GENERAL],
   },
   [Page.REPORT]: {
     Element: Report,
@@ -288,11 +324,13 @@ const pages: Record<Page, PageComponent> = {
     withHeader: true,
     backPath: Page.CONTRIBUTION,
     perform: [role.TALENT_ADMIN, role.ADMIN, role.LINE_MANAGER, role.EXECUTIVE],
+    tenant: [tenant.BANK, tenant.GENERAL],
   },
   [Page.TILE_REPORT_STATISTICS]: {
     Element: TileReportStatistics,
     withHeader: true,
     perform: [role.TALENT_ADMIN, role.ADMIN, role.LINE_MANAGER, role.EXECUTIVE],
+    tenant: [tenant.BANK, tenant.GENERAL],
   },
   [Page.ADMINISTRATION]: {
     Element: AdministratorPage,
@@ -300,35 +338,41 @@ const pages: Record<Page, PageComponent> = {
     withHeader: true,
     backPath: Page.CONTRIBUTION,
     perform: [role.ADMIN],
+    tenant: [tenant.BANK, tenant.GENERAL],
   },
   [Page.CALIBRATION_RATINGS]: {
     Element: CalibrationRatings,
     withHeader: false,
     perform: [role.LINE_MANAGER],
+    tenant: [tenant.BANK, tenant.GENERAL],
   },
   [Page.PREVIOUS_RATINGS_TILES]: {
     Element: PreviousRatingsTiles,
     title: 'Previous Ratings',
     withHeader: true,
     perform: [role.LINE_MANAGER],
+    tenant: [tenant.BANK, tenant.GENERAL],
   },
   [Page.PREVIOUS_CALIBRATION_RATINGS]: {
     Element: PreviousCalibrationRatings,
     title: 'Previous Ratings',
     withHeader: true,
     perform: [role.LINE_MANAGER],
+    tenant: [tenant.BANK, tenant.GENERAL],
   },
   [Page.PREVIOUS_OBJECTIVES_RATINGS]: {
     Element: PreviousObjectiveRatings,
     title: 'Objectives',
     withHeader: true,
     perform: [role.LINE_MANAGER],
+    tenant: [tenant.BANK, tenant.GENERAL],
   },
   [Page.PREVIOUS_REVIEW_FORMS]: {
     Element: PreviousReviewForms,
     title: 'Review forms',
     withHeader: true,
     perform: [role.LINE_MANAGER],
+    tenant: [tenant.BANK, tenant.GENERAL],
   },
   [Page.NOT_FOUND]: {
     Element: NotFound,
@@ -336,6 +380,7 @@ const pages: Record<Page, PageComponent> = {
     withHeader: false,
     backPath: Page.CONTRIBUTION,
     perform: [role.COLLEAGUE],
+    tenant: [tenant.BANK, tenant.GENERAL],
   },
 };
 

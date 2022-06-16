@@ -2,7 +2,8 @@ import React, { FC } from 'react';
 import { useNavigate } from 'react-router';
 import { CreateRule, Icon, ModalWithHeader, Rule, useStyle } from '@pma/dex-wrapper';
 import Details from 'components/Details';
-import { Attention } from 'components/Form';
+import { Page } from 'pages';
+import { buildPath } from 'features/general/Routes';
 
 export const TEST_ID = 'popup-test-id';
 
@@ -28,12 +29,11 @@ const Popup: FC<Props> = ({ items }) => {
       closeOptions={{
         closeOptionContent: <Icon graphic={'close'} invertColors={true} />,
         closeOptionStyles: {},
-        onClose: () => navigate(-1),
+        onClose: () => navigate(buildPath(Page.OBJECTIVES_VIEW)),
       }}
     >
       <div data-test-id={TEST_ID} className={css(main)}>
         <div className={css(descriptionHeader)}>Your organisation&#39;s strategic drivers</div>
-        <Attention />
         <div className={css(templatesListStyles)}>
           {items.map((obj, idx) => {
             return (
@@ -46,16 +46,15 @@ const Popup: FC<Props> = ({ items }) => {
   );
 };
 
-const main = {
-  padding: '40px',
-  overflowY: 'scroll',
+const main: Rule = {
   position: 'relative',
+  overflowY: 'auto',
   height: '100%',
-} as Rule;
+  padding: '40px',
+};
 
 const templatesListStyles: Rule = () => ({
   margin: '0px',
-  height: '100%',
 });
 
 const templatesModalWindowStyles: CreateRule<{ mobileScreen }> = ({ mobileScreen }) => {

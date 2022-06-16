@@ -4,7 +4,7 @@ import { NotFound } from 'pages/general/NotFound';
 import { buildPath, RouteWithPath } from 'features/general/Routes/utils';
 import { Page } from 'pages';
 import AccessDenied from 'components/AccessDenied';
-import { usePermission } from 'features/general/Permission';
+import { usePermission, usePermissionByTenant } from 'features/general/Permission';
 
 const notHaveAccessMessage = `
   not_have_access_to_page
@@ -17,8 +17,8 @@ type Props = {
 const MainRoutes: FC<Props> = ({ routes }) => {
   return (
     <Routes>
-      {routes.map(({ Element, path, perform }, idx) => {
-        const hasPermission = usePermission(perform);
+      {routes.map(({ Element, path, perform, tenant }, idx) => {
+        const hasPermission = usePermissionByTenant(tenant) && usePermission(perform);
         return (
           <ReactRoute
             key={idx}

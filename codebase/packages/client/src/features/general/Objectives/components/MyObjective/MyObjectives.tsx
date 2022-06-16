@@ -1,16 +1,6 @@
 import React, { FC, useEffect, useMemo, useState } from 'react';
-import { Trans, useTranslation } from 'components/Translation';
 import { Button, CreateRule, Rule, Styles, useStyle } from '@pma/dex-wrapper';
-import { ObjectiveType, ReviewType, Status } from 'config/enum';
-import { StepIndicator } from 'components/StepIndicator/StepIndicator';
-import { canEditAllObjectiveFn, REVIEW_MODIFICATION_MODE, reviewModificationModeFn } from '../../utils';
-import { useHeaderContainer } from 'contexts/headerContext';
-
-import { CreateButton, ObjectiveTypes as OT, Section, transformReviewsToObjectives } from 'features/general/Objectives';
-import { ReviewWidget } from 'features/general/ReviewWidget';
-import { PreviousReviewFilesModal } from 'features/general/ReviewFiles/components';
-import { ShareWidget } from 'features/general/ShareWidget';
-import useDispatch from 'hooks/useDispatch';
+import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import {
   colleagueUUIDSelector,
@@ -35,14 +25,25 @@ import {
   timelinesMetaSelector,
   timelineTypesAvailabilitySelector,
 } from '@pma/store';
+
+import { CreateButton, ObjectiveTypes as OT, Section, transformReviewsToObjectives } from 'features/general/Objectives';
+import { ReviewWidget } from 'features/general/ReviewWidget';
+import { PreviousReviewFilesModal } from 'features/general/ReviewFiles/components';
+import { ShareWidget } from 'features/general/ShareWidget';
+import useDispatch from 'hooks/useDispatch';
 import { OrganizationWidget } from 'features/general/OrganizationWidget';
-import { useNavigate } from 'react-router-dom';
+import { CompletedReviewsModal } from 'features/general/CompletedReviews';
+import { USER } from 'config/constants';
 import { Page } from 'pages';
 import { buildPath } from 'features/general/Routes';
 import Spinner from 'components/Spinner';
+import { Trans, useTranslation } from 'components/Translation';
+import { ObjectiveType, ReviewType, Status } from 'config/enum';
+import { StepIndicator } from 'components/StepIndicator/StepIndicator';
+import { useHeaderContainer } from 'contexts/headerContext';
+import { usePermissionByTenant, tenant } from 'features/general/Permission';
+import { canEditAllObjectiveFn, REVIEW_MODIFICATION_MODE, reviewModificationModeFn } from '../../utils';
 import { File } from '../../../ReviewFiles/components/components/File';
-import { CompletedReviewsModal } from 'features/general/CompletedReviews';
-import { USER } from 'config/constants';
 import { Objectives } from './Objectives';
 
 export const TEST_ID = 'my-objectives-page';
@@ -51,16 +52,18 @@ export const TEST_ID = 'my-objectives-page';
 const WidgetBlock = () => {
   const navigate = useNavigate();
   const { css } = useStyle();
+
+  const hasPermission = usePermissionByTenant([tenant.GENERAL]);
   return (
     <div className={css(widgetsBlock)}>
       <ShareWidget stopShare={true} sharing={false} customStyle={shareWidgetStyles} />
-
       <ShareWidget stopShare={false} sharing={true} customStyle={shareWidgetStyles} />
-
-      <OrganizationWidget
-        customStyle={organizationWidgetStyles}
-        onClick={() => navigate(buildPath(Page.STRATEGIC_DRIVERS))}
-      />
+      {hasPermission && (
+        <OrganizationWidget
+          customStyle={organizationWidgetStyles}
+          onClick={() => navigate(buildPath(Page.STRATEGIC_DRIVERS))}
+        />
+      )}
     </div>
   );
 };

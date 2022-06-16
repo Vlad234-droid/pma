@@ -20,6 +20,7 @@ type AuthData = {
   login: LoginAction;
   logout: LogoutAction;
   roles: Array<string>;
+  tenant: Tenant;
   userWorkLevel: Array<string>;
   error: any;
 };
@@ -29,6 +30,7 @@ const defaultData = {
   login: () => undefined, // to start the login process
   logout: () => undefined, // logout the user
   roles: [],
+  tenant: Tenant.GENERAL,
   error: null,
   userWorkLevel: [],
 };
@@ -62,6 +64,7 @@ export const AuthProvider: FC = ({ children }) => {
         login: loginAction,
         logout: logoutAction,
         roles: info?.data?.roles || [],
+        tenant: info?.tenant || Tenant.GENERAL,
         userWorkLevel: info?.data?.colleague?.workRelationships?.[0]?.workLevel || [],
       }}
     >
