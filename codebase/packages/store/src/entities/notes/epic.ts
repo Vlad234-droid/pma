@@ -9,6 +9,7 @@ import {
   getNotes,
   createNote,
   createFolderAndNote,
+  createFolderAndUpdateNotes,
   deleteNote,
   deleteFolder,
   updateNote,
@@ -48,6 +49,26 @@ export const createFolderAndNoteEpic: Epic = (action$, _, { api }) =>
         }),
 
         catchError(({ errors }) => of(createFolderNotes.failure(errors))),
+      );
+    }),
+  );
+
+export const createFolderAndUpdateNoteEpic: Epic = (action$, _, { api }) =>
+  action$.pipe(
+    filter(isActionOf(createFolderAndUpdateNotes.request)),
+    switchMap(({ payload }) => {
+      const { folder, note } = payload;
+      //@ts-ignore
+      return from(api.createFolderNotes(folder)).pipe(
+        //@ts-ignore
+        mergeMap(({ data }) => {
+          const { id } = data;
+
+          //@ts-ignore
+          return from([createFolderNotes.success(), updateNote.request({ ...note, folderUuid: id })]);
+        }),
+
+        catchError(({ errors }) => of(createFolderAndUpdateNotes.failure(errors))),
       );
     }),
   );
@@ -178,6 +199,7 @@ export default combineEpics(
   getFoldersNotesEpic,
   createNoteEpic,
   createFolderAndNoteEpic,
+  createFolderAndUpdateNoteEpic,
   deleteNoteEpic,
   deleteFolderEpic,
   updateNoteEpic,
