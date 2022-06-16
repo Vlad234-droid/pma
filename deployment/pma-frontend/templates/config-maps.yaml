@@ -3,16 +3,16 @@ kind: ConfigMap
 metadata:
   name: pma-frontend-azdevops
 data:
-  BUILD_BUILDID: {{ .Values.azdevops.build.buildId }}
-  BUILD_BUILDNUMBER: {{ .Values.azdevops.build.buildNumber }}
-  BUILD_DEFINITIONNAME: {{ .Values.azdevops.build.buildDefinitionName }}
-  BUILD_SOURCEBRANCHNAME: {{ .Values.azdevops.build.sourceBranchName }}
-  BUILD_SOURCEBRANCH: {{ .Values.azdevops.build.sourceBranch }}
-  BUILD_SOURCEVERSION: {{ .Values.azdevops.build.sourceVersion }}
-  RELEASE_RELEASEID: {{ .Values.azdevops.release.releaseId }}
-  RELEASE_RELEASENAME: {{ .Values.azdevops.release.releaseName }}
-  RELEASE_DEFINITIONNAME: {{ .Values.azdevops.release.releaseDefinitionName }}
-  RELEASE_ENVIRONMENTNAME: {{ .Values.azdevops.release.environmentName }}
+  BUILD_BUILDID: {{ .Values.azdevops.build.buildId | quote }}
+  BUILD_BUILDNUMBER: {{ .Values.azdevops.build.buildNumber | quote }}
+  BUILD_DEFINITIONNAME: {{ .Values.azdevops.build.buildDefinitionName | quote }}
+  BUILD_SOURCEBRANCHNAME: {{ .Values.azdevops.build.sourceBranchName | quote }}
+  BUILD_SOURCEBRANCH: {{ .Values.azdevops.build.sourceBranch | quote }}
+  BUILD_SOURCEVERSION: {{ .Values.azdevops.build.sourceVersion | quote }}
+  RELEASE_RELEASEID: {{ .Values.azdevops.release.releaseId | quote }}
+  RELEASE_RELEASENAME: {{ .Values.azdevops.release.releaseName | quote }}
+  RELEASE_DEFINITIONNAME: {{ .Values.azdevops.release.releaseDefinitionName | quote }}
+  RELEASE_ENVIRONMENTNAME: {{ .Values.azdevops.release.environmentName | quote }}
 ---
 apiVersion: v1
 kind: ConfigMap
