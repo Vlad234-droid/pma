@@ -3,16 +3,16 @@ kind: ConfigMap
 metadata:
   name: pma-frontend-azdevops
 data:
-  BUILD_BUILDID: {{ .Values.azdevops.build.buildId | quote }}
-  BUILD_BUILDNUMBER: {{ .Values.azdevops.build.buildNumber | quote }}
-  BUILD_DEFINITIONNAME: {{ .Values.azdevops.build.buildDefinitionName | quote }}
-  BUILD_SOURCEBRANCHNAME: {{ .Values.azdevops.build.sourceBranchName | quote }}
-  BUILD_SOURCEBRANCH: {{ .Values.azdevops.build.sourceBranch | quote }}
-  BUILD_SOURCEVERSION: {{ .Values.azdevops.build.sourceVersion | quote }}
-  RELEASE_RELEASEID: {{ .Values.azdevops.release.releaseId | quote }}
-  RELEASE_RELEASENAME: {{ .Values.azdevops.release.releaseName | quote }}
-  RELEASE_DEFINITIONNAME: {{ .Values.azdevops.release.releaseDefinitionName | quote }}
-  RELEASE_ENVIRONMENTNAME: {{ .Values.azdevops.release.environmentName | upper | quote }}
+  CICD_BUILD_BUILDID: {{ .Values.azdevops.build.buildId | quote }}
+  CICD_BUILD_BUILDNUMBER: {{ .Values.azdevops.build.buildNumber | quote }}
+  CICD_BUILD_DEFINITIONNAME: {{ .Values.azdevops.build.buildDefinitionName | quote }}
+  CICD_BUILD_SOURCEBRANCHNAME: {{ .Values.azdevops.build.sourceBranchName | quote }}
+  CICD_BUILD_SOURCEBRANCH: {{ .Values.azdevops.build.sourceBranch | quote }}
+  CICD_BUILD_SOURCEVERSION: {{ .Values.azdevops.build.sourceVersion | quote }}
+  CICD_RELEASE_RELEASEID: {{ .Values.azdevops.release.releaseId | quote }}
+  CICD_RELEASE_RELEASENAME: {{ .Values.azdevops.release.releaseName | quote }}
+  CICD_RELEASE_DEFINITIONNAME: {{ .Values.azdevops.release.releaseDefinitionName | quote }}
+  CICD_RELEASE_ENVIRONMENTNAME: {{ .Values.azdevops.release.environmentName | upper | quote }}
 ---
 apiVersion: v1
 kind: ConfigMap
