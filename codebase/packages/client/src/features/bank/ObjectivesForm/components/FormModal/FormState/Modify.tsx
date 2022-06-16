@@ -5,14 +5,16 @@ import { useTranslation } from 'components/Translation';
 import { TriggerModal } from 'features/general/Modal';
 import HelpTrigger from '../HelpTrigger';
 import Components from '../Components';
+import { Objective } from '../../../type';
 
 type Props = {
   components: any[];
-  objective: Record<string, string>;
+  currentNumber: number;
+  objective: Objective;
   methods: UseFormReturn;
 };
 
-const Modify: FC<Props> = ({ components, objective, methods }) => {
+const Modify: FC<Props> = ({ components, objective, methods, currentNumber }) => {
   const { css, theme } = useStyle();
   const { t } = useTranslation();
   return (
@@ -22,6 +24,7 @@ const Modify: FC<Props> = ({ components, objective, methods }) => {
           <HelpTrigger />
         </TriggerModal>
       </div>
+      <div>STEP {currentNumber}</div>
       <Components components={components} objective={objective} methods={methods} readonly={false} />
     </>
   );

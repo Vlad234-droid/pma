@@ -1,13 +1,17 @@
 import React, { FC } from 'react';
 import { Rule, useStyle } from '@pma/dex-wrapper';
-import FormWrapper from './FormWrapper';
-import Buttons from './Buttons';
 
+import { useTranslation } from 'components/Translation';
+import SuccessModal from 'components/SuccessModal';
+
+import FormWrapper from './FormWrapper';
 import FormModify from './FormState/Modify';
 import FormPreview from './FormState/Preview';
-import { FormPropsType, withForm } from '../../hoc/withForm';
-import { FormStateType } from '../../type';
 import ButtonsModify from './Buttons/ButtonsModify';
+import ButtonsPreview from './Buttons/ButtonsPreview';
+
+import { FormStateType } from '../../type';
+import { FormPropsType, withForm } from '../../hoc/withForm';
 
 export type FormModal = {
   onClose: () => void;
@@ -17,17 +21,42 @@ const FormModal: FC<FormModal> = ({
   onClose,
   objective,
   objectives,
+  currentNumber,
   components,
   methods,
   formState,
-  setFormState,
+  handleSaveAsDraft,
   handleSubmit,
   handlePreview,
+  handleNext,
 }) => {
-  const { css } = useStyle();
+  const { t } = useTranslation();
+  const { css, matchMedia } = useStyle();
+  const {
+    formState: { isValid },
+  } = methods;
+  let paddingBottom = 0;
+
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
+  if (formState === FormStateType.MODIFY) {
+    paddingBottom = mobileScreen ? 114 : 132;
+  }
+
+  if (formState === FormStateType.SUBMITTED) {
+    return (
+      <SuccessModal
+        title={t('priorities_sent', 'Priorities sent')}
+        onClose={onClose}
+        description={t(
+          'priorities_sent_to_your_line_manager',
+          'You have submitted your priorities to your Manager for agreement',
+        )}
+      />
+    );
+  }
 
   return (
-    <FormWrapper onClose={console.log}>
+    <FormWrapper onClose={console.log} paddingBottom={paddingBottom}>
       <form data-test-id={'PRIORITY_FORM_MODAL'}>
         <div className={css(formFieldsWrapperStyle)}>
           {(() => {
@@ -35,14 +64,20 @@ const FormModal: FC<FormModal> = ({
               case FormStateType.MODIFY:
                 return (
                   <>
-                    <FormModify methods={methods} objective={objective} components={components} />
+                    <FormModify
+                      methods={methods}
+                      objective={objective}
+                      components={components}
+                      currentNumber={currentNumber}
+                    />
                     <ButtonsModify
                       onClose={onClose}
                       readonly={false}
-                      isValid={false}
-                      onSaveAddObjective={console.log}
-                      onSaveExit={console.log}
+                      currentNumber={currentNumber}
+                      isValid={isValid}
+                      onSaveExit={handleSaveAsDraft}
                       onSubmit={handlePreview}
+                      onNext={handleNext}
                     />
                   </>
                 );
@@ -50,18 +85,18 @@ const FormModal: FC<FormModal> = ({
                 return (
                   <>
                     <FormPreview methods={methods} objectives={objectives} components={components} />
-                    <ButtonsModify
-                      onClose={onClose}
-                      readonly={false}
-                      isValid={false}
-                      onSaveAddObjective={console.log}
-                      onSaveExit={console.log}
-                      onSubmit={handlePreview}
-                    />
+                    <ButtonsPreview onSubmit={handleSubmit} onBack={console.log} />
                   </>
                 );
               default:
-                return <FormModify methods={methods} objective={objective} components={components} />;
+                return (
+                  <FormModify
+                    methods={methods}
+                    objective={objective}
+                    components={components}
+                    currentNumber={currentNumber}
+                  />
+                );
             }
           })()}
         </div>

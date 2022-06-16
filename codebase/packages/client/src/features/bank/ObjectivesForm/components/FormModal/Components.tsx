@@ -5,10 +5,11 @@ import { ExpressionValueType, FormType } from '@pma/store';
 import MarkdownRenderer from 'components/MarkdownRenderer';
 import { GenericItemField } from 'components/GenericForm';
 import { Input, Item, ItemProps, Select, Text, Textarea } from 'components/Form';
+import { Objective } from '../../type';
 
 type ComponentsProps = {
   components: any[];
-  objective: Record<string, string>;
+  objective: Objective;
   methods: UseFormReturn;
   readonly: boolean;
 };
@@ -36,7 +37,7 @@ const Components: FC<ComponentsProps> = ({ components, objective, methods, reado
           expression = {},
           borderStyle = {},
         } = component;
-        const value = key && objective[key] ? objective[key] : '';
+        const value = key && objective?.properties?.[key] ? objective?.properties[key] : '';
 
         const componentReadonly = expression?.auth?.permission?.read?.length ? true : readonly;
 

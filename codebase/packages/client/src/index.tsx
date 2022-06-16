@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, Suspense } from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
@@ -30,34 +30,36 @@ const rendererOptions = {
 const Root: FC = () => {
   useMonitoring(document);
   return (
-    <I18nextProvider i18n={i18n}>
-      <AccessibilityProvider
-        containFocus={false}
-        rendererOptions={rendererOptions}
-        // @ts-ignore
-        theme={theme}
-      >
-        <Provider store={store}>
-          <AuthProvider>
-            <ToastProvider>
-              <MessagesProvider>
-                <AppStateProvider>
-                  <HeaderProvider>
-                    <BrowserRouter basename={PUBLIC_URL}>
-                      <React.StrictMode>
-                        <Layout>
-                          <Navigation routes={routes} />
-                        </Layout>
-                      </React.StrictMode>
-                    </BrowserRouter>
-                  </HeaderProvider>
-                </AppStateProvider>
-              </MessagesProvider>
-            </ToastProvider>
-          </AuthProvider>
-        </Provider>
-      </AccessibilityProvider>
-    </I18nextProvider>
+    <Suspense fallback={<div>Loading...</div>}>
+      <I18nextProvider i18n={i18n}>
+        <AccessibilityProvider
+          containFocus={false}
+          rendererOptions={rendererOptions}
+          // @ts-ignore
+          theme={theme}
+        >
+          <Provider store={store}>
+            <AuthProvider>
+              <ToastProvider>
+                <MessagesProvider>
+                  <AppStateProvider>
+                    <HeaderProvider>
+                      <BrowserRouter basename={PUBLIC_URL}>
+                        <React.StrictMode>
+                          <Layout>
+                            <Navigation routes={routes} />
+                          </Layout>
+                        </React.StrictMode>
+                      </BrowserRouter>
+                    </HeaderProvider>
+                  </AppStateProvider>
+                </MessagesProvider>
+              </ToastProvider>
+            </AuthProvider>
+          </Provider>
+        </AccessibilityProvider>
+      </I18nextProvider>
+    </Suspense>
   );
 };
 

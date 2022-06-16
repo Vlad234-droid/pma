@@ -8,7 +8,7 @@ import User from 'config/entities/User';
 // hooks
 import useDispatch from 'hooks/useDispatch';
 import { useSelector } from 'react-redux';
-import { setTenant } from 'utils';
+import { setTenant, Tenant } from 'utils';
 
 type LoginAction = (payload: { email: string; password: string }) => void;
 type LogoutAction = () => void;
@@ -42,8 +42,7 @@ export const AuthProvider: FC = ({ children }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    setTenant(info?.tenant || 'test'); // TODO: where to get the tenant?
-    // const component = React.lazy(() => import('./component.jsx'));
+    setTenant((info?.tenant as Tenant) || Tenant.GENERAL); // TODO: where to get the tenant?
   }, [JSON.stringify(info)]);
 
   useEffect(() => {

@@ -1,9 +1,14 @@
-let tenant = 'general';
+export enum Tenant {
+  GENERAL = 'general',
+  BANK = 'bank',
+}
 
-export const setTenant = (t: string) => {
+let tenant: Tenant;
+
+export const setTenant = (t: Tenant) => {
   tenant = t;
 };
 
-export const getTenant = () => {
+export const getTenant = (): Tenant => {
   return tenant;
 };

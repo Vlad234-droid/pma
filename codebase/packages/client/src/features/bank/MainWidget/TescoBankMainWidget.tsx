@@ -7,9 +7,11 @@ type Props = ContentProps & {
   customStyle?: React.CSSProperties | {};
 };
 
-export const TescoBankMainWidget: FC<Props> = (props) => {
+const TescoMainWidget: FC<Props> = (props) => {
   const { t } = useTranslation();
   const content = getTescoBankContent(props, t);
 
   return <MainWidget {...props} {...content} />;
 };
+
+export default TescoMainWidget;

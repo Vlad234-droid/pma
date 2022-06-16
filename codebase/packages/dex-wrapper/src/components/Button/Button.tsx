@@ -72,5 +72,6 @@ const variantRules: Record<Variant, Rule> = {
   disabled: ({ colors }) => ({
     background: colors.link50,
     color: colors.white,
+    opacity: 0.4,
   }),
 };

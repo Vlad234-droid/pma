@@ -14,13 +14,19 @@ import {
 import { Page } from 'pages';
 import { useTranslation } from 'components/Translation';
 import SecondaryWidget, { Props as SecondaryWidgetProps } from 'features/general/SecondaryWidget';
-import { TescoMainWidget } from 'features/general/MainWidget';
 import { buildPath } from 'features/general/Routes';
 import { Props, widgetTypes } from './type';
 import { ReviewType } from 'config/enum';
-import { DATE_STRING_FORMAT, formatDateString } from 'utils';
+import { DATE_STRING_FORMAT, formatDateString, getTenant, Tenant } from 'utils';
 import Spinner from 'components/Spinner';
 import { USER } from 'config/constants';
+
+const MainWidget = (props) => {
+  const tenant: Tenant = getTenant();
+  const Widget = React.lazy(() => import(`features/${tenant}/MainWidget`));
+
+  return <Widget {...props} />;
+};
 
 const Widgets: FC<Props> = () => {
   const dispatch = useDispatch();
@@ -81,7 +87,7 @@ const Widgets: FC<Props> = () => {
       ) : (
         <>
           {canShowObjectives && (
-            <TescoMainWidget
+            <MainWidget
               status={status}
               count={count}
               nextReviewDate={nextReviewDate}

@@ -1,20 +1,27 @@
 import React, { FC } from 'react';
 import { useStyle, Button, Rule, CreateRule } from '@pma/dex-wrapper';
-import { Trans, useTranslation } from 'components/Translation';
+import { Trans } from 'components/Translation';
+import { useSelector } from 'react-redux';
+import { getReviewSchema } from '@pma/store';
+import { ReviewType } from 'config/enum';
 
 type ButtonsProps = {
+  currentNumber: number;
   readonly: boolean;
   isValid: boolean;
   onClose: () => void;
-  onSaveExit: () => void;
-  onSaveAddObjective: () => void;
-  onSubmit: () => void;
+  onSaveExit: (T) => void;
+  onSubmit: (T) => void;
+  onNext: (T) => void;
 };
 
-const Buttons: FC<ButtonsProps> = ({ readonly, isValid, onClose, onSaveExit, onSaveAddObjective, onSubmit }) => {
+const Buttons: FC<ButtonsProps> = ({ readonly, isValid, onClose, onSaveExit, onSubmit, onNext, currentNumber }) => {
   const { css, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
-  const { t } = useTranslation();
+  const schema = useSelector(getReviewSchema(ReviewType.OBJECTIVE));
+  const { markup = { max: 0, min: 0 } } = schema;
+
+  const isDisabledSaveAndAdd = !isValid || markup.max <= currentNumber;
 
   return (
     <div className={css(containerStyle)}>
@@ -29,7 +36,7 @@ const Buttons: FC<ButtonsProps> = ({ readonly, isValid, onClose, onSaveExit, onS
               <Button onPress={onSaveExit} styles={[buttonWhiteStyle]}>
                 <Trans i18nKey='save_and_exit'>Save & exit</Trans>
               </Button>
-              <Button onPress={onSaveAddObjective} styles={[buttonBlueStyle]} isDisabled={!isValid}>
+              <Button onPress={onNext} styles={[buttonBlueStyle]} isDisabled={isDisabledSaveAndAdd}>
                 <Trans i18nKey='save_add_priority'>Save & add new priority</Trans>
               </Button>
             </>
@@ -37,7 +44,7 @@ const Buttons: FC<ButtonsProps> = ({ readonly, isValid, onClose, onSaveExit, onS
         </div>
         <div className={css(buttonTextWrapperStyle({ mobileScreen }))}>Or finish</div>
         <div className={css(buttonWrapperStyle({ mobileScreen }))}>
-          <Button styles={[buttonBlueStyle]} onPress={onSubmit}>
+          <Button styles={[buttonBlueStyle]} onPress={onSubmit} isDisabled={!isValid}>
             <Trans i18nKey='review_and_submit'>Review & Submit</Trans>
           </Button>
         </div>

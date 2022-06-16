@@ -1,1 +1,2 @@
-export { TescoBankMainWidget } from './TescoBankMainWidget';
+import { default as TescoMainWidget } from './TescoBankMainWidget';
+export default TescoMainWidget;

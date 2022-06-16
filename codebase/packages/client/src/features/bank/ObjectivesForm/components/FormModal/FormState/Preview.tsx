@@ -4,43 +4,15 @@ import { Rule, useStyle } from '@pma/dex-wrapper';
 import { useTranslation, Trans } from 'components/Translation';
 import { TileWrapper } from 'components/Tile';
 import MarkdownRenderer from 'components/MarkdownRenderer';
+import { Objective } from '../../../type';
 
 type Props = {
   components: any[];
-  objectives: Record<string, string>[];
+  objectives: Objective[];
   methods: UseFormReturn;
 };
 
-const mockObjectives = [
-  {
-    uuid: '18413165-c949-4b91-b8db-282ca5ad4d9a',
-    type: 'OBJECTIVE',
-    status: 'DRAFT',
-    number: 1,
-    colleagueUuid: 'df5202ac-1bf4-41b8-9717-f36798bc4123',
-    tlPointUuid: '3467a739-53f0-4546-b64e-c2e5dfad26c4',
-    properties: {
-      title: 'title',
-      description: 'description',
-    },
-    lastUpdatedTime: '2022-06-09T10:56:40.121Z',
-  },
-  {
-    uuid: '18413165-c949-4b91-b8db-282ca5ad4d9d',
-    type: 'OBJECTIVE',
-    status: 'DRAFT',
-    number: 2,
-    colleagueUuid: 'df5202ac-1bf4-41b8-9717-f36798bc4123',
-    tlPointUuid: '3467a739-53f0-4546-b64e-c2e5dfad26c4',
-    properties: {
-      title: 'title',
-      description: 'description',
-    },
-    lastUpdatedTime: '2022-06-09T10:56:40.121Z',
-  },
-];
-
-const Preview: FC<Props> = ({ components, objectives, methods }) => {
+const Preview: FC<Props> = ({ components, objectives }) => {
   const { css, theme } = useStyle();
   const { t } = useTranslation();
   return (
@@ -49,7 +21,7 @@ const Preview: FC<Props> = ({ components, objectives, methods }) => {
         <div className={css(headerStyle)}>
           <Trans i18nKey={'please_review_your_priorities'}>Please review your priorities</Trans>
         </div>
-        {mockObjectives.map((objective) => {
+        {objectives.map((objective) => {
           return (
             <TileWrapper key={objective.uuid} boarder={true} customStyle={{ marginTop: '12px' }}>
               <div className={css({ padding: '20px' })}>

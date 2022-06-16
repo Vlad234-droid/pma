@@ -5,14 +5,15 @@ import { Icon as IconComponent } from 'components/Icon';
 export type FormWrapper = {
   onClose: () => void;
   children: JSX.Element;
+  paddingBottom?: number;
 };
 
-const FormWrapper: FC<FormWrapper> = ({ onClose, children }) => {
+const FormWrapper: FC<FormWrapper> = ({ onClose, children, paddingBottom = 0 }) => {
   const { css, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
 
   return (
-    <div className={css(containerStyle)}>
+    <div className={css(containerStyle({ paddingBottom }))}>
       <div className={css(wrapperStyle({ mobileScreen }))}>
         <span className={css(iconLeftPositionStyle({ mobileScreen }))} onClick={onClose}>
           <IconComponent graphic='arrowLeft' invertColors={true} />
@@ -23,7 +24,11 @@ const FormWrapper: FC<FormWrapper> = ({ onClose, children }) => {
   );
 };
 
-const containerStyle: Rule = { height: '100%' };
+// const containerStyle: Rule = { height: '100%' };
+const containerStyle: CreateRule<{ paddingBottom: number }> = ({ paddingBottom }) => ({
+  height: '100%',
+  paddingBottom: `${paddingBottom}px`,
+});
 
 const wrapperStyle: CreateRule<{ mobileScreen: boolean }> =
   ({ mobileScreen }) =>

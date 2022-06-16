@@ -624,5 +624,7 @@
   "add_pdp_goal": "Add PDP goal",
   "by_name": "By name",
   "by_email_address": "By email address",
-  "create_pdp": "Create PDP"
+  "create_pdp": "Create PDP",
+  "priorities_sent": "Priorities sent",
+  "priorities_sent_to_your_line_manager": "You have submitted your priorities to your Manager for agreement"
 }
