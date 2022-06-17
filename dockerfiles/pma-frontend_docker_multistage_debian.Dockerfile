@@ -146,7 +146,6 @@ ENV NODE_PORT=$NODE_PORT
 
 RUN apt-get update \
     && apt-get install --only-upgrade --yes dpkg \
-    && apt-get install --only-upgrade --yes zlib \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /home/app
