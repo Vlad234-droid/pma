@@ -146,6 +146,7 @@ ENV NODE_PORT=$NODE_PORT
 
 RUN apt-get update \
     && apt-get install --only-upgrade --yes dpkg \
+    && apt-get install --only-upgrade --yes libz-mingw-w64 \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /home/app
