@@ -144,6 +144,13 @@ ARG NODE_PORT
 ENV NODE_ENV=$NODE_ENV
 ENV NODE_PORT=$NODE_PORT
 
+RUN apt-get update \
+    && apt-get --yes --only-upgrage install \
+    dpkg \
+    zlib \
+    && rm -rf /var/lib/apt/lists/*
+
+
 WORKDIR /home/app
 
 COPY --from=post-build /home/app ./
