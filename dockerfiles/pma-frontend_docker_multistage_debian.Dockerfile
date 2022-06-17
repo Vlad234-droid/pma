@@ -145,9 +145,8 @@ ENV NODE_ENV=$NODE_ENV
 ENV NODE_PORT=$NODE_PORT
 
 RUN apt-get update \
-    && apt-get --only-upgrage install \
-    dpkg \
-    zlib \
+    && apt-get install --only-upgrage dpkg \
+    && apt-get install --only-upgrage zlib \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /home/app
