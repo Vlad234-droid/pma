@@ -25,7 +25,7 @@ const Objectives: FC<Props> = ({ objectives = [], canEditAllObjective = false, c
 
   const { loading: reviewLoading } = useSelector(reviewsMetaSelector);
   const timelineObjective = useSelector(getTimelineByCodeSelector(ReviewType.OBJECTIVE, USER.current)) || {};
-  const status = timelineObjective?.status || undefined;
+  const status = timelineObjective?.summaryStatus || undefined;
   const isAllObjectivesInSameStatus = useSelector(isReviewsInStatus(ReviewType.OBJECTIVE)(status));
 
   const document = useMemo(() => <ObjectiveDocument items={objectives} />, [JSON.stringify(objectives)]);

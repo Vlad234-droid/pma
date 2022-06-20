@@ -21,6 +21,7 @@ const generateTimeline = (config?: Config) => {
     reviewType: config?.reviewType || ReviewType.OBJECTIVE,
     startTime: dateToIso(new Date()),
     status: config?.status || Status.PENDING,
+    summaryStatus: config?.status || Status.PENDING,
     type: config?.type || TimelineType.CYCLE,
     uuid: 'mocked_timeline_uuid',
   };

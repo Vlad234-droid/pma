@@ -32,7 +32,7 @@ const ReviewWidgets: FC<Props> = ({
           <div data-test-id='mid-year-review' className={css(basicTileStyle)}>
             <ReviewWidget
               reviewType={ReviewType.MYR}
-              status={midYearReview?.status}
+              status={midYearReview?.summaryStatus}
               startTime={midYearReview?.startTime}
               endTime={midYearReview?.endTime || undefined}
               lastUpdatedTime={midYearReview?.lastUpdatedTime}
@@ -43,7 +43,7 @@ const ReviewWidgets: FC<Props> = ({
           <div data-test-id='end-year-review' className={css(basicTileStyle)}>
             <ReviewWidget
               reviewType={ReviewType.EYR}
-              status={endYearReview?.status}
+              status={endYearReview?.summaryStatus}
               startTime={endYearReview?.startTime}
               endTime={endYearReview?.endTime || undefined}
               lastUpdatedTime={endYearReview?.lastUpdatedTime}
@@ -57,7 +57,7 @@ const ReviewWidgets: FC<Props> = ({
         <div data-test-id='annual-performance-review' className={css(basicTileStyle)}>
           <ReviewWidget
             reviewType={ReviewType.EYR}
-            status={endYearReview?.status}
+            status={endYearReview?.summaryStatus}
             startTime={endYearReview?.startTime}
             endTime={endYearReview?.endTime || undefined}
             lastUpdatedTime={endYearReview?.lastUpdatedTime}

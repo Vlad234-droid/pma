@@ -19,7 +19,7 @@ const TimeLines: FC<Props> = ({ timelines }) => {
         {timelines
           ?.filter((review) => review.type !== TimelineType.TIMELINE_POINT)
           ?.map((review) => {
-            const [graphics, color, title] = getIcon(review.status, t);
+            const [graphics, color, title] = getIcon(review.summaryStatus, t);
 
             return (
               <div data-test-id='timeline' key={review.uuid} className={css(reviewItemStyles)}>
