@@ -9,6 +9,7 @@ export type Timeline = {
   reviewType: ReviewType;
   startTime: string | null;
   status: Status;
+  summaryStatus: Status;
   type: TimelineType;
   uuid: string;
 };

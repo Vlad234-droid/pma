@@ -15,7 +15,7 @@ import CareerPerformance from './CareerPerformance';
 import { USER } from 'config/constants';
 
 const CareerPerformanceContainer: FC = () => {
-  const { descriptions, startDates, statuses } = useSelector(getTimelineSelector(USER.current)) || {};
+  const { descriptions, startDates, summaryStatuses } = useSelector(getTimelineSelector(USER.current)) || {};
   const timelineTypes = useSelector(timelineTypesAvailabilitySelector(USER.current));
   const midYearReview = useSelector(getTimelineByCodeSelector(ObjectiveType.MYR, USER.current));
   const endYearReview = useSelector(getTimelineByCodeSelector(ObjectiveType.EYR, USER.current));
@@ -27,7 +27,7 @@ const CareerPerformanceContainer: FC = () => {
     <CareerPerformance
       descriptions={descriptions}
       startDates={startDates}
-      statuses={statuses}
+      statuses={summaryStatuses}
       timelineTypes={timelineTypes}
       midYearReview={midYearReview}
       endYearReview={endYearReview}

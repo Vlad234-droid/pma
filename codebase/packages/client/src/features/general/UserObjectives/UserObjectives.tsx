@@ -52,7 +52,7 @@ const UserObjectives: FC = () => {
   const { loaded: colleagueLoaded } = useSelector(getColleagueMetaSelector);
   const { uuid } = useParams<{ uuid: string }>();
 
-  const { descriptions, startDates, statuses } = useSelector(getTimelineSelector(uuid)) || {};
+  const { descriptions, startDates, summaryStatuses } = useSelector(getTimelineSelector(uuid)) || {};
   const timelineTypes = useSelector(timelineTypesAvailabilitySelector(uuid));
   const colleague = useSelector(getColleagueSelector);
   const canShowObjectives = timelineTypes[ObjectiveType.OBJECTIVE];
@@ -105,7 +105,7 @@ const UserObjectives: FC = () => {
                     mainTitle={t('performance_timeline_title', 'Your Contribution timeline')}
                     titles={descriptions}
                     descriptions={startDates}
-                    statuses={statuses}
+                    statuses={summaryStatuses}
                   />
                 </div>
               </div>
@@ -167,7 +167,7 @@ const UserObjectives: FC = () => {
                 mainTitle={t('performance_timeline_title', 'Your Contribution timeline')}
                 titles={descriptions}
                 descriptions={startDates}
-                statuses={statuses}
+                statuses={summaryStatuses}
               />
             </div>
           </div>

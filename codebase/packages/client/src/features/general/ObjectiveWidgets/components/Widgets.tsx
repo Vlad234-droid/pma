@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect, useMemo } from 'react';
 import { Styles, theme, useStyle } from '@pma/dex-wrapper';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -21,12 +21,22 @@ import { DATE_STRING_FORMAT, formatDateString, getTenant, Tenant } from 'utils';
 import Spinner from 'components/Spinner';
 import { USER } from 'config/constants';
 
-const MainWidget = (props) => {
+const MainWidget = React.memo((props) => {
   const tenant: Tenant = getTenant();
-  const Widget = React.lazy(() => import(`features/${tenant}/MainWidget`));
+  const Widget = useMemo(() => React.lazy(() => import(`features/${tenant}/MainWidget`)), []);
 
-  return <Widget {...props} />;
-};
+  return (
+    <Widget
+      {...props}
+      customStyle={{
+        flex: '4 1 500px',
+        fontSize: theme.font.fixed.f16.fontSize,
+        lineHeight: theme.font.fixed.f16.lineHeight,
+        letterSpacing: '0px',
+      }}
+    />
+  );
+});
 
 const Widgets: FC<Props> = () => {
   const dispatch = useDispatch();
@@ -37,7 +47,7 @@ const Widgets: FC<Props> = () => {
   const timelineObjective = useSelector(getTimelineByReviewTypeSelector(ReviewType.OBJECTIVE, USER.current));
   const timelineMYR = useSelector(getTimelineByReviewTypeSelector(ReviewType.MYR, USER.current));
   const timelineTypes = useSelector(timelineTypesAvailabilitySelector(USER.current));
-  const status = timelineObjective?.status;
+  const status = timelineObjective?.summaryStatus;
   const count = timelineObjective?.count || 0;
   const nextReviewDate = timelineMYR?.startTime || null;
   const canShowObjectives = timelineTypes[ReviewType.OBJECTIVE];
@@ -76,10 +86,6 @@ const Widgets: FC<Props> = () => {
     },
   ];
 
-  if (meta?.loading) {
-    return <Spinner />;
-  }
-
   return (
     <div className={css(wrapperStyle)}>
       {meta?.loading ? (
@@ -88,15 +94,10 @@ const Widgets: FC<Props> = () => {
         <>
           {canShowObjectives && (
             <MainWidget
+              //@ts-ignore
               status={status}
               count={count}
               nextReviewDate={nextReviewDate}
-              customStyle={{
-                flex: '4 1 500px',
-                fontSize: theme.font.fixed.f16.fontSize,
-                lineHeight: theme.font.fixed.f16.lineHeight,
-                letterSpacing: '0px',
-              }}
             />
           )}
 
