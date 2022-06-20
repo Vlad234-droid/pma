@@ -1,9 +1,11 @@
-import { nocolor, HighlightTheme, defaultColorizeLevel } from "./theme";
+import { nocolor, HighlightTheme } from "./theme";
 
 /**
  * 
  */
 export const PlainTheme: HighlightTheme = {
+
+   THEME_NAME: 'Plain',
 
    /**
     * 

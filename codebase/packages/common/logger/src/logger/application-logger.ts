@@ -4,7 +4,7 @@ import pino from 'pino';
 
 import { jsonHighlight } from './pretify';
 import { prettifierFactory } from './pretifier';
-import { AndroidStudioTheme } from './pretifier/themes';
+import { findThemeByName, DefaultTheme, HighlightTheme } from './pretifier/themes';
 
 /**
  *
@@ -18,7 +18,7 @@ class ApplicationLogger {
   // see: https://highlightjs.org/static/demo/
   // private readonly themeName: string = 'Night Owl';
 
-  private constructor(rootLoggerName: string, logLevel: string, pretity: boolean) {
+  private constructor(rootLoggerName: string, logLevel: string, pretity: boolean, theme: HighlightTheme) {
     let pinoConfig: pino.LoggerOptions = {
       name: rootLoggerName,
       level: logLevel,
@@ -36,7 +36,7 @@ class ApplicationLogger {
           customPrettifiers: {
             '*': jsonHighlight,
           },
-          theme: AndroidStudioTheme,
+          theme,
         } as any),
       };
 
@@ -90,17 +90,17 @@ class ApplicationLogger {
     return this.instance;
   }
 
-  static initialize(rootLoggerName: string, logLevel: string, pretity: boolean): pino.Logger {
+  static initialize(rootLoggerName: string, logLevel: string, pretity: boolean, theme: HighlightTheme): pino.Logger {
     if (this.instance) {
       throw Error(`Pino logger is already initialized.`);
     }
-    this.instance = new this(rootLoggerName, logLevel, pretity);
+    this.instance = new this(rootLoggerName, logLevel, pretity, theme);
     return this.instance.rootLogger;
   }
 }
 
-export const initialize = (rootLoggerName: string, logLevel: string = 'info', pretity: boolean = true) =>
-  ApplicationLogger.initialize(rootLoggerName, logLevel, pretity);
+export const initialize = (rootLoggerName: string, logLevel: string = 'info', pretity: boolean = true, themeName = undefined) =>
+  ApplicationLogger.initialize(rootLoggerName, logLevel, pretity, findThemeByName(themeName, DefaultTheme));
 
 export const createLogger = (bindings?: pino.Bindings) => ApplicationLogger.getInstance().createLogger(bindings);
 

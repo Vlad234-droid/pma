@@ -117,3 +117,4 @@ environment:
   LOGGER_ROOT_NAME: server
   LOGGER_LEVEL: info
   LOGGER_PRETIFY: false
+  LOGGER_THEME: Plain

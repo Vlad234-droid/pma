@@ -37,6 +37,7 @@ declare namespace NodeJS {
     LOGGER_ROOT_NAME: string;
     LOGGER_LEVEL?: keyof typeof LogLevel;
     LOGGER_PRETIFY: string | undefined;
+    LOGGER_THEME: string | undefined,
     LOGGER_LOG_AUTH_TOKEN: string | undefined;
 
     // Integration

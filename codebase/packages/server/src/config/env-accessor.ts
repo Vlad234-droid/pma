@@ -45,6 +45,7 @@ const environmentParameters: Array<keyof NodeJS.ProcessEnv> = [
   'LOGGER_ROOT_NAME',
   'LOGGER_LEVEL',
   'LOGGER_PRETIFY',
+  'LOGGER_THEME',
   'LOGGER_LOG_AUTHTOKEN',
 ];
 
@@ -67,6 +68,7 @@ const optionalEnvironmentParameters = [
   'LOGGER_ROOT_NAME',
   'LOGGER_LEVEL',
   'LOGGER_PRETIFY',
+  'LOGGER_THEME',
   'LOGGER_LOG_AUTHTOKEN',
 ];
 
