@@ -16,11 +16,11 @@ export const getEmployeesWithReviewStatus = (status: Status) => (searchValue?: s
   // @ts-ignore
   createSelector(managersSelector, ({ data = [] }) => {
     const filteredWithStatusData = data
-      ?.filter((employee) => employee.timeline.some((review) => review.status === status))
+      ?.filter((employee) => employee.timeline.some((review) => review.summaryStatus === status))
       .map((employee) => ({
         ...employee,
         reviews: employee.reviews.filter((review) => review.status === status),
-        timeline: employee.timeline.filter((review) => review.status === status),
+        timeline: employee.timeline.filter((review) => review.summaryStatus === status),
       }));
 
     const filteredData = filteredWithStatusData
@@ -51,15 +51,17 @@ export const getPendingEmployees = createSelector(
     const filteredData = data ? sortEmployeesFn(searchEmployeesFn(data, search), sort) : [];
 
     const employeeWithPendingApprovals = filteredData?.filter((employee: Employee) =>
-      employee.timeline.some((review) => review.status === Status.WAITING_FOR_APPROVAL),
+      employee.timeline.some((review) => review.summaryStatus === Status.WAITING_FOR_APPROVAL),
     );
 
     const employeePendingApprovals = filteredData?.filter((employee: Employee) =>
-      employee.timeline.some((review) => review.status === Status.DRAFT || review.status === Status.DECLINED),
+      employee.timeline.some(
+        (review) => review.summaryStatus === Status.DRAFT || review.summaryStatus === Status.DECLINED,
+      ),
     );
 
     const employeeWithCompletedApprovals = filteredData?.filter((employee: Employee) =>
-      employee.timeline.some((review) => review.status === Status.APPROVED),
+      employee.timeline.some((review) => review.summaryStatus === Status.APPROVED),
     );
 
     return {

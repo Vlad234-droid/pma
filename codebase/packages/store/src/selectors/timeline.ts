@@ -32,13 +32,13 @@ export const getTimelineSelector = (colleagueUuid) =>
     const uuid = colleagueUuid === USER.current ? user?.current.info.data.colleague.colleagueUUID : colleagueUuid;
     const data = rest?.[uuid];
     const descriptions = data?.map(({ description }) => description);
-    const statuses = data?.map(({ status }) => status);
+    const summaryStatuses = data?.map(({ summaryStatus }) => summaryStatus);
     const startDates = data?.map(({ code, startTime, endTime }, index) => {
       if (code === 'Q1' || code === 'Q3') return '';
       const date = new Date(index === 0 ? startTime : endTime);
       return `${date.toLocaleString('default', { month: 'long' })} ${date.getFullYear()}`;
     });
-    return { descriptions, startDates, statuses };
+    return { descriptions, startDates, summaryStatuses };
   });
 
 export const getTimelineMetaSelector = createSelector(timelineSelector, ({ meta }) => meta);
