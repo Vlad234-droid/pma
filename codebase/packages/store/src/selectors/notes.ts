@@ -19,14 +19,15 @@ export const getFoldersSelector = createSelector(notesSelector, (notes: any) => 
 });
 
 export const getNotesSelector = createSelector(notesSelector, (notes: any) =>
-  notes.notes.filter((item) => item.status === NoteStatus.CREATED),
+  notes?.notes?.filter((item) => item?.status === NoteStatus.CREATED),
 );
 
 export const personalNoteByUUIDSelector = (uuid: string) =>
-  createSelector(notesSelector, (notes) => notes.notes.find(({ id }) => id === uuid));
+  //@ts-ignore
+  createSelector(notesSelector, (notes) => notes?.notes?.find((note) => note?.id === uuid));
 
 export const archivedNotesSelector = createSelector(notesSelector, (notes: any) =>
-  notes.notes.filter((item) => item.status === NoteStatus.ARCHIVED),
+  notes?.notes?.filter((item) => item?.status === NoteStatus.ARCHIVED),
 );
 export const personalFolderUuidSelector = createSelector(notesSelector, (notes: any) => {
   const { folders } = notes;
@@ -56,9 +57,10 @@ export const notesFolderColleagueDataSelector = (colleagueUuid, isUserArchived) 
   createSelector(notesSelector, (notes: any) => {
     const { folders } = notes;
 
-    const notesData = notes.notes.filter((item) =>
-      !isUserArchived ? item.status === NoteStatus.CREATED : item.status === NoteStatus.ARCHIVED,
-    );
+    const notesData =
+      notes?.notes?.filter((item) =>
+        !isUserArchived ? item?.status === NoteStatus.CREATED : item?.status === NoteStatus.ARCHIVED,
+      ) || [];
 
     const personalFolderUuid = folders?.find((item) =>
       !item.parentFolderUuid && !isUserArchived
@@ -83,10 +85,10 @@ export const notesFolderColleagueDataSelector = (colleagueUuid, isUserArchived) 
           });
         }
       });
-      function caller(this: any) {
+      function helper(this: any) {
         return this.notes.length;
       }
-      obj.quantity = caller.bind(obj);
+      obj.quantity = helper.bind(obj);
       return obj;
     });
 
@@ -106,11 +108,12 @@ export const notesFolderTeamDataSelector = (colleagueUuid, teamArchivedMode) =>
   createSelector(notesSelector, (notes: any) => {
     const { folders } = notes;
 
-    const notesData = notes.notes.filter((item) =>
-      !teamArchivedMode
-        ? item.status === NoteStatus.CREATED && item.referenceColleagueUuid
-        : item.status === NoteStatus.ARCHIVED && item.referenceColleagueUuid,
-    );
+    const notesData =
+      notes?.notes?.filter((item) =>
+        !teamArchivedMode
+          ? item?.status === NoteStatus.CREATED && item.referenceColleagueUuid
+          : item?.status === NoteStatus.ARCHIVED && item.referenceColleagueUuid,
+      ) || [];
 
     const teamFolderUuid = folders?.find((item) =>
       !item.parentFolderUuid && !teamArchivedMode
@@ -135,10 +138,10 @@ export const notesFolderTeamDataSelector = (colleagueUuid, teamArchivedMode) =>
           });
         }
       });
-      function caller(this: any) {
+      function helper(this: any) {
         return this.notes.length;
       }
-      obj.quantity = caller.bind(obj);
+      obj.quantity = helper.bind(obj);
       return obj;
     });
 

@@ -43,7 +43,6 @@ export const createFolderAndNoteEpic: Epic = (action$, _, { api }) =>
         //@ts-ignore
         mergeMap(({ data }) => {
           const { id } = data;
-
           //@ts-ignore
           return from([createFolderNotes.success(), createNote.request({ ...note, folderUuid: id })]);
         }),

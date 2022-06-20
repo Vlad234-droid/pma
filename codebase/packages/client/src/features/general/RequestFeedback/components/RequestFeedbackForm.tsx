@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Field, Item, Select, Textarea, Attention } from 'components/Form';
-import { ColleaguesFinder } from './';
+import { ColleaguesFinder } from 'components/ColleaguesFinder';
 import { useTranslation, Trans } from 'components/Translation';
 import { TileWrapper } from 'components/Tile';
 import { IconButton } from 'components/IconButton';
@@ -140,7 +140,12 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel, setIsInfoModalOpen }) 
                 customStyles={{ marginTop: '0px', width: '100%' }}
                 inputStyles={{
                   borderRadius: '25px 0px 0px 25px !important',
+                  paddingLeft: '36.7px',
                 }}
+                withIcon={false}
+                marginBot={false}
+                customIcon={true}
+                multiple={true}
               />
             )}
           </InputWithDropdown>
@@ -168,7 +173,7 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel, setIsInfoModalOpen }) 
             </Item>
           </div>
           {formValues.targetType === TargetType.GOAL && (
-            <TileWrapper customStyle={tyleCustomStyle}>
+            <TileWrapper customStyle={tileCustomStyle}>
               <h3 className={css(commentStyle)}>
                 {t('add_comment_to', `Add comment to ${labelValue}`, { labelValue })}
               </h3>
@@ -206,7 +211,7 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel, setIsInfoModalOpen }) 
             </div>
           )}
           {formValues.targetId && (
-            <TileWrapper customStyle={tyleCustomStyle}>
+            <TileWrapper customStyle={tileCustomStyle}>
               <h3 className={css(commentStyle)}>
                 {t('add_comment_to_objectiveValue', `Add comment to ${objectiveValue}`, { objectiveValue })}
               </h3>
@@ -224,7 +229,7 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel, setIsInfoModalOpen }) 
             </TileWrapper>
           )}
           {formValues.targetType === TargetType.VALUE_BEHAVIOR && (
-            <TileWrapper customStyle={tyleCustomStyle}>
+            <TileWrapper customStyle={tileCustomStyle}>
               <h3 className={css(commentStyle)}>
                 {t('add_comment_to', `Add comment to ${labelValue}`, { labelValue })}
               </h3>
@@ -242,7 +247,7 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel, setIsInfoModalOpen }) 
             </TileWrapper>
           )}
           {formValues.targetType === TargetType.OTHER && (
-            <TileWrapper customStyle={tyleCustomStyle}>
+            <TileWrapper customStyle={tileCustomStyle}>
               <h3 className={css(commentStyle)}>
                 {t('add_comment_to', `Add comment to ${labelValue}`, { labelValue })}
               </h3>
@@ -311,7 +316,7 @@ const selectColleagueStyles: Rule = {
   marginTop: '32px',
 };
 
-const tyleCustomStyle: Rule = ({ theme }) => {
+const tileCustomStyle: Rule = ({ theme }) => {
   return {
     padding: '24px',
     border: `2px solid ${theme.colors.backgroundDarkest}`,

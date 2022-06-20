@@ -2,6 +2,8 @@ import React, { FC, useMemo } from 'react';
 import { theme, useStyle } from '@pma/dex-wrapper';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
+import { useSelector } from 'react-redux';
+import { colleagueUUIDSelector, notesFolderColleagueDataSelector } from '@pma/store';
 
 import { GenericItemField } from 'components/GenericForm';
 import { Input, Item, Select, Textarea } from 'components/Form';
@@ -19,12 +21,13 @@ type Props = {
   onSubmit: (data: any) => void;
   onClose: () => void;
   defaultValues: any;
-  folders: Array<{ id: string; title: string }>;
 };
 
-const AddNoteModal: FC<Props> = ({ onSubmit, onClose, defaultValues, folders }) => {
+const AddNoteModal: FC<Props> = ({ onSubmit, onClose, defaultValues }) => {
   const { css } = useStyle();
   const { t } = useTranslation();
+  const colleagueUuid = useSelector(colleagueUUIDSelector);
+  const folders = useSelector(notesFolderColleagueDataSelector(colleagueUuid, false)) || [];
 
   const methods = useFormWithCloseProtection({
     mode: 'onChange',

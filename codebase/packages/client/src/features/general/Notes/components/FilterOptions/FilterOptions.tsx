@@ -53,7 +53,7 @@ const FilterOption: FC<FilterOptionProps> = ({ onSearch, setSearchValueFilterOpt
           ...(focus ? { padding: '10px 20px 10px 16px' } : { padding: '0px' }),
           ...(focus ? { borderRadius: '50px' } : { transitionDelay: '.3s' }),
         }}
-        onChange={(e) => setSearchValueFilterOption(() => e.target.value)}
+        onChange={(e) => setSearchValueFilterOption(e.target.value)}
         visibleSettings={false}
         setSearchValueFilterOption={setSearchValueFilterOption}
       />

@@ -4,29 +4,30 @@ import mergeRefs from 'react-merge-refs';
 import debounce from 'lodash.debounce';
 import { useFormContainer } from 'components/Form/context/input';
 import { Icon } from 'components/Icon';
+import { SearchOption } from '../../config/enum';
 
-type Props<T> = {
+type Props = {
   disabled?: boolean;
   value?: string;
   name?: string;
   placeholder?: string;
   styles?: Styles | Rule;
   onSearch: (e: ChangeEvent<HTMLInputElement>) => void;
-  onChange: (item: any) => void;
-  onDelete?: (item: any) => void;
+  onChange: (item: object) => void;
+  onDelete?: (item: string) => void;
   onClear?: () => void;
-  renderOption: (item: any) => JSX.Element;
+  renderOption: (item) => JSX.Element;
   onBlur?: () => void;
   domRef?: RefObject<any>;
   isValid?: boolean;
   id?: string;
-  options?: Array<T>;
-  selected?: Array<{ label: string; value: string }> | T;
+  options?: Array<object>;
+  selected?: Array<{ label: string; value: string }>;
   multiple?: boolean;
-  searchOption?: any;
+  searchOption?: SearchOption;
 };
 
-const SearchInput: FC<Props<any>> = ({
+const SearchInput: FC<Props> = ({
   domRef,
   placeholder = '',
   styles = {},
@@ -38,11 +39,11 @@ const SearchInput: FC<Props<any>> = ({
   name,
   value,
   isValid = true,
-  selected,
+  selected = [],
   options = [],
   disabled = false,
   renderOption,
-  multiple,
+  multiple = false,
   searchOption,
 }) => {
   const [currentValue, setCurrentValue] = useState(value);
@@ -51,6 +52,7 @@ const SearchInput: FC<Props<any>> = ({
   const handleSearch = useCallback(debounce(onSearch, 300), [searchOption]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    console.log('hello');
     setCurrentValue(e.target.value);
     handleSearch(e);
   };
@@ -92,9 +94,9 @@ const SearchInput: FC<Props<any>> = ({
             ))}
           </div>
         )}
-        {multiple && (
+        {multiple && !!selected?.length && (
           <>
-            {selected.map((item): any => (
+            {selected.map((item) => (
               <div key={item.value} className={css(selectedStyle)}>
                 <span className={css({ marginRight: '10px' })}>{`${item.label}`}</span>
                 <div
@@ -106,11 +108,9 @@ const SearchInput: FC<Props<any>> = ({
                 </div>
               </div>
             ))}
-            {!!selected.length && (
-              <span data-test-id='clear-button' className={css(cleanAllStyle)} onClick={onClear}>
-                Clear all
-              </span>
-            )}
+            <span data-test-id='clear-button' className={css(cleanAllStyle)} onClick={onClear}>
+              Clear all
+            </span>
           </>
         )}
       </div>
@@ -134,7 +134,7 @@ const optionStyle: Rule = ({ theme }) => ({
 const optionsWrapperStyles: Rule = ({ theme }) => ({
   display: 'block',
   position: 'absolute',
-  width: 'clamp(100%, calc(100vw - 10vh), 560px)',
+  width: 'clamp(100%, calc(100vw - 6vh), 560px)',
   top: 0,
   // @ts-ignore
   border: `2px solid ${theme.colors.lightGray}`,
@@ -163,7 +163,7 @@ const inputStyles: CreateRule<{ isValid: boolean }> =
 
 const relativeStyles: Rule = {
   //@ts-ignore
-  width: 'clamp(100%, calc(100vw - 10vh), 560px)',
+  width: 'clamp(100%, calc(100vw - 6vh), 560px)',
   position: 'relative',
   display: 'flex',
   justifyContent: 'flex-start',
@@ -201,6 +201,7 @@ const cleanAllStyle: Rule = ({ theme }) => ({
   letterSpacing: '0px',
   color: theme.colors.tescoBlue,
   cursor: 'pointer',
+  zIndex: 2,
 });
 
 export default SearchInput;

@@ -55,12 +55,7 @@ const PreviousReviewFilesModal: FC<CompletedReviewsModalProps> = ({ onClose }) =
     >
       <div className={css(wrapperStyle)}>
         <div className={css(containerStyle)}>
-          <FormItem
-            withIcon={false}
-            marginBot={false}
-            customIcon
-            customIconInserted={<Icon graphic='search' iconStyles={iconStyles} />}
-          >
+          <FormItem withIcon={false} marginBot={false} customIcon={<Icon graphic='search' iconStyles={iconStyles} />}>
             <Input onChange={handleChangeFilter} placeholder={'Search review'} />
           </FormItem>
           {filteredReviews &&

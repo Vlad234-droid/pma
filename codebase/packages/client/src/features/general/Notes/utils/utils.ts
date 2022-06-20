@@ -1,4 +1,4 @@
-import { NEW_FOLDER_ID, AllNotesFolderId, AllNotesFolderIdTEAM, filterNotesHandler } from 'utils/note';
+import { AllNotesFolderId, AllNotesFolderIdTEAM, filterNotesHandler } from 'utils/note';
 import { NotesActions as NotesActionsToDispatch } from '@pma/store';
 
 export const prepareData = (folders, notesSelect, setFoldersWithNotes, notesFolderColleagueData) => {

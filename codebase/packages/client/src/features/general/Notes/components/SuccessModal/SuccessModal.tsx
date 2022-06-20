@@ -32,7 +32,7 @@ const SuccessModal: FC<SuccessModalProps> = ({ folder, onOk }) => {
             <Trans>Done</Trans>!
           </div>
           <div className={css(infoStyle)}>
-            {!folder ? (
+            {folder ? (
               <Trans id='your_note_has_been_added_into_the_folder' folder={folder}>
                 <>
                   Your note has been added into

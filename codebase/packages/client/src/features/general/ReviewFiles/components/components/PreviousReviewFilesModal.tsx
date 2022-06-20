@@ -117,12 +117,7 @@ const PreviousReviewFilesModal: FC<Props> = ({ onOverlayClick, colleagueUUID, re
             onClose={() => setFileUuidToRemove('')}
           />
         )}
-        <FormItem
-          withIcon={false}
-          marginBot={false}
-          customIcon
-          customIconInserted={<Icon graphic='search' iconStyles={iconStyles} />}
-        >
+        <FormItem withIcon={false} marginBot={false} customIcon={<Icon graphic='search' iconStyles={iconStyles} />}>
           <Input onChange={handleChangeFilter} placeholder={'Search file'} />
         </FormItem>
         {!readonly && (

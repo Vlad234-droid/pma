@@ -1,20 +1,19 @@
 import React, { FC, useMemo } from 'react';
-import { useSelector } from 'react-redux';
+import { colleagueUUIDSelector, getColleagueByUuidSelector, notesFolderTeamDataSelector } from '@pma/store';
 import get from 'lodash.get';
-import { getColleagueByUuidSelector } from '@pma/store';
 import { theme, useStyle } from '@pma/dex-wrapper';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
+import { useSelector } from 'react-redux';
 
 import { GenericItemField } from 'components/GenericForm';
 import { Input, Item, Select, Textarea } from 'components/Form';
-
 import { useTranslation } from 'components/Translation';
 import { ButtonsWrapper } from 'components/ButtonsWrapper';
-import { NEW_FOLDER_ID } from 'utils';
-import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
 import { ColleaguesFinder } from 'features/general/GiveFeedBack';
 import { schemaTEAMNotes } from '../../schema';
+import { NEW_FOLDER_ID } from 'utils';
+import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
 
 export const MODAL_WRAPPER = 'modal-wrapper';
 
@@ -22,13 +21,13 @@ type Props = {
   onSubmit: (data: any) => void;
   onClose: () => void;
   defaultValues: any;
-  colleagueUuid: string;
-  folders: Array<{ id: string; title: string }>;
 };
 
-const AddNoteModal: FC<Props> = ({ onSubmit, onClose, defaultValues, folders, colleagueUuid }) => {
+const AddNoteModal: FC<Props> = ({ onSubmit, onClose, defaultValues }) => {
   const { css } = useStyle();
   const { t } = useTranslation();
+  const colleagueUuid = useSelector(colleagueUUIDSelector);
+  const folders = useSelector(notesFolderTeamDataSelector(colleagueUuid, false)) || [];
 
   const methods = useFormWithCloseProtection({
     mode: 'onChange',

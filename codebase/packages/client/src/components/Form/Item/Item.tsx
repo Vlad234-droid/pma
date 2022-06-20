@@ -1,4 +1,4 @@
-import React, { FC, useRef, useState } from 'react';
+import React, { FC, ReactNode, useRef, useState, CSSProperties } from 'react';
 import { colors, CreateRule, Rule, Styles, useStyle } from '@pma/dex-wrapper';
 
 import { Icon } from 'components/Icon';
@@ -8,16 +8,15 @@ import Provider from '../context/input';
 export type ItemProps = {
   label?: string;
   withIcon?: boolean;
-  labelCustomStyle?: Styles | Rule;
+  labelCustomStyle?: Styles | Rule | CSSProperties | {};
   errormessage?: string;
   marginBot?: boolean;
-  customIcon?: boolean;
-  searchIcon?: boolean;
-  customIconInserted?: any;
+  customIcon?: ReactNode;
   onFocus?: () => void;
   focus?: boolean;
   onKeyDown?: (e: KeyboardEvent) => void;
   testId?: string;
+  iconCustomStyles?: Styles | Rule | CSSProperties | {};
 };
 
 export const Item: FC<ItemProps> = ({
@@ -27,13 +26,12 @@ export const Item: FC<ItemProps> = ({
   withIcon = true,
   errormessage = '',
   marginBot = true,
-  customIcon = false,
-  searchIcon = false,
-  customIconInserted,
+  customIcon,
   focus,
   onFocus,
   onKeyDown,
   testId = 'item',
+  iconCustomStyles = {},
 }) => {
   const { css } = useStyle();
   const [recordingState, setRecordingState] = useState(false);
@@ -82,13 +80,13 @@ export const Item: FC<ItemProps> = ({
         )}
         {customIcon && (
           <span
-            className={css(!searchIcon ? IconStyle : SearchIconStyle)}
+            className={css(IconStyle, iconCustomStyles)}
             onClick={() => {
               setInputFocus();
               onFocus && onFocus();
             }}
           >
-            {customIconInserted}
+            {customIcon}
           </span>
         )}
       </div>
@@ -135,13 +133,6 @@ const errorMessageStyle: Rule = ({ theme }) => ({
 const IconStyle: Rule = {
   position: 'absolute',
   top: '10px',
-  right: '12px',
-  cursor: 'pointer',
-};
-
-const SearchIconStyle: Rule = {
-  position: 'absolute',
-  top: '10px',
-  left: '17.67px',
+  left: '12px',
   cursor: 'pointer',
 };

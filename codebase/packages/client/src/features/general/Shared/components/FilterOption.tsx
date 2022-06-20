@@ -80,14 +80,13 @@ export const FilterOption: FC<FilterOptionProps> = ({
           data-test-id={wrapperInputId}
           className={css({
             width: focus ? '240px' : '38px',
-            transition: '.3s all ease',
+            transition: '.4s width ease',
             marginLeft: !marginLeftAuto ? '5px' : 'auto',
           })}
         >
           <Item
             withIcon={withIcon}
             marginBot={marginBot}
-            customIcon={customIcon}
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
                 onFocus && onFocus(false);
@@ -96,7 +95,7 @@ export const FilterOption: FC<FilterOptionProps> = ({
             onFocus={() => {
               onFocus && onFocus(true);
             }}
-            customIconInserted={customIcon && <Icon graphic='search' iconStyles={iconStyle} />}
+            customIcon={customIcon && <Icon graphic='search' iconStyles={iconStyle} />}
             focus={focus}
           >
             <Input
@@ -112,10 +111,13 @@ export const FilterOption: FC<FilterOptionProps> = ({
               }}
               customStyles={{
                 ...customStyles,
+                ...(!focus
+                  ? { borderRadius: '20px', paddingLeft: '0px', transitionDelay: '0s' }
+                  : { borderRadius: '20px', paddingLeft: '30px', transitionDelay: '.3s' }),
+
                 background: theme.colors.white,
                 height: '38px',
                 border: '2px solid rgb(0, 83, 159)',
-                ...(!focus && { borderRadius: '50%', padding: '0px' }),
               }}
               name={inputTestId}
             />

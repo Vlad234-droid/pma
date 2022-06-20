@@ -13,6 +13,8 @@ export const useUploadData = () => {
   }, []);
 
   useEffect(() => {
-    if (colleagueUuid) dispatch(NotesActionsToDispatch.getFoldersNotes({ ownerId: colleagueUuid }));
+    if (colleagueUuid) {
+      dispatch(NotesActionsToDispatch.getFoldersNotes({ ownerId: colleagueUuid }));
+    }
   }, [colleagueUuid]);
 };

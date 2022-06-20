@@ -41,7 +41,12 @@ const PersonalNote: FC = () => {
     navigate(buildPath(Page.NOTES));
   };
 
-  if (created) return <SuccessModal onOk={handleClose} />;
+  if (created)
+    return (
+      <WrapperModal onClose={handleClose} title={t('add_team_folder', 'Add team folder')}>
+        <SuccessModal onOk={handleClose} />
+      </WrapperModal>
+    );
 
   return (
     <WrapperModal onClose={handleClose} title={t('add_team_folder', 'Add team folder')}>
