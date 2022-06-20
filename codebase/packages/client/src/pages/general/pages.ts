@@ -25,7 +25,6 @@ import { EditTip, TipsAdministration } from './Tips';
 import UserObjectives from './UserObjectives';
 import PeopleTeam from './PeopleTeam';
 import Calibration from './Calibration';
-import AdministratorPage from './AdministratorPage';
 import RespondNewFeedback from './RespondNewFeedback';
 import TileReportStatistics from './TileReportStatistics';
 import CalibrationRatings from './CalibrationRatings';
@@ -332,14 +331,15 @@ const pages: Record<Page, PageComponent> = {
     perform: [role.TALENT_ADMIN, role.ADMIN, role.LINE_MANAGER, role.EXECUTIVE],
     tenant: [tenant.BANK, tenant.GENERAL],
   },
-  [Page.ADMINISTRATION]: {
-    Element: AdministratorPage,
-    title: 'Administrator page',
-    withHeader: true,
-    backPath: Page.CONTRIBUTION,
-    perform: [role.ADMIN],
-    tenant: [tenant.BANK, tenant.GENERAL],
-  },
+  // TODO: enabled when content of page meets business requirements
+  // [Page.ADMINISTRATION]: {
+  //   Element: AdministratorPage,
+  //   title: 'Administrator page',
+  //   withHeader: true,
+  //   backPath: Page.CONTRIBUTION,
+  //   perform: [role.ADMIN],
+  //   tenant: [tenant.BANK, tenant.GENERAL],
+  // },
   [Page.CALIBRATION_RATINGS]: {
     Element: CalibrationRatings,
     withHeader: false,

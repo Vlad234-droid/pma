@@ -37,7 +37,6 @@ enum Page {
   TIPS = 'tips',
   EDIT_TIP = 'tips/:tipUuid',
   REPORT = 'report',
-  ADMINISTRATION = 'administration',
   TILE_REPORT_STATISTICS = 'report/:type',
   CALIBRATION_RATINGS = 'calibration-ratings/:type',
   PREVIOUS_RATINGS_TILES = 'previous-ratings-tiles/:uuid',
@@ -45,6 +44,8 @@ enum Page {
   PREVIOUS_OBJECTIVES_RATINGS = 'previous-objective-ratings/:uuid',
   PREVIOUS_REVIEW_FORMS = 'previous-review-forms/:uuid',
   NOT_FOUND = '404',
+  // TODO: enabled when content of page meets business requirements
+  // ADMINISTRATION = 'administration',
 }
 
 type PageElement =

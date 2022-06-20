@@ -41,7 +41,7 @@ export const MenuDropdown: FC = () => {
       {isOpenDropdown && (
         <div className={css(menuDropdownStyle)} data-test-id={DROPDOWN_ITEMS_WRAPPER}>
           <CanPerform
-            perform={[role.ADMIN]}
+            perform={[role.COLLEAGUE]}
             yes={() => (
               <>
                 <Link
@@ -53,10 +53,11 @@ export const MenuDropdown: FC = () => {
                     {t('create_performance_cycle', 'Create performance cycle')}
                   </span>
                 </Link>
-                <Link to={buildPath(Page.ADMINISTRATION)} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>
-                  <Icon graphic={'configuration'} />
-                  <span className={css(itemSettingsTextStyle)}>{t('configurations', 'Configurations')}</span>
-                </Link>
+                {/*//TODO: enabled when content of page meets business requirements.*/}
+                {/*<Link to={buildPath(Page.ADMINISTRATION)} className={css(itemSettingsStyle, itemSettingsBorderStyle)}>*/}
+                {/*  <Icon graphic={'configuration'} />*/}
+                {/*  <span className={css(itemSettingsTextStyle)}>{t('configurations', 'Configurations')}</span>*/}
+                {/*</Link>*/}
               </>
             )}
           />

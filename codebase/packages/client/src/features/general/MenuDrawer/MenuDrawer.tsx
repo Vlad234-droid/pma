@@ -103,6 +103,7 @@ export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
         </div>
         <div className={css(menuDrawerSettingsStyle)}>
           <CanPerform perform={[role.TALENT_ADMIN, role.ADMIN, role.PROCESS_MANAGER]} yes={() => <MenuDropdown />} />
+
           <div className={css(itemSettingsBorderStyle, { marginLeft: '20px' })} />
           <Link to={buildPath(Page.SETTINGS)} className={css(itemSettingsStyle)}>
             <Icon graphic={'settingsGear'} />
