@@ -36,6 +36,8 @@ const ModalDownloadFeedback: FC<ModalDownloadFeedbackProps> = ({
 
   const [instance, updateInstance] = usePDF({ document });
 
+  const defaultBlobSize = 9666;
+
   useEffect(() => {
     const update = async () => {
       await updateInstance();
@@ -110,7 +112,12 @@ const ModalDownloadFeedback: FC<ModalDownloadFeedbackProps> = ({
               </Button>
 
               <IconButton
-                isDisabled={!formState.isValid || selected.length <= 0}
+                isDisabled={
+                  !formState.isValid ||
+                  (instance.blob && instance.blob.size === defaultBlobSize) ||
+                  instance.loading ||
+                  selected.length <= 0
+                }
                 customVariantRules={{ default: iconBtnStyle, disabled: iconBtnStyleDisabled }}
                 graphic='arrowRight'
                 iconProps={{ invertColors: true }}
@@ -120,7 +127,7 @@ const ModalDownloadFeedback: FC<ModalDownloadFeedbackProps> = ({
                   setModalSuccess(true);
                 }}
               >
-                {instance.loading ? (
+                {instance.loading && instance.blob && instance.blob.size === defaultBlobSize ? (
                   <Trans i18nKey='loading'>Loading...</Trans>
                 ) : (
                   <Trans i18nKey='download'>Download</Trans>

@@ -47,12 +47,16 @@ const FeedbackDocument: FC<Props> = ({ items }) => {
               </View>
             </View>
             <View>
-              {feedback.feedbackItems.map((val) => (
-                <View key={val.code}>
-                  <Text style={styles.question}>{val.question}</Text>
-                  <Text style={styles.answer}>{val.content}</Text>
-                </View>
-              ))}
+              {feedback.feedbackItems.map((val) => {
+                if (typeof val.question === 'undefined') return;
+
+                return (
+                  <View key={val.code}>
+                    <Text style={styles.question}>{val.question}</Text>
+                    <Text style={styles.answer}>{val.content}</Text>
+                  </View>
+                );
+              })}
             </View>
           </View>
         ))}
