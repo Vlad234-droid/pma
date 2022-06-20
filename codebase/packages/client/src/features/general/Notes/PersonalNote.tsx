@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Rule, useStyle } from '@pma/dex-wrapper';
@@ -52,6 +52,7 @@ const PersonalNote: FC = () => {
     const note = {
       ownerColleagueUuid: colleagueUuid,
       folder: folderTitle && folder !== AllNotesFolderId ? folder : undefined,
+      updateTime: new Date(),
       ...rest,
     };
 
@@ -61,36 +62,47 @@ const PersonalNote: FC = () => {
         title: folderTitle,
         parentFolderUuid: personalFolderUuid,
       };
-      if (uuid === 'new') {
-        dispatch(
-          NotesActions.createFolderAndNote({
-            note: { ...note, status: NotesStatus.CREATED },
-            folder,
-          }),
-        );
-      } else {
-        dispatch(
-          NotesActions.updateNote({
-            note: { ...note, updateTime: new Date() },
-            folder,
-          }),
-        );
-      }
+
+      dispatch(
+        NotesActions.createFolderAndNote({
+          note: { ...note, updateTime: new Date() },
+          folder,
+        }),
+      );
     } else {
-      if (uuid === 'new') {
-        dispatch(NotesActions.createNote({ ...note, status: NotesStatus.CREATED }));
-      } else {
-        dispatch(
-          NotesActions.updateNote({
-            updateTime: new Date(),
-            parentFolderUuid: personalFolderUuid,
-            ...rest,
-          }),
-        );
-      }
+      dispatch(NotesActions.createNote({ ...note, status: NotesStatus.CREATED }));
     }
     folderTitle ? setFolder(folderTitle) : setFolderName(folder);
   };
+
+  const handleUpdate = (data) => {
+    const { folderTitle, folder, ...rest } = data;
+
+    const note = {
+      ownerColleagueUuid: colleagueUuid,
+      folder: folderTitle && folder !== AllNotesFolderId ? folder : undefined,
+      ...rest,
+    };
+
+    if (folderTitle) {
+      const folder = {
+        ownerColleagueUuid: colleagueUuid,
+        title: folderTitle,
+        parentFolderUuid: personalFolderUuid,
+      };
+      dispatch(
+        NotesActions.createFolderAndUpdateNotes({
+          note,
+          folder,
+        }),
+      );
+    } else {
+      dispatch(NotesActions.updateNote(note));
+    }
+    folderTitle ? setFolder(folderTitle) : setFolderName(folder);
+  };
+
+  const handleSubmit = useCallback(uuid === 'new' ? handleCreate : handleUpdate, [uuid]);
 
   const handleClose = () => {
     dispatch(NotesActions.changeCreatedMeta(false));
@@ -118,7 +130,7 @@ const PersonalNote: FC = () => {
             }}
           />
           <PersonalNoteForm
-            onSubmit={handleCreate}
+            onSubmit={handleSubmit}
             onClose={handleClose}
             defaultValues={defaultValues}
             folders={folders}

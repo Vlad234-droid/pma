@@ -60,7 +60,7 @@ export default createReducer(initialState)
   }))
   .handleAction(createNote.success, (state) => ({
     ...state,
-    meta: { ...state.meta, loading: false, loaded: true },
+    meta: { ...state.meta, loading: false, loaded: true, created: true },
   }))
   .handleAction(createFolderAndNote.request, (state) => ({
     ...state,
@@ -100,7 +100,7 @@ export default createReducer(initialState)
   }))
   .handleAction(updateNote.success, (state) => ({
     ...state,
-    meta: { ...state.meta, loading: false, loaded: true },
+    meta: { ...state.meta, loading: false, loaded: true, created: true },
   }))
   .handleAction(updateNote.failure, (state, { payload }) => ({
     ...state,
