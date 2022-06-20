@@ -10,6 +10,7 @@ export type Review = {
   reviewType: ReviewType;
   startTime: string;
   status: Status;
+  summaryStatus: Status;
   type: TimelineType;
   uuid: string;
   properties: Record<string, string> | any;

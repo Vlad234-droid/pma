@@ -182,7 +182,7 @@ const CreateUpdateObjectives: FC<CreateUpdateObjectivesModalProps> = ({ onClose,
     dispatch(ReviewsActions.getReviews({ pathParams }));
   }, []);
 
-  if (timelineObjective?.status === Status.WAITING_FOR_APPROVAL && schemaLoaded && reviewLoaded) {
+  if (timelineObjective?.summaryStatus === Status.WAITING_FOR_APPROVAL && schemaLoaded && reviewLoaded) {
     return (
       <SuccessModal
         title={t('objectives_sent', 'Objectives sent')}

@@ -11,7 +11,7 @@ import { SearchOption } from 'config/enum';
 type Props = {
   onSelect: (person: any) => void;
   selected?: any;
-  value: string;
+  value?: string;
   error?: string;
   options?: Record<string, string>;
   searchOption?: SearchOption;
@@ -27,6 +27,7 @@ const ColleaguesFinder: FC<Props> = ({
   searchOption = SearchOption.NAME,
   customStyle = {},
   inputStyles = {},
+  selected = [],
 }) => {
   const { css } = useStyle();
   const { t } = useTranslation();
@@ -49,7 +50,7 @@ const ColleaguesFinder: FC<Props> = ({
           onSearch={(e) => handleSearchColleagues(e.target.value, searchOption)}
           placeholder={t('search', 'Search')}
           options={value ? [] : colleagues}
-          selected={[]}
+          selected={selected}
           value={value}
           disabled={Boolean(value)}
           renderOption={(item) => (

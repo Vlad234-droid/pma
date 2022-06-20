@@ -81,7 +81,7 @@ const ReviewBlock: FC<{ canShow: Boolean }> = ({ canShow }) => {
       <div data-test-id='personal' className={css(basicTileStyle)}>
         <ReviewWidget
           reviewType={ReviewType.MYR}
-          status={midYearReview?.status}
+          status={midYearReview?.summaryStatus}
           startTime={midYearReview?.startTime}
           endTime={midYearReview?.endTime}
           lastUpdatedTime={midYearReview?.lastUpdatedTime}
@@ -92,7 +92,7 @@ const ReviewBlock: FC<{ canShow: Boolean }> = ({ canShow }) => {
       <div data-test-id='feedback' className={css(basicTileStyle)}>
         <ReviewWidget
           reviewType={ReviewType.EYR}
-          status={endYearReview?.status}
+          status={endYearReview?.summaryStatus}
           startTime={endYearReview?.startTime}
           endTime={endYearReview?.endTime}
           lastUpdatedTime={endYearReview?.lastUpdatedTime}
@@ -129,7 +129,7 @@ const MyObjectives: FC = () => {
   const { loaded: timelinesLoaded } = useSelector(timelinesMetaSelector());
   const schema = useSelector(getReviewSchema(ReviewType.OBJECTIVE));
   const { components = [], markup = { max: 0, min: 0 } } = schema;
-  const { descriptions, startDates, statuses } = useSelector(getTimelineSelector(colleagueUuid)) || {};
+  const { descriptions, startDates, summaryStatuses } = useSelector(getTimelineSelector(colleagueUuid)) || {};
   const timelineTypes = useSelector(timelineTypesAvailabilitySelector(colleagueUuid)) || {};
   const timelineObjective = useSelector(getTimelineByCodeSelector(ReviewType.OBJECTIVE, USER.current)) || {};
 
@@ -242,7 +242,7 @@ const MyObjectives: FC = () => {
                     mainTitle={t('performance_timeline_title', 'Your Contribution timeline')}
                     titles={descriptions}
                     descriptions={startDates}
-                    statuses={statuses}
+                    statuses={summaryStatuses}
                   />
                 </div>
               )}
@@ -350,7 +350,7 @@ const MyObjectives: FC = () => {
                 mainTitle={t('performance_timeline_title', 'Your Contribution timeline')}
                 titles={descriptions}
                 descriptions={startDates}
-                statuses={statuses}
+                statuses={summaryStatuses}
               />
             </div>
           )}

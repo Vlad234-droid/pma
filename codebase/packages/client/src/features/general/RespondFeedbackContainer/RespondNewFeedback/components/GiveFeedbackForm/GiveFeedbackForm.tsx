@@ -8,7 +8,7 @@ import get from 'lodash.get';
 import { Trans, useTranslation } from 'components/Translation';
 import { TileWrapper } from 'components/Tile';
 import { Attention, Field, Item, Textarea } from 'components/Form';
-import { ColleaguesFinder } from 'features/general/GiveFeedBack/components';
+import { ColleaguesFinder } from 'components/ColleaguesFinder';
 import { createGiveFeedbackSchema } from 'features/general/GiveFeedBack/config';
 import FeedbackInfo from '../FeedbackInfo';
 import { GiveFeedbackFormProps } from '../../type';

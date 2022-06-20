@@ -13,7 +13,6 @@ import {
   TimelineActions,
 } from '@pma/store';
 import DescriptionBlock from 'components/DescriptionBlock';
-import { Page } from 'pages';
 import { buildPath } from 'features/general/Routes';
 import { paramsReplacer } from 'utils';
 import { Icon } from 'components/Icon';
@@ -23,6 +22,7 @@ import { TFunction, Trans, useTranslation } from 'components/Translation';
 import Spinner from 'components/Spinner';
 import GoalInfo from './components/GoalInfo';
 import usePDPSchema from './hooks/usePDPSchema';
+import { Page } from 'pages/general/types';
 
 export const TEST_ID = 'pdp-page';
 
@@ -52,11 +52,20 @@ const PersonalDevelopmentPlan: FC = () => {
 
   const documentFormElements = formElements.map((el) => ({ label: el['label'].replace(/\*./g, '') }));
 
+  const label_order = ['wiil_be_able_to', 'how_will_i_go', 'succeeded_when', 'expiration_date'];
+
   const documentFormItems = pdpSelector.map((el, idx) => {
+    const sorted = Object.keys(el.properties)
+      .sort((a, b) => label_order.indexOf(a) - label_order.indexOf(b))
+      .reduce((accumulator, key) => {
+        accumulator[key] = el.properties[key];
+        return accumulator;
+      }, {});
+
     return {
       uuid: el.uuid,
       number: pdpSelector[idx]?.number,
-      items: Object.values(el?.properties).map((value) => value),
+      items: Object.values(sorted).map((value) => value),
     };
   });
 

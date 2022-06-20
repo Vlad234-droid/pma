@@ -9,9 +9,10 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Trans, useTranslation } from 'components/Translation';
 import { TileWrapper } from 'components/Tile';
 import { Attention, Field, Item, Textarea } from 'components/Form';
-import { ColleaguesFinder, FeedbackInfo } from '../../components';
+import { FeedbackInfo } from '../../components';
 import { ButtonsWrapper } from 'components/ButtonsWrapper';
 import { InputWithDropdown } from 'components/InputWithDropdown';
+import { ColleaguesFinder } from 'components/ColleaguesFinder';
 
 import { GiveFeedbackType } from '../../type';
 import { createGiveFeedbackSchema } from '../../config';
@@ -118,7 +119,7 @@ const GiveFeedbackForm: FC<Props> = ({ onSubmit, defaultValues, currentColleague
               value={getColleagueName(selectedColleague)}
               error={get(errors, 'targetColleagueUuid.message')}
               searchOption={active}
-              customStyle={{ marginTop: '0px', width: '100%' }}
+              customStyles={{ marginTop: '0px', width: '100%' }}
               inputStyles={{
                 borderRadius: uuid === 'new' && !targetColleagueUuid ? '25px 0px 0px 25px !important' : '50px',
               }}

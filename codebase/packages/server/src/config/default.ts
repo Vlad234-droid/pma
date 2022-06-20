@@ -4,6 +4,7 @@ export const defaultConfig = {
   port: 9000,
   loggerRootName: 'server',
   loggerDefaultLevel: 'info' as keyof typeof NodeJS.LogLevel,
+  loggerDefaultTheme: 'DefaultTheme',
   oidcGroupFiltersRegex: [/GG-UK-TescoGlobal-(-[\w\d]+)+/],
   applicationCookieParserSecret: 'tesco.pma.cookie.secret',
   applicationUserDataCookieName: 'tesco.pma.userinfo',

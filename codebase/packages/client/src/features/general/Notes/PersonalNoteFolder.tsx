@@ -40,10 +40,15 @@ const PersonalNoteFolder: FC = () => {
     navigate(buildPath(Page.NOTES));
   };
 
-  if (created) return <SuccessModal onOk={handleClose} />;
+  if (created)
+    return (
+      <WrapperModal onClose={handleClose} title={t('add_a_folder', 'Add a folder')}>
+        <SuccessModal onOk={handleClose} />
+      </WrapperModal>
+    );
 
   return (
-    <WrapperModal onClose={handleClose} title={t('add_a_note', 'Add a note')}>
+    <WrapperModal onClose={handleClose} title={t('add_a_folder', 'Add a folder')}>
       <div className={css(WrapperModalGiveFeedbackStyle)} data-test-id={MODAL_WRAPPER}>
         <div>
           <Notification

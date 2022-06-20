@@ -33,8 +33,7 @@ const Search: FC<Props> = ({ focus, onFocus, iconStyles, onSearch, value }) => {
       <FormItem
         withIcon={false}
         marginBot={false}
-        customIcon
-        customIconInserted={<Icon graphic='search' iconStyles={iconStyles} />}
+        customIcon={<Icon graphic='search' iconStyles={iconStyles} />}
         focus={focus}
         onFocus={onFocus}
       >

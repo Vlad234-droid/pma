@@ -12,7 +12,7 @@ jest.mock('react-router-dom', () => ({
 }));
 
 describe('RespondNewFeedback component', () => {
-  it('render responede feedback wrapper', async () => {
+  it('render respond feedback wrapper', async () => {
     const { getByTestId } = render(<RespondNewFeedback />);
     const form = getByTestId('form_wrapper');
     expect(form).toBeInTheDocument();

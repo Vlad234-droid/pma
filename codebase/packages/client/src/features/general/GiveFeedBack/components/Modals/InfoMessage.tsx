@@ -40,21 +40,21 @@ const InfoMessage: FC<InfoModalProps> = ({ goBack }) => {
           </Trans>{' '}
           <i>&apos;on Monday when we were working on the customer service desk&apos;</i> or{' '}
           <i>&apos;in last week&apos;s team meeting&apos;.</i>
-          <li>
-            <Trans i18nKey='give_great_examples'>
-              Give great examples. Describe what you observed, assumptions aren&apos;t helpful. For example
-            </Trans>
-            , <i>&apos;I noticed you&apos;ve been late twice this week&apos;</i> is more helpful than{' '}
-            <i>&apos;you&apos;re never on time&apos;.</i>
-          </li>
-          <li>
-            <Trans i18nKey='explain_the_impact'>
-              Explain the impact. Sharing the impact your examples had gives the receiver an opportunity to reflect and
-              think about specific actions they could take going forward. An example of impact
-            </Trans>{' '}
-            <i>&apos;this meant the customer received great service&apos;</i> or{' '}
-            <i>&apos;this meant the rest of the team stayed late&apos;.</i>
-          </li>
+        </li>
+        <li>
+          <Trans i18nKey='give_great_examples'>
+            Give great examples. Describe what you observed, assumptions aren&apos;t helpful. For example
+          </Trans>
+          , <i>&apos;I noticed you&apos;ve been late twice this week&apos;</i> is more helpful than{' '}
+          <i>&apos;you&apos;re never on time&apos;.</i>
+        </li>
+        <li>
+          <Trans i18nKey='explain_the_impact'>
+            Explain the impact. Sharing the impact your examples had gives the receiver an opportunity to reflect and
+            think about specific actions they could take going forward. An example of impact
+          </Trans>{' '}
+          <i>&apos;this meant the customer received great service&apos;</i> or{' '}
+          <i>&apos;this meant the rest of the team stayed late&apos;.</i>
         </li>
       </ol>
 

@@ -5,7 +5,7 @@ import { ColleaguesActions } from '@pma/store';
 import { useDispatch } from 'react-redux';
 
 import { Item, Field } from 'components/Form';
-import { ColleaguesFinder } from 'features/general/GiveFeedBack/components';
+import { ColleaguesFinder } from 'components/ColleaguesFinder';
 import Datepicker from 'components/Datepicker';
 import { useTranslation } from 'components/Translation';
 import { InputWithDropdown } from 'components/InputWithDropdown';
@@ -50,7 +50,7 @@ const SearchPart: FC<Props> = ({ setValue, selectedColleague, date, setError, fo
             selected={[]}
             value={getColleagueName(selectedColleague)}
             searchOption={active}
-            customStyle={{ marginTop: '0px', width: '100%' }}
+            customStyles={{ marginTop: '0px', width: '100%' }}
             inputStyles={{
               borderRadius: '25px 0px 0px 25px !important',
             }}

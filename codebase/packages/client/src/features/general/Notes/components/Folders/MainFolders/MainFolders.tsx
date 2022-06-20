@@ -15,7 +15,7 @@ import {
 
 import WrapperModal from 'features/general/Modal/components/WrapperModal';
 import NoteDetail from '../../NoteDetail';
-import { useUploadData } from '../../../hooks/useUploadData';
+import { useUploadData } from 'features/general/Notes/hooks/useUploadData';
 import { ConfirmModal, ConfirmModalWithDropDown } from 'features/general/Modal';
 import { useTranslation } from 'components/Translation';
 import { PersonalFolders, PersonalsTeamFolders, SelectedFolder, SelectedTEAMFolder } from '../../index';
@@ -62,6 +62,8 @@ const MainFolders: FC<MainFolderProps> = ({ isLineManager }) => {
     archiveMode,
     setArchiveMode,
     selectedNoteToEdit,
+    setSelectedTEAMNoteToEdit,
+    setSelectedNoteToEdit,
   } = useNotesContainer();
 
   const colleagueUuid = useSelector(colleagueUUIDSelector);
@@ -71,14 +73,15 @@ const MainFolders: FC<MainFolderProps> = ({ isLineManager }) => {
   const notesFolderTeamData = useSelector(notesFolderTeamDataSelector(colleagueUuid, archiveMode.team)) || [];
 
   useEffect(() => {
-    prepareData(folders, notesSelect, setFoldersWithNotes, notesFolderColleagueData);
-  }, [folders, notesSelect, archiveMode.user]);
-
-  useEffect(() => {
     if (isLineManager && folders !== null && notesSelect !== null) {
       setFoldersWithNotesTEAM(() => notesFolderTeamData);
     }
-  }, [folders, notesSelect, archiveMode.team, notesFolderTeamData]);
+    // }, [folders, notesSelect, archiveMode.team, notesFolderTeamData]);
+  }, [folders, notesSelect, archiveMode.team]);
+
+  useEffect(() => {
+    prepareData(folders, notesSelect, setFoldersWithNotes, notesFolderColleagueData);
+  }, [folders, notesSelect, archiveMode.user]);
 
   useEffect(() => {
     isActiveSearchBar(
@@ -359,7 +362,10 @@ const MainFolders: FC<MainFolderProps> = ({ isLineManager }) => {
     setSelectedTEAMFolder((prev) => disableFolder(prev));
   };
 
-  const cancelViewNote = () => undefined;
+  const cancelViewNote = () => {
+    setSelectedTEAMNoteToEdit(null);
+    setSelectedNoteToEdit(null);
+  };
 
   if (selectedTEAMNoteToEdit || selectedNoteToEdit) {
     return (

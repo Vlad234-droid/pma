@@ -1,15 +1,15 @@
-import React, { FC, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, useParams } from 'react-router-dom';
+import React, { FC, useCallback, useState } from 'react';
 import { Rule, useStyle } from '@pma/dex-wrapper';
 import {
   colleagueUUIDSelector,
   teamFolderUuidSelector,
   NotesActions,
   personalNoteByUUIDSelector,
-  notesFolderTeamDataSelector,
   getNotesMetaSelector,
+  getFoldersSelector,
 } from '@pma/store';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import SuccessModal from './components/SuccessModal';
 import TeamNoteForm from './components/TeamNoteForm';
@@ -19,8 +19,9 @@ import { ArrowLeftIcon } from 'components/ArrowLeftIcon';
 import WrapperModal from 'features/general/Modal/components/WrapperModal';
 import { buildPath } from 'features/general/Routes';
 import { Page } from 'pages';
-import { AllNotesFolderId } from 'utils';
+import { AllNotesFolderId, NEW_FOLDER_ID } from 'utils';
 import { NotesStatus } from './type';
+import { useUploadData } from './hooks/useUploadData';
 
 export const MODAL_WRAPPER = 'modal-wrapper';
 
@@ -30,13 +31,15 @@ const PersonalNote: FC = () => {
   const { css } = useStyle();
   const { t } = useTranslation();
   const navigate = useNavigate();
-
   const dispatch = useDispatch();
+
   const teamFolderUuid = useSelector(teamFolderUuidSelector) || null;
   const colleagueUuid = useSelector(colleagueUUIDSelector);
-  const folders = useSelector(notesFolderTeamDataSelector(colleagueUuid, false)) || [];
+  const folders = useSelector(getFoldersSelector) || [];
   const defaultValues = useSelector(personalNoteByUUIDSelector(uuid as string));
   const { created } = useSelector(getNotesMetaSelector);
+
+  useUploadData();
 
   const setFolderName = (folder) => {
     if (folder === AllNotesFolderId || !folder) {
@@ -50,7 +53,9 @@ const PersonalNote: FC = () => {
     const { folderTitle, folder, ...rest } = data;
     const note = {
       ownerColleagueUuid: colleagueUuid,
-      folder: !folderTitle && folder !== AllNotesFolderId ? folder : undefined,
+      folderUuid: folder && folder !== AllNotesFolderId && folder !== NEW_FOLDER_ID ? folder : undefined,
+      updateTime: new Date(),
+      status: NotesStatus.CREATED,
       ...rest,
     };
 
@@ -60,27 +65,49 @@ const PersonalNote: FC = () => {
         title: folderTitle,
         parentFolderUuid: teamFolderUuid,
       };
-      if (uuid === 'new') {
-        dispatch(NotesActions.createFolderAndNote({ note: { ...note, status: NotesStatus.CREATED } }));
-      } else {
-        dispatch(NotesActions.updateNote({ note: { ...note, updateTime: new Date() }, folder }));
-      }
+
+      dispatch(NotesActions.createFolderAndNote({ note, folder }));
     } else {
-      if (uuid === 'new') {
-        dispatch(NotesActions.createNote({ ...note, status: NotesStatus.CREATED }));
-      } else {
-        dispatch(NotesActions.updateNote({ ...note, updateTime: new Date() }));
-      }
+      dispatch(NotesActions.createNote({ ...note }));
     }
     folderTitle ? setFolder(folderTitle) : setFolderName(folder);
   };
+
+  const handleUpdate = (data) => {
+    const { folderTitle, folder, ...rest } = data;
+    const note = {
+      ownerColleagueUuid: colleagueUuid,
+      folderUuid: folder && folder !== AllNotesFolderId && folder !== NEW_FOLDER_ID ? folder : undefined,
+      ...rest,
+    };
+
+    if (folderTitle) {
+      const folder = {
+        ownerColleagueUuid: colleagueUuid,
+        title: folderTitle,
+        parentFolderUuid: teamFolderUuid,
+      };
+
+      dispatch(NotesActions.createFolderAndUpdateNotes({ note, folder }));
+    } else {
+      dispatch(NotesActions.updateNote(note));
+    }
+    folderTitle ? setFolder(folderTitle) : setFolderName(folder);
+  };
+
+  const handleSubmit = useCallback(uuid === 'new' ? handleCreate : handleUpdate, [uuid]);
 
   const handleClose = () => {
     dispatch(NotesActions.changeCreatedMeta(false));
     navigate(buildPath(Page.NOTES));
   };
 
-  if (created) return <SuccessModal folder={folder} onOk={handleClose} />;
+  if (created)
+    return (
+      <WrapperModal onClose={handleClose} title={t('add_a_team_note', 'Add a team note')}>
+        <SuccessModal folder={folder} onOk={handleClose} />
+      </WrapperModal>
+    );
 
   return (
     <WrapperModal onClose={handleClose} title={t('add_a_team_note', 'Add a team note')}>
@@ -99,13 +126,7 @@ const PersonalNote: FC = () => {
               marginBottom: '20px',
             }}
           />
-          <TeamNoteForm
-            onSubmit={handleCreate}
-            onClose={handleClose}
-            defaultValues={defaultValues}
-            folders={folders}
-            colleagueUuid={colleagueUuid}
-          />
+          <TeamNoteForm onSubmit={handleSubmit} onClose={handleClose} defaultValues={defaultValues} />
           <ArrowLeftIcon onClick={handleClose} data-test-id='arrowRight' />
         </div>
       </div>

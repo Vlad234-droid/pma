@@ -8,6 +8,8 @@ const ctx = new chalk.Instance({ 'level': 3 });
  */
 export const AndroidStudioTheme: HighlightTheme = {
 
+   THEME_NAME: 'AndroidStudio',
+   
    'keyword': ctx.rgb(0xcc, 0x78, 0x32),
    'built_in': ctx.cyan,
    'type': ctx.rgb(0xff, 0xc6, 0x6d),

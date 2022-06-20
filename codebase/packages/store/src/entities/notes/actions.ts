@@ -30,6 +30,12 @@ export const createFolderAndNote = createAsyncAction(
   'notes/CREATE_FOLDER_AND_NOTE_FAILURE',
 )<any, any, Error>();
 
+export const createFolderAndUpdateNotes = createAsyncAction(
+  'notes/CREATE_FOLDER_AND_UPDATE_NOTE_REQUEST',
+  'notes/CREATE_FOLDER_AND_NOTE_UPDATE_SUCCESS',
+  'notes/CREATE_FOLDER_AND_NOTE_UPDATE_FAILURE',
+)<any, any, Error>();
+
 export const deleteNote = createAsyncAction(
   'notes/DELETE_NOTE_REQUEST',
   'notes/DELETE_NOTE_SUCCESS',
@@ -62,6 +68,7 @@ export const Actions = {
   getNotes: getNotes.request,
   createNote: createNote.request,
   createFolderAndNote: createFolderAndNote.request,
+  createFolderAndUpdateNotes: createFolderAndUpdateNotes.request,
   deleteNote: deleteNote.request,
   deleteFolder: deleteFolder.request,
   updateNote: updateNote.request,

@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Rule, useStyle } from '@pma/dex-wrapper';
@@ -7,8 +7,8 @@ import {
   NotesActions,
   personalFolderUuidSelector,
   personalNoteByUUIDSelector,
-  notesFolderColleagueDataSelector,
   getNotesMetaSelector,
+  getFoldersSelector,
 } from '@pma/store';
 
 import PersonalNoteForm from './components/PersonalNoteForm';
@@ -19,8 +19,9 @@ import WrapperModal from 'features/general/Modal/components/WrapperModal';
 import { buildPath } from 'features/general/Routes';
 import { Page } from 'pages';
 import { NotesStatus } from 'features/general/Notes/type';
-import { AllNotesFolderId } from 'utils';
-import SuccessModal from './components/SuccessModal';
+import { AllNotesFolderId, NEW_FOLDER_ID } from 'utils';
+import SuccessModal from './components/SuccessModal/SuccessModal';
+import { useUploadData } from './hooks/useUploadData';
 
 export const MODAL_WRAPPER = 'modal-wrapper';
 
@@ -35,8 +36,10 @@ const PersonalNote: FC = () => {
   const personalFolderUuid = useSelector(personalFolderUuidSelector) || null;
   const defaultValues = useSelector(personalNoteByUUIDSelector(uuid as string));
   const colleagueUuid = useSelector(colleagueUUIDSelector);
-  const folders = useSelector(notesFolderColleagueDataSelector(colleagueUuid, false)) || [];
+  const folders = useSelector(getFoldersSelector) || [];
   const { created } = useSelector(getNotesMetaSelector);
+
+  useUploadData();
 
   const setFolderName = (folder) => {
     if (folder === AllNotesFolderId || !folder) {
@@ -51,7 +54,9 @@ const PersonalNote: FC = () => {
 
     const note = {
       ownerColleagueUuid: colleagueUuid,
-      folder: folderTitle && folder !== AllNotesFolderId ? folder : undefined,
+      folderUuid: folder && folder !== AllNotesFolderId && folder !== NEW_FOLDER_ID ? folder : undefined,
+      updateTime: new Date(),
+      status: NotesStatus.CREATED,
       ...rest,
     };
 
@@ -61,43 +66,59 @@ const PersonalNote: FC = () => {
         title: folderTitle,
         parentFolderUuid: personalFolderUuid,
       };
-      if (uuid === 'new') {
-        dispatch(
-          NotesActions.createFolderAndNote({
-            note: { ...note, status: NotesStatus.CREATED },
-            folder,
-          }),
-        );
-      } else {
-        dispatch(
-          NotesActions.updateNote({
-            note: { ...note, updateTime: new Date() },
-            folder,
-          }),
-        );
-      }
+
+      dispatch(
+        NotesActions.createFolderAndNote({
+          note,
+          folder,
+        }),
+      );
     } else {
-      if (uuid === 'new') {
-        dispatch(NotesActions.createNote({ ...note, status: NotesStatus.CREATED }));
-      } else {
-        dispatch(
-          NotesActions.updateNote({
-            updateTime: new Date(),
-            parentFolderUuid: personalFolderUuid,
-            ...rest,
-          }),
-        );
-      }
+      dispatch(NotesActions.createNote({ ...note }));
     }
     folderTitle ? setFolder(folderTitle) : setFolderName(folder);
   };
+
+  const handleUpdate = (data) => {
+    const { folderTitle, folder, ...rest } = data;
+
+    const note = {
+      ownerColleagueUuid: colleagueUuid,
+      folderUuid: folder && folder !== AllNotesFolderId && folder !== NEW_FOLDER_ID ? folder : undefined,
+      ...rest,
+    };
+
+    if (folderTitle) {
+      const folder = {
+        ownerColleagueUuid: colleagueUuid,
+        title: folderTitle,
+        parentFolderUuid: personalFolderUuid,
+      };
+      dispatch(
+        NotesActions.createFolderAndUpdateNotes({
+          note,
+          folder,
+        }),
+      );
+    } else {
+      dispatch(NotesActions.updateNote(note));
+    }
+    folderTitle ? setFolder(folderTitle) : setFolderName(folder);
+  };
+
+  const handleSubmit = useCallback(uuid === 'new' ? handleCreate : handleUpdate, [uuid]);
 
   const handleClose = () => {
     dispatch(NotesActions.changeCreatedMeta(false));
     navigate(buildPath(Page.NOTES));
   };
 
-  if (created) return <SuccessModal folder={folder} onOk={handleClose} />;
+  if (created)
+    return (
+      <WrapperModal onClose={handleClose} title={t('add_a_note', 'Add a note')}>
+        <SuccessModal folder={folder} onOk={handleClose} />
+      </WrapperModal>
+    );
 
   return (
     <WrapperModal onClose={handleClose} title={t('add_a_note', 'Add a note')}>
@@ -117,12 +138,7 @@ const PersonalNote: FC = () => {
               marginBottom: '20px',
             }}
           />
-          <PersonalNoteForm
-            onSubmit={handleCreate}
-            onClose={handleClose}
-            defaultValues={defaultValues}
-            folders={folders}
-          />
+          <PersonalNoteForm onSubmit={handleSubmit} onClose={handleClose} defaultValues={defaultValues} />
           <ArrowLeftIcon onClick={handleClose} data-test-id='arrowRight' />
         </div>
       </div>

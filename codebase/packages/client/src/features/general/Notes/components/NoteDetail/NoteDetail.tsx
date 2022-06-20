@@ -114,7 +114,7 @@ const flexStyle: Rule = {
 
 const headerInfoStyle: Rule = {
   display: 'flex',
-  justifyContent: 'flex-end',
+  justifyContent: 'space-between',
   alignItems: 'center',
 };
 
