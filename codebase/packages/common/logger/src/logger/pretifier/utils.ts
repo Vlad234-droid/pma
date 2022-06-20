@@ -3,13 +3,14 @@ import dateformat from 'dateformat';
 import stringifySafe from 'fast-safe-stringify';
 import { isMatch } from 'micromatch';
 
-import { defaultColorizeLevel, getTheme, HighlightTheme } from './themes';
+import { HighlightTheme, DefaultTheme, PlainTheme } from './themes';
 import {
    DATE_FORMAT,
    ERROR_LIKE_KEYS,
    MESSAGE_KEY,
    LEVEL_KEY,
    LEVEL_LABEL,
+   LEVEL_NAMES,
    TIMESTAMP_KEY,
    LOGGER_KEYS,
    LEVELS
@@ -752,3 +753,39 @@ function prettifyError (params: PPrettifyError): string {
 
    return logCopy;
  }
+
+ /**
+ * 
+ * @param level 
+ * @param colorizer 
+ * @returns 
+ */
+export function defaultColorizeLevel (level: number | string, colorizer: HighlightTheme) {
+   if (Number.isInteger(+level) && typeof level === 'number') {
+      return Object.prototype.hasOwnProperty.call(LEVELS, level)
+        ? colorizer.logLevels[level](LEVELS[level])
+        : colorizer.logLevels.default(LEVELS.default)
+   }
+
+   const levelString = typeof level === 'string' ? level.toLowerCase() : 'default';
+   const levelNum = LEVEL_NAMES[levelString] || 'default'
+   return colorizer.logLevels[levelNum](LEVELS[levelNum])
+}
+
+/**
+ * Factory function get a function to colorized levels. The returned function
+ * also includes a `.message(str)` method to colorize strings.
+ *
+ * @param {boolean} [useColors=false] When `true` a function that applies standard
+ * terminal colors is returned.
+ *
+ * @returns {HighlightTheme} `HighlightTheme` has a `.message(str)` method to
+ * apply colorization to a string. The `colorizeLevel` function accepts either an integer
+ * `level` or a `string` level. The integer level will map to a known level
+ * string or to `USERLVL` if not known.  The string `level` will map to the same
+ * colors as the integer `level` and will also default to `USERLVL` if the given
+ * string is not a recognized level name.
+ */
+export function getTheme(useColors: boolean = false): HighlightTheme  {
+   return useColors ? DefaultTheme : PlainTheme
+}

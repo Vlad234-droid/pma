@@ -43,7 +43,7 @@ const logLevel =
   config.loggerLevel() ||
   (isPROD(config.runtimeEnvironment()) || isPPE(config.runtimeEnvironment()) ? 'info' : logPretify ? 'trace' : 'debug');
 
-const logger = initializeLogger(config.loggerRootName(), logLevel, logPretify);
+const logger = initializeLogger(config.loggerRootName(), logLevel, logPretify, config.loggerThemeName());
 
 logger.info(`Current build environment: ${config.buildEnvironment()}`);
 logger.info(`Current infrastructure environment: ${config.runtimeEnvironment()}`);

@@ -3,7 +3,7 @@ import jmespath from 'jmespath';
 import { parse } from '@hapi/bourne';
 import pretty from 'pino-pretty';
 
-import { getTheme, HighlightTheme } from './themes';
+import { HighlightTheme } from './themes';
 import { ERROR_LIKE_KEYS, MESSAGE_KEY, TIMESTAMP_KEY } from './constants';
 import {
   isObject,
@@ -14,6 +14,7 @@ import {
   prettifyObject,
   prettifyTime,
   filterLog,
+  getTheme,
 } from './utils';
 
 /**

@@ -18,6 +18,7 @@ export type ProcessConfig = {
   loggerRootName: () => string;
   loggerLevel: () => keyof typeof NodeJS.LogLevel;
   loggerPretify: () => boolean;
+  loggerThemeName: () => string;
   loggerLogAuthToken: () => boolean;
   //
   apiServerUrl: () => URL;
@@ -84,6 +85,7 @@ export class ConfigAccessor {
       loggerRootName: () => processEnv.LOGGER_ROOT_NAME || defaultConfig.loggerRootName,
       loggerLevel: () => processEnv.LOGGER_LEVEL || defaultConfig.loggerDefaultLevel,
       loggerPretify: () => yn(processEnv.LOGGER_PRETIFY, { default: false }),
+      loggerThemeName: () => processEnv.LOGGER_THEME || defaultConfig.loggerDefaultTheme,
       loggerLogAuthToken: () => yn(processEnv.LOGGER_LOG_AUTHTOKEN, { default: false }),
       //
       apiServerUrl: () => createUrlOrFail(

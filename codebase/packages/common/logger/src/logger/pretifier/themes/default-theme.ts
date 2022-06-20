@@ -8,6 +8,8 @@ const ctx = new chalk.Instance({ 'level': 3 });
  */
 export const DefaultTheme: HighlightTheme = {
 
+   THEME_NAME: 'Default',
+
    'keyword': ctx.blue,
    'built_in': ctx.cyan,
    'type': ctx.cyan.dim,
