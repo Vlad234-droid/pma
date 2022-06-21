@@ -4,8 +4,8 @@ import { renderWithTheme as render, screen } from 'utils/test';
 import { SchemaFixture } from 'utils/test/fixtures/schema';
 import { act, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { CreateUpdateObjectives } from './CreateUpdateObjectives';
 import { FormType, ReviewsActions } from '@pma/store';
+import CreateUpdateObjectives from './CreateUpdateObjectives';
 
 describe('CreateUpdateObjectives', () => {
   // const approvalSubmissionText = /Submit Objectives/i;

@@ -17,8 +17,6 @@ type Props = {
 const PDPDocument: FC<Props> = ({ formItems, items }) => {
   const moreThanOne = items && items?.length > 1;
 
-  // console.log(formItems, items);
-
   return (
     <GeneralDocument title={'Personal Development plan'}>
       <View style={styles.section}>

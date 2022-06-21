@@ -1,7 +1,7 @@
 import React, { FC, HTMLProps, useEffect } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
-import { ObjectiveModal } from './ObjectiveModal';
+import { ObjectiveModal } from '../ObjectiveModal';
 import useDispatch from 'hooks/useDispatch';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'components/Translation';
@@ -15,7 +15,7 @@ import {
 } from '@pma/store';
 import { createYupSchema } from 'utils/yup';
 import { ReviewType, Status } from 'config/enum';
-import useReviewSchema from '../hooks/useReviewSchema';
+import useReviewSchema from '../../hooks/useReviewSchema';
 import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
 
 export type CreateUpdateObjectiveModalProps = {
@@ -25,7 +25,7 @@ export type CreateUpdateObjectiveModalProps = {
 
 type Props = HTMLProps<HTMLInputElement> & CreateUpdateObjectiveModalProps;
 
-export const CreateUpdateObjective: FC<Props> = ({ onClose, editNumber = null }) => {
+const CreateUpdateObjective: FC<Props> = ({ onClose, editNumber = null }) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const { loaded: reviewLoaded } = useSelector(reviewsMetaSelector);
@@ -127,3 +127,5 @@ export const CreateUpdateObjective: FC<Props> = ({ onClose, editNumber = null })
     />
   );
 };
+
+export default CreateUpdateObjective;

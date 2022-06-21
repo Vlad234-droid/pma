@@ -13,7 +13,7 @@ import Action from 'components/Action';
 import LinkButton from 'components/LinkButton';
 import { Graphics } from 'components/Icon';
 import { Page } from 'pages/general/types';
-import { Status } from './type';
+import { Status } from './constants/type';
 
 type Props = {
   cycleType: string;

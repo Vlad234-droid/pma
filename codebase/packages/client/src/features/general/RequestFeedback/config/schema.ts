@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
-import { TargetType } from '../type';
 import { FeedbackShema } from 'config/enum';
+import { TargetType } from '../constants/type';
 
 export const createRequestFeedbackSchema = Yup.object().shape({
   colleagues: Yup.array()

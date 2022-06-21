@@ -65,6 +65,7 @@ src/
       - **feature** - folder for separate feature
         - **components** - features components
         - **utils** - feature utils
+        - **configs** - feature configs
         - **constants** - feature constants
         - **hooks** - feature hooks
         - **contexts** - feature context

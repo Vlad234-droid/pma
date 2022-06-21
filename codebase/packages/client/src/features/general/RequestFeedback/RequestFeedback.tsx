@@ -4,11 +4,11 @@ import { useNavigate } from 'react-router-dom';
 import RequestFeedbackForm from './components/RequestFeedbackForm';
 import SuccessMessage from './components/SuccessMessage';
 import { colleagueUUIDSelector, FeedbackActions, getLoadedStateSelector } from '@pma/store';
-import { Page } from 'pages';
 import { InfoModalContent } from './ModalParts';
 import { useTranslation } from 'components/Translation';
 import Spinner from 'components/Spinner';
 import WrapperModal from 'features/general/Modal/components/WrapperModal';
+import { Page } from 'pages/general/types';
 
 const RequestFeedback: FC = () => {
   const { t } = useTranslation();

@@ -24,7 +24,6 @@ import { useToast, Variant } from 'features/general/Toast';
 import { UserObjectivesSections } from 'features/general/UserObjectivesSections';
 import { OrganizationWidget } from 'features/general/OrganizationWidget';
 import { buildPath } from 'features/general/Routes';
-import { Page } from 'pages';
 import Spinner from 'components/Spinner';
 import { File } from 'features/general/ReviewFiles/components/components/File';
 
@@ -32,6 +31,7 @@ import { useUserObjectivesData } from './hooks';
 
 import { ObjectiveType } from 'config/enum';
 import { Profile } from 'features/general/Profile';
+import { Page } from 'pages/general/types';
 
 export const TEST_ID = 'user-objectives-page';
 

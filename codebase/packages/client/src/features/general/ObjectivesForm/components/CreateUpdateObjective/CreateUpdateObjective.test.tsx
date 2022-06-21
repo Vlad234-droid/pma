@@ -5,8 +5,8 @@ import { SchemaFixture, SchemaFixtureVariables } from 'utils/test/fixtures/schem
 import { fireEvent, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { CreateUpdateObjective } from './CreateUpdateObjective';
 import { FormType, ReviewsActions } from '@pma/store';
+import CreateUpdateObjective from './CreateUpdateObjective';
 
 describe('CreateUpdateObjective', () => {
   Element.prototype.scrollIntoView = jest.fn();

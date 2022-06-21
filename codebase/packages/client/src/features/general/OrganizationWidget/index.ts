@@ -1,1 +1,1 @@
-export * from './components';
+export { default as OrganizationWidget } from './OrganizationWidget';
