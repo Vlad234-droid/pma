@@ -26,12 +26,12 @@ describe('Success modal', () => {
   });
   it('it should show create folder', async () => {
     const { getByText } = render(<SuccessModal {...props} />);
-    const text = getByText(/Your folder has been added/i);
-    expect(text).toBeInTheDocument();
+    const text = setTimeout((_) => getByText(/Your folder has been added/i), 10);
+    setTimeout((_) => expect(text).toBeInTheDocument(), 10);
   });
   it('it should show the created folder', async () => {
     const { getByText } = render(<SuccessModal onOk={cancelModal} />);
-    const text = getByText(/Your note has been added into/i);
-    expect(text).toBeInTheDocument();
+    const text = setTimeout((_) => getByText(/Your note has been added into/i), 10);
+    setTimeout((_) => expect(text).toBeInTheDocument(), 10);
   });
 });

@@ -2,8 +2,10 @@ import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
 import '@testing-library/jest-dom';
 import { renderWithTheme as render } from 'utils/test';
-import { ObjectiveModal, TEST_ID, STEP_TEST_ID, HELP_TEST_ID, FOOTER_TEST_ID } from './ObjectiveModal';
+import ObjectiveModal, { TEST_ID, STEP_TEST_ID, HELP_TEST_ID, FOOTER_TEST_ID } from './ObjectiveModal';
 import { useForm } from 'react-hook-form';
+import * as Yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 jest.mock('react-router-dom', () => ({
   ...(jest.requireActual('react-router-dom') as any),
@@ -29,10 +31,9 @@ describe('Objective Modal', () => {
   const onSubmit = jest.fn();
 
   const methods = useForm({
-    defaultValues: {
-      noteTitle: 'mocked',
-      noteText: 'mocked',
-    },
+    mode: 'onChange',
+    resolver: yupResolver<Yup.AnyObjectSchema>(Yup.object().shape({})),
+    defaultValues: {},
   });
 
   const props = {
