@@ -14,14 +14,13 @@ import { TileWrapper } from 'components/Tile';
 import { IconButton } from 'components/IconButton';
 import { ButtonsWrapper } from 'components/ButtonsWrapper';
 import { ArrowLeftIcon } from 'components/ArrowLeftIcon';
-import { Page } from 'pages';
 import { buildPath } from '../../Routes';
 import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
 import { InputWithDropdown } from 'components/InputWithDropdown';
-
-import { TargetType } from '../type';
 import { createRequestFeedbackSchema } from '../config';
-import { SearchOption, Tesco } from 'config/enum';
+import { Tesco, SearchOption } from 'config/enum';
+import { TargetType } from '../constants/type';
+import { Page } from 'pages/general/types';
 
 type Props = {
   onSubmit: (data: any) => void;
@@ -91,7 +90,7 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel, setIsInfoModalOpen }) 
     setValue('colleagues', colleagues, { shouldDirty: true, shouldValidate: true });
   };
 
-  const handleBlur = (fieldName: string) => {
+  const handleBlur = (fieldName: string | any) => {
     setValue(fieldName, getValues(fieldName), { shouldValidate: true, shouldTouch: true });
   };
 

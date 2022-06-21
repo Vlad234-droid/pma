@@ -20,8 +20,8 @@ import { PDPType } from 'config/enum';
 import { BASE_URL_API } from 'config/constants';
 import { TFunction, Trans, useTranslation } from 'components/Translation';
 import Spinner from 'components/Spinner';
-import GoalInfo from './components/GoalInfo';
 import usePDPSchema from './hooks/usePDPSchema';
+import GoalInfo from 'components/GoalInfo';
 import { Page } from 'pages/general/types';
 
 export const TEST_ID = 'pdp-page';

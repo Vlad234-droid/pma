@@ -5,13 +5,13 @@ import { Icon } from 'components/Icon';
 import { useDispatch, useSelector } from 'react-redux';
 import { colleagueUUIDSelector, metaPDPSelector, PDPActions, schemaMetaPDPSelector } from '@pma/store';
 import { buildPath } from 'features/general/Routes';
-import { Page } from 'pages';
 import { PDPType } from 'config/enum';
 import { useTranslation } from 'components/Translation';
 import Spinner from 'components/Spinner';
 import { CreatePDPForm, CreatePDPFormNew } from './components/CreatePDPForm';
 import usePDPSchema from './hooks/usePDPSchema';
 import { ModalWrapper } from 'components/ModalWrapper';
+import { Page } from 'pages/general/types';
 
 export const TEST_ID = 'create-pdp';
 export const TEST_SPINNER_ID = 'spinner-test-id';

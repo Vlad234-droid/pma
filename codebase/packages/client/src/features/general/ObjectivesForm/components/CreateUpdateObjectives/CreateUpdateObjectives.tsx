@@ -18,8 +18,8 @@ import { createYupSchema } from 'utils/yup';
 import { ReviewType, Status } from 'config/enum';
 import SuccessModal from 'components/SuccessModal';
 import Spinner from 'components/Spinner';
-import useReviewSchema from '../hooks/useReviewSchema';
-import { ObjectiveModal } from './ObjectiveModal';
+import useReviewSchema from '../../hooks/useReviewSchema';
+import { ObjectiveModal } from '../ObjectiveModal';
 import { USER } from 'config/constants';
 import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
 
@@ -211,4 +211,4 @@ const CreateUpdateObjectives: FC<CreateUpdateObjectivesModalProps> = ({ onClose,
   );
 };
 
-export { CreateUpdateObjectives };
+export default CreateUpdateObjectives;

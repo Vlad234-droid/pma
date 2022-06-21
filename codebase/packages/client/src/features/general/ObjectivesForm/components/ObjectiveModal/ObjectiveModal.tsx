@@ -11,10 +11,10 @@ import { Attention } from 'components/Form';
 import { TriggerModal } from 'features/general/Modal/components/TriggerModal';
 
 import { ButtonWithConfirmation } from 'features/general/Modal';
-import ObjectiveHelpModal from './Modal/ObjectiveHelpModal';
+import ObjectiveHelpModal from '../Modal/ObjectiveHelpModal';
 import { IconButton, Position } from 'components/IconButton';
-import ObjectiveComponents from './ObjectiveComponents';
-import ObjectiveComponentsNew from './ObjectiveComponentsNew';
+import ObjectiveComponents from '../ObjectiveComponents';
+import ObjectiveComponentsNew from '../ObjectiveComponentsNew';
 import { isReviewsNumberInStatuses, getReviewSchema } from '@pma/store';
 import { useSelector } from 'react-redux';
 
@@ -42,7 +42,7 @@ export const FOOTER_TEST_ID = 'footer-test-id';
 
 type Props = HTMLProps<HTMLInputElement> & ObjectiveModalProps;
 
-export const ObjectiveModal: FC<Props> = ({
+const ObjectiveModal: FC<Props> = ({
   useSingleStep = false,
   methods,
   submitForm,
@@ -251,3 +251,5 @@ const helpTitleStyle: Rule = ({ theme }) => ({
   color: theme.colors.tescoBlue,
   padding: `${theme.spacing.s0} ${theme.spacing.s2}`,
 });
+
+export default ObjectiveModal;

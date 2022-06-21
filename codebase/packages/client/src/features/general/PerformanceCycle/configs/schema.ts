@@ -1,7 +1,7 @@
 import * as Yup from 'yup';
 import { TFunction } from 'components/Translation';
 import { formatDate } from 'utils';
-import { OBJECTIVE } from './constants';
+import { OBJECTIVE } from '../constants/constants';
 
 export const createPMCycleSchema = (t: TFunction) =>
   Yup.object().shape({

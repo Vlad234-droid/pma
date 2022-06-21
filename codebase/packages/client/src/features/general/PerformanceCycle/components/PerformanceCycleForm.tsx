@@ -19,8 +19,8 @@ import Datepicker from 'components/Datepicker';
 import { useTranslation } from 'components/Translation';
 import TemplatesModal from './TemplatesModal';
 import FormsViewer from './FormsViwer';
-import { createPMCycleSchema } from '../schema';
-import { OBJECTIVE } from '../constants';
+import { createPMCycleSchema } from '../configs/schema';
+import { OBJECTIVE } from '../constants/constants';
 import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
 
 type Props = {

@@ -12,13 +12,13 @@ import {
   Status,
 } from '@pma/store';
 import useDispatch from 'hooks/useDispatch';
-import { Page } from 'pages';
 import { buildPath } from 'features/general/Routes';
 import { useToast, Variant } from 'features/general/Toast';
 import Spinner from 'components/Spinner';
 import { formatDate, DATE_FORMAT, getISODateStringWithTimeFromDateString } from 'utils';
 import PerformanceCycleForm from './components/PerformanceCycleForm';
-import { Status as PerformanceCycleStatus } from './type';
+import { Status as PerformanceCycleStatus } from './constants/type';
+import { Page } from 'pages/general/types';
 
 const CreatePerformanceCycle: FC = () => {
   const dispatch = useDispatch();

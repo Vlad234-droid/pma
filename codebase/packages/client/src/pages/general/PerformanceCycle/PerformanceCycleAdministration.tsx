@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useMemo, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import PerformanceCycleTable from 'features/general/PerformanceCycle/PerformanceCycleTable';
+import { PerformanceCycleTable } from 'features/general/PerformanceCycle';
 import { Button, useStyle, Rule } from '@pma/dex-wrapper';
 import { buildPath } from 'features/general/Routes';
 import { Page } from 'pages/general/types';
@@ -9,7 +9,7 @@ import { Trans, useTranslation } from 'components/Translation';
 import { paramsReplacer } from 'utils';
 import Select from 'components/Form/Select';
 
-import { Status } from 'features/general/PerformanceCycle/type';
+import { Status } from 'features/general/PerformanceCycle/constants/type';
 
 const PerformanceCycleAdministration: FC = () => {
   const [active, setActive] = useState(Status.STARTED);
