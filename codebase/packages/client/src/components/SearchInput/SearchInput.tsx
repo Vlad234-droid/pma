@@ -6,13 +6,17 @@ import { useFormContainer } from 'components/Form/context/input';
 import { Icon } from 'components/Icon';
 import { SearchOption } from '../../config/enum';
 
+type SearchProp = {
+  target: { value: string };
+};
+
 type Props = {
   disabled?: boolean;
   value?: string;
   name?: string;
   placeholder?: string;
   styles?: Styles | Rule;
-  onSearch: (e: ChangeEvent<HTMLInputElement>) => void;
+  onSearch: (e: ChangeEvent<HTMLInputElement> | SearchProp) => void;
   onChange: (item: object) => void;
   onDelete?: (item: string) => void;
   onClear?: () => void;
@@ -49,10 +53,10 @@ const SearchInput: FC<Props> = ({
   const [currentValue, setCurrentValue] = useState(value);
   const { css } = useStyle();
   const { inputRef } = useFormContainer();
+
   const handleSearch = useCallback(debounce(onSearch, 300), [searchOption]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    console.log('hello');
     setCurrentValue(e.target.value);
     handleSearch(e);
   };
@@ -60,6 +64,17 @@ const SearchInput: FC<Props> = ({
   useEffect(() => {
     setCurrentValue(value);
   }, [value]);
+
+  useEffect(() => {
+    if (inputRef.current.value) {
+      const e = {
+        target: {
+          value: inputRef.current.value,
+        },
+      };
+      handleSearch(e);
+    }
+  }, [searchOption]);
 
   return (
     <>
