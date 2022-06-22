@@ -13,8 +13,6 @@ import {
   teamArchivedFolderUuidSelector,
 } from '@pma/store';
 
-import WrapperModal from 'features/general/Modal/components/WrapperModal';
-import NoteDetail from '../../NoteDetail';
 import { useUploadData } from 'features/general/Notes/hooks/useUploadData';
 import { ConfirmModal, ConfirmModalWithDropDown } from 'features/general/Modal';
 import { useTranslation } from 'components/Translation';
@@ -361,23 +359,6 @@ const MainFolders: FC<MainFolderProps> = ({ isLineManager }) => {
 
     setSelectedTEAMFolder((prev) => disableFolder(prev));
   };
-
-  const cancelViewNote = () => {
-    setSelectedTEAMNoteToEdit(null);
-    setSelectedNoteToEdit(null);
-  };
-
-  if (selectedTEAMNoteToEdit || selectedNoteToEdit) {
-    return (
-      <WrapperModal title={t('my_notes', 'My notes')} onClose={cancelViewNote}>
-        <NoteDetail
-          selectedNoteToEdit={selectedTEAMNoteToEdit ?? selectedNoteToEdit}
-          type={selectedTEAMNoteToEdit ? 'TEAM_NOTE' : 'PERSONAL_NOTE'}
-          onClose={cancelViewNote}
-        />
-      </WrapperModal>
-    );
-  }
 
   return (
     <div

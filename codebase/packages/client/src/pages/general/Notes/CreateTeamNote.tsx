@@ -1,8 +1,8 @@
 import React from 'react';
 import { TeamNote } from 'features/general/Notes';
 
-const TeamNotePage = () => {
+const CreateTeamNotePage = () => {
   return <TeamNote />;
 };
 
-export default TeamNotePage;
+export default CreateTeamNotePage;

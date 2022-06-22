@@ -1,8 +1,8 @@
 import React from 'react';
 import { PersonalNoteFolder } from 'features/general/Notes';
 
-const PersonalNoteFolderPage = () => {
+const CreatePersonalNoteFolderPage = () => {
   return <PersonalNoteFolder />;
 };
 
-export default PersonalNoteFolderPage;
+export default CreatePersonalNoteFolderPage;

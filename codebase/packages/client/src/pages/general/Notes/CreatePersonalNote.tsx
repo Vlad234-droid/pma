@@ -1,8 +1,8 @@
 import React from 'react';
 import { PersonalNote } from 'features/general/Notes';
 
-const PersonalNotePage = () => {
+const CreatePersonalNotePage = () => {
   return <PersonalNote />;
 };
 
-export default PersonalNotePage;
+export default CreatePersonalNotePage;

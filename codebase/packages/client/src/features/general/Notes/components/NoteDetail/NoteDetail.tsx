@@ -15,45 +15,37 @@ import { Page } from 'pages';
 export const MODAL_WRAPPER = 'modal-wrapper';
 
 type Props = {
-  selectedNoteToEdit: any;
-  type: 'TEAM_NOTE' | 'PERSONAL_NOTE';
+  note: any;
   onClose: () => void;
+  onEdit: () => void;
 };
 
-const NoteDetail: FC<Props> = ({ selectedNoteToEdit, type, onClose }) => {
+const NoteDetail: FC<Props> = ({ note, onEdit, onClose }) => {
   const { css } = useStyle();
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const dispatch = useDispatch();
   const [confirmModal, setConfirmModal] = useState(false);
   const { t } = useTranslation();
-  const navigate = useNavigate();
-
-  const getPropperInfoData = () => {
-    return {
-      title: t('delete_this_note', 'Are you sure you want to delete this note?'),
-      description: t('permanently_deleted', 'The note will be permanently deleted'),
-    };
-  };
 
   const handleDeleteEditedNote = () => {
     setConfirmModal(() => false);
     dispatch(
       NotesActions.deleteNote({
         ownerColleagueUuid: colleagueUuid,
-        noteId: selectedNoteToEdit.id,
+        noteId: note.id,
       }),
     );
   };
 
-  const handleEditNote = () => navigate(buildPath(paramsReplacer(Page[type], { ':uuid': selectedNoteToEdit.id })));
+  if (!note) return null;
 
   return (
     <div className={css(WrapperModalGiveFeedbackStyle)} data-test-id={MODAL_WRAPPER}>
       <div>
         <div className={css(headerInfoStyle)}>
-          <h2 className={css(noteTitleStyle)}>{selectedNoteToEdit.title}</h2>
+          <h2 className={css(noteTitleStyle)}>{note.title}</h2>
           <div className={css(flexStyle)}>
-            <IconButton graphic='edit' onPress={handleEditNote} />
+            <IconButton graphic='edit' onPress={onEdit} />
             <IconButton
               graphic='delete'
               iconStyles={{ marginLeft: '20px' }}
@@ -63,12 +55,12 @@ const NoteDetail: FC<Props> = ({ selectedNoteToEdit, type, onClose }) => {
             />
           </div>
         </div>
-        <p className={css(sizeStyle)}>{selectedNoteToEdit.content}</p>
+        <p className={css(sizeStyle)}>{note.content}</p>
       </div>
       {confirmModal && (
         <ConfirmModal
-          title={getPropperInfoData().title}
-          description={getPropperInfoData().description}
+          title={t('delete_this_note', 'Are you sure you want to delete this note?')}
+          description={t('permanently_deleted', 'The note will be permanently deleted')}
           onSave={() => {
             handleDeleteEditedNote();
           }}

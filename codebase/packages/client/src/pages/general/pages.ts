@@ -15,7 +15,15 @@ import RequestFeedback from './RequestFeedback';
 import RespondFeedback from './RespondFeedback';
 import ViewFeedback from './ViewFeedback';
 import Settings from './Settings';
-import Notes, { NotesInfo, PersonalNote, PersonalNoteFolder, TeamNote, TeamNoteFolder } from './Notes';
+import Notes, {
+  NotesInfo,
+  CreatePersonalNote,
+  CreatePersonalNoteFolder,
+  CreateTeamNote,
+  CreateTeamNoteFolder,
+  PersonalNoteView,
+  TeamNoteView,
+} from './Notes';
 import KnowledgeLibrary from './KnowledgeLibrary';
 import CreateOrganizationObjectives from './CreateOrganizationObjectives';
 import ObjectivesView from './ObjectivesView';
@@ -44,6 +52,7 @@ export type PageComponent = {
   withIcon?: boolean;
   iconName?: Graphics;
 };
+
 const pages: Record<Page, PageComponent> = {
   [Page.KNOWLEDGE_LIBRARY]: {
     Element: KnowledgeLibrary,
@@ -101,28 +110,42 @@ const pages: Record<Page, PageComponent> = {
     tenant: [tenant.BANK, tenant.GENERAL],
   },
   [Page.PERSONAL_NOTE]: {
-    Element: PersonalNote,
+    Element: PersonalNoteView,
     title: 'Notes',
     withHeader: false,
     perform: [role.COLLEAGUE],
     tenant: [tenant.BANK, tenant.GENERAL],
   },
-  [Page.PERSONAL_NOTE_FOLDER]: {
-    Element: PersonalNoteFolder,
+  [Page.PERSONAL_NOTE_CREATE]: {
+    Element: CreatePersonalNote,
+    title: 'Notes',
+    withHeader: false,
+    perform: [role.COLLEAGUE],
+    tenant: [tenant.BANK, tenant.GENERAL],
+  },
+  [Page.PERSONAL_NOTE_FOLDER_CREATE]: {
+    Element: CreatePersonalNoteFolder,
     title: 'Notes',
     withHeader: false,
     perform: [role.COLLEAGUE],
     tenant: [tenant.BANK, tenant.GENERAL],
   },
   [Page.TEAM_NOTE]: {
-    Element: TeamNote,
+    Element: TeamNoteView,
     title: 'Notes',
     withHeader: false,
     perform: [role.COLLEAGUE],
     tenant: [tenant.BANK, tenant.GENERAL],
   },
-  [Page.TEAM_NOTE_FOLDER]: {
-    Element: TeamNoteFolder,
+  [Page.TEAM_NOTE_CREATE]: {
+    Element: CreateTeamNote,
+    title: 'Notes',
+    withHeader: false,
+    perform: [role.COLLEAGUE],
+    tenant: [tenant.BANK, tenant.GENERAL],
+  },
+  [Page.TEAM_NOTE_FOLDER_CREATE]: {
+    Element: CreateTeamNoteFolder,
     title: 'Notes',
     withHeader: false,
     perform: [role.COLLEAGUE],

@@ -1,16 +1,20 @@
 import React, { FC, MouseEvent, useRef } from 'react';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { colors, CreateRule, Rule, Styles, theme, useStyle } from '@pma/dex-wrapper';
 import { getFoldersSelector } from '@pma/store';
-import { useSelector } from 'react-redux';
 
+import useEventListener from 'hooks/useEventListener';
 import { IconButton } from 'components/IconButton';
-import { Trans } from 'components/Translation';
 
+import { Trans } from 'components/Translation';
 import { formatToRelativeDate } from 'utils/date';
 import { getNotesFolderTitle } from 'utils/note';
+import { Page } from 'pages';
 import { SelectedFolderProps } from '../../../type';
 import { useNotesContainer } from '../../../contexts';
-import useEventListener from 'hooks/useEventListener';
+import { buildPath } from 'features/general/Routes';
+import { paramsReplacer } from 'utils';
 
 export const FOLDER_WRAPPER = 'folder-wrapper';
 
@@ -24,14 +28,15 @@ const SelectedFolder: FC<SelectedFolderProps> = ({
   teamActions,
 }) => {
   const { css, matchMedia } = useStyle();
-  const mediumScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
-
   const ref = useRef<HTMLDivElement | null>();
+  const navigate = useNavigate();
 
   const { archiveMode, selectedFolder, setSelectedFolder, setSelectedNoteToEdit, setSelectedTEAMNoteToEdit } =
     useNotesContainer();
 
   const isUserArchived = archiveMode.user;
+
+  const mediumScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
 
   const btnActionsData = [
     {
@@ -175,12 +180,19 @@ const SelectedFolder: FC<SelectedFolderProps> = ({
     });
   };
 
-  const setSelectedNoteHandler = (e, item) => {
-    if (isUserArchived || e.target.parentElement.id === 'backdrop' || e.target.id === 'backdrop') return;
+  const setSelectedNoteHandler = (e: MouseEvent<HTMLDivElement>, item: any) => {
+    if (
+      isUserArchived ||
+      (e.target as HTMLElement).parentElement?.id === 'backdrop' ||
+      (e.target as HTMLElement).id === 'backdrop'
+    )
+      return;
     if (item.referenceColleagueUuid) {
-      setSelectedTEAMNoteToEdit(() => item);
+      navigate(buildPath(paramsReplacer(Page.TEAM_NOTE, { ':uuid': item.id })));
+      // setSelectedTEAMNoteToEdit(() => item);
     } else {
-      setSelectedNoteToEdit(() => item);
+      navigate(buildPath(paramsReplacer(Page.PERSONAL_NOTE, { ':uuid': item.id })));
+      // setSelectedNoteToEdit(() => item);
     }
   };
 

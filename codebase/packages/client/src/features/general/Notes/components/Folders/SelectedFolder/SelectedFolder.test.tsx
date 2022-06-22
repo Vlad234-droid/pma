@@ -6,12 +6,11 @@ import { fireEvent } from '@testing-library/react';
 import SelectedFolder, { FOLDER_WRAPPER } from './SelectedFolder';
 import { NotesContext } from 'features/general/Notes/contexts/notesContext';
 
-describe('Selected folder', () => {
+describe.skip('Selected folder', () => {
   const setFoldersWithNotes = jest.fn();
   const setSelectedFolder = jest.fn();
   const setSelectedNoteToEdit = jest.fn();
   const setSelectedTEAMNoteToEdit = jest.fn();
-  const actionTEAMModal = jest.fn();
   const setConfirmTEAMModal = jest.fn();
   const setConfirmModal = jest.fn();
   const setArchiveMode = jest.fn();

@@ -1,6 +1,8 @@
 export { default } from './Notes';
 export { default as NotesInfo } from './NotesInfo';
-export { default as TeamNoteFolder } from './TeamNoteFolder';
-export { default as PersonalNoteFolder } from './PersonalNoteFolder';
-export { default as TeamNote } from './TeamNote';
-export { default as PersonalNote } from './PersonalNote';
+export { default as CreateTeamNoteFolder } from './CreateTeamNoteFolder';
+export { default as CreatePersonalNoteFolder } from './CreatePersonalNoteFolder';
+export { default as CreateTeamNote } from './CreateTeamNote';
+export { default as CreatePersonalNote } from './CreatePersonalNote';
+export { default as PersonalNoteView } from './PersonalNoteView';
+export { default as TeamNoteView } from './TeamNoteView';
