@@ -186,7 +186,7 @@ const pages: Record<Page, PageComponent> = {
   },
   [Page.CONTRIBUTION]: {
     Element: CareerPerformance,
-    title: (tenant) => (tenant === Tenant.GENERAL ? 'Your Contribution' : 'My quarterly priorities'),
+    title: 'Your Contribution',
     withHeader: true,
     withIcon: true,
     iconName: 'home',
