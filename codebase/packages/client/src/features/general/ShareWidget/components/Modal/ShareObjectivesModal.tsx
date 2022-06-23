@@ -8,13 +8,12 @@ export type Props = {
   manager: string;
   objectives?: ObjectiveAccordionProps['objectives'];
   onClose?: () => void;
+  description: string;
 };
 
-export const ShareObjectivesModal: FC<Props> = ({ manager, onClose, objectives = [] }) => {
+export const ShareObjectivesModal: FC<Props> = ({ manager, onClose, objectives = [], description }) => {
   const { css, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
-
-  const count = objectives.length;
 
   return (
     <div className={css(containerStyle)}>
@@ -23,11 +22,7 @@ export const ShareObjectivesModal: FC<Props> = ({ manager, onClose, objectives =
           <IconComponent graphic='arrowLeft' invertColors={true} />
         </span>
         <div>
-          <div className={css(titleStyle({ mobileScreen }))}>
-            <Trans i18nKey='you_have_shared_objectives' count={count}>
-              You have {{ count }} shared objectives
-            </Trans>
-          </div>
+          <div className={css(titleStyle({ mobileScreen }))}>{description}</div>
         </div>
         <div>
           <div className={css(managerNameStyle)}>

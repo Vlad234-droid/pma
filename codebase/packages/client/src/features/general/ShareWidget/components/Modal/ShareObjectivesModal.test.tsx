@@ -27,7 +27,14 @@ describe('<ShareObjectivesModal />', () => {
     ];
     const onClose = jest.fn();
     const manager = 'Test Manager';
-    render(<ShareObjectivesModal objectives={objectives} onClose={onClose} manager={manager} />);
+    render(
+      <ShareObjectivesModal
+        objectives={objectives}
+        onClose={onClose}
+        manager={manager}
+        description='You have 1 shared objectives'
+      />,
+    );
 
     expect(screen.getByText(/You have 1 shared objectives/)).toBeInTheDocument();
     expect(screen.getByText(/From Test Manager/)).toBeInTheDocument();

@@ -1,1 +1,1 @@
-export { default as ShareWidget } from './ShareWidget';
+export { ShareWidget } from './ShareWidget';

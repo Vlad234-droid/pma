@@ -2,7 +2,8 @@ import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
 import { renderWithTheme } from 'utils/test';
 import { screen } from '@testing-library/react';
-import ShareWidget, { TEST_ID } from './ShareWidget';
+import { ShareWidgetBase, TEST_ID } from './ShareWidgetBase';
+import { getTescoContent } from './getTescoContent';
 
 describe('ShareWidget', () => {
   it('should render ShareWidget', async () => {
@@ -62,7 +63,7 @@ describe('ShareWidget', () => {
       },
     };
 
-    renderWithTheme(<ShareWidget stopShare />, { reviews, users, objectivesSharing });
+    renderWithTheme(<ShareWidgetBase stopShare getContent={getTescoContent} />, { reviews, users, objectivesSharing });
     const widget = screen.getByTestId(TEST_ID);
 
     expect(widget).toBeInTheDocument();

@@ -4,6 +4,7 @@ import * as T from '../types';
 export const transformReviewsToObjectives = (
   reviews: T.Review[] = [],
   formElements?: Record<string, string>[],
+  type = 'Objective',
 ): T.Objective[] => {
   return reviews?.map((reviewItem) => {
     const status = reviewItem.status;
@@ -26,7 +27,7 @@ export const transformReviewsToObjectives = (
 
     return {
       id: Number(reviewItem.number),
-      title: `Objective ${reviewItem.number}`,
+      title: `${type} ${reviewItem.number}`,
       subTitle: subTitle,
       description: description,
       declineReason,
