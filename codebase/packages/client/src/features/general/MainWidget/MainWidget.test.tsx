@@ -2,7 +2,7 @@ import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
 import { renderWithTheme } from 'utils/test';
 import { screen } from '@testing-library/react';
-import { MainWidget, TEST_ID } from './MainWidget';
+import { MainWidgetBase, TEST_ID } from './MainWidgetBase';
 import { getTescoContent } from './getTescoContent';
 
 jest.mock('react-router-dom', () => ({
@@ -16,8 +16,7 @@ describe('MainWidget', () => {
   const testHandler = jest.fn();
 
   it('should render MainWidget', async () => {
-    const content = getTescoContent({ count: 3 }, (key: string, defaultValue?: string) => defaultValue || key);
-    renderWithTheme(<MainWidget {...content} />);
+    renderWithTheme(<MainWidgetBase getContent={getTescoContent} count={3} />);
     const widget = screen.queryByTestId(TEST_ID);
 
     expect(widget).toBeInTheDocument();

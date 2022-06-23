@@ -20,23 +20,7 @@ import { ReviewType } from 'config/enum';
 import { DATE_STRING_FORMAT, formatDateString, getTenant, Tenant } from 'utils';
 import Spinner from 'components/Spinner';
 import { USER } from 'config/constants';
-
-const MainWidget = React.memo((props) => {
-  const tenant: Tenant = getTenant();
-  const Widget = useMemo(() => React.lazy(() => import(`features/${tenant}/MainWidget`)), []);
-
-  return (
-    <Widget
-      {...props}
-      customStyle={{
-        flex: '4 1 500px',
-        fontSize: theme.font.fixed.f16.fontSize,
-        lineHeight: theme.font.fixed.f16.lineHeight,
-        letterSpacing: '0px',
-      }}
-    />
-  );
-});
+import { MainWidget } from 'features/general/MainWidget';
 
 const Widgets: FC<Props> = () => {
   const dispatch = useDispatch();
@@ -94,10 +78,15 @@ const Widgets: FC<Props> = () => {
         <>
           {canShowObjectives && (
             <MainWidget
-              //@ts-ignore
               status={status}
               count={count}
               nextReviewDate={nextReviewDate}
+              customStyle={{
+                flex: '4 1 500px',
+                fontSize: theme.font.fixed.f16.fontSize,
+                lineHeight: theme.font.fixed.f16.lineHeight,
+                letterSpacing: '0px',
+              }}
             />
           )}
 

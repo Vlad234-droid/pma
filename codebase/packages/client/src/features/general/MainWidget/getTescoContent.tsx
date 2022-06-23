@@ -1,7 +1,7 @@
 import { Status } from 'config/enum';
 import { Page } from 'pages';
 import { TFunction } from 'components/Translation';
-import { ContentConfig, ContentGraphics, ContentProps } from './MainWidget';
+import { ContentConfig, ContentGraphics, ContentProps } from './MainWidgetBase';
 import { ObjectivesForm } from 'features/general/ObjectivesForm';
 
 export const getTescoContent = (props: ContentProps, t: TFunction) => {

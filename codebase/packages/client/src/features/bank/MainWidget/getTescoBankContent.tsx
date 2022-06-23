@@ -1,10 +1,9 @@
 import { Status } from 'config/enum';
 import { Page } from 'pages';
 import { TFunction } from 'components/Translation';
-import { ContentConfig, ContentGraphics, ContentProps } from 'features/general/MainWidget';
 import { ObjectivesForm } from 'features/bank/ObjectivesForm';
+import { ContentConfig, ContentGraphics, ContentProps } from 'features/general/MainWidget/MainWidgetBase';
 
-//TODO: Review all statuses and text
 export const getTescoBankContent = (props: ContentProps, t: TFunction) => {
   const { status, count, nextReviewDate: date = '' } = props;
 

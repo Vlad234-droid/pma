@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Meta, Story } from '@storybook/react';
 
-import { MainWidget as MainWidgetBase, Props } from './MainWidget';
+import { MainWidgetBase, MainWidgetBaseProps } from './MainWidgetBase';
 import { getTescoContent } from './getTescoContent';
 
 export default {
@@ -10,7 +10,7 @@ export default {
   component: MainWidgetBase,
 } as Meta;
 
-const Template: Story<Props> = (props) => <MainWidgetBase {...props} />;
+const Template: Story<MainWidgetBaseProps> = (props) => <MainWidgetBase {...props} getContent={getTescoContent} />;
 
 export const MainWidget = Template.bind({});
-MainWidget.args = getTescoContent({ count: 3 }, (key: string, defaultValue?: string) => defaultValue || key);
+MainWidget.args = { count: 3 };
