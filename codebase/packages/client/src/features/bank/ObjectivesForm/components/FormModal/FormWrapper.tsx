@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
+import { CreateRule, useStyle } from '@pma/dex-wrapper';
 import { Icon as IconComponent } from 'components/Icon';
 
 export type FormWrapper = {

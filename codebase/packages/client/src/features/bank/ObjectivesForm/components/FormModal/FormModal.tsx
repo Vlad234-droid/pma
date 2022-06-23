@@ -4,7 +4,7 @@ import { Rule, useStyle } from '@pma/dex-wrapper';
 import { useTranslation } from 'components/Translation';
 import SuccessModal from 'components/SuccessModal';
 
-import FormWrapper from './FormWrapper';
+import { default as FormWrapper } from './FormWrapper';
 import FormModify from './FormState/Modify';
 import FormPreview from './FormState/Preview';
 import ButtonsModify from './Buttons/ButtonsModify';

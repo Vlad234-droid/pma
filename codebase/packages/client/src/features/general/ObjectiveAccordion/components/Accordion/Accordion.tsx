@@ -1,17 +1,17 @@
 import React, { FC } from 'react';
 import { Rule, useStyle } from '@pma/dex-wrapper';
-import { Accordion, Header, HeaderProps, Panel, Section } from 'components/Accordion';
+import { Accordion, Panel, Section } from 'components/Accordion';
 import { Trans } from 'components/Translation';
-import { ObjectiveButtons } from '../Buttons';
-import { Status } from 'config/enum';
 
-import { ObjectiveTileExplanations, ObjectiveTileHeader } from '../Tile';
+import { ObjectiveButtons } from 'features/general/Objectives/components/Buttons';
+import * as T from 'features/general/Objectives/types';
 
-import * as T from '../../types';
+import { ObjectiveTileExplanations } from '../Tile';
+import { ObjectiveHeader } from './ObjectiveHeader';
 
 export type ObjectiveAccordionProps = {
   objectives: T.Objective[];
-  canShowStatus: boolean;
+  canShowStatus?: boolean;
   isButtonsVisible?: boolean;
 };
 
@@ -35,32 +35,13 @@ const ObjectiveAccordion: FC<ObjectiveAccordionProps> = ({ objectives, canShowSt
           <ObjectiveHeader {...{ title, subTitle, description, ...(canShowStatus ? { status } : {}) }} />
           <Panel>
             {declineReason && <DeclineReason declineReason={declineReason} />}
-            <ObjectivePanel explanations={explanations} />
+            <ObjectiveTileExplanations explanations={explanations} />
             {isButtonsVisible && <ObjectiveButtons id={id} status={status} />}
           </Panel>
         </Section>
       ))}
     </div>
   </Accordion>
-);
-
-export const ObjectiveHeader: FC<
-  Omit<HeaderProps, 'children'> & {
-    title: string;
-    subTitle?: string;
-    description?: string;
-    status?: Status;
-  }
-> = ({ title, subTitle, description, status, ...rest }) => {
-  return (
-    <Header headingLevel={1} title={title} status={status} {...rest}>
-      <ObjectiveTileHeader {...{ subTitle, description, withSpacing: false }} />
-    </Header>
-  );
-};
-
-export const ObjectivePanel: FC<{ explanations: T.Explanation[] }> = ({ explanations }) => (
-  <ObjectiveTileExplanations explanations={explanations} />
 );
 
 const declineReasonStyles: Rule = ({ theme }) => ({

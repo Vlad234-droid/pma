@@ -5,7 +5,6 @@ import { AccordionConsumer, SectionConsumer } from './contexts';
 import { EventListener, KeyboardEventListener } from './types';
 import { ENTER, SPACE } from './constans';
 import { Icon } from '../Icon';
-import StatusBadge from 'components/StatusBadge';
 import { Status } from 'config/enum';
 
 type HeadingProps = {
@@ -122,12 +121,9 @@ export const BaseHeader: FC<HeaderProps> = ({ children, headingLevel, disabled, 
   );
 };
 
-const Header: FC<Omit<HeaderProps, 'children'> & { title: string; status?: Status }> = ({
-  title,
-  status,
-  children,
-  ...props
-}) => {
+const Header: FC<
+  Omit<HeaderProps, 'children'> & { title: string; status?: Status; component?: React.ReactNode | null }
+> = ({ title, component, children, ...props }) => {
   const { css } = useStyle();
 
   return (
@@ -144,7 +140,7 @@ const Header: FC<Omit<HeaderProps, 'children'> & { title: string; status?: Statu
               })}
             >
               <h3 className={css(accordionHeaderTitleStyles)}>{title}</h3>
-              {status && <StatusBadge status={status} styles={{ marginRight: '20px' }} />}
+              {component}
             </div>
             <ExpandButton extraStyles={marginRightStyles} />
           </div>

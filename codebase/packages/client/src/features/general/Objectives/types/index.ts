@@ -14,10 +14,12 @@ type Objective = {
   explanations: Explanation[];
   declineReason?: string;
   status: Status;
+  lastUpdatedTime: string;
 };
 
 type Review = {
   changeStatusReason: string;
+  lastUpdatedTime: string;
   colleagueUuid: string;
   number: 1;
   performanceCycleUuid: string;

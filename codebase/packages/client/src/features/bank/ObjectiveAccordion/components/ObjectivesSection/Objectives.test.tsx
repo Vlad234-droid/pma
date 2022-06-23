@@ -43,32 +43,21 @@ describe('Objectives list', () => {
         status: Status.DRAFT,
       },
     ],
-    canEditAllObjective: false,
-    canShowObjectives: false,
   };
 
-  it('should NOT render Objectives', async () => {
-    renderWithTheme(<Objectives {...props} />);
-    const main = screen.queryByTestId(TEST_ID);
-    expect(main).not.toBeInTheDocument();
-  });
-
   it('should render Objectives', async () => {
-    props.canShowObjectives = true;
     renderWithTheme(<Objectives {...props} />);
     const main = screen.queryByTestId(TEST_ID);
     expect(main).toBeInTheDocument();
   });
 
   it('should render objectives list', async () => {
-    props.canShowObjectives = true;
     const { queryByText } = renderWithTheme(<Objectives {...props} />);
     const noObjectives = queryByText('No objectives created');
     expect(noObjectives).not.toBeInTheDocument();
   });
 
   it('should NOT render objectives list', async () => {
-    props.canShowObjectives = true;
     props.objectives = [];
 
     const { queryByText } = renderWithTheme(<Objectives {...props} />);

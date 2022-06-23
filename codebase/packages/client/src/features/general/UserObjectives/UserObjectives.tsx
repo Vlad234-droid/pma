@@ -17,7 +17,8 @@ import { useNavigate, useParams } from 'react-router';
 import { Trans, useTranslation } from 'components/Translation';
 import { StepIndicator } from 'components/StepIndicator/StepIndicator';
 
-import { ObjectiveTypes as OT, Section } from 'features/general/Objectives';
+import { ObjectiveTypes as OT } from 'features/general/Objectives';
+import Section from 'components/Section';
 import { ShareWidget } from 'features/general/ShareWidget';
 import { PreviousReviewFilesModal } from 'features/general/ReviewFiles/components';
 import { useToast, Variant } from 'features/general/Toast';

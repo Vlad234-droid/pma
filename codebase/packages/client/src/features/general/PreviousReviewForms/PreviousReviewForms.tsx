@@ -10,7 +10,7 @@ import { Backward } from 'components/Backward';
 import { YearSwitch } from 'components/YearSwitch';
 import { ProfileTileWrapper } from 'components/ProfileTileWrapper';
 import { AdditionalInfo } from 'features/general/ObjectiveRatings/ObjectiveRatings';
-import { Section } from 'features/general/Objectives';
+import Section from 'components/Section';
 import { IconButton } from 'components/IconButton';
 import { Trans, useTranslation } from 'components/Translation';
 import { Accordion } from './components';

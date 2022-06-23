@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { Trans } from 'components/Translation';
 import { useStyle, Rule, CreateRule } from '@pma/dex-wrapper';
 import { Icon as IconComponent } from 'components/Icon';
-import { default as Accordion, ObjectiveAccordionProps } from 'features/general/Objectives/components/Accordion';
+import { Accordion, ObjectiveAccordionProps } from 'features/general/ObjectiveAccordion';
 
 export type Props = {
   manager: string;

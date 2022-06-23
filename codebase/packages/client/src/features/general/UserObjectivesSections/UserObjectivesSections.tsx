@@ -3,7 +3,9 @@ import { Rule, useStyle } from '@pma/dex-wrapper';
 
 import { Trans, useTranslation } from 'components/Translation';
 import { IconButton } from 'components/IconButton';
-import { Accordion, Section, ObjectiveTypes as OT } from 'features/general/Objectives';
+import { Accordion } from 'features/general/ObjectiveAccordion';
+import Section from 'components/Section';
+import { ObjectiveTypes as OT } from 'features/general/Objectives';
 import Spinner from 'components/Spinner';
 import { Plug } from 'components/Plug';
 

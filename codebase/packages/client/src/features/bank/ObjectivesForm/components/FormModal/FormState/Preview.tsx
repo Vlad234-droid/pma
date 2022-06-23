@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 import { Rule, useStyle } from '@pma/dex-wrapper';
-import { useTranslation, Trans } from 'components/Translation';
+import { Trans } from 'components/Translation';
 import { TileWrapper } from 'components/Tile';
 import MarkdownRenderer from 'components/MarkdownRenderer';
 import { Objective } from '../../../type';
@@ -14,7 +14,6 @@ type Props = {
 
 const Preview: FC<Props> = ({ components, objectives }) => {
   const { css, theme } = useStyle();
-  const { t } = useTranslation();
   return (
     <>
       <div className={css({ padding: `0 0 ${theme.spacing.s5}` })}>

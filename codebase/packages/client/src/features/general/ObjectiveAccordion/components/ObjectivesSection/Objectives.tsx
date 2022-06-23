@@ -1,9 +1,17 @@
 import React, { FC, useEffect, useMemo } from 'react';
 import { Rule, useStyle } from '@pma/dex-wrapper';
 import { ReviewType, Status } from 'config/enum';
-import { getTimelineByCodeSelector, isReviewsInStatus, reviewsMetaSelector } from '@pma/store';
+import {
+  countByStatusReviews,
+  getReviewSchema,
+  getTimelineByCodeSelector,
+  isReviewsInStatus,
+  reviewsMetaSelector,
+} from '@pma/store';
 import { Trans, useTranslation } from 'components/Translation';
-import { Accordion, EditButton, ObjectiveTypes, Section } from 'features/general/Objectives';
+import { canEditAllObjectiveFn, EditButton, ObjectiveTypes } from 'features/general/Objectives';
+import { Accordion } from 'features/general/ObjectiveAccordion';
+import Section from 'components/Section';
 import StatusBadge from 'components/StatusBadge';
 import { useSelector } from 'react-redux';
 import { USER } from 'config/constants';
@@ -15,11 +23,9 @@ export const TEST_ID = 'objectives-test-id';
 
 type Props = {
   objectives: ObjectiveTypes.Objective[];
-  canEditAllObjective: Boolean;
-  canShowObjectives: Boolean;
 };
 
-const Objectives: FC<Props> = ({ objectives = [], canEditAllObjective = false, canShowObjectives = false }) => {
+const Objectives: FC<Props> = ({ objectives = [] }) => {
   const { css } = useStyle();
   const { t } = useTranslation();
 
@@ -31,13 +37,24 @@ const Objectives: FC<Props> = ({ objectives = [], canEditAllObjective = false, c
   const document = useMemo(() => <ObjectiveDocument items={objectives} />, [JSON.stringify(objectives)]);
   const [instance, updateInstance] = usePDF({ document });
 
+  const objectiveSchema = useSelector(getReviewSchema(ReviewType.OBJECTIVE));
+  const countDraftReviews = useSelector(countByStatusReviews(ReviewType.OBJECTIVE, Status.DRAFT)) || 0;
+  const countDeclinedReviews = useSelector(countByStatusReviews(ReviewType.OBJECTIVE, Status.DECLINED)) || 0;
+  const countWaitingForApprovalReviews =
+    useSelector(countByStatusReviews(ReviewType.OBJECTIVE, Status.WAITING_FOR_APPROVAL)) || 0;
+
+  const canEditAllObjective = canEditAllObjectiveFn({
+    objectiveSchema,
+    countDraftReviews,
+    countDeclinedReviews,
+    countWaitingForApprovalReviews,
+  });
+
   useEffect(() => {
     if (objectives.length) {
       updateInstance();
     }
   }, [JSON.stringify(objectives)]);
-
-  if (!canShowObjectives) return null;
 
   return (
     <Section

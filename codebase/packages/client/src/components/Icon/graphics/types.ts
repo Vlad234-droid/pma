@@ -1,9 +1,10 @@
 import { FC } from 'react';
 
-import { Theme } from '@pma/dex-wrapper';
+import { Theme, Colors } from '@pma/dex-wrapper';
 
 type GraphicProps = {
   invertColors: boolean;
+  color?: Colors;
 };
 
 export type FCGraphicProps = FC<GraphicProps>;

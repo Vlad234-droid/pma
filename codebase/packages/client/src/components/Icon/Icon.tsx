@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 
-import { CreateRule, Rule, Styles, useStyle } from '@pma/dex-wrapper';
+import { CreateRule, Rule, Styles, useStyle, Colors } from '@pma/dex-wrapper';
 
 import { getId, getTitle } from './utils';
 
@@ -11,6 +11,7 @@ export type IconBaseProps = {
   title?: string;
   iconStyles?: Rule;
   invertColors?: boolean;
+  color?: Colors;
   testId?: string;
   containerTestId?: string;
   onClick?: () => void;
@@ -35,6 +36,7 @@ export const Icon: FC<IconProps> = ({
   title,
   iconStyles = {},
   invertColors = false,
+  color,
   testId,
   containerTestId,
   backgroundRadius,
@@ -63,7 +65,7 @@ export const Icon: FC<IconProps> = ({
           {customTitle}
         </title>
         {backgroundRadius && <circle cx={backgroundRadius} cy={backgroundRadius} r={backgroundRadius} fill='white' />}
-        <CustomIcon invertColors={invertColors} />
+        <CustomIcon invertColors={invertColors} color={color} />
       </svg>
     </div>
   );
