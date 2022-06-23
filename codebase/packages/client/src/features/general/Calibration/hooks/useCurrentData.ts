@@ -2,7 +2,7 @@ import useQueryString from 'hooks/useQueryString';
 import { convertToReportEnum } from 'features/general/TileReport/utils';
 import { useLocation } from 'react-router-dom';
 import { ReportPage } from 'config/enum';
-import { useChartDataStatistics } from 'features/general/useChartDataStatistics';
+import { useChartDataStatistics } from 'hooks/useChartDataStatistics';
 import { useTranslation } from 'components/Translation';
 import { getCurrentYear } from 'utils';
 

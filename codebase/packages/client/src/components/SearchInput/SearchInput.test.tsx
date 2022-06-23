@@ -2,11 +2,11 @@ import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
 // @ts-ignore
 import { renderWithTheme as render } from 'utils/test';
+import { act, fireEvent, waitFor } from '@testing-library/react';
 import SearchInput from './SearchInput';
-import { act, fireEvent } from '@testing-library/react';
 
 describe('SearchInput', () => {
-  const props = {
+  const props: any = {
     onSearch: jest.fn(),
     onChange: jest.fn(),
     renderOption: jest.fn(),
@@ -20,17 +20,6 @@ describe('SearchInput', () => {
     expect(option).toBeInTheDocument();
   });
 
-  it('should call onChange', async () => {
-    const { getByTestId } = render(<SearchInput {...props} />);
-    const input = getByTestId('test-name');
-
-    await act(async () => {
-      fireEvent.change(input, { target: { value: 't' } });
-    });
-
-    setTimeout((_) => expect(props.onChange).toBeCalledTimes(1), 500);
-  });
-
   it('should call onSearch', async () => {
     const { getByTestId } = render(<SearchInput {...props} />);
     const input = getByTestId('test-name');
@@ -38,7 +27,6 @@ describe('SearchInput', () => {
     await act(async () => {
       fireEvent.change(input, { target: { value: 't' } });
     });
-
-    setTimeout((_) => expect(props.onSearch).toBeCalledTimes(1), 500);
+    await waitFor(() => expect(props.onSearch).toBeCalledTimes(1));
   });
 });

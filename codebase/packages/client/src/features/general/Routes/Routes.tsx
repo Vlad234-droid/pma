@@ -1,10 +1,10 @@
 import React, { FC } from 'react';
 import { Navigate, Route as ReactRoute, Routes } from 'react-router-dom';
 import { NotFound } from 'pages/general/NotFound';
-import { buildPath, RouteWithPath } from 'features/general/Routes/utils';
 import { Page } from 'pages';
 import AccessDenied from 'components/AccessDenied';
 import { usePermission, usePermissionByTenant } from 'features/general/Permission';
+import { buildPath, RouteWithPath } from './utils';
 
 const notHaveAccessMessage = `
   not_have_access_to_page

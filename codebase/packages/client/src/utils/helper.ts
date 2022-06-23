@@ -4,6 +4,8 @@ export const checkTrailingSlash = (path: String) => {
   return path.endsWith('/') ? path : path + '/';
 };
 
+export const isFunction = (mFn: any) => typeof mFn === 'function';
+
 export const upperCaseFirstLetter = <T extends string>(string: T): string =>
   string.charAt(0).toUpperCase() + string.slice(1);
 

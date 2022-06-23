@@ -41,7 +41,7 @@ describe.skip('Selected folder', () => {
   const initialState = { notes: { folders: [{}] } };
   it('render selected folder wrapper', async () => {
     const { getByTestId } = render(
-      <NotesContext.Provider value={value}>
+      <NotesContext.Provider value={value as any}>
         <SelectedFolder {...props} />
       </NotesContext.Provider>,
       initialState,
@@ -51,7 +51,7 @@ describe.skip('Selected folder', () => {
   });
   it('it should call setSelectedFolder handler', async () => {
     render(
-      <NotesContext.Provider value={value}>
+      <NotesContext.Provider value={value as any}>
         <SelectedFolder {...props} />
       </NotesContext.Provider>,
       initialState,
@@ -61,7 +61,7 @@ describe.skip('Selected folder', () => {
   });
   it('it should call dots handler', async () => {
     const { getByTestId } = render(
-      <NotesContext.Provider value={value}>
+      <NotesContext.Provider value={value as any}>
         <SelectedFolder {...props} />
       </NotesContext.Provider>,
       initialState,
@@ -73,10 +73,12 @@ describe.skip('Selected folder', () => {
   it('it should call dots buttons', async () => {
     const { getByTestId } = render(
       <NotesContext.Provider
-        value={{
-          ...value,
-          selectedFolder: { notes: [{ isInSearch: false, id: 1, referenceColleagueUuid: true, selected: true }] },
-        }}
+        value={
+          {
+            ...value,
+            selectedFolder: { notes: [{ isInSearch: false, id: 1, referenceColleagueUuid: true, selected: true }] },
+          } as any
+        }
       >
         <SelectedFolder {...props} />
       </NotesContext.Provider>,
@@ -97,10 +99,12 @@ describe.skip('Selected folder', () => {
   it('it should call setConfirmModal', async () => {
     const { getByTestId } = render(
       <NotesContext.Provider
-        value={{
-          ...value,
-          selectedFolder: { notes: [{ isInSearch: false, id: 1, referenceColleagueUuid: true, selected: true }] },
-        }}
+        value={
+          {
+            ...value,
+            selectedFolder: { notes: [{ isInSearch: false, id: 1, referenceColleagueUuid: true, selected: true }] },
+          } as any
+        }
       >
         <SelectedFolder {...props} />
       </NotesContext.Provider>,

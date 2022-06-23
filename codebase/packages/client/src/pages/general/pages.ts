@@ -41,13 +41,14 @@ import PreviousCalibrationRatings from './PreviousCalibrationRatings';
 import PreviousObjectiveRatings from './PreviousObjectiveRatings';
 import PreviousReviewForms from './PreviousReviewForms';
 import { NotFound } from './NotFound';
+import { Tenant } from 'utils';
 
 export type PageComponent = {
   Element: PageElement;
   withHeader: boolean;
   perform: Array<role | workLevel>;
   tenant: Array<tenant>;
-  title?: string;
+  title?: string | ((tenant: Tenant) => string);
   backPath?: string;
   withIcon?: boolean;
   iconName?: Graphics;
@@ -185,7 +186,7 @@ const pages: Record<Page, PageComponent> = {
   },
   [Page.CONTRIBUTION]: {
     Element: CareerPerformance,
-    title: 'Your Contribution',
+    title: (tenant) => (tenant === Tenant.GENERAL ? 'Your Contribution' : 'My quarterly priorities'),
     withHeader: true,
     withIcon: true,
     iconName: 'home',

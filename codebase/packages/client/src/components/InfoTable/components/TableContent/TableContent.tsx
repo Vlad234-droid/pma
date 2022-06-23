@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { useStyle, Rule, CreateRule, Styles } from '@pma/dex-wrapper';
-import { useChartDataStatistics } from 'features/general/useChartDataStatistics';
+import { useChartDataStatistics } from 'hooks/useChartDataStatistics';
 import { IconButton } from 'components/IconButton';
 import { Trans, useTranslation } from 'components/Translation/Translation';
 

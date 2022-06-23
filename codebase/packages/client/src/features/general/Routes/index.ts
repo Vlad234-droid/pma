@@ -1,2 +1,2 @@
-export { default } from './components/Routes';
+export { default } from './Routes';
 export * from './utils';

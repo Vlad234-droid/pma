@@ -3,14 +3,15 @@ import { matchPath, useLocation, useNavigate } from 'react-router-dom';
 import { Rule, useStyle } from '@pma/dex-wrapper';
 import { pages } from 'pages';
 import { buildPath } from 'features/general/Routes/utils';
-import { CanPerform, role } from 'features/general/Permission';
+import { CanPerform, role, useTenant } from 'features/general/Permission';
 import AccessDenied from 'components/AccessDenied';
 import { Header } from 'components/Header';
 import authContext from 'contexts/authContext';
 import headerContext from 'contexts/headerContext';
 import { useTranslation, Trans } from 'components/Translation';
 import MarkdownRenderer from 'components/MarkdownRenderer';
-import { useFetchCommonData } from './useFetchCommonData';
+import { isFunction } from 'utils';
+import { useFetchCommonData } from './hooks/useFetchCommonData';
 
 export const TEST_ID = 'layout-wrapper';
 
@@ -44,6 +45,7 @@ const Yes: FC = ({ children }) => {
   }, [pathname, linkTitle]);
 
   const handleBack = (backPath = '/') => navigate(backPath, { replace: true });
+  const tenant = useTenant();
 
   useFetchCommonData();
 
@@ -51,7 +53,7 @@ const Yes: FC = ({ children }) => {
     <div data-test-id={TEST_ID} className={css(layoutRule)}>
       {withHeader && (
         <Header
-          title={title}
+          title={isFunction(title) ? title(tenant) : title}
           withIcon={withIcon}
           iconName={iconName}
           onBack={backPath ? () => handleBack(buildPath(backPath)) : undefined}
