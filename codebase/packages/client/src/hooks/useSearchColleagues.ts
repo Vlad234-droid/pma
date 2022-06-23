@@ -4,7 +4,7 @@ import { ColleaguesActions, getColleaguesSelector } from '@pma/store';
 import { buildSearchColleaguesQuery, extendQuery } from 'utils';
 import { SearchOption } from 'config/enum';
 
-const useSearchColleagues = (fields: Record<string, string> = {}, unmount = true) => {
+const useSearchColleagues = (fields: Record<string, string> = {}) => {
   const dispatch = useDispatch();
   const colleagues = useSelector(getColleaguesSelector) || [];
 
@@ -20,7 +20,7 @@ const useSearchColleagues = (fields: Record<string, string> = {}, unmount = true
 
   useEffect(() => {
     return () => {
-      if (unmount) dispatch(ColleaguesActions.clearColleagueList());
+      dispatch(ColleaguesActions.clearColleagueList());
     };
   }, []);
 

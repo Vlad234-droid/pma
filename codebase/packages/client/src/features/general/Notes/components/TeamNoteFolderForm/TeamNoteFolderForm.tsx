@@ -10,7 +10,7 @@ import { Input, Item } from 'components/Form';
 import { useTranslation } from 'components/Translation';
 import { ButtonsWrapper } from 'components/ButtonsWrapper';
 import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
-import { ColleaguesFinder } from 'features/general/GiveFeedBack';
+import { ColleaguesFinder } from 'components/ColleaguesFinder';
 import { schemaFolder } from '../../schema';
 
 export const MODAL_WRAPPER = 'modal-wrapper';

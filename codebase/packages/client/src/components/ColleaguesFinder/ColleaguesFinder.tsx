@@ -46,7 +46,7 @@ const ColleaguesFinder: FC<Props> = ({
   const { css } = useStyle();
   const { t } = useTranslation();
 
-  const { colleagues, handleSearchColleagues, clearColleagueList } = useSearchColleagues(options, false);
+  const { colleagues, handleSearchColleagues, clearColleagueList } = useSearchColleagues(options);
 
   const handleChange = (e: any) => {
     const { colleagueUUID, profile } = e.colleague;
@@ -66,7 +66,7 @@ const ColleaguesFinder: FC<Props> = ({
         customIcon={customIcon && <Icon size={'20px'} graphic='search' iconStyles={iconStyles} />}
       >
         <SearchInput
-          searchOption={searchOption}
+          key={searchOption}
           styles={inputStyles}
           name={'search_option'}
           onChange={handleChange}

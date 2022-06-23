@@ -4,11 +4,6 @@ import mergeRefs from 'react-merge-refs';
 import debounce from 'lodash.debounce';
 import { useFormContainer } from 'components/Form/context/input';
 import { Icon } from 'components/Icon';
-import { SearchOption } from '../../config/enum';
-
-type SearchProp = {
-  target: { value: string };
-};
 
 type Props = {
   disabled?: boolean;
@@ -16,7 +11,7 @@ type Props = {
   name?: string;
   placeholder?: string;
   styles?: Styles | Rule;
-  onSearch: (e: ChangeEvent<HTMLInputElement> | SearchProp) => void;
+  onSearch: (e: ChangeEvent<HTMLInputElement>) => void;
   onChange: (item: object) => void;
   onDelete?: (item: string) => void;
   onClear?: () => void;
@@ -28,7 +23,6 @@ type Props = {
   options?: Array<object>;
   selected?: Array<{ label: string; value: string }>;
   multiple?: boolean;
-  searchOption?: SearchOption;
 };
 
 const SearchInput: FC<Props> = ({
@@ -48,13 +42,12 @@ const SearchInput: FC<Props> = ({
   disabled = false,
   renderOption,
   multiple = false,
-  searchOption,
 }) => {
   const [currentValue, setCurrentValue] = useState(value);
   const { css } = useStyle();
   const { inputRef } = useFormContainer();
 
-  const handleSearch = useCallback(debounce(onSearch, 300), [searchOption]);
+  const handleSearch = useCallback(debounce(onSearch, 300), []);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setCurrentValue(e.target.value);
@@ -64,17 +57,6 @@ const SearchInput: FC<Props> = ({
   useEffect(() => {
     setCurrentValue(value);
   }, [value]);
-
-  useEffect(() => {
-    if (inputRef.current.value) {
-      const e = {
-        target: {
-          value: inputRef.current.value,
-        },
-      };
-      handleSearch(e);
-    }
-  }, [searchOption]);
 
   return (
     <>

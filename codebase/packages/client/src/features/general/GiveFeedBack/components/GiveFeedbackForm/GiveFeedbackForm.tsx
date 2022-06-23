@@ -112,13 +112,13 @@ const GiveFeedbackForm: FC<Props> = ({ onSubmit, defaultValues, currentColleague
         >
           {({ active }) => (
             <ColleaguesFinder
+              searchOption={active}
               onSelect={(colleagueUuid) => {
                 setValue('targetColleagueUuid', colleagueUuid, { shouldValidate: true });
               }}
               selected={[]}
               value={getColleagueName(selectedColleague)}
               error={get(errors, 'targetColleagueUuid.message')}
-              searchOption={active}
               customStyles={{ marginTop: '0px', width: '100%' }}
               inputStyles={{
                 borderRadius: uuid === 'new' && !targetColleagueUuid ? '25px 0px 0px 25px !important' : '50px',

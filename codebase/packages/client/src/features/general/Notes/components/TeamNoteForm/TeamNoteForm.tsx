@@ -10,7 +10,7 @@ import { GenericItemField } from 'components/GenericForm';
 import { Input, Item, Select, Textarea } from 'components/Form';
 import { useTranslation } from 'components/Translation';
 import { ButtonsWrapper } from 'components/ButtonsWrapper';
-import { ColleaguesFinder } from 'features/general/GiveFeedBack';
+import { ColleaguesFinder } from 'components/ColleaguesFinder';
 import { schemaTEAMNotes } from '../../schema';
 import { NEW_FOLDER_ID } from 'utils';
 import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';

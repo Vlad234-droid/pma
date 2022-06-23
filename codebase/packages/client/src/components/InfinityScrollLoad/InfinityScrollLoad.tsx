@@ -1,6 +1,6 @@
 import React, { useState, FC } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
-import { useStyle, Rule } from '@pma/dex-wrapper';
+import { useStyle, Rule, Styles } from '@pma/dex-wrapper';
 import { ScrollProps as Props } from './types';
 
 const InfinityScrollLoad: FC<Props> = ({
@@ -38,6 +38,15 @@ const InfinityScrollLoad: FC<Props> = ({
 const scrollWrapper: Rule = {
   overflow: 'auto',
   maxHeight: '604px',
-};
+  '&::-webkit-scrollbar': {
+    width: '14px',
+  },
+  '&::-webkit-scrollbar-thumb': {
+    border: '4px solid rgba(0, 0, 0, 0)',
+    backgroundClip: 'padding-box',
+    borderRadius: '100vmax',
+    backgroundColor: 'rgba(134,134,134,255)',
+  },
+} as Styles;
 
 export default InfinityScrollLoad;

@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useMemo } from 'react';
 import { Rule, theme, useStyle } from '@pma/dex-wrapper';
 import get from 'lodash.get';
-import { colleagueUUIDSelector, FeedbackActions, getReviews } from '@pma/store';
+import { ColleaguesActions, colleagueUUIDSelector, FeedbackActions, getReviews } from '@pma/store';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { useNavigate } from 'react-router';
@@ -120,6 +120,7 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel, setIsInfoModalOpen }) 
 
         <form className={css({ marginTop: '8px' })}>
           <InputWithDropdown
+            onChange={() => dispatch(ColleaguesActions.clearColleagueList())}
             visible={true}
             options={[
               { value: SearchOption.NAME, label: t('by_name', 'By name') },
