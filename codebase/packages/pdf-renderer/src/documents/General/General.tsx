@@ -13,7 +13,12 @@ type Props = {
 const GeneralDocument: FC<Props> = ({ documentProps = {}, pageProps = { size: 'A4' }, title, jobTitle, children }) => (
   <Document {...documentProps}>
     <Page {...pageProps} style={styles.page} wrap={true}>
-      <View render={({ pageNumber }) => pageNumber > 1 && <Text style={styles.separator} />} fixed />
+      <View
+        render={({ pageNumber }) =>
+          pageNumber > 1 && <Text style={styles.separator}>____________________________________</Text>
+        }
+        fixed
+      />
       <View style={styles.logoWrapper}>
         <Image style={styles.logo} src={TescoLogo} />
       </View>
@@ -38,8 +43,8 @@ const styles = StyleSheet.create({
   separator: {
     display: 'flex',
     width: '100%',
-    borderBottom: `1px solid ${theme.colors.tescoBlue}`,
-    color: 'red',
+    color: theme.colors.tescoBlue,
+    paddingBottom: '15px',
   },
   dot: {
     color: 'red',

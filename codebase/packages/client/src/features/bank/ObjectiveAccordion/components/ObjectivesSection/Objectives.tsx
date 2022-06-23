@@ -10,7 +10,7 @@ import StatusBadge from 'components/StatusBadge';
 import { useSelector } from 'react-redux';
 import { USER } from 'config/constants';
 import { IconButton } from 'components/IconButton';
-import { downloadPDF, ObjectiveDocument, usePDF } from '@pma/pdf-renderer';
+import { downloadPDF, PrioritiesDocument, usePDF } from '@pma/pdf-renderer';
 import Spinner from 'components/Spinner';
 
 export const TEST_ID = 'objectives-test-id';
@@ -27,7 +27,7 @@ const Objectives: FC<Props> = ({ objectives = [] }) => {
   const status = timelineObjective?.summaryStatus || undefined;
   const isAllObjectivesInSameStatus = useSelector(isReviewsInStatus(ReviewType.OBJECTIVE)(status));
 
-  const document = useMemo(() => <ObjectiveDocument items={objectives} />, [JSON.stringify(objectives)]);
+  const document = useMemo(() => <PrioritiesDocument items={objectives} />, [JSON.stringify(objectives)]);
   const [instance, updateInstance] = usePDF({ document });
 
   useEffect(() => {
@@ -52,7 +52,7 @@ const Objectives: FC<Props> = ({ objectives = [] }) => {
         content: (
           <div data-test-id={TEST_ID}>
             <IconButton
-              onPress={() => downloadPDF(instance.url!, 'objectives.pdf')}
+              onPress={() => downloadPDF(instance.url!, 'priorities.pdf')}
               graphic='download'
               customVariantRules={{ default: iconButtonStyles }}
               iconStyles={iconStyles}
