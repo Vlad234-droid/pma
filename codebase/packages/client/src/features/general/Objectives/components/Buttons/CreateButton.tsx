@@ -4,59 +4,83 @@ import { IconButton } from 'components/IconButton';
 import { ModalComponent } from 'features/general/ObjectivesForm/components/ModalComponent';
 import { useTranslation } from 'components/Translation';
 import { ObjectiveForm, ObjectivesForm } from 'features/general/ObjectivesForm';
+import { ReviewType, Status } from 'config/enum';
+import { REVIEW_MODIFICATION_MODE, reviewModificationModeFn } from '../../utils';
+import { useSelector } from 'react-redux';
+import {
+  countByTypeReviews,
+  filterReviewsByTypeSelector,
+  getReviewSchema,
+  getTimelineByCodeSelector,
+  isReviewsNumbersInStatus,
+} from '@pma/store';
+import { USER } from 'config/constants';
 
 export type CreateModalProps = {
   withIcon?: boolean;
-  buttonText?: string;
-  useSingleStep?: boolean;
-  isAvailable?: boolean;
 };
 
 type Props = HTMLProps<HTMLInputElement> & CreateModalProps;
 
-const CreateButton: FC<Props> = memo(
-  ({ withIcon = false, buttonText = 'Create objectives', useSingleStep = true, isAvailable = true }) => {
-    const { t } = useTranslation();
-    const { css } = useStyle();
+const CreateButton: FC<Props> = memo(({ withIcon = false }) => {
+  const { t } = useTranslation();
+  const { css } = useStyle();
 
-    const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
-    const handleBtnClick = () => setIsOpen(true);
+  const schema = useSelector(getReviewSchema(ReviewType.OBJECTIVE));
+  const { markup = { max: 0, min: 0 } } = schema;
+  const reviewsMinNumbersInStatusApproved = useSelector(
+    isReviewsNumbersInStatus(ReviewType.OBJECTIVE)(Status.APPROVED, markup.min),
+  );
+  const originObjectives = useSelector(filterReviewsByTypeSelector(ReviewType.OBJECTIVE));
+  const timelineObjective = useSelector(getTimelineByCodeSelector(ReviewType.OBJECTIVE, USER.current)) || {};
+  const countReviews = useSelector(countByTypeReviews(ReviewType.OBJECTIVE)) || 0;
+  const objectiveSchema = useSelector(getReviewSchema(ReviewType.OBJECTIVE));
+  const reviewModificationMode = reviewModificationModeFn(countReviews, objectiveSchema);
+  const useSingleStep = reviewModificationMode === REVIEW_MODIFICATION_MODE.SINGLE;
+  const isAvailable =
+    (reviewsMinNumbersInStatusApproved ||
+      timelineObjective.status === Status.DRAFT ||
+      originObjectives?.length === 0) &&
+    countReviews < markup.max &&
+    reviewModificationMode !== REVIEW_MODIFICATION_MODE.NONE;
 
-    return (
-      <>
-        {isAvailable && (
-          <div className={css({ display: 'flex', marginBottom: '20px' })}>
-            {withIcon ? (
-              <IconButton
-                customVariantRules={{ default: iconBtnStyle }}
-                onPress={handleBtnClick}
-                graphic='add'
-                iconProps={{ invertColors: true }}
-                iconStyles={iconStyle}
-              >
-                {buttonText}
-              </IconButton>
-            ) : (
-              <Button styles={[buttonStyle]} onPress={handleBtnClick}>
-                {buttonText}
-              </Button>
-            )}
-          </div>
-        )}
-        {isOpen && (
-          <ModalComponent onClose={() => setIsOpen(false)} title={t('create_objectives', 'Create objectives')}>
-            {useSingleStep ? (
-              <ObjectiveForm onClose={() => setIsOpen(false)} />
-            ) : (
-              <ObjectivesForm onClose={() => setIsOpen(false)} />
-            )}
-          </ModalComponent>
-        )}
-      </>
-    );
-  },
-);
+  const handleBtnClick = () => setIsOpen(true);
+
+  return (
+    <>
+      {isAvailable && (
+        <div className={css({ display: 'flex', marginBottom: '20px' })}>
+          {withIcon ? (
+            <IconButton
+              customVariantRules={{ default: iconBtnStyle }}
+              onPress={handleBtnClick}
+              graphic='add'
+              iconProps={{ invertColors: true }}
+              iconStyles={iconStyle}
+            >
+              {t('create_objectives', 'Create objective')}
+            </IconButton>
+          ) : (
+            <Button styles={[buttonStyle]} onPress={handleBtnClick}>
+              {t('create_objectives', 'Create objective')}
+            </Button>
+          )}
+        </div>
+      )}
+      {isOpen && (
+        <ModalComponent onClose={() => setIsOpen(false)} title={t('create_objectives', 'Create objectives')}>
+          {useSingleStep ? (
+            <ObjectiveForm onClose={() => setIsOpen(false)} />
+          ) : (
+            <ObjectivesForm onClose={() => setIsOpen(false)} />
+          )}
+        </ModalComponent>
+      )}
+    </>
+  );
+});
 
 const iconBtnStyle: Rule = ({ theme }) => ({
   ...theme.font.fixed.f16,

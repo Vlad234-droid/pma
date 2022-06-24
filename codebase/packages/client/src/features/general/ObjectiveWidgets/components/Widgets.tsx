@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useMemo } from 'react';
+import React, { FC, useEffect } from 'react';
 import { Styles, theme, useStyle } from '@pma/dex-wrapper';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -17,7 +17,7 @@ import SecondaryWidget, { Props as SecondaryWidgetProps } from 'features/general
 import { buildPath } from 'features/general/Routes';
 import { Props, widgetTypes } from './type';
 import { ReviewType } from 'config/enum';
-import { DATE_STRING_FORMAT, formatDateString, getTenant, Tenant } from 'utils';
+import { DATE_STRING_FORMAT, formatDateString } from 'utils';
 import Spinner from 'components/Spinner';
 import { USER } from 'config/constants';
 import { MainWidget } from 'features/general/MainWidget';

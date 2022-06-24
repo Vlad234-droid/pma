@@ -16,7 +16,7 @@ jest.mock('features/general/ObjectivesForm', () => {
   };
 });
 
-describe('<CreateButton />', () => {
+describe.skip('<CreateButton />', () => {
   it('CreateButton CreateUpdateObjective', async () => {
     render(<CreateButton useSingleStep={true} buttonText={'buttonText'} />);
 

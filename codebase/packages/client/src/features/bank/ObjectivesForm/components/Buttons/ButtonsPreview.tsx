@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { useStyle, Button, Rule, CreateRule } from '@pma/dex-wrapper';
 import { Trans, useTranslation } from 'components/Translation';
-import { ButtonWithConfirmation } from '../../../../../general/Modal';
+import { ButtonWithConfirmation } from 'features/general/Modal';
 
 type ButtonsProps = {
   onBack: () => void;

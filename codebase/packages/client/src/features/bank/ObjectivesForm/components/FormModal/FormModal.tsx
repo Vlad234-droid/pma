@@ -5,10 +5,10 @@ import { useTranslation } from 'components/Translation';
 import SuccessModal from 'components/SuccessModal';
 
 import { default as FormWrapper } from './FormWrapper';
-import FormModify from './FormState/Modify';
-import FormPreview from './FormState/Preview';
-import ButtonsModify from './Buttons/ButtonsModify';
-import ButtonsPreview from './Buttons/ButtonsPreview';
+import FormModify from '../FormState/Modify';
+import FormPreview from '../FormState/Preview';
+import ButtonsModify from '../Buttons/ButtonsModify';
+import ButtonsPreview from '../Buttons/ButtonsPreview';
 
 import { FormStateType } from '../../type';
 import { FormPropsType, withForm } from '../../hoc/withForm';

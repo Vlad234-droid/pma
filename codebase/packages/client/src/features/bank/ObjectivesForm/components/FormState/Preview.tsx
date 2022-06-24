@@ -4,7 +4,7 @@ import { Rule, useStyle } from '@pma/dex-wrapper';
 import { Trans } from 'components/Translation';
 import { TileWrapper } from 'components/Tile';
 import MarkdownRenderer from 'components/MarkdownRenderer';
-import { Objective } from '../../../type';
+import { Objective } from '../../type';
 
 type Props = {
   components: any[];

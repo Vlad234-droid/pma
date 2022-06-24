@@ -1,18 +1,15 @@
 import React, { FC, useEffect, useMemo, useState } from 'react';
+
 import { CreateRule, Rule, Styles, useStyle } from '@pma/dex-wrapper';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 import {
   colleagueUUIDSelector,
-  countByTypeReviews,
-  currentUserSelector,
   filterReviewsByTypeSelector,
   getReviewSchema,
-  getTimelineByCodeSelector,
   getTimelineMetaSelector,
   getTimelineSelector,
-  isReviewsNumbersInStatus,
   ObjectiveSharingActions,
   ReviewsActions,
   reviewsMetaSelector,
@@ -26,18 +23,16 @@ import {
 
 import { CreateButton, ObjectiveTypes as OT, transformReviewsToObjectives } from 'features/general/Objectives';
 import useDispatch from 'hooks/useDispatch';
-import { USER } from 'config/constants';
 import { Page } from 'pages';
 import Spinner from 'components/Spinner';
 import { useTranslation } from 'components/Translation';
-import { ObjectiveType, ReviewType, Status } from 'config/enum';
+import { ObjectiveType, ReviewType } from 'config/enum';
 import { StepIndicator } from 'components/StepIndicator/StepIndicator';
 import { useHeaderContainer } from 'contexts/headerContext';
 
 import { ObjectivesSection } from '../DinamicBlocks/ObjectivesSection';
-import { ReviewFilesSection, CompletedReviewsSection, MyReviewsSection } from './Sections';
-import { WidgetBlock } from './Widgets/WidgetBlock';
-import { REVIEW_MODIFICATION_MODE, reviewModificationModeFn } from '../../utils';
+import { ReviewFilesSection, CompletedReviewsSection, MyReviewsSection } from '../Sections';
+import { WidgetBlock } from '../Widgets/WidgetBlock';
 
 export const TEST_ID = 'my-objectives-page';
 
@@ -62,37 +57,19 @@ const MyObjectives: FC = () => {
   const timelinesExist = useSelector(timelinesExistSelector(colleagueUuid));
   const { loaded: timelinesLoaded } = useSelector(timelinesMetaSelector());
   const schema = useSelector(getReviewSchema(ReviewType.OBJECTIVE));
-  const { components = [], markup = { max: 0, min: 0 } } = schema;
+  const { components = [] } = schema;
   const { descriptions, startDates, summaryStatuses } = useSelector(getTimelineSelector(colleagueUuid)) || {};
   const timelineTypes = useSelector(timelineTypesAvailabilitySelector(colleagueUuid)) || {};
-  const timelineObjective = useSelector(getTimelineByCodeSelector(ReviewType.OBJECTIVE, USER.current)) || {};
 
   const canShowObjectives = timelineTypes[ObjectiveType.OBJECTIVE];
-  const canShowMyReview = timelineTypes[ObjectiveType.MYR] && timelineTypes[ObjectiveType.EYR];
+  const hasYearReview = timelineTypes[ObjectiveType.MYR] && timelineTypes[ObjectiveType.EYR];
   const canShowAnnualReview = !timelineTypes[ObjectiveType.MYR] && timelineTypes[ObjectiveType.EYR];
 
   const formElements = components.filter((component) => component.type != 'text');
 
-  const { info } = useSelector(currentUserSelector);
-  const countReviews = useSelector(countByTypeReviews(ReviewType.OBJECTIVE)) || 0;
-  const objectiveSchema = useSelector(getReviewSchema(ReviewType.OBJECTIVE));
+  const renderStepIndicator: Boolean = (mobileScreen && hasYearReview) || false;
 
-  const reviewsMinNumbersInStatusApproved = useSelector(
-    isReviewsNumbersInStatus(ReviewType.OBJECTIVE)(Status.APPROVED, markup.min),
-  );
-
-  const reviewModificationMode = reviewModificationModeFn(countReviews, objectiveSchema);
-
-  const createIsAvailable =
-    (reviewsMinNumbersInStatusApproved ||
-      timelineObjective.status === Status.DRAFT ||
-      originObjectives?.length === 0) &&
-    countReviews < markup.max &&
-    reviewModificationMode !== REVIEW_MODIFICATION_MODE.NONE;
-
-  const renderStepIndicator: Boolean = (mobileScreen && canShowMyReview && timelineLoaded) || false;
-
-  const pathParams = useMemo(() => ({ colleagueUuid: info.colleagueUUID, cycleUuid: 'CURRENT' }), [info.colleagueUUID]);
+  const pathParams = useMemo(() => ({ colleagueUuid, cycleUuid: 'CURRENT' }), [colleagueUuid]);
   const isValidPathParams = pathParams.colleagueUuid;
 
   useEffect(() => {
@@ -144,19 +121,14 @@ const MyObjectives: FC = () => {
 
   return (
     <div data-test-id={TEST_ID}>
-      <CreateButton
-        withIcon
-        useSingleStep={reviewModificationMode === REVIEW_MODIFICATION_MODE.SINGLE}
-        buttonText='Create objective'
-        isAvailable={createIsAvailable}
-      />
+      <CreateButton withIcon />
       <div className={css(bodyBlockStyles({ mobileScreen }))}>
         <div className={css(bodyWrapperStyles)}>
           {!timelineLoaded ? (
             <Spinner id='1' />
           ) : (
             <>
-              {!mobileScreen && canShowMyReview && (
+              {!mobileScreen && hasYearReview && (
                 <div className={css(timelineWrapperStyles)}>
                   <StepIndicator
                     mainTitle={t('performance_timeline_title', 'Your Contribution timeline')}
@@ -176,20 +148,23 @@ const MyObjectives: FC = () => {
           )}
         </div>
         <div className={css(widgetWrapper({ mobileScreen }))}>
-          {!timelineLoaded && (
+          {!timelineLoaded ? (
             <div className={css(timelineWrapperWidget)}>
               <Spinner id='2' />
             </div>
-          )}
-          {renderStepIndicator && (
-            <div className={css(timelineWrapperWidget)}>
-              <StepIndicator
-                mainTitle={t('performance_timeline_title', 'Your Contribution timeline')}
-                titles={descriptions}
-                descriptions={startDates}
-                statuses={summaryStatuses}
-              />
-            </div>
+          ) : (
+            <>
+              {renderStepIndicator && (
+                <div className={css(timelineWrapperWidget)}>
+                  <StepIndicator
+                    mainTitle={t('performance_timeline_title', 'Your Contribution timeline')}
+                    titles={descriptions}
+                    descriptions={startDates}
+                    statuses={summaryStatuses}
+                  />
+                </div>
+              )}
+            </>
           )}
           <WidgetBlock />
         </div>

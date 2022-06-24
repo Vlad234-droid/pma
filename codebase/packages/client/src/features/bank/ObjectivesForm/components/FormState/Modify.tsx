@@ -3,9 +3,9 @@ import { UseFormReturn } from 'react-hook-form';
 import { useStyle } from '@pma/dex-wrapper';
 import { useTranslation } from 'components/Translation';
 import { TriggerModal } from 'features/general/Modal';
-import HelpTrigger from '../HelpTrigger';
-import Components from '../Components';
-import { Objective } from '../../../type';
+import HelpTrigger from '../FormModal/HelpTrigger';
+import Components from '../FormModal/Components';
+import { Objective } from '../../type';
 
 type Props = {
   components: any[];

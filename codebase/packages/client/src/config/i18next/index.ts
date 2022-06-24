@@ -1,29 +1,31 @@
 import i18n from 'i18next';
 import { DateTime } from 'luxon';
-import { PUBLIC_URL } from 'config/constants';
-
-import backend from 'i18next-http-backend';
 import { initReactI18next } from 'react-i18next';
 
-i18n
-  .use(backend)
-  .use(initReactI18next)
-  .init({
-    fallbackLng: 'en',
-    saveMissing: false,
-    updateMissing: false,
-    backend: {
-      loadPath: `${PUBLIC_URL}/locales/{{lng}}/{{ns}}.json`,
-      queryStringParams: { v: '0.0.1' },
+import commonEn from 'locales/en/common.json';
+import generalEn from 'locales/en/general.json';
+import bankEn from 'locales/en/bank.json';
+
+const resources = {
+  en: {
+    common: commonEn,
+    general: generalEn,
+    bank: bankEn,
+  },
+};
+
+i18n.use(initReactI18next).init({
+  resources,
+  defaultNS: 'common',
+  lng: 'en',
+  interpolation: {
+    format: (value: any, format: any, lang: any): string => {
+      if (format === 'uppercase') return value.toUpperCase();
+      if (value instanceof Date) return DateTime.fromJSDate(value).setLocale(lang).toFormat(format);
+      return value;
     },
-    interpolation: {
-      format: (value: any, format: any, lang: any): string => {
-        if (format === 'uppercase') return value.toUpperCase();
-        if (value instanceof Date) return DateTime.fromJSDate(value).setLocale(lang).toFormat(format);
-        return value;
-      },
-    },
-    react: { useSuspense: false },
-  });
+    escapeValue: false,
+  },
+});
 
 export default i18n;
