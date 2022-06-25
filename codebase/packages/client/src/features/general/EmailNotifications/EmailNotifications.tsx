@@ -8,7 +8,7 @@ import { TileWrapper } from 'components/Tile';
 import { Checkbox } from 'components/Form';
 import useDispatch from 'hooks/useDispatch';
 import { useAuthContainer } from 'contexts/authContext';
-import { accessByRole, accessByTimelinePoints, accessByWorkLevel } from '../config';
+import { accessByRole, accessByTimelinePoints, accessByWorkLevel } from './config';
 
 export type Props = {};
 

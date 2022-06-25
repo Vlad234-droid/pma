@@ -5,8 +5,7 @@ import '@testing-library/jest-dom/extend-expect';
 // @ts-ignore
 import { renderWithTheme as render, screen } from 'utils/test';
 import { ReviewType } from 'config/enum';
-
-import { Buttons } from './Buttons';
+import Buttons from './Buttons';
 
 describe('<Buttons />', () => {
   it('render Buttons OBJECTIVE disabled', async () => {

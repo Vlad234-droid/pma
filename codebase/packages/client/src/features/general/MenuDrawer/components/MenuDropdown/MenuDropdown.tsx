@@ -11,7 +11,7 @@ import { Icon } from 'components/Icon';
 export const DROPDOWN_ITEMS_WRAPPER = 'dropdown-items-wrapper';
 export const DROPDOWN_BTN = 'dropdown-btn';
 
-export const MenuDropdown: FC = () => {
+const MenuDropdown: FC = () => {
   const { css } = useStyle();
   const { t } = useTranslation();
 
@@ -131,3 +131,5 @@ const adminToolsStyle: Rule = {
   cursor: 'pointer',
   userSelect: 'none',
 };
+
+export default MenuDropdown;

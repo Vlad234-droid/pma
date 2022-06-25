@@ -15,7 +15,7 @@ import { Page } from 'pages';
 import { useTranslation } from 'components/Translation';
 import SecondaryWidget, { Props as SecondaryWidgetProps } from 'features/general/SecondaryWidget';
 import { buildPath } from 'features/general/Routes';
-import { Props, widgetTypes } from './type';
+import { Props, widgetTypes } from './configs/type';
 import { ReviewType } from 'config/enum';
 import { DATE_STRING_FORMAT, formatDateString } from 'utils';
 import Spinner from 'components/Spinner';

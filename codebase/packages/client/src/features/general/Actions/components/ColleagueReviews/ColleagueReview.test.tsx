@@ -4,7 +4,7 @@ import { FormType } from '@pma/store';
 // @ts-ignore
 import { renderWithTheme as render } from 'utils/test';
 
-import { ColleagueReview, TEST_WRAPPER_ID } from './ColleagueReview';
+import ColleagueReview, { TEST_WRAPPER_ID } from './ColleagueReview';
 import { SchemaFixtureVariables } from 'utils/test/fixtures/schema';
 import { ReviewType, Status } from 'config/enum';
 

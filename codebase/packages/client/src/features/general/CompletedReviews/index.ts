@@ -1,1 +1,1 @@
-export { default as CompletedReviewsModal } from './components/CompletedReviewsModal';
+export { default as CompletedReviewsModal } from './CompletedReviewsModal';

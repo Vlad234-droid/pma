@@ -11,7 +11,7 @@ import { Trans } from 'components/Translation';
 import { formatToRelativeDate } from 'utils/date';
 import { getNotesFolderTitle } from 'utils/note';
 import { Page } from 'pages';
-import { SelectedFolderProps } from '../../../type';
+import { SelectedFolderProps } from '../../../configs/type';
 import { useNotesContainer } from '../../../contexts';
 import { buildPath } from 'features/general/Routes';
 import { paramsReplacer } from 'utils';
@@ -31,8 +31,7 @@ const SelectedFolder: FC<SelectedFolderProps> = ({
   const ref = useRef<HTMLDivElement | null>();
   const navigate = useNavigate();
 
-  const { archiveMode, selectedFolder, setSelectedFolder, setSelectedNoteToEdit, setSelectedTEAMNoteToEdit } =
-    useNotesContainer();
+  const { archiveMode, selectedFolder, setSelectedFolder } = useNotesContainer();
 
   const isUserArchived = archiveMode.user;
 

@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { Rule, Styles, useStyle } from '@pma/dex-wrapper';
-import { InfoModalProps } from '../../type';
+import { InfoModalProps } from '../../config/type';
 import { Trans } from 'components/Translation';
 import { ArrowLeftIcon } from 'components/ArrowLeftIcon';
 export const MESSAGE_WRAPPER = 'message-wrapper';

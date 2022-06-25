@@ -14,7 +14,7 @@ import { ButtonsWrapper } from 'components/ButtonsWrapper';
 import { InputWithDropdown } from 'components/InputWithDropdown';
 import { ColleaguesFinder } from 'components/ColleaguesFinder';
 
-import { GiveFeedbackType } from '../../type';
+import { GiveFeedbackType } from '../../config/type';
 import { createGiveFeedbackSchema } from '../../config';
 import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
 

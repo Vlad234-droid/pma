@@ -9,7 +9,7 @@ export type Props = {
   selectReviewHandler: any;
 };
 
-export const RowReview: FC<Props> = memo(({ review, selectReviewHandler }) => {
+const RowReview: FC<Props> = memo(({ review, selectReviewHandler }) => {
   const { css } = useStyle();
   const { t } = useTranslation();
   const { type, number, lastUpdatedTime } = review;
@@ -68,3 +68,5 @@ const listItemStyles: Rule = ({ theme }) => ({
 });
 
 const buttonsWrapperStyles = { display: 'flex', alignItems: 'center' };
+
+export default RowReview;

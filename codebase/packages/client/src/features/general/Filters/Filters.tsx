@@ -3,10 +3,10 @@ import { useStyle, Rule } from '@pma/dex-wrapper';
 
 import InfoIcon from 'components/InfoIcon';
 
-import Filtering from '../Filtering';
-import Search from '../Search';
-import Sorting from '../Sorting';
-import { SortBy, SortOption, FilterOption, FilterValues } from '../../config/types';
+import Filtering from './components/Filtering';
+import Search from './components/Search';
+import Sorting from './components/Sorting';
+import { SortBy, SortOption, FilterOption, FilterValues } from './config/types';
 
 type Props = {
   sortValue?: SortBy;

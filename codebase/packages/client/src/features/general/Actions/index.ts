@@ -1,2 +1,2 @@
-export * from './components/Actions';
+export * from './Actions';
 export * from './components/Modal';

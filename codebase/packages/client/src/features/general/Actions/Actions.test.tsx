@@ -1,7 +1,7 @@
 import React from 'react';
 import { ReviewsActions } from '@pma/store';
 import { fireEvent } from '@testing-library/react';
-import { renderWithTheme as render, screen } from '../../../../utils/test';
+import { renderWithTheme as render, screen } from '../../../utils/test';
 import '@testing-library/jest-dom/extend-expect';
 
 import { Actions } from './Actions';

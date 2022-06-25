@@ -1,1 +1,1 @@
-export { default } from './CareerPerformanceContainer';
+export { default as CareerPerformance } from './CareerPerformance';

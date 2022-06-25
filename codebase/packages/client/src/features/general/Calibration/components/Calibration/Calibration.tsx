@@ -2,7 +2,7 @@ import React, { FC, useEffect, useState } from 'react';
 import { useStyle, Rule } from '@pma/dex-wrapper';
 
 import { Trans, useTranslation } from 'components/Translation';
-import Filters, { useSearch, FilterOption, FilterValues } from 'features/general/Filters';
+import { Filters, useSearch, FilterOption, FilterValues } from 'features/general/Filters';
 import { TileWrapper } from 'components/Tile';
 import SuccessModal from 'components/SuccessModal';
 import { Employee } from 'config/types';

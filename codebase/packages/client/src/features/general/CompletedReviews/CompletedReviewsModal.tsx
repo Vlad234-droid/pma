@@ -5,8 +5,8 @@ import { Icon } from 'components/Icon';
 import { getAllReviewSchemas } from '@pma/store';
 import { Input, Item as FormItem } from 'components/Form';
 
-import { RowReview } from './RowReview';
-import { default as ReviewModal } from './ReviewModal';
+import { RowReview } from './components/RowReview';
+import { ReviewModal } from './components/ReviewModal';
 
 export type CompletedReviewsModalProps = {
   onClose: () => void;

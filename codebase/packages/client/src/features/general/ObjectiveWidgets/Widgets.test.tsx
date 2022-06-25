@@ -5,8 +5,6 @@ import { renderWithTheme as render, screen } from 'utils/test';
 import { fireEvent } from '@testing-library/react';
 
 import Widgets from './Widgets';
-// @ts-ignore
-import { Status, ReviewType } from 'config/enum';
 
 const mockedUsedNavigate = jest.fn();
 

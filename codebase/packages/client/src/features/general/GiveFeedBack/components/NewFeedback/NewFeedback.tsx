@@ -11,10 +11,10 @@ import {
 import { Page } from 'pages';
 import Spinner from 'components/Spinner';
 import WrapperModal from 'features/general/Modal/components/WrapperModal';
-import { ConfirmMessage, GiveFeedbackForm, InfoMessage, SuccessMessage } from './components';
+import { ConfirmMessage, GiveFeedbackForm, InfoMessage, SuccessMessage } from '..';
 import { useTranslation } from 'components/Translation';
 
-import { GiveFeedbackType } from './type';
+import { GiveFeedbackType } from '../../config';
 
 const feedbackFields: GiveFeedbackType[] = [
   {

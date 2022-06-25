@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react';
 import { Rule, useStyle } from '@pma/dex-wrapper';
 
-import Filters, { getEmployeesSortingOptions, useSearch, useSorting } from 'features/general/Filters';
+import { Filters, getEmployeesSortingOptions, useSearch, useSorting } from 'features/general/Filters';
 import { useTranslation } from 'components/Translation';
 
 import ViewFilters from '../ViewFilters';

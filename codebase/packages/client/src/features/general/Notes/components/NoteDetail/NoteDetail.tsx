@@ -1,5 +1,4 @@
 import React, { FC, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Rule, useStyle } from '@pma/dex-wrapper';
 import { colleagueUUIDSelector, NotesActions } from '@pma/store';
 import { useDispatch, useSelector } from 'react-redux';
@@ -8,9 +7,6 @@ import { useTranslation } from 'components/Translation';
 import { IconButton } from 'components/IconButton';
 import { ArrowLeftIcon } from 'components/ArrowLeftIcon';
 import { ConfirmModal } from 'features/general/Modal';
-import { buildPath } from 'features/general/Routes';
-import { paramsReplacer } from 'utils';
-import { Page } from 'pages';
 
 export const MODAL_WRAPPER = 'modal-wrapper';
 

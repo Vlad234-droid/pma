@@ -1,2 +1,1 @@
-export * from './ColleagueGroupReviews';
-export * from './ColleagueReview';
+export { default as ColleagueReview } from './ColleagueReview';
