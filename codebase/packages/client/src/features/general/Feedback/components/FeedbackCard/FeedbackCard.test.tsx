@@ -4,25 +4,20 @@ import { renderWithTheme as render } from 'utils/test';
 import FeedbackCard, { FEEDBACK_CARD_WRAPPER } from './FeedbackCard';
 import { Icon } from 'components/Icon';
 import { BrowserRouter } from 'react-router-dom';
-import { createMemoryHistory } from 'history';
-import { Page } from 'pages';
-import { buildPath } from 'features/general/Routes';
+import { fireEvent } from '@testing-library/react';
 
-describe.skip('Feedback card', () => {
+describe('Feedback card', () => {
+  const testHandler = jest.fn();
+
   const props = {
-    card: {
-      id: 1,
-      action: 'Give feedback',
-      text: 'Your feedback will be immediately available for your colleague to view',
-      icon: <Icon graphic={'chat'} />,
-      iconText: 'Give in the moment feedback to a colleague',
-      link: Page.GIVE_FEEDBACK,
-    },
+    action: 'Give feedback',
+    text: 'Your feedback will be immediately available for your colleague to view',
+    icon: <Icon graphic={'chat'} />,
+    iconText: 'Give in the moment feedback to a colleague',
+    onClick: testHandler,
   };
 
   it('it should render feedback card', () => {
-    const history = createMemoryHistory();
-    history.push(buildPath(Page.FEEDBACKS));
     const { getByTestId } = render(
       <BrowserRouter>
         <FeedbackCard {...props} />
@@ -31,28 +26,27 @@ describe.skip('Feedback card', () => {
     const wrapper = getByTestId(FEEDBACK_CARD_WRAPPER);
     expect(wrapper).toBeInTheDocument();
   });
-  it('should receive text feedback', () => {
-    render(
+  it('should render card text', () => {
+    const { getByText } = render(
       <BrowserRouter>
         <FeedbackCard {...props} />
       </BrowserRouter>,
     );
-    expect(props.card.text).toBe('Your feedback will be immediately available for your colleague to view');
+    const title = getByText(/Give feedback/i);
+    const description = getByText(/Your feedback will be immediately available for your colleague to view/i);
+    const iconText = getByText(/Give in the moment feedback to a colleague/i);
+    expect(title).toBeInTheDocument();
+    expect(description).toBeInTheDocument();
+    expect(iconText).toBeInTheDocument();
   });
-  it('should receive action title', () => {
-    render(
+  it('feedback card click', () => {
+    const { getByTestId } = render(
       <BrowserRouter>
         <FeedbackCard {...props} />
       </BrowserRouter>,
     );
-    expect(props.card.action).toBe('Give feedback');
-  });
-  it('should receive link', () => {
-    render(
-      <BrowserRouter>
-        <FeedbackCard {...props} />
-      </BrowserRouter>,
-    );
-    expect(props.card.link).toBe('feedback/give');
+    const card = getByTestId(FEEDBACK_CARD_WRAPPER);
+    fireEvent.click(card);
+    expect(testHandler).toBeCalled();
   });
 });

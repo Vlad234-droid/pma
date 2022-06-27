@@ -6,7 +6,7 @@ export type ConfigProps = {
   text: string;
   icon: ReactNode;
   iconText: string;
-  link: string;
+  onClick: () => void;
 };
 
 export type Info360ModalProps = {

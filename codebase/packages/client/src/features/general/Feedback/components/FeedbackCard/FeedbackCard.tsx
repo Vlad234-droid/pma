@@ -1,39 +1,35 @@
 import React, { FC } from 'react';
-import { Link } from 'react-router-dom';
 import { Rule, CreateRule, Styles, useStyle } from '@pma/dex-wrapper';
+
 import { TileWrapper } from 'components/Tile';
-import { buildPath } from 'features/general/Routes';
+
 import { ConfigProps } from '../../config/types';
 
 export const FEEDBACK_CARD_WRAPPER = 'feedback_card_wrapper';
 
-type FeedbackCardProps = {
-  card: ConfigProps;
-};
+type Props = Omit<ConfigProps, 'id'>;
 
-const FeedbackCard: FC<FeedbackCardProps> = ({ card }) => {
+const FeedbackCard: FC<Props> = ({ action, icon, iconText, text, onClick }) => {
   const { css, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
 
   return (
-    <div className={css(cardStyle({ mobileScreen }))} data-test-id={FEEDBACK_CARD_WRAPPER}>
-      <Link to={buildPath(card.link)}>
-        <TileWrapper>
-          <div className={css(wrapperBlock({ mobileScreen }))}>
-            <div className={css(actionStyle)}>{card.action}</div>
-            <div className={css(textStyle)}>{card.text}</div>
-            <div className={css(flexStyle)}>
-              <div className={css(iconStyle)}>{card.icon}</div>
-              <div className={css(iconText)}>{card.iconText}</div>
-            </div>
+    <div className={css(cardStyle({ mobileScreen }))} data-test-id={FEEDBACK_CARD_WRAPPER} onClick={onClick}>
+      <TileWrapper>
+        <div className={css(wrapperBlock({ mobileScreen }))}>
+          <div className={css(actionStyle)}>{action}</div>
+          <div className={css(textStyle)}>{text}</div>
+          <div className={css(flexStyle)}>
+            <div className={css(iconStyle)}>{icon}</div>
+            <div className={css(iconTextStyle)}>{iconText}</div>
           </div>
-        </TileWrapper>
-      </Link>
+        </div>
+      </TileWrapper>
     </div>
   );
 };
 
-const iconText: Rule = ({ theme }) => {
+const iconTextStyle: Rule = ({ theme }) => {
   return {
     marginLeft: '10px',
     fontStyle: 'normal',
@@ -73,6 +69,7 @@ const actionStyle: Rule = ({ theme }) => {
 const cardStyle: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => ({
   flexGrow: 1,
   flexBasis: mobileScreen ? '100%' : '45%',
+  cursor: 'pointer',
 });
 
 const iconStyle: Rule = {

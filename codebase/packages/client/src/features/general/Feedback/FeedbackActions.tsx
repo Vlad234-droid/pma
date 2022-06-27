@@ -2,6 +2,7 @@ import React, { FC, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { colleagueUUIDSelector, FeedbackActions as FeedbackActionsGet, UserActions } from '@pma/store';
 import { CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
+import { useNavigate } from 'react-router';
 import { Trans, useTranslation } from 'components/Translation';
 import { Item, Select } from 'components/Form';
 import { IconButton } from 'components/IconButton';
@@ -20,6 +21,7 @@ const FeedbackActions: FC = () => {
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const dispatch = useDispatch();
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const { user } = useAuthContainer();
   const profileAttr = user?.data?.profileAttributes;
   const treatmentValue: string = getSelectedTreatmentValue(profileAttr);
@@ -89,8 +91,8 @@ const FeedbackActions: FC = () => {
           </div>
         </div>
         <div className={css(cardBlockStyle)}>
-          {getCards().map((item) => (
-            <FeedbackCard card={item} key={item.id} />
+          {getCards(navigate).map((item) => (
+            <FeedbackCard {...item} key={item.id} />
           ))}
         </div>
         <div className={css({ marginTop: '32px', maxWidth: '568px' })}>
