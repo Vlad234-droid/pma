@@ -1,3 +1,4 @@
+import { TFunction } from 'components/Translation';
 import { Graphics } from 'components/Icon';
 import { role, tenant, workLevel } from 'features/general/Permission';
 
@@ -48,7 +49,7 @@ export type PageComponent = {
   withHeader: boolean;
   perform: Array<role | workLevel>;
   tenant: Array<tenant>;
-  title?: string | ((tenant: Tenant) => string);
+  title?: (tenant: Tenant, t: TFunction) => string;
   backPath?: string;
   withIcon?: boolean;
   iconName?: Graphics;
@@ -57,7 +58,7 @@ export type PageComponent = {
 const pages: Record<Page, PageComponent> = {
   [Page.KNOWLEDGE_LIBRARY]: {
     Element: KnowledgeLibrary,
-    title: 'Want to learn more?',
+    title: (tenant, t) => t('title_knowledge_library'),
     withHeader: true,
     backPath: Page.CONTRIBUTION,
     perform: [role.COLLEAGUE],
@@ -65,7 +66,7 @@ const pages: Record<Page, PageComponent> = {
   },
   [Page.KNOWLEDGE_LIBRARY_BY_ID]: {
     Element: KnowledgeLibrary,
-    title: 'Want to learn more?',
+    title: (tenant, t) => t('title_knowledge_library'),
     withHeader: true,
     backPath: Page.KNOWLEDGE_LIBRARY,
     perform: [role.COLLEAGUE],
@@ -73,7 +74,7 @@ const pages: Record<Page, PageComponent> = {
   },
   [Page.MY_TEAM]: {
     Element: MyTeam,
-    title: 'My Team',
+    title: (tenant, t) => t('my_team'),
     withHeader: true,
     backPath: Page.CONTRIBUTION,
     perform: [role.LINE_MANAGER],
@@ -81,7 +82,7 @@ const pages: Record<Page, PageComponent> = {
   },
   [Page.PEOPLE_TEAM]: {
     Element: PeopleTeam,
-    title: 'People Team',
+    title: (tenant, t) => t('title_people_team'),
     withHeader: true,
     backPath: Page.CONTRIBUTION,
     perform: [role.LINE_MANAGER],
@@ -89,7 +90,7 @@ const pages: Record<Page, PageComponent> = {
   },
   [Page.CALIBRATION]: {
     Element: Calibration,
-    title: 'Calibration',
+    title: (tenant, t) => t('calibration'),
     withHeader: true,
     backPath: Page.REPORT,
     perform: [role.LINE_MANAGER],
@@ -97,7 +98,7 @@ const pages: Record<Page, PageComponent> = {
   },
   [Page.NOTES]: {
     Element: Notes,
-    title: 'My Notes',
+    title: (tenant, t) => t('my_notes'),
     withHeader: true,
     backPath: Page.CONTRIBUTION,
     perform: [role.COLLEAGUE],
@@ -105,56 +106,56 @@ const pages: Record<Page, PageComponent> = {
   },
   [Page.NOTES_INFO]: {
     Element: NotesInfo,
-    title: 'Notes',
+    title: (tenant, t) => t('notes'),
     withHeader: true,
     perform: [role.COLLEAGUE],
     tenant: [tenant.BANK, tenant.GENERAL],
   },
   [Page.PERSONAL_NOTE]: {
     Element: PersonalNoteView,
-    title: 'Notes',
+    title: (tenant, t) => t('notes'),
     withHeader: false,
     perform: [role.COLLEAGUE],
     tenant: [tenant.BANK, tenant.GENERAL],
   },
   [Page.PERSONAL_NOTE_CREATE]: {
     Element: CreatePersonalNote,
-    title: 'Notes',
+    title: (tenant, t) => t('notes'),
     withHeader: false,
     perform: [role.COLLEAGUE],
     tenant: [tenant.BANK, tenant.GENERAL],
   },
   [Page.PERSONAL_NOTE_FOLDER_CREATE]: {
     Element: CreatePersonalNoteFolder,
-    title: 'Notes',
+    title: (tenant, t) => t('notes'),
     withHeader: false,
     perform: [role.COLLEAGUE],
     tenant: [tenant.BANK, tenant.GENERAL],
   },
   [Page.TEAM_NOTE]: {
     Element: TeamNoteView,
-    title: 'Notes',
+    title: (tenant, t) => t('notes'),
     withHeader: false,
     perform: [role.COLLEAGUE],
     tenant: [tenant.BANK, tenant.GENERAL],
   },
   [Page.TEAM_NOTE_CREATE]: {
     Element: CreateTeamNote,
-    title: 'Notes',
+    title: (tenant, t) => t('notes'),
     withHeader: false,
     perform: [role.COLLEAGUE],
     tenant: [tenant.BANK, tenant.GENERAL],
   },
   [Page.TEAM_NOTE_FOLDER_CREATE]: {
     Element: CreateTeamNoteFolder,
-    title: 'Notes',
+    title: (tenant, t) => t('notes'),
     withHeader: false,
     perform: [role.COLLEAGUE],
     tenant: [tenant.BANK, tenant.GENERAL],
   },
   [Page.MY_ACTIONS]: {
     Element: MyActions,
-    title: 'Actions',
+    title: (tenant, t) => t('actions'),
     withHeader: true,
     backPath: Page.MY_TEAM,
     perform: [role.COLLEAGUE],
@@ -162,7 +163,7 @@ const pages: Record<Page, PageComponent> = {
   },
   [Page.PERFORMANCE_CYCLE_POPULATION_MATRIX]: {
     Element: () => null,
-    title: 'Population matrix',
+    title: (tenant, t) => t('population_matrix'),
     withHeader: true,
     backPath: Page.PERFORMANCE_CYCLE,
     perform: [role.TALENT_ADMIN, role.PROCESS_MANAGER, role.ADMIN],
@@ -170,7 +171,7 @@ const pages: Record<Page, PageComponent> = {
   },
   [Page.CREATE_PERFORMANCE_CYCLE]: {
     Element: CreatePerformanceCycle,
-    title: 'Create Performance Cycle',
+    title: (tenant, t) => t('create_performance_cycle'),
     withHeader: true,
     backPath: Page.PERFORMANCE_CYCLE,
     perform: [role.TALENT_ADMIN, role.PROCESS_MANAGER, role.ADMIN],
@@ -178,7 +179,7 @@ const pages: Record<Page, PageComponent> = {
   },
   [Page.PERFORMANCE_CYCLE]: {
     Element: PerformanceCycleAdministration,
-    title: 'Performance Cycle Administration',
+    title: (tenant, t) => t('performance_cycle_administration'),
     withHeader: true,
     backPath: Page.CONTRIBUTION,
     perform: [role.PEOPLE_TEAM, role.TALENT_ADMIN, role.PROCESS_MANAGER, role.ADMIN],
@@ -186,7 +187,7 @@ const pages: Record<Page, PageComponent> = {
   },
   [Page.CONTRIBUTION]: {
     Element: CareerPerformance,
-    title: 'Your Contribution',
+    title: (tenant, t) => t('people_team'),
     withHeader: true,
     withIcon: true,
     iconName: 'home',
@@ -195,7 +196,7 @@ const pages: Record<Page, PageComponent> = {
   },
   [Page.CREATE_STRATEGIC_DRIVERS]: {
     Element: CreateOrganizationObjectives,
-    title: 'Create Strategic drivers',
+    title: (tenant, t) => t('title_create_strategic_drivers'),
     withHeader: true,
     backPath: Page.OBJECTIVES_VIEW,
     perform: [role.TALENT_ADMIN],
@@ -209,7 +210,7 @@ const pages: Record<Page, PageComponent> = {
   },
   [Page.PERSONAL_DEVELOPMENT_PLAN]: {
     Element: PersonalDevelopmentPlan,
-    title: 'Personal Development Plan',
+    title: (tenant, t) => t('personal_development_plan'),
     withHeader: true,
     backPath: Page.CONTRIBUTION,
     perform: [role.COLLEAGUE],
@@ -217,7 +218,7 @@ const pages: Record<Page, PageComponent> = {
   },
   [Page.CREATE_PERSONAL_DEVELOPMENT_PLAN]: {
     Element: CreatePersonalDevelopmentGoal,
-    title: 'Create Personal Development Goal',
+    title: (tenant, t) => t('title_create_personal_development_goal'),
     withHeader: false,
     backPath: Page.PERSONAL_DEVELOPMENT_PLAN,
     perform: [role.COLLEAGUE],
@@ -225,7 +226,7 @@ const pages: Record<Page, PageComponent> = {
   },
   [Page.UPDATE_PERSONAL_DEVELOPMENT_PLAN]: {
     Element: CreatePersonalDevelopmentGoal,
-    title: 'UPDATE Personal Development Goal',
+    title: (tenant, t) => t('title_update_personal_development_goal'),
     withHeader: false,
     backPath: Page.PERSONAL_DEVELOPMENT_PLAN,
     perform: [role.COLLEAGUE],
@@ -233,7 +234,7 @@ const pages: Record<Page, PageComponent> = {
   },
   [Page.PERSONAL_DEVELOPMENT_HELP]: {
     Element: PersonalDevelopmentHelp,
-    title: 'Personal Development Plan help',
+    title: (tenant, t) => t('title_personal_development_plan_help'),
     withHeader: false,
     backPath: Page.PERSONAL_DEVELOPMENT_PLAN,
     perform: [role.COLLEAGUE],
@@ -241,7 +242,7 @@ const pages: Record<Page, PageComponent> = {
   },
   [Page.OBJECTIVES_VIEW]: {
     Element: Objectives,
-    title: 'My objectives and reviews',
+    title: (tenant, t) => t('my_objectives_and_reviews', 'My objectives and reviews', { ns: tenant }),
     withHeader: true,
     backPath: Page.CONTRIBUTION,
     perform: [role.COLLEAGUE],
@@ -249,14 +250,14 @@ const pages: Record<Page, PageComponent> = {
   },
   [Page.USER_OBJECTIVES]: {
     Element: UserObjectives,
-    title: 'Colleague overview',
+    title: (tenant, t) => t('title_colleague_overview'),
     withHeader: true,
     perform: [role.COLLEAGUE],
     tenant: [tenant.BANK, tenant.GENERAL],
   },
   [Page.PROFILE]: {
     Element: Profile,
-    title: 'My profile',
+    title: (tenant, t) => t('title_my_profile'),
     withHeader: true,
     backPath: Page.CONTRIBUTION,
     perform: [role.COLLEAGUE],
@@ -264,7 +265,7 @@ const pages: Record<Page, PageComponent> = {
   },
   [Page.SETTINGS]: {
     Element: Settings,
-    title: 'Settings',
+    title: (tenant, t) => t('title_settings'),
     withHeader: true,
     backPath: Page.CONTRIBUTION,
     perform: [role.COLLEAGUE],
@@ -272,7 +273,7 @@ const pages: Record<Page, PageComponent> = {
   },
   [Page.GIVE_FEEDBACK]: {
     Element: GiveFeedback,
-    title: 'Give feedback',
+    title: (tenant, t) => t('give_feedback'),
     withHeader: true,
     backPath: Page.FEEDBACK,
     perform: [role.COLLEAGUE],
@@ -280,7 +281,7 @@ const pages: Record<Page, PageComponent> = {
   },
   [Page.GIVE_NEW_FEEDBACK]: {
     Element: GiveNewFeedBack,
-    title: 'Give feedback',
+    title: (tenant, t) => t('give_feedback'),
     withHeader: true,
     backPath: Page.GIVE_FEEDBACK,
     perform: [role.COLLEAGUE],
@@ -294,7 +295,7 @@ const pages: Record<Page, PageComponent> = {
   },
   [Page.RESPOND_FEEDBACK]: {
     Element: RespondFeedback,
-    title: 'Respond to feedback requests',
+    title: (tenant, t) => t('respond_to_feedback_requests'),
     withHeader: true,
     backPath: Page.FEEDBACK,
     perform: [role.COLLEAGUE],
@@ -302,7 +303,7 @@ const pages: Record<Page, PageComponent> = {
   },
   [Page.RESPOND_NEW_FEEDBACK]: {
     Element: RespondNewFeedback,
-    title: 'Respond to feedback requests',
+    title: (tenant, t) => t('respond_to_feedback_requests'),
     withHeader: true,
     backPath: Page.RESPOND_FEEDBACK,
     perform: [role.COLLEAGUE],
@@ -310,7 +311,7 @@ const pages: Record<Page, PageComponent> = {
   },
   [Page.VIEW_FEEDBACK]: {
     Element: ViewFeedback,
-    title: 'View feedback',
+    title: (tenant, t) => t('title_view_feedback'),
     withHeader: true,
     backPath: Page.FEEDBACK,
     perform: [role.COLLEAGUE],
@@ -319,7 +320,7 @@ const pages: Record<Page, PageComponent> = {
 
   [Page.FEEDBACK]: {
     Element: Feedback,
-    title: 'Feedback',
+    title: (tenant, t) => t('feedback'),
     withHeader: true,
     backPath: Page.CONTRIBUTION,
     perform: [role.COLLEAGUE],
@@ -327,7 +328,7 @@ const pages: Record<Page, PageComponent> = {
   },
   [Page.TIPS]: {
     Element: TipsAdministration,
-    title: 'Tips',
+    title: (tenant, t) => t('title_tips'),
     withHeader: true,
     backPath: Page.CONTRIBUTION,
     perform: [role.ADMIN],
@@ -335,7 +336,7 @@ const pages: Record<Page, PageComponent> = {
   },
   [Page.EDIT_TIP]: {
     Element: EditTip,
-    title: 'Edit Tip',
+    title: (tenant, t) => t('edit_tip'),
     withHeader: false,
     backPath: Page.TIPS,
     perform: [role.ADMIN],
@@ -343,7 +344,7 @@ const pages: Record<Page, PageComponent> = {
   },
   [Page.REPORT]: {
     Element: Report,
-    title: 'Team reporting',
+    title: (tenant, t) => t('team_reporting'),
     withHeader: true,
     backPath: Page.CONTRIBUTION,
     perform: [role.TALENT_ADMIN, role.ADMIN, role.LINE_MANAGER, role.EXECUTIVE],
@@ -372,35 +373,35 @@ const pages: Record<Page, PageComponent> = {
   },
   [Page.PREVIOUS_RATINGS_TILES]: {
     Element: PreviousRatingsTiles,
-    title: 'Previous Ratings',
+    title: (tenant, t) => t('title_previous_ratings'),
     withHeader: true,
     perform: [role.LINE_MANAGER],
     tenant: [tenant.BANK, tenant.GENERAL],
   },
   [Page.PREVIOUS_CALIBRATION_RATINGS]: {
     Element: PreviousCalibrationRatings,
-    title: 'Previous Ratings',
+    title: (tenant, t) => t('title_previous_ratings'),
     withHeader: true,
     perform: [role.LINE_MANAGER],
     tenant: [tenant.BANK, tenant.GENERAL],
   },
   [Page.PREVIOUS_OBJECTIVES_RATINGS]: {
     Element: PreviousObjectiveRatings,
-    title: 'Objectives',
+    title: (tenant, t) => t('objectives'),
     withHeader: true,
     perform: [role.LINE_MANAGER],
     tenant: [tenant.BANK, tenant.GENERAL],
   },
   [Page.PREVIOUS_REVIEW_FORMS]: {
     Element: PreviousReviewForms,
-    title: 'Review forms',
+    title: (tenant, t) => t('review_forms'),
     withHeader: true,
     perform: [role.LINE_MANAGER],
     tenant: [tenant.BANK, tenant.GENERAL],
   },
   [Page.NOT_FOUND]: {
     Element: NotFound,
-    title: 'Not found',
+    title: (tenant, t) => t('title_not_found'),
     withHeader: false,
     backPath: Page.CONTRIBUTION,
     perform: [role.COLLEAGUE],

@@ -5,7 +5,7 @@ import { ModalComponent } from 'features/general/ObjectivesForm/components/Modal
 import { useTranslation } from 'components/Translation';
 import { ObjectiveForm, ObjectivesForm } from 'features/general/ObjectivesForm';
 import { ReviewType, Status } from 'config/enum';
-import { REVIEW_MODIFICATION_MODE, reviewModificationModeFn } from '../../utils';
+import { REVIEW_MODIFICATION_MODE, reviewModificationMode } from '../../utils';
 import { useSelector } from 'react-redux';
 import {
   countByTypeReviews,
@@ -37,14 +37,14 @@ const CreateButton: FC<Props> = memo(({ withIcon = false }) => {
   const timelineObjective = useSelector(getTimelineByCodeSelector(ReviewType.OBJECTIVE, USER.current)) || {};
   const countReviews = useSelector(countByTypeReviews(ReviewType.OBJECTIVE)) || 0;
   const objectiveSchema = useSelector(getReviewSchema(ReviewType.OBJECTIVE));
-  const reviewModificationMode = reviewModificationModeFn(countReviews, objectiveSchema);
-  const useSingleStep = reviewModificationMode === REVIEW_MODIFICATION_MODE.SINGLE;
+  const modificationMode = reviewModificationMode(countReviews, objectiveSchema);
+  const useSingleStep = modificationMode === REVIEW_MODIFICATION_MODE.SINGLE;
   const isAvailable =
     (reviewsMinNumbersInStatusApproved ||
       timelineObjective.status === Status.DRAFT ||
       originObjectives?.length === 0) &&
     countReviews < markup.max &&
-    reviewModificationMode !== REVIEW_MODIFICATION_MODE.NONE;
+    modificationMode !== REVIEW_MODIFICATION_MODE.NONE;
 
   const handleBtnClick = () => setIsOpen(true);
 

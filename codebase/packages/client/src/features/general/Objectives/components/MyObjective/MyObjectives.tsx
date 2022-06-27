@@ -21,7 +21,7 @@ import {
   timelineTypesAvailabilitySelector,
 } from '@pma/store';
 
-import { CreateButton, ObjectiveTypes as OT, transformReviewsToObjectives } from 'features/general/Objectives';
+import { ObjectiveTypes as OT, transformReviewsToObjectives } from 'features/general/Objectives';
 import useDispatch from 'hooks/useDispatch';
 import { Page } from 'pages';
 import Spinner from 'components/Spinner';
@@ -30,9 +30,12 @@ import { ObjectiveType, ReviewType } from 'config/enum';
 import { StepIndicator } from 'components/StepIndicator/StepIndicator';
 import { useHeaderContainer } from 'contexts/headerContext';
 
-import { ObjectivesSection } from '../DinamicBlocks/ObjectivesSection';
 import { ReviewFilesSection, CompletedReviewsSection, MyReviewsSection } from '../Sections';
 import { WidgetBlock } from '../Widgets/WidgetBlock';
+
+// todo think hove resolve on page level
+import { ObjectivesSection } from '../DinamicBlocks/ObjectivesSection';
+import { CreateButton } from '../DinamicBlocks/CreateButton';
 
 export const TEST_ID = 'my-objectives-page';
 

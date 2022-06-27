@@ -25,10 +25,11 @@ const FormModal: FC<FormModal> = ({
   components,
   methods,
   formState,
-  handleSaveAsDraft,
-  handleSubmit,
-  handlePreview,
-  handleNext,
+  onSaveAsDraft,
+  onSubmit,
+  onPreview,
+  onNext,
+  onBack,
 }) => {
   const { t } = useTranslation();
   const { css, matchMedia } = useStyle();
@@ -56,7 +57,7 @@ const FormModal: FC<FormModal> = ({
   }
 
   return (
-    <FormWrapper onClose={console.log} paddingBottom={paddingBottom}>
+    <FormWrapper onClose={onBack} paddingBottom={paddingBottom}>
       <form data-test-id={'PRIORITY_FORM_MODAL'}>
         <div className={css(formFieldsWrapperStyle)}>
           {(() => {
@@ -75,9 +76,9 @@ const FormModal: FC<FormModal> = ({
                       readonly={false}
                       currentNumber={currentNumber}
                       isValid={isValid}
-                      onSaveExit={handleSaveAsDraft}
-                      onSubmit={handlePreview}
-                      onNext={handleNext}
+                      onSaveExit={onSaveAsDraft}
+                      onSubmit={onPreview}
+                      onNext={onNext}
                     />
                   </>
                 );
@@ -85,7 +86,7 @@ const FormModal: FC<FormModal> = ({
                 return (
                   <>
                     <FormPreview methods={methods} objectives={objectives} components={components} />
-                    <ButtonsPreview onSubmit={handleSubmit} onBack={console.log} />
+                    <ButtonsPreview onSubmit={onSubmit} onBack={onBack} />
                   </>
                 );
               default:

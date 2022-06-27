@@ -1,5 +1,5 @@
 export { default as MyObjective } from './components/MyObjective';
-export { CreateButton, EditButton } from './components/Buttons';
+export { EditButton } from './components/Buttons';
 // utils
 export * from './utils';
 // types

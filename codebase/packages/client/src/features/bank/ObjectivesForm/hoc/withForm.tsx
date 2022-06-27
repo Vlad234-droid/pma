@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useState, useMemo } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 import {
   colleagueUUIDSelector,
@@ -27,10 +27,11 @@ export type FormPropsType = {
   methods: UseFormReturn;
   formState: FormStateType;
   setFormState: Dispatch<SetStateAction<FormStateType>>;
-  handleSaveAsDraft: (T) => void;
-  handleSubmit: () => void;
-  handlePreview: (T) => void;
-  handleNext: (T) => void;
+  onSaveAsDraft: (T) => void;
+  onSubmit: () => void;
+  onPreview: (T) => void;
+  onNext: (T) => void;
+  onBack: () => void;
 };
 
 export function withForm<P>(WrappedComponent: React.ComponentType<P & FormPropsType>) {
@@ -40,11 +41,20 @@ export function withForm<P>(WrappedComponent: React.ComponentType<P & FormPropsT
     const colleagueUuid = useSelector(colleagueUUIDSelector);
     const schema = useSelector(getReviewSchema(ReviewType.OBJECTIVE));
     const pathParams = { colleagueUuid, type: ReviewType.OBJECTIVE, cycleUuid: 'CURRENT' };
-    const { components = [] as Component[] } = schema;
-    const [formState, setFormState] = useState<FormStateType>(FormStateType.MODIFY);
-    const [currentNumber, setNumber] = useState<number>(1);
+    const { components = [] as Component[], markup = { max: 0, min: 0 } } = schema;
     const objectives: Objective[] = useSelector(filterReviewsByTypeSelector(ReviewType.OBJECTIVE)) || [];
+
+    // todo wait for design. could start from diff number
+    const draftObjectives = useMemo(
+      () => objectives.filter((objective) => objective.status === Status.DRAFT),
+      [objectives],
+    );
+    const startFromNumber = draftObjectives?.length + 1;
+    const [currentNumber, setNumber] = useState<number>(startFromNumber);
     const [objective, setObjective] = useState<Objective>({});
+
+    const defaultFormState = objectives.length == markup.max ? FormStateType.PREVIEW : FormStateType.MODIFY;
+    const [formState, setFormState] = useState<FormStateType>(defaultFormState);
 
     // @ts-ignore
     const yepSchema = components?.reduce(createYupSchema(t), {});
@@ -55,8 +65,10 @@ export function withForm<P>(WrappedComponent: React.ComponentType<P & FormPropsT
     const { reset } = methods;
 
     const handleSaveAsDraft = (data) => {
-      if (!objectives[currentNumber - 1]) {
-        objectives[currentNumber - 1] = { number: currentNumber, status: Status.DRAFT };
+      const currentObjectiveIndex = objectives.findIndex((objective) => objective.number === currentNumber);
+
+      if (!objectives[currentObjectiveIndex]) {
+        objectives[objectives.length] = { number: currentNumber, status: Status.DRAFT };
       }
 
       const updatedObjectives = objectives.map((objective) => {
@@ -77,9 +89,10 @@ export function withForm<P>(WrappedComponent: React.ComponentType<P & FormPropsT
 
     const handleNext = (data) => {
       setObjective({ ...objective, properties: data });
+      const currentObjectiveIndex = objectives.findIndex((objective) => objective.number === currentNumber);
 
-      if (!objectives[currentNumber - 1]) {
-        objectives[currentNumber - 1] = { number: currentNumber, status: Status.DRAFT };
+      if (!objectives[currentObjectiveIndex]) {
+        objectives[objectives.length] = { number: currentNumber, status: Status.DRAFT };
       }
       const updatedObjectives: Objective[] = objectives.map((objective) => {
         if (currentNumber === Number(objective.number)) {
@@ -118,8 +131,9 @@ export function withForm<P>(WrappedComponent: React.ComponentType<P & FormPropsT
     };
 
     const handlePreview = (data) => {
-      if (!objectives[currentNumber - 1]) {
-        objectives[currentNumber - 1] = { number: currentNumber, status: Status.DRAFT };
+      const currentObjectiveIndex = objectives.findIndex((objective) => objective.number === currentNumber);
+      if (!objectives[currentObjectiveIndex]) {
+        objectives[objectives.length] = { number: currentNumber, status: Status.DRAFT };
       }
       const updatedObjectives = objectives.map((objective) => {
         if (currentNumber === Number(objective.number)) {
@@ -134,6 +148,15 @@ export function withForm<P>(WrappedComponent: React.ComponentType<P & FormPropsT
 
       dispatch(ReviewsActions.updateReviews({ pathParams, data: updatedObjectives }));
       setFormState(FormStateType.PREVIEW);
+    };
+
+    const handleBack = () => {
+      if (formState !== FormStateType.MODIFY) {
+        setFormState(FormStateType.MODIFY);
+        setNumber(draftObjectives?.length);
+      } else if (currentNumber > 1) {
+        setNumber(currentNumber - 1);
+      }
     };
 
     useEffect(() => {
@@ -157,10 +180,11 @@ export function withForm<P>(WrappedComponent: React.ComponentType<P & FormPropsT
         methods={methods}
         formState={formState}
         setFormState={setFormState}
-        handleSaveAsDraft={methods.handleSubmit(handleSaveAsDraft)}
-        handleSubmit={handleSubmit}
-        handlePreview={methods.handleSubmit(handlePreview)}
-        handleNext={methods.handleSubmit(handleNext)}
+        onSaveAsDraft={methods.handleSubmit(handleSaveAsDraft)}
+        onSubmit={handleSubmit}
+        onPreview={methods.handleSubmit(handlePreview)}
+        onNext={methods.handleSubmit(handleNext)}
+        onBack={handleBack}
       />
     );
   };

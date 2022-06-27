@@ -497,6 +497,7 @@
   "registered_cycles": "Registered",
   "started_cycles": "Started",
   "create_performance_cycle": "Create performance cycle",
+  "performance_cycle_administration": "Performance Cycle Administration",
   "Below expected": "Below expected",
   "Satisfactory": "Satisfactory",
   "Great": "Great",
@@ -626,5 +627,18 @@
   "by_email_address": "By email address",
   "create_pdp": "Create PDP",
   "priorities_sent": "Priorities sent",
-  "priorities_sent_to_your_line_manager": "You have submitted your priorities to your Manager for agreement"
+  "priorities_sent_to_your_line_manager": "You have submitted your priorities to your Manager for agreement",
+  "title_knowledge_library": "Want to learn more?",
+  "title_people_team": "People Team",
+  "title_create_strategic_drivers": "Create Strategic drivers",
+  "title_create_personal_development_goal": "Create Personal Development Goal",
+  "title_update_personal_development_goal": "UPDATE Personal Development Goal",
+  "title_personal_development_plan_help": "Personal Development Plan help",
+  "title_colleague_overview": "Colleague overview",
+  "title_my_profile": "My profile",
+  "title_settings": "Settings",
+  "title_view_feedback": "View feedback",
+  "title_tips": "Tips",
+  "title_previous_ratings": "Previous Ratings",
+  "title_not_found": "Not found"
 }
