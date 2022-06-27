@@ -5,6 +5,8 @@ import { renderWithTheme as render, screen } from 'utils/test';
 import { fireEvent } from '@testing-library/react';
 
 import Widgets from './Widgets';
+import { buildPath } from 'features/general/Routes';
+import { Page } from 'pages';
 
 const mockedUsedNavigate = jest.fn();
 
@@ -112,19 +114,19 @@ describe('<Widgets />', () => {
       render(<Widgets />, { timeline });
 
       fireEvent.click(screen.getByText('Personal Development Plan'));
-      expect(mockedUsedNavigate).toBeCalledWith('/personal-development-plan');
+      expect(mockedUsedNavigate).toBeCalledWith(buildPath(Page.PERSONAL_DEVELOPMENT_PLAN));
     });
     it('Widgets click Feedback', () => {
       render(<Widgets />, { timeline });
 
       fireEvent.click(screen.getByText('Feedback'));
-      expect(mockedUsedNavigate).toBeCalledWith('/feedback');
+      expect(mockedUsedNavigate).toBeCalledWith(buildPath(Page.FEEDBACKS));
     });
     it('Widgets click My Notes', () => {
       render(<Widgets />, { timeline });
 
       fireEvent.click(screen.getByText('My Notes'));
-      expect(mockedUsedNavigate).toBeCalledWith('/notes');
+      expect(mockedUsedNavigate).toBeCalledWith(buildPath(Page.NOTES));
     });
   });
 });
