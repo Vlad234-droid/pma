@@ -15,7 +15,7 @@ type Props = {
   isDisabled: boolean;
 };
 
-export const Buttons: FC<Props> = ({ reviewType, updateReviewStatus, isDisabled }) => {
+const Buttons: FC<Props> = ({ reviewType, updateReviewStatus, isDisabled }) => {
   const { css } = useStyle();
   const { t } = useTranslation();
   const [isOpenDeclinePopup, setIsOpenDeclinePopup] = useState(false);
@@ -84,6 +84,8 @@ export const Buttons: FC<Props> = ({ reviewType, updateReviewStatus, isDisabled 
     </div>
   );
 };
+
+export default Buttons;
 
 const containerStyle: Rule = {
   padding: '24px',

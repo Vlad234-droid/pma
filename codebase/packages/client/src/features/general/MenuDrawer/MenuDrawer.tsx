@@ -14,13 +14,13 @@ import { useHeaderContainer } from 'contexts/headerContext';
 import { MenuItem } from 'components/MenuItem';
 import TescoLogo from 'assets/img/TescoLogo.svg';
 import { Icon } from 'components/Icon';
-import { MenuDropdown } from './MenuDropdown';
+import { MenuDropdown } from './components/MenuDropdown';
 
 export type MenuDrawerProps = { onClose: () => void };
 
 export const MENU_DRAWER_WRAPPER = 'menu-drawer-wrapper';
 
-export const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
+const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
   const { linkTitle } = useHeaderContainer();
   const [isOpen, setIsOpen] = useState(false);
   const colleagueUuid = useSelector(colleagueUUIDSelector);
@@ -209,3 +209,5 @@ const itemSettingsBorderStyle: Rule = ({ theme }) => ({
   // @ts-ignore
   borderTop: `2px solid ${theme.colors.lightGray}`,
 });
+
+export default MenuDrawer;

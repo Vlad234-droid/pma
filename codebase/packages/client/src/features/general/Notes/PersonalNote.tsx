@@ -18,7 +18,7 @@ import { ArrowLeftIcon } from 'components/ArrowLeftIcon';
 import WrapperModal from 'features/general/Modal/components/WrapperModal';
 import { buildPath } from 'features/general/Routes';
 import { Page } from 'pages';
-import { NotesStatus } from 'features/general/Notes/type';
+import { NotesStatus } from 'features/general/Notes/configs/type';
 import { AllNotesFolderId, NEW_FOLDER_ID } from 'utils';
 import SuccessModal from './components/SuccessModal/SuccessModal';
 import { useUploadData } from './hooks/useUploadData';

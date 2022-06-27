@@ -22,13 +22,13 @@ describe('<Calibration />', () => {
       options: ['11', '12', '13'],
       title: 'mocked_option_title_1',
       multi: true,
-      id: 'mocked_id_1',
+      id: 1,
     },
     {
       options: ['21', '22', '23'],
       title: 'mocked_option_title_2',
       multi: false,
-      id: 'mocked_id_2',
+      id: 2,
     },
   ];
   const props = {
@@ -157,7 +157,7 @@ describe('<Calibration />', () => {
       fireEvent.click(getByText('23'));
       fireEvent.click(getByTestId('filter'));
 
-      expect(props.loadData).toHaveBeenCalledWith({ mocked_id_1: { 11: true, 12: true }, mocked_id_2: '23' });
+      expect(props.loadData).toHaveBeenCalledWith({ 1: { 11: true, 12: true }, 2: '23' });
     });
 
     it('should handle click on edit calibration widget', () => {

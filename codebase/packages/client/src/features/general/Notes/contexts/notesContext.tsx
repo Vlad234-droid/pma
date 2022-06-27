@@ -1,5 +1,5 @@
 import React, { createContext, FC, useContext, useState } from 'react';
-import { FoldersWithNotesTypes, FoldersWithNotesTypesTEAM, NoteData, NotesType, NotesTypeTEAM } from '../type';
+import { FoldersWithNotesTypes, FoldersWithNotesTypesTEAM, NoteData, NotesType, NotesTypeTEAM } from '../configs/type';
 import { PeopleTypes } from '../components/TeamNotes/ModalsParts/type';
 
 const defaultData = {

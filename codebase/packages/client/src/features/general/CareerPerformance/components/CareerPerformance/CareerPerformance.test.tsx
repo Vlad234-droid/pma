@@ -75,6 +75,7 @@ describe('<CareerPerformance />', () => {
       reviewType: ReviewType.MYR,
       startTime: 'mocked_start_time',
       status: Status.APPROVED,
+      summaryStatus: Status.APPROVED,
       type: TimelineType.REVIEW,
       uuid: 'mocked_uuid',
       properties: {
@@ -91,6 +92,7 @@ describe('<CareerPerformance />', () => {
       reviewType: ReviewType.EYR,
       startTime: 'mocked_start_time',
       status: Status.DECLINED,
+      summaryStatus: Status.APPROVED,
       type: TimelineType.REVIEW,
       uuid: 'mocked_uuid',
       properties: {

@@ -18,8 +18,7 @@ import {
 import { ReviewType, Status } from 'config/enum';
 import { Accordion, BaseAccordion, ExpandButton, Panel, Section } from 'components/Accordion';
 import { TileWrapper } from 'components/Tile';
-
-import { ColleagueGroupReviews } from '../ColleagueReviews';
+import { ColleagueGroupReviews } from '../ColleagueGroupReviews';
 
 type Props = {
   status: Status;

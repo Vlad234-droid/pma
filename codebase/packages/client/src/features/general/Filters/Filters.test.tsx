@@ -5,7 +5,7 @@ import { fireEvent, screen } from '@testing-library/react';
 import { renderWithTheme as render } from 'utils/test';
 
 import Filters from './Filters';
-import { SortBy } from '../../config/types';
+import { SortBy } from './config/types';
 
 describe('<Filters />', () => {
   const props = {

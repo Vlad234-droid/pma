@@ -27,7 +27,7 @@ type Props = {
 
 export const TEST_WRAPPER_ID = 'test-wrapper-id';
 
-export const ColleagueReview: FC<Props> = ({ review, schema, validateReview, updateColleagueReviews }) => {
+const ColleagueReview: FC<Props> = ({ review, schema, validateReview, updateColleagueReviews }) => {
   const { css, theme } = useStyle();
   const { t } = useTranslation();
 
@@ -162,6 +162,8 @@ export const ColleagueReview: FC<Props> = ({ review, schema, validateReview, upd
     </TileWrapper>
   );
 };
+
+export default ColleagueReview;
 
 const styledMarkdown: Rule = ({ theme }) => {
   return {

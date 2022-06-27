@@ -1,1 +1,1 @@
-export { Widgets as ObjectiveWidgets } from './components';
+export { default as ObjectiveWidgets } from './Widgets';

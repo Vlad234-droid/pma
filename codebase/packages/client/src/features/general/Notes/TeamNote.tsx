@@ -20,7 +20,7 @@ import WrapperModal from 'features/general/Modal/components/WrapperModal';
 import { buildPath } from 'features/general/Routes';
 import { Page } from 'pages';
 import { AllNotesFolderId, NEW_FOLDER_ID } from 'utils';
-import { NotesStatus } from './type';
+import { NotesStatus } from './configs/type';
 import { useUploadData } from './hooks/useUploadData';
 
 export const MODAL_WRAPPER = 'modal-wrapper';

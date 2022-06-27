@@ -11,7 +11,7 @@ import { useTranslation } from 'components/Translation';
 import { ButtonsWrapper } from 'components/ButtonsWrapper';
 import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
 import { ColleaguesFinder } from 'components/ColleaguesFinder';
-import { schemaFolder } from '../../schema';
+import { schemaFolder } from '../../configs/schema';
 
 export const MODAL_WRAPPER = 'modal-wrapper';
 

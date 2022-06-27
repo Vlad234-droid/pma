@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction, ReactElement } from 'react';
-import { UseFormReturn } from 'react-hook-form';
+
 export type ConfigProps = {
   id: number;
   action: string;

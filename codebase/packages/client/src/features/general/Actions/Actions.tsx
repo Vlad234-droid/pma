@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Rule, useStyle } from '@pma/dex-wrapper';
 import useDispatch from 'hooks/useDispatch';
-import Filters, { getEmployeesSortingOptions, useSearch, useSorting } from 'features/general/Filters';
+import { Filters, getEmployeesSortingOptions, useSearch, useSorting } from 'features/general/Filters';
 import { useSelector } from 'react-redux';
 import {
   colleagueUUIDSelector,
@@ -16,13 +16,13 @@ import { Status } from 'config/enum';
 import { useTranslation } from 'components/Translation';
 import Spinner from 'components/Spinner';
 
-import { RadioGroup } from './RadioGroup';
-import { SelectAll } from './SelectAll';
-import { ApprovalWidget } from './Widgets';
-import { ColleagueList } from './Colleague';
-import { filterApprovedFn } from '../utils';
-import { SuccessModal } from './Modal';
-import { SuccessModalConsumer, SuccessModalProvider } from '../context/successModalContext';
+import { SelectAll } from './components/SelectAll';
+import { ApprovalWidget } from './components/Widgets';
+import { filterApprovedFn } from './utils';
+import { SuccessModal } from './components/Modal';
+import { SuccessModalConsumer, SuccessModalProvider } from './context/successModalContext';
+import { ColleagueList } from './components/ColleagueList';
+import { RadioGroup } from './components/RadioGroup';
 
 export const Actions = () => {
   const dispatch = useDispatch();

@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { useStyle } from '@pma/dex-wrapper';
-import NewFeedback from 'features/general/GiveFeedBack/NewFeedback';
+import { NewFeedback } from 'features/general/GiveFeedBack/components/NewFeedback';
 
 const GIVE_FEEDBACK = 'give-feedback';
 

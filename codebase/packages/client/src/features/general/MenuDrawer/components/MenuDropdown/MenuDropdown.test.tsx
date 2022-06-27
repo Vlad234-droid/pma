@@ -4,7 +4,7 @@ import { renderWithTheme as render } from 'utils/test';
 import { fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import { BrowserRouter } from 'react-router-dom';
-import { MenuDropdown, DROPDOWN_ITEMS_WRAPPER, DROPDOWN_BTN } from './MenuDropdown';
+import MenuDropdown, { DROPDOWN_ITEMS_WRAPPER, DROPDOWN_BTN } from './MenuDropdown';
 
 describe('<MenuDropdown />', () => {
   it('should render dropdown', async () => {

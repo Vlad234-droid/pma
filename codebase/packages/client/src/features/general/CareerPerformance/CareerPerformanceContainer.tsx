@@ -11,8 +11,8 @@ import {
 
 import { ObjectiveType } from 'config/enum';
 
-import CareerPerformance from './CareerPerformance';
 import { USER } from 'config/constants';
+import { CareerPerformance } from './components/CareerPerformance';
 
 const CareerPerformanceContainer: FC = () => {
   const { descriptions, startDates, summaryStatuses } = useSelector(getTimelineSelector(USER.current)) || {};

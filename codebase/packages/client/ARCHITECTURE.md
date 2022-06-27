@@ -41,6 +41,7 @@ src/
 |   |   |   |   |   |-- MenuItemComponent.test.tsx
 |   |   |   |   |-- types/
 |   |   |   |   |-- utils/
+|   |   |   |   |-- configs/
 |   |   |   |   |-- constants/
 |   |   |   |   |-- hooks/
 |   |   |   |   |-- contexts/

@@ -3,12 +3,11 @@ import React from 'react';
 // @ts-ignore
 import { renderWithTheme as render, screen } from 'utils/test';
 import { act } from '@testing-library/react';
-
-import { ColleagueGroupReviews } from './ColleagueGroupReviews';
 // @ts-ignore
 import { Status, ReviewType } from 'config/enum';
 import { FormType } from '@pma/store';
 import { SchemaFixtureVariables } from 'utils/test/fixtures/schema';
+import ColleagueGroupReviews from './ColleagueGroupReviews';
 
 describe('<ColleagueGroupReviews />', () => {
   const mock = jest.fn();

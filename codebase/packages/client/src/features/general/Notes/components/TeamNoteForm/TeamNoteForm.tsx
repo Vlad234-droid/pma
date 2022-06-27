@@ -11,7 +11,7 @@ import { Input, Item, Select, Textarea } from 'components/Form';
 import { useTranslation } from 'components/Translation';
 import { ButtonsWrapper } from 'components/ButtonsWrapper';
 import { ColleaguesFinder } from 'components/ColleaguesFinder';
-import { schemaTEAMNotes } from '../../schema';
+import { schemaTEAMNotes } from '../../configs/schema';
 import { NEW_FOLDER_ID } from 'utils';
 import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
 

@@ -19,7 +19,7 @@ type GenericItemFormProps = {
   Wrapper?: FC<any>;
   wrapperProps?: any;
   rows?: number;
-  options?: Array<Record<string, number | string | boolean>>;
+  options?: Array<Record<string, number | string | boolean> | Array<undefined>>;
   domRef?: Ref | RefObject<any> | null;
   onChange?: any;
   getSelected?: (option: any) => void;

@@ -3,9 +3,9 @@ import { useStyle } from '@pma/dex-wrapper';
 
 import { ReviewType, Status } from 'config/enum';
 import { useTranslation } from 'components/Translation';
-import { ColleagueReview } from './ColleagueReview';
-import { Buttons } from './Buttons';
 import { Notification } from 'components/Notification';
+import { Buttons } from '../Buttons';
+import { ColleagueReview } from '../ColleagueReviews';
 
 type Props = {
   status: Status;
@@ -16,7 +16,7 @@ type Props = {
   updateColleagueReviews: (T) => void;
 };
 
-export const ColleagueGroupReviews: FC<Props> = ({
+const ColleagueGroupReviews: FC<Props> = ({
   reviews,
   schema,
   reviewType,
@@ -55,3 +55,5 @@ export const ColleagueGroupReviews: FC<Props> = ({
     </div>
   );
 };
+
+export default ColleagueGroupReviews;

@@ -1,8 +1,7 @@
 import React, { FC, useState } from 'react';
 import { useStyle, Rule } from '@pma/dex-wrapper';
 import { Checkbox } from 'components/Form';
-
-import { Colleague } from './Colleague';
+import { Colleague } from '../Colleague';
 import { Status } from 'config/enum';
 
 type Props = {

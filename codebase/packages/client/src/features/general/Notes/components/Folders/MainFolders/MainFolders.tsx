@@ -17,8 +17,8 @@ import { useUploadData } from 'features/general/Notes/hooks/useUploadData';
 import { ConfirmModal, ConfirmModalWithDropDown } from 'features/general/Modal';
 import { useTranslation } from 'components/Translation';
 import { PersonalFolders, PersonalsTeamFolders, SelectedFolder, SelectedTEAMFolder } from '../../index';
-import { MainFolderProps, NotesStatus } from '../../../type';
-import { folderSchema } from '../../../schema';
+import { MainFolderProps, NotesStatus } from '../../../configs/type';
+import { folderSchema } from '../../../configs/schema';
 import { useNotesContainer } from '../../../contexts';
 
 import {
@@ -56,12 +56,8 @@ const MainFolders: FC<MainFolderProps> = ({ isLineManager }) => {
     foldersWithNotesTEAM,
     setFoldersWithNotesTEAM,
     searchValueFilterOption,
-    selectedTEAMNoteToEdit,
     archiveMode,
     setArchiveMode,
-    selectedNoteToEdit,
-    setSelectedTEAMNoteToEdit,
-    setSelectedNoteToEdit,
   } = useNotesContainer();
 
   const colleagueUuid = useSelector(colleagueUUIDSelector);
