@@ -3,8 +3,7 @@ import { UseFormReturn } from 'react-hook-form';
 import { useStyle, Rule, Styles } from '@pma/dex-wrapper';
 import { ExpressionValueType, FormType } from '@pma/store';
 import MarkdownRenderer from 'components/MarkdownRenderer';
-import { GenericItemField } from 'components/GenericForm';
-import { Input, Item, ItemProps, Select, Text, Textarea } from 'components/Form';
+import { Field, Input, Item, Select, Text, Textarea } from 'components/Form';
 import { formTagComponents } from '../utils';
 import { BorderedComponent } from '../types';
 
@@ -18,6 +17,13 @@ type ReviewComponentsProps = {
 const ReviewComponents: FC<ReviewComponentsProps> = ({ components, review, methods, readonly }) => {
   const { css, theme } = useStyle();
   const borderedComponents: BorderedComponent[] = formTagComponents(components, theme);
+  const { formState } = methods;
+
+  const ItemWrapper = (props) => (
+    <Item {...props} marginBot={false} labelCustomStyle={readonly ? { padding: 0 } : { padding: '10px 0px 8px' }}>
+      {props.children}
+    </Item>
+  );
 
   return (
     <>
@@ -62,20 +68,17 @@ const ReviewComponents: FC<ReviewComponentsProps> = ({ components, review, metho
         if (type === FormType.TEXT_FIELD) {
           return (
             <div key={id} className={css(borderStyle)}>
-              <GenericItemField
+              <Field
+                key={key}
                 name={key}
-                methods={methods}
                 label={label}
-                Wrapper={Item}
-                wrapperProps={
-                  (readonly
-                    ? { marginBot: false, labelCustomStyle: { padding: 0 } }
-                    : { marginBot: false, labelCustomStyle: { padding: '10px 0px 8px' } }) as ItemProps
-                }
-                //@ts-ignore
                 Element={readonly ? Text : validate?.maxLength > 100 ? Textarea : Input}
-                placeholder={description}
+                Wrapper={ItemWrapper}
+                setValue={methods.setValue}
+                setError={methods.setError}
                 value={value}
+                error={formState.errors[key]?.message}
+                placeholder={description}
                 readonly={componentReadonly}
               />
             </div>
@@ -84,21 +87,18 @@ const ReviewComponents: FC<ReviewComponentsProps> = ({ components, review, metho
         if (type === FormType.SELECT) {
           return (
             <div key={id} className={css(borderStyle)}>
-              <GenericItemField
+              <Field
+                key={key}
                 name={key}
-                methods={methods}
                 label={label}
-                Wrapper={Item}
-                wrapperProps={
-                  (readonly
-                    ? { marginBot: false, labelCustomStyle: { padding: 0 } }
-                    : { marginBot: false, labelCustomStyle: { padding: '10px 0px 8px' } }) as ItemProps
-                }
-                //@ts-ignore
                 Element={readonly ? Text : Select}
-                options={values}
-                placeholder={description}
+                Wrapper={ItemWrapper}
+                setValue={methods.setValue}
+                setError={methods.setError}
                 value={value}
+                error={formState.errors[key]?.message}
+                placeholder={description}
+                options={values}
                 readonly={componentReadonly}
               />
             </div>

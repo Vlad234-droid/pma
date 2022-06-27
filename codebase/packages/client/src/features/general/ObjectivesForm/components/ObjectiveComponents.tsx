@@ -5,8 +5,7 @@ import { useStyle } from '@pma/dex-wrapper';
 import { FormType, Component } from '@pma/store';
 
 import MarkdownRenderer from 'components/MarkdownRenderer';
-import { GenericItemField } from 'components/GenericForm';
-import { Input, Item, Select, Textarea } from 'components/Form';
+import { Field, Input, Item, Select, Textarea } from 'components/Form';
 import { useTranslation } from 'components/Translation';
 
 type Props = {
@@ -18,6 +17,7 @@ type Props = {
 const ObjectiveComponents: FC<Props> = ({ components, review, methods }) => {
   const { css } = useStyle();
   const { t } = useTranslation();
+  const { formState } = methods;
   return (
     <>
       {components.map((component) => {
@@ -35,48 +35,54 @@ const ObjectiveComponents: FC<Props> = ({ components, review, methods }) => {
         }
         if (type === FormType.TEXT_FIELD && validate?.maxLength <= 100) {
           return (
-            <GenericItemField
-              key={id}
+            <Field
+              key={key}
               name={key}
-              methods={methods}
               label={label}
-              Wrapper={Item}
               Element={Input}
-              placeholder={description}
+              Wrapper={Item}
+              setValue={methods.setValue}
+              setError={methods.setError}
               value={value}
+              error={formState.errors[key]?.message}
+              placeholder={description}
             />
           );
         }
         if (type === FormType.TEXT_FIELD && validate?.maxLength > 100) {
           return (
-            <GenericItemField
-              key={id}
+            <Field
+              key={key}
               name={key}
-              methods={methods}
               label={label}
-              Wrapper={Item}
               Element={Textarea}
-              placeholder={description}
+              Wrapper={Item}
+              setValue={methods.setValue}
+              setError={methods.setError}
               value={value}
+              error={formState.errors[key]?.message}
+              placeholder={description}
             />
           );
         }
         if (type === FormType.SELECT) {
           return (
-            <GenericItemField
-              key={id}
+            <Field
+              key={key}
               name={key}
-              methods={methods}
               label={label}
+              Element={Select}
               Wrapper={({ children, label }) => (
                 <Item withIcon={false} label={label}>
                   {children}
                 </Item>
               )}
-              Element={Select}
-              options={values}
-              placeholder={description || t('please_select', 'Please select')}
+              setValue={methods.setValue}
+              setError={methods.setError}
               value={value}
+              error={formState.errors[key]?.message}
+              placeholder={description || t('please_select', 'Please select')}
+              options={values}
             />
           );
         }

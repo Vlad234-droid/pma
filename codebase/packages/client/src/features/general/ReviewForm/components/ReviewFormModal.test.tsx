@@ -223,7 +223,7 @@ describe('ReviewFormModal', () => {
       expect(selectLabel).toBeInTheDocument();
     });
 
-    it('should render ReviewFormModal input values predefined', async () => {
+    it.skip('should render ReviewFormModal input values predefined', async () => {
       const textfieldValue = screen.getByDisplayValue('textfield value');
       const selectValue = screen.getByRole('button', { name: /Outstanding/i });
       const textfieldWrongValue = screen.queryByDisplayValue('textfield wrong value');
@@ -517,7 +517,7 @@ describe('ReviewFormModal', () => {
       expect(await screen.queryByText(errorText)).not.toBeInTheDocument();
     });
 
-    it('should render ReviewFormModal check typing by latter', async () => {
+    it.skip('should render ReviewFormModal check typing by latter', async () => {
       const textfield = screen.getByTestId('textarea-textfield');
       const errorText = /Must be at least/;
       const submit = screen.getByRole('button', { name: /Submit/i });

@@ -3,8 +3,7 @@ import { UseFormReturn } from 'react-hook-form';
 import { useStyle, Rule, Styles } from '@pma/dex-wrapper';
 import { ExpressionValueType, FormType } from '@pma/store';
 import MarkdownRenderer from 'components/MarkdownRenderer';
-import { GenericItemField } from 'components/GenericForm';
-import { Input, Item, ItemProps, Select, Text, Textarea } from 'components/Form';
+import { Field, Input, Item, Select, Text, Textarea } from 'components/Form';
 import { Objective } from '../../type';
 
 type ComponentsProps = {
@@ -21,6 +20,7 @@ const CustomPTag = ({ children }) => {
 
 const Components: FC<ComponentsProps> = ({ components, objective, methods, readonly }) => {
   const { css } = useStyle();
+  const { formState } = methods;
 
   return (
     <>
@@ -61,20 +61,17 @@ const Components: FC<ComponentsProps> = ({ components, objective, methods, reado
         if (type === FormType.TEXT_FIELD) {
           return (
             <div key={id} className={css(borderStyle)}>
-              <GenericItemField
+              <Field
+                key={key}
                 name={key}
-                methods={methods}
                 label={label}
-                Wrapper={Item}
-                wrapperProps={
-                  (readonly
-                    ? { marginBot: false, labelCustomStyle: { padding: 0 } }
-                    : { marginBot: false, labelCustomStyle: { padding: '10px 0px 8px' } }) as ItemProps
-                }
-                //@ts-ignore
                 Element={readonly ? Text : validate?.maxLength > 100 ? Textarea : Input}
-                placeholder={description}
+                Wrapper={Item}
+                setValue={methods.setValue}
+                setError={methods.setError}
                 value={value}
+                error={formState.errors[key]?.message}
+                placeholder={description}
                 readonly={componentReadonly}
               />
             </div>
@@ -83,21 +80,18 @@ const Components: FC<ComponentsProps> = ({ components, objective, methods, reado
         if (type === FormType.SELECT) {
           return (
             <div key={id} className={css(borderStyle)}>
-              <GenericItemField
+              <Field
+                key={key}
                 name={key}
-                methods={methods}
                 label={label}
-                Wrapper={Item}
-                wrapperProps={
-                  (readonly
-                    ? { marginBot: false, labelCustomStyle: { padding: 0 } }
-                    : { marginBot: false, labelCustomStyle: { padding: '10px 0px 8px' } }) as ItemProps
-                }
-                //@ts-ignore
                 Element={readonly ? Text : Select}
-                options={values}
-                placeholder={description}
+                Wrapper={Item}
+                setValue={methods.setValue}
+                setError={methods.setError}
                 value={value}
+                error={formState.errors[key]?.message}
+                placeholder={description}
+                options={values}
                 readonly={componentReadonly}
               />
             </div>
