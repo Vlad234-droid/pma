@@ -300,7 +300,7 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel, setIsInfoModalOpen }) 
         />
         <ArrowLeftIcon
           onClick={() => {
-            navigate(buildPath(Page.FEEDBACK));
+            navigate(buildPath(Page.FEEDBACKS));
           }}
         />
       </div>

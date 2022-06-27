@@ -275,7 +275,7 @@ const pages: Record<Page, PageComponent> = {
     Element: GiveFeedback,
     title: (tenant, t) => t('give_feedback'),
     withHeader: true,
-    backPath: Page.FEEDBACK,
+    backPath: Page.FEEDBACKS,
     perform: [role.COLLEAGUE],
     tenant: [tenant.BANK, tenant.GENERAL],
   },
@@ -297,7 +297,7 @@ const pages: Record<Page, PageComponent> = {
     Element: RespondFeedback,
     title: (tenant, t) => t('respond_to_feedback_requests'),
     withHeader: true,
-    backPath: Page.FEEDBACK,
+    backPath: Page.FEEDBACKS,
     perform: [role.COLLEAGUE],
     tenant: [tenant.BANK, tenant.GENERAL],
   },
@@ -313,12 +313,12 @@ const pages: Record<Page, PageComponent> = {
     Element: ViewFeedback,
     title: (tenant, t) => t('title_view_feedback'),
     withHeader: true,
-    backPath: Page.FEEDBACK,
+    backPath: Page.FEEDBACKS,
     perform: [role.COLLEAGUE],
     tenant: [tenant.BANK, tenant.GENERAL],
   },
 
-  [Page.FEEDBACK]: {
+  [Page.FEEDBACKS]: {
     Element: Feedback,
     title: (tenant, t) => t('feedback'),
     withHeader: true,

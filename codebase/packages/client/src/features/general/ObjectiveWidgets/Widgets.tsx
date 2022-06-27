@@ -59,7 +59,7 @@ const Widgets: FC<Props> = () => {
       title: t('feedback', 'Feedback'),
       type: widgetTypes.FEEDBACK,
       customStyle: { flex: '2 1 110px' },
-      onClick: () => navigate(buildPath(Page.FEEDBACK)),
+      onClick: () => navigate(buildPath(Page.FEEDBACKS)),
     },
     {
       iconGraphic: 'edit',

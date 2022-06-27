@@ -11,7 +11,7 @@ import { renderWithTheme } from 'utils/test';
 describe('Feedback actions', () => {
   it('it should render feedback action page', async () => {
     const history = createMemoryHistory();
-    history.push(buildPath(Page.FEEDBACK));
+    history.push(buildPath(Page.FEEDBACKS));
     const { getByTestId } = renderWithTheme(
       <BrowserRouter>
         <FeedbackActions />
@@ -23,7 +23,7 @@ describe('Feedback actions', () => {
 
   it('it should render dropdown', async () => {
     const history = createMemoryHistory();
-    history.push(buildPath(Page.FEEDBACK));
+    history.push(buildPath(Page.FEEDBACKS));
     const { getByTestId } = renderWithTheme(
       <BrowserRouter>
         <FeedbackActions />

@@ -22,7 +22,7 @@ describe('Feedback card', () => {
 
   it('it should render feedback card', () => {
     const history = createMemoryHistory();
-    history.push(buildPath(Page.FEEDBACK));
+    history.push(buildPath(Page.FEEDBACKS));
     const { getByTestId } = render(
       <BrowserRouter>
         <FeedbackCard {...props} />

@@ -1,12 +1,12 @@
 import React, { FC } from 'react';
 
-import CareerPerformance from 'features/general/CareerPerformance';
+import { CareerPerformanceContainer } from 'features/general/CareerPerformance';
 import ViewNavigation from 'features/general/ViewNavigation';
 
 const CareerPerformancePage: FC = () => (
   <div>
     <ViewNavigation />
-    <CareerPerformance />
+    <CareerPerformanceContainer />
   </div>
 );
 

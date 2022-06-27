@@ -29,12 +29,12 @@ const SuccessMessage: FC = () => {
         rightIcon={false}
         rightTextNotIcon='okay'
         onRightPress={() => {
-          navigate(buildPath(Page.FEEDBACK));
+          navigate(buildPath(Page.FEEDBACKS));
         }}
       />
       <ArrowLeftIcon
         onClick={() => {
-          navigate(buildPath(Page.FEEDBACK));
+          navigate(buildPath(Page.FEEDBACKS));
         }}
       />
     </div>

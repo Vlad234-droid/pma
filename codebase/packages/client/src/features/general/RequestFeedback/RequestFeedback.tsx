@@ -38,7 +38,7 @@ const RequestFeedback: FC = () => {
 
   const handleClose = () => {
     if (isInfoModalOpen) return setIsInfoModalOpen(false);
-    navigate(`/${Page.FEEDBACK}`);
+    navigate(`/${Page.FEEDBACKS}`);
   };
 
   return (
