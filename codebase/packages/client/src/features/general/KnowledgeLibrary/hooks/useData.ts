@@ -1,51 +1,53 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getKnowledgeLibraryData, KnowledgeLibraryActions } from '@pma/store';
+import { getKnowledgeLibraryUrls, getKnowledgeLibraryData, KnowledgeLibraryActions } from '@pma/store';
 import { DataType, Item } from '../types';
 
-import { colleaguesData, managersData } from '../config';
+import { prepareData } from '../utils';
 
 type Props = {
-  dataType?: DataType;
   filterFn?: (item: Item) => boolean;
   size?: number;
 };
 
-const useData = ({ dataType, filterFn = () => true }: Props): [Item[], () => void] => {
+const useData = ({ filterFn = () => true }: Props): { colleaguesData: Array<Item>; managersData: Array<Item> } => {
   const [data, setData] = useState<Item[]>([]);
   const dispatch = useDispatch();
 
-  const linksMap = useSelector(getKnowledgeLibraryData);
+  const linksMap = useSelector(getKnowledgeLibraryUrls);
+  const dataMap = useSelector(getKnowledgeLibraryData);
 
   useEffect(() => {
-    let mapFn = (item: Item) => item;
-    if (Object.keys(linksMap).length) {
-      mapFn = (item: Item) => ({ ...item, link: linksMap[item.id] ?? '' });
+    if (Object.keys(dataMap)) {
+      setData(prepareData(dataMap, filterFn));
     }
-
-    setData(getData().filter(filterFn).map(mapFn));
-  }, [dataType, JSON.stringify(linksMap)]);
+  }, [JSON.stringify(dataMap)]);
 
   useEffect(() => {
-    fetchData();
+    fetchURLs();
   }, []);
 
-  const getData = () => {
-    switch (dataType) {
-      case DataType.COLLEAGUES:
-        return colleaguesData;
-      case DataType.MANAGERS:
-        return managersData;
-      default:
-        return [...colleaguesData, ...managersData];
+  useEffect(() => {
+    const keys = Object.keys(linksMap);
+    if (keys.length != 0) {
+      fetchData({ keys });
     }
-  };
+  }, [JSON.stringify(Object.keys(linksMap))]);
 
-  const fetchData = useCallback(() => {
+  const fetchURLs = useCallback(() => {
     dispatch(KnowledgeLibraryActions.getHelpFaqUrls());
   }, []);
 
-  return [data, fetchData];
+  const dataFilter = useCallback((status) => data.filter((item) => item?.type === status), [data]);
+
+  const fetchData = useCallback((links) => {
+    dispatch(KnowledgeLibraryActions.getHelpFaqs(links));
+  }, []);
+
+  return {
+    colleaguesData: dataFilter(DataType.COLLEAGUES),
+    managersData: dataFilter(DataType.MANAGERS),
+  };
 };
 
 export default useData;

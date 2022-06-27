@@ -21,7 +21,7 @@ const Info: FC<Props> = ({ description }) => {
 const wrapperRule: Rule = () => ({
   width: '100%',
   display: 'flex',
-  justifyContent: 'flex-end',
+  justifyContent: 'center',
   alignItems: 'center',
   padding: '16px 0 24px 0',
 });

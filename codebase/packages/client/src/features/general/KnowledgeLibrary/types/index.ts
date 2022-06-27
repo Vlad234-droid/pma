@@ -5,9 +5,10 @@ export type Item = {
   description: string;
   imgDescription: string;
   link?: string;
+  type?: string;
 };
 
 export enum DataType {
-  MANAGERS = 'namagers',
+  MANAGERS = 'managers',
   COLLEAGUES = 'colleagues',
 }

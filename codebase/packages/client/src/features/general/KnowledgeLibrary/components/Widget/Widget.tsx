@@ -9,7 +9,7 @@ const Widget: FC = () => {
 
   const filterFn = (item: Item) => ids.includes(item.id);
 
-  const [colleaguesData] = useData({ filterFn });
+  const { colleaguesData } = useData({ filterFn });
 
   return (
     <List

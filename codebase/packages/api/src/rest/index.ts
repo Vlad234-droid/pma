@@ -17,3 +17,4 @@ export * from './pdp';
 export * from './previousReviewFiles';
 export * from './objectivesReport';
 export * from './messages';
+export * from './cms';

@@ -1,11 +1,14 @@
 import React, { FC } from 'react';
+import { getKnowledgeMeta } from '@pma/store';
 import { useStyle, Rule } from '@pma/dex-wrapper';
+
+import { useSelector } from 'react-redux';
 
 import { useTranslation } from 'components/Translation';
 import { CanPerform, role } from 'features/general/Permission';
+import Spinner from 'components/Spinner';
 import List from '../List';
 import Info from '../Info';
-import { DataType } from '../../types';
 import useData from '../../hooks/useData';
 
 export const TEST_ID = 'test-wrapper';
@@ -14,8 +17,11 @@ const Wrapper: FC = () => {
   const { css } = useStyle();
   const { t } = useTranslation();
 
-  const [colleaguesData] = useData({ dataType: DataType.COLLEAGUES });
-  const [managersData] = useData({ dataType: DataType.MANAGERS });
+  const { loading, loaded } = useSelector(getKnowledgeMeta);
+
+  const { colleaguesData, managersData } = useData({});
+
+  if (loading && !loaded && (!colleaguesData.length || !managersData.length)) return <Spinner fullHeight />;
 
   return (
     <div data-test-id={TEST_ID} className={css(wrapperRule)}>
