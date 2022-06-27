@@ -43,7 +43,7 @@ const CreateButton: FC<Props> = memo(({ withIcon = false }) => {
               {t('create_priorities', 'Create priorities')}
             </IconButton>
           ) : (
-            <Button styles={[buttonStyle]} onPress={onClick}>
+            <Button styles={[buttonStyle]} onPress={handleClick}>
               {t('create_priorities', 'Create priorities')}
             </Button>
           )}
