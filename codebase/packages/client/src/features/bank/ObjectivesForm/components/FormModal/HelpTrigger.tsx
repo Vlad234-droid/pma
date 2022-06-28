@@ -7,7 +7,7 @@ const HelpTrigger: FC = () => {
 
   return (
     <div className={css(wrapperStyle)}>
-      <Icon graphic='information' />
+      <Icon graphic='information' size={'24px'} />
       <span className={css(textStyle)}>
         <Trans i18nKey='need_help_to_write'>Need help with what to write?</Trans>
       </span>
@@ -18,8 +18,8 @@ const HelpTrigger: FC = () => {
 const wrapperStyle: Rule = { display: 'flex', alignItems: 'center' };
 
 const textStyle: Rule = ({ theme }) => ({
-  ...theme.font.fixed.f14,
-  color: theme.colors.tescoBlue,
+  ...theme.font.fixed.f12,
+  color: theme.colors.grayscale,
   padding: `${theme.spacing.s0} ${theme.spacing.s2}`,
 });
 

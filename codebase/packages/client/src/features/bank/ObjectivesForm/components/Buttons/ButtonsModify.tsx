@@ -4,6 +4,7 @@ import { Trans } from 'components/Translation';
 import { useSelector } from 'react-redux';
 import { getReviewSchema } from '@pma/store';
 import { ReviewType } from 'config/enum';
+import { IconButton, Position } from 'components/IconButton';
 
 type ButtonsProps = {
   currentNumber: number;
@@ -28,25 +29,56 @@ const Buttons: FC<ButtonsProps> = ({ readonly, isValid, onClose, onSaveExit, onS
       <div className={css(wrapperStyle)}>
         <div className={css(buttonWrapperStyle({ mobileScreen }))}>
           {readonly ? (
-            <Button styles={[buttonWhiteStyle]} onPress={onClose}>
+            <Button styles={[buttonWhiteStyle({ mobileScreen })]} onPress={onClose}>
               <Trans i18nKey='close'>Close</Trans>
             </Button>
           ) : (
             <>
-              <Button onPress={onSaveExit} styles={[buttonWhiteStyle]}>
-                <Trans i18nKey='save_and_exit'>Save & exit</Trans>
-              </Button>
-              <Button onPress={onNext} styles={[buttonBlueStyle]} isDisabled={isDisabledSaveAndAdd}>
-                <Trans i18nKey='save_add_priority'>Save & add new priority</Trans>
-              </Button>
+              <div className={css(buttonGroupStyle({ mobileScreen }))}>
+                <Button onPress={onSaveExit} styles={[buttonWhiteStyle({ mobileScreen })]}>
+                  <Trans i18nKey='save_and_exit'>Save & exit</Trans>
+                </Button>
+                {mobileScreen ? (
+                  <IconButton
+                    isDisabled={isDisabledSaveAndAdd}
+                    customVariantRules={{
+                      default: buttonWithArrowStyle({ disabled: false }),
+                      disabled: buttonWithArrowStyle({ disabled: true }),
+                    }}
+                    graphic='arrowRight'
+                    iconProps={{ invertColors: true }}
+                    iconPosition={Position.RIGHT}
+                    onPress={onNext}
+                  >
+                    <Trans i18nKey='save_add_priority'>Save & create new priority</Trans>
+                  </IconButton>
+                ) : (
+                  <Button
+                    onPress={onNext}
+                    styles={[buttonBlueStyle({ mobileScreen })]}
+                    isDisabled={isDisabledSaveAndAdd}
+                  >
+                    <Trans i18nKey='save_add_priority'>Save & create new priority</Trans>
+                  </Button>
+                )}
+              </div>
+              <div>
+                <IconButton
+                  isDisabled={!isValid}
+                  customVariantRules={{
+                    default: buttonWithArrowStyle({ disabled: false }),
+                    disabled: buttonWithArrowStyle({ disabled: true }),
+                  }}
+                  graphic='arrowRight'
+                  iconProps={{ invertColors: true }}
+                  iconPosition={Position.RIGHT}
+                  onPress={onSubmit}
+                >
+                  <Trans i18nKey='review_and_submit'>Review & submit</Trans>
+                </IconButton>
+              </div>
             </>
           )}
-        </div>
-        <div className={css(buttonTextWrapperStyle({ mobileScreen }))}>Or finish</div>
-        <div className={css(buttonWrapperStyle({ mobileScreen }))}>
-          <Button styles={[buttonBlueStyle]} onPress={onSubmit} isDisabled={!isValid}>
-            <Trans i18nKey='review_and_submit'>Review & Submit</Trans>
-          </Button>
         </div>
       </div>
     </div>
@@ -73,31 +105,54 @@ const buttonWrapperStyle: CreateRule<{ mobileScreen: boolean }> =
   ({ mobileScreen }) =>
   ({ theme }) => ({
     padding: mobileScreen ? theme.spacing.s7 : theme.spacing.s9,
-    display: 'flex',
     justifyContent: 'center',
   });
-const buttonTextWrapperStyle: CreateRule<{ mobileScreen: boolean }> =
-  ({ mobileScreen }) =>
+
+const buttonGroupStyle: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => ({
+  display: mobileScreen ? 'inline-block' : 'flex',
+  width: '100%',
+  paddingBottom: mobileScreen ? '8px' : '0px',
+});
+
+const buttonWhiteStyle: CreateRule<{ mobileScreen: boolean }> =
+  ({ mobileScreen = false }) =>
   ({ theme }) => ({
-    padding: `0 ${mobileScreen ? theme.spacing.s7 : theme.spacing.s9}`,
+    ...theme.font.fixed.f16,
+    fontWeight: theme.font.weight.bold,
+    width: mobileScreen ? '100%' : '50%',
+    margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
+    background: theme.colors.white,
+    border: `${theme.border.width.b2} solid ${theme.colors.tescoBlue}`,
+    color: `${theme.colors.tescoBlue}`,
+    marginBottom: '8px',
   });
 
-const buttonWhiteStyle: Rule = ({ theme }) => ({
-  ...theme.font.fixed.f16,
-  fontWeight: theme.font.weight.bold,
-  width: '50%',
-  margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
-  background: theme.colors.white,
-  border: `${theme.border.width.b2} solid ${theme.colors.tescoBlue}`,
-  color: `${theme.colors.tescoBlue}`,
-});
+const buttonBlueStyle: CreateRule<{ mobileScreen: boolean }> =
+  ({ mobileScreen = false }) =>
+  ({ theme }) => ({
+    ...theme.font.fixed.f16,
+    fontWeight: theme.font.weight.bold,
+    width: mobileScreen ? '100%' : '50%',
+    margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
+    background: `${theme.colors.tescoBlue}`,
+    marginBottom: '8px',
+  });
 
-const buttonBlueStyle: Rule = ({ theme }) => ({
-  ...theme.font.fixed.f16,
-  fontWeight: theme.font.weight.bold,
-  width: '50%',
-  margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
-  background: `${theme.colors.tescoBlue}`,
-});
+const buttonWithArrowStyle: CreateRule<{ disabled: boolean }> =
+  ({ disabled = false }) =>
+  ({ theme }) => ({
+    ...theme.font.fixed.f16,
+    letterSpacing: '0px',
+    fontWeight: theme.font.weight.bold,
+    width: '100%',
+    height: '40px',
+    margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
+    background: `${theme.colors.tescoBlue}`,
+    color: `${theme.colors.white}`,
+    justifyContent: 'space-between',
+    padding: '0px 15px',
+    opacity: disabled ? 0.4 : 1,
+    borderRadius: '20px',
+  });
 
 export default Buttons;

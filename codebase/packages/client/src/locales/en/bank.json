@@ -1,4 +1,5 @@
 {
   "create_objectives": "Create priorities",
-  "my_objectives_and_reviews": "Quarterly priorities"
+  "my_objectives_and_reviews": "Quarterly priorities",
+  "objective_number": "Priority {{number}}"
 }

@@ -1,0 +1,45 @@
+import React, { FC } from 'react';
+import { useStyle, Rule } from '@pma/dex-wrapper';
+
+type Props = {
+  steps: string[];
+  step: number;
+};
+const Stepper: FC<Props> = ({ steps, step }) => {
+  const { css } = useStyle();
+
+  return (
+    <div className={css(wrapperStyle)}>
+      {steps.map((singleStep, index) => {
+        if (step === index + 1) {
+          return (
+            <div className={css(activeStepStyle)} key={index}>
+              <span className={css({ padding: '2px 8px 4px' })}>{singleStep}</span>
+            </div>
+          );
+        }
+        return (
+          <div className={css(stepStyle)} key={index}>
+            <span className={css({ padding: '2px 8px 4px' })}>{singleStep}</span>
+          </div>
+        );
+      })}
+    </div>
+  );
+};
+
+const wrapperStyle: Rule = { display: 'flex', flexWrap: 'wrap', gap: '10px' };
+
+const stepStyle: Rule = ({ theme }) => ({
+  ...theme.font.fixed.f12,
+  color: theme.colors.tescoBlue,
+});
+
+const activeStepStyle: Rule = ({ theme }) => ({
+  ...theme.font.fixed.f12,
+  background: theme.colors.tescoBlue,
+  color: theme.colors.white,
+  borderRadius: '3px',
+});
+
+export default Stepper;

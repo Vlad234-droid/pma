@@ -41,7 +41,7 @@ export function withForm<P>(WrappedComponent: React.ComponentType<P & FormPropsT
     const colleagueUuid = useSelector(colleagueUUIDSelector);
     const schema = useSelector(getReviewSchema(ReviewType.OBJECTIVE));
     const pathParams = { colleagueUuid, type: ReviewType.OBJECTIVE, cycleUuid: 'CURRENT' };
-    const { components = [] as Component[], markup = { max: 0, min: 0 } } = schema;
+    const { components = [] as Component[], markup = { max: 1, min: 15 } } = schema;
     const objectives: Objective[] = useSelector(filterReviewsByTypeSelector(ReviewType.OBJECTIVE)) || [];
 
     // todo wait for design. could start from diff number
@@ -53,7 +53,10 @@ export function withForm<P>(WrappedComponent: React.ComponentType<P & FormPropsT
     const [currentNumber, setNumber] = useState<number>(startFromNumber);
     const [objective, setObjective] = useState<Objective>({});
 
-    const defaultFormState = objectives.length == markup.max ? FormStateType.PREVIEW : FormStateType.MODIFY;
+    const defaultFormState = useMemo(
+      () => (objectives.length < markup.max ? FormStateType.MODIFY : FormStateType.PREVIEW),
+      [objectives, markup],
+    );
     const [formState, setFormState] = useState<FormStateType>(defaultFormState);
 
     // @ts-ignore

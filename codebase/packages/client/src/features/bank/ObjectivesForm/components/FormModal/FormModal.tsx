@@ -12,6 +12,9 @@ import ButtonsPreview from '../Buttons/ButtonsPreview';
 
 import { FormStateType } from '../../type';
 import { FormPropsType, withForm } from '../../hoc/withForm';
+import { useSelector } from 'react-redux';
+import { reviewsMetaSelector, schemaMetaSelector } from '@pma/store';
+import Spinner from 'components/Spinner';
 
 export type FormModal = {
   onClose: () => void;
@@ -38,9 +41,12 @@ const FormModal: FC<FormModal> = ({
   } = methods;
   let paddingBottom = 0;
 
+  const { loading: reviewLoading } = useSelector(reviewsMetaSelector);
+  const { loading: schemaLoading } = useSelector(schemaMetaSelector);
+
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   if (formState === FormStateType.MODIFY) {
-    paddingBottom = mobileScreen ? 114 : 132;
+    paddingBottom = mobileScreen ? 96 : 50;
   }
 
   if (formState === FormStateType.SUBMITTED) {
@@ -56,6 +62,14 @@ const FormModal: FC<FormModal> = ({
     );
   }
 
+  if (reviewLoading && schemaLoading) {
+    return (
+      <FormWrapper onClose={onBack} paddingBottom={paddingBottom}>
+        <Spinner fullHeight />
+      </FormWrapper>
+    );
+  }
+
   return (
     <FormWrapper onClose={onBack} paddingBottom={paddingBottom}>
       <form data-test-id={'PRIORITY_FORM_MODAL'}>
@@ -67,6 +81,7 @@ const FormModal: FC<FormModal> = ({
                   <>
                     <FormModify
                       methods={methods}
+                      objectives={objectives}
                       objective={objective}
                       components={components}
                       currentNumber={currentNumber}
@@ -93,6 +108,7 @@ const FormModal: FC<FormModal> = ({
                 return (
                   <FormModify
                     methods={methods}
+                    objectives={objectives}
                     objective={objective}
                     components={components}
                     currentNumber={currentNumber}
