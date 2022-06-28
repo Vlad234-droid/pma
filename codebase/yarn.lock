@@ -1571,7 +1571,7 @@
 "@dex-ddl/core@0.1.102":
   version "0.1.102"
   resolved "https://nexus.ourtesco.com/repository/colleague-ui-private/@dex-ddl/core/-/core-0.1.102.tgz#bc83f6e8faacaccf378a5f8de1631725ab92aac8"
-  integrity sha512-AzVEnM3uA+4bUnQ8aFvhcI7kt2+dCAB5NHzY4XwG/cD2rqHEJNHs1svnj+drQVQqxl3FTMa61EaJwC2W0+Ao1w==
+  integrity "sha1-ySqNeynvGX1cMbI2IuRU6IgkbQo= sha512-60+1qydwAnpr/wBhJjkE15T73JUJWHble9Qw7r8AujkK8f5bsDH49wkxKaKDIcW/8q5Sm3wKuqE5Xy5DfYiYdA=="
   dependencies:
     "@energon-components/hooks" "0.9.0"
     "@energon/array-utils" "0.19.4"
@@ -1606,7 +1606,7 @@
 "@dex-ddl/core@0.1.153":
   version "0.1.153"
   resolved "https://nexus.ourtesco.com/repository/colleague-ui-private/@dex-ddl/core/-/core-0.1.153.tgz#8d26c23704fe63e174f8a9db7c78607d16b5840c"
-  integrity sha512-E8Vm0i3i/ZISp2v/FxmuDwGiRlyPubVR/lYY0ZR/VkGOLWcFcVBsPC3DOcC197zm/diTBHsU4rcfIH0+uKjYdQ==
+  integrity "sha1-GIiqHZ4inswc7fciqQd71390aRA= sha512-5QI4kHYCwjQ5XBwQ6j22P6smLp2GPxg8LdlpgHdrKfNe0crWbIt6ECzSvvbInITGi40Sy0rVKtyF3KzOyYezjg=="
   dependencies:
     "@energon-components/hooks" "0.9.0"
     "@energon/array-utils" "0.19.4"
