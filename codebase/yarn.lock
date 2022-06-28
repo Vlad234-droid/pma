@@ -1639,46 +1639,6 @@
     react-fela "11.6.1"
     react-select "5.1.0"
 
-"@dex-ddl/core@0.1.43":
-  version "0.1.43"
-  resolved "https://nexus.ourtesco.com/repository/colleague-ui-private/@dex-ddl/core/-/core-0.1.43.tgz#7605e62e7f87f3dc8da0839eaec2a22a962100f3"
-  integrity sha512-9r2NfgPgtVVSLbRKCQw3neLcAEJL1Lbd9obfXarrhB1Zl/cTBfGH8MFqW1Twjj/dntnQ7sWQfm07aXargDsTTQ==
-  dependencies:
-    "@energon-components/hooks" "0.9.0"
-    "@energon/array-utils" "0.19.4"
-    "@energon/date-utils" "0.19.0"
-    "@energon/function-utils" "0.2.0"
-    "@energon/number-utils" "0.3.7"
-    "@react-aria/button" "3.3.2"
-    "@react-aria/dialog" "3.1.3"
-    "@react-aria/focus" "3.4.0"
-    "@react-aria/overlays" "3.7.1"
-    "@react-aria/radio" "3.1.4"
-    "@react-aria/visually-hidden" "3.2.2"
-    "@react-stately/overlays" "3.1.2"
-    "@react-stately/radio" "3.3.1"
-    "@react-types/button" "3.4.0"
-    "@react-types/dialog" "3.3.0"
-    "@react-types/overlays" "3.5.0"
-    "@react-types/radio" "3.1.1"
-    caniuse-api "3.0.0"
-    fela "11.6.1"
-    fela-plugin-fallback-value "11.6.1"
-    fela-plugin-prefixer "11.6.1"
-    fela-plugin-typescript "11.6.1"
-    inline-style-prefixer "6.0.0"
-    patch-package "6.4.7"
-    postinstall-postinstall "2.1.0"
-    react-fela "11.6.1"
-
-"@dex-runtime/root-state@0.5.1":
-  version "0.5.1"
-  resolved "https://nexus.ourtesco.com/repository/colleague-ui-private/@dex-runtime/root-state/-/root-state-0.5.1.tgz#d50945f5a4e136ddc6c5b7b64ad5b4ed1c8f7b9b"
-  integrity sha512-8v+hypkLyYhctX2VY+WjwYhsD6yo5mA6ABXlUHp1Waj6qDsMALBIUvUntkiZcPaT/OBntlKQQg9VGHkhLqF95Q==
-  dependencies:
-    "@dex-ddl/core" "0.1.43"
-    rxjs "7.3.0"
-
 "@discoveryjs/json-ext@^0.5.0", "@discoveryjs/json-ext@^0.5.3":
   version "0.5.6"
   resolved "https://registry.yarnpkg.com/@discoveryjs/json-ext/-/json-ext-0.5.6.tgz#d5e0706cf8c6acd8c6032f8d54070af261bbbb2f"
@@ -22004,13 +21964,6 @@ run-queue@^1.0.0, run-queue@^1.0.3:
   dependencies:
     aproba "^1.1.1"
 
-rxjs@7.3.0:
-  version "7.3.0"
-  resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-7.3.0.tgz#39fe4f3461dc1e50be1475b2b85a0a88c1e938c6"
-  integrity sha512-p2yuGIg9S1epc3vrjKf6iVb3RCaAYjYskkO+jHIaV0IjOPlJop4UnodOoFb2xeNwlguqLYvGw1b1McillYb5Gw==
-  dependencies:
-    tslib "~2.1.0"
-
 rxjs@7.5.2, rxjs@^7.2.0, rxjs@^7.5.1:
   version "7.5.2"
   resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-7.5.2.tgz#11e4a3a1dfad85dbf7fb6e33cbba17668497490b"
@@ -23963,11 +23916,6 @@ tslib@^1.8.1, tslib@^1.9.0, tslib@^1.9.3:
   version "1.14.1"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.14.1.tgz#cf2d38bdc34a134bcaf1091c41f6619e2f672d00"
   integrity sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==
-
-tslib@~2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.1.0.tgz#da60860f1c2ecaa5703ab7d39bc05b6bf988b97a"
-  integrity sha512-hcVC3wYEziELGGmEEXue7D75zbwIIVUMWAVbHItGPx0ziyXxrOMQx4rQEVEV45Ut/1IotuEvwqPopzIOkDMf0A==
 
 tsscmp@1.0.6:
   version "1.0.6"
