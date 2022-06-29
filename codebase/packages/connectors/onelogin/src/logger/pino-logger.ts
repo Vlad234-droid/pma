@@ -1,9 +1,9 @@
-import pino from 'pino';
 import { createLogger, 
   defaultRequestSerializer, 
   defaultResponseSerializer, 
   defaultErrorSerializer,
   filterSensitiveData,
+  Bindings,
 } from '@pma-common/logger'; 
 
 import { LoggerEvent } from './';
@@ -26,7 +26,7 @@ const oneloginResponseSerializer = (res: any) => {
   return result;
 }
 
-export const pinoLogger = (options?: pino.Bindings) => {
+export const pinoLogger = (options?: Bindings) => {
   const logger = createLogger({
     ...options,
     serializers: {

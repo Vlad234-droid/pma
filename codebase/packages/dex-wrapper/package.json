@@ -11,7 +11,8 @@
   "license": "ISC",
   "dependencies": {
     "@accessibility-toolbar/core": "0.0.24",
-    "@dex-ddl/core": "0.1.153"
-  },
-  "devDependencies": {}
+    "@dex-ddl/core": "0.1.153",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  }
 }
