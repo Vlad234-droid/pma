@@ -13,5 +13,8 @@
     "@react-pdf/renderer": "2.2.0",
     "remove-markdown": "^0.3.0"
   },
-  "devDependencies": {}
+  "devDependencies": {},
+  "resolutions": {
+    "react-reconciler": "0.29.0"
+  }
 }

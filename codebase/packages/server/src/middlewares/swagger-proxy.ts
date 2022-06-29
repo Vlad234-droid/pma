@@ -1,12 +1,10 @@
-import { ClientRequest, IncomingMessage, ServerResponse } from 'http';
+import { ClientRequest } from 'http';
 import { ServerOptions } from 'http-proxy';
 import fetch from 'node-fetch';
 
-import { Request, response, Response, Router } from 'express';
-import { Logger } from 'pino';
-import { is as mimeTypeIs } from 'type-is';
+import { Request, Response, Router } from 'express';
 
-import { createLogger } from '@pma-common/logger';
+import { createLogger, Logger } from '@pma-common/logger';
 import { emptyIfRoot } from '@pma-connectors/onelogin';
 
 import { ProcessConfig } from '../config';

@@ -69,6 +69,7 @@
     "lodash.isempty": "^4.4.0",
     "lodash.merge": "^4.6.2",
     "luxon": "^2.0.2",
+    "plotly.js": "^1.58.5",
     "react": "^17.0.2",
     "react-calendar": "^3.7.0",
     "react-dom": "^17.0.2",
@@ -83,19 +84,23 @@
     "react-router-dom": "^6.2.1",
     "react-scripts": "4.0.1",
     "recharts": "^2.1.8",
+    "redux": "^4.0.4",
     "sanitize.css": "12.0.1",
     "single-spa-react": "^4.2.0",
     "yup": "^0.32.9"
   },
   "devDependencies": {
+    "@babel/core": "^7.12.9",
     "@babel/plugin-transform-runtime": "^7.15.0",
     "@babel/runtime": "^7.14.6",
     "@storybook/addon-a11y": "^6.3.7",
     "@storybook/addon-actions": "^6.3.7",
     "@storybook/addon-essentials": "^6.3.7",
     "@storybook/addon-links": "^6.3.7",
+    "@storybook/node-logger": "^6.4.12",
     "@storybook/preset-create-react-app": "^3.2.0",
     "@storybook/react": "^6.3.7",
+    "@testing-library/dom": "^8.0.0",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^12.0.0",
     "@testing-library/user-event": "^12.8.3",
@@ -118,6 +123,7 @@
     "@types/testing-library__jest-dom": "^5.14.0",
     "@types/webpack-env": "^1.16.2",
     "@types/yup": "^0.29.11",
+    "babel-loader": "^8.1.0",
     "babel-jest": "^27.0.5",
     "core-js": "^2.6.5",
     "cross-env": "^7.0.3",
@@ -138,9 +144,11 @@
     "pretty-quick": "^3.1.1",
     "prop-types": "^15.7.2",
     "react-app-rewired": "^2.1.8",
+    "react-is": "^17.0.2",
     "react-scripts": "4.0.1",
     "redux-devtools-extension": "^2.13.9",
     "redux-mock-store": "^1.5.4",
+    "regenerator-runtime": "^0.13.4",
     "storybook-mobile": "^0.1.32",
     "ts-config-single-spa": "^2.0.1",
     "tsconfig-paths-webpack-plugin": "^3.3.0",
@@ -153,5 +161,8 @@
     "webpack-config-single-spa-ts": "^3.0.0",
     "webpack-dev-server": "^4.0.0-rc.0",
     "webpack-merge": "^5.8.0"
+  },
+  "resolutions": {
+    "@dex-ddl/core": "0.1.153"
   }
 }
