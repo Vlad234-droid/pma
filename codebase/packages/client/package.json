@@ -43,10 +43,10 @@
     ]
   },
   "dependencies": {
-    "@dex-core-common/api-connectors": "^0.6.0",
+    "@dex-core-common/api-connectors": "^0.7.0",
     "@energon-components/hooks": "0.9.0",
     "@hookform/resolvers": "^2.8.1",
-    "@my-inbox/client": "0.5.4",
+    "@my-inbox/client": "0.5.6",
     "@pma/dex-wrapper": "1.0.0",
     "@pma/openapi": "1.0.0",
     "@pma/pdf-renderer": "1.0.0",

@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@pma-common/connector-utils": "^0.1.0",
-    "@energon-connectors/core": "^0.11.2",
+    "@energon-connectors/core": "^0.11.4",
     "@energon/rest-api-consumer": "^0.8.7",
     "@energon/rest-api-definition": "^0.6.7"
   },
