@@ -98,7 +98,9 @@ ENV SKIP_PREFLIGHT_CHECK=true
 
 RUN --mount=type=cache,id=yarn_cache,target=/usr/local/share/.cache/yarn \
     --mount=type=cache,id=node_modules,target=/opt/app/node_modules \
-    yarn bootstrap:dev \ 
+    yarn clean:all \
+    && yarn cache clean \
+    && yarn bootstrap:dev \ 
     && yarn build:prod:client \
     && yarn ws:client test:ci \
     && yarn build:prod:server \
