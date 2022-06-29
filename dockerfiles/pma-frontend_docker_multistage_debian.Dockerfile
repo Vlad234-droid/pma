@@ -98,16 +98,19 @@ ENV SKIP_PREFLIGHT_CHECK=true
 
 RUN --mount=type=cache,id=yarn_cache,target=/usr/local/share/.cache/yarn \
     --mount=type=cache,id=node_modules,target=/opt/app/node_modules \
-    yarn cache clean \
-    && rm -rf ./node_modules \
-    && yarn bootstrap:dev \ 
+    rm -rf /usr/local/share/.cache/yarn/* \
+    && rm -rf /opt/app/node_modules/* \
+    && yarn bootstrap:dev 
+
+RUN --mount=type=cache,id=node_modules,target=/opt/app/node_modules \
+    && yarn ws:client test:ci 
+
+RUN --mount=type=cache,id=node_modules,target=/opt/app/node_modules \
     && yarn build:prod:client \
-    && yarn ws:client test:ci \
     && yarn build:prod:server \
     && find . -type d -name node_modules -prune -o -name 'package.json' -exec bash -c 'mkdir -p ../build/$(dirname {})' \; \
     && find . -type d -name node_modules -prune -o -name 'public' -exec cp -r '{}' '../build/{}' \; \
     && find . -type d -name node_modules -prune -o -name 'build' -exec cp -r '{}' '../build/{}' \;
-
 # ================
 # post-build stage
 # ================
