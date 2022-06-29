@@ -57,6 +57,7 @@
     "ts-jest": "^26.4.4"
   },
   "resolutions": {
+    "@dex-ddl/core": "0.1.153",
     "express": "^4.17.3",
     "http-proxy-middleware": "^2.0.6"
   },
