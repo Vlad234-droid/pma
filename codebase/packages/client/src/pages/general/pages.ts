@@ -7,7 +7,7 @@ import CareerPerformance from './CareerPerformance';
 import { CreatePersonalDevelopmentGoal, PersonalDevelopmentHelp, PersonalDevelopmentPlan } from './PDP';
 import MyTeam from './MyTeam';
 import MyActions from './MyActions';
-import Objectives from './Objectives';
+import Objectives, { CreateObjective } from './Objectives';
 import Profile from './Profile';
 import Feedback from './Feedback';
 import GiveFeedback from './GiveFeedback';
@@ -245,6 +245,12 @@ const pages: Record<Page, PageComponent> = {
     title: (tenant, t) => t('my_objectives_and_reviews', 'My objectives and reviews', { ns: tenant }),
     withHeader: true,
     backPath: Page.CONTRIBUTION,
+    perform: [role.COLLEAGUE],
+    tenant: [tenant.BANK, tenant.GENERAL],
+  },
+  [Page.CREATE_OBJECTIVES]: {
+    Element: CreateObjective,
+    withHeader: false,
     perform: [role.COLLEAGUE],
     tenant: [tenant.BANK, tenant.GENERAL],
   },

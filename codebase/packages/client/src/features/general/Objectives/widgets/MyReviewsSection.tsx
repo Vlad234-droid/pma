@@ -1,10 +1,10 @@
 import React, { FC } from 'react';
+import { useSelector } from 'react-redux';
+import { Rule, useStyle } from '@pma/dex-wrapper';
+import { colleagueUUIDSelector, getTimelineByCodeSelector, timelineTypesAvailabilitySelector } from '@pma/store';
 
 import { Trans, useTranslation } from 'components/Translation';
-import { Rule, useStyle } from '@pma/dex-wrapper';
 import Section from 'components/Section';
-import { useSelector } from 'react-redux';
-import { colleagueUUIDSelector, getTimelineByCodeSelector, timelineTypesAvailabilitySelector } from '@pma/store';
 import { ReviewWidget } from 'features/general/ReviewWidget';
 import { ObjectiveType, ReviewType } from 'config/enum';
 import { USER } from 'config/constants';
@@ -79,7 +79,7 @@ export const MyReviewsSection: FC<Props> = () => {
 };
 
 const basicTileStyle: Rule = {
-  flex: '1 0 216px',
+  flex: '1 0 230px',
 };
 
 const widgetWrapperStyle: Rule = {

@@ -45,6 +45,7 @@ src/
 |   |   |   |   |-- constants/
 |   |   |   |   |-- hooks/
 |   |   |   |   |-- contexts/
+|   |   |   |   |-- widgets/
 |   |   |   |-- MainMenu.tsx
 |   |   |   |-- index.ts
 |-- index.ts
@@ -68,6 +69,7 @@ src/
         - **utils** - feature utils
         - **configs** - feature configs
         - **constants** - feature constants
+        - **widgets** - feature widgets
         - **hooks** - feature hooks
         - **contexts** - feature context
         - <**feature name**> - component container with business logic

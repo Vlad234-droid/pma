@@ -1,9 +1,9 @@
-import React, { FC, HTMLProps, useState, memo } from 'react';
+import React, { FC, HTMLProps, memo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button, Rule, useStyle } from '@pma/dex-wrapper';
+
 import { IconButton } from 'components/IconButton';
-import { ModalComponent } from 'features/general/ObjectivesForm/components/ModalComponent';
 import { useTranslation } from 'components/Translation';
-import { ObjectiveForm, ObjectivesForm } from 'features/general/ObjectivesForm';
 import { ReviewType, Status } from 'config/enum';
 import { REVIEW_MODIFICATION_MODE, reviewModificationMode } from '../../utils';
 import { useSelector } from 'react-redux';
@@ -15,6 +15,8 @@ import {
   isReviewsNumbersInStatus,
 } from '@pma/store';
 import { USER } from 'config/constants';
+import { buildPath } from 'features/general/Routes';
+import { Page } from 'pages';
 
 export type CreateModalProps = {
   withIcon?: boolean;
@@ -25,8 +27,7 @@ type Props = HTMLProps<HTMLInputElement> & CreateModalProps;
 const CreateButton: FC<Props> = memo(({ withIcon = false }) => {
   const { t } = useTranslation();
   const { css } = useStyle();
-
-  const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
 
   const schema = useSelector(getReviewSchema(ReviewType.OBJECTIVE));
   const { markup = { max: 0, min: 0 } } = schema;
@@ -38,7 +39,6 @@ const CreateButton: FC<Props> = memo(({ withIcon = false }) => {
   const countReviews = useSelector(countByTypeReviews(ReviewType.OBJECTIVE)) || 0;
   const objectiveSchema = useSelector(getReviewSchema(ReviewType.OBJECTIVE));
   const modificationMode = reviewModificationMode(countReviews, objectiveSchema);
-  const useSingleStep = modificationMode === REVIEW_MODIFICATION_MODE.SINGLE;
   const isAvailable =
     (reviewsMinNumbersInStatusApproved ||
       timelineObjective.status === Status.DRAFT ||
@@ -46,39 +46,28 @@ const CreateButton: FC<Props> = memo(({ withIcon = false }) => {
     countReviews < markup.max &&
     modificationMode !== REVIEW_MODIFICATION_MODE.NONE;
 
-  const handleBtnClick = () => setIsOpen(true);
+  const handleBtnClick = () => navigate(buildPath(Page.CREATE_OBJECTIVES));
+
+  if (!isAvailable) return null;
 
   return (
-    <>
-      {isAvailable && (
-        <div className={css({ display: 'flex', marginBottom: '20px' })}>
-          {withIcon ? (
-            <IconButton
-              customVariantRules={{ default: iconBtnStyle }}
-              onPress={handleBtnClick}
-              graphic='add'
-              iconProps={{ invertColors: true }}
-              iconStyles={iconStyle}
-            >
-              {t('create_objectives', 'Create objective')}
-            </IconButton>
-          ) : (
-            <Button styles={[buttonStyle]} onPress={handleBtnClick}>
-              {t('create_objectives', 'Create objective')}
-            </Button>
-          )}
-        </div>
+    <div className={css({ display: 'flex', marginBottom: '20px' })}>
+      {withIcon ? (
+        <IconButton
+          customVariantRules={{ default: iconBtnStyle }}
+          onPress={handleBtnClick}
+          graphic='add'
+          iconProps={{ invertColors: true }}
+          iconStyles={iconStyle}
+        >
+          {t('create_objectives', 'Create objective')}
+        </IconButton>
+      ) : (
+        <Button styles={[buttonStyle]} onPress={handleBtnClick}>
+          {t('create_objectives', 'Create objective')}
+        </Button>
       )}
-      {isOpen && (
-        <ModalComponent onClose={() => setIsOpen(false)} title={t('create_objectives', 'Create objectives')}>
-          {useSingleStep ? (
-            <ObjectiveForm onClose={() => setIsOpen(false)} />
-          ) : (
-            <ObjectivesForm onClose={() => setIsOpen(false)} />
-          )}
-        </ModalComponent>
-      )}
-    </>
+    </div>
   );
 });
 

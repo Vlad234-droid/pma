@@ -1,13 +1,13 @@
 import React, { useMemo, FC } from 'react';
-import { getTenant, Tenant } from 'utils';
+import { useTenant } from 'features/general/Permission';
 
 // todo think on same type between tenant
 type Props = {
   withIcon?: boolean;
 };
 
-export const CreateButton: FC<Props> = React.memo((props) => {
-  const tenant: Tenant = getTenant();
+export const CreateObjective: FC<Props> = React.memo((props) => {
+  const tenant = useTenant();
   const Block = useMemo(
     () =>
       React.lazy(() =>

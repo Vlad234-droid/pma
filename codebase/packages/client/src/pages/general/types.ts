@@ -12,6 +12,7 @@ enum Page {
   UPDATE_PERSONAL_DEVELOPMENT_PLAN = 'personal-development-plan/:uuid',
   PERSONAL_DEVELOPMENT_HELP = 'personal-development-plan/help',
   OBJECTIVES_VIEW = 'objectives',
+  CREATE_OBJECTIVES = 'objectives/new',
   USER_OBJECTIVES = 'user-objective/:uuid',
   PROFILE = 'profile',
   SETTINGS = 'settings',
