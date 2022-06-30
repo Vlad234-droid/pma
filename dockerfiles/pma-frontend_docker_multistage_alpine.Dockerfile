@@ -96,11 +96,20 @@ ENV REACT_APP_DYNAMICS_APP_KEY=$REACT_APP_DYNAMICS_APP_KEY
 
 ENV SKIP_PREFLIGHT_CHECK=true
 
+# RUN --mount=type=cache,id=yarn_cache,target=/usr/local/share/.cache/yarn \
+#     --mount=type=cache,id=node_modules,target=/opt/app/node_modules \
+#     rm -rf /usr/local/share/.cache/yarn/* \
+#     && rm -rf /opt/app/node_modules/* 
+
 RUN --mount=type=cache,id=yarn_cache,target=/usr/local/share/.cache/yarn \
     --mount=type=cache,id=node_modules,target=/opt/app/node_modules \
-    yarn bootstrap:dev \ 
-    && yarn build:prod:client \
-    && yarn ws:client test:ci \
+    yarn bootstrap:dev 
+
+RUN --mount=type=cache,id=node_modules,target=/opt/app/node_modules \
+    yarn ws:client test:ci
+
+RUN --mount=type=cache,id=node_modules,target=/opt/app/node_modules \
+    yarn build:prod:client \
     && yarn build:prod:server \
     && find . -type d -name node_modules -prune -o -name 'package.json' -exec bash -c 'mkdir -p ../build/$(dirname {})' \; \
     && find . -type d -name node_modules -prune -o -name 'public' -exec cp -r '{}' '../build/{}' \; \
