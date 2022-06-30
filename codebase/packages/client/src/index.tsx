@@ -17,8 +17,6 @@ import { MessagesProvider } from 'features/general/Messages';
 import { HeaderProvider } from 'contexts/headerContext';
 import { useMonitoring } from 'hooks/useMonitoring';
 
-import { OverlayProvider } from '@react-aria/overlays';
-
 const routes = buildRoutes(pages);
 
 const globalCSS = `body { background: #F6F6F6; font-family: "TESCO Modern", Arial, sans-serif; color: #333333 } a, a:hover, a:focus, a:active {text-decoration: none; color: inherit;} @keyframes skeleton-loading {0% {background-color: hsl(200, 20%, 70%); } 100% {background-color: hsl(200%, 20%, 95%); } }`;
@@ -32,36 +30,34 @@ const Root: FC = () => {
   useMonitoring(document);
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <OverlayProvider>
-        <I18nextProvider i18n={i18n}>
-          <AccessibilityProvider
-            containFocus={false}
-            rendererOptions={rendererOptions}
-            // @ts-ignore
-            theme={theme}
-          >
-            <Provider store={store}>
-              <AuthProvider>
-                <ToastProvider>
-                  <MessagesProvider>
-                    <AppStateProvider>
-                      <HeaderProvider>
-                        <BrowserRouter basename={PUBLIC_URL}>
-                          <React.StrictMode>
-                            <Layout>
-                              <Navigation routes={routes} />
-                            </Layout>
-                          </React.StrictMode>
-                        </BrowserRouter>
-                      </HeaderProvider>
-                    </AppStateProvider>
-                  </MessagesProvider>
-                </ToastProvider>
-              </AuthProvider>
-            </Provider>
-          </AccessibilityProvider>
-        </I18nextProvider>
-      </OverlayProvider>
+      <I18nextProvider i18n={i18n}>
+        <AccessibilityProvider
+          containFocus={false}
+          rendererOptions={rendererOptions}
+          // @ts-ignore
+          theme={theme}
+        >
+          <Provider store={store}>
+            <AuthProvider>
+              <ToastProvider>
+                <MessagesProvider>
+                  <AppStateProvider>
+                    <HeaderProvider>
+                      <BrowserRouter basename={PUBLIC_URL}>
+                        <React.StrictMode>
+                          <Layout>
+                            <Navigation routes={routes} />
+                          </Layout>
+                        </React.StrictMode>
+                      </BrowserRouter>
+                    </HeaderProvider>
+                  </AppStateProvider>
+                </MessagesProvider>
+              </ToastProvider>
+            </AuthProvider>
+          </Provider>
+        </AccessibilityProvider>
+      </I18nextProvider>
     </Suspense>
   );
 };

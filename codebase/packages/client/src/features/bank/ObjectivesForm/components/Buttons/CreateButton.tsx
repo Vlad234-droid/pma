@@ -1,4 +1,4 @@
-import React, { FC, HTMLProps, useState, memo } from 'react';
+import React, { FC, useState, memo } from 'react';
 import { Button, Rule, useStyle } from '@pma/dex-wrapper';
 import { IconButton } from 'components/IconButton';
 import { ModalComponent } from 'features/general/ObjectivesForm/components/ModalComponent';
