@@ -48,6 +48,7 @@ const styles = StyleSheet.create({
   },
   dot: {
     color: 'red',
+    fontFamily: 'Courier',
   },
   noBorderTitle: {
     fontSize: theme.font.fixed.f32.fontSize,
@@ -92,6 +93,7 @@ const styles = StyleSheet.create({
   },
   section: {
     marginBottom: 10,
+    maxWidth: '70%',
   },
   pageNumber: {
     position: 'absolute',
