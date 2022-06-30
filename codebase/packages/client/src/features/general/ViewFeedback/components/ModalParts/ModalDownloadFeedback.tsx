@@ -122,8 +122,8 @@ const ModalDownloadFeedback: FC<ModalDownloadFeedbackProps> = ({
                 graphic='arrowRight'
                 iconProps={{ invertColors: true }}
                 iconPosition={Position.RIGHT}
-                onPress={() => {
-                  downloadPDF(instance.url!);
+                onPress={async () => {
+                  await downloadPDF(instance.url!, 'feedback.pdf');
                   setModalSuccess(true);
                 }}
               >

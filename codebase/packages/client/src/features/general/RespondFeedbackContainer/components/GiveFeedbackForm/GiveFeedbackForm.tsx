@@ -4,16 +4,14 @@ import { useSelector } from 'react-redux';
 import { getColleagueByUuidSelector } from '@pma/store';
 import { yupResolver } from '@hookform/resolvers/yup';
 import get from 'lodash.get';
-
 import { Trans, useTranslation } from 'components/Translation';
 import { TileWrapper } from 'components/Tile';
 import { Attention, Field, Item, Textarea } from 'components/Form';
 import { ColleaguesFinder } from 'components/ColleaguesFinder';
-import { createGiveFeedbackSchema } from 'features/general/GiveFeedBack/config';
 import FeedbackInfo from '../FeedbackInfo';
-import { GiveFeedbackFormProps } from '../../type';
 import { ButtonsWrapper } from 'components/ButtonsWrapper';
 import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
+import { createGiveFeedbackNewSchema, GiveFeedbackFormProps } from '../../config';
 
 export const FORM_WRAPPER = 'form_wrapper';
 
@@ -44,7 +42,7 @@ const GiveFeedbackForm: FC<GiveFeedbackFormProps> = ({
     formState: { isValid, errors },
   } = useFormWithCloseProtection({
     mode: 'onChange',
-    resolver: yupResolver(createGiveFeedbackSchema(t)),
+    resolver: yupResolver(createGiveFeedbackNewSchema),
     defaultValues,
   });
 

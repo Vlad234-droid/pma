@@ -2,13 +2,13 @@ import React, { FC, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import RequestFeedbackForm from './components/RequestFeedbackForm';
-import SuccessMessage from './components/SuccessMessage';
+import { SuccessMessage } from './components/SuccessMessage';
 import { colleagueUUIDSelector, FeedbackActions, getLoadedStateSelector } from '@pma/store';
-import { InfoModalContent } from './ModalParts';
 import { useTranslation } from 'components/Translation';
 import Spinner from 'components/Spinner';
 import WrapperModal from 'features/general/Modal/components/WrapperModal';
 import { Page } from 'pages/general/types';
+import { InfoModalContent } from './components/ModalParts';
 
 const RequestFeedback: FC = () => {
   const { t } = useTranslation();
