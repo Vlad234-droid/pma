@@ -67,6 +67,7 @@ const ProfessionalInformation: FC<Props> = ({ user }) => {
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const { t } = useTranslation();
   const { hireDate, job, department, businessType, manager, countryCode } = user;
+
   return (
     <BasicTile
       title={t('ProfessionalInformation', 'Professional information')}

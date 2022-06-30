@@ -188,10 +188,8 @@ const SelectedFolder: FC<SelectedFolderProps> = ({
       return;
     if (item.referenceColleagueUuid) {
       navigate(buildPath(paramsReplacer(Page.TEAM_NOTE, { ':uuid': item.id })));
-      // setSelectedTEAMNoteToEdit(() => item);
     } else {
       navigate(buildPath(paramsReplacer(Page.PERSONAL_NOTE, { ':uuid': item.id })));
-      // setSelectedNoteToEdit(() => item);
     }
   };
 

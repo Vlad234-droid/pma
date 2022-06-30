@@ -1,10 +1,14 @@
 import React, { FC, Dispatch, SetStateAction, MutableRefObject, MouseEvent, useRef } from 'react';
 import { Rule, Styles, useStyle, colors, CreateRule } from '@pma/dex-wrapper';
+import { useNavigate } from 'react-router';
 import { IconButton } from 'components/IconButton';
 
 import { formatToRelativeDate } from 'utils/date';
 import { useNotesContainer } from '../../../../contexts';
 import useEventListener from 'hooks/useEventListener';
+import { buildPath } from 'features/general/Routes';
+import { paramsReplacer } from 'utils';
+import { Page } from 'pages';
 
 export const TEAM_WRAPPER = 'team-wrapper';
 
@@ -17,8 +21,9 @@ const SelectedFolder: FC<Props> = ({ setConfirmTEAMModal, actionTEAMModal, teamA
   const { css, matchMedia } = useStyle();
   const mediumScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
   const ref = useRef<HTMLDivElement | null>();
+  const navigate = useNavigate();
 
-  const { selectedTEAMFolder, setSelectedTEAMFolder, setSelectedTEAMNoteToEdit, archiveMode } = useNotesContainer();
+  const { selectedTEAMFolder, setSelectedTEAMFolder, archiveMode } = useNotesContainer();
 
   const teamArchivedMode = archiveMode.team;
 
@@ -153,7 +158,7 @@ const SelectedFolder: FC<Props> = ({ setConfirmTEAMModal, actionTEAMModal, teamA
 
   const setSelectedNoteHandler = (e, item) => {
     if (e.target.parentElement.id === 'backdrop' || e.target.id === 'backdrop') return;
-    setSelectedTEAMNoteToEdit(() => item);
+    navigate(buildPath(paramsReplacer(Page.TEAM_NOTE, { ':uuid': item.id })));
   };
 
   return (

@@ -1,6 +1,7 @@
 import React, { FC, useState } from 'react';
 import { Rule, useStyle } from '@pma/dex-wrapper';
 import { colleagueUUIDSelector, NotesActions } from '@pma/store';
+
 import { useDispatch, useSelector } from 'react-redux';
 
 import { useTranslation } from 'components/Translation';
@@ -31,6 +32,7 @@ const NoteDetail: FC<Props> = ({ note, onEdit, onClose }) => {
         noteId: note.id,
       }),
     );
+    onClose();
   };
 
   if (!note) return null;
