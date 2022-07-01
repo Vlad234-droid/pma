@@ -62,6 +62,7 @@ export type ChosesButtonType = {
 
 export type MainFolderProps = {
   isLineManager: boolean;
+  searchValue: string;
 };
 
 export type SelectedFolderProps = {

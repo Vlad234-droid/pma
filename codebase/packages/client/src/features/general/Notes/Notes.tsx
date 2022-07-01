@@ -9,7 +9,6 @@ import { ConfirmModalWithSelectOptions } from 'features/general/Modal';
 import { buildPath } from 'features/general/Routes';
 import { Page } from 'pages';
 import { paramsReplacer } from 'utils';
-import { useNotesContainer } from './contexts';
 import { getOptions } from './utils';
 
 export const NOTES_WRAPPER = 'note-wrapper';
@@ -28,11 +27,9 @@ const NotesComposition: FC = () => {
   const { t } = useTranslation();
   const { css } = useStyle();
   const navigate = useNavigate();
-  const { searchValueFilterOption, setSearchValueFilterOption } = useNotesContainer();
+  const [searchValue, setSearchValue] = useState<string>('');
 
-  const handleCloseModal = () => {
-    setStatus(() => ModalStatuses.VIEW);
-  };
+  const handleCloseModal = () => setStatus(() => ModalStatuses.VIEW);
 
   return (
     <div data-test-id={NOTES_WRAPPER}>
@@ -59,8 +56,8 @@ const NotesComposition: FC = () => {
                   'My Notes can be used to create and store notes about Your Contribution and that of your direct reports throughout the year. Use this space to record achievements, thoughts on objectives or subjects to raise with your line manager or direct reports during your 1:1s. Team notes can be used to help keep track of your direct reports work, achievements or conversations to refer back to at a later date. Although these notes are private, in limited circumstances, they may need to be shared with others (for example as part of an investigation or Data Protection request) so they should be kept professional.',
                 )
           }
-          onSearch={searchValueFilterOption}
-          setSearchValueFilterOption={setSearchValueFilterOption}
+          onSearch={searchValue}
+          setSearchValueFilterOption={setSearchValue}
           onClickInfo={() => {
             navigate(buildPath(Page.NOTES_INFO));
           }}
@@ -80,7 +77,7 @@ const NotesComposition: FC = () => {
         />
       )}
       <div className={css({ paddingRight: '40px', position: 'relative' })}>
-        <MainFolders isLineManager={isLineManager} />
+        <MainFolders isLineManager={isLineManager} searchValue={searchValue} />
       </div>
     </div>
   );

@@ -14,7 +14,7 @@ export const actionsInitialState = {
 };
 
 export const isActiveSearchBar = (
-  searchValueFilterOption,
+  searchValue,
   archiveMode,
   setArchiveMode,
   setSelectedTEAMFolder,
@@ -25,7 +25,7 @@ export const isActiveSearchBar = (
   setFoldersWithNotesTEAM,
   notesSelect,
 ) => {
-  if (searchValueFilterOption.length > 2) {
+  if (searchValue.length > 2) {
     if (archiveMode.user) setArchiveMode((prev) => ({ ...prev, user: false }));
     if (archiveMode.team) setArchiveMode((prev) => ({ ...prev, team: false }));
 
@@ -37,7 +37,7 @@ export const isActiveSearchBar = (
       foldersWithNotesTEAM,
       setFoldersWithNotesTEAM,
       notesSelect,
-      searchValueFilterOption,
+      searchValue,
     );
 
     setSelectedFolder(() => obj);

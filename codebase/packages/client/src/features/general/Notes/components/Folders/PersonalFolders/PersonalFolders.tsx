@@ -3,7 +3,7 @@ import { Rule, useStyle, Button, Styles, CreateRule, Theme } from '@pma/dex-wrap
 import { IconButton } from 'components/IconButton';
 import { useTranslation } from 'components/Translation';
 
-import { PersonalFoldersProps } from '../../../configs/type';
+import { PersonalFoldersProps } from '../../../configs';
 import { defineNotesHandler, AllNotesFolderId } from 'utils/note';
 import { useNotesContainer } from '../../../contexts';
 import useEventListener from 'hooks/useEventListener';

@@ -11,6 +11,7 @@ import { FeedbackStatus } from 'config/enum';
 import { FeedbackBlock, RadioBtns } from './components';
 import { FilterModal } from '../Shared/components/FilterModal';
 import { prepareData } from './config';
+import { buildPath } from '../Routes';
 
 export const FEEDBACK_WRAPPER = 'feedback-wrapper';
 export const LIST_WRAPPER = 'list-wrapper';
@@ -64,9 +65,7 @@ const GiveFeedBack: FC = () => {
     }
   }, [focus]);
 
-  const handleBtnClick = (): void => {
-    navigate(paramsReplacer(`/${Page.GIVE_NEW_FEEDBACK}`, { ':uuid': 'new' }));
-  };
+  const handleBtnClick = () => navigate(buildPath(paramsReplacer(Page.GIVE_NEW_FEEDBACK, { ':uuid': 'new' })));
 
   const feedbackList = useSelector(getGiveFeedbacksSelector(status)) || [];
 

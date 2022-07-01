@@ -15,6 +15,7 @@ import { Plug } from 'components/Plug';
 import { paramsReplacer } from 'utils';
 import { useTranslation } from 'components/Translation';
 import FeedbackItem from './FeedbackItem';
+import { buildPath } from '../../../Routes';
 
 type Props = {
   list: Array<any>;
@@ -89,9 +90,9 @@ const FeedbackBlock: FC<Props> = ({ list, canEdit }) => {
                           <div className={css(wrapperBtnStyle)}>
                             <IconButtonDefault
                               graphic='arrowRight'
-                              onClick={() =>
-                                navigate(paramsReplacer(`/${Page.GIVE_NEW_FEEDBACK}`, { ':uuid': item.uuid }))
-                              }
+                              onClick={() => {
+                                navigate(buildPath(paramsReplacer(Page.GIVE_NEW_FEEDBACK, { ':uuid': item.uuid })));
+                              }}
                             />
                           </div>
                         )}

@@ -17,8 +17,7 @@ import { useUploadData } from 'features/general/Notes/hooks/useUploadData';
 import { ConfirmModal, ConfirmModalWithDropDown } from 'features/general/Modal';
 import { useTranslation } from 'components/Translation';
 import { PersonalFolders, PersonalsTeamFolders, SelectedFolder, SelectedTEAMFolder } from '../../index';
-import { MainFolderProps, NotesStatus } from '../../../configs/type';
-import { folderSchema } from '../../../configs/schema';
+import { MainFolderProps, NotesStatus, folderSchema } from '../../../configs';
 import { useNotesContainer } from '../../../contexts';
 
 import {
@@ -38,7 +37,7 @@ import { actionsInitialState, disableFolder, isActiveSearchBar, prepareData, upd
 export const SELECTED_FOLDER = 'selected-folder';
 export const FOLDER_WRAPPER = 'main-folder-wrapper';
 
-const MainFolders: FC<MainFolderProps> = ({ isLineManager }) => {
+const MainFolders: FC<MainFolderProps> = ({ isLineManager, searchValue }) => {
   const { css, matchMedia } = useStyle();
   const mediumScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
   const { t } = useTranslation();
@@ -55,7 +54,6 @@ const MainFolders: FC<MainFolderProps> = ({ isLineManager }) => {
     setFoldersWithNotes,
     foldersWithNotesTEAM,
     setFoldersWithNotesTEAM,
-    searchValueFilterOption,
     archiveMode,
     setArchiveMode,
   } = useNotesContainer();
@@ -70,7 +68,6 @@ const MainFolders: FC<MainFolderProps> = ({ isLineManager }) => {
     if (isLineManager && folders !== null && notesSelect !== null) {
       setFoldersWithNotesTEAM(() => notesFolderTeamData);
     }
-    // }, [folders, notesSelect, archiveMode.team, notesFolderTeamData]);
   }, [folders, notesSelect, archiveMode.team]);
 
   useEffect(() => {
@@ -79,7 +76,7 @@ const MainFolders: FC<MainFolderProps> = ({ isLineManager }) => {
 
   useEffect(() => {
     isActiveSearchBar(
-      searchValueFilterOption,
+      searchValue,
       archiveMode,
       setArchiveMode,
       setSelectedTEAMFolder,
@@ -90,7 +87,7 @@ const MainFolders: FC<MainFolderProps> = ({ isLineManager }) => {
       setFoldersWithNotesTEAM,
       notesSelect,
     );
-  }, [searchValueFilterOption]);
+  }, [searchValue]);
 
   const personalArchivedFolderUuid = useSelector(personalArchivedFolderUuidSelector) || null;
   const teamArchivedFolderUuid = useSelector(teamArchivedFolderUuidSelector) || null;

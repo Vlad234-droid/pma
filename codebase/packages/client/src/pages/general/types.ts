@@ -30,7 +30,7 @@ enum Page {
   TEAM_NOTE = 'notes/team-note/:uuid/view',
   TEAM_NOTE_CREATE = 'notes/team-note/:uuid',
   TEAM_NOTE_FOLDER_CREATE = 'notes/team-note-folder/:uuid',
-  GIVE_FEEDBACK = 'feedbacks/give/new',
+  GIVE_FEEDBACK = 'feedbacks/give',
   GIVE_NEW_FEEDBACK = 'feedbacks/give/:uuid',
   REQUEST_FEEDBACK = 'feedbacks/request',
   RESPOND_FEEDBACK = 'feedbacks/respond',

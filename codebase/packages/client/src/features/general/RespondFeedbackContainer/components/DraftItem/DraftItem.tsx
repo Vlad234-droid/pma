@@ -17,6 +17,7 @@ import { useTranslation } from 'components/Translation';
 import { paramsReplacer } from 'utils';
 import { FeedbackStatus, Tesco } from 'config/enum';
 import { DraftItemProps } from '../../type';
+import { buildPath } from 'features/general/Routes';
 
 export const TEST_ID = 'expand_button';
 
@@ -86,9 +87,9 @@ const DraftItem: FC<DraftItemProps> = ({ status, list, canEdit }) => {
                           <div className={css(wrapperBtnStyle)}>
                             <IconButtonDefault
                               graphic='arrowRight'
-                              onClick={() => {
-                                navigate(paramsReplacer(`/${Page.RESPOND_NEW_FEEDBACK}`, { ':uuid': item.uuid }));
-                              }}
+                              onClick={() =>
+                                navigate(buildPath(paramsReplacer(Page.RESPOND_NEW_FEEDBACK, { ':uuid': item.uuid })))
+                              }
                             />
                           </div>
                         )}

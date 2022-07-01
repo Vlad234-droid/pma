@@ -1,6 +1,5 @@
 import React, { createContext, FC, useContext, useState } from 'react';
-import { FoldersWithNotesTypes, FoldersWithNotesTypesTEAM, NoteData, NotesType, NotesTypeTEAM } from '../configs/type';
-import { PeopleTypes } from '../components/TeamNotes/ModalsParts/type';
+import { FoldersWithNotesTypes, FoldersWithNotesTypesTEAM, NoteData, NotesType, NotesTypeTEAM } from '../configs';
 
 const defaultData = {
   selectedFolder: null,
@@ -11,16 +10,10 @@ const defaultData = {
   setSelectedNoteToEdit: () => null,
   selectedTEAMFolder: null,
   setSelectedTEAMFolder: () => [],
-  searchValue: '',
-  setSearchValue: () => '',
   foldersWithNotesTEAM: [],
   setFoldersWithNotesTEAM: () => [],
   selectedTEAMNoteToEdit: null,
   setSelectedTEAMNoteToEdit: () => null,
-  selectedPerson: null,
-  setSelectedPerson: () => null,
-  searchValueFilterOption: '',
-  setSearchValueFilterOption: () => '',
   archiveMode: {
     user: false,
     team: false,
@@ -37,16 +30,10 @@ type Data = {
   setSelectedNoteToEdit: (T) => void;
   selectedTEAMFolder: null | NoteData;
   setSelectedTEAMFolder: (T) => void;
-  searchValue: string;
-  setSearchValue: (T) => void;
   foldersWithNotesTEAM: Array<FoldersWithNotesTypesTEAM> | [];
   setFoldersWithNotesTEAM: (T) => void;
   selectedTEAMNoteToEdit: null | NotesTypeTEAM;
   setSelectedTEAMNoteToEdit: (T) => void;
-  selectedPerson: PeopleTypes | null;
-  setSelectedPerson: (T) => void;
-  searchValueFilterOption: string;
-  setSearchValueFilterOption: (T) => void;
   archiveMode: { user: boolean; team: boolean };
   setArchiveMode: (T) => void;
 };
@@ -58,11 +45,8 @@ export const NotesProvider: FC = ({ children }) => {
   const [foldersWithNotes, setFoldersWithNotes] = useState<Array<FoldersWithNotesTypes> | []>([]);
   const [selectedNoteToEdit, setSelectedNoteToEdit] = useState<NotesType | null>(null);
   const [selectedTEAMFolder, setSelectedTEAMFolder] = useState<NoteData | null>(null);
-  const [searchValue, setSearchValue] = useState<string>('');
   const [foldersWithNotesTEAM, setFoldersWithNotesTEAM] = useState<Array<FoldersWithNotesTypesTEAM> | []>([]);
   const [selectedTEAMNoteToEdit, setSelectedTEAMNoteToEdit] = useState<NotesTypeTEAM | null>(null);
-  const [selectedPerson, setSelectedPerson] = useState<PeopleTypes | null>(null);
-  const [searchValueFilterOption, setSearchValueFilterOption] = useState<string>('');
   const [archiveMode, setArchiveMode] = useState<{ user: boolean; team: boolean }>({
     user: false,
     team: false,
@@ -79,16 +63,10 @@ export const NotesProvider: FC = ({ children }) => {
         setSelectedNoteToEdit,
         selectedTEAMFolder,
         setSelectedTEAMFolder,
-        searchValue,
-        setSearchValue,
         foldersWithNotesTEAM,
         setFoldersWithNotesTEAM,
         selectedTEAMNoteToEdit,
         setSelectedTEAMNoteToEdit,
-        selectedPerson,
-        setSelectedPerson,
-        searchValueFilterOption,
-        setSearchValueFilterOption,
         archiveMode,
         setArchiveMode,
       }}

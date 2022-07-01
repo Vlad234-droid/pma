@@ -11,7 +11,7 @@ import { Trans } from 'components/Translation';
 import { formatToRelativeDate } from 'utils/date';
 import { getNotesFolderTitle } from 'utils/note';
 import { Page } from 'pages';
-import { SelectedFolderProps } from '../../../configs/type';
+import { SelectedFolderProps } from '../../../configs';
 import { useNotesContainer } from '../../../contexts';
 import { buildPath } from 'features/general/Routes';
 import { paramsReplacer } from 'utils';

@@ -125,7 +125,7 @@ export const filterNotesHandler = (
   foldersWithNotesTEAM,
   setFoldersWithNotesTEAM,
   notesSelect,
-  searchValueFilterOption,
+  searchValue,
 ) => {
   setSelectedTEAMFolder(() => null);
   setSelectedFolder(() => null);
@@ -150,14 +150,14 @@ export const filterNotesHandler = (
       return arr;
     });
   }
-  const filteredNotes = filterNotesByTitle(notesSelect, searchValueFilterOption);
+  const filteredNotes = filterNotesByTitle(notesSelect, searchValue);
 
   return {
     isInSearch: true,
     notes: filteredNotes,
     title: `${
       filteredNotes.length
-        ? `Searching results for “${searchValueFilterOption}” ${filteredNotes.length && `(${filteredNotes.length})`}`
+        ? `Searching results for “${searchValue}” ${filteredNotes.length && `(${filteredNotes.length})`}`
         : `No results`
     }`,
   };
