@@ -8,6 +8,7 @@ import MainFolders, { FOLDER_WRAPPER } from './MainFolders';
 describe('Main Folders', () => {
   const props = {
     isLineManager: true,
+    searchValue: '',
   };
 
   it('it should render personal folder wrapper', async () => {
