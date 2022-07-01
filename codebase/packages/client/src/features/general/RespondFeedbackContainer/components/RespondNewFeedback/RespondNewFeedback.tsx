@@ -4,12 +4,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ColleaguesActions, colleagueUUIDSelector, FeedbackActions, feedbackByUuidSelector } from '@pma/store';
 import { Page } from 'pages';
-import GiveFeedbackForm from './components/GiveFeedbackForm';
-import InfoMessage from './components/InfoMessage';
-import SuccessMessage from './components/SuccessMessage';
 import { WrapperModal } from 'features/general/Modal';
 
-import { getFeedbackFields, getPayload, HandleSaveType, Statuses } from './config';
+import { getFeedbackFields, getPayload , HandleSaveType, Statuses } from '../../config';
+import GiveFeedbackForm from '../GiveFeedbackForm';
+import SuccessMessage from '../SuccessMessage';
+import InfoMessage from '../InfoMessage';
 
 const RespondNewFeedback: FC = () => {
   const navigate = useNavigate();

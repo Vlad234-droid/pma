@@ -6,10 +6,10 @@ import { VideoId, VideoPlayer } from 'features/general/VideoPlayer';
 import { useDispatch, useSelector } from 'react-redux';
 import { feedbackByUuidSelector, getRespondedFeedbacksSelector, getReviewByUuidS, ReviewsActions } from '@pma/store';
 import { useParams } from 'react-router-dom';
-import { getPropperTargetType } from '../../../utils';
 import { FeedbackStatus, Tesco } from 'config/enum';
 import { NotificationTile } from 'components/NotificationTile';
 import { ProfileInfo } from 'components/ProfileInfo';
+import { getPropperTargetType } from 'features/general/RespondFeedbackContainer/utils';
 
 export const INFO_WRAPPER = 'info_wrapper';
 export const GIVE_FEEDBACK_VIDEO = 'give_feedback_video';

@@ -2,7 +2,7 @@ import React from 'react';
 import '@testing-library/jest-dom';
 import '@testing-library/jest-dom/extend-expect';
 import { renderWithTheme as render } from 'utils/test';
-import Contacts from './Contacts';
+import { Contacts } from '../Contacts';
 
 describe('Contacts component', () => {
   const user = {
