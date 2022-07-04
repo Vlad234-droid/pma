@@ -4,9 +4,8 @@ import { CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
 
 import Timeline from 'features/general/Timeline';
 import Objectives, { MyReviewsSection, CompletedReviewsSection, ReviewFilesSection } from 'features/general/Objectives';
-import { tenant as T, usePermissionByTenant, useTenant } from 'features/general/Permission';
+import { tenant as T, useTenant } from 'features/general/Permission';
 import { ShareWidget } from 'features/general/ShareWidget';
-import { OrganizationWidget } from 'features/general/OrganizationWidget';
 import { buildPath } from 'features/general/Routes';
 import { Page } from 'pages/general/types';
 
@@ -16,7 +15,6 @@ const ObjectivesPage: FC = () => {
   const tenant = useTenant();
   const { css, matchMedia } = useStyle();
   const navigate = useNavigate();
-  const hasPermission = usePermissionByTenant([T.GENERAL]);
 
   const Block = useMemo(
     () =>
@@ -25,6 +23,26 @@ const ObjectivesPage: FC = () => {
       ),
     [],
   );
+
+  const Widget = useMemo(
+    () =>
+      React.lazy(() =>
+        // @ts-ignore
+        tenant === T.GENERAL
+          ? import('features/general/StrategicDrivers').then((module) => ({ default: module.OrganizationWidget }))
+          : import('features/bank/Objectives').then((module) => ({ default: module.BusinessObjectives })),
+      ),
+    [],
+  );
+
+  const handleWidgetClick = () => {
+    // @ts-ignore
+    if (tenant === T.GENERAL) {
+      navigate(buildPath(Page.STRATEGIC_DRIVERS));
+    } else {
+      window.open('https://tescobank.sharepoint.com/sites/intranet/learn/ourbig6hub/Pages/default.aspx');
+    }
+  };
 
   const mobileScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
 
@@ -44,12 +62,7 @@ const ObjectivesPage: FC = () => {
         <div className={css(widgetsBlock)}>
           <ShareWidget stopShare={true} sharing={false} customStyle={shareWidgetStyles} />
           <ShareWidget stopShare={false} sharing={true} customStyle={shareWidgetStyles} />
-          {hasPermission && (
-            <OrganizationWidget
-              customStyle={organizationWidgetStyles}
-              onClick={() => navigate(buildPath(Page.STRATEGIC_DRIVERS))}
-            />
-          )}
+          <Widget customStyle={organizationWidgetStyles} onClick={handleWidgetClick} />
         </div>
       </div>
     </div>

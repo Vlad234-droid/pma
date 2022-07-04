@@ -1,2 +1,2 @@
-export { default as StrategicDriversForm } from './components/StrategicDriversForm';
-export { default } from './components/CreateStrategicDrivers';
+export { default } from './StrategicDrivers';
+export * from './widgets';

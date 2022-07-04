@@ -23,7 +23,7 @@ import { ShareWidget } from 'features/general/ShareWidget';
 import { PreviousReviewFilesModal } from 'features/general/ReviewFiles/components';
 import { useToast, Variant } from 'features/general/Toast';
 import { UserObjectivesSections } from 'features/general/UserObjectivesSections';
-import { OrganizationWidget } from 'features/general/OrganizationWidget';
+import { OrganizationWidget } from 'features/general/StrategicDrivers';
 import { buildPath } from 'features/general/Routes';
 import Spinner from 'components/Spinner';
 import { File } from 'features/general/ReviewFiles/components/components/File';
@@ -60,9 +60,6 @@ const UserObjectives: FC = () => {
 
   const files: File[] = useSelector(getPreviousReviewFilesSelector) || [];
   const canShowMyReview = timelineTypes[ObjectiveType.MYR] && timelineTypes[ObjectiveType.EYR];
-
-  //TODO: temporary solution, in future replace to selector
-  // const isSubmittingSecondaryWidget = false;
 
   useUserObjectivesData(uuid, reviewLoaded, schemaLoaded, setObjectives);
 

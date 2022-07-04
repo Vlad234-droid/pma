@@ -26,7 +26,7 @@ import Notes, {
   TeamNoteView,
 } from './Notes';
 import KnowledgeLibrary from './KnowledgeLibrary';
-import CreateOrganizationObjectives from './CreateOrganizationObjectives';
+import OrganizationObjectives from './OrganizationObjectives';
 import ObjectivesView from './ObjectivesView';
 import Report from './Report';
 import { CreatePerformanceCycle, PerformanceCycleAdministration } from './PerformanceCycle';
@@ -195,7 +195,7 @@ const pages: Record<Page, PageComponent> = {
     tenant: [tenant.BANK, tenant.GENERAL],
   },
   [Page.CREATE_STRATEGIC_DRIVERS]: {
-    Element: CreateOrganizationObjectives,
+    Element: OrganizationObjectives,
     title: (tenant, t) => t('title_create_strategic_drivers'),
     withHeader: true,
     backPath: Page.OBJECTIVES_VIEW,

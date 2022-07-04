@@ -2,11 +2,11 @@ import React, { FC } from 'react';
 import { Rule, useStyle } from '@pma/dex-wrapper';
 import DescriptionBlock from 'components/DescriptionBlock';
 import { Attention } from 'components/Form';
-import StrategicDriversForm from './StrategicDriversForm';
-import StrategicDriversLogs from './StrategicDriversLogs';
+import StrategicDriversForm from './components/StrategicDriversForm';
+import StrategicDriversLogs from './components/StrategicDriversLogs';
 import { Trans } from 'components/Translation';
 
-const CreateStrategicDrivers: FC = () => {
+const StrategicDrivers: FC = () => {
   const { css } = useStyle();
 
   return (
@@ -56,4 +56,4 @@ const descriptionHeader: Rule = ({ theme }) => {
   };
 };
 
-export default CreateStrategicDrivers;
+export default StrategicDrivers;
