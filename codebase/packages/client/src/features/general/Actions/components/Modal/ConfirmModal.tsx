@@ -3,7 +3,7 @@ import { useStyle } from '@pma/dex-wrapper';
 
 import { ColleagueInfo } from 'features/general/MyTeam';
 import { Employee } from 'config/types';
-import { ConfirmModal as Modal } from 'features/general/Modal';
+import { ConfirmModal as Modal } from 'components/ConfirmModal';
 
 export type ConfirmAcceptModalProps = {
   title: string;

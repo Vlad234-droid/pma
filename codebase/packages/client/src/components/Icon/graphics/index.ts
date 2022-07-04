@@ -58,6 +58,7 @@ import { Performance } from './performance';
 import { People } from './people';
 import { Person } from './person';
 import { Link } from './link';
+import { Upload } from './upload';
 /**
  * Each icon we add needs to have viewbox set to "0 0 24 24".
  * Sometimes icons exported from Figma could have a different viewbox than "0 0 24 24".
@@ -123,7 +124,8 @@ export type Graphics =
   | 'view'
   | 'play'
   | 'person'
-  | 'link';
+  | 'link'
+  | 'upload';
 
 export const icons: Record<Graphics, FCGraphicProps> = {
   attention: Attention,
@@ -186,4 +188,5 @@ export const icons: Record<Graphics, FCGraphicProps> = {
   play: Play,
   person: Person,
   link: Link,
+  upload: Upload,
 };

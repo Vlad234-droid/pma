@@ -8,7 +8,7 @@ import { Attention, Field, Item, Textarea } from 'components/Form';
 import { GenericItemField } from 'components/GenericForm';
 import { createYupSchema } from 'utils/yup';
 import { v4 as uuidv4 } from 'uuid';
-import { ConfirmModal } from 'features/general/Modal';
+import { ConfirmModal } from 'components/ConfirmModal';
 import { Trans, useTranslation } from 'components/Translation';
 import Datepicker from 'components/Datepicker';
 import { StepIndicatorBasic } from 'components/StepIndicator/StepIndicator';

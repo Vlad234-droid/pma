@@ -7,7 +7,7 @@ import { colleagueUUIDSelector, timelinesExistSelector } from '@pma/store';
 import { Page } from 'pages';
 import { LINKS } from 'config/constants';
 import { buildPath } from 'features/general/Routes';
-import { ConfirmModal } from 'features/general/Modal';
+import { ConfirmModal } from 'components/ConfirmModal';
 import { CanPerform, role } from 'features/general/Permission';
 import { Trans, useTranslation } from 'components/Translation';
 import { useHeaderContainer } from 'contexts/headerContext';

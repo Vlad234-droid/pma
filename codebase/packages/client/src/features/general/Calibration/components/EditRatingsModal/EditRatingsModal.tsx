@@ -2,7 +2,7 @@ import React, { FC, useEffect, useState } from 'react';
 import { Styles, useStyle } from '@pma/dex-wrapper';
 
 import { Employee } from 'config/types';
-import { ConfirmModal } from 'features/general/Modal';
+import { ConfirmModal } from 'components/ConfirmModal';
 import { Trans, useTranslation } from 'components/Translation';
 import { Item, Select } from 'components/Form';
 import { Rating } from 'config/enum';

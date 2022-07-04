@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { TFunction, useTranslation } from 'components/Translation';
 import { Status } from 'config/enum';
-import { Rule, useStyle, CreateRule, Theme } from '@pma/dex-wrapper';
+import { Rule, useStyle, CreateRule, Theme, Colors } from '@pma/dex-wrapper';
 
 import { Icon, Graphics } from 'components/Icon';
 
@@ -11,17 +11,20 @@ export type StatusBadgeProps = {
   text?: string;
 };
 
-const getContent = (theme: Theme, t: TFunction, status: Status): [Graphics, string, string] => {
+const getContent = (theme: Theme, t: TFunction, status: Status): [Graphics, string, Colors] => {
   switch (status) {
+    case Status.COMPLETED:
     case Status.APPROVED:
-      return ['roundTick', t('approved', 'Approved'), theme.colors.green];
+      return ['roundTick', t('agreed', 'Agreed'), 'green'];
     case Status.WAITING_FOR_APPROVAL:
-      return ['roundClock', t('waiting_for_agreement', 'Waiting for agreement'), theme.colors.pending];
+      return ['roundClock', t('waiting_for_agreed', 'Waiting agreement'), 'pending'];
     case Status.DECLINED:
-      return ['roundAlert', t('declined', 'Declined'), theme.colors.base];
+      return ['roundAlert', t('declined', 'Declined'), 'base'];
+    case Status.OVERDUE:
+      return ['roundAlert', t('declined', 'Overdue'), 'tescoRed'];
     case Status.DRAFT:
     default:
-      return ['roundPencil', t('draft', 'Draft'), theme.colors.base];
+      return ['roundPencil', t('saved_as_draft', 'Saved as draft'), 'grayscale'];
   }
 };
 
@@ -32,7 +35,7 @@ const StatusBadge: FC<StatusBadgeProps> = ({ status, text, styles }) => {
   const [graphic, label, color] = getContent(theme, t, status);
   return (
     <div className={css(wrapperStyles, styles)}>
-      <Icon graphic={graphic} invertColors iconStyles={iconStyles} title={label} />
+      <Icon graphic={graphic} color={color} iconStyles={iconStyles} title={label} />
       <span className={css(labelStyles({ color }))}>
         <div>{label}</div>
         {text && <div>{text}</div>}
@@ -41,11 +44,13 @@ const StatusBadge: FC<StatusBadgeProps> = ({ status, text, styles }) => {
   );
 };
 
-const wrapperStyles: Rule = {
+const wrapperStyles: Rule = ({ theme }) => ({
   display: 'flex',
   padding: '8px 16px',
   alignItems: 'center',
-};
+  background: theme.colors.white,
+  borderRadius: '40px',
+});
 
 const iconStyles: Rule = {
   marginRight: '10px',
@@ -54,7 +59,7 @@ const iconStyles: Rule = {
   display: 'block',
 };
 
-const labelStyles: CreateRule<{ color: string }> =
+const labelStyles: CreateRule<{ color: Colors }> =
   ({ color }) =>
   ({ theme }) => ({
     fontSize: `${theme.font.fixed.f14.fontSize}`,
@@ -62,7 +67,7 @@ const labelStyles: CreateRule<{ color: string }> =
     letterSpacing: '0px',
     fontWeight: `${theme.font.weight.bold}`,
     display: 'block',
-    color,
+    color: theme.colors[color],
   });
 
 export default StatusBadge;

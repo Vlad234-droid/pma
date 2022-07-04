@@ -1,6 +1,6 @@
 import React, { FC, HTMLProps, useState } from 'react';
 import { Rule, useStyle, CreateRule, Button } from '@pma/dex-wrapper';
-import { ConfirmModal } from 'features/general/Modal';
+import { ConfirmModal } from 'components/ConfirmModal';
 import { IconButton } from 'components/IconButton';
 import { Trans } from 'components/Translation';
 

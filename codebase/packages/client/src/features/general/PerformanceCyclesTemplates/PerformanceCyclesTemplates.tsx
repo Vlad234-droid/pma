@@ -7,7 +7,7 @@ import { ProcessTemplateActions, getProcessTemplateSelector, getProcessTemplateM
 import { formatDateStringFromISO } from 'utils/date';
 import { FilterOption } from 'features/general/Shared';
 import { IconButton } from 'components/IconButton';
-import { ConfirmModal } from 'features/general/Modal';
+import { ConfirmModal } from 'components/ConfirmModal';
 import { Trans, useTranslation } from 'components/Translation';
 import { DropZone } from 'components/DropZone';
 import Spinner from 'components/Spinner';

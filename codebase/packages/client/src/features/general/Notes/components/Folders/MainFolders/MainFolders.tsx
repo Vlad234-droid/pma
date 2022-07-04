@@ -14,7 +14,8 @@ import {
 } from '@pma/store';
 
 import { useUploadData } from 'features/general/Notes/hooks/useUploadData';
-import { ConfirmModal, ConfirmModalWithDropDown } from 'features/general/Modal';
+import { ConfirmModal } from 'components/ConfirmModal';
+import { ConfirmModalWithDropDown } from 'features/general/Modal';
 import { useTranslation } from 'components/Translation';
 import { PersonalFolders, PersonalsTeamFolders, SelectedFolder, SelectedTEAMFolder } from '../../index';
 import { MainFolderProps, NotesStatus, folderSchema } from '../../../configs';

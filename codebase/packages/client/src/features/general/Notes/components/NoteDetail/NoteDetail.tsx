@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'components/Translation';
 import { IconButton } from 'components/IconButton';
 import { ArrowLeftIcon } from 'components/ArrowLeftIcon';
-import { ConfirmModal } from 'features/general/Modal';
+import { ConfirmModal } from 'components/ConfirmModal';
 
 export const MODAL_WRAPPER = 'modal-wrapper';
 

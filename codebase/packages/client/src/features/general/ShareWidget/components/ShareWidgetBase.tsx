@@ -4,7 +4,8 @@ import { Button, colors, Rule, Styles, useStyle } from '@pma/dex-wrapper';
 
 import { TileWrapper } from 'components/Tile';
 import { Icon, SuccessMark } from 'components/Icon';
-import { ConfirmModal, WrapperModal } from 'features/general/Modal';
+import { ConfirmModal } from 'components/ConfirmModal';
+import { WrapperModal } from 'features/general/Modal';
 import { ShareObjectivesModal } from './Modal';
 import SuccessModal from 'components/SuccessModal';
 import { ReviewType, Status } from 'config/enum';

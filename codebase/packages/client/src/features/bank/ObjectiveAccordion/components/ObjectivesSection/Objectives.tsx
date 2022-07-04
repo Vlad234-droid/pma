@@ -1,12 +1,11 @@
 import React, { FC, useEffect, useMemo } from 'react';
 import { Rule, useStyle } from '@pma/dex-wrapper';
-import { ReviewType, Status } from 'config/enum';
+import { ReviewType } from 'config/enum';
 import { getTimelineByCodeSelector, isReviewsInStatus, reviewsMetaSelector } from '@pma/store';
 import { Trans } from 'components/Translation';
 import { ObjectiveTypes } from 'features/general/Objectives';
 import Section from 'components/Section';
 import { Accordion } from 'features/bank/ObjectiveAccordion';
-import StatusBadge from 'components/StatusBadge';
 import { useSelector } from 'react-redux';
 import { USER } from 'config/constants';
 import { IconButton } from 'components/IconButton';
@@ -41,10 +40,7 @@ const Objectives: FC<Props> = ({ objectives = [] }) => {
       left={{
         content: (
           <div className={css(tileStyles)}>
-            <Trans i18nKey='my_priorities'>My Priorities</Trans>
-            {isAllObjectivesInSameStatus && ![Status.STARTED, Status.NOT_STARTED].includes(status) && (
-              <StatusBadge status={status} styles={statusBadgeStyle} />
-            )}
+            <Trans i18nKey='my_quarterly_priorities'>My Quarterly Priorities</Trans>
           </div>
         ),
       }}
@@ -91,8 +87,6 @@ const tileStyles: Rule = ({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
 });
-
-const statusBadgeStyle: Rule = { marginLeft: '10px' };
 
 const iconStyles: Rule = { marginRight: '10px' };
 

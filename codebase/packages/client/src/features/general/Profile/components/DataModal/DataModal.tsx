@@ -2,7 +2,7 @@ import React, { FC, useEffect, useState } from 'react';
 import { Rule, useStyle } from '@pma/dex-wrapper';
 import isEmpty from 'lodash.isempty';
 
-import { ConfirmModal as Modal } from 'features/general/Modal';
+import { ConfirmModal as Modal } from 'components/ConfirmModal';
 import { Trans, useTranslation } from 'components/Translation';
 import { ModalWrapper } from 'components/ModalWrapper';
 
