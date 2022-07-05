@@ -21,6 +21,15 @@ jest.mock('@pma/pdf-renderer', () => {
   };
 });
 
+jest.mock('../TogglePriority', () => {
+  return {
+    __esModule: true,
+    TogglePriority: () => {
+      return <div />;
+    },
+  };
+});
+
 describe('Objectives list', () => {
   beforeEach(() => {
     jest.spyOn(console, 'error').mockImplementation();

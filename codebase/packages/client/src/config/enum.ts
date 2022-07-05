@@ -21,6 +21,7 @@ export enum ObjectiveType {
 }
 
 export enum ReviewType {
+  QUARTER = 'QUARTER',
   OBJECTIVE = 'OBJECTIVE',
   MYR = 'MYR',
   EYR = 'EYR',

@@ -103,3 +103,11 @@ export const getTimelineByReviewTypeSelector = (type: ReviewType, colleagueUuid)
     const data = rest?.[uuid];
     return data?.find((timeline) => timeline.reviewType === type);
   });
+
+export const getTimelinesByReviewTypeSelector = (type: ReviewType, colleagueUuid) =>
+  createSelector(usersSelector, timelineSelector, (user, { meta, ...rest }) => {
+    // @ts-ignore
+    const uuid = colleagueUuid === USER.current ? user?.current.info.data.colleague.colleagueUUID : colleagueUuid;
+    const data = rest?.[uuid];
+    return data?.filter((timeline) => timeline.reviewType === type);
+  });
