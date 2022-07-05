@@ -5,6 +5,11 @@ import { screen } from '@testing-library/react';
 import Objectives, { TEST_ID } from './Objectives';
 import { Status } from 'config/enum';
 
+jest.mock('@pma/store', () => ({
+  ...(jest.requireActual('@pma/store') as any),
+  getPreviousReviewFilesSelector: () => () => [],
+}));
+
 jest.mock('react-router-dom', () => ({
   ...(jest.requireActual('react-router-dom') as any),
   useNavigate: () => ({

@@ -1,10 +1,11 @@
 import { Status } from 'config/enum';
+import { Tenant } from 'utils';
 import * as T from '../types';
 
 export const transformReviewsToObjectives = (
   reviews: T.Review[] = [],
   formElements?: Record<string, string>[],
-  type = 'Objective',
+  tenant = Tenant.GENERAL,
 ): T.Objective[] => {
   return reviews?.map((reviewItem) => {
     const status = reviewItem.status;
@@ -14,6 +15,7 @@ export const transformReviewsToObjectives = (
     const subTitle = objective?.['title'] || '';
     const description = objective?.['description'] || '';
     let explanations: T.Explanation[] = [];
+    const uuid = reviewItem.uuid;
 
     if (formElements) {
       explanations = formElements
@@ -27,13 +29,14 @@ export const transformReviewsToObjectives = (
 
     return {
       id: Number(reviewItem.number),
-      title: `${type} ${reviewItem.number}`,
+      title: `${tenant === Tenant.GENERAL ? 'Objective' : 'Priority'} ${reviewItem.number}`,
       subTitle: subTitle,
       description: description,
       declineReason,
       explanations,
       status,
       lastUpdatedTime,
+      uuid,
     };
   });
 };

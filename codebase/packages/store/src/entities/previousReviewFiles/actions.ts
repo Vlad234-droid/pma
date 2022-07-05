@@ -20,7 +20,7 @@ export const deleteFile = createAsyncAction(
   'previousReviewFiles/DELETE_SUCCESS',
   'previousReviewFiles/DELETE_FAILURE',
   'previousReviewFiles/DELETE_CANCEL',
-)<FileApiDelete1Request & { colleagueUUID?: string }, undefined, Error, undefined>();
+)<FileApiDelete1Request & { colleagueUUID?: string; reviewUUID?: string }, undefined, Error, undefined>();
 
 export const Actions = {
   getPreviousReviewFiles: getPreviousReviewFiles.request,

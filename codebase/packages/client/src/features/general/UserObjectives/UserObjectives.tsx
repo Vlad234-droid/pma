@@ -58,7 +58,7 @@ const UserObjectives: FC = () => {
   const colleague = useSelector(getColleagueSelector);
   const canShowObjectives = timelineTypes[ObjectiveType.OBJECTIVE];
 
-  const files: File[] = useSelector(getPreviousReviewFilesSelector) || [];
+  const files: File[] = useSelector(getPreviousReviewFilesSelector()) || [];
   const canShowMyReview = timelineTypes[ObjectiveType.MYR] && timelineTypes[ObjectiveType.EYR];
 
   useUserObjectivesData(uuid, reviewLoaded, schemaLoaded, setObjectives);

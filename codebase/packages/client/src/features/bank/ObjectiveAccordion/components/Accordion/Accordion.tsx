@@ -5,6 +5,7 @@ import { useTranslation } from 'components/Translation';
 import { ObjectiveTypes as OT } from 'features/general/Objectives';
 import { ObjectiveHeader } from './ObjectiveHeader';
 import { Button } from './Button';
+import { FileList } from 'features/bank/UploadFile';
 import { Tenant } from 'utils';
 import { CompletePriority } from '../CompletePriority/CompletePriority';
 
@@ -21,7 +22,7 @@ const ObjectiveAccordion: FC<ObjectiveAccordionProps> = ({ objectives }) => {
   return (
     <Accordion id='objective-accordion'>
       <div data-test-id={TEST_ID}>
-        {objectives.map(({ id, subTitle, description, status, lastUpdatedTime }) => {
+        {objectives.map(({ id, title, subTitle, description, status, lastUpdatedTime, uuid }) => {
           const sentences = description.split('. ');
           const firstSentence = sentences.shift();
           const restSentences = sentences.join('. ');
@@ -43,10 +44,11 @@ const ObjectiveAccordion: FC<ObjectiveAccordionProps> = ({ objectives }) => {
                 <div className={css({ lineHeight: '20px', fontSize: '16px' })}>{restSentences}</div>
                 <div className={css(buttonStyles)}>
                   <CompletePriority status={status} number={id} />
-                  <Button status={status} number={id} />
+                  <Button reviewUUID={uuid} number={id} />
                 </div>
+                <FileList reviewUUID={uuid} />
               </Panel>
-              <div className={css({ paddingBottom: '25px' })} />
+              <div className={css({ paddingBottom: '25px' })}></div>
             </Section>
           );
         })}

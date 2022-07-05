@@ -25,6 +25,8 @@ import { ObjectiveType, ReviewType } from 'config/enum';
 
 // todo think hove resolve on page level
 import { ObjectivesSection } from './components/DinamicBlocks/ObjectivesSection';
+import { useTenant } from '../Permission';
+import { Tenant } from 'utils';
 
 export const TEST_ID = 'my-objectives-page';
 const CURRENT = 'CURRENT';
@@ -35,6 +37,7 @@ const MyObjectives: FC = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const { setLinkTitle } = useHeaderContainer();
+  const tenant = useTenant();
 
   const originObjectives = useSelector(filterReviewsByTypeSelector(ReviewType.OBJECTIVE));
 
@@ -73,7 +76,7 @@ const MyObjectives: FC = () => {
 
   useEffect(() => {
     if (reviewLoaded && schemaLoaded) {
-      setObjectives(transformReviewsToObjectives(originObjectives, formElements));
+      setObjectives(transformReviewsToObjectives(originObjectives, formElements, tenant));
     }
   }, [reviewLoaded, schemaLoaded]);
 

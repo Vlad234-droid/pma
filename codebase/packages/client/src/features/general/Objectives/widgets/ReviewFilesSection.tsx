@@ -18,7 +18,7 @@ export const ReviewFilesSection: FC<Props> = () => {
   const { css, theme } = useStyle();
 
   const [previousReviewFilesModalShow, setPreviousReviewFilesModalShow] = useState(false);
-  const files: File[] = useSelector(getPreviousReviewFilesSelector) || [];
+  const files: File[] = useSelector(getPreviousReviewFilesSelector()) || [];
 
   useEffect(() => {
     dispatch(PreviousReviewFilesActions.getPreviousReviewFiles({ colleagueUUID: colleagueUuid }));

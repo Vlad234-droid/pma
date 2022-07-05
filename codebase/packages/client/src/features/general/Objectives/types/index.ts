@@ -15,6 +15,7 @@ type Objective = {
   declineReason?: string;
   status: Status;
   lastUpdatedTime: string;
+  uuid: string;
 };
 
 type Review = {

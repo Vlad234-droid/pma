@@ -15,6 +15,8 @@ export type PreviousReviewFilesModal = {
   onOverlayClick: () => void;
   colleagueUUID?: string;
   readonly?: boolean;
+  reviewUUID?: string;
+  title?: string;
 };
 
 type Props = HTMLProps<HTMLInputElement> & PreviousReviewFilesModal;
@@ -22,12 +24,18 @@ type Props = HTMLProps<HTMLInputElement> & PreviousReviewFilesModal;
 const MAX_FILES_LENGTH = 10;
 const MAX_FILE_SIZE_MB = 10;
 
-const PreviousReviewFilesModal: FC<Props> = ({ onOverlayClick, colleagueUUID, readonly }) => {
+const PreviousReviewFilesModal: FC<Props> = ({
+  onOverlayClick,
+  colleagueUUID,
+  reviewUUID,
+  readonly,
+  title = 'Previous review files',
+}) => {
   const { css, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const files: File[] = useSelector(getPreviousReviewFilesSelector) || [];
+  const files: File[] = useSelector(getPreviousReviewFilesSelector(reviewUUID)) || [];
   const [filter, setFilteredValue] = useState('');
   const [showModalLimitExceeded, setShowModalLimitExceeded] = useState(false);
   const [showModalDuplicateFile, setShowModalDuplicateFile] = useState(false);
@@ -38,7 +46,7 @@ const PreviousReviewFilesModal: FC<Props> = ({ onOverlayClick, colleagueUUID, re
     if (files.length >= MAX_FILES_LENGTH) return setShowModalLimitExceeded(true);
     if (files.some((existingFile) => existingFile.fileName === file.name)) return setShowModalDuplicateFile(true);
     if (file.size > MAX_FILE_SIZE_MB * 1024 * 1024) return setShowModalSizeExceeded(file.name);
-    dispatch(PreviousReviewFilesActions.uploadFile({ file, colleagueUUID }));
+    dispatch(PreviousReviewFilesActions.uploadFile({ file, colleagueUUID, reviewUUID }));
   };
 
   const filteredFiles = files?.filter(
@@ -48,7 +56,7 @@ const PreviousReviewFilesModal: FC<Props> = ({ onOverlayClick, colleagueUUID, re
   const openRemoveModal = (fileUuid) => setFileUuidToRemove(fileUuid);
 
   useEffect(() => {
-    dispatch(PreviousReviewFilesActions.getPreviousReviewFiles({ colleagueUUID }));
+    dispatch(PreviousReviewFilesActions.getPreviousReviewFiles({ colleagueUUID, reviewUUID }));
   }, []);
 
   if (!colleagueUUID) return null;
@@ -65,7 +73,7 @@ const PreviousReviewFilesModal: FC<Props> = ({ onOverlayClick, colleagueUUID, re
           styles: [modalCloseOptionStyle({ mobileScreen })],
         }}
         title={{
-          content: 'Previous review files',
+          content: title,
           styles: [modalTitleOptionStyle({ mobileScreen })],
         }}
         onOverlayClick={onOverlayClick}
@@ -113,12 +121,13 @@ const PreviousReviewFilesModal: FC<Props> = ({ onOverlayClick, colleagueUUID, re
           <RemoveFileModal
             fileUuid={fileUuidToRemove}
             colleagueUUID={colleagueUUID}
+            reviewUUID={reviewUUID}
             fileName={files.find(({ uuid }) => uuid === fileUuidToRemove)?.fileName || 'Unknown'}
             onClose={() => setFileUuidToRemove('')}
           />
         )}
         <FormItem withIcon={false} marginBot={false} customIcon={<Icon graphic='search' iconStyles={iconStyles} />}>
-          <Input onChange={handleChangeFilter} placeholder={'Search file'} />
+          <Input onChange={handleChangeFilter} placeholder={'Search file'} customStyles={{ paddingLeft: '32px' }} />
         </FormItem>
         {!readonly && (
           <div className={css({ marginTop: '32px', width: '100%' })}>

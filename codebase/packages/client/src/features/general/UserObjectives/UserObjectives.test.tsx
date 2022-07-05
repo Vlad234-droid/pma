@@ -3,6 +3,12 @@ import '@testing-library/jest-dom/extend-expect';
 import { renderWithTheme as render } from 'utils/test';
 import UserObjectives, { TEST_ID } from './UserObjectives';
 import { BrowserRouter } from 'react-router-dom';
+import { colleagueUUIDSelector, getPreviousReviewFilesSelector, PreviousReviewFilesActions } from '@pma/store';
+
+jest.mock('@pma/store', () => ({
+  ...(jest.requireActual('@pma/store') as any),
+  getPreviousReviewFilesSelector: () => () => [],
+}));
 
 jest.mock('react-router-dom', () => ({
   ...(jest.requireActual('react-router-dom') as any),

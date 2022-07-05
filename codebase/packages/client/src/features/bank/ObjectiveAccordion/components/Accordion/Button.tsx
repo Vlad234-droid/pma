@@ -1,22 +1,18 @@
 import React, { FC } from 'react';
-import { Status } from 'config/enum';
 import { Rule } from '@pma/dex-wrapper';
 import { Trans } from 'components/Translation';
 import { IconButton, Position } from 'components/IconButton';
+import { UploadFileButton } from 'features/bank/UploadFile';
 
-export const Button: FC<{ status: Status; number: number }> = () => {
+type Props = {
+  reviewUUID: string;
+  number: number;
+};
+
+export const Button: FC<Props> = ({ reviewUUID, number }) => {
   return (
     <div>
-      <IconButton
-        onPress={console.log}
-        graphic='upload'
-        customVariantRules={{ default: iconButtonStyles, disabled: iconButtonStyles }}
-        iconStyles={{ ...iconStyles }}
-        iconPosition={Position.LEFT}
-        iconProps={{ size: '16px' }}
-      >
-        <Trans i18nKey='upload'>Upload</Trans>
-      </IconButton>
+      <UploadFileButton reviewUUID={reviewUUID} number={number} />
       <IconButton
         onPress={console.log}
         graphic='edit'

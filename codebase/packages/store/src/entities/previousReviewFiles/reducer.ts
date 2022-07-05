@@ -4,15 +4,22 @@ import { deleteFile, getPreviousReviewFiles } from './actions';
 export const initialState = {
   meta: { loading: false, loaded: false, error: null },
   deleteFileMeta: { loading: false, loaded: false, error: null },
+  previousReviewFiles: {},
 };
 
 const request = (state) => ({ ...state, meta: { ...state.meta, loading: true, error: null } });
 
-const success = (state, { payload }) => ({
-  ...state,
-  ...payload,
-  meta: { ...state.meta, loading: false, loaded: true },
-});
+const success = (state, { payload }) => {
+  const { reviewUUID = 'previousReviewFiles' } = payload;
+  return {
+    ...state,
+    meta: { ...state.meta, loading: false, loaded: true },
+    [reviewUUID]: {
+      ...payload.data,
+      meta: { ...state.meta, loading: false, loaded: true },
+    },
+  };
+};
 
 const failure = (state, { payload }) => ({
   ...state,

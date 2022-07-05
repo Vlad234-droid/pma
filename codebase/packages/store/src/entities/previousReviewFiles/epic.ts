@@ -2,17 +2,17 @@
 import { Epic, isActionOf } from 'typesafe-actions';
 import { combineEpics } from 'redux-observable';
 import { from, of } from 'rxjs';
-import { catchError, filter, map, mergeMap, switchMap, takeUntil } from 'rxjs/operators';
+import { catchError, reduce, filter, map, mergeMap, switchMap, takeUntil, mapTo } from 'rxjs/operators';
 import { deleteFile, getPreviousReviewFiles, uploadFile } from './actions';
 import { concatWithErrorToast, errorPayloadConverter } from '../../utils/toastHelper';
 
 export const getPreviousReviewFilesEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
     filter(isActionOf(getPreviousReviewFiles.request)),
-    switchMap(({ payload }) => {
-      const { colleagueUUID } = payload;
-      return from(api.getPreviousReviewFiles({ colleagueUUID })).pipe(
-        map(getPreviousReviewFiles.success),
+    mergeMap(({ payload }) => {
+      const { colleagueUUID, reviewUUID } = payload;
+      return from(api.getPreviousReviewFiles({ colleagueUUID, reviewUUID })).pipe(
+        map((data) => getPreviousReviewFiles.success({ data, reviewUUID })),
         catchError((e) => {
           const errors = e?.data?.errors;
           return concatWithErrorToast(
@@ -29,12 +29,13 @@ export const uploadFileEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
     filter(isActionOf(uploadFile.request)),
     switchMap(({ payload }) => {
-      const { colleagueUUID, file } = payload;
+      const { colleagueUUID, file, reviewUUID } = payload;
       const previousReviewFileType = 3;
+      const review = reviewUUID ? `/${reviewUUID}` : '';
       const metadata = {
         uploadMetadataList: [
           {
-            path: `/home/${colleagueUUID}/reviews`,
+            path: `/home/${colleagueUUID}/reviews${review}`,
             fileName: file.name,
             type: {
               id: previousReviewFileType,
@@ -47,8 +48,8 @@ export const uploadFileEpic: Epic = (action$, _, { api }) =>
           },
         ],
       };
-      return from(api.uploadFile({ file, metadata })).pipe(
-        map(() => getPreviousReviewFiles.request({ colleagueUUID })),
+      return from(api.uploadFile({ file, metadata, reviewUUID })).pipe(
+        map(() => getPreviousReviewFiles.request({ colleagueUUID, reviewUUID })),
         catchError((e) => {
           const errors = e?.data?.errors;
           return concatWithErrorToast(
@@ -65,9 +66,9 @@ export const deleteFileEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
     filter(isActionOf(deleteFile.request)),
     switchMap(({ payload }) => {
-      const { fileUuid, colleagueUUID } = payload;
+      const { fileUuid, colleagueUUID, reviewUUID } = payload;
       return from(api.deleteFile({ fileUuid })).pipe(
-        mergeMap(() => of(deleteFile.success(), getPreviousReviewFiles.request({ colleagueUUID }))),
+        mergeMap(() => of(deleteFile.success(), getPreviousReviewFiles.request({ colleagueUUID, reviewUUID }))),
         catchError((e) => {
           const errors = e?.data?.errors;
           return concatWithErrorToast(

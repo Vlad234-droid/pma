@@ -9,10 +9,11 @@ type Props = {
   fileName: string;
   colleagueUUID: string;
   fileUuid: string;
+  reviewUUID?: string;
   onClose: () => void;
 };
 
-export const RemoveFileModal: React.FC<Props> = ({ colleagueUUID, fileUuid, onClose, fileName }) => {
+export const RemoveFileModal: React.FC<Props> = ({ colleagueUUID, fileUuid, onClose, fileName, reviewUUID }) => {
   const [deleting, setDeleting] = useState(false);
   const [savedFileName] = useState(fileName);
   const isSuccess = useSelector(isDeleteFileSuccess);
@@ -22,7 +23,7 @@ export const RemoveFileModal: React.FC<Props> = ({ colleagueUUID, fileUuid, onCl
   const dispatch = useDispatch();
 
   const removeFile = () => {
-    dispatch(PreviousReviewFilesActions.deleteFile({ fileUuid, colleagueUUID }));
+    dispatch(PreviousReviewFilesActions.deleteFile({ fileUuid, colleagueUUID, reviewUUID }));
     setDeleting(true);
   };
 

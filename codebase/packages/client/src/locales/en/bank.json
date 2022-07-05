@@ -2,5 +2,6 @@
   "create_objectives": "Create priorities",
   "my_objectives_and_reviews": "Quarterly priorities",
   "objective_number": "Priority {{number}}",
-  "business_objectives": "Big 6 business objectives"
+  "business_objectives": "Big 6 business objectives",
+  "priority_file_upload_header": "Priority {{number}} - upload documents"
 }

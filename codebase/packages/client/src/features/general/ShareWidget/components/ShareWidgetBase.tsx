@@ -11,7 +11,7 @@ import SuccessModal from 'components/SuccessModal';
 import { ReviewType, Status } from 'config/enum';
 import useDispatch from 'hooks/useDispatch';
 import { useSelector } from 'react-redux';
-import { usePermission, role } from 'features/general/Permission';
+import { usePermission, role, useTenant } from 'features/general/Permission';
 
 import * as T from 'features/general/Objectives/types';
 import { transformReviewsToObjectives } from 'features/general/Objectives/utils';
@@ -74,6 +74,7 @@ export const ShareWidgetBase: FC<ShareWidgetBaseProps> = ({ customStyle, stopSha
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const [isViewObjectivesModalOpen, setIsViewObjectivesModalOpen] = useState(false);
   const [objectives, setObjectives] = useState<T.Objective[]>([]);
+  const tenant = useTenant();
 
   // TODO: add selectors
   const { info } = useSelector(currentUserSelector);
@@ -125,7 +126,7 @@ export const ShareWidgetBase: FC<ShareWidgetBaseProps> = ({ customStyle, stopSha
   );
 
   useEffect(() => {
-    sharedObjectivesCount && setObjectives(transformReviewsToObjectives(sharedObjectives, formElements, type));
+    sharedObjectivesCount && setObjectives(transformReviewsToObjectives(sharedObjectives, formElements, tenant));
   }, [sharedObjectivesCount, formElementsCount, type]);
 
   const isDisplayed =
