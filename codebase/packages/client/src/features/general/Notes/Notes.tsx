@@ -10,6 +10,7 @@ import { buildPath } from 'features/general/Routes';
 import { Page } from 'pages';
 import { paramsReplacer } from 'utils';
 import { getOptions } from './utils';
+import { useNotesContainer } from './contexts';
 
 export const NOTES_WRAPPER = 'note-wrapper';
 export const ADD_NEW = 'add-new';
@@ -27,7 +28,7 @@ const NotesComposition: FC = () => {
   const { t } = useTranslation();
   const { css } = useStyle();
   const navigate = useNavigate();
-  const [searchValue, setSearchValue] = useState<string>('');
+  const { searchValue, setSearchValue } = useNotesContainer();
 
   const handleCloseModal = () => setStatus(() => ModalStatuses.VIEW);
 
@@ -77,7 +78,7 @@ const NotesComposition: FC = () => {
         />
       )}
       <div className={css({ paddingRight: '40px', position: 'relative' })}>
-        <MainFolders isLineManager={isLineManager} searchValue={searchValue} />
+        <MainFolders isLineManager={isLineManager} />
       </div>
     </div>
   );

@@ -1,7 +1,5 @@
 import React, { FC, MutableRefObject, useEffect, useRef, useState } from 'react';
 import { Rule, useStyle } from '@pma/dex-wrapper';
-import { useDispatch, useSelector } from 'react-redux';
-
 import {
   colleagueUUIDSelector,
   getFoldersSelector,
@@ -12,6 +10,7 @@ import {
   personalArchivedFolderUuidSelector,
   teamArchivedFolderUuidSelector,
 } from '@pma/store';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { useUploadData } from 'features/general/Notes/hooks/useUploadData';
 import { ConfirmModal } from 'components/ConfirmModal';
@@ -33,12 +32,12 @@ import {
   definePropperFieldTeamOptions,
   getPropperInfoData,
 } from 'utils/note';
-import { actionsInitialState, disableFolder, isActiveSearchBar, prepareData, updateFolder } from '../../../utils';
+import { actionsInitialState, prepareData } from '../../../utils';
 
 export const SELECTED_FOLDER = 'selected-folder';
 export const FOLDER_WRAPPER = 'main-folder-wrapper';
 
-const MainFolders: FC<MainFolderProps> = ({ isLineManager, searchValue }) => {
+const MainFolders: FC<MainFolderProps> = ({ isLineManager }) => {
   const { css, matchMedia } = useStyle();
   const mediumScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
   const { t } = useTranslation();
@@ -46,18 +45,8 @@ const MainFolders: FC<MainFolderProps> = ({ isLineManager, searchValue }) => {
 
   useUploadData();
 
-  const {
-    selectedFolder,
-    setSelectedFolder,
-    selectedTEAMFolder,
-    setSelectedTEAMFolder,
-    foldersWithNotes,
-    setFoldersWithNotes,
-    foldersWithNotesTEAM,
-    setFoldersWithNotesTEAM,
-    archiveMode,
-    setArchiveMode,
-  } = useNotesContainer();
+  const { foldersWithNotes, setFoldersWithNotes, foldersWithNotesTEAM, setFoldersWithNotesTEAM, archiveMode } =
+    useNotesContainer();
 
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const folders = useSelector(getFoldersSelector) || null;
@@ -75,21 +64,6 @@ const MainFolders: FC<MainFolderProps> = ({ isLineManager, searchValue }) => {
     prepareData(folders, notesSelect, setFoldersWithNotes, notesFolderColleagueData);
   }, [folders, notesSelect, archiveMode.user]);
 
-  useEffect(() => {
-    isActiveSearchBar(
-      searchValue,
-      archiveMode,
-      setArchiveMode,
-      setSelectedTEAMFolder,
-      setSelectedFolder,
-      foldersWithNotes,
-      setFoldersWithNotes,
-      foldersWithNotesTEAM,
-      setFoldersWithNotesTEAM,
-      notesSelect,
-    );
-  }, [searchValue]);
-
   const personalArchivedFolderUuid = useSelector(personalArchivedFolderUuidSelector) || null;
   const teamArchivedFolderUuid = useSelector(teamArchivedFolderUuidSelector) || null;
 
@@ -103,43 +77,6 @@ const MainFolders: FC<MainFolderProps> = ({ isLineManager, searchValue }) => {
 
   const teamActions = useRef(actionsInitialState);
 
-  const handleSelected = (itemID: string): void => {
-    setFoldersWithNotesTEAM((prev) => {
-      const arr = [...prev];
-      arr.forEach((item) => (item.selected = false));
-      return [...arr];
-    });
-    setSelectedFolder(() => foldersWithNotes.filter((note) => note.id === itemID)[0]);
-    setFoldersWithNotes((prev) => {
-      const arr = [...prev];
-      arr.forEach((item) => (item.selected = false));
-      return [...arr];
-    });
-    setFoldersWithNotes((prev) => {
-      const arr = [...prev];
-      arr.find((folder) => folder.id === itemID).selected = true;
-      return [...arr];
-    });
-  };
-  const handleTEAMSelected = (itemID: string): void => {
-    setFoldersWithNotes((prev) => {
-      const arr = [...prev];
-      arr.forEach((item) => (item.selected = false));
-      return [...arr];
-    });
-    setSelectedTEAMFolder(() => foldersWithNotesTEAM.filter((note) => note.id === itemID)[0]);
-    setFoldersWithNotesTEAM((prev) => {
-      const arr = [...prev];
-      arr.forEach((item) => (item.selected = false));
-      return [...arr];
-    });
-    setFoldersWithNotesTEAM((prev) => {
-      const arr = [...prev];
-      arr.find((folder) => folder.id === itemID).selected = true;
-      return [...arr];
-    });
-  };
-
   const handleDelete = () => {
     if (userActions.current.noteId && !userActions.current.folderId && actionModal.current !== 'move') {
       dispatch(
@@ -148,11 +85,9 @@ const MainFolders: FC<MainFolderProps> = ({ isLineManager, searchValue }) => {
           noteId: userActions.current.noteId,
         }),
       );
-      setSelectedFolder((prev) => updateFolder(prev, userActions.current.noteId));
     }
 
     if (userActions.current.folderId && !userActions.current.noteId && actionModal.current !== 'move') {
-      if (selectedFolder !== null) setSelectedFolder(() => null);
       dispatch(
         NotesActions.deleteFolder({
           ownerColleagueUuid: colleagueUuid,
@@ -182,7 +117,6 @@ const MainFolders: FC<MainFolderProps> = ({ isLineManager, searchValue }) => {
       };
 
       dispatch(NotesActions.updateFolder(payload));
-      setSelectedFolder(() => null);
       return;
     }
 
@@ -192,7 +126,6 @@ const MainFolders: FC<MainFolderProps> = ({ isLineManager, searchValue }) => {
     };
 
     if (!payload.folderUuid) {
-      setSelectedFolder((prev) => updateFolder(prev, userActions.current.noteId));
       dispatch(NotesActions.updateNote(payload));
     }
     if (payload.folderUuid) {
@@ -221,7 +154,6 @@ const MainFolders: FC<MainFolderProps> = ({ isLineManager, searchValue }) => {
         }),
       );
       dispatch(NotesActions.createFolderAndNote(body));
-      setSelectedFolder((prev) => updateFolder(prev, userActions.current.noteId));
     }
   };
 
@@ -245,8 +177,6 @@ const MainFolders: FC<MainFolderProps> = ({ isLineManager, searchValue }) => {
       };
 
       dispatch(NotesActions.updateFolder(payload));
-      setSelectedTEAMFolder(() => null);
-      setSelectedFolder(() => null);
       return;
     }
 
@@ -256,8 +186,6 @@ const MainFolders: FC<MainFolderProps> = ({ isLineManager, searchValue }) => {
     };
 
     if (!payload.folderUuid) {
-      if (selectedTEAMFolder) setSelectedTEAMFolder((prev) => updateFolder(prev, teamActions.current.noteId));
-      if (selectedFolder) setSelectedFolder((prev) => updateFolder(prev, teamActions.current.noteId));
       dispatch(NotesActions.updateNote(payload));
     }
     if (payload.folderUuid) {
@@ -284,8 +212,6 @@ const MainFolders: FC<MainFolderProps> = ({ isLineManager, searchValue }) => {
         }),
       );
       dispatch(NotesActions.createFolderAndNote(body));
-      if (selectedTEAMFolder) setSelectedTEAMFolder((prev) => updateFolder(prev, teamActions.current.noteId));
-      if (selectedFolder) setSelectedFolder((prev) => updateFolder(prev, teamActions.current.noteId));
     }
   };
 
@@ -297,19 +223,11 @@ const MainFolders: FC<MainFolderProps> = ({ isLineManager, searchValue }) => {
           noteId: teamActions.current.noteId,
         }),
       );
-      if (selectedTEAMFolder !== null) {
-        setSelectedTEAMFolder((prev) => updateFolder(prev, teamActions.current.noteId));
-      }
-
-      if (selectedFolder !== null) {
-        setSelectedFolder((prev) => updateFolder(prev, teamActions.current.noteId));
-      }
 
       return;
     }
 
     if (teamActions.current.folderId && !teamActions.current.noteId && actionTEAMModal.current !== 'move') {
-      if (selectedTEAMFolder !== null) setSelectedTEAMFolder(() => null);
       dispatch(
         NotesActions.deleteFolder({
           ownerColleagueUuid: colleagueUuid,
@@ -326,14 +244,6 @@ const MainFolders: FC<MainFolderProps> = ({ isLineManager, searchValue }) => {
     };
 
     dispatch(NotesActions.updateNote(payload));
-    if (selectedTEAMFolder !== null) {
-      setSelectedTEAMFolder((prev) => disableFolder(prev));
-    }
-
-    if (selectedFolder && !foldersWithNotes.find((item) => item?.id === AllNotesFolderId)?.selected) {
-      setSelectedFolder((prev) => updateFolder(prev, userActions.current.noteId));
-    }
-    setSelectedFolder((prev) => disableFolder(prev));
   };
   const submitMoveNoteToTEAMFolder = ({ selectedIdFolder }) => {
     const payload = {
@@ -341,17 +251,6 @@ const MainFolders: FC<MainFolderProps> = ({ isLineManager, searchValue }) => {
       folderUuid: selectedIdFolder === AllNotesFolderIdTEAM ? null : selectedIdFolder,
     };
     dispatch(NotesActions.updateNote(payload));
-
-    if (selectedFolder !== null) {
-      setSelectedTEAMFolder((prev) => disableFolder(prev));
-      setSelectedFolder((prev) => disableFolder(prev));
-    }
-
-    if (selectedTEAMFolder && !foldersWithNotesTEAM?.find((item) => item?.id === AllNotesFolderIdTEAM)?.selected) {
-      setSelectedTEAMFolder((prev) => updateFolder(prev, teamActions.current.noteId));
-    }
-
-    setSelectedTEAMFolder((prev) => disableFolder(prev));
   };
 
   return (
@@ -369,12 +268,11 @@ const MainFolders: FC<MainFolderProps> = ({ isLineManager, searchValue }) => {
       >
         <div className={css(wrapperFolder, { height: '100%' })}>
           <PersonalFolders
-            handleSelected={handleSelected}
             setConfirmModal={setConfirmModal}
             actionModal={actionModal}
             userActions={userActions.current}
           />
-          {mediumScreen && selectedFolder && (
+          {mediumScreen && (
             <SelectedFolder
               setConfirmModal={setConfirmModal}
               actionModal={actionModal}
@@ -387,13 +285,12 @@ const MainFolders: FC<MainFolderProps> = ({ isLineManager, searchValue }) => {
           )}
           {isLineManager && (
             <PersonalsTeamFolders
-              handleTEAMSelected={handleTEAMSelected}
               setConfirmTEAMModal={setConfirmTEAMModal}
               actionTEAMModal={actionTEAMModal}
               teamsActions={teamActions.current}
             />
           )}
-          {mediumScreen && selectedTEAMFolder && (
+          {mediumScreen && (
             <SelectedTEAMFolder
               setConfirmTEAMModal={setConfirmTEAMModal}
               actionTEAMModal={actionTEAMModal}
@@ -402,7 +299,7 @@ const MainFolders: FC<MainFolderProps> = ({ isLineManager, searchValue }) => {
           )}
         </div>
         <div className={css(wrapperFolder, { height: '100%' })}>
-          {!mediumScreen && selectedFolder && (
+          {!mediumScreen && (
             <SelectedFolder
               setConfirmModal={setConfirmModal}
               actionModal={actionModal}
@@ -414,7 +311,7 @@ const MainFolders: FC<MainFolderProps> = ({ isLineManager, searchValue }) => {
             />
           )}
 
-          {!mediumScreen && selectedTEAMFolder && (
+          {!mediumScreen && (
             <SelectedTEAMFolder
               setConfirmTEAMModal={setConfirmTEAMModal}
               actionTEAMModal={actionTEAMModal}

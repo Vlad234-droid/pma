@@ -84,8 +84,8 @@ const PersonalNote: FC = () => {
 
     const note = {
       ownerColleagueUuid: colleagueUuid,
-      folderUuid: folder && folder !== AllNotesFolderId && folder !== NEW_FOLDER_ID ? folder : undefined,
       ...rest,
+      folderUuid: folder && folder !== AllNotesFolderId && folder !== NEW_FOLDER_ID ? folder : undefined,
     };
 
     if (folderTitle) {
@@ -103,6 +103,7 @@ const PersonalNote: FC = () => {
     } else {
       dispatch(NotesActions.updateNote(note));
     }
+
     folderTitle ? setFolder(folderTitle) : setFolderName(folder);
   };
 
@@ -138,7 +139,14 @@ const PersonalNote: FC = () => {
               marginBottom: '20px',
             }}
           />
-          <PersonalNoteForm onSubmit={handleSubmit} onClose={handleClose} defaultValues={defaultValues} />
+          <PersonalNoteForm
+            onSubmit={handleSubmit}
+            onClose={handleClose}
+            defaultValues={{
+              ...defaultValues,
+              folder: defaultValues?.folder ? defaultValues?.folder : defaultValues?.folderUuid,
+            }}
+          />
           <ArrowLeftIcon onClick={handleClose} data-test-id='arrowRight' />
         </div>
       </div>

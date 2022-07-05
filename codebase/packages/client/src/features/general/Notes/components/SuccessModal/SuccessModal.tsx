@@ -1,5 +1,7 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import { Button, Rule, useStyle, CreateRule } from '@pma/dex-wrapper';
+import { NotesActions } from '@pma/store';
+import { useDispatch } from 'react-redux';
 
 import { Trans } from 'components/Translation';
 import successImg from 'images/success.jpg';
@@ -15,6 +17,13 @@ export type SuccessModalProps = {
 const SuccessModal: FC<SuccessModalProps> = ({ folder, onOk }) => {
   const { css, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    return () => {
+      dispatch(NotesActions.changeCreatedMeta(false));
+    };
+  }, []);
 
   return (
     <div

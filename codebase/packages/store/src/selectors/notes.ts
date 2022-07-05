@@ -74,7 +74,6 @@ export const notesFolderColleagueDataSelector = (colleagueUuid, isUserArchived) 
       const obj = {
         ...item,
         notes: [],
-        selected: false,
         selectedDots: false,
       };
       filteredNotes.forEach((noteItem: any) => {
@@ -97,7 +96,6 @@ export const notesFolderColleagueDataSelector = (colleagueUuid, isUserArchived) 
       ownerColleagueUuid: colleagueUuid,
       title: 'All notes',
       notes: [...filteredNotes],
-      selected: false,
       quantity: filteredNotes.length,
       selectedDots: false,
     };
@@ -127,7 +125,6 @@ export const notesFolderTeamDataSelector = (colleagueUuid, teamArchivedMode) =>
       const obj = {
         ...item,
         notes: [],
-        selected: false,
         selectedDots: false,
       };
       filteredNotes.forEach((noteItem: any) => {
@@ -150,7 +147,6 @@ export const notesFolderTeamDataSelector = (colleagueUuid, teamArchivedMode) =>
       ownerColleagueUuid: colleagueUuid,
       title: 'All notes',
       notes: [...filteredNotes],
-      selected: false,
       quantity: filteredNotes.length,
       selectedDots: false,
     };

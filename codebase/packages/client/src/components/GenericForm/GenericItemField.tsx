@@ -22,7 +22,6 @@ type GenericItemFormProps = {
   options?: { label?: string; value?: string }[] | [];
   domRef?: Ref | RefObject<any> | null;
   onChange?: any;
-  getSelected?: (option: any) => void;
   styles?: Styles | Rule;
 };
 export const GenericItemField: FC<GenericItemFormProps> = ({
@@ -38,7 +37,6 @@ export const GenericItemField: FC<GenericItemFormProps> = ({
   label,
   readonly,
   onChange,
-  getSelected,
   options,
   ...props
 }) => {
@@ -58,7 +56,6 @@ export const GenericItemField: FC<GenericItemFormProps> = ({
       <Element
         {...props}
         options={options}
-        getSelected={getSelected}
         isValid={!errors[name]}
         styles={{ ...customElement, ...styles }}
         name={name}

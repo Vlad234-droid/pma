@@ -3,102 +3,108 @@ import '@testing-library/jest-dom/extend-expect';
 import { renderWithTheme } from 'utils/test';
 import '@testing-library/jest-dom';
 import { fireEvent } from '@testing-library/react';
+import { BrowserRouter } from 'react-router-dom';
 import PersonalsTeamFolders, { TEAM_FOLDER_WRAPPER, CHANGE_TEAM_MODE } from './PersonalsTeamFolders';
 import { NotesContext } from 'features/general/Notes/contexts/notesContext';
 
-describe('it should render team folders & archived folders', () => {
-  const handleTEAMSelected = jest.fn();
+jest.mock('react-router-dom', () => {
+  return {
+    ...jest.requireActual('react-router-dom'),
+
+    useSearchParams: () => [new URLSearchParams(), jest.fn()],
+  };
+});
+
+describe('it should render folders & archived folders', () => {
   const setConfirmTEAMModal = jest.fn();
-  const teamsActions = jest.spyOn(React, 'useRef').mockReturnValueOnce({ current: null });
-  const actionTEAMModal = jest.spyOn(React, 'useRef').mockReturnValueOnce({ current: null });
-  const setFoldersWithNotesTEAM = jest.fn();
-  const setFoldersWithNotes = jest.fn();
-  const setSelectedFolder = jest.fn();
   const setArchiveMode = jest.fn();
-  const setSelectedTEAMFolder = jest.fn();
+  const actionTEAMModal = jest.spyOn(React, 'useRef').mockReturnValueOnce({ current: null });
+  const teamActions = jest.spyOn(React, 'useRef').mockReturnValueOnce({
+    current: {
+      folderId: null,
+      noteId: null,
+      folderUuid: null,
+    },
+  });
 
-  const foldersWithNotesTEAM = [{ id: 1, notes: [{}] }];
-  const selectedFolder = { id: 1 };
-  const archiveMode = { user: false, team: false };
-
-  const value = {
-    foldersWithNotesTEAM,
-    selectedFolder,
-    setFoldersWithNotesTEAM,
-    setFoldersWithNotes,
-    setSelectedFolder,
-    archiveMode,
-    setArchiveMode,
-    setSelectedTEAMFolder,
+  const archiveMode = {
+    user: false,
+    team: false,
   };
 
   const props = {
-    handleTEAMSelected,
     setConfirmTEAMModal,
     actionTEAMModal,
-    teamsActions,
+    teamActions,
   };
 
-  it('it should render Archived Folders', async () => {
+  const notes = [
+    {
+      content: 'mocked_content',
+      folderUuid: 'mocked_folderUuid',
+      id: 'mocked_id',
+      ownerColleagueUuid: 'mocked_ownerColleagueUuid',
+      status: 'CREATED',
+      title: 'mocked_title',
+      updateTime: 'mocked_updateTime',
+      selected: false,
+    },
+  ];
+
+  const foldersWithNotesTEAM = [
+    {
+      id: '1ad116f4-1c42-4e61-bbf0-b371e6223cf0',
+      notes,
+      ownerColleagueUuid: '15818570-cd6b-4957-8a82-3d34dcb0b077',
+      parentFolderUuid: '4eb0c40f-8e7a-43e3-8096-2a431b5c9ba1',
+      quantity: 0,
+      selectedDots: false,
+      title: 'mocked_title',
+    },
+  ];
+
+  it('it should render personal folder', async () => {
     const { getByText } = renderWithTheme(
-      <NotesContext.Provider value={value}>
+      <BrowserRouter>
         <PersonalsTeamFolders {...props} />
-      </NotesContext.Provider>,
+      </BrowserRouter>,
     );
-    const title = getByText(/Archived Folders/i);
+    const title = getByText(/Folders for Notes on my Team/i);
     expect(title).toBeInTheDocument();
   });
   it('it should render wrapper', async () => {
-    const { getByTestId } = renderWithTheme(<PersonalsTeamFolders {...props} />);
+    const { getByTestId } = renderWithTheme(
+      <BrowserRouter>
+        <PersonalsTeamFolders {...props} />
+      </BrowserRouter>,
+    );
     const personalFolderWrapper = getByTestId(TEAM_FOLDER_WRAPPER);
     expect(personalFolderWrapper).toBeInTheDocument();
   });
+
   it('it should render archived folder', async () => {
-    const { getByText, getByTestId } = renderWithTheme(
-      <NotesContext.Provider value={value}>
-        <PersonalsTeamFolders {...props} />
-      </NotesContext.Provider>,
+    const { getByTestId, getByText } = renderWithTheme(
+      <BrowserRouter>
+        <NotesContext.Provider value={{ setArchiveMode, archiveMode }}>
+          <PersonalsTeamFolders {...props} />
+        </NotesContext.Provider>
+      </BrowserRouter>,
     );
     const changeModeBtn = getByTestId(CHANGE_TEAM_MODE);
     fireEvent.click(changeModeBtn);
+    expect(setArchiveMode).toHaveBeenCalledTimes(1);
     const archivedTitle = getByText('Archived Folders');
     expect(archivedTitle).toBeInTheDocument();
   });
-  it('it should call handleSelected handler', async () => {
-    renderWithTheme(
-      <NotesContext.Provider value={value}>
-        <PersonalsTeamFolders {...props} />
-      </NotesContext.Provider>,
-    );
-    value.setFoldersWithNotes();
-    props.handleTEAMSelected();
-
-    expect(setFoldersWithNotes).toHaveBeenCalled();
-    expect(handleTEAMSelected).toHaveBeenCalled();
-  });
-
-  it('it should call setIsUserArchived, setSelectedFolder handlers', async () => {
+  it('it should call handleSelected', async () => {
+    const setSearchValue = jest.fn();
     const { getByTestId } = renderWithTheme(
-      <NotesContext.Provider value={value}>
+      <NotesContext.Provider value={{ foldersWithNotesTEAM, setArchiveMode, archiveMode, setSearchValue }}>
         <PersonalsTeamFolders {...props} />
       </NotesContext.Provider>,
     );
-    const mode = getByTestId(CHANGE_TEAM_MODE);
-    fireEvent.click(mode);
-    expect(setArchiveMode).toHaveBeenCalled();
-    expect(setSelectedTEAMFolder).toHaveBeenCalled();
-  });
-
-  it('it should call setSelectedFolder, setFoldersWithNotes handlers', async () => {
-    renderWithTheme(
-      <NotesContext.Provider value={value}>
-        <PersonalsTeamFolders {...props} />
-      </NotesContext.Provider>,
-    );
-    value.setSelectedFolder();
-    value.setFoldersWithNotesTEAM();
-
-    expect(setSelectedFolder).toHaveBeenCalled();
-    expect(setFoldersWithNotesTEAM).toHaveBeenCalled();
+    const folderItem = getByTestId('1ad116f4-1c42-4e61-bbf0-b371e6223cf0');
+    fireEvent.click(folderItem);
+    expect(setSearchValue).toHaveBeenCalledTimes(1);
   });
 });

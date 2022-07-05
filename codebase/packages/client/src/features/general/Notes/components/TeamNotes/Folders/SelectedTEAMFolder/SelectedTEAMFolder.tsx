@@ -1,16 +1,28 @@
-import React, { FC, Dispatch, SetStateAction, MutableRefObject, MouseEvent, useRef } from 'react';
+import React, { FC, Dispatch, SetStateAction, MutableRefObject, MouseEvent, useRef, useEffect, useState } from 'react';
 import { Rule, Styles, useStyle, colors, CreateRule } from '@pma/dex-wrapper';
 import { useNavigate } from 'react-router';
-import { IconButton } from 'components/IconButton';
+import { useSearchParams } from 'react-router-dom';
 
+import { IconButton } from 'components/IconButton';
 import { formatToRelativeDate } from 'utils/date';
 import { useNotesContainer } from '../../../../contexts';
 import useEventListener from 'hooks/useEventListener';
 import { buildPath } from 'features/general/Routes';
 import { paramsReplacer } from 'utils';
 import { Page } from 'pages';
+import { NoteTeamData } from '../../../../configs';
 
 export const TEAM_WRAPPER = 'team-wrapper';
+
+const initialState: NoteTeamData = {
+  id: '',
+  notes: [],
+  ownerColleagueUuid: '',
+  quantity: 0,
+  selectedDots: false,
+  title: '',
+  referenceColleagueUuid: '',
+};
 
 type Props = {
   setConfirmTEAMModal: Dispatch<SetStateAction<boolean>>;
@@ -22,15 +34,24 @@ const SelectedFolder: FC<Props> = ({ setConfirmTEAMModal, actionTEAMModal, teamA
   const mediumScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
   const ref = useRef<HTMLDivElement | null>();
   const navigate = useNavigate();
+  const [selectedFolder, setSelectedFolder] = useState<NoteTeamData>(initialState);
 
-  const { selectedTEAMFolder, setSelectedTEAMFolder, archiveMode } = useNotesContainer();
+  const [searchParams] = useSearchParams();
+
+  const { archiveMode, foldersWithNotesTEAM } = useNotesContainer();
+
+  useEffect(() => {
+    if (searchParams.get('folder')) {
+      setSelectedFolder(() => foldersWithNotesTEAM.filter((note) => note.id === searchParams.get('folder'))[0]);
+    }
+  });
 
   const teamArchivedMode = archiveMode.team;
 
   const handleClickOutside = (event: MouseEvent<HTMLElement>) => {
     const element = event?.target as HTMLElement;
     if (ref.current && !ref.current.contains(element)) {
-      setSelectedTEAMFolder((prev) => ({ ...prev, notes: prev.notes.map((item) => ({ ...item, selected: false })) }));
+      setSelectedFolder((prev) => ({ ...prev, notes: prev?.notes.map((item) => ({ ...item, selected: false })) }));
     }
   };
 
@@ -149,9 +170,11 @@ const SelectedFolder: FC<Props> = ({ setConfirmTEAMModal, actionTEAMModal, teamA
   };
 
   const selectedNoteActionhandler = (noteId) => {
-    setSelectedTEAMFolder((prev) => {
+    setSelectedFolder((prev) => {
       const arr = { ...prev };
-      arr.notes.find((item) => item.id === noteId).selected = true;
+
+      arr.notes[arr.notes.findIndex((item) => item.id === noteId)].selected = true;
+
       return arr;
     });
   };
@@ -161,13 +184,17 @@ const SelectedFolder: FC<Props> = ({ setConfirmTEAMModal, actionTEAMModal, teamA
     navigate(buildPath(paramsReplacer(Page.TEAM_NOTE, { ':uuid': item.id })));
   };
 
+  const isActive = !searchParams.get('folder') || !selectedFolder?.notes?.length;
+
+  if (isActive) return null;
+
   return (
     <div className={css(Expanded_Note_Style({ mediumScreen }))} data-test-id={TEAM_WRAPPER}>
       <div className={css(flex_between_style)}>
-        <span className={css(Folder_Title_styled)}>{selectedTEAMFolder?.title}</span>
+        <span className={css(Folder_Title_styled)}>{selectedFolder?.title}</span>
       </div>
       <div className={css({ marginTop: '32px', display: 'flex', flexDirection: 'column' })}>
-        {selectedTEAMFolder?.notes?.map((item) => (
+        {selectedFolder?.notes?.map((item) => (
           <div
             className={css(flex_between_style, Note_container_style, { position: 'relative' })}
             key={item.id}

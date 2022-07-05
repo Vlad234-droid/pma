@@ -1,20 +1,31 @@
-import React, { FC, MouseEvent, useRef } from 'react';
-import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import React, { FC, MouseEvent, useEffect, useRef, useState } from 'react';
 import { colors, CreateRule, Rule, Styles, theme, useStyle } from '@pma/dex-wrapper';
 import { getFoldersSelector } from '@pma/store';
+import { useSelector } from 'react-redux';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
-import useEventListener from 'hooks/useEventListener';
 import { IconButton } from 'components/IconButton';
-
+import { buildPath } from 'features/general/Routes';
 import { Trans } from 'components/Translation';
+import { Page } from 'pages';
+
 import { formatToRelativeDate } from 'utils/date';
 import { getNotesFolderTitle } from 'utils/note';
-import { Page } from 'pages';
-import { SelectedFolderProps } from '../../../configs';
+import { NoteData, SelectedFolderProps } from '../../../configs';
 import { useNotesContainer } from '../../../contexts';
-import { buildPath } from 'features/general/Routes';
 import { paramsReplacer } from 'utils';
+import { useSearch } from '../../../hooks/useSearch';
+import useEventListener from 'hooks/useEventListener';
+
+const initialState: NoteData = {
+  id: '',
+  isInSearch: false,
+  notes: [],
+  ownerColleagueUuid: '',
+  quantity: 0,
+  selectedDots: false,
+  title: '',
+};
 
 export const FOLDER_WRAPPER = 'folder-wrapper';
 
@@ -28,14 +39,24 @@ const SelectedFolder: FC<SelectedFolderProps> = ({
   teamActions,
 }) => {
   const { css, matchMedia } = useStyle();
+  const mediumScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
   const ref = useRef<HTMLDivElement | null>();
   const navigate = useNavigate();
+  const [selectedFolder, setSelectedFolder] = useState<NoteData>(initialState);
 
-  const { archiveMode, selectedFolder, setSelectedFolder } = useNotesContainer();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const { archiveMode, foldersWithNotes } = useNotesContainer();
+
+  useEffect(() => {
+    if (searchParams.get('folder')) {
+      setSelectedFolder(() => foldersWithNotes.filter((note) => note.id === searchParams.get('folder'))[0]);
+    }
+  });
+
+  useSearch(setSelectedFolder, setSearchParams);
 
   const isUserArchived = archiveMode.user;
-
-  const mediumScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
 
   const btnActionsData = [
     {
@@ -86,7 +107,7 @@ const SelectedFolder: FC<SelectedFolderProps> = ({
   const handleClickOutside = (event: MouseEvent<HTMLElement>) => {
     const element = event?.target as HTMLElement;
     if (ref.current && !ref.current.contains(element)) {
-      setSelectedFolder((prev) => ({ ...prev, notes: prev.notes.map((item) => ({ ...item, selected: false })) }));
+      setSelectedFolder((prev) => ({ ...prev, notes: prev?.notes.map((item) => ({ ...item, selected: false })) }));
     }
   };
 
@@ -195,6 +216,10 @@ const SelectedFolder: FC<SelectedFolderProps> = ({
 
   const foldersList = useSelector(getFoldersSelector) || [];
 
+  const isActive = (!searchParams.get('folder') || !selectedFolder?.notes?.length) && !selectedFolder?.isInSearch;
+
+  if (isActive) return null;
+
   return (
     <div className={css(expandedNoteStyle({ mediumScreen }))} data-test-id={FOLDER_WRAPPER}>
       <div className={css(flexBetweenStyle)}>
@@ -210,8 +235,9 @@ const SelectedFolder: FC<SelectedFolderProps> = ({
           >
             <span className={css(noteTitleStyle)}>
               {item.title}
-              {selectedFolder.isInSearch && (
-                <div className={css(noteFolderTitleStyle)}>{getNotesFolderTitle(item.folderUuid, foldersList)}</div>
+              {selectedFolder?.isInSearch && (
+                //@ts-ignore
+                <div className={css(noteFolderTitleStyle)}>{getNotesFolderTitle(item?.folderUuid, foldersList)}</div>
               )}
             </span>
             <div className={css(FlexStyle)}>

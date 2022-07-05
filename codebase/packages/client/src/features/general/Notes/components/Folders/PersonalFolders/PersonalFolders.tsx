@@ -1,32 +1,28 @@
 import React, { FC, MouseEvent, useRef } from 'react';
 import { Rule, useStyle, Button, Styles, CreateRule, Theme } from '@pma/dex-wrapper';
+import { useSearchParams } from 'react-router-dom';
+
 import { IconButton } from 'components/IconButton';
 import { useTranslation } from 'components/Translation';
 
+import useEventListener from 'hooks/useEventListener';
 import { PersonalFoldersProps } from '../../../configs';
 import { defineNotesHandler, AllNotesFolderId } from 'utils/note';
 import { useNotesContainer } from '../../../contexts';
-import useEventListener from 'hooks/useEventListener';
 
 export const PERSONAL_FOLDER_WRAPPER = 'personal_folder_wrapper';
 export const CHANGE_USER_MODE = 'change-user-mode';
 
-const PersonalFolders: FC<PersonalFoldersProps> = ({ handleSelected, setConfirmModal, actionModal, userActions }) => {
+const PersonalFolders: FC<PersonalFoldersProps> = ({ setConfirmModal, actionModal, userActions }) => {
   const { css, theme, matchMedia } = useStyle();
   const mediumScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
   const { t } = useTranslation();
 
+  const [searchParams, setSearchParams] = useSearchParams();
+
   const ref = useRef<HTMLDivElement | null>();
 
-  const {
-    archiveMode,
-    setSelectedTEAMFolder,
-    selectedTEAMFolder,
-    foldersWithNotes,
-    setFoldersWithNotes,
-    setSelectedFolder,
-    setArchiveMode,
-  } = useNotesContainer();
+  const { archiveMode, foldersWithNotes, setFoldersWithNotes, setArchiveMode, setSearchValue } = useNotesContainer();
 
   const isUserArchived = archiveMode.user;
 
@@ -39,7 +35,7 @@ const PersonalFolders: FC<PersonalFoldersProps> = ({ handleSelected, setConfirmM
 
   useEventListener('mousedown', handleClickOutside);
 
-  const selectedDotsActionhandler = (e, noteId) => {
+  const dotsHandler = (e, noteId) => {
     if (e.target.id === 'dots' || e.target.parentElement.id === 'dots') {
       setFoldersWithNotes((prev) => {
         const arr = [...prev];
@@ -57,8 +53,9 @@ const PersonalFolders: FC<PersonalFoldersProps> = ({ handleSelected, setConfirmM
       e.target.id === 'backdrop'
     )
       return;
-    if (selectedTEAMFolder !== null) setSelectedTEAMFolder(() => null);
-    handleSelected(id);
+
+    setSearchParams({ folder: id });
+    setSearchValue('');
   };
 
   const btnsActionsHandler = (itemId: string, notesLength: number) => {
@@ -143,27 +140,27 @@ const PersonalFolders: FC<PersonalFoldersProps> = ({ handleSelected, setConfirmM
       </div>
       <div className={css({ marginTop: '48px' })}>
         {foldersWithNotes?.map((item) => {
-          const { selected } = item;
+          const { id } = item;
 
           return (
             <div
-              data-test-id='folder-item'
+              data-test-id={id}
               className={css({ position: 'relative' })}
-              key={item.id}
-              onClick={(e) => handleExpandFolder(e, item.id)}
+              key={id}
+              onClick={(e) => handleExpandFolder(e, id)}
             >
-              <div className={css(itemListStyle({ selected }))}>
+              <div className={css(itemListStyle({ selected: searchParams.get('folder') === id }))}>
                 <div className={css(marginFlex)}>
                   <span className={css(folderTitle)}>{item.title}</span>
-                  <span className={css(quantityStyle)}>{defineNotesHandler(item.notes.length)}</span>
+                  <span className={css(quantityStyle)}>{defineNotesHandler(item?.notes?.length)}</span>
                 </div>
                 <div className={css({ display: 'flex', alignItems: 'center' })}>
-                  {item.id !== AllNotesFolderId && (
+                  {id !== AllNotesFolderId && (
                     <div className={css(flexStyle)}>
                       <div
                         className={css(dotsStyle)}
                         data-test-id='dots-items'
-                        onClick={(e) => selectedDotsActionhandler(e, item.id)}
+                        onClick={(e) => dotsHandler(e, id)}
                         id='dots'
                       >
                         <span />
@@ -173,13 +170,13 @@ const PersonalFolders: FC<PersonalFoldersProps> = ({ handleSelected, setConfirmM
                     </div>
                   )}
 
-                  {item.selectedDots && btnsActionsHandler(item.id, item.notes.length)}
+                  {item.selectedDots && btnsActionsHandler(id, item?.notes?.length)}
 
                   <div className={css({ display: 'flex', alignItems: 'center' })}>
                     <IconButton
                       iconStyles={{ marginRight: '24px' }}
                       graphic='arrowRight'
-                      onPress={(e) => handleExpandFolder(e, item.id)}
+                      onPress={(e) => handleExpandFolder(e, id)}
                     />
                   </div>
                 </div>
@@ -195,7 +192,7 @@ const PersonalFolders: FC<PersonalFoldersProps> = ({ handleSelected, setConfirmM
           data-test-id={CHANGE_USER_MODE}
           onPress={() => {
             setArchiveMode((prev) => ({ ...prev, user: !prev.user }));
-            setSelectedFolder(() => null);
+            setSearchParams({});
           }}
         >
           {!isUserArchived ? t('archived_folders', 'Archived Folders') : t('personal_folders', 'Personal Folders')}

@@ -20,7 +20,7 @@ import WrapperModal from 'features/general/Modal/components/WrapperModal';
 import { buildPath } from 'features/general/Routes';
 import { Page } from 'pages';
 import { AllNotesFolderId, NEW_FOLDER_ID } from 'utils';
-import { NotesStatus } from './configs/type';
+import { NotesStatus } from './configs';
 import { useUploadData } from './hooks/useUploadData';
 
 export const MODAL_WRAPPER = 'modal-wrapper';
@@ -77,8 +77,8 @@ const PersonalNote: FC = () => {
     const { folderTitle, folder, ...rest } = data;
     const note = {
       ownerColleagueUuid: colleagueUuid,
-      folderUuid: folder && folder !== AllNotesFolderId && folder !== NEW_FOLDER_ID ? folder : undefined,
       ...rest,
+      folderUuid: folder && folder !== AllNotesFolderId && folder !== NEW_FOLDER_ID ? folder : undefined,
     };
 
     if (folderTitle) {
@@ -126,7 +126,14 @@ const PersonalNote: FC = () => {
               marginBottom: '20px',
             }}
           />
-          <TeamNoteForm onSubmit={handleSubmit} onClose={handleClose} defaultValues={defaultValues} />
+          <TeamNoteForm
+            onSubmit={handleSubmit}
+            onClose={handleClose}
+            defaultValues={{
+              ...defaultValues,
+              folder: defaultValues?.folder ? defaultValues?.folder : defaultValues?.folderUuid,
+            }}
+          />
           <ArrowLeftIcon onClick={handleClose} data-test-id='arrowRight' />
         </div>
       </div>

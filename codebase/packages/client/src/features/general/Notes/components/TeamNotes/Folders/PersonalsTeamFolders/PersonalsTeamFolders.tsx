@@ -1,25 +1,24 @@
 import React, { FC, Dispatch, SetStateAction, MutableRefObject, MouseEvent, useRef } from 'react';
 import { Rule, useStyle, Button, Styles, CreateRule } from '@pma/dex-wrapper';
-import { IconButton } from 'components/IconButton';
-import { defineNotesHandler, AllNotesFolderIdTEAM } from 'utils/note';
-import { Trans } from 'components/Translation';
+import { useSearchParams } from 'react-router-dom';
 
+import { IconButton } from 'components/IconButton';
+import { Trans } from 'components/Translation';
 import { useNotesContainer } from '../../../../contexts';
 import useEventListener from 'hooks/useEventListener';
+import { defineNotesHandler, AllNotesFolderIdTEAM } from 'utils/note';
 
 export const TEAM_FOLDER_WRAPPER = 'team_folder_wrapper';
 export const CHANGE_TEAM_MODE = 'change_team_mode';
 export const FOLDER_TITLE = 'folder_title';
 
 type PersonalsTeamFoldersProps = {
-  handleTEAMSelected: (itemID: string) => any;
   setConfirmTEAMModal: Dispatch<SetStateAction<boolean>>;
   actionTEAMModal: MutableRefObject<null | string>;
   teamsActions: Record<string, string | null>;
 };
 
 const PersonalsTeamFolders: FC<PersonalsTeamFoldersProps> = ({
-  handleTEAMSelected,
   setConfirmTEAMModal,
   actionTEAMModal,
   teamsActions,
@@ -28,15 +27,10 @@ const PersonalsTeamFolders: FC<PersonalsTeamFoldersProps> = ({
   const mediumScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
   const ref = useRef<HTMLDivElement | null>();
 
-  const {
-    setArchiveMode,
-    archiveMode,
-    setSelectedFolder,
-    selectedFolder,
-    foldersWithNotesTEAM,
-    setFoldersWithNotesTEAM,
-    setSelectedTEAMFolder,
-  } = useNotesContainer();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const { setArchiveMode, archiveMode, foldersWithNotesTEAM, setFoldersWithNotesTEAM, setSearchValue } =
+    useNotesContainer();
 
   const teamArchivedMode = archiveMode.team;
 
@@ -68,10 +62,8 @@ const PersonalsTeamFolders: FC<PersonalsTeamFoldersProps> = ({
     ) {
       return;
     }
-    if (selectedFolder !== null) {
-      setSelectedFolder(() => null);
-    }
-    handleTEAMSelected(id);
+    setSearchParams({ folder: id });
+    setSearchValue('');
   };
 
   const btnsActionsHandle = (itemId: string, notesLength: number) => {
@@ -158,26 +150,26 @@ const PersonalsTeamFolders: FC<PersonalsTeamFoldersProps> = ({
       </div>
       <div className={css({ marginTop: '48px' })}>
         {foldersWithNotesTEAM?.map((item) => {
-          const { selected } = item;
+          const { id } = item;
           return (
             <div
               className={css({ position: 'relative' })}
-              key={item.id}
-              data-test-id='folder-item'
-              onClick={(e) => handleExpandFolder(e, item.id)}
+              key={id}
+              data-test-id={id}
+              onClick={(e) => handleExpandFolder(e, id)}
             >
-              <div className={css(itemListStyle({ selected }))}>
+              <div className={css(itemListStyle({ selected: searchParams.get('folder') === id }))}>
                 <div className={css(marginFlex)}>
                   <span className={css(folderTitle)}>{item.title}</span>
                   <span className={css(quantityStyle)}>{defineNotesHandler(item.notes.length)}</span>
                 </div>
                 <div className={css({ display: 'flex', alignItems: 'center' })}>
-                  {item.id !== AllNotesFolderIdTEAM && (
+                  {id !== AllNotesFolderIdTEAM && (
                     <div className={css(flexStyle)}>
                       <div
                         className={css(dotsStyle)}
                         data-test-id='dots-items'
-                        onClick={(e) => selectedDotsActionhandler(e, item.id)}
+                        onClick={(e) => selectedDotsActionhandler(e, id)}
                         id='dots'
                       >
                         <span />
@@ -187,13 +179,13 @@ const PersonalsTeamFolders: FC<PersonalsTeamFoldersProps> = ({
                     </div>
                   )}
 
-                  {item.selectedDots && btnsActionsHandle(item.id, item.notes.length)}
+                  {item.selectedDots && btnsActionsHandle(id, item.notes.length)}
 
                   <div className={css({ display: 'flex', alignItems: 'center' })}>
                     <IconButton
                       iconStyles={{ marginRight: '24px' }}
                       graphic='arrowRight'
-                      onPress={(e) => handleExpandFolder(e, item.id)}
+                      onPress={(e) => handleExpandFolder(e, id)}
                     />
                   </div>
                 </div>
@@ -209,7 +201,7 @@ const PersonalsTeamFolders: FC<PersonalsTeamFoldersProps> = ({
           data-test-id={CHANGE_TEAM_MODE}
           onPress={() => {
             setArchiveMode((prev) => ({ ...prev, team: !prev.team }));
-            setSelectedTEAMFolder(() => null);
+            setSearchParams({});
           }}
         >
           {!teamArchivedMode ? 'Archived Folders' : 'Personal Folders'}

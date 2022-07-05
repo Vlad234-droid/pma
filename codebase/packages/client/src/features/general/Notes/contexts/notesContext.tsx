@@ -1,52 +1,37 @@
 import React, { createContext, FC, useContext, useState } from 'react';
-import { FoldersWithNotesTypes, FoldersWithNotesTypesTEAM, NoteData, NotesType, NotesTypeTEAM } from '../configs';
+import { NoteData, NoteTeamData } from '../configs';
 
 const defaultData = {
-  selectedFolder: null,
-  setSelectedFolder: () => null,
   foldersWithNotes: [],
-  setFoldersWithNotes: () => null,
-  selectedNoteToEdit: null,
-  setSelectedNoteToEdit: () => null,
-  selectedTEAMFolder: null,
-  setSelectedTEAMFolder: () => [],
+  setFoldersWithNotes: () => [],
   foldersWithNotesTEAM: [],
   setFoldersWithNotesTEAM: () => [],
-  selectedTEAMNoteToEdit: null,
-  setSelectedTEAMNoteToEdit: () => null,
   archiveMode: {
     user: false,
     team: false,
   },
   setArchiveMode: () => ({}),
+  searchValue: '',
+  setSearchValue: () => '',
 };
 
 type Data = {
-  selectedFolder: null | NoteData;
-  setSelectedFolder: (T) => void;
-  foldersWithNotes: [] | Array<FoldersWithNotesTypes>;
+  foldersWithNotes: [] | Array<NoteData>;
   setFoldersWithNotes: (T) => void;
-  selectedNoteToEdit: NotesType | null;
-  setSelectedNoteToEdit: (T) => void;
-  selectedTEAMFolder: null | NoteData;
-  setSelectedTEAMFolder: (T) => void;
-  foldersWithNotesTEAM: Array<FoldersWithNotesTypesTEAM> | [];
+  foldersWithNotesTEAM: [] | Array<NoteTeamData>;
   setFoldersWithNotesTEAM: (T) => void;
-  selectedTEAMNoteToEdit: null | NotesTypeTEAM;
-  setSelectedTEAMNoteToEdit: (T) => void;
   archiveMode: { user: boolean; team: boolean };
   setArchiveMode: (T) => void;
+  searchValue: string;
+  setSearchValue: (T) => void;
 };
 
 export const NotesContext = createContext<Data>(defaultData);
 
 export const NotesProvider: FC = ({ children }) => {
-  const [selectedFolder, setSelectedFolder] = useState<NoteData | null>(null);
-  const [foldersWithNotes, setFoldersWithNotes] = useState<Array<FoldersWithNotesTypes> | []>([]);
-  const [selectedNoteToEdit, setSelectedNoteToEdit] = useState<NotesType | null>(null);
-  const [selectedTEAMFolder, setSelectedTEAMFolder] = useState<NoteData | null>(null);
-  const [foldersWithNotesTEAM, setFoldersWithNotesTEAM] = useState<Array<FoldersWithNotesTypesTEAM> | []>([]);
-  const [selectedTEAMNoteToEdit, setSelectedTEAMNoteToEdit] = useState<NotesTypeTEAM | null>(null);
+  const [foldersWithNotes, setFoldersWithNotes] = useState<Array<NoteData> | []>([]);
+  const [foldersWithNotesTEAM, setFoldersWithNotesTEAM] = useState<Array<NoteTeamData> | []>([]);
+  const [searchValue, setSearchValue] = useState<string>('');
   const [archiveMode, setArchiveMode] = useState<{ user: boolean; team: boolean }>({
     user: false,
     team: false,
@@ -55,20 +40,14 @@ export const NotesProvider: FC = ({ children }) => {
   return (
     <NotesContext.Provider
       value={{
-        selectedFolder,
-        setSelectedFolder,
         foldersWithNotes,
         setFoldersWithNotes,
-        selectedNoteToEdit,
-        setSelectedNoteToEdit,
-        selectedTEAMFolder,
-        setSelectedTEAMFolder,
         foldersWithNotesTEAM,
         setFoldersWithNotesTEAM,
-        selectedTEAMNoteToEdit,
-        setSelectedTEAMNoteToEdit,
         archiveMode,
         setArchiveMode,
+        searchValue,
+        setSearchValue,
       }}
     >
       {children}

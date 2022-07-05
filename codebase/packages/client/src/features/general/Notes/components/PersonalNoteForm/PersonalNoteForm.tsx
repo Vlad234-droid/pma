@@ -13,7 +13,7 @@ import { ButtonsWrapper } from 'components/ButtonsWrapper';
 import get from 'lodash.get';
 import { NEW_FOLDER_ID } from 'utils';
 import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
-import { schemaNotes } from '../../configs/schema';
+import { schemaNotes } from '../../configs';
 
 export const MODAL_WRAPPER = 'modal-wrapper';
 

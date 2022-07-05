@@ -117,39 +117,7 @@ export const defineBtnTitle = (actionTEAMModal, t) => {
   return obg[actionTEAMModal];
 };
 
-export const filterNotesHandler = (
-  setSelectedTEAMFolder,
-  setSelectedFolder,
-  foldersWithNotes,
-  setFoldersWithNotes,
-  foldersWithNotesTEAM,
-  setFoldersWithNotesTEAM,
-  notesSelect,
-  searchValue,
-) => {
-  setSelectedTEAMFolder(() => null);
-  setSelectedFolder(() => null);
-
-  if (foldersWithNotes !== null) {
-    setFoldersWithNotes((prev) => {
-      const arr = [...prev];
-      arr.forEach((item) => {
-        item.selected = false;
-        item.selectedDots = false;
-      });
-      return arr;
-    });
-  }
-  if (foldersWithNotesTEAM !== null) {
-    setFoldersWithNotesTEAM((prev) => {
-      const arr = [...prev];
-      arr.forEach((item) => {
-        item.selected = false;
-        item.selectedDots = false;
-      });
-      return arr;
-    });
-  }
+export const filterNotesHandler = (notesSelect, searchValue) => {
   const filteredNotes = filterNotesByTitle(notesSelect, searchValue);
 
   return {
@@ -167,78 +135,3 @@ export const getNotesFolderTitle = (folderUuid: string, foldersList: Array<any>)
   foldersList.find((item) => item.id === folderUuid)
     ? foldersList.find((item) => item.id === folderUuid).title
     : 'All notes' ?? '';
-
-export const getNotes = (foldersWithNotes, t) => {
-  return {
-    require: [
-      {
-        id: '1',
-        type: 'input',
-        title: t('title', 'Title'),
-        placeholder: t('enter_a_title_for_your_note', 'Enter a title for your note'),
-      },
-      {
-        id: '2',
-        type: 'textarea',
-        title: t('note', 'Note'),
-        placeholder: t('write_your_note_here', 'Write your note here'),
-      },
-      {
-        id: '3',
-        type: 'select',
-        title: t('optional_folder', 'Folder (optional)'),
-        placeholder: t('select_a_folder', 'Select a folder'),
-
-        field_options: [
-          ...foldersWithNotes?.map((item) => ({ value: `${item.id}`, label: item.title })),
-          { value: NEW_FOLDER_ID, label: t('add_new_folder', '+ Add new folder') },
-        ],
-      },
-    ],
-    option: {
-      id: '4',
-      type: 'input',
-      title: t('folder_name', 'Folder name'),
-      placeholder: t('enter_a_name_for_your_new_folder', 'Enter a name for your new folder'),
-    },
-  };
-};
-
-export const getFolder = (t) => {
-  return [
-    {
-      id: '1',
-      type: 'input',
-      title: t('folder_name', 'Folder name'),
-      placeholder: t('enter_a_name_for_your_new_folder', 'Enter a name for your new folder'),
-    },
-  ];
-};
-
-export const getEditedNote = (definePropperEditMode, foldersWithNotes, folderUuid, t) => {
-  return [
-    {
-      id: '1',
-      type: 'input',
-      title: t('title', 'Title'),
-      placeholder: t('enter_a_title_for_your_note', 'Enter a title for your note'),
-    },
-    {
-      id: '2',
-      type: 'textarea',
-      title: t('note', 'Note'),
-      placeholder: t('write_your_note_here', 'Write your note here'),
-    },
-    {
-      id: '3',
-      type: 'select',
-      title: t('optional_folder', 'Folder (optional)'),
-      placeholder: t('select_a_folder', 'Select a folder'),
-
-      field_options:
-        definePropperEditMode !== null
-          ? definePropperFieldOptions(foldersWithNotes, folderUuid)
-          : definePropperFieldTeamOptions(foldersWithNotes, folderUuid),
-    },
-  ];
-};
