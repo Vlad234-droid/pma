@@ -2,7 +2,6 @@ import React, { FC, useEffect, useMemo } from 'react';
 import { Rule, useStyle } from '@pma/dex-wrapper';
 import { reviewsMetaSelector } from '@pma/store';
 import { Trans } from 'components/Translation';
-import { ObjectiveTypes } from 'features/general/Objectives';
 import Section from 'components/Section';
 import { Accordion } from 'features/bank/ObjectiveAccordion';
 import { useSelector } from 'react-redux';
@@ -10,18 +9,13 @@ import { IconButton } from 'components/IconButton';
 import { downloadPDF, PrioritiesDocument, usePDF } from '@pma/pdf-renderer';
 import Spinner from 'components/Spinner';
 import { TogglePriority } from '../TogglePriority';
+import { PropsType, withSection } from '../../hoc/withSection';
 
 export const TEST_ID = 'objectives-test-id';
 
-type Props = {
-  objectives: ObjectiveTypes.Objective[];
-};
-
-const Objectives: FC<Props> = ({ objectives = [] }) => {
+const Objectives: FC<PropsType> = ({ objectives, handleSelectTimelinePoint, timelinePoints, activeTimelinePoints }) => {
   const { css } = useStyle();
-
   const { loading: reviewLoading } = useSelector(reviewsMetaSelector);
-
   const document = useMemo(() => <PrioritiesDocument items={objectives} />, [JSON.stringify(objectives)]);
   const [instance, updateInstance] = usePDF({ document });
 
@@ -33,7 +27,11 @@ const Objectives: FC<Props> = ({ objectives = [] }) => {
 
   return (
     <>
-      <TogglePriority />
+      <TogglePriority
+        handleSelectTimelinePoint={handleSelectTimelinePoint}
+        timelinePoints={timelinePoints}
+        activeTimelinePoints={activeTimelinePoints}
+      />
       <Section
         left={{
           content: (
@@ -97,4 +95,4 @@ const iconButtonStyles: Rule = ({ theme }) => ({
   letterSpacing: '0px',
 });
 
-export default Objectives;
+export default withSection(Objectives);

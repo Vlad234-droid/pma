@@ -1,15 +1,24 @@
-import React, { FC, useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { Rule, useStyle } from '@pma/dex-wrapper';
-import { ReviewType, Status } from 'config/enum';
+import { ObjectiveType, ReviewType, Status } from 'config/enum';
 import {
+  colleagueUUIDSelector,
   countByStatusReviews,
+  filterReviewsByTypeSelector,
   getReviewSchema,
   getTimelineByCodeSelector,
   isReviewsInStatus,
+  ReviewsActions,
   reviewsMetaSelector,
+  timelineTypesAvailabilitySelector,
 } from '@pma/store';
 import { Trans, useTranslation } from 'components/Translation';
-import { canEditAllObjectiveFn, EditButton, ObjectiveTypes } from 'features/general/Objectives';
+import {
+  canEditAllObjectiveFn,
+  EditButton,
+  ObjectiveTypes,
+  transformReviewsToObjectives,
+} from 'features/general/Objectives';
 import { Accordion } from 'features/general/ObjectiveAccordion';
 import Section from 'components/Section';
 import StatusBadge from 'components/StatusBadge';
@@ -18,16 +27,23 @@ import { USER } from 'config/constants';
 import { IconButton } from 'components/IconButton';
 import { downloadPDF, ObjectiveDocument, usePDF } from '@pma/pdf-renderer';
 import Spinner from 'components/Spinner';
+import useDispatch from 'hooks/useDispatch';
 
 export const TEST_ID = 'objectives-test-id';
 
-type Props = {
-  objectives: ObjectiveTypes.Objective[];
-};
-
-const Objectives: FC<Props> = ({ objectives = [] }) => {
+const Objectives = () => {
   const { css } = useStyle();
   const { t } = useTranslation();
+  const dispatch = useDispatch();
+
+  const colleagueUuid = useSelector(colleagueUUIDSelector);
+  const originObjectives = useSelector(filterReviewsByTypeSelector(ReviewType.OBJECTIVE));
+  const objectiveSchema = useSelector(getReviewSchema(ReviewType.OBJECTIVE));
+  const { components = [] } = objectiveSchema;
+  const formElements = components.filter((component) => component.type != 'text');
+  const objectives: ObjectiveTypes.Objective[] = transformReviewsToObjectives(originObjectives, formElements);
+  const timelineTypes = useSelector(timelineTypesAvailabilitySelector(colleagueUuid)) || {};
+  const canShowObjectives = timelineTypes[ObjectiveType.OBJECTIVE];
 
   const { loading: reviewLoading } = useSelector(reviewsMetaSelector);
   const timelineObjective = useSelector(getTimelineByCodeSelector(ReviewType.OBJECTIVE, USER.current)) || {};
@@ -37,7 +53,6 @@ const Objectives: FC<Props> = ({ objectives = [] }) => {
   const document = useMemo(() => <ObjectiveDocument items={objectives} />, [JSON.stringify(objectives)]);
   const [instance, updateInstance] = usePDF({ document });
 
-  const objectiveSchema = useSelector(getReviewSchema(ReviewType.OBJECTIVE));
   const countDraftReviews = useSelector(countByStatusReviews(ReviewType.OBJECTIVE, Status.DRAFT)) || 0;
   const countDeclinedReviews = useSelector(countByStatusReviews(ReviewType.OBJECTIVE, Status.DECLINED)) || 0;
   const countWaitingForApprovalReviews =
@@ -55,6 +70,16 @@ const Objectives: FC<Props> = ({ objectives = [] }) => {
       updateInstance();
     }
   }, [JSON.stringify(objectives)]);
+
+  useEffect(() => {
+    if (canShowObjectives) {
+      dispatch(ReviewsActions.getReviews({ pathParams: { colleagueUuid, cycleUuid: 'CURRENT' } }));
+    }
+
+    return () => {
+      dispatch(ReviewsActions.clearReviewData());
+    };
+  }, [canShowObjectives]);
 
   return (
     <Section

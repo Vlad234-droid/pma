@@ -11,10 +11,16 @@ type Config = {
 
 const generateReview = (config?: Config) => {
   const review: Review = {
-    number: '123',
+    number: 123,
     status: config?.status || Status.PENDING,
     type: config?.reviewType || ReviewType.OBJECTIVE,
     uuid: 'mocked_review_uuid',
+    changeStatusReason: 'string',
+    lastUpdatedTime: 'string',
+    colleagueUuid: 'string',
+    performanceCycleUuid: 'sss',
+    properties: {},
+    tlPointUuid: 'string',
   };
 
   // const review: Review = {

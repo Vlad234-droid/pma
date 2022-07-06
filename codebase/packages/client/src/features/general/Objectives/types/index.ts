@@ -28,6 +28,7 @@ type Review = {
   status: Status;
   type: ReviewType;
   uuid: string;
+  tlPointUuid: string;
 };
 
 interface BorderedComponent extends Component {

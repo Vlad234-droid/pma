@@ -72,6 +72,7 @@ export const hasTimelineAccessesSelector = ({
     return canShow;
   });
 
+// todo think about remove this selector
 export const timelineTypesAvailabilitySelector = (colleagueUuid) =>
   createSelector(usersSelector, timelineSelector, (user, { meta, ...rest }) => {
     // @ts-ignore
@@ -80,6 +81,7 @@ export const timelineTypesAvailabilitySelector = (colleagueUuid) =>
     const reviewTypes = data?.map(({ reviewType }) => reviewType);
     if (reviewTypes?.length) {
       return {
+        [ReviewType.QUARTER]: reviewTypes.includes(ReviewType.QUARTER),
         [ReviewType.OBJECTIVE]: reviewTypes.includes(ReviewType.OBJECTIVE),
         [ReviewType.MYR]: reviewTypes.includes(ReviewType.MYR),
         [ReviewType.EYR]: reviewTypes.includes(ReviewType.EYR),

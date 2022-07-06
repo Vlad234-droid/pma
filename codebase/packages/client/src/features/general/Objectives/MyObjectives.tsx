@@ -1,32 +1,25 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import {
   colleagueUUIDSelector,
-  filterReviewsByTypeSelector,
-  getReviewSchema,
   ObjectiveSharingActions,
-  ReviewsActions,
-  reviewsMetaSelector,
   SchemaActions,
-  schemaMetaSelector,
   TimelineActions,
   timelinesExistSelector,
   timelinesMetaSelector,
   timelineTypesAvailabilitySelector,
 } from '@pma/store';
 
-import { ObjectiveTypes as OT, transformReviewsToObjectives } from './';
 import useDispatch from 'hooks/useDispatch';
 import { Page } from 'pages';
 import { useTranslation } from 'components/Translation';
 import { useHeaderContainer } from 'contexts/headerContext';
-import { ObjectiveType, ReviewType } from 'config/enum';
+import { ObjectiveType } from 'config/enum';
 
 // todo think hove resolve on page level
 import { ObjectivesSection } from './components/DinamicBlocks/ObjectivesSection';
 import { useTenant } from '../Permission';
-import { Tenant } from 'utils';
 
 export const TEST_ID = 'my-objectives-page';
 const CURRENT = 'CURRENT';
@@ -37,25 +30,13 @@ const MyObjectives: FC = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const { setLinkTitle } = useHeaderContainer();
-  const tenant = useTenant();
 
-  const originObjectives = useSelector(filterReviewsByTypeSelector(ReviewType.OBJECTIVE));
-
-  const [objectives, setObjectives] = useState<OT.Objective[]>([]);
-
-  const { loaded: schemaLoaded } = useSelector(schemaMetaSelector);
-  const { loaded: reviewLoaded } = useSelector(reviewsMetaSelector);
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const timelinesExist = useSelector(timelinesExistSelector(colleagueUuid));
   const { loaded: timelinesLoaded } = useSelector(timelinesMetaSelector());
-  const schema = useSelector(getReviewSchema(ReviewType.OBJECTIVE));
-  const { components = [] } = schema;
   const timelineTypes = useSelector(timelineTypesAvailabilitySelector(colleagueUuid)) || {};
 
-  const canShowObjectives = timelineTypes[ObjectiveType.OBJECTIVE];
   const canShowAnnualReview = !timelineTypes[ObjectiveType.MYR] && timelineTypes[ObjectiveType.EYR];
-
-  const formElements = components.filter((component) => component.type != 'text');
 
   useEffect(() => {
     colleagueUuid && dispatch(ObjectiveSharingActions.checkSharing({ colleagueUuid, cycleUuid: CURRENT }));
@@ -75,26 +56,10 @@ const MyObjectives: FC = () => {
   }, [timelinesLoaded, timelinesExist]);
 
   useEffect(() => {
-    if (reviewLoaded && schemaLoaded) {
-      setObjectives(transformReviewsToObjectives(originObjectives, formElements, tenant));
-    }
-  }, [reviewLoaded, schemaLoaded]);
-
-  useEffect(() => {
     if (canShowAnnualReview) {
       setLinkTitle({ [Page.OBJECTIVES_VIEW]: t('reviews', 'Reviews') });
     }
   }, [canShowAnnualReview]);
-
-  useEffect(() => {
-    if (canShowObjectives) {
-      dispatch(ReviewsActions.getReviews({ pathParams: { colleagueUuid, cycleUuid: CURRENT } }));
-    }
-
-    return () => {
-      dispatch(ReviewsActions.clearReviewData());
-    };
-  }, [canShowObjectives]);
 
   useEffect(() => {
     dispatch(SchemaActions.getSchema({ colleagueUuid }));
@@ -104,7 +69,11 @@ const MyObjectives: FC = () => {
     };
   }, [colleagueUuid]);
 
-  return <div data-test-id={TEST_ID}>{canShowObjectives && <ObjectivesSection objectives={objectives} />}</div>;
+  return (
+    <div data-test-id={TEST_ID}>
+      <ObjectivesSection />
+    </div>
+  );
 };
 
 export default MyObjectives;

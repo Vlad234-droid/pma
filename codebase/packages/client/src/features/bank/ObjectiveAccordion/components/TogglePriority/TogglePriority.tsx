@@ -1,38 +1,14 @@
-import React, { useState, useCallback } from 'react';
+import React, { FC } from 'react';
 import { Rule, useStyle } from '@pma/dex-wrapper';
-import { TimelinePoint, TimelinePointStatusEnum } from '@pma/openapi';
-import { ReviewType } from 'config/types';
-import { colleagueUUIDSelector, ReviewsActions, getTimelinesByReviewTypeSelector } from '@pma/store';
-import { useSelector } from 'react-redux';
-import useDispatch from 'hooks/useDispatch';
-import { USER } from 'config/constants';
+import { Timeline } from 'config/types';
 
-const CURRENT = 'CURRENT';
-
-// thinking about move to separate feat but seems it is only for bank and specific for this section.
-const TogglePriority = () => {
+type Props = {
+  handleSelectTimelinePoint: (T) => void;
+  timelinePoints: Timeline[];
+  activeTimelinePoints?: Timeline;
+};
+const TogglePriority: FC<Props> = ({ handleSelectTimelinePoint, timelinePoints, activeTimelinePoints }) => {
   const { css } = useStyle();
-  const colleagueUuid = useSelector(colleagueUUIDSelector);
-  const dispatch = useDispatch();
-  // todo use QUARTER after back is done
-  const timelinePoints: TimelinePoint[] =
-    useSelector(getTimelinesByReviewTypeSelector(ReviewType.OBJECTIVE, USER.current)) || {};
-  const visibleTimelinePoints = timelinePoints.filter(
-    (timelinePoint) => timelinePoint.status !== TimelinePointStatusEnum.NotStarted,
-  );
-
-  const timelinePoint = visibleTimelinePoints.find(
-    (timelinePoint) => timelinePoint.status === TimelinePointStatusEnum.NotStarted,
-  );
-  const [selectedTimelinePoint, setTimelinePoint] = useState(timelinePoint);
-
-  const handleSelectTimelinePoint = useCallback((e) => {
-    const uuid = e.currentTarget.dataset['uuid'];
-    const timelinePoint = visibleTimelinePoints.find((timelinePoint) => timelinePoint.uuid === uuid);
-    setTimelinePoint(timelinePoint);
-    // todo not clear how to interact with QUARTER on backend. after back is done update request
-    dispatch(ReviewsActions.getReviews({ pathParams: { colleagueUuid, cycleUuid: CURRENT } }));
-  }, []);
 
   if (timelinePoints?.length <= 1) {
     return null;
@@ -40,7 +16,7 @@ const TogglePriority = () => {
   return (
     <div className={css(wrapperStyle)}>
       {timelinePoints.map((timelinePoint, index) => {
-        if (timelinePoint.uuid === selectedTimelinePoint?.uuid) {
+        if (timelinePoint.uuid === activeTimelinePoints?.uuid) {
           return (
             <div className={css(activeStepStyle)} key={timelinePoint.uuid}>
               <span className={css({ padding: '2px 8px 4px' })}>Quarter {index + 1}</span>

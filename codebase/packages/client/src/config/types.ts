@@ -15,10 +15,16 @@ export type Timeline = {
 };
 
 export type Review = {
-  number: string;
+  changeStatusReason: string;
+  lastUpdatedTime: string;
+  colleagueUuid: string;
+  number: number;
+  performanceCycleUuid: string;
+  properties: Record<string, string>;
   status: Status;
   type: ReviewType;
   uuid: string;
+  tlPointUuid: string;
 };
 
 export type BaseEmployee = {

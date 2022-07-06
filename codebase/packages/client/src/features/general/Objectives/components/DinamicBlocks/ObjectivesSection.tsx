@@ -1,13 +1,7 @@
-import React, { useMemo, FC } from 'react';
+import React, { useMemo } from 'react';
 import { getTenant, Tenant } from 'utils';
-import { ObjectiveTypes } from 'features/general/Objectives';
 
-// todo think on same type between tenant
-type Props = {
-  objectives: ObjectiveTypes.Objective[];
-};
-
-export const ObjectivesSection: FC<Props> = React.memo((props) => {
+export const ObjectivesSection = React.memo(() => {
   const tenant: Tenant = getTenant();
   const Block = useMemo(
     () =>
@@ -17,5 +11,5 @@ export const ObjectivesSection: FC<Props> = React.memo((props) => {
     [],
   );
 
-  return <Block {...props} />;
+  return <Block />;
 });
