@@ -4,14 +4,14 @@ import { useSelector } from 'react-redux';
 import { getColleagueByUuidSelector } from '@pma/store';
 import { yupResolver } from '@hookform/resolvers/yup';
 import get from 'lodash.get';
-import { Trans } from 'components/Translation';
+import { Trans, useTranslation } from 'components/Translation';
 import { TileWrapper } from 'components/Tile';
 import { Attention, Field, Item, Textarea } from 'components/Form';
 import { ColleaguesFinder } from 'components/ColleaguesFinder';
 import FeedbackInfo from '../FeedbackInfo';
 import { ButtonsWrapper } from 'components/ButtonsWrapper';
 import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
-import { createGiveFeedbackNewSchema, GiveFeedbackFormProps } from '../../config';
+import { createRespondFeedbackSchema, GiveFeedbackFormProps } from '../../config';
 
 export const FORM_WRAPPER = 'form_wrapper';
 
@@ -33,6 +33,7 @@ const GiveFeedbackForm: FC<GiveFeedbackFormProps> = ({
 }) => {
   const { css, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
+  const { t } = useTranslation();
 
   const {
     handleSubmit,
@@ -41,7 +42,7 @@ const GiveFeedbackForm: FC<GiveFeedbackFormProps> = ({
     formState: { isValid, errors },
   } = useFormWithCloseProtection({
     mode: 'onChange',
-    resolver: yupResolver(createGiveFeedbackNewSchema),
+    resolver: yupResolver(createRespondFeedbackSchema(t)),
     defaultValues,
   });
 
