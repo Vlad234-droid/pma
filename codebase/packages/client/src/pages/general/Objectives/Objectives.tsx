@@ -35,6 +35,15 @@ const ObjectivesPage: FC = () => {
     [],
   );
 
+  const Shortcuts = useMemo(
+    () =>
+      //@ts-ignore
+      tenant === T.BANK
+        ? React.lazy(() => import('features/bank/Objectives').then((module) => ({ default: module.ShortcutsSection })))
+        : () => null,
+    [],
+  );
+
   const handleWidgetClick = () => {
     // @ts-ignore
     if (tenant === T.GENERAL) {
@@ -58,6 +67,7 @@ const ObjectivesPage: FC = () => {
           <MyReviewsSection />
           <CompletedReviewsSection />
           <ReviewFilesSection />
+          <Shortcuts />
         </div>
         <div className={css(widgetsBlock)}>
           <ShareWidget stopShare={true} sharing={false} customStyle={shareWidgetStyles} />
