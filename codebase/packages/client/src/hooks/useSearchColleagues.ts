@@ -11,7 +11,7 @@ const useSearchColleagues = (fields: Record<string, string> = {}) => {
   const clearColleagueList = () => dispatch(ColleaguesActions.clearColleagueList());
 
   const handleSearchColleagues = (value: string, searchOption = SearchOption.NAME) => {
-    if (value === '' || value.length <= 1) {
+    if (value === '' || value.length < 3) {
       clearColleagueList();
       return;
     }

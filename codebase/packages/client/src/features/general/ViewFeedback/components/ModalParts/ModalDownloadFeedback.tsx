@@ -92,6 +92,7 @@ const ModalDownloadFeedback: FC<ModalDownloadFeedbackProps> = ({
           date={formData.date}
           setError={methods.setError}
           formState={formState}
+          setSelected={setSelected}
         />
         {selectedColleague && (
           <SubmitPart

@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { getColleagueByUuidSelector } from '@pma/store';
 import { yupResolver } from '@hookform/resolvers/yup';
 import get from 'lodash.get';
-import { Trans, useTranslation } from 'components/Translation';
+import { Trans } from 'components/Translation';
 import { TileWrapper } from 'components/Tile';
 import { Attention, Field, Item, Textarea } from 'components/Form';
 import { ColleaguesFinder } from 'components/ColleaguesFinder';
@@ -33,7 +33,6 @@ const GiveFeedbackForm: FC<GiveFeedbackFormProps> = ({
 }) => {
   const { css, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
-  const { t } = useTranslation();
 
   const {
     handleSubmit,

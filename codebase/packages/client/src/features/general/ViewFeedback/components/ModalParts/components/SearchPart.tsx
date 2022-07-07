@@ -1,14 +1,15 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { UseFormReturn } from 'react-hook-form';
-import { useStyle } from '@pma/dex-wrapper';
+import { Rule, Styles, useStyle } from '@pma/dex-wrapper';
 import { ColleaguesActions } from '@pma/store';
 import { useDispatch } from 'react-redux';
 
 import { Item, Field } from 'components/Form';
 import { ColleaguesFinder } from 'components/ColleaguesFinder';
 import Datepicker from 'components/Datepicker';
+import { Icon, RoundIcon } from 'components/Icon';
 import { useTranslation } from 'components/Translation';
-import { InputWithDropdown } from 'components/InputWithDropdown';
+import DrawerModal from 'components/DrawerModal';
 import { SearchOption } from 'config/enum';
 
 export const WRAPPER = 'search-wrapper';
@@ -22,41 +23,49 @@ const getColleagueName = (data) => {
 type Props = Pick<UseFormReturn, 'setValue' | 'setError' | 'formState'> & {
   selectedColleague: any;
   date: string;
+  setSelected: (T) => void;
 };
 
-const SearchPart: FC<Props> = ({ setValue, selectedColleague, date, setError, formState }) => {
+const SearchPart: FC<Props> = ({ setValue, selectedColleague, date, setError, formState, setSelected }) => {
   const { css } = useStyle();
   const dispatch = useDispatch();
   const { t } = useTranslation();
 
+  const [open, setOpen] = useState<boolean>(false);
+  const [active, setActive] = useState<SearchOption>(SearchOption.NAME);
+
   return (
     <div className={css({ marginTop: '32px' })} data-test-id={WRAPPER}>
-      <InputWithDropdown
-        onChange={() => dispatch(ColleaguesActions.clearColleagueList())}
-        visible={true}
-        options={[
-          { value: SearchOption.NAME, label: t('by_name', 'By name') },
-          { value: SearchOption.EMAIL, label: t('by_email_address', 'By email address') },
-        ]}
-        dropDownStyles={{
-          borderRadius: '0px 25px 25px 0px',
+      <div className={css(roundIconStyle)} onClick={() => setOpen((prev) => !prev)}>
+        <RoundIcon strokeWidth={7}>
+          <Icon graphic='settings' invertColors={false} iconStyles={modalCloseOptionStyle} />
+        </RoundIcon>
+      </div>
+      <ColleaguesFinder
+        onSelect={(targetColleagueUuid) => {
+          setValue('targetColleagueUuid', targetColleagueUuid, { shouldValidate: true });
         }}
-      >
-        {({ active }) => (
-          <ColleaguesFinder
-            onSelect={(targetColleagueUuid) => {
-              setValue('targetColleagueUuid', targetColleagueUuid, { shouldValidate: true });
-            }}
-            selected={[]}
-            value={getColleagueName(selectedColleague)}
-            searchOption={active}
-            customStyles={{ marginTop: '0px', width: '100%' }}
-            inputStyles={{
-              borderRadius: '25px 0px 0px 25px !important',
-            }}
-          />
-        )}
-      </InputWithDropdown>
+        selected={[]}
+        value={getColleagueName(selectedColleague)}
+        searchOption={active}
+        customStyles={{ marginTop: '0px', width: '100%' }}
+        inputStyles={{
+          marginTop: '20px',
+        }}
+      />
+      {open && (
+        <DrawerModal
+          active={active}
+          setOpen={setOpen}
+          title={t('filter', 'Filter')}
+          onSelect={(filter) => {
+            setSelected([]);
+            setActive(filter);
+            dispatch(ColleaguesActions.clearColleagueList());
+            setOpen(false);
+          }}
+        />
+      )}
       <Field
         name={'date'}
         isOnTop={false}
@@ -70,5 +79,21 @@ const SearchPart: FC<Props> = ({ setValue, selectedColleague, date, setError, fo
     </div>
   );
 };
+
+const roundIconStyle: Rule = {
+  '& > div': {
+    marginLeft: 'calc(100% - 31px)',
+  },
+} as Styles;
+
+const modalCloseOptionStyle: Rule = () => ({
+  display: 'inline-block',
+  height: '20px',
+  paddingLeft: '0px',
+  paddingRight: '0px',
+  textDecoration: 'none',
+  border: 'none',
+  cursor: 'pointer',
+});
 
 export default SearchPart;

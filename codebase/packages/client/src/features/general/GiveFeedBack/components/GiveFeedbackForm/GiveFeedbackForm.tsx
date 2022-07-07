@@ -1,9 +1,8 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { getColleagueByUuidSelector, ColleaguesActions } from '@pma/store';
 import { yupResolver } from '@hookform/resolvers/yup';
 import get from 'lodash.get';
-import { useStyle, Rule } from '@pma/dex-wrapper';
-import { useParams } from 'react-router-dom';
+import { useStyle, Rule, Styles } from '@pma/dex-wrapper';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { Trans, useTranslation } from 'components/Translation';
@@ -11,14 +10,14 @@ import { TileWrapper } from 'components/Tile';
 import { Attention, Field, Item, Textarea } from 'components/Form';
 import { FeedbackInfo } from '../../components';
 import { ButtonsWrapper } from 'components/ButtonsWrapper';
-import { InputWithDropdown } from 'components/InputWithDropdown';
 import { ColleaguesFinder } from 'components/ColleaguesFinder';
-
-import { GiveFeedbackType } from '../../config/type';
-import { createGiveFeedbackSchema } from '../../config';
-import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
+import DrawerModal from 'components/DrawerModal';
+import { Icon, RoundIcon } from 'components/Icon';
 
 import { SearchOption } from 'config/enum';
+import { GiveFeedbackType, createGiveFeedbackSchema } from '../../config';
+
+import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
 
 export const FORM_WRAPPER = 'form-wrapper';
 
@@ -44,7 +43,9 @@ const GiveFeedbackForm: FC<Props> = ({ onSubmit, defaultValues, currentColleague
   const { css, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const { t } = useTranslation();
-  const { uuid } = useParams<{ uuid: string }>();
+
+  const [open, setOpen] = useState<boolean>(false);
+  const [active, setActive] = useState<SearchOption>(SearchOption.NAME);
 
   const dispatch = useDispatch();
 
@@ -98,35 +99,35 @@ const GiveFeedbackForm: FC<Props> = ({ onSubmit, defaultValues, currentColleague
         >
           <Trans i18nKey='select_to_give_feedback'>Select who you&apos;d like to give feedback to</Trans>
         </div>
+        {!selectedColleague && (
+          <div className={css(roundIconStyle)} onClick={() => setOpen((prev) => !prev)}>
+            <RoundIcon strokeWidth={7}>
+              <Icon graphic='settings' invertColors={false} iconStyles={modalCloseOptionStyle} />
+            </RoundIcon>
+          </div>
+        )}
 
-        <InputWithDropdown
-          onChange={() => dispatch(ColleaguesActions.clearColleagueList())}
-          visible={uuid === 'new' && !targetColleagueUuid}
-          options={[
-            { value: SearchOption.NAME, label: t('by_name', 'By name') },
-            { value: SearchOption.EMAIL, label: t('by_email_address', 'By email address') },
-          ]}
-          dropDownStyles={{
-            borderRadius: '0px 25px 25px 0px',
+        <ColleaguesFinder
+          searchOption={active}
+          onSelect={(colleagueUuid) => {
+            setValue('targetColleagueUuid', colleagueUuid, { shouldValidate: true });
           }}
-        >
-          {({ active }) => (
-            <ColleaguesFinder
-              searchOption={active}
-              onSelect={(colleagueUuid) => {
-                setValue('targetColleagueUuid', colleagueUuid, { shouldValidate: true });
-              }}
-              selected={[]}
-              value={getColleagueName(selectedColleague)}
-              error={get(errors, 'targetColleagueUuid.message')}
-              customStyles={{ marginTop: '0px', width: '100%' }}
-              inputStyles={{
-                borderRadius: uuid === 'new' && !targetColleagueUuid ? '25px 0px 0px 25px !important' : '50px',
-              }}
-            />
-          )}
-        </InputWithDropdown>
-
+          selected={[]}
+          value={getColleagueName(selectedColleague)}
+          error={get(errors, 'targetColleagueUuid.message')}
+        />
+        {open && (
+          <DrawerModal
+            active={active}
+            setOpen={setOpen}
+            title={t('filter', 'Filter')}
+            onSelect={(filter) => {
+              setActive(filter);
+              dispatch(ColleaguesActions.clearColleagueList());
+              setOpen(false);
+            }}
+          />
+        )}
         {selectedColleague && (
           <FeedbackInfo selectedPerson={selectedColleague} onClickMore={() => goToInfo(getValues())} />
         )}
@@ -201,5 +202,20 @@ const tileCustomStyles: Rule = {
   padding: '24px 24px 0px 24px',
   border: '2px solid #E5E5E5',
 };
+const roundIconStyle: Rule = {
+  '& > div': {
+    marginLeft: 'calc(100% - 31px)',
+  },
+} as Styles;
+
+const modalCloseOptionStyle: Rule = () => ({
+  display: 'inline-block',
+  height: '20px',
+  paddingLeft: '0px',
+  paddingRight: '0px',
+  textDecoration: 'none',
+  border: 'none',
+  cursor: 'pointer',
+});
 
 export default GiveFeedbackForm;

@@ -1,5 +1,5 @@
-import React, { FC, useEffect, useMemo } from 'react';
-import { Rule, theme, useStyle } from '@pma/dex-wrapper';
+import React, { FC, useEffect, useMemo, useState } from 'react';
+import { Rule, Styles, theme, useStyle } from '@pma/dex-wrapper';
 import get from 'lodash.get';
 import { ColleaguesActions, colleagueUUIDSelector, FeedbackActions, getReviews } from '@pma/store';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -11,12 +11,13 @@ import { Field, Item, Select, Textarea, Attention } from 'components/Form';
 import { ColleaguesFinder } from 'components/ColleaguesFinder';
 import { useTranslation, Trans } from 'components/Translation';
 import { TileWrapper } from 'components/Tile';
+import DrawerModal from 'components/DrawerModal';
 import { IconButton } from 'components/IconButton';
+import { Icon, RoundIcon } from 'components/Icon';
 import { ButtonsWrapper } from 'components/ButtonsWrapper';
 import { ArrowLeftIcon } from 'components/ArrowLeftIcon';
 import { buildPath } from '../../Routes';
 import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
-import { InputWithDropdown } from 'components/InputWithDropdown';
 import { createRequestFeedbackSchema } from '../config';
 import { Tesco, SearchOption } from 'config/enum';
 import { TargetType } from '../constants/type';
@@ -36,6 +37,9 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel, setIsInfoModalOpen }) 
   const reviews = useSelector(getReviews) || [];
   const currentColleagueUuid = useSelector(colleagueUUIDSelector);
   const navigate = useNavigate();
+
+  const [open, setOpen] = useState<boolean>(false);
+  const [active, setActive] = useState<SearchOption>(SearchOption.NAME);
 
   const AREA_OPTIONS = [
     { value: TargetType.GOAL, label: t('day_job', 'Day Job') },
@@ -117,38 +121,40 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel, setIsInfoModalOpen }) 
             Select which colleague(s) you would like to ask feedback from
           </Trans>
         </div>
+        <div className={css(roundIconStyle)} onClick={() => setOpen((prev) => !prev)}>
+          <RoundIcon strokeWidth={7}>
+            <Icon graphic='settings' invertColors={false} iconStyles={modalCloseOptionStyle} />
+          </RoundIcon>
+        </div>
 
         <form className={css({ marginTop: '8px' })}>
-          <InputWithDropdown
-            onChange={() => dispatch(ColleaguesActions.clearColleagueList())}
-            visible={true}
-            options={[
-              { value: SearchOption.NAME, label: t('by_name', 'By name') },
-              { value: SearchOption.EMAIL, label: t('by_email_address', 'By email address') },
-            ]}
-            dropDownStyles={{
-              borderRadius: '0px 25px 25px 0px',
+          <ColleaguesFinder
+            searchOption={active}
+            onSelect={handleSelect}
+            onBlur={() => handleBlur('colleagues')}
+            selected={formValues.colleagues || []}
+            error={errors['colleagues']?.message?.replace('colleagues', t('colleagues', 'Colleagues'))}
+            customStyles={{ marginTop: '0px', width: '100%' }}
+            inputStyles={{
+              paddingLeft: '36.7px',
             }}
-          >
-            {({ active }) => (
-              <ColleaguesFinder
-                searchOption={active}
-                onSelect={handleSelect}
-                onBlur={() => handleBlur('colleagues')}
-                selected={formValues.colleagues || []}
-                error={errors['colleagues']?.message?.replace('colleagues', t('colleagues', 'Colleagues'))}
-                customStyles={{ marginTop: '0px', width: '100%' }}
-                inputStyles={{
-                  borderRadius: '25px 0px 0px 25px !important',
-                  paddingLeft: '36.7px',
-                }}
-                withIcon={false}
-                marginBot={false}
-                customIcon={true}
-                multiple={true}
-              />
-            )}
-          </InputWithDropdown>
+            withIcon={false}
+            marginBot={false}
+            customIcon={true}
+            multiple={true}
+          />
+          {open && (
+            <DrawerModal
+              active={active}
+              setOpen={setOpen}
+              title={t('filter', 'Filter')}
+              onSelect={(filter) => {
+                setActive(filter);
+                dispatch(ColleaguesActions.clearColleagueList());
+                setOpen(false);
+              }}
+            />
+          )}
           <div className={css({ marginTop: '18px' })}>
             <Item
               withIcon={false}
@@ -341,6 +347,22 @@ const commentStyle: Rule = ({ theme }) => ({
   ...theme.font.fixed.f16,
   letterSpacing: '0px',
   marginTop: '0px',
+});
+
+const roundIconStyle: Rule = {
+  '& > div': {
+    marginLeft: 'calc(100% - 31px)',
+  },
+} as Styles;
+
+const modalCloseOptionStyle: Rule = () => ({
+  display: 'inline-block',
+  height: '20px',
+  paddingLeft: '0px',
+  paddingRight: '0px',
+  textDecoration: 'none',
+  border: 'none',
+  cursor: 'pointer',
 });
 
 export default RequestFeedback;

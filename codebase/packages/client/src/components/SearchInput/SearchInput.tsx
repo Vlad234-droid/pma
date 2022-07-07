@@ -131,13 +131,13 @@ const optionStyle: Rule = ({ theme }) => ({
 const optionsWrapperStyles: Rule = ({ theme }) => ({
   display: 'block',
   position: 'absolute',
-  width: 'clamp(100%, calc(100vw - 6vh), 560px)',
+  width: '100%',
   top: 0,
   // @ts-ignore
   border: `2px solid ${theme.colors.lightGray}`,
   borderRadius: theme.border.radius.sm,
   background: theme.colors.white,
-  zIndex: 999,
+  zIndex: theme.zIndex.i40,
 });
 
 const inputStyles: CreateRule<{ isValid: boolean }> =
@@ -160,7 +160,7 @@ const inputStyles: CreateRule<{ isValid: boolean }> =
 
 const relativeStyles: Rule = {
   //@ts-ignore
-  width: 'clamp(100%, calc(100vw - 6vh), 560px)',
+  width: '100%',
   position: 'relative',
   display: 'flex',
   justifyContent: 'flex-start',
