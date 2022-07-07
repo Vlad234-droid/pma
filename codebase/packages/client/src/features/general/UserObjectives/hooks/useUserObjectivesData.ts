@@ -22,11 +22,6 @@ export const useUserObjectivesData = (uuid, reviewLoaded, schemaLoaded, setObjec
   const { components = [] } = schema;
   const formElements = components.filter((component) => component.type != 'text');
 
-  const params = useMemo(
-    () => ({ pathParams: { colleagueUuid: uuid, type: ReviewType.OBJECTIVE, cycleUuid: 'CURRENT' } }),
-    [uuid],
-  );
-
   useEffect(() => {
     dispatch(PreviousReviewFilesActions.getPreviousReviewFiles({ colleagueUUID: uuid }));
   }, []);
@@ -38,7 +33,11 @@ export const useUserObjectivesData = (uuid, reviewLoaded, schemaLoaded, setObjec
   }, [reviewLoaded, schemaLoaded]);
 
   useEffect(() => {
-    dispatch(ReviewsActions.getReviews(params));
+    dispatch(
+      ReviewsActions.getReviews({
+        pathParams: { colleagueUuid: uuid, type: ReviewType.OBJECTIVE, cycleUuid: 'CURRENT' },
+      }),
+    );
     if (uuid) {
       dispatch(TimelineActions.getTimeline({ colleagueUuid: uuid }));
       dispatch(SchemaActions.getSchema({ colleagueUuid: uuid }));

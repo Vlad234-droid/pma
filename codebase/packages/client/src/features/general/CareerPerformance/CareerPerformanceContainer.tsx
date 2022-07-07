@@ -3,7 +3,6 @@ import { useSelector } from 'react-redux';
 import {
   colleagueUUIDSelector,
   getTimelineByCodeSelector,
-  getTimelineSelector,
   timelinesExistSelector,
   getTimelineMetaSelector,
   timelineTypesAvailabilitySelector,
@@ -15,7 +14,6 @@ import { USER } from 'config/constants';
 import { CareerPerformance } from './components/CareerPerformance';
 
 const CareerPerformanceContainer: FC = () => {
-  const { descriptions, startDates, summaryStatuses } = useSelector(getTimelineSelector(USER.current)) || {};
   const timelineTypes = useSelector(timelineTypesAvailabilitySelector(USER.current));
   const midYearReview = useSelector(getTimelineByCodeSelector(ObjectiveType.MYR, USER.current));
   const endYearReview = useSelector(getTimelineByCodeSelector(ObjectiveType.EYR, USER.current));
@@ -25,9 +23,6 @@ const CareerPerformanceContainer: FC = () => {
 
   return (
     <CareerPerformance
-      descriptions={descriptions}
-      startDates={startDates}
-      statuses={summaryStatuses}
       timelineTypes={timelineTypes}
       midYearReview={midYearReview}
       endYearReview={endYearReview}

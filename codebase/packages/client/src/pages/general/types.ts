@@ -13,7 +13,7 @@ enum Page {
   PERSONAL_DEVELOPMENT_HELP = 'personal-development-plan/help',
   OBJECTIVES_VIEW = 'objectives',
   CREATE_OBJECTIVES = 'objectives/new',
-  USER_OBJECTIVES = 'user-objective/:uuid',
+  USER_OBJECTIVES = 'users/:uuid/objectives',
   PROFILE = 'profile',
   SETTINGS = 'settings',
   MY_TEAM = 'my-team',

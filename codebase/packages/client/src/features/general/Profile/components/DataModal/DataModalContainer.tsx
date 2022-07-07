@@ -4,6 +4,7 @@ import { currentUserSelector } from '@pma/store';
 
 import DataModal from './DataModal';
 
+// TODO: should move from components to current feature
 const DataModalContainer: FC = () => {
   const { info } = useSelector(currentUserSelector);
 

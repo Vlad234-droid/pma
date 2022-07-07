@@ -1,10 +1,10 @@
 import React, { FC } from 'react';
 
-import List from '../List';
-import { Item } from '../../types';
-import useData from '../../hooks/useData';
+import List from '../components/List';
+import { Item } from '../types';
+import useData from '../hooks/useData';
 
-const Widget: FC = () => {
+const KnowledgeLibraryWidget: FC = () => {
   const ids = ['your-contribution', 'everyday-conversations', 'feedback-at-tesco', 'system-guidance-and-faqs'];
 
   const filterFn = (item: Item) => ids.includes(item.id);
@@ -19,4 +19,4 @@ const Widget: FC = () => {
   );
 };
 
-export default Widget;
+export default KnowledgeLibraryWidget;

@@ -1,8 +1,8 @@
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
 import { renderWithTheme } from 'utils/test';
-import Widget from './Widget';
-import { TEST_ID } from '../List/List';
+import KnowledgeLibraryWidget from './KnowledgeLibraryWidget';
+import { TEST_ID } from '../components/List/List';
 
 jest.mock('react-router-dom', () => ({
   ...(jest.requireActual('react-router-dom') as any),
@@ -49,7 +49,7 @@ describe('Widget', () => {
     },
   };
   it('#render', async () => {
-    const { getByTestId } = renderWithTheme(<Widget />, { ...state });
+    const { getByTestId } = renderWithTheme(<KnowledgeLibraryWidget />, { ...state });
     const wrapper = getByTestId(TEST_ID);
 
     expect(wrapper).toBeInTheDocument();

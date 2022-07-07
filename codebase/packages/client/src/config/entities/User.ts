@@ -14,8 +14,10 @@ export { Role, Status };
 
 export default interface User {
   id: number;
+  job: string;
   firstName: string;
   lastName: string;
+  fullName: string;
   name: string;
   status: Status;
   role: Role;

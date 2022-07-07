@@ -79,6 +79,7 @@ export const renderWithTheme = <TProps extends {} = {}>(
   });
 
   store.dispatch = jest.fn();
+
   const wrapper = render(
     <Provider store={store}>
       <I18nextProvider i18n={i18n}>

@@ -1,8 +1,9 @@
 import React, { FC } from 'react';
 import { CreateRule, useStyle } from '@pma/dex-wrapper';
-import { Contacts, PersonalInformation, ProfessionalInformation } from 'features/general/Profile';
+import { PersonalInformation, ProfessionalInformation } from 'features/general/Profile';
+import Contacts from 'features/general/Profile/components/Contacts';
 import { AuthConsumer } from 'contexts/authContext';
-import { AvatarName } from 'features/general/Profile/components/Widgets/Profile';
+import AvatarName from 'components/AvatarName';
 import { TileWrapper } from 'components/Tile';
 
 export const TEST_ID = 'profile-test-page';
@@ -18,7 +19,7 @@ const Profile: FC = () => {
           return (
             <TileWrapper>
               <div className={css(cardWrapper({ mobileScreen }))}>
-                <AvatarName user={user} />
+                {user && <AvatarName user={user} />}
                 <PersonalInformation user={user} />
                 <ProfessionalInformation user={user} />
                 <Contacts user={user} />

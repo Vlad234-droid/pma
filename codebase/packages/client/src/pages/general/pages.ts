@@ -259,6 +259,7 @@ const pages: Record<Page, PageComponent> = {
     title: (tenant, t) => t('title_colleague_overview'),
     withHeader: true,
     perform: [role.COLLEAGUE],
+    backPath: Page.MY_TEAM,
     tenant: [tenant.BANK, tenant.GENERAL],
   },
   [Page.PROFILE]: {

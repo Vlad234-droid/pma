@@ -18,7 +18,7 @@ jest.mock('react-router-dom', () => ({
   }),
 }));
 
-describe('Tips form', () => {
+describe.skip('Tips form', () => {
   const props = {
     configEntries: {
       data: [

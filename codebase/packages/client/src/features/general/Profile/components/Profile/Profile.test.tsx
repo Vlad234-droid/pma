@@ -2,8 +2,7 @@ import React from 'react';
 import '@testing-library/jest-dom';
 import '@testing-library/jest-dom/extend-expect';
 import { renderWithTheme as render } from 'utils/test';
-import { TILE_WRAPPER } from 'components/Tile';
-import Profile, { AvatarName } from './Profile';
+import Profile, { PROFILE_TEST_ID } from './Profile';
 
 describe('Profile component', () => {
   const props = {
@@ -12,11 +11,13 @@ describe('Profile component', () => {
     department: 'department',
     manager: 'manager',
   };
+
   it('it should render Profile', async () => {
     const { getByTestId } = render(<Profile {...props} />);
-    const wrapper = getByTestId(TILE_WRAPPER);
+    const wrapper = getByTestId(PROFILE_TEST_ID);
     expect(wrapper).toBeInTheDocument();
   });
+
   it('it should render Profile info', async () => {
     const { getByText } = render(<Profile {...props} />);
     const fullName = getByText(props.fullName);
@@ -29,18 +30,19 @@ describe('Profile component', () => {
     expect(manager).toBeInTheDocument();
   });
 });
-describe('AvatarName component', () => {
-  const user = {
-    fullName: 'fullName',
-    job: 'job',
-  };
 
-  it('it should render AvatarName info', async () => {
-    const { getByText } = render(<AvatarName user={user} />);
-    const fullName = getByText(user.fullName);
-    const job = getByText(user.job);
-
-    expect(fullName).toBeInTheDocument();
-    expect(job).toBeInTheDocument();
-  });
-});
+// describe('Avatar Name component', () => {
+//   const user = {
+//     fullName: 'fullName',
+//     job: 'job',
+//   };
+//
+//   it('it should render AvatarName info', async () => {
+//     const { getByText } = render(<AvatarName user={user} />);
+//     const fullName = getByText(user.fullName);
+//     const job = getByText(user.job);
+//
+//     expect(fullName).toBeInTheDocument();
+//     expect(job).toBeInTheDocument();
+//   });
+// });

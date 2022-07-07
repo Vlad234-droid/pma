@@ -7,13 +7,13 @@ import { useSelector } from 'react-redux';
 import { useTranslation } from 'components/Translation';
 import { CanPerform, role } from 'features/general/Permission';
 import Spinner from 'components/Spinner';
-import List from '../List';
-import Info from '../Info';
-import useData from '../../hooks/useData';
+import List from './components/List';
+import Info from './components/Info';
+import useData from './hooks/useData';
 
 export const TEST_ID = 'test-wrapper';
 
-const Wrapper: FC = () => {
+const KnowledgeLibrary: FC = () => {
   const { css } = useStyle();
   const { t } = useTranslation();
 
@@ -51,4 +51,4 @@ const managersWrapperRule: Rule = {
   paddingTop: '40px',
 };
 
-export default Wrapper;
+export default KnowledgeLibrary;

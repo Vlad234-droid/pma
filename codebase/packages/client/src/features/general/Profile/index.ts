@@ -1,3 +1,3 @@
 // export { default as DashboardProfile } from './DashboardProfile';
-export * from './components/Widgets';
+export * from './widgets';
 export { default as DataModal } from './components/DataModal';

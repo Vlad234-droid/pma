@@ -19,7 +19,7 @@ const MyTeam: FC = () => {
   const [sortValue, setSortValue] = useSorting();
   const [searchValue, setSearchValue] = useSearch();
 
-  const handleViewChange = (view: View) => {
+  const handleChangeView = (view: View) => {
     setView(view);
   };
 
@@ -28,7 +28,7 @@ const MyTeam: FC = () => {
       <div className={css(filtersWrapperStyles)}>
         <CanPerform
           perform={[role.EXECUTIVE]}
-          yes={() => <ViewFilters view={view} onChange={handleViewChange} />}
+          yes={() => <ViewFilters view={view} onChange={handleChangeView} />}
           no={() => <div data-test-id={TEST_NO_FILTERS} className={css(emptyBlock)} />}
         />
         <div className={css(filtersStyles)}>

@@ -5,9 +5,9 @@ import { buildPath } from 'features/general/Routes';
 import { paramsReplacer } from 'utils';
 import { Page } from 'pages';
 
-import { KnowledgeLibraryWrapper } from 'features/general/KnowledgeLibrary';
+import KnowledgeLibrary from 'features/general/KnowledgeLibrary';
 
-const KnowledgeLibrary: FC = () => {
+const KnowledgeLibraryPage: FC = () => {
   const { info, authenticated } = useSelector(currentUserSelector) || {};
   useEffect(() => {
     if (authenticated) {
@@ -22,7 +22,7 @@ const KnowledgeLibrary: FC = () => {
     }
   }, [info]);
 
-  return <KnowledgeLibraryWrapper />;
+  return <KnowledgeLibrary />;
 };
 
-export default KnowledgeLibrary;
+export default KnowledgeLibraryPage;

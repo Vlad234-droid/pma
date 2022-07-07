@@ -1,26 +1,24 @@
 import React, { FC, useEffect } from 'react';
-
+import { Link } from 'react-router-dom';
 import { Rule, useStyle } from '@pma/dex-wrapper';
 
 import { ObjectiveWidgets } from 'features/general/ObjectiveWidgets';
 import { Trans, useTranslation } from 'components/Translation';
-import { ReviewType, Status } from 'config/enum';
+import { ReviewType } from 'config/enum';
 import { TimelineTypes } from 'config/types';
 import { KnowledgeLibraryWidget } from 'features/general/KnowledgeLibrary';
 import Spinner from 'components/Spinner';
 
 import HelpWidgets from '../HelpWidgets';
-import InfoWidgets from '../InfoWidgets';
+import Timeline from 'features/general/Timeline';
 import ReviewWidgets from '../ReviewWidgets';
 import Section from '../Section';
 import { Review } from '../../config/types';
 import { Page } from 'pages';
 import { useHeaderContainer } from 'contexts/headerContext';
+import { PersonalProfileWidget } from 'features/general/Profile';
 
 type Props = {
-  descriptions: string[];
-  startDates: string[];
-  statuses: Status[];
   timelineTypes: TimelineTypes | {};
   midYearReview: Review;
   endYearReview: Review;
@@ -29,16 +27,7 @@ type Props = {
   loading: boolean;
 };
 
-const CareerPerformance: FC<Props> = ({
-  descriptions,
-  startDates,
-  statuses,
-  timelineTypes,
-  midYearReview,
-  endYearReview,
-  displayTimelines,
-  loading,
-}) => {
+const CareerPerformance: FC<Props> = ({ timelineTypes, midYearReview, endYearReview, displayTimelines, loading }) => {
   const { css } = useStyle();
   const { t } = useTranslation();
   const { setLinkTitle } = useHeaderContainer();
@@ -58,12 +47,12 @@ const CareerPerformance: FC<Props> = ({
   return (
     <>
       <div className={css(wrapperStyles)}>
-        <InfoWidgets
-          showMyReview={showMyReview}
-          statuses={statuses}
-          descriptions={descriptions}
-          startDates={startDates}
-        />
+        <div className={css(infoWidgetsStyles)}>
+          <Link to={`../${Page.PROFILE}`}>
+            <PersonalProfileWidget />
+          </Link>
+          {showMyReview && <Timeline />}
+        </div>
         <HelpWidgets />
       </div>
       <ObjectiveWidgets />
@@ -96,6 +85,13 @@ const wrapperStyles: Rule = {
 
 const basicTileStyle: Rule = {
   flex: '1 0 216px',
+};
+
+const infoWidgetsStyles: Rule = {
+  flex: '3 1 504px',
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '8px',
 };
 
 export default CareerPerformance;
