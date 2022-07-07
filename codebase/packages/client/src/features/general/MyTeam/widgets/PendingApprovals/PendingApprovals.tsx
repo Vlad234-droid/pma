@@ -4,16 +4,17 @@ import { useStyle, colors, Rule, fontWeight } from '@pma/dex-wrapper';
 import { useTranslation } from 'components/Translation';
 import { TileWrapper } from 'components/Tile';
 import { Icon } from 'components/Icon';
+import { shallowEqual, useSelector } from 'react-redux';
+import { getPendingEmployees } from '@pma/store';
 
-export type Props = {
-  count: number;
-};
-
-const PendingApprovals: FC<Props> = ({ count = 0 }) => {
+const PendingApprovals: FC = () => {
   const { css, theme } = useStyle();
   const { t } = useTranslation();
+  const { employeeWithPendingApprovals } = useSelector((state) => getPendingEmployees(state), shallowEqual) || {};
 
-  if (!count) {
+  const waitingCount = employeeWithPendingApprovals?.length;
+
+  if (!waitingCount) {
     return null;
   }
 
@@ -28,7 +29,7 @@ const PendingApprovals: FC<Props> = ({ count = 0 }) => {
           <span className={css(descriptionStyle)}>{t('you_have_pending_actions', 'You have pending actions')}</span>
         </div>
         <div className={css(countWrapperStyles)}>
-          <span className={css(countStyles)}>{count}</span>
+          <span className={css(countStyles)}>{waitingCount}</span>
         </div>
       </div>
     </TileWrapper>

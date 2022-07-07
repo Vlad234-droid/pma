@@ -1,22 +1,19 @@
 import React, { FC } from 'react';
-import { colors, fontWeight, Rule, theme, useStyle } from '@pma/dex-wrapper';
-import { useNavigate } from 'react-router';
+import { colors, fontWeight, Rule, useStyle } from '@pma/dex-wrapper';
 
 import { TileWrapper } from 'components/Tile';
 import { useTranslation } from 'components/Translation';
-import { buildPath } from 'features/general/Routes';
-import { Page } from 'pages';
-import SecondaryWidget from 'features/general/SecondaryWidget';
+import { shallowEqual, useSelector } from 'react-redux';
+import { getPendingEmployees } from '@pma/store';
 
-export type Props = {
-  draftCount: number;
-  waitingCount: number;
-};
-
-const Actions: FC<Props> = ({ draftCount, waitingCount }) => {
+const YourActions: FC = () => {
   const { css } = useStyle();
   const { t } = useTranslation();
-  const navigate = useNavigate();
+  const { employeeWithPendingApprovals, employeePendingApprovals } =
+    useSelector((state) => getPendingEmployees(state), shallowEqual) || {};
+
+  const waitingCount = employeeWithPendingApprovals?.length;
+  const draftCount = employeePendingApprovals?.length;
 
   return (
     <>
@@ -37,37 +34,11 @@ const Actions: FC<Props> = ({ draftCount, waitingCount }) => {
           </div>
         </div>
       </TileWrapper>
-
-      <SecondaryWidget
-        iconGraphic={'person'}
-        title={t('team_reporting', 'Team reporting')}
-        description={t(
-          'see_how_your_team_are_progressing_throughout_the_year',
-          'See how your team are progressing throughout the year',
-        )}
-        onClick={() => navigate(buildPath(Page.REPORT))}
-        hover={false}
-        withButton={false}
-        customStyle={{
-          fontSize: theme.font.fixed.f16.fontSize,
-          lineHeight: theme.font.fixed.f16.lineHeight,
-          letterSpacing: '0px',
-          marginTop: '8px',
-          paddingTop: '6px',
-          ...tileWrapperStyles,
-          '& span': {
-            '&:last-child': {
-              fontSize: theme.font.fixed.f16.fontSize,
-              marginBottom: '8px',
-            },
-          },
-        }}
-      />
     </>
   );
 };
 
-export default Actions;
+export default YourActions;
 
 const tileWrapperStyles: Rule = { minWidth: '350px' };
 
