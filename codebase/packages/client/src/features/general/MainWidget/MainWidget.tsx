@@ -2,10 +2,11 @@ import React, { FC } from 'react';
 import { getTescoContent } from './getTescoContent';
 import { MainWidgetBase, MainWidgetBaseProps } from './MainWidgetBase';
 import { getTescoBankContent } from 'features/bank/MainWidget';
-import { getTenant, Tenant } from 'utils';
+import { useTenant } from 'features/general/Permission';
+import { Tenant } from 'config/enum';
 
 export const MainWidget: FC<Omit<MainWidgetBaseProps, 'getContent'>> = (props) => {
-  const tenant = getTenant();
+  const tenant = useTenant();
   const getContent = tenant === Tenant.GENERAL ? getTescoContent : getTescoBankContent;
 
   return <MainWidgetBase getContent={getContent} {...props} />;

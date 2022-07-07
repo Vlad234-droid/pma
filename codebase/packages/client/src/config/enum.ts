@@ -243,3 +243,8 @@ export enum SearchOption {
   NAME = 'NAME',
   EMAIL = 'EMAIL',
 }
+
+export enum Tenant {
+  GENERAL = 'general',
+  BANK = 'bank',
+}

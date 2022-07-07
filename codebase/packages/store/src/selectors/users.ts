@@ -38,6 +38,8 @@ export const currentUserSelector = createSelector(usersSelector, ({ current }) =
   //@ts-ignore
   const workRelationship = info?.workRelationships?.[0];
   const colleagueUUID = info?.colleagueUUID;
+  //@ts-ignore
+  const tenant = current?.info?.data?.tenant?.code;
   const job = workRelationship?.job?.name;
   const manager = getFullName(workRelationship?.manager?.profile);
   const department = workRelationship?.department?.name;
@@ -68,6 +70,7 @@ export const currentUserSelector = createSelector(usersSelector, ({ current }) =
       countryCode,
       manager,
       colleagueUUID,
+      tenant,
     },
   };
 });

@@ -15,7 +15,6 @@ import useDispatch from 'hooks/useDispatch';
 import { Review, ReviewType, Status, Timeline } from 'config/types';
 import { useSelector } from 'react-redux';
 import { USER } from 'config/constants';
-import { ObjectiveType } from 'config/enum';
 
 export type PropsType = {
   objectives: ObjectiveTypes.Objective[];
@@ -33,25 +32,25 @@ export function withSection<P>(WrappedComponent: React.ComponentType<P & PropsTy
     const { loaded: reviewLoaded } = useSelector(reviewsMetaSelector);
 
     const timelinePoints: Timeline[] =
-      useSelector(getTimelinesByReviewTypeSelector(ReviewType.OBJECTIVE, USER.current)) || [];
+      useSelector(getTimelinesByReviewTypeSelector(ReviewType.QUARTER, USER.current)) || [];
 
     const visibleTimelinePoints = timelinePoints?.filter(
-      (timelinePoint) => timelinePoint.status !== Status.NOT_STARTED,
+      (timelinePoint) => timelinePoint.summaryStatus !== Status.NOT_STARTED,
     );
 
-    const timelinePoint = visibleTimelinePoints.find((timelinePoint) => timelinePoint.status === Status.STARTED);
+    const timelinePoint = visibleTimelinePoints.find((timelinePoint) => timelinePoint.summaryStatus === Status.STARTED);
     const [selectedTimelinePoint, setTimelinePoint] = useState(timelinePoint);
 
     const colleagueUuid = useSelector(colleagueUUIDSelector);
-    const originObjectives: Review[] = useSelector(filterReviewsByTypeSelector(ReviewType.OBJECTIVE));
+    const originObjectives: Review[] = useSelector(filterReviewsByTypeSelector(ReviewType.QUARTER));
 
-    const objectiveSchema = useSelector(getReviewSchema(ReviewType.OBJECTIVE));
+    const objectiveSchema = useSelector(getReviewSchema(ReviewType.QUARTER));
     const { components = [] } = objectiveSchema;
     const formElements = components.filter((component) => component.type != 'text');
 
     const [objectives, setObjectives] = useState<ObjectiveTypes.Objective[]>([]);
     const timelineTypes = useSelector(timelineTypesAvailabilitySelector(colleagueUuid)) || {};
-    const canShowObjectives = timelineTypes[ObjectiveType.OBJECTIVE];
+    const canShowObjectives = timelineTypes[ReviewType.QUARTER];
 
     const handleSelectTimelinePoint = useCallback(
       (e) => {

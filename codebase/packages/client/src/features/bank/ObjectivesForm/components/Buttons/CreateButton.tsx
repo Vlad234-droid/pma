@@ -21,8 +21,8 @@ const CreateButton: FC<Props> = memo(({ withIcon = false }) => {
 
   const [isOpen, setIsOpen] = useState(false);
 
-  const objectives: Objective[] = useSelector(filterReviewsByTypeSelector(ReviewType.OBJECTIVE)) || [];
-  const schema = useSelector(getReviewSchema(ReviewType.OBJECTIVE));
+  const objectives: Objective[] = useSelector(filterReviewsByTypeSelector(ReviewType.QUARTER)) || [];
+  const schema = useSelector(getReviewSchema(ReviewType.QUARTER));
   const { markup = { max: 0, min: 0 } } = schema;
   const isAvailable = objectives.length < markup.max || false;
 

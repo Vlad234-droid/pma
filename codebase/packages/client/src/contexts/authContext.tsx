@@ -44,7 +44,7 @@ export const AuthProvider: FC = ({ children }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    setTenant((info?.tenant as Tenant) || Tenant.GENERAL); // TODO: where to get the tenant?
+    setTenant((info?.tenant as Tenant) || Tenant.GENERAL);
   }, [JSON.stringify(info)]);
 
   useEffect(() => {

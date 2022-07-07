@@ -1,8 +1,8 @@
 import React, { useMemo } from 'react';
-import { getTenant, Tenant } from 'utils';
+import { useTenant } from 'features/general/Permission';
 
 export const ObjectivesSection = React.memo(() => {
-  const tenant: Tenant = getTenant();
+  const tenant = useTenant();
   const Block = useMemo(
     () =>
       React.lazy(() =>

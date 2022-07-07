@@ -39,10 +39,10 @@ export function withForm<P>(WrappedComponent: React.ComponentType<P & FormPropsT
     const dispatch = useDispatch();
     const { t } = useTranslation();
     const colleagueUuid = useSelector(colleagueUUIDSelector);
-    const schema = useSelector(getReviewSchema(ReviewType.OBJECTIVE));
-    const pathParams = { colleagueUuid, type: ReviewType.OBJECTIVE, cycleUuid: 'CURRENT' };
+    const schema = useSelector(getReviewSchema(ReviewType.QUARTER));
+    const pathParams = { colleagueUuid, type: ReviewType.QUARTER, cycleUuid: 'CURRENT' };
     const { components = [] as Component[], markup = { max: 1, min: 15 } } = schema;
-    const objectives: Objective[] = useSelector(filterReviewsByTypeSelector(ReviewType.OBJECTIVE)) || [];
+    const objectives: Objective[] = useSelector(filterReviewsByTypeSelector(ReviewType.QUARTER)) || [];
 
     // todo wait for design. could start from diff number
     const draftObjectives = useMemo(
