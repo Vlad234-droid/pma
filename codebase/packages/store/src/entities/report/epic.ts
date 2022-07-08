@@ -8,6 +8,7 @@ import {
   getObjectivesStatistics,
   getTargetingColleagues,
   getLimitedObjectivesReport,
+  getTargetingFeedbacks,
 } from './actions';
 import { concatWithErrorToast, errorPayloadConverter } from '../../utils/toastHelper';
 
@@ -57,6 +58,21 @@ export const getTargetingColleaguesEpic: Epic = (action$, _, { api }) =>
       );
     }),
   );
+export const getTargetingFeedbacksEpic: Epic = (action$, _, { api }) =>
+  action$.pipe(
+    filter(isActionOf(getTargetingFeedbacks.request)),
+    switchMap(({ payload }) => {
+      //@ts-ignore
+      return from(api.getTargetingFeedbacks(payload)).pipe(
+        //@ts-ignore
+        map(({ data }) => {
+          //@ts-ignore
+          return getTargetingFeedbacks.success(data);
+        }),
+        catchError(({ errors }) => of(getTargetingFeedbacks.failure(errors))),
+      );
+    }),
+  );
 
 export const getObjectivesStatisticsEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
@@ -86,4 +102,5 @@ export default combineEpics(
   getObjectivesStatisticsEpic,
   getTargetingColleaguesEpic,
   getLimitedObjectivesReportEpic,
+  getTargetingFeedbacksEpic,
 );

@@ -5,6 +5,7 @@ import {
   getTargetingColleagues,
   clearStatistics,
   getLimitedObjectivesReport,
+  getTargetingFeedbacks,
 } from './actions';
 
 export const initialState = {
@@ -69,6 +70,20 @@ export default createReducer(initialState)
     meta: { ...state.meta, loading: false, loaded: true },
   }))
   .handleAction(getTargetingColleagues.failure, (state, { payload }) => ({
+    ...state,
+    meta: { ...state.meta, loading: false, loaded: true, error: payload },
+  }))
+
+  .handleAction(getTargetingFeedbacks.request, (state) => ({
+    ...state,
+    meta: { ...state.meta, loading: true },
+  }))
+  .handleAction(getTargetingFeedbacks.success, (state, { payload }) => ({
+    ...state,
+    colleagues: payload,
+    meta: { ...state.meta, loading: false, loaded: true },
+  }))
+  .handleAction(getTargetingFeedbacks.failure, (state, { payload }) => ({
     ...state,
     meta: { ...state.meta, loading: false, loaded: true, error: payload },
   }))

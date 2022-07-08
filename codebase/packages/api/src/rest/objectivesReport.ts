@@ -12,3 +12,6 @@ export const getObjectivesStatistics = (params: any) => {
 export const getTargetingColleagues = (params: any) => {
   return httpClient.get(`${domain}/targeting-colleagues`, { params });
 };
+export const getTargetingFeedbacks = (params: any) => {
+  return httpClient.get(`${domain}/targeting-feedbacks`, { params });
+};

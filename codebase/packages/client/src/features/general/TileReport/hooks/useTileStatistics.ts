@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { ReportActions } from '@pma/store';
@@ -15,18 +15,18 @@ export const useTileStatistics = () => {
 
   const query = useQueryString();
 
-  const getReport = useCallback(() => {
-    getData(dispatch, query);
-  }, []);
-
   useEffect(() => {
     dispatch(ReportActions.clearStatistics());
     setType(ReportPage[convertToReportEnum(pathname)]);
-    getReport();
     return () => {
       dispatch(ReportActions.clearStatistics());
     };
   }, []);
+
+  useEffect(() => {
+    if (!type) return;
+    getData(dispatch, query, type);
+  }, [type]);
 
   return { type, query };
 };

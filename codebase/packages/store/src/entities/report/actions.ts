@@ -24,6 +24,12 @@ export const getTargetingColleagues = createAsyncAction(
   'report/GET_TARGETING_COLLEAGUES_FAILURE',
 )<any, any, Error>();
 
+export const getTargetingFeedbacks = createAsyncAction(
+  'report/GET_TARGETING_FEEDBACKS_COLLEAGUES_REQUEST',
+  'report/GET_TARGETING_FEEDBACKS_COLLEAGUES_SUCCESS',
+  'report/GET_TARGETING_FEEDBACKS_COLLEAGUES_FAILURE',
+)<any, any, Error>();
+
 export const clearStatistics = createAction('report/CLEAR_STATISTICS')();
 
 export const Actions = {
@@ -31,5 +37,6 @@ export const Actions = {
   getTargetingColleagues: getTargetingColleagues.request,
   getObjectivesStatistics: getObjectivesStatistics.request,
   getLimitedObjectivesReport: getLimitedObjectivesReport.request,
+  getTargetingFeedbacks: getTargetingFeedbacks.request,
   clearStatistics,
 };
