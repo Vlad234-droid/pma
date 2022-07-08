@@ -46,7 +46,7 @@ const FormModal: FC<FormModal> = ({
 
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   if (formState === FormStateType.MODIFY) {
-    paddingBottom = mobileScreen ? 96 : 50;
+    paddingBottom = mobileScreen ? 138 : 90;
   }
 
   if (formState === FormStateType.SUBMITTED) {

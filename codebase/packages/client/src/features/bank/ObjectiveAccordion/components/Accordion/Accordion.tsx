@@ -22,7 +22,7 @@ const ObjectiveAccordion: FC<ObjectiveAccordionProps> = ({ objectives }) => {
   return (
     <Accordion id='objective-accordion'>
       <div data-test-id={TEST_ID}>
-        {objectives.map(({ id, title, subTitle, description, status, lastUpdatedTime, uuid }) => {
+        {objectives.map(({ id, subTitle, description, status, lastUpdatedTime, uuid }) => {
           const sentences = description.split('. ');
           const firstSentence = sentences.shift();
           const restSentences = sentences.join('. ');

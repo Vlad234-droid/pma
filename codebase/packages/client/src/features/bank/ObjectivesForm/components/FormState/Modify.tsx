@@ -3,7 +3,7 @@ import { UseFormReturn } from 'react-hook-form';
 import { useStyle } from '@pma/dex-wrapper';
 import { useTranslation } from 'components/Translation';
 import { TriggerModal } from 'features/general/Modal';
-import HelpTrigger from '../FormModal/HelpTrigger';
+import { HelpTrigger, HelperModal } from '../Helper';
 import Components from '../FormModal/Components';
 import Stepper from '../Stepper/Stepper';
 import { Objective } from '../../type';
@@ -32,7 +32,7 @@ const Modify: FC<Props> = ({ components, objective, objectives, methods, current
       <Stepper steps={steps} step={currentNumber} />
       <div className={css({ padding: `${theme.spacing.s5} 0 ${theme.spacing.s5}`, display: 'flex' })}>
         <TriggerModal triggerComponent={<HelpTrigger />} title={t('completing_your_review', 'Completing your review')}>
-          <HelpTrigger />
+          <HelperModal />
         </TriggerModal>
       </div>
       <Components components={components} objective={objective} methods={methods} readonly={false} />

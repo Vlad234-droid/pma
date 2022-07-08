@@ -1,5 +1,6 @@
 {
   "create_objectives": "Create objectives",
   "my_objectives_and_reviews": "My objectives and reviews",
-  "objective_number": "Objective {{number}}"
+  "objective_number": "Objective {{number}}",
+  "need_help_to_write" : "Need help with what to write?"
 }

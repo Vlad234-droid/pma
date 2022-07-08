@@ -14,16 +14,17 @@ type ReviewComponentsProps = {
   readonly: boolean;
 };
 
+// todo quick fix think about another way
+const ItemWrapper = (props) => (
+  <Item {...props} marginBot={false} labelCustomStyle={{ padding: '10px 0px 8px' }}>
+    {props.children}
+  </Item>
+);
+
 const ReviewComponents: FC<ReviewComponentsProps> = ({ components, review, methods, readonly }) => {
   const { css, theme } = useStyle();
   const borderedComponents: BorderedComponent[] = formTagComponents(components, theme);
   const { formState } = methods;
-
-  const ItemWrapper = (props) => (
-    <Item {...props} marginBot={false} labelCustomStyle={readonly ? { padding: 0 } : { padding: '10px 0px 8px' }}>
-      {props.children}
-    </Item>
-  );
 
   return (
     <>

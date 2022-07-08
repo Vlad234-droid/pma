@@ -14,13 +14,13 @@ const Stepper: FC<Props> = ({ steps, step }) => {
         if (step === index + 1) {
           return (
             <div className={css(activeStepStyle)} key={index}>
-              <span className={css({ padding: '2px 8px 4px' })}>{singleStep}</span>
+              <span>{singleStep}</span>
             </div>
           );
         }
         return (
           <div className={css(stepStyle)} key={index}>
-            <span className={css({ padding: '2px 8px 4px' })}>{singleStep}</span>
+            <span>{singleStep}</span>
           </div>
         );
       })}
@@ -31,15 +31,16 @@ const Stepper: FC<Props> = ({ steps, step }) => {
 const wrapperStyle: Rule = { display: 'flex', flexWrap: 'wrap', gap: '10px' };
 
 const stepStyle: Rule = ({ theme }) => ({
-  ...theme.font.fixed.f12,
+  ...theme.font.fixed.f16,
   color: theme.colors.tescoBlue,
 });
 
 const activeStepStyle: Rule = ({ theme }) => ({
-  ...theme.font.fixed.f12,
+  ...theme.font.fixed.f16,
   background: theme.colors.tescoBlue,
   color: theme.colors.white,
-  borderRadius: '3px',
+  borderRadius: '10px',
+  padding: '6px 12px 6px 12px',
 });
 
 export default Stepper;

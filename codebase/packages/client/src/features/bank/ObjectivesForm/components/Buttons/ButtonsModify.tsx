@@ -50,7 +50,7 @@ const Buttons: FC<ButtonsProps> = ({ readonly, isValid, onClose, onSaveExit, onS
                     iconPosition={Position.RIGHT}
                     onPress={onNext}
                   >
-                    <Trans i18nKey='save_add_priority'>Save & create new priority</Trans>
+                    <Trans i18nKey='save_add_priority'>Save & Create new priority</Trans>
                   </IconButton>
                 ) : (
                   <Button
@@ -58,9 +58,14 @@ const Buttons: FC<ButtonsProps> = ({ readonly, isValid, onClose, onSaveExit, onS
                     styles={[buttonBlueStyle({ mobileScreen })]}
                     isDisabled={isDisabledSaveAndAdd}
                   >
-                    <Trans i18nKey='save_add_priority'>Save & create new priority</Trans>
+                    <Trans i18nKey='save_add_priority'>Save & Create new priority</Trans>
                   </Button>
                 )}
+              </div>
+              <div className={css({ padding: '8px 0 16px' })}>
+                <Trans i18nKey='condition_submit_for_agreement' ns={'bank'}>
+                  Or, finish your priorities and submit for agreement
+                </Trans>
               </div>
               <div>
                 <IconButton
@@ -74,7 +79,7 @@ const Buttons: FC<ButtonsProps> = ({ readonly, isValid, onClose, onSaveExit, onS
                   iconPosition={Position.RIGHT}
                   onPress={onSubmit}
                 >
-                  <Trans i18nKey='review_and_submit'>Review & submit</Trans>
+                  <Trans i18nKey='review_and_submit'>Review & Submit</Trans>
                 </IconButton>
               </div>
             </>
