@@ -140,6 +140,7 @@ const PersonalNote: FC = () => {
             }}
           />
           <PersonalNoteForm
+            key={defaultValues}
             onSubmit={handleSubmit}
             onClose={handleClose}
             defaultValues={{

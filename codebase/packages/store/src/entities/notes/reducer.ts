@@ -23,17 +23,12 @@ export default createReducer(initialState)
     ...state,
     meta: { ...state.meta, loading: true },
   }))
-  .handleAction(createFolderNotes.success, (state) => ({
-    ...state,
-    meta: { ...state.meta, loading: false, loaded: true, created: true },
-  }))
   .handleAction(createFolderNotes.failure, (state, { payload }) => ({
     ...state,
     meta: { ...state.meta, loading: false, loaded: true, error: payload },
   }))
-  .handleAction(createFolderNotes.success, (state, { payload }) => ({
+  .handleAction(createFolderNotes.success, (state) => ({
     ...state,
-    notes: [...state.notes, payload],
     meta: { ...state.meta, loading: false, loaded: true, created: true },
   }))
   .handleAction(getFoldersNotes.request, (state) => ({

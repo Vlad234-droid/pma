@@ -2,7 +2,7 @@
 import { Epic, isActionOf } from 'typesafe-actions';
 import { combineEpics } from 'redux-observable';
 import { from, of } from 'rxjs';
-import { catchError, filter, map, mergeMap, switchMap } from 'rxjs/operators';
+import { catchError, filter, map, mergeMap, switchMap, tap } from 'rxjs/operators';
 import {
   createFolderNotes,
   getFoldersNotes,
@@ -24,9 +24,12 @@ export const createFolderNotesEpic: Epic = (action$, _, { api }) =>
       //@ts-ignore
       return from(api.createFolderNotes(payload)).pipe(
         //@ts-ignore
-        mergeMap(({ data }) => {
+        mergeMap(() => {
           //@ts-ignore
-          return from([createFolderNotes.success(), getFoldersNotes.request({ ownerId: ownerColleagueUuid })]);
+          return from([
+            createFolderNotes.success(payload?.created),
+            getFoldersNotes.request({ ownerId: ownerColleagueUuid }),
+          ]);
         }),
         catchError(({ errors }) => of(createFolderNotes.failure(errors))),
       );
@@ -120,21 +123,22 @@ export const getFoldersNotesEpic: Epic = (action$, _, { api }) =>
     filter(isActionOf(getFoldersNotes.request)),
     switchMap(({ payload }) => {
       const { ownerId } = payload;
-
       //@ts-ignore
       return from(api.getFoldersNotess(payload)).pipe(
         //@ts-ignore
-        mergeMap(({ data }) => {
-          const obj = {
-            ownerColleagueUuid: ownerId,
-          };
-          if (!data.length)
-            return from([
-              createFolderNotes.request({ ...obj, title: 'PERSONAL_FOLDER' }),
-              createFolderNotes.request({ ...obj, title: 'TEAM_FOLDER' }),
-              createFolderNotes.request({ ...obj, title: 'ARCHIVED_FOLDER' }),
-              createFolderNotes.request({ ...obj, title: 'TEAM_ARCHIVED_FOLDER' }),
+        tap(async ({ data }) => {
+          if (!data.length) {
+            await Promise.all([
+              api.createFolderNotes({ ownerColleagueUuid: ownerId, title: 'PERSONAL_FOLDER' }),
+              api.createFolderNotes({ ownerColleagueUuid: ownerId, title: 'TEAM_FOLDER' }),
+              api.createFolderNotes({ ownerColleagueUuid: ownerId, title: 'ARCHIVED_FOLDER' }),
+              api.createFolderNotes({ ownerColleagueUuid: ownerId, title: 'TEAM_ARCHIVED_FOLDER' }),
             ]);
+          }
+        }),
+        //@ts-ignore
+        mergeMap(({ data }) => {
+          if (!data.length) return of(getFoldersNotes.request(payload));
           return from([getFoldersNotes.success(data), getNotes.request(payload)]);
         }),
         catchError(({ errors }) => of(getFoldersNotes.failure(errors))),

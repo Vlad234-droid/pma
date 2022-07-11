@@ -45,6 +45,7 @@ const AddNoteModal: FC<Props> = ({ onSubmit, onClose, defaultValues }) => {
   const values = getValues();
 
   const selectedColleague = useSelector(getColleagueByUuidSelector(values.referenceColleagueUuid));
+
   const options = useMemo(() => folders.map(({ id, title }) => ({ value: id, label: title })), [folders]);
 
   return (
@@ -53,9 +54,13 @@ const AddNoteModal: FC<Props> = ({ onSubmit, onClose, defaultValues }) => {
         onSelect={(value) => setValue('referenceColleagueUuid', value, { shouldValidate: true })}
         options={{ 'manager-uuid_eq': colleagueUuid }}
         value={
-          values.referenceColleagueUuid
-            ? `${selectedColleague?.colleague?.profile?.firstName} ${selectedColleague?.colleague?.profile?.lastName}`
-            : ''
+          !Object.keys(defaultValues).length
+            ? values.referenceColleagueUuid
+              ? `${selectedColleague?.colleague?.profile?.firstName} ${selectedColleague?.colleague?.profile?.lastName}`
+              : ''
+            : `${values?.referenceColleagueProfile?.colleague?.profile?.firstName || ''} ${
+                values?.referenceColleagueProfile?.colleague?.profile?.lastName || ''
+              }`
         }
       />
       {values.referenceColleagueUuid && (

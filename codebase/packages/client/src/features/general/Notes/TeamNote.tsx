@@ -19,7 +19,7 @@ import { ArrowLeftIcon } from 'components/ArrowLeftIcon';
 import WrapperModal from 'features/general/Modal/components/WrapperModal';
 import { buildPath } from 'features/general/Routes';
 import { Page } from 'pages';
-import { AllNotesFolderId, NEW_FOLDER_ID } from 'utils';
+import { AllNotesFolderIdTEAM, NEW_FOLDER_ID } from 'utils';
 import { NotesStatus } from './configs';
 import { useUploadData } from './hooks/useUploadData';
 
@@ -37,12 +37,13 @@ const PersonalNote: FC = () => {
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const folders = useSelector(getFoldersSelector) || [];
   const defaultValues = useSelector(personalNoteByUUIDSelector(uuid as string));
+
   const { created } = useSelector(getNotesMetaSelector);
 
   useUploadData();
 
   const setFolderName = (folder) => {
-    if (folder === AllNotesFolderId || !folder) {
+    if (folder === AllNotesFolderIdTEAM || !folder) {
       setFolder('All notes');
     } else {
       setFolder(folders?.find((item) => item?.id === folder)?.title ?? '');
@@ -53,7 +54,7 @@ const PersonalNote: FC = () => {
     const { folderTitle, folder, ...rest } = data;
     const note = {
       ownerColleagueUuid: colleagueUuid,
-      folderUuid: folder && folder !== AllNotesFolderId && folder !== NEW_FOLDER_ID ? folder : undefined,
+      folderUuid: folder && folder !== AllNotesFolderIdTEAM && folder !== NEW_FOLDER_ID ? folder : undefined,
       updateTime: new Date(),
       status: NotesStatus.CREATED,
       ...rest,
@@ -78,7 +79,7 @@ const PersonalNote: FC = () => {
     const note = {
       ownerColleagueUuid: colleagueUuid,
       ...rest,
-      folderUuid: folder && folder !== AllNotesFolderId && folder !== NEW_FOLDER_ID ? folder : undefined,
+      folderUuid: folder && folder !== AllNotesFolderIdTEAM && folder !== NEW_FOLDER_ID ? folder : undefined,
     };
 
     if (folderTitle) {
@@ -126,14 +127,19 @@ const PersonalNote: FC = () => {
               marginBottom: '20px',
             }}
           />
+
           <TeamNoteForm
+            key={defaultValues}
             onSubmit={handleSubmit}
             onClose={handleClose}
             defaultValues={{
               ...defaultValues,
-              folder: defaultValues?.folder ? defaultValues?.folder : defaultValues?.folderUuid,
+              ...(uuid !== 'new' && {
+                folder: defaultValues?.folder ? defaultValues?.folder : defaultValues?.folderUuid,
+              }),
             }}
           />
+
           <ArrowLeftIcon onClick={handleClose} data-test-id='arrowRight' />
         </div>
       </div>
