@@ -1,12 +1,16 @@
-import React, { FC, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import React, { FC, useCallback, useEffect } from 'react';
 import { IconButton, Rule, Styles, useStyle, CreateRule } from '@pma/dex-wrapper';
+import { menuActions } from '@pma/store';
+import { useDispatch } from 'react-redux';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import { Graphics, RoundIcon, Icon } from 'components/Icon';
 import { AlertDrawer, AlertBadge, useMessagesContext } from 'features/general/Messages';
 import { DataModal } from 'features/general/Profile';
-
 import { MenuDrawer } from 'features/general/MenuDrawer';
+import { useTenant } from 'features/general/Permission';
+
+import { BurgerEntryType } from 'config/enum';
 
 export type HeaderProps = {
   title: string;
@@ -25,6 +29,8 @@ const Header: FC<HeaderProps> = ({ title, onBack, withIcon, iconName = 'home', s
   const { css, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const navigate = useNavigate();
+  const tenant = useTenant();
+  const dispatch = useDispatch();
   const { pathname, state, search }: any = useLocation();
 
   const { fetchMessagesCount } = useMessagesContext();
@@ -54,7 +60,13 @@ const Header: FC<HeaderProps> = ({ title, onBack, withIcon, iconName = 'home', s
     });
   };
 
+  const fetchMenuData = useCallback(() => {
+    dispatch(menuActions.getTopMenu({ entryType: BurgerEntryType.TOP, tenant }));
+    dispatch(menuActions.getBottomMenu({ entryType: BurgerEntryType.BOTTOM, tenant }));
+  }, []);
+
   useEffect(() => {
+    fetchMenuData();
     navigate(pathname, {
       state: {
         isMenuOpen: false,

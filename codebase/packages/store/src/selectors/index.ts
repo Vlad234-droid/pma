@@ -29,3 +29,4 @@ export * from './orgObjectives';
 export * from './processTemplate';
 export * from './knowledgeLibrary';
 export * from './performance-cycle';
+export * from './menuData';

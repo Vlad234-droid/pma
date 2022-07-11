@@ -19,7 +19,6 @@ import { ObjectiveType } from 'config/enum';
 
 // todo think hove resolve on page level
 import { ObjectivesSection } from './components/DinamicBlocks/ObjectivesSection';
-import { useTenant } from '../Permission';
 
 export const TEST_ID = 'my-objectives-page';
 const CURRENT = 'CURRENT';

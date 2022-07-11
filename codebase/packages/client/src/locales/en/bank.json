@@ -4,6 +4,7 @@
   "objective_number": "Priority {{number}}",
   "business_objectives": "Big 6 business objectives",
   "priority_file_upload_header": "Priority {{number}} - upload documents",
-  "need_help_to_write" : "Need help writing your priorities?",
-  "condition_submit_for_agreement": "Or, finish your priorities and submit for agreement"
+  "need_help_to_write": "Need help writing your priorities?",
+  "condition_submit_for_agreement": "Or, finish your priorities and submit for agreement",
+  "quarterly_priorities": "Quarterly Priorities"
 }

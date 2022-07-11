@@ -19,6 +19,7 @@ import reportEpic from '../entities/report/epic';
 import previousReviewFilesEpic from '../entities/previousReviewFiles/epic';
 import messagesEpic from '../entities/messages/epic';
 import knowledgeLibraryEpic from '../entities/knowledgeLibrary/epic';
+import getMenuDataEpic from '../entities/hamburgerMenu/epic';
 
 export const rootEpic = combineEpics(
   userEpic,
@@ -41,4 +42,5 @@ export const rootEpic = combineEpics(
   previousReviewFilesEpic,
   messagesEpic,
   knowledgeLibraryEpic,
+  getMenuDataEpic,
 );

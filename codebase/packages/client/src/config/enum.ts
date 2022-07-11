@@ -244,6 +244,11 @@ export enum SearchOption {
   EMAIL = 'EMAIL',
 }
 
+export enum BurgerEntryType {
+  TOP = 'burger-menu-top',
+  BOTTOM = 'burger-menu-bottom',
+}
+
 export enum Tenant {
   GENERAL = 'general',
   BANK = 'bank',

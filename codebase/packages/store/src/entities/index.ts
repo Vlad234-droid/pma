@@ -21,3 +21,4 @@ export { Actions as ReportActions } from './report/actions';
 export { Actions as AppStateActions } from './appState/actions';
 export { Actions as MessagesActions } from './messages/actions';
 export { Actions as KnowledgeLibraryActions } from './knowledgeLibrary/actions';
+export { Actions as menuActions } from './hamburgerMenu/actions';
