@@ -30,7 +30,11 @@ const isActive = (statuses: Status[] | undefined, i) => {
   return currentStatus !== Status.NOT_STARTED;
 };
 
-export const getIcon = (status: Status | undefined, type: TimelineType, t: TFunction): [Graphics, Colors, string] => {
+export const getIcon = (
+  status: Status | undefined,
+  type: TimelineType = TimelineType.REVIEW,
+  t: TFunction,
+): [Graphics, Colors, string] => {
   const contents: { [key: string]: { [key: string]: [Graphics, Colors, string] } } = {
     [TimelineType.REVIEW]: {
       [Status.NOT_AVAILABLE]: ['calender', 'tescoBlue', t('not_available', 'Not available')],
