@@ -31,6 +31,8 @@ export const getTimelineSelector = (colleagueUuid) =>
     // TODO: bugfix. extract to separate function
     const uuid = colleagueUuid === USER.current ? user?.current.info.data.colleague.colleagueUUID : colleagueUuid;
     const data = rest?.[uuid];
+    const codes = data?.map(({ code }) => code);
+    const types = data?.map(({ type }) => type);
     const descriptions = data?.map(({ description }) => description);
     const summaryStatuses = data?.map(({ summaryStatus }) => summaryStatus);
     const startDates = data?.map(({ code, startTime, endTime }, index) => {
@@ -38,7 +40,7 @@ export const getTimelineSelector = (colleagueUuid) =>
       const date = new Date(index === 0 ? startTime : endTime);
       return `${date.toLocaleString('default', { month: 'long' })} ${date.getFullYear()}`;
     });
-    return { descriptions, startDates, summaryStatuses };
+    return { descriptions, startDates, summaryStatuses, codes, types };
   });
 
 export const getTimelineMetaSelector = createSelector(timelineSelector, ({ meta }) => meta);

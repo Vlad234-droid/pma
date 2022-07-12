@@ -21,6 +21,7 @@ export const getTitle = (str: string): string => {
   return str.split(/(?=[A-Z])/).join(' ');
 };
 
+// todo get rid off
 export const getIcon = (status: Status | undefined, t: TFunction): [Graphics, Colors, string] => {
   const contents: { [key: string]: [Graphics, Colors, string] } = {
     [Status.NOT_AVAILABLE]: ['calender', 'tescoBlue', t('not_available', 'Not available')],

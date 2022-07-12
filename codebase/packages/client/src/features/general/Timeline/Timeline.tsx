@@ -12,7 +12,7 @@ const Timeline = () => {
   const { css } = useStyle();
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const { loading } = useSelector(getTimelineMetaSelector);
-  const { descriptions, startDates, summaryStatuses } = useSelector(getTimelineSelector(colleagueUuid)) || {};
+  const { descriptions, startDates, summaryStatuses, types } = useSelector(getTimelineSelector(colleagueUuid)) || {};
 
   return (
     <div className={css(timelineWrapperStyles)}>
@@ -24,6 +24,7 @@ const Timeline = () => {
           titles={descriptions}
           descriptions={startDates}
           statuses={summaryStatuses}
+          types={types}
         />
       )}
     </div>

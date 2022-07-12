@@ -1,11 +1,11 @@
 import React, { FC } from 'react';
-import { CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
+import { Colors, CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
 
 import { TileWrapper as Tile } from '../Tile/TileWrapper';
 import { StatusIcon } from './StatusIcon';
-import { getIcon } from 'components/Icon';
-import { Status } from 'config/enum';
-import { useTranslation } from 'components/Translation';
+import { Graphics } from 'components/Icon';
+import { Status, TimelineType } from 'config/enum';
+import { TFunction, useTranslation } from 'components/Translation';
 
 export type StepIndicatorProps = {
   mainTitle?: string;
@@ -14,6 +14,7 @@ export type StepIndicatorProps = {
   titles?: string[];
   descriptions?: string[];
   statuses?: Status[];
+  types?: TimelineType[];
   isValid?: boolean;
   customStyle?: React.CSSProperties | {};
 };
@@ -29,12 +30,33 @@ const isActive = (statuses: Status[] | undefined, i) => {
   return currentStatus !== Status.NOT_STARTED;
 };
 
+export const getIcon = (status: Status | undefined, type: TimelineType, t: TFunction): [Graphics, Colors, string] => {
+  const contents: { [key: string]: { [key: string]: [Graphics, Colors, string] } } = {
+    [TimelineType.REVIEW]: {
+      [Status.NOT_AVAILABLE]: ['calender', 'tescoBlue', t('not_available', 'Not available')],
+      [Status.AVAILABLE]: ['roundAlert', 'pending', t('available', 'Available')],
+      [Status.OVERDUE]: ['roundAlert', 'error', t('overdue', 'Overdue')],
+      [Status.DRAFT]: ['roundPencil', 'base', t('draft', 'Draft')],
+      [Status.APPROVED]: ['roundTick', 'green', t('completed', 'Completed')],
+      [Status.PENDING]: ['roundClock', 'pending', t('pending', 'Pending')],
+      [Status.WAITING_FOR_APPROVAL]: ['roundClock', 'pending', t('waiting_for_approval', 'Waiting for approval')],
+      [Status.DECLINED]: ['roundAlert', 'pending', t('declined', 'Declined')],
+    },
+    [TimelineType.TIMELINE_POINT]: {
+      [Status.STARTED]: ['roundTick', 'green', t('available', 'Available')],
+    },
+  };
+
+  return contents[type!][status!] || ['roundCircle', 'pending', t('not_completed', 'Not completed')];
+};
+
 export const StepIndicatorBasic: FC<StepIndicatorProps> = ({
   currentStep,
   currentStatus,
   titles = [],
   descriptions = [],
   statuses = [],
+  types = [],
   isValid,
 }) => {
   const { css, theme } = useStyle();
@@ -72,7 +94,7 @@ export const StepIndicatorBasic: FC<StepIndicatorProps> = ({
   let array: JSX.Element[];
   if (statuses && statuses.length > 0) {
     array = statuses.reduce((arr: JSX.Element[], status, i) => {
-      const [graphics, color, title] = getIcon(status, t);
+      const [graphics, color, title] = getIcon(status, types[i], t);
       const alignItems = getTextAlign(statuses?.length, i);
       arr.push(
         <div key={`wrapper${i}`}>
@@ -89,7 +111,7 @@ export const StepIndicatorBasic: FC<StepIndicatorProps> = ({
   } else {
     array = titles.reduce((arr: JSX.Element[], _, i) => {
       const status = getStatus(i, currentStep, currentStatus, isValid);
-      const [graphics, color, title] = getIcon(status, t);
+      const [graphics, color, title] = getIcon(status, types[i], t);
       const alignItems = getTextAlign(titles?.length, i);
       arr.push(
         <div key={`wrapper${i}`}>
@@ -157,6 +179,7 @@ export const StepIndicator: FC<StepIndicatorProps> = ({
   titles = [],
   descriptions = [],
   statuses = [],
+  types = [],
   customStyle = {},
 }) => {
   const { css } = useStyle();
@@ -170,6 +193,7 @@ export const StepIndicator: FC<StepIndicatorProps> = ({
           titles={titles}
           descriptions={descriptions}
           statuses={statuses}
+          types={types}
         />
       </div>
     </Tile>
