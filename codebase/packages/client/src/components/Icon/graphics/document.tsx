@@ -5,10 +5,10 @@ import { invertColor } from '../utils';
 
 import { FCGraphicProps } from './types';
 
-export const Document: FCGraphicProps = ({ invertColors }) => {
+export const Document: FCGraphicProps = ({ invertColors, color }) => {
   const { theme } = useStyle();
 
-  const stroke = invertColor(theme.colors.link, invertColors, theme);
+  const stroke = color || invertColor(theme.colors.link, invertColors, theme);
 
   return (
     <>

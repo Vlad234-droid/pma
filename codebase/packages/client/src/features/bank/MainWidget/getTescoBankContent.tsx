@@ -1,11 +1,14 @@
-import { Status } from 'config/enum';
+import React from 'react';
 import { Page } from 'pages';
 import { TFunction } from 'components/Translation';
 import { ObjectivesForm } from 'features/bank/ObjectivesForm';
 import { ContentConfig, ContentGraphics, ContentProps } from 'features/general/MainWidget/MainWidgetBase';
+import { Subtitle } from 'features/general/MainWidget/Subtitle';
+import { PriorityList } from './PriorityList';
 
 export const getTescoBankContent = (props: ContentProps, t: TFunction) => {
   const { status, count, nextReviewDate: date = '' } = props;
+  const WORK_IN_PROGRESS = true;
 
   const config: ContentConfig = {
     viewPage: Page.OBJECTIVES_VIEW, //TODO: Replace with proper page
@@ -14,114 +17,39 @@ export const getTescoBankContent = (props: ContentProps, t: TFunction) => {
     formComponent: ObjectivesForm,
   };
 
-  const defaultGraphics: ContentGraphics = {
-    graphic: 'add',
+  const createPriorities: ContentGraphics = {
     backgroundColor: 'tescoBlue',
-    subTitle: t('create_my_priorities', 'Create my priorities'),
-    description: 'Remember your priorities should be strategic, relevant and up to date.',
-    buttonText: t('create_my_priorities', 'Create my priorities'),
+    subTitle: (
+      <Subtitle graphic='add' invertColors>
+        {t('create_my_priorities', 'Create my priorities')}
+      </Subtitle>
+    ),
+    buttonText: t('create_priorities', 'Create priorities'),
     redirectToViewPage: false,
-    invertColors: true,
   };
 
-  if (!status) return { ...defaultGraphics, ...config };
-
-  const contents: {
-    [key: string]: ContentGraphics;
-  } = {
-    [Status.STARTED]: {
-      graphic: 'add',
-      backgroundColor: 'tescoBlue',
-      subTitle: t('create_my_priorities', 'Create my priorities'),
-      description: t(
-        'remember_your_priorities_should_be_strategic',
-        'Remember your priorities should be strategic, relevant and up to date.',
-      ),
-      buttonText: t('create_my_priorities', 'Create my priorities'),
-      redirectToViewPage: false,
-      invertColors: true,
-    },
-    [Status.DRAFT]: {
-      graphic: 'roundPencil',
-      backgroundColor: 'tescoBlue',
-      subTitle: t('priority_is_draft', `${count} priority(ies) saved as a draft`, { count }),
-      description: t(
-        'remember_if_your_priorities_change',
-        'Remember if your priorities change, review your priorities',
-      ),
-      buttonText: t('view_and_edit_priorities', 'View and edit priorities'),
-      redirectToViewPage: false,
-      invertColors: false,
-    },
-    [Status.WAITING_FOR_APPROVAL]: {
-      graphic: 'roundClock',
-      backgroundColor: 'tescoBlue',
-      subTitle: t('priority_is_pending', `${count} priority(ies) are waiting for approval`, { count }),
-      description: t(
-        'remember_if_your_priorities_change',
-        'Remember if your priorities change, review your priorities',
-      ),
-      buttonText: t('view', 'View'),
-      redirectToViewPage: true,
-      invertColors: false,
-    },
-    [Status.APPROVED]: {
-      graphic: 'roundTick',
-      backgroundColor: 'white',
-      subTitle: t('priority_is_approved', `Well done! All ${count} priority(ies) have been approved.`, {
-        count,
-        date: new Date(date),
-      }),
-      description: t(
-        'remember_if_your_priorities_change',
-        'Remember if your priorities change, review your priorities',
-      ),
-      buttonText: t('view', 'View'),
-      redirectToViewPage: true,
-      invertColors: false,
-    },
-    [Status.DECLINED]: {
-      graphic: 'roundAlert',
-      backgroundColor: 'tescoBlue',
-      subTitle: t(
-        'your_priorities_were_declined_by_the_line_manager',
-        'Your priorities were declined by the Line Manager',
-      ),
-      description: '',
-      buttonText: t('view', 'View'),
-      redirectToViewPage: true,
-      invertColors: false,
-    },
-    [Status.OVERDUE]: {
-      graphic: 'roundAlert',
-      backgroundColor: 'tescoBlue',
-      subTitle: t('priorities_are_overdue', 'Priorities are overdue'),
-      description: '',
-      buttonText: t('create_my_priorities', 'Create my priorities'),
-      redirectToViewPage: true,
-      invertColors: false,
-    },
-    [Status.PENDING]: {
-      graphic: 'roundAlert',
-      backgroundColor: 'tescoBlue',
-      subTitle: t('priorities_are_pending', 'Priorities are pending'),
-      description: '',
-      buttonText: t('create_my_priorities', 'Create my priorities'),
-      redirectToViewPage: true,
-      invertColors: false,
-    },
-    [Status.NOT_STARTED]: {
-      graphic: 'roundAlert',
-      backgroundColor: 'tescoBlue',
-      subTitle: t('priorities_are_not_started', 'Priorities are not started'),
-      description: '',
-      buttonText: t('create_my_priorities', 'Create my priorities'),
-      redirectToViewPage: true,
-      invertColors: false,
-    },
+  const hasAnyPriority: ContentGraphics = {
+    backgroundColor: 'white',
+    subTitle: <PriorityList />,
+    buttonText: t('view_priorities', 'View priorities'),
+    redirectToViewPage: true,
   };
 
-  const content = contents[status] || defaultGraphics;
+  const workInProgress: ContentGraphics = {
+    backgroundColor: 'white',
+    subTitle: <div>Coming soon</div>,
+    buttonText: t('view_priorities', 'View priorities'),
+    redirectToViewPage: false,
+    disabled: true,
+  };
 
-  return { ...content, ...config };
+  if (WORK_IN_PROGRESS) {
+    return { ...workInProgress, ...config };
+  }
+
+  if (!count || !status) {
+    return { ...createPriorities, ...config };
+  } else {
+    return { ...hasAnyPriority, ...config };
+  }
 };

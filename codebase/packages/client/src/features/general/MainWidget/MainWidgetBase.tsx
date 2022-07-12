@@ -18,13 +18,12 @@ export type ContentProps = {
 };
 
 export type ContentGraphics = {
-  graphic: Graphics;
   backgroundColor: Colors;
-  subTitle: string;
-  description: string;
+  subTitle: React.ReactNode;
+  description?: string;
   buttonText: string;
   redirectToViewPage: boolean;
-  invertColors: boolean;
+  disabled?: boolean;
 };
 
 export type ContentConfig = {
@@ -39,6 +38,8 @@ export type MainWidgetBaseProps = ContentProps & {
   customStyle?: React.CSSProperties | {};
 };
 
+const DISABLED_COLOR = '#B3CDE6';
+
 export const MainWidgetBase: FC<MainWidgetBaseProps> = ({ customStyle, getContent, ...props }) => {
   const { css } = useStyle();
   const { t } = useTranslation();
@@ -48,54 +49,59 @@ export const MainWidgetBase: FC<MainWidgetBaseProps> = ({ customStyle, getConten
   const { status } = props;
 
   const {
-    graphic,
     backgroundColor,
     subTitle,
     description,
     buttonText,
     redirectToViewPage,
-    invertColors,
     modalTitle,
     viewPage,
     widgetTitle,
     formComponent: FormComponent,
+    disabled,
   } = getContent(props, t);
 
-  const notApproved = status !== Status.APPROVED;
+  const notApproved = !disabled && status !== Status.APPROVED;
   const mode = notApproved ? 'default' : 'inverse';
 
   const handleClick = () => {
+    if (disabled) {
+      return;
+    }
+
     redirectToViewPage ? navigate(buildPath(viewPage)) : setIsOpen(true);
   };
 
   return (
     <>
-      <TileWrapper customStyle={customStyle} hover={true} background={backgroundColor}>
-        <div className={css(wrapperStyle({ clickable: notApproved }))} onMouseDown={handleClick} data-test-id={TEST_ID}>
+      <TileWrapper customStyle={customStyle} hover={!disabled} background={backgroundColor}>
+        <div
+          className={css(wrapperStyle({ clickable: notApproved, disabled }))}
+          onMouseDown={handleClick}
+          data-test-id={TEST_ID}
+        >
           <div className={css(headStyle)}>
             <div>
-              <Icon graphic='document' invertColors={notApproved} iconStyles={iconStyles} />
+              <Icon
+                graphic='document'
+                invertColors={notApproved}
+                iconStyles={iconStyles}
+                color={disabled ? DISABLED_COLOR : undefined}
+              />
             </div>
             <div className={css(headerBlockStyle)}>
               <span className={css(titleStyle)}>{widgetTitle}</span>
-              <span className={css(descriptionStyle)}>
-                <span className={css(iconStyle)}>
-                  {invertColors ? (
-                    <Icon graphic={graphic} invertColors />
-                  ) : (
-                    <Icon graphic={graphic} backgroundRadius={12} />
-                  )}
-                </span>
-                {subTitle}
-              </span>
+              <span className={css(descriptionStyle)}>{subTitle}</span>
             </div>
           </div>
           <div className={css(bodyStyle)}>
-            <div className={css(subDescription)}>{description}</div>
+            {description && <div className={css(subDescription)}>{description}</div>}
             <div className={css(bodyBlockStyle)}>
-              <Button mode={mode} styles={[viewButtonStyle({ inverse: notApproved })]} onPress={handleClick}>
-                {buttonText}
-              </Button>
+              {!disabled && (
+                <Button mode={mode} styles={[viewButtonStyle({ inverse: notApproved })]} onPress={handleClick}>
+                  {buttonText}
+                </Button>
+              )}
             </div>
           </div>
         </div>
@@ -119,11 +125,11 @@ const viewButtonStyle: CreateRule<{ inverse: boolean }> =
     border: `2px solid ${inverse ? theme.colors.white : theme.colors.tescoBlue}`,
   });
 
-const wrapperStyle: CreateRule<{ clickable: boolean }> =
-  ({ clickable }) =>
+const wrapperStyle: CreateRule<{ clickable: boolean; disabled?: boolean }> =
+  ({ clickable, disabled }) =>
   ({ theme }) => ({
     padding: '24px 30px',
-    color: clickable ? theme.colors.white : theme.colors.tescoBlue,
+    color: disabled ? DISABLED_COLOR : clickable ? theme.colors.white : theme.colors.tescoBlue,
     width: '100%',
     height: '100%',
     justifyContent: 'space-between',
@@ -169,14 +175,6 @@ const descriptionStyle: Rule = ({ theme }) => ({
   position: 'relative',
   fontStyle: 'normal',
   fontWeight: 'normal',
-  paddingLeft: '33px',
-});
-
-const iconStyle: Rule = () => ({
-  display: 'flex',
-  position: 'absolute',
-  left: 0,
-  '& > span': { display: 'flex' },
 });
 
 const bodyStyle: Rule = {
