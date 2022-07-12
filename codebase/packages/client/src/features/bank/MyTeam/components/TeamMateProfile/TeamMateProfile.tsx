@@ -1,35 +1,22 @@
 import React, { FC } from 'react';
-import { Rule, useStyle } from '@pma/dex-wrapper';
+import { Rule } from '@pma/dex-wrapper';
 
 import { TileWrapper } from 'components/Tile';
-import { Accordion, BaseAccordion, Panel, Section } from 'components/Accordion';
-import { Rating, Status } from 'config/enum';
+import { Accordion, BaseAccordion, Section } from 'components/Accordion';
+
 import { Employee } from 'config/types';
 
-import TimeLines from '../Timelines';
 import ProfilePreview from '../ProfilePreview';
 
 type Props = {
   uuid: string;
-  status: Status;
   employee: Employee;
   fullTeamView?: boolean;
-  rating?: Rating;
   onClick?: () => void;
   customWrapperStyle?: React.CSSProperties | {};
 };
 
-const TeamMateProfile: FC<Props> = ({
-  uuid,
-  status,
-  employee,
-  fullTeamView = false,
-  rating,
-  onClick,
-  customWrapperStyle,
-}) => {
-  const { css } = useStyle();
-
+const TeamMateProfile: FC<Props> = ({ uuid, employee, fullTeamView = false, onClick, customWrapperStyle }) => {
   return (
     <div data-test-id='team-mate-profile'>
       <TileWrapper customStyle={customWrapperStyle}>
@@ -38,18 +25,7 @@ const TeamMateProfile: FC<Props> = ({
             {() => (
               <>
                 <Section defaultExpanded={false}>
-                  <ProfilePreview
-                    status={status}
-                    employee={employee}
-                    fullTeamView={fullTeamView}
-                    rating={rating}
-                    onClick={onClick}
-                  />
-                  <Panel>
-                    <div className={css(panelStyles)}>
-                      <TimeLines timelines={employee?.timeline} />
-                    </div>
-                  </Panel>
+                  <ProfilePreview employee={employee} fullTeamView={fullTeamView} onClick={onClick} />
                 </Section>
               </>
             )}
@@ -66,5 +42,3 @@ const accordionCustomStyles: Rule = {
   borderBottom: 'none',
   marginTop: 0,
 };
-
-const panelStyles: Rule = { padding: '24px 35px 24px 24px' };

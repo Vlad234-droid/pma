@@ -12,7 +12,7 @@ export type Props = {
   date?: string;
   description?: string;
   customStyle?: React.CSSProperties | {};
-  onClick: () => void;
+  onClick?: () => void;
   withButton?: boolean;
   background?: Colors;
   hover?: boolean;

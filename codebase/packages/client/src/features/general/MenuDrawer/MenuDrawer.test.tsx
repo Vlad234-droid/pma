@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 // @ts-ignore
 import { renderWithTheme as render, screen } from 'utils/test';
 import { fireEvent } from '@testing-library/react';
@@ -8,11 +8,21 @@ import MenuDrawer from './MenuDrawer';
 
 describe('<MenuDrawer />', () => {
   it('render MenuDrawer close event', async () => {
+    const menuData = {
+      data: {
+        top: [{ key: 'notes' }],
+        bottom: [{ key: 'notes' }],
+      },
+      meta: { loading: false, loaded: true },
+    };
     const onClose = jest.fn();
     render(
       <BrowserRouter>
-        <MenuDrawer onClose={onClose} />
+        <Suspense fallback={<div>loading...</div>}>
+          <MenuDrawer onClose={onClose} />
+        </Suspense>
       </BrowserRouter>,
+      { menuData },
     );
 
     expect(screen.getByTestId('cancel')).toBeInTheDocument();

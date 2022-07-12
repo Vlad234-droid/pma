@@ -28,7 +28,6 @@ export const getTescoContent = (props: ContentProps, t: TFunction) => {
     redirectToViewPage: false,
   };
 
-  console.log('Status', status, count);
   if (!status) return { ...defaultGraphics, ...config };
 
   const contents: {

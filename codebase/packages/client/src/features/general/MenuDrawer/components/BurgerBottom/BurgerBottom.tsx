@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { Rule, useStyle } from '@pma/dex-wrapper';
-import { getBottomMenuData } from '@pma/store';
+import { getBottomMenuData, getMetaMenu } from '@pma/store';
 import { useSelector } from 'react-redux';
 
 import Spinner from 'components/Spinner';
@@ -12,10 +12,11 @@ export const BurgerBottom = () => {
   const { css } = useStyle();
 
   const menu = useSelector(getBottomMenuData);
+  const { loading } = useSelector(getMetaMenu);
 
   const getList = useCallback(() => menu?.map(({ key }) => <ListItem key={key} name={getSplittedKey(key)} />), [menu]);
 
-  if (!menu.length) return <Spinner />;
+  if (loading) return <Spinner />;
 
   return <div className={css(menuDrawerSettingsStyle)}>{getList()}</div>;
 };

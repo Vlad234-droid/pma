@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import '@testing-library/jest-dom/extend-expect';
 import { fireEvent } from '@testing-library/react';
 import { renderWithTheme as render } from 'utils/test';
@@ -46,10 +46,20 @@ describe('Header', () => {
   });
 
   it('should open menu', async () => {
+    const menuData = {
+      data: {
+        top: [{ key: 'notes' }],
+        bottom: [{ key: 'notes' }],
+      },
+      meta: { loading: false, loaded: true },
+    };
     const { queryByTestId, getByTestId, findByTestId } = render(
       <BrowserRouter>
-        <Header title={testTitle} />
+        <Suspense fallback={<div>...Loading</div>}>
+          <Header title={testTitle} />
+        </Suspense>
       </BrowserRouter>,
+      { menuData },
     );
 
     const header = queryByTestId(TEST_ID);

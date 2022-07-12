@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { getTopMenuData } from '@pma/store';
+import { getTopMenuData, getMetaMenu } from '@pma/store';
 import { Rule, useStyle } from '@pma/dex-wrapper';
 import { useSelector } from 'react-redux';
 
@@ -9,12 +9,13 @@ import { getSplittedKey } from '../../utils';
 
 export const BurgerTop = () => {
   const menu = useSelector(getTopMenuData);
+  const { loading } = useSelector(getMetaMenu);
 
   const { css } = useStyle();
 
   const getMenus = useCallback(() => menu?.map(({ key }) => <MenuItem key={key} name={getSplittedKey(key)} />), [menu]);
 
-  if (!menu.length) return <Spinner />;
+  if (loading) return <Spinner />;
 
   return <div className={css(menuDrawerButtonsStyle)}>{getMenus()}</div>;
 };

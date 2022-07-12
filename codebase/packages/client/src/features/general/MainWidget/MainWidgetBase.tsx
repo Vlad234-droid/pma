@@ -1,8 +1,8 @@
 import React, { FC, useState } from 'react';
 import { Status } from 'config/enum';
-import { Button, Colors, CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
+import { Button, Colors, CreateRule, Rule, useStyle, colors } from '@pma/dex-wrapper';
 import { TileWrapper } from 'components/Tile';
-import { Graphics, Icon } from 'components/Icon';
+import { Icon } from 'components/Icon';
 import { useNavigate } from 'react-router-dom';
 import { Page } from 'pages';
 import { buildPath } from 'features/general/Routes/utils';
@@ -86,7 +86,8 @@ export const MainWidgetBase: FC<MainWidgetBaseProps> = ({ customStyle, getConten
                 graphic='document'
                 invertColors={notApproved}
                 iconStyles={iconStyles}
-                color={disabled ? DISABLED_COLOR : undefined}
+                //@ts-ignore
+                color={disabled ? colors.darkBlue : undefined}
               />
             </div>
             <div className={css(headerBlockStyle)}>

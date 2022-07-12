@@ -1,11 +1,13 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 // TODO: move PendingApprovals to Actions feature to widgets
-import MyTeam, { View, ViewFilters, YourActions, TeamReporting, PendingApprovals } from 'features/general/MyTeam';
+import { View, ViewFilters, YourActions, PendingApprovals } from 'features/general/MyTeam';
+
 import ViewNavigation from 'features/general/ViewNavigation';
 import { Filters, getEmployeesSortingOptions, useSearch, useSorting } from 'features/general/Filters';
 import { Rule, useStyle } from '@pma/dex-wrapper';
-import { CanPerform, role } from 'features/general/Permission';
+import { CanPerform, role, tenant as T, useTenant } from 'features/general/Permission';
+
 import { useTranslation } from 'components/Translation';
 import { buildPath } from 'features/general/Routes';
 import { Page } from 'pages/general/types';
@@ -15,6 +17,8 @@ export const TEST_ID = 'my-team';
 const MyTeamPage: FC = () => {
   const { css } = useStyle();
   const { t } = useTranslation();
+  const tenant = useTenant();
+
   const options = getEmployeesSortingOptions(t);
   const [view, setView] = useState<View>(View.DIRECT_REPORTS);
   const [sortValue, setSortValue] = useSorting();
@@ -24,6 +28,23 @@ const MyTeamPage: FC = () => {
     setView(view);
   };
   const showActions = view === View.DIRECT_REPORTS;
+
+  const MyTeam = useMemo(
+    () =>
+      //@ts-ignore
+      tenant === T.GENERAL
+        ? React.lazy(() => import(`features/${tenant}/MyTeam`).then((module) => ({ default: module.default })))
+        : React.lazy(() => import(`features/${tenant}/MyTeam`).then((module) => ({ default: module.default }))),
+    [],
+  );
+  const TeamReporting = useMemo(
+    () =>
+      //@ts-ignore
+      tenant === T.GENERAL
+        ? React.lazy(() => import(`features/${tenant}/MyTeam`).then((module) => ({ default: module.TeamReporting })))
+        : React.lazy(() => import(`features/${tenant}/MyTeam`).then((module) => ({ default: module.TeamReporting }))),
+    [],
+  );
 
   return (
     <div>

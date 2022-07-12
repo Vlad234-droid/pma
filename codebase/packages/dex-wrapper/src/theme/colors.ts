@@ -6,6 +6,7 @@ const colors = {
   lightBlue: '#f3f9fc',
   lightGray: '#DEDEDE',
   tescoLightGray: '#F3F9F7',
+  darkBlue: '#B3CDE6',
 };
 export default colors;
 export type Colors = keyof typeof colors;

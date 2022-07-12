@@ -7,7 +7,7 @@ import { renderWithTheme as render, generateEmployeeReview } from 'utils/test';
 // @ts-ignore
 import { Status, Rating } from 'config/enum';
 
-import TimelinePreview from './TimelinePreview';
+import ProfilePreview from './ProfilePreview';
 
 jest.mock('react-router-dom', () => ({
   ...(jest.requireActual('react-router-dom') as any),
@@ -25,31 +25,31 @@ describe('<TimelinePreview />', () => {
 
   describe('#render', () => {
     it('should render wrapper', () => {
-      const { getByTestId } = render(<TimelinePreview {...props} />);
+      const { getByTestId } = render(<ProfilePreview {...props} />);
 
       expect(getByTestId('timeline-preview')).toBeInTheDocument();
     });
 
     it('should render <ColleagueInfo />', () => {
-      const { getByTestId } = render(<TimelinePreview {...props} />);
+      const { getByTestId } = render(<ProfilePreview {...props} />);
 
       expect(getByTestId('colleague-info')).toBeInTheDocument();
     });
 
     it('should render View profile button, if !props.rating', () => {
-      const { getByText } = render(<TimelinePreview {...props} />);
+      const { getByText } = render(<ProfilePreview {...props} />);
 
       expect(getByText('View profile')).toBeInTheDocument();
     });
 
     it('should render <ExpandButton />, if !props.rating', () => {
-      const { getByTestId } = render(<TimelinePreview {...props} />);
+      const { getByTestId } = render(<ProfilePreview {...props} />);
 
       expect(getByTestId('expand-button')).toBeInTheDocument();
     });
 
     it('should render icon, if !props.rating', () => {
-      const { getByTestId } = render(<TimelinePreview {...props} />);
+      const { getByTestId } = render(<ProfilePreview {...props} />);
 
       expect(getByTestId('timeline-icon')).toBeInTheDocument();
     });
@@ -60,7 +60,7 @@ describe('<TimelinePreview />', () => {
         rating: Rating.BELOW_EXPECTED,
       };
 
-      const { queryByTestId } = render(<TimelinePreview {...newProps} />);
+      const { queryByTestId } = render(<ProfilePreview {...newProps} />);
 
       expect(queryByTestId('timeline-icon')).not.toBeInTheDocument();
     });
@@ -71,7 +71,7 @@ describe('<TimelinePreview />', () => {
         rating: Rating.BELOW_EXPECTED,
       };
 
-      const { queryByTestId } = render(<TimelinePreview {...newProps} />);
+      const { queryByTestId } = render(<ProfilePreview {...newProps} />);
 
       expect(queryByTestId('expand-button')).not.toBeInTheDocument();
     });
@@ -82,7 +82,7 @@ describe('<TimelinePreview />', () => {
         rating: Rating.BELOW_EXPECTED,
       };
 
-      const { queryByText, getByText } = render(<TimelinePreview {...newProps} />);
+      const { queryByText, getByText } = render(<ProfilePreview {...newProps} />);
 
       expect(queryByText('View profile')).not.toBeInTheDocument();
       expect(getByText(newProps.rating)).toBeInTheDocument();
@@ -91,7 +91,7 @@ describe('<TimelinePreview />', () => {
 
   describe('#handlers', () => {
     it('should call props.onClick on wrapper click', () => {
-      const { getByTestId } = render(<TimelinePreview {...props} />);
+      const { getByTestId } = render(<ProfilePreview {...props} />);
 
       fireEvent.click(getByTestId('timeline-preview'));
       expect(props.onClick).toHaveBeenCalled();

@@ -21,7 +21,7 @@ type Props = {
   onClick?: () => void;
 };
 
-const TimelinePreview: FC<Props> = ({ status, employee, fullTeamView = false, rating, onClick }) => {
+const ProfilePreview: FC<Props> = ({ status, employee, fullTeamView = false, rating, onClick }) => {
   const { css } = useStyle();
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -66,7 +66,7 @@ const TimelinePreview: FC<Props> = ({ status, employee, fullTeamView = false, ra
   );
 };
 
-export default TimelinePreview;
+export default ProfilePreview;
 
 const wrapperStyles: Rule = {
   padding: '24px',
