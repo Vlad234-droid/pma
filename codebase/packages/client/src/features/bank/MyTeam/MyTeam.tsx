@@ -23,15 +23,13 @@ type Props = {
 };
 
 const MyTeam: FC<Props> = ({ view, searchValue, sortValue }) => {
-  const { loaded } = useSelector(getManagersMetaSelector) || {};
-  const { css } = useStyle();
-  const currentSelector = view === View.FULL_TEAM ? getAllEmployeesWithManagerSearch : getAllEmployees;
-  // @ts-ignore
-  const colleagues = useSelector((state) => currentSelector(state, searchValue, sortValue), shallowEqual) || [];
-
-  // @ts-ignore
-  const colleagueUuid = useSelector(colleagueUUIDSelector);
   const dispatch = useDispatch();
+  const { css } = useStyle();
+
+  const { loaded } = useSelector(getManagersMetaSelector) || {};
+  const currentSelector = view === View.FULL_TEAM ? getAllEmployeesWithManagerSearch : getAllEmployees;
+  const colleagues: Array<Employee> = useSelector(currentSelector(searchValue, sortValue), shallowEqual) || [];
+  const colleagueUuid: string = useSelector(colleagueUUIDSelector);
 
   const loadManagers = () =>
     dispatch(ManagersActions.getManagerReviews({ colleagueUuid, fullTeam: view === View.FULL_TEAM }));

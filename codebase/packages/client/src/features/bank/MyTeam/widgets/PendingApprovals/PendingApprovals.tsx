@@ -10,7 +10,8 @@ import { getPendingEmployees } from '@pma/store';
 const PendingApprovals: FC = () => {
   const { css, theme } = useStyle();
   const { t } = useTranslation();
-  const { employeeWithPendingApprovals } = useSelector((state) => getPendingEmployees(state), shallowEqual) || {};
+  //@ts-ignore
+  const { employeeWithPendingApprovals } = useSelector(getPendingEmployees, shallowEqual) || {};
 
   const waitingCount = employeeWithPendingApprovals?.length;
 
