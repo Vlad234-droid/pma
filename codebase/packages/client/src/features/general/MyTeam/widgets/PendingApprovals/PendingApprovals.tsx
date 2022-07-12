@@ -1,16 +1,16 @@
 import React, { FC } from 'react';
+import { useSelector } from 'react-redux';
+import { getPendingEmployees } from '@pma/store';
 import { useStyle, colors, Rule, fontWeight } from '@pma/dex-wrapper';
 
 import { useTranslation } from 'components/Translation';
 import { TileWrapper } from 'components/Tile';
 import { Icon } from 'components/Icon';
-import { shallowEqual, useSelector } from 'react-redux';
-import { getPendingEmployees } from '@pma/store';
 
 const PendingApprovals: FC = () => {
   const { css, theme } = useStyle();
   const { t } = useTranslation();
-  const { employeeWithPendingApprovals } = useSelector((state) => getPendingEmployees(state), shallowEqual) || {};
+  const { employeeWithPendingApprovals } = useSelector(getPendingEmployees()) || {};
 
   const waitingCount = employeeWithPendingApprovals?.length;
 

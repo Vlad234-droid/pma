@@ -5,7 +5,7 @@ import { Trans } from 'components/Translation/Translation';
 import { TileWrapper } from 'components/Tile';
 import { Icon } from 'components/Icon';
 import { Employee, ReviewType, Status } from 'config/types';
-import { filterApprovedFn } from 'features/general/Actions/utils';
+import { filterApprovedFn } from 'features/general/MyActions/utils';
 import { useSelector } from 'react-redux';
 import useDispatch from 'hooks/useDispatch';
 import { DeclineModal, ApproveModal } from '../Modal';
@@ -48,12 +48,12 @@ export const ApprovalWidget: FC<Props> = ({ isDisabled, reviews, onSave }) => {
     }
   }, [declines, reviews]);
 
-  const handleDeclineBtnClick = () => {
+  const handleDecline = () => {
     setIsOpenDeclinePopup(true);
     setCurrentReview(reviews[0]);
   };
 
-  const handleApproveBtnClick = () => {
+  const handleApprove = () => {
     setIsOpenApprovePopup(true);
     setCurrentReview(reviews[0]);
   };
@@ -148,30 +148,26 @@ export const ApprovalWidget: FC<Props> = ({ isDisabled, reviews, onSave }) => {
           <div className={css(buttonsWrapperStyle)}>
             <div>
               <Button
-                isDisabled={isDisabled}
+                isDisabled={isDisabled || !currentTimeline?.length}
                 styles={[buttonStyle({ inverse: true }), isDisabled ? { opacity: '0.6' } : {}]}
-                onPress={handleDeclineBtnClick}
+                onPress={handleDecline}
               >
                 <Icon graphic='cancel' iconStyles={{ paddingRight: '8px' }} />
                 <Trans i18nKey='decline'>Decline</Trans>
               </Button>
             </div>
             <div className={css({ display: 'inline-block' })}>
-              <Button
-                isDisabled={isDisabled}
-                styles={[buttonStyle({ inverse: false })]}
-                onPress={handleApproveBtnClick}
-              >
+              <Button isDisabled={isDisabled} styles={[buttonStyle({ inverse: false })]} onPress={handleApprove}>
                 <Icon graphic='check' invertColors={true} iconStyles={{ paddingRight: '8px' }} />
                 <Trans i18nKey='approve'>Approve</Trans>
               </Button>
             </div>
-            {isOpenDeclinePopup && currentTimeline && (
+            {isOpenDeclinePopup && (
               <DeclineModal
                 onSave={handleDeclineSubmit}
                 onClose={handleDeclineClose}
                 review={currentReview || undefined}
-                reviewType={currentTimeline[0].reviewType}
+                reviewType={currentTimeline?.[0]?.reviewType as ReviewType}
               />
             )}
             {isOpenApprovePopup && (

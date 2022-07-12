@@ -1,10 +1,10 @@
-import React, { FC } from 'react';
+import React, { ChangeEvent, FC } from 'react';
 import { useStyle, Rule } from '@pma/dex-wrapper';
 import { Checkbox } from 'components/Form';
 import { Trans } from 'components/Translation/Translation';
 
 type Props = {
-  onChange: () => void;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
   checked: boolean;
   indeterminate: boolean;
   disabled?: boolean;
@@ -14,7 +14,7 @@ export const SelectAll: FC<Props> = ({ onChange, checked, indeterminate, disable
   const { css } = useStyle();
 
   return (
-    <label>
+    <label className={css(labelStyle)}>
       <Checkbox
         disabled={disabled}
         name='selectAll'
@@ -39,3 +39,7 @@ const spanStyle: Rule = ({ theme }) => ({
   fontWeight: theme.font.weight.bold,
   cursor: 'pointer',
 });
+
+const labelStyle: Rule = {
+  display: 'flex',
+};

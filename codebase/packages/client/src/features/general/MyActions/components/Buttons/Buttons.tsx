@@ -3,7 +3,7 @@ import { Button, useStyle, Rule } from '@pma/dex-wrapper';
 
 import { Icon } from 'components/Icon';
 import { Trans, useTranslation } from 'components/Translation/Translation';
-import { getReviewTypeTitle } from 'features/general/Actions/utils';
+import { getReviewTypeTitle } from 'features/general/MyActions/utils';
 import { ReviewType, Status } from 'config/enum';
 
 import { ApproveModal, DeclineModal } from '../Modal';

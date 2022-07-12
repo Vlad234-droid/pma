@@ -1,6 +1,6 @@
 import { createAsyncAction } from 'typesafe-actions';
 
-export const getManagers = createAsyncAction(
+export const getManagerReviews = createAsyncAction(
   'managers/REQUEST',
   'managers/SUCCESS',
   'managers/FAILURE',
@@ -8,5 +8,5 @@ export const getManagers = createAsyncAction(
 )<any, any, Error, undefined>();
 
 export const Actions = {
-  getManagers: getManagers.request,
+  getManagerReviews: getManagerReviews.request,
 };

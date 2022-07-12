@@ -19,7 +19,7 @@ type Props = {
 
 const Modal: FC<Props> = ({ review, status, onClose }) => {
   const { t } = useTranslation();
-  const colleaguesWaitingForApproval = useSelector(getEmployeesWithReviewStatus(Status.WAITING_FOR_APPROVAL)());
+  const colleaguesWaitingForApproval = useSelector(getEmployeesWithReviewStatus(Status.WAITING_FOR_APPROVAL));
   const navigate = useNavigate();
 
   const title = `${status === Status.DECLINED ? t('declined', 'Declined') : t('approved', 'Approved')} ${t(

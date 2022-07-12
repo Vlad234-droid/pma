@@ -28,14 +28,14 @@ const MyTeam: FC<Props> = ({ view, searchValue, sortValue }) => {
   const { css } = useStyle();
   const currentSelector = view === View.FULL_TEAM ? getAllEmployeesWithManagerSearch : getAllEmployees;
   // @ts-ignore
-  const colleagues = useSelector((state) => currentSelector(state, searchValue, sortValue), shallowEqual) || [];
+  const colleagues = useSelector(currentSelector(searchValue, sortValue)) || [];
 
   // @ts-ignore
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const dispatch = useDispatch();
 
   const loadManagers = () =>
-    dispatch(ManagersActions.getManagers({ colleagueUuid, fullTeam: view === View.FULL_TEAM }));
+    dispatch(ManagersActions.getManagerReviews({ colleagueUuid, fullTeam: view === View.FULL_TEAM }));
 
   useEffect(() => {
     if (colleagueUuid) loadManagers();

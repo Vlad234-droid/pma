@@ -17,7 +17,7 @@ import {
   updateRatingReview,
 } from './actions';
 import { getTimeline } from '../timeline/actions';
-import { getManagers } from '../managers/actions';
+import { getManagerReviews } from '../managers/actions';
 
 export const getReviewsEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
@@ -45,7 +45,10 @@ export const getColleagueReviewsEpic: Epic = (action$, _, { api }) =>
       from(api.getReviews(payload)).pipe(
         mergeMap(({ data }: any) =>
           from([
-            getColleagueReviews.success({ colleagueReviews: { [payload.pathParams.colleagueUuid]: data }, data }),
+            getColleagueReviews.success({
+              colleagueReviews: { [payload.pathParams.colleagueUuid as string]: data },
+              data,
+            }),
             getReviews.success({ data }),
           ]),
         ),
@@ -146,7 +149,7 @@ export const updateReviewStatusEpic: Epic = (action$, _, { api }) => {
       return from(api.updateReviewStatus(payload)).pipe(
         mergeMap(() =>
           from([
-            getManagers.request({ colleagueUuid: payload.pathParams.approverUuid }),
+            getManagerReviews.request({ colleagueUuid: payload.pathParams.approverUuid }),
             updateReviewStatus.success({ ...payload }),
             getReviews.request({
               pathParams: { colleagueUuid: payload.pathParams.colleagueUuid, cycleUuid: payload.pathParams.cycleUuid },
@@ -187,7 +190,7 @@ export const updateRatingReviewEpic: Epic = (action$, state$, { api }) =>
       // @ts-ignore
       from(api.getOverallRating(payload)).pipe(
         // @ts-ignore
-        map(({ success, data }) => {
+        map(({ data }) => {
           const { reviews }: any = { ...state$.value };
           const reviewsData = reviews?.data || [];
           const reviewType = payload?.type;

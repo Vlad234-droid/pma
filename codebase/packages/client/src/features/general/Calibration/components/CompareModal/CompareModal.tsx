@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react';
 import { Styles, useStyle } from '@pma/dex-wrapper';
 
-import { ConfirmModal } from 'features/general/Actions';
+import { ConfirmModal } from 'features/general/MyActions';
 import { Trans, useTranslation } from 'components/Translation';
 import { Radio } from 'components/Form';
 
