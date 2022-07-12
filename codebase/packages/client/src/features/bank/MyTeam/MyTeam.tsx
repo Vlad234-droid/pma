@@ -34,7 +34,7 @@ const MyTeam: FC<Props> = ({ view, searchValue, sortValue }) => {
   const dispatch = useDispatch();
 
   const loadManagers = () =>
-    dispatch(ManagersActions.getManagers({ colleagueUuid, fullTeam: view === View.FULL_TEAM }));
+    dispatch(ManagersActions.getManagerReviews({ colleagueUuid, fullTeam: view === View.FULL_TEAM }));
 
   useEffect(() => {
     if (colleagueUuid) loadManagers();
