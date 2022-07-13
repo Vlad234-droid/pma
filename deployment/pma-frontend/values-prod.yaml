@@ -95,7 +95,7 @@ environment:
   API_PROXY_MOUNT_PATH: /api/pma/v1
   API_SERVER_URL: http://pma-api-service:8083/v1
   API_IDENTITY_SERVER_URL: http://pma-api-service:8084/v1
-  API_MANAGEMENT_SERVER_URL: http://pma-api-service:8090/actuator
+  # API_MANAGEMENT_SERVER_URL: http://pma-api-service:8090/actuator
   SWAGGER_PROXY_MOUNT_PATH: /api-docs,/swagger-ui
   SWAGGER_SERVER_URL: http://pma-api-service:8083
   CAMUNDA_PROXY_MOUNT_PATH: /camunda

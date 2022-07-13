@@ -25,7 +25,24 @@ spec:
             name: pma-frontend-service
             port:
               number: 9000
-{{- if .Values.api.enabled }}
+    {{- if .Values.api.enabled }}
+      # to backend IAM services
+      - path: /(iam-api/)(v1/.*)
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: pma-api-service
+            port:
+              number: 8084
+      # to all other backend APIs
+      # !!! souldn't be exposed in PROD
+      - path: /(pma-api/)(v1/.*)
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: pma-api-service
+            port:
+              number: 8083
       {{- if .Values.api.camunda.enabled }}
       # to camunda
       - path: /()(camunda/.*)
@@ -64,21 +81,4 @@ spec:
             port:
               number: 8090
       {{- end }}
-      # to backend IAM services
-      - path: /(iam-api/)(v1/.*)
-        pathType: ImplementationSpecific
-        backend:
-          service:
-            name: pma-api-service
-            port:
-              number: 8084
-      # to all other backend APIs
-      # !!! souldn't be exposed in PROD
-      - path: /(pma-api/)(v1/.*)
-        pathType: ImplementationSpecific
-        backend:
-          service:
-            name: pma-api-service
-            port:
-              number: 8083
-{{- end }}
+    {{- end }}
