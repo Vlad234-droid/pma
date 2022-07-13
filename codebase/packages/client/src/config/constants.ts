@@ -1,5 +1,5 @@
 export const PUBLIC_URL = process?.env?.PUBLIC_URL ?? '';
-export const API_URL = process.env.REACT_APP_API_URL ?? '/api/v1';
+export const API_URL = process.env.REACT_APP_API_URL ?? '/api/pma/v1';
 export const CAMUNDA_APP_PATH = process.env.REACT_APP_CAMUNDA_APP_PATH ?? '/camunda';
 
 export const INTEGRATION_MODE = process.env.REACT_APP_INTEGRATION_MODE ?? 'integrity';

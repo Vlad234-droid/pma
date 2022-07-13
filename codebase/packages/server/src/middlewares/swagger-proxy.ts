@@ -90,7 +90,7 @@ export const swaggerProxyMiddleware = (processConfig: ProcessConfig) => {
   //
   //
   //
-  appRouter.get('/api-docs/*', async (req, res) => {
+  appRouter.get('/api-docs/:component', async (req, res) => {
     
     const fetchApiDoc = async (url: string) => {
       const authToken = extractAuthToken(req, res);
@@ -114,25 +114,63 @@ export const swaggerProxyMiddleware = (processConfig: ProcessConfig) => {
         return undefined;
       }
     }
-    
-    const apiDoc = await fetchApiDoc(req.originalUrl);
-    if (apiDoc) {
-      const ajustedApiDoc = {
-        ...apiDoc,
-        components: {
-          ...apiDoc.components,
-          securitySchemes: undefined,
-        },
-        security: undefined,
-        servers: [
-          { description: `${buildEnvironment().toUpperCase()} server`, url: `${applicationOrigin()}${emptyIfRoot(applicationContextPath())}/api`},
-        ],
-      };
 
-      const swaggerConfigBuffer = Buffer.from(JSON.stringify(ajustedApiDoc));
+    const transformComponenApiDocs = async (suffix: string, prefixToStrip: string = '') => {
+      const stripCompPrefix = (comps: Object, prefix = '') => {
+        if (prefix === '') return comps;
+        let result: Object = {};
+        for (let path in comps) {
+          if (path && path.startsWith(prefixToStrip)) {
+            const newPath = path.substring(prefixToStrip.length) || '/';
+            result = Object.assign(result, { [newPath]: comps[path] });
+          } else {
+            result = Object.assign(result, { [path]: comps[path] });
+          }
+        }
+        return result;
+      }
 
-      res.contentType('application/json');
-      res.send(swaggerConfigBuffer);
+      const apiDoc = await fetchApiDoc(req.originalUrl);
+      if (apiDoc) {
+        const ajustedApiDoc = {
+          ...apiDoc,
+          components: {
+            ...apiDoc.components,
+            securitySchemes: undefined,
+          },
+          security: undefined,
+          servers: [
+            { 
+              description: `${buildEnvironment().toUpperCase()} server`, 
+              url: `${applicationOrigin()}${emptyIfRoot(applicationContextPath())}/${suffix}`
+            },
+          ],
+          paths: stripCompPrefix(apiDoc.paths, prefixToStrip),
+        };
+
+        return ajustedApiDoc;
+      } else {
+        return {};
+      }
+    }
+
+    const component = req.params.component;
+    switch (component) {
+      case 'pma-api-v1':
+        const apiConfigBuffer = Buffer.from(JSON.stringify(await transformComponenApiDocs('api/pma/v1', '/v1')));
+        res.contentType('application/json');
+        res.send(apiConfigBuffer);
+        break;
+      case 'user-management-v1':
+        const userManagementConfigBuffer = Buffer.from(JSON.stringify(await transformComponenApiDocs('api/identity/v1', '/v1')));
+        res.contentType('application/json');
+        res.send(userManagementConfigBuffer);
+        break;
+      case 'x-actuator':
+        const actuatorConfigBuffer = Buffer.from(JSON.stringify(await transformComponenApiDocs('api/actuator', '/actuator')));
+        res.contentType('application/json');
+        res.send(actuatorConfigBuffer);
+        break;
     }
   });
 

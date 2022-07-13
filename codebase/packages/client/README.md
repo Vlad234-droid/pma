@@ -24,15 +24,15 @@ where `[ENV] = production | dev | stage` and if missing it defaults to ''.
 
 ## Environment Table
 
-| Column                      | Description                                            | Value (one of)          | Optional | Suggestion                   |
-| --------------------------- | ------------------------------------------------------ | ----------------------- | -------- | ---------------------------- |
-| PORT                        | Specifies the port, which will be used for development | 9000                    | Y        | 9000                         |
-| NODE_ENV                    | Env where the app is running                           | development, production | N        | development                  |
-| PUBLIC_URL                  | For subdirectory                                       | /                       | N        | /                            |
-| REACT_APP_LOGOUT_URL        | Path for logout                                        | /sso/logout             | N        | /sso/logout                  |
-| REACT_APP_API_URL           | URL for api server                                     | [Local URL]             | N        | http://localhost:9000/api/v1 |
-| REACT_APP_MY_INBOX_API_PATH | API path to integrate with Inbox                       | /api/colleague-inbox    | N        | /api/colleague-inbox         |
-| REACT_APP_INTEGRATION_MODE  | Integration Mode                                       | standalone, integrity   | N        | standalone                   |
+| Column | Description | Value (one of) | Optional | Suggestion |
+| ------ | ----------- | -------------- | -------- | ---------- |
+| PORT | Specifies the port, which will be used for development | 9000 | Y | 9000 |
+| NODE_ENV | Env where the app is running | development, production | N | development |
+| PUBLIC_URL | For subdirectory | / | N | / |
+| REACT_APP_LOGOUT_URL | Path for logout | /sso/logout | N | /sso/logout |
+| REACT_APP_API_URL | URL for api server | [Local URL] | N | http://localhost:9000/api/pma/v1 |
+| REACT_APP_MY_INBOX_API_PATH | API path to integrate with Inbox | /api/colleague-inbox | N | /api/colleague-inbox |
+| REACT_APP_INTEGRATION_MODE | Integration Mode | standalone, integrity | N | standalone |
 
 ## Available Scripts
 

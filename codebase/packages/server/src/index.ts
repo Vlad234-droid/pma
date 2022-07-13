@@ -20,6 +20,7 @@ import {
   standaloneIndexAssetHandler,
   myInboxConfig,
   apiProxyMiddleware,
+  apiIdentityProxyMiddleware,
   apiManagementProxyMiddleware,
   swaggerProxyMiddleware,
   camundaProxyMiddleware,
@@ -103,11 +104,12 @@ if (!API_SERVER_URL) {
     }
   }
 
-  router.use('/api/v1', apiProxyMiddleware(config));
+  router.use('/api/pma/v1', apiProxyMiddleware(config));
 
+  config.apiIdentityServerUrl() && router.use('/api/identity/v1', apiIdentityProxyMiddleware(config));
   config.apiManagementServerUrl() && router.use('/api/actuator', apiManagementProxyMiddleware(config));
-  config.swaggerServerUrl() && router.use(swaggerProxyMiddleware(config));
   config.camundaServerUrl() && router.use('/camunda', camundaProxyMiddleware(config));
+  config.swaggerServerUrl() && router.use(swaggerProxyMiddleware(config));
 
   router.use('/_status', (_, res) => res.sendStatus(200));
 

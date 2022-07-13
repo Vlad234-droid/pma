@@ -7,13 +7,32 @@ export const apiProxyMiddleware = ({
 }: ProcessConfig) => {
 
   const apiProxy = initializeProxyMiddleware({ 
-    mountPath: `/api/v1`,
+    mountPath: `/api/pma/v1`,
     targetUrl: apiServerUrl(),
     logLevel: loggerLevel(), 
     logger: 'api',
   });
 
   return apiProxy;
+};
+
+export const apiIdentityProxyMiddleware = ({ 
+  apiIdentityServerUrl,
+  loggerLevel,
+}: ProcessConfig) => {
+
+  if (apiIdentityServerUrl() === undefined) {
+    return [];
+  }
+
+  const apiIdentityProxy = initializeProxyMiddleware({ 
+    mountPath: `/api/identity/v1`,
+    targetUrl: apiIdentityServerUrl()!,
+    logLevel: loggerLevel(), 
+    logger: 'api',
+  });
+
+  return apiIdentityProxy;
 };
 
 export const apiManagementProxyMiddleware = ({ 

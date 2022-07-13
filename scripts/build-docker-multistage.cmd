@@ -23,7 +23,7 @@ docker build ^
     --build-arg NPM_ACCESS_TOKEN=%NPM_ACCESS_TOKEN% ^
     --build-arg NODE_ENV=ppe ^
     --build-arg PUBLIC_URL=/experience/yourcontribution ^
-    --build-arg REACT_APP_API_URL=/experience/yourcontribution/api/v1 ^
+    --build-arg REACT_APP_API_URL=/experience/yourcontribution/api/pma/v1 ^
     --build-arg REACT_APP_MY_INBOX_API_PATH=/experience/yourcontribution/api/colleague-inbox ^
     --file dockerfiles/pma-frontend_docker_multistage_alpine.Dockerfile ^
    .
