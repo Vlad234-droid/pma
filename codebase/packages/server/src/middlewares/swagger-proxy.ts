@@ -66,17 +66,24 @@ export const swaggerProxyMiddleware = (processConfig: ProcessConfig) => {
   //
   //
   appRouter.get('/api-docs/swagger-config', (req, res) => {
+    const urls = [
+      { url: `${emptyIfRoot(applicationContextPath())}/api-docs/pma-api-v1`, name: 'pma-api-v1' },
+    ];
+
+    if (processConfig.apiIdentityServerUrl()) {
+      urls.push({ url: `${emptyIfRoot(applicationContextPath())}/api-docs/user-management-v1`, name: 'user-management-v1' });
+    }
+    if (processConfig.apiManagementServerUrl()) {
+      urls.push({ url: `${emptyIfRoot(applicationContextPath())}/api-docs/x-actuator`, name: 'x-actuator' });
+    }
+
     const swaggerConfig = {
       configUrl:`${emptyIfRoot(applicationContextPath())}/api-docs/swagger-config`,
       displayRequestDuration:true,
       oauth2RedirectUrl: `${applicationOrigin()}${emptyIfRoot(applicationContextPath())}/swagger-ui/oauth2-redirect.html`,
       operationsSorter: 'alpha',
       tagsSorter: 'alpha',
-      urls:[
-        { url: `${emptyIfRoot(applicationContextPath())}/api-docs/pma-api-v1`, name: 'pma-api-v1' },
-        { url: `${emptyIfRoot(applicationContextPath())}/api-docs/user-management-v1`, name: 'user-management-v1' },
-        { url: `${emptyIfRoot(applicationContextPath())}/api-docs/x-actuator`, name: 'x-actuator' },
-      ],
+      urls,
       'urls.primaryName': 'pma-api-v1',
       validatorUrl: '',
     };
