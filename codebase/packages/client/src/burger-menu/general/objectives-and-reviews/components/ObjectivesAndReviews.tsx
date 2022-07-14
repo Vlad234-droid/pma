@@ -1,4 +1,7 @@
 import React from 'react';
+import { colleagueUUIDSelector, timelinesExistSelector } from '@pma/store';
+import { useSelector } from 'react-redux';
+
 import { buildPath } from 'features/general/Routes';
 import { MenuItem as Item } from 'components/MenuItem';
 import { useTranslation } from 'components/Translation';
@@ -8,6 +11,11 @@ import { Page } from 'pages';
 const MenuItem = () => {
   const { linkTitle } = useHeaderContainer();
   const { t } = useTranslation();
+  const colleagueUuid = useSelector(colleagueUUIDSelector);
+  const timelineExist = useSelector(timelinesExistSelector(colleagueUuid));
+
+  if (!timelineExist) return null;
+
   return (
     <Item
       iconGraphic={'goal'}
