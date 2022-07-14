@@ -10,10 +10,13 @@ import { emptyIfRoot } from '@pma-connectors/onelogin';
 import { ProcessConfig } from '../config';
 import { extractAuthToken, initializeProxyMiddleware } from './proxy';
 
-
 export const swaggerProxyMiddleware = (processConfig: ProcessConfig) => { 
-  
-  const { buildEnvironment, applicationContextPath, applicationOrigin, swaggerServerUrl, loggerLevel }= processConfig;
+
+  const API_PMA_V1_NAME = 'yoc-api-v1';
+  const API_IDENTITY_V1_NAME = 'identity-api-v1';
+  const API_MANAGEMENT_NAME = 'x-actuator';
+
+  const { buildEnvironment, applicationContextPath, applicationOrigin, swaggerServerUrl, loggerLevel } = processConfig;
 
   if (swaggerServerUrl() === undefined) {
     return [];
@@ -52,7 +55,7 @@ export const swaggerProxyMiddleware = (processConfig: ProcessConfig) => {
           displayRequestDuration: true,
           operationsSorter: 'alpha',
           tagsSorter: 'alpha',
-          'urls.primaryName': 'pma-api-v1',
+          'urls.primaryName': '${API_PMA_V1_NAME}',
           validatorUrl: ''
         });
       };
@@ -67,14 +70,14 @@ export const swaggerProxyMiddleware = (processConfig: ProcessConfig) => {
   //
   appRouter.get('/api-docs/swagger-config', (req, res) => {
     const urls = [
-      { url: `${emptyIfRoot(applicationContextPath())}/api-docs/pma-api-v1`, name: 'pma-api-v1' },
+      { url: `${emptyIfRoot(applicationContextPath())}/api-docs/${API_PMA_V1_NAME}`, name: API_PMA_V1_NAME },
     ];
 
     if (processConfig.apiIdentityServerUrl()) {
-      urls.push({ url: `${emptyIfRoot(applicationContextPath())}/api-docs/user-management-v1`, name: 'user-management-v1' });
+      urls.push({ url: `${emptyIfRoot(applicationContextPath())}/api-docs/${API_IDENTITY_V1_NAME}`, name: API_IDENTITY_V1_NAME });
     }
     if (processConfig.apiManagementServerUrl()) {
-      urls.push({ url: `${emptyIfRoot(applicationContextPath())}/api-docs/x-actuator`, name: 'x-actuator' });
+      urls.push({ url: `${emptyIfRoot(applicationContextPath())}/api-docs/${API_MANAGEMENT_NAME}`, name: API_MANAGEMENT_NAME });
     }
 
     const swaggerConfig = {
@@ -84,7 +87,7 @@ export const swaggerProxyMiddleware = (processConfig: ProcessConfig) => {
       operationsSorter: 'alpha',
       tagsSorter: 'alpha',
       urls,
-      'urls.primaryName': 'pma-api-v1',
+      'urls.primaryName': API_PMA_V1_NAME,
       validatorUrl: '',
     };
 
@@ -122,7 +125,7 @@ export const swaggerProxyMiddleware = (processConfig: ProcessConfig) => {
       }
     }
 
-    const transformComponenApiDocs = async (suffix: string, prefixToStrip: string = '') => {
+    const transformComponenApiDocs = async (apiPath: string, prefixToStrip: string = '') => {
       const stripCompPrefix = (comps: Object, prefix = '') => {
         if (prefix === '') return comps;
         let result: Object = {};
@@ -149,7 +152,7 @@ export const swaggerProxyMiddleware = (processConfig: ProcessConfig) => {
           servers: [
             { 
               description: `${buildEnvironment().toUpperCase()} server`, 
-              url: `${applicationOrigin()}${emptyIfRoot(applicationContextPath())}/${suffix}`
+              url: `${applicationOrigin()}${emptyIfRoot(applicationContextPath())}${apiPath}`
             },
           ],
           paths: stripCompPrefix(apiDoc.paths, prefixToStrip),
@@ -163,18 +166,18 @@ export const swaggerProxyMiddleware = (processConfig: ProcessConfig) => {
 
     const component = req.params.component;
     switch (component) {
-      case 'pma-api-v1':
-        const apiConfigBuffer = Buffer.from(JSON.stringify(await transformComponenApiDocs('api/pma/v1', '/v1')));
+      case API_PMA_V1_NAME:
+        const apiConfigBuffer = Buffer.from(JSON.stringify(await transformComponenApiDocs('/api/yoc/v1', '/v1')));
         res.contentType('application/json');
         res.send(apiConfigBuffer);
         break;
-      case 'user-management-v1':
-        const userManagementConfigBuffer = Buffer.from(JSON.stringify(await transformComponenApiDocs('api/identity/v1', '/v1')));
+      case API_IDENTITY_V1_NAME:
+        const userManagementConfigBuffer = Buffer.from(JSON.stringify(await transformComponenApiDocs('/api/identity/v1', '/v1')));
         res.contentType('application/json');
         res.send(userManagementConfigBuffer);
         break;
-      case 'x-actuator':
-        const actuatorConfigBuffer = Buffer.from(JSON.stringify(await transformComponenApiDocs('api/actuator', '/actuator')));
+      case API_MANAGEMENT_NAME:
+        const actuatorConfigBuffer = Buffer.from(JSON.stringify(await transformComponenApiDocs('/api/actuator', '/actuator')));
         res.contentType('application/json');
         res.send(actuatorConfigBuffer);
         break;

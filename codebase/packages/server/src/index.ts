@@ -104,7 +104,7 @@ if (!API_SERVER_URL) {
     }
   }
 
-  router.use('/api/pma/v1', apiProxyMiddleware(config));
+  router.use('/api/yoc/v1', apiProxyMiddleware(config));
 
   config.apiIdentityServerUrl() && router.use('/api/identity/v1', apiIdentityProxyMiddleware(config));
   config.apiManagementServerUrl() && router.use('/api/actuator', apiManagementProxyMiddleware(config));

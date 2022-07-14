@@ -7,7 +7,7 @@ export const apiProxyMiddleware = ({
 }: ProcessConfig) => {
 
   const apiProxy = initializeProxyMiddleware({ 
-    mountPath: `/api/pma/v1`,
+    mountPath: `/api/yoc/v1`,
     targetUrl: apiServerUrl(),
     logLevel: loggerLevel(), 
     logger: 'api',

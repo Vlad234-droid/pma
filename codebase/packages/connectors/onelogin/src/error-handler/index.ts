@@ -23,7 +23,7 @@ export const errorHandler =
     const canRedirect = !noRedirectPathFragments.some((pathFragment) => req.originalUrl.includes(pathFragment));
 
     if (canRedirect) {
-      const redirectTo = `${emptyIfRoot(applicationPath)}${req.path}`;
+      const redirectTo = `${emptyIfRoot(applicationPath)}${req.originalUrl}`;
       const message = status === 401
         ? `${error.message} - User will be redirected to the ${redirectAuthenticationPath}, return path after login: ${redirectTo}`
         : `${error.message} - Error will be forwarded to application error handler`;
