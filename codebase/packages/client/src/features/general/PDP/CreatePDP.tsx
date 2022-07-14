@@ -24,7 +24,7 @@ const CreateMyPDP = () => {
   const dispatch = useDispatch();
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const pdpList = useSelector(schemaMetaPDPSelector)?.goals || [];
-  const { loaded, loading } = useSelector(metaPDPSelector) || {};
+  const { loading } = useSelector(metaPDPSelector) || {};
   const [pdpGoals, setPDPGoals] = useState<any[]>([]);
   const [schema] = usePDPSchema(PDPType.PDP);
   const { components = [], display: newSchemaVersion } = schema;
@@ -42,10 +42,6 @@ const CreateMyPDP = () => {
     UPDATE = 'update',
     CREATE = 'create',
   }
-
-  useEffect(() => {
-    dispatch(PDPActions.getPDPGoal({}));
-  }, []);
 
   useEffect(() => {
     if (schema?.meta?.loaded) {
@@ -95,10 +91,6 @@ const CreateMyPDP = () => {
     'Personal Development Goal',
   )}`;
 
-  if (loading || !loaded || !schema?.meta?.loaded) {
-    return <Spinner data-test-id={TEST_SPINNER_ID} fullHeight />;
-  }
-
   return (
     <ModalWrapper data-test-id={TEST_ID} isOpen={true}>
       <Modal
@@ -115,41 +107,45 @@ const CreateMyPDP = () => {
           styles: [modalTitleOptionStyle({ mobileScreen })],
         }}
       >
-        <div className={css(mainContainer)}>
-          {newSchemaVersion ? (
-            <CreatePDPFormNew
-              pdpGoals={pdpGoals}
-              pdpList={pdpList}
-              currentTab={currentTab}
-              setCurrentTab={setCurrentTab}
-              currentGoal={currentGoal}
-              components={components}
-              confirmSaveModal={confirmSaveModal}
-              maxGoals={maxGoalCount}
-              setConfirmModal={setConfirmModal}
-              currentUUID={currentUUID}
-              colleagueUuid={colleagueUuid}
-              onSubmit={onFormSubmit}
-              requestMethods={METHODS}
-            />
-          ) : (
-            <CreatePDPForm
-              pdpGoals={pdpGoals}
-              pdpList={pdpList}
-              currentTab={currentTab}
-              setCurrentTab={setCurrentTab}
-              currentGoal={currentGoal}
-              formElements={formElements}
-              confirmSaveModal={confirmSaveModal}
-              maxGoals={maxGoalCount}
-              setConfirmModal={setConfirmModal}
-              currentUUID={currentUUID}
-              colleagueUuid={colleagueUuid}
-              onSubmit={onFormSubmit}
-              requestMethods={METHODS}
-            />
-          )}
-        </div>
+        {loading || !schema?.meta?.loaded ? (
+          <Spinner data-test-id={TEST_SPINNER_ID} fullHeight />
+        ) : (
+          <div className={css(mainContainer)}>
+            {newSchemaVersion ? (
+              <CreatePDPFormNew
+                pdpGoals={pdpGoals}
+                pdpList={pdpList}
+                currentTab={currentTab}
+                setCurrentTab={setCurrentTab}
+                currentGoal={currentGoal}
+                components={components}
+                confirmSaveModal={confirmSaveModal}
+                maxGoals={maxGoalCount}
+                setConfirmModal={setConfirmModal}
+                currentUUID={currentUUID}
+                colleagueUuid={colleagueUuid}
+                onSubmit={onFormSubmit}
+                requestMethods={METHODS}
+              />
+            ) : (
+              <CreatePDPForm
+                pdpGoals={pdpGoals}
+                pdpList={pdpList}
+                currentTab={currentTab}
+                setCurrentTab={setCurrentTab}
+                currentGoal={currentGoal}
+                formElements={formElements}
+                confirmSaveModal={confirmSaveModal}
+                maxGoals={maxGoalCount}
+                setConfirmModal={setConfirmModal}
+                currentUUID={currentUUID}
+                colleagueUuid={colleagueUuid}
+                onSubmit={onFormSubmit}
+                requestMethods={METHODS}
+              />
+            )}
+          </div>
+        )}
       </Modal>
     </ModalWrapper>
   );
