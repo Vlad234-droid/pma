@@ -45,9 +45,11 @@ export const getIcon = (
       [Status.PENDING]: ['roundClock', 'pending', t('pending', 'Pending')],
       [Status.WAITING_FOR_APPROVAL]: ['roundClock', 'pending', t('waiting_for_approval', 'Waiting for approval')],
       [Status.DECLINED]: ['roundAlert', 'pending', t('declined', 'Declined')],
+      [Status.COMPLETED]: ['roundTick', 'green', t('completed', 'Completed')],
     },
     [TimelineType.TIMELINE_POINT]: {
       [Status.STARTED]: ['roundTick', 'green', t('available', 'Available')],
+      [Status.COMPLETED]: ['roundTick', 'green', t('completed', 'Completed')],
     },
   };
 

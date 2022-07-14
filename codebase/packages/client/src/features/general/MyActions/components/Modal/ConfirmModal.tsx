@@ -1,11 +1,11 @@
-import React, { FC, HTMLProps } from 'react';
+import React, { FC } from 'react';
 import { useStyle } from '@pma/dex-wrapper';
 
-import { ColleagueInfo } from 'features/general/MyTeam';
 import { Employee } from 'config/types';
+import ColleagueInfo from 'components/ColleagueInfo';
 import { ConfirmModal as Modal } from 'components/ConfirmModal';
 
-export type ConfirmAcceptModalProps = {
+export type Props = {
   title: string;
   onClose: () => void;
   onSave: (hasReason?: boolean, reason?: string) => void;
@@ -15,8 +15,6 @@ export type ConfirmAcceptModalProps = {
   reason?: string;
   submitBtnTitle?: JSX.Element;
 };
-
-type Props = HTMLProps<HTMLInputElement> & ConfirmAcceptModalProps;
 
 const ConfirmModal: FC<Props> = ({
   title,

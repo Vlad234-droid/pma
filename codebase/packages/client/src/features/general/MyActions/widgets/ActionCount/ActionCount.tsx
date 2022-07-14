@@ -6,12 +6,11 @@ import { useTranslation } from 'components/Translation';
 import { shallowEqual, useSelector } from 'react-redux';
 import { getPendingEmployees } from '@pma/store';
 
-const YourActions: FC = () => {
+const ActionCount: FC = () => {
   const { css } = useStyle();
   const { t } = useTranslation();
-  //@ts-ignore
   const { employeeWithPendingApprovals, employeePendingApprovals } =
-    useSelector(getPendingEmployees, shallowEqual) || {};
+    useSelector(getPendingEmployees(), shallowEqual) || {};
 
   const waitingCount = employeeWithPendingApprovals?.length;
   const draftCount = employeePendingApprovals?.length;
@@ -39,7 +38,7 @@ const YourActions: FC = () => {
   );
 };
 
-export default YourActions;
+export default ActionCount;
 
 const tileWrapperStyles: Rule = { minWidth: '350px' };
 

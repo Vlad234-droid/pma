@@ -72,6 +72,8 @@ const CreatePDPForm: FC<Props> = ({
 
   const [isOpenConfirmNext, setConfirmNextOpen] = useState<boolean>(false);
 
+  const fillEmptyHandler = () => reset(formElementsFilledEmpty);
+
   const today = useMemo(() => {
     const now = new Date();
     now.setHours(0);
@@ -100,7 +102,7 @@ const CreatePDPForm: FC<Props> = ({
     if (Object.keys(currentGoal).length > 0) {
       reset(currentGoal?.properties);
     } else {
-      reset(formElementsFilledEmpty);
+      fillEmptyHandler();
     }
   }, [pdpList.length, currentGoal, currentTab]);
 
@@ -157,6 +159,7 @@ const CreatePDPForm: FC<Props> = ({
             submitBtnTitle={<Trans i18nKey='confirm'>Confirm</Trans>}
             onSave={() => {
               onSubmit(schemaLoaded, requestData, requestMethods.CREATE);
+              fillEmptyHandler();
               setConfirmNextOpen(false);
             }}
             onCancel={() => setConfirmNextOpen(false)}
@@ -226,7 +229,7 @@ const CreatePDPForm: FC<Props> = ({
           <div className={css(buttonWrapperStyle({ mobileScreen }))}>
             <Button
               isDisabled={!formState.isValid}
-              onPress={() => setConfirmModal(!confirmSaveModal)}
+              onPress={() => setConfirmModal(true)}
               styles={[buttonWhiteStyle({ theme, mobileScreen, formState, displaySaveBtn })]}
             >
               <Trans i18nKey='save_and_exit'>Save & Exit</Trans>
@@ -236,10 +239,7 @@ const CreatePDPForm: FC<Props> = ({
               <Button
                 data-test-id={SUBMIT_TEST_ID}
                 isDisabled={!formState.isValid}
-                onPress={() => {
-                  onSubmit(schemaLoaded, requestData, requestMethods.CREATE);
-                  reset(formElementsFilledEmpty);
-                }}
+                onPress={() => setConfirmNextOpen(true)}
                 styles={[customBtn({ mobileScreen }), createBtn]}
               >
                 <div className={css(spacedText)}>

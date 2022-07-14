@@ -10,8 +10,7 @@ import { paramsReplacer } from 'utils';
 import { buildPath } from 'features/general/Routes';
 import { Employee } from 'config/types';
 import { useTranslation } from 'components/Translation';
-
-import ColleagueInfo from '../ColleagueInfo';
+import ColleagueInfo from 'components/ColleagueInfo';
 
 type Props = {
   status: Status;

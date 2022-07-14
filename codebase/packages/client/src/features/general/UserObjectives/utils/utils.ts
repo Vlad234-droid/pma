@@ -1,8 +1,7 @@
-import { Props as SecondaryWidgetProps } from 'features/general/SecondaryWidget';
 import { paramsReplacer } from 'utils';
 import { Page } from 'pages';
 
-export const getWidgets = (t, isSubmittingSecondaryWidget, navigate, uuid): Array<SecondaryWidgetProps> => [
+export const getWidgets = (t, isSubmittingSecondaryWidget, navigate, uuid) => [
   {
     iconGraphic: 'list',
     title: t('view_previous_ratings', 'View previous ratings'),

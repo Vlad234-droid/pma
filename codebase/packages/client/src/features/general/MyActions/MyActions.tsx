@@ -18,7 +18,8 @@ import { Status } from 'config/enum';
 import Spinner from 'components/Spinner';
 import { ApprovalWidget } from './components/ApprovalWidget';
 import { SuccessModalProvider } from './context/successModalContext';
-import { ColleagueList } from './components/ColleagueList';
+import { Checkbox } from 'components/Form';
+import ColleagueAction from './components/ColleagueAction';
 
 type Props = {
   status: Status;
@@ -79,12 +80,32 @@ const MyActions: FC<Props> = ({ status, searchValue, sortValue, isCheckedAll }) 
       <SuccessModalProvider>
         <div className={css(bodyStyle)}>
           <div className={css(optionWrapperStyle)}>
-            <ColleagueList
-              status={status}
-              checkedItems={checkedItems}
-              colleagues={colleagues}
-              handleSelectItem={handleSelectItem}
-            />
+            <div data-test-id='colleague-list'>
+              {colleagues?.map((colleague) => (
+                <div
+                  data-test-id={`colleague-wrapper-${colleague.uuid}`}
+                  key={colleague.uuid}
+                  className={css(wrapperStyle)}
+                >
+                  <div className={css(checkboxWrapperStyle)}>
+                    {status === Status.WAITING_FOR_APPROVAL && (
+                      <span className={css(checkboxPositionStyle)}>
+                        <Checkbox
+                          disabled={colleague?.timeline?.length > 1}
+                          id={colleague.uuid}
+                          name={colleague.uuid}
+                          checked={checkedItems.includes(colleague.uuid)}
+                          onChange={handleSelectItem}
+                        />
+                      </span>
+                    )}
+                  </div>
+                  <div className={css(blockStyle)}>
+                    <ColleagueAction status={status} colleague={colleague} />
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
           {isWaitingForApprovalStatus && (
             <div className={css(rightColumnStyle)}>
@@ -114,3 +135,8 @@ const bodyStyle: Rule = {
 const optionWrapperStyle: Rule = { flex: '3 1 375px', display: 'flex', flexDirection: 'column', gap: '8px' };
 
 const rightColumnStyle: Rule = { flex: '1 0 216px' };
+
+const wrapperStyle: Rule = { display: 'flex', flexWrap: 'wrap' };
+const checkboxWrapperStyle: Rule = { width: '40px', position: 'relative' };
+const checkboxPositionStyle: Rule = { position: 'absolute', top: '36px' };
+const blockStyle: Rule = { width: 'calc(100% - 40px)' };

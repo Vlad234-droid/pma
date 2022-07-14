@@ -41,7 +41,7 @@ describe('<EditRatingsModal />', () => {
       expect(getByText('Save change')).toBeInTheDocument();
     });
 
-    it('should render ColleagueInfo', () => {
+    it.skip('should render ColleagueInfo', () => {
       const { getByText } = render(<EditRatingsModal {...props} />);
 
       expect(getByText('mocked_colleague_info')).toBeInTheDocument();

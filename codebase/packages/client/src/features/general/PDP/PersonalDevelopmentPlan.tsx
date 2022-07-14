@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useMemo, useRef } from 'react';
+import React, { FC, useEffect, useMemo, useRef, useCallback } from 'react';
 import { colors, CreateRule, Rule, Styles, theme, useStyle } from '@pma/dex-wrapper';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
@@ -94,18 +94,13 @@ const PersonalDevelopmentPlan: FC = () => {
     }
   }, [loaded]);
 
-  useEffect(() => {
-    dispatch(PDPActions.getPDPGoal({}));
-  }, []);
-
-  const deleteGoal = (uuid) => {
+  const deleteGoal = useCallback((uuid) => {
     dispatch(PDPActions.deletePDPGoal({ uuid }));
     elRef.current?.scrollTo(0, 0);
-  };
+  }, []);
 
-  const editGoal = (uuid) => {
+  const editGoal = (uuid) =>
     navigate(buildPath(paramsReplacer(`${Page.UPDATE_PERSONAL_DEVELOPMENT_PLAN}`, { ':uuid': uuid })));
-  };
 
   const downloadHref = () => `${BASE_URL_API}/pdp/template`;
 

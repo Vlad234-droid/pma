@@ -1,7 +1,7 @@
 import React, { FC, useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-// TODO: move PendingApprovals to Actions feature to widgets
-import { View, ViewFilters, YourActions, PendingApprovals } from 'features/general/MyTeam';
+import { View, ViewFilters } from 'features/general/MyTeam';
+import { ActionCountWidget, PendingApprovalsWidget } from 'features/general/MyActions';
 
 import ViewNavigation from 'features/general/ViewNavigation';
 import { Filters, getEmployeesSortingOptions, useSearch, useSorting } from 'features/general/Filters';
@@ -69,7 +69,7 @@ const MyTeamPage: FC = () => {
         <div className={css(listWrapperStyles)}>
           {showActions && (
             <Link to={buildPath(Page.MY_ACTIONS)}>
-              <PendingApprovals />
+              <PendingApprovalsWidget />
             </Link>
           )}
           <MyTeam view={view} searchValue={searchValue} sortValue={sortValue} />
@@ -77,7 +77,7 @@ const MyTeamPage: FC = () => {
         <div className={css(actionsStyles)}>
           {showActions && (
             <>
-              <YourActions />
+              <ActionCountWidget />
               <TeamReporting />
             </>
           )}

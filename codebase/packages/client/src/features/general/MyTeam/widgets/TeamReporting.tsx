@@ -5,14 +5,14 @@ import { useNavigate } from 'react-router';
 import { useTranslation } from 'components/Translation';
 import { buildPath } from 'features/general/Routes';
 import { Page } from 'pages';
-import SecondaryWidget from 'features/general/SecondaryWidget';
+import BaseWidget from 'components/BaseWidget';
 
 const TeamReporting: FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
   return (
-    <SecondaryWidget
+    <BaseWidget
       iconGraphic={'person'}
       title={t('team_reporting', 'Team reporting')}
       description={t(

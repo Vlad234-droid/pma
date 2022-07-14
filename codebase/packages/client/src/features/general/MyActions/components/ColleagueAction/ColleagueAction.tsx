@@ -1,11 +1,6 @@
-import React, { FC, useCallback, useEffect, useState } from 'react';
+import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Rule, useStyle } from '@pma/dex-wrapper';
-import useDispatch from 'hooks/useDispatch';
-
-import { groupArrayOfObjects } from '../../utils';
-import { ColleagueInfo } from 'features/general/MyTeam';
-
 import {
   colleagueUUIDSelector,
   getAllReviews,
@@ -15,31 +10,37 @@ import {
   SchemaActions,
 } from '@pma/store';
 
-import { ReviewType, Status } from 'config/enum';
+import useDispatch from 'hooks/useDispatch';
+import ColleagueInfo from 'components/ColleagueInfo';
 import { Accordion, BaseAccordion, ExpandButton, Panel, Section } from 'components/Accordion';
 import { TileWrapper } from 'components/Tile';
+import { ReviewType, Status } from 'config/enum';
+import { groupArrayOfObjects } from '../../utils';
 import { ColleagueGroupReviews } from '../ColleagueGroupReviews';
 
 type Props = {
   status: Status;
   colleague: any;
-  colleagueExpanded?: string;
-  setColleagueExpanded: (T) => void;
 };
 
-export const Colleague: FC<Props> = ({ status, colleague, colleagueExpanded, setColleagueExpanded }) => {
+const ColleagueAction: FC<Props> = ({ status, colleague }) => {
+  const [colleagueExpanded, setColleagueExpanded] = useState<string>();
+  const [colleagueReviews, updateColleagueReviews] = useState<any>([]);
+
   const dispatch = useDispatch();
   const { css } = useStyle();
+
   const { loaded: reviewLoaded = false } = useSelector(reviewsMetaSelector);
   const approverUuid = useSelector(colleagueUUIDSelector);
   const allColleagueReviews = useSelector(getAllReviews) || [];
   const allColleagueReviewsSchema = useSelector(getAllReviewSchemas) || [];
 
-  const [colleagueReviews, updateColleagueReviews] = useState<any>([]);
+  const groupColleagueReviews: { [key in ReviewType]: any[] } = useMemo(
+    () => groupArrayOfObjects(colleagueReviews, 'type'),
+    [colleagueReviews],
+  );
 
-  const groupColleagueReviews: { [key in ReviewType]: any[] } = groupArrayOfObjects(colleagueReviews, 'type');
-
-  const updateReviewStatus = useCallback(
+  const handleUpdateReviewStatus = useCallback(
     (status: Status) => (reviewType: ReviewType) => (reason: string) => {
       const update = {
         pathParams: {
@@ -117,7 +118,7 @@ export const Colleague: FC<Props> = ({ status, colleague, colleagueExpanded, set
                         reviewType={reviewType as ReviewType}
                         reviews={groupColleagueReviews[reviewType]}
                         schema={allColleagueReviewsSchema[reviewType] || []}
-                        updateReviewStatus={updateReviewStatus}
+                        updateReviewStatus={handleUpdateReviewStatus}
                         updateColleagueReviews={updateColleagueReviews}
                       />
                     ))}
@@ -131,6 +132,8 @@ export const Colleague: FC<Props> = ({ status, colleague, colleagueExpanded, set
     </div>
   );
 };
+
+export default ColleagueAction;
 
 const accordionStyle: Rule = {
   borderBottom: 'none',

@@ -11,31 +11,42 @@ import {
 
 export const initialState = {
   meta: { loading: false, loaded: false, error: null, status: null },
-  pdp: [],
+  pdp: {
+    goals: [],
+    form: {},
+  },
   date: '',
 };
 
 export default createReducer(initialState)
-  .handleAction(createPDPGoal.request, (state, { payload }) => ({
+  .handleAction(createPDPGoal.request, (state) => ({
     ...state,
-    ...payload,
     meta: { ...state.meta, loading: true, error: null, loaded: false },
   }))
   .handleAction(createPDPGoal.success, (state, { payload }) => ({
     ...state,
-    ...payload,
+    pdp: {
+      ...state.pdp,
+      goals: [...state.pdp.goals, payload],
+    },
     meta: { ...state.meta, loading: false, loaded: true },
   }))
 
-  .handleAction(deletePDPGoal.request, (state, { payload }) => ({
+  .handleAction(deletePDPGoal.request, (state) => ({
     ...state,
-    ...payload,
     meta: { ...state.meta, loading: true, error: null, loaded: false },
   }))
   .handleAction(deletePDPGoal.success, (state, { payload }) => ({
     ...state,
-    ...payload,
+    pdp: {
+      ...state.pdp,
+      goals: state?.pdp?.goals?.filter((item) => item.uuid !== payload.uuid),
+    },
     meta: { ...state.meta, loading: false, loaded: true },
+  }))
+  .handleAction(deletePDPGoal.failure, (state, { payload }) => ({
+    ...state,
+    meta: { loading: false, loaded: false, error: payload },
   }))
 
   .handleAction(updatePDPGoal.request, (state, { payload }) => ({
@@ -70,14 +81,16 @@ export default createReducer(initialState)
     meta: { ...state.meta, loading: false, loaded: false },
   }))
 
-  .handleAction(getPDPGoal.request, (state, { payload }) => ({
+  .handleAction(getPDPGoal.request, (state) => ({
     ...state,
-    ...payload,
     meta: { ...state.meta, loading: true, error: null, loaded: false },
   }))
   .handleAction(getPDPGoal.success, (state, { payload }) => ({
     ...state,
-    ...payload,
+    pdp: {
+      form: payload.form,
+      goals: payload.goals,
+    },
     meta: { ...state.meta, loading: false, loaded: true },
   }))
   .handleAction(getPDPGoal.cancel, (state, { payload }) => ({
@@ -87,8 +100,7 @@ export default createReducer(initialState)
   }))
   .handleAction(getPDPGoal.failure, (state, { payload }) => ({
     ...state,
-    ...payload,
-    meta: { ...state.meta, loading: false, loaded: false },
+    meta: { ...state.meta, loading: false, loaded: false, error: payload },
   }))
 
   .handleAction(getEarlyAchievementDate.request, (state) => ({
@@ -102,7 +114,6 @@ export default createReducer(initialState)
   }))
   .handleAction(getEarlyAchievementDate.failure, (state, { payload }) => ({
     ...state,
-    ...payload,
     meta: { loading: false, loaded: false, error: payload },
   }))
 

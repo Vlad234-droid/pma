@@ -2,13 +2,13 @@ import React, { FC } from 'react';
 import { Rule, theme } from '@pma/dex-wrapper';
 
 import { useTranslation } from 'components/Translation';
-import SecondaryWidget from 'features/bank/SecondaryWidget';
+import BaseWidget from 'components/BaseWidget';
 
 const TeamReporting: FC = () => {
   const { t } = useTranslation();
 
   return (
-    <SecondaryWidget
+    <BaseWidget
       iconGraphic={'person'}
       title={t('team_reporting', 'Team reporting')}
       description={t('coming_soon', 'Coming soon')}
