@@ -5,7 +5,7 @@ import { BrowserRouter } from 'react-router-dom';
 // @ts-ignore
 import { renderWithTheme as render } from 'utils/test';
 
-import YourActions from './YourActions';
+import ActionCount from './ActionCount';
 
 jest.mock('react-router-dom', () => ({
   ...(jest.requireActual('react-router-dom') as any),
@@ -23,7 +23,7 @@ describe.skip('<Actions />', () => {
     it('should render <TileWrapper />', () => {
       const { getAllByTestId } = render(
         <BrowserRouter>
-          <YourActions />
+          <ActionCount />
         </BrowserRouter>,
       );
 
@@ -33,7 +33,7 @@ describe.skip('<Actions />', () => {
     it('should render expected content', () => {
       const { getByText } = render(
         <BrowserRouter>
-          <YourActions />
+          <ActionCount />
         </BrowserRouter>,
       );
 

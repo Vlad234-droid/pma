@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { useStyle } from '@pma/dex-wrapper';
 
 import { useTranslation } from 'components/Translation';
-import SecondaryWidget, { Props as SecondaryWidgetProps } from 'features/general/SecondaryWidget';
+import BaseWidget, { Props as SecondaryWidgetProps } from 'components/BaseWidget';
 
 type Props = {
   onEditClick: () => void;
@@ -11,6 +11,7 @@ type Props = {
   compareMode: boolean;
 };
 
+//TODO: move to widgets folder (src/features/general/Calibration/widgets)
 const Calibration: FC<Props> = ({ onEditClick, onCompareClick, editMode, compareMode }) => {
   const { css } = useStyle();
   const { t } = useTranslation();
@@ -50,7 +51,7 @@ const Calibration: FC<Props> = ({ onEditClick, onCompareClick, editMode, compare
 
         return (
           <div key={idx} className={css({ marginBottom: '8px' })}>
-            <SecondaryWidget {...props} />
+            <BaseWidget {...props} />
           </div>
         );
       })}

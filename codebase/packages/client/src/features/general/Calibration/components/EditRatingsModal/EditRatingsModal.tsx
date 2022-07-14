@@ -1,12 +1,12 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Styles, useStyle } from '@pma/dex-wrapper';
 
-import { Employee } from 'config/types';
 import { ConfirmModal } from 'components/ConfirmModal';
 import { Trans, useTranslation } from 'components/Translation';
 import { Item, Select } from 'components/Form';
+import ColleagueInfo from 'components/ColleagueInfo';
+import { Employee } from 'config/types';
 import { Rating } from 'config/enum';
-import { ColleagueInfo } from 'features/general/MyTeam';
 
 import { getRatingsOptions, getRatingValues } from '../../mock';
 

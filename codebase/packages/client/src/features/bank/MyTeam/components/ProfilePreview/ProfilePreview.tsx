@@ -1,8 +1,7 @@
 import React, { FC } from 'react';
 import { Rule, useStyle } from '@pma/dex-wrapper';
 import { Employee } from 'config/types';
-
-import ColleagueInfo from '../ColleagueInfo';
+import ColleagueInfo from 'components/ColleagueInfo';
 
 type Props = {
   employee: Employee;

@@ -10,9 +10,9 @@ export type Props = {
   data?: string;
   type?: string;
   date?: string;
+  onClick?: () => void;
   description?: string;
   customStyle?: React.CSSProperties | {};
-  onClick?: () => void;
   withButton?: boolean;
   background?: Colors;
   hover?: boolean;
@@ -20,7 +20,7 @@ export type Props = {
 
 export const TEST_ID = 'secondary-widget';
 
-const SecondaryWidget: FC<Props> = ({
+const BaseWidget: FC<Props> = ({
   iconGraphic,
   title,
   data,
@@ -135,4 +135,4 @@ const btnStyle: CreateRule<{ background: Colors }> =
     background: 'transparent',
   });
 
-export default SecondaryWidget;
+export default BaseWidget;

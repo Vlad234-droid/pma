@@ -14,6 +14,7 @@ type Props = {
   filterOptions?: FilterOption[];
   onFilter?: (filters: FilterValues) => void;
 };
+
 const MyActionsPage: FC<Props> = () => {
   const { css } = useStyle();
   // TODO: move states to searchParams
