@@ -13,7 +13,7 @@ import {
 
 import { Page } from 'pages';
 import { useTranslation } from 'components/Translation';
-import SecondaryWidget, { Props as SecondaryWidgetProps } from 'features/general/SecondaryWidget';
+import BaseWidget, { Props as SecondaryWidgetProps } from 'components/BaseWidget';
 import { buildPath } from 'features/general/Routes';
 import { Props, widgetTypes } from './configs/type';
 import { ReviewType } from 'config/enum';
@@ -93,7 +93,7 @@ const Widgets: FC<Props> = () => {
           {widgets.map((props, idx) => {
             if (props.type === widgetTypes.PDP) {
               return (
-                <SecondaryWidget
+                <BaseWidget
                   customStyle={{
                     fontSize: theme.font.fixed.f16.fontSize,
                     lineHeight: theme.font.fixed.f16.lineHeight,
@@ -107,7 +107,7 @@ const Widgets: FC<Props> = () => {
             }
 
             return (
-              <SecondaryWidget
+              <BaseWidget
                 customStyle={{
                   fontSize: theme.font.fixed.f16.fontSize,
                   lineHeight: theme.font.fixed.f16.lineHeight,

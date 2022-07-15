@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router';
 import { Styles, theme, useStyle } from '@pma/dex-wrapper';
 import { Page } from 'pages';
 import { useTranslation } from 'components/Translation';
-import SecondaryWidget, { Props as WidgetProps } from 'features/general/SecondaryWidget';
+import BaseWidget, { Props as WidgetProps } from 'components/BaseWidget';
 import { widgetTypes } from 'features/general/ObjectiveWidgets/configs/type';
 import { buildPath } from 'features/general/Routes';
 
@@ -31,7 +31,7 @@ const ShortcutsSection: React.FC = () => {
   return (
     <div className={css(wrapperStyle)}>
       {widgets.map((props, idx) => (
-        <SecondaryWidget
+        <BaseWidget
           customStyle={{
             fontSize: theme.font.fixed.f16.fontSize,
             lineHeight: theme.font.fixed.f16.lineHeight,

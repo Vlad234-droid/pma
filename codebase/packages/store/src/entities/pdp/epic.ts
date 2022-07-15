@@ -2,7 +2,7 @@
 import { Epic, isActionOf } from 'typesafe-actions';
 import { combineEpics } from 'redux-observable';
 import { from, of } from 'rxjs';
-import { catchError, filter, map, switchMap, takeUntil } from 'rxjs/operators';
+import { catchError, filter, map, mergeMap, switchMap, takeUntil } from 'rxjs/operators';
 
 import {
   getPDPGoal,
@@ -16,12 +16,11 @@ import {
 export const getPDPEpic: Epic = (action$, _, { api }) => {
   return action$.pipe(
     filter(isActionOf(getPDPGoal.request)),
-    switchMap(({ payload }) =>
+    switchMap(() =>
       from(api.getPDPGoal()).pipe(
         // @ts-ignore
-        map(({ success, data }) => {
-          getPDPGoal;
-          return getPDPGoal.success({ pdp: data });
+        map(({ data }) => {
+          return getPDPGoal.success(data);
         }),
         catchError(({ errors }) => of(getPDPGoal.failure(errors))),
         takeUntil(action$.pipe(filter(isActionOf(getPDPGoal.cancel)))),
@@ -36,8 +35,7 @@ export const getPDPByUUIDEpic: Epic = (action$, _, { api }) => {
     switchMap(({ payload }) =>
       from(api.getPDPByUUIDGoal(payload)).pipe(
         // @ts-ignore
-        map(({ success, data }) => {
-          getPDPByUUIDGoal;
+        map(({ data }) => {
           return getPDPByUUIDGoal.success({ pdp: data });
         }),
         catchError(({ errors }) => of(getPDPGoal.failure(errors))),
@@ -54,23 +52,10 @@ export const createPDPEpic: Epic = (action$, _, { api }) =>
       const { data } = payload;
       return from(api.createPDPGoal(data)).pipe(
         // @ts-ignore
-        map(({ data }) => {
-          return createPDPGoal.success(data);
-        }),
-        catchError(({ errors }) => of(createPDPGoal.failure(errors))),
-      );
-    }),
-  );
-
-// try to optimiz in future
-export const createAndFetchPDPEpic: Epic = (action$, _, { api }) =>
-  action$.pipe(
-    filter(isActionOf(createPDPGoal.success)),
-    switchMap(({ payload }) => {
-      return from(api.getPDPGoal()).pipe(
-        // @ts-ignore
-        map(({ data }) => {
-          return getPDPGoal.request({});
+        mergeMap(({ data }) => {
+          const [goal] = data;
+          //@ts-ignore
+          return from([createPDPGoal.success(goal), getPDPGoal.request()]);
         }),
         catchError(({ errors }) => of(createPDPGoal.failure(errors))),
       );
@@ -81,41 +66,26 @@ export const deletePDPEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
     filter(isActionOf(deletePDPGoal.request)),
     switchMap(({ payload }) => {
-      const data = payload.uuid;
-      return from(api.deletePDPGoal(data)).pipe(
+      return from(api.deletePDPGoal(payload.uuid)).pipe(
         // @ts-ignore
-        map(({ data }) => {
-          return deletePDPGoal.success(data);
+        map(() => {
+          return deletePDPGoal.success(payload);
         }),
         catchError(({ errors }) => of(deletePDPGoal.failure(errors))),
       );
     }),
   );
 
-// try to optimiz in future
-export const deleteAndFetchPDPEpic: Epic = (action$, _, { api }) =>
-  action$.pipe(
-    filter(isActionOf(deletePDPGoal.success)),
-    switchMap(({ payload }) => {
-      return from(api.getPDPGoal()).pipe(
-        // @ts-ignore
-        map(({ data }) => {
-          return getPDPGoal.request({});
-        }),
-        catchError(({ errors }) => of(getPDPGoal.failure(errors))),
-      );
-    }),
-  );
-
-export const updadePDPEpic: Epic = (action$, _, { api }) =>
+export const updatePDPEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
     filter(isActionOf(updatePDPGoal.request)),
     switchMap(({ payload }) => {
       const { data } = payload;
       return from(api.updatePDPGoal(data)).pipe(
         // @ts-ignore
-        map(({ data }) => {
-          return updatePDPGoal.success(data);
+        mergeMap(({ data }) => {
+          // @ts-ignore
+          return from([updatePDPGoal.success(data), getPDPGoal.request()]);
         }),
         catchError(({ errors }) => of(updatePDPGoal.failure(errors))),
       );
@@ -135,28 +105,11 @@ export const getEarlyAchievementDatepic: Epic = (action$, _, { api }) =>
     }),
   );
 
-export const updadeAndFetchPDPEpic: Epic = (action$, _, { api }) =>
-  action$.pipe(
-    filter(isActionOf(updatePDPGoal.success)),
-    switchMap(({ payload }) => {
-      return from(api.getPDPGoal()).pipe(
-        // @ts-ignore
-        map(({ data }) => {
-          return getPDPGoal.request({});
-        }),
-        catchError(({ errors }) => of(createPDPGoal.failure(errors))),
-      );
-    }),
-  );
-
 export default combineEpics(
   getPDPEpic,
   getPDPByUUIDEpic,
   createPDPEpic,
-  updadePDPEpic,
+  updatePDPEpic,
   deletePDPEpic,
-  deleteAndFetchPDPEpic,
-  createAndFetchPDPEpic,
-  updadeAndFetchPDPEpic,
   getEarlyAchievementDatepic,
 );

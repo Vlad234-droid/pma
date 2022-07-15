@@ -5,7 +5,7 @@ import { useStyle, Styles } from '@pma/dex-wrapper';
 import { buildPath } from 'features/general/Routes';
 import { Page } from 'pages';
 import { useTranslation } from 'components/Translation';
-import SecondaryWidget, { Props as SecondaryWidgetProps } from 'features/general/SecondaryWidget';
+import BaseWidget, { Props as SecondaryWidgetProps } from 'components/BaseWidget';
 import ViewNavigation from 'features/general/ViewNavigation';
 
 export const TEST_ID = 'test-people-team-id';
@@ -40,7 +40,7 @@ const PeopleTeam: FC = () => {
       <ViewNavigation />
       <div data-test-id={SECONDARY_WIDGET_ID} className={css(wrapperStyle)}>
         {widgets.map((props, idx) => (
-          <SecondaryWidget key={idx} {...props} />
+          <BaseWidget key={idx} {...props} />
         ))}
       </div>
     </div>

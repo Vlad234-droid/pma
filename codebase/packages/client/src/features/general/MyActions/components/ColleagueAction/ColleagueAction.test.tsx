@@ -4,12 +4,12 @@ import React from 'react';
 import { renderWithTheme as render, screen } from 'utils/test';
 import { fireEvent, waitFor } from '@testing-library/react';
 
-import { Colleague } from './Colleague';
+import ColleagueAction from './ColleagueAction';
 // @ts-ignore
 import { Status } from 'config/enum';
 import { FormType, ReviewsActions, SchemaActions } from '@pma/store';
 import { act } from 'react-dom/test-utils';
-import { SchemaFixture } from '../../../../../utils/test/fixtures/schema';
+import { SchemaFixture } from 'utils/test/fixtures/schema';
 
 describe('<Colleague />', () => {
   const props = {
@@ -55,7 +55,7 @@ describe('<Colleague />', () => {
   };
   describe('#render', () => {
     it('should render ', () => {
-      render(<Colleague {...props} />);
+      render(<ColleagueAction {...props} />);
 
       expect(screen.getByTestId(`expand-button-${props.colleague.uuid}`)).toBeInTheDocument();
       expect(screen.getByText('Alex Smith')).toBeInTheDocument();
@@ -129,12 +129,11 @@ describe('<Colleague />', () => {
       const updateReviewStatusMock = jest.spyOn(ReviewsActions, 'updateReviewStatus');
       const getSchemaMock = jest.spyOn(SchemaActions, 'getSchema');
 
-      render(<Colleague {...props} />, { reviews, schema });
+      render(<ColleagueAction {...props} />, { reviews, schema });
 
       await act(async () => {
         fireEvent.click(screen.getByRole('heading'));
 
-        expect(props.setColleagueExpanded).toBeCalled();
         expect(clearSchemaDataMock).toBeCalled();
         expect(getSchemaMock).toBeCalledWith({ colleagueUuid: '10000000-0000-0000-0000-000000000003' });
         expect(getColleagueReviewsMock).toBeCalledWith({

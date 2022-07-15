@@ -22,6 +22,7 @@ export type ProcessConfig = {
   loggerLogAuthToken: () => boolean;
   //
   apiServerUrl: () => URL;
+  apiIdentityServerUrl: () => URL | undefined;
   apiManagementServerUrl: () => URL | undefined;
   swaggerServerUrl: () => URL | undefined;
   camundaServerUrl: () => URL | undefined;
@@ -91,6 +92,11 @@ export class ConfigAccessor {
       apiServerUrl: () => createUrlOrFail(
         processEnv.API_SERVER_URL,
         `API_SERVER_URL must be a well-formed URL pointing to API server, e.g.: http://tesco.com/pma/api`,
+        { removeTrailingSlash: true }),
+      //
+      apiIdentityServerUrl: () => createUrlOrUndefined(
+        processEnv.API_IDENTITY_SERVER_URL,
+        `API_IDENTITY_SERVER_URL must be a well-formed URL pointing to identity API server, e.g.: http://tesco.com:8080/pma/iam-api`,
         { removeTrailingSlash: true }),
       //
       apiManagementServerUrl: () => createUrlOrUndefined(

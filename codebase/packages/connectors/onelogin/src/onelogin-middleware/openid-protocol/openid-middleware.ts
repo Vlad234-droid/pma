@@ -344,7 +344,7 @@ export const initializeOpenidMiddleware = async (configuration: OpenidConfig): P
 
     res.clearCookie(ONELOGIN_RETURN_URI_COOKIE_NAME, { path: sessionCookie.path });
 
-    const afterLoginRedirect = addTrailngSlash(`${applicationServerUrlRoot}${returnUriFromCookie || applicationPath}`);
+    const afterLoginRedirect = `${applicationServerUrlRoot}${returnUriFromCookie || applicationPath}`;
 
     logger(LoggerEvent.debug(
       'login', 

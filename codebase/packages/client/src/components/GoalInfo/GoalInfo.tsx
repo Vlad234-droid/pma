@@ -21,13 +21,20 @@ const GoalInfo = (props) => {
   const [confirmDelete, setConfirmDelete] = useState(false);
 
   useEffect(() => {
-    setTimeout(() => {
+    const timer = setTimeout(() => {
       window.scrollTo({
         top: 0,
         behavior: 'smooth',
       });
     }, 3000);
+    return () => {
+      clearTimeout(timer);
+      toggleOpen(false);
+      setConfirmDelete(false);
+    };
   }, []);
+
+  const handleScroll = () => window.scrollTo(0, 0);
 
   return (
     <div className={css(fullGoals)}>
@@ -37,9 +44,9 @@ const GoalInfo = (props) => {
           description={t('this_is_permanent_and_cannot_be_undone', 'This is permanent and cannot be undone.')}
           submitBtnTitle={<Trans i18nKey='delete'>Delete</Trans>}
           onSave={() => {
+            handleScroll();
             deleteGoal(id);
             setConfirmDelete(false);
-            window.scrollTo(0, 0);
           }}
           onCancel={() => setConfirmDelete(false)}
           onOverlayClick={() => setConfirmDelete(false)}
