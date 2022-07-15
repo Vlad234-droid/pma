@@ -5,10 +5,10 @@ export const getReviews = <T>(params: any = {}) => {
     pathParams: { colleagueUuid = '', code, cycleUuid = 'CURRENT' },
     searchParams,
   } = params;
-  const domain = code
+  const uri = code
     ? `colleagues/${colleagueUuid}/pm-cycles/${cycleUuid}/review-codes/${code}/reviews`
     : `colleagues/${colleagueUuid}/pm-cycles/${cycleUuid}/reviews`;
-  return httpClient.get(`${domain}`, { params: searchParams });
+  return httpClient.get(uri, { params: searchParams });
 };
 
 export const createReview = <T>(params: any = {}) => {
@@ -17,8 +17,8 @@ export const createReview = <T>(params: any = {}) => {
     data,
   } = params;
   const firstElement = data.shift();
-  const domain = `/colleagues/${colleagueUuid}/pm-cycles/${cycleUuid}/review-codes/${code}/numbers/${number}/reviews`;
-  return httpClient.post(`${domain}`, firstElement);
+  const uri = `/colleagues/${colleagueUuid}/pm-cycles/${cycleUuid}/review-codes/${code}/numbers/${number}/reviews`;
+  return httpClient.post(uri, firstElement);
 };
 
 export const updateReview = <T>(params: any = {}) => {
@@ -28,8 +28,8 @@ export const updateReview = <T>(params: any = {}) => {
   } = params;
 
   const firstElement = data.shift();
-  const domain = `/colleagues/${colleagueUuid}/pm-cycles/${cycleUuid}/review-codes/${code}/numbers/${number}/reviews`;
-  return httpClient.put(`${domain}`, firstElement);
+  const uri = `/colleagues/${colleagueUuid}/pm-cycles/${cycleUuid}/review-codes/${code}/numbers/${number}/reviews`;
+  return httpClient.put(uri, firstElement);
 };
 
 export const updateReviews = <T>(params: any = {}) => {
@@ -38,8 +38,8 @@ export const updateReviews = <T>(params: any = {}) => {
     data,
   } = params;
 
-  const domain = `/colleagues/${colleagueUuid}/pm-cycles/${cycleUuid}/review-codes/${code}/reviews`;
-  return httpClient.put(`${domain}`, data);
+  const uri = `/colleagues/${colleagueUuid}/pm-cycles/${cycleUuid}/review-codes/${code}/reviews`;
+  return httpClient.put(uri, data);
 };
 
 export const deleteReview = <T>(params: any = {}) => {
@@ -47,8 +47,8 @@ export const deleteReview = <T>(params: any = {}) => {
     pathParams: { colleagueUuid = '', code, cycleUuid = 'CURRENT', number },
   } = params;
 
-  const domain = `/colleagues/${colleagueUuid}/pm-cycles/${cycleUuid}/review-codes/${code}/numbers/${number}/reviews`;
-  return httpClient.delete(`${domain}`);
+  const uri = `/colleagues/${colleagueUuid}/pm-cycles/${cycleUuid}/review-codes/${code}/numbers/${number}/reviews`;
+  return httpClient.delete(uri);
 };
 
 export const updateReviewStatus = <T>(params: any = {}) => {
@@ -56,8 +56,8 @@ export const updateReviewStatus = <T>(params: any = {}) => {
     pathParams: { colleagueUuid = '', code, cycleUuid = 'CURRENT', status },
     data,
   } = params;
-  const domain = `/colleagues/${colleagueUuid}/pm-cycles/${cycleUuid}/review-codes/${code}/statuses/${status}/reviews`;
-  return httpClient.put(`${domain}`, data);
+  const uri = `/colleagues/${colleagueUuid}/pm-cycles/${cycleUuid}/review-codes/${code}/statuses/${status}/reviews`;
+  return httpClient.put(uri, data);
 };
 
 export const approveReview = <T>(params: any = {}) => {
@@ -65,8 +65,8 @@ export const approveReview = <T>(params: any = {}) => {
     pathParams: { colleagueUuid = '', code, cycleUuid = 'CURRENT' },
     data,
   } = params;
-  const domain = `/colleagues/${colleagueUuid}/pm-cycles/${cycleUuid}/review-codes/${code}/statuses/APPROVED/reviews`;
-  return httpClient.put(`${domain}`, data);
+  const uri = `/colleagues/${colleagueUuid}/pm-cycles/${cycleUuid}/review-codes/${code}/statuses/APPROVED/reviews`;
+  return httpClient.put(uri, data);
 };
 
 export const declineReview = <T>(params: any = {}) => {
@@ -74,12 +74,12 @@ export const declineReview = <T>(params: any = {}) => {
     pathParams: { colleagueUuid = '', code, cycleUuid = 'CURRENT' },
     data,
   } = params;
-  const domain = `/colleagues/${colleagueUuid}/pm-cycles/${cycleUuid}/review-codes/${code}/statuses/DECLINED/reviews`;
-  return httpClient.put(`${domain}`, data);
+  const uri = `/colleagues/${colleagueUuid}/pm-cycles/${cycleUuid}/review-codes/${code}/statuses/DECLINED/reviews`;
+  return httpClient.put(uri, data);
 };
 
 export const getReviewByUuid = (params: any) => {
   const { uuid } = params;
-  const domain = `/reviews/${uuid}`;
-  return httpClient.get(`${domain}`);
+  const uri = `/reviews/${uuid}`;
+  return httpClient.get(uri);
 };
