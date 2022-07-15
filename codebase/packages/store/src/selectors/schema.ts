@@ -75,7 +75,9 @@ export const getReviewSchema = (code: string, withForms = true) =>
         cycle: { timelinePoints = [] },
       },
     } = schema;
-    const review = timelinePoints.find((timelinePoint) => timelinePoint?.properties?.pm_timeline_point_code === code);
+    const review = timelinePoints.find(
+      (timelinePoint) => timelinePoint?.properties?.pm_timeline_point_code?.toLowerCase() === code?.toLowerCase(),
+    );
 
     if (withForms && schema?.forms?.length && review?.form) {
       form = schema?.forms.find((form) => form.id === review.form.id);
