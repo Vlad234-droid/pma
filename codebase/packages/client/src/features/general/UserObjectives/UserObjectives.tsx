@@ -5,7 +5,7 @@ import { reviewsMetaSelector, schemaMetaSelector, timelineTypesAvailabilitySelec
 
 import { ObjectiveTypes as OT } from 'features/general/Objectives';
 import { UserObjectivesSections } from 'features/general/UserObjectivesSections';
-import { ObjectiveType } from 'config/enum';
+import { ReviewType } from 'config/enum';
 import { useUserObjectivesData } from './hooks';
 
 export const TEST_ID = 'user-objectives-page';
@@ -18,7 +18,7 @@ const UserObjectives: FC = () => {
   const { uuid } = useParams<{ uuid: string }>();
 
   const timelineTypes = useSelector(timelineTypesAvailabilitySelector(uuid));
-  const canShowObjectives = timelineTypes[ObjectiveType.OBJECTIVE];
+  const canShowObjectives = timelineTypes[ReviewType.OBJECTIVE];
 
   useUserObjectivesData(uuid, reviewLoaded, schemaLoaded, setObjectives);
 

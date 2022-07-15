@@ -41,11 +41,19 @@ export const Colleague: FC<Props> = ({ status, colleague, colleagueExpanded, set
 
   const updateReviewStatus = useCallback(
     (status: Status) => (reviewType: ReviewType) => (reason: string) => {
+      const { timeline = [] } = colleague;
+      const reviews = colleague?.reviews?.filter(
+        ({ status, type }) => status === Status.WAITING_FOR_APPROVAL && type === reviewType,
+      );
+
+      const timelineId = reviews[0]?.tlPointUuid;
+      const code = timeline.find((tl) => tl.uuid == timelineId)?.code;
+
       const update = {
         pathParams: {
           colleagueUuid: colleague.uuid,
           approverUuid,
-          type: reviewType,
+          code,
           cycleUuid: 'CURRENT',
           status,
         },
@@ -53,20 +61,18 @@ export const Colleague: FC<Props> = ({ status, colleague, colleagueExpanded, set
           ...(reason ? { reason } : {}),
           status,
           colleagueUuid: colleague.uuid,
-          reviews: colleagueReviews
-            .filter(({ status, type }) => status === Status.WAITING_FOR_APPROVAL && type === reviewType)
-            .map(({ number, properties }) => {
-              if (reviewType !== ReviewType.MYR) {
-                return { number, properties };
-              }
-              return { number };
-            }),
+          reviews: reviews.map(({ number, properties }) => {
+            if (reviewType !== ReviewType.MYR) {
+              return { number, properties };
+            }
+            return { number };
+          }),
         },
       };
 
       dispatch(ReviewsActions.updateReviewStatus(update));
     },
-    [colleague, colleagueReviews],
+    [colleague, reviewLoaded],
   );
   const fetchColleagueReviews = (colleagueUuid: string) => {
     setColleagueExpanded(colleagueUuid);

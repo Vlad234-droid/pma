@@ -14,7 +14,7 @@ import { useUserObjectivesData } from 'features/general/UserObjectives/hooks';
 import { UserObjectivesSections } from 'features/general/UserObjectivesSections';
 import { useFetchColleague } from 'features/general/RatingsTiles/hooks/useFetchColleague';
 
-import { ObjectiveType } from 'config/enum';
+import { ReviewType } from 'config/enum';
 import { getCurrentYear } from 'utils/date';
 
 const ObjectiveRatings = () => {
@@ -30,7 +30,7 @@ const ObjectiveRatings = () => {
   const { firstName, lastName, businessType, managerSirName, managerName, job, department } =
     useSelector(colleagueInfo);
   const timelineTypes = useSelector(timelineTypesAvailabilitySelector(uuid));
-  const canShowObjectives = timelineTypes[ObjectiveType.OBJECTIVE];
+  const canShowObjectives = timelineTypes[ReviewType.OBJECTIVE];
 
   useFetchColleague(uuid);
   useUserObjectivesData(uuid, reviewLoaded, schemaLoaded, setObjectives);

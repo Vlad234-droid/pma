@@ -1,7 +1,7 @@
 //@ts-ignore
 import { createSelector } from 'reselect'; //@ts-ignore
 import { RootState } from 'typesafe-actions';
-import { ObjectiveType, ReviewType } from '@pma/client/src/config/enum';
+import { ReviewType } from '@pma/client/src/config/enum';
 import { usersSelector } from './users';
 
 export enum Type {
@@ -51,8 +51,8 @@ export const hasTimelineAccessesSelector = ({
   method,
 }: {
   colleagueUuid: string;
-  types: ObjectiveType[];
-  excludeTypes?: ObjectiveType[];
+  types: ReviewType[];
+  excludeTypes?: ReviewType[];
   method: 'some' | 'every';
 }) =>
   createSelector(usersSelector, timelineSelector, ({ meta, ...rest }) => {

@@ -253,7 +253,7 @@ describe('ReviewFormModal', () => {
       const requestParamFirstCall = addMockUpdateReviews.mock.calls[0][0];
 
       expect(addMockUpdateReviews).toHaveBeenCalledTimes(1);
-      expect(requestParamFirstCall.pathParams.type).toEqual('EYR');
+      expect(requestParamFirstCall.pathParams.code).toEqual('EYR');
       expect(requestParamFirstCall.data[0].status).toEqual('DRAFT');
       expect(requestParamFirstCall.data[0].properties).toMatchObject({
         select: 'Outstanding',
@@ -274,7 +274,7 @@ describe('ReviewFormModal', () => {
 
       const requestParamFirstCall = addMockUpdateReviews.mock.calls[0][0];
 
-      expect(requestParamFirstCall.pathParams.type).toEqual('EYR');
+      expect(requestParamFirstCall.pathParams.code).toEqual('EYR');
       expect(requestParamFirstCall.data[0].status).toEqual('WAITING_FOR_APPROVAL');
       expect(requestParamFirstCall.data[0].properties).toMatchObject({
         select: 'Outstanding',
@@ -495,7 +495,7 @@ describe('ReviewFormModal', () => {
 
       const requestParamFirstCall = addMockUpdateReviews.mock.calls[0][0];
 
-      expect(requestParamFirstCall.pathParams.type).toEqual('EYR');
+      expect(requestParamFirstCall.pathParams.code).toEqual('EYR');
       expect(requestParamFirstCall.data[0].status).toEqual('WAITING_FOR_APPROVAL');
       expect(requestParamFirstCall.data[0].properties).toMatchObject({
         textfield: 'textfield value',

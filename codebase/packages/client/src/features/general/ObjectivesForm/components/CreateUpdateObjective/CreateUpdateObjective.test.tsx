@@ -79,7 +79,7 @@ describe('CreateUpdateObjective', () => {
 
       const requestParamFirstCall = addMockCreateReview.mock.calls[0][0];
 
-      expect(requestParamFirstCall.pathParams.type).toEqual('OBJECTIVE');
+      expect(requestParamFirstCall.pathParams.code).toEqual('OBJECTIVE');
       expect(requestParamFirstCall.data[0].status).toEqual('WAITING_FOR_APPROVAL');
       expect(requestParamFirstCall.data[0].properties).toMatchObject({
         textfield: 'textfield value',
@@ -138,7 +138,7 @@ describe('CreateUpdateObjective', () => {
 
       const requestParamFirstCall = addMockUpdateReview.mock.calls[0][0];
 
-      expect(requestParamFirstCall.pathParams.type).toEqual('OBJECTIVE');
+      expect(requestParamFirstCall.pathParams.code).toEqual('OBJECTIVE');
       expect(requestParamFirstCall.data[0].status).toEqual('DRAFT');
       expect(requestParamFirstCall.data[0].properties).toMatchObject({
         textfield: 'textfield prev textfield value',
@@ -165,7 +165,7 @@ describe('CreateUpdateObjective', () => {
 
       const requestParamFirstCall = addMockUpdateReview.mock.calls[0][0];
 
-      expect(requestParamFirstCall.pathParams.type).toEqual('OBJECTIVE');
+      expect(requestParamFirstCall.pathParams.code).toEqual('OBJECTIVE');
       expect(requestParamFirstCall.data[0].status).toEqual('WAITING_FOR_APPROVAL');
       expect(requestParamFirstCall.data[0].properties).toMatchObject({
         textfield: 'textfield prev textfield value',

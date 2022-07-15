@@ -37,7 +37,7 @@ const ObjectiveButtons: FC<ObjectiveButtonsProps> = ({ id, status }) => {
   const remove = () => {
     dispatch(
       ReviewsActions.deleteReview({
-        pathParams: { colleagueUuid: info.colleagueUUID, type: ReviewType.OBJECTIVE, cycleUuid: 'CURRENT', number: id },
+        pathParams: { colleagueUuid: info.colleagueUUID, code: 'OBJECTIVE', cycleUuid: 'CURRENT', number: id },
       }),
     );
   };

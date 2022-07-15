@@ -15,7 +15,7 @@ import useDispatch from 'hooks/useDispatch';
 import { Page } from 'pages';
 import { useTranslation } from 'components/Translation';
 import { useHeaderContainer } from 'contexts/headerContext';
-import { ObjectiveType } from 'config/enum';
+import { ReviewType } from 'config/enum';
 
 // todo think hove resolve on page level
 import { ObjectivesSection } from './components/DinamicBlocks/ObjectivesSection';
@@ -35,7 +35,7 @@ const MyObjectives: FC = () => {
   const { loaded: timelinesLoaded } = useSelector(timelinesMetaSelector());
   const timelineTypes = useSelector(timelineTypesAvailabilitySelector(colleagueUuid)) || {};
 
-  const canShowAnnualReview = !timelineTypes[ObjectiveType.MYR] && timelineTypes[ObjectiveType.EYR];
+  const canShowAnnualReview = !timelineTypes[ReviewType.MYR] && timelineTypes[ReviewType.EYR];
 
   useEffect(() => {
     colleagueUuid && dispatch(ObjectiveSharingActions.checkSharing({ colleagueUuid, cycleUuid: CURRENT }));

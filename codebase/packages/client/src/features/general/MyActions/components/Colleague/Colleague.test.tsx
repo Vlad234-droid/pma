@@ -25,6 +25,7 @@ describe('<Colleague />', () => {
       reviews: [
         {
           uuid: 'reviews_uuid_mock',
+          tlPointUuid: 'e226a9a3-20ee-44e5-8ced-042b7fb12c46',
           type: 'MYR',
           status: 'WAITING_FOR_APPROVAL',
           number: 1,
@@ -32,10 +33,10 @@ describe('<Colleague />', () => {
       ],
       timeline: [
         {
-          uuid: '278e6e31-5555-53bf-450e-780edbcf21f9',
+          uuid: 'e226a9a3-20ee-44e5-8ced-042b7fb12c46',
           colleagueCycleUuid: '3fa85f64-5717-4562-b3fc-2c963f66afa3',
-          code: 'EYR',
-          description: 'End of Year Review',
+          code: 'MYR',
+          description: 'Mid of Year Review',
           type: 'REVIEW',
           startTime: '2021-04-01T00:00:00.000Z',
           endTime: null,
@@ -43,7 +44,7 @@ describe('<Colleague />', () => {
             pm_review_type: 'objective',
           },
           status: 'WAITING_FOR_APPROVAL',
-          reviewType: 'EYR',
+          reviewType: 'MYR',
           count: 1,
           lastUpdatedTime: '2022-02-11T12:17:43.507Z',
         },
@@ -153,7 +154,7 @@ describe('<Colleague />', () => {
             colleagueUuid: '10000000-0000-0000-0000-000000000003',
             cycleUuid: 'CURRENT',
             status: 'APPROVED',
-            type: 'MYR',
+            code: 'MYR',
           },
         });
       });

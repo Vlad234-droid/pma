@@ -1,5 +1,3 @@
-import { ReviewType } from './enum';
-
 export interface ActionParams {
   pathParams?: any;
 }
@@ -13,5 +11,5 @@ export interface ActionPostData {
 }
 
 export interface ReviewActionParams extends ActionParams, ActionPostData, ActionGetParams {
-  pathParams: { colleagueUuid?: string; type?: ReviewType; cycleUuid: string; number?: number; status?: string };
+  pathParams: { colleagueUuid?: string; code?: string; cycleUuid: string; number?: number; status?: string };
 }

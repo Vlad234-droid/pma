@@ -40,7 +40,7 @@ export function withForm<P>(WrappedComponent: React.ComponentType<P & FormPropsT
     const { t } = useTranslation();
     const colleagueUuid = useSelector(colleagueUUIDSelector);
     const schema = useSelector(getReviewSchema(ReviewType.QUARTER));
-    const pathParams = { colleagueUuid, type: ReviewType.QUARTER, cycleUuid: 'CURRENT' };
+    const pathParams = { colleagueUuid, code: 'Q1', cycleUuid: 'CURRENT' }; // todo code dynamic in priorities jira
     const { components = [] as Component[], markup = { max: 1, min: 15 } } = schema;
     const objectives: Objective[] = useSelector(filterReviewsByTypeSelector(ReviewType.QUARTER)) || [];
 

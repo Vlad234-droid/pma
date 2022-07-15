@@ -91,7 +91,7 @@ const ReviewFormModal: FC<ReviewFormModal> = ({ reviewType, onClose }) => {
     const data = getValues();
     dispatch(
       ReviewsActions.updateReviews({
-        pathParams: { colleagueUuid: info.colleagueUUID, type: reviewType, cycleUuid: 'CURRENT' },
+        pathParams: { colleagueUuid: info.colleagueUUID, code: timelineReview.code, cycleUuid: 'CURRENT' },
         data: [
           {
             status: Status.DRAFT,
@@ -105,7 +105,7 @@ const ReviewFormModal: FC<ReviewFormModal> = ({ reviewType, onClose }) => {
   const onSubmit = async (data) => {
     dispatch(
       ReviewsActions.updateReviews({
-        pathParams: { colleagueUuid: info.colleagueUUID, type: reviewType, cycleUuid: 'CURRENT' },
+        pathParams: { colleagueUuid: info.colleagueUUID, code: timelineReview.code, cycleUuid: 'CURRENT' },
         data: [
           {
             status: Status.WAITING_FOR_APPROVAL,

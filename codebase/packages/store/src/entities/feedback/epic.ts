@@ -136,7 +136,7 @@ export const getObjectiveReviewsEpic: Epic = (action$, _, { api }) =>
     filter(isActionOf(getObjectiveReviews.request)),
     switchMap(({ payload }) => {
       //@ts-ignore
-      return from(api.getObjectivesRewiews(payload)).pipe(
+      return from(api.getObjectivesReviews(payload)).pipe(
         //@ts-ignore
         map(({ data }) => getObjectiveReviews.success(data)),
         catchError(({ errors }) => of(getObjectiveReviews.failure(errors))),

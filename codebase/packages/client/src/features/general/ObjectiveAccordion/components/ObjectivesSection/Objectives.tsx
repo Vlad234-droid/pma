@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo } from 'react';
 import { Rule, useStyle } from '@pma/dex-wrapper';
-import { ObjectiveType, ReviewType, Status } from 'config/enum';
+import { ReviewType, Status } from 'config/enum';
 import {
   colleagueUUIDSelector,
   countByStatusReviews,
@@ -43,7 +43,7 @@ const Objectives = () => {
   const formElements = components.filter((component) => component.type != 'text');
   const objectives: ObjectiveTypes.Objective[] = transformReviewsToObjectives(originObjectives, formElements);
   const timelineTypes = useSelector(timelineTypesAvailabilitySelector(colleagueUuid)) || {};
-  const canShowObjectives = timelineTypes[ObjectiveType.OBJECTIVE];
+  const canShowObjectives = timelineTypes[ReviewType.OBJECTIVE];
 
   const { loading: reviewLoading } = useSelector(reviewsMetaSelector);
   const timelineObjective = useSelector(getTimelineByCodeSelector(ReviewType.OBJECTIVE, USER.current)) || {};

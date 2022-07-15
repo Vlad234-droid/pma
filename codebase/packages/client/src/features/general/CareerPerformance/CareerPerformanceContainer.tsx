@@ -8,15 +8,15 @@ import {
   timelineTypesAvailabilitySelector,
 } from '@pma/store';
 
-import { ObjectiveType } from 'config/enum';
+import { ReviewType } from 'config/enum';
 
 import { USER } from 'config/constants';
 import { CareerPerformance } from './components/CareerPerformance';
 
 const CareerPerformanceContainer: FC = () => {
   const timelineTypes = useSelector(timelineTypesAvailabilitySelector(USER.current));
-  const midYearReview = useSelector(getTimelineByCodeSelector(ObjectiveType.MYR, USER.current));
-  const endYearReview = useSelector(getTimelineByCodeSelector(ObjectiveType.EYR, USER.current));
+  const midYearReview = useSelector(getTimelineByCodeSelector(ReviewType.MYR, USER.current));
+  const endYearReview = useSelector(getTimelineByCodeSelector(ReviewType.EYR, USER.current));
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const timelinesExist = useSelector(timelinesExistSelector(colleagueUuid));
   const { loaded } = useSelector(getTimelineMetaSelector);
