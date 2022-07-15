@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { FC, useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Rule, useStyle } from '@pma/dex-wrapper';
 import {
@@ -15,8 +15,8 @@ import ColleagueInfo from 'components/ColleagueInfo';
 import { Accordion, BaseAccordion, ExpandButton, Panel, Section } from 'components/Accordion';
 import { TileWrapper } from 'components/Tile';
 import { ReviewType, Status } from 'config/enum';
-import { groupArrayOfObjects } from '../../utils';
 import { ColleagueGroupReviews } from '../ColleagueGroupReviews';
+import { Timeline, Review } from 'config/types';
 
 type Props = {
   status: Status;
@@ -34,11 +34,13 @@ const ColleagueAction: FC<Props> = ({ status, colleague }) => {
   const approverUuid = useSelector(colleagueUUIDSelector);
   const allColleagueReviews = useSelector(getAllReviews) || [];
   const allColleagueReviewsSchema = useSelector(getAllReviewSchemas) || [];
-
-  const groupColleagueReviews: { [key in ReviewType]: any[] } = useMemo(
-    () => groupArrayOfObjects(colleagueReviews, 'type'),
-    [colleagueReviews],
-  );
+  const groupColleagueReviews: { [key: string]: { timeline: Timeline; reviews: Review[] } } = {};
+  for (const timeline of colleague.timeline) {
+    groupColleagueReviews[timeline.code] = {
+      timeline,
+      reviews: colleagueReviews.filter((review) => review.tlPointUuid === timeline.uuid),
+    };
+  }
 
   const handleUpdateReviewStatus = useCallback(
     (status: Status) => (reviewType: ReviewType) => (reason: string) => {
@@ -117,13 +119,13 @@ const ColleagueAction: FC<Props> = ({ status, colleague }) => {
                     </div>
                   </div>
                   <Panel>
-                    {Object.keys(groupColleagueReviews).map((reviewType) => (
+                    {Object.keys(groupColleagueReviews).map((code) => (
                       <ColleagueGroupReviews
-                        key={reviewType}
+                        key={code}
                         status={status}
-                        reviewType={reviewType as ReviewType}
-                        reviews={groupColleagueReviews[reviewType]}
-                        schema={allColleagueReviewsSchema[reviewType] || []}
+                        reviewType={groupColleagueReviews[code].timeline.reviewType as ReviewType}
+                        reviews={groupColleagueReviews[code].reviews}
+                        schema={allColleagueReviewsSchema[code] || []}
                         updateReviewStatus={handleUpdateReviewStatus}
                         updateColleagueReviews={updateColleagueReviews}
                       />
