@@ -46,23 +46,25 @@ export const getAllReviewSchemas = createSelector(schemaSelector, (schema: any) 
   } = schema;
   const reviews: any = {};
   timelinePoints?.forEach((timelinePoint) => {
-    if (timelinePoint.reviewType) {
+    if (timelinePoint?.properties?.pm_timeline_point_code && timelinePoint?.form?.id) {
       const form = schema?.forms.find((form) => form.id === timelinePoint.form.id);
-      reviews[timelinePoint.reviewType] = {
-        ...schema,
-        ...(form?.json || {}),
-        markup: {
-          min: Number(timelinePoint?.properties?.pm_review_min || 0),
-          max: Number(timelinePoint?.properties?.pm_review_max || 0),
-        },
-      };
+      if (form) {
+        reviews[timelinePoint?.properties?.pm_timeline_point_code] = {
+          ...schema,
+          ...(form?.json || {}),
+          markup: {
+            min: Number(timelinePoint?.properties?.pm_review_min || 0),
+            max: Number(timelinePoint?.properties?.pm_review_max || 0),
+          },
+        };
+      }
     }
   });
 
   return reviews;
 });
 
-export const getReviewSchema = (type: ReviewType, withForms = true) =>
+export const getReviewSchema = (code: string, withForms = true) =>
   createSelector(schemaSelector, (schema: any) => {
     let form;
     if (!schema?.metadata?.cycle) {
@@ -73,7 +75,7 @@ export const getReviewSchema = (type: ReviewType, withForms = true) =>
         cycle: { timelinePoints = [] },
       },
     } = schema;
-    const review = timelinePoints.find((review) => review.reviewType === type);
+    const review = timelinePoints.find((timelinePoint) => timelinePoint?.properties?.pm_timeline_point_code === code);
 
     if (withForms && schema?.forms?.length && review?.form) {
       form = schema?.forms.find((form) => form.id === review.form.id);
@@ -91,9 +93,9 @@ export const getReviewSchema = (type: ReviewType, withForms = true) =>
   });
 
 export const getExpressionListenersKeys =
-  (type: ReviewType, withForms = true) =>
+  (code: string, withForms = true) =>
   (expressionValue: string) =>
-    createSelector(getReviewSchema(type, withForms), (schema: any) => {
+    createSelector(getReviewSchema(code, withForms), (schema: any) => {
       const { components } = schema;
       return components
         ?.filter((component) => {
