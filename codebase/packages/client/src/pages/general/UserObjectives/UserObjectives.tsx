@@ -2,7 +2,6 @@ import React, { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import UserObjectivesContainer from 'features/general/UserObjectives';
 import { ColleagueProfileWidget } from 'features/general/Profile';
-import Timeline from 'features/general/Timeline';
 import { useTranslation } from 'components/Translation';
 import { CreateRule, Styles, useStyle } from '@pma/dex-wrapper';
 import { ShareWidget } from 'features/general/ShareWidget';
@@ -42,6 +41,11 @@ const UserObjectives = () => {
       window.open('https://tescobank.sharepoint.com/sites/intranet/learn/ourbig6hub/Pages/default.aspx');
     }
   };
+
+  const Timeline = useMemo(
+    () => React.lazy(() => import(`features/${tenant}/Timeline`).then((module) => ({ default: module.default }))),
+    [],
+  );
 
   const Widget = useMemo(
     () =>

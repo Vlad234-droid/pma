@@ -2,7 +2,6 @@ import React, { FC, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
 
-import Timeline from 'features/general/Timeline';
 import Objectives, { MyReviewsSection, CompletedReviewsSection, ReviewFilesSection } from 'features/general/Objectives';
 import { tenant as T, useTenant } from 'features/general/Permission';
 import { ShareWidget } from 'features/general/ShareWidget';
@@ -21,6 +20,11 @@ const ObjectivesPage: FC = () => {
       React.lazy(() =>
         import(`features/${tenant}/ObjectivesForm`).then((module) => ({ default: module.CreateButton })),
       ),
+    [],
+  );
+
+  const Timeline = useMemo(
+    () => React.lazy(() => import(`features/${tenant}/Timeline`).then((module) => ({ default: module.default }))),
     [],
   );
 

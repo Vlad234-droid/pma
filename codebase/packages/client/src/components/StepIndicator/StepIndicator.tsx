@@ -11,6 +11,7 @@ export type StepIndicatorProps = {
   mainTitle?: string;
   currentStep?: number;
   currentStatus?: Status;
+  activeStep?: number;
   titles?: string[];
   descriptions?: string[];
   statuses?: Status[];
@@ -53,11 +54,19 @@ export const getIcon = (
     },
   };
 
-  return contents[type!][status!] || ['roundCircle', 'pending', t('not_completed', 'Not completed')];
+  return contents[type!]?.[status!] || ['roundCircle', 'pending', t('not_completed', 'Not completed')];
+};
+
+const getUnderline = ({ step, index, totalSteps }) => {
+  if (step > index || step == totalSteps - 1) return 'full';
+  if (step > 0 && index == step) return 'half';
+
+  return undefined;
 };
 
 export const StepIndicatorBasic: FC<StepIndicatorProps> = ({
   currentStep,
+  activeStep,
   currentStatus,
   titles = [],
   descriptions = [],
@@ -68,12 +77,18 @@ export const StepIndicatorBasic: FC<StepIndicatorProps> = ({
   const { css, theme } = useStyle();
   const { t } = useTranslation();
 
-  const Line: FC<{ active?: boolean }> = ({ active }) => (
+  const Line: FC<{ active?: boolean; underline?: 'half' | 'full' }> = ({ active, underline }) => (
     <div
       className={css({
         width: '100%',
         height: '3px',
-        background: active ? theme.colors.tescoBlue : theme.colors.backgroundDarkest,
+        background: active
+          ? theme.colors.tescoBlue
+          : underline
+          ? underline === 'full'
+            ? theme.colors.tescoBlue
+            : `linear-gradient(90deg, ${theme.colors.tescoBlue} 50%, ${theme.colors.backgroundDarkest} 50%)`
+          : theme.colors.backgroundDarkest,
         flex: 1,
       })}
     />
@@ -99,12 +114,16 @@ export const StepIndicatorBasic: FC<StepIndicatorProps> = ({
 
   let array: JSX.Element[];
   if (statuses && statuses.length > 0) {
-    array = statuses.reduce((arr: JSX.Element[], status, i) => {
+    array = statuses.reduce((arr: JSX.Element[], status, i, array) => {
       const [graphics, color, title] = getIcon(status, types[i], t);
       const alignItems = getTextAlign(statuses?.length, i);
       arr.push(
         <div key={`wrapper${i}`}>
-          <Line key={`line${i}`} active={!!currentStep && currentStep >= i} />
+          <Line
+            key={`line${i}`}
+            active={!!currentStep && currentStep >= i}
+            underline={getUnderline({ index: i, step: activeStep, totalSteps: array.length })}
+          />
           <Step
             key={`step${i}`}
             alignItems={alignItems}
@@ -115,13 +134,17 @@ export const StepIndicatorBasic: FC<StepIndicatorProps> = ({
       return arr;
     }, []);
   } else {
-    array = titles.reduce((arr: JSX.Element[], _, i) => {
+    array = titles.reduce((arr: JSX.Element[], _, i, array) => {
       const status = getStatus(i, currentStep, currentStatus, isValid);
       const [graphics, color, title] = getIcon(status, types[i], t);
       const alignItems = getTextAlign(titles?.length, i);
       arr.push(
         <div key={`wrapper${i}`}>
-          <Line key={`line${i}`} active={!!currentStep && currentStep >= i} />
+          <Line
+            key={`line${i}`}
+            active={!!currentStep && currentStep >= i}
+            underline={getUnderline({ index: i, step: activeStep, totalSteps: array.length })}
+          />
           <Step
             key={`step${i}`}
             alignItems={alignItems}
@@ -181,6 +204,7 @@ export const StepIndicatorBasic: FC<StepIndicatorProps> = ({
 export const StepIndicator: FC<StepIndicatorProps> = ({
   mainTitle = 'Your Contribution timeline',
   currentStep,
+  activeStep,
   currentStatus,
   titles = [],
   descriptions = [],
@@ -195,6 +219,7 @@ export const StepIndicator: FC<StepIndicatorProps> = ({
         <span className={css(titleStyle)}>{mainTitle}</span>
         <StepIndicatorBasic
           currentStep={currentStep}
+          activeStep={activeStep}
           currentStatus={currentStatus}
           titles={titles}
           descriptions={descriptions}

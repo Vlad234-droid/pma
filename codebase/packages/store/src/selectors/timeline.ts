@@ -43,6 +43,43 @@ export const getTimelineSelector = (colleagueUuid) =>
     return { descriptions, startDates, summaryStatuses, codes, types };
   });
 
+export const getBankTimelineSelector = (colleagueUuid) =>
+  createSelector(usersSelector, timelineSelector, (user, { meta, ...rest }) => {
+    // @ts-ignore
+    const uuid = colleagueUuid === USER.current ? user?.current.info.data.colleague.colleagueUUID : colleagueUuid;
+    const data = rest?.[uuid];
+
+    const quarterDescription = data?.find((element) => element.code === 'Q3')?.description;
+    const result = { codes: [], types: [], summaryStatuses: [], descriptions: [], startDates: [], currentStep: 0 };
+    let currentStep = 0;
+    let step = 0;
+
+    const getDesc = (code, description) => (code !== 'MYR' ? description : `${description} / ${quarterDescription}`);
+    const getStartDate = (startTime, endTime, index) => getDateString(new Date(index === 0 ? startTime : endTime));
+    const getDateString = (date) => `${date.toLocaleString('default', { month: 'short' })} ${date.getFullYear()}`;
+    const isActive = (status) => status !== 'STARTED' && status !== 'NOT_STARTED';
+    const getStep = (step) => (step <= 0 ? 0 : step - 1);
+
+    data?.map(({ code, type, summaryStatus, description, startTime, endTime }, index) => {
+      const { codes, types, summaryStatuses, descriptions, startDates } = result as any;
+
+      if (code !== 'Q3') {
+        codes.push(code);
+        types.push(type);
+        summaryStatuses.push(summaryStatus);
+        descriptions.push(getDesc(code, description));
+        startDates.push(getStartDate(startTime, endTime, index));
+        step++;
+      }
+
+      if ((code === 'MYR' || code === 'EYR') && isActive(summaryStatus)) {
+        currentStep = step;
+      }
+    });
+
+    return { ...result, currentStep: getStep(currentStep) };
+  });
+
 export const getTimelineMetaSelector = createSelector(timelineSelector, ({ meta }) => meta);
 
 export const hasTimelineAccessesSelector = ({
