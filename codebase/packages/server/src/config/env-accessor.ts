@@ -8,7 +8,7 @@ const environmentParameters: Array<keyof NodeJS.ProcessEnv> = [
   'RUNTIME_ENV',
   //
   'API_SERVER_URL',
-  'API_IDENTITY_SERVER_URL',
+  'API_IAM_SERVER_URL',
   'API_MANAGEMENT_SERVER_URL',
   'SWAGGER_SERVER_URL',
   'CAMUNDA_SERVER_URL',
@@ -54,7 +54,7 @@ const environmentParameters: Array<keyof NodeJS.ProcessEnv> = [
  * 
  */
 const optionalEnvironmentParameters = [
-  'API_IDENTITY_SERVER_URL',
+  'API_IAM_SERVER_URL',
   'API_MANAGEMENT_SERVER_URL',
   'SWAGGER_SERVER_URL',
   'CAMUNDA_SERVER_URL',

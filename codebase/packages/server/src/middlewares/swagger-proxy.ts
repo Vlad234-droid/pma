@@ -12,8 +12,8 @@ import { extractAuthToken, initializeProxyMiddleware } from './proxy';
 
 export const swaggerProxyMiddleware = (processConfig: ProcessConfig) => { 
 
-  const API_PMA_V1_NAME = 'yoc-api-v1';
-  const API_IDENTITY_V1_NAME = 'identity-api-v1';
+  const API_PMA_V1_NAME = 'yc-api-v1';
+  const API_IAM_V1_NAME = 'iam-api-v1';
   const API_MANAGEMENT_NAME = 'x-actuator';
 
   const { buildEnvironment, applicationContextPath, applicationOrigin, swaggerServerUrl, loggerLevel } = processConfig;
@@ -74,7 +74,7 @@ export const swaggerProxyMiddleware = (processConfig: ProcessConfig) => {
     ];
 
     if (processConfig.apiIdentityServerUrl()) {
-      urls.push({ url: `${emptyIfRoot(applicationContextPath())}/api-docs/${API_IDENTITY_V1_NAME}`, name: API_IDENTITY_V1_NAME });
+      urls.push({ url: `${emptyIfRoot(applicationContextPath())}/api-docs/${API_IAM_V1_NAME}`, name: API_IAM_V1_NAME });
     }
     if (processConfig.apiManagementServerUrl()) {
       urls.push({ url: `${emptyIfRoot(applicationContextPath())}/api-docs/${API_MANAGEMENT_NAME}`, name: API_MANAGEMENT_NAME });
@@ -167,12 +167,12 @@ export const swaggerProxyMiddleware = (processConfig: ProcessConfig) => {
     const component = req.params.component;
     switch (component) {
       case API_PMA_V1_NAME:
-        const apiConfigBuffer = Buffer.from(JSON.stringify(await transformComponenApiDocs('/api/yoc/v1', '/v1')));
+        const apiConfigBuffer = Buffer.from(JSON.stringify(await transformComponenApiDocs('/api/yc/v1', '/v1')));
         res.contentType('application/json');
         res.send(apiConfigBuffer);
         break;
-      case API_IDENTITY_V1_NAME:
-        const userManagementConfigBuffer = Buffer.from(JSON.stringify(await transformComponenApiDocs('/api/identity/v1', '/v1')));
+      case API_IAM_V1_NAME:
+        const userManagementConfigBuffer = Buffer.from(JSON.stringify(await transformComponenApiDocs('/api/iam/v1', '/v1')));
         res.contentType('application/json');
         res.send(userManagementConfigBuffer);
         break;

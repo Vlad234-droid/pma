@@ -104,9 +104,9 @@ if (!API_SERVER_URL) {
     }
   }
 
-  router.use('/api/yoc/v1', apiProxyMiddleware(config));
+  router.use('/api/yc/v1', apiProxyMiddleware(config));
 
-  config.apiIdentityServerUrl() && router.use('/api/identity/v1', apiIdentityProxyMiddleware(config));
+  config.apiIdentityServerUrl() && router.use('/api/iam/v1', apiIdentityProxyMiddleware(config));
   config.apiManagementServerUrl() && router.use('/api/actuator', apiManagementProxyMiddleware(config));
   config.camundaServerUrl() && router.use('/camunda', camundaProxyMiddleware(config));
   config.swaggerServerUrl() && router.use(swaggerProxyMiddleware(config));
