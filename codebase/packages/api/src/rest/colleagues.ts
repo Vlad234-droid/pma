@@ -7,9 +7,9 @@ export const getColleagues = (params: any) => {
   return httpClient.get(`${domain}`, { params });
 };
 
-export const getObjectivesRewiews = (params: any) => {
-  const { type, colleagueUuid } = params;
-  return httpClient.get(`${colleagues}/${colleagueUuid}/pm-cycles/CURRENT/review-types/${type}/reviews`);
+export const getObjectivesReviews = (params: any) => {
+  const { code, colleagueUuid } = params;
+  return httpClient.get(`${colleagues}/${colleagueUuid}/pm-cycles/CURRENT/review-codes/${code}/reviews`);
 };
 
 export const getProfileColleague = (params: any) => {

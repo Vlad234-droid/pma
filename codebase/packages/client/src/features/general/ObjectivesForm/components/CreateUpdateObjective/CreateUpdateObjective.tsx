@@ -31,7 +31,7 @@ const CreateUpdateObjective: FC<Props> = ({ onClose, editNumber = null }) => {
   const { loaded: reviewLoaded } = useSelector(reviewsMetaSelector);
   const { info } = useSelector(currentUserSelector);
 
-  const pathParams = { colleagueUuid: info.colleagueUUID, type: ReviewType.OBJECTIVE, cycleUuid: 'CURRENT' };
+  const pathParams = { colleagueUuid: info.colleagueUUID, code: 'OBJECTIVE', cycleUuid: 'CURRENT' };
 
   const objectives = useSelector(getReviewPropertiesSelector(ReviewType.OBJECTIVE));
   const [schema] = useReviewSchema(ReviewType.OBJECTIVE);

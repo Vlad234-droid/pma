@@ -35,7 +35,7 @@ export const useUserObjectivesData = (uuid, reviewLoaded, schemaLoaded, setObjec
   useEffect(() => {
     dispatch(
       ReviewsActions.getReviews({
-        pathParams: { colleagueUuid: uuid, type: ReviewType.OBJECTIVE, cycleUuid: 'CURRENT' },
+        pathParams: { colleagueUuid: uuid, code: 'OBJECTIVE', cycleUuid: 'CURRENT' },
       }),
     );
     if (uuid) {

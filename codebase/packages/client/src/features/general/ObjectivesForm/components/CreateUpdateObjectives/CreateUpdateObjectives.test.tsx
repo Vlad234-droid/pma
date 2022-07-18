@@ -91,7 +91,7 @@ describe('CreateUpdateObjectives', () => {
       });
 
       const requestParamFirstCall = addMockUpdateReviews.mock.calls[0][0];
-      expect(requestParamFirstCall.pathParams.type).toEqual('OBJECTIVE');
+      expect(requestParamFirstCall.pathParams.code).toEqual('OBJECTIVE');
       expect(requestParamFirstCall.data[0].status).toEqual('DRAFT');
       expect(requestParamFirstCall.data[0].properties).toMatchObject({
         textfield: `textfield value`,
@@ -117,7 +117,7 @@ describe('CreateUpdateObjectives', () => {
 
       expect(textfield).toBeEmptyDOMElement();
       const requestParamFirstCall = addMockUpdateReviews.mock.calls[0][0];
-      expect(requestParamFirstCall.pathParams.type).toEqual('OBJECTIVE');
+      expect(requestParamFirstCall.pathParams.code).toEqual('OBJECTIVE');
       expect(requestParamFirstCall.data[0].status).toEqual('DRAFT');
       expect(requestParamFirstCall.data[0].properties).toMatchObject({
         textfield: `textfield value`,
@@ -226,7 +226,7 @@ describe('CreateUpdateObjectives', () => {
 
       const requestParamSecondCall = addMockUpdateReviews.mock.calls[1][0];
 
-      expect(requestParamSecondCall.pathParams.type).toEqual('OBJECTIVE');
+      expect(requestParamSecondCall.pathParams.code).toEqual('OBJECTIVE');
       expect(requestParamSecondCall.data[0].status).toEqual('WAITING_FOR_APPROVAL');
       expect(requestParamSecondCall.data[1].status).toEqual('WAITING_FOR_APPROVAL');
       expect(requestParamSecondCall.data[0].properties).toMatchObject({

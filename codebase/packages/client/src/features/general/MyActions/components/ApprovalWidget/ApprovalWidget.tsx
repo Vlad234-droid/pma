@@ -106,7 +106,7 @@ export const ApprovalWidget: FC<Props> = ({ isDisabled, reviews, onSave }) => {
           pathParams: {
             colleagueUuid: colleague.uuid,
             approverUuid: colleagueUuid,
-            type: timeline.reviewType,
+            code: timeline.code,
             cycleUuid: 'CURRENT',
             status,
           },

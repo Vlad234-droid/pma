@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo } from 'react';
 import { Rule, useStyle } from '@pma/dex-wrapper';
-import { ObjectiveType, ReviewType, Status } from 'config/enum';
+import { ReviewType, Status } from 'config/enum';
 import {
   colleagueUUIDSelector,
   countByStatusReviews,
@@ -11,6 +11,7 @@ import {
   ReviewsActions,
   reviewsMetaSelector,
   timelineTypesAvailabilitySelector,
+  getActiveTimelineByReviewTypeSelector,
 } from '@pma/store';
 import { Trans, useTranslation } from 'components/Translation';
 import {
@@ -36,14 +37,15 @@ const Objectives = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
+  const activeTimeline = useSelector(getActiveTimelineByReviewTypeSelector(ReviewType.OBJECTIVE, USER.current));
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const originObjectives = useSelector(filterReviewsByTypeSelector(ReviewType.OBJECTIVE));
-  const objectiveSchema = useSelector(getReviewSchema(ReviewType.OBJECTIVE));
+  const objectiveSchema = useSelector(getReviewSchema(activeTimeline?.code)) || {};
   const { components = [] } = objectiveSchema;
   const formElements = components.filter((component) => component.type != 'text');
   const objectives: ObjectiveTypes.Objective[] = transformReviewsToObjectives(originObjectives, formElements);
   const timelineTypes = useSelector(timelineTypesAvailabilitySelector(colleagueUuid)) || {};
-  const canShowObjectives = timelineTypes[ObjectiveType.OBJECTIVE];
+  const canShowObjectives = timelineTypes[ReviewType.OBJECTIVE];
 
   const { loading: reviewLoading } = useSelector(reviewsMetaSelector);
   const timelineObjective = useSelector(getTimelineByCodeSelector(ReviewType.OBJECTIVE, USER.current)) || {};

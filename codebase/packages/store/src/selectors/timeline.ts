@@ -1,8 +1,9 @@
 //@ts-ignore
 import { createSelector } from 'reselect'; //@ts-ignore
 import { RootState } from 'typesafe-actions';
-import { ObjectiveType, ReviewType } from '@pma/client/src/config/enum';
+import { ReviewType } from '@pma/client/src/config/enum';
 import { usersSelector } from './users';
+import { ReviewStatusEnum } from '@pma/openapi';
 
 export enum Type {
   OBJECTIVE = 'OBJECTIVE',
@@ -51,8 +52,8 @@ export const hasTimelineAccessesSelector = ({
   method,
 }: {
   colleagueUuid: string;
-  types: ObjectiveType[];
-  excludeTypes?: ObjectiveType[];
+  types: ReviewType[];
+  excludeTypes?: ReviewType[];
   method: 'some' | 'every';
 }) =>
   createSelector(usersSelector, timelineSelector, ({ meta, ...rest }) => {
@@ -114,4 +115,12 @@ export const getTimelinesByReviewTypeSelector = (type: ReviewType, colleagueUuid
     const uuid = colleagueUuid === USER.current ? user?.current.info.data.colleague.colleagueUUID : colleagueUuid;
     const data = rest?.[uuid];
     return data?.filter((timeline) => timeline.reviewType === type);
+  });
+
+export const getActiveTimelineByReviewTypeSelector = (type: ReviewType, colleagueUuid) =>
+  createSelector(usersSelector, timelineSelector, (user, { meta, ...rest }) => {
+    // @ts-ignore
+    const uuid = colleagueUuid === USER.current ? user?.current.info.data.colleague.colleagueUUID : colleagueUuid;
+    const data = rest?.[uuid];
+    return data?.find((timeline) => timeline.reviewType === type && timeline.status === ReviewStatusEnum.Started);
   });

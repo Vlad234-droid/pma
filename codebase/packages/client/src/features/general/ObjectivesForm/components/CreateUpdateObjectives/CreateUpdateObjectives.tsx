@@ -35,7 +35,7 @@ type ObjectivesProps = {
 const Objectives: FC<ObjectivesProps> = ({ colleagueUUID, schema, objectives, origin, onClose, editNumber = null }) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const pathParams = { colleagueUuid: colleagueUUID, type: ReviewType.OBJECTIVE, cycleUuid: 'CURRENT' };
+  const pathParams = { colleagueUuid: colleagueUUID, code: 'OBJECTIVE', cycleUuid: 'CURRENT' };
 
   const [currentObjectiveNumber, setObjectiveNumber] = useState(editNumber ? editNumber : 1);
   const [objectivesHashMap, setObjectiveHashMap] = useState(objectives);

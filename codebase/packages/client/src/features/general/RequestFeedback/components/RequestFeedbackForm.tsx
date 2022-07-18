@@ -67,7 +67,7 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel, setIsInfoModalOpen }) 
 
   useEffect(() => {
     if (!reviews.length && formValues.targetType === TargetType.OBJECTIVE) {
-      dispatch(FeedbackActions.getObjectiveReviews({ type: 'OBJECTIVE', colleagueUuid: currentColleagueUuid }));
+      dispatch(FeedbackActions.getObjectiveReviews({ code: 'OBJECTIVE', colleagueUuid: currentColleagueUuid }));
     }
   }, [formValues.targetType]);
 

@@ -6,7 +6,7 @@ import { colleagueUUIDSelector, getTimelineByCodeSelector, timelineTypesAvailabi
 import { Trans, useTranslation } from 'components/Translation';
 import Section from 'components/Section';
 import { ReviewWidget } from 'features/general/ReviewWidget';
-import { ObjectiveType, ReviewType } from 'config/enum';
+import { ReviewType } from 'config/enum';
 import { USER } from 'config/constants';
 
 type Props = {};
@@ -17,11 +17,11 @@ export const MyReviewsSection: FC<Props> = () => {
 
   const { css } = useStyle();
 
-  const midYearReview = useSelector(getTimelineByCodeSelector(ObjectiveType.MYR, USER.current));
-  const endYearReview = useSelector(getTimelineByCodeSelector(ObjectiveType.EYR, USER.current));
+  const midYearReview = useSelector(getTimelineByCodeSelector(ReviewType.MYR, USER.current));
+  const endYearReview = useSelector(getTimelineByCodeSelector(ReviewType.EYR, USER.current));
   const timelineTypes = useSelector(timelineTypesAvailabilitySelector(colleagueUuid)) || {};
-  const canShowMyReview = timelineTypes[ObjectiveType.MYR] && timelineTypes[ObjectiveType.EYR];
-  const canShowAnnualReview = !timelineTypes[ObjectiveType.MYR] && timelineTypes[ObjectiveType.EYR];
+  const canShowMyReview = timelineTypes[ReviewType.MYR] && timelineTypes[ReviewType.EYR];
+  const canShowAnnualReview = !timelineTypes[ReviewType.MYR] && timelineTypes[ReviewType.EYR];
 
   return (
     <Section

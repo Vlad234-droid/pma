@@ -14,21 +14,6 @@ export enum Status {
   NOT_CREATED = 'NOT_CREATED',
 }
 
-export enum Code {
-  START_CYCLE = 'START_CYCLE',
-  MYR = 'MYR',
-  EYR = 'EYR',
-  Q3 = 'Q3',
-  OBJECTIVE = 'OBJECTIVE',
-  Q1 = 'Q1',
-}
-
-export enum ObjectiveType {
-  OBJECTIVE = 'OBJECTIVE',
-  MYR = 'MYR',
-  EYR = 'EYR',
-}
-
 export enum ReviewType {
   QUARTER = 'QUARTER',
   OBJECTIVE = 'OBJECTIVE',
