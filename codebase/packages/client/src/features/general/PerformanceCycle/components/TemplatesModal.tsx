@@ -6,6 +6,7 @@ import { Input } from 'components/Form';
 import { useTranslation } from 'components/Translation';
 import { ProcessTemplateActions, getProcessTemplateSelector } from '@pma/store';
 import { formatDateStringFromISO } from 'utils/date';
+import { FileExtensions } from 'config/enum';
 
 type TemplateModalProps = {
   onSelect: (value) => void;
@@ -24,7 +25,7 @@ const TemplatesModal: FC<TemplateModalProps> = ({ onSelect }) => {
     dispatch(
       ProcessTemplateActions.getProcessTemplate({
         path_eq: 'cycles',
-        type_eq: 1,
+        type_eq: FileExtensions.BPMN,
       }),
     );
   }, []);

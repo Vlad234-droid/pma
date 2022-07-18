@@ -70,6 +70,7 @@ const PerformanceCyclesTemplates: FC = () => {
     debounce((filter) => {
       dispatch(ProcessTemplateActions.getProcessTemplate(processTemplatePayload(filter)));
     }, 300),
+
     [],
   );
 

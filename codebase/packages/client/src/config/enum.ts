@@ -44,16 +44,6 @@ export enum FileDescription {
   DOC = 'Word document',
 }
 
-export enum FileId {
-  BPMN = 1,
-  FORM,
-  PDF,
-  PPT,
-  XLS,
-  DMN,
-  DOC,
-}
-
 export enum FileExtensions {
   BPMN = 'BPMN',
   FORM = 'FORM',

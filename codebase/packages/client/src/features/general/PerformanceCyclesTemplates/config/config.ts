@@ -1,4 +1,4 @@
-import { FileId, SortFileValue, FileExtensions } from 'config/enum';
+import { SortFileValue, FileExtensions } from 'config/enum';
 import { getFileExtension } from 'utils/file';
 export const exceptableFiles = '.pdf, .bpmn, .form, .ppt, .xls, .dmn, .doc';
 
@@ -28,9 +28,7 @@ export const initialFilters: FilterType = {
   extension: '',
 };
 
-export const filterFileType = (extention = '') => {
-  return FileId?.[extention];
-};
+export const filterFileType = (extention = '') => FileExtensions?.[extention];
 
 export const checkForExtenstion = (name) => exceptableFiles.includes(getFileExtension(name));
 

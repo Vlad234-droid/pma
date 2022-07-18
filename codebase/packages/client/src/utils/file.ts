@@ -1,4 +1,4 @@
-import { FileDescription, FileId } from 'config/enum';
+import { FileDescription, FileExtensions } from 'config/enum';
 
 export const makeBinaryFromObject = <T extends unknown>(data: T) =>
   new Blob([JSON.stringify(data)], {
@@ -18,6 +18,6 @@ export const getFileType = (fileName) => {
   return {
     code,
     description: FileDescription[code.toUpperCase()],
-    id: FileId[code.toUpperCase()],
+    id: FileExtensions[code.toUpperCase()],
   };
 };
