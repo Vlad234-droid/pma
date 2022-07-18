@@ -50,6 +50,7 @@ describe('CreateUpdateObjectives', () => {
             properties: {
               pm_review_start_delay: 'P1Y',
               pm_review_type: 'eyr',
+              pm_timeline_point_code: 'EYR',
               pm_review_before_start: 'P2W',
               pm_type: 'review',
               pm_review_start_time: '2022-03-15',

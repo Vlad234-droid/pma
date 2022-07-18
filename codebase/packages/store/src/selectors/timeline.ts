@@ -3,7 +3,6 @@ import { createSelector } from 'reselect'; //@ts-ignore
 import { RootState } from 'typesafe-actions';
 import { ReviewType } from '@pma/client/src/config/enum';
 import { usersSelector } from './users';
-import { ReviewStatusEnum } from '@pma/openapi';
 
 export enum Type {
   OBJECTIVE = 'OBJECTIVE',
@@ -122,5 +121,5 @@ export const getActiveTimelineByReviewTypeSelector = (type: ReviewType, colleagu
     // @ts-ignore
     const uuid = colleagueUuid === USER.current ? user?.current.info.data.colleague.colleagueUUID : colleagueUuid;
     const data = rest?.[uuid];
-    return data?.find((timeline) => timeline.reviewType === type && timeline.status === ReviewStatusEnum.Started);
+    return data?.find((timeline) => timeline.reviewType === type && timeline.status === 'STARTED');
   });

@@ -52,6 +52,7 @@ describe('ReviewFormModal', () => {
                   pm_review_max: '1',
                   pm_review_min: '1',
                   pm_review_type: 'eyr',
+                  pm_timeline_point_code: 'EYR',
                   pm_review_duration: 'P2W',
                   pm_review_before_end: 'P1W',
                   pm_review_start_time: '2022-03-15',
@@ -322,6 +323,7 @@ describe('ReviewFormModal', () => {
                   pm_review_max: '1',
                   pm_review_min: '1',
                   pm_review_type: 'eyr',
+                  pm_timeline_point_code: 'EYR',
                   pm_review_duration: 'P2W',
                   pm_review_before_end: 'P1W',
                   pm_review_start_time: '2022-03-15',
@@ -422,6 +424,7 @@ describe('ReviewFormModal', () => {
           properties: {
             pm_review_start_delay: 'P1Y',
             pm_review_type: 'eyr',
+            pm_timeline_point_code: 'EYR',
             pm_review_before_start: 'P2W',
             pm_type: 'review',
             pm_review_start_time: '2022-03-15',

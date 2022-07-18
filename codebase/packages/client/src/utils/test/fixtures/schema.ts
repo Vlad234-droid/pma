@@ -24,7 +24,7 @@ const metadata = {
     timelinePoints: [
       {
         id: 'endOfYearReview',
-        code: 'Year-end review',
+        code: 'EYR',
         description: 'Year-end review',
         type: 'REVIEW',
         properties: {
@@ -33,6 +33,7 @@ const metadata = {
           pm_review_max: '1',
           pm_review_min: '1',
           pm_review_type: 'eyr',
+          pm_timeline_point_code: 'EYR',
           pm_review_duration: 'P2W',
           pm_review_before_end: 'P1W',
           pm_review_start_time: '2022-03-15',
@@ -51,7 +52,7 @@ const metadata = {
       },
       {
         id: 'midYearReview',
-        code: 'Mid-year review',
+        code: 'MYR',
         description: 'Mid-year review',
         type: 'REVIEW',
         properties: {
@@ -60,6 +61,7 @@ const metadata = {
           pm_review_max: '1',
           pm_review_min: '1',
           pm_review_type: 'myr',
+          pm_timeline_point_code: 'MYR',
           pm_review_duration: 'P2W',
           pm_review_before_end: 'P1W',
           pm_review_start_time: '2021-10-01',
@@ -87,6 +89,7 @@ const metadata = {
           pm_review_max: '2',
           pm_review_min: '2',
           pm_review_type: 'objective',
+          pm_timeline_point_code: 'OBJECTIVE',
           pm_review_duration: 'P2W',
           pm_review_before_end: 'P1W',
           pm_review_start_time: '2021-04-01',
