@@ -95,8 +95,8 @@ export class ConfigAccessor {
         { removeTrailingSlash: true }),
       //
       apiIdentityServerUrl: () => createUrlOrUndefined(
-        processEnv.API_IDENTITY_SERVER_URL,
-        `API_IDENTITY_SERVER_URL must be a well-formed URL pointing to identity API server, e.g.: http://tesco.com:8080/pma/iam-api`,
+        processEnv.API_IAM_SERVER_URL,
+        `API_IAM_SERVER_URL must be a well-formed URL pointing to identity API server, e.g.: http://tesco.com:8080/pma/iam-api`,
         { removeTrailingSlash: true }),
       //
       apiManagementServerUrl: () => createUrlOrUndefined(
