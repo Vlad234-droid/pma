@@ -17,10 +17,10 @@ jest.mock('features/general/ObjectiveWidgets', () => {
   };
 });
 
-jest.mock('./components/HelpWidgets', () => {
+jest.mock('../widgets/HelpWidget', () => {
   return {
     __esModule: true,
-    default: () => {
+    HelpWidget: () => {
       return <div>mocked_help_widgets</div>;
     },
   };

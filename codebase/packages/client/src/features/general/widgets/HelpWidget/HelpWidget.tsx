@@ -8,7 +8,7 @@ import { useTranslation } from 'components/Translation';
 import { buildPath } from 'features/general/Routes';
 import { Page } from 'pages';
 
-const HelpWidgets: FC = () => {
+export const HelpWidget: FC = () => {
   const { css } = useStyle();
   const { t } = useTranslation();
 
@@ -31,8 +31,6 @@ const HelpWidgets: FC = () => {
     </div>
   );
 };
-
-export default HelpWidgets;
 
 const wrrapperRule: Rule = {
   height: '100%',
