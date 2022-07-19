@@ -1,6 +1,6 @@
 import httpClient from '../config/client';
 
-export const getReviews = <T>(params: any = {}) => {
+export const getReviews = (params: any = {}) => {
   const {
     pathParams: { colleagueUuid = '', code, cycleUuid = 'CURRENT' },
     searchParams,
@@ -11,7 +11,7 @@ export const getReviews = <T>(params: any = {}) => {
   return httpClient.get(uri, { params: searchParams });
 };
 
-export const createReview = <T>(params: any = {}) => {
+export const createReview = (params: any = {}) => {
   const {
     pathParams: { colleagueUuid = '', code, cycleUuid = 'CURRENT', number },
     data,
@@ -21,7 +21,7 @@ export const createReview = <T>(params: any = {}) => {
   return httpClient.post(uri, firstElement);
 };
 
-export const updateReview = <T>(params: any = {}) => {
+export const updateReview = (params: any = {}) => {
   const {
     pathParams: { colleagueUuid = '', code, cycleUuid = 'CURRENT', number },
     data,
@@ -32,7 +32,7 @@ export const updateReview = <T>(params: any = {}) => {
   return httpClient.put(uri, firstElement);
 };
 
-export const updateReviews = <T>(params: any = {}) => {
+export const updateReviews = (params: any = {}) => {
   const {
     pathParams: { colleagueUuid = '', code, cycleUuid = 'CURRENT' },
     data,
@@ -42,7 +42,7 @@ export const updateReviews = <T>(params: any = {}) => {
   return httpClient.put(uri, data);
 };
 
-export const deleteReview = <T>(params: any = {}) => {
+export const deleteReview = (params: any = {}) => {
   const {
     pathParams: { colleagueUuid = '', code, cycleUuid = 'CURRENT', number },
   } = params;
@@ -51,7 +51,7 @@ export const deleteReview = <T>(params: any = {}) => {
   return httpClient.delete(uri);
 };
 
-export const updateReviewStatus = <T>(params: any = {}) => {
+export const updateReviewStatus = (params: any = {}) => {
   const {
     pathParams: { colleagueUuid = '', code, cycleUuid = 'CURRENT', status },
     data,
@@ -60,7 +60,7 @@ export const updateReviewStatus = <T>(params: any = {}) => {
   return httpClient.put(uri, data);
 };
 
-export const approveReview = <T>(params: any = {}) => {
+export const approveReview = (params: any = {}) => {
   const {
     pathParams: { colleagueUuid = '', code, cycleUuid = 'CURRENT' },
     data,
@@ -69,7 +69,7 @@ export const approveReview = <T>(params: any = {}) => {
   return httpClient.put(uri, data);
 };
 
-export const declineReview = <T>(params: any = {}) => {
+export const declineReview = (params: any = {}) => {
   const {
     pathParams: { colleagueUuid = '', code, cycleUuid = 'CURRENT' },
     data,
