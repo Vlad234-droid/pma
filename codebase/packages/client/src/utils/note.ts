@@ -47,7 +47,8 @@ export const definePropperFieldTeamOptions = (foldersWithNotes, noteFolderUuid) 
 
 export const getPropperInfoData = (actionModal, actionItems, t) => {
   if (actionModal.current === 'delete') {
-    const option = actionItems.notedId ? 'note' : 'folder';
+    const option = actionItems.noteId ? 'note' : 'folder';
+
     return {
       title: t('delete_folder_note', `Are you sure you want to delete this ${option}?`, { option }),
       description: t('this_is_permanent_and_cannot_be_undone', 'This is permanent and cannot be undone.'),

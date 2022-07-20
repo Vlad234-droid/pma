@@ -46,7 +46,7 @@ const SelectedFolder: FC<SelectedFolderProps> = ({
 
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const { archiveMode, foldersWithNotes } = useNotesContainer();
+  const { archiveMode, foldersWithNotes, setFoldersWithNotes } = useNotesContainer();
 
   useEffect(() => {
     if (searchParams.get('folder')) {
@@ -107,7 +107,11 @@ const SelectedFolder: FC<SelectedFolderProps> = ({
   const handleClickOutside = (event: MouseEvent<HTMLElement>) => {
     const element = event?.target as HTMLElement;
     if (ref.current && !ref.current.contains(element)) {
-      setSelectedFolder((prev) => ({ ...prev, notes: prev?.notes.map((item) => ({ ...item, selected: false })) }));
+      setFoldersWithNotes((prev) =>
+        prev.map((item) => ({ ...item, notes: item.notes.map((item) => ({ ...item, selected: false })) })),
+      );
+      if (selectedFolder?.isInSearch)
+        setSelectedFolder((prev) => ({ ...prev, notes: prev.notes.map((item) => ({ ...item, selected: false })) }));
     }
   };
 

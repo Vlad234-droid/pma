@@ -38,7 +38,7 @@ const SelectedFolder: FC<Props> = ({ setConfirmTEAMModal, actionTEAMModal, teamA
 
   const [searchParams] = useSearchParams();
 
-  const { archiveMode, foldersWithNotesTEAM } = useNotesContainer();
+  const { archiveMode, foldersWithNotesTEAM, setFoldersWithNotesTEAM } = useNotesContainer();
 
   useEffect(() => {
     if (searchParams.get('folder')) {
@@ -51,7 +51,9 @@ const SelectedFolder: FC<Props> = ({ setConfirmTEAMModal, actionTEAMModal, teamA
   const handleClickOutside = (event: MouseEvent<HTMLElement>) => {
     const element = event?.target as HTMLElement;
     if (ref.current && !ref.current.contains(element)) {
-      setSelectedFolder((prev) => ({ ...prev, notes: prev?.notes.map((item) => ({ ...item, selected: false })) }));
+      setFoldersWithNotesTEAM((prev) =>
+        prev.map((item) => ({ ...item, notes: item.notes.map((item) => ({ ...item, selected: false })) })),
+      );
     }
   };
 
