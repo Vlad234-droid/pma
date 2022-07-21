@@ -6,5 +6,13 @@
   "priority_file_upload_header": "Priority {{number}} - upload documents",
   "need_help_to_write": "Need help writing your priorities?",
   "condition_submit_for_agreement": "Or, finish your priorities and submit for agreement",
-  "quarterly_priorities": "Quarterly Priorities"
+  "quarterly_priorities": "Quarterly Priorities",
+  "mid_year_review_title": "What have you contributed this half year and how have you gone about it?",
+  "mid_year_review_help_text": "Use this to capture the outcome of the conversation you’ve had with your line manager. Remember to focus as much on your how as your what.",
+  "end_year_review_title": "What have you contributed this year and how have you gone about it?",
+  "mid_year_review_widget_title": "Complete this once you’ve had your mid-year conversation with your line manager.",
+  "mid_year_review_widget_title_approved": "Your mid-year review is complete.",
+  "end_year_review_widget_title": "Complete this once you’ve had your year-end conversation with your line manager.",
+  "end_year_review_widget_title_approved": "Your year-end review is complete.",
+  "myr_review_sent_to_manager": "Your comments have been submitted to your Line Manager"
 }

@@ -2,5 +2,13 @@
   "create_objectives": "Create objectives",
   "my_objectives_and_reviews": "My objectives and reviews",
   "objective_number": "Objective {{number}}",
-  "need_help_to_write": "Need help with what to write?"
+  "need_help_to_write": "Need help with what to write?",
+  "mid_year_review_title": "How is your year going so far?",
+  "mid_year_review_help_text": "Use this to capture a summary of the mid-year conversation you’ve had with your line manager. Remember to focus as much on your how as your what.",
+  "end_year_review_title": "What have you contributed this year and how have you gone about it?",
+  "mid_year_review_widget_title": "Complete this once you’ve had your mid-year conversation with your line manager.",
+  "mid_year_review_widget_title_approved": "Your mid-year review is complete.",
+  "end_year_review_widget_title": "Complete this once you’ve had your year-end conversation with your line manager.",
+  "end_year_review_widget_title_approved": "Your year-end review is complete.",
+  "myr_review_sent_to_manager": "Your mid-year review has been sent to your line manager."
 }

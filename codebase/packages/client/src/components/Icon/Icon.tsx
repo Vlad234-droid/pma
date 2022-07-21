@@ -33,6 +33,7 @@ export type IconProps = ViewBoxType & IconBaseProps & IconStyleProps;
 
 export const Icon: FC<IconProps> = ({
   graphic,
+
   title,
   iconStyles = {},
   invertColors = false,

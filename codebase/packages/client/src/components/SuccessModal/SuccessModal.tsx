@@ -10,6 +10,7 @@ export type SuccessModal = {
   title: string;
   additionalText?: string;
   mark?: JSX.Element;
+  customElement?: JSX.Element;
   customButtonStyles?: Rule | Styles | CSSProperties | {};
 };
 
@@ -33,6 +34,7 @@ const SuccessModal: FC<Props> = ({
   title,
   customButtonStyles = {},
   additionalText = '',
+  customElement,
 }) => {
   const { css, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
@@ -58,6 +60,7 @@ const SuccessModal: FC<Props> = ({
             </div>
             <div className={css(descriptionStyle)}>{description}</div>
             {additionalText && <div className={css(descriptionStyle, { marginTop: '30px' })}>{additionalText}</div>}
+            {customElement && <div>{customElement}</div>}
           </div>
         </div>
         <div className={css(buttonWrapperStyle)}>

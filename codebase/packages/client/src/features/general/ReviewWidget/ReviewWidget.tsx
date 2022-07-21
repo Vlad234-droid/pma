@@ -1,11 +1,13 @@
-import React, { FC, useState } from 'react';
-import { TFunction, useTranslation } from 'components/Translation';
+import React, { FC, useMemo, useState } from 'react';
+import { useTranslation } from 'components/Translation';
 import { ReviewType, Status } from 'config/enum';
-import { Button, colors, Colors, CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
+import { Button, colors, CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
 
-import { ModalComponent, ReviewForm } from 'features/general/ReviewForm';
 import { TileWrapper } from 'components/Tile';
-import { Graphics, Icon } from 'components/Icon';
+import { BasicFormModal } from 'components/BasicFormModal';
+import { Icon } from 'components/Icon';
+import { getReviewTypeContent, getContent } from './utils';
+import { useTenant } from '../Permission';
 
 export type Props = {
   onClick?: () => void;
@@ -21,118 +23,6 @@ export type Props = {
 
 export const TEST_ID = 'review-widget';
 
-const getContent = (
-  { status, startTime = '', lastUpdatedTime = '' },
-  t: TFunction,
-): [Graphics, Colors, Colors, boolean, boolean, string, string] => {
-  switch (status) {
-    case Status.NOT_STARTED:
-      return [
-        'calender',
-        'tescoBlue',
-        'white',
-        true,
-        false,
-        t('form_available_in_date', `The form will be available on ${startTime}`, { date: new Date(startTime) }),
-        '',
-      ];
-    case Status.STARTED:
-      return [
-        'roundAlert',
-        'pending',
-        'tescoBlue',
-        true,
-        true,
-        t('your_form_is_now_available', 'Your form is now available'),
-        t('view', 'View'),
-      ];
-    case Status.DECLINED:
-      return [
-        'roundAlert',
-        'error',
-        'white',
-        true,
-        true,
-        t('review_form_declined', 'Declined'),
-        t('view_and_edit', 'View and edit'),
-      ];
-    case Status.DRAFT:
-      return [
-        'roundPencil',
-        'base',
-        'tescoBlue',
-        true,
-        true,
-        t('review_widget_saved_as_draft', 'Your form is currently saved as a draft'),
-        t('view_and_edit', 'View and edit'),
-      ];
-    case Status.APPROVED:
-      return [
-        'roundTick',
-        'green',
-        'white',
-        true,
-        true,
-        t(
-          'review_form_approved',
-          t('completed_at_date', `Completed ${lastUpdatedTime}`, { date: new Date(lastUpdatedTime) }),
-        ),
-        t('view', 'View'),
-      ];
-    case Status.WAITING_FOR_APPROVAL:
-      return [
-        'roundClock',
-        'pending',
-        'tescoBlue',
-        true,
-        true,
-        t('review_form_waiting_for_approval', 'Waiting for approval'),
-        t('view', 'View'),
-      ];
-    case Status.COMPLETED:
-      return ['roundTick', 'green', 'white', true, false, t('review_form_completed', 'Completed'), t('view', 'View')];
-    default:
-      return [
-        'roundAlert',
-        'pending',
-        'tescoBlue',
-        true,
-        true,
-        t('Your form is now available'),
-        t('view_review_form', 'View review form'),
-      ];
-  }
-};
-
-const getReviewTypeContent = (reviewType: ReviewType, status: Status, t: TFunction) => {
-  const contents: {
-    [key: string]: {
-      reviewTypeContent: string;
-    };
-  } = {
-    [ReviewType.MYR]: {
-      reviewTypeContent:
-        status === Status.APPROVED
-          ? t('mid_year_review_widget_title_approved', 'Your mid-year review is complete.')
-          : t(
-              'mid_year_review_widget_title',
-              'Complete this once you’ve had your mid-year conversation with your line manager.',
-            ),
-    },
-    [ReviewType.EYR]: {
-      reviewTypeContent:
-        status === Status.APPROVED
-          ? t('end_year_review_widget_title_approved', 'Your year-end review is complete.')
-          : t(
-              'end_year_review_widget_title',
-              'Complete this once you’ve had your year-end conversation with your line manager.',
-            ),
-    },
-  };
-
-  return contents[reviewType];
-};
-
 const ReviewWidget: FC<Props> = ({
   customStyle,
   reviewType,
@@ -144,6 +34,14 @@ const ReviewWidget: FC<Props> = ({
   const { t } = useTranslation();
   const { css } = useStyle();
   const [isOpen, setIsOpen] = useState(false);
+  const tenant = useTenant();
+
+  //todo fine way to use outside of feature
+  const ReviewForm = useMemo(
+    () => React.lazy(() => import(`features/${tenant}/Review`).then((module) => ({ default: module.Review }))),
+    [],
+  );
+
   const [graphic, iconColor, background, shadow, hasDescription, content, buttonContent] = getContent(
     {
       status,
@@ -153,7 +51,7 @@ const ReviewWidget: FC<Props> = ({
     t,
   );
 
-  const { reviewTypeContent } = getReviewTypeContent(reviewType, status, t);
+  const { reviewTypeContent } = getReviewTypeContent({ reviewType, status, t, tenant });
 
   const descriptionColor = background === 'tescoBlue' ? colors.white : colors.base;
   const titleColor = background === 'tescoBlue' ? colors.white : colors.tescoBlue;
@@ -201,9 +99,9 @@ const ReviewWidget: FC<Props> = ({
         )}
       </div>
       {isOpen && (
-        <ModalComponent onClose={handleClickClose} title={title}>
+        <BasicFormModal onClose={handleClickClose} title={title}>
           <ReviewForm reviewType={reviewType} onClose={handleClickClose} />
-        </ModalComponent>
+        </BasicFormModal>
       )}
     </TileWrapper>
   );

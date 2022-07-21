@@ -1,5 +1,4 @@
-import { ReviewType, Status } from 'config/enum';
-import { TFunction } from 'components/Translation';
+import { Status } from 'config/enum';
 
 /**
  * Available for min review count and status in [ DRAFT, DECLINED ]
@@ -66,30 +65,4 @@ export const canDeleteSingleObjectiveFn = ({
     (countDraftReviews > markup.min || countDeclinedReviews > markup.min || countApprovedReviews > markup.min) &&
     allowedStatus
   );
-};
-
-export const getReviewFormContent = (reviewType: ReviewType, t: TFunction) => {
-  const contents: {
-    [key: string]: {
-      title: string;
-      helperText: string;
-    };
-  } = {
-    [ReviewType.MYR]: {
-      title: t('mid_year_review_title', 'How is your year going so far?'),
-      helperText: t(
-        'mid_year_review_help_text',
-        'Use this to capture a summary of the mid-year conversation you’ve had with your line manager. Remember to focus as much on your how as your what.',
-      ),
-    },
-    [ReviewType.EYR]: {
-      title: t('end_year_review_title', 'What have you contributed this year and how have you gone about it?'),
-      helperText: t(
-        'end_year_review_help_text',
-        'Use this to capture the outcome of the conversation you’ve had with your line manager. Remember to focus as much on your how as your what. Use the look forward section to capture your priorities and development for the year ahead.',
-      ),
-    },
-  };
-
-  return contents[reviewType];
 };

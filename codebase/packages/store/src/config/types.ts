@@ -1,3 +1,4 @@
+import { Styles } from '@pma/dex-wrapper';
 export enum Status {
   IDLE = 'idle',
   PENDING = 'pending',
@@ -54,6 +55,11 @@ export interface Component {
   validate?: any;
   values?: { label?: string; value?: string }[];
   expression?: any;
+}
+
+export interface BorderedComponent extends Component {
+  borderStyle?: Styles;
+  level?: number;
 }
 
 // to rename after use new scheme

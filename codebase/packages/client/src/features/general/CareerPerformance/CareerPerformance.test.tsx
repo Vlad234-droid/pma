@@ -26,15 +26,6 @@ jest.mock('../widgets/HelpWidget', () => {
   };
 });
 
-jest.mock('./components/ReviewWidgets', () => {
-  return {
-    __esModule: true,
-    default: () => {
-      return <div>mocked_review_widgets</div>;
-    },
-  };
-});
-
 jest.mock('features/general/KnowledgeLibrary', () => {
   return {
     __esModule: true,
@@ -101,7 +92,6 @@ describe('<CareerPerformance />', () => {
       expect(getByText('mocked_objective_widgets')).toBeInTheDocument();
       expect(getByText('My reviews')).toBeInTheDocument();
       expect(getByText('Useful resources')).toBeInTheDocument();
-      expect(getByText('mocked_review_widgets')).toBeInTheDocument();
       expect(getByText('mocked_knowledge_library_widget')).toBeInTheDocument();
     });
 

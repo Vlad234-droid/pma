@@ -1,0 +1,1 @@
+export { BasicFormModal } from './BasicFormModal';
