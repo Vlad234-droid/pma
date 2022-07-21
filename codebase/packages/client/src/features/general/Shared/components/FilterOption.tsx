@@ -57,7 +57,7 @@ export const FilterOption: FC<FilterOptionProps> = ({
           customVariantRules={{
             default: iconBtnStyle({ isActive: hasActiveFilter, colors: theme.colors }),
           }}
-          iconStyles={iconStyle}
+          iconStyles={settingsStyle}
           iconProps={{
             invertColors: hasActiveFilter,
           }}
@@ -95,7 +95,7 @@ export const FilterOption: FC<FilterOptionProps> = ({
             onFocus={() => {
               onFocus && onFocus(true);
             }}
-            customIcon={customIcon && <Icon graphic='search' iconStyles={iconStyle} />}
+            customIcon={customIcon && <Icon graphic='search' iconStyles={searchStyle} />}
             focus={focus}
           >
             <Input
@@ -154,10 +154,16 @@ const iconBtnStyle: CreateRule<{ isActive: boolean; colors: any }> = ({ colors, 
   };
 };
 
-const iconStyle: Rule = {
+const settingsStyle: Rule = {
+  width: '16px',
+  height: '16px',
+  position: 'relative',
+  top: '1px',
+};
+
+const searchStyle: Rule = {
   width: '16px',
   height: '16px',
   position: 'relative',
   top: '2px',
-  left: '2px',
 };

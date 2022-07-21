@@ -368,8 +368,6 @@ const Report: FC = () => {
 const iconDownloadStyle: Rule = () => ({
   height: '22px',
   position: 'relative',
-  top: '2px',
-  left: '2px',
 });
 
 const countStyles: Rule = ({ theme }) => ({
