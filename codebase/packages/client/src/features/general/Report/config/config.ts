@@ -38,15 +38,13 @@ export const getRequestParams = (selectedCheckboxes) =>
   }, []);
 
 export const listOfStatuses = [
-  Status.APPROVED,
   Status.DRAFT,
   Status.WAITING_FOR_APPROVAL,
+  Status.APPROVED,
   Status.DECLINED,
+  Status.WAITING_FOR_COMPLETION,
+  Status.REQUESTED_TO_AMEND,
   Status.COMPLETED,
-  Status.OVERDUE,
-  Status.STARTED,
-  Status.NOT_STARTED,
-  Status.NOT_CREATED,
 ];
 
 export const convertToLink = (str) => str.split('_').slice(1).join('-').toLowerCase();
