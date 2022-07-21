@@ -5,15 +5,16 @@ import { Button, Rule, useStyle } from '@pma/dex-wrapper';
 import Section from 'components/Section';
 import { File } from 'features/general/ReviewFiles/components/components/File';
 import { useSelector } from 'react-redux';
-import { colleagueUUIDSelector, getPreviousReviewFilesSelector, PreviousReviewFilesActions } from '@pma/store';
+import { getPreviousReviewFilesSelector, PreviousReviewFilesActions } from '@pma/store';
 import useDispatch from 'hooks/useDispatch';
 import { PreviousReviewFilesModal } from 'features/general/ReviewFiles/components';
 
-type Props = {};
+type Props = {
+  colleagueUuid: string | undefined;
+};
 
-export const ReviewFilesSection: FC<Props> = () => {
+export const ReviewFilesSection: FC<Props> = ({ colleagueUuid }) => {
   const dispatch = useDispatch();
-  const colleagueUuid = useSelector(colleagueUUIDSelector);
 
   const { css, theme } = useStyle();
 

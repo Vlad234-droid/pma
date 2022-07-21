@@ -39,7 +39,7 @@ export const useUserObjectivesData = (uuid, reviewLoaded, schemaLoaded, setObjec
       }),
     );
     if (uuid) {
-      dispatch(TimelineActions.getTimeline({ colleagueUuid: uuid }));
+      dispatch(TimelineActions.getUserTimeline({ colleagueUuid: uuid }));
       dispatch(SchemaActions.getSchema({ colleagueUuid: uuid }));
       dispatch(ColleagueActions.getColleagueByUuid({ colleagueUuid: uuid }));
     }

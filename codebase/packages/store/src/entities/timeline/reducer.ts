@@ -1,9 +1,8 @@
 import { createReducer } from 'typesafe-actions';
-import { getTimeline } from './actions';
+import { getTimeline, getUserTimeline } from './actions';
 
 export const initialState = {
   meta: { loading: false, loaded: false, error: null },
-  data: [],
 };
 
 const request = (state) => ({ ...state, meta: { ...state.meta, loading: true, error: null } });
@@ -22,4 +21,7 @@ const failure = (state, { payload }) => ({
 export default createReducer(initialState)
   .handleAction(getTimeline.request, request)
   .handleAction(getTimeline.success, success)
-  .handleAction(getTimeline.failure, failure);
+  .handleAction(getTimeline.failure, failure)
+  .handleAction(getUserTimeline.request, request)
+  .handleAction(getUserTimeline.success, success)
+  .handleAction(getUserTimeline.failure, failure);

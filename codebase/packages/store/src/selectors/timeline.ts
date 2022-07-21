@@ -16,9 +16,8 @@ export const USER = {
 
 export const timelineSelector = (state: RootState) => state.timeline;
 
-export const userReviewTypesSelector = createSelector(timelineSelector, ({ data }) =>
-  data?.map((item: { code: string }) => item.code),
-);
+export const userReviewTypesSelector = (uuid) =>
+  createSelector(timelineSelector, (timeline) => timeline[uuid]?.map((item: { code: string }) => item.code));
 
 export const timelinesExistSelector = (colleagueUuid) =>
   createSelector(timelineSelector, (timelines) => !!timelines[colleagueUuid]?.length);

@@ -1,6 +1,9 @@
 import React, { FC, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
+import { colleagueUUIDSelector } from '@pma/store';
+
+import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 import Objectives, { MyReviewsSection, CompletedReviewsSection, ReviewFilesSection } from 'features/general/Objectives';
 import { tenant as T, useTenant } from 'features/general/Permission';
@@ -14,6 +17,7 @@ const ObjectivesPage: FC = () => {
   const tenant = useTenant();
   const { css, matchMedia } = useStyle();
   const navigate = useNavigate();
+  const colleagueUuid = useSelector(colleagueUUIDSelector);
 
   const Block = useMemo(
     () =>
@@ -66,11 +70,11 @@ const ObjectivesPage: FC = () => {
       </div>
       <div className={css(bodyBlockStyles({ mobileScreen }))}>
         <div className={css(bodyWrapperStyles)}>
-          <Timeline />
+          <Timeline colleagueUuid={colleagueUuid} />
           <Objectives />
           <MyReviewsSection />
           <CompletedReviewsSection />
-          <ReviewFilesSection />
+          <ReviewFilesSection colleagueUuid={colleagueUuid} />
           <Shortcuts />
         </div>
         <div className={css(widgetsBlock)}>

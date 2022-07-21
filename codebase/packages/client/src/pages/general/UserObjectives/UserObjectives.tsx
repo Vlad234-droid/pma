@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import UserObjectivesContainer from 'features/general/UserObjectives';
 import { ColleagueProfileWidget } from 'features/general/Profile';
 import { useTranslation } from 'components/Translation';
@@ -18,6 +18,7 @@ const UserObjectives = () => {
   const { addToast } = useToast();
   const tenant = useTenant();
   const navigate = useNavigate();
+  const { uuid } = useParams<{ uuid: string }>();
 
   const mobileScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
 
@@ -64,7 +65,7 @@ const UserObjectives = () => {
         <div className={css(mainBlockStyles({ mobileScreen }))}>
           <ColleagueProfileWidget />
           <div data-test-id={'test-step-indicator'} onClick={handleClick} className={css(timelineWrapperStyles)}>
-            <Timeline />
+            <Timeline colleagueUuid={uuid} />
           </div>
         </div>
         <div className={css(rightAsideWrapperStyles({ mobileScreen }))}>
@@ -75,7 +76,7 @@ const UserObjectives = () => {
         </div>
         <div className={css(mainBlockStyles({ mobileScreen }))}>
           <UserObjectivesContainer />
-          <ReviewFilesSection />
+          <ReviewFilesSection colleagueUuid={uuid} />
         </div>
       </div>
     </>

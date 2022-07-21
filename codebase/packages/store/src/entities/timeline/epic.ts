@@ -3,7 +3,7 @@ import { Epic, isActionOf } from 'typesafe-actions';
 import { combineEpics } from 'redux-observable';
 import { from, of } from 'rxjs';
 import { catchError, filter, mergeMap, switchMap, takeUntil } from 'rxjs/operators';
-import { getTimeline } from './actions';
+import { getTimeline, getUserTimeline } from './actions';
 import { concatWithErrorToast, errorPayloadConverter } from '../../utils/toastHelper';
 import { addModalError } from '../appState/actions';
 
@@ -38,5 +38,25 @@ export const getTimelineEpic: Epic = (action$, _, { api }) =>
       ),
     ),
   );
+export const getUserTimelineEpic: Epic = (action$, _, { api }) =>
+  action$.pipe(
+    filter(isActionOf(getUserTimeline.request)),
+    switchMap(({ payload }) =>
+      from(api.getTimeline(payload)).pipe(
+        mergeMap((response) => {
+          // @ts-ignore
+          return of(getUserTimeline.success({ success: response?.success, [payload.colleagueUuid]: response?.data }));
+        }),
+        catchError((e) => {
+          const errors = e?.data?.errors;
+          return concatWithErrorToast(
+            of(getUserTimeline.failure(errors?.[0])),
+            errorPayloadConverter({ ...errors?.[0], title: 'Timeline fetch error' }),
+          );
+        }),
+        takeUntil(action$.pipe(filter(isActionOf(getUserTimeline.cancel)))),
+      ),
+    ),
+  );
 
-export default combineEpics(getTimelineEpic);
+export default combineEpics(getTimelineEpic, getUserTimelineEpic);

@@ -1,16 +1,15 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { useSelector } from 'react-redux';
-import { colleagueUUIDSelector, getTimelineMetaSelector, getBankTimelineSelector } from '@pma/store';
+import { getTimelineMetaSelector, getBankTimelineSelector } from '@pma/store';
 import { Rule, useStyle } from '@pma/dex-wrapper';
 
 import { StepIndicator } from 'components/StepIndicator/StepIndicator';
 import { useTranslation } from 'components/Translation';
 import Spinner from 'components/Spinner';
 
-const Timeline = () => {
+const Timeline: FC<{ colleagueUuid: string }> = ({ colleagueUuid }) => {
   const { t } = useTranslation();
   const { css } = useStyle();
-  const colleagueUuid = useSelector(colleagueUUIDSelector);
   const { loading } = useSelector(getTimelineMetaSelector);
   const { descriptions, startDates, summaryStatuses, types, currentStep } =
     useSelector(getBankTimelineSelector(colleagueUuid)) || {};
