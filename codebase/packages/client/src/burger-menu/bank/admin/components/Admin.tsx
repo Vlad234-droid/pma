@@ -11,6 +11,9 @@ export const DROPDOWN_BTN = 'DROPDOWN_BTN';
 export const DROPDOWN_ITEMS_WRAPPER = 'DROPDOWN_ITEMS_WRAPPER';
 
 const Administration = () => {
+  //TODO: Disabled tile PMA-2259
+  return null;
+
   const [isOpenDropdown, toggleOpen] = useState(false);
 
   const { css } = useStyle();

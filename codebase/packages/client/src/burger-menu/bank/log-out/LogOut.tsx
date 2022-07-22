@@ -63,5 +63,5 @@ const itemSettingsStyle: Rule = {
 
 const itemSettingsBorderStyle: Rule = ({ theme }) => ({
   // @ts-ignore
-  borderTop: `2px solid ${theme.colors.lightGray}`,
+  // borderTop: `2px solid ${theme.colors.lightGray}`,
 });
