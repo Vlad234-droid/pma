@@ -2,12 +2,16 @@ import { Colors } from '@pma/dex-wrapper';
 
 import { TFunction } from 'components/Translation';
 import { Graphics } from 'components/Icon';
-import { ReviewType, Status } from 'config/enum';
+import { ReviewType, Status, Tenant } from 'config/enum';
+import { useTenant } from 'features/general/Permission';
 
 export const getContent = (
   { status, startTime = '', lastUpdatedTime = '' },
   t: TFunction,
 ): [Graphics, Colors, Colors, boolean, boolean, string, string] => {
+  const tenant = useTenant();
+  const isGeneral = tenant === Tenant.GENERAL;
+
   switch (status) {
     case Status.NOT_STARTED:
       return [
@@ -36,7 +40,7 @@ export const getContent = (
         'white',
         true,
         true,
-        t('review_form_declined', 'Declined'),
+        isGeneral ? t('review_form_declined', 'Declined') : t('request_to_amend ', 'Request to amend'),
         t('view_and_edit', 'View and edit'),
       ];
     case Status.DRAFT:
@@ -69,7 +73,9 @@ export const getContent = (
         'tescoBlue',
         true,
         true,
-        t('review_form_waiting_for_approval', 'Waiting for approval'),
+        isGeneral
+          ? t('review_form_waiting_for_approval', 'Waiting for approval')
+          : t('review_form_waiting_for_agreement', 'Waiting for agreement'),
         t('view', 'View'),
       ];
     case Status.COMPLETED:
