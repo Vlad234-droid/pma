@@ -9,6 +9,7 @@ import {
   timelinesExistSelector,
   timelinesMetaSelector,
   timelineTypesAvailabilitySelector,
+  timelineStartedSelector,
 } from '@pma/store';
 
 import useDispatch from 'hooks/useDispatch';
@@ -35,7 +36,12 @@ const MyObjectives: FC = () => {
   const { loaded: timelinesLoaded } = useSelector(timelinesMetaSelector());
   const timelineTypes = useSelector(timelineTypesAvailabilitySelector(colleagueUuid)) || {};
 
+  const isAvailable = useSelector(timelineStartedSelector(colleagueUuid));
+
   const canShowAnnualReview = !timelineTypes[ReviewType.MYR] && timelineTypes[ReviewType.EYR];
+
+  const isEYRTimeline =
+    canShowAnnualReview && !timelineTypes[ReviewType.OBJECTIVE] && !timelineTypes[ReviewType.QUARTER];
 
   useEffect(() => {
     colleagueUuid && dispatch(ObjectiveSharingActions.checkSharing({ colleagueUuid, cycleUuid: CURRENT }));
@@ -67,6 +73,8 @@ const MyObjectives: FC = () => {
       dispatch(SchemaActions.clearSchemaData());
     };
   }, [colleagueUuid]);
+
+  if (!isAvailable || isEYRTimeline) return null;
 
   return (
     <div data-test-id={TEST_ID}>

@@ -105,7 +105,6 @@ const iconStyles: Rule = {
   height: '24px',
   display: 'flex',
   alignItems: 'center',
-  marginTop: '10px',
   cursor: 'pointer',
 };
 
