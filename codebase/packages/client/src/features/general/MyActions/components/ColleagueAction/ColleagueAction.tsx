@@ -1,39 +1,43 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Rule, useStyle } from '@pma/dex-wrapper';
-import {
-  colleagueUUIDSelector,
-  getAllReviews,
-  getAllReviewSchemas,
-  ReviewsActions,
-  reviewsMetaSelector,
-  SchemaActions,
-} from '@pma/store';
+import { getAllReviews, getAllReviewSchemas, ReviewsActions, reviewsMetaSelector, SchemaActions } from '@pma/store';
 
+import { useTenant } from 'features/general/Permission';
 import useDispatch from 'hooks/useDispatch';
 import ColleagueInfo from 'components/ColleagueInfo';
 import { Accordion, BaseAccordion, ExpandButton, Panel, Section } from 'components/Accordion';
 import { TileWrapper } from 'components/Tile';
+import { Notification } from 'components/Notification';
+import { useTranslation } from 'components/Translation';
 import { ReviewType, Status } from 'config/enum';
-import { ColleagueGroupReviews } from '../ColleagueGroupReviews';
-import { Timeline, Review } from 'config/types';
+import { Review, Timeline } from 'config/types';
+import { Buttons } from '../Buttons';
+import { ColleagueReview } from '../ColleagueReviews';
+import { Tenant } from 'utils';
 
 type Props = {
   status: Status;
+  onUpdate: (reviewType: ReviewType, data: any) => void;
   colleague: any;
 };
 
-const ColleagueAction: FC<Props> = ({ status, colleague }) => {
+const ColleagueAction: FC<Props> = ({ status, colleague, onUpdate }) => {
   const [colleagueExpanded, setColleagueExpanded] = useState<string>();
   const [colleagueReviews, updateColleagueReviews] = useState<any>([]);
+  const [formsValid, validateReview] = useState<{ [key: string]: boolean }>({});
+  const isButtonsDisabled = Object.values(formsValid).filter((val) => !val)?.length > 0;
 
   const dispatch = useDispatch();
   const { css } = useStyle();
+  const { t } = useTranslation();
+  const tenant = useTenant();
 
   const { loaded: reviewLoaded = false } = useSelector(reviewsMetaSelector);
-  const approverUuid = useSelector(colleagueUUIDSelector);
   const allColleagueReviews = useSelector(getAllReviews) || [];
   const allColleagueReviewsSchema = useSelector(getAllReviewSchemas) || [];
+
+  // TODO: strange part of code, should refactoring
   const groupColleagueReviews: { [key: string]: { timeline: Timeline; reviews: Review[] } } = {};
   for (const timeline of colleague.timeline) {
     groupColleagueReviews[timeline.code] = {
@@ -42,7 +46,7 @@ const ColleagueAction: FC<Props> = ({ status, colleague }) => {
     };
   }
 
-  const handleUpdateReviewStatus = useCallback(
+  const handleUpdateReview = useCallback(
     (status: Status) => (reviewType: ReviewType) => (reason: string) => {
       const { timeline = [] } = colleague;
       const reviews = colleague?.reviews?.filter(
@@ -52,28 +56,21 @@ const ColleagueAction: FC<Props> = ({ status, colleague }) => {
       const timelineId = reviews[0]?.tlPointUuid;
       const code = timeline.find((tl) => tl.uuid == timelineId)?.code;
 
-      const update = {
-        pathParams: {
-          colleagueUuid: colleague.uuid,
-          approverUuid,
-          code,
-          cycleUuid: 'CURRENT',
-          status,
-        },
-        data: {
-          ...(reason ? { reason } : {}),
-          status,
-          colleagueUuid: colleague.uuid,
-          reviews: reviews.map(({ number, properties }) => {
+      const data = {
+        ...(reason ? { reason } : {}),
+        status,
+        code,
+        colleagueUuid: colleague.uuid,
+        reviews: colleagueReviews
+          .filter(({ status, type }) => status === Status.WAITING_FOR_APPROVAL && type === reviewType)
+          .map(({ number, properties }) => {
             if (reviewType !== ReviewType.MYR) {
               return { number, properties };
             }
             return { number };
           }),
-        },
       };
-
-      dispatch(ReviewsActions.updateReviewStatus(update));
+      onUpdate(reviewType, data);
     },
     [colleague, reviewLoaded],
   );
@@ -119,16 +116,40 @@ const ColleagueAction: FC<Props> = ({ status, colleague }) => {
                     </div>
                   </div>
                   <Panel>
-                    {Object.keys(groupColleagueReviews).map((code) => (
-                      <ColleagueGroupReviews
-                        key={code}
-                        status={status}
-                        reviewType={groupColleagueReviews[code].timeline.reviewType as ReviewType}
-                        reviews={groupColleagueReviews[code].reviews}
-                        schema={allColleagueReviewsSchema[code] || []}
-                        updateReviewStatus={handleUpdateReviewStatus}
-                        updateColleagueReviews={updateColleagueReviews}
-                      />
+                    {Object.keys(groupColleagueReviews).map((reviewType) => (
+                      <div className={css({ padding: '24px 35px 24px 24px' })} key={reviewType}>
+                        <Notification
+                          graphic='information'
+                          iconColor='pending'
+                          text={t(
+                            'time_to_approve_or_decline',
+                            tenant === Tenant.GENERAL
+                              ? 'It’s time to review your colleague’s objectives and / or reviews'
+                              : "It's time to review your colleague's priorities and / or reviews",
+                            { ns: tenant },
+                          )}
+                          customStyle={{
+                            background: '#FFDBC2',
+                            marginBottom: '20px',
+                          }}
+                        />
+                        {groupColleagueReviews[reviewType]?.reviews?.map((review) => (
+                          <ColleagueReview
+                            key={review.uuid}
+                            review={review}
+                            schema={allColleagueReviewsSchema[reviewType] || []}
+                            validateReview={validateReview}
+                            updateColleagueReviews={updateColleagueReviews}
+                          />
+                        ))}
+                        {status === Status.WAITING_FOR_APPROVAL && (
+                          <Buttons
+                            reviewType={reviewType as ReviewType}
+                            onUpdate={handleUpdateReview}
+                            isDisabled={isButtonsDisabled}
+                          />
+                        )}
+                      </div>
                     ))}
                   </Panel>
                 </Section>

@@ -1,15 +1,15 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
-import { useStyle, Rule, CreateRule, Button } from '@pma/dex-wrapper';
+import { useSelector } from 'react-redux';
 import { colleagueUUIDSelector, ReviewsActions } from '@pma/store';
-import { Trans } from 'components/Translation/Translation';
-import { TileWrapper } from 'components/Tile';
-import { Icon } from 'components/Icon';
 import { Employee, ReviewType, Status } from 'config/types';
 import { filterApprovedFn } from 'features/general/MyActions/utils';
-import { useSelector } from 'react-redux';
+import { useTranslation } from 'components/Translation';
+import Approval from 'components/Approval';
+import { useTenant } from 'features/general/Permission';
 import useDispatch from 'hooks/useDispatch';
-import { DeclineModal, ApproveModal } from '../Modal';
+import { ApproveModal, DeclineModal } from '../Modal';
 import { useSuccessModalContext } from '../../context/successModalContext';
+import { Tenant } from 'utils';
 
 type Props = {
   isDisabled: boolean;
@@ -17,13 +17,14 @@ type Props = {
   onSave: () => void;
 };
 
-export const ApprovalWidget: FC<Props> = ({ isDisabled, reviews, onSave }) => {
-  const { css } = useStyle();
+const ApprovalWidget: FC<Props> = ({ isDisabled, reviews, onSave }) => {
   const dispatch = useDispatch();
+  const { t } = useTranslation();
+  const tenant = useTenant();
   const { setOpened: setIsOpenSuccessModal, reviewStatus, setReviewStatus, setReviewType } = useSuccessModalContext();
 
-  const [isOpenDeclinePopup, setIsOpenDeclinePopup] = useState(false);
-  const [isOpenApprovePopup, setIsOpenApprovePopup] = useState(false);
+  const [isOpenDecline, toggleOpenDecline] = useState(false);
+  const [isOpenApprove, toggleOpenApprove] = useState(false);
   const [declines, setDeclines] = useState<(string | null)[]>([]);
   const [currentReview, setCurrentReview] = useState<Employee | null>(null);
   const currentTimeline = currentReview?.timeline?.filter(filterApprovedFn);
@@ -49,12 +50,12 @@ export const ApprovalWidget: FC<Props> = ({ isDisabled, reviews, onSave }) => {
   }, [declines, reviews]);
 
   const handleDecline = () => {
-    setIsOpenDeclinePopup(true);
+    toggleOpenDecline(true);
     setCurrentReview(reviews[0]);
   };
 
   const handleApprove = () => {
-    setIsOpenApprovePopup(true);
+    toggleOpenApprove(true);
     setCurrentReview(reviews[0]);
   };
 
@@ -62,10 +63,9 @@ export const ApprovalWidget: FC<Props> = ({ isDisabled, reviews, onSave }) => {
     (hasReason?: boolean, reason?: string) => {
       if (declines.length + 1 < reviews.length) {
         setCurrentReview(reviews[declines.length + 1]);
-        setIsOpenDeclinePopup(false);
-        setIsOpenDeclinePopup(true);
+        toggleOpenDecline(true);
       } else {
-        setIsOpenDeclinePopup(false);
+        toggleOpenDecline(false);
       }
 
       !hasReason && setDeclines((declines) => [...declines, '']);
@@ -78,7 +78,7 @@ export const ApprovalWidget: FC<Props> = ({ isDisabled, reviews, onSave }) => {
   const handleDeclineClose = useCallback(() => {
     if (reviews.length === declines.length + 1) {
       // if all reviews were opened already, close popup
-      setIsOpenDeclinePopup(false);
+      toggleOpenDecline(false);
       setCurrentReview(null);
     } else {
       // update currentReview with next one
@@ -90,7 +90,7 @@ export const ApprovalWidget: FC<Props> = ({ isDisabled, reviews, onSave }) => {
 
   const handleApproveSubmit = () => {
     approveColleagues();
-    setIsOpenApprovePopup(false);
+    toggleOpenApprove(false);
   };
 
   const updateReviewStatus = useCallback(
@@ -140,78 +140,31 @@ export const ApprovalWidget: FC<Props> = ({ isDisabled, reviews, onSave }) => {
 
   return (
     <>
-      <TileWrapper>
-        <div className={css(wrapperStyle({ isDisabled }))}>
-          <div className={css(titleStyle)}>
-            <Trans i18nKey={'approve_or_decline_review'}>Approve or decline colleague’s objectives or reviews</Trans>
-          </div>
-          <div className={css(buttonsWrapperStyle)}>
-            <div>
-              <Button
-                isDisabled={isDisabled || !currentTimeline?.length}
-                styles={[buttonStyle({ inverse: true }), isDisabled ? { opacity: '0.6' } : {}]}
-                onPress={handleDecline}
-              >
-                <Icon graphic='cancel' iconStyles={{ paddingRight: '8px' }} />
-                <Trans i18nKey='decline'>Decline</Trans>
-              </Button>
-            </div>
-            <div className={css({ display: 'inline-block' })}>
-              <Button isDisabled={isDisabled} styles={[buttonStyle({ inverse: false })]} onPress={handleApprove}>
-                <Icon graphic='check' invertColors={true} iconStyles={{ paddingRight: '8px' }} />
-                <Trans i18nKey='approve'>Approve</Trans>
-              </Button>
-            </div>
-            {isOpenDeclinePopup && (
-              <DeclineModal
-                onSave={handleDeclineSubmit}
-                onClose={handleDeclineClose}
-                review={currentReview || undefined}
-                reviewType={currentTimeline?.[0]?.reviewType as ReviewType}
-              />
-            )}
-            {isOpenApprovePopup && (
-              <ApproveModal onSave={handleApproveSubmit} onClose={() => setIsOpenApprovePopup(false)} />
-            )}
-          </div>
-        </div>
-      </TileWrapper>
+      <Approval
+        text={t(
+          'approve_or_decline_review',
+          tenant === Tenant.GENERAL
+            ? 'Approve or decline colleague’s objectives or reviews'
+            : "Approve or request amend colleague's priorities or reviews",
+          {
+            ns: tenant,
+          },
+        )}
+        onApprove={handleApprove}
+        onDecline={handleDecline}
+        isActive={!isDisabled}
+      />
+      {isOpenDecline && (
+        <DeclineModal
+          onSave={handleDeclineSubmit}
+          onClose={handleDeclineClose}
+          review={currentReview || undefined}
+          reviewType={currentTimeline?.[0]?.reviewType as ReviewType}
+        />
+      )}
+      {isOpenApprove && <ApproveModal onSave={handleApproveSubmit} onClose={() => toggleOpenApprove(false)} />}
     </>
   );
 };
 
-const wrapperStyle: CreateRule<{ isDisabled: boolean }> = ({ isDisabled }) => ({
-  textAlign: 'center',
-  padding: '24px',
-  ...(isDisabled ? { opacity: '0.4' } : {}),
-});
-
-const titleStyle: Rule = ({ theme }) => ({
-  display: 'block',
-  fontSize: '20px',
-  lineHeight: '24px',
-  letterSpacing: '0px',
-  paddingBottom: '10px',
-  fontWeight: theme.font.weight.bold,
-});
-
-const buttonsWrapperStyle: Rule = {
-  justifyContent: 'center',
-  display: 'flex',
-};
-
-const buttonStyle: CreateRule<{ inverse: boolean }> =
-  ({ inverse }) =>
-  ({ theme }) => ({
-    fontSize: '16px',
-    lineHeight: '20px',
-    fontWeight: theme.font.weight.bold,
-    margin: '0px 4px',
-    ...(inverse
-      ? {
-          background: theme.colors.white,
-          color: `${theme.colors.tescoBlue}`,
-          border: `2px solid ${theme.colors.tescoBlue}`,
-        }
-      : {}),
-  });
+export default ApprovalWidget;

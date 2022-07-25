@@ -34,8 +34,7 @@ describe('<SuccessModal />', () => {
       const { getByText } = render(<SuccessModal {...props} />);
       const expectedTitle = 'Declined objectives and / or reviews';
       const expectedContent =
-        'You’ve rejected this form as it doesn’t reflect the conversation you had with your colleague. ' +
-        'Please pick up with them directly to discuss more.';
+        "You’ve rejected this form as it doesn't reflect the conversation you had with your colleague. Please pick up with them directly to discuss more.";
 
       expect(getByText(expectedTitle)).toBeInTheDocument();
       expect(getByText(expectedContent)).toBeInTheDocument();
@@ -50,8 +49,7 @@ describe('<SuccessModal />', () => {
       const { getByText } = render(<SuccessModal {...newProps} />);
       const expectedTitle = 'Declined objectives and / or reviews';
       const expectedContent =
-        'You’ve rejected this form as it doesn’t reflect the conversation you had with your colleague. ' +
-        'Please pick up with them directly to discuss more.';
+        "You’ve rejected this form as it doesn't reflect the conversation you had with your colleague. Please pick up with them directly to discuss more.";
 
       expect(getByText(expectedTitle)).toBeInTheDocument();
       expect(getByText(expectedContent)).toBeInTheDocument();
@@ -66,8 +64,7 @@ describe('<SuccessModal />', () => {
       const { getByText } = render(<SuccessModal {...newProps} />);
       const expectedTitle = 'Declined objectives and / or reviews';
       const expectedContent =
-        'You’ve rejected this form as it doesn’t reflect the conversation you had with your colleague. ' +
-        'Please pick up with them directly to discuss more.';
+        "You’ve rejected this form as it doesn't reflect the conversation you had with your colleague. Please pick up with them directly to discuss more.";
 
       expect(getByText(expectedTitle)).toBeInTheDocument();
       expect(getByText(expectedContent)).toBeInTheDocument();

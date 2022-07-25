@@ -1,36 +1,43 @@
 import React, { FC, useState } from 'react';
-import { Button, useStyle, Rule } from '@pma/dex-wrapper';
+import { Button, Rule, useStyle } from '@pma/dex-wrapper';
 
 import { Icon } from 'components/Icon';
 import { Trans, useTranslation } from 'components/Translation/Translation';
-import { getReviewTypeTitle } from 'features/general/MyActions/utils';
 import { ReviewType, Status } from 'config/enum';
 
 import { ApproveModal, DeclineModal } from '../Modal';
 import { useSuccessModalContext } from '../../context/successModalContext';
+import { useTenant } from 'features/general/Permission';
+import { Tenant } from 'utils';
 
 type Props = {
   reviewType: ReviewType;
-  updateReviewStatus: (status: Status) => (reviewType: ReviewType) => (T) => void;
+  onUpdate: (status: Status) => (reviewType: ReviewType) => (T) => void;
   isDisabled: boolean;
 };
 
-const Buttons: FC<Props> = ({ reviewType, updateReviewStatus, isDisabled }) => {
-  const { css } = useStyle();
-  const { t } = useTranslation();
+const TITLES: Record<string, [string, string]> = {
+  [ReviewType.OBJECTIVE]: ['objectives', 'Objectives'],
+  [ReviewType.MYR]: ['mid_year_review', 'Mid-year review'],
+  [ReviewType.EYR]: ['year_end_review', 'Year-end review'],
+};
+
+const Buttons: FC<Props> = ({ reviewType, onUpdate, isDisabled }) => {
   const [isOpenDeclinePopup, setIsOpenDeclinePopup] = useState(false);
   const [isOpenApprovePopup, setIsOpenApprovePopup] = useState(false);
-  const title = getReviewTypeTitle(t);
+  const { css } = useStyle();
+  const { t } = useTranslation();
+  const tenant = useTenant();
   const { setOpened: setIsOpenSuccessModal, setReviewStatus, setReviewType } = useSuccessModalContext();
 
-  const approveColleagues = updateReviewStatus(Status.APPROVED)(reviewType);
-  const declineColleagues = updateReviewStatus(Status.DECLINED)(reviewType);
+  const approveColleagues = onUpdate(Status.APPROVED)(reviewType);
+  const declineColleagues = onUpdate(Status.DECLINED)(reviewType);
 
   const handleDeclineBtnClick = () => {
     setIsOpenDeclinePopup(true);
   };
 
-  const handleApproveSubmit = (event) => {
+  const handleApprove = (event) => {
     approveColleagues(event);
     setIsOpenApprovePopup(false);
     setReviewStatus(Status.APPROVED);
@@ -38,7 +45,7 @@ const Buttons: FC<Props> = ({ reviewType, updateReviewStatus, isDisabled }) => {
     setIsOpenSuccessModal(true);
   };
 
-  const handleDeclineSubmit = (hasReason = false, reason?: string) => {
+  const handleDecline = (hasReason = false, reason?: string) => {
     declineColleagues(hasReason ? reason : '');
     setIsOpenDeclinePopup(false);
     setReviewStatus(Status.DECLINED);
@@ -48,7 +55,13 @@ const Buttons: FC<Props> = ({ reviewType, updateReviewStatus, isDisabled }) => {
 
   return (
     <div className={css(containerStyle)}>
-      <div className={css(wrapperStyle)}>{`${t('approve_or_decline', 'Approve or decline')} ${title[reviewType]}`}</div>
+      <div className={css(wrapperStyle)}>
+        {`${t(
+          'approve_or_decline',
+          tenant === Tenant.GENERAL ? 'Approve or decline' : 'Agree or request to amend the',
+          { ns: tenant },
+        )} ${t(...TITLES[reviewType])}`}
+      </div>
       <div>
         <div className={css({ display: 'inline-block' })}>
           <Button
@@ -57,7 +70,9 @@ const Buttons: FC<Props> = ({ reviewType, updateReviewStatus, isDisabled }) => {
             onPress={handleDeclineBtnClick}
           >
             <Icon graphic='cancel' iconStyles={{ paddingRight: '8px' }} />
-            <Trans i18nKey='decline'>Decline</Trans>
+            <Trans i18nKey='decline' ns={tenant}>
+              Decline
+            </Trans>
           </Button>
         </div>
         <div className={css({ display: 'inline-block' })}>
@@ -67,19 +82,15 @@ const Buttons: FC<Props> = ({ reviewType, updateReviewStatus, isDisabled }) => {
             onPress={() => setIsOpenApprovePopup(true)}
           >
             <Icon graphic='check' invertColors={true} iconStyles={{ paddingRight: '8px' }} />
-            <Trans i18nKey='approve'>Approve</Trans>
+            <Trans i18nKey='approve' ns={tenant}>
+              Approve
+            </Trans>
           </Button>
         </div>
         {isOpenDeclinePopup && (
-          <DeclineModal
-            onSave={handleDeclineSubmit}
-            onClose={() => setIsOpenDeclinePopup(false)}
-            reviewType={reviewType}
-          />
+          <DeclineModal onSave={handleDecline} onClose={() => setIsOpenDeclinePopup(false)} reviewType={reviewType} />
         )}
-        {isOpenApprovePopup && (
-          <ApproveModal onSave={handleApproveSubmit} onClose={() => setIsOpenApprovePopup(false)} />
-        )}
+        {isOpenApprovePopup && <ApproveModal onSave={handleApprove} onClose={() => setIsOpenApprovePopup(false)} />}
       </div>
     </div>
   );

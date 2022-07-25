@@ -5,7 +5,7 @@ import { CheckboxField } from '../types';
 const Checkbox: FC<CheckboxField> = ({ id, name, onChange, checked, disabled = false, indeterminate = false }) => {
   const { css } = useStyle();
   return (
-    <span data-test-id={`checkbox-${name}`}>
+    <div data-test-id={`checkbox-${name}`}>
       <input
         disabled={disabled}
         className={css(inputStyle({ indeterminate, checked }), disabled ? inputDisabledStyle : {})}
@@ -21,7 +21,7 @@ const Checkbox: FC<CheckboxField> = ({ id, name, onChange, checked, disabled = f
           }
         }}
       />
-    </span>
+    </div>
   );
 };
 

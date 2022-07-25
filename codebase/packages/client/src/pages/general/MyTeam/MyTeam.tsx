@@ -30,19 +30,11 @@ const MyTeamPage: FC = () => {
   const showActions = view === View.DIRECT_REPORTS;
 
   const MyTeam = useMemo(
-    () =>
-      //@ts-ignore
-      tenant === T.GENERAL
-        ? React.lazy(() => import(`features/${tenant}/MyTeam`).then((module) => ({ default: module.default })))
-        : React.lazy(() => import(`features/${tenant}/MyTeam`).then((module) => ({ default: module.default }))),
+    () => React.lazy(() => import(`features/${tenant}/MyTeam`).then((module) => ({ default: module.default }))),
     [],
   );
   const TeamReporting = useMemo(
-    () =>
-      //@ts-ignore
-      tenant === T.GENERAL
-        ? React.lazy(() => import(`features/${tenant}/MyTeam`).then((module) => ({ default: module.TeamReporting })))
-        : React.lazy(() => import(`features/${tenant}/MyTeam`).then((module) => ({ default: module.TeamReporting }))),
+    () => React.lazy(() => import(`features/${tenant}/MyTeam`).then((module) => ({ default: module.TeamReporting }))),
     [],
   );
 

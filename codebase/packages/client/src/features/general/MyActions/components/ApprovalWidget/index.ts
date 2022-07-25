@@ -1,1 +1,1 @@
-export * from './ApprovalWidget';
+export { default } from './ApprovalWidget';

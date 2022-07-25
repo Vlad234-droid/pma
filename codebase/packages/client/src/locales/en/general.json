@@ -10,5 +10,18 @@
   "mid_year_review_widget_title_approved": "Your mid-year review is complete.",
   "end_year_review_widget_title": "Complete this once you’ve had your year-end conversation with your line manager.",
   "end_year_review_widget_title_approved": "Your year-end review is complete.",
-  "myr_review_sent_to_manager": "Your mid-year review has been sent to your line manager."
+  "myr_review_sent_to_manager": "Your mid-year review has been sent to your line manager.",
+  "approve_or_decline_review": "Approve or decline colleague’s objectives or reviews",
+  "time_to_approve_or_decline": "It's time to review your colleague's objective and / or reviews",
+  "approve_or_decline": "Approve or decline",
+  "approve": "Approve",
+  "decline": "Decline",
+  "decline_reason": "Decline reason",
+  "decline_review_agreement": "Done, you’ve rejected this form as it doesn't reflect the conversation you had with your colleague. Please pick up with them directly to discuss more.",
+  "declined": "Declined",
+  "objectives_or_reviews": "objectives and / or reviews",
+  "you_have_rejected": "You’ve rejected this form as it doesn't reflect the conversation you had with your colleague. Please pick up with them directly to discuss more.",
+  "submit_objectives_or_reviews": "Submit objectives or reviews",
+  "approve_objectives_or_reviews": "Are you sure you want to approve objectives or reviews?",
+  "you_have_approved": "You have approved your colleague's"
 }

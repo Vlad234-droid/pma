@@ -14,5 +14,18 @@
   "mid_year_review_widget_title_approved": "Your mid-year review is complete.",
   "end_year_review_widget_title": "Complete this once you’ve had your year-end conversation with your line manager.",
   "end_year_review_widget_title_approved": "Your year-end review is complete.",
-  "myr_review_sent_to_manager": "Your comments have been submitted to your Line Manager"
+  "myr_review_sent_to_manager": "Your comments have been submitted to your Line Manager",
+  "approve_or_decline_review": "Approve or request amend colleague's priorities or reviews",
+  "time_to_approve_or_decline": "It's time to review your colleague's priorities and / or reviews",
+  "approve_or_decline": "Agree or request to amend the",
+  "approve": "Agree",
+  "decline": "Request amend",
+  "decline_reason": "Request amend reason",
+  "decline_review_agreement": "Done, you've requested the form to be amended as it doesn't reflect the conversation you had with your colleague. Please pick up with them directly to discuss more.",
+  "declined": "Request to amend",
+  "objectives_or_reviews": "priorities and / or reviews",
+  "you_have_rejected": "You've requested the form to be amended as it doesn't reflect the conversation you had with your colleague. Please pick up with them directly to discuss",
+  "submit_objectives_or_reviews": "Submit priorities or reviews",
+  "approve_objectives_or_reviews": "Are you sure you want to agree priorities or reviews?",
+  "you_have_approved": "You have agreed your colleague's"
 }
