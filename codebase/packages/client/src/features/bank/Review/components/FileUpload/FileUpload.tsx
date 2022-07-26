@@ -1,12 +1,13 @@
-import React, { FC, useState, useMemo } from 'react';
+import React, { FC, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'components/Translation';
-import { useStyle, Rule } from '@pma/dex-wrapper';
+import { Rule, useStyle } from '@pma/dex-wrapper';
 
 import { BASE_URL_API } from 'config/constants';
-import { Review } from 'config/types';
+import { Review, Status } from 'config/types';
 
 import Upload from 'images/Upload.svg';
 import { DropZone } from 'components/DropZone';
+import FileList from 'components/FileList';
 import { ConfirmModal } from 'components/ConfirmModal';
 
 import { FileNotificationModal } from '../FileNotificationModal';
@@ -74,26 +75,10 @@ export const FileUpload: FC<FilesProps> = ({ handleAddFiles, metadata, handleDel
         <img className={css({ maxWidth: 'inherit' })} src={Upload} alt='Upload' />
         <span className={css(uploadTextStyle)}>{t('Upload any supporting documents')}</span>
       </DropZone>
-
-      {fileList.length > 0 &&
-        fileList.map((file) => {
-          //{ name, uuid, href }
-          // TODO: replace with file list component
-          return (
-            <div key={file.name}>
-              <a href={file.href}>{file.name}</a>
-              <div
-                data-file-name={file.name}
-                onClick={() => {
-                  // TODO: use in file list component as onDelete function
-                  setFileName(file.name);
-                }}
-              >
-                delete
-              </div>
-            </div>
-          );
-        })}
+      <FileList
+        files={fileList}
+        {...([Status.DRAFT, Status.DECLINED].includes(status) ? { onDelete: setFileName } : {})}
+      />
       {fileNameRemove && (
         <ConfirmModal
           title={t('do_you_want_to_delete', 'Do you want to delete')}
