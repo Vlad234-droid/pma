@@ -1,5 +1,5 @@
 import { createReducer } from 'typesafe-actions';
-import { deleteFile, getPreviousReviewFiles } from './actions';
+import { deleteFile, getPreviousReviewFiles, clearPreviousReviewFiles } from './actions';
 
 export const initialState = {
   meta: { loading: false, loaded: false, error: null },
@@ -47,4 +47,5 @@ export default createReducer(initialState)
   .handleAction(getPreviousReviewFiles.failure, failure)
   .handleAction(deleteFile.request, deleteFileRequest)
   .handleAction(deleteFile.success, deleteFileSuccess)
-  .handleAction(deleteFile.failure, deleteFileFailure);
+  .handleAction(deleteFile.failure, deleteFileFailure)
+  .handleAction(clearPreviousReviewFiles, () => initialState);

@@ -28,6 +28,7 @@ export const FileUpload: FC<FilesProps> = ({ handleAddFiles, metadata, handleDel
   const { t } = useTranslation();
   const { colleagueUuid, status } = review || {};
 
+  const editable = [Status.DRAFT, Status.DECLINED].includes(status);
   const getDownloadHref = (fileUuid) =>
     `${BASE_URL_API}/colleagues/${colleagueUuid}/reviews/files/${fileUuid}/download`;
 
@@ -71,14 +72,13 @@ export const FileUpload: FC<FilesProps> = ({ handleAddFiles, metadata, handleDel
         handleClose={() => setShowModalSizeExceeded('')}
         text={t('size_limit_exceeded', { fileName: showModalSizeExceeded, size: `${MAX_FILE_SIZE_MB}MB` })}
       />
-      <DropZone styles={{ paddingTop: '20px', paddingBottom: '20px' }} onUpload={onUpload}>
-        <img className={css({ maxWidth: 'inherit' })} src={Upload} alt='Upload' />
-        <span className={css(uploadTextStyle)}>{t('Upload any supporting documents')}</span>
-      </DropZone>
-      <FileList
-        files={fileList}
-        {...([Status.DRAFT, Status.DECLINED].includes(status) ? { onDelete: setFileName } : {})}
-      />
+      {editable && (
+        <DropZone styles={{ paddingTop: '20px', paddingBottom: '20px' }} onUpload={onUpload}>
+          <img className={css({ maxWidth: 'inherit' })} src={Upload} alt='Upload' />
+          <span className={css(uploadTextStyle)}>{t('Upload any supporting documents')}</span>
+        </DropZone>
+      )}
+      <FileList files={fileList} {...(editable ? { onDelete: setFileName } : {})} />
       {fileNameRemove && (
         <ConfirmModal
           title={t('do_you_want_to_delete', 'Do you want to delete')}

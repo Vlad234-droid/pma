@@ -45,7 +45,9 @@ export const updateReviews = (params: any = {}) => {
   const uploadMetadata = new Blob([JSON.stringify(metadata)], { type: 'application/json' });
   formData.append('reviews', new Blob([JSON.stringify(data)], { type: 'application/json' }));
   if (files?.length) {
-    formData.append('files', files);
+    for (const file of files) {
+      formData.append('files', file);
+    }
   }
   if (metadata?.uploadMetadataList?.length) {
     formData.append('uploadMetadata', uploadMetadata);

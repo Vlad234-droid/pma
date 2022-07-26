@@ -44,6 +44,12 @@ export const useUploadReviewFiles = ({ colleagueUuid, reviewUuid }: Props): Retu
     }
   }, [filesInStore, loaded]);
 
+  useEffect(() => {
+    return () => {
+      dispatch(PreviousReviewFilesActions.clearPreviousReviewFiles());
+    };
+  }, []);
+
   const handleAddFiles = useCallback(
     (file: File) => {
       setMetadata([
