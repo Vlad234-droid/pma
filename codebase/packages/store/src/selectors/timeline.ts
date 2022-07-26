@@ -8,6 +8,7 @@ export enum Type {
   OBJECTIVE = 'OBJECTIVE',
   MYR = 'MYR',
   EYR = 'EYR',
+  START_CYCLE = 'START_CYCLE',
 }
 
 export const USER = {
@@ -21,6 +22,14 @@ export const userReviewTypesSelector = (uuid) =>
 
 export const timelinesExistSelector = (colleagueUuid) =>
   createSelector(timelineSelector, (timelines) => !!timelines[colleagueUuid]?.length);
+
+export const timelineStartedSelector = (colleagueUuid) =>
+  createSelector(usersSelector, timelineSelector, (user, { ...rest }) => {
+    // @ts-ignore
+    const uuid = colleagueUuid === USER.current ? user?.current.info.data.colleague.colleagueUUID : colleagueUuid;
+    const data = rest?.[uuid];
+    return !data?.some((item) => item.code === Type.START_CYCLE && item.code !== Type.OBJECTIVE);
+  });
 
 export const timelinesMetaSelector = () => createSelector(timelineSelector, (timelines) => timelines.meta);
 
@@ -48,6 +57,7 @@ export const getBankTimelineSelector = (colleagueUuid) =>
     const uuid = colleagueUuid === USER.current ? user?.current.info.data.colleague.colleagueUUID : colleagueUuid;
     const data = rest?.[uuid];
 
+    const hasMYR = data?.some((element) => element.code === 'MYR');
     const quarterDescription = data?.find((element) => element.code === 'Q3')?.description;
     const result = { codes: [], types: [], summaryStatuses: [], descriptions: [], startDates: [], currentStep: 0 };
     let currentStep = 0;
@@ -62,7 +72,7 @@ export const getBankTimelineSelector = (colleagueUuid) =>
     data?.map(({ code, type, summaryStatus, description, startTime, endTime }, index) => {
       const { codes, types, summaryStatuses, descriptions, startDates } = result as any;
 
-      if (code !== 'Q3') {
+      if (code !== 'Q3' || !hasMYR) {
         codes.push(code);
         types.push(type);
         summaryStatuses.push(summaryStatus);

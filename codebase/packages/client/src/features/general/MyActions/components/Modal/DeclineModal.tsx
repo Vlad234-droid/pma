@@ -1,13 +1,15 @@
 import React, { FC, useState } from 'react';
 import { useStyle } from '@pma/dex-wrapper';
 
+import { useTenant } from 'features/general/Permission';
 import { Employee } from 'config/types';
 import { ReviewType } from 'config/enum';
 import { Item, Select } from 'components/Form';
-import { useTranslation } from 'components/Translation';
 
+import { useTranslation } from 'components/Translation';
 import ConfirmModal from './ConfirmModal';
 import { getDeclineReasonOptions } from '../../utils';
+import { Tenant } from 'utils';
 
 type Props = {
   onSave: (hasReason?: boolean, reason?: string) => void;
@@ -19,17 +21,18 @@ type Props = {
 const DeclineModal: FC<Props> = ({ onSave, onClose, review, reviewType }) => {
   const { css } = useStyle();
   const { t } = useTranslation();
+  const tenant = useTenant();
   const isObjective = reviewType === ReviewType.OBJECTIVE;
   const options = getDeclineReasonOptions(t);
   const [reason, setReason] = useState('');
 
-  const handleReasonChange = (event) => {
+  const handleChangeReason = (event) => {
     setReason(event.target.value);
   };
 
   return (
     <ConfirmModal
-      title={t('decline_reason', 'Decline reason')}
+      title={t('decline_reason', tenant === Tenant.GENERAL ? 'Decline reason' : 'Request amend reason', { ns: tenant })}
       hasReason={isObjective}
       onSave={onSave}
       onClose={onClose}
@@ -48,7 +51,7 @@ const DeclineModal: FC<Props> = ({ onSave, onClose, review, reviewType }) => {
                   name='declineReason'
                   options={options}
                   placeholder={t('please_select', 'Please select')}
-                  onChange={handleReasonChange}
+                  onChange={handleChangeReason}
                 />
               </Item>
             </div>
@@ -56,7 +59,10 @@ const DeclineModal: FC<Props> = ({ onSave, onClose, review, reviewType }) => {
         ) : (
           t(
             'decline_review_agreement',
-            `Done, you’ve rejected this form as it doesn’t reflect the conversation you had with your colleague. Please pick up with them directly to discuss more.`,
+            tenant === Tenant.GENERAL
+              ? "Done, you’ve rejected this form as it doesn't reflect the conversation you had with your colleague. Please pick up with them directly to discuss more."
+              : "Done, you've requested the form to be amended as it doesn't reflect the conversation you had with your colleague. Please pick up with them directly to discuss more.",
+            { ns: tenant },
           )
         )}
       </div>

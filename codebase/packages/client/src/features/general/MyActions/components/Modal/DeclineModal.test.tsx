@@ -27,7 +27,7 @@ describe('<DeclineModal />', () => {
 
       expect(
         getByText(
-          'Done, you’ve rejected this form as it doesn’t reflect the conversation you had with your colleague. Please pick up with them directly to discuss more.',
+          "Done, you’ve rejected this form as it doesn't reflect the conversation you had with your colleague. Please pick up with them directly to discuss more.",
         ),
       ).toBeInTheDocument();
     });

@@ -19,8 +19,9 @@ export const getDeclineReasonOptions = (t) => [
   { value: 'Something else, I will pick up with you offline', label: t('something_else', 'Something else') },
 ];
 
-export const getReviewTypeTitle = (t) => ({
-  [ReviewType.OBJECTIVE]: t('objectives', 'Objectives'),
-  [ReviewType.MYR]: t('mid_year_review', 'Mid-year review'),
-  [ReviewType.EYR]: t('year_end_review', 'Year-end review'),
-});
+export const groupArrayOfObjects = (list, key) => {
+  return list.reduce((rv, x) => {
+    (rv[x[key]] = rv[x[key]] || []).push(x);
+    return rv;
+  }, {});
+};

@@ -1,12 +1,7 @@
-// @ts-ignore
 import React from 'react';
-// @ts-ignore
 import { renderWithTheme as render, screen } from 'utils/test';
 import { fireEvent } from '@testing-library/react';
-
 import { SelectAll } from './SelectAll';
-// @ts-ignore
-import { Status } from 'config/enum';
 
 describe('<SelectAll />', () => {
   describe('#render', () => {

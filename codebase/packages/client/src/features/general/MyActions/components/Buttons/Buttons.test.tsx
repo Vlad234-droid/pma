@@ -10,10 +10,10 @@ import Buttons from './Buttons';
 describe('<Buttons />', () => {
   it('render Buttons OBJECTIVE disabled', async () => {
     const updateReviewStatus = () => jest.fn();
-    render(<Buttons reviewType={ReviewType.OBJECTIVE} isDisabled={true} updateReviewStatus={updateReviewStatus} />);
+    render(<Buttons reviewType={ReviewType.OBJECTIVE} isDisabled={true} onUpdate={updateReviewStatus} />);
 
-    const approve = screen.getByRole('button', { name: /Approve/i });
-    const decline = screen.getByRole('button', { name: /Decline/i });
+    const approve = screen.getByRole('button', { name: /approve/i });
+    const decline = screen.getByRole('button', { name: /decline/i });
 
     expect(approve).toBeInTheDocument();
     expect(decline).toBeInTheDocument();
@@ -25,10 +25,10 @@ describe('<Buttons />', () => {
   it('render Buttons OBJECTIVE click decline', async () => {
     const fn = jest.fn();
     const updateReviewStatus = () => () => fn;
-    render(<Buttons reviewType={ReviewType.MYR} isDisabled={false} updateReviewStatus={updateReviewStatus} />);
+    render(<Buttons reviewType={ReviewType.MYR} isDisabled={false} onUpdate={updateReviewStatus} />);
 
-    const approve = screen.getByRole('button', { name: /Approve/i });
-    const decline = screen.getByRole('button', { name: /Decline/i });
+    const approve = screen.getByRole('button', { name: /approve/i });
+    const decline = screen.getByRole('button', { name: /decline/i });
 
     expect(approve).toBeInTheDocument();
     expect(decline).toBeInTheDocument();
@@ -50,10 +50,10 @@ describe('<Buttons />', () => {
   it('render Buttons OBJECTIVE click approve', async () => {
     const fn = jest.fn();
     const updateReviewStatus = () => () => fn;
-    render(<Buttons reviewType={ReviewType.OBJECTIVE} isDisabled={false} updateReviewStatus={updateReviewStatus} />);
+    render(<Buttons reviewType={ReviewType.OBJECTIVE} isDisabled={false} onUpdate={updateReviewStatus} />);
 
-    const approve = screen.getByRole('button', { name: /Approve/i });
-    const decline = screen.getByRole('button', { name: /Decline/i });
+    const approve = screen.getByRole('button', { name: /approve/i });
+    const decline = screen.getByRole('button', { name: /decline/i });
 
     expect(approve).toBeInTheDocument();
     expect(decline).toBeInTheDocument();
