@@ -31,7 +31,7 @@ export const useUploadReviewFiles = ({ colleagueUuid, reviewUuid }: Props): Retu
         PreviousReviewFilesActions.getPreviousReviewFiles({ colleagueUUID: colleagueUuid, reviewUUID: reviewUuid }),
       );
     }
-  }, [loaded]);
+  }, [loaded, colleagueUuid, reviewUuid]);
 
   useEffect(() => {
     if (loaded) {

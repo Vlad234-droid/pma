@@ -6,7 +6,6 @@ import {
   filterReviewsByTypeSelector,
   getReviewSchema,
   getTimelineByReviewTypeSelector,
-  PreviousReviewFilesActions,
   ReviewsActions,
   reviewsMetaSelector,
   SchemaActions,
@@ -95,6 +94,7 @@ export function withForm<P extends ReviewFormType>(WrappedComponent: React.Compo
       );
       onClose();
     };
+
     const onSubmit = async (data) => {
       dispatch(
         ReviewsActions.updateReviews({
@@ -153,14 +153,6 @@ export function withForm<P extends ReviewFormType>(WrappedComponent: React.Compo
         reset(reviewProperties);
       }
     }, [reviewLoaded, schemaLoaded]);
-
-    useEffect(() => {
-      if (colleagueUuid && reviewUuid) {
-        dispatch(
-          PreviousReviewFilesActions.getPreviousReviewFiles({ colleagueUUID: colleagueUuid, reviewUUID: reviewUuid }),
-        );
-      }
-    }, [colleagueUuid, reviewUuid]);
 
     return (
       <WrappedComponent
