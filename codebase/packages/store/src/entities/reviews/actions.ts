@@ -13,6 +13,11 @@ interface ReviewUpdateStatusAction extends ActionParams {
   };
 }
 
+interface ReviewUpdateMultipartAction extends ReviewActionParams {
+  files?: File[];
+  metadata?: object;
+}
+
 export const getReview = createAsyncAction(
   'reviews/FETCH_REQUEST',
   'reviews/FETCH_SUCCESS',
@@ -80,7 +85,7 @@ export const updateReviews = createAsyncAction(
   'reviews/UPDATE_ALL_SUCCESS',
   'reviews/UPDATE_ALL_FAILURE',
   'reviews/UPDATE_ALL_CANCEL',
-)<ReviewActionParams, any, Error>();
+)<ReviewUpdateMultipartAction, any, Error>();
 
 export const getReviewByUuid = createAsyncAction(
   'objectives/getReviewByUuid_REQUEST',

@@ -36,10 +36,22 @@ export const updateReviews = (params: any = {}) => {
   const {
     pathParams: { colleagueUuid = '', code, cycleUuid = 'CURRENT' },
     data,
+    files,
+    metadata,
   } = params;
 
   const uri = `/colleagues/${colleagueUuid}/pm-cycles/${cycleUuid}/review-codes/${code}/reviews`;
-  return httpClient.put(uri, data);
+  const formData = new FormData();
+  const uploadMetadata = new Blob([JSON.stringify(metadata)], { type: 'application/json' });
+  formData.append('reviews', new Blob([JSON.stringify(data)], { type: 'application/json' }));
+  if (files?.length) {
+    formData.append('files', files);
+  }
+  if (metadata?.uploadMetadataList?.length) {
+    formData.append('uploadMetadata', uploadMetadata);
+  }
+
+  return httpClient.put(uri, formData);
 };
 
 export const deleteReview = (params: any = {}) => {
