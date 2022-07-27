@@ -29,8 +29,6 @@ const Header: FC<HeaderProps> = ({ title, onBack, withIcon, iconName = 'home', s
   const { css, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const navigate = useNavigate();
-  const tenant = useTenant();
-  const dispatch = useDispatch();
   const { pathname, state, search }: any = useLocation();
 
   const { fetchMessagesCount } = useMessagesContext();
@@ -60,13 +58,7 @@ const Header: FC<HeaderProps> = ({ title, onBack, withIcon, iconName = 'home', s
     });
   };
 
-  const fetchMenuData = useCallback(() => {
-    dispatch(menuActions.getTopMenu({ entryType: BurgerEntryType.TOP, tenant }));
-    dispatch(menuActions.getBottomMenu({ entryType: BurgerEntryType.BOTTOM, tenant }));
-  }, []);
-
   useEffect(() => {
-    fetchMenuData();
     navigate(pathname, {
       state: {
         isMenuOpen: false,
@@ -94,7 +86,7 @@ const Header: FC<HeaderProps> = ({ title, onBack, withIcon, iconName = 'home', s
         </RoundIcon>
         <Icon onClick={handleMenuOpen} graphic='hamburger' iconStyles={iconStyles} containerTestId={MENU_BTN} />
       </div>
-      {state?.isMenuOpen && <MenuDrawer onClose={handleClose} />}
+      {<MenuDrawer onClose={handleClose} isOpen={state?.isMenuOpen} />}
       {state?.isAlertOpen && <AlertDrawer onClose={handleAlertClose} />}
     </div>
   );

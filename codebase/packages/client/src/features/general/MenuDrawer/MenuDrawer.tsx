@@ -1,5 +1,5 @@
-import React, { FC, MouseEvent, useRef } from 'react';
-import { Rule, useStyle } from '@pma/dex-wrapper';
+import React, { FC, MouseEvent, useEffect, useRef } from 'react';
+import { Rule, CreateRule, useStyle } from '@pma/dex-wrapper';
 
 import { BurgerTop } from './components/BurgerTop';
 import { BurgerBottom } from './components/BurgerBottom';
@@ -7,21 +7,32 @@ import { Trans } from 'components/Translation';
 import { Icon } from 'components/Icon';
 
 import TescoLogo from 'assets/img/TescoLogo.svg';
+import { menuActions } from '@pma/store';
+import { BurgerEntryType } from 'config/enum';
+import { useTenant } from 'features/general/Permission';
+import { useDispatch } from 'react-redux';
 
-export type MenuDrawerProps = { onClose: () => void };
+export type MenuDrawerProps = { onClose: () => void; isOpen: boolean };
 
 export const MENU_DRAWER_WRAPPER = 'menu-drawer-wrapper';
 
-const MenuDrawer: FC<MenuDrawerProps> = ({ onClose }) => {
+const MenuDrawer: FC<MenuDrawerProps> = ({ onClose, isOpen }) => {
   const { css } = useStyle();
 
   const underlayRef = useRef(null);
+  const tenant = useTenant();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(menuActions.getTopMenu({ entryType: BurgerEntryType.TOP, tenant }));
+    dispatch(menuActions.getBottomMenu({ entryType: BurgerEntryType.BOTTOM, tenant }));
+  }, []);
 
   const underlayClick = (e: MouseEvent<HTMLDivElement>) => e.target === underlayRef.current && onClose();
 
   return (
     <div
-      className={css(menuDrawerWrapperStyle)}
+      className={css(menuDrawerWrapperStyle({ isOpen }))}
       onClick={underlayClick}
       ref={underlayRef}
       data-test-id={MENU_DRAWER_WRAPPER}
@@ -57,16 +68,18 @@ const iconStyles: Rule = {
   cursor: 'pointer',
 };
 
-const menuDrawerWrapperStyle: Rule = ({ colors, zIndex }) => ({
-  position: 'fixed',
-  left: 0,
-  top: 0,
-  width: '100%',
-  height: '100%',
-  overflow: 'auto',
-  backgroundColor: colors.link30,
-  zIndex: zIndex.i50,
-});
+const menuDrawerWrapperStyle: CreateRule<{ isOpen: boolean }> =
+  ({ isOpen }) =>
+  ({ colors, zIndex }) => ({
+    position: 'fixed',
+    left: isOpen ? 0 : '-100%',
+    top: 0,
+    width: '100%',
+    height: '100%',
+    overflow: 'auto',
+    backgroundColor: colors.link30,
+    zIndex: zIndex.i50,
+  });
 
 const menuDrawerContentStyle: Rule = ({ theme }) => ({
   position: 'absolute',

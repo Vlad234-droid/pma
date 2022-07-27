@@ -494,6 +494,7 @@
   "inactive_cycles": "Inactive",
   "registered_cycles": "Registered",
   "started_cycles": "Started",
+  "administrator_tools": "Administrator tools",
   "create_performance_cycle": "Create performance cycle",
   "performance_cycle_administration": "Performance Cycle Administration",
   "Below expected": "Below expected",

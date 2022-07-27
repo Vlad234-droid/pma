@@ -1,9 +1,8 @@
-import React, { useCallback } from 'react';
+import React, { useMemo } from 'react';
 import { Rule, useStyle } from '@pma/dex-wrapper';
-import { getBottomMenuData, getMetaMenu } from '@pma/store';
+import { getBottomMenuData } from '@pma/store';
 import { useSelector } from 'react-redux';
 
-import Spinner from 'components/Spinner';
 import ListItem from '../ListItem';
 
 import { getSplittedKey } from '../../utils';
@@ -12,13 +11,10 @@ export const BurgerBottom = () => {
   const { css } = useStyle();
 
   const menu = useSelector(getBottomMenuData);
-  const { loading } = useSelector(getMetaMenu);
 
-  const getList = useCallback(() => menu?.map(({ key }) => <ListItem key={key} name={getSplittedKey(key)} />), [menu]);
+  const menuItems = useMemo(() => menu?.map(({ key }) => <ListItem key={key} name={getSplittedKey(key)} />), [menu]);
 
-  if (loading) return <Spinner />;
-
-  return <div className={css(menuDrawerSettingsStyle)}>{getList()}</div>;
+  return <div className={css(menuDrawerSettingsStyle)}>{menuItems}</div>;
 };
 
 const menuDrawerSettingsStyle: Rule = ({ theme }) => ({

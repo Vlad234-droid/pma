@@ -1,9 +1,10 @@
-import React, { useCallback, useState } from 'react';
-import { Rule, useStyle } from '@pma/dex-wrapper';
+import React, { useMemo, useState } from 'react';
+import { Rule, CreateRule, useStyle } from '@pma/dex-wrapper';
 import { getInnerMenuData } from '@pma/store';
 import { useSelector } from 'react-redux';
 
 import { Icon } from 'components/Icon';
+import { Trans } from 'components/Translation';
 import { getSplittedKey } from 'features/general/MenuDrawer/utils';
 import { InnerList } from './InnerList';
 
@@ -20,8 +21,8 @@ const Administration = () => {
     toggleOpen((isOpenDropdown) => !isOpenDropdown);
   };
 
-  const getInnerList = useCallback(
-    () => innerList.map(({ key }) => <InnerList key={key} name={getSplittedKey(key)} />),
+  const innerListItems = useMemo(
+    () => innerList?.map(({ key }) => <InnerList key={key} name={getSplittedKey(key)} />),
     [innerList],
   );
 
@@ -33,8 +34,9 @@ const Administration = () => {
         onClick={handleToggleDropdown}
       >
         <Icon graphic={'tool'} />
-        <span className={css(itemSettingsTextStyle)}>Administrator tools</span>
-
+        <span className={css(itemSettingsTextStyle)}>
+          <Trans i18key={'administrator_tools'}>Administrator tools</Trans>
+        </span>
         <Icon
           graphic={'arrowDown'}
           iconStyles={{
@@ -44,20 +46,22 @@ const Administration = () => {
           }}
         />
       </div>
-      {isOpenDropdown && (
-        <div className={css(menuDropdownStyle)} data-test-id={DROPDOWN_ITEMS_WRAPPER}>
-          {getInnerList()}
-        </div>
-      )}
+      <div className={css(menuDropdownStyle({ isOpen: isOpenDropdown }))} data-test-id={DROPDOWN_ITEMS_WRAPPER}>
+        {innerListItems}
+      </div>
     </>
   );
 };
 
-const menuDropdownStyle: Rule = ({ theme }) => ({
-  // @ts-ignore
-  backgroundColor: theme.colors.lightBlue,
-  transition: 'all .5s ease-in-out',
-});
+const menuDropdownStyle: CreateRule<{ isOpen: boolean }> =
+  ({ isOpen }) =>
+  ({ theme }) => ({
+    height: isOpen ? 'auto' : 0,
+    overflow: 'hidden',
+    // @ts-ignore
+    backgroundColor: theme.colors.lightBlue,
+    transition: 'all .5s ease-in-out',
+  });
 
 const itemSettingsStyle: Rule = {
   display: 'flex',
