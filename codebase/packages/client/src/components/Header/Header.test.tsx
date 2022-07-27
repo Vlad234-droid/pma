@@ -7,6 +7,12 @@ import { BrowserRouter } from 'react-router-dom';
 import Header, { TEST_ID, BACK_BTN_TEST_ID, MENU_BTN } from './Header';
 import { MENU_DRAWER_WRAPPER } from 'features/general/MenuDrawer/MenuDrawer';
 
+jest.mock('@pma/store', () => ({
+  ...(jest.requireActual('@pma/store') as any),
+  getTopMenuData: jest.fn(),
+  getBottomMenuData: jest.fn(),
+}));
+
 describe('Header', () => {
   const testHandler = jest.fn();
   const testTitle = 'test title';
