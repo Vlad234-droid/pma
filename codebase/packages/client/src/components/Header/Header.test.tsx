@@ -7,6 +7,12 @@ import { BrowserRouter } from 'react-router-dom';
 import Header, { TEST_ID, BACK_BTN_TEST_ID, MENU_BTN } from './Header';
 import { MENU_DRAWER_WRAPPER } from 'features/general/MenuDrawer/MenuDrawer';
 
+jest.mock('@pma/store', () => ({
+  ...(jest.requireActual('@pma/store') as any),
+  getTopMenuData: jest.fn(),
+  getBottomMenuData: jest.fn(),
+}));
+
 const menuData = {
   data: {
     top: [{ key: 'notes' }],
@@ -14,6 +20,7 @@ const menuData = {
   },
   meta: { loading: false, loaded: true },
 };
+
 
 describe('Header', () => {
   const testHandler = jest.fn();
