@@ -9,9 +9,6 @@ import { Icon } from 'components/Icon';
 import { Page } from 'pages';
 
 const List = () => {
-  //TODO: Disabled tile PMA-2259
-  return null;
-
   const { css } = useStyle();
   const { t } = useTranslation();
   return (
