@@ -2,7 +2,7 @@ import React, { FC, useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { colleagueUUIDSelector, ReviewsActions } from '@pma/store';
 import { Employee, ReviewType, Status } from 'config/types';
-import { filterApprovedFn } from 'features/general/MyActions/utils';
+import { getEmployeeTimeline } from 'features/general/MyActions/utils';
 import { useTranslation } from 'components/Translation';
 import Approval from 'components/Approval';
 import { useTenant } from 'features/general/Permission';
@@ -27,7 +27,8 @@ const ApprovalWidget: FC<Props> = ({ isDisabled, reviews, onSave }) => {
   const [isOpenApprove, toggleOpenApprove] = useState(false);
   const [declines, setDeclines] = useState<(string | null)[]>([]);
   const [currentReview, setCurrentReview] = useState<Employee | null>(null);
-  const currentTimeline = currentReview?.timeline?.filter(filterApprovedFn);
+  const currentTimeline = currentReview ? getEmployeeTimeline(currentReview) : [];
+
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const [allReviewsProcessed, setAllReviewsProcessed] = useState<boolean>(false);
 
@@ -96,7 +97,7 @@ const ApprovalWidget: FC<Props> = ({ isDisabled, reviews, onSave }) => {
   const updateReviewStatus = useCallback(
     (status: Status) => (reasons?: (string | null)[]) => {
       reviews?.forEach((colleague, index) => {
-        const currentTimeline = colleague?.timeline.filter(filterApprovedFn);
+        const currentTimeline = getEmployeeTimeline(colleague);
 
         if ((reasons && !reasons[index] && currentTimeline![0].reviewType === ReviewType.OBJECTIVE) || !currentTimeline)
           return;

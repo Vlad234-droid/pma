@@ -1,4 +1,7 @@
 import { ReviewType, Status } from 'config/enum';
+import { Employee } from 'config/types';
+
+export const filterReviewApprovedFn = (tl) => tl.status === Status.WAITING_FOR_APPROVAL;
 
 export const filterApprovedFn = (tl) => tl.summaryStatus === Status.WAITING_FOR_APPROVAL;
 
@@ -24,4 +27,10 @@ export const groupArrayOfObjects = (list, key) => {
     (rv[x[key]] = rv[x[key]] || []).push(x);
     return rv;
   }, {});
+};
+
+export const getEmployeeTimeline = (employee: Employee) => {
+  const tlPointUuids: string[] =
+    employee?.reviews?.filter(filterReviewApprovedFn)?.map(({ tlPointUuid }) => tlPointUuid) || [];
+  return employee?.timeline?.filter((timeline) => tlPointUuids.includes(timeline.uuid));
 };

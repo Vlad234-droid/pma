@@ -43,6 +43,16 @@ export const getContent = (
         isGeneral ? t('review_form_declined', 'Declined') : t('request_to_amend ', 'Request to amend'),
         t('view_and_edit', 'View and edit'),
       ];
+    case Status.OVERDUE:
+      return [
+        'roundAlert',
+        'error',
+        'tescoBlue',
+        true,
+        true,
+        t('overdue', 'Overdue'),
+        t('view_and_edit', 'View and edit'),
+      ];
     case Status.DRAFT:
       return [
         'roundPencil',
