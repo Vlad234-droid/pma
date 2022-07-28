@@ -1,5 +1,5 @@
 import React, { FC, useEffect } from 'react';
-import { shallowEqual, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Rule, useStyle } from '@pma/dex-wrapper';
 import {
   colleagueUUIDSelector,
@@ -27,8 +27,7 @@ const MyTeam: FC<Props> = ({ view, searchValue, sortValue }) => {
   const { loaded } = useSelector(getManagersMetaSelector) || {};
   const { css } = useStyle();
   const currentSelector = view === View.FULL_TEAM ? getAllEmployeesWithManagerSearch : getAllEmployees;
-  // @ts-ignore
-  const colleagues = useSelector(currentSelector(searchValue, sortValue)) || [];
+  const colleagues = useSelector((state) => currentSelector(state, searchValue, sortValue)) || [];
 
   // @ts-ignore
   const colleagueUuid = useSelector(colleagueUUIDSelector);

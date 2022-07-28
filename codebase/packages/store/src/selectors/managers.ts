@@ -1,7 +1,7 @@
 //@ts-ignore
-import { createSelector } from 'reselect'; //@ts-ignore
+import { createSelector, ParametricSelector, Selector } from 'reselect'; //@ts-ignore
 import { RootState } from 'typesafe-actions';
-import { Status } from '@pma/client/src/config/enum';
+import { ReviewType, Status } from '@pma/client/src/config/enum';
 import {
   SortBy,
   searchEmployeesFn,
@@ -12,9 +12,15 @@ import { Employee } from '@pma/client/src/config/types';
 
 export const managersSelector = (state: RootState) => state.managers || {};
 
-export const getEmployeesWithReviewStatus = (status: Status, searchValue?: string, sortValue?: SortBy) =>
+export const getEmployeesWithReviewStatus: ParametricSelector<RootState, any, any> = createSelector(
+  [
+    managersSelector,
+    (_, status: Status) => status,
+    (_, __, search?: string) => search,
+    (_, __, ___?, sort?: SortBy) => sort,
+  ],
   // @ts-ignore
-  createSelector(managersSelector, ({ data = [] }) => {
+  ({ data = [] }, status, searchValue = '', sortValue) => {
     const filteredWithStatusData = data
       .filter((employee) => employee.timeline.some((review) => review.summaryStatus === status))
       .map((employee) => ({
@@ -26,49 +32,104 @@ export const getEmployeesWithReviewStatus = (status: Status, searchValue?: strin
     return filteredWithStatusData
       ? sortEmployeesFn(searchEmployeesFn(filteredWithStatusData, searchValue), sortValue)
       : [];
-  });
+  },
+);
 
-export const getAllEmployees = (search?: string, sort?: SortBy) =>
-  createSelector(
-    managersSelector,
-    // @ts-ignore
-    ({ data }) => (data ? sortEmployeesFn(searchEmployeesFn(data, search), sort) : []),
-  );
+export const getAllEmployees: Selector<RootState, any, any> = createSelector(
+  [managersSelector, (_, search?: string) => search, (_, __?, sort?: SortBy) => sort],
+  // @ts-ignore
+  ({ data }, search = '', sort) => (data ? sortEmployeesFn(searchEmployeesFn(data, search), sort) : []),
+);
 
-export const getAllEmployeesWithManagerSearch = (search: string, sort: SortBy) =>
-  createSelector(
-    managersSelector,
-    // @ts-ignore
-    ({ data }) => (data ? sortEmployeesFn(searchEmployeesAndManagersFn(data, search), sort) : []),
-  );
+export const getAllEmployeesWithManagerSearch: Selector<RootState, any, any> = createSelector(
+  [managersSelector, (_, search?: string) => search, (_, __?, sort?: SortBy) => sort],
+  // @ts-ignore
+  ({ data }, search = '', sort) => (data ? sortEmployeesFn(searchEmployeesAndManagersFn(data, search), sort) : []),
+);
 
-export const getPendingEmployees = (search?: string, sort?: SortBy) =>
-  createSelector(
-    managersSelector,
-    // @ts-ignore
-    ({ data }) => {
-      const filteredData = data ? sortEmployeesFn(searchEmployeesFn(data, (search = '')), sort) : [];
+export const getPendingEmployees: Selector<RootState, any, any> = createSelector(
+  [managersSelector, (_, search?: string) => search, (_, __?, sort?: SortBy) => sort],
+  // @ts-ignore
+  ({ data }, search = '', sort) => {
+    const filteredData = data ? sortEmployeesFn(searchEmployeesFn(data, search), sort) : [];
 
-      const employeeWithPendingApprovals = filteredData?.filter((employee: Employee) =>
-        employee.timeline.some((review) => review.summaryStatus === Status.WAITING_FOR_APPROVAL),
-      );
+    const employeePendingApprovals = filteredData?.filter((employee: Employee) =>
+      employee.timeline.some(
+        (review) => review.summaryStatus === Status.DRAFT || review.summaryStatus === Status.DECLINED,
+      ),
+    );
 
-      const employeePendingApprovals = filteredData?.filter((employee: Employee) =>
+    const employeeWithCompletedApprovals = filteredData?.filter((employee: Employee) =>
+      employee.timeline.some((review) => review.summaryStatus === Status.APPROVED),
+    );
+
+    const employeeWithPendingApprovals = filteredData?.filter((employee: Employee) =>
+      employee.timeline.some((review) => review.summaryStatus === Status.WAITING_FOR_APPROVAL),
+    );
+
+    return {
+      employeeWithPendingApprovals,
+      employeePendingApprovals,
+      employeeWithCompletedApprovals,
+    };
+  },
+);
+
+export const getOutstandingPendingEmployees: Selector<RootState, any, any> = createSelector(
+  [managersSelector, (_, search?: string) => search, (_, __?, sort?: SortBy) => sort],
+  // @ts-ignore
+  ({ data }, search = '', sort) => {
+    const filteredData = data ? sortEmployeesFn(searchEmployeesFn(data, search), sort) : [];
+
+    const employeeOverdueAnniversary = filteredData?.filter(
+      (employee) =>
+        employee.timeline.length === 1 &&
+        employee.timeline[0].reviewType === ReviewType.EYR &&
+        isAfterDeadline({ date: employee.timeline[0].endTime, days: 7 }),
+    );
+
+    const employeeOverdueEYR = filteredData?.filter(
+      (employee) =>
+        employee.timeline.length !== 1 &&
         employee.timeline.some(
-          (review) => review.summaryStatus === Status.DRAFT || review.summaryStatus === Status.DECLINED,
+          (review) => review.reviewType === ReviewType.EYR && isAfterDeadline({ date: review.endTime, days: 7 }),
         ),
-      );
+    );
 
-      const employeeWithCompletedApprovals = filteredData?.filter((employee: Employee) =>
-        employee.timeline.some((review) => review.summaryStatus === Status.APPROVED),
-      );
+    const employeeOverdueMYR = filteredData?.filter((employee) =>
+      employee.timeline.some(
+        (review) => review.reviewType === ReviewType.MYR && isAfterDeadline({ date: review.endTime, days: 7 }),
+      ),
+    );
 
-      return {
-        employeeWithPendingApprovals,
-        employeePendingApprovals,
-        employeeWithCompletedApprovals,
-      };
-    },
-  );
+    const employeeOverdueObjectives = filteredData?.filter((employee: Employee) =>
+      employee.timeline.some((review) => review.summaryStatus === Status.OVERDUE),
+    );
+
+    const employeeObjectivesWaiting = filteredData?.filter((employee) =>
+      employee.timeline.some(
+        (point) =>
+          point.summaryStatus === Status.OVERDUE &&
+          employee.reviews.some(
+            (review) =>
+              review.tlPointUuid === point.uuid &&
+              review.status === Status.WAITING_FOR_APPROVAL &&
+              (review.type === ReviewType.OBJECTIVE || review.type === ReviewType.QUARTER),
+          ),
+      ),
+    );
+
+    return {
+      employeeOverdueAnniversary,
+      employeeOverdueObjectives,
+      employeeObjectivesWaiting,
+      employeeOverdueEYR,
+      employeeOverdueMYR,
+    };
+  },
+);
 
 export const getManagersMetaSelector = createSelector(managersSelector, ({ meta }) => meta);
+
+const isAfterDeadline = ({ date, days = 0 }) =>
+  new Date().getTime() > new Date(date).getTime() - days * 24 * 60 * 60 * 1000;

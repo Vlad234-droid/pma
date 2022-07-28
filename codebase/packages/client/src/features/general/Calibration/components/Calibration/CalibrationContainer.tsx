@@ -12,7 +12,6 @@ import { getMockFilterOptions } from '../../mock';
 const CalibrationContainer: FC = () => {
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const dispatch = useDispatch();
-  // @ts-ignore
   const colleagues: Array<Employee> = useSelector(getAllEmployees, shallowEqual) || [];
 
   const { loaded } = useSelector(getManagersMetaSelector);

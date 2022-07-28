@@ -1,7 +1,6 @@
 import React, { FC, useState, useMemo } from 'react';
-import { Link } from 'react-router-dom';
 import { View, ViewFilters } from 'features/general/MyTeam';
-import { ActionCountWidget, PendingApprovalsWidget } from 'features/general/MyActions';
+import { ActionCountWidget, PendingApprovalsWidget, OutstandingActionsWidget } from 'features/general/MyActions';
 
 import ViewNavigation from 'features/general/ViewNavigation';
 import { Filters, getEmployeesSortingOptions, useSearch, useSorting } from 'features/general/Filters';
@@ -9,8 +8,6 @@ import { Rule, useStyle } from '@pma/dex-wrapper';
 import { CanPerform, role, useTenant } from 'features/general/Permission';
 
 import { useTranslation } from 'components/Translation';
-import { buildPath } from 'features/general/Routes';
-import { Page } from 'pages/general/types';
 
 export const TEST_ID = 'my-team';
 
@@ -60,9 +57,10 @@ const MyTeamPage: FC = () => {
       <div className={css(wrapperStyles)}>
         <div className={css(listWrapperStyles)}>
           {showActions && (
-            <Link to={buildPath(Page.MY_ACTIONS)}>
+            <>
               <PendingApprovalsWidget />
-            </Link>
+              <OutstandingActionsWidget />
+            </>
           )}
           <MyTeam view={view} searchValue={searchValue} sortValue={sortValue} />
         </div>

@@ -10,7 +10,7 @@ const ActionCount: FC = () => {
   const { css } = useStyle();
   const { t } = useTranslation();
   const { employeeWithPendingApprovals, employeePendingApprovals } =
-    useSelector(getPendingEmployees(), shallowEqual) || {};
+    useSelector(getPendingEmployees, shallowEqual) || {};
 
   const waitingCount = employeeWithPendingApprovals?.length;
   const draftCount = employeePendingApprovals?.length;

@@ -21,7 +21,9 @@ type Props = {
 
 const ReviewSuccessModal: FC<Props> = ({ review, status, onClose }) => {
   const { t } = useTranslation();
-  const colleaguesWaitingForApproval = useSelector(getEmployeesWithReviewStatus(Status.WAITING_FOR_APPROVAL));
+  const colleaguesWaitingForApproval = useSelector((state) =>
+    getEmployeesWithReviewStatus(state, Status.WAITING_FOR_APPROVAL),
+  );
   const navigate = useNavigate();
   const tenant = useTenant();
 

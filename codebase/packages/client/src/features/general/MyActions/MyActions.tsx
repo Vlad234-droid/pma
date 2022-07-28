@@ -37,7 +37,7 @@ const MyActions: FC<Props> = ({ status, searchValue, sortValue, isCheckedAll }) 
 
   const [checkedItems, setCheckedItems]: [string[], (T) => void] = useState([]);
   const isWaitingForApprovalStatus = status === Status.WAITING_FOR_APPROVAL;
-  const colleagues = useSelector(getEmployeesWithReviewStatus(status, searchValue, sortValue));
+  const colleagues = useSelector((state) => getEmployeesWithReviewStatus(state, status, searchValue, sortValue));
 
   const reviewsForApproval = useMemo(
     () => colleagues.filter(({ uuid }) => uuid && checkedItems.includes(uuid)),

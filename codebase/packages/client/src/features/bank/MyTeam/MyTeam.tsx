@@ -28,7 +28,8 @@ const MyTeam: FC<Props> = ({ view, searchValue, sortValue }) => {
 
   const { loaded } = useSelector(getManagersMetaSelector) || {};
   const currentSelector = view === View.FULL_TEAM ? getAllEmployeesWithManagerSearch : getAllEmployees;
-  const colleagues: Array<Employee> = useSelector(currentSelector(searchValue, sortValue), shallowEqual) || [];
+  const colleagues: Array<Employee> =
+    useSelector((state) => currentSelector(state, searchValue, sortValue), shallowEqual) || [];
   const colleagueUuid: string = useSelector(colleagueUUIDSelector);
 
   const loadManagers = () =>

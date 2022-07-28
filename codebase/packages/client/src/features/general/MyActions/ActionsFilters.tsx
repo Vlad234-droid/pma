@@ -37,7 +37,7 @@ const ActionsFilters: FC<Props> = ({
   const options = getEmployeesSortingOptions(t);
 
   const isWaitingForApproval = status === Status.WAITING_FOR_APPROVAL;
-  const colleagues = useSelector(getEmployeesWithReviewStatus(status, searchValue, sortValue));
+  const colleagues = useSelector((state) => getEmployeesWithReviewStatus(state, status, searchValue, sortValue));
 
   // disable selectAll, if every colleague has more then one item for approve
   const isDisabled = useMemo(

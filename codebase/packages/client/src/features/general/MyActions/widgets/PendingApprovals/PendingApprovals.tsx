@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { getPendingEmployees } from '@pma/store';
 import { useStyle, colors, Rule, fontWeight } from '@pma/dex-wrapper';
@@ -6,11 +7,13 @@ import { useStyle, colors, Rule, fontWeight } from '@pma/dex-wrapper';
 import { useTranslation } from 'components/Translation';
 import { TileWrapper } from 'components/Tile';
 import { Icon } from 'components/Icon';
+import { buildPath } from 'features/general/Routes';
+import { Page } from 'pages';
 
 const PendingApprovals: FC = () => {
   const { css, theme } = useStyle();
   const { t } = useTranslation();
-  const { employeeWithPendingApprovals } = useSelector(getPendingEmployees()) || {};
+  const { employeeWithPendingApprovals } = useSelector(getPendingEmployees) || {};
 
   const waitingCount = employeeWithPendingApprovals?.length;
 
@@ -19,20 +22,22 @@ const PendingApprovals: FC = () => {
   }
 
   return (
-    <TileWrapper customStyle={{ background: colors.pending }}>
-      <div data-test-id='pending-approvals' className={css(wrapperStyles)}>
-        <div className={css(iconWrapperStyles)}>
-          <Icon graphic='roundClock' fill={theme.colors.white} iconStyles={iconStyles} />
+    <Link to={buildPath(Page.MY_ACTIONS)}>
+      <TileWrapper customStyle={{ background: colors.pending }}>
+        <div data-test-id='pending-approvals' className={css(wrapperStyles)}>
+          <div className={css(iconWrapperStyles)}>
+            <Icon graphic='roundClock' fill={theme.colors.white} iconStyles={iconStyles} />
+          </div>
+          <div className={css(headerBlockStyles)}>
+            <span className={css(titleStyles)}>{t('pending_actions', 'Pending actions')}</span>
+            <span className={css(descriptionStyle)}>{t('you_have_pending_actions', 'You have pending actions')}</span>
+          </div>
+          <div className={css(countWrapperStyles)}>
+            <span className={css(countStyles)}>{waitingCount}</span>
+          </div>
         </div>
-        <div className={css(headerBlockStyles)}>
-          <span className={css(titleStyles)}>{t('pending_actions', 'Pending actions')}</span>
-          <span className={css(descriptionStyle)}>{t('you_have_pending_actions', 'You have pending actions')}</span>
-        </div>
-        <div className={css(countWrapperStyles)}>
-          <span className={css(countStyles)}>{waitingCount}</span>
-        </div>
-      </div>
-    </TileWrapper>
+      </TileWrapper>
+    </Link>
   );
 };
 
