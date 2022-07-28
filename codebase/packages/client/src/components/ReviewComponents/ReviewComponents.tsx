@@ -40,7 +40,8 @@ const ReviewComponents: FC<ReviewComponentsProps> = ({ components, review, metho
           expression = {},
           borderStyle = {},
         } = component;
-        const value = key && review[key] ? review[key] : '';
+
+        const value = key && review?.[key] ? review[key] : '';
 
         const componentReadonly = expression?.auth?.permission?.read?.length ? true : readonly;
 

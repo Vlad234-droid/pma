@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 import {
+  colleagueUUIDSelector,
   Component,
-  currentUserSelector,
-  getReviewByTypeSelector,
+  filterReviewsByTypeSelector,
   getReviewSchema,
   getTimelineByReviewTypeSelector,
   ReviewsActions,
@@ -21,8 +21,9 @@ import { useSelector } from 'react-redux';
 import { Status } from 'config/enum';
 import useDispatch from 'hooks/useDispatch';
 import { USER } from 'config/constants';
-import { ReviewFormType } from '../type';
-import { Timeline } from 'config/types';
+import { Review, Timeline } from 'config/types';
+import { useUploadReviewFiles } from '../hook';
+import { FileMetadata, ReviewFormType } from '../type';
 
 export type FormPropsType = {
   reviewLoading: boolean;
@@ -32,9 +33,12 @@ export type FormPropsType = {
   timelineReview: Timeline;
   methods: UseFormReturn;
   components: any[];
-  review: Record<string, string>;
+  review: Review;
   handleSaveDraft: () => void;
   handleSubmit: () => void;
+  metadata: FileMetadata[];
+  handleAddFiles: (file: File) => void;
+  handleDeleteFiles: (name: string) => void;
 };
 
 export function withForm<P extends ReviewFormType>(WrappedComponent: React.ComponentType<P & FormPropsType>) {
@@ -43,10 +47,14 @@ export function withForm<P extends ReviewFormType>(WrappedComponent: React.Compo
 
     const { t } = useTranslation();
     const [successModal, setSuccessModal] = useState(false);
-    const { info } = useSelector(currentUserSelector);
+    const colleagueUuid = useSelector(colleagueUUIDSelector);
     const dispatch = useDispatch();
-    const [review] = useSelector(getReviewByTypeSelector(reviewType));
-    const formValues = review || {};
+    const [review]: Review[] = useSelector(filterReviewsByTypeSelector(reviewType));
+    const reviewUuid = review?.uuid;
+    const reviewProperties = review?.properties || {};
+
+    const { files, metadata, handleDeleteFiles, handleAddFiles } = useUploadReviewFiles({ colleagueUuid, reviewUuid });
+
     const { loading: reviewLoading, loaded: reviewLoaded, updated: reviewUpdated } = useSelector(reviewsMetaSelector);
     const { loading: schemaLoading, loaded: schemaLoaded } = useSelector(schemaMetaSelector);
     const schema = useSelector(getReviewSchema(reviewType));
@@ -64,7 +72,7 @@ export function withForm<P extends ReviewFormType>(WrappedComponent: React.Compo
     const methods = useFormWithCloseProtection({
       mode: 'onChange',
       resolver: yupResolver<Yup.AnyObjectSchema>(Yup.object().shape(yepSchema)),
-      defaultValues: formValues,
+      defaultValues: reviewProperties,
     });
 
     const { getValues, handleSubmit, reset, watch, setValue } = methods;
@@ -73,27 +81,32 @@ export function withForm<P extends ReviewFormType>(WrappedComponent: React.Compo
       const data = getValues();
       dispatch(
         ReviewsActions.updateReviews({
-          pathParams: { colleagueUuid: info.colleagueUUID, code: timelineReview.code, cycleUuid: 'CURRENT' },
+          pathParams: { colleagueUuid, code: timelineReview.code, cycleUuid: 'CURRENT' },
           data: [
             {
               status: Status.DRAFT,
               properties: { ...data },
             },
           ],
+          files,
+          metadata: { uploadMetadataList: metadata },
         }),
       );
       onClose();
     };
+
     const onSubmit = async (data) => {
       dispatch(
         ReviewsActions.updateReviews({
-          pathParams: { colleagueUuid: info.colleagueUUID, code: timelineReview.code, cycleUuid: 'CURRENT' },
+          pathParams: { colleagueUuid: colleagueUuid, code: timelineReview.code, cycleUuid: 'CURRENT' },
           data: [
             {
               status: Status.WAITING_FOR_APPROVAL,
               properties: { ...data },
             },
           ],
+          files,
+          metadata: { uploadMetadataList: metadata },
         }),
       );
       reset();
@@ -116,10 +129,8 @@ export function withForm<P extends ReviewFormType>(WrappedComponent: React.Compo
     );
 
     useEffect(() => {
-      dispatch(
-        ReviewsActions.getColleagueReviews({ pathParams: { colleagueUuid: info.colleagueUUID, cycleUuid: 'CURRENT' } }),
-      );
-      dispatch(SchemaActions.getSchema({ colleagueUuid: info.colleagueUUID }));
+      dispatch(ReviewsActions.getColleagueReviews({ pathParams: { colleagueUuid, cycleUuid: 'CURRENT' } }));
+      dispatch(SchemaActions.getSchema({ colleagueUuid }));
     }, []);
 
     useEffect(() => {
@@ -132,16 +143,16 @@ export function withForm<P extends ReviewFormType>(WrappedComponent: React.Compo
     }, [watch, reviewLoaded, schemaLoaded, overallRatingListeners]);
 
     useEffect(() => {
-      if (overallRatingRequestKey && review?.[overallRatingRequestKey]) {
-        setValue(overallRatingRequestKey, review[overallRatingRequestKey]);
+      if (overallRatingRequestKey && reviewProperties?.[overallRatingRequestKey]) {
+        setValue(overallRatingRequestKey, reviewProperties[overallRatingRequestKey]);
       }
-    }, [reviewUpdated, review, overallRatingRequestKey]);
+    }, [reviewUpdated, reviewProperties, overallRatingRequestKey]);
 
     useEffect(() => {
-      if (reviewLoaded && review) {
-        reset(review);
+      if (reviewLoaded && schemaLoaded && reviewProperties) {
+        reset(reviewProperties);
       }
-    }, [reviewLoaded]);
+    }, [reviewLoaded, schemaLoaded]);
 
     return (
       <WrappedComponent
@@ -153,9 +164,12 @@ export function withForm<P extends ReviewFormType>(WrappedComponent: React.Compo
         readonly={readonly}
         methods={methods}
         components={components}
-        review={formValues}
+        review={review}
         handleSaveDraft={handleSaveDraft}
         handleSubmit={handleSubmit(onSubmit)}
+        metadata={metadata}
+        handleDeleteFiles={handleDeleteFiles}
+        handleAddFiles={handleAddFiles}
       />
     );
   };

@@ -49,6 +49,9 @@ const Review: FC<ReviewFormType & FormPropsType> = ({
   review,
   handleSaveDraft,
   handleSubmit,
+  metadata,
+  handleDeleteFiles,
+  handleAddFiles,
 }) => {
   const { css, theme, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
@@ -96,8 +99,18 @@ const Review: FC<ReviewFormType & FormPropsType> = ({
               </TriggerModal>
             </div>
             {!readonly && <Attention />}
-            <ReviewComponents components={components} review={review} methods={methods} readonly={readonly} />
-            <FileUpload />
+            <ReviewComponents
+              components={components}
+              review={review?.properties || {}}
+              methods={methods}
+              readonly={readonly}
+            />
+            <FileUpload
+              review={review}
+              metadata={metadata}
+              handleDeleteFiles={handleDeleteFiles}
+              handleAddFiles={handleAddFiles}
+            />
           </div>
           <ReviewButtons
             isValid={isValid}
