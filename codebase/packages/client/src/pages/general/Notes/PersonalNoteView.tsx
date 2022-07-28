@@ -1,5 +1,5 @@
 import React from 'react';
-import { PersonalNoteView } from 'features/general/Notes';
+import PersonalNoteView from 'features/general/PersonalNoteView';
 
 const PersonalNotePage = () => <PersonalNoteView />;
 

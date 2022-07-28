@@ -50,6 +50,7 @@ const ColleaguesFinder: FC<Props> = ({
 
   const handleChange = (e: any) => {
     const { colleagueUUID, profile } = e.colleague;
+
     if (multiple) {
       onSelect([...selected, { value: colleagueUUID, label: `${profile?.firstName} ${profile?.lastName}` }]);
       return clearColleagueList();
@@ -85,8 +86,8 @@ const ColleaguesFinder: FC<Props> = ({
             <ColleagueProfile
               firstName={item?.colleague?.profile?.firstName}
               lastName={item?.colleague?.profile?.lastName}
-              job={item?.colleague?.workRelationships[0]?.job?.name}
-              department={item?.colleague?.workRelationships[0]?.department?.name}
+              job={item?.colleague?.workRelationships?.[0]?.job?.name}
+              department={item?.colleague?.workRelationships?.[0]?.department?.name}
             />
           )}
         />

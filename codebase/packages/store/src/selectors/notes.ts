@@ -31,7 +31,7 @@ export const archivedNotesSelector = createSelector(notesSelector, (notes: any) 
 );
 export const personalFolderUuidSelector = createSelector(notesSelector, (notes: any) => {
   const { folders } = notes;
-  if (!folders.length) return;
+  if (!folders?.length) return;
   return folders?.find((item) => !item.parentFolderUuid && item.title === Folders.PERSONAL_FOLDER)?.id;
 });
 
@@ -49,7 +49,7 @@ export const teamArchivedFolderUuidSelector = createSelector(notesSelector, (not
 
 export const teamFolderUuidSelector = createSelector(notesSelector, (notes: any) => {
   const { folders } = notes;
-  if (!folders.length) return;
+  if (!folders?.length) return;
   return folders?.find((item) => !item.parentFolderUuid && item.title === Folders.TEAM_FOLDER)?.id;
 });
 

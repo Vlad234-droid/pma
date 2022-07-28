@@ -2,7 +2,7 @@
 import React from 'react';
 
 // @ts-ignore
-import { renderWithTheme as render, generateEmployeeReview } from 'utils/test';
+import { renderWithTheme as render } from 'utils/test';
 // @ts-ignore
 import { ReviewType, Status } from 'config/enum';
 

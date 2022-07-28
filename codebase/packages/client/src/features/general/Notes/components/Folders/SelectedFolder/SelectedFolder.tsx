@@ -28,6 +28,7 @@ const initialState: NoteData = {
 };
 
 export const FOLDER_WRAPPER = 'folder-wrapper';
+export const BUTTONS_DOTS = 'button-dots';
 
 const SelectedFolder: FC<SelectedFolderProps> = ({
   setConfirmModal,
@@ -188,7 +189,7 @@ const SelectedFolder: FC<SelectedFolderProps> = ({
 
     return (
       //@ts-ignore
-      <div ref={ref} className={css(modalButtonsStyle({ isUserArchived }))} data-test-id='button-dots'>
+      <div ref={ref} className={css(modalButtonsStyle({ isUserArchived }))} data-test-id={BUTTONS_DOTS}>
         {btnsActions.map((item) => (
           <div key={item?.id}>{item?.button}</div>
         ))}

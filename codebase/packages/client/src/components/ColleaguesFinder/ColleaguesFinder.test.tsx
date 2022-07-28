@@ -13,7 +13,7 @@ describe('Colleague finder', () => {
     multiple: false,
     selected: [],
   };
-  it('render give feedback wrapper', async () => {
+  it('render give colleague finder wrapper', async () => {
     const { getByTestId } = render(<ColleaguesFinder {...props} />);
     const wrapper = getByTestId(TEST_ID);
     expect(wrapper).toBeInTheDocument();

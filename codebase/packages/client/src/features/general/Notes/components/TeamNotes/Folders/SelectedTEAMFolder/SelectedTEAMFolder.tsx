@@ -13,6 +13,7 @@ import { Page } from 'pages';
 import { NoteTeamData } from '../../../../configs';
 
 export const TEAM_WRAPPER = 'team-wrapper';
+export const BUTTONS_DOTS = 'button-dots';
 
 const initialState: NoteTeamData = {
   id: '',
@@ -161,7 +162,7 @@ const SelectedFolder: FC<Props> = ({ setConfirmTEAMModal, actionTEAMModal, teamA
 
     return (
       //@ts-ignore
-      <div ref={ref} className={css(Modal_buttons_style({ teamArchivedMode }))} data-test-id='button-dots'>
+      <div ref={ref} className={css(Modal_buttons_style({ teamArchivedMode }))} data-test-id={BUTTONS_DOTS}>
         {btnsActions.map((item) => (
           <div key={item.id} className={css({})}>
             {item.button}

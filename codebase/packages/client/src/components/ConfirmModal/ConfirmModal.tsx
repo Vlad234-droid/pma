@@ -1,9 +1,11 @@
-import React, { FC, HTMLProps } from 'react';
-import { Trans } from 'components/Translation';
-
+import React, { FC } from 'react';
 import { useStyle, CreateRule, Modal, Button, Rule } from '@pma/dex-wrapper';
 
-export type ConfirmModal = {
+import { Trans } from 'components/Translation';
+
+export const CONFIRM_MODAL = 'confirm-modal';
+
+export type Props = {
   title: string;
   description?: string;
   onCancel: () => void;
@@ -13,8 +15,6 @@ export type ConfirmModal = {
   canSubmit?: boolean;
   visibleCancelBtn?: boolean;
 };
-
-type Props = HTMLProps<HTMLInputElement> & ConfirmModal;
 
 const ConfirmModal: FC<Props> = ({
   title,
@@ -40,7 +40,7 @@ const ConfirmModal: FC<Props> = ({
       }}
       onOverlayClick={onOverlayClick}
     >
-      <div data-test-id='confirm-modal'>
+      <div data-test-id={CONFIRM_MODAL}>
         {description && (
           <div
             className={css({

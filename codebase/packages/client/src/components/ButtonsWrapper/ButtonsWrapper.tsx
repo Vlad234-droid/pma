@@ -4,6 +4,7 @@ import { Trans } from 'components/Translation';
 import { IconButton, Position } from '../IconButton';
 
 export const LEFT_SIDE_BUTTON = 'left-side-button';
+export const ARROW_RIGHT = 'arrow-right';
 
 type ButtonsProps = {
   isValid?: boolean;
@@ -48,7 +49,7 @@ const ButtonsWrapper: FC<ButtonsProps> = ({
               )}
               {rightIcon ? (
                 <IconButton
-                  data-test-id='arrowRight'
+                  data-test-id={ARROW_RIGHT}
                   onPress={onRightPress}
                   graphic='arrowRight'
                   customVariantRules={{

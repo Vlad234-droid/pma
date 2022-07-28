@@ -78,6 +78,7 @@ const SearchInput: FC<Props> = ({
           <div className={css(optionsWrapperStyles)}>
             {options?.map((item, idx) => (
               <div
+                data-test-id={`option-${idx}`}
                 key={idx}
                 className={css(optionStyle)}
                 onMouseDown={(e) => e.preventDefault()}

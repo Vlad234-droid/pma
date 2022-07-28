@@ -6,7 +6,7 @@ import { ActionCountWidget, PendingApprovalsWidget } from 'features/general/MyAc
 import ViewNavigation from 'features/general/ViewNavigation';
 import { Filters, getEmployeesSortingOptions, useSearch, useSorting } from 'features/general/Filters';
 import { Rule, useStyle } from '@pma/dex-wrapper';
-import { CanPerform, role, tenant as T, useTenant } from 'features/general/Permission';
+import { CanPerform, role, useTenant } from 'features/general/Permission';
 
 import { useTranslation } from 'components/Translation';
 import { buildPath } from 'features/general/Routes';

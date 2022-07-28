@@ -8,7 +8,7 @@ export const useSearch = (setSelectedFolder, setSearchParams): void => {
   const notesSelect = useSelector(getNotesSelector) || [];
   const { searchValue, archiveMode, setArchiveMode } = useNotesContainer();
   useEffect(() => {
-    if (searchValue.length > 2) {
+    if (searchValue?.length > 2) {
       setSearchParams({});
       if (archiveMode.user) setArchiveMode((prev) => ({ ...prev, user: false }));
       if (archiveMode.team) setArchiveMode((prev) => ({ ...prev, team: false }));
