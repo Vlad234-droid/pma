@@ -28,7 +28,7 @@ export const FileUpload: FC<FilesProps> = ({ handleAddFiles, metadata, handleDel
   const { t } = useTranslation();
   const { colleagueUuid, status } = review || {};
 
-  const editable = [Status.DRAFT, Status.DECLINED].includes(status) || true;
+  const editable = status ? [Status.DRAFT, Status.DECLINED].includes(status) : true;
   const getDownloadHref = (fileUuid) =>
     `${BASE_URL_API}/colleagues/${colleagueUuid}/reviews/files/${fileUuid}/download`;
 
@@ -78,7 +78,9 @@ export const FileUpload: FC<FilesProps> = ({ handleAddFiles, metadata, handleDel
           <span className={css(uploadTextStyle)}>{t('Upload any supporting documents')}</span>
         </DropZone>
       )}
-      <FileList files={fileList} {...(editable ? { onDelete: setFileName } : {})} />
+      <div className={css(fileListStyle)}>
+        <FileList files={fileList} {...(editable ? { onDelete: setFileName } : {})} />
+      </div>
       {fileNameRemove && (
         <ConfirmModal
           title={t('do_you_want_to_delete', 'Do you want to delete')}
@@ -99,3 +101,6 @@ const uploadTextStyle: Rule = ({ theme }) => ({
   paddingTop: '6px',
   color: theme.colors.tescoBlue,
 });
+const fileListStyle: Rule = {
+  paddingTop: '20px',
+};
