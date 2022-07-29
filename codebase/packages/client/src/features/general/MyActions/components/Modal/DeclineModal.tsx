@@ -22,7 +22,7 @@ const DeclineModal: FC<Props> = ({ onSave, onClose, review, reviewType }) => {
   const { css } = useStyle();
   const { t } = useTranslation();
   const tenant = useTenant();
-  const isObjective = reviewType === ReviewType.OBJECTIVE;
+  const isObjective = tenant === Tenant.GENERAL && reviewType === ReviewType.OBJECTIVE;
   const options = getDeclineReasonOptions(t);
   const [reason, setReason] = useState('');
 
