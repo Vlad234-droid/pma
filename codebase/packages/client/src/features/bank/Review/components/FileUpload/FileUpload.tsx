@@ -28,7 +28,7 @@ export const FileUpload: FC<FilesProps> = ({ handleAddFiles, metadata, handleDel
   const { t } = useTranslation();
   const { colleagueUuid, status } = review || {};
 
-  const editable = [Status.DRAFT, Status.DECLINED].includes(status);
+  const editable = [Status.DRAFT, Status.DECLINED].includes(status) || true;
   const getDownloadHref = (fileUuid) =>
     `${BASE_URL_API}/colleagues/${colleagueUuid}/reviews/files/${fileUuid}/download`;
 

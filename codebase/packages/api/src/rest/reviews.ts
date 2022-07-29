@@ -17,8 +17,10 @@ export const createReview = (params: any = {}) => {
     data,
   } = params;
   const firstElement = data.shift();
+  const formData = new FormData();
+  formData.append('review', new Blob([JSON.stringify(firstElement)], { type: 'application/json' }));
   const uri = `/colleagues/${colleagueUuid}/pm-cycles/${cycleUuid}/review-codes/${code}/numbers/${number}/reviews`;
-  return httpClient.post(uri, firstElement);
+  return httpClient.post(uri, formData);
 };
 
 export const updateReview = (params: any = {}) => {
