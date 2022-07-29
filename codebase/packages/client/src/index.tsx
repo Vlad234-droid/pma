@@ -19,7 +19,7 @@ import { useMonitoring } from 'hooks/useMonitoring';
 
 const routes = buildRoutes(pages);
 
-const globalCSS = `body { background: #F6F6F6; font-family: "TESCO Modern", Arial, sans-serif; color: #333333 } a, a:hover, a:focus, a:active {text-decoration: none; color: inherit;} @keyframes skeleton-loading {0% {background-color: hsl(200, 20%, 70%); } 100% {background-color: hsl(200%, 20%, 95%); } }`;
+const globalCSS = `body { background: #F6F6F6; font-family: "TESCO Modern", Arial, sans-serif; color: #333333; overflow-wrap: anywhere; } a, a:hover, a:focus, a:active {text-decoration: none; color: inherit;} @keyframes skeleton-loading {0% {background-color: hsl(200, 20%, 70%); } 100% {background-color: hsl(200%, 20%, 95%); } }`;
 
 const rendererOptions = {
   fontSettings,
