@@ -15,10 +15,22 @@ export const createReview = (params: any = {}) => {
   const {
     pathParams: { colleagueUuid = '', code, cycleUuid = 'CURRENT', number },
     data,
+    files,
+    metadata,
   } = params;
   const firstElement = data.shift();
   const formData = new FormData();
   formData.append('review', new Blob([JSON.stringify(firstElement)], { type: 'application/json' }));
+  if (files?.length) {
+    for (const file of files) {
+      formData.append('files', file);
+    }
+  }
+  if (metadata?.uploadMetadataList?.length) {
+    const uploadMetadata = new Blob([JSON.stringify(metadata)], { type: 'application/json' });
+    formData.append('uploadMetadata', uploadMetadata);
+  }
+
   const uri = `/colleagues/${colleagueUuid}/pm-cycles/${cycleUuid}/review-codes/${code}/numbers/${number}/reviews`;
 
   return httpClient.post(uri, formData);
@@ -45,7 +57,6 @@ export const updateReviews = (params: any = {}) => {
 
   const uri = `/colleagues/${colleagueUuid}/pm-cycles/${cycleUuid}/review-codes/${code}/reviews`;
   const formData = new FormData();
-  const uploadMetadata = new Blob([JSON.stringify(metadata)], { type: 'application/json' });
   formData.append('reviews', new Blob([JSON.stringify(data)], { type: 'application/json' }));
   if (files?.length) {
     for (const file of files) {
@@ -53,6 +64,7 @@ export const updateReviews = (params: any = {}) => {
     }
   }
   if (metadata?.uploadMetadataList?.length) {
+    const uploadMetadata = new Blob([JSON.stringify(metadata)], { type: 'application/json' });
     formData.append('uploadMetadata', uploadMetadata);
   }
 

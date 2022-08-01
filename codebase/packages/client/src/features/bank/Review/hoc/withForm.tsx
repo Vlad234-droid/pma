@@ -79,36 +79,68 @@ export function withForm<P extends ReviewFormType>(WrappedComponent: React.Compo
 
     const handleSaveDraft = () => {
       const data = getValues();
-      dispatch(
-        ReviewsActions.updateReviews({
-          pathParams: { colleagueUuid, code: timelineReview.code, cycleUuid: 'CURRENT' },
-          data: [
-            {
-              status: Status.DRAFT,
-              properties: { ...data },
-            },
-          ],
-          files,
-          metadata: { uploadMetadataList: metadata },
-        }),
-      );
+      if (review?.uuid) {
+        dispatch(
+          ReviewsActions.updateReviews({
+            pathParams: { colleagueUuid, code: timelineReview.code, cycleUuid: 'CURRENT' },
+            data: [
+              {
+                status: Status.DRAFT,
+                properties: { ...data },
+              },
+            ],
+            files,
+            metadata: { uploadMetadataList: metadata },
+          }),
+        );
+      } else {
+        dispatch(
+          ReviewsActions.createReview({
+            pathParams: { colleagueUuid, code: timelineReview.code, cycleUuid: 'CURRENT', number: 1 },
+            data: [
+              {
+                status: Status.DRAFT,
+                properties: { ...data },
+              },
+            ],
+            files,
+            metadata: { uploadMetadataList: metadata },
+          }),
+        );
+      }
       onClose();
     };
 
     const onSubmit = async (data) => {
-      dispatch(
-        ReviewsActions.updateReviews({
-          pathParams: { colleagueUuid: colleagueUuid, code: timelineReview.code, cycleUuid: 'CURRENT' },
-          data: [
-            {
-              status: Status.WAITING_FOR_APPROVAL,
-              properties: { ...data },
-            },
-          ],
-          files,
-          metadata: { uploadMetadataList: metadata },
-        }),
-      );
+      if (review?.uuid) {
+        dispatch(
+          ReviewsActions.updateReviews({
+            pathParams: { colleagueUuid, code: timelineReview.code, cycleUuid: 'CURRENT' },
+            data: [
+              {
+                status: Status.WAITING_FOR_APPROVAL,
+                properties: { ...data },
+              },
+            ],
+            files,
+            metadata: { uploadMetadataList: metadata },
+          }),
+        );
+      } else {
+        dispatch(
+          ReviewsActions.createReview({
+            pathParams: { colleagueUuid, code: timelineReview.code, cycleUuid: 'CURRENT', number: 1 },
+            data: [
+              {
+                status: Status.WAITING_FOR_APPROVAL,
+                properties: { ...data },
+              },
+            ],
+            files,
+            metadata: { uploadMetadataList: metadata },
+          }),
+        );
+      }
       reset();
       setSuccessModal(true);
     };
