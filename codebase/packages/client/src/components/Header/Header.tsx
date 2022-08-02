@@ -1,6 +1,5 @@
 import React, { FC, useEffect } from 'react';
 import { IconButton, Rule, Styles, useStyle, CreateRule } from '@pma/dex-wrapper';
-
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { Graphics, RoundIcon, Icon } from 'components/Icon';

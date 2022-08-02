@@ -9,6 +9,7 @@ import { PersonalProfileWidget } from 'features/general/Profile';
 import { Rule } from '@pma/dex-wrapper';
 import { useTenant } from 'features/general/Permission';
 
+// TODO: separate & move to CareerPerformance Page
 export const CareerHeaderSection: FC<{ timeline: React.ReactNode }> = ({ timeline }) => {
   const timelineTypes = useSelector(timelineTypesAvailabilitySelector(USER.current));
   const showMyReview = timelineTypes[ReviewType.MYR] && timelineTypes[ReviewType.EYR];

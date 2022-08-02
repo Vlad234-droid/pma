@@ -4,6 +4,5 @@ import { checkPermissions } from '../utils';
 
 export default (actions: Array<string>) => {
   const { roles } = useContext(authContext);
-
   return checkPermissions(actions, roles);
 };

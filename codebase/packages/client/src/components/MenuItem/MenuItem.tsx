@@ -18,7 +18,7 @@ export const MenuItem: FC<Props> = ({ iconGraphic, title, linkTo = '' }) => {
   return (
     <div data-test-id={TEST_ID} className={css(wrapperStyle)}>
       <Link to={linkTo} replace>
-        <TileWrapper title={title} hover={true} customStyle={wrapperStyles}>
+        <TileWrapper hover={true} customStyle={wrapperStyles}>
           <Icon graphic={iconGraphic} iconStyles={iconStyles} />
           <div className={css(styledTitle)}>{title}</div>
         </TileWrapper>

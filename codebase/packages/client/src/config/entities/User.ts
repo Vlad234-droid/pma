@@ -1,3 +1,5 @@
+import { UserprofileAttributes } from 'config/types';
+
 enum Status {
   PENDING = 'pending',
   ACTIVE = 'active',
@@ -21,5 +23,5 @@ export default interface User {
   name: string;
   status: Status;
   role: Role;
-  data?: any;
+  profileAttributes: UserprofileAttributes;
 }

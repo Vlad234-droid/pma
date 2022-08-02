@@ -12,34 +12,41 @@ export const getFullName = (profile) => {
   return lastName ? `${fullName} ${lastName}` : fullName;
 };
 
-export const colleagueUUIDSelector = createSelector(usersSelector, ({ current }) => {
-  // @ts-ignore
-  return current?.info?.data?.colleague?.colleagueUUID;
-});
-export const getUserRoles = createSelector(usersSelector, ({ current }) => {
-  // @ts-ignore
-  return current?.info?.data?.roles;
-});
+export const colleagueUUIDSelector = (state: RootState) => {
+  const users = usersSelector(state);
+
+  return users.current.info?.colleague?.colleagueUUID;
+};
+
+export const getUserRoles = (state: RootState) => {
+  const users = usersSelector(state);
+  return users.current.info?.roles;
+};
+
+export const userCycleTypeSelector = (state: RootState) => {
+  const users = usersSelector(state);
+  return users.current.metadata?.cycle?.cycleType;
+};
 
 export const getUserWorkLevels = createSelector(usersSelector, ({ current }) => {
   // @ts-ignore
-  return current?.info?.data?.colleague?.workRelationships?.map((workRelationship) => workRelationship.workLevel);
+  return current?.info?.colleague?.workRelationships?.map((workRelationship) => workRelationship.workLevel);
 });
 
 export const isManager = createSelector(usersSelector, ({ current }) => {
   // @ts-ignore
-  return current?.info?.data?.roles?.some((role) => role.toLowerCase().includes('manager'));
+  return current?.info?.roles?.some((role) => role.toLowerCase().includes('manager'));
 });
 
 export const currentUserSelector = createSelector(usersSelector, ({ current }) => {
   // @ts-ignore
-  const info = current?.info?.data?.colleague;
+  const info = current?.info?.colleague;
   const fullName = getFullName(info?.profile);
   //@ts-ignore
   const workRelationship = info?.workRelationships?.[0];
   const colleagueUUID = info?.colleagueUUID;
   //@ts-ignore
-  const tenant = current?.info?.data?.tenant?.code;
+  const tenant = current?.info?.tenant?.code;
   const job = workRelationship?.job?.name;
   const manager = getFullName(workRelationship?.manager?.profile);
   const department = workRelationship?.department?.name;

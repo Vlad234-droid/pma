@@ -21,7 +21,7 @@ type AuthData = {
   logout: LogoutAction;
   roles: Array<string>;
   tenant: Tenant;
-  userWorkLevel: Array<string>;
+  workLevels: Array<string>;
   error: any;
 };
 
@@ -32,7 +32,7 @@ const defaultData = {
   roles: [],
   tenant: Tenant.GENERAL,
   error: null,
-  userWorkLevel: [],
+  workLevels: [],
 };
 
 const AuthContext = createContext<AuthData>(defaultData);
@@ -63,9 +63,9 @@ export const AuthProvider: FC = ({ children }) => {
         user: info,
         login: loginAction,
         logout: logoutAction,
-        roles: info?.data?.roles || [],
+        roles: info?.roles || [],
         tenant: info?.tenant || Tenant.GENERAL,
-        userWorkLevel: info?.data?.colleague?.workRelationships?.[0]?.workLevel || [],
+        workLevels: info?.colleague?.workRelationships?.map(({ workLevel }) => workLevel) || [],
       }}
     >
       {loaded ? children : null}

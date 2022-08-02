@@ -22,14 +22,13 @@ export const renderWithTheme = <TProps extends {} = {}>(
       current: {
         authenticated: true,
         info: {
-          data: {
-            colleague: {
-              colleagueUUID: 'test-colleagueUuid',
-              profile: {
-                firstName: 'Test fullName',
-              },
+          colleague: {
+            colleagueUUID: 'test-colleagueUuid',
+            profile: {
+              firstName: 'Test fullName',
             },
           },
+          profileAttributes: [],
         },
       },
       meta: {

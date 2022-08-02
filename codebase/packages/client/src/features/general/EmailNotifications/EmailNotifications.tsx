@@ -19,7 +19,8 @@ export const EmailNotifications: FC<Props> = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const { user } = useAuthContainer();
-  const { profileAttributes } = user?.data || [];
+  //@ts-ignore
+  const { profileAttributes } = user || [];
   const colleagueUuid = useSelector(colleagueUUIDSelector);
 
   useEffect(() => {
@@ -41,7 +42,7 @@ export const EmailNotifications: FC<Props> = () => {
   }, [profileAttributes]);
 
   return (
-    <TileWrapper title={t('Email notifications', 'Email notifications')}>
+    <TileWrapper>
       <div data-test-id={TEST_ID} className={css(listStyles)}>
         <span className={css(titleStyle)}>
           <Trans i18nKey='notifications'>Notifications</Trans>
@@ -54,9 +55,9 @@ export const EmailNotifications: FC<Props> = () => {
         {profileAttributesFiltered
           .filter(
             ({ name }) =>
-              usePermission(accessByRole[name]) ||
-              usePermissionByWorkLevel(accessByWorkLevel[name]) ||
-              usePermissionByReviewType(accessByTimelinePoints[name]),
+              usePermission(accessByRole[name] || []) ||
+              usePermissionByWorkLevel(accessByWorkLevel[name] || []) ||
+              usePermissionByReviewType(accessByTimelinePoints[name] || []),
           )
           .map(({ name, value, type }) => (
             <div key={name} className={css(checkBoxStyle)}>

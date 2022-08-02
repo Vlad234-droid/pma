@@ -13,8 +13,8 @@ import { colleagueUUIDSelector } from '../../selectors';
 export const getSchemaEpic: Epic = (action$, state$, { api }) =>
   action$.pipe(
     filter(isActionOf(getSchema.request)),
-    switchMap(({ payload }) =>
-      from(api.getSchema({ ...payload, includeForms: payload?.includeForms ? payload?.includeForms : true })).pipe(
+    switchMap(({ payload: { includeForms = true, ...rest } }) =>
+      from(api.getColleagueMetadata({ ...rest, includeForms })).pipe(
         // @ts-ignore
         mergeMap(({ success, data: schemaData }) => {
           const state: any = state$.value;
@@ -50,13 +50,13 @@ export const getSchemaEpic: Epic = (action$, state$, { api }) =>
 export const getSchemaWithColleaguePermissionEpic: Epic = (action$, state$, { api }) =>
   action$.pipe(
     filter(isActionOf(getSchemaWithColleaguePermission.request)),
-    switchMap(({ payload }) =>
-      from(api.getSchema({ ...payload, includeForms: payload?.includeForms ? payload?.includeForms : true })).pipe(
+    switchMap(({ payload: { includeForms = true, ...rest } }) =>
+      from(api.getColleagueMetadata({ ...rest, includeForms })).pipe(
         // @ts-ignore
         mergeMap(({ success, data: schemaData }) => {
           const state: any = state$.value;
           const currentColleagueUUID: string = colleagueUUIDSelector(state);
-          const requestColleagueUUID: string = payload?.colleagueUuid;
+          const requestColleagueUUID: string = rest?.colleagueUuid;
           const users = state?.users;
 
           const schema = of(getSchema.success(schemaData));

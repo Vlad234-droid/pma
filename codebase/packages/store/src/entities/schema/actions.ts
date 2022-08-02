@@ -5,14 +5,14 @@ export const getSchema = createAsyncAction(
   'schema/FETCH_SUCCESS',
   'schema/FETCH_FAILURE',
   'schema/CANCEL',
-)<{ colleagueUuid: string }, { current: any; colleagueSchema?: any }, Error, undefined>();
+)<{ colleagueUuid: string; includeForms?: boolean }, { current: any; colleagueSchema?: any }, Error, undefined>();
 
 export const getSchemaWithColleaguePermission = createAsyncAction(
   'schema/permission/FETCH_REQUEST',
   'schema/permission/FETCH_SUCCESS',
   'schema/permission/FETCH_FAILURE',
   'schema/permission/CANCEL',
-)<{ colleagueUuid: string }, { current: any; colleagueSchema?: any }, Error, undefined>();
+)<{ colleagueUuid: string; includeForms?: boolean }, { current: any; colleagueSchema?: any }, Error, undefined>();
 
 export const clearSchemaData = createAction('schema/CLEAR')<undefined>();
 

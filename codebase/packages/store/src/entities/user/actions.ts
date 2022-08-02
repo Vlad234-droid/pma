@@ -23,6 +23,13 @@ export const getCurrentUser = createAsyncAction(
   'user/current/CANCEL',
 )<undefined, RestResponseUser, RestResponseVoid, undefined>();
 
+export const getCurrentUserMetadata = createAsyncAction(
+  'user/current/metadata/REQUEST',
+  'user/current/metadata/SUCCESS',
+  'user/current/metadata/FAILURE',
+  'user/current/metadata/CANCEL',
+)<undefined, any, any, undefined>();
+
 export const updateUserNotification = createAsyncAction(
   'user/notification/REQUEST',
   'user/notification/SUCCESS',

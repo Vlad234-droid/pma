@@ -16,6 +16,7 @@ import { buildPath } from 'features/general/Routes';
 import { useToast, Variant } from 'features/general/Toast';
 import Spinner from 'components/Spinner';
 import { formatDate, DATE_FORMAT, getISODateStringWithTimeFromDateString } from 'utils';
+import { CycleType } from 'config/enum';
 import PerformanceCycleForm from './components/PerformanceCycleForm';
 import { Status as PerformanceCycleStatus } from './constants/type';
 import { Page } from 'pages/general/types';
@@ -65,13 +66,18 @@ const CreatePerformanceCycle: FC = () => {
   }, [performanceCycleUuid]);
 
   function buildData(data) {
-    const { metadata, name, template, entryConfigKey, status, type } = data;
+    const { metadata, name, template, entryConfigKey, status, type, cycleType = CycleType.FISCAL } = data;
     const startTime = getISODateStringWithTimeFromDateString(
       formatDate(metadata.cycle.properties.pm_cycle_start_time, DATE_FORMAT),
     );
     const endTime = getISODateStringWithTimeFromDateString(
       formatDate(metadata.cycle.properties.pm_cycle_end_time, DATE_FORMAT),
     );
+
+    const properties = Object.entries(metadata.cycle.properties).reduce((acc, [key, value]) => {
+      if (value) acc[key] = value;
+      return acc;
+    }, {});
 
     return {
       uuid: performanceCycleUuid !== 'new' ? performanceCycleUuid : undefined,
@@ -82,12 +88,12 @@ const CreatePerformanceCycle: FC = () => {
       createdBy: {
         uuid: colleagueUuid,
       },
-      type: type || 'FISCAL',
+      type: type || cycleType,
       metadata: {
         ...metadata,
         cycle: {
           ...metadata.cycle,
-          properties: { ...metadata.cycle.properties, pm_cycle_start_time: startTime, pm_cycle_end_time: endTime },
+          properties: { ...properties, pm_cycle_start_time: startTime, pm_cycle_end_time: endTime },
         },
       },
       startTime,

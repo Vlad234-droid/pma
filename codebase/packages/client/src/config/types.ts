@@ -1,4 +1,7 @@
+import { colors } from '@pma/dex-wrapper';
 import { ReviewType, Status, TimelineType } from './enum';
+
+export type Colors = keyof typeof colors;
 
 export type Timeline = {
   code: string;

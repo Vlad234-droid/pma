@@ -5,8 +5,9 @@ import { useSelector } from 'react-redux';
 
 import ViewNavigation from 'features/general/ViewNavigation';
 import { useTenant } from 'features/general/Permission';
-import { CareerHeaderSection, CareerPerformance, CareerReviewsSection } from 'features/general/CareerPerformance';
+import { CareerHeaderSection, CareerPerformance } from 'features/general/CareerPerformance';
 import { ObjectiveWidgets } from 'features/general/ObjectiveWidgets';
+import { MyReviewsSection } from 'features/general/Objectives';
 
 const CareerPerformancePage: FC = () => {
   const tenant = useTenant();
@@ -23,7 +24,7 @@ const CareerPerformancePage: FC = () => {
       <CareerPerformance>
         <CareerHeaderSection timeline={<Timeline colleagueUuid={colleagueUuid} />} />
         <ObjectiveWidgets />
-        <CareerReviewsSection />
+        <MyReviewsSection />
       </CareerPerformance>
     </div>
   );

@@ -14,7 +14,7 @@ const KnowledgeLibraryPage: FC = () => {
       console.log(
         buildPath(
           paramsReplacer(`${Page.KNOWLEDGE_LIBRARY_BY_ID}`, {
-            ':countryCode': info?.data?.colleague?.countryCode,
+            ':countryCode': info?.colleague?.countryCode,
             ':id': '1',
           }),
         ),

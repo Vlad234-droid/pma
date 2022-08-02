@@ -1,24 +1,16 @@
 import React, { FC } from 'react';
 import { useSelector } from 'react-redux';
 import { Rule, useStyle } from '@pma/dex-wrapper';
-import { colleagueUUIDSelector, getTimelineByCodeSelector, timelineTypesAvailabilitySelector } from '@pma/store';
+import { colleagueUUIDSelector, timelineTypesAvailabilitySelector } from '@pma/store';
 
-import { Trans, useTranslation } from 'components/Translation';
+import { AnnualReviewWidget, MidYearReviewWidget, YearEndReviewWidget } from 'features/general/Objectives';
+import { Trans } from 'components/Translation';
 import Section from 'components/Section';
-import { ReviewWidget } from 'features/general/ReviewWidget';
 import { ReviewType } from 'config/enum';
-import { USER } from 'config/constants';
 
-type Props = {};
-
-export const MyReviewsSection: FC<Props> = () => {
-  const { t } = useTranslation();
+export const MyReviewsSection: FC = () => {
   const colleagueUuid = useSelector(colleagueUUIDSelector);
-
   const { css } = useStyle();
-
-  const midYearReview = useSelector(getTimelineByCodeSelector(ReviewType.MYR, USER.current));
-  const endYearReview = useSelector(getTimelineByCodeSelector(ReviewType.EYR, USER.current));
   const timelineTypes = useSelector(timelineTypesAvailabilitySelector(colleagueUuid)) || {};
   const canShowMyReview = timelineTypes[ReviewType.MYR] && timelineTypes[ReviewType.EYR];
   const canShowAnnualReview = !timelineTypes[ReviewType.MYR] && timelineTypes[ReviewType.EYR];
@@ -36,50 +28,14 @@ export const MyReviewsSection: FC<Props> = () => {
     >
       {canShowMyReview && (
         <>
-          <div data-test-id='personal' className={css(basicTileStyle)}>
-            <ReviewWidget
-              reviewType={ReviewType.MYR}
-              status={midYearReview?.summaryStatus}
-              startTime={midYearReview?.startTime}
-              endTime={midYearReview?.endTime}
-              lastUpdatedTime={midYearReview?.lastUpdatedTime}
-              title={t('mid_year_review', 'Mid-year review')}
-              customStyle={{ height: '100%' }}
-            />
-          </div>
-          <div data-test-id='feedback' className={css(basicTileStyle)}>
-            <ReviewWidget
-              reviewType={ReviewType.EYR}
-              status={endYearReview?.summaryStatus}
-              startTime={endYearReview?.startTime}
-              endTime={endYearReview?.endTime}
-              lastUpdatedTime={endYearReview?.lastUpdatedTime}
-              title={t('review_type_description_eyr', 'Year-end review')}
-              customStyle={{ height: '100%' }}
-            />
-          </div>
+          <MidYearReviewWidget />
+          <YearEndReviewWidget />
         </>
       )}
 
-      {canShowAnnualReview && (
-        <div data-test-id='feedback' className={css(basicTileStyle)}>
-          <ReviewWidget
-            reviewType={ReviewType.EYR}
-            status={endYearReview.status}
-            startTime={endYearReview?.startTime}
-            endTime={endYearReview?.endTime}
-            lastUpdatedTime={endYearReview?.lastUpdatedTime}
-            title={t('annual_performance_review', 'Annual performance review')}
-            customStyle={{ height: '100%' }}
-          />
-        </div>
-      )}
+      {canShowAnnualReview && <AnnualReviewWidget />}
     </Section>
   );
-};
-
-const basicTileStyle: Rule = {
-  flex: '1 0 230px',
 };
 
 const widgetWrapperStyle: Rule = {

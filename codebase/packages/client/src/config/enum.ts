@@ -233,3 +233,8 @@ export enum Tenant {
   GENERAL = 'general',
   BANK = 'bank',
 }
+
+export enum CycleType {
+  HIRING = 'HIRING',
+  FISCAL = 'FISCAL',
+}

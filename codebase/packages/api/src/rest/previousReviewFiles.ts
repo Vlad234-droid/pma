@@ -1,6 +1,6 @@
 import httpClient from '../config/client';
 
-const getDomain = '/colleagues';
+const domain = '/colleagues';
 const uploadDomain = '/reviews/files';
 
 type GetPreviousReviewFilesParams = {
@@ -10,8 +10,8 @@ type GetPreviousReviewFilesParams = {
 
 export const getPreviousReviewFiles = ({ colleagueUUID, reviewUUID }: GetPreviousReviewFilesParams) => {
   const URL = reviewUUID
-    ? `${getDomain}/${colleagueUUID}/reviews/${reviewUUID}/files`
-    : `${getDomain}/${colleagueUUID}/reviews/files`;
+    ? `${domain}/${colleagueUUID}/reviews/${reviewUUID}/files`
+    : `${domain}/${colleagueUUID}/reviews/files`;
 
   return httpClient.get(URL);
 };

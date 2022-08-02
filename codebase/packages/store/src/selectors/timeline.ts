@@ -18,7 +18,7 @@ export const USER = {
 export const timelineSelector = (state: RootState) => state.timeline;
 
 export const userReviewTypesSelector = (uuid) =>
-  createSelector(timelineSelector, (timeline) => timeline[uuid]?.map((item: { code: string }) => item.code));
+  createSelector(timelineSelector, (timeline) => timeline[uuid]?.map((item: { code: string }) => item.code) || []);
 
 export const timelinesExistSelector = (colleagueUuid) =>
   createSelector(timelineSelector, (timelines) => !!timelines[colleagueUuid]?.length);
@@ -26,7 +26,7 @@ export const timelinesExistSelector = (colleagueUuid) =>
 export const timelineStartedSelector = (colleagueUuid) =>
   createSelector(usersSelector, timelineSelector, (user, { ...rest }) => {
     // @ts-ignore
-    const uuid = colleagueUuid === USER.current ? user?.current.info.data.colleague.colleagueUUID : colleagueUuid;
+    const uuid = colleagueUuid === USER.current ? user?.current.info.colleague.colleagueUUID : colleagueUuid;
     const data = rest?.[uuid];
     return !data?.some((item) => item.code === Type.START_CYCLE && item.code !== Type.OBJECTIVE);
   });
@@ -37,7 +37,7 @@ export const getTimelineSelector = (colleagueUuid) =>
   createSelector(usersSelector, timelineSelector, (user, { meta, ...rest }) => {
     // @ts-ignore
     // TODO: bugfix. extract to separate function
-    const uuid = colleagueUuid === USER.current ? user?.current.info.data.colleague.colleagueUUID : colleagueUuid;
+    const uuid = colleagueUuid === USER.current ? user?.current.info.colleague.colleagueUUID : colleagueUuid;
     const data = rest?.[uuid];
     const codes = data?.map(({ code }) => code);
     const types = data?.map(({ type }) => type);
@@ -54,7 +54,7 @@ export const getTimelineSelector = (colleagueUuid) =>
 export const getBankTimelineSelector = (colleagueUuid) =>
   createSelector(usersSelector, timelineSelector, (user, { meta, ...rest }) => {
     // @ts-ignore
-    const uuid = colleagueUuid === USER.current ? user?.current.info.data.colleague.colleagueUUID : colleagueUuid;
+    const uuid = colleagueUuid === USER.current ? user?.current.info.colleague.colleagueUUID : colleagueUuid;
     const data = rest?.[uuid];
 
     const hasMYR = data?.some((element) => element.code === 'MYR');
@@ -103,7 +103,7 @@ export const hasTimelineAccessesSelector = ({
 }) =>
   createSelector(usersSelector, timelineSelector, ({ meta, ...rest }) => {
     // @ts-ignore
-    const uuid = colleagueUuid === USER.current ? user?.current.info.data.colleague.colleagueUUID : colleagueUuid;
+    const uuid = colleagueUuid === USER.current ? user?.current.info.colleague.colleagueUUID : colleagueUuid;
     const data = rest?.[uuid];
     const codes = data?.map(({ code }) => code) || [];
     let canShow = false;
@@ -124,7 +124,7 @@ export const hasTimelineAccessesSelector = ({
 export const timelineTypesAvailabilitySelector = (colleagueUuid) =>
   createSelector(usersSelector, timelineSelector, (user, { meta, ...rest }) => {
     // @ts-ignore
-    const uuid = colleagueUuid === USER.current ? user?.current.info.data.colleague.colleagueUUID : colleagueUuid;
+    const uuid = colleagueUuid === USER.current ? user?.current.info.colleague.colleagueUUID : colleagueUuid;
     const data = rest?.[uuid];
     const reviewTypes = data?.map(({ reviewType }) => reviewType);
     if (reviewTypes?.length) {
@@ -141,7 +141,7 @@ export const timelineTypesAvailabilitySelector = (colleagueUuid) =>
 export const getTimelineByCodeSelector = (code, colleagueUuid) =>
   createSelector(usersSelector, timelineSelector, (user, { meta, ...rest }) => {
     // @ts-ignore
-    const uuid = colleagueUuid === USER.current ? user?.current.info.data.colleague.colleagueUUID : colleagueUuid;
+    const uuid = colleagueUuid === USER.current ? user?.current.info.colleague.colleagueUUID : colleagueUuid;
     const data = rest?.[uuid];
     return data?.find((timeline) => timeline.code === code);
   });
@@ -149,7 +149,7 @@ export const getTimelineByCodeSelector = (code, colleagueUuid) =>
 export const getTimelineByReviewTypeSelector = (type: ReviewType, colleagueUuid) =>
   createSelector(usersSelector, timelineSelector, (user, { meta, ...rest }) => {
     // @ts-ignore
-    const uuid = colleagueUuid === USER.current ? user?.current.info.data.colleague.colleagueUUID : colleagueUuid;
+    const uuid = colleagueUuid === USER.current ? user?.current.info.colleague.colleagueUUID : colleagueUuid;
     const data = rest?.[uuid];
     return data?.find((timeline) => timeline.reviewType === type);
   });
@@ -157,7 +157,7 @@ export const getTimelineByReviewTypeSelector = (type: ReviewType, colleagueUuid)
 export const getTimelinesByReviewTypeSelector = (type: ReviewType, colleagueUuid) =>
   createSelector(usersSelector, timelineSelector, (user, { meta, ...rest }) => {
     // @ts-ignore
-    const uuid = colleagueUuid === USER.current ? user?.current.info.data.colleague.colleagueUUID : colleagueUuid;
+    const uuid = colleagueUuid === USER.current ? user?.current.info.colleague.colleagueUUID : colleagueUuid;
     const data = rest?.[uuid];
     return data?.filter((timeline) => timeline.reviewType === type);
   });
@@ -165,7 +165,7 @@ export const getTimelinesByReviewTypeSelector = (type: ReviewType, colleagueUuid
 export const getActiveTimelineByReviewTypeSelector = (type: ReviewType, colleagueUuid) =>
   createSelector(usersSelector, timelineSelector, (user, { meta, ...rest }) => {
     // @ts-ignore
-    const uuid = colleagueUuid === USER.current ? user?.current.info.data.colleague.colleagueUUID : colleagueUuid;
+    const uuid = colleagueUuid === USER.current ? user?.current.info.colleague.colleagueUUID : colleagueUuid;
     const data = rest?.[uuid];
     return data?.find((timeline) => timeline.reviewType === type && timeline.status === 'STARTED');
   });

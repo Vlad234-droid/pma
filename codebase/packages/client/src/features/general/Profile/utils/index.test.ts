@@ -4,24 +4,22 @@ describe('#getMissedFields', () => {
   it('should return empty array, if all fields have data', () => {
     const info = {
       managerUUID: 'mocked_manager_uuid',
-      data: {
-        colleague: {
-          profile: {
-            firstName: 'mocked_first_name',
-            lastName: 'mocked_last_name',
-          },
-          workRelationships: [
-            {
-              job: {
-                name: 'mocked_job_name',
-              },
-              department: {
-                name: 'mocked_department_name',
-              },
-              managerUUID: 'mocked_manager_uuid',
-            },
-          ],
+      colleague: {
+        profile: {
+          firstName: 'mocked_first_name',
+          lastName: 'mocked_last_name',
         },
+        workRelationships: [
+          {
+            job: {
+              name: 'mocked_job_name',
+            },
+            department: {
+              name: 'mocked_department_name',
+            },
+            managerUUID: 'mocked_manager_uuid',
+          },
+        ],
       },
     };
 
@@ -30,19 +28,17 @@ describe('#getMissedFields', () => {
 
   it('should return an array with empty fields', () => {
     const info = {
-      data: {
-        colleague: {
-          profile: {
-            lastName: 'mocked_last_name',
-          },
-          workRelationships: [
-            {
-              department: {
-                name: 'mocked_department_name',
-              },
-            },
-          ],
+      colleague: {
+        profile: {
+          lastName: 'mocked_last_name',
         },
+        workRelationships: [
+          {
+            department: {
+              name: 'mocked_department_name',
+            },
+          },
+        ],
       },
     };
 
@@ -52,22 +48,20 @@ describe('#getMissedFields', () => {
   it('should return an array with nullable fields', () => {
     const info = {
       managerUUID: null,
-      data: {
-        colleague: {
-          profile: {
-            firstName: null,
-            lastName: 'mocked_last_name',
-          },
-          workRelationships: [
-            {
-              job: null,
-              department: {
-                name: 'mocked_department_name',
-              },
-              managerUUID: null,
-            },
-          ],
+      colleague: {
+        profile: {
+          firstName: null,
+          lastName: 'mocked_last_name',
         },
+        workRelationships: [
+          {
+            job: null,
+            department: {
+              name: 'mocked_department_name',
+            },
+            managerUUID: null,
+          },
+        ],
       },
     };
 
@@ -77,22 +71,20 @@ describe('#getMissedFields', () => {
   it('should return an array with empty string fields', () => {
     const info = {
       managerUUID: '',
-      data: {
-        colleague: {
-          profile: {
-            firstName: '',
-            lastName: 'mocked_last_name',
-          },
-          workRelationships: [
-            {
-              job: '',
-              department: {
-                name: 'mocked_department_name',
-              },
-              managerUUID: '',
-            },
-          ],
+      colleague: {
+        profile: {
+          firstName: '',
+          lastName: 'mocked_last_name',
         },
+        workRelationships: [
+          {
+            job: '',
+            department: {
+              name: 'mocked_department_name',
+            },
+            managerUUID: '',
+          },
+        ],
       },
     };
 
@@ -102,22 +94,20 @@ describe('#getMissedFields', () => {
   it('should return an array with false fields', () => {
     const info = {
       managerUUID: false,
-      data: {
-        colleague: {
-          profile: {
-            firstName: false,
-            lastName: 'mocked_last_name',
-          },
-          workRelationships: [
-            {
-              job: false,
-              department: {
-                name: 'mocked_department_name',
-              },
-              managerUUID: false,
-            },
-          ],
+      colleague: {
+        profile: {
+          firstName: false,
+          lastName: 'mocked_last_name',
         },
+        workRelationships: [
+          {
+            job: false,
+            department: {
+              name: 'mocked_department_name',
+            },
+            managerUUID: false,
+          },
+        ],
       },
     };
 
@@ -127,22 +117,20 @@ describe('#getMissedFields', () => {
   it('should return an array with 0 fields', () => {
     const info = {
       managerUUID: 0,
-      data: {
-        colleague: {
-          profile: {
-            firstName: 0,
-            lastName: 'mocked_last_name',
-          },
-          workRelationships: [
-            {
-              job: 0,
-              department: {
-                name: 'mocked_department_name',
-              },
-              managerUUID: 0,
-            },
-          ],
+      colleague: {
+        profile: {
+          firstName: 0,
+          lastName: 'mocked_last_name',
         },
+        workRelationships: [
+          {
+            job: 0,
+            department: {
+              name: 'mocked_department_name',
+            },
+            managerUUID: 0,
+          },
+        ],
       },
     };
 

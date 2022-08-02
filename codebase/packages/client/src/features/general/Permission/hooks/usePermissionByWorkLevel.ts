@@ -3,7 +3,7 @@ import authContext from 'contexts/authContext';
 import { checkPermissions } from '../utils';
 
 export default (actions: Array<string>) => {
-  const { userWorkLevel } = useContext(authContext);
+  const { workLevels } = useContext(authContext);
 
-  return checkPermissions(actions, userWorkLevel);
+  return checkPermissions(actions, workLevels);
 };

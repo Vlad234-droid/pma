@@ -10,13 +10,14 @@ import {
   timelinesMetaSelector,
   timelineTypesAvailabilitySelector,
   timelineStartedSelector,
+  userCycleTypeSelector,
 } from '@pma/store';
 
 import useDispatch from 'hooks/useDispatch';
 import { Page } from 'pages';
 import { useTranslation } from 'components/Translation';
 import { useHeaderContainer } from 'contexts/headerContext';
-import { ReviewType } from 'config/enum';
+import { CycleType, ReviewType } from 'config/enum';
 
 // todo think hove resolve on page level
 import { ObjectivesSection } from './components/DinamicBlocks/ObjectivesSection';
@@ -35,6 +36,7 @@ const MyObjectives: FC = () => {
   const timelinesExist = useSelector(timelinesExistSelector(colleagueUuid));
   const { loaded: timelinesLoaded } = useSelector(timelinesMetaSelector());
   const timelineTypes = useSelector(timelineTypesAvailabilitySelector(colleagueUuid)) || {};
+  const cycleType = useSelector(userCycleTypeSelector);
 
   const isAvailable = useSelector(timelineStartedSelector(colleagueUuid));
 
@@ -74,7 +76,7 @@ const MyObjectives: FC = () => {
     };
   }, [colleagueUuid]);
 
-  if (!isAvailable || isEYRTimeline) return null;
+  if (!isAvailable || isEYRTimeline || cycleType === CycleType.HIRING) return null;
 
   return (
     <div data-test-id={TEST_ID}>

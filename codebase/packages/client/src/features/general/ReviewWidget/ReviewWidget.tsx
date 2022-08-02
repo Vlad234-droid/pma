@@ -1,78 +1,72 @@
-import React, { FC, useMemo, useState } from 'react';
-import { useTranslation } from 'components/Translation';
-import { ReviewType, Status } from 'config/enum';
+import React, { FC, useMemo, useState, CSSProperties } from 'react';
+import { ReviewType } from 'config/enum';
 import { Button, colors, CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
 
 import { TileWrapper } from 'components/Tile';
 import { BasicFormModal } from 'components/BasicFormModal';
 import { Icon } from 'components/Icon';
-import { getReviewTypeContent, getContent } from './utils';
 import { useTenant } from '../Permission';
+import { Colors } from 'config/types';
 
 export type Props = {
-  onClick?: () => void;
-  onClose?: () => void;
   reviewType: ReviewType;
-  status?: Status;
-  startTime?: string;
-  endTime?: string;
-  lastUpdatedTime?: string;
-  customStyle?: React.CSSProperties | {};
+  disabled: boolean;
+  graphic;
+  iconColor: Colors;
+  background: Colors;
+  shadow: boolean;
+  content: string;
+  buttonText: string;
   title: string;
+  description?: string;
+  customStyle?: CSSProperties | {};
 };
 
 export const TEST_ID = 'review-widget';
 
+// TODO: move to src/components
 const ReviewWidget: FC<Props> = ({
   customStyle,
   reviewType,
-  status = Status.NOT_STARTED,
-  startTime,
-  lastUpdatedTime,
+  disabled,
+  graphic,
+  iconColor,
+  background,
+  shadow,
+  content,
+  buttonText,
+  description,
   title,
 }) => {
-  const { t } = useTranslation();
   const { css } = useStyle();
   const [isOpen, setIsOpen] = useState(false);
   const tenant = useTenant();
 
-  //todo fine way to use outside of feature
+  //TODO: fine way to use outside of feature
   const ReviewForm = useMemo(
     () => React.lazy(() => import(`features/${tenant}/Review`).then((module) => ({ default: module.Review }))),
     [],
   );
 
-  const [graphic, iconColor, background, shadow, hasDescription, content, buttonContent] = getContent(
-    {
-      status,
-      startTime,
-      lastUpdatedTime,
-    },
-    t,
-  );
-
-  const { reviewTypeContent } = getReviewTypeContent({ reviewType, status, t, tenant });
-
   const descriptionColor = background === 'tescoBlue' ? colors.white : colors.base;
   const titleColor = background === 'tescoBlue' ? colors.white : colors.tescoBlue;
   const buttonVariant = background === 'tescoBlue' ? 'default' : 'inverse';
 
-  const handleClickOpen = () => {
-    status !== Status.NOT_STARTED && setIsOpen(true);
+  const handleOpen = () => {
+    !disabled && setIsOpen(true);
   };
-  const handleClickClose = () => {
+
+  const handleClose = () => {
     setIsOpen(false);
   };
 
   return (
     <TileWrapper customStyle={{ ...customStyle }} hover={shadow} boarder={shadow} background={background}>
-      <div className={css(wrapperStyle)} onMouseDown={handleClickOpen} data-test-id={TEST_ID}>
+      <div className={css(wrapperStyle)} onMouseDown={handleOpen} data-test-id={TEST_ID}>
         <div className={css(headStyle)}>
           <div className={css(headerBlockStyle)}>
             <span className={css(titleStyle({ color: titleColor }))}>{title}</span>
-            {hasDescription && (
-              <span className={css(descriptionStyle({ color: descriptionColor }))}>{reviewTypeContent}</span>
-            )}
+            {description && <span className={css(descriptionStyle({ color: descriptionColor }))}>{description}</span>}
             <span className={css(descriptionStyle({ color: descriptionColor }), iconWrapper)}>
               <Icon
                 graphic={graphic}
@@ -84,23 +78,24 @@ const ReviewWidget: FC<Props> = ({
             </span>
           </div>
         </div>
-        {status !== Status.NOT_STARTED && (
+        {!disabled && (
           <div className={css(bodyStyle)}>
             <div className={css(bodyBlockStyle)}>
               <Button
                 mode={buttonVariant}
                 styles={[buttonStyle({ inverse: buttonVariant === 'default' })]}
-                onPress={handleClickOpen}
+                onPress={handleOpen}
               >
-                {buttonContent}
+                {buttonText}
               </Button>
             </div>
           </div>
         )}
       </div>
+      {/*{TODO: move to separate page /reviews/<reviewType>/<uuid> or /reviews/<uuid>}*/}
       {isOpen && (
-        <BasicFormModal onClose={handleClickClose} title={title}>
-          <ReviewForm reviewType={reviewType} onClose={handleClickClose} />
+        <BasicFormModal onClose={handleClose} title={title}>
+          <ReviewForm reviewType={reviewType} onClose={handleClose} />
         </BasicFormModal>
       )}
     </TileWrapper>

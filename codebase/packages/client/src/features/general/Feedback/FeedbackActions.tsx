@@ -23,8 +23,9 @@ const FeedbackActions: FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { user } = useAuthContainer();
-  const profileAttr = user?.data?.profileAttributes;
-  const treatmentValue: string = getSelectedTreatmentValue(profileAttr);
+  //@ts-ignore
+  const { profileAttributes = [] }: { profileAttributes: Array<any> } = user || {};
+  const treatmentValue: string = getSelectedTreatmentValue(profileAttributes);
 
   const [info360Modal, setInfo360Modal] = useState<boolean>(false);
   const colleagueUuid = useSelector(colleagueUUIDSelector);
@@ -47,7 +48,7 @@ const FeedbackActions: FC = () => {
       type: 'STRING',
       value,
     };
-    if (profileAttr?.find((item) => item?.name === 'voice')) {
+    if (profileAttributes.find((item) => item?.name === 'voice')) {
       dispatch(UserActions.updateProfileAttribute([payload]));
       return;
     }

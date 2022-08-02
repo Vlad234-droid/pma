@@ -1,9 +1,10 @@
-import React, { FC, HTMLProps } from 'react';
-import { Colors, colors, CreateRule, useStyle } from '@pma/dex-wrapper';
+import React, { FC } from 'react';
+import { CreateRule, useStyle } from '@pma/dex-wrapper';
+import { Colors } from 'config/types';
 
 export const TILE_WRAPPER = 'tile-wrapper';
 
-export type TileWrapperProps = {
+export type Props = {
   boarder?: boolean;
   boxShadow?: boolean;
   hover?: boolean;
@@ -11,8 +12,6 @@ export type TileWrapperProps = {
   children: any;
   customStyle?: React.CSSProperties | {};
 };
-
-type Props = HTMLProps<HTMLInputElement> & TileWrapperProps;
 
 export const TileWrapper: FC<Props> = ({
   boarder = false,
@@ -45,8 +44,8 @@ const containerStyle: CreateRule<{ hover: boolean; background: Colors }> =
     const style = {
       margin: 0,
       padding: 0,
-      background: colors[background],
-      color: background === 'tescoBlue' ? colors.white : colors.base,
+      background: theme.colors[background],
+      color: background === 'tescoBlue' ? theme.colors.white : theme.colors.base,
       borderRadius: theme.border.radius.md,
     };
     if (hover) {

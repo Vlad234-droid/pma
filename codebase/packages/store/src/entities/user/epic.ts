@@ -5,7 +5,13 @@ import { from, of } from 'rxjs';
 import { catchError, filter, map, mergeMap, switchMap, takeUntil, tap } from 'rxjs/operators';
 import { concatWithErrorToast, errorPayloadConverter } from '../../utils/toastHelper';
 
-import { createProfileAttribute, getCurrentUser, updateProfileAttribute, updateUserNotification } from './actions';
+import {
+  createProfileAttribute,
+  getCurrentUser,
+  getCurrentUserMetadata,
+  updateProfileAttribute,
+  updateUserNotification,
+} from './actions';
 
 const NUMBER_OF_DEFAULT_ATTRIBUTES = 18;
 
@@ -14,16 +20,18 @@ export const getCurrentUserEpic: Epic = (action$, _, { openapi }) =>
     filter(isActionOf(getCurrentUser.request)),
     switchMap(() =>
       from(openapi.user.getMe()).pipe(
-        tap((data) => {
+        // @ts-ignore
+        tap(({ data }) => {
           // @ts-ignore
-          const profileAttributes = data.data?.profileAttributes;
+          const profileAttributes = data?.profileAttributes;
           if (!profileAttributes || profileAttributes.length < NUMBER_OF_DEFAULT_ATTRIBUTES) {
             // @ts-ignore
-            openapi.config.updateDefaultAttributes({ colleagueUuid: data.data?.colleague.colleagueUUID });
+            openapi.config.updateDefaultAttributes({ colleagueUuid: data?.colleague.colleagueUUID });
           }
         }),
-        map((data) => {
-          return getCurrentUser.success(data as any);
+        // @ts-ignore
+        map(({ data }) => {
+          return getCurrentUser.success(data);
         }),
         catchError((e) => {
           const { status, data } = e || {};
@@ -38,6 +46,23 @@ export const getCurrentUserEpic: Epic = (action$, _, { openapi }) =>
         takeUntil(action$.pipe(filter(isActionOf(getCurrentUser.cancel)))),
       ),
     ),
+  );
+
+export const getUserMetadataEpic: Epic = (action$, _, { api }) =>
+  action$.pipe(
+    filter(isActionOf(getCurrentUser.success)),
+    //@ts-ignore
+    switchMap(({ payload: { colleague } }) => {
+      return from(api.getColleagueMetadata({ colleagueUuid: colleague.colleagueUUID })).pipe(
+        //@ts-ignore
+        map(({ data }) => getCurrentUserMetadata.success(data)),
+        catchError((e) => {
+          const { data } = e || {};
+          const errors = data?.errors;
+          return of(getCurrentUserMetadata.failure(errors?.[0]));
+        }),
+      );
+    }),
   );
 
 export const createProfileAttributeEpic: Epic = (action$, _, { api }) =>
@@ -84,6 +109,7 @@ export const updateUserNotificationEpic: Epic = (action$, state$, { api }) =>
 
 export default combineEpics(
   getCurrentUserEpic,
+  getUserMetadataEpic,
   updateUserNotificationEpic,
   createProfileAttributeEpic,
   updateProfileAttributeEpic,

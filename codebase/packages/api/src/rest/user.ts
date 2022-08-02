@@ -4,11 +4,6 @@ const usersDomain = '/users';
 
 const colleaguesDomain = '/colleagues';
 
-export const getColleagueByUuid = (params: any = {}) => {
-  const { colleagueUuid } = params;
-  return httpClient.get(`${colleaguesDomain}/${colleagueUuid}`, { params: { ...params } });
-};
-
 export const updateUserNotification = (params: any = {}) => {
   // TODO: update payload and epic. split params and query params
   const { colleagueUuid } = params?.[0];

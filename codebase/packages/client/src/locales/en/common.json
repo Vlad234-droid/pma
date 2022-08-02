@@ -410,6 +410,7 @@
   "ratings": "Ratings",
   "coming_soon": "Coming soon",
   "annual_performance_review": "Annual performance review",
+  "anniversary_review": "Anniversary Review",
   "notifications": "Notifications",
   "you_will_receive_notification_about_marked_actions": "You will receive notification about marked actions",
   "no_feedback_records_to_be_displayed": "No feedback records to be displayed.",
@@ -694,5 +695,7 @@
   "our_purpose_and_strategic_pillars_description": "Knowing more about these will help keep your objectives and work aligned to our priorities.",
   "our_purpose_and_strategic_pillars_img_description": "Three people having a conversation outside of a Tesco Express store.",
   "view_pdp": "View PDP",
-  "ensure_capture_pdp": ":Please ensure you capture your development in Personal Development Plan"
+  "ensure_capture_pdp": ":Please ensure you capture your development in Personal Development Plan",
+  "performance_period_duration": "Performance period {{ startDate }} - {{ endDate }}",
+  "your_review_due_by_date": "Your performance review form is due by {{ date }}"
 }

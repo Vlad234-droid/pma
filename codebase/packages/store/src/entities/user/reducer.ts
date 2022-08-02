@@ -1,10 +1,22 @@
 import { createReducer } from 'typesafe-actions';
-import { getCurrentUser, createProfileAttribute, updateProfileAttribute } from './actions';
+import { getCurrentUser, createProfileAttribute, updateProfileAttribute, getCurrentUserMetadata } from './actions';
 
-export const initialState = {
+export const initialState: {
+  current: {
+    authenticated: boolean;
+    info: any;
+    metadata: any;
+  };
+  meta: {
+    loading: boolean;
+    loaded: boolean;
+    error: any;
+  };
+} = {
   current: {
     authenticated: false,
-    info: undefined,
+    info: {},
+    metadata: {},
   },
   meta: { loading: false, loaded: false, error: null },
 };
@@ -17,16 +29,13 @@ const success = (state, { payload }) => ({
   meta: { ...state.meta, loading: false, loaded: true },
 });
 
-const ProfileAttributeSuccess = (state, { payload }) => ({
+const profileAttributeSuccess = (state, { payload }) => ({
   ...state,
   current: {
     ...state.current,
     info: {
       ...state.current.info,
-      data: {
-        ...state.current.info.data,
-        profileAttributes: payload,
-      },
+      profileAttributes: payload,
     },
   },
   meta: { ...state.meta, loading: false, loaded: true },
@@ -38,11 +47,17 @@ const failure = (state, { payload }) => ({
   meta: { ...state.meta, loading: false, loaded: true, error: payload },
 });
 
+const currentUserMetadataSuccess = (state, { payload }) => ({
+  ...state,
+  current: { ...state.current, ...payload },
+});
+
 export default createReducer(initialState)
   .handleAction(getCurrentUser.request, request)
   .handleAction(getCurrentUser.success, success)
   .handleAction(getCurrentUser.failure, failure)
   .handleAction(createProfileAttribute.request, request)
-  .handleAction(createProfileAttribute.success, ProfileAttributeSuccess)
+  .handleAction(createProfileAttribute.success, profileAttributeSuccess)
   .handleAction(updateProfileAttribute.request, request)
-  .handleAction(updateProfileAttribute.success, ProfileAttributeSuccess);
+  .handleAction(updateProfileAttribute.success, profileAttributeSuccess)
+  .handleAction(getCurrentUserMetadata.success, currentUserMetadataSuccess);

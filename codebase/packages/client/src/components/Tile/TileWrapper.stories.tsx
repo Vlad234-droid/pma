@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Meta, Story } from '@storybook/react';
 
-import { TileWrapper, TileWrapperProps } from './index';
+import { TileWrapper, Props as TileWrapperProps } from './index';
 
 export default {
   title: 'components/TileWrapper',

@@ -1,15 +1,13 @@
-import { Colors } from '@pma/dex-wrapper';
-
 import { TFunction } from 'components/Translation';
+import { Status, Tenant } from 'config/enum';
 import { Graphics } from 'components/Icon';
-import { ReviewType, Status, Tenant } from 'config/enum';
-import { useTenant } from 'features/general/Permission';
+import { Colors } from 'config/types';
 
 export const getContent = (
   { status, startTime = '', lastUpdatedTime = '' },
   t: TFunction,
+  tenant: Tenant,
 ): [Graphics, Colors, Colors, boolean, boolean, string, string] => {
-  const tenant = useTenant();
   const isGeneral = tenant === Tenant.GENERAL;
 
   switch (status) {
@@ -101,42 +99,4 @@ export const getContent = (
         t('view_review_form', 'View review form'),
       ];
   }
-};
-
-export const getReviewTypeContent = ({
-  reviewType,
-  status,
-  t,
-}: {
-  reviewType: ReviewType;
-  status: Status;
-  t: TFunction;
-  tenant: string;
-}) => {
-  const contents: {
-    [key: string]: {
-      reviewTypeContent: string;
-    };
-  } = {
-    [ReviewType.MYR]: {
-      reviewTypeContent:
-        status === Status.APPROVED
-          ? t('mid_year_review_widget_title_approved', 'Your mid-year review is complete.')
-          : t(
-              'mid_year_review_widget_title',
-              'Complete this once you’ve had your mid-year conversation with your line manager.',
-            ),
-    },
-    [ReviewType.EYR]: {
-      reviewTypeContent:
-        status === Status.APPROVED
-          ? t('end_year_review_widget_title_approved', 'Your year-end review is complete.')
-          : t(
-              'end_year_review_widget_title',
-              'Complete this once you’ve had your year-end conversation with your line manager.',
-            ),
-    },
-  };
-
-  return contents[reviewType];
 };
