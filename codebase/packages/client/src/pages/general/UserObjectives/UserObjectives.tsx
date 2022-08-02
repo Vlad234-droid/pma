@@ -1,16 +1,16 @@
 import React, { useMemo } from 'react';
+import { CreateRule, Styles, useStyle } from '@pma/dex-wrapper';
 import { useNavigate, useParams } from 'react-router-dom';
 import UserObjectivesContainer from 'features/general/UserObjectives';
 import { ColleagueProfileWidget } from 'features/general/Profile';
 import { useTranslation } from 'components/Translation';
-import { CreateRule, Styles, useStyle } from '@pma/dex-wrapper';
 import { ShareWidget } from 'features/general/ShareWidget';
 import { buildPath } from 'features/general/Routes';
-import { Page } from 'pages/general/types';
 import { ReviewFilesSection } from 'features/general/Objectives';
 import { TEST_ID } from 'features/general/UserObjectives/UserObjectives';
 import { useToast, Variant } from 'features/general/Toast';
 import { tenant as T, useTenant } from 'features/general/Permission';
+import { Page } from 'pages/general/types';
 
 const UserObjectives = () => {
   const { css, matchMedia } = useStyle();
@@ -60,26 +60,24 @@ const UserObjectives = () => {
   );
 
   return (
-    <>
-      <div data-test-id={TEST_ID} className={css(bodyBlockStyles({ mobileScreen }))}>
-        <div className={css(mainBlockStyles({ mobileScreen }))}>
-          <ColleagueProfileWidget />
-          <div data-test-id={'test-step-indicator'} onClick={handleClick} className={css(timelineWrapperStyles)}>
-            <Timeline colleagueUuid={uuid} />
-          </div>
-        </div>
-        <div className={css(rightAsideWrapperStyles({ mobileScreen }))}>
-          <div className={css(widgetsBlock)}>
-            <Widget onClick={handleWidgetClick} />
-            <ShareWidget stopShare={true} customStyle={shareWidgetStyles} />
-          </div>
-        </div>
-        <div className={css(mainBlockStyles({ mobileScreen }))}>
-          <UserObjectivesContainer />
-          <ReviewFilesSection colleagueUuid={uuid} />
+    <div data-test-id={TEST_ID} className={css(bodyBlockStyles({ mobileScreen }))}>
+      <div className={css(mainBlockStyles({ mobileScreen }))}>
+        <ColleagueProfileWidget />
+        <div data-test-id={'test-step-indicator'} onClick={handleClick} className={css(timelineWrapperStyles)}>
+          <Timeline colleagueUuid={uuid} />
         </div>
       </div>
-    </>
+      <div className={css(rightAsideWrapperStyles({ mobileScreen }))}>
+        <div className={css(widgetsBlock)}>
+          <Widget onClick={handleWidgetClick} />
+          <ShareWidget stopShare={true} customStyle={shareWidgetStyles} />
+        </div>
+      </div>
+      <div className={css(mainBlockStyles({ mobileScreen }))}>
+        <UserObjectivesContainer />
+        <ReviewFilesSection colleagueUuid={uuid} />
+      </div>
+    </div>
   );
 };
 

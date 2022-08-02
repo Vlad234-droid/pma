@@ -121,6 +121,7 @@ const ApprovalWidget: FC<Props> = ({ isDisabled, reviews, onSave }) => {
           },
         };
 
+        // @ts-ignore
         dispatch(ReviewsActions.updateReviewStatus(update));
         setReviewStatus(status);
         setReviewType(currentTimeline![0].reviewType);

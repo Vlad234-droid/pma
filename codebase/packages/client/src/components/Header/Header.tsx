@@ -1,16 +1,12 @@
-import React, { FC, useCallback, useEffect } from 'react';
+import React, { FC, useEffect } from 'react';
 import { IconButton, Rule, Styles, useStyle, CreateRule } from '@pma/dex-wrapper';
-import { menuActions } from '@pma/store';
-import { useDispatch } from 'react-redux';
+
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { Graphics, RoundIcon, Icon } from 'components/Icon';
 import { AlertDrawer, AlertBadge, useMessagesContext } from 'features/general/Messages';
 import { DataModal } from 'features/general/Profile';
 import { MenuDrawer } from 'features/general/MenuDrawer';
-import { useTenant } from 'features/general/Permission';
-
-import { BurgerEntryType } from 'config/enum';
 
 export type HeaderProps = {
   title: string;
@@ -29,7 +25,8 @@ const Header: FC<HeaderProps> = ({ title, onBack, withIcon, iconName = 'home', s
   const { css, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const navigate = useNavigate();
-  const { pathname, state, search }: any = useLocation();
+  const { pathname, state, search } = useLocation();
+  const { isMenuOpen, isAlertOpen } = (state as any) || {};
 
   const { fetchMessagesCount } = useMessagesContext();
 
@@ -86,8 +83,8 @@ const Header: FC<HeaderProps> = ({ title, onBack, withIcon, iconName = 'home', s
         </RoundIcon>
         <Icon onClick={handleMenuOpen} graphic='hamburger' iconStyles={iconStyles} containerTestId={MENU_BTN} />
       </div>
-      {<MenuDrawer onClose={handleClose} isOpen={state?.isMenuOpen} />}
-      {state?.isAlertOpen && <AlertDrawer onClose={handleAlertClose} />}
+      {<MenuDrawer onClose={handleClose} isOpen={isMenuOpen} />}
+      {isAlertOpen && <AlertDrawer onClose={handleAlertClose} />}
     </div>
   );
 };

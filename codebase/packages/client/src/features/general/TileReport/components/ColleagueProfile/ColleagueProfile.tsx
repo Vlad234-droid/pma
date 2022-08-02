@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { useStyle, Rule } from '@pma/dex-wrapper';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import { Accordion, BaseAccordion, Section } from 'components/Accordion';
 import { TileWrapper } from 'components/Tile';
@@ -18,9 +18,14 @@ export const NAME = 'name';
 const ColleagueProfile: FC<Props> = ({ colleague }) => {
   const { css } = useStyle();
   const navigate = useNavigate();
-  const viewProfile = (uuid: string): void => {
-    navigate(buildPath(paramsReplacer(`${Page.USER_OBJECTIVES}`, { ':uuid': uuid })));
-  };
+  const { pathname, search } = useLocation();
+
+  const viewProfile = (uuid: string) =>
+    navigate(buildPath(paramsReplacer(`${Page.USER_OBJECTIVES}`, { ':uuid': uuid })), {
+      state: {
+        backPath: `${pathname}${search}`,
+      },
+    });
   return (
     <TileWrapper customStyle={wrapperStyles}>
       <Accordion

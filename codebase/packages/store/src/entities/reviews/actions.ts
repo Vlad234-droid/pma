@@ -1,22 +1,20 @@
 import { createAction, createAsyncAction } from 'typesafe-actions';
-import { ReviewActionParams, ActionParams } from '@pma/client/src/config/interface';
-import { ReviewType, Status } from '@pma/client/src/config/enum';
-import { Review } from '@pma/client/src/config/types';
+import { ReviewActionParams, ActionParams, Statuses, ReviewType, Review } from '../../config/types';
 
 interface ReviewUpdateStatusAction extends ActionParams {
-  pathParams: { colleagueUuid: string; approverUuid: string; code?: string; cycleUuid?: string; status?: Status };
+  pathParams: { colleagueUuid: string; approverUuid: string; code?: string; cycleUuid?: string; status?: Statuses };
   data: {
     reason?: string;
     reviews?: Review[];
-    status?: Status;
+    status?: Statuses;
     colleagueUuid?: string;
   };
 }
 
-interface ReviewUpdateMultipartAction extends ReviewActionParams {
+type ReviewUpdateMultipartAction = {
   files?: File[];
   metadata?: object;
-}
+} & ReviewActionParams;
 
 export const getReview = createAsyncAction(
   'reviews/FETCH_REQUEST',
@@ -43,7 +41,7 @@ export const createReview = createAsyncAction(
   'reviews/CREATE_REQUEST',
   'reviews/CREATE_SUCCESS',
   'reviews/CREATE_FAILURE',
-)<ReviewActionParams, any, Error>();
+)<ReviewUpdateMultipartAction, any, Error>();
 
 export const deleteReview = createAsyncAction(
   'reviews/DELETE_REQUEST',

@@ -1,4 +1,7 @@
 import { Styles } from '@pma/dex-wrapper';
+
+//TODO: split this file to enum interface and type
+
 export enum Status {
   IDLE = 'idle',
   PENDING = 'pending',
@@ -87,3 +90,57 @@ export enum NoteStatus {
   CREATED = 'CREATED',
   ARCHIVED = 'ARCHIVED',
 }
+
+export interface ActionParams {
+  pathParams?: any;
+}
+
+export interface ActionGetParams {
+  searchParams?: any;
+}
+
+export interface ActionPostData {
+  data?: any[];
+}
+
+export interface ReviewActionParams extends ActionPostData, ActionGetParams {
+  pathParams: { colleagueUuid?: string; code?: string; cycleUuid: string; number?: number; status?: string };
+}
+
+export enum ReviewType {
+  QUARTER = 'QUARTER',
+  OBJECTIVE = 'OBJECTIVE',
+  MYR = 'MYR',
+  EYR = 'EYR',
+}
+
+export enum Statuses {
+  PENDING = 'PENDING',
+  DRAFT = 'DRAFT',
+  WAITING_FOR_APPROVAL = 'WAITING_FOR_APPROVAL',
+  APPROVED = 'APPROVED',
+  OVERDUE = 'OVERDUE',
+  NOT_AVAILABLE = 'NOT_AVAILABLE',
+  AVAILABLE = 'AVAILABLE',
+  RETURNED = 'RETURNED',
+  DECLINED = 'DECLINED',
+  COMPLETED = 'COMPLETED',
+  STARTED = 'STARTED',
+  NOT_STARTED = 'NOT_STARTED',
+  NOT_CREATED = 'NOT_CREATED',
+  WAITING_FOR_COMPLETION = 'WAITING_FOR_COMPLETION',
+  REQUESTED_TO_AMEND = 'REQUESTED_TO_AMEND',
+}
+
+export type Review = {
+  changeStatusReason: string;
+  lastUpdatedTime: string;
+  colleagueUuid: string;
+  number: number;
+  performanceCycleUuid: string;
+  properties: Record<string, string>;
+  status: Status;
+  type: ReviewType;
+  uuid: string;
+  tlPointUuid: string;
+};

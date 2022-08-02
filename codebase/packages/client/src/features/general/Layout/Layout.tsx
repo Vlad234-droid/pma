@@ -36,8 +36,11 @@ const Yes: FC = ({ children }) => {
   const { css } = useStyle();
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { pathname } = useLocation();
+  const { pathname, state } = useLocation();
+  const { backPath: stateBackPath } = (state as any) || {};
+
   const { linkTitle } = useContext(headerContext);
+  const tenant = useTenant();
 
   const { title, withHeader, backPath, withIcon, iconName } = useMemo(() => {
     const page = Object.keys(pages).find((page) => matchPath(page, pathname)) || '';
@@ -45,8 +48,7 @@ const Yes: FC = ({ children }) => {
     return { ...pageData, title: linkTitle?.[page] ? linkTitle[page] : pageData?.title };
   }, [pathname, linkTitle]);
 
-  const handleBack = (backPath = '/') => navigate(backPath, { replace: true });
-  const tenant = useTenant();
+  const handleBack = (backPath = '/') => navigate(stateBackPath || backPath, { replace: true });
 
   useFetchCommonData();
 

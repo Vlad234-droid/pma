@@ -3,6 +3,7 @@ import React from 'react';
 
 // @ts-ignore
 import { renderWithTheme as render, generateEmployeeReview } from 'utils/test';
+import { BrowserRouter } from 'react-router-dom';
 // @ts-ignore
 import { Status } from 'config/enum';
 
@@ -26,25 +27,41 @@ describe('<TeamMateProfile />', () => {
 
   describe('#render', () => {
     it('should render <TileWrapper />', () => {
-      const { getByTestId } = render(<TeamMateProfile {...props} />);
+      const { getByTestId } = render(
+        <BrowserRouter>
+          <TeamMateProfile {...props} />
+        </BrowserRouter>,
+      );
 
       expect(getByTestId(TILE_WRAPPER)).toBeInTheDocument();
     });
 
     it('should render <Accordion />', () => {
-      const { getByTestId } = render(<TeamMateProfile {...props} />);
+      const { getByTestId } = render(
+        <BrowserRouter>
+          <TeamMateProfile {...props} />
+        </BrowserRouter>,
+      );
 
       expect(getByTestId('accordion')).toBeInTheDocument();
     });
 
     it('should render <TimelinePreview />', () => {
-      const { getByTestId } = render(<TeamMateProfile {...props} />);
+      const { getByTestId } = render(
+        <BrowserRouter>
+          <TeamMateProfile {...props} />
+        </BrowserRouter>,
+      );
 
       expect(getByTestId('timeline-preview')).toBeInTheDocument();
     });
 
     it('should render <TimeLines />', () => {
-      const { getByTestId } = render(<TeamMateProfile {...props} />);
+      const { getByTestId } = render(
+        <BrowserRouter>
+          <TeamMateProfile {...props} />
+        </BrowserRouter>,
+      );
 
       expect(getByTestId('timelines')).toBeInTheDocument();
     });

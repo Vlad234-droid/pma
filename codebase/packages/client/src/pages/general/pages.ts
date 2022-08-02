@@ -258,8 +258,8 @@ const pages: Record<Page, PageComponent> = {
     Element: UserObjectives,
     title: (tenant, t) => t('title_colleague_overview'),
     withHeader: true,
+    backPath: Page.CONTRIBUTION,
     perform: [role.COLLEAGUE],
-    backPath: Page.MY_TEAM,
     tenant: [tenant.BANK, tenant.GENERAL],
   },
   [Page.PROFILE]: {

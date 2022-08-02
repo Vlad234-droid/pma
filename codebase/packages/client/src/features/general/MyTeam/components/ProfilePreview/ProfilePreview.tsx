@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { colors, Rule, useStyle } from '@pma/dex-wrapper';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import { Icon, getIcon } from 'components/Icon';
 import { ExpandButton } from 'components/Accordion';
@@ -8,6 +8,7 @@ import { Rating, Status } from 'config/enum';
 import { Page } from 'pages/general/types';
 import { paramsReplacer } from 'utils';
 import { buildPath } from 'features/general/Routes';
+
 import { Employee } from 'config/types';
 import { useTranslation } from 'components/Translation';
 import ColleagueInfo from 'components/ColleagueInfo';
@@ -24,11 +25,16 @@ const ProfilePreview: FC<Props> = ({ status, employee, fullTeamView = false, rat
   const { css } = useStyle();
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { pathname } = useLocation();
   const [graphics, color, title] = getIcon(status, t);
 
   const viewUserObjectives = (uuid: string) => {
     onClick && onClick();
-    navigate(buildPath(paramsReplacer(`${Page.USER_OBJECTIVES}`, { ':uuid': uuid })));
+    navigate(buildPath(paramsReplacer(`${Page.USER_OBJECTIVES}`, { ':uuid': uuid })), {
+      state: {
+        backPath: `${pathname}`,
+      },
+    });
   };
 
   return (

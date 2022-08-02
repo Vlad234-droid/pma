@@ -81,8 +81,3 @@ const filtersStyle: Rule = {
   display: 'flex',
   alignItems: 'center',
 };
-
-const selectAllMobileStyle: Rule = {
-  width: '100%',
-  padding: '16px 0',
-};

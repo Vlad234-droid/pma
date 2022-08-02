@@ -4,6 +4,7 @@ import { fireEvent } from '@testing-library/react';
 
 // @ts-ignore
 import { renderWithTheme as render, generateEmployeeReview } from 'utils/test';
+import { BrowserRouter } from 'react-router-dom';
 // @ts-ignore
 import { Status, Rating } from 'config/enum';
 
@@ -25,31 +26,51 @@ describe('<TimelinePreview />', () => {
 
   describe('#render', () => {
     it('should render wrapper', () => {
-      const { getByTestId } = render(<ProfilePreview {...props} />);
+      const { getByTestId } = render(
+        <BrowserRouter>
+          <ProfilePreview {...props} />
+        </BrowserRouter>,
+      );
 
       expect(getByTestId('timeline-preview')).toBeInTheDocument();
     });
 
     it('should render <ColleagueInfo />', () => {
-      const { getByTestId } = render(<ProfilePreview {...props} />);
+      const { getByTestId } = render(
+        <BrowserRouter>
+          <ProfilePreview {...props} />
+        </BrowserRouter>,
+      );
 
       expect(getByTestId('colleague-info')).toBeInTheDocument();
     });
 
     it('should render View profile button, if !props.rating', () => {
-      const { getByText } = render(<ProfilePreview {...props} />);
+      const { getByText } = render(
+        <BrowserRouter>
+          <ProfilePreview {...props} />
+        </BrowserRouter>,
+      );
 
       expect(getByText('View profile')).toBeInTheDocument();
     });
 
     it('should render <ExpandButton />, if !props.rating', () => {
-      const { getByTestId } = render(<ProfilePreview {...props} />);
+      const { getByTestId } = render(
+        <BrowserRouter>
+          <ProfilePreview {...props} />
+        </BrowserRouter>,
+      );
 
       expect(getByTestId('expand-button')).toBeInTheDocument();
     });
 
     it('should render icon, if !props.rating', () => {
-      const { getByTestId } = render(<ProfilePreview {...props} />);
+      const { getByTestId } = render(
+        <BrowserRouter>
+          <ProfilePreview {...props} />
+        </BrowserRouter>,
+      );
 
       expect(getByTestId('timeline-icon')).toBeInTheDocument();
     });
@@ -60,7 +81,11 @@ describe('<TimelinePreview />', () => {
         rating: Rating.BELOW_EXPECTED,
       };
 
-      const { queryByTestId } = render(<ProfilePreview {...newProps} />);
+      const { queryByTestId } = render(
+        <BrowserRouter>
+          <ProfilePreview {...newProps} />
+        </BrowserRouter>,
+      );
 
       expect(queryByTestId('timeline-icon')).not.toBeInTheDocument();
     });
@@ -71,7 +96,11 @@ describe('<TimelinePreview />', () => {
         rating: Rating.BELOW_EXPECTED,
       };
 
-      const { queryByTestId } = render(<ProfilePreview {...newProps} />);
+      const { queryByTestId } = render(
+        <BrowserRouter>
+          <ProfilePreview {...newProps} />
+        </BrowserRouter>,
+      );
 
       expect(queryByTestId('expand-button')).not.toBeInTheDocument();
     });
@@ -82,7 +111,11 @@ describe('<TimelinePreview />', () => {
         rating: Rating.BELOW_EXPECTED,
       };
 
-      const { queryByText, getByText } = render(<ProfilePreview {...newProps} />);
+      const { queryByText, getByText } = render(
+        <BrowserRouter>
+          <ProfilePreview {...newProps} />
+        </BrowserRouter>,
+      );
 
       expect(queryByText('View profile')).not.toBeInTheDocument();
       expect(getByText(newProps.rating)).toBeInTheDocument();
@@ -91,7 +124,11 @@ describe('<TimelinePreview />', () => {
 
   describe('#handlers', () => {
     it('should call props.onClick on wrapper click', () => {
-      const { getByTestId } = render(<ProfilePreview {...props} />);
+      const { getByTestId } = render(
+        <BrowserRouter>
+          <ProfilePreview {...props} />
+        </BrowserRouter>,
+      );
 
       fireEvent.click(getByTestId('timeline-preview'));
       expect(props.onClick).toHaveBeenCalled();
