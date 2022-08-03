@@ -1,5 +1,6 @@
 import React, { useMemo, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router';
+import { useLocation } from 'react-router-dom';
 
 import { useTenant } from 'features/general/Permission';
 import { useTranslation } from 'components/Translation';
@@ -13,6 +14,7 @@ const Reviews = () => {
   const { type } = useParams();
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { state } = useLocation();
 
   const ReviewForm = useMemo(
     () => React.lazy(() => import(`features/${tenant}/Review`).then((module) => ({ default: module.Review }))),
@@ -20,7 +22,7 @@ const Reviews = () => {
   );
 
   const handleClose = () => {
-    navigate(buildPath(Page.REVIEWS_VIEW));
+    navigate((state as any)?.backPath || buildPath(Page.REVIEWS_VIEW));
   };
 
   useEffect(() => {

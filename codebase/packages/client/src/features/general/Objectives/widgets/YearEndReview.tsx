@@ -3,6 +3,7 @@ import { Rule, useStyle } from '@pma/dex-wrapper';
 import { getTimelineByCodeSelector } from '@pma/store';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
+import { useLocation } from 'react-router-dom';
 
 import { useTranslation } from 'components/Translation';
 import { ReviewWidget } from 'features/general/ReviewWidget';
@@ -21,6 +22,7 @@ const YearEndReview: FC<Props> = () => {
   const { css } = useStyle();
   const tenant = useTenant();
   const navigate = useNavigate();
+  const { pathname } = useLocation();
 
   const review = useSelector(getTimelineByCodeSelector(ReviewType.EYR, USER.current));
 
@@ -44,7 +46,11 @@ const YearEndReview: FC<Props> = () => {
     <div data-test-id='feedback' className={css(basicTileStyle)}>
       <ReviewWidget
         onClick={() =>
-          navigate(buildPath(paramsReplacer(Page.REVIEWS, { ':type': ReviewType.EYR.toLocaleLowerCase() })))
+          navigate(buildPath(paramsReplacer(Page.REVIEWS, { ':type': ReviewType.EYR.toLocaleLowerCase() })), {
+            state: {
+              backPath: pathname,
+            },
+          })
         }
         title={t('review_type_description_eyr', 'Year-end review')}
         description={

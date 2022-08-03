@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { Rule, useStyle } from '@pma/dex-wrapper';
 import { getTimelineByCodeSelector } from '@pma/store';
 import { useNavigate } from 'react-router';
+import { useLocation } from 'react-router-dom';
 
 import { useTranslation } from 'components/Translation';
 import { ReviewWidget } from 'features/general/ReviewWidget';
@@ -19,6 +20,7 @@ const MidYearReview: FC = () => {
   const { css } = useStyle();
   const tenant = useTenant();
   const navigate = useNavigate();
+  const { pathname } = useLocation();
 
   const review = useSelector(getTimelineByCodeSelector(ReviewType.MYR, USER.current));
 
@@ -41,7 +43,13 @@ const MidYearReview: FC = () => {
   return (
     <div data-test-id='personal' className={css(basicTileStyle)}>
       <ReviewWidget
-        onClick={() => navigate(buildPath(paramsReplacer(Page.REVIEWS, { ':type': ReviewType.MYR.toLowerCase() })))}
+        onClick={() =>
+          navigate(buildPath(paramsReplacer(Page.REVIEWS, { ':type': ReviewType.MYR.toLowerCase() })), {
+            state: {
+              backPath: pathname,
+            },
+          })
+        }
         title={t('mid_year_review', 'Mid-year review')}
         description={
           hasDescription

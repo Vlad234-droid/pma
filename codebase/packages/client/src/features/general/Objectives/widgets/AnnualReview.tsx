@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { Rule, useStyle } from '@pma/dex-wrapper';
 import { getTimelineByCodeSelector, userCycleTypeSelector } from '@pma/store';
 import { useNavigate } from 'react-router';
+import { useLocation } from 'react-router-dom';
 
 import { useTranslation } from 'components/Translation';
 //TODO: move to components
@@ -27,6 +28,7 @@ const AnnualReview: FC = () => {
   const { css } = useStyle();
   const tenant = useTenant();
   const navigate = useNavigate();
+  const { pathname } = useLocation();
 
   const review = useSelector(getTimelineByCodeSelector(ReviewType.EYR, USER.current));
   const cycleType = useSelector(userCycleTypeSelector);
@@ -56,7 +58,13 @@ const AnnualReview: FC = () => {
   return (
     <div data-test-id='feedback' className={css(basicTileStyle)}>
       <ReviewWidget
-        onClick={() => navigate(buildPath(paramsReplacer(Page.REVIEWS, { ':type': ReviewType.EYR.toLowerCase() })))}
+        onClick={() =>
+          navigate(buildPath(paramsReplacer(Page.REVIEWS, { ':type': ReviewType.EYR.toLowerCase() })), {
+            state: {
+              backPath: pathname,
+            },
+          })
+        }
         title={
           cycleType === CycleType.FISCAL
             ? t('annual_performance_review', 'Annual performance review')
