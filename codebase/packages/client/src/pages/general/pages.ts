@@ -41,6 +41,7 @@ import PreviousRatingsTiles from './PreviousRatingsTiles';
 import PreviousCalibrationRatings from './PreviousCalibrationRatings';
 import PreviousObjectiveRatings from './PreviousObjectiveRatings';
 import PreviousReviewForms from './PreviousReviewForms';
+import Reviews from './Reviews';
 import { NotFound } from './NotFound';
 import { Tenant } from 'utils';
 
@@ -198,7 +199,7 @@ const pages: Record<Page, PageComponent> = {
     Element: OrganizationObjectives,
     title: (tenant, t) => t('title_create_strategic_drivers'),
     withHeader: true,
-    backPath: Page.OBJECTIVES_VIEW,
+    backPath: Page.REVIEWS_VIEW,
     perform: [role.TALENT_ADMIN],
     tenant: [tenant.BANK, tenant.GENERAL],
   },
@@ -240,7 +241,7 @@ const pages: Record<Page, PageComponent> = {
     perform: [role.COLLEAGUE],
     tenant: [tenant.BANK, tenant.GENERAL],
   },
-  [Page.OBJECTIVES_VIEW]: {
+  [Page.REVIEWS_VIEW]: {
     Element: Objectives,
     title: (tenant, t) => t('my_objectives_and_reviews', 'My objectives and reviews', { ns: tenant }),
     withHeader: true,
@@ -248,13 +249,20 @@ const pages: Record<Page, PageComponent> = {
     perform: [role.COLLEAGUE],
     tenant: [tenant.BANK, tenant.GENERAL],
   },
-  [Page.CREATE_OBJECTIVES]: {
+  [Page.REVIEWS]: {
+    Element: Reviews,
+    withHeader: true,
+    backPath: Page.REVIEWS_VIEW,
+    perform: [role.COLLEAGUE],
+    tenant: [tenant.BANK, tenant.GENERAL],
+  },
+  [Page.CREATE_REVIEWS]: {
     Element: CreateObjective,
     withHeader: false,
     perform: [role.COLLEAGUE],
     tenant: [tenant.BANK, tenant.GENERAL],
   },
-  [Page.USER_OBJECTIVES]: {
+  [Page.USER_REVIEWS]: {
     Element: UserObjectives,
     title: (tenant, t) => t('title_colleague_overview'),
     withHeader: true,

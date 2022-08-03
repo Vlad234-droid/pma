@@ -64,7 +64,7 @@ const MyObjectives: FC = () => {
 
   useEffect(() => {
     if (canShowAnnualReview) {
-      setLinkTitle({ [Page.OBJECTIVES_VIEW]: t('reviews', 'Reviews') });
+      setLinkTitle({ [Page.REVIEWS_VIEW]: t('reviews', 'Reviews') });
     }
   }, [canShowAnnualReview]);
 

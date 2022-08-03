@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { Rule, useStyle } from '@pma/dex-wrapper';
 import { colleagueUUIDSelector, TimelineActions, UserActions } from '@pma/store';
 import { usePermission, usePermissionByReviewType, usePermissionByWorkLevel } from 'features/general/Permission';
-import { Trans, useTranslation } from 'components/Translation';
+import { Trans } from 'components/Translation';
 import { TileWrapper } from 'components/Tile';
 import { Checkbox } from 'components/Form';
 import useDispatch from 'hooks/useDispatch';
@@ -16,7 +16,6 @@ export const TEST_ID = 'email-notification-id';
 
 export const EmailNotifications: FC<Props> = () => {
   const { css } = useStyle();
-  const { t } = useTranslation();
   const dispatch = useDispatch();
   const { user } = useAuthContainer();
   //@ts-ignore

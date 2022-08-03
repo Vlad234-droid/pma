@@ -2,6 +2,7 @@ import React, { FC, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { Rule, useStyle } from '@pma/dex-wrapper';
 import { getTimelineByCodeSelector, userCycleTypeSelector } from '@pma/store';
+import { useNavigate } from 'react-router';
 
 import { useTranslation } from 'components/Translation';
 //TODO: move to components
@@ -10,12 +11,22 @@ import { CycleType, ReviewType, Status } from 'config/enum';
 import { USER } from 'config/constants';
 import { useTenant } from 'features/general/Permission';
 import { getContent } from '../utils';
-import { formatDateStringFromISO, minusDayToDateString, DateTime, formatDateTime, getLocalNow } from 'utils';
+import {
+  formatDateStringFromISO,
+  minusDayToDateString,
+  DateTime,
+  formatDateTime,
+  getLocalNow,
+  paramsReplacer,
+} from 'utils';
+import { buildPath } from 'features/general/Routes';
+import { Page } from 'pages';
 
 const AnnualReview: FC = () => {
   const { t } = useTranslation();
   const { css } = useStyle();
   const tenant = useTenant();
+  const navigate = useNavigate();
 
   const review = useSelector(getTimelineByCodeSelector(ReviewType.EYR, USER.current));
   const cycleType = useSelector(userCycleTypeSelector);
@@ -45,6 +56,7 @@ const AnnualReview: FC = () => {
   return (
     <div data-test-id='feedback' className={css(basicTileStyle)}>
       <ReviewWidget
+        onClick={() => navigate(buildPath(paramsReplacer(Page.REVIEWS, { ':type': ReviewType.EYR.toLowerCase() })))}
         title={
           cycleType === CycleType.FISCAL
             ? t('annual_performance_review', 'Annual performance review')
@@ -65,7 +77,6 @@ const AnnualReview: FC = () => {
                 )
             : undefined
         }
-        reviewType={ReviewType.EYR}
         disabled={status === Status.NOT_STARTED}
         graphic={graphic}
         iconColor={iconColor}

@@ -30,7 +30,7 @@ const ProfilePreview: FC<Props> = ({ status, employee, fullTeamView = false, rat
 
   const viewUserObjectives = (uuid: string) => {
     onClick && onClick();
-    navigate(buildPath(paramsReplacer(`${Page.USER_OBJECTIVES}`, { ':uuid': uuid })), {
+    navigate(buildPath(paramsReplacer(`${Page.USER_REVIEWS}`, { ':uuid': uuid })), {
       state: {
         backPath: `${pathname}`,
       },

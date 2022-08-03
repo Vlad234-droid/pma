@@ -1,15 +1,11 @@
-import React, { FC, useMemo, useState, CSSProperties } from 'react';
-import { ReviewType } from 'config/enum';
+import React, { FC, CSSProperties } from 'react';
 import { Button, colors, CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
 
 import { TileWrapper } from 'components/Tile';
-import { BasicFormModal } from 'components/BasicFormModal';
 import { Icon } from 'components/Icon';
-import { useTenant } from '../Permission';
 import { Colors } from 'config/types';
 
 export type Props = {
-  reviewType: ReviewType;
   disabled: boolean;
   graphic;
   iconColor: Colors;
@@ -20,6 +16,7 @@ export type Props = {
   title: string;
   description?: string;
   customStyle?: CSSProperties | {};
+  onClick: () => void;
 };
 
 export const TEST_ID = 'review-widget';
@@ -27,7 +24,6 @@ export const TEST_ID = 'review-widget';
 // TODO: move to src/components
 const ReviewWidget: FC<Props> = ({
   customStyle,
-  reviewType,
   disabled,
   graphic,
   iconColor,
@@ -37,27 +33,16 @@ const ReviewWidget: FC<Props> = ({
   buttonText,
   description,
   title,
+  onClick,
 }) => {
   const { css } = useStyle();
-  const [isOpen, setIsOpen] = useState(false);
-  const tenant = useTenant();
-
-  //TODO: fine way to use outside of feature
-  const ReviewForm = useMemo(
-    () => React.lazy(() => import(`features/${tenant}/Review`).then((module) => ({ default: module.Review }))),
-    [],
-  );
 
   const descriptionColor = background === 'tescoBlue' ? colors.white : colors.base;
   const titleColor = background === 'tescoBlue' ? colors.white : colors.tescoBlue;
   const buttonVariant = background === 'tescoBlue' ? 'default' : 'inverse';
 
   const handleOpen = () => {
-    !disabled && setIsOpen(true);
-  };
-
-  const handleClose = () => {
-    setIsOpen(false);
+    !disabled && onClick();
   };
 
   return (
@@ -92,12 +77,6 @@ const ReviewWidget: FC<Props> = ({
           </div>
         )}
       </div>
-      {/*{TODO: move to separate page /reviews/<reviewType>/<uuid> or /reviews/<uuid>}*/}
-      {isOpen && (
-        <BasicFormModal onClose={handleClose} title={title}>
-          <ReviewForm reviewType={reviewType} onClose={handleClose} />
-        </BasicFormModal>
-      )}
     </TileWrapper>
   );
 };

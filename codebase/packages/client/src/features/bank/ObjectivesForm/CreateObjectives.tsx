@@ -12,7 +12,7 @@ const CreateButton: FC = memo(() => {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const handleClose = () => navigate(buildPath(Page.OBJECTIVES_VIEW));
+  const handleClose = () => navigate(buildPath(Page.REVIEWS_VIEW));
 
   return (
     <ModalComponent onClose={handleClose} title={t('create_priorities', 'Create priorities')}>

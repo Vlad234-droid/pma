@@ -1,14 +1,18 @@
 import React, { FC, useMemo } from 'react';
-import { useSelector } from 'react-redux';
 import { Rule, useStyle } from '@pma/dex-wrapper';
 import { getTimelineByCodeSelector } from '@pma/store';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router';
 
 import { useTranslation } from 'components/Translation';
 import { ReviewWidget } from 'features/general/ReviewWidget';
-import { ReviewType, Status } from 'config/enum';
-import { USER } from 'config/constants';
 import { getContent } from 'features/general/Objectives/utils';
 import { useTenant } from 'features/general/Permission';
+import { buildPath } from 'features/general/Routes';
+import { paramsReplacer } from 'utils';
+import { ReviewType, Status } from 'config/enum';
+import { USER } from 'config/constants';
+import { Page } from 'pages';
 
 type Props = {};
 
@@ -16,10 +20,11 @@ const YearEndReview: FC<Props> = () => {
   const { t } = useTranslation();
   const { css } = useStyle();
   const tenant = useTenant();
+  const navigate = useNavigate();
 
   const review = useSelector(getTimelineByCodeSelector(ReviewType.EYR, USER.current));
 
-  const { status, startTime, endTime, lastUpdatedTime } = review;
+  const { status, startTime, lastUpdatedTime } = review;
 
   const [graphic, iconColor, background, shadow, hasDescription, content, buttonText] = useMemo(
     () =>
@@ -38,6 +43,9 @@ const YearEndReview: FC<Props> = () => {
   return (
     <div data-test-id='feedback' className={css(basicTileStyle)}>
       <ReviewWidget
+        onClick={() =>
+          navigate(buildPath(paramsReplacer(Page.REVIEWS, { ':type': ReviewType.EYR.toLocaleLowerCase() })))
+        }
         title={t('review_type_description_eyr', 'Year-end review')}
         description={
           hasDescription
@@ -49,7 +57,6 @@ const YearEndReview: FC<Props> = () => {
                 )
             : undefined
         }
-        reviewType={ReviewType.EYR}
         disabled={status === Status.NOT_STARTED}
         graphic={graphic}
         iconColor={iconColor}

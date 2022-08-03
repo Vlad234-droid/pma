@@ -19,10 +19,10 @@ const MenuItem = () => {
   return (
     <Item
       iconGraphic={'goal'}
-      linkTo={buildPath(Page.OBJECTIVES_VIEW)}
+      linkTo={buildPath(Page.REVIEWS_VIEW)}
       title={
-        linkTitle?.[Page.OBJECTIVES_VIEW]
-          ? linkTitle[Page.OBJECTIVES_VIEW]
+        linkTitle?.[Page.REVIEWS_VIEW]
+          ? linkTitle[Page.REVIEWS_VIEW]
           : t('my_objectives_and_reviews', 'My objectives and reviews')
       }
     />

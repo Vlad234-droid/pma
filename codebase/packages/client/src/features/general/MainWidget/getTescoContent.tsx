@@ -10,7 +10,7 @@ export const getTescoContent = (props: ContentProps, t: TFunction) => {
   const { status, count, nextReviewDate: date = '' } = props;
 
   const config: ContentConfig = {
-    viewPage: Page.OBJECTIVES_VIEW,
+    viewPage: Page.REVIEWS_VIEW,
     widgetTitle: t('my_business_objectives', 'My objectives'),
     modalTitle: t('create_objectives', 'Create objectives'),
     formComponent: ObjectivesForm,

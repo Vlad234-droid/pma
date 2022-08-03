@@ -29,7 +29,7 @@ const Popup: FC<Props> = ({ items }) => {
       closeOptions={{
         closeOptionContent: <Icon graphic={'close'} invertColors={true} />,
         closeOptionStyles: {},
-        onClose: () => navigate(buildPath(Page.OBJECTIVES_VIEW)),
+        onClose: () => navigate(buildPath(Page.REVIEWS_VIEW)),
       }}
     >
       <div data-test-id={TEST_ID} className={css(main)}>

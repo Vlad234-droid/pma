@@ -21,7 +21,7 @@ const ColleagueProfile: FC<Props> = ({ colleague }) => {
   const { pathname, search } = useLocation();
 
   const viewProfile = (uuid: string) =>
-    navigate(buildPath(paramsReplacer(`${Page.USER_OBJECTIVES}`, { ':uuid': uuid })), {
+    navigate(buildPath(paramsReplacer(`${Page.USER_REVIEWS}`, { ':uuid': uuid })), {
       state: {
         backPath: `${pathname}${search}`,
       },

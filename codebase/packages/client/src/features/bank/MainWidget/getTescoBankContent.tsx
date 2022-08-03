@@ -11,7 +11,7 @@ export const getTescoBankContent = (props: ContentProps, t: TFunction) => {
   const WORK_IN_PROGRESS = true;
 
   const config: ContentConfig = {
-    viewPage: Page.OBJECTIVES_VIEW, //TODO: Replace with proper page
+    viewPage: Page.REVIEWS_VIEW, //TODO: Replace with proper page
     widgetTitle: t('my_quarterly_priorities', 'My quarterly priorities'),
     modalTitle: t('create_my_priorities', 'Create my priorities'),
     formComponent: ObjectivesForm,

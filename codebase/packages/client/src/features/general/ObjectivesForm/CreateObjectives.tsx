@@ -19,7 +19,7 @@ const CreateButton: FC = memo(() => {
   const modificationMode = reviewModificationMode(countReviews, objectiveSchema);
   const useSingleStep = modificationMode === REVIEW_MODIFICATION_MODE.SINGLE;
 
-  const handleClose = () => navigate(buildPath(Page.OBJECTIVES_VIEW));
+  const handleClose = () => navigate(buildPath(Page.REVIEWS_VIEW));
 
   return (
     <ModalComponent onClose={handleClose} title={t('create_objectives', 'Create objectives')}>

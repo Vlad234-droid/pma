@@ -46,7 +46,7 @@ const CreateButton: FC<Props> = memo(({ withIcon = false }) => {
     countReviews < markup.max &&
     modificationMode !== REVIEW_MODIFICATION_MODE.NONE;
 
-  const handleBtnClick = () => navigate(buildPath(Page.CREATE_OBJECTIVES));
+  const handleBtnClick = () => navigate(buildPath(Page.CREATE_REVIEWS));
 
   if (!isAvailable) return null;
 
