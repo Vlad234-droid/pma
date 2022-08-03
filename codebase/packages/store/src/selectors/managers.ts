@@ -106,7 +106,9 @@ export const getOutstandingPendingEmployees: Selector<RootState, any, any> = cre
     );
 
     const employeeOverdueObjectives = filteredData?.filter((employee: Employee) =>
-      employee.timeline.some((review) => review.summaryStatus === Status.OVERDUE),
+      employee.timeline.some(
+        (review) => review.code === ReviewType.OBJECTIVE && review.summaryStatus === Status.OVERDUE,
+      ),
     );
 
     const employeeObjectivesWaiting = filteredData?.filter((employee) =>
