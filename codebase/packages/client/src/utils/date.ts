@@ -57,6 +57,13 @@ export const addYearToDateString = (date: string, format = DATE_FORMAT) =>
 
 export const minusDayToDateString = (date: DateTime) => date.minus({ days: 1 });
 
+export const minusMonthFromDateString = (date: string, format = DATE_FORMAT) =>
+  DateTime.fromFormat(date, format).minus({ month: 1 });
+
+export const minusMonthFromISODateString = (date: string) => DateTime.fromISO(date).minus({ month: 1 });
+
+export const minusMonthFromDateTime = (date: DateTime) => date.minus({ month: 1 });
+
 export const inDayRange = (date: string, checkDate: string) => {
   const compare = DateTime.fromISO(checkDate);
   return compare >= DateTime.fromISO(date).startOf('day') && compare <= DateTime.fromISO(date).endOf('day');

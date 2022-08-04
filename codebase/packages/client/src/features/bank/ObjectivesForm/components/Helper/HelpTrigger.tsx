@@ -9,9 +9,7 @@ const HelpTrigger: FC = () => {
     <div className={css(wrapperStyle)}>
       <Icon graphic='information' size={'18px'} />
       <span className={css(textStyle)}>
-        <Trans i18nKey='need_help_to_write' ns={'bank'}>
-          Need help writing your priorities?
-        </Trans>
+        <Trans i18nKey='need_help_to_write'>Need help writing your priorities?</Trans>
       </span>
     </div>
   );

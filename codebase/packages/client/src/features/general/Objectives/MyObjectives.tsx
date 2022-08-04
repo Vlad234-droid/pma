@@ -15,8 +15,6 @@ import {
 
 import useDispatch from 'hooks/useDispatch';
 import { Page } from 'pages';
-import { useTranslation } from 'components/Translation';
-import { useHeaderContainer } from 'contexts/headerContext';
 import { CycleType, ReviewType } from 'config/enum';
 
 // todo think hove resolve on page level
@@ -28,9 +26,7 @@ const CURRENT = 'CURRENT';
 // TODO: move part of codebase to page
 const MyObjectives: FC = () => {
   const navigate = useNavigate();
-  const { t } = useTranslation();
   const dispatch = useDispatch();
-  const { setLinkTitle } = useHeaderContainer();
 
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const timelinesExist = useSelector(timelinesExistSelector(colleagueUuid));
@@ -61,12 +57,6 @@ const MyObjectives: FC = () => {
       navigate(`/${Page.NOT_FOUND}`);
     }
   }, [timelinesLoaded, timelinesExist]);
-
-  useEffect(() => {
-    if (canShowAnnualReview) {
-      setLinkTitle({ [Page.REVIEWS_VIEW]: t('reviews', 'Reviews') });
-    }
-  }, [canShowAnnualReview]);
 
   useEffect(() => {
     dispatch(SchemaActions.getSchema({ colleagueUuid }));

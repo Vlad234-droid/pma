@@ -19,6 +19,7 @@ import {
   formatDateTime,
   getLocalNow,
   paramsReplacer,
+  minusMonthFromISODateString,
 } from 'utils';
 import { buildPath } from 'features/general/Routes';
 import { Page } from 'pages';
@@ -77,7 +78,7 @@ const AnnualReview: FC = () => {
               : cycleType === CycleType.HIRING && status === Status.STARTED
               ? t('performance_period_duration', {
                   startDate: formatDateStringFromISO(startTime, 'LLL yyyy'),
-                  endDate: formatDateStringFromISO(endTime, 'LLL yyyy'),
+                  endDate: formatDateTime(minusMonthFromISODateString(endTime), 'LLL yyyy'),
                 })
               : t(
                   'end_year_review_widget_title',

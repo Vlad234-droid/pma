@@ -56,7 +56,7 @@ describe.skip('<Colleague />', () => {
   };
   describe('#render', () => {
     it('should render ', () => {
-      render(<ColleagueAction {...props} />);
+      render(<ColleagueAction {...props} onUpdate={jest.fn} />);
 
       expect(screen.getByTestId(`expand-button-${props.colleague.uuid}`)).toBeInTheDocument();
       expect(screen.getByText('Alex Smith')).toBeInTheDocument();
@@ -130,7 +130,7 @@ describe.skip('<Colleague />', () => {
       const updateReviewStatusMock = jest.spyOn(ReviewsActions, 'updateReviewStatus');
       const getSchemaMock = jest.spyOn(SchemaActions, 'getSchema');
 
-      render(<ColleagueAction {...props} />, { reviews, schema });
+      render(<ColleagueAction {...props} onUpdate={jest.fn} />, { reviews, schema });
 
       await act(async () => {
         fireEvent.click(screen.getByRole('heading'));
