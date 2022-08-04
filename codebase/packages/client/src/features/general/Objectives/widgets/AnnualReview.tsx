@@ -34,20 +34,20 @@ const AnnualReview: FC = () => {
   const review = useSelector(getTimelineByCodeSelector(ReviewType.EYR, USER.current));
   const cycleType = useSelector(userCycleTypeSelector);
 
-  const { status, startTime, endTime, lastUpdatedTime } = review;
+  const { summaryStatus, startTime, endTime, lastUpdatedTime } = review;
 
   const [graphic, iconColor, background, shadow, hasDescription, content, buttonText] = useMemo(
     () =>
       getContent(
         {
-          status,
+          status: summaryStatus,
           startTime,
           lastUpdatedTime,
         },
         t,
         tenant,
       ),
-    [status, startTime, lastUpdatedTime],
+    [summaryStatus, startTime, lastUpdatedTime],
   );
 
   if (
@@ -73,9 +73,9 @@ const AnnualReview: FC = () => {
         }
         description={
           hasDescription
-            ? status === Status.APPROVED
+            ? summaryStatus === Status.APPROVED
               ? t('end_year_review_widget_title_approved', 'Your year-end review is complete.')
-              : cycleType === CycleType.HIRING && status === Status.STARTED
+              : cycleType === CycleType.HIRING && summaryStatus === Status.STARTED
               ? t('performance_period_duration', {
                   startDate: formatDateStringFromISO(startTime, 'LLL yyyy'),
                   endDate: formatDateTime(minusMonthFromISODateString(endTime), 'LLL yyyy'),
@@ -86,13 +86,13 @@ const AnnualReview: FC = () => {
                 )
             : undefined
         }
-        disabled={status === Status.NOT_STARTED}
+        disabled={summaryStatus === Status.NOT_STARTED}
         graphic={graphic}
         iconColor={iconColor}
         background={background}
         shadow={shadow}
         content={
-          cycleType === CycleType.HIRING && status === Status.STARTED
+          cycleType === CycleType.HIRING && summaryStatus === Status.STARTED
             ? t(
                 'your_review_due_by_date',
                 `Your performance review form is due by ${formatDateTime(

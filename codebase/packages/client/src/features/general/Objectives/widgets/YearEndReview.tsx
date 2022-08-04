@@ -26,20 +26,20 @@ const YearEndReview: FC<Props> = () => {
 
   const review = useSelector(getTimelineByCodeSelector(ReviewType.EYR, USER.current));
 
-  const { status, startTime, lastUpdatedTime } = review;
+  const { summaryStatus, startTime, lastUpdatedTime } = review;
 
   const [graphic, iconColor, background, shadow, hasDescription, content, buttonText] = useMemo(
     () =>
       getContent(
         {
-          status,
+          status: summaryStatus,
           startTime,
           lastUpdatedTime,
         },
         t,
         tenant,
       ),
-    [status, startTime, lastUpdatedTime],
+    [summaryStatus, startTime, lastUpdatedTime],
   );
 
   return (
@@ -55,7 +55,7 @@ const YearEndReview: FC<Props> = () => {
         title={t('review_type_description_eyr', 'Year-end review')}
         description={
           hasDescription
-            ? status === Status.APPROVED
+            ? summaryStatus === Status.APPROVED
               ? t('end_year_review_widget_title_approved', 'Your year-end review is complete.')
               : t(
                   'end_year_review_widget_title',
@@ -63,7 +63,7 @@ const YearEndReview: FC<Props> = () => {
                 )
             : undefined
         }
-        disabled={status === Status.NOT_STARTED}
+        disabled={summaryStatus === Status.NOT_STARTED}
         graphic={graphic}
         iconColor={iconColor}
         background={background}

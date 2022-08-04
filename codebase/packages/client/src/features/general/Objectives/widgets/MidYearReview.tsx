@@ -24,20 +24,20 @@ const MidYearReview: FC = () => {
 
   const review = useSelector(getTimelineByCodeSelector(ReviewType.MYR, USER.current));
 
-  const { status, startTime, lastUpdatedTime } = review;
+  const { summaryStatus, startTime, lastUpdatedTime } = review;
 
   const [graphic, iconColor, background, shadow, hasDescription, content, buttonText] = useMemo(
     () =>
       getContent(
         {
-          status,
+          status: summaryStatus,
           startTime,
           lastUpdatedTime,
         },
         t,
         tenant,
       ),
-    [status, startTime, lastUpdatedTime],
+    [summaryStatus, startTime, lastUpdatedTime],
   );
 
   return (
@@ -53,7 +53,7 @@ const MidYearReview: FC = () => {
         title={t('mid_year_review', 'Mid-year review')}
         description={
           hasDescription
-            ? status === Status.APPROVED
+            ? summaryStatus === Status.APPROVED
               ? t('mid_year_review_widget_title_approved', 'Your mid-year review is complete.')
               : t(
                   'mid_year_review_widget_title',
@@ -61,7 +61,7 @@ const MidYearReview: FC = () => {
                 )
             : undefined
         }
-        disabled={status === Status.NOT_STARTED}
+        disabled={summaryStatus === Status.NOT_STARTED}
         graphic={graphic}
         iconColor={iconColor}
         background={background}
