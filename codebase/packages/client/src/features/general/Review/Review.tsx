@@ -197,7 +197,9 @@ const ReviewFormModal: FC<Review> = ({ reviewType, onClose }) => {
             <div className={css(helperTextStyle)}>{t(...TRANSLATION[reviewType].helperText, { ns: 'general' })}</div>
             <div className={css({ padding: `0 0 ${theme.spacing.s5}`, display: 'flex' })}>
               <TriggerModal
-                triggerComponent={<InfoBlock text={t('need_help_to_write', "You have approved your colleague's")} />}
+                triggerComponent={
+                  <InfoBlock text={t('need_help_to_write', 'Need help with what to write?', { ns: 'general' })} />
+                }
                 title={t('completing_your_review', 'Completing your review')}
               >
                 <ReviewHelpModal />
