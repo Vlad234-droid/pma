@@ -20,7 +20,7 @@ import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
 type Props = {
   review: any;
   schema: any;
-  validateReview: (T) => void;
+  validateReview: (review: { [key: string]: boolean }) => void;
   updateColleagueReviews: (T) => void;
 };
 
@@ -47,7 +47,7 @@ const ColleagueReview: FC<Props> = ({ review, schema, validateReview, updateColl
   } = methods;
 
   useEffect(() => {
-    validateReview((state) => ({ ...state, ...{ [review.uuid]: isValid } }));
+    validateReview({ [review.uuid]: isValid });
   }, [isValid]);
 
   useEffect(() => {

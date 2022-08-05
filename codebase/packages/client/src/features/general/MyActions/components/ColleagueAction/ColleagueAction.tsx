@@ -46,6 +46,14 @@ const ColleagueAction: FC<Props> = ({ status, colleague, onUpdate }) => {
     };
   }
 
+  useEffect(() => {
+    const reviewsUuid = colleague?.reviews?.map(({ uuid }) => uuid) || [];
+    const colleaguesReviews = allColleagueReviews.filter(
+      (review) => reviewsUuid.includes(review.uuid) && review.status === status,
+    );
+    updateColleagueReviews(colleaguesReviews);
+  }, [reviewLoaded, status]);
+
   const handleUpdateReview = useCallback(
     (status: Status) => (reviewType: ReviewType) => (reason: string) => {
       const { timeline = [] } = colleague;
@@ -72,8 +80,9 @@ const ColleagueAction: FC<Props> = ({ status, colleague, onUpdate }) => {
       };
       onUpdate(reviewType, data);
     },
-    [colleague, reviewLoaded],
+    [colleague, colleagueReviews, reviewLoaded],
   );
+
   const fetchColleagueReviews = (colleagueUuid: string) => {
     setColleagueExpanded(colleagueUuid);
     dispatch(SchemaActions.clearSchemaData());
@@ -83,13 +92,8 @@ const ColleagueAction: FC<Props> = ({ status, colleague, onUpdate }) => {
     dispatch(SchemaActions.getSchema({ colleagueUuid }));
   };
 
-  useEffect(() => {
-    const reviewsUuid = colleague?.reviews?.map(({ uuid }) => uuid) || [];
-    const colleaguesReviews = allColleagueReviews.filter(
-      (review) => reviewsUuid.includes(review.uuid) && review.status === status,
-    );
-    updateColleagueReviews(colleaguesReviews);
-  }, [reviewLoaded, status]);
+  const handleValidateReview = (review: { [key: string]: boolean }) =>
+    validateReview((state) => ({ ...state, ...review }));
 
   return (
     <div data-test-id={`colleague-${colleague.uuid}`}>
@@ -138,7 +142,7 @@ const ColleagueAction: FC<Props> = ({ status, colleague, onUpdate }) => {
                             key={review.uuid}
                             review={review}
                             schema={allColleagueReviewsSchema[reviewType] || []}
-                            validateReview={validateReview}
+                            validateReview={handleValidateReview}
                             updateColleagueReviews={updateColleagueReviews}
                           />
                         ))}
