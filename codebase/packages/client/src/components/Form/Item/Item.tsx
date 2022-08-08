@@ -33,7 +33,7 @@ export const Item: FC<ItemProps> = ({
   testId = 'item',
   iconCustomStyles = {},
 }) => {
-  const { css } = useStyle();
+  const { css } = useStyle(['lineHeight'], 'remove');
   const [recordingState, setRecordingState] = useState(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [hasFocus, setFocus] = useState(false);
@@ -100,6 +100,7 @@ const wrapperItem: CreateRule<{ marginBot: boolean }> = ({ marginBot }) => ({
   padding: '0',
   color: colors.black,
   width: '100%',
+  lineHeight: '0',
 });
 
 const labelStyle: Rule = ({ theme }) => {

@@ -1,5 +1,5 @@
 import React, { FC, HTMLProps } from 'react';
-import { useStyle, CreateRule, Icon } from '@pma/dex-wrapper';
+import { CreateRule, Icon, useStyle } from '@pma/dex-wrapper';
 
 export type AvatarProps = {
   img?: string;
@@ -44,7 +44,7 @@ const imageStyle = {
 };
 
 export const Avatar: FC<Props> = ({ img, size = 56 }) => {
-  const { css } = useStyle();
+  const { css } = useStyle(['backgroundColor']);
   return (
     <span data-test-id='avatar' className={css(contentStyle({ size }))}>
       {img ? <img style={imageStyle} src={img} /> : <Icon graphic='account' testId={'test-id-account-icon'} />}

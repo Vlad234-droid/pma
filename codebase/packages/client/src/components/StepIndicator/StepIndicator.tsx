@@ -75,11 +75,12 @@ export const StepIndicatorBasic: FC<StepIndicatorProps> = ({
   isValid,
 }) => {
   const { css, theme } = useStyle();
+  const { css: cssWithoutBackground } = useStyle(['backgroundColor']);
   const { t } = useTranslation();
 
   const Line: FC<{ active?: boolean; underline?: 'half' | 'full' }> = ({ active, underline }) => (
     <div
-      className={css({
+      className={cssWithoutBackground({
         width: '100%',
         height: '3px',
         background: active

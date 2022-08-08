@@ -21,7 +21,7 @@ const Input: FC<InputField> = ({
   defaultValue,
   ...rest
 }) => {
-  const { css } = useStyle();
+  const { css } = useStyle(['lineHeight']);
   const { inputRef, setFocus } = useFormContainer();
 
   return (

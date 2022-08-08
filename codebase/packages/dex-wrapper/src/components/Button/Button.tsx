@@ -26,7 +26,7 @@ export const Button: FC<PropsWithChildren<ButtonProps>> = memo((props) => {
   // eslint-disable-next-line react/prop-types
   const { children, isDisabled, mode = 'default', styles = [] } = props;
 
-  const { css } = useStyle();
+  const { css } = useStyle(['lineHeight'], 'remove');
 
   const variant = useMemo(() => (isDisabled ? 'disabled' : mode), [isDisabled, mode]);
 
@@ -44,6 +44,7 @@ export const Button: FC<PropsWithChildren<ButtonProps>> = memo((props) => {
           borderRadius: '20px',
           justifyContent: 'center',
           alignItems: 'center',
+          lineHeight: '0',
           outline: 0,
         },
         ...styles,
