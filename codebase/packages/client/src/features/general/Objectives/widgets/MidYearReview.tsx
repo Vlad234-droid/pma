@@ -1,7 +1,7 @@
 import React, { FC, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { Rule, useStyle } from '@pma/dex-wrapper';
-import { getTimelineByCodeSelector } from '@pma/store';
+import { getTimelineByCodeSelector, uuidCompareSelector } from '@pma/store';
 import { useNavigate } from 'react-router';
 import { useLocation } from 'react-router-dom';
 
@@ -12,17 +12,21 @@ import { useTenant } from 'features/general/Permission';
 import { buildPath } from 'features/general/Routes';
 import { Page } from 'pages';
 import { ReviewType, Status } from 'config/enum';
-import { USER } from 'config/constants';
 import { paramsReplacer } from 'utils';
 
-const MidYearReview: FC = () => {
+type Props = {
+  colleagueUuid: string;
+};
+
+const MidYearReview: FC<Props> = ({ colleagueUuid }) => {
   const { t } = useTranslation();
   const { css } = useStyle();
   const tenant = useTenant();
   const navigate = useNavigate();
   const { pathname } = useLocation();
+  const isUserView = useSelector(uuidCompareSelector(colleagueUuid));
 
-  const review = useSelector(getTimelineByCodeSelector(ReviewType.MYR, USER.current));
+  const review = useSelector(getTimelineByCodeSelector(ReviewType.MYR, colleagueUuid));
 
   const { summaryStatus, startTime, lastUpdatedTime } = review;
 
@@ -40,15 +44,27 @@ const MidYearReview: FC = () => {
     [summaryStatus, startTime, lastUpdatedTime],
   );
 
+  const disabled = isUserView
+    ? summaryStatus === Status.NOT_STARTED
+    : summaryStatus === Status.NOT_STARTED || summaryStatus === Status.DRAFT;
+
   return (
     <div data-test-id='personal' className={css(basicTileStyle)}>
       <ReviewWidget
         onClick={() =>
-          navigate(buildPath(paramsReplacer(Page.REVIEWS, { ':type': ReviewType.MYR.toLowerCase() })), {
-            state: {
-              backPath: pathname,
+          navigate(
+            buildPath(
+              paramsReplacer(isUserView ? Page.REVIEWS : Page.USER_TL_REVIEW, {
+                ':type': ReviewType.MYR.toLowerCase(),
+                ...(!isUserView && { ':uuid': colleagueUuid }),
+              }),
+            ),
+            {
+              state: {
+                backPath: pathname,
+              },
             },
-          })
+          )
         }
         title={t('mid_year_review', 'Mid-year review')}
         description={
@@ -61,7 +77,7 @@ const MidYearReview: FC = () => {
                 )
             : undefined
         }
-        disabled={summaryStatus === Status.NOT_STARTED}
+        disabled={disabled}
         graphic={graphic}
         iconColor={iconColor}
         background={background}

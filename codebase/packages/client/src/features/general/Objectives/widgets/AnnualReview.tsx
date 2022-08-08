@@ -1,7 +1,7 @@
 import React, { FC, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { Rule, useStyle } from '@pma/dex-wrapper';
-import { getTimelineByCodeSelector, userCycleTypeSelector } from '@pma/store';
+import { getTimelineByCodeSelector, userCycleTypeSelector, uuidCompareSelector } from '@pma/store';
 import { useNavigate } from 'react-router';
 import { useLocation } from 'react-router-dom';
 
@@ -9,7 +9,6 @@ import { useTranslation } from 'components/Translation';
 //TODO: move to components
 import { ReviewWidget } from 'features/general/ReviewWidget';
 import { CycleType, ReviewType, Status } from 'config/enum';
-import { USER } from 'config/constants';
 import { useTenant } from 'features/general/Permission';
 import { getContent } from '../utils';
 import {
@@ -24,14 +23,20 @@ import {
 import { buildPath } from 'features/general/Routes';
 import { Page } from 'pages';
 
-const AnnualReview: FC = () => {
+type Props = {
+  colleagueUuid: string;
+};
+
+const AnnualReview: FC<Props> = ({ colleagueUuid }) => {
   const { t } = useTranslation();
   const { css } = useStyle();
   const tenant = useTenant();
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
-  const review = useSelector(getTimelineByCodeSelector(ReviewType.EYR, USER.current));
+  const isUserView = useSelector(uuidCompareSelector(colleagueUuid));
+
+  const review = useSelector(getTimelineByCodeSelector(ReviewType.EYR, colleagueUuid));
   const cycleType = useSelector(userCycleTypeSelector);
 
   const { summaryStatus, startTime, endTime, lastUpdatedTime } = review;
@@ -56,15 +61,27 @@ const AnnualReview: FC = () => {
   )
     return null;
 
+  const disabled = isUserView
+    ? summaryStatus === Status.NOT_STARTED
+    : summaryStatus === Status.NOT_STARTED || summaryStatus === Status.DRAFT;
+
   return (
     <div data-test-id='feedback' className={css(basicTileStyle)}>
       <ReviewWidget
         onClick={() =>
-          navigate(buildPath(paramsReplacer(Page.REVIEWS, { ':type': ReviewType.EYR.toLowerCase() })), {
-            state: {
-              backPath: pathname,
+          navigate(
+            buildPath(
+              paramsReplacer(isUserView ? Page.REVIEWS : Page.USER_TL_REVIEW, {
+                ':type': ReviewType.EYR.toLowerCase(),
+                ...(!isUserView && { ':uuid': colleagueUuid }),
+              }),
+            ),
+            {
+              state: {
+                backPath: pathname,
+              },
             },
-          })
+          )
         }
         title={
           cycleType === CycleType.FISCAL
@@ -86,7 +103,7 @@ const AnnualReview: FC = () => {
                 )
             : undefined
         }
-        disabled={summaryStatus === Status.NOT_STARTED}
+        disabled={disabled}
         graphic={graphic}
         iconColor={iconColor}
         background={background}

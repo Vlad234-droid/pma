@@ -1,6 +1,6 @@
 import React, { FC, useMemo } from 'react';
 import { Rule, useStyle } from '@pma/dex-wrapper';
-import { getTimelineByCodeSelector } from '@pma/store';
+import { getTimelineByCodeSelector, uuidCompareSelector } from '@pma/store';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { useLocation } from 'react-router-dom';
@@ -12,19 +12,21 @@ import { useTenant } from 'features/general/Permission';
 import { buildPath } from 'features/general/Routes';
 import { paramsReplacer } from 'utils';
 import { ReviewType, Status } from 'config/enum';
-import { USER } from 'config/constants';
 import { Page } from 'pages';
 
-type Props = {};
+type Props = {
+  colleagueUuid: string;
+};
 
-const YearEndReview: FC<Props> = () => {
+const YearEndReview: FC<Props> = ({ colleagueUuid }) => {
   const { t } = useTranslation();
   const { css } = useStyle();
   const tenant = useTenant();
   const navigate = useNavigate();
   const { pathname } = useLocation();
+  const isUserView = useSelector(uuidCompareSelector(colleagueUuid));
 
-  const review = useSelector(getTimelineByCodeSelector(ReviewType.EYR, USER.current));
+  const review = useSelector(getTimelineByCodeSelector(ReviewType.EYR, colleagueUuid));
 
   const { summaryStatus, startTime, lastUpdatedTime } = review;
 
@@ -41,16 +43,27 @@ const YearEndReview: FC<Props> = () => {
       ),
     [summaryStatus, startTime, lastUpdatedTime],
   );
+  const disabled = isUserView
+    ? summaryStatus === Status.NOT_STARTED
+    : summaryStatus === Status.NOT_STARTED || summaryStatus === Status.DRAFT;
 
   return (
     <div data-test-id='feedback' className={css(basicTileStyle)}>
       <ReviewWidget
         onClick={() =>
-          navigate(buildPath(paramsReplacer(Page.REVIEWS, { ':type': ReviewType.EYR.toLocaleLowerCase() })), {
-            state: {
-              backPath: pathname,
+          navigate(
+            buildPath(
+              paramsReplacer(isUserView ? Page.REVIEWS : Page.USER_TL_REVIEW, {
+                ':type': ReviewType.EYR.toLocaleLowerCase(),
+                ...(!isUserView && { ':uuid': colleagueUuid }),
+              }),
+            ),
+            {
+              state: {
+                backPath: pathname,
+              },
             },
-          })
+          )
         }
         title={t('review_type_description_eyr', 'Year-end review')}
         description={
@@ -63,7 +76,7 @@ const YearEndReview: FC<Props> = () => {
                 )
             : undefined
         }
-        disabled={summaryStatus === Status.NOT_STARTED}
+        disabled={disabled}
         graphic={graphic}
         iconColor={iconColor}
         background={background}

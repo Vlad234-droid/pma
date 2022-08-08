@@ -1,14 +1,16 @@
 import React, { useMemo } from 'react';
 import { CreateRule, Styles, useStyle } from '@pma/dex-wrapper';
 import { useNavigate, useParams } from 'react-router-dom';
+
 import UserObjectivesContainer from 'features/general/UserObjectives';
 import { ColleagueProfileWidget } from 'features/general/Profile';
 import { useTranslation } from 'components/Translation';
 import { ShareWidget } from 'features/general/ShareWidget';
 import { buildPath } from 'features/general/Routes';
-import { ReviewFilesSection } from 'features/general/Objectives';
+import { CompletedReviewsSection, ReviewFilesSection, ReviewsSection } from 'features/general/Objectives';
 import { TEST_ID } from 'features/general/UserObjectives/UserObjectives';
 import { useToast, Variant } from 'features/general/Toast';
+
 import { tenant as T, useTenant } from 'features/general/Permission';
 import { Page } from 'pages/general/types';
 
@@ -75,6 +77,8 @@ const UserObjectives = () => {
       </div>
       <div className={css(mainBlockStyles({ mobileScreen }))}>
         <UserObjectivesContainer />
+        <ReviewsSection colleagueUuid={uuid as string} />
+        <CompletedReviewsSection />
         <ReviewFilesSection colleagueUuid={uuid} />
       </div>
     </div>

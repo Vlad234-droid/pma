@@ -270,6 +270,12 @@ const pages: Record<Page, PageComponent> = {
     perform: [role.COLLEAGUE],
     tenant: [tenant.BANK, tenant.GENERAL],
   },
+  [Page.USER_TL_REVIEW]: {
+    Element: Reviews,
+    withHeader: true,
+    perform: [role.COLLEAGUE],
+    tenant: [tenant.BANK, tenant.GENERAL],
+  },
   [Page.PROFILE]: {
     Element: Profile,
     title: (tenant, t) => t('title_my_profile'),

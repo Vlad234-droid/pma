@@ -13,7 +13,9 @@ import {
   reviewsMetaSelector,
   SchemaActions,
   schemaMetaSelector,
+  uuidCompareSelector,
 } from '@pma/store';
+import { useParams } from 'react-router';
 
 import { ReviewType, Status } from 'config/enum';
 import { createYupSchema } from 'utils/yup';
@@ -55,13 +57,22 @@ export type Review = {
   onClose: () => void;
 };
 
+enum View {
+  USER = 'USER',
+  MANAGER = 'MANAGER',
+}
+
 const ReviewFormModal: FC<Review> = ({ reviewType, onClose }) => {
   const { css, theme, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const { t } = useTranslation();
+  const { uuid } = useParams<{ uuid: string }>();
+  const isUserView = useSelector(uuidCompareSelector(uuid));
 
+  const [view, setView] = useState<View | null>(null);
   const [successModal, setSuccessModal] = useState(false);
   const { info } = useSelector(currentUserSelector);
+  const colleagueUuid = uuid ? uuid : info.colleagueUUID;
   const dispatch = useDispatch();
   const [review] = useSelector(getReviewByTypeSelector(reviewType));
   const formValues = review || {};
@@ -74,7 +85,10 @@ const ReviewFormModal: FC<Review> = ({ reviewType, onClose }) => {
   const overallRatingRequestKey = 'overall_rating';
 
   const timelineReview = useSelector(getTimelineByReviewTypeSelector(reviewType, USER.current));
-  const readonly = [Status.WAITING_FOR_APPROVAL, Status.APPROVED].includes(timelineReview?.summaryStatus);
+  const readonly =
+    view === View.MANAGER
+      ? true
+      : [Status.WAITING_FOR_APPROVAL, Status.APPROVED].includes(timelineReview?.summaryStatus);
 
   const { components = [] as Component[] } = schema;
 
@@ -141,10 +155,13 @@ const ReviewFormModal: FC<Review> = ({ reviewType, onClose }) => {
   );
 
   useEffect(() => {
-    dispatch(
-      ReviewsActions.getColleagueReviews({ pathParams: { colleagueUuid: info.colleagueUUID, cycleUuid: 'CURRENT' } }),
-    );
-    dispatch(SchemaActions.getSchema({ colleagueUuid: info.colleagueUUID }));
+    if (!uuid) return setView(View.USER);
+    isUserView ? setView(View.USER) : setView(View.MANAGER);
+  }, []);
+
+  useEffect(() => {
+    dispatch(ReviewsActions.getColleagueReviews({ pathParams: { colleagueUuid, cycleUuid: 'CURRENT' } }));
+    dispatch(SchemaActions.getSchema({ colleagueUuid }));
   }, []);
 
   useEffect(() => {
@@ -171,6 +188,8 @@ const ReviewFormModal: FC<Review> = ({ reviewType, onClose }) => {
   if (reviewLoading && schemaLoading) {
     return <Spinner fullHeight />;
   }
+
+  if (!view) return null;
 
   if (successModal) {
     return (

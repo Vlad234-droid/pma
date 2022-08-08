@@ -8,12 +8,14 @@ import { BasicFormModal } from 'components/BasicFormModal';
 import { ReviewType } from 'config/enum';
 import { Page } from 'pages/general/types';
 import { buildPath } from 'features/general/Routes';
+import { paramsReplacer } from '../../../utils';
 
 const Reviews = () => {
   const tenant = useTenant();
   const { type } = useParams();
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { uuid } = useParams<{ uuid: string }>();
   const { state } = useLocation();
 
   const ReviewForm = useMemo(
@@ -22,7 +24,10 @@ const Reviews = () => {
   );
 
   const handleClose = () => {
-    navigate((state as any)?.backPath || buildPath(Page.REVIEWS_VIEW));
+    navigate(
+      (state as any)?.backPath ||
+        buildPath(!uuid ? Page.REVIEWS_VIEW : paramsReplacer(Page.USER_REVIEWS, { ':uuid': uuid })),
+    );
   };
 
   useEffect(() => {

@@ -181,7 +181,7 @@ const Report: FC = () => {
         <Spinner />
       ) : (
         <>
-          <div className={css(pieChartWrapper, { flexWrap: 'wrap-reverse' })}>
+          <div className={css(pieChartWrapper)}>
             {isDisplayTile(IsReportTiles.OBJECTIVES_SUBMITTED) && (
               <div className={css(leftColumn)}>
                 <PieChart

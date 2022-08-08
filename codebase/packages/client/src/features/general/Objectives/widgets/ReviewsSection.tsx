@@ -1,18 +1,23 @@
 import React, { FC } from 'react';
 import { useSelector } from 'react-redux';
 import { Rule, useStyle } from '@pma/dex-wrapper';
-import { colleagueUUIDSelector, timelineTypesAvailabilitySelector } from '@pma/store';
+import { timelineTypesAvailabilitySelector, uuidCompareSelector } from '@pma/store';
 
 import { AnnualReviewWidget, MidYearReviewWidget, YearEndReviewWidget } from 'features/general/Objectives';
 import { Trans } from 'components/Translation';
 import Section from 'components/Section';
 import { ReviewType } from 'config/enum';
 
-export const MyReviewsSection: FC = () => {
-  const colleagueUuid = useSelector(colleagueUUIDSelector);
+type Props = {
+  colleagueUuid: string;
+};
+
+export const ReviewsSection: FC<Props> = ({ colleagueUuid }) => {
   const { css } = useStyle();
+  const isUserView = useSelector(uuidCompareSelector(colleagueUuid));
+
   const timelineTypes = useSelector(timelineTypesAvailabilitySelector(colleagueUuid)) || {};
-  const canShowMyReview = timelineTypes[ReviewType.MYR] && timelineTypes[ReviewType.EYR];
+  const canShowReview = timelineTypes[ReviewType.MYR] && timelineTypes[ReviewType.EYR];
   const canShowAnnualReview = !timelineTypes[ReviewType.MYR] && timelineTypes[ReviewType.EYR];
 
   return (
@@ -21,19 +26,19 @@ export const MyReviewsSection: FC = () => {
       left={{
         content: (
           <div className={css(tileStyles)}>
-            <Trans i18nKey='my_reviews'>My Reviews</Trans>
+            {isUserView ? <Trans i18nKey='my_reviews'>My Reviews</Trans> : <Trans i18nKey='reviews'>Reviews</Trans>}
           </div>
         ),
       }}
     >
-      {canShowMyReview && (
+      {canShowReview && (
         <>
-          <MidYearReviewWidget />
-          <YearEndReviewWidget />
+          <MidYearReviewWidget colleagueUuid={colleagueUuid} />
+          <YearEndReviewWidget colleagueUuid={colleagueUuid} />
         </>
       )}
 
-      {canShowAnnualReview && <AnnualReviewWidget />}
+      {canShowAnnualReview && <AnnualReviewWidget colleagueUuid={colleagueUuid} />}
     </Section>
   );
 };

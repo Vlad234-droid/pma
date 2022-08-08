@@ -697,5 +697,6 @@
   "view_pdp": "View PDP",
   "ensure_capture_pdp": ":Please ensure you capture your development in Personal Development Plan",
   "performance_period_duration": "Performance period {{ startDate }} - {{ endDate }}",
-  "your_review_due_by_date": "Your performance review form is due by {{ date }}"
+  "your_review_due_by_date": "Your performance review form is due by {{ date }}",
+  "need_help_to_write": "You have approved your colleague's"
 }

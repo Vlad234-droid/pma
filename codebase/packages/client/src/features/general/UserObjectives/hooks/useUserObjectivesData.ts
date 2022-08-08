@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
 import {
   ColleagueActions,
+  filterReviewsByTypeSelector,
   getReviewSchema,
   PreviousReviewFilesActions,
   ReviewsActions,
-  reviewsSelector,
   SchemaActions,
   TimelineActions,
 } from '@pma/store';
@@ -17,7 +17,8 @@ import useDispatch from 'hooks/useDispatch';
 
 export const useUserObjectivesData = (uuid, reviewLoaded, schemaLoaded, setObjectives) => {
   const dispatch = useDispatch();
-  const { data } = useSelector(reviewsSelector);
+  const data = useSelector(filterReviewsByTypeSelector(ReviewType.OBJECTIVE));
+
   const schema = useSelector(getReviewSchema(ReviewType.OBJECTIVE));
   const { components = [] } = schema;
   const formElements = components.filter((component) => component.type != 'text');
@@ -33,11 +34,7 @@ export const useUserObjectivesData = (uuid, reviewLoaded, schemaLoaded, setObjec
   }, [reviewLoaded, schemaLoaded]);
 
   useEffect(() => {
-    dispatch(
-      ReviewsActions.getReviews({
-        pathParams: { colleagueUuid: uuid, code: 'OBJECTIVE', cycleUuid: 'CURRENT' },
-      }),
-    );
+    dispatch(ReviewsActions.getReviews({ pathParams: { colleagueUuid: uuid, cycleUuid: 'CURRENT' } }));
     if (uuid) {
       dispatch(TimelineActions.getUserTimeline({ colleagueUuid: uuid }));
       dispatch(SchemaActions.getSchema({ colleagueUuid: uuid }));

@@ -14,8 +14,12 @@ export const getFullName = (profile) => {
 
 export const colleagueUUIDSelector = (state: RootState) => {
   const users = usersSelector(state);
-
   return users.current.info?.colleague?.colleagueUUID;
+};
+
+export const uuidCompareSelector = (uuid) => (state) => {
+  const users = usersSelector(state);
+  return users.current.info?.colleague?.colleagueUUID === uuid;
 };
 
 export const getUserRoles = (state: RootState) => {

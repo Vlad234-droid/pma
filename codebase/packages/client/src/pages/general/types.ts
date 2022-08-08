@@ -15,6 +15,7 @@ enum Page {
   CREATE_REVIEWS = 'reviews/new',
   REVIEWS = 'reviews/:type',
   USER_REVIEWS = 'users/:uuid/reviews',
+  USER_TL_REVIEW = 'users/:uuid/reviews/:type',
   PROFILE = 'profile',
   SETTINGS = 'settings',
   MY_TEAM = 'my-team',

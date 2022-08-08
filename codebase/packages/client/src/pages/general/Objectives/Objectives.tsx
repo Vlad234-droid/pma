@@ -5,7 +5,7 @@ import { colleagueUUIDSelector } from '@pma/store';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
-import Objectives, { MyReviewsSection, CompletedReviewsSection, ReviewFilesSection } from 'features/general/Objectives';
+import Objectives, { ReviewsSection, CompletedReviewsSection, ReviewFilesSection } from 'features/general/Objectives';
 import { tenant as T, useTenant } from 'features/general/Permission';
 import { ShareWidget } from 'features/general/ShareWidget';
 import { buildPath } from 'features/general/Routes';
@@ -72,7 +72,7 @@ const ObjectivesPage: FC = () => {
         <div className={css(bodyWrapperStyles)}>
           <Timeline colleagueUuid={colleagueUuid} />
           <Objectives />
-          <MyReviewsSection />
+          <ReviewsSection colleagueUuid={colleagueUuid} />
           <CompletedReviewsSection />
           <ReviewFilesSection colleagueUuid={colleagueUuid} />
           <Shortcuts />
