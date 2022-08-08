@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router';
 import { useLocation } from 'react-router-dom';
 
 import { useTranslation } from 'components/Translation';
-import { ReviewWidget } from 'features/general/ReviewWidget';
+import { ReviewWidget } from '../components/ReviewWidget';
 import { getContent } from 'features/general/Objectives/utils';
 import { useTenant } from 'features/general/Permission';
 import { buildPath } from 'features/general/Routes';

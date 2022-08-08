@@ -7,7 +7,7 @@ import { useLocation } from 'react-router-dom';
 
 import { useTranslation } from 'components/Translation';
 //TODO: move to components
-import { ReviewWidget } from 'features/general/ReviewWidget';
+import { ReviewWidget } from '../components/ReviewWidget';
 import { CycleType, ReviewType, Status } from 'config/enum';
 import { useTenant } from 'features/general/Permission';
 import { getContent } from '../utils';
@@ -106,7 +106,7 @@ const AnnualReview: FC<Props> = ({ colleagueUuid }) => {
         disabled={disabled}
         graphic={graphic}
         iconColor={iconColor}
-        background={background}
+        background={cycleType === CycleType.FISCAL ? background : 'white'}
         shadow={shadow}
         content={
           cycleType === CycleType.HIRING && summaryStatus === Status.STARTED
