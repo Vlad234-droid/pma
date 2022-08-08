@@ -1,5 +1,11 @@
 import { createReducer } from 'typesafe-actions';
-import { getCurrentUser, createProfileAttribute, updateProfileAttribute, getCurrentUserMetadata } from './actions';
+import {
+  getCurrentUser,
+  createProfileAttribute,
+  updateProfileAttribute,
+  getCurrentUserMetadata,
+  deleteProfileAttribute,
+} from './actions';
 
 export const initialState: {
   current: {
@@ -52,12 +58,38 @@ const currentUserMetadataSuccess = (state, { payload }) => ({
   current: { ...state.current, ...payload },
 });
 
+const updateProfileAttributeSuccess = (state, { payload: [updatedAttribute] }) => {
+  return {
+    ...state,
+    current: {
+      ...state.current,
+      info: {
+        ...state.current.info,
+        profileAttributes: state.current.info.profileAttributes.map((attribute) =>
+          attribute.name === updatedAttribute.name ? updatedAttribute : attribute,
+        ),
+      },
+    },
+  };
+};
+
+const deleteProfileAttributeSuccess = (state, { payload: [{ name }] }) => ({
+  ...state,
+  current: {
+    ...state.current,
+    info: {
+      ...state.current.info,
+      profileAttributes: state.current.info.profileAttributes.filter((attribute) => attribute.name !== name),
+    },
+  },
+});
+
 export default createReducer(initialState)
   .handleAction(getCurrentUser.request, request)
   .handleAction(getCurrentUser.success, success)
   .handleAction(getCurrentUser.failure, failure)
-  .handleAction(createProfileAttribute.request, request)
   .handleAction(createProfileAttribute.success, profileAttributeSuccess)
-  .handleAction(updateProfileAttribute.request, request)
   .handleAction(updateProfileAttribute.success, profileAttributeSuccess)
-  .handleAction(getCurrentUserMetadata.success, currentUserMetadataSuccess);
+  .handleAction(getCurrentUserMetadata.success, currentUserMetadataSuccess)
+  .handleAction(updateProfileAttribute.success, updateProfileAttributeSuccess)
+  .handleAction(deleteProfileAttribute.success, deleteProfileAttributeSuccess);

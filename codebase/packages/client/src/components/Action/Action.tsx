@@ -27,7 +27,8 @@ const Action: FC<Props> = ({ items }) => {
         <div className={css(modalStyle)} data-test-id={ITEMS_TEST_ID}>
           {items.map(({ icon, text, action }, idx) => (
             <div key={idx} className={css(item)} onClick={action}>
-              <Icon graphic={icon} /> {text}
+              <Icon graphic={icon} />
+              <span>{text}</span>
             </div>
           ))}
         </div>
@@ -67,6 +68,11 @@ const item: Rule = ({ colors }) => ({
   alignItems: 'center',
   padding: '12px 24px',
   cursor: 'pointer',
+  minWidth: '8em',
   // @ts-ignore
   borderBottom: `1px solid ${colors.lightGray}`,
+
+  ':last-child': {
+    borderBottom: 'none',
+  },
 });

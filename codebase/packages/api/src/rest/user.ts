@@ -9,6 +9,12 @@ export const updateUserNotification = (params: any = {}) => {
   const { colleagueUuid } = params?.[0];
   return httpClient.put(`${colleaguesDomain}/${colleagueUuid}/attributes`, params);
 };
+
+export const deleteProfileAttribute = (data: any = {}) => {
+  const [{ colleagueUuid }] = data;
+  return httpClient.delete(`${colleaguesDomain}/${colleagueUuid}/attributes`, { data });
+};
+
 export const createProfileAttribute = (params: any) => {
   const [tone] = params;
   return httpClient.post(`${colleaguesDomain}/${tone.colleagueUuid}/attributes`, params);

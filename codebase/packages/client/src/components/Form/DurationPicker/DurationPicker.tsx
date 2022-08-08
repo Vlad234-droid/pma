@@ -64,7 +64,7 @@ export const DurationPicker: FC<DurationField> = ({ value, name, onChange, reado
 
   return (
     <div data-test-id={TEST_ID} className='dropdown-container' style={{ position: 'relative' }} ref={containerRef}>
-      <Input onFocus={() => toggleOpen(!isOpen)} value={displayValue} readonly={readonly} />
+      <Input onFocus={() => !readonly && toggleOpen(!isOpen)} value={displayValue} readonly={readonly} />
       {isOpen && (
         <TileWrapper
           customStyle={{

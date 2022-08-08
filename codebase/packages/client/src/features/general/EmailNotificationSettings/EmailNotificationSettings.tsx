@@ -1,7 +1,7 @@
-import React, { FC, useEffect, useMemo } from 'react';
+import React, { FC, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { Rule, useStyle } from '@pma/dex-wrapper';
-import { colleagueUUIDSelector, TimelineActions, UserActions } from '@pma/store';
+import { colleagueUUIDSelector, UserActions } from '@pma/store';
 import { usePermission, usePermissionByReviewType, usePermissionByWorkLevel } from 'features/general/Permission';
 import { Trans } from 'components/Translation';
 import { TileWrapper } from 'components/Tile';
@@ -10,23 +10,18 @@ import useDispatch from 'hooks/useDispatch';
 import { useAuthContainer } from 'contexts/authContext';
 import { accessByRole, accessByTimelinePoints, accessByWorkLevel } from './config';
 
-export type Props = {};
-
 export const TEST_ID = 'email-notification-id';
 
-export const EmailNotifications: FC<Props> = () => {
+const EmailNotificationSettings: FC = () => {
   const { css } = useStyle();
   const dispatch = useDispatch();
   const { user } = useAuthContainer();
   //@ts-ignore
-  const { profileAttributes } = user || [];
+  const { profileAttributes = [] }: { profileAttributes: Array<any> } = user;
   const colleagueUuid = useSelector(colleagueUUIDSelector);
 
-  useEffect(() => {
-    if (colleagueUuid) dispatch(TimelineActions.getTimeline({ colleagueUuid }));
-  }, [colleagueUuid]);
-
-  const updateSettingAction = (setting) => dispatch(UserActions.updateUserNotification(setting));
+  const handleUpdateSetting = (setting: any) =>
+    dispatch(UserActions.updateProfileAttribute([{ ...setting, colleagueUuid }]));
 
   const profileAttributesFiltered = useMemo(() => {
     return (
@@ -62,9 +57,7 @@ export const EmailNotifications: FC<Props> = () => {
             <div key={name} className={css(checkBoxStyle)}>
               <Checkbox
                 id={name}
-                onChange={({ target: { checked: value } }) =>
-                  updateSettingAction([{ colleagueUuid, name, type, value }])
-                }
+                onChange={({ target: { checked: value } }) => handleUpdateSetting({ name, type, value })}
                 checked={value === 'true'}
               />
               <label className={css(labelStyle)} htmlFor={name}>
@@ -76,6 +69,8 @@ export const EmailNotifications: FC<Props> = () => {
     </TileWrapper>
   );
 };
+
+export default EmailNotificationSettings;
 
 const checkBoxStyle: Rule = {
   display: 'flex',
@@ -115,4 +110,8 @@ const labelStyle: Rule = {
   marginLeft: '8px',
   marginBottom: '2px',
   cursor: 'pointer',
+};
+
+const deleteButtonStyle: Rule = {
+  paddingLeft: '1em',
 };

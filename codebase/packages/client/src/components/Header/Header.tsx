@@ -67,7 +67,7 @@ const Header: FC<HeaderProps> = ({ title, onBack, withIcon, iconName = 'home', s
     <div className={css(wrapperStyles, styles)} data-test-id={TEST_ID}>
       <DataModal />
       {onBack ? <IconButton onPress={onBack} graphic='backwardLink' testId={BACK_BTN_TEST_ID} /> : <div />}
-      <h3 className={css(headerStyles({ mobileScreen, onBack }))}>
+      <h3 className={css(headerStyles({ mobileScreen, hasPadding: !onBack }))}>
         {withIcon && (
           <div className={css(iconWrapperStyle)}>
             <Icon graphic={iconName} />
@@ -108,8 +108,8 @@ const wrapperStyles: Rule = {
   justifyContent: 'space-between',
 };
 
-const headerStyles: CreateRule<{ mobileScreen; onBack }> =
-  ({ mobileScreen, onBack }) =>
+const headerStyles: CreateRule<{ mobileScreen: boolean; hasPadding: boolean }> =
+  ({ mobileScreen, hasPadding }) =>
   ({ theme }) => ({
     fontSize: theme.font.fixed.f24.fontSize,
     lineHeight: theme.font.fixed.f24.lineHeight,
@@ -125,7 +125,7 @@ const headerStyles: CreateRule<{ mobileScreen; onBack }> =
         }
       : {
           marginLeft: 'auto',
-          paddingLeft: onBack ? '66px' : '91px',
+          paddingLeft: hasPadding ? '91px' : '66px',
         }),
   });
 

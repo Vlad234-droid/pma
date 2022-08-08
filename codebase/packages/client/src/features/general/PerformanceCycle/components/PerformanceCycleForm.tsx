@@ -11,6 +11,8 @@ import {
   performanceCycleMappingKeys,
 } from '@pma/store';
 import useDispatch from 'hooks/useDispatch';
+import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
+import { Icon } from 'components/Icon';
 import { TileWrapper } from 'components/Tile';
 import { Input, Item, Field } from 'components/Form';
 import { DurationPicker } from 'components/Form/DurationPicker';
@@ -21,7 +23,6 @@ import TemplatesModal from './TemplatesModal';
 import FormsViewer from './FormsViwer';
 import { createPMCycleSchema } from '../configs/schema';
 import { OBJECTIVE } from '../constants/constants';
-import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
 
 type Props = {
   onSubmit: (data: any) => void;
@@ -84,6 +85,9 @@ const PerformanceCycleForm: FC<Props> = ({ onSubmit, defaultValues, canEdit = tr
   useEffect(() => {
     dispatch(PerformanceCycleActions.getPerformanceCycleMappingKeys());
   }, []);
+
+  const hasBeforeStarProperties = properties.pm_cycle_before_start !== undefined;
+  const hasBeforeEndProperties = properties.pm_cycle_before_end !== undefined;
 
   return (
     <form className={css({ marginTop: '32px' })} autoComplete='off'>
@@ -179,38 +183,69 @@ const PerformanceCycleForm: FC<Props> = ({ onSubmit, defaultValues, canEdit = tr
               readonly={!canEdit}
             />
           </div>
-
-          <div className={css(itemStyle)}>
-            <Item label={t('notifications', 'Notifications')} withIcon={false} />
-            <div>
-              <Field
-                name={'metadata.cycle.properties.pm_cycle_before_start'}
-                setValue={setValue}
-                Wrapper={({ children }) => (
-                  <Item label={t('before_start', 'Before start')} withIcon={false}>
-                    {children}
-                  </Item>
-                )}
-                Element={DurationPicker}
-                value={get(formValues, 'metadata.cycle.properties.pm_cycle_before_start')}
-                readonly={!canEdit}
-              />
-            </div>
+          {(hasBeforeEndProperties || hasBeforeStarProperties) && (
             <div className={css(itemStyle)}>
-              <Field
-                name={'metadata.cycle.properties.pm_cycle_before_end'}
-                setValue={setValue}
-                Wrapper={({ children }) => (
-                  <Item label={t('before_end', 'Before end')} withIcon={false}>
-                    {children}
-                  </Item>
-                )}
-                Element={DurationPicker}
-                value={get(formValues, 'metadata.cycle.properties.pm_cycle_before_end')}
-                readonly={!canEdit}
-              />
+              <Item label={t('notifications', 'Notifications')} withIcon={false} />
+              {hasBeforeStarProperties && (
+                <div>
+                  <Field
+                    name={'metadata.cycle.properties.pm_cycle_before_start'}
+                    setValue={setValue}
+                    Wrapper={({ children }) => (
+                      <div>
+                        <Item
+                          label={t('before_start', 'Before start')}
+                          withIcon={false}
+                          customIcon={
+                            canEdit ? (
+                              <Icon
+                                graphic={'delete'}
+                                onClick={() => setValue('metadata.cycle.properties.pm_cycle_before_start', undefined)}
+                              />
+                            ) : undefined
+                          }
+                        >
+                          {children}
+                        </Item>
+                      </div>
+                    )}
+                    Element={DurationPicker}
+                    value={get(formValues, 'metadata.cycle.properties.pm_cycle_before_start')}
+                    readonly={!canEdit}
+                  />
+                </div>
+              )}
+              {hasBeforeEndProperties && (
+                <div className={css(itemStyle)}>
+                  <Field
+                    name={'metadata.cycle.properties.pm_cycle_before_end'}
+                    setValue={setValue}
+                    Wrapper={({ children }) => (
+                      <div>
+                        <Item
+                          label={t('before_end', 'Before end')}
+                          withIcon={false}
+                          customIcon={
+                            canEdit ? (
+                              <Icon
+                                graphic={'delete'}
+                                onClick={() => setValue('metadata.cycle.properties.pm_cycle_before_end', undefined)}
+                              />
+                            ) : undefined
+                          }
+                        >
+                          {children}
+                        </Item>
+                      </div>
+                    )}
+                    Element={DurationPicker}
+                    value={get(formValues, 'metadata.cycle.properties.pm_cycle_before_end')}
+                    readonly={!canEdit}
+                  />
+                </div>
+              )}
             </div>
-          </div>
+          )}
         </div>
       </TileWrapper>
       <TileWrapper

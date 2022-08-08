@@ -134,6 +134,6 @@ const errorMessageStyle: Rule = ({ theme }) => ({
 const IconStyle: Rule = {
   position: 'absolute',
   top: '10px',
-  left: '12px',
+  right: '12px',
   cursor: 'pointer',
 };

@@ -15,7 +15,7 @@ import useDispatch from 'hooks/useDispatch';
 import { buildPath } from 'features/general/Routes';
 import { useToast, Variant } from 'features/general/Toast';
 import Spinner from 'components/Spinner';
-import { formatDate, DATE_FORMAT, getISODateStringWithTimeFromDateString } from 'utils';
+import { formatDate, DATE_FORMAT, getISODateStringWithTimeFromDateString, checkExistedValue } from 'utils';
 import { CycleType } from 'config/enum';
 import PerformanceCycleForm from './components/PerformanceCycleForm';
 import { Status as PerformanceCycleStatus } from './constants/type';
@@ -74,10 +74,12 @@ const CreatePerformanceCycle: FC = () => {
       formatDate(metadata.cycle.properties.pm_cycle_end_time, DATE_FORMAT),
     );
 
-    const properties = Object.entries(metadata.cycle.properties).reduce((acc, [key, value]) => {
-      if (value) acc[key] = value;
-      return acc;
-    }, {});
+    const properties = checkExistedValue(metadata.cycle.properties);
+
+    const timelinePoints = metadata.cycle.timelinePoints.map(({ properties, ...rest }) => ({
+      ...rest,
+      properties: checkExistedValue(properties),
+    }));
 
     return {
       uuid: performanceCycleUuid !== 'new' ? performanceCycleUuid : undefined,
@@ -93,6 +95,7 @@ const CreatePerformanceCycle: FC = () => {
         ...metadata,
         cycle: {
           ...metadata.cycle,
+          timelinePoints,
           properties: { ...properties, pm_cycle_start_time: startTime, pm_cycle_end_time: endTime },
         },
       },

@@ -13,3 +13,9 @@ export const extendQuery = <T extends QueryType, U extends Record<string, string
   ...query,
   ...fields,
 });
+
+export const checkExistedValue = (obj: Record<string, any>) =>
+  Object.entries(obj).reduce((acc, [key, value]) => {
+    if (value) acc[key] = value;
+    return acc;
+  }, {});

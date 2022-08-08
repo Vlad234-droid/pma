@@ -3,14 +3,13 @@ import { Epic, isActionOf } from 'typesafe-actions';
 import { combineEpics } from 'redux-observable';
 import { from, of } from 'rxjs';
 import { catchError, filter, map, mergeMap, switchMap, takeUntil, tap } from 'rxjs/operators';
-import { concatWithErrorToast, errorPayloadConverter } from '../../utils/toastHelper';
 
 import {
   createProfileAttribute,
   getCurrentUser,
   getCurrentUserMetadata,
   updateProfileAttribute,
-  updateUserNotification,
+  deleteProfileAttribute,
 } from './actions';
 
 const NUMBER_OF_DEFAULT_ATTRIBUTES = 18;
@@ -53,7 +52,7 @@ export const getUserMetadataEpic: Epic = (action$, _, { api }) =>
     filter(isActionOf(getCurrentUser.success)),
     //@ts-ignore
     switchMap(({ payload: { colleague } }) => {
-      return from(api.getColleagueMetadata({ colleagueUuid: colleague.colleagueUUID })).pipe(
+      return from(api.getColleagueMetadata({ colleagueUuid: colleague.colleagueUUID, includeForms: false })).pipe(
         //@ts-ignore
         map(({ data }) => getCurrentUserMetadata.success(data)),
         catchError((e) => {
@@ -77,32 +76,34 @@ export const createProfileAttributeEpic: Epic = (action$, _, { api }) =>
     ),
   );
 
-export const updateProfileAttributeEpic: Epic = (action$, _, { api }) =>
+export const updateProfileAttributesEpic: Epic = (action$, state$, { api }) =>
   action$.pipe(
     filter(isActionOf(updateProfileAttribute.request)),
     switchMap(({ payload }) =>
       //@ts-ignore
-      from(api.updateProfileAttribute(payload)).pipe(
+      from(api.updateUserNotification(payload)).pipe(
         //@ts-ignore
-        mergeMap(({ data }) => {
-          return from([updateProfileAttribute.success(data)]);
+        map(({ data }) => updateProfileAttribute.success(data)),
+        catchError((e) => {
+          const errors = e?.data?.errors;
+          return of(updateProfileAttribute.failure(errors?.[0]));
         }),
       ),
     ),
   );
 
-export const updateUserNotificationEpic: Epic = (action$, state$, { api }) =>
+export const deleteProfileAttributesEpic: Epic = (action$, state$, { api }) =>
   action$.pipe(
-    filter(isActionOf(updateUserNotification.request)),
+    filter(isActionOf(deleteProfileAttribute.request)),
     switchMap(({ payload }) =>
       //@ts-ignore
-      from(api.updateUserNotification(payload)).pipe(
-        map(getCurrentUser.request),
+      from(api.deleteProfileAttribute(payload)).pipe(
+        //@ts-ignore
+        map(({ data }) => deleteProfileAttribute.success(data)),
         catchError((e) => {
           const errors = e?.data?.errors;
-          return of(updateUserNotification.failure(errors?.[0]));
+          return of(deleteProfileAttribute.failure(errors?.[0]));
         }),
-        takeUntil(action$.pipe(filter(isActionOf(updateUserNotification.cancel)))),
       ),
     ),
   );
@@ -110,7 +111,7 @@ export const updateUserNotificationEpic: Epic = (action$, state$, { api }) =>
 export default combineEpics(
   getCurrentUserEpic,
   getUserMetadataEpic,
-  updateUserNotificationEpic,
   createProfileAttributeEpic,
-  updateProfileAttributeEpic,
+  updateProfileAttributesEpic,
+  deleteProfileAttributesEpic,
 );

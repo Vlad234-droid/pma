@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { useStyle } from '@pma/dex-wrapper';
 import { TileWrapper } from 'components/Tile';
-import { EmailNotifications } from 'features/general/EmailNotifications';
+import EmailNotificationSettings from 'features/general/EmailNotificationSettings';
 
 export const TEST_ID = 'objectives-pave';
 
@@ -19,7 +19,7 @@ const Settings: FC = () => {
       >
         <div className={css({ flex: '3 1 375px', display: 'flex', flexDirection: 'column', gap: '8px' })}>
           <TileWrapper>
-            <EmailNotifications />
+            <EmailNotificationSettings />
           </TileWrapper>
         </div>
         <div

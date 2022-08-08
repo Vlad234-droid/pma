@@ -30,13 +30,6 @@ export const getCurrentUserMetadata = createAsyncAction(
   'user/current/metadata/CANCEL',
 )<undefined, any, any, undefined>();
 
-export const updateUserNotification = createAsyncAction(
-  'user/notification/REQUEST',
-  'user/notification/SUCCESS',
-  'user/notification/FAILURE',
-  'user/notification/CANCEL',
-)<any, any, Error, undefined>();
-
 export const createProfileAttribute = createAsyncAction(
   'user/CREATE_PROFILE_ATTRIBUTE_REQUEST',
   'user/CREATE_PROFILE_ATTRIBUTE_SUCCESS',
@@ -44,18 +37,24 @@ export const createProfileAttribute = createAsyncAction(
 )<any, any, Error>();
 
 export const updateProfileAttribute = createAsyncAction(
-  'user/UPDATE_PROFILE_ATTRIBUTE_REQUEST',
-  'user/UPDATE_PROFILE_ATTRIBUTE_SUCCESS',
-  'user/UPDATE_PROFILE_ATTRIBUTE_FAILURE',
+  'user/update-profile-attribute/REQUEST',
+  'user/update-profile-attribute/SUCCESS',
+  'user/update-profile-attribute/FAILURE',
+)<any, any, Error>();
+
+export const deleteProfileAttribute = createAsyncAction(
+  'user/delete-profile-attribute/REQUEST',
+  'user/delete-profile-attribute/SUCCESS',
+  'user/delete-profile-attribute/FAILURE',
 )<any, any, Error>();
 
 export const Actions = {
   login: loginAsync.request,
   logout: logoutAsync.request,
   getCurrentUser: getCurrentUser.request,
-  updateUserNotification: updateUserNotification.request,
   createProfileAttribute: createProfileAttribute.request,
   updateProfileAttribute: updateProfileAttribute.request,
+  deleteProfileAttribute: deleteProfileAttribute.request,
 };
 
 export type Action = ActionType<typeof loginAsync>;
