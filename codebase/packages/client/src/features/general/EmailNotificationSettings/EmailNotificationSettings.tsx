@@ -17,7 +17,7 @@ const EmailNotificationSettings: FC = () => {
   const dispatch = useDispatch();
   const { user } = useAuthContainer();
   //@ts-ignore
-  const { profileAttributes = [] }: { profileAttributes: Array<any> } = user;
+  const { profileAttributes = [] }: { profileAttributes: Array<any> } = user || {};
   const colleagueUuid = useSelector(colleagueUUIDSelector);
 
   const handleUpdateSetting = (setting: any) =>
@@ -106,12 +106,9 @@ const listStyles: Rule = {
   gap: '24px',
   padding: '24px',
 };
+
 const labelStyle: Rule = {
   marginLeft: '8px',
   marginBottom: '2px',
   cursor: 'pointer',
-};
-
-const deleteButtonStyle: Rule = {
-  paddingLeft: '1em',
 };
