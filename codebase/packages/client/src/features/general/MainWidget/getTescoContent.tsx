@@ -7,7 +7,8 @@ import { ObjectivesForm } from 'features/general/ObjectivesForm';
 import { Subtitle } from './Subtitle';
 
 export const getTescoContent = (props: ContentProps, t: TFunction) => {
-  const { status, count, nextReviewDate: date = '' } = props;
+  const { status, statistic, nextReviewDate: date = '' } = props;
+  const count = status ? statistic?.[status] || 0 : 0;
 
   const config: ContentConfig = {
     viewPage: Page.REVIEWS_VIEW,
@@ -59,7 +60,7 @@ export const getTescoContent = (props: ContentProps, t: TFunction) => {
         'Remember if your priorities change, review your objectives',
       ),
       buttonText: t('view_and_edit_objectives', 'View and edit objectives'),
-      redirectToViewPage: false,
+      redirectToViewPage: !!statistic?.[Status.APPROVED],
     },
     [Status.WAITING_FOR_APPROVAL]: {
       backgroundColor: 'tescoBlue',

@@ -32,7 +32,6 @@ const Widgets: FC<Props> = () => {
   const timelineMYR = useSelector(getTimelineByReviewTypeSelector(ReviewType.MYR, USER.current));
   const timelineTypes = useSelector(timelineTypesAvailabilitySelector(USER.current));
   const status = timelineObjective?.summaryStatus;
-  const count = timelineObjective?.count || 0;
   const nextReviewDate = timelineMYR?.startTime || null;
   const canShowObjectives = timelineTypes[ReviewType.OBJECTIVE];
   const dates = useSelector(earlyDataPDPSelector) || '';
@@ -79,7 +78,7 @@ const Widgets: FC<Props> = () => {
           {canShowObjectives && (
             <MainWidget
               status={status}
-              count={count}
+              statistic={timelineObjective?.statistics}
               nextReviewDate={nextReviewDate}
               customStyle={{
                 flex: '4 1 500px',

@@ -10,7 +10,6 @@ import {
   filterReviewsByTypeSelector,
   FormType,
   getReviewPropertiesSelector,
-  getTimelineByReviewTypeSelector,
   ReviewsActions,
   reviewsMetaSelector,
 } from '@pma/store';
@@ -25,6 +24,7 @@ import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
 
 type ObjectivesProps = {
   onClose: () => void;
+  toggleSuccess: (T: boolean) => void;
   schema: any;
   objectives: any;
   origin: any;
@@ -32,7 +32,15 @@ type ObjectivesProps = {
   editNumber?: number;
 };
 
-const Objectives: FC<ObjectivesProps> = ({ colleagueUUID, schema, objectives, origin, onClose, editNumber = null }) => {
+const Objectives: FC<ObjectivesProps> = ({
+  colleagueUUID,
+  schema,
+  objectives,
+  origin,
+  onClose,
+  editNumber = null,
+  toggleSuccess,
+}) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const pathParams = { colleagueUuid: colleagueUUID, code: 'OBJECTIVE', cycleUuid: 'CURRENT' };
@@ -80,6 +88,7 @@ const Objectives: FC<ObjectivesProps> = ({ colleagueUUID, schema, objectives, or
       return { ...objective, status: Status.WAITING_FOR_APPROVAL };
     });
     dispatch(ReviewsActions.updateReviews({ pathParams, data: updatedObjectives }));
+    toggleSuccess(true);
   };
   const onSaveDraft = () => {
     const data = getValues();
@@ -168,6 +177,7 @@ export type CreateUpdateObjectivesModalProps = {
 const CreateUpdateObjectives: FC<CreateUpdateObjectivesModalProps> = ({ onClose, editNumber }) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
+  const [showSuccess, toggleSuccess] = useState<boolean>(false);
   const { loaded: schemaLoaded, loading: schemaLoading } = useSelector(schemaMetaSelector);
   const { loaded: reviewLoaded, loading: reviewLoading } = useSelector(reviewsMetaSelector);
   const { info } = useSelector(currentUserSelector);
@@ -176,13 +186,12 @@ const CreateUpdateObjectives: FC<CreateUpdateObjectivesModalProps> = ({ onClose,
   const origin = useSelector(filterReviewsByTypeSelector(ReviewType.OBJECTIVE)) || [];
   const objectives = useSelector(getReviewPropertiesSelector(ReviewType.OBJECTIVE));
   const [schema] = useReviewSchema(ReviewType.OBJECTIVE);
-  const timelineObjective = useSelector(getTimelineByReviewTypeSelector(ReviewType.OBJECTIVE, USER.current));
 
   useEffect(() => {
     dispatch(ReviewsActions.getReviews({ pathParams }));
   }, []);
 
-  if (timelineObjective?.summaryStatus === Status.WAITING_FOR_APPROVAL && schemaLoaded && reviewLoaded) {
+  if (showSuccess) {
     return (
       <SuccessModal
         title={t('objectives_sent', 'Objectives sent')}
@@ -201,6 +210,7 @@ const CreateUpdateObjectives: FC<CreateUpdateObjectivesModalProps> = ({ onClose,
 
   return (
     <Objectives
+      toggleSuccess={toggleSuccess}
       onClose={onClose}
       editNumber={editNumber}
       schema={schema}

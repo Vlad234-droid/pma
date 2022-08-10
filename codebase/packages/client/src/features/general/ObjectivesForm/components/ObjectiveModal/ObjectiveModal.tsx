@@ -1,22 +1,23 @@
 import React, { FC, HTMLProps, useEffect, useRef } from 'react';
 import { UseFormReturn } from 'react-hook-form';
+import { useSelector } from 'react-redux';
 
 import { Button, CreateRule, Icon, Rule, useStyle } from '@pma/dex-wrapper';
+import { isReviewsNumberInStatuses, reviewsMetaSelector } from '@pma/store';
 
 import { ReviewType, Status } from 'config/enum';
 import { Trans, useTranslation } from 'components/Translation';
 import { Icon as IconComponent } from 'components/Icon';
 import { StepIndicatorBasic } from 'components/StepIndicator/StepIndicator';
 import { Attention } from 'components/Form';
-import { TriggerModal } from 'features/general/Modal/components/TriggerModal';
-
-import { ButtonWithConfirmation } from 'features/general/Modal';
-import ObjectiveHelpModal from '../Modal/ObjectiveHelpModal';
+import Spinner from 'components/Spinner';
 import { IconButton, Position } from 'components/IconButton';
+
+import { TriggerModal } from 'features/general/Modal/components/TriggerModal';
+import { ButtonWithConfirmation } from 'features/general/Modal';
+
+import ObjectiveHelpModal from '../Modal/ObjectiveHelpModal';
 import ObjectiveComponents from '../ObjectiveComponents';
-import ObjectiveComponentsNew from '../ObjectiveComponentsNew';
-import { isReviewsNumberInStatuses, getReviewSchema } from '@pma/store';
-import { useSelector } from 'react-redux';
 
 export type ObjectiveModalProps = {
   useSingleStep?: boolean;
@@ -58,8 +59,7 @@ const ObjectiveModal: FC<Props> = ({
   skipHelp,
   onClose,
 }) => {
-  // todo temporary
-  const { display: newSchemaVersion } = useSelector(getReviewSchema(ReviewType.OBJECTIVE));
+  const { loading: reviewLoading } = useSelector(reviewsMetaSelector);
 
   const canNotSaveAsDraft = useSelector(
     isReviewsNumberInStatuses(ReviewType.OBJECTIVE)([Status.APPROVED, Status.DECLINED], currentObjectiveNumber),
@@ -83,6 +83,7 @@ const ObjectiveModal: FC<Props> = ({
   const {
     formState: { isValid },
   } = methods;
+  const isDisabled = reviewLoading || !isValid;
 
   return (
     <div data-test-id={TEST_ID} className={css(containerStyle)}>
@@ -119,8 +120,8 @@ const ObjectiveModal: FC<Props> = ({
             </div>
           )}
           <Attention customStyle={{ marginBottom: '20px' }} />
-          {newSchemaVersion ? (
-            <ObjectiveComponentsNew components={schemaComponents} review={formValues} methods={methods} />
+          {reviewLoading ? (
+            <Spinner fullHeight />
           ) : (
             <ObjectiveComponents components={schemaComponents} review={formValues} methods={methods} />
           )}
@@ -129,7 +130,7 @@ const ObjectiveModal: FC<Props> = ({
               <div className={css(footerWrapperStyle)}>
                 <div className={css(buttonWrapperStyle({ mobileScreen }))}>
                   {!canNotSaveAsDraft ? (
-                    <Button styles={[buttonWhiteStyle]} onPress={onSaveDraft}>
+                    <Button styles={[buttonWhiteStyle]} onPress={onSaveDraft} isDisabled={reviewLoading}>
                       <Trans i18nKey='save_as_draft'>Save as draft</Trans>
                     </Button>
                   ) : (
@@ -139,14 +140,14 @@ const ObjectiveModal: FC<Props> = ({
                   )}
                   {submitForm ? (
                     <ButtonWithConfirmation
-                      isDisabled={!isValid}
+                      isDisabled={isDisabled}
                       onSave={onSubmit}
                       disabledBtnTooltip={t('action_enabled', 'Action enabled when mandatory fields are completed')}
-                      styles={[buttonBlueStyle({ disabled: !isValid })]}
+                      styles={[buttonBlueStyle({ disabled: isDisabled })]}
                     />
                   ) : (
                     <IconButton
-                      isDisabled={!isValid}
+                      isDisabled={isDisabled}
                       customVariantRules={{
                         default: buttonBlueStyle({ disabled: false }),
                         disabled: buttonBlueStyle({ disabled: true }),

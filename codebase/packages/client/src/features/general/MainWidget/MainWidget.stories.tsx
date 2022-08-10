@@ -13,4 +13,4 @@ export default {
 const Template: Story<MainWidgetBaseProps> = (props) => <MainWidgetBase {...props} getContent={getTescoContent} />;
 
 export const MainWidget = Template.bind({});
-MainWidget.args = { count: 3 };
+MainWidget.args = { statistic: { DRAFT: 3 } };

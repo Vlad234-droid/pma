@@ -3,7 +3,6 @@ import { Rule, useStyle } from '@pma/dex-wrapper';
 import { ReviewType, Status } from 'config/enum';
 import {
   colleagueUUIDSelector,
-  countByStatusReviews,
   filterReviewsByTypeSelector,
   getReviewSchema,
   getTimelineByCodeSelector,
@@ -49,16 +48,15 @@ const Objectives = () => {
 
   const { loading: reviewLoading } = useSelector(reviewsMetaSelector);
   const timelineObjective = useSelector(getTimelineByCodeSelector(ReviewType.OBJECTIVE, USER.current)) || {};
-  const status = timelineObjective?.summaryStatus || undefined;
+  const status = timelineObjective?.summaryStatus || null;
   const isAllObjectivesInSameStatus = useSelector(isReviewsInStatus(ReviewType.OBJECTIVE)(status));
 
   const document = useMemo(() => <ObjectiveDocument items={objectives} />, [JSON.stringify(objectives)]);
   const [instance, updateInstance] = usePDF({ document });
 
-  const countDraftReviews = useSelector(countByStatusReviews(ReviewType.OBJECTIVE, Status.DRAFT)) || 0;
-  const countDeclinedReviews = useSelector(countByStatusReviews(ReviewType.OBJECTIVE, Status.DECLINED)) || 0;
-  const countWaitingForApprovalReviews =
-    useSelector(countByStatusReviews(ReviewType.OBJECTIVE, Status.WAITING_FOR_APPROVAL)) || 0;
+  const countDraftReviews = parseInt(timelineObjective?.statistics?.[Status.DRAFT] || 0);
+  const countDeclinedReviews = parseInt(timelineObjective?.statistics?.[Status.DECLINED] || 0);
+  const countWaitingForApprovalReviews = parseInt(timelineObjective?.statistics?.[Status.WAITING_FOR_APPROVAL] || 0);
 
   const canEditAllObjective = canEditAllObjectiveFn({
     objectiveSchema,

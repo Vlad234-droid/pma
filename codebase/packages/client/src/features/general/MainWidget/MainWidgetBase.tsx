@@ -13,7 +13,7 @@ export const TEST_ID = 'main-widget';
 
 export type ContentProps = {
   status?: Status;
-  count?: number;
+  statistic?: object;
   nextReviewDate?: string;
 };
 

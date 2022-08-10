@@ -7,8 +7,9 @@ import { Subtitle } from 'features/general/MainWidget/Subtitle';
 import { PriorityList } from './PriorityList';
 
 export const getTescoBankContent = (props: ContentProps, t: TFunction) => {
-  const { status, count, nextReviewDate: date = '' } = props;
+  const { status, statistic, nextReviewDate: date = '' } = props;
   const WORK_IN_PROGRESS = true;
+  const count = status ? statistic?.[status] || 0 : 0;
 
   const config: ContentConfig = {
     viewPage: Page.REVIEWS_VIEW, //TODO: Replace with proper page
