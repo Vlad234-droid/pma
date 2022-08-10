@@ -16,9 +16,19 @@ type Props = {
   searchValue: string;
   filterOptions?: FilterOption[];
   onFilter?: (filters: FilterValues) => void;
+  infoIcon?: boolean;
 };
 
-const Filters: FC<Props> = ({ sortingOptions, sortValue, onSort, searchValue, onSearch, filterOptions, onFilter }) => {
+const Filters: FC<Props> = ({
+  sortingOptions,
+  sortValue,
+  onSort,
+  searchValue,
+  onSearch,
+  filterOptions,
+  onFilter,
+  infoIcon = true,
+}) => {
   const { css } = useStyle();
   const [sortOpen, setSortOpen] = useState<boolean>(false);
   const [searchOpened, setSearchOpen] = useState<boolean>(false);
@@ -58,9 +68,11 @@ const Filters: FC<Props> = ({ sortingOptions, sortValue, onSort, searchValue, on
 
   return (
     <div className={css(wrapperStyles)} data-test-id='filters'>
-      <div className={css(iconWrapperStyles)}>
-        <InfoIcon onClick={() => console.log('info clicked')} />
-      </div>
+      {infoIcon && (
+        <div className={css(iconWrapperStyles)}>
+          <InfoIcon onClick={() => console.log('info clicked')} />
+        </div>
+      )}
       {sortingOptions && (
         <Sorting
           iconStyles={iconStyles}

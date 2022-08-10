@@ -46,6 +46,7 @@ const MyTeamPage: FC = () => {
         />
         <div className={css(filtersStyles)}>
           <Filters
+            infoIcon={false}
             sortValue={sortValue}
             onSort={setSortValue}
             searchValue={searchValue}
