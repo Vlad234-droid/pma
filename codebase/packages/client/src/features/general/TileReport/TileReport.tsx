@@ -10,7 +10,8 @@ import { FilterOption } from 'features/general/Shared';
 import { buildPath } from 'features/general/Routes';
 import { ChartContent } from './components/ChartContent';
 import { TableContent } from './components/TableContent';
-import { WorkLevelContent } from './components/WorkLevelContent';
+// TODO: enabled when content of chart meets business requirements
+// import { WorkLevelContent } from './components/WorkLevelContent';
 import { View } from 'components/PieChart/config';
 import { ColleaguesCount } from 'features/general/Report/components/ColleaguesCount';
 import { useStatisticsReport } from 'features/general/Report/hooks';
@@ -20,7 +21,6 @@ import {
   checkBusinessType,
   checkExceptionType,
   checkTableChart,
-  checkWorkLevel,
   getReportTitles,
   checkColleaguesCount,
   getTableChartTitle,
@@ -43,20 +43,22 @@ const TileReport = () => {
   const [filterModal, setFilterModal] = useState(false);
   const [checkedItems, setCheckedItems]: [string[], (T) => void] = useState([]);
   const [isCheckAll, setIsCheckAll]: [string[], (T) => void] = useState([]);
-  const [isFullView, toggleFullView] = useState<boolean>(false);
+  const [isFullView] = useState<boolean>(false);
 
-  const { approvedObjPercent, approvedObjTitle, colleaguesCount } = useStatisticsReport([...metaStatuses]);
+  const { colleaguesCount } = useStatisticsReport([...metaStatuses]);
 
   const { type, query } = useTileStatistics();
 
   const isBusinessType = checkBusinessType(type);
   const isTableChart = checkTableChart(type);
-  const isWorkLevel = checkWorkLevel(type);
+  // TODO: enabled when content of chart meets business requirements
+  // const isWorkLevel = checkWorkLevel(type);
   const isException = checkExceptionType(type);
   const isShowCount = checkColleaguesCount(type);
 
   const getContent = () => {
-    if (isWorkLevel) return <WorkLevelContent toggleFullView={toggleFullView} isFullView={isFullView} />;
+    // TODO: enabled when content of chart meets business requirements
+    // if (isWorkLevel) return <WorkLevelContent toggleFullView={toggleFullView} isFullView={isFullView} />;
     if (isTableChart) return <TableContent type={type} />;
     return <ChartContent isException={isException} type={type} />;
   };
@@ -113,14 +115,17 @@ const TileReport = () => {
           {getContent()}
         </div>
         {!isFullView && (
-          <div data-test-id={'full-view'} className={css(rightColumn({ isWorkLevel }))}>
-            {isWorkLevel ? (
-              <PieChart
-                title={getReportTitles(t, type)?.chart}
-                data={[{ percent: approvedObjPercent, title: approvedObjTitle }]}
-                display={View.CHART}
-              />
-            ) : isTableChart ? (
+          <div data-test-id={'full-view'} className={css(rightColumn({ isTableChart }))}>
+            {/*TODO: enabled when content of chart meets business requirements*/}
+            {/*isWorkLevel ? (*/}
+            {/*<PieChart*/}
+            {/*    title={getReportTitles(t, type)?.chart}*/}
+            {/*    data={[{ percent: approvedObjPercent, title: approvedObjTitle }]}*/}
+            {/*    display={View.CHART}*/}
+            {/*/>*/}
+            {/*) :*/}
+
+            {isTableChart ? (
               <InfoTable mainTitle={getTableChartTitle(t, type)} data={type} />
             ) : (
               <PieChart
@@ -158,14 +163,14 @@ const arrowLeftStyle: Rule = ({ theme }) => {
   };
 };
 
-const rightColumn: CreateRule<{ isWorkLevel: boolean }> =
-  ({ isWorkLevel }) =>
+const rightColumn: CreateRule<{ isTableChart: boolean }> =
+  ({ isTableChart }) =>
   ({ theme }) => ({
     display: 'flex',
     gap: theme.spacing.s2,
     flex: 4,
     flexBasis: '400px',
-    marginTop: isWorkLevel ? '79px' : '73px',
+    marginTop: isTableChart ? '51px' : '73px',
     alignSelf: 'flex-end',
   });
 

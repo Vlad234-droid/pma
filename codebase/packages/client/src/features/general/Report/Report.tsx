@@ -279,19 +279,20 @@ const Report: FC = () => {
             )}
           </div>
           <div className={css(pieChartWrapper)}>
-            {isDisplayTile(IsReportTiles.WL4And5) && (
-              <div className={css(leftColumn)}>
-                <PieChart
-                  title={t(TitlesReport.WL4And5, 'WL4 & 5 Objectives submitted')}
-                  display={View.CHART}
-                  data={ReportPage.REPORT_WORK_LEVEL}
-                  link={Page.TILE_REPORT_STATISTICS}
-                  params={getYear()}
-                  type={convertToLink(ReportPage.REPORT_WORK_LEVEL)}
-                  hoverVisibility={false}
-                />
-              </div>
-            )}
+            {/*// TODO: enabled when content of chart meets business requirements*/}
+            {/*{isDisplayTile(IsReportTiles.WL4And5) && (*/}
+            {/*  <div className={css(leftColumn)}>*/}
+            {/*    <PieChart*/}
+            {/*      title={t(TitlesReport.WL4And5, 'WL4 & 5 Objectives submitted')}*/}
+            {/*      display={View.CHART}*/}
+            {/*      data={ReportPage.REPORT_WORK_LEVEL}*/}
+            {/*      link={Page.TILE_REPORT_STATISTICS}*/}
+            {/*      params={getYear()}*/}
+            {/*      type={convertToLink(ReportPage.REPORT_WORK_LEVEL)}*/}
+            {/*      hoverVisibility={false}*/}
+            {/*    />*/}
+            {/*  </div>*/}
+            {/*)}*/}
             {isDisplayTile(IsReportTiles.NEW_TO_BUSINESS) && (
               <div className={css(rightColumn)}>
                 <PieChart

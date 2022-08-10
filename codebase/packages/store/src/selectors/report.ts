@@ -92,7 +92,7 @@ export const getTableChartData = (type: string) =>
 
     return colleagues.reduce(
       (acc, colleague) => {
-        if (colleague.tags[type] !== '') acc[colleague.tags[type]].push(colleague);
+        if (colleague.tags[type] !== '') acc[colleague.tags[type]]?.push(colleague);
         return acc;
       },
       {
@@ -109,7 +109,7 @@ export const getAnniversaryData = createSelector(reportSelector, (report: any) =
   return colleagues.reduce(
     (acc, colleague) => {
       Object.keys(acc).forEach((type) => {
-        if (Number(colleague.tags[type])) acc[type].push(colleague);
+        if (Number(colleague.tags[type])) acc[type]?.push(colleague);
         return acc;
       });
 

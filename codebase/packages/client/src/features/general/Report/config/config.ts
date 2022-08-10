@@ -187,7 +187,8 @@ export const checkboxes = (t, fields) => [
 ];
 
 export const getWLFields = (t) => [
-  { id: '10', label: t(StatisticsTitlesReportKeys.WL4And5), isChecked: false },
+  /*// TODO: enabled when content of chart meets business requirements*/
+  // { id: '10', label: t(StatisticsTitlesReportKeys.WL4And5), isChecked: false },
   getSelectAllField(t),
 ];
 

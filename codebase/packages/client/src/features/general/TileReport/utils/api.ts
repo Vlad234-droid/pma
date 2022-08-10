@@ -1,5 +1,5 @@
 import { ReportActions } from '@pma/store';
-import { metaStatuses, listOfStatuses } from 'features/general/Report/config';
+import { metaStatuses } from 'features/general/Report/config';
 import { ReportPage } from 'config/enum';
 
 export const getData = (dispatch, query, type) => {
@@ -22,11 +22,11 @@ export const getData = (dispatch, query, type) => {
       }),
     );
   }
-
-  dispatch(
-    ReportActions.getObjectivesReport({
-      year: query.year,
-      statuses_in: [...listOfStatuses],
-    }),
-  );
+  // TODO: enabled when content of chart meets business requirements
+  // dispatch(
+  //   ReportActions.getObjectivesReport({
+  //     year: query.year,
+  //     statuses_in: [...listOfStatuses],
+  //   }),
+  // );
 };
