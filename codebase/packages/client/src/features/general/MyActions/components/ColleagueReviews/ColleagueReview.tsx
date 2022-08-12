@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect, useMemo } from 'react';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { createYupSchema } from 'utils/yup';
@@ -16,17 +16,20 @@ import { GenericItemField } from 'components/GenericForm';
 import { ReviewType, Status } from 'config/enum';
 import { formTagComponents } from '../../../Objectives';
 import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
+import FileList from 'components/FileList';
+import { getReviewFileLink } from 'utils/review';
 
 type Props = {
   review: any;
   schema: any;
+  colleagueUuid: string;
   validateReview: (review: { [key: string]: boolean }) => void;
   updateColleagueReviews: (T) => void;
 };
 
 export const TEST_WRAPPER_ID = 'test-wrapper-id';
 
-const ColleagueReview: FC<Props> = ({ review, schema, validateReview, updateColleagueReviews }) => {
+const ColleagueReview: FC<Props> = ({ colleagueUuid, review, schema, validateReview, updateColleagueReviews }) => {
   const { css, theme } = useStyle();
   const { t } = useTranslation();
 
@@ -34,6 +37,16 @@ const ColleagueReview: FC<Props> = ({ review, schema, validateReview, updateColl
   const styledComponents = formTagComponents(components, theme);
 
   const reviewProperties = review?.properties;
+  const fileList = useMemo(
+    () =>
+      review?.files?.map(({ fileName, uuid }) => ({
+        name: fileName,
+        uuid: uuid,
+        href: getReviewFileLink(colleagueUuid, uuid),
+      })),
+    [review],
+  );
+
   const yepSchema = components.reduce(createYupSchema(t), {});
   const methods = useFormWithCloseProtection({
     mode: 'onChange',
@@ -147,6 +160,11 @@ const ColleagueReview: FC<Props> = ({ review, schema, validateReview, updateColl
           })}
         </>
       </div>
+      {fileList?.length && (
+        <div className={css(fileListStyle)}>
+          <FileList files={fileList} />
+        </div>
+      )}
     </TileWrapper>
   );
 };
@@ -174,3 +192,5 @@ const titleStyles: Rule = ({ theme }) => ({
 });
 
 const valueStyle: Rule = ({ theme }) => ({ ...theme.font.fixed.f16, letterSpacing: '0px' });
+
+const fileListStyle: Rule = { padding: '0px 20px 20px' };

@@ -87,7 +87,10 @@ const ColleagueAction: FC<Props> = ({ status, colleague, onUpdate }) => {
     setColleagueExpanded(colleagueUuid);
     dispatch(SchemaActions.clearSchemaData());
     dispatch(
-      ReviewsActions.getColleagueReviews({ pathParams: { colleagueUuid: colleagueUuid, cycleUuid: 'CURRENT' } }),
+      ReviewsActions.getColleagueReviews({
+        pathParams: { colleagueUuid: colleagueUuid, cycleUuid: 'CURRENT' },
+        searchParams: { includeFiles: true },
+      }),
     );
     dispatch(SchemaActions.getSchema({ colleagueUuid }));
   };
@@ -140,6 +143,7 @@ const ColleagueAction: FC<Props> = ({ status, colleague, onUpdate }) => {
                         {groupColleagueReviews[reviewType]?.reviews?.map((review) => (
                           <ColleagueReview
                             key={review.uuid}
+                            colleagueUuid={colleague.uuid}
                             review={review}
                             schema={allColleagueReviewsSchema[reviewType] || []}
                             validateReview={handleValidateReview}
