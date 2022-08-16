@@ -73,6 +73,10 @@ export const dateToIso = (date: Date) => DateTime.fromJSDate(date).toISO();
 
 export const getCurrentYear = () => DateTime.local().year.toString();
 
+export const getNextYear = (year: number) => DateTime.local().plus({ year }).toFormat('yyyy');
+
+export const getPrevYear = (year: number) => DateTime.local().minus({ year }).toFormat('yyyy');
+
 export const getISODateStringWithTimeFromDateString = (dateString: string): string => {
   const date = DateTime.fromFormat(dateString, DATE_FORMAT);
 

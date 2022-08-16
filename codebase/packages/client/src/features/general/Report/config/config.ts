@@ -1,5 +1,5 @@
 import { MetaDataReport, StatisticsTitlesReport, StatisticsTitlesReportKeys, Status } from 'config/enum';
-import { getCurrentYear } from 'utils/date';
+import { getCurrentYear, getNextYear, getPrevYear } from 'utils/date';
 
 export enum IsReportTiles {
   OBJECTIVES_SUBMITTED = 'Objectives submitted',
@@ -13,13 +13,7 @@ export enum IsReportTiles {
   ANNIVERSARY_REVIEWS = 'Anniversary Reviews completed per quarter',
   WL4And5 = 'WL4 & 5 Objectives approved',
 }
-export const getFieldOptions = (currentYear) => {
-  return [
-    { value: (currentYear - 1).toString(), label: (currentYear - 1).toString() },
-    { value: (currentYear - 2).toString(), label: (currentYear - 2).toString() },
-    { value: (currentYear - 3).toString(), label: (currentYear - 3).toString() },
-  ];
-};
+export const getFieldOptions = () => [{ value: getPrevYear(1), label: `${getCurrentYear()}-${getNextYear(1)}` }];
 
 export const getYearsFromCurrentYear = (currentYear) => {
   return [

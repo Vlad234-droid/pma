@@ -13,7 +13,7 @@ import { PieChart } from 'components/PieChart';
 import { Select } from 'components/Form';
 import { ReportModal } from './Modals';
 import { Trans, useTranslation } from 'components/Translation';
-import { getCurrentYear } from 'utils/date';
+import { getCurrentYear, getNextYear } from 'utils/date';
 import { View } from 'components/PieChart/config';
 import { HoverContainer } from 'components/HoverContainer';
 import { HoverMessage } from 'components/HoverMessage';
@@ -102,7 +102,14 @@ const Report: FC = () => {
             </h2>
 
             <Select
-              options={[{ value: getCurrentYear(), label: getCurrentYear() }, ...getFieldOptions(getCurrentYear())]}
+              options={[
+                //TODO: temporary solution
+                {
+                  value: getCurrentYear(),
+                  label: `${getNextYear(1)}-${getNextYear(2)}`,
+                },
+                ...getFieldOptions(),
+              ]}
               name={'year_options'}
               placeholder={t('choose_an_area', 'Choose an area')}
               //@ts-ignore

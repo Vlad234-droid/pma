@@ -11,7 +11,7 @@ import InfoTable, { INFO_TABLE_WRAPPER } from 'components/InfoTable';
 
 import { View } from 'components/PieChart/config';
 import { Rating } from 'config/enum';
-import { getCurrentYear } from '../../../utils';
+import { getCurrentYear, getNextYear } from 'utils';
 import { FILTER_WRAPPER } from './components/FilterModal/FilterModal';
 import { LEFT_SIDE_BUTTON } from 'components/ButtonsWrapper/ButtonsWrapper';
 
@@ -67,7 +67,7 @@ describe('Report page', () => {
     expect(await wrapper).toBeInTheDocument();
   });
   it('it should change select value ', () => {
-    const prevYear = (Number(getCurrentYear()) - 1).toString();
+    const prevYear = `${getCurrentYear()}-${getNextYear(1)}`;
 
     const { getByTestId, queryByText, getByText } = render(
       <BrowserRouter>
