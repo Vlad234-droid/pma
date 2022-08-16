@@ -13,7 +13,6 @@ type ErrorHandlerConfig = {
 export const errorHandler =
   ({ applicationPath, noRedirectPathFragments, clearCookies, logger }: ErrorHandlerConfig) =>
   (error: OneloginError | Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
-
     clearCookies(res);
 
     const status = OneloginError.is(error) ? error.status : 500;
@@ -24,9 +23,10 @@ export const errorHandler =
 
     if (canRedirect) {
       const redirectTo = `${emptyIfRoot(applicationPath)}${req.originalUrl}`;
-      const message = status === 401
-        ? `${error.message} - User will be redirected to the ${redirectAuthenticationPath}, return path after login: ${redirectTo}`
-        : `${error.message} - Error will be forwarded to application error handler`;
+      const message =
+        status === 401
+          ? `${error.message} - User will be redirected to the ${redirectAuthenticationPath}, return path after login: ${redirectTo}`
+          : `${error.message} - Error will be forwarded to application error handler`;
 
       if (status === 401) {
         logger(LoggerEvent.info(flow, message, { req, res }));
@@ -36,6 +36,9 @@ export const errorHandler =
         logger(LoggerEvent.error(flow, Error(message), { req, res }));
         next(error); // advance to error handler
       }
+    } else if (status === 401) {
+      // Client should refresh page on 401 status code.
+      return res.status(401).send(error);
     } else {
       const message = `${status}, ${error.message}`;
       logger(LoggerEvent.error(flow, Error(message), { req, res }));

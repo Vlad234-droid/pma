@@ -27,7 +27,7 @@ export default createReducer(initialState)
   .handleAction(getHelpFaqUrls.success, (state, { payload }) => {
     return {
       ...state,
-      urls: payload.data,
+      urls: payload?.data || {},
       meta: { ...state.meta, loading: false, loaded: true },
     };
   })
