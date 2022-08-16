@@ -20,6 +20,7 @@ import { Checkbox } from 'components/Form';
 import ApprovalWidget from './components/ApprovalWidget';
 import { SuccessModalProvider } from './context/successModalContext';
 import ColleagueAction from './components/ColleagueAction';
+import { SuccessModal } from './components/Modal';
 
 type Props = {
   status: Status;
@@ -130,6 +131,7 @@ const MyActions: FC<Props> = ({ status, searchValue, sortValue, isCheckedAll }) 
           </div>
         )}
       </div>
+      <SuccessModal />
     </SuccessModalProvider>
   );
 };

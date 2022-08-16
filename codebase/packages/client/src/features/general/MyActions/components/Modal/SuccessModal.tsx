@@ -12,20 +12,17 @@ import { buildPath } from 'features/general/Routes';
 import { Page } from 'pages';
 import { useTenant } from 'features/general/Permission';
 import { Tenant } from 'utils';
+import { useSuccessModalContext } from 'features/general/MyActions/context/successModalContext';
 
-type Props = {
-  review: ReviewType;
-  status: Status.DECLINED | Status.APPROVED;
-  onClose: () => void;
-};
-
-const ReviewSuccessModal: FC<Props> = ({ review, status, onClose }) => {
+const ReviewSuccessModal: FC = () => {
   const { t } = useTranslation();
   const colleaguesWaitingForApproval = useSelector((state) =>
     getEmployeesWithReviewStatus(state, Status.WAITING_FOR_APPROVAL),
   );
   const navigate = useNavigate();
   const tenant = useTenant();
+
+  const { reviewStatus: status, reviewType: review, setOpened, isOpen } = useSuccessModalContext();
 
   const title = `${
     status === Status.DECLINED ? t('declined', 'Declined', { ns: tenant }) : t('approved', 'Approved', { ns: tenant })
@@ -60,11 +57,13 @@ const ReviewSuccessModal: FC<Props> = ({ review, status, onClose }) => {
         )} ${typeDescription}.`;
 
   const handleClose = () => {
-    onClose();
+    setOpened(false);
     if (!colleaguesWaitingForApproval.length) {
       navigate(buildPath(Page.MY_TEAM));
     }
   };
+
+  if (!isOpen) return null;
 
   return (
     <SuccessModal
