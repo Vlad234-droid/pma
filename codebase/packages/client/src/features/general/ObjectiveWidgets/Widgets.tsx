@@ -17,23 +17,27 @@ import BaseWidget, { Props as SecondaryWidgetProps } from 'components/BaseWidget
 import { buildPath } from 'features/general/Routes';
 import { Props, widgetTypes } from './configs/type';
 import { ReviewType } from 'config/enum';
-import { DATE_STRING_FORMAT, formatDateString } from 'utils';
+import { DATE_STRING_FORMAT, formatDateString, Tenant } from 'utils';
 import Spinner from 'components/Spinner';
 import { USER } from 'config/constants';
 import { MainWidget } from 'features/general/MainWidget';
+import { useTenant } from '../Permission';
 
 const Widgets: FC<Props> = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { css } = useStyle();
   const { t } = useTranslation();
+  const tenant = useTenant();
 
   const timelineObjective = useSelector(getTimelineByReviewTypeSelector(ReviewType.OBJECTIVE, USER.current));
   const timelineMYR = useSelector(getTimelineByReviewTypeSelector(ReviewType.MYR, USER.current));
   const timelineTypes = useSelector(timelineTypesAvailabilitySelector(USER.current));
   const status = timelineObjective?.summaryStatus;
   const nextReviewDate = timelineMYR?.startTime || null;
-  const canShowObjectives = timelineTypes[ReviewType.OBJECTIVE];
+  const canShowObjectives = Tenant.GENERAL === tenant && timelineTypes[ReviewType.OBJECTIVE];
+  const canShowQuarter = Tenant.BANK === tenant && timelineTypes[ReviewType.QUARTER];
+  const canShowMainWidget = canShowObjectives || canShowQuarter;
   const dates = useSelector(earlyDataPDPSelector) || '';
   const pdpSelector = useSelector(schemaMetaPDPSelector)?.goals || [];
   const meta = useSelector(metaPDPSelector);
@@ -75,7 +79,7 @@ const Widgets: FC<Props> = () => {
         <Spinner />
       ) : (
         <>
-          {canShowObjectives && (
+          {canShowMainWidget && (
             <MainWidget
               status={status}
               statistic={timelineObjective?.statistics}
