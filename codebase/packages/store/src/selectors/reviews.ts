@@ -49,8 +49,14 @@ export const getReviewPropertiesSelector = (reviewType: ReviewType) =>
 
 export const getNextReviewNumberSelector = (reviewType: ReviewType) =>
   createSelector(filterReviewsByTypeSelector(reviewType), (reviews: any) => {
+    const daftReview = reviews.find(
+      ({ status, properties = {} }) => status === 'DRAFT' && Object.values(properties).some((value) => !value),
+    );
+
+    if (daftReview) return daftReview.number;
+
     if (reviews?.length) {
-      const number = reviews?.length;
+      const { number } = reviews[reviews.length - 1];
       return number + 1;
     }
 
@@ -79,9 +85,6 @@ export const isReviewsNumbersInStatus = (reviewType: ReviewType) => (status: Sta
 
 export const isReviewsNumberInStatuses = (reviewType: ReviewType) => (statuses: Status[], num: number) =>
   createSelector(filterReviewsByTypeSelector(reviewType), (reviews: any) => {
-    if (reviews?.length < num) {
-      return false;
-    }
     const review = reviews?.find((reviews) => reviews.number === num);
     if (!review && review?.status) {
       return false;

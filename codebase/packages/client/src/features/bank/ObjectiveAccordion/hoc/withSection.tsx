@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { ObjectiveTypes, transformReviewsToObjectives } from 'features/general/Objectives';
+import { ObjectiveTypes, transformReviewsToObjectives } from 'features/general/Reviews';
 import {
   colleagueUUIDSelector,
   filterReviewsByTypeSelector,

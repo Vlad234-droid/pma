@@ -7,7 +7,7 @@ import CareerPerformance from './CareerPerformance';
 import { CreatePersonalDevelopmentGoal, PersonalDevelopmentHelp, PersonalDevelopmentPlan } from './PDP';
 import MyTeam from './MyTeam';
 import MyActions from './MyActions';
-import Objectives, { CreateObjective } from './Objectives';
+import Reviews from './Reviews';
 import Profile from './Profile';
 import Feedback from './Feedback';
 import GiveFeedback from './GiveFeedback';
@@ -31,7 +31,7 @@ import ObjectivesView from './ObjectivesView';
 import Report from './Report';
 import { CreatePerformanceCycle, PerformanceCycleAdministration } from './PerformanceCycle';
 import { EditTip, TipsAdministration } from './Tips';
-import UserObjectives from './UserObjectives';
+import UserObjectives, { CreateObjective } from './UserObjectives';
 import PeopleTeam from './PeopleTeam';
 import Calibration from './Calibration';
 import RespondNewFeedback from './RespondNewFeedback';
@@ -41,7 +41,8 @@ import PreviousRatingsTiles from './PreviousRatingsTiles';
 import PreviousCalibrationRatings from './PreviousCalibrationRatings';
 import PreviousObjectiveRatings from './PreviousObjectiveRatings';
 import PreviousReviewForms from './PreviousReviewForms';
-import Reviews from './Reviews';
+import Review from './Review';
+import UpdateObjectives from './UpdateObjectives';
 import { NotFound } from './NotFound';
 import { Tenant } from 'utils';
 
@@ -242,7 +243,7 @@ const pages: Record<Page, PageComponent> = {
     tenant: [tenant.BANK, tenant.GENERAL],
   },
   [Page.REVIEWS_VIEW]: {
-    Element: Objectives,
+    Element: Reviews,
     title: (tenant, t) => t('my_objectives_and_reviews', 'My objectives and reviews', { ns: tenant }),
     withHeader: true,
     backPath: Page.CONTRIBUTION,
@@ -250,13 +251,27 @@ const pages: Record<Page, PageComponent> = {
     tenant: [tenant.BANK, tenant.GENERAL],
   },
   [Page.REVIEWS]: {
-    Element: Reviews,
+    Element: Review,
     withHeader: true,
     backPath: Page.REVIEWS_VIEW,
     perform: [role.COLLEAGUE],
     tenant: [tenant.BANK, tenant.GENERAL],
   },
-  [Page.CREATE_REVIEWS]: {
+  [Page.OBJECTIVES]: {
+    Element: UpdateObjectives,
+    withHeader: true,
+    backPath: Page.REVIEWS_VIEW,
+    perform: [role.COLLEAGUE],
+    tenant: [tenant.BANK, tenant.GENERAL],
+  },
+  [Page.OBJECTIVE]: {
+    Element: UpdateObjectives,
+    withHeader: true,
+    backPath: Page.REVIEWS_VIEW,
+    perform: [role.COLLEAGUE],
+    tenant: [tenant.BANK, tenant.GENERAL],
+  },
+  [Page.CREATE_OBJECTIVES]: {
     Element: CreateObjective,
     withHeader: false,
     perform: [role.COLLEAGUE],
@@ -271,7 +286,7 @@ const pages: Record<Page, PageComponent> = {
     tenant: [tenant.BANK, tenant.GENERAL],
   },
   [Page.USER_TL_REVIEW]: {
-    Element: Reviews,
+    Element: Review,
     withHeader: true,
     perform: [role.COLLEAGUE],
     tenant: [tenant.BANK, tenant.GENERAL],

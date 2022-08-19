@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { Rule, Styles, useStyle } from '@pma/dex-wrapper';
 import { Accordion, Panel, Section } from 'components/Accordion';
 import { useTranslation } from 'components/Translation';
-import { ObjectiveTypes as OT } from 'features/general/Objectives';
+import { ObjectiveTypes as OT } from 'features/general/Reviews';
 import { ObjectiveHeader } from './ObjectiveHeader';
 import { Button } from './Button';
 import { FileList } from 'features/bank/UploadFile';

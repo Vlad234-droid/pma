@@ -69,41 +69,20 @@ export default createReducer(initialState)
       meta: { ...state.meta, loading: false, loaded: true },
     };
   })
-
-  .handleAction(createReview.request, (state) => ({
-    ...state,
-    meta: { ...state.meta, loading: true, error: null, loaded: false },
-  }))
   .handleAction(createReview.success, (state, { payload }) => ({
     ...state,
     ...payload,
     meta: { ...state.meta, loading: false, loaded: true },
   }))
-
-  .handleAction(updateReview.request, (state, { payload }) => ({
-    ...state,
-    ...payload,
-    meta: { ...state.meta, loading: true, error: null, loaded: false },
-  }))
   .handleAction(updateReview.success, (state, { payload }) => ({
     ...state,
-    ...payload,
+    data: state.data.map((review) => (review.uuid === payload.uuid ? payload : review)),
     meta: { ...state.meta, loading: false, loaded: true },
-  }))
-
-  .handleAction(updateReviews.request, (state, { payload }) => ({
-    ...state,
-    ...payload,
-    meta: { ...state.meta, loading: true, error: null, loaded: false },
   }))
   .handleAction(updateReviews.success, (state, { payload }) => ({
     ...state,
     ...payload,
     meta: { ...state.meta, loading: false, loaded: true },
-  }))
-  .handleAction(updateReviewStatus.request, (state) => ({
-    ...state,
-    meta: { ...state.meta, loading: true, error: null, loaded: false },
   }))
   .handleAction(updateReviewStatus.success, (state) => ({
     ...state,
@@ -116,10 +95,6 @@ export default createReducer(initialState)
   .handleAction(updateReviewsState, (state, { payload }) => ({
     ...state,
     ...payload,
-  }))
-  .handleAction(getReviewByUuid.request, (state) => ({
-    ...state,
-    meta: { ...state.meta, loading: true, error: null, loaded: false },
   }))
   .handleAction(getReviewByUuid.success, (state, { payload }) => ({
     ...state,

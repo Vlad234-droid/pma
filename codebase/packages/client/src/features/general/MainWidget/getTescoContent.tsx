@@ -3,7 +3,6 @@ import { Status } from 'config/enum';
 import { Page } from 'pages';
 import { TFunction } from 'components/Translation';
 import { ContentConfig, ContentGraphics, ContentProps } from './MainWidgetBase';
-import { ObjectivesForm } from 'features/general/ObjectivesForm';
 import { Subtitle } from './Subtitle';
 
 export const getTescoContent = (props: ContentProps, t: TFunction) => {
@@ -14,10 +13,10 @@ export const getTescoContent = (props: ContentProps, t: TFunction) => {
     viewPage: Page.REVIEWS_VIEW,
     widgetTitle: t('my_business_objectives', 'My objectives'),
     modalTitle: t('create_objectives', 'Create objectives'),
-    formComponent: ObjectivesForm,
   };
 
   const defaultGraphics: ContentGraphics = {
+    viewPage: Page.CREATE_OBJECTIVES,
     backgroundColor: 'tescoBlue',
     subTitle: (
       <Subtitle graphic='add' invertColors>
@@ -26,7 +25,6 @@ export const getTescoContent = (props: ContentProps, t: TFunction) => {
     ),
     description: 'Remember your objectives should be strategic, relevant and up to date.',
     buttonText: t('create_my_objectives', 'Create my objectives'),
-    redirectToViewPage: false,
   };
 
   if (!status) return { ...defaultGraphics, ...config };
@@ -35,6 +33,7 @@ export const getTescoContent = (props: ContentProps, t: TFunction) => {
     [key: string]: ContentGraphics;
   } = {
     [Status.STARTED]: {
+      viewPage: Page.CREATE_OBJECTIVES,
       backgroundColor: 'tescoBlue',
       subTitle: (
         <Subtitle graphic='add' invertColors>
@@ -46,9 +45,9 @@ export const getTescoContent = (props: ContentProps, t: TFunction) => {
         'Remember your objectives should be strategic, relevant and up to date.',
       ),
       buttonText: t('create_my_objectives', 'Create my objectives'),
-      redirectToViewPage: false,
     },
     [Status.DRAFT]: {
+      viewPage: Page.OBJECTIVES,
       backgroundColor: 'tescoBlue',
       subTitle: (
         <Subtitle graphic='roundPencil'>
@@ -60,7 +59,6 @@ export const getTescoContent = (props: ContentProps, t: TFunction) => {
         'Remember if your priorities change, review your objectives',
       ),
       buttonText: t('view_and_edit_objectives', 'View and edit objectives'),
-      redirectToViewPage: !!statistic?.[Status.APPROVED],
     },
     [Status.WAITING_FOR_APPROVAL]: {
       backgroundColor: 'tescoBlue',
@@ -74,7 +72,6 @@ export const getTescoContent = (props: ContentProps, t: TFunction) => {
         'Remember if your priorities change, review your objectives',
       ),
       buttonText: t('view', 'View'),
-      redirectToViewPage: true,
     },
     [Status.APPROVED]: {
       backgroundColor: 'white',
@@ -91,7 +88,6 @@ export const getTescoContent = (props: ContentProps, t: TFunction) => {
         'Remember if your priorities change, review your objectives',
       ),
       buttonText: t('view', 'View'),
-      redirectToViewPage: true,
     },
     [Status.DECLINED]: {
       backgroundColor: 'tescoBlue',
@@ -102,34 +98,32 @@ export const getTescoContent = (props: ContentProps, t: TFunction) => {
       ),
       description: '',
       buttonText: t('view', 'View'),
-      redirectToViewPage: true,
     },
     [Status.OVERDUE]: {
+      viewPage: Page.CREATE_OBJECTIVES,
       backgroundColor: 'tescoBlue',
       subTitle: <Subtitle graphic='roundAlert'>{t('objectives_are_overdue', 'Objectives are overdue')}</Subtitle>,
       description: '',
       buttonText: t('create_my_objectives', 'Create my objectives'),
-      redirectToViewPage: true,
     },
     [Status.PENDING]: {
+      viewPage: Page.CREATE_OBJECTIVES,
       backgroundColor: 'tescoBlue',
       subTitle: <Subtitle graphic='roundAlert'>{t('objectives_are_pending', 'Objectives are pending')}</Subtitle>,
       description: '',
       buttonText: t('create_my_objectives', 'Create my objectives'),
-      redirectToViewPage: true,
     },
     [Status.NOT_STARTED]: {
+      viewPage: Page.CREATE_OBJECTIVES,
       backgroundColor: 'tescoBlue',
       subTitle: (
         <Subtitle graphic='roundAlert'>{t('objectives_are_not_started', 'Objectives are not started')}</Subtitle>
       ),
       description: '',
       buttonText: t('create_my_objectives', 'Create my objectives'),
-      redirectToViewPage: true,
     },
   };
-
   const content = contents[status] || defaultGraphics;
 
-  return { ...content, ...config };
+  return { ...config, ...content };
 };

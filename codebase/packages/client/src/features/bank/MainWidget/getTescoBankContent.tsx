@@ -1,7 +1,6 @@
 import React from 'react';
 import { Page } from 'pages';
 import { TFunction } from 'components/Translation';
-import { ObjectivesForm } from 'features/bank/ObjectivesForm';
 import { ContentConfig, ContentGraphics, ContentProps } from 'features/general/MainWidget/MainWidgetBase';
 import { Subtitle } from 'features/general/MainWidget/Subtitle';
 import { PriorityList } from './PriorityList';
@@ -15,7 +14,6 @@ export const getTescoBankContent = (props: ContentProps, t: TFunction) => {
     viewPage: Page.REVIEWS_VIEW, //TODO: Replace with proper page
     widgetTitle: t('my_quarterly_priorities', 'My quarterly priorities'),
     modalTitle: t('create_my_priorities', 'Create my priorities'),
-    formComponent: ObjectivesForm,
   };
 
   const createPriorities: ContentGraphics = {
@@ -26,21 +24,18 @@ export const getTescoBankContent = (props: ContentProps, t: TFunction) => {
       </Subtitle>
     ),
     buttonText: t('create_priorities', 'Create priorities'),
-    redirectToViewPage: false,
   };
 
   const hasAnyPriority: ContentGraphics = {
     backgroundColor: 'white',
     subTitle: <PriorityList />,
     buttonText: t('view_priorities', 'View priorities'),
-    redirectToViewPage: true,
   };
 
   const workInProgress: ContentGraphics = {
     backgroundColor: 'white',
     subTitle: <div>Coming soon</div>,
     buttonText: t('view_priorities', 'View priorities'),
-    redirectToViewPage: false,
     disabled: true,
   };
 

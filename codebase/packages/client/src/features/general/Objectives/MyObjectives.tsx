@@ -18,7 +18,7 @@ import { Page } from 'pages';
 import { CycleType, ReviewType } from 'config/enum';
 
 // todo think hove resolve on page level
-import { ObjectivesSection } from './components/DinamicBlocks/ObjectivesSection';
+import ObjectiveAccordion from './components/ObjectivesSection';
 
 export const TEST_ID = 'my-objectives-page';
 const CURRENT = 'CURRENT';
@@ -61,16 +61,16 @@ const MyObjectives: FC = () => {
   useEffect(() => {
     dispatch(SchemaActions.getSchema({ colleagueUuid }));
 
-    return () => {
-      dispatch(SchemaActions.clearSchemaData());
-    };
+    // return () => {
+    //   dispatch(SchemaActions.clearSchemaData());
+    // };
   }, [colleagueUuid]);
 
   if (!isAvailable || isEYRTimeline || cycleType === CycleType.HIRING) return null;
 
   return (
     <div data-test-id={TEST_ID}>
-      <ObjectivesSection />
+      <ObjectiveAccordion />
     </div>
   );
 };

@@ -4,7 +4,6 @@ import { Styles, theme, useStyle } from '@pma/dex-wrapper';
 import { Page } from 'pages';
 import { useTranslation } from 'components/Translation';
 import BaseWidget, { Props as WidgetProps } from 'components/BaseWidget';
-import { widgetTypes } from 'features/general/ObjectiveWidgets/configs/type';
 import { buildPath } from 'features/general/Routes';
 
 const ShortcutsSection: React.FC = () => {
@@ -22,7 +21,6 @@ const ShortcutsSection: React.FC = () => {
     {
       iconGraphic: 'edit',
       title: t('My Notes'),
-      type: widgetTypes.NOTES,
       customStyle: { flex: '2 1 110px' },
       onClick: () => navigate(buildPath(Page.NOTES)),
     },

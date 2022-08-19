@@ -3,7 +3,8 @@ import { useSelector } from 'react-redux';
 import { getReviewsWithStatuses } from '@pma/store';
 
 import { Accordion as AccordionSection, Panel, Section } from 'components/Accordion';
-import { ObjectiveHeader } from 'features/general/ObjectiveAccordion';
+// TODO: move to src/components
+import ObjectiveHeader from 'features/general/Objectives/components/ObjectiveHeader';
 import { useTranslation } from 'components/Translation';
 import { ReviewForm } from '../ReviewForm';
 import { ReviewType } from 'config/enum';

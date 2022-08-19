@@ -10,7 +10,7 @@ import {
 } from '@pma/store';
 import { useSelector } from 'react-redux';
 
-import { transformReviewsToObjectives } from 'features/general/Objectives';
+import { transformReviewsToObjectives } from 'features/general/Reviews';
 
 import { ReviewType } from 'config/enum';
 import useDispatch from 'hooks/useDispatch';

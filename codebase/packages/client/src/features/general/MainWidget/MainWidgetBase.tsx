@@ -1,12 +1,12 @@
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Status } from 'config/enum';
-import { Button, Colors, CreateRule, Rule, useStyle, colors } from '@pma/dex-wrapper';
+import { Button, CreateRule, Rule, useStyle, colors } from '@pma/dex-wrapper';
+import { Colors } from 'config/types';
 import { TileWrapper } from 'components/Tile';
 import { Icon } from 'components/Icon';
-import { useNavigate } from 'react-router-dom';
 import { Page } from 'pages';
 import { buildPath } from 'features/general/Routes/utils';
-import { ModalComponent } from 'features/general/ObjectivesForm/components/ModalComponent';
 import { TFunction, useTranslation } from 'components/Translation';
 
 export const TEST_ID = 'main-widget';
@@ -14,6 +14,7 @@ export const TEST_ID = 'main-widget';
 export type ContentProps = {
   status?: Status;
   statistic?: object;
+  count?: number;
   nextReviewDate?: string;
 };
 
@@ -22,15 +23,15 @@ export type ContentGraphics = {
   subTitle: React.ReactNode;
   description?: string;
   buttonText: string;
-  redirectToViewPage: boolean;
   disabled?: boolean;
+  viewPage?: Page;
 };
 
 export type ContentConfig = {
   viewPage: Page;
   widgetTitle: string;
   modalTitle: string;
-  formComponent: React.FC<{ onClose: () => void }>;
+  formComponent?: React.FC;
 };
 
 export type MainWidgetBaseProps = ContentProps & {
@@ -44,22 +45,11 @@ export const MainWidgetBase: FC<MainWidgetBaseProps> = ({ customStyle, getConten
   const { css } = useStyle();
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const [isOpen, setIsOpen] = useState(false);
+  const { pathname } = useLocation();
 
   const { status } = props;
 
-  const {
-    backgroundColor,
-    subTitle,
-    description,
-    buttonText,
-    redirectToViewPage,
-    modalTitle,
-    viewPage,
-    widgetTitle,
-    formComponent: FormComponent,
-    disabled,
-  } = getContent(props, t);
+  const { backgroundColor, subTitle, description, buttonText, viewPage, widgetTitle, disabled } = getContent(props, t);
 
   const notApproved = !disabled && status !== Status.APPROVED;
   const mode = notApproved ? 'default' : 'inverse';
@@ -69,7 +59,7 @@ export const MainWidgetBase: FC<MainWidgetBaseProps> = ({ customStyle, getConten
       return;
     }
 
-    redirectToViewPage ? navigate(buildPath(viewPage)) : setIsOpen(true);
+    navigate(buildPath(viewPage), { state: { backPath: pathname } });
   };
 
   return (
@@ -107,11 +97,6 @@ export const MainWidgetBase: FC<MainWidgetBaseProps> = ({ customStyle, getConten
           </div>
         </div>
       </TileWrapper>
-      {isOpen && (
-        <ModalComponent onClose={() => setIsOpen(false)} title={modalTitle}>
-          <FormComponent onClose={() => setIsOpen(false)} />
-        </ModalComponent>
-      )}
     </>
   );
 };

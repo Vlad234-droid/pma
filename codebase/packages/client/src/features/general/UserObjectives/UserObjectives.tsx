@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import { reviewsMetaSelector, schemaMetaSelector, timelineTypesAvailabilitySelector } from '@pma/store';
 
-import { ObjectiveTypes as OT } from 'features/general/Objectives';
+import { ObjectiveTypes as OT } from 'features/general/Reviews';
 import { UserObjectivesSections } from 'features/general/UserObjectivesSections';
 import { ReviewType } from 'config/enum';
 import { useUserObjectivesData } from './hooks';

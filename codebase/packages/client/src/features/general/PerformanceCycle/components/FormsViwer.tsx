@@ -2,9 +2,8 @@ import React, { FC, useState } from 'react';
 import { useStyle, Rule } from '@pma/dex-wrapper';
 import { TileWrapper } from 'components/Tile';
 import { Radio } from 'components/Form';
-import { ObjectiveModal } from 'features/general/ObjectivesForm/components/ObjectiveModal';
 import { useTranslation } from 'components/Translation';
-import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
+import DynamicForm from 'components/DynamicForm';
 
 type Props = {
   forms: Array<any>;
@@ -15,10 +14,6 @@ const FormsViewer: FC<Props> = ({ forms, isActive }) => {
   const { css } = useStyle();
   const { t } = useTranslation();
   const [activeFormIndex, setActiveFormIndex] = useState<number | undefined>();
-
-  const methods = useFormWithCloseProtection({
-    mode: 'onChange',
-  });
 
   const activeForm = activeFormIndex !== undefined && JSON.parse(forms[activeFormIndex].json);
 
@@ -66,21 +61,7 @@ const FormsViewer: FC<Props> = ({ forms, isActive }) => {
           })}
         </div>
         {activeFormIndex !== undefined && (
-          <ObjectiveModal
-            formValues={{}}
-            schemaComponents={activeForm?.components}
-            methods={methods}
-            currentObjectiveNumber={1}
-            useSingleStep={false}
-            submitForm={false}
-            setPrevObjectiveNumber={() => console.log}
-            onSaveDraft={() => console.log}
-            onSubmit={() => console.log}
-            setNextObjectiveNumber={() => console.log}
-            onClose={() => console.log}
-            skipFooter={true}
-            skipHelp={true}
-          />
+          <DynamicForm components={activeForm?.components} formValues={{}} errors={null} />
         )}
       </div>
     </TileWrapper>

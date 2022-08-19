@@ -7,7 +7,7 @@ import { ColleagueProfileWidget } from 'features/general/Profile';
 import { useTranslation } from 'components/Translation';
 import { ShareWidget } from 'features/general/ShareWidget';
 import { buildPath } from 'features/general/Routes';
-import { CompletedReviewsSection, ReviewFilesSection, ReviewsSection } from 'features/general/Objectives';
+import { CompletedReviewsSection, ReviewFilesSection, ReviewsSection } from 'features/general/Reviews';
 import { TEST_ID } from 'features/general/UserObjectives/UserObjectives';
 import { useToast, Variant } from 'features/general/Toast';
 

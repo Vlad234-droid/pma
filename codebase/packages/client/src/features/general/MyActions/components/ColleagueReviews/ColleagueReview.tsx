@@ -14,7 +14,7 @@ import { TileWrapper } from 'components/Tile';
 import MarkdownRenderer from 'components/MarkdownRenderer';
 import { GenericItemField } from 'components/GenericForm';
 import { ReviewType, Status } from 'config/enum';
-import { formTagComponents } from '../../../Objectives';
+import { formTagComponents } from '../../../Reviews';
 import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
 import FileList from 'components/FileList';
 import { getReviewFileLink } from 'utils/review';
@@ -97,7 +97,7 @@ const ColleagueReview: FC<Props> = ({ colleagueUuid, review, schema, validateRev
               expression = {},
               borderStyle = {},
             } = component;
-            const value = key && reviewProperties[key] ? reviewProperties[key] : '';
+            const value = key && reviewProperties?.[key] ? reviewProperties[key] : '';
 
             if (type === FormType.TEXT) {
               return (

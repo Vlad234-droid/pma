@@ -3,7 +3,7 @@ import '@testing-library/jest-dom';
 import { renderWithTheme as render } from 'utils/test';
 import { TEST_WRAPPER_ID, UserObjectivesSections } from './UserObjectivesSections';
 import { Status } from 'config/enum';
-import { ObjectiveTypes as OT } from 'features/general/Objectives';
+import { ObjectiveTypes as OT } from 'features/general/Reviews';
 
 describe('UserObjectivesSections component', () => {
   const props = {

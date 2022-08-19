@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 
 import { YearSwitch } from 'components/YearSwitch';
 import { ProfileTileWrapper } from 'components/ProfileTileWrapper';
-import { ObjectiveTypes as OT } from 'features/general/Objectives';
+import { ObjectiveTypes as OT } from 'features/general/Reviews';
 import { Trans } from 'components/Translation';
 import { Backward } from 'components/Backward';
 import { useUserObjectivesData } from 'features/general/UserObjectives/hooks';

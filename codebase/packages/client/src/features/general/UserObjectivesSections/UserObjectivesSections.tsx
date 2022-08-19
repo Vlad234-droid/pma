@@ -3,9 +3,9 @@ import { Rule, useStyle } from '@pma/dex-wrapper';
 
 import { Trans, useTranslation } from 'components/Translation';
 import { IconButton } from 'components/IconButton';
-import { Accordion } from 'features/general/ObjectiveAccordion';
+// import { Accordion } from 'features/general/ObjectiveAccordion';
 import Section from 'components/Section';
-import { ObjectiveTypes as OT } from 'features/general/Objectives';
+import { ObjectiveTypes as OT } from 'features/general/Reviews';
 import Spinner from 'components/Spinner';
 import { Plug } from 'components/Plug';
 
@@ -53,7 +53,7 @@ export const UserObjectivesSections: FC<{
                 ),
               }}
             >
-              <Accordion objectives={objectives} canShowStatus={true} isButtonsVisible={false} />
+              {/*<Accordion objectives={objectives} canShowStatus={true} isButtonsVisible={false} />*/}
             </Section>
           )}
         </>

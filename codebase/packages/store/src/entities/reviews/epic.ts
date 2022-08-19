@@ -64,13 +64,8 @@ export const updateReviewEpic: Epic = (action$, _, { api }) =>
     switchMap(({ payload }) => {
       // @ts-ignore
       return from(api.updateReview(payload)).pipe(
-        mergeMap(() =>
-          from([
-            updateReview.success({ ...payload }),
-            getReviews.request({ ...payload }),
-            getTimeline.request(payload.pathParams),
-          ]),
-        ),
+        // @ts-ignore
+        mergeMap(({ data }) => from([updateReview.success(data), getTimeline.request(payload.pathParams)])),
         catchError(({ errors }) => of(updateReview.failure(errors))),
         takeUntil(action$.pipe(filter(isActionOf(updateReview.cancel)))),
       );
