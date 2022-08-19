@@ -67,17 +67,6 @@ describe('PreviousReviewForms feature', () => {
     const prevYear = getAllByTestId('label-id');
     expect(prevYear[1]).toBeInTheDocument();
   });
-
-  it('it should display accordion ratings', async () => {
-    const { getByTestId } = render(
-      <BrowserRouter>
-        <ObjectiveRatings />
-      </BrowserRouter>,
-      { timeline },
-    );
-    const accordion = getByTestId('objective-accordion');
-    expect(accordion).toBeInTheDocument();
-  });
   it('it should display a plug', async () => {
     timeline.meta.loaded = false;
     const { getByTestId } = render(

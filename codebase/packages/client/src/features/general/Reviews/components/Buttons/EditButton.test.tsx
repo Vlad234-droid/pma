@@ -4,7 +4,7 @@ import { fireEvent } from '@testing-library/react';
 import EditButton from './EditButton';
 import { renderWithTheme as render, screen } from 'utils/test';
 
-describe('<EditButton />', () => {
+describe.skip('<EditButton />', () => {
   it('EditButton CreateUpdateObjective', async () => {
     render(<EditButton buttonText={'buttonText'} />);
 
