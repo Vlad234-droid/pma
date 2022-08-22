@@ -10,8 +10,8 @@ type CustomSerializedError = Record<string, any>;
 
 /**
  * Default request serializer
- * @param req 
- * @returns 
+ * @param req
+ * @returns
  */
 export const defaultRequestSerializer = (req: any): CustomSerializedRequest => {
   let result: CustomSerializedRequest = {
@@ -22,7 +22,7 @@ export const defaultRequestSerializer = (req: any): CustomSerializedRequest => {
     remoteAddress: req.remoteAddress,
     remotePort: req.remotePort,
   };
- 
+
   let headers = { ...req.headers };
 
   if (Object.prototype.hasOwnProperty.call(headers, 'cookie')) {
@@ -45,23 +45,22 @@ export const defaultRequestSerializer = (req: any): CustomSerializedRequest => {
   headers = filterSensitiveData(headers);
 
   return { ...result, headers };
-}
- 
+};
+
 /**
  * Default response serializer
- * @param res 
- * @returns 
+ * @param res
+ * @returns
  */
-export const defaultResponseSerializer = (res: any): CustomSerializedResponse  => {
+export const defaultResponseSerializer = (res: any): CustomSerializedResponse => {
   let result = {
-      statusCode: res.statusCode,
+    statusCode: res.statusCode,
   };
 
   let headers = { ...res.headers };
   for (const header in headers) {
     if (Object.prototype.hasOwnProperty.call(headers, header)) {
-      if (header.toLowerCase() === 'content-type' 
-          || header.toLowerCase() === 'content-length') {
+      if (header.toLowerCase() === 'content-type' || header.toLowerCase() === 'content-length') {
         result = { ...result, [camelcase(header)]: headers[header] };
         delete headers[header];
       }
@@ -70,7 +69,9 @@ export const defaultResponseSerializer = (res: any): CustomSerializedResponse  =
         delete headers[header];
       }
       if (header.toLowerCase() === 'set-cookie' && Array.isArray(headers[header])) {
-        const setCookiesObj = Object.fromEntries((headers[header] as Array<string>).map(v => [ v.substring(0, v.indexOf('=')), v ]));
+        const setCookiesObj = Object.fromEntries(
+          (headers[header] as Array<string>).map((v) => [v.substring(0, v.indexOf('=')), v]),
+        );
         result = { ...result, [camelcase(header)]: filterSensitiveData(setCookiesObj) };
         delete headers[header];
       }
@@ -78,14 +79,14 @@ export const defaultResponseSerializer = (res: any): CustomSerializedResponse  =
   }
 
   headers = filterSensitiveData(headers);
- 
+
   return { ...result, headers: headers };
-}
- 
+};
+
 /**
  * Default error serializer
- * @param err 
- * @returns 
+ * @param err
+ * @returns
  */
 export const defaultErrorSerializer = (err: Error): CustomSerializedError => {
   let result: CustomSerializedError = pino.stdSerializers.err(err);
@@ -96,19 +97,19 @@ export const defaultErrorSerializer = (err: Error): CustomSerializedError => {
   }
 
   return result;
-}
+};
 
 export const filterSensitiveData = (obj: Object): Object => {
   if (obj === null || obj === undefined) return undefined;
 
-  const cookiesToFilter = [ 'jwt', 'identity', 'auth', 'token', 'userdata', 'userinfo' ];
+  const cookiesToFilter = ['jwt', 'identity', 'auth', 'token', 'userdata', 'userinfo', 'referer', 'referrer'];
   const result = { ...obj };
   for (const key in obj) {
     const adjustedKey = key.toLowerCase().replace(/[-_.]/g, '');
-    if (cookiesToFilter.some(f => adjustedKey.includes(f))) {
+    if (cookiesToFilter.some((f) => adjustedKey.includes(f))) {
       result[key] = '<REDUCTED>';
     }
   }
 
   return result;
-}
+};
