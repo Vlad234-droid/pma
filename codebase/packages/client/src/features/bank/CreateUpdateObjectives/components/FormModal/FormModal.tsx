@@ -1,8 +1,16 @@
 import React, { FC } from 'react';
+import { useSelector } from 'react-redux';
 import { Rule, useStyle } from '@pma/dex-wrapper';
+import { reviewsMetaSelector, schemaMetaSelector } from '@pma/store';
+
+import { createYupSchema } from 'utils/yup';
+import * as Yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 import { useTranslation } from 'components/Translation';
 import SuccessModal from 'components/SuccessModal';
+import Spinner from 'components/Spinner';
+import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
 
 import { default as FormWrapper } from './FormWrapper';
 import FormModify from '../FormState/Modify';
@@ -12,9 +20,6 @@ import ButtonsPreview from '../Buttons/ButtonsPreview';
 
 import { FormStateType } from '../../type';
 import { FormPropsType, withForm } from '../../hoc/withForm';
-import { useSelector } from 'react-redux';
-import { reviewsMetaSelector, schemaMetaSelector } from '@pma/store';
-import Spinner from 'components/Spinner';
 
 export type FormModal = {
   onClose: () => void;
@@ -22,11 +27,12 @@ export type FormModal = {
 
 const FormModal: FC<FormModal> = ({
   onClose,
+  defaultValues,
   objective,
   objectives,
+  timelineCode,
   currentNumber,
   components,
-  methods,
   formState,
   onSaveAsDraft,
   onSubmit,
@@ -36,7 +42,20 @@ const FormModal: FC<FormModal> = ({
 }) => {
   const { t } = useTranslation();
   const { css, matchMedia } = useStyle();
+
+  // @ts-ignore
+  const yepSchema: Record<string, any> = components
+    ?.filter((component) => component.type != 'text')
+    ?.reduce(createYupSchema(t), {});
+  const methods = useFormWithCloseProtection({
+    mode: 'onChange',
+    resolver: yupResolver<Yup.AnyObjectSchema>(Yup.object().shape(yepSchema)),
+    defaultValues,
+  });
   const {
+    getValues,
+    handleSubmit,
+    setValue,
     formState: { isValid },
   } = methods;
   let paddingBottom = 0;
@@ -90,10 +109,11 @@ const FormModal: FC<FormModal> = ({
                       onClose={onClose}
                       readonly={false}
                       currentNumber={currentNumber}
+                      timelineCode={timelineCode}
                       isValid={isValid}
-                      onSaveExit={onSaveAsDraft}
-                      onSubmit={onPreview}
-                      onNext={onNext}
+                      onSaveExit={handleSubmit(onSaveAsDraft)}
+                      onSubmit={handleSubmit(onPreview)}
+                      onNext={handleSubmit(onNext)}
                     />
                   </>
                 );

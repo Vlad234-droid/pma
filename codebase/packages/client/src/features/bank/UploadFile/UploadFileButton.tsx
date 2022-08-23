@@ -9,9 +9,10 @@ import { colleagueUUIDSelector } from '@pma/store';
 type Props = {
   number: number;
   reviewUUID: string;
+  disabled: boolean;
 };
 
-export const UploadFileButton: FC<Props> = ({ reviewUUID, number }) => {
+export const UploadFileButton: FC<Props> = ({ reviewUUID, number, disabled }) => {
   const { t } = useTranslation();
   const [showModal, setShowModal] = useState(false);
   const colleagueUuid = useSelector(colleagueUUIDSelector);
@@ -19,6 +20,7 @@ export const UploadFileButton: FC<Props> = ({ reviewUUID, number }) => {
   return (
     <>
       <IconButton
+        isDisabled={disabled}
         onPress={() => setShowModal(true)}
         graphic='upload'
         customVariantRules={{ default: iconButtonStyles, disabled: iconButtonStyles }}

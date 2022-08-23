@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { Header, HeaderProps } from 'components/Accordion';
 import { useTranslation } from 'components/Translation';
 import { Status } from 'config/enum';
-import StatusBadge from './StatusBadge';
+import { StatusBadge } from '../StatusBadge';
 import { ObjectiveTileHeader } from 'features/general/Objectives/components/Tile';
 
 export const ObjectiveHeader: FC<

@@ -15,7 +15,7 @@ type Props = {
   onSave: (hasReason?: boolean, reason?: string) => void;
   onClose: () => void;
   review?: Employee;
-  reviewType: ReviewType;
+  reviewType: string;
 };
 
 const DeclineModal: FC<Props> = ({ onSave, onClose, review, reviewType }) => {

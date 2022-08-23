@@ -3,7 +3,7 @@ import { Rule, useStyle } from '@pma/dex-wrapper';
 import { reviewsMetaSelector } from '@pma/store';
 import { Trans } from 'components/Translation';
 import Section from 'components/Section';
-import { Accordion } from 'features/bank/ObjectiveAccordion';
+import Accordion from '../Accordion';
 import { useSelector } from 'react-redux';
 import { IconButton } from 'components/IconButton';
 import { downloadPDF, PrioritiesDocument, usePDF } from '@pma/pdf-renderer';
@@ -13,7 +13,13 @@ import { PropsType, withSection } from '../../hoc/withSection';
 
 export const TEST_ID = 'objectives-test-id';
 
-const Objectives: FC<PropsType> = ({ objectives, handleSelectTimelinePoint, timelinePoints, activeTimelinePoints }) => {
+const Objectives: FC<PropsType> = ({
+  objectives,
+  handleSelectTimelinePoint,
+  timelinePoints,
+  activeTimelinePoints,
+  handleCompletion,
+}) => {
   const { css } = useStyle();
   const { loading: reviewLoading } = useSelector(reviewsMetaSelector);
   const document = useMemo(() => <PrioritiesDocument items={objectives} />, [JSON.stringify(objectives)]);
@@ -58,7 +64,7 @@ const Objectives: FC<PropsType> = ({ objectives, handleSelectTimelinePoint, time
         {reviewLoading ? (
           <Spinner fullHeight />
         ) : objectives.length ? (
-          <Accordion objectives={objectives} canShowStatus={true} />
+          <Accordion handleCompletion={handleCompletion} objectives={objectives} canShowStatus={true} />
         ) : (
           <div className={css(emptyBlockStyle)}>
             <Trans i18nKey={'no_objectives_created'}>No objectives created</Trans>

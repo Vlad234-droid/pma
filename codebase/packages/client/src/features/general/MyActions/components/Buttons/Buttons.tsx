@@ -11,12 +11,14 @@ import { useTenant } from 'features/general/Permission';
 import { Tenant } from 'utils';
 
 type Props = {
-  reviewType: ReviewType;
-  onUpdate: (status: Status) => (reviewType: ReviewType) => (T) => void;
+  reviewType: string;
+  onUpdate: (status: Status) => (reviewType: string) => (T) => void;
   isDisabled: boolean;
 };
 
 const TITLES: Record<string, [string, string]> = {
+  ['Q1']: ['priorities', 'Priorities'],
+  [ReviewType.QUARTER]: ['priorities', 'Priorities'],
   [ReviewType.OBJECTIVE]: ['objectives', 'Objectives'],
   [ReviewType.MYR]: ['mid_year_review', 'Mid-year review'],
   [ReviewType.EYR]: ['year_end_review', 'Year-end review'],

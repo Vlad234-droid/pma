@@ -65,7 +65,7 @@ const MyActions: FC<Props> = ({ status, searchValue, sortValue, isCheckedAll }) 
     };
   }, []);
 
-  const handleUpdateReview = (reviewType: ReviewType, newData: any) => {
+  const handleUpdateReview = (reviewType: string, newData: any) => {
     const { code, ...data } = newData;
     dispatch(
       ReviewsActions.updateReviewStatus({

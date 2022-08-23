@@ -6,7 +6,6 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 import { ReviewsSection, CompletedReviewsSection, ReviewFilesSection } from 'features/general/Reviews';
-import Objectives from 'features/general/Objectives';
 import { tenant as T, useTenant } from 'features/general/Permission';
 import { ShareWidget } from 'features/general/ShareWidget';
 import { buildPath } from 'features/general/Routes';
@@ -19,6 +18,11 @@ const ObjectivesPage: FC = () => {
   const { css, matchMedia } = useStyle();
   const navigate = useNavigate();
   const colleagueUuid = useSelector(colleagueUUIDSelector);
+
+  const Objectives = useMemo(
+    () => React.lazy(() => import(`features/${tenant}/Objectives`).then((module) => ({ default: module.default }))),
+    [],
+  );
 
   const CreateButton = useMemo(
     () =>

@@ -32,7 +32,7 @@ export type ContentConfig = {
 
 export const getTescoBankContent = (props: ContentProps, t: TFunction) => {
   const { status, statistics, nextReviewDate: date = '' } = props;
-  const WORK_IN_PROGRESS = true;
+  const WORK_IN_PROGRESS = false;
   const count = status ? statistics?.[status] || 0 : 0;
 
   const config: ContentConfig = {
@@ -42,6 +42,7 @@ export const getTescoBankContent = (props: ContentProps, t: TFunction) => {
   };
 
   const createPriorities: ContentGraphics = {
+    viewPage: Page.CREATE_OBJECTIVES,
     backgroundColor: 'tescoBlue',
     subTitle: (
       <Subtitle graphic='add' invertColors>
@@ -65,12 +66,14 @@ export const getTescoBankContent = (props: ContentProps, t: TFunction) => {
   };
 
   if (WORK_IN_PROGRESS) {
-    return { ...workInProgress, ...config };
+    return { ...config, ...workInProgress };
   }
+  console.log('count', count);
+  console.log('status', status);
 
   if (!count || !status) {
-    return { ...createPriorities, ...config };
+    return { ...config, ...createPriorities };
   } else {
-    return { ...hasAnyPriority, ...config };
+    return { ...config, ...hasAnyPriority };
   }
 };

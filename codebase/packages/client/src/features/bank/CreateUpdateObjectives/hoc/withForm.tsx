@@ -1,30 +1,33 @@
 import React, { Dispatch, SetStateAction, useEffect, useState, useMemo } from 'react';
-import { UseFormReturn } from 'react-hook-form';
+
 import {
   colleagueUUIDSelector,
   Component,
   filterReviewsByTypeSelector,
   getReviewSchema,
+  getTimelinesByReviewTypeSelector,
   ReviewsActions,
+  reviewsMetaSelector,
   SchemaActions,
+  schemaMetaSelector,
+  TimelineActions,
+  timelinesMetaSelector,
 } from '@pma/store';
-import { createYupSchema } from 'utils/yup';
-import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
-
-import * as Yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { useTranslation } from 'components/Translation';
 import { FormStateType, Objective } from '../type';
 import { useSelector } from 'react-redux';
 import { ReviewType, Status } from 'config/enum';
 import useDispatch from 'hooks/useDispatch';
+import { Timeline } from 'config/types';
+import { USER } from 'config/constants';
+import Spinner from 'components/Spinner';
 
 export type FormPropsType = {
   currentNumber: number;
+  timelineCode: string;
+  defaultValues: Record<string, any>;
   components: Component[];
   objective: Objective;
   objectives: Objective[];
-  methods: UseFormReturn;
   formState: FormStateType;
   setFormState: Dispatch<SetStateAction<FormStateType>>;
   onSaveAsDraft: (T) => void;
@@ -37,19 +40,28 @@ export type FormPropsType = {
 export function withForm<P>(WrappedComponent: React.ComponentType<P & FormPropsType>) {
   const Component = (props: P) => {
     const dispatch = useDispatch();
-    const { t } = useTranslation();
+    const { loading: schemaLoading } = useSelector(schemaMetaSelector);
+    const { loading: reviewLoading } = useSelector(reviewsMetaSelector);
+    const { loading: timelineLoading } = useSelector(timelinesMetaSelector());
     const colleagueUuid = useSelector(colleagueUUIDSelector);
-    const schema = useSelector(getReviewSchema(ReviewType.QUARTER));
-    const pathParams = { colleagueUuid, code: 'Q1', cycleUuid: 'CURRENT' }; // todo code dynamic in priorities jira
+    const timelinePoints: Timeline[] =
+      useSelector(getTimelinesByReviewTypeSelector(ReviewType.QUARTER, USER.current)) || [];
+
+    const visibleTimelinePoints = timelinePoints?.filter(
+      (timelinePoint) => timelinePoint.status !== Status.NOT_STARTED,
+    );
+
+    const timelinePoint: Timeline = visibleTimelinePoints.find(
+      (timelinePoint) => timelinePoint.status === Status.STARTED, // todo not handle overdue
+    ) as Timeline;
+
+    const schema = useSelector(getReviewSchema(timelinePoint?.code));
+    const pathParams = { colleagueUuid, code: timelinePoint?.code, cycleUuid: 'CURRENT' };
     const { components = [] as Component[], markup = { max: 1, min: 15 } } = schema;
     const objectives: Objective[] = useSelector(filterReviewsByTypeSelector(ReviewType.QUARTER)) || [];
 
-    // todo wait for design. could start from diff number
-    const draftObjectives = useMemo(
-      () => objectives.filter((objective) => objective.status === Status.DRAFT),
-      [objectives],
-    );
-    const startFromNumber = draftObjectives?.length + 1;
+    const startFromNumber = objectives?.length < markup.max ? objectives?.length + 1 : objectives?.length;
+
     const [currentNumber, setNumber] = useState<number>(startFromNumber);
     const [objective, setObjective] = useState<Objective>({});
 
@@ -59,13 +71,16 @@ export function withForm<P>(WrappedComponent: React.ComponentType<P & FormPropsT
     );
     const [formState, setFormState] = useState<FormStateType>(defaultFormState);
 
-    // @ts-ignore
-    const yepSchema = components?.reduce(createYupSchema(t), {});
-    const methods = useFormWithCloseProtection({
-      mode: 'onChange',
-      resolver: yupResolver<Yup.AnyObjectSchema>(Yup.object().shape(yepSchema)),
-    });
-    const { reset } = methods;
+    const formElementsFilledEmpty = components
+      ?.filter((component) => component.type != 'text')
+      .reduce((acc, current) => {
+        if (current.key) {
+          acc[current.key] = '';
+        }
+        return acc;
+      }, {});
+
+    const defaultValues = objectives[currentNumber - 1]?.properties || formElementsFilledEmpty;
 
     const handleSaveAsDraft = (data) => {
       const currentObjectiveIndex = objectives.findIndex((objective) => objective.number === currentNumber);
@@ -84,6 +99,7 @@ export function withForm<P>(WrappedComponent: React.ComponentType<P & FormPropsT
         }
         return { ...objective, status: Status.DRAFT };
       });
+      console.log('{ pathParams, data: updatedObjectives }', { pathParams, data: updatedObjectives });
       dispatch(ReviewsActions.updateReviews({ pathParams, data: updatedObjectives }));
 
       // @ts-ignore
@@ -156,7 +172,7 @@ export function withForm<P>(WrappedComponent: React.ComponentType<P & FormPropsT
     const handleBack = () => {
       if (formState !== FormStateType.MODIFY) {
         setFormState(FormStateType.MODIFY);
-        setNumber(draftObjectives?.length);
+        setNumber(objectives?.length);
       } else if (currentNumber > 1) {
         setNumber(currentNumber - 1);
       }
@@ -165,28 +181,34 @@ export function withForm<P>(WrappedComponent: React.ComponentType<P & FormPropsT
     useEffect(() => {
       dispatch(ReviewsActions.getReviews({ pathParams }));
       dispatch(SchemaActions.getSchema({ colleagueUuid }));
+      dispatch(TimelineActions.getTimeline({ colleagueUuid }));
     }, []);
-    useEffect(() => {
-      reset(objective?.properties || { title: '', description: '' });
-    }, [objective]);
+
     useEffect(() => {
       setObjective(objectives?.find(({ number }) => number === currentNumber) || {});
     }, [objectives?.length, currentNumber]);
 
+    useEffect(() => {
+      setNumber(startFromNumber);
+    }, [startFromNumber]);
+
+    if (schemaLoading || reviewLoading || timelineLoading) return <Spinner fullHeight />;
+
     return (
       <WrappedComponent
         {...props}
+        defaultValues={defaultValues}
+        timelineCode={timelinePoint?.code}
         currentNumber={currentNumber}
         components={components}
         objective={objective}
         objectives={objectives}
-        methods={methods}
         formState={formState}
         setFormState={setFormState}
-        onSaveAsDraft={methods.handleSubmit(handleSaveAsDraft)}
+        onSaveAsDraft={handleSaveAsDraft}
         onSubmit={handleSubmit}
-        onPreview={methods.handleSubmit(handlePreview)}
-        onNext={methods.handleSubmit(handleNext)}
+        onPreview={handlePreview}
+        onNext={handleNext}
         onBack={handleBack}
       />
     );

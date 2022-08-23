@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { ObjectiveTypes, transformReviewsToObjectives } from 'features/general/Reviews';
 import {
   colleagueUUIDSelector,
@@ -18,6 +18,7 @@ import { USER } from 'config/constants';
 
 export type PropsType = {
   objectives: ObjectiveTypes.Objective[];
+  handleCompletion: (T) => void;
   handleSelectTimelinePoint: (T) => void;
   timelinePoints: Timeline[];
   activeTimelinePoints?: Timeline;
@@ -38,13 +39,13 @@ export function withSection<P>(WrappedComponent: React.ComponentType<P & PropsTy
       (timelinePoint) => timelinePoint.summaryStatus !== Status.NOT_STARTED,
     );
 
-    const timelinePoint = visibleTimelinePoints.find((timelinePoint) => timelinePoint.summaryStatus === Status.STARTED);
+    const timelinePoint = visibleTimelinePoints.find((timelinePoint) => timelinePoint.status === Status.STARTED);
     const [selectedTimelinePoint, setTimelinePoint] = useState(timelinePoint);
 
     const colleagueUuid = useSelector(colleagueUUIDSelector);
     const originObjectives: Review[] = useSelector(filterReviewsByTypeSelector(ReviewType.QUARTER));
 
-    const objectiveSchema = useSelector(getReviewSchema(ReviewType.QUARTER));
+    const objectiveSchema = useSelector(getReviewSchema(timelinePoint?.code || 'Q1'));
     const { components = [] } = objectiveSchema;
     const formElements = components.filter((component) => component.type != 'text');
 
@@ -66,14 +67,21 @@ export function withSection<P>(WrappedComponent: React.ComponentType<P & PropsTy
       [visibleTimelinePoints, originObjectives],
     );
 
+    const handleCompletion = (number) => {
+      const pathParams = { colleagueUuid, code: timelinePoint?.code, cycleUuid: 'CURRENT' };
+      const objective = originObjectives.find((objective) => objective.number == number);
+      dispatch(
+        ReviewsActions.updateReview({
+          pathParams: { ...pathParams, number },
+          data: [{ number, properties: objective?.properties, status: Status.WAITING_FOR_COMPLETION }],
+        }),
+      );
+    };
+
     useEffect(() => {
       if (canShowObjectives) {
         dispatch(ReviewsActions.getReviews({ pathParams: { colleagueUuid, cycleUuid: 'CURRENT' } }));
       }
-
-      return () => {
-        dispatch(ReviewsActions.clearReviewData());
-      };
     }, [canShowObjectives]);
 
     useEffect(() => {
@@ -95,6 +103,7 @@ export function withSection<P>(WrappedComponent: React.ComponentType<P & PropsTy
       <WrappedComponent
         {...props}
         objectives={objectives}
+        handleCompletion={handleCompletion}
         handleSelectTimelinePoint={handleSelectTimelinePoint}
         timelinePoints={visibleTimelinePoints}
         activeTimelinePoints={selectedTimelinePoint}

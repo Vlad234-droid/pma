@@ -3,11 +3,11 @@ import { useStyle, Button, Rule, CreateRule } from '@pma/dex-wrapper';
 import { Trans } from 'components/Translation';
 import { useSelector } from 'react-redux';
 import { getReviewSchema } from '@pma/store';
-import { ReviewType } from 'config/enum';
 import { IconButton, Position } from 'components/IconButton';
 
 type ButtonsProps = {
   currentNumber: number;
+  timelineCode: string;
   readonly: boolean;
   isValid: boolean;
   onClose: () => void;
@@ -16,10 +16,19 @@ type ButtonsProps = {
   onNext: (T) => void;
 };
 
-const Buttons: FC<ButtonsProps> = ({ readonly, isValid, onClose, onSaveExit, onSubmit, onNext, currentNumber }) => {
+const Buttons: FC<ButtonsProps> = ({
+  readonly,
+  isValid,
+  onClose,
+  onSaveExit,
+  onSubmit,
+  onNext,
+  currentNumber,
+  timelineCode,
+}) => {
   const { css, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
-  const schema = useSelector(getReviewSchema(ReviewType.OBJECTIVE));
+  const schema = useSelector(getReviewSchema(timelineCode));
   const { markup = { max: 0, min: 0 } } = schema;
 
   const isDisabledSaveAndAdd = !isValid || markup.max <= currentNumber;

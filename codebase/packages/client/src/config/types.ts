@@ -15,6 +15,7 @@ export type Timeline = {
   summaryStatus: Status;
   type: TimelineType;
   uuid: string;
+  statistics: Record<string, string> | null;
 };
 
 export type Review = {

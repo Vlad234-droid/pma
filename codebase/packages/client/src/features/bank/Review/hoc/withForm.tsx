@@ -162,7 +162,7 @@ export function withForm<P extends ReviewFormType>(WrappedComponent: React.Compo
 
     useEffect(() => {
       dispatch(ReviewsActions.getColleagueReviews({ pathParams: { colleagueUuid, cycleUuid: 'CURRENT' } }));
-      dispatch(SchemaActions.getSchema({ colleagueUuid }));
+      dispatch(SchemaActions.getSchema({ colleagueUuid, includeForms: true }));
     }, []);
 
     useEffect(() => {

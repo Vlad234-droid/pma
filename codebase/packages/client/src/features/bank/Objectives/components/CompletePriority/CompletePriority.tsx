@@ -10,7 +10,8 @@ import SuccessModal from 'components/SuccessModal';
 export const CompletePriority: FC<{
   status: Status;
   number: number;
-}> = ({ status }) => {
+  handleCompletion: (T) => void;
+}> = ({ status, number, handleCompletion }) => {
   const { css } = useStyle();
   const { t } = useTranslation();
 
@@ -22,12 +23,14 @@ export const CompletePriority: FC<{
       setOpen(true);
     }
   };
-  // todo use number for update specific priorities after statuses is done on backend
-  const handleSave = () => ({});
+
+  const handleSave = () => {
+    handleCompletion(number);
+  };
 
   return (
     <div>
-      {status !== Status.COMPLETED && (
+      {status === Status.APPROVED && (
         <div className={css(buttonLikeStyle({ disabled: disabledButton }))} onClick={handleOpen}>
           <span className={css(iconCircleStyles)}>
             <Icon graphic='check' title={'check'} size={'14px'} />

@@ -18,7 +18,7 @@ import { Tenant } from 'utils';
 
 type Props = {
   status: Status;
-  onUpdate: (reviewType: ReviewType, data: any) => void;
+  onUpdate: (reviewType: string, data: any) => void;
   colleague: any;
 };
 
@@ -55,14 +55,8 @@ const ColleagueAction: FC<Props> = ({ status, colleague, onUpdate }) => {
   }, [reviewLoaded, status]);
 
   const handleUpdateReview = useCallback(
-    (status: Status) => (reviewType: ReviewType) => (reason: string) => {
-      const { timeline = [] } = colleague;
-      const reviews = colleague?.reviews?.filter(
-        ({ status, type }) => status === Status.WAITING_FOR_APPROVAL && type === reviewType,
-      );
-
-      const timelineId = reviews[0]?.tlPointUuid;
-      const code = timeline.find((tl) => tl.uuid == timelineId)?.code;
+    (status: Status) => (code: string) => (reason: string) => {
+      const reviewType = colleague?.timeline?.find((timeline) => timeline.code === code).reviewType;
 
       const data = {
         ...(reason ? { reason } : {}),
@@ -152,7 +146,7 @@ const ColleagueAction: FC<Props> = ({ status, colleague, onUpdate }) => {
                         ))}
                         {status === Status.WAITING_FOR_APPROVAL && (
                           <Buttons
-                            reviewType={reviewType as ReviewType}
+                            reviewType={reviewType}
                             onUpdate={handleUpdateReview}
                             isDisabled={isButtonsDisabled}
                           />

@@ -3,7 +3,7 @@ import { Rule, Styles, useStyle } from '@pma/dex-wrapper';
 import { Accordion, Panel, Section } from 'components/Accordion';
 import { useTranslation } from 'components/Translation';
 import { ObjectiveTypes as OT } from 'features/general/Reviews';
-import { ObjectiveHeader } from './ObjectiveHeader';
+import { ObjectiveHeader } from '../ObjectiveHeader';
 import { Button } from './Button';
 import { FileList } from 'features/bank/UploadFile';
 import { Tenant } from 'utils';
@@ -13,10 +13,11 @@ export const TEST_ID = 'priorities-accordion';
 
 export type ObjectiveAccordionProps = {
   objectives: OT.Objective[];
+  handleCompletion: (T) => void;
   canShowStatus?: boolean;
 };
 
-const ObjectiveAccordion: FC<ObjectiveAccordionProps> = ({ objectives }) => {
+const ObjectiveAccordion: FC<ObjectiveAccordionProps> = ({ objectives, handleCompletion }) => {
   const { css } = useStyle();
   const { t } = useTranslation();
   return (
@@ -43,8 +44,8 @@ const ObjectiveAccordion: FC<ObjectiveAccordionProps> = ({ objectives }) => {
               <Panel>
                 <div className={css({ lineHeight: '20px', fontSize: '16px' })}>{restSentences}</div>
                 <div className={css(buttonStyles)}>
-                  <CompletePriority status={status} number={id} />
-                  <Button reviewUUID={uuid} number={id} />
+                  <CompletePriority status={status} number={id} handleCompletion={handleCompletion} />
+                  <Button reviewUUID={uuid} number={id} status={status} />
                 </div>
                 <FileList reviewUUID={uuid} />
               </Panel>
