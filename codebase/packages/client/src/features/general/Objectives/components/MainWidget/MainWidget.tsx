@@ -10,6 +10,7 @@ export const TEST_ID = 'main-widget';
 
 export type ContentProps = {
   status?: Status;
+  statistic?: object;
   count?: number;
   nextReviewDate?: string;
 };
@@ -19,15 +20,15 @@ export type ContentGraphics = {
   subTitle: React.ReactNode;
   description?: string;
   buttonText: string;
-  redirectToViewPage: boolean;
   disabled?: boolean;
+  viewPage?: Page;
 };
 
 export type ContentConfig = {
   viewPage: Page;
   widgetTitle: string;
   modalTitle: string;
-  formComponent: React.FC<{ onClose: () => void }>;
+  formComponent?: React.FC;
 };
 
 export type Props = {

@@ -1,12 +1,18 @@
 import React from 'react';
 import { Page } from 'pages';
 import { TFunction } from 'components/Translation';
-import { ContentConfig, ContentGraphics, ContentProps } from 'features/general/MainWidget/MainWidgetBase';
-import { Subtitle } from 'features/general/MainWidget/Subtitle';
+import { ContentConfig, ContentGraphics } from './PrioritiesWidget';
+import { Subtitle } from './Subtitle';
 import { PriorityList } from './PriorityList';
+import { Status } from 'config/enum';
+
+export type ContentProps = {
+  status?: Status;
+  statistic?: object;
+};
 
 export const getTescoBankContent = (props: ContentProps, t: TFunction) => {
-  const { status, statistic, nextReviewDate: date = '' } = props;
+  const { status, statistic } = props;
   const WORK_IN_PROGRESS = true;
   const count = status ? statistic?.[status] || 0 : 0;
 

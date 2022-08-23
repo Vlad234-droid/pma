@@ -10,7 +10,7 @@ import { ReviewsSection } from 'features/general/Reviews';
 import { PDPWidget } from 'features/general/PDP';
 import { FeedbackView } from 'features/general/Feedback';
 import { MyNotesView } from 'features/general/Notes';
-import { ObjectiveView } from 'features/general/Objectives';
+import { Tenant } from 'utils';
 
 const CareerPerformancePage: FC = () => {
   const tenant = useTenant();
@@ -19,6 +19,16 @@ const CareerPerformancePage: FC = () => {
 
   const Timeline = useMemo(
     () => React.lazy(() => import(`features/${tenant}/Timeline`).then((module) => ({ default: module.default }))),
+    [],
+  );
+
+  const ObjectiveView = useMemo(
+    () =>
+      tenant === Tenant.GENERAL
+        ? React.lazy(() => import('features/general/Objectives').then((module) => ({ default: module.ObjectiveView })))
+        : React.lazy(() =>
+            import('features/bank/widgets/PrioritiesWidget').then((module) => ({ default: module.PrioritiesWidget })),
+          ),
     [],
   );
 

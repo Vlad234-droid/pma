@@ -1,22 +1,18 @@
 import React, { FC } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Status } from 'config/enum';
-import { Button, CreateRule, Rule, useStyle, colors } from '@pma/dex-wrapper';
+import { ReviewType, Status } from 'config/enum';
+import { Button, CreateRule, Rule, useStyle, colors, theme } from '@pma/dex-wrapper';
 import { Colors } from 'config/types';
 import { TileWrapper } from 'components/Tile';
 import { Icon } from 'components/Icon';
 import { Page } from 'pages';
 import { buildPath } from 'features/general/Routes/utils';
-import { TFunction, useTranslation } from 'components/Translation';
+import { useTranslation } from 'components/Translation';
+import { getTescoBankContent } from './getTescoBankContent';
+import { useSelector } from 'react-redux';
+import { getTimelineByReviewTypeSelector, USER } from '@pma/store';
 
 export const TEST_ID = 'main-widget';
-
-export type ContentProps = {
-  status?: Status;
-  statistic?: object;
-  count?: number;
-  nextReviewDate?: string;
-};
 
 export type ContentGraphics = {
   backgroundColor: Colors;
@@ -34,22 +30,20 @@ export type ContentConfig = {
   formComponent?: React.FC;
 };
 
-export type MainWidgetBaseProps = ContentProps & {
-  getContent: (props: ContentProps, t: TFunction) => ContentConfig & ContentGraphics;
-  customStyle?: React.CSSProperties | {};
-};
-
 const DISABLED_COLOR = '#B3CDE6';
 
-export const MainWidgetBase: FC<MainWidgetBaseProps> = ({ customStyle, getContent, ...props }) => {
+export const PrioritiesWidget: FC = (props) => {
   const { css } = useStyle();
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { pathname } = useLocation();
+  const timelineQuarter = useSelector(getTimelineByReviewTypeSelector(ReviewType.QUARTER, USER.current));
+  const { status, statistics } = timelineQuarter;
 
-  const { status } = props;
-
-  const { backgroundColor, subTitle, description, buttonText, viewPage, widgetTitle, disabled } = getContent(props, t);
+  const { backgroundColor, subTitle, description, buttonText, viewPage, widgetTitle, disabled } = getTescoBankContent(
+    { status },
+    t,
+  );
 
   const notApproved = !disabled && status !== Status.APPROVED;
   const mode = notApproved ? 'default' : 'inverse';
@@ -64,7 +58,16 @@ export const MainWidgetBase: FC<MainWidgetBaseProps> = ({ customStyle, getConten
 
   return (
     <>
-      <TileWrapper customStyle={customStyle} hover={!disabled} background={backgroundColor}>
+      <TileWrapper
+        customStyle={{
+          flex: '4 1 500px',
+          fontSize: theme.font.fixed.f16.fontSize,
+          lineHeight: theme.font.fixed.f16.lineHeight,
+          letterSpacing: '0px',
+        }}
+        hover={!disabled}
+        background={backgroundColor}
+      >
         <div
           className={css(wrapperStyle({ clickable: notApproved, disabled }))}
           onMouseDown={handleClick}
