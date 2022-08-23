@@ -2,19 +2,18 @@ import React, { useMemo } from 'react';
 import { CreateRule, Styles, useStyle } from '@pma/dex-wrapper';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import UserObjectivesContainer from 'features/general/UserObjectives';
+import { UserObjectives } from 'features/general/Objectives';
 import { ColleagueProfileWidget } from 'features/general/Profile';
 import { useTranslation } from 'components/Translation';
 import { ShareWidget } from 'features/general/ShareWidget';
 import { buildPath } from 'features/general/Routes';
 import { CompletedReviewsSection, ReviewFilesSection, ReviewsSection } from 'features/general/Reviews';
-import { TEST_ID } from 'features/general/UserObjectives/UserObjectives';
 import { useToast, Variant } from 'features/general/Toast';
 
 import { tenant as T, useTenant } from 'features/general/Permission';
 import { Page } from 'pages/general/types';
 
-const UserObjectives = () => {
+const UserObjectivesPage = () => {
   const { css, matchMedia } = useStyle();
   const { t } = useTranslation();
   const { addToast } = useToast();
@@ -62,7 +61,7 @@ const UserObjectives = () => {
   );
 
   return (
-    <div data-test-id={TEST_ID} className={css(bodyBlockStyles({ mobileScreen }))}>
+    <div className={css(bodyBlockStyles({ mobileScreen }))}>
       <div className={css(mainBlockStyles({ mobileScreen }))}>
         <ColleagueProfileWidget />
         <div data-test-id={'test-step-indicator'} onClick={handleClick} className={css(timelineWrapperStyles)}>
@@ -76,7 +75,7 @@ const UserObjectives = () => {
         </div>
       </div>
       <div className={css(mainBlockStyles({ mobileScreen }))}>
-        <UserObjectivesContainer />
+        <UserObjectives />
         <ReviewsSection colleagueUuid={uuid as string} />
         <CompletedReviewsSection />
         <ReviewFilesSection colleagueUuid={uuid} />
@@ -133,4 +132,4 @@ const shareWidgetStyles: Styles = {
   width: '100%',
 };
 
-export default UserObjectives;
+export default UserObjectivesPage;

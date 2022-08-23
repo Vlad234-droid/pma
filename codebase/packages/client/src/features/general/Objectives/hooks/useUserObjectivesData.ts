@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import {
   ColleagueActions,
   filterReviewsByTypeSelector,
@@ -10,14 +10,16 @@ import {
 } from '@pma/store';
 import { useSelector } from 'react-redux';
 
-import { transformReviewsToObjectives } from 'features/general/Reviews';
+//TODO: move utils to current feature
+import { ObjectiveTypes as OT, transformReviewsToObjectives } from 'features/general/Reviews';
 
 import { ReviewType } from 'config/enum';
 import useDispatch from 'hooks/useDispatch';
 
-export const useUserObjectivesData = (uuid, reviewLoaded, schemaLoaded, setObjectives) => {
+export const useUserObjectivesData = (uuid, reviewLoaded, schemaLoaded) => {
   const dispatch = useDispatch();
   const data = useSelector(filterReviewsByTypeSelector(ReviewType.OBJECTIVE));
+  const [objectives, setObjectives] = useState<OT.Objective[]>([]);
 
   const schema = useSelector(getReviewSchema(ReviewType.OBJECTIVE));
   const { components = [] } = schema;
@@ -47,4 +49,6 @@ export const useUserObjectivesData = (uuid, reviewLoaded, schemaLoaded, setObjec
       dispatch(ColleagueActions.clearColleagueData());
     };
   }, [uuid]);
+
+  return objectives;
 };

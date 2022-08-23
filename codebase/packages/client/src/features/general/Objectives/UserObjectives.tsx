@@ -1,26 +1,40 @@
-import React, { FC, ReactNode } from 'react';
+import React, { FC, useEffect, useMemo } from 'react';
+import { useParams } from 'react-router-dom';
 import { Rule, useStyle } from '@pma/dex-wrapper';
 
 import { Trans, useTranslation } from 'components/Translation';
 import { IconButton } from 'components/IconButton';
-// import { Accordion } from 'features/general/ObjectiveAccordion';
+import Accordion from './components/Accordion';
 import Section from 'components/Section';
-import { ObjectiveTypes as OT } from 'features/general/Reviews';
 import Spinner from 'components/Spinner';
 import { Plug } from 'components/Plug';
+import { useSelector } from 'react-redux';
+import { reviewsMetaSelector, schemaMetaSelector, timelineTypesAvailabilitySelector } from '@pma/store';
+import { ReviewType } from 'config/enum';
+import { useUserObjectivesData } from './hooks';
+import { downloadPDF, ObjectiveDocument, usePDF } from '@pma/pdf-renderer';
 
 export const TEST_WRAPPER_ID = 'TEST_WRAPPER_ID';
 
-export const UserObjectivesSections: FC<{
-  canShowObjectives: boolean;
-  reviewLoading: boolean;
-  reviewLoaded: boolean;
-  objectives: OT.Objective[];
-  children?: ReactNode | null;
-}> = ({ canShowObjectives, reviewLoading, objectives, children = null, reviewLoaded }) => {
+const UserObjectives: FC = () => {
   const { css } = useStyle();
-
   const { t } = useTranslation();
+  const { loaded: schemaLoaded } = useSelector(schemaMetaSelector);
+  const { loaded: reviewLoaded, loading: reviewLoading } = useSelector(reviewsMetaSelector);
+  const { uuid } = useParams<{ uuid: string }>();
+
+  const timelineTypes = useSelector(timelineTypesAvailabilitySelector(uuid));
+  const canShowObjectives = timelineTypes[ReviewType.OBJECTIVE];
+
+  const objectives = useUserObjectivesData(uuid, reviewLoaded, schemaLoaded);
+  const document = useMemo(() => <ObjectiveDocument items={objectives} />, [JSON.stringify(objectives)]);
+  const [instance, updateInstance] = usePDF({ document });
+
+  useEffect(() => {
+    if (objectives.length) {
+      updateInstance();
+    }
+  }, [JSON.stringify(objectives)]);
 
   if (reviewLoading) return <Spinner fullHeight />;
 
@@ -40,7 +54,7 @@ export const UserObjectivesSections: FC<{
                 content: (
                   <div>
                     <IconButton
-                      onPress={() => alert('download')}
+                      onPress={() => downloadPDF(instance.url!, 'objectives.pdf')}
                       graphic='download'
                       customVariantRules={{ default: iconButtonStyles }}
                       iconStyles={iconStyles}
@@ -53,15 +67,16 @@ export const UserObjectivesSections: FC<{
                 ),
               }}
             >
-              {/*<Accordion objectives={objectives} canShowStatus={true} isButtonsVisible={false} />*/}
+              <Accordion objectives={objectives} canShowStatus={true} isButtonsVisible={false} />
             </Section>
           )}
         </>
       )}
-      {children}
     </>
   );
 };
+
+export default UserObjectives;
 
 const tileStyles: Rule = {
   display: 'flex',

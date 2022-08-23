@@ -9,7 +9,7 @@ import { ProfileTileWrapper } from 'components/ProfileTileWrapper';
 import { Backward } from 'components/Backward';
 import { CalibrationRatingsTable } from 'features/general/CalibrationRatingsTable';
 import { useFetchColleague } from 'features/general/RatingsTiles/hooks/useFetchColleague';
-import { AdditionalInfo } from 'features/general/ObjectiveRatings';
+import AdditionalInfo from 'components/AdditionalInfo';
 
 export const PROFILE_WRAPPER = 'profile-wrapper';
 

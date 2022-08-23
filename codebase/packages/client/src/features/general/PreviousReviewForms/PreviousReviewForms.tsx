@@ -5,18 +5,18 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getReviewsWithStatuses, ReviewsActions, reviewsMetaSelector, SchemaActions, colleagueInfo } from '@pma/store';
 import { useParams } from 'react-router-dom';
 
+import { getCurrentYear } from 'utils';
+import { useFetchColleague } from 'features/general/RatingsTiles/hooks/useFetchColleague';
 import Spinner from 'components/Spinner';
 import { Backward } from 'components/Backward';
 import { YearSwitch } from 'components/YearSwitch';
 import { ProfileTileWrapper } from 'components/ProfileTileWrapper';
-import { AdditionalInfo } from 'features/general/ObjectiveRatings/ObjectiveRatings';
+import AdditionalInfo from 'components/AdditionalInfo';
 import Section from 'components/Section';
 import { IconButton } from 'components/IconButton';
 import { Trans, useTranslation } from 'components/Translation';
-import { Accordion } from './components';
-import { getCurrentYear } from 'utils';
 import { Plug } from 'components/Plug';
-import { useFetchColleague } from 'features/general/RatingsTiles/hooks/useFetchColleague';
+import { Accordion } from './components';
 
 export const PLUG_ID = 'plug';
 
