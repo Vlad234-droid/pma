@@ -1,1 +1,0 @@
-export { PrioritiesWidget } from './PrioritiesWidget';

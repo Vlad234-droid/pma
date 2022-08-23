@@ -7,10 +7,12 @@ import { getTimelineByReviewTypeSelector, metaPDPSelector, timelineTypesAvailabi
 import { ReviewType, Tenant } from 'config/enum';
 import Spinner from 'components/Spinner';
 import { USER } from 'config/constants';
+import { useTenant } from 'features/general/Permission';
+import { getTescoContent } from 'features/general/MainWidget/getTescoContent';
+import { getTescoBankContent } from 'features/bank/MainWidget';
 import { useTranslation } from 'components/Translation';
 import { buildPath } from 'features/general/Routes';
 import MainWidget from '../../components/MainWidget';
-import { getTescoContent } from './getTescoContent';
 
 const ObjectiveView: FC = () => {
   const { t } = useTranslation();
@@ -28,7 +30,11 @@ const ObjectiveView: FC = () => {
   if (!canShowObjectives) return null;
   if (meta.loading) return <Spinner />;
 
-  const { subTitle, description, buttonText, backgroundColor, disabled, viewPage } = getTescoContent(
+  const tenant = useTenant();
+  //TODO: move this logic to separate features
+  const getContent = tenant === Tenant.GENERAL ? getTescoContent : getTescoBankContent;
+
+  const { subTitle, description, buttonText, backgroundColor, disabled, viewPage } = getContent(
     { status, nextReviewDate: date },
     t,
   );

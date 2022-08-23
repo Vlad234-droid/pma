@@ -2,7 +2,7 @@ import React from 'react';
 import { Status } from 'config/enum';
 import { Page } from 'pages';
 import { TFunction } from 'components/Translation';
-import { ContentConfig, ContentGraphics, ContentProps } from '../../components/MainWidget/MainWidget';
+import { ContentConfig, ContentGraphics, ContentProps } from './MainWidgetBase';
 import { Subtitle } from './Subtitle';
 
 export const getTescoContent = (props: ContentProps, t: TFunction) => {
