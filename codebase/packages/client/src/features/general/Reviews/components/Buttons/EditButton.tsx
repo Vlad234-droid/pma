@@ -22,7 +22,7 @@ const EditButton: FC<Props> = ({ styles = {}, icon = 'add', buttonText = 'Edit a
     const pathname =
       editNumber !== undefined
         ? paramsReplacer(buildPath(Page.OBJECTIVE), { ':id': editNumber.toString() })
-        : buildPath(Page.OBJECTIVES);
+        : buildPath(Page.EDIT_OBJECTIVES);
 
     navigate(pathname);
   };

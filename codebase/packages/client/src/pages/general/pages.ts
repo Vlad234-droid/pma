@@ -257,7 +257,7 @@ const pages: Record<Page, PageComponent> = {
     perform: [role.COLLEAGUE],
     tenant: [tenant.BANK, tenant.GENERAL],
   },
-  [Page.OBJECTIVES]: {
+  [Page.EDIT_OBJECTIVES]: {
     Element: UpdateObjectives,
     withHeader: true,
     backPath: Page.REVIEWS_VIEW,

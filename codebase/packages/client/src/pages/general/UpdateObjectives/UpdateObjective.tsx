@@ -1,12 +1,14 @@
 import React, { FC } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
 import { CreateRule, Modal, useStyle } from '@pma/dex-wrapper';
-import CreateUpdateObjectives from 'features/general/CreateUpdateObjectives';
-import { buildPath } from 'features/general/Routes';
-import { Page } from 'pages/general/types';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
+
 import { Icon } from 'components/Icon';
+import { buildPath } from 'features/general/Routes';
+import CreateUpdateObjectives from 'features/general/CreateUpdateObjectives';
+import { Page } from 'pages/general/types';
 
 const UpdateObjective: FC = () => {
+  const { state } = useLocation();
   const navigate = useNavigate();
   const { id } = useParams();
   const { matchMedia } = useStyle();
@@ -14,7 +16,7 @@ const UpdateObjective: FC = () => {
 
   const editNumber = id !== undefined ? +id : 1;
 
-  const handleClose = () => navigate(buildPath(Page.REVIEWS));
+  const handleClose = () => navigate((state as any)?.backPath || buildPath(Page.REVIEWS));
 
   return (
     <Modal

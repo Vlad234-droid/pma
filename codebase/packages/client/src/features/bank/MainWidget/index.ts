@@ -1,1 +1,1 @@
-export * from './getTescoBankContent';
+export * from './PriorityList';

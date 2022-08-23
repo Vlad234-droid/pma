@@ -94,7 +94,7 @@ const Objectives = () => {
         ),
       }}
       right={{
-        content: (
+        content: objectives.length ? (
           <div data-test-id={TEST_ID}>
             <IconButton
               onPress={() => downloadPDF(instance.url!, 'objectives.pdf')}
@@ -108,7 +108,7 @@ const Objectives = () => {
               <EditButton buttonText={t('edit_all', 'Edit all')} icon={'edit'} styles={borderButtonStyles} />
             )}
           </div>
-        ),
+        ) : null,
       }}
     >
       {reviewLoading ? (

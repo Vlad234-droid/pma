@@ -4,31 +4,8 @@ import { Button, CreateRule, Rule, useStyle, colors } from '@pma/dex-wrapper';
 import { Colors } from 'config/types';
 import { TileWrapper } from 'components/Tile';
 import { Icon } from 'components/Icon';
-import { Page } from 'pages';
 
 export const TEST_ID = 'main-widget';
-
-export type ContentProps = {
-  status?: Status;
-  count?: number;
-  nextReviewDate?: string;
-};
-
-export type ContentGraphics = {
-  backgroundColor: Colors;
-  subTitle: React.ReactNode;
-  description?: string;
-  buttonText: string;
-  redirectToViewPage: boolean;
-  disabled?: boolean;
-};
-
-export type ContentConfig = {
-  viewPage: Page;
-  widgetTitle: string;
-  modalTitle: string;
-  formComponent: React.FC<{ onClose: () => void }>;
-};
 
 export type Props = {
   status: Status;
@@ -40,6 +17,8 @@ export type Props = {
   description?: string;
   customStyle?: React.CSSProperties | {};
   disabled?: boolean;
+  isClickable: boolean;
+  mode?: 'default' | 'inverse';
 };
 
 const DISABLED_COLOR = '#B3CDE6';
@@ -47,24 +26,22 @@ const DISABLED_COLOR = '#B3CDE6';
 const MainWidgetBase: FC<Props> = ({
   customStyle,
   title,
-  status,
   subTitle,
   description,
   buttonText,
   backgroundColor,
   disabled,
   onClick,
+  isClickable,
+  mode,
 }) => {
   const { css } = useStyle();
-
-  const notApproved = !disabled && status !== Status.APPROVED;
-  const mode = notApproved ? 'default' : 'inverse';
 
   return (
     <>
       <TileWrapper customStyle={customStyle} hover={!disabled} background={backgroundColor}>
         <div
-          className={css(wrapperStyle({ clickable: notApproved, disabled }))}
+          className={css(wrapperStyle({ clickable: isClickable, disabled }))}
           onMouseDown={onClick}
           data-test-id={TEST_ID}
         >
@@ -72,7 +49,7 @@ const MainWidgetBase: FC<Props> = ({
             <div>
               <Icon
                 graphic='document'
-                invertColors={notApproved}
+                invertColors={isClickable}
                 iconStyles={iconStyles}
                 //@ts-ignore
                 color={disabled ? colors.darkBlue : undefined}
@@ -87,7 +64,7 @@ const MainWidgetBase: FC<Props> = ({
             {description && <div className={css(subDescription)}>{description}</div>}
             <div className={css(bodyBlockStyle)}>
               {!disabled && (
-                <Button mode={mode} styles={[viewButtonStyle({ inverse: notApproved })]} onPress={onClick}>
+                <Button mode={mode} styles={[viewButtonStyle({ inverse: isClickable })]} onPress={onClick}>
                   {buttonText}
                 </Button>
               )}
@@ -98,8 +75,6 @@ const MainWidgetBase: FC<Props> = ({
     </>
   );
 };
-
-export default MainWidgetBase;
 
 const viewButtonStyle: CreateRule<{ inverse: boolean }> =
   ({ inverse }) =>
@@ -176,3 +151,5 @@ const subDescription: Rule = ({ theme }) => ({
   marginTop: '14px',
   marginLeft: '9px',
 });
+
+export default MainWidgetBase;

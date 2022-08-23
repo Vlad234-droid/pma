@@ -1,13 +1,40 @@
 import React from 'react';
+import { TFunction } from 'components/Translation';
+import { Subtitle } from 'components/Subtitle';
+
 import { Status } from 'config/enum';
 import { Page } from 'pages';
-import { TFunction } from 'components/Translation';
-import { ContentConfig, ContentGraphics, ContentProps } from './MainWidgetBase';
-import { Subtitle } from './Subtitle';
+import { Colors } from 'config/types';
+
+export type ContentProps = {
+  status?: Status;
+  statistics?: object;
+  count?: number;
+  nextReviewDate?: string;
+};
+
+export type ContentGraphics = {
+  backgroundColor: Colors;
+  subTitle: React.ReactNode;
+  description?: string;
+  buttonText: string;
+  disabled?: boolean;
+  viewPage?: Page;
+};
+
+export type ContentConfig = {
+  viewPage: Page;
+  widgetTitle: string;
+  modalTitle: string;
+  formComponent?: React.FC;
+};
 
 export const getTescoContent = (props: ContentProps, t: TFunction) => {
-  const { status, statistic, nextReviewDate: date = '' } = props;
-  const count = status ? statistic?.[status] || 0 : 0;
+  const { status, statistics, nextReviewDate: date = '' } = props;
+  const count = status ? statistics?.[status] || 0 : 0;
+
+  const isEditPage =
+    statistics?.[Status.WAITING_FOR_APPROVAL] || statistics?.[Status.DECLINED] || statistics?.[Status.APPROVED];
 
   const config: ContentConfig = {
     viewPage: Page.REVIEWS_VIEW,
@@ -47,7 +74,7 @@ export const getTescoContent = (props: ContentProps, t: TFunction) => {
       buttonText: t('create_my_objectives', 'Create my objectives'),
     },
     [Status.DRAFT]: {
-      viewPage: Page.OBJECTIVES,
+      viewPage: isEditPage ? Page.REVIEWS_VIEW : Page.EDIT_OBJECTIVES,
       backgroundColor: 'tescoBlue',
       subTitle: (
         <Subtitle graphic='roundPencil'>

@@ -1,14 +1,39 @@
 import React from 'react';
-import { Page } from 'pages';
 import { TFunction } from 'components/Translation';
-import { ContentConfig, ContentGraphics, ContentProps } from 'features/general/MainWidget/MainWidgetBase';
-import { Subtitle } from 'features/general/MainWidget/Subtitle';
-import { PriorityList } from './PriorityList';
+import { Subtitle } from 'components/Subtitle';
+import { PriorityList } from 'features/bank/MainWidget';
+
+import { Page } from 'pages';
+import { Status } from 'config/enum';
+import { Colors } from 'config/types';
+
+export type ContentProps = {
+  status?: Status;
+  statistics?: object;
+  count?: number;
+  nextReviewDate?: string;
+};
+
+export type ContentGraphics = {
+  backgroundColor: Colors;
+  subTitle: React.ReactNode;
+  description?: string;
+  buttonText: string;
+  disabled?: boolean;
+  viewPage?: Page;
+};
+
+export type ContentConfig = {
+  viewPage: Page;
+  widgetTitle: string;
+  modalTitle: string;
+  formComponent?: React.FC;
+};
 
 export const getTescoBankContent = (props: ContentProps, t: TFunction) => {
-  const { status, statistic, nextReviewDate: date = '' } = props;
+  const { status, statistics, nextReviewDate: date = '' } = props;
   const WORK_IN_PROGRESS = true;
-  const count = status ? statistic?.[status] || 0 : 0;
+  const count = status ? statistics?.[status] || 0 : 0;
 
   const config: ContentConfig = {
     viewPage: Page.REVIEWS_VIEW, //TODO: Replace with proper page

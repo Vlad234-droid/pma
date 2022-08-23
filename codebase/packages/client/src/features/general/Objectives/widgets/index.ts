@@ -1,1 +1,1 @@
-export { default as ObjectiveView } from './ObjectiveView';
+export { default as ObjectiveWidget } from './ObjectiveWidget';

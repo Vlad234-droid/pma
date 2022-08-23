@@ -4,7 +4,6 @@ import useDispatch from 'hooks/useDispatch';
 import {
   colleagueUUIDSelector,
   FormType,
-  getNextReviewNumberSelector,
   getReviewPropertiesSelector,
   isReviewsNumberInStatuses,
   ReviewsActions,
