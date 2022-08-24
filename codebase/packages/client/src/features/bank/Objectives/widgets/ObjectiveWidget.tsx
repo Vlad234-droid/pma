@@ -46,15 +46,18 @@ const ObjectiveWidget: FC = () => {
   if (!canShowObjectives) return null;
   if (meta.loading) return <Spinner />;
 
-  const { subTitle, description, buttonText, backgroundColor, disabled, viewPage } = getTescoBankContent(
+  const { subTitle, description, buttonText, backgroundColor, disabled, viewPage, widgetTitle } = getTescoBankContent(
     { status, statistics: statistics || {}, nextReviewDate: date },
     t,
   );
+
+  const prioritiesCount = Object.values(statistics || {}).reduce((acc, el) => acc + Number(el), 0);
 
   const handleClick = () => navigate(buildPath(viewPage), { state: { backPath: pathname } });
 
   return (
     <MainWidgetBase
+      title={widgetTitle}
       status={status}
       onClick={handleClick}
       subTitle={subTitle}
@@ -62,8 +65,8 @@ const ObjectiveWidget: FC = () => {
       buttonText={buttonText}
       backgroundColor={backgroundColor}
       disabled={disabled}
-      isClickable={!disabled && status !== Status.APPROVED}
-      mode={!disabled && status !== Status.APPROVED ? 'default' : 'inverse'}
+      isClickable={!disabled && !prioritiesCount}
+      mode={!disabled && !prioritiesCount ? 'default' : 'inverse'}
       customStyle={widgetStyles}
     />
   );

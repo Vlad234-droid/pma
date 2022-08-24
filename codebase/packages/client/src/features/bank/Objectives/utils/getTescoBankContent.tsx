@@ -9,7 +9,7 @@ import { Colors } from 'config/types';
 
 export type ContentProps = {
   status?: Status;
-  statistics?: object;
+  statistics: Record<string, string>;
   count?: number;
   nextReviewDate?: string;
 };
@@ -33,10 +33,10 @@ export type ContentConfig = {
 export const getTescoBankContent = (props: ContentProps, t: TFunction) => {
   const { status, statistics, nextReviewDate: date = '' } = props;
   const WORK_IN_PROGRESS = false;
-  const count = status ? statistics?.[status] || 0 : 0;
+  const count = Object.values(statistics).reduce((acc, el) => acc + Number(el), 0);
 
   const config: ContentConfig = {
-    viewPage: Page.REVIEWS_VIEW, //TODO: Replace with proper page
+    viewPage: Page.REVIEWS_VIEW,
     widgetTitle: t('my_quarterly_priorities', 'My quarterly priorities'),
     modalTitle: t('create_my_priorities', 'Create my priorities'),
   };
@@ -54,7 +54,7 @@ export const getTescoBankContent = (props: ContentProps, t: TFunction) => {
 
   const hasAnyPriority: ContentGraphics = {
     backgroundColor: 'white',
-    subTitle: <PriorityList />,
+    subTitle: <PriorityList statistics={statistics} />,
     buttonText: t('view_priorities', 'View priorities'),
   };
 

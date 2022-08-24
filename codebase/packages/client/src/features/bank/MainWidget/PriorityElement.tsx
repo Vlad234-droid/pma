@@ -5,7 +5,7 @@ import { Rule, useStyle, Colors } from '@pma/dex-wrapper';
 type Props = {
   graphic: Graphics;
   title: string;
-  count: number;
+  count: string;
   color?: Colors;
 };
 
