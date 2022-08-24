@@ -6,7 +6,7 @@ import { ColleaguesActions, colleagueUUIDSelector, FeedbackActions, feedbackByUu
 import { Page } from 'pages';
 import { WrapperModal } from 'features/general/Modal';
 
-import { getFeedbackFields, getPayload , HandleSaveType, Statuses } from '../../config';
+import { getFeedbackFields, getPayload, HandleSaveType, Statuses } from '../../config';
 import GiveFeedbackForm from '../GiveFeedbackForm';
 import SuccessMessage from '../SuccessMessage';
 import InfoMessage from '../InfoMessage';

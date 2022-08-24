@@ -1,4 +1,4 @@
-import React, { FC, HTMLProps, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { Button, CreateRule, Modal, Rule, Styles, theme, useStyle } from '@pma/dex-wrapper';
 import { DropZone } from 'components/DropZone';
 import Upload from 'images/Upload.svg';
@@ -6,12 +6,12 @@ import { Input, Item as FormItem } from 'components/Form';
 import { getPreviousReviewFilesSelector, PreviousReviewFilesActions } from '@pma/store';
 import useDispatch from 'hooks/useDispatch';
 import { useSelector } from 'react-redux';
-import { File } from './File';
+import FileView from './components/File';
 import { Trans, useTranslation } from 'components/Translation';
 import { Icon } from 'components/Icon';
-import { RemoveFileModal } from './RemoveFileModal';
+import { RemoveFileModal } from './components/RemoveFileModal';
 
-export type PreviousReviewFilesModal = {
+export type Props = {
   onOverlayClick: () => void;
   colleagueUUID?: string;
   readonly?: boolean;
@@ -19,12 +19,10 @@ export type PreviousReviewFilesModal = {
   title?: string;
 };
 
-type Props = HTMLProps<HTMLInputElement> & PreviousReviewFilesModal;
-
 const MAX_FILES_LENGTH = 10;
 const MAX_FILE_SIZE_MB = 10;
 
-const PreviousReviewFilesModal: FC<Props> = ({
+const PreviousReviewFiles: FC<Props> = ({
   onOverlayClick,
   colleagueUUID,
   reviewUUID,
@@ -44,13 +42,13 @@ const PreviousReviewFilesModal: FC<Props> = ({
 
   const onUpload = (file) => {
     if (files.length >= MAX_FILES_LENGTH) return setShowModalLimitExceeded(true);
-    if (files.some((existingFile) => existingFile.fileName === file.name)) return setShowModalDuplicateFile(true);
+    if (files.some((existingFile: any) => existingFile.fileName === file.name)) return setShowModalDuplicateFile(true);
     if (file.size > MAX_FILE_SIZE_MB * 1024 * 1024) return setShowModalSizeExceeded(file.name);
     dispatch(PreviousReviewFilesActions.uploadFile({ file, colleagueUUID, reviewUUID }));
   };
 
   const filteredFiles = files?.filter(
-    ({ fileName }) => !filter || fileName.toLowerCase().includes(filter.toLowerCase()),
+    ({ fileName }: any) => !filter || fileName.toLowerCase().includes(filter.toLowerCase()),
   );
   const handleChangeFilter = ({ target }) => setFilteredValue(target.value);
   const openRemoveModal = (fileUuid) => setFileUuidToRemove(fileUuid);
@@ -122,7 +120,7 @@ const PreviousReviewFilesModal: FC<Props> = ({
             fileUuid={fileUuidToRemove}
             colleagueUUID={colleagueUUID}
             reviewUUID={reviewUUID}
-            fileName={files.find(({ uuid }) => uuid === fileUuidToRemove)?.fileName || 'Unknown'}
+            fileName={(files as Array<any>).find(({ uuid }: any) => uuid === fileUuidToRemove)?.fileName || 'Unknown'}
             onClose={() => setFileUuidToRemove('')}
           />
         )}
@@ -140,7 +138,7 @@ const PreviousReviewFilesModal: FC<Props> = ({
         )}
         <div className={css(fileListStyles)}>
           {filteredFiles?.map((file) => (
-            <File file={file} onDelete={openRemoveModal} key={file.uuid} readonly={readonly} />
+            <FileView key={(file as any).uuid} file={file as any} onDelete={openRemoveModal} readonly={readonly} />
           ))}
         </div>
       </Modal>
@@ -225,4 +223,4 @@ const fileListStyles = {
   width: '100%',
 } as Styles;
 
-export default PreviousReviewFilesModal;
+export default PreviousReviewFiles;

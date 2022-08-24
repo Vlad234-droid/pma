@@ -19,7 +19,7 @@ export type Props = {
   readonly?: boolean;
 };
 
-export const File: FC<Props> = ({ file, onDelete, readonly }) => {
+const File: FC<Props> = ({ file, onDelete, readonly }) => {
   const { css } = useStyle();
   const { fileName, fileLength, uuid } = file;
   const colleagueUuid = useSelector(colleagueUUIDSelector);
@@ -46,6 +46,8 @@ export const File: FC<Props> = ({ file, onDelete, readonly }) => {
     </div>
   );
 };
+
+export default File;
 
 const buttonStyles = {
   backgroundColor: 'inherit',

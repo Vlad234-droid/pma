@@ -1,9 +1,10 @@
 import React, { FC, useEffect, useState } from 'react';
-import { colleagueUUIDSelector, getPreviousReviewFilesSelector, PreviousReviewFilesActions } from '@pma/store';
 import { useSelector } from 'react-redux';
-import { RemoveFileModal } from 'features/general/ReviewFiles/components/components/RemoveFileModal';
-import { File } from './File';
 import { useStyle } from '@pma/dex-wrapper';
+import { colleagueUUIDSelector, getPreviousReviewFilesSelector, PreviousReviewFilesActions } from '@pma/store';
+//TODO: should move to general components
+import { RemoveFileModal } from 'features/general/ReviewFiles/components/RemoveFileModal';
+import { File } from './File';
 import useDispatch from 'hooks/useDispatch';
 
 type Props = {

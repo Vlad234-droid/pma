@@ -2,7 +2,7 @@ import { Rule } from '@pma/dex-wrapper';
 import React, { FC, useState } from 'react';
 import { useTranslation } from 'components/Translation';
 import { IconButton, Position } from 'components/IconButton';
-import { PreviousReviewFilesModal } from 'features/general/ReviewFiles/components';
+import PreviousReviewFiles from 'features/general/ReviewFiles';
 import { useSelector } from 'react-redux';
 import { colleagueUUIDSelector } from '@pma/store';
 
@@ -31,7 +31,7 @@ export const UploadFileButton: FC<Props> = ({ reviewUUID, number, disabled }) =>
         {t('upload', 'Upload')}
       </IconButton>
       {showModal && (
-        <PreviousReviewFilesModal
+        <PreviousReviewFiles
           title={t('priority_file_upload_header', `Priority ${number} - upload documents`, { number })}
           onOverlayClick={() => setShowModal(false)}
           colleagueUUID={colleagueUuid}

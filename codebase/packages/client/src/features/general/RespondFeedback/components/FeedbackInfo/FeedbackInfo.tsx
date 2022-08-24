@@ -9,7 +9,7 @@ import { useParams } from 'react-router-dom';
 import { FeedbackStatus, Tesco } from 'config/enum';
 import { NotificationTile } from 'components/NotificationTile';
 import { ProfileInfo } from 'components/ProfileInfo';
-import { getPropperTargetType } from 'features/general/RespondFeedbackContainer/utils';
+import { getPropperTargetType } from 'features/general/RespondFeedback/utils';
 
 export const INFO_WRAPPER = 'info_wrapper';
 export const GIVE_FEEDBACK_VIDEO = 'give_feedback_video';

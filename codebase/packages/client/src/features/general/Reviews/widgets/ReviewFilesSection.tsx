@@ -3,11 +3,11 @@ import React, { FC, useState, useEffect } from 'react';
 import { Trans } from 'components/Translation';
 import { Button, Rule, useStyle } from '@pma/dex-wrapper';
 import Section from 'components/Section';
-import { File } from 'features/general/ReviewFiles/components/components/File';
+import { File } from 'features/general/ReviewFiles/components/File';
 import { useSelector } from 'react-redux';
 import { getPreviousReviewFilesSelector, PreviousReviewFilesActions } from '@pma/store';
 import useDispatch from 'hooks/useDispatch';
-import { PreviousReviewFilesModal } from 'features/general/ReviewFiles/components';
+import PreviousReviewFiles from 'features/general/ReviewFiles';
 
 type Props = {
   colleagueUuid: string | undefined;
@@ -56,7 +56,7 @@ export const ReviewFilesSection: FC<Props> = ({ colleagueUuid }) => {
         </div>
       </Section>
       {previousReviewFilesModalShow && (
-        <PreviousReviewFilesModal
+        <PreviousReviewFiles
           onOverlayClick={() => setPreviousReviewFilesModalShow(false)}
           colleagueUUID={colleagueUuid}
         />

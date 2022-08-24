@@ -13,6 +13,8 @@ import {
 } from '@pma/store';
 import { ReviewType, Status } from 'config/enum';
 import Spinner from 'components/Spinner';
+import SuccessModal from 'components/SuccessModal';
+import { useTranslation } from 'components/Translation';
 import ObjectiveForm from './components/ObjectiveForm';
 import useReviewSchema from './hooks/useReviewSchema';
 
@@ -23,9 +25,11 @@ export type Props = {
 };
 
 const CreateUpdateObjectives: FC<Props> = ({ onClose, editNumber, useSingleStep }) => {
-  const dispatch = useDispatch();
-  const colleagueUuid = useSelector(colleagueUUIDSelector);
   const [currentNumber, setCurrentNumber] = useState(editNumber);
+  const [isSuccess, setSuccess] = useState(false);
+  const dispatch = useDispatch();
+  const { t } = useTranslation();
+  const colleagueUuid = useSelector(colleagueUUIDSelector);
   const { loaded: schemaLoaded, loading: schemaLoading } = useSelector(schemaMetaSelector);
   const { loaded: reviewLoaded, loading: reviewLoading } = useSelector(reviewsMetaSelector);
 
@@ -59,7 +63,7 @@ const CreateUpdateObjectives: FC<Props> = ({ onClose, editNumber, useSingleStep 
 
   const handleSuccess = () => {
     if (useSingleStep || markupMin <= currentNumber) {
-      onClose();
+      setSuccess(true);
     } else {
       setCurrentNumber((current) => ++current);
     }
@@ -138,6 +142,18 @@ const CreateUpdateObjectives: FC<Props> = ({ onClose, editNumber, useSingleStep 
 
   if (!schemaLoaded || !reviewLoaded) return null;
   if (schemaLoading || reviewLoading) return <Spinner fullHeight />;
+
+  if (isSuccess)
+    return (
+      <SuccessModal
+        title={t('objectives_sent', 'Objectives sent')}
+        onClose={onClose}
+        description={t(
+          'your_objectives_has_been_sent_to_your_line_manager',
+          'Your objectives has been sent to your line manager.',
+        )}
+      />
+    );
 
   return (
     <ObjectiveForm

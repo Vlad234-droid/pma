@@ -16,12 +16,11 @@ import { FEEDBACK_STATUS_IN, FeedbackStatus } from 'config/enum';
 import Spinner from 'components/Spinner';
 import { initialState } from './config';
 
-import { getSortString } from 'utils/feedback';
-import { buildSearchFeedbacksQuery } from '../../../utils';
+import { buildSearchFeedbacksQuery, getSortString } from 'utils';
 
 export const RESPOND_FEEDBACK_CONTAINER = 'respond_feedback_container';
 
-const RespondFeedbackContainer: FC = () => {
+const RespondFeedback: FC = () => {
   const { css, matchMedia } = useStyle();
   const medium = matchMedia({ xSmall: true, small: true, medium: true }) || false;
   const dispatch = useDispatch();
@@ -138,4 +137,4 @@ const DraftsStyle: Rule = {
   gap: '8px',
 };
 
-export default RespondFeedbackContainer;
+export default RespondFeedback;
