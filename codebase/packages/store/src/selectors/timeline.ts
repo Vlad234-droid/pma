@@ -43,10 +43,10 @@ export const getTimelineSelector = (colleagueUuid) =>
     const types = data?.map(({ type }) => type);
     const descriptions = data?.map(({ description }) => description);
     const summaryStatuses = data?.map(({ summaryStatus }) => summaryStatus);
-    const startDates = data?.map(({ code, startTime, endTime }, index) => {
+    const startDates = data?.map(({ code, startTime }) => {
       if (code === 'Q1' || code === 'Q3') return '';
-      const date = new Date(index === 0 ? startTime : endTime);
-      return `${date.toLocaleString('default', { month: 'long' })} ${date.getFullYear()}`;
+      const date = new Date(startTime);
+      return `${new Date(startTime).toLocaleString('default', { month: 'long' })} ${date.getFullYear()}`;
     });
     return { descriptions, startDates, summaryStatuses, codes, types };
   });
