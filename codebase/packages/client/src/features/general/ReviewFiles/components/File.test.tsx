@@ -2,7 +2,7 @@ import React from 'react';
 import { renderWithTheme } from 'utils/test';
 import '@testing-library/jest-dom/extend-expect';
 
-import { File } from './File';
+import File from './File';
 
 it('render File', async () => {
   const { getByText } = renderWithTheme(
@@ -12,6 +12,7 @@ it('render File', async () => {
         fileLength: 10,
         uuid: 'uuid',
       }}
+      onDelete={jest.fn}
     >
       <div>upload file</div>
     </File>,
