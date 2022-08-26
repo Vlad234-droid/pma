@@ -11,6 +11,7 @@ export type Objective = {
 
 export enum FormStateType {
   MODIFY = 'MODIFY',
+  SINGLE_MODIFY = 'SINGLE_MODIFY',
   PREVIEW = 'PREVIEW',
   SUBMITTED = 'SUBMITTED',
 }

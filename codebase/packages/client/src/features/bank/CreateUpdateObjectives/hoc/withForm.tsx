@@ -1,4 +1,6 @@
 import React, { Dispatch, SetStateAction, useEffect, useState, useMemo } from 'react';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 import {
   colleagueUUIDSelector,
@@ -13,33 +15,38 @@ import {
   TimelineActions,
   timelinesMetaSelector,
 } from '@pma/store';
-import { FormStateType, Objective } from '../type';
-import { useSelector } from 'react-redux';
+
+import { Page } from 'pages';
 import { ReviewType, Status } from 'config/enum';
 import useDispatch from 'hooks/useDispatch';
 import { Timeline } from 'config/types';
 import { USER } from 'config/constants';
+
 import Spinner from 'components/Spinner';
+
+import { FormStateType, Objective } from '../type';
+import { Props } from '../CreateObjectives';
 
 export type FormPropsType = {
   currentNumber: number;
   timelineCode: string;
   defaultValues: Record<string, any>;
   components: Component[];
-  objective: Objective;
   objectives: Objective[];
   formState: FormStateType;
   setFormState: Dispatch<SetStateAction<FormStateType>>;
   onSaveAsDraft: (T) => void;
-  onSubmit: () => void;
+  onSubmit: (T?) => void;
   onPreview: (T) => void;
   onNext: (T) => void;
   onBack: () => void;
 };
 
-export function withForm<P>(WrappedComponent: React.ComponentType<P & FormPropsType>) {
+export function withForm<P extends Props>(WrappedComponent: React.ComponentType<P & FormPropsType>) {
   const Component = (props: P) => {
+    const { editNumber, useSingleStep, onClose } = props;
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const { loading: schemaLoading } = useSelector(schemaMetaSelector);
     const { loading: reviewLoading } = useSelector(reviewsMetaSelector);
     const { loading: timelineLoading } = useSelector(timelinesMetaSelector());
@@ -63,12 +70,15 @@ export function withForm<P>(WrappedComponent: React.ComponentType<P & FormPropsT
     const startFromNumber = objectives?.length < markup.max ? objectives?.length + 1 : objectives?.length;
 
     const [currentNumber, setNumber] = useState<number>(startFromNumber);
-    const [objective, setObjective] = useState<Objective>({});
 
-    const defaultFormState = useMemo(
-      () => (objectives.length < markup.max ? FormStateType.MODIFY : FormStateType.PREVIEW),
-      [objectives, markup],
-    );
+    const [defaultValues, setDefaultValues] = useState<Objective>({});
+
+    const defaultFormState = useMemo(() => {
+      if (useSingleStep) {
+        return FormStateType.SINGLE_MODIFY;
+      }
+      return objectives.length < markup.max ? FormStateType.MODIFY : FormStateType.PREVIEW;
+    }, [objectives, markup, useSingleStep]);
     const [formState, setFormState] = useState<FormStateType>(defaultFormState);
 
     const formElementsFilledEmpty = components
@@ -80,72 +90,71 @@ export function withForm<P>(WrappedComponent: React.ComponentType<P & FormPropsT
         return acc;
       }, {});
 
-    const defaultValues = objectives[currentNumber - 1]?.properties || formElementsFilledEmpty;
-
     const handleSaveAsDraft = (data) => {
       const currentObjectiveIndex = objectives.findIndex((objective) => objective.number === currentNumber);
-
       if (!objectives[currentObjectiveIndex]) {
-        objectives[objectives.length] = { number: currentNumber, status: Status.DRAFT };
+        dispatch(
+          ReviewsActions.createReview({
+            pathParams: { ...pathParams, number: currentNumber },
+            data: [{ number: currentNumber, properties: data, status: Status.DRAFT }],
+          }),
+        );
+      } else {
+        dispatch(
+          ReviewsActions.updateReview({
+            pathParams: { ...pathParams, number: currentNumber },
+            data: [{ number: currentNumber, properties: data, status: Status.DRAFT }],
+          }),
+        );
       }
 
-      const updatedObjectives = objectives.map((objective) => {
-        if (currentNumber === objective.number) {
-          return {
-            ...objective,
-            status: Status.DRAFT,
-            properties: { ...data },
-          };
-        }
-        return { ...objective, status: Status.DRAFT };
-      });
-      console.log('{ pathParams, data: updatedObjectives }', { pathParams, data: updatedObjectives });
-      dispatch(ReviewsActions.updateReviews({ pathParams, data: updatedObjectives }));
-
-      // @ts-ignore
-      props.onClose();
+      onClose();
     };
 
     const handleNext = (data) => {
-      setObjective({ ...objective, properties: data });
       const currentObjectiveIndex = objectives.findIndex((objective) => objective.number === currentNumber);
-
       if (!objectives[currentObjectiveIndex]) {
-        objectives[objectives.length] = { number: currentNumber, status: Status.DRAFT };
+        dispatch(
+          ReviewsActions.createReview({
+            pathParams: { ...pathParams, number: currentNumber },
+            data: [{ number: currentNumber, properties: data, status: Status.DRAFT }],
+          }),
+        );
+      } else {
+        dispatch(
+          ReviewsActions.updateReview({
+            pathParams: { ...pathParams, number: currentNumber },
+            data: [{ number: currentNumber, properties: data, status: Status.DRAFT }],
+          }),
+        );
       }
-      const updatedObjectives: Objective[] = objectives.map((objective) => {
-        if (currentNumber === Number(objective.number)) {
-          return {
-            ...objective,
-            number: currentNumber,
-            status: Status.DRAFT,
-            properties: { ...data },
-          };
-        }
-        return { ...objective, status: Status.DRAFT };
-      });
-
-      dispatch(
-        ReviewsActions.updateReviews({
-          pathParams,
-          data: updatedObjectives,
-        }),
-      );
-      setNumber(currentNumber + 1);
+      const nextNumber = currentNumber + 1;
+      setNumber(nextNumber);
+      const currentObjective = objectives.find((objective) => objective.number === nextNumber);
+      setDefaultValues(currentObjective?.properties || formElementsFilledEmpty);
     };
 
-    const handleSubmit = () => {
-      const updatedObjectives = objectives.map((objective) => {
-        if (currentNumber === Number(objective.number)) {
-          return {
-            ...objective,
-            status: Status.WAITING_FOR_APPROVAL,
-          };
-        }
-        return { ...objective, status: Status.WAITING_FOR_APPROVAL };
-      });
+    const handleSubmit = (data) => {
+      if (useSingleStep && editNumber) {
+        dispatch(
+          ReviewsActions.updateReview({
+            pathParams: { ...pathParams, number: editNumber },
+            data: [{ number: editNumber, properties: data, status: Status.WAITING_FOR_APPROVAL }],
+          }),
+        );
+      } else {
+        const updatedObjectives = objectives.map((objective) => {
+          if (currentNumber === Number(objective.number)) {
+            return {
+              ...objective,
+              status: Status.WAITING_FOR_APPROVAL,
+            };
+          }
+          return { ...objective, status: Status.WAITING_FOR_APPROVAL };
+        });
+        dispatch(ReviewsActions.updateReviews({ pathParams, data: updatedObjectives }));
+      }
 
-      dispatch(ReviewsActions.updateReviews({ pathParams, data: updatedObjectives }));
       setFormState(FormStateType.SUBMITTED);
     };
 
@@ -174,7 +183,10 @@ export function withForm<P>(WrappedComponent: React.ComponentType<P & FormPropsT
         setFormState(FormStateType.MODIFY);
         setNumber(objectives?.length);
       } else if (currentNumber > 1) {
-        setNumber(currentNumber - 1);
+        const prevNumber = currentNumber - 1;
+        setNumber(prevNumber);
+        const currentObjective = objectives.find((objective) => objective.number === prevNumber);
+        setDefaultValues(currentObjective?.properties || formElementsFilledEmpty);
       }
     };
 
@@ -185,11 +197,18 @@ export function withForm<P>(WrappedComponent: React.ComponentType<P & FormPropsT
     }, []);
 
     useEffect(() => {
-      setObjective(objectives?.find(({ number }) => number === currentNumber) || {});
-    }, [objectives?.length, currentNumber]);
-
-    useEffect(() => {
-      setNumber(startFromNumber);
+      if (useSingleStep && editNumber) {
+        setNumber(editNumber);
+        const currentObjective = objectives.find((objective) => objective.number === editNumber);
+        setDefaultValues(currentObjective?.properties || formElementsFilledEmpty);
+        if (!currentObjective?.properties) {
+          navigate(`/${Page.NOT_FOUND}`);
+        }
+      } else {
+        setNumber(startFromNumber);
+        const currentObjective = objectives.find((objective) => objective.number === startFromNumber);
+        setDefaultValues(currentObjective?.properties || formElementsFilledEmpty);
+      }
     }, [startFromNumber]);
 
     if (schemaLoading || reviewLoading || timelineLoading) return <Spinner fullHeight />;
@@ -201,7 +220,6 @@ export function withForm<P>(WrappedComponent: React.ComponentType<P & FormPropsT
         timelineCode={timelinePoint?.code}
         currentNumber={currentNumber}
         components={components}
-        objective={objective}
         objectives={objectives}
         formState={formState}
         setFormState={setFormState}

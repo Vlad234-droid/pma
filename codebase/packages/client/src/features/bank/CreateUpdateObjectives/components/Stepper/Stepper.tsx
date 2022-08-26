@@ -28,7 +28,7 @@ const Stepper: FC<Props> = ({ steps, step }) => {
   );
 };
 
-const wrapperStyle: Rule = { display: 'flex', flexWrap: 'wrap', gap: '10px' };
+const wrapperStyle: Rule = { display: 'flex', flexWrap: 'wrap', gap: '10px', alignItems: 'center' };
 
 const stepStyle: Rule = ({ theme }) => ({
   ...theme.font.fixed.f16,

@@ -4,11 +4,12 @@ import { Trans, useTranslation } from 'components/Translation';
 import { ButtonWithConfirmation } from 'features/general/Modal';
 
 type ButtonsProps = {
-  onBack: () => void;
-  onSubmit: () => void;
+  onClose: () => void;
+  isValid: boolean;
+  onSubmit: (T?) => void;
 };
 
-const Buttons: FC<ButtonsProps> = ({ onSubmit, onBack }) => {
+const Buttons: FC<ButtonsProps> = ({ onSubmit, onClose, isValid }) => {
   const { css, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const { t } = useTranslation();
@@ -17,10 +18,11 @@ const Buttons: FC<ButtonsProps> = ({ onSubmit, onBack }) => {
     <div className={css(containerStyle)}>
       <div className={css(wrapperStyle)}>
         <div className={css(buttonWrapperStyle({ mobileScreen }))}>
-          <Button onPress={onBack} styles={[buttonWhiteStyle]}>
-            <Trans i18nKey='back'>Back</Trans>
+          <Button onPress={onClose} styles={[buttonWhiteStyle]}>
+            <Trans i18nKey='cancel'>Cancel</Trans>
           </Button>
           <ButtonWithConfirmation
+            isDisabled={!isValid}
             onSave={onSubmit}
             styles={[buttonBlueStyle]}
             confirmationTitle={''}

@@ -18,6 +18,8 @@ const getContent = (theme: Theme, t: TFunction, status: Status): [Graphics, stri
       return ['roundTick', t('agreed', 'Agreed'), 'green'];
     case Status.WAITING_FOR_APPROVAL:
       return ['roundClock', t('waiting_for_agreed', 'Waiting agreement'), 'pending'];
+    case Status.WAITING_FOR_COMPLETION:
+      return ['roundClock', t('waiting_for_completion', 'Waiting for completion'), 'pending'];
     case Status.DECLINED:
       return ['roundAlert', t('declined', 'Declined'), 'base'];
     case Status.OVERDUE:

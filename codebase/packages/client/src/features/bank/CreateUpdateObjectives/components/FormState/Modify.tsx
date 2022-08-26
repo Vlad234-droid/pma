@@ -4,9 +4,9 @@ import { useStyle } from '@pma/dex-wrapper';
 import { useTranslation } from 'components/Translation';
 import { TriggerModal } from 'features/general/Modal';
 import { HelpTrigger, HelperModal } from '../Helper';
-import Components from '../FormModal/Components';
 import Stepper from '../Stepper/Stepper';
 import { Objective } from '../../type';
+import DynamicForm from '../../../../../components/DynamicForm';
 
 type Props = {
   components: any[];
@@ -14,11 +14,17 @@ type Props = {
   objective: Objective;
   objectives: Objective[];
   methods: UseFormReturn;
+  withStepper?: boolean;
 };
 
-const Modify: FC<Props> = ({ components, objective, objectives, methods, currentNumber }) => {
+const Modify: FC<Props> = ({ components, objective, objectives, methods, currentNumber, withStepper = true }) => {
   const { css, theme } = useStyle();
   const { t } = useTranslation();
+  const {
+    getValues,
+    setValue,
+    formState: { errors },
+  } = methods;
   const steps = objectives.map((objectives) =>
     t('objective_number', `Priority ${objectives.number}`, { ns: 'bank', number: objectives.number }),
   );
@@ -29,13 +35,13 @@ const Modify: FC<Props> = ({ components, objective, objectives, methods, current
 
   return (
     <>
-      <Stepper steps={steps} step={currentNumber} />
+      {withStepper && <Stepper steps={steps} step={currentNumber} />}
       <div className={css({ padding: `${theme.spacing.s5} 0 ${theme.spacing.s5}`, display: 'flex' })}>
         <TriggerModal triggerComponent={<HelpTrigger />} title={t('completing_your_review', 'Completing your review')}>
           <HelperModal />
         </TriggerModal>
       </div>
-      <Components components={components} objective={objective} methods={methods} readonly={false} />
+      <DynamicForm components={components} errors={errors} formValues={objective} setValue={setValue} />
     </>
   );
 };

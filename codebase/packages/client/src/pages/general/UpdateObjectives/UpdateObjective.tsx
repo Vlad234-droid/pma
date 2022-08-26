@@ -1,13 +1,14 @@
-import React, { FC } from 'react';
+import React, { FC, useMemo } from 'react';
 import { CreateRule, Modal, useStyle } from '@pma/dex-wrapper';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 
 import { Icon } from 'components/Icon';
 import { buildPath } from 'features/general/Routes';
-import CreateUpdateObjectives from 'features/general/CreateUpdateObjectives';
 import { Page } from 'pages/general/types';
+import { useTenant } from 'features/general/Permission';
 
 const UpdateObjective: FC = () => {
+  const tenant = useTenant();
   const { state } = useLocation();
   const navigate = useNavigate();
   const { id } = useParams();
@@ -17,6 +18,14 @@ const UpdateObjective: FC = () => {
   const editNumber = id !== undefined ? +id : 1;
 
   const handleClose = () => navigate((state as any)?.backPath || buildPath(Page.REVIEWS));
+
+  const CreateUpdateObjectives = useMemo(
+    () =>
+      React.lazy(() =>
+        import(`features/${tenant}/CreateUpdateObjectives`).then((module) => ({ default: module.default })),
+      ),
+    [],
+  );
 
   return (
     <Modal

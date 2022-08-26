@@ -1,2 +1,2 @@
 export * from './FormModal';
-export { default as CreateButton } from './Buttons/CreateButton';
+export { default as CreateButton } from './CreateButton';
