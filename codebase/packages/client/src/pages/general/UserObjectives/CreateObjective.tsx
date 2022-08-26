@@ -46,7 +46,7 @@ const CreateObjective: FC = React.memo(() => {
           styles: [modalTitleOptionStyle({ mobileScreen })],
         }}
       >
-        <CreateUpdateObjectives onClose={handleClose} editNumber={nextNumber} />
+        <CreateUpdateObjectives onClose={handleClose} editNumber={nextNumber} create />
       </Modal>
     </ModalWrapper>
   );

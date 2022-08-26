@@ -7,7 +7,7 @@ import {
   Component,
   ExpressionValueType,
   getExpressionRequestKey,
-  getReviewByTypeSelector,
+  getReviewPropertiesByTypeSelector,
   getReviewSchema,
   reviewsMetaSelector,
 } from '@pma/store';
@@ -21,7 +21,7 @@ import { ReviewType } from 'config/enum';
 
 export const ReviewForm: FC<{ reviewType: ReviewType; id: number }> = ({ reviewType, id }) => {
   const { t } = useTranslation();
-  const [review] = useSelector(getReviewByTypeSelector(reviewType));
+  const [review] = useSelector(getReviewPropertiesByTypeSelector(reviewType));
 
   const formValues = review || {};
   const { loaded: reviewLoaded, updated: reviewUpdated } = useSelector(reviewsMetaSelector);

@@ -1,7 +1,8 @@
 import React, { FC } from 'react';
+import { FieldValues, UseFormSetValue } from 'react-hook-form';
+import get from 'lodash.get';
 import { useStyle } from '@pma/dex-wrapper';
 import { FormType } from '@pma/store';
-import { FieldValues, UseFormSetValue } from 'react-hook-form';
 
 import MarkdownRenderer from 'components/MarkdownRenderer';
 import { Input, Item, Select, Textarea, Field } from 'components/Form';
@@ -12,9 +13,10 @@ type Props = {
   errors: any;
   components: any[];
   formValues: any;
+  prefixKey?: string;
 };
 
-const DynamicForm: FC<Props> = ({ components, formValues, setValue, errors }) => {
+const DynamicForm: FC<Props> = ({ components, formValues, setValue, errors, prefixKey = '' }) => {
   const { css } = useStyle();
   const { t } = useTranslation();
 
@@ -22,7 +24,7 @@ const DynamicForm: FC<Props> = ({ components, formValues, setValue, errors }) =>
     <>
       {components.map((component) => {
         const { id, key = '', label = '', text = '', description, type, validate, values = [] } = component;
-        const value = formValues[key];
+        const value = get(formValues, `${prefixKey}${key}`);
 
         if (type === FormType.TEXT) {
           return (
@@ -36,14 +38,14 @@ const DynamicForm: FC<Props> = ({ components, formValues, setValue, errors }) =>
         if (type === FormType.TEXT_FIELD && validate?.maxLength <= 100) {
           return (
             <Field
-              key={key}
-              name={key}
+              key={`${prefixKey}${key}`}
+              name={`${prefixKey}${key}`}
               label={label}
               Element={Input}
               Wrapper={Item}
               setValue={setValue}
               value={value}
-              error={errors[key]?.message}
+              error={errors?.[`${prefixKey}${key}`]?.message}
               placeholder={description}
             />
           );
@@ -51,14 +53,14 @@ const DynamicForm: FC<Props> = ({ components, formValues, setValue, errors }) =>
         if (type === FormType.TEXT_FIELD && validate?.maxLength > 100) {
           return (
             <Field
-              key={key}
-              name={key}
+              key={`${prefixKey}${key}`}
+              name={`${prefixKey}${key}`}
               label={label}
               Element={Textarea}
               Wrapper={Item}
               setValue={setValue}
               value={value}
-              error={errors[key]?.message}
+              error={errors?.[`${prefixKey}${key}`]?.message}
               placeholder={description}
             />
           );
@@ -66,8 +68,8 @@ const DynamicForm: FC<Props> = ({ components, formValues, setValue, errors }) =>
         if (type === FormType.SELECT) {
           return (
             <Field
-              key={key}
-              name={key}
+              key={`${prefixKey}${key}`}
+              name={`${prefixKey}${key}`}
               label={label}
               Element={Select}
               Wrapper={({ children, label }) => (
@@ -77,7 +79,7 @@ const DynamicForm: FC<Props> = ({ components, formValues, setValue, errors }) =>
               )}
               setValue={setValue}
               value={value}
-              error={errors[key]?.message}
+              error={errors?.[`${prefixKey}${key}`]?.message}
               placeholder={description || t('please_select', 'Please select')}
               options={values}
             />

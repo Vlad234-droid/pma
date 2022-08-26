@@ -21,7 +21,7 @@ const EditButton: FC<Props> = ({ styles = {}, icon = 'add', buttonText = 'Edit a
   const handleBtnClick = () => {
     const pathname =
       editNumber !== undefined
-        ? paramsReplacer(buildPath(Page.OBJECTIVE), { ':id': editNumber.toString() })
+        ? paramsReplacer(buildPath(Page.EDIT_OBJECTIVE), { ':id': editNumber.toString() })
         : buildPath(Page.EDIT_OBJECTIVES);
 
     navigate(pathname);

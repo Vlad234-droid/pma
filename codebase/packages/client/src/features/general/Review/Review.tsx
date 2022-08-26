@@ -6,7 +6,7 @@ import { CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
 import {
   Component,
   currentUserSelector,
-  getReviewByTypeSelector,
+  getReviewPropertiesByTypeSelector,
   getReviewSchema,
   getTimelineByReviewTypeSelector,
   ReviewsActions,
@@ -74,7 +74,7 @@ const ReviewFormModal: FC<Review> = ({ reviewType, onClose }) => {
   const { info } = useSelector(currentUserSelector);
   const colleagueUuid = uuid ? uuid : info.colleagueUUID;
   const dispatch = useDispatch();
-  const [review] = useSelector(getReviewByTypeSelector(reviewType));
+  const [review] = useSelector(getReviewPropertiesByTypeSelector(reviewType));
   const formValues = review || {};
   const { loading: reviewLoading, loaded: reviewLoaded, updated: reviewUpdated } = useSelector(reviewsMetaSelector);
   const { loading: schemaLoading, loaded: schemaLoaded } = useSelector(schemaMetaSelector);

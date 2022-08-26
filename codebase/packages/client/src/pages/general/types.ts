@@ -14,7 +14,7 @@ enum Page {
   REVIEWS_VIEW = 'reviews',
   EDIT_OBJECTIVES = 'reviews/objectives/edit',
   CREATE_OBJECTIVES = 'reviews/objectives/new',
-  OBJECTIVE = 'reviews/objectives/:id',
+  EDIT_OBJECTIVE = 'reviews/objectives/:id',
   REVIEWS = 'reviews/:type',
   USER_REVIEWS = 'users/:uuid/reviews',
   USER_TL_REVIEW = 'users/:uuid/reviews/:type',

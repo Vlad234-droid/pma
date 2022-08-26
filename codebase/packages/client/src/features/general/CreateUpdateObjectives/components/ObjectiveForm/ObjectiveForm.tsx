@@ -1,9 +1,7 @@
-import React, { FC, useEffect, useRef } from 'react';
-import { useSelector } from 'react-redux';
+import React, { FC, useEffect, useRef, useMemo } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { Button, Icon, useStyle, Rule, CreateRule } from '@pma/dex-wrapper';
-import { reviewsMetaSelector } from '@pma/store';
 
 import { createYupSchema } from 'utils/yup';
 import { Status } from 'config/enum';
@@ -29,8 +27,9 @@ export type Props = {
   onSaveDraft: (data: any) => void;
   onSubmit: (data: any) => void;
   onPrev?: () => void;
+  onNext?: () => void;
   titles?: Array<string>;
-  onClose?: () => void;
+  onCancel?: () => void;
   defaultValues?: any;
   skipFooter?: boolean;
   skipHelp?: boolean;
@@ -50,28 +49,44 @@ const ObjectiveForm: FC<Props> = ({
   schemaComponents,
   formElements,
   onPrev,
+  onNext,
   onSaveDraft,
   onSubmit,
   defaultValues,
   skipFooter,
   skipHelp,
-  onClose,
+  onCancel,
 }) => {
-  const { loading: reviewLoading } = useSelector(reviewsMetaSelector);
-  // todo temporary
-  // const { display: newSchemaVersion } = useSelector(getReviewSchema(ReviewType.OBJECTIVE));
   const { t } = useTranslation();
 
   const { css, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
-  const yepSchema = formElements.reduce(createYupSchema(t), {});
+
+  const { schema, propertiesSchema } = useMemo(() => {
+    const propertiesSchema = Yup.object().shape(formElements.reduce(createYupSchema(t), {}));
+    const schema = Yup.object().shape({
+      data: Yup.array(
+        Yup.object().shape({
+          properties: propertiesSchema,
+        }),
+      ),
+    });
+    return { schema, propertiesSchema };
+  }, []);
+
   const methods = useFormWithCloseProtection({
     mode: 'onChange',
-    resolver: yupResolver<Yup.AnyObjectSchema>(Yup.object().shape(yepSchema)),
+    //@ts-ignore
+    resolver: yupResolver(schema),
     defaultValues,
   });
 
-  const { getValues, handleSubmit, setValue } = methods;
+  const {
+    getValues,
+    handleSubmit,
+    setValue,
+    formState: { isValid, errors },
+  } = methods;
   const formValues = getValues();
   const { watch } = methods;
 
@@ -86,11 +101,9 @@ const ObjectiveForm: FC<Props> = ({
     return () => subscription.unsubscribe();
   }, [watch]);
 
-  const {
-    formState: { isValid, errors },
-  } = methods;
+  const currentValues = formValues.data[currentId - 1];
 
-  const isDisabled = reviewLoading || !isValid;
+  const isCurrentValid = propertiesSchema.isValidSync(currentValues?.properties);
 
   // @ts-ignore
   return (
@@ -128,17 +141,23 @@ const ObjectiveForm: FC<Props> = ({
             </div>
           )}
           <Attention customStyle={{ marginBottom: '20px' }} />
-          <DynamicForm components={schemaComponents} errors={errors} formValues={formValues} setValue={setValue} />
+          <DynamicForm
+            components={schemaComponents}
+            errors={errors}
+            formValues={formValues}
+            setValue={setValue}
+            prefixKey={`data.${currentId - 1}.properties.`}
+          />
           {!skipFooter && (
             <div data-test-id={FOOTER_TEST_ID} className={css(footerContainerStyle)}>
               <div className={css(footerWrapperStyle)}>
                 <div className={css(buttonWrapperStyle({ mobileScreen }))}>
                   {!editMode ? (
-                    <Button styles={[buttonWhiteStyle]} onPress={() => onSaveDraft(getValues())}>
+                    <Button styles={[buttonWhiteStyle]} onPress={() => onSaveDraft(currentValues)}>
                       <Trans i18nKey='save_as_draft'>Save as draft</Trans>
                     </Button>
                   ) : (
-                    <Button styles={[buttonWhiteStyle]} onPress={onClose}>
+                    <Button styles={[buttonWhiteStyle]} onPress={onCancel}>
                       <Trans i18nKey='cancel'>Cancel</Trans>
                     </Button>
                   )}
@@ -147,11 +166,11 @@ const ObjectiveForm: FC<Props> = ({
                       isDisabled={!isValid}
                       onSave={handleSubmit(onSubmit)}
                       disabledBtnTooltip={t('action_enabled', 'Action enabled when mandatory fields are completed')}
-                      styles={[buttonBlueStyle({ disabled: isDisabled })]}
+                      styles={[buttonBlueStyle({ disabled: !isValid })]}
                     />
                   ) : (
                     <IconButton
-                      isDisabled={isDisabled}
+                      isDisabled={!isCurrentValid}
                       customVariantRules={{
                         default: buttonBlueStyle({ disabled: false }),
                         disabled: buttonBlueStyle({ disabled: true }),
@@ -159,8 +178,7 @@ const ObjectiveForm: FC<Props> = ({
                       graphic='arrowRight'
                       iconProps={{ invertColors: true }}
                       iconPosition={Position.RIGHT}
-                      //@ts-ignore
-                      onPress={() => handleSubmit(onSubmit)()}
+                      onPress={onNext}
                     >
                       <Trans i18nKey='next'>Next</Trans>
                     </IconButton>

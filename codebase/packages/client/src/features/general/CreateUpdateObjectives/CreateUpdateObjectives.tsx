@@ -1,14 +1,15 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import useDispatch from 'hooks/useDispatch';
 import {
   colleagueUUIDSelector,
   FormType,
-  getReviewPropertiesSelector,
+  getReviewByTypeSelector,
   isReviewsNumberInStatuses,
   ReviewsActions,
   reviewsMetaSelector,
   SchemaActions,
+  TimelineActions,
   schemaMetaSelector,
 } from '@pma/store';
 import { ReviewType, Status } from 'config/enum';
@@ -22,9 +23,10 @@ export type Props = {
   onClose: () => void;
   editNumber: number;
   useSingleStep?: boolean;
+  create?: boolean;
 };
 
-const CreateUpdateObjectives: FC<Props> = ({ onClose, editNumber, useSingleStep }) => {
+const CreateUpdateObjectives: FC<Props> = ({ onClose, editNumber, useSingleStep, create }) => {
   const [currentNumber, setCurrentNumber] = useState(editNumber);
   const [isSuccess, setSuccess] = useState(false);
   const dispatch = useDispatch();
@@ -37,15 +39,22 @@ const CreateUpdateObjectives: FC<Props> = ({ onClose, editNumber, useSingleStep 
   const isApproved = useSelector(isReviewsNumberInStatuses(ReviewType.OBJECTIVE)([Status.APPROVED], currentNumber));
   const isDeclined = useSelector(isReviewsNumberInStatuses(ReviewType.OBJECTIVE)([Status.DECLINED], currentNumber));
 
-  const objectives = useSelector(getReviewPropertiesSelector(ReviewType.OBJECTIVE));
+  const objectives = useSelector(getReviewByTypeSelector(ReviewType.OBJECTIVE));
   const [schema] = useReviewSchema(ReviewType.OBJECTIVE);
 
   const { components = [], display: newSchemaVersion, markup } = schema;
   const markupMin = markup?.min;
+  const isSingleStep = useSingleStep || markupMin < currentNumber;
 
   useEffect(() => {
     if (editNumber !== currentNumber) setCurrentNumber(editNumber);
   }, [editNumber]);
+
+  useEffect(() => {
+    return () => {
+      dispatch(TimelineActions.getTimeline);
+    };
+  }, []);
 
   const formElements = newSchemaVersion
     ? components
@@ -53,12 +62,31 @@ const CreateUpdateObjectives: FC<Props> = ({ onClose, editNumber, useSingleStep 
         .filter((e) => [FormType.TEXT_FIELD, FormType.TEXT_AREA, FormType.SELECT].includes(e?.type))
     : components.filter((component) => component.type != 'text');
 
-  const formElementsFilledEmpty = formElements.reduce((acc, current) => {
-    acc[current.key] = '';
-    return acc;
-  }, {});
+  const defaultValues = useMemo(() => {
+    const defaultProperties = formElements.reduce((acc, current) => {
+      acc[current.key] = '';
+      return acc;
+    }, {});
 
-  const defaultValues = objectives[currentNumber] || formElementsFilledEmpty;
+    if (create && isSingleStep)
+      return [
+        {
+          properties: defaultProperties,
+        },
+      ];
+    if (create) {
+      return new Array(markupMin)
+        .fill({
+          properties: defaultProperties,
+        })
+        .map((properties, idx) => objectives?.find(({ number }) => number === idx + 1) || properties);
+    }
+    if (isSingleStep) {
+      return [objectives.find(({ number }) => currentNumber === number)];
+    }
+    return objectives.slice(0, markupMin);
+  }, [objectives]);
+
   const titles = [...Array(markupMin).keys()].map((key) => `Objective ${key + 1}`);
 
   const handleSuccess = () => {
@@ -69,67 +97,55 @@ const CreateUpdateObjectives: FC<Props> = ({ onClose, editNumber, useSingleStep 
     }
   };
 
-  const buildData = (data, status, single?: boolean) => {
-    const currentObjective = {
-      status,
-      properties: { ...data },
-    };
-    if (single) {
-      return [{ number: currentNumber, ...currentObjective }];
-    }
-
-    if (objectives[currentNumber]) {
-      return [
-        ...Object.values(objectives).map((properties: any, _, list) =>
-          list.length === currentNumber ? currentObjective : { properties, status },
-        ),
-      ];
-    }
-
-    return [...Object.values(objectives).map((properties: any) => ({ properties, status })), currentObjective];
+  const buildData = (data: Array<Record<'properties' | 'number', any>>, status: Status) => {
+    return data.map(({ properties, number }) => ({ properties, status, number }));
   };
 
-  const saveData = (data: Array<any>) => {
-    if (data.length > 1) {
+  const saveDraftData = (data: Array<any>, number?: number) => {
+    if (number) {
       dispatch(
-        ReviewsActions.updateReviews({
-          pathParams,
+        ReviewsActions.updateReview({
+          pathParams: { ...pathParams, number },
           data,
         }),
       );
       return;
     }
+    dispatch(
+      ReviewsActions.createReview({
+        pathParams: { ...pathParams, number: currentNumber },
+        data,
+      }),
+    );
+  };
 
-    if (objectives[currentNumber]) {
+  const saveData = (data: Array<any>) => {
+    if (isSingleStep) {
       dispatch(
         ReviewsActions.updateReview({
           pathParams: { ...pathParams, number: currentNumber },
           data,
         }),
       );
-    } else {
-      dispatch(
-        ReviewsActions.createReview({
-          pathParams: { ...pathParams, number: currentNumber },
-          data,
-        }),
-      );
+      return;
     }
+
+    dispatch(
+      ReviewsActions.updateReviews({
+        pathParams,
+        data,
+      }),
+    );
   };
 
-  const handleSubmit = async (data) => {
-    saveData(
-      buildData(
-        data,
-        currentNumber >= markupMin || isApproved || isDeclined ? Status.WAITING_FOR_APPROVAL : Status.DRAFT,
-        useSingleStep || markupMin !== currentNumber || isApproved || isDeclined,
-      ),
-    );
+  const handleSubmit = ({ data }) => {
+    saveData(buildData(data, Status.WAITING_FOR_APPROVAL));
     handleSuccess();
   };
 
   const handleSaveDraft = (data: any) => {
-    saveData(buildData(data, Status.DRAFT, true));
+    const { number, ...rest } = data;
+    saveDraftData([{ ...rest, status: Status.DRAFT }], number);
     onClose();
   };
 
@@ -139,6 +155,7 @@ const CreateUpdateObjectives: FC<Props> = ({ onClose, editNumber, useSingleStep 
   }, []);
 
   const handlePrev = () => setCurrentNumber((current) => Math.max(--current, 1));
+  const handleNext = () => setCurrentNumber((current) => Math.min(++current, markupMin));
 
   if (!schemaLoaded || !reviewLoaded) return null;
   if (schemaLoading || reviewLoading) return <Spinner fullHeight />;
@@ -157,19 +174,19 @@ const CreateUpdateObjectives: FC<Props> = ({ onClose, editNumber, useSingleStep 
 
   return (
     <ObjectiveForm
-      key={currentNumber}
       formElements={formElements}
       schemaComponents={components}
-      currentId={currentNumber}
+      currentId={isSingleStep ? 1 : currentNumber}
       editMode={isApproved || isDeclined}
-      multiply={!useSingleStep && markupMin >= currentNumber}
+      multiply={!isSingleStep}
       isLastStep={currentNumber === markupMin}
-      defaultValues={defaultValues}
+      defaultValues={{ data: defaultValues }}
       onSaveDraft={handleSaveDraft}
       onSubmit={handleSubmit}
       titles={titles}
-      onClose={onClose}
+      onCancel={onClose}
       onPrev={handlePrev}
+      onNext={handleNext}
     />
   );
 };

@@ -26,12 +26,17 @@ export const filterPDPByTypeSelector = (pdpType: PDPType) =>
     return pdps?.data?.filter((pdp) => pdp.type === pdpType) || [];
   });
 
-export const getReviewByTypeSelector = (reviewType: ReviewType) =>
+//getReviewByTypeSelector
+
+export const getReviewPropertiesByTypeSelector = (reviewType: ReviewType) =>
   createSelector(
     reviewsSelector,
     (reviews: any) =>
       reviews?.data?.filter((review) => review.type === reviewType)?.map((review) => review?.properties) || [],
   );
+
+export const getReviewByTypeSelector = (reviewType: ReviewType) =>
+  createSelector(reviewsSelector, (reviews) => reviews?.data?.filter((review) => review.type === reviewType));
 
 export const getReviewPropertiesSelector = (reviewType: ReviewType) =>
   createSelector(filterReviewsByTypeSelector(reviewType), (reviews: any) => {
