@@ -48,7 +48,7 @@ export function withForm<P extends Props>(WrappedComponent: React.ComponentType<
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { loading: schemaLoading } = useSelector(schemaMetaSelector);
-    const { loading: reviewLoading } = useSelector(reviewsMetaSelector);
+    const { loading: reviewLoading, loaded: reviewLoaded } = useSelector(reviewsMetaSelector);
     const { loading: timelineLoading } = useSelector(timelinesMetaSelector());
     const colleagueUuid = useSelector(colleagueUUIDSelector);
     const timelinePoints: Timeline[] =
@@ -201,7 +201,7 @@ export function withForm<P extends Props>(WrappedComponent: React.ComponentType<
         setNumber(editNumber);
         const currentObjective = objectives.find((objective) => objective.number === editNumber);
         setDefaultValues(currentObjective?.properties || formElementsFilledEmpty);
-        if (!currentObjective?.properties) {
+        if (reviewLoaded && !currentObjective?.properties) {
           navigate(`/${Page.NOT_FOUND}`);
         }
       } else {

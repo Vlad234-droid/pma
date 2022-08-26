@@ -13,9 +13,11 @@ export type Props = {
 
 const CreateUpdatePriorities: FC<Props> = memo(({ onClose, editNumber, useSingleStep = false }) => {
   const { t } = useTranslation();
+  const title =
+    useSingleStep && editNumber ? t('edit_priorities', 'Edit priorities') : t('create_priorities', 'Create priorities');
 
   return (
-    <ModalComponent onClose={onClose} title={t('create_priorities', 'Create priorities')}>
+    <ModalComponent onClose={onClose} title={title}>
       <ObjectivesForm onClose={onClose} useSingleStep={useSingleStep} editNumber={editNumber} />
     </ModalComponent>
   );

@@ -21,7 +21,7 @@ const getContent = (theme: Theme, t: TFunction, status: Status): [Graphics, stri
     case Status.WAITING_FOR_COMPLETION:
       return ['roundClock', t('waiting_for_completion', 'Waiting for completion'), 'pending'];
     case Status.DECLINED:
-      return ['roundAlert', t('declined', 'Declined'), 'base'];
+      return ['roundAlert', t('request_to_amend', 'Request to amend'), 'base'];
     case Status.OVERDUE:
       return ['roundAlert', t('declined', 'Overdue'), 'tescoRed'];
     case Status.DRAFT:

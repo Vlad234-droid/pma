@@ -20,7 +20,7 @@ export const Button: FC<Props> = ({ reviewUUID, number, status }) => {
   const isEnabled = [Status.DRAFT, Status.DECLINED, Status.APPROVED].includes(status);
 
   const handleEditClick = () => {
-    const pathname = paramsReplacer(buildPath(Page.EDIT_OBJECTIVES), { ':id': number.toString() });
+    const pathname = paramsReplacer(buildPath(Page.EDIT_OBJECTIVE), { ':id': number.toString() });
 
     navigate(pathname);
   };
