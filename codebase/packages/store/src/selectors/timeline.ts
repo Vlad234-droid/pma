@@ -43,10 +43,11 @@ export const getTimelineSelector = (colleagueUuid) =>
     const types = data?.map(({ type }) => type);
     const descriptions = data?.map(({ description }) => description);
     const summaryStatuses = data?.map(({ summaryStatus }) => summaryStatus);
-    const startDates = data?.map(({ code, startTime }) => {
+    const startDates = data?.map(({ code, startTime, endTime }) => {
       if (code === 'Q1' || code === 'Q3') return '';
-      const date = new Date(startTime);
-      return `${new Date(startTime).toLocaleString('default', { month: 'long' })} ${date.getFullYear()}`;
+      return `${new Date(code === Type.EYR ? endTime : startTime).toLocaleString('default', {
+        month: 'long',
+      })} ${new Date(code === Type.EYR ? endTime : startTime).getFullYear()}`;
     });
     return { descriptions, startDates, summaryStatuses, codes, types };
   });
@@ -64,12 +65,14 @@ export const getBankTimelineSelector = (colleagueUuid) =>
     let step = 0;
 
     const getDesc = (code, description) => (code !== 'MYR' ? description : `${description} / ${quarterDescription}`);
-    const getStartDate = (startTime, endTime, index) => getDateString(new Date(index === 0 ? startTime : endTime));
-    const getDateString = (date) => `${date.toLocaleString('default', { month: 'short' })} ${date.getFullYear()}`;
+    const getStartDate = (startTime, endTime, code) =>
+      `${new Date(code === Type.EYR ? endTime : startTime).toLocaleString('default', { month: 'short' })} ${new Date(
+        code === Type.EYR ? endTime : startTime,
+      ).getFullYear()}`;
     const isActive = (status) => status !== 'STARTED' && status !== 'NOT_STARTED';
     const getStep = (step) => (step <= 0 ? 0 : step - 1);
 
-    data?.map(({ code, type, summaryStatus, description, startTime, endTime }, index) => {
+    data?.map(({ code, type, summaryStatus, description, startTime, endTime }) => {
       const { codes, types, summaryStatuses, descriptions, startDates } = result as any;
 
       if (code !== 'Q3' || !hasMYR) {
@@ -77,7 +80,7 @@ export const getBankTimelineSelector = (colleagueUuid) =>
         types.push(type);
         summaryStatuses.push(summaryStatus);
         descriptions.push(getDesc(code, description));
-        startDates.push(getStartDate(startTime, endTime, index));
+        startDates.push(getStartDate(startTime, endTime, code));
         step++;
       }
 
