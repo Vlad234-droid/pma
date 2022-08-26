@@ -1,0 +1,13 @@
+diff --git a/node_modules/@dex-ddl/core/package.json b/node_modules/@dex-ddl/core/package.json
+index f492241..b6c8234 100644
+--- a/node_modules/@dex-ddl/core/package.json
++++ b/node_modules/@dex-ddl/core/package.json
+@@ -2,7 +2,7 @@
+   "name": "@dex-ddl/core",
+   "version": "0.1.153",
+   "engines": {
+-    "node": "14.17.x",
++    "node": ">=14.17.x",
+     "yarn": "1.22.x"
+   },
+   "files": [
