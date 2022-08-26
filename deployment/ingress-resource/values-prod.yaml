@@ -2,10 +2,10 @@ api:
   enabled: true
 
   swagger:
-    enabled: false
+    enabled: true
   
   camunda:
-    enabled: false
+    enabled: true
   
   actuator:
-    enabled: false
+    enabled: true
