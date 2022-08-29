@@ -30,7 +30,7 @@ const ObjectiveWidget: FC = () => {
   if (!canShowObjectives) return null;
   if (meta.loading) return <Spinner />;
 
-  const { subTitle, description, buttonText, backgroundColor, disabled, viewPage } = getTescoContent(
+  const { subTitle, description, buttonText, backgroundColor, disabled, viewPage, widgetTitle } = getTescoContent(
     { status, statistics, nextReviewDate: date },
     t,
   );
@@ -39,6 +39,7 @@ const ObjectiveWidget: FC = () => {
 
   return (
     <MainWidgetBase
+      title={widgetTitle}
       status={status}
       onClick={handleClick}
       subTitle={subTitle}
