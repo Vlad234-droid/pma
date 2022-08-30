@@ -15,9 +15,11 @@ import {
   updateReviewStatus,
   getReviewByUuid,
   updateRatingReview,
+  getReviewsWithNotes,
 } from './actions';
 import { getTimeline } from '../timeline/actions';
 import { getManagerReviews } from '../managers/actions';
+import { getPriorityNotesWithReviews } from '../priorityNotes/actions';
 
 export const getReviewsEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
@@ -54,6 +56,24 @@ export const getColleagueReviewsEpic: Epic = (action$, _, { api }) =>
         ),
         catchError(({ errors }) => of(getColleagueReviews.failure(errors))),
         takeUntil(action$.pipe(filter(isActionOf(getColleagueReviews.cancel)))),
+      ),
+    ),
+  );
+
+export const getReviewsWithNotesEpic: Epic = (action$, _, { api }) =>
+  action$.pipe(
+    filter(isActionOf(getReviewsWithNotes.request)),
+    switchMap(({ payload }) =>
+      // @ts-ignore
+      from(api.getReviews(payload)).pipe(
+        mergeMap(({ data }: any) =>
+          from([
+            getPriorityNotesWithReviews.request({ data, colleagueUuid: payload.pathParams.colleagueUuid }),
+            getReviewsWithNotes.success({ data }),
+          ]),
+        ),
+        catchError(({ errors }) => of(getReviewsWithNotes.failure(errors))),
+        takeUntil(action$.pipe(filter(isActionOf(getReviewsWithNotes.cancel)))),
       ),
     ),
   );
@@ -193,6 +213,7 @@ export const updateRatingReviewEpic: Epic = (action$, state$, { api }) =>
 export default combineEpics(
   getReviewsEpic,
   getColleagueReviewsEpic,
+  getReviewsWithNotesEpic,
   updateReviewEpic,
   createReviewEpic,
   updateReviewsEpic,

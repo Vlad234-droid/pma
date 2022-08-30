@@ -1,8 +1,9 @@
-import React, { useEffect, useState, useCallback, useMemo } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { ObjectiveTypes, transformReviewsToObjectives } from 'features/general/Reviews';
 import {
   colleagueUUIDSelector,
   filterReviewsByTypeSelector,
+  priorityNotesMetaSelector,
   getReviewSchema,
   getTimelinesByReviewTypeSelector,
   ReviewsActions,
@@ -31,6 +32,7 @@ export function withSection<P>(WrappedComponent: React.ComponentType<P & PropsTy
     const { loaded: schemaLoaded } = useSelector(schemaMetaSelector);
     const { loaded: timelineLoaded } = useSelector(timelinesMetaSelector());
     const { loaded: reviewLoaded } = useSelector(reviewsMetaSelector);
+    const { loaded: notesLoaded } = useSelector(priorityNotesMetaSelector);
 
     const timelinePoints: Timeline[] =
       useSelector(getTimelinesByReviewTypeSelector(ReviewType.QUARTER, USER.current)) || [];
@@ -80,7 +82,7 @@ export function withSection<P>(WrappedComponent: React.ComponentType<P & PropsTy
 
     useEffect(() => {
       if (canShowObjectives) {
-        dispatch(ReviewsActions.getReviews({ pathParams: { colleagueUuid, cycleUuid: 'CURRENT' } }));
+        dispatch(ReviewsActions.getReviewsWithNotes({ pathParams: { colleagueUuid, cycleUuid: 'CURRENT' } }));
       }
     }, [canShowObjectives]);
 
@@ -91,13 +93,13 @@ export function withSection<P>(WrappedComponent: React.ComponentType<P & PropsTy
     }, [timelineLoaded]);
 
     useEffect(() => {
-      if (reviewLoaded && schemaLoaded && timelineLoaded) {
+      if (reviewLoaded && schemaLoaded && timelineLoaded && notesLoaded) {
         const filteredObjectives = originObjectives.filter(
           (objective) => objective.tlPointUuid === selectedTimelinePoint?.uuid,
         );
         setObjectives(transformReviewsToObjectives(filteredObjectives, formElements));
       }
-    }, [reviewLoaded, schemaLoaded, timelineLoaded]);
+    }, [reviewLoaded, schemaLoaded, timelineLoaded, notesLoaded]);
 
     return (
       <WrappedComponent

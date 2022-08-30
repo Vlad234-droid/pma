@@ -9,6 +9,7 @@ import colleagueEpic from '../entities/colleague/epic';
 import colleaguesEpic from '../entities/colleagues/epic';
 import reviewsEpic from '../entities/reviews/epic';
 import objectiveSharingEpic from '../entities/objectiveSharing/epic';
+import priorityNotesEpic from '../entities/priorityNotes/epic';
 import notesEpic from '../entities/notes/epic';
 import tipsEpic from '../entities/tips/epic';
 import performanceCycleEpic from '../entities/performanceCycle/epic';
@@ -32,6 +33,7 @@ export const rootEpic = combineEpics(
   colleaguesEpic,
   reviewsEpic,
   objectiveSharingEpic,
+  priorityNotesEpic,
   notesEpic,
   tipsEpic,
   performanceCycleEpic,

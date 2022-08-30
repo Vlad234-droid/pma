@@ -37,6 +37,13 @@ export const getColleagueReviews = createAsyncAction(
   'reviews/colleague/FETCH_ALL_CANCEL',
 )<ReviewActionParams, any, Error>();
 
+export const getReviewsWithNotes = createAsyncAction(
+  'reviews/notes/FETCH_ALL_REQUEST',
+  'reviews/notes/FETCH_ALL_SUCCESS',
+  'reviews/notes/FETCH_ALL_FAILURE',
+  'reviews/notes/FETCH_ALL_CANCEL',
+)<ReviewActionParams, any, Error>();
+
 export const createReview = createAsyncAction(
   'reviews/CREATE_REQUEST',
   'reviews/CREATE_SUCCESS',
@@ -107,6 +114,7 @@ export const Actions = {
   getReview: getReview.request,
   getReviews: getReviews.request,
   getColleagueReviews: getColleagueReviews.request,
+  getReviewsWithNotes: getReviewsWithNotes.request,
   createReview: createReview.request,
   deleteReview: deleteReview.request,
   updateReview: updateReview.request,

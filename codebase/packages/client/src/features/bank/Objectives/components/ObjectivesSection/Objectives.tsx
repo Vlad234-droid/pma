@@ -10,6 +10,7 @@ import { downloadPDF, PrioritiesDocument, usePDF } from '@pma/pdf-renderer';
 import Spinner from 'components/Spinner';
 import { TogglePriority } from '../TogglePriority';
 import { PropsType, withSection } from '../../hoc/withSection';
+import { AddNoteButton } from '../AddNoteButton';
 
 export const TEST_ID = 'objectives-test-id';
 
@@ -64,7 +65,10 @@ const Objectives: FC<PropsType> = ({
         {reviewLoading ? (
           <Spinner fullHeight />
         ) : objectives.length ? (
-          <Accordion handleCompletion={handleCompletion} objectives={objectives} canShowStatus={true} />
+          <>
+            <Accordion handleCompletion={handleCompletion} objectives={objectives} canShowStatus={true} />
+            <AddNoteButton objectives={objectives} activeTimelinePoints={activeTimelinePoints} />
+          </>
         ) : (
           <div className={css(emptyBlockStyle)}>
             <Trans i18nKey={'no_objectives_created'}>No objectives created</Trans>

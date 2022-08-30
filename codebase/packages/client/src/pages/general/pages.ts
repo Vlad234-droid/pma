@@ -46,6 +46,8 @@ import Review from './Review';
 import UpdateObjectives from './UpdateObjectives';
 import { NotFound } from './NotFound';
 import { Tenant } from 'utils';
+import PriorityNote from './Notes/PriorityNote';
+import PriorityNoteEdit from './Notes/PriorityNoteEdit';
 
 export type PageComponent = {
   Element: PageElement;
@@ -116,6 +118,20 @@ const pages: Record<Page, PageComponent> = {
   },
   [Page.PERSONAL_NOTE]: {
     Element: PersonalNoteView,
+    title: (tenant, t) => t('notes'),
+    withHeader: false,
+    perform: [role.COLLEAGUE],
+    tenant: [tenant.BANK, tenant.GENERAL],
+  },
+  [Page.PRIORITY_NOTE]: {
+    Element: PriorityNote,
+    title: (tenant, t) => t('notes'),
+    withHeader: false,
+    perform: [role.COLLEAGUE],
+    tenant: [tenant.BANK, tenant.GENERAL],
+  },
+  [Page.PRIORITY_NOTE_EDIT]: {
+    Element: PriorityNoteEdit,
     title: (tenant, t) => t('notes'),
     withHeader: false,
     perform: [role.COLLEAGUE],

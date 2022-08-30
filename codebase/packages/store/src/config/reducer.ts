@@ -11,6 +11,7 @@ import colleagueReducer from '../entities/colleague/reducer';
 import colleaguesReducer from '../entities/colleagues/reducer';
 import reviewsReducer from '../entities/reviews/reducer';
 import objectiveSharingReducer from '../entities/objectiveSharing/reducer';
+import priorityNotesReducer from '../entities/priorityNotes/reducer';
 import notesReducer from '../entities/notes/reducer';
 import tipsReducer from '../entities/tips/reducer';
 import performanceCycleReducer from '../entities/performanceCycle/reducer';
@@ -37,6 +38,7 @@ export const rootReducer = combineReducers({
   colleagues: colleaguesReducer,
   reviews: reviewsReducer,
   objectivesSharing: objectiveSharingReducer,
+  priorityNotes: priorityNotesReducer,
   notes: notesReducer,
   tips: tipsReducer,
   performanceCycle: performanceCycleReducer,

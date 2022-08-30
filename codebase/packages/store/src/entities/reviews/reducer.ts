@@ -7,6 +7,7 @@ import {
   updateReviews,
   clearReviewData,
   getColleagueReviews,
+  getReviewsWithNotes,
   updateReviewStatus,
   updateReviewsState,
   getReviewByUuid,
@@ -55,7 +56,26 @@ export default createReducer(initialState)
       meta: { ...state.meta, loading: false, loaded: true },
     };
   })
-
+  .handleAction(getReviewsWithNotes.request, (state) => {
+    return {
+      ...state,
+      meta: { ...state.meta, loading: true, error: null, loaded: false },
+    };
+  })
+  .handleAction(getReviewsWithNotes.failure, (state, { payload }) => {
+    return {
+      ...state,
+      ...payload,
+      meta: { ...state.meta, loading: false, loaded: true, error: payload },
+    };
+  })
+  .handleAction(getReviewsWithNotes.success, (state, { payload }) => {
+    return {
+      ...state,
+      ...payload,
+      meta: { ...state.meta, loading: false, loaded: true },
+    };
+  })
   .handleAction(deleteReview.request, (state) => {
     return {
       ...state,

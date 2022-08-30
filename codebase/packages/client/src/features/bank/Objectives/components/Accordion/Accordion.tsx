@@ -8,6 +8,7 @@ import { Button } from './Button';
 import { FileList } from 'features/bank/UploadFile';
 import { Tenant } from 'utils';
 import { CompletePriority } from '../CompletePriority/CompletePriority';
+import { NoteSection } from '../NoteSection';
 
 export const TEST_ID = 'priorities-accordion';
 
@@ -48,6 +49,7 @@ const ObjectiveAccordion: FC<ObjectiveAccordionProps> = ({ objectives, handleCom
                   <Button reviewUUID={uuid} number={id} status={status} />
                 </div>
                 <FileList reviewUUID={uuid} />
+                <NoteSection reviewUuid={uuid} />
               </Panel>
               <div className={css({ paddingBottom: '25px' })}></div>
             </Section>

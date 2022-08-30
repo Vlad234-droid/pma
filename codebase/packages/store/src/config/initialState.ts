@@ -10,6 +10,7 @@ import { initialState as colleagueInitialState } from '../entities/colleague/red
 import { initialState as colleaguessState } from '../entities/colleagues/reducer';
 import { initialState as reviewsInitialState } from '../entities/reviews/reducer';
 import { initialState as objectiveSharingState } from '../entities/objectiveSharing/reducer';
+import { initialState as priorityNotesState } from '../entities/priorityNotes/reducer';
 import { initialState as notesState } from '../entities/notes/reducer';
 import { initialState as tipsInitialState } from '../entities/tips/reducer';
 import { initialState as performanceCycleInitialState } from '../entities/performanceCycle/reducer';
@@ -36,6 +37,7 @@ export const initialState = {
   colleagues: colleaguessState,
   reviewsInitialState: reviewsInitialState,
   objectivesSharing: objectiveSharingState,
+  priorityNotes: priorityNotesState,
   notes: notesState,
   tips: tipsInitialState,
   performanceCycle: performanceCycleInitialState,

@@ -28,6 +28,8 @@ enum Page {
   CALIBRATION = 'calibration/:type',
   NOTES = 'notes',
   NOTES_INFO = 'notes/info',
+  PRIORITY_NOTE = 'notes/priority-note/:uuid',
+  PRIORITY_NOTE_EDIT = 'notes/priority-note/edit/:uuid/:noteUuid',
   PERSONAL_NOTE = 'notes/personal-note/:uuid/view',
   PERSONAL_NOTE_CREATE = 'notes/personal-note/:uuid',
   PERSONAL_NOTE_FOLDER_CREATE = 'notes/personal-note-folder/:uuid',
