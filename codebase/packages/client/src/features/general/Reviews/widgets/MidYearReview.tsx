@@ -67,7 +67,7 @@ const MidYearReview: FC<Props> = ({ colleagueUuid }) => {
           )
         }
         title={t('mid_year_review', 'Mid-year review')}
-        description={
+        subTitle={
           hasDescription
             ? summaryStatus === Status.APPROVED
               ? t('mid_year_review_widget_title_approved', 'Your mid-year review is complete.')
@@ -75,6 +75,11 @@ const MidYearReview: FC<Props> = ({ colleagueUuid }) => {
                   'mid_year_review_widget_title',
                   'Complete this once you’ve had your mid-year conversation with your line manager.',
                 )
+            : undefined
+        }
+        description={
+          hasDescription && summaryStatus !== Status.APPROVED
+            ? t('mid_year_review_widget_subtitle', 'This should be submitted and approved by 7th October.')
             : undefined
         }
         disabled={disabled}

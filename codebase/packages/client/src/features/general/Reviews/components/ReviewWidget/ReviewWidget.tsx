@@ -14,6 +14,7 @@ export type Props = {
   content: string;
   buttonText: string;
   title: string;
+  subTitle?: string;
   description?: string;
   customStyle?: CSSProperties | {};
   onClick: () => void;
@@ -31,8 +32,9 @@ const ReviewWidget: FC<Props> = ({
   shadow,
   content,
   buttonText,
-  description,
   title,
+  subTitle,
+  description,
   onClick,
 }) => {
   const { css } = useStyle();
@@ -51,6 +53,7 @@ const ReviewWidget: FC<Props> = ({
         <div className={css(headStyle)}>
           <div className={css(headerBlockStyle)}>
             <span className={css(titleStyle({ color: titleColor }))}>{title}</span>
+            {subTitle && <span className={css(descriptionStyle({ color: descriptionColor }))}>{subTitle}</span>}
             {description && <span className={css(descriptionStyle({ color: descriptionColor }))}>{description}</span>}
             <span className={css(descriptionStyle({ color: descriptionColor }), iconWrapper)}>
               <Icon
