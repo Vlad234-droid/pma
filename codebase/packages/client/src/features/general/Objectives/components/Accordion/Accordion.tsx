@@ -6,7 +6,7 @@ import { Trans } from 'components/Translation';
 import { ObjectiveButtons } from 'features/general/Reviews/components/Buttons';
 import * as T from 'features/general/Reviews/types';
 
-import { ObjectiveTileExplanations } from '../Tile';
+import { ObjectiveDetails } from '../Tile';
 import ObjectiveHeader from '../ObjectiveHeader';
 
 export type ObjectiveAccordionProps = {
@@ -17,12 +17,12 @@ export type ObjectiveAccordionProps = {
 
 export const TEST_ID = 'objective-accordion';
 
-const DeclineReason: FC<{ declineReason: string }> = ({ declineReason }) => {
+const DeclineReason: FC<{ reason: string }> = ({ reason }) => {
   const { css } = useStyle();
   return (
     <div className={css(declineReasonStyles)}>
       <Trans i18nKey={'objective_decline_reason_prefix'}>Your objective was declined because it was not:</Trans>{' '}
-      {declineReason}
+      {reason}
     </div>
   );
 };
@@ -30,16 +30,18 @@ const DeclineReason: FC<{ declineReason: string }> = ({ declineReason }) => {
 const ObjectiveAccordion: FC<ObjectiveAccordionProps> = ({ objectives, canShowStatus, isButtonsVisible = true }) => (
   <Accordion id='objective-accordion'>
     <div data-test-id={TEST_ID}>
-      {objectives.map(({ id, title, subTitle, description, declineReason, explanations, status }) => (
-        <Section key={id}>
-          <ObjectiveHeader {...{ title, subTitle, description, ...(canShowStatus ? { status } : {}) }} />
-          <Panel>
-            {declineReason && <DeclineReason declineReason={declineReason} />}
-            <ObjectiveTileExplanations explanations={explanations} />
-            {isButtonsVisible && <ObjectiveButtons id={id} status={status} />}
-          </Panel>
-        </Section>
-      ))}
+      {objectives.map(({ id, title, subTitle, description, declineReason, status, explanations }) => {
+        return (
+          <Section key={id}>
+            <ObjectiveHeader {...{ title, subTitle, description, ...(canShowStatus ? { status } : {}) }} />
+            <Panel>
+              {declineReason && <DeclineReason reason={declineReason} />}
+              <ObjectiveDetails explanations={explanations} />
+              {isButtonsVisible && <ObjectiveButtons id={id} status={status} />}
+            </Panel>
+          </Section>
+        );
+      })}
     </div>
   </Accordion>
 );

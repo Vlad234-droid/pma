@@ -1,33 +1,26 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect } from 'react';
 import { Rule, useStyle } from '@pma/dex-wrapper';
 import { ReviewType, Status } from 'config/enum';
 import {
   colleagueUUIDSelector,
-  filterReviewsByTypeSelector,
   getReviewSchema,
   getTimelineByCodeSelector,
   isReviewsInStatus,
   ReviewsActions,
-  reviewsMetaSelector,
   timelineTypesAvailabilitySelector,
   getActiveTimelineByReviewTypeSelector,
 } from '@pma/store';
 import { Trans, useTranslation } from 'components/Translation';
-import {
-  canEditAllObjectiveFn,
-  EditButton,
-  ObjectiveTypes,
-  transformReviewsToObjectives,
-} from 'features/general/Reviews';
+import { canEditAllObjectiveFn, EditButton } from 'features/general/Reviews';
 import Accordion from '../Accordion';
 import Section from 'components/Section';
 import StatusBadge from 'components/StatusBadge';
 import { useSelector } from 'react-redux';
 import { USER } from 'config/constants';
 import { IconButton } from 'components/IconButton';
-import { downloadPDF, ObjectiveDocument, usePDF } from '@pma/pdf-renderer';
 import Spinner from 'components/Spinner';
 import useDispatch from 'hooks/useDispatch';
+import { useObjectivesData, useDownload } from '../../hooks';
 
 export const TEST_ID = 'objectives-test-id';
 
@@ -35,24 +28,23 @@ const Objectives = () => {
   const { css } = useStyle();
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const uuid = useSelector(colleagueUUIDSelector);
 
   const activeTimeline = useSelector(getActiveTimelineByReviewTypeSelector(ReviewType.OBJECTIVE, USER.current));
   const colleagueUuid = useSelector(colleagueUUIDSelector);
-  const originObjectives = useSelector(filterReviewsByTypeSelector(ReviewType.OBJECTIVE));
   const objectiveSchema = useSelector(getReviewSchema(activeTimeline?.code)) || {};
-  const { components = [] } = objectiveSchema;
-  const formElements = components.filter((component) => component.type != 'text');
-  const objectives: ObjectiveTypes.Objective[] = transformReviewsToObjectives(originObjectives, formElements);
+  const {
+    objectives,
+    meta: { loading, loaded },
+  } = useObjectivesData(uuid);
   const timelineTypes = useSelector(timelineTypesAvailabilitySelector(colleagueUuid)) || {};
   const canShowObjectives = timelineTypes[ReviewType.OBJECTIVE];
 
-  const { loading: reviewLoading } = useSelector(reviewsMetaSelector);
   const timelineObjective = useSelector(getTimelineByCodeSelector(ReviewType.OBJECTIVE, USER.current)) || {};
   const status = timelineObjective?.summaryStatus || null;
   const isAllObjectivesInSameStatus = useSelector(isReviewsInStatus(ReviewType.OBJECTIVE)(status));
 
-  const document = useMemo(() => <ObjectiveDocument items={objectives} />, [JSON.stringify(objectives)]);
-  const [instance, updateInstance] = usePDF({ document });
+  const download = useDownload(objectives);
 
   const countDraftReviews = parseInt(timelineObjective?.statistics?.[Status.DRAFT] || 0);
   const countDeclinedReviews = parseInt(timelineObjective?.statistics?.[Status.DECLINED] || 0);
@@ -66,20 +58,12 @@ const Objectives = () => {
   });
 
   useEffect(() => {
-    if (objectives.length) {
-      updateInstance();
-    }
-  }, [JSON.stringify(objectives)]);
-
-  useEffect(() => {
     if (canShowObjectives) {
       dispatch(ReviewsActions.getReviews({ pathParams: { colleagueUuid, cycleUuid: 'CURRENT' } }));
     }
-
-    // return () => {
-    //   dispatch(ReviewsActions.clearReviewData());
-    // };
   }, [canShowObjectives]);
+
+  if (loading) return <Spinner fullHeight />;
 
   return (
     <Section
@@ -97,7 +81,7 @@ const Objectives = () => {
         content: objectives.length ? (
           <div data-test-id={TEST_ID}>
             <IconButton
-              onPress={() => downloadPDF(instance.url!, 'objectives.pdf')}
+              onPress={download}
               graphic='download'
               customVariantRules={{ default: iconButtonStyles }}
               iconStyles={iconStyles}
@@ -111,9 +95,7 @@ const Objectives = () => {
         ) : null,
       }}
     >
-      {reviewLoading ? (
-        <Spinner fullHeight />
-      ) : objectives.length ? (
+      {loaded && objectives.length ? (
         <Accordion objectives={objectives} canShowStatus={!isAllObjectivesInSameStatus} />
       ) : (
         <div className={css(emptyBlockStyle)}>

@@ -1,1 +1,1 @@
-export { default, ObjectiveTileHeader, ObjectiveTileExplanations } from './Tile';
+export { default, ObjectiveTileHeader, ObjectiveDetails } from './Tile';

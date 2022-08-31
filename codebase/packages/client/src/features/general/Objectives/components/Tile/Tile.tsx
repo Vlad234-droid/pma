@@ -35,7 +35,7 @@ const ObjectiveTile: FC<Props> = ({
     <TileWrapper key={id} customStyle={tileWrapperStyles} boarder={true}>
       <div style={{ padding: '24px' }}>
         <ObjectiveTileHeader {...{ title, subTitle, description, withSpacing }} />
-        <ObjectiveTileExplanations explanations={explanations} updateReview={updateReview} />
+        <ObjectiveDetails explanations={explanations} updateReview={updateReview} />
       </div>
     </TileWrapper>
   );
@@ -58,13 +58,13 @@ export const ObjectiveTileHeader: FC<Pick<Props, 'title' | 'subTitle' | 'descrip
   );
 };
 
-export const ObjectiveTileExplanations: FC<Pick<Props, 'explanations' | 'withSpacing' | 'updateReview'>> = ({
+export const ObjectiveDetails: FC<Pick<Props, 'explanations' | 'withSpacing' | 'updateReview'>> = ({
   explanations,
   withSpacing = false,
   updateReview,
 }) => {
   const { css } = useStyle();
-  const handleOnChange = (key) => (e) => {
+  const handleChange = (key) => (e) => {
     if (key && updateReview) {
       updateReview({ [key]: e.target.value });
     }
@@ -84,7 +84,7 @@ export const ObjectiveTileExplanations: FC<Pick<Props, 'explanations' | 'withSpa
           ) : (
             <div className={css(inputsStyles)}>
               {/*todo not only textarea*/}
-              <Textarea isValid={true} value={description} onChange={handleOnChange(key)} />
+              <Textarea isValid={true} value={description} onChange={handleChange(key)} />
             </div>
           )}
         </div>
