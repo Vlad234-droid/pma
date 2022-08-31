@@ -52,7 +52,7 @@ const CreateUpdateObjectives: FC<Props> = ({ onClose, editNumber, useSingleStep,
 
   useEffect(() => {
     return () => {
-      dispatch(TimelineActions.getTimeline);
+      dispatch(TimelineActions.getTimeline({ colleagueUuid }));
     };
   }, []);
 

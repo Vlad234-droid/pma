@@ -127,11 +127,11 @@ export const getTescoContent = (props: ContentProps, t: TFunction) => {
       buttonText: t('view', 'View'),
     },
     [Status.OVERDUE]: {
-      viewPage: Page.CREATE_OBJECTIVES,
+      viewPage: Page.REVIEWS_VIEW,
       backgroundColor: 'tescoBlue',
       subTitle: <Subtitle graphic='roundAlert'>{t('objectives_are_overdue', 'Objectives are overdue')}</Subtitle>,
       description: '',
-      buttonText: t('create_my_objectives', 'Create my objectives'),
+      buttonText: t('view', 'View'),
     },
     [Status.PENDING]: {
       viewPage: Page.CREATE_OBJECTIVES,
