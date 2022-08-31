@@ -101,19 +101,19 @@ const CreateUpdateObjectives: FC<Props> = ({ onClose, editNumber, useSingleStep,
     return data.map(({ properties, number }) => ({ properties, status, number }));
   };
 
-  const saveDraftData = (data: Array<any>, number?: number) => {
-    if (number) {
-      dispatch(
-        ReviewsActions.updateReview({
-          pathParams: { ...pathParams, number },
-          data,
-        }),
-      );
-      return;
-    }
+  const saveDraftData = (data: Array<any>, number: number) => {
     dispatch(
       ReviewsActions.createReview({
-        pathParams: { ...pathParams, number: currentNumber },
+        pathParams: { ...pathParams, number },
+        data,
+      }),
+    );
+  };
+
+  const updateDraftData = (data: Array<any>, number: number) => {
+    dispatch(
+      ReviewsActions.updateReview({
+        pathParams: { ...pathParams, number },
         data,
       }),
     );
@@ -143,10 +143,16 @@ const CreateUpdateObjectives: FC<Props> = ({ onClose, editNumber, useSingleStep,
     handleSuccess();
   };
 
-  const handleSaveDraft = (data: any) => {
-    const { number, ...rest } = data;
-    saveDraftData([{ ...rest, status: Status.DRAFT }], number);
-    onClose();
+  const handleSaveDraft = (data: Array<any>) => {
+    data.forEach((objective, idx) => {
+      const { number, ...rest } = objective;
+      if (number) {
+        updateDraftData([{ ...rest, status: Status.DRAFT }], number);
+      } else {
+        saveDraftData([{ ...rest, status: Status.DRAFT }], idx + 1);
+      }
+    });
+    setTimeout(onClose, 300);
   };
 
   useEffect(() => {

@@ -4,6 +4,7 @@ import * as Yup from 'yup';
 import { Button, Icon, useStyle, Rule, CreateRule } from '@pma/dex-wrapper';
 
 import { createYupSchema } from 'utils/yup';
+import { checkIsExistValue } from 'utils';
 import { Status } from 'config/enum';
 import { TriggerModal } from 'features/general/Modal/components/TriggerModal';
 import { ButtonWithConfirmation } from 'features/general/Modal';
@@ -24,7 +25,7 @@ export type Props = {
   isLastStep?: boolean;
   schemaComponents: any; // todo add schema type
   setPrevObjectiveNumber?: () => void;
-  onSaveDraft: (data: any) => void;
+  onSaveDraft: (data: Array<any>) => void;
   onSubmit: (data: any) => void;
   onPrev?: () => void;
   onNext?: () => void;
@@ -153,7 +154,12 @@ const ObjectiveForm: FC<Props> = ({
               <div className={css(footerWrapperStyle)}>
                 <div className={css(buttonWrapperStyle({ mobileScreen }))}>
                   {!editMode ? (
-                    <Button styles={[buttonWhiteStyle]} onPress={() => onSaveDraft(currentValues)}>
+                    <Button
+                      styles={[buttonWhiteStyle]}
+                      onPress={() =>
+                        onSaveDraft(formValues.data.filter(({ properties }) => checkIsExistValue(properties)))
+                      }
+                    >
                       <Trans i18nKey='save_as_draft'>Save as draft</Trans>
                     </Button>
                   ) : (

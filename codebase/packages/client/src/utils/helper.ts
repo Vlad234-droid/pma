@@ -19,3 +19,6 @@ export const checkExistedValue = (obj: Record<string, any>) =>
     if (value) acc[key] = value;
     return acc;
   }, {});
+
+export const checkIsExistValue = (obj: Record<string, any>): boolean =>
+  typeof obj === 'object' ? Object.values(obj).some(Boolean) : false;
