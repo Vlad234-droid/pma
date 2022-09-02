@@ -3,7 +3,7 @@ import { fireEvent } from '@testing-library/react';
 import { renderWithTheme as render } from 'utils/test';
 import FileList, { FILE_LIST_TEST_ID } from './FileList';
 
-describe.skip('FileList', () => {
+describe('FileList', () => {
   const onDelete = jest.fn();
   const name = 'test name';
   const props = {
@@ -12,14 +12,14 @@ describe.skip('FileList', () => {
   };
 
   it('#render', () => {
-    const { findByTestId, findByText } = render(<FileList {...props} />);
-    expect(findByTestId(FILE_LIST_TEST_ID)).toBeInTheDocument();
-    expect(findByText(name)).toBeInTheDocument();
+    const { getByTestId, getByText } = render(<FileList {...props} />);
+    expect(getByTestId(FILE_LIST_TEST_ID)).toBeInTheDocument();
+    expect(getByText(name)).toBeInTheDocument();
   });
 
   it('#onDelete', async () => {
-    const { getAllByRole } = render(<FileList {...props} />);
-    fireEvent.click(getAllByRole('icon')[0]);
+    const { getByTestId } = render(<FileList {...props} />);
+    fireEvent.click(getByTestId('delete'));
     expect(onDelete).toBeCalledTimes(1);
   });
 });

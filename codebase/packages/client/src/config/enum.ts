@@ -22,6 +22,13 @@ export enum ReviewType {
   MYR = 'MYR',
   EYR = 'EYR',
 }
+export enum ReportType {
+  NTB = 'NEW-TO-BUSINESS',
+  FEEDBACK = 'FEEDBACK',
+  OBJECTIVE = 'OBJECTIVE',
+  MYR = 'MYR',
+  EYR = 'EYR',
+}
 
 export enum PDPType {
   PDP = 'PDP',

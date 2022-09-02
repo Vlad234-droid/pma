@@ -1,1 +1,0 @@
-export { useTileStatistics } from './useTileStatistics';

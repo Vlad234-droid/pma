@@ -9,7 +9,10 @@ import { getCurrentYear } from 'utils';
 export const TEST_ID = 'wrapper-id';
 export const TEST_LABEL = 'label-id';
 
-const YearSwitch: FC<{ currentYear: string; onChange: (year: string) => void }> = ({ currentYear, onChange }) => {
+const YearSwitch: FC<{ currentYear: string | number; onChange: (year: string) => void }> = ({
+  currentYear,
+  onChange,
+}) => {
   const { css } = useStyle();
   const [years] = useState<Array<number> | []>([Number(currentYear), Number(currentYear) - 1, Number(currentYear) - 2]);
   const [active, setActive] = useState<number>(Number(getCurrentYear()));

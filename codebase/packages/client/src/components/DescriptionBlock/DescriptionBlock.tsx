@@ -1,14 +1,19 @@
-import React from 'react';
-import { Rule, useStyle } from '@pma/dex-wrapper';
+import React, { FC, CSSProperties, ReactNode } from 'react';
+import { Rule, useStyle, Styles } from '@pma/dex-wrapper';
 
 export const TEST_ID = 'test-description-block';
 
-const DescriptionBlock = (props) => {
+type Props = {
+  style?: Rule | CSSProperties | Styles | {};
+  children: ReactNode;
+};
+
+const DescriptionBlock: FC<Props> = ({ style = {}, children }) => {
   const { css } = useStyle();
 
   return (
-    <div data-test-id={TEST_ID} className={css(description, props.style ? props.style : null)}>
-      {props.children}
+    <div data-test-id={TEST_ID} className={css(description, style)}>
+      {children}
     </div>
   );
 };

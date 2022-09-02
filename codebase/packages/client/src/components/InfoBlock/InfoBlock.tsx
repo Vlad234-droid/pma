@@ -1,11 +1,13 @@
 import React, { FC } from 'react';
 import { useStyle, Rule, Icon } from '@pma/dex-wrapper';
 
+export const WRAPPER_ID = 'wrapper-id';
+
 const InfoBlock: FC<{ text: string }> = ({ text }) => {
   const { css } = useStyle();
 
   return (
-    <div className={css(wrapperStyle)}>
+    <div className={css(wrapperStyle)} data-test-id={WRAPPER_ID}>
       <Icon graphic='information' />
       <span className={css(textStyle)}>{text}</span>
     </div>

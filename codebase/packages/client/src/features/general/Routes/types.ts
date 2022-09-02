@@ -6,7 +6,7 @@ type PageComponent = ComponentType;
 
 type BuildPath = (page: string, root?: string, prefix?: string, sufix?: string) => string;
 
-type BuildPathWithParams = (link: string, searchParams: Record<string, string>) => string;
+type BuildPathWithParams = (link: string, searchParams: Record<string, string | number>) => string;
 
 type BuildRoute = (page: string, pageComponents: Record<string, PageComponent>, exact?: boolean) => Route;
 

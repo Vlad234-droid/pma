@@ -5,6 +5,8 @@ import { SearchOption } from 'config/enum';
 import { Trans } from 'components/Translation';
 import { Icon } from '../Icon';
 
+export const WRAPPER_ID = 'wrapper-id';
+
 const DrawerModal: FC<{ setOpen: (T) => void; title: string; onSelect: (T) => void; active: SearchOption }> = ({
   setOpen,
   title = '',
@@ -21,7 +23,7 @@ const DrawerModal: FC<{ setOpen: (T) => void; title: string; onSelect: (T) => vo
   const underlayClick = (e: MouseEvent<HTMLDivElement>) => e.target === ref.current && closeHandler();
 
   return (
-    <div className={css(drawerWrapperStyle)} ref={ref} onClick={underlayClick}>
+    <div className={css(drawerWrapperStyle)} ref={ref} onClick={underlayClick} data-test-id={WRAPPER_ID}>
       <div className={css(drawerContentStyle({ mobileScreen }))}>
         <div className={css(headerStyle)}>
           {title && <p className={css(titleStyle)}>{title}</p>}

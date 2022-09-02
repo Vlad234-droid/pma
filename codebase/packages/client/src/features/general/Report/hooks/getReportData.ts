@@ -1,27 +1,25 @@
-import { useCallback, useEffect } from 'react';
+import { useEffect } from 'react';
+import { ReportActions, ReviewType } from '@pma/store';
 import { useDispatch } from 'react-redux';
-import { ReportActions } from '@pma/store';
 import { getCurrentYear } from 'utils/date';
 
-export const getData = (dispatch, fields: Record<string, string>): void => {
-  dispatch(ReportActions.getObjectivesStatistics({ year: fields.year }));
-
-  /*// TODO: enabled when content of chart meets business requirements*/
-  // dispatch(
-  //   ReportActions.getObjectivesReport({
-  //     year: fields.year,
-  //     statuses_in: [...listOfStatuses],
-  //   }),
-  // );
-};
-
-export const getReportData = (fields: Record<string, string> = {}): void => {
+export const getReportData = (fields: Record<string, string | number> = {}, year: string) => {
   const dispatch = useDispatch();
-  const getStatsReportData = useCallback(() => {
-    getData(dispatch, { year: fields?.year || getCurrentYear() });
-  }, []);
 
   useEffect(() => {
-    getStatsReportData();
-  }, []);
+    const payload = {
+      year: !year ? fields?.year || getCurrentYear() : year,
+    };
+    dispatch(
+      ReportActions.getReviewReport({
+        ...payload,
+        'review-type_in': [ReviewType.MYR, ReviewType.EYR, ReviewType.OBJECTIVE],
+      }),
+    );
+    dispatch(ReportActions.getOverallRatingsReport(payload));
+    dispatch(ReportActions.getNewToBusinessReport(payload));
+    dispatch(ReportActions.getFeedbacksReport(payload));
+    dispatch(ReportActions.getAnniversaryReviewsReport(payload));
+    dispatch(ReportActions.getLeadershipReviewsReport(payload));
+  }, [year]);
 };

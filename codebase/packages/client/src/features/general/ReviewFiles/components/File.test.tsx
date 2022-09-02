@@ -1,21 +1,37 @@
 import React from 'react';
 import { renderWithTheme } from 'utils/test';
 import '@testing-library/jest-dom/extend-expect';
+import { fireEvent } from '@testing-library/react';
 
-import File from './File';
+// eslint-disable-next-line import/no-named-as-default
+import File, { TEST_ID } from './File';
 
-it('render File', async () => {
-  const { getByText } = renderWithTheme(
-    <File
-      file={{
-        fileName: 'fileName',
-        fileLength: 10,
-        uuid: 'uuid',
-      }}
-      onDelete={jest.fn}
-    >
-      <div>upload file</div>
-    </File>,
-  );
-  expect(getByText('fileName')).toBeInTheDocument();
+describe('File', () => {
+  const onDelete = jest.fn();
+  const props = {
+    onDelete,
+    file: {
+      fileName: 'fileName',
+      fileLength: 10,
+      uuid: 'uuid',
+    },
+  };
+  it('render File', async () => {
+    const { getByText } = renderWithTheme(
+      <File {...props}>
+        <div>upload file</div>
+      </File>,
+    );
+    expect(getByText('fileName')).toBeInTheDocument();
+  });
+  it('shout call onDelete prop', async () => {
+    const { getByTestId } = renderWithTheme(
+      <File {...props}>
+        <div>upload file</div>
+      </File>,
+    );
+    const button = getByTestId(TEST_ID);
+    fireEvent.click(button);
+    expect(onDelete).toHaveBeenCalledTimes(1);
+  });
 });

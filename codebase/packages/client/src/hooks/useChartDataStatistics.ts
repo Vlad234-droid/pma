@@ -1,143 +1,106 @@
-import { TitlesReport, Rating, ReportPage } from 'config/enum';
-import { useStatisticsReport } from 'features/general/Report/hooks';
-import { metaStatuses } from 'features/general/Report/config';
+import { ChartReport, getReportByType } from '@pma/store';
+import { useSelector } from 'react-redux';
+import { getDefaultData } from 'features/general/Report/config';
+import { useTranslation } from 'components/Translation';
+import { ReportPage, ReportType } from 'config/enum';
 
-export const useChartDataStatistics = (t, type) => {
-  const {
-    myrSubmittedPercentage,
-    myrApprovedPercentage,
-    eyrSubmittedPercentage,
-    eyrApprovedPercentage,
-    feedbackRequestedPercentage,
-    feedbackGivenPercentage,
-    objectivesSubmittedPercentage,
-    objectivesApprovedPercentage,
-    myrRatingBreakdownBelowExpectedPercentage,
-    myrRatingBreakdownBelowExpectedCount,
-    myrRatingBreakdownSatisfactoryPercentage,
-    myrRatingBreakdownSatisfactoryCount,
-    myrRatingBreakdownGreatPercentage,
-    myrRatingBreakdownGreatCount,
-    myrRatingBreakdownOutstandingPercentage,
-    myrRatingBreakdownOutstandingCount,
-    eyrRatingBreakdownBelowExpectedPercentage,
-    eyrRatingBreakdownBelowExpectedCount,
-    eyrRatingBreakdownSatisfactoryPercentage,
-    eyrRatingBreakdownSatisfactoryCount,
-    eyrRatingBreakdownGreatPercentage,
-    eyrRatingBreakdownGreatCount,
-    eyrRatingBreakdownOutstandingPercentage,
-    eyrRatingBreakdownOutstandingCount,
-    newToBusinessCount,
-    anniversaryReviewPerQuarter1Percentage,
-    anniversaryReviewPerQuarter1Count,
-    anniversaryReviewPerQuarter2Percentage,
-    anniversaryReviewPerQuarter2Count,
-    anniversaryReviewPerQuarter3Percentage,
-    anniversaryReviewPerQuarter3Count,
-    anniversaryReviewPerQuarter4Percentage,
-    anniversaryReviewPerQuarter4Count,
-    colleaguesCount,
-    approvedObjPercent,
-    approvedObjTitle,
-    notApprovedObjPercent,
-    notApprovedObjTitle,
-  } = useStatisticsReport([...metaStatuses]);
+export type Data = {
+  percentage: string;
+  count?: string;
+  title?: string;
+};
+
+export const useChartDataStatistics = (configKey: ReportPage): Array<Data> => {
+  const { t } = useTranslation();
+
+  const withTitles = [
+    ReportPage.REPORT_MID_YEAR_REVIEW,
+    ReportPage.REPORT_END_YEAR_REVIEW,
+    ReportPage.REPORT_EYR_BREAKDOWN,
+    ReportPage.REPORT_MYR_BREAKDOWN,
+    ReportPage.REPORT_ANNIVERSARY_REVIEWS,
+  ];
 
   const report = {
-    [ReportPage.REPORT_MID_YEAR_REVIEW]: [
-      { percent: myrSubmittedPercentage, title: t(TitlesReport.SUBMITTED, 'Submitted') },
-      { percent: myrApprovedPercentage, title: t(TitlesReport.APPROVED, 'Approved') },
-    ],
-    [ReportPage.REPORT_END_YEAR_REVIEW]: [
-      { percent: eyrSubmittedPercentage, title: t(TitlesReport.SUBMITTED, 'Submitted') },
-      { percent: eyrApprovedPercentage, title: t(TitlesReport.APPROVED, 'Approved') },
-    ],
-    [ReportPage.REPORT_FEEDBACK]: [
-      { percent: feedbackRequestedPercentage, title: t(TitlesReport.REQUESTED, 'Requested') },
-      { percent: feedbackGivenPercentage, title: t(TitlesReport.GIVEN, 'Given') },
-    ],
+    [ReportPage.REPORT_SUBMITTED_OBJECTIVES]: {
+      type: ReportType.OBJECTIVE,
+      selectorType: 'review',
+      key: 'submitted',
+    },
 
-    [ReportPage.REPORT_SUBMITTED_OBJECTIVES]: [{ percent: objectivesSubmittedPercentage }],
-
-    [ReportPage.REPORT_APPROVED_OBJECTIVES]: [{ percent: objectivesApprovedPercentage }],
-    [ReportPage.REPORT_WORK_LEVEL]: [
-      { percent: notApprovedObjPercent, title: notApprovedObjTitle },
-      { percent: approvedObjPercent, title: approvedObjTitle },
-    ],
-
-    [ReportPage.REPORT_NEW_TO_BUSINESS]: [{ percent: newToBusinessCount, title: t(Rating.COLLEAGUES, 'Colleagues') }],
-
-    [ReportPage.REPORT_MYR_BREAKDOWN]: [
-      {
-        percent: myrRatingBreakdownBelowExpectedPercentage || 0,
-        quantity: myrRatingBreakdownBelowExpectedCount || 0,
-        title: t(Rating.BELOW_EXPECTED, 'Below expected'),
-      },
-      {
-        percent: myrRatingBreakdownSatisfactoryPercentage || 0,
-        quantity: myrRatingBreakdownSatisfactoryCount || 0,
-        title: t(Rating.SATISFACTORY, 'Satisfactory'),
-      },
-      {
-        percent: myrRatingBreakdownGreatPercentage || 0,
-        quantity: myrRatingBreakdownGreatCount || 0,
-        title: t(Rating.GREAT, 'Great'),
-      },
-      {
-        percent: myrRatingBreakdownOutstandingPercentage || 0,
-        quantity: myrRatingBreakdownOutstandingCount || 0,
-        title: t(Rating.OUTSTANDING, 'Outstanding'),
-      },
-    ],
-    [ReportPage.REPORT_EYR_BREAKDOWN]: [
-      {
-        percent: eyrRatingBreakdownBelowExpectedPercentage,
-        quantity: eyrRatingBreakdownBelowExpectedCount,
-        title: t(Rating.BELOW_EXPECTED, 'Below expected'),
-      },
-      {
-        percent: eyrRatingBreakdownSatisfactoryPercentage,
-        quantity: eyrRatingBreakdownSatisfactoryCount,
-        title: t(Rating.SATISFACTORY, 'Satisfactory'),
-      },
-      {
-        percent: eyrRatingBreakdownGreatPercentage,
-        quantity: eyrRatingBreakdownGreatCount,
-        title: t(Rating.GREAT, 'Great'),
-      },
-      {
-        percent: eyrRatingBreakdownOutstandingPercentage,
-        quantity: eyrRatingBreakdownOutstandingCount,
-        title: t(Rating.OUTSTANDING, 'Outstanding'),
-      },
-    ],
-
-    [ReportPage.REPORT_ANNIVERSARY_REVIEWS]: [
-      {
-        percent: anniversaryReviewPerQuarter1Percentage,
-        quantity: anniversaryReviewPerQuarter1Count,
-        title: t(Rating.QUARTER_1, 'Quarter 1'),
-      },
-      {
-        percent: anniversaryReviewPerQuarter2Percentage,
-        quantity: anniversaryReviewPerQuarter2Count,
-        title: t(Rating.QUARTER_2, 'Quarter 2'),
-      },
-      {
-        percent: anniversaryReviewPerQuarter3Percentage,
-        quantity: anniversaryReviewPerQuarter3Count,
-        title: t(Rating.QUARTER_3, 'Quarter 3'),
-      },
-      {
-        percent: anniversaryReviewPerQuarter4Percentage,
-        quantity: anniversaryReviewPerQuarter4Count,
-        title: t(Rating.QUARTER_4, 'Quarter 4'),
-      },
-    ],
-
-    colleaguesCount,
+    [ReportPage.REPORT_APPROVED_OBJECTIVES]: {
+      type: ReportType.OBJECTIVE,
+      selectorType: 'review',
+      key: 'approved',
+    },
+    [ReportPage.REPORT_MID_YEAR_REVIEW]: {
+      type: ReportType.MYR,
+      selectorType: 'review',
+    },
+    [ReportPage.REPORT_END_YEAR_REVIEW]: {
+      type: ReportType.EYR,
+      selectorType: 'review',
+    },
+    [ReportPage.REPORT_EYR_BREAKDOWN]: {
+      type: ReportType.EYR,
+      selectorType: 'overallRatings',
+    },
+    [ReportPage.REPORT_MYR_BREAKDOWN]: {
+      type: ReportType.MYR,
+      selectorType: 'overallRatings',
+    },
+    [ReportPage.REPORT_NEW_TO_BUSINESS]: {
+      type: ReportType.NTB,
+      selectorType: 'newToBusiness',
+      key: 'new-to-business',
+      title: t('colleagues', 'Colleagues'),
+    },
+    [ReportPage.REPORT_FEEDBACK]: {
+      type: ReportType.FEEDBACK,
+      selectorType: 'feedbacks',
+    },
+    [ReportPage.REPORT_ANNIVERSARY_REVIEWS]: {
+      type: ReportType.EYR,
+      selectorType: 'anniversaryReviews',
+    },
   };
 
-  return report[type];
+  const reportData = report[configKey];
+
+  const chartData = useSelector(getReportByType(reportData?.selectorType)) ?? [];
+
+  if (!chartData.length) return getDefaultData(configKey, t);
+
+  const isOneChart =
+    configKey === ReportPage.REPORT_SUBMITTED_OBJECTIVES ||
+    configKey === ReportPage.REPORT_APPROVED_OBJECTIVES ||
+    configKey === ReportPage.REPORT_NEW_TO_BUSINESS
+      ? Object.entries(chartData.filter((chart) => chart.type === reportData.type)[0].statistics)
+          ?.find((item) => item[0] === reportData.key)
+          ?.slice(1)
+
+          ?.map((item) => {
+            return {
+              [configKey === ReportPage.REPORT_NEW_TO_BUSINESS ? 'count' : 'percentage']:
+                //@ts-ignore
+                configKey === ReportPage.REPORT_NEW_TO_BUSINESS ? item.count : item.percentage,
+              ...(reportData?.title && { title: reportData?.title }),
+            };
+          })
+      : false;
+
+  if (isOneChart) return isOneChart as Array<ChartReport>;
+
+  const chart = Object.values(
+    chartData.filter((chart) => chart.type === reportData.type)[0].statistics,
+  ) as Array<ChartReport>;
+
+  if (withTitles.includes(configKey)) {
+    chart.forEach((item, index) => {
+      item.title = t(Object.keys(chartData.filter((chart) => chart.type === reportData.type)[0].statistics)[index]);
+    });
+  }
+  //TODO: remove until backend will be fixed
+  // return chart;
+  return chart.filter((item) => item.title !== 'Not submitted');
 };

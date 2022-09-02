@@ -1,27 +1,23 @@
 import useQueryString from 'hooks/useQueryString';
-import { convertToReportEnum } from 'features/general/TileReport/utils';
+import { convertToReportEnum } from 'features/general/ColleaguesReviews/utils';
 import { useLocation } from 'react-router-dom';
 import { ReportPage } from 'config/enum';
 import { useChartDataStatistics } from 'hooks/useChartDataStatistics';
-import { useTranslation } from 'components/Translation';
 import { getCurrentYear } from 'utils';
 
-export const useCurrentData = (compareData2: Array<Record<string | number, string | number>> = []) => {
-  const { t } = useTranslation();
+export const useCurrentData = (compareData: Array<Record<string | number, string | number>> = []) => {
   const query = useQueryString() as Record<string, string>;
   const { pathname } = useLocation();
 
-  const compareYear = compareData2.length && Object.keys(compareData2[0])[0];
+  const compareYear = compareData.length && Object.keys(compareData[0])[0];
 
-  const chartData = useChartDataStatistics(t, ReportPage[convertToReportEnum(pathname)]) || [];
+  const chartData = useChartDataStatistics(ReportPage[convertToReportEnum(pathname)]) || [];
   const computedChartData = [...chartData].map((item, i) => {
-    const ob = {
-      [query.year || getCurrentYear()]: item.percent,
+    return {
+      [query.year || getCurrentYear()]: item.percentage,
       name: item.title,
-      ...(compareData2.length && { [compareYear]: compareData2[i][compareYear] }),
+      ...(compareData.length && { [compareYear]: compareData[i][compareYear] }),
     };
-
-    return ob;
   });
 
   return [computedChartData, chartData];

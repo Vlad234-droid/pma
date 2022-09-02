@@ -1,48 +1,113 @@
 import { createReducer } from 'typesafe-actions';
 import {
-  getObjectivesReport,
-  getObjectivesStatistics,
-  getTargetingColleagues,
   clearStatistics,
   getLimitedObjectivesReport,
-  getTargetingFeedbacks,
+  getLeadershipReviewsReport,
+  getAnniversaryReviewsReport,
+  getFeedbacksReport,
+  getReviewReport,
+  getOverallRatingsReport,
+  getNewToBusinessReport,
 } from './actions';
 
 export const initialState = {
-  objectiveReports: [],
   limitedObjectiveReports: [],
-  objectiveStatistics: [],
-  colleagues: [],
+  review: [],
+  overallRatings: [],
+  newToBusiness: [],
+  anniversaryReviews: [],
+  leadershipReviews: [],
   meta: { loading: false, loaded: false, error: null },
 };
 
 export default createReducer(initialState)
-  .handleAction(getObjectivesReport.request, (state) => ({
+  .handleAction(getLeadershipReviewsReport.request, (state) => ({
     ...state,
     meta: { ...state.meta, loading: true },
   }))
-  .handleAction(getObjectivesReport.success, (state, { payload }) => ({
+  .handleAction(getLeadershipReviewsReport.success, (state, { payload }) => ({
     ...state,
+    leadershipReviews: payload,
     meta: { ...state.meta, loading: false, loaded: true },
-    objectiveReports: payload,
   }))
-  .handleAction(getObjectivesReport.failure, (state, { payload }) => ({
+  .handleAction(getLeadershipReviewsReport.failure, (state, { payload }) => ({
     ...state,
-    objectiveReports: [],
+    leadershipReviews: [],
     meta: { ...state.meta, loading: false, loaded: true, error: payload },
   }))
 
-  .handleAction(getObjectivesStatistics.request, (state) => ({
+  .handleAction(getAnniversaryReviewsReport.request, (state) => ({
     ...state,
     meta: { ...state.meta, loading: true },
   }))
-  .handleAction(getObjectivesStatistics.success, (state, { payload }) => ({
+  .handleAction(getAnniversaryReviewsReport.success, (state, { payload }) => ({
     ...state,
-    objectiveStatistics: payload,
+    anniversaryReviews: payload,
     meta: { ...state.meta, loading: false, loaded: true },
   }))
-  .handleAction(getObjectivesStatistics.failure, (state, { payload }) => ({
+  .handleAction(getAnniversaryReviewsReport.failure, (state, { payload }) => ({
     ...state,
+    anniversaryReviews: [],
+    meta: { ...state.meta, loading: false, loaded: true, error: payload },
+  }))
+
+  .handleAction(getFeedbacksReport.request, (state) => ({
+    ...state,
+    meta: { ...state.meta, loading: true },
+  }))
+  .handleAction(getFeedbacksReport.success, (state, { payload }) => ({
+    ...state,
+    feedbacks: payload,
+    meta: { ...state.meta, loading: false, loaded: true },
+  }))
+  .handleAction(getFeedbacksReport.failure, (state, { payload }) => ({
+    ...state,
+    feedbacks: [],
+    meta: { ...state.meta, loading: false, loaded: true, error: payload },
+  }))
+
+  .handleAction(getReviewReport.request, (state) => ({
+    ...state,
+    meta: { ...state.meta, loading: true },
+  }))
+  .handleAction(getReviewReport.success, (state, { payload }) => ({
+    ...state,
+    review: payload,
+    meta: { ...state.meta, loading: false, loaded: true },
+  }))
+  .handleAction(getReviewReport.failure, (state, { payload }) => ({
+    ...state,
+    review: [],
+    meta: { ...state.meta, loading: false, loaded: true, error: payload },
+  }))
+
+  .handleAction(getOverallRatingsReport.request, (state) => ({
+    ...state,
+    meta: { ...state.meta, loading: true },
+  }))
+  .handleAction(getOverallRatingsReport.success, (state, { payload }) => ({
+    ...state,
+    overallRatings: payload,
+    meta: { ...state.meta, loading: false, loaded: true },
+  }))
+  .handleAction(getOverallRatingsReport.failure, (state, { payload }) => ({
+    ...state,
+    overallRatings: [],
+    meta: { ...state.meta, loading: false, loaded: true, error: payload },
+  }))
+
+  .handleAction(getNewToBusinessReport.request, (state) => ({
+    ...state,
+    meta: { ...state.meta, loading: true },
+  }))
+  .handleAction(getNewToBusinessReport.success, (state, { payload }) => ({
+    ...state,
+    newToBusiness: payload,
+    meta: { ...state.meta, loading: false, loaded: true },
+  }))
+  .handleAction(getNewToBusinessReport.failure, (state, { payload }) => ({
+    ...state,
+    newToBusiness: [],
     meta: { ...state.meta, loading: false, loaded: true, error: payload },
   }))
 
@@ -60,31 +125,4 @@ export default createReducer(initialState)
     meta: { ...state.meta, loading: false, loaded: true, error: payload },
   }))
 
-  .handleAction(getTargetingColleagues.request, (state) => ({
-    ...state,
-    meta: { ...state.meta, loading: true },
-  }))
-  .handleAction(getTargetingColleagues.success, (state, { payload }) => ({
-    ...state,
-    colleagues: payload,
-    meta: { ...state.meta, loading: false, loaded: true },
-  }))
-  .handleAction(getTargetingColleagues.failure, (state, { payload }) => ({
-    ...state,
-    meta: { ...state.meta, loading: false, loaded: true, error: payload },
-  }))
-
-  .handleAction(getTargetingFeedbacks.request, (state) => ({
-    ...state,
-    meta: { ...state.meta, loading: true },
-  }))
-  .handleAction(getTargetingFeedbacks.success, (state, { payload }) => ({
-    ...state,
-    colleagues: payload,
-    meta: { ...state.meta, loading: false, loaded: true },
-  }))
-  .handleAction(getTargetingFeedbacks.failure, (state, { payload }) => ({
-    ...state,
-    meta: { ...state.meta, loading: false, loaded: true, error: payload },
-  }))
   .handleAction(clearStatistics, () => initialState);

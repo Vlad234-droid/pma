@@ -3,6 +3,8 @@ import { useStyle, Button, Rule, CreateRule } from '@pma/dex-wrapper';
 import { Trans, useTranslation } from 'components/Translation';
 import { ButtonWithConfirmation } from 'features/general/Modal';
 
+export const TEST_WRAPPER_ID = 'wrapper';
+
 type ReviewButtonsProps = {
   readonly: boolean;
   isValid: boolean;
@@ -17,7 +19,7 @@ const ReviewButtons: FC<ReviewButtonsProps> = ({ readonly, isValid, onClose, onS
   const { t } = useTranslation();
 
   return (
-    <div className={css(containerStyle)}>
+    <div className={css(containerStyle)} data-test-id={TEST_WRAPPER_ID}>
       <div className={css(wrapperStyle)}>
         <div className={css(buttonWrapperStyle({ mobileScreen }))}>
           {readonly ? (

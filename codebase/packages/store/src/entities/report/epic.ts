@@ -4,29 +4,111 @@ import { combineEpics } from 'redux-observable';
 import { from, of } from 'rxjs';
 import { catchError, filter, map, switchMap } from 'rxjs/operators';
 import {
-  getObjectivesReport,
-  getObjectivesStatistics,
-  getTargetingColleagues,
   getLimitedObjectivesReport,
-  getTargetingFeedbacks,
+  getLeadershipReviewsReport,
+  getAnniversaryReviewsReport,
+  getFeedbacksReport,
+  getNewToBusinessReport,
+  getReviewReport,
+  getOverallRatingsReport,
 } from './actions';
-import { concatWithErrorToast, errorPayloadConverter } from '../../utils/toastHelper';
 
-export const getObjectivesReportEpic: Epic = (action$, _, { api }) =>
+export const getLeadershipReviewsReportEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
-    filter(isActionOf(getObjectivesReport.request)),
+    filter(isActionOf(getLeadershipReviewsReport.request)),
     switchMap(({ payload }) => {
       //@ts-ignore
-      return from(api.getObjectivesReport(payload)).pipe(
+      return from(api.getLeadershipReviewsStatistics(payload)).pipe(
         //@ts-ignore
         map(({ data }) => {
           //@ts-ignore
-          return getObjectivesReport.success(data.data);
+          return getLeadershipReviewsReport.success(data);
         }),
-        catchError(({ errors }) => of(getObjectivesReport.failure(errors))),
+        catchError(({ errors }) => of(getLeadershipReviewsReport.failure(errors))),
       );
     }),
   );
+
+export const getAnniversaryReviewsReportEpic: Epic = (action$, _, { api }) =>
+  action$.pipe(
+    filter(isActionOf(getAnniversaryReviewsReport.request)),
+    switchMap(({ payload }) => {
+      //@ts-ignore
+      return from(api.getAnniversaryReviewsStatistics(payload)).pipe(
+        //@ts-ignore
+        map(({ data }) => {
+          //@ts-ignore
+          return getAnniversaryReviewsReport.success(data);
+        }),
+        catchError(({ errors }) => of(getAnniversaryReviewsReport.failure(errors))),
+      );
+    }),
+  );
+
+export const getFeedbacksReportEpic: Epic = (action$, _, { api }) =>
+  action$.pipe(
+    filter(isActionOf(getFeedbacksReport.request)),
+    switchMap(({ payload }) => {
+      //@ts-ignore
+      return from(api.getFeedbacksStatistics(payload)).pipe(
+        //@ts-ignore
+        map(({ data }) => {
+          //@ts-ignore
+          return getFeedbacksReport.success(data);
+        }),
+        catchError(({ errors }) => of(getFeedbacksReport.failure(errors))),
+      );
+    }),
+  );
+
+export const getNewToBusinessReportEpic: Epic = (action$, _, { api }) =>
+  action$.pipe(
+    filter(isActionOf(getNewToBusinessReport.request)),
+    switchMap(({ payload }) => {
+      //@ts-ignore
+      return from(api.getNewToBusinessStatistics(payload)).pipe(
+        //@ts-ignore
+        map(({ data }) => {
+          //@ts-ignore
+          return getNewToBusinessReport.success(data);
+        }),
+        catchError(({ errors }) => of(getNewToBusinessReport.failure(errors))),
+      );
+    }),
+  );
+
+export const getStatisticsReviewEpic: Epic = (action$, _, { api }) =>
+  action$.pipe(
+    filter(isActionOf(getReviewReport.request)),
+    switchMap(({ payload }) => {
+      //@ts-ignore
+      return from(api.getReviewStatistics(payload)).pipe(
+        //@ts-ignore
+        map(({ data }) => {
+          //@ts-ignore
+          return getReviewReport.success(data);
+        }),
+        catchError(({ errors }) => of(getReviewReport.failure(errors))),
+      );
+    }),
+  );
+
+export const getOverallRatingsReportEpic: Epic = (action$, _, { api }) =>
+  action$.pipe(
+    filter(isActionOf(getOverallRatingsReport.request)),
+    switchMap(({ payload }) => {
+      //@ts-ignore
+      return from(api.getOverallRatingsStatistics(payload)).pipe(
+        //@ts-ignore
+        map(({ data }) => {
+          //@ts-ignore
+          return getOverallRatingsReport.success(data);
+        }),
+        catchError(({ errors }) => of(getOverallRatingsReport.failure(errors))),
+      );
+    }),
+  );
+
 export const getLimitedObjectivesReportEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
     filter(isActionOf(getLimitedObjectivesReport.request)),
@@ -36,71 +118,19 @@ export const getLimitedObjectivesReportEpic: Epic = (action$, _, { api }) =>
         //@ts-ignore
         map(({ data }) => {
           //@ts-ignore
-          return getLimitedObjectivesReport.success(data.data);
+          return getLimitedObjectivesReport.success(data);
         }),
         catchError(({ errors }) => of(getLimitedObjectivesReport.failure(errors))),
       );
     }),
   );
 
-export const getTargetingColleaguesEpic: Epic = (action$, _, { api }) =>
-  action$.pipe(
-    filter(isActionOf(getTargetingColleagues.request)),
-    switchMap(({ payload }) => {
-      //@ts-ignore
-      return from(api.getTargetingColleagues(payload)).pipe(
-        //@ts-ignore
-        map(({ data }) => {
-          //@ts-ignore
-          return getTargetingColleagues.success(data);
-        }),
-        catchError(({ errors }) => of(getTargetingColleagues.failure(errors))),
-      );
-    }),
-  );
-export const getTargetingFeedbacksEpic: Epic = (action$, _, { api }) =>
-  action$.pipe(
-    filter(isActionOf(getTargetingFeedbacks.request)),
-    switchMap(({ payload }) => {
-      //@ts-ignore
-      return from(api.getTargetingFeedbacks(payload)).pipe(
-        //@ts-ignore
-        map(({ data }) => {
-          //@ts-ignore
-          return getTargetingFeedbacks.success(data);
-        }),
-        catchError(({ errors }) => of(getTargetingFeedbacks.failure(errors))),
-      );
-    }),
-  );
-
-export const getObjectivesStatisticsEpic: Epic = (action$, _, { api }) =>
-  action$.pipe(
-    filter(isActionOf(getObjectivesStatistics.request)),
-    switchMap(({ payload }) => {
-      return from(api.getObjectivesStatistics(payload)).pipe(
-        //@ts-ignore
-        map(({ data }) => {
-          //@ts-ignore
-          return getObjectivesStatistics.success(data);
-        }),
-        catchError((e) => {
-          const errors = e?.data?.errors;
-
-          return concatWithErrorToast(
-            of(getObjectivesStatistics.failure(errors?.[0])),
-
-            errorPayloadConverter({ ...errors?.[0], title: 'Objectives statistics fetch error' }),
-          );
-        }),
-      );
-    }),
-  );
-
 export default combineEpics(
-  getObjectivesReportEpic,
-  getObjectivesStatisticsEpic,
-  getTargetingColleaguesEpic,
   getLimitedObjectivesReportEpic,
-  getTargetingFeedbacksEpic,
+  getLeadershipReviewsReportEpic,
+  getAnniversaryReviewsReportEpic,
+  getFeedbacksReportEpic,
+  getNewToBusinessReportEpic,
+  getStatisticsReviewEpic,
+  getOverallRatingsReportEpic,
 );

@@ -1,13 +1,15 @@
-import React, { FC } from 'react';
-import { useStyle, Rule } from '@pma/dex-wrapper';
-import { HoverMessage as Props } from './types';
+import React, { FC, CSSProperties } from 'react';
+import { useStyle, Rule, Styles } from '@pma/dex-wrapper';
 
 export const MESSAGE_WRAPPER = 'message-wrapper';
 
-const HoverMessage: FC<Props> = ({ text = '', customStyles = {}, isVisible = true }) => {
-  const { css } = useStyle();
+export type Props = {
+  text: string;
+  customStyles?: Rule | Styles | CSSProperties | {};
+};
 
-  if (!isVisible) return null;
+const HoverMessage: FC<Props> = ({ text = '', customStyles = {} }) => {
+  const { css } = useStyle();
 
   return (
     <div className={css(hoverMessage, customStyles)} data-test-id={MESSAGE_WRAPPER}>

@@ -24,6 +24,7 @@ import appStateReducer from '../entities/appState/reducer';
 import messagesReducer from '../entities/messages/reducer';
 import knowledgeLibraryReducer from '../entities/knowledgeLibrary/reducer';
 import menuDataReducer from '../entities/hamburgerMenu/reducer';
+import statisticsReducer from '../entities/statistics/reducer';
 
 export const rootReducer = combineReducers({
   users: userReducer,
@@ -50,4 +51,5 @@ export const rootReducer = combineReducers({
   messages: messagesReducer,
   knowledgeLibrary: knowledgeLibraryReducer,
   menuData: menuDataReducer,
+  statistics: statisticsReducer,
 });

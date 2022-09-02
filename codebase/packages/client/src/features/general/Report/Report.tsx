@@ -1,29 +1,32 @@
-import React, { FC, useState, useCallback } from 'react';
-import { colors, CreateRule, Rule, useStyle, Styles } from '@pma/dex-wrapper';
-import { getReportMetaSelector } from '@pma/store';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { FC, useCallback, useState, useMemo } from 'react';
+import { colors, CreateRule, Rule, Styles, useStyle } from '@pma/dex-wrapper';
+import { colleaguesCountSelector, getReportMetaSelector } from '@pma/store';
+import { useSelector } from 'react-redux';
 
-import FilterModal from './components/FilterModal';
-import InfoTable from 'components/InfoTable';
-import useQueryString from 'hooks/useQueryString';
-import Spinner from 'components/Spinner';
-import { IconButton } from 'components/IconButton';
+import { buildPath, buildPathWithParams } from 'features/general/Routes';
 import { FilterOption } from 'features/general/Shared';
+import InfoTable from 'components/InfoTable';
+import { HoverMessage } from 'components/HoverMessage';
+import { IconButton } from 'components/IconButton';
+import Spinner from 'components/Spinner';
 import { PieChart } from 'components/PieChart';
 import { Select } from 'components/Form';
-import { ReportModal } from './Modals';
 import { Trans, useTranslation } from 'components/Translation';
-import { getCurrentYear, getNextYear } from 'utils/date';
-import { View } from 'components/PieChart/config';
+import { ColleaguesCount } from 'components/ColleaguesCount';
 import { HoverContainer } from 'components/HoverContainer';
-import { HoverMessage } from 'components/HoverMessage';
-import { ColleaguesCount } from './components/ColleaguesCount';
 
-import { getFieldOptions, initialValues, convertToLink, IsReportTiles, getCurrentValue } from './config';
-import { getReportData, getData, useStatisticsReport } from './hooks';
-import { MetaDataReport, ReportPage, TitlesReport } from 'config/enum';
-
+import ChartWidget from './widgets/ChartWidget';
+import TableWidget from './widgets/TableWidget';
+import FilterModal from './components/FilterModal';
+import { ReportModal } from './Modals';
+import { paramsReplacer } from 'utils';
+import useQueryString from 'hooks/useQueryString';
+import { getReportData } from './hooks';
+import { convertToLink, getCurrentValue, getFieldOptions, initialValues, IsReportTiles, View } from './config';
+import { ReportPage, TitlesReport } from 'config/enum';
+import { isStartPeriod, getCurrentYearWithStartDate } from './utils';
 import { Page } from 'pages';
+import { getCurrentYear, getNextYear, getPrevYear } from 'utils/date';
 
 export enum ModalStatus {
   DOWNLOAD = 'DOWNLOAD',
@@ -33,12 +36,12 @@ export enum ModalStatus {
 export const REPORT_WRAPPER = 'REPORT_WRAPPER';
 
 const Report: FC = () => {
-  const query = useQueryString() as Record<string, string>;
+  const query = useQueryString() as Record<string, string | number>;
   const { t } = useTranslation();
   const { css, matchMedia } = useStyle();
   const small = matchMedia({ xSmall: true, small: true }) || false;
   const mobileScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
-  const dispatch = useDispatch();
+
   const [focus, setFocus] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [modalStatus, setModalStatus] = useState<null | ModalStatus>(null);
@@ -51,14 +54,13 @@ const Report: FC = () => {
   const [isCheckAll, setIsCheckAll]: [string[], (T) => void] = useState([]);
   const { loaded } = useSelector(getReportMetaSelector);
 
-  getReportData(query);
+  getReportData(query, year);
 
-  const { colleaguesCount } = useStatisticsReport([MetaDataReport.COLLEAGUES_COUNT]);
+  const colleaguesCount = useSelector(colleaguesCountSelector) || 0;
 
   const changeYearHandler = (value) => {
     if (!value) return;
     setYear(value);
-    getData(dispatch, { year: value });
   };
 
   //TODO: attach this with Marius
@@ -69,9 +71,16 @@ const Report: FC = () => {
   // };
   // const quantity = getAppliedReport().length;
 
-  const getYear = useCallback(
+  const getYear = useMemo(
     () => ({
-      year: !year && !query?.year ? getCurrentYear() : query?.year && year ? year : !query.year ? year : query.year,
+      year:
+        !year && !query?.year
+          ? getCurrentYearWithStartDate()
+          : query?.year && year
+          ? year
+          : !query.year
+          ? year
+          : query.year,
     }),
     [query.year, year],
   );
@@ -103,23 +112,23 @@ const Report: FC = () => {
 
             <Select
               options={[
-                //TODO: temporary solution
                 {
-                  value: getCurrentYear(),
-                  label: `${getNextYear(1)}-${getNextYear(2)}`,
+                  value: getCurrentYearWithStartDate(),
+                  label: isStartPeriod()
+                    ? `${getCurrentYear()}-${getNextYear(1)}`
+                    : `${getPrevYear(1)}-${getCurrentYear()}`,
                 },
                 ...getFieldOptions(),
               ]}
               name={'year_options'}
               placeholder={t('choose_an_area', 'Choose an area')}
-              //@ts-ignore
               onChange={({ target: { value } }) => {
                 changeYearHandler(value);
               }}
               value={getCurrentValue(query, year)}
             />
           </form>
-          <ColleaguesCount colleaguesCount={colleaguesCount} countStyles={countStyles} />
+          <ColleaguesCount count={colleaguesCount} countStyles={countStyles} />
         </div>
 
         <div className={css(flexCenterStyled)}>
@@ -191,36 +200,80 @@ const Report: FC = () => {
           <div className={css(pieChartWrapper)}>
             {isDisplayTile(IsReportTiles.OBJECTIVES_SUBMITTED) && (
               <div className={css(leftColumn)}>
-                <PieChart
-                  title={t(TitlesReport.OBJECTIVES_SUBMITTED, 'Objectives submitted')}
-                  data={ReportPage.REPORT_SUBMITTED_OBJECTIVES}
-                  display={View.CHART}
-                  link={Page.TILE_REPORT_STATISTICS}
-                  params={getYear()}
-                  type={convertToLink(ReportPage.REPORT_SUBMITTED_OBJECTIVES)}
-                  hoverVisibility={!small}
-                  hoverMessage={t(
-                    'percentage_of_objectives_submitted_by_colleagues',
-                    'Percentage of objectives submitted by colleagues, prior to being reviewed and approved by their line manager.',
-                  )}
-                />
+                <HoverContainer
+                  isActive={!small}
+                  customStyles={{ width: '100%' }}
+                  message={
+                    <HoverMessage
+                      text={t(
+                        'percentage_of_objectives_submitted_by_colleagues',
+                        'Percentage of objectives submitted by colleagues, prior to being reviewed and approved by their line manager.',
+                      )}
+                      customStyles={reportHoverMessage}
+                    />
+                  }
+                >
+                  <ChartWidget
+                    configKey={ReportPage.REPORT_SUBMITTED_OBJECTIVES}
+                    link={buildPathWithParams(
+                      buildPath(
+                        paramsReplacer(Page.REPORT_STATISTICS, {
+                          ':type': convertToLink(ReportPage.REPORT_SUBMITTED_OBJECTIVES),
+                        }),
+                      ),
+                      {
+                        ...getYear,
+                      },
+                    )}
+                  >
+                    {({ data }) => (
+                      <PieChart
+                        title={t(TitlesReport.OBJECTIVES_SUBMITTED, 'Objectives submitted')}
+                        data={data}
+                        display={View.CHART}
+                      />
+                    )}
+                  </ChartWidget>
+                </HoverContainer>
               </div>
             )}
             {isDisplayTile(IsReportTiles.OBJECTIVES_APPROVED) && (
               <div className={css(rightColumn)}>
-                <PieChart
-                  title={t(TitlesReport.OBJECTIVES_APPROVED, 'Objectives approved')}
-                  data={ReportPage.REPORT_APPROVED_OBJECTIVES}
-                  display={View.CHART}
-                  link={Page.TILE_REPORT_STATISTICS}
-                  params={getYear()}
-                  type={convertToLink(ReportPage.REPORT_APPROVED_OBJECTIVES)}
-                  hoverMessage={t(
-                    'percentage_of_objectives_approved_by_colleagues',
-                    'Percentage of objectives submitted by colleagues that have been approved by their line managers.',
-                  )}
-                  hoverVisibility={!small}
-                />
+                <HoverContainer
+                  customStyles={{ width: '100%' }}
+                  message={
+                    <HoverMessage
+                      text={t(
+                        'percentage_of_objectives_approved_by_colleagues',
+                        'Percentage of objectives submitted by colleagues that have been approved by their line managers.',
+                      )}
+                      customStyles={reportHoverMessage}
+                    />
+                  }
+                  isActive={!small}
+                >
+                  <ChartWidget
+                    configKey={ReportPage.REPORT_APPROVED_OBJECTIVES}
+                    link={buildPathWithParams(
+                      buildPath(
+                        paramsReplacer(Page.REPORT_STATISTICS, {
+                          ':type': convertToLink(ReportPage.REPORT_APPROVED_OBJECTIVES),
+                        }),
+                      ),
+                      {
+                        ...getYear,
+                      },
+                    )}
+                  >
+                    {({ data }) => (
+                      <PieChart
+                        title={t(TitlesReport.OBJECTIVES_APPROVED, 'Objectives approved')}
+                        data={data}
+                        display={View.CHART}
+                      />
+                    )}
+                  </ChartWidget>
+                </HoverContainer>
               </div>
             )}
           </div>
@@ -228,60 +281,116 @@ const Report: FC = () => {
           <div className={css(pieChartWrapper)}>
             {isDisplayTile(IsReportTiles.MID_YEAR_FORMS) && (
               <div className={css(leftColumn)}>
-                <PieChart
-                  title={t(TitlesReport.MYR, 'Mid-year review')}
-                  display={View.CHART}
-                  data={ReportPage.REPORT_MID_YEAR_REVIEW}
-                  link={Page.TILE_REPORT_STATISTICS}
-                  params={getYear()}
-                  type={convertToLink(ReportPage.REPORT_MID_YEAR_REVIEW)}
-                  hoverMessage={t(
-                    'when_a_colleague_has_completed_their_mid_year_review',
-                    'Submitted: When a colleague completes their mid-year review submission prior to approval by a line manager. Approval: After approval by a line manager.',
-                  )}
-                  hoverVisibility={!small}
-                />
+                <HoverContainer
+                  customStyles={{ width: '100%' }}
+                  message={
+                    <HoverMessage
+                      text={t(
+                        'when_a_colleague_has_completed_their_mid_year_review',
+                        'Submitted: When a colleague completes their mid-year review submission prior to approval by a line manager. Approval: After approval by a line manager.',
+                      )}
+                      customStyles={reportHoverMessage}
+                    />
+                  }
+                  isActive={!small}
+                >
+                  <ChartWidget
+                    configKey={ReportPage.REPORT_MID_YEAR_REVIEW}
+                    link={buildPathWithParams(
+                      buildPath(
+                        paramsReplacer(Page.REPORT_STATISTICS, {
+                          ':type': convertToLink(ReportPage.REPORT_MID_YEAR_REVIEW),
+                        }),
+                      ),
+                      {
+                        ...getYear,
+                      },
+                    )}
+                  >
+                    {({ data }) => (
+                      <PieChart title={t(TitlesReport.MYR, 'Mid-year review')} data={data} display={View.CHART} />
+                    )}
+                  </ChartWidget>
+                </HoverContainer>
               </div>
             )}
             {isDisplayTile(IsReportTiles.BREAKDOWN_MID_YEAR_REVIEW) && (
               <div className={css(rightColumn)}>
-                <InfoTable
-                  mainTitle={t(TitlesReport.MYR_BREAKDOWN, 'Breakdown of Mid-year review')}
-                  data={ReportPage.REPORT_MYR_BREAKDOWN}
-                  type={convertToLink(ReportPage.REPORT_MYR_BREAKDOWN)}
-                  link={Page.TILE_REPORT_STATISTICS}
-                  params={getYear()}
-                />
+                <TableWidget
+                  configKey={ReportPage.REPORT_MYR_BREAKDOWN}
+                  link={buildPathWithParams(
+                    buildPath(
+                      paramsReplacer(Page.REPORT_STATISTICS, {
+                        ':type': convertToLink(ReportPage.REPORT_MYR_BREAKDOWN),
+                      }),
+                    ),
+                    {
+                      ...getYear,
+                    },
+                  )}
+                >
+                  {({ data }) => (
+                    <InfoTable mainTitle={t(TitlesReport.MYR_BREAKDOWN, 'Breakdown of Mid-year review')} data={data} />
+                  )}
+                </TableWidget>
               </div>
             )}
           </div>
           <div className={css(pieChartWrapper)}>
             {isDisplayTile(IsReportTiles.YEAR_END_FORMS) && (
               <div className={css(leftColumn)}>
-                <PieChart
-                  title={t(TitlesReport.EYR, 'Year-end review')}
-                  display={View.CHART}
-                  data={ReportPage.REPORT_END_YEAR_REVIEW}
-                  link={Page.TILE_REPORT_STATISTICS}
-                  params={getYear()}
-                  type={convertToLink(ReportPage.REPORT_END_YEAR_REVIEW)}
-                  hoverMessage={t(
-                    'when_a_colleague_has_completed_their_year_end_review',
-                    'Submitted: When a colleague has completed their year-end review submission prior to approval by a line manager. Approved: After approval by a line manager.',
-                  )}
-                  hoverVisibility={!small}
-                />
+                <HoverContainer
+                  customStyles={{ width: '100%' }}
+                  message={
+                    <HoverMessage
+                      customStyles={reportHoverMessage}
+                      text={t(
+                        'when_a_colleague_has_completed_their_year_end_review',
+                        'Submitted: When a colleague has completed their year-end review submission prior to approval by a line manager. Approved: After approval by a line manager.',
+                      )}
+                    />
+                  }
+                  isActive={!small}
+                >
+                  <ChartWidget
+                    configKey={ReportPage.REPORT_END_YEAR_REVIEW}
+                    link={buildPathWithParams(
+                      buildPath(
+                        paramsReplacer(Page.REPORT_STATISTICS, {
+                          ':type': convertToLink(ReportPage.REPORT_END_YEAR_REVIEW),
+                        }),
+                      ),
+                      {
+                        ...getYear,
+                      },
+                    )}
+                  >
+                    {({ data }) => (
+                      <PieChart title={t(TitlesReport.EYR, 'Year-end review')} data={data} display={View.CHART} />
+                    )}
+                  </ChartWidget>
+                </HoverContainer>
               </div>
             )}
             {isDisplayTile(IsReportTiles.BREAKDOWN_YEAR_END_REVIEW) && (
               <div className={css(rightColumn)}>
-                <InfoTable
-                  mainTitle={t(TitlesReport.EYR_BREAKDOWN, 'Breakdown of End-year review')}
-                  data={ReportPage.REPORT_EYR_BREAKDOWN}
-                  type={convertToLink(ReportPage.REPORT_EYR_BREAKDOWN)}
-                  link={Page.TILE_REPORT_STATISTICS}
-                  params={getYear()}
-                />
+                <TableWidget
+                  configKey={ReportPage.REPORT_EYR_BREAKDOWN}
+                  link={buildPathWithParams(
+                    buildPath(
+                      paramsReplacer(Page.REPORT_STATISTICS, {
+                        ':type': convertToLink(ReportPage.REPORT_EYR_BREAKDOWN),
+                      }),
+                    ),
+                    {
+                      ...getYear,
+                    },
+                  )}
+                >
+                  {({ data }) => (
+                    <InfoTable mainTitle={t(TitlesReport.EYR_BREAKDOWN, 'Breakdown of End-year review')} data={data} />
+                  )}
+                </TableWidget>
               </div>
             )}
           </div>
@@ -293,8 +402,8 @@ const Report: FC = () => {
             {/*      title={t(TitlesReport.WL4And5, 'WL4 & 5 Objectives submitted')}*/}
             {/*      display={View.CHART}*/}
             {/*      data={ReportPage.REPORT_WORK_LEVEL}*/}
-            {/*      link={Page.TILE_REPORT_STATISTICS}*/}
-            {/*      params={getYear()}*/}
+            {/*      link={Page.REPORT_STATISTICS}*/}
+            {/*      params={getYear}*/}
             {/*      type={convertToLink(ReportPage.REPORT_WORK_LEVEL)}*/}
             {/*      hoverVisibility={false}*/}
             {/*    />*/}
@@ -302,55 +411,121 @@ const Report: FC = () => {
             {/*)}*/}
             {isDisplayTile(IsReportTiles.NEW_TO_BUSINESS) && (
               <div className={css(rightColumn)}>
-                <PieChart
-                  title={t(TitlesReport.BUSINESS, 'New to business')}
-                  data={ReportPage.REPORT_NEW_TO_BUSINESS}
-                  display={View.QUANTITY}
-                  link={Page.TILE_REPORT_STATISTICS}
-                  params={getYear()}
-                  type={convertToLink(ReportPage.REPORT_NEW_TO_BUSINESS)}
-                  hoverMessage={t(
-                    'colleagues_who_have_joined_the_business',
-                    'Colleagues who have joined the business in the last 90 days.',
-                  )}
-                  hoverVisibility={!small}
-                />
+                <HoverContainer
+                  customStyles={{ width: '100%' }}
+                  message={
+                    <HoverMessage
+                      text={t(
+                        'colleagues_who_have_joined_the_business',
+                        'Colleagues who have joined the business in the last 90 days.',
+                      )}
+                      customStyles={reportHoverMessage}
+                    />
+                  }
+                  isActive={!small}
+                >
+                  <ChartWidget
+                    configKey={ReportPage.REPORT_NEW_TO_BUSINESS}
+                    link={buildPathWithParams(
+                      buildPath(
+                        paramsReplacer(Page.REPORT_STATISTICS, {
+                          ':type': convertToLink(ReportPage.REPORT_NEW_TO_BUSINESS),
+                        }),
+                      ),
+                      {
+                        ...getYear,
+                      },
+                    )}
+                  >
+                    {({ data }) => (
+                      <PieChart
+                        title={t(TitlesReport.BUSINESS, 'New to business')}
+                        data={data}
+                        display={View.QUANTITY}
+                      />
+                    )}
+                  </ChartWidget>
+                </HoverContainer>
               </div>
             )}
           </div>
           <div className={css(pieChartWrapper)}>
             {isDisplayTile(IsReportTiles.MOMENT_FEEDBACK) && (
               <div className={css(leftColumn)}>
-                <PieChart
-                  title={t(TitlesReport.MOMENT_FEEDBACK, 'In the moment feedback')}
-                  display={View.CHART}
-                  data={ReportPage.REPORT_FEEDBACK}
-                  link={Page.TILE_REPORT_STATISTICS}
-                  params={getYear()}
-                  type={convertToLink(ReportPage.REPORT_FEEDBACK)}
-                  hoverMessage={t(
-                    'percentage_of_colleagues_who_have_requested_or_given_feedback_this_year',
-                    'Percentage of colleagues who have requested or given feedback this year.  ',
-                  )}
-                  hoverVisibility={!small}
-                />
+                <HoverContainer
+                  customStyles={{ width: '100%' }}
+                  message={
+                    <HoverMessage
+                      text={t(
+                        'percentage_of_colleagues_who_have_requested_or_given_feedback_this_year',
+                        'Percentage of colleagues who have requested or given feedback this year.',
+                      )}
+                      customStyles={reportHoverMessage}
+                    />
+                  }
+                  isActive={!small}
+                >
+                  <ChartWidget
+                    configKey={ReportPage.REPORT_FEEDBACK}
+                    link={buildPathWithParams(
+                      buildPath(
+                        paramsReplacer(Page.REPORT_STATISTICS, {
+                          ':type': convertToLink(ReportPage.REPORT_FEEDBACK),
+                        }),
+                      ),
+                      {
+                        ...getYear,
+                      },
+                    )}
+                  >
+                    {({ data }) => (
+                      <PieChart
+                        title={t(TitlesReport.MOMENT_FEEDBACK, 'In the moment feedback')}
+                        data={data}
+                        display={View.CHART}
+                      />
+                    )}
+                  </ChartWidget>
+                </HoverContainer>
               </div>
             )}
             {isDisplayTile(IsReportTiles.ANNIVERSARY_REVIEWS) && (
               <div className={css(rightColumn)}>
-                <InfoTable
-                  mainTitle={t(TitlesReport.ANNIVERSARY_REVIEWS, 'Anniversary Reviews completed per quarter')}
-                  preTitle={t(TitlesReport.HOURLY_PAID, 'Hourly paid colleagues only')}
-                  data={ReportPage.REPORT_ANNIVERSARY_REVIEWS}
-                  type={convertToLink(ReportPage.REPORT_ANNIVERSARY_REVIEWS)}
-                  link={Page.TILE_REPORT_STATISTICS}
-                  params={getYear()}
-                  hoverMessage={t(
-                    'the_number_of_annual_reviews_a_line_manager_has_undertaken',
-                    'The number of annual reviews a line manager has undertaken per quarter based on the number of direct reports they have. This is just indicative assuming a line manager will space reviews out equally during the year.',
-                  )}
-                  hoverVisibility={!small}
-                />
+                <HoverContainer
+                  customStyles={{ width: '100%' }}
+                  message={
+                    <HoverMessage
+                      text={t(
+                        'the_number_of_annual_reviews_a_line_manager_has_undertaken',
+                        'The number of annual reviews a line manager has undertaken per quarter based on the number of direct reports they have. This is just indicative assuming a line manager will space reviews out equally during the year.',
+                      )}
+                      customStyles={reportHoverMessage}
+                    />
+                  }
+                  isActive={!small}
+                >
+                  <TableWidget
+                    configKey={ReportPage.REPORT_ANNIVERSARY_REVIEWS}
+                    link={buildPathWithParams(
+                      buildPath(
+                        paramsReplacer(Page.REPORT_STATISTICS, {
+                          ':type': convertToLink(ReportPage.REPORT_ANNIVERSARY_REVIEWS),
+                        }),
+                      ),
+                      {
+                        ...getYear,
+                      },
+                    )}
+                  >
+                    {({ data }) => (
+                      <InfoTable
+                        mainTitle={t(TitlesReport.ANNIVERSARY_REVIEWS, 'Anniversary Reviews completed per quarter')}
+                        preTitle={t(TitlesReport.HOURLY_PAID, 'Hourly paid colleagues only')}
+                        data={data}
+                      />
+                    )}
+                  </TableWidget>
+                </HoverContainer>
               </div>
             )}
           </div>
@@ -477,6 +652,20 @@ const hoverContainer: Rule = () => ({
   bottom: '-8px',
   left: '50%',
   transform: 'translate(-95%, 100%)',
+});
+
+const reportHoverMessage: Rule = ({ theme }) => ({
+  zIndex: '2',
+  background: theme.colors.link,
+  padding: theme.spacing.s4,
+  width: '294px',
+  maxWidth: '294px',
+  color: theme.colors.white,
+  borderRadius: theme.spacing.s2_5,
+  position: 'absolute',
+  bottom: '-8px',
+  left: '50%',
+  transform: 'translate(-50%, 100%)',
 });
 
 export default Report;

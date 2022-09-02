@@ -9,6 +9,31 @@ export enum Status {
   FAILED = 'failed',
 }
 
+export enum ReportTags {
+  REPORT_SUBMITTED_OBJECTIVES = 'has_objective_submitted',
+  REPORT_APPROVED_OBJECTIVES = 'has_objective_approved',
+  REPORT_MID_YEAR_REVIEW = 'has_myr_submitted has_myr_approved',
+  REPORT_END_YEAR_REVIEW = 'has_eyr_submitted has_eyr_approved',
+  REPORT_WORK_LEVEL = 'REPORT_WORK_LEVEL',
+  REPORT_FEEDBACK = 'has_feedback_requested has_feedback_given',
+  REPORT_NEW_TO_BUSINESS = 'is_new_to_business',
+  REPORT_MYR_BREAKDOWN = 'myr_overall_rating',
+  REPORT_EYR_BREAKDOWN = 'eyr_overall_rating',
+}
+
+export enum ReportPage {
+  REPORT_SUBMITTED_OBJECTIVES = 'REPORT_SUBMITTED_OBJECTIVES',
+  REPORT_APPROVED_OBJECTIVES = 'REPORT_APPROVED_OBJECTIVES',
+  REPORT_MID_YEAR_REVIEW = 'REPORT_MID_YEAR_REVIEW',
+  REPORT_END_YEAR_REVIEW = 'REPORT_END_YEAR_REVIEW',
+  REPORT_WORK_LEVEL = 'REPORT_WORK_LEVEL',
+  REPORT_FEEDBACK = 'REPORT_FEEDBACK',
+  REPORT_EYR_BREAKDOWN = 'REPORT_EYR_BREAKDOWN',
+  REPORT_MYR_BREAKDOWN = 'REPORT_MYR_BREAKDOWN',
+  REPORT_ANNIVERSARY_REVIEWS = 'REPORT_ANNIVERSARY_REVIEWS',
+  REPORT_NEW_TO_BUSINESS = 'REPORT_NEW_TO_BUSINESS',
+}
+
 export enum ExpressionType {
   AUTH = 'auth',
   ROLE = 'role',
@@ -112,6 +137,7 @@ export enum ReviewType {
   OBJECTIVE = 'OBJECTIVE',
   MYR = 'MYR',
   EYR = 'EYR',
+  FEEDBACK = 'FEEDBACK',
 }
 
 export enum Statuses {
@@ -143,4 +169,10 @@ export type Review = {
   type: ReviewType;
   uuid: string;
   tlPointUuid: string;
+};
+
+export type ChartReport = {
+  percentage: string;
+  count?: string;
+  title?: string;
 };

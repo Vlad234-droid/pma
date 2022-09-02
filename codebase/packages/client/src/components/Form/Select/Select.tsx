@@ -8,8 +8,8 @@ import useEventListener from 'hooks/useEventListener';
 import { SelectField, Option } from '../types';
 import { useFormContainer } from '../context/input';
 
-const getSelectedOption = (options: Option[], value?: string) =>
-  value ? options.filter((option) => option.value === value)[0] : undefined;
+const getSelectedOption = (options: Option[], value?: string | number) =>
+  value ? options.filter((option) => option.value == value)[0] : undefined;
 
 type CustomProps = {
   wrapperStyles?: Styles | Rule | CSSProperties | {};

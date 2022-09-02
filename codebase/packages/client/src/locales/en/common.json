@@ -699,5 +699,11 @@
   "ensure_capture_pdp": ":Please ensure you capture your development in Personal Development Plan",
   "performance_period_duration": "Performance period {{ startDate }} - {{ endDate }}",
   "your_review_due_by_date": "Your performance review form is due by {{ date }}",
-  "need_help_to_write": "You have approved your colleague's"
+  "need_help_to_write": "You have approved your colleague's",
+  "belowExpected": "Below expected",
+  "quarter1": "Quarter 1",
+  "quarter2": "Quarter 2",
+  "quarter3": "Quarter 3",
+  "quarter4": "Quarter 4",
+  "not-submitted": "Not submitted"
 }

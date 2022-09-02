@@ -18,7 +18,7 @@ describe('IconWithText component', () => {
     const wrapper = getByTestId(WRAPPER_ID);
     expect(wrapper).toBeInTheDocument();
   });
-  it('it should fire onChange handler', async () => {
+  it('ReportsType onChange handler', async () => {
     const { getByTestId } = render(<IconWithText {...props} />);
     const wrapper = getByTestId(WRAPPER_ID);
     fireEvent.click(wrapper);

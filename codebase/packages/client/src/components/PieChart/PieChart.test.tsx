@@ -1,58 +1,44 @@
 import React from 'react';
-import { BrowserRouter } from 'react-router-dom';
-
+import '@testing-library/jest-dom/extend-expect';
 import { renderWithTheme as render } from 'utils/test';
 
-import { View } from './config';
-import PieChart, { PIE_CHART_WRAPPER } from './PieChart';
-import { fireEvent } from '@testing-library/react';
+import PieChart, { TEST_ID, TITLE_ID, PERCENT_ID } from './PieChart';
+import { View } from 'features/general/Report/config';
 
-describe('<PieChart />', () => {
-  it('should render link and content, if link is passed', () => {
-    const props = {
-      data: [],
-      display: View.CHART,
-      link: 'mocked_link',
-      hoverMessage: '',
-    };
+describe('PieChartContent', () => {
+  const props = {
+    title: 'Test title',
+    data: [],
+    display: View.CHART,
+  };
 
-    const { getByTestId } = render(
-      <BrowserRouter>
-        <PieChart {...props} />
-      </BrowserRouter>,
-    );
+  it('should render PieChartContent body', async () => {
+    const { queryByTestId } = render(<PieChart {...props} />);
 
-    expect(getByTestId('pie-chart-content-id').closest('a')).toHaveAttribute('href', '/mocked_link');
-    expect(getByTestId('pie-chart-content-id')).toBeInTheDocument();
+    const body = queryByTestId(TEST_ID);
+    expect(body).toBeInTheDocument();
   });
 
-  it('should render wrapper and content, if link not passed', () => {
-    const props = {
-      data: [],
-      display: View.CHART,
-    };
+  it('should render PieChartContent title', async () => {
+    const { queryByTestId } = render(<PieChart {...props} />);
 
-    const { getByTestId } = render(<PieChart {...props} />);
-
-    expect(getByTestId(PIE_CHART_WRAPPER)).toBeInTheDocument();
-    expect(getByTestId('pie-chart-content-id')).toBeInTheDocument();
+    const title = queryByTestId(TITLE_ID);
+    expect(title).toBeInTheDocument();
+    expect(title).toHaveTextContent(props.title);
   });
-  it('it should display hover message', async () => {
-    const props = {
-      data: [],
-      display: View.CHART,
-      link: 'mocked_link',
-      hoverMessage: 'mocked_message',
-    };
 
-    const { getByText, getByTestId } = render(
-      <BrowserRouter>
-        <PieChart {...props} />
-      </BrowserRouter>,
-    );
+  it('should NOT render PieChartContent percent', async () => {
+    const { queryByTestId } = render(<PieChart {...props} />);
 
-    const wrapper = getByTestId(PIE_CHART_WRAPPER);
-    fireEvent.mouseOver(wrapper);
-    expect(getByText(props.hoverMessage)).toBeInTheDocument();
+    const percent = queryByTestId(PERCENT_ID);
+    expect(percent).not.toBeInTheDocument();
+  });
+
+  it('should render PieChartContent percent', async () => {
+    const propsWithData = { ...props, data: [{ percentage: '10' }] };
+    const { queryByTestId } = render(<PieChart {...propsWithData} />);
+
+    const percent = queryByTestId(PERCENT_ID);
+    expect(percent).toBeInTheDocument();
   });
 });

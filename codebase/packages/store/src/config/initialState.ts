@@ -22,6 +22,7 @@ import { initialState as previousReviewFilesInitialState } from '../entities/pre
 import { initialState as appState } from '../entities/appState/reducer';
 import { initialState as messagesState } from '../entities/messages/reducer';
 import { initialState as knowledgeLibraryState } from '../entities/knowledgeLibrary/reducer';
+import { initialState as statisticsState } from '../entities/statistics/reducer';
 
 //@ts-ignore
 export const initialState = {
@@ -48,6 +49,7 @@ export const initialState = {
   appState,
   messages: messagesState,
   knowledgeLibrary: knowledgeLibraryState,
+  statistics: statisticsState,
 };
 
 export type State = StateType<typeof initialState>;

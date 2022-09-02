@@ -15,8 +15,8 @@ type Props = {
 
 export const RemoveFileModal: React.FC<Props> = ({ colleagueUUID, fileUuid, onClose, fileName, reviewUUID }) => {
   const [deleting, setDeleting] = useState(false);
-  const [savedFileName] = useState(fileName);
   const isSuccess = useSelector(isDeleteFileSuccess);
+
   const isLoaded = useSelector(isDeleteFileLoaded);
   const { css, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
@@ -40,7 +40,7 @@ export const RemoveFileModal: React.FC<Props> = ({ colleagueUUID, fileUuid, onCl
         <Trans>Remove the file</Trans>
       </div>
       <div className={css({ marginBottom: '24px', fontSize: '16px' })}>
-        <Trans>Are you sure you want to remove {savedFileName}?</Trans>
+        <Trans>Are you sure you want to remove {fileName}?</Trans>
       </div>
       <div className={css({ display: 'flex', gap: '8px', width: '100%' })}>
         <Button styles={[buttonStyles]} onPress={onClose} mode='inverse'>
@@ -60,7 +60,7 @@ export const RemoveFileModal: React.FC<Props> = ({ colleagueUUID, fileUuid, onCl
         <Trans>The file is removed</Trans>
       </div>
       <div className={css({ marginBottom: '24px', fontSize: '16px' })}>
-        <Trans>{savedFileName} was removed successfully!</Trans>
+        <Trans>{fileName} was removed successfully!</Trans>
       </div>
       <div className={css({ width: '100%', maxWidth: '204px', margin: 'auto' })}>
         <Button styles={[buttonStyles]} onPress={onClose}>

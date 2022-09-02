@@ -8,7 +8,7 @@ async function getData(url) {
   return await fetch(
     url +
       new URLSearchParams({
-        year: getCurrentYear(),
+        year: getCurrentYear().toString(),
         'statuses_in[0]': Status.APPROVED,
       }),
   );

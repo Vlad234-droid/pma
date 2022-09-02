@@ -36,7 +36,7 @@ import UserObjectives, { CreateObjective } from './UserObjectives';
 import PeopleTeam from './PeopleTeam';
 import Calibration from './Calibration';
 import RespondNewFeedback from './RespondNewFeedback';
-import TileReportStatistics from './TileReportStatistics';
+import ReportStatistics from './ReportStatistics';
 import CalibrationRatings from './CalibrationRatings';
 import PreviousRatingsTiles from './PreviousRatingsTiles';
 import PreviousCalibrationRatings from './PreviousCalibrationRatings';
@@ -403,8 +403,8 @@ const pages: Record<Page, PageComponent> = {
     perform: [role.TALENT_ADMIN, role.ADMIN, role.LINE_MANAGER, role.EXECUTIVE],
     tenant: [tenant.BANK, tenant.GENERAL],
   },
-  [Page.TILE_REPORT_STATISTICS]: {
-    Element: TileReportStatistics,
+  [Page.REPORT_STATISTICS]: {
+    Element: ReportStatistics,
     withHeader: true,
     perform: [role.TALENT_ADMIN, role.ADMIN, role.LINE_MANAGER, role.EXECUTIVE],
     tenant: [tenant.BANK, tenant.GENERAL],

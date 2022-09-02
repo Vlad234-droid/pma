@@ -1,5 +1,25 @@
-import { MetaDataReport, StatisticsTitlesReport, StatisticsTitlesReportKeys, Status } from 'config/enum';
-import { getCurrentYear, getNextYear, getPrevYear } from 'utils/date';
+import {
+  MetaDataReport,
+  StatisticsTitlesReport,
+  StatisticsTitlesReportKeys,
+  Status,
+  Rating,
+  ReportPage,
+  TitlesReport,
+} from 'config/enum';
+import { getCurrentYear, getPrevYear } from 'utils/date';
+import { getCurrentYearWithStartDate, isStartPeriod } from '../utils';
+
+export enum View {
+  CHART = 'chart',
+  QUANTITY = 'quantity',
+}
+
+export type Data = {
+  percentage: string;
+  count?: string;
+  title?: string;
+};
 
 export enum IsReportTiles {
   OBJECTIVES_SUBMITTED = 'Objectives submitted',
@@ -13,7 +33,12 @@ export enum IsReportTiles {
   ANNIVERSARY_REVIEWS = 'Anniversary Reviews completed per quarter',
   WL4And5 = 'WL4 & 5 Objectives approved',
 }
-export const getFieldOptions = () => [{ value: getPrevYear(1), label: `${getCurrentYear()}-${getNextYear(1)}` }];
+export const getFieldOptions = () => [
+  {
+    value: isStartPeriod() ? getPrevYear(1) : getPrevYear(2),
+    label: isStartPeriod() ? `${getPrevYear(1)}-${getCurrentYear()}` : `${getPrevYear(2)}-${getPrevYear(1)}`,
+  },
+];
 
 export const getYearsFromCurrentYear = (currentYear) => {
   return [
@@ -229,4 +254,100 @@ export const prepareData = (selectedCheckboxes, isCheckAll, t) => {
 };
 
 export const getCurrentValue = (query, year) =>
-  query.year ? year || query.year || getCurrentYear() : year || getCurrentYear();
+  query.year ? year || query.year || getCurrentYearWithStartDate() : year || getCurrentYearWithStartDate();
+
+export const getDefaultData = (type, t) => {
+  const report = {
+    [ReportPage.REPORT_SUBMITTED_OBJECTIVES]: [{ percentage: 0 }],
+    [ReportPage.REPORT_APPROVED_OBJECTIVES]: [{ percentage: 0 }],
+
+    [ReportPage.REPORT_MID_YEAR_REVIEW]: [
+      { percentage: 0, title: t(TitlesReport.SUBMITTED, 'Submitted') },
+      { percentage: 0, title: t(TitlesReport.APPROVED, 'Approved') },
+    ],
+    [ReportPage.REPORT_END_YEAR_REVIEW]: [
+      { percentage: 0, title: t(TitlesReport.SUBMITTED, 'Submitted') },
+      { percentage: 0, title: t(TitlesReport.APPROVED, 'Approved') },
+    ],
+    [ReportPage.REPORT_FEEDBACK]: [
+      { percentage: 0, title: t(TitlesReport.REQUESTED, 'Requested') },
+      { percentage: 0, title: t(TitlesReport.GIVEN, 'Given') },
+    ],
+
+    [ReportPage.REPORT_WORK_LEVEL]: [
+      { percentage: 0, title: 'Not approved' },
+      { percentage: 0, title: 'Approved' },
+    ],
+
+    [ReportPage.REPORT_NEW_TO_BUSINESS]: [{ percentage: 0, title: t(Rating.COLLEAGUES, 'Colleagues') }],
+
+    [ReportPage.REPORT_MYR_BREAKDOWN]: [
+      {
+        percentage: 0,
+        count: 0,
+        title: t(Rating.BELOW_EXPECTED, 'Below expected'),
+      },
+      {
+        percentage: 0,
+        count: 0,
+        title: t(Rating.SATISFACTORY, 'Satisfactory'),
+      },
+      {
+        percentage: 0,
+        count: 0,
+        title: t(Rating.GREAT, 'Great'),
+      },
+      {
+        percentage: 0,
+        count: 0,
+        title: t(Rating.OUTSTANDING, 'Outstanding'),
+      },
+    ],
+    [ReportPage.REPORT_EYR_BREAKDOWN]: [
+      {
+        percentage: 0,
+        count: 0,
+        title: t(Rating.BELOW_EXPECTED, 'Below expected'),
+      },
+      {
+        percentage: 0,
+        count: 0,
+        title: t(Rating.SATISFACTORY, 'Satisfactory'),
+      },
+      {
+        percentage: 0,
+        count: 0,
+        title: t(Rating.GREAT, 'Great'),
+      },
+      {
+        percentage: 0,
+        count: 0,
+        title: t(Rating.OUTSTANDING, 'Outstanding'),
+      },
+    ],
+
+    [ReportPage.REPORT_ANNIVERSARY_REVIEWS]: [
+      {
+        percentage: 0,
+        count: 0,
+        title: t(Rating.QUARTER_1, 'Quarter 1'),
+      },
+      {
+        percentage: 0,
+        count: 0,
+        title: t(Rating.QUARTER_2, 'Quarter 2'),
+      },
+      {
+        percentage: 0,
+        count: 0,
+        title: t(Rating.QUARTER_3, 'Quarter 3'),
+      },
+      {
+        percentage: 0,
+        count: 0,
+        title: t(Rating.QUARTER_4, 'Quarter 4'),
+      },
+    ],
+  };
+  return report[type];
+};

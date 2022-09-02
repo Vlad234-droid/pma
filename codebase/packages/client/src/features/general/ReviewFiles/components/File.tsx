@@ -7,6 +7,8 @@ import { BASE_URL_API } from 'config/constants';
 import { useSelector } from 'react-redux';
 import { colleagueUUIDSelector } from '@pma/store';
 
+export const TEST_ID = 'button-id';
+
 export type File = {
   fileName: string;
   fileLength: number;
@@ -38,7 +40,7 @@ const File: FC<Props> = ({ file, onDelete, readonly }) => {
           <img src={Download} alt='Download' />
         </a>
         {!readonly && (
-          <button className={css(buttonStyles)} onClick={() => onDelete(uuid)}>
+          <button className={css(buttonStyles)} onClick={() => onDelete(uuid)} data-test-id={TEST_ID}>
             <img src={Trash} alt='Trash' />
           </button>
         )}

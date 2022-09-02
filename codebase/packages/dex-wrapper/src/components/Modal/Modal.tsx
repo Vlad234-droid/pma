@@ -64,7 +64,7 @@ export const Modal: FC<ModalProps> = ({
   );
 
   return (
-    <OverlayContainer id='portal-modal'>
+    <OverlayContainer id='portal-modal' data-test-id='overlay-container'>
       <div
         {...underlayProps}
         aria-label='overlay'

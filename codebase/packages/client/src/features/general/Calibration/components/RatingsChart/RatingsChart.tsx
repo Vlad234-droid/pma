@@ -95,7 +95,7 @@ const CustomizedLabel = (props) => {
           textAnchor='start'
           opacity={0.5}
         >
-          {chartData[index]?.quantity || 0}
+          {chartData[index]?.count || 0}
         </text>
       </g>
     </>

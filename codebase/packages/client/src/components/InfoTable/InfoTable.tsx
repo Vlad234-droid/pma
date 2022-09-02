@@ -1,89 +1,133 @@
-import React, { FC, useState } from 'react';
-import { useStyle, Rule } from '@pma/dex-wrapper';
-import { Link } from 'react-router-dom';
-import TableContent from './components/TableContent';
-import { InfoTableProps as Props } from './type';
-import { paramsReplacer } from 'utils';
-import { buildPath, buildPathWithParams } from 'features/general/Routes';
-import { HoverMessage } from '../HoverMessage';
+import React, { FC } from 'react';
+import { useStyle, Rule, CreateRule, Styles } from '@pma/dex-wrapper';
 
-export const INFO_TABLE_WRAPPER = 'info_table_wrapper';
+import { IconButton } from 'components/IconButton';
+import { Trans } from 'components/Translation/Translation';
+import { Data } from 'features/general/Report/config';
 
-const InfoTable: FC<Props> = ({
-  mainTitle,
-  data,
-  preTitle = '',
-  link = '',
-  Wrapper = 'div',
-  type = '',
-  params = {},
-  hoverMessage = '',
-  hoverVisibility = true,
-}) => {
-  const { css } = useStyle();
+type Props = {
+  mainTitle: string;
+  data: Array<Data>;
+  preTitle?: string;
+};
 
-  const [isHovering, setIsHovering] = useState<boolean>(false);
-
-  const props = {
-    mainTitle,
-    data,
-    preTitle,
-  };
-
-  const HoverMessageWrapper = () => (
-    <HoverMessage
-      isVisible={hoverVisibility && !!hoverMessage && isHovering}
-      text={hoverMessage}
-      customStyles={hoverContainer}
-    />
-  );
-
-  if (!link)
-    return (
-      <Wrapper
-        className={css(infoTableWrapper)}
-        data-test-id={INFO_TABLE_WRAPPER}
-        onMouseEnter={() => setIsHovering(true)}
-        onMouseLeave={() => setIsHovering(false)}
-      >
-        <TableContent {...props} />
-        <HoverMessageWrapper />
-      </Wrapper>
-    );
+const InfoTable: FC<Props> = ({ mainTitle, data, preTitle = '' }) => {
+  const { css, matchMedia } = useStyle();
+  const small = matchMedia({ xSmall: true, small: true }) || false;
 
   return (
-    <Link
-      to={buildPathWithParams(buildPath(paramsReplacer(link, { ':type': type })), {
-        ...params,
-      })}
-      className={css(infoTableWrapper)}
-      data-test-id={INFO_TABLE_WRAPPER}
-      onMouseEnter={() => setIsHovering(true)}
-      onMouseLeave={() => setIsHovering(false)}
-    >
-      <TableContent {...props} />
-      <HoverMessageWrapper />
-    </Link>
+    <React.Fragment>
+      <h2 className={css(titleStyle({ preTitle }))}>{mainTitle}</h2>
+      {preTitle !== '' && (
+        <div className={css(flexStyle)}>
+          <IconButton
+            graphic='information'
+            iconStyles={{
+              marginRight: '10px',
+            }}
+            onPress={() => {
+              console.log();
+            }}
+          />
+          <p className={css(preTitleStyle)}>{preTitle}</p>
+        </div>
+      )}
+      <div className={css(blockWrapper({ small }))}>
+        {data?.map((chart, i) => {
+          const percentage = chart?.percentage || 0;
+          const quantity = chart?.count || 0;
+          return (
+            <div key={i} className={css(infoBlock({ small }))}>
+              <span className={css(percentStyle)}>{percentage}%</span>
+              <span className={css(quantityStyle({ small }))}>
+                <Trans i18nKey='people'>People</Trans> {quantity}
+              </span>
+              <p className={css(blockTitleStyle)}>{chart.title}</p>
+            </div>
+          );
+        })}
+      </div>
+    </React.Fragment>
   );
 };
 
-const infoTableWrapper: Rule = ({ theme }) => ({
-  padding: '24px',
-  background: theme.colors.white,
-  boxShadow: '3px 3px 1px 1px rgba(0, 0, 0, 0.05)',
-  borderRadius: '10px',
-  width: '100%',
+const titleStyle: CreateRule<{ preTitle: string | undefined }> =
+  ({ preTitle }) =>
+  ({ theme }) => ({
+    color: theme.colors.link,
+    fontWeight: theme.font.weight.bold,
+    fontSize: theme.font.fixed.f20.fontSize,
+    lineHeight: theme.font.fixed.f20.lineHeight,
+    letterSpacing: '0px',
+    textAlign: 'center',
+    margin: !preTitle ? '0px 0px 32px 0px' : '0px 0px 12px 0px',
+  });
+
+const percentStyle: Rule = ({ theme }) => ({
+  color: theme.colors.link,
+  fontWeight: theme.font.weight.bold,
+  fontSize: theme.font.fixed.f28.fontSize,
+  lineHeight: theme.font.fixed.f28.lineHeight,
+  letterSpacing: '0px',
+  marginBottom: '4px',
+});
+const blockTitleStyle: Rule = ({ theme }) => ({
+  color: theme.colors.base,
+  fontWeight: theme.font.weight.bold,
   fontSize: theme.font.fixed.f16.fontSize,
   lineHeight: theme.font.fixed.f16.lineHeight,
   letterSpacing: '0px',
-  position: 'relative',
+  marginTop: '18.5px',
 });
 
-const hoverContainer: Rule = () => ({
-  position: 'absolute',
-  bottom: '-8px',
-  left: '50%',
-  transform: 'translate(-50%, 100%)',
+const quantityStyle: CreateRule<{ small: boolean }> =
+  ({ small }) =>
+  ({ theme }) =>
+    ({
+      color: theme.colors.link,
+      fontWeight: 'normal',
+      fontSize: theme.font.fixed.f16.fontSize,
+      lineHeight: theme.font.fixed.f16.lineHeight,
+      letterSpacing: '0px',
+      position: 'relative',
+      alignSelf: !small ? 'flex-start' : 'center',
+      ':after': {
+        content: "''",
+        width: '100%',
+        height: '2px',
+        position: 'absolute',
+        bottom: '-8px',
+        left: '0px',
+        background: theme.colors.backgroundDarkest,
+      },
+    } as Styles);
+
+const blockWrapper: CreateRule<{ small: boolean }> = ({ small }) => ({
+  display: 'flex',
+  justifyContent: 'space-between',
+  flexDirection: !small ? 'row' : 'column',
+  alignItems: 'center',
+  marginTop: '32px',
+});
+const infoBlock: CreateRule<{ small: boolean }> = ({ small }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  ...(small && { justifyContent: 'center', alignItems: 'center' }),
+});
+
+const flexStyle: Rule = {
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+};
+
+const preTitleStyle: Rule = ({ theme }) => ({
+  color: theme.colors.link,
+  fontStyle: 'normal',
+  fontWeight: 'normal',
+  fontSize: theme.font.fixed.f18.fontSize,
+  lineHeight: theme.font.fixed.f18.lineHeight,
+  letterSpacing: '0px',
 });
 
 export default InfoTable;

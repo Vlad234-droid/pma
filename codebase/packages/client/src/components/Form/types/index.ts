@@ -28,7 +28,7 @@ export interface InputField extends FormField {
 }
 
 export type Option = {
-  value: string;
+  value: string | number;
   label: string;
 };
 
@@ -36,7 +36,7 @@ export interface SelectField extends FormField {
   name: string;
   options: Array<Option>;
   placeholder: string;
-  value?: string;
+  value?: string | number;
   error?: string;
   onBlur?: () => void;
   //TODO: change any to ChangeEvent when all dropdonwns will be fixed

@@ -3,12 +3,13 @@ import { useTranslation } from 'components/Translation';
 import { ReportPage, TitlesReport } from 'config/enum';
 import { getCurrentYear } from 'utils';
 import useQueryString from 'hooks/useQueryString';
-import { convertToReportEnum } from 'features/general/TileReport/utils';
 
 export const useChartTitle = () => {
   const { pathname } = useLocation();
   const { t } = useTranslation();
   const query = useQueryString() as Record<string, string>;
+
+  console.log('pathname', pathname);
 
   const getChartTitle = () => {
     const titles = {
@@ -16,7 +17,9 @@ export const useChartTitle = () => {
       [ReportPage.REPORT_NEW_TO_BUSINESS]: t(TitlesReport.EYR_BREAKDOWN, 'Breakdown of End-year review'),
     };
 
-    return titles[ReportPage[convertToReportEnum(pathname)]];
+    return titles[ReportPage.REPORT_NEW_TO_BUSINESS];
+
+    // return titles[ReportPage[convertToReportEnum(pathname)]] ?? '';
   };
 
   return {

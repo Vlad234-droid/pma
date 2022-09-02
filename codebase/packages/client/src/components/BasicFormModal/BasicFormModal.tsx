@@ -1,12 +1,12 @@
-import React, { FC } from 'react';
+import React, { FC, ReactNode } from 'react';
 import { CreateRule, Modal, useMedia } from '@pma/dex-wrapper';
 import { Icon } from 'components/Icon';
 import { ModalWrapper } from 'components/ModalWrapper';
 
 type Props = {
-  onClose: any;
-  title: any;
-  children: any;
+  onClose: () => void;
+  title: string;
+  children: JSX.Element | ReactNode;
 };
 export const BasicFormModal: FC<Props> = ({ onClose, title, children }) => {
   const { matchMedia } = useMedia();
