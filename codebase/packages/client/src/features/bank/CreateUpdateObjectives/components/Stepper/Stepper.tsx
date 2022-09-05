@@ -1,26 +1,29 @@
 import React, { FC } from 'react';
+
 import { useStyle, Rule } from '@pma/dex-wrapper';
+import { useTranslation } from 'components/Translation';
 
 type Props = {
-  steps: string[];
+  steps: Array<number | undefined>;
   step: number;
+  onSelectStep?: any;
 };
-const Stepper: FC<Props> = ({ steps, step }) => {
+const Stepper: FC<Props> = ({ steps, step, onSelectStep }) => {
   const { css } = useStyle();
+  const { t } = useTranslation();
 
   return (
     <div className={css(wrapperStyle)}>
       {steps.map((singleStep, index) => {
-        if (step === index + 1) {
-          return (
-            <div className={css(activeStepStyle)} key={index}>
-              <span>{singleStep}</span>
-            </div>
-          );
-        }
         return (
-          <div className={css(stepStyle)} key={index}>
-            <span>{singleStep}</span>
+          <div
+            onClick={() => {
+              onSelectStep && onSelectStep(index);
+            }}
+            className={css(step === index ? activeStepStyle : stepStyle)}
+            key={index}
+          >
+            <span>{t('objective_number', `Priority ${singleStep}`, { ns: 'bank', number: singleStep })}</span>
           </div>
         );
       })}

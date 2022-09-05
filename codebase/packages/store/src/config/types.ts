@@ -126,6 +126,7 @@ export interface ActionGetParams {
 
 export interface ActionPostData {
   data?: any[];
+  queryParams?: any;
 }
 
 export interface ReviewActionParams extends ActionPostData, ActionGetParams {

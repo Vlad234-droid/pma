@@ -111,10 +111,20 @@ export default createReducer(initialState)
     data: state.data.map((review) => (review.uuid === payload.uuid ? payload : review)),
     meta: { ...state.meta, loading: false, loaded: true },
   }))
+  .handleAction(updateReviews.request, (state) => {
+    return {
+      ...state,
+      meta: { ...state.meta, loading: true, error: null, loaded: false },
+    };
+  })
   .handleAction(updateReviews.success, (state, { payload }) => ({
     ...state,
     ...payload,
     meta: { ...state.meta, loading: false, loaded: true },
+  }))
+  .handleAction(updateReviews.failure, (state, { payload }) => ({
+    ...state,
+    meta: { ...state.meta, loading: false, loaded: true, error: payload },
   }))
   .handleAction(updateReviewStatus.success, (state) => ({
     ...state,

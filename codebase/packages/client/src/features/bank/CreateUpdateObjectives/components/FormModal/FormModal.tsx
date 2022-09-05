@@ -1,7 +1,7 @@
-import React, { FC } from 'react';
+import React, { FC, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { Rule, useStyle } from '@pma/dex-wrapper';
-import { reviewsMetaSelector, schemaMetaSelector, timelinesMetaSelector } from '@pma/store';
+import { reviewsMetaSelector } from '@pma/store';
 
 import { createYupSchema } from 'utils/yup';
 import * as Yup from 'yup';
@@ -12,65 +12,81 @@ import SuccessModal from 'components/SuccessModal';
 import Spinner from 'components/Spinner';
 import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
 
+import { Status } from 'config/enum';
+
 import { default as FormWrapper } from './FormWrapper';
 import FormModify from '../FormState/Modify';
 import FormPreview from '../FormState/Preview';
 import { ButtonsModify } from '../ButtonsModify';
 import { ButtonsPreview } from '../ButtonsPreview';
 import { ButtonsModifySingleStep } from '../ButtonsModifySingleStep';
-
 import { FormStateType } from '../../type';
 import { FormPropsType, withForm } from '../../hoc/withForm';
+import { withBasicData } from '../../hoc/withBasicData';
 import { Props } from '../../CreateObjectives';
 
-export type FormModal = {
-  onClose: () => void;
-} & FormPropsType &
-  Props;
+export type FormModal = FormPropsType & Props;
 
 const FormModal: FC<FormModal> = ({
+  formElements,
   useSingleStep,
   onClose,
   defaultValues,
-  objectives,
-  timelineCode,
-  currentNumber,
+  currentPriorityIndex,
   components,
   formState,
+  setFormState,
   onSaveAsDraft,
   onSubmit,
   onPreview,
   onNext,
-  onBack,
+  onPrev,
+  onSelectStep,
+  lastStep,
 }) => {
   const { t } = useTranslation();
   const { css, matchMedia } = useStyle();
 
-  // @ts-ignore
-  const yepSchema: Record<string, any> = components
-    ?.filter((component) => component.type != 'text')
-    ?.reduce(createYupSchema(t), {});
+  const { schema, propertiesSchema } = useMemo(() => {
+    const propertiesSchema = Yup.object().shape(formElements.reduce(createYupSchema(t), {}));
+    const schema = Yup.object().shape({
+      data: Yup.array(
+        Yup.object().shape({
+          properties: propertiesSchema,
+        }),
+      ),
+    });
+    return { schema, propertiesSchema };
+  }, []);
+
   const methods = useFormWithCloseProtection({
     mode: 'onChange',
-    resolver: yupResolver<Yup.AnyObjectSchema>(Yup.object().shape(yepSchema)),
+    //@ts-ignore
+    resolver: yupResolver(schema),
     defaultValues,
   });
-  const {
-    handleSubmit,
-    formState: { isValid },
-  } = methods;
-  let paddingBottom = 0;
 
-  const { loading: reviewLoading, loaded: reviewLoaded } = useSelector(reviewsMetaSelector);
-  const { loading: schemaLoading } = useSelector(schemaMetaSelector);
-  const { loading: timelineLoading } = useSelector(timelinesMetaSelector());
+  const {
+    getValues,
+    handleSubmit,
+    formState: { isValid, isDirty },
+  } = methods;
+  const formValues = getValues();
+  const currentValue = formValues.data?.[currentPriorityIndex] || {};
+  const isCurrentValid = propertiesSchema.isValidSync(currentValue?.properties);
+  const canModify = currentValue?.status ? [Status.DECLINED, Status.DRAFT].includes(currentValue.status) : false;
+
+  const { loading: reviewLoading, loaded: reviewLoaded, error: reviewError } = useSelector(reviewsMetaSelector);
 
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
-  if (formState === FormStateType.MODIFY) {
-    paddingBottom = mobileScreen ? 138 : 90;
-  }
+  const paddingBottom = useMemo(() => {
+    if (formState === FormStateType.MODIFY) {
+      return mobileScreen ? 138 : 90;
+    }
+    return 0;
+  }, [formState, mobileScreen]);
 
-  if (formState === FormStateType.SUBMITTED && reviewLoaded) {
+  if (formState === FormStateType.SUBMITTED && reviewLoaded && !reviewError) {
     return (
       <SuccessModal
         title={t('priorities_sent', 'Priorities sent')}
@@ -84,9 +100,9 @@ const FormModal: FC<FormModal> = ({
   }
 
   return (
-    <FormWrapper onClose={onBack} paddingBottom={paddingBottom}>
-      {reviewLoading && schemaLoading && timelineLoading ? (
-        <FormWrapper onClose={onBack} paddingBottom={paddingBottom}>
+    <FormWrapper onClose={() => onPrev(isDirty)} paddingBottom={paddingBottom}>
+      {reviewLoading ? (
+        <FormWrapper onClose={() => onPrev(isDirty)} paddingBottom={paddingBottom}>
           <Spinner fullHeight />
         </FormWrapper>
       ) : (
@@ -99,54 +115,54 @@ const FormModal: FC<FormModal> = ({
                     <>
                       <FormModify
                         methods={methods}
-                        objectives={objectives}
-                        objective={defaultValues}
+                        defaultValues={defaultValues}
                         components={components}
-                        currentNumber={currentNumber}
+                        currentPriorityIndex={currentPriorityIndex}
+                        onSelectStep={onSelectStep}
                       />
                       <ButtonsModify
                         onClose={onClose}
                         readonly={false}
-                        currentNumber={currentNumber}
-                        timelineCode={timelineCode}
                         isValid={isValid}
-                        onSaveExit={handleSubmit(onSaveAsDraft)}
-                        onSubmit={handleSubmit(onPreview)}
-                        onNext={handleSubmit(onNext)}
+                        isStepValid={!lastStep && isCurrentValid}
+                        onSaveExit={() => onSaveAsDraft(formValues)}
+                        onSubmit={onPreview}
+                        onNext={() => onNext(formValues)}
                       />
                     </>
                   );
                 case FormStateType.SINGLE_MODIFY:
                   return (
                     <>
-                      <FormModify
-                        withStepper={!useSingleStep}
-                        methods={methods}
-                        objectives={objectives}
-                        objective={defaultValues}
-                        components={components}
-                        currentNumber={currentNumber}
-                      />
-                      <ButtonsModifySingleStep onClose={onClose} isValid={isValid} onSubmit={handleSubmit(onSubmit)} />
+                      {canModify ? (
+                        <>
+                          <FormModify
+                            withStepper={!useSingleStep}
+                            methods={methods}
+                            defaultValues={defaultValues}
+                            components={components}
+                            currentPriorityIndex={currentPriorityIndex}
+                          />
+                          <ButtonsModifySingleStep
+                            onClose={onClose}
+                            isValid={canModify && isCurrentValid}
+                            onSubmit={handleSubmit(onSubmit)}
+                          />
+                        </>
+                      ) : (
+                        <div>{t('priority_not_editable', 'Can not modify or priority not exist')}</div>
+                      )}
                     </>
                   );
                 case FormStateType.PREVIEW:
                   return (
                     <>
-                      <FormPreview methods={methods} objectives={objectives} components={components} />
-                      <ButtonsPreview onSubmit={onSubmit} onBack={onBack} />
+                      <FormPreview formValues={formValues} components={components} />
+                      <ButtonsPreview onSubmit={handleSubmit(onSubmit)} onBack={setFormState} />
                     </>
                   );
                 default:
-                  return (
-                    <FormModify
-                      methods={methods}
-                      objectives={objectives}
-                      objective={defaultValues}
-                      components={components}
-                      currentNumber={currentNumber}
-                    />
-                  );
+                  return <FormPreview formValues={formValues} components={components} />;
               }
             })()}
           </div>
@@ -158,4 +174,4 @@ const FormModal: FC<FormModal> = ({
 
 const formFieldsWrapperStyle: Rule = ({ theme }) => ({ padding: `0 0 ${theme.spacing.s5}` });
 
-export default withForm(FormModal);
+export default withBasicData(withForm(FormModal));

@@ -111,7 +111,13 @@ export const updateReviewsEpic: Epic = (action$, _, { api }) =>
       // @ts-ignore
       from(api.updateReviews(payload)).pipe(
         map(({ data }: any) => updateReviews.success({ data })),
-        catchError(({ errors }) => of(updateReviews.failure(errors))),
+        catchError((e) => {
+          const errors = e?.data?.errors;
+          return concatWithErrorToast(
+            of(updateReviews.failure(errors?.[0])),
+            errorPayloadConverter({ ...errors?.[0], title: 'Something went wrong' }),
+          );
+        }),
         takeUntil(action$.pipe(filter(isActionOf(updateReviews.cancel)))),
       ),
     ),

@@ -1,23 +1,32 @@
 import React, { FC } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 import { useStyle } from '@pma/dex-wrapper';
+
 import { useTranslation } from 'components/Translation';
+import DynamicForm from 'components/DynamicForm';
 import { TriggerModal } from 'features/general/Modal';
+
 import { HelpTrigger, HelperModal } from '../Helper';
 import Stepper from '../Stepper/Stepper';
-import { Objective } from '../../type';
-import DynamicForm from '../../../../../components/DynamicForm';
+import { FormValues } from '../../type';
 
 type Props = {
   components: any[];
-  currentNumber: number;
-  objective: Objective;
-  objectives: Objective[];
+  defaultValues: FormValues;
+  currentPriorityIndex: number;
   methods: UseFormReturn;
   withStepper?: boolean;
+  onSelectStep?: (T) => void;
 };
 
-const Modify: FC<Props> = ({ components, objective, objectives, methods, currentNumber, withStepper = true }) => {
+const Modify: FC<Props> = ({
+  components,
+  methods,
+  defaultValues,
+  currentPriorityIndex,
+  withStepper = true,
+  onSelectStep,
+}) => {
   const { css, theme } = useStyle();
   const { t } = useTranslation();
   const {
@@ -25,23 +34,24 @@ const Modify: FC<Props> = ({ components, objective, objectives, methods, current
     setValue,
     formState: { errors },
   } = methods;
-  const steps = objectives.map((objectives) =>
-    t('objective_number', `Priority ${objectives.number}`, { ns: 'bank', number: objectives.number }),
-  );
-  const currentObjectiveIndex = objectives.findIndex((objective) => objective.number === currentNumber);
-  if (!steps[currentObjectiveIndex]) {
-    steps[steps.length] = t('objective_number', `Priority ${currentNumber}`, { ns: 'bank', number: currentNumber });
-  }
+  const formValues = getValues();
+  const steps = defaultValues.data?.map((objective) => objective.number) || [];
 
   return (
     <>
-      {withStepper && <Stepper steps={steps} step={currentNumber} />}
+      {withStepper && <Stepper steps={steps} step={currentPriorityIndex} onSelectStep={onSelectStep} />}
       <div className={css({ padding: `${theme.spacing.s5} 0 ${theme.spacing.s5}`, display: 'flex' })}>
         <TriggerModal triggerComponent={<HelpTrigger />} title={t('completing_your_review', 'Completing your review')}>
           <HelperModal />
         </TriggerModal>
       </div>
-      <DynamicForm components={components} errors={errors} formValues={objective} setValue={setValue} />
+      <DynamicForm
+        components={components}
+        errors={errors}
+        formValues={formValues}
+        setValue={setValue}
+        prefixKey={`data.${currentPriorityIndex}.properties.`}
+      />
     </>
   );
 };

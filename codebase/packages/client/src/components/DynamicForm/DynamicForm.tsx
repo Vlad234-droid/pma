@@ -25,6 +25,7 @@ const DynamicForm: FC<Props> = ({ components, formValues, setValue, errors, pref
       {components.map((component) => {
         const { id, key = '', label = '', text = '', description, type, validate, values = [] } = component;
         const value = get(formValues, `${prefixKey}${key}`);
+        const error = get(errors, `${prefixKey}${key}.message`);
 
         if (type === FormType.TEXT) {
           return (
@@ -45,7 +46,7 @@ const DynamicForm: FC<Props> = ({ components, formValues, setValue, errors, pref
               Wrapper={Item}
               setValue={setValue}
               value={value}
-              error={errors?.[`${prefixKey}${key}`]?.message}
+              error={error}
               placeholder={description}
             />
           );
@@ -60,7 +61,7 @@ const DynamicForm: FC<Props> = ({ components, formValues, setValue, errors, pref
               Wrapper={Item}
               setValue={setValue}
               value={value}
-              error={errors?.[`${prefixKey}${key}`]?.message}
+              error={error}
               placeholder={description}
             />
           );
@@ -79,7 +80,7 @@ const DynamicForm: FC<Props> = ({ components, formValues, setValue, errors, pref
               )}
               setValue={setValue}
               value={value}
-              error={errors?.[`${prefixKey}${key}`]?.message}
+              error={error}
               placeholder={description || t('please_select', 'Please select')}
               options={values}
             />

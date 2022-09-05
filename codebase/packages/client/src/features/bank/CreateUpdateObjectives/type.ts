@@ -1,17 +1,13 @@
-import { ReviewType, Status } from 'config/enum';
+import { Review } from 'config/types';
 
-export type Objective = {
-  number?: number;
-  properties?: any;
-  status?: Status;
-  tlPointUuid?: string;
-  type?: ReviewType.OBJECTIVE;
-  uuid?: string;
-};
+export type FormValues = Record<string | 'data', Objective[] | undefined>;
+
+export type Objective = Partial<Review>;
 
 export enum FormStateType {
   MODIFY = 'MODIFY',
   SINGLE_MODIFY = 'SINGLE_MODIFY',
   PREVIEW = 'PREVIEW',
   SUBMITTED = 'SUBMITTED',
+  SAVED_AS_DRAFT = 'SAVED_AS_DRAFT',
 }

@@ -1,10 +1,13 @@
 import React, { FC } from 'react';
 import { useStyle, Button, Rule, CreateRule } from '@pma/dex-wrapper';
+
 import { Trans, useTranslation } from 'components/Translation';
 import { ButtonWithConfirmation } from 'features/general/Modal';
 
+import { FormStateType } from '../../type';
+
 type ButtonsProps = {
-  onBack: () => void;
+  onBack: (state: FormStateType) => void;
   onSubmit: (T?) => void;
 };
 
@@ -12,12 +15,15 @@ const Buttons: FC<ButtonsProps> = ({ onSubmit, onBack }) => {
   const { css, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const { t } = useTranslation();
+  const handleBack = () => {
+    onBack(FormStateType.MODIFY);
+  };
 
   return (
     <div className={css(containerStyle)}>
       <div className={css(wrapperStyle)}>
         <div className={css(buttonWrapperStyle({ mobileScreen }))}>
-          <Button onPress={onBack} styles={[buttonWhiteStyle]}>
+          <Button onPress={handleBack} styles={[buttonWhiteStyle]}>
             <Trans i18nKey='back'>Back</Trans>
           </Button>
           <ButtonWithConfirmation

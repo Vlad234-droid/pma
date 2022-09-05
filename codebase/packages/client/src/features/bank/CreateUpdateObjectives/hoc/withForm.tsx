@@ -1,6 +1,5 @@
-import React, { Dispatch, SetStateAction, useEffect, useState, useMemo } from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 
 import {
   colleagueUUIDSelector,
@@ -9,48 +8,44 @@ import {
   getReviewSchema,
   getTimelinesByReviewTypeSelector,
   ReviewsActions,
-  reviewsMetaSelector,
-  SchemaActions,
-  schemaMetaSelector,
-  TimelineActions,
-  timelinesMetaSelector,
 } from '@pma/store';
 
-import { Page } from 'pages';
 import { ReviewType, Status } from 'config/enum';
 import useDispatch from 'hooks/useDispatch';
 import { Timeline } from 'config/types';
 import { USER } from 'config/constants';
 
-import Spinner from 'components/Spinner';
-
-import { FormStateType, Objective } from '../type';
+import { FormStateType, Objective, FormValues } from '../type';
 import { Props } from '../CreateObjectives';
 
+import { prioritiesInStatuses, prioritiesNotInStatuses } from '../utils';
+
 export type FormPropsType = {
-  currentNumber: number;
-  timelineCode: string;
-  defaultValues: Record<string, any>;
+  formElements: Array<any>;
+  currentPriorityIndex: number;
+  defaultValues: FormValues;
   components: Component[];
-  objectives: Objective[];
   formState: FormStateType;
   setFormState: Dispatch<SetStateAction<FormStateType>>;
   onSaveAsDraft: (T) => void;
-  onSubmit: (T?) => void;
-  onPreview: (T) => void;
+  onSubmit: (T) => void;
+  onPreview: () => void;
   onNext: (T) => void;
-  onBack: () => void;
+  onPrev: (withConfirmation: boolean) => void;
+  onSelectStep: (index: number) => void;
+  lastStep: boolean;
 };
 
-export function withForm<P extends Props>(WrappedComponent: React.ComponentType<P & FormPropsType>) {
+export function withForm<
+  P extends Props & { formState: FormStateType; setFormState: Dispatch<SetStateAction<FormStateType>> },
+>(WrappedComponent: React.ComponentType<P & FormPropsType>) {
   const Component = (props: P) => {
-    const { editNumber, useSingleStep, onClose } = props;
+    const { editNumber, useSingleStep, onClose, formState, setFormState } = props;
     const dispatch = useDispatch();
-    const navigate = useNavigate();
-    const { loading: schemaLoading } = useSelector(schemaMetaSelector);
-    const { loading: reviewLoading, loaded: reviewLoaded } = useSelector(reviewsMetaSelector);
-    const { loading: timelineLoading } = useSelector(timelinesMetaSelector());
+    const [currentPriorityIndex, setPriorityIndex] = useState<number>(0);
+
     const colleagueUuid = useSelector(colleagueUUIDSelector);
+
     const timelinePoints: Timeline[] =
       useSelector(getTimelinesByReviewTypeSelector(ReviewType.QUARTER, USER.current)) || [];
 
@@ -59,7 +54,7 @@ export function withForm<P extends Props>(WrappedComponent: React.ComponentType<
     );
 
     const timelinePoint: Timeline = visibleTimelinePoints.find(
-      (timelinePoint) => timelinePoint.status === Status.STARTED, // todo not handle overdue
+      (timelinePoint) => timelinePoint.status === Status.STARTED,
     ) as Timeline;
 
     const schema = useSelector(getReviewSchema(timelinePoint?.code));
@@ -67,167 +62,141 @@ export function withForm<P extends Props>(WrappedComponent: React.ComponentType<
     const { components = [] as Component[], markup = { max: 1, min: 15 } } = schema;
     const objectives: Objective[] = useSelector(filterReviewsByTypeSelector(ReviewType.QUARTER)) || [];
 
-    const startFromNumber = objectives?.length < markup.max ? objectives?.length + 1 : objectives?.length;
+    const { number: lastCreatedNumber = 0 } = useMemo(
+      () => (objectives.length ? objectives[objectives.length - 1] : {}),
+      [objectives],
+    );
 
-    const [currentNumber, setNumber] = useState<number>(startFromNumber);
+    const prioritiesInStatusDraft = prioritiesInStatuses([Status.DRAFT])(objectives);
+    const prioritiesNotInStatusDraft = prioritiesNotInStatuses([Status.DRAFT])(objectives);
 
-    const [defaultValues, setDefaultValues] = useState<Objective>({});
+    const minCreatePrioritiesIndex = 0;
+    const maxCreatePrioritiesIndex: number = Number(markup.max) - Number(prioritiesNotInStatusDraft.length) - 1;
 
-    const defaultFormState = useMemo(() => {
-      if (useSingleStep) {
-        return FormStateType.SINGLE_MODIFY;
+    const formElements: Array<any> = components.filter((component) => component.type != 'text');
+
+    const saveDraftData = (priority: Objective) => {
+      if (!priority?.uuid) {
+        dispatch(
+          ReviewsActions.createReview({
+            pathParams: { ...pathParams, number: priority.number },
+            data: [{ number: priority.number, properties: priority.properties, status: Status.DRAFT }],
+          }),
+        );
+      } else {
+        dispatch(
+          ReviewsActions.updateReview({
+            pathParams: { ...pathParams, number: priority.number },
+            data: [{ number: priority.number, properties: priority.properties, status: Status.DRAFT }],
+          }),
+        );
       }
-      return objectives.length < markup.max ? FormStateType.MODIFY : FormStateType.PREVIEW;
-    }, [objectives, markup, useSingleStep]);
-    const [formState, setFormState] = useState<FormStateType>(defaultFormState);
+    };
 
-    const formElementsFilledEmpty = components
-      ?.filter((component) => component.type != 'text')
-      .reduce((acc, current) => {
-        if (current.key) {
-          acc[current.key] = '';
+    const saveData = (priorities: Objective[]) => {
+      if (useSingleStep && editNumber) {
+        const [priority] = priorities;
+        if (priority.number === editNumber) {
+          dispatch(
+            ReviewsActions.updateReview({
+              pathParams: { ...pathParams, number: priority.number },
+              data: [{ number: priority.number, properties: priority.properties, status: Status.WAITING_FOR_APPROVAL }],
+            }),
+          );
+          setFormState(FormStateType.SUBMITTED);
         }
+      } else {
+        dispatch(
+          ReviewsActions.updateReviews({
+            pathParams: { ...pathParams },
+            queryParams: { modes: ['CREATE', 'UPDATE'] },
+            data: priorities.map((priority) => ({ ...priority, status: Status.WAITING_FOR_APPROVAL })),
+          }),
+        );
+        setFormState(FormStateType.SUBMITTED);
+      }
+    };
+
+    const handleSaveAsDraft = (data: FormValues) => {
+      if (data.data?.length) saveDraftData(data.data[currentPriorityIndex]);
+      setFormState(FormStateType.SAVED_AS_DRAFT);
+    };
+
+    const handleNext = (data: FormValues) => {
+      if (data.data?.length) saveDraftData(data.data[currentPriorityIndex]);
+      setPriorityIndex((current) => Math.min(++current, maxCreatePrioritiesIndex));
+    };
+    const handlePrev = (withConfirmation) => {
+      if (currentPriorityIndex === 0 && withConfirmation) {
+        if (confirm('Changes that you made may not be saved.')) onClose();
+      } else if (currentPriorityIndex === 0) {
+        onClose();
+      } else {
+        setPriorityIndex((current) => Math.max(--current, 0));
+      }
+    };
+
+    const handleSubmit = (data: FormValues) => {
+      if (data.data?.length) saveData(data.data);
+    };
+
+    const handlePreview = () => setFormState(FormStateType.PREVIEW);
+
+    const handleSelectStep = (index: number) => setPriorityIndex(index);
+
+    useEffect(() => {
+      if (!useSingleStep && minCreatePrioritiesIndex < maxCreatePrioritiesIndex) {
+        setPriorityIndex(prioritiesInStatusDraft.length);
+      }
+      if (!useSingleStep && minCreatePrioritiesIndex === maxCreatePrioritiesIndex) {
+        setPriorityIndex(Math.max(prioritiesInStatusDraft.length - 1, 0));
+      }
+    }, []);
+
+    const defaultValues = useMemo(() => {
+      const emptyProperties = formElements.reduce((acc, current) => {
+        acc[current.key] = '';
         return acc;
       }, {});
 
-    const handleSaveAsDraft = (data) => {
-      const currentObjectiveIndex = objectives.findIndex((objective) => objective.number === currentNumber);
-      if (!objectives[currentObjectiveIndex]) {
-        dispatch(
-          ReviewsActions.createReview({
-            pathParams: { ...pathParams, number: currentNumber },
-            data: [{ number: currentNumber, properties: data, status: Status.DRAFT }],
-          }),
-        );
-      } else {
-        dispatch(
-          ReviewsActions.updateReview({
-            pathParams: { ...pathParams, number: currentNumber },
-            data: [{ number: currentNumber, properties: data, status: Status.DRAFT }],
-          }),
-        );
-      }
+      if (!useSingleStep) {
+        const defaultPriorities = prioritiesInStatusDraft.map((priority) => ({
+          uuid: priority.uuid,
+          number: priority.number,
+          properties: priority.properties,
+        }));
 
-      onClose();
-    };
-
-    const handleNext = (data) => {
-      const currentObjectiveIndex = objectives.findIndex((objective) => objective.number === currentNumber);
-      if (!objectives[currentObjectiveIndex]) {
-        dispatch(
-          ReviewsActions.createReview({
-            pathParams: { ...pathParams, number: currentNumber },
-            data: [{ number: currentNumber, properties: data, status: Status.DRAFT }],
-          }),
-        );
-      } else {
-        dispatch(
-          ReviewsActions.updateReview({
-            pathParams: { ...pathParams, number: currentNumber },
-            data: [{ number: currentNumber, properties: data, status: Status.DRAFT }],
-          }),
-        );
-      }
-      const nextNumber = currentNumber + 1;
-      setNumber(nextNumber);
-      const currentObjective = objectives.find((objective) => objective.number === nextNumber);
-      setDefaultValues(currentObjective?.properties || formElementsFilledEmpty);
-    };
-
-    const handleSubmit = (data) => {
-      if (useSingleStep && editNumber) {
-        dispatch(
-          ReviewsActions.updateReview({
-            pathParams: { ...pathParams, number: editNumber },
-            data: [{ number: editNumber, properties: data, status: Status.WAITING_FOR_APPROVAL }],
-          }),
-        );
-      } else {
-        const updatedObjectives = objectives.map((objective) => {
-          if (currentNumber === Number(objective.number)) {
-            return {
-              ...objective,
-              status: Status.WAITING_FOR_APPROVAL,
-            };
-          }
-          return { ...objective, status: Status.WAITING_FOR_APPROVAL };
-        });
-        dispatch(ReviewsActions.updateReviews({ pathParams, data: updatedObjectives }));
-      }
-
-      setFormState(FormStateType.SUBMITTED);
-    };
-
-    const handlePreview = (data) => {
-      const currentObjectiveIndex = objectives.findIndex((objective) => objective.number === currentNumber);
-      if (!objectives[currentObjectiveIndex]) {
-        objectives[objectives.length] = { number: currentNumber, status: Status.DRAFT };
-      }
-      const updatedObjectives = objectives.map((objective) => {
-        if (currentNumber === Number(objective.number)) {
-          return {
-            ...objective,
-            status: Status.DRAFT,
-            properties: { ...data },
-          };
+        if (minCreatePrioritiesIndex <= maxCreatePrioritiesIndex) {
+          defaultPriorities.push({
+            uuid: undefined,
+            number: lastCreatedNumber + 1,
+            properties: emptyProperties,
+          });
         }
-        return { ...objective, status: Status.DRAFT };
-      });
 
-      dispatch(ReviewsActions.updateReviews({ pathParams, data: updatedObjectives }));
-      setFormState(FormStateType.PREVIEW);
-    };
-
-    const handleBack = () => {
-      if (formState !== FormStateType.MODIFY) {
-        setFormState(FormStateType.MODIFY);
-        setNumber(objectives?.length);
-      } else if (currentNumber > 1) {
-        const prevNumber = currentNumber - 1;
-        setNumber(prevNumber);
-        const currentObjective = objectives.find((objective) => objective.number === prevNumber);
-        setDefaultValues(currentObjective?.properties || formElementsFilledEmpty);
+        return defaultPriorities;
+      } else if (useSingleStep && editNumber) {
+        const objective = objectives.find((objective) => objective.number === editNumber) || {};
+        return [objective];
       }
-    };
-
-    useEffect(() => {
-      dispatch(ReviewsActions.getReviews({ pathParams }));
-      dispatch(SchemaActions.getSchema({ colleagueUuid }));
-      dispatch(TimelineActions.getTimeline({ colleagueUuid }));
-    }, []);
-
-    useEffect(() => {
-      if (useSingleStep && editNumber) {
-        setNumber(editNumber);
-        const currentObjective = objectives.find((objective) => objective.number === editNumber);
-        setDefaultValues(currentObjective?.properties || formElementsFilledEmpty);
-        if (reviewLoaded && !currentObjective?.properties) {
-          navigate(`/${Page.NOT_FOUND}`);
-        }
-      } else {
-        setNumber(startFromNumber);
-        const currentObjective = objectives.find((objective) => objective.number === startFromNumber);
-        setDefaultValues(currentObjective?.properties || formElementsFilledEmpty);
-      }
-    }, [startFromNumber]);
-
-    if (schemaLoading || reviewLoading || timelineLoading) return <Spinner fullHeight />;
+    }, [prioritiesInStatusDraft]);
 
     return (
       <WrappedComponent
         {...props}
-        defaultValues={defaultValues}
-        timelineCode={timelinePoint?.code}
-        currentNumber={currentNumber}
+        lastStep={maxCreatePrioritiesIndex === currentPriorityIndex}
+        formElements={formElements}
+        defaultValues={{ data: defaultValues }}
+        currentPriorityIndex={currentPriorityIndex}
         components={components}
-        objectives={objectives}
         formState={formState}
         setFormState={setFormState}
         onSaveAsDraft={handleSaveAsDraft}
         onSubmit={handleSubmit}
         onPreview={handlePreview}
         onNext={handleNext}
-        onBack={handleBack}
+        onPrev={handlePrev}
+        onSelectStep={handleSelectStep}
       />
     );
   };

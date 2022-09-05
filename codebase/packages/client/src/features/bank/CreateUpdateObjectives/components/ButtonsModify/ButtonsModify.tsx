@@ -1,37 +1,23 @@
 import React, { FC } from 'react';
 import { useStyle, Button, Rule, CreateRule } from '@pma/dex-wrapper';
 import { Trans } from 'components/Translation';
-import { useSelector } from 'react-redux';
-import { getReviewSchema } from '@pma/store';
 import { IconButton, Position } from 'components/IconButton';
 
 type ButtonsProps = {
-  currentNumber: number;
-  timelineCode: string;
   readonly: boolean;
   isValid: boolean;
+  isStepValid: boolean;
   onClose: () => void;
   onSaveExit: (T) => void;
-  onSubmit: (T) => void;
+  onSubmit: () => void;
   onNext: (T) => void;
 };
 
-const Buttons: FC<ButtonsProps> = ({
-  readonly,
-  isValid,
-  onClose,
-  onSaveExit,
-  onSubmit,
-  onNext,
-  currentNumber,
-  timelineCode,
-}) => {
+const Buttons: FC<ButtonsProps> = ({ readonly, isValid, isStepValid, onClose, onSaveExit, onSubmit, onNext }) => {
   const { css, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
-  const schema = useSelector(getReviewSchema(timelineCode));
-  const { markup = { max: 0, min: 0 } } = schema;
 
-  const isDisabledSaveAndAdd = !isValid || markup.max <= currentNumber;
+  const isDisabledSaveAndAdd = !isStepValid;
 
   return (
     <div className={css(containerStyle)}>

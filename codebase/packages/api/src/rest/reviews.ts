@@ -1,3 +1,4 @@
+import qs from 'qs';
 import httpClient from '../config/client';
 
 export const getReviews = (params: any = {}) => {
@@ -50,6 +51,7 @@ export const updateReview = (params: any = {}) => {
 export const updateReviews = (params: any = {}) => {
   const {
     pathParams: { colleagueUuid = '', code, cycleUuid = 'CURRENT' },
+    queryParams = {},
     data,
     files,
     metadata,
@@ -68,7 +70,12 @@ export const updateReviews = (params: any = {}) => {
     formData.append('uploadMetadata', uploadMetadata);
   }
 
-  return httpClient.put(uri, formData);
+  return httpClient.put(uri, formData, {
+    params: queryParams,
+    paramsSerializer: (params) => {
+      return qs.stringify(params, { arrayFormat: 'repeat' });
+    },
+  });
 };
 
 export const deleteReview = (params: any = {}) => {
