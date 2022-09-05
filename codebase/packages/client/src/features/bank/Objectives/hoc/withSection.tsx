@@ -16,10 +16,13 @@ import useDispatch from 'hooks/useDispatch';
 import { Review, ReviewType, Status, Timeline } from 'config/types';
 import { useSelector } from 'react-redux';
 import { USER } from 'config/constants';
+import { ConfirmModal } from 'components/ConfirmModal';
+import { Trans, useTranslation } from 'components/Translation';
 
 export type PropsType = {
   objectives: ObjectiveTypes.Objective[];
-  handleCompletion: (T) => void;
+  handleCompletion: (number: number) => void;
+  handleDelete: (number: number) => void;
   handleSelectTimelinePoint: (T) => void;
   timelinePoints: Timeline[];
   activeTimelinePoints?: Timeline;
@@ -28,6 +31,8 @@ export type PropsType = {
 export function withSection<P>(WrappedComponent: React.ComponentType<P & PropsType>) {
   const Component = (props: P) => {
     const dispatch = useDispatch();
+    const { t } = useTranslation();
+    const [removedPriority, setPriority] = useState<string>('');
 
     const { loaded: schemaLoaded } = useSelector(schemaMetaSelector);
     const { loaded: timelineLoaded } = useSelector(timelinesMetaSelector());
@@ -80,6 +85,18 @@ export function withSection<P>(WrappedComponent: React.ComponentType<P & PropsTy
       );
     };
 
+    const handleDelete = (number) => {
+      const pathParams = { colleagueUuid, code: timelinePoint?.code, cycleUuid: 'CURRENT' };
+      dispatch(
+        ReviewsActions.deleteReview({
+          pathParams: { ...pathParams, number },
+        }),
+      );
+      const objective = objectives.find((objective) => objective.id == number);
+      setPriority(objective?.subTitle || number);
+    };
+    const handleClearRemovedPriority = () => setPriority('');
+
     useEffect(() => {
       if (canShowObjectives) {
         dispatch(ReviewsActions.getReviewsWithNotes({ pathParams: { colleagueUuid, cycleUuid: 'CURRENT' } }));
@@ -102,14 +119,28 @@ export function withSection<P>(WrappedComponent: React.ComponentType<P & PropsTy
     }, [reviewLoaded, schemaLoaded, timelineLoaded, notesLoaded]);
 
     return (
-      <WrappedComponent
-        {...props}
-        objectives={objectives}
-        handleCompletion={handleCompletion}
-        handleSelectTimelinePoint={handleSelectTimelinePoint}
-        timelinePoints={visibleTimelinePoints}
-        activeTimelinePoints={selectedTimelinePoint}
-      />
+      <>
+        <WrappedComponent
+          {...props}
+          objectives={objectives}
+          handleCompletion={handleCompletion}
+          handleDelete={handleDelete}
+          handleSelectTimelinePoint={handleSelectTimelinePoint}
+          timelinePoints={visibleTimelinePoints}
+          activeTimelinePoints={selectedTimelinePoint}
+        />
+        {removedPriority && reviewLoaded && (
+          <ConfirmModal
+            title={t('priority_deleted', 'Priority deleted')}
+            description={removedPriority}
+            visibleCancelBtn={false}
+            onSave={handleClearRemovedPriority}
+            submitBtnTitle={<Trans i18nKey='ok'>Ok</Trans>}
+            onCancel={handleClearRemovedPriority}
+            onOverlayClick={handleClearRemovedPriority}
+          />
+        )}
+      </>
     );
   };
   return Component;

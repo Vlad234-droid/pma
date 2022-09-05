@@ -20,6 +20,7 @@ const Objectives: FC<PropsType> = ({
   timelinePoints,
   activeTimelinePoints,
   handleCompletion,
+  handleDelete,
 }) => {
   const { css } = useStyle();
   const { loading: reviewLoading } = useSelector(reviewsMetaSelector);
@@ -66,7 +67,12 @@ const Objectives: FC<PropsType> = ({
           <Spinner fullHeight />
         ) : objectives.length ? (
           <>
-            <Accordion handleCompletion={handleCompletion} objectives={objectives} canShowStatus={true} />
+            <Accordion
+              handleCompletion={handleCompletion}
+              handleDelete={handleDelete}
+              objectives={objectives}
+              canShowStatus={true}
+            />
             <AddNoteButton objectives={objectives} activeTimelinePoints={activeTimelinePoints} />
           </>
         ) : (
