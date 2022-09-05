@@ -145,15 +145,16 @@ export const updateReviewStatusEpic: Epic = (action$, _, { api }) => {
     switchMap(({ payload }: any) => {
       // @ts-ignore
       return from(api.updateReviewStatus(payload)).pipe(
-        mergeMap(() =>
-          from([
-            getManagerReviews.request({ colleagueUuid: payload.pathParams.approverUuid }),
-            updateReviewStatus.success({ ...payload }),
+        mergeMap(() => {
+          const { approverUuid, colleagueUuid, cycleUuid } = payload.pathParams;
+          return from([
+            getManagerReviews.request({ colleagueUuid: approverUuid }),
+            updateReviewStatus.success(payload),
             getReviews.request({
-              pathParams: { colleagueUuid: payload.pathParams.colleagueUuid, cycleUuid: payload.pathParams.cycleUuid },
+              pathParams: { colleagueUuid, cycleUuid },
             }),
-          ]),
-        ),
+          ]);
+        }),
         catchError((e) => {
           const data = e?.data;
           return concatWithErrorToast(

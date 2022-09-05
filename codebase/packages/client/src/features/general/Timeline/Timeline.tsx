@@ -1,10 +1,11 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import {
   getTimelineMetaSelector,
   getTimelineSelector,
   timelineTypesAvailabilitySelector,
   userCycleTypeSelector,
+  TimelineActions,
 } from '@pma/store';
 import { Rule, useStyle } from '@pma/dex-wrapper';
 
@@ -12,10 +13,12 @@ import { StepIndicator } from 'components/StepIndicator/StepIndicator';
 import { useTranslation } from 'components/Translation';
 import Spinner from 'components/Spinner';
 import { CycleType, ReviewType } from 'config/enum';
+import useDispatch from 'hooks/useDispatch';
 
 const Timeline: FC<{ colleagueUuid: string }> = ({ colleagueUuid }) => {
   const { t } = useTranslation();
   const { css } = useStyle();
+  const dispatch = useDispatch();
   const { loading } = useSelector(getTimelineMetaSelector);
   const { descriptions, startDates, summaryStatuses, types } = useSelector(getTimelineSelector(colleagueUuid)) || {};
   const timelineTypes = useSelector(timelineTypesAvailabilitySelector(colleagueUuid)) || {};
@@ -28,6 +31,10 @@ const Timeline: FC<{ colleagueUuid: string }> = ({ colleagueUuid }) => {
     !timelineTypes[ReviewType.QUARTER];
 
   if (isEYRTimeline || cycleType === CycleType.HIRING) return null;
+
+  useEffect(() => {
+    dispatch(TimelineActions.getTimeline({ colleagueUuid }));
+  }, []);
 
   return (
     <div className={css(timelineWrapperStyles)}>
