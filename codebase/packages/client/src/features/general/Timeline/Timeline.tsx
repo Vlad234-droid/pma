@@ -5,11 +5,13 @@ import {
   timelineTypesAvailabilitySelector,
   userCycleTypeSelector,
   TimelineActions,
+  getTimelineMetaSelector,
 } from '@pma/store';
 import { Rule, useStyle } from '@pma/dex-wrapper';
 
 import { StepIndicator } from 'components/StepIndicator/StepIndicator';
 import { useTranslation } from 'components/Translation';
+import Spinner from 'components/Spinner';
 
 import { CycleType, ReviewType } from 'config/enum';
 import useDispatch from 'hooks/useDispatch';
@@ -18,6 +20,7 @@ const Timeline: FC<{ colleagueUuid: string }> = ({ colleagueUuid }) => {
   const { t } = useTranslation();
   const { css } = useStyle();
   const dispatch = useDispatch();
+  const { loading } = useSelector(getTimelineMetaSelector);
   const { descriptions, startDates, summaryStatuses, types } = useSelector(getTimelineSelector(colleagueUuid)) || {};
   const timelineTypes = useSelector(timelineTypesAvailabilitySelector(colleagueUuid)) || {};
   const cycleType = useSelector(userCycleTypeSelector);
@@ -36,13 +39,17 @@ const Timeline: FC<{ colleagueUuid: string }> = ({ colleagueUuid }) => {
 
   return (
     <div className={css(timelineWrapperStyles)}>
-      <StepIndicator
-        mainTitle={t('performance_timeline_title', 'Your Contribution timeline')}
-        titles={descriptions}
-        descriptions={startDates}
-        statuses={summaryStatuses}
-        types={types}
-      />
+      {loading ? (
+        <Spinner />
+      ) : (
+        <StepIndicator
+          mainTitle={t('performance_timeline_title', 'Your Contribution timeline')}
+          titles={descriptions}
+          descriptions={startDates}
+          statuses={summaryStatuses}
+          types={types}
+        />
+      )}
     </div>
   );
 };

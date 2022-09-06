@@ -10,7 +10,6 @@ import { tenant as T, useTenant } from 'features/general/Permission';
 import { ShareWidget } from 'features/general/ShareWidget';
 import { buildPath } from 'features/general/Routes';
 import { Page } from 'pages/general/types';
-import Spinner from 'components/Spinner';
 
 export const TEST_ID = 'objectives-pave';
 
@@ -75,7 +74,7 @@ const ObjectivesPage: FC = () => {
       <div>{loading ? null : <CreateButton withIcon />}</div>
       <div className={css(bodyBlockStyles({ mobileScreen }))}>
         <div className={css(bodyWrapperStyles)}>
-          {loading ? <Spinner /> : <Timeline colleagueUuid={colleagueUuid} />}
+          <Timeline colleagueUuid={colleagueUuid} />
           <Objectives />
           <ReviewsSection colleagueUuid={colleagueUuid} />
           <CompletedReviewsSection />
