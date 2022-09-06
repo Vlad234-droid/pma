@@ -105,22 +105,13 @@ const CreateUpdateObjectives: FC<Props> = ({ onClose, editNumber, useSingleStep,
   };
 
   const buildData = (data: Array<Record<'properties' | 'number', any>>, status: Status) => {
-    return data.map(({ properties, number }) => ({ properties, status, number }));
+    return data.map(({ properties, number }, idx) => ({ properties, status, number: number || idx + 1 }));
   };
 
-  const saveDraftData = (data: Array<any>, number: number) => {
+  const saveDraftData = (data: Array<any>) => {
     dispatch(
-      ReviewsActions.createReview({
-        pathParams: { ...pathParams, number },
-        data,
-      }),
-    );
-  };
-
-  const updateDraftData = (data: Array<any>, number: number) => {
-    dispatch(
-      ReviewsActions.updateReview({
-        pathParams: { ...pathParams, number },
+      ReviewsActions.updateReviews({
+        pathParams,
         data,
       }),
     );
@@ -151,15 +142,7 @@ const CreateUpdateObjectives: FC<Props> = ({ onClose, editNumber, useSingleStep,
   };
 
   const handleSaveDraft = (data: Array<any>) => {
-    data.forEach((objective, idx) => {
-      const { number, ...rest } = objective;
-      if (number) {
-        updateDraftData([{ ...rest, status: Status.DRAFT }], number);
-      } else {
-        saveDraftData([{ ...rest, status: Status.DRAFT }], idx + 1);
-      }
-    });
-    setTimeout(onClose, 300);
+    saveDraftData(buildData(data, Status.DRAFT));
   };
 
   useEffect(() => {
