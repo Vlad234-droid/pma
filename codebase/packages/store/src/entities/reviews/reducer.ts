@@ -12,12 +12,13 @@ import {
   updateReviewsState,
   getReviewByUuid,
   updateRatingReview,
+  updateReviewMeta,
 } from './actions';
 
 export const initialState = {
   data: [],
   colleagueReviews: {},
-  meta: { loading: false, loaded: false, error: null, status: null, updating: false, updated: false },
+  meta: { loading: false, loaded: false, error: null, status: null, saving: false, saved: false },
 };
 
 export default createReducer(initialState)
@@ -92,24 +93,28 @@ export default createReducer(initialState)
   .handleAction(createReview.request, (state) => {
     return {
       ...state,
-      meta: { ...state.meta, loading: true, error: null, loaded: false },
+      meta: { ...state.meta, error: null, saving: true, saved: false },
     };
   })
   .handleAction(createReview.success, (state, { payload }) => ({
     ...state,
     data: [...state.data, payload],
-    meta: { ...state.meta, loading: false, loaded: true },
+    meta: { ...state.meta, saving: false, saved: true },
   }))
   .handleAction(updateReview.request, (state) => {
     return {
       ...state,
-      meta: { ...state.meta, loading: true, error: null, loaded: false },
+      meta: { ...state.meta, error: null, loaded: false, saving: true, saved: false },
     };
   })
   .handleAction(updateReview.success, (state, { payload }) => ({
     ...state,
     data: state.data.map((review) => (review.uuid === payload.uuid ? payload : review)),
-    meta: { ...state.meta, loading: false, loaded: true },
+    meta: { ...state.meta, saving: false, saved: true },
+  }))
+  .handleAction(updateReviews.request, (state) => ({
+    ...state,
+    meta: { ...state.meta, saving: true, saved: false },
   }))
   .handleAction(updateReviews.request, (state) => {
     return {
@@ -120,7 +125,7 @@ export default createReducer(initialState)
   .handleAction(updateReviews.success, (state, { payload }) => ({
     ...state,
     ...payload,
-    meta: { ...state.meta, loading: false, loaded: true },
+    meta: { ...state.meta, saving: false, saved: true },
   }))
   .handleAction(updateReviews.failure, (state, { payload }) => ({
     ...state,
@@ -155,5 +160,9 @@ export default createReducer(initialState)
     ...state,
     ...payload,
     meta: { ...state.meta, loading: false, loaded: true, updating: false, updated: true },
+  }))
+  .handleAction(updateReviewMeta, (state, { payload }) => ({
+    ...state,
+    meta: { ...state.meta, ...payload },
   }))
   .handleAction(clearReviewData, () => initialState);

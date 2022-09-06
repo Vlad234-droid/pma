@@ -33,7 +33,7 @@ const CreateUpdateObjectives: FC<Props> = ({ onClose, editNumber, useSingleStep,
   const { t } = useTranslation();
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const { loaded: schemaLoaded, loading: schemaLoading } = useSelector(schemaMetaSelector);
-  const { loaded: reviewLoaded, loading: reviewLoading } = useSelector(reviewsMetaSelector);
+  const { loaded: reviewLoaded, loading: reviewLoading, saving, saved } = useSelector(reviewsMetaSelector);
 
   const pathParams = { colleagueUuid, code: 'OBJECTIVE', cycleUuid: 'CURRENT' };
   const isApproved = useSelector(isReviewsNumberInStatuses(ReviewType.OBJECTIVE)([Status.APPROVED], currentNumber));
@@ -55,6 +55,13 @@ const CreateUpdateObjectives: FC<Props> = ({ onClose, editNumber, useSingleStep,
       dispatch(TimelineActions.getTimeline({ colleagueUuid }));
     };
   }, []);
+
+  useEffect(() => {
+    if (!isSuccess && saved) {
+      dispatch(ReviewsActions.updateReviewMeta({ saved: false }));
+      onClose();
+    }
+  }, [saved]);
 
   const formElements = newSchemaVersion
     ? components
@@ -164,7 +171,7 @@ const CreateUpdateObjectives: FC<Props> = ({ onClose, editNumber, useSingleStep,
   const handleNext = () => setCurrentNumber((current) => Math.min(++current, markupMin));
 
   if (!schemaLoaded || !reviewLoaded) return null;
-  if (schemaLoading || reviewLoading) return <Spinner fullHeight />;
+  if (schemaLoading || reviewLoading || saving) return <Spinner fullHeight />;
 
   if (isSuccess)
     return (
