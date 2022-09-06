@@ -31,6 +31,7 @@ const CreateButton: FC<Props> = memo(({ withIcon = false }) => {
 
   const schema = useSelector(getReviewSchema(ReviewType.OBJECTIVE));
   const { markup = { max: 0, min: 0 } } = schema;
+
   const reviewsMinNumbersInStatusApproved = useSelector(
     isReviewsNumbersInStatus(ReviewType.OBJECTIVE)(Status.APPROVED, markup.min),
   );
@@ -39,6 +40,7 @@ const CreateButton: FC<Props> = memo(({ withIcon = false }) => {
   const countReviews = useSelector(countByTypeReviews(ReviewType.OBJECTIVE)) || 0;
   const objectiveSchema = useSelector(getReviewSchema(ReviewType.OBJECTIVE));
   const modificationMode = reviewModificationMode(countReviews, objectiveSchema);
+
   const isAvailable =
     (reviewsMinNumbersInStatusApproved ||
       timelineObjective.status === Status.DRAFT ||

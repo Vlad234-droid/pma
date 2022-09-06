@@ -1,7 +1,6 @@
 import React, { FC, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import {
-  getTimelineMetaSelector,
   getTimelineSelector,
   timelineTypesAvailabilitySelector,
   userCycleTypeSelector,
@@ -11,7 +10,7 @@ import { Rule, useStyle } from '@pma/dex-wrapper';
 
 import { StepIndicator } from 'components/StepIndicator/StepIndicator';
 import { useTranslation } from 'components/Translation';
-import Spinner from 'components/Spinner';
+
 import { CycleType, ReviewType } from 'config/enum';
 import useDispatch from 'hooks/useDispatch';
 
@@ -19,7 +18,6 @@ const Timeline: FC<{ colleagueUuid: string }> = ({ colleagueUuid }) => {
   const { t } = useTranslation();
   const { css } = useStyle();
   const dispatch = useDispatch();
-  const { loading } = useSelector(getTimelineMetaSelector);
   const { descriptions, startDates, summaryStatuses, types } = useSelector(getTimelineSelector(colleagueUuid)) || {};
   const timelineTypes = useSelector(timelineTypesAvailabilitySelector(colleagueUuid)) || {};
   const cycleType = useSelector(userCycleTypeSelector);
@@ -38,17 +36,13 @@ const Timeline: FC<{ colleagueUuid: string }> = ({ colleagueUuid }) => {
 
   return (
     <div className={css(timelineWrapperStyles)}>
-      {loading ? (
-        <Spinner id='1' />
-      ) : (
-        <StepIndicator
-          mainTitle={t('performance_timeline_title', 'Your Contribution timeline')}
-          titles={descriptions}
-          descriptions={startDates}
-          statuses={summaryStatuses}
-          types={types}
-        />
-      )}
+      <StepIndicator
+        mainTitle={t('performance_timeline_title', 'Your Contribution timeline')}
+        titles={descriptions}
+        descriptions={startDates}
+        statuses={summaryStatuses}
+        types={types}
+      />
     </div>
   );
 };

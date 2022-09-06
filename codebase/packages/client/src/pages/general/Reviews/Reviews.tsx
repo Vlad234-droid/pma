@@ -1,6 +1,6 @@
 import React, { FC, useMemo } from 'react';
 import { CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
-import { colleagueUUIDSelector } from '@pma/store';
+import { colleagueUUIDSelector, getTimelineMetaSelector } from '@pma/store';
 
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -10,6 +10,7 @@ import { tenant as T, useTenant } from 'features/general/Permission';
 import { ShareWidget } from 'features/general/ShareWidget';
 import { buildPath } from 'features/general/Routes';
 import { Page } from 'pages/general/types';
+import Spinner from 'components/Spinner';
 
 export const TEST_ID = 'objectives-pave';
 
@@ -18,6 +19,7 @@ const ObjectivesPage: FC = () => {
   const { css, matchMedia } = useStyle();
   const navigate = useNavigate();
   const colleagueUuid = useSelector(colleagueUUIDSelector);
+  const { loading } = useSelector(getTimelineMetaSelector);
 
   const Objectives = useMemo(
     () => React.lazy(() => import(`features/${tenant}/Objectives`).then((module) => ({ default: module.default }))),
@@ -70,12 +72,10 @@ const ObjectivesPage: FC = () => {
 
   return (
     <div>
-      <div>
-        <CreateButton withIcon />
-      </div>
+      <div>{loading ? null : <CreateButton withIcon />}</div>
       <div className={css(bodyBlockStyles({ mobileScreen }))}>
         <div className={css(bodyWrapperStyles)}>
-          <Timeline colleagueUuid={colleagueUuid} />
+          {loading ? <Spinner /> : <Timeline colleagueUuid={colleagueUuid} />}
           <Objectives />
           <ReviewsSection colleagueUuid={colleagueUuid} />
           <CompletedReviewsSection />
