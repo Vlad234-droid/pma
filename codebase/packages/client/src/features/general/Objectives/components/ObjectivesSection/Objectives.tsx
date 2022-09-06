@@ -71,9 +71,11 @@ const Objectives = () => {
         content: (
           <div className={css(tileStyles)}>
             <Trans i18nKey='my_objectives'>My objectives</Trans>
-            {isAllObjectivesInSameStatus && ![Status.STARTED, Status.NOT_STARTED].includes(status) && (
-              <StatusBadge status={status} styles={statusBadgeStyle} />
-            )}
+            {!!objectives?.length &&
+              isAllObjectivesInSameStatus &&
+              ![Status.STARTED, Status.NOT_STARTED].includes(status) && (
+                <StatusBadge status={status} styles={statusBadgeStyle} />
+              )}
           </div>
         ),
       }}

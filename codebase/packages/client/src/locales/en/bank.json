@@ -27,5 +27,6 @@
   "you_have_rejected": "You've requested the form to be amended as it doesn't reflect the conversation you had with your colleague. Please pick up with them directly to discuss",
   "submit_objectives_or_reviews": "Submit priorities or reviews",
   "approve_objectives_or_reviews": "Are you sure you want to agree priorities or reviews?",
-  "you_have_approved": "You have agreed your colleague's"
+  "you_have_approved": "You have agreed your colleague's",
+  "users_objectives": "User objectives"
 }

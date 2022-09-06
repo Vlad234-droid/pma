@@ -1,6 +1,8 @@
 import React, { FC } from 'react';
-import { useParams } from 'react-router-dom';
 import { Rule, useStyle } from '@pma/dex-wrapper';
+import { getTimelineByCodeSelector, isReviewsInStatus, timelineTypesAvailabilitySelector } from '@pma/store';
+import { useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 
 import { Trans, useTranslation } from 'components/Translation';
 import { IconButton } from 'components/IconButton';
@@ -8,9 +10,8 @@ import Accordion from './components/Accordion';
 import Section from 'components/Section';
 import Spinner from 'components/Spinner';
 import { Plug } from 'components/Plug';
-import { useSelector } from 'react-redux';
-import { timelineTypesAvailabilitySelector } from '@pma/store';
-import { ReviewType } from 'config/enum';
+import StatusBadge from 'components/StatusBadge';
+import { ReviewType, Status } from 'config/enum';
 import { useObjectivesData, useDownload } from './hooks';
 
 export const TEST_WRAPPER_ID = 'TEST_WRAPPER_ID';
@@ -22,6 +23,10 @@ const UserObjectives: FC = () => {
 
   const timelineTypes = useSelector(timelineTypesAvailabilitySelector(uuid));
   const canShowObjectives = timelineTypes[ReviewType.OBJECTIVE];
+  const timelineObjective = useSelector(getTimelineByCodeSelector(ReviewType.OBJECTIVE, uuid));
+
+  const status = timelineObjective?.summaryStatus || null;
+  const isAllObjectivesInSameStatus = useSelector(isReviewsInStatus(ReviewType.OBJECTIVE)(status));
 
   const {
     objectives,
@@ -36,12 +41,21 @@ const UserObjectives: FC = () => {
       {canShowObjectives && (
         <>
           {loaded && !objectives.length ? (
-            <Plug text={t('no_objectives_created', 'No objectives created')} customStyle={{}} />
+            <Plug text={t('no_objectives_created', 'No objectives created')} />
           ) : (
             <Section
               testId={TEST_WRAPPER_ID}
               left={{
-                content: <div className={css(tileStyles)}>User objectives</div>,
+                content: (
+                  <div className={css(tileStyles)}>
+                    <Trans i18nKey='my_objectives'>User objectives</Trans>
+                    {!!objectives?.length &&
+                      isAllObjectivesInSameStatus &&
+                      ![Status.STARTED, Status.NOT_STARTED].includes(status) && (
+                        <StatusBadge status={status} styles={statusBadgeStyle} />
+                      )}
+                  </div>
+                ),
               }}
               right={{
                 content: (
@@ -60,7 +74,11 @@ const UserObjectives: FC = () => {
                 ),
               }}
             >
-              <Accordion objectives={objectives} canShowStatus={true} isButtonsVisible={false} />
+              <Accordion
+                objectives={objectives}
+                canShowStatus={!isAllObjectivesInSameStatus}
+                isButtonsVisible={false}
+              />
             </Section>
           )}
         </>
@@ -85,3 +103,5 @@ const iconButtonStyles: Rule = ({ theme }) => ({
 const iconStyles: Rule = {
   marginRight: '10px',
 };
+
+const statusBadgeStyle: Rule = { marginLeft: '10px' };
