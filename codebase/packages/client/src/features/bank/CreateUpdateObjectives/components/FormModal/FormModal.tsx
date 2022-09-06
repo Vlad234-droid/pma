@@ -76,7 +76,12 @@ const FormModal: FC<FormModal> = ({
   const isCurrentValid = propertiesSchema.isValidSync(currentValue?.properties);
   const canModify = currentValue?.status ? [Status.DECLINED, Status.DRAFT].includes(currentValue.status) : false;
 
-  const { loading: reviewLoading, loaded: reviewLoaded, error: reviewError } = useSelector(reviewsMetaSelector);
+  const {
+    loading: reviewLoading,
+    saving: reviewSaving,
+    saved: reviewSaved,
+    error: reviewError,
+  } = useSelector(reviewsMetaSelector);
 
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const paddingBottom = useMemo(() => {
@@ -86,7 +91,7 @@ const FormModal: FC<FormModal> = ({
     return 0;
   }, [formState, mobileScreen]);
 
-  if (formState === FormStateType.SUBMITTED && reviewLoaded && !reviewError) {
+  if (formState === FormStateType.SUBMITTED && reviewSaved && !reviewError) {
     return (
       <SuccessModal
         title={t('priorities_sent', 'Priorities sent')}
@@ -101,7 +106,7 @@ const FormModal: FC<FormModal> = ({
 
   return (
     <FormWrapper onClose={() => onPrev(isDirty)} paddingBottom={paddingBottom}>
-      {reviewLoading ? (
+      {reviewLoading || reviewSaving ? (
         <FormWrapper onClose={() => onPrev(isDirty)} paddingBottom={paddingBottom}>
           <Spinner fullHeight />
         </FormWrapper>

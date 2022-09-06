@@ -40,7 +40,12 @@ export function withBasicData<P extends Props>(
     ) as Timeline;
 
     const { loading: schemaLoading } = useSelector(schemaMetaSelector);
-    const { loading: reviewLoading, loaded: reviewLoaded, error: reviewError } = useSelector(reviewsMetaSelector);
+    const {
+      loading: reviewLoading,
+      saved: reviewSaved,
+      saving: reviewSaving,
+      error: reviewError,
+    } = useSelector(reviewsMetaSelector);
     const { loading: timelineLoading } = useSelector(timelinesMetaSelector());
     const colleagueUuid = useSelector(colleagueUUIDSelector);
 
@@ -64,12 +69,12 @@ export function withBasicData<P extends Props>(
     }, [reviewError]);
 
     useEffect(() => {
-      if (formState === FormStateType.SAVED_AS_DRAFT && reviewLoaded) {
+      if (formState === FormStateType.SAVED_AS_DRAFT && reviewSaved) {
         props.onClose();
       }
-    }, [formState, reviewLoaded]);
+    }, [formState, reviewSaved]);
 
-    if (schemaLoading || reviewLoading || timelineLoading) return <Spinner fullHeight />;
+    if (schemaLoading || reviewLoading || reviewSaving || timelineLoading) return <Spinner fullHeight />;
 
     return <WrappedComponent {...props} formState={formState} setFormState={setFormState} />;
   };

@@ -45,7 +45,7 @@ const ObjectiveAccordion: FC<ObjectiveAccordionProps> = ({ objectives, handleCom
           const firstSentence = sentences.shift();
           const restSentences = sentences.join('. ');
           const isEnabled = [Status.DRAFT, Status.DECLINED, Status.APPROVED].includes(status);
-          const isRemovable = isEnabled && objectives.length > 1;
+          const isRemovable = status === Status.DRAFT && objectives.length > 1;
 
           return (
             <Section key={id}>
