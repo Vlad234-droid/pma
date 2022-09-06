@@ -71,6 +71,8 @@ export const updateReviewStatus = createAsyncAction(
   'reviews/UPDATE_STATUS_CANCEL',
 )<ReviewUpdateStatusAction, any, Error>();
 
+export const updateReviewMeta = createAction('reviews/meta/UPDATE')<{ loaded?: boolean; saved?: boolean }>();
+
 export const approveReview = createAsyncAction(
   'reviews/APPROVE_REQUEST',
   'reviews/APPROVE_SUCCESS',
@@ -126,4 +128,5 @@ export const Actions = {
   updateRatingReview: updateRatingReview.request,
   updateReviewsState,
   clearReviewData,
+  updateReviewMeta,
 };
