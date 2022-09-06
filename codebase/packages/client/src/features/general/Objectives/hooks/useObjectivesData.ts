@@ -37,7 +37,7 @@ const useObjectivesData = (uuid) => {
     if (reviewLoaded && schemaLoaded) {
       setObjectives(transformReviewsToObjectives(data, formElements));
     }
-  }, [reviewLoaded, schemaLoaded, formElements]);
+  }, [reviewLoaded, schemaLoaded, JSON.stringify(formElements)]);
 
   useEffect(() => {
     dispatch(ReviewsActions.getReviews({ pathParams: { colleagueUuid: uuid, cycleUuid: 'CURRENT' } }));
