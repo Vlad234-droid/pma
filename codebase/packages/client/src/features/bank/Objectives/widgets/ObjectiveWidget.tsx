@@ -40,7 +40,7 @@ const ObjectiveWidget: FC = () => {
   const meta = useSelector(metaPDPSelector);
 
   const { statistics, summaryStatus: status = Status.NOT_STARTED } = timelinePoint;
-  const date = timelineMYR?.startTime || null;
+  const date = timelineMYR?.startTime;
   const canShowObjectives = timelineTypes[ReviewType.QUARTER];
 
   if (!canShowObjectives) return null;

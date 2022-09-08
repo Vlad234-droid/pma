@@ -24,7 +24,7 @@ const MyObjectives: FC = () => {
 
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const timelinesExist = useSelector(timelinesExistSelector(colleagueUuid));
-  const { loaded: timelinesLoaded } = useSelector(timelinesMetaSelector());
+  const { loaded: timelinesLoaded } = useSelector(timelinesMetaSelector);
 
   useEffect(() => {
     colleagueUuid && dispatch(ObjectiveSharingActions.checkSharing({ colleagueUuid, cycleUuid: CURRENT }));

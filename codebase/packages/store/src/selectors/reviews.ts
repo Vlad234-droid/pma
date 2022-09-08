@@ -68,7 +68,7 @@ export const getNextReviewNumberSelector = (reviewType: ReviewType) =>
     return 1;
   });
 
-export const isReviewsInStatus = (reviewType: ReviewType) => (status: Status) =>
+export const isReviewsInStatus = (reviewType: ReviewType) => (status?: Status) =>
   createSelector(filterReviewsByTypeSelector(reviewType), (reviews: any) => {
     const statuses = reviews?.map((review) => review.status);
     statuses.every((elem) => {

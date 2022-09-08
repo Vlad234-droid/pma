@@ -37,6 +37,9 @@ const AnnualReview: FC<Props> = ({ colleagueUuid }) => {
   const isUserView = useSelector(uuidCompareSelector(colleagueUuid));
 
   const review = useSelector(getTimelineByCodeSelector(ReviewType.EYR, colleagueUuid));
+  if (!review) {
+    return null;
+  }
   const cycleType = useSelector(userCycleTypeSelector);
 
   const { summaryStatus, startTime, endTime, lastUpdatedTime } = review;

@@ -3,9 +3,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { colleagueUUIDSelector, SchemaActions, getPDPSchema } from '@pma/store';
 import { PDPType } from 'config/enum';
 
+// @ts-ignore
 function usePDPSchema(type: PDPType) {
   const dispatch = useDispatch();
-  const schema = useSelector(getPDPSchema(type));
+  const schema = useSelector(getPDPSchema(/*type*/));
 
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const { components = [] } = schema;

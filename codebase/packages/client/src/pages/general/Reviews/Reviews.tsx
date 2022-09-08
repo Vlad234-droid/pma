@@ -1,6 +1,6 @@
 import React, { FC, useMemo } from 'react';
 import { CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
-import { colleagueUUIDSelector, getTimelineMetaSelector } from '@pma/store';
+import { colleagueUUIDSelector, timelinesMetaSelector } from '@pma/store';
 
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -18,7 +18,7 @@ const ObjectivesPage: FC = () => {
   const { css, matchMedia } = useStyle();
   const navigate = useNavigate();
   const colleagueUuid = useSelector(colleagueUUIDSelector);
-  const { loading } = useSelector(getTimelineMetaSelector);
+  const { loading } = useSelector(timelinesMetaSelector);
 
   const Objectives = useMemo(
     () => React.lazy(() => import(`features/${tenant}/Objectives`).then((module) => ({ default: module.default }))),

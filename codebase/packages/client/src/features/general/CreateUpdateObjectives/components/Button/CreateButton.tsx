@@ -36,14 +36,14 @@ const CreateButton: FC<Props> = memo(({ withIcon = false }) => {
     isReviewsNumbersInStatus(ReviewType.OBJECTIVE)(Status.APPROVED, markup.min),
   );
   const originObjectives = useSelector(filterReviewsByTypeSelector(ReviewType.OBJECTIVE));
-  const timelineObjective = useSelector(getTimelineByCodeSelector(ReviewType.OBJECTIVE, USER.current)) || {};
+  const timelineObjective = useSelector(getTimelineByCodeSelector(ReviewType.OBJECTIVE, USER.current));
   const countReviews = useSelector(countByTypeReviews(ReviewType.OBJECTIVE)) || 0;
   const objectiveSchema = useSelector(getReviewSchema(ReviewType.OBJECTIVE));
   const modificationMode = reviewModificationMode(countReviews, objectiveSchema);
 
   const isAvailable =
     (reviewsMinNumbersInStatusApproved ||
-      timelineObjective.status === Status.DRAFT ||
+      timelineObjective?.status === Status.DRAFT ||
       originObjectives?.length === 0) &&
     countReviews < markup.max &&
     modificationMode !== REVIEW_MODIFICATION_MODE.NONE;

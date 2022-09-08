@@ -40,15 +40,15 @@ const Objectives = () => {
   const timelineTypes = useSelector(timelineTypesAvailabilitySelector(colleagueUuid)) || {};
   const canShowObjectives = timelineTypes[ReviewType.OBJECTIVE];
 
-  const timelineObjective = useSelector(getTimelineByCodeSelector(ReviewType.OBJECTIVE, USER.current)) || {};
-  const status = timelineObjective?.summaryStatus || null;
+  const timelineObjective = useSelector(getTimelineByCodeSelector(ReviewType.OBJECTIVE, USER.current));
+  const status = timelineObjective?.summaryStatus;
   const isAllObjectivesInSameStatus = useSelector(isReviewsInStatus(ReviewType.OBJECTIVE)(status));
 
   const download = useDownload(objectives);
 
-  const countDraftReviews = parseInt(timelineObjective?.statistics?.[Status.DRAFT] || 0);
-  const countDeclinedReviews = parseInt(timelineObjective?.statistics?.[Status.DECLINED] || 0);
-  const countWaitingForApprovalReviews = parseInt(timelineObjective?.statistics?.[Status.WAITING_FOR_APPROVAL] || 0);
+  const countDraftReviews = parseInt(timelineObjective?.statistics?.[Status.DRAFT] || '0');
+  const countDeclinedReviews = parseInt(timelineObjective?.statistics?.[Status.DECLINED] || '0');
+  const countWaitingForApprovalReviews = parseInt(timelineObjective?.statistics?.[Status.WAITING_FOR_APPROVAL] || '0');
 
   const canEditAllObjective = canEditAllObjectiveFn({
     objectiveSchema,
@@ -73,8 +73,8 @@ const Objectives = () => {
             <Trans i18nKey='my_objectives'>My objectives</Trans>
             {!!objectives?.length &&
               isAllObjectivesInSameStatus &&
-              ![Status.STARTED, Status.NOT_STARTED].includes(status) && (
-                <StatusBadge status={status} styles={statusBadgeStyle} />
+              ![Status.STARTED, Status.NOT_STARTED].includes(status!) && (
+                <StatusBadge status={status!} styles={statusBadgeStyle} />
               )}
           </div>
         ),

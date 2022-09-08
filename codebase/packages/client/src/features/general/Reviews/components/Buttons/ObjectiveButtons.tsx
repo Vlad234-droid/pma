@@ -22,10 +22,10 @@ const ObjectiveButtons: FC<ObjectiveButtonsProps> = ({ id, status }) => {
   const { info } = useSelector(currentUserSelector);
 
   const objectiveSchema = useSelector(getReviewSchema(ReviewType.OBJECTIVE));
-  const timelineObjective = useSelector(getTimelineByCodeSelector(ReviewType.OBJECTIVE, USER.current)) || {};
-  const countDraftReviews = parseInt(timelineObjective?.statistics?.[Status.DRAFT] || 0);
-  const countDeclinedReviews = parseInt(timelineObjective?.statistics?.[Status.DECLINED] || 0);
-  const countApprovedReviews = parseInt(timelineObjective?.statistics?.[Status.APPROVED] || 0);
+  const timelineObjective = useSelector(getTimelineByCodeSelector(ReviewType.OBJECTIVE, USER.current));
+  const countDraftReviews = parseInt(timelineObjective?.statistics?.[Status.DRAFT] || '0');
+  const countDeclinedReviews = parseInt(timelineObjective?.statistics?.[Status.DECLINED] || '0');
+  const countApprovedReviews = parseInt(timelineObjective?.statistics?.[Status.APPROVED] || '0');
 
   const canEditSingleObjective = canEditSingleObjectiveFn({ status, objectiveSchema, number: id });
   const canDelete = canDeleteSingleObjectiveFn({

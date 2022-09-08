@@ -21,11 +21,11 @@ const UserObjectives: FC = () => {
   const { t } = useTranslation();
   const { uuid } = useParams<{ uuid: string }>();
 
-  const timelineTypes = useSelector(timelineTypesAvailabilitySelector(uuid));
+  const timelineTypes = useSelector(timelineTypesAvailabilitySelector(uuid!));
   const canShowObjectives = timelineTypes[ReviewType.OBJECTIVE];
-  const timelineObjective = useSelector(getTimelineByCodeSelector(ReviewType.OBJECTIVE, uuid));
+  const timelineObjective = useSelector(getTimelineByCodeSelector(ReviewType.OBJECTIVE, uuid!));
 
-  const status = timelineObjective?.summaryStatus || null;
+  const status = timelineObjective?.summaryStatus;
   const isAllObjectivesInSameStatus = useSelector(isReviewsInStatus(ReviewType.OBJECTIVE)(status));
 
   const {
@@ -51,8 +51,8 @@ const UserObjectives: FC = () => {
                     <Trans i18nKey='my_objectives'>User objectives</Trans>
                     {!!objectives?.length &&
                       isAllObjectivesInSameStatus &&
-                      ![Status.STARTED, Status.NOT_STARTED].includes(status) && (
-                        <StatusBadge status={status} styles={statusBadgeStyle} />
+                      ![Status.STARTED, Status.NOT_STARTED].includes(status!) && (
+                        <StatusBadge status={status!} styles={statusBadgeStyle} />
                       )}
                   </div>
                 ),

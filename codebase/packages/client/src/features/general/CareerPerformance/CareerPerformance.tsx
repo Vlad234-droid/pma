@@ -6,10 +6,10 @@ import Spinner from 'components/Spinner';
 
 import Section from './components/Section';
 import { useSelector } from 'react-redux';
-import { getTimelineMetaSelector } from '@pma/store';
+import { timelinesMetaSelector } from '@pma/store';
 
 const CareerPerformance: FC = ({ children }) => {
-  const { loaded } = useSelector(getTimelineMetaSelector);
+  const { loaded } = useSelector(timelinesMetaSelector);
 
   if (!loaded) {
     return <Spinner fullHeight />;

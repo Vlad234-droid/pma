@@ -37,7 +37,7 @@ export function withSection<P>(WrappedComponent: React.ComponentType<P & PropsTy
     const [removedPriority, setPriority] = useState<string>('');
 
     const { loaded: schemaLoaded } = useSelector(schemaMetaSelector);
-    const { loaded: timelineLoaded } = useSelector(timelinesMetaSelector());
+    const { loaded: timelineLoaded } = useSelector(timelinesMetaSelector);
     const { loaded: reviewLoaded, saved: reviewSaved } = useSelector(reviewsMetaSelector);
     const { loaded: notesLoaded } = useSelector(priorityNotesMetaSelector);
 

@@ -1,4 +1,5 @@
 import { Styles } from '@pma/dex-wrapper';
+import { PayloadAction } from 'typesafe-actions';
 
 //TODO: split this file to enum interface and type
 
@@ -176,4 +177,12 @@ export type ChartReport = {
   percentage: string;
   count?: string;
   title?: string;
+};
+
+export type ActionHandler<State, Payload = any> = (state: State, action: PayloadAction<string, Payload>) => State;
+
+export type Meta = {
+  loading: boolean;
+  loaded: boolean;
+  error: Error | null;
 };

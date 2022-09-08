@@ -64,6 +64,11 @@ export function withForm<P extends ReviewFormType>(WrappedComponent: React.Compo
     const overallRatingRequestKey = 'overall_rating';
 
     const timelineReview = useSelector(getTimelineByReviewTypeSelector(reviewType, USER.current));
+
+    if (!timelineReview) {
+      return null;
+    }
+
     const readonly = [Status.WAITING_FOR_APPROVAL, Status.APPROVED].includes(timelineReview.summaryStatus);
 
     const { components = [] as Component[] } = schema;

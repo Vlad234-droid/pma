@@ -6,7 +6,7 @@ import { downloadPDF, PDPDocument, usePDF } from '@pma/pdf-renderer';
 import {
   colleagueUUIDSelector,
   FormType,
-  getTimelineMetaSelector,
+  timelinesMetaSelector,
   metaPDPSelector,
   PDPActions,
   schemaMetaPDPSelector,
@@ -78,7 +78,7 @@ const PersonalDevelopmentPlan: FC = () => {
 
   const navToGoalPage = () => navigate(buildPath(Page.CREATE_PERSONAL_DEVELOPMENT_PLAN));
 
-  const { loaded, loading } = useSelector(getTimelineMetaSelector) || {};
+  const { loaded, loading } = useSelector(timelinesMetaSelector) || {};
 
   const elRef = useRef<HTMLDivElement | null>(null);
 

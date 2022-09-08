@@ -12,20 +12,27 @@ export const getTimelineEpic: Epic = (action$, _, { api }) =>
     filter(isActionOf(getTimeline.request)),
     switchMap(({ payload }) =>
       from(api.getTimeline(payload)).pipe(
-        mergeMap((response) => {
-          //@ts-ignore
+        mergeMap((response: any) => {
           if (!response.data.length) {
             return of(
               addModalError({
                 title: 'timeline_is_empty',
                 description: 'you_dont_have_access_to_pma',
               }),
-              //@ts-ignore
-              getTimeline.success({ success: response?.success, [payload.colleagueUuid]: response?.data }),
+              getTimeline.success({
+                colleagueUuid: payload.colleagueUuid,
+                success: response.success,
+                data: response.data,
+              }),
             );
           }
-          // @ts-ignore
-          return of(getTimeline.success({ success: response?.success, [payload.colleagueUuid]: response?.data }));
+          return of(
+            getTimeline.success({
+              colleagueUuid: payload.colleagueUuid,
+              success: response.success,
+              data: response.data,
+            }),
+          );
         }),
         catchError((e) => {
           const errors = e?.data?.errors;
@@ -43,9 +50,14 @@ export const getUserTimelineEpic: Epic = (action$, _, { api }) =>
     filter(isActionOf(getUserTimeline.request)),
     switchMap(({ payload }) =>
       from(api.getTimeline(payload)).pipe(
-        mergeMap((response) => {
-          // @ts-ignore
-          return of(getUserTimeline.success({ success: response?.success, [payload.colleagueUuid]: response?.data }));
+        mergeMap((response: any) => {
+          return of(
+            getUserTimeline.success({
+              colleagueUuid: payload.colleagueUuid,
+              success: response.success,
+              data: response.data,
+            }),
+          );
         }),
         catchError((e) => {
           const errors = e?.data?.errors;

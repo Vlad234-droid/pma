@@ -3,19 +3,29 @@ import { ReviewType, Status, TimelineType } from './enum';
 
 export type Colors = keyof typeof colors;
 
+export type TimelineStatistics = {
+  APPROVED?: string;
+  DRAFT?: string;
+  WAITING_FOR_APPROVAL?: string;
+  DECLINED?: string;
+  WAITING_FOR_COMPLETION?: string;
+  REQUESTED_TO_AMEND?: string;
+  COMPLETED?: string;
+};
+
 export type Timeline = {
   code: string;
   colleagueCycleUuid: string;
-  count: number;
   description: string;
-  endTime: string | null;
+  endTime: string;
   reviewType: ReviewType;
-  startTime: string | null;
+  startTime: string;
   status: Status; // todo change to TimelineStatus
   summaryStatus: Status; // todo change to TimelineStatus
   type: TimelineType;
   uuid: string;
-  statistics: Record<string, string> | null;
+  statistics?: TimelineStatistics;
+  lastUpdatedTime?: string;
 };
 
 export type Review = {

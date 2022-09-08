@@ -64,7 +64,7 @@ export const getAllReviewSchemas = createSelector(schemaSelector, (schema: any) 
   return reviews;
 });
 
-export const getReviewSchema = (code: string, withForms = true) =>
+export const getReviewSchema = (code?: string, withForms = true) =>
   createSelector(schemaSelector, (schema: any) => {
     let form;
     if (!schema?.metadata?.cycle) {
@@ -119,7 +119,7 @@ export const getExpressionRequestKey =
       );
     });
 
-export const getPDPSchema = (type: PDPType) =>
+export const getPDPSchema = (/*type: PDPType*/) =>
   createSelector(schemaPDPSelector, (schema: any) => {
     if (!schema?.pdp?.form) {
       return { ...schema };

@@ -1,10 +1,9 @@
 import React, { FC } from 'react';
 import { Rule } from '@pma/dex-wrapper';
-import { getTimelineByReviewTypeSelector, metaPDPSelector, timelineTypesAvailabilitySelector } from '@pma/store';
+import { getTimelineByReviewTypeSelector, timelineTypesAvailabilitySelector } from '@pma/store';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
-import Spinner from 'components/Spinner';
 import { buildPath } from 'features/general/Routes';
 import MainWidgetBase from 'components/MainWidgetBase';
 import { useTranslation } from 'components/Translation';
@@ -20,15 +19,13 @@ const ObjectiveWidget: FC = () => {
   const timelineObjective = useSelector(getTimelineByReviewTypeSelector(ReviewType.OBJECTIVE, USER.current));
   const timelineMYR = useSelector(getTimelineByReviewTypeSelector(ReviewType.MYR, USER.current));
   const timelineTypes = useSelector(timelineTypesAvailabilitySelector(USER.current));
-  const meta = useSelector(metaPDPSelector);
+
+  const canShowObjectives = timelineTypes[ReviewType.OBJECTIVE];
+  if (!canShowObjectives || !timelineObjective) return null;
 
   const { statistics, summaryStatus: status } = timelineObjective;
 
-  const date = timelineMYR?.startTime || null;
-  const canShowObjectives = timelineTypes[ReviewType.OBJECTIVE];
-
-  if (!canShowObjectives) return null;
-  if (meta.loading) return <Spinner />;
+  const date = timelineMYR?.startTime;
 
   const { subTitle, description, buttonText, backgroundColor, disabled, viewPage, widgetTitle } = getTescoContent(
     { status, statistics, nextReviewDate: date },

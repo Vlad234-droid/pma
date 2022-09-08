@@ -14,7 +14,6 @@ type Config = {
 const generateTimeline = (config?: Config) => {
   const timeline: Timeline = {
     code: 'mocked_code',
-    count: 222,
     colleagueCycleUuid: 'mocked_colleague_cycle_id',
     description: 'mocked_description',
     endTime: dateToIso(new Date()),
@@ -24,7 +23,6 @@ const generateTimeline = (config?: Config) => {
     summaryStatus: config?.status || Status.PENDING,
     type: config?.type || TimelineType.CYCLE,
     uuid: 'mocked_timeline_uuid',
-    statistics: null,
   };
 
   // const timeline: Timeline = {

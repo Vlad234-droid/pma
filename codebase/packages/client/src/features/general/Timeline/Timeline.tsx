@@ -5,7 +5,7 @@ import {
   timelineTypesAvailabilitySelector,
   userCycleTypeSelector,
   TimelineActions,
-  getTimelineMetaSelector,
+  timelinesMetaSelector,
 } from '@pma/store';
 import { Rule, useStyle } from '@pma/dex-wrapper';
 
@@ -20,7 +20,7 @@ const Timeline: FC<{ colleagueUuid: string }> = ({ colleagueUuid }) => {
   const { t } = useTranslation();
   const { css } = useStyle();
   const dispatch = useDispatch();
-  const { loading } = useSelector(getTimelineMetaSelector);
+  const { loading } = useSelector(timelinesMetaSelector);
   const { descriptions, startDates, summaryStatuses, types } = useSelector(getTimelineSelector(colleagueUuid)) || {};
   const timelineTypes = useSelector(timelineTypesAvailabilitySelector(colleagueUuid)) || {};
   const cycleType = useSelector(userCycleTypeSelector);

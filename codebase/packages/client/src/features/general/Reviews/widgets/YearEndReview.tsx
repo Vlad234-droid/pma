@@ -28,6 +28,10 @@ const YearEndReview: FC<Props> = ({ colleagueUuid }) => {
 
   const review = useSelector(getTimelineByCodeSelector(ReviewType.EYR, colleagueUuid));
 
+  if (!review) {
+    return null;
+  }
+
   const { summaryStatus, startTime, lastUpdatedTime } = review;
 
   const [graphic, iconColor, background, shadow, hasDescription, content, buttonText] = useMemo(

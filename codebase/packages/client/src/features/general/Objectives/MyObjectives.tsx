@@ -30,7 +30,7 @@ const MyObjectives: FC = () => {
 
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const timelinesExist = useSelector(timelinesExistSelector(colleagueUuid));
-  const { loaded: timelinesLoaded } = useSelector(timelinesMetaSelector());
+  const { loaded: timelinesLoaded } = useSelector(timelinesMetaSelector);
   const timelineTypes = useSelector(timelineTypesAvailabilitySelector(colleagueUuid)) || {};
   const cycleType = useSelector(userCycleTypeSelector);
 

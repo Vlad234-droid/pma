@@ -1,24 +1,29 @@
-import { createReducer } from 'typesafe-actions';
+import { ActionHandler } from '../../config/types';
+import { Action, createReducer } from 'typesafe-actions';
 import { getTimeline, getUserTimeline } from './actions';
+import { State, SuccessPayload, ErrorPayload } from './types';
 
-export const initialState = {
+export const initialState: State = {
   meta: { loading: false, loaded: false, error: null },
 };
 
-const request = (state) => ({ ...state, meta: { ...state.meta, loading: true, error: null } });
+const request: ActionHandler<State> = (state) => ({ ...state, meta: { ...state.meta, loading: true, error: null } });
 
-const success = (state, { payload }) => ({
+const success: ActionHandler<State, SuccessPayload> = (state, { payload }) => ({
   ...state,
-  ...payload,
+  data: {
+    ...state.data,
+    [payload.colleagueUuid]: payload.data,
+  },
   meta: { ...state.meta, loading: false, loaded: true },
 });
 
-const failure = (state, { payload }) => ({
+const failure: ActionHandler<State, ErrorPayload> = (state, { payload }) => ({
   ...state,
   meta: { ...state.meta, loading: false, loaded: true, error: payload },
 });
 
-export default createReducer(initialState)
+export default createReducer<State, Action<string>>(initialState)
   .handleAction(getTimeline.request, request)
   .handleAction(getTimeline.success, success)
   .handleAction(getTimeline.failure, failure)

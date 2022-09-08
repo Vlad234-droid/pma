@@ -34,7 +34,7 @@ export function withBasicData<P extends Props>(
       saving: reviewSaving,
       error: reviewError,
     } = useSelector(reviewsMetaSelector);
-    const { loading: timelineLoading } = useSelector(timelinesMetaSelector());
+    const { loading: timelineLoading } = useSelector(timelinesMetaSelector);
     const colleagueUuid = useSelector(colleagueUUIDSelector);
 
     useEffect(() => {

@@ -85,10 +85,15 @@ const ReviewFormModal: FC<Review> = ({ reviewType, onClose }) => {
   const overallRatingRequestKey = 'overall_rating';
 
   const timelineReview = useSelector(getTimelineByReviewTypeSelector(reviewType, USER.current));
+
+  if (!timelineReview) {
+    return null;
+  }
+
   const readonly =
     view === View.MANAGER
       ? true
-      : [Status.WAITING_FOR_APPROVAL, Status.APPROVED].includes(timelineReview?.summaryStatus);
+      : [Status.WAITING_FOR_APPROVAL, Status.APPROVED].includes(timelineReview.summaryStatus);
 
   const { components = [] as Component[] } = schema;
 
