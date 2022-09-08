@@ -153,10 +153,7 @@ const CreateUpdateObjectives: FC<Props> = ({ onClose, editNumber, useSingleStep,
   const handlePrev = () => setCurrentNumber((current) => Math.max(--current, 1));
   const handleNext = () => setCurrentNumber((current) => Math.min(++current, markupMin));
 
-  if (!schemaLoaded || !reviewLoaded) return null;
-  if (schemaLoading || reviewLoading || saving) return <Spinner fullHeight />;
-
-  if (isSuccess)
+  if (isSuccess && saved)
     return (
       <SuccessModal
         title={t('objectives_sent', 'Objectives sent')}
@@ -167,6 +164,8 @@ const CreateUpdateObjectives: FC<Props> = ({ onClose, editNumber, useSingleStep,
         )}
       />
     );
+  if (schemaLoading || reviewLoading || saving) return <Spinner fullHeight />;
+  if (!schemaLoaded || !reviewLoaded) return null;
 
   return (
     <ObjectiveForm
