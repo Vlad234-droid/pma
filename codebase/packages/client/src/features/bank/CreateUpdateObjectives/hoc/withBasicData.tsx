@@ -3,19 +3,17 @@ import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
   colleagueUUIDSelector,
-  getTimelinesByReviewTypeSelector,
   ReviewsActions,
   reviewsMetaSelector,
   SchemaActions,
   schemaMetaSelector,
-  TimelineActions,
   timelinesMetaSelector,
 } from '@pma/store';
 import useDispatch from 'hooks/useDispatch';
-import { ReviewType, Status, Timeline } from 'config/types';
-import { USER } from 'config/constants';
+import { ReviewType } from 'config/types';
 import Spinner from 'components/Spinner';
 import { FormStateType } from '../type';
+import { useTimelineContainer } from 'contexts/timelineContext';
 
 export function withBasicData<P extends Props>(
   WrappedComponent: React.ComponentType<
@@ -24,20 +22,10 @@ export function withBasicData<P extends Props>(
 ) {
   const Component = (props: P) => {
     const dispatch = useDispatch();
+    const { activeCode } = useTimelineContainer();
 
     const defaultFormState = props.useSingleStep ? FormStateType.SINGLE_MODIFY : FormStateType.MODIFY;
     const [formState, setFormState] = useState<FormStateType>(defaultFormState);
-
-    const timelinePoints: Timeline[] =
-      useSelector(getTimelinesByReviewTypeSelector(ReviewType.QUARTER, USER.current)) || [];
-
-    const visibleTimelinePoints = timelinePoints?.filter(
-      (timelinePoint) => timelinePoint.status !== Status.NOT_STARTED,
-    );
-
-    const timelinePoint: Timeline = visibleTimelinePoints.find(
-      (timelinePoint) => timelinePoint.status === Status.STARTED,
-    ) as Timeline;
 
     const { loading: schemaLoading } = useSelector(schemaMetaSelector);
     const {
@@ -51,15 +39,14 @@ export function withBasicData<P extends Props>(
 
     useEffect(() => {
       dispatch(SchemaActions.getSchema({ colleagueUuid }));
-      dispatch(TimelineActions.getTimeline({ colleagueUuid }));
     }, []);
 
     useEffect(() => {
-      if (timelinePoint?.code) {
-        const pathParams = { colleagueUuid, code: timelinePoint?.code, cycleUuid: 'CURRENT' };
+      if (activeCode[ReviewType.QUARTER]) {
+        const pathParams = { colleagueUuid, code: activeCode[ReviewType.QUARTER], cycleUuid: 'CURRENT' };
         dispatch(ReviewsActions.getReviews({ pathParams }));
       }
-    }, [timelinePoint]);
+    }, []);
 
     useEffect(() => {
       if (reviewError !== null) {

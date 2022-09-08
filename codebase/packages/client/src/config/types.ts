@@ -11,8 +11,8 @@ export type Timeline = {
   endTime: string | null;
   reviewType: ReviewType;
   startTime: string | null;
-  status: Status;
-  summaryStatus: Status;
+  status: Status; // todo change to TimelineStatus
+  summaryStatus: Status; // todo change to TimelineStatus
   type: TimelineType;
   uuid: string;
   statistics: Record<string, string> | null;

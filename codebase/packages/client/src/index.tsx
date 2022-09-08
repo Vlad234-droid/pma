@@ -8,6 +8,7 @@ import { AccessibilityProvider, fontSettings, theme } from '@pma/dex-wrapper';
 import { INTEGRATION_MODE, PUBLIC_URL } from 'config/constants';
 import store from 'config/store';
 import { AuthProvider } from 'contexts/authContext';
+import { TimelineProvider } from 'contexts/timelineContext';
 import Layout from 'features/general/Layout';
 import Navigation, { buildRoutes } from 'features/general/Routes';
 import { pages } from 'pages';
@@ -46,7 +47,9 @@ const Root: FC = () => {
                       <BrowserRouter basename={PUBLIC_URL}>
                         <React.StrictMode>
                           <Layout>
-                            <Navigation routes={routes} />
+                            <TimelineProvider>
+                              <Navigation routes={routes} />
+                            </TimelineProvider>
                           </Layout>
                         </React.StrictMode>
                       </BrowserRouter>

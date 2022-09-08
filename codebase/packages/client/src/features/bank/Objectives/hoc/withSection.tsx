@@ -1,11 +1,12 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useTimelineContainer } from 'contexts/timelineContext';
 import { ObjectiveTypes, transformReviewsToObjectives } from 'features/general/Reviews';
 import {
   colleagueUUIDSelector,
   filterReviewsByTypeSelector,
-  priorityNotesMetaSelector,
   getReviewSchema,
   getTimelinesByReviewTypeSelector,
+  priorityNotesMetaSelector,
   ReviewsActions,
   reviewsMetaSelector,
   schemaMetaSelector,
@@ -31,23 +32,25 @@ export type PropsType = {
 export function withSection<P>(WrappedComponent: React.ComponentType<P & PropsType>) {
   const Component = (props: P) => {
     const dispatch = useDispatch();
+    const { activeCode, setActiveCode } = useTimelineContainer();
     const { t } = useTranslation();
     const [removedPriority, setPriority] = useState<string>('');
 
     const { loaded: schemaLoaded } = useSelector(schemaMetaSelector);
     const { loaded: timelineLoaded } = useSelector(timelinesMetaSelector());
-    const { loaded: reviewLoaded } = useSelector(reviewsMetaSelector);
+    const { loaded: reviewLoaded, saved: reviewSaved } = useSelector(reviewsMetaSelector);
     const { loaded: notesLoaded } = useSelector(priorityNotesMetaSelector);
 
     const timelinePoints: Timeline[] =
       useSelector(getTimelinesByReviewTypeSelector(ReviewType.QUARTER, USER.current)) || [];
 
     const visibleTimelinePoints = timelinePoints?.filter(
-      (timelinePoint) => timelinePoint.summaryStatus !== Status.NOT_STARTED,
+      (timelinePoint) => timelinePoint.status !== Status.NOT_STARTED,
     );
 
-    const timelinePoint = visibleTimelinePoints.find((timelinePoint) => timelinePoint.status === Status.STARTED);
-    const [selectedTimelinePoint, setTimelinePoint] = useState(timelinePoint);
+    const timelinePoint = visibleTimelinePoints.find(
+      (timelinePoint) => timelinePoint.code === activeCode[ReviewType.QUARTER],
+    );
 
     const colleagueUuid = useSelector(colleagueUUIDSelector);
     const originObjectives: Review[] = useSelector(filterReviewsByTypeSelector(ReviewType.QUARTER));
@@ -62,9 +65,9 @@ export function withSection<P>(WrappedComponent: React.ComponentType<P & PropsTy
 
     const handleSelectTimelinePoint = useCallback(
       (e) => {
-        const uuid = e.currentTarget.dataset['uuid'];
-        const timelinePointById = visibleTimelinePoints.find((timelinePoint) => timelinePoint.uuid === uuid);
-        setTimelinePoint(timelinePointById);
+        const code = e.currentTarget.dataset['code'];
+        const timelinePointById = visibleTimelinePoints.find((timelinePoint) => timelinePoint.code === code);
+        setActiveCode(ReviewType.QUARTER, code);
 
         const filteredObjectives = originObjectives.filter(
           (objective) => objective.tlPointUuid === timelinePointById?.uuid,
@@ -75,7 +78,7 @@ export function withSection<P>(WrappedComponent: React.ComponentType<P & PropsTy
     );
 
     const handleCompletion = (number) => {
-      const pathParams = { colleagueUuid, code: timelinePoint?.code, cycleUuid: 'CURRENT' };
+      const pathParams = { colleagueUuid, code: activeCode[ReviewType.QUARTER], cycleUuid: 'CURRENT' };
       const objective = originObjectives.find((objective) => objective.number == number);
       dispatch(
         ReviewsActions.updateReview({
@@ -86,7 +89,7 @@ export function withSection<P>(WrappedComponent: React.ComponentType<P & PropsTy
     };
 
     const handleDelete = (number) => {
-      const pathParams = { colleagueUuid, code: timelinePoint?.code, cycleUuid: 'CURRENT' };
+      const pathParams = { colleagueUuid, code: activeCode[ReviewType.QUARTER], cycleUuid: 'CURRENT' };
       dispatch(
         ReviewsActions.deleteReview({
           pathParams: { ...pathParams, number },
@@ -98,25 +101,23 @@ export function withSection<P>(WrappedComponent: React.ComponentType<P & PropsTy
     const handleClearRemovedPriority = () => setPriority('');
 
     useEffect(() => {
-      if (canShowObjectives) {
-        dispatch(ReviewsActions.getReviewsWithNotes({ pathParams: { colleagueUuid, cycleUuid: 'CURRENT' } }));
+      if (canShowObjectives && activeCode[ReviewType.QUARTER]) {
+        dispatch(
+          ReviewsActions.getReviewsWithNotes({
+            pathParams: { colleagueUuid, code: activeCode[ReviewType.QUARTER], cycleUuid: 'CURRENT' },
+          }),
+        );
       }
-    }, [canShowObjectives]);
+    }, [canShowObjectives, activeCode[ReviewType.QUARTER]]);
 
     useEffect(() => {
-      if (timelineLoaded) {
-        setTimelinePoint(timelinePoint);
-      }
-    }, [timelineLoaded]);
-
-    useEffect(() => {
-      if (reviewLoaded && schemaLoaded && timelineLoaded && notesLoaded) {
+      if ((reviewLoaded || reviewSaved) && schemaLoaded && timelineLoaded && notesLoaded) {
         const filteredObjectives = originObjectives.filter(
-          (objective) => objective.tlPointUuid === selectedTimelinePoint?.uuid,
+          (objective) => objective.tlPointUuid === timelinePoint?.uuid,
         );
         setObjectives(transformReviewsToObjectives(filteredObjectives, formElements));
       }
-    }, [reviewLoaded, schemaLoaded, timelineLoaded, notesLoaded]);
+    }, [reviewLoaded, reviewSaved, schemaLoaded, timelineLoaded, notesLoaded]);
 
     return (
       <>
@@ -127,7 +128,7 @@ export function withSection<P>(WrappedComponent: React.ComponentType<P & PropsTy
           handleDelete={handleDelete}
           handleSelectTimelinePoint={handleSelectTimelinePoint}
           timelinePoints={visibleTimelinePoints}
-          activeTimelinePoints={selectedTimelinePoint}
+          activeTimelinePoints={timelinePoint}
         />
         {removedPriority && reviewLoaded && (
           <ConfirmModal

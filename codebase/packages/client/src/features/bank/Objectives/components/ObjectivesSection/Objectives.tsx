@@ -35,11 +35,7 @@ const Objectives: FC<PropsType> = ({
 
   return (
     <>
-      <TogglePriority
-        handleSelectTimelinePoint={handleSelectTimelinePoint}
-        timelinePoints={timelinePoints}
-        activeTimelinePoints={activeTimelinePoints}
-      />
+      <TogglePriority handleSelectTimelinePoint={handleSelectTimelinePoint} timelinePoints={timelinePoints} />
       <Section
         left={{
           content: (

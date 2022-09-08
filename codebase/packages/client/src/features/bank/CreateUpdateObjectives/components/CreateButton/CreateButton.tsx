@@ -3,14 +3,14 @@ import { Button, Rule, useStyle } from '@pma/dex-wrapper';
 import { useNavigate } from 'react-router-dom';
 import { IconButton } from 'components/IconButton';
 import { useTranslation } from 'components/Translation';
-import { ReviewType, Status } from 'config/enum';
+import { ReviewType } from 'config/enum';
 import { useSelector } from 'react-redux';
-import { filterReviewsByTypeSelector, getReviewSchema, getTimelinesByReviewTypeSelector } from '@pma/store';
-import { Objective } from '../../type';
+import { getReviewSchema, getTimelinesByReviewTypeSelector } from '@pma/store';
 import { Timeline } from 'config/types';
 import { USER } from 'config/constants';
 import { buildPath } from 'features/general/Routes';
 import { Page } from 'pages';
+import { useTimelineContainer } from 'contexts/timelineContext';
 
 export type CreateModalProps = {
   withIcon?: boolean;
@@ -22,22 +22,23 @@ const CreateButton: FC<Props> = memo(({ withIcon = false }) => {
   const { t } = useTranslation();
   const { css } = useStyle();
   const navigate = useNavigate();
-
-  const objectives: Objective[] = useSelector(filterReviewsByTypeSelector(ReviewType.QUARTER)) || [];
+  const { activeCode } = useTimelineContainer();
 
   const timelinePoints: Timeline[] =
     useSelector(getTimelinesByReviewTypeSelector(ReviewType.QUARTER, USER.current)) || [];
 
-  const visibleTimelinePoints = timelinePoints?.filter((timelinePoint) => timelinePoint.status !== Status.NOT_STARTED);
-
-  const timelinePoint: Timeline = visibleTimelinePoints.find(
-    (timelinePoint) => timelinePoint.status === Status.STARTED, // todo not handle overdue
+  const timelinePoint: Timeline = timelinePoints.find(
+    (timelinePoint) => timelinePoint.code === activeCode[ReviewType.QUARTER],
   ) as Timeline;
 
-  const schema = useSelector(getReviewSchema(timelinePoint?.code));
+  const objectivesLen = timelinePoint?.statistics
+    ? Object.values(timelinePoint?.statistics).reduce((acc, el) => acc + Number(el), 0)
+    : 0;
+
+  const schema = useSelector(getReviewSchema(activeCode[ReviewType.QUARTER]));
 
   const { markup = { max: 0, min: 0 } } = schema;
-  const isAvailable = objectives.length < markup.max || false;
+  const isAvailable = objectivesLen < markup.max || false;
 
   const handleClick = () => navigate(buildPath(Page.CREATE_OBJECTIVES));
 

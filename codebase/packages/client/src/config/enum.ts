@@ -12,8 +12,19 @@ export enum Status {
   STARTED = 'STARTED',
   NOT_STARTED = 'NOT_STARTED',
   NOT_CREATED = 'NOT_CREATED',
+  FINISHING = 'FINISHING',
   WAITING_FOR_COMPLETION = 'WAITING_FOR_COMPLETION',
   REQUESTED_TO_AMEND = 'REQUESTED_TO_AMEND',
+}
+
+// todo use for timeline this statuses. should be changed in many places
+export enum TimelineStatus {
+  COMPLETED = 'COMPLETED',
+  OVERDUE = 'OVERDUE',
+  STARTED = 'STARTED',
+  NOT_STARTED = 'NOT_STARTED',
+  SCHEDULED = 'SCHEDULED',
+  FINISHING = 'FINISHING',
 }
 
 export enum ReviewType {

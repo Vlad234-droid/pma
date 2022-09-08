@@ -1,14 +1,15 @@
 import React, { FC } from 'react';
 import { Rule, useStyle } from '@pma/dex-wrapper';
-import { Timeline } from 'config/types';
+import { useTimelineContainer } from 'contexts/timelineContext';
+import { ReviewType, Timeline } from 'config/types';
 
 type Props = {
   handleSelectTimelinePoint: (T) => void;
   timelinePoints: Timeline[];
-  activeTimelinePoints?: Timeline;
 };
-const TogglePriority: FC<Props> = ({ handleSelectTimelinePoint, timelinePoints, activeTimelinePoints }) => {
+const TogglePriority: FC<Props> = ({ handleSelectTimelinePoint, timelinePoints }) => {
   const { css } = useStyle();
+  const { activeCode } = useTimelineContainer();
 
   if (timelinePoints?.length <= 1) {
     return null;
@@ -16,7 +17,7 @@ const TogglePriority: FC<Props> = ({ handleSelectTimelinePoint, timelinePoints, 
   return (
     <div className={css(wrapperStyle)}>
       {timelinePoints.map((timelinePoint, index) => {
-        if (timelinePoint.uuid === activeTimelinePoints?.uuid) {
+        if (timelinePoint.code === activeCode[ReviewType.QUARTER]) {
           return (
             <div className={css(activeStepStyle)} key={timelinePoint.uuid}>
               <span className={css({ padding: '2px 8px 4px' })}>Quarter {index + 1}</span>
@@ -25,7 +26,7 @@ const TogglePriority: FC<Props> = ({ handleSelectTimelinePoint, timelinePoints, 
         }
         return (
           <div
-            data-uuid={timelinePoint.uuid}
+            data-code={timelinePoint.code}
             onClick={handleSelectTimelinePoint}
             className={css(stepStyle)}
             key={timelinePoint.uuid}
@@ -46,6 +47,7 @@ const stepStyle: Rule = ({ theme }) => ({
   border: `1px solid ${theme.colors.tescoBlue}`,
   borderRadius: '3px',
   cursor: 'pointer',
+  padding: '6px',
 });
 
 const activeStepStyle: Rule = ({ theme }) => ({
@@ -53,6 +55,7 @@ const activeStepStyle: Rule = ({ theme }) => ({
   background: theme.colors.tescoBlue,
   color: theme.colors.white,
   borderRadius: '3px',
+  padding: '6px',
 });
 
 export default TogglePriority;

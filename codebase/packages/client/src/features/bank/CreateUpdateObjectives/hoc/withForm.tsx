@@ -6,19 +6,17 @@ import {
   Component,
   filterReviewsByTypeSelector,
   getReviewSchema,
-  getTimelinesByReviewTypeSelector,
   ReviewsActions,
 } from '@pma/store';
 
 import { ReviewType, Status } from 'config/enum';
 import useDispatch from 'hooks/useDispatch';
-import { Timeline } from 'config/types';
-import { USER } from 'config/constants';
 
 import { FormStateType, Objective, FormValues } from '../type';
 import { Props } from '../CreateObjectives';
 
 import { prioritiesInStatuses, prioritiesNotInStatuses } from '../utils';
+import { useTimelineContainer } from 'contexts/timelineContext';
 
 export type FormPropsType = {
   formElements: Array<any>;
@@ -42,23 +40,13 @@ export function withForm<
   const Component = (props: P) => {
     const { editNumber, useSingleStep, onClose, formState, setFormState } = props;
     const dispatch = useDispatch();
+    const { activeCode } = useTimelineContainer();
     const [currentPriorityIndex, setPriorityIndex] = useState<number>(0);
 
     const colleagueUuid = useSelector(colleagueUUIDSelector);
 
-    const timelinePoints: Timeline[] =
-      useSelector(getTimelinesByReviewTypeSelector(ReviewType.QUARTER, USER.current)) || [];
-
-    const visibleTimelinePoints = timelinePoints?.filter(
-      (timelinePoint) => timelinePoint.status !== Status.NOT_STARTED,
-    );
-
-    const timelinePoint: Timeline = visibleTimelinePoints.find(
-      (timelinePoint) => timelinePoint.status === Status.STARTED,
-    ) as Timeline;
-
-    const schema = useSelector(getReviewSchema(timelinePoint?.code));
-    const pathParams = { colleagueUuid, code: timelinePoint?.code, cycleUuid: 'CURRENT' };
+    const schema = useSelector(getReviewSchema(activeCode[ReviewType.QUARTER]));
+    const pathParams = { colleagueUuid, code: activeCode[ReviewType.QUARTER], cycleUuid: 'CURRENT' };
     const { components = [] as Component[], markup = { max: 1, min: 15 } } = schema;
     const objectives: Objective[] = useSelector(filterReviewsByTypeSelector(ReviewType.QUARTER)) || [];
 

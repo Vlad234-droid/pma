@@ -18,6 +18,9 @@ type Props = {
 
 const TITLES: Record<string, [string, string]> = {
   ['Q1']: ['priorities', 'Priorities'],
+  ['Q2']: ['priorities', 'Priorities'],
+  ['Q3']: ['priorities', 'Priorities'],
+  ['Q4']: ['priorities', 'Priorities'],
   [ReviewType.QUARTER]: ['priorities', 'Priorities'],
   [ReviewType.OBJECTIVE]: ['objectives', 'Objectives'],
   [ReviewType.MYR]: ['mid_year_review', 'Mid-year review'],
