@@ -395,20 +395,31 @@ const Report: FC = () => {
             )}
           </div>
           <div className={css(pieChartWrapper)}>
-            {/*// TODO: enabled when content of chart meets business requirements*/}
-            {/*{isDisplayTile(IsReportTiles.WL4And5) && (*/}
-            {/*  <div className={css(leftColumn)}>*/}
-            {/*    <PieChart*/}
-            {/*      title={t(TitlesReport.WL4And5, 'WL4 & 5 Objectives submitted')}*/}
-            {/*      display={View.CHART}*/}
-            {/*      data={ReportPage.REPORT_WORK_LEVEL}*/}
-            {/*      link={Page.REPORT_STATISTICS}*/}
-            {/*      params={getYear}*/}
-            {/*      type={convertToLink(ReportPage.REPORT_WORK_LEVEL)}*/}
-            {/*      hoverVisibility={false}*/}
-            {/*    />*/}
-            {/*  </div>*/}
-            {/*)}*/}
+            {isDisplayTile(IsReportTiles.WL4And5) && (
+              <div className={css(leftColumn)}>
+                <ChartWidget
+                  configKey={ReportPage.REPORT_WORK_LEVEL}
+                  link={buildPathWithParams(
+                    buildPath(
+                      paramsReplacer(Page.REPORT_STATISTICS, {
+                        ':type': convertToLink(ReportPage.REPORT_WORK_LEVEL),
+                      }),
+                    ),
+                    {
+                      ...getYear,
+                    },
+                  )}
+                >
+                  {({ data }) => (
+                    <PieChart
+                      title={t(TitlesReport.WL4And5, 'WL4 & 5 Objectives submitted')}
+                      data={data}
+                      display={View.CHART}
+                    />
+                  )}
+                </ChartWidget>
+              </div>
+            )}
             {isDisplayTile(IsReportTiles.NEW_TO_BUSINESS) && (
               <div className={css(rightColumn)}>
                 <HoverContainer

@@ -19,6 +19,7 @@ export const useChartDataStatistics = (configKey: ReportPage): Array<Data> => {
     ReportPage.REPORT_EYR_BREAKDOWN,
     ReportPage.REPORT_MYR_BREAKDOWN,
     ReportPage.REPORT_ANNIVERSARY_REVIEWS,
+    ReportPage.REPORT_WORK_LEVEL,
   ];
 
   const report = {
@@ -63,6 +64,10 @@ export const useChartDataStatistics = (configKey: ReportPage): Array<Data> => {
       type: ReportType.EYR,
       selectorType: 'anniversaryReviews',
     },
+    [ReportPage.REPORT_WORK_LEVEL]: {
+      type: ReportType.OBJECTIVE,
+      selectorType: 'leadershipReviews',
+    },
   };
 
   const reportData = report[configKey];
@@ -76,7 +81,8 @@ export const useChartDataStatistics = (configKey: ReportPage): Array<Data> => {
     configKey === ReportPage.REPORT_APPROVED_OBJECTIVES ||
     configKey === ReportPage.REPORT_NEW_TO_BUSINESS
       ? Object.entries(chartData.filter((chart) => chart.type === reportData.type)[0].statistics)
-          ?.find((item) => item[0] === reportData.key)
+          //@ts-ignore
+          ?.find((item) => item[0] === reportData?.key)
           ?.slice(1)
 
           ?.map((item) => {
@@ -84,6 +90,7 @@ export const useChartDataStatistics = (configKey: ReportPage): Array<Data> => {
               [configKey === ReportPage.REPORT_NEW_TO_BUSINESS ? 'count' : 'percentage']:
                 //@ts-ignore
                 configKey === ReportPage.REPORT_NEW_TO_BUSINESS ? item.count : item.percentage,
+              //@ts-ignore
               ...(reportData?.title && { title: reportData?.title }),
             };
           })

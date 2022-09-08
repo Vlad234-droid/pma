@@ -206,8 +206,7 @@ export const checkboxes = (t, fields) => [
 ];
 
 export const getWLFields = (t) => [
-  /*// TODO: enabled when content of chart meets business requirements*/
-  // { id: '10', label: t(StatisticsTitlesReportKeys.WL4And5), isChecked: false },
+  { id: '10', label: t(StatisticsTitlesReportKeys.WL4And5), isChecked: false },
   getSelectAllField(t),
 ];
 
@@ -275,8 +274,8 @@ export const getDefaultData = (type, t) => {
     ],
 
     [ReportPage.REPORT_WORK_LEVEL]: [
-      { percentage: 0, title: 'Not approved' },
       { percentage: 0, title: 'Approved' },
+      { percentage: 0, title: 'Submitted' },
     ],
 
     [ReportPage.REPORT_NEW_TO_BUSINESS]: [{ percentage: 0, title: t(Rating.COLLEAGUES, 'Colleagues') }],

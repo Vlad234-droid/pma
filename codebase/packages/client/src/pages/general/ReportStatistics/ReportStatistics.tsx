@@ -96,6 +96,7 @@ const ReportStatistics = () => {
       case ReportPage.REPORT_END_YEAR_REVIEW:
       case ReportPage.REPORT_APPROVED_OBJECTIVES:
       case ReportPage.REPORT_SUBMITTED_OBJECTIVES:
+      case ReportPage.REPORT_WORK_LEVEL:
         return <StatisticsReviews type={type} />;
 
       case ReportPage.REPORT_ANNIVERSARY_REVIEWS:
