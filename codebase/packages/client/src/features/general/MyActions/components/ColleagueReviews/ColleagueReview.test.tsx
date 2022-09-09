@@ -6,7 +6,8 @@ import { renderWithTheme as render } from 'utils/test';
 
 import ColleagueReview, { TEST_WRAPPER_ID } from './ColleagueReview';
 import { SchemaFixtureVariables } from 'utils/test/fixtures/schema';
-import { ReviewType, Status } from 'config/enum';
+import { Status } from 'config/enum';
+import { Timeline } from 'config/types';
 
 describe('<ColleagueReview />', () => {
   describe('#render', () => {
@@ -44,10 +45,28 @@ describe('<ColleagueReview />', () => {
           },
         ],
       },
-      reviewType: ReviewType.OBJECTIVE,
+      timeline: {
+        uuid: 'uuid',
+        colleagueCycleUuid: 'colleagueCycleUuid',
+        code: 'OBJECTIVE',
+        description: 'OBJECTIVE',
+        type: 'REVIEW',
+        startTime: '2022-09-01T00:00:00.000Z',
+        endTime: '2022-09-15T00:00:00.000Z',
+        status: 'STARTED',
+        summaryStatus: 'WAITING_FOR_APPROVAL',
+        reviewType: 'OBJECTIVE',
+        lastUpdatedTime: '2022-09-09T07:19:52.076Z',
+        statistics: {
+          DRAFT: '1',
+          DECLINED: '1',
+          WAITING_FOR_APPROVAL: '1',
+        },
+      } as Timeline,
       status: Status.WAITING_FOR_APPROVAL,
       validateReview: jest.fn(),
       updateColleagueReviews: jest.fn(),
+      colleagueUuid: 'colleagueUuid',
     };
 
     it('should render ColleagueReview component', () => {
@@ -56,7 +75,7 @@ describe('<ColleagueReview />', () => {
     });
 
     it('should render array of component', () => {
-      const { getByTestId, getByText } = render(<ColleagueReview {...props} />);
+      const { getByText } = render(<ColleagueReview {...props} />);
       expect(getByText(props.schema.components[0].text)).toBeInTheDocument();
     });
   });

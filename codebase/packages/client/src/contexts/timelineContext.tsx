@@ -19,6 +19,14 @@ const TimelineContext = createContext<TimelineData>(defaultData);
 export const TimelineProvider: FC = ({ children }) => {
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const userTimelines: Timeline[] = useSelector(userTimelineSelector(colleagueUuid));
+  const timelines = userTimelines.map(({ status, summaryStatus, uuid, reviewType, colleagueCycleUuid, code }) => ({
+    status,
+    summaryStatus,
+    uuid,
+    reviewType,
+    colleagueCycleUuid,
+    code,
+  }));
 
   const [activeCode, setCode] = useState<{ [key in ReviewType]: string } | {}>({});
   const setActiveCode = (type: ReviewType, code: string) => {
@@ -26,14 +34,14 @@ export const TimelineProvider: FC = ({ children }) => {
   };
 
   useEffect(() => {
-    const activeCodes = userTimelines?.reduce((acc, current) => {
+    const activeCodes = timelines?.reduce((acc, current) => {
       if ([Status.STARTED, Status.FINISHING].includes(current.status)) {
         acc[current.reviewType] = current.code;
       }
       return acc;
     }, {});
     setCode(activeCodes);
-  }, [JSON.stringify(userTimelines)]);
+  }, [JSON.stringify(timelines)]);
 
   return <TimelineContext.Provider value={{ activeCode, setActiveCode }}>{children}</TimelineContext.Provider>;
 };

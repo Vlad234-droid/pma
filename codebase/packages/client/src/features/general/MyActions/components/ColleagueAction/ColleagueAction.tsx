@@ -56,7 +56,7 @@ const ColleagueAction: FC<Props> = ({ status, colleague, onUpdate }) => {
 
   const handleUpdateReview = useCallback(
     (status: Status) => (code: string) => (reason: string) => {
-      const reviewType = colleague?.timeline?.find((timeline) => timeline.code === code).reviewType;
+      const { reviewType, uuid } = colleague?.timeline?.find((timeline) => timeline.code === code);
 
       const data = {
         ...(reason ? { reason } : {}),
@@ -64,9 +64,9 @@ const ColleagueAction: FC<Props> = ({ status, colleague, onUpdate }) => {
         code,
         colleagueUuid: colleague.uuid,
         reviews: colleagueReviews
-          .filter(({ status, type }) => status === Status.WAITING_FOR_APPROVAL && type === reviewType)
-          .map(({ number, properties }) => {
-            if (reviewType !== ReviewType.MYR) {
+          .filter(({ status, tlPointUuid }) => status === Status.WAITING_FOR_APPROVAL && tlPointUuid === uuid)
+          .map(({ number, type, properties }) => {
+            if (type !== ReviewType.MYR) {
               return { number, properties };
             }
             return { number };
@@ -139,6 +139,7 @@ const ColleagueAction: FC<Props> = ({ status, colleague, onUpdate }) => {
                             key={review.uuid}
                             colleagueUuid={colleague.uuid}
                             review={review}
+                            timeline={groupColleagueReviews[reviewType].timeline}
                             schema={allColleagueReviewsSchema[reviewType] || []}
                             validateReview={handleValidateReview}
                             updateColleagueReviews={updateColleagueReviews}

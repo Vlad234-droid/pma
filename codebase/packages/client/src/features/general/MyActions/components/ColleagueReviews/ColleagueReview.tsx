@@ -13,14 +13,16 @@ import { TileWrapper } from 'components/Tile';
 
 import MarkdownRenderer from 'components/MarkdownRenderer';
 import { GenericItemField } from 'components/GenericForm';
-import { ReviewType, Status } from 'config/enum';
+import { Status } from 'config/enum';
 import { formTagComponents } from '../../../Reviews';
 import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
 import FileList from 'components/FileList';
 import { getReviewFileLink } from 'utils/review';
+import { Timeline } from 'config/types';
 
 type Props = {
   review: any;
+  timeline: Timeline;
   schema: any;
   colleagueUuid: string;
   validateReview: (review: { [key: string]: boolean }) => void;
@@ -29,7 +31,14 @@ type Props = {
 
 export const TEST_WRAPPER_ID = 'test-wrapper-id';
 
-const ColleagueReview: FC<Props> = ({ colleagueUuid, review, schema, validateReview, updateColleagueReviews }) => {
+const ColleagueReview: FC<Props> = ({
+  colleagueUuid,
+  review,
+  timeline,
+  schema,
+  validateReview,
+  updateColleagueReviews,
+}) => {
   const { css, theme } = useStyle();
   const { t } = useTranslation();
 
@@ -78,7 +87,7 @@ const ColleagueReview: FC<Props> = ({ colleagueUuid, review, schema, validateRev
     <TileWrapper boarder={true} customStyle={{ marginTop: '20px' }}>
       <div data-test-id={TEST_WRAPPER_ID} className={css({ padding: '24px 35px 24px 24px' })}>
         <div className={css(titleStyles)}>
-          {t(`review_type_description_${review.type?.toLowerCase()}`, ReviewType[review.type], {
+          {t(`review_type_description_${timeline.code?.toLowerCase()}`, timeline.code, {
             num: review.number,
           })}
         </div>
