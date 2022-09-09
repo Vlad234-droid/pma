@@ -259,6 +259,7 @@ const wrapperStyle: CreateRule<{ mobileScreen: boolean; currentUUID: string | un
 const spacedText: Rule = {
   height: '18px',
   display: 'flex',
+  lineHeight: 1,
   justifyContent: 'space-between',
   alignItems: 'space-between',
   width: '100%',
