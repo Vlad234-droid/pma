@@ -4,7 +4,7 @@ import { combineEpics } from 'redux-observable';
 import { from, of } from 'rxjs';
 import { catchError, filter, map, switchMap, takeUntil } from 'rxjs/operators';
 import { getMessages, getMessagesCount, updateMessage } from './actions';
-import { getRequestedFeedbacks, getViewFeedback } from '../feedback/actions';
+import { getGivenFeedbacks, getRequestedFeedbacks, getViewFeedback } from '../feedback/actions';
 
 export const getMessagesEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
@@ -67,7 +67,7 @@ export const refreshFeedbacks: Epic = (action$) =>
       const isViewFeedbackNotification = messeges.find(({ content }) => content.includes('have feedback'));
 
       if (isViewFeedbackNotification) {
-        return getViewFeedback.request({});
+        return getGivenFeedbacks.request({});
       }
     }),
     filter(Boolean),
