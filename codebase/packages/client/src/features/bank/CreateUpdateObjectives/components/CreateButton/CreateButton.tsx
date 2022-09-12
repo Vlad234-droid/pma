@@ -5,12 +5,11 @@ import { IconButton } from 'components/IconButton';
 import { useTranslation } from 'components/Translation';
 import { ReviewType } from 'config/enum';
 import { useSelector } from 'react-redux';
-import { getReviewSchema, getTimelinesByReviewTypeSelector } from '@pma/store';
-import { Timeline } from 'config/types';
-import { USER } from 'config/constants';
+import { getReviewSchema, getTimelinesByReviewTypeSelector, USER } from '@pma/store';
 import { buildPath } from 'features/general/Routes';
 import { Page } from 'pages';
 import { useTimelineContainer } from 'contexts/timelineContext';
+import { Timeline } from 'config/types';
 
 export type CreateModalProps = {
   withIcon?: boolean;
@@ -22,20 +21,21 @@ const CreateButton: FC<Props> = memo(({ withIcon = false }) => {
   const { t } = useTranslation();
   const { css } = useStyle();
   const navigate = useNavigate();
-  const { activeCode } = useTimelineContainer();
+  const { activeTimelines, currentTimelines } = useTimelineContainer();
+  const { code: currentCode } = currentTimelines[ReviewType.QUARTER] || {};
+  const { code: activeCode } = activeTimelines[ReviewType.QUARTER] || {};
+  const isDisabled = !!activeCode && activeCode !== currentCode;
+
+  const schema = useSelector(getReviewSchema(activeCode));
 
   const timelinePoints: Timeline[] =
     useSelector(getTimelinesByReviewTypeSelector(ReviewType.QUARTER, USER.current)) || [];
 
-  const timelinePoint: Timeline = timelinePoints.find(
-    (timelinePoint) => timelinePoint.code === activeCode[ReviewType.QUARTER],
-  ) as Timeline;
+  const timelinePoint: Timeline = timelinePoints.find((timelinePoint) => timelinePoint.code === activeCode) as Timeline;
 
   const objectivesLen = timelinePoint?.statistics
     ? Object.values(timelinePoint?.statistics).reduce((acc, el) => acc + Number(el), 0)
     : 0;
-
-  const schema = useSelector(getReviewSchema(activeCode[ReviewType.QUARTER]));
 
   const { markup = { max: 0, min: 0 } } = schema;
   const isAvailable = objectivesLen < markup.max || false;
@@ -48,7 +48,8 @@ const CreateButton: FC<Props> = memo(({ withIcon = false }) => {
     <div className={css({ display: 'flex', marginBottom: '20px' })}>
       {withIcon ? (
         <IconButton
-          customVariantRules={{ default: iconBtnStyle }}
+          isDisabled={isDisabled}
+          customVariantRules={{ default: iconBtnStyle, disabled: iconBtnStyle }}
           onPress={handleClick}
           graphic='add'
           iconProps={{ invertColors: true }}
@@ -57,7 +58,7 @@ const CreateButton: FC<Props> = memo(({ withIcon = false }) => {
           {t('create_priorities', 'Create priorities')}
         </IconButton>
       ) : (
-        <Button styles={[buttonStyle]} onPress={handleClick}>
+        <Button styles={[buttonStyle]} onPress={handleClick} isDisabled={isDisabled}>
           {t('create_priorities', 'Create priorities')}
         </Button>
       )}

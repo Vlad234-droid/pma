@@ -40,13 +40,14 @@ export function withForm<
   const Component = (props: P) => {
     const { editNumber, useSingleStep, onClose, formState, setFormState } = props;
     const dispatch = useDispatch();
-    const { activeCode } = useTimelineContainer();
+    const { activeTimelines } = useTimelineContainer();
+    const { code: activeCode } = activeTimelines[ReviewType.QUARTER] || {};
     const [currentPriorityIndex, setPriorityIndex] = useState<number>(0);
 
     const colleagueUuid = useSelector(colleagueUUIDSelector);
 
-    const schema = useSelector(getReviewSchema(activeCode[ReviewType.QUARTER]));
-    const pathParams = { colleagueUuid, code: activeCode[ReviewType.QUARTER], cycleUuid: 'CURRENT' };
+    const schema = useSelector(getReviewSchema(activeCode));
+    const pathParams = { colleagueUuid, code: activeCode, cycleUuid: 'CURRENT' };
     const { components = [] as Component[], markup = { max: 1, min: 15 } } = schema;
     const objectives: Objective[] = useSelector(filterReviewsByTypeSelector(ReviewType.QUARTER)) || [];
 

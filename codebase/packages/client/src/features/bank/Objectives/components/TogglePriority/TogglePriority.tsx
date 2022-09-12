@@ -9,7 +9,8 @@ type Props = {
 };
 const TogglePriority: FC<Props> = ({ handleSelectTimelinePoint, timelinePoints }) => {
   const { css } = useStyle();
-  const { activeCode } = useTimelineContainer();
+  const { activeTimelines } = useTimelineContainer();
+  const { code: activeCode } = activeTimelines[ReviewType.QUARTER] || {};
 
   if (timelinePoints?.length <= 1) {
     return null;
@@ -17,7 +18,7 @@ const TogglePriority: FC<Props> = ({ handleSelectTimelinePoint, timelinePoints }
   return (
     <div className={css(wrapperStyle)}>
       {timelinePoints.map((timelinePoint, index) => {
-        if (timelinePoint.code === activeCode[ReviewType.QUARTER]) {
+        if (timelinePoint.code === activeCode) {
           return (
             <div className={css(activeStepStyle)} key={timelinePoint.uuid}>
               <span className={css({ padding: '2px 8px 4px' })}>Quarter {index + 1}</span>

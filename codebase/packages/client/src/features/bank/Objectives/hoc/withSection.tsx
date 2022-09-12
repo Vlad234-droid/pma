@@ -32,14 +32,15 @@ export type PropsType = {
 export function withSection<P>(WrappedComponent: React.ComponentType<P & PropsType>) {
   const Component = (props: P) => {
     const dispatch = useDispatch();
-    const { activeCode, setActiveCode } = useTimelineContainer();
     const { t } = useTranslation();
     const [removedPriority, setPriority] = useState<string>('');
+    const { activeTimelines, setActiveTimeline } = useTimelineContainer();
 
     const { loaded: schemaLoaded } = useSelector(schemaMetaSelector);
     const { loaded: timelineLoaded } = useSelector(timelinesMetaSelector);
     const { loaded: reviewLoaded, saved: reviewSaved } = useSelector(reviewsMetaSelector);
     const { loaded: notesLoaded } = useSelector(priorityNotesMetaSelector);
+    const { code: activeCode } = activeTimelines[ReviewType.QUARTER] || {};
 
     const timelinePoints: Timeline[] =
       useSelector(getTimelinesByReviewTypeSelector(ReviewType.QUARTER, USER.current)) || [];
@@ -48,9 +49,7 @@ export function withSection<P>(WrappedComponent: React.ComponentType<P & PropsTy
       (timelinePoint) => timelinePoint.status !== Status.NOT_STARTED,
     );
 
-    const timelinePoint = visibleTimelinePoints.find(
-      (timelinePoint) => timelinePoint.code === activeCode[ReviewType.QUARTER],
-    );
+    const timelinePoint = visibleTimelinePoints.find((timelinePoint) => timelinePoint.code === activeCode);
 
     const colleagueUuid = useSelector(colleagueUUIDSelector);
     const originObjectives: Review[] = useSelector(filterReviewsByTypeSelector(ReviewType.QUARTER));
@@ -67,7 +66,7 @@ export function withSection<P>(WrappedComponent: React.ComponentType<P & PropsTy
       (e) => {
         const code = e.currentTarget.dataset['code'];
         const timelinePointById = visibleTimelinePoints.find((timelinePoint) => timelinePoint.code === code);
-        setActiveCode(ReviewType.QUARTER, code);
+        timelinePointById && setActiveTimeline(ReviewType.QUARTER, { code, uuid: timelinePointById.uuid });
 
         const filteredObjectives = originObjectives.filter(
           (objective) => objective.tlPointUuid === timelinePointById?.uuid,
@@ -78,7 +77,7 @@ export function withSection<P>(WrappedComponent: React.ComponentType<P & PropsTy
     );
 
     const handleCompletion = (number) => {
-      const pathParams = { colleagueUuid, code: activeCode[ReviewType.QUARTER], cycleUuid: 'CURRENT' };
+      const pathParams = { colleagueUuid, code: activeCode, cycleUuid: 'CURRENT' };
       const objective = originObjectives.find((objective) => objective.number == number);
       dispatch(
         ReviewsActions.updateReview({
@@ -89,7 +88,7 @@ export function withSection<P>(WrappedComponent: React.ComponentType<P & PropsTy
     };
 
     const handleDelete = (number) => {
-      const pathParams = { colleagueUuid, code: activeCode[ReviewType.QUARTER], cycleUuid: 'CURRENT' };
+      const pathParams = { colleagueUuid, code: activeCode, cycleUuid: 'CURRENT' };
       dispatch(
         ReviewsActions.deleteReview({
           pathParams: { ...pathParams, number },
@@ -101,14 +100,14 @@ export function withSection<P>(WrappedComponent: React.ComponentType<P & PropsTy
     const handleClearRemovedPriority = () => setPriority('');
 
     useEffect(() => {
-      if (canShowObjectives && activeCode[ReviewType.QUARTER]) {
+      if (canShowObjectives && activeCode) {
         dispatch(
           ReviewsActions.getReviewsWithNotes({
-            pathParams: { colleagueUuid, code: activeCode[ReviewType.QUARTER], cycleUuid: 'CURRENT' },
+            pathParams: { colleagueUuid, code: activeCode, cycleUuid: 'CURRENT' },
           }),
         );
       }
-    }, [canShowObjectives, activeCode[ReviewType.QUARTER]]);
+    }, [canShowObjectives, activeCode]);
 
     useEffect(() => {
       if ((reviewLoaded || reviewSaved) && schemaLoaded && timelineLoaded && notesLoaded) {

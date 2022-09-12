@@ -22,7 +22,8 @@ export function withBasicData<P extends Props>(
 ) {
   const Component = (props: P) => {
     const dispatch = useDispatch();
-    const { activeCode } = useTimelineContainer();
+    const { activeTimelines } = useTimelineContainer();
+    const { code: activeCode } = activeTimelines[ReviewType.QUARTER] || {};
 
     const defaultFormState = props.useSingleStep ? FormStateType.SINGLE_MODIFY : FormStateType.MODIFY;
     const [formState, setFormState] = useState<FormStateType>(defaultFormState);
@@ -42,11 +43,11 @@ export function withBasicData<P extends Props>(
     }, []);
 
     useEffect(() => {
-      if (activeCode[ReviewType.QUARTER]) {
-        const pathParams = { colleagueUuid, code: activeCode[ReviewType.QUARTER], cycleUuid: 'CURRENT' };
+      if (activeCode) {
+        const pathParams = { colleagueUuid, code: activeCode, cycleUuid: 'CURRENT' };
         dispatch(ReviewsActions.getReviews({ pathParams }));
       }
-    }, []);
+    }, [activeCode]);
 
     useEffect(() => {
       if (reviewError !== null) {

@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 //@ts-ignore
 import { RootState } from 'typesafe-actions';
-import { ReviewType, PDPType } from '@pma/client/src/config/enum';
+import { ReviewType } from '@pma/client/src/config/enum';
 
 import get from 'lodash.get';
 import { ExpressionType } from '../config/types';

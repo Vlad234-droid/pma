@@ -4,14 +4,19 @@ import { colleagueUUIDSelector, userTimelineSelector } from '@pma/store';
 import { ReviewType, Status } from 'config/enum';
 import { Timeline } from '../config/types';
 
+type Identifiers = Pick<Timeline, 'code' | 'uuid'>;
+type TimelinePoints = Partial<Record<ReviewType, Identifiers>>;
+
 const defaultData = {
-  activeCode: {},
-  setActiveCode: () => ({}),
+  activeTimelines: {},
+  currentTimelines: {},
+  setActiveTimeline: () => ({}),
 };
 
 export type TimelineData = {
-  activeCode: { [key in ReviewType]: string } | {};
-  setActiveCode: (type: ReviewType, code: string) => void;
+  activeTimelines: TimelinePoints;
+  currentTimelines: TimelinePoints;
+  setActiveTimeline: (type: ReviewType, code: Identifiers) => void;
 };
 
 const TimelineContext = createContext<TimelineData>(defaultData);
@@ -19,31 +24,32 @@ const TimelineContext = createContext<TimelineData>(defaultData);
 export const TimelineProvider: FC = ({ children }) => {
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const userTimelines: Timeline[] = useSelector(userTimelineSelector(colleagueUuid));
-  const timelines = userTimelines.map(({ status, summaryStatus, uuid, reviewType, colleagueCycleUuid, code }) => ({
-    status,
-    summaryStatus,
-    uuid,
-    reviewType,
-    colleagueCycleUuid,
-    code,
+  const timelines = userTimelines.map(({ lastUpdatedTime, statistics, ...rest }) => ({
+    ...rest,
   }));
 
-  const [activeCode, setCode] = useState<{ [key in ReviewType]: string } | {}>({});
-  const setActiveCode = (type: ReviewType, code: string) => {
-    setCode((state) => ({ ...state, [type]: code }));
+  const [activeTimelines, setActiveTimelines] = useState<TimelinePoints>({});
+  const [currentTimelines, setCurrentTimelines] = useState<TimelinePoints>({});
+  const setActiveTimeline = (type: ReviewType, identifiers: Identifiers) => {
+    setActiveTimelines((state) => ({ ...state, [type]: identifiers }));
   };
 
   useEffect(() => {
-    const activeCodes = timelines?.reduce((acc, current) => {
+    const activePoints = timelines?.reduce((acc, current) => {
       if ([Status.STARTED, Status.FINISHING].includes(current.status)) {
-        acc[current.reviewType] = current.code;
+        acc[current.reviewType] = { code: current.code, uuid: current.uuid };
       }
       return acc;
     }, {});
-    setCode(activeCodes);
+    setActiveTimelines(activePoints);
+    setCurrentTimelines(activePoints);
   }, [JSON.stringify(timelines)]);
 
-  return <TimelineContext.Provider value={{ activeCode, setActiveCode }}>{children}</TimelineContext.Provider>;
+  return (
+    <TimelineContext.Provider value={{ activeTimelines, currentTimelines, setActiveTimeline }}>
+      {children}
+    </TimelineContext.Provider>
+  );
 };
 
 export const useTimelineContainer = () => useContext(TimelineContext);
