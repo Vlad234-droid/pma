@@ -63,6 +63,8 @@ const wrapperStyle: Rule = ({ theme }) => ({
   right: theme.spacing.s0,
   // @ts-ignore
   borderTop: `${theme.border.width.b2} solid ${theme.colors.lightGray}`,
+  background: theme.colors.white,
+  borderRadius: '0px 0 32px 32px',
 });
 
 const buttonWrapperStyle: CreateRule<{ mobileScreen: boolean }> =
