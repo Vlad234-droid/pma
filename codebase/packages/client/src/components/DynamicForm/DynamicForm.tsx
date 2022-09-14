@@ -17,7 +17,7 @@ type Props = {
   onlyView?: boolean;
 };
 
-const DynamicForm: FC<Props> = ({ components, formValues, setValue, errors, prefixKey = '', onlyView = '' }) => {
+const DynamicForm: FC<Props> = ({ components, formValues, setValue, errors, prefixKey = '', onlyView = false }) => {
   const { css } = useStyle();
   const { t } = useTranslation();
 
