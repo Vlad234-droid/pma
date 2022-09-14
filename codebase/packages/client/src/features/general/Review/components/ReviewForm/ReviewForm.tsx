@@ -5,7 +5,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Rule, useStyle } from '@pma/dex-wrapper';
 import { reviewOverallRatingByTypeSelector, ReviewsActions } from '@pma/store';
 
-import { ReviewType } from 'config/enum';
+import { ReviewType, Status } from 'config/enum';
 import { createYupSchema } from 'utils/yup';
 import { useTranslation } from 'components/Translation';
 import { Attention } from 'components/Form';
@@ -23,11 +23,21 @@ export type Props = {
   readonly?: boolean;
   components: any;
   defaultValues: any;
+  reviewStatus: Status;
 };
 
 const overallRatingListeners: string[] = ['what_rating', 'how_rating'];
 
-const ReviewForm: FC<Props> = ({ reviewType, components, defaultValues, readonly, onClose, onSubmit, onSaveDraft }) => {
+const ReviewForm: FC<Props> = ({
+  reviewType,
+  components,
+  defaultValues,
+  readonly,
+  onClose,
+  onSubmit,
+  onSaveDraft,
+  reviewStatus,
+}) => {
   const { css, theme } = useStyle();
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -93,6 +103,7 @@ const ReviewForm: FC<Props> = ({ reviewType, components, defaultValues, readonly
         onClose={onClose}
         onSaveDraft={() => onSaveDraft(getValues())}
         onSave={handleSubmit(onSubmit)}
+        reviewStatus={reviewStatus}
       />
     </form>
   );

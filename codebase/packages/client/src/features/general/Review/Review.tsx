@@ -4,7 +4,7 @@ import { CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
 import {
   Component,
   currentUserSelector,
-  getReviewPropertiesByTypeSelector,
+  filterReviewsByTypeSelector,
   getReviewSchema,
   getTimelineByReviewTypeSelector,
   ReviewsActions,
@@ -27,6 +27,7 @@ import { ReviewHelpModal } from './components/ReviewHelp';
 import { InfoBlock } from 'components/InfoBlock';
 import { USER } from 'config/constants';
 import { formTagComponents } from 'utils/schema';
+import { Review } from 'config/types';
 import ReviewForm from './components/ReviewForm';
 
 type Translation = [string, string];
@@ -48,7 +49,7 @@ const TRANSLATION: Record<ReviewType.MYR | ReviewType.EYR, { title: Translation;
   },
 };
 
-export type Review = {
+export type Props = {
   reviewType: ReviewType.MYR | ReviewType.EYR;
   onClose: () => void;
 };
@@ -58,7 +59,7 @@ enum View {
   MANAGER = 'MANAGER',
 }
 
-const Review: FC<Review> = ({ reviewType, onClose }) => {
+const MyReview: FC<Props> = ({ reviewType, onClose }) => {
   const { css, theme, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const { t } = useTranslation();
@@ -70,9 +71,9 @@ const Review: FC<Review> = ({ reviewType, onClose }) => {
   const { info } = useSelector(currentUserSelector);
   const colleagueUuid = uuid ? uuid : info.colleagueUUID;
   const dispatch = useDispatch();
-  const [review] = useSelector(getReviewPropertiesByTypeSelector(reviewType));
+  const [review]: Review[] = useSelector(filterReviewsByTypeSelector(reviewType)) || [];
+  const formValues = review?.properties || {};
 
-  const formValues = review || {};
   const { loading: reviewLoading, saving, saved } = useSelector(reviewsMetaSelector);
   const { loading: schemaLoading } = useSelector(schemaMetaSelector);
   const schema = useSelector(getReviewSchema(reviewType));
@@ -187,6 +188,7 @@ const Review: FC<Review> = ({ reviewType, onClose }) => {
               onSaveDraft={handleSaveDraft}
               reviewType={reviewType}
               defaultValues={formValues}
+              reviewStatus={review?.status}
             />
           </div>
         </div>
@@ -233,6 +235,4 @@ const helperTextStyle: Rule = ({ theme }) => ({
   paddingBottom: theme.spacing.s5,
 });
 
-const formFieldsWrapperStyle: Rule = ({ theme }) => ({ padding: `0 0 ${theme.spacing.s5}` });
-
-export default Review;
+export default MyReview;
