@@ -6,7 +6,7 @@ import { CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
 import {
   Component,
   currentUserSelector,
-  getReviewPropertiesByTypeSelector,
+  filterReviewsByTypeSelector,
   getReviewSchema,
   getTimelineByReviewTypeSelector,
   ReviewsActions,
@@ -32,6 +32,7 @@ import { ReviewButtons } from './components/ReviewButtons';
 import { ReviewComponents } from 'components/ReviewComponents';
 import { InfoBlock } from 'components/InfoBlock';
 import { USER } from 'config/constants';
+import { Review } from 'config/types';
 import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
 
 type Translation = [string, string];
@@ -53,7 +54,7 @@ const TRANSLATION: Record<ReviewType.MYR | ReviewType.EYR, { title: Translation;
   },
 };
 
-export type Review = {
+export type ReviewProps = {
   reviewType: ReviewType.MYR | ReviewType.EYR;
   onClose: () => void;
 };
@@ -63,7 +64,7 @@ enum View {
   MANAGER = 'MANAGER',
 }
 
-const ReviewFormModal: FC<Review> = ({ reviewType, onClose }) => {
+const ReviewFormModal: FC<ReviewProps> = ({ reviewType, onClose }) => {
   const { css, theme, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const { t } = useTranslation();
@@ -75,8 +76,8 @@ const ReviewFormModal: FC<Review> = ({ reviewType, onClose }) => {
   const { info } = useSelector(currentUserSelector);
   const colleagueUuid = uuid ? uuid : info.colleagueUUID;
   const dispatch = useDispatch();
-  const [review] = useSelector(getReviewPropertiesByTypeSelector(reviewType));
-  const formValues = review || {};
+  const [review]: Review[] = useSelector(filterReviewsByTypeSelector(reviewType)) || [];
+  const formValues = review?.properties || {};
   const {
     loading: reviewLoading,
     loaded: reviewLoaded,
@@ -197,16 +198,10 @@ const ReviewFormModal: FC<Review> = ({ reviewType, onClose }) => {
   }, [watch, reviewLoaded, schemaLoaded, overallRatingListeners]);
 
   useEffect(() => {
-    if (overallRatingRequestKey && review?.[overallRatingRequestKey]) {
-      setValue(overallRatingRequestKey, review[overallRatingRequestKey]);
+    if (overallRatingRequestKey && formValues?.[overallRatingRequestKey]) {
+      setValue(overallRatingRequestKey, formValues[overallRatingRequestKey]);
     }
-  }, [reviewUpdated, review, overallRatingRequestKey]);
-
-  useEffect(() => {
-    if (reviewLoaded && review) {
-      reset(review);
-    }
-  }, [reviewLoaded]);
+  }, [reviewUpdated, formValues, overallRatingRequestKey]);
 
   if (reviewLoading || schemaLoading || saving) {
     return <Spinner fullHeight />;
@@ -251,6 +246,7 @@ const ReviewFormModal: FC<Review> = ({ reviewType, onClose }) => {
             <ReviewComponents components={components} review={formValues} methods={methods} readonly={readonly} />
           </div>
           <ReviewButtons
+            reviewStatus={review?.status}
             isValid={isValid}
             readonly={readonly}
             onClose={onClose}

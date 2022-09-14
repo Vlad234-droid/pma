@@ -1,11 +1,13 @@
 import React, { FC } from 'react';
 import { useStyle, Button, Rule, CreateRule } from '@pma/dex-wrapper';
+import { Status } from 'config/enum';
 import { Trans, useTranslation } from 'components/Translation';
 import { ButtonWithConfirmation } from 'features/general/Modal';
 
 export const TEST_WRAPPER_ID = 'wrapper';
 
 type ReviewButtonsProps = {
+  reviewStatus?: Status;
   readonly: boolean;
   isValid: boolean;
   onClose: () => void;
@@ -13,7 +15,7 @@ type ReviewButtonsProps = {
   onSave: () => void;
 };
 
-const ReviewButtons: FC<ReviewButtonsProps> = ({ readonly, isValid, onClose, onSaveDraft, onSave }) => {
+const ReviewButtons: FC<ReviewButtonsProps> = ({ readonly, isValid, onClose, onSaveDraft, onSave, reviewStatus }) => {
   const { css, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const { t } = useTranslation();
@@ -28,9 +30,15 @@ const ReviewButtons: FC<ReviewButtonsProps> = ({ readonly, isValid, onClose, onS
             </Button>
           ) : (
             <>
-              <Button onPress={onSaveDraft} styles={[buttonWhiteStyle]}>
-                <Trans i18nKey='save_as_draft'>Save as draft</Trans>
-              </Button>
+              {reviewStatus === Status.DECLINED ? (
+                <Button onPress={onClose} styles={[buttonWhiteStyle]}>
+                  <Trans i18nKey='cancel'>Cancel</Trans>
+                </Button>
+              ) : (
+                <Button onPress={onSaveDraft} styles={[buttonWhiteStyle]}>
+                  <Trans i18nKey='save_as_draft'>Save as draft</Trans>
+                </Button>
+              )}
               <ButtonWithConfirmation
                 onSave={onSave}
                 styles={[buttonBlueStyle]}
