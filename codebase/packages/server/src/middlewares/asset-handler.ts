@@ -27,15 +27,16 @@ export const standaloneIndexAssetHandler =
       const preloadedStateCode = Buffer.from(`
           <script>window["__MY_WORK_CONFIG__"] = ${JSON.stringify(config)}</script>
           `);
-  
+
       const bodyIndex = templateCode.indexOf('</body>');
       const preloadedTemplate = Buffer.concat([
         templateCode.slice(0, bodyIndex),
         preloadedStateCode,
         templateCode.slice(bodyIndex),
       ]);
-  
+
       res.contentType('html');
+      res.setHeader('Cache-Control', 'no-store');
       res.send(preloadedTemplate);
     }
   };
