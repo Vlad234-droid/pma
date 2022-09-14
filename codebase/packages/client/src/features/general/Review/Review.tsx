@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -13,6 +13,7 @@ import {
   reviewsMetaSelector,
   SchemaActions,
   schemaMetaSelector,
+  TimelineActions,
   uuidCompareSelector,
 } from '@pma/store';
 import { useParams } from 'react-router';
@@ -76,7 +77,13 @@ const ReviewFormModal: FC<Review> = ({ reviewType, onClose }) => {
   const dispatch = useDispatch();
   const [review] = useSelector(getReviewPropertiesByTypeSelector(reviewType));
   const formValues = review || {};
-  const { loading: reviewLoading, loaded: reviewLoaded, updated: reviewUpdated } = useSelector(reviewsMetaSelector);
+  const {
+    loading: reviewLoading,
+    loaded: reviewLoaded,
+    updated: reviewUpdated,
+    saving,
+    saved,
+  } = useSelector(reviewsMetaSelector);
   const { loading: schemaLoading, loaded: schemaLoaded } = useSelector(schemaMetaSelector);
   const schema = useSelector(getReviewSchema(reviewType));
   // todo hardcoded. rewrite overallRatingRequestKey after merge
@@ -115,6 +122,7 @@ const ReviewFormModal: FC<Review> = ({ reviewType, onClose }) => {
 
   const onSaveDraft = () => {
     const data = getValues();
+
     dispatch(
       ReviewsActions.updateReviews({
         pathParams: { colleagueUuid: info.colleagueUUID, code: timelineReview.code, cycleUuid: 'CURRENT' },
@@ -126,9 +134,9 @@ const ReviewFormModal: FC<Review> = ({ reviewType, onClose }) => {
         ],
       }),
     );
-    onClose();
   };
-  const onSubmit = async (data) => {
+
+  const handleSubmitData = async (data) => {
     dispatch(
       ReviewsActions.updateReviews({
         pathParams: { colleagueUuid: info.colleagueUUID, code: timelineReview.code, cycleUuid: 'CURRENT' },
@@ -144,20 +152,24 @@ const ReviewFormModal: FC<Review> = ({ reviewType, onClose }) => {
     setSuccessModal(true);
   };
 
-  const updateRatingReviewRequest = useCallback(
-    (review) => {
-      const permitToOverallRatingRequest = overallRatingListeners?.length
-        ? overallRatingListeners?.every((listener) => review[listener])
-        : false;
-      if (permitToOverallRatingRequest) {
-        const filteredData = Object.fromEntries(
-          Object.entries(review).filter(([key]) => overallRatingListeners?.includes(key)),
-        );
-        dispatch(ReviewsActions.updateRatingReview({ type: reviewType, number: 1, fields: filteredData }));
-      }
-    },
-    [overallRatingListeners],
-  );
+  const updateReviewRating = (review) => {
+    const permitToOverallRatingRequest = overallRatingListeners?.length
+      ? overallRatingListeners?.every((listener) => review[listener])
+      : false;
+    if (permitToOverallRatingRequest) {
+      const filteredData = Object.fromEntries(
+        Object.entries(review).filter(([key]) => overallRatingListeners?.includes(key)),
+      );
+      dispatch(ReviewsActions.updateRatingReview({ type: reviewType, number: 1, fields: filteredData }));
+    }
+  };
+
+  useEffect(() => {
+    if (!successModal && saved) {
+      dispatch(ReviewsActions.updateReviewMeta({ saved: false }));
+      onClose();
+    }
+  }, [saved, successModal]);
 
   useEffect(() => {
     if (!uuid) return setView(View.USER);
@@ -170,9 +182,15 @@ const ReviewFormModal: FC<Review> = ({ reviewType, onClose }) => {
   }, []);
 
   useEffect(() => {
+    return () => {
+      dispatch(TimelineActions.getTimeline({ colleagueUuid }));
+    };
+  }, []);
+
+  useEffect(() => {
     const subscription = watch((review, { name = '' }) => {
       if (overallRatingListeners?.includes(name)) {
-        updateRatingReviewRequest(review);
+        updateReviewRating(review);
       }
     });
     return () => subscription.unsubscribe();
@@ -190,7 +208,7 @@ const ReviewFormModal: FC<Review> = ({ reviewType, onClose }) => {
     }
   }, [reviewLoaded]);
 
-  if (reviewLoading && schemaLoading) {
+  if (reviewLoading || schemaLoading || saving) {
     return <Spinner fullHeight />;
   }
 
@@ -237,7 +255,7 @@ const ReviewFormModal: FC<Review> = ({ reviewType, onClose }) => {
             readonly={readonly}
             onClose={onClose}
             onSaveDraft={onSaveDraft}
-            onSave={handleSubmit(onSubmit)}
+            onSave={handleSubmit(handleSubmitData)}
           />
         </form>
       </div>
