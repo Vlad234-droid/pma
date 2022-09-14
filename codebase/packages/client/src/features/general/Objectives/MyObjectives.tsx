@@ -48,6 +48,7 @@ const MyObjectives: FC = () => {
 
   useEffect(() => {
     if (colleagueUuid) {
+      dispatch(SchemaActions.getSchema({ colleagueUuid }));
       dispatch(TimelineActions.getTimeline({ colleagueUuid }));
     }
   }, [colleagueUuid]);
@@ -57,14 +58,6 @@ const MyObjectives: FC = () => {
       navigate(`/${Page.NOT_FOUND}`);
     }
   }, [timelinesLoaded, timelinesExist]);
-
-  useEffect(() => {
-    dispatch(SchemaActions.getSchema({ colleagueUuid }));
-
-    // return () => {
-    //   dispatch(SchemaActions.clearSchemaData());
-    // };
-  }, [colleagueUuid]);
 
   if (!isAvailable || isEYRTimeline || cycleType === CycleType.HIRING) return null;
 

@@ -199,5 +199,7 @@ const markdownCustomStyle: CreateRule<{ tag: string }> =
       ...(tags[tag] ? tags[tag] : {}),
     } as Styles;
   };
-
+/**
+ * @deprecated use DynamicForm instead
+ * */
 export default ReviewComponents;

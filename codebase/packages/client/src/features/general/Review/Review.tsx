@@ -1,7 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import * as Yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
 import { CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
 import {
   Component,
@@ -19,20 +17,17 @@ import {
 import { useParams } from 'react-router';
 
 import { ReviewType, Status } from 'config/enum';
-import { createYupSchema } from 'utils/yup';
 import { TriggerModal } from 'features/general/Modal/components/TriggerModal';
 import { useTranslation } from 'components/Translation';
-import { Attention } from 'components/Form';
 import SuccessModal from 'components/SuccessModal';
 import { Icon as IconComponent } from 'components/Icon';
 import Spinner from 'components/Spinner';
 
 import { ReviewHelpModal } from './components/ReviewHelp';
-import { ReviewButtons } from './components/ReviewButtons';
-import { ReviewComponents } from 'components/ReviewComponents';
 import { InfoBlock } from 'components/InfoBlock';
 import { USER } from 'config/constants';
-import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
+import { formTagComponents } from 'utils/schema';
+import ReviewForm from './components/ReviewForm';
 
 type Translation = [string, string];
 
@@ -63,7 +58,7 @@ enum View {
   MANAGER = 'MANAGER',
 }
 
-const ReviewFormModal: FC<Review> = ({ reviewType, onClose }) => {
+const Review: FC<Review> = ({ reviewType, onClose }) => {
   const { css, theme, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const { t } = useTranslation();
@@ -76,56 +71,25 @@ const ReviewFormModal: FC<Review> = ({ reviewType, onClose }) => {
   const colleagueUuid = uuid ? uuid : info.colleagueUUID;
   const dispatch = useDispatch();
   const [review] = useSelector(getReviewPropertiesByTypeSelector(reviewType));
+
   const formValues = review || {};
-  const {
-    loading: reviewLoading,
-    loaded: reviewLoaded,
-    updated: reviewUpdated,
-    saving,
-    saved,
-  } = useSelector(reviewsMetaSelector);
-  const { loading: schemaLoading, loaded: schemaLoaded } = useSelector(schemaMetaSelector);
+  const { loading: reviewLoading, saving, saved } = useSelector(reviewsMetaSelector);
+  const { loading: schemaLoading } = useSelector(schemaMetaSelector);
   const schema = useSelector(getReviewSchema(reviewType));
-  // todo hardcoded. rewrite overallRatingRequestKey after merge
-  const overallRatingListeners: string[] = ['what_rating', 'how_rating'];
-  // todo hardcoded. rewrite getExpressionRequestKey after merge
-  const overallRatingRequestKey = 'overall_rating';
 
   const timelineReview = useSelector(getTimelineByReviewTypeSelector(reviewType, USER.current));
 
-  if (!timelineReview) {
-    return null;
-  }
-
   const readonly =
-    view === View.MANAGER
-      ? true
-      : [Status.WAITING_FOR_APPROVAL, Status.APPROVED].includes(timelineReview.summaryStatus);
+    view === View.MANAGER ||
+    (timelineReview?.summaryStatus &&
+      [Status.WAITING_FOR_APPROVAL, Status.APPROVED].includes(timelineReview?.summaryStatus));
 
   const { components = [] as Component[] } = schema;
 
-  const yepSchema = components.reduce(createYupSchema(t), {});
-  const methods = useFormWithCloseProtection({
-    mode: 'onChange',
-    resolver: yupResolver<Yup.AnyObjectSchema>(Yup.object().shape(yepSchema)),
-    defaultValues: formValues,
-  });
-
-  const {
-    getValues,
-    handleSubmit,
-    formState: { isValid },
-    reset,
-    watch,
-    setValue,
-  } = methods;
-
-  const onSaveDraft = () => {
-    const data = getValues();
-
+  const handleSaveDraft = (data) => {
     dispatch(
       ReviewsActions.updateReviews({
-        pathParams: { colleagueUuid: info.colleagueUUID, code: timelineReview.code, cycleUuid: 'CURRENT' },
+        pathParams: { colleagueUuid: info.colleagueUUID, code: reviewType, cycleUuid: 'CURRENT' },
         data: [
           {
             status: Status.DRAFT,
@@ -139,7 +103,7 @@ const ReviewFormModal: FC<Review> = ({ reviewType, onClose }) => {
   const handleSubmitData = async (data) => {
     dispatch(
       ReviewsActions.updateReviews({
-        pathParams: { colleagueUuid: info.colleagueUUID, code: timelineReview.code, cycleUuid: 'CURRENT' },
+        pathParams: { colleagueUuid: info.colleagueUUID, code: reviewType, cycleUuid: 'CURRENT' },
         data: [
           {
             status: Status.WAITING_FOR_APPROVAL,
@@ -148,20 +112,7 @@ const ReviewFormModal: FC<Review> = ({ reviewType, onClose }) => {
         ],
       }),
     );
-    reset();
     setSuccessModal(true);
-  };
-
-  const updateReviewRating = (review) => {
-    const permitToOverallRatingRequest = overallRatingListeners?.length
-      ? overallRatingListeners?.every((listener) => review[listener])
-      : false;
-    if (permitToOverallRatingRequest) {
-      const filteredData = Object.fromEntries(
-        Object.entries(review).filter(([key]) => overallRatingListeners?.includes(key)),
-      );
-      dispatch(ReviewsActions.updateRatingReview({ type: reviewType, number: 1, fields: filteredData }));
-    }
   };
 
   useEffect(() => {
@@ -177,7 +128,7 @@ const ReviewFormModal: FC<Review> = ({ reviewType, onClose }) => {
   }, []);
 
   useEffect(() => {
-    dispatch(ReviewsActions.getColleagueReviews({ pathParams: { colleagueUuid, cycleUuid: 'CURRENT' } }));
+    dispatch(ReviewsActions.getReviews({ pathParams: { colleagueUuid, cycleUuid: 'CURRENT' } }));
     dispatch(SchemaActions.getSchema({ colleagueUuid }));
   }, []);
 
@@ -186,27 +137,6 @@ const ReviewFormModal: FC<Review> = ({ reviewType, onClose }) => {
       dispatch(TimelineActions.getTimeline({ colleagueUuid }));
     };
   }, []);
-
-  useEffect(() => {
-    const subscription = watch((review, { name = '' }) => {
-      if (overallRatingListeners?.includes(name)) {
-        updateReviewRating(review);
-      }
-    });
-    return () => subscription.unsubscribe();
-  }, [watch, reviewLoaded, schemaLoaded, overallRatingListeners]);
-
-  useEffect(() => {
-    if (overallRatingRequestKey && review?.[overallRatingRequestKey]) {
-      setValue(overallRatingRequestKey, review[overallRatingRequestKey]);
-    }
-  }, [reviewUpdated, review, overallRatingRequestKey]);
-
-  useEffect(() => {
-    if (reviewLoaded && review) {
-      reset(review);
-    }
-  }, [reviewLoaded]);
 
   if (reviewLoading || schemaLoading || saving) {
     return <Spinner fullHeight />;
@@ -227,37 +157,39 @@ const ReviewFormModal: FC<Review> = ({ reviewType, onClose }) => {
     );
   }
 
+  if (!timelineReview || !review) {
+    return null;
+  }
+
   return (
     <div className={css(containerStyle)}>
       <div className={css(wrapperStyle({ mobileScreen }))}>
         <span className={css(iconLeftPositionStyle({ mobileScreen }))} onClick={onClose}>
           <IconComponent graphic='arrowLeft' invertColors={true} />
         </span>
-        <form data-test-id={'REVIEW_FORM_MODAL'}>
-          <div className={css(formFieldsWrapperStyle)}>
-            <div className={css(formTitleStyle)}>{t(...TRANSLATION[reviewType].title, { ns: 'general' })}</div>
-            <div className={css(helperTextStyle)}>{t(...TRANSLATION[reviewType].helperText, { ns: 'general' })}</div>
-            <div className={css({ padding: `0 0 ${theme.spacing.s5}`, display: 'flex' })}>
-              <TriggerModal
-                triggerComponent={
-                  <InfoBlock text={t('need_help_to_write', 'Need help with what to write?', { ns: 'general' })} />
-                }
-                title={t('completing_your_review', 'Completing your review')}
-              >
-                <ReviewHelpModal />
-              </TriggerModal>
-            </div>
-            {!readonly && <Attention />}
-            <ReviewComponents components={components} review={formValues} methods={methods} readonly={readonly} />
+        <div>
+          <div className={css(formTitleStyle)}>{t(...TRANSLATION[reviewType].title, { ns: 'general' })}</div>
+          <div className={css(helperTextStyle)}>{t(...TRANSLATION[reviewType].helperText, { ns: 'general' })}</div>
+          <div className={css({ padding: `0 0 ${theme.spacing.s5}` })}>
+            <TriggerModal
+              triggerComponent={
+                <InfoBlock text={t('need_help_to_write', 'Need help with what to write?', { ns: 'general' })} />
+              }
+              title={t('completing_your_review', 'Completing your review')}
+            >
+              <ReviewHelpModal />
+            </TriggerModal>
+            <ReviewForm
+              components={readonly ? formTagComponents(components, theme) : components}
+              readonly={readonly}
+              onClose={onClose}
+              onSubmit={handleSubmitData}
+              onSaveDraft={handleSaveDraft}
+              reviewType={reviewType}
+              defaultValues={formValues}
+            />
           </div>
-          <ReviewButtons
-            isValid={isValid}
-            readonly={readonly}
-            onClose={onClose}
-            onSaveDraft={onSaveDraft}
-            onSave={handleSubmit(handleSubmitData)}
-          />
-        </form>
+        </div>
       </div>
     </div>
   );
@@ -303,4 +235,4 @@ const helperTextStyle: Rule = ({ theme }) => ({
 
 const formFieldsWrapperStyle: Rule = ({ theme }) => ({ padding: `0 0 ${theme.spacing.s5}` });
 
-export default ReviewFormModal;
+export default Review;

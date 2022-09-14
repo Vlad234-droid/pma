@@ -6,7 +6,7 @@ import { ButtonWithConfirmation } from 'features/general/Modal';
 export const TEST_WRAPPER_ID = 'wrapper';
 
 type ReviewButtonsProps = {
-  readonly: boolean;
+  readonly?: boolean;
   isValid: boolean;
   onClose: () => void;
   onSaveDraft: () => void;

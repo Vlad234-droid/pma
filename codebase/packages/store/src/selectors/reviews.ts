@@ -35,6 +35,12 @@ export const getReviewPropertiesByTypeSelector = (reviewType: ReviewType) =>
       reviews?.data?.filter((review) => review.type === reviewType)?.map((review) => review?.properties) || [],
   );
 
+export const reviewOverallRatingByTypeSelector = (reviewType: ReviewType) =>
+  createSelector(
+    reviewsSelector,
+    (reviews: any) => reviews?.data?.find((review) => review.type === reviewType)?.properties?.overall_rating || '',
+  );
+
 export const getReviewByTypeSelector = (reviewType: ReviewType) =>
   createSelector(reviewsSelector, (reviews) => reviews?.data?.filter((review) => review.type === reviewType));
 
