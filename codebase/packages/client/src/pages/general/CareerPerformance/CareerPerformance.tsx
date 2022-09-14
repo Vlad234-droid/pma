@@ -5,7 +5,7 @@ import { Rule, useStyle } from '@pma/dex-wrapper';
 
 import ViewNavigation from 'features/general/ViewNavigation';
 import { useTenant } from 'features/general/Permission';
-import { ReviewsSection } from 'features/general/Reviews';
+import { ReviewsSection } from 'features/general/Review';
 import { PDPWidget } from 'features/general/PDP';
 import { FeedbackView } from 'features/general/Feedback';
 import { MyNotesView } from 'features/general/Notes';

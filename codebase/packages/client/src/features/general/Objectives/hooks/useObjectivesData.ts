@@ -13,7 +13,7 @@ import {
 import { useSelector } from 'react-redux';
 
 //TODO: move utils to current feature
-import { ObjectiveTypes as OT, transformReviewsToObjectives } from 'features/general/Reviews';
+import { ObjectiveTypes as OT, transformReviewsToObjectives } from 'features/general/Review';
 
 import { ReviewType } from 'config/enum';
 import useDispatch from 'hooks/useDispatch';

@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router';
 import { buildPath } from 'features/general/Routes';
 import { paramsReplacer } from 'utils';
 import { Page } from 'pages';
-import { ObjectiveTypes } from 'features/general/Reviews';
+import { ObjectiveTypes } from 'features/general/Review';
 import { Trans } from 'components/Translation';
 import { useSelector } from 'react-redux';
 import { getReviewsWithoutPriorityNote } from '@pma/store';

@@ -1,20 +1,18 @@
 import React, { FC, useEffect, useMemo } from 'react';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { createYupSchema } from 'utils/yup';
-
 import { Rule, useStyle } from '@pma/dex-wrapper';
 import { FormType } from '@pma/store';
 
+import { createYupSchema } from 'utils/yup';
 import { Input, Item, Select, Textarea } from 'components/Form';
-
 import { useTranslation } from 'components/Translation';
 import { TileWrapper } from 'components/Tile';
-
 import MarkdownRenderer from 'components/MarkdownRenderer';
 import { GenericItemField } from 'components/GenericForm';
 import { Status } from 'config/enum';
-import { formTagComponents } from '../../../Reviews';
+//TODO: should move to general utils
+import { formTagComponents } from 'features/general/Review';
 import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
 import FileList from 'components/FileList';
 import { getReviewFileLink } from 'utils/review';

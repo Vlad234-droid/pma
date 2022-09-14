@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { Rule, useStyle } from '@pma/dex-wrapper';
 import { timelineTypesAvailabilitySelector, uuidCompareSelector } from '@pma/store';
 
-import { AnnualReviewWidget, MidYearReviewWidget, YearEndReviewWidget } from 'features/general/Reviews';
+import { AnnualReviewWidget, MidYearReviewWidget, YearEndReviewWidget } from './';
 import { Trans } from 'components/Translation';
 import Section from 'components/Section';
 import { ReviewType } from 'config/enum';

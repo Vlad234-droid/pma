@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTimelineContainer } from 'contexts/timelineContext';
-import { ObjectiveTypes, transformReviewsToObjectives } from 'features/general/Reviews';
+import { ObjectiveTypes, transformReviewsToObjectives } from 'features/general/Review';
 import {
   colleagueUUIDSelector,
   filterReviewsByTypeSelector,
