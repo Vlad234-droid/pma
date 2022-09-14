@@ -5,7 +5,7 @@ import { colleagueUUIDSelector, timelinesMetaSelector } from '@pma/store';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
-import { ReviewsSection, CompletedReviewsSection, ReviewFilesSection } from 'features/general/Reviews';
+import { ReviewsSection, CompletedReviewsSection, ReviewFilesSection } from 'features/general/Review';
 import { tenant as T, useTenant } from 'features/general/Permission';
 import { ShareWidget } from 'features/general/ShareWidget';
 import { buildPath } from 'features/general/Routes';

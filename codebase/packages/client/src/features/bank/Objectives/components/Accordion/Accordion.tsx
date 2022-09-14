@@ -9,7 +9,7 @@ import { Accordion, Panel, Section } from 'components/Accordion';
 import { Trans, useTranslation } from 'components/Translation';
 import { IconButton, Position } from 'components/IconButton';
 import { buildPath } from 'features/general/Routes';
-import { ObjectiveTypes as OT } from 'features/general/Reviews';
+import { ObjectiveTypes as OT } from 'features/general/Review';
 
 import { ObjectiveHeader } from '../ObjectiveHeader';
 import { FileList, UploadFileButton } from 'features/bank/UploadFile';

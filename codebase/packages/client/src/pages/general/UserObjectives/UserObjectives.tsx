@@ -7,7 +7,7 @@ import { ColleagueProfileWidget } from 'features/general/Profile';
 import { useTranslation } from 'components/Translation';
 import { ShareWidget } from 'features/general/ShareWidget';
 import { buildPath } from 'features/general/Routes';
-import { CompletedReviewsSection, ReviewFilesSection, ReviewsSection } from 'features/general/Reviews';
+import { CompletedReviewsSection, ReviewFilesSection, ReviewsSection } from 'features/general/Review';
 import { useToast, Variant } from 'features/general/Toast';
 
 import { tenant as T, useTenant } from 'features/general/Permission';

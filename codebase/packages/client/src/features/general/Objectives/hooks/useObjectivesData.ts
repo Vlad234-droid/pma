@@ -13,12 +13,12 @@ import {
 import { useSelector } from 'react-redux';
 
 //TODO: move utils to current feature
-import { ObjectiveTypes as OT, transformReviewsToObjectives } from 'features/general/Reviews';
+import { ObjectiveTypes as OT, transformReviewsToObjectives } from 'features/general/Review';
 
 import { ReviewType } from 'config/enum';
 import useDispatch from 'hooks/useDispatch';
 
-const useObjectivesData = (uuid) => {
+const useObjectivesData = (uuid: string) => {
   const dispatch = useDispatch();
   const { loaded: schemaLoaded, loading: schemaLoading } = useSelector(schemaMetaSelector);
   const { loaded: reviewLoaded, loading: reviewLoading } = useSelector(reviewsMetaSelector);
@@ -27,7 +27,7 @@ const useObjectivesData = (uuid) => {
 
   const schema = useSelector(getReviewSchema(ReviewType.OBJECTIVE));
   const { components = [] } = schema;
-  const formElements = components.filter((component) => component.type != 'text');
+  const formElements = components.filter((component: any) => component.type != 'text');
 
   useEffect(() => {
     dispatch(PreviousReviewFilesActions.getPreviousReviewFiles({ colleagueUUID: uuid }));
@@ -44,12 +44,6 @@ const useObjectivesData = (uuid) => {
     dispatch(TimelineActions.getUserTimeline({ colleagueUuid: uuid }));
     dispatch(SchemaActions.getSchema({ colleagueUuid: uuid }));
     dispatch(ColleagueActions.getColleagueByUuid({ colleagueUuid: uuid }));
-
-    return () => {
-      dispatch(ReviewsActions.clearReviewData());
-      dispatch(SchemaActions.clearSchemaData());
-      dispatch(ColleagueActions.clearColleagueData());
-    };
   }, [uuid]);
 
   return { objectives, meta: { loaded: schemaLoaded && reviewLoaded, loading: schemaLoading || reviewLoading } };

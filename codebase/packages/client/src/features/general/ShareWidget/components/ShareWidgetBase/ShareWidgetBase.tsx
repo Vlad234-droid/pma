@@ -21,8 +21,10 @@ import { ReviewType, Status } from 'config/enum';
 import useDispatch from 'hooks/useDispatch';
 import { usePermission, role, useTenant } from 'features/general/Permission';
 
-import * as T from 'features/general/Reviews/types';
-import { transformReviewsToObjectives } from 'features/general/Reviews/utils';
+//TODO: should move to general types
+import * as T from 'features/general/Review/types';
+//TODO: should move to src/utils
+import { transformReviewsToObjectives } from 'features/general/Review/utils';
 
 export type ShareWidgetBaseProps = {
   getContent: (props: ContentProps, t: TFunction) => Content;

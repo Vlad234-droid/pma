@@ -20,6 +20,9 @@ const ItemWrapper = (props) => (
   </Item>
 );
 
+/**
+ * @deprecated use DynamicForm instead
+ * */
 const ReviewComponents: FC<ReviewComponentsProps> = ({ components, review, methods, readonly }) => {
   const { css, theme } = useStyle();
   const borderedComponents: BorderedComponent[] = formTagComponents(components, theme);

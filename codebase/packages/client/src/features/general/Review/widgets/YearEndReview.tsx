@@ -1,24 +1,24 @@
 import React, { FC, useMemo } from 'react';
-import { useSelector } from 'react-redux';
 import { Rule, useStyle } from '@pma/dex-wrapper';
 import { getTimelineByCodeSelector, uuidCompareSelector } from '@pma/store';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { useLocation } from 'react-router-dom';
 
 import { useTranslation } from 'components/Translation';
 import { ReviewWidget } from '../components/ReviewWidget';
-import { getContent } from 'features/general/Reviews/utils';
+import { getContent } from '../utils';
 import { useTenant } from 'features/general/Permission';
 import { buildPath } from 'features/general/Routes';
-import { Page } from 'pages';
-import { ReviewType, Status } from 'config/enum';
 import { paramsReplacer } from 'utils';
+import { ReviewType, Status } from 'config/enum';
+import { Page } from 'pages';
 
 type Props = {
   colleagueUuid: string;
 };
 
-const MidYearReview: FC<Props> = ({ colleagueUuid }) => {
+const YearEndReview: FC<Props> = ({ colleagueUuid }) => {
   const { t } = useTranslation();
   const { css } = useStyle();
   const tenant = useTenant();
@@ -26,7 +26,7 @@ const MidYearReview: FC<Props> = ({ colleagueUuid }) => {
   const { pathname } = useLocation();
   const isUserView = useSelector(uuidCompareSelector(colleagueUuid));
 
-  const review = useSelector(getTimelineByCodeSelector(ReviewType.MYR, colleagueUuid));
+  const review = useSelector(getTimelineByCodeSelector(ReviewType.EYR, colleagueUuid));
 
   if (!review) {
     return null;
@@ -47,19 +47,18 @@ const MidYearReview: FC<Props> = ({ colleagueUuid }) => {
       ),
     [summaryStatus, startTime, lastUpdatedTime],
   );
-
   const disabled = isUserView
     ? summaryStatus === Status.NOT_STARTED
     : summaryStatus === Status.NOT_STARTED || summaryStatus === Status.DRAFT;
 
   return (
-    <div data-test-id='personal' className={css(basicTileStyle)}>
+    <div data-test-id='feedback' className={css(basicTileStyle)}>
       <ReviewWidget
         onClick={() =>
           navigate(
             buildPath(
               paramsReplacer(isUserView ? Page.REVIEWS : Page.USER_TL_REVIEW, {
-                ':type': ReviewType.MYR.toLowerCase(),
+                ':type': ReviewType.EYR.toLocaleLowerCase(),
                 ...(!isUserView && { ':uuid': colleagueUuid }),
               }),
             ),
@@ -70,20 +69,15 @@ const MidYearReview: FC<Props> = ({ colleagueUuid }) => {
             },
           )
         }
-        title={t('mid_year_review', 'Mid-year review')}
-        subTitle={
+        title={t('review_type_description_eyr', 'Year-end review')}
+        description={
           hasDescription
             ? summaryStatus === Status.APPROVED
-              ? t('mid_year_review_widget_title_approved', 'Your mid-year review is complete.')
+              ? t('end_year_review_widget_title_approved', 'Your year-end review is complete.')
               : t(
-                  'mid_year_review_widget_title',
-                  'Complete this once you’ve had your mid-year conversation with your line manager.',
+                  'end_year_review_widget_title',
+                  'Complete this once you’ve had your year-end conversation with your line manager.',
                 )
-            : undefined
-        }
-        description={
-          hasDescription && summaryStatus !== Status.APPROVED
-            ? t('mid_year_review_widget_subtitle', 'This should be submitted and approved by 7th October.')
             : undefined
         }
         disabled={disabled}
@@ -99,7 +93,7 @@ const MidYearReview: FC<Props> = ({ colleagueUuid }) => {
   );
 };
 
-export default MidYearReview;
+export default YearEndReview;
 
 const basicTileStyle: Rule = {
   flex: '1 0 230px',

@@ -11,7 +11,7 @@ import {
   getActiveTimelineByReviewTypeSelector,
 } from '@pma/store';
 import { Trans, useTranslation } from 'components/Translation';
-import { canEditAllObjectiveFn, EditButton } from 'features/general/Reviews';
+import { canEditAllObjectiveFn, EditButton } from 'features/general/Review';
 import Accordion from '../Accordion';
 import Section from 'components/Section';
 import StatusBadge from 'components/StatusBadge';
@@ -36,7 +36,7 @@ const Objectives = () => {
   const {
     objectives,
     meta: { loading, loaded },
-  } = useObjectivesData(uuid);
+  } = useObjectivesData(uuid as string);
   const timelineTypes = useSelector(timelineTypesAvailabilitySelector(colleagueUuid)) || {};
   const canShowObjectives = timelineTypes[ReviewType.OBJECTIVE];
 

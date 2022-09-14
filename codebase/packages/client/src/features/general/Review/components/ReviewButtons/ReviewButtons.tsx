@@ -8,7 +8,7 @@ export const TEST_WRAPPER_ID = 'wrapper';
 
 type ReviewButtonsProps = {
   reviewStatus?: Status;
-  readonly: boolean;
+  readonly?: boolean;
   isValid: boolean;
   onClose: () => void;
   onSaveDraft: () => void;
