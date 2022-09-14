@@ -84,7 +84,7 @@ const ReviewForm: FC<Props> = ({ reviewType, components, defaultValues, readonly
           errors={errors}
           formValues={formValues}
           setValue={setValue}
-          readonly={readonly}
+          onlyView={readonly}
         />
       </div>
       <ReviewButtons

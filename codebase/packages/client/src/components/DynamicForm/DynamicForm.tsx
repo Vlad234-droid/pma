@@ -14,10 +14,10 @@ type Props = {
   components: any[];
   formValues: any;
   prefixKey?: string;
-  readonly?: boolean;
+  onlyView?: boolean;
 };
 
-const DynamicForm: FC<Props> = ({ components, formValues, setValue, errors, prefixKey = '', readonly = '' }) => {
+const DynamicForm: FC<Props> = ({ components, formValues, setValue, errors, prefixKey = '', onlyView = '' }) => {
   const { css } = useStyle();
   const { t } = useTranslation();
 
@@ -33,15 +33,18 @@ const DynamicForm: FC<Props> = ({ components, formValues, setValue, errors, pref
           type,
           validate,
           values = [],
+          expression = {},
           borderStyle = {},
         } = component;
         const value = get(formValues, `${prefixKey}${key}`);
         const error = get(errors, `${prefixKey}${key}.message`);
 
+        const readonly = expression?.auth?.permission?.read?.length > 0;
+
         if (type === FormType.TEXT) {
           return (
             <div className={css({ padding: 0, margin: 0 }, borderStyle)} key={id}>
-              <div className={css({ fontSize: '16px', lineHeight: '20px' }, readonly ? markdownCustomStyle : {})}>
+              <div className={css({ fontSize: '16px', lineHeight: '20px' }, onlyView ? markdownCustomStyle : {})}>
                 <MarkdownRenderer source={text} />
               </div>
             </div>
@@ -50,46 +53,48 @@ const DynamicForm: FC<Props> = ({ components, formValues, setValue, errors, pref
 
         if (type === FormType.TEXT_FIELD && validate?.maxLength <= 100) {
           return (
-            <div key={id} className={css(borderStyle, readonly ? componentCustomStyle : {})}>
+            <div key={id} className={css(borderStyle, onlyView ? componentCustomStyle : {})}>
               <Field
                 key={`${prefixKey}${key}`}
                 name={`${prefixKey}${key}`}
                 label={label}
-                Element={readonly ? Text : Input}
+                Element={onlyView ? Text : Input}
                 Wrapper={Item}
                 setValue={setValue}
                 value={value}
                 error={error}
                 placeholder={description}
+                readonly={readonly}
               />
             </div>
           );
         }
         if (type === FormType.TEXT_FIELD && validate?.maxLength > 100) {
           return (
-            <div key={id} className={css(borderStyle, readonly ? componentCustomStyle : {})}>
+            <div key={id} className={css(borderStyle, onlyView ? componentCustomStyle : {})}>
               <Field
                 key={`${prefixKey}${key}`}
                 name={`${prefixKey}${key}`}
                 label={label}
-                Element={readonly ? Text : Textarea}
+                Element={onlyView ? Text : Textarea}
                 Wrapper={Item}
                 setValue={setValue}
                 value={value}
                 error={error}
                 placeholder={description}
+                readonly={readonly}
               />
             </div>
           );
         }
         if (type === FormType.SELECT) {
           return (
-            <div key={id} className={css(borderStyle, readonly ? componentCustomStyle : {})}>
+            <div key={id} className={css(borderStyle, onlyView ? componentCustomStyle : {})}>
               <Field
                 key={`${prefixKey}${key}`}
                 name={`${prefixKey}${key}`}
                 label={label}
-                Element={readonly ? Text : Select}
+                Element={onlyView ? Text : Select}
                 Wrapper={({ children, label }) => (
                   <Item withIcon={false} label={label}>
                     {children}
@@ -100,6 +105,7 @@ const DynamicForm: FC<Props> = ({ components, formValues, setValue, errors, pref
                 error={error}
                 placeholder={description || t('please_select', 'Please select')}
                 options={values}
+                readonly={readonly}
               />
             </div>
           );
