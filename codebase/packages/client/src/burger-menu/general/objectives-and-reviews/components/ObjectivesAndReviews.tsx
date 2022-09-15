@@ -13,7 +13,9 @@ const MenuItem = () => {
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const timelineExist = useSelector(timelinesExistSelector(colleagueUuid));
   const timelineTypes = useSelector(timelineTypesAvailabilitySelector(colleagueUuid)) || {};
-  const canShowAnnualReview = !timelineTypes[ReviewType.MYR] && timelineTypes[ReviewType.EYR];
+
+  const canShowAnnualReview =
+    (!timelineTypes[ReviewType.MYR] && timelineTypes[ReviewType.EYR]) || !timelineTypes[ReviewType.OBJECTIVE];
 
   if (!timelineExist) return null;
 
