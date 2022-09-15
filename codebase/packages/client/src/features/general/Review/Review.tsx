@@ -68,8 +68,8 @@ const MyReview: FC<Props> = ({ reviewType, onClose }) => {
   const review: Review = useSelector(getReviewByTypeSelector(reviewType)) || {};
   const formValues = review?.properties || {};
 
-  const { loading: reviewLoading, saving, saved } = useSelector(reviewsMetaSelector);
-  const { loading: schemaLoading } = useSelector(schemaMetaSelector);
+  const { loading: reviewLoading, loaded: reviewLoaded, saving, saved } = useSelector(reviewsMetaSelector);
+  const { loading: schemaLoading, loaded: schemaLoaded } = useSelector(schemaMetaSelector);
   const schema = useSelector(getReviewSchema(reviewType));
 
   const timelineReview = useSelector(getTimelineByReviewTypeSelector(reviewType, USER.current)) || ({} as any);
@@ -130,6 +130,8 @@ const MyReview: FC<Props> = ({ reviewType, onClose }) => {
     return <Spinner fullHeight />;
   }
 
+  if (!schemaLoaded || !reviewLoaded) return null;
+
   if (successModal) {
     return (
       <SuccessModal
@@ -142,12 +144,6 @@ const MyReview: FC<Props> = ({ reviewType, onClose }) => {
       />
     );
   }
-
-  // if (!timelineReview || !review) {
-  //   return null;
-  // }
-
-  console.log({ review });
 
   return (
     <div className={css(containerStyle)}>
