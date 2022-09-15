@@ -20,6 +20,7 @@ export const useChartDataStatistics = (configKey: ReportPage): Array<Data> => {
     ReportPage.REPORT_MYR_BREAKDOWN,
     ReportPage.REPORT_ANNIVERSARY_REVIEWS,
     ReportPage.REPORT_WORK_LEVEL,
+    ReportPage.REPORT_FEEDBACK,
   ];
 
   const report = {
