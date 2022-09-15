@@ -3,9 +3,10 @@ import { Button, CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 
+import { CanPerform, role } from 'features/general/Permission';
+import { WrapperModal } from 'features/general/Modal';
 import { Checkbox, Item, Select } from 'components/Form';
 import { Trans, useTranslation } from 'components/Translation';
-import { WrapperModal } from 'features/general/Modal';
 import { ButtonsWrapper } from 'components/ButtonsWrapper';
 
 import { downloadReportStatistics } from '../utils';
@@ -21,6 +22,7 @@ import {
 } from '../config';
 import { ModalStatus } from '../Report';
 import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
+import { ReportPage } from 'config/enum';
 
 export const DOWNLOAD_WRAPPER = 'modal-wrapper';
 
@@ -46,6 +48,7 @@ const ReportModal: FC<ModalProps> = ({ onClose, modalStatus, tiles }) => {
 
   const values = getValues();
 
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [selectedCheckboxes, setSelectedCheckboxes] = useState(
     checkboxes(t, modalStatus === ModalStatus.EDIT ? [...getWLFields(t)] : []),
   );
@@ -71,8 +74,6 @@ const ReportModal: FC<ModalProps> = ({ onClose, modalStatus, tiles }) => {
         });
       });
   }, []);
-
-  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const submitReportModal = () => {
     if (modalStatus === ModalStatus.DOWNLOAD) {
@@ -133,12 +134,25 @@ const ReportModal: FC<ModalProps> = ({ onClose, modalStatus, tiles }) => {
         </h3>
         <div>
           <div className={css({ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' })}>
-            {selectedCheckboxes.map((item) => (
-              <label key={item.id} className={css(checkboxItemStyle)} data-test-id={item.id}>
-                <Checkbox checked={item.isChecked} onChange={() => handleCheck(item.id)} />
-                <span className={css({ marginLeft: '15px' })}>{item.label}</span>
-              </label>
-            ))}
+            {selectedCheckboxes.map((item) =>
+              item.id !== ReportPage.REPORT_WORK_LEVEL ? (
+                <label key={item.id} className={css(checkboxItemStyle)} data-test-id={item.id}>
+                  <Checkbox checked={item.isChecked} onChange={() => handleCheck(item.id)} />
+                  <span className={css({ marginLeft: '15px' })}>{item.label}</span>
+                </label>
+              ) : (
+                <CanPerform
+                  key={item.id}
+                  perform={[role.TALENT_ADMIN]}
+                  yes={() => (
+                    <label key={item.id} className={css(checkboxItemStyle)} data-test-id={item.id}>
+                      <Checkbox checked={item.isChecked} onChange={() => handleCheck(item.id)} />
+                      <span className={css({ marginLeft: '15px' })}>{item.label}</span>
+                    </label>
+                  )}
+                />
+              ),
+            )}
           </div>
           {modalStatus === ModalStatus.DOWNLOAD && (
             <Item withIcon={false} label={t('select_a_year', 'Select a year')}>

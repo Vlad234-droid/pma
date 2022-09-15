@@ -1,10 +1,10 @@
 import {
   MetaDataReport,
+  Rating,
+  ReportPage,
   StatisticsTitlesReport,
   StatisticsTitlesReportKeys,
   Status,
-  Rating,
-  ReportPage,
   TitlesReport,
 } from 'config/enum';
 import { getCurrentYear, getPrevYear } from 'utils/date';
@@ -156,49 +156,49 @@ export const statisticsReport = {
 
 export const checkboxes = (t, fields) => [
   {
-    id: '1',
+    id: ReportPage.REPORT_SUBMITTED_OBJECTIVES,
     label: t(StatisticsTitlesReportKeys.OBJECTIVES_SUBMITTED),
     isChecked: false,
   },
   {
-    id: '2',
+    id: ReportPage.REPORT_APPROVED_OBJECTIVES,
     label: t(StatisticsTitlesReportKeys.OBJECTIVES_APPROVED),
     isChecked: false,
   },
   {
-    id: '3',
+    id: ReportPage.REPORT_MID_YEAR_REVIEW,
     label: t(StatisticsTitlesReportKeys.MID_YEAR_FORMS),
     isChecked: false,
   },
   {
-    id: '4',
+    id: ReportPage.REPORT_MYR_BREAKDOWN,
     label: t(StatisticsTitlesReportKeys.BREAKDOWN_OF_MID_YEAR_RATINGS),
     isChecked: false,
   },
   {
-    id: '5',
+    id: ReportPage.REPORT_END_YEAR_REVIEW,
     label: t(StatisticsTitlesReportKeys.YEAR_END_FORMS),
     isChecked: false,
   },
   {
-    id: '6',
+    id: ReportPage.REPORT_EYR_BREAKDOWN,
     label: t(StatisticsTitlesReportKeys.BREAKDOWN_OF_YEAR_END_RATINGS),
     isChecked: false,
   },
   {
-    id: '7',
+    id: ReportPage.REPORT_FEEDBACK,
     label: t(StatisticsTitlesReportKeys.IN_THE_MOMENT_FEEDBACK),
     isChecked: false,
   },
 
   {
-    id: '8',
+    id: ReportPage.REPORT_NEW_TO_BUSINESS,
     label: t(StatisticsTitlesReportKeys.BUSINESS),
     isChecked: false,
   },
 
   {
-    id: '9',
+    id: ReportPage.REPORT_ANNIVERSARY_REVIEWS,
     label: t(StatisticsTitlesReportKeys.ANNIVERSARY_REVIEWS),
     isChecked: false,
   },
@@ -206,7 +206,7 @@ export const checkboxes = (t, fields) => [
 ];
 
 export const getWLFields = (t) => [
-  { id: '10', label: t(StatisticsTitlesReportKeys.WL4And5), isChecked: false },
+  { id: ReportPage.REPORT_WORK_LEVEL, label: t(StatisticsTitlesReportKeys.WL4And5), isChecked: false },
   getSelectAllField(t),
 ];
 

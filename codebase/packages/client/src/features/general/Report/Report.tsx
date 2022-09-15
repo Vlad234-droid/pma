@@ -4,6 +4,7 @@ import { colleaguesCountSelector, getReportMetaSelector } from '@pma/store';
 import { useSelector } from 'react-redux';
 
 import { buildPath, buildPathWithParams } from 'features/general/Routes';
+import { CanPerform, role } from 'features/general/Permission';
 import { FilterOption } from 'features/general/Shared';
 import InfoTable from 'components/InfoTable';
 import { HoverMessage } from 'components/HoverMessage';
@@ -396,30 +397,36 @@ const Report: FC = () => {
           </div>
           <div className={css(pieChartWrapper)}>
             {isDisplayTile(IsReportTiles.WL4And5) && (
-              <div className={css(leftColumn)}>
-                <ChartWidget
-                  configKey={ReportPage.REPORT_WORK_LEVEL}
-                  link={buildPathWithParams(
-                    buildPath(
-                      paramsReplacer(Page.REPORT_STATISTICS, {
-                        ':type': convertToLink(ReportPage.REPORT_WORK_LEVEL),
-                      }),
-                    ),
-                    {
-                      ...getYear,
-                    },
-                  )}
-                >
-                  {({ data }) => (
-                    <PieChart
-                      title={t(TitlesReport.WL4And5, 'WL4 & 5 Objectives submitted')}
-                      data={data}
-                      display={View.CHART}
-                    />
-                  )}
-                </ChartWidget>
-              </div>
+              <CanPerform
+                perform={[role.TALENT_ADMIN]}
+                yes={() => (
+                  <div className={css(leftColumn)}>
+                    <ChartWidget
+                      configKey={ReportPage.REPORT_WORK_LEVEL}
+                      link={buildPathWithParams(
+                        buildPath(
+                          paramsReplacer(Page.REPORT_STATISTICS, {
+                            ':type': convertToLink(ReportPage.REPORT_WORK_LEVEL),
+                          }),
+                        ),
+                        {
+                          ...getYear,
+                        },
+                      )}
+                    >
+                      {({ data }) => (
+                        <PieChart
+                          title={t(TitlesReport.WL4And5, 'WL4 & 5 Objectives submitted')}
+                          data={data}
+                          display={View.CHART}
+                        />
+                      )}
+                    </ChartWidget>
+                  </div>
+                )}
+              />
             )}
+
             {isDisplayTile(IsReportTiles.NEW_TO_BUSINESS) && (
               <div className={css(rightColumn)}>
                 <HoverContainer
