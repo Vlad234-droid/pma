@@ -4,7 +4,7 @@ import useDispatch from 'hooks/useDispatch';
 import {
   colleagueUUIDSelector,
   FormType,
-  getReviewByTypeSelector,
+  getReviewsByTypeSelector,
   isReviewsNumberInStatuses,
   ReviewsActions,
   reviewsMetaSelector,
@@ -39,7 +39,7 @@ const CreateUpdateObjectives: FC<Props> = ({ onClose, editNumber, useSingleStep,
   const isApproved = useSelector(isReviewsNumberInStatuses(ReviewType.OBJECTIVE)([Status.APPROVED], currentNumber));
   const isDeclined = useSelector(isReviewsNumberInStatuses(ReviewType.OBJECTIVE)([Status.DECLINED], currentNumber));
 
-  const objectives = useSelector(getReviewByTypeSelector(ReviewType.OBJECTIVE));
+  const objectives = useSelector(getReviewsByTypeSelector(ReviewType.OBJECTIVE));
   const [schema] = useReviewSchema(ReviewType.OBJECTIVE);
 
   const { components = [], display: newSchemaVersion, markup } = schema;
