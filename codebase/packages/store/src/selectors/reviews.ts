@@ -17,6 +17,11 @@ export const filterReviewsByTypeSelector = (reviewType: ReviewType) =>
     return reviews?.data?.filter((review) => review.type === reviewType) || [];
   });
 
+export const getReviewByTypeSelector = (reviewType: ReviewType) =>
+  createSelector(reviewsSelector, (reviews: any) => {
+    return reviews.data?.find((review) => review.type === reviewType);
+  });
+
 export const getReviewsWithStatuses = createSelector(reviewsSelector, (reviews: any) =>
   reviews?.data?.map(({ status, type }) => ({ status, reviewType: type })),
 );
@@ -25,8 +30,6 @@ export const filterPDPByTypeSelector = (pdpType: PDPType) =>
   createSelector(pdpSelector, (pdps: any) => {
     return pdps?.data?.filter((pdp) => pdp.type === pdpType) || [];
   });
-
-//getReviewByTypeSelector
 
 export const getReviewPropertiesByTypeSelector = (reviewType: ReviewType) =>
   createSelector(
@@ -41,7 +44,7 @@ export const reviewOverallRatingByTypeSelector = (reviewType: ReviewType) =>
     (reviews: any) => reviews?.data?.find((review) => review.type === reviewType)?.properties?.overall_rating || '',
   );
 
-export const getReviewByTypeSelector = (reviewType: ReviewType) =>
+export const getReviewsByTypeSelector = (reviewType: ReviewType) =>
   createSelector(reviewsSelector, (reviews) => reviews?.data?.filter((review) => review.type === reviewType));
 
 export const getReviewPropertiesSelector = (reviewType: ReviewType) =>

@@ -4,7 +4,7 @@ import { CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
 import {
   Component,
   currentUserSelector,
-  filterReviewsByTypeSelector,
+  getReviewByTypeSelector,
   getReviewSchema,
   getTimelineByReviewTypeSelector,
   ReviewsActions,
@@ -54,11 +54,6 @@ export type Props = {
   onClose: () => void;
 };
 
-enum View {
-  USER = 'USER',
-  MANAGER = 'MANAGER',
-}
-
 const MyReview: FC<Props> = ({ reviewType, onClose }) => {
   const { css, theme, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
@@ -66,26 +61,41 @@ const MyReview: FC<Props> = ({ reviewType, onClose }) => {
   const { uuid } = useParams<{ uuid: string }>();
   const isUserView = useSelector(uuidCompareSelector(uuid));
 
-  const [view, setView] = useState<View | null>(null);
   const [successModal, setSuccessModal] = useState(false);
   const { info } = useSelector(currentUserSelector);
-  const colleagueUuid = uuid ? uuid : info.colleagueUUID;
+  const colleagueUuid = uuid || info.colleagueUUID;
   const dispatch = useDispatch();
-  const [review]: Review[] = useSelector(filterReviewsByTypeSelector(reviewType)) || [];
+  const review: Review = useSelector(getReviewByTypeSelector(reviewType)) || {};
   const formValues = review?.properties || {};
 
   const { loading: reviewLoading, saving, saved } = useSelector(reviewsMetaSelector);
   const { loading: schemaLoading } = useSelector(schemaMetaSelector);
   const schema = useSelector(getReviewSchema(reviewType));
 
-  const timelineReview = useSelector(getTimelineByReviewTypeSelector(reviewType, USER.current));
+  const timelineReview = useSelector(getTimelineByReviewTypeSelector(reviewType, USER.current)) || ({} as any);
 
   const readonly =
-    view === View.MANAGER ||
-    (timelineReview?.summaryStatus &&
-      [Status.WAITING_FOR_APPROVAL, Status.APPROVED].includes(timelineReview?.summaryStatus));
+    (uuid && !isUserView) || [Status.WAITING_FOR_APPROVAL, Status.APPROVED].includes(timelineReview?.summaryStatus);
 
   const { components = [] as Component[] } = schema;
+
+  useEffect(() => {
+    if (!successModal && saved) {
+      dispatch(ReviewsActions.updateReviewMeta({ saved: false }));
+      onClose();
+    }
+  }, [saved, successModal]);
+
+  useEffect(() => {
+    dispatch(ReviewsActions.getReviews({ pathParams: { colleagueUuid, cycleUuid: 'CURRENT' } }));
+    dispatch(SchemaActions.getSchema({ colleagueUuid }));
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      dispatch(TimelineActions.getTimeline({ colleagueUuid }));
+    };
+  }, []);
 
   const handleSaveDraft = (data) => {
     dispatch(
@@ -116,34 +126,9 @@ const MyReview: FC<Props> = ({ reviewType, onClose }) => {
     setSuccessModal(true);
   };
 
-  useEffect(() => {
-    if (!successModal && saved) {
-      dispatch(ReviewsActions.updateReviewMeta({ saved: false }));
-      onClose();
-    }
-  }, [saved, successModal]);
-
-  useEffect(() => {
-    if (!uuid) return setView(View.USER);
-    isUserView ? setView(View.USER) : setView(View.MANAGER);
-  }, []);
-
-  useEffect(() => {
-    dispatch(ReviewsActions.getReviews({ pathParams: { colleagueUuid, cycleUuid: 'CURRENT' } }));
-    dispatch(SchemaActions.getSchema({ colleagueUuid }));
-  }, []);
-
-  useEffect(() => {
-    return () => {
-      dispatch(TimelineActions.getTimeline({ colleagueUuid }));
-    };
-  }, []);
-
   if (reviewLoading || schemaLoading || saving) {
     return <Spinner fullHeight />;
   }
-
-  if (!view) return null;
 
   if (successModal) {
     return (
@@ -158,9 +143,11 @@ const MyReview: FC<Props> = ({ reviewType, onClose }) => {
     );
   }
 
-  if (!timelineReview || !review) {
-    return null;
-  }
+  // if (!timelineReview || !review) {
+  //   return null;
+  // }
+
+  console.log({ review });
 
   return (
     <div className={css(containerStyle)}>
