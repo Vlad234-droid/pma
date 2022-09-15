@@ -26,7 +26,7 @@ const ColleagueAction: FC<Props> = ({ status, colleague, onUpdate }) => {
   const [colleagueExpanded, setColleagueExpanded] = useState<string>();
   const [colleagueReviews, updateColleagueReviews] = useState<any>([]);
   const [formsValid, validateReview] = useState<{ [key: string]: boolean }>({});
-  const isButtonsDisabled = Object.values(formsValid).filter((val) => !val)?.length > 0;
+  const isButtonsDisabled = Object.values(formsValid).some((value) => !value);
 
   const dispatch = useDispatch();
   const { css } = useStyle();

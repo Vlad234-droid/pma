@@ -172,7 +172,7 @@ const pages: Record<Page, PageComponent> = {
     perform: [role.COLLEAGUE],
     tenant: [tenant.BANK, tenant.GENERAL],
   },
-  [Page.MY_ACTIONS]: {
+  [Page.MY_TEAM_ACTIONS]: {
     Element: MyActions,
     title: (tenant, t) => t('actions'),
     withHeader: true,
