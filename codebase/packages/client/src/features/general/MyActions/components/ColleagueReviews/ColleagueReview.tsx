@@ -5,11 +5,10 @@ import { Rule, useStyle } from '@pma/dex-wrapper';
 import { FormType } from '@pma/store';
 
 import { createYupSchema } from 'utils/yup';
-import { Input, Item, Select, Textarea } from 'components/Form';
+import { Input, Item, Select, Textarea, Field } from 'components/Form';
 import { useTranslation } from 'components/Translation';
 import { TileWrapper } from 'components/Tile';
 import MarkdownRenderer from 'components/MarkdownRenderer';
-import { GenericItemField } from 'components/GenericForm';
 import { Status } from 'config/enum';
 //TODO: should move to general utils
 import { formTagComponents } from 'features/general/Review';
@@ -24,19 +23,12 @@ type Props = {
   schema: any;
   colleagueUuid: string;
   validateReview: (review: { [key: string]: boolean }) => void;
-  updateColleagueReviews: (T) => void;
+  onUpdate: (reviewUuid: string, review: any) => void;
 };
 
 export const TEST_WRAPPER_ID = 'test-wrapper-id';
 
-const ColleagueReview: FC<Props> = ({
-  colleagueUuid,
-  review,
-  timeline,
-  schema,
-  validateReview,
-  updateColleagueReviews,
-}) => {
+const ColleagueReview: FC<Props> = ({ colleagueUuid, review, timeline, schema, validateReview, onUpdate }) => {
   const { css, theme } = useStyle();
   const { t } = useTranslation();
 
@@ -44,6 +36,7 @@ const ColleagueReview: FC<Props> = ({
   const styledComponents = formTagComponents(components, theme);
 
   const reviewProperties = review?.properties;
+
   const fileList = useMemo(
     () =>
       review?.files?.map(({ fileName, uuid }) => ({
@@ -64,6 +57,8 @@ const ColleagueReview: FC<Props> = ({
   const {
     formState: { isValid },
     watch,
+    setValue,
+    getValues,
   } = methods;
 
   useEffect(() => {
@@ -72,14 +67,12 @@ const ColleagueReview: FC<Props> = ({
 
   useEffect(() => {
     const subscription = watch((data) => {
-      updateColleagueReviews((stateReviews) => {
-        const reviews = stateReviews?.filter(({ uuid }) => uuid !== review.uuid) || {};
-        const currentReview = stateReviews?.find(({ uuid }) => uuid === review.uuid) || {};
-        return [...reviews, { ...currentReview, properties: { ...data } }];
-      });
+      onUpdate(review.uuid, data);
     });
     return () => subscription.unsubscribe();
   }, [watch, review]);
+
+  const formValues = getValues();
 
   return (
     <TileWrapper boarder={true} customStyle={{ marginTop: '20px' }}>
@@ -104,7 +97,7 @@ const ColleagueReview: FC<Props> = ({
               expression = {},
               borderStyle = {},
             } = component;
-            const value = key && reviewProperties?.[key] ? reviewProperties[key] : '';
+            const value = formValues[key] || '';
 
             if (type === FormType.TEXT) {
               return (
@@ -120,10 +113,10 @@ const ColleagueReview: FC<Props> = ({
               if (type === FormType.TEXT_FIELD) {
                 return (
                   <div className={css(borderStyle)}>
-                    <GenericItemField
+                    <Field
                       key={id}
                       name={key}
-                      methods={methods}
+                      setValue={setValue}
                       label={label}
                       Wrapper={Item}
                       wrapperProps={{ marginBot: false, labelCustomStyle: { padding: '0px 0px 8px' } }}
@@ -138,10 +131,10 @@ const ColleagueReview: FC<Props> = ({
               if (type === FormType.SELECT) {
                 return (
                   <div className={css(borderStyle)}>
-                    <GenericItemField
+                    <Field
                       key={id}
                       name={key}
-                      methods={methods}
+                      setValue={setValue}
                       label={label}
                       Wrapper={Item}
                       wrapperProps={{ marginBot: false, labelCustomStyle: { padding: '0px 0px 8px' } }}

@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useState } from 'react';
+import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Rule, useStyle } from '@pma/dex-wrapper';
 import { getAllReviews, getAllReviewSchemas, ReviewsActions, reviewsMetaSelector, SchemaActions } from '@pma/store';
@@ -33,18 +33,19 @@ const ColleagueAction: FC<Props> = ({ status, colleague, onUpdate }) => {
   const { t } = useTranslation();
   const tenant = useTenant();
 
-  const { loaded: reviewLoaded = false } = useSelector(reviewsMetaSelector);
+  const { loaded: reviewLoaded } = useSelector(reviewsMetaSelector);
   const allColleagueReviews = useSelector(getAllReviews) || [];
   const allColleagueReviewsSchema = useSelector(getAllReviewSchemas) || [];
 
-  // TODO: strange part of code, should refactoring
-  const groupColleagueReviews: { [key: string]: { timeline: Timeline; reviews: Review[] } } = {};
-  for (const timeline of colleague.timeline) {
-    groupColleagueReviews[timeline.code] = {
-      timeline,
-      reviews: colleagueReviews.filter((review) => review.tlPointUuid === timeline.uuid),
-    };
-  }
+  const groupColleagueReviews = useMemo(() => {
+    return ((colleague.timeline as Array<any>).reduce((acc, timeline) => {
+      acc[timeline.code] = {
+        timeline,
+        reviews: colleagueReviews?.filter((review) => review.tlPointUuid === timeline.uuid) || [],
+      };
+      return acc;
+    }, {}) || {}) as { [key: string]: { timeline: Timeline; reviews: Review[] } };
+  }, [JSON.stringify(colleagueReviews), colleague.timeline]);
 
   useEffect(() => {
     const reviewsUuid = colleague?.reviews?.map(({ uuid }) => uuid) || [];
@@ -92,6 +93,12 @@ const ColleagueAction: FC<Props> = ({ status, colleague, onUpdate }) => {
   const handleValidateReview = (review: { [key: string]: boolean }) =>
     validateReview((state) => ({ ...state, ...review }));
 
+  const handleChangeReview = (reviewUuid, data) => {
+    updateColleagueReviews((stateReviews) =>
+      stateReviews?.map((review) => (review.uuid !== reviewUuid ? review : { ...review, properties: { ...data } })),
+    );
+  };
+
   return (
     <div data-test-id={`colleague-${colleague.uuid}`}>
       <TileWrapper>
@@ -134,17 +141,20 @@ const ColleagueAction: FC<Props> = ({ status, colleague, onUpdate }) => {
                             marginBottom: '20px',
                           }}
                         />
-                        {groupColleagueReviews[reviewType]?.reviews?.map((review) => (
-                          <ColleagueReview
-                            key={review.uuid}
-                            colleagueUuid={colleague.uuid}
-                            review={review}
-                            timeline={groupColleagueReviews[reviewType].timeline}
-                            schema={allColleagueReviewsSchema[reviewType] || []}
-                            validateReview={handleValidateReview}
-                            updateColleagueReviews={updateColleagueReviews}
-                          />
-                        ))}
+                        {groupColleagueReviews[reviewType]?.reviews?.map((review) => {
+                          if (!review) return null;
+                          return (
+                            <ColleagueReview
+                              key={review.uuid}
+                              colleagueUuid={colleague.uuid}
+                              review={review}
+                              timeline={groupColleagueReviews[reviewType].timeline}
+                              schema={allColleagueReviewsSchema[reviewType] || []}
+                              validateReview={handleValidateReview}
+                              onUpdate={handleChangeReview}
+                            />
+                          );
+                        })}
                         {status === Status.WAITING_FOR_APPROVAL && (
                           <Buttons
                             reviewType={reviewType}
