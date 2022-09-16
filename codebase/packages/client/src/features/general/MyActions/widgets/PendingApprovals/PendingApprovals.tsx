@@ -22,7 +22,7 @@ const PendingApprovals: FC = () => {
   }
 
   return (
-    <Link to={buildPath(Page.MY_ACTIONS)}>
+    <Link to={buildPath(Page.MY_TEAM_ACTIONS)}>
       <TileWrapper customStyle={{ background: colors.pending }}>
         <div data-test-id='pending-approvals' className={css(wrapperStyles)}>
           <div className={css(iconWrapperStyles)}>

@@ -21,7 +21,7 @@ enum Page {
   PROFILE = 'profile',
   SETTINGS = 'settings',
   MY_TEAM = 'my-team',
-  MY_ACTIONS = 'my-team/actions',
+  MY_TEAM_ACTIONS = 'my-team/actions',
   KNOWLEDGE_LIBRARY = 'knowledge-library',
   KNOWLEDGE_LIBRARY_BY_ID = ':countryCode/knowledge-library/:id',
   PEOPLE_TEAM = 'people-team',

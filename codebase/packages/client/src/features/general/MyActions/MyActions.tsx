@@ -14,7 +14,7 @@ import {
   getEmployeesWithReviewStatus,
 } from '@pma/store';
 
-import { Status, ReviewType } from 'config/enum';
+import { Status } from 'config/enum';
 import Spinner from 'components/Spinner';
 import { Checkbox } from 'components/Form';
 import ApprovalWidget from './components/ApprovalWidget';

@@ -1,10 +1,10 @@
 import React, { FC, useState, useMemo } from 'react';
+import { Rule, CreateRule, useStyle } from '@pma/dex-wrapper';
+
 import { View, ViewFilters } from 'features/general/MyTeam';
 import { ActionCountWidget, PendingApprovalsWidget, OutstandingActionsWidget } from 'features/general/MyActions';
-
 import ViewNavigation from 'features/general/ViewNavigation';
 import { Filters, getEmployeesSortingOptions, useSearch, useSorting } from 'features/general/Filters';
-import { Rule, useStyle } from '@pma/dex-wrapper';
 import { CanPerform, role, useTenant } from 'features/general/Permission';
 
 import { useTranslation } from 'components/Translation';
@@ -12,9 +12,10 @@ import { useTranslation } from 'components/Translation';
 export const TEST_ID = 'my-team';
 
 const MyTeamPage: FC = () => {
-  const { css } = useStyle();
+  const { css, matchMedia } = useStyle();
   const { t } = useTranslation();
   const tenant = useTenant();
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
 
   const options = getEmployeesSortingOptions(t);
   const [view, setView] = useState<View>(View.DIRECT_REPORTS);
@@ -55,7 +56,7 @@ const MyTeamPage: FC = () => {
           />
         </div>
       </div>
-      <div className={css(wrapperStyles)}>
+      <div className={css(wrapperStyles({ mobileScreen }))}>
         <div className={css(listWrapperStyles)}>
           {showActions && (
             <>
@@ -93,12 +94,13 @@ const filtersStyles: Rule = {
   alignItems: 'center',
 };
 
-const wrapperStyles: Rule = {
+const wrapperStyles: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => ({
   display: 'flex',
   flexWrap: 'wrap',
   alignItems: 'stretch',
   gap: '8px',
-};
+  flexDirection: mobileScreen ? 'column-reverse' : 'row',
+});
 
 const listWrapperStyles: Rule = {
   flex: '3 1 375px',
