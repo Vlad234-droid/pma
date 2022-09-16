@@ -25,6 +25,10 @@ const Timeline: FC<{ colleagueUuid: string }> = ({ colleagueUuid }) => {
   const timelineTypes = useSelector(timelineTypesAvailabilitySelector(colleagueUuid)) || {};
   const cycleType = useSelector(userCycleTypeSelector);
 
+  useEffect(() => {
+    dispatch(TimelineActions.getTimeline({ colleagueUuid }));
+  }, []);
+
   const isEYRTimeline =
     timelineTypes[ReviewType.EYR] &&
     !timelineTypes[ReviewType.MYR] &&
@@ -32,10 +36,6 @@ const Timeline: FC<{ colleagueUuid: string }> = ({ colleagueUuid }) => {
     !timelineTypes[ReviewType.QUARTER];
 
   if (isEYRTimeline || cycleType === CycleType.HIRING) return null;
-
-  useEffect(() => {
-    dispatch(TimelineActions.getTimeline({ colleagueUuid }));
-  }, []);
 
   return (
     <div className={css(timelineWrapperStyles)}>
