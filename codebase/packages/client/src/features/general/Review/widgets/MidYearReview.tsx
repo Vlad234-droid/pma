@@ -32,13 +32,15 @@ const MidYearReview: FC<Props> = ({ colleagueUuid }) => {
     return null;
   }
 
-  const { summaryStatus, startTime, lastUpdatedTime } = review;
+  const { summaryStatus, startTime, lastUpdatedTime, statistics } = review;
+
+  const status = Object.keys(statistics || { STARTED: 1 })[0];
 
   const [graphic, iconColor, background, shadow, hasDescription, content, buttonText] = useMemo(
     () =>
       getContent(
         {
-          status: summaryStatus,
+          status: status,
           startTime,
           lastUpdatedTime,
         },

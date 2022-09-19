@@ -25,7 +25,15 @@ export type ModalProps = {
   };
 };
 
-export const Modal: FC<ModalProps> = ({
+export const Modal: FC<ModalProps> = (props) => {
+  return (
+    <OverlayContainer id='portal-modal' data-test-id='overlay-container'>
+      <ModalComponent {...props} />
+    </OverlayContainer>
+  );
+};
+
+const ModalComponent: FC<ModalProps> = ({
   modalPosition = 'bottom',
   overlayStyles = {},
   overlayColor,
@@ -64,35 +72,33 @@ export const Modal: FC<ModalProps> = ({
   );
 
   return (
-    <OverlayContainer id='portal-modal' data-test-id='overlay-container'>
-      <div
-        {...underlayProps}
-        aria-label='overlay'
-        className={css(underlayRule({ isBottomPosition, overlayColor }), overlayStyles)}
-      >
-        <FocusScope restoreFocus autoFocus>
-          <div
-            {...overlayProps}
-            {...dialogProps}
-            {...modalProps}
-            ref={overlayRef}
-            className={css(containerRule({ isBottomPosition, topInset, sideInset }), ...modalContainerRule)}
-          >
-            {titleContent && (
-              <div {...titleProps} className={css(...titleStyles)}>
-                {titleContent}
-              </div>
-            )}
-            {children}
-            {closeOptionContent && (
-              <Button onPress={onClose} styles={closeOptionStyles}>
-                {closeOptionContent}
-              </Button>
-            )}
-          </div>
-        </FocusScope>
-      </div>
-    </OverlayContainer>
+    <div
+      {...underlayProps}
+      aria-label='overlay'
+      className={css(underlayRule({ isBottomPosition, overlayColor }), overlayStyles)}
+    >
+      <FocusScope restoreFocus autoFocus>
+        <div
+          {...overlayProps}
+          {...dialogProps}
+          {...modalProps}
+          ref={overlayRef}
+          className={css(containerRule({ isBottomPosition, topInset, sideInset }), ...modalContainerRule)}
+        >
+          {titleContent && (
+            <div {...titleProps} className={css(...titleStyles)}>
+              {titleContent}
+            </div>
+          )}
+          {children}
+          {closeOptionContent && (
+            <Button onPress={onClose} styles={closeOptionStyles}>
+              {closeOptionContent}
+            </Button>
+          )}
+        </div>
+      </FocusScope>
+    </div>
   );
 };
 

@@ -74,8 +74,9 @@ const MyReview: FC<Props> = ({ reviewType, onClose }) => {
 
   const timelineReview = useSelector(getTimelineByReviewTypeSelector(reviewType, USER.current)) || ({} as any);
 
-  const readonly =
-    (uuid && !isUserView) || [Status.WAITING_FOR_APPROVAL, Status.APPROVED].includes(timelineReview?.summaryStatus);
+  const status = Object.keys(timelineReview?.statistics || { STARTED: 1 })[0] as Status;
+
+  const readonly = (uuid && !isUserView) || [Status.WAITING_FOR_APPROVAL, Status.APPROVED].includes(status);
 
   const { components = [] as Component[] } = schema;
 

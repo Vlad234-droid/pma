@@ -69,7 +69,8 @@ export function withForm<P extends ReviewFormType>(WrappedComponent: React.Compo
       return null;
     }
 
-    const readonly = [Status.WAITING_FOR_APPROVAL, Status.APPROVED].includes(timelineReview.summaryStatus);
+    const status = Object.keys(timelineReview.statistics || { STARTED: 1 })[0] as Status;
+    const readonly = [Status.WAITING_FOR_APPROVAL, Status.APPROVED].includes(status);
 
     const { components = [] as Component[] } = schema;
 

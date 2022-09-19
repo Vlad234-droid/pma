@@ -42,15 +42,7 @@ export const getContent = (
         t('view_and_edit', 'View and edit'),
       ];
     case Status.OVERDUE:
-      return [
-        'roundAlert',
-        'error',
-        'tescoBlue',
-        true,
-        true,
-        t('overdue', 'Overdue'),
-        t('view_and_edit', 'View and edit'),
-      ];
+      return ['roundAlert', 'error', 'tescoBlue', true, true, t('overdue', 'Overdue'), t('view', 'View')];
     case Status.DRAFT:
       return [
         'roundPencil',
