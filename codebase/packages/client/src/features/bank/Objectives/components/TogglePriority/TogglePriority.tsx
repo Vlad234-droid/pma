@@ -57,6 +57,7 @@ const activeStepStyle: Rule = ({ theme }) => ({
   color: theme.colors.white,
   borderRadius: '3px',
   padding: '6px',
+  cursor: 'pointer',
 });
 
 export default TogglePriority;

@@ -11,7 +11,7 @@ import {
   getActiveTimelineByReviewTypeSelector,
 } from '@pma/store';
 import { Trans, useTranslation } from 'components/Translation';
-import { canEditAllObjectiveFn, EditButton } from 'features/general/Review';
+import { EditButton } from '../Buttons';
 import Accordion from '../Accordion';
 import Section from 'components/Section';
 import StatusBadge from 'components/StatusBadge';
@@ -21,6 +21,7 @@ import { IconButton } from 'components/IconButton';
 import Spinner from 'components/Spinner';
 import useDispatch from 'hooks/useDispatch';
 import { useObjectivesData, useDownload } from '../../hooks';
+import { canEditAllObjectiveFn } from '../../utils';
 
 export const TEST_ID = 'objectives-test-id';
 

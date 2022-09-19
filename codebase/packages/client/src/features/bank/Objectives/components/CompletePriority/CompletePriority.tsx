@@ -2,7 +2,7 @@ import React, { FC, useState } from 'react';
 import { Status } from 'config/enum';
 import { Icon, SuccessMark } from 'components/Icon';
 import { Trans, useTranslation } from 'components/Translation';
-import { Rule, CreateRule, useStyle } from '@pma/dex-wrapper';
+import { CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
 
 import { ConfirmModal } from 'components/ConfirmModal';
 import SuccessModal from 'components/SuccessModal';
@@ -17,9 +17,9 @@ export const CompletePriority: FC<{
 
   const [isOpen, setOpen] = useState(false);
   const [isOpenModal, setOpenModal] = useState(false);
-  const disabledButton = [Status.DRAFT].includes(status);
+  const enabledButton = [Status.APPROVED].includes(status);
   const handleOpen = () => {
-    if (!disabledButton) {
+    if (enabledButton) {
       setOpen(true);
     }
   };
@@ -30,8 +30,15 @@ export const CompletePriority: FC<{
 
   return (
     <div>
-      {status === Status.APPROVED && (
-        <div className={css(buttonLikeStyle({ disabled: disabledButton }))} onClick={handleOpen}>
+      {status === Status.COMPLETED ? (
+        <div className={css(buttonLikeStyle({ disabled: false }))}>
+          <Icon graphic='roundTick' title={'check'} size={'24px'} />
+          <span className={css({ paddingLeft: '10px' })}>
+            <Trans i18nKey={'completed'}>Completed</Trans>
+          </span>
+        </div>
+      ) : (
+        <div className={css(buttonLikeStyle({ disabled: !enabledButton }))} onClick={handleOpen}>
           <span className={css(iconCircleStyles)}>
             <Icon graphic='check' title={'check'} size={'14px'} />
           </span>
@@ -40,9 +47,13 @@ export const CompletePriority: FC<{
           </span>
         </div>
       )}
+
       {isOpen && (
         <ConfirmModal
-          title={'Are you sure ?'}
+          title={t(
+            'confirm_question_complete_priorities',
+            'Are you sure you have completed all the steps of this priority? Your manager will be notified of this priority completion.',
+          )}
           onSave={() => {
             handleSave();
             setOpen(false);
@@ -69,9 +80,10 @@ const buttonLikeStyle: CreateRule<{ disabled: boolean }> =
   ({ disabled }) =>
   ({ theme }) => ({
     display: 'flex',
-    cursor: 'pointer',
+    cursor: disabled ? 'unset' : 'pointer',
     opacity: disabled ? 0.4 : 1,
     color: theme.colors.tescoBlue,
+    alignItems: 'center',
   });
 
 const iconCircleStyles: Rule = ({ theme }) => ({

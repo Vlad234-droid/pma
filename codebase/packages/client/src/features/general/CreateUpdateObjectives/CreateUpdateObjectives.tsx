@@ -51,12 +51,6 @@ const CreateUpdateObjectives: FC<Props> = ({ onClose, editNumber, useSingleStep,
   }, [editNumber]);
 
   useEffect(() => {
-    return () => {
-      dispatch(TimelineActions.getTimeline({ colleagueUuid }));
-    };
-  }, []);
-
-  useEffect(() => {
     if (!isSuccess && saved) {
       dispatch(ReviewsActions.updateReviewMeta({ saved: false }));
       onClose();

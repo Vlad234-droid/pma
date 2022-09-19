@@ -1,13 +1,11 @@
 import React, { FC } from 'react';
 import { Rule, useStyle } from '@pma/dex-wrapper';
+
 import { Accordion, Panel, Section } from 'components/Accordion';
 import { Trans } from 'components/Translation';
-
-//TODO: should move to src/components
-import { ObjectiveButtons } from 'features/general/Review/components/Buttons';
-//TODO: should move to src/config/types
 import * as T from 'features/general/Review/types';
 
+import { ObjectiveButtons } from '../Buttons';
 import { ObjectiveDetails } from '../Tile';
 import ObjectiveHeader from '../ObjectiveHeader';
 

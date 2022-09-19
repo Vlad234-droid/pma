@@ -91,12 +91,6 @@ const MyReview: FC<Props> = ({ reviewType, onClose }) => {
     dispatch(SchemaActions.getSchema({ colleagueUuid }));
   }, []);
 
-  useEffect(() => {
-    return () => {
-      dispatch(TimelineActions.getTimeline({ colleagueUuid }));
-    };
-  }, []);
-
   const handleSaveDraft = (data) => {
     dispatch(
       ReviewsActions.updateReviews({
