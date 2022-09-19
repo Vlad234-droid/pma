@@ -59,6 +59,7 @@ export const ReviewFilesSection: FC<Props> = ({ colleagueUuid }) => {
         <PreviousReviewFiles
           onOverlayClick={() => setPreviousReviewFilesModalShow(false)}
           colleagueUUID={colleagueUuid}
+          readonly
         />
       )}
     </>
