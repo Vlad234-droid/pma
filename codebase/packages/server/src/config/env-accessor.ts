@@ -74,6 +74,7 @@ const optionalEnvironmentParameters = [
   'LOGGER_PRETIFY',
   'LOGGER_THEME',
   'LOGGER_LOG_AUTHTOKEN',
+  'USE_REQUIRE_IDENTITY_TOKEN',
 ];
 
 export class EnvAccessor {
