@@ -9,10 +9,11 @@ import { Accordion, Panel, Section } from 'components/Accordion';
 import { Trans, useTranslation } from 'components/Translation';
 import { IconButton, Position } from 'components/IconButton';
 import { buildPath } from 'features/general/Routes';
+
+import { FileList } from 'features/bank/UploadFile';
 import { ObjectiveTypes as OT } from 'features/general/Review';
 
 import { ObjectiveHeader } from '../ObjectiveHeader';
-import { FileList, UploadFileButton } from 'features/bank/UploadFile';
 import { CompletePriority } from '../CompletePriority/CompletePriority';
 import { NoteSection } from '../NoteSection';
 import { DeleteButton } from '../DeleteButton';
@@ -32,9 +33,7 @@ const ObjectiveAccordion: FC<ObjectiveAccordionProps> = ({ objectives, handleCom
   const navigate = useNavigate();
 
   const handleEditClick = (number) => {
-    const pathname = paramsReplacer(buildPath(Page.EDIT_OBJECTIVE), { ':id': number.toString() });
-
-    navigate(pathname);
+    navigate(paramsReplacer(buildPath(Page.EDIT_OBJECTIVE), { ':id': number.toString() }));
   };
 
   return (
@@ -65,7 +64,6 @@ const ObjectiveAccordion: FC<ObjectiveAccordionProps> = ({ objectives, handleCom
                 <div className={css(buttonStyles)}>
                   <CompletePriority status={status} number={id} handleCompletion={handleCompletion} />
                   <div>
-                    <UploadFileButton reviewUUID={uuid} number={id} disabled={!isEnabled} />
                     <IconButton
                       isDisabled={!isEnabled}
                       onPress={() => handleEditClick(id)}
@@ -88,7 +86,7 @@ const ObjectiveAccordion: FC<ObjectiveAccordionProps> = ({ objectives, handleCom
                 <FileList reviewUUID={uuid} />
                 <NoteSection reviewUuid={uuid} />
               </Panel>
-              <div className={css({ paddingBottom: '25px' })}></div>
+              <div className={css({ paddingBottom: '25px' })} />
             </Section>
           );
         })}
