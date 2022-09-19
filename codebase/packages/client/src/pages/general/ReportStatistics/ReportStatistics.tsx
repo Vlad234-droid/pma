@@ -1,13 +1,12 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { CreateRule, IconButton as BackButton, Rule, useStyle } from '@pma/dex-wrapper';
-import { colleaguesCountSelector, ReportPage } from '@pma/store';
+import { getListStatistics, ReportPage } from '@pma/store';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 import { ColleaguesCount } from 'components/ColleaguesCount';
 import { useTranslation } from 'components/Translation';
-import StatisticsReviews from 'features/general/ColleaguesReviews/StatisticsReviews';
-import OverAllReviews from 'features/general/ColleaguesReviews/OverAllReviews';
-import AnniversaryReviews from 'features/general/ColleaguesReviews/AnniversaryReviews';
+import StatisticsReviews from 'features/general/ColleaguesReviews';
 import FilterModal from 'features/general/Report/components/FilterModal';
 import { ColleaguesStatistics } from 'features/general/Report/widgets';
 import { buildPath } from 'features/general/Routes';
@@ -18,10 +17,10 @@ import { useTileStatistics } from 'features/general/ColleaguesReviews/hooks/useT
 import { initialValues } from 'features/general/Report/config';
 import { useHeaderContainer } from 'contexts/headerContext';
 
-import { checkTableChart, getCurrentYearWithStartDate } from 'features/general/Report/utils';
+import { getCurrentYearWithStartDate } from 'features/general/Report/utils';
 import { convertToReportEnum } from 'features/general/ColleaguesReviews/utils';
 import { Page } from 'pages';
-import { useSelector } from 'react-redux';
+import { List } from 'features/general/ColleaguesReviews/config';
 
 const defineHeaderTitle = (type, t) => {
   const tilePage = Page.REPORT_STATISTICS;
@@ -71,7 +70,7 @@ const ReportStatistics = () => {
   const navigate = useNavigate();
 
   const [focus, setFocus] = useState(false);
-  const [searchValueFilterOption, setSearchValueFilterOption] = useState<string>('');
+  const [searchedValue, setSearchedValue] = useState<string>('');
   const [filterModal, setFilterModal] = useState(false);
   const [checkedItems, setCheckedItems]: [string[], (T) => void] = useState([]);
   const [isCheckAll, setIsCheckAll]: [string[], (T) => void] = useState([]);
@@ -84,32 +83,9 @@ const ReportStatistics = () => {
     setLinkTitle(defineHeaderTitle(convertToReportEnum(pathname), t));
   }, []);
 
-  const colleaguesCount = useSelector(colleaguesCountSelector) || 0;
+  const list: List = useSelector(getListStatistics);
 
   const { type } = useTileStatistics();
-
-  const ColleaguesReviews = useMemo(() => {
-    switch (type) {
-      case ReportPage.REPORT_FEEDBACK:
-      case ReportPage.REPORT_NEW_TO_BUSINESS:
-      case ReportPage.REPORT_MID_YEAR_REVIEW:
-      case ReportPage.REPORT_END_YEAR_REVIEW:
-      case ReportPage.REPORT_APPROVED_OBJECTIVES:
-      case ReportPage.REPORT_SUBMITTED_OBJECTIVES:
-      case ReportPage.REPORT_WORK_LEVEL:
-        return <StatisticsReviews type={type} />;
-
-      case ReportPage.REPORT_ANNIVERSARY_REVIEWS:
-        return <AnniversaryReviews type={type} />;
-
-      case ReportPage.REPORT_EYR_BREAKDOWN:
-      case ReportPage.REPORT_MYR_BREAKDOWN:
-        return <OverAllReviews type={type} />;
-
-      default:
-        return null;
-    }
-  }, [type]);
 
   return (
     <div className={css({ position: 'relative' })}>
@@ -129,13 +105,7 @@ const ReportStatistics = () => {
 
       <ColleaguesCount
         countStyles={countStyles}
-        count={colleaguesCount}
-        visible={
-          type === ReportPage.REPORT_APPROVED_OBJECTIVES ||
-          type === ReportPage.REPORT_SUBMITTED_OBJECTIVES ||
-          type === ReportPage.REPORT_MID_YEAR_REVIEW ||
-          type === ReportPage.REPORT_END_YEAR_REVIEW
-        }
+        count={Object.values(list).reduce((acc, item) => acc + item.length, 0) || 0}
       />
 
       <div className={css(header({ mobileScreen }))}>
@@ -144,19 +114,19 @@ const ReportStatistics = () => {
             testSettingsId='filter-options-id'
             focus={focus}
             customIcon={true}
-            searchValue={searchValueFilterOption}
+            searchValue={searchedValue}
             onFocus={setFocus}
             withIcon={false}
             customStyles={{
               ...(focus ? { padding: '10px 20px 10px 16px' } : { padding: '0px' }),
               ...(focus ? { borderRadius: '50px' } : { transitionDelay: '.3s' }),
             }}
-            onChange={(e) => setSearchValueFilterOption(() => e.target.value)}
+            onChange={(e) => setSearchedValue(() => e.target.value)}
             onSettingsPress={() => {
               setFilterModal((prev) => !prev);
               setFocus(false);
             }}
-            setSearchValueFilterOption={setSearchValueFilterOption}
+            setSearchValueFilterOption={setSearchedValue}
           />
           <FilterModal
             filterModal={filterModal}
@@ -171,9 +141,9 @@ const ReportStatistics = () => {
       </div>
       <div data-test-id={'test-pie-chart'} className={css(wrapperStyle)}>
         <div data-test-id={'content-id'} className={css(leftColumn)}>
-          {type && ColleaguesReviews}
+          {type && <StatisticsReviews type={type} />}
         </div>
-        <div data-test-id={'full-view'} className={css(rightColumn({ isTableChart: checkTableChart(type) }))}>
+        <div data-test-id={'full-view'} className={css(rightColumn)}>
           {type && <ColleaguesStatistics type={type} />}
         </div>
       </div>
@@ -193,9 +163,9 @@ const arrowLeftStyle: Rule = ({ theme }) => {
 };
 
 const countStyles: Rule = ({ theme }) => ({
-  position: 'fixed',
-  top: '8.5%',
-  left: '15px',
+  position: 'absolute',
+  top: '28px',
+  left: '5px',
   transform: 'translateY(-50%)',
   fontWeight: theme.font.weight.regular,
   fontSize: theme.font.fixed.f16.fontSize,
@@ -212,16 +182,14 @@ const wrapperStyle: Rule = ({ theme }) => {
   };
 };
 
-const rightColumn: CreateRule<{ isTableChart: boolean }> =
-  ({ isTableChart }) =>
-  ({ theme }) => ({
-    display: 'flex',
-    gap: theme.spacing.s2,
-    flex: 4,
-    flexBasis: '400px',
-    marginTop: isTableChart ? '51px' : '51px',
-    alignSelf: 'flex-end',
-  });
+const rightColumn: Rule = ({ theme }) => ({
+  display: 'flex',
+  gap: theme.spacing.s2,
+  flex: 4,
+  flexBasis: '400px',
+  marginTop: '70px',
+  alignSelf: 'flex-end',
+});
 
 const leftColumn: Rule = ({ theme }) => ({
   display: 'flex',

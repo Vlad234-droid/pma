@@ -2,7 +2,7 @@
 import { Epic, isActionOf } from 'typesafe-actions';
 import { combineEpics } from 'redux-observable';
 import { from, of } from 'rxjs';
-import { catchError, filter, map, switchMap } from 'rxjs/operators';
+import { catchError, filter, map, mergeMap, switchMap } from 'rxjs/operators';
 import {
   getStatisticsReview,
   getOverallRatingsStatistics,
@@ -15,13 +15,13 @@ import {
 export const getStatisticsReviewEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
     filter(isActionOf(getStatisticsReview.request)),
-    switchMap(({ payload }) => {
-      //@ts-ignore
+    mergeMap(({ payload }) => {
+      const { status } = payload;
       return from(api.getColleaguesReview(payload)).pipe(
         //@ts-ignore
         map(({ data }) => {
           //@ts-ignore
-          return getStatisticsReview.success(data.data);
+          return getStatisticsReview.success({ status, data });
         }),
         catchError(({ errors }) => of(getStatisticsReview.failure(errors))),
       );
@@ -31,13 +31,13 @@ export const getStatisticsReviewEpic: Epic = (action$, _, { api }) =>
 export const getOverallRatingsStatisticsEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
     filter(isActionOf(getOverallRatingsStatistics.request)),
-    switchMap(({ payload }) => {
+    mergeMap(({ payload }) => {
       //@ts-ignore
       return from(api.getColleaguesOverallRatings(payload)).pipe(
         //@ts-ignore
         map(({ data }) => {
           //@ts-ignore
-          return getOverallRatingsStatistics.success(data.data);
+          return getOverallRatingsStatistics.success({ status: payload['overall-rating'], data });
         }),
         catchError(({ errors }) => of(getOverallRatingsStatistics.failure(errors))),
       );
@@ -47,13 +47,14 @@ export const getOverallRatingsStatisticsEpic: Epic = (action$, _, { api }) =>
 export const getFeedbacksStatisticsEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
     filter(isActionOf(getFeedbacksStatistics.request)),
-    switchMap(({ payload }) => {
+    mergeMap(({ payload }) => {
+      const { type } = payload;
       //@ts-ignore
       return from(api.getColleaguesFeedbacks(payload)).pipe(
         //@ts-ignore
         map(({ data }) => {
           //@ts-ignore
-          return getFeedbacksStatistics.success(data.data);
+          return getFeedbacksStatistics.success({ data, status: type });
         }),
         catchError(({ errors }) => of(getFeedbacksStatistics.failure(errors))),
       );
@@ -69,7 +70,7 @@ export const getNewToBusinessStatisticsEpic: Epic = (action$, _, { api }) =>
         //@ts-ignore
         map(({ data }) => {
           //@ts-ignore
-          return getNewToBusinessStatistics.success(data.data);
+          return getNewToBusinessStatistics.success({ data, status: 'new-to-business' });
         }),
         catchError(({ errors }) => of(getNewToBusinessStatistics.failure(errors))),
       );
@@ -79,13 +80,14 @@ export const getNewToBusinessStatisticsEpic: Epic = (action$, _, { api }) =>
 export const getAnniversaryReviewsStatisticsEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
     filter(isActionOf(getAnniversaryReviewsStatistics.request)),
-    switchMap(({ payload }) => {
+    mergeMap(({ payload }) => {
+      const { quarter } = payload;
       //@ts-ignore
       return from(api.getColleaguesAnniversaryReviews(payload)).pipe(
         //@ts-ignore
         map(({ data }) => {
           //@ts-ignore
-          return getAnniversaryReviewsStatistics.success(data.data);
+          return getAnniversaryReviewsStatistics.success({ data, status: quarter });
         }),
         catchError(({ errors }) => of(getAnniversaryReviewsStatistics.failure(errors))),
       );
@@ -95,13 +97,14 @@ export const getAnniversaryReviewsStatisticsEpic: Epic = (action$, _, { api }) =
 export const getLeadershipReviewsStatisticsEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
     filter(isActionOf(getLeadershipReviewsStatistics.request)),
-    switchMap(({ payload }) => {
+    mergeMap(({ payload }) => {
+      const { status } = payload;
       //@ts-ignore
       return from(api.getColleaguesLeadershipReviews(payload)).pipe(
         //@ts-ignore
         map(({ data }) => {
           //@ts-ignore
-          return getLeadershipReviewsStatistics.success(data.data);
+          return getLeadershipReviewsStatistics.success({ data, status });
         }),
         catchError(({ errors }) => of(getLeadershipReviewsStatistics.failure(errors))),
       );

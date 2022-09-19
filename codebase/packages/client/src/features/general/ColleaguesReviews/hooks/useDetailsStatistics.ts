@@ -1,99 +1,242 @@
-import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { ReportActions, ReviewType, StatisticsAction } from '@pma/store';
-import { workLevel } from 'features/general/Permission';
+import { useEffect, useState } from 'react';
+import { getStatisticsMetaSelector, StatisticsAction } from '@pma/store';
+import { useSelector } from 'react-redux';
 
 import { ReportPage, ReportType } from 'config/enum';
 import { initialFields } from '../config';
+import useDispatch from 'hooks/useDispatch';
 
 export const useDetailsStatistics = (type, query) => {
   const dispatch = useDispatch();
+  const { year } = query;
+  const { loading: detailsLoading } = useSelector(getStatisticsMetaSelector);
+  const [loading, setLoading] = useState<boolean>(false);
 
-  useEffect(() => {
-    if (!type) return;
+  const getDetails = (query = {}) => {
+    if (Object.keys(query)?.length) setLoading(true);
     switch (type) {
-      case ReportPage.REPORT_APPROVED_OBJECTIVES:
+      case ReportPage.REPORT_APPROVED_OBJECTIVES: {
+        dispatch(
+          StatisticsAction.getStatisticsReview({
+            ...initialFields,
+            year,
+            status: 'approved',
+            'review-type': ReportType.OBJECTIVE,
+            ...query,
+          }),
+        );
+        break;
+      }
       case ReportPage.REPORT_SUBMITTED_OBJECTIVES: {
         dispatch(
-          ReportActions.getReviewReport({
-            year: query.year,
-            'review-type_in': [ReviewType.MYR, ReviewType.EYR, ReviewType.OBJECTIVE],
+          StatisticsAction.getStatisticsReview({
+            ...initialFields,
+            year,
+            status: 'submitted',
+            'review-type': ReportType.OBJECTIVE,
+          }),
+        );
+
+        dispatch(
+          StatisticsAction.getStatisticsReview({
+            ...initialFields,
+            year,
+            status: 'not-submitted',
+            'review-type': ReportType.OBJECTIVE,
+          }),
+        );
+
+        break;
+      }
+      case ReportPage.REPORT_MID_YEAR_REVIEW: {
+        dispatch(
+          StatisticsAction.getStatisticsReview({
+            ...initialFields,
+            year,
+            'review-type': ReportType.MYR,
+            status: 'submitted',
           }),
         );
         dispatch(
           StatisticsAction.getStatisticsReview({
             ...initialFields,
-            year: query.year,
-            'review-type': ReportType.OBJECTIVE,
+            year,
+            'review-type': ReportType.MYR,
+            status: 'not-submitted',
           }),
         );
-        return;
-      }
-      case ReportPage.REPORT_MID_YEAR_REVIEW: {
-        dispatch(ReportActions.getReviewReport({ year: query.year }));
         dispatch(
-          StatisticsAction.getStatisticsReview({ ...initialFields, year: query.year, 'review-type': ReportType.MYR }),
+          StatisticsAction.getStatisticsReview({
+            ...initialFields,
+            year,
+            'review-type': ReportType.MYR,
+            status: 'approved',
+          }),
         );
-        return;
+        break;
       }
       case ReportPage.REPORT_END_YEAR_REVIEW: {
-        dispatch(ReportActions.getReviewReport({ year: query.year }));
         dispatch(
-          StatisticsAction.getStatisticsReview({ ...initialFields, year: query.year, 'review-type': ReportType.EYR }),
+          StatisticsAction.getStatisticsReview({
+            ...initialFields,
+            year,
+            'review-type': ReportType.EYR,
+            status: 'submitted',
+          }),
         );
-        return;
+        dispatch(
+          StatisticsAction.getStatisticsReview({
+            ...initialFields,
+            year,
+            'review-type': ReportType.EYR,
+            status: 'not-submitted',
+          }),
+        );
+        dispatch(
+          StatisticsAction.getStatisticsReview({
+            ...initialFields,
+            year,
+            'review-type': ReportType.EYR,
+            status: 'approved',
+          }),
+        );
+        break;
       }
       case ReportPage.REPORT_EYR_BREAKDOWN: {
-        dispatch(ReportActions.getOverallRatingsReport({ year: query.year }));
         dispatch(
           StatisticsAction.getOverallRatingsStatistics({
             ...initialFields,
-            year: query.year,
+            year,
             'review-type': ReportType.EYR,
+            'overall-rating': 'Below expected',
           }),
         );
-        return;
+        dispatch(
+          StatisticsAction.getOverallRatingsStatistics({
+            ...initialFields,
+            year,
+            'review-type': ReportType.EYR,
+            'overall-rating': 'Outstanding',
+          }),
+        );
+        dispatch(
+          StatisticsAction.getOverallRatingsStatistics({
+            ...initialFields,
+            year,
+            'review-type': ReportType.EYR,
+            'overall-rating': 'Great',
+          }),
+        );
+        dispatch(
+          StatisticsAction.getOverallRatingsStatistics({
+            ...initialFields,
+            year,
+            'review-type': ReportType.EYR,
+            'overall-rating': 'Satisfactory',
+          }),
+        );
+        break;
       }
       case ReportPage.REPORT_MYR_BREAKDOWN: {
-        dispatch(ReportActions.getOverallRatingsReport({ year: query.year }));
         dispatch(
           StatisticsAction.getOverallRatingsStatistics({
             ...initialFields,
-            year: query.year,
+            year,
             'review-type': ReportType.MYR,
+            'overall-rating': 'Below expected',
           }),
         );
-        return;
+        dispatch(
+          StatisticsAction.getOverallRatingsStatistics({
+            ...initialFields,
+            year,
+            'review-type': ReportType.MYR,
+            'overall-rating': 'Outstanding',
+          }),
+        );
+        dispatch(
+          StatisticsAction.getOverallRatingsStatistics({
+            ...initialFields,
+            year,
+            'review-type': ReportType.MYR,
+            'overall-rating': 'Great',
+          }),
+        );
+        dispatch(
+          StatisticsAction.getOverallRatingsStatistics({
+            ...initialFields,
+            year,
+            'review-type': ReportType.MYR,
+            'overall-rating': 'Satisfactory',
+          }),
+        );
+        break;
       }
       case ReportPage.REPORT_NEW_TO_BUSINESS: {
-        dispatch(ReportActions.getNewToBusinessReport({ year: query.year }));
-        dispatch(StatisticsAction.getNewToBusinessStatistics({ ...initialFields, year: query.year }));
-        return;
+        dispatch(StatisticsAction.getNewToBusinessStatistics({ ...initialFields, year }));
+        break;
       }
       case ReportPage.REPORT_FEEDBACK: {
-        dispatch(ReportActions.getFeedbacksReport({ year: query.year }));
-        dispatch(StatisticsAction.getFeedbacksStatistics({ ...initialFields, year: query.year }));
-        return;
+        dispatch(StatisticsAction.getFeedbacksStatistics({ ...initialFields, year, type: 'requested' }));
+        dispatch(StatisticsAction.getFeedbacksStatistics({ ...initialFields, year, type: 'given' }));
+        break;
       }
       case ReportPage.REPORT_ANNIVERSARY_REVIEWS: {
-        dispatch(ReportActions.getAnniversaryReviewsReport({ year: query.year }));
-        dispatch(StatisticsAction.getAnniversaryReviewsStatistics({ ...initialFields, year: query.year }));
-        return;
+        dispatch(StatisticsAction.getAnniversaryReviewsStatistics({ ...initialFields, year, quarter: 'quarter1' }));
+        dispatch(StatisticsAction.getAnniversaryReviewsStatistics({ ...initialFields, year, quarter: 'quarter2' }));
+        dispatch(StatisticsAction.getAnniversaryReviewsStatistics({ ...initialFields, year, quarter: 'quarter3' }));
+        dispatch(StatisticsAction.getAnniversaryReviewsStatistics({ ...initialFields, year, quarter: 'quarter4' }));
+        break;
       }
       case ReportPage.REPORT_WORK_LEVEL: {
-        dispatch(ReportActions.getLeadershipReviewsReport({ year: query.year }));
         dispatch(
           StatisticsAction.getLeadershipReviewsStatistics({
             ...initialFields,
-            year: query.year,
-            'review-type': ReportType.OBJECTIVE,
-            'work-level-in': [workLevel.WL4, workLevel.WL5],
+            year,
+            status: 'submitted',
           }),
         );
-        return;
+        dispatch(
+          StatisticsAction.getLeadershipReviewsStatistics({
+            ...initialFields,
+            year,
+            status: 'approved',
+          }),
+        );
+        break;
       }
-      default:
-        return;
     }
+  };
+
+  useEffect(() => {
+    if (loading && detailsLoading) return setLoading(true);
+    setLoading(false);
+  }, [detailsLoading]);
+
+  useEffect(() => {
+    if (!type) return;
+    getDetails();
   }, [type]);
+
+  // const searchedDetails = useCallback(
+  //   debounce((query) => {
+  //     getDetails(query);
+  //   }, 300),
+  //   [],
+  // );
+  // useEffect(() => {
+  //   if (!type) return;
+  //   if (searchedValue.length <= 2) return;
+  //   dispatch(StatisticsAction.clearStatistics());
+  //   searchedDetails(buildSearchColleaguesReviews(searchedValue));
+  // }, [type, searchedValue]);
+  //   TODO: uncomment when backend will be ready for search functionality
+
+  useEffect(() => {
+    return () => {
+      dispatch(StatisticsAction.clearStatistics());
+    };
+  }, []);
+
+  return loading;
 };

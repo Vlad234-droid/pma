@@ -7,4 +7,5 @@ export type ScrollProps = {
   pageStart?: number;
   render: () => JSX.Element;
   hasMore: boolean;
+  id?: string;
 };

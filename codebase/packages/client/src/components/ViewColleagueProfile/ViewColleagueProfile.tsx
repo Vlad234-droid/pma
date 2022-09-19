@@ -17,10 +17,9 @@ export type ColleagueProfile = {
   firstName: colleagueValue;
   jobName: colleagueValue;
   lastName: colleagueValue;
-  lineManager: colleagueValue;
-  middleName: colleagueValue;
+  lineManager?: colleagueValue;
+  middleName?: colleagueValue;
   uuid: string;
-  tags: Record<string, string>;
 };
 
 export type Props = {

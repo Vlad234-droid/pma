@@ -5,7 +5,7 @@ import { Avatar } from 'components/Avatar';
 import { BaseEmployee } from 'config/types';
 import { useTranslation } from 'components/Translation';
 
-type Props = {
+export type Props = {
   firstName: string;
   lastName: string;
   jobName: string;

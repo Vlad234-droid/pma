@@ -7,7 +7,7 @@ export const reportSelector = (state: RootState) => state.report;
 export const statisticsSelector = (state: RootState) => state.statistics;
 
 export const getReportMetaSelector = createSelector(reportSelector, (report) => report.meta);
-export const getStatisticsMetaSelector = createSelector(reportSelector, (report) => report.meta);
+export const getStatisticsMetaSelector = createSelector(statisticsSelector, (report) => report.meta);
 
 export const getTableChartData = (type: string) =>
   createSelector(reportSelector, (report: any) => {
@@ -128,6 +128,17 @@ export const getChartDataStatistics = createSelector(statisticsSelector, (statis
       [colleague.tags?.status]: acc[colleague.tags?.status]?.length
         ? [...acc[colleague.tags?.status], colleague]
         : [colleague],
+    }),
+    {},
+  );
+});
+
+export const getListStatistics = createSelector(statisticsSelector, (statistics) => {
+  return Object.entries(statistics).reduce(
+    (acc, [key, value]) => ({
+      ...acc,
+      //@ts-ignore
+      ...(!!value?.length && { [key]: value }),
     }),
     {},
   );

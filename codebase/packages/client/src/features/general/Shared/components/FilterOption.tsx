@@ -113,7 +113,7 @@ export const FilterOption: FC<FilterOptionProps> = ({
                 ...customStyles,
                 ...(!focus
                   ? { borderRadius: '20px', paddingLeft: '0px', transitionDelay: '0s' }
-                  : { borderRadius: '20px', paddingLeft: '30px', transitionDelay: '.3s' }),
+                  : { borderRadius: '20px', paddingLeft: '25px', transitionDelay: '.3s' }),
 
                 background: theme.colors.white,
                 height: '38px',

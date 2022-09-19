@@ -31,25 +31,25 @@ export const getLeadershipReviewsStatistics = <T extends string>(params: { year:
 };
 
 export const getColleaguesReview = <T extends string>(params: { year: T }) => {
-  return httpClient.get(`${domain}/statistics-reviews/colleagues`, { params });
+  return httpClient.get(`${domain}/statistics-reviews/colleague`, { params });
 };
 
 export const getColleaguesOverallRatings = <T extends string>(params: { year: T }) => {
-  return httpClient.get(`${domain}/statistics-overall-ratings/colleagues`, { params });
+  return httpClient.get(`${domain}/statistics-overall-ratings/colleague`, { params });
 };
 
 export const getColleaguesNewToBusiness = <T extends string>(params: { year: T }) => {
-  return httpClient.get(`${domain}/statistics-new-to-business/colleagues`, { params });
+  return httpClient.get(`${domain}/statistics-new-to-business/colleague`, { params });
 };
 
 export const getColleaguesFeedbacks = <T extends string>(params: { year: T }) => {
-  return httpClient.get(`${domain}/statistics-feedbacks/colleagues`, { params });
+  return httpClient.get(`${domain}/statistics-feedbacks/colleague`, { params });
 };
 
 export const getColleaguesAnniversaryReviews = <T extends string>(params: { year: T }) => {
-  return httpClient.get(`${domain}/statistics-anniversary-reviews/colleagues`, { params });
+  return httpClient.get(`${domain}/statistics-anniversary-reviews/colleague`, { params });
 };
 
 export const getColleaguesLeadershipReviews = <T extends string>(params: { year: T }) => {
-  return httpClient.get(`${domain}/statistics-leadership-reviews/colleagues`, { params });
+  return httpClient.get(`${domain}/statistics-leadership-reviews/colleague`, { params });
 };

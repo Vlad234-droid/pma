@@ -45,4 +45,5 @@ export const Actions = {
   getFeedbacksStatistics: getFeedbacksStatistics.request,
   getAnniversaryReviewsStatistics: getAnniversaryReviewsStatistics.request,
   getLeadershipReviewsStatistics: getLeadershipReviewsStatistics.request,
+  clearStatistics: clearStatistics,
 };

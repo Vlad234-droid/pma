@@ -41,3 +41,15 @@ export const buildSearchFeedbacksQuery = (value: string): any => {
 
   return query;
 };
+
+export const buildSearchColleaguesReviews = (value: string): any => {
+  const query = {};
+  if (/ /.test(value)) {
+    const [firstName, lastName] = value.split(' ');
+
+    query['_sort'] = `first-name:${firstName},last-name:${lastName}`;
+  } else {
+    query['_sort'] = `first-name:${value},last-name:${value}`;
+  }
+  return query;
+};
