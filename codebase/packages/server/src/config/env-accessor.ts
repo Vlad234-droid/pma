@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 const environmentParameters: Array<keyof NodeJS.ProcessEnv> = [
   'BUILD_ENV',
@@ -30,6 +30,8 @@ const environmentParameters: Array<keyof NodeJS.ProcessEnv> = [
   'STICK_COOKIES_TO_APPLICATION_PATH',
   // use sso
   'USE_ONELOGIN',
+  // use auth_token check
+  'USE_REQUIRE_IDENTITY_TOKEN',
   // onelogin
   'OIDC_ISSUER_URL',
   'OIDC_AUTH_CALLBACK_PATH',
@@ -51,7 +53,7 @@ const environmentParameters: Array<keyof NodeJS.ProcessEnv> = [
 ];
 
 /**
- * 
+ *
  */
 const optionalEnvironmentParameters = [
   'API_IAM_SERVER_URL',

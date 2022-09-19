@@ -19,7 +19,7 @@ declare namespace NodeJS {
     debug = 'debug',
     info = 'info',
     warn = 'warn',
-    error = 'error'
+    error = 'error',
   }
 
   interface ProcessEnv {
@@ -28,7 +28,7 @@ declare namespace NodeJS {
     NODE_ENV: keyof typeof Environment;
     RUNTIME_ENV: keyof typeof Environment;
     BUILD_ENV: keyof typeof Environment | undefined;
-    
+
     API_SERVER_URL: string;
     API_IAM_SERVER_URL: string;
     API_MANAGEMENT_SERVER_URL: string;
@@ -38,7 +38,7 @@ declare namespace NodeJS {
     LOGGER_ROOT_NAME: string;
     LOGGER_LEVEL?: keyof typeof LogLevel;
     LOGGER_PRETIFY: string | undefined;
-    LOGGER_THEME: string | undefined,
+    LOGGER_THEME: string | undefined;
     LOGGER_LOG_AUTH_TOKEN: string | undefined;
 
     // Integration
@@ -64,6 +64,9 @@ declare namespace NodeJS {
 
     // SSO turn on or off
     USE_ONELOGIN: boolean;
+
+    // requireIdentityToken turn on or off
+    USE_REQUIRE_IDENTITY_TOKEN: boolean;
 
     // One login
     OIDC_ISSUER_URL: string;

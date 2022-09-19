@@ -51,6 +51,8 @@ export type ProcessConfig = {
   applicationUserDataCookieName: () => string;
   applicationUserDataCookieSecret: () => string | undefined;
   stickCookiesToApplicationPath: () => boolean;
+  // authToken check
+  useRequireIdentityToken: () => boolean;
   // onelogin
   useOneLogin: () => boolean;
   oidcIssuerUrl: () => string;
@@ -89,30 +91,40 @@ export class ConfigAccessor {
       loggerThemeName: () => processEnv.LOGGER_THEME || defaultConfig.loggerDefaultTheme,
       loggerLogAuthToken: () => yn(processEnv.LOGGER_LOG_AUTHTOKEN, { default: false }),
       //
-      apiServerUrl: () => createUrlOrFail(
-        processEnv.API_SERVER_URL,
-        `API_SERVER_URL must be a well-formed URL pointing to API server, e.g.: http://tesco.com/pma/api`,
-        { removeTrailingSlash: true }),
+      apiServerUrl: () =>
+        createUrlOrFail(
+          processEnv.API_SERVER_URL,
+          `API_SERVER_URL must be a well-formed URL pointing to API server, e.g.: http://tesco.com/pma/api`,
+          { removeTrailingSlash: true },
+        ),
       //
-      apiIdentityServerUrl: () => createUrlOrUndefined(
-        processEnv.API_IAM_SERVER_URL,
-        `API_IAM_SERVER_URL must be a well-formed URL pointing to identity API server, e.g.: http://tesco.com:8080/pma/iam-api`,
-        { removeTrailingSlash: true }),
+      apiIdentityServerUrl: () =>
+        createUrlOrUndefined(
+          processEnv.API_IAM_SERVER_URL,
+          `API_IAM_SERVER_URL must be a well-formed URL pointing to identity API server, e.g.: http://tesco.com:8080/pma/iam-api`,
+          { removeTrailingSlash: true },
+        ),
       //
-      apiManagementServerUrl: () => createUrlOrUndefined(
-        processEnv.API_MANAGEMENT_SERVER_URL,
-        `API_MANAGEMENT_SERVER_URL must be a well-formed URL pointing to actuator server, e.g.: http://tesco.com:8080/pma/actuator`,
-        { removeTrailingSlash: true }),
+      apiManagementServerUrl: () =>
+        createUrlOrUndefined(
+          processEnv.API_MANAGEMENT_SERVER_URL,
+          `API_MANAGEMENT_SERVER_URL must be a well-formed URL pointing to actuator server, e.g.: http://tesco.com:8080/pma/actuator`,
+          { removeTrailingSlash: true },
+        ),
       //
-      swaggerServerUrl: () => createUrlOrUndefined(
-        processEnv.SWAGGER_SERVER_URL,
-        `SWAGGER_SERVER_URL must be a well-formed URL pointing to API server, e.g.: http://tesco.com/pma/api-docs`,
-        { removeTrailingSlash: true }),
+      swaggerServerUrl: () =>
+        createUrlOrUndefined(
+          processEnv.SWAGGER_SERVER_URL,
+          `SWAGGER_SERVER_URL must be a well-formed URL pointing to API server, e.g.: http://tesco.com/pma/api-docs`,
+          { removeTrailingSlash: true },
+        ),
       //
-      camundaServerUrl: () => createUrlOrUndefined(
-        processEnv.CAMUNDA_SERVER_URL,
-        `CAMUNDA_SERVER_URL must be a well-formed URL pointing to API server, e.g.: http://tesco.com/pma/camunda`,
-        { removeTrailingSlash: true }),
+      camundaServerUrl: () =>
+        createUrlOrUndefined(
+          processEnv.CAMUNDA_SERVER_URL,
+          `CAMUNDA_SERVER_URL must be a well-formed URL pointing to API server, e.g.: http://tesco.com/pma/camunda`,
+          { removeTrailingSlash: true },
+        ),
       authPath: () => defaultConfig.authPath,
       // integration
       integrationMode: () => processEnv.INTEGRATION_MODE,
@@ -155,6 +167,7 @@ export class ConfigAccessor {
       stickCookiesToApplicationPath: () => yn(processEnv.STICK_COOKIES_TO_APPLICATION_PATH, { default: false }),
       // use sso
       useOneLogin: () => yn(processEnv.USE_ONELOGIN, { default: false }),
+      useRequireIdentityToken: () => yn(processEnv.USE_REQUIRE_IDENTITY_TOKEN, { default: true }),
       // onelogin
       oidcIssuerUrl: () => processEnv.OIDC_ISSUER_URL,
       oidcClientId: () => processEnv.OIDC_CLIENT_ID,
