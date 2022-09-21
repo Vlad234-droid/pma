@@ -50,7 +50,8 @@ const StatisticsReviews: FC<{ type: ReportPage }> = ({ type }) => {
   return (
     <div className={css({ width: '100%' })}>
       {Object.entries(list).map(([title, data]) => {
-        const total = data?.length === reviews?.statistics?.[title]?.count;
+        const total = reviews?.statistics?.[title]?.count;
+        const hasMore = data?.length !== reviews?.statistics?.[title]?.count;
         return (
           <Accordion id={`team-mate-accordion-${1}`} key={title} customStyle={{ marginTop: '0px' }}>
             <BaseAccordion id={`team-mate-base-accordion-${2}`}>
@@ -59,7 +60,7 @@ const StatisticsReviews: FC<{ type: ReportPage }> = ({ type }) => {
                   <div className={css(scrollContainer)}>
                     <div className={css(wrapperStyles)}>
                       <span className={css(titleStyles)}>
-                        {t(title)} {data.length}
+                        {t(title)}: {total} {total === 1 ? t('colleague', 'Colleague') : t('colleagues', 'Colleagues')}
                       </span>
                       <div className={css(expandButtonStyles)}>
                         <ExpandButton />
@@ -181,7 +182,7 @@ const StatisticsReviews: FC<{ type: ReportPage }> = ({ type }) => {
                         }}
                         loading={loading}
                         limit={10}
-                        hasMore={!total}
+                        hasMore={hasMore}
                         render={() => (
                           <div key={title} className={css({ marginBottom: '24px' })}>
                             {data.map((item, i) => (

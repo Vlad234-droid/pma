@@ -17,6 +17,7 @@ export const initialState = {
   newToBusiness: [],
   anniversaryReviews: [],
   leadershipReviews: [],
+  feedbacks: [],
   meta: { loading: false, loaded: false, error: null },
 };
 

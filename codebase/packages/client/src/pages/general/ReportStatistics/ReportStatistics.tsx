@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { CreateRule, IconButton as BackButton, Rule, useStyle } from '@pma/dex-wrapper';
-import { getListStatistics, ReportPage } from '@pma/store';
+import { getTotalReviewsByType, ReportPage } from '@pma/store';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
@@ -20,7 +20,63 @@ import { useHeaderContainer } from 'contexts/headerContext';
 import { getCurrentYearWithStartDate } from 'features/general/Report/utils';
 import { convertToReportEnum } from 'features/general/ColleaguesReviews/utils';
 import { Page } from 'pages';
-import { List } from 'features/general/ColleaguesReviews/config';
+import { ReportType } from 'config/enum';
+
+const getConfigReviewsKeys = (type): { key: string; configType: ReportType; configKey: Array<string> } => {
+  const page = {
+    [ReportPage.REPORT_APPROVED_OBJECTIVES]: {
+      key: 'review',
+      configKeys: ['approved'],
+      configType: ReportType.OBJECTIVE,
+    },
+    [ReportPage.REPORT_SUBMITTED_OBJECTIVES]: {
+      key: 'review',
+      configKeys: ['not-submitted', 'submitted'],
+      configType: ReportType.OBJECTIVE,
+    },
+    [ReportPage.REPORT_MID_YEAR_REVIEW]: {
+      key: 'review',
+      configKeys: ['not-submitted', 'submitted', 'approved'],
+      configType: ReportType.MYR,
+    },
+    [ReportPage.REPORT_END_YEAR_REVIEW]: {
+      key: 'review',
+      configKeys: ['not-submitted', 'submitted', 'approved'],
+      configType: ReportType.EYR,
+    },
+    [ReportPage.REPORT_MYR_BREAKDOWN]: {
+      key: 'overallRatings',
+      configKeys: ['Great', 'Below expected', 'Outstanding', 'Satisfactory'],
+      configType: ReportType.MYR,
+    },
+    [ReportPage.REPORT_EYR_BREAKDOWN]: {
+      key: 'overallRatings',
+      configKeys: ['Great', 'Below expected', 'Outstanding', 'Satisfactory'],
+      configType: ReportType.EYR,
+    },
+    [ReportPage.REPORT_WORK_LEVEL]: {
+      key: 'leadershipReviews',
+      configKeys: ['submitted', 'approved'],
+      configType: ReportType.OBJECTIVE,
+    },
+    [ReportPage.REPORT_NEW_TO_BUSINESS]: {
+      key: 'newToBusiness',
+      configKeys: ['new-to-business'],
+      configType: ReportType.NTB,
+    },
+    [ReportPage.REPORT_FEEDBACK]: {
+      key: 'feedbacks',
+      configKeys: ['given', 'requested'],
+      configType: ReportType.FEEDBACK,
+    },
+    [ReportPage.REPORT_ANNIVERSARY_REVIEWS]: {
+      key: 'anniversaryReviews',
+      configKeys: ['quarter1', 'quarter2', 'quarter3', 'quarter4'],
+      configType: ReportType.EYR,
+    },
+  };
+  return page[type];
+};
 
 const defineHeaderTitle = (type, t) => {
   const tilePage = Page.REPORT_STATISTICS;
@@ -68,6 +124,7 @@ const ReportStatistics = () => {
 
   const query = useQueryString() as Record<string, string>;
   const navigate = useNavigate();
+  const { type } = useTileStatistics();
 
   const [focus, setFocus] = useState(false);
   const [searchedValue, setSearchedValue] = useState<string>('');
@@ -83,9 +140,7 @@ const ReportStatistics = () => {
     setLinkTitle(defineHeaderTitle(convertToReportEnum(pathname), t));
   }, []);
 
-  const list: List = useSelector(getListStatistics);
-
-  const { type } = useTileStatistics();
+  const totalCount: number = useSelector(getTotalReviewsByType(getConfigReviewsKeys(type))) || 0;
 
   return (
     <div className={css({ position: 'relative' })}>
@@ -103,10 +158,7 @@ const ReportStatistics = () => {
         />
       </div>
 
-      <ColleaguesCount
-        countStyles={countStyles}
-        count={Object.values(list).reduce((acc, item) => acc + item.length, 0) || 0}
-      />
+      <ColleaguesCount countStyles={countStyles} count={totalCount} />
 
       <div className={css(header({ mobileScreen }))}>
         <div className={css(flexCenterStyled)}>
@@ -159,6 +211,7 @@ const arrowLeftStyle: Rule = ({ theme }) => {
     border: 'none',
     cursor: 'pointer',
     left: theme.spacing.s4,
+    zIndex: '2',
   };
 };
 

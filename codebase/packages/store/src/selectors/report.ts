@@ -144,6 +144,14 @@ export const getListStatistics = createSelector(statisticsSelector, (statistics)
   );
 });
 
+export const getTotalReviewsByType = (data) =>
+  createSelector(reportSelector, (report) => {
+    if (!data) return 0;
+    const { configType, key, configKeys } = data;
+    const totalStatistic = report[key]?.find((item) => configType === item.type)?.statistics ?? 0;
+    return configKeys.reduce((acc, item) => totalStatistic[item]?.count + acc, 0) ?? 0;
+  });
+
 export const colleaguesCountSelector = createSelector(reportSelector, (report: any) => {
   const { feedbacks } = report;
 
