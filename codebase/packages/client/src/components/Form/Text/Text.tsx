@@ -12,4 +12,5 @@ const containerStyle: Rule = ({ theme }) => ({
   letterSpacing: '0px',
   color: theme.colors.base,
   paddingBottom: '8px',
+  whiteSpace: 'pre-wrap',
 });
