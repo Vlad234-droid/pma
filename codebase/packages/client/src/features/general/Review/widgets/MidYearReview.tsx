@@ -87,7 +87,10 @@ const MidYearReview: FC<Props> = ({ colleagueUuid }) => {
         }
         description={
           hasDescription && summaryStatus !== Status.APPROVED
-            ? t('mid_year_review_widget_subtitle', 'This should be submitted and approved by 7th October.')
+            ? t(
+                'mid_year_review_widget_subtitle',
+                'This should be submitted and approved by 7th October, or 14th October if you are an ROI colleague.',
+              )
             : undefined
         }
         disabled={disabled}
