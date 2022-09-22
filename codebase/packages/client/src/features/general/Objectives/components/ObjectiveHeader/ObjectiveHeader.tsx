@@ -17,9 +17,9 @@ const ObjectiveHeader: FC<
     () => (status ? <StatusBadge status={status} styles={{ marginRight: '20px' }} /> : null),
     [status],
   );
+
   return (
     <Header headingLevel={1} title={title} status={status} component={statusComponent} {...rest}>
-      {title && <h3 className={css(titleStyles)}>{title}</h3>}
       {subTitle && <h4 className={css(subTitleStyles)}>{subTitle}</h4>}
       <p className={css(descriptionStyles)}>{description}</p>
     </Header>
@@ -27,15 +27,6 @@ const ObjectiveHeader: FC<
 };
 
 export default ObjectiveHeader;
-
-const titleStyles: Rule = ({ theme }) => ({
-  margin: 0,
-  fontSize: theme.font.fixed.f18.fontSize,
-  lineHeight: theme.font.fluid.f18.lineHeight,
-  letterSpacing: '0px',
-  color: theme.colors.tescoBlue,
-  fontWeight: theme.font.weight.bold,
-});
 
 const subTitleStyles: Rule = ({ theme }) => ({
   margin: 0,
