@@ -23,7 +23,7 @@ const MidYearReview: FC<Props> = ({ colleagueUuid }) => {
   const { css } = useStyle();
   const tenant = useTenant();
   const navigate = useNavigate();
-  const { pathname } = useLocation();
+  const { pathname, state } = useLocation();
   const isUserView = useSelector(uuidCompareSelector(colleagueUuid));
 
   const review = useSelector(getTimelineByCodeSelector(ReviewType.MYR, colleagueUuid));
@@ -59,15 +59,17 @@ const MidYearReview: FC<Props> = ({ colleagueUuid }) => {
       <ReviewWidget
         onClick={() =>
           navigate(
-            buildPath(
-              paramsReplacer(isUserView ? Page.REVIEWS : Page.USER_TL_REVIEW, {
-                ':type': ReviewType.MYR.toLowerCase(),
-                ...(!isUserView && { ':uuid': colleagueUuid }),
-              }),
-            ),
+            (state as any)?.prevBackPath ||
+              buildPath(
+                paramsReplacer(isUserView ? Page.REVIEWS : Page.USER_TL_REVIEW, {
+                  ':type': ReviewType.MYR.toLowerCase(),
+                  ...(!isUserView && { ':uuid': colleagueUuid }),
+                }),
+              ),
             {
               state: {
                 backPath: pathname,
+                prevBackPath: (state as any)?.backPath,
               },
             },
           )

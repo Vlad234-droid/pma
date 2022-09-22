@@ -25,10 +25,9 @@ const Review = () => {
   );
 
   const handleClose = () => {
-    navigate(
-      (state as any)?.backPath ||
-        buildPath(!uuid ? Page.REVIEWS_VIEW : paramsReplacer(Page.USER_REVIEWS, { ':uuid': uuid })),
-    );
+    navigate(buildPath(!uuid ? Page.REVIEWS_VIEW : paramsReplacer(Page.USER_REVIEWS, { ':uuid': uuid })), {
+      state: { backPath: (state as any).prevBackPath },
+    });
   };
 
   useEffect(() => {

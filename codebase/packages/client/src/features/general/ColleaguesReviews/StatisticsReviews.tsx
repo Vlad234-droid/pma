@@ -18,7 +18,7 @@ import useQueryString from 'hooks/useQueryString';
 import { useChartStatistics } from './hooks/useChartStatistics';
 import { useDetailsStatistics, useTotalReviews } from './hooks';
 import { paramsReplacer } from 'utils';
-import { List } from './config';
+import { defaultSort, List } from './config';
 import { ReportPage, ReportType } from 'config/enum';
 
 const StatisticsReviews: FC<{ type: ReportPage }> = ({ type }) => {
@@ -78,6 +78,7 @@ const StatisticsReviews: FC<{ type: ReportPage }> = ({ type }) => {
                                   year,
                                   status: title,
                                   'review-type': ReportType.OBJECTIVE,
+                                  ...defaultSort,
                                 }),
                               );
                               break;
@@ -90,6 +91,7 @@ const StatisticsReviews: FC<{ type: ReportPage }> = ({ type }) => {
                                   _start,
                                   status: title,
                                   'review-type': ReportType.OBJECTIVE,
+                                  ...defaultSort,
                                 }),
                               );
                               break;
@@ -102,6 +104,7 @@ const StatisticsReviews: FC<{ type: ReportPage }> = ({ type }) => {
                                   status: title,
                                   _limit,
                                   _start,
+                                  ...defaultSort,
                                 }),
                               );
                               break;
@@ -114,6 +117,7 @@ const StatisticsReviews: FC<{ type: ReportPage }> = ({ type }) => {
                                   status: title,
                                   _limit,
                                   _start,
+                                  ...defaultSort,
                                 }),
                               );
                               break;
@@ -126,6 +130,7 @@ const StatisticsReviews: FC<{ type: ReportPage }> = ({ type }) => {
                                   'overall-rating': title,
                                   _limit,
                                   _start,
+                                  ...defaultSort,
                                 }),
                               );
                               break;
@@ -138,6 +143,7 @@ const StatisticsReviews: FC<{ type: ReportPage }> = ({ type }) => {
                                   'overall-rating': title,
                                   _limit,
                                   _start,
+                                  ...defaultSort,
                                 }),
                               );
                               break;
@@ -148,12 +154,21 @@ const StatisticsReviews: FC<{ type: ReportPage }> = ({ type }) => {
                                   year,
                                   _limit,
                                   _start,
+                                  ...defaultSort,
                                 }),
                               );
                               break;
                             }
                             case ReportPage.REPORT_FEEDBACK: {
-                              dispatch(StatisticsAction.getFeedbacksStatistics({ year, type: title, _limit, _start }));
+                              dispatch(
+                                StatisticsAction.getFeedbacksStatistics({
+                                  year,
+                                  type: title,
+                                  _limit,
+                                  _start,
+                                  ...defaultSort,
+                                }),
+                              );
                               break;
                             }
                             case ReportPage.REPORT_ANNIVERSARY_REVIEWS: {
@@ -163,6 +178,7 @@ const StatisticsReviews: FC<{ type: ReportPage }> = ({ type }) => {
                                   quarter: title,
                                   _limit,
                                   _start,
+                                  ...defaultSort,
                                 }),
                               );
                               break;
@@ -174,6 +190,7 @@ const StatisticsReviews: FC<{ type: ReportPage }> = ({ type }) => {
                                   status: title,
                                   _limit,
                                   _start,
+                                  ...defaultSort,
                                 }),
                               );
                               break;

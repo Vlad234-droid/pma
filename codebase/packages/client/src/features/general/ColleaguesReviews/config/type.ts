@@ -1,4 +1,4 @@
-import { ReportPage, ReviewType } from 'config/enum';
+import { ReviewType } from 'config/enum';
 import { Props as ColleagueInfo } from 'components/ColleagueInfo/ColleagueInfo';
 
 const _limit = 10;
@@ -8,6 +8,8 @@ export const initialFields: Record<'_start' | '_limit', number> = {
   _start,
   _limit,
 };
+
+export const defaultSort = { _sort: 'first-name:asc,last-name:asc' };
 
 type Info = Omit<ColleagueInfo, 'manager'> & { uuid: string };
 
@@ -25,9 +27,3 @@ export type ReviewStatistics = {
 };
 
 export type List = Record<string, Array<Info>>;
-
-export type ReviewsListProps = {
-  type: ReportPage;
-  list: List;
-  reviews: ReviewStatistics;
-};
