@@ -17,6 +17,15 @@ export enum Status {
   REQUESTED_TO_AMEND = 'REQUESTED_TO_AMEND',
 }
 
+export enum ActionStatus {
+  ERROR = 'ERROR',
+  PENDING = 'PENDING',
+  COMPLETED = 'COMPLETED',
+  APPROVED = 'APPROVED',
+  APPROVE_DECLINED = 'APPROVE_DECLINED',
+  COMPLETE_DECLINED = 'COMPLETE_DECLINED',
+}
+
 // todo use for timeline this statuses. should be changed in many places
 export enum TimelineStatus {
   COMPLETED = 'COMPLETED',

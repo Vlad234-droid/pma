@@ -6,13 +6,12 @@ import { Trans, useTranslation } from 'components/Translation/Translation';
 import { ReviewType, Status } from 'config/enum';
 
 import { ApproveModal, DeclineModal } from '../Modal';
-import { useSuccessModalContext } from '../../context/successModalContext';
 import { useTenant } from 'features/general/Permission';
-import { Tenant } from 'utils';
 
 type Props = {
-  reviewType: string;
-  onUpdate: (status: Status) => (reviewType: string) => (T) => void;
+  code: string;
+  status: Status;
+  onUpdate: (prevStatus: Status, status: Status) => (code: string) => (T) => void;
   isDisabled: boolean;
 };
 
@@ -27,16 +26,20 @@ const TITLES: Record<string, [string, string]> = {
   [ReviewType.EYR]: ['year_end_review', 'Year-end review'],
 };
 
-const Buttons: FC<Props> = ({ reviewType, onUpdate, isDisabled }) => {
+const statusMap: Record<Status.WAITING_FOR_APPROVAL | Status.WAITING_FOR_COMPLETION, (approve: boolean) => Status> = {
+  [Status.WAITING_FOR_APPROVAL]: (approve) => (approve ? Status.APPROVED : Status.DECLINED),
+  [Status.WAITING_FOR_COMPLETION]: (approve) => (approve ? Status.COMPLETED : Status.APPROVED),
+};
+
+const Buttons: FC<Props> = ({ code, onUpdate, isDisabled, status }) => {
   const [isOpenDeclinePopup, setIsOpenDeclinePopup] = useState(false);
   const [isOpenApprovePopup, setIsOpenApprovePopup] = useState(false);
   const { css } = useStyle();
   const { t } = useTranslation();
   const tenant = useTenant();
-  const { setOpened: setIsOpenSuccessModal, setReviewStatus, setReviewType } = useSuccessModalContext();
 
-  const approveColleagues = onUpdate(Status.APPROVED)(reviewType);
-  const declineColleagues = onUpdate(Status.DECLINED)(reviewType);
+  const approveColleagues = onUpdate(status, statusMap[status](true))(code);
+  const declineColleagues = onUpdate(status, statusMap[status](false))(code);
 
   const handleDeclineBtnClick = () => {
     setIsOpenDeclinePopup(true);
@@ -45,27 +48,19 @@ const Buttons: FC<Props> = ({ reviewType, onUpdate, isDisabled }) => {
   const handleApprove = (event) => {
     approveColleagues(event);
     setIsOpenApprovePopup(false);
-    setReviewStatus(Status.APPROVED);
-    setReviewType(reviewType);
-    setIsOpenSuccessModal(true);
   };
 
   const handleDecline = (hasReason = false, reason?: string) => {
     declineColleagues(hasReason ? reason : '');
     setIsOpenDeclinePopup(false);
-    setReviewStatus(Status.DECLINED);
-    setReviewType(reviewType);
-    setIsOpenSuccessModal(true);
   };
 
   return (
     <div className={css(containerStyle)}>
       <div className={css(wrapperStyle)}>
-        {`${t(
-          'approve_or_decline',
-          tenant === Tenant.GENERAL ? 'Approve or decline' : 'Agree or request to amend the',
-          { ns: tenant },
-        )} ${t(...TITLES[reviewType])}`}
+        {Status.WAITING_FOR_APPROVAL === status
+          ? `${t('approve_or_decline', { ns: tenant })} ${t(...TITLES[code])}`
+          : `${t('complete_or_request_amend')} ${t(...TITLES[code])}`}
       </div>
       <div>
         <div className={css({ display: 'inline-block' })}>
@@ -87,13 +82,17 @@ const Buttons: FC<Props> = ({ reviewType, onUpdate, isDisabled }) => {
             onPress={() => setIsOpenApprovePopup(true)}
           >
             <Icon graphic='check' invertColors={true} iconStyles={{ paddingRight: '8px' }} />
-            <Trans i18nKey='approve' ns={tenant}>
-              Approve
-            </Trans>
+            {Status.WAITING_FOR_APPROVAL === status ? (
+              <Trans i18nKey='approve' ns={tenant}>
+                Approve
+              </Trans>
+            ) : (
+              <Trans i18nKey='complete'>Complete</Trans>
+            )}
           </Button>
         </div>
         {isOpenDeclinePopup && (
-          <DeclineModal onSave={handleDecline} onClose={() => setIsOpenDeclinePopup(false)} reviewType={reviewType} />
+          <DeclineModal onSave={handleDecline} onClose={() => setIsOpenDeclinePopup(false)} code={code} />
         )}
         {isOpenApprovePopup && <ApproveModal onSave={handleApprove} onClose={() => setIsOpenApprovePopup(false)} />}
       </div>

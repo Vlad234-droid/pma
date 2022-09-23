@@ -5,7 +5,7 @@ export const initialState = {
   meta: { loading: false, loaded: false, error: null },
 };
 
-const request = (state) => ({ ...state, meta: { ...initialState.meta } });
+const request = (state) => ({ ...state, meta: { ...state.meta, loading: true, loaded: false } });
 
 const success = (state, { payload }) => ({
   ...state,

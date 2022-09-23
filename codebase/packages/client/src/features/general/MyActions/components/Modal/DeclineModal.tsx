@@ -15,14 +15,14 @@ type Props = {
   onSave: (hasReason?: boolean, reason?: string) => void;
   onClose: () => void;
   review?: Employee;
-  reviewType: string;
+  code: string;
 };
 
-const DeclineModal: FC<Props> = ({ onSave, onClose, review, reviewType }) => {
+const DeclineModal: FC<Props> = ({ onSave, onClose, review, code }) => {
   const { css } = useStyle();
   const { t } = useTranslation();
   const tenant = useTenant();
-  const isObjective = tenant === Tenant.GENERAL && reviewType === ReviewType.OBJECTIVE;
+  const isObjective = tenant === Tenant.GENERAL && code.toLowerCase() === ReviewType.OBJECTIVE.toLowerCase();
   const options = getDeclineReasonOptions(t);
   const [reason, setReason] = useState('');
 

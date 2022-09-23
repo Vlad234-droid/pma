@@ -4,13 +4,20 @@ import { fireEvent, act } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 // @ts-ignore
 import { renderWithTheme as render, screen } from 'utils/test';
-import { ReviewType } from 'config/enum';
+import { ReviewType, Status } from 'config/enum';
 import Buttons from './Buttons';
 
 describe('<Buttons />', () => {
   it('render Buttons OBJECTIVE disabled', async () => {
     const updateReviewStatus = () => jest.fn();
-    render(<Buttons reviewType={ReviewType.OBJECTIVE} isDisabled={true} onUpdate={updateReviewStatus} />);
+    render(
+      <Buttons
+        code={ReviewType.OBJECTIVE}
+        isDisabled={true}
+        onUpdate={updateReviewStatus}
+        status={Status.WAITING_FOR_APPROVAL}
+      />,
+    );
 
     const approve = screen.getByRole('button', { name: /approve/i });
     const decline = screen.getByRole('button', { name: /decline/i });
@@ -25,7 +32,14 @@ describe('<Buttons />', () => {
   it('render Buttons OBJECTIVE click decline', async () => {
     const fn = jest.fn();
     const updateReviewStatus = () => () => fn;
-    render(<Buttons reviewType={ReviewType.MYR} isDisabled={false} onUpdate={updateReviewStatus} />);
+    render(
+      <Buttons
+        code={ReviewType.MYR}
+        isDisabled={false}
+        onUpdate={updateReviewStatus}
+        status={Status.WAITING_FOR_APPROVAL}
+      />,
+    );
 
     const approve = screen.getByRole('button', { name: /approve/i });
     const decline = screen.getByRole('button', { name: /decline/i });
@@ -50,7 +64,14 @@ describe('<Buttons />', () => {
   it('render Buttons OBJECTIVE click approve', async () => {
     const fn = jest.fn();
     const updateReviewStatus = () => () => fn;
-    render(<Buttons reviewType={ReviewType.OBJECTIVE} isDisabled={false} onUpdate={updateReviewStatus} />);
+    render(
+      <Buttons
+        code={ReviewType.OBJECTIVE}
+        isDisabled={false}
+        onUpdate={updateReviewStatus}
+        status={Status.WAITING_FOR_APPROVAL}
+      />,
+    );
 
     const approve = screen.getByRole('button', { name: /approve/i });
     const decline = screen.getByRole('button', { name: /decline/i });

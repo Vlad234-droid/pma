@@ -10,23 +10,29 @@ import { Accordion, BaseAccordion, ExpandButton, Panel, Section } from 'componen
 import { TileWrapper } from 'components/Tile';
 import { Notification } from 'components/Notification';
 import { useTranslation } from 'components/Translation';
-import { ReviewType, Status } from 'config/enum';
+import { ActionStatus, ReviewType, Status } from 'config/enum';
 import { Review, Timeline } from 'config/types';
 import { Buttons } from '../Buttons';
 import { ColleagueReview } from '../ColleagueReviews';
 import { Tenant } from 'utils';
+import { useSuccessModalContext } from '../../context/successModalContext';
 
 type Props = {
-  status: Status;
-  onUpdate: (reviewType: string, data: any) => void;
+  status: ActionStatus;
+  onUpdate: (code: string, data: any) => void;
   colleague: any;
 };
 
 const ColleagueAction: FC<Props> = ({ status, colleague, onUpdate }) => {
+  const { setOpened: setIsOpenSuccessModal, setStatusHistory } = useSuccessModalContext();
   const [colleagueExpanded, setColleagueExpanded] = useState<string>();
   const [colleagueReviews, updateColleagueReviews] = useState<any>([]);
   const [formsValid, validateReview] = useState<{ [key: string]: boolean }>({});
   const isButtonsDisabled = Object.values(formsValid).some((value) => !value);
+  const statuses =
+    status === ActionStatus.PENDING
+      ? [Status.WAITING_FOR_APPROVAL, Status.WAITING_FOR_COMPLETION]
+      : [Status.COMPLETED, Status.APPROVED, Status.DECLINED];
 
   const dispatch = useDispatch();
   const { css } = useStyle();
@@ -50,13 +56,13 @@ const ColleagueAction: FC<Props> = ({ status, colleague, onUpdate }) => {
   useEffect(() => {
     const reviewsUuid = colleague?.reviews?.map(({ uuid }) => uuid) || [];
     const colleaguesReviews = allColleagueReviews.filter(
-      (review) => reviewsUuid.includes(review.uuid) && review.status === status,
+      (review) => reviewsUuid.includes(review.uuid) && statuses.includes(review.status),
     );
     updateColleagueReviews(colleaguesReviews);
   }, [reviewLoaded, status]);
 
   const handleUpdateReview = useCallback(
-    (status: Status) => (code: string) => (reason: string) => {
+    (prevStatus: Status, status: Status) => (code: string) => (reason: string) => {
       const { reviewType, uuid } = colleague?.timeline?.find((timeline) => timeline.code === code);
 
       const data = {
@@ -65,7 +71,7 @@ const ColleagueAction: FC<Props> = ({ status, colleague, onUpdate }) => {
         code,
         colleagueUuid: colleague.uuid,
         reviews: colleagueReviews
-          .filter(({ status, tlPointUuid }) => status === Status.WAITING_FOR_APPROVAL && tlPointUuid === uuid)
+          .filter(({ status, tlPointUuid }) => prevStatus === status && tlPointUuid === uuid)
           .map(({ number, type, properties }) => {
             if (type !== ReviewType.MYR) {
               return { number, properties };
@@ -74,6 +80,8 @@ const ColleagueAction: FC<Props> = ({ status, colleague, onUpdate }) => {
           }),
       };
       onUpdate(reviewType, data);
+      setIsOpenSuccessModal(true);
+      setStatusHistory({ prevStatus, status, type: reviewType });
     },
     [colleague, colleagueReviews, reviewLoaded],
   );
@@ -124,46 +132,68 @@ const ColleagueAction: FC<Props> = ({ status, colleague, onUpdate }) => {
                     </div>
                   </div>
                   <Panel>
-                    {Object.keys(groupColleagueReviews).map((reviewType) => (
-                      <div className={css({ padding: '24px 35px 24px 24px' })} key={reviewType}>
-                        <Notification
-                          graphic='information'
-                          iconColor='pending'
-                          text={t(
-                            'time_to_approve_or_decline',
-                            tenant === Tenant.GENERAL
-                              ? 'It’s time to review your colleague’s objectives and / or reviews'
-                              : "It's time to review your colleague's priorities and / or reviews",
-                            { ns: tenant },
-                          )}
-                          customStyle={{
-                            background: '#FFDBC2',
-                            marginBottom: '20px',
-                          }}
-                        />
-                        {groupColleagueReviews[reviewType]?.reviews?.map((review) => {
-                          if (!review) return null;
-                          return (
-                            <ColleagueReview
-                              key={review.uuid}
-                              colleagueUuid={colleague.uuid}
-                              review={review}
-                              timeline={groupColleagueReviews[reviewType].timeline}
-                              schema={allColleagueReviewsSchema[reviewType] || []}
-                              validateReview={handleValidateReview}
-                              onUpdate={handleChangeReview}
-                            />
-                          );
-                        })}
-                        {status === Status.WAITING_FOR_APPROVAL && (
-                          <Buttons
-                            reviewType={reviewType}
-                            onUpdate={handleUpdateReview}
-                            isDisabled={isButtonsDisabled}
+                    {Object.keys(groupColleagueReviews).map((code) => {
+                      const reviewGroupByStatus: [Status, any[]][] = [];
+                      const colleagueReviews = groupColleagueReviews[code]?.reviews;
+                      const colleagueTimeline = groupColleagueReviews[code].timeline;
+                      const statusStatistics = Object.keys(colleagueTimeline.statistics || {}) as Status[];
+
+                      for (const status of statusStatistics) {
+                        reviewGroupByStatus.push([
+                          status,
+                          colleagueReviews.filter((review) => status === review.status),
+                        ]);
+                      }
+                      return (
+                        <div className={css({ padding: '24px 35px 24px 24px' })} key={code}>
+                          <Notification
+                            graphic='information'
+                            iconColor='pending'
+                            text={t(
+                              'time_to_approve_or_decline',
+                              tenant === Tenant.GENERAL
+                                ? 'It’s time to review your colleague’s objectives and / or reviews'
+                                : "It's time to review your colleague's priorities and / or reviews",
+                              { ns: tenant },
+                            )}
+                            customStyle={{
+                              background: '#FFDBC2',
+                              marginBottom: '20px',
+                            }}
                           />
-                        )}
-                      </div>
-                    ))}
+                          {reviewGroupByStatus.map(([statusReview, reviews]) => {
+                            return (
+                              <div key={statusReview}>
+                                {reviews.map((review) => {
+                                  if (!review) return null;
+                                  return (
+                                    <ColleagueReview
+                                      key={review.uuid}
+                                      colleagueUuid={colleague.uuid}
+                                      review={review}
+                                      timeline={colleagueTimeline}
+                                      schema={allColleagueReviewsSchema[code] || []}
+                                      validateReview={handleValidateReview}
+                                      onUpdate={handleChangeReview}
+                                    />
+                                  );
+                                })}
+                                {(statusReview === Status.WAITING_FOR_COMPLETION ||
+                                  statusReview === Status.WAITING_FOR_APPROVAL) &&
+                                  status === ActionStatus.PENDING && (
+                                    <Buttons
+                                      status={statusReview}
+                                      code={code}
+                                      onUpdate={handleUpdateReview}
+                                      isDisabled={isButtonsDisabled}
+                                    />
+                                  )}
+                              </div>
+                            );
+                          })}
+                        </div>
+                      );
+                    })}
                   </Panel>
                 </Section>
               );

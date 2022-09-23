@@ -3,6 +3,7 @@ import { Button, useStyle, Rule, CreateRule, Styles } from '@pma/dex-wrapper';
 
 import { WrapperModal } from 'features/general/Modal';
 import { Trans } from 'components/Translation';
+import Spinner from '../Spinner';
 
 export type SuccessModal = {
   onClose: () => void;
@@ -12,6 +13,7 @@ export type SuccessModal = {
   mark?: JSX.Element;
   customElement?: JSX.Element;
   customButtonStyles?: Rule | Styles | CSSProperties | {};
+  loading?: boolean;
 };
 
 type Props = HTMLProps<HTMLInputElement> & SuccessModal;
@@ -35,48 +37,53 @@ const SuccessModal: FC<Props> = ({
   customButtonStyles = {},
   additionalText = '',
   customElement,
+  loading,
 }) => {
   const { css, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
 
   return (
     <WrapperModal title={title} onClose={onClose} onOverlayClick={onClose}>
-      <div data-test-id='success-modal' className={css(wrapperStyle)}>
-        <div className={css(containerStyle({ mobileScreen }))}>
-          <div style={{ textAlign: 'center' }}>
-            <span
-              style={{
-                display: 'block',
-                padding: '15px',
-              }}
-              data-test-id='success-check-mark'
-            >
-              <svg width='165' height='164' viewBox='0 0 165 164' fill='none' xmlns='http://www.w3.org/2000/svg'>
-                {mark}
-              </svg>
-            </span>
-            <div className={css(titleStyle)}>
-              <Trans i18nKey='done'>Done</Trans>!
+      {loading ? (
+        <Spinner fullHeight />
+      ) : (
+        <div data-test-id='success-modal' className={css(wrapperStyle)}>
+          <div className={css(containerStyle({ mobileScreen }))}>
+            <div style={{ textAlign: 'center' }}>
+              <span
+                style={{
+                  display: 'block',
+                  padding: '15px',
+                }}
+                data-test-id='success-check-mark'
+              >
+                <svg width='165' height='164' viewBox='0 0 165 164' fill='none' xmlns='http://www.w3.org/2000/svg'>
+                  {mark}
+                </svg>
+              </span>
+              <div className={css(titleStyle)}>
+                <Trans i18nKey='done'>Done</Trans>!
+              </div>
+              <div className={css(descriptionStyle)}>{description}</div>
+              {additionalText && <div className={css(descriptionStyle, { marginTop: '30px' })}>{additionalText}</div>}
+              {customElement && <div>{customElement}</div>}
             </div>
-            <div className={css(descriptionStyle)}>{description}</div>
-            {additionalText && <div className={css(descriptionStyle, { marginTop: '30px' })}>{additionalText}</div>}
-            {customElement && <div>{customElement}</div>}
+          </div>
+          <div className={css(buttonWrapperStyle)}>
+            <div
+              className={css({
+                padding: '36px 36px',
+                display: 'flex',
+                justifyContent: 'center',
+              })}
+            >
+              <Button styles={[buttonStyle, customButtonStyles]} onPress={onClose}>
+                <Trans i18nKey='okay'>Okay</Trans>
+              </Button>
+            </div>
           </div>
         </div>
-        <div className={css(buttonWrapperStyle)}>
-          <div
-            className={css({
-              padding: '36px 36px',
-              display: 'flex',
-              justifyContent: 'center',
-            })}
-          >
-            <Button styles={[buttonStyle, customButtonStyles]} onPress={onClose}>
-              <Trans i18nKey='okay'>Okay</Trans>
-            </Button>
-          </div>
-        </div>
-      </div>
+      )}
     </WrapperModal>
   );
 };

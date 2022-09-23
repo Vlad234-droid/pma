@@ -3,7 +3,7 @@ import { useStyle } from '@pma/dex-wrapper';
 import MyActions, { ActionsFilters } from 'features/general/MyActions';
 import { FilterOption, FilterValues, SortBy, useSearch, useSorting } from 'features/general/Filters';
 import { SortOption } from 'features/general/Filters/config/types';
-import { Status } from 'config/enum';
+import { ActionStatus } from 'config/enum';
 
 type Props = {
   sortValue?: SortBy;
@@ -18,7 +18,7 @@ type Props = {
 const MyActionsPage: FC<Props> = () => {
   const { css } = useStyle();
   // TODO: move states to searchParams
-  const [status, setStatus] = useState<Status>(Status.WAITING_FOR_APPROVAL);
+  const [status, setStatus] = useState<ActionStatus>(ActionStatus.PENDING);
   const [sortValue, setSortValue] = useSorting();
   const [searchValue, setSearchValue] = useSearch();
   const [isCheckedAll, toggleCheckedAll] = useState(false);

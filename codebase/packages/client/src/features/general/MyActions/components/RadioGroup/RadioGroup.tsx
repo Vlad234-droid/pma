@@ -2,11 +2,11 @@ import React, { FC } from 'react';
 import { useStyle } from '@pma/dex-wrapper';
 import { Radio } from 'components/Form';
 import { Trans } from 'components/Translation/Translation';
-import { Status } from 'config/enum';
+import { Status, ActionStatus } from 'config/enum';
 
 type Props = {
-  status: Status;
-  setStatus: (value: Status) => void;
+  status: ActionStatus;
+  setStatus: (value: ActionStatus) => void;
 };
 
 export const RadioGroup: FC<Props> = ({ status, setStatus }) => {
@@ -21,11 +21,11 @@ export const RadioGroup: FC<Props> = ({ status, setStatus }) => {
           })}
         >
           <Radio
-            id={Status.WAITING_FOR_APPROVAL}
-            value={Status.WAITING_FOR_APPROVAL}
+            id={ActionStatus.PENDING}
+            value={ActionStatus.PENDING}
             name='status'
-            checked={status === Status.WAITING_FOR_APPROVAL}
-            onChange={() => setStatus(Status.WAITING_FOR_APPROVAL)}
+            checked={status === ActionStatus.PENDING}
+            onChange={() => setStatus(ActionStatus.PENDING)}
           />
           <span
             className={css({
@@ -47,11 +47,11 @@ export const RadioGroup: FC<Props> = ({ status, setStatus }) => {
           })}
         >
           <Radio
-            id={Status.APPROVED}
-            value={Status.APPROVED}
+            id={ActionStatus.COMPLETED}
+            value={ActionStatus.COMPLETED}
             name='status'
-            checked={status === Status.APPROVED}
-            onChange={() => setStatus(Status.APPROVED)}
+            checked={status === ActionStatus.COMPLETED}
+            onChange={() => setStatus(ActionStatus.COMPLETED)}
           />
           <span
             className={css({

@@ -21,7 +21,7 @@ const ApprovalWidget: FC<Props> = ({ isDisabled, reviews, onSave }) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const tenant = useTenant();
-  const { setOpened: setIsOpenSuccessModal, reviewStatus, setReviewStatus, setReviewType } = useSuccessModalContext();
+  const { setOpened: setIsOpenSuccessModal } = useSuccessModalContext();
 
   const [isOpenDecline, toggleOpenDecline] = useState(false);
   const [isOpenApprove, toggleOpenApprove] = useState(false);
@@ -33,10 +33,10 @@ const ApprovalWidget: FC<Props> = ({ isDisabled, reviews, onSave }) => {
   const [allReviewsProcessed, setAllReviewsProcessed] = useState<boolean>(false);
 
   useEffect(() => {
-    if (reviewStatus && allReviewsProcessed) {
+    if (allReviewsProcessed) {
       setIsOpenSuccessModal(true);
     }
-  }, [reviewStatus, allReviewsProcessed]);
+  }, [allReviewsProcessed]);
 
   useEffect(() => {
     if (declines.length && declines.length === reviews.length) {
@@ -123,8 +123,6 @@ const ApprovalWidget: FC<Props> = ({ isDisabled, reviews, onSave }) => {
 
         // @ts-ignore
         dispatch(ReviewsActions.updateReviewStatus(update));
-        setReviewStatus(status);
-        setReviewType(currentTimeline![0].reviewType);
 
         onSave();
         // clean declines after submit
@@ -161,7 +159,7 @@ const ApprovalWidget: FC<Props> = ({ isDisabled, reviews, onSave }) => {
           onSave={handleDeclineSubmit}
           onClose={handleDeclineClose}
           review={currentReview || undefined}
-          reviewType={currentTimeline?.[0]?.reviewType as ReviewType}
+          code={currentTimeline?.[0]?.code}
         />
       )}
       {isOpenApprove && <ApproveModal onSave={handleApproveSubmit} onClose={() => toggleOpenApprove(false)} />}

@@ -11,11 +11,10 @@ import {
   ManagersActions,
   ReviewsActions,
   SchemaActions,
-  getEmployeesWithReviewStatus,
+  getEmployeesWithReviewStatuses,
 } from '@pma/store';
 
-import { Status } from 'config/enum';
-import Spinner from 'components/Spinner';
+import { ActionStatus, Status } from 'config/enum';
 import { Checkbox } from 'components/Form';
 import ApprovalWidget from './components/ApprovalWidget';
 import { SuccessModalProvider } from './context/successModalContext';
@@ -23,7 +22,7 @@ import ColleagueAction from './components/ColleagueAction';
 import { SuccessModal } from './components/Modal';
 
 type Props = {
-  status: Status;
+  status: ActionStatus;
   searchValue: string;
   sortValue: SortBy;
   isCheckedAll: boolean;
@@ -33,12 +32,15 @@ const MyActions: FC<Props> = ({ status, searchValue, sortValue, isCheckedAll }) 
   const dispatch = useDispatch();
   const { css } = useStyle();
 
-  const { loaded, loading } = useSelector(getManagersMetaSelector) || {};
+  const { loaded } = useSelector(getManagersMetaSelector) || {};
   const colleagueUuid = useSelector(colleagueUUIDSelector);
 
   const [checkedItems, setCheckedItems]: [string[], (T) => void] = useState([]);
-  const isWaitingForApprovalStatus = status === Status.WAITING_FOR_APPROVAL;
-  const colleagues = useSelector((state) => getEmployeesWithReviewStatus(state, status, searchValue, sortValue));
+  const isWaitingForApprovalStatus = status === ActionStatus.PENDING;
+  const statuses = isWaitingForApprovalStatus
+    ? [Status.WAITING_FOR_APPROVAL, Status.WAITING_FOR_COMPLETION]
+    : [Status.COMPLETED, Status.APPROVED, Status.DECLINED];
+  const colleagues = useSelector((state) => getEmployeesWithReviewStatuses(state, statuses, searchValue, sortValue));
 
   const reviewsForApproval = useMemo(
     () => colleagues.filter(({ uuid }) => uuid && checkedItems.includes(uuid)),
@@ -92,46 +94,56 @@ const MyActions: FC<Props> = ({ status, searchValue, sortValue, isCheckedAll }) 
 
   const clearCheckedItems = () => setCheckedItems([]);
 
-  if (loading) return <Spinner fullHeight />;
-
   return (
     <SuccessModalProvider>
-      <div className={css(bodyStyle)}>
-        <div className={css(optionWrapperStyle)}>
-          <div data-test-id='colleague-list'>
-            {colleagues?.map((colleague) => (
-              <div
-                data-test-id={`colleague-wrapper-${colleague.uuid}`}
-                key={colleague.uuid}
-                className={css(wrapperStyle)}
-              >
-                <div className={css(checkboxWrapperStyle)}>
-                  {status === Status.WAITING_FOR_APPROVAL && (
-                    <div className={css(checkboxPositionStyle)}>
-                      <Checkbox
-                        disabled={colleague?.timeline?.length > 1}
-                        id={colleague.uuid}
-                        name={colleague.uuid}
-                        checked={checkedItems.includes(colleague.uuid)}
-                        onChange={handleSelectItem}
-                      />
+      {({ isOpen, statusHistory, setOpened }) => {
+        return (
+          <>
+            <div className={css(bodyStyle)}>
+              <div className={css(optionWrapperStyle)}>
+                <div data-test-id='colleague-list'>
+                  {colleagues?.map((colleague) => (
+                    <div
+                      data-test-id={`colleague-wrapper-${colleague.uuid}`}
+                      key={colleague.uuid}
+                      className={css(wrapperStyle)}
+                    >
+                      <div className={css(checkboxWrapperStyle)}>
+                        {status === ActionStatus.PENDING && (
+                          <div className={css(checkboxPositionStyle)}>
+                            <Checkbox
+                              disabled={colleague?.timeline?.length > 1}
+                              id={colleague.uuid}
+                              name={colleague.uuid}
+                              checked={checkedItems.includes(colleague.uuid)}
+                              onChange={handleSelectItem}
+                            />
+                          </div>
+                        )}
+                      </div>
+                      <div className={css(blockStyle)}>
+                        <ColleagueAction status={status} colleague={colleague} onUpdate={handleUpdateReview} />
+                      </div>
                     </div>
-                  )}
-                </div>
-                <div className={css(blockStyle)}>
-                  <ColleagueAction status={status} colleague={colleague} onUpdate={handleUpdateReview} />
+                  ))}
                 </div>
               </div>
-            ))}
-          </div>
-        </div>
-        {isWaitingForApprovalStatus && (
-          <div className={css(rightColumnStyle)}>
-            <ApprovalWidget isDisabled={!checkedItems.length} reviews={reviewsForApproval} onSave={clearCheckedItems} />
-          </div>
-        )}
-      </div>
-      <SuccessModal />
+              {isWaitingForApprovalStatus && (
+                <div className={css(rightColumnStyle)}>
+                  <ApprovalWidget
+                    isDisabled={!checkedItems.length}
+                    reviews={reviewsForApproval}
+                    onSave={clearCheckedItems}
+                  />
+                </div>
+              )}
+            </div>
+            {isOpen && statusHistory && (
+              <SuccessModal isOpen={isOpen} statusHistory={statusHistory} setOpened={setOpened} />
+            )}
+          </>
+        );
+      }}
     </SuccessModalProvider>
   );
 };

@@ -17,7 +17,7 @@ const UpdateObjective: FC = () => {
 
   const editNumber = id !== undefined ? +id : 1;
 
-  const handleClose = () => navigate((state as any)?.backPath || buildPath(Page.REVIEWS));
+  const handleClose = () => navigate((state as any)?.backPath || buildPath(Page.REVIEWS_VIEW));
 
   const CreateUpdateObjectives = useMemo(
     () =>

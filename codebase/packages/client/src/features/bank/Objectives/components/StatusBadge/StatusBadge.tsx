@@ -14,6 +14,7 @@ export type StatusBadgeProps = {
 const getContent = (theme: Theme, t: TFunction, status: Status): [Graphics, string, Colors] => {
   switch (status) {
     case Status.COMPLETED:
+      return ['roundTick', t('completed', 'Completed'), 'green'];
     case Status.APPROVED:
       return ['roundTick', t('agreed', 'Agreed'), 'green'];
     case Status.WAITING_FOR_APPROVAL:

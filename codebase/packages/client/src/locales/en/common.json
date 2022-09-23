@@ -5,6 +5,7 @@
   "not_approved": "Not approved",
   "business_unit_bonus": "Business unit bonus",
   "cancel": "Cancel",
+  "complete": "Complete",
   "check_ins": "Check-ins",
   "check_ins_date": "Last updated {{date, d LLL yyyy}}",
   "overdue_actions": "Overdue actions",
@@ -97,6 +98,7 @@
   "submit_objectives_or_reviews": "Submit objectives or reviews",
   "approve_objectives_or_reviews": "Are you sure you want to approve objectives or reviews?",
   "approve_or_decline": "Approve or decline",
+  "complete_or_request_amend": "Complete or request amend",
   "mid_year_review_help_text": "Use this to capture a summary of the mid-year conversation you’ve had with your line manager. Remember to focus as much on your how as your what.",
   "end_year_review_help_text": "Use this to capture the outcome of the conversation you’ve had with your line manager. Remember to focus as much on your how as your what. Use the look forward section to capture your priorities and development for the year ahead.",
   "myr_review_sent_to_manager": "Your mid-year review has been sent to your line manager.",
@@ -707,5 +709,7 @@
   "quarter3": "Quarter 3",
   "quarter4": "Quarter 4",
   "not-submitted": "Not submitted",
-  "new-to-business": "New to business"
+  "new-to-business": "New to business",
+  "you_have_completed": "You have agreed the completion of your colleague's priority!",
+  "you_have_complete_declined": "You've requested the form to be amended as it doesn't reflect the conversation you had with your colleague"
 }

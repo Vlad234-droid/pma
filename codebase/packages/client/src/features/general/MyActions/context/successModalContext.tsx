@@ -1,44 +1,48 @@
-import React, { createContext, FC, useContext, useState } from 'react';
+import React, { createContext, FC, ReactNode, useContext, useState } from 'react';
 
 import { ReviewType, Status } from 'config/enum';
 
+export type StatusHistoryType = {
+  prevStatus: Status;
+  status: Status;
+  type: ReviewType;
+};
 type Data = {
   isOpen: boolean;
-  reviewStatus: Status | null;
-  reviewType: ReviewType | null;
-  setReviewStatus: (T) => void;
-  setReviewType: (T) => void;
   setOpened: (T) => void;
+  statusHistory: StatusHistoryType | null;
+  setStatusHistory: (history: StatusHistoryType) => void;
 };
 
 const defaultData = {
   isOpen: false,
-  reviewStatus: null,
-  reviewType: null,
-  setReviewStatus: () => null,
-  setReviewType: () => null,
   setOpened: () => null,
+  statusHistory: null,
+  setStatusHistory: () => null,
 };
 
 const SuccessModalContext = createContext<Data>(defaultData);
 
-export const SuccessModalProvider: FC = ({ children }) => {
+export const SuccessModalProvider: FC<{
+  children: (renderProps: {
+    isOpen: boolean;
+    setOpened: (T) => void;
+    statusHistory: StatusHistoryType | null;
+  }) => ReactNode;
+}> = ({ children }) => {
   const [isOpen, setOpened] = useState<boolean>(false);
-  const [reviewStatus, setReviewStatus] = useState<Status | null>(null);
-  const [reviewType, setReviewType] = useState<ReviewType | null>(null);
+  const [statusHistory, setStatusHistory] = useState<StatusHistoryType | null>(null);
 
   return (
     <SuccessModalContext.Provider
       value={{
         isOpen,
-        reviewStatus,
-        reviewType,
         setOpened,
-        setReviewStatus,
-        setReviewType,
+        statusHistory,
+        setStatusHistory,
       }}
     >
-      {children}
+      {children({ isOpen, statusHistory, setOpened })}
     </SuccessModalContext.Provider>
   );
 };

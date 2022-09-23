@@ -19,8 +19,6 @@ import { useSelector } from 'react-redux';
 import { USER } from 'config/constants';
 import { ConfirmModal } from 'components/ConfirmModal';
 import { Trans, useTranslation } from 'components/Translation';
-import SuccessModal from 'components/SuccessModal';
-import { SuccessMark } from 'components/Icon';
 
 export type PropsType = {
   objectives: ObjectiveTypes.Objective[];
@@ -36,7 +34,6 @@ export function withSection<P>(WrappedComponent: React.ComponentType<P & PropsTy
     const dispatch = useDispatch();
     const { t } = useTranslation();
     const [removedPriority, setPriority] = useState<string>('');
-    const [completedPriority, setPriorityCompleted] = useState<string>('');
     const { activeTimelines, setActiveTimeline } = useTimelineContainer();
 
     const { loaded: schemaLoaded } = useSelector(schemaMetaSelector);
@@ -88,7 +85,6 @@ export function withSection<P>(WrappedComponent: React.ComponentType<P & PropsTy
           data: [{ number, properties: objective?.properties, status: Status.WAITING_FOR_COMPLETION }],
         }),
       );
-      setPriorityCompleted(objective?.properties?.title || t('quarterly_priority', 'Quarterly priority'));
     };
 
     const handleDelete = (number) => {
@@ -133,14 +129,6 @@ export function withSection<P>(WrappedComponent: React.ComponentType<P & PropsTy
           timelinePoints={visibleTimelinePoints}
           activeTimelinePoints={timelinePoint}
         />
-        {completedPriority && (
-          <SuccessModal
-            title={completedPriority}
-            onClose={() => setPriorityCompleted('')}
-            description={t('priority_completed', 'Your Line Manager will now review your completed priority')}
-            mark={<SuccessMark />}
-          />
-        )}
         {removedPriority && reviewLoaded && (
           <ConfirmModal
             title={t('priority_deleted', 'Priority deleted')}

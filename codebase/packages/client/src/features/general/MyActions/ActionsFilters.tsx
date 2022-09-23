@@ -1,9 +1,9 @@
 import React, { FC, useMemo } from 'react';
 import { useSelector } from 'react-redux';
-import { getEmployeesWithReviewStatus } from '@pma/store';
+import { getEmployeesWithReviewStatuses } from '@pma/store';
 import { Rule, useStyle } from '@pma/dex-wrapper';
 import { Filters, getEmployeesSortingOptions, SortBy } from 'features/general/Filters';
-import { Status } from 'config/enum';
+import { ActionStatus, Status } from 'config/enum';
 import { useTranslation } from 'components/Translation';
 
 import { SelectAll } from './components/SelectAll';
@@ -15,8 +15,8 @@ type Props = {
   onChangeSort: (value: SortBy) => void;
   searchValue: string;
   onChangeSearch: (value: string) => void;
-  status: Status;
-  onChangeStatus: (status: Status) => void;
+  status: ActionStatus;
+  onChangeStatus: (status: ActionStatus) => void;
   isCheckedAll: boolean;
   onChangeCheckedAll: (isSelected: boolean) => void;
 };
@@ -36,8 +36,12 @@ const ActionsFilters: FC<Props> = ({
 
   const options = getEmployeesSortingOptions(t);
 
-  const isWaitingForApproval = status === Status.WAITING_FOR_APPROVAL;
-  const colleagues = useSelector((state) => getEmployeesWithReviewStatus(state, status, searchValue, sortValue));
+  const isWaitingForApproval = status === ActionStatus.PENDING;
+  const statuses = isWaitingForApproval
+    ? [Status.WAITING_FOR_APPROVAL, Status.WAITING_FOR_COMPLETION]
+    : [Status.COMPLETED, Status.APPROVED, Status.DECLINED];
+
+  const colleagues = useSelector((state) => getEmployeesWithReviewStatuses(state, statuses, searchValue, sortValue));
 
   // disable selectAll, if every colleague has more then one item for approve
   const isDisabled = useMemo(

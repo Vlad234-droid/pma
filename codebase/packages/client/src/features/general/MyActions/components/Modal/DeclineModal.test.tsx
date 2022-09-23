@@ -12,7 +12,7 @@ describe('<DeclineModal />', () => {
     onClose: jest.fn(),
     onSave: jest.fn(),
     review: generateEmployeeReview(),
-    reviewType: ReviewType.MYR,
+    code: ReviewType.MYR,
   };
 
   describe('#render', () => {
@@ -35,7 +35,7 @@ describe('<DeclineModal />', () => {
     it('should render select, if reviewType is Objective', () => {
       const newProps = {
         ...props,
-        reviewType: ReviewType.OBJECTIVE,
+        code: ReviewType.OBJECTIVE,
       };
 
       const { getByText } = render(<DeclineModal {...newProps} />);

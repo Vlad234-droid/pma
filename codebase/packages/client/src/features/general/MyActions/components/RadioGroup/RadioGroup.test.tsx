@@ -6,11 +6,11 @@ import { fireEvent } from '@testing-library/react';
 
 import { RadioGroup } from './RadioGroup';
 // @ts-ignore
-import { Status } from 'config/enum';
+import { ActionStatus } from 'config/enum';
 
 describe('<RadioGroup />', () => {
   const props = {
-    status: Status.WAITING_FOR_APPROVAL,
+    status: ActionStatus.PENDING,
     setStatus: jest.fn(),
   };
 
@@ -20,14 +20,14 @@ describe('<RadioGroup />', () => {
 
       expect(screen.getByTestId('radio-group')).toBeInTheDocument();
       screen.getAllByRole('radio').forEach((radio: any) => {
-        if (radio.id === 'WAITING_FOR_APPROVAL') {
+        if (radio.id === 'PENDING') {
           expect(radio.checked).toBeTruthy();
         } else {
           expect(radio.checked).not.toBeTruthy();
         }
       });
       fireEvent.click(screen.getByText('Complete'));
-      expect(props.setStatus).toBeCalledWith('APPROVED');
+      expect(props.setStatus).toBeCalledWith('COMPLETED');
     });
   });
 });

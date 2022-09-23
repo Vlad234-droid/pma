@@ -3,28 +3,28 @@ import { createSelector, ParametricSelector, Selector } from 'reselect'; //@ts-i
 import { RootState } from 'typesafe-actions';
 import { ReviewType, Status } from '@pma/client/src/config/enum';
 import {
-  SortBy,
-  searchEmployeesFn,
-  sortEmployeesFn,
   searchEmployeesAndManagersFn,
+  searchEmployeesFn,
+  SortBy,
+  sortEmployeesFn,
 } from '@pma/client/src/features/general/Filters';
 import { Employee } from '@pma/client/src/config/types';
 
 export const managersSelector = (state: RootState) => state.managers || {};
 
-export const getEmployeesWithReviewStatus: ParametricSelector<RootState, any, any> = createSelector(
+export const getEmployeesWithReviewStatuses: ParametricSelector<RootState, Status[], any> = createSelector(
   [
     managersSelector,
-    (_, status: Status) => status,
+    (_, statuses: Status[]) => statuses,
     (_, __, search?: string) => search,
     (_, __, ___?, sort?: SortBy) => sort,
   ],
   // @ts-ignore
-  ({ data = [] }, status, searchValue = '', sortValue) => {
+  ({ data = [] }, statuses: Status[], searchValue = '', sortValue) => {
     const filteredWithStatusData = data
-      .filter((employee) => employee.reviews.some((review) => review.status === status))
+      .filter((employee) => employee.reviews.some((review) => statuses.includes(review.status)))
       .map((employee) => {
-        const reviews = employee.reviews.filter((review) => review.status === status);
+        const reviews = employee.reviews.filter((review) => statuses.includes(review.status));
         const timelineIds = reviews.map(({ tlPointUuid }) => tlPointUuid);
         const timeline = employee.timeline.filter((timeline) => timelineIds.includes(timeline.uuid));
         return {
@@ -59,7 +59,9 @@ export const getPendingEmployees: Selector<RootState, any, any> = createSelector
     const filteredData = data ? sortEmployeesFn(searchEmployeesFn(data, search), sort) : [];
 
     const employeeWithPendingApprovals = filteredData?.filter((employee: Employee) =>
-      employee.reviews.some((review) => review.status === Status.WAITING_FOR_APPROVAL),
+      employee.reviews.some((review) =>
+        [Status.WAITING_FOR_APPROVAL, Status.WAITING_FOR_COMPLETION].includes(review.status),
+      ),
     );
 
     const employeePendingApprovals = filteredData?.filter((employee: Employee) =>
