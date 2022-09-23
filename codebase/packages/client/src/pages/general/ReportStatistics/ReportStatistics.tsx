@@ -249,7 +249,7 @@ const rightColumn: Rule = ({ theme }) => ({
   gap: theme.spacing.s2,
   flex: 4,
   flexBasis: '400px',
-  marginTop: '70px',
+  marginTop: '30px',
   alignSelf: 'flex-end',
 });
 

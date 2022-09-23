@@ -713,5 +713,6 @@
   "you_have_complete_declined": "You've requested the form to be amended as it doesn't reflect the conversation you had with your colleague",
   "last_name": "Last name",
   "business_type": "Business type",
-  "job_name": "Job name"
+  "job_name": "Job name",
+  "complete_or_request_amend": "Complete or request amend"
 }
