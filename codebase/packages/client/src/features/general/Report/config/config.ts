@@ -273,10 +273,7 @@ export const getDefaultData = (type, t) => {
       { percentage: 0, title: t(TitlesReport.GIVEN, 'Given') },
     ],
 
-    [ReportPage.REPORT_WORK_LEVEL]: [
-      { percentage: 0, title: 'Approved' },
-      { percentage: 0, title: 'Submitted' },
-    ],
+    [ReportPage.REPORT_WORK_LEVEL]: [{ percentage: 0, title: 'Approved' }],
 
     [ReportPage.REPORT_NEW_TO_BUSINESS]: [{ percentage: 0, title: t(Rating.COLLEAGUES, 'Colleagues') }],
 

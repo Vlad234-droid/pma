@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { useStyle } from '@pma/dex-wrapper';
 import { Radio } from 'components/Form';
 import { Trans } from 'components/Translation/Translation';
-import { Status, ActionStatus } from 'config/enum';
+import { ActionStatus } from 'config/enum';
 
 type Props = {
   status: ActionStatus;

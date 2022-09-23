@@ -241,15 +241,8 @@ export const useDetailsStatistics = (type, query) => {
             ...initialFields,
             ...defaultSort,
             year,
-            status: 'submitted',
-          }),
-        );
-        dispatch(
-          StatisticsAction.getLeadershipReviewsStatistics({
-            ...initialFields,
-            ...defaultSort,
-            year,
             status: 'approved',
+            ...(type === ReportPage.REPORT_WORK_LEVEL && { _limit: 10 }),
           }),
         );
         break;

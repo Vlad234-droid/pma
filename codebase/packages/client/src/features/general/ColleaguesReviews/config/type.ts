@@ -1,7 +1,7 @@
 import { ReviewType } from 'config/enum';
 import { Props as ColleagueInfo } from 'components/ColleagueInfo/ColleagueInfo';
 
-const _limit = 10;
+const _limit = 15;
 const _start = 0;
 
 export const initialFields: Record<'_start' | '_limit', number> = {
@@ -11,7 +11,7 @@ export const initialFields: Record<'_start' | '_limit', number> = {
 
 export const defaultSort = { _sort: 'first-name:asc,last-name:asc' };
 
-type Info = Omit<ColleagueInfo, 'manager'> & { uuid: string };
+export type Info = Omit<ColleagueInfo, 'manager'> & { uuid: string };
 
 export type ReviewStatistics = {
   type: ReviewType;
@@ -26,4 +26,4 @@ export type ReviewStatistics = {
   totalCount: number;
 };
 
-export type List = Record<string, Array<Info>>;
+export type List = Record<string, Array<Info> | []>;

@@ -110,5 +110,8 @@ export const useChartDataStatistics = (configKey: ReportPage): Array<Data> => {
   }
   //TODO: remove until backend will be fixed
   // return chart;
+  if (configKey === ReportPage.REPORT_WORK_LEVEL) {
+    return chart.filter((item) => item.title === 'Approved');
+  }
   return chart.filter((item) => item.title !== 'Not submitted');
 };

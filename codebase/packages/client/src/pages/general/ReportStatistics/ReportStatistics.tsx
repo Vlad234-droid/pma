@@ -56,7 +56,7 @@ const getConfigReviewsKeys = (type): { key: string; configType: ReportType; conf
     },
     [ReportPage.REPORT_WORK_LEVEL]: {
       key: 'leadershipReviews',
-      configKeys: ['submitted', 'approved'],
+      configKeys: ['approved'],
       configType: ReportType.OBJECTIVE,
     },
     [ReportPage.REPORT_NEW_TO_BUSINESS]: {
@@ -131,6 +131,7 @@ const ReportStatistics = () => {
   const [filterModal, setFilterModal] = useState(false);
   const [checkedItems, setCheckedItems]: [string[], (T) => void] = useState([]);
   const [isCheckAll, setIsCheckAll]: [string[], (T) => void] = useState([]);
+  const [isFullView, toggleFullView] = useState<boolean>(false);
 
   useEffect(() => {
     if (!Object.entries(query).length || !query.year) navigate(buildPath(Page.REPORT));
@@ -193,11 +194,19 @@ const ReportStatistics = () => {
       </div>
       <div data-test-id={'test-pie-chart'} className={css(wrapperStyle)}>
         <div data-test-id={'content-id'} className={css(leftColumn)}>
-          {type && <StatisticsReviews type={type} />}
+          {type && (
+            <StatisticsReviews
+              type={type}
+              isFullView={isFullView}
+              toggleFullView={() => toggleFullView((prev) => !prev)}
+            />
+          )}
         </div>
-        <div data-test-id={'full-view'} className={css(rightColumn)}>
-          {type && <ColleaguesStatistics type={type} />}
-        </div>
+        {!isFullView && (
+          <div data-test-id={'full-view'} className={css(rightColumn)}>
+            {type && <ColleaguesStatistics type={type} />}
+          </div>
+        )}
       </div>
     </div>
   );

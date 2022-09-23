@@ -43,16 +43,18 @@ const Table: FC<Props> = ({
               </tr>
             </thead>
             <tbody>
-              {currentItems?.map((item, i) => (
-                <tr key={i} className={css(trCustomStyle)}>
-                  {Object.values(item)?.map((desc, i) => (
-                    <td key={`${desc}${i}`} className={css(contentStyle, descriptionStyle, descriptionCustomStyle)}>
-                      {/*@ts-ignore*/}
-                      {!i ? desc : !breakTd ? desc : breakWord(desc ? desc?.split(' ') ?? desc : desc)}
-                    </td>
-                  ))}
-                </tr>
-              ))}
+              {currentItems?.map((item, i) => {
+                return (
+                  <tr key={i} className={css(trCustomStyle)}>
+                    {Object.values(item)?.map((desc, i) => (
+                      <td key={`${desc}${i}`} className={css(contentStyle, descriptionStyle, descriptionCustomStyle)}>
+                        {/*@ts-ignore*/}
+                        {!i ? desc : !breakTd ? desc : breakWord(desc ? desc?.split(' ') ?? desc : desc)}
+                      </td>
+                    ))}
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
@@ -103,6 +105,7 @@ const tableStyle: Rule = ({ theme }) => ({
 
 const tableContainer: Rule = {
   width: '100%',
+  marginBottom: '20px',
 };
 
 const wrapper: Rule = {
