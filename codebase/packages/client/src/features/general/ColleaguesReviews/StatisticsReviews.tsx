@@ -295,7 +295,7 @@ const StatisticsReviews: FC<{ type: ReportPage; toggleFullView: () => void; isFu
                                 </div>
                               ) : (
                                 <Table
-                                  tableTitles={['first_name', 'last_name', 'job_name', 'business_type']}
+                                  tableTitles={['business_type', 'first_name', 'job_name', 'last_name']}
                                   //@ts-ignore
                                   currentItems={data.map(({ businessType, firstName, jobName, lastName }) => ({
                                     businessType,
