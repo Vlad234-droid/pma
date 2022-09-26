@@ -1,15 +1,18 @@
-import React, { FC, useMemo } from 'react';
+import React, { FC, useEffect, useMemo } from 'react';
 import { CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
-import { colleagueUUIDSelector, timelinesMetaSelector } from '@pma/store';
+import { colleagueUUIDSelector, timelinesMetaSelector, timelineTypesAvailabilitySelector } from '@pma/store';
 
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
+import { useTranslation } from 'components/Translation';
 import { ReviewsSection, CompletedReviewsSection, ReviewFilesSection } from 'features/general/Review';
 import { tenant as T, useTenant } from 'features/general/Permission';
 import { ShareWidget } from 'features/general/ShareWidget';
 import { buildPath } from 'features/general/Routes';
 import { Page } from 'pages/general/types';
+import { useHeaderContainer } from 'contexts/headerContext';
+import { ReviewType } from 'config/enum';
 
 export const TEST_ID = 'objectives-pave';
 
@@ -18,7 +21,18 @@ const ObjectivesPage: FC = () => {
   const { css, matchMedia } = useStyle();
   const navigate = useNavigate();
   const colleagueUuid = useSelector(colleagueUUIDSelector);
+  const timelineTypes = useSelector(timelineTypesAvailabilitySelector(colleagueUuid)) || {};
+  const { t } = useTranslation();
+  const canShowReviewTitle =
+    (!timelineTypes[ReviewType.MYR] && timelineTypes[ReviewType.EYR]) || !timelineTypes[ReviewType.OBJECTIVE];
+
   const { loading } = useSelector(timelinesMetaSelector);
+  const { setLinkTitle } = useHeaderContainer();
+
+  useEffect(() => {
+    if (Object.keys(timelineTypes).length && canShowReviewTitle)
+      setLinkTitle({ [Page.REVIEWS_VIEW]: t('reviews', 'Reviews') });
+  }, [Object.keys(timelineTypes).length]);
 
   const Objectives = useMemo(
     () => React.lazy(() => import(`features/${tenant}/Objectives`).then((module) => ({ default: module.default }))),
