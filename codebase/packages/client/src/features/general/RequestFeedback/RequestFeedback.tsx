@@ -2,13 +2,15 @@ import React, { FC, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import RequestFeedbackForm from './components/RequestFeedbackForm';
-import { SuccessMessage } from './components/SuccessMessage';
 import { colleagueUUIDSelector, FeedbackActions, getLoadedStateSelector } from '@pma/store';
 import { useTranslation } from 'components/Translation';
 import Spinner from 'components/Spinner';
 import WrapperModal from 'features/general/Modal/components/WrapperModal';
 import { Page } from 'pages/general/types';
 import { InfoModalContent } from './components/ModalParts';
+import SuccessModal from 'components/SuccessModal';
+import { buildPath } from '../Routes';
+import { SuccessMark } from 'components/Icon';
 
 const RequestFeedback: FC = () => {
   const { t } = useTranslation();
@@ -50,7 +52,14 @@ const RequestFeedback: FC = () => {
           {isInfoModalOpen ? (
             <InfoModalContent onClose={() => setIsInfoModalOpen(false)} />
           ) : sent ? (
-            <SuccessMessage />
+            <SuccessModal
+              title={t('request_feedback', 'Request feedback')}
+              onClose={() => {
+                navigate(buildPath(Page.FEEDBACKS));
+              }}
+              description={t('your_feedback_request_has_been_shared', 'Your feedback request has been shared.')}
+              mark={<SuccessMark />}
+            />
           ) : (
             <RequestFeedbackForm
               onSubmit={handleSubmit}
