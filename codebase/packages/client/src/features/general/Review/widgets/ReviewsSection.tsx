@@ -38,7 +38,7 @@ export const ReviewsSection: FC<Props> = ({ colleagueUuid }) => {
         </>
       )}
 
-      {canShowAnnualReview && <AnnualReviewWidget colleagueUuid={colleagueUuid} />}
+      {(canShowAnnualReview || true) && <AnnualReviewWidget colleagueUuid={colleagueUuid} />}
     </Section>
   );
 };

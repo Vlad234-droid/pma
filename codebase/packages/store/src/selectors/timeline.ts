@@ -1,6 +1,7 @@
 import { createSelector } from 'reselect';
 // @ts-ignore
 import { RootState } from 'typesafe-actions';
+//TODO: should move to store or separate package @pma/types
 import { ReviewType, TimelineStatus } from '@pma/client/src/config/enum';
 import { usersSelector } from './users';
 import { Timeline } from '@pma/client/src/config/types';

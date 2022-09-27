@@ -11,7 +11,7 @@ export const initialState: {
   current: {
     authenticated: boolean;
     info: any;
-    metadata: any;
+    metadata: object;
   };
   meta: {
     loading: boolean;
