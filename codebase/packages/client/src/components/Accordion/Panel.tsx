@@ -1,4 +1,4 @@
-import React, { ReactNode, useRef, RefObject, CSSProperties, FC, useState, useEffect } from 'react';
+import React, { ReactNode, useRef, RefObject, CSSProperties, FC, useState, useLayoutEffect } from 'react';
 import { useStyle, Rule } from '@pma/dex-wrapper';
 
 import useEventListener from 'hooks/useEventListener';
@@ -27,7 +27,7 @@ export const BasePanel = ({ children, ...baseRest }: Props) => {
   const content = useRef<HTMLElement>(null);
   const [height, setHeight] = useState<number>(0);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     updateHeight();
   });
 
