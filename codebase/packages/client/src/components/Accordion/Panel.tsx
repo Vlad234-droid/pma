@@ -1,4 +1,4 @@
-import React, { ReactNode, useRef, RefObject, CSSProperties, FC, useState, useLayoutEffect } from 'react';
+import React, { ReactNode, useRef, RefObject, CSSProperties, FC, useState } from 'react';
 import { useStyle, Rule } from '@pma/dex-wrapper';
 
 import useEventListener from 'hooks/useEventListener';
@@ -27,10 +27,6 @@ export const BasePanel = ({ children, ...baseRest }: Props) => {
   const content = useRef<HTMLElement>(null);
   const [height, setHeight] = useState<number>(0);
 
-  useLayoutEffect(() => {
-    updateHeight();
-  });
-
   const updateHeight = () => {
     content.current && setHeight(content.current.scrollHeight);
   };
@@ -41,8 +37,9 @@ export const BasePanel = ({ children, ...baseRest }: Props) => {
     <AccordionConsumer>
       {({ disableRegions }) => (
         <SectionConsumer>
-          {({ sectionId, expanded }) =>
-            children({
+          {({ sectionId, expanded }) => {
+            if (expanded) updateHeight();
+            return children({
               expanded,
               content,
               getPanelProps: (props = {}) => ({
@@ -54,8 +51,8 @@ export const BasePanel = ({ children, ...baseRest }: Props) => {
                 'aria-hidden': expanded ? undefined : true,
                 style: { maxHeight: expanded ? `${height}px` : '0px' },
               }),
-            })
-          }
+            });
+          }}
         </SectionConsumer>
       )}
     </AccordionConsumer>
