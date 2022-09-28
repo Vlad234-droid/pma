@@ -1,7 +1,8 @@
 import { ReviewType, Status } from 'config/enum';
 import { Employee, Timeline } from 'config/types';
 
-export const filterReviewApprovedFn = (tl) => tl.status === Status.WAITING_FOR_APPROVAL;
+export const filterReviewApprovedFn = (rw) =>
+  [Status.WAITING_FOR_APPROVAL, Status.WAITING_FOR_COMPLETION].includes(rw.status);
 
 export const filterApprovedFn = (tl) => tl.summaryStatus === Status.WAITING_FOR_APPROVAL;
 
