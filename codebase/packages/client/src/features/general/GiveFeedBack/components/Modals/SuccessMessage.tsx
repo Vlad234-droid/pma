@@ -37,7 +37,6 @@ const SuccessMessage: FC<Props> = ({ selectedColleagueUuid, targetColleagueProfi
 };
 
 const WrapperSuccessContainer: Rule = {
-  paddingTop: '40px',
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',

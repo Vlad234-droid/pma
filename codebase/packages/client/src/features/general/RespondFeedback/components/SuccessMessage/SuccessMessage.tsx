@@ -33,7 +33,6 @@ const SuccessMessage: FC<Props> = ({ targetColleagueProfile, onSuccess }) => {
 };
 
 const wrapperSuccessContainer: Rule = {
-  paddingTop: '40px',
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
