@@ -5,7 +5,7 @@ import { ReviewType, Status } from 'config/enum';
 export type StatusHistoryType = {
   prevStatus: Status;
   status: Status;
-  type: ReviewType;
+  type: ReviewType | null;
 };
 type Data = {
   isOpen: boolean;

@@ -4,10 +4,11 @@ import { CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
 type Props = {
   withText?: boolean;
   fullHeight?: boolean;
+  text?: string;
   id?: string;
 };
 
-const Spinner: FC<Props> = ({ withText = true, fullHeight = false, id = '1' }) => {
+const Spinner: FC<Props> = ({ withText = true, fullHeight = false, id = '1', text }) => {
   const { css } = useStyle();
   const [increment, setIncrement] = useState<number>(0);
   const elem = document.getElementById(`spinner-${id}`);
@@ -37,7 +38,7 @@ const Spinner: FC<Props> = ({ withText = true, fullHeight = false, id = '1' }) =
   return (
     <div data-test-id='spinner-wrapper' className={css(wrapperStyles({ fullHeight }))}>
       <div data-test-id={`spinner-${id}`} className={css(loaderStyles)} id={`spinner-${id}`} />
-      {withText && <span className={css(textStyles)}>Loading...</span>}
+      {withText && <span className={css(textStyles)}>{text || 'Loading...'}</span>}
     </div>
   );
 };

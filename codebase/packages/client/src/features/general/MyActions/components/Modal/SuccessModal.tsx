@@ -58,7 +58,6 @@ const ReviewSuccessModal: FC<{
   };
 
   const typeDescription = {
-    [ActionStatus.ERROR]: '',
     [ReviewType.QUARTER]: t('priorities', 'Priorities').toLowerCase(),
     [ReviewType.OBJECTIVE]: t('objectives', 'Objectives').toLowerCase(),
     [ReviewType.MYR]: t('review_type_description_myr', 'Mid-year review').toLowerCase(),
@@ -83,7 +82,7 @@ const ReviewSuccessModal: FC<{
           <SuccessMark />
         )
       }
-      description={`${description[actionStatus]} ${typeDescription[type]}.`}
+      description={`${description[actionStatus]} ${type ? typeDescription[type] : ''}.`}
       loading={loading || saving || managerLoading}
     />
   );

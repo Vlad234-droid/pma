@@ -37,17 +37,6 @@ const ActionsFilters: FC<Props> = ({
   const options = getEmployeesSortingOptions(t);
 
   const isWaitingForApproval = status === ActionStatus.PENDING;
-  const statuses = isWaitingForApproval
-    ? [Status.WAITING_FOR_APPROVAL, Status.WAITING_FOR_COMPLETION]
-    : [Status.COMPLETED, Status.APPROVED, Status.DECLINED];
-
-  const colleagues = useSelector((state) => getEmployeesWithReviewStatuses(state, statuses, searchValue, sortValue));
-
-  // disable selectAll, if every colleague has more then one item for approve
-  const isDisabled = useMemo(
-    () => colleagues.every(({ timeline = [] }) => timeline?.filter(filterApprovedFn)?.length > 1),
-    [colleagues],
-  );
 
   return (
     <>
@@ -55,7 +44,6 @@ const ActionsFilters: FC<Props> = ({
         <div>
           {isWaitingForApproval && (
             <SelectAll
-              disabled={isDisabled}
               onChange={(e) => onChangeCheckedAll(e.target.checked)}
               checked={isCheckedAll}
               indeterminate={false}

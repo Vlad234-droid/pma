@@ -48,12 +48,7 @@ const MyActions: FC<Props> = ({ status, searchValue, sortValue, isCheckedAll }) 
   );
 
   useEffect(() => {
-    // filter employee with more and less than 1 timeline
-    const filteredEmployee = colleagues?.filter(
-      (colleague) => colleague?.timeline?.filter(filterApprovedFn)?.length === 1,
-    );
-
-    setCheckedItems(isCheckedAll ? filteredEmployee?.map((colleague) => colleague.uuid) : []);
+    setCheckedItems(isCheckedAll ? colleagues?.map((colleague) => colleague.uuid) : []);
   }, [isCheckedAll]);
 
   useEffect(() => {
@@ -112,7 +107,6 @@ const MyActions: FC<Props> = ({ status, searchValue, sortValue, isCheckedAll }) 
                         {status === ActionStatus.PENDING && (
                           <div className={css(checkboxPositionStyle)}>
                             <Checkbox
-                              disabled={colleague?.timeline?.length > 1}
                               id={colleague.uuid}
                               name={colleague.uuid}
                               checked={checkedItems.includes(colleague.uuid)}

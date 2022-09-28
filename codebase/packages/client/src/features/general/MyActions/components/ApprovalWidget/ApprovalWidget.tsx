@@ -7,7 +7,7 @@ import { useTranslation } from 'components/Translation';
 import Approval from 'components/Approval';
 import { useTenant } from 'features/general/Permission';
 import useDispatch from 'hooks/useDispatch';
-import { ApproveModal, DeclineModal } from '../Modal';
+import { ApproveModal, DeclineModal, SavingModal } from '../Modal';
 import { useSuccessModalContext } from '../../context/successModalContext';
 import { Tenant } from 'utils';
 
@@ -17,11 +17,27 @@ type Props = {
   onSave: () => void;
 };
 
+enum Action {
+  APPROVE = 'APPROVE',
+  DECLINE = 'DECLINE',
+}
+
+const statusMap: Record<Action, Record<Status.WAITING_FOR_APPROVAL | Status.WAITING_FOR_COMPLETION, Status>> = {
+  [Action.APPROVE]: {
+    [Status.WAITING_FOR_APPROVAL]: Status.APPROVED,
+    [Status.WAITING_FOR_COMPLETION]: Status.COMPLETED,
+  },
+  [Action.DECLINE]: {
+    [Status.WAITING_FOR_APPROVAL]: Status.DECLINED,
+    [Status.WAITING_FOR_COMPLETION]: Status.APPROVED,
+  },
+};
+
 const ApprovalWidget: FC<Props> = ({ isDisabled, reviews, onSave }) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const tenant = useTenant();
-  const { setOpened: setIsOpenSuccessModal } = useSuccessModalContext();
+  const { setOpened: setIsOpenSuccessModal, setStatusHistory } = useSuccessModalContext();
 
   const [isOpenDecline, toggleOpenDecline] = useState(false);
   const [isOpenApprove, toggleOpenApprove] = useState(false);
@@ -30,13 +46,15 @@ const ApprovalWidget: FC<Props> = ({ isDisabled, reviews, onSave }) => {
   const currentTimeline = currentReview ? getEmployeeTimeline(currentReview) : [];
 
   const colleagueUuid = useSelector(colleagueUUIDSelector);
-  const [allReviewsProcessed, setAllReviewsProcessed] = useState<boolean>(false);
+  const [processing, setProcessing] = useState<boolean>(false);
 
   useEffect(() => {
-    if (allReviewsProcessed) {
+    if (processing && reviews.length === 0) {
+      setProcessing(false);
       setIsOpenSuccessModal(true);
+      onSave();
     }
-  }, [allReviewsProcessed]);
+  }, [processing, reviews]);
 
   useEffect(() => {
     if (declines.length && declines.length === reviews.length) {
@@ -95,48 +113,55 @@ const ApprovalWidget: FC<Props> = ({ isDisabled, reviews, onSave }) => {
   };
 
   const updateReviewStatus = useCallback(
-    (status: Status) => (reasons?: (string | null)[]) => {
-      reviews?.forEach((colleague, index) => {
-        const currentTimeline = getEmployeeTimeline(colleague);
+    (action: Action) => (reasons?: (string | null)[]) => {
+      for (const [index, colleague] of reviews.entries()) {
+        const timelines = getEmployeeTimeline(colleague);
 
-        if ((reasons && !reasons[index] && currentTimeline![0].reviewType === ReviewType.OBJECTIVE) || !currentTimeline)
-          return;
+        if ((reasons && !reasons[index] && timelines![0].reviewType === ReviewType.OBJECTIVE) || !timelines) break;
 
-        const [timeline] = currentTimeline || [];
-        const update = {
-          pathParams: {
-            colleagueUuid: colleague.uuid,
-            approverUuid: colleagueUuid,
-            code: timeline.code,
-            cycleUuid: 'CURRENT',
-            status,
-          },
-          data: {
-            ...(reasons ? { reason: reasons[index] as string } : {}),
-            status,
-            colleagueUuid: colleague.uuid,
-            reviews: colleague.reviews.filter(
-              ({ status, type }) => status === Status.WAITING_FOR_APPROVAL && type === timeline.reviewType,
-            ),
-          },
-        };
-
-        // @ts-ignore
-        dispatch(ReviewsActions.updateReviewStatus(update));
-
-        onSave();
+        for (const timeline of timelines) {
+          const allowedStatuses = [Status.WAITING_FOR_APPROVAL, Status.WAITING_FOR_COMPLETION].filter(
+            (status) => timeline?.statistics?.[status],
+          );
+          for (const allowedStatus of allowedStatuses) {
+            const update = {
+              pathParams: {
+                colleagueUuid: colleague.uuid,
+                approverUuid: colleagueUuid,
+                code: timeline.code,
+                cycleUuid: 'CURRENT',
+                status: statusMap[action][allowedStatus],
+              },
+              data: {
+                ...(reasons ? { reason: reasons[index] as string } : {}),
+                status: statusMap[action][allowedStatus],
+                colleagueUuid: colleague.uuid,
+                reviews: colleague.reviews.filter(
+                  ({ status, tlPointUuid }) => allowedStatus === status && tlPointUuid === timeline.uuid,
+                ),
+              },
+            };
+            // @ts-ignore
+            dispatch(ReviewsActions.updateReviewStatus(update));
+          }
+        }
         // clean declines after submit
         setDeclines([]);
         setCurrentReview(null);
-      });
+      }
 
-      setAllReviewsProcessed(true);
+      setStatusHistory({
+        prevStatus: Status.WAITING_FOR_APPROVAL,
+        status: statusMap[action][Status.WAITING_FOR_APPROVAL],
+        type: null,
+      });
+      setProcessing(true);
     },
     [reviews],
   );
 
-  const approveColleagues = updateReviewStatus(Status.APPROVED);
-  const declineColleagues = updateReviewStatus(Status.DECLINED);
+  const approveColleagues = updateReviewStatus(Action.APPROVE);
+  const declineColleagues = updateReviewStatus(Action.DECLINE);
 
   return (
     <>
@@ -145,7 +170,7 @@ const ApprovalWidget: FC<Props> = ({ isDisabled, reviews, onSave }) => {
           'approve_or_decline_review',
           tenant === Tenant.GENERAL
             ? 'Approve or decline colleague’s objectives or reviews'
-            : "Approve or request amend colleague's priorities or reviews",
+            : 'Agree, complete or request amend colleague’s priorities or reviews',
           {
             ns: tenant,
           },
@@ -154,6 +179,7 @@ const ApprovalWidget: FC<Props> = ({ isDisabled, reviews, onSave }) => {
         onDecline={handleDecline}
         isActive={!isDisabled}
       />
+      {processing && <SavingModal />}
       {isOpenDecline && (
         <DeclineModal
           onSave={handleDeclineSubmit}
