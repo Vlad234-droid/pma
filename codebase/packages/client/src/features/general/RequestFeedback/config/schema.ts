@@ -12,7 +12,7 @@ export const createRequestFeedbackSchema = Yup.object().shape({
     )
     .min(1)
     .required(),
-  targetType: Yup.string().required(),
+  targetType: Yup.string().required('This field is required'),
   targetId: Yup.string()
     .notRequired()
     .when('targetType', {
