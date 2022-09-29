@@ -1,9 +1,8 @@
 import React, { FC, useEffect, useMemo, useState } from 'react';
-import { Rule, useStyle } from '@pma/dex-wrapper';
+import { Rule, Styles, useStyle } from '@pma/dex-wrapper';
 import useDispatch from 'hooks/useDispatch';
 // TODO: get SortBy from common type
 import { SortBy } from 'features/general/Filters';
-import { filterApprovedFn } from './utils';
 import { useSelector } from 'react-redux';
 import {
   colleagueUUIDSelector,
@@ -156,7 +155,13 @@ const optionWrapperStyle: Rule = { flex: '3 1 375px', display: 'flex', flexDirec
 
 const rightColumnStyle: Rule = { flex: '1 0 216px' };
 
-const wrapperStyle: Rule = { display: 'flex', flexWrap: 'wrap' };
+const wrapperStyle: Rule = {
+  display: 'flex',
+  flexWrap: 'wrap',
+  '&:not(:first-child)': {
+    marginTop: '4px',
+  },
+} as Styles;
 const checkboxWrapperStyle: Rule = { width: '40px', position: 'relative' };
 const checkboxPositionStyle: Rule = { position: 'relative', top: '36px' };
 const blockStyle: Rule = { width: 'calc(100% - 40px)' };

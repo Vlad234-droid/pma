@@ -1,4 +1,4 @@
-import React, { ReactNode, useRef, RefObject, CSSProperties, FC, useState } from 'react';
+import React, { ReactNode, useRef, RefObject, CSSProperties, FC, useState, useEffect } from 'react';
 import { useStyle, Rule } from '@pma/dex-wrapper';
 
 import useEventListener from 'hooks/useEventListener';
@@ -14,6 +14,7 @@ type PanelProps = {
 };
 
 type RenderProps = {
+  updateHeight: () => void;
   expanded: boolean;
   content: RefObject<any>;
   getPanelProps: (props?: { [key: string]: any }) => PanelProps;
@@ -31,15 +32,19 @@ export const BasePanel = ({ children, ...baseRest }: Props) => {
     content.current && setHeight(content.current.scrollHeight);
   };
 
+  useEffect(() => {
+    updateHeight();
+  });
+
   useEventListener('resize', updateHeight);
 
   return (
     <AccordionConsumer>
       {({ disableRegions }) => (
         <SectionConsumer>
-          {({ sectionId, expanded }) => {
-            if (expanded) updateHeight();
-            return children({
+          {({ sectionId, expanded }) =>
+            children({
+              updateHeight,
               expanded,
               content,
               getPanelProps: (props = {}) => ({
@@ -51,8 +56,8 @@ export const BasePanel = ({ children, ...baseRest }: Props) => {
                 'aria-hidden': expanded ? undefined : true,
                 style: { maxHeight: expanded ? `${height}px` : '0px' },
               }),
-            });
-          }}
+            })
+          }
         </SectionConsumer>
       )}
     </AccordionConsumer>
@@ -64,11 +69,14 @@ const Panel: FC<{}> = ({ children, ...props }) => {
 
   return (
     <BasePanel {...props}>
-      {({ getPanelProps, content }) => (
-        <div className={css(accordionPanelStyles)} {...getPanelProps()} ref={content}>
-          {children}
-        </div>
-      )}
+      {({ getPanelProps, content, expanded, updateHeight }) => {
+        if (expanded) updateHeight();
+        return (
+          <div className={css(accordionPanelStyles)} {...getPanelProps()} ref={content}>
+            {children}
+          </div>
+        );
+      }}
     </BasePanel>
   );
 };
