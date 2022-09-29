@@ -149,7 +149,12 @@ export const getTotalReviewsByType = (data) =>
     if (!data) return 0;
     const { configType, key, configKeys } = data;
     const totalStatistic = report[key]?.find((item) => configType === item.type)?.statistics ?? 0;
-    return configKeys.reduce((acc, item) => totalStatistic[item]?.count + acc, 0) ?? 0;
+    return (
+      configKeys.reduce((acc, item) => {
+        const statisticsCount = totalStatistic?.[item]?.count || 0;
+        return statisticsCount + acc;
+      }, 0) ?? 0
+    );
   });
 
 export const colleaguesCountSelector = createSelector(reportSelector, (report: any) => {

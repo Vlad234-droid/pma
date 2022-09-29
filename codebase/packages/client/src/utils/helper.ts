@@ -22,3 +22,5 @@ export const checkExistedValue = (obj: Record<string, any>) =>
 
 export const checkIsExistValue = (obj: Record<string, any>): boolean =>
   typeof obj === 'object' ? Object.values(obj).some(Boolean) : false;
+
+export const isSingular = (num: number): boolean => num === 1;

@@ -20,7 +20,7 @@ import useDispatch from 'hooks/useDispatch';
 import useQueryString from 'hooks/useQueryString';
 import { useChartStatistics } from './hooks/useChartStatistics';
 import { useDetailsStatistics, useTotalReviews } from './hooks';
-import { paramsReplacer } from 'utils';
+import { isSingular, paramsReplacer } from 'utils';
 import { defaultSort, List } from './config';
 import { ReportPage, ReportType } from 'config/enum';
 import { downloadCsvFile } from './utils';
@@ -97,7 +97,7 @@ const StatisticsReviews: FC<{ type: ReportPage; toggleFullView: () => void; isFu
     <div className={css({ width: '100%' })}>
       {type &&
         Object.entries({ ...getReviewsTitles(type).titles, ...list }).map(([title, data]) => {
-          const total = reviews?.statistics?.[title]?.count;
+          const total = reviews?.statistics?.[title]?.count ?? 0;
           const hasMore = (data as any)?.length !== reviews?.statistics?.[title]?.count;
 
           return (
@@ -113,7 +113,7 @@ const StatisticsReviews: FC<{ type: ReportPage; toggleFullView: () => void; isFu
                       <div className={css(wrapperStyles({ isWLPage }))}>
                         <span className={css(titleStyles)}>
                           {t(title)}: {total}{' '}
-                          {total === 1 || total === 0 ? t('colleague', 'Colleague') : t('colleagues', 'Colleagues')}
+                          {isSingular(total) ? t('colleague', 'Colleague') : t('colleagues', 'Colleagues')}
                         </span>
                         {!!(data as any).length && !isWLPage && (
                           <div className={css(expandButtonStyles)}>
