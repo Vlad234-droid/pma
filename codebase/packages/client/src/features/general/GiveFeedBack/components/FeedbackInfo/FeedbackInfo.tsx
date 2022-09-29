@@ -22,7 +22,9 @@ const FeedbackInfo: FC<Props> = ({ selectedPerson, onClickMore }) => {
   const tenant = useTenant();
 
   const toneOfVoice =
-    selectedPerson?.profileAttributes?.find((item) => item?.name === 'voice')?.value ?? 'Direct and simple';
+    tenant === Tenant.GENERAL
+      ? selectedPerson?.profileAttributes?.find((item) => item?.name === 'voice')?.value ?? 'Direct and simple'
+      : undefined;
 
   return (
     <div data-test-id={INFO_WRAPPER}>
@@ -40,7 +42,7 @@ const FeedbackInfo: FC<Props> = ({ selectedPerson, onClickMore }) => {
           job={colleague?.workRelationships?.[0]?.job?.name}
           department={colleague?.workRelationships?.[0]?.department?.name}
           toneOfVoice={toneOfVoice}
-          withLabel={tenant === Tenant.GENERAL}
+          withLabel
         />
       </div>
       <NotificationTile>

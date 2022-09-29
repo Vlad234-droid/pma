@@ -28,11 +28,13 @@ const ProfileInfo: FC<ProfileInfoProps> = ({ firstName, lastName, job, departmen
       <div className={css({ marginLeft: '16px' })}>
         <h3 className={css(names_Style)}>{`${firstName ?? ''} ${lastName ?? ''}`}</h3>
         <p className={css(industryStyle)}>{`${job ?? ''}${department && job ? ',' : ''} ${department ?? ''}`}</p>
-        <span className={css(treatmentStyle)} data-test-id={TONE_VOICE}>
-          {withLabel
-            ? t('i_prefer_feedback_that_is', `I prefer feedback that is: ${toneOfVoice}`, { toneOfVoice })
-            : toneOfVoice}
-        </span>
+        {toneOfVoice && (
+          <span className={css(treatmentStyle)} data-test-id={TONE_VOICE}>
+            {withLabel
+              ? t('i_prefer_feedback_that_is', `I prefer feedback that is: ${toneOfVoice}`, { toneOfVoice })
+              : toneOfVoice}
+          </span>
+        )}
       </div>
     </div>
   );

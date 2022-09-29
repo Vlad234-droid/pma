@@ -10,7 +10,7 @@ import MyTeam from './MyTeam';
 import MyActions from './MyActions';
 import Reviews from './Reviews';
 import Profile from './Profile';
-import Feedback from './Feedback';
+import Feedback, { Feedback360Info } from './Feedback';
 import GiveFeedback from './GiveFeedback';
 import GiveNewFeedBack from './GiveNewFeedback';
 import RequestFeedback from './RequestFeedback';
@@ -375,6 +375,12 @@ const pages: Record<Page, PageComponent> = {
     title: (_, t) => t('feedback'),
     withHeader: true,
     backPath: Page.CONTRIBUTION,
+    perform: [role.COLLEAGUE],
+    tenant: [Tenant.BANK, Tenant.GENERAL],
+  },
+  [Page.FEEDBACK_360_INFO]: {
+    Element: Feedback360Info,
+    withHeader: false,
     perform: [role.COLLEAGUE],
     tenant: [Tenant.BANK, Tenant.GENERAL],
   },
