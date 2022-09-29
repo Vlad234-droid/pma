@@ -5,6 +5,8 @@ import { VideoId, VideoPlayer } from 'features/general/VideoPlayer';
 import { Trans } from 'components/Translation';
 import { NotificationTile } from 'components/NotificationTile';
 import { ProfileInfo } from 'components/ProfileInfo';
+import { useTenant } from 'features/general/Permission';
+import { Tenant } from 'utils';
 
 export const INFO_WRAPPER = 'info-wrapper';
 export const TONE_VOICE = 'tone-voice';
@@ -17,6 +19,7 @@ type Props = {
 const FeedbackInfo: FC<Props> = ({ selectedPerson, onClickMore }) => {
   const { css } = useStyle();
   const { colleague } = selectedPerson || {};
+  const tenant = useTenant();
 
   const toneOfVoice =
     selectedPerson?.profileAttributes?.find((item) => item?.name === 'voice')?.value ?? 'Direct and simple';
@@ -37,6 +40,7 @@ const FeedbackInfo: FC<Props> = ({ selectedPerson, onClickMore }) => {
           job={colleague?.workRelationships?.[0]?.job?.name}
           department={colleague?.workRelationships?.[0]?.department?.name}
           toneOfVoice={toneOfVoice}
+          withLabel={tenant === Tenant.GENERAL}
         />
       </div>
       <NotificationTile>

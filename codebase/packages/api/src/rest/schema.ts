@@ -7,7 +7,7 @@ export const getSchema = (params: any = {}) => {
   return httpClient.get(`/colleagues/${colleagueUuid}/metadata`, { params: restParams });
 };
 
-export const getOverallRating = <T>(params: any = {}) => {
+export const getOverallRating = (params: any = {}) => {
   const { fields } = params;
 
   return httpClient.get(reportDomain, { params: fields });

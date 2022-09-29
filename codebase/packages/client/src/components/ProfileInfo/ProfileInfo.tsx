@@ -14,10 +14,10 @@ type ProfileInfoProps = {
   job: string;
   department: string;
   toneOfVoice: string;
-  single?: boolean;
+  withLabel?: boolean;
 };
 
-const ProfileInfo: FC<ProfileInfoProps> = ({ firstName, lastName, job, department, toneOfVoice, single = false }) => {
+const ProfileInfo: FC<ProfileInfoProps> = ({ firstName, lastName, job, department, toneOfVoice, withLabel = true }) => {
   const { css } = useStyle();
   const { t } = useTranslation();
   return (
@@ -29,9 +29,9 @@ const ProfileInfo: FC<ProfileInfoProps> = ({ firstName, lastName, job, departmen
         <h3 className={css(names_Style)}>{`${firstName ?? ''} ${lastName ?? ''}`}</h3>
         <p className={css(industryStyle)}>{`${job ?? ''}${department && job ? ',' : ''} ${department ?? ''}`}</p>
         <span className={css(treatmentStyle)} data-test-id={TONE_VOICE}>
-          {single
-            ? toneOfVoice
-            : t('i_prefer_feedback_that_is', `I prefer feedback that is: ${toneOfVoice}`, { toneOfVoice })}
+          {withLabel
+            ? t('i_prefer_feedback_that_is', `I prefer feedback that is: ${toneOfVoice}`, { toneOfVoice })
+            : toneOfVoice}
         </span>
       </div>
     </div>

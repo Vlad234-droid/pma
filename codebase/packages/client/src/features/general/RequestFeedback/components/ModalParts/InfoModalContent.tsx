@@ -1,8 +1,11 @@
 import React, { FC } from 'react';
-import { useStyle, Rule, CreateRule } from '@pma/dex-wrapper';
-import requestInfoModal from 'images/requestInfoModal.png';
+import whatHowRequestFeedbackGeneral from 'images/whatHowRequestFeedbackGeneral.png';
+import whatHowRequestFeedbackBank from 'images/whatHowRequestFeedbackBank.png';
+import { CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
 import { IconButton } from 'components/IconButton';
 import { Trans } from 'components/Translation';
+import { useTenant } from 'features/general/Permission';
+import { Tenant } from 'utils';
 
 export const WRAPPER = 'wrapper';
 
@@ -13,6 +16,8 @@ type InfoModalProps = {
 const InfoModalContent: FC<InfoModalProps> = ({ onClose }) => {
   const { css, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
+  const tenant = useTenant();
+
   return (
     <div className={css(wrapperStyle)} data-test-id={WRAPPER}>
       <p className={css(titleStyle)}>
@@ -25,7 +30,7 @@ const InfoModalContent: FC<InfoModalProps> = ({ onClose }) => {
       <ol className={css(listStyle)}>
         <li>
           <b>
-            <Trans i18nKey='take_a_step_back'></Trans>
+            <Trans i18nKey='take_a_step_back' />
           </b>{' '}
           <Trans i18nKey='take_time_to_reflect_on_the_feedback'>
             Take time to reflect on the feedback you&apos;ve received, don&apos;t feel like you must take action right
@@ -56,7 +61,7 @@ const InfoModalContent: FC<InfoModalProps> = ({ onClose }) => {
         </li>
       </ol>
       <p className={css(titleStyle)}>
-        <Trans i18nKey='when_requesting_feedback_choose_one_area'>
+        <Trans i18nKey='when_requesting_feedback_choose_one_area' ns={tenant}>
           When requesting feedback, choose one area you&apos;d like feedback on. This could be any part of your role:
           &apos;what&apos; you do or &apos;how&apos; you do it. We&apos;ve linked the options to your full contribution.
         </Trans>
@@ -64,7 +69,7 @@ const InfoModalContent: FC<InfoModalProps> = ({ onClose }) => {
       <div className={css({ marginTop: '22px' })}>
         <img
           className={css({ width: '100%', height: '100%', objectFit: 'contain' })}
-          src={requestInfoModal}
+          src={tenant === Tenant.GENERAL ? whatHowRequestFeedbackGeneral : whatHowRequestFeedbackBank}
           alt='Learn more about how to request great feedback'
         />
       </div>

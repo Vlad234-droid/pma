@@ -10,7 +10,7 @@ import { buildPath } from 'features/general/Routes';
 import { CompletedReviewsSection, ReviewFilesSection, ReviewsSection } from 'features/general/Review';
 import { useToast, Variant } from 'features/general/Toast';
 
-import { tenant as T, useTenant } from 'features/general/Permission';
+import { Tenant, useTenant } from 'features/general/Permission';
 import { Page } from 'pages/general/types';
 
 const UserObjectivesPage = () => {
@@ -37,7 +37,7 @@ const UserObjectivesPage = () => {
 
   const handleWidgetClick = () => {
     // @ts-ignore
-    if (tenant === T.GENERAL) {
+    if (tenant === Tenant.GENERAL) {
       navigate(buildPath(Page.STRATEGIC_DRIVERS));
     } else {
       window.open('https://tescobank.sharepoint.com/sites/intranet/learn/ourbig6hub/Pages/default.aspx');
@@ -53,7 +53,7 @@ const UserObjectivesPage = () => {
     () =>
       React.lazy(() =>
         // @ts-ignore
-        tenant === T.GENERAL
+        tenant === Tenant.GENERAL
           ? import('features/general/StrategicDrivers').then((module) => ({ default: module.OrganizationWidget }))
           : import('features/bank/Objectives').then((module) => ({ default: module.BusinessObjectives })),
       ),

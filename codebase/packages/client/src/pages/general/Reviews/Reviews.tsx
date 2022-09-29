@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 
 import { useTranslation } from 'components/Translation';
 import { ReviewsSection, CompletedReviewsSection, ReviewFilesSection } from 'features/general/Review';
-import { tenant as T, useTenant } from 'features/general/Permission';
+import { Tenant, useTenant } from 'features/general/Permission';
 import { ShareWidget } from 'features/general/ShareWidget';
 import { buildPath } from 'features/general/Routes';
 import { Page } from 'pages/general/types';
@@ -56,7 +56,7 @@ const ObjectivesPage: FC = () => {
     () =>
       React.lazy(() =>
         // @ts-ignore
-        tenant === T.GENERAL
+        tenant === Tenant.GENERAL
           ? import('features/general/StrategicDrivers').then((module) => ({ default: module.OrganizationWidget }))
           : import('features/bank/Objectives').then((module) => ({ default: module.BusinessObjectives })),
       ),
@@ -66,7 +66,7 @@ const ObjectivesPage: FC = () => {
   const Shortcuts = useMemo(
     () =>
       //@ts-ignore
-      tenant === T.BANK
+      tenant === Tenant.BANK
         ? React.lazy(() => import('features/bank/Objectives').then((module) => ({ default: module.ShortcutsSection })))
         : () => null,
     [],

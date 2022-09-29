@@ -1,1 +1,1 @@
-export { default as Info360Modal } from './Info360Modal';
+export { default as InfoModal } from './Info360Modal';

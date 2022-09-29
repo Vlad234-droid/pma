@@ -1,4 +1,4 @@
-export enum tenant {
+export enum Tenant {
   BANK = 'bank',
   GENERAL = 'general',
 }

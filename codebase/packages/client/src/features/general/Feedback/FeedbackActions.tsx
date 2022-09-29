@@ -12,7 +12,7 @@ import { useAuthContainer } from 'contexts/authContext';
 import { getCards, TREATMENT_FIELD_OPTIONS } from './config';
 import { getSelectedTreatmentValue } from './utils';
 import { FeedbackCard } from './components';
-import { Info360Modal } from './Modals';
+import { InfoModal } from './Modals';
 
 export const FEEDBACK_ACTIONS = 'feedback_actions';
 
@@ -27,7 +27,7 @@ const FeedbackActions: FC = () => {
   const { profileAttributes = [] }: { profileAttributes: Array<any> } = user || {};
   const treatmentValue: string = getSelectedTreatmentValue(profileAttributes);
 
-  const [info360Modal, setInfo360Modal] = useState<boolean>(false);
+  const [info360Modal, toggleInfoModal] = useState<boolean>(false);
   const colleagueUuid = useSelector(colleagueUUIDSelector);
 
   useEffect(() => {
@@ -35,7 +35,7 @@ const FeedbackActions: FC = () => {
     dispatch(FeedbackActionsGet.getGivenFeedbacks({}));
   }, []);
 
-  const handleBtnClick360 = () => {
+  const handleOpenInfo = () => {
     window.open('https://feedback.etsplc.com/Tesco360/', '_blank')?.focus();
   };
 
@@ -59,8 +59,8 @@ const FeedbackActions: FC = () => {
   return (
     <>
       {info360Modal && (
-        <WrapperModal title={t('everyday_feedback', 'Everyday Feedback')} onClose={() => setInfo360Modal(false)}>
-          <Info360Modal setInfo360Modal={setInfo360Modal} />
+        <WrapperModal title={t('everyday_feedback', 'Everyday Feedback')} onClose={() => toggleInfoModal(false)}>
+          <InfoModal onClose={() => toggleInfoModal(false)} />
         </WrapperModal>
       )}
       <div data-test-id={FEEDBACK_ACTIONS}>
@@ -75,14 +75,14 @@ const FeedbackActions: FC = () => {
               graphic='information'
               iconStyles={{ marginLeft: '8px', marginRight: '20px' }}
               data-test-id='iconButton'
-              onPress={() => setInfo360Modal(true)}
+              onPress={() => toggleInfoModal(true)}
             />
           </div>
 
           <div>
             <IconButton
               customVariantRules={{ default: iconBtnStyle }}
-              onPress={handleBtnClick360}
+              onPress={handleOpenInfo}
               graphic='add'
               iconProps={{ invertColors: true }}
               iconStyles={iconStyle}
@@ -99,7 +99,10 @@ const FeedbackActions: FC = () => {
         <div className={css({ marginTop: '32px', maxWidth: '568px' })}>
           <div className={css(iconTextStyle)}>
             <div className={css(voiceStyle)}>
-              Do you have a preference in the way you&apos;d like to receive feedback?
+              {t(
+                'preference_to_receive_feedback',
+                'Do you have a preference in the way you’d like to receive feedback?',
+              )}
             </div>
             <div className={css({ cursor: 'pointer' })}>
               <Icon
