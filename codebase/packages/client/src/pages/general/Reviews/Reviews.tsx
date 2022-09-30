@@ -30,7 +30,7 @@ const ObjectivesPage: FC = () => {
   const { setLinkTitle } = useHeaderContainer();
 
   useEffect(() => {
-    if (Object.keys(timelineTypes).length && canShowReviewTitle)
+    if (tenant === Tenant.GENERAL && Object.keys(timelineTypes).length && canShowReviewTitle)
       setLinkTitle({ [Page.REVIEWS_VIEW]: t('reviews', 'Reviews') });
   }, [Object.keys(timelineTypes).length]);
 
