@@ -260,7 +260,10 @@ const pages: Record<Page, PageComponent> = {
   },
   [Page.REVIEWS_VIEW]: {
     Element: Reviews,
-    title: (tenant, t) => t('my_objectives_and_reviews', 'My objectives and reviews', { ns: tenant }),
+    title: (tenant, t) =>
+      t('my_objectives_and_reviews', tenant === Tenant.GENERAL ? 'My objectives and reviews' : 'Quarterly priorities', {
+        ns: tenant,
+      }),
     withHeader: true,
     backPath: Page.CONTRIBUTION,
     perform: [role.COLLEAGUE],
