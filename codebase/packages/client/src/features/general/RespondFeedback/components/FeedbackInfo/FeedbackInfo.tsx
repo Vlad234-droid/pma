@@ -10,6 +10,8 @@ import { FeedbackStatus, Tesco } from 'config/enum';
 import { NotificationTile } from 'components/NotificationTile';
 import { ProfileInfo } from 'components/ProfileInfo';
 import { getPropperTargetType } from 'features/general/RespondFeedback/utils';
+import { useTenant } from 'features/general/Permission';
+import { Tenant } from 'utils';
 
 export const INFO_WRAPPER = 'info_wrapper';
 export const GIVE_FEEDBACK_VIDEO = 'give_feedback_video';
@@ -21,6 +23,7 @@ type Props = {
 const FeedbackInfo: FC<Props> = ({ onClickMore }) => {
   const { css } = useStyle();
   const { uuid } = useParams<{ uuid: string }>();
+  const tenant = useTenant();
   const pendingNotes = useSelector(getRespondedFeedbacksSelector(FeedbackStatus.PENDING)) || [];
   const { feedbackItems, targetColleagueProfile, targetType, targetId } =
     useSelector(feedbackByUuidSelector(uuid)) || {};
@@ -38,10 +41,11 @@ const FeedbackInfo: FC<Props> = ({ onClickMore }) => {
   }, [pendingNotes.length]);
 
   const toneOfVoice =
-    targetColleagueProfile?.profileAttributes?.find((item) => item?.name === 'voice')?.value ?? 'Direct and simple';
+    tenant === Tenant.GENERAL
+      ? targetColleagueProfile?.profileAttributes?.find((item) => item?.name === 'voice')?.value ?? 'Direct and simple'
+      : undefined;
 
-  const getPropperCommentRequested = () =>
-    feedbackItems?.find((item) => item?.code === 'comment_to_request')?.content ?? '';
+  const content = feedbackItems?.find((item) => item?.code === 'comment_to_request')?.content ?? '';
 
   return (
     <div data-test-id={INFO_WRAPPER}>
@@ -62,7 +66,7 @@ const FeedbackInfo: FC<Props> = ({ onClickMore }) => {
           feedbackItems,
           review,
         )}`}</p>
-        <p>{getPropperCommentRequested()}</p>
+        <p>{content}</p>
       </NotificationTile>
       <div className={css({ marginTop: '24px' })}>
         <IconButton graphic='information' onPress={() => onClickMore()}>

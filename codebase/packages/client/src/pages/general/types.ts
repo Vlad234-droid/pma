@@ -43,6 +43,7 @@ enum Page {
   RESPOND_NEW_FEEDBACK = 'feedbacks/respond/:uuid',
   VIEW_FEEDBACK = 'feedbacks/view',
   FEEDBACKS = 'feedbacks',
+  FEEDBACK_360_INFO = 'feedbacks/360-info',
   TIPS = 'tips',
   EDIT_TIP = 'tips/:tipUuid',
   REPORT = 'report',

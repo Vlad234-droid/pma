@@ -33,7 +33,7 @@ export const InfoBlock: FC<{ mode: Modes | null }> = ({ mode }) => {
         job={'rivet pullers'}
         department={'Economics'}
         toneOfVoice={'Treat me kindly'}
-        single={true}
+        withLabel={false}
       />
     </div>
   );

@@ -1,27 +1,29 @@
 import React, { FC, useEffect, useMemo, useState } from 'react';
-import { Rule, Styles, theme, useStyle } from '@pma/dex-wrapper';
-import get from 'lodash.get';
-import { ColleaguesActions, colleagueUUIDSelector, FeedbackActions, getReviews } from '@pma/store';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
-import { useNavigate } from 'react-router';
-import { useDispatch, useSelector } from 'react-redux';
+import { Rule, Styles, theme, useStyle } from '@pma/dex-wrapper';
+import { ColleaguesActions, colleagueUUIDSelector, FeedbackActions, getReviews } from '@pma/store';
 
-import { Field, Item, Select, Textarea, Attention } from 'components/Form';
+import { Attention, Field, Item, Select, Textarea } from 'components/Form';
 import { ColleaguesFinder } from 'components/ColleaguesFinder';
-import { useTranslation, Trans } from 'components/Translation';
+import { Trans, useTranslation } from 'components/Translation';
 import { TileWrapper } from 'components/Tile';
 import DrawerModal from 'components/DrawerModal';
 import { IconButton } from 'components/IconButton';
 import { Icon, RoundIcon } from 'components/Icon';
 import { ButtonsWrapper } from 'components/ButtonsWrapper';
 import { ArrowLeftIcon } from 'components/ArrowLeftIcon';
-import { buildPath } from '../../Routes';
 import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
-import { createRequestFeedbackSchema } from '../config';
-import { Tesco, SearchOption } from 'config/enum';
-import { TargetType } from '../constants/type';
+import { SearchOption, Tesco } from 'config/enum';
 import { Page } from 'pages/general/types';
+import { useTenant } from 'features/general/Permission';
+import { buildPath } from '../../Routes';
+import { createRequestFeedbackSchema } from '../config';
+import { TargetType } from '../constants/type';
+import { Tenant } from 'utils';
+import get from 'lodash.get';
 
 type Props = {
   onSubmit: (data: any) => void;
@@ -37,6 +39,7 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel, setIsInfoModalOpen }) 
   const reviews = useSelector(getReviews) || [];
   const currentColleagueUuid = useSelector(colleagueUUIDSelector);
   const navigate = useNavigate();
+  const tenant = useTenant();
 
   const [open, setOpen] = useState<boolean>(false);
   const [active, setActive] = useState<SearchOption>(SearchOption.NAME);
@@ -53,7 +56,7 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel, setIsInfoModalOpen }) 
 
   const methods = useFormWithCloseProtection({
     mode: 'onChange',
-    resolver: yupResolver<Yup.AnyObjectSchema>(createRequestFeedbackSchema),
+    resolver: yupResolver<Yup.AnyObjectSchema>(createRequestFeedbackSchema(tenant)),
   });
 
   const {
@@ -155,29 +158,31 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel, setIsInfoModalOpen }) 
               }}
             />
           )}
-          <div className={css({ marginTop: '18px' })}>
-            <Item
-              withIcon={false}
-              label={t('choose_what_you_like_feedback_on', 'Choose what you`d like feedback on')}
-              errormessage={errors['targetType']?.message}
-              labelCustomStyle={{ fontWeight: theme.font.weight.bold }}
-            >
-              <Select
-                name={'targetType'}
-                options={AREA_OPTIONS}
-                placeholder={t('choose_an_area', 'Choose an area')}
-                onBlur={() => handleBlur('targetType')}
-                error={errors['targetType']?.message}
-                //@ts-ignore
-                onChange={({ target: { value } }) => {
-                  if (get(formValues, 'targetId') && value !== TargetType.OBJECTIVE) {
-                    setValue('targetId', '', { shouldValidate: false });
-                  }
-                  setValue('targetType', value, { shouldValidate: true });
-                }}
-              />
-            </Item>
-          </div>
+          {tenant === Tenant.GENERAL && (
+            <div className={css({ marginTop: '18px' })}>
+              <Item
+                withIcon={false}
+                label={t('choose_what_you_like_feedback_on', 'Choose what you`d like feedback on')}
+                errormessage={errors['targetType']?.message}
+                labelCustomStyle={{ fontWeight: theme.font.weight.bold }}
+              >
+                <Select
+                  name={'targetType'}
+                  options={AREA_OPTIONS}
+                  placeholder={t('choose_an_area', 'Choose an area')}
+                  onBlur={() => handleBlur('targetType')}
+                  error={errors['targetType']?.message}
+                  //@ts-ignore
+                  onChange={({ target: { value } }) => {
+                    if (get(formValues, 'targetId') && value !== TargetType.OBJECTIVE) {
+                      setValue('targetId', '', { shouldValidate: false });
+                    }
+                    setValue('targetType', value, { shouldValidate: true });
+                  }}
+                />
+              </Item>
+            </div>
+          )}
           {formValues.targetType === TargetType.GOAL && (
             <TileWrapper customStyle={tileCustomStyle}>
               <h3 className={css(commentStyle)}>

@@ -1,2 +1,2 @@
-export { default as FeedbackActions } from './FeedbackActions';
+export { default } from './Feedback';
 export * from './widgets';
