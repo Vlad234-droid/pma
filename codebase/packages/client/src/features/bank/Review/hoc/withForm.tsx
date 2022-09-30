@@ -65,13 +65,6 @@ export function withForm<P extends ReviewFormType>(WrappedComponent: React.Compo
 
     const timelineReview = useSelector(getTimelineByReviewTypeSelector(reviewType, USER.current));
 
-    if (!timelineReview) {
-      return null;
-    }
-
-    const status = Object.keys(timelineReview.statistics || { STARTED: 1 })[0] as Status;
-    const readonly = [Status.WAITING_FOR_APPROVAL, Status.APPROVED].includes(status);
-
     const { components = [] as Component[] } = schema;
 
     const yepSchema = components.reduce(createYupSchema(t), {});
@@ -82,6 +75,54 @@ export function withForm<P extends ReviewFormType>(WrappedComponent: React.Compo
     });
 
     const { getValues, handleSubmit, reset, watch, setValue } = methods;
+
+    useEffect(() => {
+      dispatch(ReviewsActions.getColleagueReviews({ pathParams: { colleagueUuid, cycleUuid: 'CURRENT' } }));
+      dispatch(SchemaActions.getSchema({ colleagueUuid, includeForms: true }));
+    }, []);
+
+    useEffect(() => {
+      const subscription = watch((review, { name = '' }) => {
+        if (overallRatingListeners?.includes(name)) {
+          updateRatingReviewRequest(review);
+        }
+      });
+      return () => subscription.unsubscribe();
+    }, [watch, reviewLoaded, schemaLoaded, overallRatingListeners]);
+
+    useEffect(() => {
+      if (overallRatingRequestKey && reviewProperties?.[overallRatingRequestKey]) {
+        setValue(overallRatingRequestKey, reviewProperties[overallRatingRequestKey]);
+      }
+    }, [reviewUpdated, reviewProperties, overallRatingRequestKey]);
+
+    useEffect(() => {
+      if (reviewLoaded && schemaLoaded && reviewProperties) {
+        reset(reviewProperties);
+      }
+    }, [reviewLoaded, schemaLoaded]);
+
+    const updateRatingReviewRequest = useCallback(
+      (review) => {
+        const permitToOverallRatingRequest = overallRatingListeners?.length
+          ? overallRatingListeners?.every((listener) => review[listener])
+          : false;
+        if (permitToOverallRatingRequest) {
+          const filteredData = Object.fromEntries(
+            Object.entries(review).filter(([key]) => overallRatingListeners?.includes(key)),
+          );
+          dispatch(ReviewsActions.updateRatingReview({ type: reviewType, number: 1, fields: filteredData }));
+        }
+      },
+      [overallRatingListeners],
+    );
+
+    if (!timelineReview) {
+      return null;
+    }
+
+    const status = Object.keys(timelineReview.statistics || { STARTED: 1 })[0] as Status;
+    const readonly = [Status.WAITING_FOR_APPROVAL, Status.APPROVED].includes(status);
 
     const handleSaveDraft = () => {
       const data = getValues();
@@ -150,47 +191,6 @@ export function withForm<P extends ReviewFormType>(WrappedComponent: React.Compo
       reset();
       setSuccessModal(true);
     };
-
-    const updateRatingReviewRequest = useCallback(
-      (review) => {
-        const permitToOverallRatingRequest = overallRatingListeners?.length
-          ? overallRatingListeners?.every((listener) => review[listener])
-          : false;
-        if (permitToOverallRatingRequest) {
-          const filteredData = Object.fromEntries(
-            Object.entries(review).filter(([key]) => overallRatingListeners?.includes(key)),
-          );
-          dispatch(ReviewsActions.updateRatingReview({ type: reviewType, number: 1, fields: filteredData }));
-        }
-      },
-      [overallRatingListeners],
-    );
-
-    useEffect(() => {
-      dispatch(ReviewsActions.getColleagueReviews({ pathParams: { colleagueUuid, cycleUuid: 'CURRENT' } }));
-      dispatch(SchemaActions.getSchema({ colleagueUuid, includeForms: true }));
-    }, []);
-
-    useEffect(() => {
-      const subscription = watch((review, { name = '' }) => {
-        if (overallRatingListeners?.includes(name)) {
-          updateRatingReviewRequest(review);
-        }
-      });
-      return () => subscription.unsubscribe();
-    }, [watch, reviewLoaded, schemaLoaded, overallRatingListeners]);
-
-    useEffect(() => {
-      if (overallRatingRequestKey && reviewProperties?.[overallRatingRequestKey]) {
-        setValue(overallRatingRequestKey, reviewProperties[overallRatingRequestKey]);
-      }
-    }, [reviewUpdated, reviewProperties, overallRatingRequestKey]);
-
-    useEffect(() => {
-      if (reviewLoaded && schemaLoaded && reviewProperties) {
-        reset(reviewProperties);
-      }
-    }, [reviewLoaded, schemaLoaded]);
 
     return (
       <WrappedComponent
