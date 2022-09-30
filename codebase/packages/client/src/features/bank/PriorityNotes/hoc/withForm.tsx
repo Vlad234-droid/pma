@@ -121,6 +121,7 @@ export function withForm<P extends Props>(WrappedComponent: React.ComponentType<
     const handlePrevious = () => {
       if (formType === FormType.NEW) {
         setFormState(FormState.SELECT_PRIORITY);
+        reset();
       } else {
         handleClose();
       }
