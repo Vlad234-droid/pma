@@ -79,12 +79,13 @@ export const StepIndicatorBasic: FC<StepIndicatorProps> = ({
   const { css, theme } = useStyle();
   const { css: cssWithoutBackground } = useStyle(['backgroundColor']);
   const { t } = useTranslation();
+  const lineHeight = 3;
 
   const Line: FC<{ active?: boolean; underline?: 'half' | 'full' }> = ({ active, underline }) => (
     <div
       className={cssWithoutBackground({
         width: '100%',
-        height: '3px',
+        height: `${lineHeight}px`,
         background: active
           ? theme.colors.tescoBlue
           : underline
@@ -107,6 +108,7 @@ export const StepIndicatorBasic: FC<StepIndicatorProps> = ({
           position: 'relative',
           zIndex: 1,
           paddingBottom: '12px',
+          bottom: `${lineHeight / 2}px`,
         })}
       >
         <StatusIcon graphics='roundCircle' color='base' />
