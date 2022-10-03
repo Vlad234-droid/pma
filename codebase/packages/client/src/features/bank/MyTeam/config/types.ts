@@ -1,4 +1,0 @@
-export enum View {
-  DIRECT_REPORTS = 'DIRECT_REPORTS',
-  FULL_TEAM = 'FULL_TEAM',
-}

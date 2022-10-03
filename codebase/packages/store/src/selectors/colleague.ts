@@ -7,11 +7,12 @@ export const colleagueSelector = (state: RootState) => state.colleague;
 
 export const getColleagueMetaSelector = createSelector(colleagueSelector, (colleague: any) => colleague?.meta);
 
-export const getColleagueSelector = createSelector(colleagueSelector, ({ colleague: { colleague } }: any) => {
+export const getColleagueSelector = createSelector(colleagueSelector, ({ colleague: { colleague, tenant } }: any) => {
   const workRelationships = colleague?.workRelationships?.[0];
 
   return {
     ...colleague,
+    tenant,
     profile: {
       fullName: getFullName(colleague?.profile),
       managerName: getManagerFullName(workRelationships),

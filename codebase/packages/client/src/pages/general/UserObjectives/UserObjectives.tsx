@@ -1,8 +1,7 @@
 import React, { useMemo } from 'react';
 import { CreateRule, Styles, useStyle } from '@pma/dex-wrapper';
 import { useNavigate, useParams } from 'react-router-dom';
-
-import { UserObjectives } from 'features/general/Objectives';
+import useColleagueTenant from 'hooks/useColleagueTenant';
 import { ColleagueProfileWidget } from 'features/general/Profile';
 import { useTranslation } from 'components/Translation';
 import { ShareWidget } from 'features/general/ShareWidget';
@@ -10,8 +9,10 @@ import { buildPath } from 'features/general/Routes';
 import { CompletedReviewsSection, ReviewFilesSection, ReviewsSection } from 'features/general/Review';
 import { useToast, Variant } from 'features/general/Toast';
 
-import { Tenant, useTenant } from 'features/general/Permission';
+import { useTenant } from 'features/general/Permission';
 import { Page } from 'pages/general/types';
+import Spinner from 'components/Spinner';
+import { Tenant } from 'utils';
 
 const UserObjectivesPage = () => {
   const { css, matchMedia } = useStyle();
@@ -20,6 +21,7 @@ const UserObjectivesPage = () => {
   const tenant = useTenant();
   const navigate = useNavigate();
   const { uuid } = useParams<{ uuid: string }>();
+  const { tenant: userTenant, loading, loaded } = useColleagueTenant({ uuid });
 
   const mobileScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
 
@@ -59,6 +61,18 @@ const UserObjectivesPage = () => {
       ),
     [],
   );
+
+  const UserObjectives = useMemo(
+    () =>
+      React.lazy(() =>
+        import(`features/${userTenant || Tenant.GENERAL}/Objectives`).then((module) => ({
+          default: module.UserObjectives,
+        })),
+      ),
+    [userTenant],
+  );
+
+  if (loading && !loaded) return <Spinner fullHeight />;
 
   return (
     <div className={css(bodyBlockStyles({ mobileScreen }))}>

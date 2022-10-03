@@ -11,7 +11,7 @@ import { IconButton, Position } from 'components/IconButton';
 import { buildPath } from 'features/general/Routes';
 
 import { FileList } from 'features/bank/UploadFile';
-import { ObjectiveTypes as OT } from 'features/general/Review';
+import { Objective } from '../../type';
 
 import { ObjectiveHeader } from '../ObjectiveHeader';
 import { CompletePriority } from '../CompletePriority/CompletePriority';
@@ -21,7 +21,7 @@ import { DeleteButton } from '../DeleteButton';
 export const TEST_ID = 'priorities-accordion';
 
 export type ObjectiveAccordionProps = {
-  objectives: OT.Objective[];
+  objectives: Objective[];
   handleCompletion: (T) => void;
   handleDelete: (T: number) => void;
   canShowStatus?: boolean;

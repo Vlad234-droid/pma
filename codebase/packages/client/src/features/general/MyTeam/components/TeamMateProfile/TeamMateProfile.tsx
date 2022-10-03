@@ -47,7 +47,7 @@ const TeamMateProfile: FC<Props> = ({
                   />
                   <Panel>
                     <div className={css(panelStyles)}>
-                      <TimeLines timelines={employee?.timeline} />
+                      <TimeLines employee={employee} />
                     </div>
                   </Panel>
                 </Section>

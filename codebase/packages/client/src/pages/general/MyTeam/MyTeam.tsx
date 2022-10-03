@@ -1,7 +1,7 @@
 import React, { FC, useState, useMemo } from 'react';
 import { Rule, CreateRule, useStyle } from '@pma/dex-wrapper';
 
-import { View, ViewFilters } from 'features/general/MyTeam';
+import { View, ViewFilters, default as MyTeam } from 'features/general/MyTeam';
 import { ActionCountWidget, PendingApprovalsWidget, OutstandingActionsWidget } from 'features/general/MyActions';
 import ViewNavigation from 'features/general/ViewNavigation';
 import { Filters, getEmployeesSortingOptions, useSearch, useSorting } from 'features/general/Filters';
@@ -27,10 +27,6 @@ const MyTeamPage: FC = () => {
   };
   const showActions = view === View.DIRECT_REPORTS;
 
-  const MyTeam = useMemo(
-    () => React.lazy(() => import(`features/${tenant}/MyTeam`).then((module) => ({ default: module.default }))),
-    [],
-  );
   const TeamReporting = useMemo(
     () => React.lazy(() => import(`features/${tenant}/MyTeam`).then((module) => ({ default: module.TeamReporting }))),
     [],

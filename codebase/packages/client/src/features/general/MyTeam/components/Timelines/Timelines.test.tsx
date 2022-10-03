@@ -10,19 +10,17 @@ import Timelines from './Timelines';
 
 describe('<Timelines />', () => {
   const timeline = generateTimeline();
-  const props = {
-    timelines: [timeline, timeline],
-  };
+  const props = { employee: { timeline: [timeline, timeline], reviews: [] } };
 
   describe('#render', () => {
     it('should render wrapper', () => {
-      const { getByTestId } = render(<Timelines />);
+      const { getByTestId } = render(<Timelines {...props} />);
 
       expect(getByTestId('timelines')).toBeInTheDocument();
     });
 
     it('should not render timeline, if !props.timelines', () => {
-      const { queryByTestId } = render(<Timelines />);
+      const { queryByTestId } = render(<Timelines employee={{ timeline: [], reviews: [] }} />);
 
       expect(queryByTestId('timeline')).not.toBeInTheDocument();
     });
@@ -35,7 +33,9 @@ describe('<Timelines />', () => {
 
     it('should render filtered timeline, if props.timelines', () => {
       const newProps = {
-        timelines: [generateTimeline({ type: TimelineType.TIMELINE_POINT }), generateTimeline()],
+        employee: {
+          timeline: [generateTimeline({ type: TimelineType.TIMELINE_POINT }), generateTimeline()],
+        },
       };
 
       const { getAllByTestId, getByText } = render(<Timelines {...newProps} />);
