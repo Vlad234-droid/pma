@@ -78,7 +78,7 @@ const ReviewForm: FC<ReviewFormType & FormPropsType> = ({
     () =>
       components?.filter((component) => {
         const { key = '', expression = {} } = component;
-        const value = key && review?.[key] ? review[key] : '';
+        const value = key && review?.properties?.[key] ? review.properties[key] : '';
         const keyVisibleOnEmptyValue = ExpressionValueType.OVERALL_RATING;
         return !(expression?.auth?.permission?.read?.length && !value && key !== keyVisibleOnEmptyValue);
       }),
