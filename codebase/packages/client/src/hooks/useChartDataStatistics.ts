@@ -75,13 +75,14 @@ export const useChartDataStatistics = (configKey: ReportPage): Array<Data> => {
 
   const chartData = useSelector(getReportByType(reportData?.selectorType)) ?? [];
 
-  if (!chartData.length) return getDefaultData(configKey, t);
+  if (!chartData.length || !chartData?.find((item) => item?.type === reportData?.type))
+    return getDefaultData(configKey, t);
 
   const isOneChart =
     configKey === ReportPage.REPORT_SUBMITTED_OBJECTIVES ||
     configKey === ReportPage.REPORT_APPROVED_OBJECTIVES ||
     configKey === ReportPage.REPORT_NEW_TO_BUSINESS
-      ? Object.entries(chartData.filter((chart) => chart.type === reportData.type)[0].statistics)
+      ? Object.entries(chartData.filter((chart) => chart.type === reportData.type)[0]?.statistics)
           //@ts-ignore
           ?.find((item) => item[0] === reportData?.key)
           ?.slice(1)
@@ -100,12 +101,12 @@ export const useChartDataStatistics = (configKey: ReportPage): Array<Data> => {
   if (isOneChart) return isOneChart as Array<ChartReport>;
 
   const chart = Object.values(
-    chartData.filter((chart) => chart.type === reportData.type)[0].statistics,
+    chartData.filter((chart) => chart.type === reportData.type)[0]?.statistics,
   ) as Array<ChartReport>;
 
   if (withTitles.includes(configKey)) {
     chart.forEach((item, index) => {
-      item.title = t(Object.keys(chartData.filter((chart) => chart.type === reportData.type)[0].statistics)[index]);
+      item.title = t(Object.keys(chartData.filter((chart) => chart.type === reportData.type)[0]?.statistics)[index]);
     });
   }
   //TODO: remove until backend will be fixed
