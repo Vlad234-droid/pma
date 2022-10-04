@@ -113,6 +113,16 @@ export const timelineTypesAvailabilitySelector = (colleagueUuid: string) =>
     return {};
   });
 
+export const isAnniversaryTimelineType = (colleagueUuid: string) =>
+  createSelector(timelineTypesAvailabilitySelector(colleagueUuid), (timelineTypes) => {
+    return (
+      !!timelineTypes[ReviewType.EYR] &&
+      !timelineTypes[ReviewType.MYR] &&
+      !timelineTypes[ReviewType.OBJECTIVE] &&
+      !timelineTypes[ReviewType.QUARTER]
+    );
+  });
+
 export const getTimelineByCodeSelector = (code: string, colleagueUuid: string) =>
   createSelector(usersSelector, timelineSelector, (user, timeline): Timeline | undefined => {
     const uuid = colleagueUuid === USER.current ? user?.current.info.colleague.colleagueUUID : colleagueUuid;

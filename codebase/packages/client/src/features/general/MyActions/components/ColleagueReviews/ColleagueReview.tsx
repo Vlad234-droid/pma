@@ -2,7 +2,7 @@ import React, { FC, useEffect, useMemo } from 'react';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Rule, useStyle } from '@pma/dex-wrapper';
-import { FormType } from '@pma/store';
+import { FormType, isAnniversaryTimelineType } from '@pma/store';
 
 import { createYupSchema } from 'utils/yup';
 import { Input, Item, Select, Textarea, Field } from 'components/Form';
@@ -16,6 +16,7 @@ import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
 import FileList from 'components/FileList';
 import { getReviewFileLink } from 'utils/review';
 import { Timeline } from 'config/types';
+import { useSelector } from 'react-redux';
 
 type Props = {
   review: any;
@@ -31,6 +32,7 @@ export const TEST_WRAPPER_ID = 'test-wrapper-id';
 const ColleagueReview: FC<Props> = ({ colleagueUuid, review, timeline, schema, validateReview, onUpdate }) => {
   const { css, theme } = useStyle();
   const { t } = useTranslation();
+  const isAnniversary = useSelector(isAnniversaryTimelineType(colleagueUuid));
 
   const { components = [] } = schema;
   const styledComponents = formTagComponents(components, theme);
@@ -61,6 +63,12 @@ const ColleagueReview: FC<Props> = ({ colleagueUuid, review, timeline, schema, v
     getValues,
   } = methods;
 
+  const title = isAnniversary
+    ? t('anniversary_review', 'Anniversary review')
+    : t(`review_type_description_${timeline.code?.toLowerCase()}`, timeline.code, {
+        num: review.number,
+      });
+
   useEffect(() => {
     validateReview({ [review.uuid]: isValid });
   }, [isValid]);
@@ -77,12 +85,7 @@ const ColleagueReview: FC<Props> = ({ colleagueUuid, review, timeline, schema, v
   return (
     <TileWrapper boarder={true} customStyle={{ marginTop: '20px' }}>
       <div data-test-id={TEST_WRAPPER_ID} className={css({ padding: '24px 35px 24px 24px' })}>
-        <div className={css(titleStyles)}>
-          {t(`review_type_description_${timeline.code?.toLowerCase()}`, timeline.code, {
-            num: review.number,
-          })}
-        </div>
-
+        <div className={css(titleStyles)}>{title}</div>
         <>
           {styledComponents.map((component) => {
             const {
@@ -112,9 +115,8 @@ const ColleagueReview: FC<Props> = ({ colleagueUuid, review, timeline, schema, v
             if (expression?.auth?.permission?.write?.length && review.status === Status.WAITING_FOR_APPROVAL) {
               if (type === FormType.TEXT_FIELD) {
                 return (
-                  <div className={css(borderStyle)}>
+                  <div key={id} className={css(borderStyle)}>
                     <Field
-                      key={id}
                       name={key}
                       setValue={setValue}
                       label={label}
@@ -130,9 +132,8 @@ const ColleagueReview: FC<Props> = ({ colleagueUuid, review, timeline, schema, v
               }
               if (type === FormType.SELECT) {
                 return (
-                  <div className={css(borderStyle)}>
+                  <div key={id} className={css(borderStyle)}>
                     <Field
-                      key={id}
                       name={key}
                       setValue={setValue}
                       label={label}

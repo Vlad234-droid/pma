@@ -1,18 +1,13 @@
 import React, { FC, useMemo } from 'react';
-import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { useStyle } from '@dex-ddl/core';
-import { timelineTypesAvailabilitySelector, USER } from '@pma/store';
 import { Page } from 'pages';
-import { ReviewType } from 'config/enum';
 import { PersonalProfileWidget } from 'features/general/Profile';
 import { Rule } from '@pma/dex-wrapper';
 import { useTenant } from 'features/general/Permission';
 
 // TODO: separate & move to CareerPerformance Page
 export const CareerHeaderSection: FC<{ timeline: React.ReactNode }> = ({ timeline }) => {
-  const timelineTypes = useSelector(timelineTypesAvailabilitySelector(USER.current));
-  const showMyReview = timelineTypes[ReviewType.MYR] && timelineTypes[ReviewType.EYR];
   const { css } = useStyle();
   const tenant = useTenant();
 
@@ -30,7 +25,7 @@ export const CareerHeaderSection: FC<{ timeline: React.ReactNode }> = ({ timelin
         <Link to={`../${Page.PROFILE}`}>
           <PersonalProfileWidget />
         </Link>
-        {showMyReview && timeline}
+        {timeline}
       </div>
       <HelpWidget />
     </div>

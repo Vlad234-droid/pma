@@ -191,13 +191,15 @@ export const StepIndicatorBasic: FC<StepIndicatorProps> = ({
     );
   });
 
+  const columns = array.length - 2;
+
   return (
     <div
       className={css({
         paddingTop: '12px',
         marginTop: '16px',
         display: 'grid',
-        gridTemplateColumns: ` 1fr repeat(${array.length - 2}, 2fr) 1fr`,
+        gridTemplateColumns: columns ? `1fr repeat(${columns}, 2fr) 1fr` : `repeat(1, 2fr) 1fr`,
       })}
     >
       {array}

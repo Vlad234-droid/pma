@@ -1,19 +1,12 @@
 import React, { FC, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import {
-  getTimelineSelector,
-  timelineTypesAvailabilitySelector,
-  userCycleTypeSelector,
-  TimelineActions,
-  timelinesMetaSelector,
-} from '@pma/store';
+import { getTimelineSelector, TimelineActions, timelinesMetaSelector } from '@pma/store';
 import { Rule, useStyle } from '@pma/dex-wrapper';
 
 import { StepIndicator } from 'components/StepIndicator/StepIndicator';
 import { useTranslation } from 'components/Translation';
 import Spinner from 'components/Spinner';
 
-import { CycleType, ReviewType } from 'config/enum';
 import useDispatch from 'hooks/useDispatch';
 
 const Timeline: FC<{ colleagueUuid: string }> = ({ colleagueUuid }) => {
@@ -22,20 +15,10 @@ const Timeline: FC<{ colleagueUuid: string }> = ({ colleagueUuid }) => {
   const dispatch = useDispatch();
   const { loading } = useSelector(timelinesMetaSelector);
   const { descriptions, startDates, summaryStatuses, types } = useSelector(getTimelineSelector(colleagueUuid)) || {};
-  const timelineTypes = useSelector(timelineTypesAvailabilitySelector(colleagueUuid)) || {};
-  const cycleType = useSelector(userCycleTypeSelector);
 
   useEffect(() => {
     dispatch(TimelineActions.getTimeline({ colleagueUuid }));
   }, []);
-
-  const isEYRTimeline =
-    timelineTypes[ReviewType.EYR] &&
-    !timelineTypes[ReviewType.MYR] &&
-    !timelineTypes[ReviewType.OBJECTIVE] &&
-    !timelineTypes[ReviewType.QUARTER];
-
-  if (isEYRTimeline || cycleType === CycleType.HIRING) return null;
 
   return (
     <div className={css(timelineWrapperStyles)}>
