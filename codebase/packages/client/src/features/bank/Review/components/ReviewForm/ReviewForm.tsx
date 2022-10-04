@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect, useMemo } from 'react';
 
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -18,7 +18,7 @@ import { Review } from 'config/types';
 import { ReviewType } from 'config/enum';
 import { formTagComponents } from 'utils/schema';
 import DynamicForm from 'components/DynamicForm';
-import { reviewOverallRatingByTypeSelector, ReviewsActions } from '@pma/store';
+import { ExpressionValueType, reviewOverallRatingByTypeSelector, ReviewsActions } from '@pma/store';
 import { createYupSchema } from 'utils/yup';
 import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
 import { useDispatch, useSelector } from 'react-redux';
@@ -74,9 +74,20 @@ const ReviewForm: FC<ReviewFormType & FormPropsType> = ({
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
+  const filteredComponent = useMemo(
+    () =>
+      components?.filter((component) => {
+        const { key = '', expression = {} } = component;
+        const value = key && review?.[key] ? review[key] : '';
+        const keyVisibleOnEmptyValue = ExpressionValueType.OVERALL_RATING;
+        return !(expression?.auth?.permission?.read?.length && !value && key !== keyVisibleOnEmptyValue);
+      }),
+    [components, review],
+  );
+
   const rating = useSelector(reviewOverallRatingByTypeSelector(reviewType));
 
-  const yepSchema = components.reduce(createYupSchema(t), {});
+  const yepSchema = filteredComponent.reduce(createYupSchema(t), {});
   const methods = useFormWithCloseProtection({
     mode: 'onChange',
     resolver: yupResolver<Yup.AnyObjectSchema>(Yup.object().shape(yepSchema)),
@@ -135,7 +146,7 @@ const ReviewForm: FC<ReviewFormType & FormPropsType> = ({
             </div>
             {!readonly && <Attention />}
             <DynamicForm
-              components={readonly ? formTagComponents(components, theme) : components}
+              components={readonly ? formTagComponents(filteredComponent, theme) : filteredComponent}
               errors={errors}
               formValues={formValues}
               setValue={setValue}
