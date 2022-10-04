@@ -155,6 +155,13 @@ describe('features/general/Objectives/utils/schema', () => {
           id: 'Field_1gbty45',
           level: 1,
           borderStyle: {
+            '> div': {
+              '& > h2,h3': {
+                padding: '14px 0 14px',
+                margin: 0,
+                letterSpacing: '0px',
+              },
+            },
             borderLeft: '2px solid test',
             borderRadius: '10px 10px 0 0',
             borderRight: '2px solid test',
@@ -172,6 +179,13 @@ describe('features/general/Objectives/utils/schema', () => {
           id: 'Field_0hu83pj',
           level: 1,
           borderStyle: {
+            '> div': {
+              '& > h2,h3': {
+                padding: '14px 0 14px',
+                margin: 0,
+                letterSpacing: '0px',
+              },
+            },
             borderLeft: '2px solid test',
             borderRight: '2px solid test',
             boxShadow: '3px 0px 0px 0px rgba(0, 0, 0, 0.05)',
@@ -186,6 +200,13 @@ describe('features/general/Objectives/utils/schema', () => {
           id: 'Field_1gbty45',
           level: 1,
           borderStyle: {
+            '> div': {
+              '& > h2,h3': {
+                padding: '14px 0 14px',
+                margin: 0,
+                letterSpacing: '0px',
+              },
+            },
             borderBottom: '2px solid test',
             borderLeft: '2px solid test',
             borderRadius: '0 0 10px 10px',

@@ -1,5 +1,15 @@
 import { ExpressionValueType, ExpressionType, Component, BorderedComponent } from '@pma/store';
-import { Theme } from '@pma/dex-wrapper';
+import { Styles, Theme } from '@pma/dex-wrapper';
+
+const markdownStyle = {
+  '> div': {
+    '& > h2,h3': {
+      padding: '14px 0 14px',
+      margin: 0,
+      letterSpacing: '0px',
+    },
+  },
+};
 
 export const formTagCheck = (components: Component[], type = ExpressionType.BLOCK): boolean => {
   const holder: string[] = [];
@@ -51,6 +61,7 @@ export const formTagComponents = (
             borderRight: `2px solid ${theme.colors.lightGray}`,
             padding: '5px 20px',
             boxShadow: '3px 0px 0px 0px rgba(0, 0, 0, 0.05)',
+            ...markdownStyle,
           },
           level,
         });
@@ -67,6 +78,7 @@ export const formTagComponents = (
             borderRight: `2px solid ${theme.colors.lightGray}`,
             padding: '0px 20px 20px',
             boxShadow: '2px 1px 1px 1px rgba(0, 0, 0, 0.05)',
+            ...markdownStyle,
           },
           level,
         });
@@ -83,6 +95,7 @@ export const formTagComponents = (
                   borderRight: `2px solid ${theme.colors.lightGray}`,
                   padding: '0px 20px',
                   boxShadow: '3px 0px 0px 0px rgba(0, 0, 0, 0.05)',
+                  ...markdownStyle,
                 }
               : {},
           level,

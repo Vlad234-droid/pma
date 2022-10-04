@@ -2,11 +2,12 @@ import React, { FC } from 'react';
 import { FieldValues, UseFormSetValue } from 'react-hook-form';
 import get from 'lodash.get';
 import { Rule, Styles, useStyle } from '@pma/dex-wrapper';
-import { FormType } from '@pma/store';
+import { BorderedComponent, FormType } from '@pma/store';
 
 import MarkdownRenderer from 'components/MarkdownRenderer';
 import { Input, Item, Select, Textarea, Field, Text } from 'components/Form';
 import { useTranslation } from 'components/Translation';
+import { formTagComponents } from 'utils/schema';
 
 type Props = {
   setValue?: UseFormSetValue<FieldValues>;
@@ -18,12 +19,13 @@ type Props = {
 };
 
 const DynamicForm: FC<Props> = ({ components, formValues, setValue, errors, prefixKey = '', onlyView = false }) => {
-  const { css } = useStyle();
+  const { css, theme } = useStyle();
+  const borderedComponents: BorderedComponent[] = formTagComponents(components, theme);
   const { t } = useTranslation();
 
   return (
     <>
-      {components.map((component) => {
+      {borderedComponents.map((component) => {
         const {
           id,
           key = '',

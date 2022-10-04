@@ -96,8 +96,8 @@ export const Item: FC<ItemProps> = ({
 
 const wrapperItem: CreateRule<{ marginBot: boolean }> = ({ marginBot }) => ({
   boxSizing: 'border-box',
-  margin: marginBot ? '0 0 24px' : '0px',
-  padding: '0',
+  padding: marginBot ? '0 0 24px' : '0px',
+  margin: '0',
   color: colors.black,
   width: '100%',
   lineHeight: '0',
