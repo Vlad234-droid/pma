@@ -1,168 +1,179 @@
-import React, { FC } from 'react';
-import { CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
-import { TriggerModal } from 'features/general/Modal/components/TriggerModal';
+import React, { FC, useEffect, useState } from 'react';
+import { useParams } from 'react-router';
+import {
+  Component,
+  currentUserSelector,
+  getReviewByTypeSelector,
+  getReviewSchema,
+  getTimelineByReviewTypeSelector,
+  ReviewsActions,
+  reviewsMetaSelector,
+  SchemaActions,
+  schemaMetaSelector,
+  uuidCompareSelector,
+} from '@pma/store';
+
 import { useTranslation } from 'components/Translation';
-import { Attention } from 'components/Form';
-import SuccessModal from 'components/SuccessModal';
-import { Icon as IconComponent, SuccessMark } from 'components/Icon';
+import { useSelector } from 'react-redux';
+import { Status, ReviewType } from 'config/enum';
+import useDispatch from 'hooks/useDispatch';
+import { USER } from 'config/constants';
+import { Review } from 'config/types';
+import { useUploadReviewFiles } from './hook';
+import { FileMetadata, ReviewFormType } from './type';
 import Spinner from 'components/Spinner';
-import { ReviewComponents } from 'components/ReviewComponents';
-import { InfoBlock } from 'components/InfoBlock';
-import { ReviewHelpModal } from './components/ReviewHelp';
-import { ReviewButtons } from './components/ReviewButtons';
-import { CustomDescription } from './components/CustomDescription';
-import { FileUpload } from './components/FileUpload';
+import SuccessModal from 'components/SuccessModal';
+import ReviewForm from './components/ReviewForm';
 
-import { ReviewFormType } from './type';
-import { FormPropsType, withForm } from './hoc/withForm';
-import { ReviewType } from 'config/enum';
-
-type Translation = [string, string];
-
-const TRANSLATION: Record<ReviewType.MYR | ReviewType.EYR, { title: Translation; helperText: Translation }> = {
-  [ReviewType.MYR]: {
-    title: ['mid_year_review_title', 'How is your year going so far?'],
-    helperText: [
-      'mid_year_review_help_text',
-      'Use this to capture the outcome of the conversation you’ve had with your line manager. Remember to focus as much on your how as your what. Use the look forward section to capture your development for the year ahead.',
-    ],
-  },
-  [ReviewType.EYR]: {
-    title: ['end_year_review_title', 'What have you contributed this year and how have you gone about it?'],
-    helperText: [
-      'end_year_review_help_text',
-      'Use this to capture the outcome of the conversation you’ve had with your line manager. Remember to focus as much on your how as your what. Use the look forward section to capture your priorities and development for the year ahead.',
-    ],
-  },
+export type FormPropsType = {
+  onSubmit: (data: any) => void;
+  onSaveDraft: (data: any) => void;
+  onClose: () => void;
+  reviewType: ReviewType.MYR | ReviewType.EYR;
+  readonly?: boolean;
+  components: any;
+  review: Review;
+  metadata: FileMetadata[];
+  handleAddFiles: (file: File) => void;
+  handleDeleteFiles: (name: string) => void;
 };
 
-const Review: FC<ReviewFormType & FormPropsType> = ({
-  reviewType,
-  onClose,
-  reviewLoading,
-  schemaLoading,
-  successModal,
-  timelineReview,
-  readonly,
-  methods,
-  components,
-  review,
-  handleSaveDraft,
-  handleSubmit,
-  metadata,
-  handleDeleteFiles,
-  handleAddFiles,
-}) => {
-  const { css, theme, matchMedia } = useStyle();
-  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
+const MyReview: FC<ReviewFormType> = ({ reviewType, onClose }) => {
   const { t } = useTranslation();
+  const { uuid } = useParams<{ uuid: string }>();
+  const { info } = useSelector(currentUserSelector);
+  const colleagueUuid = info.colleagueUUID;
+  const isUserView = useSelector(uuidCompareSelector(uuid));
 
-  const {
-    formState: { isValid },
-  } = methods;
+  const [successModal, setSuccessModal] = useState(false);
+  const dispatch = useDispatch();
+  const review: Review = useSelector(getReviewByTypeSelector(reviewType)) || {};
+  const { files, metadata, handleDeleteFiles, handleAddFiles } = useUploadReviewFiles({
+    colleagueUuid,
+    reviewUuid: review?.uuid,
+  });
+  //
+  const { loading: reviewLoading, loaded: reviewLoaded, saving, saved } = useSelector(reviewsMetaSelector);
+  const { loading: schemaLoading, loaded: schemaLoaded } = useSelector(schemaMetaSelector);
+  const schema = useSelector(getReviewSchema(reviewType));
 
-  if (reviewLoading && schemaLoading) {
+  const timelineReview = useSelector(getTimelineByReviewTypeSelector(reviewType, USER.current)) || ({} as any);
+
+  const status = Object.keys(timelineReview?.statistics || { STARTED: 1 })[0] as Status;
+
+  const readonly = (uuid && !isUserView) || [Status.WAITING_FOR_APPROVAL, Status.APPROVED].includes(status);
+
+  const { components = [] as Component[] } = schema;
+
+  useEffect(() => {
+    if (!successModal && saved) {
+      dispatch(ReviewsActions.updateReviewMeta({ saved: false }));
+      onClose();
+    }
+  }, [saved, successModal]);
+
+  useEffect(() => {
+    dispatch(ReviewsActions.getReviews({ pathParams: { colleagueUuid, cycleUuid: 'CURRENT' } }));
+    dispatch(SchemaActions.getSchema({ colleagueUuid }));
+  }, []);
+
+  const handleSaveDraft = (data) => {
+    if (review?.uuid) {
+      dispatch(
+        ReviewsActions.updateReviews({
+          pathParams: { colleagueUuid, code: timelineReview.code, cycleUuid: 'CURRENT' },
+          data: [
+            {
+              status: Status.DRAFT,
+              properties: { ...data },
+            },
+          ],
+          files,
+          metadata: { uploadMetadataList: metadata },
+        }),
+      );
+    } else {
+      dispatch(
+        ReviewsActions.createReview({
+          pathParams: { colleagueUuid, code: timelineReview.code, cycleUuid: 'CURRENT', number: 1 },
+          data: [
+            {
+              status: Status.DRAFT,
+              properties: { ...data },
+            },
+          ],
+          files,
+          metadata: { uploadMetadataList: metadata },
+        }),
+      );
+    }
+  };
+
+  const handleSubmitData = async (data) => {
+    if (review?.uuid) {
+      dispatch(
+        ReviewsActions.updateReviews({
+          pathParams: { colleagueUuid, code: timelineReview.code, cycleUuid: 'CURRENT' },
+          data: [
+            {
+              status: Status.WAITING_FOR_APPROVAL,
+              properties: { ...data },
+            },
+          ],
+          files,
+          metadata: { uploadMetadataList: metadata },
+        }),
+      );
+    } else {
+      dispatch(
+        ReviewsActions.createReview({
+          pathParams: { colleagueUuid, code: timelineReview.code, cycleUuid: 'CURRENT', number: 1 },
+          data: [
+            {
+              status: Status.WAITING_FOR_APPROVAL,
+              properties: { ...data },
+            },
+          ],
+          files,
+          metadata: { uploadMetadataList: metadata },
+        }),
+      );
+    }
+    setSuccessModal(true);
+  };
+
+  if (reviewLoading || schemaLoading || saving) {
     return <Spinner fullHeight />;
   }
+
+  if (!schemaLoaded || !reviewLoaded) return null;
 
   if (successModal) {
     return (
       <SuccessModal
         title='Review sent'
         onClose={onClose}
-        mark={<SuccessMark />}
         description={t(
           `${timelineReview?.code?.toLowerCase()}_review_sent_to_manager`,
           'Your review has been sent to your line manager.',
-          { ns: 'bank' },
         )}
-        customElement={<CustomDescription />}
       />
     );
   }
   return (
-    <div className={css(containerStyle)}>
-      <div className={css(wrapperStyle({ mobileScreen }))}>
-        <span className={css(iconLeftPositionStyle({ mobileScreen }))} onClick={onClose}>
-          <IconComponent graphic='arrowLeft' invertColors={true} />
-        </span>
-        <form data-test-id={'REVIEW_FORM_MODAL'}>
-          <div className={css(formFieldsWrapperStyle)}>
-            <div className={css(formTitleStyle)}>{t(...TRANSLATION[reviewType].title, { ns: 'bank' })}</div>
-            <div className={css(helperTextStyle)}>{t(...TRANSLATION[reviewType].helperText, { ns: 'bank' })}</div>
-            <div className={css({ padding: `0 0 ${theme.spacing.s5}`, display: 'flex' })}>
-              <TriggerModal
-                triggerComponent={<InfoBlock text={t('bank_colleague_help', 'Bank Colleague Help')} />}
-                title={t('completing_your_review', 'Completing your review')}
-              >
-                <ReviewHelpModal />
-              </TriggerModal>
-            </div>
-            {!readonly && <Attention />}
-            <ReviewComponents
-              components={components}
-              review={review?.properties || {}}
-              methods={methods}
-              readonly={readonly}
-            />
-            <FileUpload
-              review={review}
-              metadata={metadata}
-              handleDeleteFiles={handleDeleteFiles}
-              handleAddFiles={handleAddFiles}
-            />
-          </div>
-          <ReviewButtons
-            isValid={isValid}
-            readonly={readonly}
-            onClose={onClose}
-            handleSaveDraft={handleSaveDraft}
-            handleSubmit={handleSubmit}
-          />
-        </form>
-      </div>
-    </div>
+    <ReviewForm
+      onClose={onClose}
+      readonly={readonly}
+      components={components}
+      review={review}
+      onSaveDraft={handleSaveDraft}
+      onSubmit={handleSubmitData}
+      reviewType={reviewType}
+      metadata={metadata}
+      handleDeleteFiles={handleDeleteFiles}
+      handleAddFiles={handleAddFiles}
+    />
   );
 };
 
-const containerStyle: Rule = { height: '100%' };
-
-const wrapperStyle: CreateRule<{ mobileScreen: boolean }> =
-  ({ mobileScreen }) =>
-  ({ theme }) => ({
-    height: '100%',
-    overflow: 'auto',
-    padding: mobileScreen ? `0 ${theme.spacing.s4}` : `0 ${theme.spacing.s10}`,
-  });
-
-const iconLeftPositionStyle: CreateRule<{ mobileScreen: boolean }> =
-  ({ mobileScreen }) =>
-  ({ theme }) => ({
-    position: 'fixed',
-    top: theme.spacing.s5,
-    left: mobileScreen ? theme.spacing.s5 : theme.spacing.s10,
-    textDecoration: 'none',
-    border: 'none',
-    cursor: 'pointer',
-  });
-
-const formTitleStyle: Rule = ({ theme }) => ({
-  fontSize: theme.font.fixed.f24.fontSize,
-  lineHeight: theme.font.fluid.f24.lineHeight,
-  letterSpacing: '0px',
-  color: theme.colors.tescoBlue,
-  fontWeight: theme.font.weight.bold,
-});
-
-const helperTextStyle: Rule = ({ theme }) => ({
-  fontSize: theme.font.fixed.f18.fontSize,
-  lineHeight: theme.font.fluid.f18.lineHeight,
-  letterSpacing: '0px',
-  color: theme.colors.tescoBlue,
-  paddingTop: theme.spacing.s2,
-  paddingBottom: theme.spacing.s5,
-});
-
-const formFieldsWrapperStyle: Rule = ({ theme }) => ({ padding: `0 0 ${theme.spacing.s5}` });
-
-export default withForm(Review);
+export default MyReview;

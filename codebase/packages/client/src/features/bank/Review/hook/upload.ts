@@ -42,7 +42,7 @@ export const useUploadReviewFiles = ({ colleagueUuid, reviewUuid }: Props): Retu
       }));
       setMetadata(metadataList);
     }
-  }, [filesInStore, loaded]);
+  }, [JSON.stringify(filesInStore), loaded]);
 
   useEffect(() => {
     return () => {

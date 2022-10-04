@@ -1,23 +1,27 @@
 import React, { FC } from 'react';
 import { useStyle, Button, Rule, CreateRule } from '@pma/dex-wrapper';
+import { Status } from 'config/enum';
 import { Trans, useTranslation } from 'components/Translation';
 import { ButtonWithConfirmation } from 'features/general/Modal';
 
+export const TEST_WRAPPER_ID = 'wrapper';
+
 type ReviewButtonsProps = {
-  readonly: boolean;
+  reviewStatus?: Status;
+  readonly?: boolean;
   isValid: boolean;
   onClose: () => void;
-  handleSaveDraft: () => void;
-  handleSubmit: () => void;
+  onSaveDraft: () => void;
+  onSave: () => void;
 };
 
-const ReviewButtons: FC<ReviewButtonsProps> = ({ readonly, isValid, onClose, handleSaveDraft, handleSubmit }) => {
+const ReviewButtons: FC<ReviewButtonsProps> = ({ readonly, isValid, onClose, onSaveDraft, onSave, reviewStatus }) => {
   const { css, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const { t } = useTranslation();
 
   return (
-    <div className={css(containerStyle)}>
+    <div className={css(containerStyle)} data-test-id={TEST_WRAPPER_ID}>
       <div className={css(wrapperStyle)}>
         <div className={css(buttonWrapperStyle({ mobileScreen }))}>
           {readonly ? (
@@ -26,11 +30,17 @@ const ReviewButtons: FC<ReviewButtonsProps> = ({ readonly, isValid, onClose, han
             </Button>
           ) : (
             <>
-              <Button onPress={handleSaveDraft} styles={[buttonWhiteStyle]}>
-                <Trans i18nKey='save_as_draft'>Save as draft</Trans>
-              </Button>
+              {reviewStatus === Status.DECLINED ? (
+                <Button onPress={onClose} styles={[buttonWhiteStyle]}>
+                  <Trans i18nKey='cancel'>Cancel</Trans>
+                </Button>
+              ) : (
+                <Button onPress={onSaveDraft} styles={[buttonWhiteStyle]}>
+                  <Trans i18nKey='save_as_draft'>Save as draft</Trans>
+                </Button>
+              )}
               <ButtonWithConfirmation
-                onSave={handleSubmit}
+                onSave={onSave}
                 styles={[buttonBlueStyle]}
                 isDisabled={!isValid}
                 confirmationTitle={''}
@@ -61,6 +71,8 @@ const wrapperStyle: Rule = ({ theme }) => ({
   right: theme.spacing.s0,
   // @ts-ignore
   borderTop: `${theme.border.width.b2} solid ${theme.colors.lightGray}`,
+  background: theme.colors.white,
+  borderRadius: '0px 0 32px 32px',
 });
 
 const buttonWrapperStyle: CreateRule<{ mobileScreen: boolean }> =
