@@ -101,7 +101,7 @@ export const useChartDataStatistics = (configKey: ReportPage): Array<Data> => {
   if (isOneChart) return isOneChart as Array<ChartReport>;
 
   const chart = Object.values(
-    chartData.filter((chart) => chart.type === reportData.type)[0]?.statistics,
+    chartData.filter((chart) => chart.type === reportData.type)[0]?.statistics || {},
   ) as Array<ChartReport>;
 
   if (withTitles.includes(configKey)) {
