@@ -56,7 +56,7 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel, setIsInfoModalOpen }) 
 
   const methods = useFormWithCloseProtection({
     mode: 'onChange',
-    resolver: yupResolver<Yup.AnyObjectSchema>(createRequestFeedbackSchema(tenant)),
+    resolver: yupResolver<Yup.AnyObjectSchema>(createRequestFeedbackSchema(tenant, t)),
   });
 
   const {
@@ -280,7 +280,7 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel, setIsInfoModalOpen }) 
             customStyle={{
               padding: '24px',
               border: `2px solid ${theme.colors.backgroundDarkest}`,
-              marginTop: '16px',
+              marginTop: '24px',
               marginBottom: '50px',
             }}
           >

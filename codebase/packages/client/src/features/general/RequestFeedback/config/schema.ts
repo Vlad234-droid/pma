@@ -2,8 +2,9 @@ import * as Yup from 'yup';
 import { FeedbackShema } from 'config/enum';
 import { TargetType } from '../constants/type';
 import { Tenant } from 'features/general/Permission';
+import { TFunction } from 'components/Translation';
 
-export const createRequestFeedbackSchema = (tenant: Tenant) =>
+export const createRequestFeedbackSchema = (tenant: Tenant, t: TFunction) =>
   Yup.object().shape({
     colleagues: Yup.array()
       .of(
@@ -14,7 +15,10 @@ export const createRequestFeedbackSchema = (tenant: Tenant) =>
       )
       .min(1)
       .required(),
-    targetType: tenant === Tenant.GENERAL ? Yup.string().required() : Yup.string().notRequired(),
+    targetType:
+      tenant === Tenant.GENERAL
+        ? Yup.string().required(t('field_required', 'This field is required'))
+        : Yup.string().notRequired(),
     targetId: Yup.string()
       .notRequired()
       .when('targetType', {
