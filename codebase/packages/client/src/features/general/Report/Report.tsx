@@ -1,5 +1,5 @@
 import React, { FC, useCallback, useState, useMemo } from 'react';
-import { colors, CreateRule, Rule, Styles, useStyle } from '@pma/dex-wrapper';
+import { CreateRule, Rule, Styles, useStyle } from '@pma/dex-wrapper';
 import { colleaguesCountSelector, getReportMetaSelector } from '@pma/store';
 import { useSelector } from 'react-redux';
 
@@ -15,18 +15,19 @@ import { Select } from 'components/Form';
 import { Trans, useTranslation } from 'components/Translation';
 import { ColleaguesCount } from 'components/ColleaguesCount';
 import { HoverContainer } from 'components/HoverContainer';
-
-import ChartWidget from './widgets/ChartWidget';
-import TableWidget from './widgets/TableWidget';
+import UnderlayModal from 'components/UnderlayModal';
 import FilterModal from './components/FilterModal';
-import { ReportModal } from './Modals';
-import { paramsReplacer } from 'utils';
+import { Page } from 'pages';
+
 import useQueryString from 'hooks/useQueryString';
 import { getReportData } from './hooks';
+import ChartWidget from './widgets/ChartWidget';
+import TableWidget from './widgets/TableWidget';
+import { ReportModal } from './Modals';
+import { paramsReplacer } from 'utils';
 import { convertToLink, getCurrentValue, getFieldOptions, initialValues, IsReportTiles, View } from './config';
 import { ReportPage, TitlesReport } from 'config/enum';
 import { isStartPeriod, getCurrentYearWithStartDate } from './utils';
-import { Page } from 'pages';
 import { getCurrentYear, getNextYear, getPrevYear } from 'utils/date';
 
 export enum ModalStatus {
@@ -41,7 +42,8 @@ const Report: FC = () => {
   const { t } = useTranslation();
   const { css, matchMedia } = useStyle();
   const small = matchMedia({ xSmall: true, small: true }) || false;
-  const mobileScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
+  const mediumScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
 
   const [focus, setFocus] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -96,7 +98,7 @@ const Report: FC = () => {
 
   return (
     <div className={css({ margin: '22px 42px 110px 40px' })} data-test-id={REPORT_WRAPPER}>
-      <div className={css(spaceBetween({ mobileScreen }))}>
+      <div className={css(spaceBetween({ mediumScreen }))}>
         {/*//Todo in future move active filters to another place */}
         {/*{!!getAppliedReport().length && (*/}
         {/*  <AppliedFilters*/}
@@ -171,15 +173,24 @@ const Report: FC = () => {
               setShowModal(true);
             }}
           />
-          <FilterModal
-            initialValues={initialValues}
-            filterModal={filterModal}
-            setFilterModal={setFilterModal}
-            checkedItems={checkedItems}
-            setCheckedItems={setCheckedItems}
-            isCheckAll={isCheckAll}
-            setIsCheckAll={setIsCheckAll}
-          />
+
+          {filterModal && (
+            <UnderlayModal
+              onClose={() => setFilterModal(false)}
+              styles={{ maxWidth: !mobileScreen ? '424px' : '100%' }}
+            >
+              {({ onClose }) => (
+                <FilterModal
+                  initialValues={initialValues}
+                  onClose={onClose}
+                  checkedItems={checkedItems}
+                  setCheckedItems={setCheckedItems}
+                  isCheckAll={isCheckAll}
+                  setIsCheckAll={setIsCheckAll}
+                />
+              )}
+            </UnderlayModal>
+          )}
 
           <IconButton
             graphic='download'
@@ -588,7 +599,7 @@ const downloadWrapperStyle: Rule = {
   position: 'relative',
 } as Styles;
 
-const iconBtnStyle = {
+const iconBtnStyle: Rule = ({ theme }) => ({
   padding: '0',
   marginLeft: '5px',
   display: 'flex',
@@ -597,7 +608,7 @@ const iconBtnStyle = {
   justifyContent: 'center',
   alignItems: 'center',
   outline: 0,
-  border: `2px solid ${colors.tescoBlue}`,
+  border: `2px solid ${theme.colors.tescoBlue}`,
   borderRadius: '20px',
   cursor: 'pointer',
   position: 'relative',
@@ -606,7 +617,7 @@ const iconBtnStyle = {
     justifyContent: 'center',
     alignItems: 'center',
   },
-};
+});
 
 const pieChartWrapper: Rule = ({ theme }) => ({
   display: 'flex',
@@ -640,11 +651,11 @@ const flexCenterStyled: Rule = {
   height: '116px',
 };
 
-const spaceBetween: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => {
+const spaceBetween: CreateRule<{ mediumScreen: boolean }> = ({ mediumScreen }) => {
   return {
     display: 'flex',
-    flexWrap: mobileScreen ? 'wrap' : 'nowrap',
-    ...(mobileScreen && { flexBasis: '250px' }),
+    flexWrap: mediumScreen ? 'wrap' : 'nowrap',
+    ...(mediumScreen && { flexBasis: '250px' }),
     // Todo replace it in future due to applied filters
     // justifyContent: quantity ? 'space-between' : 'flex-end',
     alignItems: 'center',

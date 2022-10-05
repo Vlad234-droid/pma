@@ -8,10 +8,12 @@ import { SearchOption } from 'config/enum';
 describe('DrawerModal', () => {
   const setOpen = jest.fn();
   const onSelect = jest.fn();
+  const onClose = jest.fn();
   const props = {
     setOpen,
     title: 'title',
     onSelect,
+    onClose,
     active: SearchOption.NAME,
   };
 

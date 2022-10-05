@@ -6,6 +6,7 @@ import { Graphics, RoundIcon, Icon } from 'components/Icon';
 import { AlertDrawer, AlertBadge, useMessagesContext } from 'features/general/Messages';
 import { DataModal } from 'features/general/Profile';
 import { MenuDrawer } from 'features/general/MenuDrawer';
+import UnderlayModal from 'components/UnderlayModal';
 
 export type HeaderProps = {
   title: string;
@@ -83,7 +84,9 @@ const Header: FC<HeaderProps> = ({ title, onBack, withIcon, iconName = 'home', s
         <Icon onClick={handleMenuOpen} graphic='hamburger' iconStyles={iconStyles} containerTestId={MENU_BTN} />
       </div>
       {<MenuDrawer onClose={handleClose} isOpen={isMenuOpen} />}
-      {isAlertOpen && <AlertDrawer onClose={handleAlertClose} />}
+      {isAlertOpen && (
+        <UnderlayModal onClose={handleAlertClose}>{({ onClose }) => <AlertDrawer onClose={onClose} />}</UnderlayModal>
+      )}
     </div>
   );
 };

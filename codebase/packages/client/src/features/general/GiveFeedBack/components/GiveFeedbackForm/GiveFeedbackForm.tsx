@@ -12,6 +12,7 @@ import { FeedbackInfo } from '../../components';
 import { ButtonsWrapper } from 'components/ButtonsWrapper';
 import { ColleaguesFinder } from 'components/ColleaguesFinder';
 import DrawerModal from 'components/DrawerModal';
+import UnderlayModal from 'components/UnderlayModal';
 import { Icon, RoundIcon } from 'components/Icon';
 
 import { SearchOption } from 'config/enum';
@@ -117,16 +118,20 @@ const GiveFeedbackForm: FC<Props> = ({ onSubmit, defaultValues, currentColleague
           error={get(errors, 'targetColleagueUuid.message')}
         />
         {open && (
-          <DrawerModal
-            active={active}
-            setOpen={setOpen}
-            title={t('filter', 'Filter')}
-            onSelect={(filter) => {
-              setActive(filter);
-              dispatch(ColleaguesActions.clearColleagueList());
-              setOpen(false);
-            }}
-          />
+          <UnderlayModal onClose={() => setOpen(false)} styles={{ maxWidth: !mobileScreen ? '488px' : '100%' }}>
+            {({ onClose }) => (
+              <DrawerModal
+                active={active}
+                title={t('filter', 'Filter')}
+                onSelect={(filter) => {
+                  setActive(filter);
+                  dispatch(ColleaguesActions.clearColleagueList());
+                  onClose();
+                }}
+                onClose={onClose}
+              />
+            )}
+          </UnderlayModal>
         )}
         {selectedColleague && (
           <FeedbackInfo selectedPerson={selectedColleague} onClickMore={() => goToInfo(getValues())} />

@@ -4,13 +4,14 @@ import { getTotalReviewsByType, ReportPage } from '@pma/store';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
-import { ColleaguesCount } from 'components/ColleaguesCount';
+import UnderlayModal from 'components/UnderlayModal';
 import { useTranslation } from 'components/Translation';
-import StatisticsReviews from 'features/general/ColleaguesReviews';
-import FilterModal from 'features/general/Report/components/FilterModal';
+import { ColleaguesCount } from 'components/ColleaguesCount';
 import { ColleaguesStatistics } from 'features/general/Report/widgets';
-import { buildPath } from 'features/general/Routes';
+import FilterModal from 'features/general/Report/components/FilterModal';
+import StatisticsReviews from 'features/general/ColleaguesReviews';
 import { FilterOption } from 'features/general/Shared';
+import { buildPath } from 'features/general/Routes';
 
 import useQueryString from 'hooks/useQueryString';
 import { useTileStatistics } from 'features/general/ColleaguesReviews/hooks/useTileStatistics';
@@ -181,15 +182,23 @@ const ReportStatistics = () => {
             }}
             setSearchValueFilterOption={setSearchedValue}
           />
-          <FilterModal
-            filterModal={filterModal}
-            setFilterModal={setFilterModal}
-            initialValues={initialValues}
-            checkedItems={checkedItems}
-            setCheckedItems={setCheckedItems}
-            isCheckAll={isCheckAll}
-            setIsCheckAll={setIsCheckAll}
-          />
+          {filterModal && (
+            <UnderlayModal
+              onClose={() => setFilterModal(false)}
+              styles={{ maxWidth: !mobileScreen ? '424px' : '100%' }}
+            >
+              {({ onClose }) => (
+                <FilterModal
+                  initialValues={initialValues}
+                  onClose={onClose}
+                  checkedItems={checkedItems}
+                  setCheckedItems={setCheckedItems}
+                  isCheckAll={isCheckAll}
+                  setIsCheckAll={setIsCheckAll}
+                />
+              )}
+            </UnderlayModal>
+          )}
         </div>
       </div>
       <div data-test-id={'test-pie-chart'} className={css(wrapperStyle)}>

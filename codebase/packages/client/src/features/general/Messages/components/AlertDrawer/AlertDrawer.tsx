@@ -1,6 +1,6 @@
-import React, { FC, useRef, useState, MouseEvent, useEffect } from 'react';
+import React, { FC } from 'react';
 
-import { Rule, useStyle, CreateRule, IconButton } from '@pma/dex-wrapper';
+import { Rule, useStyle, IconButton } from '@pma/dex-wrapper';
 import { MyInbox } from '@my-inbox/client';
 import { useTranslation } from 'components/Translation';
 import { CONFIG } from 'config/constants';
@@ -13,79 +13,33 @@ export type AlertDrawerProps = { onClose: () => void };
 export const ALERT_DRAWER_WRAPPER = 'alert-drawer-wrapper';
 export const ALERT_DRAWER_CLOSE_BTN = 'alert-drawer-close-btn';
 
-type Spacing = '100%' | 0;
-
 export const AlertDrawer: FC<AlertDrawerProps> = ({ onClose }) => {
-  const [width, setWidth] = useState<Spacing>(0);
-  const { css, matchMedia } = useStyle();
-  const isDesktop = matchMedia({ largeAbove: true }) ?? false;
-
+  const { css } = useStyle();
+  const { t } = useTranslation();
   const { info } = useSelector(currentUserSelector);
   const isManager = (info && info.isManager) ?? false;
-
-  const { t } = useTranslation();
-
-  const underlayRef = useRef(null);
-
-  const underlayClick = (e: MouseEvent<HTMLDivElement>) => e.target === underlayRef.current && onClosePress();
-
-  const onTransitionEnd = () => {
-    if (isDesktop && width === 0) {
-      return onClose();
-    }
-  };
-
-  const onClosePress = () => {
-    setWidth(0);
-    if (!isDesktop) {
-      return setTimeout(() => onClose(), 0);
-    }
-  };
-
-  useEffect(() => {
-    setTimeout(() => setWidth('100%'), 0);
-  }, []);
 
   const { signOut, applicationName, mountPath } = CONFIG;
 
   return (
-    <div className={css(slideInModalRule)}>
-      {isDesktop && <div className={css(underlayRule)} onClick={underlayClick} ref={underlayRef} />}
-      <div
-        data-test-id={ALERT_DRAWER_WRAPPER}
-        className={css(containerRule({ isDesktop, width }))}
-        onTransitionEnd={onTransitionEnd}
-      >
-        <div className={css(headerRule, pointerRule)}>
-          <div className={css(titleRule)}>{t('my_alerts', 'My Alerts')}</div>
-          <div className={css(iconRule)} data-test-id={ALERT_DRAWER_CLOSE_BTN}>
-            <IconButton graphic='close' onPress={onClosePress} iconProps={{ size: '14px' }} />
-          </div>
-        </div>
-        <div className={css(parcelRule, pointerRule)}>
-          <MyInbox
-            appName={applicationName}
-            envConfig={{ env: mountPath as any, mountPath, logoutPath: signOut }}
-            isManager={isManager}
-            senders={[DEFAULT_SENDER_NAME]}
-          />
+    <>
+      <div className={css(headerRule, pointerRule)}>
+        <div className={css(titleRule)}>{t('my_alerts', 'My Alerts')}</div>
+        <div className={css(iconRule)} data-test-id={ALERT_DRAWER_CLOSE_BTN}>
+          <IconButton graphic='close' onPress={onClose} iconProps={{ size: '14px' }} />
         </div>
       </div>
-    </div>
+      <div className={css(parcelRule, pointerRule)} data-test-id={ALERT_DRAWER_WRAPPER}>
+        <MyInbox
+          appName={applicationName}
+          envConfig={{ env: mountPath as any, mountPath, logoutPath: signOut }}
+          isManager={isManager}
+          senders={[DEFAULT_SENDER_NAME]}
+        />
+      </div>
+    </>
   );
 };
-
-const slideInModalRule: Rule = ({ zIndex }) => ({
-  position: 'fixed',
-  top: 0,
-  right: 0,
-  bottom: 0,
-  left: 0,
-  overflow: 'hidden',
-  width: '100%',
-  zIndex: zIndex.i40,
-  height: '100%',
-});
 
 const titleRule: Rule = ({ theme }) => {
   return {
@@ -95,34 +49,6 @@ const titleRule: Rule = ({ theme }) => {
     letterSpacing: '0px',
   };
 };
-
-const underlayRule: Rule = ({ colors }) => ({
-  width: '100%',
-  height: '100%',
-  background: colors.link30,
-  cursor: 'pointer',
-});
-
-const containerRule: CreateRule<Record<'width', Spacing> & { isDesktop: boolean }> =
-  ({ width, isDesktop }) =>
-  ({ zIndex, theme }) => ({
-    fontSize: theme.font.fixed.f16.fontSize,
-    lineHeight: theme.font.fixed.f16.lineHeight,
-    letterSpacing: '0px',
-    position: 'fixed',
-    top: 0,
-    right: 0,
-    width,
-    display: 'flex',
-    flexDirection: 'column',
-    transition: 'width .4s ease-in-out',
-    ...(isDesktop && {
-      width: width === '100%' ? '50%' : 0,
-    }),
-    cursor: 'pointer',
-    height: '100%',
-    zIndex: zIndex.i50,
-  });
 
 const headerRule: Rule = ({ colors, font }) => ({
   background: colors.backgroundDark,

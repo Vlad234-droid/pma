@@ -1,5 +1,5 @@
-import React, { FC, MouseEvent, useRef } from 'react';
-import { Rule, useStyle, CreateRule } from '@pma/dex-wrapper';
+import React, { FC } from 'react';
+import { Rule, useStyle } from '@pma/dex-wrapper';
 import { Radio } from 'components/Form';
 import { SearchOption } from 'config/enum';
 import { Trans } from 'components/Translation';
@@ -7,81 +7,55 @@ import { Icon } from '../Icon';
 
 export const WRAPPER_ID = 'wrapper-id';
 
-const DrawerModal: FC<{ setOpen: (T) => void; title: string; onSelect: (T) => void; active: SearchOption }> = ({
-  setOpen,
-  title = '',
-  onSelect,
-  active,
-}) => {
-  const { css, matchMedia } = useStyle();
-  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
-
-  const ref = useRef<HTMLDivElement | null>(null);
-
-  const closeHandler = () => setOpen(false);
-
-  const underlayClick = (e: MouseEvent<HTMLDivElement>) => e.target === ref.current && closeHandler();
+const DrawerModal2: FC<{
+  title: string;
+  onSelect: (T) => void;
+  active: SearchOption;
+  onClose: () => void;
+}> = ({ title = '', onSelect, active, onClose }) => {
+  const { css } = useStyle();
 
   return (
-    <div className={css(drawerWrapperStyle)} ref={ref} onClick={underlayClick} data-test-id={WRAPPER_ID}>
-      <div className={css(drawerContentStyle({ mobileScreen }))}>
-        <div className={css(headerStyle)}>
-          {title && <p className={css(titleStyle)}>{title}</p>}
-          <Icon graphic='cancel' invertColors={false} onClick={closeHandler} iconStyles={modalCloseOptionStyle} />
-        </div>
-        <div className={css(labelStyle)}>
-          <label htmlFor='name' className={css(flexStyle)}>
-            <Radio
-              name='name'
-              checked={active === SearchOption.NAME}
-              id='name'
-              onChange={() => onSelect(SearchOption.NAME)}
-            />
-            <span className={css(titleRadioStyle)}>
-              <Trans i18nKey='name'>Name</Trans>
-            </span>
-          </label>
-        </div>
-        <div className={css(labelStyle, { marginTop: '22px' })}>
-          <label htmlFor='email' className={css(flexStyle)}>
-            <Radio
-              name='email'
-              checked={active === SearchOption.EMAIL}
-              id='email'
-              onChange={() => onSelect(SearchOption.EMAIL)}
-            />
-            <span className={css(titleRadioStyle)}>
-              <Trans i18nKey='email'>Email</Trans>
-            </span>
-          </label>
-        </div>
+    <div className={css(drawerContentStyle)} data-test-id={WRAPPER_ID}>
+      <div className={css(headerStyle)}>
+        {title && <p className={css(titleStyle)}>{title}</p>}
+        <Icon graphic='cancel' invertColors={false} onClick={onClose} iconStyles={modalCloseOptionStyle} />
+      </div>
+      <div className={css(labelStyle)}>
+        <label htmlFor='name' className={css(flexStyle)}>
+          <Radio
+            name='name'
+            checked={active === SearchOption.NAME}
+            id='name'
+            onChange={() => onSelect(SearchOption.NAME)}
+          />
+          <span className={css(titleRadioStyle)}>
+            <Trans i18nKey='name'>Name</Trans>
+          </span>
+        </label>
+      </div>
+      <div className={css(labelStyle, { marginTop: '22px' })}>
+        <label htmlFor='email' className={css(flexStyle)}>
+          <Radio
+            name='email'
+            checked={active === SearchOption.EMAIL}
+            id='email'
+            onChange={() => onSelect(SearchOption.EMAIL)}
+          />
+          <span className={css(titleRadioStyle)}>
+            <Trans i18nKey='email'>Email</Trans>
+          </span>
+        </label>
       </div>
     </div>
   );
 };
 
-const drawerWrapperStyle: Rule = ({ colors, zIndex }) => ({
-  position: 'fixed',
-  left: 0,
-  top: 0,
-  width: '100%',
+const drawerContentStyle: Rule = ({ theme }) => ({
+  background: theme.colors.backgroundDark,
   height: '100%',
-  overflow: 'auto',
-  backgroundColor: colors.link30,
-  zIndex: zIndex.i50,
+  padding: '26px 24px',
 });
-
-const drawerContentStyle: CreateRule<{ mobileScreen: boolean }> =
-  ({ mobileScreen }) =>
-  ({ theme }) => ({
-    position: 'absolute',
-    right: 0,
-    top: 0,
-    minWidth: !mobileScreen ? '488px' : '100%',
-    background: theme.colors.backgroundDark,
-    minHeight: '100vh',
-    padding: '26px 24px',
-  });
 
 const titleStyle: Rule = ({ theme }) => ({
   fontSize: theme.font.fixed.f20.fontSize,
@@ -120,4 +94,4 @@ const modalCloseOptionStyle: Rule = () => ({
   cursor: 'pointer',
 });
 
-export default DrawerModal;
+export default DrawerModal2;

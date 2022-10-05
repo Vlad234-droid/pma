@@ -9,7 +9,8 @@ import { ColleaguesFinder } from 'components/ColleaguesFinder';
 import Datepicker from 'components/Datepicker';
 import { Icon, RoundIcon } from 'components/Icon';
 import { useTranslation } from 'components/Translation';
-import DrawerModal from 'components/DrawerModal';
+import UnderlayModal from 'components/UnderlayModal';
+import DrawerModal from 'components/DrawerModal/DrawerModal';
 import { SearchOption } from 'config/enum';
 
 export const WRAPPER = 'search-wrapper';
@@ -27,9 +28,10 @@ type Props = Pick<UseFormReturn, 'setValue' | 'setError' | 'formState'> & {
 };
 
 const SearchPart: FC<Props> = ({ setValue, selectedColleague, date, setError, formState, setSelected }) => {
-  const { css } = useStyle();
+  const { css, matchMedia } = useStyle();
   const dispatch = useDispatch();
   const { t } = useTranslation();
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
 
   const [open, setOpen] = useState<boolean>(false);
   const [active, setActive] = useState<SearchOption>(SearchOption.NAME);
@@ -54,17 +56,21 @@ const SearchPart: FC<Props> = ({ setValue, selectedColleague, date, setError, fo
         }}
       />
       {open && (
-        <DrawerModal
-          active={active}
-          setOpen={setOpen}
-          title={t('filter', 'Filter')}
-          onSelect={(filter) => {
-            setSelected([]);
-            setActive(filter);
-            dispatch(ColleaguesActions.clearColleagueList());
-            setOpen(false);
-          }}
-        />
+        <UnderlayModal onClose={() => setOpen(false)} styles={{ maxWidth: !mobileScreen ? '488px' : '100%' }}>
+          {({ onClose }) => (
+            <DrawerModal
+              active={active}
+              title={t('filter', 'Filter')}
+              onSelect={(filter) => {
+                setSelected([]);
+                setActive(filter);
+                dispatch(ColleaguesActions.clearColleagueList());
+                onClose();
+              }}
+              onClose={onClose}
+            />
+          )}
+        </UnderlayModal>
       )}
       <Field
         name={'date'}

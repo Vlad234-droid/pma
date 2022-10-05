@@ -10,11 +10,12 @@ import { Attention, Field, Item, Select, Textarea } from 'components/Form';
 import { ColleaguesFinder } from 'components/ColleaguesFinder';
 import { Trans, useTranslation } from 'components/Translation';
 import { TileWrapper } from 'components/Tile';
-import DrawerModal from 'components/DrawerModal';
 import { IconButton } from 'components/IconButton';
 import { Icon, RoundIcon } from 'components/Icon';
 import { ButtonsWrapper } from 'components/ButtonsWrapper';
 import { ArrowLeftIcon } from 'components/ArrowLeftIcon';
+import UnderlayModal from 'components/UnderlayModal';
+import DrawerModal from 'components/DrawerModal';
 import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
 import { SearchOption, Tesco } from 'config/enum';
 import { Page } from 'pages/general/types';
@@ -34,7 +35,8 @@ type Props = {
 
 const RequestFeedback: FC<Props> = ({ onSubmit, onCancel, setIsInfoModalOpen }) => {
   const { t } = useTranslation();
-  const { css } = useStyle();
+  const { css, matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const dispatch = useDispatch();
   const reviews = useSelector(getReviews) || [];
   const currentColleagueUuid = useSelector(colleagueUUIDSelector);
@@ -147,16 +149,20 @@ const RequestFeedback: FC<Props> = ({ onSubmit, onCancel, setIsInfoModalOpen }) 
             multiple={true}
           />
           {open && (
-            <DrawerModal
-              active={active}
-              setOpen={setOpen}
-              title={t('filter', 'Filter')}
-              onSelect={(filter) => {
-                setActive(filter);
-                dispatch(ColleaguesActions.clearColleagueList());
-                setOpen(false);
-              }}
-            />
+            <UnderlayModal onClose={() => setOpen(false)} styles={{ maxWidth: !mobileScreen ? '488px' : '100%' }}>
+              {({ onClose }) => (
+                <DrawerModal
+                  active={active}
+                  title={t('filter', 'Filter')}
+                  onSelect={(filter) => {
+                    setActive(filter);
+                    dispatch(ColleaguesActions.clearColleagueList());
+                    onClose();
+                  }}
+                  onClose={onClose}
+                />
+              )}
+            </UnderlayModal>
           )}
           {tenant === Tenant.GENERAL && (
             <div className={css({ marginTop: '18px' })}>

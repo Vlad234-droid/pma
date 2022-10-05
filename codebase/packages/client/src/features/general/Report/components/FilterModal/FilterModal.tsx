@@ -1,4 +1,4 @@
-import React, { Dispatch, FC, MouseEvent, SetStateAction, useRef, useState } from 'react';
+import React, { FC, MouseEvent, useRef, useState } from 'react';
 import { Button, CreateRule, Rule, Styles, useStyle } from '@pma/dex-wrapper';
 import useEventListener from 'hooks/useEventListener';
 import { IconButton } from 'components/IconButton';
@@ -10,8 +10,7 @@ enum FilterType {
 }
 
 type FilterModalProps = {
-  filterModal: boolean;
-  setFilterModal: Dispatch<SetStateAction<boolean>>;
+  onClose: () => void;
   checkedItems: string[];
   setCheckedItems: (T: any) => void;
   isCheckAll: string[];
@@ -28,8 +27,7 @@ export const FILTER_WRAPPER = 'filter-wrapper';
 
 // TODO: Extract duplicate 3
 const FilterModal: FC<FilterModalProps> = ({
-  filterModal,
-  setFilterModal,
+  onClose,
   checkedItems,
   setCheckedItems,
   isCheckAll,
@@ -43,7 +41,7 @@ const FilterModal: FC<FilterModalProps> = ({
   const handleClickOutside = (event: MouseEvent<HTMLElement>) => {
     const element = event?.target as HTMLElement;
     if (ref.current && !ref.current.contains(element)) {
-      setFilterModal(false);
+      onClose();
     }
   };
 
@@ -108,19 +106,13 @@ const FilterModal: FC<FilterModalProps> = ({
   };
 
   return (
-    <div ref={ref} className={css(wrapperStyle({ filterModal }))} data-test-id={FILTER_WRAPPER}>
+    <div ref={ref} className={css(wrapperStyle)} data-test-id={FILTER_WRAPPER}>
       <div className={css(flexColumnStyle)}>
         <div className={css(flexStyle)}>
           <span className={css(filterStyle)}>
             <Trans i18nKey={'filter'}>Filter</Trans>
           </span>
-          <IconButton
-            graphic='cancel'
-            iconStyles={iconStyle}
-            onPress={() => {
-              setFilterModal(() => false);
-            }}
-          />
+          <IconButton graphic='cancel' iconStyles={iconStyle} onPress={onClose} />
         </div>
         {filterData.map((item) => {
           const { title, data } = item;
@@ -153,10 +145,10 @@ const FilterModal: FC<FilterModalProps> = ({
       <div className={css(absoluteStyle)}>
         <div className={css(relativeBtnStyled)}>
           <div className={css(spacingStyle({ mobileScreen }))}>
-            <Button styles={[theme.font.fixed.f16, buttonStyle]} onPress={() => setFilterModal(() => false)}>
+            <Button styles={[theme.font.fixed.f16, buttonStyle]} onPress={onClose}>
               <Trans i18nKey={'cancel'}>Cancel</Trans>
             </Button>
-            <Button styles={[theme.font.fixed.f16, filterButtonStyle]} onPress={() => setFilterModal(() => false)}>
+            <Button styles={[theme.font.fixed.f16, filterButtonStyle]} onPress={onClose}>
               <Trans i18nKey={'filter'}>Filter</Trans>
             </Button>
           </div>
@@ -166,22 +158,13 @@ const FilterModal: FC<FilterModalProps> = ({
   );
 };
 
-const wrapperStyle: CreateRule<{ filterModal: boolean }> = ({ filterModal }) => {
-  const { theme } = useStyle();
+const wrapperStyle: Rule = ({ theme }) => {
   return {
-    position: 'absolute',
-    width: '424px',
     padding: '24px 24px 60px 24px',
-    top: '60px',
-    right: '44px',
-    pointerEvents: filterModal ? 'all' : 'none',
-    transform: filterModal ? 'scaleY(1)' : 'scaleY(0)',
-    transition: 'transform .3s ease',
-    transformOrigin: '50% 0%',
     background: theme.colors.white,
+    height: '100%',
     boxShadow: '0px 0px 6px 1px rgba(0, 0, 0, 0.14)',
     borderRadius: '10px',
-    zIndex: 2,
   };
 };
 const flexColumnStyle: Rule = {
@@ -210,9 +193,7 @@ const wrapperContainer: Rule = ({ theme }) =>
       },
     },
   } as Styles);
-const checkBoxItemTitle: Rule = () => {
-  const { theme } = useStyle();
-
+const checkBoxItemTitle: Rule = ({ theme }) => {
   return {
     fontStyle: 'normal',
     fontWeight: 'bold',
@@ -222,9 +203,7 @@ const checkBoxItemTitle: Rule = () => {
     marginLeft: '16px',
   };
 };
-const titleStyle: Rule = () => {
-  const { theme } = useStyle();
-
+const titleStyle: Rule = ({ theme }) => {
   return {
     fontStyle: 'normal',
     fontWeight: 'bold',
@@ -234,9 +213,7 @@ const titleStyle: Rule = () => {
     marginBottom: '24px',
   };
 };
-const filterStyle: Rule = () => {
-  const { theme } = useStyle();
-
+const filterStyle: Rule = ({ theme }) => {
   return {
     fontWeight: 'bold',
     fontSize: '20px',
@@ -254,8 +231,7 @@ const iconStyle: Rule = {
   height: '18px',
   marginTop: '5px',
 };
-const absoluteStyle: Rule = () => {
-  const { theme } = useStyle();
+const absoluteStyle: Rule = ({ theme }) => {
   return {
     position: 'absolute',
     left: 0,
