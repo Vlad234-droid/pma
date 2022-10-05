@@ -68,8 +68,6 @@ export const getTescoBankContent = (props: ContentProps, t: TFunction) => {
   if (WORK_IN_PROGRESS) {
     return { ...config, ...workInProgress };
   }
-  console.log('count', count);
-  console.log('status', status);
 
   if (!count || !status) {
     return { ...config, ...createPriorities };

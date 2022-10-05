@@ -64,11 +64,11 @@ const UserObjectivesPage = () => {
 
   const UserObjectives = useMemo(
     () =>
-      React.lazy(() =>
-        import(`features/${userTenant || Tenant.GENERAL}/Objectives`).then((module) => ({
-          default: module.UserObjectives,
-        })),
-      ),
+      userTenant
+        ? React.lazy(() =>
+            import(`features/${userTenant}/Objectives`).then((module) => ({ default: module.UserObjectives })),
+          )
+        : Spinner,
     [userTenant],
   );
 

@@ -9,8 +9,6 @@ export const useChartTitle = () => {
   const { t } = useTranslation();
   const query = useQueryString() as Record<string, string>;
 
-  console.log('pathname', pathname);
-
   const getChartTitle = () => {
     const titles = {
       //TODO: rewrite this
