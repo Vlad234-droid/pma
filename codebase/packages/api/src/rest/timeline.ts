@@ -4,5 +4,6 @@ const domain = '/colleagues';
 
 export const getTimeline = (params: { colleagueUuid: string }) => {
   const { colleagueUuid } = params;
-  return httpClient.get(`${domain}/${colleagueUuid}/timeline`);
+  const cycleUuid = 'CURRENT';
+  return httpClient.get(`${domain}/${colleagueUuid}/pm-cycles/${cycleUuid}/timeline`);
 };
