@@ -73,8 +73,7 @@ const ObjectivesPage: FC = () => {
   );
 
   const handleWidgetClick = () => {
-    // @ts-ignore
-    if (tenant === T.GENERAL) {
+    if (tenant === Tenant.GENERAL) {
       navigate(buildPath(Page.STRATEGIC_DRIVERS));
     } else {
       window.open('https://tescobank.sharepoint.com/sites/intranet/learn/ourbig6hub/Pages/default.aspx');
