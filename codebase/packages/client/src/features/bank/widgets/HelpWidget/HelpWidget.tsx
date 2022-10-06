@@ -1,9 +1,12 @@
 import React, { FC } from 'react';
-import { colors, Rule, useStyle } from '@pma/dex-wrapper';
+import { Rule, useStyle } from '@pma/dex-wrapper';
+import { Link } from 'react-router-dom';
 
-import { TileWrapper } from 'components/Tile';
+import { BasicTile } from 'components/Tile';
 import { Icon } from 'components/Icon';
 import { useTranslation } from 'components/Translation';
+import { buildPath } from 'features/general/Routes';
+import { Page } from 'pages';
 
 export const HelpWidget: FC = () => {
   const { css } = useStyle();
@@ -12,14 +15,18 @@ export const HelpWidget: FC = () => {
   return (
     <div data-test-id='help-widgets' className={css(wrapperStyles)}>
       <div data-test-id='question-tile' className={css(wrrapperRule)}>
-        <TileWrapper customStyle={widgetStyles} background='white'>
-          {/* @ts-ignore */}
-          <Icon color={colors.darkBlue} graphic='question' />
-          <div className={css({ fontWeight: 'bold' })}>
-            {t('want_to_learn_more', 'Want to learn more about Your Contribution at Tesco?')}
-          </div>
-          <div className={css({ fontSize: '16px' })}>Coming soon</div>
-        </TileWrapper>
+        <Link to={buildPath(Page.KNOWLEDGE_LIBRARY)}>
+          <BasicTile
+            img={<Icon graphic='question' />}
+            hover
+            title={t('want_to_learn_more', 'Want to learn more about Your Contribution at Tesco?')}
+            imgCustomStyle={imageStyles}
+            customStyle={{
+              ...widgetStyles,
+            }}
+            icon={true}
+          />
+        </Link>
       </div>
     </div>
   );
@@ -39,14 +46,15 @@ const wrapperStyles: Rule = {
 
 const widgetStyles: Rule = {
   display: 'flex',
-  flexDirection: 'column',
-  gap: '8px',
   alignItems: 'center',
   textAlign: 'center',
   justifyContent: 'center',
   height: '100%',
-  padding: '24px 30px',
+  padding: '24px 27px 24px 10px',
   border: 'none',
-  fontSize: '18px',
-  color: '#B3CDE6',
+};
+
+const imageStyles: Rule = {
+  width: '30px',
+  margin: '8px auto 0px',
 };

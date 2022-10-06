@@ -1,7 +1,8 @@
 import { Item } from '../types';
-import { colleaguesData, managersData } from '../config';
+import { colleaguesData, managersData, bankColleaguesData, managersBankData } from '../config';
+import { Tenant } from 'config/enum';
 
-export const prepareData = (dataMap, filterFn) => {
+export const prepareData = (dataMap, filterFn, tenant) => {
   let mapFn = (item: Item) => item;
   if (Object.keys(dataMap).length) {
     mapFn = (item: Item) => ({
@@ -13,6 +14,15 @@ export const prepareData = (dataMap, filterFn) => {
       type: dataMap?.[item?.id]?.[0]?.properties?.type ?? '',
     });
   }
-  //@ts-ignore
-  return [...colleaguesData, ...managersData].filter(filterFn).map(mapFn);
+
+  return (
+    [
+      ...colleaguesData,
+      ...(tenant === Tenant.BANK ? managersBankData : managersData),
+      ...(tenant === Tenant.BANK ? bankColleaguesData : []),
+    ]
+      .filter(filterFn)
+      //@ts-ignore
+      .map(mapFn)
+  );
 };

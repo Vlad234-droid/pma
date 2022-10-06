@@ -36,10 +36,12 @@ const colleaguesData = [
   {
     id: 'performance-reviews',
     img: EverydayConversationsAndReviews,
+    withTenant: true,
   },
   {
     id: 'strategic-objectives',
     img: StrategicObjectives,
+    withTenant: true,
   },
   {
     id: 'opportunities-to-get-on',
@@ -52,6 +54,23 @@ const colleaguesData = [
   {
     id: 'our-purpose-and-strategic-pillars',
     img: OurStrategicPillars,
+  },
+];
+const bankColleaguesData = [
+  {
+    id: 'internal-careers-site',
+    img: SystemGuidance,
+    withTenant: true,
+  },
+  {
+    id: 'be-well-hub',
+    img: SystemGuidance,
+    withTenant: true,
+  },
+  {
+    id: 'learning-curriculum',
+    img: SystemGuidance,
+    withTenant: true,
   },
 ];
 
@@ -90,4 +109,19 @@ const managersData = [
   },
 ];
 
-export { colleaguesData, managersData };
+const managersBankData = [
+  {
+    id: 'our-win-together-behaviours',
+    img: OurWinTogetherBehaviours,
+  },
+  {
+    id: 'managing-underperformance',
+    img: ManagingUnderperformance,
+  },
+  {
+    id: 'further-learning-for-managers',
+    img: FurtherLearningForManagers,
+  },
+];
+
+export { colleaguesData, managersData, bankColleaguesData, managersBankData };

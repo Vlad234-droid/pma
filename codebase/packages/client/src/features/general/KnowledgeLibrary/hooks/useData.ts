@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getKnowledgeLibraryUrls, getKnowledgeLibraryData, KnowledgeLibraryActions } from '@pma/store';
+import { useTenant } from 'features/general/Permission';
 import { DataType, Item } from '../types';
-
 import { prepareData } from '../utils';
 
 type Props = {
@@ -16,10 +16,11 @@ const useData = ({ filterFn = () => true }: Props): { colleaguesData: Array<Item
 
   const linksMap = useSelector(getKnowledgeLibraryUrls);
   const dataMap = useSelector(getKnowledgeLibraryData);
+  const tenant = useTenant();
 
   useEffect(() => {
     if (Object.keys(dataMap)) {
-      setData(prepareData(dataMap, filterFn));
+      setData(prepareData(dataMap, filterFn, tenant));
     }
   }, [JSON.stringify(dataMap)]);
 

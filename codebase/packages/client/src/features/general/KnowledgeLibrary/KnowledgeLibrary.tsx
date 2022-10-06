@@ -1,14 +1,14 @@
 import React, { FC } from 'react';
 import { getKnowledgeMeta } from '@pma/store';
 import { useStyle, Rule } from '@pma/dex-wrapper';
-
 import { useSelector } from 'react-redux';
 
-import { useTranslation } from 'components/Translation';
 import { CanPerform, role } from 'features/general/Permission';
+import { useTranslation } from 'components/Translation';
 import Spinner from 'components/Spinner';
 import List from './components/List';
 import Info from './components/Info';
+
 import useData from './hooks/useData';
 
 export const TEST_ID = 'test-wrapper';

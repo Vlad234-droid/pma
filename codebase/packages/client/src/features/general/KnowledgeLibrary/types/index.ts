@@ -6,6 +6,7 @@ export type Item = {
   imgDescription: string;
   link?: string;
   type?: string;
+  withTenant?: boolean;
 };
 
 export enum DataType {
