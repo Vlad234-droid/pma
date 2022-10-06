@@ -9,7 +9,7 @@ const getData = (url) =>
     url +
       new URLSearchParams({
         year: getCurrentYearWithStartDate().toString(),
-        'statuses_in[0]': Status.APPROVED,
+        status: Status.APPROVED.toLocaleLowerCase(),
       }),
   );
 

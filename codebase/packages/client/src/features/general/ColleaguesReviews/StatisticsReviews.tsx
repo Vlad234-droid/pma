@@ -323,6 +323,7 @@ const wrapperStyles: CreateRule<{ isWLPage: boolean }> = ({ isWLPage }) => ({
   padding: isWLPage ? '24px 14px 2px 0px' : '24px 14px 24px 0px',
   display: 'flex',
   justifyContent: 'space-between',
+  alignItems: 'center',
 });
 
 const scrollContainer: Rule = {

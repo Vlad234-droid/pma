@@ -408,7 +408,7 @@ const pages: Record<Page, PageComponent> = {
     title: (_, t) => t('team_reporting'),
     withHeader: true,
     backPath: Page.CONTRIBUTION,
-    perform: [role.TALENT_ADMIN, role.ADMIN, role.LINE_MANAGER, role.EXECUTIVE],
+    perform: [role.TALENT_ADMIN, role.ADMIN, role.LINE_MANAGER, role.EXECUTIVE, role.PEOPLE_TEAM],
     tenant: [Tenant.BANK, Tenant.GENERAL],
   },
   [Page.REPORT_STATISTICS]: {
