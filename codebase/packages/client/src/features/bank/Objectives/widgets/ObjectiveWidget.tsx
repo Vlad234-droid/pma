@@ -32,7 +32,7 @@ const ObjectiveWidget: FC = () => {
 
   const timelinePoint: Timeline =
     (visibleTimelinePoints.find(
-      (timelinePoint) => timelinePoint.status === Status.STARTED, // todo not handle overdue
+      (timelinePoint) => timelinePoint.status === Status.STARTED || timelinePoint.status === Status.FINISHING, // todo not handle overdue
     ) as Timeline) || {};
 
   const timelineMYR = useSelector(getTimelineByReviewTypeSelector(ReviewType.MYR, USER.current));
@@ -65,6 +65,7 @@ const ObjectiveWidget: FC = () => {
       buttonText={buttonText}
       backgroundColor={backgroundColor}
       disabled={disabled}
+      showIcon={!prioritiesCount}
       isClickable={!disabled && !prioritiesCount}
       mode={!disabled && !prioritiesCount ? 'default' : 'inverse'}
       customStyle={widgetStyles}

@@ -30,6 +30,7 @@ const Timeline: FC<{ colleagueUuid: string }> = ({ colleagueUuid }) => {
           descriptions={startDates}
           statuses={summaryStatuses}
           types={types}
+          nowrap
         />
       )}
     </div>

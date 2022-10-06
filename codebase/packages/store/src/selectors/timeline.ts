@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 // @ts-ignore
 import { RootState } from 'typesafe-actions';
-import { ReviewType } from '@pma/client/src/config/enum';
+import { ReviewType, TimelineStatus } from '@pma/client/src/config/enum';
 import { usersSelector } from './users';
 import { Timeline } from '@pma/client/src/config/types';
 
@@ -62,33 +62,28 @@ export const getBankTimelineSelector = (colleagueUuid: string) =>
     const uuid = colleagueUuid === USER.current ? user?.current.info.colleague.colleagueUUID : colleagueUuid;
     const data = timeline.data?.[uuid];
 
-    const hasMYR = data?.some((element) => element.code === 'MYR');
-    const quarterDescription = data?.find((element) => element.code === 'Q3')?.description;
     const result = { codes: [], types: [], summaryStatuses: [], descriptions: [], startDates: [], currentStep: 0 };
     let currentStep = 0;
     let step = 0;
 
-    const getDesc = (code, description) => (code !== 'MYR' ? description : `${description} / ${quarterDescription}`);
-    const getStartDate = (startTime, endTime, code) =>
-      `${new Date(code === Type.EYR ? endTime : startTime).toLocaleString('default', { month: 'short' })} ${new Date(
-        code === Type.EYR ? endTime : startTime,
-      ).getFullYear()}`;
-    const isActive = (status) => status !== 'STARTED' && status !== 'NOT_STARTED';
+    const getStartDate = (startTime, endTime, code) => getDateString(code === Type.EYR ? endTime : startTime);
+    const getDateString = (time) =>
+      `${new Date(time).toLocaleString('default', { month: 'short' })} ${new Date(time).getFullYear()}`;
+    const isActive = (status) => status !== TimelineStatus.STARTED && status !== TimelineStatus.NOT_STARTED;
     const getStep = (step) => (step <= 0 ? 0 : step - 1);
+    const getDesc = (description) => description.replace(/(review)/g, '');
 
     data?.map(({ code, type, summaryStatus, description, startTime, endTime }) => {
       const { codes, types, summaryStatuses, descriptions, startDates } = result as any;
 
-      if (code !== 'Q3' || !hasMYR) {
-        codes.push(code);
-        types.push(type);
-        summaryStatuses.push(summaryStatus);
-        descriptions.push(getDesc(code, description));
-        startDates.push(getStartDate(startTime, endTime, code));
-        step++;
-      }
+      codes.push(code);
+      types.push(type);
+      summaryStatuses.push(summaryStatus);
+      descriptions.push(getDesc(description));
+      startDates.push(getStartDate(startTime, endTime, code));
+      step++;
 
-      if ((code === 'MYR' || code === 'EYR') && isActive(summaryStatus)) {
+      if (isActive(summaryStatus)) {
         currentStep = step;
       }
     });

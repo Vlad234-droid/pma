@@ -11,7 +11,7 @@ export type Props = {
   status: Status;
   title?: string;
   subTitle: string | ReactNode;
-  buttonText: string;
+  buttonText?: string;
   backgroundColor: Colors;
   onClick: () => void;
   description?: string;
@@ -19,6 +19,7 @@ export type Props = {
   disabled?: boolean;
   isClickable: boolean;
   mode?: 'default' | 'inverse';
+  showIcon?: boolean;
 };
 
 const DISABLED_COLOR = '#B3CDE6';
@@ -34,6 +35,7 @@ const MainWidgetBase: FC<Props> = ({
   onClick,
   isClickable,
   mode,
+  showIcon = true,
 }) => {
   const { css } = useStyle();
 
@@ -46,16 +48,18 @@ const MainWidgetBase: FC<Props> = ({
           data-test-id={TEST_ID}
         >
           <div className={css(headStyle)}>
-            <div>
-              <Icon
-                graphic='document'
-                invertColors={isClickable}
-                iconStyles={iconStyles}
-                //@ts-ignore
-                color={disabled ? colors.darkBlue : undefined}
-              />
-            </div>
-            <div className={css(headerBlockStyle)}>
+            {showIcon && (
+              <div>
+                <Icon
+                  graphic='document'
+                  invertColors={isClickable}
+                  iconStyles={iconStyles}
+                  //@ts-ignore
+                  color={disabled ? colors.darkBlue : undefined}
+                />
+              </div>
+            )}
+            <div className={css(headerBlockStyle({ marginLeft: showIcon }))}>
               <span className={css(titleStyle)}>{title}</span>
               <span className={css(descriptionStyle)}>{subTitle}</span>
             </div>
@@ -63,7 +67,7 @@ const MainWidgetBase: FC<Props> = ({
           <div className={css(bodyStyle)}>
             {description && <div className={css(subDescription)}>{description}</div>}
             <div className={css(bodyBlockStyle)}>
-              {!disabled && (
+              {!disabled && buttonText && (
                 <Button mode={mode} styles={[viewButtonStyle({ inverse: isClickable })]} onPress={onClick}>
                   {buttonText}
                 </Button>
@@ -98,6 +102,13 @@ const wrapperStyle: CreateRule<{ clickable: boolean; disabled?: boolean }> =
     display: 'flex',
   });
 
+const headerBlockStyle: CreateRule<{ marginLeft: boolean }> = ({ marginLeft }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  width: '100%',
+  marginLeft: marginLeft ? '30px' : '0px',
+});
+
 const iconStyles: Rule = {
   width: '52px',
   height: '70px',
@@ -109,12 +120,6 @@ const iconStyles: Rule = {
 
 const headStyle: Rule = {
   display: 'flex',
-};
-
-const headerBlockStyle: Rule = {
-  display: 'flex',
-  marginLeft: '30px',
-  flexDirection: 'column',
 };
 
 const bodyBlockStyle: Rule = {

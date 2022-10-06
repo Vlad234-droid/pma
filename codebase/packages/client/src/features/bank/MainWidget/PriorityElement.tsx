@@ -1,30 +1,37 @@
 import React, { FC } from 'react';
-import { Graphics, Icon } from 'components/Icon';
-import { Rule, useStyle, Colors } from '@pma/dex-wrapper';
+import { Rule, useStyle } from '@pma/dex-wrapper';
 
 type Props = {
-  graphic: Graphics;
   title: string;
   count: string;
-  color?: Colors;
 };
 
-export const PriorityElement: FC<Props> = ({ graphic, count, title, color }) => {
+export const PriorityElement: FC<Props> = ({ count, title }) => {
   const { css } = useStyle();
 
   return (
     <div className={css(containerStyles)}>
-      <Icon graphic={graphic} iconStyles={{ marginRight: '6px', width: '20px', height: '20px' }} color={color} />
-      <span>
-        {title}: <span className={css({ fontWeight: 'bold' })}>{count}</span>
-      </span>
+      <span className={css(countStyles)}>{count}</span>
+      <span className={css(titleStyles)}>{title}</span>
     </div>
   );
 };
 
+const countStyles: Rule = {
+  fontWeight: 'bold',
+  fontSize: '20px',
+  lineHeight: '24px',
+};
+
+const titleStyles: Rule = {
+  fontSize: '14px',
+  lineHeight: '18px',
+  fontWeight: 'lighter',
+};
+
 const containerStyles: Rule = {
   display: 'flex',
-  flexDirection: 'row',
+  flexDirection: 'column',
   marginBottom: '8px',
   alignItems: 'center',
 };

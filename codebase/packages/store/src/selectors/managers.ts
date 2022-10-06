@@ -80,6 +80,16 @@ export const getPendingEmployees: Selector<RootState, any, any> = createSelector
   },
 );
 
+const isAnniversaryTimeline = (timeline: any) => {
+  const reviewTypes = timeline.map(({ reviewType }) => reviewType);
+  return (
+    reviewTypes.includes(ReviewType.EYR) &&
+    !reviewTypes.includes(ReviewType.MYR) &&
+    !reviewTypes.includes(ReviewType.OBJECTIVE) &&
+    !reviewTypes.includes(ReviewType.QUARTER)
+  );
+};
+
 export const getOutstandingPendingEmployees: Selector<RootState, any, any> = createSelector(
   [managersSelector, (_, search?: string) => search, (_, __?, sort?: SortBy) => sort],
   // @ts-ignore
@@ -88,14 +98,15 @@ export const getOutstandingPendingEmployees: Selector<RootState, any, any> = cre
 
     const employeeOverdueAnniversary = filteredData?.filter(
       (employee) =>
-        employee.timeline.length === 1 &&
-        employee.timeline[0].reviewType === ReviewType.EYR &&
-        isAfterDeadline({ date: employee.timeline[0].endTime, days: 7 }),
+        isAnniversaryTimeline(employee.timeline) &&
+        employee.timeline.some(
+          (review) => review.reviewType === ReviewType.EYR && isAfterDeadline({ date: review.endTime, days: 7 }),
+        ),
     );
 
     const employeeOverdueEYR = filteredData?.filter(
       (employee) =>
-        employee.timeline.length !== 1 &&
+        !isAnniversaryTimeline(employee.timeline) &&
         employee.timeline.some(
           (review) => review.reviewType === ReviewType.EYR && isAfterDeadline({ date: review.endTime, days: 7 }),
         ),

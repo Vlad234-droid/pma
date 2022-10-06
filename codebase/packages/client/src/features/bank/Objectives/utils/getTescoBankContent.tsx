@@ -18,7 +18,7 @@ export type ContentGraphics = {
   backgroundColor: Colors;
   subTitle: React.ReactNode;
   description?: string;
-  buttonText: string;
+  buttonText?: string;
   disabled?: boolean;
   viewPage?: Page;
 };
@@ -32,12 +32,11 @@ export type ContentConfig = {
 
 export const getTescoBankContent = (props: ContentProps, t: TFunction) => {
   const { status, statistics, nextReviewDate: date = '' } = props;
-  const WORK_IN_PROGRESS = false;
   const count = Object.values(statistics).reduce((acc, el) => acc + Number(el), 0);
 
   const config: ContentConfig = {
     viewPage: Page.REVIEWS_VIEW,
-    widgetTitle: t('my_quarterly_priorities', 'My quarterly priorities'),
+    widgetTitle: t('my_quarterly_priorities', 'My Quarterly Qriorities'),
     modalTitle: t('create_my_priorities', 'Create my priorities'),
   };
 
@@ -49,25 +48,12 @@ export const getTescoBankContent = (props: ContentProps, t: TFunction) => {
         {t('create_my_priorities', 'Create my priorities')}
       </Subtitle>
     ),
-    buttonText: t('create_priorities', 'Create priorities'),
   };
 
   const hasAnyPriority: ContentGraphics = {
     backgroundColor: 'white',
     subTitle: <PriorityList statistics={statistics} />,
-    buttonText: t('view_priorities', 'View priorities'),
   };
-
-  const workInProgress: ContentGraphics = {
-    backgroundColor: 'white',
-    subTitle: <div>Coming soon</div>,
-    buttonText: t('view_priorities', 'View priorities'),
-    disabled: true,
-  };
-
-  if (WORK_IN_PROGRESS) {
-    return { ...config, ...workInProgress };
-  }
 
   if (!count || !status) {
     return { ...config, ...createPriorities };

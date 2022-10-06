@@ -12,6 +12,7 @@ export type StepIndicatorProps = {
   currentStep?: number;
   currentStatus?: Status;
   activeStep?: number;
+  nowrap?: boolean;
   titles?: string[];
   descriptions?: string[];
   statuses?: Status[];
@@ -70,6 +71,7 @@ export const StepIndicatorBasic: FC<StepIndicatorProps> = ({
   currentStep,
   activeStep,
   currentStatus,
+  nowrap,
   titles = [],
   descriptions = [],
   statuses = [],
@@ -183,7 +185,7 @@ export const StepIndicatorBasic: FC<StepIndicatorProps> = ({
     }
     return (
       <div key={`title${i}`}>
-        <div className={css(title2Style({ textAlign, active }))} key={`title${i}`}>
+        <div className={css(title2Style({ textAlign, active, nowrap }))} key={`title${i}`}>
           {title}
         </div>
         <div className={css(descriptionStyle({ textAlign, active }))}>{descriptions[i]}</div>
@@ -213,6 +215,7 @@ export const StepIndicator: FC<StepIndicatorProps> = ({
   currentStep,
   activeStep,
   currentStatus,
+  nowrap,
   titles = [],
   descriptions = [],
   statuses = [],
@@ -232,6 +235,7 @@ export const StepIndicator: FC<StepIndicatorProps> = ({
           descriptions={descriptions}
           statuses={statuses}
           types={types}
+          nowrap={nowrap}
         />
       </div>
     </Tile>
@@ -246,8 +250,8 @@ const titleStyle: Rule = ({ theme }) => ({
   marginBottom: '30px',
 });
 
-const title2Style: CreateRule<{ textAlign: any; active: boolean }> =
-  ({ textAlign, active }) =>
+const title2Style: CreateRule<{ textAlign: any; active: boolean; nowrap: boolean | undefined }> =
+  ({ textAlign, active, nowrap }) =>
   ({ theme }) => ({
     fontStyle: 'normal',
     fontWeight: 'bold',
@@ -256,6 +260,7 @@ const title2Style: CreateRule<{ textAlign: any; active: boolean }> =
     paddingTop: '8px',
     flex: '0 1 0',
     textAlign: textAlign,
+    whiteSpace: nowrap ? 'nowrap' : 'unset',
     color: active ? theme.colors.base : theme.colors.backgroundDarkest,
   });
 
