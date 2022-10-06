@@ -3,15 +3,15 @@ import {
   getCurrentUser,
   createProfileAttribute,
   updateProfileAttribute,
-  getCurrentUserMetadata,
   deleteProfileAttribute,
+  getColleaguePerformanceCycles,
 } from './actions';
 
 export const initialState: {
   current: {
     authenticated: boolean;
     info: any;
-    metadata: object;
+    metadata: any[];
   };
   meta: {
     loading: boolean;
@@ -22,7 +22,7 @@ export const initialState: {
   current: {
     authenticated: false,
     info: {},
-    metadata: {},
+    metadata: [],
   },
   meta: { loading: false, loaded: false, error: null },
 };
@@ -55,7 +55,7 @@ const failure = (state, { payload }) => ({
 
 const currentUserMetadataSuccess = (state, { payload }) => ({
   ...state,
-  current: { ...state.current, ...payload },
+  current: { ...state.current, metadata: payload },
 });
 
 const updateProfileAttributeSuccess = (state, { payload: [updatedAttribute] }) => {
@@ -90,6 +90,6 @@ export default createReducer(initialState)
   .handleAction(getCurrentUser.failure, failure)
   .handleAction(createProfileAttribute.success, profileAttributeSuccess)
   .handleAction(updateProfileAttribute.success, profileAttributeSuccess)
-  .handleAction(getCurrentUserMetadata.success, currentUserMetadataSuccess)
+  .handleAction(getColleaguePerformanceCycles.success, currentUserMetadataSuccess)
   .handleAction(updateProfileAttribute.success, updateProfileAttributeSuccess)
   .handleAction(deleteProfileAttribute.success, deleteProfileAttributeSuccess);

@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { useSelector } from 'react-redux';
 import { Rule, useStyle } from '@pma/dex-wrapper';
-import { timelineTypesAvailabilitySelector, uuidCompareSelector } from '@pma/store';
+import { isAnniversaryTimelineType, timelineTypesAvailabilitySelector, uuidCompareSelector } from '@pma/store';
 
 import { AnnualReviewWidget, MidYearReviewWidget, YearEndReviewWidget } from './';
 import { Trans } from 'components/Translation';
@@ -17,8 +17,8 @@ export const ReviewsSection: FC<Props> = ({ colleagueUuid }) => {
   const isUserView = useSelector(uuidCompareSelector(colleagueUuid));
 
   const timelineTypes = useSelector(timelineTypesAvailabilitySelector(colleagueUuid)) || {};
-  const canShowReview = timelineTypes[ReviewType.MYR] && timelineTypes[ReviewType.EYR];
-  const canShowAnnualReview = !timelineTypes[ReviewType.MYR] && timelineTypes[ReviewType.EYR];
+  const isAnniversary = useSelector(isAnniversaryTimelineType(colleagueUuid));
+  const canShowReview = !isAnniversary && timelineTypes[ReviewType.MYR] && timelineTypes[ReviewType.EYR];
 
   return (
     <Section
@@ -37,8 +37,7 @@ export const ReviewsSection: FC<Props> = ({ colleagueUuid }) => {
           <YearEndReviewWidget colleagueUuid={colleagueUuid} />
         </>
       )}
-
-      {(canShowAnnualReview || true) && <AnnualReviewWidget colleagueUuid={colleagueUuid} />}
+      {isAnniversary && <AnnualReviewWidget colleagueUuid={colleagueUuid} />}
     </Section>
   );
 };

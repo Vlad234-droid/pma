@@ -27,9 +27,11 @@ export const getUserRoles = (state: RootState) => {
   return users.current.info?.roles;
 };
 
-export const userCycleTypeSelector = (state: RootState) => {
+export const userCurrentCycleTypeSelector = (state: RootState) => {
   const users = usersSelector(state);
-  return users.current.metadata?.cycle?.cycleType;
+  const { metadata } = users.current;
+  const { length, [length - 1]: cycle } = metadata;
+  return cycle?.cycleType;
 };
 
 export const getUserWorkLevels = createSelector(usersSelector, ({ current }) => {

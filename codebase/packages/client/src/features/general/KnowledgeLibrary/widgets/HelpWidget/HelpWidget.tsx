@@ -14,7 +14,7 @@ export const HelpWidget: FC = () => {
 
   return (
     <div data-test-id='help-widgets' className={css(wrapperStyles)}>
-      <div data-test-id='question-tile' className={css(wrrapperRule)}>
+      <div data-test-id='question-tile' className={css(wrapperRule)}>
         <Link to={buildPath(Page.KNOWLEDGE_LIBRARY)}>
           <BasicTile
             img={<Icon graphic='question' />}
@@ -32,7 +32,7 @@ export const HelpWidget: FC = () => {
   );
 };
 
-const wrrapperRule: Rule = {
+const wrapperRule: Rule = {
   height: '100%',
 };
 
@@ -50,7 +50,7 @@ const widgetStyles: Rule = {
   textAlign: 'center',
   justifyContent: 'center',
   height: '100%',
-  padding: '24px 27px 24px 10px',
+  padding: '0 24px',
   border: 'none',
 };
 

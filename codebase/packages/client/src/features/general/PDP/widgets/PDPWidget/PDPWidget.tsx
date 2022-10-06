@@ -28,7 +28,7 @@ const PDPWidget: FC = () => {
       date={addedDate}
       iconGraphic={'list'}
       title={t('personal_development_plan', 'Personal development Plan')}
-      customStyle={{ flex: '2 1 110px' }}
+      customStyle={{ flex: '2 1 110px', cursor: 'pointer' }}
       onClick={() => navigate(buildPath(Page.PERSONAL_DEVELOPMENT_PLAN))}
     />
   );

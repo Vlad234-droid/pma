@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { useLocation } from 'react-router-dom';
 import { CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
-import { getTimelineByCodeSelector, userCycleTypeSelector, uuidCompareSelector } from '@pma/store';
+import { getTimelineByCodeSelector, userCurrentCycleTypeSelector, uuidCompareSelector } from '@pma/store';
 
 import { useTenant } from 'features/general/Permission';
 import { buildPath } from 'features/general/Routes';
@@ -33,12 +33,9 @@ const AnnualReview: FC<Props> = ({ colleagueUuid }) => {
   const tenant = useTenant();
   const navigate = useNavigate();
   const { pathname, state } = useLocation();
-
   const isUserView = useSelector(uuidCompareSelector(colleagueUuid));
-
   const review = useSelector(getTimelineByCodeSelector(ReviewType.EYR, colleagueUuid));
-
-  const cycleType = useSelector(userCycleTypeSelector);
+  const cycleType = useSelector(userCurrentCycleTypeSelector);
 
   const { summaryStatus, startTime, endTime, lastUpdatedTime } = review || {};
 
@@ -61,8 +58,9 @@ const AnnualReview: FC<Props> = ({ colleagueUuid }) => {
   }
 
   if (
-    cycleType === CycleType.HIRING &&
-    (DateTime.fromISO(endTime as string) < getLocalNow() || DateTime.fromISO(startTime as string) > getLocalNow())
+    cycleType !== CycleType.HIRING ||
+    DateTime.fromISO(endTime as string) < getLocalNow() ||
+    DateTime.fromISO(startTime as string) > getLocalNow()
   )
     return null;
 

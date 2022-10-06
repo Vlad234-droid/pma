@@ -60,7 +60,7 @@ const ReviewWidget: FC<Props> = ({
           )}
           {subTitle && <p className={css(descriptionStyle({ color: descriptionColor }))}>{subTitle}</p>}
           {description && <p className={css(descriptionStyle({ color: descriptionColor }))}>{description}</p>}
-          <p className={css(descriptionStyle({ color: descriptionColor }), iconWrapper)}>
+          <div className={css(descriptionStyle({ color: descriptionColor }), iconWrapper)}>
             <Icon
               graphic={graphic}
               iconStyles={{ verticalAlign: 'middle', margin: '0px 10px 0px 0px' }}
@@ -68,7 +68,7 @@ const ReviewWidget: FC<Props> = ({
               fill={colors[iconColor]}
             />
             {content}
-          </p>
+          </div>
         </div>
         {!disabled && (
           <div className={css(bodyStyle)}>

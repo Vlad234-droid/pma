@@ -10,7 +10,7 @@ import {
   timelinesMetaSelector,
   timelineTypesAvailabilitySelector,
   timelineStartedSelector,
-  userCycleTypeSelector,
+  userCurrentCycleTypeSelector,
 } from '@pma/store';
 
 import useDispatch from 'hooks/useDispatch';
@@ -32,7 +32,7 @@ const MyObjectives: FC = () => {
   const timelinesExist = useSelector(timelinesExistSelector(colleagueUuid));
   const { loaded: timelinesLoaded } = useSelector(timelinesMetaSelector);
   const timelineTypes = useSelector(timelineTypesAvailabilitySelector(colleagueUuid)) || {};
-  const cycleType = useSelector(userCycleTypeSelector);
+  const cycleType = useSelector(userCurrentCycleTypeSelector);
 
   const isAvailable = useSelector(timelineStartedSelector(colleagueUuid));
 

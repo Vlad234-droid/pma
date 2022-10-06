@@ -100,7 +100,6 @@ const wrapperItem: CreateRule<{ marginBot: boolean }> = ({ marginBot }) => ({
   margin: '0',
   color: colors.black,
   width: '100%',
-  lineHeight: '0',
 });
 
 const labelStyle: Rule = ({ theme }) => {

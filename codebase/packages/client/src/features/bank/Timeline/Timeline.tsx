@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { useSelector } from 'react-redux';
-import { getBankTimelineSelector, timelinesMetaSelector, userCycleTypeSelector } from '@pma/store';
+import { getBankTimelineSelector, timelinesMetaSelector, userCurrentCycleTypeSelector } from '@pma/store';
 import { Rule, useStyle } from '@pma/dex-wrapper';
 
 import { StepIndicator } from 'components/StepIndicator/StepIndicator';
@@ -14,7 +14,7 @@ const Timeline: FC<{ colleagueUuid: string }> = ({ colleagueUuid }) => {
   const { loading } = useSelector(timelinesMetaSelector);
   const { descriptions, startDates, summaryStatuses, types, currentStep } =
     useSelector(getBankTimelineSelector(colleagueUuid)) || {};
-  const cycleType = useSelector(userCycleTypeSelector);
+  const cycleType = useSelector(userCurrentCycleTypeSelector);
 
   if (cycleType === CycleType.HIRING) return null;
 

@@ -35,6 +35,4 @@ export const publishPerformanceCycle = (params: any) => {
   return httpClient.post(`${domain}/publish`, params);
 };
 
-export const getPerformanceCycleMappingKeys = () => {
-  return httpClient.get(`${domain}//mappings/keys`);
-};
+export const getPerformanceCycleMappingKeys = () => httpClient.get(`${domain}/mappings/keys`);

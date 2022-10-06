@@ -14,7 +14,7 @@ const FeedbackView: FC = () => {
     <BaseWidget
       iconGraphic={'chat'}
       title={t('feedback', 'Feedback')}
-      customStyle={{ flex: '2 1 110px' }}
+      customStyle={{ flex: '2 1 110px', cursor: 'pointer' }}
       onClick={() => navigate(buildPath(Page.FEEDBACKS))}
     />
   );

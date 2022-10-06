@@ -1,6 +1,6 @@
 import React, { FC, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { getTimelineSelector, TimelineActions, timelinesMetaSelector } from '@pma/store';
+import { getTimelineSelector, TimelineActions, timelinesMetaSelector, userCurrentCycleTypeSelector } from '@pma/store';
 import { Rule, useStyle } from '@pma/dex-wrapper';
 
 import { StepIndicator } from 'components/StepIndicator/StepIndicator';
@@ -8,6 +8,7 @@ import { useTranslation } from 'components/Translation';
 import Spinner from 'components/Spinner';
 
 import useDispatch from 'hooks/useDispatch';
+import { CycleType } from 'config/enum';
 
 const Timeline: FC<{ colleagueUuid: string }> = ({ colleagueUuid }) => {
   const { t } = useTranslation();
@@ -16,9 +17,15 @@ const Timeline: FC<{ colleagueUuid: string }> = ({ colleagueUuid }) => {
   const { loading } = useSelector(timelinesMetaSelector);
   const { descriptions, startDates, summaryStatuses, types } = useSelector(getTimelineSelector(colleagueUuid)) || {};
 
+  const cycleType = useSelector(userCurrentCycleTypeSelector);
+
   useEffect(() => {
-    dispatch(TimelineActions.getTimeline({ colleagueUuid }));
-  }, []);
+    if (cycleType && cycleType !== CycleType.HIRING) {
+      dispatch(TimelineActions.getTimeline({ colleagueUuid }));
+    }
+  }, [cycleType]);
+
+  if (cycleType && cycleType === CycleType.HIRING) return null;
 
   return (
     <div className={css(timelineWrapperStyles)}>

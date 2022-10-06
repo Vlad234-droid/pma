@@ -14,7 +14,7 @@ export const CareerHeaderSection: FC<{ timeline: React.ReactNode }> = ({ timelin
   const HelpWidget = useMemo(
     () =>
       React.lazy(() =>
-        import(`features/${tenant}/widgets/HelpWidget`).then((module) => ({ default: module.HelpWidget })),
+        import(`features/${tenant}/KnowledgeLibrary`).then((module) => ({ default: module.HelpWidget })),
       ),
     [tenant],
   );
