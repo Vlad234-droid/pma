@@ -36,7 +36,7 @@ export const TimelineProvider: FC = ({ children }) => {
 
   useEffect(() => {
     const activePoints = timelines?.reduce((acc, current) => {
-      if ([Status.STARTED, Status.FINISHING].includes(current.status)) {
+      if ([Status.STARTED, Status.FINISHING, Status.OVERDUE].includes(current.status)) {
         acc[current.reviewType] = { code: current.code, uuid: current.uuid };
       }
       return acc;
