@@ -37,7 +37,10 @@ const Priority: FC<Props> = ({ employee }) => {
   const { timeline: timelines, reviews } = employee;
 
   const startedQuarterTimeline = timelines
-    .filter(({ status, reviewType }) => status === Status.STARTED && reviewType === ReviewType.QUARTER)
+    .filter(
+      ({ status, reviewType }) =>
+        [Status.STARTED, Status.FINISHING, Status.OVERDUE].includes(status) && reviewType === ReviewType.QUARTER,
+    )
     .pop();
 
   const relatedReviews = reviews
@@ -50,8 +53,8 @@ const Priority: FC<Props> = ({ employee }) => {
         relatedReviews.map((review) => {
           const [graphic, label, color] = getContent(theme, t, review.status);
           const date = [Status.WAITING_FOR_APPROVAL, Status.WAITING_FOR_COMPLETION].includes(review.status)
-            ? t('submitted_date', { date: new Date(startedQuarterTimeline?.lastUpdatedTime || '') })
-            : t('full_date', { date: new Date(startedQuarterTimeline?.lastUpdatedTime || '') });
+            ? t('submitted_date', { date: new Date(review?.lastUpdatedTime || '') })
+            : t('full_date', { date: new Date(review?.lastUpdatedTime || '') });
 
           return (
             <div key={review.uuid} className={css(wrapperStyles)}>
