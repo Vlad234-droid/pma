@@ -81,6 +81,9 @@ const ShareWidgetBase: FC<ShareWidgetBaseProps> = ({ customStyle, stopShare, sha
   const { info } = useSelector(currentUserSelector);
   const isShared = useSelector(isSharedSelector);
   const hasApprovedObjective = useSelector(hasStatusInReviews(ReviewType.OBJECTIVE, Status.APPROVED));
+  const hasApprovedPriorities = useSelector(hasStatusInReviews(ReviewType.QUARTER, Status.APPROVED));
+  const hasApproved = hasApprovedObjective || hasApprovedPriorities;
+
   const { components = [] } = useSelector(getReviewSchema(ReviewType.OBJECTIVE));
   const sharedObjectives = useSelector(getAllSharedObjectives);
   const formElements = components.filter((component) => component.type != 'text');
@@ -112,7 +115,7 @@ const ShareWidgetBase: FC<ShareWidgetBaseProps> = ({ customStyle, stopShare, sha
 
   const { type, title, description, actionTitle, handleClick, confirm, success, view } = getContent(
     {
-      hasApprovedObjective,
+      hasApprovedObjective: hasApproved,
       isManager,
       sharedObjectivesCount,
       sharing,
@@ -130,8 +133,7 @@ const ShareWidgetBase: FC<ShareWidgetBaseProps> = ({ customStyle, stopShare, sha
     sharedObjectivesCount && setObjectives(transformReviewsToObjectives(sharedObjectives, formElements, tenant));
   }, [sharedObjectivesCount, formElementsCount, type]);
 
-  const isDisplayed =
-    title === 'N/A' || (!stopShare && !hasApprovedObjective && !sharing && !isManager && !hasApprovedObjective);
+  const isDisplayed = title === 'N/A' || (!stopShare && !hasApproved && !sharing && !isManager);
 
   if (isDisplayed) {
     return null;
