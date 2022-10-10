@@ -414,7 +414,7 @@ const pages: Record<Page, PageComponent> = {
   [Page.REPORT_STATISTICS]: {
     Element: ReportStatistics,
     withHeader: true,
-    perform: [role.TALENT_ADMIN, role.ADMIN, role.LINE_MANAGER, role.EXECUTIVE],
+    perform: [role.TALENT_ADMIN, role.ADMIN, role.LINE_MANAGER, role.EXECUTIVE, role.PEOPLE_TEAM],
     tenant: [Tenant.BANK, Tenant.GENERAL],
   },
   // TODO: enabled when content of page meets business requirements
