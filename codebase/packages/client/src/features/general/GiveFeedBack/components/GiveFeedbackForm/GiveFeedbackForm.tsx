@@ -77,113 +77,111 @@ const GiveFeedbackForm: FC<Props> = ({ onSubmit, defaultValues, currentColleague
   };
 
   return (
-    <>
-      <div className={css(wrapperModalGiveFeedbackStyle)} data-test-id={FORM_WRAPPER}>
-        <div
-          className={css({
-            fontWeight: 'bold',
-            fontSize: '24px',
-            lineHeight: '28px',
-            ...(mobileScreen && { textAlign: 'center' }),
-          })}
-        >
-          <Trans i18nKey='let_a_colleague_know_how_they_are_doing'>Let a colleague know how they are doing</Trans>
-        </div>
-        <Attention />
-        <div
-          className={css({
-            marginTop: '8px',
-            fontSize: '18px',
-            lineHeight: '22px',
-            ...(mobileScreen && { textAlign: 'center' }),
-          })}
-        >
-          <Trans i18nKey='select_to_give_feedback'>Select who you&apos;d like to give feedback to</Trans>
-        </div>
-        {!selectedColleague && (
-          <div className={css(roundIconStyle)} onClick={() => setOpen((prev) => !prev)}>
-            <RoundIcon strokeWidth={7}>
-              <Icon graphic='settings' invertColors={false} iconStyles={modalCloseOptionStyle} />
-            </RoundIcon>
-          </div>
-        )}
-
-        <ColleaguesFinder
-          searchOption={active}
-          onSelect={(colleagueUuid) => {
-            setValue('targetColleagueUuid', colleagueUuid, { shouldValidate: true });
-          }}
-          selected={[]}
-          value={getColleagueName(selectedColleague)}
-          error={get(errors, 'targetColleagueUuid.message')}
-        />
-        {open && (
-          <UnderlayModal onClose={() => setOpen(false)} styles={{ maxWidth: !mobileScreen ? '488px' : '100%' }}>
-            {({ onClose }) => (
-              <DrawerModal
-                active={active}
-                title={t('filter', 'Filter')}
-                onSelect={(filter) => {
-                  setActive(filter);
-                  dispatch(ColleaguesActions.clearColleagueList());
-                  onClose();
-                }}
-                onClose={onClose}
-              />
-            )}
-          </UnderlayModal>
-        )}
-        {selectedColleague && (
-          <FeedbackInfo selectedPerson={selectedColleague} onClickMore={() => goToInfo(getValues())} />
-        )}
-        {selectedColleague && (
-          <div>
-            {feedbackFields.map((item, index) => {
-              return (
-                <div
-                  key={index}
-                  className={css({
-                    ':last-child': {
-                      marginBottom: '32px',
-                    },
-                  })}
-                >
-                  <TileWrapper
-                    customStyle={{
-                      marginBottom: '16px !important',
-                      ...tileCustomStyles,
-                    }}
-                  >
-                    <h3 className={css(feedbackTitle)}>{item.title}</h3>
-                    <p className={css(feedbackDescription)}>{item?.description}</p>
-                    <Field
-                      name={`feedbackItems.${index}`}
-                      Wrapper={Item}
-                      Element={Textarea}
-                      value={get(feedbackItems, `[${index}]`, '')}
-                      setValue={setValue}
-                      error={get(errors, `feedbackItems[${index}].message`)}
-                    />
-                  </TileWrapper>
-                </div>
-              );
-            })}
-          </div>
-        )}
-        <ButtonsWrapper
-          isValid={isValid}
-          onLeftPress={handleDraft}
-          onRightPress={() => {
-            handleSubmit(handleSave)();
-          }}
-          leftText='save_as_draft'
-          rightTextWithIcon='submit'
-        />
+    <div className={css(formContainer)} data-test-id={FORM_WRAPPER}>
+      <div
+        className={css({
+          fontWeight: 'bold',
+          fontSize: '24px',
+          lineHeight: '28px',
+          ...(mobileScreen && { textAlign: 'center' }),
+        })}
+      >
+        <Trans i18nKey='let_a_colleague_know_how_they_are_doing'>Let a colleague know how they are doing</Trans>
       </div>
-    </>
+      <Attention />
+      <div
+        className={css({
+          marginTop: '8px',
+          fontSize: '18px',
+          lineHeight: '22px',
+          ...(mobileScreen && { textAlign: 'center' }),
+        })}
+      >
+        <Trans i18nKey='select_to_give_feedback'>Select who you&apos;d like to give feedback to</Trans>
+      </div>
+      {!selectedColleague && (
+        <div className={css(roundIconStyle)} onClick={() => setOpen((prev) => !prev)}>
+          <RoundIcon strokeWidth={7}>
+            <Icon graphic='settings' invertColors={false} iconStyles={modalCloseOptionStyle} />
+          </RoundIcon>
+        </div>
+      )}
+
+      <ColleaguesFinder
+        searchOption={active}
+        onSelect={(colleagueUuid) => {
+          setValue('targetColleagueUuid', colleagueUuid, { shouldValidate: true });
+        }}
+        selected={[]}
+        value={getColleagueName(selectedColleague)}
+        error={get(errors, 'targetColleagueUuid.message')}
+      />
+      {open && (
+        <UnderlayModal onClose={() => setOpen(false)} styles={{ maxWidth: !mobileScreen ? '488px' : '100%' }}>
+          {({ onClose }) => (
+            <DrawerModal
+              active={active}
+              title={t('filter', 'Filter')}
+              onSelect={(filter) => {
+                setActive(filter);
+                dispatch(ColleaguesActions.clearColleagueList());
+                onClose();
+              }}
+              onClose={onClose}
+            />
+          )}
+        </UnderlayModal>
+      )}
+      {selectedColleague && (
+        <FeedbackInfo selectedPerson={selectedColleague} onClickMore={() => goToInfo(getValues())} />
+      )}
+      {selectedColleague && (
+        <div>
+          {feedbackFields.map((item, index) => {
+            return (
+              <div
+                key={index}
+                className={css({
+                  ':last-child': {
+                    marginBottom: '32px',
+                  },
+                })}
+              >
+                <TileWrapper
+                  customStyle={{
+                    marginBottom: '16px !important',
+                    ...tileCustomStyles,
+                  }}
+                >
+                  <h3 className={css(feedbackTitle)}>{item.title}</h3>
+                  <p className={css(feedbackDescription)}>{item?.description}</p>
+                  <Field
+                    name={`feedbackItems.${index}`}
+                    Wrapper={Item}
+                    Element={Textarea}
+                    value={get(feedbackItems, `[${index}]`, '')}
+                    setValue={setValue}
+                    error={get(errors, `feedbackItems[${index}].message`)}
+                  />
+                </TileWrapper>
+              </div>
+            );
+          })}
+        </div>
+      )}
+      <ButtonsWrapper
+        isValid={isValid}
+        onLeftPress={handleDraft}
+        onRightPress={() => {
+          handleSubmit(handleSave)();
+        }}
+        leftText='save_as_draft'
+        rightTextWithIcon='submit'
+      />
+    </div>
   );
 };
-const wrapperModalGiveFeedbackStyle: Rule = {
+const formContainer: Rule = {
   paddingLeft: '40px',
   paddingRight: '40px',
   height: '100%',

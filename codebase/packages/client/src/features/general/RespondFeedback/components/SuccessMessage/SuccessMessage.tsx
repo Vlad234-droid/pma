@@ -34,9 +34,12 @@ const SuccessMessage: FC<Props> = ({ targetColleagueProfile, onSuccess }) => {
 
 const wrapperSuccessContainer: Rule = {
   display: 'flex',
-  justifyContent: 'center',
+  justifyContent: 'start',
   alignItems: 'center',
   flexDirection: 'column',
+  height: '100%',
+  overflow: 'auto',
+  padding: '8px',
 };
 const successImg: Rule = {
   width: '164px',

@@ -33,9 +33,12 @@ const SuccessModal: FC<Props> = ({ onSuccess }) => {
 const wrapperSuccessContainer: Rule = {
   paddingTop: '40px',
   display: 'flex',
-  justifyContent: 'center',
+  justifyContent: 'start',
   alignItems: 'center',
   flexDirection: 'column',
+  height: '100%',
+  overflow: 'auto',
+  padding: '8px',
 };
 const successImg: Rule = {
   width: '164px',

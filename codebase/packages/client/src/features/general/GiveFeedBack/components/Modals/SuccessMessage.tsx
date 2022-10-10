@@ -21,7 +21,7 @@ const SuccessMessage: FC<Props> = ({ selectedColleagueUuid, targetColleagueProfi
   const selectedColleague = useSelector(getColleagueByUuidSelector(selectedColleagueUuid)) || targetColleagueProfile;
 
   return (
-    <div className={css(WrapperSuccessContainer)} data-test-id={SUCCESS_WRAPPER}>
+    <div className={css(successContainer)} data-test-id={SUCCESS_WRAPPER}>
       <div className={css(SuccessImg)}>
         <img src={success} alt='success' />
       </div>
@@ -36,9 +36,12 @@ const SuccessMessage: FC<Props> = ({ selectedColleagueUuid, targetColleagueProfi
   );
 };
 
-const WrapperSuccessContainer: Rule = {
+const successContainer: Rule = {
+  height: '100%',
+  overflow: 'auto',
+  padding: '8px',
   display: 'flex',
-  justifyContent: 'center',
+  justifyContent: 'start',
   alignItems: 'center',
   flexDirection: 'column',
 };
