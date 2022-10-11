@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTimelineContainer } from 'contexts/timelineContext';
-import { ObjectiveTypes, transformReviewsToObjectives } from 'features/general/Review';
+import { Objective as ObjectiveTypes } from '../type';
+import { transformReviewsToObjectives } from '../utils';
 import {
   colleagueUUIDSelector,
   filterReviewsByTypeSelector,
-  getReviewSchema,
   getTimelinesByReviewTypeSelector,
   priorityNotesMetaSelector,
   ReviewsActions,
@@ -21,7 +21,7 @@ import { ConfirmModal } from 'components/ConfirmModal';
 import { Trans, useTranslation } from 'components/Translation';
 
 export type PropsType = {
-  objectives: ObjectiveTypes.Objective[];
+  objectives: ObjectiveTypes[];
   handleCompletion: (number: number) => void;
   handleDelete: (number: number) => void;
   handleSelectTimelinePoint: (T) => void;
@@ -54,11 +54,7 @@ export function withSection<P>(WrappedComponent: React.ComponentType<P & PropsTy
     const colleagueUuid = useSelector(colleagueUUIDSelector);
     const originObjectives: Review[] = useSelector(filterReviewsByTypeSelector(ReviewType.QUARTER));
 
-    const objectiveSchema = useSelector(getReviewSchema(timelinePoint?.code || 'Q1'));
-    const { components = [] } = objectiveSchema;
-    const formElements = components.filter((component) => component.type != 'text');
-
-    const [objectives, setObjectives] = useState<ObjectiveTypes.Objective[]>([]);
+    const [objectives, setObjectives] = useState<ObjectiveTypes[]>([]);
     const timelineTypes = useSelector(timelineTypesAvailabilitySelector(colleagueUuid)) || {};
     const canShowObjectives = timelineTypes[ReviewType.QUARTER];
 
@@ -71,7 +67,7 @@ export function withSection<P>(WrappedComponent: React.ComponentType<P & PropsTy
         const filteredObjectives = originObjectives.filter(
           (objective) => objective.tlPointUuid === timelinePointById?.uuid,
         );
-        setObjectives(transformReviewsToObjectives(filteredObjectives, formElements));
+        setObjectives(transformReviewsToObjectives(filteredObjectives));
       },
       [visibleTimelinePoints, originObjectives],
     );
@@ -114,7 +110,7 @@ export function withSection<P>(WrappedComponent: React.ComponentType<P & PropsTy
         const filteredObjectives = originObjectives.filter(
           (objective) => objective.tlPointUuid === timelinePoint?.uuid,
         );
-        setObjectives(transformReviewsToObjectives(filteredObjectives, formElements));
+        setObjectives(transformReviewsToObjectives(filteredObjectives));
       }
     }, [reviewLoaded, reviewSaved, schemaLoaded, timelineLoaded, notesLoaded]);
 

@@ -11,6 +11,7 @@ import Spinner from 'components/Spinner';
 import { TogglePriority } from '../TogglePriority';
 import { PropsType, withSection } from '../../hoc/withSection';
 import { AddNoteButton } from '../AddNoteButton';
+import { Tenant } from 'config/enum';
 
 export const TEST_ID = 'objectives-test-id';
 
@@ -45,7 +46,7 @@ const Objectives: FC<PropsType> = ({
           ),
         }}
         right={{
-          content: (
+          content: objectives.length ? (
             <div data-test-id={TEST_ID}>
               <IconButton
                 onPress={() => downloadPDF(instance.url!, 'priorities.pdf')}
@@ -56,7 +57,7 @@ const Objectives: FC<PropsType> = ({
                 <Trans i18nKey='download'>Download</Trans>
               </IconButton>
             </div>
-          ),
+          ) : null,
         }}
       >
         {reviewLoading ? (
@@ -73,7 +74,9 @@ const Objectives: FC<PropsType> = ({
           </>
         ) : (
           <div className={css(emptyBlockStyle)}>
-            <Trans i18nKey={'no_objectives_created'}>No objectives created</Trans>
+            <Trans i18nKey={'no_objectives_created'} ns={Tenant.BANK}>
+              No Priority created
+            </Trans>
           </div>
         )}
       </Section>

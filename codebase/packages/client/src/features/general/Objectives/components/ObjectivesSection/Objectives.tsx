@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Rule, useStyle } from '@pma/dex-wrapper';
-import { ReviewType, Status } from 'config/enum';
+import { ReviewType, Status, Tenant } from 'config/enum';
 import {
   colleagueUUIDSelector,
   getReviewSchema,
@@ -102,7 +102,9 @@ const Objectives = () => {
         <Accordion objectives={objectives} canShowStatus={!isAllObjectivesInSameStatus} />
       ) : (
         <div className={css(emptyBlockStyle)}>
-          <Trans i18nKey={'no_objectives_created'}>No objectives created</Trans>
+          <Trans i18nKey={'no_objectives_created'} ns={Tenant.GENERAL}>
+            No objectives created
+          </Trans>
         </div>
       )}
     </Section>
