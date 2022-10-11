@@ -7,6 +7,7 @@ import {
   reviewsMetaSelector,
   timelinesMetaSelector,
   TimelineActions,
+  colleagueCurrentCycleSelector,
 } from '@pma/store';
 import { useSelector } from 'react-redux';
 
@@ -23,6 +24,9 @@ const useObjectivesData = (uuid: string) => {
   const { loaded: timelineLoaded, loading: timelineLoading } = useSelector(timelinesMetaSelector);
   const data = useSelector(filterReviewsByTypeSelector(ReviewType.QUARTER));
   const [objectives, setObjectives] = useState<Objective[]>([]);
+  const currentCycle = useSelector(colleagueCurrentCycleSelector);
+
+  console.log({ currentCycle });
 
   useEffect(() => {
     dispatch(PreviousReviewFilesActions.getPreviousReviewFiles({ colleagueUUID: uuid }));
@@ -35,10 +39,10 @@ const useObjectivesData = (uuid: string) => {
   }, [reviewLoaded]);
 
   useEffect(() => {
-    dispatch(ReviewsActions.getReviews({ pathParams: { colleagueUuid: uuid, cycleUuid: 'CURRENT' } }));
-    dispatch(TimelineActions.getUserTimeline({ colleagueUuid: uuid }));
+    dispatch(ReviewsActions.getReviews({ pathParams: { colleagueUuid: uuid, cycleUuid: currentCycle } }));
+    dispatch(TimelineActions.getUserTimeline({ colleagueUuid: uuid, cycleUuid: currentCycle }));
     dispatch(ColleagueActions.getColleagueByUuid({ colleagueUuid: uuid }));
-  }, [uuid]);
+  }, [uuid, currentCycle]);
 
   return { objectives, meta: { loaded: reviewLoaded | timelineLoaded, loading: reviewLoading | timelineLoading } };
 };

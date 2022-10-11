@@ -1,9 +1,14 @@
-import React, { FC, useMemo } from 'react';
-import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router';
-import { useLocation } from 'react-router-dom';
+import React, { ChangeEvent, FC, useEffect, useMemo, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
-import { getTimelineByCodeSelector, userCurrentCycleTypeSelector, uuidCompareSelector } from '@pma/store';
+import {
+  getTimelineByCodeSelector,
+  isAnniversaryTimelineType,
+  uuidCompareSelector,
+  colleaguePerformanceCyclesSelector,
+  colleagueCurrentCycleSelector,
+} from '@pma/store';
 
 import { useTenant } from 'features/general/Permission';
 import { buildPath } from 'features/general/Routes';
@@ -11,31 +16,56 @@ import { Page } from 'pages';
 import { useTranslation } from 'components/Translation';
 import { Select } from 'components/Form';
 import { ReviewWidget } from '../components/ReviewWidget';
-import { CycleType, ReviewType, Status } from 'config/enum';
+import { ReviewType, Status } from 'config/enum';
 import { getContent } from '../utils';
 import {
   formatDateStringFromISO,
   minusDayToDateString,
   DateTime,
   formatDateTime,
-  getLocalNow,
   paramsReplacer,
   minusMonthFromISODateString,
 } from 'utils';
+import { changeColleagueCurrentCycles } from '@pma/store/src/entities/user/actions';
 
 type Props = {
   colleagueUuid: string;
 };
 
 const AnnualReview: FC<Props> = ({ colleagueUuid }) => {
+  const [value, setValue] = useState<string | undefined>();
   const { t } = useTranslation();
   const { css } = useStyle();
   const tenant = useTenant();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { pathname, state } = useLocation();
   const isUserView = useSelector(uuidCompareSelector(colleagueUuid));
   const review = useSelector(getTimelineByCodeSelector(ReviewType.EYR, colleagueUuid));
-  const cycleType = useSelector(userCurrentCycleTypeSelector);
+  const isAnniversary = useSelector(isAnniversaryTimelineType(colleagueUuid));
+  const cycles = useSelector(colleaguePerformanceCyclesSelector);
+  const currentCycle = useSelector(colleagueCurrentCycleSelector);
+
+  const options = useMemo(() => {
+    return [...cycles].reverse().map(({ endTime, startTime, uuid }) => ({
+      value: uuid,
+      label: `${formatDateStringFromISO(startTime, 'yyyy')} - ${formatDateStringFromISO(endTime, 'yyyy')}`,
+    }));
+  }, [cycles]);
+
+  useEffect(() => {
+    if (currentCycle !== 'CURRENT') {
+      setValue(currentCycle);
+    } else {
+      setValue(options[0]?.value);
+    }
+  }, [options]);
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    setValue(value);
+    dispatch(changeColleagueCurrentCycles(value));
+  };
 
   const { summaryStatus, startTime, endTime, lastUpdatedTime } = review || {};
 
@@ -52,17 +82,6 @@ const AnnualReview: FC<Props> = ({ colleagueUuid }) => {
       ),
     [summaryStatus, startTime, lastUpdatedTime],
   );
-
-  if (!review) {
-    return null;
-  }
-
-  if (
-    cycleType !== CycleType.HIRING ||
-    DateTime.fromISO(endTime as string) < getLocalNow() ||
-    DateTime.fromISO(startTime as string) > getLocalNow()
-  )
-    return null;
 
   const disabled = isUserView
     ? summaryStatus === Status.NOT_STARTED
@@ -90,7 +109,7 @@ const AnnualReview: FC<Props> = ({ colleagueUuid }) => {
         }
         title={
           //@ts-ignore
-          cycleType === CycleType.FISCAL
+          !isAnniversary
             ? t('annual_performance_review', 'Annual performance review')
             : t('anniversary_review', 'Anniversary Review')
         }
@@ -98,7 +117,7 @@ const AnnualReview: FC<Props> = ({ colleagueUuid }) => {
           hasDescription
             ? summaryStatus === Status.APPROVED
               ? t('end_year_review_widget_title_approved', 'Your year-end review is complete.')
-              : cycleType === CycleType.HIRING && summaryStatus === Status.STARTED
+              : isAnniversary && summaryStatus === Status.STARTED
               ? t('performance_period_duration', {
                   startDate: formatDateStringFromISO(startTime as string, 'LLL yyyy'),
                   endDate: formatDateTime(minusMonthFromISODateString(endTime as string), 'LLL yyyy'),
@@ -113,10 +132,10 @@ const AnnualReview: FC<Props> = ({ colleagueUuid }) => {
         graphic={graphic}
         iconColor={iconColor}
         //@ts-ignore
-        background={cycleType === CycleType.FISCAL ? background : 'white'}
+        background={!isAnniversary ? background : 'white'}
         shadow={shadow}
         content={
-          cycleType === CycleType.HIRING && summaryStatus === Status.STARTED
+          isAnniversary && summaryStatus === Status.STARTED
             ? t(
                 'your_review_due_by_date',
                 `Your performance review form is due by ${formatDateTime(
@@ -133,16 +152,7 @@ const AnnualReview: FC<Props> = ({ colleagueUuid }) => {
           <div className={css(headerStyle)}>
             <div className={css(titleStyle({ color: titleColor }))}>{title}</div>
             <div className={css(selectStyle)}>
-              <Select
-                options={[
-                  { label: '2022 - 2023', value: 'CURRENT' },
-                  { label: '2021 - 2022', value: 'PREV' },
-                ]}
-                onChange={() => undefined}
-                name={'period'}
-                placeholder={''}
-                value={'CURRENT'}
-              />
+              <Select options={options} onChange={handleChange} name={'period'} placeholder={''} value={value} />
             </div>
           </div>
         )}

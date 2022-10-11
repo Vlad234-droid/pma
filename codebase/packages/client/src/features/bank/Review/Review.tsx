@@ -1,6 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import {
+  colleagueCurrentCycleSelector,
   Component,
   currentUserSelector,
   getReviewByTypeSelector,
@@ -56,7 +57,7 @@ const MyReview: FC<ReviewFormType> = ({ reviewType, onClose }) => {
   const { loading: reviewLoading, loaded: reviewLoaded, saving, saved } = useSelector(reviewsMetaSelector);
   const { loading: schemaLoading, loaded: schemaLoaded } = useSelector(schemaMetaSelector);
   const schema = useSelector(getReviewSchema(reviewType));
-
+  const currentCycle = useSelector(colleagueCurrentCycleSelector);
   const timelineReview = useSelector(getTimelineByReviewTypeSelector(reviewType, USER.current)) || ({} as any);
 
   const status = Object.keys(timelineReview?.statistics || { STARTED: 1 })[0] as Status;
@@ -73,15 +74,15 @@ const MyReview: FC<ReviewFormType> = ({ reviewType, onClose }) => {
   }, [saved, successModal]);
 
   useEffect(() => {
-    dispatch(ReviewsActions.getReviews({ pathParams: { colleagueUuid, cycleUuid: 'CURRENT' } }));
+    dispatch(ReviewsActions.getReviews({ pathParams: { colleagueUuid, cycleUuid: currentCycle } }));
     dispatch(SchemaActions.getSchema({ colleagueUuid }));
-  }, []);
+  }, [currentCycle]);
 
   const handleSaveDraft = (data) => {
     if (review?.uuid) {
       dispatch(
         ReviewsActions.updateReviews({
-          pathParams: { colleagueUuid, code: timelineReview.code, cycleUuid: 'CURRENT' },
+          pathParams: { colleagueUuid, code: timelineReview.code, cycleUuid: currentCycle },
           data: [
             {
               status: Status.DRAFT,
@@ -95,7 +96,7 @@ const MyReview: FC<ReviewFormType> = ({ reviewType, onClose }) => {
     } else {
       dispatch(
         ReviewsActions.createReview({
-          pathParams: { colleagueUuid, code: timelineReview.code, cycleUuid: 'CURRENT', number: 1 },
+          pathParams: { colleagueUuid, code: timelineReview.code, cycleUuid: currentCycle, number: 1 },
           data: [
             {
               status: Status.DRAFT,
@@ -113,7 +114,7 @@ const MyReview: FC<ReviewFormType> = ({ reviewType, onClose }) => {
     if (review?.uuid) {
       dispatch(
         ReviewsActions.updateReviews({
-          pathParams: { colleagueUuid, code: timelineReview.code, cycleUuid: 'CURRENT' },
+          pathParams: { colleagueUuid, code: timelineReview.code, cycleUuid: currentCycle },
           data: [
             {
               status: Status.WAITING_FOR_APPROVAL,
@@ -127,7 +128,7 @@ const MyReview: FC<ReviewFormType> = ({ reviewType, onClose }) => {
     } else {
       dispatch(
         ReviewsActions.createReview({
-          pathParams: { colleagueUuid, code: timelineReview.code, cycleUuid: 'CURRENT', number: 1 },
+          pathParams: { colleagueUuid, code: timelineReview.code, cycleUuid: currentCycle, number: 1 },
           data: [
             {
               status: Status.WAITING_FOR_APPROVAL,

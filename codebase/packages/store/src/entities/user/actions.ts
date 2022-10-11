@@ -1,4 +1,4 @@
-import { ActionType, createAsyncAction } from 'typesafe-actions';
+import { ActionType, createAsyncAction, createAction } from 'typesafe-actions';
 
 import { RestResponseUser, RestResponseVoid } from '@pma/openapi';
 
@@ -54,6 +54,8 @@ export const getColleaguePerformanceCycles = createAsyncAction(
   'user/performance-cycles/FAILURE',
 )<any, any, Error>();
 
+export const changeColleagueCurrentCycles = createAction('user/current-performance-cycles/CHANGE')<string>();
+
 export const Actions = {
   login: loginAsync.request,
   logout: logoutAsync.request,
@@ -62,6 +64,7 @@ export const Actions = {
   updateProfileAttribute: updateProfileAttribute.request,
   deleteProfileAttribute: deleteProfileAttribute.request,
   getColleaguePerformanceCycles: getColleaguePerformanceCycles.request,
+  changeColleagueCurrentCycles,
 };
 
 export type Action = ActionType<typeof loginAsync>;

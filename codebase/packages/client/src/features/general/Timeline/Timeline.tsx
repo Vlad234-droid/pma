@@ -1,31 +1,30 @@
 import React, { FC, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { getTimelineSelector, TimelineActions, timelinesMetaSelector, userCurrentCycleTypeSelector } from '@pma/store';
+import {
+  colleagueCurrentCycleSelector,
+  getTimelineSelector,
+  TimelineActions,
+  timelinesMetaSelector,
+  userCurrentCycleTypeSelector,
+} from '@pma/store';
 import { Rule, useStyle } from '@pma/dex-wrapper';
-
 import { StepIndicator } from 'components/StepIndicator/StepIndicator';
 import { useTranslation } from 'components/Translation';
 import Spinner from 'components/Spinner';
-
 import useDispatch from 'hooks/useDispatch';
-import { CycleType } from 'config/enum';
 
 const Timeline: FC<{ colleagueUuid: string }> = ({ colleagueUuid }) => {
   const { t } = useTranslation();
   const { css } = useStyle();
   const dispatch = useDispatch();
+  const currentCycle = useSelector(colleagueCurrentCycleSelector);
   const { loading } = useSelector(timelinesMetaSelector);
   const { descriptions, startDates, summaryStatuses, types } = useSelector(getTimelineSelector(colleagueUuid)) || {};
-
   const cycleType = useSelector(userCurrentCycleTypeSelector);
 
   useEffect(() => {
-    if (cycleType && cycleType !== CycleType.HIRING) {
-      dispatch(TimelineActions.getTimeline({ colleagueUuid }));
-    }
+    dispatch(TimelineActions.getTimeline({ colleagueUuid, cycleUuid: currentCycle }));
   }, [cycleType]);
-
-  if (cycleType && cycleType === CycleType.HIRING) return null;
 
   return (
     <div className={css(timelineWrapperStyles)}>

@@ -9,6 +9,7 @@ import {
   ReviewsActions,
   timelineTypesAvailabilitySelector,
   getActiveTimelineByReviewTypeSelector,
+  colleagueCurrentCycleSelector,
 } from '@pma/store';
 import { Trans, useTranslation } from 'components/Translation';
 import { EditButton } from '../Buttons';
@@ -34,10 +35,13 @@ const Objectives = () => {
   const activeTimeline = useSelector(getActiveTimelineByReviewTypeSelector(ReviewType.OBJECTIVE, USER.current));
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const objectiveSchema = useSelector(getReviewSchema(activeTimeline?.code)) || {};
+  const currentCycle = useSelector(colleagueCurrentCycleSelector);
   const {
     objectives,
     meta: { loading, loaded },
-  } = useObjectivesData(uuid as string);
+  } = useObjectivesData(uuid, currentCycle);
+
+  console.log({ currentCycle });
   const timelineTypes = useSelector(timelineTypesAvailabilitySelector(colleagueUuid)) || {};
   const canShowObjectives = timelineTypes[ReviewType.OBJECTIVE];
 
@@ -60,9 +64,9 @@ const Objectives = () => {
 
   useEffect(() => {
     if (canShowObjectives) {
-      dispatch(ReviewsActions.getReviews({ pathParams: { colleagueUuid, cycleUuid: 'CURRENT' } }));
+      dispatch(ReviewsActions.getReviews({ pathParams: { colleagueUuid, cycleUuid: currentCycle } }));
     }
-  }, [canShowObjectives]);
+  }, [canShowObjectives, currentCycle]);
 
   if (loading) return <Spinner fullHeight />;
 

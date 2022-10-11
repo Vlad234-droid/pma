@@ -2,6 +2,7 @@ import React, { FC, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
 import {
+  colleagueCurrentCycleSelector,
   Component,
   currentUserSelector,
   getReviewByTypeSelector,
@@ -11,7 +12,6 @@ import {
   reviewsMetaSelector,
   SchemaActions,
   schemaMetaSelector,
-  TimelineActions,
   uuidCompareSelector,
 } from '@pma/store';
 import { useParams } from 'react-router';
@@ -63,6 +63,7 @@ const MyReview: FC<Props> = ({ reviewType, onClose }) => {
 
   const [successModal, setSuccessModal] = useState(false);
   const { info } = useSelector(currentUserSelector);
+  const currentCycle = useSelector(colleagueCurrentCycleSelector);
   const colleagueUuid = uuid || info.colleagueUUID;
   const dispatch = useDispatch();
   const review: Review = useSelector(getReviewByTypeSelector(reviewType)) || {};
@@ -88,14 +89,14 @@ const MyReview: FC<Props> = ({ reviewType, onClose }) => {
   }, [saved, successModal]);
 
   useEffect(() => {
-    dispatch(ReviewsActions.getReviews({ pathParams: { colleagueUuid, cycleUuid: 'CURRENT' } }));
+    dispatch(ReviewsActions.getReviews({ pathParams: { colleagueUuid, cycleUuid: currentCycle } }));
     dispatch(SchemaActions.getSchema({ colleagueUuid }));
-  }, []);
+  }, [currentCycle]);
 
   const handleSaveDraft = (data) => {
     dispatch(
       ReviewsActions.updateReviews({
-        pathParams: { colleagueUuid: info.colleagueUUID, code: reviewType, cycleUuid: 'CURRENT' },
+        pathParams: { colleagueUuid: info.colleagueUUID, code: reviewType, cycleUuid: currentCycle },
         data: [
           {
             status: Status.DRAFT,
@@ -109,7 +110,7 @@ const MyReview: FC<Props> = ({ reviewType, onClose }) => {
   const handleSubmitData = async (data) => {
     dispatch(
       ReviewsActions.updateReviews({
-        pathParams: { colleagueUuid: info.colleagueUUID, code: reviewType, cycleUuid: 'CURRENT' },
+        pathParams: { colleagueUuid: info.colleagueUUID, code: reviewType, cycleUuid: currentCycle },
         data: [
           {
             status: Status.WAITING_FOR_APPROVAL,

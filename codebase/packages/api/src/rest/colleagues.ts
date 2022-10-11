@@ -37,4 +37,5 @@ export const getColleaguePerformanceCyclesByStatuses = ({
 }: {
   colleagueUuid: string;
   allowedStatuses: string[];
-}) => httpClient.get(`${domain}/${colleagueUuid}/pm-cycles/`, { params: { allowedStatuses: allowedStatuses[0] } });
+}) =>
+  httpClient.get(`${domain}/${colleagueUuid}/pm-cycles/`, { params: { allowedStatuses: allowedStatuses.toString() } });

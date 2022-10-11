@@ -1,13 +1,10 @@
-import React, { FC, useMemo } from 'react';
-import { useSelector } from 'react-redux';
-import { getEmployeesWithReviewStatuses } from '@pma/store';
+import React, { FC } from 'react';
 import { Rule, useStyle } from '@pma/dex-wrapper';
 import { Filters, getEmployeesSortingOptions, SortBy } from 'features/general/Filters';
-import { ActionStatus, Status } from 'config/enum';
+import { ActionStatus } from 'config/enum';
 import { useTranslation } from 'components/Translation';
 
 import { SelectAll } from './components/SelectAll';
-import { filterApprovedFn } from './utils';
 import { RadioGroup } from './components/RadioGroup';
 
 type Props = {

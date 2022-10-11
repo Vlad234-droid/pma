@@ -11,6 +11,7 @@ import {
   timelineTypesAvailabilitySelector,
   timelineStartedSelector,
   userCurrentCycleTypeSelector,
+  colleagueCurrentCycleSelector,
 } from '@pma/store';
 
 import useDispatch from 'hooks/useDispatch';
@@ -27,12 +28,12 @@ const CURRENT = 'CURRENT';
 const MyObjectives: FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const timelinesExist = useSelector(timelinesExistSelector(colleagueUuid));
   const { loaded: timelinesLoaded } = useSelector(timelinesMetaSelector);
   const timelineTypes = useSelector(timelineTypesAvailabilitySelector(colleagueUuid)) || {};
   const cycleType = useSelector(userCurrentCycleTypeSelector);
+  const currentCycle = useSelector(colleagueCurrentCycleSelector);
 
   const isAvailable = useSelector(timelineStartedSelector(colleagueUuid));
 
@@ -49,7 +50,7 @@ const MyObjectives: FC = () => {
   useEffect(() => {
     if (colleagueUuid) {
       dispatch(SchemaActions.getSchema({ colleagueUuid }));
-      dispatch(TimelineActions.getTimeline({ colleagueUuid }));
+      dispatch(TimelineActions.getTimeline({ colleagueUuid, cycleUuid: currentCycle }));
     }
   }, [colleagueUuid]);
 

@@ -11,6 +11,7 @@ import {
   PDPActions,
   schemaMetaPDPSelector,
   TimelineActions,
+  userCurrentCycleTypeSelector,
 } from '@pma/store';
 import DescriptionBlock from 'components/DescriptionBlock';
 import { buildPath } from 'features/general/Routes';
@@ -37,6 +38,7 @@ const PersonalDevelopmentPlan: FC = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const cycleType = useSelector(userCurrentCycleTypeSelector);
 
   const pdpSelector = useSelector(schemaMetaPDPSelector)?.goals || [];
   const colleagueUuid = useSelector(colleagueUUIDSelector);
@@ -90,7 +92,7 @@ const PersonalDevelopmentPlan: FC = () => {
 
   useEffect(() => {
     if (!loaded) {
-      dispatch(TimelineActions.getTimeline({ colleagueUuid }));
+      dispatch(TimelineActions.getTimeline({ colleagueUuid, cycleUuid: cycleType }));
     }
   }, [loaded]);
 

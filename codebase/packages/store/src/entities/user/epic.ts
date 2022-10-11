@@ -7,7 +7,6 @@ import { catchError, filter, map, mergeMap, switchMap, takeUntil, tap } from 'rx
 import {
   createProfileAttribute,
   getCurrentUser,
-  getCurrentUserMetadata,
   updateProfileAttribute,
   deleteProfileAttribute,
   getColleaguePerformanceCycles,
@@ -118,11 +117,15 @@ export const getColleaguePerformanceCyclesEpic: Epic = (actions$, _, { api }) =>
       from(
         api.getColleaguePerformanceCyclesByStatuses({
           colleagueUuid: colleague.colleagueUUID,
-          allowedStatuses: ['STARTED'],
+          allowedStatuses: ['STARTED', 'FINISHED'],
         }),
       ).pipe(
         //@ts-ignore
-        map(({ data }) => getColleaguePerformanceCycles.success(data.map(({ metadata }) => metadata.cycle))),
+        map(({ data }) =>
+          getColleaguePerformanceCycles.success(
+            data.map(({ endTime, startTime, uuid, type, status }) => ({ endTime, startTime, uuid, type, status })),
+          ),
+        ),
         catchError((e) => {
           const errors = e?.data?.errors;
           return of(getColleaguePerformanceCycles.failure(errors?.[0]));

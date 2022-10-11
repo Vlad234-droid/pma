@@ -2,6 +2,7 @@ import { Props } from '../CreateObjectives';
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
+  colleagueCurrentCycleSelector,
   colleagueUUIDSelector,
   ReviewsActions,
   reviewsMetaSelector,
@@ -27,6 +28,7 @@ export function withBasicData<P extends Props>(
 
     const defaultFormState = props.useSingleStep ? FormStateType.SINGLE_MODIFY : FormStateType.MODIFY;
     const [formState, setFormState] = useState<FormStateType>(defaultFormState);
+    const currentCycle = useSelector(colleagueCurrentCycleSelector);
 
     const { loading: schemaLoading } = useSelector(schemaMetaSelector);
     const {
@@ -44,10 +46,10 @@ export function withBasicData<P extends Props>(
 
     useEffect(() => {
       if (activeCode) {
-        const pathParams = { colleagueUuid, code: activeCode, cycleUuid: 'CURRENT' };
+        const pathParams = { colleagueUuid, code: activeCode, cycleUuid: currentCycle };
         dispatch(ReviewsActions.getReviews({ pathParams }));
       }
-    }, [activeCode]);
+    }, [activeCode, currentCycle]);
 
     useEffect(() => {
       if (reviewError !== null) {
