@@ -41,7 +41,6 @@ const Objectives = () => {
     meta: { loading, loaded },
   } = useObjectivesData(uuid, currentCycle);
 
-  console.log({ currentCycle });
   const timelineTypes = useSelector(timelineTypesAvailabilitySelector(colleagueUuid)) || {};
   const canShowObjectives = timelineTypes[ReviewType.OBJECTIVE];
 

@@ -26,8 +26,6 @@ const useObjectivesData = (uuid: string) => {
   const [objectives, setObjectives] = useState<Objective[]>([]);
   const currentCycle = useSelector(colleagueCurrentCycleSelector);
 
-  console.log({ currentCycle });
-
   useEffect(() => {
     dispatch(PreviousReviewFilesActions.getPreviousReviewFiles({ colleagueUUID: uuid }));
   }, []);
