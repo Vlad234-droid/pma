@@ -4,29 +4,33 @@ import removeMD from 'remove-markdown';
 
 import GeneralDocument from '../General';
 import { theme } from '@pma/dex-wrapper';
+import { Status } from '@pma/client/src/config/enum';
 
 type Explanation = {
   title: string;
   description?: string;
 };
 
-type Priority = {
+export type Objective = {
   id: number;
   title: string;
-  description: string;
   subTitle: string;
-  explanations: Explanation[];
+  description: string;
+  status: Status;
+  lastUpdatedTime: string;
+  uuid: string;
+  explanations?: Explanation[];
 };
 
 type Props = {
-  items: Priority[];
+  items: Objective[];
 };
 
 const PrioritiesDocument: FC<Props> = ({ items }) => {
   return (
     <GeneralDocument title={'Priorities'}>
       <View>
-        {items.map(({ id, title, subTitle, description, explanations }) => (
+        {items.map(({ id, title, subTitle, description, explanations = [] }) => (
           <View key={id}>
             <View>
               <View style={styles.subtitleWrapper}>
@@ -38,12 +42,13 @@ const PrioritiesDocument: FC<Props> = ({ items }) => {
             </View>
             <View>
               <Text style={styles.answer}>{description}</Text>
-              {explanations.map(({ description, title }, idx) => (
-                <View key={idx}>
-                  <Text style={styles.question}>{removeMD(title)}</Text>
-                  <Text style={styles.answer}>{description}</Text>
-                </View>
-              ))}
+              {!!explanations?.length &&
+                explanations.map(({ description, title }, idx) => (
+                  <View key={idx}>
+                    <Text style={styles.question}>{removeMD(title)}</Text>
+                    <Text style={styles.answer}>{description}</Text>
+                  </View>
+                ))}
             </View>
           </View>
         ))}

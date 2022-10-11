@@ -1,19 +1,19 @@
 import React, { FC, useMemo } from 'react';
 import { Rule, useStyle } from '@pma/dex-wrapper';
-import { Status } from 'config/enum';
-import { Icon } from 'components/Icon';
+import { getReviewsWithoutPriorityNote } from '@pma/store';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { buildPath } from 'features/general/Routes';
-import { paramsReplacer } from 'utils';
-import { Page } from 'pages';
-import { ObjectiveTypes } from 'features/general/Review';
 import { Trans } from 'components/Translation';
-import { useSelector } from 'react-redux';
-import { getReviewsWithoutPriorityNote } from '@pma/store';
+import { Icon } from 'components/Icon';
+import { Page } from 'pages';
+import { Status } from 'config/enum';
+import { paramsReplacer } from 'utils';
+import { Objective as ObjectiveTypes } from '../../type';
 import { Timeline } from 'config/types';
 
 type Props = {
-  objectives: ObjectiveTypes.Objective[];
+  objectives: ObjectiveTypes[];
   activeTimelinePoints: Timeline | undefined;
 };
 
