@@ -1,48 +1,73 @@
-import React, { FC, useMemo } from 'react';
-import { useSelector } from 'react-redux';
-import { Rule, useStyle } from '@pma/dex-wrapper';
-import { getTimelineByCodeSelector, userCycleTypeSelector, uuidCompareSelector } from '@pma/store';
-import { useNavigate } from 'react-router';
-import { useLocation } from 'react-router-dom';
+import React, { ChangeEvent, FC, useEffect, useMemo, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
+import {
+  getTimelineByCodeSelector,
+  isAnniversaryTimelineType,
+  uuidCompareSelector,
+  colleaguePerformanceCyclesSelector,
+  colleagueCurrentCycleSelector,
+} from '@pma/store';
 
-import { useTranslation } from 'components/Translation';
-//TODO: move to components
-import { ReviewWidget } from '../components/ReviewWidget';
-import { CycleType, ReviewType, Status } from 'config/enum';
 import { useTenant } from 'features/general/Permission';
+import { buildPath } from 'features/general/Routes';
+import { Page } from 'pages';
+import { useTranslation } from 'components/Translation';
+import { Select } from 'components/Form';
+import { ReviewWidget } from '../components/ReviewWidget';
+import { ReviewType, Status } from 'config/enum';
 import { getContent } from '../utils';
 import {
   formatDateStringFromISO,
   minusDayToDateString,
   DateTime,
   formatDateTime,
-  getLocalNow,
   paramsReplacer,
   minusMonthFromISODateString,
 } from 'utils';
-import { buildPath } from 'features/general/Routes';
-import { Page } from 'pages';
+import { changeColleagueCurrentCycles } from '@pma/store/src/entities/user/actions';
 
 type Props = {
   colleagueUuid: string;
 };
 
 const AnnualReview: FC<Props> = ({ colleagueUuid }) => {
+  const [value, setValue] = useState<string | undefined>();
   const { t } = useTranslation();
   const { css } = useStyle();
   const tenant = useTenant();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { pathname, state } = useLocation();
-
   const isUserView = useSelector(uuidCompareSelector(colleagueUuid));
-
   const review = useSelector(getTimelineByCodeSelector(ReviewType.EYR, colleagueUuid));
-  if (!review) {
-    return null;
-  }
-  const cycleType = useSelector(userCycleTypeSelector);
+  const isAnniversary = useSelector(isAnniversaryTimelineType(colleagueUuid));
+  const cycles = useSelector(colleaguePerformanceCyclesSelector);
+  const currentCycle = useSelector(colleagueCurrentCycleSelector);
 
-  const { summaryStatus, startTime, endTime, lastUpdatedTime } = review;
+  const options = useMemo(() => {
+    return [...cycles].reverse().map(({ endTime, startTime, uuid }) => ({
+      value: uuid,
+      label: `${formatDateStringFromISO(startTime, 'yyyy')} - ${formatDateStringFromISO(endTime, 'yyyy')}`,
+    }));
+  }, [cycles]);
+
+  useEffect(() => {
+    if (currentCycle !== 'CURRENT') {
+      setValue(currentCycle);
+    } else {
+      setValue(options[0]?.value);
+    }
+  }, [options]);
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    setValue(value);
+    dispatch(changeColleagueCurrentCycles(value));
+  };
+
+  const { summaryStatus, startTime, endTime, lastUpdatedTime } = review || {};
 
   const [graphic, iconColor, background, shadow, hasDescription, content, buttonText] = useMemo(
     () =>
@@ -57,12 +82,6 @@ const AnnualReview: FC<Props> = ({ colleagueUuid }) => {
       ),
     [summaryStatus, startTime, lastUpdatedTime],
   );
-
-  if (
-    cycleType === CycleType.HIRING &&
-    (DateTime.fromISO(endTime) < getLocalNow() || DateTime.fromISO(startTime) > getLocalNow())
-  )
-    return null;
 
   const disabled = isUserView
     ? summaryStatus === Status.NOT_STARTED
@@ -89,7 +108,8 @@ const AnnualReview: FC<Props> = ({ colleagueUuid }) => {
           )
         }
         title={
-          cycleType === CycleType.FISCAL
+          //@ts-ignore
+          !isAnniversary
             ? t('annual_performance_review', 'Annual performance review')
             : t('anniversary_review', 'Anniversary Review')
         }
@@ -97,10 +117,10 @@ const AnnualReview: FC<Props> = ({ colleagueUuid }) => {
           hasDescription
             ? summaryStatus === Status.APPROVED
               ? t('end_year_review_widget_title_approved', 'Your year-end review is complete.')
-              : cycleType === CycleType.HIRING && summaryStatus === Status.STARTED
+              : isAnniversary && summaryStatus === Status.STARTED
               ? t('performance_period_duration', {
-                  startDate: formatDateStringFromISO(startTime, 'LLL yyyy'),
-                  endDate: formatDateTime(minusMonthFromISODateString(endTime), 'LLL yyyy'),
+                  startDate: formatDateStringFromISO(startTime as string, 'LLL yyyy'),
+                  endDate: formatDateTime(minusMonthFromISODateString(endTime as string), 'LLL yyyy'),
                 })
               : t(
                   'end_year_review_widget_title',
@@ -111,22 +131,31 @@ const AnnualReview: FC<Props> = ({ colleagueUuid }) => {
         disabled={disabled}
         graphic={graphic}
         iconColor={iconColor}
-        background={cycleType === CycleType.FISCAL ? background : 'white'}
+        //@ts-ignore
+        background={!isAnniversary ? background : 'white'}
         shadow={shadow}
         content={
-          cycleType === CycleType.HIRING && summaryStatus === Status.STARTED
+          isAnniversary && summaryStatus === Status.STARTED
             ? t(
                 'your_review_due_by_date',
                 `Your performance review form is due by ${formatDateTime(
-                  minusDayToDateString(DateTime.fromISO(endTime)),
+                  minusDayToDateString(DateTime.fromISO(endTime as string)),
                   'dd LLL yyyy',
                 )}`,
-                { date: formatDateTime(minusDayToDateString(DateTime.fromISO(endTime)), 'dd LLL yyyy') },
+                { date: formatDateTime(minusDayToDateString(DateTime.fromISO(endTime as string)), 'dd LLL yyyy') },
               )
             : content
         }
         buttonText={buttonText}
         customStyle={{ height: '100%' }}
+        renderHeader={({ title, titleColor }) => (
+          <div className={css(headerStyle)}>
+            <div className={css(titleStyle({ color: titleColor }))}>{title}</div>
+            <div className={css(selectStyle)}>
+              <Select options={options} onChange={handleChange} name={'period'} placeholder={''} value={value} />
+            </div>
+          </div>
+        )}
       />
     </div>
   );
@@ -137,3 +166,24 @@ export default AnnualReview;
 const basicTileStyle: Rule = {
   flex: '1 0 230px',
 };
+
+const headerStyle: Rule = {
+  display: 'flex',
+  gap: '15px',
+  justifyContent: 'space-between',
+};
+
+const selectStyle: Rule = {
+  zIndex: 1,
+};
+
+const titleStyle: CreateRule<{ color: string }> =
+  ({ color }) =>
+  ({ theme }) => ({
+    ...theme.font.fixed.f18,
+    letterSpacing: '0px',
+    fontStyle: 'normal',
+    fontWeight: theme.font.weight.bold,
+    marginBottom: '12px',
+    color,
+  });

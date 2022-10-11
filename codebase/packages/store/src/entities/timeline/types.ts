@@ -3,6 +3,7 @@ import { Meta } from '../../config/types';
 
 export type RequestPayload = {
   colleagueUuid: string;
+  cycleUuid: string;
 };
 
 export type SuccessPayload = {

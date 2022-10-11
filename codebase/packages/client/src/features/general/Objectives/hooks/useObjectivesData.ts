@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import {
   ColleagueActions,
   filterReviewsByTypeSelector,
@@ -10,7 +11,6 @@ import {
   schemaMetaSelector,
   TimelineActions,
 } from '@pma/store';
-import { useSelector } from 'react-redux';
 
 //TODO: move utils to current feature
 import { ObjectiveTypes as OT, transformReviewsToObjectives } from 'features/general/Review';
@@ -18,7 +18,7 @@ import { ObjectiveTypes as OT, transformReviewsToObjectives } from 'features/gen
 import { ReviewType } from 'config/enum';
 import useDispatch from 'hooks/useDispatch';
 
-const useObjectivesData = (uuid: string) => {
+const useObjectivesData = (uuid: string, currentCycle?: string) => {
   const dispatch = useDispatch();
   const { loaded: schemaLoaded, loading: schemaLoading } = useSelector(schemaMetaSelector);
   const { loaded: reviewLoaded, loading: reviewLoading } = useSelector(reviewsMetaSelector);
@@ -40,11 +40,11 @@ const useObjectivesData = (uuid: string) => {
   }, [reviewLoaded, schemaLoaded, JSON.stringify(formElements)]);
 
   useEffect(() => {
-    dispatch(ReviewsActions.getReviews({ pathParams: { colleagueUuid: uuid, cycleUuid: 'CURRENT' } }));
-    dispatch(TimelineActions.getUserTimeline({ colleagueUuid: uuid }));
+    dispatch(ReviewsActions.getReviews({ pathParams: { colleagueUuid: uuid, cycleUuid: currentCycle || 'CURRENT' } }));
+    dispatch(TimelineActions.getUserTimeline({ colleagueUuid: uuid, cycleUuid: currentCycle || 'CURRENT' }));
     dispatch(SchemaActions.getSchema({ colleagueUuid: uuid }));
     dispatch(ColleagueActions.getColleagueByUuid({ colleagueUuid: uuid }));
-  }, [uuid]);
+  }, [uuid, currentCycle]);
 
   return { objectives, meta: { loaded: schemaLoaded && reviewLoaded, loading: schemaLoading || reviewLoading } };
 };

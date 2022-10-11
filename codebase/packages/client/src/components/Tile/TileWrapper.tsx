@@ -53,7 +53,7 @@ const containerStyle: CreateRule<{ hover: boolean; background: Colors }> =
         ...style,
         '&:hover': {
           ...(background === 'white' ? { background: '#F3F9FC', opacity: 0.9 } : { opacity: 0.8 }),
-          cursor: 'pointer',
+          //cursor: 'pointer',
         },
       };
     }

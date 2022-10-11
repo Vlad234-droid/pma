@@ -2,6 +2,7 @@ import React, { FC, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import {
+  colleagueCurrentCycleSelector,
   colleagueUUIDSelector,
   ObjectiveSharingActions,
   SchemaActions,
@@ -25,6 +26,7 @@ const MyObjectives: FC = () => {
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const timelinesExist = useSelector(timelinesExistSelector(colleagueUuid));
   const { loaded: timelinesLoaded } = useSelector(timelinesMetaSelector);
+  const currentCycle = useSelector(colleagueCurrentCycleSelector);
 
   useEffect(() => {
     colleagueUuid && dispatch(ObjectiveSharingActions.checkSharing({ colleagueUuid, cycleUuid: CURRENT }));
@@ -33,7 +35,7 @@ const MyObjectives: FC = () => {
 
   useEffect(() => {
     if (colleagueUuid) {
-      dispatch(TimelineActions.getTimeline({ colleagueUuid }));
+      dispatch(TimelineActions.getTimeline({ colleagueUuid, cycleUuid: currentCycle }));
     }
   }, [colleagueUuid]);
 

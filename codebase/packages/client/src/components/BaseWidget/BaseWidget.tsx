@@ -67,7 +67,7 @@ const wrapperStyle: CreateRule<{ background: Colors }> =
       height: '100%',
       color: `${background === 'tescoBlue' ? theme.colors.white : theme.colors.tescoBlue}`,
       width: '100%',
-      cursor: 'pointer',
+      // cursor: 'pointer',
       justifyContent: 'space-between',
       alignItems: 'center',
       flexDirection: 'column',

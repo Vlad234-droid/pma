@@ -14,7 +14,7 @@ export const getFullName = (profile) => {
 
 export const colleagueUUIDSelector = (state: RootState) => {
   const users = usersSelector(state);
-  return users.current.info?.colleague?.colleagueUUID;
+  return users.current.info?.colleague?.colleagueUUID as string;
 };
 
 export const uuidCompareSelector = (uuid) => (state) => {
@@ -27,9 +27,10 @@ export const getUserRoles = (state: RootState) => {
   return users.current.info?.roles;
 };
 
-export const userCycleTypeSelector = (state: RootState) => {
+export const userCurrentCycleTypeSelector = (state: RootState) => {
   const users = usersSelector(state);
-  return users.current.metadata?.cycle?.cycleType;
+  const { metadata } = users.current;
+  return metadata?.currentCycle;
 };
 
 export const getUserWorkLevels = createSelector(usersSelector, ({ current }) => {
@@ -87,3 +88,13 @@ export const currentUserSelector = createSelector(usersSelector, ({ current }) =
 });
 
 export const currentUserMetaSelector = createSelector(usersSelector, ({ meta }) => meta);
+
+export const colleaguePerformanceCyclesSelector = (state: RootState) => {
+  const users = usersSelector(state);
+  return users.current.metadata.cycles;
+};
+
+export const colleagueCurrentCycleSelector = (state: RootState) => {
+  const users = usersSelector(state);
+  return users.current.metadata.currentCycle;
+};

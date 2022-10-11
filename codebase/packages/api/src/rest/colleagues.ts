@@ -30,3 +30,12 @@ export const getColleague = (params: { colleagueUuid: string }) => {
   const { colleagueUuid } = params;
   return httpClient.get(`${domain}/${colleagueUuid}`);
 };
+
+export const getColleaguePerformanceCyclesByStatuses = ({
+  colleagueUuid,
+  allowedStatuses,
+}: {
+  colleagueUuid: string;
+  allowedStatuses: string[];
+}) =>
+  httpClient.get(`${domain}/${colleagueUuid}/pm-cycles/`, { params: { allowedStatuses: allowedStatuses.toString() } });

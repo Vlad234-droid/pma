@@ -1,4 +1,4 @@
-import React, { FC, CSSProperties } from 'react';
+import React, { FC, CSSProperties, ReactNode } from 'react';
 import { Button, colors, CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
 
 import { TileWrapper } from 'components/Tile';
@@ -17,6 +17,7 @@ export type Props = {
   subTitle?: string;
   description?: string;
   customStyle?: CSSProperties | {};
+  renderHeader?: ({ title, titleColor }: { title: string; titleColor: string }) => ReactNode;
   onClick: () => void;
 };
 
@@ -34,6 +35,7 @@ const ReviewWidget: FC<Props> = ({
   buttonText,
   title,
   subTitle,
+  renderHeader,
   description,
   onClick,
 }) => {
@@ -49,21 +51,23 @@ const ReviewWidget: FC<Props> = ({
 
   return (
     <TileWrapper customStyle={{ ...customStyle }} hover={shadow} boarder={shadow} background={background}>
-      <div className={css(wrapperStyle)} onMouseDown={handleOpen} data-test-id={TEST_ID}>
-        <div className={css(headStyle)}>
-          <div className={css(headerBlockStyle)}>
-            <span className={css(titleStyle({ color: titleColor }))}>{title}</span>
-            {subTitle && <span className={css(descriptionStyle({ color: descriptionColor }))}>{subTitle}</span>}
-            {description && <span className={css(descriptionStyle({ color: descriptionColor }))}>{description}</span>}
-            <span className={css(descriptionStyle({ color: descriptionColor }), iconWrapper)}>
-              <Icon
-                graphic={graphic}
-                iconStyles={{ verticalAlign: 'middle', margin: '0px 10px 0px 0px' }}
-                backgroundRadius={12}
-                fill={colors[iconColor]}
-              />
-              {content}
-            </span>
+      <div className={css(wrapperStyle)} data-test-id={TEST_ID}>
+        <div className={css(headerBlockStyle)}>
+          {renderHeader ? (
+            renderHeader({ title, titleColor })
+          ) : (
+            <h2 className={css(titleStyle({ color: titleColor }))}>{title}</h2>
+          )}
+          {subTitle && <p className={css(descriptionStyle({ color: descriptionColor }))}>{subTitle}</p>}
+          {description && <p className={css(descriptionStyle({ color: descriptionColor }))}>{description}</p>}
+          <div className={css(descriptionStyle({ color: descriptionColor }), iconWrapper)}>
+            <Icon
+              graphic={graphic}
+              iconStyles={{ verticalAlign: 'middle', margin: '0px 10px 0px 0px' }}
+              backgroundRadius={12}
+              fill={colors[iconColor]}
+            />
+            {content}
           </div>
         </div>
         {!disabled && (
@@ -90,10 +94,6 @@ const wrapperStyle: Rule = {
   height: '100%',
   justifyContent: 'space-between',
   flexDirection: 'column',
-  display: 'flex',
-};
-
-const headStyle: Rule = {
   display: 'flex',
 };
 
@@ -125,11 +125,11 @@ const descriptionStyle: CreateRule<{ color: string }> =
     position: 'relative',
     fontStyle: 'normal',
     fontWeight: 'normal',
+    margin: '0 0 12px',
     color,
   });
 
 const iconWrapper: Rule = ({ theme }) => ({
-  paddingTop: '16px',
   display: 'flex',
   alignItems: 'center',
   lineHeight: theme.font.fixed.f18.lineHeight,

@@ -14,7 +14,7 @@ const MyNotesView: FC = () => {
     <BaseWidget
       iconGraphic={'edit'}
       title={t('my_notes', 'My Notes')}
-      customStyle={{ flex: '2 1 110px' }}
+      customStyle={{ flex: '2 1 110px', cursor: 'pointer' }}
       onClick={() => navigate(buildPath(Page.NOTES))}
     />
   );

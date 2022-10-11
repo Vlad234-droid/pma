@@ -7,9 +7,9 @@ import { catchError, filter, map, mergeMap, switchMap, takeUntil, tap } from 'rx
 import {
   createProfileAttribute,
   getCurrentUser,
-  getCurrentUserMetadata,
   updateProfileAttribute,
   deleteProfileAttribute,
+  getColleaguePerformanceCycles,
 } from './actions';
 
 const NUMBER_OF_DEFAULT_ATTRIBUTES = 18;
@@ -47,22 +47,22 @@ export const getCurrentUserEpic: Epic = (action$, _, { openapi }) =>
     ),
   );
 
-export const getUserMetadataEpic: Epic = (action$, _, { api }) =>
-  action$.pipe(
-    filter(isActionOf(getCurrentUser.success)),
-    //@ts-ignore
-    switchMap(({ payload: { colleague } }) => {
-      return from(api.getColleagueMetadata({ colleagueUuid: colleague.colleagueUUID, includeForms: false })).pipe(
-        //@ts-ignore
-        map(({ data }) => getCurrentUserMetadata.success(data)),
-        catchError((e) => {
-          const { data } = e || {};
-          const errors = data?.errors;
-          return of(getCurrentUserMetadata.failure(errors?.[0]));
-        }),
-      );
-    }),
-  );
+// export const getUserMetadataEpic: Epic = (action$, _, { api }) =>
+//   action$.pipe(
+//     filter(isActionOf(getCurrentUser.success)),
+//     //@ts-ignore
+//     switchMap(({ payload: { colleague } }) => {
+//       return from(api.getColleagueMetadata({ colleagueUuid: colleague.colleagueUUID, includeForms: false })).pipe(
+//         //@ts-ignore
+//         map(({ data }) => getCurrentUserMetadata.success(data)),
+//         catchError((e) => {
+//           const { data } = e || {};
+//           const errors = data?.errors;
+//           return of(getCurrentUserMetadata.failure(errors?.[0]));
+//         }),
+//       );
+//     }),
+//   );
 
 export const createProfileAttributeEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
@@ -76,7 +76,7 @@ export const createProfileAttributeEpic: Epic = (action$, _, { api }) =>
     ),
   );
 
-export const updateProfileAttributesEpic: Epic = (action$, state$, { api }) =>
+export const updateProfileAttributesEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
     filter(isActionOf(updateProfileAttribute.request)),
     switchMap(({ payload }) =>
@@ -92,7 +92,7 @@ export const updateProfileAttributesEpic: Epic = (action$, state$, { api }) =>
     ),
   );
 
-export const deleteProfileAttributesEpic: Epic = (action$, state$, { api }) =>
+export const deleteProfileAttributesEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
     filter(isActionOf(deleteProfileAttribute.request)),
     switchMap(({ payload }) =>
@@ -108,10 +108,37 @@ export const deleteProfileAttributesEpic: Epic = (action$, state$, { api }) =>
     ),
   );
 
+export const getColleaguePerformanceCyclesEpic: Epic = (actions$, _, { api }) =>
+  actions$.pipe(
+    filter(isActionOf(getCurrentUser.success)),
+    //@ts-ignore
+    switchMap(({ payload: { colleague } }) =>
+      //@ts-ignore
+      from(
+        api.getColleaguePerformanceCyclesByStatuses({
+          colleagueUuid: colleague.colleagueUUID,
+          allowedStatuses: ['STARTED', 'FINISHED'],
+        }),
+      ).pipe(
+        //@ts-ignore
+        map(({ data }) =>
+          getColleaguePerformanceCycles.success(
+            data.map(({ endTime, startTime, uuid, type, status }) => ({ endTime, startTime, uuid, type, status })),
+          ),
+        ),
+        catchError((e) => {
+          const errors = e?.data?.errors;
+          return of(getColleaguePerformanceCycles.failure(errors?.[0]));
+        }),
+      ),
+    ),
+  );
+
 export default combineEpics(
   getCurrentUserEpic,
-  getUserMetadataEpic,
+  // getUserMetadataEpic,
   createProfileAttributeEpic,
   updateProfileAttributesEpic,
   deleteProfileAttributesEpic,
+  getColleaguePerformanceCyclesEpic,
 );
