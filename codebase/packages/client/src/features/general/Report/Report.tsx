@@ -1,6 +1,6 @@
 import React, { FC, useCallback, useState, useMemo } from 'react';
 import { CreateRule, Rule, Styles, useStyle } from '@pma/dex-wrapper';
-import { colleaguesCountSelector, getReportMetaSelector } from '@pma/store';
+import { getReportMetaSelector } from '@pma/store';
 import { useSelector } from 'react-redux';
 
 import { buildPath, buildPathWithParams } from 'features/general/Routes';
@@ -13,12 +13,10 @@ import Spinner from 'components/Spinner';
 import { PieChart } from 'components/PieChart';
 import { Select } from 'components/Form';
 import { Trans, useTranslation } from 'components/Translation';
-import { ColleaguesCount } from 'components/ColleaguesCount';
 import { HoverContainer } from 'components/HoverContainer';
 import UnderlayModal from 'components/UnderlayModal';
 import FilterModal from './components/FilterModal';
 import { Page } from 'pages';
-
 import useQueryString from 'hooks/useQueryString';
 import { getReportData } from './hooks';
 import ChartWidget from './widgets/ChartWidget';
@@ -59,7 +57,10 @@ const Report: FC = () => {
 
   getReportData(query, year);
 
-  const colleaguesCount = useSelector(colleaguesCountSelector) || 0;
+  {
+    /*//TODO: restore back when backend will be ready*/
+  }
+  // const colleaguesCount = useSelector(colleaguesCountSelector) || 0;
 
   const changeYearHandler = (value) => {
     if (!value) return;
@@ -131,7 +132,8 @@ const Report: FC = () => {
               value={getCurrentValue(query, year)}
             />
           </form>
-          <ColleaguesCount count={colleaguesCount} countStyles={countStyles} />
+          {/*//TODO: restore back when backend will be ready*/}
+          {/*<ColleaguesCount count={colleaguesCount} countStyles={countStyles} />*/}
         </div>
 
         <div className={css(flexCenterStyled)}>

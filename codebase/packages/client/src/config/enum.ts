@@ -43,7 +43,7 @@ export enum ReviewType {
   EYR = 'EYR',
 }
 export enum ReportType {
-  NTB = 'NEW-TO-BUSINESS',
+  NTB = 'NEW_TO_BUSINESS',
   FEEDBACK = 'FEEDBACK',
   OBJECTIVE = 'OBJECTIVE',
   MYR = 'MYR',

@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux';
 import UnderlayModal from 'components/UnderlayModal';
 import { useTranslation } from 'components/Translation';
 import { ColleaguesCount } from 'components/ColleaguesCount';
+
 import { ColleaguesStatistics } from 'features/general/Report/widgets';
 import FilterModal from 'features/general/Report/components/FilterModal';
 import StatisticsReviews from 'features/general/ColleaguesReviews';
@@ -23,56 +24,47 @@ import { convertToReportEnum } from 'features/general/ColleaguesReviews/utils';
 import { Page } from 'pages';
 import { ReportType } from 'config/enum';
 
-const getConfigReviewsKeys = (type): { key: string; configType: ReportType; configKey: Array<string> } => {
+const getConfigReviewsKeys = (type): { key: string; configType: ReportType } => {
   const page = {
     [ReportPage.REPORT_APPROVED_OBJECTIVES]: {
       key: 'review',
-      configKeys: ['approved'],
       configType: ReportType.OBJECTIVE,
     },
     [ReportPage.REPORT_SUBMITTED_OBJECTIVES]: {
       key: 'review',
-      configKeys: ['not-submitted', 'submitted'],
       configType: ReportType.OBJECTIVE,
     },
     [ReportPage.REPORT_MID_YEAR_REVIEW]: {
       key: 'review',
-      configKeys: ['not-submitted', 'submitted', 'approved'],
       configType: ReportType.MYR,
     },
     [ReportPage.REPORT_END_YEAR_REVIEW]: {
       key: 'review',
-      configKeys: ['not-submitted', 'submitted', 'approved'],
       configType: ReportType.EYR,
     },
     [ReportPage.REPORT_MYR_BREAKDOWN]: {
       key: 'overallRatings',
-      configKeys: ['Great', 'Below expected', 'Outstanding', 'Satisfactory'],
+
       configType: ReportType.MYR,
     },
     [ReportPage.REPORT_EYR_BREAKDOWN]: {
       key: 'overallRatings',
-      configKeys: ['Great', 'Below expected', 'Outstanding', 'Satisfactory'],
       configType: ReportType.EYR,
     },
     [ReportPage.REPORT_WORK_LEVEL]: {
       key: 'leadershipReviews',
-      configKeys: ['approved'],
       configType: ReportType.OBJECTIVE,
     },
     [ReportPage.REPORT_NEW_TO_BUSINESS]: {
       key: 'newToBusiness',
-      configKeys: ['new-to-business'],
       configType: ReportType.NTB,
     },
     [ReportPage.REPORT_FEEDBACK]: {
       key: 'feedbacks',
-      configKeys: ['given', 'requested'],
       configType: ReportType.FEEDBACK,
     },
     [ReportPage.REPORT_ANNIVERSARY_REVIEWS]: {
       key: 'anniversaryReviews',
-      configKeys: ['quarter1', 'quarter2', 'quarter3', 'quarter4'],
       configType: ReportType.EYR,
     },
   };
@@ -160,7 +152,9 @@ const ReportStatistics = () => {
         />
       </div>
 
-      <ColleaguesCount countStyles={countStyles} count={totalCount} />
+      {type !== ReportPage.REPORT_NEW_TO_BUSINESS && type !== ReportPage.REPORT_FEEDBACK && (
+        <ColleaguesCount countStyles={countStyles} count={totalCount} />
+      )}
 
       <div className={css(header({ mobileScreen }))}>
         <div className={css(flexCenterStyled)}>

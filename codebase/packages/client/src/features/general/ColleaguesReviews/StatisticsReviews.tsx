@@ -40,10 +40,10 @@ const getReviewsTitles = (type): List => {
       titles: { 'not-submitted': [], submitted: [], approved: [] },
     },
     [ReportPage.REPORT_MYR_BREAKDOWN]: {
-      titles: { Great: [], 'Below expected': [], Outstanding: [], Satisfactory: [] },
+      titles: { 'Below expected': [], Great: [], Outstanding: [], Satisfactory: [] },
     },
     [ReportPage.REPORT_EYR_BREAKDOWN]: {
-      titles: { Great: [], 'Below expected': [], Outstanding: [], Satisfactory: [] },
+      titles: { 'Below expected': [], Great: [], Outstanding: [], Satisfactory: [] },
     },
     [ReportPage.REPORT_WORK_LEVEL]: {
       titles: { approved: [] },

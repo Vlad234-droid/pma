@@ -114,5 +114,17 @@ export const useChartDataStatistics = (configKey: ReportPage): Array<Data> => {
   if (configKey === ReportPage.REPORT_WORK_LEVEL) {
     return chart.filter((item) => item.title === 'Approved');
   }
+
+  if (configKey === ReportPage.REPORT_ANNIVERSARY_REVIEWS) {
+    const order = ['Quarter 1', 'Quarter 2', 'Quarter 3', 'Quarter 4'];
+    //@ts-ignore
+    return chart.sort((a, b) => order.indexOf(a.title) - order.indexOf(b.title));
+  }
+  //@ts-ignore
+  if (configKey === ReportPage.REPORT_MYR_BREAKDOWN || configKey === ReportPage.REPORT_EYR_BREAKDOWN) {
+    const order = ['Below expected', 'Satisfactory', 'Great', 'Outstanding'];
+    //@ts-ignore
+    return chart.sort((a, b) => order.indexOf(a.title) - order.indexOf(b.title));
+  }
   return chart.filter((item) => item.title !== 'Not submitted');
 };
