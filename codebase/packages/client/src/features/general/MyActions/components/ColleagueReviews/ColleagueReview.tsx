@@ -1,10 +1,12 @@
 import React, { FC, useEffect, useMemo } from 'react';
+import { useSelector } from 'react-redux';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Rule, useStyle } from '@pma/dex-wrapper';
 import { FormType, isAnniversaryTimelineType } from '@pma/store';
 
 import { createYupSchema } from 'utils/yup';
+import { getYearFromISO } from 'utils';
 import { Input, Item, Select, Textarea, Field } from 'components/Form';
 import { useTranslation } from 'components/Translation';
 import { TileWrapper } from 'components/Tile';
@@ -16,7 +18,6 @@ import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
 import FileList from 'components/FileList';
 import { getReviewFileLink } from 'utils/review';
 import { Timeline } from 'config/types';
-import { useSelector } from 'react-redux';
 
 type Props = {
   review: any;
@@ -64,7 +65,9 @@ const ColleagueReview: FC<Props> = ({ colleagueUuid, review, timeline, schema, v
   } = methods;
 
   const title = isAnniversary
-    ? t('anniversary_review', 'Anniversary review')
+    ? `${t('anniversary_review', 'Anniversary review')} ${getYearFromISO(timeline?.startTime)}-${getYearFromISO(
+        timeline?.endTime,
+      )}`
     : t(`review_type_description_${timeline.code?.toLowerCase()}`, timeline.code, {
         num: review.number,
       });
