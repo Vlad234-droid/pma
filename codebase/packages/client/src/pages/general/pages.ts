@@ -35,6 +35,7 @@ import { EditTip, TipsAdministration } from './Tips';
 import UserObjectives, { CreateObjective } from './UserObjectives';
 import PeopleTeam from './PeopleTeam';
 import Calibration from './Calibration';
+import NewCalibration from './NewCalibration';
 import RespondNewFeedback from './RespondNewFeedback';
 import ReportStatistics from './ReportStatistics';
 import CalibrationRatings from './CalibrationRatings';
@@ -89,6 +90,13 @@ const pages: Record<Page, PageComponent> = {
     title: (_, t) => t('title_people_team'),
     withHeader: true,
     backPath: Page.CONTRIBUTION,
+    perform: [role.LINE_MANAGER],
+    tenant: [Tenant.BANK, Tenant.GENERAL],
+  },
+  [Page.NEW_CALIBRATION]: {
+    Element: NewCalibration,
+    title: (_, t) => t('calibration'),
+    withHeader: true,
     perform: [role.LINE_MANAGER],
     tenant: [Tenant.BANK, Tenant.GENERAL],
   },

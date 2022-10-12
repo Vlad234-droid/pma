@@ -25,6 +25,7 @@ enum Page {
   KNOWLEDGE_LIBRARY = 'knowledge-library',
   KNOWLEDGE_LIBRARY_BY_ID = ':countryCode/knowledge-library/:id',
   PEOPLE_TEAM = 'people-team',
+  NEW_CALIBRATION = 'calibration',
   CALIBRATION = 'calibration/:type',
   NOTES = 'notes',
   NOTES_INFO = 'notes/info',
