@@ -97,11 +97,7 @@ const MyActions: FC<Props> = ({ status, searchValue, sortValue, isCheckedAll }) 
               <div className={css(optionWrapperStyle)}>
                 <div data-test-id='colleague-list'>
                   {colleagues?.map((colleague) => (
-                    <div
-                      data-test-id={`colleague-wrapper-${colleague.uuid}`}
-                      key={colleague.uuid}
-                      className={css(wrapperStyle)}
-                    >
+                    <div key={colleague.uuid} className={css(wrapperStyle)}>
                       <div className={css(checkboxWrapperStyle)}>
                         {status === ActionStatus.PENDING && (
                           <div className={css(checkboxPositionStyle)}>
