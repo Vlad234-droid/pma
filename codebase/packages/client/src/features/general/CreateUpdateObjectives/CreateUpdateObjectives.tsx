@@ -147,17 +147,12 @@ const CreateUpdateObjectives: FC<Props> = ({ onClose, editNumber, useSingleStep,
   const handlePrev = () => setCurrentNumber((current) => Math.max(--current, 1));
   const handleNext = () => setCurrentNumber((current) => Math.min(++current, markupMin));
 
-  if (isSuccess && saved)
-    return (
-      <SuccessModal
-        title={t('objectives_sent', 'Objectives sent')}
-        onClose={onClose}
-        description={t(
-          'your_objectives_has_been_sent_to_your_line_manager',
-          'Your objectives has been sent to your line manager.',
-        )}
-      />
-    );
+  if (isSuccess && saved) {
+    const description = isSingleStep
+      ? t('your_objective_has_been_sent_to_your_line_manager', 'Your objective has been sent to your line manager.')
+      : t('your_objectives_has_been_sent_to_your_line_manager', 'Your objectives has been sent to your line manager.');
+    return <SuccessModal title={t('objectives_sent', 'Objectives sent')} onClose={onClose} description={description} />;
+  }
   if (schemaLoading || reviewLoading || saving) return <Spinner fullHeight />;
   if (!schemaLoaded || !reviewLoaded) return null;
 

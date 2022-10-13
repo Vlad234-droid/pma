@@ -173,6 +173,10 @@ const ObjectiveForm: FC<Props> = ({
                       onSave={handleSubmit(onSubmit)}
                       disabledBtnTooltip={t('action_enabled', 'Action enabled when mandatory fields are completed')}
                       styles={[buttonBlueStyle({ disabled: !isValid })]}
+                      confirmationTitle={multiply ? undefined : 'Submit Objective'}
+                      confirmationDescription={
+                        multiply ? undefined : 'Are you sure you want to submit objective to your manager?'
+                      }
                     />
                   ) : (
                     <IconButton
