@@ -5,13 +5,13 @@ import { useTranslation } from 'components/Translation';
 
 import BaseWidget from 'components/BaseWidget';
 
-const DownloadReport: FC = () => {
+const CalibrationSession: FC = () => {
   const { t } = useTranslation();
 
   return (
     <BaseWidget
-      iconGraphic={'download'}
-      title={t('download_report', 'Download report')}
+      iconGraphic={'chart'}
+      title={t('calibration_sessions', 'Calibration sessions')}
       onClick={console.log}
       hover={false}
       withButton={false}
@@ -31,6 +31,6 @@ const DownloadReport: FC = () => {
   );
 };
 
-export default DownloadReport;
+export default CalibrationSession;
 
 const tileWrapperStyles: Rule = { minWidth: '350px' };

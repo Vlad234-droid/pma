@@ -5,9 +5,10 @@ import { Icon, IconProps } from 'components/Icon';
 import { Button, Rule, Styles, useStyle, Colors, CreateRule } from '@pma/dex-wrapper';
 
 export type Props = {
-  iconGraphic: IconProps['graphic'];
+  iconGraphic?: IconProps['graphic'];
   title: string;
   data?: string;
+  number?: string;
   type?: string;
   date?: string;
   onClick?: () => void;
@@ -27,7 +28,7 @@ const BaseWidget: FC<Props> = ({
   description,
   customStyle,
   onClick,
-  date,
+  number,
   withButton = true,
   background = 'white',
   hover = true,
@@ -38,10 +39,10 @@ const BaseWidget: FC<Props> = ({
     <TileWrapper customStyle={customStyle} hover={hover} background={background}>
       <div className={css(wrapperStyle({ background }))} onClick={onClick} data-test-id={TEST_ID}>
         <div className={css(headStyle)}>
-          <Icon graphic={iconGraphic} invertColors={background === 'tescoBlue'} />
+          {iconGraphic && <Icon graphic={iconGraphic} invertColors={background === 'tescoBlue'} />}
           <span className={css(titleStyle)}>{title}</span>
+          {number && <span className={css(numberStyle({ background }))}>{number}</span>}
           {data && <span className={css(descriptionStyle({ background }))}>{data}</span>}
-          {date && <span className={css(descriptionStyle({ background }))}>{date}</span>}
           <span className={css(descriptionStyle({ background }))}>{description}</span>
         </div>
         {withButton && (
@@ -87,12 +88,11 @@ const headStyle = {
 } as Styles;
 
 const titleStyle: Rule = ({ theme }) => {
-  const mobileScreen = theme.breakpoints.small || theme.breakpoints.xSmall;
   return {
     fontStyle: 'normal',
     fontWeight: 'bold',
-    fontSize: mobileScreen ? theme.font.fixed.f18.fontSize : theme.font.fixed.f20.fontSize,
-    lineHeight: mobileScreen ? theme.font.fixed.f16.lineHeight : '22px',
+    fontSize: theme.font.fixed.f20.fontSize,
+    lineHeight: theme.font.fixed.f20.lineHeight,
     letterSpacing: '0px',
     marginBottom: '4px',
     textAlign: 'center',
@@ -111,6 +111,19 @@ const descriptionStyle: CreateRule<{ background: Colors }> =
       lineHeight: mobileScreen ? '16px' : theme.font.fixed.f16.lineHeight,
       letterSpacing: '0px',
       color: background === 'tescoBlue' ? theme.colors.white : theme.colors.base,
+      textAlign: 'center',
+    };
+  };
+const numberStyle: CreateRule<{ background: Colors }> =
+  ({ background }) =>
+  ({ theme }) => {
+    return {
+      fontStyle: 'normal',
+      fontWeight: 'bold',
+      fontSize: theme.font.fixed.f24.fontSize,
+      lineHeight: theme.font.fixed.f24.lineHeight,
+      letterSpacing: '0px',
+      color: background === 'tescoBlue' ? theme.colors.white : theme.colors.tescoBlue,
       textAlign: 'center',
     };
   };

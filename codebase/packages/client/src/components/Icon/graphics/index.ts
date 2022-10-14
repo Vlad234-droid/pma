@@ -60,6 +60,7 @@ import { Person } from './person';
 import { Link } from './link';
 import { FileAttached } from './fileAttached';
 import { Upload } from './upload';
+import { Chart } from './chart';
 
 /**
  * Each icon we add needs to have viewbox set to "0 0 24 24".
@@ -128,6 +129,7 @@ export type Graphics =
   | 'person'
   | 'link'
   | 'fileAttached'
+  | 'chart'
   | 'upload';
 
 export const icons: Record<Graphics, FCGraphicProps> = {
@@ -193,4 +195,5 @@ export const icons: Record<Graphics, FCGraphicProps> = {
   link: Link,
   fileAttached: FileAttached,
   upload: Upload,
+  chart: Chart,
 };

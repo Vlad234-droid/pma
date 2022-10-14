@@ -5,16 +5,17 @@ import { useTranslation } from 'components/Translation';
 
 import BaseWidget from 'components/BaseWidget';
 
-const DownloadReport: FC = () => {
+const CalibrationsCompleted: FC<{ number?: string }> = ({ number = '0' }) => {
   const { t } = useTranslation();
 
   return (
     <BaseWidget
-      iconGraphic={'download'}
-      title={t('download_report', 'Download report')}
+      title={t('calibrations_completed', 'Calibrations Completed')}
       onClick={console.log}
       hover={false}
       withButton={false}
+      number={number}
+      description={t('calibrations', 'Calibrations')}
       customStyle={{
         fontSize: theme.font.fixed.f16.fontSize,
         lineHeight: theme.font.fixed.f16.lineHeight,
@@ -31,6 +32,6 @@ const DownloadReport: FC = () => {
   );
 };
 
-export default DownloadReport;
+export default CalibrationsCompleted;
 
 const tileWrapperStyles: Rule = { minWidth: '350px' };

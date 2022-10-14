@@ -1,21 +1,37 @@
 import React from 'react';
 import { Rule, useStyle } from '@pma/dex-wrapper';
 
-import { DownloadReport } from './widgets';
+import {
+  DownloadReport,
+  CalibrationSession,
+  CreateCalibration,
+  RatingsSubmitted,
+  CalibrationsCompleted,
+  RatingsChange,
+} from './widgets';
+import { Filter } from './components/Filter';
 
 const NewCalibration = () => {
   const { css } = useStyle();
 
   return (
-    <div className={css(listStyles)}>
-      <DownloadReport />
+    <div>
+      <Filter />
+      <div className={css(widgetContainerStyles)}>
+        <DownloadReport />
+        <CalibrationSession />
+        <CreateCalibration />
+        <RatingsSubmitted />
+        <CalibrationsCompleted />
+        <RatingsChange />
+      </div>
     </div>
   );
 };
 
-const listStyles: Rule = {
-  display: 'flex',
-  flexDirection: 'column',
+const widgetContainerStyles: Rule = {
+  display: 'grid',
+  gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))',
   gap: '8px',
 };
 
