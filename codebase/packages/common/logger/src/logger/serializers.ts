@@ -102,7 +102,17 @@ export const defaultErrorSerializer = (err: Error): CustomSerializedError => {
 export const filterSensitiveData = (obj: Object): Object => {
   if (obj === null || obj === undefined) return undefined;
 
-  const cookiesToFilter = ['jwt', 'identity', 'auth', 'token', 'userdata', 'userinfo', 'referer', 'referrer'];
+  const cookiesToFilter = [
+    'jwt',
+    'identity',
+    'auth',
+    'token',
+    'userdata',
+    'userinfo',
+    'referer',
+    'referrer',
+    'mixpanel',
+  ];
   const result = { ...obj };
   for (const key in obj) {
     const adjustedKey = key.toLowerCase().replace(/[-_.]/g, '');
