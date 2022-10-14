@@ -36,7 +36,7 @@ export const getTescoBankContent = (props: ContentProps, t: TFunction) => {
 
   const config: ContentConfig = {
     viewPage: Page.REVIEWS_VIEW,
-    widgetTitle: t('my_quarterly_priorities', 'My Quarterly Qriorities'),
+    widgetTitle: t('my_quarterly_priorities', 'My Quarterly Priorities'),
     modalTitle: t('create_my_priorities', 'Create my priorities'),
   };
 
