@@ -39,6 +39,7 @@ const priorityDetailsStyles: Rule = {
   display: 'flex',
   flexDirection: 'column',
   padding: '0 10px',
+  width: '100%',
 };
 
 const labelStyles: Rule = ({ theme }) => ({
