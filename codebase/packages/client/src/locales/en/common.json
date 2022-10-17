@@ -565,7 +565,7 @@
   "achieved_objective": "How do I know I`ve ACHIEVED this objective?",
   "over_achieved_objective": "How do I know I`ve OVER-ACHIEVED this objective?",
   "full_date": "{{date, d LLL yyyy}}",
-  "submitted_date": "Submited {{date, d LLL yyyy}}",
+  "submitted_date": "Submitted {{date, d LLL yyyy}}",
   "try_to_select_another_year": "Try to select another year.",
   "choose_which_data_you_want_to_see_in_your_dashboard": "Choose which data you want to see in your dashboard",
   "full_view": "Full view",
