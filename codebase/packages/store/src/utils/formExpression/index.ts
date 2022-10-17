@@ -11,3 +11,4 @@ export * from './formModification';
 // {auth.permission.read:Colleague,LineManager;auth.permission.write:LineManager}
 // {tag.block:open}
 // {tag.block:close}
+// {dependency.dependent.key:test;dependency.dependent.value:yes}

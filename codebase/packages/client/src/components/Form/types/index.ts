@@ -53,6 +53,16 @@ export interface RadioField extends InputField {
   checked?: boolean;
 }
 
+export interface RadioGroupFields extends FormField {
+  name: string;
+  options: Array<Option>;
+  placeholder?: string;
+  value?: string | number;
+  error?: string;
+  //TODO: change any to ChangeEvent when all dropdowns will be fixed
+  onChange: (value: any) => void;
+}
+
 export interface CheckboxField extends InputField {
   indeterminate?: boolean;
   checked?: boolean;

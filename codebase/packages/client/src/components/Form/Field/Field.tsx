@@ -14,7 +14,6 @@ type FieldProps = {
 
 const createChangeObject = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
   switch (e.target.type) {
-    case 'radio':
     case 'checkbox': {
       return {
         target: {

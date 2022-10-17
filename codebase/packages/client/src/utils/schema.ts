@@ -1,5 +1,5 @@
 import { ExpressionValueType, ExpressionType, Component, BorderedComponent } from '@pma/store';
-import { Styles, Theme } from '@pma/dex-wrapper';
+import { Theme } from '@pma/dex-wrapper';
 
 const markdownStyle = {
   '> div': {

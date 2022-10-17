@@ -2,10 +2,10 @@ import React, { FC } from 'react';
 import { FieldValues, UseFormSetValue } from 'react-hook-form';
 import get from 'lodash.get';
 import { Rule, Styles, useStyle } from '@pma/dex-wrapper';
-import { BorderedComponent, FormType } from '@pma/store';
+import { BorderedComponent, FormType, ExpressionType } from '@pma/store';
 
 import MarkdownRenderer from 'components/MarkdownRenderer';
-import { Input, Item, Select, Textarea, Field, Text } from 'components/Form';
+import { Input, Item, Select, Textarea, Field, Text, RadioGroup } from 'components/Form';
 import { useTranslation } from 'components/Translation';
 import { formTagComponents } from 'utils/schema';
 
@@ -23,9 +23,24 @@ const DynamicForm: FC<Props> = ({ components, formValues, setValue, errors, pref
   const borderedComponents: BorderedComponent[] = formTagComponents(components, theme);
   const { t } = useTranslation();
 
+  const dependentFilter = (component) => {
+    const { expression = {} } = component;
+    const [dependOnKey] =
+      expression?.[ExpressionType.DEPENDENCY]?.[ExpressionType.DEPENDENT]?.[ExpressionType.KEY] || [];
+    const [dependOnKeyValue] =
+      expression?.[ExpressionType.DEPENDENCY]?.[ExpressionType.DEPENDENT]?.[ExpressionType.VALUE] || [];
+
+    if (dependOnKey) {
+      const dependedValue = get(formValues, `${prefixKey}${dependOnKey}`);
+      return dependOnKeyValue.toString() === dependedValue.toString();
+    }
+
+    return true;
+  };
+
   return (
     <>
-      {borderedComponents.map((component) => {
+      {borderedComponents.filter(dependentFilter).map((component) => {
         const {
           id,
           key = '',
@@ -106,6 +121,28 @@ const DynamicForm: FC<Props> = ({ components, formValues, setValue, errors, pref
                 value={value}
                 error={error}
                 placeholder={description || t('please_select', 'Please select')}
+                options={values}
+                readonly={readonly}
+              />
+            </div>
+          );
+        }
+        if (type === FormType.RADIO) {
+          return (
+            <div key={id} className={css(borderStyle, onlyView ? componentCustomStyle : {})}>
+              <Field
+                key={`${prefixKey}${key}`}
+                name={`${prefixKey}${key}`}
+                label={label}
+                Element={onlyView ? Text : RadioGroup}
+                Wrapper={({ children, label }) => (
+                  <Item withIcon={false} label={label}>
+                    {children}
+                  </Item>
+                )}
+                setValue={setValue}
+                value={value}
+                error={error}
                 options={values}
                 readonly={readonly}
               />

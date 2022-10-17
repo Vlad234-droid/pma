@@ -38,11 +38,15 @@ export enum ReportPage {
 export enum ExpressionType {
   AUTH = 'auth',
   ROLE = 'role',
+  DEPENDENCY = 'dependency',
+  DEPENDENT = 'dependent',
   WORK_LEVEL = 'work_level',
   REQUEST = 'request',
   LISTENER = 'listener',
   BLOCK = 'block',
   TAG = 'tag',
+  KEY = 'key',
+  VALUE = 'value',
 }
 
 export enum ExpressionValueType {

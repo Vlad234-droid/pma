@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Meta, Story } from '@storybook/react';
 
-import { Input, Radio, Checkbox, Textarea, Select, Item, ItemProps } from '../index';
+import { Input, Radio, Checkbox, Textarea, Select, Item, ItemProps, RadioGroup } from '../index';
 
 export default {
   title: 'components/Form',
@@ -17,6 +17,16 @@ const Template: Story<ItemProps> = (args) => (
           name='Dropdown'
           onChange={() => undefined}
           placeholder='Select'
+          options={[
+            { value: '1', label: 'test 1' },
+            { value: '2', label: 'test 2' },
+          ]}
+        />
+      </Item>
+      <Item {...args} withIcon={false}>
+        <RadioGroup
+          name='RadioGroup'
+          onChange={() => undefined}
           options={[
             { value: '1', label: 'test 1' },
             { value: '2', label: 'test 2' },
