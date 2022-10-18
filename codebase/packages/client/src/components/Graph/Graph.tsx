@@ -31,7 +31,14 @@ const Graph: FC<Props> = ({ currentData, compareData, title }) => {
           layout='vertical'
           margin={{ top: 32, right: 50, left: 100, bottom: 50 }}
         >
-          <XAxis type='number' tickCount={11} tickLine={false} axisLine={false} tick={<CustomizedTick />} />
+          <XAxis
+            type='number'
+            tickCount={11}
+            tickLine={false}
+            axisLine={false}
+            tick={<CustomizedTick />}
+            domain={[0, 100]}
+          />
           <YAxis dataKey='name' type='category' tickLine={false} axisLine={false} />
           <Legend content={renderLegend} />
           {/*<Area dataKey='amt' fill='#8884d8' stroke='#8884d8' />*/}

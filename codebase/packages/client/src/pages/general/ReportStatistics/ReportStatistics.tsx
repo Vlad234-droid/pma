@@ -44,7 +44,6 @@ const getConfigReviewsKeys = (type): { key: string; configType: ReportType } => 
     },
     [ReportPage.REPORT_MYR_BREAKDOWN]: {
       key: 'overallRatings',
-
       configType: ReportType.MYR,
     },
     [ReportPage.REPORT_EYR_BREAKDOWN]: {
@@ -152,9 +151,11 @@ const ReportStatistics = () => {
         />
       </div>
 
-      {type !== ReportPage.REPORT_NEW_TO_BUSINESS && type !== ReportPage.REPORT_FEEDBACK && (
-        <ColleaguesCount countStyles={countStyles} count={totalCount} />
-      )}
+      <ColleaguesCount
+        countStyles={countStyles}
+        count={totalCount}
+        title={t('total_unique_colleagues', 'Total unique colleagues')}
+      />
 
       <div className={css(header({ mobileScreen }))}>
         <div className={css(flexCenterStyled)}>

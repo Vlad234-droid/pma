@@ -1,6 +1,6 @@
 import React, { FC, useCallback, useState, useMemo } from 'react';
 import { CreateRule, Rule, Styles, useStyle } from '@pma/dex-wrapper';
-import { getReportMetaSelector } from '@pma/store';
+import { colleaguesCountSelector, getReportMetaSelector } from '@pma/store';
 import { useSelector } from 'react-redux';
 
 import { buildPath, buildPathWithParams } from 'features/general/Routes';
@@ -27,6 +27,7 @@ import { convertToLink, getCurrentValue, getFieldOptions, initialValues, IsRepor
 import { ReportPage, TitlesReport } from 'config/enum';
 import { isStartPeriod, getCurrentYearWithStartDate } from './utils';
 import { getCurrentYear, getNextYear, getPrevYear } from 'utils/date';
+import { ColleaguesCount } from 'components/ColleaguesCount';
 
 export enum ModalStatus {
   DOWNLOAD = 'DOWNLOAD',
@@ -57,10 +58,7 @@ const Report: FC = () => {
 
   getReportData(query, year);
 
-  {
-    /*//TODO: restore back when backend will be ready*/
-  }
-  // const colleaguesCount = useSelector(colleaguesCountSelector) || 0;
+  const colleaguesCount = useSelector(colleaguesCountSelector) || 0;
 
   const changeYearHandler = (value) => {
     if (!value) return;
@@ -132,8 +130,12 @@ const Report: FC = () => {
               value={getCurrentValue(query, year)}
             />
           </form>
-          {/*//TODO: restore back when backend will be ready*/}
-          {/*<ColleaguesCount count={colleaguesCount} countStyles={countStyles} />*/}
+
+          <ColleaguesCount
+            count={colleaguesCount}
+            countStyles={countStyles}
+            title={t('total_unique_colleagues', 'Total unique colleagues')}
+          />
         </div>
 
         <div className={css(flexCenterStyled)}>
@@ -300,8 +302,8 @@ const Report: FC = () => {
                   message={
                     <HoverMessage
                       text={t(
-                        'when_a_colleague_has_completed_their_mid_year_review',
-                        'Submitted: When a colleague completes their mid-year review submission prior to approval by a line manager. Approval: After approval by a line manager.',
+                        'when_a_colleague_has_completed_their_review',
+                        'Submitted: All reviews submitted regardless of approval status. Approved: all reviews that have been submitted and subsequently approved by the Line Manager.',
                       )}
                       customStyles={reportHoverMessage}
                     />
@@ -359,8 +361,8 @@ const Report: FC = () => {
                     <HoverMessage
                       customStyles={reportHoverMessage}
                       text={t(
-                        'when_a_colleague_has_completed_their_year_end_review',
-                        'Submitted: When a colleague has completed their year-end review submission prior to approval by a line manager. Approved: After approval by a line manager.',
+                        'when_a_colleague_has_completed_their_review',
+                        'Submitted: All reviews submitted regardless of approval status. Approved: all reviews that have been submitted and subsequently approved by the Line Manager.',
                       )}
                     />
                   }
@@ -448,7 +450,7 @@ const Report: FC = () => {
                     <HoverMessage
                       text={t(
                         'colleagues_who_have_joined_the_business',
-                        'Colleagues who have joined the business in the last 90 days.',
+                        'Colleagues who have joined the business in the selected financial year.',
                       )}
                       customStyles={reportHoverMessage}
                     />

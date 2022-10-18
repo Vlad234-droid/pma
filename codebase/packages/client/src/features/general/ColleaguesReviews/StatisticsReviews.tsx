@@ -11,7 +11,7 @@ import { useToast } from 'features/general/Toast';
 import Spinner from 'components/Spinner';
 import InfinityScrollLoad from 'components/InfinityScrollLoad';
 import ViewColleagueProfile from 'components/ViewColleagueProfile';
-import { Trans, useTranslation } from 'components/Translation';
+import { TFunction, Trans, useTranslation } from 'components/Translation';
 import { Table } from 'components/Table';
 import { IconButton } from 'components/IconButton';
 import { Accordion, BaseAccordion, ExpandButton, Panel, Section } from 'components/Accordion';
@@ -24,6 +24,18 @@ import { isSingular, paramsReplacer } from 'utils';
 import { defaultSort, List } from './config';
 import { ReportPage, ReportType } from 'config/enum';
 import { downloadCsvFile } from './utils';
+
+const exceptionTitles = (titleToSwitch, t: TFunction) => {
+  const titles = {
+    'not-submitted': t('total_reviews_not_submitted', 'Total reviews not submitted'),
+    approved: t('total_reviews_submitted_&_approved_by_manager', 'Total reviews submitted & approved by manager'),
+    submitted: t(
+      'total_reviews_submitted_approved_and_not_approved',
+      'Total reviews submitted (approved and not approved)',
+    ),
+  };
+  return titles[titleToSwitch];
+};
 
 const getReviewsTitles = (type): List => {
   const page = {
@@ -90,8 +102,6 @@ const StatisticsReviews: FC<{ type: ReportPage; toggleFullView: () => void; isFu
 
   const { year } = query;
 
-  console.log('list', list);
-
   if (reportLoading || searchedLoading) return <Spinner fullHeight />;
   const isWLPage = type === ReportPage.REPORT_WORK_LEVEL;
 
@@ -114,8 +124,10 @@ const StatisticsReviews: FC<{ type: ReportPage; toggleFullView: () => void; isFu
                     <div className={css(scrollContainer)}>
                       <div className={css(wrapperStyles({ isWLPage }))}>
                         <span className={css(titleStyles)}>
-                          {t(title)}: {total}{' '}
-                          {isSingular(total) ? t('colleague', 'Colleague') : t('colleagues', 'Colleagues')}
+                          {type !== ReportPage.REPORT_MID_YEAR_REVIEW && type !== ReportPage.REPORT_END_YEAR_REVIEW
+                            ? t(title)
+                            : exceptionTitles(title, t)}
+                          : {total} {isSingular(total) ? t('colleague', 'Colleague') : t('colleagues', 'Colleagues')}
                         </span>
                         {!!(data as any).length && !isWLPage && (
                           <div className={css(expandButtonStyles)}>
@@ -286,7 +298,7 @@ const StatisticsReviews: FC<{ type: ReportPage; toggleFullView: () => void; isFu
                           render={() => (
                             <>
                               {!isWLPage ? (
-                                <div key={`${title}`} className={css({ marginBottom: '24px', width: '100%' })}>
+                                <div key={title} className={css({ marginBottom: '24px', width: '100%' })}>
                                   {!!(data as any)?.length &&
                                     (data as any).map((item, i) => (
                                       //@ts-ignore

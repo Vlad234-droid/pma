@@ -511,9 +511,8 @@
   "feedback_report": "Feedback report",
   "percentage_of_objectives_submitted_by_colleagues": "Percentage of objectives submitted by colleagues, prior to being reviewed and approved by their line manager.",
   "percentage_of_objectives_approved_by_colleagues": "Percentage of objectives submitted by colleagues that have been approved by their line managers.",
-  "when_a_colleague_has_completed_their_mid_year_review": "Submitted: When a colleague completes their mid-year review submission prior to approval by a line manager. Approval: After approval by a line manager.",
-  "when_a_colleague_has_completed_their_year_end_review": "Submitted: When a colleague has completed their year-end review submission prior to approval by a line manager. Approved: After approval by a line manager.",
-  "colleagues_who_have_joined_the_business": "Colleagues who have joined the business in the last 90 days.",
+  "when_a_colleague_has_completed_their_review": "Submitted: All reviews submitted regardless of approval status. Approved: all reviews that have been submitted and subsequently approved by the Line Manager.",
+  "colleagues_who_have_joined_the_business": "Colleagues who have joined the business in the selected financial year.",
   "percentage_of_colleagues_who_have_requested_or_given_feedback_this_year": "Percentage of colleagues who have requested or given feedback this year.",
   "missed_fields/managerUUID": "Line Manager name",
   "missed_fields/profile/firstName": "First name",
@@ -710,5 +709,9 @@
   "ratings_period": "Ratings {{period}}",
   "graph": "Graph",
   "list": "List",
-  "table": "Table"
+  "table": "Table",
+  "total_unique_colleagues": "Total unique colleagues: ",
+  "total_reviews_not_submitted": "Total reviews not submitted",
+  "total_reviews_submitted_&_approved_by_manager": "Total reviews submitted & approved by manager",
+  "total_reviews_submitted_approved_and_not_approved": "Total reviews submitted (approved and not approved)"
 }
