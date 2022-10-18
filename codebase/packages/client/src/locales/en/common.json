@@ -141,7 +141,7 @@
   "compare": "Compare",
   "expected_distribution": "Expected distribution",
   "none": "None",
-  "calibration_submission": "calibration submission",
+  "calibration_submission": "Calibration submission {{year}}",
   "choose_data_to_compare": "Choose the data you would like to compare the 2021 calibration to:",
   "saved_changes_to_calibration": "You have saved your changes to calibration. These changes will now be reflected on the colleague profile as a record.",
   "see_more": "See more",
@@ -706,5 +706,9 @@
   "last_name": "Last name",
   "business_type": "Business type",
   "job_name": "Job name",
-  "complete_or_request_amend": "Complete or request amend"
+  "complete_or_request_amend": "Complete or request amend",
+  "ratings_period": "Ratings {{period}}",
+  "graph": "Graph",
+  "list": "List",
+  "table": "Table"
 }

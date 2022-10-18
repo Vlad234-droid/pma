@@ -3,7 +3,7 @@ import { useStyle, Rule } from '@dex-ddl/core';
 import { BarChart, Legend, XAxis, YAxis, Bar, ResponsiveContainer, Cell } from 'recharts';
 
 import { getComputedData, getGraphBars } from '../../utils';
-import { RatingChartData } from '../../config/types';
+import { RatingChartData } from 'components/Graph/types';
 import { Trans } from 'components/Translation';
 
 import { useCurrentData, useChartTitle } from '../../hooks';

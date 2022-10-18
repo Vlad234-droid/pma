@@ -1,6 +1,6 @@
 // @ts-ignore
 import React from 'react';
-import { fireEvent } from '@testing-library/react';
+
 // @ts-ignore
 import { renderWithTheme as render, generateEmployeeReview } from 'utils/test';
 
@@ -50,30 +50,7 @@ describe('<Colleagues />', () => {
     it('should render colleagues with ratings', () => {
       const { getByText } = render(<Colleagues {...props} />);
 
-      expect(getByText('outstanding')).toBeInTheDocument();
-    });
-  });
-
-  describe('#handlers', () => {
-    it('should not render edit ratings modal, if !editMode', () => {
-      const { getByText, queryByText } = render(<Colleagues {...props} />);
-
-      fireEvent.click(getByText('outstanding'));
-
-      expect(queryByText('mocked_ratings_modal')).not.toBeInTheDocument();
-    });
-
-    it('should render edit ratings modal, if editMode', () => {
-      const newProps = {
-        ...props,
-        editMode: true,
-      };
-
-      const { getByText } = render(<Colleagues {...newProps} />);
-
-      fireEvent.click(getByText('outstanding'));
-
-      expect(getByText('mocked_ratings_modal')).toBeInTheDocument();
+      expect(getByText('Outstanding')).toBeInTheDocument();
     });
   });
 });

@@ -90,6 +90,8 @@ const StatisticsReviews: FC<{ type: ReportPage; toggleFullView: () => void; isFu
 
   const { year } = query;
 
+  console.log('list', list);
+
   if (reportLoading || searchedLoading) return <Spinner fullHeight />;
   const isWLPage = type === ReportPage.REPORT_WORK_LEVEL;
 
