@@ -32,7 +32,7 @@ const DynamicForm: FC<Props> = ({ components, formValues, setValue, errors, pref
 
     if (dependOnKey) {
       const dependedValue = get(formValues, `${prefixKey}${dependOnKey}`);
-      return dependOnKeyValue.toString() === dependedValue.toString();
+      return dependedValue && dependOnKeyValue.toString() === dependedValue.toString();
     }
 
     return true;

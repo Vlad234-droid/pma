@@ -63,15 +63,15 @@ describe('<Field />', () => {
   it('render Field with element Radio without wrapper', async () => {
     const onChange = jest.fn();
     const setValue = jest.fn();
-    render(<Field Element={Radio} name={'TEST_ID'} onChange={onChange} setValue={setValue} />);
+    render(<Field Element={Radio} name={'TEST_ID'} onChange={onChange} setValue={setValue} value={'test'} />);
     const radio = screen.getByTestId('TEST_ID');
     expect(radio).toBeInTheDocument();
     await act(async () => {
       fireEvent.click(radio);
     });
 
-    expect(onChange).toBeCalledWith({ target: { name: 'TEST_ID', value: true } });
+    expect(onChange).toBeCalledTimes(1);
     //TODO: should delete in future
-    expect(setValue).toBeCalledWith('TEST_ID', true, { shouldDirty: true, shouldValidate: true });
+    expect(setValue).toBeCalledWith('TEST_ID', 'test', { shouldDirty: true, shouldValidate: true });
   });
 });
