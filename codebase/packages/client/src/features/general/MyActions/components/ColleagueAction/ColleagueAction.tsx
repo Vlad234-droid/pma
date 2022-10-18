@@ -1,7 +1,7 @@
 import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Rule, useStyle } from '@pma/dex-wrapper';
-import { getAllReviews, getAllReviewSchemas, ReviewsActions, reviewsMetaSelector, SchemaActions } from '@pma/store';
+import { getAllReviewSchemas, ReviewsActions, reviewsMetaSelector, SchemaActions, getAllReviews } from '@pma/store';
 
 import { useTenant } from 'features/general/Permission';
 import useDispatch from 'hooks/useDispatch';
@@ -11,7 +11,6 @@ import { TileWrapper } from 'components/Tile';
 import { Notification } from 'components/Notification';
 import { useTranslation } from 'components/Translation';
 import { ActionStatus, ReviewType, Status } from 'config/enum';
-import { Review, Timeline } from 'config/types';
 import { Buttons } from '../Buttons';
 import { ColleagueReview } from '../ColleagueReviews';
 import { Tenant } from 'utils';
@@ -29,10 +28,6 @@ const ColleagueAction: FC<Props> = ({ status, colleague, onUpdate }) => {
   const [colleagueReviews, updateColleagueReviews] = useState<any>([]);
   const [formsValid, validateReview] = useState<{ [key: string]: boolean }>({});
   const isButtonsDisabled = Object.values(formsValid).some((value) => !value);
-  const statuses =
-    status === ActionStatus.PENDING
-      ? [Status.WAITING_FOR_APPROVAL, Status.WAITING_FOR_COMPLETION]
-      : [Status.COMPLETED, Status.APPROVED, Status.DECLINED];
 
   const dispatch = useDispatch();
   const { css } = useStyle();
@@ -40,26 +35,8 @@ const ColleagueAction: FC<Props> = ({ status, colleague, onUpdate }) => {
   const tenant = useTenant();
 
   const { loaded: reviewLoaded } = useSelector(reviewsMetaSelector);
-  const allColleagueReviews = useSelector(getAllReviews) || [];
+  const reviews = useSelector(getAllReviews) || [];
   const allColleagueReviewsSchema = useSelector(getAllReviewSchemas) || [];
-
-  const groupColleagueReviews = useMemo(() => {
-    return ((colleague.timeline as Array<any>).reduce((acc, timeline) => {
-      acc[timeline.code] = {
-        timeline,
-        reviews: colleagueReviews?.filter((review) => review.tlPointUuid === timeline.uuid) || [],
-      };
-      return acc;
-    }, {}) || {}) as { [key: string]: { timeline: Timeline; reviews: Review[] } };
-  }, [JSON.stringify(colleagueReviews), colleague.timeline]);
-
-  useEffect(() => {
-    const reviewsUuid = colleague?.reviews?.map(({ uuid }) => uuid) || [];
-    const colleaguesReviews = allColleagueReviews.filter(
-      (review) => reviewsUuid.includes(review.uuid) && statuses.includes(review.status),
-    );
-    updateColleagueReviews(colleaguesReviews);
-  }, [reviewLoaded, status]);
 
   const handleUpdateReview = useCallback(
     (prevStatus: Status, status: Status) => (code: string) => (reason: string) => {
@@ -86,17 +63,18 @@ const ColleagueAction: FC<Props> = ({ status, colleague, onUpdate }) => {
     [colleague, colleagueReviews, reviewLoaded],
   );
 
-  const fetchColleagueReviews = (colleagueUuid: string) => {
-    setColleagueExpanded(colleagueUuid);
+  const colleagueReviewUuids = useMemo(
+    () => colleague.reviews.map(({ uuid }) => uuid),
+    [JSON.stringify(colleague.reviews)],
+  );
+
+  useEffect(() => {
     dispatch(SchemaActions.clearSchemaData());
-    dispatch(
-      ReviewsActions.getColleagueReviews({
-        pathParams: { colleagueUuid: colleagueUuid, cycleUuid: 'CURRENT' },
-        searchParams: { includeFiles: true },
-      }),
-    );
-    dispatch(SchemaActions.getSchema({ colleagueUuid }));
-  };
+    colleagueReviewUuids.forEach((uuid) => {
+      dispatch(ReviewsActions.getReviewByUuid({ uuid }));
+    });
+    dispatch(SchemaActions.getSchema({ colleagueUuid: colleague.uuid }));
+  }, [colleagueReviewUuids]);
 
   const handleValidateReview = (review: { [key: string]: boolean }) =>
     validateReview((state) => ({ ...state, ...review }));
@@ -127,15 +105,15 @@ const ColleagueAction: FC<Props> = ({ status, colleague, onUpdate }) => {
                     />
                     <div className={css(expandButtonStyle)}>
                       <div data-test-id={`expand-button-${colleague.uuid}`} className={css({ paddingLeft: '12px' })}>
-                        <ExpandButton onClick={(expanded) => expanded && fetchColleagueReviews(colleague.uuid)} />
+                        <ExpandButton onClick={(expanded) => expanded && setColleagueExpanded(colleague.uuid)} />
                       </div>
                     </div>
                   </div>
                   <Panel>
-                    {Object.keys(groupColleagueReviews).map((code) => {
+                    {colleague.timeline.map((colleagueTimeline) => {
+                      const { code, uuid } = colleagueTimeline;
                       const reviewGroupByStatus: [Status, any[]][] = [];
-                      const colleagueReviews = groupColleagueReviews[code]?.reviews;
-                      const colleagueTimeline = groupColleagueReviews[code].timeline;
+                      const colleagueReviews = colleague.reviews.filter(({ tlPointUuid }) => tlPointUuid === uuid);
                       const statusStatistics = Object.keys(colleagueTimeline.statistics || {}) as Status[];
 
                       for (const status of statusStatistics) {
@@ -144,6 +122,7 @@ const ColleagueAction: FC<Props> = ({ status, colleague, onUpdate }) => {
                           colleagueReviews.filter((review) => status === review.status),
                         ]);
                       }
+
                       return (
                         <div className={css({ padding: '24px 35px 24px 24px' })} key={code}>
                           <Notification
@@ -161,16 +140,17 @@ const ColleagueAction: FC<Props> = ({ status, colleague, onUpdate }) => {
                               marginBottom: '20px',
                             }}
                           />
-                          {reviewGroupByStatus.map(([statusReview, reviews]) => {
+                          {reviewGroupByStatus.map(([statusReview, colleagueReviews]) => {
                             return (
                               <div key={statusReview}>
-                                {reviews.map((review) => {
-                                  if (!review) return null;
+                                {colleagueReviews.map((review) => {
+                                  const reviewData = reviews.find(({ uuid }) => uuid === review?.uuid);
+                                  if (!reviewData) return null;
                                   return (
                                     <ColleagueReview
                                       key={review.uuid}
                                       colleagueUuid={colleague.uuid}
-                                      review={review}
+                                      review={reviewData}
                                       timeline={colleagueTimeline}
                                       schema={allColleagueReviewsSchema[code] || []}
                                       validateReview={handleValidateReview}

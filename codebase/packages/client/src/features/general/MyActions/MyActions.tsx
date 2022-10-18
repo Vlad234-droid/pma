@@ -41,6 +41,8 @@ const MyActions: FC<Props> = ({ status, searchValue, sortValue, isCheckedAll }) 
     : [Status.COMPLETED, Status.APPROVED, Status.DECLINED];
   const colleagues = useSelector((state) => getEmployeesWithReviewStatuses(state, statuses, searchValue, sortValue));
 
+  console.log(colleagues);
+
   const reviewsForApproval = useMemo(
     () => colleagues.filter(({ uuid }) => uuid && checkedItems.includes(uuid)),
     [colleagues, checkedItems],

@@ -1,4 +1,5 @@
 import { createReducer } from 'typesafe-actions';
+import union from 'lodash.union';
 import {
   getReviews,
   deleteReview,
@@ -139,8 +140,8 @@ export default createReducer(initialState)
   }))
   .handleAction(getReviewByUuid.success, (state, { payload }) => ({
     ...state,
-    data: [...state.data, { ...payload }],
-    meta: { ...state.meta, loading: false, loaded: true },
+    //@ts-ignore
+    data: union([payload], state.data),
   }))
   .handleAction(getReviewByUuid.failure, (state, { payload }) => ({
     ...state,

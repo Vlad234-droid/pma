@@ -177,7 +177,7 @@ export const updateReviewStatusEpic: Epic = (action$, _, { api }) => {
 export const getReviewByUuidEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
     filter(isActionOf(getReviewByUuid.request)),
-    switchMap(({ payload }) => {
+    mergeMap(({ payload }) => {
       return from(api.getReviewByUuid(payload)).pipe(
         // @ts-ignore
         map(({ data }) => {
