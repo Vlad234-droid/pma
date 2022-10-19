@@ -147,9 +147,9 @@ const bodyStyle: Rule = {
   alignItems: 'stretch',
 };
 
-const optionWrapperStyle: Rule = { flex: '3 1 375px', display: 'flex', flexDirection: 'column', gap: '8px' };
+const optionWrapperStyle: Rule = { flex: '3 1 500px', display: 'flex', flexDirection: 'column', gap: '8px' };
 
-const rightColumnStyle: Rule = { flex: '1 0 216px' };
+const rightColumnStyle: Rule = { flex: '1 0 290px' };
 
 const wrapperStyle: Rule = {
   display: 'flex',
