@@ -8,6 +8,7 @@ describe('Colleagues count component', () => {
   const props = {
     countStyles: {},
     count: 10,
+    title: 'title',
   };
   it('it should display a plug wrapper', async () => {
     const { getByTestId } = render(<ColleaguesCount {...props} />);
@@ -21,7 +22,7 @@ describe('Colleagues count component', () => {
   });
   it('it should display Colleagues title', async () => {
     const { getByText } = render(<ColleaguesCount {...props} />);
-    const title = getByText(/Colleagues:/);
+    const title = getByText(props.title);
     expect(title).toBeInTheDocument();
   });
 });
