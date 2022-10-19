@@ -100,7 +100,10 @@ export const getOutstandingPendingEmployees: Selector<RootState, any, any> = cre
       (employee) =>
         isAnniversaryTimeline(employee.timeline) &&
         employee.timeline.some(
-          (review) => review.reviewType === ReviewType.EYR && isAfterDeadline({ date: review.endTime, days: 7 }),
+          (review) =>
+            review.reviewType === ReviewType.EYR &&
+            isAfterDeadline({ date: review.endTime, days: 7 }) &&
+            review.summaryStatus === Status.OVERDUE,
         ),
     );
 
@@ -108,13 +111,19 @@ export const getOutstandingPendingEmployees: Selector<RootState, any, any> = cre
       (employee) =>
         !isAnniversaryTimeline(employee.timeline) &&
         employee.timeline.some(
-          (review) => review.reviewType === ReviewType.EYR && isAfterDeadline({ date: review.endTime, days: 7 }),
+          (review) =>
+            review.reviewType === ReviewType.EYR &&
+            isAfterDeadline({ date: review.endTime, days: 7 }) &&
+            review.summaryStatus === Status.OVERDUE,
         ),
     );
 
     const employeeOverdueMYR = filteredData?.filter((employee) =>
       employee.timeline.some(
-        (review) => review.reviewType === ReviewType.MYR && isAfterDeadline({ date: review.endTime, days: 7 }),
+        (review) =>
+          review.reviewType === ReviewType.MYR &&
+          isAfterDeadline({ date: review.endTime, days: 7 }) &&
+          review.summaryStatus === Status.OVERDUE,
       ),
     );
 

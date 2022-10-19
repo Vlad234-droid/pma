@@ -32,8 +32,10 @@ const ObjectiveWidget: FC = () => {
 
   const timelinePoint: Timeline =
     (visibleTimelinePoints.find(
-      (timelinePoint) => timelinePoint.status === Status.STARTED || timelinePoint.status === Status.FINISHING, // todo not handle overdue
-    ) as Timeline) || {};
+      (timelinePoint) => timelinePoint.status === Status.STARTED || timelinePoint.status === Status.FINISHING,
+    ) as Timeline) ||
+    (visibleTimelinePoints.reverse().find((timelinePoint) => timelinePoint.status === Status.COMPLETED) as Timeline) ||
+    {};
 
   const timelineMYR = useSelector(getTimelineByReviewTypeSelector(ReviewType.MYR, USER.current));
   const timelineTypes = useSelector(timelineTypesAvailabilitySelector(USER.current));
