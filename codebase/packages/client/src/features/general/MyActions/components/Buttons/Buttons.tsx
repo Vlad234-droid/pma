@@ -10,8 +10,9 @@ import { useTenant } from 'features/general/Permission';
 
 type Props = {
   code: string;
+  cycleUuid: string;
   status: Status;
-  onUpdate: (prevStatus: Status, status: Status) => (code: string) => (T) => void;
+  onUpdate: (prevStatus: Status, status: Status) => (code: string, cycleUuid: string) => (T) => void;
   isDisabled: boolean;
 };
 
@@ -31,15 +32,15 @@ const statusMap: Record<Status.WAITING_FOR_APPROVAL | Status.WAITING_FOR_COMPLET
   [Status.WAITING_FOR_COMPLETION]: (approve) => (approve ? Status.COMPLETED : Status.APPROVED),
 };
 
-const Buttons: FC<Props> = ({ code, onUpdate, isDisabled, status }) => {
+const Buttons: FC<Props> = ({ code, cycleUuid, onUpdate, isDisabled, status }) => {
   const [isOpenDeclinePopup, setIsOpenDeclinePopup] = useState(false);
   const [isOpenApprovePopup, setIsOpenApprovePopup] = useState(false);
   const { css } = useStyle();
   const { t } = useTranslation();
   const tenant = useTenant();
 
-  const approveColleagues = onUpdate(status, statusMap[status](true))(code);
-  const declineColleagues = onUpdate(status, statusMap[status](false))(code);
+  const approveColleagues = onUpdate(status, statusMap[status](true))(code, cycleUuid);
+  const declineColleagues = onUpdate(status, statusMap[status](false))(code, cycleUuid);
 
   const handleDeclineBtnClick = () => {
     setIsOpenDeclinePopup(true);

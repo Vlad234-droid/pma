@@ -1,7 +1,7 @@
 import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Rule, useStyle } from '@pma/dex-wrapper';
-import { getAllReviewSchemas, ReviewsActions, reviewsMetaSelector, SchemaActions, getAllReviews } from '@pma/store';
+import { getAllReviewSchemas, ReviewsActions, SchemaActions, getAllReviews } from '@pma/store';
 
 import { useTenant } from 'features/general/Permission';
 import useDispatch from 'hooks/useDispatch';
@@ -33,19 +33,18 @@ const ColleagueAction: FC<Props> = ({ status, colleague, onUpdate }) => {
   const { css } = useStyle();
   const { t } = useTranslation();
   const tenant = useTenant();
-
-  const { loaded: reviewLoaded } = useSelector(reviewsMetaSelector);
   const reviews = useSelector(getAllReviews) || [];
-  const allColleagueReviewsSchema = useSelector(getAllReviewSchemas) || [];
+  const reviewSchemaMap = useSelector(getAllReviewSchemas) || [];
 
   const handleUpdateReview = useCallback(
-    (prevStatus: Status, status: Status) => (code: string) => (reason: string) => {
+    (prevStatus: Status, status: Status) => (code: string, cycleUuid: string) => (reason: string) => {
       const { reviewType, uuid } = colleague?.timeline?.find((timeline) => timeline.code === code);
 
       const data = {
         ...(reason ? { reason } : {}),
         status,
         code,
+        cycleUuid,
         colleagueUuid: colleague.uuid,
         reviews: colleagueReviews
           .filter(({ status, tlPointUuid }) => prevStatus === status && tlPointUuid === uuid)
@@ -60,7 +59,7 @@ const ColleagueAction: FC<Props> = ({ status, colleague, onUpdate }) => {
       setIsOpenSuccessModal(true);
       setStatusHistory({ prevStatus, status, type: reviewType });
     },
-    [colleague, colleagueReviews, reviewLoaded],
+    [colleague, colleagueReviews],
   );
 
   const colleagueReviewUuids = useMemo(
@@ -152,7 +151,7 @@ const ColleagueAction: FC<Props> = ({ status, colleague, onUpdate }) => {
                                       colleagueUuid={colleague.uuid}
                                       review={reviewData}
                                       timeline={colleagueTimeline}
-                                      schema={allColleagueReviewsSchema[code] || []}
+                                      schema={reviewSchemaMap[code] || []}
                                       validateReview={handleValidateReview}
                                       onUpdate={handleChangeReview}
                                     />
@@ -164,6 +163,7 @@ const ColleagueAction: FC<Props> = ({ status, colleague, onUpdate }) => {
                                     <Buttons
                                       status={statusReview}
                                       code={code}
+                                      cycleUuid={colleagueTimeline.cycleUuid || 'CURRENT'}
                                       onUpdate={handleUpdateReview}
                                       isDisabled={isButtonsDisabled}
                                     />
