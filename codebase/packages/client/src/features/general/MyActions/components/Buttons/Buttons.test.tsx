@@ -12,6 +12,9 @@ describe('<Buttons />', () => {
     const updateReviewStatus = () => jest.fn();
     render(
       <Buttons
+        reviewType={ReviewType.MYR}
+        tlPointUuid='test'
+        cycleUuid={'test'}
         code={ReviewType.OBJECTIVE}
         isDisabled={true}
         onUpdate={updateReviewStatus}
@@ -30,12 +33,14 @@ describe('<Buttons />', () => {
   });
 
   it('render Buttons OBJECTIVE click decline', async () => {
-    const fn = jest.fn();
-    const updateReviewStatus = () => () => fn;
+    const updateReviewStatus = jest.fn();
     render(
       <Buttons
         code={ReviewType.MYR}
         isDisabled={false}
+        reviewType={ReviewType.MYR}
+        tlPointUuid='test'
+        cycleUuid={'test'}
         onUpdate={updateReviewStatus}
         status={Status.WAITING_FOR_APPROVAL}
       />,
@@ -58,16 +63,18 @@ describe('<Buttons />', () => {
     act(() => {
       fireEvent.click(submit);
     });
-    expect(fn).toBeCalled();
+    expect(updateReviewStatus).toBeCalled();
   });
 
   it('render Buttons OBJECTIVE click approve', async () => {
-    const fn = jest.fn();
-    const updateReviewStatus = () => () => fn;
+    const updateReviewStatus = jest.fn();
     render(
       <Buttons
         code={ReviewType.OBJECTIVE}
         isDisabled={false}
+        reviewType={ReviewType.MYR}
+        tlPointUuid='test'
+        cycleUuid={'test'}
         onUpdate={updateReviewStatus}
         status={Status.WAITING_FOR_APPROVAL}
       />,
@@ -90,6 +97,6 @@ describe('<Buttons />', () => {
     act(() => {
       fireEvent.click(submit);
     });
-    expect(fn).toBeCalled();
+    expect(updateReviewStatus).toBeCalled();
   });
 });
