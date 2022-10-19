@@ -10,8 +10,19 @@ import { useTenant } from 'features/general/Permission';
 
 type Props = {
   code: string;
+  cycleUuid: string;
   status: Status;
-  onUpdate: (prevStatus: Status, status: Status) => (code: string) => (T) => void;
+  reviewType: ReviewType;
+  tlPointUuid: string;
+  onUpdate: (data: {
+    prevStatus: Status;
+    status: Status;
+    tlUuid: string;
+    code: string;
+    cycleUuid: string;
+    reviewType: ReviewType;
+    reason?: string;
+  }) => void;
   isDisabled: boolean;
 };
 
@@ -31,28 +42,48 @@ const statusMap: Record<Status.WAITING_FOR_APPROVAL | Status.WAITING_FOR_COMPLET
   [Status.WAITING_FOR_COMPLETION]: (approve) => (approve ? Status.COMPLETED : Status.APPROVED),
 };
 
-const Buttons: FC<Props> = ({ code, onUpdate, isDisabled, status }) => {
-  const [isOpenDeclinePopup, setIsOpenDeclinePopup] = useState(false);
-  const [isOpenApprovePopup, setIsOpenApprovePopup] = useState(false);
+const Buttons: FC<Props> = ({ code, cycleUuid, onUpdate, isDisabled, status, reviewType, tlPointUuid }) => {
+  const [isOpenDeclinePopup, toggleOpenDeclinePopup] = useState(false);
+  const [isOpenApprovePopup, toggleOpenApprovePopup] = useState(false);
   const { css } = useStyle();
   const { t } = useTranslation();
   const tenant = useTenant();
 
-  const approveColleagues = onUpdate(status, statusMap[status](true))(code);
-  const declineColleagues = onUpdate(status, statusMap[status](false))(code);
-
-  const handleDeclineBtnClick = () => {
-    setIsOpenDeclinePopup(true);
+  const declineColleagues = (reason?: string) => {
+    onUpdate({
+      prevStatus: status,
+      status: statusMap[status](false),
+      tlUuid: tlPointUuid,
+      code,
+      cycleUuid,
+      reviewType,
+      reason,
+    });
   };
 
-  const handleApprove = (event) => {
-    approveColleagues(event);
-    setIsOpenApprovePopup(false);
+  const approveColleagues = () => {
+    onUpdate({
+      prevStatus: status,
+      status: statusMap[status](true),
+      tlUuid: tlPointUuid,
+      code,
+      cycleUuid,
+      reviewType,
+    });
+  };
+
+  const handleDeclineBtnClick = () => {
+    toggleOpenDeclinePopup(true);
+  };
+
+  const handleApprove = () => {
+    approveColleagues();
+    toggleOpenApprovePopup(false);
   };
 
   const handleDecline = (hasReason = false, reason?: string) => {
     declineColleagues(hasReason ? reason : '');
-    setIsOpenDeclinePopup(false);
+    toggleOpenDeclinePopup(false);
   };
 
   return (
@@ -79,7 +110,7 @@ const Buttons: FC<Props> = ({ code, onUpdate, isDisabled, status }) => {
           <Button
             isDisabled={isDisabled}
             styles={[inverseButtonStyle, isDisabled ? { opacity: '0.4' } : {}]}
-            onPress={() => setIsOpenApprovePopup(true)}
+            onPress={() => toggleOpenApprovePopup(true)}
           >
             <Icon graphic='check' invertColors={true} iconStyles={{ paddingRight: '8px' }} />
             {Status.WAITING_FOR_APPROVAL === status ? (
@@ -92,9 +123,9 @@ const Buttons: FC<Props> = ({ code, onUpdate, isDisabled, status }) => {
           </Button>
         </div>
         {isOpenDeclinePopup && (
-          <DeclineModal onSave={handleDecline} onClose={() => setIsOpenDeclinePopup(false)} code={code} />
+          <DeclineModal onSave={handleDecline} onClose={() => toggleOpenDeclinePopup(false)} code={code} />
         )}
-        {isOpenApprovePopup && <ApproveModal onSave={handleApprove} onClose={() => setIsOpenApprovePopup(false)} />}
+        {isOpenApprovePopup && <ApproveModal onSave={handleApprove} onClose={() => toggleOpenApprovePopup(false)} />}
       </div>
     </div>
   );

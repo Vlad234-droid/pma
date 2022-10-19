@@ -56,6 +56,7 @@ describe.skip('<Colleague />', () => {
   };
   describe('#render', () => {
     it('should render ', () => {
+      //@ts-ignore
       render(<ColleagueAction {...props} onUpdate={jest.fn} />);
 
       expect(screen.getByTestId(`expand-button-${props.colleague.uuid}`)).toBeInTheDocument();
@@ -129,7 +130,7 @@ describe.skip('<Colleague />', () => {
       const getColleagueReviewsMock = jest.spyOn(ReviewsActions, 'getColleagueReviews');
       const updateReviewStatusMock = jest.spyOn(ReviewsActions, 'updateReviewStatus');
       const getSchemaMock = jest.spyOn(SchemaActions, 'getSchema');
-
+      //@ts-ignore
       render(<ColleagueAction {...props} onUpdate={jest.fn} />, { reviews, schema });
 
       await act(async () => {

@@ -19,6 +19,7 @@
     "redux-observable": "^1.2.0",
     "reselect": "^4.0.0",
     "rxjs": "^6.6.7",
+    "lodash.union": "^4.6.0",
     "typesafe-actions": "^5.1.0",
     "uuid": "^8.3.2"
   },
@@ -27,6 +28,7 @@
     "@types/lodash.findindex": "^4.6.6",
     "@types/luxon": "^1.26.5",
     "@types/redux-logger": "^3.0.8",
+    "@types/lodash.union": "^4.6.0",
     "@types/uuid": "^8.3.0",
     "utility-types": "^3.10.0"
   }
