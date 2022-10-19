@@ -56,16 +56,18 @@ const ProfilePreview: FC<Props> = ({ status, employee, fullTeamView = false, rat
             </button>
           )}
         </div>
-        {!rating && (
-          <div className={css(iconWrapperStyles)}>
-            <Icon graphic={graphics} fill={color} title={title} testId='timeline-icon' />
-          </div>
-        )}
-        {!rating && (
-          <div className={css(expandButtonStyles)}>
-            <ExpandButton />
-          </div>
-        )}
+        <div className={css({ display: 'flex' })}>
+          {!rating && (
+            <div className={css(iconWrapperStyles)}>
+              <Icon graphic={graphics} fill={color} title={title} testId='timeline-icon' />
+            </div>
+          )}
+          {!rating && (
+            <div className={css(expandButtonStyles)}>
+              <ExpandButton />
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
@@ -78,13 +80,27 @@ const wrapperStyles: Rule = {
   display: 'flex',
 };
 
-const contentStyles: Rule = {
-  marginLeft: 'auto',
-  display: 'flex',
-  alignItems: 'center',
+const contentStyles: Rule = ({ theme }) => {
+  const { matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true, medium: true });
+
+  return {
+    marginLeft: 'auto',
+    display: 'flex',
+    flexDirection: mobileScreen ? 'column' : 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  };
 };
 
-const buttonWrapperStyles: Rule = { padding: '12px 12px' };
+const buttonWrapperStyles: Rule = ({ theme }) => {
+  const { matchMedia } = useStyle();
+  const mobileScreen = matchMedia({ xSmall: true, small: true, medium: true });
+
+  return {
+    padding: mobileScreen ? '0 0 12px 0' : '12px 12px',
+  };
+};
 
 const buttonStyles: Rule = ({ theme }) => ({
   fontSize: `${theme.font.fixed.f16.fontSize}`,
@@ -94,6 +110,7 @@ const buttonStyles: Rule = ({ theme }) => ({
   cursor: 'pointer',
   border: 'none',
   backgroundColor: 'transparent',
+  whiteSpace: 'nowrap',
 });
 
 const iconWrapperStyles: Rule = { padding: '0px 12px' };
