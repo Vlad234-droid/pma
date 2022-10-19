@@ -37,22 +37,37 @@ const ColleagueAction: FC<Props> = ({ status, colleague, onUpdate }) => {
   const reviewSchemaMap = useSelector(getAllReviewSchemas) || [];
 
   const handleUpdateReview = useCallback(
-    (prevStatus: Status, status: Status) => (code: string, cycleUuid: string) => (reason: string) => {
-      const { reviewType, uuid } = colleague?.timeline?.find((timeline) => timeline.code === code);
-
+    ({
+      prevStatus,
+      status,
+      tlUuid,
+      code,
+      cycleUuid,
+      reviewType,
+      reason,
+    }: {
+      prevStatus: Status;
+      status: Status;
+      tlUuid: string;
+      code: string;
+      cycleUuid: string;
+      reviewType: ReviewType;
+      reason?: string;
+    }) => {
+      console.log(status);
       const data = {
-        ...(reason ? { reason } : {}),
+        reason,
         status,
         code,
         cycleUuid,
         colleagueUuid: colleague.uuid,
         reviews: colleagueReviews
-          .filter(({ status, tlPointUuid }) => prevStatus === status && tlPointUuid === uuid)
+          .filter(({ tlPointUuid }) => tlPointUuid === tlUuid)
           .map(({ number, type, properties }) => {
-            if (type !== ReviewType.MYR) {
-              return { number, properties };
+            if (type === ReviewType.MYR) {
+              return { number };
             }
-            return { number };
+            return { number, properties };
           }),
       };
       onUpdate(reviewType, data);
@@ -74,6 +89,10 @@ const ColleagueAction: FC<Props> = ({ status, colleague, onUpdate }) => {
     });
     dispatch(SchemaActions.getSchema({ colleagueUuid: colleague.uuid }));
   }, [colleagueReviewUuids]);
+
+  useEffect(() => {
+    updateColleagueReviews(reviews);
+  }, [reviews]);
 
   const handleValidateReview = (review: { [key: string]: boolean }) =>
     validateReview((state) => ({ ...state, ...review }));
@@ -123,7 +142,7 @@ const ColleagueAction: FC<Props> = ({ status, colleague, onUpdate }) => {
                       }
 
                       return (
-                        <div className={css({ padding: '24px 35px 24px 24px' })} key={code}>
+                        <div className={css({ padding: '24px 35px 24px 24px' })} key={uuid}>
                           <Notification
                             graphic='information'
                             iconColor='pending'
@@ -163,6 +182,8 @@ const ColleagueAction: FC<Props> = ({ status, colleague, onUpdate }) => {
                                     <Buttons
                                       status={statusReview}
                                       code={code}
+                                      tlPointUuid={colleagueTimeline.uuid}
+                                      reviewType={colleagueTimeline.reviewType}
                                       cycleUuid={colleagueTimeline.cycleUuid || 'CURRENT'}
                                       onUpdate={handleUpdateReview}
                                       isDisabled={isButtonsDisabled}
