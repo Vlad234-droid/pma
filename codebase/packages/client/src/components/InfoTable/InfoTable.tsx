@@ -1,7 +1,6 @@
 import React, { FC } from 'react';
 import { useStyle, Rule, CreateRule, Styles } from '@pma/dex-wrapper';
 
-import { IconButton } from 'components/IconButton';
 import { Trans } from 'components/Translation/Translation';
 import { Data } from 'features/general/Report/config';
 
@@ -18,17 +17,8 @@ const InfoTable: FC<Props> = ({ mainTitle, data, preTitle = '' }) => {
   return (
     <React.Fragment>
       <h2 className={css(titleStyle({ preTitle }))}>{mainTitle}</h2>
-      {preTitle !== '' && (
+      {preTitle && (
         <div className={css(flexStyle)}>
-          <IconButton
-            graphic='information'
-            iconStyles={{
-              marginRight: '10px',
-            }}
-            onPress={() => {
-              console.log();
-            }}
-          />
           <p className={css(preTitleStyle)}>{preTitle}</p>
         </div>
       )}

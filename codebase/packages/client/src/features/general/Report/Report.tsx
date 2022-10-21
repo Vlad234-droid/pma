@@ -530,7 +530,7 @@ const Report: FC = () => {
                     <HoverMessage
                       text={t(
                         'the_number_of_annual_reviews_a_line_manager_has_undertaken',
-                        'The number of annual reviews a line manager has undertaken per quarter based on the number of direct reports they have. This is just indicative assuming a line manager will space reviews out equally during the year.',
+                        'The number of annual reviews a line manager has undertaken based on the number of direct reports they have. This is just indicative assuming a line manager will space reviews out equally during the year.',
                       )}
                       customStyles={reportHoverMessage}
                     />
@@ -552,7 +552,7 @@ const Report: FC = () => {
                   >
                     {({ data }) => (
                       <InfoTable
-                        mainTitle={t(TitlesReport.ANNIVERSARY_REVIEWS, 'Anniversary Reviews completed per quarter')}
+                        mainTitle={t(TitlesReport.ANNIVERSARY_REVIEWS, 'Anniversary Reviews')}
                         preTitle={t(TitlesReport.HOURLY_PAID, 'Hourly paid colleagues only')}
                         data={data}
                       />
