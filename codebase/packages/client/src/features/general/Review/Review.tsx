@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
 import {
@@ -13,6 +13,7 @@ import {
   SchemaActions,
   schemaMetaSelector,
   uuidCompareSelector,
+  ExpressionValueType,
 } from '@pma/store';
 import { useParams } from 'react-router';
 
@@ -80,6 +81,17 @@ const MyReview: FC<Props> = ({ reviewType, onClose }) => {
   const readonly = (uuid && !isUserView) || [Status.WAITING_FOR_APPROVAL, Status.APPROVED].includes(status);
 
   const { components = [] as Component[] } = schema;
+
+  const filteredComponent = useMemo(
+    () =>
+      components?.filter((component) => {
+        const { key = '', expression = {} } = component;
+        const value = key && review?.properties?.[key] ? review.properties[key] : '';
+        const keyVisibleOnEmptyValue = ExpressionValueType.OVERALL_RATING;
+        return !(expression?.auth?.permission?.read?.length && !value && key !== keyVisibleOnEmptyValue);
+      }),
+    [components, review],
+  );
 
   useEffect(() => {
     if (!successModal && saved) {
@@ -160,7 +172,7 @@ const MyReview: FC<Props> = ({ reviewType, onClose }) => {
               <ReviewHelpModal />
             </TriggerModal>
             <ReviewForm
-              components={readonly ? formTagComponents(components, theme) : components}
+              components={readonly ? formTagComponents(filteredComponent, theme) : filteredComponent}
               readonly={readonly}
               onClose={onClose}
               onSubmit={handleSubmitData}

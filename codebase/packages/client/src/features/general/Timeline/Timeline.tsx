@@ -9,6 +9,7 @@ import {
   userCurrentCycleTypeSelector,
   UserActions,
   uuidCompareSelector,
+  ReviewsActions,
 } from '@pma/store';
 import { Rule, useStyle } from '@pma/dex-wrapper';
 import { TileWrapper as Tile } from 'components/Tile/TileWrapper';
@@ -53,6 +54,7 @@ const Timeline: FC<{ colleagueUuid: string }> = ({ colleagueUuid }) => {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     setValue(value);
+    dispatch(ReviewsActions.clearReviewData());
     dispatch(UserActions.changeColleagueCurrentCycles(value));
   };
 
