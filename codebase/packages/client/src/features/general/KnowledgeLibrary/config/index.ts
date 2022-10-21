@@ -15,6 +15,8 @@ import MasteringFeedback from '../../../../assets/img/knowledgeLibrary/Mastering
 import ManagingUnderperformance from '../../../../assets/img/knowledgeLibrary/ManagingUnderperformance.jpg';
 import FurtherLearningForManagers from '../../../../assets/img/knowledgeLibrary/FurtherLearningForManagers.jpg';
 import SystemGuidance from '../../../../assets/img/knowledgeLibrary/SystemGuidance.jpg';
+import InternalCareers from '../../../../assets/img/knowledgeLibrary/InternalCareers.jpg';
+import LearningCurriculum from '../../../../assets/img/knowledgeLibrary/LearningCurriculum.jpg';
 
 const colleaguesData = [
   {
@@ -59,17 +61,17 @@ const colleaguesData = [
 const bankColleaguesData = [
   {
     id: 'internal-careers-site',
-    img: SystemGuidance,
+    img: InternalCareers,
     withTenant: true,
   },
   {
     id: 'be-well-hub',
-    img: SystemGuidance,
+    img: ManagingATeamAtTesco,
     withTenant: true,
   },
   {
     id: 'learning-curriculum',
-    img: SystemGuidance,
+    img: LearningCurriculum,
     withTenant: true,
   },
 ];

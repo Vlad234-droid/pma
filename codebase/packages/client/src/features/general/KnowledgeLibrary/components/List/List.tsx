@@ -31,7 +31,8 @@ const List: FC<Props> = ({ title, data = [], customRule = {} }) => {
             img={img}
             title={t(title, withTenant ? { ns: tenant } : undefined)}
             description={t(description, withTenant ? { ns: tenant } : undefined)}
-            link={link}
+            //TODO: remove in future
+            link={title !== 'system_guidance_and_faqs_title' ? link : ''}
             imgDescription={t(imgDescription)}
           />
         ))}
