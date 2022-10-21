@@ -33,7 +33,7 @@ const MyObjectives: FC = () => {
   const { loaded: timelinesLoaded } = useSelector(timelinesMetaSelector);
   const timelineTypes = useSelector(timelineTypesAvailabilitySelector(colleagueUuid)) || {};
   const cycleType = useSelector(userCurrentCycleTypeSelector);
-  const currentCycle = useSelector(colleagueCurrentCycleSelector);
+  const currentCycle = useSelector(colleagueCurrentCycleSelector(colleagueUuid));
 
   const isAvailable = useSelector(timelineStartedSelector(colleagueUuid));
 

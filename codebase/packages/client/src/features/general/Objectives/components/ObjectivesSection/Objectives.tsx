@@ -35,7 +35,7 @@ const Objectives = () => {
   const activeTimeline = useSelector(getActiveTimelineByReviewTypeSelector(ReviewType.OBJECTIVE, USER.current));
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const objectiveSchema = useSelector(getReviewSchema(activeTimeline?.code)) || {};
-  const currentCycle = useSelector(colleagueCurrentCycleSelector);
+  const currentCycle = useSelector(colleagueCurrentCycleSelector(colleagueUuid));
   const {
     objectives,
     meta: { loading, loaded },

@@ -57,7 +57,7 @@ const MyReview: FC<ReviewFormType> = ({ reviewType, onClose }) => {
   const { loading: reviewLoading, loaded: reviewLoaded, saving, saved } = useSelector(reviewsMetaSelector);
   const { loading: schemaLoading, loaded: schemaLoaded } = useSelector(schemaMetaSelector);
   const schema = useSelector(getReviewSchema(reviewType));
-  const currentCycle = useSelector(colleagueCurrentCycleSelector);
+  const currentCycle = useSelector(colleagueCurrentCycleSelector(colleagueUuid));
   const timelineReview = useSelector(getTimelineByReviewTypeSelector(reviewType, USER.current)) || ({} as any);
 
   const status = Object.keys(timelineReview?.statistics || { STARTED: 1 })[0] as Status;

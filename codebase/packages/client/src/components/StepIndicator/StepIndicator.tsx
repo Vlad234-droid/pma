@@ -1,7 +1,6 @@
 import React, { FC } from 'react';
-import { Colors, CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
-
-import { TileWrapper as Tile } from '../Tile/TileWrapper';
+import { CreateRule, useStyle } from '@pma/dex-wrapper';
+import { Colors } from 'config/types';
 import { StatusIcon } from './StatusIcon';
 import { Graphics } from 'components/Icon';
 import { Status, TimelineType } from 'config/enum';
@@ -67,7 +66,7 @@ const getUnderline = ({ step, index, totalSteps }) => {
   return undefined;
 };
 
-export const StepIndicatorBasic: FC<StepIndicatorProps> = ({
+const StepIndicator: FC<StepIndicatorProps> = ({
   currentStep,
   activeStep,
   currentStatus,
@@ -210,46 +209,6 @@ export const StepIndicatorBasic: FC<StepIndicatorProps> = ({
   );
 };
 
-export const StepIndicator: FC<StepIndicatorProps> = ({
-  mainTitle = 'Your Contribution timeline',
-  currentStep,
-  activeStep,
-  currentStatus,
-  nowrap,
-  titles = [],
-  descriptions = [],
-  statuses = [],
-  types = [],
-  customStyle = {},
-}) => {
-  const { css } = useStyle();
-  return (
-    <Tile customStyle={customStyle}>
-      <div className={css(wrapperStyle)} data-test-id='timeline'>
-        <span className={css(titleStyle)}>{mainTitle}</span>
-        <StepIndicatorBasic
-          currentStep={currentStep}
-          activeStep={activeStep}
-          currentStatus={currentStatus}
-          titles={titles}
-          descriptions={descriptions}
-          statuses={statuses}
-          types={types}
-          nowrap={nowrap}
-        />
-      </div>
-    </Tile>
-  );
-};
-
-const titleStyle: Rule = ({ theme }) => ({
-  ...theme.font.fixed.f16,
-  letterSpacing: '0px',
-  fontStyle: 'normal',
-  fontWeight: 'bold',
-  marginBottom: '30px',
-});
-
 const title2Style: CreateRule<{ textAlign: any; active: boolean; nowrap: boolean | undefined }> =
   ({ textAlign, active, nowrap }) =>
   ({ theme }) => ({
@@ -275,6 +234,4 @@ const descriptionStyle: CreateRule<{ textAlign: any; active: boolean }> =
     color: active ? theme.colors.base : theme.colors.backgroundDarkest,
   });
 
-const wrapperStyle = {
-  padding: '20px',
-};
+export default StepIndicator;

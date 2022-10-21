@@ -11,7 +11,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { ConfirmModal } from 'components/ConfirmModal';
 import { Trans, useTranslation } from 'components/Translation';
 import Datepicker from 'components/Datepicker';
-import { StepIndicatorBasic } from 'components/StepIndicator/StepIndicator';
+import StepIndicator from 'components/StepIndicator/StepIndicator';
 import { Status } from 'config/enum';
 import { Icon } from 'components/Icon';
 import MarkdownRenderer from 'components/MarkdownRenderer';
@@ -126,7 +126,7 @@ const CreatePDPForm: FC<Props> = ({
       <div className={css(wrapperStyle({ mobileScreen, currentUUID }))}>
         {!currentUUID && (
           <div className={css(stepIndicatorWrapperStyle)}>
-            <StepIndicatorBasic
+            <StepIndicator
               currentStatus={Status.DRAFT}
               currentStep={currentTab + 1}
               titles={['Goal 1', 'Goal 2', 'Goal 3', 'Goal 4', 'Goal 5']}

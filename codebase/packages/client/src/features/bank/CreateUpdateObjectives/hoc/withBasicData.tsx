@@ -25,10 +25,11 @@ export function withBasicData<P extends Props>(
     const dispatch = useDispatch();
     const { activeTimelines } = useTimelineContainer();
     const { code: activeCode } = activeTimelines[ReviewType.QUARTER] || {};
+    const colleagueUuid = useSelector(colleagueUUIDSelector);
 
     const defaultFormState = props.useSingleStep ? FormStateType.SINGLE_MODIFY : FormStateType.MODIFY;
     const [formState, setFormState] = useState<FormStateType>(defaultFormState);
-    const currentCycle = useSelector(colleagueCurrentCycleSelector);
+    const currentCycle = useSelector(colleagueCurrentCycleSelector(colleagueUuid));
 
     const { loading: schemaLoading } = useSelector(schemaMetaSelector);
     const {
@@ -38,7 +39,6 @@ export function withBasicData<P extends Props>(
       error: reviewError,
     } = useSelector(reviewsMetaSelector);
     const { loading: timelineLoading } = useSelector(timelinesMetaSelector);
-    const colleagueUuid = useSelector(colleagueUUIDSelector);
 
     useEffect(() => {
       dispatch(SchemaActions.getSchema({ colleagueUuid }));

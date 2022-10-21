@@ -18,16 +18,16 @@ import { transformReviewsToObjectives } from '../utils';
 import { ReviewType } from 'config/enum';
 import useDispatch from 'hooks/useDispatch';
 
-const useObjectivesData = (uuid: string) => {
+const useObjectivesData = (colleagueUuid: string) => {
   const dispatch = useDispatch();
   const { loaded: reviewLoaded, loading: reviewLoading } = useSelector(reviewsMetaSelector);
   const { loaded: timelineLoaded, loading: timelineLoading } = useSelector(timelinesMetaSelector);
   const data = useSelector(filterReviewsByTypeSelector(ReviewType.QUARTER));
   const [objectives, setObjectives] = useState<Objective[]>([]);
-  const currentCycle = useSelector(colleagueCurrentCycleSelector);
+  const currentCycle = useSelector(colleagueCurrentCycleSelector(colleagueUuid));
 
   useEffect(() => {
-    dispatch(PreviousReviewFilesActions.getPreviousReviewFiles({ colleagueUUID: uuid }));
+    dispatch(PreviousReviewFilesActions.getPreviousReviewFiles({ colleagueUUID: colleagueUuid }));
   }, []);
 
   useEffect(() => {
@@ -37,10 +37,10 @@ const useObjectivesData = (uuid: string) => {
   }, [reviewLoaded]);
 
   useEffect(() => {
-    dispatch(ReviewsActions.getReviews({ pathParams: { colleagueUuid: uuid, cycleUuid: currentCycle } }));
-    dispatch(TimelineActions.getUserTimeline({ colleagueUuid: uuid, cycleUuid: currentCycle }));
-    dispatch(ColleagueActions.getColleagueByUuid({ colleagueUuid: uuid }));
-  }, [uuid, currentCycle]);
+    dispatch(ReviewsActions.getReviews({ pathParams: { colleagueUuid, cycleUuid: currentCycle } }));
+    dispatch(TimelineActions.getUserTimeline({ colleagueUuid, cycleUuid: currentCycle }));
+    dispatch(ColleagueActions.getColleagueByUuid({ colleagueUuid }));
+  }, [colleagueUuid, currentCycle]);
 
   return { objectives, meta: { loaded: reviewLoaded | timelineLoaded, loading: reviewLoading | timelineLoading } };
 };

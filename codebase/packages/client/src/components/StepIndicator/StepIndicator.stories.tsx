@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Meta, Story } from '@storybook/react';
 
-import { StepIndicator, StepIndicatorBasic, StepIndicatorProps } from './StepIndicator';
+import StepIndicator, { StepIndicatorProps } from './StepIndicator';
 import { Status } from 'config/enum';
 
 export default {
@@ -11,18 +11,6 @@ export default {
 } as Meta;
 
 const Template: Story<StepIndicatorProps> = (args) => <StepIndicator {...args} />;
-const TemplateBasic: Story<StepIndicatorProps> = (args) => (
-  <div style={{ padding: '20px' }}>
-    <StepIndicatorBasic {...args} />
-  </div>
-);
-
-export const StepIndicatorBasicComponent = TemplateBasic.bind({});
-StepIndicatorBasicComponent.args = {
-  currentStatus: Status.APPROVED,
-  currentStep: 2,
-  titles: ['Set objectives', 'Mid-year review', 'Year-end review'],
-};
 
 export const StepIndicatorPending = Template.bind({});
 StepIndicatorPending.args = {

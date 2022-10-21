@@ -63,8 +63,8 @@ const MyReview: FC<Props> = ({ reviewType, onClose }) => {
 
   const [successModal, setSuccessModal] = useState(false);
   const { info } = useSelector(currentUserSelector);
-  const currentCycle = useSelector(colleagueCurrentCycleSelector);
   const colleagueUuid = uuid || info.colleagueUUID;
+  const currentCycle = useSelector(colleagueCurrentCycleSelector(colleagueUuid));
   const dispatch = useDispatch();
   const review: Review = useSelector(getReviewByTypeSelector(reviewType)) || {};
   const formValues = review?.properties || {};
@@ -128,7 +128,7 @@ const MyReview: FC<Props> = ({ reviewType, onClose }) => {
 
   if (!schemaLoaded || !reviewLoaded) return null;
 
-  if (successModal) {
+  if (saved && successModal) {
     return (
       <SuccessModal
         title='Review sent'

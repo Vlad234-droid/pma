@@ -11,7 +11,7 @@ import { useTranslation } from 'components/Translation';
 import { BasicFormModal } from 'components/BasicFormModal';
 
 // TODO: fix
-const Review = () => {
+const ReviewPage = () => {
   const tenant = useTenant();
   const { type } = useParams();
   const navigate = useNavigate();
@@ -19,7 +19,7 @@ const Review = () => {
   const { uuid } = useParams<{ uuid: string }>();
   const { state } = useLocation();
 
-  const ReviewForm = useMemo(
+  const Review = useMemo(
     () => React.lazy(() => import(`features/${tenant}/Review`).then((module) => ({ default: module.Review }))),
     [],
   );
@@ -53,9 +53,9 @@ const Review = () => {
           : t('review_type_description_eyr', 'Year-end review')
       }
     >
-      <ReviewForm reviewType={type?.toUpperCase()} onClose={handleClose} />
+      <Review reviewType={type?.toUpperCase()} onClose={handleClose} />
     </BasicFormModal>
   );
 };
 
-export default Review;
+export default ReviewPage;

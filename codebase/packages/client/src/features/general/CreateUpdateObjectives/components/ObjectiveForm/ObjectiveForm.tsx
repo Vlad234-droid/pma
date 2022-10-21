@@ -11,7 +11,7 @@ import { ButtonWithConfirmation } from 'features/general/Modal';
 import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
 import { Trans, useTranslation } from 'components/Translation';
 import { Icon as IconComponent } from 'components/Icon';
-import { StepIndicatorBasic } from 'components/StepIndicator/StepIndicator';
+import StepIndicator from 'components/StepIndicator/StepIndicator';
 import { Attention } from 'components/Form';
 import ObjectiveHelpModal from '../Modal/ObjectiveHelpModal';
 import DynamicForm from 'components/DynamicForm';
@@ -118,7 +118,7 @@ const ObjectiveForm: FC<Props> = ({
         <form ref={formRef} data-test-id={'OBJECTIVE_FORM_MODAL'}>
           {multiply && (
             <div data-test-id={STEP_TEST_ID} className={css(stepIndicatorWrapperStyle)}>
-              <StepIndicatorBasic
+              <StepIndicator
                 currentStatus={Status.DRAFT}
                 currentStep={currentId - 1}
                 titles={titles}

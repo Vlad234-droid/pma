@@ -51,7 +51,7 @@ const ReviewWidget: FC<Props> = ({
 
   return (
     <TileWrapper customStyle={{ ...customStyle }} hover={shadow} boarder={shadow} background={background}>
-      <div className={css(wrapperStyle)} data-test-id={TEST_ID}>
+      <div className={css(wrapperStyle)} onMouseDown={handleOpen} data-test-id={TEST_ID}>
         <div className={css(headerBlockStyle)}>
           {renderHeader ? (
             renderHeader({ title, titleColor })

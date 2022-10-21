@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 export const useFetchCommonData = () => {
   const dispatch = useDispatch();
   const colleagueUuid = useSelector(colleagueUUIDSelector);
-  const currentCycle = useSelector(colleagueCurrentCycleSelector);
+  const currentCycle = useSelector(colleagueCurrentCycleSelector(colleagueUuid));
 
   useEffect(() => {
     if (colleagueUuid) {
