@@ -27,6 +27,7 @@ enum Page {
   PEOPLE_TEAM = 'people-team',
   NEW_CALIBRATION = 'calibration',
   CALIBRATION = 'calibration/:type',
+  CALIBRATION_SESSION = 'calibration-session',
   NOTES = 'notes',
   NOTES_INFO = 'notes/info',
   PRIORITY_NOTE = 'notes/priority-note/:uuid',

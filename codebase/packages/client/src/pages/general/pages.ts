@@ -18,11 +18,11 @@ import RespondFeedback from './RespondFeedback';
 import ViewFeedback from './ViewFeedback';
 import Settings from './Settings';
 import Notes, {
-  NotesInfo,
   CreatePersonalNote,
   CreatePersonalNoteFolder,
   CreateTeamNote,
   CreateTeamNoteFolder,
+  NotesInfo,
   PersonalNoteView,
   TeamNoteView,
 } from './Notes';
@@ -35,6 +35,7 @@ import { EditTip, TipsAdministration } from './Tips';
 import UserObjectives, { CreateObjective } from './UserObjectives';
 import PeopleTeam from './PeopleTeam';
 import Calibration from './Calibration';
+import CalibrationSession from './CalibrationSession';
 import NewCalibration from './NewCalibration';
 import RespondNewFeedback from './RespondNewFeedback';
 import ReportStatistics from './ReportStatistics';
@@ -106,6 +107,13 @@ const pages: Record<Page, PageComponent> = {
     withHeader: true,
     backPath: Page.REPORT,
     perform: [role.LINE_MANAGER],
+    tenant: [Tenant.BANK, Tenant.GENERAL],
+  },
+  [Page.CALIBRATION_SESSION]: {
+    Element: CalibrationSession,
+    title: (_, t) => t('calibration_session'),
+    withHeader: true,
+    perform: [role.LINE_MANAGER, role.PEOPLE_TEAM],
     tenant: [Tenant.BANK, Tenant.GENERAL],
   },
   [Page.NOTES]: {
