@@ -25,6 +25,10 @@ export default createReducer(initialState)
       meta: { ...state.meta, loading: false, loaded: true, updating: false, updated: false },
     };
   })
+  .handleAction(getSchema.request, (state, { payload }) => ({
+    ...state,
+    meta: { ...state.meta, loading: false, error: payload, loaded: false },
+  }))
   .handleAction(getSchemaWithColleaguePermission.request, (state) => ({
     ...state,
     meta: { ...state.meta, loading: true, error: null, loaded: false, updating: false, updated: false },
