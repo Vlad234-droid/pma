@@ -21,7 +21,7 @@ const UserObjectivesPage = () => {
   const tenant = useTenant();
   const navigate = useNavigate();
   const { uuid } = useParams<{ uuid: string }>();
-  const { tenant: userTenant, loading, loaded } = useColleagueTenant({ uuid });
+  const { tenant: userTenant, loading, loaded } = useColleagueTenant(uuid as string);
 
   const mobileScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
 
@@ -68,7 +68,7 @@ const UserObjectivesPage = () => {
         ? React.lazy(() =>
             import(`features/${userTenant}/Objectives`).then((module) => ({ default: module.UserObjectives })),
           )
-        : Spinner,
+        : () => null,
     [userTenant],
   );
 
