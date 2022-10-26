@@ -1,12 +1,5 @@
-import {
-  MetaDataReport,
-  Rating,
-  ReportPage,
-  StatisticsTitlesReport,
-  StatisticsTitlesReportKeys,
-  Status,
-  TitlesReport,
-} from 'config/enum';
+import { TFunction } from 'components/Translation';
+import { Rating, ReportPage, StatisticsTitlesReportKeys, TitlesReport } from 'config/enum';
 import { getCurrentYear, getPrevYear } from 'utils/date';
 import { getCurrentYearWithStartDate, isStartPeriod } from '../utils';
 
@@ -30,8 +23,8 @@ export enum IsReportTiles {
   BREAKDOWN_YEAR_END_REVIEW = 'Breakdown of year-end review',
   MOMENT_FEEDBACK = 'Everyday Feedback',
   NEW_TO_BUSINESS = 'New to business',
-  ANNIVERSARY_REVIEWS = 'Anniversary Reviews completed per quarter',
-  WL4And5 = 'WL4 & 5 Objectives approved',
+  ANNIVERSARY_REVIEWS = 'Anniversary Reviews',
+  WL4AND5 = 'WL4 & 5 Objectives approved',
 }
 export const getFieldOptions = () => [
   {
@@ -40,121 +33,9 @@ export const getFieldOptions = () => [
   },
 ];
 
-export const getYearsFromCurrentYear = (currentYear) => {
-  return [
-    { value: currentYear.toString(), label: currentYear.toString() },
-    { value: (currentYear - 1).toString(), label: (currentYear - 1).toString() },
-    { value: (currentYear - 2).toString(), label: (currentYear - 2).toString() },
-  ];
-};
-
-export const getRequestParams = (selectedCheckboxes) =>
-  selectedCheckboxes.reduce((acc, item) => {
-    if (item.isChecked) {
-      acc.push(...statisticsReport[item.label]);
-    }
-    return acc;
-  }, []);
-
-export const listOfStatuses = [
-  Status.DRAFT,
-  Status.WAITING_FOR_APPROVAL,
-  Status.APPROVED,
-  Status.DECLINED,
-  Status.WAITING_FOR_COMPLETION,
-  Status.REQUESTED_TO_AMEND,
-  Status.COMPLETED,
-];
-
 export const convertToLink = (str) => str.split('_').slice(1).join('-').toLowerCase();
 
-export const metaStatuses = [
-  MetaDataReport.MYR_SUBMITTED_PERCENTAGE,
-  MetaDataReport.MYR_APPROVED_PERCENTAGE,
-  MetaDataReport.EYR_SUBMITTED_PERCENTAGE,
-  MetaDataReport.EYR_APPROVED_PERCENTAGE,
-  MetaDataReport.FEEDBACK_REQUESTED_PERCENTAGE,
-  MetaDataReport.FEEDBACK_GIVEN_PERCENTAGE,
-  MetaDataReport.OBJECTIVES_SUBMITTED_PERCENTAGE,
-  MetaDataReport.OBJECTIVES_APPROVED_PERCENTAGE,
-  MetaDataReport.MYR_RATING_BREAKDOWN_BELOW_EXPECTED_PERCENTAGE,
-  MetaDataReport.MYR_RATING_BREAKDOWN_BELOW_EXPECTED_COUNT,
-  MetaDataReport.MYR_RATING_BREAKDOWN_SATISFACTORY_PERCENTAGE,
-  MetaDataReport.MYR_RATING_BREAKDOWN_SATISFACTORY_COUNT,
-  MetaDataReport.MYR_RATING_BREAKDOWN_GREAT_PERCENTAGE,
-  MetaDataReport.MYR_RATING_BREAKDOWN_GREAT_COUNT,
-  MetaDataReport.MYR_RATING_BREAKDOWN_OUTSTANDING_PERCENTAGE,
-  MetaDataReport.MYR_RATING_BREAKDOWN_OUTSTANDING_COUNT,
-  MetaDataReport.EYR_RATING_BREAKDOWN_BELOW_EXPECTED_PERCENTAGE,
-  MetaDataReport.EYR_RATING_BREAKDOWN_BELOW_EXPECTED_COUNT,
-  MetaDataReport.EYR_RATING_BREAKDOWN_SATISFACTORY_PERCENTAGE,
-  MetaDataReport.EYR_RATING_BREAKDOWN_SATISFACTORY_COUNT,
-  MetaDataReport.EYR_RATING_BREAKDOWN_GREAT_PERCENTAGE,
-  MetaDataReport.EYR_RATING_BREAKDOWN_GREAT_COUNT,
-  MetaDataReport.EYR_RATING_BREAKDOWN_OUTSTANDING_PERCENTAGE,
-  MetaDataReport.EYR_RATING_BREAKDOWN_OUTSTANDING_COUNT,
-  MetaDataReport.NEW_TO_BUSINESS_COUNT,
-  MetaDataReport.ANNIVERSARY_REVIEW_PER_QUARTER_1_PERCENTAGE,
-  MetaDataReport.ANNIVERSARY_REVIEW_PER_QUARTER_1_COUNT,
-  MetaDataReport.ANNIVERSARY_REVIEW_PER_QUARTER_2_PERCENTAGE,
-  MetaDataReport.ANNIVERSARY_REVIEW_PER_QUARTER_2_COUNT,
-  MetaDataReport.ANNIVERSARY_REVIEW_PER_QUARTER_3_PERCENTAGE,
-  MetaDataReport.ANNIVERSARY_REVIEW_PER_QUARTER_3_COUNT,
-  MetaDataReport.ANNIVERSARY_REVIEW_PER_QUARTER_4_PERCENTAGE,
-  MetaDataReport.ANNIVERSARY_REVIEW_PER_QUARTER_4_COUNT,
-  MetaDataReport.COLLEAGUES_COUNT,
-];
-
-export const statisticsReport = {
-  [StatisticsTitlesReport.COLLEAGUES_COUNT]: [MetaDataReport.COLLEAGUES_COUNT],
-  [StatisticsTitlesReport.OBJECTIVES_SUBMITTED]: [MetaDataReport.OBJECTIVES_SUBMITTED_PERCENTAGE],
-  [StatisticsTitlesReport.OBJECTIVES_APPROVED]: [MetaDataReport.OBJECTIVES_APPROVED_PERCENTAGE],
-  [StatisticsTitlesReport.MID_YEAR_FORMS]: [
-    MetaDataReport.MYR_SUBMITTED_PERCENTAGE,
-    MetaDataReport.MYR_APPROVED_PERCENTAGE,
-  ],
-  [StatisticsTitlesReport.BREAKDOWN_OF_MID_YEAR_REVIEW]: [
-    MetaDataReport.MYR_RATING_BREAKDOWN_BELOW_EXPECTED_PERCENTAGE,
-    MetaDataReport.MYR_RATING_BREAKDOWN_BELOW_EXPECTED_COUNT,
-    MetaDataReport.MYR_RATING_BREAKDOWN_SATISFACTORY_PERCENTAGE,
-    MetaDataReport.MYR_RATING_BREAKDOWN_SATISFACTORY_COUNT,
-    MetaDataReport.MYR_RATING_BREAKDOWN_GREAT_PERCENTAGE,
-    MetaDataReport.MYR_RATING_BREAKDOWN_GREAT_COUNT,
-    MetaDataReport.MYR_RATING_BREAKDOWN_OUTSTANDING_PERCENTAGE,
-    MetaDataReport.MYR_RATING_BREAKDOWN_OUTSTANDING_COUNT,
-  ],
-  [StatisticsTitlesReport.YEAR_END_FORMS]: [
-    MetaDataReport.EYR_SUBMITTED_PERCENTAGE,
-    MetaDataReport.EYR_APPROVED_PERCENTAGE,
-  ],
-  [StatisticsTitlesReport.BREAKDOWN_OF_YEAR_END_REVIEW]: [
-    MetaDataReport.EYR_RATING_BREAKDOWN_BELOW_EXPECTED_PERCENTAGE,
-    MetaDataReport.EYR_RATING_BREAKDOWN_BELOW_EXPECTED_COUNT,
-    MetaDataReport.EYR_RATING_BREAKDOWN_SATISFACTORY_PERCENTAGE,
-    MetaDataReport.EYR_RATING_BREAKDOWN_SATISFACTORY_COUNT,
-    MetaDataReport.EYR_RATING_BREAKDOWN_GREAT_PERCENTAGE,
-    MetaDataReport.EYR_RATING_BREAKDOWN_GREAT_COUNT,
-    MetaDataReport.EYR_RATING_BREAKDOWN_OUTSTANDING_PERCENTAGE,
-    MetaDataReport.EYR_RATING_BREAKDOWN_OUTSTANDING_COUNT,
-  ],
-  [StatisticsTitlesReport.IN_THE_MOMENT_FEEDBACK]: [
-    MetaDataReport.FEEDBACK_REQUESTED_PERCENTAGE,
-    MetaDataReport.FEEDBACK_GIVEN_PERCENTAGE,
-  ],
-  [StatisticsTitlesReport.NEW_TO_BUSINESS]: [MetaDataReport.NEW_TO_BUSINESS_COUNT],
-  [StatisticsTitlesReport.ANNIVERSARY_REVIEWS]: [
-    MetaDataReport.ANNIVERSARY_REVIEW_PER_QUARTER_1_PERCENTAGE,
-    MetaDataReport.ANNIVERSARY_REVIEW_PER_QUARTER_1_COUNT,
-    MetaDataReport.ANNIVERSARY_REVIEW_PER_QUARTER_2_PERCENTAGE,
-    MetaDataReport.ANNIVERSARY_REVIEW_PER_QUARTER_2_COUNT,
-    MetaDataReport.ANNIVERSARY_REVIEW_PER_QUARTER_3_PERCENTAGE,
-    MetaDataReport.ANNIVERSARY_REVIEW_PER_QUARTER_3_COUNT,
-    MetaDataReport.ANNIVERSARY_REVIEW_PER_QUARTER_4_PERCENTAGE,
-    MetaDataReport.ANNIVERSARY_REVIEW_PER_QUARTER_4_COUNT,
-  ],
-};
-
-export const checkboxes = (t, fields) => [
+export const checkboxes = (t: TFunction) => [
   {
     id: ReportPage.REPORT_SUBMITTED_OBJECTIVES,
     label: t(StatisticsTitlesReportKeys.OBJECTIVES_SUBMITTED),
@@ -202,12 +83,8 @@ export const checkboxes = (t, fields) => [
     label: t(StatisticsTitlesReportKeys.ANNIVERSARY_REVIEWS),
     isChecked: false,
   },
-  ...fields,
-];
-
-export const getWLFields = (t) => [
   { id: ReportPage.REPORT_WORK_LEVEL, label: t(StatisticsTitlesReportKeys.WL4And5), isChecked: false },
-  getSelectAllField(t),
+  { id: '11', label: t('select_all', 'Select All'), isChecked: false },
 ];
 
 export const getSelectAllField = (t) => ({ id: '11', label: t('select_all', 'Select All'), isChecked: false });

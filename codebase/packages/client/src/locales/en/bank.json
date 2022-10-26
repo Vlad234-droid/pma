@@ -41,5 +41,8 @@
   "be_well_hub_description": "Explore key resources and support that help you and the people you care about Be Well.",
   "learning_curriculum_title": "Learning curriculum",
   "learning_curriculum_description": "Explore learning available to support you in your role",
-  "no_objectives_created": "No Priority created"
+  "no_objectives_created": "No Priority created",
+  "priorities_submitted_per_quarter": "Priorities submitted per quarter",
+  "priorities_agreed_per_quarter": "Priorities agreed per quarter",
+  "priorities_completed_per_quarter": "Priorities completed per quarter"
 }

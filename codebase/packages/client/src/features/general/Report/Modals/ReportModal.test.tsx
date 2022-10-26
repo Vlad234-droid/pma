@@ -8,7 +8,7 @@ describe('Download report modal', () => {
   const onClose = jest.fn();
   const props = {
     onClose,
-    modalStatus: null,
+    tiles: ['Objective submitted'],
   };
   it('it should render download wrapper', async () => {
     const { getByTestId } = render(<ReportModal {...props} />);

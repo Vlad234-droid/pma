@@ -81,3 +81,8 @@ export const getISODateStringWithTimeFromDateString = (dateString: string): stri
 
   return date.toISO().replace(/\+.+$/, 'Z');
 };
+
+export const getYearsFromCurrentYear = (currentYear, depth = 3): Array<{ value: string }> =>
+  Array.from(new Array(depth), (_, index) => ({
+    value: (currentYear - index).toString(),
+  }));

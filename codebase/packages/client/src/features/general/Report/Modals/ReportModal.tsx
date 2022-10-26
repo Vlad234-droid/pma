@@ -1,61 +1,32 @@
 import React, { FC, useEffect, useState } from 'react';
-import { Button, CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
-import * as Yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
 
 import { CanPerform, role } from 'features/general/Permission';
 import { WrapperModal } from 'features/general/Modal';
-import { Checkbox, Item, Select } from 'components/Form';
+import { Checkbox } from 'components/Form';
 import { Trans, useTranslation } from 'components/Translation';
 import { ButtonsWrapper } from 'components/ButtonsWrapper';
 
-import { downloadReportStatistics } from '../utils';
-import { getCurrentYear } from 'utils/date';
-import success from 'images/success.jpg';
-import {
-  checkboxes,
-  getRequestParams,
-  getWLFields,
-  getYearsFromCurrentYear,
-  prepareData,
-  reportByYearSchema,
-} from '../config';
-import { ModalStatus } from '../Report';
-import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
+import { checkboxes, prepareData } from '../config';
+
 import { ReportPage } from 'config/enum';
 
 export const DOWNLOAD_WRAPPER = 'modal-wrapper';
 
 type ModalProps = {
   onClose: (selectedCheckboxes?: any) => void;
-  modalStatus: null | ModalStatus;
   tiles: Array<string>;
 };
 
-const ReportModal: FC<ModalProps> = ({ onClose, modalStatus, tiles }) => {
+const ReportModal: FC<ModalProps> = ({ onClose, tiles }) => {
   const { css, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
   const { t } = useTranslation();
-  const methods = useFormWithCloseProtection({
-    mode: 'onChange',
-    resolver: yupResolver<Yup.AnyObjectSchema>(reportByYearSchema),
-  });
-  const {
-    formState: { isValid },
-    getValues,
-    setValue,
-  } = methods;
 
-  const values = getValues();
-
-  const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const [selectedCheckboxes, setSelectedCheckboxes] = useState(
-    checkboxes(t, modalStatus === ModalStatus.EDIT ? [...getWLFields(t)] : []),
-  );
+  const [selectedCheckboxes, setSelectedCheckboxes] = useState(checkboxes(t));
 
   useEffect(() => {
-    const isEditedCheckboxes = modalStatus === ModalStatus.EDIT && tiles.length;
-    isEditedCheckboxes &&
+    tiles.length &&
       setSelectedCheckboxes((prev) => {
         return prev.map((checkbox, i) => {
           if (i === prev.length - 1)
@@ -76,20 +47,14 @@ const ReportModal: FC<ModalProps> = ({ onClose, modalStatus, tiles }) => {
   }, []);
 
   const submitReportModal = () => {
-    if (modalStatus === ModalStatus.DOWNLOAD) {
-      setShowSuccessModal(true);
-      downloadReportStatistics({ year: values?.year, topics: getRequestParams(selectedCheckboxes) });
-      return;
-    }
     const isCheckAll = selectedCheckboxes.slice(0, -1).every((item) => item.isChecked);
-
     onClose(prepareData(selectedCheckboxes, isCheckAll, t));
   };
 
   const handleCheck = (checkboxId) => {
     const itemIndex = selectedCheckboxes.findIndex((item) => item.id === checkboxId);
     const isSelectAll = itemIndex === selectedCheckboxes.length - 1;
-    if (isSelectAll && modalStatus === ModalStatus.EDIT) {
+    if (isSelectAll) {
       return setSelectedCheckboxes((prev) =>
         prev.map((checkbox) => ({
           ...checkbox,
@@ -106,31 +71,14 @@ const ReportModal: FC<ModalProps> = ({ onClose, modalStatus, tiles }) => {
     setSelectedCheckboxes(newArray);
   };
 
-  const isDisabledSubmit = () => {
-    if (modalStatus === ModalStatus.DOWNLOAD && isValid && selectedCheckboxes.some((item) => item['isChecked']))
-      return true;
-    return modalStatus === ModalStatus.EDIT && selectedCheckboxes.some((item) => item['isChecked']);
-  };
+  const isDisabledSubmit = () => selectedCheckboxes.some((item) => item['isChecked']);
   return (
-    <WrapperModal
-      onClose={onClose}
-      title={
-        modalStatus === ModalStatus.DOWNLOAD
-          ? t('download_and_extract', 'Download and Extract')
-          : t('edit_dashboard', 'Edit dashboard')
-      }
-    >
+    <WrapperModal onClose={onClose} title={t('edit_dashboard', 'Edit dashboard')}>
       <div className={css(wrapperModalGiveFeedbackStyle)}>
         <h3 className={css(modalTitleStyle({ mobileScreen }))} data-test-id={DOWNLOAD_WRAPPER}>
-          {modalStatus === ModalStatus.DOWNLOAD ? (
-            <Trans i18nKey='topics_to_download_into_excel_report'>
-              Choose which topics you’d like to download into an excel report
-            </Trans>
-          ) : (
-            <Trans i18nKey='choose_which_data_you_want_to_see_in_your_dashboard'>
-              Choose which data you want to see in your dashboard
-            </Trans>
-          )}
+          <Trans i18nKey='choose_which_data_you_want_to_see_in_your_dashboard'>
+            Choose which data you want to see in your dashboard
+          </Trans>
         </h3>
         <div>
           <div className={css({ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' })}>
@@ -154,49 +102,14 @@ const ReportModal: FC<ModalProps> = ({ onClose, modalStatus, tiles }) => {
               ),
             )}
           </div>
-          {modalStatus === ModalStatus.DOWNLOAD && (
-            <Item withIcon={false} label={t('select_a_year', 'Select a year')}>
-              <Select
-                options={getYearsFromCurrentYear(getCurrentYear())}
-                name={'year'}
-                placeholder={t('please_select', 'Please select')}
-                //@ts-ignore
-                onChange={({ target: { value } }) => {
-                  setValue('year', value, { shouldValidate: true });
-                }}
-              />
-            </Item>
-          )}
-          {modalStatus === ModalStatus.DOWNLOAD && (
-            <>
-              <div className={css(textBlock, { fontWeight: 700 })}>Guidance for colleagues</div>
-              <div className={css(textBlock, { marginBottom: '30px' })}>
-                <Trans i18nKey='data_is_confidential'>
-                  This data is confidential. If you need to download this data, you must ensure you do not share with
-                  anyone else and that you store the data securely with a password.
-                </Trans>
-              </div>
-            </>
-          )}
         </div>
         <ButtonsWrapper
           isValid={isDisabledSubmit()}
           onLeftPress={onClose}
           onRightPress={submitReportModal}
           rightIcon={false}
-          rightTextNotIcon={modalStatus === ModalStatus.DOWNLOAD ? 'download' : 'save_changes'}
+          rightTextNotIcon={'save_changes'}
         />
-
-        {showSuccessModal && (
-          <div className={css(successModalWrap)} data-test-id='success-wrapper'>
-            <img src={success} alt='success' />
-            <div className={css(successModalTitle)}>Done!</div>
-            <div className={css(successModalText)}>You have downloaded the report onto your device.</div>
-            <Button styles={[successModalBtn]} onPress={onClose}>
-              <Trans i18nKey='okay'>Okay</Trans>
-            </Button>
-          </div>
-        )}
       </div>
     </WrapperModal>
   );
@@ -235,55 +148,5 @@ const modalTitleStyle: CreateRule<{ mobileScreen: boolean }> =
           lineHeight: theme.font.fixed.f24.lineHeight,
         }),
   });
-
-const textBlock: Rule = ({ theme }) => {
-  return {
-    fontSize: theme.font.fixed.f16.fontSize,
-    lineHeight: theme.font.fixed.f16.lineHeight,
-    marginBottom: '5px',
-  };
-};
-
-const successModalWrap: Rule = ({ theme }) => {
-  return {
-    position: 'absolute',
-    width: '100%',
-    height: '100%',
-    top: theme.spacing.s0,
-    left: theme.spacing.s0,
-    borderRadius: '32px',
-    padding: '120px 40px 40px',
-    background: theme.colors.white,
-    display: 'flex',
-    alignItems: 'center',
-    flexDirection: 'column',
-    textAlign: 'center',
-  };
-};
-
-const successModalTitle: Rule = ({ theme }) => {
-  return {
-    fontSize: theme.font.fixed.f32.fontSize,
-    fontWeight: 700,
-    margin: '40px 0 15px',
-  };
-};
-
-const successModalText: Rule = ({ theme }) => {
-  return {
-    fontSize: theme.font.fixed.f24.fontSize,
-    lineHeight: theme.font.fixed.f24.lineHeight,
-    maxWidth: '370px',
-  };
-};
-
-const successModalBtn: Rule = () => {
-  return {
-    marginTop: 'auto',
-    maxWidth: '250px',
-    width: '100%',
-    fontWeight: 700,
-  };
-};
 
 export default ReportModal;

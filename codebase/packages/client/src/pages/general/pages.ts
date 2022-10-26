@@ -30,6 +30,7 @@ import KnowledgeLibrary from './KnowledgeLibrary';
 import OrganizationObjectives from './OrganizationObjectives';
 import ObjectivesView from './ObjectivesView';
 import Report from './Report';
+import ReportDownload from './ReportDownload';
 import { CreatePerformanceCycle, PerformanceCycleAdministration } from './PerformanceCycle';
 import { EditTip, TipsAdministration } from './Tips';
 import UserObjectives, { CreateObjective } from './UserObjectives';
@@ -424,6 +425,12 @@ const pages: Record<Page, PageComponent> = {
     title: (_, t) => t('team_reporting'),
     withHeader: true,
     backPath: Page.CONTRIBUTION,
+    perform: [role.TALENT_ADMIN, role.ADMIN, role.LINE_MANAGER, role.EXECUTIVE, role.PEOPLE_TEAM],
+    tenant: [Tenant.BANK, Tenant.GENERAL],
+  },
+  [Page.REPORT_DOWNLOAD]: {
+    Element: ReportDownload,
+    withHeader: false,
     perform: [role.TALENT_ADMIN, role.ADMIN, role.LINE_MANAGER, role.EXECUTIVE, role.PEOPLE_TEAM],
     tenant: [Tenant.BANK, Tenant.GENERAL],
   },

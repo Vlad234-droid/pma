@@ -49,6 +49,7 @@ enum Page {
   TIPS = 'tips',
   EDIT_TIP = 'tips/:tipUuid',
   REPORT = 'report',
+  REPORT_DOWNLOAD = 'report/download',
   REPORT_STATISTICS = 'report/:type',
   CALIBRATION_RATINGS = 'calibration-ratings/:type',
   PREVIOUS_RATINGS_TILES = 'previous-ratings-tiles/:uuid',

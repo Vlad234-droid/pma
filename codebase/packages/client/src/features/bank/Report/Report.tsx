@@ -5,22 +5,20 @@ import { useSelector } from 'react-redux';
 
 import { buildPath, buildPathWithParams } from 'features/general/Routes';
 import { CanPerform, role } from 'features/general/Permission';
-import { useTranslation } from 'components/Translation';
 import { HoverContainer } from 'components/HoverContainer';
+import { useTranslation } from 'components/Translation';
 import { HoverMessage } from 'components/HoverMessage';
+import { TableWidget, ChartWidget } from './widgets';
 import { PieChart } from 'components/PieChart';
 import InfoTable from 'components/InfoTable';
 import Spinner from 'components/Spinner';
-import ChartWidget from './widgets/ChartWidget';
-import TableWidget from './widgets/TableWidget';
-
-import { Page } from 'pages';
-import useQueryString from 'hooks/useQueryString';
-import { getReportData } from './hooks';
 import { paramsReplacer } from 'utils';
-import { convertToLink, IsReportTiles, View } from './config';
+import { Page } from 'pages';
 import { ReportPage as ReportPageType, TitlesReport } from 'config/enum';
+import { convertToLink, IsReportTiles, View } from './config';
 import { getCurrentYearWithStartDate } from './utils';
+import { useReportDataLoader } from './hooks';
+import useQueryString from 'hooks/useQueryString';
 
 export const REPORT_WRAPPER = 'REPORT_WRAPPER';
 
@@ -31,15 +29,7 @@ const Report: FC<{ year: string; tiles: Array<string> }> = ({ year, tiles }) => 
   const small = matchMedia({ xSmall: true, small: true }) || false;
   const { loaded } = useSelector(getReportMetaSelector);
 
-  getReportData(query, year);
-
-  //TODO: attach this with Marius
-  // const getAppliedReport = () => [...new Set(checkedItems.map((item) => item.split('-')[0]))];
-  // const clearAppliedFilters = (filterTitle) => {
-  //   if (isCheckAll.length) setIsCheckAll((prev) => [...prev.filter((item) => item.split('-')[0] !== filterTitle)]);
-  //   setCheckedItems((prev) => [...prev.filter((item) => item.split('-')[0] !== filterTitle)]);
-  // };
-  // const quantity = getAppliedReport().length;
+  useReportDataLoader(query, year);
 
   const getYear = useMemo(
     () => ({
@@ -411,6 +401,121 @@ const Report: FC<{ year: string; tiles: Array<string> }> = ({ year, tiles }) => 
             </HoverContainer>
           </div>
         )}
+
+        <div className={css(leftColumn)}>
+          <HoverContainer
+            customStyles={{ width: '100%' }}
+            message={
+              <HoverMessage
+                text={t(
+                  'the_number_of_annual_reviews_a_line_manager_has_undertaken',
+                  'The number of annual reviews a line manager has undertaken based on the number of direct reports they have. This is just indicative assuming a line manager will space reviews out equally during the year.',
+                )}
+                customStyles={reportHoverMessage}
+              />
+            }
+            isActive={false}
+          >
+            <TableWidget
+              configKey={ReportPageType.REPORT_ANNIVERSARY_REVIEWS}
+              link={buildPathWithParams(
+                buildPath(
+                  paramsReplacer(Page.REPORT_STATISTICS, {
+                    ':type': convertToLink(ReportPageType.REPORT_ANNIVERSARY_REVIEWS),
+                  }),
+                ),
+                {
+                  ...getYear,
+                },
+              )}
+            >
+              {({ data }) => {
+                return (
+                  <InfoTable
+                    mainTitle={t('priorities_submitted_per_quarter', 'Priorities submitted per quarter')}
+                    data={data}
+                  />
+                );
+              }}
+            </TableWidget>
+          </HoverContainer>
+        </div>
+
+        <div className={css(rightColumn)}>
+          <HoverContainer
+            customStyles={{ width: '100%' }}
+            message={
+              <HoverMessage
+                text={t(
+                  'the_number_of_annual_reviews_a_line_manager_has_undertaken',
+                  'The number of annual reviews a line manager has undertaken based on the number of direct reports they have. This is just indicative assuming a line manager will space reviews out equally during the year.',
+                )}
+                customStyles={reportHoverMessage}
+              />
+            }
+            isActive={false}
+          >
+            <TableWidget
+              configKey={ReportPageType.REPORT_ANNIVERSARY_REVIEWS}
+              link={buildPathWithParams(
+                buildPath(
+                  paramsReplacer(Page.REPORT_STATISTICS, {
+                    ':type': convertToLink(ReportPageType.REPORT_ANNIVERSARY_REVIEWS),
+                  }),
+                ),
+                {
+                  ...getYear,
+                },
+              )}
+            >
+              {({ data }) => (
+                <InfoTable
+                  mainTitle={t('priorities_agreed_per_quarter', 'Priorities agreed per quarter')}
+                  data={data}
+                />
+              )}
+            </TableWidget>
+          </HoverContainer>
+        </div>
+
+        <div className={css(leftColumn)}>
+          <HoverContainer
+            customStyles={{ width: '100%' }}
+            message={
+              <HoverMessage
+                text={t(
+                  'the_number_of_annual_reviews_a_line_manager_has_undertaken',
+                  'The number of annual reviews a line manager has undertaken based on the number of direct reports they have. This is just indicative assuming a line manager will space reviews out equally during the year.',
+                )}
+                customStyles={reportHoverMessage}
+              />
+            }
+            isActive={false}
+          >
+            <TableWidget
+              configKey={ReportPageType.REPORT_ANNIVERSARY_REVIEWS}
+              link={buildPathWithParams(
+                buildPath(
+                  paramsReplacer(Page.REPORT_STATISTICS, {
+                    ':type': convertToLink(ReportPageType.REPORT_ANNIVERSARY_REVIEWS),
+                  }),
+                ),
+                {
+                  ...getYear,
+                },
+              )}
+            >
+              {({ data }) => {
+                return (
+                  <InfoTable
+                    mainTitle={t('priorities_completed_per_quarter', 'Priorities completed per quarter')}
+                    data={data}
+                  />
+                );
+              }}
+            </TableWidget>
+          </HoverContainer>
+        </div>
       </div>
     </>
   );

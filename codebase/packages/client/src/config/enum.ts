@@ -191,7 +191,7 @@ export enum MetaDataReport {
 
 export enum TitlesReport {
   OBJECTIVES_SUBMITTED = 'objectives_submitted',
-  WL4And5 = 'WL4_and_5',
+  WL4AND5 = 'WL4_and_5',
   MYR = 'review_type_description_myr',
   EYR = 'review_type_description_eyr',
   SUBMITTED = 'submitted',
@@ -230,7 +230,7 @@ export enum StatisticsTitlesReport {
   BREAKDOWN_OF_YEAR_END_REVIEW = 'Breakdown of year-end review',
   IN_THE_MOMENT_FEEDBACK = 'Everyday Feedback',
   NEW_TO_BUSINESS = 'New to business',
-  ANNIVERSARY_REVIEWS = 'Anniversary Reviews completed per quarter',
+  ANNIVERSARY_REVIEWS = 'Anniversary Reviews',
 }
 
 export enum ReportPage {

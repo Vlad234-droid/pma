@@ -35,7 +35,7 @@ export const getReportTitles = (t, type) => {
     [ReportPage.REPORT_WORK_LEVEL]: {
       pending: t('not_approved', 'Not Approved'),
       done: t('approved', 'Approved'),
-      chart: t(TitlesReport.WL4And5, 'WL4 & 5 Objectives submitted'),
+      chart: t(TitlesReport.WL4AND5, 'WL4 & 5 Objectives submitted'),
     },
     [ReportPage.REPORT_NEW_TO_BUSINESS]: {
       done: t('TitlesReport.BUSINESS', 'New to business'),
