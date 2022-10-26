@@ -146,9 +146,11 @@ const bodyStyle: Rule = {
 const buttonStyle: CreateRule<{ inverse: boolean }> =
   ({ inverse }) =>
   ({ theme }) => ({
-    border: `2px solid ${inverse ? theme.colors.white : theme.colors.tescoBlue}`,
     ...theme.font.fixed.f14,
     letterSpacing: '0px',
+    fontWeight: theme.font.weight.bold,
+    padding: '0 16px',
+    border: `2px solid ${inverse ? theme.colors.white : theme.colors.tescoBlue}`,
   });
 
 export default ReviewWidget;
