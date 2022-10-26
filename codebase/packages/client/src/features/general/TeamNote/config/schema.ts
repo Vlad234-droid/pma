@@ -4,7 +4,7 @@ import { NEW_FOLDER_ID } from 'utils';
 
 export const schemaTEAMNotes = Yup.object().shape({
   referenceColleagueUuid: Yup.string().required(),
-  title: Yup.string().required(),
+  title: Yup.string().required().max(55),
   content: Yup.string().required().max(RICH_TEXT_CHARACTERS_LIMIT),
   folder: Yup.string().notRequired(),
   folderTitle: Yup.string()

@@ -41,6 +41,7 @@ const SelectedFolder: FC<SelectedFolderProps> = ({
 }) => {
   const { css, matchMedia } = useStyle();
   const mediumScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
+  const smallScreen = matchMedia({ xSmall: true, small: true }) || false;
   const ref = useRef<HTMLDivElement | null>();
   const navigate = useNavigate();
   const [selectedFolder, setSelectedFolder] = useState<NoteData>(initialState);
@@ -233,7 +234,7 @@ const SelectedFolder: FC<SelectedFolderProps> = ({
       <div className={css({ marginTop: '32px', display: 'flex', flexDirection: 'column' })} data-test-id={testId}>
         {selectedFolder?.notes?.map((item) => (
           <div
-            className={css(flexBetweenStyle, noteContainerStyle, { position: 'relative' })}
+            className={css(flexBetweenStyle, noteContainerStyle({ smallScreen }), { position: 'relative' })}
             key={item.id}
             data-test-id='note'
             onClick={(e) => setSelectedNoteHandler(e, item)}
@@ -245,7 +246,7 @@ const SelectedFolder: FC<SelectedFolderProps> = ({
                 <div className={css(noteFolderTitleStyle)}>{getNotesFolderTitle(item?.folderUuid, foldersList)}</div>
               )}
             </span>
-            <div className={css(FlexStyle)}>
+            <div className={css(FlexStyle, buttonsContainer({ smallScreen }))}>
               <span className={css(timeStyled)}>{formatToRelativeDate(item?.updateTime)}</span>
               <div
                 className={css(dotsStyle)}
@@ -340,6 +341,31 @@ const expandedNoteStyle: CreateRule<{ mediumScreen: boolean }> =
     ...(mediumScreen && { flexGrow: 1 }),
   });
 
+const noteContainerStyle: CreateRule<{ smallScreen: boolean }> = ({ smallScreen }) => ({
+  position: 'relative',
+  display: 'flex',
+  flexDirection: smallScreen ? 'column' : 'row',
+  alignItems: 'flex-start',
+  cursor: 'pointer',
+  padding: '10px 0',
+  '&:before': {
+    content: '""',
+    position: 'absolute',
+    height: '1px',
+    width: '100%',
+    background: theme.colors.backgroundDarkest,
+    left: '0px',
+    bottom: '0px',
+  },
+});
+
+const buttonsContainer: CreateRule<{ smallScreen: boolean }> = ({ smallScreen }) => ({
+  width: smallScreen ? '100%' : 'auto',
+  paddingTop: smallScreen ? '8px' : '0px',
+  display: 'flex',
+  justifyContent: 'space-between',
+});
+
 const folderTitleStyled: Rule = {
   fontStyle: 'normal',
   fontWeight: theme.font.weight.bold,
@@ -369,27 +395,13 @@ const noteFolderTitleStyle: Rule = {
   marginTop: '5px',
 };
 
-const noteContainerStyle: Rule = {
-  position: 'relative',
-  cursor: 'pointer',
-  padding: '10px 0',
-  '&:before': {
-    content: '""',
-    position: 'absolute',
-    height: '1px',
-    width: '100%',
-    background: theme.colors.backgroundDarkest,
-    left: '0px',
-    bottom: '0px',
-  },
-} as Styles;
-
 const timeStyled: Rule = {
   fontWeight: 'normal',
   fontSize: theme.font.fixed.f18.fontSize,
   lineHeight: theme.font.fixed.f18.lineHeight,
   textAlign: 'right',
   color: theme.colors.base,
+  whiteSpace: 'nowrap',
 };
 
 const notePropertiesIconStyle: Rule = {
