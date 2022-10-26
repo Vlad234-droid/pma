@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react';
 import { Rule, useStyle } from '@pma/dex-wrapper';
 import { useNavigate } from 'react-router-dom';
-import { role, usePermission } from 'features/general/Permission';
+import { role, usePermission, Tenant, useTenant } from 'features/general/Permission';
 import { Trans, useTranslation } from 'components/Translation';
 import { FilterOptions, MainFolders } from './components';
 import { IconButton } from 'components/IconButton';
@@ -24,6 +24,7 @@ enum ModalStatuses {
 
 const NotesComposition: FC = () => {
   const isLineManager = usePermission([role.LINE_MANAGER]);
+  const tenant = useTenant();
   const [status, setStatus] = useState(ModalStatuses.VIEW);
   const { t } = useTranslation();
   const { css } = useStyle();
@@ -49,12 +50,18 @@ const NotesComposition: FC = () => {
           title={
             isLineManager
               ? t(
-                  'my_notes_can_be_used_to_create_and_store_notes',
-                  'My Notes can be used to create and store notes about Your Contribution throughout the year. Use this space to record achievements, thoughts on objectives or subjects to raise with your line manager during your 1:1s. Although these notes are private, in limited circumstances, they may need to be shared with others (for example as part of an investigation or Data Protection request) so they should be kept professional.',
+                  'my_notes_can_be_used_to_create_and_store_notes_about_your_contribution',
+                  tenant === Tenant.GENERAL
+                    ? 'My Notes can be used to create and store notes about Your Contribution and that of your direct reports throughout the year. Use this space to record achievements, thoughts on objectives or subjects to raise with your line manager or direct reports during your 1:1s. Team notes can be used to help keep track of your direct reports work, achievements or conversations to refer back to at a later date. Although these notes are private, in limited circumstances, they may need to be shared with others (for example as part of an investigation or Data Protection request) so they should be kept professional.'
+                    : 'My Notes can be used to create and store notes about Your Contribution and that of your direct reports throughout the year. Use this space to record outcomes and agreements from your quarterly check-in conversations, achievements or subjects to raise with your line manager or direct reports during your 1:1s. Team notes can be used to help keep track of your direct reports work, achievements or conversations to refer back to at a later date. Although these notes are private, in limited circumstances, they may need to be shared with others (for example as part of an investigation or Data Protection request) so they should be kept professional.',
+                  { ns: tenant },
                 )
               : t(
-                  'my_notes_can_be_used_to_create_and_store_notes_about_your_contribution',
-                  'My Notes can be used to create and store notes about Your Contribution and that of your direct reports throughout the year. Use this space to record achievements, thoughts on objectives or subjects to raise with your line manager or direct reports during your 1:1s. Team notes can be used to help keep track of your direct reports work, achievements or conversations to refer back to at a later date. Although these notes are private, in limited circumstances, they may need to be shared with others (for example as part of an investigation or Data Protection request) so they should be kept professional.',
+                  'my_notes_can_be_used_to_create_and_store_notes',
+                  tenant === Tenant.GENERAL
+                    ? 'My Notes can be used to create and store notes about Your Contribution throughout the year. Use this space to record achievements, thoughts on objectives or subjects to raise with your line manager during your 1:1s. Although these notes are private, in limited circumstances, they may need to be shared with others (for example as part of an investigation or Data Protection request) so they should be kept professional.'
+                    : 'My Notes can be used to create and store notes about Your Contribution throughout the year. Use this space to record outcomes and agreements from your quarterly check-in conversations, achievements or subjects to raise with your line manager. Although these notes are private, in limited circumstances, they may need to be shared with others (for example as part of an investigation or Data Protection request) so they should be kept professional',
+                  { ns: tenant },
                 )
           }
           onSearch={searchValue}
