@@ -137,7 +137,6 @@ const Report: FC<{ year: string; tiles: Array<string> }> = ({ year, tiles }) => 
           </div>
         )}
       </div>
-
       <div className={css(pieChartWrapper)}>
         {isDisplayTile(IsReportTiles.MID_YEAR_FORMS) && (
           <div className={css(leftColumn)}>
@@ -401,7 +400,8 @@ const Report: FC<{ year: string; tiles: Array<string> }> = ({ year, tiles }) => 
             </HoverContainer>
           </div>
         )}
-
+      </div>
+      <div className={css(pieChartWrapper)}>
         <div className={css(leftColumn)}>
           <HoverContainer
             customStyles={{ width: '100%' }}
@@ -416,19 +416,7 @@ const Report: FC<{ year: string; tiles: Array<string> }> = ({ year, tiles }) => 
             }
             isActive={false}
           >
-            <TableWidget
-              configKey={ReportPageType.REPORT_ANNIVERSARY_REVIEWS}
-              link={buildPathWithParams(
-                buildPath(
-                  paramsReplacer(Page.REPORT_STATISTICS, {
-                    ':type': convertToLink(ReportPageType.REPORT_ANNIVERSARY_REVIEWS),
-                  }),
-                ),
-                {
-                  ...getYear,
-                },
-              )}
-            >
+            <TableWidget configKey={ReportPageType.REPORT_ANNIVERSARY_REVIEWS}>
               {({ data }) => {
                 return (
                   <InfoTable
@@ -455,19 +443,7 @@ const Report: FC<{ year: string; tiles: Array<string> }> = ({ year, tiles }) => 
             }
             isActive={false}
           >
-            <TableWidget
-              configKey={ReportPageType.REPORT_ANNIVERSARY_REVIEWS}
-              link={buildPathWithParams(
-                buildPath(
-                  paramsReplacer(Page.REPORT_STATISTICS, {
-                    ':type': convertToLink(ReportPageType.REPORT_ANNIVERSARY_REVIEWS),
-                  }),
-                ),
-                {
-                  ...getYear,
-                },
-              )}
-            >
+            <TableWidget configKey={ReportPageType.REPORT_ANNIVERSARY_REVIEWS}>
               {({ data }) => (
                 <InfoTable
                   mainTitle={t('priorities_agreed_per_quarter', 'Priorities agreed per quarter')}
@@ -477,7 +453,8 @@ const Report: FC<{ year: string; tiles: Array<string> }> = ({ year, tiles }) => 
             </TableWidget>
           </HoverContainer>
         </div>
-
+      </div>
+      <div className={css(pieChartWrapper)}>
         <div className={css(leftColumn)}>
           <HoverContainer
             customStyles={{ width: '100%' }}
@@ -492,19 +469,7 @@ const Report: FC<{ year: string; tiles: Array<string> }> = ({ year, tiles }) => 
             }
             isActive={false}
           >
-            <TableWidget
-              configKey={ReportPageType.REPORT_ANNIVERSARY_REVIEWS}
-              link={buildPathWithParams(
-                buildPath(
-                  paramsReplacer(Page.REPORT_STATISTICS, {
-                    ':type': convertToLink(ReportPageType.REPORT_ANNIVERSARY_REVIEWS),
-                  }),
-                ),
-                {
-                  ...getYear,
-                },
-              )}
-            >
+            <TableWidget configKey={ReportPageType.REPORT_ANNIVERSARY_REVIEWS}>
               {({ data }) => {
                 return (
                   <InfoTable
