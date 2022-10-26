@@ -1,8 +1,9 @@
 import React, { FC } from 'react';
+import { Button, Rule, Styles, useStyle, CreateRule } from '@pma/dex-wrapper';
 import { Trans } from 'components/Translation';
 import { TileWrapper } from 'components/Tile';
 import { Icon, IconProps } from 'components/Icon';
-import { Button, Rule, Styles, useStyle, Colors, CreateRule } from '@pma/dex-wrapper';
+import { Colors } from 'config/types';
 
 export type Props = {
   iconGraphic?: IconProps['graphic'];
@@ -40,7 +41,7 @@ const BaseWidget: FC<Props> = ({
       <div className={css(wrapperStyle({ background }))} onClick={onClick} data-test-id={TEST_ID}>
         <div className={css(headStyle)}>
           {iconGraphic && <Icon graphic={iconGraphic} invertColors={background === 'tescoBlue'} />}
-          <span className={css(titleStyle)}>{title}</span>
+          <h2 className={css(titleStyle)}>{title}</h2>
           {number && <span className={css(numberStyle({ background }))}>{number}</span>}
           {data && <span className={css(descriptionStyle({ background }))}>{data}</span>}
           <span className={css(descriptionStyle({ background }))}>{description}</span>
@@ -102,13 +103,11 @@ const titleStyle: Rule = ({ theme }) => {
 const descriptionStyle: CreateRule<{ background: Colors }> =
   ({ background }) =>
   ({ theme }) => {
-    const mobileScreen = theme.breakpoints.small || theme.breakpoints.xSmall;
     return {
       fontStyle: 'normal',
       fontWeight: 'normal',
-      fontSize: mobileScreen ? '12px' : theme.font.fixed.f14.fontSize,
-      // lineHeight: mobileScreen ? '16px' : '20px',
-      lineHeight: mobileScreen ? '16px' : theme.font.fixed.f16.lineHeight,
+      fontSize: theme.font.fixed.f14.fontSize,
+      lineHeight: theme.font.fixed.f16.lineHeight,
       letterSpacing: '0px',
       color: background === 'tescoBlue' ? theme.colors.white : theme.colors.base,
       textAlign: 'center',

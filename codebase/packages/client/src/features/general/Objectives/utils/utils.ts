@@ -20,10 +20,7 @@ export const getWidgets = (t, isSubmittingSecondaryWidget, navigate, uuid) => [
     customStyle: { flex: '2 1 150px' },
     background: isSubmittingSecondaryWidget ? 'tescoBlue' : 'white',
     hover: false,
-    onClick: () =>
-      navigate(
-        paramsReplacer(`/${Page.CALIBRATION_RATINGS}`, { ':type': isSubmittingSecondaryWidget ? 'submit' : 'edit' }),
-      ),
+    onClick: () => undefined,
   },
   {
     iconGraphic: 'edit',
