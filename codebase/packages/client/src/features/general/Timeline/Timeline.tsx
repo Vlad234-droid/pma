@@ -10,6 +10,7 @@ import {
   UserActions,
   uuidCompareSelector,
   ReviewsActions,
+  isAnniversaryTimelineType,
 } from '@pma/store';
 import { Rule, useStyle } from '@pma/dex-wrapper';
 import { TileWrapper as Tile } from 'components/Tile/TileWrapper';
@@ -31,6 +32,7 @@ const Timeline: FC<{ colleagueUuid: string }> = ({ colleagueUuid }) => {
   const cycles = useSelector(colleaguePerformanceCyclesSelector);
   const currentCycle = useSelector(colleagueCurrentCycleSelector(colleagueUuid));
   const cycleType = useSelector(userCurrentCycleTypeSelector);
+  const isAnniversary = useSelector(isAnniversaryTimelineType(colleagueUuid));
 
   const options = useMemo(() => {
     return [...cycles].reverse().map(({ endTime, startTime, uuid }) => ({
@@ -65,7 +67,7 @@ const Timeline: FC<{ colleagueUuid: string }> = ({ colleagueUuid }) => {
           <div className={css(wrapperStyle)}>
             <div className={css(headerStyle)}>
               <h2 className={css(titleStyle)}>{t('performance_timeline_title', 'Your Contribution timeline')}</h2>
-              {isUserView && (
+              {isAnniversary && isUserView && (
                 <div className={css(selectStyle)}>
                   <Select options={options} onChange={handleChange} name={'period'} placeholder={''} value={value} />
                 </div>
