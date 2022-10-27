@@ -28,6 +28,8 @@ enum Page {
   NEW_CALIBRATION = 'calibration',
   CALIBRATION = 'calibration/:type',
   CALIBRATION_SESSION = 'calibration-session',
+  CREATE_CALIBRATION_SESSION = 'calibration-session/new',
+  EDIT_CALIBRATION_SESSION = 'calibration-session/edit/:uuid',
   NOTES = 'notes',
   NOTES_INFO = 'notes/info',
   PRIORITY_NOTE = 'notes/priority-note/:uuid',

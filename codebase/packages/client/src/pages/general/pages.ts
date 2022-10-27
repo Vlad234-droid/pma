@@ -36,7 +36,7 @@ import { EditTip, TipsAdministration } from './Tips';
 import UserObjectives, { CreateObjective } from './UserObjectives';
 import PeopleTeam from './PeopleTeam';
 import Calibration from './Calibration';
-import CalibrationSession from './CalibrationSession';
+import CalibrationSession, { CreateCalibrationSession } from './CalibrationSession';
 import NewCalibration from './NewCalibration';
 import RespondNewFeedback from './RespondNewFeedback';
 import ReportStatistics from './ReportStatistics';
@@ -113,6 +113,20 @@ const pages: Record<Page, PageComponent> = {
   [Page.CALIBRATION_SESSION]: {
     Element: CalibrationSession,
     title: (_, t) => t('calibration_session'),
+    withHeader: true,
+    perform: [role.LINE_MANAGER, role.PEOPLE_TEAM],
+    tenant: [Tenant.BANK, Tenant.GENERAL],
+  },
+  [Page.CREATE_CALIBRATION_SESSION]: {
+    Element: CreateCalibrationSession,
+    title: (_, t) => t('create_calibration_session'),
+    withHeader: true,
+    perform: [role.LINE_MANAGER, role.PEOPLE_TEAM],
+    tenant: [Tenant.BANK, Tenant.GENERAL],
+  },
+  [Page.EDIT_CALIBRATION_SESSION]: {
+    Element: CreateCalibrationSession,
+    title: (_, t) => t('edit_calibration_session'),
     withHeader: true,
     perform: [role.LINE_MANAGER, role.PEOPLE_TEAM],
     tenant: [Tenant.BANK, Tenant.GENERAL],

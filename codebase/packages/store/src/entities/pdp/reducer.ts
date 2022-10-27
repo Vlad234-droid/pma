@@ -88,8 +88,8 @@ export default createReducer(initialState)
   .handleAction(getPDPGoal.success, (state, { payload }) => ({
     ...state,
     pdp: {
-      form: payload.form,
-      goals: payload.goals,
+      form: payload?.form,
+      goals: payload?.goals,
     },
     meta: { ...state.meta, loading: false, loaded: true },
   }))

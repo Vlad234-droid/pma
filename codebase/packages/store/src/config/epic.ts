@@ -22,6 +22,7 @@ import messagesEpic from '../entities/messages/epic';
 import knowledgeLibraryEpic from '../entities/knowledgeLibrary/epic';
 import menuEpic from '../entities/hamburgerMenu/epic';
 import statisticsEpic from '../entities/statistics/epic';
+import calibrationSessionsEpic from '../entities/calibrationSessions/epic';
 
 export const rootEpic = combineEpics(
   userEpic,
@@ -47,4 +48,5 @@ export const rootEpic = combineEpics(
   knowledgeLibraryEpic,
   menuEpic,
   statisticsEpic,
+  calibrationSessionsEpic,
 );

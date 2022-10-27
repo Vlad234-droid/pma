@@ -18,7 +18,7 @@ import { Configuration } from "./configuration";
 // @ts-ignore
 import globalAxios, { AxiosPromise, AxiosInstance, AxiosRequestConfig } from 'axios';
 
-export const BASE_PATH = "http://frontend.dev.pma.tescocloud.com/v1".replace(/\/+$/, "");
+export const BASE_PATH = "https://frontend.dev.pma.tescocloud.com/experience/yourcontribution/api/yc/v1".replace(/\/+$/, "");
 
 /**
  *

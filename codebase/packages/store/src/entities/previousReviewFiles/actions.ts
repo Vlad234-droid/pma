@@ -1,5 +1,5 @@
 import { createAsyncAction, createAction } from 'typesafe-actions';
-import { FileApiDelete1Request } from '@pma/openapi';
+import { FileApiDelete5Request } from '@pma/openapi';
 
 export const getPreviousReviewFiles = createAsyncAction(
   'previousReviewFiles/REQUEST',
@@ -20,7 +20,7 @@ export const deleteFile = createAsyncAction(
   'previousReviewFiles/DELETE_SUCCESS',
   'previousReviewFiles/DELETE_FAILURE',
   'previousReviewFiles/DELETE_CANCEL',
-)<FileApiDelete1Request & { colleagueUUID?: string; reviewUUID?: string }, undefined, Error, undefined>();
+)<FileApiDelete5Request & { colleagueUUID?: string; reviewUUID?: string }, undefined, Error, undefined>();
 
 export const clearPreviousReviewFiles = createAction('previousReviewFiles/CLEAR')<undefined>();
 

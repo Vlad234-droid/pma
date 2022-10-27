@@ -24,3 +24,4 @@ export { Actions as MessagesActions } from './messages/actions';
 export { Actions as KnowledgeLibraryActions } from './knowledgeLibrary/actions';
 export { Actions as menuActions } from './hamburgerMenu/actions';
 export { Actions as StatisticsAction } from './statistics/actions';
+export { Actions as CalibrationSessionsAction } from './calibrationSessions/actions';

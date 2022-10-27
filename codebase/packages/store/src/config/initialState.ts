@@ -23,6 +23,7 @@ import { initialState as appState } from '../entities/appState/reducer';
 import { initialState as messagesState } from '../entities/messages/reducer';
 import { initialState as knowledgeLibraryState } from '../entities/knowledgeLibrary/reducer';
 import { initialState as statisticsState } from '../entities/statistics/reducer';
+import { initialState as calibrationSessionsState } from '../entities/calibrationSessions/reducer';
 import { State as TimelineState } from 'entities/timeline/types';
 
 //@ts-ignore
@@ -51,6 +52,7 @@ export const initialState = {
   messages: messagesState,
   knowledgeLibrary: knowledgeLibraryState,
   statistics: statisticsState,
+  calibrationSessions: calibrationSessionsState,
 };
 
 type InitialStateType = Omit<typeof initialState, 'timeline'>;

@@ -1,7 +1,7 @@
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
 import { RenderResultWithProps, renderWithTheme } from 'utils/test';
-import { TileWrapper, TileWrapperProps, TILE_WRAPPER } from './TileWrapper';
+import { TileWrapper, Props as TileWrapperProps, TILE_WRAPPER } from './TileWrapper';
 
 describe('Tile/TileWrapper', () => {
   let wrapper: RenderResultWithProps<TileWrapperProps>;
