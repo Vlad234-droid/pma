@@ -1,13 +1,12 @@
 import React, { FC } from 'react';
 import { useNavigate } from 'react-router';
-import { Rule, Styles, useStyle } from '@pma/dex-wrapper';
+import { Rule, CreateRule, Styles, useStyle } from '@pma/dex-wrapper';
 import { Page } from 'pages';
 import { Status } from 'config/enum';
 import { paramsReplacer, Tenant } from 'utils';
 
 import { Accordion, Panel, Section } from 'components/Accordion';
-import { Trans, useTranslation } from 'components/Translation';
-import { IconButton, Position } from 'components/IconButton';
+import { useTranslation } from 'components/Translation';
 import { buildPath } from 'features/general/Routes';
 
 import { FileList } from 'features/bank/UploadFile';
@@ -17,6 +16,7 @@ import { ObjectiveHeader } from '../ObjectiveHeader';
 import { CompletePriority } from '../CompletePriority/CompletePriority';
 import { NoteSection } from '../NoteSection';
 import { DeleteButton } from '../DeleteButton';
+import { Button } from '../Button';
 
 export const TEST_ID = 'priorities-accordion';
 
@@ -64,17 +64,12 @@ const ObjectiveAccordion: FC<ObjectiveAccordionProps> = ({ objectives, handleCom
                 <div className={css(buttonStyles)}>
                   <CompletePriority status={status} number={id} handleCompletion={handleCompletion} />
                   <div>
-                    <IconButton
+                    <Button
+                      graphic={'edit'}
                       isDisabled={!isEnabled}
                       onPress={() => handleEditClick(id)}
-                      graphic='edit'
-                      customVariantRules={{ default: iconButtonStyles, disabled: iconButtonStyles }}
-                      iconStyles={iconStyles}
-                      iconPosition={Position.LEFT}
-                      iconProps={{ size: '16px' }}
-                    >
-                      <Trans i18nKey='edit'>Edit</Trans>
-                    </IconButton>
+                      name={t('edit', 'Edit')}
+                    />
                     <DeleteButton
                       isRemovable={isRemovable}
                       number={id}
@@ -103,15 +98,5 @@ const buttonStyles: Rule = {
   alignItems: 'center',
   paddingTop: '30px',
 };
-
-const iconButtonStyles: Rule = ({ theme }) => ({
-  padding: '10px 10px',
-  color: theme.colors.tescoBlue,
-  fontWeight: theme.font.weight.bold,
-  ...theme.font.fixed.f14,
-  letterSpacing: '0px',
-});
-
-const iconStyles: Rule = { marginRight: '5px' };
 
 export default ObjectiveAccordion;

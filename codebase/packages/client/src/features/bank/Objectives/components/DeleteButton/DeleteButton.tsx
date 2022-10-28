@@ -1,8 +1,7 @@
 import React, { FC, useState } from 'react';
-import { Rule } from '@pma/dex-wrapper';
 import { Trans, useTranslation } from 'components/Translation';
-import { IconButton, Position } from 'components/IconButton';
 import { ConfirmModal } from 'components/ConfirmModal';
+import { Button } from '../Button';
 
 type Props = {
   onDelete: (number: number) => void;
@@ -17,17 +16,12 @@ export const DeleteButton: FC<Props> = ({ onDelete, number, isRemovable, descrip
 
   return (
     <>
-      <IconButton
+      <Button
+        graphic={'trash'}
         isDisabled={!isRemovable}
         onPress={() => setIsOpen(true)}
-        graphic='trash'
-        customVariantRules={{ default: iconButtonStyles, disabled: iconButtonStyles }}
-        iconStyles={iconStyles}
-        iconPosition={Position.LEFT}
-        iconProps={{ size: '16px' }}
-      >
-        <Trans i18nKey='delete'>Delete</Trans>
-      </IconButton>
+        name={t('delete', 'Delete')}
+      />
       {isOpen && (
         <ConfirmModal
           title={t('delete_priority', 'Are you sure you want to delete this priority?')}
@@ -44,13 +38,3 @@ export const DeleteButton: FC<Props> = ({ onDelete, number, isRemovable, descrip
     </>
   );
 };
-
-const iconButtonStyles: Rule = ({ theme }) => ({
-  padding: '10px 10px',
-  color: theme.colors.tescoBlue,
-  fontWeight: theme.font.weight.bold,
-  ...theme.font.fixed.f14,
-  letterSpacing: '0px',
-});
-
-const iconStyles: Rule = { marginRight: '5px' };
