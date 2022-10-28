@@ -6,7 +6,7 @@ export * from './managers';
 export * from './colleagues';
 export * from './reviews';
 export * from './orgObjective';
-export * from './objectiveSharing';
+export * from './reviewsSharing';
 export * from './notes';
 export * from './prioritiesNotes';
 export * from './tips';

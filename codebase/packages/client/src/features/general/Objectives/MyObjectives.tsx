@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import {
   colleagueUUIDSelector,
-  ObjectiveSharingActions,
+  ReviewSharingActions,
   SchemaActions,
   TimelineActions,
   timelinesExistSelector,
@@ -43,8 +43,9 @@ const MyObjectives: FC = () => {
     canShowAnnualReview && !timelineTypes[ReviewType.OBJECTIVE] && !timelineTypes[ReviewType.QUARTER];
 
   useEffect(() => {
-    colleagueUuid && dispatch(ObjectiveSharingActions.checkSharing({ colleagueUuid, cycleUuid: CURRENT }));
-    colleagueUuid && dispatch(ObjectiveSharingActions.getSharings({ colleagueUuid, cycleUuid: CURRENT }));
+    colleagueUuid &&
+      dispatch(ReviewSharingActions.checkSharing({ colleagueUuid, cycleUuid: CURRENT, code: 'OBJECTIVE' }));
+    colleagueUuid && dispatch(ReviewSharingActions.getSharings({ colleagueUuid, code: 'OBJECTIVE' }));
   }, [colleagueUuid]);
 
   useEffect(() => {

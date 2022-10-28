@@ -7,7 +7,7 @@ import {
   getReviewSchema,
   hasStatusInReviews,
   isSharedSelector,
-  ObjectiveSharingActions,
+  ReviewSharingActions,
 } from '@pma/store';
 
 import { TileWrapper } from 'components/Tile';
@@ -25,6 +25,8 @@ import { usePermission, role, useTenant } from 'features/general/Permission';
 import * as T from 'features/general/Review/types';
 //TODO: should move to src/utils
 import { transformReviewsToObjectives } from 'features/general/Review/utils';
+import { Tenant } from 'utils';
+import { useTimelineContainer } from 'contexts/timelineContext';
 
 export type ShareWidgetBaseProps = {
   getContent: (props: ContentProps, t: TFunction) => Content;
@@ -83,13 +85,13 @@ const ShareWidgetBase: FC<ShareWidgetBaseProps> = ({ customStyle, stopShare, sha
   const hasApprovedObjective = useSelector(hasStatusInReviews(ReviewType.OBJECTIVE, Status.APPROVED));
   const hasApprovedPriorities = useSelector(hasStatusInReviews(ReviewType.QUARTER, Status.APPROVED));
   const hasApproved = hasApprovedObjective || hasApprovedPriorities;
+  const { currentTimelines } = useTimelineContainer();
+  const { code: currentCode } = currentTimelines[ReviewType.QUARTER] || { code: '' };
 
   const { components = [] } = useSelector(getReviewSchema(ReviewType.OBJECTIVE));
   const sharedObjectives = useSelector(getAllSharedObjectives);
   const formElements = components.filter((component) => component.type != 'text');
   const isManager = usePermission([role.LINE_MANAGER]);
-
-  const pathParams = useMemo(() => ({ colleagueUuid: info.colleagueUUID, cycleUuid: 'CURRENT' }), [info.colleagueUUID]);
   const manager = info.manager;
 
   const isManagerShared = isManager && isShared;
@@ -100,13 +102,25 @@ const ShareWidgetBase: FC<ShareWidgetBaseProps> = ({ customStyle, stopShare, sha
     setIsConfirmDeclineModalOpen(false);
     setTimeout(() => setIsSuccessModalOpen(true), 500);
 
-    dispatch(ObjectiveSharingActions.startSharing(pathParams));
+    dispatch(
+      ReviewSharingActions.startSharing({
+        colleagueUuid: info.colleagueUUID,
+        cycleUuid: 'CURRENT',
+        code: tenant === Tenant.GENERAL ? 'OBJECTIVE' : currentCode,
+      }),
+    );
   };
 
   const handleStopShareClick = () => {
     setIsSuccessModalOpen(true);
 
-    dispatch(ObjectiveSharingActions.stopSharing(pathParams));
+    dispatch(
+      ReviewSharingActions.stopSharing({
+        colleagueUuid: info.colleagueUUID,
+        cycleUuid: 'CURRENT',
+        code: tenant === Tenant.GENERAL ? 'OBJECTIVE' : currentCode,
+      }),
+    );
   };
 
   const handleViewObjectivesClick = () => {
