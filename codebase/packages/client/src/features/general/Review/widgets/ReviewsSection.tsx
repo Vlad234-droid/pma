@@ -18,7 +18,8 @@ export const ReviewsSection: FC<Props> = ({ colleagueUuid }) => {
 
   const timelineTypes = useSelector(timelineTypesAvailabilitySelector(colleagueUuid)) || {};
   const isAnniversary = useSelector(isAnniversaryTimelineType(colleagueUuid));
-  const canShowReview = !isAnniversary && timelineTypes[ReviewType.MYR] && timelineTypes[ReviewType.EYR];
+  const hasMYR = timelineTypes[ReviewType.MYR];
+  const hasEYR = timelineTypes[ReviewType.EYR];
 
   return (
     <Section
@@ -31,13 +32,14 @@ export const ReviewsSection: FC<Props> = ({ colleagueUuid }) => {
         ),
       }}
     >
-      {canShowReview && (
+      {isAnniversary ? (
+        <AnnualReviewWidget colleagueUuid={colleagueUuid} />
+      ) : (
         <>
-          <MidYearReviewWidget colleagueUuid={colleagueUuid} />
-          <YearEndReviewWidget colleagueUuid={colleagueUuid} />
+          {hasMYR && <MidYearReviewWidget colleagueUuid={colleagueUuid} />}
+          {hasEYR && <YearEndReviewWidget colleagueUuid={colleagueUuid} />}
         </>
       )}
-      {isAnniversary && <AnnualReviewWidget colleagueUuid={colleagueUuid} />}
     </Section>
   );
 };
