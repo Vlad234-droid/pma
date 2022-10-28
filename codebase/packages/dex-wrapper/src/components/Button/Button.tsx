@@ -46,7 +46,6 @@ export const Button: FC<PropsWithChildren<ButtonProps>> = memo((props) => {
           alignItems: 'center',
           lineHeight: '0',
           outline: 0,
-          opacity: 1,
         },
         ...styles,
       )}
