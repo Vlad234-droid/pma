@@ -26,7 +26,7 @@ const Graph: FC<Props> = ({ currentData, compareData, title }) => {
       <ResponsiveContainer width='100%' height={'100%'}>
         <BarChart
           width={730}
-          // height={250}
+          height={400}
           data={data}
           layout='vertical'
           margin={{ top: 32, right: 50, left: 100, bottom: 50 }}
@@ -82,6 +82,7 @@ const CustomizedTick = (props) => {
     <>
       {index !== visibleTicksCount - 1 && (
         <line
+          data-test-id={'f'}
           type={'number'}
           orientation={'bottom'}
           height={30}

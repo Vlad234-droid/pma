@@ -2,6 +2,8 @@ import React, { FC } from 'react';
 import { Rule, useStyle } from '@pma/dex-wrapper';
 import { Graphics, Icon } from 'components/Icon';
 
+export const TITLE_CONTAINER = 'title-container';
+
 type Props = {
   invertColors?: boolean;
   graphic: Graphics;
@@ -11,7 +13,7 @@ export const Subtitle: FC<Props> = ({ invertColors, graphic, children }) => {
   const { css } = useStyle();
 
   return (
-    <div className={css(descriptionStyle)}>
+    <div className={css(descriptionStyle)} data-test-id={TITLE_CONTAINER}>
       <span className={css(iconStyle)}>
         {invertColors ? <Icon graphic={graphic} invertColors /> : <Icon graphic={graphic} backgroundRadius={12} />}
       </span>

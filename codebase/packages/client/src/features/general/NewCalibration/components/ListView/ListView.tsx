@@ -3,6 +3,8 @@ import { useStyle, CreateRule, Rule } from '@pma/dex-wrapper';
 import { ActiveList } from '../../NewCalibration';
 import { useTranslation } from 'components/Translation';
 
+export const VIEW_WRAPPER = 'view-wrapper';
+
 type Props = {
   active: ActiveList;
   setActive: (ActiveList) => void;
@@ -16,7 +18,7 @@ const ListView = forwardRef(function ListView<P extends Props>(props: P, ref) {
   const clickHandler = (e) => setActive(e.target?.id);
 
   return (
-    <div className={css(viewContainer)} onClick={clickHandler} ref={ref}>
+    <div className={css(viewContainer)} onClick={clickHandler} ref={ref} data-test-id={VIEW_WRAPPER}>
       <div id={ActiveList.GRAPH} className={css(viewStyle({ active: active === ActiveList.GRAPH }))}>
         {t('graph', 'Graph')}
       </div>
