@@ -23,8 +23,8 @@ export function withBasicData<P extends Props>(
 ) {
   const Component = (props: P) => {
     const dispatch = useDispatch();
-    const { activeTimelines } = useTimelineContainer();
-    const { code: activeCode } = activeTimelines[ReviewType.QUARTER] || {};
+    const { currentTimelines } = useTimelineContainer();
+    const { code: activeCode } = currentTimelines[ReviewType.QUARTER] || {};
     const colleagueUuid = useSelector(colleagueUUIDSelector);
 
     const defaultFormState = props.useSingleStep ? FormStateType.SINGLE_MODIFY : FormStateType.MODIFY;

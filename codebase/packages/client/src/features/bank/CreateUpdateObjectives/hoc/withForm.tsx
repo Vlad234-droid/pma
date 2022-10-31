@@ -40,8 +40,8 @@ export function withForm<
   const Component = (props: P) => {
     const { editNumber, useSingleStep, onClose, formState, setFormState } = props;
     const dispatch = useDispatch();
-    const { activeTimelines } = useTimelineContainer();
-    const { code: activeCode } = activeTimelines[ReviewType.QUARTER] || {};
+    const { currentTimelines } = useTimelineContainer();
+    const { code: activeCode } = currentTimelines[ReviewType.QUARTER] || {};
     const [currentPriorityIndex, setPriorityIndex] = useState<number>(0);
 
     const colleagueUuid = useSelector(colleagueUUIDSelector);
