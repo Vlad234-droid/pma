@@ -4,17 +4,20 @@ import { CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
 import { Filters, SortBy } from 'features/general/Filters';
 import { Option, RadioGroup } from 'components/Form';
 
+import { FilterStatus } from '../../utils/types';
+
 type Props = {
-  setStatus: (value: string) => void;
+  status: FilterStatus;
+  setStatus: (val) => void;
 };
 
-const Filter: FC<Props> = ({ setStatus }) => {
+const Filter: FC<Props> = ({ setStatus, status }) => {
   const { css, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
 
   const fieldOptions: Option[] = [
-    { value: 'ACTIVE', label: 'Active' },
-    { value: 'COMPLETED', label: 'Completed' },
+    { value: FilterStatus.ACTIVE, label: 'Active' },
+    { value: FilterStatus.COMPLETED, label: 'Completed' },
   ];
   return (
     <div className={css(headStyle({ mobileScreen }))}>
@@ -23,7 +26,7 @@ const Filter: FC<Props> = ({ setStatus }) => {
           options={fieldOptions}
           name={'targetStatus'}
           placeholder={''}
-          value={'PENDING'}
+          value={status}
           onChange={({ target: { value } }) => setStatus(value)}
           customStyles={selectStyle}
         />

@@ -1,14 +1,31 @@
 import React, { FC } from 'react';
+import { useNavigate } from 'react-router';
+
 import { Rule, Styles, useStyle } from '@pma/dex-wrapper';
+import { CalibrationSession, CalibrationSessionStatusEnum } from '@pma/openapi';
+
+import { paramsReplacer } from 'utils';
+import { Page } from 'pages';
 
 import { Accordion, BaseAccordion, ExpandButton, Panel, Section } from 'components/Accordion';
-
-import { DateBadge } from '../DateBadge';
 import { IconButton, Position } from 'components/IconButton';
-import { Trans } from 'components/Translation';
+import { Trans, useTranslation } from 'components/Translation';
+import { buildPath } from 'features/general/Routes';
+import ButtonWithConfirmation from 'components/ButtonWithConfirmation';
+import { DateBadge } from '../DateBadge';
 
-const SessionAccordion: FC<{ isFirst?: boolean }> = ({ isFirst = false }) => {
+const SessionAccordion: FC<{
+  isFirst?: boolean;
+  calibrationSession: CalibrationSession;
+  onDeleteCalibrationSession: (uuid: string | null) => void;
+}> = ({ isFirst = false, calibrationSession, onDeleteCalibrationSession }) => {
   const { css } = useStyle();
+  const navigate = useNavigate();
+  const { t } = useTranslation();
+  const navigateToPage = () =>
+    calibrationSession.uuid
+      ? navigate(buildPath(paramsReplacer(Page.EDIT_CALIBRATION_SESSION, { ':uuid': calibrationSession.uuid })))
+      : navigate(buildPath(Page.NOT_FOUND));
 
   return (
     <Accordion id={'session-accordion'} customStyle={isFirst ? borderStyles : marginStyles}>
@@ -16,9 +33,9 @@ const SessionAccordion: FC<{ isFirst?: boolean }> = ({ isFirst = false }) => {
         {() => (
           <Section defaultExpanded={false}>
             <div className={css(sectionBodyStyle)}>
-              <div className={css(titleStyle)}>Calibration: West Midlands Stores WL2</div>
+              <div className={css(titleStyle)}>{calibrationSession.title}</div>
               <div className={css(expandButtonStyle)}>
-                <DateBadge time={'2022-10-06T07:30:28.573Z'} />
+                <DateBadge time={calibrationSession.startTime || ''} />
                 <ExpandButton />
               </div>
             </div>
@@ -41,47 +58,51 @@ const SessionAccordion: FC<{ isFirst?: boolean }> = ({ isFirst = false }) => {
                 </div>
                 <div>
                   <div>Notes</div>
-                  <div>
-                    Quisque ornare ex et fermentum molestie. Vestibulum quis est metus. Sed sed dictum diam, nec
-                    porttitor magna. Sed accumsan eu magna sit amet lobortis. Nullam efficitur, nisi sed mattis
-                    suscipit, quam lorem posuere lorem, sed molestie elit nibh vel sem.
-                  </div>
+                  <div>{calibrationSession.description}</div>
                 </div>
               </div>
               <div className={css({ paddingBottom: '24px', display: ' flex', gap: '30px' })}>
-                <IconButton
-                  isDisabled={false}
-                  onPress={console.log}
-                  graphic='edit'
-                  customVariantRules={{ default: iconButtonStyles, disabled: iconButtonStyles }}
-                  iconStyles={iconStyles}
-                  iconPosition={Position.LEFT}
-                  iconProps={{ size: '16px' }}
-                >
-                  <Trans i18nKey='edit_or_start_session'>Edit or start session</Trans>
-                </IconButton>
-                <IconButton
-                  isDisabled={false}
-                  onPress={console.log}
-                  graphic='delete'
-                  customVariantRules={{ default: iconButtonStyles, disabled: iconButtonStyles }}
-                  iconStyles={iconStyles}
-                  iconPosition={Position.LEFT}
-                  iconProps={{ size: '16px' }}
-                >
-                  <Trans i18nKey='delete'>Delete</Trans>
-                </IconButton>
-                <IconButton
-                  isDisabled={false}
-                  onPress={console.log}
-                  graphic='view'
-                  customVariantRules={{ default: iconButtonStyles, disabled: iconButtonStyles }}
-                  iconStyles={iconStyles}
-                  iconPosition={Position.LEFT}
-                  iconProps={{ size: '16px' }}
-                >
-                  <Trans i18nKey='view_session'>View Session</Trans>
-                </IconButton>
+                {calibrationSession?.status !== CalibrationSessionStatusEnum.Completed && (
+                  <>
+                    <IconButton
+                      isDisabled={false}
+                      onPress={navigateToPage}
+                      graphic='edit'
+                      customVariantRules={{ default: iconButtonStyles, disabled: iconButtonStyles }}
+                      iconStyles={iconStyles}
+                      iconPosition={Position.LEFT}
+                      iconProps={{ size: '16px' }}
+                    >
+                      <Trans i18nKey='edit_or_start_session'>Edit or start session</Trans>
+                    </IconButton>
+                    <ButtonWithConfirmation
+                      withIcon={true}
+                      graphic={'delete'}
+                      onSave={() => onDeleteCalibrationSession(calibrationSession.uuid || null)}
+                      buttonName={t('delete', 'Delete')}
+                      styles={iconButtonStyles}
+                      isDisabled={false}
+                      confirmationTitle={''}
+                      confirmationDescription={t(
+                        'calibration_session_delete',
+                        'Are you sure you want to delete calibration session?',
+                      )}
+                    />
+                  </>
+                )}
+                {calibrationSession?.status === CalibrationSessionStatusEnum.Completed && (
+                  <IconButton
+                    isDisabled={false}
+                    onPress={console.log}
+                    graphic='view'
+                    customVariantRules={{ default: iconButtonStyles, disabled: iconButtonStyles }}
+                    iconStyles={iconStyles}
+                    iconPosition={Position.LEFT}
+                    iconProps={{ size: '16px' }}
+                  >
+                    <Trans i18nKey='view_session'>View Session</Trans>
+                  </IconButton>
+                )}
               </div>
             </Panel>
           </Section>

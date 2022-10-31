@@ -4,8 +4,13 @@ import { combineEpics } from 'redux-observable';
 import { from, of } from 'rxjs';
 import { catchError, filter, map, switchMap, takeUntil } from 'rxjs/operators';
 
-import { RestResponseListCalibrationSession } from '@pma/openapi';
-import { getCalibrationSessions, createCalibrationSession } from './actions';
+import { RestResponseListCalibrationSession, RestResponseCalibrationSession } from '@pma/openapi';
+import {
+  getCalibrationSessions,
+  createCalibrationSession,
+  updateCalibrationSession,
+  deleteCalibrationSession,
+} from './actions';
 import { concatWithErrorToast, errorPayloadConverter } from '../../utils/toastHelper';
 
 export const getCalibrationSessionsEpic: Epic = (action$, _, { api }) =>
@@ -16,7 +21,7 @@ export const getCalibrationSessionsEpic: Epic = (action$, _, { api }) =>
         //@ts-ignore
         map(({ success, data, errors }: RestResponseListCalibrationSession) => {
           if (!success) {
-            return createCalibrationSession.failure(new Error(errors?.[0].message || undefined));
+            return getCalibrationSessions.failure(new Error(errors?.[0].message || undefined));
           }
           return getCalibrationSessions.success({ data: data || [] });
         }),
@@ -32,18 +37,18 @@ export const getCalibrationSessionsEpic: Epic = (action$, _, { api }) =>
     ),
   );
 
-export const createReviewEpic: Epic = (action$, _, { api }) =>
+export const createCalibrationSessionEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
     filter(isActionOf(createCalibrationSession.request)),
     switchMap(({ payload }: any) => {
       // @ts-ignore
       return from(api.createCalibrationSessions(payload)).pipe(
         //@ts-ignore
-        map(({ success, data, errors }: RestResponseListCalibrationSession) => {
+        map(({ success, data, errors }: RestResponseCalibrationSession) => {
           if (!success) {
             return createCalibrationSession.failure(new Error(errors?.[0].message || undefined));
           }
-          return createCalibrationSession.success({ data: data || [] });
+          return createCalibrationSession.success({ data: data || {} });
         }),
         catchError((e) => {
           const errors = e?.data?.errors;
@@ -56,4 +61,57 @@ export const createReviewEpic: Epic = (action$, _, { api }) =>
     }),
   );
 
-export default combineEpics(getCalibrationSessionsEpic, createReviewEpic);
+export const updateCalibrationSessionEpic: Epic = (action$, _, { api }) =>
+  action$.pipe(
+    filter(isActionOf(updateCalibrationSession.request)),
+    switchMap(({ payload }: any) => {
+      // @ts-ignore
+      return from(api.updateCalibrationSessions(payload)).pipe(
+        //@ts-ignore
+        map(({ success, data, errors }: RestResponseCalibrationSession) => {
+          if (!success) {
+            return updateCalibrationSession.failure(new Error(errors?.[0].message || undefined));
+          }
+          return updateCalibrationSession.success({ data: data || {} });
+        }),
+        catchError((e) => {
+          const errors = e?.data?.errors;
+          return concatWithErrorToast(
+            of(updateCalibrationSession.failure(errors?.[0])),
+            errorPayloadConverter({ ...errors?.[0], title: errors?.[0].message }),
+          );
+        }),
+      );
+    }),
+  );
+
+export const deleteCalibrationSessionEpic: Epic = (action$, state$, { api }) =>
+  action$.pipe(
+    filter(isActionOf(deleteCalibrationSession.request)),
+    switchMap(({ payload }) => {
+      // @ts-ignore
+      return from(api.deleteCalibrationSessions(payload)).pipe(
+        //@ts-ignore
+        map(({ success, data, errors }) => {
+          if (!success) {
+            return deleteCalibrationSession.failure(new Error(errors?.[0].message || undefined));
+          }
+          return deleteCalibrationSession.success({ data });
+        }),
+        catchError((e) => {
+          const errors = e?.data?.errors;
+          return concatWithErrorToast(
+            of(deleteCalibrationSession.failure(errors?.[0])),
+            errorPayloadConverter({ ...errors?.[0], title: errors?.[0].message }),
+          );
+        }),
+      );
+    }),
+  );
+
+export default combineEpics(
+  getCalibrationSessionsEpic,
+  createCalibrationSessionEpic,
+  updateCalibrationSessionEpic,
+  deleteCalibrationSessionEpic,
+);

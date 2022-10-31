@@ -11,7 +11,7 @@ export type Props = {
   onCancel: () => void;
   onSave: () => void;
   onOverlayClick?: () => void;
-  submitBtnTitle?: JSX.Element;
+  submitBtnTitle?: JSX.Element | string;
   canSubmit?: boolean;
   visibleCancelBtn?: boolean;
 };

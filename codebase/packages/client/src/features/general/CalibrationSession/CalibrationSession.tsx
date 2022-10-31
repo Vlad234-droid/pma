@@ -1,21 +1,75 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Rule, useStyle } from '@pma/dex-wrapper';
+import { CalibrationSessionStatusEnum } from '@pma/openapi';
+import useDispatch from 'hooks/useDispatch';
 
 import { Filter } from './components/Filter';
 import { SessionAccordion } from './components/SessionAccordion';
 import { CreateCalibrationSession } from './widgets';
+import { CalibrationSessionsAction, calibrationSessionsMetaSelector, getCalibrationSessionsSelector } from '@pma/store';
+import { useSelector } from 'react-redux';
+import Spinner from 'components/Spinner';
+
+import { FilterStatus } from './utils/types';
 
 const CalibrationSession = () => {
   const { css } = useStyle();
+  const dispatch = useDispatch();
+  const [filterStatus, setFilterStatus] = useState<FilterStatus>(FilterStatus.ACTIVE);
+  const activeStatuses = [
+    CalibrationSessionStatusEnum.Created,
+    CalibrationSessionStatusEnum.Started,
+    CalibrationSessionStatusEnum.Updated,
+  ];
+  const completedStatuses = [CalibrationSessionStatusEnum.Completed];
+
+  const { loading: calibrationSessionLoading, loaded: calibrationSessionLoaded } = useSelector(
+    calibrationSessionsMetaSelector,
+  );
+  const calibrationSessions = useSelector(getCalibrationSessionsSelector) || [];
+  const calibrationSessionsByStatus = calibrationSessions.filter((calibrationSession) => {
+    if (calibrationSession.status) {
+      return filterStatus === FilterStatus.ACTIVE
+        ? activeStatuses.includes(calibrationSession?.status)
+        : completedStatuses.includes(calibrationSession.status);
+    }
+    return false;
+  });
+
+  useEffect(() => {
+    dispatch(CalibrationSessionsAction.getCalibrationSessions({}));
+  }, []);
+
+  const handleDeleteCalibrationSession = (uuid: string | null) => {
+    if (uuid) {
+      dispatch(CalibrationSessionsAction.deleteCalibrationSession({ uuid }));
+    }
+  };
+
+  if (!calibrationSessionLoaded) {
+    return <Spinner fullHeight />;
+  }
 
   return (
     <div>
-      <Filter setStatus={console.log} />
+      <Filter status={filterStatus} setStatus={setFilterStatus} />
       <div className={css(bodyStyle)}>
         <div className={css(leftColumnStyle)}>
           <div className={css(titleStyle)}>Calibration Sessions</div>
-          <SessionAccordion isFirst={true} />
-          <SessionAccordion />
+          {calibrationSessionLoading ? (
+            <Spinner fullHeight />
+          ) : (
+            <>
+              {calibrationSessionsByStatus.map((calibrationSession, index) => (
+                <SessionAccordion
+                  key={calibrationSession.uuid}
+                  isFirst={index === 0}
+                  calibrationSession={calibrationSession}
+                  onDeleteCalibrationSession={handleDeleteCalibrationSession}
+                />
+              ))}
+            </>
+          )}
         </div>
         <div className={css(rightColumnStyle)}>
           <CreateCalibrationSession />

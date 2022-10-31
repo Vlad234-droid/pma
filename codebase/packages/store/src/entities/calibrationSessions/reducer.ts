@@ -10,7 +10,7 @@ import {
   clearCalibrationSessionData,
 } from './actions';
 
-type InitialStateType = {
+export type InitialStateType = {
   data: CalibrationSession[];
   meta: {
     loading: boolean;
@@ -82,7 +82,6 @@ export default createReducer(initialState)
     };
   })
   .handleAction(createCalibrationSession.failure, (state, { payload }) => {
-    console.log('payload', payload);
     return {
       ...state,
       ...payload,
@@ -98,9 +97,7 @@ export default createReducer(initialState)
   })
   .handleAction(updateCalibrationSession.success, (state, { payload }) => ({
     ...state,
-    data: state.data.map((calibrationSession) =>
-      calibrationSession.uuid === payload.uuid ? payload : calibrationSession,
-    ),
+    data: state.data.map((cs) => (cs.uuid === payload.uuid ? payload : cs)),
     meta: { ...state.meta, updating: false, updated: true },
   }))
   .handleAction(updateCalibrationSession.failure, (state, { payload }) => {
@@ -120,7 +117,7 @@ export default createReducer(initialState)
   .handleAction(deleteCalibrationSession.success, (state, { payload }) => {
     return {
       ...state,
-      ...payload,
+      data: state.data.filter((cs) => cs.uuid !== payload.data?.uuid),
       meta: { ...state.meta, loading: false, loaded: true },
     };
   })

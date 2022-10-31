@@ -43,20 +43,24 @@ const CreateUpdateCalibrationSession: FC<Props> = ({ onClose }) => {
 
   const handleSaveAndExit = async (data) => {
     console.log('handleSaveAndExit', data);
-    dispatch(
-      CalibrationSessionsAction.createCalibrationSession({
-        data: { ...data, status: CalibrationSessionStatusEnum.Created },
-      }),
-    );
+    if (data.uuid) {
+      dispatch(CalibrationSessionsAction.updateCalibrationSession(data));
+    } else {
+      dispatch(
+        CalibrationSessionsAction.createCalibrationSession({ ...data, status: CalibrationSessionStatusEnum.Created }),
+      );
+    }
     toggleSaveAndExit(true);
   };
   const handleSubmitData = async (data) => {
     console.log('handleSubmitData', data);
-    dispatch(
-      CalibrationSessionsAction.createCalibrationSession({
-        data: { ...data, status: CalibrationSessionStatusEnum.Created },
-      }),
-    );
+    if (data.uuid) {
+      dispatch(CalibrationSessionsAction.updateCalibrationSession(data));
+    } else {
+      dispatch(
+        CalibrationSessionsAction.createCalibrationSession({ ...data, status: CalibrationSessionStatusEnum.Created }),
+      );
+    }
     toggleSubmitData(true);
   };
 

@@ -24,6 +24,7 @@ const CreateCalibrationSession: FC = () => {
         fontSize: theme.font.fixed.f16.fontSize,
         lineHeight: theme.font.fixed.f16.lineHeight,
         letterSpacing: '0px',
+        cursor: 'pointer',
         ...tileWrapperStyles,
         '& span': {
           '&:last-child': {
