@@ -1,7 +1,7 @@
 import React from 'react';
 import { renderWithTheme as render } from 'utils/test';
 import ListView, { VIEW_WRAPPER } from './ListView';
-import { ActiveList } from '../../NewCalibration';
+import { ActiveList } from '../../utils/types';
 import { fireEvent } from '@testing-library/react';
 
 describe('ListView', () => {

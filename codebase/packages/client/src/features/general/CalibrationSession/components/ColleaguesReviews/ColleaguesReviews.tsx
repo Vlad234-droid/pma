@@ -9,7 +9,7 @@ import ViewColleagueProfile from 'components/ViewColleagueProfile';
 import InfinityScrollLoad from 'components/InfinityScrollLoad';
 import { useTranslation } from 'components/Translation';
 import { buildPath } from 'features/general/Routes';
-import { ActiveList } from '../../NewCalibration';
+import { ActiveList } from '../../utils/types';
 
 import { Page } from 'pages';
 import useDispatch from 'hooks/useDispatch';

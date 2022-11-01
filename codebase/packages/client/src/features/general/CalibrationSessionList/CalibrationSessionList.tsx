@@ -12,7 +12,7 @@ import Spinner from 'components/Spinner';
 
 import { FilterStatus } from './utils/types';
 
-const CalibrationSession = () => {
+const CalibrationSessionList = () => {
   const { css } = useStyle();
   const dispatch = useDispatch();
   const [filterStatus, setFilterStatus] = useState<FilterStatus>(FilterStatus.ACTIVE);
@@ -98,4 +98,4 @@ const titleStyle: Rule = ({ theme }) => ({
   letterSpacing: '0px',
 });
 
-export default CalibrationSession;
+export default CalibrationSessionList;

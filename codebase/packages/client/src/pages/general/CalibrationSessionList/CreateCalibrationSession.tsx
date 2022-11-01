@@ -17,7 +17,7 @@ const CreateCalibrationSessionPage: FC = () => {
   const { state } = useLocation();
 
   const handleClose = () => {
-    navigate(buildPath((state as any)?.backPath?.replace('/', '') || Page.CALIBRATION_SESSION), {
+    navigate(buildPath((state as any)?.backPath?.replace('/', '') || Page.CALIBRATION_SESSION_LIST), {
       state: { backPath: (state as any)?.prevBackPath },
     });
   };

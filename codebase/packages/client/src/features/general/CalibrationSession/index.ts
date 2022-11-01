@@ -1,1 +1,1 @@
-export { default } from './CalibrationSession';
+export { default } from './CalibrationSessionOverview';

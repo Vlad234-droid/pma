@@ -18,13 +18,9 @@ import Graph from 'components/Graph';
 import { Rating } from 'config/enum';
 import { TileWrapper } from 'components/Tile';
 
-export enum ActiveList {
-  LIST = 'LIST',
-  GRAPH = 'GRAPH',
-  TABLE = 'TABLE',
-}
+import { ActiveList } from './utils/types';
 
-const NewCalibration = () => {
+const CalibrationSessionOverview = () => {
   const { css, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const mediumScreen = matchMedia({ xSmall: false, small: false, medium: true }) || false;
@@ -204,4 +200,4 @@ const listHeaderContainer: CreateRule<{ width: undefined | number; mediumScreen:
       },
     } as Styles);
 
-export default NewCalibration;
+export default CalibrationSessionOverview;

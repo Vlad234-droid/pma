@@ -76,7 +76,7 @@ const SessionAccordion: FC<{
                       <Trans i18nKey='edit_or_start_session'>Edit or start session</Trans>
                     </IconButton>
                     <ButtonWithConfirmation
-                      withIcon={true}
+                      withIcon
                       graphic={'delete'}
                       onSave={() => onDeleteCalibrationSession(calibrationSession.uuid || null)}
                       buttonName={t('delete', 'Delete')}

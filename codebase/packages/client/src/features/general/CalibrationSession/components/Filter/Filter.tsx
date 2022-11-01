@@ -2,32 +2,29 @@ import React, { FC } from 'react';
 import { CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
 
 import { Filters, SortBy } from 'features/general/Filters';
-import { Option, RadioGroup } from 'components/Form';
-
-import { FilterStatus } from '../../utils/types';
+import { Option, Select } from 'components/Form';
 
 type Props = {
-  status: FilterStatus;
-  setStatus: (val) => void;
+  setPeriod: (value: string) => void;
 };
 
-const Filter: FC<Props> = ({ setStatus, status }) => {
+const Filter: FC<Props> = ({ setPeriod }) => {
   const { css, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
 
   const fieldOptions: Option[] = [
-    { value: FilterStatus.ACTIVE, label: 'Active' },
-    { value: FilterStatus.COMPLETED, label: 'Completed' },
+    { value: '2021 - 2022', label: '2021 - 2022' },
+    { value: '2022 - 2023', label: '2022 - 2023' },
   ];
   return (
     <div className={css(headStyle({ mobileScreen }))}>
       <div>
-        <RadioGroup
+        <Select
           options={fieldOptions}
-          name={'targetStatus'}
+          name={'targetType'}
           placeholder={''}
-          value={status}
-          onChange={({ target: { value } }) => setStatus(value)}
+          value={'2021 - 2022'}
+          onChange={({ target: { value } }) => setPeriod(value)}
           customStyles={selectStyle}
         />
       </div>

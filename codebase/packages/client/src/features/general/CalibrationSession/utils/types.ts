@@ -1,4 +1,5 @@
-export enum FilterStatus {
-  ACTIVE = 'ACTIVE',
-  COMPLETED = 'COMPLETED',
+export enum ActiveList {
+  LIST = 'LIST',
+  GRAPH = 'GRAPH',
+  TABLE = 'TABLE',
 }

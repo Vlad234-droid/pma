@@ -1,10 +1,10 @@
-import React, { FC, HTMLProps, useState } from 'react';
+import React, { FC, useState } from 'react';
 import { Rule, useStyle, CreateRule, Button } from '@pma/dex-wrapper';
 import { ConfirmModal } from 'components/ConfirmModal';
 import { IconButton } from 'components/IconButton';
 import { Graphics } from 'components/Icon';
 
-export type ButtonWithConfirmation = {
+type CommonButtonProps = {
   onSave: (params?: any) => void;
   styles?: Rule;
   isDisabled?: boolean;
@@ -12,13 +12,18 @@ export type ButtonWithConfirmation = {
   confirmationButtonTitle?: JSX.Element;
   confirmationTitle?: string;
   confirmationDescription?: string;
-  withIcon?: boolean;
-  graphic?: Graphics;
-  iconSize?: number;
   disabledButtonTooltip?: string;
 };
 
-type Props = HTMLProps<HTMLInputElement> & ButtonWithConfirmation;
+type ButtonWithIconProps = CommonButtonProps & {
+  withIcon: boolean;
+  graphic: Graphics;
+  iconSize?: number;
+};
+
+type ButtonWithoutIconProps = CommonButtonProps & { withIcon?: never; graphic?: never; iconSize?: never };
+
+export type Props = ButtonWithIconProps | ButtonWithoutIconProps;
 
 const ButtonWithConfirmation: FC<Props> = ({
   confirmationButtonTitle = 'Submit',
@@ -29,8 +34,8 @@ const ButtonWithConfirmation: FC<Props> = ({
   disabledButtonTooltip = '',
   styles = {},
   isDisabled = false,
-  withIcon = false,
-  graphic = 'cancel',
+  withIcon,
+  graphic,
   iconSize = 16,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -38,7 +43,7 @@ const ButtonWithConfirmation: FC<Props> = ({
 
   return (
     <>
-      {withIcon ? (
+      {withIcon && graphic ? (
         <IconButton
           iconProps={{ size: `${iconSize}px` }}
           onPress={() => setIsOpen(true)}
