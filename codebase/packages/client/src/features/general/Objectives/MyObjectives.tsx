@@ -12,6 +12,7 @@ import {
   timelineStartedSelector,
   userCurrentCycleTypeSelector,
   colleagueCurrentCycleSelector,
+  currentUserSelector,
 } from '@pma/store';
 
 import useDispatch from 'hooks/useDispatch';
@@ -29,6 +30,7 @@ const MyObjectives: FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const colleagueUuid = useSelector(colleagueUUIDSelector);
+  const { managerUUID } = useSelector(currentUserSelector).info;
   const timelinesExist = useSelector(timelinesExistSelector(colleagueUuid));
   const { loaded: timelinesLoaded } = useSelector(timelinesMetaSelector);
   const timelineTypes = useSelector(timelineTypesAvailabilitySelector(colleagueUuid)) || {};
@@ -45,7 +47,7 @@ const MyObjectives: FC = () => {
   useEffect(() => {
     colleagueUuid &&
       dispatch(ReviewSharingActions.checkSharing({ colleagueUuid, cycleUuid: CURRENT, code: 'OBJECTIVE' }));
-    colleagueUuid && dispatch(ReviewSharingActions.getSharings({ colleagueUuid, code: 'OBJECTIVE' }));
+    managerUUID && dispatch(ReviewSharingActions.getSharings({ colleagueUuid: managerUUID, code: 'OBJECTIVE' }));
   }, [colleagueUuid]);
 
   useEffect(() => {
