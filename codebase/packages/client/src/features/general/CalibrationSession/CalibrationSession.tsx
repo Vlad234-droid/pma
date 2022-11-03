@@ -1,34 +1,54 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+import { useParams } from 'react-router';
 import { CreateRule, Rule, Styles, useStyle } from '@pma/dex-wrapper';
+import { CalibrationSessionStatusEnum } from '@pma/openapi';
+import useDispatch from 'hooks/useDispatch';
+
+import { getCalibrationSessionsSelector, CalibrationSessionsAction } from '@pma/store';
 
 import { useTranslation } from 'components/Translation';
 import { ListView } from './components/ListView';
 import { Line } from 'components/Line';
-import {
-  DownloadReport,
-  CalibrationSession,
-  CreateCalibration,
-  RatingsSubmitted,
-  CalibrationsCompleted,
-  RatingsChange,
-} from './widgets';
+import { Widget } from './widgets';
 import { Filter } from './components/Filter';
+import { Footer } from './components/Footer';
 import ColleaguesReviews from './components/ColleaguesReviews';
 import Graph from 'components/Graph';
 import { Rating } from 'config/enum';
 import { TileWrapper } from 'components/Tile';
 
 import { ActiveList } from './utils/types';
+import { useSelector } from 'react-redux';
 
-const CalibrationSessionOverview = () => {
+const CalibrationSession = () => {
   const { css, matchMedia } = useStyle();
+  const dispatch = useDispatch();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const mediumScreen = matchMedia({ xSmall: false, small: false, medium: true }) || false;
+  const { uuid } = useParams<{ uuid: string }>();
+  const calibrationSessions = useSelector(getCalibrationSessionsSelector) || [];
+
+  const calibrationSession = uuid ? calibrationSessions.find((cs) => cs.uuid === uuid) || null : {};
+  const isStarted =
+    calibrationSession?.status === CalibrationSessionStatusEnum.Started ||
+    calibrationSession?.status === CalibrationSessionStatusEnum.Updated;
 
   const { t } = useTranslation();
   const [period, setPeriod] = useState<string>('2021 - 2022');
   const [activeList, setActiveList] = useState<ActiveList>(ActiveList.LIST);
   const listRef = useRef<HTMLDivElement>();
+  const bottomPanelRef = useRef<HTMLDivElement>();
+
+  const handleCancellation = () => {
+    console.log('handleCancellation');
+  };
+  const handleSave = () => {
+    console.log('handleSave');
+  };
+
+  useEffect(() => {
+    dispatch(CalibrationSessionsAction.getCalibrationSessions({}));
+  }, []);
 
   const data = {
     Outstanding: [
@@ -112,48 +132,61 @@ const CalibrationSessionOverview = () => {
       },
     ],
   };
-
   return (
     <div>
-      <div>
-        <Filter withDateFilter setPeriod={(active) => setPeriod(active)} />
-        <div className={css(widgetContainerStyles)}>
-          <DownloadReport />
-          <CalibrationSession />
-          <CreateCalibration />
-          <RatingsSubmitted />
-          <CalibrationsCompleted />
-          <RatingsChange />
+      <div className={css(contentBlockStyle({ height: bottomPanelRef?.current?.clientHeight }))}>
+        <div>
+          <Filter />
+          <div className={css(widgetContainerStyles)}>
+            <Widget
+              graphics={'chart'}
+              title={
+                isStarted
+                  ? t('calibration_session_in_progress', 'Calibration session in progress')
+                  : t('start_calibration_session_edit_rating', 'Start calibration session and edit ratings')
+              }
+              onClick={console.log}
+              // @ts-ignore
+              background={isStarted ? 'paleOrange' : 'white'}
+            />
+            <Widget
+              graphics={'edit'}
+              title={t('edit_calibration_session', 'Edit calibration session')}
+              onClick={console.log}
+              isDisabled={isStarted}
+            />
+          </div>
         </div>
-      </div>
-      <div className={css(listHeaderContainer({ width: listRef?.current?.clientWidth, mediumScreen, mobileScreen }))}>
-        <p>{t('ratings_period', 'Ratings', { period })}</p>
-        <ListView active={activeList} setActive={(active) => setActiveList(active)} ref={listRef} />
-      </div>
-      <Line styles={lineStyles} />
-      {activeList !== ActiveList.GRAPH ? (
-        <ColleaguesReviews
-          data={data}
-          activeList={activeList}
-          key={activeList}
-          styles={activeList === ActiveList.TABLE ? tableStyles({ mobileScreen }) : {}}
-        />
-      ) : (
-        <TileWrapper customStyle={tileStyles}>
-          <Graph
-            title={t('calibration_submission', 'Calibration submission', { year: '2021' })}
-            currentData={{
-              title: '2022',
-              ratings: {
-                [Rating.OUTSTANDING]: 30,
-                [Rating.GREAT]: 20,
-                [Rating.SATISFACTORY]: 50,
-                [Rating.BELOW_EXPECTED]: 70,
-              },
-            }}
+        <div className={css(listHeaderContainer({ width: listRef?.current?.clientWidth, mediumScreen, mobileScreen }))}>
+          <p>{t('ratings_period', 'Ratings', { period })}</p>
+          <ListView active={activeList} setActive={(active) => setActiveList(active)} ref={listRef} />
+        </div>
+        <Line styles={lineStyles} />
+        {activeList !== ActiveList.GRAPH ? (
+          <ColleaguesReviews
+            data={data}
+            activeList={activeList}
+            key={activeList}
+            styles={activeList === ActiveList.TABLE ? tableStyles({ mobileScreen }) : {}}
           />
-        </TileWrapper>
-      )}
+        ) : (
+          <TileWrapper customStyle={tileStyles}>
+            <Graph
+              title={t('calibration_submission', 'Calibration submission', { year: '2021' })}
+              currentData={{
+                title: '2022',
+                ratings: {
+                  [Rating.OUTSTANDING]: 30,
+                  [Rating.GREAT]: 20,
+                  [Rating.SATISFACTORY]: 50,
+                  [Rating.BELOW_EXPECTED]: 70,
+                },
+              }}
+            />
+          </TileWrapper>
+        )}
+      </div>
+      {isStarted && <Footer ref={bottomPanelRef} onCancel={handleCancellation} onSave={handleSave} />}
     </div>
   );
 };
@@ -200,4 +233,13 @@ const listHeaderContainer: CreateRule<{ width: undefined | number; mediumScreen:
       },
     } as Styles);
 
-export default CalibrationSessionOverview;
+const contentBlockStyle: CreateRule<{ height: number | undefined }> = ({ height }) => {
+  console.log('height', height);
+  if (height) {
+    return { paddingBottom: `${height}px` };
+  }
+
+  return {};
+};
+
+export default CalibrationSession;

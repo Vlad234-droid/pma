@@ -1,45 +1,47 @@
 import React, { FC, useState } from 'react';
-import { Rule, useStyle, CreateRule, Button } from '@pma/dex-wrapper';
+import { Rule, Button } from '@pma/dex-wrapper';
 import { ConfirmModal } from 'components/ConfirmModal';
 import { IconButton } from 'components/IconButton';
 import { Graphics } from 'components/Icon';
 
 type CommonButtonProps = {
   onSave: (params?: any) => void;
-  styles?: Rule;
   isDisabled?: boolean;
   buttonName?: string;
   confirmationButtonTitle?: JSX.Element;
   confirmationTitle?: string;
-  confirmationDescription?: string;
-  disabledButtonTooltip?: string;
+  confirmationDescription?: JSX.Element | string;
 };
 
 type ButtonWithIconProps = CommonButtonProps & {
   withIcon: boolean;
   graphic: Graphics;
   iconSize?: number;
+  styles?: Rule;
 };
 
-type ButtonWithoutIconProps = CommonButtonProps & { withIcon?: never; graphic?: never; iconSize?: never };
+type ButtonWithoutIconProps = CommonButtonProps & {
+  withIcon?: never;
+  graphic?: never;
+  iconSize?: never;
+  styles?: Rule[];
+};
 
 export type Props = ButtonWithIconProps | ButtonWithoutIconProps;
 
 const ButtonWithConfirmation: FC<Props> = ({
   confirmationButtonTitle = 'Submit',
-  confirmationTitle = 'Submit',
+  confirmationTitle,
   confirmationDescription = 'Are you sure in your action?',
   onSave,
   buttonName = 'Submit',
-  disabledButtonTooltip = '',
-  styles = {},
+  styles,
   isDisabled = false,
   withIcon,
   graphic,
   iconSize = 16,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const { css } = useStyle();
 
   return (
     <>
@@ -48,16 +50,14 @@ const ButtonWithConfirmation: FC<Props> = ({
           iconProps={{ size: `${iconSize}px` }}
           onPress={() => setIsOpen(true)}
           graphic={graphic}
-          customVariantRules={{ default: styles }}
+          customVariantRules={{ default: !Array.isArray(styles) ? styles : {} }}
         >
           {buttonName}
         </IconButton>
       ) : (
-        <div title={isDisabled ? disabledButtonTooltip : ''} className={css(btnStyles({ isDisabled }), styles)}>
-          <Button onPress={() => setIsOpen(true)} isDisabled={isDisabled}>
-            {buttonName}
-          </Button>
-        </div>
+        <Button onPress={() => setIsOpen(true)} isDisabled={isDisabled} styles={Array.isArray(styles) ? styles : []}>
+          {buttonName}
+        </Button>
       )}
       {isOpen && (
         <ConfirmModal
@@ -75,11 +75,5 @@ const ButtonWithConfirmation: FC<Props> = ({
     </>
   );
 };
-
-const btnStyles: CreateRule<{ isDisabled: boolean }> = ({ isDisabled }) => ({
-  cursor: isDisabled ? 'default' : 'pointer',
-  opacity: isDisabled ? 0.6 : 1,
-  borderRadius: '32px',
-});
 
 export default ButtonWithConfirmation;

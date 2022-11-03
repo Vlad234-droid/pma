@@ -37,7 +37,7 @@ import UserObjectives, { CreateObjective } from './UserObjectives';
 import PeopleTeam from './PeopleTeam';
 import Calibration from './Calibration';
 import CalibrationSessionList, { CreateCalibrationSession } from './CalibrationSessionList';
-import CalibrationSession from './CalibrationSession';
+import CalibrationSessionOverview, { CalibrationSession } from './CalibrationSession';
 import RespondNewFeedback from './RespondNewFeedback';
 import ReportStatistics from './ReportStatistics';
 import CalibrationRatings from './CalibrationRatings';
@@ -92,6 +92,13 @@ const pages: Record<Page, PageComponent> = {
     title: (_, t) => t('title_people_team'),
     withHeader: true,
     backPath: Page.CONTRIBUTION,
+    perform: [role.LINE_MANAGER],
+    tenant: [Tenant.BANK, Tenant.GENERAL],
+  },
+  [Page.CALIBRATION_SESSION_OVERVIEW]: {
+    Element: CalibrationSessionOverview,
+    title: (_, t) => t('calibration'),
+    withHeader: true,
     perform: [role.LINE_MANAGER],
     tenant: [Tenant.BANK, Tenant.GENERAL],
   },

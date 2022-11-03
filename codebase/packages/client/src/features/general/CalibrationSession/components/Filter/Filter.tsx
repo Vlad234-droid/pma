@@ -4,11 +4,19 @@ import { CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
 import { Filters, SortBy } from 'features/general/Filters';
 import { Option, Select } from 'components/Form';
 
-type Props = {
+type WithDateProps = {
+  withDateFilter: boolean;
   setPeriod: (value: string) => void;
 };
 
-const Filter: FC<Props> = ({ setPeriod }) => {
+type WithoutDateProps = {
+  withDateFilter?: never;
+  setPeriod?: never;
+};
+
+type Props = WithDateProps | WithoutDateProps;
+
+const Filter: FC<Props> = ({ withDateFilter, setPeriod }) => {
   const { css, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
 
@@ -19,14 +27,16 @@ const Filter: FC<Props> = ({ setPeriod }) => {
   return (
     <div className={css(headStyle({ mobileScreen }))}>
       <div>
-        <Select
-          options={fieldOptions}
-          name={'targetType'}
-          placeholder={''}
-          value={'2021 - 2022'}
-          onChange={({ target: { value } }) => setPeriod(value)}
-          customStyles={selectStyle}
-        />
+        {withDateFilter && setPeriod && (
+          <Select
+            options={fieldOptions}
+            name={'targetType'}
+            placeholder={''}
+            value={'2021 - 2022'}
+            onChange={({ target: { value } }) => setPeriod(value)}
+            customStyles={selectStyle}
+          />
+        )}
       </div>
       <div className={css(filtersStyle)}>
         <Filters
