@@ -60,7 +60,7 @@ const NotesComposition: FC = () => {
                   'my_notes_can_be_used_to_create_and_store_notes',
                   tenant === Tenant.GENERAL
                     ? 'My Notes can be used to create and store notes about Your Contribution throughout the year. Use this space to record achievements, thoughts on objectives or subjects to raise with your line manager during your 1:1s. Although these notes are private, in limited circumstances, they may need to be shared with others (for example as part of an investigation or Data Protection request) so they should be kept professional.'
-                    : 'My Notes can be used to create and store notes about Your Contribution throughout the year. Use this space to record outcomes and agreements from your quarterly check-in conversations, achievements or subjects to raise with your line manager. Although these notes are private, in limited circumstances, they may need to be shared with others (for example as part of an investigation or Data Protection request) so they should be kept professional',
+                    : 'My Notes can be used to create and store notes about Your Contribution throughout the year. Use this space to record outcomes and agreements from your quarterly check-in conversations, achievements or subjects to raise with your line manager. Although these notes are private, in limited circumstances, they may need to be shared with others (for example as part of an investigation or Data Protection request) so they should be kept professional.',
                   { ns: tenant },
                 )
           }
