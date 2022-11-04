@@ -4,7 +4,7 @@ import { colleaguesCountSelector } from '@pma/store';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 
-import FilterModal from 'features/general/Report/components/FilterModal';
+import FilterModal from 'components/FilterModal';
 import { ReportModal } from 'features/general/Report/Modals';
 import { buildPath } from 'features/general/Routes';
 import { Trans, useTranslation } from 'components/Translation';
@@ -46,12 +46,10 @@ const ReportPage: FC = () => {
   const [focus, setFocus] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [searchValueFilterOption, setSearchValueFilterOption] = useState('');
-  const [filterModal, setFilterModal] = useState(false);
+  const [filterModal, setFilterModal] = useState<boolean>(false);
   const [year, setYear] = useState<string>('');
   const [tiles, setTiles] = useState<Array<string>>([]);
-
-  const [checkedItems, setCheckedItems]: [string[], (T) => void] = useState([]);
-  const [isCheckAll, setIsCheckAll]: [string[], (T) => void] = useState([]);
+  const [savedFilter, setSavedFilter] = useState<any>(null);
 
   const colleaguesCount = useSelector(colleaguesCountSelector) || 0;
 
@@ -156,16 +154,17 @@ const ReportPage: FC = () => {
           {filterModal && (
             <UnderlayModal
               onClose={() => setFilterModal(false)}
-              styles={{ maxWidth: !mobileScreen ? '424px' : '100%' }}
+              styles={{ maxWidth: !mobileScreen ? '500px' : '100%' }}
             >
               {({ onClose }) => (
                 <FilterModal
                   initialValues={initialValues}
+                  savedFilter={savedFilter}
                   onClose={onClose}
-                  checkedItems={checkedItems}
-                  setCheckedItems={setCheckedItems}
-                  isCheckAll={isCheckAll}
-                  setIsCheckAll={setIsCheckAll}
+                  onSubmit={(data) => {
+                    onClose();
+                    setTimeout(() => setSavedFilter(data), 300);
+                  }}
                 />
               )}
             </UnderlayModal>

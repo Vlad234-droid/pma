@@ -1,8 +1,7 @@
 import React, { FC } from 'react';
 import { useStyle, CreateRule, Rule } from '@pma/dex-wrapper';
-import { CheckboxField } from '../types';
 
-const Checkbox: FC<CheckboxField> = ({ id, name, onChange, checked, disabled = false, indeterminate = false }) => {
+const Checkbox: FC<any> = ({ id, name, onChange, checked, disabled = false, indeterminate = false, ...rest }) => {
   const { css } = useStyle();
   return (
     <div data-test-id={`checkbox-${name}`}>
@@ -20,6 +19,7 @@ const Checkbox: FC<CheckboxField> = ({ id, name, onChange, checked, disabled = f
             input.indeterminate = indeterminate;
           }
         }}
+        {...rest}
       />
     </div>
   );

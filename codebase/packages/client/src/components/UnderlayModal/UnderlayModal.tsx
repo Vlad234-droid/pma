@@ -36,7 +36,10 @@ const UnderlayModal: FC<Props> = ({ onClose, transitionDuration = 300, styles = 
   };
 
   useEffect(() => {
-    setTimeout(() => setWidth('100%'), 0);
+    const timeout = setTimeout(() => setWidth('100%'), 0);
+    return () => {
+      clearTimeout(timeout);
+    };
   }, []);
 
   const handleClickOutside = (event: MouseEvent<HTMLElement>) => {
@@ -85,7 +88,6 @@ const containerRule: CreateRule<{
     fontSize: theme.font.fixed.f16.fontSize,
     lineHeight: theme.font.fixed.f16.lineHeight,
     letterSpacing: '0px',
-    position: 'fixed',
     top: 0,
     right: 0,
     width,
@@ -95,7 +97,8 @@ const containerRule: CreateRule<{
     ...(isDesktop && {
       width: width === '100%' ? '50%' : 0,
     }),
-    cursor: 'pointer',
     height: '100%',
     zIndex: zIndex.i50,
+    position: 'relative',
+    marginLeft: 'auto',
   });

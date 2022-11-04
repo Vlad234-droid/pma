@@ -9,14 +9,13 @@ import { useTranslation } from 'components/Translation';
 import { ColleaguesCount } from 'components/ColleaguesCount';
 
 import { ColleaguesStatistics } from 'features/general/Report/widgets';
-import FilterModal from 'features/general/Report/components/FilterModal';
+import FilterModal, { initialValues } from 'components/FilterModal';
 import StatisticsReviews from 'features/general/ColleaguesReviews';
 import { FilterOption } from 'features/general/Shared';
 import { buildPath } from 'features/general/Routes';
 
 import useQueryString from 'hooks/useQueryString';
 import { useTileStatistics } from 'features/general/ColleaguesReviews/hooks/useTileStatistics';
-import { initialValues } from 'features/general/Report/config';
 import { useHeaderContainer } from 'contexts/headerContext';
 
 import { getCurrentYearWithStartDate } from 'features/general/Report/utils';
@@ -121,8 +120,6 @@ const ReportStatistics = () => {
   const [focus, setFocus] = useState(false);
   const [searchedValue, setSearchedValue] = useState<string>('');
   const [filterModal, setFilterModal] = useState(false);
-  const [checkedItems, setCheckedItems]: [string[], (T) => void] = useState([]);
-  const [isCheckAll, setIsCheckAll]: [string[], (T) => void] = useState([]);
   const [isFullView, toggleFullView] = useState<boolean>(false);
 
   useEffect(() => {
@@ -180,16 +177,15 @@ const ReportStatistics = () => {
           {filterModal && (
             <UnderlayModal
               onClose={() => setFilterModal(false)}
-              styles={{ maxWidth: !mobileScreen ? '424px' : '100%' }}
+              styles={{ maxWidth: !mobileScreen ? '500px' : '100%' }}
             >
               {({ onClose }) => (
                 <FilterModal
                   initialValues={initialValues}
                   onClose={onClose}
-                  checkedItems={checkedItems}
-                  setCheckedItems={setCheckedItems}
-                  isCheckAll={isCheckAll}
-                  setIsCheckAll={setIsCheckAll}
+                  onSubmit={(data) => {
+                    console.log('data', data);
+                  }}
                 />
               )}
             </UnderlayModal>

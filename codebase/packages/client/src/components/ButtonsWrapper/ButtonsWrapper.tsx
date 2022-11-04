@@ -16,6 +16,7 @@ type ButtonsProps = {
   rightTextNotIcon?: string;
   single?: boolean;
   customButtons?: JSX.Element;
+  customStyles?: Rule | Styles;
 };
 
 const ButtonsWrapper: FC<ButtonsProps> = ({
@@ -28,10 +29,11 @@ const ButtonsWrapper: FC<ButtonsProps> = ({
   rightTextNotIcon = 'download',
   single = false,
   customButtons,
+  customStyles = {},
 }) => {
   const { css, theme } = useStyle();
   return (
-    <div className={css(blockStyle)}>
+    <div className={css(blockStyle, customStyles)}>
       <div className={css(wrapperStyle)}>
         <div className={css(buttonsWrapper({ customButtons }))}>
           {customButtons ? (
@@ -79,13 +81,11 @@ const ButtonsWrapper: FC<ButtonsProps> = ({
   );
 };
 
-const blockStyle: Rule = () => {
-  return {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    width: '100%',
-  };
+const blockStyle: Rule = {
+  position: 'absolute',
+  bottom: 0,
+  left: 0,
+  width: '100%',
 };
 
 const buttonsWrapper: CreateRule<{ customButtons: JSX.Element | undefined }> =
