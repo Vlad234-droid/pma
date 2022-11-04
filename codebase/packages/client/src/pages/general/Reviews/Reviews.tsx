@@ -90,8 +90,6 @@ const ObjectivesPage: FC = () => {
           <ReviewsSection colleagueUuid={colleagueUuid} />
           <div className={css(widgetsContainer)}>
             <SubmitCalibrationRatingsWidget />
-            <SubmitCalibrationRatingsWidget />
-            <SubmitCalibrationRatingsWidget />
           </div>
           <CompletedReviewsSection />
           <ReviewFilesSection colleagueUuid={colleagueUuid} />

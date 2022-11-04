@@ -1,113 +1,65 @@
-import React, { FC } from 'react';
-import { useNavigate } from 'react-router';
+import React, { FC, useEffect, useMemo } from 'react';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useStyle, Rule, Styles } from '@pma/dex-wrapper';
-import { FormType } from '@pma/store';
-
-import { Item, Select } from 'components/Form';
 import { useTranslation } from 'components/Translation';
-import { GenericItemField } from 'components/GenericForm';
 import { ButtonsWrapper } from 'components/ButtonsWrapper';
-import { NotificationTile } from 'components/NotificationTile';
-import { Line } from 'components/Line';
 import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
+import DynamicForm from 'components/DynamicForm';
+import useOverallRating from 'hooks/useOverallRating';
 
-import { RadioWrapper } from '../RadioWrapper';
-import { defaultValues, getFields, fieldsSpecifity } from '../../utils';
-import { Notification, yupRatingSchema } from '../../config';
+import { createYupSchema } from 'utils/yup';
+
+const overallRatingListeners: string[] = ['what_rating', 'how_rating'];
 
 type Props = {
+  components: Array<any>;
   onSubmit: (data: any) => void;
+  onCancel: () => void;
+  defaultValues: any;
 };
-const RatingForm: FC<Props> = ({ onSubmit }) => {
+const RatingForm: FC<Props> = ({ onSubmit, onCancel, components, defaultValues }) => {
   const { t } = useTranslation();
-  const { css, theme } = useStyle();
-  const navigate = useNavigate();
+
+  const schema = Yup.object().shape(components.reduce(createYupSchema(t), {}));
   const methods = useFormWithCloseProtection({
     mode: 'onChange',
-    resolver: yupResolver<Yup.AnyObjectSchema>(yupRatingSchema),
-    defaultValues: { ...defaultValues },
+    resolver: yupResolver<Yup.AnyObjectSchema>(schema),
+    defaultValues,
   });
   const {
     getValues,
     handleSubmit,
     setValue,
-    formState: { isValid },
+    formState: { errors, isValid },
+    watch,
   } = methods;
   const values = getValues();
 
-  const isFullFields = !!(values['what'] && values['how']);
+  const [what_rating, how_rating] = watch(overallRatingListeners);
 
-  const goBack = () => navigate(-1);
+  const params = useMemo(
+    () => (what_rating && how_rating ? { what_rating, how_rating } : null),
+    [what_rating, how_rating],
+  );
 
-  const findSpecificField = () =>
-    fieldsSpecifity[
-      Math.min(
-        fieldsSpecifity.findIndex((item) => item === values['what']),
-        fieldsSpecifity.findIndex((item) => item === values['how']),
-      )
-    ];
+  const { overall_rating } = useOverallRating(params);
+
+  useEffect(() => {
+    if (overall_rating && overall_rating !== values.overall_rating) setValue('overall_rating', overall_rating);
+  }, [overall_rating]);
 
   return (
-    <form className={css({ marginTop: '40px' })}>
-      {getFields(t, values).map((item) => {
-        if (item.type === 'line') {
-          return <Line key={item.name} styles={{ marginBottom: '24px' }} />;
-        }
-        if (item.type === Notification.NOTIFICATION_TILE && isFullFields) {
-          return (
-            <NotificationTile key={item.name} styles={{ marginBottom: '24px' }}>
-              <p className={css(colleaguesOverallRating)}>
-                {t('overall_rating_is', "Your colleague's overall rating is")}: <span>{findSpecificField()}</span>
-              </p>
-            </NotificationTile>
-          );
-        }
-        if (item.type === FormType.RADIO) {
-          return (
-            <RadioWrapper key={item.name} text={item.label} setValue={setValue} name={item.name} values={values} />
-          );
-        }
-        if (item.type === FormType.SELECT) {
-          return (
-            <GenericItemField
-              key={item.name}
-              name={item?.name}
-              //@ts-ignore
-              methods={methods}
-              label={item.label}
-              Wrapper={({ children, label }) => (
-                <Item withIcon={false} label={label} labelCustomStyle={{ fontWeight: theme.font.weight.bold }}>
-                  {children}
-                </Item>
-              )}
-              Element={Select}
-              placeholder={item.placeholder}
-              options={item.options}
-              // @ts-ignore
-              value={values[item?.name] || ''}
-            />
-          );
-        }
-      })}
+    <div>
+      <DynamicForm components={components} formValues={values} errors={errors} setValue={setValue} />
       <ButtonsWrapper
         isValid={isValid}
-        onLeftPress={goBack}
+        onLeftPress={onCancel}
         rightIcon={false}
         rightTextNotIcon={'submit'}
         onRightPress={handleSubmit(onSubmit)}
       />
-    </form>
+    </div>
   );
 };
-
-const colleaguesOverallRating: Rule = ({ theme }) =>
-  ({
-    '& > span': {
-      color: theme.colors.tescoBlue,
-      fontWeight: theme.font.weight.bold,
-    },
-  } as Styles);
 
 export default RatingForm;
