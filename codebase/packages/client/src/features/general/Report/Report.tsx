@@ -1,5 +1,5 @@
 import React, { FC, useCallback, useMemo } from 'react';
-import { getReportMetaSelector } from '@pma/store';
+import { getReportByType, getReportMetaSelector } from '@pma/store';
 import { Rule, useStyle } from '@pma/dex-wrapper';
 import { useSelector } from 'react-redux';
 
@@ -17,9 +17,9 @@ import TableWidget from './widgets/TableWidget';
 import { Page } from 'pages';
 import useQueryString from 'hooks/useQueryString';
 import { getReportData } from './hooks';
-import { paramsReplacer } from 'utils';
+import { isSingular, paramsReplacer } from 'utils';
 import { convertToLink, IsReportTiles, View } from './config';
-import { ReportPage as ReportPageType, TitlesReport } from 'config/enum';
+import { ReportPage as ReportPageType, ReportType, TitlesReport } from 'config/enum';
 import { getCurrentYearWithStartDate } from './utils';
 
 export const REPORT_WRAPPER = 'REPORT_WRAPPER';
@@ -30,6 +30,8 @@ const Report: FC<{ year: string; tiles: Array<string> }> = ({ year, tiles }) => 
   const { css, matchMedia } = useStyle();
   const small = matchMedia({ xSmall: true, small: true }) || false;
   const { loaded } = useSelector(getReportMetaSelector);
+  const anniversary = useSelector(getReportByType('anniversaryReviews'));
+  const anniversaryReport = anniversary?.find(({ type }) => type === ReportType.EYR) || {};
 
   getReportData(query, year);
 
@@ -400,13 +402,30 @@ const Report: FC<{ year: string; tiles: Array<string> }> = ({ year, tiles }) => 
                   },
                 )}
               >
-                {({ data }) => (
-                  <InfoTable
-                    mainTitle={t(TitlesReport.ANNIVERSARY_REVIEWS, 'Anniversary Reviews')}
-                    preTitle={t(TitlesReport.HOURLY_PAID, 'Hourly paid colleagues only')}
-                    data={data}
-                  />
-                )}
+                {() => {
+                  const totalCount = anniversaryReport.totalCount ?? 0;
+                  const completed = anniversaryReport?.statistics?.approved?.count ?? 0;
+                  return (
+                    <>
+                      <InfoTable
+                        mainTitle={t(TitlesReport.ANNIVERSARY_REVIEWS, 'Anniversary Reviews')}
+                        preTitle={t(TitlesReport.HOURLY_PAID, 'Hourly paid colleagues only')}
+                      />
+                      <div className={css(anniversaryInfo)}>
+                        <span className={css(infoStatistics)}>
+                          {isSingular(totalCount)
+                            ? t('total_colleague', 'Colleague', { totalCount })
+                            : t('total_colleagues', 'Colleagues', { totalCount })}
+                        </span>
+                        <span className={css(infoStatistics, { marginTop: '6px' })}>
+                          {isSingular(totalCount)
+                            ? t('total_review_completed', 'Review completed', { completed })
+                            : t('total_reviews_completed', 'Reviews completed', { completed })}
+                        </span>
+                      </div>
+                    </>
+                  );
+                }}
               </TableWidget>
             </HoverContainer>
           </div>
@@ -414,6 +433,20 @@ const Report: FC<{ year: string; tiles: Array<string> }> = ({ year, tiles }) => 
       </div>
     </>
   );
+};
+
+const infoStatistics: Rule = ({ theme }) => ({
+  //@ts-ignore
+  color: theme.colors.lightPurple,
+  fontSize: theme.font.fixed.f16.fontSize,
+});
+
+const anniversaryInfo: Rule = {
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  justifyContent: 'center',
+  marginTop: '12px',
 };
 
 const pieChartWrapper: Rule = ({ theme }) => ({

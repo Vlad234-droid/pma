@@ -178,14 +178,8 @@ export enum MetaDataReport {
   EYR_RATING_BREAKDOWN_OUTSTANDING_PERCENTAGE = 'eyr-rating-breakdown-outstanding-percentage',
   EYR_RATING_BREAKDOWN_OUTSTANDING_COUNT = 'eyr-rating-breakdown-outstanding-count',
   NEW_TO_BUSINESS_COUNT = 'new-to-business-count',
-  ANNIVERSARY_REVIEW_PER_QUARTER_1_PERCENTAGE = 'anniversary-review-per-quarter-1-percentage',
-  ANNIVERSARY_REVIEW_PER_QUARTER_1_COUNT = 'anniversary-review-per-quarter-1-count',
-  ANNIVERSARY_REVIEW_PER_QUARTER_2_PERCENTAGE = 'anniversary-review-per-quarter-2-percentage',
-  ANNIVERSARY_REVIEW_PER_QUARTER_2_COUNT = 'anniversary-review-per-quarter-2-count',
-  ANNIVERSARY_REVIEW_PER_QUARTER_3_PERCENTAGE = 'anniversary-review-per-quarter-3-percentage',
-  ANNIVERSARY_REVIEW_PER_QUARTER_3_COUNT = 'anniversary-review-per-quarter-3-count',
-  ANNIVERSARY_REVIEW_PER_QUARTER_4_PERCENTAGE = 'anniversary-review-per-quarter-4-percentage',
-  ANNIVERSARY_REVIEW_PER_QUARTER_4_COUNT = 'anniversary-review-per-quarter-4-count',
+  TOTAL_UNIQUE_NUMBER_OF_COLLEAGUE_WITH_ANNIVERSARY_CYCLE = 'total-unique-number-of-colleague-with-anniversary-cycle',
+  NUMBER_OF_ANNIVERSARY_REVIEWS_COMPLETED = 'number-of-anniversary-reviews-completed',
   COLLEAGUES_COUNT = 'colleagues-count',
 }
 
