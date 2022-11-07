@@ -1,6 +1,6 @@
 import React, { FC, useState, useMemo } from 'react';
 import { CreateRule, Rule, Styles, useStyle } from '@pma/dex-wrapper';
-import { colleaguesCountSelector } from '@pma/store';
+import { totalColleaguesSelector } from '@pma/store';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 
@@ -40,6 +40,7 @@ const ReportPage: FC = () => {
 
   const { css, matchMedia } = useStyle();
   const small = matchMedia({ xSmall: true, small: true }) || false;
+
   const mediumScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const navigate = useNavigate();
@@ -51,7 +52,7 @@ const ReportPage: FC = () => {
   const [tiles, setTiles] = useState<Array<string>>([]);
   const [savedFilter, setSavedFilter] = useState<any>(null);
 
-  const colleaguesCount = useSelector(colleaguesCountSelector) || 0;
+  const totalColleagues = useSelector(totalColleaguesSelector) ?? 0;
 
   const changeYearHandler = (value) => {
     if (!value) return;
@@ -108,7 +109,7 @@ const ReportPage: FC = () => {
           </form>
 
           <ColleaguesCount
-            count={colleaguesCount}
+            count={totalColleagues}
             countStyles={countStyles}
             title={t('total_unique_colleagues', 'Total unique colleagues')}
           />
@@ -209,11 +210,13 @@ const countStyles: Rule = ({ theme }) => ({
   fontSize: theme.font.fixed.f16.fontSize,
   lineHeight: theme.font.fixed.f16.lineHeight,
   color: theme.colors.base,
+  whiteSpace: 'nowrap',
 });
 const downloadWrapperStyle: Rule = {
   display: 'flex',
   flexDirection: 'column',
   width: '40%',
+  flexBasis: '202px',
   marginBottom: '29px',
   position: 'relative',
 } as Styles;
@@ -243,14 +246,14 @@ const flexCenterStyled: Rule = {
   alignItems: 'center',
   position: 'relative',
   justifyContent: 'space-between',
-  height: '116px',
+  margin: '20px 0px',
 };
 
 const spaceBetween: CreateRule<{ mediumScreen: boolean }> = ({ mediumScreen }) => {
   return {
     display: 'flex',
     flexWrap: mediumScreen ? 'wrap' : 'nowrap',
-    ...(mediumScreen && { flexBasis: '250px' }),
+    // ...(mediumScreen && { flexBasis: '250px' }),
     // Todo replace it in future due to applied filters
     // justifyContent: quantity ? 'space-between' : 'flex-end',
     alignItems: 'center',

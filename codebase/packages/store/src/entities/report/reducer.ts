@@ -1,23 +1,23 @@
 import { createReducer } from 'typesafe-actions';
 import {
   clearStatistics,
-  getLimitedObjectivesReport,
   getLeadershipReviewsReport,
   getAnniversaryReviewsReport,
   getFeedbacksReport,
   getReviewReport,
   getOverallRatingsReport,
   getNewToBusinessReport,
+  getReportsTotalColleagues,
 } from './actions';
 
 export const initialState = {
-  limitedObjectiveReports: [],
   review: [],
   overallRatings: [],
   newToBusiness: [],
   anniversaryReviews: [],
   leadershipReviews: [],
   feedbacks: [],
+  total: 0,
   meta: { loading: false, loaded: false, error: null },
 };
 
@@ -34,6 +34,21 @@ export default createReducer(initialState)
   .handleAction(getLeadershipReviewsReport.failure, (state, { payload }) => ({
     ...state,
     leadershipReviews: [],
+    meta: { ...state.meta, loading: false, loaded: true, error: payload },
+  }))
+
+  .handleAction(getReportsTotalColleagues.request, (state) => ({
+    ...state,
+    meta: { ...state.meta, loading: true },
+  }))
+  .handleAction(getReportsTotalColleagues.success, (state, { payload }) => ({
+    ...state,
+    total: payload,
+    meta: { ...state.meta, loading: false, loaded: true },
+  }))
+  .handleAction(getReportsTotalColleagues.failure, (state, { payload }) => ({
+    ...state,
+    total: 0,
     meta: { ...state.meta, loading: false, loaded: true, error: payload },
   }))
 
@@ -109,20 +124,6 @@ export default createReducer(initialState)
   .handleAction(getNewToBusinessReport.failure, (state, { payload }) => ({
     ...state,
     newToBusiness: [],
-    meta: { ...state.meta, loading: false, loaded: true, error: payload },
-  }))
-
-  .handleAction(getLimitedObjectivesReport.request, (state) => ({
-    ...state,
-    meta: { ...state.meta, loading: true },
-  }))
-  .handleAction(getLimitedObjectivesReport.success, (state, { payload }) => ({
-    ...state,
-    limitedObjectiveReports: [...state.limitedObjectiveReports, ...payload],
-    meta: { ...state.meta, loading: false, loaded: true },
-  }))
-  .handleAction(getLimitedObjectivesReport.failure, (state, { payload }) => ({
-    ...state,
     meta: { ...state.meta, loading: false, loaded: true, error: payload },
   }))
 

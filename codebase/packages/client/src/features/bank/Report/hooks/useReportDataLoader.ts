@@ -21,5 +21,7 @@ export const useReportDataLoader = (fields: Record<string, string | number> = {}
     dispatch(ReportActions.getFeedbacksReport(payload));
     dispatch(ReportActions.getAnniversaryReviewsReport(payload));
     dispatch(ReportActions.getLeadershipReviewsReport(payload));
+    //TODO: remove comment when endpoint for total colleague will be ready
+    // dispatch(ReportActions.getReportsTotalColleagues(payload));
   }, [year]);
 };

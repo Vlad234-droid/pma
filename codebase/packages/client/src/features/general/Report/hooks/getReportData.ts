@@ -21,5 +21,6 @@ export const getReportData = (fields: Record<string, string | number> = {}, year
     dispatch(ReportActions.getFeedbacksReport(payload));
     dispatch(ReportActions.getAnniversaryReviewsReport(payload));
     dispatch(ReportActions.getLeadershipReviewsReport(payload));
+    dispatch(ReportActions.getReportsTotalColleagues(payload));
   }, [year]);
 };
