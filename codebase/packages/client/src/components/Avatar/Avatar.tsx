@@ -11,17 +11,20 @@ type Props = HTMLProps<HTMLInputElement> & AvatarProps;
 const contentStyle: CreateRule<{ size?: number }> =
   ({ size = 56 }) =>
   ({ theme }) => ({
-    display: 'inline-block',
+    display: 'inline-flex',
     minWidth: `${size}px`,
     width: `${size}px`,
     height: `${size}px`,
-    lineHeight: `${size}px`,
+    lineHeight: 1,
     fontSize: `${size / 2}px`,
     background: '#ccc',
     borderRadius: '50%',
     whiteSpace: 'nowrap',
     textAlign: 'center',
-    verticalAlign: 'middle',
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignContent: 'center',
+    paddingBottom: '3px',
     overflow: 'hidden',
     '& svg': {
       width: `${size / 2}px`,
@@ -46,8 +49,12 @@ const imageStyle = {
 export const Avatar: FC<Props> = ({ img, size = 56 }) => {
   const { css } = useStyle(['backgroundColor']);
   return (
-    <span data-test-id='avatar' className={css(contentStyle({ size }))}>
-      {img ? <img style={imageStyle} src={img} /> : <Icon graphic='account' testId={'test-id-account-icon'} />}
-    </span>
+    <div data-test-id='avatar' className={css(contentStyle({ size }))}>
+      {img ? (
+        <img style={imageStyle} src={img} alt={'avatar'} />
+      ) : (
+        <Icon graphic='account' testId={'test-id-account-icon'} />
+      )}
+    </div>
   );
 };
