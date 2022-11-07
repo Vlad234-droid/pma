@@ -2,7 +2,7 @@ import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
 // @ts-ignore
 import { renderWithTheme as render } from 'utils/test';
-import CreatePDP, { TEST_ID } from './CreatePDP';
+import { CreateUpdatePDP, TEST_ID } from './CreateUpdatePDP';
 
 jest.mock('react-router-dom', () => ({
   ...(jest.requireActual('react-router-dom') as any),
@@ -201,7 +201,7 @@ describe('PDP feature', () => {
   };
 
   it('should NOT render PDP feature', async () => {
-    const { queryByTestId } = render(<CreatePDP />, {
+    const { queryByTestId } = render(<CreateUpdatePDP />, {
       schema: { meta: { loading: true, loaded: false, error: null } },
       managers,
     });

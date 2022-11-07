@@ -3,12 +3,11 @@ import { CreateRule, Modal, Rule, theme, useStyle } from '@pma/dex-wrapper';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Icon } from 'components/Icon';
 import { useDispatch, useSelector } from 'react-redux';
-import { colleagueUUIDSelector, metaPDPSelector, PDPActions, schemaMetaPDPSelector } from '@pma/store';
+import { colleagueUUIDSelector, FormType, metaPDPSelector, PDPActions, schemaMetaPDPSelector } from '@pma/store';
 import { buildPath } from 'features/general/Routes';
-import { PDPType } from 'config/enum';
 import { useTranslation } from 'components/Translation';
 import Spinner from 'components/Spinner';
-import { CreatePDPForm, CreatePDPFormNew } from './components/CreatePDPForm';
+import { CreateUpdatePDPForm, RequestMethods } from './components';
 import usePDPSchema from './hooks/usePDPSchema';
 import { ModalWrapper } from 'components/ModalWrapper';
 import { Page } from 'pages/general/types';
@@ -16,80 +15,57 @@ import { Page } from 'pages/general/types';
 export const TEST_ID = 'create-pdp';
 export const TEST_SPINNER_ID = 'spinner-test-id';
 
-const CreateMyPDP = () => {
+const MAX_GOAL_COUNT = 5;
+
+export const CreateUpdatePDP = () => {
   const { css, matchMedia } = useStyle();
-  const mobileScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
   const navigate = useNavigate();
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const [schema] = usePDPSchema();
+  const { uuid } = useParams<{ uuid: string }>();
+
+  const mobileScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
+
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const pdpList = useSelector(schemaMetaPDPSelector)?.goals || [];
   const { loading } = useSelector(metaPDPSelector) || {};
-  const [pdpGoals, setPDPGoals] = useState<any[]>([]);
-  const [schema] = usePDPSchema(PDPType.PDP);
-  const { components = [], display: newSchemaVersion } = schema;
+
+  const [currentTab, setCurrentTab] = useState(0);
+
+  const { components = [] } = schema;
+
   const formElements = components.filter((component) => component.type != 'text');
-  const maxGoalCount = 5;
-  const { uuid } = useParams<{ uuid: string }>();
-  const [currentGoal, setCurrentGoal] = useState<any>({});
-  const [confirmSaveModal, setConfirmModal] = useState<boolean>(false);
 
-  const [currentUUID, setUUID] = useState<string | undefined>(uuid);
-  const [currentTab, setCurrentTab] = useState<number>(0);
+  const currentGoal = pdpList?.filter((el) => el.uuid === uuid)[0] || {};
 
-  enum METHODS {
-    SAVE = 'save',
-    UPDATE = 'update',
-    CREATE = 'create',
-  }
-
-  useEffect(() => {
-    if (schema?.meta?.loaded) {
-      setPDPGoals(components);
-    }
-  }, [schema?.meta?.loaded]);
-
-  useEffect(() => {
-    setUUID(uuid);
-  }, [uuid]);
-
-  useEffect(() => {
-    if (currentUUID) {
-      const goal = pdpList?.filter((el) => el.uuid === currentUUID)[0] || {};
-      setCurrentGoal(goal);
-    } else {
-      setCurrentGoal({});
-    }
-  }, [pdpList.length]);
+  const title = `${uuid ? t('update', 'Update') : t('create', 'Create')} ${t(
+    'personal_development_goal',
+    'Personal Development Goal',
+  )}`;
 
   const onFormSubmit = (schemaLoaded, requestData, method) => {
     switch (method) {
-      case METHODS.SAVE:
+      case RequestMethods.SAVE:
         dispatch(PDPActions.createPDPGoal({ data: requestData }));
         if (schemaLoaded) navigate(buildPath(Page.PERSONAL_DEVELOPMENT_PLAN));
         break;
-      case METHODS.UPDATE:
+      case RequestMethods.UPDATE:
         dispatch(PDPActions.updatePDPGoal({ data: requestData }));
         if (schemaLoaded) navigate(buildPath(Page.PERSONAL_DEVELOPMENT_PLAN));
         break;
-      case METHODS.CREATE:
-        if (currentUUID && currentGoal.uuid === currentUUID) {
+      case RequestMethods.CREATE:
+        if (uuid && currentGoal.uuid === uuid) {
           dispatch(PDPActions.updatePDPGoal({ data: requestData }));
           if (schemaLoaded) navigate(buildPath(Page.CREATE_PERSONAL_DEVELOPMENT_PLAN));
         } else {
           dispatch(PDPActions.createPDPGoal({ data: requestData }));
         }
-        setCurrentGoal({});
         break;
       default:
         break;
     }
   };
-
-  const title = `${currentUUID ? t('update', 'Update') : t('create', 'Create')} ${t(
-    'personal_development_goal',
-    'Personal Development Goal',
-  )}`;
 
   return (
     <ModalWrapper data-test-id={TEST_ID} isOpen={true}>
@@ -111,39 +87,18 @@ const CreateMyPDP = () => {
           <Spinner data-test-id={TEST_SPINNER_ID} fullHeight />
         ) : (
           <div className={css(mainContainer)}>
-            {newSchemaVersion ? (
-              <CreatePDPFormNew
-                pdpGoals={pdpGoals}
-                pdpList={pdpList}
-                currentTab={currentTab}
-                setCurrentTab={setCurrentTab}
-                currentGoal={currentGoal}
-                components={components}
-                confirmSaveModal={confirmSaveModal}
-                maxGoals={maxGoalCount}
-                setConfirmModal={setConfirmModal}
-                currentUUID={currentUUID}
-                colleagueUuid={colleagueUuid}
-                onSubmit={onFormSubmit}
-                requestMethods={METHODS}
-              />
-            ) : (
-              <CreatePDPForm
-                pdpGoals={pdpGoals}
-                pdpList={pdpList}
-                currentTab={currentTab}
-                setCurrentTab={setCurrentTab}
-                currentGoal={currentGoal}
-                formElements={formElements}
-                confirmSaveModal={confirmSaveModal}
-                maxGoals={maxGoalCount}
-                setConfirmModal={setConfirmModal}
-                currentUUID={currentUUID}
-                colleagueUuid={colleagueUuid}
-                onSubmit={onFormSubmit}
-                requestMethods={METHODS}
-              />
-            )}
+            <CreateUpdatePDPForm
+              pdpGoals={components}
+              pdpList={pdpList}
+              currentTab={currentTab}
+              setCurrentTab={setCurrentTab}
+              currentGoal={currentGoal}
+              formElements={formElements}
+              maxGoals={MAX_GOAL_COUNT}
+              currentUUID={uuid}
+              colleagueUuid={colleagueUuid}
+              onSubmit={onFormSubmit}
+            />
           </div>
         )}
       </Modal>
@@ -216,5 +171,3 @@ const mainContainer = {
   position: 'relative',
   height: '100%',
 } as Rule;
-
-export default CreateMyPDP;

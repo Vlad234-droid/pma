@@ -1,3 +1,3 @@
-export { default as CreatePDP } from './CreatePDP';
+export { CreateUpdatePDP } from './CreateUpdatePDP';
 export { default as PersonalDevelopmentPlan } from './PersonalDevelopmentPlan';
 export * from './widgets';
