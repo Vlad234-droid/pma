@@ -206,7 +206,7 @@ export const useDetailsStatistics = (type, query) => {
             ...initialFields,
             ...defaultSort,
             year,
-            quarter: 'quarter1',
+            status: 'not-submitted',
           }),
         );
         dispatch(
@@ -214,7 +214,7 @@ export const useDetailsStatistics = (type, query) => {
             ...initialFields,
             ...defaultSort,
             year,
-            quarter: 'quarter2',
+            status: 'submitted',
           }),
         );
         dispatch(
@@ -222,15 +222,7 @@ export const useDetailsStatistics = (type, query) => {
             ...initialFields,
             ...defaultSort,
             year,
-            quarter: 'quarter3',
-          }),
-        );
-        dispatch(
-          StatisticsAction.getAnniversaryReviewsStatistics({
-            ...initialFields,
-            ...defaultSort,
-            year,
-            quarter: 'quarter4',
+            status: 'approved',
           }),
         );
         break;

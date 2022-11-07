@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import {
   colleagueCurrentCycleSelector,
   colleagueUUIDSelector,
+  currentUserSelector,
   ReviewSharingActions,
   ReviewType,
   SchemaActions,
@@ -26,6 +27,7 @@ const MyObjectives: FC = () => {
   const dispatch = useDispatch();
 
   const colleagueUuid = useSelector(colleagueUUIDSelector);
+  const { managerUUID } = useSelector(currentUserSelector).info;
   const timelinesExist = useSelector(timelinesExistSelector(colleagueUuid));
   const { loaded: timelinesLoaded } = useSelector(timelinesMetaSelector);
   const currentCycle = useSelector(colleagueCurrentCycleSelector(colleagueUuid));
@@ -34,7 +36,7 @@ const MyObjectives: FC = () => {
 
   useEffect(() => {
     colleagueUuid && dispatch(ReviewSharingActions.checkSharing({ colleagueUuid, cycleUuid: CURRENT, code }));
-    colleagueUuid && dispatch(ReviewSharingActions.getSharings({ colleagueUuid, code }));
+    managerUUID && dispatch(ReviewSharingActions.getSharings({ colleagueUuid: managerUUID, code }));
   }, [colleagueUuid, code]);
 
   useEffect(() => {

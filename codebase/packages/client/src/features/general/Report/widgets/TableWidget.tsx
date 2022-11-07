@@ -52,6 +52,7 @@ const infoTableWrapper: Rule = ({ theme }) => ({
   letterSpacing: '0px',
   position: 'relative',
   display: 'inline-block',
+  height: '100%',
 });
 
 export default InfoTable;

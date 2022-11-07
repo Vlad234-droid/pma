@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Rule, Styles, useStyle, CreateRule } from '@pma/dex-wrapper';
+import { CreateRule, Rule, Styles, useStyle } from '@pma/dex-wrapper';
 import { getListStatistics, getReportMetaSelector, getStatisticsMetaSelector, StatisticsAction } from '@pma/store';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
@@ -25,7 +25,7 @@ import { defaultSort, List } from './config';
 import { ReportPage, ReportType } from 'config/enum';
 import { downloadCsvFile } from './utils';
 
-const exceptionTitles = (titleToSwitch, t: TFunction) => {
+const switchTitltes = (titleToSwitch, t: TFunction) => {
   const titles = {
     'not-submitted': t('total_reviews_not_submitted', 'Total reviews not submitted'),
     approved: t('total_reviews_submitted_&_approved_by_manager', 'Total reviews submitted & approved by manager'),
@@ -67,7 +67,7 @@ const getReviewsTitles = (type): List => {
       titles: { given: [], requested: [] },
     },
     [ReportPage.REPORT_ANNIVERSARY_REVIEWS]: {
-      titles: { quarter1: [], quarter2: [], quarter3: [], quarter4: [] },
+      titles: { 'not-submitted': [], submitted: [], approved: [] },
     },
   };
   return page[type];
@@ -103,6 +103,7 @@ const StatisticsReviews: FC<{ type: ReportPage; toggleFullView: () => void; isFu
   const { year } = query;
 
   if (reportLoading || searchedLoading) return <Spinner fullHeight />;
+
   const isWLPage = type === ReportPage.REPORT_WORK_LEVEL;
 
   return (
@@ -124,9 +125,11 @@ const StatisticsReviews: FC<{ type: ReportPage; toggleFullView: () => void; isFu
                     <div className={css(scrollContainer)}>
                       <div className={css(wrapperStyles({ isWLPage }))}>
                         <span className={css(titleStyles)}>
-                          {type !== ReportPage.REPORT_MID_YEAR_REVIEW && type !== ReportPage.REPORT_END_YEAR_REVIEW
-                            ? t(title)
-                            : exceptionTitles(title, t)}
+                          {type === ReportPage.REPORT_MID_YEAR_REVIEW ||
+                          type === ReportPage.REPORT_END_YEAR_REVIEW ||
+                          type === ReportPage.REPORT_ANNIVERSARY_REVIEWS
+                            ? switchTitltes(title, t)
+                            : t(title)}
                           : {total} {isSingular(total) ? t('colleague', 'Colleague') : t('colleagues', 'Colleagues')}
                         </span>
                         {!!(data as any).length && !isWLPage && (
@@ -270,7 +273,7 @@ const StatisticsReviews: FC<{ type: ReportPage; toggleFullView: () => void; isFu
                                 dispatch(
                                   StatisticsAction.getAnniversaryReviewsStatistics({
                                     year,
-                                    quarter: title,
+                                    status: title,
                                     _limit,
                                     _start,
                                     ...defaultSort,

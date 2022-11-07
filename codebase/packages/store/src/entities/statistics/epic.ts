@@ -81,13 +81,13 @@ export const getAnniversaryReviewsStatisticsEpic: Epic = (action$, _, { api }) =
   action$.pipe(
     filter(isActionOf(getAnniversaryReviewsStatistics.request)),
     mergeMap(({ payload }) => {
-      const { quarter } = payload;
+      const { status } = payload;
       //@ts-ignore
       return from(api.getColleaguesAnniversaryReviews(payload)).pipe(
         //@ts-ignore
         map(({ data }) => {
           //@ts-ignore
-          return getAnniversaryReviewsStatistics.success({ data, status: quarter });
+          return getAnniversaryReviewsStatistics.success({ data, status });
         }),
         catchError(({ errors }) => of(getAnniversaryReviewsStatistics.failure(errors))),
       );

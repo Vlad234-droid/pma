@@ -89,30 +89,30 @@ export const checkboxes = (t: TFunction) => [
 
 export const getSelectAllField = (t) => ({ id: '11', label: t('select_all', 'Select All'), isChecked: false });
 
-export const initialValues: Array<{ title: string; data: Array<{ title: string }> }> = [
+export const initialValues: Array<{ type: string; items: Array<{ description: string }> }> = [
   {
-    title: 'Work level',
-    data: [
-      { title: 'Select All' },
-      { title: 'Colleagues' },
-      { title: 'Work level 1' },
-      { title: 'Work level 2' },
-      { title: 'Work level 3' },
+    type: 'Work level',
+    items: [
+      { description: 'Select All' },
+      { description: 'Colleagues' },
+      { description: 'Work level 1' },
+      { description: 'Work level 2' },
+      { description: 'Work level 3' },
     ],
   },
   {
-    title: 'Operational areas',
-    data: [
-      { title: 'Select All' },
-      { title: 'Objectives' },
-      { title: 'PDP' },
-      { title: 'Mid-year Review' },
-      { title: 'End-year Review' },
+    type: 'Operational areas',
+    items: [
+      { description: 'Select All' },
+      { description: 'Objectives' },
+      { description: 'PDP' },
+      { description: 'Mid-year Review' },
+      { description: 'End-year Review' },
     ],
   },
   {
-    title: 'Gender',
-    data: [{ title: 'Select All' }, { title: 'Male' }, { title: 'Female' }],
+    type: 'Gender',
+    items: [{ description: 'Select All' }, { description: 'Male' }, { description: 'Female' }],
   },
 ];
 

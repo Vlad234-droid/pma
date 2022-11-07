@@ -6,7 +6,7 @@ import { Data } from 'features/general/Report/config';
 
 type Props = {
   mainTitle: string;
-  data: Array<Data>;
+  data?: Array<Data>;
   preTitle?: string;
 };
 
@@ -15,29 +15,31 @@ const InfoTable: FC<Props> = ({ mainTitle, data, preTitle = '' }) => {
   const small = matchMedia({ xSmall: true, small: true }) || false;
 
   return (
-    <React.Fragment>
+    <>
       <h2 className={css(titleStyle({ preTitle }))}>{mainTitle}</h2>
       {preTitle && (
         <div className={css(flexStyle)}>
           <p className={css(preTitleStyle)}>{preTitle}</p>
         </div>
       )}
-      <div className={css(blockWrapper({ small }))}>
-        {data?.map((chart, i) => {
-          const percentage = chart?.percentage || 0;
-          const quantity = chart?.count || 0;
-          return (
-            <div key={i} className={css(infoBlock({ small }))}>
-              <span className={css(percentStyle)}>{percentage}%</span>
-              <span className={css(quantityStyle({ small }))}>
-                <Trans i18nKey='people'>People</Trans> {quantity}
-              </span>
-              <p className={css(blockTitleStyle)}>{chart.title}</p>
-            </div>
-          );
-        })}
-      </div>
-    </React.Fragment>
+      {data && (
+        <div className={css(blockWrapper({ small }))}>
+          {data?.map((chart, i) => {
+            const percentage = chart?.percentage || 0;
+            const quantity = chart?.count || 0;
+            return (
+              <div key={i} className={css(infoBlock({ small }))}>
+                <span className={css(percentStyle)}>{percentage}%</span>
+                <span className={css(quantityStyle({ small }))}>
+                  <Trans i18nKey='people'>People</Trans> {quantity}
+                </span>
+                <p className={css(blockTitleStyle)}>{chart.title}</p>
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </>
   );
 };
 
@@ -118,6 +120,7 @@ const preTitleStyle: Rule = ({ theme }) => ({
   fontSize: theme.font.fixed.f18.fontSize,
   lineHeight: theme.font.fixed.f18.lineHeight,
   letterSpacing: '0px',
+  marginTop: '0px',
 });
 
 export default InfoTable;

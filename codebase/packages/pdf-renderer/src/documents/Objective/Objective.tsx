@@ -33,15 +33,15 @@ const ObjectiveDocument: FC<Props> = ({ items }) => {
                 <Text style={styles.subtitle}>{title}</Text>
               </View>
               <View>
-                <Text style={styles.question}>{subTitle}</Text>
+                <Text style={styles.question}>{subTitle.trim()}</Text>
               </View>
             </View>
             <View>
-              <Text style={styles.answer}>{description}</Text>
+              <Text style={styles.answer}>{description.trim()}</Text>
               {explanations.map(({ description, title }, idx) => (
                 <View key={idx}>
                   <Text style={styles.question}>{removeMD(title)}</Text>
-                  <Text style={styles.answer}>{description}</Text>
+                  <Text style={styles.answer}>{description?.trim()}</Text>
                 </View>
               ))}
             </View>

@@ -35,16 +35,22 @@ const DownloadReport: FC = () => {
     formState: { isValid },
     getValues,
     setValue,
+    handleSubmit,
   } = methods;
 
   const values = getValues();
 
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
-  const handleSubmit = () =>
-    downloadReportStatistics({ year: values?.year, topics: getRequestParams(Object.keys(values.topics)) }).then(() =>
-      setShowSuccessModal(true),
-    );
+  const onSubmit = (data) => {
+    downloadReportStatistics({
+      year: values?.year,
+      topics: getRequestParams(
+        //@ts-ignore
+        Object.entries(data.topics).reduce((acc, [keys, value]) => [...(value ? [keys] : []), ...acc], []),
+      ),
+    }).then(() => setShowSuccessModal(true));
+  };
 
   const handleClose = () => navigate(buildPath(Page.REPORT));
 
@@ -135,7 +141,7 @@ const DownloadReport: FC = () => {
             <ButtonsWrapper
               isValid={isValid}
               onLeftPress={handleClose}
-              onRightPress={handleSubmit}
+              onRightPress={handleSubmit(onSubmit)}
               rightIcon={false}
               rightTextNotIcon={'download'}
             />

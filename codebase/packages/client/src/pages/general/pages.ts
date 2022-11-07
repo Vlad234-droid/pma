@@ -35,8 +35,8 @@ import { CreatePerformanceCycle, PerformanceCycleAdministration } from './Perfor
 import { EditTip, TipsAdministration } from './Tips';
 import UserObjectives, { CreateObjective } from './UserObjectives';
 import PeopleTeam from './PeopleTeam';
-import Calibration from './NewCalibration';
-import CalibrationSession, { CreateCalibrationSession } from './CalibrationSession';
+import CalibrationSessionList, { CreateCalibrationSession } from './CalibrationSessionList';
+import CalibrationSessionOverview, { CalibrationSession } from './CalibrationSession';
 import RespondNewFeedback from './RespondNewFeedback';
 import ReportStatistics from './ReportStatistics';
 import PreviousObjectiveRatings from './PreviousObjectiveRatings';
@@ -92,21 +92,22 @@ const pages: Record<Page, PageComponent> = {
     perform: [role.LINE_MANAGER],
     tenant: [Tenant.BANK, Tenant.GENERAL],
   },
-  [Page.NEW_CALIBRATION]: {
-    Element: Calibration,
+  [Page.CALIBRATION_SESSION_OVERVIEW]: {
+    Element: CalibrationSessionOverview,
     title: (_, t) => t('calibration'),
     withHeader: true,
     perform: [role.LINE_MANAGER],
     tenant: [Tenant.BANK, Tenant.GENERAL],
   },
-  [Page.CREATE_CALIBRATION_RATING]: {
-    Element: CreateCalibrationRating,
-    withHeader: false,
+  [Page.CALIBRATION_SESSION]: {
+    Element: CalibrationSession,
+    title: (_, t) => t('calibration'),
+    withHeader: true,
     perform: [role.LINE_MANAGER],
     tenant: [Tenant.BANK, Tenant.GENERAL],
   },
-  [Page.CALIBRATION_SESSION]: {
-    Element: CalibrationSession,
+  [Page.CALIBRATION_SESSION_LIST]: {
+    Element: CalibrationSessionList,
     title: (_, t) => t('calibration_session'),
     withHeader: true,
     perform: [role.LINE_MANAGER, role.PEOPLE_TEAM],
@@ -124,6 +125,12 @@ const pages: Record<Page, PageComponent> = {
     title: (_, t) => t('edit_calibration_session'),
     withHeader: true,
     perform: [role.LINE_MANAGER, role.PEOPLE_TEAM],
+    tenant: [Tenant.BANK, Tenant.GENERAL],
+  },
+  [Page.CREATE_CALIBRATION_RATING]: {
+    Element: CreateCalibrationRating,
+    withHeader: false,
+    perform: [role.LINE_MANAGER],
     tenant: [Tenant.BANK, Tenant.GENERAL],
   },
   [Page.NOTES]: {

@@ -1,2 +1,2 @@
-export { default } from './CalibrationSession';
-export { default as CreateCalibrationSession } from './CreateCalibrationSession';
+export { default } from './CalibrationSessionOverview';
+export { default as CalibrationSession } from './CalibrationSession';

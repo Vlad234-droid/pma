@@ -25,18 +25,6 @@ const UserObjectivesPage = () => {
 
   const mobileScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
 
-  const handleClick = () => {
-    addToast({
-      id: Date.now().toString(),
-      title: t('do_you_know', 'Do you know?'),
-      variant: Variant.INFO,
-      description: t(
-        'that_you_can_submit',
-        'That you can submit new objectives at anytime during the performance cycle?',
-      ),
-    });
-  };
-
   const handleWidgetClick = () => {
     // @ts-ignore
     if (tenant === Tenant.GENERAL) {
@@ -78,7 +66,7 @@ const UserObjectivesPage = () => {
     <div className={css(bodyBlockStyles({ mobileScreen }))}>
       <div className={css(mainBlockStyles({ mobileScreen }))}>
         <ColleagueProfileWidget />
-        <div data-test-id={'test-step-indicator'} onClick={handleClick} className={css(timelineWrapperStyles)}>
+        <div data-test-id={'test-step-indicator'} className={css(timelineWrapperStyles)}>
           <Timeline colleagueUuid={uuid} />
         </div>
       </div>

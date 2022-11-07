@@ -1,101 +1,245 @@
-import React, { useEffect, useState } from 'react';
-import { Rule, useStyle } from '@pma/dex-wrapper';
+import React, { useState, useRef, useEffect } from 'react';
+import { useParams } from 'react-router';
+import { CreateRule, Rule, Styles, useStyle } from '@pma/dex-wrapper';
 import { CalibrationSessionStatusEnum } from '@pma/openapi';
 import useDispatch from 'hooks/useDispatch';
 
-import { Filter } from './components/Filter';
-import { SessionAccordion } from './components/SessionAccordion';
-import { CreateCalibrationSession } from './widgets';
-import { CalibrationSessionsAction, calibrationSessionsMetaSelector, getCalibrationSessionsSelector } from '@pma/store';
-import { useSelector } from 'react-redux';
-import Spinner from 'components/Spinner';
+import { getCalibrationSessionsSelector, CalibrationSessionsAction } from '@pma/store';
 
-import { FilterStatus } from './utils/types';
+import { useTranslation } from 'components/Translation';
+import { ListView } from './components/ListView';
+import { Line } from 'components/Line';
+import { Widget } from './widgets';
+import { Filter } from './components/Filter';
+import { Footer } from './components/Footer';
+import ColleaguesReviews from './components/ColleaguesReviews';
+import Graph from 'components/Graph';
+import { Rating } from 'config/enum';
+import { TileWrapper } from 'components/Tile';
+
+import { ActiveList } from './utils/types';
+import { useSelector } from 'react-redux';
 
 const CalibrationSession = () => {
-  const { css } = useStyle();
+  const { css, matchMedia } = useStyle();
   const dispatch = useDispatch();
-  const [filterStatus, setFilterStatus] = useState<FilterStatus>(FilterStatus.ACTIVE);
-  const activeStatuses = [
-    CalibrationSessionStatusEnum.Created,
-    CalibrationSessionStatusEnum.Started,
-    CalibrationSessionStatusEnum.Updated,
-  ];
-  const completedStatuses = [CalibrationSessionStatusEnum.Completed];
-
-  const { loading: calibrationSessionLoading, loaded: calibrationSessionLoaded } = useSelector(
-    calibrationSessionsMetaSelector,
-  );
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
+  const mediumScreen = matchMedia({ xSmall: false, small: false, medium: true }) || false;
+  const { uuid } = useParams<{ uuid: string }>();
   const calibrationSessions = useSelector(getCalibrationSessionsSelector) || [];
-  const calibrationSessionsByStatus = calibrationSessions.filter((calibrationSession) => {
-    if (calibrationSession.status) {
-      return filterStatus === FilterStatus.ACTIVE
-        ? activeStatuses.includes(calibrationSession?.status)
-        : completedStatuses.includes(calibrationSession.status);
-    }
-    return false;
-  });
+
+  const calibrationSession = uuid ? calibrationSessions.find((cs) => cs.uuid === uuid) || null : {};
+  const isStarted =
+    calibrationSession?.status === CalibrationSessionStatusEnum.Started ||
+    calibrationSession?.status === CalibrationSessionStatusEnum.Updated;
+
+  const { t } = useTranslation();
+  const [period, setPeriod] = useState<string>('2021 - 2022');
+  const [activeList, setActiveList] = useState<ActiveList>(ActiveList.LIST);
+  const listRef = useRef<HTMLDivElement>();
+  const bottomPanelRef = useRef<HTMLDivElement>();
+
+  const handleCancellation = () => {
+    console.log('handleCancellation');
+  };
+  const handleSave = () => {
+    console.log('handleSave');
+  };
 
   useEffect(() => {
     dispatch(CalibrationSessionsAction.getCalibrationSessions({}));
   }, []);
 
-  const handleDeleteCalibrationSession = (uuid: string | null) => {
-    if (uuid) {
-      dispatch(CalibrationSessionsAction.deleteCalibrationSession({ uuid }));
-    }
+  const data = {
+    Outstanding: [
+      {
+        businessType: 'store',
+        firstName: 'store',
+        jobName: 'store',
+        lastName: 'store',
+        uuid: '1',
+        type: 'Outstanding',
+        value: 'how',
+      },
+      {
+        businessType: 'store',
+        firstName: 'store',
+        jobName: 'store',
+        lastName: 'store',
+        uuid: '2',
+        type: 'Outstanding',
+        value: 'how',
+      },
+    ],
+    Great: [
+      {
+        businessType: 'store',
+        firstName: 'store',
+        jobName: 'store',
+        lastName: 'store',
+        uuid: '1',
+        type: 'Outstanding',
+        value: 'how',
+      },
+      {
+        businessType: 'store',
+        firstName: 'store',
+        jobName: 'store',
+        lastName: 'store',
+        uuid: '2',
+        type: 'Outstanding',
+        value: 'how',
+      },
+    ],
+    Satisfactory: [
+      {
+        businessType: 'store',
+        firstName: 'store',
+        jobName: 'store',
+        lastName: 'store',
+        uuid: '1',
+        type: 'Outstanding',
+        value: 'how',
+      },
+      {
+        businessType: 'store',
+        firstName: 'store',
+        jobName: 'store',
+        lastName: 'store',
+        uuid: '2',
+        type: 'Outstanding',
+        value: 'how',
+      },
+    ],
+    'Below expected': [
+      {
+        businessType: 'store',
+        firstName: 'store',
+        jobName: 'store',
+        lastName: 'store',
+        uuid: '1',
+        type: 'Outstanding',
+        value: 'how',
+      },
+      {
+        businessType: 'store',
+        firstName: 'store',
+        jobName: 'store',
+        lastName: 'store',
+        uuid: '2',
+        type: 'Outstanding',
+        value: 'how',
+      },
+    ],
   };
-
-  if (!calibrationSessionLoaded) {
-    return <Spinner fullHeight />;
-  }
-
   return (
     <div>
-      <Filter status={filterStatus} setStatus={setFilterStatus} />
-      <div className={css(bodyStyle)}>
-        <div className={css(leftColumnStyle)}>
-          <div className={css(titleStyle)}>Calibration Sessions</div>
-          {calibrationSessionLoading ? (
-            <Spinner fullHeight />
-          ) : (
-            <>
-              {calibrationSessionsByStatus.map((calibrationSession, index) => (
-                <SessionAccordion
-                  key={calibrationSession.uuid}
-                  isFirst={index === 0}
-                  calibrationSession={calibrationSession}
-                  onDeleteCalibrationSession={handleDeleteCalibrationSession}
-                />
-              ))}
-            </>
-          )}
+      <div className={css(contentBlockStyle({ height: bottomPanelRef?.current?.clientHeight }))}>
+        <div>
+          <Filter />
+          <div className={css(widgetContainerStyles)}>
+            <Widget
+              graphics={'chart'}
+              title={
+                isStarted
+                  ? t('calibration_session_in_progress', 'Calibration session in progress')
+                  : t('start_calibration_session_edit_rating', 'Start calibration session and edit ratings')
+              }
+              onClick={console.log}
+              // @ts-ignore
+              background={isStarted ? 'paleOrange' : 'white'}
+            />
+            <Widget
+              graphics={'edit'}
+              title={t('edit_calibration_session', 'Edit calibration session')}
+              onClick={console.log}
+              isDisabled={isStarted}
+            />
+          </div>
         </div>
-        <div className={css(rightColumnStyle)}>
-          <CreateCalibrationSession />
+        <div className={css(listHeaderContainer({ width: listRef?.current?.clientWidth, mediumScreen, mobileScreen }))}>
+          <p>{t('ratings_period', 'Ratings', { period })}</p>
+          <ListView active={activeList} setActive={(active) => setActiveList(active)} ref={listRef} />
         </div>
+        <Line styles={lineStyles} />
+        {activeList !== ActiveList.GRAPH ? (
+          <ColleaguesReviews
+            data={data}
+            activeList={activeList}
+            key={activeList}
+            styles={activeList === ActiveList.TABLE ? tableStyles({ mobileScreen }) : {}}
+          />
+        ) : (
+          <TileWrapper customStyle={tileStyles}>
+            <Graph
+              title={t('calibration_submission', 'Calibration submission', { year: '2021' })}
+              currentData={{
+                title: '2022',
+                ratings: {
+                  [Rating.OUTSTANDING]: 30,
+                  [Rating.GREAT]: 20,
+                  [Rating.SATISFACTORY]: 50,
+                  [Rating.BELOW_EXPECTED]: 70,
+                },
+              }}
+            />
+          </TileWrapper>
+        )}
       </div>
+      {isStarted && <Footer ref={bottomPanelRef} onCancel={handleCancellation} onSave={handleSave} />}
     </div>
   );
 };
 
-const bodyStyle: Rule = {
-  display: 'flex',
-  flexWrap: 'wrap-reverse',
-  gridGap: '8px',
-  marginTop: '34px',
-  alignItems: 'stretch',
+const widgetContainerStyles: Rule = {
+  display: 'grid',
+  gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))',
+  gap: '8px',
+  marginBottom: '56px',
 };
+const lineStyles: Rule = {
+  marginTop: '16px',
+  marginBottom: '8px',
+};
+const tileStyles: Rule = {
+  padding: '24px',
+  marginTop: '24px',
+};
+const tableStyles: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) =>
+  ({
+    display: 'flex',
+    overflow: 'scroll',
+    gap: '16px',
+    '& > div': {
+      flex: 1,
+      minWidth: mobileScreen ? '260px' : '326px',
+    },
+  } as Styles);
 
-const leftColumnStyle: Rule = { flex: '3 1 375px', display: 'flex', flexDirection: 'column' };
+const listHeaderContainer: CreateRule<{ width: undefined | number; mediumScreen: boolean; mobileScreen: boolean }> =
+  ({ width, mediumScreen, mobileScreen }) =>
+  ({ theme }) =>
+    ({
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      width: mediumScreen || mobileScreen ? '100%' : `calc(50% + ${width}px / 2)`,
+      ...(mobileScreen && { flexDirection: 'column', gap: '18px' }),
+      '& > p': {
+        color: theme.colors.base,
+        fontSize: theme.font.fixed.f18.fontSize,
+        margin: 0,
+        ...(mobileScreen && { alignSelf: 'flex-start' }),
+      },
+    } as Styles);
 
-const rightColumnStyle: Rule = { flex: '1 0 216px' };
+const contentBlockStyle: CreateRule<{ height: number | undefined }> = ({ height }) => {
+  console.log('height', height);
+  if (height) {
+    return { paddingBottom: `${height}px` };
+  }
 
-const titleStyle: Rule = ({ theme }) => ({
-  fontWeight: theme.font.weight.bold,
-  fontSize: theme.font.fixed.f18.fontSize,
-  lineHeight: theme.font.fixed.f18.lineHeight,
-  letterSpacing: '0px',
-});
+  return {};
+};
 
 export default CalibrationSession;

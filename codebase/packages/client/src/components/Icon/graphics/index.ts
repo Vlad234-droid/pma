@@ -33,6 +33,7 @@ import { Trash } from './trash';
 import { Folder } from './folder';
 import { Archive } from './archive';
 import { Full } from './full';
+import { Less } from './less';
 import { Rating } from './rating';
 import { Goal } from './goal';
 import { View } from './view';
@@ -122,6 +123,7 @@ export type Graphics =
   | 'arrowRightPaginator'
   | 'arrowLeftPaginator'
   | 'full'
+  | 'less'
   | 'goal'
   | 'rating'
   | 'view'
@@ -187,6 +189,7 @@ export const icons: Record<Graphics, FCGraphicProps> = {
   arrowRightPaginator: ArrowRightPaginator,
   arrowLeftPaginator: ArrowLeftPaginator,
   full: Full,
+  less: Less,
   rating: Rating,
   goal: Goal,
   view: View,

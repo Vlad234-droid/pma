@@ -6,8 +6,8 @@ import { Trans } from 'components/Translation';
 export const CONFIRM_MODAL = 'confirm-modal';
 
 export type Props = {
-  title: string;
-  description?: string;
+  title?: string;
+  description?: JSX.Element | string;
   onCancel: () => void;
   onSave: () => void;
   onOverlayClick?: () => void;
@@ -34,10 +34,7 @@ const ConfirmModal: FC<Props> = ({
     <Modal
       modalPosition={'middle'}
       modalContainerRule={[containerRule({ mobileScreen })]}
-      title={{
-        content: title,
-        styles: [titleStyle],
-      }}
+      title={title ? { content: title, styles: [titleStyle] } : undefined}
       onOverlayClick={onOverlayClick}
     >
       <div data-test-id={CONFIRM_MODAL}>
