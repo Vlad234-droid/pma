@@ -1,32 +1,38 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import { CreateRule, Rule, Styles, useStyle } from '@pma/dex-wrapper';
 import { CalibrationSessionStatusEnum } from '@pma/openapi';
 import useDispatch from 'hooks/useDispatch';
 
-import { getCalibrationSessionsSelector, CalibrationSessionsAction } from '@pma/store';
+import { getCalibrationSessionsSelector, CalibrationSessionsAction, calibrationSessionsMetaSelector } from '@pma/store';
 
+import { buildPath } from 'features/general/Routes';
 import { useTranslation } from 'components/Translation';
 import { ListView } from './components/ListView';
 import { Line } from 'components/Line';
 import { Widget } from './widgets';
 import { Filter } from './components/Filter';
 import { Footer } from './components/Footer';
+import { SuccessModal } from './components/SuccessModal';
 import ColleaguesReviews from './components/ColleaguesReviews';
 import Graph from 'components/Graph';
 import { Rating } from 'config/enum';
 import { TileWrapper } from 'components/Tile';
 
 import { ActiveList } from './utils/types';
-import { useSelector } from 'react-redux';
+import { Page } from 'pages';
 
 const CalibrationSession = () => {
   const { css, matchMedia } = useStyle();
   const dispatch = useDispatch();
-  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
+  const navigate = useNavigate();
+  const mobileScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
   const mediumScreen = matchMedia({ xSmall: false, small: false, medium: true }) || false;
   const { uuid } = useParams<{ uuid: string }>();
   const calibrationSessions = useSelector(getCalibrationSessionsSelector) || [];
+  const { loading: csLoading, updating: csUpdating } = useSelector(calibrationSessionsMetaSelector);
 
   const calibrationSession = uuid ? calibrationSessions.find((cs) => cs.uuid === uuid) || null : {};
   const isStarted =
@@ -34,18 +40,24 @@ const CalibrationSession = () => {
     calibrationSession?.status === CalibrationSessionStatusEnum.Updated;
 
   const { t } = useTranslation();
+  const [showSuccessModal, toggleSuccessModal] = useState<boolean>(false);
   const [period, setPeriod] = useState<string>('2021 - 2022');
   const [activeList, setActiveList] = useState<ActiveList>(ActiveList.LIST);
   const listRef = useRef<HTMLDivElement>();
   const bottomPanelRef = useRef<HTMLDivElement>();
 
   const handleCancellation = () => {
-    console.log('handleCancellation');
+    navigate(buildPath(Page.CALIBRATION_SESSION_LIST));
   };
   const handleSave = () => {
-    console.log('handleSave');
+    dispatch(
+      CalibrationSessionsAction.updateCalibrationSession({
+        ...calibrationSession,
+        status: CalibrationSessionStatusEnum.Completed,
+      }),
+    );
+    toggleSuccessModal(!showSuccessModal);
   };
-
   useEffect(() => {
     dispatch(CalibrationSessionsAction.getCalibrationSessions({}));
   }, []);
@@ -132,12 +144,22 @@ const CalibrationSession = () => {
       },
     ],
   };
+
+  if (showSuccessModal) {
+    return (
+      <SuccessModal
+        title={`${t('calibration', 'Calibration')}: ${calibrationSession?.title || ''}`}
+        loading={csLoading || csUpdating}
+      />
+    );
+  }
+
   return (
     <div>
       <div className={css(contentBlockStyle({ height: bottomPanelRef?.current?.clientHeight }))}>
         <div>
           <Filter />
-          <div className={css(widgetContainerStyles)}>
+          <div className={css(widgetContainerStyles({ mobileScreen }))}>
             <Widget
               graphics={'chart'}
               title={
@@ -191,12 +213,11 @@ const CalibrationSession = () => {
   );
 };
 
-const widgetContainerStyles: Rule = {
-  display: 'grid',
-  gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))',
+const widgetContainerStyles: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => ({
+  display: mobileScreen ? 'block' : 'flex',
   gap: '8px',
   marginBottom: '56px',
-};
+});
 const lineStyles: Rule = {
   marginTop: '16px',
   marginBottom: '8px',

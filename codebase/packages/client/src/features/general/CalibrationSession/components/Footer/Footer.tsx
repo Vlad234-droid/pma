@@ -1,5 +1,5 @@
 import React, { useState, forwardRef } from 'react';
-import { Button, CreateRule, Rule, useStyle, Colors } from '@pma/dex-wrapper';
+import { Button, CreateRule, useStyle, Colors } from '@pma/dex-wrapper';
 
 import { Icon } from 'components/Icon';
 import ButtonWithConfirmation from 'components/ButtonWithConfirmation';
@@ -36,7 +36,7 @@ const Footer = forwardRef<any, Props>(({ onCancel, onSave }, ref) => {
         <div />
         <div>Performance ratings are available to edit</div>
         <div
-          className={css({ display: 'flex', cursor: 'pointer', alignItems: 'center' })}
+          className={css({ display: 'flex', cursor: 'pointer', alignItems: 'center', justifyContent: 'end' })}
           onClick={() => toggleFullScreen(!fullScreen)}
         >
           <div className={css(colorStyle({ color: 'tescoBlue' }), { paddingRight: '5px' })}>
@@ -49,14 +49,14 @@ const Footer = forwardRef<any, Props>(({ onCancel, onSave }, ref) => {
         <div className={css(buttonContainerStyle({ mobileScreen }))}>
           <Button
             onPress={onCancel}
-            styles={[buttonStyle, colorBackgroundStyle({}), colorStyle({ color: 'tescoBlue' })]}
+            styles={[buttonStyle({ mobileScreen }), colorBackgroundStyle({}), colorStyle({ color: 'tescoBlue' })]}
           >
             <Trans i18nKey='cancel_and_exit'>Cancel and exit</Trans>
           </Button>
           <ButtonWithConfirmation
             onSave={onSave}
             buttonName={t('save_and_end_calibration_session', 'Save and end calibration session')}
-            styles={[buttonStyle, colorBackgroundStyle({ color: 'tescoBlue' }), colorStyle({})]}
+            styles={[buttonStyle({ mobileScreen }), colorBackgroundStyle({ color: 'tescoBlue' }), colorStyle({})]}
             confirmationDescription={<ConfirmationDescription />}
             confirmationButtonTitle={t('end_session', 'End session')}
           />
@@ -75,40 +75,49 @@ const footerBlockStyle: CreateRule<{ fullScreen: boolean }> =
     width: '100%',
     height: fullScreen ? '198px' : '100px',
     background: theme.colors['paleOrange'],
+    paddingLeft: '10px',
+    paddingRight: '10px',
   });
 
 const containerStyle: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => ({
   display: 'flex',
   alignItems: 'center',
-  paddingTop: '20px',
-  justifyContent: 'space-around',
+  paddingTop: '30px',
+  '& > div': {
+    width: '33%',
+    textAlign: 'center',
+  },
   ...(mobileScreen && {
-    flexDirection: 'column',
-    alignItems: 'flex-start',
-    gap: '10px',
-    paddingLeft: '20px',
+    '& > div': {
+      width: '50%',
+    },
+    '& > div:first-child': {
+      display: 'none',
+    },
   }),
 });
 
 const buttonContainerStyle: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => ({
   display: 'flex',
   alignItems: 'center',
-  paddingTop: '20px',
+  paddingTop: '36px',
   justifyContent: 'center',
   ...(mobileScreen && {
     flexDirection: 'column',
     gap: '10px',
-    paddingLeft: '20px',
+    alignItems: 'left',
   }),
 });
 
-const buttonStyle: Rule = ({ theme }) => ({
-  ...theme.font.fixed.f16,
-  fontWeight: theme.font.weight.bold,
-  width: '40%',
-  margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
-  border: `${theme.border.width.b2} solid ${theme.colors.tescoBlue}`,
-});
+const buttonStyle: CreateRule<{ mobileScreen: boolean }> =
+  ({ mobileScreen }) =>
+  ({ theme }) => ({
+    ...theme.font.fixed.f16,
+    fontWeight: theme.font.weight.bold,
+    width: mobileScreen ? '100%' : '300px',
+    margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
+    border: `${theme.border.width.b2} solid ${theme.colors.tescoBlue}`,
+  });
 
 const colorBackgroundStyle: CreateRule<{ color?: Colors }> =
   ({ color = 'white' }) =>
