@@ -39,7 +39,7 @@ const MyTeam: FC<Props> = ({ view, searchValue, sortValue }) => {
       ManagersActions.getManagerReviews({
         colleagueUuid,
         fullTeam: view === View.FULL_TEAM,
-        colleagueCycleStatuses: [Status.STARTED, Status.FINISHING],
+        'colleague-cycle-status_in': [Status.STARTED, Status.FINISHING],
         status: Status.PENDING,
       }),
     );
