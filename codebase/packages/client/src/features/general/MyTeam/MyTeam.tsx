@@ -16,6 +16,7 @@ import Spinner from 'components/Spinner';
 import { Employee } from 'config/types';
 import TeamMateProfile from './components/TeamMateProfile';
 import { getLastTimelineStatus } from './utils';
+import { Status } from 'config/enum';
 
 type Props = {
   view: View;
@@ -27,7 +28,7 @@ const MyTeam: FC<Props> = ({ view, searchValue, sortValue }) => {
   const { loaded } = useSelector(getManagersMetaSelector) || {};
   const { css } = useStyle();
   const currentSelector = view === View.FULL_TEAM ? getAllEmployeesWithManagerSearch : getAllEmployees;
-  const colleagues = useSelector((state) => currentSelector(state, 'ALL', searchValue, sortValue)) || [];
+  const colleagues = useSelector((state) => currentSelector(state, Status.PENDING, searchValue, sortValue)) || [];
 
   // @ts-ignore
   const colleagueUuid = useSelector(colleagueUUIDSelector);
@@ -38,7 +39,8 @@ const MyTeam: FC<Props> = ({ view, searchValue, sortValue }) => {
       ManagersActions.getManagerReviews({
         colleagueUuid,
         fullTeam: view === View.FULL_TEAM,
-        colleagueCycleStatuses: ['STARTED', 'FINISHING'],
+        colleagueCycleStatuses: [Status.STARTED, Status.FINISHING],
+        status: Status.PENDING,
       }),
     );
 
