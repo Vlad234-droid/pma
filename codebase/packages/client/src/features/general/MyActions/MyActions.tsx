@@ -53,7 +53,14 @@ const MyActions: FC<Props> = ({ status, searchValue, sortValue, isCheckedAll }) 
 
   useEffect(() => {
     if (colleagueUuid)
-      dispatch(ManagersActions.getManagerReviews({ colleagueUuid, reviewStatuses, colleagueCycleStatuses, status }));
+      dispatch(
+        ManagersActions.getManagerReviews({
+          colleagueUuid,
+          'review-status_in': reviewStatuses,
+          'colleague-cycle-status_in': colleagueCycleStatuses,
+          status,
+        }),
+      );
   }, [colleagueUuid, status]);
 
   useEffect(() => {
