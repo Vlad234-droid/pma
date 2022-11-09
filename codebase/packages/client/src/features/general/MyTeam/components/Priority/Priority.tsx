@@ -37,10 +37,7 @@ const Priority: FC<Props> = ({ employee }) => {
   const { timeline: timelines, reviews } = employee;
 
   const startedQuarterTimeline = timelines
-    .filter(
-      ({ status, reviewType }) =>
-        [Status.STARTED, Status.FINISHING, Status.OVERDUE].includes(status) && reviewType === ReviewType.QUARTER,
-    )
+    .filter(({ status, reviewType }) => status != Status.NOT_STARTED && reviewType === ReviewType.QUARTER)
     .pop();
 
   const relatedReviews = reviews
