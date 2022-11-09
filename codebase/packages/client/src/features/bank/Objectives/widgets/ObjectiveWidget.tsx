@@ -76,6 +76,7 @@ const ObjectiveWidget: FC = () => {
 };
 
 const widgetStyles: Rule = ({ theme }) => ({
+  cursor: 'pointer',
   flex: '4 1 500px',
   fontSize: theme.font.fixed.f16.fontSize,
   lineHeight: theme.font.fixed.f16.lineHeight,
