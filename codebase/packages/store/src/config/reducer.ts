@@ -26,6 +26,7 @@ import knowledgeLibraryReducer from '../entities/knowledgeLibrary/reducer';
 import menuDataReducer from '../entities/hamburgerMenu/reducer';
 import statisticsReducer from '../entities/statistics/reducer';
 import calibrationSessionsReducer from '../entities/calibrationSessions/reducer';
+import calibrationReviewReducer from '../entities/calibrationReview/reducer';
 
 export const rootReducer = combineReducers({
   users: userReducer,
@@ -54,4 +55,5 @@ export const rootReducer = combineReducers({
   menuData: menuDataReducer,
   statistics: statisticsReducer,
   calibrationSessions: calibrationSessionsReducer,
+  calibrationReview: calibrationReviewReducer,
 });

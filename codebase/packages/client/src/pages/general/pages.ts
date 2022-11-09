@@ -35,14 +35,10 @@ import { CreatePerformanceCycle, PerformanceCycleAdministration } from './Perfor
 import { EditTip, TipsAdministration } from './Tips';
 import UserObjectives, { CreateObjective } from './UserObjectives';
 import PeopleTeam from './PeopleTeam';
-import Calibration from './Calibration';
 import CalibrationSessionList, { CreateCalibrationSession } from './CalibrationSessionList';
 import CalibrationSessionOverview, { CalibrationSession } from './CalibrationSession';
 import RespondNewFeedback from './RespondNewFeedback';
 import ReportStatistics from './ReportStatistics';
-import CalibrationRatings from './CalibrationRatings';
-import PreviousRatingsTiles from './PreviousRatingsTiles';
-import PreviousCalibrationRatings from './PreviousCalibrationRatings';
 import PreviousObjectiveRatings from './PreviousObjectiveRatings';
 import PreviousReviewForms from './PreviousReviewForms';
 import Review from './Review';
@@ -50,6 +46,7 @@ import UpdateObjectives from './UpdateObjectives';
 import { NotFound } from './NotFound';
 import PriorityNote from './Notes/PriorityNote';
 import PriorityNoteEdit from './Notes/PriorityNoteEdit';
+import CreateCalibrationRating from './CreateCalibrationRating';
 
 export type PageComponent = {
   Element: PageElement;
@@ -109,14 +106,6 @@ const pages: Record<Page, PageComponent> = {
     perform: [role.LINE_MANAGER],
     tenant: [Tenant.BANK, Tenant.GENERAL],
   },
-  [Page.CALIBRATION]: {
-    Element: Calibration,
-    title: (_, t) => t('calibration'),
-    withHeader: true,
-    backPath: Page.REPORT,
-    perform: [role.LINE_MANAGER],
-    tenant: [Tenant.BANK, Tenant.GENERAL],
-  },
   [Page.CALIBRATION_SESSION_LIST]: {
     Element: CalibrationSessionList,
     title: (_, t) => t('calibration_session'),
@@ -136,6 +125,12 @@ const pages: Record<Page, PageComponent> = {
     title: (_, t) => t('edit_calibration_session'),
     withHeader: true,
     perform: [role.LINE_MANAGER, role.PEOPLE_TEAM],
+    tenant: [Tenant.BANK, Tenant.GENERAL],
+  },
+  [Page.CREATE_CALIBRATION_RATING]: {
+    Element: CreateCalibrationRating,
+    withHeader: false,
+    perform: [role.LINE_MANAGER],
     tenant: [Tenant.BANK, Tenant.GENERAL],
   },
   [Page.NOTES]: {
@@ -470,26 +465,6 @@ const pages: Record<Page, PageComponent> = {
   //   perform: [role.ADMIN],
   //   tenant: [tenant.BANK, tenant.GENERAL],
   // },
-  [Page.CALIBRATION_RATINGS]: {
-    Element: CalibrationRatings,
-    withHeader: false,
-    perform: [role.LINE_MANAGER],
-    tenant: [Tenant.BANK, Tenant.GENERAL],
-  },
-  [Page.PREVIOUS_RATINGS_TILES]: {
-    Element: PreviousRatingsTiles,
-    title: (tenant, t) => t('title_previous_ratings'),
-    withHeader: true,
-    perform: [role.LINE_MANAGER],
-    tenant: [Tenant.BANK, Tenant.GENERAL],
-  },
-  [Page.PREVIOUS_CALIBRATION_RATINGS]: {
-    Element: PreviousCalibrationRatings,
-    title: (_, t) => t('title_previous_ratings'),
-    withHeader: true,
-    perform: [role.LINE_MANAGER],
-    tenant: [Tenant.BANK, Tenant.GENERAL],
-  },
   [Page.PREVIOUS_OBJECTIVES_RATINGS]: {
     Element: PreviousObjectiveRatings,
     title: (_, t) => t('objectives'),

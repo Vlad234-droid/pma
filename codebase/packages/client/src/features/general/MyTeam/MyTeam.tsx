@@ -27,7 +27,7 @@ const MyTeam: FC<Props> = ({ view, searchValue, sortValue }) => {
   const { loaded } = useSelector(getManagersMetaSelector) || {};
   const { css } = useStyle();
   const currentSelector = view === View.FULL_TEAM ? getAllEmployeesWithManagerSearch : getAllEmployees;
-  const colleagues = useSelector((state) => currentSelector(state, searchValue, sortValue)) || [];
+  const colleagues = useSelector((state) => currentSelector(state, 'ALL', searchValue, sortValue)) || [];
 
   // @ts-ignore
   const colleagueUuid = useSelector(colleagueUUIDSelector);

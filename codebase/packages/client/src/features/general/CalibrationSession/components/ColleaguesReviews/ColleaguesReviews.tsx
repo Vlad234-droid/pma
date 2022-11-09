@@ -1,8 +1,7 @@
 import React, { FC } from 'react';
-import { Rule, Styles, useStyle } from '@pma/dex-wrapper';
-
 import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router';
+import { Rule, Styles, useStyle } from '@pma/dex-wrapper';
 
 import { Accordion, BaseAccordion, ExpandButton, Panel, Section } from 'components/Accordion';
 import ViewColleagueProfile from 'components/ViewColleagueProfile';
@@ -10,9 +9,7 @@ import InfinityScrollLoad from 'components/InfinityScrollLoad';
 import { useTranslation } from 'components/Translation';
 import { buildPath } from 'features/general/Routes';
 import { ActiveList } from '../../utils/types';
-
 import { Page } from 'pages';
-import useDispatch from 'hooks/useDispatch';
 import { paramsReplacer } from 'utils';
 
 type Props = {
@@ -24,7 +21,6 @@ type Props = {
 const ColleaguesReviews: FC<Props> = ({ data, activeList, styles = {} }) => {
   const { t } = useTranslation();
   const { css } = useStyle();
-  const dispatch = useDispatch();
   const navigate = useNavigate();
   const { pathname } = useLocation();
 

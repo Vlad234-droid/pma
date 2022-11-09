@@ -25,9 +25,7 @@ const ReviewSuccessModal: FC<{
   const { t } = useTranslation();
   const { loading, error, saving } = useSelector(reviewsMetaSelector);
   const { loading: managerLoading } = useSelector(getManagersMetaSelector);
-  const colleaguesWaitingForApproval = useSelector((state) =>
-    getEmployeesWithReviewStatuses(state, [Status.WAITING_FOR_APPROVAL, Status.WAITING_FOR_COMPLETION]),
-  );
+  const colleaguesWaitingForApproval = useSelector((state) => getEmployeesWithReviewStatuses(state, 'PENDING'));
   const navigate = useNavigate();
   const tenant = useTenant();
 

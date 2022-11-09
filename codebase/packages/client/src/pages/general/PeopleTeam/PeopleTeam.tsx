@@ -22,7 +22,7 @@ const PeopleTeam: FC = () => {
       title: t('calibration', 'Calibration'),
       data: t('click_here_to_access_calibration', 'Click here to access the calibration area'),
       customStyle: { flex: '2 1 110px' },
-      onClick: () => navigate(buildPath(Page.CALIBRATION)),
+      onClick: () => navigate(buildPath(Page.CALIBRATION_SESSION_OVERVIEW)),
       withButton: false,
     },
     {

@@ -1,7 +1,6 @@
 import React, { FC } from 'react';
-import { useStyle, CreateRule } from '@pma/dex-wrapper';
 import { useNavigate } from 'react-router';
-import { useParams } from 'react-router-dom';
+import { useStyle, CreateRule } from '@pma/dex-wrapper';
 import { colleagueInfo } from '@pma/store';
 import { useSelector } from 'react-redux';
 
@@ -9,7 +8,6 @@ import { YearSwitch } from 'components/YearSwitch';
 import { ProfileTileWrapper } from 'components/ProfileTileWrapper';
 import { Backward } from 'components/Backward';
 import { UserObjectives } from 'features/general/Objectives';
-import { useFetchColleague } from 'features/general/RatingsTiles/hooks/useFetchColleague';
 import AdditionalInfo from 'components/AdditionalInfo';
 import { getCurrentYear } from 'utils/date';
 
@@ -18,12 +16,8 @@ const PreviousObjectiveRatings: FC = () => {
   const mobileScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
   const navigate = useNavigate();
 
-  const { uuid } = useParams<{ uuid: string }>();
-
   const { firstName, lastName, businessType, managerSirName, managerName, job, department } =
     useSelector(colleagueInfo);
-
-  useFetchColleague(uuid);
 
   const handleChange = (/*year*/) => {
     //TODO: dispatch(...)

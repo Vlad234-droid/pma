@@ -13,9 +13,9 @@ import { Trans, useTranslation } from 'components/Translation';
 import { Icon as IconComponent } from 'components/Icon';
 import StepIndicator from 'components/StepIndicator/StepIndicator';
 import { Attention } from 'components/Form';
-import ObjectiveHelpModal from '../Modal/ObjectiveHelpModal';
 import DynamicForm from 'components/DynamicForm';
 import { IconButton, Position } from 'components/IconButton';
+import ObjectiveHelpModal from '../Modal/ObjectiveHelpModal';
 
 export type Props = {
   formElements: Array<any>;

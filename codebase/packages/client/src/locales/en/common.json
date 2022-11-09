@@ -583,6 +583,7 @@
   "size_limit_exceeded": "{{ fileName }} exceeds maximum limit. Maximum allowed file size is {{ size }}.",
   "view_previous_ratings": "View previous ratings",
   "submit_calibration_ratings": "Submit calibration ratings",
+  "ratings_ready_to_submit": "Ratings ready to submit",
   "managing_performance": "Managing performance",
   "ratings_are_submitted": "Ratings are submitted",
   "start_syp": "Start SYP",

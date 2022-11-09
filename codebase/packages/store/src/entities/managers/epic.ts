@@ -9,8 +9,10 @@ export const getManagerReviewsEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
     filter(isActionOf(getManagerReviews.request)),
     switchMap(({ payload }) => {
-      return from(api.getManagersReviews(payload)).pipe(
-        map(getManagerReviews.success),
+      const { status, ...rest } = payload;
+      return from(api.getManagersReviews(rest)).pipe(
+        //@ts-ignore
+        map(({ data }) => getManagerReviews.success({ [status]: data })),
         catchError((e) => {
           const errors = e?.data?.errors;
           return concatWithErrorToast(

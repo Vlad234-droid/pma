@@ -6,11 +6,10 @@ import { SortBy } from 'features/general/Filters';
 import { useSelector } from 'react-redux';
 import {
   colleagueUUIDSelector,
-  getManagersMetaSelector,
+  getEmployeesWithReviewStatuses,
   ManagersActions,
   ReviewsActions,
   SchemaActions,
-  getEmployeesWithReviewStatuses,
 } from '@pma/store';
 
 import { ActionStatus, Status } from 'config/enum';
@@ -30,16 +29,18 @@ type Props = {
 const MyActions: FC<Props> = ({ status, searchValue, sortValue, isCheckedAll }) => {
   const dispatch = useDispatch();
   const { css } = useStyle();
-
-  const { loaded } = useSelector(getManagersMetaSelector) || {};
   const colleagueUuid = useSelector(colleagueUUIDSelector);
 
   const [checkedItems, setCheckedItems]: [string[], (T) => void] = useState([]);
-  const isWaitingForApprovalStatus = status === ActionStatus.PENDING;
-  const statuses = isWaitingForApprovalStatus
+  const isPending = status === ActionStatus.PENDING;
+  const reviewStatuses = isPending
     ? [Status.WAITING_FOR_APPROVAL, Status.WAITING_FOR_COMPLETION]
     : [Status.COMPLETED, Status.APPROVED, Status.DECLINED];
-  const colleagues = useSelector((state) => getEmployeesWithReviewStatuses(state, statuses, searchValue, sortValue));
+  const colleagueCycleStatuses = isPending
+    ? [Status.STARTED, Status.FINISHED, Status.FINISHING]
+    : [Status.STARTED, Status.FINISHED, Status.FINISHING, Status.COMPLETED];
+
+  const colleagues = useSelector((state) => getEmployeesWithReviewStatuses(state, status, searchValue, sortValue));
 
   const reviewsForApproval = useMemo(
     () => colleagues.filter(({ uuid }) => uuid && checkedItems.includes(uuid)),
@@ -47,12 +48,13 @@ const MyActions: FC<Props> = ({ status, searchValue, sortValue, isCheckedAll }) 
   );
 
   useEffect(() => {
-    setCheckedItems(isCheckedAll ? colleagues?.map((colleague) => colleague.uuid) : []);
+    setCheckedItems(isCheckedAll ? colleagues?.map((colleague: any) => colleague?.uuid) : []);
   }, [isCheckedAll]);
 
   useEffect(() => {
-    if (!loaded && colleagueUuid) dispatch(ManagersActions.getManagerReviews({ colleagueUuid }));
-  }, [loaded, colleagueUuid]);
+    if (colleagueUuid)
+      dispatch(ManagersActions.getManagerReviews({ colleagueUuid, reviewStatuses, colleagueCycleStatuses, status }));
+  }, [colleagueUuid, status]);
 
   useEffect(() => {
     return () => {
@@ -95,29 +97,27 @@ const MyActions: FC<Props> = ({ status, searchValue, sortValue, isCheckedAll }) 
           <>
             <div className={css(bodyStyle)}>
               <div className={css(optionWrapperStyle)}>
-                <div data-test-id='colleague-list'>
-                  {colleagues?.map((colleague) => (
-                    <div key={colleague.uuid} className={css(wrapperStyle)}>
-                      <div className={css(checkboxWrapperStyle)}>
-                        {status === ActionStatus.PENDING && (
-                          <div className={css(checkboxPositionStyle)}>
-                            <Checkbox
-                              id={colleague.uuid}
-                              name={colleague.uuid}
-                              checked={checkedItems.includes(colleague.uuid)}
-                              onChange={handleSelectItem}
-                            />
-                          </div>
-                        )}
-                      </div>
-                      <div className={css(blockStyle)}>
-                        <ColleagueAction status={status} colleague={colleague} onUpdate={handleUpdateReview} />
-                      </div>
+                {colleagues?.map((colleague: any) => (
+                  <div key={colleague.uuid} className={css(wrapperStyle)}>
+                    <div className={css(checkboxWrapperStyle)}>
+                      {status === ActionStatus.PENDING && (
+                        <div className={css(checkboxPositionStyle)}>
+                          <Checkbox
+                            id={colleague.uuid}
+                            name={colleague.uuid}
+                            checked={checkedItems.includes(colleague.uuid)}
+                            onChange={handleSelectItem}
+                          />
+                        </div>
+                      )}
                     </div>
-                  ))}
-                </div>
+                    <div className={css(blockStyle)}>
+                      <ColleagueAction status={status} colleague={colleague} onUpdate={handleUpdateReview} />
+                    </div>
+                  </div>
+                ))}
               </div>
-              {isWaitingForApprovalStatus && (
+              {isPending && (
                 <div className={css(rightColumnStyle)}>
                   <ApprovalWidget
                     isDisabled={!checkedItems.length}

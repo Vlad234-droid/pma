@@ -9,7 +9,6 @@ import {
   ReviewsActions,
   reviewsMetaSelector,
   SchemaActions,
-  TimelineActions,
   schemaMetaSelector,
 } from '@pma/store';
 import { ReviewType, Status } from 'config/enum';

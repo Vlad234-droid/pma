@@ -1,20 +1,18 @@
 import React, { FC, useEffect, useMemo } from 'react';
-import { CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
-import { colleagueUUIDSelector, timelinesMetaSelector, timelineTypesAvailabilitySelector } from '@pma/store';
-
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
+import { colleagueUUIDSelector, timelinesMetaSelector, timelineTypesAvailabilitySelector } from '@pma/store';
 
 import { useTranslation } from 'components/Translation';
 import { ReviewsSection, CompletedReviewsSection, ReviewFilesSection } from 'features/general/Review';
 import { Tenant, useTenant } from 'features/general/Permission';
 import { ShareWidget } from 'features/general/ShareWidget';
 import { buildPath } from 'features/general/Routes';
+import { SubmitCalibrationRatingsWidget } from 'features/general/CreateCalibrationRatings';
 import { Page } from 'pages/general/types';
 import { useHeaderContainer } from 'contexts/headerContext';
 import { ReviewType } from 'config/enum';
-
-export const TEST_ID = 'objectives-pave';
 
 const ObjectivesPage: FC = () => {
   const tenant = useTenant();
@@ -90,6 +88,9 @@ const ObjectivesPage: FC = () => {
           <Timeline colleagueUuid={colleagueUuid} />
           <Objectives />
           <ReviewsSection colleagueUuid={colleagueUuid} />
+          <div className={css(widgetsContainer)}>
+            <SubmitCalibrationRatingsWidget />
+          </div>
           <CompletedReviewsSection />
           <ReviewFilesSection colleagueUuid={colleagueUuid} />
           <Shortcuts />
@@ -149,5 +150,11 @@ const organizationWidgetStyles: Rule = ({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
 });
+
+const widgetsContainer: Rule = {
+  display: 'flex',
+  margin: '30px 0',
+  gap: '10px',
+};
 
 export default ObjectivesPage;
