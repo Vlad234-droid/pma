@@ -17,12 +17,12 @@ import { buildPath } from 'features/general/Routes';
 import useQueryString from 'hooks/useQueryString';
 import { useTileStatistics } from 'features/general/ColleaguesReviews/hooks/useTileStatistics';
 import { useHeaderContainer } from 'contexts/headerContext';
+import ViewItems from 'components/ViewItems';
 
 import { getCurrentYearWithStartDate } from 'features/general/Report/utils';
 import { convertToReportEnum } from 'features/general/ColleaguesReviews/utils';
 import { Page } from 'pages';
 import { ReportType } from 'config/enum';
-import ViewItems from '../../../components/ViewItems';
 
 const getConfigReviewsKeys = (type): { key: string; configType: ReportType } => {
   const page = {
@@ -179,12 +179,13 @@ const ReportStatistics = () => {
           items={appliedFilters}
         />
       )}
-
-      <ColleaguesCount
-        countStyles={countStyles({ isFiltersApplied: !!appliedFilters?.length })}
-        count={totalCount}
-        title={t('total_unique_colleagues', 'Total unique colleagues')}
-      />
+      {type !== ReportPage.REPORT_NEW_TO_BUSINESS && (
+        <ColleaguesCount
+          countStyles={countStyles}
+          count={totalCount}
+          title={t('total_unique_colleagues', 'Total unique colleagues')}
+        />
+      )}
 
       <div className={css(header({ mobileScreen }))}>
         <div className={css(flexCenterStyled)}>
