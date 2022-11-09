@@ -15,9 +15,10 @@ type Props = {
   children: (renderProps: RenderProps) => ReactNode;
   transitionDuration?: number;
   styles?: CSSProperties | Styles | Rule | {};
+  loading?: boolean;
 };
 
-const UnderlayModal: FC<Props> = ({ onClose, transitionDuration = 300, styles = {}, children }) => {
+const UnderlayModal: FC<Props> = ({ onClose, transitionDuration = 300, styles = {}, children, loading = false }) => {
   const [width, setWidth] = useState<Spacing>(0);
   const [duration] = useState<number>(transitionDuration);
   const { css, matchMedia } = useStyle();
@@ -101,4 +102,5 @@ const containerRule: CreateRule<{
     zIndex: zIndex.i50,
     position: 'relative',
     marginLeft: 'auto',
+    background: theme.colors.white,
   });

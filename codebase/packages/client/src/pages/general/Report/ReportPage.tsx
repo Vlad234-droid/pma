@@ -1,19 +1,21 @@
-import React, { FC, useState, useMemo } from 'react';
+import React, { FC, useState, useMemo, useEffect } from 'react';
 import { CreateRule, Rule, Styles, useStyle } from '@pma/dex-wrapper';
 import { totalColleaguesSelector } from '@pma/store';
+import { useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 
-import FilterModal from 'components/FilterModal';
 import { ReportModal } from 'features/general/Report/Modals';
+import { FilterOption } from 'features/general/Shared';
 import { buildPath } from 'features/general/Routes';
 import { Trans, useTranslation } from 'components/Translation';
 import { ColleaguesCount } from 'components/ColleaguesCount';
 import { HoverContainer } from 'components/HoverContainer';
 import { HoverMessage } from 'components/HoverMessage';
-import { FilterOption } from 'features/general/Shared';
 import UnderlayModal from 'components/UnderlayModal';
 import { IconButton } from 'components/IconButton';
+import FilterModal from 'components/FilterModal';
+import ViewItems from 'components/ViewItems';
 import { Select } from 'components/Form';
 
 import { getCurrentValue, getFieldOptions, initialValues } from 'features/general/Report/config';
@@ -37,13 +39,14 @@ const ReportPage: FC = () => {
   const query = useQueryString() as Record<string, string | number>;
   const { t } = useTranslation();
   const tenant = useTenant();
+  const { state } = useLocation();
+  const { filters } = (state as any) || {};
+  const navigate = useNavigate();
 
   const { css, matchMedia } = useStyle();
   const small = matchMedia({ xSmall: true, small: true }) || false;
-
   const mediumScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
-  const navigate = useNavigate();
   const [focus, setFocus] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [searchValueFilterOption, setSearchValueFilterOption] = useState('');
@@ -54,35 +57,45 @@ const ReportPage: FC = () => {
 
   const totalColleagues = useSelector(totalColleaguesSelector) ?? 0;
 
+  useEffect(() => filters && setSavedFilter(() => filters), []);
+
   const changeYearHandler = (value) => {
     if (!value) return;
     setYear(value);
   };
-
-  //TODO: attach this with Marius
-  // const getAppliedReport = () => [...new Set(checkedItems.map((item) => item.split('-')[0]))];
-  // const clearAppliedFilters = (filterTitle) => {
-  //   if (isCheckAll.length) setIsCheckAll((prev) => [...prev.filter((item) => item.split('-')[0] !== filterTitle)]);
-  //   setCheckedItems((prev) => [...prev.filter((item) => item.split('-')[0] !== filterTitle)]);
-  // };
-  // const quantity = getAppliedReport().length;
 
   const Report = useMemo(
     () => React.lazy(() => import(`features/${tenant}/Report`).then((module) => ({ default: module.default }))),
     [],
   );
 
+  const appliedFilters = useMemo(() => {
+    return (
+      savedFilter &&
+      //@ts-ignore
+      Object.entries(savedFilter).reduce((acc, [key, value]) => {
+        //@ts-ignore
+        if (value.some(({ checked }) => checked)) return [...acc, key];
+        return acc;
+      }, [])
+    );
+  }, [savedFilter]);
+
   return (
     <div className={css({ margin: '22px 42px 110px 40px' })} data-test-id={REPORT_WRAPPER}>
+      {!!appliedFilters && !!appliedFilters?.length && (
+        <ViewItems
+          onClose={(item) =>
+            //TODO: dispatch filters without item checkboxes
+            setSavedFilter((prev) => ({
+              ...prev,
+              [item]: prev[item].map((item) => ({ ...item, checked: false })),
+            }))
+          }
+          items={appliedFilters}
+        />
+      )}
       <div className={css(spaceBetween({ mediumScreen }))}>
-        {/*//Todo in future move active filters to another place */}
-        {/*{!!getAppliedReport().length && (*/}
-        {/*  <AppliedFilters*/}
-        {/*    clearAppliedFilters={clearAppliedFilters}*/}
-        {/*    getAppliedReport={getAppliedReport()}*/}
-        {/*    colleaguesCount={colleaguesCount}*/}
-        {/*  />*/}
-        {/*)}*/}
         <div className={css(downloadWrapperStyle)}>
           <form>
             <h2 className={css(yearLabel)}>
@@ -114,7 +127,6 @@ const ReportPage: FC = () => {
             title={t('total_unique_colleagues', 'Total unique colleagues')}
           />
         </div>
-
         <div className={css(flexCenterStyled)}>
           <HoverContainer
             isActive={!small}
@@ -181,7 +193,7 @@ const ReportPage: FC = () => {
           />
         </div>
       </div>
-      <Report year={year} tiles={tiles} />
+      <Report year={year} tiles={tiles} savedFilter={savedFilter} />
       {showModal && (
         <ReportModal
           tiles={tiles}

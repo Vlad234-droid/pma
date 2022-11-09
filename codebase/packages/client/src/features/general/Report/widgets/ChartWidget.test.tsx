@@ -12,7 +12,6 @@ describe('<PieChart />', () => {
     const props = {
       customData: [{ percentage: '10', count: '10' }],
       display: View.CHART,
-      link: 'mocked_link',
     };
     const { getByTestId } = render(
       <BrowserRouter>
@@ -20,7 +19,6 @@ describe('<PieChart />', () => {
       </BrowserRouter>,
     );
 
-    expect(getByTestId('pie-chart-content-id').closest('a')).toHaveAttribute('href', '/mocked_link');
     expect(getByTestId('pie-chart-content-id')).toBeInTheDocument();
   });
 

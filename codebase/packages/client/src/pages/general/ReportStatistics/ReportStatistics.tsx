@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { CreateRule, IconButton as BackButton, Rule, useStyle } from '@pma/dex-wrapper';
 import { getTotalReviewsByType, ReportPage } from '@pma/store';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -22,6 +22,7 @@ import { getCurrentYearWithStartDate } from 'features/general/Report/utils';
 import { convertToReportEnum } from 'features/general/ColleaguesReviews/utils';
 import { Page } from 'pages';
 import { ReportType } from 'config/enum';
+import ViewItems from '../../../components/ViewItems';
 
 const getConfigReviewsKeys = (type): { key: string; configType: ReportType } => {
   const page = {
@@ -108,28 +109,43 @@ const defineHeaderTitle = (type, t) => {
 
 const ReportStatistics = () => {
   const { css, matchMedia } = useStyle();
-  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
-  const { setLinkTitle } = useHeaderContainer();
   const { t } = useTranslation();
-  const { pathname } = useLocation();
-
+  const { pathname, state } = useLocation();
+  const { filters } = (state as any) || {};
+  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const query = useQueryString() as Record<string, string>;
   const navigate = useNavigate();
-  const { type } = useTileStatistics();
-
   const [focus, setFocus] = useState(false);
   const [searchedValue, setSearchedValue] = useState<string>('');
   const [filterModal, setFilterModal] = useState(false);
   const [isFullView, toggleFullView] = useState<boolean>(false);
   const [savedFilter, setSavedFilter] = useState<any>(null);
 
+  const { setLinkTitle } = useHeaderContainer();
+  const { type } = useTileStatistics();
+
   useEffect(() => {
     if (!Object.entries(query).length || !query.year) navigate(buildPath(Page.REPORT));
   }, [query]);
 
+  useEffect(() => filters && setSavedFilter(() => filters), []);
+
   useEffect(() => {
     setLinkTitle(defineHeaderTitle(convertToReportEnum(pathname), t));
   }, []);
+
+  const appliedFilters = useMemo(
+    () =>
+      savedFilter &&
+      //@ts-ignore
+      Object.entries(savedFilter).reduce((acc, [key, value]) => {
+        //@ts-ignore
+        if (value.some(({ checked }) => checked)) return [...acc, key];
+        return acc;
+      }, []),
+
+    [savedFilter],
+  );
 
   const totalCount: number = useSelector(getTotalReviewsByType(getConfigReviewsKeys(type))) || 0;
 
@@ -139,18 +155,33 @@ const ReportStatistics = () => {
         <BackButton
           testId={'test-back-button'}
           onPress={() => {
-            navigate({
-              pathname: buildPath(Page.REPORT),
-              //@ts-ignore
-              search: new URLSearchParams({ year: query.year || getCurrentYearWithStartDate() }).toString(),
-            });
+            navigate(
+              {
+                pathname: buildPath(Page.REPORT),
+                //@ts-ignore
+                search: new URLSearchParams({ year: query.year || getCurrentYearWithStartDate() }).toString(),
+              },
+              { state: { filters: savedFilter } },
+            );
           }}
           graphic='backwardLink'
         />
       </div>
+      {!!appliedFilters && !!appliedFilters?.length && (
+        <ViewItems
+          onClose={(item) =>
+            //TODO: dispatch filters without item checkboxes
+            setSavedFilter((prev) => ({
+              ...prev,
+              [item]: prev[item].map((item) => ({ ...item, checked: false })),
+            }))
+          }
+          items={appliedFilters}
+        />
+      )}
 
       <ColleaguesCount
-        countStyles={countStyles}
+        countStyles={countStyles({ isFiltersApplied: !!appliedFilters?.length })}
         count={totalCount}
         title={t('total_unique_colleagues', 'Total unique colleagues')}
       />
@@ -227,16 +258,18 @@ const arrowLeftStyle: Rule = ({ theme }) => {
   };
 };
 
-const countStyles: Rule = ({ theme }) => ({
-  position: 'absolute',
-  top: '28px',
-  left: '5px',
-  transform: 'translateY(-50%)',
-  fontWeight: theme.font.weight.regular,
-  fontSize: theme.font.fixed.f16.fontSize,
-  lineHeight: theme.font.fixed.f16.lineHeight,
-  color: theme.colors.base,
-});
+const countStyles: CreateRule<{ isFiltersApplied: boolean }> =
+  ({ isFiltersApplied }) =>
+  ({ theme }) => ({
+    position: 'absolute',
+    top: isFiltersApplied ? '65px' : '27px',
+    left: '5px',
+    transform: 'translateY(-50%)',
+    fontWeight: theme.font.weight.regular,
+    fontSize: theme.font.fixed.f16.fontSize,
+    lineHeight: theme.font.fixed.f16.lineHeight,
+    color: theme.colors.base,
+  });
 
 const wrapperStyle: Rule = ({ theme }) => {
   return {

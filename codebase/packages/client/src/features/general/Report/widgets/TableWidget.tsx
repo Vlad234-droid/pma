@@ -1,5 +1,5 @@
 import React, { FC, ReactNode } from 'react';
-import { useStyle, Rule } from '@pma/dex-wrapper';
+import { useStyle, CreateRule } from '@pma/dex-wrapper';
 import { Link } from 'react-router-dom';
 
 import { Data } from '../config';
@@ -18,9 +18,10 @@ type Props = {
   link?: string;
   children: (renderProps: RenderProps) => ReactNode;
   customData?: Array<Data>;
+  onClick?: () => void;
 };
 
-const InfoTable: FC<Props> = ({ configKey, link = '', Wrapper = 'div', customData, children }) => {
+const InfoTable: FC<Props> = ({ configKey, link = '', onClick, Wrapper = 'div', customData, children }) => {
   const { css } = useStyle();
 
   const chartDataStatistics = useChartDataStatistics(configKey);
@@ -29,30 +30,37 @@ const InfoTable: FC<Props> = ({ configKey, link = '', Wrapper = 'div', customDat
 
   if (!link)
     return (
-      <Wrapper className={css(infoTableWrapper)} data-test-id={INFO_TABLE_WRAPPER}>
+      <Wrapper
+        className={css(infoTableWrapper({ isClickable: !!onClick }))}
+        data-test-id={INFO_TABLE_WRAPPER}
+        onClick={onClick}
+      >
         {children({ data })}
       </Wrapper>
     );
 
   return (
-    <Link to={link} className={css(infoTableWrapper)} data-test-id={INFO_TABLE_WRAPPER}>
+    <Link to={link} data-test-id={INFO_TABLE_WRAPPER}>
       {children({ data })}
     </Link>
   );
 };
 
-const infoTableWrapper: Rule = ({ theme }) => ({
-  padding: '24px',
-  background: theme.colors.white,
-  boxShadow: '3px 3px 1px 1px rgba(0, 0, 0, 0.05)',
-  borderRadius: '10px',
-  width: '100%',
-  fontSize: theme.font.fixed.f16.fontSize,
-  lineHeight: theme.font.fixed.f16.lineHeight,
-  letterSpacing: '0px',
-  position: 'relative',
-  display: 'inline-block',
-  height: '100%',
-});
+const infoTableWrapper: CreateRule<{ isClickable: boolean }> =
+  ({ isClickable }) =>
+  ({ theme }) => ({
+    padding: '24px',
+    background: theme.colors.white,
+    boxShadow: '3px 3px 1px 1px rgba(0, 0, 0, 0.05)',
+    borderRadius: '10px',
+    width: '100%',
+    fontSize: theme.font.fixed.f16.fontSize,
+    lineHeight: theme.font.fixed.f16.lineHeight,
+    letterSpacing: '0px',
+    position: 'relative',
+    display: 'inline-block',
+    height: '100%',
+    cursor: isClickable ? 'pointer' : 'auto',
+  });
 
 export default InfoTable;

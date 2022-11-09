@@ -7,7 +7,6 @@ const colors = {
   lightGray: '#DEDEDE',
   tescoLightGray: '#F3F9F7',
   darkBlue: '#B3CDE6',
-  lightPurple: '#4954d2',
   paleOrange: '#FFDBC2',
 };
 export default colors;

@@ -1,7 +1,8 @@
 import React, { FC, useCallback, useMemo } from 'react';
-import { getReportMetaSelector } from '@pma/store';
-import { Rule, useStyle } from '@pma/dex-wrapper';
+import { getReportByType, getReportMetaSelector } from '@pma/store';
+import { Rule, Styles, useStyle } from '@pma/dex-wrapper';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router';
 
 import { buildPath, buildPathWithParams } from 'features/general/Routes';
 import { CanPerform, role } from 'features/general/Permission';
@@ -12,22 +13,25 @@ import { TableWidget, ChartWidget } from './widgets';
 import { PieChart } from 'components/PieChart';
 import InfoTable from 'components/InfoTable';
 import Spinner from 'components/Spinner';
-import { paramsReplacer } from 'utils';
 import { Page } from 'pages';
-import { ReportPage as ReportPageType, TitlesReport } from 'config/enum';
+import { ReportPage as ReportPageType, ReportType, TitlesReport } from 'config/enum';
 import { convertToLink, IsReportTiles, View } from './config';
 import { getCurrentYearWithStartDate } from './utils';
 import { useReportDataLoader } from './hooks';
 import useQueryString from 'hooks/useQueryString';
+import { isSingular, paramsReplacer } from 'utils';
 
 export const REPORT_WRAPPER = 'REPORT_WRAPPER';
 
-const Report: FC<{ year: string; tiles: Array<string> }> = ({ year, tiles }) => {
+const Report: FC<{ year: string; tiles: Array<string>; savedFilter: any }> = ({ year, tiles, savedFilter }) => {
   const query = useQueryString() as Record<string, string | number>;
   const { t } = useTranslation();
   const { css, matchMedia } = useStyle();
+  const navigate = useNavigate();
   const small = matchMedia({ xSmall: true, small: true }) || false;
   const { loaded } = useSelector(getReportMetaSelector);
+  const anniversary = useSelector(getReportByType('anniversaryReviews'));
+  const anniversaryReport = anniversary?.find(({ type }) => type === ReportType.EYR) || {};
 
   useReportDataLoader(query, year);
 
@@ -53,6 +57,8 @@ const Report: FC<{ year: string; tiles: Array<string> }> = ({ year, tiles }) => 
     [tiles],
   );
 
+  const filters = useMemo(() => (savedFilter ? { state: { filters: savedFilter } } : { state: null }), [savedFilter]);
+
   if (!loaded) return <Spinner />;
 
   return (
@@ -75,16 +81,21 @@ const Report: FC<{ year: string; tiles: Array<string> }> = ({ year, tiles }) => 
             >
               <ChartWidget
                 configKey={ReportPageType.REPORT_SUBMITTED_OBJECTIVES}
-                link={buildPathWithParams(
-                  buildPath(
-                    paramsReplacer(Page.REPORT_STATISTICS, {
-                      ':type': convertToLink(ReportPageType.REPORT_SUBMITTED_OBJECTIVES),
-                    }),
-                  ),
-                  {
-                    ...getYear,
-                  },
-                )}
+                onClick={() =>
+                  navigate(
+                    buildPathWithParams(
+                      buildPath(
+                        paramsReplacer(Page.REPORT_STATISTICS, {
+                          ':type': convertToLink(ReportPageType.REPORT_SUBMITTED_OBJECTIVES),
+                        }),
+                      ),
+                      {
+                        ...getYear,
+                      },
+                    ),
+                    filters,
+                  )
+                }
               >
                 {({ data }) => (
                   <PieChart
@@ -114,16 +125,21 @@ const Report: FC<{ year: string; tiles: Array<string> }> = ({ year, tiles }) => 
             >
               <ChartWidget
                 configKey={ReportPageType.REPORT_APPROVED_OBJECTIVES}
-                link={buildPathWithParams(
-                  buildPath(
-                    paramsReplacer(Page.REPORT_STATISTICS, {
-                      ':type': convertToLink(ReportPageType.REPORT_APPROVED_OBJECTIVES),
-                    }),
-                  ),
-                  {
-                    ...getYear,
-                  },
-                )}
+                onClick={() =>
+                  navigate(
+                    buildPathWithParams(
+                      buildPath(
+                        paramsReplacer(Page.REPORT_STATISTICS, {
+                          ':type': convertToLink(ReportPageType.REPORT_APPROVED_OBJECTIVES),
+                        }),
+                      ),
+                      {
+                        ...getYear,
+                      },
+                    ),
+                    filters,
+                  )
+                }
               >
                 {({ data }) => (
                   <PieChart
@@ -137,6 +153,7 @@ const Report: FC<{ year: string; tiles: Array<string> }> = ({ year, tiles }) => 
           </div>
         )}
       </div>
+
       <div className={css(pieChartWrapper)}>
         {isDisplayTile(IsReportTiles.MID_YEAR_FORMS) && (
           <div className={css(leftColumn)}>
@@ -155,16 +172,21 @@ const Report: FC<{ year: string; tiles: Array<string> }> = ({ year, tiles }) => 
             >
               <ChartWidget
                 configKey={ReportPageType.REPORT_MID_YEAR_REVIEW}
-                link={buildPathWithParams(
-                  buildPath(
-                    paramsReplacer(Page.REPORT_STATISTICS, {
-                      ':type': convertToLink(ReportPageType.REPORT_MID_YEAR_REVIEW),
-                    }),
-                  ),
-                  {
-                    ...getYear,
-                  },
-                )}
+                onClick={() =>
+                  navigate(
+                    buildPathWithParams(
+                      buildPath(
+                        paramsReplacer(Page.REPORT_STATISTICS, {
+                          ':type': convertToLink(ReportPageType.REPORT_MID_YEAR_REVIEW),
+                        }),
+                      ),
+                      {
+                        ...getYear,
+                      },
+                    ),
+                    filters,
+                  )
+                }
               >
                 {({ data }) => (
                   <PieChart title={t(TitlesReport.MYR, 'Mid-year review')} data={data} display={View.CHART} />
@@ -177,16 +199,21 @@ const Report: FC<{ year: string; tiles: Array<string> }> = ({ year, tiles }) => 
           <div className={css(rightColumn)}>
             <TableWidget
               configKey={ReportPageType.REPORT_MYR_BREAKDOWN}
-              link={buildPathWithParams(
-                buildPath(
-                  paramsReplacer(Page.REPORT_STATISTICS, {
-                    ':type': convertToLink(ReportPageType.REPORT_MYR_BREAKDOWN),
-                  }),
-                ),
-                {
-                  ...getYear,
-                },
-              )}
+              onClick={() =>
+                navigate(
+                  buildPathWithParams(
+                    buildPath(
+                      paramsReplacer(Page.REPORT_STATISTICS, {
+                        ':type': convertToLink(ReportPageType.REPORT_MYR_BREAKDOWN),
+                      }),
+                    ),
+                    {
+                      ...getYear,
+                    },
+                  ),
+                  filters,
+                )
+              }
             >
               {({ data }) => (
                 <InfoTable mainTitle={t(TitlesReport.MYR_BREAKDOWN, 'Breakdown of Mid-year review')} data={data} />
@@ -213,16 +240,21 @@ const Report: FC<{ year: string; tiles: Array<string> }> = ({ year, tiles }) => 
             >
               <ChartWidget
                 configKey={ReportPageType.REPORT_END_YEAR_REVIEW}
-                link={buildPathWithParams(
-                  buildPath(
-                    paramsReplacer(Page.REPORT_STATISTICS, {
-                      ':type': convertToLink(ReportPageType.REPORT_END_YEAR_REVIEW),
-                    }),
-                  ),
-                  {
-                    ...getYear,
-                  },
-                )}
+                onClick={() =>
+                  navigate(
+                    buildPathWithParams(
+                      buildPath(
+                        paramsReplacer(Page.REPORT_STATISTICS, {
+                          ':type': convertToLink(ReportPageType.REPORT_END_YEAR_REVIEW),
+                        }),
+                      ),
+                      {
+                        ...getYear,
+                      },
+                    ),
+                    filters,
+                  )
+                }
               >
                 {({ data }) => (
                   <PieChart title={t(TitlesReport.EYR, 'Year-end review')} data={data} display={View.CHART} />
@@ -235,16 +267,21 @@ const Report: FC<{ year: string; tiles: Array<string> }> = ({ year, tiles }) => 
           <div className={css(rightColumn)}>
             <TableWidget
               configKey={ReportPageType.REPORT_EYR_BREAKDOWN}
-              link={buildPathWithParams(
-                buildPath(
-                  paramsReplacer(Page.REPORT_STATISTICS, {
-                    ':type': convertToLink(ReportPageType.REPORT_EYR_BREAKDOWN),
-                  }),
-                ),
-                {
-                  ...getYear,
-                },
-              )}
+              onClick={() =>
+                navigate(
+                  buildPathWithParams(
+                    buildPath(
+                      paramsReplacer(Page.REPORT_STATISTICS, {
+                        ':type': convertToLink(ReportPageType.REPORT_EYR_BREAKDOWN),
+                      }),
+                    ),
+                    {
+                      ...getYear,
+                    },
+                  ),
+                  filters,
+                )
+              }
             >
               {({ data }) => (
                 <InfoTable mainTitle={t(TitlesReport.EYR_BREAKDOWN, 'Breakdown of End-year review')} data={data} />
@@ -261,16 +298,21 @@ const Report: FC<{ year: string; tiles: Array<string> }> = ({ year, tiles }) => 
               <div className={css(leftColumn)}>
                 <ChartWidget
                   configKey={ReportPageType.REPORT_WORK_LEVEL}
-                  link={buildPathWithParams(
-                    buildPath(
-                      paramsReplacer(Page.REPORT_STATISTICS, {
-                        ':type': convertToLink(ReportPageType.REPORT_WORK_LEVEL),
-                      }),
-                    ),
-                    {
-                      ...getYear,
-                    },
-                  )}
+                  onClick={() =>
+                    navigate(
+                      buildPathWithParams(
+                        buildPath(
+                          paramsReplacer(Page.REPORT_STATISTICS, {
+                            ':type': convertToLink(ReportPageType.REPORT_WORK_LEVEL),
+                          }),
+                        ),
+                        {
+                          ...getYear,
+                        },
+                      ),
+                      filters,
+                    )
+                  }
                 >
                   {({ data }) => (
                     <PieChart
@@ -302,16 +344,21 @@ const Report: FC<{ year: string; tiles: Array<string> }> = ({ year, tiles }) => 
             >
               <ChartWidget
                 configKey={ReportPageType.REPORT_NEW_TO_BUSINESS}
-                link={buildPathWithParams(
-                  buildPath(
-                    paramsReplacer(Page.REPORT_STATISTICS, {
-                      ':type': convertToLink(ReportPageType.REPORT_NEW_TO_BUSINESS),
-                    }),
-                  ),
-                  {
-                    ...getYear,
-                  },
-                )}
+                onClick={() =>
+                  navigate(
+                    buildPathWithParams(
+                      buildPath(
+                        paramsReplacer(Page.REPORT_STATISTICS, {
+                          ':type': convertToLink(ReportPageType.REPORT_NEW_TO_BUSINESS),
+                        }),
+                      ),
+                      {
+                        ...getYear,
+                      },
+                    ),
+                    filters,
+                  )
+                }
               >
                 {({ data }) => (
                   <PieChart title={t(TitlesReport.BUSINESS, 'New to business')} data={data} display={View.QUANTITY} />
@@ -339,16 +386,21 @@ const Report: FC<{ year: string; tiles: Array<string> }> = ({ year, tiles }) => 
             >
               <ChartWidget
                 configKey={ReportPageType.REPORT_FEEDBACK}
-                link={buildPathWithParams(
-                  buildPath(
-                    paramsReplacer(Page.REPORT_STATISTICS, {
-                      ':type': convertToLink(ReportPageType.REPORT_FEEDBACK),
-                    }),
-                  ),
-                  {
-                    ...getYear,
-                  },
-                )}
+                onClick={() =>
+                  navigate(
+                    buildPathWithParams(
+                      buildPath(
+                        paramsReplacer(Page.REPORT_STATISTICS, {
+                          ':type': convertToLink(ReportPageType.REPORT_FEEDBACK),
+                        }),
+                      ),
+                      {
+                        ...getYear,
+                      },
+                    ),
+                    filters,
+                  )
+                }
               >
                 {({ data }) => (
                   <PieChart
@@ -378,24 +430,46 @@ const Report: FC<{ year: string; tiles: Array<string> }> = ({ year, tiles }) => 
             >
               <TableWidget
                 configKey={ReportPageType.REPORT_ANNIVERSARY_REVIEWS}
-                link={buildPathWithParams(
-                  buildPath(
-                    paramsReplacer(Page.REPORT_STATISTICS, {
-                      ':type': convertToLink(ReportPageType.REPORT_ANNIVERSARY_REVIEWS),
-                    }),
-                  ),
-                  {
-                    ...getYear,
-                  },
-                )}
+                onClick={() =>
+                  navigate(
+                    buildPathWithParams(
+                      buildPath(
+                        paramsReplacer(Page.REPORT_STATISTICS, {
+                          ':type': convertToLink(ReportPageType.REPORT_ANNIVERSARY_REVIEWS),
+                        }),
+                      ),
+                      {
+                        ...getYear,
+                      },
+                    ),
+                    filters,
+                  )
+                }
               >
-                {({ data }) => (
-                  <InfoTable
-                    mainTitle={t(TitlesReport.ANNIVERSARY_REVIEWS, 'Anniversary Reviews')}
-                    preTitle={t(TitlesReport.HOURLY_PAID, 'Hourly paid colleagues only')}
-                    data={data}
-                  />
-                )}
+                {() => {
+                  const totalCount = anniversaryReport.totalCount ?? 0;
+                  const completed = anniversaryReport?.statistics?.approved?.count ?? 0;
+                  return (
+                    <>
+                      <InfoTable
+                        mainTitle={t(TitlesReport.ANNIVERSARY_REVIEWS, 'Anniversary Reviews')}
+                        preTitle={t(TitlesReport.HOURLY_PAID, 'Hourly paid colleagues only')}
+                      />
+                      <div className={css(anniversaryInfo)}>
+                        <span className={css(infoStatistics)}>
+                          <b>{totalCount}</b>{' '}
+                          {isSingular(totalCount) ? t('colleague', 'Colleague') : t('colleagues', 'Colleagues')}
+                        </span>
+                        <span className={css(infoStatistics, { marginTop: '6px' })}>
+                          <b>{completed}</b>{' '}
+                          {isSingular(completed)
+                            ? t('review_completed', 'Review completed')
+                            : t('reviews_completed', 'Reviews completed')}
+                        </span>
+                      </div>
+                    </>
+                  );
+                }}
               </TableWidget>
             </HoverContainer>
           </div>
@@ -484,6 +558,25 @@ const Report: FC<{ year: string; tiles: Array<string> }> = ({ year, tiles }) => 
       </div>
     </>
   );
+};
+
+const infoStatistics: Rule = ({ theme }) =>
+  ({
+    color: theme.colors.base,
+    fontSize: theme.font.fixed.f16.fontSize,
+    fontWeight: theme.font.weight.bold,
+    '& > b': {
+      fontSize: '20px',
+      color: theme.colors.link,
+    },
+  } as Styles);
+
+const anniversaryInfo: Rule = {
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  justifyContent: 'center',
+  marginTop: '12px',
 };
 
 const pieChartWrapper: Rule = ({ theme }) => ({
