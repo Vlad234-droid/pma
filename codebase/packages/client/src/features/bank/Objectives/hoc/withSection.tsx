@@ -128,7 +128,9 @@ export function withSection<P>(WrappedComponent: React.ComponentType<P & PropsTy
         {removedPriority && reviewLoaded && (
           <ConfirmModal
             title={t('priority_deleted', 'Priority deleted')}
-            description={removedPriority}
+            description={t('removed_priority', `${removedPriority} was deleted successfully!`, {
+              removedPriority: removedPriority,
+            })}
             visibleCancelBtn={false}
             onSave={handleClearRemovedPriority}
             submitBtnTitle={<Trans i18nKey='ok'>Ok</Trans>}
