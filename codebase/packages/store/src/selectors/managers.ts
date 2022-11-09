@@ -10,21 +10,22 @@ import {
 } from '@pma/client/src/features/general/Filters';
 import { Employee } from '@pma/client/src/config/types';
 
-export const managersSelector = (state: RootState) => state.managers || {};
+export const managersSelector = (state: RootState) => state.managers.data || {};
+export const getManagersMetaSelector = (state: RootState) => state.managers.meta || {};
 
-export const getEmployeesWithReviewStatuses: ParametricSelector<RootState, Status[], any> = createSelector(
+export const getEmployeesWithReviewStatuses: ParametricSelector<RootState, string, any> = createSelector(
   [
     managersSelector,
-    (_, statuses: Status[]) => statuses,
+    (_, status: string) => status,
     (_, __, search?: string) => search,
     (_, __, ___?, sort?: SortBy) => sort,
   ],
   // @ts-ignore
-  ({ data = [] }, statuses: Status[], searchValue = '', sortValue) => {
-    const filteredWithStatusData = data
-      .filter((employee) => employee.reviews.some((review) => statuses.includes(review.status)))
-      .map((employee) => {
-        const reviews = employee.reviews.filter((review) => statuses.includes(review.status));
+  (data = {}, status: string, searchValue = '', sortValue) => {
+    const filteredWithStatusData = (data[status] || [])
+      ?.filter((employee) => employee.reviews.length)
+      ?.map((employee) => {
+        const reviews = employee.reviews;
         const timelineIds = reviews.map(({ tlPointUuid }) => tlPointUuid);
         const timeline = employee.timeline.filter((timeline) => timelineIds.includes(timeline.uuid));
         return {
@@ -41,15 +42,29 @@ export const getEmployeesWithReviewStatuses: ParametricSelector<RootState, Statu
 );
 
 export const getAllEmployees: Selector<RootState, any, any> = createSelector(
-  [managersSelector, (_, search?: string) => search, (_, __?, sort?: SortBy) => sort],
+  [
+    managersSelector,
+    (_, status: string) => status,
+    (_, __, search?: string) => search,
+    (_, __?, sort?: SortBy) => sort,
+  ],
   // @ts-ignore
-  ({ data }, search = '', sort) => (data ? sortEmployeesFn(searchEmployeesFn(data, search), sort) : []),
+  (data, status, search = '', sort) => {
+    return data[status] ? sortEmployeesFn(searchEmployeesFn(data[status], search), sort) : [];
+  },
 );
 
 export const getAllEmployeesWithManagerSearch: Selector<RootState, any, any> = createSelector(
-  [managersSelector, (_, search?: string) => search, (_, __?, sort?: SortBy) => sort],
+  [
+    managersSelector,
+    (_, status: string) => status,
+    (_, __, search?: string) => search,
+    (_, __?, sort?: SortBy) => sort,
+  ],
   // @ts-ignore
-  ({ data }, search = '', sort) => (data ? sortEmployeesFn(searchEmployeesAndManagersFn(data, search), sort) : []),
+  (data, status, search = '', sort) => {
+    return data[status] ? sortEmployeesFn(searchEmployeesAndManagersFn(data[status], search), sort) : [];
+  },
 );
 
 export const getPendingEmployees: Selector<RootState, any, any> = createSelector(
@@ -155,8 +170,6 @@ export const getOutstandingPendingEmployees: Selector<RootState, any, any> = cre
     };
   },
 );
-
-export const getManagersMetaSelector = createSelector(managersSelector, ({ meta }) => meta);
 
 const isAfterDeadline = ({ date, days = 0 }) =>
   new Date().getTime() > new Date(date).getTime() - days * 24 * 60 * 60 * 1000;

@@ -2,6 +2,7 @@ import { createReducer } from 'typesafe-actions';
 import { getManagerReviews } from './actions';
 
 export const initialState = {
+  data: {},
   meta: { loading: false, loaded: false, error: null },
 };
 
@@ -9,7 +10,10 @@ const request = (state) => ({ ...state, meta: { ...state.meta, loading: true, lo
 
 const success = (state, { payload }) => ({
   ...state,
-  ...payload,
+  data: {
+    ...state.data,
+    ...payload,
+  },
   meta: { ...state.meta, loading: false, loaded: true },
 });
 

@@ -13,7 +13,7 @@ import { Page } from 'pages';
 const PendingApprovals: FC = () => {
   const { css, theme } = useStyle();
   const { t } = useTranslation();
-  const { employeeWithPendingApprovals } = useSelector(getPendingEmployees) || {};
+  const { employeeWithPendingApprovals } = useSelector((state) => getPendingEmployees(state, 'ALL')) || {};
 
   const waitingCount = employeeWithPendingApprovals?.length;
 
@@ -28,7 +28,7 @@ const PendingApprovals: FC = () => {
           <div className={css(iconWrapperStyles)}>
             <Icon graphic='roundClock' fill={theme.colors.white} iconStyles={iconStyles} />
           </div>
-          <div className={css(headerBlockStyles)}>
+          <div className={css(headerStyles)}>
             <span className={css(titleStyles)}>{t('pending_actions', 'Pending actions')}</span>
             <span className={css(descriptionStyle)}>{t('you_have_pending_actions', 'You have pending actions')}</span>
           </div>
@@ -58,7 +58,7 @@ const iconStyles: Rule = {
   minHeight: '40px',
 };
 
-const headerBlockStyles: Rule = {
+const headerStyles: Rule = {
   display: 'grid',
   padding: '0 20px',
   alignSelf: 'center',
