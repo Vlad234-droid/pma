@@ -11,6 +11,11 @@ export const getColleagueMetadata = (config: any) => {
   return httpClient.get(`${domain}/${colleagueUuid}/metadata`, { params });
 };
 
+export const getColleagueMetadataByPerformanceCycle = (config: any) => {
+  const { colleagueUuid, cycleUuid, ...params } = config || {};
+  return httpClient.get(`${domain}/${colleagueUuid}/pm-cycles/${cycleUuid}/metadata`, { params });
+};
+
 export const getColleagueByUuid = (config: any) => {
   const { colleagueUuid, ...params } = config || {};
   return httpClient.get(`${domain}/${colleagueUuid}`, { params });

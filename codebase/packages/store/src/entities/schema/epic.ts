@@ -6,9 +6,10 @@ import { catchError, filter, mergeMap, switchMap, takeUntil } from 'rxjs/operato
 
 import { ReviewType, Status } from '@pma/client/src/config/enum';
 
-import { getSchema, getSchemaWithColleaguePermission } from './actions';
+import { getColleagueSchema, getSchema, getSchemaWithColleaguePermission } from './actions';
 import { addStrategicObjectiveInForms, getPermittedForms, convertFormsJsonToObject } from '../../utils/formExpression';
 import { colleagueUUIDSelector } from '../../selectors';
+import { getColleagueMetadataByPerformanceCycle } from '@pma/api/src/rest';
 
 export const getSchemaEpic: Epic = (action$, state$, { api }) =>
   action$.pipe(
@@ -43,6 +44,30 @@ export const getSchemaEpic: Epic = (action$, state$, { api }) =>
         }),
         catchError(({ errors }) => of(getSchema.failure(errors))),
         takeUntil(action$.pipe(filter(isActionOf(getSchema.cancel)))),
+      ),
+    ),
+  );
+
+export const getColleagueSchemaEpic: Epic = (action$, state$, { api }) =>
+  action$.pipe(
+    filter(isActionOf(getColleagueSchema.request)),
+    mergeMap(({ payload: { includeForms = true, colleagueUuid, cycleUuid } }) =>
+      from(api.getColleagueMetadataByPerformanceCycle({ colleagueUuid, cycleUuid, includeForms })).pipe(
+        // @ts-ignore
+        mergeMap(({ data: schema }) => {
+          const updatedForms: any[] = addStrategicObjectiveInForms(
+            convertFormsJsonToObject(schema.forms.filter((form) => form)),
+            0,
+          );
+          return of(
+            getColleagueSchema.success({
+              [colleagueUuid]: { [cycleUuid]: { ...schema, forms: updatedForms } },
+              colleagueUuid,
+            }),
+          );
+        }),
+        catchError(({ errors }) => of(getColleagueSchema.failure(errors))),
+        takeUntil(action$.pipe(filter(isActionOf(getColleagueSchema.cancel)))),
       ),
     ),
   );
@@ -99,4 +124,4 @@ export const getSchemaWithColleaguePermissionEpic: Epic = (action$, state$, { ap
     ),
   );
 
-export default combineEpics(getSchemaEpic);
+export default combineEpics(getSchemaEpic, getColleagueSchemaEpic);

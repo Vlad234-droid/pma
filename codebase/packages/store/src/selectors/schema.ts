@@ -64,6 +64,41 @@ export const getAllReviewSchemas = createSelector(schemaSelector, (schema: any) 
   return reviews;
 });
 
+export const getColleaguesSchemas = (colleagueUuid) =>
+  createSelector(
+    (state) => state.schema.colleagueSchema?.[colleagueUuid],
+    (data: any) => {
+      if (!data) return {};
+      return Object.keys(data).reduce((schema, key) => {
+        const reviews = {};
+        const {
+          metadata: {
+            cycle: { timelinePoints = [] },
+          },
+        } = data[key];
+        timelinePoints?.forEach((timelinePoint) => {
+          if (timelinePoint?.properties?.pm_timeline_point_code && timelinePoint?.form?.id) {
+            const form = data[key]?.forms.find((form) => form.id === timelinePoint.form.id);
+            if (form) {
+              reviews[timelinePoint?.properties?.pm_timeline_point_code] = {
+                ...data[key],
+                ...(form?.json || {}),
+                markup: {
+                  min: Number(timelinePoint?.properties?.pm_review_min || 0),
+                  max: Number(timelinePoint?.properties?.pm_review_max || 0),
+                },
+              };
+            }
+          }
+        });
+
+        schema[key] = reviews;
+
+        return schema;
+      }, {});
+    },
+  );
+
 export const getReviewSchema = (code?: string, withForms = true) =>
   createSelector(schemaSelector, (schema: any) => {
     let form;
