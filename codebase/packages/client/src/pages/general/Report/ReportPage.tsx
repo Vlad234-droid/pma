@@ -120,6 +120,11 @@ const ReportPage: FC = () => {
               value={getCurrentValue(query, year)}
             />
           </form>
+          <ColleaguesCount
+            count={totalColleagues}
+            countStyles={countStyles}
+            title={t('total_unique_colleagues', 'Total unique colleagues')}
+          />
         </div>
         <div className={css(flexCenterStyled)}>
           <HoverContainer
