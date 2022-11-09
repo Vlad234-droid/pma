@@ -1,16 +1,16 @@
-// @ts-ignore
+//@ts-ignore
 import { Epic, isActionOf } from 'typesafe-actions';
 import { combineEpics } from 'redux-observable';
 import { from, of } from 'rxjs';
 import { catchError, filter, map, switchMap } from 'rxjs/operators';
 import {
-  getLimitedObjectivesReport,
   getLeadershipReviewsReport,
   getAnniversaryReviewsReport,
   getFeedbacksReport,
   getNewToBusinessReport,
   getReviewReport,
   getOverallRatingsReport,
+  getReportsTotalColleagues,
 } from './actions';
 
 export const getLeadershipReviewsReportEpic: Epic = (action$, _, { api }) =>
@@ -25,6 +25,20 @@ export const getLeadershipReviewsReportEpic: Epic = (action$, _, { api }) =>
           return getLeadershipReviewsReport.success(data);
         }),
         catchError(({ errors }) => of(getLeadershipReviewsReport.failure(errors))),
+      );
+    }),
+  );
+export const getReportsTotalColleaguesEpic: Epic = (action$, _, { api }) =>
+  action$.pipe(
+    filter(isActionOf(getReportsTotalColleagues.request)),
+    switchMap(({ payload }) => {
+      //@ts-ignore
+      return from(api.getReportsTotalColleagues(payload)).pipe(
+        //@ts-ignore
+        map(({ data }) => {
+          return getReportsTotalColleagues.success(data);
+        }),
+        catchError(({ errors }) => of(getReportsTotalColleagues.failure(errors))),
       );
     }),
   );
@@ -109,28 +123,12 @@ export const getOverallRatingsReportEpic: Epic = (action$, _, { api }) =>
     }),
   );
 
-export const getLimitedObjectivesReportEpic: Epic = (action$, _, { api }) =>
-  action$.pipe(
-    filter(isActionOf(getLimitedObjectivesReport.request)),
-    switchMap(({ payload }) => {
-      //@ts-ignore
-      return from(api.getObjectivesReport(payload)).pipe(
-        //@ts-ignore
-        map(({ data }) => {
-          //@ts-ignore
-          return getLimitedObjectivesReport.success(data);
-        }),
-        catchError(({ errors }) => of(getLimitedObjectivesReport.failure(errors))),
-      );
-    }),
-  );
-
 export default combineEpics(
-  getLimitedObjectivesReportEpic,
   getLeadershipReviewsReportEpic,
   getAnniversaryReviewsReportEpic,
   getFeedbacksReportEpic,
   getNewToBusinessReportEpic,
   getStatisticsReviewEpic,
   getOverallRatingsReportEpic,
+  getReportsTotalColleaguesEpic,
 );

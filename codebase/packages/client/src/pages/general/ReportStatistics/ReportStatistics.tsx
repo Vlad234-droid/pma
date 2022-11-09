@@ -121,6 +121,7 @@ const ReportStatistics = () => {
   const [searchedValue, setSearchedValue] = useState<string>('');
   const [filterModal, setFilterModal] = useState(false);
   const [isFullView, toggleFullView] = useState<boolean>(false);
+  const [savedFilter, setSavedFilter] = useState<any>(null);
 
   useEffect(() => {
     if (!Object.entries(query).length || !query.year) navigate(buildPath(Page.REPORT));
@@ -183,8 +184,10 @@ const ReportStatistics = () => {
                 <FilterModal
                   initialValues={initialValues}
                   onClose={onClose}
+                  savedFilter={savedFilter}
                   onSubmit={(data) => {
-                    console.log('data', data);
+                    onClose();
+                    setTimeout(() => setSavedFilter(data), 300);
                   }}
                 />
               )}

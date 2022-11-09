@@ -3,9 +3,9 @@ import { Button, Rule, useStyle } from '@pma/dex-wrapper';
 import { useNavigate } from 'react-router-dom';
 import { IconButton } from 'components/IconButton';
 import { useTranslation } from 'components/Translation';
-import { ReviewType } from 'config/enum';
+import { ReviewType, Status } from 'config/enum';
 import { useSelector } from 'react-redux';
-import { getReviewSchema, getTimelinesByReviewTypeSelector, USER } from '@pma/store';
+import { getReviewSchema, getTimelineByCodeSelector, getTimelinesByReviewTypeSelector, USER } from '@pma/store';
 import { buildPath } from 'features/general/Routes';
 import { Page } from 'pages';
 import { useTimelineContainer } from 'contexts/timelineContext';
@@ -24,7 +24,8 @@ const CreateButton: FC<Props> = memo(({ withIcon = false }) => {
   const { activeTimelines, currentTimelines } = useTimelineContainer();
   const { code: currentCode } = currentTimelines[ReviewType.QUARTER] || {};
   const { code: activeCode } = activeTimelines[ReviewType.QUARTER] || {};
-  const isDisabled = !!activeCode && activeCode !== currentCode;
+  const timelineObjective = useSelector(getTimelineByCodeSelector(activeCode || 'Q1', USER.current));
+  const isDisabled = (!!activeCode && activeCode !== currentCode) || timelineObjective?.status === Status.COMPLETED;
 
   const schema = useSelector(getReviewSchema(activeCode));
 

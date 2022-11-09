@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 //@ts-ignore
 import { RootState } from 'typesafe-actions';
-import { ReportTags, WorkLevel, ReviewType } from '@pma/store/src/config/types';
+import { ReportTags, ReviewType } from '@pma/store/src/config/types';
 
 export const reportSelector = (state: RootState) => state.report;
 export const statisticsSelector = (state: RootState) => state.statistics;
@@ -29,48 +29,6 @@ export const getTableChartData = (type: string) =>
       },
     );
   });
-
-export const getLimitedWLProfilesSelector = createSelector(reportSelector, (report: any) => {
-  const { limitedObjectiveReports } = report;
-
-  return limitedObjectiveReports?.reduce((acc, item) => {
-    if (item.includes(WorkLevel.WL4) || item.includes(WorkLevel.WL5)) {
-      const [
-        _,
-        employeeNo,
-        colleagueUuid,
-        firstName,
-        lastName,
-        workingLevel,
-        jobTitle,
-        lineManager,
-        objectiveNumber,
-        __,
-        strategicDriver,
-        title,
-        howAchieved,
-        howOverAchieved,
-      ] = item;
-
-      acc.push({
-        employeeNo,
-        colleagueUuid,
-        firstName,
-        lastName,
-        workingLevel,
-        jobTitle,
-        lineManager,
-        objectiveNumber,
-        strategicDriver,
-        title,
-        howAchieved,
-        howOverAchieved,
-      });
-      return acc;
-    }
-    return acc;
-  }, []);
-});
 
 export const getTotalWlSelector = createSelector(reportSelector, (report: any) => {
   const { limitedObjectiveReports } = report;
@@ -160,5 +118,6 @@ export const colleaguesCountSelector = createSelector(reportSelector, (report: a
 
   return feedbacks.find((colleague) => colleague.type === ReviewType.FEEDBACK)?.totalCount;
 });
+export const totalColleaguesSelector = createSelector(reportSelector, ({ total }: any) => total);
 
 export const getReportByType = (type) => createSelector(reportSelector, (report: any) => report[type]);

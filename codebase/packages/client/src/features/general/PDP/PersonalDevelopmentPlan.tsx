@@ -17,7 +17,6 @@ import DescriptionBlock from 'components/DescriptionBlock';
 import { buildPath } from 'features/general/Routes';
 import { paramsReplacer } from 'utils';
 import { Icon } from 'components/Icon';
-import { PDPType } from 'config/enum';
 import { BASE_URL_API } from 'config/constants';
 import { TFunction, Trans, useTranslation } from 'components/Translation';
 import Spinner from 'components/Spinner';
@@ -43,7 +42,7 @@ const PersonalDevelopmentPlan: FC = () => {
   const pdpSelector = useSelector(schemaMetaPDPSelector)?.goals || [];
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const { loaded: pdpLoaded, loading: pdpLoading } = useSelector(metaPDPSelector);
-  const [schema] = usePDPSchema(PDPType.PDP);
+  const [schema] = usePDPSchema();
   const { components = [], display: newSchemaVersion } = schema;
 
   const formElements = newSchemaVersion

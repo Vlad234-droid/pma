@@ -29,6 +29,7 @@ const CreateObjective: FC = React.memo(() => {
   );
 
   const handleClose = () => navigate((state as any)?.backPath || buildPath(Page.REVIEWS));
+  const onSuccessClose = () => navigate(buildPath(Page.REVIEWS_VIEW));
 
   return (
     <ModalWrapper isOpen={true}>
@@ -46,7 +47,7 @@ const CreateObjective: FC = React.memo(() => {
           styles: [modalTitleOptionStyle({ mobileScreen })],
         }}
       >
-        <CreateUpdateObjectives onClose={handleClose} editNumber={nextNumber} create />
+        <CreateUpdateObjectives onClose={handleClose} onSuccessClose={onSuccessClose} editNumber={nextNumber} create />
       </Modal>
     </ModalWrapper>
   );

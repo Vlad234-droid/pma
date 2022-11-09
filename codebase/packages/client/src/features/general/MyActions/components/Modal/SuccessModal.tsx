@@ -49,17 +49,12 @@ const ReviewSuccessModal: FC<{
   const description = {
     [ActionStatus.ERROR]: t('something_went_wrong', 'Something went wrong'),
     [ActionStatus.PENDING]: t('pending', 'Pending'),
-    [ActionStatus.COMPLETED]: t('you_have_completed'),
-    [ActionStatus.APPROVED]: t('you_have_approved', { ns: tenant }),
-    [ActionStatus.COMPLETE_DECLINED]: t('you_have_complete_declined'),
+    [ActionStatus.APPROVED]: type
+      ? t(`you_have_approved_${type?.toLowerCase()}`, { ns: tenant })
+      : t('you_have_bulk_approved', { ns: tenant }),
+    [ActionStatus.COMPLETED]: t('you_have_completed', { ns: tenant }),
+    [ActionStatus.COMPLETE_DECLINED]: t('you_have_rejected', { ns: tenant }),
     [ActionStatus.APPROVE_DECLINED]: t('you_have_rejected', { ns: tenant }),
-  };
-
-  const typeDescription = {
-    [ReviewType.QUARTER]: t('priorities', 'Priorities').toLowerCase(),
-    [ReviewType.OBJECTIVE]: t('objectives', 'Objectives').toLowerCase(),
-    [ReviewType.MYR]: t('review_type_description_myr', 'Mid-year review').toLowerCase(),
-    [ReviewType.EYR]: t('review_type_description_eyr', 'Year-end review').toLowerCase(),
   };
 
   const handleClose = () => {
@@ -80,7 +75,7 @@ const ReviewSuccessModal: FC<{
           <SuccessMark />
         )
       }
-      description={`${description[actionStatus]} ${type ? typeDescription[type] : ''}.`}
+      description={description[actionStatus]}
       loading={loading || saving || managerLoading}
     />
   );

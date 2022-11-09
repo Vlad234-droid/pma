@@ -15,6 +15,8 @@ import useDispatch from 'hooks/useDispatch';
 import { TriggerModal } from '../Modal';
 import { Form } from './components/Form';
 import { useSelector } from 'react-redux';
+import { buildPath } from 'features/general/Routes/utils';
+import { paramsReplacer } from 'utils';
 
 export type Props = {
   onClose: () => void;
@@ -42,7 +44,6 @@ const CreateUpdateCalibrationSession: FC<Props> = ({ onClose }) => {
   const canEdit = calibrationSession ? calibrationSession?.status !== CalibrationSessionStatusEnum.Completed : true;
 
   const handleSaveAndExit = async (data) => {
-    console.log('handleSaveAndExit', data);
     if (data.uuid) {
       dispatch(CalibrationSessionsAction.updateCalibrationSession(data));
     } else {
@@ -53,7 +54,6 @@ const CreateUpdateCalibrationSession: FC<Props> = ({ onClose }) => {
     toggleSaveAndExit(true);
   };
   const handleSubmitData = async (data) => {
-    console.log('handleSubmitData', data);
     if (data.uuid) {
       dispatch(CalibrationSessionsAction.updateCalibrationSession(data));
     } else {
@@ -72,8 +72,11 @@ const CreateUpdateCalibrationSession: FC<Props> = ({ onClose }) => {
 
   useEffect(() => {
     if (isSubmittedData && !calibrationSessionUpdating) {
-      // todo redirect to session start page
-      onClose();
+      if (calibrationSession?.uuid) {
+        navigate(buildPath(paramsReplacer(`${Page.CALIBRATION_SESSION}`, { ':uuid': calibrationSession?.uuid })));
+      } else {
+        onClose();
+      }
     }
   }, [isSubmittedData, calibrationSessionUpdating]);
 

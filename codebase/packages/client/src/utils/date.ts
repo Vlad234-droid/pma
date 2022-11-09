@@ -1,6 +1,5 @@
 import { min } from 'lodash';
 import { DateTime, DurationUnit } from 'luxon';
-
 export { DateTime };
 
 const PRECISE_UNITS: Record<string, DurationUnit> = {
@@ -86,3 +85,11 @@ export const getYearsFromCurrentYear = (currentYear, depth = 3): Array<{ value: 
   Array.from(new Array(depth), (_, index) => ({
     value: (currentYear - index).toString(),
   }));
+
+export const getToday = () => {
+  const now = new Date();
+  now.setHours(0);
+  now.setMinutes(0);
+  now.setMilliseconds(0);
+  return now;
+};

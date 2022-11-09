@@ -15,6 +15,8 @@ import StepIndicator from 'components/StepIndicator/StepIndicator';
 import { Status } from 'config/enum';
 import { Icon } from 'components/Icon';
 import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
+import { RequestMethods } from './RequestMethods';
+import { getToday } from 'utils';
 
 type Props = {
   pdpGoals: any;
@@ -22,12 +24,9 @@ type Props = {
   currentTab: number;
   currentGoal: any;
   formElements: any;
-  confirmSaveModal: boolean;
   maxGoals: number;
   currentUUID: string | undefined;
   colleagueUuid: string;
-  requestMethods: any;
-  setConfirmModal: (isActive: boolean) => void;
   setCurrentTab: (id: number) => void;
   onSubmit: (schemaLoaded: boolean, requestData: any, method: string) => void;
 };
@@ -35,18 +34,15 @@ type Props = {
 export const TEST_ID = 'pdp-form';
 export const SUBMIT_TEST_ID = 'pdp-form-submit';
 
-const CreatePDPForm: FC<Props> = ({
+export const CreateUpdatePDPForm: FC<Props> = ({
   pdpGoals,
   pdpList,
   currentTab,
   currentGoal,
   formElements,
-  confirmSaveModal,
   maxGoals,
   currentUUID,
   colleagueUuid,
-  requestMethods,
-  setConfirmModal,
   setCurrentTab,
   onSubmit,
 }) => {
@@ -54,10 +50,17 @@ const CreatePDPForm: FC<Props> = ({
   const mobileScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
   const { t } = useTranslation();
   const { loaded: schemaLoaded = false } = useSelector(metaPDPSelector) || false;
+
+  const [isOpenConfirmNext, setConfirmNextOpen] = useState(false);
+  const [confirmSaveModal, setConfirmModal] = useState(false);
+
+  const today = useMemo(getToday, []);
+
   const formElementsFilledEmpty = formElements.reduce((acc, current) => {
     acc[current.key] = '';
     return acc;
   }, {});
+
   const yepSchema = formElements.reduce(createYupSchema(t), {});
   const methods = useFormWithCloseProtection({
     mode: 'onChange',
@@ -66,18 +69,7 @@ const CreatePDPForm: FC<Props> = ({
   const { getValues, formState, reset, setError } = methods;
   const formValues = getValues();
 
-  const [isOpenConfirmNext, setConfirmNextOpen] = useState<boolean>(false);
-
   const fillEmptyHandler = () => reset(formElementsFilledEmpty);
-
-  const today = useMemo(() => {
-    // TODO: move to date utils
-    const now = new Date();
-    now.setHours(0);
-    now.setMinutes(0);
-    now.setMilliseconds(0);
-    return now;
-  }, []);
 
   const formRef = useRef<HTMLFormElement | null>(null);
   useEffect(() => {
@@ -140,8 +132,8 @@ const CreatePDPForm: FC<Props> = ({
             submitBtnTitle={<Trans i18nKey='confirm'>Confirm</Trans>}
             onSave={() => {
               currentUUID || Object.keys(currentGoal)?.length > 0
-                ? onSubmit(schemaLoaded, requestData, requestMethods.UPDATE)
-                : onSubmit(schemaLoaded, requestData, requestMethods.SAVE);
+                ? onSubmit(schemaLoaded, requestData, RequestMethods.UPDATE)
+                : onSubmit(schemaLoaded, requestData, RequestMethods.SAVE);
               setConfirmModal(false);
             }}
             onCancel={() => setConfirmModal(false)}
@@ -155,7 +147,7 @@ const CreatePDPForm: FC<Props> = ({
             description={' '}
             submitBtnTitle={<Trans i18nKey='confirm'>Confirm</Trans>}
             onSave={() => {
-              onSubmit(schemaLoaded, requestData, requestMethods.CREATE);
+              onSubmit(schemaLoaded, requestData, RequestMethods.CREATE);
               fillEmptyHandler();
               setConfirmNextOpen(false);
             }}
@@ -324,5 +316,3 @@ const footerContainerStyle: Rule = ({ theme }) => ({
 const createBtn: Rule = {
   justifyContent: 'center',
 };
-
-export default CreatePDPForm;

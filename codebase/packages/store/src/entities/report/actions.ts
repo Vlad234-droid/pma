@@ -1,11 +1,5 @@
 import { createAsyncAction, createAction } from 'typesafe-actions';
 
-export const getLimitedObjectivesReport = createAsyncAction(
-  'report/GET_LIMITED_OBJECTIVES_REPORT_REQUEST',
-  'report/GET_LIMITED_OBJECTIVES_REPORT_SUCCESS',
-  'report/GET_LIMITED_OBJECTIVES_REPORT_FAILURE',
-)<any, any, Error>();
-
 export const getReviewReport = createAsyncAction(
   'report/statistics-review/REQUEST',
   'report/statistics-review/SUCCESS',
@@ -42,6 +36,12 @@ export const getLeadershipReviewsReport = createAsyncAction(
   'report/statistics-leadership-reviews/FAILURE',
 )<any, any, Error>();
 
+export const getReportsTotalColleagues = createAsyncAction(
+  'report/total-colleagues/REQUEST',
+  'report/total-colleagues/SUCCESS',
+  'report/total-colleagues/FAILURE',
+)<any, any, Error>();
+
 export const clearStatistics = createAction('report/CLEAR_STATISTICS')();
 
 export const Actions = {
@@ -51,6 +51,6 @@ export const Actions = {
   getFeedbacksReport: getFeedbacksReport.request,
   getAnniversaryReviewsReport: getAnniversaryReviewsReport.request,
   getLeadershipReviewsReport: getLeadershipReviewsReport.request,
-  getLimitedObjectivesReport: getLimitedObjectivesReport.request,
+  getReportsTotalColleagues: getReportsTotalColleagues.request,
   clearStatistics,
 };

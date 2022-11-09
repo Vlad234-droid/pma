@@ -53,3 +53,7 @@ export const getColleaguesAnniversaryReviews = <T extends string>(params: { year
 export const getColleaguesLeadershipReviews = <T extends string>(params: { year: T }) => {
   return httpClient.get(`${domain}/statistics-leadership-reviews/colleague`, { params });
 };
+
+export const getReportsTotalColleagues = <T extends string>(params: { year: T }) => {
+  return httpClient.get(`${domain}/colleagues/total`, { params });
+};
