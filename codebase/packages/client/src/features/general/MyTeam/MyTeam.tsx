@@ -28,7 +28,7 @@ const MyTeam: FC<Props> = ({ view, searchValue, sortValue }) => {
   const { css } = useStyle();
   const dispatch = useDispatch();
   const currentSelector = view === View.FULL_TEAM ? getAllEmployeesWithManagerSearch : getAllEmployees;
-  const colleagues = useSelector((state) => currentSelector(state, Status.PENDING, searchValue, sortValue)) || [];
+  const colleagues = useSelector((state) => currentSelector(state, 'ALL', searchValue, sortValue)) || [];
   const colleagueUuid = useSelector(colleagueUUIDSelector);
 
   useEffect(() => {
@@ -38,23 +38,11 @@ const MyTeam: FC<Props> = ({ view, searchValue, sortValue }) => {
           colleagueUuid,
           fullTeam: view === View.FULL_TEAM,
           'colleague-cycle-status_in': [Status.STARTED, Status.FINISHING],
-          'review-status_in': [Status.WAITING_FOR_APPROVAL, Status.WAITING_FOR_APPROVAL],
-          status: Status.PENDING,
+          status: 'ALL',
         }),
       );
     }
   }, [colleagueUuid, view]);
-
-  useEffect(() => {
-    dispatch(
-      ManagersActions.getManagerReviews({
-        colleagueUuid,
-        'colleague-cycle-status_in': [Status.STARTED, Status.FINISHING],
-        'review-status_in': [Status.DRAFT],
-        status: Status.DRAFT,
-      }),
-    );
-  }, [colleagueUuid]);
 
   if (!loaded) return <Spinner />;
 
