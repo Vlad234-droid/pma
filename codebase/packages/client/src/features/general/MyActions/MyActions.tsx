@@ -74,6 +74,11 @@ const MyActions: FC<Props> = ({ status, searchValue, sortValue, isCheckedAll }) 
     const { code, cycleUuid, ...data } = newData;
     dispatch(
       ReviewsActions.updateReviewStatus({
+        updateParams: {
+          'review-status_in': reviewStatuses,
+          'colleague-cycle-status_in': colleagueCycleStatuses,
+          status,
+        },
         pathParams: {
           colleagueUuid: data.colleagueUuid,
           approverUuid: colleagueUuid,

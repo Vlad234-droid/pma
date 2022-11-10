@@ -1,20 +1,44 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { colors, fontWeight, Rule, useStyle } from '@pma/dex-wrapper';
-import { getEmployeesWithReviewStatuses } from '@pma/store';
+import { colleagueUUIDSelector, getEmployeesWithReviewStatuses, ManagersActions } from '@pma/store';
 
 import { Status } from 'config/enum';
 import { TileWrapper } from 'components/Tile';
 import { useTranslation } from 'components/Translation';
+import useDispatch from 'hooks/useDispatch';
 
 const ActionCount: FC = () => {
   const { css } = useStyle();
   const { t } = useTranslation();
+  const dispatch = useDispatch();
+  const colleagueUuid = useSelector(colleagueUUIDSelector);
   const pendingEmployee = useSelector((state) => getEmployeesWithReviewStatuses(state, Status.PENDING)) || [];
   const draftEmployee = useSelector((state) => getEmployeesWithReviewStatuses(state, Status.DRAFT)) || [];
 
   const waitingCount = pendingEmployee.length;
   const draftCount = draftEmployee.length;
+
+  useEffect(() => {
+    if (colleagueUuid) {
+      dispatch(
+        ManagersActions.getManagerReviews({
+          colleagueUuid,
+          'colleague-cycle-status_in': [Status.STARTED, Status.FINISHING],
+          'review-status_in': [Status.DRAFT],
+          status: Status.DRAFT,
+        }),
+      );
+      dispatch(
+        ManagersActions.getManagerReviews({
+          colleagueUuid,
+          'colleague-cycle-status_in': [Status.STARTED, Status.FINISHING],
+          'review-status_in': [Status.WAITING_FOR_APPROVAL, Status.WAITING_FOR_COMPLETION],
+          status: Status.PENDING,
+        }),
+      );
+    }
+  }, [colleagueUuid]);
 
   return (
     <>
