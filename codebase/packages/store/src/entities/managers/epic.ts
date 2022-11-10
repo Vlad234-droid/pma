@@ -1,14 +1,14 @@
 // @ts-ignore
 import { Epic, isActionOf } from 'typesafe-actions';
 import { from, of } from 'rxjs';
-import { catchError, filter, map, switchMap, takeUntil } from 'rxjs/operators';
+import { catchError, filter, map, mergeMap, takeUntil } from 'rxjs/operators';
 import { getManagerReviews } from './actions';
 import { concatWithErrorToast, errorPayloadConverter } from '../../utils/toastHelper';
 
 export const getManagerReviewsEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
     filter(isActionOf(getManagerReviews.request)),
-    switchMap(({ payload }) => {
+    mergeMap(({ payload }) => {
       const { status, ...rest } = payload;
       return from(api.getManagersReviews(rest)).pipe(
         //@ts-ignore
