@@ -10,11 +10,11 @@ import { useTranslation } from 'components/Translation';
 const ActionCount: FC = () => {
   const { css } = useStyle();
   const { t } = useTranslation();
-  const employee = useSelector((state) => getEmployeesWithReviewStatuses(state, Status.PENDING)) || {};
+  const pendingEmployee = useSelector((state) => getEmployeesWithReviewStatuses(state, Status.PENDING)) || [];
+  const draftEmployee = useSelector((state) => getEmployeesWithReviewStatuses(state, Status.DRAFT)) || [];
 
-  const waitingCount = employee?.length;
-
-  const draftCount = 0;
+  const waitingCount = pendingEmployee.length;
+  const draftCount = draftEmployee.length;
 
   return (
     <>

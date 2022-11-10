@@ -5,18 +5,17 @@ import {
   colleagueUUIDSelector,
   getAllEmployees,
   getAllEmployeesWithManagerSearch,
-  ManagersActions,
   getManagersMetaSelector,
+  ManagersActions,
 } from '@pma/store';
 
 import useDispatch from 'hooks/useDispatch';
 import { SortBy } from 'features/general/Filters';
 import { View } from './config/types';
 import Spinner from 'components/Spinner';
-import { Employee } from 'config/types';
+import { Employee, Status } from 'config/types';
 import TeamMateProfile from './components/TeamMateProfile';
 import { getLastTimelineStatus } from './utils';
-import { Status } from 'config/enum';
 
 type Props = {
   view: View;
@@ -27,26 +26,35 @@ type Props = {
 const MyTeam: FC<Props> = ({ view, searchValue, sortValue }) => {
   const { loaded } = useSelector(getManagersMetaSelector) || {};
   const { css } = useStyle();
+  const dispatch = useDispatch();
   const currentSelector = view === View.FULL_TEAM ? getAllEmployeesWithManagerSearch : getAllEmployees;
   const colleagues = useSelector((state) => currentSelector(state, Status.PENDING, searchValue, sortValue)) || [];
-
-  // @ts-ignore
   const colleagueUuid = useSelector(colleagueUUIDSelector);
-  const dispatch = useDispatch();
 
-  const loadManagers = () =>
+  useEffect(() => {
+    if (colleagueUuid) {
+      dispatch(
+        ManagersActions.getManagerReviews({
+          colleagueUuid,
+          fullTeam: view === View.FULL_TEAM,
+          'colleague-cycle-status_in': [Status.STARTED, Status.FINISHING],
+          'review-status_in': [Status.WAITING_FOR_APPROVAL, Status.WAITING_FOR_APPROVAL],
+          status: Status.PENDING,
+        }),
+      );
+    }
+  }, [colleagueUuid, view]);
+
+  useEffect(() => {
     dispatch(
       ManagersActions.getManagerReviews({
         colleagueUuid,
-        fullTeam: view === View.FULL_TEAM,
         'colleague-cycle-status_in': [Status.STARTED, Status.FINISHING],
-        status: Status.PENDING,
+        'review-status_in': [Status.DRAFT],
+        status: Status.DRAFT,
       }),
     );
-
-  useEffect(() => {
-    if (colleagueUuid) loadManagers();
-  }, [colleagueUuid, view]);
+  }, [colleagueUuid]);
 
   if (!loaded) return <Spinner />;
 
