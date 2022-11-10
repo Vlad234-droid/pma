@@ -99,7 +99,7 @@ const FormModal: FC<FormModal> = ({
     return (
       <SuccessModal
         title={t('priorities_sent', 'Priorities sent')}
-        onClose={onSuccessClose}
+        onClose={onSuccessClose || onClose}
         description={t(
           'priorities_sent_to_your_line_manager',
           'You have submitted your priorities to your Manager for agreement',
