@@ -4,6 +4,10 @@ import { Trans } from 'components/Translation';
 
 export const TEST_ID = 'review-help-modal';
 
+const READ_LINK = 'https://colleague-help.ourtesco.com/hc/en-us/article_attachments/6701783987988/3As_overview.pdf';
+const EXPLORE_LINK =
+  'https://colleague-help.ourtesco.com/hc/en-us/articles/4631411873812-Your-Contribution-Quarterly-Priorities';
+
 const HelperModal: FC = () => {
   const { css, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
@@ -17,41 +21,44 @@ const HelperModal: FC = () => {
               Need help with writing your priorities?
             </Trans>
           </div>
-          <div className={css(tipsStyle)}>
+          <div className={css(tipsStyle, tipsTextStyle)}>
             <Trans i18nKey={'hint_priority_1'} ns={'bank'}>
-              Below we have listed some resources to help you write objectives that are meaningful and relevant to your
-              role.
+              Here are some resources to help you identify relevant and meaningful priorities.
             </Trans>
           </div>
           <div className={css(subTitleStyle)}>
             <Trans i18nKey={'what_to_write_priorities'} ns={'bank'}>
-              What to write in your priorities
+              Read
             </Trans>
           </div>
           <div className={css(tipsStyle)}>
-            <Trans i18nKey={'hint_review_2'}>
-              What’s most important is the quality of the review conversation you’ve had.
-            </Trans>
+            <span className={css(tipsTextStyle)}>
+              <Trans
+                i18nKey={'read_help_priorities'}
+                components={{
+                  linkHref: <a href={READ_LINK} />,
+                }}
+                defaults={'Use the 3 A s model to help you write great quarterly priorities <linkHref>here</linkHref>.'}
+              ></Trans>
+            </span>
           </div>
           <div className={css(subTitleStyle)}>
             <Trans i18nKey={'what_to_write_priorities'} ns={'bank'}>
-              What to write in your priorities
+              Explore
             </Trans>
           </div>
           <div className={css(tipsStyle)}>
-            <Trans i18nKey={'hint_review_2'}>
-              What’s most important is the quality of the review conversation you’ve had.
-            </Trans>
-          </div>
-          <div className={css(subTitleStyle)}>
-            <Trans i18nKey={'what_to_write_priorities'} ns={'bank'}>
-              What to write in your priorities
-            </Trans>
-          </div>
-          <div className={css(tipsStyle)}>
-            <Trans i18nKey={'hint_review_2'}>
-              What’s most important is the quality of the review conversation you’ve had.
-            </Trans>
+            <span className={css(tipsTextStyle)}>
+              <Trans
+                i18nKey={'explore_help_priorities'}
+                components={{
+                  linkHref: <a href={EXPLORE_LINK} />,
+                }}
+                defaults={
+                  'Find out more about quarterly priorities and how they support your contribution in the quarterly priorities guide for colleagues and managers <linkHref>here</linkHref>.'
+                }
+              ></Trans>
+            </span>
           </div>
         </div>
       </div>
@@ -84,11 +91,17 @@ const subTitleStyle: Rule = ({ theme }) => ({
   fontWeight: theme.font.weight.bold,
 });
 
+const tipsTextStyle: Rule = ({ theme }) => ({
+  fontSize: theme.font.fixed.f16.fontSize,
+  lineHeight: theme.font.fixed.f16.lineHeight,
+  letterSpacing: '0px',
+  '& > a': {
+    color: theme.colors.tescoBlue,
+  },
+});
+
 const tipsStyle: Rule = ({ theme }) => {
   return {
-    fontSize: theme.font.fixed.f16.fontSize,
-    lineHeight: theme.font.fixed.f16.lineHeight,
-    letterSpacing: '0px',
     paddingTop: '8px',
     paddingBottom: '20px',
     display: 'flex',
