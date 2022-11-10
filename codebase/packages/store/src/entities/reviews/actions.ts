@@ -3,6 +3,7 @@ import { ReviewActionParams, ActionParams, Statuses, ReviewType, Review } from '
 
 interface ReviewUpdateStatusAction extends ActionParams {
   pathParams: { colleagueUuid: string; approverUuid: string; code?: string; cycleUuid?: string; status?: Statuses };
+  updateParams: any;
   data: {
     reason?: string;
     reviews?: Review[];
