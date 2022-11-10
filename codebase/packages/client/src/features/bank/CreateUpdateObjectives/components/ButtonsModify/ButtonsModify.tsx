@@ -57,12 +57,7 @@ const Buttons: FC<ButtonsProps> = ({ readonly, isValid, isStepValid, onClose, on
                   </Button>
                 )}
               </div>
-              <div className={css({ padding: '8px 0 16px' })}>
-                <Trans i18nKey='condition_submit_for_agreement' ns={'bank'}>
-                  Or, finish your priorities and submit for agreement
-                </Trans>
-              </div>
-              <div>
+              <div className={css({ padding: '8px 0 0px' })}>
                 <IconButton
                   isDisabled={!isValid}
                   customVariantRules={{
