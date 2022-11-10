@@ -15,7 +15,7 @@ type ButtonsProps = {
 
 const Buttons: FC<ButtonsProps> = ({ readonly, isValid, isStepValid, onClose, onSaveExit, onSubmit, onNext }) => {
   const { css, matchMedia } = useStyle();
-  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
+  const mobileScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
 
   const isDisabledSaveAndAdd = !isStepValid;
 
@@ -33,44 +33,24 @@ const Buttons: FC<ButtonsProps> = ({ readonly, isValid, isStepValid, onClose, on
                 <Button onPress={onSaveExit} styles={[buttonWhiteStyle({ mobileScreen })]}>
                   <Trans i18nKey='save_and_exit'>Save & exit</Trans>
                 </Button>
-                {mobileScreen ? (
-                  <IconButton
-                    isDisabled={isDisabledSaveAndAdd}
-                    customVariantRules={{
-                      default: buttonWithArrowStyle({ disabled: false }),
-                      disabled: buttonWithArrowStyle({ disabled: true }),
-                    }}
-                    graphic='arrowRight'
-                    iconProps={{ invertColors: true }}
-                    iconPosition={Position.RIGHT}
-                    onPress={onNext}
-                  >
-                    <Trans i18nKey='save_add_priority'>Save & Create new priority</Trans>
-                  </IconButton>
-                ) : (
-                  <Button
-                    onPress={onNext}
-                    styles={[buttonBlueStyle({ mobileScreen })]}
-                    isDisabled={isDisabledSaveAndAdd}
-                  >
-                    <Trans i18nKey='save_add_priority'>Save & Create new priority</Trans>
-                  </Button>
-                )}
-              </div>
-              <div className={css({ padding: '8px 0 0px' })}>
                 <IconButton
-                  isDisabled={!isValid}
+                  isDisabled={isDisabledSaveAndAdd}
                   customVariantRules={{
-                    default: buttonWithArrowStyle({ disabled: false }),
-                    disabled: buttonWithArrowStyle({ disabled: true }),
+                    default: buttonWithArrowStyle({ disabled: false, mobileScreen }),
+                    disabled: buttonWithArrowStyle({ disabled: true, mobileScreen }),
                   }}
                   graphic='arrowRight'
                   iconProps={{ invertColors: true }}
                   iconPosition={Position.RIGHT}
-                  onPress={onSubmit}
+                  onPress={onNext}
                 >
-                  <Trans i18nKey='review_and_submit'>Review & Submit</Trans>
+                  <Trans i18nKey='save_add_priority'>Save & Create new priority</Trans>
                 </IconButton>
+              </div>
+              <div className={css({ padding: '8px 0 0px' })}>
+                <Button onPress={onSubmit} styles={[buttonBlueStyle]} isDisabled={!isValid}>
+                  <Trans i18nKey='review_and_submit'>Review & Submit</Trans>
+                </Button>
               </div>
             </>
           )}
@@ -94,6 +74,15 @@ const wrapperStyle: Rule = ({ theme }) => ({
   right: theme.spacing.s0,
   // @ts-ignore
   borderTop: `${theme.border.width.b2} solid ${theme.colors.lightGray}`,
+});
+
+const buttonBlueStyle: Rule = ({ theme }) => ({
+  ...theme.font.fixed.f16,
+  fontWeight: theme.font.weight.bold,
+  width: '100%',
+  margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
+  background: `${theme.colors.tescoBlue}`,
+  marginBottom: '8px',
 });
 
 const buttonWrapperStyle: CreateRule<{ mobileScreen: boolean }> =
@@ -122,24 +111,13 @@ const buttonWhiteStyle: CreateRule<{ mobileScreen: boolean }> =
     marginBottom: '8px',
   });
 
-const buttonBlueStyle: CreateRule<{ mobileScreen: boolean }> =
-  ({ mobileScreen = false }) =>
-  ({ theme }) => ({
-    ...theme.font.fixed.f16,
-    fontWeight: theme.font.weight.bold,
-    width: mobileScreen ? '100%' : '50%',
-    margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
-    background: `${theme.colors.tescoBlue}`,
-    marginBottom: '8px',
-  });
-
-const buttonWithArrowStyle: CreateRule<{ disabled: boolean }> =
-  ({ disabled = false }) =>
+const buttonWithArrowStyle: CreateRule<{ disabled: boolean; mobileScreen: boolean }> =
+  ({ disabled = false, mobileScreen }) =>
   ({ theme }) => ({
     ...theme.font.fixed.f16,
     letterSpacing: '0px',
     fontWeight: theme.font.weight.bold,
-    width: '100%',
+    width: mobileScreen ? '100%' : '50%',
     height: '40px',
     margin: `${theme.spacing.s0} ${theme.spacing.s0_5}`,
     background: `${theme.colors.tescoBlue}`,
