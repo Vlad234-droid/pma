@@ -13,16 +13,25 @@ import {
 import useDispatch from 'hooks/useDispatch';
 import { ReviewType } from 'config/types';
 import Spinner from 'components/Spinner';
-import { FormStateType } from '../type';
+import { FormStateType, Objective } from '../type';
 import { useTimelineContainer } from 'contexts/timelineContext';
 
 export function withBasicData<P extends Props>(
   WrappedComponent: React.ComponentType<
-    P & { formState: FormStateType; setFormState: Dispatch<SetStateAction<FormStateType>> }
+    P & {
+      formState: FormStateType;
+      setFormState: Dispatch<SetStateAction<FormStateType>>;
+      localObjectives: Objective[];
+      setLocalObjectives: Dispatch<SetStateAction<Objective[]>>;
+      currentPriorityIndex: number;
+      setPriorityIndex: Dispatch<SetStateAction<number>>;
+    }
   >,
 ) {
   const Component = (props: P) => {
     const dispatch = useDispatch();
+    const [localObjectives, setLocalObjectives] = useState<Objective[]>([]);
+    const [currentPriorityIndex, setPriorityIndex] = useState<number>(0);
     const { currentTimelines } = useTimelineContainer();
     const { code: activeCode } = currentTimelines[ReviewType.QUARTER] || {};
     const colleagueUuid = useSelector(colleagueUUIDSelector);
@@ -66,7 +75,17 @@ export function withBasicData<P extends Props>(
 
     if (schemaLoading || reviewLoading || reviewSaving || timelineLoading) return <Spinner fullHeight />;
 
-    return <WrappedComponent {...props} formState={formState} setFormState={setFormState} />;
+    return (
+      <WrappedComponent
+        {...props}
+        formState={formState}
+        setFormState={setFormState}
+        localObjectives={localObjectives}
+        setLocalObjectives={setLocalObjectives}
+        currentPriorityIndex={currentPriorityIndex}
+        setPriorityIndex={setPriorityIndex}
+      />
+    );
   };
   return Component;
 }

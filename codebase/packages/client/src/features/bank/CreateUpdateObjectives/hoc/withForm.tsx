@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
+import React, { Dispatch, SetStateAction, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 
 import {
@@ -15,7 +15,6 @@ import useDispatch from 'hooks/useDispatch';
 import { FormStateType, Objective, FormValues } from '../type';
 import { Props } from '../CreateObjectives';
 
-import { prioritiesInStatuses, prioritiesNotInStatuses } from '../utils';
 import { useTimelineContainer } from 'contexts/timelineContext';
 
 export type FormPropsType = {
@@ -35,37 +34,51 @@ export type FormPropsType = {
 };
 
 export function withForm<
-  P extends Props & { formState: FormStateType; setFormState: Dispatch<SetStateAction<FormStateType>> },
+  P extends Props & {
+    formState: FormStateType;
+    setFormState: Dispatch<SetStateAction<FormStateType>>;
+    localObjectives: Objective[];
+    setLocalObjectives: Dispatch<SetStateAction<Objective[]>>;
+    currentPriorityIndex: number;
+    setPriorityIndex: Dispatch<SetStateAction<number>>;
+  },
 >(WrappedComponent: React.ComponentType<P & FormPropsType>) {
   const Component = (props: P) => {
-    const { editNumber, useSingleStep, onClose, formState, setFormState } = props;
+    const {
+      editNumber,
+      useSingleStep,
+      onClose,
+      formState,
+      setFormState,
+      localObjectives,
+      setLocalObjectives,
+      currentPriorityIndex,
+      setPriorityIndex,
+    } = props;
     const dispatch = useDispatch();
     const { currentTimelines } = useTimelineContainer();
     const { code: activeCode } = currentTimelines[ReviewType.QUARTER] || {};
-    const [currentPriorityIndex, setPriorityIndex] = useState<number>(0);
-
     const colleagueUuid = useSelector(colleagueUUIDSelector);
-
     const schema = useSelector(getReviewSchema(activeCode));
     const pathParams = { colleagueUuid, code: activeCode, cycleUuid: 'CURRENT' };
-    const { components = [] as Component[], markup = { max: 1, min: 15 } } = schema;
-    const objectives: Objective[] = useSelector(filterReviewsByTypeSelector(ReviewType.QUARTER)) || [];
-
+    const { components = [] as Component[], markup = { max: 15, min: 1 } } = schema;
+    const allObjectives: Objective[] = useSelector(filterReviewsByTypeSelector(ReviewType.QUARTER)) || [];
     const { number: lastCreatedNumber = 0 } = useMemo(
-      () => (objectives.length ? objectives[objectives.length - 1] : {}),
-      [objectives],
+      () => (allObjectives.length ? allObjectives[allObjectives.length - 1] : {}),
+      [allObjectives],
     );
 
-    const prioritiesInStatusDraft = prioritiesInStatuses([Status.DRAFT])(objectives);
-    const prioritiesNotInStatusDraft = prioritiesNotInStatuses([Status.DRAFT])(objectives);
+    const getObjectivesUuid = (number) => allObjectives.find((o) => o.number === number)?.uuid || null;
 
     const minCreatePrioritiesIndex = 0;
-    const maxCreatePrioritiesIndex: number = Number(markup.max) - Number(prioritiesNotInStatusDraft.length) - 1;
+    const maxCreatePrioritiesIndex: number = Number(markup.max) - Number(allObjectives.length);
+    const lastStep = Number(markup.max) === Number(allObjectives.length) + 1;
 
     const formElements: Array<any> = components.filter((component) => component.type != 'text');
 
     const saveDraftData = (priority: Objective) => {
-      if (!priority?.uuid) {
+      const uuid = getObjectivesUuid(priority.number);
+      if (!uuid) {
         dispatch(
           ReviewsActions.createReview({
             pathParams: { ...pathParams, number: priority.number },
@@ -80,6 +93,10 @@ export function withForm<
           }),
         );
       }
+      setLocalObjectives((current) => [
+        ...current,
+        { number: priority.number, properties: priority.properties, status: Status.DRAFT },
+      ]);
     };
 
     const saveData = (priorities: Objective[]) => {
@@ -113,7 +130,7 @@ export function withForm<
 
     const handleNext = (data: FormValues) => {
       if (data.data?.length) saveDraftData(data.data[currentPriorityIndex]);
-      setPriorityIndex((current) => Math.min(++current, maxCreatePrioritiesIndex));
+      setPriorityIndex((current) => Math.min(++current, Number(markup.max) - 1));
     };
     const handlePrev = (withConfirmation) => {
       if (currentPriorityIndex === 0 && withConfirmation) {
@@ -133,15 +150,6 @@ export function withForm<
 
     const handleSelectStep = (index: number) => setPriorityIndex(index);
 
-    useEffect(() => {
-      if (!useSingleStep && minCreatePrioritiesIndex < maxCreatePrioritiesIndex) {
-        setPriorityIndex(prioritiesInStatusDraft.length);
-      }
-      if (!useSingleStep && minCreatePrioritiesIndex === maxCreatePrioritiesIndex) {
-        setPriorityIndex(Math.max(prioritiesInStatusDraft.length - 1, 0));
-      }
-    }, []);
-
     const defaultValues = useMemo(() => {
       const emptyProperties = formElements.reduce((acc, current) => {
         acc[current.key] = '';
@@ -149,7 +157,7 @@ export function withForm<
       }, {});
 
       if (!useSingleStep) {
-        const defaultPriorities = prioritiesInStatusDraft.map((priority) => ({
+        const defaultPriorities = localObjectives.map((priority) => ({
           uuid: priority.uuid,
           number: priority.number,
           properties: priority.properties,
@@ -165,15 +173,15 @@ export function withForm<
 
         return defaultPriorities;
       } else if (useSingleStep && editNumber) {
-        const objective = objectives.find((objective) => objective.number === editNumber) || {};
+        const objective = allObjectives.find((objective) => objective.number === editNumber) || {};
         return [objective];
       }
-    }, [prioritiesInStatusDraft]);
+    }, [localObjectives, lastCreatedNumber, editNumber]);
 
     return (
       <WrappedComponent
         {...props}
-        lastStep={maxCreatePrioritiesIndex === currentPriorityIndex}
+        lastStep={lastStep}
         formElements={formElements}
         defaultValues={{ data: defaultValues }}
         currentPriorityIndex={currentPriorityIndex}
