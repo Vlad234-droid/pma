@@ -3,12 +3,12 @@ import { theme, useStyle } from '@pma/dex-wrapper';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { useSelector } from 'react-redux';
-import { colleagueUUIDSelector, notesFolderColleagueDataSelector } from '@pma/store';
+import { colleagueUUIDSelector, getNotesMetaSelector, notesFolderColleagueDataSelector } from '@pma/store';
 
-import { GenericItemField } from 'components/GenericForm';
 import { Input, Item, Select, Textarea } from 'components/Form';
-import { useTranslation } from 'components/Translation';
 import { ButtonsWrapper } from 'components/ButtonsWrapper';
+import { GenericItemField } from 'components/GenericForm';
+import { useTranslation } from 'components/Translation';
 
 import get from 'lodash.get';
 import { NEW_FOLDER_ID } from 'utils';
@@ -28,6 +28,7 @@ const AddNoteModal: FC<Props> = ({ onSubmit, onClose, defaultValues }) => {
   const { t } = useTranslation();
   const colleagueUuid = useSelector(colleagueUUIDSelector);
   const folders = useSelector(notesFolderColleagueDataSelector(colleagueUuid, false)) || [];
+  const { loading } = useSelector(getNotesMetaSelector);
 
   const methods = useFormWithCloseProtection({
     mode: 'onChange',
@@ -86,7 +87,7 @@ const AddNoteModal: FC<Props> = ({ onSubmit, onClose, defaultValues }) => {
           label={t('folder_name', 'Folder name')}
         />
       )}
-      <ButtonsWrapper isValid={isValid} onLeftPress={onClose} onRightPress={handleSubmit(onSubmit)} />
+      <ButtonsWrapper isValid={isValid && !loading} onLeftPress={onClose} onRightPress={handleSubmit(onSubmit)} />
     </form>
   );
 };

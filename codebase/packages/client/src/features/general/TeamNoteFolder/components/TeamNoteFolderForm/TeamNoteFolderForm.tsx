@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
-import { useSelector } from 'react-redux';
-import { getColleagueByUuidSelector } from '@pma/store';
 import { theme, useStyle } from '@pma/dex-wrapper';
+import { getColleagueByUuidSelector, getNotesMetaSelector } from '@pma/store';
+import { useSelector } from 'react-redux';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import * as Yup from 'yup';
@@ -24,6 +24,7 @@ type Props = {
 const TeamNoteFolderForm: FC<Props> = ({ onSubmit, onClose, colleagueUuid }) => {
   const { css } = useStyle();
   const { t } = useTranslation();
+  const { loading } = useSelector(getNotesMetaSelector);
 
   const methods = useFormWithCloseProtection({
     mode: 'onChange',
@@ -63,7 +64,7 @@ const TeamNoteFolderForm: FC<Props> = ({ onSubmit, onClose, colleagueUuid }) => 
           label={t('folder_name', 'Folder name')}
         />
       )}
-      <ButtonsWrapper isValid={isValid} onLeftPress={onClose} onRightPress={handleSubmit(onSubmit)} />
+      <ButtonsWrapper isValid={isValid && !loading} onLeftPress={onClose} onRightPress={handleSubmit(onSubmit)} />
     </form>
   );
 };

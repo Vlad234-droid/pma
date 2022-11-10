@@ -1,12 +1,14 @@
 import React, { FC } from 'react';
 import { theme, useStyle } from '@pma/dex-wrapper';
+import { getNotesMetaSelector } from '@pma/store';
+import { useSelector } from 'react-redux';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 
 import { GenericItemField } from 'components/GenericForm';
-import { Input, Item } from 'components/Form';
-import { useTranslation } from 'components/Translation';
 import { ButtonsWrapper } from 'components/ButtonsWrapper';
+import { useTranslation } from 'components/Translation';
+import { Input, Item } from 'components/Form';
 
 import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
 import { schemaFolder } from '../../config';
@@ -21,6 +23,7 @@ type Props = {
 const PersonalNoteFolderForm: FC<Props> = ({ onSubmit, onClose }) => {
   const { css } = useStyle();
   const { t } = useTranslation();
+  const { loading } = useSelector(getNotesMetaSelector);
 
   const methods = useFormWithCloseProtection({
     mode: 'onChange',
@@ -46,7 +49,7 @@ const PersonalNoteFolderForm: FC<Props> = ({ onSubmit, onClose }) => {
         value={values?.title}
         label={t('folder_name', 'Folder name')}
       />
-      <ButtonsWrapper isValid={isValid} onLeftPress={onClose} onRightPress={handleSubmit(onSubmit)} />
+      <ButtonsWrapper isValid={isValid && !loading} onLeftPress={onClose} onRightPress={handleSubmit(onSubmit)} />
     </form>
   );
 };
