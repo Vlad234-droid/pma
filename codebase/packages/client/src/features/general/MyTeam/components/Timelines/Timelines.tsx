@@ -42,7 +42,7 @@ const TimeLines: FC<Props> = ({ employee }) => {
 
 export default TimeLines;
 
-const listStyles: Rule = { justifyContent: 'flex-start' };
+const listStyles: Rule = { display: 'flex' };
 
 const wrapperStyles: Rule = ({ theme }) => ({
   background: `${theme.colors.backgroundDark}`,
@@ -51,10 +51,14 @@ const wrapperStyles: Rule = ({ theme }) => ({
 });
 
 const reviewItemStyles: Rule = ({ theme }) => ({
-  display: 'inline-block',
+  // display: 'inline-block',
   paddingRight: '30px',
   textAlign: 'center',
   fontSize: `${theme.font.fixed.f14.fontSize}`,
   lineHeight: `${theme.font.fixed.f14.lineHeight}`,
   letterSpacing: '0px',
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'center',
 });
