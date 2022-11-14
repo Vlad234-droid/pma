@@ -94,6 +94,11 @@ export const colleaguePerformanceCyclesSelector = (state: RootState) => {
   return users.current.metadata.cycles;
 };
 
+export const colleagueCycleSelector = (state: RootState) => {
+  const users = usersSelector(state);
+  return users.current.metadata.colleagueCycle;
+};
+
 export const colleagueCurrentCycleSelector = (colleagueUuid: string) => (state: RootState) => {
   const users = usersSelector(state);
   if (colleagueUuid === users.current.info?.colleague?.colleagueUUID) {

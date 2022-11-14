@@ -57,8 +57,12 @@ const Timeline: FC<{ colleagueUuid: string }> = ({ colleagueUuid }) => {
     const { value } = e.target;
     setValue(value);
     dispatch(ReviewsActions.clearReviewData());
-    dispatch(UserActions.changeColleagueCurrentCycles(value));
+    dispatch(UserActions.changeCurrentCycles(value));
   };
+
+  useEffect(() => {
+    if (value) dispatch(UserActions.getColleagueCycles({ colleagueUuid, cycleUuid: value }));
+  }, [value]);
 
   return (
     <div className={css(timelineWrapperStyles)}>
