@@ -19,6 +19,7 @@ const PDPWidget: FC = () => {
 
   useEffect(() => {
     if (pdpSelector.length) {
+      //TODO: early date calculated also from dates that were already expired
       dispatch(PDPActions.getEarlyAchievementDate({}));
     }
   }, [pdpSelector]);

@@ -26,6 +26,7 @@ const BaseWidget: FC<Props> = ({
   iconGraphic,
   title,
   data,
+  date,
   description,
   customStyle,
   onClick,
@@ -43,6 +44,7 @@ const BaseWidget: FC<Props> = ({
           {iconGraphic && <Icon graphic={iconGraphic} invertColors={background === 'tescoBlue'} />}
           <h2 className={css(titleStyle)}>{title}</h2>
           {number && <span className={css(numberStyle({ background }))}>{number}</span>}
+          {date && <span className={css(descriptionStyle({ background }))}>{date}</span>}
           {data && <span className={css(descriptionStyle({ background }))}>{data}</span>}
           <span className={css(descriptionStyle({ background }))}>{description}</span>
         </div>
