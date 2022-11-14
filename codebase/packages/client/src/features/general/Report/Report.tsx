@@ -459,11 +459,11 @@ const Report: FC<{ year: string; tiles: Array<string>; savedFilter: any }> = ({ 
                       />
                       <div className={css(anniversaryInfo)}>
                         <span className={css(infoStatistics)}>
-                          <b>{totalCount}</b>{' '}
+                          <span>{totalCount}</span>{' '}
                           {isSingular(totalCount) ? t('colleague', 'Colleague') : t('colleagues', 'Colleagues')}
                         </span>
                         <span className={css(infoStatistics, { marginTop: '6px' })}>
-                          <b>{completed}</b>{' '}
+                          <span>{completed}</span>{' '}
                           {isSingular(completed)
                             ? t('review_completed', 'Review completed')
                             : t('reviews_completed', 'Reviews completed')}
@@ -486,7 +486,7 @@ const infoStatistics: Rule = ({ theme }) =>
     color: theme.colors.base,
     fontSize: theme.font.fixed.f16.fontSize,
     fontWeight: theme.font.weight.bold,
-    '& > b': {
+    '& > span': {
       fontSize: '20px',
       color: theme.colors.link,
     },
