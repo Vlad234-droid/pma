@@ -24,7 +24,7 @@ const ActionCount: FC = () => {
       dispatch(
         ManagersActions.getManagerReviews({
           colleagueUuid,
-          'colleague-cycle-status_in': [Status.STARTED, Status.FINISHING],
+          'colleague-cycle-status_in': [Status.STARTED, Status.FINISHING, Status.FINISHED],
           'review-status_in': [Status.DRAFT],
           status: Status.DRAFT,
         }),
@@ -32,7 +32,7 @@ const ActionCount: FC = () => {
       dispatch(
         ManagersActions.getManagerReviews({
           colleagueUuid,
-          'colleague-cycle-status_in': [Status.STARTED, Status.FINISHING],
+          'colleague-cycle-status_in': [Status.STARTED, Status.FINISHING, Status.FINISHED],
           'review-status_in': [Status.WAITING_FOR_APPROVAL, Status.WAITING_FOR_COMPLETION],
           status: Status.PENDING,
         }),
