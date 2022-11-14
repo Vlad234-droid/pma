@@ -9,8 +9,10 @@ import {
   getCurrentUser,
   updateProfileAttribute,
   deleteProfileAttribute,
-  getColleaguePerformanceCycles,
+  getPerformanceCycles,
+  getColleagueCycles,
 } from './actions';
+import { getColleagueCyclesByPmCycleUuid } from '@pma/api/src/rest';
 
 const NUMBER_OF_DEFAULT_ATTRIBUTES = 18;
 
@@ -108,27 +110,54 @@ export const deleteProfileAttributesEpic: Epic = (action$, _, { api }) =>
     ),
   );
 
-export const getColleaguePerformanceCyclesEpic: Epic = (actions$, _, { api }) =>
+export const getPerformanceCyclesEpic: Epic = (actions$, _, { api }) =>
   actions$.pipe(
     filter(isActionOf(getCurrentUser.success)),
     //@ts-ignore
     switchMap(({ payload: { colleague } }) =>
       //@ts-ignore
       from(
-        api.getColleaguePerformanceCyclesByStatuses({
+        api.getPerformanceCyclesByStatuses({
           colleagueUuid: colleague.colleagueUUID,
           allowedStatuses: ['STARTED', 'FINISHED', 'FINISHING', 'COMPLETED'],
         }),
       ).pipe(
         //@ts-ignore
         map(({ data }) =>
-          getColleaguePerformanceCycles.success(
+          getPerformanceCycles.success(
             data.map(({ endTime, startTime, uuid, type, status }) => ({ endTime, startTime, uuid, type, status })),
           ),
         ),
         catchError((e) => {
           const errors = e?.data?.errors;
-          return of(getColleaguePerformanceCycles.failure(errors?.[0]));
+          return of(getPerformanceCycles.failure(errors?.[0]));
+        }),
+      ),
+    ),
+  );
+
+export const getColleagueCyclesEpic: Epic = (actions$, _, { api }) =>
+  actions$.pipe(
+    filter(isActionOf(getColleagueCycles.request)),
+    //@ts-ignore
+    switchMap(({ payload }) =>
+      //@ts-ignore
+      from(
+        api.getColleagueCyclesByPmCycleUuid({
+          ...payload,
+          params: {
+            'colleague-cycle-status_in': ['STARTED', 'FINISHING', 'FINISHED', 'COMPLETED'],
+          },
+        }),
+      ).pipe(
+        //@ts-ignore
+        map(({ data }) => {
+          const { endTime, startTime, uuid, type, status } = data?.[0] || {};
+          return getColleagueCycles.success({ endTime, startTime, uuid, type, status });
+        }),
+        catchError((e) => {
+          const errors = e?.data?.errors;
+          return of(getColleagueCycles.failure(errors?.[0]));
         }),
       ),
     ),
@@ -140,5 +169,6 @@ export default combineEpics(
   createProfileAttributeEpic,
   updateProfileAttributesEpic,
   deleteProfileAttributesEpic,
-  getColleaguePerformanceCyclesEpic,
+  getPerformanceCyclesEpic,
+  getColleagueCyclesEpic,
 );

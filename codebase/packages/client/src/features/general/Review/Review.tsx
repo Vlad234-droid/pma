@@ -14,6 +14,7 @@ import {
   schemaMetaSelector,
   uuidCompareSelector,
   ExpressionValueType,
+  colleagueCycleSelector,
 } from '@pma/store';
 import { useParams } from 'react-router';
 
@@ -68,6 +69,7 @@ const MyReview: FC<Props> = ({ reviewType, onClose }) => {
   const currentCycle = useSelector(colleagueCurrentCycleSelector(colleagueUuid));
   const dispatch = useDispatch();
   const review: Review = useSelector(getReviewByTypeSelector(reviewType)) || {};
+  const colleagueCycle = useSelector(colleagueCycleSelector);
   const formValues = review?.properties || {};
 
   const { loading: reviewLoading, loaded: reviewLoaded, saving, saved } = useSelector(reviewsMetaSelector);
@@ -78,7 +80,10 @@ const MyReview: FC<Props> = ({ reviewType, onClose }) => {
 
   const status = Object.keys(timelineReview?.statistics || { STARTED: 1 })[0] as Status;
 
-  const readonly = (uuid && !isUserView) || [Status.WAITING_FOR_APPROVAL, Status.APPROVED].includes(status);
+  const readonly =
+    (uuid && !isUserView) ||
+    [Status.WAITING_FOR_APPROVAL, Status.APPROVED].includes(status) ||
+    colleagueCycle?.status === Status.COMPLETED;
 
   const { components = [] as Component[] } = schema;
 

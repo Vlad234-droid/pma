@@ -48,13 +48,19 @@ export const deleteProfileAttribute = createAsyncAction(
   'user/delete-profile-attribute/FAILURE',
 )<any, any, Error>();
 
-export const getColleaguePerformanceCycles = createAsyncAction(
+export const getPerformanceCycles = createAsyncAction(
   'user/performance-cycles/REQUEST',
   'user/performance-cycles/SUCCESS',
   'user/performance-cycles/FAILURE',
 )<any, any, Error>();
 
-export const changeColleagueCurrentCycles = createAction('user/current-performance-cycles/CHANGE')<string>();
+export const getColleagueCycles = createAsyncAction(
+  'user/colleague-cycles/REQUEST',
+  'user/colleague-cycles/SUCCESS',
+  'user/colleague-cycles/FAILURE',
+)<any, any, Error>();
+
+export const changeCurrentCycles = createAction('user/current-performance-cycles/CHANGE')<string>();
 
 export const Actions = {
   login: loginAsync.request,
@@ -63,8 +69,9 @@ export const Actions = {
   createProfileAttribute: createProfileAttribute.request,
   updateProfileAttribute: updateProfileAttribute.request,
   deleteProfileAttribute: deleteProfileAttribute.request,
-  getColleaguePerformanceCycles: getColleaguePerformanceCycles.request,
-  changeColleagueCurrentCycles,
+  getPerformanceCycles: getPerformanceCycles.request,
+  getColleagueCycles: getColleagueCycles.request,
+  changeCurrentCycles,
 };
 
 export type Action = ActionType<typeof loginAsync>;
