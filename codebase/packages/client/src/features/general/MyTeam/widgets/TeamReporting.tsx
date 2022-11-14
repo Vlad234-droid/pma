@@ -27,6 +27,7 @@ const TeamReporting: FC = () => {
         lineHeight: theme.font.fixed.f16.lineHeight,
         letterSpacing: '0px',
         marginTop: '8px',
+        cursor: 'pointer',
         paddingTop: '6px',
         ...tileWrapperStyles,
         '& span': {
