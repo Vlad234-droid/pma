@@ -17,6 +17,7 @@ import { AppStateProvider } from 'features/general/AppState';
 import { MessagesProvider } from 'features/general/Messages';
 import { HeaderProvider } from 'contexts/headerContext';
 import { useMonitoring } from 'hooks/useMonitoring';
+import { ErrorReporting } from 'error-reporting';
 
 const routes = buildRoutes(pages);
 
@@ -32,34 +33,36 @@ const Root: FC = () => {
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <I18nextProvider i18n={i18n}>
-        <AccessibilityProvider
-          containFocus={false}
-          rendererOptions={rendererOptions}
-          // @ts-ignore
-          theme={theme}
-        >
-          <Provider store={store}>
-            <AuthProvider>
-              <ToastProvider>
-                <MessagesProvider>
-                  <AppStateProvider>
-                    <HeaderProvider>
-                      <BrowserRouter basename={PUBLIC_URL}>
-                        <React.StrictMode>
-                          <Layout>
-                            <TimelineProvider>
-                              <Navigation routes={routes} />
-                            </TimelineProvider>
-                          </Layout>
-                        </React.StrictMode>
-                      </BrowserRouter>
-                    </HeaderProvider>
-                  </AppStateProvider>
-                </MessagesProvider>
-              </ToastProvider>
-            </AuthProvider>
-          </Provider>
-        </AccessibilityProvider>
+        <ErrorReporting>
+          <AccessibilityProvider
+            containFocus={false}
+            rendererOptions={rendererOptions}
+            // @ts-ignore
+            theme={theme}
+          >
+            <Provider store={store}>
+              <AuthProvider>
+                <ToastProvider>
+                  <MessagesProvider>
+                    <AppStateProvider>
+                      <HeaderProvider>
+                        <BrowserRouter basename={PUBLIC_URL}>
+                          <React.StrictMode>
+                            <Layout>
+                              <TimelineProvider>
+                                <Navigation routes={routes} />
+                              </TimelineProvider>
+                            </Layout>
+                          </React.StrictMode>
+                        </BrowserRouter>
+                      </HeaderProvider>
+                    </AppStateProvider>
+                  </MessagesProvider>
+                </ToastProvider>
+              </AuthProvider>
+            </Provider>
+          </AccessibilityProvider>
+        </ErrorReporting>
       </I18nextProvider>
     </Suspense>
   );

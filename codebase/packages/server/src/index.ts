@@ -3,6 +3,7 @@ import path from 'path';
 import os from 'os';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
+import { uiLoggingMiddleware } from '@energon/splunk-logger';
 
 // utils
 import { getPackageDistFolder } from './utils/package';
@@ -24,6 +25,7 @@ import {
   apiManagementProxyMiddleware,
   swaggerProxyMiddleware,
   camundaProxyMiddleware,
+  loggingMiddleware,
 } from './middlewares';
 
 import { initialize as initializeLogger, getHttpLoggerMiddleware } from '@pma-common/logger';
@@ -84,6 +86,8 @@ if (!API_SERVER_URL) {
 
   // setup logger middlewares
   router.use(getHttpLoggerMiddleware('http'));
+  router.use(loggingMiddleware(config));
+  router.use(await uiLoggingMiddleware());
 
   if (config.useOneLogin() === false) {
     logger.info(`WARNING! Authentication is turned off. Fake Login is used.`);
