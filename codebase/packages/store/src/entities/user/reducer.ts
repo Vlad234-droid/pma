@@ -5,6 +5,7 @@ import {
   updateProfileAttribute,
   deleteProfileAttribute,
   getPerformanceCycles,
+  getColleagueCycles,
   changeCurrentCycles,
 } from './actions';
 
@@ -90,6 +91,11 @@ const colleagueCurrentCycle = (state, { payload }) => ({
   current: { ...state.current, metadata: { ...state.current.metadata, currentCycle: payload } },
 });
 
+const colleagueCycles = (state, { payload }) => ({
+  ...state,
+  current: { ...state.current, metadata: { ...state.current.metadata, colleagueCycle: payload } },
+});
+
 export default createReducer(initialState)
   .handleAction(getCurrentUser.request, request)
   .handleAction(getCurrentUser.success, success)
@@ -99,4 +105,5 @@ export default createReducer(initialState)
   .handleAction(getPerformanceCycles.success, currentUserMetadataSuccess)
   .handleAction(updateProfileAttribute.success, updateProfileAttributeSuccess)
   .handleAction(deleteProfileAttribute.success, deleteProfileAttributeSuccess)
-  .handleAction(changeCurrentCycles, colleagueCurrentCycle);
+  .handleAction(changeCurrentCycles, colleagueCurrentCycle)
+  .handleAction(getColleagueCycles.success, colleagueCycles);
