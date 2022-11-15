@@ -33,7 +33,7 @@ import Report from './Report';
 import ReportDownload from './ReportDownload';
 import { CreatePerformanceCycle, PerformanceCycleAdministration } from './PerformanceCycle';
 import { EditTip, TipsAdministration } from './Tips';
-import UserObjectives, { CreateObjective } from './UserObjectives';
+import UserReviews from './UserReviews';
 import PeopleTeam from './PeopleTeam';
 import CalibrationSessionList, { CreateCalibrationSession } from './CalibrationSessionList';
 import CalibrationSessionOverview, { CalibrationSession } from './CalibrationSession';
@@ -42,7 +42,7 @@ import ReportStatistics from './ReportStatistics';
 import PreviousObjectiveRatings from './PreviousObjectiveRatings';
 import PreviousReviewForms from './PreviousReviewForms';
 import Review from './Review';
-import UpdateObjectives from './UpdateObjectives';
+import UpdateObjectives, { CreateObjective } from './CreateUpdateObjectives';
 import { NotFound } from './NotFound';
 import PriorityNote from './Notes/PriorityNote';
 import PriorityNoteEdit from './Notes/PriorityNoteEdit';
@@ -330,7 +330,7 @@ const pages: Record<Page, PageComponent> = {
     tenant: [Tenant.BANK, Tenant.GENERAL],
   },
   [Page.USER_REVIEWS]: {
-    Element: UserObjectives,
+    Element: UserReviews,
     title: (_, t) => t('title_colleague_overview'),
     withHeader: true,
     backPath: Page.CONTRIBUTION,

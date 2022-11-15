@@ -13,7 +13,7 @@ export type InitialStateType = {
 };
 
 export const initialState: InitialStateType = {
-  data: null,
+  data: {},
   meta: { loading: false, loaded: false, error: null, updating: false, updated: false },
 };
 
@@ -27,7 +27,10 @@ export default createReducer(initialState)
   .handleAction(getCalibrationReview.success, (state, { payload }) => {
     return {
       ...state,
-      data: payload,
+      data: {
+        ...state.data,
+        ...payload,
+      },
       meta: { ...state.meta, loading: false, loaded: true, updated: false },
     };
   })
@@ -46,7 +49,10 @@ export default createReducer(initialState)
   .handleAction(saveCalibrationReview.success, (state, { payload }) => {
     return {
       ...state,
-      data: payload,
+      data: {
+        ...state.data,
+        ...payload,
+      },
       meta: { ...state.meta, updating: false, updated: true },
     };
   })
@@ -65,7 +71,10 @@ export default createReducer(initialState)
   .handleAction(updateCalibrationReview.success, (state, { payload }) => {
     return {
       ...state,
-      data: payload,
+      data: {
+        ...state.data,
+        ...payload,
+      },
       meta: { ...state.meta, updating: false, updated: true },
     };
   })

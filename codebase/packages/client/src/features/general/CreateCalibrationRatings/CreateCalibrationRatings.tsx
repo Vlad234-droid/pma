@@ -9,10 +9,12 @@ import {
   CalibrationReviewAction,
   calibrationReviewMetaSelector,
   calibrationReviewDataSelector,
+  getColleagueSelector,
+  getColleagueMetaSelector,
+  ColleagueActions,
 } from '@pma/store';
 
 import WrapperModal from 'features/general/Modal/components/WrapperModal';
-import { AuthConsumer } from 'contexts/authContext';
 import { useTranslation } from 'components/Translation';
 import AvatarName from 'components/AvatarName';
 import { SuccessMark } from 'components/Icon';
@@ -36,15 +38,24 @@ export enum Modes {
 const STANDARD_CALIBRATION_FORM_CODE = 'forms/standard_calibration.form';
 
 const CreateCalibrationRatings: FC = () => {
-  const { uuid } = useParams<{ uuid: string }>();
+  const { uuid, userUuid: colleagueUuid } = useParams<{ uuid: string; userUuid: string }>() as {
+    uuid: string;
+    userUuid: string;
+  };
+  const { profile } = useSelector(getColleagueSelector) || {};
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const colleagueUuid = useSelector(colleagueUUIDSelector);
   const { components } = useSelector(getFormByCode(STANDARD_CALIBRATION_FORM_CODE)) || {};
-  const { loading, loaded, error, updating, updated } = useSelector(calibrationReviewMetaSelector);
-  const calibrationReview = useSelector(calibrationReviewDataSelector) || {};
+  const { loading, loaded, updated } = useSelector(calibrationReviewMetaSelector);
+  const calibrationReview = useSelector(calibrationReviewDataSelector(colleagueUuid)) || {};
   const { t } = useTranslation();
   const { css, theme } = useStyle();
+
+  const { loaded: colleagueLoaded } = useSelector(getColleagueMetaSelector);
+
+  useEffect(() => {
+    dispatch(ColleagueActions.getColleagueByUuid({ colleagueUuid }));
+  }, [colleagueUuid, colleagueLoaded]);
 
   const isNew = uuid === 'new';
 
@@ -58,7 +69,7 @@ const CreateCalibrationRatings: FC = () => {
   if (!components) return null;
 
   const handleBack = () => {
-    navigate(buildPath(Page.REVIEWS_VIEW));
+    navigate(paramsReplacer(buildPath(Page.USER_REVIEWS), { ':uuid': colleagueUuid as string }));
   };
 
   const buildData = (properties) => ({
@@ -110,7 +121,7 @@ const CreateCalibrationRatings: FC = () => {
           Ratings are subject to change in calibration and should not be communicated to colleagues until they are
           confirmed.
         </p>
-        <AuthConsumer>{({ user }) => <AvatarName user={user as User} />}</AuthConsumer>
+        <AvatarName user={profile as User} />
         <RatingForm
           onSubmit={isNew ? handleSave : handleUpdate}
           onCancel={handleBack}

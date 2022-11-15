@@ -39,7 +39,7 @@ const useObjectivesData = (colleagueUuid: string) => {
   useEffect(() => {
     dispatch(ReviewsActions.getReviews({ pathParams: { colleagueUuid, cycleUuid: currentCycle } }));
     dispatch(TimelineActions.getUserTimeline({ colleagueUuid, cycleUuid: currentCycle }));
-    dispatch(ColleagueActions.getColleagueByUuid({ colleagueUuid }));
+    //dispatch(ColleagueActions.getColleagueByUuid({ colleagueUuid }));
   }, [colleagueUuid, currentCycle]);
 
   return { objectives, meta: { loaded: reviewLoaded | timelineLoaded, loading: reviewLoading | timelineLoading } };

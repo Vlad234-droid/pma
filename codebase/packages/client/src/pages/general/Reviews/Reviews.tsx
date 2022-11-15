@@ -88,9 +88,6 @@ const ObjectivesPage: FC = () => {
           <Timeline colleagueUuid={colleagueUuid} />
           <Objectives />
           <ReviewsSection colleagueUuid={colleagueUuid} />
-          <div className={css(widgetsContainer)}>
-            <SubmitCalibrationRatingsWidget />
-          </div>
           <CompletedReviewsSection />
           <ReviewFilesSection colleagueUuid={colleagueUuid} />
           <Shortcuts />
@@ -150,11 +147,5 @@ const organizationWidgetStyles: Rule = ({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
 });
-
-const widgetsContainer: Rule = {
-  display: 'flex',
-  margin: '30px 0',
-  gap: '10px',
-};
 
 export default ObjectivesPage;

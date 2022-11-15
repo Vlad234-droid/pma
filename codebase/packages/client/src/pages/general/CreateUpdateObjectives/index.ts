@@ -1,2 +1,2 @@
-export { default } from './UserObjectives';
+export { default } from './UpdateObjective';
 export { default as CreateObjective } from './CreateObjective';

@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
-import useDispatch from './useDispatch';
-import { ColleagueActions, getColleagueSelector, getColleagueMetaSelector } from '@pma/store';
 import { useSelector } from 'react-redux';
-import { Tenant } from '../utils';
+import { ColleagueActions, getColleagueSelector, getColleagueMetaSelector } from '@pma/store';
+import { Tenant } from 'features/general/Permission';
+import useDispatch from './useDispatch';
 
 function useColleagueTenant(uuid: string): { tenant: Tenant; loading: boolean; loaded: boolean } {
   const dispatch = useDispatch();
@@ -10,14 +10,8 @@ function useColleagueTenant(uuid: string): { tenant: Tenant; loading: boolean; l
   const colleague = useSelector(getColleagueSelector);
 
   useEffect(() => {
-    if (uuid && !loaded) dispatch(ColleagueActions.getColleagueByUuid({ colleagueUuid: uuid }));
+    dispatch(ColleagueActions.getColleagueByUuid({ colleagueUuid: uuid }));
   }, [uuid, loaded]);
-
-  useEffect(() => {
-    return () => {
-      dispatch(ColleagueActions.clearColleagueData());
-    };
-  }, []);
 
   const tenant = (colleague?.tenant?.code as Tenant) || null;
 

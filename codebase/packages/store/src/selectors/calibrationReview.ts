@@ -13,7 +13,5 @@ export const calibrationReviewMetaSelector = createSelector(
   (calibrationSessions) => calibrationSessions.meta,
 );
 
-export const calibrationReviewDataSelector = createSelector(
-  calibrationReviewSelector,
-  (calibrationSessions) => calibrationSessions.data,
-);
+export const calibrationReviewDataSelector = (colleagueUuid: string) =>
+  createSelector(calibrationReviewSelector, (calibrationSessions) => calibrationSessions.data[colleagueUuid]);

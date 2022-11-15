@@ -1,15 +1,16 @@
 import React, { useMemo, FC } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { getNextReviewNumberSelector } from '@pma/store';
 import { CreateRule, Modal, useMedia } from '@pma/dex-wrapper';
+
 import { useTenant } from 'features/general/Permission';
+import { buildPath } from 'features/general/Routes';
+import { Page } from 'pages/general/types';
+import { ReviewType } from 'config/enum';
 import { ModalWrapper } from 'components/ModalWrapper';
 import { Icon } from 'components/Icon';
 import { useTranslation } from 'components/Translation';
-import { buildPath } from 'features/general/Routes';
-import { Page } from 'pages/general/types';
-import { useSelector } from 'react-redux';
-import { getNextReviewNumberSelector } from '@pma/store';
-import { ReviewType } from 'config/enum';
 
 const CreateObjective: FC = React.memo(() => {
   const tenant = useTenant();

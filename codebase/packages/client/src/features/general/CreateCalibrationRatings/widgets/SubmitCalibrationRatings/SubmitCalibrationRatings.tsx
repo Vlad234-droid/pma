@@ -6,26 +6,22 @@ import { Page } from 'pages';
 import { paramsReplacer } from 'utils';
 import { useTranslation } from 'components/Translation';
 import { useSelector } from 'react-redux';
-import {
-  CalibrationReviewAction,
-  calibrationReviewDataSelector,
-  calibrationReviewMetaSelector,
-  colleagueUUIDSelector,
-  SchemaActions,
-} from '@pma/store';
-import { useStyle } from '@pma/dex-wrapper';
+import { CalibrationReviewAction, calibrationReviewDataSelector, calibrationReviewMetaSelector } from '@pma/store';
 import useDispatch from 'hooks/useDispatch';
 
-const SubmitCalibrationRatings: FC = () => {
+type Props = {
+  userUuid: string;
+};
+
+const SubmitCalibrationRatings: FC<Props> = ({ userUuid }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const colleagueUuid = useSelector(colleagueUUIDSelector);
-  const calibrationReview = useSelector(calibrationReviewDataSelector) || {};
+  const calibrationReview = useSelector(calibrationReviewDataSelector(userUuid)) || {};
   const { loading } = useSelector(calibrationReviewMetaSelector);
 
   useEffect(() => {
-    dispatch(CalibrationReviewAction.getCalibrationReview({ colleagueUuid, cycleUuid: 'CURRENT' }));
+    dispatch(CalibrationReviewAction.getCalibrationReview({ colleagueUuid: userUuid, cycleUuid: 'CURRENT' }));
   }, []);
 
   if (loading) return null;
@@ -39,7 +35,11 @@ const SubmitCalibrationRatings: FC = () => {
       description={t('ratings_ready_to_submit', 'Ratings ready to submit')}
       customStyle={{ cursor: 'pointer' }}
       onClick={() =>
-        navigate(buildPath(paramsReplacer(Page.CREATE_CALIBRATION_RATING, { ':uuid': calibrationReviewUuid })))
+        navigate(
+          buildPath(
+            paramsReplacer(Page.CREATE_CALIBRATION_RATING, { ':userUuid': userUuid, ':uuid': calibrationReviewUuid }),
+          ),
+        )
       }
     />
   );

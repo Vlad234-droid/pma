@@ -44,8 +44,13 @@ const RatingForm: FC<Props> = ({ onSubmit, onCancel, components, defaultValues }
 
   const { overall_rating } = useOverallRating(params);
 
+  console.log({ params, overall_rating });
+
   useEffect(() => {
-    if (overall_rating && overall_rating !== values.overall_rating) setValue('overall_rating', overall_rating);
+    if (overall_rating && overall_rating !== values.overall_rating) {
+      console.log(overall_rating);
+      setValue('overall_rating', overall_rating);
+    }
   }, [overall_rating]);
 
   return (
