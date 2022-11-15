@@ -13,7 +13,7 @@ export const PriorityList: FC<Props> = ({ statistics }) => {
     DRAFT = '0',
     APPROVED = '0',
     COMPLETED = '0',
-    REQUESTED_TO_AMEND = '0',
+    DECLINED = '0',
     WAITING_FOR_COMPLETION = '0',
     WAITING_FOR_APPROVAL = '0',
   } = statistics;
@@ -26,7 +26,7 @@ export const PriorityList: FC<Props> = ({ statistics }) => {
     <div className={css(containerStyles({ mobileScreen }))}>
       <PriorityElement title={t('saved_as_draft', 'Saved as draft')} count={DRAFT} />
       <PriorityElement title={t('waiting_agreement', 'Waiting agreement')} count={WAITING_FOR_APPROVAL} />
-      <PriorityElement title={t('requires_review', 'Requires review')} count={REQUESTED_TO_AMEND} />
+      <PriorityElement title={t('requires_review', 'Requires review')} count={DECLINED} />
       <PriorityElement title={t('agreed', 'Agreed')} count={APPROVED} />
       <PriorityElement title={t('waiting_for_manager', 'Waiting for manager')} count={WAITING_FOR_COMPLETION} />
       <PriorityElement title={t('completed', 'Completed')} count={COMPLETED} />
