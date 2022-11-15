@@ -41,7 +41,7 @@ const Modify: FC<Props> = ({
     <>
       {withStepper && <Stepper steps={steps} step={currentPriorityIndex} onSelectStep={onSelectStep} />}
       <div className={css({ padding: `${theme.spacing.s5} 0 ${theme.spacing.s5}`, display: 'flex' })}>
-        <TriggerModal triggerComponent={<HelpTrigger />} title={t('completing_your_review', 'Completing your review')}>
+        <TriggerModal triggerComponent={<HelpTrigger />} title={t('create_priorities', 'Create Priorities')}>
           <HelperModal />
         </TriggerModal>
       </div>

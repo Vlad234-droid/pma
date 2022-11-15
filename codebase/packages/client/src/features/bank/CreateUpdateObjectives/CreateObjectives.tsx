@@ -15,7 +15,7 @@ export type Props = {
 const CreateUpdatePriorities: FC<Props> = memo(({ onClose, onSuccessClose, editNumber, useSingleStep = false }) => {
   const { t } = useTranslation();
   const title =
-    useSingleStep && editNumber ? t('edit_priorities', 'Edit priorities') : t('create_priorities', 'Create priorities');
+    useSingleStep && editNumber ? t('edit_priorities', 'Edit Priorities') : t('create_priorities', 'Create Priorities');
 
   return (
     <ModalComponent onClose={onClose} title={title}>
