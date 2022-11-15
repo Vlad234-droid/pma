@@ -133,7 +133,7 @@ export function withSection<P>(WrappedComponent: React.ComponentType<P & PropsTy
             })}
             visibleCancelBtn={false}
             onSave={handleClearRemovedPriority}
-            submitBtnTitle={<Trans i18nKey='ok'>Ok</Trans>}
+            submitBtnTitle={<Trans i18nKey='ok'>Okay</Trans>}
             onCancel={handleClearRemovedPriority}
             onOverlayClick={handleClearRemovedPriority}
           />
