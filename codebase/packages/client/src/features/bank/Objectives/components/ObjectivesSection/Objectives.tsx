@@ -1,17 +1,22 @@
 import React, { FC, useEffect, useMemo } from 'react';
+import { downloadPDF, PrioritiesDocument, usePDF } from '@pma/pdf-renderer';
 import { Rule, useStyle } from '@pma/dex-wrapper';
 import { reviewsMetaSelector } from '@pma/store';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router';
+
+import { buildPath } from 'features/general/Routes';
+import { IconButton } from 'components/IconButton';
 import { Trans } from 'components/Translation';
+import Spinner from 'components/Spinner';
 import Section from 'components/Section';
 import Accordion from '../Accordion';
-import { useSelector } from 'react-redux';
-import { IconButton } from 'components/IconButton';
-import { downloadPDF, PrioritiesDocument, usePDF } from '@pma/pdf-renderer';
-import Spinner from 'components/Spinner';
 import { TogglePriority } from '../TogglePriority';
-import { PropsType, withSection } from '../../hoc/withSection';
 import { AddNoteButton } from '../AddNoteButton';
 import { Tenant } from 'config/enum';
+import { paramsReplacer } from 'utils';
+import { Page } from 'pages';
+import { PropsType, withSection } from '../../hoc/withSection';
 
 export const TEST_ID = 'objectives-test-id';
 
@@ -27,6 +32,7 @@ const Objectives: FC<PropsType> = ({
   const { loading: reviewLoading } = useSelector(reviewsMetaSelector);
   const document = useMemo(() => <PrioritiesDocument items={objectives} />, [JSON.stringify(objectives)]);
   const [instance, updateInstance] = usePDF({ document });
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (objectives.length) {
@@ -70,7 +76,14 @@ const Objectives: FC<PropsType> = ({
               objectives={objectives}
               canShowStatus={true}
             />
-            <AddNoteButton objectives={objectives} activeTimelinePoints={activeTimelinePoints} />
+            <AddNoteButton
+              objectives={objectives}
+              onClick={() =>
+                navigate(
+                  buildPath(paramsReplacer(Page.PRIORITY_NOTE, { ':uuid': activeTimelinePoints?.uuid ?? 'new' })),
+                )
+              }
+            />
           </>
         ) : (
           <div className={css(emptyBlockStyle)}>
