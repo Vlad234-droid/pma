@@ -9,6 +9,7 @@ import { TriggerModal } from 'features/general/Modal';
 import { HelpTrigger, HelperModal } from '../Helper';
 import Stepper from '../Stepper/Stepper';
 import { FormValues } from '../../type';
+import { useTimelineContainer } from 'contexts/timelineContext';
 
 type Props = {
   components: any[];
@@ -36,12 +37,21 @@ const Modify: FC<Props> = ({
   } = methods;
   const formValues = getValues();
   const steps = defaultValues.data?.map((objective) => objective.number) || [];
+  const {
+    currentTimelines: { QUARTER },
+  } = useTimelineContainer();
+  const code = QUARTER?.code || '';
 
   return (
     <>
       {withStepper && <Stepper steps={steps} step={currentPriorityIndex} onSelectStep={onSelectStep} />}
       <div className={css({ padding: `${theme.spacing.s5} 0 ${theme.spacing.s5}`, display: 'flex' })}>
-        <TriggerModal triggerComponent={<HelpTrigger />} title={t('create_priorities', 'Create Priorities')}>
+        <TriggerModal
+          triggerComponent={<HelpTrigger />}
+          title={t('create_priorities', `Create Priorities ${code}`, {
+            code,
+          })}
+        >
           <HelperModal />
         </TriggerModal>
       </div>
