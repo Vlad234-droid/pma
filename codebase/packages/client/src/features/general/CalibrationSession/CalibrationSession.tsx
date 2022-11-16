@@ -23,6 +23,7 @@ import { TileWrapper } from 'components/Tile';
 
 import { ActiveList } from './utils/types';
 import { Page } from 'pages';
+import { paramsReplacer } from 'utils';
 
 const CalibrationSession = () => {
   const { css, matchMedia } = useStyle();
@@ -35,9 +36,7 @@ const CalibrationSession = () => {
   const { loading: csLoading, updating: csUpdating } = useSelector(calibrationSessionsMetaSelector);
 
   const calibrationSession = uuid ? calibrationSessions.find((cs) => cs.uuid === uuid) || null : {};
-  const isStarted =
-    calibrationSession?.status === CalibrationSessionStatusEnum.Started ||
-    calibrationSession?.status === CalibrationSessionStatusEnum.Updated;
+  const isStarted = calibrationSession?.status === CalibrationSessionStatusEnum.Started;
 
   const { t } = useTranslation();
   const [showSuccessModal, toggleSuccessModal] = useState<boolean>(false);
@@ -46,17 +45,32 @@ const CalibrationSession = () => {
   const listRef = useRef<HTMLDivElement>();
   const bottomPanelRef = useRef<HTMLDivElement>();
 
+  const handleEditCalibrationSession = () => {
+    uuid && !isStarted && navigate(buildPath(paramsReplacer(Page.EDIT_CALIBRATION_SESSION, { ':uuid': uuid })));
+  };
   const handleCancellation = () => {
     navigate(buildPath(Page.CALIBRATION_SESSION_LIST));
   };
   const handleSave = () => {
-    dispatch(
-      CalibrationSessionsAction.updateCalibrationSession({
-        ...calibrationSession,
-        status: CalibrationSessionStatusEnum.Completed,
-      }),
-    );
-    toggleSuccessModal(!showSuccessModal);
+    if (calibrationSession?.status === CalibrationSessionStatusEnum.Started) {
+      dispatch(
+        CalibrationSessionsAction.updateCalibrationSession({
+          ...calibrationSession,
+          status: CalibrationSessionStatusEnum.Completed,
+        }),
+      );
+      toggleSuccessModal(!showSuccessModal);
+    }
+  };
+  const handleStart = () => {
+    if (calibrationSession?.status !== CalibrationSessionStatusEnum.Started) {
+      dispatch(
+        CalibrationSessionsAction.updateCalibrationSession({
+          ...calibrationSession,
+          status: CalibrationSessionStatusEnum.Started,
+        }),
+      );
+    }
   };
   useEffect(() => {
     dispatch(CalibrationSessionsAction.getCalibrationSessions({}));
@@ -167,14 +181,14 @@ const CalibrationSession = () => {
                   ? t('calibration_session_in_progress', 'Calibration session in progress')
                   : t('start_calibration_session_edit_rating', 'Start calibration session and edit ratings')
               }
-              onClick={console.log}
+              onClick={handleStart}
               // @ts-ignore
               background={isStarted ? 'paleOrange' : 'white'}
             />
             <Widget
               graphics={'edit'}
               title={t('edit_calibration_session', 'Edit calibration session')}
-              onClick={console.log}
+              onClick={handleEditCalibrationSession}
               isDisabled={isStarted}
             />
           </div>
@@ -214,7 +228,8 @@ const CalibrationSession = () => {
 };
 
 const widgetContainerStyles: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => ({
-  display: mobileScreen ? 'block' : 'flex',
+  display: 'flex',
+  flexDirection: mobileScreen ? 'column' : 'row',
   gap: '8px',
   marginBottom: '56px',
 });
@@ -245,17 +260,15 @@ const listHeaderContainer: CreateRule<{ width: undefined | number; mediumScreen:
       alignItems: 'center',
       justifyContent: 'space-between',
       width: mediumScreen || mobileScreen ? '100%' : `calc(50% + ${width}px / 2)`,
-      ...(mobileScreen && { flexDirection: 'column', gap: '18px' }),
+      ...(mobileScreen && { flexDirection: 'row', gap: '18px' }),
       '& > p': {
         color: theme.colors.base,
         fontSize: theme.font.fixed.f18.fontSize,
         margin: 0,
-        ...(mobileScreen && { alignSelf: 'flex-start' }),
       },
     } as Styles);
 
 const contentBlockStyle: CreateRule<{ height: number | undefined }> = ({ height }) => {
-  console.log('height', height);
   if (height) {
     return { paddingBottom: `${height}px` };
   }

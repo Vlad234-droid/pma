@@ -36,6 +36,7 @@ const CreateUpdateCalibrationSession: FC<Props> = ({ onClose }) => {
     updating: calibrationSessionUpdating,
     loading: calibrationSessionLoading,
     loaded: calibrationSessionLoaded,
+    error: calibrationSessionError,
   } = useSelector(calibrationSessionsMetaSelector);
   const calibrationSessions = useSelector(getCalibrationSessionsSelector) || [];
 
@@ -44,21 +45,40 @@ const CreateUpdateCalibrationSession: FC<Props> = ({ onClose }) => {
   const canEdit = calibrationSession ? calibrationSession?.status !== CalibrationSessionStatusEnum.Completed : true;
 
   const handleSaveAndExit = async (data) => {
-    if (data.uuid) {
-      dispatch(CalibrationSessionsAction.updateCalibrationSession(data));
+    const mappedData = {
+      ...data,
+      ...(data.startTime
+        ? { startTime: new Date(data.startTime).toISOString(), endTime: new Date(data.startTime).toISOString() }
+        : {}),
+    };
+    if (mappedData.uuid) {
+      dispatch(CalibrationSessionsAction.updateCalibrationSession(mappedData));
     } else {
       dispatch(
-        CalibrationSessionsAction.createCalibrationSession({ ...data, status: CalibrationSessionStatusEnum.Created }),
+        CalibrationSessionsAction.createCalibrationSession({
+          ...mappedData,
+          status: CalibrationSessionStatusEnum.Created,
+        }),
       );
     }
     toggleSaveAndExit(true);
   };
   const handleSubmitData = async (data) => {
-    if (data.uuid) {
-      dispatch(CalibrationSessionsAction.updateCalibrationSession(data));
+    // todo remove endTime when backend is ready
+    const mappedData = {
+      ...data,
+      ...(data.startTime
+        ? { startTime: new Date(data.startTime).toISOString(), endTime: new Date(data.startTime).toISOString() }
+        : {}),
+    };
+    if (mappedData.uuid) {
+      dispatch(CalibrationSessionsAction.updateCalibrationSession(mappedData));
     } else {
       dispatch(
-        CalibrationSessionsAction.createCalibrationSession({ ...data, status: CalibrationSessionStatusEnum.Created }),
+        CalibrationSessionsAction.createCalibrationSession({
+          ...mappedData,
+          status: CalibrationSessionStatusEnum.Created,
+        }),
       );
     }
     toggleSubmitData(true);
@@ -72,13 +92,13 @@ const CreateUpdateCalibrationSession: FC<Props> = ({ onClose }) => {
 
   useEffect(() => {
     if (isSubmittedData && !calibrationSessionUpdating) {
-      if (calibrationSession?.uuid) {
+      if (!calibrationSessionError && calibrationSession?.uuid) {
         navigate(buildPath(paramsReplacer(`${Page.CALIBRATION_SESSION}`, { ':uuid': calibrationSession?.uuid })));
       } else {
         onClose();
       }
     }
-  }, [isSubmittedData, calibrationSessionUpdating]);
+  }, [isSubmittedData, calibrationSessionUpdating, calibrationSessionError]);
 
   useEffect(() => {
     if (calibrationSessionLoaded && uuid && !calibrationSession) {

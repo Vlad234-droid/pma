@@ -24,7 +24,7 @@ const SessionAccordion: FC<{
   const { t } = useTranslation();
   const navigateToPage = () =>
     calibrationSession.uuid
-      ? navigate(buildPath(paramsReplacer(Page.EDIT_CALIBRATION_SESSION, { ':uuid': calibrationSession.uuid })))
+      ? navigate(buildPath(paramsReplacer(Page.CALIBRATION_SESSION, { ':uuid': calibrationSession.uuid })))
       : navigate(buildPath(Page.NOT_FOUND));
 
   return (

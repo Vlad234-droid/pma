@@ -8,6 +8,7 @@ import { SessionAccordion } from './components/SessionAccordion';
 import { CreateCalibrationSession } from './widgets';
 import { CalibrationSessionsAction, calibrationSessionsMetaSelector, getCalibrationSessionsSelector } from '@pma/store';
 import { useSelector } from 'react-redux';
+import { Trans } from 'components/Translation';
 import Spinner from 'components/Spinner';
 
 import { FilterStatus } from './utils/types';
@@ -60,14 +61,20 @@ const CalibrationSessionList = () => {
             <Spinner fullHeight />
           ) : (
             <>
-              {calibrationSessionsByStatus.map((calibrationSession, index) => (
-                <SessionAccordion
-                  key={calibrationSession.uuid}
-                  isFirst={index === 0}
-                  calibrationSession={calibrationSession}
-                  onDeleteCalibrationSession={handleDeleteCalibrationSession}
-                />
-              ))}
+              {calibrationSessionsByStatus?.length ? (
+                calibrationSessionsByStatus.map((calibrationSession, index) => (
+                  <SessionAccordion
+                    key={calibrationSession.uuid}
+                    isFirst={index === 0}
+                    calibrationSession={calibrationSession}
+                    onDeleteCalibrationSession={handleDeleteCalibrationSession}
+                  />
+                ))
+              ) : (
+                <div className={css(emptyBlockStyle)}>
+                  <Trans i18nKey='no_calibration_session'>You do not have calibration sessions</Trans>
+                </div>
+              )}
             </>
           )}
         </div>
@@ -95,6 +102,13 @@ const titleStyle: Rule = ({ theme }) => ({
   fontWeight: theme.font.weight.bold,
   fontSize: theme.font.fixed.f18.fontSize,
   lineHeight: theme.font.fixed.f18.lineHeight,
+  letterSpacing: '0px',
+});
+
+const emptyBlockStyle: Rule = ({ theme }) => ({
+  paddingBottom: '20px',
+  fontSize: theme.font.fixed.f16.fontSize,
+  lineHeight: theme.font.fixed.f16.lineHeight,
   letterSpacing: '0px',
 });
 

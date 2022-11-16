@@ -25,24 +25,24 @@ const ConfirmationDescription = () => (
 );
 
 const Footer = forwardRef<any, Props>(({ onCancel, onSave }, ref) => {
-  const { css, matchMedia } = useStyle();
+  const { css, matchMedia, theme } = useStyle();
   const { t } = useTranslation();
-  const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
+  const mobileScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
   const [fullScreen, toggleFullScreen] = useState<boolean>(true);
 
   return (
-    <div className={css(footerBlockStyle({ fullScreen }))} ref={ref}>
+    <div className={css(footerBlockStyle({ fullScreen, mobileScreen }))} ref={ref}>
       <div className={css(containerStyle({ mobileScreen }))}>
         <div />
-        <div>Performance ratings are available to edit</div>
+        <div className={css(textStyle({ mobileScreen }))}>Performance ratings are available to edit</div>
         <div
           className={css({ display: 'flex', cursor: 'pointer', alignItems: 'center', justifyContent: 'end' })}
           onClick={() => toggleFullScreen(!fullScreen)}
         >
-          <div className={css(colorStyle({ color: 'tescoBlue' }), { paddingRight: '5px' })}>
+          <div className={css(colorStyle({ color: 'tescoBlue' }), { paddingRight: '5px', ...theme.font.fixed.f14 })}>
             {fullScreen ? t('minimise', 'Minimise') : t('maximise', 'Maximise')}
           </div>
-          <Icon graphic={fullScreen ? 'less' : 'full'} />
+          <Icon size={'22px'} graphic={fullScreen ? 'less' : 'full'} />
         </div>
       </div>
       {fullScreen && (
@@ -66,14 +66,14 @@ const Footer = forwardRef<any, Props>(({ onCancel, onSave }, ref) => {
   );
 });
 
-const footerBlockStyle: CreateRule<{ fullScreen: boolean }> =
-  ({ fullScreen }) =>
+const footerBlockStyle: CreateRule<{ fullScreen: boolean; mobileScreen: boolean }> =
+  ({ fullScreen, mobileScreen }) =>
   ({ theme }) => ({
     position: 'absolute',
     bottom: 0,
     left: 0,
     width: '100%',
-    height: fullScreen ? '198px' : '100px',
+    height: fullScreen ? (mobileScreen ? '180px' : '152px') : '70px',
     background: theme.colors['paleOrange'],
     paddingLeft: '10px',
     paddingRight: '10px',
@@ -82,7 +82,7 @@ const footerBlockStyle: CreateRule<{ fullScreen: boolean }> =
 const containerStyle: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => ({
   display: 'flex',
   alignItems: 'center',
-  paddingTop: '30px',
+  paddingTop: mobileScreen ? '16px' : '25px',
   '& > div': {
     width: '33%',
     textAlign: 'center',
@@ -100,7 +100,7 @@ const containerStyle: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen })
 const buttonContainerStyle: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => ({
   display: 'flex',
   alignItems: 'center',
-  paddingTop: '36px',
+  paddingTop: mobileScreen ? '16px' : '25px',
   justifyContent: 'center',
   ...(mobileScreen && {
     flexDirection: 'column',
@@ -129,6 +129,13 @@ const colorStyle: CreateRule<{ color?: Colors }> =
   ({ color = 'white' }) =>
   ({ theme }) => ({
     color: theme.colors[color],
+  });
+
+const textStyle: CreateRule<{ mobileScreen: boolean }> =
+  ({ mobileScreen }) =>
+  ({ theme }) => ({
+    ...(mobileScreen ? theme.font.fixed.f16 : theme.font.fixed.f20),
+    letterSpacing: '0px',
   });
 
 export default Footer;

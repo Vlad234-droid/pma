@@ -1,29 +1,33 @@
 import React, { useState, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { CreateRule, Rule, Styles, useStyle } from '@pma/dex-wrapper';
 
+import { Page } from 'pages';
 import { useTranslation } from 'components/Translation';
 import { ListView } from './components/ListView';
 import { Line } from 'components/Line';
-import {
-  DownloadReport,
-  CalibrationSession,
-  CreateCalibration,
-  RatingsSubmitted,
-  CalibrationsCompleted,
-  RatingsChange,
-} from './widgets';
+import { DownloadReport, RatingsSubmitted, CalibrationsCompleted, RatingsChange, Widget } from './widgets';
 import { Filter } from './components/Filter';
 import ColleaguesReviews from './components/ColleaguesReviews';
 import Graph from 'components/Graph';
 import { Rating } from 'config/enum';
-import { TileWrapper } from 'components/Tile';
 
+import { TileWrapper } from 'components/Tile';
 import { ActiveList } from './utils/types';
+import { buildPath } from '../Routes';
 
 const CalibrationSessionOverview = () => {
   const { css, matchMedia } = useStyle();
+  const navigate = useNavigate();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const mediumScreen = matchMedia({ xSmall: false, small: false, medium: true }) || false;
+
+  const handleCalibrationSessionList = () => {
+    navigate(buildPath(Page.CALIBRATION_SESSION_LIST));
+  };
+  const handleCreateCalibrationSession = () => {
+    navigate(buildPath(Page.CREATE_CALIBRATION_SESSION));
+  };
 
   const { t } = useTranslation();
   const [period, setPeriod] = useState<string>('2021 - 2022');
@@ -119,8 +123,16 @@ const CalibrationSessionOverview = () => {
         <Filter withDateFilter setPeriod={(active) => setPeriod(active)} />
         <div className={css(widgetContainerStyles)}>
           <DownloadReport />
-          <CalibrationSession />
-          <CreateCalibration />
+          <Widget
+            title={t('calibration_sessions', 'Calibration sessions')}
+            graphics={'chart'}
+            onClick={handleCalibrationSessionList}
+          />
+          <Widget
+            title={t('create_calibration_session', 'Create calibration session')}
+            graphics={'add'}
+            onClick={handleCreateCalibrationSession}
+          />
           <RatingsSubmitted />
           <CalibrationsCompleted />
           <RatingsChange />

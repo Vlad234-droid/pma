@@ -2,7 +2,7 @@
 import { Epic, isActionOf } from 'typesafe-actions';
 import { combineEpics } from 'redux-observable';
 import { from, of } from 'rxjs';
-import { catchError, filter, map, switchMap, takeUntil } from 'rxjs/operators';
+import { catchError, filter, map, mergeMap, switchMap, takeUntil } from 'rxjs/operators';
 
 import { RestResponseListCalibrationSession, RestResponseCalibrationSession } from '@pma/openapi';
 import {
@@ -92,11 +92,11 @@ export const deleteCalibrationSessionEpic: Epic = (action$, state$, { api }) =>
       // @ts-ignore
       return from(api.deleteCalibrationSessions(payload)).pipe(
         //@ts-ignore
-        map(({ success, data, errors }) => {
+        mergeMap(({ success, data, errors }) => {
           if (!success) {
-            return deleteCalibrationSession.failure(new Error(errors?.[0].message || undefined));
+            return from([deleteCalibrationSession.failure(new Error(errors?.[0].message || undefined))]);
           }
-          return deleteCalibrationSession.success({ data });
+          return from([deleteCalibrationSession.success({ data }), getCalibrationSessions.request({})]);
         }),
         catchError((e) => {
           const errors = e?.data?.errors;
