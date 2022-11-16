@@ -30,7 +30,11 @@ const Buttons: FC<ButtonsProps> = ({ readonly, isValid, isStepValid, onClose, on
           ) : (
             <>
               <div className={css(buttonGroupStyle({ mobileScreen }))}>
-                <Button onPress={onSaveExit} styles={[buttonWhiteStyle({ mobileScreen })]}>
+                <Button
+                  isDisabled={isDisabledSaveAndAdd}
+                  onPress={onSaveExit}
+                  styles={[buttonWhiteStyle({ mobileScreen })]}
+                >
                   <Trans i18nKey='save_and_exit'>Save & exit</Trans>
                 </Button>
                 <IconButton
