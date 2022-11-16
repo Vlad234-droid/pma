@@ -11,6 +11,7 @@ export const getCalibrationReviewEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
     filter(isActionOf(getCalibrationReview.request)),
     switchMap(({ payload }) => {
+      const { colleagueUuid } = payload;
       //@ts-ignore
       return from(api.getCalibrationReviews(payload)).pipe(
         //@ts-ignore
@@ -18,7 +19,7 @@ export const getCalibrationReviewEpic: Epic = (action$, _, { api }) =>
           if (!success) {
             return getCalibrationReview.failure(new Error(errors?.[0].message || undefined));
           }
-          return getCalibrationReview.success(data);
+          return getCalibrationReview.success({ [colleagueUuid]: data });
         }),
         catchError((e) => {
           const errors = e?.data?.errors;
@@ -34,6 +35,7 @@ export const saveCalibrationReviewEpic: Epic = (action$, _, { api }) =>
     filter(isActionOf(saveCalibrationReview.request)),
     switchMap(({ payload }) => {
       const { data, ...rest } = payload;
+      const { colleagueUuid } = rest;
       //@ts-ignore
       return from(api.createCalibrationReview(rest, data)).pipe(
         //@ts-ignore
@@ -41,7 +43,7 @@ export const saveCalibrationReviewEpic: Epic = (action$, _, { api }) =>
           if (!success) {
             return saveCalibrationReview.failure(new Error(errors?.[0].message || undefined));
           }
-          return saveCalibrationReview.success(data);
+          return saveCalibrationReview.success({ [colleagueUuid]: data });
         }),
         catchError((e) => {
           const errors = e?.data?.errors;
@@ -60,6 +62,7 @@ export const updateCalibrationReviewEpic: Epic = (action$, _, { api }) =>
     filter(isActionOf(updateCalibrationReview.request)),
     switchMap(({ payload }) => {
       const { data, ...rest } = payload;
+      const { colleagueUuid } = rest;
       //@ts-ignore
       return from(api.updateCalibrationReview(rest, data)).pipe(
         //@ts-ignore
@@ -67,7 +70,7 @@ export const updateCalibrationReviewEpic: Epic = (action$, _, { api }) =>
           if (!success) {
             return updateCalibrationReview.failure(new Error(errors?.[0].message || undefined));
           }
-          return updateCalibrationReview.success(data);
+          return updateCalibrationReview.success({ [colleagueUuid]: data });
         }),
         catchError((e) => {
           const errors = e?.data?.errors;

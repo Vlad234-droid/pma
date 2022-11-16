@@ -1,23 +1,19 @@
 import React, { useMemo } from 'react';
-import { CreateRule, Styles, useStyle } from '@pma/dex-wrapper';
 import { useNavigate, useParams } from 'react-router-dom';
+import { CreateRule, Rule, Styles, useStyle } from '@pma/dex-wrapper';
+
 import useColleagueTenant from 'hooks/useColleagueTenant';
 import { ColleagueProfileWidget } from 'features/general/Profile';
-import { useTranslation } from 'components/Translation';
 import { ShareWidget } from 'features/general/ShareWidget';
 import { buildPath } from 'features/general/Routes';
 import { CompletedReviewsSection, ReviewFilesSection, ReviewsSection } from 'features/general/Review';
-import { useToast, Variant } from 'features/general/Toast';
-
-import { useTenant } from 'features/general/Permission';
+import { useTenant, Tenant } from 'features/general/Permission';
+import { SubmitCalibrationRatingsWidget } from 'features/general/CreateCalibrationRatings';
 import { Page } from 'pages/general/types';
 import Spinner from 'components/Spinner';
-import { Tenant } from 'utils';
 
 const UserObjectivesPage = () => {
   const { css, matchMedia } = useStyle();
-  const { t } = useTranslation();
-  const { addToast } = useToast();
   const tenant = useTenant();
   const navigate = useNavigate();
   const { uuid } = useParams<{ uuid: string }>();
@@ -81,6 +77,9 @@ const UserObjectivesPage = () => {
         <ReviewsSection colleagueUuid={uuid as string} />
         <CompletedReviewsSection />
         <ReviewFilesSection colleagueUuid={uuid} />
+        <div className={css(widgetsContainer)}>
+          <SubmitCalibrationRatingsWidget userUuid={uuid as string} />
+        </div>
       </div>
     </div>
   );
@@ -132,6 +131,12 @@ const shareWidgetStyles: Styles = {
   flexDirection: 'column',
   marginBottom: '20px',
   width: '100%',
+};
+
+const widgetsContainer: Rule = {
+  display: 'flex',
+  margin: '30px 0',
+  gap: '10px',
 };
 
 export default UserObjectivesPage;

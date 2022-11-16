@@ -1,3 +1,6 @@
+/**
+ * @deprecated use features/general/Permission instead
+ */
 export enum Tenant {
   GENERAL = 'general',
   BANK = 'bank',
