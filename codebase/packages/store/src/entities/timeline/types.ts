@@ -9,6 +9,7 @@ export type RequestPayload = {
 export type SuccessPayload = {
   success: boolean;
   colleagueUuid: string;
+  cycleUuid: string;
   data: Timeline[];
 };
 
@@ -19,5 +20,5 @@ export type CancelPayload = undefined;
 export type State = {
   meta: Meta;
   success?: boolean;
-  data?: Record<string, Timeline[]>;
+  data: any;
 };

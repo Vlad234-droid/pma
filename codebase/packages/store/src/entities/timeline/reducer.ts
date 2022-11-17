@@ -4,6 +4,7 @@ import { getTimeline, getUserTimeline } from './actions';
 import { State, SuccessPayload, ErrorPayload } from './types';
 
 export const initialState: State = {
+  data: {},
   meta: { loading: false, loaded: false, error: null },
 };
 
@@ -13,7 +14,10 @@ const success: ActionHandler<State, SuccessPayload> = (state, { payload }) => ({
   ...state,
   data: {
     ...state.data,
-    [payload.colleagueUuid]: payload.data,
+    [payload.colleagueUuid]: {
+      ...(state.data?.[payload.colleagueUuid] || {}),
+      [payload.cycleUuid]: payload.data,
+    },
   },
   meta: { ...state.meta, loading: false, loaded: true },
 });

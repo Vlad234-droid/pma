@@ -33,7 +33,7 @@ export const TEST_WRAPPER_ID = 'test-wrapper-id';
 const ColleagueReview: FC<Props> = ({ colleagueUuid, review, timeline, schema, validateReview, onUpdate }) => {
   const { css, theme } = useStyle();
   const { t } = useTranslation();
-  const isAnniversary = useSelector(isAnniversaryTimelineType(colleagueUuid));
+  const isAnniversary = useSelector(isAnniversaryTimelineType(colleagueUuid, timeline?.cycleUuid));
 
   const { components = [] } = schema;
   const styledComponents = formTagComponents(components, theme);
