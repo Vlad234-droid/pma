@@ -12,8 +12,6 @@ import { buildPath } from 'features/general/Routes';
 import { useTranslation } from 'components/Translation';
 import { ListView } from './components/ListView';
 import { Line } from 'components/Line';
-import { Widget } from './widgets';
-import { Filter } from './components/Filter';
 import { Footer } from './components/Footer';
 import { SuccessModal } from './components/SuccessModal';
 import ColleaguesReviews from './components/ColleaguesReviews';
@@ -23,7 +21,6 @@ import { TileWrapper } from 'components/Tile';
 
 import { ActiveList } from './utils/types';
 import { Page } from 'pages';
-import { paramsReplacer } from 'utils';
 
 const CalibrationSession = () => {
   const { css, matchMedia } = useStyle();
@@ -45,9 +42,6 @@ const CalibrationSession = () => {
   const listRef = useRef<HTMLDivElement>();
   const bottomPanelRef = useRef<HTMLDivElement>();
 
-  const handleEditCalibrationSession = () => {
-    uuid && !isStarted && navigate(buildPath(paramsReplacer(Page.EDIT_CALIBRATION_SESSION, { ':uuid': uuid })));
-  };
   const handleCancellation = () => {
     navigate(buildPath(Page.CALIBRATION_SESSION_LIST));
   };
@@ -62,16 +56,7 @@ const CalibrationSession = () => {
       toggleSuccessModal(!showSuccessModal);
     }
   };
-  const handleStart = () => {
-    if (calibrationSession?.status !== CalibrationSessionStatusEnum.Started) {
-      dispatch(
-        CalibrationSessionsAction.updateCalibrationSession({
-          ...calibrationSession,
-          status: CalibrationSessionStatusEnum.Started,
-        }),
-      );
-    }
-  };
+
   useEffect(() => {
     dispatch(CalibrationSessionsAction.getCalibrationSessions({}));
   }, []);
@@ -169,70 +154,40 @@ const CalibrationSession = () => {
   }
 
   return (
-    <div>
-      <div className={css(contentBlockStyle({ height: bottomPanelRef?.current?.clientHeight }))}>
-        <div>
-          <Filter />
-          <div className={css(widgetContainerStyles({ mobileScreen }))}>
-            <Widget
-              graphics={'chart'}
-              title={
-                isStarted
-                  ? t('calibration_session_in_progress', 'Calibration session in progress')
-                  : t('start_calibration_session_edit_rating', 'Start calibration session and edit ratings')
-              }
-              onClick={handleStart}
-              // @ts-ignore
-              background={isStarted ? 'paleOrange' : 'white'}
-            />
-            <Widget
-              graphics={'edit'}
-              title={t('edit_calibration_session', 'Edit calibration session')}
-              onClick={handleEditCalibrationSession}
-              isDisabled={isStarted}
-            />
-          </div>
-        </div>
-        <div className={css(listHeaderContainer({ width: listRef?.current?.clientWidth, mediumScreen, mobileScreen }))}>
-          <p>{t('ratings_period', 'Ratings', { period })}</p>
-          <ListView active={activeList} setActive={(active) => setActiveList(active)} ref={listRef} />
-        </div>
-        <Line styles={lineStyles} />
-        {activeList !== ActiveList.GRAPH ? (
-          <ColleaguesReviews
-            data={data}
-            activeList={activeList}
-            key={activeList}
-            styles={activeList === ActiveList.TABLE ? tableStyles({ mobileScreen }) : {}}
-          />
-        ) : (
-          <TileWrapper customStyle={tileStyles}>
-            <Graph
-              title={t('calibration_submission', 'Calibration submission', { year: '2021' })}
-              currentData={{
-                title: '2022',
-                ratings: {
-                  [Rating.OUTSTANDING]: 30,
-                  [Rating.GREAT]: 20,
-                  [Rating.SATISFACTORY]: 50,
-                  [Rating.BELOW_EXPECTED]: 70,
-                },
-              }}
-            />
-          </TileWrapper>
-        )}
+    <>
+      <div className={css(listHeaderContainer({ width: listRef?.current?.clientWidth, mediumScreen, mobileScreen }))}>
+        <p>{t('ratings_period', 'Ratings', { period })}</p>
+        <ListView active={activeList} setActive={(active) => setActiveList(active)} ref={listRef} />
       </div>
+      <Line styles={lineStyles} />
+      {activeList !== ActiveList.GRAPH ? (
+        <ColleaguesReviews
+          data={data}
+          activeList={activeList}
+          key={activeList}
+          styles={activeList === ActiveList.TABLE ? tableStyles({ mobileScreen }) : {}}
+        />
+      ) : (
+        <TileWrapper customStyle={tileStyles}>
+          <Graph
+            title={t('calibration_submission', 'Calibration submission', { year: '2021' })}
+            currentData={{
+              title: '2022',
+              ratings: {
+                [Rating.OUTSTANDING]: 30,
+                [Rating.GREAT]: 20,
+                [Rating.SATISFACTORY]: 50,
+                [Rating.BELOW_EXPECTED]: 70,
+              },
+            }}
+          />
+        </TileWrapper>
+      )}
       {isStarted && <Footer ref={bottomPanelRef} onCancel={handleCancellation} onSave={handleSave} />}
-    </div>
+    </>
   );
 };
 
-const widgetContainerStyles: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => ({
-  display: 'flex',
-  flexDirection: mobileScreen ? 'column' : 'row',
-  gap: '8px',
-  marginBottom: '56px',
-});
 const lineStyles: Rule = {
   marginTop: '16px',
   marginBottom: '8px',
@@ -267,13 +222,5 @@ const listHeaderContainer: CreateRule<{ width: undefined | number; mediumScreen:
         margin: 0,
       },
     } as Styles);
-
-const contentBlockStyle: CreateRule<{ height: number | undefined }> = ({ height }) => {
-  if (height) {
-    return { paddingBottom: `${height}px` };
-  }
-
-  return {};
-};
 
 export default CalibrationSession;

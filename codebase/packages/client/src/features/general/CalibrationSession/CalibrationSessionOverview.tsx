@@ -6,7 +6,7 @@ import { Page } from 'pages';
 import { useTranslation } from 'components/Translation';
 import { ListView } from './components/ListView';
 import { Line } from 'components/Line';
-import { DownloadReport, RatingsSubmitted, CalibrationsCompleted, RatingsChange, Widget } from './widgets';
+import { RatingsSubmitted, CalibrationsCompleted, RatingsChange, Widget } from './widgets';
 import { Filter } from './components/Filter';
 import ColleaguesReviews from './components/ColleaguesReviews';
 import Graph from 'components/Graph';
@@ -122,7 +122,7 @@ const CalibrationSessionOverview = () => {
       <div>
         <Filter withDateFilter setPeriod={(active) => setPeriod(active)} />
         <div className={css(widgetContainerStyles)}>
-          <DownloadReport />
+          <Widget title={t('download_report', 'Download report')} graphics={'download'} onClick={console.log} />
           <Widget
             title={t('calibration_sessions', 'Calibration sessions')}
             graphics={'chart'}
