@@ -1,9 +1,9 @@
 import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Rule, useStyle } from '@pma/dex-wrapper';
-import { ReviewsActions, SchemaActions, getAllReviews, getColleaguesSchemas } from '@pma/store';
+import { ReviewsActions, SchemaActions, getAllReviews, getColleaguesSchemas, TimelineActions } from '@pma/store';
 
-import { useTenant } from 'features/general/Permission';
+import { useTenant, Tenant } from 'features/general/Permission';
 import useDispatch from 'hooks/useDispatch';
 import ColleagueInfo from 'components/ColleagueInfo';
 import { Accordion, BaseAccordion, ExpandButton, Panel, Section } from 'components/Accordion';
@@ -13,7 +13,6 @@ import { useTranslation } from 'components/Translation';
 import { ActionStatus, ReviewType, Status } from 'config/enum';
 import { Buttons } from '../Buttons';
 import { ColleagueReview } from '../ColleagueReviews';
-import { Tenant } from 'utils';
 import { useSuccessModalContext } from '../../context/successModalContext';
 
 type Props = {
@@ -91,6 +90,7 @@ const ColleagueAction: FC<Props> = ({ status, colleague, onUpdate }) => {
       dispatch(ReviewsActions.getReviewByUuid({ uuid }));
     });
     cycleUuidList.forEach((cycleUuid) => {
+      dispatch(TimelineActions.getUserTimeline({ colleagueUuid: colleague.uuid, cycleUuid }));
       dispatch(
         SchemaActions.getColleagueSchema({
           colleagueUuid: colleague.uuid,

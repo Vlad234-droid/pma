@@ -21,6 +21,7 @@ export const getTimelineEpic: Epic = (action$, _, { api }) =>
               }),
               getTimeline.success({
                 colleagueUuid: payload.colleagueUuid,
+                cycleUuid: payload.cycleUuid,
                 success: response.success,
                 data: response.data,
               }),
@@ -29,6 +30,7 @@ export const getTimelineEpic: Epic = (action$, _, { api }) =>
           return of(
             getTimeline.success({
               colleagueUuid: payload.colleagueUuid,
+              cycleUuid: payload.cycleUuid,
               success: response.success,
               data: response.data,
             }),
@@ -54,6 +56,7 @@ export const getUserTimelineEpic: Epic = (action$, _, { api }) =>
           return of(
             getUserTimeline.success({
               colleagueUuid: payload.colleagueUuid,
+              cycleUuid: payload.cycleUuid,
               success: response.success,
               data: response.data,
             }),

@@ -15,6 +15,7 @@ const generateTimeline = (config?: Config) => {
   const timeline: Timeline = {
     code: 'mocked_code',
     colleagueCycleUuid: 'mocked_colleague_cycle_id',
+    cycleUuid: 'mocked_cycle_id',
     description: 'mocked_description',
     endTime: dateToIso(new Date()),
     reviewType: config?.reviewType || ReviewType.OBJECTIVE,

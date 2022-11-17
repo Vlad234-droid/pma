@@ -16,6 +16,7 @@ export type TimelineStatistics = {
 export type Timeline = {
   code: string;
   colleagueCycleUuid: string;
+  cycleUuid: string;
   description: string;
   endTime: string;
   reviewType: ReviewType;

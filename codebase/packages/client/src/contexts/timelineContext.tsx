@@ -23,7 +23,7 @@ const TimelineContext = createContext<TimelineData>(defaultData);
 
 export const TimelineProvider: FC = ({ children }) => {
   const colleagueUuid = useSelector(colleagueUUIDSelector);
-  const userTimelines: Timeline[] = useSelector(userTimelineSelector(colleagueUuid));
+  const userTimelines: Timeline[] = useSelector(userTimelineSelector(colleagueUuid, 'CURRENT'));
   const timelines = userTimelines.map(({ lastUpdatedTime, statistics, ...rest }) => ({
     ...rest,
   }));
