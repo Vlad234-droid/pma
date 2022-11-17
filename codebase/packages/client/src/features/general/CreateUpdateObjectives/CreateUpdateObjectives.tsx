@@ -51,7 +51,6 @@ const CreateUpdateObjectives: FC<Props> = ({ onClose, editNumber, useSingleStep,
 
   useEffect(() => {
     if (!isSuccess && saved) {
-      dispatch(ReviewsActions.updateReviewMeta({ saved: false }));
       onClose();
     }
   }, [saved]);
@@ -141,6 +140,10 @@ const CreateUpdateObjectives: FC<Props> = ({ onClose, editNumber, useSingleStep,
   useEffect(() => {
     dispatch(ReviewsActions.getReviews({ pathParams }));
     dispatch(SchemaActions.getSchema({ colleagueUuid }));
+
+    return () => {
+      dispatch(ReviewsActions.updateReviewMeta({ saved: false }));
+    };
   }, []);
 
   const handlePrev = () => setCurrentNumber((current) => Math.max(--current, 1));
