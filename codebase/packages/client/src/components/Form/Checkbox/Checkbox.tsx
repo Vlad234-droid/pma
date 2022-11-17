@@ -38,7 +38,7 @@ const inputStyle: CreateRule<{ indeterminate: boolean; checked?: boolean }> =
     display: 'inline-block',
     position: 'relative',
     cursor: 'pointer',
-    ...(indeterminate
+    ...(indeterminate && checked
       ? {
           backgroundColor: theme.colors.tescoBlue,
           ':before': {

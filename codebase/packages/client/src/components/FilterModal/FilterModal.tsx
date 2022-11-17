@@ -194,9 +194,9 @@ const SelectAll: FC<SelectAllProps & FieldValues> = ({ onChange, values, descrip
         id={`${type}_${description}`}
         onChange={onChange}
         checked={values[type][index].checked ?? false}
-        indeterminate={values[type]?.includes(description) ?? false}
+        indeterminate={true}
       />
-      <span className={css(checkBoxItemTitle)}>
+      <span className={css(selectAllStyles)}>
         <Trans>{description}</Trans>
       </span>
     </>
@@ -271,8 +271,17 @@ const wrapperContainer: Rule = () => ({
 const checkBoxItemTitle: Rule = ({ theme }) => {
   return {
     fontStyle: 'normal',
-    fontWeight: 'bold',
-    fontSize: '16px',
+    fontWeight: 'normal',
+    fontSize: theme.font.fixed.f16.fontSize,
+    lineHeight: '20px',
+    color: theme.colors.base,
+    marginLeft: '16px',
+  };
+};
+const selectAllStyles: Rule = ({ theme }) => {
+  return {
+    fontWeight: theme.font.weight.bold,
+    fontSize: theme.font.fixed.f16.fontSize,
     lineHeight: '20px',
     color: theme.colors.link,
     marginLeft: '16px',
