@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Rule, useStyle } from '@pma/dex-wrapper';
+import { Rule, Styles, useStyle } from '@pma/dex-wrapper';
 import { getReportByType } from '@pma/store';
 import { useSelector } from 'react-redux';
 
@@ -38,14 +38,12 @@ export const ColleaguesStatistics: FC<{ type: ReportPage }> = ({ type }) => {
                 />
                 <div className={css(anniversaryInfo)}>
                   <span className={css(infoStatistics)}>
-                    {isSingular(totalCount)
-                      ? t('total_colleague', 'Colleague', { totalCount })
-                      : t('total_colleagues', 'Colleagues', { totalCount })}
+                    <span>{totalCount}</span>{' '}
+                    {isSingular(totalCount) ? t('colleague', 'Colleague') : t('colleagues', 'Colleagues')}
                   </span>
                   <span className={css(infoStatistics, { marginTop: '6px' })}>
-                    {isSingular(totalCount)
-                      ? t('total_review_completed', 'Review completed', { completed })
-                      : t('total_reviews_completed', 'Reviews completed', { completed })}
+                    <span>{completed}</span>{' '}
+                    {isSingular(completed) ? t('review_completed', 'Review completed') : t('co', 'Reviews completed')}
                   </span>
                 </div>
               </>
@@ -69,12 +67,16 @@ export const ColleaguesStatistics: FC<{ type: ReportPage }> = ({ type }) => {
   );
 };
 
-const infoStatistics: Rule = ({ theme }) => ({
-  //@ts-ignore
-  color: theme.colors.lightPurple,
-  fontSize: theme.font.fixed.f16.fontSize,
-});
-
+const infoStatistics: Rule = ({ theme }) =>
+  ({
+    color: theme.colors.base,
+    fontSize: theme.font.fixed.f16.fontSize,
+    fontWeight: theme.font.weight.bold,
+    '& > span': {
+      fontSize: '20px',
+      color: theme.colors.link,
+    },
+  } as Styles);
 const anniversaryInfo: Rule = {
   display: 'flex',
   flexDirection: 'column',

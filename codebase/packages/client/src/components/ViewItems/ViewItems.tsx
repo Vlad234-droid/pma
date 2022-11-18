@@ -16,9 +16,9 @@ const ViewItems: FC<Props> = ({ onClose, items = [] }) => {
   const { t } = useTranslation();
 
   return (
-    <div className={css({ marginBottom: '10px' })} data-test-id={APPLIED_WRAPPER}>
+    <div className={css(itemsContainer)} data-test-id={APPLIED_WRAPPER}>
       <div className={css(appliedWrapper)}>
-        <span>{t('filters_applied', 'Filters applied')}:</span>
+        <span className={css({ whiteSpace: 'nowrap' })}>{t('filters_applied', 'Filters applied')}:</span>
         <div className={css(flexStyle)}>
           {items.map((item) => (
             <div key={item} className={css(appliedItems)}>
@@ -35,6 +35,11 @@ const ViewItems: FC<Props> = ({ onClose, items = [] }) => {
       </div>
     </div>
   );
+};
+
+const itemsContainer: Rule = {
+  marginBottom: '10px',
+  overflow: 'auto',
 };
 
 const appliedWrapper: Rule = ({ theme }) => {
@@ -80,6 +85,7 @@ const filteredTitle: Rule = ({ theme }) => {
     fontSize: '16px',
     lineHeight: '20px',
     color: theme.colors.base,
+    whiteSpace: 'nowrap',
   };
 };
 

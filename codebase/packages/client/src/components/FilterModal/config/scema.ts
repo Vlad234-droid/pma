@@ -3,14 +3,16 @@ import * as Yup from 'yup';
 export const schema = (initialValues) =>
   Yup.object()
     .shape(
-      initialValues.reduce(
-        (acc: Yup.AnyObjectSchema, { type }) => ({
+      Object.keys(initialValues).reduce(
+        (acc, item) => ({
           ...acc,
-          [type]: Yup.array().of(
+          [item]: Yup.array().of(
             Yup.object().shape({
-              description: Yup.string(),
+              name: Yup.string(),
               id: Yup.string().notRequired(),
               checked: Yup.boolean(),
+              uuid: Yup.string().notRequired(),
+              code: Yup.string().notRequired(),
             }),
           ),
         }),

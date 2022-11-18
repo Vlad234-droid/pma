@@ -1,28 +1,58 @@
-export type FilterProps = Array<{ type: string; items: Array<{ description: string }> }>;
-
-export const initialValues: FilterProps = [
-  {
-    type: 'Work level',
-    items: [
-      { description: 'Select All' },
-      { description: 'Colleagues' },
-      { description: 'Work level 1' },
-      { description: 'Work level 2' },
-      { description: 'Work level 3' },
-    ],
-  },
-  {
-    type: 'Operational areas',
-    items: [
-      { description: 'Select All' },
-      { description: 'Objectives' },
-      { description: 'PDP' },
-      { description: 'Mid-year Review' },
-      { description: 'End-year Review' },
-    ],
-  },
-  {
-    type: 'Gender',
-    items: [{ description: 'Select All' }, { description: 'Male' }, { description: 'Female' }],
-  },
-];
+export const defaultValues = {
+  functions: [
+    {
+      uuid: '10000000-0000-0000-0000-000000000002',
+      name: 'FUN_2',
+    },
+    {
+      uuid: '10000000-0000-0000-0000-000000000001',
+      name: 'FUN',
+    },
+  ],
+  departments: [
+    {
+      uuid: '10000000-0000-0000-0000-000000000001',
+      name: 'DEP_1',
+    },
+    {
+      uuid: '10000000-0000-0000-0000-000000000002',
+      name: 'DEP_2',
+    },
+  ],
+  countries: [
+    {
+      name: 'The United Kingdom of Great Britain and Northern Ireland',
+      code: 'GB',
+    },
+  ],
+  'legal-entities': [
+    {
+      uuid: '10000000-0000-0000-0000-000000000002',
+      name: 'LE2',
+    },
+    {
+      uuid: '10000000-0000-0000-0000-000000000001',
+      name: 'LE1',
+    },
+  ],
+  'business-groups': [
+    {
+      uuid: '10000000-0000-0000-0000-000000000002',
+      name: 'BG2',
+    },
+    {
+      uuid: '10000000-0000-0000-0000-000000000001',
+      name: 'BG1',
+    },
+  ],
+  'work-levels': [
+    {
+      name: 'Work Level 4',
+      code: 'WL4',
+    },
+    {
+      name: 'Work Level 3',
+      code: 'WL3',
+    },
+  ],
+};

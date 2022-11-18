@@ -1,18 +1,11 @@
 import { useFieldArray } from 'react-hook-form';
-
 export const useFieldsArray = (defaultValues, control) =>
-  defaultValues.reduce((acc, { type }) => {
+  Object.keys(defaultValues).map((name) => {
     const { fields, update, replace } = useFieldArray({
       control,
-      name: type,
+      name,
     });
-    return [
-      ...acc,
-      {
-        fields,
-        type,
-        update,
-        replace,
-      },
-    ];
-  }, []);
+    return { fields, type: name, update, replace };
+  });
+
+export type useFieldsType = ReturnType<typeof useFieldsArray>;

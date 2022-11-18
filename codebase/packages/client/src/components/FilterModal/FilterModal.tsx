@@ -12,32 +12,16 @@ import { TileWrapper } from 'components/Tile';
 import { Checkbox } from 'components/Form';
 import Spinner from 'components/Spinner';
 
+import { FilterType, Props, SelectAllProps } from './types';
+import { useFieldsArray, useFieldsType } from './hooks';
+import { prepareDefaultValues } from './utils';
+import { schema } from './config';
 import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
 import useEventListener from 'hooks/useEventListener';
-import { useFieldsArray } from './hooks';
-import { FilterProps, schema } from './config';
-
-enum FilterType {
-  SELECT_ALL = 'Select All',
-}
-
-type FilterModalProps = {
-  onClose: () => void;
-  initialValues: FilterProps;
-  onSubmit: (data: FilterProps) => void;
-  savedFilter?: any;
-  loading?: boolean;
-};
-type SelectAllProps = {
-  onChange: (e: any, value?: string) => any;
-  description: string;
-  type: string;
-  index: string | number;
-};
 
 export const FILTER_WRAPPER = 'filter-wrapper';
 
-const FilterModal: FC<FilterModalProps> = ({ onClose, initialValues, onSubmit, savedFilter, loading = false }) => {
+const FilterModal: FC<Props> = ({ onClose, defaultValues, onSubmit, savedFilter, loading = false }) => {
   const { css } = useStyle();
 
   const ref = useRef<HTMLDivElement | null>(null);
@@ -53,16 +37,8 @@ const FilterModal: FC<FilterModalProps> = ({ onClose, initialValues, onSubmit, s
 
   const methods = useFormWithCloseProtection({
     mode: 'onChange',
-    resolver: yupResolver<Yup.AnyObjectSchema>(schema(initialValues)),
-    defaultValues: savedFilter
-      ? savedFilter
-      : initialValues.reduce(
-          (acc, { type, items }) => ({
-            ...acc,
-            [type]: items.map(({ description }) => ({ description, checked: false })),
-          }),
-          {},
-        ),
+    resolver: yupResolver<Yup.AnyObjectSchema>(schema(defaultValues)),
+    defaultValues: prepareDefaultValues({ defaultValues, savedFilter }),
   });
 
   const {
@@ -74,15 +50,15 @@ const FilterModal: FC<FilterModalProps> = ({ onClose, initialValues, onSubmit, s
   } = methods;
   const values = getValues();
 
-  const fieldsArray = useFieldsArray(initialValues, control);
+  const fieldsArray: useFieldsType = useFieldsArray(defaultValues, control);
 
   useEffect(() => {
     const watchAll = watch((data) => {
       for (const key in values) {
         if (data[key].every(({ checked }) => checked)) return;
         if (data[key].slice(1).every(({ checked }) => checked)) {
-          const { update } = fieldsArray.find(({ type }) => type === key);
-          update(0, { description: FilterType.SELECT_ALL, checked: true });
+          const methods = fieldsArray.find(({ type }) => type === key);
+          methods && methods.update(0, { name: FilterType.SELECT_ALL, checked: true });
         }
       }
       // dispatch(action(data))
@@ -92,9 +68,7 @@ const FilterModal: FC<FilterModalProps> = ({ onClose, initialValues, onSubmit, s
     };
   }, [watch]);
 
-  const handleSubmitData = (data) => {
-    onSubmit(data);
-  };
+  const handleSubmitData = (data) => onSubmit(data);
 
   return (
     <>
@@ -121,23 +95,25 @@ const FilterModal: FC<FilterModalProps> = ({ onClose, initialValues, onSubmit, s
                       searchValue &&
                       fields.map((item) => ({
                         ...item,
-                        hidden: !item.description.toLowerCase().includes(searchValue.toLowerCase()),
+                        //@ts-ignore
+                        hidden: !item.name.toLowerCase().includes(searchValue.toLowerCase()),
                       }));
                     return (
                       <>
                         <div className={css(titleStyle)}>{type}</div>
                         {Field}
                         <TileWrapper boxShadow={false} customStyle={tileStyles}>
-                          {(filteredFields || fields).map(({ description, id, hidden = false }, index) => {
+                          {/*//@ts-ignore*/}
+                          {(filteredFields || fields).map(({ name, id, hidden = false }, index) => {
                             return (
                               <Fragment key={id}>
-                                {description === FilterType.SELECT_ALL ? (
+                                {name === FilterType.SELECT_ALL ? (
                                   <label className={css(labelStyle, { display: hidden ? 'none' : 'flex' })}>
                                     <SelectAll
                                       onChange={({ target: { _, checked } }) =>
                                         replace(fields.map(({ ...rest }) => ({ ...rest, checked })))
                                       }
-                                      description={description}
+                                      name={name}
                                       type={type}
                                       values={values}
                                       index={index}
@@ -146,16 +122,16 @@ const FilterModal: FC<FilterModalProps> = ({ onClose, initialValues, onSubmit, s
                                 ) : (
                                   <label className={css(labelStyle, { display: hidden ? 'none' : 'flex' })} key={id}>
                                     <Checkbox
-                                      id={`${type}_${description}`}
+                                      id={`${type}_${name}`}
                                       name={type}
                                       checked={values[type][index].checked ?? false}
                                       onChange={({ target: { _, checked } }) => {
-                                        update(index, { description, checked });
-                                        !checked && update(0, { description: FilterType.SELECT_ALL, checked });
+                                        update(index, { ...fields[index], checked });
+                                        !checked && update(0, { name: FilterType.SELECT_ALL, checked });
                                       }}
                                     />
                                     <span className={css(checkBoxItemTitle)}>
-                                      <Trans>{description}</Trans>
+                                      <Trans>{name}</Trans>
                                     </span>
                                   </label>
                                 )}
@@ -185,19 +161,19 @@ const FilterModal: FC<FilterModalProps> = ({ onClose, initialValues, onSubmit, s
   );
 };
 
-const SelectAll: FC<SelectAllProps & FieldValues> = ({ onChange, values, description, type, index }) => {
+const SelectAll: FC<SelectAllProps & FieldValues> = ({ onChange, values, name, type, index }) => {
   const { css } = useStyle();
   return (
     <>
       <Checkbox
         name={type}
-        id={`${type}_${description}`}
+        id={`${type}_${name}`}
         onChange={onChange}
         checked={values[type][index].checked ?? false}
         indeterminate={true}
       />
       <span className={css(selectAllStyles)}>
-        <Trans>{description}</Trans>
+        <Trans>{name}</Trans>
       </span>
     </>
   );

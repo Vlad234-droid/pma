@@ -717,8 +717,6 @@
   "total_reviews_submitted_&_approved_by_manager": "Total reviews submitted & approved by manager",
   "total_reviews_submitted_approved_and_not_approved": "Total reviews submitted (approved and not approved)",
   "complete_all_fields": "Please complete all fields, before moving on.",
-  "total_colleague": "{{ totalCount }} Colleague",
-  "total_colleagues": "{{ totalCount }} Colleagues",
   "review_completed": "Review completed",
   "reviews_completed": "Reviews completed",
   "filters_applied": "Filters applied"

@@ -9,7 +9,7 @@ import { useTranslation } from 'components/Translation';
 import { ColleaguesCount } from 'components/ColleaguesCount';
 
 import { ColleaguesStatistics } from 'features/general/Report/widgets';
-import FilterModal, { initialValues } from 'components/FilterModal';
+import FilterModal, { defaultValues } from 'components/FilterModal';
 import StatisticsReviews from 'features/general/ColleaguesReviews';
 import { FilterOption } from 'features/general/Shared';
 import { buildPath } from 'features/general/Routes';
@@ -214,7 +214,7 @@ const ReportStatistics = () => {
             >
               {({ onClose }) => (
                 <FilterModal
-                  initialValues={initialValues}
+                  defaultValues={defaultValues}
                   onClose={onClose}
                   savedFilter={savedFilter}
                   onSubmit={(data) => {

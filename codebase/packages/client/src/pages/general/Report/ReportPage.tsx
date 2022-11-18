@@ -14,11 +14,11 @@ import { HoverContainer } from 'components/HoverContainer';
 import { HoverMessage } from 'components/HoverMessage';
 import UnderlayModal from 'components/UnderlayModal';
 import { IconButton } from 'components/IconButton';
-import FilterModal from 'components/FilterModal';
+import FilterModal, { defaultValues } from 'components/FilterModal';
 import ViewItems from 'components/ViewItems';
 import { Select } from 'components/Form';
 
-import { getCurrentValue, getFieldOptions, initialValues } from 'features/general/Report/config';
+import { getCurrentValue, getFieldOptions } from 'features/general/Report/config';
 import { getCurrentYear, getNextYear, getPrevYear } from 'utils/date';
 import { useTenant } from 'features/general/Permission';
 import useQueryString from 'hooks/useQueryString';
@@ -50,7 +50,7 @@ const ReportPage: FC = () => {
   const [focus, setFocus] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [searchValueFilterOption, setSearchValueFilterOption] = useState('');
-  const [filterModal, setFilterModal] = useState<boolean>(false);
+  const [isVisibleFilterModal, setFilterModal] = useState<boolean>(false);
   const [year, setYear] = useState<string>('');
   const [tiles, setTiles] = useState<Array<string>>([]);
   const [savedFilter, setSavedFilter] = useState<any>(null);
@@ -163,14 +163,14 @@ const ReportPage: FC = () => {
             onEditPress={() => setShowModal(true)}
           />
 
-          {filterModal && (
+          {isVisibleFilterModal && (
             <UnderlayModal
               onClose={() => setFilterModal(false)}
               styles={{ maxWidth: !mobileScreen ? '500px' : '100%' }}
             >
               {({ onClose }) => (
                 <FilterModal
-                  initialValues={initialValues}
+                  defaultValues={defaultValues}
                   savedFilter={savedFilter}
                   onClose={onClose}
                   onSubmit={(data) => {
