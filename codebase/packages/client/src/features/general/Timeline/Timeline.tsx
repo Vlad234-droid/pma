@@ -34,7 +34,7 @@ const Timeline: FC<{ colleagueUuid: string }> = ({ colleagueUuid }) => {
   const isAnniversary = useSelector(isAnniversaryTimelineType(colleagueUuid, currentCycle));
 
   const options = useMemo(() => {
-    return [...cycles].reverse().map(({ endTime, startTime, uuid }) => ({
+    return cycles.map(({ endTime, startTime, uuid }) => ({
       value: uuid,
       label: `${formatDateStringFromISO(startTime, 'yyyy')} - ${formatDateStringFromISO(endTime, 'yyyy')}`,
     }));
