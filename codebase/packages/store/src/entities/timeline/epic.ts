@@ -50,7 +50,7 @@ export const getTimelineEpic: Epic = (action$, _, { api }) =>
 export const getUserTimelineEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
     filter(isActionOf(getUserTimeline.request)),
-    switchMap(({ payload }) =>
+    mergeMap(({ payload }) =>
       from(api.getTimeline(payload)).pipe(
         mergeMap((response: any) => {
           return of(
