@@ -155,6 +155,7 @@ const ObjectiveForm: FC<Props> = ({
                 <div className={css(buttonWrapperStyle({ mobileScreen }))}>
                   {!editMode ? (
                     <Button
+                      isDisabled={!isCurrentValid}
                       styles={[buttonWhiteStyle]}
                       onPress={() =>
                         onSaveDraft(formValues.data.filter(({ properties }) => checkIsExistValue(properties)))
