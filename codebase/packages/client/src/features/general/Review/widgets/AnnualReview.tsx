@@ -2,7 +2,12 @@ import React, { FC, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Rule, useStyle } from '@pma/dex-wrapper';
-import { getTimelineByCodeSelector, isAnniversaryTimelineType, uuidCompareSelector } from '@pma/store';
+import {
+  colleagueCurrentCycleSelector,
+  getTimelineByCodeSelector,
+  isAnniversaryTimelineType,
+  uuidCompareSelector,
+} from '@pma/store';
 
 import { useTenant } from 'features/general/Permission';
 import { buildPath } from 'features/general/Routes';
@@ -31,8 +36,9 @@ const AnnualReview: FC<Props> = ({ colleagueUuid }) => {
   const navigate = useNavigate();
   const { pathname, state } = useLocation();
   const isUserView = useSelector(uuidCompareSelector(colleagueUuid));
-  const review = useSelector(getTimelineByCodeSelector(ReviewType.EYR, colleagueUuid));
-  const isAnniversary = useSelector(isAnniversaryTimelineType(colleagueUuid));
+  const currentCycle = useSelector(colleagueCurrentCycleSelector(colleagueUuid));
+  const review = useSelector(getTimelineByCodeSelector(ReviewType.EYR, colleagueUuid, currentCycle));
+  const isAnniversary = useSelector(isAnniversaryTimelineType(colleagueUuid, currentCycle));
 
   const { summaryStatus, startTime, endTime, lastUpdatedTime } = review || {};
 

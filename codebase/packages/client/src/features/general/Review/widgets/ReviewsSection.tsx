@@ -1,7 +1,12 @@
 import React, { FC } from 'react';
 import { useSelector } from 'react-redux';
 import { Rule, useStyle } from '@pma/dex-wrapper';
-import { isAnniversaryTimelineType, timelineTypesAvailabilitySelector, uuidCompareSelector } from '@pma/store';
+import {
+  colleagueCurrentCycleSelector,
+  isAnniversaryTimelineType,
+  timelineTypesAvailabilitySelector,
+  uuidCompareSelector,
+} from '@pma/store';
 
 import { AnnualReviewWidget, MidYearReviewWidget, YearEndReviewWidget } from './';
 import { Trans } from 'components/Translation';
@@ -15,9 +20,9 @@ type Props = {
 export const ReviewsSection: FC<Props> = ({ colleagueUuid }) => {
   const { css } = useStyle();
   const isUserView = useSelector(uuidCompareSelector(colleagueUuid));
-
-  const timelineTypes = useSelector(timelineTypesAvailabilitySelector(colleagueUuid)) || {};
-  const isAnniversary = useSelector(isAnniversaryTimelineType(colleagueUuid));
+  const currentCycle = useSelector(colleagueCurrentCycleSelector(colleagueUuid));
+  const timelineTypes = useSelector(timelineTypesAvailabilitySelector(colleagueUuid, currentCycle)) || {};
+  const isAnniversary = useSelector(isAnniversaryTimelineType(colleagueUuid, currentCycle));
   const hasMYR = timelineTypes[ReviewType.MYR];
   const hasEYR = timelineTypes[ReviewType.EYR];
 

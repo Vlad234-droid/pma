@@ -6,7 +6,6 @@ import {
   getTimelineSelector,
   TimelineActions,
   timelinesMetaSelector,
-  userCurrentCycleTypeSelector,
   UserActions,
   uuidCompareSelector,
   ReviewsActions,
@@ -28,14 +27,14 @@ const Timeline: FC<{ colleagueUuid: string }> = ({ colleagueUuid }) => {
   const dispatch = useDispatch();
   const isUserView = useSelector(uuidCompareSelector(colleagueUuid));
   const { loading } = useSelector(timelinesMetaSelector);
-  const { descriptions, startDates, summaryStatuses, types } = useSelector(getTimelineSelector(colleagueUuid)) || {};
   const cycles = useSelector(colleaguePerformanceCyclesSelector);
   const currentCycle = useSelector(colleagueCurrentCycleSelector(colleagueUuid));
-  const cycleType = useSelector(userCurrentCycleTypeSelector);
-  const isAnniversary = useSelector(isAnniversaryTimelineType(colleagueUuid));
+  const { descriptions, startDates, summaryStatuses, types } =
+    useSelector(getTimelineSelector(colleagueUuid, currentCycle)) || {};
+  const isAnniversary = useSelector(isAnniversaryTimelineType(colleagueUuid, currentCycle));
 
   const options = useMemo(() => {
-    return [...cycles].reverse().map(({ endTime, startTime, uuid }) => ({
+    return cycles.map(({ endTime, startTime, uuid }) => ({
       value: uuid,
       label: `${formatDateStringFromISO(startTime, 'yyyy')} - ${formatDateStringFromISO(endTime, 'yyyy')}`,
     }));
@@ -43,7 +42,7 @@ const Timeline: FC<{ colleagueUuid: string }> = ({ colleagueUuid }) => {
 
   useEffect(() => {
     dispatch(TimelineActions.getTimeline({ colleagueUuid, cycleUuid: currentCycle }));
-  }, [cycleType]);
+  }, [currentCycle]);
 
   useEffect(() => {
     if (currentCycle !== 'CURRENT') {
