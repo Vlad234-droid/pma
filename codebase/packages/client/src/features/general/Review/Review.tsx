@@ -76,13 +76,12 @@ const MyReview: FC<Props> = ({ reviewType, onClose }) => {
   const { loading: schemaLoading, loaded: schemaLoaded } = useSelector(schemaMetaSelector);
   const schema = useSelector(getReviewSchema(reviewType));
 
-  const timelineReview = useSelector(getTimelineByReviewTypeSelector(reviewType, USER.current)) || ({} as any);
-
-  const status = Object.keys(timelineReview?.statistics || { STARTED: 1 })[0] as Status;
+  const timelineReview =
+    useSelector(getTimelineByReviewTypeSelector(reviewType, USER.current, currentCycle)) || ({} as any);
 
   const readonly =
     (uuid && !isUserView) ||
-    [Status.WAITING_FOR_APPROVAL, Status.APPROVED].includes(status) ||
+    [Status.WAITING_FOR_APPROVAL, Status.APPROVED].includes(review.status) ||
     colleagueCycle?.status === Status.COMPLETED;
 
   const { components = [] as Component[] } = schema;
