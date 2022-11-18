@@ -17,7 +17,7 @@ import { useSuccessModalContext } from '../../context/successModalContext';
 
 type Props = {
   status: ActionStatus;
-  onUpdate: (code: string, data: any) => void;
+  onUpdate: (data: any) => void;
   colleague: any;
 };
 
@@ -73,7 +73,7 @@ const ColleagueAction: FC<Props> = ({ status, colleague, onUpdate }) => {
             return { number, properties };
           }),
       };
-      onUpdate(reviewType, data);
+      onUpdate(data);
       setIsOpenSuccessModal(true);
       setStatusHistory({ prevStatus, status, type: reviewType });
     },

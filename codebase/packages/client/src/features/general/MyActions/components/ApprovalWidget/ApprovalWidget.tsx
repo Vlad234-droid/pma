@@ -15,6 +15,7 @@ type Props = {
   isDisabled: boolean;
   reviews: any;
   onSave: () => void;
+  onUpdate: (data: any) => void;
 };
 
 enum Action {
@@ -33,8 +34,7 @@ const statusMap: Record<Action, Record<Status.WAITING_FOR_APPROVAL | Status.WAIT
   },
 };
 
-const ApprovalWidget: FC<Props> = ({ isDisabled, reviews, onSave }) => {
-  const dispatch = useDispatch();
+const ApprovalWidget: FC<Props> = ({ isDisabled, reviews, onSave, onUpdate }) => {
   const { t } = useTranslation();
   const tenant = useTenant();
   const { setOpened: setIsOpenSuccessModal, setStatusHistory } = useSuccessModalContext();
@@ -124,25 +124,16 @@ const ApprovalWidget: FC<Props> = ({ isDisabled, reviews, onSave }) => {
             (status) => timeline?.statistics?.[status],
           );
           for (const allowedStatus of allowedStatuses) {
-            const update = {
-              pathParams: {
-                colleagueUuid: colleague.uuid,
-                approverUuid: colleagueUuid,
-                code: timeline.code,
-                cycleUuid: 'CURRENT',
-                status: statusMap[action][allowedStatus],
-              },
-              data: {
-                ...(reasons ? { reason: reasons[index] as string } : {}),
-                status: statusMap[action][allowedStatus],
-                colleagueUuid: colleague.uuid,
-                reviews: colleague.reviews.filter(
-                  ({ status, tlPointUuid }) => allowedStatus === status && tlPointUuid === timeline.uuid,
-                ),
-              },
-            };
-            // @ts-ignore
-            dispatch(ReviewsActions.updateReviewStatus(update));
+            onUpdate({
+              ...(reasons ? { reason: reasons[index] as string } : {}),
+              code: timeline.code,
+              cycleUuid: 'CURRENT',
+              status: statusMap[action][allowedStatus],
+              colleagueUuid: colleague.uuid,
+              reviews: colleague.reviews.filter(
+                ({ status, tlPointUuid }) => allowedStatus === status && tlPointUuid === timeline.uuid,
+              ),
+            });
           }
         }
         // clean declines after submit
