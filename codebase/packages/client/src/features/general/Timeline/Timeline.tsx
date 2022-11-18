@@ -6,7 +6,6 @@ import {
   getTimelineSelector,
   TimelineActions,
   timelinesMetaSelector,
-  userCurrentCycleTypeSelector,
   UserActions,
   uuidCompareSelector,
   ReviewsActions,
