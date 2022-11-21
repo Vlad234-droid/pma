@@ -9,7 +9,6 @@ import { ReviewType, Status } from '@pma/client/src/config/enum';
 import { getColleagueSchema, getSchema, getSchemaWithColleaguePermission } from './actions';
 import { addStrategicObjectiveInForms, getPermittedForms, convertFormsJsonToObject } from '../../utils/formExpression';
 import { colleagueUUIDSelector } from '../../selectors';
-import { getColleagueMetadataByPerformanceCycle } from '@pma/api/src/rest';
 
 export const getSchemaEpic: Epic = (action$, state$, { api }) =>
   action$.pipe(

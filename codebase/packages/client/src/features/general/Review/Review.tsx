@@ -106,8 +106,13 @@ const MyReview: FC<Props> = ({ reviewType, onClose }) => {
 
   useEffect(() => {
     dispatch(ReviewsActions.getReviews({ pathParams: { colleagueUuid, cycleUuid: currentCycle } }));
-    dispatch(SchemaActions.getSchema({ colleagueUuid }));
   }, [currentCycle]);
+
+  useEffect(() => {
+    if (reviewLoaded) {
+      dispatch(SchemaActions.getSchema({ colleagueUuid }));
+    }
+  }, [reviewLoaded]);
 
   const handleSaveDraft = (data) => {
     dispatch(

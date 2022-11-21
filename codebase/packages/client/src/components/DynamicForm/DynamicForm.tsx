@@ -61,7 +61,12 @@ const DynamicForm: FC<Props> = ({ components, formValues, setValue, errors, pref
         if (type === FormType.TEXT) {
           return (
             <div className={css({ padding: 0, margin: 0 }, borderStyle)} key={id}>
-              <div className={css({ fontSize: '16px', lineHeight: '20px' }, onlyView ? markdownCustomStyle : {})}>
+              <div
+                className={css(
+                  { fontSize: '16px', lineHeight: '20px' },
+                  onlyView ? markdownCustomStyle : componentCustomStyle,
+                )}
+              >
                 <MarkdownRenderer source={text} />
               </div>
             </div>
@@ -179,6 +184,9 @@ const markdownCustomStyle: Rule = ({ theme }) =>
 const componentCustomStyle: Rule = {
   '& > div': {
     marginBottom: 0,
+  },
+  '& > p': {
+    paddingBottom: '8px',
   },
 } as Styles;
 
