@@ -55,9 +55,20 @@ export const getColleagueSchemaEpic: Epic = (action$, state$, { api }) =>
       from(api.getColleagueMetadataByPerformanceCycle({ colleagueUuid, cycleUuid, includeForms })).pipe(
         // @ts-ignore
         mergeMap(({ data: schema }) => {
+          const state = state$.value;
+          // @ts-ignore
+          const { reviews } = state?.managers?.data?.PENDING?.find(({ uuid }) => uuid === colleagueUuid) || {
+            reviews: [],
+          };
+          // @ts-ignore
+          const timelinePoint = (state?.timeline?.data?.[colleagueUuid]?.[cycleUuid] || []).find(
+            ({ reviewType }) => reviewType === 'OBJECTIVE',
+          );
+          const count = (reviews.filter(({ tlPointUuid }) => tlPointUuid === timelinePoint?.uuid) || []).length;
+
           const updatedForms: any[] = addStrategicObjectiveInForms(
             convertFormsJsonToObject(schema.forms.filter((form) => form)),
-            0,
+            count,
           );
           return of(
             getColleagueSchema.success({
