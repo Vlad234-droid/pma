@@ -36,8 +36,22 @@ export const getTimelineEpic: Epic = (action$, _, { api }) =>
             }),
           );
         }),
-        catchError((e) => {
-          const errors = e?.data?.errors;
+        catchError(({ status, data }) => {
+          if (status === 404) {
+            return of(
+              addModalError({
+                title: 'timeline_is_empty',
+                description: 'you_dont_have_access_to_pma',
+              }),
+              getTimeline.success({
+                colleagueUuid: payload.colleagueUuid,
+                cycleUuid: payload.cycleUuid,
+                success: data.success,
+                data: data.data,
+              }),
+            );
+          }
+          const errors = data?.errors;
           return concatWithErrorToast(
             of(getTimeline.failure(errors?.[0])),
             errorPayloadConverter({ ...errors?.[0], title: 'Timeline fetch error' }),
