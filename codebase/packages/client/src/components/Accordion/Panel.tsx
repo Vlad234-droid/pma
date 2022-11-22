@@ -1,8 +1,7 @@
-import React, { ReactNode, useRef, RefObject, CSSProperties, FC, useState, useEffect } from 'react';
+import React, { ReactNode, useRef, CSSProperties, FC, useState, useEffect } from 'react';
 import { useStyle, Rule } from '@pma/dex-wrapper';
 
 import useEventListener from 'hooks/useEventListener';
-
 import { AccordionConsumer, SectionConsumer } from './contexts';
 
 type PanelProps = {
@@ -10,13 +9,10 @@ type PanelProps = {
   role: 'region' | undefined;
   'aria-labelledby': string;
   'aria-hidden': true | undefined;
-  style: CSSProperties;
 };
 
 type RenderProps = {
-  updateHeight: () => void;
   expanded: boolean;
-  content: RefObject<any>;
   getPanelProps: (props?: { [key: string]: any }) => PanelProps;
 };
 
@@ -24,29 +20,14 @@ export type Props = {
   children: (renderProps: RenderProps) => ReactNode;
 };
 
-export const BasePanel = ({ children, ...baseRest }: Props) => {
-  const content = useRef<HTMLElement>(null);
-  const [height, setHeight] = useState<number>(0);
-
-  const updateHeight = () => {
-    content.current && setHeight(content.current.scrollHeight);
-  };
-
-  useEffect(() => {
-    updateHeight();
-  });
-
-  useEventListener('resize', updateHeight);
-
+export const BasePanel: FC<Props> = ({ children, ...baseRest }) => {
   return (
     <AccordionConsumer>
       {({ disableRegions }) => (
         <SectionConsumer>
-          {({ sectionId, expanded }) =>
-            children({
-              updateHeight,
+          {({ sectionId, expanded }) => {
+            return children({
               expanded,
-              content,
               getPanelProps: (props = {}) => ({
                 ...baseRest,
                 ...props,
@@ -54,26 +35,42 @@ export const BasePanel = ({ children, ...baseRest }: Props) => {
                 role: disableRegions ? undefined : 'region',
                 'aria-labelledby': `${sectionId}-header`,
                 'aria-hidden': expanded ? undefined : true,
-                style: { maxHeight: expanded ? `${height}px` : '0px' },
               }),
-            })
-          }
+            });
+          }}
         </SectionConsumer>
       )}
     </AccordionConsumer>
   );
 };
 
-const Panel: FC<{}> = ({ children, ...props }) => {
+const Panel: FC = ({ children, ...props }) => {
   const { css } = useStyle();
+  const content = useRef<HTMLDivElement>(null);
+  const [height, setHeight] = useState(0);
+
+  const updateHeight = () => {
+    const { scrollHeight } = content.current || {};
+    if (scrollHeight !== height) setHeight(scrollHeight || 0);
+  };
+
+  useEventListener('resize', updateHeight);
+
+  useEffect(() => {
+    updateHeight();
+  });
 
   return (
     <BasePanel {...props}>
-      {({ getPanelProps, content, expanded, updateHeight }) => {
-        if (expanded) updateHeight();
+      {({ getPanelProps, expanded }) => {
         return (
-          <div className={css(accordionPanelStyles)} {...getPanelProps()} ref={content}>
-            {children}
+          <div
+            className={css(accordionPanelStyles)}
+            {...getPanelProps()}
+            style={{ maxHeight: expanded ? `${height}px` : '0px' }}
+            ref={content}
+          >
+            <div>{children}</div>
           </div>
         );
       }}

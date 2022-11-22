@@ -56,8 +56,7 @@ const InternalSection: FC<InternalSectionProps> = ({
   useEffect(() => {
     addSection(id, expandSection, collapseSection);
 
-    // TODO: It is never called. Remove this
-    () => {
+    return () => {
       removeSection(id);
     };
   }, []);

@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { Rule, CreateRule, useStyle } from '@pma/dex-wrapper';
 import { PerformanceCycleActions, getPerformanceCycleSelector, performanceCycleMetaSelector } from '@pma/store';
 
-import { BaseAccordion, BaseSection, BasePanel, ExpandButton } from 'components/Accordion';
+import { BaseAccordion, BaseSection, Panel, ExpandButton } from 'components/Accordion';
 import useDispatch from 'hooks/useDispatch';
 import { TileWrapper } from 'components/Tile';
 import { Trans } from 'components/Translation';
@@ -139,7 +139,7 @@ const PerformanceCycleTable: FC<Props> = ({ cycleType }) => {
                                   </div>
                                 </td>
                               </tr>
-                              <BasePanel>
+                              <Panel>
                                 {({ getPanelProps, content }) => (
                                   <tr className={css(tableRowRule({ expanded }))}>
                                     <td colSpan={6}>
@@ -176,7 +176,7 @@ const PerformanceCycleTable: FC<Props> = ({ cycleType }) => {
                                     </td>
                                   </tr>
                                 )}
-                              </BasePanel>
+                              </Panel>
                             </>
                           )}
                         </BaseSection>

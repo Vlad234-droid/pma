@@ -123,90 +123,92 @@ const ColleagueAction: FC<Props> = ({ status, colleague, onUpdate }) => {
                 collapseAllSections();
               }
               return (
-                <Section defaultExpanded={false}>
-                  <div className={css(sectionBodyStyle)}>
-                    <ColleagueInfo
-                      firstName={colleague.firstName}
-                      lastName={colleague.lastName}
-                      jobName={colleague?.jobName}
-                      businessType={colleague?.businessType}
-                    />
-                    <div className={css(expandButtonStyle)}>
-                      <div data-test-id={`expand-button-${colleague.uuid}`} className={css({ paddingLeft: '12px' })}>
-                        <ExpandButton onClick={(expanded) => expanded && setColleagueExpanded(colleague.uuid)} />
+                <div>
+                  <Section defaultExpanded={false}>
+                    <div className={css(sectionBodyStyle)}>
+                      <ColleagueInfo
+                        firstName={colleague.firstName}
+                        lastName={colleague.lastName}
+                        jobName={colleague?.jobName}
+                        businessType={colleague?.businessType}
+                      />
+                      <div className={css(expandButtonStyle)}>
+                        <div data-test-id={`expand-button-${colleague.uuid}`} className={css({ paddingLeft: '12px' })}>
+                          <ExpandButton onClick={(expanded) => expanded && setColleagueExpanded(colleague.uuid)} />
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <Panel>
-                    {colleague.timeline.map((colleagueTimeline) => {
-                      const { code, uuid } = colleagueTimeline;
-                      const reviewGroupByStatus: [Status, any[]][] = [];
-                      const colleagueReviews = colleague.reviews.filter(({ tlPointUuid }) => tlPointUuid === uuid);
-                      const statusStatistics = Object.keys(colleagueTimeline.statistics || {}) as Status[];
+                    <Panel>
+                      {colleague.timeline.map((colleagueTimeline) => {
+                        const { code, uuid } = colleagueTimeline;
+                        const reviewGroupByStatus: [Status, any[]][] = [];
+                        const colleagueReviews = colleague.reviews.filter(({ tlPointUuid }) => tlPointUuid === uuid);
+                        const statusStatistics = Object.keys(colleagueTimeline.statistics || {}) as Status[];
 
-                      for (const status of statusStatistics) {
-                        reviewGroupByStatus.push([
-                          status,
-                          colleagueReviews.filter((review) => status === review.status),
-                        ]);
-                      }
+                        for (const status of statusStatistics) {
+                          reviewGroupByStatus.push([
+                            status,
+                            colleagueReviews.filter((review) => status === review.status),
+                          ]);
+                        }
 
-                      return (
-                        <div className={css({ padding: '24px 35px 24px 24px' })} key={uuid}>
-                          <Notification
-                            graphic='information'
-                            iconColor='pending'
-                            text={t(
-                              'time_to_approve_or_decline',
-                              tenant === Tenant.GENERAL
-                                ? 'It’s time to review your colleague’s objectives and / or reviews'
-                                : "It's time to review your colleague's priorities and / or reviews",
-                              { ns: tenant },
-                            )}
-                            customStyle={{
-                              background: '#FFDBC2',
-                              marginBottom: '20px',
-                            }}
-                          />
-                          {reviewGroupByStatus.map(([statusReview, colleagueReviews]) => {
-                            return (
-                              <div key={statusReview}>
-                                {colleagueReviews.map((review) => {
-                                  const reviewData = reviews.find(({ uuid }) => uuid === review?.uuid);
-                                  if (!reviewData) return null;
-                                  return (
-                                    <ColleagueReview
-                                      key={review.uuid}
-                                      colleagueUuid={colleague.uuid}
-                                      review={reviewData}
-                                      timeline={colleagueTimeline}
-                                      schema={reviewSchemaMap?.[colleagueTimeline?.cycleUuid]?.[code] || []}
-                                      validateReview={handleValidateReview}
-                                      onUpdate={handleChangeReview}
-                                    />
-                                  );
-                                })}
-                                {(statusReview === Status.WAITING_FOR_COMPLETION ||
-                                  statusReview === Status.WAITING_FOR_APPROVAL) &&
-                                  status === ActionStatus.PENDING && (
-                                    <Buttons
-                                      status={statusReview}
-                                      code={code}
-                                      tlPointUuid={colleagueTimeline.uuid}
-                                      reviewType={colleagueTimeline.reviewType}
-                                      cycleUuid={colleagueTimeline.cycleUuid || 'CURRENT'}
-                                      onUpdate={handleUpdateReview}
-                                      isDisabled={isButtonsDisabled}
-                                    />
-                                  )}
-                              </div>
-                            );
-                          })}
-                        </div>
-                      );
-                    })}
-                  </Panel>
-                </Section>
+                        return (
+                          <div className={css({ margin: '24px 35px 24px 24px' })} key={uuid}>
+                            <Notification
+                              graphic='information'
+                              iconColor='pending'
+                              text={t(
+                                'time_to_approve_or_decline',
+                                tenant === Tenant.GENERAL
+                                  ? 'It’s time to review your colleague’s objectives and / or reviews'
+                                  : "It's time to review your colleague's priorities and / or reviews",
+                                { ns: tenant },
+                              )}
+                              customStyle={{
+                                background: '#FFDBC2',
+                                marginBottom: '20px',
+                              }}
+                            />
+                            {reviewGroupByStatus.map(([statusReview, colleagueReviews]) => {
+                              return (
+                                <div key={statusReview}>
+                                  {colleagueReviews.map((review) => {
+                                    const reviewData = reviews.find(({ uuid }) => uuid === review?.uuid);
+                                    if (!reviewData) return null;
+                                    return (
+                                      <ColleagueReview
+                                        key={review.uuid}
+                                        colleagueUuid={colleague.uuid}
+                                        review={reviewData}
+                                        timeline={colleagueTimeline}
+                                        schema={reviewSchemaMap?.[colleagueTimeline?.cycleUuid]?.[code] || []}
+                                        validateReview={handleValidateReview}
+                                        onUpdate={handleChangeReview}
+                                      />
+                                    );
+                                  })}
+                                  {(statusReview === Status.WAITING_FOR_COMPLETION ||
+                                    statusReview === Status.WAITING_FOR_APPROVAL) &&
+                                    status === ActionStatus.PENDING && (
+                                      <Buttons
+                                        status={statusReview}
+                                        code={code}
+                                        tlPointUuid={colleagueTimeline.uuid}
+                                        reviewType={colleagueTimeline.reviewType}
+                                        cycleUuid={colleagueTimeline.cycleUuid || 'CURRENT'}
+                                        onUpdate={handleUpdateReview}
+                                        isDisabled={isButtonsDisabled}
+                                      />
+                                    )}
+                                </div>
+                              );
+                            })}
+                          </div>
+                        );
+                      })}
+                    </Panel>
+                  </Section>
+                </div>
               );
             }}
           </BaseAccordion>
