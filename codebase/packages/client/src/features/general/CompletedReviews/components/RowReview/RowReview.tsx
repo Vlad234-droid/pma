@@ -12,22 +12,14 @@ export type Props = {
 const RowReview: FC<Props> = memo(({ review, selectReviewHandler }) => {
   const { css } = useStyle();
   const { t } = useTranslation();
-  const { type, number, lastUpdatedTime } = review;
+  const { type, lastUpdatedTime } = review;
 
   return (
     <div className={css(listItemStyles)}>
       <div className={css({ margin: '24px 0' })}>
-        <div className={css(titleStyles)}>
-          {t(`review_type_description_${type?.toLowerCase()}`, ReviewType[type], {
-            num: number,
-          })}
-        </div>
+        <div className={css(titleStyles)}>{t(`review_type_description_${type?.toLowerCase()}`, ReviewType[type])}</div>
         <div className={css(subTitleStyles)}>
-          <Icon
-            graphic={'calender'}
-            size={'16px'}
-            iconStyles={{ verticalAlign: 'middle', margin: '0px 10px 0px 0px' }}
-          />
+          <Icon graphic={'calender'} size={'16px'} iconStyles={{ verticalAlign: 'middle', marginRight: '4px' }} />
           {t('full_date', `${lastUpdatedTime}`, { date: new Date(lastUpdatedTime) })}
         </div>
       </div>
@@ -58,6 +50,7 @@ const titleStyles: Rule = ({ theme }) => ({
   letterSpacing: '0px',
   fontWeight: theme.font.weight.bold,
   color: theme.colors.tescoBlue,
+  marginBottom: '8px',
 });
 
 const listItemStyles: Rule = ({ theme }) => ({

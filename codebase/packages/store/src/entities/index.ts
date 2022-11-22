@@ -26,3 +26,4 @@ export { Actions as menuActions } from './hamburgerMenu/actions';
 export { Actions as StatisticsAction } from './statistics/actions';
 export { Actions as CalibrationSessionsAction } from './calibrationSessions/actions';
 export { Actions as CalibrationReviewAction } from './calibrationReview/actions';
+export { Actions as CompletedReviewsAction } from './completedReviews/actions';

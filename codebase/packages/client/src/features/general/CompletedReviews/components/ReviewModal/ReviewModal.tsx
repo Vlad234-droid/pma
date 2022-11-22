@@ -2,18 +2,27 @@ import React, { FC } from 'react';
 import { CreateRule, Modal, Rule, theme, useStyle } from '@pma/dex-wrapper';
 import { Icon } from 'components/Icon';
 import { useTranslation } from 'components/Translation';
-import { ReviewType } from 'config/enum';
+import { ReviewType, Status } from 'config/enum';
+import ReviewForm from 'features/general/Review/components/ReviewForm';
+import { Component, getAllReviewSchemas } from '@pma/store';
+import { formTagComponents } from 'utils/schema';
+import { useSelector } from 'react-redux';
 
 export type CompletedReviewsModalProps = {
   onClose: () => void;
   review: any;
-  scheme: any;
 };
 
 const ReviewModal: FC<CompletedReviewsModalProps> = ({ onClose, review }) => {
-  const { css, matchMedia } = useStyle();
+  const { css, theme, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const { t } = useTranslation();
+
+  const schemas = useSelector(getAllReviewSchemas);
+
+  const scheme = review ? schemas[review?.type] : [];
+
+  const { components = [] as Component[] } = scheme;
 
   return (
     <Modal
@@ -38,9 +47,7 @@ const ReviewModal: FC<CompletedReviewsModalProps> = ({ onClose, review }) => {
           })}
         >
           <div className={css(titleStyles)}>
-            {t(`review_type_description_${review?.type?.toLowerCase()}`, ReviewType[review?.type], {
-              num: review?.number,
-            })}
+            {t(`review_type_description_${review?.type?.toLowerCase()}`, ReviewType[review?.type])}
           </div>
           <div className={css(subTitleStyles)}>
             <Icon
@@ -50,7 +57,18 @@ const ReviewModal: FC<CompletedReviewsModalProps> = ({ onClose, review }) => {
             />
             {t('full_date', `${review?.lastUpdatedTime}`, { date: new Date(review?.lastUpdatedTime) })}
           </div>
-          {review.uuid}
+          <div className={css({ marginBottom: '80px', marginTop: '24px' })}>
+            <ReviewForm
+              readonly
+              onClose={onClose}
+              onSaveDraft={() => null}
+              onSubmit={() => null}
+              reviewType={review.type}
+              reviewStatus={Status.COMPLETED}
+              components={formTagComponents(components, theme)}
+              defaultValues={review.properties}
+            />
+          </div>
         </div>
       </div>
     </Modal>
@@ -111,8 +129,7 @@ const titleStyles: Rule = ({ theme }) => ({
   ...theme.font.fixed.f24,
   letterSpacing: '0px',
   fontWeight: theme.font.weight.bold,
-  color: theme.colors.tescoBlue,
-  paddingBottom: '8px',
+  marginBottom: '16px',
 });
 
 const subTitleStyles: Rule = ({ theme }) => ({

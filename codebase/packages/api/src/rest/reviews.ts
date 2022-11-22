@@ -1,7 +1,16 @@
 import qs from 'qs';
 import httpClient from '../config/client';
 
-export const getReviews = (params: any = {}) => {
+export type GetReviewsParams = {
+  pathParams: {
+    colleagueUuid?: string;
+    code?: string;
+    cycleUuid?: string;
+  };
+  searchParams?: string[];
+};
+
+export const getReviews = (params: GetReviewsParams) => {
   const {
     pathParams: { colleagueUuid = '', code, cycleUuid = 'CURRENT' },
     searchParams,

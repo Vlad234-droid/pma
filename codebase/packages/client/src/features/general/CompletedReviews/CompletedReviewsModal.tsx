@@ -2,25 +2,26 @@ import React, { FC, useState, useCallback, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { CreateRule, Modal, Rule, theme, useStyle } from '@pma/dex-wrapper';
 import { Icon } from 'components/Icon';
-import { getAllReviewSchemas } from '@pma/store';
+import { completedReviewsSelector } from '@pma/store';
 import { Input, Item as FormItem } from 'components/Form';
 
 import { RowReview } from './components/RowReview';
 import { ReviewModal } from './components/ReviewModal';
+import { useTranslation } from 'components/Translation';
 
 export type CompletedReviewsModalProps = {
   onClose: () => void;
 };
 
-// TODO: wait for backend
-const reviews: any[] = [];
-
 const PreviousReviewFilesModal: FC<CompletedReviewsModalProps> = ({ onClose }) => {
   const { css, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
-  const schemas = useSelector(getAllReviewSchemas);
+  const { t } = useTranslation();
+
   const [isReviewModalOpen, setReviewModalOpen] = useState(false);
   const [selectedReviewId, setSelectedReviewId] = useState(null);
+  const [filter, setFilteredValue] = useState('');
+  const reviews = useSelector(completedReviewsSelector);
 
   const selectReviewHandler = useCallback((e) => {
     e.preventDefault();
@@ -28,14 +29,19 @@ const PreviousReviewFilesModal: FC<CompletedReviewsModalProps> = ({ onClose }) =
     setSelectedReviewId(key);
     setReviewModalOpen(true);
   }, []);
+
   const selectedReview = useMemo(
     () => (reviews?.length ? reviews?.find((review) => review.uuid === selectedReviewId) : null),
     [selectedReviewId],
   );
-  const scheme = selectedReview ? schemas[selectedReview?.type] : [];
 
-  const [filter, setFilteredValue] = useState('');
-  const filteredReviews = reviews?.filter(({ type }) => !filter || type.toLowerCase().includes(filter.toLowerCase()));
+  const filteredReviews = reviews?.filter(({ type, lastUpdatedTime }) => {
+    const name = t(`review_type_description_${type?.toLowerCase()}`);
+    const date = t('full_date', `${lastUpdatedTime}`, { date: new Date(lastUpdatedTime) });
+    const searchData = name + date + type;
+    return !filter || searchData.toLowerCase().includes(filter.toLowerCase());
+  });
+
   const handleChangeFilter = ({ target }) => setFilteredValue(target.value);
 
   return (
@@ -55,16 +61,16 @@ const PreviousReviewFilesModal: FC<CompletedReviewsModalProps> = ({ onClose }) =
     >
       <div className={css(wrapperStyle)}>
         <div className={css(containerStyle)}>
-          <FormItem withIcon={false} marginBot={false} customIcon={<Icon graphic='search' iconStyles={iconStyles} />}>
-            <Input onChange={handleChangeFilter} placeholder={'Search review'} />
-          </FormItem>
+          <div className={css({ marginBottom: '8px' })}>
+            <FormItem withIcon={false} marginBot={false} customIcon={<Icon graphic='search' iconStyles={iconStyles} />}>
+              <Input onChange={handleChangeFilter} placeholder={'Search review'} />
+            </FormItem>
+          </div>
           {filteredReviews &&
             filteredReviews.map((review) => (
               <RowReview key={review.uuid} review={review} selectReviewHandler={selectReviewHandler} />
             ))}
-          {isReviewModalOpen && (
-            <ReviewModal onClose={() => setReviewModalOpen(false)} review={selectedReview} scheme={scheme} />
-          )}
+          {isReviewModalOpen && <ReviewModal onClose={() => setReviewModalOpen(false)} review={selectedReview} />}
         </div>
       </div>
     </Modal>

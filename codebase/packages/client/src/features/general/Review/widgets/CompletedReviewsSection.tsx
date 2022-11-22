@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 
 import { Button, Rule, useStyle } from '@pma/dex-wrapper';
 
@@ -6,13 +6,30 @@ import { Trans } from 'components/Translation';
 
 import Section from 'components/Section';
 import { CompletedReviewsModal } from 'features/general/CompletedReviews';
+import useDispatch from 'hooks/useDispatch';
+import {
+  colleaguePerformanceCyclesSelector,
+  CompletedReviewsAction,
+  completedReviewsSelector,
+  ReviewsActions,
+} from '@pma/store';
+import { useSelector } from 'react-redux';
 
-type Props = {};
-
-export const CompletedReviewsSection: FC<Props> = () => {
+export const CompletedReviewsSection: FC = () => {
   const { css, theme } = useStyle();
 
   const [isCompletedReviewsModalOpen, setCompletedReviewsModalOpen] = useState(false);
+
+  const dispatch = useDispatch();
+  const cycles = useSelector(colleaguePerformanceCyclesSelector);
+  const completedReviews = useSelector(completedReviewsSelector);
+
+  useEffect(() => {
+    if (cycles.length) {
+      dispatch(CompletedReviewsAction.getCompletedReviews());
+    }
+  }, [dispatch, cycles]);
+
   return (
     <>
       <Section
@@ -30,6 +47,7 @@ export const CompletedReviewsSection: FC<Props> = () => {
                 mode='inverse'
                 onPress={() => setCompletedReviewsModalOpen(true)}
                 styles={[linkStyles({ theme })]}
+                isDisabled={!completedReviews.length}
               >
                 <Trans className={css(title)} i18nKey='view_history'>
                   View history
@@ -40,7 +58,13 @@ export const CompletedReviewsSection: FC<Props> = () => {
         }}
       >
         <div className={css(emptyBlockStyle)}>
-          <Trans i18nKey='no_completed_reviews'>You have no completed reviews</Trans>
+          {completedReviews.length ? (
+            <Trans i18nKey='completed_reviews_count' count={completedReviews.length}>
+              You have {completedReviews.length} completed reviews
+            </Trans>
+          ) : (
+            <Trans i18nKey='no_completed_reviews'>You have no completed reviews</Trans>
+          )}
         </div>
       </Section>
       {isCompletedReviewsModalOpen && <CompletedReviewsModal onClose={() => setCompletedReviewsModalOpen(false)} />}
