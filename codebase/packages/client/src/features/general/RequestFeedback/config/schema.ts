@@ -23,7 +23,7 @@ export const createRequestFeedbackSchema = (tenant: Tenant, t: TFunction) =>
       .notRequired()
       .when('targetType', {
         is: (val) => val === TargetType.OBJECTIVE,
-        then: Yup.string().required(),
+        then: Yup.string().required(t('field_required', 'This field is required')),
       }),
     comment_to_objective: Yup.string()
       .notRequired()
