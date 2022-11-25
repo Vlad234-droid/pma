@@ -26,15 +26,9 @@ const Buttons: FC<ButtonsProps> = ({ onSubmit, onBack }) => {
           <Button onPress={handleBack} styles={[buttonWhiteStyle]}>
             <Trans i18nKey='back'>Back</Trans>
           </Button>
-          <ButtonWithConfirmation
-            onSave={onSubmit}
-            styles={[buttonBlueStyle]}
-            confirmationTitle={''}
-            confirmationDescription={t(
-              'review_confirmation_submit',
-              'Are you sure you want to submit your review to your line manager for approval?',
-            )}
-          />
+          <Button onPress={onSubmit} styles={[buttonBlueStyle]}>
+            <Trans i18nKey='submit'>Submit</Trans>
+          </Button>
         </div>
       </div>
     </div>
