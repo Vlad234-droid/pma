@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useMemo, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Button, colors, Rule, Styles, useStyle } from '@pma/dex-wrapper';
 import {
@@ -8,6 +8,7 @@ import {
   hasStatusInReviews,
   isSharedSelector,
   ReviewSharingActions,
+  sharingObjectivesMetaSelector,
 } from '@pma/store';
 
 import { TileWrapper } from 'components/Tile';
@@ -82,6 +83,7 @@ const ShareWidgetBase: FC<ShareWidgetBaseProps> = ({ customStyle, stopShare, sha
   // TODO: add selectors
   const { info } = useSelector(currentUserSelector);
   const isShared = useSelector(isSharedSelector);
+  const { loading: sharingLoading } = useSelector(sharingObjectivesMetaSelector);
   const hasApprovedObjective = useSelector(hasStatusInReviews(ReviewType.OBJECTIVE, Status.APPROVED));
   const hasApprovedPriorities = useSelector(hasStatusInReviews(ReviewType.QUARTER, Status.APPROVED));
   const hasApproved = hasApprovedObjective || hasApprovedPriorities;
@@ -197,7 +199,7 @@ const ShareWidgetBase: FC<ShareWidgetBaseProps> = ({ customStyle, stopShare, sha
           onOverlayClick={() => setIsConfirmDeclineModalOpen(false)}
         />
       )}
-      {isSuccessModalOpen && (
+      {isSuccessModalOpen && !sharingLoading && (
         <SuccessModal
           title={success.title}
           description={success.description}
