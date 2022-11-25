@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     fontStyle: 'regular',
   },
   subtitleWrapper: {
-    paddingBottom: 10,
+    marginBottom: 10,
     boxSizing: 'border-box',
   },
   subtitle: {
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
     fontSize: theme.font.fixed.f16.fontSize,
     color: theme.colors.tescoBlue,
     fontWeight: theme.font.weight.bold,
-    padding: '30px 0 0',
+    marginTop: 30,
   },
   main: {
     width: '80%',
