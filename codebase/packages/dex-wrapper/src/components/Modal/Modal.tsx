@@ -20,6 +20,9 @@ export type ModalProps = {
   overlayColor?: Colors;
   modalContainerRule?: Rule[];
   title?: NodeOptions;
+  backOptions?: NodeOptions & {
+    onBack: () => void;
+  };
   closeOptions?: NodeOptions & {
     onClose: () => void;
   };
@@ -41,6 +44,7 @@ const ModalComponent: FC<ModalProps> = ({
   children,
   onOverlayClick,
   title: { content: titleContent, styles: titleStyles = [] } = {},
+  backOptions: { content: backOptionContent, styles: backOptionStyles = [], onBack } = {},
   closeOptions: { content: closeOptionContent, styles: closeOptionStyles = [], onClose } = {},
 }) => {
   const overlayRef = useRef(null);
@@ -91,6 +95,11 @@ const ModalComponent: FC<ModalProps> = ({
             </div>
           )}
           {children}
+          {backOptionContent && (
+            <Button onPress={onBack} styles={backOptionStyles}>
+              {backOptionContent}
+            </Button>
+          )}
           {closeOptionContent && (
             <Button onPress={onClose} styles={closeOptionStyles}>
               {closeOptionContent}

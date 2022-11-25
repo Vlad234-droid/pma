@@ -30,6 +30,11 @@ const TriggerModal: FC<Props> = ({ triggerComponent, title, children }) => {
           modalPosition={'middle'}
           overlayColor={'tescoBlue'}
           modalContainerRule={[containerRule({ mobileScreen })]}
+          backOptions={{
+            content: <Icon graphic='arrowLeft' invertColors={true} />,
+            onBack: () => setIsOpen(false),
+            styles: [modalBackOptionStyle({ mobileScreen })],
+          }}
           closeOptions={{
             content: <Icon graphic='cancel' invertColors={true} />,
             onClose: () => setIsOpen(false),
@@ -99,6 +104,19 @@ const modalTitleOptionStyle: CreateRule<{ mobileScreen: boolean }> =
           fontSize: theme.font.fixed.f24.fontSize,
           lineHeight: theme.font.fluid.f24.lineHeight,
         }),
+  });
+
+const modalBackOptionStyle: CreateRule<{ mobileScreen: boolean }> =
+  ({ mobileScreen }) =>
+  ({ theme }) => ({
+    position: 'fixed',
+    top: theme.spacing.s5,
+    height: 'auto',
+    padding: '0px',
+    left: mobileScreen ? theme.spacing.s5 : theme.spacing.s10,
+    textDecoration: 'none',
+    border: 'none',
+    cursor: 'pointer',
   });
 
 export default TriggerModal;
