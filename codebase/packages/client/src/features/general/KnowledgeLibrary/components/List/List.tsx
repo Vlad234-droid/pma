@@ -6,6 +6,7 @@ import { useTenant } from 'features/general/Permission';
 import { useTranslation } from 'components/Translation';
 
 import { Item } from '../../types';
+import { Tenant } from 'utils';
 
 type Props = {
   title?: string;
@@ -32,7 +33,7 @@ const List: FC<Props> = ({ title, data = [], customRule = {} }) => {
             title={t(title, withTenant ? { ns: tenant } : undefined)}
             description={t(description, withTenant ? { ns: tenant } : undefined)}
             //TODO: remove in future
-            link={title !== 'system_guidance_and_faqs_title' ? link : ''}
+            link={title === 'system_guidance_and_faqs_title' && tenant === Tenant.BANK ? '' : link}
             imgDescription={t(imgDescription)}
           />
         ))}
