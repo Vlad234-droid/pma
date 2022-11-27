@@ -1,4 +1,4 @@
-export const defaultValues = {
+export const defaultFilters = {
   functions: [
     {
       uuid: '10000000-0000-0000-0000-000000000002',

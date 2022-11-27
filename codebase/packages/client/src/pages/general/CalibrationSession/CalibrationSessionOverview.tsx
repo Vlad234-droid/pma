@@ -1,19 +1,17 @@
 import React, { FC, useState } from 'react';
+import { CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
 
-import CalibrationSessionOverview from 'features/general/CalibrationSession';
-import {
+import CalibrationSessionOverview, {
   CalibrationsCompleted,
   RatingsChange,
   RatingsSubmitted,
   CreateCalibrationSession,
   CalibrationSessions,
   Widget,
-} from 'features/general/CalibrationSession/widgets';
-
-import { CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
+} from 'features/general/CalibrationSession';
+import { Filters, SortBy } from 'features/general/Filters';
 import { useTranslation } from 'components/Translation';
 import { Option, Select } from 'components/Form';
-import { Filters, SortBy } from 'features/general/Filters';
 
 const CalibrationSessionPage: FC = () => {
   const { css, matchMedia } = useStyle();
