@@ -48,7 +48,6 @@ export const useDetailsStatistics = (type, query) => {
             'review-type': ReportType.OBJECTIVE,
           }),
         );
-
         break;
       }
       case ReportPage.REPORT_MID_YEAR_REVIEW: {
@@ -234,7 +233,6 @@ export const useDetailsStatistics = (type, query) => {
             ...defaultSort,
             year,
             status: 'approved',
-            ...(type === ReportPage.REPORT_WORK_LEVEL && { _limit: 10 }),
           }),
         );
         break;

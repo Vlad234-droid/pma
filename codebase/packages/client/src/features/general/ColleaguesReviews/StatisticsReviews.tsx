@@ -296,7 +296,7 @@ const StatisticsReviews: FC<{ type: ReportPage; toggleFullView: () => void; isFu
                             }
                           }}
                           loading={loading}
-                          limit={isWLPage ? 10 : 15}
+                          limit={10}
                           hasMore={hasMore}
                           render={() => (
                             <>
