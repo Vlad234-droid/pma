@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
 import { useStyle, Rule, CreateRule, Button } from '@pma/dex-wrapper';
+import { useTenant } from 'features/general/Permission';
 import { Trans } from 'components/Translation/Translation';
 import { TileWrapper } from 'components/Tile';
 import { Icon } from 'components/Icon';
@@ -13,6 +14,7 @@ type Props = {
 
 const Approval: FC<Props> = ({ text, isActive, onApprove, onDecline }) => {
   const { css } = useStyle();
+  const tenant = useTenant();
 
   return (
     <>
@@ -27,13 +29,17 @@ const Approval: FC<Props> = ({ text, isActive, onApprove, onDecline }) => {
                 onPress={onDecline}
               >
                 <Icon graphic='cancel' iconStyles={{ paddingRight: '8px' }} />
-                <Trans i18nKey='decline'>Decline</Trans>
+                <Trans i18nKey='decline' ns={tenant}>
+                  Decline
+                </Trans>
               </Button>
             </div>
             <div className={css({ display: 'inline-block' })}>
               <Button isDisabled={!isActive} styles={[buttonStyle({ inverse: false })]} onPress={onApprove}>
                 <Icon graphic='check' invertColors={true} iconStyles={{ paddingRight: '8px' }} />
-                <Trans i18nKey='approve'>Approve</Trans>
+                <Trans i18nKey='approve' ns={tenant}>
+                  Approve
+                </Trans>
               </Button>
             </div>
           </div>

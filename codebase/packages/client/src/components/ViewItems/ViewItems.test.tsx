@@ -11,7 +11,7 @@ import { fireEvent } from '@testing-library/react';
 
 describe('Applied items', () => {
   const props = {
-    onClose: jest.fn(),
+    onDelete: jest.fn(),
     items: ['mocked_title'],
   };
   it('it should render applied items', async () => {
@@ -26,13 +26,13 @@ describe('Applied items', () => {
     expect(wrapper).toBeInTheDocument();
   });
 
-  it('it should call onClose prop', () => {
+  it('it should call onDelete prop', () => {
     const history = createMemoryHistory();
     history.push(buildPath(Page.REPORT));
     const clearHandler = jest.fn();
     const { getByTestId } = render(
       <BrowserRouter>
-        <ViewItems onClose={clearHandler} items={['mocked_title']} />
+        <ViewItems onDelete={clearHandler} items={['mocked_title']} />
       </BrowserRouter>,
     );
 
@@ -45,7 +45,7 @@ describe('Applied items', () => {
     const clearHandler = jest.fn();
     const { queryByTestId } = render(
       <BrowserRouter>
-        <ViewItems onClose={clearHandler} items={[]} />
+        <ViewItems onDelete={clearHandler} items={[]} />
       </BrowserRouter>,
     );
 
