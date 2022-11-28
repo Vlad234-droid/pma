@@ -22,6 +22,7 @@ export const getLogger = ({
       sendLogToSplunk(...args);
     }
     if (buildEnvironment() === 'local') {
+      console.log('ARGS', JSON.stringify(args, null, 4));
       sendLogToConsole(...args);
     }
   };
@@ -30,7 +31,10 @@ export const getLogger = ({
 export const loggingMiddleware = (config: ProcessConfig) =>
   loggerMiddleware({
     logSenders: [getLogger(config)],
-    apiUrlPredicate: (url) => url.includes(`/api/`),
+    apiUrlPredicate: (url) => {
+      console.log('Url: ', url, ' result: ', url.includes(`/api/`));
+      return url.includes(`/api/`);
+    },
     userInfoResolver: userDataResolver,
   });
 
