@@ -22,11 +22,12 @@ type Props = {
   onCancel: () => void;
   defaultValues: any;
   filters: { [key: string]: Array<{ [key: string]: string }> };
-  onSubmit: (data) => void;
+  onSubmit: (data: any) => void;
   loading?: boolean;
+  onUpdate?: (data: any) => void;
 };
 
-const FilterForm: FC<Props> = ({ onCancel, defaultValues, onSubmit, loading = false, filters }) => {
+const FilterForm: FC<Props> = ({ onCancel, defaultValues, onSubmit, loading = false, filters, onUpdate }) => {
   const { css } = useStyle();
 
   const ref = useRef<HTMLDivElement | null>(null);
@@ -44,8 +45,16 @@ const FilterForm: FC<Props> = ({ onCancel, defaultValues, onSubmit, loading = fa
     setValue,
     formState: { isValid },
     handleSubmit,
+    watch,
   } = methods;
   const values = getValues();
+
+  useEffect(() => {
+    const subscription = watch((data) => onUpdate && onUpdate(data));
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [watch]);
 
   return (
     <>

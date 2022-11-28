@@ -1,4 +1,4 @@
-import React, { FC, useState, useMemo, useEffect } from 'react';
+import React, { FC, useState, useMemo } from 'react';
 import { CreateRule, Rule, Styles, useStyle } from '@pma/dex-wrapper';
 import { totalColleaguesSelector } from '@pma/store';
 import { useLocation } from 'react-router-dom';
@@ -50,8 +50,8 @@ const ReportPage: FC = () => {
   const [searchValueFilterOption, setSearchValueFilterOption] = useState('');
   const [isVisibleFilterModal, setFilterModal] = useState<boolean>(false);
   const [year, setYear] = useState<string>('');
-  const [tiles, setTiles] = useState<Array<string>>(filters || []);
-  const [savedFilter, setSavedFilter] = useState<any>(null);
+  const [tiles, setTiles] = useState<Array<string>>([] || null);
+  const [savedFilter, setSavedFilter] = useState<any>(filters || null);
 
   const totalColleagues = useSelector(totalColleaguesSelector) ?? 0;
 
