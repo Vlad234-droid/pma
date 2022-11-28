@@ -1,4 +1,4 @@
-import React, { FC, useRef, Fragment } from 'react';
+import React, { FC, useRef, Fragment, useEffect } from 'react';
 import * as Yup from 'yup';
 import { Rule, useStyle, CreateRule } from '@pma/dex-wrapper';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -83,8 +83,8 @@ const FilterForm: FC<Props> = ({ onCancel, defaultValues, onSubmit, loading = fa
                             <Checkbox
                               onChange={({ target }) => {
                                 //@ts-ignore
-                                properties.forEach(({ name, code }) => {
-                                  const field = `${key}.${code || name}`;
+                                properties.forEach(({ uuid, code }) => {
+                                  const field = `${key}.${uuid || code}`;
                                   setValue(field, target.checked, {
                                     shouldValidate: true,
                                     shouldTouch: true,
@@ -103,15 +103,15 @@ const FilterForm: FC<Props> = ({ onCancel, defaultValues, onSubmit, loading = fa
                             </span>
                           </label>
                           {/*//@ts-ignore*/}
-                          {(filteredFields || properties).map(({ name, code, hidden = false }) => {
-                            const label = code || name;
+                          {(filteredFields || properties).map(({ name, code, uuid, hidden = false }) => {
+                            const filter = uuid || code;
                             return (
                               <Fragment key={code}>
                                 <label className={css(labelStyle, { display: hidden ? 'none' : 'flex' })} key={code}>
                                   <Checkbox
                                     id={`${key}_${name}`}
-                                    name={`${key}.${label}`}
-                                    checked={values?.[key]?.[label] || false}
+                                    name={`${key}.${filter}`}
+                                    checked={values?.[key]?.[filter] || false}
                                     onChange={({ target: { name, checked } }) => {
                                       setValue(name, checked, {
                                         shouldValidate: true,
