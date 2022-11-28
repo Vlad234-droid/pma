@@ -119,7 +119,7 @@ const ReportStatistics = () => {
   const [searchedValue, setSearchedValue] = useState<string>('');
   const [isOpenFilter, toggleFilter] = useState(false);
   const [isFullView, toggleFullView] = useState<boolean>(false);
-  const [savedFilter, setSavedFilter] = useState<any>(null);
+  const [savedFilter, setSavedFilter] = useState<any>(filters);
 
   const { setLinkTitle } = useHeaderContainer();
   const { type } = useTileStatistics();
@@ -128,24 +128,21 @@ const ReportStatistics = () => {
     if (!Object.entries(query).length || !query.year) navigate(buildPath(Page.REPORT));
   }, [query]);
 
-  useEffect(() => filters && setSavedFilter(() => filters), []);
-
   useEffect(() => {
     setLinkTitle(defineHeaderTitle(convertToReportEnum(pathname), t));
   }, []);
 
-  const appliedFilters = useMemo(
-    () =>
+  const appliedFilters = useMemo(() => {
+    return (
       savedFilter &&
       //@ts-ignore
       Object.entries(savedFilter).reduce((acc, [key, value]) => {
         //@ts-ignore
-        if (value.some(({ checked }) => checked)) return [...acc, key];
+        if (Object.values(value).some((checked) => checked)) return [...acc, key];
         return acc;
-      }, []),
-
-    [savedFilter],
-  );
+      }, [])
+    );
+  }, [savedFilter]);
 
   const totalCount: number = useSelector(getTotalReviewsByType(getConfigReviewsKeys(type))) || 0;
 
@@ -169,12 +166,13 @@ const ReportStatistics = () => {
       </div>
       {!!appliedFilters && !!appliedFilters?.length && (
         <ViewItems
-          onClose={(item) =>
+          onDelete={(item) =>
             //TODO: dispatch filters without item checkboxes
-            setSavedFilter((prev) => ({
-              ...prev,
-              [item]: prev[item].map((item) => ({ ...item, checked: false })),
-            }))
+            setSavedFilter((prev) => {
+              const filters = { ...prev };
+              delete filters[item];
+              return filters;
+            })
           }
           items={appliedFilters}
         />
@@ -216,7 +214,7 @@ const ReportStatistics = () => {
                   filters={defaultFilters}
                   onSubmit={(data) => {
                     onClose();
-                    console.log(data);
+                    setTimeout(() => setSavedFilter(data), 300);
                   }}
                 />
               )}

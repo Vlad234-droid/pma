@@ -81,12 +81,13 @@ const ReportPage: FC = () => {
     <div className={css({ margin: '22px 42px 110px 40px' })}>
       {!!appliedFilters && !!appliedFilters?.length && (
         <ViewItems
-          onClose={(item) =>
+          onDelete={(item) =>
             //TODO: dispatch filters without item checkboxes
-            setSavedFilter((prev) => ({
-              ...prev,
-              [item]: prev[item].map((item) => ({ ...item, checked: false })),
-            }))
+            setSavedFilter((prev) => {
+              const filters = { ...prev };
+              delete filters[item];
+              return filters;
+            })
           }
           items={appliedFilters}
         />
