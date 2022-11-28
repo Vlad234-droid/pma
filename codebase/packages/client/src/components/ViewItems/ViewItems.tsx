@@ -7,11 +7,11 @@ export const APPLIED_WRAPPER = 'applied-wrapper';
 export const CLEAR_ITEM = 'clear-item';
 
 type Props = {
-  onClose: (item: string) => void;
+  onDelete: (item: string) => void;
   items: Array<string>;
 };
 
-const ViewItems: FC<Props> = ({ onClose, items = [] }) => {
+const ViewItems: FC<Props> = ({ onDelete, items = [] }) => {
   const { css } = useStyle();
   const { t } = useTranslation();
 
@@ -27,7 +27,7 @@ const ViewItems: FC<Props> = ({ onClose, items = [] }) => {
                 data-test-id={CLEAR_ITEM}
                 graphic='cancel'
                 iconStyles={iconDeclineStyle}
-                onPress={() => onClose(item)}
+                onPress={() => onDelete(item)}
               />
             </div>
           ))}

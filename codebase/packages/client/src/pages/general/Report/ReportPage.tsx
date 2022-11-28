@@ -14,7 +14,7 @@ import { HoverContainer } from 'components/HoverContainer';
 import { HoverMessage } from 'components/HoverMessage';
 import UnderlayModal from 'components/UnderlayModal';
 import { IconButton } from 'components/IconButton';
-import FilterModal, { defaultValues } from 'components/FilterModal';
+import FilterForm, { defaultFilters } from 'components/FilterForm';
 import ViewItems from 'components/ViewItems';
 import { Select } from 'components/Form';
 
@@ -33,8 +33,6 @@ const startMonth = 3;
 export const isStartPeriod = () => getLocalNow().month >= startMonth;
 export const getCurrentYearWithStartDate = () => (isStartPeriod() ? getCurrentYear() : getPrevYear(1));
 
-export const REPORT_WRAPPER = 'REPORT_WRAPPER';
-
 const ReportPage: FC = () => {
   const query = useQueryString() as Record<string, string | number>;
   const { t } = useTranslation();
@@ -52,12 +50,10 @@ const ReportPage: FC = () => {
   const [searchValueFilterOption, setSearchValueFilterOption] = useState('');
   const [isVisibleFilterModal, setFilterModal] = useState<boolean>(false);
   const [year, setYear] = useState<string>('');
-  const [tiles, setTiles] = useState<Array<string>>([]);
+  const [tiles, setTiles] = useState<Array<string>>(filters || []);
   const [savedFilter, setSavedFilter] = useState<any>(null);
 
   const totalColleagues = useSelector(totalColleaguesSelector) ?? 0;
-
-  useEffect(() => filters && setSavedFilter(() => filters), []);
 
   const changeYearHandler = (value) => {
     if (!value) return;
@@ -75,22 +71,23 @@ const ReportPage: FC = () => {
       //@ts-ignore
       Object.entries(savedFilter).reduce((acc, [key, value]) => {
         //@ts-ignore
-        if (value.some(({ checked }) => checked)) return [...acc, key];
+        if (Object.values(value).some((checked) => checked)) return [...acc, key];
         return acc;
       }, [])
     );
   }, [savedFilter]);
 
   return (
-    <div className={css({ margin: '22px 42px 110px 40px' })} data-test-id={REPORT_WRAPPER}>
+    <div className={css({ margin: '22px 42px 110px 40px' })}>
       {!!appliedFilters && !!appliedFilters?.length && (
         <ViewItems
-          onClose={(item) =>
+          onDelete={(item) =>
             //TODO: dispatch filters without item checkboxes
-            setSavedFilter((prev) => ({
-              ...prev,
-              [item]: prev[item].map((item) => ({ ...item, checked: false })),
-            }))
+            setSavedFilter((prev) => {
+              const filters = { ...prev };
+              delete filters[item];
+              return filters;
+            })
           }
           items={appliedFilters}
         />
@@ -169,10 +166,10 @@ const ReportPage: FC = () => {
               styles={{ maxWidth: !mobileScreen ? '500px' : '100%' }}
             >
               {({ onClose }) => (
-                <FilterModal
-                  defaultValues={defaultValues}
-                  savedFilter={savedFilter}
-                  onClose={onClose}
+                <FilterForm
+                  defaultValues={savedFilter}
+                  onCancel={onClose}
+                  filters={defaultFilters}
                   onSubmit={(data) => {
                     onClose();
                     setTimeout(() => setSavedFilter(data), 300);

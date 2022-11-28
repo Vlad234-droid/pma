@@ -7,17 +7,17 @@ import { useSelector } from 'react-redux';
 import UnderlayModal from 'components/UnderlayModal';
 import { useTranslation } from 'components/Translation';
 import { ColleaguesCount } from 'components/ColleaguesCount';
+import FilterForm, { defaultFilters } from 'components/FilterForm';
+import ViewItems from 'components/ViewItems';
 
 import { ColleaguesStatistics } from 'features/general/Report/widgets';
-import FilterModal, { defaultValues } from 'components/FilterModal';
 import StatisticsReviews from 'features/general/ColleaguesReviews';
 import { FilterOption } from 'features/general/Shared';
 import { buildPath } from 'features/general/Routes';
+import { useTileStatistics } from 'features/general/ColleaguesReviews/hooks/useTileStatistics';
 
 import useQueryString from 'hooks/useQueryString';
-import { useTileStatistics } from 'features/general/ColleaguesReviews/hooks/useTileStatistics';
 import { useHeaderContainer } from 'contexts/headerContext';
-import ViewItems from 'components/ViewItems';
 
 import { getCurrentYearWithStartDate } from 'features/general/Report/utils';
 import { convertToReportEnum } from 'features/general/ColleaguesReviews/utils';
@@ -117,9 +117,9 @@ const ReportStatistics = () => {
   const navigate = useNavigate();
   const [focus, setFocus] = useState(false);
   const [searchedValue, setSearchedValue] = useState<string>('');
-  const [filterModal, setFilterModal] = useState(false);
+  const [isOpenFilter, toggleFilter] = useState(false);
   const [isFullView, toggleFullView] = useState<boolean>(false);
-  const [savedFilter, setSavedFilter] = useState<any>(null);
+  const [savedFilter, setSavedFilter] = useState<any>(filters);
 
   const { setLinkTitle } = useHeaderContainer();
   const { type } = useTileStatistics();
@@ -128,24 +128,21 @@ const ReportStatistics = () => {
     if (!Object.entries(query).length || !query.year) navigate(buildPath(Page.REPORT));
   }, [query]);
 
-  useEffect(() => filters && setSavedFilter(() => filters), []);
-
   useEffect(() => {
     setLinkTitle(defineHeaderTitle(convertToReportEnum(pathname), t));
   }, []);
 
-  const appliedFilters = useMemo(
-    () =>
+  const appliedFilters = useMemo(() => {
+    return (
       savedFilter &&
       //@ts-ignore
       Object.entries(savedFilter).reduce((acc, [key, value]) => {
         //@ts-ignore
-        if (value.some(({ checked }) => checked)) return [...acc, key];
+        if (Object.values(value).some((checked) => checked)) return [...acc, key];
         return acc;
-      }, []),
-
-    [savedFilter],
-  );
+      }, [])
+    );
+  }, [savedFilter]);
 
   const totalCount: number = useSelector(getTotalReviewsByType(getConfigReviewsKeys(type))) || 0;
 
@@ -169,12 +166,13 @@ const ReportStatistics = () => {
       </div>
       {!!appliedFilters && !!appliedFilters?.length && (
         <ViewItems
-          onClose={(item) =>
+          onDelete={(item) =>
             //TODO: dispatch filters without item checkboxes
-            setSavedFilter((prev) => ({
-              ...prev,
-              [item]: prev[item].map((item) => ({ ...item, checked: false })),
-            }))
+            setSavedFilter((prev) => {
+              const filters = { ...prev };
+              delete filters[item];
+              return filters;
+            })
           }
           items={appliedFilters}
         />
@@ -202,21 +200,18 @@ const ReportStatistics = () => {
             }}
             onChange={(e) => setSearchedValue(() => e.target.value)}
             onSettingsPress={() => {
-              setFilterModal((prev) => !prev);
+              toggleFilter((prev) => !prev);
               setFocus(false);
             }}
             setSearchValueFilterOption={setSearchedValue}
           />
-          {filterModal && (
-            <UnderlayModal
-              onClose={() => setFilterModal(false)}
-              styles={{ maxWidth: !mobileScreen ? '500px' : '100%' }}
-            >
+          {isOpenFilter && (
+            <UnderlayModal onClose={() => toggleFilter(false)} styles={{ maxWidth: !mobileScreen ? '500px' : '100%' }}>
               {({ onClose }) => (
-                <FilterModal
-                  defaultValues={defaultValues}
-                  onClose={onClose}
-                  savedFilter={savedFilter}
+                <FilterForm
+                  defaultValues={savedFilter}
+                  onCancel={onClose}
+                  filters={defaultFilters}
                   onSubmit={(data) => {
                     onClose();
                     setTimeout(() => setSavedFilter(data), 300);
