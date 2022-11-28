@@ -18,11 +18,7 @@ const ReviewModal: FC<CompletedReviewsModalProps> = ({ onClose, review }) => {
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const { t } = useTranslation();
 
-  const schemas = useSelector(getAllReviewSchemas);
-
-  const scheme = review ? schemas[review?.type] : [];
-
-  const { components = [] as Component[] } = scheme;
+  const { components = [] as Component[] } = review.schema;
 
   return (
     <Modal

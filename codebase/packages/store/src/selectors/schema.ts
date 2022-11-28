@@ -35,7 +35,7 @@ export const getObjectiveSchema = createSelector(schemaSelector, (schema: any) =
   return reviewMarkup;
 });
 
-export const getAllReviewSchemas = createSelector(schemaSelector, (schema: any) => {
+export const parseSchema = (schema: any) => {
   if (!schema?.metadata?.cycle) {
     return { ...schema };
   }
@@ -62,7 +62,9 @@ export const getAllReviewSchemas = createSelector(schemaSelector, (schema: any) 
   });
 
   return reviews;
-});
+};
+
+export const getAllReviewSchemas = createSelector(schemaSelector, parseSchema);
 
 export const getColleaguesSchemas = (colleagueUuid) =>
   createSelector(

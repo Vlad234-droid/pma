@@ -5,6 +5,11 @@ import { RootState } from 'typesafe-actions';
 //@ts-ignore
 export const colleagueSelector = (state: RootState) => state.colleague;
 
+export const colleagueCyclesSelector = createSelector(
+  colleagueSelector,
+  (colleague: any) => colleague?.colleague?.cycles || [],
+);
+
 export const getColleagueMetaSelector = createSelector(colleagueSelector, (colleague: any) => colleague?.meta);
 
 export const getColleagueSelector = createSelector(colleagueSelector, ({ colleague: { colleague, tenant } }: any) => {

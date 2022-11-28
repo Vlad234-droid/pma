@@ -6,24 +6,45 @@ import { catchError, filter, map, mergeMap, switchMap, takeUntil } from 'rxjs/op
 
 import { getCompletedReviews } from './actions';
 import { concatWithErrorToast, errorPayloadConverter } from '../../utils/toastHelper';
-import { colleaguePerformanceCyclesSelector, colleagueUUIDSelector } from '../../selectors';
+import {
+  colleagueCyclesSelector,
+  colleaguePerformanceCyclesSelector,
+  colleagueUUIDSelector,
+  parseSchema,
+} from '../../selectors';
+import { convertFormsJsonToObject } from '../../utils/formExpression';
 
 export const getCompletedReviewsEpic: Epic = (action$, state, { api }) =>
   action$.pipe(
     filter(isActionOf(getCompletedReviews.request)),
 
-    switchMap(() => {
-      const colleagueUuid = colleagueUUIDSelector(state.value);
-      const cycles = colleaguePerformanceCyclesSelector(state.value) || [];
+    //@ts-ignore
+    mergeMap((data: any) => {
+      const colleagueUuid = data.payload.colleagueUuid || colleagueUUIDSelector(state.value);
+      const cycles = data.payload.colleagueUuid
+        ? colleagueCyclesSelector(state.value)
+        : colleaguePerformanceCyclesSelector(state.value) || [];
       const cyclesUUID = cycles.map(({ uuid }) => uuid);
 
       return from(
-        Promise.all(cyclesUUID.map((cycleUuid) => api.getReviews({ pathParams: { colleagueUuid, cycleUuid } }))),
+        Promise.all(
+          cyclesUUID.map(async (cycleUuid) => {
+            const schema: any = await api.getColleagueMetadataByPerformanceCycle({
+              colleagueUuid,
+              cycleUuid,
+              includeForms: true,
+            });
+            const reviews = await api.getReviews({ pathParams: { colleagueUuid, cycleUuid } });
+            const forms = convertFormsJsonToObject(schema.data.forms);
+            const parsedSchema = parseSchema({ ...schema.data, forms });
+
+            return reviews.data.map((review) => ({ ...review, schema: parsedSchema[review.type] }));
+          }),
+        ),
       ).pipe(
         // @ts-ignore
         map((responsesData) => {
           const data = responsesData
-            .map((apiRequest: any) => apiRequest.data)
             .flat()
             .filter(({ type, status }) => ['MYR', 'EYR'].includes(type) && status === 'APPROVED');
 

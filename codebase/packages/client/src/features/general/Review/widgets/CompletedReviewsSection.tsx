@@ -8,6 +8,7 @@ import Section from 'components/Section';
 import { CompletedReviewsModal } from 'features/general/CompletedReviews';
 import useDispatch from 'hooks/useDispatch';
 import {
+  colleagueCyclesSelector,
   colleaguePerformanceCyclesSelector,
   CompletedReviewsAction,
   completedReviewsSelector,
@@ -15,20 +16,26 @@ import {
 } from '@pma/store';
 import { useSelector } from 'react-redux';
 
-export const CompletedReviewsSection: FC = () => {
+type Props = {
+  colleagueUuid?: string;
+};
+
+export const CompletedReviewsSection: FC<Props> = ({ colleagueUuid }) => {
   const { css, theme } = useStyle();
 
   const [isCompletedReviewsModalOpen, setCompletedReviewsModalOpen] = useState(false);
 
+  const isCollegueView = !!colleagueUuid;
+
   const dispatch = useDispatch();
-  const cycles = useSelector(colleaguePerformanceCyclesSelector);
+  const cycles = useSelector(isCollegueView ? colleagueCyclesSelector : colleaguePerformanceCyclesSelector);
   const completedReviews = useSelector(completedReviewsSelector);
 
   useEffect(() => {
     if (cycles.length) {
-      dispatch(CompletedReviewsAction.getCompletedReviews());
+      dispatch(CompletedReviewsAction.getCompletedReviews({ colleagueUuid }));
     }
-  }, [dispatch, cycles]);
+  }, [dispatch, cycles, colleagueUuid]);
 
   return (
     <>

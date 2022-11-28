@@ -75,7 +75,7 @@ const UserObjectivesPage = () => {
       <div className={css(mainBlockStyles({ mobileScreen }))}>
         <UserObjectives />
         <ReviewsSection colleagueUuid={uuid as string} />
-        <CompletedReviewsSection />
+        <CompletedReviewsSection colleagueUuid={uuid} />
         <ReviewFilesSection colleagueUuid={uuid} />
         <div className={css(widgetsContainer)}>
           <SubmitCalibrationRatingsWidget userUuid={uuid as string} />
