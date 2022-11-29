@@ -1,9 +1,12 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import { Trans, useTranslation } from 'components/Translation';
 import { useStyle, Rule, Button, Styles, colors } from '@pma/dex-wrapper';
 
 import { TileWrapper } from 'components/Tile';
 import { Icon, Graphics } from 'components/Icon';
+import useDispatch from 'hooks/useDispatch';
+import { OrgObjectiveActions, orgObjectivesSelector } from '@pma/store';
+import { useSelector } from 'react-redux';
 
 export type Props = {
   onClick: () => void;
@@ -16,6 +19,10 @@ export const CLICK_BUTTON_TEST_ID = 'click-button-test-id';
 const OrganizationWidget: FC<Props> = ({ onClick, customStyle }) => {
   const { css, theme } = useStyle();
   const { t } = useTranslation();
+  const dispatch = useDispatch();
+
+  const orgObjectives = useSelector(orgObjectivesSelector) || [];
+  const hasObjectives = !!orgObjectives.length;
 
   const getContent = (): [Graphics, string, string] => {
     return [
@@ -26,6 +33,12 @@ const OrganizationWidget: FC<Props> = ({ onClick, customStyle }) => {
   };
 
   const [graphic, description, actionTitle] = getContent();
+
+  useEffect(() => {
+    dispatch(OrgObjectiveActions.getOrgObjectives({}));
+  }, []);
+
+  if (!hasObjectives) return null;
 
   return (
     <TileWrapper customStyle={{ ...customStyle }}>
