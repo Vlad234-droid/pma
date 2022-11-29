@@ -50,7 +50,13 @@ const ColleagueReview: FC<Props> = ({ colleagueUuid, review, timeline, schema, v
     [review],
   );
 
-  const yepSchema = components.reduce(createYupSchema(t), {});
+  const yepSchema = useMemo(
+    () =>
+      components
+        .filter(({ expression, key }) => key && expression?.auth?.permission?.write?.length)
+        .reduce(createYupSchema(t), {}),
+    [components],
+  );
   const methods = useFormWithCloseProtection({
     mode: 'onChange',
     resolver: yupResolver<Yup.AnyObjectSchema>(Yup.object().shape(yepSchema)),
