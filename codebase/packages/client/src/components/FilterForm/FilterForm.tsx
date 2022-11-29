@@ -1,4 +1,4 @@
-import React, { FC, useRef, Fragment, useEffect } from 'react';
+import React, { FC, useRef, Fragment } from 'react';
 import * as Yup from 'yup';
 import { Rule, useStyle, CreateRule } from '@pma/dex-wrapper';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -12,6 +12,7 @@ import { Checkbox } from 'components/Form';
 import Spinner from 'components/Spinner';
 import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
 import useClickOutside from 'hooks/useClickOutside';
+import { getName } from './utils';
 
 import { FilterType } from './types';
 import { schema } from './config';
@@ -103,8 +104,9 @@ const FilterForm: FC<Props> = ({ onCancel, defaultValues, onSubmit, loading = fa
                             </span>
                           </label>
                           {/*//@ts-ignore*/}
-                          {(filteredFields || properties).map(({ name, code, uuid, hidden = false }) => {
+                          {(filteredFields || properties).map(({ code, uuid, hidden = false, ...rest }) => {
                             const filter = uuid || code;
+                            const name = getName(rest);
                             return (
                               <Fragment key={code}>
                                 <label className={css(labelStyle, { display: hidden ? 'none' : 'flex' })} key={code}>
