@@ -144,6 +144,7 @@ export enum TargetFeedbackKeys {
 export enum Rating {
   BELOW_EXPECTED = 'Below expected',
   SATISFACTORY = 'Satisfactory',
+  UNSUBMITTED = 'Unsubmitted',
   GREAT = 'Great',
   OUTSTANDING = 'Outstanding',
   COLLEAGUES = 'colleagues',

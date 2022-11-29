@@ -41,7 +41,6 @@ const Graph: FC<Props> = ({ currentData, compareData, title }) => {
           />
           <YAxis dataKey='name' type='category' tickLine={false} axisLine={false} />
           <Legend content={renderLegend} />
-          {/*<Area dataKey='amt' fill='#8884d8' stroke='#8884d8' />*/}
           {bars.map((bar) => {
             return (
               <Bar
