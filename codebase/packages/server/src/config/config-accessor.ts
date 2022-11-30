@@ -190,8 +190,8 @@ export class ConfigAccessor {
 
       //splunk
       splunkEnabled: () => yn(processEnv.SPLUNK_ENABLED, { default: false }),
-      splunkSourcetype: () => processEnv.SPLUNK_SOURCETYPE || 'colleague_pma_local',
-      splunkSource: () => processEnv.SPLUNK_SOURCE || 'colleague_pma',
+      splunkSourcetype: () => processEnv.SPLUNK_SOURCETYPE || 'colleague_pma',
+      splunkSource: () => processEnv.SPLUNK_SOURCE || 'colleague_pma_local',
       splunkTokenSecret: () => processEnv.SPLUNK_TOKEN_SECRET || 'invalid_secret',
     };
   }
