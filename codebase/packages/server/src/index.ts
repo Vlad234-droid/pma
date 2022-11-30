@@ -6,11 +6,7 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 
 // splunk logging
-import {
-  uiLoggingMiddleware,
-  loggerErrorMiddleware
-} from '@energon/splunk-logger';
-
+import { uiLoggingMiddleware, loggerErrorMiddleware } from '@energon/splunk-logger';
 
 // utils
 import { getPackageDistFolder } from './utils/package';
@@ -95,8 +91,6 @@ if (!API_SERVER_URL) {
   // setup logger middlewares
   router.use(getHttpLoggerMiddleware('http'));
   router.use(loggingMiddleware(config));
-  router.use(loggerErrorMiddleware);
-  router.use(await uiLoggingMiddleware());
 
   if (config.useOneLogin() === false) {
     logger.info(`WARNING! Authentication is turned off. Fake Login is used.`);
@@ -117,6 +111,12 @@ if (!API_SERVER_URL) {
     }
   }
 
+  router.use(
+    await uiLoggingMiddleware({
+      sourceMapDirectory: clientDistFolder,
+      parseSourceMap: true,
+    }),
+  );
   router.use('/api/yc/v1', apiProxyMiddleware(config));
 
   config.apiIdentityServerUrl() && router.use('/api/iam/v1', apiIdentityProxyMiddleware(config));
@@ -165,6 +165,7 @@ if (!API_SERVER_URL) {
     }
   }
 
+  router.use(loggerErrorMiddleware);
   app.use(
     errorHandler({
       appName: config.applicationName(),

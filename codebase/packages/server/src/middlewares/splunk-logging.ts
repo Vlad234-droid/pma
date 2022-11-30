@@ -30,21 +30,16 @@ export const getLogger = ({
 export const loggingMiddleware = (config: ProcessConfig) =>
   loggerMiddleware({
     logSenders: [getLogger(config)],
-    apiUrlPredicate: (url) => {
-      console.log('Url: ', url, ' result: ', url.includes(`/api/`));
-      return url.includes(`/api/`);
-    },
+    apiUrlPredicate: (url) => url.includes(`/api/`),
     userInfoResolver: userDataResolver,
   });
 
 const userDataResolver = (req, res) => {
   const colleagueUuid = res.colleagueUUID;
-
-  const isPublic = !isCookiePresent(req, AUTH_TOKEN_COOKIE_NAME);
-  const openIdData: any = isPublic ? { params: {} } : getUserData(res);
+  const openIdData = getUserData<{ params?: { employeeNumber: string } }>(res);
 
   return {
-    employeeNumber: openIdData.params.employeeNumber,
+    employeeNumber: openIdData?.params?.employeeNumber,
     colleagueUuid,
   };
 };

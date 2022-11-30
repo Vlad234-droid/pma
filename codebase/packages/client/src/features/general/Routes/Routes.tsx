@@ -16,30 +16,20 @@ type Props = {
 
 const MainRoutes: FC<Props> = ({ routes }) => {
   return (
-    <>
-      <button
-        onClick={() => {
-          throw new Error('ERROR MSG');
-        }}
-      >
-        {' '}
-        throw
-      </button>
-      <Routes>
-        {routes.map(({ Element, path, perform, tenant }, idx) => {
-          const hasPermission = usePermissionByTenant(tenant) && usePermission(perform);
-          return (
-            <ReactRoute
-              key={idx}
-              element={hasPermission ? <Element /> : <AccessDenied message={notHaveAccessMessage} />}
-              path={path}
-            />
-          );
-        })}
-        <ReactRoute path='/' element={<Navigate to={buildPath(Page.CONTRIBUTION)} />} />
-        <ReactRoute path='*' element={<NotFound />} />
-      </Routes>
-    </>
+    <Routes>
+      {routes.map(({ Element, path, perform, tenant }, idx) => {
+        const hasPermission = usePermissionByTenant(tenant) && usePermission(perform);
+        return (
+          <ReactRoute
+            key={idx}
+            element={hasPermission ? <Element /> : <AccessDenied message={notHaveAccessMessage} />}
+            path={path}
+          />
+        );
+      })}
+      <ReactRoute path='/' element={<Navigate to={buildPath(Page.CONTRIBUTION)} />} />
+      <ReactRoute path='*' element={<NotFound />} />
+    </Routes>
   );
 };
 

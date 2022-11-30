@@ -1,7 +1,5 @@
 import React from 'react';
-import {
-  ErrorBoundary as EnergonErrorBoundary,
-} from '@energon/splunk-logger-ui';
+import { ErrorBoundary as EnergonErrorBoundary } from '@energon/splunk-logger-ui';
 import { DDLProvider, SorryPage } from '@dex-ddl/core';
 import { CONFIG, LINKS } from 'config/constants';
 import { uiLogger } from './ui-logger';
@@ -18,17 +16,13 @@ export const ErrorReporting: React.FC = ({ children }) => {
         </DDLProvider>
       )}
     >
-      <>
-        {children}
-      </>
+      <>{children}</>
     </EnergonErrorBoundary>
   );
 };
 
 const normalize = (thrown: unknown): any => {
   return Object.assign(thrown as object, {
-    tag: 'Render error',
-    message: 'Error msg',
-    name: 'PMA Error',
+    name: 'PMA UI Error',
   });
 };
