@@ -2028,6 +2028,16 @@
     "@energon/function-utils" "0.2.0"
     "@energon/object-utils" "0.7.1"
 
+"@energon-connectors/colleague-cms-api@0.7.14":
+  version "0.7.14"
+  resolved "https://nexus.ourtesco.com/repository/colleague-ui/@energon-connectors/colleague-cms-api/-/colleague-cms-api-0.7.14.tgz#ac4aa2990befa056b10561b4ad1a888483c0d119"
+  integrity sha512-CiB6bUMmFQxvRojICQG6NMSHQ3yMBDclO/dusgDmLZHrKxrFCwlxyL6ueeRDPprimqkh8c7mYlS+SzIuKOehCQ==
+  dependencies:
+    "@energon-connectors/core" "0.11.5"
+    "@energon/fetch-client" "0.14.6"
+    "@energon/rest-api-consumer" "0.8.14"
+    "@energon/rest-api-definition" "0.6.14"
+
 "@energon-connectors/colleague-cms-api@0.7.9":
   version "0.7.9"
   resolved "https://nexus.ourtesco.com/repository/colleague-ui/@energon-connectors/colleague-cms-api/-/colleague-cms-api-0.7.9.tgz#1f0521196e3859f27ab9c10d01e158a8b3974e2d"
@@ -2081,6 +2091,18 @@
     "@energon/redux-utils" "1.8.0"
     "@energon/splunk-logger-core" "0.3.0"
     "@energon/splunk-logger-ui" "0.7.1"
+    react "^16.8.0"
+
+"@energon/app-utils@0.5.7":
+  version "0.5.7"
+  resolved "https://nexus.ourtesco.com/repository/colleague-ui/@energon/app-utils/-/app-utils-0.5.7.tgz#167edd3616fa8efe02fa845ed7b8e9535d281a9e"
+  integrity sha512-NQ+UM9YmMSIBR2mkCOmveYxv2Ux42ilOcyDFQAtSC77RWmiyzZyuJFKMDQAf0D/So1uBtvVlJ7BwPxlGNY/Lag==
+  dependencies:
+    "@energon/array-utils" "0.19.8"
+    "@energon/date-utils" "0.19.0"
+    "@energon/redux-utils" "1.8.0"
+    "@energon/splunk-logger-core" "0.3.0"
+    "@energon/splunk-logger-ui" "0.7.4"
     react "^16.8.0"
 
 "@energon/array-utils@0.19.2":
@@ -2189,6 +2211,22 @@
     "@energon/object-utils" "0.7.1"
     "@energon/onelogin" "1.35.1"
     "@energon/splunk-logger" "0.31.1"
+    "@energon/splunk-logger-core" "0.3.0"
+    crypto-js "4.0.0"
+    http-proxy-middleware "0.20.0"
+
+"@energon/express-middlewares@0.26.7":
+  version "0.26.7"
+  resolved "https://nexus.ourtesco.com/repository/colleague-ui/@energon/express-middlewares/-/express-middlewares-0.26.7.tgz#9b4118079cd440e204dea71c469f86a4ab499a58"
+  integrity sha512-HW0PoR4E27xoeIJQ6w9ff3GFnAzLYD3A3tceLlPWzce1U4dJ03WENCMPcrgHSNWY7OMd73BbKMcMFAxBWy5YDQ==
+  dependencies:
+    "@energon-connectors/colleague-cms-api" "0.7.14"
+    "@energon-connectors/core" "0.11.5"
+    "@energon/app-utils" "0.5.7"
+    "@energon/array-utils" "0.19.2"
+    "@energon/object-utils" "0.7.1"
+    "@energon/onelogin" "1.41.2"
+    "@energon/splunk-logger" "0.36.1"
     "@energon/splunk-logger-core" "0.3.0"
     crypto-js "4.0.0"
     http-proxy-middleware "0.20.0"
@@ -2320,6 +2358,39 @@
     typemoq "^2.1.0"
     uuid "^3.3.2"
 
+"@energon/onelogin@1.41.2", "@energon/onelogin@^1.41.2":
+  version "1.41.2"
+  resolved "https://nexus.ourtesco.com/repository/colleague-ui/@energon/onelogin/-/onelogin-1.41.2.tgz#79ea96db5c5a73d1a92351bd4f244e122f705ffb"
+  integrity sha512-awA9WhWw8w3BPRqW1ImnYiWpszPNTlu3JwixllJ9lWODhLLABoJk0y5iJdP6r5w6T27znUn74/Ba5es9/3t24Q==
+  dependencies:
+    "@energon/cookie-utils" "0.7.0"
+    "@energon/express-middlewares" "0.26.7"
+    "@energon/fetch-client" "0.14.6"
+    "@energon/rest-api-consumer" "0.8.14"
+    "@energon/splunk-logger" "0.36.1"
+    "@energon/type-utils" "0.11.0"
+    "@types/cookie-parser" "^1.4.1"
+    "@types/cookie-session" "^2.0.37"
+    "@types/crypto-js" "^3.1.43"
+    "@types/express" "4.17.2"
+    "@types/isomorphic-fetch" "^0.0.35"
+    "@types/js-cookie" "^2.2.2"
+    "@types/jsonwebtoken" "^8.3.2"
+    "@types/passport" "^1.0.0"
+    cookie-parser "^1.4.4"
+    cookie-session "^1.3.3"
+    crypto-js "^4.0.0"
+    fast-xml-parser "^3.12.20"
+    isomorphic-fetch "^2.2.1"
+    js-cookie "^2.2.0"
+    jsonwebtoken "^8.5.1"
+    jwks-rsa "^1.5.0"
+    node-fetch "2.6.6"
+    openid-client "^4.7.4"
+    passport "^0.4.0"
+    typemoq "^2.1.0"
+    uuid "^3.3.2"
+
 "@energon/period-utils@0.0.1":
   version "0.0.1"
   resolved "https://nexus.ourtesco.com/repository/colleague-ui-private/@energon/period-utils/-/period-utils-0.0.1.tgz#5e9929f0939c7dd9f915301f18dd7fe2c60de715"
@@ -2431,18 +2502,18 @@
     "@energon/splunk-logger-core" "0.3.0"
     utility-types "3.7.0"
 
-"@energon/splunk-logger-ui@^0.7.2":
-  version "0.7.2"
-  resolved "https://nexus.ourtesco.com/repository/colleague-ui-private/@energon/splunk-logger-ui/-/splunk-logger-ui-0.7.2.tgz#af816c65c935bdc3c2ca8d4d0434d89fe0cd3ebe"
-  integrity sha512-CHi47Nu2ipEB4zH5e249trpY/+MKkzly6kZJca0ZcsPA35moy00hpjRn/DKtxftuC9faBxxekBX9SCEt3SG5FA==
+"@energon/splunk-logger-ui@0.7.4", "@energon/splunk-logger-ui@^0.7.4":
+  version "0.7.4"
+  resolved "https://nexus.ourtesco.com/repository/colleague-ui/@energon/splunk-logger-ui/-/splunk-logger-ui-0.7.4.tgz#89c9acbe66bde926a401c008bdda2b0f750ac11c"
+  integrity sha512-eO5CAoLkeqKf3A5cEwd7TxT0gdxmQd1nLVGyXlEEpQH8ZEjI2u8lgTS5RheruZfzdOqraYu+YnKuHh2l2l7SGw==
   dependencies:
     "@energon/splunk-logger-core" "0.3.0"
     utility-types "3.7.0"
 
-"@energon/splunk-logger-ui@^0.7.4":
-  version "0.7.4"
-  resolved "https://nexus.ourtesco.com/repository/colleague-ui/@energon/splunk-logger-ui/-/splunk-logger-ui-0.7.4.tgz#89c9acbe66bde926a401c008bdda2b0f750ac11c"
-  integrity sha512-eO5CAoLkeqKf3A5cEwd7TxT0gdxmQd1nLVGyXlEEpQH8ZEjI2u8lgTS5RheruZfzdOqraYu+YnKuHh2l2l7SGw==
+"@energon/splunk-logger-ui@^0.7.2":
+  version "0.7.2"
+  resolved "https://nexus.ourtesco.com/repository/colleague-ui-private/@energon/splunk-logger-ui/-/splunk-logger-ui-0.7.2.tgz#af816c65c935bdc3c2ca8d4d0434d89fe0cd3ebe"
+  integrity sha512-CHi47Nu2ipEB4zH5e249trpY/+MKkzly6kZJca0ZcsPA35moy00hpjRn/DKtxftuC9faBxxekBX9SCEt3SG5FA==
   dependencies:
     "@energon/splunk-logger-core" "0.3.0"
     utility-types "3.7.0"
@@ -2463,7 +2534,7 @@
     url-join "4.0.1"
     uuid "3.3.2"
 
-"@energon/splunk-logger@^0.36.1":
+"@energon/splunk-logger@0.36.1", "@energon/splunk-logger@^0.36.1":
   version "0.36.1"
   resolved "https://nexus.ourtesco.com/repository/colleague-ui/@energon/splunk-logger/-/splunk-logger-0.36.1.tgz#628a07633e61fadb2a8a61777da446327a833811"
   integrity sha512-GS0f9Hwt1RnmrmUjkkJNwR1z18K+UaT4v0NvjAfBmkeSmTF05QBwy+QszxHlCcyOpylt2Vr9F/Xbe3cEP8upng==
@@ -19984,6 +20055,13 @@ node-fetch@2.6.1:
   resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.1.tgz#045bd323631f76ed2e2b55573394416b639a0052"
   integrity sha512-V4aYg89jEoVRxRb2fJdAg8FHvI7cEyYdVAh94HH0UIK8oJxUfkjlDQN9RbMx+bEjP7+ggMiFRprSti032Oipxw==
 
+node-fetch@2.6.6, node-fetch@^2.6.1:
+  version "2.6.6"
+  resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.6.tgz#1751a7c01834e8e1697758732e9efb6eeadfaf89"
+  integrity sha512-Z8/6vRlTUChSdIgMa51jxQ4lrw/Jy5SOW10ObaA47/RElsAN2c5Pn8bTgFGWn/ibwzXTE8qwr1Yzx28vsecXEA==
+  dependencies:
+    whatwg-url "^5.0.0"
+
 node-fetch@2.6.7:
   version "2.6.7"
   resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.7.tgz#24de9fba827e3b4ae44dc8b20256a379160052ad"
@@ -19998,13 +20076,6 @@ node-fetch@^1.0.1:
   dependencies:
     encoding "^0.1.11"
     is-stream "^1.0.1"
-
-node-fetch@^2.6.1:
-  version "2.6.6"
-  resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.6.tgz#1751a7c01834e8e1697758732e9efb6eeadfaf89"
-  integrity sha512-Z8/6vRlTUChSdIgMa51jxQ4lrw/Jy5SOW10ObaA47/RElsAN2c5Pn8bTgFGWn/ibwzXTE8qwr1Yzx28vsecXEA==
-  dependencies:
-    whatwg-url "^5.0.0"
 
 node-forge@^0.10.0:
   version "0.10.0"

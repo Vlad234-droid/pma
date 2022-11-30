@@ -22,7 +22,6 @@ export const getLogger = ({
       sendLogToSplunk(...args);
     }
     if (buildEnvironment() === 'local') {
-      console.log('ARGS', JSON.stringify(args, null, 4));
       sendLogToConsole(...args);
     }
   };
@@ -45,7 +44,6 @@ const userDataResolver = (req, res) => {
   const openIdData: any = isPublic ? { params: {} } : getUserData(res);
 
   return {
-    sessionId: openIdData.sid,
     employeeNumber: openIdData.params.employeeNumber,
     colleagueUuid,
   };

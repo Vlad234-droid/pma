@@ -1,10 +1,16 @@
 import express, { Router } from 'express';
+import bodyParser from 'body-parser';
 import path from 'path';
 import os from 'os';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
-import { uiLoggingMiddleware, loggerErrorMiddleware } from '@energon/splunk-logger';
-import bodyParser from 'body-parser';
+
+// splunk logging
+import {
+  uiLoggingMiddleware,
+  loggerErrorMiddleware
+} from '@energon/splunk-logger';
+
 
 // utils
 import { getPackageDistFolder } from './utils/package';
@@ -90,7 +96,7 @@ if (!API_SERVER_URL) {
   router.use(getHttpLoggerMiddleware('http'));
   router.use(loggingMiddleware(config));
   router.use(loggerErrorMiddleware);
-  router.use('/logger', await uiLoggingMiddleware());
+  router.use(await uiLoggingMiddleware());
 
   if (config.useOneLogin() === false) {
     logger.info(`WARNING! Authentication is turned off. Fake Login is used.`);
