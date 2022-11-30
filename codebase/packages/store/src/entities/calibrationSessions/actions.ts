@@ -30,14 +30,14 @@ export const createCalibrationSession = createAsyncAction(
   'calibrationSession/CREATE_SUCCESS',
   'calibrationSession/CREATE_FAILURE',
   'calibrationSession/CREATE_CANCEL',
-)<CalibrationSession, RestResponseCalibrationSession, Error>();
+)<Omit<CalibrationSession, 'participants'>, RestResponseCalibrationSession, Error>();
 
 export const updateCalibrationSession = createAsyncAction(
   'calibrationSession/UPDATE_REQUEST',
   'calibrationSession/UPDATE_SUCCESS',
   'calibrationSession/UPDATE_FAILURE',
   'calibrationSession/UPDATE_CANCEL',
-)<CalibrationSession, RestResponseCalibrationSession, Error>();
+)<Omit<CalibrationSession, 'participants'>, RestResponseCalibrationSession, Error>();
 
 export const deleteCalibrationSession = createAsyncAction(
   'calibrationSession/DELETE_REQUEST',

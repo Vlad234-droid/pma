@@ -1,5 +1,6 @@
 import { CalibrationSession, RequestQuery } from '@pma/openapi';
 import httpClient from '../config/client';
+import qs from 'qs';
 
 const domain = '/calibration';
 type Config = { colleagueUuid: string; cycleUuid: string };
@@ -32,3 +33,21 @@ export const createCalibrationReview = ({ colleagueUuid, cycleUuid }: Config, da
 export const updateCalibrationReview = ({ colleagueUuid, cycleUuid }: Config, data: any) =>
   httpClient.put(`${domain}/colleagues/${colleagueUuid}/pm-cycles/${cycleUuid}/reviews`, data);
 ///calibration
+
+export const getCalibrationFilter = (params: RequestQuery) => {
+  return httpClient.get(`${domain}/sessions/filters`, {
+    params,
+    paramsSerializer: (params) => {
+      return qs.stringify(params, { arrayFormat: 'indices' });
+    },
+  });
+};
+
+export const getCalibrationColleagues = (params: RequestQuery) => {
+  return httpClient.get(`${domain}/sessions/colleagues`, {
+    params,
+    paramsSerializer: (params) => {
+      return qs.stringify(params, { arrayFormat: 'indices' });
+    },
+  });
+};

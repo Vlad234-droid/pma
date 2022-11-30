@@ -261,3 +261,19 @@ export enum CycleType {
   HIRING = 'HIRING',
   FISCAL = 'FISCAL',
 }
+
+export enum Operand {
+  EQUALS = '_eq',
+  NOT_EQUALS = '_ne',
+  CONTAINS = '_contains',
+  NOT_CONTAINS = '_ncontains',
+  IN = '_in',
+  NOT_IN = '_nin',
+  LESS_THAN = '_lt',
+  LESS_THAN_EQUALS = '_lte',
+  GREATER_THAN = '_gt',
+  GREATER_THAN_EQUALS = '_gte',
+  LIKE = '_like',
+  NULL = '_null',
+  NOT_EXIST = '_nexist',
+}

@@ -33,4 +33,6 @@ export * from './performance-cycle';
 export * from './menuData';
 export * from './calibrationSessions';
 export * from './calibrationReview';
+export * from './colleagueFilter';
+export * from './colleagueSimple';
 export * from './completedReviews';

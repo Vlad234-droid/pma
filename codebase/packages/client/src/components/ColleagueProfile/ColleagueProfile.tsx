@@ -3,8 +3,9 @@ import { Rule, useStyle } from '@pma/dex-wrapper';
 import defaultImg from 'images/default.png';
 
 type Props = Record<'firstName' | 'lastName' | 'job' | 'department', string | undefined>;
+type Action = { action?: JSX.Element };
 
-export const ColleagueProfile: FC<Props> = ({ firstName, lastName, job, department }) => {
+export const ColleagueProfile: FC<Props & Action> = ({ firstName, lastName, job, department, action }) => {
   const { css } = useStyle();
   return (
     <div className={css({ display: 'flex', justifyContent: 'flex-start', alignItems: 'center' })}>
@@ -23,6 +24,7 @@ export const ColleagueProfile: FC<Props> = ({ firstName, lastName, job, departme
           <div>{department}</div>
         </div>
       </div>
+      {action}
     </div>
   );
 };

@@ -1,22 +1,24 @@
 import React, { FC, useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
 import { CalibrationSessionStatusEnum } from '@pma/openapi';
-
 import { CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
 import { CalibrationSessionsAction, calibrationSessionsMetaSelector, getCalibrationSessionsSelector } from '@pma/store';
 
+import useDispatch from 'hooks/useDispatch';
 import { Page } from 'pages';
+import { buildPath } from 'features/general/Routes/utils';
 import Spinner from 'components/Spinner';
 import { Icon as IconComponent } from 'components/Icon';
 import { InfoBlock } from 'components/InfoBlock';
+import { paramsReplacer } from 'utils';
 
 import { useTranslation } from 'components/Translation';
-import useDispatch from 'hooks/useDispatch';
 import { TriggerModal } from '../Modal';
 import { Form } from './components/Form';
-import { useSelector } from 'react-redux';
-import { buildPath } from 'features/general/Routes/utils';
-import { paramsReplacer } from 'utils';
+import useFilter from './hooks/useFilter';
+import { CalibrationSessionUiType } from './types';
+import { prepareFormData } from './utils';
 
 export type Props = {
   onClose: () => void;
@@ -32,6 +34,7 @@ const CreateUpdateCalibrationSession: FC<Props> = ({ onClose }) => {
 
   const [isSaveAndExit, toggleSaveAndExit] = useState<boolean>(false);
   const [isSubmittedData, toggleSubmitData] = useState<boolean>(false);
+
   const {
     updating: calibrationSessionUpdating,
     loading: calibrationSessionLoading,
@@ -39,18 +42,20 @@ const CreateUpdateCalibrationSession: FC<Props> = ({ onClose }) => {
     error: calibrationSessionError,
   } = useSelector(calibrationSessionsMetaSelector);
   const calibrationSessions = useSelector(getCalibrationSessionsSelector) || [];
+  const { defaultFilters, colleaguesRemoved, colleaguesAdd } = useFilter(uuid);
 
   const calibrationSession = uuid ? calibrationSessions.find((cs) => cs.uuid === uuid) || null : {};
+  const defaultValues: CalibrationSessionUiType = {
+    ...calibrationSession,
+    colleaguesRemoved,
+    colleaguesAdd,
+    filter: defaultFilters,
+  };
 
   const canEdit = calibrationSession ? calibrationSession?.status !== CalibrationSessionStatusEnum.Completed : true;
 
-  const handleSaveAndExit = async (data) => {
-    const mappedData = {
-      ...data,
-      ...(data.startTime
-        ? { startTime: new Date(data.startTime).toISOString(), endTime: new Date(data.startTime).toISOString() }
-        : {}),
-    };
+  const handleSaveAndExit = async (data: CalibrationSessionUiType) => {
+    const mappedData = prepareFormData(data);
     if (mappedData.uuid) {
       dispatch(CalibrationSessionsAction.updateCalibrationSession(mappedData));
     } else {
@@ -63,14 +68,9 @@ const CreateUpdateCalibrationSession: FC<Props> = ({ onClose }) => {
     }
     toggleSaveAndExit(true);
   };
-  const handleSubmitData = async (data) => {
-    // todo remove endTime when backend is ready
-    const mappedData = {
-      ...data,
-      ...(data.startTime
-        ? { startTime: new Date(data.startTime).toISOString(), endTime: new Date(data.startTime).toISOString() }
-        : {}),
-    };
+
+  const handleSubmitData = async (data: CalibrationSessionUiType) => {
+    const mappedData = prepareFormData(data);
     if (mappedData.uuid) {
       dispatch(CalibrationSessionsAction.updateCalibrationSession(mappedData));
     } else {
@@ -106,9 +106,9 @@ const CreateUpdateCalibrationSession: FC<Props> = ({ onClose }) => {
     }
   }, [calibrationSessionLoaded, uuid]);
 
-  // useEffect(() => {
-  //   dispatch(CalibrationSessionsAction.getCalibrationSessions({}));
-  // }, []);
+  useEffect(() => {
+    dispatch(CalibrationSessionsAction.getCalibrationSessions({}));
+  }, []);
 
   if (calibrationSessionUpdating || calibrationSessionLoading) {
     return <Spinner fullHeight />;
@@ -141,7 +141,7 @@ const CreateUpdateCalibrationSession: FC<Props> = ({ onClose }) => {
             <Form
               onSubmit={handleSubmitData}
               onSaveAndExit={handleSaveAndExit}
-              defaultValues={calibrationSession}
+              defaultValues={defaultValues}
               canEdit={canEdit}
             />
           </div>

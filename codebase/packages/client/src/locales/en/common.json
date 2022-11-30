@@ -720,5 +720,6 @@
   "complete_all_fields": "Please complete all fields, before moving on.",
   "review_completed": "Review completed",
   "reviews_completed": "Reviews completed",
-  "filters_applied": "Filters applied"
+  "filters_applied": "Filters applied",
+  "show_number_of_people_in_group": "Show all {{number}} people in this group"
 }

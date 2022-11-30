@@ -359,6 +359,15 @@
               "type": "string",
               "format": "uuid"
             }
+          },
+          {
+            "name": "merge-mode",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": ["ADDED", "OVERWRITE"]
+            }
           }
         ],
         "responses": {
@@ -405,6 +414,15 @@
             "required": true,
             "schema": {
               "type": "string"
+            }
+          },
+          {
+            "name": "merge-mode",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": ["ADDED", "OVERWRITE"]
             }
           }
         ],
@@ -1940,6 +1958,253 @@
         }
       }
     },
+    "/calibration/colleagues/{colleagueUuid}/pm-cycles/{cycleUuid}/statuses/{status}/reviews": {
+      "put": {
+        "tags": ["calibration"],
+        "summary": "Update status of existing calibration reviews",
+        "description": "Update status of existing calibration reviews",
+        "operationId": "updateReviewsStatus_1",
+        "parameters": [
+          {
+            "name": "colleagueUuid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "cycleUuid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "status",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "DRAFT",
+                "WAITING_FOR_APPROVAL",
+                "APPROVED",
+                "DECLINED",
+                "WAITING_FOR_COMPLETION",
+                "REQUESTED_TO_AMEND",
+                "COMPLETED"
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateReviewsStatusRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Reviews status updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RestResponsePMReviewStatus"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Review not found"
+          }
+        }
+      }
+    },
+    "/calibration/colleagues/{colleagueUuid}/pm-cycles/{cycleUuid}/reviews": {
+      "get": {
+        "tags": ["calibration"],
+        "summary": "Returns accessible Calibration Reviews for the user",
+        "operationId": "getReview_1",
+        "parameters": [
+          {
+            "name": "colleagueUuid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "cycleUuid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Calibration Reviews were found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RestResponseReview"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Calibration Reviews were not found"
+          }
+        }
+      },
+      "put": {
+        "tags": ["calibration"],
+        "summary": "Update existing calibration review",
+        "description": "Update existing review",
+        "operationId": "updateReview_1",
+        "parameters": [
+          {
+            "name": "colleagueUuid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "cycleUuid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Review"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Review updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RestResponseReview"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Review not found"
+          }
+        }
+      },
+      "post": {
+        "tags": ["calibration"],
+        "summary": "Create a calibration review",
+        "description": "Review created",
+        "operationId": "createReview_1",
+        "parameters": [
+          {
+            "name": "colleagueUuid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "cycleUuid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Review"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RestResponseReview"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["calibration"],
+        "summary": "Delete existing calibration review",
+        "description": "Delete existing review",
+        "operationId": "deleteReview_1",
+        "parameters": [
+          {
+            "name": "colleagueUuid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "cycleUuid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Review deleted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RestResponseVoid"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Review not found"
+          }
+        }
+      }
+    },
     "/tips": {
       "get": {
         "tags": ["tip"],
@@ -3065,11 +3330,11 @@
         }
       }
     },
-    "/colleagues/{colleagueUuid}/pm-cycles/{cycleUuid}/review-types/objective/sharing": {
+    "/colleagues/{colleagueUuid}/pm-cycles/{cycleUuid}/review-codes/{code}/sharing": {
       "get": {
-        "tags": ["objective-sharing"],
-        "summary": "Check if colleague objectives is shared",
-        "operationId": "isColleagueShareObjectives",
+        "tags": ["review-sharing"],
+        "summary": "Check if colleague reviews is shared",
+        "operationId": "isColleagueShareReviews",
         "parameters": [
           {
             "name": "cycleUuid",
@@ -3087,11 +3352,19 @@
               "type": "string",
               "format": "uuid"
             }
+          },
+          {
+            "name": "code",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
           "200": {
-            "description": "Info about sharing objectives",
+            "description": "Info about sharing reviews",
             "content": {
               "application/json": {
                 "schema": {
@@ -3103,9 +3376,9 @@
         }
       },
       "post": {
-        "tags": ["objective-sharing"],
-        "summary": "Share colleague objectives",
-        "operationId": "shareObjectives",
+        "tags": ["review-sharing"],
+        "summary": "Share colleague reviews",
+        "operationId": "shareReviews",
         "parameters": [
           {
             "name": "cycleUuid",
@@ -3123,11 +3396,19 @@
               "type": "string",
               "format": "uuid"
             }
+          },
+          {
+            "name": "code",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
           "200": {
-            "description": "Objectives sharing have been enabled",
+            "description": "Reviews sharing have been enabled",
             "content": {
               "application/json": {
                 "schema": {
@@ -3139,9 +3420,9 @@
         }
       },
       "delete": {
-        "tags": ["objective-sharing"],
-        "summary": "Stop sharing colleague objectives",
-        "operationId": "stopSharingObjectives",
+        "tags": ["review-sharing"],
+        "summary": "Stop sharing colleague reviews",
+        "operationId": "stopSharingReviews",
         "parameters": [
           {
             "name": "cycleUuid",
@@ -3159,11 +3440,19 @@
               "type": "string",
               "format": "uuid"
             }
+          },
+          {
+            "name": "code",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
           "200": {
-            "description": "Objectives sharing have been disabled",
+            "description": "Reviews sharing have been disabled",
             "content": {
               "application/json": {
                 "schema": {
@@ -4139,6 +4428,71 @@
         }
       }
     },
+    "/reports/colleagues/total": {
+      "get": {
+        "tags": ["report"],
+        "summary": "Get Feedback Statistics Report Data with filters",
+        "operationId": "getTotalColleagueCount",
+        "parameters": [
+          {
+            "name": "requestQuery",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/RequestQuery"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Found the Statistics Report data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RestResponseInteger"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Statistics Report data not found"
+          }
+        }
+      }
+    },
+    "/reports/calibration-overview": {
+      "get": {
+        "tags": ["report"],
+        "summary": "Get calibration overview report",
+        "operationId": "getCalibrationOverviewReport",
+        "parameters": [
+          {
+            "name": "requestQuery",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/RequestQuery"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Found the Calibration Overview Report data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Calibration Overview data not found"
+          }
+        }
+      }
+    },
     "/processes": {
       "get": {
         "tags": ["deployment"],
@@ -4586,6 +4940,26 @@
               "type": "string",
               "format": "uuid"
             }
+          },
+          {
+            "name": "requestQuery",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/RequestQuery"
+            },
+            "example": {
+              "colleague-cycle-status_in": ["ACTIVE", "SCHEDULED", "STARTED", "FINISHING", "FINISHED", "COMPLETED"],
+              "review-status_in": [
+                "DRAFT",
+                "WAITING_FOR_APPROVAL",
+                "APPROVED",
+                "DECLINED",
+                "WAITING_FOR_COMPLETION",
+                "REQUESTED_TO_AMEND",
+                "COMPLETED"
+              ]
+            }
           }
         ],
         "responses": {
@@ -4618,6 +4992,26 @@
             "schema": {
               "type": "string",
               "format": "uuid"
+            }
+          },
+          {
+            "name": "requestQuery",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/RequestQuery"
+            },
+            "example": {
+              "colleague-cycle-status_in": ["ACTIVE", "SCHEDULED", "STARTED", "FINISHING", "FINISHED", "COMPLETED"],
+              "review-status_in": [
+                "DRAFT",
+                "WAITING_FOR_APPROVAL",
+                "APPROVED",
+                "DECLINED",
+                "WAITING_FOR_COMPLETION",
+                "REQUESTED_TO_AMEND",
+                "COMPLETED"
+              ]
             }
           }
         ],
@@ -5358,11 +5752,11 @@
         }
       }
     },
-    "/colleagues/{colleagueUuid}/review-types/objective/sharing": {
+    "/colleagues/{colleagueUuid}/review-codes/{code}/sharing": {
       "get": {
-        "tags": ["objective-sharing"],
-        "summary": "Get all shared objectives by their manager",
-        "operationId": "getSharedObjectivesForColleague",
+        "tags": ["review-sharing"],
+        "summary": "Get all shared reviews by their manager",
+        "operationId": "getSharedReviewsForColleague",
         "parameters": [
           {
             "name": "colleagueUuid",
@@ -5372,11 +5766,19 @@
               "type": "string",
               "format": "uuid"
             }
+          },
+          {
+            "name": "code",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
           "200": {
-            "description": "Shared objectives",
+            "description": "Shared reviews",
             "content": {
               "application/json": {
                 "schema": {
@@ -5409,6 +5811,17 @@
             "required": true,
             "schema": {
               "type": "string"
+            }
+          },
+          {
+            "name": "requestQuery",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/RequestQuery"
+            },
+            "example": {
+              "colleague-cycle-status_in": ["ACTIVE", "SCHEDULED", "STARTED", "FINISHING", "FINISHED", "COMPLETED"]
             }
           }
         ],
@@ -5457,6 +5870,17 @@
               "type": "boolean",
               "default": false
             }
+          },
+          {
+            "name": "requestQuery",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/RequestQuery"
+            },
+            "example": {
+              "colleague-cycle-status_in": ["ACTIVE", "SCHEDULED", "STARTED", "FINISHING", "FINISHED", "COMPLETED"]
+            }
           }
         ],
         "responses": {
@@ -5472,6 +5896,110 @@
           },
           "404": {
             "description": "Reviews not found"
+          }
+        }
+      }
+    },
+    "/colleagues/{colleagueUuid}/pm-cycles/{cycleUuid}/metadata": {
+      "get": {
+        "tags": ["performance-cycle"],
+        "summary": "Get full metadata for colleague and cycle",
+        "operationId": "getMetadataByColleagueAndCycle",
+        "parameters": [
+          {
+            "name": "colleagueUuid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "cycleUuid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "includeForms",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Found the cycle metadata for colleague and cycle",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RestResponseCompositePMCycleMetadataResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Performance cycle not found"
+          }
+        }
+      }
+    },
+    "/colleagues/{colleagueUuid}/pm-cycles/{cycleUuid}/colleague-cycles": {
+      "get": {
+        "tags": ["performance-cycle"],
+        "summary": "Get colleague cycles for colleague and cycle",
+        "operationId": "getColleagueCycles",
+        "parameters": [
+          {
+            "name": "colleagueUuid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "cycleUuid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "requestQuery",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/RequestQuery"
+            },
+            "example": {
+              "colleague-cycle-status_in": ["ACTIVE", "SCHEDULED", "STARTED", "FINISHING", "FINISHED", "COMPLETED"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Found colleague cycles for colleague and cycle",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RestResponseListPMColleagueCycle"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Colleague cycle not found"
           }
         }
       }
@@ -5722,6 +6250,94 @@
         }
       }
     },
+    "/calibration/sessions/{sessionUuid}/reviews": {
+      "get": {
+        "tags": ["calibration"],
+        "summary": "Gets reviews by Calibration Sessions",
+        "operationId": "getSessionReviews",
+        "parameters": [
+          {
+            "name": "sessionUuid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of session reviews",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RestResponseListReview"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/calibration/sessions/filters": {
+      "get": {
+        "tags": ["calibration"],
+        "summary": "Get filters by permissions and selected filters",
+        "operationId": "getColleagueFilterOptions",
+        "parameters": [
+          {
+            "name": "requestQuery",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/RequestQuery"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of available filters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RestResponseColleagueFilterOptions"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/calibration/sessions/colleagues": {
+      "get": {
+        "tags": ["calibration"],
+        "summary": "Get colleagues for calibration by filter params",
+        "operationId": "getColleagues",
+        "parameters": [
+          {
+            "name": "requestQuery",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/RequestQuery"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of available filters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RestResponseListColleagueSimple"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/calibration/reviews": {
       "get": {
         "tags": ["calibration"],
@@ -5743,13 +6359,43 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/RestResponseListReview"
+                  "$ref": "#/components/schemas/RestResponseMapStringListReview"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/calibration/reviews/{uuid}": {
+      "get": {
+        "tags": ["calibration"],
+        "summary": "Get a calibration review by its identifier",
+        "operationId": "getReviewByUuid_1",
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Found the Review",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RestResponseReview"
                 }
               }
             }
           },
           "404": {
-            "description": "Calibration Reviews were not found"
+            "description": "Review not found"
           }
         }
       }
@@ -6460,7 +7106,7 @@
           },
           "workLevel": {
             "type": "string",
-            "enum": ["WL1", "WL2", "WL3", "WL4", "WL5"]
+            "enum": ["COLLEAGUE", "WL1", "WL2", "WL3", "WL4", "WL5"]
           },
           "managerUUID": {
             "type": "string",
@@ -7486,52 +8132,104 @@
             "type": "string",
             "format": "uuid"
           },
-          "reviews": {
-            "uniqueItems": true,
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Review"
-            }
-          },
           "participants": {
-            "$ref": "#/components/schemas/ColleagueFilter"
+            "$ref": "#/components/schemas/RequestQuery"
           }
         }
       },
-      "ColleagueCriterion": {
+      "Condition": {
         "type": "object",
         "properties": {
-          "colleagueUuid": {
-            "type": "string",
-            "format": "uuid"
+          "property": {
+            "type": "string"
           },
-          "status": {
+          "operand": {
             "type": "string",
-            "enum": ["ADDED", "REMOVED"]
+            "enum": [
+              "EQUALS",
+              "NOT_EQUALS",
+              "CONTAINS",
+              "NOT_CONTAINS",
+              "IN",
+              "NOT_IN",
+              "LESS_THAN",
+              "LESS_THAN_EQUALS",
+              "GREATER_THAN",
+              "GREATER_THAN_EQUALS",
+              "LIKE",
+              "NULL"
+            ]
+          },
+          "value": {
+            "type": "object"
           }
         }
       },
-      "ColleagueFilter": {
+      "ConditionGroup": {
         "type": "object",
         "properties": {
-          "groupsCriteria": {
-            "uniqueItems": true,
+          "filters": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/Criterion"
+              "$ref": "#/components/schemas/Condition"
             }
           },
-          "colleaguesCriteria": {
-            "uniqueItems": true,
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ColleagueCriterion"
-            }
+          "_type": {
+            "type": "string",
+            "enum": ["OR", "AND"]
           }
         }
       },
-      "Criterion": {
-        "type": "object"
+      "RequestQuery": {
+        "type": "object",
+        "properties": {
+          "sort": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Sort"
+            }
+          },
+          "filters": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Condition"
+            }
+          },
+          "_start": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "_limit": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "_groups": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ConditionGroup"
+            }
+          },
+          "_search": {
+            "type": "string"
+          },
+          "_sort": {
+            "type": "string",
+            "writeOnly": true
+          }
+        },
+        "example": "{\n    \"_sort\": \"field1:DESC,field2:ASC\",\n    \"field1\": \"A\",\n    \"field2_ne\": \"5\",\n    \"field3_contains\": \"A\",\n    \"field4_ncontains\": \"B\",\n    \"field5_in\": [\"A\",\"B\"],\n    \"field6_in[0]\": \"A\",\n    \"field6_in[1]\": \"B\",\n    \"field6_in[2]\": \"C\",\n    \"field7_nin\": [\"C\",\"D\"],\n    \"field8_lt\": \"5\",\n    \"field9_lte\": \"5\",\n    \"field10_gt\": \"5\",\n    \"field11_gte\": \"5\",\n    \"field12_null\": \"true\",\n    \"_groups\": [{ \"\n             \"_type\": \"OR\",\n             \"field2_eq\": \"B\",\n             \"field3_eq\": \"C\"}],\n    \"_start\": \"1\",\n    \"_limit\": \"7\",\n    \"_search\": \"A\"\n}"
+      },
+      "Sort": {
+        "type": "object",
+        "properties": {
+          "field": {
+            "type": "string"
+          },
+          "order": {
+            "type": "string",
+            "enum": ["ASC", "DESC"]
+          }
+        }
       },
       "RestResponseCalibrationSession": {
         "type": "object",
@@ -7647,12 +8345,12 @@
           "source": {
             "type": "string"
           },
-          "tenantId": {
-            "type": "string"
-          },
           "deploymentTime": {
             "type": "string",
             "format": "date-time"
+          },
+          "tenantId": {
+            "type": "string"
           }
         }
       },
@@ -7891,6 +8589,18 @@
           "eventId": {
             "type": "string"
           },
+          "eventProperties": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object"
+            }
+          },
+          "callbackEvent": {
+            "$ref": "#/components/schemas/Event"
+          },
+          "eventName": {
+            "type": "string"
+          },
           "eventPriority": {
             "type": "string",
             "enum": [
@@ -7912,18 +8622,6 @@
             "format": "date-time"
           },
           "callbackServiceURL": {
-            "type": "string"
-          },
-          "eventProperties": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "object"
-            }
-          },
-          "callbackEvent": {
-            "$ref": "#/components/schemas/Event"
-          },
-          "eventName": {
             "type": "string"
           }
         }
@@ -8114,100 +8812,6 @@
           }
         }
       },
-      "Condition": {
-        "type": "object",
-        "properties": {
-          "property": {
-            "type": "string"
-          },
-          "operand": {
-            "type": "string",
-            "enum": [
-              "EQUALS",
-              "NOT_EQUALS",
-              "CONTAINS",
-              "NOT_CONTAINS",
-              "IN",
-              "NOT_IN",
-              "LESS_THAN",
-              "LESS_THAN_EQUALS",
-              "GREATER_THAN",
-              "GREATER_THAN_EQUALS",
-              "LIKE",
-              "NULL"
-            ]
-          },
-          "value": {
-            "type": "object"
-          }
-        }
-      },
-      "ConditionGroup": {
-        "type": "object",
-        "properties": {
-          "filters": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Condition"
-            }
-          },
-          "_type": {
-            "type": "string",
-            "enum": ["OR", "AND"]
-          }
-        }
-      },
-      "RequestQuery": {
-        "type": "object",
-        "properties": {
-          "sort": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Sort"
-            }
-          },
-          "filters": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Condition"
-            }
-          },
-          "_start": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "_limit": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "_groups": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ConditionGroup"
-            }
-          },
-          "_search": {
-            "type": "string"
-          },
-          "_sort": {
-            "type": "string",
-            "writeOnly": true
-          }
-        },
-        "example": "{\n    \"_sort\": \"field1:DESC,field2:ASC\",\n    \"field1\": \"A\",\n    \"field2_ne\": \"5\",\n    \"field3_contains\": \"A\",\n    \"field4_ncontains\": \"B\",\n    \"field5_in\": [\"A\",\"B\"],\n    \"field6_in[0]\": \"A\",\n    \"field6_in[1]\": \"B\",\n    \"field6_in[2]\": \"C\",\n    \"field7_nin\": [\"C\",\"D\"],\n    \"field8_lt\": \"5\",\n    \"field9_lte\": \"5\",\n    \"field10_gt\": \"5\",\n    \"field11_gte\": \"5\",\n    \"field12_null\": \"true\",\n    \"_groups\": [{ \"\n             \"_type\": \"OR\",\n             \"field2_eq\": \"B\",\n             \"field3_eq\": \"C\"}],\n    \"_start\": \"1\",\n    \"_limit\": \"7\",\n    \"_search\": \"A\"\n}"
-      },
-      "Sort": {
-        "type": "object",
-        "properties": {
-          "field": {
-            "type": "string"
-          },
-          "order": {
-            "type": "string",
-            "enum": ["ASC", "DESC"]
-          }
-        }
-      },
       "RestResponseListTip": {
         "type": "object",
         "properties": {
@@ -8372,6 +8976,24 @@
           }
         }
       },
+      "RestResponseInteger": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ApiError"
+            }
+          }
+        }
+      },
       "ProcessInfo": {
         "type": "object",
         "properties": {
@@ -8397,13 +9019,13 @@
           "category": {
             "type": "string"
           },
+          "versionTag": {
+            "type": "string"
+          },
           "deploymentId": {
             "type": "string"
           },
           "diagramResourceName": {
-            "type": "string"
-          },
-          "versionTag": {
             "type": "string"
           },
           "tenantId": {
@@ -8963,24 +9585,6 @@
           }
         }
       },
-      "RestResponseInteger": {
-        "type": "object",
-        "properties": {
-          "success": {
-            "type": "boolean"
-          },
-          "data": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "errors": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ApiError"
-            }
-          }
-        }
-      },
       "RestResponseListGeneralDictionaryItem": {
         "type": "object",
         "properties": {
@@ -9060,13 +9664,13 @@
           "category": {
             "type": "string"
           },
+          "versionTag": {
+            "type": "string"
+          },
           "deploymentId": {
             "type": "string"
           },
           "diagramResourceName": {
-            "type": "string"
-          },
-          "versionTag": {
             "type": "string"
           },
           "tenantId": {
@@ -9343,6 +9947,83 @@
           }
         }
       },
+      "PMColleagueCycle": {
+        "type": "object",
+        "properties": {
+          "uuid": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "colleagueUuid": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "cycleUuid": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "INACTIVE",
+              "COMPLETED",
+              "DRAFT",
+              "FAILED",
+              "REGISTERED",
+              "STARTED",
+              "SUSPENDED",
+              "TERMINATED",
+              "SCHEDULED",
+              "FINISHING",
+              "FINISHED"
+            ]
+          },
+          "creationTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "startTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "properties": {
+            "type": "object",
+            "properties": {
+              "empty": {
+                "type": "boolean"
+              }
+            },
+            "additionalProperties": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "RestResponseListPMColleagueCycle": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PMColleagueCycle"
+            }
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ApiError"
+            }
+          }
+        }
+      },
       "RestResponseListColleagueProfile": {
         "type": "object",
         "properties": {
@@ -9480,6 +10161,120 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/CalibrationSession"
+            }
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ApiError"
+            }
+          }
+        }
+      },
+      "ColleagueFilterOptions": {
+        "type": "object",
+        "properties": {
+          "functions": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Function"
+            }
+          },
+          "departments": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Department"
+            }
+          },
+          "countries": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Country"
+            }
+          },
+          "legal-entities": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LegalEntity"
+            }
+          },
+          "business-groups": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BusinessGroup"
+            }
+          },
+          "line-managers": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ColleagueSimple"
+            }
+          },
+          "work-levels": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WorkLevel"
+            }
+          }
+        }
+      },
+      "RestResponseColleagueFilterOptions": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "$ref": "#/components/schemas/ColleagueFilterOptions"
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ApiError"
+            }
+          }
+        }
+      },
+      "RestResponseListColleagueSimple": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ColleagueSimple"
+            }
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ApiError"
+            }
+          }
+        }
+      },
+      "RestResponseMapStringListReview": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Review"
+              }
             }
           },
           "errors": {
