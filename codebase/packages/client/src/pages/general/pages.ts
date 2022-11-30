@@ -89,14 +89,14 @@ const pages: Record<Page, PageComponent> = {
     title: (_, t) => t('title_people_team'),
     withHeader: true,
     backPath: Page.CONTRIBUTION,
-    perform: [role.LINE_MANAGER],
+    perform: [role.TALENT_ADMIN, role.PEOPLE_TEAM],
     tenant: [Tenant.BANK, Tenant.GENERAL],
   },
   [Page.CALIBRATION_SESSION_OVERVIEW]: {
     Element: CalibrationSessionOverview,
     title: (_, t) => t('calibration'),
     withHeader: true,
-    perform: [role.LINE_MANAGER],
+    perform: [role.TALENT_ADMIN, role.PEOPLE_TEAM],
     tenant: [Tenant.BANK, Tenant.GENERAL],
   },
   [Page.CALIBRATION_SESSION]: {
@@ -238,7 +238,7 @@ const pages: Record<Page, PageComponent> = {
   },
   [Page.CONTRIBUTION]: {
     Element: CareerPerformance,
-    title: (_, t) => t('people_team'),
+    title: (_, t) => t('your_contribution'),
     withHeader: true,
     withIcon: true,
     iconName: 'home',

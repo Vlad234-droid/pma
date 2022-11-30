@@ -18,7 +18,6 @@ const CalibrationSessionOverview: FC<{ period: string }> = ({ period }) => {
 
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const mediumScreen = matchMedia({ xSmall: false, small: false, medium: true }) || false;
-
   const { t } = useTranslation();
 
   const [activeList, setActiveList] = useState<ActiveList>(ActiveList.LIST);
@@ -32,8 +31,8 @@ const CalibrationSessionOverview: FC<{ period: string }> = ({ period }) => {
         jobName: 'store',
         lastName: 'store',
         uuid: '1',
-        type: 'Outstanding',
-        value: 'how',
+        what: 'Outstanding',
+        how: 'Outstanding',
       },
       {
         businessType: 'store',
@@ -41,8 +40,8 @@ const CalibrationSessionOverview: FC<{ period: string }> = ({ period }) => {
         jobName: 'store',
         lastName: 'store',
         uuid: '2',
-        type: 'Outstanding',
-        value: 'how',
+        what: 'Outstanding',
+        how: 'Outstanding',
       },
     ],
     Great: [
@@ -52,8 +51,8 @@ const CalibrationSessionOverview: FC<{ period: string }> = ({ period }) => {
         jobName: 'store',
         lastName: 'store',
         uuid: '1',
-        type: 'Outstanding',
-        value: 'how',
+        what: 'Outstanding',
+        how: 'Outstanding',
       },
       {
         businessType: 'store',
@@ -61,8 +60,8 @@ const CalibrationSessionOverview: FC<{ period: string }> = ({ period }) => {
         jobName: 'store',
         lastName: 'store',
         uuid: '2',
-        type: 'Outstanding',
-        value: 'how',
+        what: 'Outstanding',
+        how: 'Outstanding',
       },
     ],
     Satisfactory: [
@@ -72,8 +71,8 @@ const CalibrationSessionOverview: FC<{ period: string }> = ({ period }) => {
         jobName: 'store',
         lastName: 'store',
         uuid: '1',
-        type: 'Outstanding',
-        value: 'how',
+        what: 'Outstanding',
+        how: 'Outstanding',
       },
       {
         businessType: 'store',
@@ -81,8 +80,8 @@ const CalibrationSessionOverview: FC<{ period: string }> = ({ period }) => {
         jobName: 'store',
         lastName: 'store',
         uuid: '2',
-        type: 'Outstanding',
-        value: 'how',
+        what: 'Outstanding',
+        how: 'Outstanding',
       },
     ],
     'Below expected': [
@@ -92,8 +91,8 @@ const CalibrationSessionOverview: FC<{ period: string }> = ({ period }) => {
         jobName: 'store',
         lastName: 'store',
         uuid: '1',
-        type: 'Outstanding',
-        value: 'how',
+        what: 'Outstanding',
+        how: 'Outstanding',
       },
       {
         businessType: 'store',
@@ -101,8 +100,8 @@ const CalibrationSessionOverview: FC<{ period: string }> = ({ period }) => {
         jobName: 'store',
         lastName: 'store',
         uuid: '2',
-        type: 'Outstanding',
-        value: 'how',
+        what: 'Outstanding',
+        how: 'Outstanding',
       },
     ],
     Unsubmitted: [
@@ -112,8 +111,8 @@ const CalibrationSessionOverview: FC<{ period: string }> = ({ period }) => {
         jobName: 'store',
         lastName: 'store',
         uuid: '1',
-        type: 'Outstanding',
-        value: 'how',
+        what: 'Outstanding',
+        how: 'Outstanding',
       },
       {
         businessType: 'store',
@@ -121,8 +120,8 @@ const CalibrationSessionOverview: FC<{ period: string }> = ({ period }) => {
         jobName: 'store',
         lastName: 'store',
         uuid: '2',
-        type: 'Outstanding',
-        value: 'how',
+        what: 'Outstanding',
+        how: 'Outstanding',
       },
     ],
   };

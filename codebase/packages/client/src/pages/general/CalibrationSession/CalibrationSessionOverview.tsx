@@ -9,6 +9,7 @@ import CalibrationSessionOverview, {
   Widget,
 } from 'features/general/CalibrationSession';
 import { Filter } from 'features/general/CalibrationSession/components/Filter';
+import { role, usePermission } from 'features/general/Permission';
 import { buildPath } from 'features/general/Routes';
 import { useTranslation } from 'components/Translation';
 
@@ -18,6 +19,7 @@ const CalibrationSessionPage: FC = () => {
   const { css } = useStyle();
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const isPerform = usePermission([role.TALENT_ADMIN]);
 
   const [period, setPeriod] = useState<string>('2021 - 2022');
 
@@ -31,11 +33,13 @@ const CalibrationSessionPage: FC = () => {
             title={t('calibration_sessions', 'Calibration sessions')}
             graphics={'chart'}
             onClick={() => navigate(buildPath(Page.CALIBRATION_SESSION_LIST))}
+            isDisabled={!isPerform}
           />
           <Widget
             title={t('create_calibration_session', 'Create calibration session')}
             graphics={'add'}
             onClick={() => navigate(buildPath(Page.CREATE_CALIBRATION_SESSION))}
+            isDisabled={!isPerform}
           />
           <RatingsSubmitted />
           <CalibrationsCompleted />

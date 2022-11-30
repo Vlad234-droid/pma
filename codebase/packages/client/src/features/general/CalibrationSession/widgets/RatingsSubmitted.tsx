@@ -5,7 +5,7 @@ import { useTranslation } from 'components/Translation';
 
 import BaseWidget from 'components/BaseWidget';
 
-const RatingsSubmitted: FC<{ number?: string }> = ({ number = '0' }) => {
+const RatingsSubmitted: FC<{ number?: string; outOf?: string }> = ({ number = '5', outOf = '10' }) => {
   const { t } = useTranslation();
 
   return (
@@ -15,7 +15,7 @@ const RatingsSubmitted: FC<{ number?: string }> = ({ number = '0' }) => {
       hover={false}
       withButton={false}
       number={number}
-      description={t('ratings', 'Ratings')}
+      description={t('outOf', 'Out Of', { outOf })}
       customStyle={{
         fontSize: theme.font.fixed.f16.fontSize,
         lineHeight: theme.font.fixed.f16.lineHeight,

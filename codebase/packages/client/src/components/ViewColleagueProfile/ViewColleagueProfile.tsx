@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { useStyle, Rule } from '@pma/dex-wrapper';
+import { useStyle, Rule, Styles } from '@pma/dex-wrapper';
 import { TileWrapper } from 'components/Tile';
 import { Trans } from 'components/Translation';
 
@@ -18,6 +18,9 @@ export type ColleagueProfile = {
   lineManager?: colleagueValue;
   middleName?: colleagueValue;
   uuid: string;
+  what?: string;
+  how?: string;
+  overall?: string;
 };
 
 export type Props = {
@@ -42,6 +45,29 @@ const ViewColleagueProfile: FC<Props> = ({ colleague, onClick, title }) => {
           </div>
         </div>
 
+        {(colleague?.what || colleague?.how || colleague?.overall) && (
+          <div className={css(ratingContainer)}>
+            {colleague?.what && (
+              <div className={css(ratingType)}>
+                <span>{colleague?.what}</span>
+                <span>What</span>
+              </div>
+            )}
+            {colleague?.how && (
+              <div className={css(ratingType)}>
+                <span>{colleague?.how}</span>
+                <span>How</span>
+              </div>
+            )}
+            {colleague?.overall && (
+              <div className={css(ratingType)}>
+                <span>{colleague?.overall}</span>
+                <span>Overall</span>
+              </div>
+            )}
+          </div>
+        )}
+
         <div className={css({ display: 'flex', justifyContent: 'center', alignItems: 'center' })}>
           <div className={css({ display: 'flex', alignItems: 'center' })}>
             <span className={css(viewStyle)} onClick={() => onClick(colleague.uuid)}>
@@ -60,6 +86,31 @@ const industryStyle: Rule = {
   lineHeight: '20px',
   margin: '4px 0px 0px 0px',
 };
+const ratingContainer: Rule = {
+  display: 'flex',
+  justifyContent: 'space-between',
+  gap: '5%',
+  flexWrap: 'wrap',
+  flexBasis: '370px',
+};
+
+const ratingType: Rule = (theme) =>
+  ({
+    flexGrow: '1',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    '& > span:first-child': {
+      whiteSpace: 'nowrap',
+      fontWeight: theme.font.weight.bold,
+      fontSize: theme.font.fixed.f18.fontSize,
+    },
+    '& > span:last-child': {
+      whiteSpace: 'nowrap',
+      fontSize: theme.font.fixed.f16.fontSize,
+      marginTop: '4px',
+    },
+  } as Styles);
 
 const viewStyle: Rule = ({ theme }) => ({
   fontStyle: 'normal',
@@ -69,6 +120,7 @@ const viewStyle: Rule = ({ theme }) => ({
   color: `${theme.colors.link}`,
   cursor: 'pointer',
   padding: '2px',
+  whiteSpace: 'nowrap',
 });
 
 const wrapperStyles: Rule = {
@@ -96,6 +148,7 @@ const namesStyle: Rule = {
   lineHeight: '22px',
   margin: '0px',
   color: '#00539F',
+  minWidth: '50px',
 };
 
 export default ViewColleagueProfile;

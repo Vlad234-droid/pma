@@ -27,7 +27,7 @@ const Widget: FC<Props> = ({ graphics, title, onClick, background, isDisabled = 
         letterSpacing: '0px',
         ...tileWrapperStyles,
         ...(background ? { background: colors[background] } : {}),
-        ...(!isDisabled ? { cursor: 'pointer' } : { opacity: 0.6 }),
+        ...(!isDisabled ? { cursor: 'pointer' } : { opacity: 0.6, pointerEvents: 'none' }),
         '& span': {
           '&:last-child': {
             fontSize: theme.font.fixed.f16.fontSize,

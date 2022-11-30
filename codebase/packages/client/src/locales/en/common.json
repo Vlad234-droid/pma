@@ -161,7 +161,7 @@
   "reporting": "Reporting",
   "my_view": "My View",
   "my_team": "My Team",
-  "people_team": "Your Contribution",
+  "people_view": "People View",
   "you_dont_have_access_to_pma": "However, you can approve objectives and reviews for your direct reports (if you are a Manager), give your team feedback and save notes for your team.",
   "my_alerts": "My alerts",
   "timeline_is_empty": "You do not have a full access to Your Contribution",
@@ -721,5 +721,6 @@
   "review_completed": "Review completed",
   "reviews_completed": "Reviews completed",
   "filters_applied": "Filters applied",
+  "outOf": "Out of {{outOf}}",
   "show_number_of_people_in_group": "Show all {{number}} people in this group"
 }
