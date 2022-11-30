@@ -1,4 +1,4 @@
-import React, { useState, useRef, FC } from 'react';
+import React, { FC, useRef, useState } from 'react';
 import { CreateRule, Rule, Styles, useStyle } from '@pma/dex-wrapper';
 
 import ColleaguesReviews from './components/ColleaguesReviews';
@@ -11,6 +11,7 @@ import { Rating } from 'config/enum';
 
 import { TileWrapper } from 'components/Tile';
 import { ActiveList } from './utils/types';
+import omit from 'lodash.omit';
 
 const CalibrationSessionOverview: FC<{ period: string }> = ({ period }) => {
   const { css, matchMedia } = useStyle();
@@ -135,7 +136,7 @@ const CalibrationSessionOverview: FC<{ period: string }> = ({ period }) => {
       <Line styles={lineStyles} />
       {activeList !== ActiveList.GRAPH ? (
         <ColleaguesReviews
-          data={data}
+          data={activeList === ActiveList.TABLE ? omit(data, 'Unsubmitted') : data}
           activeList={activeList}
           key={activeList}
           styles={activeList === ActiveList.TABLE ? tableStyles({ mobileScreen }) : {}}
@@ -151,7 +152,6 @@ const CalibrationSessionOverview: FC<{ period: string }> = ({ period }) => {
                 [Rating.GREAT]: 20,
                 [Rating.SATISFACTORY]: 50,
                 [Rating.BELOW_EXPECTED]: 70,
-                [Rating.UNSUBMITTED]: 40,
               },
             }}
           />
