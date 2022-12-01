@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router';
 import { Rule, Styles, useStyle } from '@pma/dex-wrapper';
@@ -16,15 +16,23 @@ type Props = {
   data: any;
   activeList: ActiveList;
   styles?: Rule | Styles | {};
+  onUpload?: (type: string) => void;
 };
 
-const ColleaguesReviews: FC<Props> = ({ data, activeList, styles = {} }) => {
+const ColleaguesReviews: FC<Props> = ({ data, activeList, styles = {}, onUpload }) => {
   const { t } = useTranslation();
   const { css } = useStyle();
   const navigate = useNavigate();
   const { pathname } = useLocation();
-
   const loading = false;
+
+  useEffect(() => {
+    onUpload &&
+      activeList === ActiveList.TABLE &&
+      Object.keys(data).forEach((type) => {
+        onUpload(type);
+      });
+  }, []);
 
   const handleView = (uuid: string) =>
     navigate(buildPath(paramsReplacer(`${Page.USER_REVIEWS}`, { ':uuid': uuid })), {
@@ -32,6 +40,7 @@ const ColleaguesReviews: FC<Props> = ({ data, activeList, styles = {} }) => {
         backPath: `${pathname}`,
       },
     });
+
   return (
     <div className={css(styles)}>
       {Object.entries(data).map(([title, data]) => {
@@ -56,7 +65,7 @@ const ColleaguesReviews: FC<Props> = ({ data, activeList, styles = {} }) => {
                       </span>
                       {!!(data as any).length && activeList === ActiveList.LIST && (
                         <div className={css(expandButtonStyles)}>
-                          <ExpandButton />
+                          <ExpandButton onClick={(expanded) => onUpload && expanded && onUpload(title)} />
                         </div>
                       )}
                     </div>

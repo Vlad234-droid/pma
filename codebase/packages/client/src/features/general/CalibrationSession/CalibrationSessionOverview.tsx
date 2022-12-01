@@ -1,5 +1,7 @@
-import React, { FC, useRef, useState } from 'react';
+import React, { FC, useCallback, useRef, useState } from 'react';
 import { CreateRule, Rule, Styles, useStyle } from '@pma/dex-wrapper';
+import { CalibrationReviewsAction } from '@pma/store';
+import useDispatch from 'hooks/useDispatch';
 
 import ColleaguesReviews from './components/ColleaguesReviews';
 import { useTranslation } from 'components/Translation';
@@ -15,10 +17,15 @@ import omit from 'lodash.omit';
 
 const CalibrationSessionOverview: FC<{ period: string }> = ({ period }) => {
   const { css, matchMedia } = useStyle();
+  const dispatch = useDispatch();
 
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const mediumScreen = matchMedia({ xSmall: false, small: false, medium: true }) || false;
   const { t } = useTranslation();
+
+  const getCalibrationReviews = useCallback((type: string) => {
+    dispatch(CalibrationReviewsAction.getCalibrationUsersReviews({ params: { 'review-status_in': type }, type }));
+  }, []);
 
   const [activeList, setActiveList] = useState<ActiveList>(ActiveList.LIST);
   const listRef = useRef<HTMLDivElement>();
@@ -139,6 +146,7 @@ const CalibrationSessionOverview: FC<{ period: string }> = ({ period }) => {
           activeList={activeList}
           key={activeList}
           styles={activeList === ActiveList.TABLE ? tableStyles({ mobileScreen }) : {}}
+          onUpload={(type) => getCalibrationReviews(type)}
         />
       ) : (
         <TileWrapper customStyle={tileStyles}>
