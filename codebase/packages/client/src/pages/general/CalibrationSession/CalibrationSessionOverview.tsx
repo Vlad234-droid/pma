@@ -19,7 +19,7 @@ const CalibrationSessionPage: FC = () => {
   const { css } = useStyle();
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const isPerform = usePermission([role.TALENT_ADMIN]);
+  const isPerform = usePermission([role.PEOPLE_TEAM]);
 
   const [period, setPeriod] = useState<string>('2021 - 2022');
 

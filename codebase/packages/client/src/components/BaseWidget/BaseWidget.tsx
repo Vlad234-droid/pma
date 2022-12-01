@@ -18,6 +18,7 @@ export type Props = {
   withButton?: boolean;
   background?: Colors;
   hover?: boolean;
+  size?: Styles['width'];
 };
 
 export const TEST_ID = 'secondary-widget';
@@ -34,6 +35,7 @@ const BaseWidget: FC<Props> = ({
   withButton = true,
   background = 'white',
   hover = true,
+  size,
 }) => {
   const { css } = useStyle();
 
@@ -41,7 +43,7 @@ const BaseWidget: FC<Props> = ({
     <TileWrapper customStyle={customStyle} hover={hover} background={background}>
       <div className={css(wrapperStyle({ background }))} onClick={onClick} data-test-id={TEST_ID}>
         <div className={css(headStyle)}>
-          {iconGraphic && <Icon graphic={iconGraphic} invertColors={background === 'tescoBlue'} />}
+          {iconGraphic && <Icon graphic={iconGraphic} size={size} invertColors={background === 'tescoBlue'} />}
           <h2 className={css(titleStyle)}>{title}</h2>
           {number && <span className={css(numberStyle({ background }))}>{number}</span>}
           {date && <span className={css(descriptionStyle({ background }))}>{date}</span>}

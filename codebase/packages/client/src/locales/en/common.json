@@ -722,5 +722,6 @@
   "reviews_completed": "Reviews completed",
   "filters_applied": "Filters applied",
   "outOf": "Out of {{outOf}}",
-  "show_number_of_people_in_group": "Show all {{number}} people in this group"
+  "show_number_of_people_in_group": "Show all {{number}} people in this group",
+  "clear_filter": "Clear filter"
 }

@@ -149,12 +149,15 @@ const FilterForm: FC<Props> = ({ onCancel, defaultValues, onSubmit, loading = fa
         </div>
       </div>
       <ButtonsWrapper
-        leftText='cancel'
+        leftText='clear_filter'
         onLeftPress={onCancel}
         onRightPress={handleSubmit(onSubmit)}
         isValid={isValid}
         rightIcon={false}
-        rightTextNotIcon={'filter'}
+        rightTextNotIcon={`Apply filter (${Object.entries(values).reduce(
+          (acc, [_, value]) => acc + Object.keys(value as object).length,
+          0,
+        )})`}
         customStyles={customStyles}
       />
     </>
