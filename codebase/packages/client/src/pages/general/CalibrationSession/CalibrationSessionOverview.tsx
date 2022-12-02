@@ -12,8 +12,10 @@ import { Filter } from 'features/general/CalibrationSession/components/Filter';
 import { role, usePermission } from 'features/general/Permission';
 import { buildPath } from 'features/general/Routes';
 import { useTranslation } from 'components/Translation';
-
 import { Page } from 'pages/general/types';
+import useDownloadExelFile from 'hooks/useDownloadExelFile';
+
+const REPORT_URL = 'reports/calibration-overview';
 
 const CalibrationSessionPage: FC = () => {
   const { css } = useStyle();
@@ -21,19 +23,29 @@ const CalibrationSessionPage: FC = () => {
   const navigate = useNavigate();
   const isPerform = usePermission([role.PEOPLE_TEAM]);
 
-  const [period, setPeriod] = useState<string>('2021 - 2022');
+  const [period, setPeriod] = useState<string>('2022');
+
+  const downloadReport = useDownloadExelFile({
+    resource: { url: REPORT_URL, params: { year: period } },
+    fileName: 'Report',
+    ext: 'csv',
+    errorMassage: {
+      title: t('statistics_not_found', 'Statistics not found'),
+      description: t('try_to_select_another_year', 'Try to select another year.'),
+    },
+  });
 
   return (
     <div>
       <div>
-        <Filter withDateFilter setPeriod={(active) => setPeriod(active)} />
+        <Filter withDateFilter onChangePeriod={(active) => setPeriod(active)} period={period} />
         <div className={css(widgetContainerStyles)}>
-          <Widget title={t('download_report', 'Download report')} graphics={'download'} onClick={console.log} />
+          <Widget title={t('download_report', 'Download report')} graphics={'download'} onClick={downloadReport} />
           <Widget
             title={t('calibration_sessions', 'Calibration sessions')}
             graphics={'chart'}
             onClick={() => navigate(buildPath(Page.CALIBRATION_SESSION_LIST))}
-            isDisabled={!isPerform}
+            //isDisabled={!isPerform}
           />
           <Widget
             title={t('create_calibration_session', 'Create calibration session')}
