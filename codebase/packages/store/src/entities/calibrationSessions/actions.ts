@@ -39,6 +39,20 @@ export const updateCalibrationSession = createAsyncAction(
   'calibrationSession/UPDATE_CANCEL',
 )<Omit<CalibrationSession, 'participants'>, RestResponseCalibrationSession, Error>();
 
+export const startCalibrationSession = createAsyncAction(
+  'calibrationSession/START_REQUEST',
+  'calibrationSession/START_SUCCESS',
+  'calibrationSession/START_FAILURE',
+  'calibrationSession/START_CANCEL',
+)<Omit<CalibrationSession, 'participants'>, RestResponseCalibrationSession, Error>();
+
+export const closeCalibrationSession = createAsyncAction(
+  'calibrationSession/CLOSE_REQUEST',
+  'calibrationSession/CLOSE_SUCCESS',
+  'calibrationSession/CLOSE_FAILURE',
+  'calibrationSession/CLOSE_CANCEL',
+)<Omit<CalibrationSession, 'participants'>, RestResponseCalibrationSession, Error>();
+
 export const deleteCalibrationSession = createAsyncAction(
   'calibrationSession/DELETE_REQUEST',
   'calibrationSession/DELETE_SUCCESS',
@@ -59,6 +73,8 @@ export const Actions = {
   createCalibrationSession: createCalibrationSession.request,
   updateCalibrationSession: updateCalibrationSession.request,
   deleteCalibrationSession: deleteCalibrationSession.request,
+  startCalibrationSession: startCalibrationSession.request,
+  closeCalibrationSession: closeCalibrationSession.request,
   updateCalibrationSessionMeta,
   clearCalibrationSessionData,
 };

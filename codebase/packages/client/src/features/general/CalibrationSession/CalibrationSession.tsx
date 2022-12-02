@@ -33,7 +33,9 @@ const CalibrationSession = () => {
   const { loading: csLoading, updating: csUpdating } = useSelector(calibrationSessionsMetaSelector);
 
   const calibrationSession = uuid ? calibrationSessions.find((cs) => cs.uuid === uuid) || null : {};
-  const isStarted = calibrationSession?.status === CalibrationSessionStatusEnum.Started;
+  const isStarted =
+    calibrationSession?.status === CalibrationSessionStatusEnum.Started ||
+    calibrationSession?.status === CalibrationSessionStatusEnum.Updated;
 
   const { t } = useTranslation();
   const [showSuccessModal, toggleSuccessModal] = useState<boolean>(false);
@@ -46,9 +48,9 @@ const CalibrationSession = () => {
     navigate(buildPath(Page.CALIBRATION_SESSION_LIST));
   };
   const handleSave = () => {
-    if (calibrationSession?.status === CalibrationSessionStatusEnum.Started) {
+    if (isStarted) {
       dispatch(
-        CalibrationSessionsAction.updateCalibrationSession({
+        CalibrationSessionsAction.closeCalibrationSession({
           ...calibrationSession,
           status: CalibrationSessionStatusEnum.Completed,
         }),

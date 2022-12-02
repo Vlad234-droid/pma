@@ -17,16 +17,15 @@ const StartCalibrationSession: FC = () => {
   const calibrationSessions = useSelector(getCalibrationSessionsSelector) || [];
 
   const calibrationSession = uuid ? calibrationSessions.find((cs) => cs.uuid === uuid) || null : {};
-  const isStarted = calibrationSession?.status === CalibrationSessionStatusEnum.Started;
+  const isStarted =
+    calibrationSession?.status === CalibrationSessionStatusEnum.Started ||
+    calibrationSession?.status === CalibrationSessionStatusEnum.Updated;
   const isCompleted = calibrationSession?.status === CalibrationSessionStatusEnum.Completed;
 
   const handleStart = () => {
-    if (
-      calibrationSession?.status &&
-      [CalibrationSessionStatusEnum.Started, CalibrationSessionStatusEnum.Updated].includes(calibrationSession.status)
-    ) {
+    if (calibrationSession?.status === CalibrationSessionStatusEnum.Created) {
       dispatch(
-        CalibrationSessionsAction.updateCalibrationSession({
+        CalibrationSessionsAction.startCalibrationSession({
           ...calibrationSession,
           status: CalibrationSessionStatusEnum.Started,
         }),

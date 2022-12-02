@@ -133,6 +133,40 @@
         }
       }
     },
+    "/recovery/colleagues": {
+      "put": {
+        "tags": ["recovery"],
+        "summary": "Update existing colleagues",
+        "description": "Update existing colleagues",
+        "operationId": "updateExistingColleague",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Colleagues updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RestResponseMapUUIDBoolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/pm-cycles/{uuid}": {
       "get": {
         "tags": ["performance-cycle"],
@@ -1948,6 +1982,72 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/RestResponseVoid"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Calibration Session was not found"
+          }
+        }
+      }
+    },
+    "/calibration/sessions/{sessionUuid}/start": {
+      "put": {
+        "tags": ["calibration"],
+        "summary": "Start Calibration Session",
+        "operationId": "startSession",
+        "parameters": [
+          {
+            "name": "sessionUuid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Calibration Session was started",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RestResponseCalibrationSession"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Calibration Session was not found"
+          }
+        }
+      }
+    },
+    "/calibration/sessions/{sessionUuid}/close": {
+      "put": {
+        "tags": ["calibration"],
+        "summary": "Start Calibration Session",
+        "operationId": "closeSession",
+        "parameters": [
+          {
+            "name": "sessionUuid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Calibration Session was closed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RestResponseCalibrationSession"
                 }
               }
             }
@@ -7207,6 +7307,26 @@
           }
         }
       },
+      "RestResponseMapUUIDBoolean": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "boolean"
+            }
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ApiError"
+            }
+          }
+        }
+      },
       "ColleagueSimple": {
         "type": "object",
         "properties": {
@@ -8345,12 +8465,12 @@
           "source": {
             "type": "string"
           },
+          "tenantId": {
+            "type": "string"
+          },
           "deploymentTime": {
             "type": "string",
             "format": "date-time"
-          },
-          "tenantId": {
-            "type": "string"
           }
         }
       },
@@ -9019,13 +9139,13 @@
           "category": {
             "type": "string"
           },
-          "versionTag": {
+          "diagramResourceName": {
             "type": "string"
           },
           "deploymentId": {
             "type": "string"
           },
-          "diagramResourceName": {
+          "versionTag": {
             "type": "string"
           },
           "tenantId": {
@@ -9664,13 +9784,13 @@
           "category": {
             "type": "string"
           },
-          "versionTag": {
+          "diagramResourceName": {
             "type": "string"
           },
           "deploymentId": {
             "type": "string"
           },
-          "diagramResourceName": {
+          "versionTag": {
             "type": "string"
           },
           "tenantId": {
@@ -9836,6 +9956,13 @@
           "colleagueType": {
             "type": "string",
             "enum": ["EMPLOYEE", "EXTERNAL", "CONTRACTOR"]
+          },
+          "lastUpdatedTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "md5sum": {
+            "type": "string"
           }
         }
       },

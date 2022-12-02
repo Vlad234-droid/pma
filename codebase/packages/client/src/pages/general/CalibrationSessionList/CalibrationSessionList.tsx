@@ -1,17 +1,23 @@
 import React, { FC, useState } from 'react';
 
-import { CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
+import { CreateRule, Rule, useStyle, Styles } from '@pma/dex-wrapper';
 
 import { default as CalibrationSessionList } from 'features/general/CalibrationSessionList';
 import { CreateCalibrationSession } from 'features/general/CalibrationSessionList/widgets';
 import { FilterStatus } from 'features/general/CalibrationSessionList/utils/types';
 import { Option, RadioGroup } from 'components/Form';
-import { Filters, SortBy } from 'features/general/Filters';
+import { Filters, getEmployeesSortingOptions, useSearch, useSorting } from 'features/general/Filters';
+import { useTranslation } from 'components/Translation';
 
 const CalibrationSessionPage: FC = () => {
   const { css, matchMedia } = useStyle();
+  const { t } = useTranslation();
   const [filterStatus, setFilterStatus] = useState<FilterStatus>(FilterStatus.ACTIVE);
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
+
+  const options = getEmployeesSortingOptions(t);
+  const [sortValue, setSortValue] = useSorting();
+  const [searchValue, setSearchValue] = useSearch();
 
   const fieldOptions: Option[] = [
     { value: FilterStatus.ACTIVE, label: 'Active' },
@@ -21,7 +27,7 @@ const CalibrationSessionPage: FC = () => {
   return (
     <div>
       <div className={css(headStyle({ mobileScreen }))}>
-        <div>
+        <div className={css(radioGroupStyle)}>
           <RadioGroup
             options={fieldOptions}
             name={'targetStatus'}
@@ -33,18 +39,19 @@ const CalibrationSessionPage: FC = () => {
         </div>
         <div className={css(filtersStyle)}>
           <Filters
-            sortValue={SortBy.AZ}
-            onSort={console.log}
-            searchValue={''}
-            onSearch={console.log}
-            sortingOptions={[]}
+            infoIcon={false}
+            sortValue={sortValue}
+            onSort={setSortValue}
+            searchValue={searchValue}
+            onSearch={setSearchValue}
+            sortingOptions={options}
           />
         </div>
       </div>
       <div className={css(bodyStyle)}>
         <div className={css(leftColumnStyle)}>
           <div className={css(titleStyle)}>Calibration Sessions</div>
-          <CalibrationSessionList filterStatus={filterStatus} />
+          <CalibrationSessionList filterStatus={filterStatus} searchValue={searchValue} sortValue={sortValue} />
         </div>
         <div className={css(rightColumnStyle)}>
           <CreateCalibrationSession />
@@ -91,5 +98,12 @@ const titleStyle: Rule = ({ theme }) => ({
   lineHeight: theme.font.fixed.f18.lineHeight,
   letterSpacing: '0px',
 });
+
+const radioGroupStyle: Rule = {
+  '& > label': {
+    paddingRight: '32px',
+    alignItems: 'center',
+  },
+} as Styles;
 
 export default CalibrationSessionPage;

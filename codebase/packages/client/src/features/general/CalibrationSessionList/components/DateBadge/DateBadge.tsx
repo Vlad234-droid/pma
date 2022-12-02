@@ -10,7 +10,7 @@ const DateBadge: FC<{ time: string }> = ({ time }) => {
 
   return (
     <div className={css(wrapperStyles)}>
-      <Icon graphic={'calender'} color={'tescoBlue'} iconStyles={iconStyles} title={'calender'} />
+      <Icon graphic={'calenderFilled'} color={'tescoBlue'} iconStyles={iconStyles} title={'calender'} />
       <span className={css(labelStyles)}>
         <div>{t('full_date', { date: new Date(time || '') })}</div>
       </span>

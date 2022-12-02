@@ -723,5 +723,12 @@
   "filters_applied": "Filters applied",
   "outOf": "Out of {{outOf}}",
   "show_number_of_people_in_group": "Show all {{number}} people in this group",
-  "clear_filter": "Clear filter"
+  "clear_filter": "Clear filter",
+  "group_name_departments": "Departments",
+  "group_name_functions": "Functions",
+  "group_name_countries": "Countries",
+  "group_name_legal-entities": "Legal entities",
+  "group_name_business-groups": "Business groups",
+  "group_name_line-managers": "Line managers",
+  "group_name_work-levels": "Work levels"
 }
