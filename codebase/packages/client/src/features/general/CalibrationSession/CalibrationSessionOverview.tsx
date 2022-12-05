@@ -1,137 +1,45 @@
 import React, { FC, useCallback, useRef, useState } from 'react';
 import { CreateRule, Rule, Styles, useStyle } from '@pma/dex-wrapper';
-import { CalibrationReviewsAction } from '@pma/store';
+import { CalibrationReviewsAction, calibrationReviewsDataSelector } from '@pma/store';
 import useDispatch from 'hooks/useDispatch';
+import { useSelector } from 'react-redux';
 
-import ColleaguesReviews from './components/ColleaguesReviews';
+import ColleaguesRatings from './components/ColleaguesRatings';
 import { useTranslation } from 'components/Translation';
 import { ListView } from './components/ListView';
-import { Line } from 'components/Line';
-
-import Graph from 'components/Graph';
-import { Rating } from 'config/enum';
-
 import { TileWrapper } from 'components/Tile';
-import { ActiveList } from './utils/types';
+import { Line } from 'components/Line';
+import Graph from 'components/Graph';
+
+import { Rating } from 'config/enum';
+import { ActiveList } from './types';
 import omit from 'lodash.omit';
+import { isNegative } from 'utils';
+import { useCalibrationStatistics } from './hook';
 
 const CalibrationSessionOverview: FC<{ period: string }> = ({ period }) => {
   const { css, matchMedia } = useStyle();
   const dispatch = useDispatch();
+  const data = useSelector(calibrationReviewsDataSelector);
 
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const mediumScreen = matchMedia({ xSmall: false, small: false, medium: true }) || false;
   const { t } = useTranslation();
 
-  const getCalibrationReviews = useCallback((type: string) => {
-    dispatch(CalibrationReviewsAction.getCalibrationUsersReviews({ params: { 'review-status_in': type }, type }));
+  const getCalibrationReviews = useCallback((rating: string) => {
+    const isSpaced = !isNegative(rating.indexOf(' '));
+    dispatch(
+      CalibrationReviewsAction.getCalibrationUsersReviews({
+        params: { 'review-rating_in': isSpaced ? [rating.toUpperCase().replace(' ', '_')] : [rating.toUpperCase()] },
+        rating: isSpaced ? rating.toLowerCase().replace(' ', '_') : rating.toLowerCase(),
+      }),
+    );
   }, []);
+
+  const { statistics } = useCalibrationStatistics();
 
   const [activeList, setActiveList] = useState<ActiveList>(ActiveList.LIST);
   const listRef = useRef<HTMLDivElement>();
-
-  const data = {
-    Outstanding: [
-      {
-        businessType: 'store',
-        firstName: 'store',
-        jobName: 'store',
-        lastName: 'store',
-        uuid: '1',
-        what: 'Outstanding',
-        how: 'Outstanding',
-      },
-      {
-        businessType: 'store',
-        firstName: 'store',
-        jobName: 'store',
-        lastName: 'store',
-        uuid: '2',
-        what: 'Outstanding',
-        how: 'Outstanding',
-      },
-    ],
-    Great: [
-      {
-        businessType: 'store',
-        firstName: 'store',
-        jobName: 'store',
-        lastName: 'store',
-        uuid: '1',
-        what: 'Outstanding',
-        how: 'Outstanding',
-      },
-      {
-        businessType: 'store',
-        firstName: 'store',
-        jobName: 'store',
-        lastName: 'store',
-        uuid: '2',
-        what: 'Outstanding',
-        how: 'Outstanding',
-      },
-    ],
-    Satisfactory: [
-      {
-        businessType: 'store',
-        firstName: 'store',
-        jobName: 'store',
-        lastName: 'store',
-        uuid: '1',
-        what: 'Outstanding',
-        how: 'Outstanding',
-      },
-      {
-        businessType: 'store',
-        firstName: 'store',
-        jobName: 'store',
-        lastName: 'store',
-        uuid: '2',
-        what: 'Outstanding',
-        how: 'Outstanding',
-      },
-    ],
-    'Below expected': [
-      {
-        businessType: 'store',
-        firstName: 'store',
-        jobName: 'store',
-        lastName: 'store',
-        uuid: '1',
-        what: 'Outstanding',
-        how: 'Outstanding',
-      },
-      {
-        businessType: 'store',
-        firstName: 'store',
-        jobName: 'store',
-        lastName: 'store',
-        uuid: '2',
-        what: 'Outstanding',
-        how: 'Outstanding',
-      },
-    ],
-    Unsubmitted: [
-      {
-        businessType: 'store',
-        firstName: 'store',
-        jobName: 'store',
-        lastName: 'store',
-        uuid: '1',
-        what: 'Outstanding',
-        how: 'Outstanding',
-      },
-      {
-        businessType: 'store',
-        firstName: 'store',
-        jobName: 'store',
-        lastName: 'store',
-        uuid: '2',
-        what: 'Outstanding',
-        how: 'Outstanding',
-      },
-    ],
-  };
 
   return (
     <div>
@@ -141,12 +49,13 @@ const CalibrationSessionOverview: FC<{ period: string }> = ({ period }) => {
       </div>
       <Line styles={lineStyles} />
       {activeList !== ActiveList.GRAPH ? (
-        <ColleaguesReviews
-          data={activeList === ActiveList.TABLE ? omit(data, 'Unsubmitted') : data}
+        <ColleaguesRatings
+          data={activeList === ActiveList.TABLE ? omit(data, 'unsubmitted') : data}
           activeList={activeList}
           key={activeList}
           styles={activeList === ActiveList.TABLE ? tableStyles({ mobileScreen }) : {}}
-          onUpload={(type) => getCalibrationReviews(type)}
+          onUpload={(rating) => getCalibrationReviews(rating)}
+          statistics={statistics}
         />
       ) : (
         <TileWrapper customStyle={tileStyles}>

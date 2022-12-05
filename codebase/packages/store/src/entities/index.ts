@@ -30,3 +30,4 @@ export { Actions as CalibrationReviewsAction } from './calibrationReviews/action
 export { Actions as ColleagueFilterAction } from './colleagueFilter/actions';
 export { Actions as ColleagueSimpleAction } from './colleagueSimple/actions';
 export { Actions as CompletedReviewsAction } from './completedReviews/actions';
+export { Actions as CalibrationStatisticsAction } from './calibrationStatistics/actions';

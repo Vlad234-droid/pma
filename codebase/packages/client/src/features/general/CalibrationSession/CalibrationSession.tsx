@@ -14,12 +14,12 @@ import { ListView } from './components/ListView';
 import { Line } from 'components/Line';
 import { Footer } from './components/Footer';
 import { SuccessModal } from './components/SuccessModal';
-import ColleaguesReviews from './components/ColleaguesReviews';
+import ColleaguesRatings from './components/ColleaguesRatings';
 import Graph from 'components/Graph';
 import { Rating } from 'config/enum';
 import { TileWrapper } from 'components/Tile';
+import { ActiveList } from './types';
 
-import { ActiveList } from './utils/types';
 import { Page } from 'pages';
 
 const CalibrationSession = () => {
@@ -62,7 +62,7 @@ const CalibrationSession = () => {
   }, []);
 
   const data = {
-    Outstanding: [
+    outstanding: [
       {
         businessType: 'store',
         firstName: 'store',
@@ -82,7 +82,7 @@ const CalibrationSession = () => {
         value: 'how',
       },
     ],
-    Great: [
+    great: [
       {
         businessType: 'store',
         firstName: 'store',
@@ -102,7 +102,7 @@ const CalibrationSession = () => {
         value: 'how',
       },
     ],
-    Satisfactory: [
+    satisfactory: [
       {
         businessType: 'store',
         firstName: 'store',
@@ -122,7 +122,7 @@ const CalibrationSession = () => {
         value: 'how',
       },
     ],
-    'Below expected': [
+    below_expected: [
       {
         businessType: 'store',
         firstName: 'store',
@@ -161,7 +161,9 @@ const CalibrationSession = () => {
       </div>
       <Line styles={lineStyles} />
       {activeList !== ActiveList.GRAPH ? (
-        <ColleaguesReviews
+        <ColleaguesRatings
+          //TODO: replace to data from selector
+          //@ts-ignore
           data={data}
           activeList={activeList}
           key={activeList}

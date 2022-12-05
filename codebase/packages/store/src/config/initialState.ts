@@ -29,6 +29,7 @@ import { initialState as colleagueFilterState } from '../entities/colleagueFilte
 import { initialState as colleagueSimpleState } from '../entities/colleagueSimple/reducer';
 import { initialState as completedReviewsState } from '../entities/completedReviews/reducer';
 import { initialState as calibrationReviewsState } from '../entities/calibrationReviews/reducer';
+import { initialState as calibrationStatisticsState } from '../entities/calibrationStatistics/reducer';
 import { State as TimelineState } from 'entities/timeline/types';
 
 //@ts-ignore
@@ -63,6 +64,7 @@ export const initialState = {
   colleagueFilter: colleagueFilterState,
   colleagueSimple: colleagueSimpleState,
   completedReviews: completedReviewsState,
+  calibrationStatistics: calibrationStatisticsState,
 };
 
 type InitialStateType = Omit<typeof initialState, 'timeline'>;

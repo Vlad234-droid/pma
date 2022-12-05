@@ -133,6 +133,40 @@
         }
       }
     },
+    "/recovery/colleagues": {
+      "put": {
+        "tags": ["recovery"],
+        "summary": "Update existing colleagues",
+        "description": "Update existing colleagues",
+        "operationId": "updateExistingColleague",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Colleagues updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RestResponseMapUUIDBoolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/pm-cycles/{uuid}": {
       "get": {
         "tags": ["performance-cycle"],
@@ -1948,6 +1982,72 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/RestResponseVoid"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Calibration Session was not found"
+          }
+        }
+      }
+    },
+    "/calibration/sessions/{sessionUuid}/start": {
+      "put": {
+        "tags": ["calibration"],
+        "summary": "Start Calibration Session",
+        "operationId": "startSession",
+        "parameters": [
+          {
+            "name": "sessionUuid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Calibration Session was started",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RestResponseCalibrationSession"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Calibration Session was not found"
+          }
+        }
+      }
+    },
+    "/calibration/sessions/{sessionUuid}/close": {
+      "put": {
+        "tags": ["calibration"],
+        "summary": "Start Calibration Session",
+        "operationId": "closeSession",
+        "parameters": [
+          {
+            "name": "sessionUuid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Calibration Session was closed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RestResponseCalibrationSession"
                 }
               }
             }
@@ -4460,6 +4560,39 @@
         }
       }
     },
+    "/reports/calibration-session": {
+      "get": {
+        "tags": ["report"],
+        "summary": "Get calibration session report",
+        "operationId": "getCalibrationSessionReport",
+        "parameters": [
+          {
+            "name": "requestQuery",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/RequestQuery"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Found the Calibration session Report data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Calibration session data not found"
+          }
+        }
+      }
+    },
     "/reports/calibration-overview": {
       "get": {
         "tags": ["report"],
@@ -6250,6 +6383,76 @@
         }
       }
     },
+    "/calibration/statistics": {
+      "get": {
+        "tags": ["calibration"],
+        "summary": "Returns calibration rating statistics accessible for the user",
+        "operationId": "getRatingStatistics",
+        "parameters": [
+          {
+            "name": "requestQuery",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/RequestQuery"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Calibration rating statistics were found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RestResponseListRatingStatistic"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/calibration/sessions/{sessionUuid}/statistics": {
+      "get": {
+        "tags": ["calibration"],
+        "summary": "Returns calibration rating statistics by calibration session",
+        "operationId": "getSessionRatingStatistics",
+        "parameters": [
+          {
+            "name": "sessionUuid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "requestQuery",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/RequestQuery"
+            },
+            "example": {
+              "review-rating_in": ["OUTSTANDING", "GREAT", "SATISFACTORY", "BELOW_EXPECTED", "UNSUBMITTED"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Calibration rating statistics were found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RestResponseListRatingStatistic"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/calibration/sessions/{sessionUuid}/reviews": {
       "get": {
         "tags": ["calibration"],
@@ -6264,6 +6467,17 @@
               "type": "string",
               "format": "uuid"
             }
+          },
+          {
+            "name": "requestQuery",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/RequestQuery"
+            },
+            "example": {
+              "review-rating_in": ["OUTSTANDING", "GREAT", "SATISFACTORY", "BELOW_EXPECTED", "UNSUBMITTED"]
+            }
           }
         ],
         "responses": {
@@ -6272,7 +6486,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/RestResponseListReview"
+                  "$ref": "#/components/schemas/RestResponseListColleagueReview"
                 }
               }
             }
@@ -6359,7 +6573,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/RestResponseMapStringListReview"
+                  "$ref": "#/components/schemas/RestResponseListColleagueReview"
                 }
               }
             }
@@ -6674,6 +6888,39 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/calibration/sessions/{sessionUuid}/cancel": {
+      "delete": {
+        "tags": ["calibration"],
+        "summary": "Cancels a Calibration Session",
+        "operationId": "cancelSessions",
+        "parameters": [
+          {
+            "name": "sessionUuid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Calibration Session Cancelled",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RestResponseVoid"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Calibration Session cannot be cancelled"
           }
         }
       }
@@ -7204,6 +7451,26 @@
           "reviewUuid": {
             "type": "string",
             "format": "uuid"
+          }
+        }
+      },
+      "RestResponseMapUUIDBoolean": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "boolean"
+            }
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ApiError"
+            }
           }
         }
       },
@@ -8345,12 +8612,12 @@
           "source": {
             "type": "string"
           },
+          "tenantId": {
+            "type": "string"
+          },
           "deploymentTime": {
             "type": "string",
             "format": "date-time"
-          },
-          "tenantId": {
-            "type": "string"
           }
         }
       },
@@ -8589,14 +8856,14 @@
           "eventId": {
             "type": "string"
           },
+          "callbackEvent": {
+            "$ref": "#/components/schemas/Event"
+          },
           "eventProperties": {
             "type": "object",
             "additionalProperties": {
               "type": "object"
             }
-          },
-          "callbackEvent": {
-            "$ref": "#/components/schemas/Event"
           },
           "eventName": {
             "type": "string"
@@ -9019,16 +9286,16 @@
           "category": {
             "type": "string"
           },
-          "versionTag": {
+          "tenantId": {
             "type": "string"
           },
-          "deploymentId": {
+          "versionTag": {
             "type": "string"
           },
           "diagramResourceName": {
             "type": "string"
           },
-          "tenantId": {
+          "deploymentId": {
             "type": "string"
           }
         }
@@ -9664,16 +9931,16 @@
           "category": {
             "type": "string"
           },
-          "versionTag": {
+          "tenantId": {
             "type": "string"
           },
-          "deploymentId": {
+          "versionTag": {
             "type": "string"
           },
           "diagramResourceName": {
             "type": "string"
           },
-          "tenantId": {
+          "deploymentId": {
             "type": "string"
           }
         }
@@ -9836,6 +10103,13 @@
           "colleagueType": {
             "type": "string",
             "enum": ["EMPLOYEE", "EXTERNAL", "CONTRACTOR"]
+          },
+          "lastUpdatedTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "md5sum": {
+            "type": "string"
           }
         }
       },
@@ -10151,6 +10425,43 @@
           }
         }
       },
+      "RatingStatistic": {
+        "type": "object",
+        "properties": {
+          "count": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "percentage": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "rating": {
+            "type": "string",
+            "enum": ["OUTSTANDING", "GREAT", "SATISFACTORY", "BELOW_EXPECTED", "UNSUBMITTED"]
+          }
+        }
+      },
+      "RestResponseListRatingStatistic": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RatingStatistic"
+            }
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ApiError"
+            }
+          }
+        }
+      },
       "RestResponseListCalibrationSession": {
         "type": "object",
         "properties": {
@@ -10161,6 +10472,37 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/CalibrationSession"
+            }
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ApiError"
+            }
+          }
+        }
+      },
+      "ColleagueReview": {
+        "type": "object",
+        "properties": {
+          "colleague": {
+            "$ref": "#/components/schemas/ColleagueSimple"
+          },
+          "review": {
+            "$ref": "#/components/schemas/Review"
+          }
+        }
+      },
+      "RestResponseListColleagueReview": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ColleagueReview"
             }
           },
           "errors": {
@@ -10252,29 +10594,6 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/ColleagueSimple"
-            }
-          },
-          "errors": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ApiError"
-            }
-          }
-        }
-      },
-      "RestResponseMapStringListReview": {
-        "type": "object",
-        "properties": {
-          "success": {
-            "type": "boolean"
-          },
-          "data": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "array",
-              "items": {
-                "$ref": "#/components/schemas/Review"
-              }
             }
           },
           "errors": {

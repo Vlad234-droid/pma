@@ -1,8 +1,25 @@
 import { createReducer } from 'typesafe-actions';
 
+import { ColleagueReview } from '@pma/openapi';
 import { getCalibrationUsersReviews } from './actions';
 
-export const initialState = {
+type ColleagueReviewType = Array<ColleagueReview>;
+
+export type RatingsType = Record<
+  'outstanding' | 'great' | 'satisfactory' | 'below_expected' | 'unsubmitted',
+  ColleagueReviewType
+>;
+
+export type InitialStateType = {
+  data: RatingsType;
+  meta: {
+    loading: boolean;
+    loaded: boolean;
+    error: any;
+  };
+};
+
+export const initialState: InitialStateType = {
   data: {
     outstanding: [],
     great: [],
@@ -10,7 +27,7 @@ export const initialState = {
     below_expected: [],
     unsubmitted: [],
   },
-  meta: { loading: false, loaded: false, error: null, updating: false, updated: false },
+  meta: { loading: false, loaded: false, error: null },
 };
 
 export default createReducer(initialState)
@@ -21,11 +38,12 @@ export default createReducer(initialState)
     };
   })
   .handleAction(getCalibrationUsersReviews.success, (state, { payload }) => {
-    const { type, reviews } = payload;
+    const { rating, data } = payload;
     return {
+      ...state,
       data: {
         ...state.data,
-        [type]: reviews,
+        [rating]: data,
       },
       meta: { ...state.meta, loading: false, loaded: true },
     };

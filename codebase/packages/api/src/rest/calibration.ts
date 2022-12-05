@@ -53,5 +53,12 @@ export const getCalibrationColleagues = (params: RequestQuery) => {
 };
 
 export const getCalibrationUsersReviews = (params: any) => {
-  return httpClient.get(`${domain}/reviews`, { params });
+  return httpClient.get(`${domain}/reviews`, {
+    params,
+    paramsSerializer: (params) => {
+      return qs.stringify(params, { arrayFormat: 'indices' });
+    },
+  });
 };
+
+export const getCalibrationStatistics = () => httpClient.get(`${domain}/statistics`);

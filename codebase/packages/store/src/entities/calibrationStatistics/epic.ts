@@ -4,25 +4,25 @@ import { combineEpics } from 'redux-observable';
 import { from, of } from 'rxjs';
 import { catchError, filter, map, mergeMap } from 'rxjs/operators';
 
-import { getCalibrationUsersReviews } from './actions';
+import { getCalibrationStatistics } from './actions';
 import { concatWithErrorToast, errorPayloadConverter } from '../../utils/toastHelper';
 
-export const getCalibrationUsersReviewsEpic: Epic = (action$, _, { api }) =>
+export const getCalibrationStatisticsEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
-    filter(isActionOf(getCalibrationUsersReviews.request)),
-    mergeMap(({ payload: { params, rating } }) =>
-      from(api.getCalibrationUsersReviews(params)).pipe(
+    filter(isActionOf(getCalibrationStatistics.request)),
+    mergeMap(() =>
+      from(api.getCalibrationStatistics()).pipe(
         //@ts-ignore
         map(({ success, data, errors }) => {
           if (!success) {
-            return getCalibrationUsersReviews.failure(new Error(errors?.[0].message || undefined));
+            return getCalibrationStatistics.failure(new Error(errors?.[0].message || undefined));
           }
-          return getCalibrationUsersReviews.success({ data, rating });
+          return getCalibrationStatistics.success(data);
         }),
         catchError((e) => {
           const errors = e?.data?.errors;
           return concatWithErrorToast(
-            of(getCalibrationUsersReviews.failure(errors?.[0])),
+            of(getCalibrationStatistics.failure(errors?.[0])),
             errorPayloadConverter({ ...errors?.[0], title: errors?.[0].message }),
           );
         }),
@@ -30,4 +30,4 @@ export const getCalibrationUsersReviewsEpic: Epic = (action$, _, { api }) =>
     ),
   );
 
-export default combineEpics(getCalibrationUsersReviewsEpic);
+export default combineEpics(getCalibrationStatisticsEpic);
