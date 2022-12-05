@@ -28,7 +28,7 @@ const CalibrationSessionPage: FC = () => {
   const downloadReport = useDownloadExelFile({
     resource: { url: REPORT_URL, params: { year: period } },
     fileName: 'Report',
-    ext: 'csv',
+    ext: 'xlsx',
     errorMassage: {
       title: t('statistics_not_found', 'Statistics not found'),
       description: t('try_to_select_another_year', 'Try to select another year.'),
@@ -45,7 +45,7 @@ const CalibrationSessionPage: FC = () => {
             title={t('calibration_sessions', 'Calibration sessions')}
             graphics={'chart'}
             onClick={() => navigate(buildPath(Page.CALIBRATION_SESSION_LIST))}
-            //isDisabled={!isPerform}
+            isDisabled={!isPerform}
           />
           <Widget
             title={t('create_calibration_session', 'Create calibration session')}

@@ -5,4 +5,5 @@ export { default as RatingsSubmitted } from './RatingsSubmitted';
 export { default as CalibrationsCompleted } from './CalibrationsCompleted';
 export { default as RatingsChange } from './RatingsChange';
 export { default as CalibrationSessions } from './CalibrationSessions';
+export { default as DownloadReport } from './Download';
 export { default as Widget } from './Widget';
