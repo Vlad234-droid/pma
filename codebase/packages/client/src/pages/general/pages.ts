@@ -95,6 +95,7 @@ const pages: Record<Page, PageComponent> = {
   [Page.CALIBRATION_SESSION_OVERVIEW]: {
     Element: CalibrationSessionOverview,
     title: (_, t) => t('calibration'),
+    backPath: Page.PEOPLE_TEAM,
     withHeader: true,
     perform: [role.TALENT_ADMIN, role.PEOPLE_TEAM],
     tenant: [Tenant.BANK, Tenant.GENERAL],
@@ -103,12 +104,14 @@ const pages: Record<Page, PageComponent> = {
     Element: CalibrationSession,
     title: (_, t) => t('calibration'),
     withHeader: true,
+    backPath: Page.CALIBRATION_SESSION_LIST,
     perform: [role.LINE_MANAGER],
     tenant: [Tenant.BANK, Tenant.GENERAL],
   },
   [Page.CALIBRATION_SESSION_LIST]: {
     Element: CalibrationSessionList,
     title: (_, t) => t('calibration_session'),
+    backPath: Page.CALIBRATION_SESSION_OVERVIEW,
     withHeader: true,
     perform: [role.PEOPLE_TEAM],
     tenant: [Tenant.BANK, Tenant.GENERAL],

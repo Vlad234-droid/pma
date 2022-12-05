@@ -1,4 +1,29 @@
 import { FileDescription, FileExtensions } from 'config/enum';
+import { httpClient } from '@pma/api';
+
+export const downloadFile = async (url: any, success: (blob: Blob) => void, failure: () => void) => {
+  httpClient({
+    ...url,
+    method: 'GET',
+    responseType: 'blob',
+  })
+    .then((data) => {
+      if (data instanceof Blob) {
+        return success(data);
+      }
+      new Error('data not supported');
+    })
+    .catch(failure);
+};
+
+export const createFile = (fileName: string) => (blob: Blob) => {
+  const a = document.createElement('a');
+  a.href = window.URL.createObjectURL(blob);
+  a.download = fileName;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+};
 
 export const makeBinaryFromObject = <T extends unknown>(data: T) =>
   new Blob([JSON.stringify(data)], {

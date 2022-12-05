@@ -1,4 +1,4 @@
-import { AxiosResponse } from 'axios';
+import { AxiosResponse, AxiosPromise } from 'axios';
 import { Configuration, ConfigurationParameters, FileApi, UserApi, CmsApi, ConfigApi } from './src/openapi';
 import client from './src/config/client';
 
@@ -22,6 +22,6 @@ const createApiClient = (configuration: ConfigurationParameters = {}): Api =>
     {} as Api,
   );
 
-export type { AxiosResponse, Api };
+export type { AxiosResponse, AxiosPromise, Api };
 export { createApiClient };
 export * from './src/openapi';
