@@ -71,4 +71,10 @@ export type UserprofileAttributes = {
   value: string;
 };
 
+export enum Mode {
+  SAVE = 'save',
+  UPDATE = 'update',
+  CREATE = 'create',
+}
+
 export { ReviewType, Status, TimelineType };
