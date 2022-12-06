@@ -23,4 +23,5 @@ export const accessByRole = {
   [setting.OBJECTIVE_DECLINED]: [role.COLLEAGUE],
   [setting.BEFORE_CYCLE_END_LM]: [role.LINE_MANAGER],
   [setting.OBJECTIVE_SUBMITTED]: [role.LINE_MANAGER],
+  [setting.CALIBRATION_OPEN]: [role.LINE_MANAGER],
 };
