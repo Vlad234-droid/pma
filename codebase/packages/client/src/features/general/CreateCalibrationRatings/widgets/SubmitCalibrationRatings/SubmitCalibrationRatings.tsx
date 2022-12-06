@@ -6,7 +6,14 @@ import { Page } from 'pages';
 import { paramsReplacer } from 'utils';
 import { useTranslation } from 'components/Translation';
 import { useSelector } from 'react-redux';
-import { CalibrationReviewAction, calibrationReviewDataSelector, calibrationReviewMetaSelector } from '@pma/store';
+import {
+  CalibrationReviewAction,
+  calibrationReviewDataSelector,
+  calibrationReviewMetaSelector,
+  colleagueCurrentCycleSelector,
+  colleagueUUIDSelector,
+  isAnniversaryTimelineType,
+} from '@pma/store';
 import useDispatch from 'hooks/useDispatch';
 
 type Props = {
@@ -18,13 +25,17 @@ const SubmitCalibrationRatings: FC<Props> = ({ userUuid }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const calibrationReview = useSelector(calibrationReviewDataSelector(userUuid)) || {};
+  const colleagueUuid = useSelector(colleagueUUIDSelector);
+  const currentCycle = useSelector(colleagueCurrentCycleSelector(colleagueUuid));
+  const isAnniversary = useSelector(isAnniversaryTimelineType(colleagueUuid, currentCycle));
   const { loading } = useSelector(calibrationReviewMetaSelector);
 
   useEffect(() => {
-    dispatch(CalibrationReviewAction.getCalibrationReview({ colleagueUuid: userUuid, cycleUuid: 'CURRENT' }));
+    !isAnniversary &&
+      dispatch(CalibrationReviewAction.getCalibrationReview({ colleagueUuid: userUuid, cycleUuid: 'CURRENT' }));
   }, []);
 
-  if (loading) return null;
+  if (isAnniversary || loading) return null;
 
   const calibrationReviewUuid = calibrationReview?.uuid || 'new';
 

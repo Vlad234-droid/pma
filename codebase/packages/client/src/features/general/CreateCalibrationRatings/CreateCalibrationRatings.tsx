@@ -3,7 +3,6 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { Icon, Rule, useStyle } from '@pma/dex-wrapper';
 import {
-  colleagueUUIDSelector,
   getFormByCode,
   SchemaActions,
   CalibrationReviewAction,
