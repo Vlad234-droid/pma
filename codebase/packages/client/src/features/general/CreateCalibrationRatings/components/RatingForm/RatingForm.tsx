@@ -6,6 +6,7 @@ import { ButtonsWrapper } from 'components/ButtonsWrapper';
 import { useFormWithCloseProtection } from 'hooks/useFormWithCloseProtection';
 import DynamicForm from 'components/DynamicForm';
 import useOverallRating from 'hooks/useOverallRating';
+import { Mode } from 'config/types';
 
 import { createYupSchema } from 'utils/yup';
 
@@ -16,8 +17,10 @@ type Props = {
   onSubmit: (data: any) => void;
   onCancel: () => void;
   defaultValues: any;
+  mode: Omit<Mode, Mode.SAVE>;
 };
-const RatingForm: FC<Props> = ({ onSubmit, onCancel, components, defaultValues }) => {
+
+const RatingForm: FC<Props> = ({ onSubmit, onCancel, components, defaultValues, mode }) => {
   const { t } = useTranslation();
 
   const schema = Yup.object().shape(components.reduce(createYupSchema(t), {}));
@@ -55,10 +58,11 @@ const RatingForm: FC<Props> = ({ onSubmit, onCancel, components, defaultValues }
       <DynamicForm components={components} formValues={values} errors={errors} setValue={setValue} />
       <ButtonsWrapper
         isValid={isValid}
-        onLeftPress={onCancel}
+        onLeftPress={mode === Mode.CREATE ? () => onSubmit({ ...values, status: 'DRAFT' }) : onCancel}
         rightIcon={false}
         rightTextNotIcon={'submit'}
-        onRightPress={handleSubmit(onSubmit)}
+        leftText={mode === Mode.CREATE ? 'save_as_draft' : 'cancel'}
+        onRightPress={handleSubmit((data) => onSubmit({ ...data, status: 'WAITING_FOR_APPROVAL' }))}
       />
     </div>
   );

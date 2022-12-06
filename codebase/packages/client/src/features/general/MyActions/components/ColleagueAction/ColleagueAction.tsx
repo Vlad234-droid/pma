@@ -27,6 +27,7 @@ const ColleagueAction: FC<Props> = ({ status, colleague, onUpdate }) => {
   const [colleagueReviews, updateColleagueReviews] = useState<any>([]);
   const [formsValid, validateReview] = useState<{ [key: string]: boolean }>({});
   const isButtonsDisabled = Object.values(formsValid).some((value) => !value);
+  const showNotification = status !== ActionStatus.COMPLETED;
 
   const dispatch = useDispatch();
   const { css } = useStyle();
@@ -154,21 +155,23 @@ const ColleagueAction: FC<Props> = ({ status, colleague, onUpdate }) => {
 
                         return (
                           <div className={css({ margin: '24px 35px 24px 24px' })} key={uuid}>
-                            <Notification
-                              graphic='information'
-                              iconColor='pending'
-                              text={t(
-                                'time_to_approve_or_decline',
-                                tenant === Tenant.GENERAL
-                                  ? 'It’s time to review your colleague’s objectives and / or reviews'
-                                  : "It's time to review your colleague's priorities and / or reviews",
-                                { ns: tenant },
-                              )}
-                              customStyle={{
-                                background: '#FFDBC2',
-                                marginBottom: '20px',
-                              }}
-                            />
+                            {showNotification && (
+                              <Notification
+                                graphic='information'
+                                iconColor='pending'
+                                text={t(
+                                  'time_to_approve_or_decline',
+                                  tenant === Tenant.GENERAL
+                                    ? 'It’s time to review your colleague’s objectives and / or reviews'
+                                    : "It's time to review your colleague's priorities and / or reviews",
+                                  { ns: tenant },
+                                )}
+                                customStyle={{
+                                  background: '#FFDBC2',
+                                  marginBottom: '20px',
+                                }}
+                              />
+                            )}
                             {reviewGroupByStatus.map(([statusReview, colleagueReviews]) => {
                               return (
                                 <div key={statusReview}>

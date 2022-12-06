@@ -1,20 +1,20 @@
 import React, { FC, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { Icon, Rule, useStyle } from '@pma/dex-wrapper';
 import {
+  CalibrationReviewAction,
+  calibrationReviewDataSelector,
+  calibrationReviewMetaSelector,
+  ColleagueActions,
+  getColleagueMetaSelector,
+  getColleagueSelector,
   getFormByCode,
   SchemaActions,
-  CalibrationReviewAction,
-  calibrationReviewMetaSelector,
-  calibrationReviewDataSelector,
-  getColleagueSelector,
-  getColleagueMetaSelector,
-  ColleagueActions,
 } from '@pma/store';
 
 import WrapperModal from 'features/general/Modal/components/WrapperModal';
-import { useTranslation } from 'components/Translation';
+import { useTranslation, Trans } from 'components/Translation';
 import AvatarName from 'components/AvatarName';
 import { SuccessMark } from 'components/Icon';
 import useDispatch from 'hooks/useDispatch';
@@ -24,14 +24,11 @@ import User from 'config/entities/User';
 import { buildPath } from 'features/general/Routes';
 import { Page } from 'pages';
 import { paramsReplacer } from 'utils';
+import { Mode, Status } from 'config/types';
 
 export enum Statuses {
   PENDING = 'PENDING',
   SUCCESS = 'SUCCESS',
-}
-export enum Modes {
-  EDIT = 'EDIT',
-  SUBMIT = 'SUBMIT',
 }
 
 const STANDARD_CALIBRATION_FORM_CODE = 'forms/standard_calibration.form';
@@ -71,25 +68,35 @@ const CreateCalibrationRatings: FC = () => {
     navigate(paramsReplacer(buildPath(Page.USER_REVIEWS), { ':uuid': colleagueUuid as string }));
   };
 
-  const buildData = (properties) => ({
-    data: {
-      number: 1,
-      properties,
-      lastUpdatedTime: new Date(),
+  const buildData = (data: any) => {
+    const { status, ...properties } = data;
+    return {
+      data: {
+        number: 1,
+        properties,
+        lastUpdatedTime: new Date(),
+        colleagueUuid,
+        status,
+      },
       colleagueUuid,
-      status: 'DRAFT',
-    },
-    colleagueUuid,
-    cycleUuid: 'CURRENT',
-  });
-
-  const handleSave = (properties) => {
-    dispatch(CalibrationReviewAction.saveCalibrationReview(buildData(properties)));
+      cycleUuid: 'CURRENT',
+    };
   };
 
-  const handleUpdate = (properties) => {
-    dispatch(CalibrationReviewAction.updateCalibrationReview(buildData(properties)));
+  const handleSave = (data: any) => {
+    dispatch(CalibrationReviewAction.saveCalibrationReview(buildData(data)));
   };
+
+  const handleUpdate = (data) => {
+    dispatch(CalibrationReviewAction.updateCalibrationReview(buildData(data)));
+  };
+
+  const { properties, status } = calibrationReview;
+
+  if (status === Status.WAITING_FOR_APPROVAL) {
+    handleBack();
+    return null;
+  }
 
   if (loading) return null;
 
@@ -114,18 +121,23 @@ const CreateCalibrationRatings: FC = () => {
       <div className={css(ratingWrapper)}>
         <div className={css({ display: 'flex', alignItems: 'center' })}>
           <Icon graphic='information' />
-          <span className={css(helpTitleStyle)}>Guidence on how to use this page</span>
+          <span className={css(helpTitleStyle)}>
+            <Trans i18nKey={'guidence_how_to_use_page'}>Guidence on how to use this page</Trans>
+          </span>
         </div>
         <p>
-          Ratings are subject to change in calibration and should not be communicated to colleagues until they are
-          confirmed.
+          <Trans i18nKey={'ratings_to_change_in_calibration_until_they_confirmed'}>
+            Ratings are subject to change in calibration and should not be communicated to colleagues until they are
+            confirmed.
+          </Trans>
         </p>
         <AvatarName user={profile as User} />
         <RatingForm
           onSubmit={isNew ? handleSave : handleUpdate}
           onCancel={handleBack}
           components={components}
-          defaultValues={!isNew ? calibrationReview?.properties : {}}
+          defaultValues={!isNew ? properties : {}}
+          mode={isNew ? Mode.CREATE : Mode.UPDATE}
         />
       </div>
     </WrapperModal>
