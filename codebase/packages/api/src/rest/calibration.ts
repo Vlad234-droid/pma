@@ -68,7 +68,11 @@ export const getCalibrationUsersReviews = (params: any) => {
   });
 };
 
-export const getCalibrationStatistics = () => httpClient.get(`${domain}/statistics`);
+export const getCalibrationStatistics = (params = {}) =>
+  httpClient.get(`${domain}/statistics`, {
+    params,
+    paramsSerializer: (params) => qs.stringify(params, { arrayFormat: 'indices' }),
+  });
 
 export const uploadCalibrationUsersReviews = (params: any) =>
   httpClient.get(`${domain}/reviews`, {

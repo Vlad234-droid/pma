@@ -1,4 +1,5 @@
 import { ColleagueReview, RatingStatistic } from '@pma/openapi';
+import { initialStatistics } from '../config';
 
 type ColleagueReviewType = Array<ColleagueReview>;
 
@@ -14,3 +15,5 @@ export type RatingsType = Record<
 >;
 
 export type StatisticsType = Array<RatingStatistic>;
+
+export type statisticsType = typeof initialStatistics;

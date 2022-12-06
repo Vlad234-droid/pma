@@ -1,22 +1,24 @@
 import React, { FC, useCallback, useRef, useState } from 'react';
 import { CreateRule, Rule, Styles, useStyle } from '@pma/dex-wrapper';
 import { CalibrationReviewsAction, calibrationReviewsDataSelector } from '@pma/store';
-import useDispatch from 'hooks/useDispatch';
+
 import { useSelector } from 'react-redux';
+import useDispatch from 'hooks/useDispatch';
 
 import ColleaguesRatings from './components/ColleaguesRatings';
 import { useTranslation } from 'components/Translation';
 import { ListView } from './components/ListView';
 import { TileWrapper } from 'components/Tile';
+import Spinner from 'components/Spinner';
 import { Line } from 'components/Line';
 import Graph from 'components/Graph';
 
 import { initialFields } from './config';
-import { Rating } from 'config/enum';
 import { ActiveList } from './types';
 import omit from 'lodash.omit';
 import { isNegative } from 'utils';
 import { useCalibrationStatistics } from './hook';
+import { buildData, toLocalRating } from './utils';
 
 const CalibrationSessionOverview: FC<{ period: string }> = ({ period }) => {
   const { css, matchMedia } = useStyle();
@@ -29,23 +31,21 @@ const CalibrationSessionOverview: FC<{ period: string }> = ({ period }) => {
   const [activeList, setActiveList] = useState<ActiveList>(ActiveList.LIST);
   const listRef = useRef<HTMLDivElement>();
 
-  const { statistics } = useCalibrationStatistics();
+  const { statistics, loading: statisticsLoading } = useCalibrationStatistics(activeList);
 
-  const getCalibrationReviews = useCallback((rating: string, _start, _limit) => {
+  const getCalibrationReviewsList = useCallback((rating: string, _start, _limit) => {
     const isSpaced = !isNegative(rating.indexOf(' '));
     const isScroll = _start || _limit;
     const params = {
       'review-rating_in': isSpaced ? [rating.toUpperCase().replace(' ', '_')] : [rating.toUpperCase()],
       ...(isScroll ? { _start, _limit } : initialFields),
     };
-    const toLocalRating = isSpaced ? rating.toLowerCase().replace(' ', '_') : rating.toLowerCase();
-
     isScroll
-      ? dispatch(CalibrationReviewsAction.uploadCalibrationUsersReviews({ params, rating: toLocalRating }))
+      ? dispatch(CalibrationReviewsAction.uploadCalibrationUsersReviews({ params, rating: toLocalRating(rating) }))
       : dispatch(
           CalibrationReviewsAction.getCalibrationUsersReviews({
             params,
-            rating: toLocalRating,
+            rating: toLocalRating(rating),
           }),
         );
   }, []);
@@ -57,27 +57,25 @@ const CalibrationSessionOverview: FC<{ period: string }> = ({ period }) => {
         <ListView active={activeList} setActive={(active) => setActiveList(active)} ref={listRef} />
       </div>
       <Line styles={lineStyles} />
-      {activeList !== ActiveList.GRAPH ? (
+      {statisticsLoading ? (
+        <Spinner fullHeight />
+      ) : activeList !== ActiveList.GRAPH ? (
         <ColleaguesRatings
           data={activeList === ActiveList.TABLE ? omit(data, 'unsubmitted') : data}
           activeList={activeList}
           key={activeList}
           styles={activeList === ActiveList.TABLE ? tableStyles({ mobileScreen }) : {}}
-          onUpload={(rating, _start, _limit) => getCalibrationReviews(rating, _start, _limit)}
+          onUpload={(rating, _start, _limit) => getCalibrationReviewsList(rating, _start, _limit)}
           statistics={statistics}
         />
       ) : (
         <TileWrapper customStyle={tileStyles}>
           <Graph
             title={t('calibration_submission', 'Calibration submission', { year: period })}
+            properties={buildData(statistics, t, 'count')}
             currentData={{
-              title: '2022',
-              ratings: {
-                [Rating.OUTSTANDING]: 30,
-                [Rating.GREAT]: 20,
-                [Rating.SATISFACTORY]: 50,
-                [Rating.BELOW_EXPECTED]: 70,
-              },
+              title: period,
+              ratings: buildData(statistics, t, 'percentage'),
             }}
           />
         </TileWrapper>

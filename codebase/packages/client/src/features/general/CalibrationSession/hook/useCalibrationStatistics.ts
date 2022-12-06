@@ -1,29 +1,27 @@
 import { useEffect } from 'react';
-import { RatingStatisticRatingEnum } from '@pma/openapi';
-import { CalibrationStatisticsAction, calibrationStatisticsDataSelector } from '@pma/store';
+import {
+  CalibrationStatisticsAction,
+  calibrationStatisticsDataSelector,
+  calibrationStatisticsMetaSelector,
+} from '@pma/store';
 import { useSelector } from 'react-redux';
 import useDispatch from 'hooks/useDispatch';
+import { ActiveList, statisticsType } from '../types';
+import { initialRatings, initialStatistics } from '../config';
 
-const initialStatistics = [
-  { rating: RatingStatisticRatingEnum.Outstanding, count: 0, percentage: 0 },
-  { rating: RatingStatisticRatingEnum.Great, count: 0, percentage: 0 },
-  { rating: RatingStatisticRatingEnum.Satisfactory, count: 0, percentage: 0 },
-  { rating: RatingStatisticRatingEnum.BelowExpected, count: 0, percentage: 0 },
-  { rating: RatingStatisticRatingEnum.Unsubmitted, count: 0, percentage: 0 },
-];
-
-export type statisticsType = typeof initialStatistics;
-
-export const useCalibrationStatistics = (): { statistics: statisticsType } => {
+export const useCalibrationStatistics = (activeList: ActiveList): { statistics: statisticsType; loading: boolean } => {
   const dispatch = useDispatch();
 
   const data = useSelector(calibrationStatisticsDataSelector);
+  const { loading } = useSelector(calibrationStatisticsMetaSelector);
 
   useEffect(() => {
-    dispatch(CalibrationStatisticsAction.getCalibrationStatistics({}));
-  }, []);
+    const params = activeList !== ActiveList.LIST ? { 'review-rating_in': initialRatings } : {};
+    dispatch(CalibrationStatisticsAction.getCalibrationStatistics(params));
+  }, [activeList]);
 
   return {
+    loading,
     statistics: !data.length
       ? initialStatistics
       : (initialStatistics.map(

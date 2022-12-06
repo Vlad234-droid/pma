@@ -11,10 +11,9 @@ import { Accordion, BaseAccordion, ExpandButton, Panel, Section } from 'componen
 import ViewColleagueProfile from 'components/ViewColleagueProfile';
 import InfinityScrollLoad from 'components/InfinityScrollLoad';
 import { useTranslation } from 'components/Translation';
-import { ActiveList, RatingsType } from '../../types';
+import { ActiveList, RatingsType, statisticsType } from '../../types';
 import { paramsReplacer } from 'utils';
 import { Page } from 'pages';
-import { statisticsType } from '../../hook/useCalibrationStatistics';
 
 type Props = {
   data: RatingsType | Omit<RatingsType, 'unsubmitted'>;

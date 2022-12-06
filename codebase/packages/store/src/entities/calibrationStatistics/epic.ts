@@ -10,8 +10,9 @@ import { concatWithErrorToast, errorPayloadConverter } from '../../utils/toastHe
 export const getCalibrationStatisticsEpic: Epic = (action$, _, { api }) =>
   action$.pipe(
     filter(isActionOf(getCalibrationStatistics.request)),
-    mergeMap(() =>
-      from(api.getCalibrationStatistics()).pipe(
+    mergeMap(({ payload }) =>
+      //@ts-ignore
+      from(api.getCalibrationStatistics(payload)).pipe(
         //@ts-ignore
         map(({ success, data, errors }) => {
           if (!success) {
