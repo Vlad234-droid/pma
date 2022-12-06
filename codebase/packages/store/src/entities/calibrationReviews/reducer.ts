@@ -1,7 +1,7 @@
 import { createReducer } from 'typesafe-actions';
 
 import { ColleagueReview } from '@pma/openapi';
-import { getCalibrationUsersReviews } from './actions';
+import { getCalibrationUsersReviews, uploadCalibrationUsersReviews } from './actions';
 
 type ColleagueReviewType = Array<ColleagueReview>;
 
@@ -49,6 +49,24 @@ export default createReducer(initialState)
     };
   })
   .handleAction(getCalibrationUsersReviews.failure, (state, { payload }) => {
+    return {
+      ...state,
+      meta: { ...state.meta, loading: false, loaded: true, error: payload },
+    };
+  })
+  .handleAction(uploadCalibrationUsersReviews.request, (state) => ({
+    ...state,
+    meta: { ...state.meta, loading: true, error: null, loaded: false },
+  }))
+  .handleAction(uploadCalibrationUsersReviews.success, (state, { payload }) => ({
+    ...state,
+    data: {
+      ...state.data,
+      [payload.rating]: [...state.data[payload.rating], ...payload.data],
+    },
+    meta: { ...state.meta, loading: false, error: null, loaded: true },
+  }))
+  .handleAction(uploadCalibrationUsersReviews.failure, (state, { payload }) => {
     return {
       ...state,
       meta: { ...state.meta, loading: false, loaded: true, error: payload },

@@ -1,14 +1,14 @@
 import React, { FC, useState } from 'react';
 import { ColleagueFilterOptions } from '@pma/openapi';
-import { colors, Rule, Styles, useStyle } from '@pma/dex-wrapper';
+import { colors, Rule, Styles, useStyle, Button } from '@pma/dex-wrapper';
 import { IconButton } from 'components/IconButton';
-import { useTranslation } from 'components/Translation';
+import { useTranslation, Trans } from 'components/Translation';
 import { ColleagueProfile } from 'components/ColleagueProfile';
 import { Icon } from 'components/Icon';
 import { useSelector } from 'react-redux';
 import { getColleagueFilterSelector, getColleagueSimpleSelector } from '@pma/store';
 
-const getSelectedNamesGroup = (colleagueFilter: ColleagueFilterOptions, filter): string => {
+const getSelectedNamesGroup = (colleagueFilter: ColleagueFilterOptions, filter): string[] => {
   const acc: string[] = [];
   for (const [key, value] of Object.entries(colleagueFilter)) {
     const valueIds = value?.map((v) => (v.uuid ? v.uuid : v.code));
@@ -17,13 +17,12 @@ const getSelectedNamesGroup = (colleagueFilter: ColleagueFilterOptions, filter):
       acc.push(key);
     }
   }
-  return acc.join(' | ');
+  return acc;
 };
 
 const ColleaguesRemover: FC<{ colleaguesRemoved: any; onRemove: any; onCancel: () => void; filter: any }> = ({
   colleaguesRemoved,
   onRemove,
-  onCancel,
   filter,
 }) => {
   const { t } = useTranslation();
@@ -31,7 +30,9 @@ const ColleaguesRemover: FC<{ colleaguesRemoved: any; onRemove: any; onCancel: (
   const colleagueFilter = useSelector(getColleagueFilterSelector) || {};
   const { css } = useStyle(['lineHeight']);
   const [isPeopleListOpen, togglePeopleList] = useState<boolean>(false);
-  const selectedNamesGroup = getSelectedNamesGroup(colleagueFilter, filter);
+  const selectedNamesGroup = getSelectedNamesGroup(colleagueFilter, filter)
+    .map((name) => t(`group_name_${name}`, name))
+    .join(' | ');
 
   const colleaguesRemovedUUID = colleaguesRemoved.map((colleagueRemoved) => colleagueRemoved.value);
   const colleaguesAvailable = colleagues?.filter((colleague) => {
@@ -51,12 +52,14 @@ const ColleaguesRemover: FC<{ colleaguesRemoved: any; onRemove: any; onCancel: (
     <>
       <div className={css(borderStyle, { marginTop: '20px' })}>
         <div className={css(blockContainerStyle)}>
-          <div className={css({ padding: '4px', minHeight: '28px' })}>{selectedNamesGroup}</div>
-          {selectedNamesGroup && (
-            <div className={css({ paddingRight: '4px' })}>
-              <IconButton onPress={onCancel} graphic='cancel' />
-            </div>
-          )}
+          <div
+            className={css(
+              { padding: '4px', minHeight: '28px' },
+              { overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' },
+            )}
+          >
+            {selectedNamesGroup}
+          </div>
         </div>
         <div className={css(blockContainerStyle, bottomBorderStyle, relativeStyles)}>
           <div className={css({ padding: '4px', minHeight: '28px' })}>
@@ -84,9 +87,13 @@ const ColleaguesRemover: FC<{ colleaguesRemoved: any; onRemove: any; onCancel: (
                     job={item?.jobName}
                     department={''}
                     action={
-                      <div className={css({ marginLeft: 'auto' })}>
-                        <IconButton onPress={() => handleRemove(item)} graphic='cancel' />
-                      </div>
+                      <Button
+                        styles={[{ marginLeft: 'auto', fontWeight: 'bold' }]}
+                        onPress={() => handleRemove(item)}
+                        mode={'inverse'}
+                      >
+                        <Trans i18nKey={'remove'}>Remove</Trans>
+                      </Button>
                     }
                   />
                 </div>

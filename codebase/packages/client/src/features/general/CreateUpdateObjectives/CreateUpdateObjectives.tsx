@@ -17,6 +17,7 @@ import SuccessModal from 'components/SuccessModal';
 import { useTranslation } from 'components/Translation';
 import ObjectiveForm from './components/ObjectiveForm';
 import useReviewSchema from './hooks/useReviewSchema';
+import { ModalComponent } from './components/ModalComponent';
 
 export type Props = {
   onClose: () => void;
@@ -44,6 +45,7 @@ const CreateUpdateObjectives: FC<Props> = ({ onClose, editNumber, useSingleStep,
   const { components = [], display: newSchemaVersion, markup } = schema;
   const markupMin = markup?.min;
   const isSingleStep = useSingleStep || markupMin < currentNumber;
+  const title = isSingleStep ? t('edit_objective', 'Edit objective') : t('edit_objectives', 'Edit objectives');
 
   useEffect(() => {
     if (editNumber !== currentNumber) setCurrentNumber(editNumber);
@@ -159,21 +161,23 @@ const CreateUpdateObjectives: FC<Props> = ({ onClose, editNumber, useSingleStep,
   if (!schemaLoaded || !reviewLoaded) return null;
 
   return (
-    <ObjectiveForm
-      formElements={formElements}
-      schemaComponents={components}
-      currentId={isSingleStep ? 1 : currentNumber}
-      editMode={isApproved || isDeclined}
-      multiply={!isSingleStep}
-      isLastStep={currentNumber === markupMin}
-      defaultValues={{ data: defaultValues }}
-      onSaveDraft={handleSaveDraft}
-      onSubmit={handleSubmit}
-      titles={titles}
-      onCancel={onClose}
-      onPrev={handlePrev}
-      onNext={handleNext}
-    />
+    <ModalComponent onClose={onClose} title={title}>
+      <ObjectiveForm
+        formElements={formElements}
+        schemaComponents={components}
+        currentId={isSingleStep ? 1 : currentNumber}
+        editMode={isApproved || isDeclined}
+        multiply={!isSingleStep}
+        isLastStep={currentNumber === markupMin}
+        defaultValues={{ data: defaultValues }}
+        onSaveDraft={handleSaveDraft}
+        onSubmit={handleSubmit}
+        titles={titles}
+        onCancel={onClose}
+        onPrev={handlePrev}
+        onNext={handleNext}
+      />
+    </ModalComponent>
   );
 };
 

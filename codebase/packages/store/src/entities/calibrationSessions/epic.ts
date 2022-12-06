@@ -10,6 +10,8 @@ import {
   createCalibrationSession,
   updateCalibrationSession,
   deleteCalibrationSession,
+  startCalibrationSession,
+  closeCalibrationSession,
 } from './actions';
 import { concatWithErrorToast, errorPayloadConverter } from '../../utils/toastHelper';
 
@@ -109,9 +111,59 @@ export const deleteCalibrationSessionEpic: Epic = (action$, state$, { api }) =>
     }),
   );
 
+export const startCalibrationSessionEpic: Epic = (action$, state$, { api }) =>
+  action$.pipe(
+    filter(isActionOf(startCalibrationSession.request)),
+    switchMap(({ payload }) => {
+      // @ts-ignore
+      return from(api.startCalibrationSession(payload)).pipe(
+        //@ts-ignore
+        mergeMap(({ success, data, errors }) => {
+          if (!success) {
+            return from([startCalibrationSession.failure(new Error(errors?.[0].message || undefined))]);
+          }
+          return from([startCalibrationSession.success({ data })]);
+        }),
+        catchError((e) => {
+          const errors = e?.data?.errors;
+          return concatWithErrorToast(
+            of(startCalibrationSession.failure(errors?.[0])),
+            errorPayloadConverter({ ...errors?.[0], title: errors?.[0].message }),
+          );
+        }),
+      );
+    }),
+  );
+
+export const closeCalibrationSessionEpic: Epic = (action$, state$, { api }) =>
+  action$.pipe(
+    filter(isActionOf(closeCalibrationSession.request)),
+    switchMap(({ payload }) => {
+      // @ts-ignore
+      return from(api.closeCalibrationSession(payload)).pipe(
+        //@ts-ignore
+        mergeMap(({ success, data, errors }) => {
+          if (!success) {
+            return from([closeCalibrationSession.failure(new Error(errors?.[0].message || undefined))]);
+          }
+          return from([closeCalibrationSession.success({ data })]);
+        }),
+        catchError((e) => {
+          const errors = e?.data?.errors;
+          return concatWithErrorToast(
+            of(closeCalibrationSession.failure(errors?.[0])),
+            errorPayloadConverter({ ...errors?.[0], title: errors?.[0].message }),
+          );
+        }),
+      );
+    }),
+  );
+
 export default combineEpics(
   getCalibrationSessionsEpic,
   createCalibrationSessionEpic,
   updateCalibrationSessionEpic,
   deleteCalibrationSessionEpic,
+  startCalibrationSessionEpic,
+  closeCalibrationSessionEpic,
 );

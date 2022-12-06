@@ -1,8 +1,10 @@
 import React, { FC, useEffect } from 'react';
-import { ColleagueSimple } from '@pma/openapi';
+import { calibrationReviewsMetaSelector } from '@pma/store';
 import { Rule, Styles, useStyle } from '@pma/dex-wrapper';
+import { ColleagueSimple } from '@pma/openapi';
 import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router';
+import { useSelector } from 'react-redux';
 
 import { buildPath } from 'features/general/Routes';
 import { Accordion, BaseAccordion, ExpandButton, Panel, Section } from 'components/Accordion';
@@ -19,15 +21,15 @@ type Props = {
   activeList: ActiveList;
   statistics?: statisticsType;
   styles?: Rule | Styles | {};
-  onUpload?: (rating: string) => void;
+  onUpload?: (rating: string, _start?: number, _limit?: number) => void;
 };
 
 const ColleaguesRatings: FC<Props> = ({ data, activeList, styles = {}, onUpload, statistics }) => {
   const { t } = useTranslation();
   const { css } = useStyle();
   const navigate = useNavigate();
+  const { loading } = useSelector(calibrationReviewsMetaSelector);
   const { pathname } = useLocation();
-  const loading = false;
 
   useEffect(() => {
     onUpload &&
@@ -47,11 +49,12 @@ const ColleaguesRatings: FC<Props> = ({ data, activeList, styles = {}, onUpload,
   return (
     <div className={css(styles)}>
       {Object.entries(data).map(([title, data], i) => {
-        // const total = reviews?.statistics?.[title]?.count ?? 0;
-        // const hasMore = (data as any)?.length !== reviews?.statistics?.[title]?.count;
         const ratingStatistics = statistics && statistics?.[i];
         const rating = ratingStatistics?.rating as string;
-        const hasMore = !!(ratingStatistics && ratingStatistics?.count >= 1);
+        const isExpandable = ratingStatistics && ratingStatistics?.count >= 1;
+        const hasMore = !!(
+          statistics && statistics.find(({ rating }) => rating.toLowerCase() === title)?.count !== data.length
+        );
 
         return (
           <Accordion
@@ -67,7 +70,7 @@ const ColleaguesRatings: FC<Props> = ({ data, activeList, styles = {}, onUpload,
                       <span className={css(titleStyles)}>
                         {t(rating.toLowerCase())}: {ratingStatistics?.count}
                       </span>
-                      {hasMore && activeList === ActiveList.LIST && (
+                      {isExpandable && activeList === ActiveList.LIST && (
                         <div className={css(expandButtonStyles)}>
                           <ExpandButton
                             onClick={(expanded) => !data?.length && onUpload && expanded && onUpload(title)}
@@ -79,19 +82,12 @@ const ColleaguesRatings: FC<Props> = ({ data, activeList, styles = {}, onUpload,
                       <InfinityScrollLoad
                         loadOnScroll={false}
                         loadMore={(_limit, _start) => {
-                          switch (activeList) {
-                            case ActiveList.LIST: {
-                              // dispatch();
-                              break;
-                            }
-                            case ActiveList.TABLE: {
-                              // dispatch();
-                              break;
-                            }
-                          }
+                          (activeList === ActiveList.LIST || activeList === ActiveList.TABLE) &&
+                            onUpload &&
+                            onUpload(rating, _start, _limit);
                         }}
                         loading={loading}
-                        limit={15}
+                        limit={10}
                         hasMore={hasMore}
                         render={() => (
                           <>

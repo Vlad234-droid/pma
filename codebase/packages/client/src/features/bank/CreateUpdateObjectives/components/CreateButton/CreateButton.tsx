@@ -24,7 +24,7 @@ const CreateButton: FC<Props> = memo(({ withIcon = false }) => {
   const { activeTimelines, currentTimelines } = useTimelineContainer();
   const { code: currentCode } = currentTimelines[ReviewType.QUARTER] || {};
   const { code: activeCode } = activeTimelines[ReviewType.QUARTER] || {};
-  const isDisabled = !!activeCode && activeCode !== currentCode;
+  const isActive = !!activeCode && activeCode === currentCode;
 
   const schema = useSelector(getReviewSchema(activeCode));
 
@@ -38,11 +38,11 @@ const CreateButton: FC<Props> = memo(({ withIcon = false }) => {
     : 0;
 
   const { markup = { max: 0, min: 0 } } = schema;
-  const isAvailable = objectivesLen < markup.max || false;
+  const canCreateObjectives = objectivesLen < markup.max;
+
+  const isDisabled = !isActive || !canCreateObjectives;
 
   const handleClick = () => navigate(buildPath(Page.CREATE_OBJECTIVES));
-
-  if (!isAvailable) return null;
 
   return (
     <div className={css({ display: 'flex', marginBottom: '20px' })}>

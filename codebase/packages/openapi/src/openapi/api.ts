@@ -1216,6 +1216,12 @@ export interface DecisionInfo {
      * @type {string}
      * @memberof DecisionInfo
      */
+    'deploymentId'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DecisionInfo
+     */
     'tenantId'?: string;
     /**
      * 
@@ -1229,12 +1235,6 @@ export interface DecisionInfo {
      * @memberof DecisionInfo
      */
     'diagramResourceName'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof DecisionInfo
-     */
-    'deploymentId'?: string;
 }
 /**
  * 
@@ -1392,28 +1392,22 @@ export interface Event {
     'eventId'?: string;
     /**
      * 
-     * @type {Event}
-     * @memberof Event
-     */
-    'callbackEvent'?: Event;
-    /**
-     * 
      * @type {{ [key: string]: object; }}
      * @memberof Event
      */
     'eventProperties'?: { [key: string]: object; };
     /**
      * 
-     * @type {string}
+     * @type {Event}
      * @memberof Event
      */
-    'eventName'?: string;
+    'callbackEvent'?: Event;
     /**
      * 
      * @type {string}
      * @memberof Event
      */
-    'eventPriority'?: EventEventPriorityEnum;
+    'eventName'?: string;
     /**
      * 
      * @type {string}
@@ -1426,6 +1420,12 @@ export interface Event {
      * @memberof Event
      */
     'callbackServiceURL'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Event
+     */
+    'eventPriority'?: EventEventPriorityEnum;
 }
 
 /**
@@ -3138,6 +3138,12 @@ export interface ProcessInfo {
      * @type {string}
      * @memberof ProcessInfo
      */
+    'deploymentId'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ProcessInfo
+     */
     'tenantId'?: string;
     /**
      * 
@@ -3151,12 +3157,6 @@ export interface ProcessInfo {
      * @memberof ProcessInfo
      */
     'diagramResourceName'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ProcessInfo
-     */
-    'deploymentId'?: string;
 }
 /**
  * 

@@ -6,34 +6,37 @@ import { Option, Select } from 'components/Form';
 
 type WithDateProps = {
   withDateFilter: boolean;
-  setPeriod: (value: string) => void;
+  period: string;
+  onChangePeriod: (value: string) => void;
 };
 
 type WithoutDateProps = {
   withDateFilter?: never;
-  setPeriod?: never;
+  onChangePeriod?: never;
+  period?: never;
 };
 
 type Props = WithDateProps | WithoutDateProps;
 
-const Filter: FC<Props> = ({ withDateFilter, setPeriod }) => {
+const Filter: FC<Props> = ({ withDateFilter, onChangePeriod, period = '' }) => {
   const { css, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
 
   const fieldOptions: Option[] = [
-    { value: '2021 - 2022', label: '2021 - 2022' },
-    { value: '2022 - 2023', label: '2022 - 2023' },
+    { value: '2021', label: '2021 - 2022' },
+    { value: '2022', label: '2022 - 2023' },
   ];
+
   return (
     <div className={css(headStyle({ mobileScreen }))}>
       <div>
-        {withDateFilter && setPeriod && (
+        {withDateFilter && onChangePeriod && (
           <Select
             options={fieldOptions}
             name={'targetType'}
             placeholder={''}
-            value={'2021 - 2022'}
-            onChange={({ target: { value } }) => setPeriod(value)}
+            value={period}
+            onChange={({ target: { value } }) => onChangePeriod(value)}
             customStyles={selectStyle}
           />
         )}

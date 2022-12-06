@@ -8856,16 +8856,23 @@
           "eventId": {
             "type": "string"
           },
-          "callbackEvent": {
-            "$ref": "#/components/schemas/Event"
-          },
           "eventProperties": {
             "type": "object",
             "additionalProperties": {
               "type": "object"
             }
           },
+          "callbackEvent": {
+            "$ref": "#/components/schemas/Event"
+          },
           "eventName": {
+            "type": "string"
+          },
+          "eventCreationDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "callbackServiceURL": {
             "type": "string"
           },
           "eventPriority": {
@@ -8883,13 +8890,6 @@
               "LOW_L",
               "LOWEST"
             ]
-          },
-          "eventCreationDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "callbackServiceURL": {
-            "type": "string"
           }
         }
       },
@@ -9286,6 +9286,9 @@
           "category": {
             "type": "string"
           },
+          "deploymentId": {
+            "type": "string"
+          },
           "tenantId": {
             "type": "string"
           },
@@ -9293,9 +9296,6 @@
             "type": "string"
           },
           "diagramResourceName": {
-            "type": "string"
-          },
-          "deploymentId": {
             "type": "string"
           }
         }
@@ -9931,6 +9931,9 @@
           "category": {
             "type": "string"
           },
+          "deploymentId": {
+            "type": "string"
+          },
           "tenantId": {
             "type": "string"
           },
@@ -9938,9 +9941,6 @@
             "type": "string"
           },
           "diagramResourceName": {
-            "type": "string"
-          },
-          "deploymentId": {
             "type": "string"
           }
         }

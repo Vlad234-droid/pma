@@ -11,6 +11,7 @@ import { TileWrapper } from 'components/Tile';
 import { Line } from 'components/Line';
 import Graph from 'components/Graph';
 
+import { initialFields } from './config';
 import { Rating } from 'config/enum';
 import { ActiveList } from './types';
 import omit from 'lodash.omit';
@@ -20,26 +21,34 @@ import { useCalibrationStatistics } from './hook';
 const CalibrationSessionOverview: FC<{ period: string }> = ({ period }) => {
   const { css, matchMedia } = useStyle();
   const dispatch = useDispatch();
-  const data = useSelector(calibrationReviewsDataSelector);
-
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const mediumScreen = matchMedia({ xSmall: false, small: false, medium: true }) || false;
   const { t } = useTranslation();
-
-  const getCalibrationReviews = useCallback((rating: string) => {
-    const isSpaced = !isNegative(rating.indexOf(' '));
-    dispatch(
-      CalibrationReviewsAction.getCalibrationUsersReviews({
-        params: { 'review-rating_in': isSpaced ? [rating.toUpperCase().replace(' ', '_')] : [rating.toUpperCase()] },
-        rating: isSpaced ? rating.toLowerCase().replace(' ', '_') : rating.toLowerCase(),
-      }),
-    );
-  }, []);
-
-  const { statistics } = useCalibrationStatistics();
+  const data = useSelector(calibrationReviewsDataSelector);
 
   const [activeList, setActiveList] = useState<ActiveList>(ActiveList.LIST);
   const listRef = useRef<HTMLDivElement>();
+
+  const { statistics } = useCalibrationStatistics();
+
+  const getCalibrationReviews = useCallback((rating: string, _start, _limit) => {
+    const isSpaced = !isNegative(rating.indexOf(' '));
+    const isScroll = _start || _limit;
+    const params = {
+      'review-rating_in': isSpaced ? [rating.toUpperCase().replace(' ', '_')] : [rating.toUpperCase()],
+      ...(isScroll ? { _start, _limit } : initialFields),
+    };
+    const toLocalRating = isSpaced ? rating.toLowerCase().replace(' ', '_') : rating.toLowerCase();
+
+    isScroll
+      ? dispatch(CalibrationReviewsAction.uploadCalibrationUsersReviews({ params, rating: toLocalRating }))
+      : dispatch(
+          CalibrationReviewsAction.getCalibrationUsersReviews({
+            params,
+            rating: toLocalRating,
+          }),
+        );
+  }, []);
 
   return (
     <div>
@@ -54,7 +63,7 @@ const CalibrationSessionOverview: FC<{ period: string }> = ({ period }) => {
           activeList={activeList}
           key={activeList}
           styles={activeList === ActiveList.TABLE ? tableStyles({ mobileScreen }) : {}}
-          onUpload={(rating) => getCalibrationReviews(rating)}
+          onUpload={(rating, _start, _limit) => getCalibrationReviews(rating, _start, _limit)}
           statistics={statistics}
         />
       ) : (

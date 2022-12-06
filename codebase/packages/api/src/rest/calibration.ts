@@ -22,6 +22,13 @@ export const deleteCalibrationSessions = (params: { uuid: string }) => {
   return httpClient.delete(`${domain}/sessions/${uuid}`);
 };
 
+export const startCalibrationSession = (data: CalibrationSession) => {
+  return httpClient.put(`${domain}/sessions/${data.uuid}/start`, data);
+};
+export const closeCalibrationSession = (data: CalibrationSession) => {
+  return httpClient.put(`${domain}/sessions/${data.uuid}/close`, data);
+};
+
 export const getCalibrationReviews = ({ colleagueUuid, cycleUuid }: Config) =>
   httpClient.get(`${domain}/colleagues/${colleagueUuid}/pm-cycles/${cycleUuid}/reviews`);
 
@@ -62,3 +69,9 @@ export const getCalibrationUsersReviews = (params: any) => {
 };
 
 export const getCalibrationStatistics = () => httpClient.get(`${domain}/statistics`);
+
+export const uploadCalibrationUsersReviews = (params: any) =>
+  httpClient.get(`${domain}/reviews`, {
+    params,
+    paramsSerializer: (params) => qs.stringify(params, { arrayFormat: 'indices' }),
+  });

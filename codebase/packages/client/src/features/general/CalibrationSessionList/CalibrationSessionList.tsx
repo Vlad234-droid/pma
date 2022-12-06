@@ -27,8 +27,11 @@ import { DateBadge } from './components/DateBadge';
 import { buildPath } from '../Routes';
 
 import { dataFromSessionResponse } from './utils';
+import { SortBy } from '../Filters';
 
-const CalibrationSessionList: FC<{ filterStatus: FilterStatus }> = ({ filterStatus }) => {
+const CalibrationSessionList: FC<{ filterStatus: FilterStatus; searchValue: string; sortValue: SortBy }> = ({
+  filterStatus,
+}) => {
   const { css } = useStyle();
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -117,8 +120,10 @@ const CalibrationSessionList: FC<{ filterStatus: FilterStatus }> = ({ filterStat
                             {Object.entries(colleagueFilterInfo).map(([filterName, filterOptions]) => {
                               return (
                                 <div key={filterName}>
-                                  <div>{filterName}:</div>
-                                  <div>
+                                  <div className={css(groupStyles, boldStyles)}>
+                                    {t(`group_name_${filterName}`, filterName)}:
+                                  </div>
+                                  <div className={css(groupStyles)}>
                                     {Array.isArray(filterOptions) &&
                                       filterOptions.map((filterOption) => {
                                         return (
@@ -132,8 +137,8 @@ const CalibrationSessionList: FC<{ filterStatus: FilterStatus }> = ({ filterStat
                           </>
                         )}
                         <div>
-                          <div>Notes</div>
-                          <div>{calibrationSession.description}</div>
+                          <div className={css(groupStyles, boldStyles)}>Notes</div>
+                          <div className={css(groupStyles)}>{calibrationSession.description}</div>
                         </div>
                       </div>
                       <div className={css({ paddingBottom: '24px', display: ' flex', gap: '30px' })}>
@@ -226,6 +231,16 @@ const sectionBodyStyle: Rule = {
 };
 
 const expandButtonStyle: Rule = { marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '10px' };
+
+const groupStyles: Rule = ({ theme }) => ({
+  padding: '0',
+  ...theme.font.fixed.f14,
+  letterSpacing: '0px',
+});
+
+const boldStyles: Rule = ({ theme }) => ({
+  fontWeight: theme.font.weight.bold,
+});
 
 const iconButtonStyles: Rule = ({ theme }) => ({
   padding: '0',

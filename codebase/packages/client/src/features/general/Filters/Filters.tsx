@@ -75,7 +75,7 @@ const Filters: FC<Props> = ({
       )}
       {sortingOptions && (
         <Sorting
-          iconStyles={iconStyles}
+          iconStyles={sortingStyles}
           isOpen={sortOpen}
           onClick={handleSortOpen}
           onSort={handleSort}
@@ -120,4 +120,11 @@ const iconStyles: Rule = {
   position: 'relative',
   top: '2px',
   left: '2px',
+};
+const sortingStyles: Rule = {
+  width: '16px',
+  height: '16px',
+  position: 'relative',
+  top: '1px',
+  left: 0,
 };

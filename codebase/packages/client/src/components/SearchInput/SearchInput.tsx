@@ -9,6 +9,7 @@ type Props = {
   disabled?: boolean;
   value?: string;
   name?: string;
+  optionDataLiner?: string;
   placeholder?: string;
   styles?: Styles | Rule;
   onSearch: (e: ChangeEvent<HTMLInputElement>) => void;
@@ -21,6 +22,7 @@ type Props = {
   isValid?: boolean;
   id?: string;
   options?: Array<object>;
+  disabledOptions?: Array<object>;
   selected?: Array<{ label: string; value: string }>;
   multiple?: boolean;
 };
@@ -35,10 +37,12 @@ const SearchInput: FC<Props> = ({
   onClear,
   onBlur,
   name,
+  optionDataLiner,
   value,
   isValid = true,
   selected = [],
   options = [],
+  disabledOptions = [],
   disabled = false,
   renderOption,
   multiple = false,
@@ -74,22 +78,33 @@ const SearchInput: FC<Props> = ({
         placeholder={placeholder}
       />
       <div className={css(relativeStyles)}>
-        {!!options.length && (
+        {(!!options.length || !!disabledOptions.length) && (
           <div className={css(optionsWrapperStyles)}>
-            {options?.map((item, idx) => (
-              <div
-                data-test-id={`option-${idx}`}
-                key={idx}
-                className={css(optionStyle)}
-                onMouseDown={(e) => e.preventDefault()}
-                onClick={() => {
-                  onChange(item);
-                  multiple && setCurrentValue('');
-                }}
-              >
-                {renderOption(item)}
-              </div>
-            ))}
+            {!!options.length &&
+              options?.map((item, idx) => (
+                <div
+                  data-test-id={`option-${idx}`}
+                  key={idx}
+                  className={css(optionStyle)}
+                  onMouseDown={(e) => e.preventDefault()}
+                  onClick={() => {
+                    onChange(item);
+                    multiple && setCurrentValue('');
+                  }}
+                >
+                  {renderOption(item)}
+                </div>
+              ))}
+            {!!disabledOptions.length && (
+              <>
+                {optionDataLiner && <div className={css(optionDataLinerStyle)}>{optionDataLiner}</div>}
+                {disabledOptions?.map((item, idx) => (
+                  <div data-test-id={`option-${idx}`} key={idx} className={css(optionStyle, optionDisabledStyle)}>
+                    {renderOption(item)}
+                  </div>
+                ))}
+              </>
+            )}
           </div>
         )}
         {multiple && !!selected?.length && (
@@ -102,7 +117,7 @@ const SearchInput: FC<Props> = ({
                   className={css({ cursor: 'pointer' })}
                   onClick={() => onDelete && onDelete(item.value)}
                 >
-                  <Icon graphic={'cancel'} />
+                  <Icon graphic={'cancel'} size={'16px'} />
                 </div>
               </div>
             ))}
@@ -126,6 +141,24 @@ const optionStyle: Rule = ({ theme }) => ({
   ':hover': {
     background: '#F3F9FC',
   },
+});
+
+const optionDisabledStyle: Rule = {
+  opacity: 0.6,
+};
+
+const optionDataLinerStyle: Rule = ({ theme }) => ({
+  display: 'block',
+  width: '100%',
+  fontSize: theme.font.fixed.f14.fontSize,
+  lineHeight: theme.font.fixed.f14.lineHeight,
+  letterSpacing: '0px',
+  padding: '10px 30px 10px 16px',
+  background: theme.colors.backgroundDark,
+  // @ts-ignore
+  borderTop: `1px solid ${theme.colors.lightGray}`,
+  // @ts-ignore
+  borderBottom: `1px solid ${theme.colors.lightGray}`,
 });
 
 //@ts-ignore

@@ -2,6 +2,7 @@ import { Add } from './add';
 import { ArrowLeft } from './arrow-left';
 import { ArrowRight } from './arrow-right';
 import { Calender } from './calender';
+import { CalenderFilled } from './calenderFilled';
 import { Cancel } from './cancel';
 import { Check } from './check';
 import { ChatSq } from './chat-sq';
@@ -79,6 +80,7 @@ export type Graphics =
   | 'arrowRight'
   | 'arrowUp'
   | 'calender'
+  | 'calenderFilled'
   | 'cancel'
   | 'chat'
   | 'check'
@@ -143,6 +145,7 @@ export const icons: Record<Graphics, FCGraphicProps> = {
   document: Document,
   account: Account,
   calender: Calender,
+  calenderFilled: CalenderFilled,
   cancel: Cancel,
   check: Check,
   microphone: Microphone,

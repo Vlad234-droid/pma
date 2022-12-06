@@ -137,6 +137,7 @@ const Form: FC<Props> = ({ defaultValues, canEdit, onSaveAndExit, onSubmit }) =>
             iconProps={{ title: `Filter and add`, fill: '#fff', size: '16px' }}
           >
             <Trans i18nKey='filter_and_add'>Filter and add</Trans>
+            {Object.keys(formValues.filter)?.length ? ` (${Object.keys(formValues.filter)?.length})` : ''}
           </IconButton>
         </div>
         {colleagueSimpleLoading ? (
@@ -187,7 +188,10 @@ const Form: FC<Props> = ({ defaultValues, canEdit, onSaveAndExit, onSubmit }) =>
             {({ onClose }) => (
               <FilterForm
                 defaultValues={savedFilter}
-                onCancel={onClose}
+                onCancel={() => {
+                  handleRemoveCancellation();
+                  onClose();
+                }}
                 filters={colleagueFilter as { [key: string]: Array<{ [key: string]: string }> }}
                 onSubmit={(data) => {
                   onClose();

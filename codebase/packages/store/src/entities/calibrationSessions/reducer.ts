@@ -7,6 +7,8 @@ import {
   updateCalibrationSession,
   deleteCalibrationSession,
   updateCalibrationSessionMeta,
+  startCalibrationSession,
+  closeCalibrationSession,
   clearCalibrationSessionData,
 } from './actions';
 
@@ -97,10 +99,48 @@ export default createReducer(initialState)
   })
   .handleAction(updateCalibrationSession.success, (state, { payload }) => ({
     ...state,
-    data: state.data.map((cs) => (cs.uuid === payload.uuid ? payload : cs)),
+    data: state.data.map((cs) => (cs.uuid === payload.data.uuid ? payload.data : cs)),
     meta: { ...state.meta, updating: false, updated: true },
   }))
   .handleAction(updateCalibrationSession.failure, (state, { payload }) => {
+    return {
+      ...state,
+      ...payload,
+      meta: { ...state.meta, updating: false, updated: true, error: payload },
+    };
+  })
+
+  .handleAction(startCalibrationSession.request, (state) => {
+    return {
+      ...state,
+      meta: { ...state.meta, error: null, loaded: false, updating: true, updated: false },
+    };
+  })
+  .handleAction(startCalibrationSession.success, (state, { payload }) => ({
+    ...state,
+    data: state.data.map((cs) => (cs.uuid === payload.data.uuid ? payload.data : cs)),
+    meta: { ...state.meta, updating: false, updated: true },
+  }))
+  .handleAction(startCalibrationSession.failure, (state, { payload }) => {
+    return {
+      ...state,
+      ...payload,
+      meta: { ...state.meta, updating: false, updated: true, error: payload },
+    };
+  })
+
+  .handleAction(closeCalibrationSession.request, (state) => {
+    return {
+      ...state,
+      meta: { ...state.meta, error: null, loaded: false, updating: true, updated: false },
+    };
+  })
+  .handleAction(closeCalibrationSession.success, (state, { payload }) => ({
+    ...state,
+    data: state.data.map((cs) => (cs.uuid === payload.data.uuid ? payload.data : cs)),
+    meta: { ...state.meta, updating: false, updated: true },
+  }))
+  .handleAction(closeCalibrationSession.failure, (state, { payload }) => {
     return {
       ...state,
       ...payload,

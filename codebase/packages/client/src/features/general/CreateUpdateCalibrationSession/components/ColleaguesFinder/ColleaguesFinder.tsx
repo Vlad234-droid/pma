@@ -70,6 +70,7 @@ const ColleaguesFinder: FC<Props> = ({
           key={searchOption}
           styles={inputStyles}
           name={'search_option'}
+          optionDataLiner={'These colleagues are included into another sessions:'}
           onChange={handleChange}
           onSearch={(e) => handleSearchColleagues(e.target.value, searchOption)}
           placeholder={t('search', 'Search')}
