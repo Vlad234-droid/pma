@@ -1,7 +1,7 @@
 import React, { forwardRef } from 'react';
 import { useStyle, CreateRule, Rule } from '@pma/dex-wrapper';
-import { ActiveList } from '../../utils/types';
 import { useTranslation } from 'components/Translation';
+import { ActiveList } from '../../types';
 
 export const VIEW_WRAPPER = 'view-wrapper';
 

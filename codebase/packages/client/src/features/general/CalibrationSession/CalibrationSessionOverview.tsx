@@ -1,130 +1,54 @@
-import React, { FC, useRef, useState } from 'react';
+import React, { FC, useCallback, useRef, useState } from 'react';
 import { CreateRule, Rule, Styles, useStyle } from '@pma/dex-wrapper';
+import { CalibrationReviewsAction, calibrationReviewsDataSelector } from '@pma/store';
 
-import ColleaguesReviews from './components/ColleaguesReviews';
+import { useSelector } from 'react-redux';
+import useDispatch from 'hooks/useDispatch';
+
+import ColleaguesRatings from './components/ColleaguesRatings';
 import { useTranslation } from 'components/Translation';
 import { ListView } from './components/ListView';
-import { Line } from 'components/Line';
-
-import Graph from 'components/Graph';
-import { Rating } from 'config/enum';
-
 import { TileWrapper } from 'components/Tile';
-import { ActiveList } from './utils/types';
+import Spinner from 'components/Spinner';
+import { Line } from 'components/Line';
+import Graph from 'components/Graph';
+
+import { initialFields } from './config';
+import { ActiveList } from './types';
 import omit from 'lodash.omit';
+import { isNegative } from 'utils';
+import { useCalibrationStatistics } from './hook';
+import { buildData, toLocalRating } from './utils';
 
 const CalibrationSessionOverview: FC<{ period: string }> = ({ period }) => {
   const { css, matchMedia } = useStyle();
-
+  const dispatch = useDispatch();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const mediumScreen = matchMedia({ xSmall: false, small: false, medium: true }) || false;
   const { t } = useTranslation();
+  const data = useSelector(calibrationReviewsDataSelector);
 
   const [activeList, setActiveList] = useState<ActiveList>(ActiveList.LIST);
   const listRef = useRef<HTMLDivElement>();
 
-  const data = {
-    Outstanding: [
-      {
-        businessType: 'store',
-        firstName: 'store',
-        jobName: 'store',
-        lastName: 'store',
-        uuid: '1',
-        what: 'Outstanding',
-        how: 'Outstanding',
-      },
-      {
-        businessType: 'store',
-        firstName: 'store',
-        jobName: 'store',
-        lastName: 'store',
-        uuid: '2',
-        what: 'Outstanding',
-        how: 'Outstanding',
-      },
-    ],
-    Great: [
-      {
-        businessType: 'store',
-        firstName: 'store',
-        jobName: 'store',
-        lastName: 'store',
-        uuid: '1',
-        what: 'Outstanding',
-        how: 'Outstanding',
-      },
-      {
-        businessType: 'store',
-        firstName: 'store',
-        jobName: 'store',
-        lastName: 'store',
-        uuid: '2',
-        what: 'Outstanding',
-        how: 'Outstanding',
-      },
-    ],
-    Satisfactory: [
-      {
-        businessType: 'store',
-        firstName: 'store',
-        jobName: 'store',
-        lastName: 'store',
-        uuid: '1',
-        what: 'Outstanding',
-        how: 'Outstanding',
-      },
-      {
-        businessType: 'store',
-        firstName: 'store',
-        jobName: 'store',
-        lastName: 'store',
-        uuid: '2',
-        what: 'Outstanding',
-        how: 'Outstanding',
-      },
-    ],
-    'Below expected': [
-      {
-        businessType: 'store',
-        firstName: 'store',
-        jobName: 'store',
-        lastName: 'store',
-        uuid: '1',
-        what: 'Outstanding',
-        how: 'Outstanding',
-      },
-      {
-        businessType: 'store',
-        firstName: 'store',
-        jobName: 'store',
-        lastName: 'store',
-        uuid: '2',
-        what: 'Outstanding',
-        how: 'Outstanding',
-      },
-    ],
-    Unsubmitted: [
-      {
-        businessType: 'store',
-        firstName: 'store',
-        jobName: 'store',
-        lastName: 'store',
-        uuid: '1',
-        what: 'Outstanding',
-        how: 'Outstanding',
-      },
-      {
-        businessType: 'store',
-        firstName: 'store',
-        jobName: 'store',
-        lastName: 'store',
-        uuid: '2',
-        what: 'Outstanding',
-        how: 'Outstanding',
-      },
-    ],
-  };
+  const { statistics, loading: statisticsLoading } = useCalibrationStatistics(activeList);
+
+  const getCalibrationReviewsList = useCallback((rating: string, _start, _limit) => {
+    const isSpaced = !isNegative(rating.indexOf(' '));
+    const isScroll = _start || _limit;
+    const params = {
+      'review-rating_in': isSpaced ? [rating.toUpperCase().replace(' ', '_')] : [rating.toUpperCase()],
+      ...(isScroll ? { _start, _limit } : initialFields),
+    };
+    isScroll
+      ? dispatch(CalibrationReviewsAction.uploadCalibrationUsersReviews({ params, rating: toLocalRating(rating) }))
+      : dispatch(
+          CalibrationReviewsAction.getCalibrationUsersReviews({
+            params,
+            rating: toLocalRating(rating),
+          }),
+        );
+  }, []);
 
   return (
     <div>
@@ -133,25 +57,25 @@ const CalibrationSessionOverview: FC<{ period: string }> = ({ period }) => {
         <ListView active={activeList} setActive={(active) => setActiveList(active)} ref={listRef} />
       </div>
       <Line styles={lineStyles} />
-      {activeList !== ActiveList.GRAPH ? (
-        <ColleaguesReviews
-          data={activeList === ActiveList.TABLE ? omit(data, 'Unsubmitted') : data}
+      {statisticsLoading ? (
+        <Spinner fullHeight />
+      ) : activeList !== ActiveList.GRAPH ? (
+        <ColleaguesRatings
+          data={activeList === ActiveList.TABLE ? omit(data, 'unsubmitted') : data}
           activeList={activeList}
           key={activeList}
           styles={activeList === ActiveList.TABLE ? tableStyles({ mobileScreen }) : {}}
+          onUpload={(rating, _start, _limit) => getCalibrationReviewsList(rating, _start, _limit)}
+          statistics={statistics}
         />
       ) : (
         <TileWrapper customStyle={tileStyles}>
           <Graph
             title={t('calibration_submission', 'Calibration submission', { year: period })}
+            properties={buildData(statistics, t, 'count')}
             currentData={{
-              title: '2022',
-              ratings: {
-                [Rating.OUTSTANDING]: 30,
-                [Rating.GREAT]: 20,
-                [Rating.SATISFACTORY]: 50,
-                [Rating.BELOW_EXPECTED]: 70,
-              },
+              title: period,
+              ratings: buildData(statistics, t, 'percentage'),
             }}
           />
         </TileWrapper>

@@ -3,6 +3,7 @@ import { CreateRule, useStyle, Rule } from '@pma/dex-wrapper';
 import { BarChart, Legend, XAxis, YAxis, Bar, ResponsiveContainer, Cell } from 'recharts';
 
 import { Trans } from 'components/Translation';
+
 import { RatingChartData } from './types';
 import { getComputedData, getGraphBars } from './utils';
 
@@ -12,14 +13,16 @@ type Props = {
   compareData?: RatingChartData;
   currentData: RatingChartData;
   title: string;
+  properties?: Record<string, number>;
 };
 
-const Graph: FC<Props> = ({ currentData, compareData, title }) => {
+const Graph: FC<Props> = ({ currentData, compareData, title, properties }) => {
   const { css, theme, matchMedia } = useStyle();
   const small = matchMedia({ xSmall: true, small: true }) || false;
 
   const { data } = getComputedData(currentData, compareData);
   const bars = getGraphBars(data);
+
   const height = compareData ? '594px' : small ? '600px' : '347px';
 
   return (
@@ -61,16 +64,18 @@ const Graph: FC<Props> = ({ currentData, compareData, title }) => {
           )}
           {!small && <Legend content={renderLegend} />}
           {/*//TODO: use not legend, broke on mobile*/}
-          {/*<Legend*/}
-          {/*  align={'right'}*/}
-          {/*  verticalAlign={'middle'}*/}
-          {/*  wrapperStyle={{*/}
-          {/*    position: 'absolute',*/}
-          {/*    top: '320px',*/}
-          {/*    transform: 'rotate(-90deg)',*/}
-          {/*  }}*/}
-          {/*  payload={[{ value: '% of Colleagues', type: 'line' }]}*/}
-          {/*/>*/}
+          {!small && (
+            <Legend
+              align={'right'}
+              verticalAlign={'middle'}
+              wrapperStyle={{
+                position: 'absolute',
+                top: '320px',
+                transform: 'rotate(-90deg)',
+              }}
+              payload={[{ value: '% of Colleagues', type: 'line' }]}
+            />
+          )}
           {bars.map((bar) => {
             return (
               <Bar
@@ -79,7 +84,7 @@ const Graph: FC<Props> = ({ currentData, compareData, title }) => {
                 dataKey={bar}
                 fill={theme.colors.tescoBlue}
                 barSize={small ? undefined : 50}
-                label={<CustomizedLabel />}
+                label={<CustomizedLabel properties={properties} />}
                 strokeWidth={100}
               >
                 {data.map((item, index) => (
@@ -205,10 +210,10 @@ const CustomizedYAxisTick = (props) => {
 };
 
 const CustomizedLabel = (props) => {
-  const { x, y, value, height, width } = props;
-  //TODO: hook to get the count of colleagues
+  const { x, y, value, height, width, name } = props;
   const { matchMedia, theme } = useStyle();
   const small = matchMedia({ xSmall: true, small: true }) || false;
+  const count = props.properties[name] ?? '';
 
   return (
     <>
@@ -234,8 +239,7 @@ const CustomizedLabel = (props) => {
           textAnchor='start'
           opacity={0.5}
         >
-          {/*//TODO:use count*/}
-          {value}
+          {count}
         </text>
       </g>
     </>

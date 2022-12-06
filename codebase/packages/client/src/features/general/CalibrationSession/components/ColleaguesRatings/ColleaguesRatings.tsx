@@ -1,30 +1,42 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
+import { calibrationReviewsMetaSelector } from '@pma/store';
+import { Rule, Styles, useStyle } from '@pma/dex-wrapper';
+import { ColleagueSimple } from '@pma/openapi';
 import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router';
-import { Rule, Styles, useStyle } from '@pma/dex-wrapper';
+import { useSelector } from 'react-redux';
 
+import { buildPath } from 'features/general/Routes';
 import { Accordion, BaseAccordion, ExpandButton, Panel, Section } from 'components/Accordion';
 import ViewColleagueProfile from 'components/ViewColleagueProfile';
 import InfinityScrollLoad from 'components/InfinityScrollLoad';
 import { useTranslation } from 'components/Translation';
-import { buildPath } from 'features/general/Routes';
-import { ActiveList } from '../../utils/types';
-import { Page } from 'pages';
+import { ActiveList, RatingsType, statisticsType } from '../../types';
 import { paramsReplacer } from 'utils';
+import { Page } from 'pages';
 
 type Props = {
-  data: any;
+  data: RatingsType | Omit<RatingsType, 'unsubmitted'>;
   activeList: ActiveList;
+  statistics?: statisticsType;
   styles?: Rule | Styles | {};
+  onUpload?: (rating: string, _start?: number, _limit?: number) => void;
 };
 
-const ColleaguesReviews: FC<Props> = ({ data, activeList, styles = {} }) => {
+const ColleaguesRatings: FC<Props> = ({ data, activeList, styles = {}, onUpload, statistics }) => {
   const { t } = useTranslation();
   const { css } = useStyle();
   const navigate = useNavigate();
+  const { loading } = useSelector(calibrationReviewsMetaSelector);
   const { pathname } = useLocation();
 
-  const loading = false;
+  useEffect(() => {
+    onUpload &&
+      activeList === ActiveList.TABLE &&
+      Object.keys(data).forEach((rating) => {
+        onUpload(rating);
+      });
+  }, []);
 
   const handleView = (uuid: string) =>
     navigate(buildPath(paramsReplacer(`${Page.USER_REVIEWS}`, { ':uuid': uuid })), {
@@ -32,13 +44,16 @@ const ColleaguesReviews: FC<Props> = ({ data, activeList, styles = {} }) => {
         backPath: `${pathname}`,
       },
     });
+
   return (
     <div className={css(styles)}>
-      {Object.entries(data).map(([title, data]) => {
-        // const total = reviews?.statistics?.[title]?.count ?? 0;
-        const total = (data as []).length;
-        // const hasMore = (data as any)?.length !== reviews?.statistics?.[title]?.count;
-        const hasMore = true;
+      {Object.entries(data).map(([title, data], i) => {
+        const ratingStatistics = statistics && statistics?.[i];
+        const rating = ratingStatistics?.rating as string;
+        const isExpandable = ratingStatistics && ratingStatistics?.count >= 1;
+        const hasMore = !!(
+          statistics && statistics.find(({ rating }) => rating.toLowerCase() === title)?.count !== data.length
+        );
 
         return (
           <Accordion
@@ -52,11 +67,13 @@ const ColleaguesReviews: FC<Props> = ({ data, activeList, styles = {} }) => {
                   <div className={css(scrollContainer)}>
                     <div className={css(wrapperStyles)}>
                       <span className={css(titleStyles)}>
-                        {t(title)}: {total}
+                        {t(rating.toLowerCase())}: {ratingStatistics?.count}
                       </span>
-                      {!!(data as any).length && activeList === ActiveList.LIST && (
+                      {isExpandable && activeList === ActiveList.LIST && (
                         <div className={css(expandButtonStyles)}>
-                          <ExpandButton />
+                          <ExpandButton
+                            onClick={(expanded) => !data?.length && onUpload && expanded && onUpload(title)}
+                          />
                         </div>
                       )}
                     </div>
@@ -64,34 +81,30 @@ const ColleaguesReviews: FC<Props> = ({ data, activeList, styles = {} }) => {
                       <InfinityScrollLoad
                         loadOnScroll={false}
                         loadMore={(_limit, _start) => {
-                          switch (activeList) {
-                            case ActiveList.LIST: {
-                              // dispatch();
-                              break;
-                            }
-                            case ActiveList.TABLE: {
-                              // dispatch();
-                              break;
-                            }
-                          }
+                          (activeList === ActiveList.LIST || activeList === ActiveList.TABLE) &&
+                            onUpload &&
+                            onUpload(rating, _start, _limit);
                         }}
                         loading={loading}
-                        limit={15}
+                        limit={10}
                         hasMore={hasMore}
                         render={() => (
                           <>
-                            <div key={`${title}`} className={css({ marginBottom: '24px', width: '100%' })}>
-                              {!!(data as any)?.length &&
-                                (data as any).map((item, i) => (
-                                  //@ts-ignore
-                                  <div key={`${title}${i}`} className={css(profileStyles)}>
-                                    <ViewColleagueProfile
-                                      title={'view'}
-                                      colleague={item}
-                                      onClick={() => handleView(item.uuid)}
-                                    />
-                                  </div>
-                                ))}
+                            <div key={title} className={css({ marginBottom: '24px', width: '100%' })}>
+                              {!!data?.length &&
+                                data.map((item, i) => {
+                                  return (
+                                    <div key={`${title}${i}`} className={css(profileStyles)}>
+                                      <ViewColleagueProfile
+                                        title={'view'}
+                                        colleague={item.colleague as ColleagueSimple}
+                                        //TODO: replace to review uuid
+                                        onClick={() => handleView(item?.colleague?.uuid as string)}
+                                        properties={item?.review?.properties}
+                                      />
+                                    </div>
+                                  );
+                                })}
                             </div>
                           </>
                         )}
@@ -136,4 +149,4 @@ const titleStyles: Rule = ({ theme }) => ({
   color: theme.colors.tescoBlue,
 });
 
-export default ColleaguesReviews;
+export default ColleaguesRatings;

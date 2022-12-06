@@ -58,3 +58,24 @@ export const getCalibrationColleagues = (params: RequestQuery) => {
     },
   });
 };
+
+export const getCalibrationUsersReviews = (params: any) => {
+  return httpClient.get(`${domain}/reviews`, {
+    params,
+    paramsSerializer: (params) => {
+      return qs.stringify(params, { arrayFormat: 'indices' });
+    },
+  });
+};
+
+export const getCalibrationStatistics = (params = {}) =>
+  httpClient.get(`${domain}/statistics`, {
+    params,
+    paramsSerializer: (params) => qs.stringify(params, { arrayFormat: 'indices' }),
+  });
+
+export const uploadCalibrationUsersReviews = (params: any) =>
+  httpClient.get(`${domain}/reviews`, {
+    params,
+    paramsSerializer: (params) => qs.stringify(params, { arrayFormat: 'indices' }),
+  });

@@ -6,6 +6,8 @@ export const checkTrailingSlash = (path: String) => {
 
 export const isFunction = (mFn: any) => typeof mFn === 'function';
 
+export const isNegative = (num: number): boolean => num < 0;
+
 export const upperCaseFirstLetter = <T extends string>(string: T): string =>
   string.charAt(0).toUpperCase() + string.slice(1);
 

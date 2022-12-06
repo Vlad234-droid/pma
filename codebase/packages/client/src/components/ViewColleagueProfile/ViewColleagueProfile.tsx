@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import { ColleagueSimple } from '@pma/openapi';
 import { useStyle, Rule, Styles } from '@pma/dex-wrapper';
 import { TileWrapper } from 'components/Tile';
 import { Trans } from 'components/Translation';
@@ -8,28 +9,14 @@ import defaultImg from 'images/default.png';
 export const TILE_WRAPPER = 'tile-wrapper';
 export const NAME = 'name';
 
-type colleagueValue = string | null;
-
-export type ColleagueProfile = {
-  businessType: colleagueValue;
-  firstName: colleagueValue;
-  jobName: colleagueValue;
-  lastName: colleagueValue;
-  lineManager?: colleagueValue;
-  middleName?: colleagueValue;
-  uuid: string;
-  what?: string;
-  how?: string;
-  overall?: string;
-};
-
 export type Props = {
-  colleague: ColleagueProfile;
+  colleague: ColleagueSimple;
   onClick: (uuid: string) => void;
   title?: string;
+  properties?: { [key: string]: string };
 };
 
-const ViewColleagueProfile: FC<Props> = ({ colleague, onClick, title }) => {
+const ViewColleagueProfile: FC<Props> = ({ colleague, onClick, title, properties }) => {
   const { css } = useStyle();
 
   return (
@@ -40,29 +27,37 @@ const ViewColleagueProfile: FC<Props> = ({ colleague, onClick, title }) => {
             <img className={css(imgStyle)} src={defaultImg} alt='photo' />
           </div>
           <div className={css({ marginLeft: '16px' })}>
-            <h3 className={css(namesStyle)} data-test-id={NAME}>{`${colleague.firstName} ${colleague.lastName}`}</h3>
-            <p className={css(industryStyle)}>{`${colleague.jobName || ''}, ${colleague.businessType || ''}`}</p>
+            <h3 className={css(namesStyle)} data-test-id={NAME}>{`${colleague?.firstName || ''} ${
+              colleague?.lastName || ''
+            }`}</h3>
+            <p className={css(industryStyle)}>{`${colleague?.jobName || ''} ${colleague?.businessType || ''}`}</p>
           </div>
         </div>
 
-        {(colleague?.what || colleague?.how || colleague?.overall) && (
+        {(properties?.what_rating || properties?.how_rating || properties?.overall_rating) && (
           <div className={css(ratingContainer)}>
-            {colleague?.what && (
+            {properties?.what_rating && (
               <div className={css(ratingType)}>
-                <span>{colleague?.what}</span>
-                <span>What</span>
+                <span>{properties?.what_rating}</span>
+                <span>
+                  <Trans i18nKey={'what'} />
+                </span>
               </div>
             )}
-            {colleague?.how && (
+            {properties?.how_rating && (
               <div className={css(ratingType)}>
-                <span>{colleague?.how}</span>
-                <span>How</span>
+                <span>{properties?.how_rating}</span>
+                <span>
+                  <Trans i18nKey={'how'} />
+                </span>
               </div>
             )}
-            {colleague?.overall && (
+            {properties?.overall_rating && (
               <div className={css(ratingType)}>
-                <span>{colleague?.overall}</span>
-                <span>Overall</span>
+                <span>{properties?.overall_rating}</span>
+                <span>
+                  <Trans i18nKey={'Overall'} />
+                </span>
               </div>
             )}
           </div>
@@ -70,7 +65,7 @@ const ViewColleagueProfile: FC<Props> = ({ colleague, onClick, title }) => {
 
         <div className={css({ display: 'flex', justifyContent: 'center', alignItems: 'center' })}>
           <div className={css({ display: 'flex', alignItems: 'center' })}>
-            <span className={css(viewStyle)} onClick={() => onClick(colleague.uuid)}>
+            <span className={css(viewStyle)} onClick={() => onClick(colleague.uuid as string)}>
               <Trans i18nKey={title ? title : 'view_profile'} />
             </span>
           </div>

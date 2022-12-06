@@ -28,6 +28,8 @@ import { initialState as calibrationReviewState } from '../entities/calibrationR
 import { initialState as colleagueFilterState } from '../entities/colleagueFilter/reducer';
 import { initialState as colleagueSimpleState } from '../entities/colleagueSimple/reducer';
 import { initialState as completedReviewsState } from '../entities/completedReviews/reducer';
+import { initialState as calibrationReviewsState } from '../entities/calibrationReviews/reducer';
+import { initialState as calibrationStatisticsState } from '../entities/calibrationStatistics/reducer';
 import { State as TimelineState } from 'entities/timeline/types';
 
 //@ts-ignore
@@ -58,9 +60,11 @@ export const initialState = {
   statistics: statisticsState,
   calibrationSessions: calibrationSessionsState,
   calibrationReview: calibrationReviewState,
+  calibrationReviews: calibrationReviewsState,
   colleagueFilter: colleagueFilterState,
   colleagueSimple: colleagueSimpleState,
   completedReviews: completedReviewsState,
+  calibrationStatistics: calibrationStatisticsState,
 };
 
 type InitialStateType = Omit<typeof initialState, 'timeline'>;
