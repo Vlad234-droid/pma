@@ -1,7 +1,14 @@
 import React, { FC, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { CalibrationReviewAction, calibrationReviewDataSelector, calibrationReviewMetaSelector } from '@pma/store';
+import {
+  CalibrationReviewAction,
+  calibrationReviewDataSelector,
+  calibrationReviewMetaSelector,
+  colleagueCurrentCycleSelector,
+  colleagueUUIDSelector,
+  isAnniversaryTimelineType,
+} from '@pma/store';
 
 import BaseWidget from 'components/BaseWidget';
 import { buildPath } from 'features/general/Routes';
@@ -20,13 +27,17 @@ const SubmitCalibrationRatings: FC<Props> = ({ userUuid }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const calibrationReview = useSelector(calibrationReviewDataSelector(userUuid)) || {};
+  const colleagueUuid = useSelector(colleagueUUIDSelector);
+  const currentCycle = useSelector(colleagueCurrentCycleSelector(colleagueUuid));
+  const isAnniversary = useSelector(isAnniversaryTimelineType(colleagueUuid, currentCycle));
   const { loading } = useSelector(calibrationReviewMetaSelector);
 
   useEffect(() => {
-    dispatch(CalibrationReviewAction.getCalibrationReview({ colleagueUuid: userUuid, cycleUuid: 'CURRENT' }));
+    !isAnniversary &&
+      dispatch(CalibrationReviewAction.getCalibrationReview({ colleagueUuid: userUuid, cycleUuid: 'CURRENT' }));
   }, []);
 
-  if (loading) return null;
+  if (isAnniversary || loading) return null;
 
   const { uuid = 'new', status } = calibrationReview;
 
