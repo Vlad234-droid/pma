@@ -8,7 +8,7 @@ import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'components/Translation';
 import { ReviewWidget } from '../components/ReviewWidget';
 import { getContent } from '../utils';
-import { useTenant } from 'features/general/Permission';
+import { useTenant, Tenant } from 'features/general/Permission';
 import { buildPath } from 'features/general/Routes';
 import { Page } from 'pages';
 import { ReviewType, Status } from 'config/enum';
@@ -86,7 +86,7 @@ const MidYearReview: FC<Props> = ({ colleagueUuid }) => {
             : undefined
         }
         description={
-          hasDescription && summaryStatus !== Status.APPROVED
+          hasDescription && summaryStatus !== Status.APPROVED && tenant === Tenant.GENERAL
             ? t(
                 'mid_year_review_widget_subtitle',
                 'This should be submitted and approved by 7th October, or 14th October if you are an ROI colleague.',
