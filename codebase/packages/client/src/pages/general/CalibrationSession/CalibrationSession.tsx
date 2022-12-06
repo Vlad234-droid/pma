@@ -3,30 +3,19 @@ import { useParams } from 'react-router-dom';
 import { CreateRule, Rule, useStyle } from '@pma/dex-wrapper';
 
 import { CalibrationSession as CalibrationSessionDetails } from 'features/general/CalibrationSession';
-import { StartCalibrationSession, EditCalibrationSession, Widget } from 'features/general/CalibrationSession/widgets';
-import { useTranslation } from 'components/Translation';
+import {
+  StartCalibrationSession,
+  EditCalibrationSession,
+  DownloadReport,
+} from 'features/general/CalibrationSession/widgets';
 import { Filters, SortBy } from 'features/general/Filters';
-import useDownloadExelFile from 'hooks/useDownloadExelFile';
-
-const REPORT_URL = 'reports/calibration-session';
 
 const CalibrationSessionPage: FC = () => {
   const { uuid } = useParams<{ uuid: string }>();
   const { css, matchMedia } = useStyle();
   const mobileScreen = matchMedia({ xSmall: true, small: true, medium: true }) || false;
 
-  const { t } = useTranslation();
   const bottomPanelRef = useRef<HTMLDivElement>();
-
-  const downloadReport = useDownloadExelFile({
-    resource: { url: REPORT_URL, params: { year: '2022', 'calibration-session-uuid': uuid } },
-    fileName: 'Report',
-    ext: 'csv',
-    errorMassage: {
-      title: t('statistics_not_found', 'Statistics not found'),
-      description: '',
-    },
-  });
 
   return (
     <div>
@@ -47,7 +36,7 @@ const CalibrationSessionPage: FC = () => {
           <div className={css(widgetContainerStyles({ mobileScreen }))}>
             <StartCalibrationSession />
             <EditCalibrationSession />
-            <Widget graphics={'download'} title={t('download_report', 'Download report')} onClick={downloadReport} />
+            <DownloadReport uuid={uuid as string} />
           </div>
         </div>
         <CalibrationSessionDetails />

@@ -731,9 +731,11 @@
   "group_name_legal-entities": "Legal entities",
   "group_name_business-groups": "Business groups",
   "group_name_line-managers": "Line managers",
-  "group_name_work-levels": "Work levels",
   "what": "What",
   "how": "How",
   "overall": "Overall",
-  "unsubmitted": "Unsubmitted"
+  "unsubmitted": "Unsubmitted",
+  "group_name_work-levels": "Work levels",
+  "ratings_to_change_in_calibration_until_they_confirmed": "Ratings are subject to change in calibration and should not be communicated to colleagues until they are confirmed.",
+  "guidence_how_to_use_page": "Guidence on how to use this page"
 }
