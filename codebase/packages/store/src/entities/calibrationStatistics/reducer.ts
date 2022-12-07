@@ -1,7 +1,7 @@
 import { createReducer } from 'typesafe-actions';
 
 import { RatingStatistic } from '@pma/openapi';
-import { getCalibrationStatistics } from './actions';
+import { clearCalibrationStatistics, getCalibrationStatistics } from './actions';
 
 export type StatisticsType = Array<RatingStatistic>;
 
@@ -38,4 +38,5 @@ export default createReducer(initialState)
       ...state,
       meta: { ...state.meta, loading: false, loaded: true, error: payload },
     };
-  });
+  })
+  .handleAction(clearCalibrationStatistics, () => initialState);

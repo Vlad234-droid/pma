@@ -1,10 +1,8 @@
-import React, { FC, useCallback, useRef, useState } from 'react';
+import React, { FC, useRef, useState } from 'react';
 import { CreateRule, Rule, Styles, useStyle } from '@pma/dex-wrapper';
-import { CalibrationReviewsAction, calibrationReviewsDataSelector } from '@pma/store';
+import { calibrationReviewsDataSelector } from '@pma/store';
 
 import { useSelector } from 'react-redux';
-import useDispatch from 'hooks/useDispatch';
-
 import ColleaguesRatings from './components/ColleaguesRatings';
 import { useTranslation } from 'components/Translation';
 import { ListView } from './components/ListView';
@@ -13,42 +11,23 @@ import Spinner from 'components/Spinner';
 import { Line } from 'components/Line';
 import Graph from 'components/Graph';
 
-import { initialFields } from './config';
 import { ActiveList } from './types';
 import omit from 'lodash.omit';
-import { isNegative } from 'utils';
-import { useCalibrationStatistics } from './hook';
-import { buildData, toLocalRating } from './utils';
+import { useCalibrationStatistics, useClearCalibrationData, useReviewsCalibrationList } from './hook';
+import { buildData } from './utils';
 
 const CalibrationSessionOverview: FC<{ period: string }> = ({ period }) => {
   const { css, matchMedia } = useStyle();
-  const dispatch = useDispatch();
   const mobileScreen = matchMedia({ xSmall: true, small: true }) || false;
   const mediumScreen = matchMedia({ xSmall: false, small: false, medium: true }) || false;
   const { t } = useTranslation();
   const data = useSelector(calibrationReviewsDataSelector);
-
   const [activeList, setActiveList] = useState<ActiveList>(ActiveList.LIST);
   const listRef = useRef<HTMLDivElement>();
 
   const { statistics, loading: statisticsLoading } = useCalibrationStatistics(activeList);
-
-  const getCalibrationReviewsList = useCallback((rating: string, _start, _limit) => {
-    const isSpaced = !isNegative(rating.indexOf(' '));
-    const isScroll = _start || _limit;
-    const params = {
-      'review-rating_in': isSpaced ? [rating.toUpperCase().replace(' ', '_')] : [rating.toUpperCase()],
-      ...(isScroll ? { _start, _limit } : initialFields),
-    };
-    isScroll
-      ? dispatch(CalibrationReviewsAction.uploadCalibrationUsersReviews({ params, rating: toLocalRating(rating) }))
-      : dispatch(
-          CalibrationReviewsAction.getCalibrationUsersReviews({
-            params,
-            rating: toLocalRating(rating),
-          }),
-        );
-  }, []);
+  const getCalibrationReviewsList = useReviewsCalibrationList(activeList);
+  useClearCalibrationData();
 
   return (
     <div>
@@ -63,13 +42,12 @@ const CalibrationSessionOverview: FC<{ period: string }> = ({ period }) => {
         <ColleaguesRatings
           data={activeList === ActiveList.TABLE ? omit(data, 'unsubmitted') : data}
           activeList={activeList}
-          key={activeList}
           styles={activeList === ActiveList.TABLE ? tableStyles({ mobileScreen }) : {}}
           onUpload={(rating, _start, _limit) => getCalibrationReviewsList(rating, _start, _limit)}
           statistics={statistics}
         />
       ) : (
-        <TileWrapper customStyle={tileStyles}>
+        <TileWrapper customStyle={tileStyles({ mobileScreen })}>
           <Graph
             title={t('calibration_submission', 'Calibration submission', { year: period })}
             properties={buildData(statistics, t, 'count')}
@@ -88,10 +66,10 @@ const lineStyles: Rule = {
   marginTop: '16px',
   marginBottom: '8px',
 };
-const tileStyles: Rule = {
-  padding: '24px',
+const tileStyles: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) => ({
+  padding: mobileScreen ? '24px 24px 24px 0px' : '24px',
   marginTop: '24px',
-};
+});
 const tableStyles: CreateRule<{ mobileScreen: boolean }> = ({ mobileScreen }) =>
   ({
     display: 'flex',

@@ -63,19 +63,22 @@ const Graph: FC<Props> = ({ currentData, compareData, title, properties }) => {
             />
           )}
           {!small && <Legend content={renderLegend} />}
+          {/*{small && <Legend content={renderLegend} />}*/}
+          {small && <Legend height={60} payload={[{ value: 'hey', type: 'none' }]} />}
+          {/*{small && <Legend payload={[{ value: 'h2fwefw' }]} align={'right'} verticalAlign={'middle'} />}*/}
           {/*//TODO: use not legend, broke on mobile*/}
-          {!small && (
-            <Legend
-              align={'right'}
-              verticalAlign={'middle'}
-              wrapperStyle={{
-                position: 'absolute',
-                top: '320px',
-                transform: 'rotate(-90deg)',
-              }}
-              payload={[{ value: '% of Colleagues', type: 'line' }]}
-            />
-          )}
+          {/*{!small && (*/}
+          {/*  <Legend*/}
+          {/*    align={'right'}*/}
+          {/*    verticalAlign={'middle'}*/}
+          {/*    wrapperStyle={{*/}
+          {/*      position: 'absolute',*/}
+          {/*      top: '320px',*/}
+          {/*      transform: 'rotate(-90deg)',*/}
+          {/*    }}*/}
+          {/*    payload={[{ value: '% of Colleagues', type: 'line' }]}*/}
+          {/*  />*/}
+          {/*)}*/}
           {bars.map((bar) => {
             return (
               <Bar
@@ -183,7 +186,7 @@ const CustomizedYAxisTick = (props) => {
           stroke={theme.colors.tescoBlue}
           fill={'none'}
           y2={!index ? y : y + 9}
-          y1={y - 40}
+          y1={y - 34}
           x1={x - 4}
           x2={x - 4}
           strokeWidth={'6px'}
