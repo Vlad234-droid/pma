@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { Icon, Rule, useStyle } from '@pma/dex-wrapper';
@@ -14,7 +14,7 @@ import {
 } from '@pma/store';
 
 import WrapperModal from 'features/general/Modal/components/WrapperModal';
-import { useTranslation, Trans } from 'components/Translation';
+import { Trans, useTranslation } from 'components/Translation';
 import AvatarName from 'components/AvatarName';
 import { SuccessMark } from 'components/Icon';
 import useDispatch from 'hooks/useDispatch';
@@ -34,6 +34,9 @@ export enum Statuses {
 const STANDARD_CALIBRATION_FORM_CODE = 'forms/standard_calibration.form';
 
 const CreateCalibrationRatings: FC = () => {
+  const { t } = useTranslation();
+  const { css, theme } = useStyle();
+  const [currentStatus, setCurrentStatus] = useState('');
   const { uuid, userUuid: colleagueUuid } = useParams<{ uuid: string; userUuid: string }>() as {
     uuid: string;
     userUuid: string;
@@ -46,16 +49,14 @@ const CreateCalibrationRatings: FC = () => {
   const { components } = useSelector(getFormByCode(STANDARD_CALIBRATION_FORM_CODE)) || {};
   const { loading, loaded, updated } = useSelector(calibrationReviewMetaSelector);
   const calibrationReview = useSelector(calibrationReviewDataSelector(colleagueUuid)) || {};
-  const { t } = useTranslation();
-  const { css, theme } = useStyle();
-
   const { loaded: colleagueLoaded } = useSelector(getColleagueMetaSelector);
+
+  const isNew = uuid === 'new';
+  const isDraft = calibrationReview?.status === Status.DRAFT;
 
   useEffect(() => {
     dispatch(ColleagueActions.getColleagueByUuid({ colleagueUuid }));
   }, [colleagueUuid, colleagueLoaded]);
-
-  const isNew = uuid === 'new';
 
   useEffect(() => {
     if (!isNew) {
@@ -67,9 +68,7 @@ const CreateCalibrationRatings: FC = () => {
   if (!components) return null;
 
   const handleBack = () => {
-    navigate(
-      backPath || paramsReplacer(buildPath(backPath || Page.USER_REVIEWS), { ':uuid': colleagueUuid as string }),
-    );
+    navigate(backPath || paramsReplacer(buildPath(Page.USER_REVIEWS), { ':uuid': colleagueUuid as string }));
   };
 
   const buildData = (data: any) => {
@@ -88,23 +87,24 @@ const CreateCalibrationRatings: FC = () => {
   };
 
   const handleSave = (data: any) => {
+    setCurrentStatus(data.status);
     dispatch(CalibrationReviewAction.saveCalibrationReview(buildData(data)));
   };
 
   const handleUpdate = (data) => {
+    setCurrentStatus(data.status);
     dispatch(CalibrationReviewAction.updateCalibrationReview(buildData(data)));
   };
 
-  const { properties, status } = calibrationReview;
-
-  if (status === Status.WAITING_FOR_APPROVAL) {
-    handleBack();
-    return null;
-  }
+  const { properties } = calibrationReview;
 
   if (loading) return null;
 
-  if (!loading && updated)
+  if (!loading && updated) {
+    if (currentStatus === Status.DRAFT) {
+      handleBack();
+      return null;
+    }
     return (
       <SuccessModal
         customButtonStyles={{ background: theme.colors.tescoBlue, color: theme.colors.white }}
@@ -115,13 +115,17 @@ const CreateCalibrationRatings: FC = () => {
         mark={<SuccessMark />}
       />
     );
+  }
 
   if (!isNew && loaded && !calibrationReview?.properties) {
     navigate(buildPath(paramsReplacer(Page.CREATE_CALIBRATION_RATING, { ':uuid': 'new' })), { replace: true });
   }
 
   return (
-    <WrapperModal onClose={handleBack} title={isNew ? t('submit_calibration_ratings') : t('edit_calibration_ratings')}>
+    <WrapperModal
+      onClose={handleBack}
+      title={isNew || isDraft ? t('submit_calibration_ratings') : t('edit_calibration_ratings')}
+    >
       <div className={css(ratingWrapper)}>
         <div className={css({ display: 'flex', alignItems: 'center' })}>
           <Icon graphic='information' />
@@ -141,7 +145,7 @@ const CreateCalibrationRatings: FC = () => {
           onCancel={handleBack}
           components={components}
           defaultValues={!isNew ? properties : {}}
-          mode={isNew ? Mode.CREATE : Mode.UPDATE}
+          mode={isNew || isDraft ? Mode.CREATE : Mode.UPDATE}
         />
       </div>
     </WrapperModal>

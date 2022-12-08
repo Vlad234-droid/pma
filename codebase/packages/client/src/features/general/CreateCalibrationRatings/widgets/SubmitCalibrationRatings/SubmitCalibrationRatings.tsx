@@ -5,8 +5,6 @@ import {
   CalibrationReviewAction,
   calibrationReviewDataSelector,
   calibrationReviewMetaSelector,
-  colleagueCurrentCycleSelector,
-  colleagueUUIDSelector,
   isAnniversaryTimelineType,
 } from '@pma/store';
 
@@ -27,21 +25,16 @@ const SubmitCalibrationRatings: FC<Props> = ({ userUuid }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const calibrationReview = useSelector(calibrationReviewDataSelector(userUuid)) || {};
-  const colleagueUuid = useSelector(colleagueUUIDSelector);
-  const currentCycle = useSelector(colleagueCurrentCycleSelector(colleagueUuid));
-  const isAnniversary = useSelector(isAnniversaryTimelineType(colleagueUuid, currentCycle));
+  const isAnniversary = useSelector(isAnniversaryTimelineType(userUuid, 'CURRENT'));
   const { loading } = useSelector(calibrationReviewMetaSelector);
+  const { uuid = 'new', status } = calibrationReview;
 
   useEffect(() => {
     !isAnniversary &&
       dispatch(CalibrationReviewAction.getCalibrationReview({ colleagueUuid: userUuid, cycleUuid: 'CURRENT' }));
   }, []);
 
-  if (isAnniversary || loading) return null;
-
-  const { uuid = 'new', status } = calibrationReview;
-
-  if (status === Status.WAITING_FOR_APPROVAL) return null;
+  if (isAnniversary || loading || status === Status.WAITING_FOR_APPROVAL) return null;
 
   return (
     <BaseWidget

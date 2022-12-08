@@ -26,7 +26,7 @@ const ActionCount: FC = () => {
           colleagueUuid,
           'colleague-cycle-status_in': [Status.STARTED, Status.FINISHING, Status.FINISHED],
           'review-status_in': [Status.DRAFT],
-          'review-type_nin': ['CALIBRATION'],
+          'review-type_in': ['CALIBRATION'],
           status: Status.DRAFT,
         }),
       );
@@ -35,7 +35,7 @@ const ActionCount: FC = () => {
           colleagueUuid,
           'colleague-cycle-status_in': [Status.STARTED, Status.FINISHING, Status.FINISHED],
           'review-status_in': [Status.WAITING_FOR_APPROVAL, Status.WAITING_FOR_COMPLETION],
-          'review-type_nin': ['CALIBRATION'],
+          'review-type_in': ['CALIBRATION'],
           status: Status.PENDING,
         }),
       );
